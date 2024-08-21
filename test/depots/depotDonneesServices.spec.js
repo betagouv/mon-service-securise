@@ -1760,6 +1760,8 @@ describe('Le dépôt de données des services', () => {
   describe('sur recherche dans les autres contributeurs de ses services', () => {
     let depot;
     let adaptateurPersistance;
+    let depotDonneesUtilisateurs;
+
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(unUtilisateur().avecId('moi').donnees)
@@ -1777,13 +1779,15 @@ describe('Le dépôt de données des services', () => {
           uneAutorisation().deContributeur('pasmoi', 'S1').donnees
         )
         .construis();
+      depotDonneesUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+      });
       depot = DepotDonneesServices.creeDepot({
         adaptateurChiffrement: fauxAdaptateurChiffrement(),
         adaptateurPersistance,
         busEvenements,
-        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
-          adaptateurPersistance,
-        }),
+        depotDonneesUtilisateurs,
       });
     });
 
@@ -1844,6 +1848,20 @@ describe('Le dépôt de données des services', () => {
 
       expect(contributeurs.length).to.be(1);
       expect(contributeurs[0].id).to.be('U1');
+    });
+
+    it('déchiffre les données des contributeurs', async () => {
+      depotDonneesUtilisateurs.dechiffreUtilisateur = (donneesUtilisateur) => {
+        donneesUtilisateur.donnees.nom = `${donneesUtilisateur.donnees.nom}-nom-déchiffré`;
+        return new Utilisateur({
+          id: donneesUtilisateur.id,
+          ...donneesUtilisateur.donnees,
+        });
+      };
+
+      const contributeurs = await depot.rechercheContributeurs('moi', '');
+
+      expect(contributeurs[0].prenomNom()).to.be('Pauline Doe-nom-déchiffré');
     });
   });
 });
