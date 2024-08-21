@@ -7,7 +7,7 @@ describe("Le service d'annuaire", () => {
     it('délègue au dépôt de données la recherche de contributeurs', async () => {
       const depotDonnees = {
         rechercheContributeurs: async () => [
-          { id: '123', email: 'jean.dujardin@beta.gouv.fr' },
+          new Utilisateur({ id: '123', email: 'jean.dujardin@beta.gouv.fr' }),
         ],
       };
 
