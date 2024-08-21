@@ -137,7 +137,6 @@
     --couleur-texte-survol: var(--texte-clair);
     --couleur-fond-survol: white;
 
-    border: 1px solid var(--liseres-fonce);
     font-size: 0.9rem;
     line-height: 20px;
   }
