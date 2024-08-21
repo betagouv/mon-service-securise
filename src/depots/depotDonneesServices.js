@@ -464,6 +464,10 @@ const creeDepot = (config = {}) => {
         recherche
       );
 
+    const tousUtilisateurs = tousContributeurs.map(
+      (u) => new Utilisateur({ id: u.id, ...u.donnees })
+    );
+
     const normalise = (texte) =>
       texte
         ?.toLowerCase()
@@ -473,14 +477,10 @@ const creeDepot = (config = {}) => {
 
     const rechercheNormalisee = normalise(recherche);
 
-    const resultatsFiltres = tousContributeurs.filter(
+    return tousUtilisateurs.filter(
       (contributeur) =>
-        normalise(contributeur.donnees.email).includes(rechercheNormalisee) ||
-        normalise(contributeur.donnees.prenom)?.includes(rechercheNormalisee) ||
-        normalise(contributeur.donnees.nom)?.includes(rechercheNormalisee)
-    );
-    return resultatsFiltres.map(
-      (u) => new Utilisateur({ id: u.id, ...u.donnees })
+        normalise(contributeur.email).includes(rechercheNormalisee) ||
+        normalise(contributeur.prenomNom())?.includes(rechercheNormalisee)
     );
   };
 
