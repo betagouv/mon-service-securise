@@ -100,8 +100,8 @@ const nouvelAdaptateur = (env) => {
     };
   };
 
-  const contributeursService = async (id) => {
-    const contributeurs = await knex('autorisations as a')
+  const contributeursService = async (id) =>
+    knex('autorisations as a')
       .join(
         'utilisateurs as u',
         knex.raw("(a.donnees->>'idUtilisateur')::uuid"),
@@ -113,12 +113,6 @@ const nouvelAdaptateur = (env) => {
         dateCreation: 'u.date_creation',
         donnees: 'u.donnees',
       });
-    return contributeurs.map((c) => ({
-      id: c.id,
-      dateCreation: c.dateCreation,
-      ...c.donnees,
-    }));
-  };
 
   const suggestionsActionsService = async (id) =>
     knex('suggestions_actions')
