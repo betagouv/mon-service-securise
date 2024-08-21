@@ -148,17 +148,15 @@ const nouvelAdaptateur = (env) => {
     return avecPMapPourChaqueElement(Promise.resolve(ids), service);
   };
 
-  const metsAJourService = (id, donneesService, nomServiceHash) =>
+  const metsAJourService = (id, donnees, nomServiceHash) =>
     knex('services')
       .where({ id })
       .first()
-      .then(({ donnees }) =>
-        knex('services')
-          .where({ id })
-          .update({
-            donnees: Object.assign(donnees, donneesService),
-            nom_service_hash: nomServiceHash,
-          })
+      .then(() =>
+        knex('services').where({ id }).update({
+          donnees,
+          nom_service_hash: nomServiceHash,
+        })
       );
 
   const metsAJourIdResetMdpUtilisateur = (id, idResetMotDePasse) =>

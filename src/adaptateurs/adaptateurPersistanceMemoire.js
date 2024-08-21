@@ -72,7 +72,7 @@ const nouvelAdaptateur = (
 
   const metsAJourService = async (id, donneesService, nomServiceHash) => {
     const s = await service(id);
-    Object.assign(s, { nomServiceHash, ...donneesService });
+    Object.assign(s, { nomServiceHash, donnees: donneesService });
   };
 
   const sauvegardeAutorisation = async (id, donneesAutorisation) => {
