@@ -16,7 +16,6 @@ const {
 const EvenementDossierHomologationFinalise = require('../bus/evenementDossierHomologationFinalise');
 const EvenementServiceSupprime = require('../bus/evenementServiceSupprime');
 const Entite = require('../modeles/entite');
-const Utilisateur = require('../modeles/utilisateur');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -464,8 +463,10 @@ const creeDepot = (config = {}) => {
         recherche
       );
 
-    const tousUtilisateurs = tousContributeurs.map(
-      (u) => new Utilisateur({ id: u.id, ...u.donnees })
+    const tousUtilisateurs = await Promise.all(
+      tousContributeurs.map((donneesContributeur) =>
+        depotDonneesUtilisateurs.dechiffreUtilisateur(donneesContributeur)
+      )
     );
 
     const normalise = (texte) =>
