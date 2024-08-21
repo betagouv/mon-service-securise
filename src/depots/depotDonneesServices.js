@@ -53,7 +53,7 @@ const fabriquePersistance = (
 
   const dechiffreDonneesService = async (donneesService) => {
     const { donnees, ...autreProprietes } = donneesService;
-    return { ...(await dechiffre.donneesService(donnees)), ...autreProprietes };
+    return { ...autreProprietes, ...(await dechiffre.donneesService(donnees)) };
   };
 
   const enrichisService = async (service) => {

@@ -1154,8 +1154,10 @@ describe('Le dépôt de données des services', () => {
     it("n'écrase pas les autres dossiers si l'ID est différent", (done) => {
       const donneesHomologations = {
         id: '123',
-        descriptionService: { nomService: 'Un service' },
-        dossiers: [{ id: '888', finalise: true }],
+        donnees: {
+          descriptionService: { nomService: 'Un service' },
+          dossiers: [{ id: '888', finalise: true }],
+        },
       };
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
@@ -1189,8 +1191,10 @@ describe('Le dépôt de données des services', () => {
       const donneesDossierAvecDecision = { id: '999', decision };
       const donneesService = {
         id: '123',
-        descriptionService: { nomService: 'Un service' },
-        dossiers: [donneesDossierAvecDecision],
+        donnees: {
+          descriptionService: { nomService: 'Un service' },
+          dossiers: [donneesDossierAvecDecision],
+        },
       };
 
       const adaptateurPersistance =
