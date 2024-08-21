@@ -32,13 +32,7 @@ const fabriqueChiffrement = (adaptateurChiffrement) => {
       },
     },
     dechiffre: {
-      donneesService: async (donnees) => {
-        const { descriptionService } = donnees;
-        return {
-          ...donnees,
-          descriptionService: await dechiffre(descriptionService),
-        };
-      },
+      donneesService: async (donneesChiffrees) => dechiffre(donneesChiffrees),
     },
   };
 };
@@ -52,21 +46,34 @@ const fabriquePersistance = (
   const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
   const dechiffreService = async (donneesService) => {
-    const donneesEnClair = await dechiffre.donneesService(donneesService);
-    return new Service(donneesEnClair, referentiel);
+    const { donnees, ...autreProprietes } = donneesService;
+    const donneesEnClair = await dechiffre.donneesService(donnees);
+    return new Service(
+      {
+        ...autreProprietes,
+        ...donneesEnClair,
+      },
+      referentiel
+    );
+  };
+
+  const dechiffreDonneesService = async (donneesService) => {
+    const { donnees, ...autreProprietes } = donneesService;
+    return { ...(await dechiffre.donneesService(donnees)), ...autreProprietes };
   };
 
   const enrichisService = async (service) => {
     const donneesContributeurs =
       await adaptateurPersistance.contributeursService(service.id);
-    service.contributeurs = await Promise.all(
+    const serviceEnClair = await dechiffreDonneesService(service);
+    serviceEnClair.contributeurs = await Promise.all(
       donneesContributeurs.map((d) =>
         depotDonneesUtilisateurs.dechiffreUtilisateur(d)
       )
     );
-    service.suggestionsActions =
+    serviceEnClair.suggestionsActions =
       await adaptateurPersistance.suggestionsActionsService(service.id);
-    return dechiffreService(service);
+    return new Service(serviceEnClair, referentiel);
   };
 
   const persistance = {
@@ -91,6 +98,7 @@ const fabriquePersistance = (
       },
       tous: async () => {
         const donneesServices = await adaptateurPersistance.tousLesServices();
+        // TODO : Les services devraient être 'enrichis' ici
         return Promise.all(donneesServices.map((d) => dechiffreService(d)));
       },
       // TODO : refactorer -> renommer et retourner un bool
