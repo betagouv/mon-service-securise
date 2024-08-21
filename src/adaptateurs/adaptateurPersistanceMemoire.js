@@ -49,13 +49,6 @@ const nouvelAdaptateur = (
 
   const service = async (id) => donnees.services.find((h) => h.id === id);
 
-  const serviceDeprecated = async (id) => {
-    const serviceTrouve = donnees.services.find((s) => s.id === id);
-    if (serviceTrouve) serviceTrouve.contributeurs = contributeursService(id);
-
-    return serviceTrouve;
-  };
-
   const services = async (idUtilisateur) => {
     const as = await autorisations(idUtilisateur);
     return Promise.all(as.map(({ idService }) => service(idService)));
@@ -290,7 +283,6 @@ const nouvelAdaptateur = (
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
     sauvegardeService,
-    serviceDeprecated,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,

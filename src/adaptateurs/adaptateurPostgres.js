@@ -113,8 +113,6 @@ const nouvelAdaptateur = (env) => {
       .where({ id_service: id, date_acquittement: null })
       .select({ nature: 'nature' });
 
-  const serviceDeprecated = (id) => elementDeTable('services', id);
-
   const serviceAvecHashNom = (
     idUtilisateur,
     hashNomService,
@@ -474,7 +472,6 @@ const nouvelAdaptateur = (env) => {
     nouveautesPourUtilisateur,
     contributeursDesServicesDe,
     sauvegardeService,
-    serviceDeprecated,
     sauvegardeAutorisation,
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
