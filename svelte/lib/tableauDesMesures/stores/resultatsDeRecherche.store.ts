@@ -29,6 +29,10 @@ import {
   rechercheParPriorite,
 } from './rechercheParPriorite.store';
 import type { PrioriteMesure } from '../../ui/types';
+import {
+  appliqueFiltreMesMesures,
+  rechercheMesMesures,
+} from './rechercheMesMesures.store';
 
 type Filtre = (mesure: MesureSpecifique | MesureGenerale) => boolean;
 type Predicats = {
@@ -41,7 +45,8 @@ const construisFiltres = (
   categories: IdCategorie[],
   priorites: PrioriteMesure[],
   referentiels: IdReferentiel[],
-  avancement: 'statutADefinir' | 'enAction' | 'traite' | 'toutes'
+  avancement: 'statutADefinir' | 'enAction' | 'traite' | 'toutes',
+  uniquementMesMesures: boolean
 ) => {
   const filtres: Filtre[] = [];
 
@@ -70,6 +75,12 @@ const construisFiltres = (
       appliqueFiltreAvancement(mesure, avancement)
     );
 
+  if (uniquementMesMesures) {
+    filtres.push((mesure: MesureGenerale | MesureSpecifique) =>
+      appliqueFiltreMesMesures(mesure)
+    );
+  }
+
   return filtres;
 };
 
@@ -80,6 +91,7 @@ const predicats = derived<
     typeof rechercheParPriorite,
     typeof rechercheParReferentiel,
     typeof rechercheParAvancement,
+    typeof rechercheMesMesures,
   ],
   Predicats
 >(
@@ -89,6 +101,7 @@ const predicats = derived<
     rechercheParPriorite,
     rechercheParReferentiel,
     rechercheParAvancement,
+    rechercheMesMesures,
   ],
   ([
     $rechercheTextuelle,
@@ -96,13 +109,15 @@ const predicats = derived<
     $rechercheParPriorite,
     $rechercheParReferentiel,
     $rechercheParAvancement,
+    $rechercheMesMesures,
   ]) => ({
     filtres: construisFiltres(
       $rechercheTextuelle,
       $rechercheParCategorie,
       $rechercheParPriorite,
       $rechercheParReferentiel,
-      $rechercheParAvancement
+      $rechercheParAvancement,
+      $rechercheMesMesures
     ),
     substitueAvancement: (avancementDeSimulation: Avancement) => ({
       filtres: construisFiltres(
@@ -110,7 +125,8 @@ const predicats = derived<
         $rechercheParCategorie,
         $rechercheParPriorite,
         $rechercheParReferentiel,
-        avancementDeSimulation
+        avancementDeSimulation,
+        $rechercheMesMesures
       ),
     }),
   })
