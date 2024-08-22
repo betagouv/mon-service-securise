@@ -56,7 +56,7 @@ const nouvelAdaptateur = (
 
   const tousLesServices = async () => {
     const lesIds = donnees.services.map((s) => s.id);
-    return lesIds.map(service);
+    return Promise.all(lesIds.map(service));
   };
 
   const serviceAvecHashNom = (

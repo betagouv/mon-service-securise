@@ -60,6 +60,7 @@ const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheE
 const Entite = require('../../src/modeles/entite');
 const Utilisateur = require('../../src/modeles/utilisateur');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
+const { creeReferentielVide } = require('../../src/referentiel');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -1863,6 +1864,41 @@ describe('Le dépôt de données des services', () => {
       const contributeurs = await depot.rechercheContributeurs('moi', '');
 
       expect(contributeurs[0].prenomNom()).to.be('Pauline Doe-nom-déchiffré');
+    });
+  });
+
+  describe('sur demande de tous les services', () => {
+    let depot;
+    let adaptateurPersistance;
+    let depotDonneesUtilisateurs;
+    let referentiel;
+
+    beforeEach(() => {
+      referentiel = creeReferentielVide();
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('moi').donnees)
+        .ajouteUnService(unService(referentiel).avecId('S1').donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('moi', 'S1').donnees
+        )
+        .construis();
+      depotDonneesUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+      });
+      depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurPersistance,
+        busEvenements,
+        depotDonneesUtilisateurs,
+        referentiel,
+      });
+    });
+
+    it('récupère les contributeurs', async () => {
+      const tousLesServices = await depot.tousLesServices();
+
+      expect(tousLesServices[0].contributeurs.length).to.be(1);
     });
   });
 });
