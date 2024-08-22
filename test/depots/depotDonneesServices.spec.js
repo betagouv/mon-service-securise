@@ -148,13 +148,10 @@ describe('Le dépôt de données des services', () => {
   });
 
   it('peut retrouver un service à partir de son identifiant', async () => {
-    let donneeDechiffree;
     const adaptateurChiffrement = {
       dechiffre: async (objetDonnee) => {
-        donneeDechiffree = objetDonnee;
-        donneeDechiffree.chiffre = false;
-        const { chiffre, ...reste } = objetDonnee;
-        return reste;
+        objetDonnee.descriptionService.nomService = `${objetDonnee.descriptionService.nomService}-dechiffre`;
+        return objetDonnee;
       },
     };
 
@@ -162,7 +159,6 @@ describe('Le dépôt de données des services', () => {
       .ajouteUnService({
         id: '789',
         descriptionService: { nomService: 'nom' },
-        chiffre: true,
       })
       .construis();
     const referentiel = Referentiel.creeReferentielVide();
@@ -177,11 +173,7 @@ describe('Le dépôt de données des services', () => {
     expect(service).to.be.a(Service);
     expect(service.id).to.equal('789');
     expect(service.referentiel).to.equal(referentiel);
-    expect(service.nomService()).to.be('nom');
-    expect(donneeDechiffree).to.eql({
-      descriptionService: { nomService: 'nom' },
-      chiffre: false,
-    });
+    expect(service.nomService()).to.be('nom-dechiffre');
   });
 
   it('associe ses contributeurs au service', async () => {

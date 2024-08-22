@@ -39,21 +39,15 @@ const fabriquePersistance = (
 ) => {
   const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
-  const dechiffreService = async (donneesService) => {
-    const { donnees, ...autreProprietes } = donneesService;
-    const donneesEnClair = await dechiffre.donneesService(donnees);
-    return new Service(
-      {
-        ...autreProprietes,
-        ...donneesEnClair,
-      },
-      referentiel
-    );
-  };
-
   const dechiffreDonneesService = async (donneesService) => {
     const { donnees, ...autreProprietes } = donneesService;
-    return { ...autreProprietes, ...(await dechiffre.donneesService(donnees)) };
+    const donneesEnClair = await dechiffre.donneesService(donnees);
+    return { ...autreProprietes, ...donneesEnClair };
+  };
+
+  const dechiffreService = async (donneesService) => {
+    const donneesServiceEnClair = await dechiffreDonneesService(donneesService);
+    return new Service(donneesServiceEnClair, referentiel);
   };
 
   const enrichisService = async (service) => {
