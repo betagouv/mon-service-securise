@@ -210,7 +210,7 @@ const nouvelAdaptateur = (env) => {
 
   const tousUtilisateurs = () =>
     knex('utilisateurs').then((tous) =>
-      tous.map(convertisLigneEnObjetSansMiseAPlatDonnees())
+      tous.map(convertisLigneEnObjetSansMiseAPlatDonnees)
     );
 
   const autorisation = (id) => elementDeTable('autorisations', id);
