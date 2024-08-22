@@ -9,10 +9,13 @@ const depotDonneesParcoursUtilisateurs = require('./depots/depotDonneesParcoursU
 const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
 const depotDonneesNotifications = require('./depots/depotDonneesNotifications');
 const depotDonneesSuggestionsActions = require('./depots/depotDonneesSuggestionsActions');
+const {
+  fabriqueAdaptateurChiffrement,
+} = require('./adaptateurs/fabriqueAdaptateurChiffrement');
 
 const creeDepot = (config = {}) => {
   const {
-    adaptateurChiffrement,
+    adaptateurChiffrement = fabriqueAdaptateurChiffrement(),
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = fabriqueAdaptateurUUID(),
