@@ -45,11 +45,6 @@ const fabriquePersistance = (
     return { ...autreProprietes, ...donneesEnClair };
   };
 
-  const dechiffreService = async (donneesService) => {
-    const donneesServiceEnClair = await dechiffreDonneesService(donneesService);
-    return new Service(donneesServiceEnClair, referentiel);
-  };
-
   const enrichisService = async (service) => {
     const donneesContributeurs =
       await adaptateurPersistance.contributeursService(service.id);
@@ -86,8 +81,7 @@ const fabriquePersistance = (
       },
       tous: async () => {
         const donneesServices = await adaptateurPersistance.tousLesServices();
-        // TODO : Les services devraient être 'enrichis' ici
-        return Promise.all(donneesServices.map((d) => dechiffreService(d)));
+        return Promise.all(donneesServices.map((d) => enrichisService(d)));
       },
       // TODO : refactorer -> renommer et retourner un bool
       celuiAvecNom: async (
