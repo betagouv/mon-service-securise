@@ -113,24 +113,23 @@ const nouvelAdaptateur = (env) => {
       .where({ id_service: id, date_acquittement: null })
       .select({ nature: 'nature' });
 
-  const serviceAvecHashNom = (
+  const serviceExisteAvecHashNom = async (
     idUtilisateur,
     hashNomService,
     idServiceMisAJour
   ) =>
-    knex('services')
-      .join(
-        'autorisations',
-        knex.raw("(autorisations.donnees->>'idService')::uuid"),
-        'services.id'
-      )
-      .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
-      .whereRaw('not services.id::text=?', idServiceMisAJour)
-      .whereRaw('services.nom_service_hash=?', hashNomService)
-      .select('services.*')
-      .first()
-      .then(convertisLigneEnObjetSansMiseAPlatDonnees)
-      .catch(() => undefined);
+    (
+      await knex('services')
+        .join(
+          'autorisations',
+          knex.raw("(autorisations.donnees->>'idService')::uuid"),
+          'services.id'
+        )
+        .whereRaw("autorisations.donnees->>'idUtilisateur'=?", idUtilisateur)
+        .whereRaw('not services.id::text=?', idServiceMisAJour)
+        .whereRaw('services.nom_service_hash=?', hashNomService)
+        .count('services.*')
+    )[0].count >= 1;
 
   const services = (idUtilisateur) => {
     const idsServices = knex('autorisations')
@@ -457,7 +456,7 @@ const nouvelAdaptateur = (env) => {
     autorisationsDuService,
     contributeursService,
     service,
-    serviceAvecHashNom,
+    serviceExisteAvecHashNom,
     services,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,

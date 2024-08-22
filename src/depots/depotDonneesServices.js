@@ -83,14 +83,13 @@ const fabriquePersistance = (
         const donneesServices = await adaptateurPersistance.tousLesServices();
         return Promise.all(donneesServices.map((d) => enrichisService(d)));
       },
-      // TODO : refactorer -> renommer et retourner un bool
-      celuiAvecNom: async (
+      existeAvecNom: async (
         idUtilisateur,
         nomService,
         idServiceMisAJour = ''
       ) => {
         const hashNom = adaptateurChiffrement.hacheSha256(nomService);
-        return adaptateurPersistance.serviceAvecHashNom(
+        return adaptateurPersistance.serviceExisteAvecHashNom(
           idUtilisateur,
           hashNom,
           idServiceMisAJour
@@ -216,18 +215,8 @@ const creeDepot = (config = {}) => {
   const ajouteRisqueGeneralAService = (...params) =>
     ajouteAItemsDuService('risquesGeneraux', ...params);
 
-  const serviceExiste = async (
-    idUtilisateur,
-    nomService,
-    idServiceMisAJour
-  ) => {
-    const s = await p.lis.celuiAvecNom(
-      idUtilisateur,
-      nomService,
-      idServiceMisAJour
-    );
-    return !!s;
-  };
+  const serviceExiste = async (idUtilisateur, nomService, idServiceMisAJour) =>
+    p.lis.existeAvecNom(idUtilisateur, nomService, idServiceMisAJour);
 
   const valideDescriptionService = async (
     idUtilisateur,

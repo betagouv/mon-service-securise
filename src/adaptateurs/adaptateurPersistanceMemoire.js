@@ -59,16 +59,16 @@ const nouvelAdaptateur = (
     return Promise.all(lesIds.map(service));
   };
 
-  const serviceAvecHashNom = (
+  const serviceExisteAvecHashNom = async (
     idUtilisateur,
     hashNomService,
     idServiceMisAJour
-  ) =>
-    services(idUtilisateur).then((lesServices) =>
-      lesServices.find(
-        (s) => s.id !== idServiceMisAJour && s.nomServiceHash === hashNomService
-      )
+  ) => {
+    const lesServices = await services(idUtilisateur);
+    return lesServices.some(
+      (s) => s.id !== idServiceMisAJour && s.nomServiceHash === hashNomService
     );
+  };
 
   const metsAJourService = async (id, donneesService, nomServiceHash) => {
     const s = await service(id);
@@ -267,7 +267,7 @@ const nouvelAdaptateur = (
     contributeursService,
     suggestionsActionsService,
     service,
-    serviceAvecHashNom,
+    serviceExisteAvecHashNom,
     services,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
