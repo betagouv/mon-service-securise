@@ -12,6 +12,7 @@
   import type { ReferentielPriorite } from '../../ui/types.d';
   import { rechercheParPriorite } from '../stores/rechercheParPriorite.store';
   import { featureFlags } from '../../featureFlags';
+  import { rechercheMesMesures } from '../stores/rechercheMesMesures.store';
 
   export let categories: Record<IdCategorie, string>;
   export let priorites: ReferentielPriorite;
@@ -144,6 +145,17 @@
             <label for={id}>{labels.libelleComplet}</label>
           </div>
         {/each}
+      </fieldset>
+      <fieldset>
+        <legend>Attribution des mesures</legend>
+        <div>
+          <input
+            type="checkbox"
+            id="mes-mesures"
+            bind:checked={$rechercheMesMesures}
+          />
+          <label for="mes-mesures">Mesure(s) dont je suis responsable</label>
+        </div>
       </fieldset>
     {/if}
     <button
