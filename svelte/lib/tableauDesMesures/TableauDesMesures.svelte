@@ -295,7 +295,7 @@
           }}
           on:click={() =>
             afficheTiroirEditeMesure({
-              mesure,
+              mesure: { ...mesure },
               metadonnees: { typeMesure: 'GENERALE', idMesure: id },
             })}
           estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
@@ -339,7 +339,7 @@
           }}
           on:click={() =>
             afficheTiroirEditeMesure({
-              mesure,
+              mesure: { ...mesure },
               metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: indexReel },
             })}
           estLectureSeule={estLectureSeule || etatEnregistrement === EnCours}
