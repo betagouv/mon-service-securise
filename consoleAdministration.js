@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 const axios = require('axios');
 const { AxiosError } = require('axios');
+const { inspect } = require('util');
 const donneesReferentiel = require('./donneesReferentiel');
 const DepotDonnees = require('./src/depotDonnees');
 const Referentiel = require('./src/referentiel');
@@ -80,10 +82,8 @@ class ConsoleAdministration {
 
     this.journalConsole = {
       consigneEvenement: (evenement) => {
-        /* eslint-disable no-console */
         console.log(`${JSON.stringify(evenement)}\n---------------`);
         return Promise.resolve();
-        /* eslint-enable no-console */
       },
     };
   }
@@ -348,7 +348,6 @@ class ConsoleAdministration {
       }
       iteration += 1;
     }
-    // eslint-disable-next-line no-console
     console.log(`\n${rapportExecution}`);
   }
 
@@ -433,7 +432,6 @@ class ConsoleAdministration {
     ciblee.appliqueDroits(devientProprietaire);
     await this.depotDonnees.sauvegardeAutorisation(ciblee);
 
-    // eslint-disable-next-line no-console
     console.log('DONE');
   }
 
@@ -451,6 +449,71 @@ class ConsoleAdministration {
       afficheErreur,
       rattrapeUtilisateur
     );
+  }
+
+  async utilisateurAvecEmail(email) {
+    return this.depotDonnees.utilisateurAvecEmail(email);
+  }
+
+  async service(idService) {
+    return this.depotDonnees.service(idService);
+  }
+
+  async afficheUtilisateurAvecEmail(email) {
+    const utilisateur = await this.utilisateurAvecEmail(email);
+    if (!utilisateur) {
+      console.log(`Pas d'utilisateur avec l'email ${email}`);
+    } else {
+      console.log(utilisateur.donneesSerialisees());
+    }
+  }
+
+  async afficheAutorisationsDeUtilisateurAvecEmail(email) {
+    const utilisateur = await this.utilisateurAvecEmail(email);
+    if (!utilisateur) {
+      console.log(`Pas d'utilisateur avec l'email ${email}`);
+      return;
+    }
+    const autorisations = await this.depotDonnees.autorisations(utilisateur.id);
+    autorisations.forEach((a) => console.log(a.donneesAPersister()));
+  }
+
+  async afficheServicesDe(email) {
+    const utilisateur = await this.utilisateurAvecEmail(email);
+    if (!utilisateur) {
+      console.log(`Pas d'utilisateur avec l'email ${email}`);
+      return;
+    }
+    const autorisations = await this.depotDonnees.autorisations(utilisateur.id);
+    (
+      await Promise.all(
+        autorisations.map(async (a) => ({
+          ...a,
+          service: await this.service(a.idService),
+        }))
+      )
+    ).forEach((a) =>
+      console.log({
+        idService: a.service.id,
+        nomService: a.service.nomService(),
+        estProprietaire: a.estProprietaire,
+        droits: a.droits,
+      })
+    );
+  }
+
+  async afficheService(idService) {
+    const service = await this.service(idService);
+    if (!service) {
+      console.log(`Pas de service avec l'id ${idService}`);
+    } else {
+      console.log(
+        inspect(service.donneesAPersister().toutes(), {
+          depth: Infinity,
+          colors: true,
+        })
+      );
+    }
   }
 
   async chiffreDonneesServiceEtUtilisateur(
@@ -517,3 +580,4 @@ class ConsoleAdministration {
 }
 
 module.exports = ConsoleAdministration;
+/* eslint-enable no-console */
