@@ -1,23 +1,18 @@
 <script lang="ts">
   import { rechercheTextuelle } from '../stores/rechercheTextuelle.store';
-  import { rechercheParCategorie } from '../stores/rechercheParCategorie.store';
-  import { rechercheParReferentiel } from '../stores/rechercheParReferentiel.store';
   import { nombreResultats } from '../stores/nombreDeResultats.store';
-  import SelectionStatut from '../../ui/SelectionStatut.svelte';
   import type { ReferentielStatut } from '../../ui/types';
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import { rechercheParAvancement } from '../stores/rechercheParAvancement.store';
-  import { rechercheParPriorite } from '../stores/rechercheParPriorite.store';
-  import { rechercheMesMesures } from '../stores/rechercheMesMesures.store';
+  import { createEventDispatcher } from 'svelte';
 
   export let referentielStatuts: ReferentielStatut;
 
+  const declenche = createEventDispatcher<{ supprimeFiltres: null }>();
+
   const supprimeRechercheEtFiltres = () => {
+    declenche('supprimeFiltres');
     $rechercheTextuelle = '';
-    $rechercheParCategorie = [];
-    $rechercheParReferentiel = [];
-    $rechercheParPriorite = [];
-    $rechercheMesMesures = false;
   };
 </script>
 
