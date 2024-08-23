@@ -141,6 +141,10 @@
     line-height: 20px;
   }
 
+  select:not(:disabled).avecLibelleOption.vide {
+    border: 1px solid var(--liseres-fonce);
+  }
+
   select.avecLibelleOption {
     padding: 8px;
     border-radius: 4px;
