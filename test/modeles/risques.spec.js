@@ -8,7 +8,7 @@ const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
 
 const ils = it;
 
-describe('Les risques liés à une homologation', () => {
+describe('Les risques liés à un service', () => {
   ils('agrègent des risques spécifiques', () => {
     const risques = new Risques({
       risquesSpecifiques: [

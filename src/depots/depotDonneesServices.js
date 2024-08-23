@@ -160,18 +160,18 @@ const creeDepot = (config = {}) => {
   };
 
   const metsAJourProprieteService = (nomPropriete, idService, propriete) => {
-    const metsAJour = (h) => {
-      h[nomPropriete] ||= {};
+    const metsAJour = (s) => {
+      s[nomPropriete] ||= {};
 
       const donneesPropriete = propriete.toJSON();
-      Object.assign(h[nomPropriete], donneesPropriete);
+      Object.assign(s[nomPropriete], donneesPropriete);
 
-      const { id, ...donnees } = h;
+      const { id, ...donnees } = s;
       return p.sauvegarde(id, donnees);
     };
 
     const trouveDonneesService = (id) =>
-      p.lis.un(id).then((h) => h.donneesAPersister().toutes());
+      p.lis.un(id).then((s) => s.donneesAPersister().toutes());
 
     return trouveDonneesService(idService).then(metsAJour);
   };

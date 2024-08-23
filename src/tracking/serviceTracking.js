@@ -3,15 +3,15 @@ const fabriqueServiceTracking = () => {
     depotHomologations,
     idUtilisateur
   ) => {
-    const hs = await depotHomologations.services(idUtilisateur);
+    const services = await depotHomologations.services(idUtilisateur);
 
-    return hs.length === 0
+    return services.length === 0
       ? 0
       : Math.floor(
-          hs.reduce(
-            (accumulateur, h) => accumulateur + h.contributeurs.length,
+          services.reduce(
+            (accumulateur, s) => accumulateur + s.contributeurs.length,
             0
-          ) / hs.length
+          ) / services.length
         );
   };
 
@@ -19,7 +19,7 @@ const fabriqueServiceTracking = () => {
     depotHomologations,
     idUtilisateur
   ) => {
-    const [nbMoyenContributeurs, hs] = await Promise.all([
+    const [nbMoyenContributeurs, services] = await Promise.all([
       nombreMoyenContributeursPourUtilisateur(
         depotHomologations,
         idUtilisateur
@@ -28,18 +28,18 @@ const fabriqueServiceTracking = () => {
     ]);
 
     return {
-      nombreServices: hs.length,
+      nombreServices: services.length,
       nombreMoyenContributeurs: nbMoyenContributeurs,
       tauxCompletudeMoyenTousServices: Math.floor(
-        (hs.reduce((accumulateur, h) => {
-          const completudeMesures = h.completudeMesures();
+        (services.reduce((accumulateur, s) => {
+          const completudeMesures = s.completudeMesures();
           return (
             accumulateur +
             completudeMesures.nombreMesuresCompletes /
               completudeMesures.nombreTotalMesures
           );
         }, 0) /
-          hs.length) *
+          services.length) *
           100
       ),
     };

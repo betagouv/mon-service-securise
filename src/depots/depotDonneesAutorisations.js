@@ -87,8 +87,8 @@ const creeDepot = (config = {}) => {
     };
 
     const verifieServiceExiste = async (id) => {
-      const h = await depotServices.service(nouvelleAutorisation.idService);
-      if (!h)
+      const s = await depotServices.service(nouvelleAutorisation.idService);
+      if (!s)
         throw new ErreurServiceInexistant(`Le service "${id}" n'existe pas`);
     };
 

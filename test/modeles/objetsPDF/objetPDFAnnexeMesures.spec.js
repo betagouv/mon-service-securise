@@ -48,7 +48,7 @@ describe("L'objet PDF de l'annexe des mesures", () => {
     expect(donnees.categories).to.eql(donneesReferentiel.categoriesMesures);
   });
 
-  it("fournit le nom du service de l'homologation", () => {
+  it('fournit le nom du service', () => {
     const vueAnnexePDFMesures = new VueAnnexePDFMesures(service, referentiel);
 
     const donnees = vueAnnexePDFMesures.donnees();
@@ -57,7 +57,7 @@ describe("L'objet PDF de l'annexe des mesures", () => {
     expect(donnees.nomService).to.equal('Nom Service');
   });
 
-  it("fournit les mesures par statut et par catégorie de l'homologation", () => {
+  it('fournit les mesures par statut et par catégorie du service', () => {
     const vueAnnexePDFMesures = new VueAnnexePDFMesures(service, referentiel);
     service.mesuresParStatutEtCategorie = () => ({
       grave: { gouvernance: [{ id: 'mesure1' }] },
@@ -71,7 +71,7 @@ describe("L'objet PDF de l'annexe des mesures", () => {
     });
   });
 
-  it("fournit le nombre de mesures à remplir toutes catégories de l'homologation", () => {
+  it('fournit le nombre de mesures à remplir toutes catégories du service', () => {
     const vueAnnexePDFMesures = new VueAnnexePDFMesures(service, referentiel);
     service.nombreTotalMesuresARemplirToutesCategories = () => 6;
 

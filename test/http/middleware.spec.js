@@ -174,7 +174,7 @@ describe('Le middleware MSS', () => {
     });
   });
 
-  describe('sur recherche homologation existante', () => {
+  describe("sur recherche d'un service existant", () => {
     const adaptateurJWT = {
       decode: () => ({ idUtilisateur: '999', cguAcceptees: true }),
     };
