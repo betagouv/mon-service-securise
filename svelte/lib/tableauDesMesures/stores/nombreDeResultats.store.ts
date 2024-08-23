@@ -4,6 +4,7 @@ import { rechercheParCategorie } from './rechercheParCategorie.store';
 import { resultatsDeRecherche } from './resultatsDeRecherche.store';
 import { rechercheParPriorite } from './rechercheParPriorite.store';
 import type { Avancement } from './rechercheParAvancement.store';
+import { rechercheMesMesures } from './rechercheMesMesures.store';
 
 type NombreResultats = {
   filtrees: number;
@@ -17,6 +18,7 @@ export const nombreResultats = derived<
     typeof rechercheParReferentiel,
     typeof rechercheParCategorie,
     typeof rechercheParPriorite,
+    typeof rechercheMesMesures,
   ],
   NombreResultats
 >(
@@ -25,12 +27,14 @@ export const nombreResultats = derived<
     rechercheParReferentiel,
     rechercheParCategorie,
     rechercheParPriorite,
+    rechercheMesMesures,
   ],
   ([
     $resultatsDeRecherche,
     $rechercheParReferentiel,
     $rechercheParCategorie,
     $rechercheParPriorite,
+    $rechercheMesMesures,
   ]) => {
     const nbMesuresGeneralesFiltrees = Object.keys(
       $resultatsDeRecherche.mesuresGenerales
@@ -46,7 +50,8 @@ export const nombreResultats = derived<
       aDesFiltresAppliques:
         $rechercheParReferentiel.length > 0 ||
         $rechercheParCategorie.length > 0 ||
-        $rechercheParPriorite.length > 0,
+        $rechercheParPriorite.length > 0 ||
+        $rechercheMesMesures,
       nombreParAvancement: {
         statutADefinir:
           $resultatsDeRecherche.parAvancement.statutADefinir.length,
