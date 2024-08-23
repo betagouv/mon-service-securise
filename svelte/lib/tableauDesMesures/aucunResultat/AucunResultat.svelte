@@ -8,6 +8,7 @@
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import { rechercheParAvancement } from '../stores/rechercheParAvancement.store';
   import { rechercheParPriorite } from '../stores/rechercheParPriorite.store';
+  import { rechercheMesMesures } from '../stores/rechercheMesMesures.store';
 
   export let referentielStatuts: ReferentielStatut;
 
@@ -16,6 +17,7 @@
     $rechercheParCategorie = [];
     $rechercheParReferentiel = [];
     $rechercheParPriorite = [];
+    $rechercheMesMesures = false;
   };
 </script>
 
