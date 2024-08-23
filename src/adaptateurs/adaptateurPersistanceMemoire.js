@@ -47,7 +47,7 @@ const nouvelAdaptateur = (
   const suggestionsActionsService = (idService) =>
     donnees.suggestionsActions.filter((s) => s.idService === idService);
 
-  const service = async (id) => donnees.services.find((h) => h.id === id);
+  const service = async (id) => donnees.services.find((s) => s.id === id);
 
   const services = async (idUtilisateur) => {
     const as = await autorisations(idUtilisateur);

@@ -4,7 +4,7 @@ const {
   consigneServiceSupprimeDansJournal,
 } = require('../../../src/bus/abonnements/consigneServiceSupprimeDansJournal');
 
-describe("L'abonnement qui consigne (dans le journal MSS) la finalisation d'un dossier d'homologation", () => {
+describe("L'abonnement qui consigne (dans le journal MSS) la suppression d'un service", () => {
   let adaptateurJournal;
 
   beforeEach(() => {

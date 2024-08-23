@@ -48,8 +48,8 @@ describe("L'ajout d'un contributeur sur des services", () => {
     const utilisateurCourant = { prenomNom: () => '' };
     depotDonnees.utilisateur = async () => utilisateurCourant;
 
-    const homologation = { nomService: () => '' };
-    depotDonnees.service = async () => homologation;
+    const service = { nomService: () => '' };
+    depotDonnees.service = async () => service;
 
     adaptateurMail = fabriqueAdaptateurMailMemoire();
     adaptateurMail.envoieMessageInvitationContribution = async () => {};
@@ -109,11 +109,11 @@ describe("L'ajout d'un contributeur sur des services", () => {
     beforeEach(() => {
       const contributeur = { email: 'jean.dupont@mail.fr' };
       const utilisateurCourant = { prenomNom: () => 'Utilisateur Courant' };
-      const homologation = { id: '123', nomService: () => 'Nom Service' };
+      const service = { id: '123', nomService: () => 'Nom Service' };
 
       depotDonnees.utilisateurAvecEmail = async () => contributeur;
       depotDonnees.utilisateur = async () => utilisateurCourant;
-      depotDonnees.service = async () => homologation;
+      depotDonnees.service = async () => service;
     });
 
     describe("si le contributeur n'a pas déjà été invité", () => {

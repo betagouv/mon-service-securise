@@ -723,9 +723,7 @@ describe('Le dépôt de données des services', () => {
             niveauSecurite: 'niveau1',
           },
         });
-        expect().fail(
-          "La création de l'homologation aurait dû lever une exception"
-        );
+        expect().fail('La création du service aurait dû lever une exception');
       } catch (e) {
         expect(e).to.be.an(ErreurDonneesNiveauSecuriteInsuffisant);
       }
@@ -744,7 +742,7 @@ describe('Le dépôt de données des services', () => {
           descriptionService: donneesDescriptionServiceIncompletes,
         })
         .then(() =>
-          done("La création de l'homologation aurait dû lever une exception")
+          done('La création du service aurait dû lever une exception')
         )
         .catch((e) => expect(e).to.be.an(ErreurDonneesObligatoiresManquantes))
         .then(() => done())
@@ -1016,7 +1014,7 @@ describe('Le dépôt de données des services', () => {
       depot
         .ajouteDossierCourantSiNecessaire('123')
         .then(() => depot.service('123'))
-        .then((h) => expect(h.nombreDossiers()).to.equal(1))
+        .then((s) => expect(s.nombreDossiers()).to.equal(1))
         .then(() => done())
         .catch(done);
     });
@@ -1039,7 +1037,7 @@ describe('Le dépôt de données des services', () => {
       depot
         .ajouteDossierCourantSiNecessaire('123')
         .then(() => depot.service('123'))
-        .then((h) => expect(h.nombreDossiers()).to.equal(1))
+        .then((s) => expect(s.nombreDossiers()).to.equal(1))
         .then(() => done())
         .catch(done);
     });
@@ -1063,7 +1061,7 @@ describe('Le dépôt de données des services', () => {
       depot
         .ajouteDossierCourantSiNecessaire('123')
         .then(() => depot.service('123'))
-        .then((h) => expect(h.dossiers.item(0).id).to.equal('999'))
+        .then((s) => expect(s.dossiers.item(0).id).to.equal('999'))
         .then(() => done())
         .catch(done);
     });
@@ -1132,9 +1130,9 @@ describe('Le dépôt de données des services', () => {
       depot
         .enregistreDossier('123', dossier)
         .then(() => depot.service('123'))
-        .then((h) => {
-          expect(h.nombreDossiers()).to.equal(1);
-          const dossierCourant = h.dossierCourant();
+        .then((s) => {
+          expect(s.nombreDossiers()).to.equal(1);
+          const dossierCourant = s.dossierCourant();
           expect(dossierCourant.decision.dateHomologation).to.equal(
             '2022-11-30'
           );
@@ -1167,10 +1165,10 @@ describe('Le dépôt de données des services', () => {
       depot
         .enregistreDossier('123', dossier)
         .then(() => depot.service('123'))
-        .then((h) => {
-          expect(h.nombreDossiers()).to.equal(2);
-          expect(h.dossiers.item(0).id).to.equal('888');
-          expect(h.dossiers.item(1).id).to.equal('999');
+        .then((s) => {
+          expect(s.nombreDossiers()).to.equal(2);
+          expect(s.dossiers.item(0).id).to.equal('888');
+          expect(s.dossiers.item(1).id).to.equal('999');
           done();
         })
         .catch(done);
@@ -1209,8 +1207,8 @@ describe('Le dépôt de données des services', () => {
       depot
         .enregistreDossier('123', seulementAutorite)
         .then(() => depot.service('123'))
-        .then((h) => {
-          const donneesDossierCourant = h.dossierCourant().toJSON();
+        .then((s) => {
+          const donneesDossierCourant = s.dossierCourant().toJSON();
           expect(donneesDossierCourant.autorite).to.eql(autorite);
           expect(donneesDossierCourant.decision).to.eql({});
           done();

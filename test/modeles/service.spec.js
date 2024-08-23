@@ -572,10 +572,10 @@ describe('Un service', () => {
   });
 
   it('connaît son indice cyber', () => {
-    const homologation = unService().construis();
-    homologation.mesures.indiceCyber = () => 3.7;
+    const service = unService().construis();
+    service.mesures.indiceCyber = () => 3.7;
 
-    expect(homologation.indiceCyber()).to.equal(3.7);
+    expect(service.indiceCyber()).to.equal(3.7);
   });
 
   it('délègue aux mesures le calcul du nombre total de mesures générales', () => {
@@ -707,7 +707,7 @@ describe('Un service', () => {
   });
 
   describe('sur requête des données à persister', () => {
-    it("retourne une représentation correcte de l'ensemble de l'Homologation", () => {
+    it("retourne une représentation correcte de l'ensemble du service", () => {
       const referentiel = Referentiel.creeReferentiel({
         categoriesMesures: {},
         documentsHomologation: { decision: {} },
@@ -723,7 +723,7 @@ describe('Un service', () => {
       const aujourdhui = new Date();
       const service = new Service(
         {
-          id: 'id-homologation',
+          id: 'id-service',
           descriptionService: uneDescriptionValide(
             Referentiel.creeReferentielVide()
           )
@@ -751,7 +751,7 @@ describe('Un service', () => {
       );
 
       expect(service.donneesAPersister().toutes()).to.eql({
-        id: 'id-homologation',
+        id: 'id-service',
         descriptionService: {
           delaiAvantImpactCritique: 'unDelai',
           localisationDonnees: 'uneLocalisation',
@@ -820,7 +820,7 @@ describe('Un service', () => {
 
     it('retourne les données sans identifiant', () => {
       const service = new Service(
-        { id: 'id-homologation', descriptionService },
+        { id: 'id-service', descriptionService },
         referentiel
       );
 
@@ -829,9 +829,9 @@ describe('Un service', () => {
       expect(duplicata.id).to.be(undefined);
     });
 
-    it("utilise le nom d'homologation passé en paramètre", () => {
+    it('utilise le nom de service passé en paramètre', () => {
       const service = new Service(
-        { id: 'id-homologation', descriptionService },
+        { id: 'id-service', descriptionService },
         referentiel
       );
 
@@ -845,7 +845,7 @@ describe('Un service', () => {
     it("ne duplique pas les dossiers de l'homologation", () => {
       const service = new Service(
         {
-          id: 'id-homologation',
+          id: 'id-service',
           descriptionService,
           dossiers: [{ id: '999' }],
         },

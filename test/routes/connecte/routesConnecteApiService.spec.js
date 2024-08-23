@@ -1025,7 +1025,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().enregistreDossier = async () => {};
     });
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
         [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
         {
@@ -1093,7 +1093,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.referentiel().recharge({ echeancesRenouvellement: { unAn: {} } });
     });
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
         [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
         {
@@ -1193,7 +1193,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .recharge({ documentsHomologation: { decision: {} } });
     });
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
         [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
         {
@@ -1257,7 +1257,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
         [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
         {
@@ -1398,7 +1398,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().enregistreDossier = () => Promise.resolve();
     });
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
         [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
         {
@@ -1511,7 +1511,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().finaliseDossierCourant = () => Promise.resolve();
     });
 
-    it("recherche l'homologation correspondante", (done) => {
+    it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
         [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
         {
