@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import type { EcheanceMesure } from '../../ui/types';
+  import type { EcheanceMesure } from './types';
 
   export let echeance: string | undefined;
   export let estLectureSeule = false;
