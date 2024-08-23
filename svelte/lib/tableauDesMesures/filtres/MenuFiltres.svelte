@@ -21,6 +21,7 @@
     rechercheParCategorie.set([]);
     rechercheParReferentiel.set([]);
     rechercheParPriorite.set([]);
+    rechercheMesMesures.set(false);
   };
 
   $: cocheGlobaleANSSI =
