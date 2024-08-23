@@ -16,7 +16,7 @@
   import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
   import { rechercheTextuelle } from '../stores/rechercheTextuelle.store';
   import SelectionPriorite from '../../ui/SelectionPriorite.svelte';
-  import SelectionEcheance from './SelectionEcheance.svelte';
+  import SelectionEcheance from '../../ui/SelectionEcheance.svelte';
   import { planDActionDisponible } from '../../modeles/mesure';
   import SelectionResponsables from '../../ui/SelectionResponsables.svelte';
 

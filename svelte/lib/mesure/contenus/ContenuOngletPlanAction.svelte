@@ -4,7 +4,7 @@
   import Avertissement from '../../ui/Avertissement.svelte';
   import SelectionStatut from '../../ui/SelectionStatut.svelte';
   import type { ReferentielPriorite, ReferentielStatut } from '../../ui/types';
-  import SelectionEcheance from '../../tableauDesMesures/ligne/SelectionEcheance.svelte';
+  import SelectionEcheance from '../../ui/SelectionEcheance.svelte';
   import { planDActionDisponible } from '../../modeles/mesure';
   import { contributeurs } from '../../tableauDesMesures/stores/contributeurs.store';
   import Initiales from '../../ui/Initiales.svelte';
