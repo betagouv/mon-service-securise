@@ -93,7 +93,7 @@ class ConsoleAdministration {
   }
 
   supprimeService(idService) {
-    return this.depotDonnees.supprimeHomologation(idService);
+    return this.depotDonnees.supprimeService(idService);
   }
 
   async supprimeUtilisateur(id) {

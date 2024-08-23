@@ -1541,7 +1541,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.middleware().reinitialise({
         autorisationACharger: Autorisation.NouvelleAutorisationProprietaire(),
       });
-      testeur.depotDonnees().supprimeHomologation = () => Promise.resolve();
+      testeur.depotDonnees().supprimeService = () => Promise.resolve();
     });
 
     it('utilise le middleware de recherche du service', (done) => {
@@ -1602,7 +1602,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('demande au dépôt de supprimer le service', (done) => {
       let serviceSupprime = false;
 
-      testeur.depotDonnees().supprimeHomologation = (idService) => {
+      testeur.depotDonnees().supprimeService = (idService) => {
         try {
           expect(idService).to.equal('123');
           serviceSupprime = true;
