@@ -44,6 +44,10 @@
   import { featureFlags } from '../featureFlags';
   import { contributeurs } from './stores/contributeurs.store';
   import { storeAutorisations } from '../gestionContributeurs/stores/autorisations.store';
+  import { rechercheParCategorie } from './stores/rechercheParCategorie.store';
+  import { rechercheParReferentiel } from './stores/rechercheParReferentiel.store';
+  import { rechercheParPriorite } from './stores/rechercheParPriorite.store';
+  import { rechercheMesMesures } from './stores/rechercheMesMesures.store';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -141,6 +145,13 @@
   if (modeVisiteGuidee) {
     $rechercheParAvancement = 'enAction';
   }
+
+  const supprimeFiltres = () => {
+    $rechercheParCategorie = [];
+    $rechercheParReferentiel = [];
+    $rechercheParPriorite = [];
+    $rechercheMesMesures = false;
+  };
 </script>
 
 <svelte:body
@@ -166,7 +177,7 @@
       placeholder="Rechercher par intitulé, description, ID"
     />
   </div>
-  <MenuFiltres {categories} {priorites} />
+  <MenuFiltres {categories} {priorites} on:supprimeFiltres={supprimeFiltres} />
 </div>
 {#if $nouveautesPage.doitAfficherNouveautePourPage('ongletStatutsMesures') && !modeVisiteGuidee}
   <Avertissement
@@ -248,7 +259,10 @@
   </thead>
   <tbody>
     {#if $nombreResultats.aucunResultat}
-      <AucunResultat referentielStatuts={statuts} />
+      <AucunResultat
+        referentielStatuts={statuts}
+        on:supprimeFiltres={supprimeFiltres}
+      />
     {:else}
       {#each Object.entries($resultatsDeRecherche.mesuresGenerales) as [id, mesure] (id)}
         <LigneMesure

@@ -13,16 +13,12 @@
   import { rechercheParPriorite } from '../stores/rechercheParPriorite.store';
   import { featureFlags } from '../../featureFlags';
   import { rechercheMesMesures } from '../stores/rechercheMesMesures.store';
+  import { createEventDispatcher } from 'svelte';
 
   export let categories: Record<IdCategorie, string>;
   export let priorites: ReferentielPriorite;
 
-  const effaceFiltres = () => {
-    rechercheParCategorie.set([]);
-    rechercheParReferentiel.set([]);
-    rechercheParPriorite.set([]);
-    rechercheMesMesures.set(false);
-  };
+  const declenche = createEventDispatcher<{ supprimeFiltres: null }>();
 
   $: cocheGlobaleANSSI =
     $rechercheParReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
@@ -161,7 +157,7 @@
     {/if}
     <button
       class="bouton bouton-secondaire bouton-effacer-filtre"
-      on:click={effaceFiltres}
+      on:click={() => declenche('supprimeFiltres')}
     >
       Effacer les filtres
     </button>
