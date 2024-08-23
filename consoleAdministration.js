@@ -33,7 +33,6 @@ const fabriqueAdaptateurTracking = require('./src/adaptateurs/fabriqueAdaptateur
 const {
   consigneCompletudeDansJournal,
 } = require('./src/bus/abonnements/consigneCompletudeDansJournal');
-const DescriptionService = require('./src/modeles/descriptionService');
 const adaptateurChiffrementQuiChiffreVraiment = require('./src/adaptateurs/adaptateurChiffrementVault');
 
 const log = {
@@ -351,73 +350,6 @@ class ConsoleAdministration {
     }
     // eslint-disable-next-line no-console
     console.log(`\n${rapportExecution}`);
-  }
-
-  async retrogradeServiceSuiteSuppressionQuestionDecrire(persiste = false) {
-    /* eslint-disable no-await-in-loop */
-    /* eslint-disable no-console */
-    const tousServices = await this.depotDonnees.tousLesServices();
-    const lesServicesRetrogrades = tousServices
-      .map((s) => ({
-        service: s,
-        niveauCalcule: DescriptionService.estimeNiveauDeSecurite(
-          s.descriptionService
-        ),
-      }))
-      .filter(
-        ({ service, niveauCalcule }) =>
-          service.descriptionService.niveauSecurite !== niveauCalcule
-      );
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const { service, niveauCalcule } of lesServicesRetrogrades) {
-      if (niveauCalcule === 'niveau3') {
-        throw new Error(
-          `Cas impossible d'augmentation de niveau ${JSON.stringify(service)}`
-        );
-      }
-      const tacheService = {
-        id: fabriqueAdaptateurUUID().genereUUID(),
-        idService: service.id,
-        nature: 'niveauSecuriteRetrograde',
-        donnees: {
-          nouveauxBesoins:
-            niveauCalcule === 'niveau2' ? 'modérés' : 'élémentaires',
-        },
-      };
-      if (persiste) {
-        await this.adaptateurPersistance.ajouteTacheDeService(tacheService);
-      } else {
-        console.log('Tâche de service', tacheService);
-      }
-
-      const suggestionAction = {
-        idService: service.id,
-        nature: 'controleBesoinsDeSecuriteRetrogrades',
-      };
-      if (persiste) {
-        await this.adaptateurPersistance.ajouteSuggestionAction(
-          suggestionAction
-        );
-      } else {
-        console.log('Suggestion action', suggestionAction);
-      }
-
-      if (persiste) {
-        service.descriptionService.niveauSecurite = niveauCalcule;
-        await this.depotDonnees.metsAJourService(service);
-      } else {
-        console.log(
-          `Nouveau niveau securite ${niveauCalcule} pour service ${service.nomService()}`
-        );
-      }
-    }
-    console.log(
-      `Nombre de services rétrogradés: ${lesServicesRetrogrades.length}`
-    );
-
-    /* eslint-enable no-await-in-loop */
-    /* eslint-enable no-console */
   }
 
   async rattrapageProfilsContactBrevo() {
