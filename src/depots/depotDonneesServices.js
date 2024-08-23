@@ -334,7 +334,7 @@ const creeDepot = (config = {}) => {
   const remplaceRisquesSpecifiquesDuService = (...params) =>
     remplaceProprieteService('risquesSpecifiques', ...params);
 
-  const supprimeHomologation = async (idService) => {
+  const supprimeService = async (idService) => {
     const { contributeurs: avantSuppression } = await p.lis.un(idService);
 
     await p.supprime(idService);
@@ -482,7 +482,7 @@ const creeDepot = (config = {}) => {
     rechercheContributeurs,
     remplaceRisquesSpecifiquesDuService,
     supprimeContributeur,
-    supprimeHomologation,
+    supprimeService,
     tousLesServices,
     trouveIndexDisponible,
   };
