@@ -29,6 +29,14 @@
     dispatch('modificationEcheance', { echeance: nouvelleEcheance });
   };
 
+  let dateEcheance: string;
+
+  if (echeance) {
+    dateEcheance = new Date(Date.parse(echeance))
+      .toISOString()
+      .substring(0, 10);
+  }
+
   const labelVide = avecLabel ? 'Définir l’échéance' : 'Échéance';
 </script>
 
@@ -46,7 +54,12 @@
     {dateFormattee ?? labelVide}
   </button>
   <!-- Sans passer par `bind:value` car ça casse le fonctionnement du bouton « Effacer » du date-picker -->
-  <input type="date" bind:this={elementDate} on:input={modifieEcheance} />
+  <input
+    type="date"
+    bind:this={elementDate}
+    on:input={modifieEcheance}
+    value={dateEcheance}
+  />
 </div>
 
 <style>
