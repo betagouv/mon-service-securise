@@ -64,7 +64,7 @@
     </div>
     <div class="pied-page">
       <button on:click={ouvreTiroirContributeurs}
-        >Gerer les contributeurs</button
+        >Gérer les contributeurs</button
       >
       <span>pour modifier les droits ou ajouter des responsables.</span>
     </div>
