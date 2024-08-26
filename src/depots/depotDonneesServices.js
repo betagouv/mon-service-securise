@@ -16,6 +16,7 @@ const {
 const EvenementDossierHomologationFinalise = require('../bus/evenementDossierHomologationFinalise');
 const EvenementServiceSupprime = require('../bus/evenementServiceSupprime');
 const Entite = require('../modeles/entite');
+const EvenementMesureServiceModifiee = require('../bus/evenementMesureServiceModifiee');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -408,7 +409,7 @@ const creeDepot = (config = {}) => {
     await metsAJourService(s);
     const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementMesuresServiceModifiees({ service: s, utilisateur: u })
+      new EvenementMesureServiceModifiee({ service: s, utilisateur: u })
     );
   };
 
