@@ -59,7 +59,7 @@
         cible: cibleTiroirMesure,
         callbackInitialeCible: () => {
           document
-            .getElementsByClassName('ligne-de-mesure')[0]
+            .getElementsByClassName('titre-mesure')[0]
             .dispatchEvent(new Event('click'));
           document.querySelector(
             '#conteneur-mesure .conteneur-actions button'
