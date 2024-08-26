@@ -61,6 +61,7 @@ const Entite = require('../../src/modeles/entite');
 const Utilisateur = require('../../src/modeles/utilisateur');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
 const { creeReferentielVide } = require('../../src/referentiel');
+const EvenementMesureServiceModifiee = require('../../src/bus/evenementMesureServiceModifiee');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -1679,7 +1680,7 @@ describe('Le dépôt de données des services', () => {
       await depot.metsAJourMesureGeneraleDuService('123', '789', mesure);
 
       expect(
-        busEvenements.aRecuUnEvenement(EvenementMesuresServiceModifiees)
+        busEvenements.aRecuUnEvenement(EvenementMesureServiceModifiee)
       ).to.be(true);
     });
   });
