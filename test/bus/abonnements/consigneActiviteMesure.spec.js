@@ -20,6 +20,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
   beforeEach(() => {
     ajouteActiviteMesureAppelee = false;
+    activiteAjoutee = undefined;
     const depotDonnees = {
       ajouteActiviteMesure: (activite) => {
         ajouteActiviteMesureAppelee = true;
@@ -31,6 +32,21 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
   it('renvoie une fonction', () => {
     expect(typeof gestionnaire).to.be('function');
+  });
+
+  it("ne consigne pas si la mesure n'a pas changé", async () => {
+    const mesureGenerale = new MesureGenerale(
+      { id: 'audit', statut: 'fait' },
+      referentiel
+    );
+    const evenement = {
+      ancienneMesure: mesureGenerale,
+      nouvelleMesure: mesureGenerale,
+    };
+
+    await gestionnaire(evenement);
+
+    expect(ajouteActiviteMesureAppelee).to.be(false);
   });
 
   it("crée une activité de mise à jour de statut et délègue au dépôt de données l'ajout", async () => {
@@ -78,18 +94,31 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     });
   });
 
-  it("ne consigne pas si le statut n'a pas changé", async () => {
-    const mesureGenerale = new MesureGenerale(
-      { id: 'audit', statut: 'fait' },
-      referentiel
-    );
+  it("ajoute une activité d'ajout de priorité et délègue au dépôt de données l'ajout", async () => {
+    referentiel.enrichis({ prioritesMesures: { p2: {} } });
+    const service = unService().construis();
+    const utilisateur = unUtilisateur().construis();
     const evenement = {
-      ancienneMesure: mesureGenerale,
-      nouvelleMesure: mesureGenerale,
+      service,
+      utilisateur,
+      ancienneMesure: new MesureGenerale(
+        { id: 'audit', priorite: undefined },
+        referentiel
+      ),
+      nouvelleMesure: new MesureGenerale(
+        { id: 'audit', priorite: 'p2' },
+        referentiel
+      ),
     };
 
     await gestionnaire(evenement);
 
-    expect(ajouteActiviteMesureAppelee).to.be(false);
+    expect(activiteAjoutee).to.be.an(ActiviteMesure);
+    expect(activiteAjoutee.service).to.be(service);
+    expect(activiteAjoutee.acteur).to.be(utilisateur);
+    expect(activiteAjoutee.type).to.be('ajoutPriorite');
+    expect(activiteAjoutee.details).to.eql({
+      nouvellePriorite: 'p2',
+    });
   });
 });
