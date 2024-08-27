@@ -26,7 +26,7 @@ class StatistiquesMesuresGenerales {
   }
 
   constructor(
-    { mesuresGenerales, mesuresPersonnalisees },
+    { mesuresGenerales, mesuresPersonnalisees, mesuresSpecifiques = [] },
     referentiel,
     ignoreMesuresNonPrisesEnCompte = false
   ) {
@@ -44,18 +44,31 @@ class StatistiquesMesuresGenerales {
       recommandees: initialiseStatsParCategorie(referentiel, { total: 0 }),
     };
 
-    const mesuresATraiter = Object.entries(mesuresPersonnalisees)
+    const filtreMesuresNonPriseEnCompte = (mesure) => {
+      if (ignoreMesuresNonPrisesEnCompte) {
+        return mesure.statut !== 'nonFait';
+      }
+      return true;
+    };
+
+    const mesuresGeneralesATraiter = Object.entries(mesuresPersonnalisees)
       .map(([id, mesurePerso]) => ({
         ...mesurePerso,
         ...mesuresGenerales.avecId(id),
         type: mesurePerso.indispensable ? 'indispensables' : 'recommandees',
       }))
-      .filter((mesure) => {
-        if (ignoreMesuresNonPrisesEnCompte) {
-          return mesure.statut !== 'nonFait';
-        }
-        return true;
-      });
+      .filter(filtreMesuresNonPriseEnCompte);
+    const mesuresSpecifiquesATraiter = mesuresSpecifiques
+      .map((m) => ({
+        ...m,
+        type: 'recommandees', // Car les mesures "spécifiques" sont comptées au même titre que les mesures "recommandées"
+      }))
+      .filter(filtreMesuresNonPriseEnCompte);
+
+    const mesuresATraiter = [
+      ...mesuresGeneralesATraiter,
+      ...mesuresSpecifiquesATraiter,
+    ];
     mesuresATraiter.forEach((mesure) => {
       const { categorie, type } = mesure;
       const avecStatut = statutRenseigne(mesure?.statut);
