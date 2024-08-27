@@ -240,3 +240,42 @@
   font-weight: 500;
   white-space: nowrap;
 }
+
+.conteneur-indice-cyber .onglet {
+  min-width: 140px;
+  padding: 9px 12px;
+  background: #eff6ff;
+  border: none;
+  cursor: pointer;
+  border-top: 2px solid transparent;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.conteneur-indice-cyber .onglet.actif {
+  background: white;
+  border-top: 2px solid var(--bleu-mise-en-avant);
+  border-left: 1px solid var(--liseres-fonce);
+  border-right: 1px solid var(--liseres-fonce);
+  border-bottom: 1px solid white;
+  color: var(--bleu-mise-en-avant);
+  font-weight: bold;
+}
+
+.conteneur-indice-cyber .onglet .note-onglet {
+  padding: 3px 8px 5px 8px;
+  border-radius: 4px;
+  background: white;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--texte-fonce);
+}
+
+.conteneur-indice-cyber .onglet.actif .note-onglet {
+  background: var(--fond-bleu-pale);
+}

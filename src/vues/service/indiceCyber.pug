@@ -29,6 +29,10 @@ block formulaire
   - const noteMax = referentiel.indiceCyberNoteMax()
   - const trancheIndiceCyber = referentiel.trancheIndiceCyber(indiceCyber.total)
   .conteneur-indice-cyber
+    .onglets
+      button.onglet.actif(type="button")
+        span Indice cyber ANSSI
+        span.note-onglet!= `${indiceCyber.total.toFixed(1)}/${noteMax}`
     .conteneur-descriptif
       .disque-indice
         #conteneur-indice-cyber
