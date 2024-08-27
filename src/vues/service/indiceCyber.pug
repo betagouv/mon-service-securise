@@ -26,49 +26,55 @@ block header-titre-page
 
 block formulaire
   - const indiceCyber = service.indiceCyber()
+  - const indiceCyberPersonnalise = service.indiceCyberPersonnalise()
   - const noteMax = referentiel.indiceCyberNoteMax()
   - const trancheIndiceCyber = referentiel.trancheIndiceCyber(indiceCyber.total)
   .conteneur-indice-cyber
     .onglets
-      button.onglet.actif(type="button")
+      button.onglet.actif(type="button" data-cible='indice-cyber-ANSSI')
         span Indice cyber ANSSI
         span.note-onglet!= `${indiceCyber.total.toFixed(1)}/${noteMax}`
-    .conteneur-descriptif
-      .disque-indice
-        #conteneur-indice-cyber
-      .contenu-descriptif
-        p
-          | L'indice cyber est une évaluation indicative du niveau de sécurisation du service, calculé à partir des mesures «&nbsp;faites » et «&nbsp;partielles » proposées par #{referentielConcernes} dans MonServiceSécurisé.
-          | Il est un indicateur de la qualité de la démarche de sécurisation du service.
-    .conteneur-plus-details
-      details(open=true)
-        summary(role='button')
-        .contenu-plus-details
-          .conteneur-graphique
-            h4 Répartition par catégorie
-            +radarIndiceCyber([
-              indiceCyber.gouvernance,
-              indiceCyber.resilience,
-              indiceCyber.defense,
-              indiceCyber.protection,
-            ], noteMax)
-          .conteneur-explication-valeur
-            .titre
-              img.icone(src="/statique/assets/images/icone_explication_tranche.svg")
-              h4 Quelle est la valeur de l'indice cyber ?
-            p Face aux risques les plus courants, un indice cyber peut être considéré comme
-            ul.liste-tranches
-              each tranche in referentiel.descriptionsTranchesIndiceCyber(indiceCyber.total)
-                li(class=`${tranche.trancheCourante ? 'tranche-courante' : ''}`)= tranche.description
-    .conteneur-recommandation-anssi
-      img.fond(src="/statique/assets/images/fond_recommandation_anssi.svg")
-      .titre
-        img.icone(src="/statique/assets/images/icone_recommandation_anssi.svg")
-        h3 Recommandation indicative de l'ANSSI en cas de décision d'homologation
-      .conteneur-duree-recommandee
-        if(trancheIndiceCyber.conseilHomologation)
-          p= trancheIndiceCyber.conseilHomologation
-        if(!trancheIndiceCyber.deconseillee)
-          .separateur
-          p Durée d'homologation conseillée
-          p#duree-recommandee= trancheIndiceCyber.dureeHomologationConseillee
+      button.onglet(type="button" data-cible='indice-cyber-personnalise')
+        span Indice cyber personnalisé
+        span.note-onglet!= `${indiceCyberPersonnalise.total.toFixed(1)}/${noteMax}`
+    #indice-cyber-ANSSI.contenu-global
+      .conteneur-descriptif
+        .disque-indice
+          #conteneur-indice-cyber
+        .contenu-descriptif
+          p
+            | L'indice cyber est une évaluation indicative du niveau de sécurisation du service, calculé à partir des mesures «&nbsp;faites » et «&nbsp;partielles » proposées par #{referentielConcernes} dans MonServiceSécurisé.
+            | Il est un indicateur de la qualité de la démarche de sécurisation du service.
+      .conteneur-plus-details
+        details(open=true)
+          summary(role='button')
+          .contenu-plus-details
+            .conteneur-graphique
+              h4 Répartition par catégorie
+              +radarIndiceCyber([
+                indiceCyber.gouvernance,
+                indiceCyber.resilience,
+                indiceCyber.defense,
+                indiceCyber.protection,
+              ], noteMax)
+            .conteneur-explication-valeur
+              .titre
+                img.icone(src="/statique/assets/images/icone_explication_tranche.svg")
+                h4 Quelle est la valeur de l'indice cyber ?
+              p Face aux risques les plus courants, un indice cyber peut être considéré comme
+              ul.liste-tranches
+                each tranche in referentiel.descriptionsTranchesIndiceCyber(indiceCyber.total)
+                  li(class=`${tranche.trancheCourante ? 'tranche-courante' : ''}`)= tranche.description
+      .conteneur-recommandation-anssi
+        img.fond(src="/statique/assets/images/fond_recommandation_anssi.svg")
+        .titre
+          img.icone(src="/statique/assets/images/icone_recommandation_anssi.svg")
+          h3 Recommandation indicative de l'ANSSI en cas de décision d'homologation
+        .conteneur-duree-recommandee
+          if(trancheIndiceCyber.conseilHomologation)
+            p= trancheIndiceCyber.conseilHomologation
+          if(!trancheIndiceCyber.deconseillee)
+            .separateur
+            p Durée d'homologation conseillée
+            p#duree-recommandee= trancheIndiceCyber.dureeHomologationConseillee
+    #indice-cyber-personnalise.contenu-global
