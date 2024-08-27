@@ -279,3 +279,13 @@
 .conteneur-indice-cyber .onglet.actif .note-onglet {
   background: var(--fond-bleu-pale);
 }
+
+.conteneur-indice-cyber .onglets {
+  display: flex;
+  flex-direction: row;
+  gap: 9px;
+}
+
+#indice-cyber-personnalise {
+  display: none;
+}
