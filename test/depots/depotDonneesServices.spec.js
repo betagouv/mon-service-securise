@@ -1683,6 +1683,46 @@ describe('Le dépôt de données des services', () => {
         busEvenements.aRecuUnEvenement(EvenementMesureServiceModifiee)
       ).to.be(true);
     });
+
+    it('fournit la version précédente de la mesure dans l’événement', async () => {
+      const mesures = new Mesures(
+        { mesuresGenerales: [{ id: 'audit', statut: 'nonFait' }] },
+        referentiel
+      );
+      const mesure = new MesureGenerale(
+        { id: 'audit', statut: 'fait' },
+        referentiel
+      );
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('789').donnees)
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('123')
+            .avecMesures(mesures)
+            .construis()
+            .donneesAPersister().donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('789', '123').donnees
+        );
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecConstructeurDePersistance(persistance)
+        .avecBusEvenements(busEvenements)
+        .construis();
+
+      await depot.metsAJourMesureGeneraleDuService('123', '789', mesure);
+
+      const evenement = busEvenements.recupereEvenement(
+        EvenementMesureServiceModifiee
+      );
+      expect(evenement.ancienneMesure).to.eql(
+        new MesureGenerale({ id: 'audit', statut: 'nonFait' }, referentiel)
+      );
+      expect(evenement.nouvelleMesure).to.eql(
+        new MesureGenerale({ id: 'audit', statut: 'fait' }, referentiel)
+      );
+    });
   });
 
   describe("sur demande de suppression d'un contributeur du service", () => {
