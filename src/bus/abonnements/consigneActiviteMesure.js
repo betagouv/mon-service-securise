@@ -5,25 +5,29 @@ const {
 
 function consigneActiviteMesure({ depotDonnees }) {
   return async ({ service, utilisateur, ancienneMesure, nouvelleMesure }) => {
-    if (ancienneMesure?.statut === nouvelleMesure.statut) {
-      return;
+    async function ajouteActivite(type, details) {
+      try {
+        const activiteMesure = new ActiviteMesure({
+          service,
+          acteur: utilisateur,
+          type,
+          details,
+        });
+        await depotDonnees.ajouteActiviteMesure(activiteMesure);
+      } catch (e) {
+        fabriqueAdaptateurGestionErreur().logueErreur("Erreur d'ajout d'activité", e);
+      }
     }
-    try {
-      const activiteMesure = new ActiviteMesure({
-        service,
-        acteur: utilisateur,
-        type: 'miseAJourStatut',
-        details: {
-          ancienStatut: ancienneMesure?.statut,
-          nouveauStatut: nouvelleMesure.statut,
-        },
+
+    if (ancienneMesure?.statut !== nouvelleMesure.statut) {
+      await ajouteActivite('miseAJourStatut', {
+        ancienStatut: ancienneMesure?.statut,
+        nouveauStatut: nouvelleMesure.statut,
       });
-      await depotDonnees.ajouteActiviteMesure(activiteMesure);
-    } catch (e) {
-      fabriqueAdaptateurGestionErreur().logueErreur(
-        "Erreur d'ajout d'activité",
-        e
-      );
+    } else if (ancienneMesure.priorite !== nouvelleMesure.priorite) {
+      await ajouteActivite('ajoutPriorite', {
+        nouvellePriorite: nouvelleMesure.priorite,
+      });
     }
   };
 }
