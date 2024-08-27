@@ -86,6 +86,8 @@ const nouvelAdaptateur = (env) => {
       email_hash: emailHash,
     });
 
+  const ajouteActiviteMesure = (idActeur, idService, type, details) => {};
+
   const arreteTout = () => knex.destroy();
 
   const service = async (id) =>
@@ -449,6 +451,7 @@ const nouvelAdaptateur = (env) => {
     ajouteSuggestionAction,
     ajouteTacheDeService,
     ajouteUtilisateur,
+    ajouteActiviteMesure,
     arreteTout,
     autorisation,
     autorisationPour,
