@@ -1,10 +1,10 @@
 .zone-principale {
-  margin-bottom: 8em;
   background: white;
 }
 
 .conteneur-indice-cyber {
   text-align: left;
+  padding-bottom: 8em;
 }
 
 .conteneur-indice-cyber .conteneur-titre {
