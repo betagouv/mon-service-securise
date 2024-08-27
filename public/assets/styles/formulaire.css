@@ -159,11 +159,13 @@ input[type='checkbox']:checked::before {
 }
 
 input[type='radio']:checked::before {
-  height: 100%;
-  width: 100%;
-  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="25" style="fill: %230f7ac7" /></svg>');
-  background-repeat: no-repeat;
-  background-size: contain;
+  display: block;
+  content: '';
+  background: var(--bleu-mise-en-avant);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  transform: translate(4px, 4px);
 }
 
 input[type='checkbox'] + label,
