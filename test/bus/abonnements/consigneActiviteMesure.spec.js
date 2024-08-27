@@ -12,14 +12,17 @@ const Referentiel = require('../../../src/referentiel');
 
 describe("L'abonnement qui consigne l'activité pour une mesure", () => {
   let activiteAjoutee;
+  let ajouteActiviteMesureAppelee;
   let gestionnaire;
   const referentiel = Referentiel.creeReferentiel({
     mesures: { audit: { categorie: 'gouvernance' } },
   });
 
   beforeEach(() => {
+    ajouteActiviteMesureAppelee = false;
     const depotDonnees = {
       ajouteActiviteMesure: (activite) => {
+        ajouteActiviteMesureAppelee = true;
         activiteAjoutee = activite;
       },
     };
@@ -30,13 +33,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(typeof gestionnaire).to.be('function');
   });
 
-  it('delegue au depôt de données la creation de l’activité', async () => {
-    await gestionnaire({ nouvelleMesure: {} });
-
-    expect(activiteAjoutee).to.be.an(ActiviteMesure);
-  });
-
-  it('crée une activité de mise à jour de statut', async () => {
+  it("crée une activité de mise à jour de statut et délègue au dépôt de données l'ajout", async () => {
     const service = unService().construis();
     const utilisateur = unUtilisateur().construis();
     const evenement = {
@@ -54,6 +51,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
     await gestionnaire(evenement);
 
+    expect(activiteAjoutee).to.be.an(ActiviteMesure);
     expect(activiteAjoutee.service).to.be(service);
     expect(activiteAjoutee.acteur).to.be(utilisateur);
     expect(activiteAjoutee.type).to.be('miseAJourStatut');
@@ -78,5 +76,20 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
       ancienStatut: undefined,
       nouveauStatut: 'fait',
     });
+  });
+
+  it("ne consigne pas si le statut n'a pas changé", async () => {
+    const mesureGenerale = new MesureGenerale(
+      { id: 'audit', statut: 'fait' },
+      referentiel
+    );
+    const evenement = {
+      ancienneMesure: mesureGenerale,
+      nouvelleMesure: mesureGenerale,
+    };
+
+    await gestionnaire(evenement);
+
+    expect(ajouteActiviteMesureAppelee).to.be(false);
   });
 });
