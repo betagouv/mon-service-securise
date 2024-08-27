@@ -6,9 +6,9 @@ class ActiviteMesure {
     this.details = donnees.details;
   }
 
-  acteurId = () => this.acteur.id;
+  idActeur = () => this.acteur.id;
 
-  serviceId = () => this.service.id;
+  idService = () => this.service.id;
 }
 
 module.exports = ActiviteMesure;
