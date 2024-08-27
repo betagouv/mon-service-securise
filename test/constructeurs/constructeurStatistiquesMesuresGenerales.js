@@ -8,6 +8,7 @@ class ConstructeurStatistiquesMesuresGenerales {
     this.donnees = {
       mesuresGenerales: [],
       mesuresPersonnalisees: {},
+      mesuresSpecifiques: [],
     };
     this.referentiel = referentiel;
     this.ignoreMesuresNonPrisesEnCompte = false;
@@ -20,6 +21,11 @@ class ConstructeurStatistiquesMesuresGenerales {
 
   avecMesuresPersonnalisees(donneesMesuresPersonnalisees) {
     this.donnees.mesuresPersonnalisees = donneesMesuresPersonnalisees;
+    return this;
+  }
+
+  avecMesuresSpecifiques(donneesMesuresSpecifiques) {
+    this.donnees.mesuresSpecifiques = donneesMesuresSpecifiques;
     return this;
   }
 
@@ -36,6 +42,7 @@ class ConstructeurStatistiquesMesuresGenerales {
           this.referentiel
         ),
         mesuresPersonnalisees: this.donnees.mesuresPersonnalisees,
+        mesuresSpecifiques: this.donnees.mesuresSpecifiques,
       },
       this.referentiel,
       this.ignoreMesuresNonPrisesEnCompte

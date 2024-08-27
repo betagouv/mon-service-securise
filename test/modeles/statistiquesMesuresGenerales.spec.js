@@ -447,7 +447,41 @@ describe('Les statistiques des mesures générales', () => {
     });
   });
 
-  it('calculent les totaux et le nombre de mesure faites par type et par catégories sans prendre en compte les mesures "nonFait"', () => {
+  it('ajoute les mesures spécifiques aux totaux des mesures recommandées par type et par catégories', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: {
+        gouvernance: 'Gouvernance',
+        protection: 'Protection',
+      },
+      mesures: { G1: {}, P1: {} },
+      statutsMesures: { fait: 'Fait' },
+    });
+
+    const stats = desStatistiques(referentiel)
+      .surLesMesuresGenerales([
+        { id: 'G1', statut: 'fait' },
+        { id: 'P1', statut: 'fait' },
+      ])
+      .avecMesuresPersonnalisees({
+        G1: { categorie: 'gouvernance', indispensable: true },
+        P1: { categorie: 'protection' },
+      })
+      .avecMesuresSpecifiques([{ categorie: 'protection', statut: 'fait' }])
+      .construis();
+
+    expect(stats.totauxParTypeEtParCategorie()).to.eql({
+      indispensables: {
+        gouvernance: { sansStatut: 0, fait: 1, total: 1 },
+        protection: { sansStatut: 0, fait: 0, total: 0 },
+      },
+      recommandees: {
+        protection: { sansStatut: 0, fait: 2, total: 2 },
+        gouvernance: { sansStatut: 0, fait: 0, total: 0 },
+      },
+    });
+  });
+
+  it('calculent les totaux et le nombre de mesure faite par type et par catégorie sans prendre en compte les mesures "nonFait"', () => {
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: {
         gouvernance: 'Gouvernance',
