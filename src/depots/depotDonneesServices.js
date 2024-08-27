@@ -405,11 +405,17 @@ const creeDepot = (config = {}) => {
     mesure
   ) => {
     const s = await p.lis.un(idService);
+    const ancienneMesure = s.mesuresGenerales().avecId(mesure.id);
     s.metsAJourMesureGenerale(mesure);
     await metsAJourService(s);
     const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementMesureServiceModifiee({ service: s, utilisateur: u })
+      new EvenementMesureServiceModifiee({
+        service: s,
+        utilisateur: u,
+        ancienneMesure,
+        nouvelleMesure: mesure,
+      })
     );
   };
 
