@@ -300,6 +300,8 @@ const routesConnecteApi = ({
       const idUtilisateur = requete.idUtilisateurCourant;
       const emailContributeur = requete.body.emailContributeur?.toLowerCase();
 
+      if (!droits.estProprietaire) delete droits.estProprietaire;
+
       if (!verifieCoherenceDesDroits(droits)) {
         reponse.status(422).json({ erreur: { code: 'DROITS_INCOHERENTS' } });
         return;

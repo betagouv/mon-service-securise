@@ -661,6 +661,9 @@ const routesConnecteApiService = ({
       const { idAutorisation } = requete.params;
       const nouveauxDroits = requete.body.droits;
 
+      if (!nouveauxDroits.estProprietaire)
+        delete nouveauxDroits.estProprietaire;
+
       if (!verifieCoherenceDesDroits(nouveauxDroits)) {
         reponse.status(422).json({ code: 'DROITS_INCOHERENTS' });
         return;

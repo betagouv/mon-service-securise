@@ -2028,6 +2028,20 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
+    it('ne renvoie pas d’erreur 422 si propritaire est false', async () => {
+      testeur.depotDonnees().autorisation = async (id) =>
+        uneAutorisation().avecId(id).deContributeur('888', '456').construis();
+
+      const reponse = await axios.patch(
+        'http://localhost:1234/api/service/456/autorisations/uuid-1',
+        {
+          droits: { estProprietaire: false },
+        }
+      );
+
+      expect(reponse.status).to.be(200);
+    });
+
     it('permet de nommer un nouveau propriétaire', async () => {
       testeur.depotDonnees().autorisation = async () =>
         uneAutorisation().deContributeur('BBB', '456').construis();
