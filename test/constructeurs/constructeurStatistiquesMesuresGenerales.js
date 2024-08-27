@@ -10,6 +10,7 @@ class ConstructeurStatistiquesMesuresGenerales {
       mesuresPersonnalisees: {},
     };
     this.referentiel = referentiel;
+    this.ignoreMesuresNonPrisesEnCompte = false;
   }
 
   surLesMesuresGenerales(donneesMesuresGenerales) {
@@ -22,6 +23,11 @@ class ConstructeurStatistiquesMesuresGenerales {
     return this;
   }
 
+  ignoreLesMesuresNonPrisesEnCompte() {
+    this.ignoreMesuresNonPrisesEnCompte = true;
+    return this;
+  }
+
   construis() {
     return new StatistiquesMesuresGenerales(
       {
@@ -31,7 +37,8 @@ class ConstructeurStatistiquesMesuresGenerales {
         ),
         mesuresPersonnalisees: this.donnees.mesuresPersonnalisees,
       },
-      this.referentiel
+      this.referentiel,
+      this.ignoreMesuresNonPrisesEnCompte
     );
   }
 }

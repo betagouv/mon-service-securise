@@ -25,7 +25,11 @@ class StatistiquesMesuresGenerales {
     );
   }
 
-  constructor({ mesuresGenerales, mesuresPersonnalisees }, referentiel) {
+  constructor(
+    { mesuresGenerales, mesuresPersonnalisees },
+    referentiel,
+    ignoreMesuresNonPrisesEnCompte = false
+  ) {
     StatistiquesMesuresGenerales.valide({ mesuresPersonnalisees }, referentiel);
 
     this.parCategorie = initialiseStatsParCategorie(referentiel);
@@ -46,6 +50,9 @@ class StatistiquesMesuresGenerales {
       const { categorie } = mesurePerso;
       const avecStatut = statutRenseigne(generale?.statut);
       if (avecStatut) {
+        if (ignoreMesuresNonPrisesEnCompte && generale.statut === 'nonFait') {
+          return;
+        }
         this.parCategorie[categorie][generale.statut] += 1;
         this.toutesCategories[generale.statut] += 1;
       } else {
