@@ -16,7 +16,8 @@ const tauxDeCategorie = (
   const fractionRecommandees =
     recommandees.fait + recommandees.enCours * coeff.statutPartiel;
   let score;
-  if (recommandees.total === 0)
+  if (recommandees.total === 0 && indispensables.total === 0) score = 0;
+  else if (recommandees.total === 0)
     score = fractionIndispensables / indispensables.total;
   else if (indispensables.total === 0)
     score = fractionRecommandees / recommandees.total;
