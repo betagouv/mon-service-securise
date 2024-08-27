@@ -344,6 +344,42 @@ describe('Les statistiques des mesures générales', () => {
 
         expect(stats[methode]().total).to.be(4);
       });
+
+      it(`ne prend pas en compte les mesures 'nonFait' dans le nombre total de mesures qui sont ${nom}`, () => {
+        const referentiel = Referentiel.creeReferentiel({
+          categoriesMesures: { gouvernance: 'Gouvernance' },
+          mesures: { A: {}, B: {}, C: {}, D: {}, E: {} },
+          statutsMesures: { fait: '', nonFait: '' },
+        });
+
+        const typeCorrectFaite = { id: 'A', statut: 'fait' };
+        const typeCorrectNonFaite = { id: 'B', statut: 'nonFait' };
+        const typeCorrectSansStatut = { id: 'C' };
+        const typeIncorrect = { id: 'D', statut: 'fait' };
+        const typeCorrectSeulementPersonnalisee = {
+          indispensable,
+          categorie: 'gouvernance',
+        };
+
+        const stats = desStatistiques(referentiel)
+          .surLesMesuresGenerales([
+            typeCorrectFaite,
+            typeCorrectNonFaite,
+            typeCorrectSansStatut,
+            typeIncorrect,
+          ])
+          .avecMesuresPersonnalisees({
+            A: { indispensable, categorie: 'gouvernance' },
+            B: { indispensable, categorie: 'gouvernance' },
+            C: { indispensable, categorie: 'gouvernance' },
+            D: { indispensable: !indispensable, categorie: 'gouvernance' },
+            E: typeCorrectSeulementPersonnalisee,
+          })
+          .ignoreLesMesuresNonPrisesEnCompte()
+          .construis();
+
+        expect(stats[methode]().total).to.be(3);
+      });
     });
   });
 
@@ -407,6 +443,74 @@ describe('Les statistiques des mesures générales', () => {
       recommandees: {
         protection: { sansStatut: 0, enCours: 1, fait: 1, total: 2 },
         gouvernance: { sansStatut: 0, enCours: 0, fait: 0, total: 0 },
+      },
+    });
+  });
+
+  it('calculent les totaux et le nombre de mesure faites par type et par catégories sans prendre en compte les mesures "nonFait"', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: {
+        gouvernance: 'Gouvernance',
+        protection: 'Protection',
+      },
+      mesures: { G1: {}, G2: {}, G3: {}, P1: {}, P2: {} },
+      statutsMesures: {
+        fait: 'Fait',
+        enCours: 'En cours',
+        nonFait: 'Non prise en compte',
+      },
+    });
+
+    const stats = desStatistiques(referentiel)
+      .surLesMesuresGenerales([
+        { id: 'G1', statut: 'fait' },
+        { id: 'G2', statut: 'fait' },
+        { id: 'G3', statut: 'enCours' },
+        { id: 'P1', statut: 'nonFait' },
+        { id: 'P2', statut: 'enCours' },
+      ])
+      .avecMesuresPersonnalisees({
+        G1: { categorie: 'gouvernance', indispensable: true },
+        G2: { categorie: 'gouvernance', indispensable: true },
+        G3: { categorie: 'gouvernance', indispensable: true },
+        P1: { categorie: 'protection' },
+        P2: { categorie: 'protection' },
+      })
+      .ignoreLesMesuresNonPrisesEnCompte()
+      .construis();
+
+    expect(stats.totauxParTypeEtParCategorie()).to.eql({
+      indispensables: {
+        gouvernance: {
+          sansStatut: 0,
+          enCours: 1,
+          fait: 2,
+          nonFait: 0,
+          total: 3,
+        },
+        protection: {
+          sansStatut: 0,
+          enCours: 0,
+          fait: 0,
+          nonFait: 0,
+          total: 0,
+        },
+      },
+      recommandees: {
+        protection: {
+          sansStatut: 0,
+          enCours: 1,
+          fait: 0,
+          nonFait: 0,
+          total: 1,
+        },
+        gouvernance: {
+          sansStatut: 0,
+          enCours: 0,
+          fait: 0,
+          nonFait: 0,
+          total: 0,
+        },
       },
     });
   });
