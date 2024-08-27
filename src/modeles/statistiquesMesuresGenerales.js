@@ -44,41 +44,43 @@ class StatistiquesMesuresGenerales {
       recommandees: initialiseStatsParCategorie(referentiel, { total: 0 }),
     };
 
-    Object.entries(mesuresPersonnalisees).forEach(([id, mesurePerso]) => {
-      const generale = mesuresGenerales.avecId(id);
-
-      const { categorie } = mesurePerso;
-      const avecStatut = statutRenseigne(generale?.statut);
-      if (avecStatut) {
-        if (ignoreMesuresNonPrisesEnCompte && generale.statut === 'nonFait') {
-          return;
+    const mesuresATraiter = Object.entries(mesuresPersonnalisees)
+      .map(([id, mesurePerso]) => ({
+        ...mesurePerso,
+        ...mesuresGenerales.avecId(id),
+        type: mesurePerso.indispensable ? 'indispensables' : 'recommandees',
+      }))
+      .filter((mesure) => {
+        if (ignoreMesuresNonPrisesEnCompte) {
+          return mesure.statut !== 'nonFait';
         }
-        this.parCategorie[categorie][generale.statut] += 1;
-        this.toutesCategories[generale.statut] += 1;
+        return true;
+      });
+    mesuresATraiter.forEach((mesure) => {
+      const { categorie, type } = mesure;
+      const avecStatut = statutRenseigne(mesure?.statut);
+      if (avecStatut) {
+        this.parCategorie[categorie][mesure.statut] += 1;
+        this.toutesCategories[mesure.statut] += 1;
       } else {
         this.parCategorie[categorie].sansStatut += 1;
         this.toutesCategories.sansStatut += 1;
       }
 
-      const { indispensable } = mesurePerso;
-      const type = indispensable ? 'indispensables' : 'recommandees';
-
       this.parType[type].total += 1;
       this.parTypeEtParCategorie[type][categorie].total += 1;
 
       if (avecStatut) {
-        this.parType[type][generale.statut] += 1;
-        this.parTypeEtParCategorie[type][categorie][generale.statut] += 1;
+        this.parType[type][mesure.statut] += 1;
+        this.parTypeEtParCategorie[type][categorie][mesure.statut] += 1;
       }
 
-      const seulementMesurePerso = !generale; // Seulement une mesure perso : signifie "sans statut"
-
-      const nonFaite = generale?.statut !== STATUT_FAIT;
-      const compteCommeRestante = nonFaite || seulementMesurePerso;
+      const nonFaite = mesure?.statut !== STATUT_FAIT;
+      const compteCommeRestante = nonFaite || !mesure.statut;
       if (compteCommeRestante) this.parType[type].restant += 1;
 
-      const generaleSansStatut = generale && !generale.statut;
-      const aRemplir = generaleSansStatut || seulementMesurePerso;
+      const generaleSansStatut = mesure && !mesure.statut;
+      const aRemplir = generaleSansStatut || !mesure.statut;
       if (aRemplir) {
         this.parType[type].aRemplir += 1;
         this.parTypeEtParCategorie[type][categorie].sansStatut += 1;
