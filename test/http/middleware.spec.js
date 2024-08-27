@@ -404,10 +404,10 @@ describe('Le middleware MSS', () => {
       );
     });
 
-    it("autorise le chargement des images dont l'URL commence par `data:` ainsi que les images venant de CRISP", (done) => {
+    it('autorise le chargement des images venant de CRISP', (done) => {
       verifiePositionnementHeader(
         'content-security-policy',
-        "img-src 'self' https://storage.crisp.chat data:;",
+        "img-src 'self' https://storage.crisp.chat;",
         done
       );
     });

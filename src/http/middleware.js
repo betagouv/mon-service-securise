@@ -28,7 +28,7 @@ const middleware = (configuration = {}) => {
 
     const defaultCsp = "default-src 'self'";
     const connectCsp = `connect-src 'self' ${CSP_BIBLIOTHEQUES.matomo.connect}`;
-    const imgCsp = `img-src 'self' ${CSP_BIBLIOTHEQUES.crisp.image} data:`;
+    const imgCsp = `img-src 'self' ${CSP_BIBLIOTHEQUES.crisp.image}`;
     const mediaCsp = `media-src 'self' ${CSP_BIBLIOTHEQUES.monservicesecurise.media}`;
 
     const styleCsp = nonce ? `style-src 'self' 'nonce-${nonce}'` : '';
