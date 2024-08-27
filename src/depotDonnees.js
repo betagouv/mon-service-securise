@@ -9,6 +9,8 @@ const depotDonneesParcoursUtilisateurs = require('./depots/depotDonneesParcoursU
 const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
 const depotDonneesNotifications = require('./depots/depotDonneesNotifications');
 const depotDonneesSuggestionsActions = require('./depots/depotDonneesSuggestionsActions');
+const depotDonneesActivitesMesure = require('./depots/depotDonneesActivitesMesure');
+
 const {
   fabriqueAdaptateurChiffrement,
 } = require('./adaptateurs/fabriqueAdaptateurChiffrement');
@@ -68,6 +70,10 @@ const creeDepot = (config = {}) => {
   });
 
   const depotSuggestionsActions = depotDonneesSuggestionsActions.creeDepot({
+    adaptateurPersistance,
+  });
+
+  const depotActivitesMesure = depotDonneesActivitesMesure.creeDepot({
     adaptateurPersistance,
   });
 
@@ -140,9 +146,12 @@ const creeDepot = (config = {}) => {
 
   const { acquitteSuggestionAction } = depotSuggestionsActions;
 
+  const { ajouteActiviteMesure } = depotActivitesMesure;
+
   return {
     accesAutorise,
     acquitteSuggestionAction,
+    ajouteActiviteMesure,
     ajouteContributeurAuService,
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,

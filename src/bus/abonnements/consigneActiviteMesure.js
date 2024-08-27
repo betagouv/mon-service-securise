@@ -5,17 +5,20 @@ function consigneActiviteMesure({ depotDonnees }) {
     if (ancienneMesure?.statut === nouvelleMesure.statut) {
       return;
     }
-
-    const activiteMesure = new ActiviteMesure({
-      service,
-      acteur: utilisateur,
-      type: 'miseAJourStatut',
-      details: {
-        ancienStatut: ancienneMesure?.statut,
-        nouveauStatut: nouvelleMesure.statut,
-      },
-    });
-    depotDonnees.ajouteActiviteMesure(activiteMesure);
+    try {
+      const activiteMesure = new ActiviteMesure({
+        service,
+        acteur: utilisateur,
+        type: 'miseAJourStatut',
+        details: {
+          ancienStatut: ancienneMesure?.statut,
+          nouveauStatut: nouvelleMesure.statut,
+        },
+      });
+      await depotDonnees.ajouteActiviteMesure(activiteMesure);
+    } catch (e) {
+      console.error("Erreur d'ajout d'activité", e);
+    }
   };
 }
 
