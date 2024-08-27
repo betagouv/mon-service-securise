@@ -11,7 +11,9 @@
   import OnOff from '../kit/OnOff.svelte';
 
   export let utilisateur: Utilisateur;
-  export let droitsOriginaux: Record<Rubrique, Permission>;
+  export let droitsOriginaux: Record<Rubrique, Permission> & {
+    estProprietaire: boolean;
+  };
   $: redefinis = { ...droitsOriginaux };
 
   let rubriques: { id: Rubrique; nom: string; droit: Permission }[];

@@ -29,8 +29,9 @@
     droits: invitations[enPersonnalisation!.email].droits,
   });
   const personnaliseLesDroitsInvite = (
-    personnalises: Record<Rubrique, Permission>
+    personnalises: Record<Rubrique, Permission> & { estProprietaire: boolean }
   ) => {
+    personnalises.estProprietaire = false;
     invitations[enPersonnalisation!.email].droits = personnalises;
     invitations = invitations;
   };

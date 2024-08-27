@@ -977,6 +977,21 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         }
       );
     });
+
+    it('ne retourne pas une erreur HTTP 422 si les droits contiennent estProprietaire=false', async () => {
+      const reponse = await axios.post(
+        'http://localhost:1234/api/autorisation',
+        {
+          emailContributeur: 'jean.dupont@mail.fr',
+          idServices: ['123'],
+          droits: {
+            estProprietaire: false,
+          },
+        }
+      );
+
+      expect(reponse.status).to.be(200);
+    });
   });
 
   describe('quand requête DELETE sur `/api/autorisation`', () => {
