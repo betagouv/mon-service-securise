@@ -24,10 +24,19 @@ function consigneActiviteMesure({ depotDonnees }) {
         ancienStatut: ancienneMesure?.statut,
         nouveauStatut: nouvelleMesure.statut,
       });
-    } else if (ancienneMesure.priorite !== nouvelleMesure.priorite) {
-      await ajouteActivite('ajoutPriorite', {
-        nouvellePriorite: nouvelleMesure.priorite,
-      });
+    }
+
+    if (ancienneMesure?.priorite !== nouvelleMesure.priorite) {
+      if (ancienneMesure?.priorite) {
+        await ajouteActivite('miseAJourPriorite', {
+          anciennePriorite: ancienneMesure.priorite,
+          nouvellePriorite: nouvelleMesure.priorite,
+        });
+      } else {
+        await ajouteActivite('ajoutPriorite', {
+          nouvellePriorite: nouvelleMesure.priorite,
+        });
+      }
     }
   };
 }

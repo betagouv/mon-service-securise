@@ -12,6 +12,7 @@ const Referentiel = require('../../../src/referentiel');
 
 describe("L'abonnement qui consigne l'activité pour une mesure", () => {
   let activiteAjoutee;
+  let activiteAjoutees;
   let ajouteActiviteMesureAppelee;
   let gestionnaire;
   const referentiel = Referentiel.creeReferentiel({
@@ -21,10 +22,12 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
   beforeEach(() => {
     ajouteActiviteMesureAppelee = false;
     activiteAjoutee = undefined;
+    activiteAjoutees = [];
     const depotDonnees = {
       ajouteActiviteMesure: (activite) => {
         ajouteActiviteMesureAppelee = true;
         activiteAjoutee = activite;
+        activiteAjoutees.push(activite);
       },
     };
     gestionnaire = consigneActiviteMesure({ depotDonnees });
@@ -118,6 +121,54 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(activiteAjoutee.acteur).to.be(utilisateur);
     expect(activiteAjoutee.type).to.be('ajoutPriorite');
     expect(activiteAjoutee.details).to.eql({
+      nouvellePriorite: 'p2',
+    });
+  });
+
+  it('peut consigner une mise à jour du statut et de la priorité en même temps', async () => {
+    referentiel.enrichis({ prioritesMesures: { p2: {} } });
+    const service = unService().construis();
+    const utilisateur = unUtilisateur().construis();
+    const evenement = {
+      service,
+      utilisateur,
+      ancienneMesure: undefined,
+      nouvelleMesure: new MesureGenerale(
+        { id: 'audit', statut: 'nonFait', priorite: 'p2' },
+        referentiel
+      ),
+    };
+
+    await gestionnaire(evenement);
+
+    expect(activiteAjoutees.length).to.be(2);
+    expect(activiteAjoutees[0].type).to.be('miseAJourStatut');
+    expect(activiteAjoutees[1].type).to.be('ajoutPriorite');
+  });
+
+  it('ajoute une activité de mise à jour de priorité si celle-ci a changé', async () => {
+    referentiel.enrichis({ prioritesMesures: { p2: {}, p3: {} } });
+    const service = unService().construis();
+    const utilisateur = unUtilisateur().construis();
+    const evenement = {
+      service,
+      utilisateur,
+      ancienneMesure: new MesureGenerale(
+        { id: 'audit', priorite: 'p3' },
+        referentiel
+      ),
+      nouvelleMesure: new MesureGenerale(
+        { id: 'audit', priorite: 'p2' },
+        referentiel
+      ),
+    };
+
+    await gestionnaire(evenement);
+
+    expect(activiteAjoutee).to.be.an(ActiviteMesure);
+    expect(activiteAjoutee.type).to.be('miseAJourPriorite');
+    expect(activiteAjoutee.details).to.eql({
+      anciennePriorite: 'p3',
       nouvellePriorite: 'p2',
     });
   });
