@@ -30,7 +30,7 @@ $(() => {
   );
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-indice-cyber-personnalise', {
-      detail: { indiceCyberPersonnalise, noteMax },
+      detail: { indiceCyberPersonnalise, noteMax, idService },
     })
   );
   brancheOnglets();

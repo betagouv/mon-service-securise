@@ -1,6 +1,10 @@
 <script lang="ts">
+  import { recupereIndiceCyberPersonnalise } from './indiceCyberPersonnalise.api';
+
   export let indiceCyberPersonnalise: number;
   export let noteMax: number;
+
+  export let idService: string;
 
   $: indiceCyberFormatte = Intl.NumberFormat('fr', {
     minimumFractionDigits: 1,
@@ -13,9 +17,14 @@
   const hauteurRectangle = 12;
   const radius = 0.85 * (taille / 2);
 
-  const avancement = Math.floor((indiceCyberPersonnalise / noteMax) * nbTraits);
+  $: avancement = Math.floor((indiceCyberPersonnalise / noteMax) * nbTraits);
+
+  const metAJourIndiceCyber = async () => {
+    indiceCyberPersonnalise = await recupereIndiceCyberPersonnalise(idService);
+  };
 </script>
 
+<svelte:body on:mesure-modifiee={metAJourIndiceCyber} />
 <svg
   id="score-indice-cyber-personnalise"
   viewBox="0 0 {taille} {taille}"
