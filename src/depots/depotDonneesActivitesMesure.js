@@ -5,7 +5,7 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance.ajouteActiviteMesure(
       activite.idActeur(),
       activite.idService(),
-      null,
+      activite.idMesure(),
       activite.type,
       activite.details
     );
