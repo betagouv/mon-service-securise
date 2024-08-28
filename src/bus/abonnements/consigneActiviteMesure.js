@@ -15,7 +15,10 @@ function consigneActiviteMesure({ depotDonnees }) {
         });
         await depotDonnees.ajouteActiviteMesure(activiteMesure);
       } catch (e) {
-        fabriqueAdaptateurGestionErreur().logueErreur("Erreur d'ajout d'activité", e);
+        fabriqueAdaptateurGestionErreur().logueErreur(
+          "Erreur d'ajout d'activité",
+          e
+        );
       }
     }
 
@@ -32,7 +35,7 @@ function consigneActiviteMesure({ depotDonnees }) {
           anciennePriorite: ancienneMesure.priorite,
           nouvellePriorite: nouvelleMesure.priorite,
         });
-      } else {
+      } else if (nouvelleMesure.priorite) {
         await ajouteActivite('ajoutPriorite', {
           nouvellePriorite: nouvelleMesure.priorite,
         });

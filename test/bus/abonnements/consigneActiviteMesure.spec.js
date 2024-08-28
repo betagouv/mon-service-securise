@@ -12,7 +12,7 @@ const Referentiel = require('../../../src/referentiel');
 
 describe("L'abonnement qui consigne l'activité pour une mesure", () => {
   let activiteAjoutee;
-  let activiteAjoutees;
+  let activitesAjoutees;
   let ajouteActiviteMesureAppelee;
   let gestionnaire;
   const referentiel = Referentiel.creeReferentiel({
@@ -22,12 +22,12 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
   beforeEach(() => {
     ajouteActiviteMesureAppelee = false;
     activiteAjoutee = undefined;
-    activiteAjoutees = [];
+    activitesAjoutees = [];
     const depotDonnees = {
       ajouteActiviteMesure: (activite) => {
         ajouteActiviteMesureAppelee = true;
         activiteAjoutee = activite;
-        activiteAjoutees.push(activite);
+        activitesAjoutees.push(activite);
       },
     };
     gestionnaire = consigneActiviteMesure({ depotDonnees });
@@ -141,9 +141,9 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
     await gestionnaire(evenement);
 
-    expect(activiteAjoutees.length).to.be(2);
-    expect(activiteAjoutees[0].type).to.be('miseAJourStatut');
-    expect(activiteAjoutees[1].type).to.be('ajoutPriorite');
+    expect(activitesAjoutees.length).to.be(2);
+    expect(activitesAjoutees[0].type).to.be('miseAJourStatut');
+    expect(activitesAjoutees[1].type).to.be('ajoutPriorite');
   });
 
   it('ajoute une activité de mise à jour de priorité si celle-ci a changé', async () => {
@@ -171,5 +171,25 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
       anciennePriorite: 'p3',
       nouvellePriorite: 'p2',
     });
+  });
+
+  it("ne crée pas d'activité de mise à jour de priorité lorsque le statut est défini mais pas la priorité", async () => {
+    referentiel.enrichis({ prioritesMesures: { p2: {}, p3: {} } });
+    const service = unService().construis();
+    const utilisateur = unUtilisateur().construis();
+    const evenement = {
+      service,
+      utilisateur,
+      ancienneMesure: undefined,
+      nouvelleMesure: new MesureGenerale(
+        { id: 'audit', statut: 'fait', priorite: '' },
+        referentiel
+      ),
+    };
+
+    await gestionnaire(evenement);
+
+    expect(activitesAjoutees.length).to.be(1);
+    expect(activitesAjoutees[0].type).to.be('miseAJourStatut');
   });
 });
