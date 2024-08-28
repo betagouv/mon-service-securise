@@ -5,6 +5,8 @@
   import type { ActiviteMesure } from '../mesure.d';
   import { writable } from 'svelte/store';
 
+  export let visible: boolean;
+
   const { subscribe, update } = writable<ActiviteMesure[]>([]);
 
   export const storeActivites = {
@@ -22,6 +24,39 @@
   });
 </script>
 
-{#each $storeActivites as activite}
-  <h2>{activite.type}</h2>
-{/each}
+<div id="contenu-onglet-activite" class:visible>
+  {#each $storeActivites as activite}
+    <h2>{activite.type}</h2>
+  {:else}
+    <div class="aucune-activite">
+      <img src="/statique/assets/images/dossiers.png" alt="" />
+      <div>
+        <p>Il n’y a pas encore d’activité sur cette mesure.</p>
+      </div>
+    </div>
+  {/each}
+</div>
+
+<style>
+  #contenu-onglet-activite:not(.visible) {
+    display: none;
+  }
+
+  .aucune-activite {
+    margin: 70px 50px 0;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    color: var(--texte-clair);
+  }
+
+  .aucune-activite img {
+    max-width: 128px;
+  }
+
+  .aucune-activite p {
+    margin: 0;
+  }
+</style>
