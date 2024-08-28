@@ -113,6 +113,7 @@ const routesConnectePage = ({
         const mesures = moteurRegles.mesures(service.descriptionService);
 
         service.indiceCyber = () => ({ total: 4.3 });
+        service.indiceCyberPersonnalise = () => ({ total: 4.6 });
         reponse.render('service/mesures', {
           InformationsService,
           referentiel,
