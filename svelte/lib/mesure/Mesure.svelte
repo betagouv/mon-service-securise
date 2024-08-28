@@ -12,6 +12,7 @@
   import type { ReferentielPriorite, ReferentielStatut } from '../ui/types';
   import ContenuOngletPlanAction from './contenus/ContenuOngletPlanAction.svelte';
   import { planDActionDisponible } from '../modeles/mesure';
+  import ContenuOngletActivite from './contenus/ContenuOngletActivite.svelte';
 
   export let idService: string;
   export let categories: Record<string, string>;
@@ -83,6 +84,12 @@
         badge={!planDActionDisponible($store.mesureEditee.mesure.statut) &&
           'info'}
       />
+      <Onglet
+        bind:ongletActif
+        cetOnglet="activite"
+        labelOnglet="Activité"
+        sansBordureEnBas
+      />
     </div>
   {/if}
 
@@ -107,6 +114,7 @@
         {statuts}
         {priorites}
       />
+      <ContenuOngletActivite />
     </div>
     <div class="conteneur-actions">
       {#if $configurationAffichage.doitAfficherSuppression}
