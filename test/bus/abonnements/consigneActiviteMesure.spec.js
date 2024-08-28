@@ -16,6 +16,8 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
   let activitesAjoutees;
   let ajouteActiviteMesureAppelee;
   let gestionnaire;
+  const le12septembre = new Date(2024, 8, 12);
+  const le28aout = new Date(2024, 7, 28);
 
   beforeEach(() => {
     ajouteActiviteMesureAppelee = false;
@@ -156,7 +158,6 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
   });
 
   it("crée une activité lorsque la date d'échéance est ajoutée", async () => {
-    const le28aout = new Date(2024, 7, 28);
     const evenement = creeEvenement({
       ancienneMesure: uneMesureGenerale().avecEcheance('').construis(),
       nouvelleMesure: uneMesureGenerale().avecEcheance(le28aout).construis(),
@@ -179,5 +180,23 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
     expect(activitesAjoutees.length).to.be(1);
     expect(activiteAjoutee.type).to.be('ajoutStatut');
+  });
+
+  it("crée une activité lorsque l'échéance est modifiée", async () => {
+    const evenement = creeEvenement({
+      ancienneMesure: uneMesureGenerale()
+        .avecEcheance(le12septembre)
+        .construis(),
+      nouvelleMesure: uneMesureGenerale().avecEcheance(le28aout).construis(),
+    });
+
+    await gestionnaire(evenement);
+
+    expect(activitesAjoutees.length).to.be(1);
+    expect(activiteAjoutee.type).to.be('miseAJourEcheance');
+    expect(activiteAjoutee.details).to.eql({
+      ancienneEcheance: le12septembre,
+      nouvelleEcheance: le28aout,
+    });
   });
 });
