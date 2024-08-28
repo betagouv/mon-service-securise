@@ -73,6 +73,22 @@ class Mesures extends InformationsService {
     return this.nombreMesuresPersonnalisees();
   }
 
+  nombreTotalNonFait() {
+    const statistiquesAvecNonFait = new StatistiquesMesuresGenerales(
+      {
+        mesuresGenerales: this.mesuresGenerales,
+        mesuresPersonnalisees: this.mesuresPersonnalisees,
+        mesuresSpecifiques: this.mesuresSpecifiques.items,
+      },
+      this.referentiel,
+      false
+    );
+    return (
+      statistiquesAvecNonFait.indispensables().nonFait +
+      statistiquesAvecNonFait.recommandees().nonFait
+    );
+  }
+
   metsAJourMesuresSpecifiques(mesures) {
     this.mesuresSpecifiques = mesures;
   }
