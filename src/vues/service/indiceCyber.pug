@@ -10,9 +10,12 @@ block append styles
 
 block append scripts
   +composantSvelte('indiceCyber.js')
+  +composantSvelte('indiceCyberPersonnalise.js')
   script(type = 'module', src = '/statique/service/indiceCyber.js')
-  script(id = 'indice-cyber', type = 'application/json').
+  script(id = 'donnees-indice-cyber', type = 'application/json').
     !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax() })}
+  script(id = 'donnees-indice-cyber-personnalise', type = 'application/json').
+    !{JSON.stringify({ indiceCyberPersonnalise: service.indiceCyberPersonnalise().total })}
 
 block titre
   h1 Sécuriser

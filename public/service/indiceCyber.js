@@ -1,6 +1,11 @@
 $(() => {
   const idService = $('.page-service').data('id-service');
-  const { indiceCyber, noteMax } = JSON.parse($('#indice-cyber').text());
+  const { indiceCyber, noteMax } = JSON.parse(
+    $('#donnees-indice-cyber').text()
+  );
+  const { indiceCyberPersonnalise } = JSON.parse(
+    $('#donnees-indice-cyber-personnalise').text()
+  );
 
   const brancheOnglets = () => {
     const $onglets = $('.conteneur-indice-cyber .onglets .onglet');
@@ -21,6 +26,11 @@ $(() => {
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-indice-cyber', {
       detail: { indiceCyber, noteMax, idService },
+    })
+  );
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-indice-cyber-personnalise', {
+      detail: { indiceCyberPersonnalise, noteMax },
     })
   );
   brancheOnglets();
