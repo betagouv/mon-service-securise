@@ -37,15 +37,22 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(typeof gestionnaire).to.be('function');
   });
 
+  const creeEvenement = ({ ancienneMesure, nouvelleMesure }) => ({
+    service: unService().construis(),
+    utilisateur: unUtilisateur().construis(),
+    ancienneMesure,
+    nouvelleMesure,
+  });
+
   it("ne consigne pas si la mesure n'a pas changé", async () => {
     const mesureGenerale = new MesureGenerale(
       { id: 'audit', statut: 'fait' },
       referentiel
     );
-    const evenement = {
+    const evenement = creeEvenement({
       ancienneMesure: mesureGenerale,
       nouvelleMesure: mesureGenerale,
-    };
+    });
 
     await gestionnaire(evenement);
 
@@ -53,11 +60,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
   });
 
   it("crée une activité de mise à jour de statut et délègue au dépôt de données l'ajout", async () => {
-    const service = unService().construis();
-    const utilisateur = unUtilisateur().construis();
-    const evenement = {
-      service,
-      utilisateur,
+    const evenement = creeEvenement({
       ancienneMesure: new MesureGenerale(
         { id: 'audit', statut: 'nonFait' },
         referentiel
@@ -66,13 +69,13 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
         { id: 'audit', statut: 'fait' },
         referentiel
       ),
-    };
+    });
 
     await gestionnaire(evenement);
 
     expect(activiteAjoutee).to.be.an(ActiviteMesure);
-    expect(activiteAjoutee.service).to.be(service);
-    expect(activiteAjoutee.acteur).to.be(utilisateur);
+    expect(activiteAjoutee.service).to.be(evenement.service);
+    expect(activiteAjoutee.acteur).to.be(evenement.utilisateur);
     expect(activiteAjoutee.type).to.be('miseAJourStatut');
     expect(activiteAjoutee.details).to.eql({
       ancienStatut: 'nonFait',
@@ -81,13 +84,13 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
   });
 
   it("crée une activité d'ajout de statut si l'ancienne mesure est indéfinie", async () => {
-    const evenement = {
+    const evenement = creeEvenement({
       ancienneMesure: undefined,
       nouvelleMesure: new MesureGenerale(
         { id: 'audit', statut: 'fait' },
         referentiel
       ),
-    };
+    });
 
     await gestionnaire(evenement);
 
@@ -99,11 +102,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
   it("ajoute une activité d'ajout de priorité et délègue au dépôt de données l'ajout", async () => {
     referentiel.enrichis({ prioritesMesures: { p2: {} } });
-    const service = unService().construis();
-    const utilisateur = unUtilisateur().construis();
-    const evenement = {
-      service,
-      utilisateur,
+    const evenement = creeEvenement({
       ancienneMesure: new MesureGenerale(
         { id: 'audit', priorite: undefined },
         referentiel
@@ -112,13 +111,13 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
         { id: 'audit', priorite: 'p2' },
         referentiel
       ),
-    };
+    });
 
     await gestionnaire(evenement);
 
     expect(activiteAjoutee).to.be.an(ActiviteMesure);
-    expect(activiteAjoutee.service).to.be(service);
-    expect(activiteAjoutee.acteur).to.be(utilisateur);
+    expect(activiteAjoutee.service).to.be(evenement.service);
+    expect(activiteAjoutee.acteur).to.be(evenement.utilisateur);
     expect(activiteAjoutee.type).to.be('ajoutPriorite');
     expect(activiteAjoutee.details).to.eql({
       nouvellePriorite: 'p2',
@@ -127,17 +126,13 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
   it('peut consigner un ajout de statut et de la priorité en même temps', async () => {
     referentiel.enrichis({ prioritesMesures: { p2: {} } });
-    const service = unService().construis();
-    const utilisateur = unUtilisateur().construis();
-    const evenement = {
-      service,
-      utilisateur,
+    const evenement = creeEvenement({
       ancienneMesure: undefined,
       nouvelleMesure: new MesureGenerale(
         { id: 'audit', statut: 'nonFait', priorite: 'p2' },
         referentiel
       ),
-    };
+    });
 
     await gestionnaire(evenement);
 
@@ -148,11 +143,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
   it('ajoute une activité de mise à jour de priorité si celle-ci a changé', async () => {
     referentiel.enrichis({ prioritesMesures: { p2: {}, p3: {} } });
-    const service = unService().construis();
-    const utilisateur = unUtilisateur().construis();
-    const evenement = {
-      service,
-      utilisateur,
+    const evenement = creeEvenement({
       ancienneMesure: new MesureGenerale(
         { id: 'audit', priorite: 'p3' },
         referentiel
@@ -161,7 +152,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
         { id: 'audit', priorite: 'p2' },
         referentiel
       ),
-    };
+    });
 
     await gestionnaire(evenement);
 
@@ -175,17 +166,13 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
   it("ne crée pas d'activité de mise à jour de priorité lorsque le statut est défini mais pas la priorité", async () => {
     referentiel.enrichis({ prioritesMesures: { p2: {}, p3: {} } });
-    const service = unService().construis();
-    const utilisateur = unUtilisateur().construis();
-    const evenement = {
-      service,
-      utilisateur,
+    const evenement = creeEvenement({
       ancienneMesure: undefined,
       nouvelleMesure: new MesureGenerale(
         { id: 'audit', statut: 'fait', priorite: '' },
         referentiel
       ),
-    };
+    });
 
     await gestionnaire(evenement);
 
@@ -194,18 +181,14 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
   });
 
   it("ajoute la mesure dans l'activité", async () => {
-    const service = unService().construis();
-    const utilisateur = unUtilisateur().construis();
     const mesure = new MesureGenerale(
       { id: 'audit', statut: 'fait' },
       referentiel
     );
-    const evenement = {
-      service,
-      utilisateur,
+    const evenement = creeEvenement({
       ancienneMesure: undefined,
       nouvelleMesure: mesure,
-    };
+    });
 
     await gestionnaire(evenement);
 
