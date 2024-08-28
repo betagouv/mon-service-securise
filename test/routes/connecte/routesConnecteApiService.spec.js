@@ -815,7 +815,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         mesureGenerale
       );
 
-      expect(donneesRecues.echeance).to.equal('01/01/2024');
+      expect(donneesRecues.echeance.getTime()).to.equal(
+        new Date('01/01/2024').getTime()
+      );
     });
   });
 

@@ -14,6 +14,7 @@ class MesureGenerale extends Mesure {
 
     this.rendueIndispensable = !!donneesMesure.rendueIndispensable;
     this.referentiel = referentiel;
+    this.echeance = donneesMesure.echeance && new Date(donneesMesure.echeance);
   }
 
   donneesReferentiel() {

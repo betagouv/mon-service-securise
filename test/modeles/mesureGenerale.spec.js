@@ -44,7 +44,7 @@ describe('Une mesure de sécurité', () => {
     expect(mesure.statut).to.equal(MesureGenerale.STATUT_FAIT);
     expect(mesure.modalites).to.equal("Des modalités d'application");
     expect(mesure.priorite).to.equal('p3');
-    expect(mesure.echeance).to.equal('01/01/2023');
+    expect(mesure.echeance).to.eql(new Date('01/01/2023'));
     expect(mesure.responsables).to.eql([
       'unIdUtilisateur',
       'unAutreIdUtilisateur',
@@ -54,7 +54,7 @@ describe('Une mesure de sécurité', () => {
       statut: MesureGenerale.STATUT_FAIT,
       modalites: "Des modalités d'application",
       priorite: 'p3',
-      echeance: '01/01/2023',
+      echeance: new Date('01/01/2023'),
       responsables: ['unIdUtilisateur', 'unAutreIdUtilisateur'],
     });
   });
@@ -203,5 +203,18 @@ describe('Une mesure de sécurité', () => {
     const persistance = avecEcheance.donneesSerialisees();
 
     expect(persistance.echeance).to.be('2024-01-23T10:00:00.000Z');
+  });
+
+  it('conserve une echeance vide', () => {
+    const mesure = new MesureGenerale(
+      {
+        id: 'identifiantMesure',
+        statut: MesureGenerale.STATUT_FAIT,
+        echeance: '',
+      },
+      referentiel
+    );
+
+    expect(mesure.echeance).to.be('');
   });
 });
