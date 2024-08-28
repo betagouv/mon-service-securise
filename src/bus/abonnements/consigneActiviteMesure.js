@@ -24,10 +24,16 @@ function consigneActiviteMesure({ depotDonnees }) {
     }
 
     if (ancienneMesure?.statut !== nouvelleMesure.statut) {
-      await ajouteActivite('miseAJourStatut', {
-        ancienStatut: ancienneMesure?.statut,
-        nouveauStatut: nouvelleMesure.statut,
-      });
+      if (ancienneMesure?.statut) {
+        await ajouteActivite('miseAJourStatut', {
+          ancienStatut: ancienneMesure?.statut,
+          nouveauStatut: nouvelleMesure.statut,
+        });
+      } else {
+        await ajouteActivite('ajoutStatut', {
+          nouveauStatut: nouvelleMesure.statut,
+        });
+      }
     }
 
     if (ancienneMesure?.priorite !== nouvelleMesure.priorite) {
