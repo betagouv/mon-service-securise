@@ -111,7 +111,6 @@ const routesConnectePage = ({
         });
       } else if (idEtape === 'securiser') {
         const mesures = moteurRegles.mesures(service.descriptionService);
-        const pourcentageProgression = 80;
 
         service.indiceCyber = () => ({ total: 4.3 });
         reponse.render('service/mesures', {
@@ -119,7 +118,6 @@ const routesConnectePage = ({
           referentiel,
           service,
           etapeActive: 'mesures',
-          pourcentageProgression,
           mesures,
         });
       } else if (idEtape === 'homologuer') {
