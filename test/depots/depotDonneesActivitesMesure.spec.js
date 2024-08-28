@@ -19,6 +19,8 @@ describe('Le dépôt de données des activités de mesure', () => {
       adaptateurPersistance.ajouteActiviteMesure = (
         idActeur,
         idService,
+        // eslint-disable-next-line no-unused-vars
+        idMesure,
         type,
         details
       ) => {
