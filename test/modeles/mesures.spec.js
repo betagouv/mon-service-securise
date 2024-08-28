@@ -349,4 +349,47 @@ describe('Les mesures liées à un service', () => {
       });
     });
   });
+
+  it('connait le nombre total de mesures "nonFait"', () => {
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: { C1: 'C1', C2: 'C2' },
+      statutsMesures: {
+        fait: 'Faite',
+        nonFait: 'Non prise en compte',
+      },
+      mesures: {
+        M1: {},
+        M2: {},
+        M3: {},
+      },
+    });
+
+    const mesures = new Mesures(
+      {
+        mesuresGenerales: [
+          { id: 'M1', statut: 'nonFait' },
+          { id: 'M2', statut: 'nonFait' },
+          { id: 'M3', statut: 'fait' },
+        ],
+        mesuresSpecifiques: [
+          {
+            statut: 'nonFait',
+            categorie: 'C1',
+          },
+          {
+            statut: 'fait',
+            categorie: 'C2',
+          },
+        ],
+      },
+      referentiel,
+      {
+        M1: { categorie: 'C1' },
+        M2: { categorie: 'C2' },
+        M3: { categorie: 'C2' },
+      }
+    );
+
+    expect(mesures.nombreTotalNonFait()).to.be(3);
+  });
 });

@@ -249,6 +249,10 @@ class Service {
     return this.mesures.nombreTotalMesuresGenerales();
   }
 
+  nombreTotalMesuresNonFait() {
+    return this.mesures.nombreTotalNonFait();
+  }
+
   nombreTotalMesuresARemplirToutesCategories() {
     return this.statistiquesMesuresGenerales().toutesCategories.sansStatut;
   }
