@@ -11,6 +11,7 @@ block append scripts
   +composantSvelte('mesure.js')
   +composantSvelte('tableauDesMesures.js')
   +composantSvelte('indiceCyber.js')
+  +composantSvelte('indiceCyberPersonnalise.js')
   script(type = 'module', src = '/statique/service/mesures.js')
   script(id = 'referentiel-categories-mesures', type = 'application/json').
     !{JSON.stringify(referentiel.categoriesMesures())}
@@ -24,6 +25,8 @@ block append scripts
     !{JSON.stringify(autorisationsService.SECURISER.estLectureSeule)}
   script(id = 'indice-cyber', type = 'application/json').
     !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax()})}
+  script(id = 'indice-cyber-personnalise', type = 'application/json').
+    !{JSON.stringify({ indiceCyberPersonnalise: service.indiceCyberPersonnalise().total })}
 
 block header-titre-page
   h3
@@ -46,3 +49,11 @@ block formulaire
           br
           a.lien-indice-cyber(href="indiceCyber") Voir le détail
         #conteneur-indice-cyber
+      .conteneur-indice-cyber.personnalise
+        .cartouche-indice-cyber.personnalise
+          span Indice cyber&nbsp;
+          span
+            b personnalisé&nbsp;&nbsp;
+          br
+          a.lien-indice-cyber(href="indiceCyber") Voir le détail
+        #conteneur-indice-cyber-personnalise
