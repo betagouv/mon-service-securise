@@ -82,6 +82,10 @@ class Service {
     return this.mesures.indiceCyber();
   }
 
+  indiceCyberPersonnalise() {
+    return this.mesures.indiceCyberPersonnalise();
+  }
+
   completudeMesures() {
     const completude = this.mesures.completude();
     const { nombreTotalMesures, nombreMesuresCompletes } = completude;
@@ -271,6 +275,10 @@ class Service {
 
   risquesSpecifiques() {
     return this.risques.risquesSpecifiques;
+  }
+
+  statistiquesMesures() {
+    return this.mesures.statistiquesMesures();
   }
 
   statistiquesMesuresGenerales() {

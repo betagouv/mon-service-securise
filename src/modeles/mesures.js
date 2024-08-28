@@ -54,6 +54,13 @@ class Mesures extends InformationsService {
     ).indiceCyber();
   }
 
+  indiceCyberPersonnalise() {
+    return new IndiceCyber(
+      this.statistiquesMesures().totauxParTypeEtParCategorie(),
+      this.referentiel
+    ).indiceCyber();
+  }
+
   nombreMesuresPersonnalisees() {
     return Object.keys(this.mesuresPersonnalisees).length;
   }
@@ -132,6 +139,18 @@ class Mesures extends InformationsService {
         mesuresPersonnalisees: this.mesuresPersonnalisees,
       },
       this.referentiel
+    );
+  }
+
+  statistiquesMesures() {
+    return new StatistiquesMesuresGenerales(
+      {
+        mesuresGenerales: this.mesuresGenerales,
+        mesuresPersonnalisees: this.mesuresPersonnalisees,
+        mesuresSpecifiques: this.mesuresSpecifiques.items,
+      },
+      this.referentiel,
+      true
     );
   }
 

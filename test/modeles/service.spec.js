@@ -578,6 +578,13 @@ describe('Un service', () => {
     expect(service.indiceCyber()).to.equal(3.7);
   });
 
+  it('connaît son indice cyber personnalisé', () => {
+    const service = unService().construis();
+    service.mesures.indiceCyberPersonnalise = () => 4.8;
+
+    expect(service.indiceCyberPersonnalise()).to.equal(4.8);
+  });
+
   it('délègue aux mesures le calcul du nombre total de mesures générales', () => {
     const service = new Service({ mesuresGenerales: [] });
     service.mesures.nombreTotalMesuresGenerales = () => 42;
