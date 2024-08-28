@@ -51,9 +51,21 @@ function consigneActiviteMesure({ depotDonnees }) {
 
     if (
       ancienneMesure?.echeance !== nouvelleMesure.echeance &&
-      nouvelleMesure.echeance
+      nouvelleMesure.echeance &&
+      !ancienneMesure?.echeance
     ) {
       await ajouteActivite('ajoutEcheance', {
+        nouvelleEcheance: nouvelleMesure.echeance,
+      });
+    }
+
+    if (
+      ancienneMesure?.echeance &&
+      nouvelleMesure.echeance &&
+      ancienneMesure?.echeance !== nouvelleMesure.echeance
+    ) {
+      await ajouteActivite('miseAJourEcheance', {
+        ancienneEcheance: ancienneMesure.echeance,
         nouvelleEcheance: nouvelleMesure.echeance,
       });
     }
