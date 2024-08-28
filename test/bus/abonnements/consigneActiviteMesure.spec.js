@@ -199,4 +199,21 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
       nouvelleEcheance: le28aout,
     });
   });
+
+  it("crée une activité lorsque l'échéance est supprimée", async () => {
+    const evenement = creeEvenement({
+      ancienneMesure: uneMesureGenerale()
+        .avecEcheance(le12septembre)
+        .construis(),
+      nouvelleMesure: uneMesureGenerale().avecEcheance('').construis(),
+    });
+
+    await gestionnaire(evenement);
+
+    expect(activitesAjoutees.length).to.be(1);
+    expect(activiteAjoutee.type).to.be('suppressionEcheance');
+    expect(activiteAjoutee.details).to.eql({
+      ancienneEcheance: le12septembre,
+    });
+  });
 });
