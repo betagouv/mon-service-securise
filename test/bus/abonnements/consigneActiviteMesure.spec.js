@@ -80,7 +80,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     });
   });
 
-  it("considère l'ancien statut comme non défini si l'ancienne mesure est indéfinie", async () => {
+  it("crée une activité d'ajout de statut si l'ancienne mesure est indéfinie", async () => {
     const evenement = {
       ancienneMesure: undefined,
       nouvelleMesure: new MesureGenerale(
@@ -91,8 +91,8 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
     await gestionnaire(evenement);
 
+    expect(activiteAjoutee.type).to.be('ajoutStatut');
     expect(activiteAjoutee.details).to.eql({
-      ancienStatut: undefined,
       nouveauStatut: 'fait',
     });
   });
@@ -125,7 +125,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     });
   });
 
-  it('peut consigner une mise à jour du statut et de la priorité en même temps', async () => {
+  it('peut consigner un ajout de statut et de la priorité en même temps', async () => {
     referentiel.enrichis({ prioritesMesures: { p2: {} } });
     const service = unService().construis();
     const utilisateur = unUtilisateur().construis();
@@ -142,7 +142,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     await gestionnaire(evenement);
 
     expect(activitesAjoutees.length).to.be(2);
-    expect(activitesAjoutees[0].type).to.be('miseAJourStatut');
+    expect(activitesAjoutees[0].type).to.be('ajoutStatut');
     expect(activitesAjoutees[1].type).to.be('ajoutPriorite');
   });
 
@@ -190,7 +190,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     await gestionnaire(evenement);
 
     expect(activitesAjoutees.length).to.be(1);
-    expect(activitesAjoutees[0].type).to.be('miseAJourStatut');
+    expect(activitesAjoutees[0].type).to.be('ajoutStatut');
   });
 
   it("ajoute la mesure dans l'activité", async () => {
