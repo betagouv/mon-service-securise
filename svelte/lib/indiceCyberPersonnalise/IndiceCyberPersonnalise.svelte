@@ -7,7 +7,7 @@
     maximumFractionDigits: 1,
   }).format(indiceCyberPersonnalise);
 
-  const taille = 200;
+  const taille = 160;
   const nbTraits = 52;
   const largeurRectangle = 3;
   const hauteurRectangle = 12;
@@ -24,19 +24,26 @@
   filter="drop-shadow(0px 4.6857147216796875px 23.428573608398438px rgba(26, 68, 139, 0.2))"
 >
   <circle cx={taille / 2} cy={taille / 2} r={taille / 2 - 1} fill="white" />
-  <text x="50" y="110" fill="#0079D0" font-size="2.8em" font-weight="bold">
+  <text
+    x="35"
+    y="90"
+    fill="#0079D0"
+    font-size="2.2em"
+    font-weight="bold"
+    class="indice-cyber-personnalise"
+  >
     {indiceCyberFormatte}
   </text>
   <line
-    x1="125"
-    y1="130"
-    x2="137"
-    y2="89"
+    x1="97"
+    y1="100"
+    x2="105"
+    y2="70"
     stroke="#0C5C98"
     stroke-width="2"
     opacity="0.8"
   />
-  <text x="135" y="125" fill="#0C5C98" font-size="1.7em" opacity="0.8">
+  <text x="105" y="98" fill="#0C5C98" font-size="1.5em" opacity="0.8">
     {noteMax}
   </text>
   <foreignObject x="0" y="0" width={taille} height={taille} mask="url(#masque)">
