@@ -1,4 +1,4 @@
-import type { MesuresExistantes } from './mesure.d';
+import type { ActiviteMesure, MesuresExistantes } from './mesure.d';
 import type { MesureStore } from './mesure.store';
 
 const formatteurDate = new Intl.DateTimeFormat('en-EN');
@@ -76,3 +76,7 @@ export const enregistreRetourUtilisateur = async (
     commentaire,
   });
 };
+
+export const recupereActiviteMesure = async (
+  idMesure: string | number
+): Promise<ActiviteMesure[]> => [];

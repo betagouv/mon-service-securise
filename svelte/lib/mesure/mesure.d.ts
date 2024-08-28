@@ -59,3 +59,7 @@ export type MesureEditee = {
     idMesure: string | number;
   };
 };
+
+export type ActiviteMesure = {
+  type: string;
+};
