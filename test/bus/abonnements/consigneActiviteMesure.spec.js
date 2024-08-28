@@ -68,8 +68,8 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(activiteAjoutee.acteur).to.be(evenement.utilisateur);
     expect(activiteAjoutee.type).to.be('miseAJourStatut');
     expect(activiteAjoutee.details).to.eql({
-      ancienStatut: 'nonFait',
-      nouveauStatut: 'fait',
+      ancienneValeur: 'nonFait',
+      nouvelleValeur: 'fait',
     });
   });
 
@@ -83,7 +83,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
     expect(activiteAjoutee.type).to.be('ajoutStatut');
     expect(activiteAjoutee.details).to.eql({
-      nouveauStatut: 'fait',
+      nouvelleValeur: 'fait',
     });
   });
 
@@ -100,7 +100,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(activiteAjoutee.acteur).to.be(evenement.utilisateur);
     expect(activiteAjoutee.type).to.be('ajoutPriorite');
     expect(activiteAjoutee.details).to.eql({
-      nouvellePriorite: 'p2',
+      nouvelleValeur: 'p2',
     });
   });
 
@@ -128,8 +128,8 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(activiteAjoutee).to.be.an(ActiviteMesure);
     expect(activiteAjoutee.type).to.be('miseAJourPriorite');
     expect(activiteAjoutee.details).to.eql({
-      anciennePriorite: 'p3',
-      nouvellePriorite: 'p2',
+      ancienneValeur: 'p3',
+      nouvelleValeur: 'p2',
     });
   });
 
@@ -167,7 +167,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
     expect(activitesAjoutees.length).to.be(1);
     expect(activiteAjoutee.type).to.be('ajoutEcheance');
-    expect(activiteAjoutee.details).to.eql({ nouvelleEcheance: le28aout });
+    expect(activiteAjoutee.details).to.eql({ nouvelleValeur: le28aout });
   });
 
   it("ne crée pas d'activité lorsque l'ancienne mesure est vide et que l'échéance est vide", async () => {
@@ -195,8 +195,8 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(activitesAjoutees.length).to.be(1);
     expect(activiteAjoutee.type).to.be('miseAJourEcheance');
     expect(activiteAjoutee.details).to.eql({
-      ancienneEcheance: le12septembre,
-      nouvelleEcheance: le28aout,
+      ancienneValeur: le12septembre,
+      nouvelleValeur: le28aout,
     });
   });
 
@@ -213,7 +213,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(activitesAjoutees.length).to.be(1);
     expect(activiteAjoutee.type).to.be('suppressionEcheance');
     expect(activiteAjoutee.details).to.eql({
-      ancienneEcheance: le12septembre,
+      ancienneValeur: le12septembre,
     });
   });
 });
