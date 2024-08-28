@@ -69,6 +69,12 @@ function consigneActiviteMesure({ depotDonnees }) {
         nouvelleEcheance: nouvelleMesure.echeance,
       });
     }
+
+    if (ancienneMesure?.echeance && !nouvelleMesure.echeance) {
+      await ajouteActivite('suppressionEcheance', {
+        ancienneEcheance: ancienneMesure.echeance,
+      });
+    }
   };
 }
 
