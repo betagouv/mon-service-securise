@@ -109,18 +109,12 @@ const routesConnectePageService = ({
       const { service } = requete;
 
       const mesures = moteurRegles.mesures(service.descriptionService);
-      const completude = service.completudeMesures();
-      const pourcentageProgression = Math.round(
-        (completude.nombreMesuresCompletes / completude.nombreTotalMesures) *
-          100
-      );
 
       reponse.render('service/mesures', {
         InformationsService,
         referentiel,
         service,
         etapeActive: 'mesures',
-        pourcentageProgression,
         mesures,
       });
     }

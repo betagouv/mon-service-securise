@@ -2226,47 +2226,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
-  describe('quand requête GET sur `/api/service/:id/completude', () => {
-    it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        [{ niveau: LECTURE, rubrique: SECURISER }],
-        {
-          method: 'get',
-          url: 'http://localhost:1234/api/service/456/completude',
-        },
-        done
-      );
-    });
-
-    it("aseptise l'id du service", (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['id'],
-        {
-          method: 'get',
-          url: 'http://localhost:1234/api/service/456/completude',
-        },
-        done
-      );
-    });
-
-    it('renvoie la complétude des mesures du service', async () => {
-      const serviceARenvoyer = unService().construis();
-      serviceARenvoyer.completudeMesures = () => ({
-        nombreMesuresCompletes: 2,
-        nombreTotalMesures: 10,
-      });
-      testeur.middleware().reinitialise({
-        serviceARenvoyer,
-      });
-
-      const { data } = await axios.get(
-        'http://localhost:1234/api/service/456/completude'
-      );
-
-      expect(data.completude).to.be(20);
-    });
-  });
-
   describe('quand requête POST sur `/api/service/:id/retourUtilisateurMesure', () => {
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
