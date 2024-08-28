@@ -102,3 +102,8 @@
 #nouveaute-onglet-statuts-mesures {
   order: 30;
 }
+
+.conteneur-indice-cyber .cartouche-indice-cyber.personnalise {
+  background: white;
+  border: 1px solid var(--liseres-fonce);
+}

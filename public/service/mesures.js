@@ -13,6 +13,9 @@ $(() => {
   const idService = $('.page-service').data('id-service');
   const { indiceCyber, noteMax } = JSON.parse($('#indice-cyber').text());
   const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
+  const { indiceCyberPersonnalise } = JSON.parse(
+    $('#indice-cyber-personnalise').text()
+  );
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-tableau-mesures', {
@@ -31,6 +34,12 @@ $(() => {
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-indice-cyber', {
       detail: { indiceCyber, noteMax, idService },
+    })
+  );
+
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-indice-cyber-personnalise', {
+      detail: { indiceCyberPersonnalise, noteMax },
     })
   );
 
