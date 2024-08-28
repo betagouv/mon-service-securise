@@ -10,6 +10,8 @@ class ActiviteMesure {
   idActeur = () => this.acteur.id;
 
   idService = () => this.service.id;
+
+  idMesure = () => this.mesure.id;
 }
 
 module.exports = ActiviteMesure;

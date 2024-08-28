@@ -6,6 +6,8 @@ const DepotDonneesActivitesMesure = require('../../src/depots/depotDonneesActivi
 const ActiviteMesure = require('../../src/modeles/activiteMesure');
 const { unService } = require('../constructeurs/constructeurService');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
+const MesureGenerale = require('../../src/modeles/mesureGenerale');
+const Referentiel = require('../../src/referentiel');
 
 describe('Le dépôt de données des activités de mesure', () => {
   describe('sur ajout d’une activité', () => {
@@ -14,12 +16,12 @@ describe('Le dépôt de données des activités de mesure', () => {
       let activiteAjouteeAPersistance = false;
       let idServiceActivite;
       let idActeurActivite;
+      let idMesureActivite;
       let typeActivite;
       let detailsActivite;
       adaptateurPersistance.ajouteActiviteMesure = (
         idActeur,
         idService,
-        // eslint-disable-next-line no-unused-vars
         idMesure,
         type,
         details
@@ -27,11 +29,15 @@ describe('Le dépôt de données des activités de mesure', () => {
         activiteAjouteeAPersistance = true;
         idServiceActivite = idService;
         idActeurActivite = idActeur;
+        idMesureActivite = idMesure;
         typeActivite = type;
         detailsActivite = details;
       };
       const depot = DepotDonneesActivitesMesure.creeDepot({
         adaptateurPersistance,
+      });
+      const referentiel = Referentiel.creeReferentiel({
+        mesures: { audit: { categorie: 'gouvernance' } },
       });
       const service = unService().avecId(987).construis();
       const acteur = unUtilisateur().avecId(654).construis();
@@ -40,6 +46,7 @@ describe('Le dépôt de données des activités de mesure', () => {
         acteur,
         type: 'statutMisAJour',
         details: { nouveauStatut: 'fait' },
+        mesure: new MesureGenerale({ id: 'audit' }, referentiel),
       });
 
       depot.ajouteActiviteMesure(activite);
@@ -49,6 +56,7 @@ describe('Le dépôt de données des activités de mesure', () => {
       expect(idActeurActivite).to.be(654);
       expect(typeActivite).to.be('statutMisAJour');
       expect(detailsActivite).to.eql({ nouveauStatut: 'fait' });
+      expect(idMesureActivite).to.eql('audit');
     });
   });
 });
