@@ -45,7 +45,6 @@
   flex-direction: row;
   gap: 0;
   align-items: center;
-  cursor: pointer;
   margin-top: -14px;
 }
 
@@ -61,20 +60,20 @@
 .conteneur-indice-cyber .cartouche-indice-cyber {
   border-radius: 8px;
   background: #f1f5f9;
-  padding: 8px 12px;
   color: #08416a;
-  font-weight: bold;
-  transform: translateX(12px);
+  font-weight: 500;
   white-space: nowrap;
+  text-align: left;
+  line-height: 16px;
+  transform: translateX(26px);
+  padding: 8px 30px 8px 12px;
 }
 
-.conteneur-indice-cyber:hover .cartouche-indice-cyber {
-  background: #dbecf1;
-}
-
-.conteneur-indice-cyber:active .cartouche-indice-cyber {
-  background: #08416a;
-  color: white;
+.conteneur-indice-cyber .lien-indice-cyber {
+  color: var(--bleu-mise-en-avant);
+  font-size: 10px;
+  font-weight: 500;
+  text-decoration-line: underline;
 }
 
 .conteneur-page-formulaire {
