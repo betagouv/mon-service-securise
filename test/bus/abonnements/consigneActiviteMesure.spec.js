@@ -192,4 +192,23 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(activitesAjoutees.length).to.be(1);
     expect(activitesAjoutees[0].type).to.be('miseAJourStatut');
   });
+
+  it("ajoute la mesure dans l'activité", async () => {
+    const service = unService().construis();
+    const utilisateur = unUtilisateur().construis();
+    const mesure = new MesureGenerale(
+      { id: 'audit', statut: 'fait' },
+      referentiel
+    );
+    const evenement = {
+      service,
+      utilisateur,
+      ancienneMesure: undefined,
+      nouvelleMesure: mesure,
+    };
+
+    await gestionnaire(evenement);
+
+    expect(activiteAjoutee.mesure).to.be(mesure);
+  });
 });

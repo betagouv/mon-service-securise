@@ -4,6 +4,7 @@ class ActiviteMesure {
     this.acteur = donnees.acteur;
     this.type = donnees.type;
     this.details = donnees.details;
+    this.mesure = donnees.mesure;
   }
 
   idActeur = () => this.acteur.id;
