@@ -48,7 +48,7 @@ mixin contenuIndiceCyber(idCible, titre, donneesIndiceCyber, noteMax, donneesTra
             donneesIndiceCyber.resilience,
             donneesIndiceCyber.defense,
             donneesIndiceCyber.protection,
-          ], noteMax)
+          ], noteMax, idCible)
         .conteneur-explication-valeur
           .titre
             img.icone(src="/statique/assets/images/icone_explication_tranche.svg")
@@ -75,6 +75,10 @@ block formulaire
   - const indiceCyberPersonnalise = service.indiceCyberPersonnalise()
   - const noteMax = referentiel.indiceCyberNoteMax()
   - const trancheIndiceCyber = referentiel.trancheIndiceCyber(indiceCyber.total)
+  - const trancheIndiceCyberPersonnalise = referentiel.trancheIndiceCyber(indiceCyberPersonnalise.total)
+  - const nombreMesuresSpecifiques = service.mesuresSpecifiques().nombre()
+  - const nombreMesuresNonFait = service.nombreTotalMesuresNonFait()
+  - const metAuPluriel = (chaine, estAuPluriel) => estAuPluriel ? `${chaine}s` : chaine
   .conteneur-indice-cyber
     .onglets
       button.onglet.actif(type="button" data-cible='indice-cyber-ANSSI')
@@ -90,3 +94,12 @@ block formulaire
           | Il est un indicateur de la qualité de la démarche de sécurisation du service.
         a(href="https://aide.monservicesecurise.cyber.gouv.fr/fr/article/lindice-cyber-que-represente-t-il-et-comment-est-il-calcule-1l94rzd/" target="_blank") Comment est calculé l’indice cyber ANSSI ?
     #indice-cyber-personnalise.contenu-global
+      +contenuIndiceCyber('conteneur-indice-cyber-personnalise', 'Indice cyber personnalisé', indiceCyberPersonnalise, noteMax, trancheIndiceCyberPersonnalise, referentiel)
+        p L'indice cyber personnalisé reprend les même règles de calcul que l'indice cyber ANSSI en intégrant également les mesures spécifiques ajoutées par l'équipe et excluant les mesures de #{referentielConcernes} signalées comme "non prises en compte".
+        p.inclusion-exclusion
+          b Incluant :&nbsp;
+          | #{nombreMesuresSpecifiques} #{metAuPluriel('mesure', nombreMesuresSpecifiques > 1)} #{metAuPluriel('spécifique', nombreMesuresSpecifiques > 1)} #{metAuPluriel('ajoutée', nombreMesuresSpecifiques > 1)}.
+          br
+          b Excluant :&nbsp;
+          | #{nombreMesuresNonFait} #{metAuPluriel('mesure', nombreMesuresNonFait > 1)} #{metAuPluriel('proposée', nombreMesuresNonFait > 1)} par #{referentielConcernes}, "non #{metAuPluriel('prise', nombreMesuresNonFait > 1)} en compte" par l'équipe.
+        a(href="https://aide.monservicesecurise.cyber.gouv.fr/fr/article/lindice-cyber-personnalise-que-represente-t-il-et-comment-est-il-calcule-13ffv4p" target="_blank") Comment est calculé l’indice cyber personnalisé ?
