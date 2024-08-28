@@ -48,6 +48,15 @@ function consigneActiviteMesure({ depotDonnees }) {
         });
       }
     }
+
+    if (
+      ancienneMesure?.echeance !== nouvelleMesure.echeance &&
+      nouvelleMesure.echeance
+    ) {
+      await ajouteActivite('ajoutEcheance', {
+        nouvelleEcheance: nouvelleMesure.echeance,
+      });
+    }
   };
 }
 

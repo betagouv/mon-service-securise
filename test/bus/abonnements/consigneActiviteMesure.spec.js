@@ -194,4 +194,51 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
     expect(activiteAjoutee.mesure).to.be(mesure);
   });
+
+  it("crée une activité lorsque la date d'échéance est ajoutée", async () => {
+    const le28aout = new Date(2024, 7, 28);
+    const evenement = creeEvenement({
+      ancienneMesure: new MesureGenerale(
+        {
+          id: 'audit',
+          statut: 'fait',
+          echeance: '',
+        },
+        referentiel
+      ),
+      nouvelleMesure: new MesureGenerale(
+        {
+          id: 'audit',
+          statut: 'fait',
+          echeance: le28aout,
+        },
+        referentiel
+      ),
+    });
+
+    await gestionnaire(evenement);
+
+    expect(activitesAjoutees.length).to.be(1);
+    expect(activiteAjoutee.type).to.be('ajoutEcheance');
+    expect(activiteAjoutee.details).to.eql({ nouvelleEcheance: le28aout });
+  });
+
+  it("ne crée pas d'activité lorsque l'ancienne mesure est vide et que l'échéance est vide", async () => {
+    const evenement = creeEvenement({
+      ancienneMesure: undefined,
+      nouvelleMesure: new MesureGenerale(
+        {
+          id: 'audit',
+          statut: 'fait',
+          echeance: '',
+        },
+        referentiel
+      ),
+    });
+
+    await gestionnaire(evenement);
+
+    expect(activitesAjoutees.length).to.be(1);
+    expect(activiteAjoutee.type).to.be('ajoutStatut');
+  });
 });
