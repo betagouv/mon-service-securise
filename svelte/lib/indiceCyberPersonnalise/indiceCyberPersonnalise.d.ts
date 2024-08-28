@@ -7,4 +7,5 @@ declare global {
 export type IndiceCyberPersonnaliseProps = {
   indiceCyberPersonnalise: number;
   noteMax: number;
+  idService: string;
 };
