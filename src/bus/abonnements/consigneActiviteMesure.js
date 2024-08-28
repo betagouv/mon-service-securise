@@ -1,4 +1,7 @@
 const ActiviteMesure = require('../../modeles/activiteMesure');
+const {
+  fabriqueAdaptateurGestionErreur,
+} = require('../../adaptateurs/fabriqueAdaptateurGestionErreur');
 
 function consigneActiviteMesure({ depotDonnees }) {
   return async ({ service, utilisateur, ancienneMesure, nouvelleMesure }) => {
@@ -17,7 +20,10 @@ function consigneActiviteMesure({ depotDonnees }) {
       });
       await depotDonnees.ajouteActiviteMesure(activiteMesure);
     } catch (e) {
-      console.error("Erreur d'ajout d'activité", e);
+      fabriqueAdaptateurGestionErreur().logueErreur(
+        "Erreur d'ajout d'activité",
+        e
+      );
     }
   };
 }
