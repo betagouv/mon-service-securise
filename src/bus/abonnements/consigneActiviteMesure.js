@@ -12,6 +12,7 @@ function consigneActiviteMesure({ depotDonnees }) {
           acteur: utilisateur,
           type,
           details,
+          mesure: nouvelleMesure,
         });
         await depotDonnees.ajouteActiviteMesure(activiteMesure);
       } catch (e) {
