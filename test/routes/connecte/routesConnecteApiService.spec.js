@@ -2226,6 +2226,44 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête GET sur `/api/service/:id/indiceCyberPersonnalise', () => {
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: LECTURE, rubrique: SECURISER }],
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/service/456/indiceCyberPersonnalise',
+        },
+        done
+      );
+    });
+
+    it("aseptise l'id du service", (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['id'],
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/service/456/indiceCyberPersonnalise',
+        },
+        done
+      );
+    });
+
+    it("renvoie l'indice cyber personnalisé du service", async () => {
+      const serviceARenvoyer = unService().construis();
+      serviceARenvoyer.indiceCyberPersonnalise = () => ({ total: 2.5 });
+      testeur.middleware().reinitialise({
+        serviceARenvoyer,
+      });
+
+      const { data } = await axios.get(
+        'http://localhost:1234/api/service/456/indiceCyberPersonnalise'
+      );
+
+      expect(data.total).to.be(2.5);
+    });
+  });
+
   describe('quand requête POST sur `/api/service/:id/retourUtilisateurMesure', () => {
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
