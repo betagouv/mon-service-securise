@@ -231,4 +231,75 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
     expect(activitesAjoutees.length).to.be(0);
   });
+
+  it("crée une activité lorsqu'un responsable est ajouté", async () => {
+    const evenement = creeEvenement({
+      ancienneMesure: uneMesureGenerale().sansResponsable().construis(),
+      nouvelleMesure: uneMesureGenerale()
+        .avecResponsable('idUtilisateur')
+        .construis(),
+    });
+
+    await gestionnaire(evenement);
+
+    expect(activitesAjoutees.length).to.be(1);
+    expect(activiteAjoutee.type).to.be('ajoutResponsable');
+    expect(activiteAjoutee.details).to.eql({ valeur: 'idUtilisateur' });
+  });
+
+  it("crée une activité lorsqu'un second responsable est ajouté", async () => {
+    const evenement = creeEvenement({
+      ancienneMesure: uneMesureGenerale()
+        .avecResponsable('idUtilisateur')
+        .construis(),
+      nouvelleMesure: uneMesureGenerale()
+        .avecResponsable('idUtilisateur')
+        .avecResponsable('secondIdUtilisateur')
+        .construis(),
+    });
+
+    await gestionnaire(evenement);
+
+    expect(activitesAjoutees.length).to.be(1);
+    expect(activiteAjoutee.type).to.be('ajoutResponsable');
+    expect(activiteAjoutee.details).to.eql({ valeur: 'secondIdUtilisateur' });
+  });
+
+  it("crée une activité lorsqu'un second responsable est ajouté en première position", async () => {
+    const evenement = creeEvenement({
+      ancienneMesure: uneMesureGenerale()
+        .avecResponsable('idUtilisateur')
+        .construis(),
+      nouvelleMesure: uneMesureGenerale()
+        .avecResponsable('secondIdUtilisateur')
+        .avecResponsable('idUtilisateur')
+        .construis(),
+    });
+
+    await gestionnaire(evenement);
+
+    expect(activitesAjoutees.length).to.be(1);
+    expect(activiteAjoutee.type).to.be('ajoutResponsable');
+    expect(activiteAjoutee.details).to.eql({ valeur: 'secondIdUtilisateur' });
+  });
+
+  it('crée une activité lorsque plusieurs responsables sont ajoutés', async () => {
+    const evenement = creeEvenement({
+      ancienneMesure: uneMesureGenerale().sansResponsable().construis(),
+      nouvelleMesure: uneMesureGenerale()
+        .avecResponsable('secondIdUtilisateur')
+        .avecResponsable('idUtilisateur')
+        .construis(),
+    });
+
+    await gestionnaire(evenement);
+
+    expect(activitesAjoutees.length).to.be(2);
+    expect(activitesAjoutees[0].type).to.be('ajoutResponsable');
+    expect(activitesAjoutees[0].details).to.eql({
+      valeur: 'secondIdUtilisateur',
+    });
+    expect(activitesAjoutees[1].type).to.be('ajoutResponsable');
+    expect(activitesAjoutees[1].details).to.eql({ valeur: 'idUtilisateur' });
+  });
 });

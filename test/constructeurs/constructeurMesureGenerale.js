@@ -6,6 +6,7 @@ class ConstructeurMesureGenerale {
     this.donnees = {
       id: 'audit',
       statut: 'fait',
+      responsables: [],
     };
     this.referentiel = referentiel;
   }
@@ -30,6 +31,16 @@ class ConstructeurMesureGenerale {
 
   avecEcheance(echeance) {
     this.donnees.echeance = echeance;
+    return this;
+  }
+
+  sansResponsable() {
+    this.donnees.responsables = [];
+    return this;
+  }
+
+  avecResponsable(idUtilisateur) {
+    this.donnees.responsables.push(idUtilisateur);
     return this;
   }
 }
