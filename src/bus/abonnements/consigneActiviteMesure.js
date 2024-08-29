@@ -84,6 +84,17 @@ const consigneActiviteMesure =
     comparateur.proprietesMisesAJour().forEach(consigneMiseAJour);
     comparateur.proprietesAjoutees().forEach(consigneAjout);
     comparateur.proprietesSupprimees().forEach(consigneSuppression);
+
+    const responsablesDeLancienneMesure = ancienneMesure?.responsables || [];
+
+    const responsablesAjoutes = nouvelleMesure.responsables.filter(
+      (r) => !responsablesDeLancienneMesure.includes(r)
+    );
+    responsablesAjoutes.forEach((r) =>
+      consigneActivite('ajoutResponsable', {
+        valeur: r,
+      })
+    );
   };
 
 module.exports = { consigneActiviteMesure };
