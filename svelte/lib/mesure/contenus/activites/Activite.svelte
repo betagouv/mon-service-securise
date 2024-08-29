@@ -6,11 +6,20 @@
   import Initiales from '../../../ui/Initiales.svelte';
   import { storeAutorisations } from '../../../gestionContributeurs/stores/autorisations.store';
   import { formatteDateHeureFr } from '../../../formatDate/formatDate';
+  import ActiviteMiseAJourPriorite from './ActiviteMiseAJourPriorite.svelte';
 
   export let activite: ActiviteMesure;
   export let priorites: ReferentielPriorite;
 
-  const titre = 'Priorité';
+  let titre: string;
+  let composantContenu: any;
+  if (activite.type === 'ajoutPriorite') {
+    titre = 'Priorité';
+    composantContenu = ActiviteAjoutPriorite;
+  } else {
+    titre = 'Modification de la priorité';
+    composantContenu = ActiviteMiseAJourPriorite;
+  }
 
   $: autorisation = $storeAutorisations.autorisations[activite.idActeur];
 
@@ -43,7 +52,7 @@
       <span>{formatteDateHeureFr(activite.date)}</span>
     </div>
     <div>
-      <ActiviteAjoutPriorite {activite} {priorites} />
+      <svelte:component this={composantContenu} {activite} {priorites} />
     </div>
   </div>
 </div>
