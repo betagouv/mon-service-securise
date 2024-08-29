@@ -37,6 +37,18 @@ class ComparateurMesures {
     ['statut', 'priorite', 'echeance'].filter((p) => this.aAjoute(p));
 
   proprietesSupprimees = () => ['echeance'].filter((p) => this.aSupprime(p));
+
+  responsablesDeLancienneMesure = () => this.ancienneMesure?.responsables || [];
+
+  responsablesAjoutes = () =>
+    this.nouvelleMesure.responsables.filter(
+      (r) => !this.responsablesDeLancienneMesure().includes(r)
+    );
+
+  responsablesRetires = () =>
+    this.responsablesDeLancienneMesure().filter(
+      (r) => !this.nouvelleMesure.responsables.includes(r)
+    );
 }
 
 const majuscule = (chaine) =>
@@ -84,17 +96,14 @@ const consigneActiviteMesure =
     comparateur.proprietesMisesAJour().forEach(consigneMiseAJour);
     comparateur.proprietesAjoutees().forEach(consigneAjout);
     comparateur.proprietesSupprimees().forEach(consigneSuppression);
-
-    const responsablesDeLancienneMesure = ancienneMesure?.responsables || [];
-
-    const responsablesAjoutes = nouvelleMesure.responsables.filter(
-      (r) => !responsablesDeLancienneMesure.includes(r)
-    );
-    responsablesAjoutes.forEach((r) =>
-      consigneActivite('ajoutResponsable', {
-        valeur: r,
-      })
-    );
+    comparateur
+      .responsablesAjoutes()
+      .forEach((valeur) => consigneActivite('ajoutResponsable', { valeur }));
+    comparateur
+      .responsablesRetires()
+      .forEach((valeur) =>
+        consigneActivite('suppressionResponsable', { valeur })
+      );
   };
 
 module.exports = { consigneActiviteMesure };
