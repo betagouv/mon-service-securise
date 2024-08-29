@@ -44,3 +44,12 @@ export const formatteDifferenceDateRelative = (chaineDate: string) => {
   );
   return dateFormattee.charAt(0).toUpperCase() + dateFormattee.slice(1);
 };
+
+export const formatteDateHeureFr = (dateHeure: Date) =>
+  new Intl.DateTimeFormat('fr-FR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(dateHeure);

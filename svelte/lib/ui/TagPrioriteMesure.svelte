@@ -16,7 +16,7 @@
     border: none;
     background: var(--couleur-fond-normal);
     color: var(--couleur-texte-normal);
-    padding: 4px 6px;
+    padding: 4px 6px 5px;
     border-radius: 4px;
     font-size: 12px;
     font-weight: bold;
