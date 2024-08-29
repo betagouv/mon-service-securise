@@ -38,6 +38,12 @@
   border-radius: 4px;
   background: #dbeeff;
   width: fit-content;
+  border: 1px solid transparent;
+}
+
+.homologation .indice-cyber.personnalise {
+  background: white;
+  border: 1px solid var(--liseres-fonce);
 }
 
 .homologation .conteneur-indice-cyber {
@@ -119,6 +125,7 @@
   font-weight: bold;
   color: #2f3a43;
   width: fit-content;
+  height: fit-content;
 }
 
 .homologation .dossier .statut-homologation.bientotActivee {
@@ -280,4 +287,10 @@ dialog.modale-encart-homologation .page img {
   height: 30px;
   margin-right: -4px;
   filter: brightness(0) invert();
+}
+
+.conteneur-statut-indice-cyber .indices-cyber {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
