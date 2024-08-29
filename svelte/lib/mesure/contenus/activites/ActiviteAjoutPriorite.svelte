@@ -6,9 +6,7 @@
   export let activite: ActiviteMesure;
   export let priorites: ReferentielPriorite;
 
-  const details: DetailsAjoutPropriete = <DetailsAjoutPropriete>(
-    activite.details
-  );
+  const details = <DetailsAjoutPropriete>activite.details;
   const priorite: PrioriteMesure = <PrioriteMesure>details.nouvelleValeur;
 </script>
 
