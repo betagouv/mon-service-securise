@@ -55,7 +55,7 @@ class Dossiers extends ElementsConstructibles {
     return this.items.find((dossier) => dossier.estActif());
   }
 
-  finaliseDossierCourant(indiceCyber) {
+  finaliseDossierCourant(indiceCyber, indiceCyberPersonnalise) {
     if (!this.dossierCourant())
       throw new ErreurDossierNonFinalisable(
         'Aucun dossier courant à finaliser'
@@ -64,7 +64,10 @@ class Dossiers extends ElementsConstructibles {
     this.items.forEach((dossier) => {
       if (dossier !== this.dossierCourant()) dossier.enregistreArchivage();
     });
-    this.dossierCourant().enregistreFinalisation(indiceCyber);
+    this.dossierCourant().enregistreFinalisation(
+      indiceCyber,
+      indiceCyberPersonnalise
+    );
   }
 
   finalises() {

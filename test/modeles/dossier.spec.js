@@ -42,6 +42,7 @@ describe("Un dossier d'homologation", () => {
         finalise: true,
         archive: true,
         indiceCyber: 3.5,
+        indiceCyberPersonnalise: 4.5,
       },
       referentiel
     );
@@ -64,6 +65,7 @@ describe("Un dossier d'homologation", () => {
       finalise: true,
       archive: true,
       indiceCyber: 3.5,
+      indiceCyberPersonnalise: 4.5,
     });
   });
 
@@ -378,9 +380,10 @@ describe("Un dossier d'homologation", () => {
         .quiEstNonFinalise()
         .construit();
 
-      dossierComplet.enregistreFinalisation(3.5);
+      dossierComplet.enregistreFinalisation(3.5, 4.5);
       expect(dossierComplet.finalise).to.be(true);
       expect(dossierComplet.indiceCyber).to.be(3.5);
+      expect(dossierComplet.indiceCyberPersonnalise).to.be(4.5);
     });
   });
 

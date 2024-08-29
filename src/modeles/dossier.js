@@ -27,6 +27,7 @@ class Dossier extends InformationsService {
         'finalise',
         'archive',
         'indiceCyber',
+        'indiceCyberPersonnalise',
       ],
     });
     this.renseigneProprietes(donneesDossier, referentiel);
@@ -138,7 +139,7 @@ class Dossier extends InformationsService {
     this.decision.enregistre(dateHomologation, dureeHomologation);
   }
 
-  enregistreFinalisation(indiceCyber) {
+  enregistreFinalisation(indiceCyber, indiceCyberPersonnalise) {
     if (!this.estComplet()) {
       const etapesIncompletes = Dossier.etapesObligatoires().filter(
         (etape) => !this[etape].estComplete()
@@ -151,6 +152,7 @@ class Dossier extends InformationsService {
 
     this.finalise = true;
     this.indiceCyber = indiceCyber;
+    this.indiceCyberPersonnalise = indiceCyberPersonnalise;
   }
 
   estComplet() {

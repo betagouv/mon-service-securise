@@ -185,7 +185,7 @@ describe('Les dossiers liés à un service', () => {
         referentiel
       );
 
-      deuxDossiers.finaliseDossierCourant(3.5);
+      deuxDossiers.finaliseDossierCourant(3.5, 4.5);
 
       const [dossierAArchiver, dossierAFinaliser] = deuxDossiers.items;
       expect(dossierAArchiver.id).to.equal('dossier à archiver');
@@ -194,6 +194,7 @@ describe('Les dossiers liés à un service', () => {
       expect(dossierAFinaliser.archive).to.be(undefined);
       expect(dossierAFinaliser.finalise).to.be(true);
       expect(dossierAFinaliser.indiceCyber).to.be(3.5);
+      expect(dossierAFinaliser.indiceCyberPersonnalise).to.be(4.5);
     });
 
     it("jette une erreur si aucun dossier courant n'existe", () => {
