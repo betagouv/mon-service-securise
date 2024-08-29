@@ -20,6 +20,7 @@ html {
   /* On utilise ces règles CSS pour assurer un rendu correct des images et graphiques */
   /* https://github.com/puppeteer/puppeteer/issues/2685#issuecomment-643573422 */
   -webkit-print-color-adjust: exact !important;
+  -webkit-filter: opacity(1) !important;
 }
 
 .statistiques-mesures,
@@ -490,6 +491,11 @@ p {
   font-weight: 500;
 }
 
+.synthese-securite .resume {
+  max-height: 250px;
+  overflow: hidden;
+}
+
 .synthese-securite .localisation-donnees.france::before {
   content: '';
   display: inline-block;
@@ -508,21 +514,62 @@ p {
 }
 
 .synthese-securite .score-indice-cyber {
-  width: 6em;
-  height: 6em;
+  width: 5em;
+  height: 5em;
   font-size: 1.5em;
   margin: -3em auto 0;
+}
+
+.synthese-securite .score-indice-cyber-personnalise {
+  display: flex;
+  flex-direction: row;
+  gap: 1px;
+  align-items: center;
+}
+
+.synthese-securite .score-indice-cyber-personnalise p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #08416a;
+}
+
+.synthese-securite .score-indice-cyber-personnalise svg {
+  width: 5em;
+  height: fit-content;
+  font-size: 1.5em;
+}
+
+.gradient {
+  width: 100%;
+  height: 100%;
+  background-image: conic-gradient(
+    from 122.78deg at 50% 50%,
+    #54b8f6 -141.68deg,
+    #08416a 103.92deg,
+    #54b8f6 141.72deg,
+    #54b8f6 218.32deg,
+    #08416a 463.92deg
+  );
+  transform: rotate(90deg);
+}
+
+.synthese-securite .conteneur-cadres-indices-cyber {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .synthese-securite .indices-par-categories {
   display: flex;
   flex-direction: column;
   gap: 1em;
-  margin-top: 2em;
+  margin-top: 4px;
 }
 
 .synthese-securite .indices-par-categories .titre {
   margin: 0;
+  text-align: left;
 }
 
 .synthese-securite .categories {
@@ -816,12 +863,8 @@ p {
 .synthese-securite .conteneur-premiere-ligne {
   display: grid;
   grid-template-columns: 3fr 1fr 1fr;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   column-gap: 8px;
-}
-
-.synthese-securite .conteneur-premiere-ligne fieldset {
-  padding-bottom: 16px;
 }
 
 .synthese-securite .besoins-securite {
@@ -845,7 +888,7 @@ p {
 
 .synthese-securite .besoins-securite .illustration-niveau {
   width: 90px;
-  padding: 16px;
+  padding: 24px 16px 16px;
 }
 
 .synthese-securite .besoins-securite .illustration-niveau.niveau1 {
@@ -867,7 +910,6 @@ p {
   background: #0079d0;
   color: white;
   font-size: 9px;
-  margin-top: -10px;
 }
 
 .synthese-securite
@@ -894,7 +936,7 @@ p {
   width: 11px;
 }
 
-.tampon-homologation {
+.synthese-securite .tampon-homologation {
   width: calc(288px - 32px);
   margin: -8px;
   padding: 16px;

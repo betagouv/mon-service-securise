@@ -1,6 +1,7 @@
 extends base
 
 include ./indiceCyber/scoreIndiceCyber
+include ./indiceCyberPersonnalise/scoreIndiceCyberPersonnalise
 
 mixin chiffre(texte, angle, classe, estUnique)
   - const rayon = estUnique ? '0' : '2.5em';
@@ -93,21 +94,28 @@ block page
             span Besoins identifiés
               br
               | par l'ANSSI
-      fieldset(class='indice-cyber')
-        - const indiceCyber = service.indiceCyber();
-        - const noteMax = referentiel.indiceCyberNoteMax()
-        - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format;
-        .contenu
-          .score-indice-cyber
-            +scoreIndiceCyber(indiceCyber.total, noteMax)
-          .indices-par-categories
-            .titre
-              p Par catégorie :
-            .categories
-              each id in referentiel.identifiantsCategoriesMesures()
-                .indice-cyber-categorie
-                  span= referentiel.descriptionCategorie(id)
-                  span.note= (typeof indiceCyber[id] === 'number' ? `${formatIndiceCyber(indiceCyber[id])}` : '–')
+      .conteneur-cadres-indices-cyber
+        fieldset(class='indice-cyber')
+          - const indiceCyber = service.indiceCyber();
+          - const noteMax = referentiel.indiceCyberNoteMax()
+          - const formatIndiceCyber = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format;
+          .contenu
+            .score-indice-cyber
+              +scoreIndiceCyber(indiceCyber.total, noteMax)
+            .indices-par-categories
+              .titre
+                p Par catégorie :
+              .categories
+                each id in referentiel.identifiantsCategoriesMesures()
+                  .indice-cyber-categorie
+                    span= referentiel.descriptionCategorie(id)
+                    span.note= (typeof indiceCyber[id] === 'number' ? `${formatIndiceCyber(indiceCyber[id])}` : '–')
+        fieldset(class='indice-cyber-personnalise')
+          - const indiceCyberPersonnalise = service.indiceCyberPersonnalise()
+          .contenu
+            .score-indice-cyber-personnalise
+              p Indice cyber Personnalisé
+              +scoreIndiceCyberPersonnalise(indiceCyberPersonnalise.total, noteMax)
     .conteneur
       fieldset.mesures-securite
         legend
