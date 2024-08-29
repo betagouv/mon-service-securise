@@ -302,4 +302,45 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(activitesAjoutees[1].type).to.be('ajoutResponsable');
     expect(activitesAjoutees[1].details).to.eql({ valeur: 'idUtilisateur' });
   });
+
+  it("crée une activité lorsqu'un responsable est supprimé", async () => {
+    const evenement = creeEvenement({
+      ancienneMesure: uneMesureGenerale()
+        .avecResponsable('idUtilisateur')
+        .construis(),
+      nouvelleMesure: uneMesureGenerale().sansResponsable().construis(),
+    });
+
+    await gestionnaire(evenement);
+
+    expect(activitesAjoutees.length).to.be(1);
+    expect(activiteAjoutee.type).to.be('suppressionResponsable');
+    expect(activiteAjoutee.details).to.eql({ valeur: 'idUtilisateur' });
+  });
+
+  it('crée une activité lorsque les responsables changent', async () => {
+    const evenement = creeEvenement({
+      ancienneMesure: uneMesureGenerale()
+        .avecResponsable('U1')
+        .avecResponsable('U2')
+        .construis(),
+      nouvelleMesure: uneMesureGenerale()
+        .avecResponsable('U3')
+        .avecResponsable('U4')
+        .construis(),
+    });
+
+    await gestionnaire(evenement);
+
+    const activiteAEteAjoutee = (type, valeur) =>
+      activitesAjoutees.some(
+        (a) => a.type === type && a.details.valeur === valeur
+      );
+
+    expect(activitesAjoutees.length).to.be(4);
+    expect(activiteAEteAjoutee('suppressionResponsable', 'U1')).to.be(true);
+    expect(activiteAEteAjoutee('suppressionResponsable', 'U2')).to.be(true);
+    expect(activiteAEteAjoutee('ajoutResponsable', 'U3')).to.be(true);
+    expect(activiteAEteAjoutee('ajoutResponsable', 'U4')).to.be(true);
+  });
 });
