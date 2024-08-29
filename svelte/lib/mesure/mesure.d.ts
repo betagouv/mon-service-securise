@@ -60,6 +60,46 @@ export type MesureEditee = {
   };
 };
 
+type TypeActiviteMesure =
+  | 'ajoutStatut'
+  | 'miseAJourStatut'
+  | 'ajoutPriorite'
+  | 'miseAJourPriorite'
+  | 'ajoutResponsable'
+  | 'suppressionResponsable'
+  | 'ajoutEcheance'
+  | 'suppressionEcheance'
+  | 'miseAJourEcheance';
+
+type DetailsActiviteMesure =
+  | DetailsAjoutPropriete
+  | DetailsSuppressionPropriete
+  | DetailsMiseAJourPropriete
+  | DetailsModificationResponsable;
+
 export type ActiviteMesure = {
-  type: string;
+  idActeur: IdUtilisateur;
+  date: Date;
+  type: TypeActiviteMesure;
+  details: DetailsActiviteMesure;
+  identifiantNumeriqueMesure: string;
+};
+
+type ValeurPropriete = string | Date;
+
+export type DetailsAjoutPropriete = {
+  nouvelleValeur: ValeurPropriete;
+};
+
+export type DetailsSuppressionPropriete = {
+  ancienneValeur: ValeurPropriete;
+};
+
+export type DetailsMiseAJourPropriete = {
+  nouvelleValeur: ValeurPropriete;
+  ancienneValeur: ValeurPropriete;
+};
+
+export type DetailsModificationResponsable = {
+  valeur: string;
 };
