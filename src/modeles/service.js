@@ -181,7 +181,10 @@ class Service {
   }
 
   finaliseDossierCourant() {
-    this.dossiers.finaliseDossierCourant(this.indiceCyber().total);
+    this.dossiers.finaliseDossierCourant(
+      this.indiceCyber().total,
+      this.indiceCyberPersonnalise().total
+    );
   }
 
   fonctionAutoriteHomologation() {
