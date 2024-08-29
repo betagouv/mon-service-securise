@@ -48,8 +48,11 @@ export const formatteDifferenceDateRelative = (chaineDate: string) => {
 export const formatteDateHeureFr = (dateHeure: Date) =>
   new Intl.DateTimeFormat('fr-FR', {
     year: 'numeric',
-    month: '2-digit',
+    month: 'short',
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
-  }).format(dateHeure);
+  })
+    .formatToParts(dateHeure)
+    .map((o) => (o.value === ', ' ? ' à ' : o.value === ':' ? 'h' : o.value))
+    .join('');
