@@ -12,8 +12,9 @@ mixin scoreIndiceCyberPersonnalise(indiceCyberPersonnalise, noteMax)
     text.indice-cyber-personnalise(x='35' y='90' fill='#0079D0' font-size='2.2em' font-weight='bold')!= indiceCyberFormatte
     line(x1='97' y1='100' x2='105' y2='70' stroke='#0C5C98' stroke-width='2' opacity='0.8')
     text(x='105' y='98' fill='#0C5C98' font-size='1.5em' opacity='0.8')!= noteMax
-    foreignObject(x='0' y='0' width=taille height=taille mask='url(#masque)')
-      .gradient(xmlns='http://www.w3.org/1999/xhtml')
+    g(mask='url(#masque)')
+      foreignObject(x='0' y='0' width=taille height=taille )
+        .gradient(xmlns='http://www.w3.org/1999/xhtml')
     mask#masque
       each _, i in new Array(avancement).fill(0)
         -
