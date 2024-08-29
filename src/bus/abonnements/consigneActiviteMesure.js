@@ -9,15 +9,23 @@ class ComparateurMesures {
     this.nouvelleMesure = nouvelleMesure;
   }
 
+  valeursÉgales(propriete) {
+    if (propriete === 'echeance') {
+      return (
+        new Date(this.ancienneMesure[propriete]).getTime() ===
+        new Date(this.nouvelleMesure[propriete]).getTime()
+      );
+    }
+    return this.ancienneMesure[propriete] === this.nouvelleMesure[propriete];
+  }
+
   aMisAJour = (propriete) =>
-    this.ancienneMesure?.[propriete] !== this.nouvelleMesure[propriete] &&
     this.ancienneMesure?.[propriete] &&
+    !this.valeursÉgales(propriete) &&
     this.nouvelleMesure[propriete];
 
   aAjoute = (propriete) =>
-    this.ancienneMesure?.[propriete] !== this.nouvelleMesure[propriete] &&
-    !this.ancienneMesure?.[propriete] &&
-    this.nouvelleMesure[propriete];
+    !this.ancienneMesure?.[propriete] && this.nouvelleMesure[propriete];
 
   aSupprime = (propriete) =>
     this.ancienneMesure?.[propriete] && !this.nouvelleMesure[propriete];
