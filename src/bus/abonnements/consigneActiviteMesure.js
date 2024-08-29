@@ -9,7 +9,7 @@ class ComparateurMesures {
     this.nouvelleMesure = nouvelleMesure;
   }
 
-  valeursÉgales(propriete) {
+  valeursEgales(propriete) {
     if (propriete === 'echeance') {
       return (
         new Date(this.ancienneMesure[propriete]).getTime() ===
@@ -21,7 +21,7 @@ class ComparateurMesures {
 
   aMisAJour = (propriete) =>
     this.ancienneMesure?.[propriete] &&
-    !this.valeursÉgales(propriete) &&
+    !this.valeursEgales(propriete) &&
     this.nouvelleMesure[propriete];
 
   aAjoute = (propriete) =>
@@ -39,13 +39,13 @@ class ComparateurMesures {
   proprietesSupprimees = () => ['echeance'].filter((p) => this.aSupprime(p));
 }
 
-function majuscule(chaine) {
-  return chaine.charAt(0).toUpperCase() + chaine.substring(1);
-}
+const majuscule = (chaine) =>
+  `${chaine.charAt(0).toUpperCase()}${chaine.substring(1)}`;
 
-function consigneActiviteMesure({ depotDonnees }) {
-  return async ({ service, utilisateur, ancienneMesure, nouvelleMesure }) => {
-    async function ajouteActivite(type, details) {
+const consigneActiviteMesure =
+  ({ depotDonnees }) =>
+  async ({ service, utilisateur, ancienneMesure, nouvelleMesure }) => {
+    const consigneActivite = async (type, details) => {
       try {
         const activiteMesure = new ActiviteMesure({
           service,
@@ -61,38 +61,29 @@ function consigneActiviteMesure({ depotDonnees }) {
           e
         );
       }
-    }
+    };
 
-    const ajouteMiseAJour = async (propriete) =>
-      ajouteActivite(`miseAJour${majuscule(propriete)}`, {
+    const consigneMiseAJour = async (propriete) =>
+      consigneActivite(`miseAJour${majuscule(propriete)}`, {
         ancienneValeur: ancienneMesure?.[propriete],
         nouvelleValeur: nouvelleMesure[propriete],
       });
 
-    const ajouteAjout = async (propriete) =>
-      ajouteActivite(`ajout${majuscule(propriete)}`, {
+    const consigneAjout = async (propriete) =>
+      consigneActivite(`ajout${majuscule(propriete)}`, {
         nouvelleValeur: nouvelleMesure[propriete],
       });
 
-    const ajouteSuppression = async (propriete) =>
-      ajouteActivite(`suppression${majuscule(propriete)}`, {
+    const consigneSuppression = async (propriete) =>
+      consigneActivite(`suppression${majuscule(propriete)}`, {
         ancienneValeur: ancienneMesure[propriete],
       });
 
     const comparateur = new ComparateurMesures(ancienneMesure, nouvelleMesure);
 
-    comparateur
-      .proprietesMisesAJour()
-      .forEach((propriete) => ajouteMiseAJour(propriete));
-
-    comparateur
-      .proprietesAjoutees()
-      .forEach((propriete) => ajouteAjout(propriete));
-
-    comparateur
-      .proprietesSupprimees()
-      .forEach((propriete) => ajouteSuppression(propriete));
+    comparateur.proprietesMisesAJour().forEach(consigneMiseAJour);
+    comparateur.proprietesAjoutees().forEach(consigneAjout);
+    comparateur.proprietesSupprimees().forEach(consigneSuppression);
   };
-}
 
 module.exports = { consigneActiviteMesure };

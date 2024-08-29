@@ -170,7 +170,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(activiteAjoutee.details).to.eql({ nouvelleValeur: le28aout });
   });
 
-  it("ne crée pas d'activité lorsque l'ancienne mesure est vide et que l'échéance est vide", async () => {
+  it("ne crée pas d'activité concernant l'échéance lorsque l'ancienne mesure est vide et que l'échéance est vide", async () => {
     const evenement = creeEvenement({
       ancienneMesure: undefined,
       nouvelleMesure: uneMesureGenerale().avecEcheance('').construis(),
