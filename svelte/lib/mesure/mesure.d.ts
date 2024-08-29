@@ -1,4 +1,4 @@
-import type { Referentiel } from '../ui/types.d';
+import type { PrioriteMesure, Referentiel } from '../ui/types.d';
 import type { StatutMesure } from '../modeles/mesure';
 
 declare global {
@@ -85,7 +85,7 @@ export type ActiviteMesure = {
   identifiantNumeriqueMesure: string;
 };
 
-type ValeurPropriete = string | Date;
+type ValeurPropriete = StatutMesure | Date | PrioriteMesure;
 
 export type DetailsAjoutPropriete = {
   nouvelleValeur: ValeurPropriete;

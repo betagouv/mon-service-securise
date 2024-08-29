@@ -114,7 +114,7 @@
         {statuts}
         {priorites}
       />
-      <ContenuOngletActivite visible={ongletActif === 'activite'} />
+      <ContenuOngletActivite visible={ongletActif === 'activite'} {priorites} />
     </div>
     <div class="conteneur-actions">
       {#if $configurationAffichage.doitAfficherSuppression}
