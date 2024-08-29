@@ -4,8 +4,11 @@
   import { onMount } from 'svelte';
   import type { ActiviteMesure } from '../mesure.d';
   import { writable } from 'svelte/store';
+  import Activite from './activites/Activite.svelte';
+  import type { ReferentielPriorite } from '../../ui/types';
 
   export let visible: boolean;
+  export let priorites: ReferentielPriorite;
 
   const { subscribe, update } = writable<ActiviteMesure[]>([]);
 
@@ -26,7 +29,7 @@
 
 <div id="contenu-onglet-activite" class:visible>
   {#each $storeActivites as activite}
-    <h2>{activite.type}</h2>
+    <Activite {priorites} {activite} />
   {:else}
     <div class="aucune-activite">
       <img src="/statique/assets/images/dossiers.png" alt="" />
