@@ -1,0 +1,25 @@
+mixin scoreIndiceCyberPersonnalise(indiceCyberPersonnalise, noteMax)
+  -
+    const taille = 160
+    const nbTraits = 52
+    const largeurRectangle = 3
+    const hauteurRectangle = 12
+    const radius = 0.85 * (taille / 2)
+    const avancement = Math.floor((indiceCyberPersonnalise / noteMax) * nbTraits)
+    const indiceCyberFormatte = Intl.NumberFormat('fr', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(indiceCyberPersonnalise)
+  svg#score-indice-cyber-personnalise(viewbox=`0 0 ${taille} ${taille}` fill='none' xmlns='http://www.w3.org/2000/svg')
+    circle(cx=`${taille / 2}` cy=`${taille / 2}` r=`${taille / 2 - 1}` fill='white')
+    text.indice-cyber-personnalise(x='35' y='90' fill='#0079D0' font-size='2.2em' font-weight='bold')!= indiceCyberFormatte
+    line(x1='97' y1='100' x2='105' y2='70' stroke='#0C5C98' stroke-width='2' opacity='0.8')
+    text(x='105' y='98' fill='#0C5C98' font-size='1.5em' opacity='0.8')!= noteMax
+    foreignObject(x='0' y='0' width=taille height=taille mask='url(#masque)')
+      .gradient(xmlns='http://www.w3.org/1999/xhtml')
+    mask#masque
+      each _, i in new Array(avancement).fill(0)
+        -
+          const angle = (i / nbTraits) * 2 * Math.PI - Math.PI / 2
+          const x = radius * Math.cos(angle) + taille / 2
+          const y = radius * Math.sin(angle) + taille / 2
+          const angleTrait = ((angle + Math.PI / 2) * 180) / Math.PI
+        g(transform=`translate(${x}, ${y}) rotate(${angleTrait})`)
+          rect(x='0' y='0' width=largeurRectangle height=hauteurRectangle fill='white')
