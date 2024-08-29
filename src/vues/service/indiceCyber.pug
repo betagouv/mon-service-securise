@@ -32,7 +32,7 @@ block header-titre-page
   h3
     +texteTronque({ texte: service.nomService() || '' })
 
-mixin contenuIndiceCyber(idCible, titre, donneesIndiceCyber, noteMax, donneesTrancheIndiceCyber, referentiel)
+mixin contenuIndiceCyber(idCible, titre, donneesIndiceCyber, noteMax, donneesTrancheIndiceCyber, referentiel, avecRecommandationANSSI)
   .conteneur-descriptif
     .disque-indice
       div(id=idCible)
@@ -60,18 +60,19 @@ mixin contenuIndiceCyber(idCible, titre, donneesIndiceCyber, noteMax, donneesTra
           ul.liste-tranches
             each tranche in referentiel.descriptionsTranchesIndiceCyber(donneesIndiceCyber.total)
               li(class=`${tranche.trancheCourante ? 'tranche-courante' : ''}`)= tranche.description
-  .conteneur-recommandation-anssi
-    img.fond(src="/statique/assets/images/fond_recommandation_anssi.svg")
-    .titre
-      img.icone(src="/statique/assets/images/icone_recommandation_anssi.svg")
-      h3 Recommandation indicative de l'ANSSI en cas de décision d'homologation
-    .conteneur-duree-recommandee
-      if(donneesTrancheIndiceCyber.conseilHomologation)
-        p= donneesTrancheIndiceCyber.conseilHomologation
-      if(!donneesTrancheIndiceCyber.deconseillee)
-        .separateur
-        p Durée d'homologation conseillée
-        p#duree-recommandee= donneesTrancheIndiceCyber.dureeHomologationConseillee
+  if avecRecommandationANSSI
+    .conteneur-recommandation-anssi
+      img.fond(src="/statique/assets/images/fond_recommandation_anssi.svg")
+      .titre
+        img.icone(src="/statique/assets/images/icone_recommandation_anssi.svg")
+        h3 Recommandation indicative de l'ANSSI en cas de décision d'homologation
+      .conteneur-duree-recommandee
+        if(donneesTrancheIndiceCyber.conseilHomologation)
+          p= donneesTrancheIndiceCyber.conseilHomologation
+        if(!donneesTrancheIndiceCyber.deconseillee)
+          .separateur
+          p Durée d'homologation conseillée
+          p#duree-recommandee= donneesTrancheIndiceCyber.dureeHomologationConseillee
 
 block formulaire
   - const indiceCyber = service.indiceCyber()
@@ -91,7 +92,7 @@ block formulaire
         span Indice cyber personnalisé
         span.note-onglet!= `${indiceCyberPersonnalise.total.toFixed(1)}/${noteMax}`
     #indice-cyber-ANSSI.contenu-global
-      +contenuIndiceCyber('conteneur-indice-cyber', 'Indice cyber ANSSI', indiceCyber, noteMax, trancheIndiceCyber, referentiel)
+      +contenuIndiceCyber('conteneur-indice-cyber', 'Indice cyber ANSSI', indiceCyber, noteMax, trancheIndiceCyber, referentiel, true)
         p
           | L'indice cyber est une évaluation indicative du niveau de sécurisation du service, calculé à partir des mesures «&nbsp;faites » et «&nbsp;partielles » proposées par #{referentielConcernes} dans MonServiceSécurisé.
           | Il est un indicateur de la qualité de la démarche de sécurisation du service.
