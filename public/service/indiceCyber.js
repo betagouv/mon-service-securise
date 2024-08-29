@@ -23,6 +23,22 @@ $(() => {
     $onglets.on('click', basculeOnglets);
   };
 
+  const brancheNavigationOngletDepuisURL = () => {
+    const $onglets = $('.conteneur-indice-cyber .onglets .onglet');
+    const $tousContenus = $('.contenu-global');
+
+    const recherche = new URLSearchParams(window.location.search);
+    if (recherche.has('onglet')) {
+      const cible = recherche.get('onglet');
+
+      $onglets.removeClass('actif');
+      $(`.onglet[data-cible=${cible}]`).addClass('actif');
+
+      $tousContenus.hide();
+      $(`#${cible}`).show();
+    }
+  };
+
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-indice-cyber', {
       detail: { indiceCyber, noteMax, idService },
@@ -34,4 +50,5 @@ $(() => {
     })
   );
   brancheOnglets();
+  brancheNavigationOngletDepuisURL();
 });
