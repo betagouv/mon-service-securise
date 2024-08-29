@@ -71,6 +71,16 @@ module.exports = {
       image: 'prioritePlanAction.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'indiceCyberPersonnalise',
+      dateDeDeploiement: '2024-08-30 08:00:00Z',
+      titre: "L'indice cyber personnalisé est arrivé !",
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/lindice-cyber-personnalise-que-represente-t-il-et-comment-est-il-calcule-13ffv4p/',
+      sousTitre:
+        'Celui-ci prend en compte les mesures spécifiques ajoutées et retire du calcul les mesures avec le statut "non prise en compte".',
+      image: 'indiceCyberPersonnalise.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
