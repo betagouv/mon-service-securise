@@ -26,6 +26,8 @@ jobs:
 
       - name: Installer les dépendances
         run: npm ci
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
 
       - name: Contrôler la mise en forme avec Prettier
         run: npx prettier --check .
