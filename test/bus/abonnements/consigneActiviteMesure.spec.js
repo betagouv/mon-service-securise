@@ -216,4 +216,19 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
       ancienneValeur: le12septembre,
     });
   });
+
+  it("ne crée pas d'activité si les deux dates des échéances sont égales", async () => {
+    const evenement = creeEvenement({
+      ancienneMesure: uneMesureGenerale()
+        .avecEcheance(new Date(le12septembre))
+        .construis(),
+      nouvelleMesure: uneMesureGenerale()
+        .avecEcheance(new Date(le12septembre))
+        .construis(),
+    });
+
+    await gestionnaire(evenement);
+
+    expect(activitesAjoutees.length).to.be(0);
+  });
 });
