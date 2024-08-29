@@ -1,7 +1,10 @@
 <script lang="ts">
   import ActiviteAjoutPriorite from './ActiviteAjoutPriorite.svelte';
   import type { ActiviteMesure } from '../../mesure.d';
-  import type { ReferentielPriorite } from '../../../ui/types';
+  import type {
+    ReferentielPriorite,
+    ResumeNiveauDroit,
+  } from '../../../ui/types';
   import { contributeurs } from '../../../tableauDesMesures/stores/contributeurs.store';
   import Initiales from '../../../ui/Initiales.svelte';
   import { storeAutorisations } from '../../../gestionContributeurs/stores/autorisations.store';
@@ -21,10 +24,12 @@
     composantContenu = ActiviteMiseAJourPriorite;
   }
 
-  $: autorisation = $storeAutorisations.autorisations[activite.idActeur];
-
-  let acteur: { prenomNom: string; initiales: string };
-  let intituleActeur: string;
+  type Acteur = {
+    intitule: string;
+    initiales: string;
+    resumeNiveauDroit?: ResumeNiveauDroit;
+  };
+  let acteur: Acteur;
 
   $: {
     const contributeursTrouves = $contributeurs.filter(
@@ -32,9 +37,17 @@
     );
     acteur =
       contributeursTrouves.length === 0
-        ? { prenomNom: 'Utilisateur·rice', initiales: '' }
-        : contributeursTrouves[0];
-    intituleActeur = acteur.prenomNom;
+        ? {
+            intitule: 'Utilisateur·rice',
+            initiales: '',
+          }
+        : {
+            ...contributeursTrouves[0],
+            intitule: contributeursTrouves[0].prenomNom,
+            resumeNiveauDroit:
+              $storeAutorisations.autorisations[activite.idActeur]
+                ?.resumeNiveauDroit,
+          };
   }
 </script>
 
@@ -42,13 +55,13 @@
   <div>
     <Initiales
       valeur={acteur.initiales}
-      resumeNiveauDroit={autorisation?.resumeNiveauDroit}
+      resumeNiveauDroit={acteur.resumeNiveauDroit}
     />
   </div>
   <div class="contenu">
     <div class="titre">{titre}</div>
     <div class="infos">
-      <span>{intituleActeur}</span> &bull;
+      <span>{acteur.intitule}</span> &bull;
       <span>{formatteDateHeureFr(activite.date)}</span>
     </div>
     <div>
