@@ -3,13 +3,18 @@
   import type { ActiviteMesure } from '../../mesure.d';
   import type { ReferentielPriorite } from '../../../ui/types';
   import { contributeurs } from '../../../tableauDesMesures/stores/contributeurs.store';
+  import Initiales from '../../../ui/Initiales.svelte';
+  import { storeAutorisations } from '../../../gestionContributeurs/stores/autorisations.store';
+  import { formatteDateHeureFr } from '../../../formatDate/formatDate';
 
   export let activite: ActiviteMesure;
   export let priorites: ReferentielPriorite;
 
   const titre = 'Priorité';
 
-  let acteur: { prenomNom: string };
+  $: autorisation = $storeAutorisations.autorisations[activite.idActeur];
+
+  let acteur: { prenomNom: string; initiales: string };
   let intituleActeur: string;
 
   $: {
@@ -18,21 +23,52 @@
     );
     acteur =
       contributeursTrouves.length === 0
-        ? { prenomNom: 'Utilisateur·rice' }
+        ? { prenomNom: 'Utilisateur·rice', initiales: '' }
         : contributeursTrouves[0];
     intituleActeur = acteur.prenomNom;
   }
 </script>
 
-<div>
-  <div>MG</div>
+<div class="activite">
   <div>
-    <div>{titre}</div>
-    <div>
-      <span>{intituleActeur}</span> &bull; <span>15 sept. 2024 à 13:20</span>
+    <Initiales
+      valeur={acteur.initiales}
+      resumeNiveauDroit={autorisation?.resumeNiveauDroit}
+    />
+  </div>
+  <div class="contenu">
+    <div class="titre">{titre}</div>
+    <div class="infos">
+      <span>{intituleActeur}</span> &bull;
+      <span>{formatteDateHeureFr(activite.date)}</span>
     </div>
     <div>
       <ActiviteAjoutPriorite {activite} {priorites} />
     </div>
   </div>
 </div>
+
+<style>
+  .activite {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .contenu {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .titre {
+    font-weight: bold;
+    font-size: 14px;
+    color: var(--texte-fonce);
+  }
+
+  .infos {
+    font-size: 12px;
+    color: var(--texte-clair);
+    margin-bottom: 4px;
+  }
+</style>
