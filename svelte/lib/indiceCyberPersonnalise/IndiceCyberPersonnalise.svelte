@@ -64,16 +64,12 @@
       {@const x = radius * Math.cos(angle) + taille / 2}
       {@const y = radius * Math.sin(angle) + taille / 2}
       {@const angleTrait = ((angle + Math.PI / 2) * 180) / Math.PI}
-      <g
-        transform="translate({x}, {y}) rotate({angleTrait})"
-        filter="url(#ombre)"
-      >
+      <g transform="translate({x}, {y}) rotate({angleTrait})">
         <rect
           x="0"
           y="0"
           width={largeurRectangle}
           height={hauteurRectangle}
-          filter="url(#ombre)"
           fill="white"
         />
       </g>
