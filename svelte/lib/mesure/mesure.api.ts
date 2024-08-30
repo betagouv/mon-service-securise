@@ -78,5 +78,11 @@ export const enregistreRetourUtilisateur = async (
 };
 
 export const recupereActiviteMesure = async (
+  idService: string,
   idMesure: string | number
-): Promise<ActiviteMesure[]> => [];
+): Promise<ActiviteMesure[]> => {
+  const reponse = await axios.get(
+    `/api/service/${idService}/mesures/${idMesure}/activites`
+  );
+  return reponse.data.map((a: any) => ({ ...a, date: new Date(a.date) }));
+};

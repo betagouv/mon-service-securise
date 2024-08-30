@@ -6,8 +6,10 @@
   import { writable } from 'svelte/store';
   import Activite from './activites/Activite.svelte';
   import type { ReferentielPriorite, ReferentielStatut } from '../../ui/types';
+  import type { IdService } from '../../tableauDesMesures/tableauDesMesures.d';
 
   export let visible: boolean;
+  export let idService: IdService;
   export let priorites: ReferentielPriorite;
   export let statuts: ReferentielStatut;
 
@@ -22,6 +24,7 @@
 
   onMount(async () => {
     const activites = await recupereActiviteMesure(
+      idService,
       $store.mesureEditee.metadonnees.idMesure
     );
     storeActivites.charge(activites);
