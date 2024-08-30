@@ -6,6 +6,8 @@
   import { contributeurs } from '../../../tableauDesMesures/stores/contributeurs.store';
 
   export let activite: ActiviteMesure;
+  // eslint-disable-next-line svelte/valid-compile
+  export let priorites, statuts;
 
   const details = <DetailsModificationResponsable>activite.details;
   const idResponsable: string = details.valeur;

@@ -9,6 +9,8 @@
 
   export let activite: ActiviteMesure;
   export let priorites: ReferentielPriorite;
+  // eslint-disable-next-line svelte/valid-compile
+  export let statuts;
 
   const details = <DetailsMiseAJourPropriete>activite.details;
   const ancienneValeur: PrioriteMesure = <PrioriteMesure>details.ancienneValeur;

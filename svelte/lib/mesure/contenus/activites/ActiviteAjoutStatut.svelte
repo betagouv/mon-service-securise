@@ -6,6 +6,8 @@
 
   export let activite: ActiviteMesure;
   export let statuts: ReferentielStatut;
+  // eslint-disable-next-line svelte/valid-compile
+  export let priorites;
 
   const details = <DetailsAjoutPropriete>activite.details;
   const statut = <StatutMesure>details.nouvelleValeur;
