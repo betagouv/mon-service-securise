@@ -95,6 +95,18 @@ const nouvelAdaptateur = (env) => {
       details,
     });
 
+  const activitesMesure = async (idService, idMesure) =>
+    knex('activites_mesure')
+      .where({ id_service: idService, id_mesure: idMesure })
+      .select(
+        'type',
+        'details',
+        'date',
+        'id_acteur as idActeur',
+        'id_service as idService',
+        'id_mesure as idMesure'
+      );
+
   const arreteTout = () => knex.destroy();
 
   const service = async (id) =>
@@ -454,6 +466,7 @@ const nouvelAdaptateur = (env) => {
   };
 
   return {
+    activitesMesure,
     ajouteAutorisation,
     ajouteSuggestionAction,
     ajouteTacheDeService,
