@@ -66,7 +66,11 @@ const routesConnecteApiService = ({
   );
 
   routes.use(
-    routesConnecteApiServiceActivitesMesure({ middleware, depotDonnees })
+    routesConnecteApiServiceActivitesMesure({
+      middleware,
+      depotDonnees,
+      referentiel,
+    })
   );
 
   routes.post(

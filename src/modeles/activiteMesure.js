@@ -1,18 +1,12 @@
 class ActiviteMesure {
   constructor(donnees) {
-    this.service = donnees.service;
-    this.acteur = donnees.acteur;
+    this.idService = donnees.idService;
+    this.idActeur = donnees.idActeur;
     this.type = donnees.type;
     this.details = donnees.details;
-    this.mesure = donnees.mesure;
+    this.idMesure = donnees.idMesure;
     this.date = donnees.date;
   }
-
-  idActeur = () => this.acteur.id;
-
-  idService = () => this.service.id;
-
-  idMesure = () => this.mesure.id;
 }
 
 module.exports = ActiviteMesure;

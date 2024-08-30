@@ -5,14 +5,7 @@ const {
   Permissions,
   Rubriques,
 } = require('../../../src/modeles/autorisations/gestionDroits');
-const Referentiel = require('../../../src/referentiel');
-const {
-  uneMesureGenerale,
-} = require('../../constructeurs/constructeurMesureGenerale');
 const ActiviteMesure = require('../../../src/modeles/activiteMesure');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
 
 const { LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -49,18 +42,14 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
     });
 
     it('renvoie la liste des activités de la mesure', async () => {
-      const avecAudit = Referentiel.creeReferentiel({
+      testeur.referentiel().enrichis({
         mesures: { audit: { identifiantNumerique: '0007' } },
       });
-      const fabriqueMesure = uneMesureGenerale(avecAudit).avecId('audit');
-      const audit = fabriqueMesure.construis();
       testeur.depotDonnees().litActivitesMesure = () => [
         new ActiviteMesure({
-          acteur: unUtilisateur()
-            .avecId('9724853e-037c-4bca-9350-0a4b14a85a29')
-            .construis(),
+          idActeur: '9724853e-037c-4bca-9350-0a4b14a85a29',
           date: new Date('2024-09-29 11:15:02.817 +0200'),
-          mesure: audit,
+          idMesure: 'audit',
           type: 'ajoutPriorite',
           details: { nouvelleValeur: 'p3' },
         }),
