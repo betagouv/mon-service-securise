@@ -4,6 +4,7 @@ import ActiviteMiseAJourPriorite from './ActiviteMiseAJourPriorite.svelte';
 import ActiviteInconnue from './ActiviteInconnue.svelte';
 import type { SvelteComponent } from 'svelte';
 import ActiviteAjoutStatut from './ActiviteAjoutStatut.svelte';
+import ActiviteMiseAJourStatut from './ActiviteMiseAJourStatut.svelte';
 
 export type VisualisationActivite = {
   titre: string;
@@ -24,6 +25,10 @@ const visualisationsParType: Partial<
   ajoutStatut: {
     titre: 'Statut',
     composantContenu: ActiviteAjoutStatut,
+  },
+  miseAJourStatut: {
+    titre: 'Modification du statut',
+    composantContenu: ActiviteMiseAJourStatut,
   },
 };
 
