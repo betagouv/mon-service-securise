@@ -3,6 +3,7 @@ import ActiviteAjoutPriorite from './ActiviteAjoutPriorite.svelte';
 import ActiviteMiseAJourPriorite from './ActiviteMiseAJourPriorite.svelte';
 import ActiviteInconnue from './ActiviteInconnue.svelte';
 import type { SvelteComponent } from 'svelte';
+import ActiviteAjoutStatut from './ActiviteAjoutStatut.svelte';
 
 export type VisualisationActivite = {
   titre: string;
@@ -19,6 +20,10 @@ const visualisationsParType: Partial<
   miseAJourPriorite: {
     titre: 'Modification de la priorité',
     composantContenu: ActiviteMiseAJourPriorite,
+  },
+  ajoutStatut: {
+    titre: 'Statut',
+    composantContenu: ActiviteAjoutStatut,
   },
 };
 

@@ -2,6 +2,7 @@
   import type { ActiviteMesure } from '../../mesure.d';
   import type {
     ReferentielPriorite,
+    ReferentielStatut,
     ResumeNiveauDroit,
   } from '../../../ui/types';
   import { contributeurs } from '../../../tableauDesMesures/stores/contributeurs.store';
@@ -12,6 +13,7 @@
 
   export let activite: ActiviteMesure;
   export let priorites: ReferentielPriorite;
+  export let statuts: ReferentielStatut;
 
   const visualisation = obtientVisualisation(activite);
 
@@ -60,6 +62,7 @@
         this={visualisation.composantContenu}
         {activite}
         {priorites}
+        {statuts}
       />
     </div>
   </div>
