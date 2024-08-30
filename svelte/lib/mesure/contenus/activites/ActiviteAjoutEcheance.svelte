@@ -3,6 +3,8 @@
   import TagEcheanceMesure from '../../../ui/TagEcheanceMesure.svelte';
 
   export let activite: ActiviteMesure;
+  // eslint-disable-next-line svelte/valid-compile
+  export let priorites, statuts;
 
   const details = <DetailsAjoutPropriete>activite.details;
   const echeance = new Date(details.nouvelleValeur);

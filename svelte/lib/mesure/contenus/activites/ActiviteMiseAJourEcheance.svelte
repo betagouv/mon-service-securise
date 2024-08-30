@@ -6,6 +6,8 @@
   import TagEcheanceMesure from '../../../ui/TagEcheanceMesure.svelte';
 
   export let activite: ActiviteMesure;
+  // eslint-disable-next-line svelte/valid-compile
+  export let priorites, statuts;
 
   const details = <DetailsMiseAJourPropriete>activite.details;
   const ancienneEcheance = new Date(details.ancienneValeur);
