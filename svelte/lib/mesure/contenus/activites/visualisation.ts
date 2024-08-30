@@ -8,6 +8,7 @@ import ActiviteMiseAJourStatut from './ActiviteMiseAJourStatut.svelte';
 import ActiviteAjoutEcheance from './ActiviteAjoutEcheance.svelte';
 import ActiviteMiseAJourEcheance from './ActiviteMiseAJourEcheance.svelte';
 import ActiviteSuppressionEcheance from './ActiviteSuppressionEcheance.svelte';
+import ActiviteAjoutResponsable from './ActiviteAjoutResponsable.svelte';
 
 export type VisualisationActivite = {
   titre: string;
@@ -44,6 +45,10 @@ const visualisationsParType: Partial<
   suppressionEcheance: {
     titre: "Suppression de l'échéance",
     composantContenu: ActiviteSuppressionEcheance,
+  },
+  ajoutResponsable: {
+    titre: 'Attribution à un·e responsable',
+    composantContenu: ActiviteAjoutResponsable,
   },
 };
 
