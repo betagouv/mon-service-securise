@@ -1,5 +1,4 @@
 <script lang="ts">
-  import ActiviteAjoutPriorite from './ActiviteAjoutPriorite.svelte';
   import type { ActiviteMesure } from '../../mesure.d';
   import type {
     ReferentielPriorite,
@@ -9,20 +8,12 @@
   import Initiales from '../../../ui/Initiales.svelte';
   import { storeAutorisations } from '../../../gestionContributeurs/stores/autorisations.store';
   import { formatteDateHeureFr } from '../../../formatDate/formatDate';
-  import ActiviteMiseAJourPriorite from './ActiviteMiseAJourPriorite.svelte';
+  import { obtientVisualisation } from './visualisation';
 
   export let activite: ActiviteMesure;
   export let priorites: ReferentielPriorite;
 
-  let titre: string;
-  let composantContenu: any;
-  if (activite.type === 'ajoutPriorite') {
-    titre = 'Priorité';
-    composantContenu = ActiviteAjoutPriorite;
-  } else {
-    titre = 'Modification de la priorité';
-    composantContenu = ActiviteMiseAJourPriorite;
-  }
+  const visualisation = obtientVisualisation(activite);
 
   type Acteur = {
     intitule: string;
@@ -59,13 +50,17 @@
     />
   </div>
   <div class="contenu">
-    <div class="titre">{titre}</div>
+    <div class="titre">{visualisation.titre}</div>
     <div class="infos">
       <span>{acteur.intitule}</span> &bull;
       <span>{formatteDateHeureFr(activite.date)}</span>
     </div>
     <div>
-      <svelte:component this={composantContenu} {activite} {priorites} />
+      <svelte:component
+        this={visualisation.composantContenu}
+        {activite}
+        {priorites}
+      />
     </div>
   </div>
 </div>
