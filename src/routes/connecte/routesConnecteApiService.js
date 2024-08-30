@@ -39,6 +39,7 @@ const {
 } = require('../../modeles/autorisations/gestionDroits');
 const objetGetMesures = require('../../modeles/objetsApi/objetGetMesures');
 const EvenementRetourUtilisateurMesure = require('../../modeles/journalMSS/evenementRetourUtilisateurMesure');
+const routesConnecteApiServiceActivitesMesure = require('./routesConnecteApiServiceActivitesMesure');
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -62,6 +63,10 @@ const routesConnecteApiService = ({
       middleware,
       referentiel,
     })
+  );
+
+  routes.use(
+    routesConnecteApiServiceActivitesMesure({ middleware, depotDonnees })
   );
 
   routes.post(

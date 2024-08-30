@@ -15,6 +15,11 @@ class ConstructeurMesureGenerale {
     return new MesureGenerale(this.donnees, this.referentiel);
   }
 
+  avecId(id) {
+    this.donnees.id = id;
+    return this;
+  }
+
   avecStatut(statut) {
     this.donnees.statut = statut;
     return this;
