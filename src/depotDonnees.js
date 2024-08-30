@@ -146,7 +146,7 @@ const creeDepot = (config = {}) => {
 
   const { acquitteSuggestionAction } = depotSuggestionsActions;
 
-  const { ajouteActiviteMesure } = depotActivitesMesure;
+  const { ajouteActiviteMesure, lisActivitesMesure } = depotActivitesMesure;
 
   return {
     accesAutorise,
@@ -168,6 +168,7 @@ const creeDepot = (config = {}) => {
     services,
     enregistreDossier,
     finaliseDossierCourant,
+    lisActivitesMesure,
     lisNotificationsExpirationHomologationEnDate,
     lisParcoursUtilisateur,
     marqueNouveauteLue,

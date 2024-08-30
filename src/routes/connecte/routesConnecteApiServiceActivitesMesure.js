@@ -16,9 +16,9 @@ const routesConnecteApiServiceActivitesMesure = ({
   routes.get(
     '/:id/mesures/:idMesure/activites',
     middleware.trouveService({ [SECURISER]: LECTURE }),
-    (requete, reponse) => {
+    async (requete, reponse) => {
       reponse.status(200);
-      const activites = depotDonnees.litActivitesMesure(
+      const activites = await depotDonnees.lisActivitesMesure(
         requete.service.id,
         requete.params.idMesure
       );
