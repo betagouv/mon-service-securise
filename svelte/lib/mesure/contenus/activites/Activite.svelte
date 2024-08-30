@@ -57,7 +57,7 @@
       <span>{acteur.intitule}</span> &bull;
       <span>{formatteDateHeureFr(activite.date)}</span>
     </div>
-    <div>
+    <div class="description">
       <svelte:component
         this={visualisation.composantContenu}
         {activite}
@@ -78,6 +78,10 @@
   .contenu {
     display: flex;
     flex-direction: column;
+  }
+
+  .description {
+    line-height: 18px;
   }
 
   .titre {
