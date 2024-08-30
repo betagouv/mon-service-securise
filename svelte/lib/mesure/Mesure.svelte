@@ -2,6 +2,7 @@
   import Formulaire from '../ui/Formulaire.svelte';
   import SuppressionMesureSpecifique from './suppression/SuppressionMesureSpecifique.svelte';
   import type { MesuresExistantes } from './mesure.d';
+  import type { IdService } from '../tableauDesMesures/tableauDesMesures.d';
 
   import { configurationAffichage, store } from './mesure.store';
   import { enregistreMesures, enregistreRetourUtilisateur } from './mesure.api';
@@ -14,7 +15,7 @@
   import { planDActionDisponible } from '../modeles/mesure';
   import ContenuOngletActivite from './contenus/ContenuOngletActivite.svelte';
 
-  export let idService: string;
+  export let idService: IdService;
   export let categories: Record<string, string>;
   export let statuts: ReferentielStatut;
   export let retoursUtilisateur: Record<string, string>;
@@ -118,6 +119,7 @@
         visible={ongletActif === 'activite'}
         {priorites}
         {statuts}
+        {idService}
       />
     </div>
     <div class="conteneur-actions">
