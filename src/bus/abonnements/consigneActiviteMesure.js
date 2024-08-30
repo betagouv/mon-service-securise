@@ -60,11 +60,11 @@ const consigneActiviteMesure =
     const consigneActivite = async (type, details) => {
       try {
         const activiteMesure = new ActiviteMesure({
-          service,
-          acteur: utilisateur,
+          idService: service.id,
+          idActeur: utilisateur.id,
           type,
           details,
-          mesure: nouvelleMesure,
+          idMesure: nouvelleMesure.id,
         });
         await depotDonnees.ajouteActiviteMesure(activiteMesure);
       } catch (e) {

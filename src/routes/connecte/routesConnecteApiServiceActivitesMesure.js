@@ -10,6 +10,7 @@ const { SECURISER } = Rubriques;
 const routesConnecteApiServiceActivitesMesure = ({
   middleware,
   depotDonnees,
+  referentiel,
 }) => {
   const routes = express.Router();
   routes.get(
@@ -24,9 +25,9 @@ const routesConnecteApiServiceActivitesMesure = ({
 
       const resultat = activites.map((a) => ({
         date: a.date.toISOString(),
-        idActeur: a.idActeur(),
+        idActeur: a.idActeur,
         identifiantNumeriqueMesure:
-          a.mesure.donneesReferentiel().identifiantNumerique,
+          referentiel.mesures()[a.idMesure].identifiantNumerique,
         type: a.type,
         details: a.details,
       }));

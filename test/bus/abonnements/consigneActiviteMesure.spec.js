@@ -64,8 +64,8 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     await gestionnaire(evenement);
 
     expect(activiteAjoutee).to.be.an(ActiviteMesure);
-    expect(activiteAjoutee.service).to.be(evenement.service);
-    expect(activiteAjoutee.acteur).to.be(evenement.utilisateur);
+    expect(activiteAjoutee.idService).to.be(evenement.service.id);
+    expect(activiteAjoutee.idActeur).to.be(evenement.utilisateur.id);
     expect(activiteAjoutee.type).to.be('miseAJourStatut');
     expect(activiteAjoutee.details).to.eql({
       ancienneValeur: 'nonFait',
@@ -96,8 +96,8 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     await gestionnaire(evenement);
 
     expect(activiteAjoutee).to.be.an(ActiviteMesure);
-    expect(activiteAjoutee.service).to.be(evenement.service);
-    expect(activiteAjoutee.acteur).to.be(evenement.utilisateur);
+    expect(activiteAjoutee.idService).to.be(evenement.service.id);
+    expect(activiteAjoutee.idActeur).to.be(evenement.utilisateur.id);
     expect(activiteAjoutee.type).to.be('ajoutPriorite');
     expect(activiteAjoutee.details).to.eql({
       nouvelleValeur: 'p2',
@@ -154,7 +154,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
 
     await gestionnaire(evenement);
 
-    expect(activiteAjoutee.mesure).to.be(mesure);
+    expect(activiteAjoutee.idMesure).to.be(mesure.id);
   });
 
   it("crée une activité lorsque la date d'échéance est ajoutée", async () => {
