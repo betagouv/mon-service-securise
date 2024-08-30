@@ -9,6 +9,7 @@ import ActiviteAjoutEcheance from './ActiviteAjoutEcheance.svelte';
 import ActiviteMiseAJourEcheance from './ActiviteMiseAJourEcheance.svelte';
 import ActiviteSuppressionEcheance from './ActiviteSuppressionEcheance.svelte';
 import ActiviteAjoutResponsable from './ActiviteAjoutResponsable.svelte';
+import ActiviteSuppressionResponsable from './ActiviteSuppressionResponsable.svelte';
 
 export type VisualisationActivite = {
   titre: string;
@@ -49,6 +50,10 @@ const visualisationsParType: Partial<
   ajoutResponsable: {
     titre: 'Attribution à un·e responsable',
     composantContenu: ActiviteAjoutResponsable,
+  },
+  suppressionResponsable: {
+    titre: "Suppression de l'attribution",
+    composantContenu: ActiviteSuppressionResponsable,
   },
 };
 
