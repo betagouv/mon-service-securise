@@ -16,15 +16,15 @@
     content: '';
     width: 24px;
     height: 24px;
-    display: inline-block;
     background: url('/statique/assets/images/icone_calendrier_sans_loupe.svg')
       no-repeat;
+    position: relative;
+    left: -2px;
+    top: 6px;
+    display: inline-block;
   }
 
   .dateEcheance {
-    display: flex;
-    align-items: center;
-    margin: 2px 0;
-    gap: 6px;
+    margin-left: 6px;
   }
 </style>
