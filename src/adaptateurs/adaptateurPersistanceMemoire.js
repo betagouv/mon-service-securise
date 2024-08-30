@@ -11,6 +11,7 @@ const nouvelAdaptateur = (
   donnees.notificationsExpirationHomologation ||= [];
   donnees.notifications ||= [];
   donnees.suggestionsActions ||= [];
+  donnees.activitesMesure ||= [];
 
   const supprimeEnregistrement = async (nomTable, id) => {
     donnees[nomTable] = donnees[nomTable].filter((e) => e.id !== id);
@@ -255,7 +256,13 @@ const nouvelAdaptateur = (
 
   const ajouteTacheDeService = async () => {};
 
+  const activitesMesure = async (idService, idMesure) =>
+    donnees.activitesMesure.filter(
+      (a) => a.idService === idService && a.idMesure === idMesure
+    );
+
   return {
+    activitesMesure,
     ajouteAutorisation,
     ajouteSuggestionAction,
     ajouteTacheDeService,

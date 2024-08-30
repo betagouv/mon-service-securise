@@ -17,6 +17,9 @@ class ConstructeurMesureGenerale {
 
   avecId(id) {
     this.donnees.id = id;
+    this.referentiel.enrichis({
+      mesures: { [id]: { categorie: 'gouvernance' } },
+    });
     return this;
   }
 

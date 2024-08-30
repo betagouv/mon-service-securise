@@ -6,9 +6,14 @@ const DepotDonneesActivitesMesure = require('../../src/depots/depotDonneesActivi
 const ActiviteMesure = require('../../src/modeles/activiteMesure');
 
 describe('Le dépôt de données des activités de mesure', () => {
+  let adaptateurPersistance;
+
+  const depot = () =>
+    DepotDonneesActivitesMesure.creeDepot({ adaptateurPersistance });
+
   describe('sur ajout d’une activité', () => {
     it("ajoute l'activité", () => {
-      const adaptateurPersistance = unePersistanceMemoire().construis();
+      adaptateurPersistance = unePersistanceMemoire().construis();
       let activiteAjouteeAPersistance = false;
       let idServiceActivite;
       let idActeurActivite;
@@ -29,9 +34,6 @@ describe('Le dépôt de données des activités de mesure', () => {
         typeActivite = type;
         detailsActivite = details;
       };
-      const depot = DepotDonneesActivitesMesure.creeDepot({
-        adaptateurPersistance,
-      });
       const activite = new ActiviteMesure({
         idService: 987,
         idActeur: 654,
@@ -40,7 +42,7 @@ describe('Le dépôt de données des activités de mesure', () => {
         idMesure: 'audit',
       });
 
-      depot.ajouteActiviteMesure(activite);
+      depot().ajouteActiviteMesure(activite);
 
       expect(activiteAjouteeAPersistance).to.be(true);
       expect(idServiceActivite).to.be(987);
@@ -48,6 +50,53 @@ describe('Le dépôt de données des activités de mesure', () => {
       expect(typeActivite).to.be('statutMisAJour');
       expect(detailsActivite).to.eql({ nouveauStatut: 'fait' });
       expect(idMesureActivite).to.eql('audit');
+    });
+  });
+
+  describe('sur lecture des activités', () => {
+    it('lit les activités depuis la persistance', async () => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .avecUneActiviteMesure({
+          idService: 'S1',
+          idActeur: '',
+          idMesure: 'm1',
+          date: '',
+          type: 'ajoutPriorite',
+        })
+        .construis();
+
+      const activites = await depot().lisActivitesMesure('S1', 'm1');
+
+      expect(activites.length).to.be(1);
+      expect(activites[0].type).to.be('ajoutPriorite');
+    });
+
+    it('lit uniquement les activités de la mesure et du service demandés', async () => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .avecUneActiviteMesure({ idService: 'SA', idMesure: 'intrusion' })
+        .avecUneActiviteMesure({ idService: 'SB', idMesure: 'audit' })
+        .construis();
+
+      const activites = await depot().lisActivitesMesure('SA', 'audit');
+
+      expect(activites.length).to.be(0);
+    });
+
+    it('convertit la date en objet', async () => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .avecUneActiviteMesure({
+          idService: 'SA',
+          idMesure: 'audit',
+          date: '2024-08-30 14:17:14.051990 +00:00',
+        })
+        .construis();
+
+      const activites = await depot().lisActivitesMesure('SA', 'audit');
+
+      expect(activites[0].date).to.be.an('object');
+      expect(activites[0].date.getTime()).to.be(
+        new Date('2024-08-30T14:17:14.051990Z').getTime()
+      );
     });
   });
 });

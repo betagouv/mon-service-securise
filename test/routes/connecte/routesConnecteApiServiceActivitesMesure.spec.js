@@ -19,7 +19,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
 
   describe('quand requête GET sur `/api/service/:id/mesures/:id/activites', () => {
     beforeEach(() => {
-      testeur.depotDonnees().litActivitesMesure = () => [];
+      testeur.depotDonnees().lisActivitesMesure = () => [];
     });
 
     it('recherche le service correspondant', (done) => {
@@ -45,7 +45,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
       testeur.referentiel().enrichis({
         mesures: { audit: { identifiantNumerique: '0007' } },
       });
-      testeur.depotDonnees().litActivitesMesure = () => [
+      testeur.depotDonnees().lisActivitesMesure = () => [
         new ActiviteMesure({
           idActeur: '9724853e-037c-4bca-9350-0a4b14a85a29',
           date: new Date('2024-09-29 11:15:02.817 +0200'),
@@ -73,7 +73,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
     it('retourne uniquement les activités de la mesure et du service', async () => {
       let idServiceUtilise;
       let idMesureUtilise;
-      testeur.depotDonnees().litActivitesMesure = (idService, idMesure) => {
+      testeur.depotDonnees().lisActivitesMesure = (idService, idMesure) => {
         idServiceUtilise = idService;
         idMesureUtilise = idMesure;
         return [];
