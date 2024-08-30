@@ -1,1 +1,1 @@
-Activite inconnue
+Activité inconnue

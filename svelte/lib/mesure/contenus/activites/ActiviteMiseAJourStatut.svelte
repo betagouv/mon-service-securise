@@ -18,7 +18,24 @@
 <div>
   Le statut de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> a été
   modifié de
-  <TagStatutMesure referentielStatuts={statuts} statut={ancienStatut} />
+  <span class="tag"
+    ><TagStatutMesure
+      referentielStatuts={statuts}
+      statut={ancienStatut}
+    /></span
+  >
   à
-  <TagStatutMesure referentielStatuts={statuts} statut={nouveauStatut} />
+  <span class="tag"
+    ><TagStatutMesure
+      referentielStatuts={statuts}
+      statut={nouveauStatut}
+    /></span
+  >
 </div>
+
+<style>
+  .tag {
+    margin: 2px 0;
+    display: inline-block;
+  }
+</style>

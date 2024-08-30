@@ -46,7 +46,13 @@
     display: none;
   }
 
-  .aucune-activite {
+  #contenu-onglet-activite {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+  }
+
+  #contenu-onglet-activite .aucune-activite {
     margin: 70px 50px 0;
     display: flex;
     gap: 16px;
