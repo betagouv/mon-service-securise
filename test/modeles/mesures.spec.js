@@ -71,6 +71,7 @@ describe('Les mesures liées à un service', () => {
           mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
           mesuresSpecifiques: [
             {
+              id: '1',
               description: 'Faire une étude',
               categorie: 'gouvernance',
               statut: 'fait',

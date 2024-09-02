@@ -424,6 +424,9 @@ const creeDepot = (config = {}) => {
     idUtilisateur,
     mesures
   ) => {
+    mesures.toutes().forEach((m) => {
+      if (!m.id) m.id = adaptateurUUID.genereUUID();
+    });
     const s = await p.lis.un(idService);
     s.metsAJourMesuresSpecifiques(mesures);
     await metsAJourService(s);

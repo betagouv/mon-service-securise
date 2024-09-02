@@ -47,6 +47,7 @@ describe('Une mesure spécifique', () => {
 
   elle('connaît ses propriétés obligatoires', () => {
     expect(MesureSpecifique.proprietesObligatoires()).to.eql([
+      'id',
       'description',
       'categorie',
       'statut',
@@ -58,6 +59,7 @@ describe('Une mesure spécifique', () => {
     () => {
       const mesure = new MesureSpecifique(
         {
+          id: 'x',
           description: 'Une mesure spécifique',
           categorie: 'uneCategorie',
           statut: 'fait',
