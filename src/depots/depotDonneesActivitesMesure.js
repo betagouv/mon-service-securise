@@ -15,7 +15,9 @@ const creeDepot = (config = {}) => {
       idService,
       idMesure
     );
-    return activitesMesure.map((a) => ({ ...a, date: new Date(a.date) }));
+    return activitesMesure
+      .map((a) => ({ ...a, date: new Date(a.date) }))
+      .sort((a, b) => b.date - a.date);
   };
 
   return {
