@@ -59,7 +59,7 @@
     <fieldset>
       <legend>Catégories de cybersécurité</legend>
       {#each Object.entries(categories) as [id, categorie]}
-        <div>
+        <div class="case-et-label">
           <input
             type="checkbox"
             {id}
@@ -73,7 +73,7 @@
     </fieldset>
     <fieldset>
       <legend>Mesures par référentiel</legend>
-      <div>
+      <div class="case-et-label">
         <input
           type="checkbox"
           id="anssi"
@@ -84,25 +84,23 @@
         />
         <label for="anssi">ANSSI</label>
       </div>
-      <div>
+      <div class="case-et-label decalage-checkbox">
         <input
           type="checkbox"
           id="anssi-indispensable"
           name="anssi-indispensable"
           bind:group={$rechercheParReferentiel}
           value={IdReferentiel.ANSSIIndispensable}
-          class="decalage-checkbox"
         />
         <label for="anssi-indispensable">Indispensable</label>
       </div>
-      <div>
+      <div class="case-et-label decalage-checkbox">
         <input
           type="checkbox"
           id="anssi-recommandee"
           name="anssi-recommandee"
           bind:group={$rechercheParReferentiel}
           value={IdReferentiel.ANSSIRecommandee}
-          class="decalage-checkbox"
         />
         <label for="anssi-recommandee">Recommandée</label>
       </div>
@@ -116,7 +114,7 @@
         />
         <label for="mesure-cnil">CNIL</label>
       </div>
-      <div>
+      <div class="case-et-label">
         <input
           type="checkbox"
           id="mesure-ajoutee"
@@ -131,7 +129,7 @@
       <fieldset>
         <legend>Priorité</legend>
         {#each Object.entries(priorites) as [id, labels]}
-          <div>
+          <div class="case-et-label">
             <input
               type="checkbox"
               {id}
@@ -145,7 +143,7 @@
       </fieldset>
       <fieldset>
         <legend>Attribution des mesures</legend>
-        <div>
+        <div class="case-et-label">
           <input
             type="checkbox"
             id="mes-mesures"
@@ -237,5 +235,22 @@
 
   .decalage-checkbox {
     margin-left: 12px;
+  }
+
+  .case-et-label {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin-top: 1em;
+  }
+
+  .case-et-label input {
+    margin: 0;
+    transform: none;
+  }
+
+  .case-et-label label {
+    margin: 0;
+    text-align: left;
   }
 </style>
