@@ -81,6 +81,16 @@ module.exports = {
       image: 'indiceCyberPersonnalise.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'activites',
+      dateDeDeploiement: '2024-09-02 08:30:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/historique-des-actions-sur-les-mesures-10c6n77/',
+      titre: 'Suivi de vos activités sur les mesures !',
+      sousTitre:
+        'Vous pouvez désormais suivre qui a fait des modifications et à quelle date sur les mesures de sécurité.',
+      image: 'activites.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
