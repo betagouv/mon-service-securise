@@ -1,7 +1,6 @@
 <script lang="ts">
   import type {
     ActiviteMesure,
-    DetailsAjoutPropriete,
     DetailsMiseAJourPropriete,
   } from '../../mesure.d';
   import TagPrioriteMesure from '../../../ui/TagPrioriteMesure.svelte';
@@ -18,9 +17,20 @@
 </script>
 
 <div>
-  La priorité de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> a été
-  modifiée de
-  <TagPrioriteMesure {priorites} priorite={ancienneValeur} />
-  à
-  <TagPrioriteMesure {priorites} priorite={nouvelleValeur} />
+  <div>
+    La priorité de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> a été
+    modifiée
+  </div>
+  <div class="changements">
+    de
+    <TagPrioriteMesure {priorites} priorite={ancienneValeur} />
+    à
+    <TagPrioriteMesure {priorites} priorite={nouvelleValeur} />
+  </div>
 </div>
+
+<style>
+  .changements {
+    margin-top: 4px;
+  }
+</style>

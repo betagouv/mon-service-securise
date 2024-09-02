@@ -18,26 +18,19 @@
 </script>
 
 <div>
-  Le statut de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> a été
-  modifié de
-  <span class="tag"
-    ><TagStatutMesure
-      referentielStatuts={statuts}
-      statut={ancienStatut}
-    /></span
-  >
-  à
-  <span class="tag"
-    ><TagStatutMesure
-      referentielStatuts={statuts}
-      statut={nouveauStatut}
-    /></span
-  >
+  <div>
+    Le statut de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> a été modifié
+  </div>
+  <div class="changements">
+    de
+    <TagStatutMesure referentielStatuts={statuts} statut={ancienStatut} />
+    à
+    <TagStatutMesure referentielStatuts={statuts} statut={nouveauStatut} />
+  </div>
 </div>
 
 <style>
-  .tag {
-    margin: 2px 0;
-    display: inline-block;
+  .changements {
+    margin-top: 4px;
   }
 </style>
