@@ -9,7 +9,7 @@
   class="initiales contributeur {resumeNiveauDroit || ''}"
   class:persona={!valeur}
 >
-  {valeur}
+  <span>{valeur}</span>
 </div>
 
 <style>
@@ -25,6 +25,10 @@
     font-weight: 700;
     background: var(--role-inconnu);
     color: var(--role-inconnu-texte);
+  }
+
+  .initiales:not(.persona) span {
+    margin-bottom: 3px;
   }
 
   .initiales.persona::before {
