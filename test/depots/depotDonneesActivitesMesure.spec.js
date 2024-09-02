@@ -98,5 +98,27 @@ describe('Le dépôt de données des activités de mesure', () => {
         new Date('2024-08-30T14:17:14.051990Z').getTime()
       );
     });
+
+    it('tri les activités par date', async () => {
+      adaptateurPersistance = unePersistanceMemoire()
+        .avecUneActiviteMesure({
+          idService: 'S1',
+          idMesure: 'm1',
+          date: '2024-09-02 07:30:59.983586 +00:00',
+          type: 'ajoutStatut',
+        })
+        .avecUneActiviteMesure({
+          idService: 'S1',
+          idMesure: 'm1',
+          date: '2024-09-03 07:30:59.983586 +00:00',
+          type: 'ajoutPriorite',
+        })
+        .construis();
+
+      const activites = await depot().lisActivitesMesure('S1', 'm1');
+
+      expect(activites[0].type).to.be('ajoutPriorite');
+      expect(activites[1].type).to.be('ajoutStatut');
+    });
   });
 });
