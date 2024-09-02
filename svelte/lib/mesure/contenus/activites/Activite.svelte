@@ -46,10 +46,12 @@
 
 <div class="activite">
   <div>
-    <Initiales
-      valeur={acteur.initiales}
-      resumeNiveauDroit={acteur.resumeNiveauDroit}
-    />
+    <div class="cartouche">
+      <Initiales
+        valeur={acteur.initiales}
+        resumeNiveauDroit={acteur.resumeNiveauDroit}
+      />
+    </div>
   </div>
   <div class="contenu">
     <div class="titre">{visualisation.titre}</div>
@@ -69,6 +71,19 @@
 </div>
 
 <style>
+  .cartouche {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% + 12px);
+  }
+
+  .activite:not(:last-child) .cartouche:after {
+    content: '';
+    border-left: solid 1px #eff6ff;
+    transform: translateX(50%) translateY(4px);
+    height: 100%;
+  }
+
   .activite {
     display: flex;
     flex-direction: row;
