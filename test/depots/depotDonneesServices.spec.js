@@ -1616,6 +1616,34 @@ describe('Le dépôt de données des services', () => {
       );
     });
 
+    it('ajoute un identifiant aux mesures spécifiques', async () => {
+      const mesures = new MesuresSpecifiques({
+        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+      });
+
+      await depot.metsAJourMesuresSpecifiquesDuService('123', '789', mesures);
+
+      const {
+        mesures: { mesuresSpecifiques },
+      } = await depot.service('123');
+      expect(mesuresSpecifiques.item(0).id).to.be('unUUID');
+    });
+
+    it("n'ajoute pas un identifiant aux mesures spécifiques qui en ont déjà un", async () => {
+      const mesures = new MesuresSpecifiques({
+        mesuresSpecifiques: [
+          { description: 'Une mesure spécifique', id: 'truc' },
+        ],
+      });
+
+      await depot.metsAJourMesuresSpecifiquesDuService('123', '789', mesures);
+
+      const {
+        mesures: { mesuresSpecifiques },
+      } = await depot.service('123');
+      expect(mesuresSpecifiques.item(0).id).to.be('truc');
+    });
+
     it("publie un événement de 'Mesures service modifiées'", async () => {
       await depot.metsAJourMesuresSpecifiquesDuService(
         '123',

@@ -39,7 +39,7 @@ class MesureSpecifique extends Mesure {
   }
 
   static proprietesObligatoires() {
-    return ['description', 'categorie', 'statut'];
+    return ['id', 'description', 'categorie', 'statut'];
   }
 
   static valide({ categorie, statut, priorite, echeance }, referentiel) {
