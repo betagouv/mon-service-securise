@@ -26,5 +26,6 @@
 
   .dateEcheance {
     margin-left: 6px;
+    display: inline-block;
   }
 </style>
