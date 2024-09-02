@@ -11,7 +11,11 @@
 </script>
 
 <div>
-  L'échéance de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> a été
-  fixée au
-  <TagEcheanceMesure {echeance} />
+  <div>
+    L'échéance de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> a été fixée
+    au
+  </div>
+  <div>
+    <TagEcheanceMesure {echeance} />
+  </div>
 </div>

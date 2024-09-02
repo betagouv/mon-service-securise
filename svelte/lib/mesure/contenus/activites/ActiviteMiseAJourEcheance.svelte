@@ -15,9 +15,25 @@
 </script>
 
 <div>
-  L'échéance de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> a été
-  modifiée du
-  <TagEcheanceMesure echeance={ancienneEcheance} />
-  au
-  <TagEcheanceMesure echeance={nouvelleEcheance} />
+  <div>
+    L'échéance de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> a été modifiée
+    du
+  </div>
+  <div>
+    <span class="ancienne"
+      ><TagEcheanceMesure echeance={ancienneEcheance} /></span
+    >au<span class="nouvelle"
+      ><TagEcheanceMesure echeance={nouvelleEcheance} /></span
+    >
+  </div>
 </div>
+
+<style>
+  .ancienne {
+    margin-right: 8px;
+  }
+
+  .nouvelle {
+    margin-left: 8px;
+  }
+</style>
