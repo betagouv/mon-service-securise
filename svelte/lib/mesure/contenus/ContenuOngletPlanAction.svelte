@@ -83,7 +83,7 @@
         on:click={() =>
           document.body.dispatchEvent(
             new CustomEvent('jquery-affiche-tiroir-contributeurs')
-          )}>Gerer les contributeurs</button
+          )}>Gérer les contributeurs</button
       >
       <span>pour modifier les droits ou ajouter des responsables.</span>
     </p>
