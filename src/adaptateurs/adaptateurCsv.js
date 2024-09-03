@@ -12,19 +12,20 @@ const avecBOM = (...contenus) => `\uFEFF${contenus.join('')}`;
 const sansRetoursChariots = (texte) => texte.replaceAll('\n', ' ');
 const separesParVirgule = (liste) => liste.join(', ');
 
+const creeWriterDeCsv = (headerDuCsv) =>
+  createObjectCsvStringifier({ header: headerDuCsv, fieldDelimiter: ';' });
+
 const genereCsvServices = (tableauServices) => {
   try {
-    const writer = createObjectCsvStringifier({
+    const writer = creeWriterDeCsv([
       // Les `id` correspondent aux noms des propriétés dans notre modèle
-      header: [
-        { id: 'service', title: 'Nom du service' },
-        { id: 'organisations', title: 'Organisations responsables' },
-        { id: 'nombreContributeurs', title: 'Nombre de contributeurs' },
-        { id: 'estProprietaire', title: 'Est propriétaire ?' },
-        { id: 'indiceCyber', title: 'Indice cyber' },
-        { id: 'statut', title: 'Statut homologation' },
-      ],
-    });
+      { id: 'service', title: 'Nom du service' },
+      { id: 'organisations', title: 'Organisations responsables' },
+      { id: 'nombreContributeurs', title: 'Nombre de contributeurs' },
+      { id: 'estProprietaire', title: 'Est propriétaire ?' },
+      { id: 'indiceCyber', title: 'Indice cyber' },
+      { id: 'statut', title: 'Statut homologation' },
+    ]);
 
     const donnnesCsv = tableauServices.map((s) => ({
       service: decode(s.nomService),
@@ -111,7 +112,7 @@ const genereCsvMesures = async (
       }))
     );
 
-  const writer = createObjectCsvStringifier({ header: colonnes });
+  const writer = creeWriterDeCsv(colonnes);
   const titre = writer.getHeaderString();
   const lignes = writer.stringifyRecords(donneesCsv);
   const csv = avecBOM(titre, lignes);
