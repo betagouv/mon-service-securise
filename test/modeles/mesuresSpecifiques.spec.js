@@ -3,6 +3,7 @@ const expect = require('expect.js');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
 const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
 const Referentiel = require('../../src/referentiel');
+const { ErreurMesureInconnue } = require('../../src/erreurs');
 
 const elle = it;
 
@@ -212,5 +213,52 @@ describe('La liste des mesures spécifiques', () => {
     mesures.supprimeMesure('M1');
 
     expect(mesures.items.length).to.be(0);
+  });
+
+  describe('sur demande de mise à jour', () => {
+    elle('peut mettre à jour une mesure spécifique', () => {
+      const donneesMesure = {
+        id: 'M1',
+        description: 'Mesure Spécifique 1',
+        statut: 'fait',
+        categorie: 'categorie1',
+      };
+      const mesures = new MesuresSpecifiques(
+        { mesuresSpecifiques: [donneesMesure] },
+        referentiel
+      );
+      const mesureAJour = new MesureSpecifique(
+        {
+          ...donneesMesure,
+          description: 'Nouvelle description',
+        },
+        referentiel
+      );
+
+      mesures.metsAJourMesure(mesureAJour);
+
+      expect(mesures.items[0].description).to.be('Nouvelle description');
+    });
+
+    elle('jette une erreur si la mesure est introuvable', () => {
+      const mesures = new MesuresSpecifiques(
+        { mesuresSpecifiques: [] },
+        referentiel
+      );
+
+      const mesureAJour = new MesureSpecifique(
+        {
+          id: 'INTROUVABLE',
+          description: 'une description',
+          statut: 'fait',
+          categorie: 'categorie1',
+        },
+        referentiel
+      );
+
+      expect(() => mesures.metsAJourMesure(mesureAJour)).to.throwError((e) => {
+        expect(e).to.be.an(ErreurMesureInconnue);
+      });
+    });
   });
 });
