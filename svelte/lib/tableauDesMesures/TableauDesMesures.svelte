@@ -8,7 +8,7 @@
   import LigneMesure from './ligne/LigneMesure.svelte';
   import {
     enregistreMesureGenerale,
-    enregistreMesuresSpecifiques,
+    metsAJourMesureSpecifique as metsAJourMesureSpecifiqueAPI,
     recupereAutorisations,
     recupereContributeurs,
     recupereMesures,
@@ -92,12 +92,15 @@
 
   let etatEnregistrement: EtatEnregistrement = Jamais;
 
-  const metsAJourMesuresSpecifiques = async (
+  const metsAJourMesureSpecifique = async (
     indexReel: number,
     affichetoast: boolean = false
   ) => {
     etatEnregistrement = EnCours;
-    await enregistreMesuresSpecifiques(idService, $mesures.mesuresSpecifiques);
+    await metsAJourMesureSpecifiqueAPI(
+      idService,
+      $mesures.mesuresSpecifiques[indexReel]
+    );
     etatEnregistrement = Fait;
     document.body.dispatchEvent(new CustomEvent('mesure-modifiee'));
     if (affichetoast) {
@@ -314,28 +317,28 @@
           bind:mesure={$mesures.mesuresSpecifiques[indexReel]}
           on:modificationStatut={(e) => {
             mesures.metAJourStatutMesureSpecifique(indexReel, e.detail.statut);
-            metsAJourMesuresSpecifiques(indexReel, true);
+            metsAJourMesureSpecifique(indexReel, true);
           }}
           on:modificationPriorite={(e) => {
             mesures.metAJourPrioriteMesureSpecifique(
               indexReel,
               e.detail.priorite
             );
-            metsAJourMesuresSpecifiques(indexReel);
+            metsAJourMesureSpecifique(indexReel);
           }}
           on:modificationEcheance={(e) => {
             mesures.metAJourEcheanceMesureSpecifique(
               indexReel,
               e.detail.echeance
             );
-            metsAJourMesuresSpecifiques(indexReel);
+            metsAJourMesureSpecifique(indexReel);
           }}
           on:modificationResponsables={(e) => {
             mesures.metAJourResponsablesMesureSpecifique(
               indexReel,
               e.detail.responsables
             );
-            metsAJourMesuresSpecifiques(indexReel);
+            metsAJourMesureSpecifique(indexReel);
           }}
           on:click={() =>
             afficheTiroirEditeMesure({

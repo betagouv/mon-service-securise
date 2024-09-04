@@ -37,6 +37,7 @@ export type MesureGenerale = {
 };
 
 export type MesureSpecifique = {
+  id: string;
   categorie: string;
   description: string;
   statut: StatutMesure;
