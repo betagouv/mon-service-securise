@@ -32,6 +32,7 @@ type PlanAction = {
 export type MesureGenerale = PlanAction & {
   statut?: StatutMesure;
   modalites?: string;
+  id: string;
 };
 
 export type MesureGeneraleEnrichie = MesureGenerale & {
@@ -45,6 +46,7 @@ export type MesureGeneraleEnrichie = MesureGenerale & {
 };
 
 export type MesureSpecifique = PlanAction & {
+  id: string;
   statut?: StatutMesure;
   modalites?: string;
   categorie: string;

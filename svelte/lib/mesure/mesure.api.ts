@@ -9,13 +9,17 @@ export const enregistreMesures = async (
   $store: MesureStore
 ) => {
   async function enregistreMesureGenerale() {
-    const idMesure = $store.mesureEditee.metadonnees.idMesure;
+    const idMesure = <string>$store.mesureEditee.metadonnees.idMesure;
     const { modalites, statut, priorite, responsables } =
       $store.mesureEditee.mesure;
     let { echeance } = $store.mesureEditee.mesure;
     if (echeance) echeance = formatteurDate.format(new Date(echeance));
 
-    mesuresExistantes.mesuresGenerales[idMesure] = { modalites, statut };
+    mesuresExistantes.mesuresGenerales[idMesure] = {
+      modalites,
+      statut,
+      id: idMesure,
+    };
 
     await axios.put(`/api/service/${idService}/mesures/${idMesure}`, {
       modalites,
@@ -54,13 +58,12 @@ export const enregistreMesures = async (
 export const supprimeMesureSpecifique = async (
   idService: string,
   mesuresExistantes: MesuresExistantes,
-  idMesureSpecifique: number
+  indexMesureSpecifique: number
 ) => {
-  const copieMesuresSpecifiques = [...mesuresExistantes.mesuresSpecifiques];
-  copieMesuresSpecifiques.splice(idMesureSpecifique, 1);
-  await axios.put(
-    `/api/service/${idService}/mesures-specifiques`,
-    copieMesuresSpecifiques
+  const idMesure =
+    mesuresExistantes.mesuresSpecifiques[indexMesureSpecifique].id;
+  await axios.delete(
+    `/api/service/${idService}/mesuresSpecifiques/${idMesure}`
   );
 };
 
