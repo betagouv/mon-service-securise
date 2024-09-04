@@ -223,6 +223,14 @@
   margin: 0;
 }
 
+#contenu-suppression .banniere img {
+  width: 32px;
+}
+
+#contenu-suppression .banniere {
+  align-items: center;
+}
+
 #contenu-contributeurs .conteneur-confirmation .entete {
   margin: 0 0 1em 0;
 }
