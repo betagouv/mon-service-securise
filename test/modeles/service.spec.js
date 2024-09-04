@@ -25,6 +25,7 @@ const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const Mesures = require('../../src/modeles/mesures');
 const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
 const { ErreurResponsablesMesureInvalides } = require('../../src/erreurs');
+const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
 
 describe('Un service', () => {
   it('connaît son nom', () => {
@@ -987,7 +988,7 @@ describe('Un service', () => {
       }
     });
 
-    it('mets à jour le mesure', async () => {
+    it('mets à jour la mesure', async () => {
       const utilisateur = unUtilisateur()
         .avecId('unIdDeContributeur')
         .construis();
@@ -1009,6 +1010,63 @@ describe('Un service', () => {
         statut: 'fait',
         responsables: ['unIdDeContributeur'],
       });
+    });
+  });
+
+  describe("sur demande de mise à jour d'une mesure spécifique", () => {
+    let referentiel;
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        categoriesMesures: { gouvernance: '' },
+      });
+    });
+
+    it('jette une erreur si les responsables de la mesure ne font pas tous partie des contributeurs', async () => {
+      try {
+        const utilisateur = unUtilisateur()
+          .avecId('unIdDeContributeur')
+          .construis();
+        const service = unService()
+          .ajouteUnContributeur(utilisateur)
+          .construis();
+        const mesure = new MesureSpecifique(
+          {
+            id: 'M1',
+            statut: 'fait',
+            responsables: ['unIdDeContributeur', 'pasUnIdDeContributeur'],
+          },
+          referentiel
+        );
+
+        await service.metsAJourMesureSpecifique(mesure);
+
+        expect().fail("L'appel aurait dû échouer");
+      } catch (e) {
+        expect(e).to.be.an(ErreurResponsablesMesureInvalides);
+        expect(e.message).to.be(
+          "Les responsables d'une mesure spécifique doivent être des contributeurs du service."
+        );
+      }
+    });
+
+    it('mets à jour la mesure', async () => {
+      const service = unService().construis();
+      let donneesRecues;
+      service.mesures.mesuresSpecifiques.metsAJourMesure = (mesureRecu) => {
+        donneesRecues = mesureRecu;
+      };
+      const mesure = new MesureSpecifique(
+        {
+          id: 'M1',
+          statut: 'fait',
+          responsables: [],
+        },
+        referentiel
+      );
+
+      await service.metsAJourMesureSpecifique(mesure);
+
+      expect(donneesRecues.id).to.be('M1');
     });
   });
 });
