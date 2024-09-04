@@ -193,4 +193,24 @@ describe('La liste des mesures spécifiques', () => {
       );
     }
   );
+
+  elle('peut supprimer une mesure spécifique', () => {
+    const mesures = new MesuresSpecifiques(
+      {
+        mesuresSpecifiques: [
+          {
+            id: 'M1',
+            description: 'Mesure Spécifique 1',
+            statut: 'fait',
+            categorie: 'categorie1',
+          },
+        ],
+      },
+      referentiel
+    );
+
+    mesures.supprimeMesure('M1');
+
+    expect(mesures.items.length).to.be(0);
+  });
 });
