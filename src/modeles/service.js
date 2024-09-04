@@ -348,6 +348,16 @@ class Service {
     this.mesures.mesuresSpecifiques.supprimeMesure(idMesure);
   }
 
+  metsAJourMesureSpecifique(mesure) {
+    const idContributeurs = this.contributeurs.map((u) => u.id);
+    if (mesure.responsables.some((r) => !idContributeurs.includes(r))) {
+      throw new ErreurResponsablesMesureInvalides(
+        "Les responsables d'une mesure spécifique doivent être des contributeurs du service."
+      );
+    }
+    this.mesures.mesuresSpecifiques.metsAJourMesure(mesure);
+  }
+
   static creePourUnUtilisateur(utilisateur) {
     const donneesService = {
       descriptionService: {
