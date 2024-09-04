@@ -269,6 +269,10 @@
   background-size: contain;
 }
 
+#contenu-telechargement {
+  width: 100%;
+}
+
 #contenu-telechargement p {
   font-weight: 500;
 }
