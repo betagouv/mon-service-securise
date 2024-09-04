@@ -236,6 +236,10 @@
   margin-top: 2em;
 }
 
+#contenu-export {
+  width: 100%;
+}
+
 #contenu-export .liste-fichiers {
   list-style: none;
   padding-left: 0;
