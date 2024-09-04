@@ -19,6 +19,7 @@ const mesureEditeeParDefaut = (): MesureEditee => ({
     statut: undefined,
     modalites: '',
     identifiantNumerique: '',
+    id: '',
   },
   metadonnees: {
     typeMesure: 'SPECIFIQUE',
