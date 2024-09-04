@@ -279,6 +279,21 @@ const routesConnecteApiService = ({
     }
   );
 
+  routes.delete(
+    '/:id/mesuresSpecifiques/:idMesure',
+    middleware.verificationAcceptationCGU,
+    middleware.trouveService({ [SECURISER]: ECRITURE }),
+    async (requete, reponse, _suite) => {
+      const { service } = requete;
+      const { idMesure } = requete.params;
+
+      service.supprimeMesureSpecifique(idMesure);
+      await depotDonnees.metsAJourService(service);
+
+      reponse.sendStatus(200);
+    }
+  );
+
   routes.put(
     '/:id/mesures/:idMesure',
     middleware.verificationAcceptationCGU,

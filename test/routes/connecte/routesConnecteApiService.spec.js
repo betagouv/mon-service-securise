@@ -620,6 +620,58 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête DELETE sur `api/service/:id/mesuresSpecifiques/:idMesure`', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().metsAJourService = async () => {};
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'delete',
+          url: 'http://localhost:1234/api/service/456/mesuresSpecifiques/789',
+          data: [],
+        },
+        done
+      );
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: SECURISER }],
+        {
+          method: 'delete',
+          url: 'http://localhost:1234/api/service/456/mesuresSpecifiques/789',
+          data: [],
+        },
+        done
+      );
+    });
+
+    it('délègue au dépôt de données et au service la suppression de la mesure spécifique', async () => {
+      const serviceARenvoyer = unService(testeur.referentiel())
+        .avecId('456')
+        .avecMesures(new Mesures({ mesuresSpecifiques: [{ id: 'M1' }] }))
+        .construis();
+      testeur.middleware().reinitialise({
+        idUtilisateur: '999',
+        serviceARenvoyer,
+      });
+      let serviceRecu;
+      testeur.depotDonnees().metsAJourService = async (service) => {
+        serviceRecu = service;
+      };
+
+      expect(serviceARenvoyer.nombreMesuresSpecifiques()).to.eql(1);
+      await axios.delete(
+        'http://localhost:1234/api/service/456/mesuresSpecifiques/M1'
+      );
+
+      expect(serviceRecu).not.to.be(undefined);
+      expect(serviceRecu.nombreMesuresSpecifiques()).to.eql(0);
+    });
+  });
+
   describe('quand requête PUT sur `/api/service/:id/mesures/:idMesure`', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({
