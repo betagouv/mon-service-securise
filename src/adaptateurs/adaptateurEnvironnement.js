@@ -60,7 +60,11 @@ const versionDeBuild = () => {
   return versionCommit.substring(0, 8);
 };
 
-const modeMaintenance = () => process.env.MODE_MAINTENANCE === 'true';
+const modeMaintenance = () => ({
+  actif: () => process.env.MODE_MAINTENANCE === 'true',
+  enPreparation: () => !!process.env.PREPARATION_MODE_MAINTENANCE,
+  detailsPreparation: () => process.env.PREPARATION_MODE_MAINTENANCE,
+});
 
 module.exports = {
   chiffrement,
