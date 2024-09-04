@@ -33,19 +33,23 @@ export const enregistreMesures = async (
   async function enregistreMesuresSpecifiques() {
     if ($store.etape === 'Creation') {
       mesuresExistantes.mesuresSpecifiques.push($store.mesureEditee.mesure);
+      await axios.put(
+        `/api/service/${idService}/mesures-specifiques`,
+        mesuresExistantes.mesuresSpecifiques.map((m) => {
+          if (m.echeance)
+            m.echeance = formatteurDate.format(new Date(m.echeance));
+          return m;
+        })
+      );
     } else {
-      mesuresExistantes.mesuresSpecifiques[
-        $store.mesureEditee.metadonnees.idMesure as number
-      ] = $store.mesureEditee.mesure;
+      const { id, echeance, ...donnees } = $store.mesureEditee.mesure;
+      await axios.put(`/api/service/${idService}/mesuresSpecifiques/${id}`, {
+        ...donnees,
+        ...(echeance && {
+          echeance: formatteurDate.format(new Date(echeance)),
+        }),
+      });
     }
-    await axios.put(
-      `/api/service/${idService}/mesures-specifiques`,
-      mesuresExistantes.mesuresSpecifiques.map((m) => {
-        if (m.echeance)
-          m.echeance = formatteurDate.format(new Date(m.echeance));
-        return m;
-      })
-    );
   }
 
   if ($store.etape === 'EditionGenerale') {
