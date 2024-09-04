@@ -22,6 +22,10 @@ class MesuresSpecifiques extends ElementsConstructibles {
     }, accumulateur);
   }
 
+  supprimeMesure(idMesure) {
+    this.items = this.items.filter((m) => m.id !== idMesure);
+  }
+
   supprimeResponsable(idUtilisateur) {
     this.toutes().forEach((m) => m.supprimeResponsable(idUtilisateur));
   }

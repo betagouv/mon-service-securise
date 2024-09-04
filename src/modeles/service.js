@@ -344,6 +344,10 @@ class Service {
       .map((s) => s.route());
   }
 
+  supprimeMesureSpecifique(idMesure) {
+    this.mesures.mesuresSpecifiques.supprimeMesure(idMesure);
+  }
+
   static creePourUnUtilisateur(utilisateur) {
     const donneesService = {
       descriptionService: {
