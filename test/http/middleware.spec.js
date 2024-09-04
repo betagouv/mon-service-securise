@@ -911,13 +911,47 @@ describe('Le middleware MSS', () => {
     });
   });
 
-  describe('concernant mode maintenance', () => {
+  describe('concernant le mode maintenance', () => {
     let adaptateurEnvironnement;
+
+    beforeEach(() => {
+      adaptateurEnvironnement = {
+        modeMaintenance: () => ({
+          actif: () => false,
+          enPreparation: () => false,
+          detailsPreparation: () => {},
+        }),
+      };
+    });
+
+    it('ajoute le contenu de la préparation de maintenance dans `reponse.locals`, le rendant ainsi accessible aux `.pug`', (done) => {
+      adaptateurEnvironnement = {
+        modeMaintenance: () => ({
+          actif: () => false,
+          enPreparation: () => true,
+          detailsPreparation: () => 'JOUR - HEURE',
+        }),
+      };
+
+      const middleware = Middleware({ adaptateurEnvironnement });
+
+      middleware.verificationModeMaintenance(requete, reponse, () => {
+        expect(reponse.locals.avertissementMaintenance).to.eql({
+          jour: 'JOUR',
+          heure: 'HEURE',
+        });
+        done();
+      });
+    });
 
     describe('quand il est actif', () => {
       beforeEach(() => {
         adaptateurEnvironnement = {
-          modeMaintenance: () => true,
+          modeMaintenance: () => ({
+            actif: () => true,
+            enPreparation: () => false,
+            detailsPreparation: () => {},
+          }),
         };
       });
 
@@ -953,7 +987,11 @@ describe('Le middleware MSS', () => {
     describe("quand il n'est pas actif", () => {
       it('appelle le middleware suivant', () => {
         adaptateurEnvironnement = {
-          modeMaintenance: () => false,
+          modeMaintenance: () => ({
+            actif: () => false,
+            enPreparation: () => false,
+            detailsPreparation: () => {},
+          }),
         };
         let suiteAppelee = false;
         let requeteInterceptee = false;

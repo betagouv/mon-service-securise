@@ -314,7 +314,13 @@ const middleware = (configuration = {}) => {
   };
 
   const verificationModeMaintenance = (_requete, reponse, suite) => {
-    const modeMaintenanceActif = adaptateurEnvironnement.modeMaintenance();
+    const modeMaintenance = adaptateurEnvironnement.modeMaintenance();
+    const modeMaintenanceEnPreparation = modeMaintenance.enPreparation();
+    if (modeMaintenanceEnPreparation) {
+      const [jour, heure] = modeMaintenance.detailsPreparation().split(' - ');
+      reponse.locals.avertissementMaintenance = { jour, heure };
+    }
+    const modeMaintenanceActif = modeMaintenance.actif();
     if (modeMaintenanceActif) {
       reponse.status(503).render('maintenance');
     } else {
