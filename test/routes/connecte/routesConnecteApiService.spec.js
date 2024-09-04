@@ -672,6 +672,122 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête PUT sur `api/service/:id/mesuresSpecifiques/:idMesure`', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().metsAJourService = async () => {};
+      testeur.referentiel().enrichis({
+        categoriesMesures: { gouvernance: '' },
+      });
+      const serviceARenvoyer = unService(testeur.referentiel())
+        .avecId('456')
+        .avecMesures(new Mesures({ mesuresSpecifiques: [{ id: 'M1' }] }))
+        .construis();
+      testeur.middleware().reinitialise({
+        idUtilisateur: '999',
+        serviceARenvoyer,
+      });
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesuresSpecifiques/789',
+          data: [],
+        },
+        done
+      );
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: SECURISER }],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesuresSpecifiques/789',
+          data: [],
+        },
+        done
+      );
+    });
+
+    it('aseptise tous les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        [
+          'description',
+          'categorie',
+          'statut',
+          'modalites',
+          'priorite',
+          'echeance',
+          'responsables.*',
+        ],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesuresSpecifiques/789',
+          data: [],
+        },
+        done
+      );
+    });
+
+    it('délègue au dépôt de données et au service la mise à jour de la mesure spécifique', async () => {
+      let serviceRecu;
+      testeur.depotDonnees().metsAJourService = async (service) => {
+        serviceRecu = service;
+      };
+
+      await axios.put(
+        'http://localhost:1234/api/service/456/mesuresSpecifiques/M1',
+        {
+          description: 'une description',
+          categorie: 'gouvernance',
+          statut: 'fait',
+          echeance: '01&#x2F;01&#x2F;2024',
+        }
+      );
+
+      expect(serviceRecu).not.to.be(undefined);
+      const mesureMiseAJour = serviceRecu.mesures.mesuresSpecifiques.items[0];
+      expect(mesureMiseAJour.description).to.be('une description');
+      expect(mesureMiseAJour.categorie).to.be('gouvernance');
+      expect(mesureMiseAJour.statut).to.be('fait');
+      expect(mesureMiseAJour.echeance).to.be('01/01/2024');
+    });
+
+    it('renvoi une erreur 404 si la mesure est introuvable', async () => {
+      await testeur.verifieRequeteGenereErreurHTTP(
+        404,
+        'La mesure est introuvable',
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesuresSpecifiques/INTROUVABLE',
+          data: {
+            description: 'une description',
+            categorie: 'gouvernance',
+            statut: 'fait',
+          },
+        }
+      );
+    });
+
+    it('renvoi une erreur 400 si la mesure est malformée', async () => {
+      await testeur.verifieRequeteGenereErreurHTTP(
+        400,
+        'La catégorie "MAUVAISE_CATEGORIE" n\'est pas répertoriée',
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/mesuresSpecifiques/M1',
+          data: {
+            description: 'une description',
+            categorie: 'MAUVAISE_CATEGORIE',
+            statut: 'fait',
+          },
+        }
+      );
+    });
+  });
+
   describe('quand requête PUT sur `/api/service/:id/mesures/:idMesure`', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({

@@ -40,6 +40,7 @@ const {
 const objetGetMesures = require('../../modeles/objetsApi/objetGetMesures');
 const EvenementRetourUtilisateurMesure = require('../../modeles/journalMSS/evenementRetourUtilisateurMesure');
 const routesConnecteApiServiceActivitesMesure = require('./routesConnecteApiServiceActivitesMesure');
+const MesureSpecifique = require('../../modeles/mesureSpecifique');
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -275,6 +276,45 @@ const routesConnecteApiService = ({
           return;
         }
         suite(e);
+      }
+    }
+  );
+
+  routes.put(
+    '/:id/mesuresSpecifiques/:idMesure',
+    middleware.verificationAcceptationCGU,
+    middleware.trouveService({ [SECURISER]: ECRITURE }),
+    middleware.aseptise(
+      'description',
+      'categorie',
+      'statut',
+      'modalites',
+      'priorite',
+      'echeance',
+      'responsables.*'
+    ),
+    async (requete, reponse, _suite) => {
+      const { service } = requete;
+      const { idMesure } = requete.params;
+      const { echeance } = requete.body;
+
+      try {
+        const mesureSpecifique = new MesureSpecifique(
+          {
+            id: idMesure,
+            ...requete.body,
+            ...(echeance && { echeance: echeance.replaceAll('&#x2F;', '/') }),
+          },
+          referentiel
+        );
+        service.metsAJourMesureSpecifique(mesureSpecifique);
+        await depotDonnees.metsAJourService(service);
+
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurMesureInconnue)
+          reponse.status(404).send('La mesure est introuvable');
+        else reponse.status(400).send(e.message);
       }
     }
   );
