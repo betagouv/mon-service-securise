@@ -36,6 +36,15 @@ block page
           nav
             .bouton-fermer Fermer
             block navigation
+    if avertissementMaintenance
+      .banniere-maintenance
+        img(src="/statique/assets/images/icone_danger.svg" alt="")
+        p
+          span Une maintenance est prévue aujourd'hui (#{avertissementMaintenance.jour}) sur MonServiceSécurisé, de #{avertissementMaintenance.heure}.
+          br
+          span La plateforme sera inaccessible. Nous nous excusons pour la gêne occasionée.
+
+
 
   block session
     include csrf.pug

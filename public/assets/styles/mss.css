@@ -161,3 +161,15 @@ section:last-of-type {
   bottom: 64px;
   left: 50px;
 }
+
+.banniere-maintenance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--role-proprietaire);
+  border-top: 1px solid var(--role-proprietaire-texte);
+  border-bottom: 1px solid var(--role-proprietaire-texte);
+  font-size: 12px;
+  font-weight: 500;
+  gap: 12px;
+}
