@@ -1,11 +1,18 @@
 const ElementsConstructibles = require('./elementsConstructibles');
 const MesureSpecifique = require('./mesureSpecifique');
 const Referentiel = require('../referentiel');
+const { ErreurMesureInconnue } = require('../erreurs');
 
 class MesuresSpecifiques extends ElementsConstructibles {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     const { mesuresSpecifiques = [] } = donnees;
     super(MesureSpecifique, { items: mesuresSpecifiques }, referentiel);
+  }
+
+  metsAJourMesure(mesure) {
+    const index = this.items.findIndex((m) => m.id === mesure.id);
+    if (index === -1) throw new ErreurMesureInconnue();
+    this.items[index] = mesure;
   }
 
   parStatutEtCategorie(
