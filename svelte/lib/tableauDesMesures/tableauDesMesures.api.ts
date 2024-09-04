@@ -79,15 +79,17 @@ export const metEnFormeMesures = (mesures: Mesures) => {
   };
 };
 
-export const enregistreMesuresSpecifiques = async (
+export const metsAJourMesureSpecifique = async (
   idService: IdService,
-  mesures: MesureSpecifique[]
+  mesure: MesureSpecifique
 ) => {
-  const mesuresAvecEcheance = mesures.map((m) => {
-    if (m.echeance) m.echeance = formatteurDate.format(new Date(m.echeance));
-    return m;
-  });
-  await axios.put(`/api/service/${idService}/mesures-specifiques`, mesures);
+  if (mesure.echeance)
+    mesure.echeance = formatteurDate.format(new Date(mesure.echeance));
+  const { id, ...donnees } = mesure;
+  await axios.put(
+    `/api/service/${idService}/mesuresSpecifiques/${id}`,
+    donnees
+  );
 };
 
 export const enregistreMesureGenerale = async (

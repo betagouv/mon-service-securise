@@ -17,6 +17,7 @@ describe('Le store dérivé de volumétrie des mesures', () => {
         mesuresGenerales: {},
         mesuresSpecifiques: [
           {
+            id: 'M1',
             categorie: 'Protection',
             modalites: '',
             statut: 'Fait',
