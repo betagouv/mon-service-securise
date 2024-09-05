@@ -633,7 +633,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('retourne une réponse 201', async () => {
       const reponse = await axios.post(
-        'http://localhost:1234/api/service/456/mesuresSpecifiques'
+        'http://localhost:1234/api/service/456/mesuresSpecifiques',
+        { statut: 'fait' }
       );
 
       expect(reponse.status).to.be(201);
@@ -743,6 +744,120 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(mesureRecue.echeance.getTime()).to.equal(
         new Date('01/01/2024').getTime()
       );
+    });
+
+    it('renvoi une erreur 400 si la mesure est malformée', async () => {
+      await testeur.verifieRequeteGenereErreurHTTP(
+        400,
+        'La catégorie "MAUVAISE_CATEGORIE" n\'est pas répertoriée',
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/456/mesuresSpecifiques',
+          data: {
+            description: 'une description',
+            categorie: 'MAUVAISE_CATEGORIE',
+            statut: 'fait',
+          },
+        }
+      );
+    });
+
+    it('jette une erreur 403 si les responsables ne sont pas des contributeurs du service', async () => {
+      testeur.depotDonnees().ajouteMesureSpecifiqueAuService = async () => {
+        throw new ErreurResponsablesMesureInvalides(
+          "Les responsables d'une mesure spécifique doivent être des contributeurs du service."
+        );
+      };
+
+      const mesure = {
+        statut: 'fait',
+        responsables: ['pasUnIdDeContributeur'],
+      };
+
+      try {
+        await axios.post(
+          'http://localhost:1234/api/service/456/mesuresSpecifiques',
+          mesure
+        );
+        expect().fail('L’appel aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(403);
+        expect(e.response.data).to.be(
+          "Les responsables d'une mesure spécifique doivent être des contributeurs du service."
+        );
+      }
+    });
+
+    it('jette une erreur 400 si le statut est vide', async () => {
+      const mesure = {
+        statut: '',
+      };
+
+      try {
+        await axios.post(
+          'http://localhost:1234/api/service/456/mesuresSpecifiques',
+          mesure
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'Le statut de la mesure est obligatoire.'
+        );
+      }
+    });
+
+    it('renvoie une erreur 400 si la mesure est invalide à cause du statut', async () => {
+      const mesure = {
+        statut: 'invalide',
+      };
+
+      try {
+        await axios.post(
+          'http://localhost:1234/api/service/456/mesuresSpecifiques',
+          mesure
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be('La mesure est invalide.');
+      }
+    });
+
+    it('renvoie une erreur 400 si la mesure est invalide à cause de la priorité', async () => {
+      const mesure = {
+        priorite: 'invalide',
+        statut: 'enCours',
+      };
+
+      try {
+        await axios.post(
+          'http://localhost:1234/api/service/456/mesuresSpecifiques',
+          mesure
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be('La mesure est invalide.');
+      }
+    });
+
+    it("renvoie une erreur 400 si la mesure est invalide à cause de l'échéance", async () => {
+      const mesure = {
+        echeance: 'invalide',
+        statut: 'enCours',
+      };
+
+      try {
+        await axios.post(
+          'http://localhost:1234/api/service/456/mesuresSpecifiques',
+          mesure
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be('La mesure est invalide.');
+      }
     });
   });
 

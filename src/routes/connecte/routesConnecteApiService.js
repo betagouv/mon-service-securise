@@ -335,19 +335,41 @@ const routesConnecteApiService = ({
       'echeance',
       'responsables.*'
     ),
-    (requete, reponse) => {
+    async (requete, reponse) => {
       const { idUtilisateurCourant: idUtilisateur, service, body } = requete;
 
-      if (body.echeance) {
-        body.echeance = body.echeance.replaceAll('&#x2F;', '/');
+      if (!body.statut) {
+        reponse.status(400).send('Le statut de la mesure est obligatoire.');
+        return;
       }
 
-      depotDonnees.ajouteMesureSpecifiqueAuService(
-        new MesureSpecifique({ ...body }, referentiel),
-        idUtilisateur,
-        service.id
-      );
-      reponse.send(201);
+      try {
+        if (body.echeance) {
+          body.echeance = body.echeance.replaceAll('&#x2F;', '/');
+        }
+
+        await depotDonnees.ajouteMesureSpecifiqueAuService(
+          new MesureSpecifique({ ...body }, referentiel),
+          idUtilisateur,
+          service.id
+        );
+        reponse.send(201);
+      } catch (e) {
+        if (
+          e instanceof ErreurStatutMesureInvalide ||
+          e instanceof ErreurPrioriteMesureInvalide ||
+          e instanceof ErreurEcheanceMesureInvalide
+        ) {
+          reponse.status(400).send('La mesure est invalide.');
+          return;
+        }
+
+        if (e instanceof ErreurResponsablesMesureInvalides) {
+          reponse.status(403).send(e.message);
+          return;
+        }
+        reponse.status(400).send(e.message);
+      }
     }
   );
 
