@@ -86,11 +86,19 @@ const nouvelAdaptateur = (env) => {
       email_hash: emailHash,
     });
 
-  const ajouteActiviteMesure = (idActeur, idService, idMesure, type, details) =>
+  const ajouteActiviteMesure = (
+    idActeur,
+    idService,
+    idMesure,
+    type,
+    typeMesure,
+    details
+  ) =>
     knex('activites_mesure').insert({
       id_acteur: idActeur,
       id_service: idService,
       id_mesure: idMesure,
+      type_mesure: typeMesure,
       type,
       details,
     });

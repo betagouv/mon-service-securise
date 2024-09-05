@@ -19,12 +19,14 @@ describe('Le dépôt de données des activités de mesure', () => {
       let idActeurActivite;
       let idMesureActivite;
       let typeActivite;
+      let typeMesureActivite;
       let detailsActivite;
       adaptateurPersistance.ajouteActiviteMesure = (
         idActeur,
         idService,
         idMesure,
         type,
+        typeMesure,
         details
       ) => {
         activiteAjouteeAPersistance = true;
@@ -32,12 +34,14 @@ describe('Le dépôt de données des activités de mesure', () => {
         idActeurActivite = idActeur;
         idMesureActivite = idMesure;
         typeActivite = type;
+        typeMesureActivite = typeMesure;
         detailsActivite = details;
       };
       const activite = new ActiviteMesure({
         idService: 987,
         idActeur: 654,
         type: 'statutMisAJour',
+        typeMesure: 'generale',
         details: { nouveauStatut: 'fait' },
         idMesure: 'audit',
       });
@@ -47,9 +51,11 @@ describe('Le dépôt de données des activités de mesure', () => {
       expect(activiteAjouteeAPersistance).to.be(true);
       expect(idServiceActivite).to.be(987);
       expect(idActeurActivite).to.be(654);
+      expect(idActeurActivite).to.be(654);
       expect(typeActivite).to.be('statutMisAJour');
       expect(detailsActivite).to.eql({ nouveauStatut: 'fait' });
       expect(idMesureActivite).to.eql('audit');
+      expect(typeMesureActivite).to.eql('generale');
     });
   });
 

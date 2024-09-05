@@ -37,11 +37,12 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(typeof gestionnaire).to.be('function');
   });
 
-  const creeEvenement = ({ ancienneMesure, nouvelleMesure }) => ({
+  const creeEvenement = ({ ancienneMesure, nouvelleMesure, typeMesure }) => ({
     service: unService().construis(),
     utilisateur: unUtilisateur().construis(),
     ancienneMesure,
     nouvelleMesure,
+    typeMesure,
   });
 
   it("ne consigne pas si la mesure n'a pas changé", async () => {
@@ -59,6 +60,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     const evenement = creeEvenement({
       ancienneMesure: uneMesureGenerale().avecStatut('nonFait').construis(),
       nouvelleMesure: uneMesureGenerale().avecStatut('fait').construis(),
+      typeMesure: 'generale',
     });
 
     await gestionnaire(evenement);
@@ -67,6 +69,7 @@ describe("L'abonnement qui consigne l'activité pour une mesure", () => {
     expect(activiteAjoutee.idService).to.be(evenement.service.id);
     expect(activiteAjoutee.idActeur).to.be(evenement.utilisateur.id);
     expect(activiteAjoutee.type).to.be('miseAJourStatut');
+    expect(activiteAjoutee.typeMesure).to.be('generale');
     expect(activiteAjoutee.details).to.eql({
       ancienneValeur: 'nonFait',
       nouvelleValeur: 'fait',

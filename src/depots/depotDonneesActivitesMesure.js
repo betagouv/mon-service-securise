@@ -7,6 +7,7 @@ const creeDepot = (config = {}) => {
       activite.idService,
       activite.idMesure,
       activite.type,
+      activite.typeMesure,
       activite.details
     );
 

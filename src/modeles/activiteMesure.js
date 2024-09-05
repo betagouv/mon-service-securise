@@ -6,6 +6,7 @@ class ActiviteMesure {
     this.details = donnees.details;
     this.idMesure = donnees.idMesure;
     this.date = donnees.date;
+    this.typeMesure = donnees.typeMesure;
   }
 }
 

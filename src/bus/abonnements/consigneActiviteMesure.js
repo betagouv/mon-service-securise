@@ -56,7 +56,13 @@ const majuscule = (chaine) =>
 
 const consigneActiviteMesure =
   ({ depotDonnees }) =>
-  async ({ service, utilisateur, ancienneMesure, nouvelleMesure }) => {
+  async ({
+    service,
+    utilisateur,
+    ancienneMesure,
+    nouvelleMesure,
+    typeMesure,
+  }) => {
     const consigneActivite = async (type, details) => {
       try {
         const activiteMesure = new ActiviteMesure({
@@ -65,6 +71,7 @@ const consigneActiviteMesure =
           type,
           details,
           idMesure: nouvelleMesure.id,
+          typeMesure,
         });
         await depotDonnees.ajouteActiviteMesure(activiteMesure);
       } catch (e) {

@@ -1750,6 +1750,7 @@ describe('Le dépôt de données des services', () => {
       expect(evenement.nouvelleMesure).to.eql(
         new MesureGenerale({ id: 'audit', statut: 'fait' }, referentiel)
       );
+      expect(evenement.typeMesure).to.be('generale');
     });
   });
 
@@ -1828,6 +1829,7 @@ describe('Le dépôt de données des services', () => {
       const evenement = busEvenements.recupereEvenement(
         EvenementMesureServiceModifiee
       );
+      expect(evenement.typeMesure).to.be('specifique');
       expect(evenement.ancienneMesure).to.eql(
         new MesureSpecifique({ id: 'MS1', statut: 'nonFait' }, referentiel)
       );
