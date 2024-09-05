@@ -10,6 +10,7 @@ const {
   ErreurDonneesObligatoiresManquantes,
   ErreurNomServiceDejaExistant,
   ErreurResponsablesMesureInvalides,
+  ErreurMesureInconnue,
 } = require('../../../src/erreurs');
 const Service = require('../../../src/modeles/service');
 const {
@@ -609,7 +610,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         ]
       );
 
-      expect(donneesRecues.item(0).toJSON().echeance).to.eql('01/01/2024');
+      expect(donneesRecues.item(0).toJSON().echeance).to.eql(
+        new Date('01/01/2024')
+      );
       expect(donneesRecues.item(1).toJSON()).to.eql({
         description: 'd2',
         categorie: 'uneCategorie',
@@ -674,7 +677,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur `api/service/:id/mesuresSpecifiques/:idMesure`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().metsAJourService = async () => {};
+      testeur.depotDonnees().metsAJourMesureSpecifiqueDuService =
+        async () => {};
       testeur.referentiel().enrichis({
         categoriesMesures: { gouvernance: '' },
       });
@@ -731,10 +735,18 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it('délègue au dépôt de données et au service la mise à jour de la mesure spécifique', async () => {
-      let serviceRecu;
-      testeur.depotDonnees().metsAJourService = async (service) => {
-        serviceRecu = service;
+    it('délègue au dépôt de données la mise à jour de la mesure spécifique', async () => {
+      let idServiceRecu;
+      let idUtilisateurRecu;
+      let mesureRecue;
+      testeur.depotDonnees().metsAJourMesureSpecifiqueDuService = async (
+        idService,
+        idUtilisateur,
+        mesure
+      ) => {
+        idServiceRecu = idService;
+        idUtilisateurRecu = idUtilisateur;
+        mesureRecue = mesure;
       };
 
       await axios.put(
@@ -747,15 +759,20 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         }
       );
 
-      expect(serviceRecu).not.to.be(undefined);
-      const mesureMiseAJour = serviceRecu.mesures.mesuresSpecifiques.items[0];
-      expect(mesureMiseAJour.description).to.be('une description');
-      expect(mesureMiseAJour.categorie).to.be('gouvernance');
-      expect(mesureMiseAJour.statut).to.be('fait');
-      expect(mesureMiseAJour.echeance).to.be('01/01/2024');
+      expect(idServiceRecu).to.be('456');
+      expect(idUtilisateurRecu).to.be('999');
+      expect(mesureRecue.description).to.be('une description');
+      expect(mesureRecue.categorie).to.be('gouvernance');
+      expect(mesureRecue.statut).to.be('fait');
+      expect(mesureRecue.echeance.getTime()).to.be(
+        new Date('01/01/2024').getTime()
+      );
     });
 
     it('renvoi une erreur 404 si la mesure est introuvable', async () => {
+      testeur.depotDonnees().metsAJourMesureSpecifiqueDuService = async () => {
+        throw new ErreurMesureInconnue();
+      };
       await testeur.verifieRequeteGenereErreurHTTP(
         404,
         'La mesure est introuvable',
