@@ -1,5 +1,11 @@
 class EvenementMesureServiceModifiee {
-  constructor({ service, utilisateur, ancienneMesure, nouvelleMesure }) {
+  constructor({
+    service,
+    utilisateur,
+    ancienneMesure,
+    nouvelleMesure,
+    typeMesure,
+  }) {
     if (!service)
       throw Error("Impossible d'instancier l'événement sans service");
     if (!utilisateur)
@@ -9,6 +15,7 @@ class EvenementMesureServiceModifiee {
     this.utilisateur = utilisateur;
     this.ancienneMesure = ancienneMesure;
     this.nouvelleMesure = nouvelleMesure;
+    this.typeMesure = typeMesure;
   }
 }
 

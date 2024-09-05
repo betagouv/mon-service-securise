@@ -415,6 +415,7 @@ const creeDepot = (config = {}) => {
         utilisateur: u,
         ancienneMesure,
         nouvelleMesure: mesure,
+        typeMesure: 'generale',
       })
     );
   };
@@ -435,6 +436,7 @@ const creeDepot = (config = {}) => {
         utilisateur: u,
         ancienneMesure,
         nouvelleMesure: mesure,
+        typeMesure: 'specifique',
       })
     );
   };
