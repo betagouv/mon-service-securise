@@ -29,6 +29,10 @@ class MesuresSpecifiques extends ElementsConstructibles {
     }, accumulateur);
   }
 
+  ajouteMesure(mesure) {
+    this.items.push(mesure);
+  }
+
   supprimeMesure(idMesure) {
     this.items = this.items.filter((m) => m.id !== idMesure);
   }

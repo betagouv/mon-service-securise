@@ -344,6 +344,10 @@ class Service {
       .map((s) => s.route());
   }
 
+  ajouteMesureSpecifique(mesure) {
+    this.mesures.mesuresSpecifiques.ajouteMesure(mesure);
+  }
+
   supprimeMesureSpecifique(idMesure) {
     this.mesures.mesuresSpecifiques.supprimeMesure(idMesure);
   }
