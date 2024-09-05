@@ -14,6 +14,7 @@ const {
   ErreurChainageMiddleware,
 } = require('../erreurs');
 const { ajouteLaRedirectionPostConnexion } = require('./redirection');
+const { extraisIp } = require('./requeteHttp');
 
 const middleware = (configuration = {}) => {
   const {
@@ -301,8 +302,8 @@ const middleware = (configuration = {}) => {
     }
 
     return ipfilter(config.ipAutorisees(), {
-      // Utilise l'IP d'origine : https://doc.scalingo.com/platform/internals/routing
-      detectIp: (requete) => requete.headers['x-real-ip'],
+      // Seules les IP du WAF doivent être autorisées si jamais le filtrage IP est activé.
+      detectIp: (requete) => extraisIp(requete.headers).waf,
       mode: 'allow',
       log: false,
     });
