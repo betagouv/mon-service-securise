@@ -1753,6 +1753,90 @@ describe('Le dépôt de données des services', () => {
     });
   });
 
+  describe("sur demande de mise à jour d'une mesure spécifique d’un service", () => {
+    let persistance;
+    let depot;
+    const referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: { gouvernance: 'Gouvernance' },
+      mesures: { audit: { categorie: 'gouvernance' } },
+      reglesPersonnalisation: { mesuresBase: ['audit'] },
+    });
+
+    beforeEach(() => {
+      const uneMesure = new Mesures(
+        { mesuresSpecifiques: [{ id: 'MS1', statut: 'nonFait' }] },
+        referentiel
+      );
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('789').donnees)
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('123')
+            .avecMesures(uneMesure)
+            .avecNomService('nom')
+            .construis()
+            .donneesAPersister().donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('789', '123').donnees
+        );
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecConstructeurDePersistance(persistance)
+        .avecBusEvenements(busEvenements)
+        .construis();
+    });
+
+    it('met à jour la mesure', async () => {
+      const mesure = new MesureSpecifique(
+        { id: 'MS1', statut: 'fait' },
+        referentiel
+      );
+
+      await depot.metsAJourMesureSpecifiqueDuService('123', '789', mesure);
+
+      const {
+        mesures: { mesuresSpecifiques },
+      } = await depot.service('123');
+      expect(mesuresSpecifiques.nombre()).to.equal(1);
+      expect(mesuresSpecifiques.item(0)).to.be.a(MesureSpecifique);
+      expect(mesuresSpecifiques.item(0).id).to.equal('MS1');
+      expect(mesuresSpecifiques.item(0).statut).to.equal('fait');
+    });
+
+    it("publie un événement de 'Mesures service modifiées'", async () => {
+      const mesure = new MesureSpecifique(
+        { id: 'MS1', statut: 'fait' },
+        referentiel
+      );
+
+      await depot.metsAJourMesureSpecifiqueDuService('123', '789', mesure);
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementMesureServiceModifiee)
+      ).to.be(true);
+    });
+
+    it('fournit la version précédente de la mesure dans l’événement', async () => {
+      const mesure = new MesureSpecifique(
+        { id: 'MS1', statut: 'fait' },
+        referentiel
+      );
+
+      await depot.metsAJourMesureSpecifiqueDuService('123', '789', mesure);
+
+      const evenement = busEvenements.recupereEvenement(
+        EvenementMesureServiceModifiee
+      );
+      expect(evenement.ancienneMesure).to.eql(
+        new MesureSpecifique({ id: 'MS1', statut: 'nonFait' }, referentiel)
+      );
+      expect(evenement.nouvelleMesure).to.eql(
+        new MesureSpecifique({ id: 'MS1', statut: 'fait' }, referentiel)
+      );
+    });
+  });
+
   describe("sur demande de suppression d'un contributeur du service", () => {
     it('supprime le contributeur des responsables des mesures générales du service', async () => {
       const referentiel = Referentiel.creeReferentiel({

@@ -419,6 +419,26 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const metsAJourMesureSpecifiqueDuService = async (
+    idService,
+    idUtilisateur,
+    mesure
+  ) => {
+    const s = await p.lis.un(idService);
+    const ancienneMesure = s.mesuresSpecifiques().avecId(mesure.id);
+    s.metsAJourMesureSpecifique(mesure);
+    await metsAJourService(s);
+    const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
+    await busEvenements.publie(
+      new EvenementMesureServiceModifiee({
+        service: s,
+        utilisateur: u,
+        ancienneMesure,
+        nouvelleMesure: mesure,
+      })
+    );
+  };
+
   const metsAJourMesuresSpecifiquesDuService = async (
     idService,
     idUtilisateur,
@@ -485,6 +505,7 @@ const creeDepot = (config = {}) => {
     enregistreDossier,
     metsAJourMesureGeneraleDuService,
     metsAJourMesuresSpecifiquesDuService,
+    metsAJourMesureSpecifiqueDuService,
     metsAJourService,
     nouveauService,
     service,

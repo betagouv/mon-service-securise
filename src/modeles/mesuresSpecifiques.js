@@ -40,6 +40,10 @@ class MesuresSpecifiques extends ElementsConstructibles {
   nombreDeSansStatut() {
     return this.toutes().filter((ms) => !ms.statutRenseigne()).length;
   }
+
+  avecId(idMesure) {
+    return this.toutes().find((m) => m.id === idMesure);
+  }
 }
 
 module.exports = MesuresSpecifiques;
