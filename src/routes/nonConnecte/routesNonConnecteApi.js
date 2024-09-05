@@ -21,6 +21,10 @@ const routesNonConnecteApi = ({
 }) => {
   const routes = express.Router();
 
+  routes.get('/infoHeaderCleverCloud', async (requete, reponse, _suite) => {
+    reponse.status(200).json(requete.headers);
+  });
+
   routes.post(
     '/utilisateur',
     middleware.protegeTrafic(),
