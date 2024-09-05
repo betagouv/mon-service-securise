@@ -610,8 +610,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         ]
       );
 
-      expect(donneesRecues.item(0).toJSON().echeance).to.eql(
-        new Date('01/01/2024')
+      expect(donneesRecues.item(0).toJSON().echeance.getTime()).to.eql(
+        new Date('01/01/2024').getTime()
       );
       expect(donneesRecues.item(1).toJSON()).to.eql({
         description: 'd2',
@@ -620,6 +620,129 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         modalites: 'm2',
         responsables: [],
       });
+    });
+  });
+
+  describe('quand requête POST sur `api/service/:id/mesuresSpecifiques`', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().ajouteMesureSpecifiqueAuService = async () => {};
+      testeur.referentiel().enrichis({
+        categoriesMesures: { gouvernance: '' },
+      });
+    });
+
+    it('retourne une réponse 201', async () => {
+      const reponse = await axios.post(
+        'http://localhost:1234/api/service/456/mesuresSpecifiques'
+      );
+
+      expect(reponse.status).to.be(201);
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/456/mesuresSpecifiques',
+          data: [],
+        },
+        done
+      );
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: SECURISER }],
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/456/mesuresSpecifiques',
+          data: [],
+        },
+        done
+      );
+    });
+
+    it('aseptise tous les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        [
+          'description',
+          'categorie',
+          'statut',
+          'modalites',
+          'priorite',
+          'echeance',
+          'responsables.*',
+        ],
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/456/mesuresSpecifiques',
+          data: [],
+        },
+        done
+      );
+    });
+
+    it("délègue au dépôt de données l'ajout de la mesure spécifique", async () => {
+      const serviceARenvoyer = unService(testeur.referentiel())
+        .avecId('456')
+        .construis();
+      testeur.middleware().reinitialise({
+        idUtilisateur: '999',
+        serviceARenvoyer,
+      });
+      let idServiceRecu;
+      let mesureRecue;
+      let idUtilisateurRecu;
+      testeur.depotDonnees().ajouteMesureSpecifiqueAuService = async (
+        mesure,
+        idUtilisateur,
+        idService
+      ) => {
+        mesureRecue = mesure;
+        idUtilisateurRecu = idUtilisateur;
+        idServiceRecu = idService;
+      };
+
+      await axios.post(
+        'http://localhost:1234/api/service/456/mesuresSpecifiques',
+        {
+          description: 'une description',
+          categorie: 'gouvernance',
+          statut: 'fait',
+        }
+      );
+
+      expect(idServiceRecu).to.be('456');
+      expect(idUtilisateurRecu).to.be('999');
+      expect(mesureRecue.description).to.be('une description');
+      expect(mesureRecue.categorie).to.be('gouvernance');
+      expect(mesureRecue.statut).to.be('fait');
+    });
+
+    it("décode les 'slash' de la date d'échéance ", async () => {
+      const slash = '&#x2F;';
+      let mesureRecue;
+      testeur.depotDonnees().ajouteMesureSpecifiqueAuService = (
+        mesure,
+        __,
+        _
+      ) => {
+        mesureRecue = mesure;
+      };
+
+      const mesureSpecifique = {
+        statut: 'fait',
+        echeance: `01${slash}01${slash}2024`,
+      };
+
+      await axios.post(
+        'http://localhost:1234/api/service/456/mesuresSpecifiques',
+        mesureSpecifique
+      );
+
+      expect(mesureRecue.echeance.getTime()).to.equal(
+        new Date('01/01/2024').getTime()
+      );
     });
   });
 
