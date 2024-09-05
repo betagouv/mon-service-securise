@@ -31,24 +31,20 @@ export const enregistreMesures = async (
   }
 
   async function enregistreMesuresSpecifiques() {
+    const { id, echeance, ...donnees } = $store.mesureEditee.mesure;
+    const payload = {
+      ...donnees,
+      ...(echeance && {
+        echeance: formatteurDate.format(new Date(echeance)),
+      }),
+    };
     if ($store.etape === 'Creation') {
-      mesuresExistantes.mesuresSpecifiques.push($store.mesureEditee.mesure);
-      await axios.put(
-        `/api/service/${idService}/mesures-specifiques`,
-        mesuresExistantes.mesuresSpecifiques.map((m) => {
-          if (m.echeance)
-            m.echeance = formatteurDate.format(new Date(m.echeance));
-          return m;
-        })
-      );
+      await axios.post(`/api/service/${idService}/mesuresSpecifiques`, payload);
     } else {
-      const { id, echeance, ...donnees } = $store.mesureEditee.mesure;
-      await axios.put(`/api/service/${idService}/mesuresSpecifiques/${id}`, {
-        ...donnees,
-        ...(echeance && {
-          echeance: formatteurDate.format(new Date(echeance)),
-        }),
-      });
+      await axios.put(
+        `/api/service/${idService}/mesuresSpecifiques/${id}`,
+        payload
+      );
     }
   }
 
