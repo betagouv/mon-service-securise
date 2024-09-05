@@ -80,6 +80,7 @@ const creeDepot = (config = {}) => {
   const {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
+    ajouteMesureSpecifiqueAuService,
     ajouteRisqueGeneralAService,
     ajouteRolesResponsabilitesAService,
     dupliqueService,
@@ -156,6 +157,7 @@ const creeDepot = (config = {}) => {
     ajouteContributeurAuService,
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
+    ajouteMesureSpecifiqueAuService,
     ajouteRisqueGeneralAService,
     ajouteRolesResponsabilitesAService,
     autorisation,

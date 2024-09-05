@@ -456,6 +456,25 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const ajouteMesureSpecifiqueAuService = async (
+    mesure,
+    idUtilisateur,
+    idService
+  ) => {
+    mesure.id = adaptateurUUID.genereUUID();
+    const s = await p.lis.un(idService);
+    s.ajouteMesureSpecifique(mesure);
+    await metsAJourService(s);
+    const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
+    await busEvenements.publie(
+      new EvenementMesureServiceModifiee({
+        service: s,
+        utilisateur: u,
+        nouvelleMesure: mesure,
+      })
+    );
+  };
+
   const supprimeContributeur = async (idService, idUtilisateur) => {
     const unService = await p.lis.un(idService);
 
@@ -497,6 +516,7 @@ const creeDepot = (config = {}) => {
   return {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
+    ajouteMesureSpecifiqueAuService,
     ajouteRisqueGeneralAService,
     ajouteRolesResponsabilitesAService,
     dupliqueService,

@@ -2052,4 +2052,63 @@ describe('Le dépôt de données des services', () => {
       expect(tousLesServices[0].contributeurs.length).to.be(1);
     });
   });
+
+  describe("sur demande d'ajout de mesure spécifique", () => {
+    let depot;
+    let adaptateurPersistance;
+    let depotDonneesUtilisateurs;
+    let referentiel;
+
+    beforeEach(() => {
+      referentiel = creeReferentielVide();
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('moi').donnees)
+        .ajouteUnService(unService(referentiel).avecId('S1').donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('moi', 'S1').donnees
+        );
+      depotDonneesUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance: adaptateurPersistance.construis(),
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+      });
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecConstructeurDePersistance(adaptateurPersistance)
+        .avecBusEvenements(busEvenements)
+        .avecDepotDonneesUtilisateurs(depotDonneesUtilisateurs)
+        .construis();
+    });
+
+    it('ajoute la mesure aux mesures spécifiques du service', async () => {
+      const mesure = new MesureSpecifique({}, referentiel);
+
+      await depot.ajouteMesureSpecifiqueAuService(mesure, 'moi', 'S1');
+
+      const service = await depot.service('S1');
+      expect(service.mesures.nombreMesuresSpecifiques()).to.be(1);
+    });
+
+    it("publie un événement de 'Mesure service modifiée'", async () => {
+      const mesure = new MesureSpecifique({}, referentiel);
+
+      await depot.ajouteMesureSpecifiqueAuService(mesure, 'moi', 'S1');
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementMesureServiceModifiee)
+      ).to.be(true);
+      expect(
+        busEvenements.recupereEvenement(EvenementMesureServiceModifiee)
+          .nouvelleMesure
+      ).to.be(mesure);
+    });
+
+    it('affecte un id à la mesure', async () => {
+      const mesure = new MesureSpecifique({}, referentiel);
+
+      await depot.ajouteMesureSpecifiqueAuService(mesure, 'moi', 'S1');
+
+      const service = await depot.service('S1');
+      expect(service.mesures.mesuresSpecifiques.item(0).id).to.be('unUUID');
+    });
+  });
 });
