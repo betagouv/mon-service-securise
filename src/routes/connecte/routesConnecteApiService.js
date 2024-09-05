@@ -322,6 +322,35 @@ const routesConnecteApiService = ({
     }
   );
 
+  routes.post(
+    '/:id/mesuresSpecifiques',
+    middleware.verificationAcceptationCGU,
+    middleware.trouveService({ [SECURISER]: ECRITURE }),
+    middleware.aseptise(
+      'description',
+      'categorie',
+      'statut',
+      'modalites',
+      'priorite',
+      'echeance',
+      'responsables.*'
+    ),
+    (requete, reponse) => {
+      const { idUtilisateurCourant: idUtilisateur, service, body } = requete;
+
+      if (body.echeance) {
+        body.echeance = body.echeance.replaceAll('&#x2F;', '/');
+      }
+
+      depotDonnees.ajouteMesureSpecifiqueAuService(
+        new MesureSpecifique({ ...body }, referentiel),
+        idUtilisateur,
+        service.id
+      );
+      reponse.send(201);
+    }
+  );
+
   routes.delete(
     '/:id/mesuresSpecifiques/:idMesure',
     middleware.verificationAcceptationCGU,
