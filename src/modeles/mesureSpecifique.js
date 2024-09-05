@@ -17,6 +17,7 @@ class MesureSpecifique extends Mesure {
     this.renseigneProprietes(donneesMesure);
 
     this.referentiel = referentiel;
+    this.echeance = donneesMesure.echeance && new Date(donneesMesure.echeance);
   }
 
   descriptionMesure() {

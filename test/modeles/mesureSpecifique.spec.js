@@ -38,7 +38,9 @@ describe('Une mesure spécifique', () => {
     expect(mesure.statut).to.equal('fait');
     expect(mesure.modalites).to.equal('Des modalités de mise en œuvre');
     expect(mesure.priorite).to.equal('p3');
-    expect(mesure.echeance).to.equal('01/01/2023');
+    expect(mesure.echeance.getTime()).to.equal(
+      new Date('01/01/2023').getTime()
+    );
     expect(mesure.responsables).to.eql([
       'unIdUtilisateur',
       'unAutreIdUtilisateur',

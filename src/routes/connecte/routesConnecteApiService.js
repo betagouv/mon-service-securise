@@ -307,8 +307,11 @@ const routesConnecteApiService = ({
           },
           referentiel
         );
-        service.metsAJourMesureSpecifique(mesureSpecifique);
-        await depotDonnees.metsAJourService(service);
+        await depotDonnees.metsAJourMesureSpecifiqueDuService(
+          service.id,
+          requete.idUtilisateurCourant,
+          mesureSpecifique
+        );
 
         reponse.sendStatus(200);
       } catch (e) {
