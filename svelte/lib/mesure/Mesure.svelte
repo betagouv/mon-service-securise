@@ -22,6 +22,7 @@
   export let mesuresExistantes: MesuresExistantes;
   export let estLectureSeule: boolean;
   export let priorites: ReferentielPriorite;
+  export let modeVisiteGuidee: boolean;
 
   const statutInitial = $store.mesureEditee.mesure.statut;
 
@@ -120,6 +121,7 @@
         {priorites}
         {statuts}
         {idService}
+        {modeVisiteGuidee}
       />
     </div>
     <div class="conteneur-actions">

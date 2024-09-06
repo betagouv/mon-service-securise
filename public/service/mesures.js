@@ -17,6 +17,9 @@ $(() => {
     $('#indice-cyber-personnalise').text()
   );
 
+  const enVisiteGuidee = () =>
+    etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause;
+
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-tableau-mesures', {
       detail: {
@@ -25,8 +28,7 @@ $(() => {
         priorites,
         idService,
         estLectureSeule,
-        modeVisiteGuidee:
-          etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause,
+        modeVisiteGuidee: enVisiteGuidee(),
       },
     })
   );
@@ -52,6 +54,7 @@ $(() => {
       priorites,
       retoursUtilisateur,
       estLectureSeule,
+      modeVisiteGuidee: enVisiteGuidee(),
       mesuresExistantes: e.detail.mesuresExistantes,
       mesureAEditer: e.detail.mesureAEditer,
     };

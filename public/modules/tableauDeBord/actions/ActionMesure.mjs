@@ -15,6 +15,7 @@ class ActionMesure extends ActionAbstraite {
     estLectureSeule,
     mesuresExistantes,
     mesureAEditer,
+    modeVisiteGuidee,
   }) {
     super.initialise();
     document.body.dispatchEvent(
@@ -28,6 +29,7 @@ class ActionMesure extends ActionAbstraite {
           estLectureSeule,
           mesuresExistantes,
           mesureAEditer,
+          modeVisiteGuidee,
         },
       })
     );
