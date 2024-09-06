@@ -2,6 +2,7 @@
   import type { ActiviteMesure, DetailsAjoutPropriete } from '../../mesure.d';
   import TagPrioriteMesure from '../../../ui/TagPrioriteMesure.svelte';
   import type { PrioriteMesure, ReferentielPriorite } from '../../../ui/types';
+  import DesignationMesureActivite from './DesignationMesureActivite.svelte';
 
   export let activite: ActiviteMesure;
   export let priorites: ReferentielPriorite;
@@ -13,6 +14,6 @@
 </script>
 
 <div>
-  La priorité de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> est
+  La priorité de la <DesignationMesureActivite {activite} /> est
   <TagPrioriteMesure {priorites} {priorite} />
 </div>

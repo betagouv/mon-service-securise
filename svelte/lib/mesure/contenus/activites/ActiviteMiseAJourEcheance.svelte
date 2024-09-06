@@ -4,6 +4,7 @@
     DetailsMiseAJourPropriete,
   } from '../../mesure.d';
   import TagEcheanceMesure from '../../../ui/TagEcheanceMesure.svelte';
+  import DesignationMesureActivite from './DesignationMesureActivite.svelte';
 
   export let activite: ActiviteMesure;
   // eslint-disable-next-line svelte/valid-compile
@@ -16,8 +17,7 @@
 
 <div>
   <div>
-    L'échéance de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> a été modifiée
-    du
+    L'échéance de la <DesignationMesureActivite {activite} /> a été modifiée du
   </div>
   <div>
     <span class="ancienne"

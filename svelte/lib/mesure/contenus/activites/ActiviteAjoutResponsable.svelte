@@ -4,6 +4,7 @@
     DetailsModificationResponsable,
   } from '../../mesure.d';
   import { contributeurs } from '../../../tableauDesMesures/stores/contributeurs.store';
+  import DesignationMesureActivite from './DesignationMesureActivite.svelte';
 
   export let activite: ActiviteMesure;
   // eslint-disable-next-line svelte/valid-compile
@@ -25,5 +26,5 @@
 
 <div>
   <b>{intitule}</b> a été désigné·e responsable de la
-  <b>mesure #{activite.identifiantNumeriqueMesure}</b>
+  <DesignationMesureActivite {activite} />
 </div>

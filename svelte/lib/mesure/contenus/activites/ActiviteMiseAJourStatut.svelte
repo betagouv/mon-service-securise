@@ -6,6 +6,7 @@
   import type { ReferentielStatut } from '../../../ui/types';
   import type { StatutMesure } from '../../../modeles/mesure';
   import TagStatutMesure from '../../../ui/TagStatutMesure.svelte';
+  import DesignationMesureActivite from './DesignationMesureActivite.svelte';
 
   export let activite: ActiviteMesure;
   export let statuts: ReferentielStatut;
@@ -19,7 +20,7 @@
 
 <div>
   <div>
-    Le statut de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> a été modifié
+    Le statut de la <DesignationMesureActivite {activite} /> a été modifié
   </div>
   <div class="changements">
     de

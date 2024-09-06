@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ActiviteMesure, DetailsAjoutPropriete } from '../../mesure.d';
   import TagEcheanceMesure from '../../../ui/TagEcheanceMesure.svelte';
+  import DesignationMesureActivite from './DesignationMesureActivite.svelte';
 
   export let activite: ActiviteMesure;
   // eslint-disable-next-line svelte/valid-compile
@@ -12,8 +13,7 @@
 
 <div>
   <div>
-    L'échéance de la <b>mesure #{activite.identifiantNumeriqueMesure}</b> a été fixée
-    au
+    L'échéance de la <DesignationMesureActivite {activite} /> a été fixée au
   </div>
   <div>
     <TagEcheanceMesure {echeance} />
