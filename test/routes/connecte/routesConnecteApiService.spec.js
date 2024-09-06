@@ -571,7 +571,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête DELETE sur `api/service/:id/mesuresSpecifiques/:idMesure`', () => {
     beforeEach(() => {
-      testeur.depotDonnees().metsAJourService = async () => {};
+      testeur.depotDonnees().supprimeMesureSpecifiqueDuService = async () => {};
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
@@ -597,7 +597,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it('délègue au dépôt de données et au service la suppression de la mesure spécifique', async () => {
+    it('délègue au dépôt de données la suppression de la mesure spécifique', async () => {
       const serviceARenvoyer = unService(testeur.referentiel())
         .avecId('456')
         .avecMesures(new Mesures({ mesuresSpecifiques: [{ id: 'M1' }] }))
@@ -606,9 +606,17 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         idUtilisateur: '999',
         serviceARenvoyer,
       });
-      let serviceRecu;
-      testeur.depotDonnees().metsAJourService = async (service) => {
-        serviceRecu = service;
+      let idServiceRecu;
+      let idUtilisateurRecu;
+      let idMesureRecue;
+      testeur.depotDonnees().supprimeMesureSpecifiqueDuService = async (
+        idService,
+        idUtilisateur,
+        idMesure
+      ) => {
+        idServiceRecu = idService;
+        idUtilisateurRecu = idUtilisateur;
+        idMesureRecue = idMesure;
       };
 
       expect(serviceARenvoyer.nombreMesuresSpecifiques()).to.eql(1);
@@ -616,8 +624,9 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         'http://localhost:1234/api/service/456/mesuresSpecifiques/M1'
       );
 
-      expect(serviceRecu).not.to.be(undefined);
-      expect(serviceRecu.nombreMesuresSpecifiques()).to.eql(0);
+      expect(idServiceRecu).to.be('456');
+      expect(idUtilisateurRecu).to.be('999');
+      expect(idMesureRecue).to.be('M1');
     });
   });
 

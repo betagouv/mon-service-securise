@@ -318,11 +318,14 @@ const routesConnecteApiService = ({
     middleware.verificationAcceptationCGU,
     middleware.trouveService({ [SECURISER]: ECRITURE }),
     async (requete, reponse, _suite) => {
-      const { service } = requete;
+      const { service, idUtilisateurCourant } = requete;
       const { idMesure } = requete.params;
 
-      service.supprimeMesureSpecifique(idMesure);
-      await depotDonnees.metsAJourService(service);
+      await depotDonnees.supprimeMesureSpecifiqueDuService(
+        service.id,
+        idUtilisateurCourant,
+        idMesure
+      );
 
       reponse.sendStatus(200);
     }

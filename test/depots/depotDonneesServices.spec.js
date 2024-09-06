@@ -60,6 +60,7 @@ const Utilisateur = require('../../src/modeles/utilisateur');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
 const { creeReferentielVide } = require('../../src/referentiel');
 const EvenementMesureServiceModifiee = require('../../src/bus/evenementMesureServiceModifiee');
+const EvenementMesureServiceSupprimee = require('../../src/bus/evenementMesureServiceSupprimee');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -2030,6 +2031,58 @@ describe('Le dépôt de données des services', () => {
 
       const service = await depot.service('S1');
       expect(service.mesures.mesuresSpecifiques.item(0).id).to.be('unUUID');
+    });
+  });
+
+  describe('sur demande de suppression de mesure spécifique', () => {
+    let depot;
+    let referentiel;
+    let persistance;
+
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentielVide();
+      const uneMesure = new Mesures(
+        { mesuresSpecifiques: [{ id: 'MS1', statut: 'nonFait' }] },
+        referentiel
+      );
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('789').donnees)
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('123')
+            .avecMesures(uneMesure)
+            .avecNomService('nom')
+            .construis()
+            .donneesAPersister().donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('789', '123').donnees
+        );
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecConstructeurDePersistance(persistance)
+        .avecBusEvenements(busEvenements)
+        .construis();
+    });
+
+    it('retire la mesure des mesures spécifiques du service', async () => {
+      await depot.supprimeMesureSpecifiqueDuService('123', '789', 'MS1');
+
+      const service = await depot.service('123');
+      expect(service.mesures.nombreMesuresSpecifiques()).to.be(0);
+    });
+
+    it("publie un événement de 'Mesure service supprimé'", async () => {
+      await depot.supprimeMesureSpecifiqueDuService('123', '789', 'MS1');
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementMesureServiceSupprimee)
+      ).to.be(true);
+      const evenement = busEvenements.recupereEvenement(
+        EvenementMesureServiceSupprimee
+      );
+      expect(evenement.utilisateur.id).to.be('789');
+      expect(evenement.idMesure).to.be('MS1');
     });
   });
 });

@@ -74,6 +74,7 @@ const EvenementMesureServiceModifiee = require('./evenementMesureServiceModifiee
 const {
   consigneActiviteMesure,
 } = require('./abonnements/consigneActiviteMesure');
+const EvenementMesureServiceSupprimee = require('./evenementMesureServiceSupprimee');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -114,6 +115,14 @@ const cableTousLesAbonnes = (
     }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
     consigneActiviteMesure({ depotDonnees }),
+  ]);
+
+  busEvenements.abonnePlusieurs(EvenementMesureServiceSupprimee, [
+    consigneCompletudeDansJournal({
+      adaptateurJournal,
+      adaptateurRechercheEntreprise,
+    }),
+    envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementDescriptionServiceModifiee, [

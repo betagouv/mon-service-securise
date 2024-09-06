@@ -16,6 +16,7 @@ const EvenementDossierHomologationFinalise = require('../bus/evenementDossierHom
 const EvenementServiceSupprime = require('../bus/evenementServiceSupprime');
 const Entite = require('../modeles/entite');
 const EvenementMesureServiceModifiee = require('../bus/evenementMesureServiceModifiee');
+const EvenementMesureServiceSupprimee = require('../bus/evenementMesureServiceSupprimee');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -459,6 +460,24 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const supprimeMesureSpecifiqueDuService = async (
+    idService,
+    idUtilisateur,
+    idMesure
+  ) => {
+    const s = await p.lis.un(idService);
+    s.supprimeMesureSpecifique(idMesure);
+    await metsAJourService(s);
+    const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
+    await busEvenements.publie(
+      new EvenementMesureServiceSupprimee({
+        service: s,
+        utilisateur: u,
+        idMesure,
+      })
+    );
+  };
+
   const supprimeContributeur = async (idService, idUtilisateur) => {
     const unService = await p.lis.un(idService);
 
@@ -516,6 +535,7 @@ const creeDepot = (config = {}) => {
     rechercheContributeurs,
     remplaceRisquesSpecifiquesDuService,
     supprimeContributeur,
+    supprimeMesureSpecifiqueDuService,
     supprimeService,
     tousLesServices,
     trouveIndexDisponible,
