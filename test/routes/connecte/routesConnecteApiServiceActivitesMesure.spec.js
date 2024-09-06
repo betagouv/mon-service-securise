@@ -52,6 +52,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
           idMesure: 'audit',
           type: 'ajoutPriorite',
           details: { nouvelleValeur: 'p3' },
+          typeMesure: 'generale',
         }),
       ];
 
@@ -85,6 +86,25 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
 
       expect(idServiceUtilise).to.be('456');
       expect(idMesureUtilise).to.be('audit');
+    });
+
+    it('fournit un identificant numérique pour les mesures spécifiques', async () => {
+      testeur.depotDonnees().lisActivitesMesure = () => [
+        new ActiviteMesure({
+          idActeur: '9724853e-037c-4bca-9350-0a4b14a85a29',
+          date: new Date('2024-09-29 11:15:02.817 +0200'),
+          idMesure: 'a13ec795-0043-4622-8a36-0670198b6460',
+          type: 'ajoutPriorite',
+          details: { nouvelleValeur: 'p3' },
+          typeMesure: 'specifique',
+        }),
+      ];
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/service/456/mesures/audit/activites'
+      );
+
+      expect(reponse.data[0].identifiantNumeriqueMesure).to.be(undefined);
     });
   });
 });
