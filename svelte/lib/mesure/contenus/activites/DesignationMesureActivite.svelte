@@ -4,4 +4,8 @@
   export let activite: ActiviteMesure;
 </script>
 
-<b>mesure #{activite.identifiantNumeriqueMesure}</b>
+{#if activite.identifiantNumeriqueMesure}
+  <b>mesure #{activite.identifiantNumeriqueMesure}</b>
+{:else}
+  mesure
+{/if}
