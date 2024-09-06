@@ -221,21 +221,6 @@ class Service {
     this.mesures.mesuresGenerales.metsAJourMesure(mesure);
   }
 
-  metsAJourMesuresSpecifiques(mesures) {
-    const idContributeurs = this.contributeurs.map((u) => u.id);
-    if (
-      mesures
-        .toutes()
-        .flatMap((m) => m.responsables)
-        .some((r) => !idContributeurs.includes(r))
-    ) {
-      throw new ErreurResponsablesMesureInvalides(
-        'Les responsables des mesures spécifiques doivent être des contributeurs du service.'
-      );
-    }
-    this.mesures.metsAJourMesuresSpecifiques(mesures, this.referentiel);
-  }
-
   supprimeResponsableMesures(idUtilisateur) {
     this.mesures.supprimeResponsable(idUtilisateur);
   }
