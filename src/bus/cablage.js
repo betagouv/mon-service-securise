@@ -1,4 +1,3 @@
-const EvenementMesuresServiceModifiees = require('./evenementMesuresServiceModifiees');
 const {
   EvenementAutorisationsServiceModifiees,
 } = require('./evenementAutorisationsServiceModifiees');
@@ -106,14 +105,6 @@ const cableTousLesAbonnes = (
       crmBrevo,
       depotDonnees,
     }),
-  ]);
-
-  busEvenements.abonnePlusieurs(EvenementMesuresServiceModifiees, [
-    consigneCompletudeDansJournal({
-      adaptateurJournal,
-      adaptateurRechercheEntreprise,
-    }),
-    envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementMesureServiceModifiee, [

@@ -8,7 +8,6 @@ const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
 const Service = require('../modeles/service');
 const Autorisation = require('../modeles/autorisations/autorisation');
-const EvenementMesuresServiceModifiees = require('../bus/evenementMesuresServiceModifiees');
 const EvenementNouveauServiceCree = require('../bus/evenementNouveauServiceCree');
 const {
   EvenementDescriptionServiceModifiee,
@@ -441,23 +440,6 @@ const creeDepot = (config = {}) => {
     );
   };
 
-  const metsAJourMesuresSpecifiquesDuService = async (
-    idService,
-    idUtilisateur,
-    mesures
-  ) => {
-    mesures.toutes().forEach((m) => {
-      if (!m.id) m.id = adaptateurUUID.genereUUID();
-    });
-    const s = await p.lis.un(idService);
-    s.metsAJourMesuresSpecifiques(mesures);
-    await metsAJourService(s);
-    const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
-    await busEvenements.publie(
-      new EvenementMesuresServiceModifiees({ service: s, utilisateur: u })
-    );
-  };
-
   const ajouteMesureSpecifiqueAuService = async (
     mesure,
     idUtilisateur,
@@ -526,7 +508,6 @@ const creeDepot = (config = {}) => {
     serviceExiste,
     enregistreDossier,
     metsAJourMesureGeneraleDuService,
-    metsAJourMesuresSpecifiquesDuService,
     metsAJourMesureSpecifiqueDuService,
     metsAJourService,
     nouveauService,

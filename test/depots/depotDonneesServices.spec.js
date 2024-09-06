@@ -23,7 +23,6 @@ const Dossier = require('../../src/modeles/dossier');
 const Service = require('../../src/modeles/service');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
-const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
 const RisqueGeneral = require('../../src/modeles/risqueGeneral');
 const RisqueSpecifique = require('../../src/modeles/risqueSpecifique');
 const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
@@ -47,7 +46,6 @@ const {
   Rubriques,
   Permissions,
 } = require('../../src/modeles/autorisations/gestionDroits');
-const EvenementMesuresServiceModifiees = require('../../src/bus/evenementMesuresServiceModifiees');
 const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
 const EvenementNouveauServiceCree = require('../../src/bus/evenementNouveauServiceCree');
 const {
@@ -1575,85 +1573,6 @@ describe('Le dépôt de données des services', () => {
 
       expect(donneesPersistees.id).to.eql('S1');
       expect(donneesPersistees.donnees).not.to.be(undefined);
-    });
-  });
-
-  describe('sur demande de mise à jour des mesures spécifiques d’un service', () => {
-    let persistance;
-    let depot;
-    const referentiel = Referentiel.creeReferentielVide();
-
-    beforeEach(() => {
-      persistance = unePersistanceMemoire()
-        .ajouteUnUtilisateur(unUtilisateur().avecId('789').donnees)
-        .ajouteUnService(
-          unService(referentiel).avecId('123').avecNomService('nom').donnees
-        )
-        .ajouteUneAutorisation(
-          uneAutorisation().deProprietaire('789', '123').donnees
-        );
-      depot = unDepotDeDonneesServices()
-        .avecReferentiel(referentiel)
-        .avecConstructeurDePersistance(persistance)
-        .avecBusEvenements(busEvenements)
-        .construis();
-    });
-
-    it('associe les mesures spécifiques au service', async () => {
-      const mesures = new MesuresSpecifiques({
-        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
-      });
-
-      await depot.metsAJourMesuresSpecifiquesDuService('123', '789', mesures);
-
-      const {
-        mesures: { mesuresSpecifiques },
-      } = await depot.service('123');
-      expect(mesuresSpecifiques.nombre()).to.equal(1);
-      expect(mesuresSpecifiques.item(0)).to.be.a(MesureSpecifique);
-      expect(mesuresSpecifiques.item(0).description).to.equal(
-        'Une mesure spécifique'
-      );
-    });
-
-    it('ajoute un identifiant aux mesures spécifiques', async () => {
-      const mesures = new MesuresSpecifiques({
-        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
-      });
-
-      await depot.metsAJourMesuresSpecifiquesDuService('123', '789', mesures);
-
-      const {
-        mesures: { mesuresSpecifiques },
-      } = await depot.service('123');
-      expect(mesuresSpecifiques.item(0).id).to.be('unUUID');
-    });
-
-    it("n'ajoute pas un identifiant aux mesures spécifiques qui en ont déjà un", async () => {
-      const mesures = new MesuresSpecifiques({
-        mesuresSpecifiques: [
-          { description: 'Une mesure spécifique', id: 'truc' },
-        ],
-      });
-
-      await depot.metsAJourMesuresSpecifiquesDuService('123', '789', mesures);
-
-      const {
-        mesures: { mesuresSpecifiques },
-      } = await depot.service('123');
-      expect(mesuresSpecifiques.item(0).id).to.be('truc');
-    });
-
-    it("publie un événement de 'Mesures service modifiées'", async () => {
-      await depot.metsAJourMesuresSpecifiquesDuService(
-        '123',
-        '789',
-        new MesuresSpecifiques()
-      );
-
-      expect(
-        busEvenements.aRecuUnEvenement(EvenementMesuresServiceModifiees)
-      ).to.be(true);
     });
   });
 

@@ -7,7 +7,6 @@ const {
   ErreurDonneesObligatoiresManquantes,
   ErreurNomServiceDejaExistant,
   ErreurDossierCourantInexistant,
-  ErreurCategorieInconnue,
   ErreurStatutMesureInvalide,
   ErreurMesureInconnue,
   ErreurDonneesReferentielIncorrectes,
@@ -21,7 +20,6 @@ const DescriptionService = require('../../modeles/descriptionService');
 const FonctionnalitesSpecifiques = require('../../modeles/fonctionnalitesSpecifiques');
 const DonneesSensiblesSpecifiques = require('../../modeles/donneesSensiblesSpecifiques');
 const MesureGenerale = require('../../modeles/mesureGenerale');
-const MesuresSpecifiques = require('../../modeles/mesuresSpecifiques');
 const PartiesPrenantes = require('../../modeles/partiesPrenantes/partiesPrenantes');
 const PointsAcces = require('../../modeles/pointsAcces');
 const RisqueGeneral = require('../../modeles/risqueGeneral');
@@ -219,64 +217,6 @@ const routesConnecteApiService = ({
       const { service } = requete;
 
       reponse.json(objetGetMesures.donnees(service));
-    }
-  );
-
-  routes.put(
-    '/:id/mesures-specifiques',
-    middleware.verificationAcceptationCGU,
-    middleware.trouveService({ [SECURISER]: ECRITURE }),
-    middleware.aseptise(
-      '*.description',
-      '*.categorie',
-      '*.statut',
-      '*.modalites',
-      '*.priorite',
-      '*.echeance',
-      '*.responsables.*'
-    ),
-    async (requete, reponse, suite) => {
-      // il ne faut pas utiliser params.id qui est modifié par le middleware aseptise
-      const {
-        service,
-        idUtilisateurCourant,
-        body: mesuresSpecifiques,
-      } = requete;
-      if (mesuresSpecifiques.some((m) => !m.statut)) {
-        reponse.status(400).send('Les statuts des mesures sont obligatoires.');
-        return;
-      }
-      try {
-        const donneesMesuresSpecifiques = mesuresSpecifiques.map((m) => {
-          if (m.echeance) m.echeance = m.echeance.replaceAll('&#x2F;', '/');
-          return m;
-        });
-        const mesures = new MesuresSpecifiques(
-          { mesuresSpecifiques: donneesMesuresSpecifiques },
-          referentiel
-        );
-        await depotDonnees.metsAJourMesuresSpecifiquesDuService(
-          service.id,
-          idUtilisateurCourant,
-          mesures
-        );
-        reponse.sendStatus(200);
-      } catch (e) {
-        if (
-          e instanceof ErreurCategorieInconnue ||
-          e instanceof ErreurStatutMesureInvalide ||
-          e instanceof ErreurPrioriteMesureInvalide ||
-          e instanceof ErreurEcheanceMesureInvalide
-        ) {
-          reponse.status(400).send(e.message);
-          return;
-        }
-        if (e instanceof ErreurResponsablesMesureInvalides) {
-          reponse.status(403).send(e.message);
-          return;
-        }
-        suite(e);
-      }
     }
   );
 

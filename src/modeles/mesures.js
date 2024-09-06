@@ -89,10 +89,6 @@ class Mesures extends InformationsService {
     );
   }
 
-  metsAJourMesuresSpecifiques(mesures) {
-    this.mesuresSpecifiques = mesures;
-  }
-
   parStatutEtCategorie() {
     const applicables = mesuresGeneralesApplicables(
       this.mesuresPersonnalisees,
