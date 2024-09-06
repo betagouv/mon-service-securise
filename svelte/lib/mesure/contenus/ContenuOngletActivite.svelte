@@ -23,10 +23,12 @@
   };
 
   onMount(async () => {
-    const activites = await recupereActiviteMesure(
-      idService,
-      $store.mesureEditee.metadonnees.idMesure
-    );
+    let id;
+    if ($store.mesureEditee.metadonnees.typeMesure === 'SPECIFIQUE')
+      id = $store.mesureEditee.mesure.id;
+    else id = $store.mesureEditee.metadonnees.idMesure;
+
+    const activites = await recupereActiviteMesure(idService, id);
     storeActivites.charge(activites);
   });
 </script>
