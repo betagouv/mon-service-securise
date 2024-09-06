@@ -7,11 +7,13 @@
   import Activite from './activites/Activite.svelte';
   import type { ReferentielPriorite, ReferentielStatut } from '../../ui/types';
   import type { IdService } from '../../tableauDesMesures/tableauDesMesures.d';
+  import { activitesVisiteGuidee } from '../modeVisiteGuidee/donneesVisiteGuidee';
 
   export let visible: boolean;
   export let idService: IdService;
   export let priorites: ReferentielPriorite;
   export let statuts: ReferentielStatut;
+  export let modeVisiteGuidee: boolean;
 
   const { subscribe, update } = writable<ActiviteMesure[]>([]);
 
@@ -23,12 +25,16 @@
   };
 
   onMount(async () => {
+    const chargeActivites = async (idMesure: string | number) =>
+      modeVisiteGuidee
+        ? activitesVisiteGuidee
+        : recupereActiviteMesure(idService, idMesure);
+
     let id;
     if ($store.mesureEditee.metadonnees.typeMesure === 'SPECIFIQUE')
       id = $store.mesureEditee.mesure.id;
     else id = $store.mesureEditee.metadonnees.idMesure;
-
-    const activites = await recupereActiviteMesure(idService, id);
+    const activites = await chargeActivites(id);
     storeActivites.charge(activites);
   });
 </script>

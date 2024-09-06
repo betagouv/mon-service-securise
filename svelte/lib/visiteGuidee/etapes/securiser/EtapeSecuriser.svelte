@@ -93,6 +93,44 @@
         animation: '/statique/assets/images/visiteGuidee/securiser_3.gif',
       },
       {
+        cible: cibleTiroirMesure,
+        callbackInitialeCible: () => {
+          document
+            .getElementsByClassName('titre-mesure')[0]
+            .dispatchEvent(new Event('click'));
+          document.querySelector(
+            '#conteneur-mesure .conteneur-actions button'
+          ).disabled = true;
+          document.getElementsByClassName(
+            'fermeture-tiroir'
+          )[0].disabled = true;
+          const onglets = document.querySelectorAll(
+            '#conteneur-mesure .conteneur-onglet .onglet'
+          );
+          for (let i = 0; i < onglets.length; i++) {
+            onglets[i].inert = true;
+          }
+          setTimeout(() => {
+            const ongletActivites = document.querySelector(
+              '#conteneur-mesure .conteneur-onglet .onglet:nth-of-type(3)'
+            );
+            ongletActivites.dispatchEvent(new Event('click'));
+          }, 300);
+        },
+        delaiAvantAffichage: 300,
+        callbackFinaleCible: () => {
+          document
+            .getElementsByClassName('fermeture-tiroir')[0]
+            .dispatchEvent(new Event('click'));
+        },
+        positionnementModale: 'MilieuGauche',
+        titre: "Suivez tout ce qu'il se passe sur les mesures !",
+        description:
+          'Visualisez ce que vous et votre équipe faites sur vos mesures, notamment quel contributeur a fait des modifications et à quelle date.',
+        animation:
+          '/statique/assets/images/visiteGuidee/securiser_activites.gif',
+      },
+      {
         cible: cibleIndiceCyber,
         callbackInitialeCible: (cible) => cible.removeAttribute('href'),
         margeElementMisEnAvant: 3,
