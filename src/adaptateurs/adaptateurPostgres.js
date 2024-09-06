@@ -112,7 +112,8 @@ const nouvelAdaptateur = (env) => {
         'date',
         'id_acteur as idActeur',
         'id_service as idService',
-        'id_mesure as idMesure'
+        'id_mesure as idMesure',
+        'type_mesure as typeMesure'
       );
 
   const arreteTout = () => knex.destroy();

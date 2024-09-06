@@ -27,7 +27,9 @@ const routesConnecteApiServiceActivitesMesure = ({
         date: a.date.toISOString(),
         idActeur: a.idActeur,
         identifiantNumeriqueMesure:
-          referentiel.mesures()[a.idMesure].identifiantNumerique,
+          a.typeMesure === 'generale'
+            ? referentiel.mesures()[a.idMesure].identifiantNumerique
+            : undefined,
         type: a.type,
         details: a.details,
       }));
