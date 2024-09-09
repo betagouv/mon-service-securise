@@ -30,6 +30,8 @@
         ? activitesVisiteGuidee
         : recupereActiviteMesure(idService, idMesure);
 
+    if ($store.etape === 'Creation') return;
+
     let id;
     if ($store.mesureEditee.metadonnees.typeMesure === 'SPECIFIQUE')
       id = $store.mesureEditee.mesure.id;
