@@ -46,7 +46,7 @@ describe("L'abonnement qui envoie au tracking la connexion de l'utilisateur", ()
       donneesPassees = { destinataire, donneesEvenement };
       return Promise.resolve();
     };
-    depotDonnees.services = async () => [{ id: '123' }];
+    depotDonnees.nombreServices = async () => 1;
     depotDonnees.utilisateur = async () =>
       unUtilisateur()
         .avecId('456')
