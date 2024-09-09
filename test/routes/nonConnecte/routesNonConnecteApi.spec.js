@@ -446,33 +446,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           .catch(done);
       });
 
-      it("utilise l'adaptateur de tracking pour envoyer un événement de connexion", (done) => {
-        let donneesPassees = {};
-        testeur.depotDonnees().services = () =>
-          Promise.resolve([{ id: '123' }]);
-        testeur.adaptateurTracking().envoieTrackingConnexion = (
-          destinataire,
-          donneesEvenement
-        ) => {
-          donneesPassees = { destinataire, donneesEvenement };
-          return Promise.resolve();
-        };
-
-        axios
-          .post('http://localhost:1234/api/token', {
-            login: 'jean.dupont@mail.fr',
-            motDePasse: 'mdp_12345',
-          })
-          .then(() => {
-            expect(donneesPassees).to.eql({
-              destinataire: 'jean.dupont@mail.fr',
-              donneesEvenement: { nombreServices: 1 },
-            });
-            done();
-          })
-          .catch((e) => done(e.response?.data || e));
-      });
-
       it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {
         let idUtilisateurPasse = {};
         testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = async (

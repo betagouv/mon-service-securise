@@ -12,6 +12,9 @@ const {
   consigneNouveauServiceDansJournal,
 } = require('./abonnements/consigneNouveauServiceDansJournal');
 const {
+  envoieTrackingDeConnexionUtilisateur,
+} = require('./abonnements/envoieTrackingDeConnexionUtilisateur');
+const {
   envoieTrackingDeNouveauService,
 } = require('./abonnements/envoieTrackingDeNouveauService');
 const {
@@ -163,10 +166,10 @@ const cableTousLesAbonnes = (
     metAJourEstimationNombreServicesContactBrevo({ crmBrevo }),
   ]);
 
-  busEvenements.abonne(
-    EvenementNouvelleConnexionUtilisateur,
-    consigneConnexionUtilisateurDansJournal({ adaptateurJournal })
-  );
+  busEvenements.abonnePlusieurs(EvenementNouvelleConnexionUtilisateur, [
+    consigneConnexionUtilisateurDansJournal({ adaptateurJournal }),
+    envoieTrackingDeConnexionUtilisateur({ adaptateurTracking, depotDonnees }),
+  ]);
 
   busEvenements.abonnePlusieurs(EvenementDossierHomologationFinalise, [
     consigneNouvelleHomologationCreeeDansJournal({
