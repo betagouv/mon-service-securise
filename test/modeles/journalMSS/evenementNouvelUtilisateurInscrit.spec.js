@@ -7,7 +7,7 @@ const {
 describe('Un événement de nouvel utilisateur inscrit', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
 
-  it("chiffre l'identifiant de l'utilisateur qui lui est donné", () => {
+  it("hache l'identifiant de l'utilisateur qui lui est donné", () => {
     const evenement = new EvenementNouvelUtilisateurInscrit(
       { idUtilisateur: 'abc' },
       { adaptateurChiffrement: hacheEnMajuscules }
