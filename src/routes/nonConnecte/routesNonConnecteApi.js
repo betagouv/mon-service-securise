@@ -145,11 +145,9 @@ const routesNonConnecteApi = ({
           nombreServices: services.length,
         });
 
-        const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
+        await depotDonnees.enregistreNouvelleConnexionUtilisateur(
           utilisateur.id
         );
-        parcoursUtilisateur.enregistreDerniereConnexionMaintenant();
-        await depotDonnees.sauvegardeParcoursUtilisateur(parcoursUtilisateur);
 
         reponse.sendStatus(200);
       } catch (e) {
