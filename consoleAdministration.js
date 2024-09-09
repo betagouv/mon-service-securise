@@ -36,6 +36,7 @@ const {
   consigneCompletudeDansJournal,
 } = require('./src/bus/abonnements/consigneCompletudeDansJournal');
 const adaptateurChiffrementQuiChiffreVraiment = require('./src/adaptateurs/adaptateurChiffrementVault');
+const Autorisation = require('./src/modeles/autorisations/autorisation');
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -576,6 +577,17 @@ class ConsoleAdministration {
     const donneesDeTousUtilisateurs =
       await this.adaptateurPersistance.tousUtilisateurs();
     await temporise(donneesDeTousUtilisateurs, chiffreEtSauvegardeUtilisateur);
+  }
+
+  async ajouteProprietaireAuService(idService, emailNouveauProprietaire) {
+    const nouveauProprietaire = await this.utilisateurAvecEmail(
+      emailNouveauProprietaire
+    );
+    const autorisation = Autorisation.NouvelleAutorisationProprietaire({
+      idUtilisateur: nouveauProprietaire.id,
+      idService,
+    });
+    await this.depotDonnees.ajouteContributeurAuService(autorisation);
   }
 }
 
