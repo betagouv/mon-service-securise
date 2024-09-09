@@ -1,19 +1,13 @@
 <script lang="ts">
   import { store } from '../mesure.store';
   import { supprimeMesureSpecifique } from '../mesure.api';
-  import type { MesuresExistantes } from '../mesure.d';
 
   export let idService: string;
-  export let mesuresExistantes: MesuresExistantes;
 
   let enCoursEnvoi = false;
   const supprimeMesure = async () => {
     enCoursEnvoi = true;
-    await supprimeMesureSpecifique(
-      idService,
-      mesuresExistantes,
-      $store.mesureEditee.metadonnees.idMesure as number
-    );
+    await supprimeMesureSpecifique(idService, $store.mesureEditee.mesure.id);
     enCoursEnvoi = false;
     document.body.dispatchEvent(
       new CustomEvent('mesure-modifiee', {
@@ -38,8 +32,9 @@
 <div class="conteneur-actions">
   <button
     class="bouton bouton-secondaire"
-    on:click={store.afficheEtapeEditionSpecifique}>Annuler</button
-  >
+    on:click={store.afficheEtapeEditionSpecifique}
+    >Annuler
+  </button>
   <button
     class="bouton"
     class:en-cours-chargement={enCoursEnvoi}

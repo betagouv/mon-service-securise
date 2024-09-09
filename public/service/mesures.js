@@ -55,7 +55,6 @@ $(() => {
       retoursUtilisateur,
       estLectureSeule,
       modeVisiteGuidee: enVisiteGuidee(),
-      mesuresExistantes: e.detail.mesuresExistantes,
       mesureAEditer: e.detail.mesureAEditer,
     };
     actionMesure = new ActionMesure(e.detail.titreTiroir);

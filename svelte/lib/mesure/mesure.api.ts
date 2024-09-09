@@ -1,11 +1,10 @@
-import type { ActiviteMesure, MesuresExistantes } from './mesure.d';
+import type { ActiviteMesure } from './mesure.d';
 import type { MesureStore } from './mesure.store';
 
 const formatteurDate = new Intl.DateTimeFormat('en-EN');
 
 export const enregistreMesures = async (
   idService: string,
-  mesuresExistantes: MesuresExistantes,
   $store: MesureStore
 ) => {
   async function enregistreMesureGenerale() {
@@ -14,12 +13,6 @@ export const enregistreMesures = async (
       $store.mesureEditee.mesure;
     let { echeance } = $store.mesureEditee.mesure;
     if (echeance) echeance = formatteurDate.format(new Date(echeance));
-
-    mesuresExistantes.mesuresGenerales[idMesure] = {
-      modalites,
-      statut,
-      id: idMesure,
-    };
 
     await axios.put(`/api/service/${idService}/mesures/${idMesure}`, {
       modalites,
@@ -57,11 +50,8 @@ export const enregistreMesures = async (
 
 export const supprimeMesureSpecifique = async (
   idService: string,
-  mesuresExistantes: MesuresExistantes,
-  indexMesureSpecifique: number
+  idMesure: string
 ) => {
-  const idMesure =
-    mesuresExistantes.mesuresSpecifiques[indexMesureSpecifique].id;
   await axios.delete(
     `/api/service/${idService}/mesuresSpecifiques/${idMesure}`
   );
