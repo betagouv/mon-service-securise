@@ -1,7 +1,6 @@
 const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
-const ParcoursUtilisateur = require('../../../src/modeles/parcoursUtilisateur');
 const {
   ErreurUtilisateurExistant,
   ErreurEmailManquant,
@@ -397,8 +396,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it("authentifie l'utilisateur avec le login en minuscules", (done) => {
-      testeur.depotDonnees().lisParcoursUtilisateur = async () =>
-        new ParcoursUtilisateur();
+      testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur =
+        async () => {};
 
       const utilisateur = { toJSON: () => {}, genereToken: () => {} };
 
@@ -433,8 +432,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         testeur.depotDonnees().utilisateurAuthentifie = () =>
           Promise.resolve(utilisateur);
 
-        testeur.depotDonnees().lisParcoursUtilisateur = async () =>
-          new ParcoursUtilisateur();
+        testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur =
+          async () => {};
       });
 
       it('pose un cookie', (done) => {
@@ -474,27 +473,20 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           .catch((e) => done(e.response?.data || e));
       });
 
-      it('utilise le dépôt pour lire et mettre à jour le parcours utilisateur', async () => {
-        let idPasse;
-        let donneesPassees = {};
-        testeur.depotDonnees().lisParcoursUtilisateur = (id) => {
-          idPasse = id;
-          return Promise.resolve(
-            new ParcoursUtilisateur({ idUtilisateur: id })
-          );
-        };
-        testeur.depotDonnees().sauvegardeParcoursUtilisateur = (parcours) => {
-          donneesPassees = parcours.toJSON();
-          return Promise.resolve();
+      it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {
+        let idUtilisateurPasse = {};
+        testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = async (
+          idUtilisateur
+        ) => {
+          idUtilisateurPasse = idUtilisateur;
         };
 
         await axios.post('http://localhost:1234/api/token', {
           login: 'jean.dupont@mail.fr',
           motDePasse: 'mdp_12345',
         });
-        expect(idPasse).to.eql('456');
-        expect(donneesPassees.idUtilisateur).to.eql('456');
-        expect(donneesPassees.dateDerniereConnexion).not.to.be(undefined);
+
+        expect(idUtilisateurPasse).to.eql('456');
       });
     });
 
