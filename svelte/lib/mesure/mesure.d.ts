@@ -13,13 +13,7 @@ export type MesureProps = {
   statuts: Record<StatutMesure, string>;
   retoursUtilisateur: Record<string, string>;
   estLectureSeule: boolean;
-  mesuresExistantes: MesuresExistantes;
   mesureAEditer?: MesureEditee;
-};
-
-export type MesuresExistantes = {
-  mesuresGenerales: Record<string, MesureGenerale>;
-  mesuresSpecifiques: MesureSpecifique[];
 };
 
 type IdUtilisateur = string;

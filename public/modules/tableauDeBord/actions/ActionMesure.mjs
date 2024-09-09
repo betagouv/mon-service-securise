@@ -13,7 +13,6 @@ class ActionMesure extends ActionAbstraite {
     priorites,
     retoursUtilisateur,
     estLectureSeule,
-    mesuresExistantes,
     mesureAEditer,
     modeVisiteGuidee,
   }) {
@@ -27,7 +26,6 @@ class ActionMesure extends ActionAbstraite {
           priorites,
           retoursUtilisateur,
           estLectureSeule,
-          mesuresExistantes,
           mesureAEditer,
           modeVisiteGuidee,
         },
