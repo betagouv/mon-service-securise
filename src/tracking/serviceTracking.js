@@ -1,11 +1,6 @@
 const fabriqueServiceTracking = () => {
-  const nombreMoyenContributeursPourUtilisateur = async (
-    depotDonnees,
-    idUtilisateur
-  ) => {
-    const services = await depotDonnees.services(idUtilisateur);
-
-    return services.length === 0
+  const nombreMoyenContributeurs = async (services) =>
+    services.length === 0
       ? 0
       : Math.floor(
           services.reduce(
@@ -13,17 +8,21 @@ const fabriqueServiceTracking = () => {
             0
           ) / services.length
         );
+
+  const nombreMoyenContributeursPourUtilisateur = async (
+    depotDonnees,
+    idUtilisateur
+  ) => {
+    const services = await depotDonnees.services(idUtilisateur);
+    return nombreMoyenContributeurs(services);
   };
 
   const completudeDesServicesPourUtilisateur = async (
     depotDonnees,
     idUtilisateur
   ) => {
-    const [nbMoyenContributeurs, services] = await Promise.all([
-      nombreMoyenContributeursPourUtilisateur(depotDonnees, idUtilisateur),
-      depotDonnees.services(idUtilisateur),
-    ]);
-
+    const services = await depotDonnees.services(idUtilisateur);
+    const nbMoyenContributeurs = await nombreMoyenContributeurs(services);
     return {
       nombreServices: services.length,
       nombreMoyenContributeurs: nbMoyenContributeurs,
