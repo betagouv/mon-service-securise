@@ -140,7 +140,6 @@
 
   .section {
     flex: 1;
-    max-width: 384px;
     border: 1px solid var(--systeme-design-etat-contour-champs);
     border-bottom: 4px solid var(--bleu-mise-en-avant);
   }
