@@ -1,9 +1,9 @@
 const fabriqueServiceTracking = () => {
   const nombreMoyenContributeursPourUtilisateur = async (
-    depotHomologations,
+    depotDonnees,
     idUtilisateur
   ) => {
-    const services = await depotHomologations.services(idUtilisateur);
+    const services = await depotDonnees.services(idUtilisateur);
 
     return services.length === 0
       ? 0
@@ -16,15 +16,12 @@ const fabriqueServiceTracking = () => {
   };
 
   const completudeDesServicesPourUtilisateur = async (
-    depotHomologations,
+    depotDonnees,
     idUtilisateur
   ) => {
     const [nbMoyenContributeurs, services] = await Promise.all([
-      nombreMoyenContributeursPourUtilisateur(
-        depotHomologations,
-        idUtilisateur
-      ),
-      depotHomologations.services(idUtilisateur),
+      nombreMoyenContributeursPourUtilisateur(depotDonnees, idUtilisateur),
+      depotDonnees.services(idUtilisateur),
     ]);
 
     return {
