@@ -75,6 +75,10 @@ const {
   consigneActiviteMesure,
 } = require('./abonnements/consigneActiviteMesure');
 const EvenementMesureServiceSupprimee = require('./evenementMesureServiceSupprimee');
+const {
+  consigneConnexionUtilisateurDansJournal,
+} = require('./abonnements/consigneConnexionUtilisateurDansJournal');
+const EvenementNouvelleConnexionUtilisateur = require('./evenementNouvelleConnexionUtilisateur');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -158,6 +162,11 @@ const cableTousLesAbonnes = (
     relieEntrepriseEtContactBrevo({ crmBrevo }),
     metAJourEstimationNombreServicesContactBrevo({ crmBrevo }),
   ]);
+
+  busEvenements.abonne(
+    EvenementNouvelleConnexionUtilisateur,
+    consigneConnexionUtilisateurDansJournal({ adaptateurJournal })
+  );
 
   busEvenements.abonnePlusieurs(EvenementDossierHomologationFinalise, [
     consigneNouvelleHomologationCreeeDansJournal({

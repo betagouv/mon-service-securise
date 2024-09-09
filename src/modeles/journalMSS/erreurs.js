@@ -1,5 +1,7 @@
 class ErreurJournal extends Error {}
 class ErreurAutorisationsServiceManquantes extends ErreurJournal {}
+class ErreurDateDerniereConnexionManquante extends ErreurJournal {}
+class ErreurDateDerniereConnexionInvalide extends ErreurJournal {}
 class ErreurDateHomologationManquante extends ErreurJournal {}
 class ErreurDureeHomologationManquante extends ErreurJournal {}
 class ErreurIdentifiantServiceManquant extends ErreurJournal {}
@@ -11,6 +13,8 @@ class ErreurUtilisateurManquant extends ErreurJournal {}
 
 module.exports = {
   ErreurAutorisationsServiceManquantes,
+  ErreurDateDerniereConnexionManquante,
+  ErreurDateDerniereConnexionInvalide,
   ErreurDateHomologationManquante,
   ErreurDureeHomologationManquante,
   ErreurIdentifiantServiceManquant,
