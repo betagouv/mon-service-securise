@@ -56,6 +56,7 @@ const creeDepot = (config = {}) => {
   const depotParcoursUtilisateurs = depotDonneesParcoursUtilisateurs.creeDepot({
     adaptateurPersistance,
     referentiel,
+    busEvenements,
   });
 
   const depotNotificationsExpirationHomologation =
@@ -129,8 +130,11 @@ const creeDepot = (config = {}) => {
     supprimeContributeur,
   } = depotAutorisations;
 
-  const { lisParcoursUtilisateur, sauvegardeParcoursUtilisateur } =
-    depotParcoursUtilisateurs;
+  const {
+    lisParcoursUtilisateur,
+    sauvegardeParcoursUtilisateur,
+    enregistreNouvelleConnexionUtilisateur,
+  } = depotParcoursUtilisateurs;
 
   const {
     marqueNouveauteLue,
@@ -189,6 +193,7 @@ const creeDepot = (config = {}) => {
     remplaceRisquesSpecifiquesDuService,
     sauvegardeAutorisation,
     sauvegardeParcoursUtilisateur,
+    enregistreNouvelleConnexionUtilisateur,
     sauvegardeNotificationsExpirationHomologation,
     supprimeContributeur,
     supprimeMesureSpecifiqueDuService,

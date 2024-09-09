@@ -1,7 +1,8 @@
 const ParcoursUtilisateur = require('../modeles/parcoursUtilisateur');
+const EvenementNouvelleConnexionUtilisateur = require('../bus/evenementNouvelleConnexionUtilisateur');
 
 const creeDepot = (config = {}) => {
-  const { adaptateurPersistance, referentiel } = config;
+  const { adaptateurPersistance, referentiel, busEvenements } = config;
 
   const lisParcoursUtilisateur = async (idUtilisateur) => {
     const parcoursConnu =
@@ -18,9 +19,24 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const enregistreNouvelleConnexionUtilisateur = async (idUtilisateur) => {
+    const parcoursUtilisateur = await lisParcoursUtilisateur(idUtilisateur);
+
+    parcoursUtilisateur.enregistreDerniereConnexionMaintenant();
+    await sauvegardeParcoursUtilisateur(parcoursUtilisateur);
+
+    await busEvenements.publie(
+      new EvenementNouvelleConnexionUtilisateur({
+        idUtilisateur,
+        dateDerniereConnexion: parcoursUtilisateur.dateDerniereConnexion,
+      })
+    );
+  };
+
   return {
     lisParcoursUtilisateur,
     sauvegardeParcoursUtilisateur,
+    enregistreNouvelleConnexionUtilisateur,
   };
 };
 
