@@ -80,6 +80,12 @@ const fabriquePersistance = (
           s1.nomService().localeCompare(s2.nomService())
         );
       },
+      nombreDeUtilisateur: async (idUtilisateur) => {
+        const donneesServices =
+          await adaptateurPersistance.services(idUtilisateur);
+
+        return donneesServices.length;
+      },
       tous: async () => {
         const donneesServices = await adaptateurPersistance.tousLesServices();
         return Promise.all(donneesServices.map((d) => enrichisService(d)));
@@ -263,6 +269,9 @@ const creeDepot = (config = {}) => {
     metsAJourProprieteService('rolesResponsabilites', ...params);
 
   const services = (idUtilisateur) => p.lis.ceuxDeUtilisateur(idUtilisateur);
+
+  const nombreServices = (idUtilisateur) =>
+    p.lis.nombreDeUtilisateur(idUtilisateur);
 
   const ajouteDescriptionService = async (idUtilisateur, idService, infos) => {
     const existant = await p.lis.un(idService);
@@ -529,6 +538,7 @@ const creeDepot = (config = {}) => {
     metsAJourMesureGeneraleDuService,
     metsAJourMesureSpecifiqueDuService,
     metsAJourService,
+    nombreServices,
     nouveauService,
     service,
     services,

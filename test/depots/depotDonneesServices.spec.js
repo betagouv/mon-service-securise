@@ -72,31 +72,41 @@ describe('Le dépôt de données des services', () => {
     busEvenements = fabriqueBusPourLesTests();
   });
 
-  it("connaît tous les services d'un utilisateur donné", async () => {
-    const referentiel = Referentiel.creeReferentielVide();
+  describe("sur les demandes qui concernent les services d'un utilisateur donné", () => {
+    let depot;
+    let referentiel;
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentielVide();
+      const persistance = unePersistanceMemoire()
+        .ajouteUnService(unService(referentiel).avecId('123').donnees)
+        .ajouteUnService(unService(referentiel).avecId('789').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('456').donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('456', '123').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('999', '789').donnees
+        );
+      depot = unDepotDeDonneesServices()
+        .avecConstructeurDePersistance(persistance)
+        .avecReferentiel(referentiel)
+        .construis();
+    });
 
-    const persistance = unePersistanceMemoire()
-      .ajouteUnService(unService(referentiel).avecId('123').donnees)
-      .ajouteUnService(unService(referentiel).avecId('789').donnees)
-      .ajouteUnUtilisateur(unUtilisateur().avecId('456').donnees)
-      .ajouteUneAutorisation(
-        uneAutorisation().deProprietaire('456', '123').donnees
-      )
-      .ajouteUneAutorisation(
-        uneAutorisation().deProprietaire('999', '789').donnees
-      );
+    it("connaît tous les services d'un utilisateur donné", async () => {
+      const services = await depot.services('456');
 
-    const depot = unDepotDeDonneesServices()
-      .avecConstructeurDePersistance(persistance)
-      .avecReferentiel(referentiel)
-      .construis();
+      expect(services.length).to.equal(1);
+      expect(services[0]).to.be.a(Service);
+      expect(services[0].id).to.equal('123');
+      expect(services[0].referentiel).to.equal(referentiel);
+    });
 
-    const services = await depot.services('456');
+    it("connaît le nombre de services d'un utilisateur donné", async () => {
+      const nombreServices = await depot.nombreServices('456');
 
-    expect(services.length).to.equal(1);
-    expect(services[0]).to.be.a(Service);
-    expect(services[0].id).to.equal('123');
-    expect(services[0].referentiel).to.equal(referentiel);
+      expect(nombreServices).to.equal(1);
+    });
   });
 
   it("utilise l'adaptateur de persistance pour récupérer tous les services du système", async () => {
