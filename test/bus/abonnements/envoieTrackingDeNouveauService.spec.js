@@ -1,5 +1,4 @@
 const expect = require('expect.js');
-const { unService } = require('../../constructeurs/constructeurService');
 const {
   unAdaptateurTracking,
 } = require('../../constructeurs/constructeurAdaptateurTracking');
@@ -30,11 +29,7 @@ describe("L'abonnement qui envoie au tracking les informations d'un nouveau serv
     ) => {
       donneesDeTracking = { destinataire, donneesEvenement };
     };
-    depotDonnees.services = async () => [
-      unService().construis(),
-      unService().construis(),
-      unService().construis(),
-    ];
+    depotDonnees.nombreServices = async () => 3;
 
     await envoieTrackingDeNouveauService({ adaptateurTracking, depotDonnees })({
       utilisateur: unUtilisateur().avecEmail('jean.dupont@mail.fr').construis(),

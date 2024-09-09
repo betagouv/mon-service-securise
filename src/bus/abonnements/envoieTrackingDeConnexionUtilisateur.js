@@ -11,10 +11,10 @@ function envoieTrackingDeConnexionUtilisateur({
       );
 
     const utilisateur = await depotDonnees.utilisateur(idUtilisateur);
-    const services = await depotDonnees.services(idUtilisateur);
+    const nombreServices = await depotDonnees.nombreServices(idUtilisateur);
 
     await adaptateurTracking.envoieTrackingConnexion(utilisateur.email, {
-      nombreServices: services.length,
+      nombreServices,
     });
   };
 }

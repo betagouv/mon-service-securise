@@ -10,11 +10,11 @@ function envoieTrackingDeNouveauService({ adaptateurTracking, depotDonnees }) {
 
     if (!utilisateur) leveException("l'utilisateur");
 
-    const services = await depotDonnees.services(utilisateur.id);
+    const nombreServices = await depotDonnees.nombreServices(utilisateur.id);
 
     await adaptateurTracking.envoieTrackingNouveauServiceCree(
       utilisateur.email,
-      { nombreServices: services.length }
+      { nombreServices }
     );
   };
 }
