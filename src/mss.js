@@ -113,6 +113,7 @@ const creeServeur = (
     '/oidc',
     routesNonConnecteOidc({
       adaptateurOidc,
+      depotDonnees,
     })
   );
   app.use(
