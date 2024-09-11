@@ -30,11 +30,15 @@ const {
 } = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
 const adaptateurRechercheEntrepriseAPI = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
 const adaptateurCmsCrisp = require('./src/adaptateurs/adaptateurCmsCrisp');
+const {
+  fabriqueAdaptateurOidc,
+} = require('./src/adaptateurs/fabriqueAdaptateurOidc');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
 const adaptateurJournal = fabriqueAdaptateurJournalMSS();
 const adaptateurChiffrement = fabriqueAdaptateurChiffrement();
+const adaptateurOidc = fabriqueAdaptateurOidc();
 const busEvenements = new BusEvenements({ adaptateurGestionErreur });
 const port = process.env.PORT || 3000;
 
@@ -90,6 +94,7 @@ const serveur = MSS.creeServeur(
   adaptateurTracking,
   adaptateurProtection,
   adaptateurJournal,
+  adaptateurOidc,
   procedures
 );
 

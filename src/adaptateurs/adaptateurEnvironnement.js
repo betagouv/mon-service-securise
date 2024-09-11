@@ -66,6 +66,14 @@ const modeMaintenance = () => ({
   detailsPreparation: () => process.env.PREPARATION_MODE_MAINTENANCE,
 });
 
+const oidc = () => ({
+  urlRedirectionApresAuthentification: () =>
+    `${process.env.URL_BASE_MSS}/oidc/apres-authentification`,
+  urlBase: () => process.env.OIDC_URL_BASE,
+  clientId: () => process.env.OIDC_CLIENT_ID,
+  clientSecret: () => process.env.OIDC_CLIENT_SECRET,
+});
+
 module.exports = {
   chiffrement,
   emailMemoire,
@@ -74,6 +82,7 @@ module.exports = {
   journalMSS,
   matomo,
   modeMaintenance,
+  oidc,
   sendinblue,
   sentry,
   statistiques,
