@@ -15,6 +15,7 @@ const {
 const routesNonConnecteApiStyles = require('./routes/nonConnecte/routesNonConnecteApiStyles');
 const routesNonConnectePage = require('./routes/nonConnecte/routesNonConnectePage');
 const routesConnectePage = require('./routes/connecte/routesConnectePage');
+const routesNonConnecteOidc = require('./routes/nonConnecte/routesNonConnecteOidc');
 
 require('dotenv').config();
 
@@ -34,6 +35,7 @@ const creeServeur = (
   adaptateurTracking,
   adaptateurProtection,
   adaptateurJournalMSS,
+  adaptateurOidc,
   procedures,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
   avecPageErreur = process.env.NODE_ENV === 'production'
@@ -105,6 +107,12 @@ const creeServeur = (
       serviceAnnuaire,
       adaptateurTracking,
       adaptateurMail,
+    })
+  );
+  app.use(
+    '/oidc',
+    routesNonConnecteOidc({
+      adaptateurOidc,
     })
   );
   app.use(

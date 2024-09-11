@@ -22,6 +22,7 @@ const testeurMss = () => {
   let adaptateurTracking;
   let adaptateurProtection;
   let adaptateurJournalMSS;
+  let adaptateurOidc;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -88,7 +89,10 @@ const testeurMss = () => {
         () => (_requete, _reponse, suite) =>
           suite(),
     };
-    adaptateurJournalMSS = { consigneEvenement: async () => {} };
+    adaptateurJournalMSS = {
+      consigneEvenement: async () => {},
+    };
+    adaptateurOidc = {};
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
     procedures = fabriqueProcedures({
@@ -116,6 +120,7 @@ const testeurMss = () => {
           adaptateurTracking,
           adaptateurProtection,
           adaptateurJournalMSS,
+          adaptateurOidc,
           procedures,
           false,
           false
@@ -138,6 +143,7 @@ const testeurMss = () => {
     adaptateurTracking: () => adaptateurTracking,
     adaptateurJournalMSS: () => adaptateurJournalMSS,
     adaptateurCmsCrisp: () => adaptateurCmsCrisp,
+    adaptateurOidc: () => adaptateurOidc,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,
