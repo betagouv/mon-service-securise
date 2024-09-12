@@ -71,6 +71,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       });
       testeur.depotDonnees().utilisateurAvecEmail = (email) =>
         email === 'unEmailInconnu' ? undefined : utilisateur;
+      testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = () => {};
     });
 
     it('sert une page HTML', async () => {
@@ -142,6 +143,26 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
       const tokenDecode = decodeTokenDuCookie(reponse, 1);
       expect(tokenDecode.token).to.be('unJetonJWT');
+    });
+
+    it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {
+      let idUtilisateurPasse = {};
+      testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = async (
+        idUtilisateur
+      ) => {
+        idUtilisateurPasse = idUtilisateur;
+      };
+
+      const utilisateurAuthentifie = unUtilisateur().avecId('456').construis();
+      utilisateurAuthentifie.genereToken = () => 'unJetonJWT';
+      testeur.depotDonnees().utilisateurAvecEmail = async () =>
+        utilisateurAuthentifie;
+
+      await requeteSansRedirection(
+        'http://localhost:1234/oidc/apres-authentification'
+      );
+
+      expect(idUtilisateurPasse).to.eql('456');
     });
   });
 });
