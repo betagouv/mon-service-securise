@@ -41,3 +41,10 @@ label .information {
 .banniere.invisible {
   display: none;
 }
+
+form#inscription input[disabled] {
+  color: #667892;
+  background: #dbecf1;
+  user-select: none;
+  cursor: not-allowed;
+}
