@@ -1,7 +1,6 @@
 const Sentry = require('@sentry/node');
 const { IpDeniedError } = require('express-ipfilter');
 const adaptateurEnvironnement = require('./adaptateurEnvironnement');
-const { extraisIp } = require('../http/requeteHttp');
 
 const logueErreur = (erreur, infosDeContexte = {}) => {
   Sentry.withScope(() => {
@@ -34,14 +33,7 @@ const initialise = (applicationExpress) => {
 const controleurErreurs = (erreur, requete, reponse, suite) => {
   const estErreurDeFiltrageIp = erreur instanceof IpDeniedError;
   if (estErreurDeFiltrageIp) {
-    const ipDuClient = extraisIp(requete.headers).client;
-
-    logueErreur(
-      new Error(
-        'Une IP non autorisée a été bloquée. Aucune page ne lui a été servie.'
-      ),
-      { 'IP du client': ipDuClient?.replaceAll('.', '*') }
-    );
+    // On termine la connexion directement si qqun nous appelle sans passer par Baleen.
     reponse.end();
     return suite();
   }
