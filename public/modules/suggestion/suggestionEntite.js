@@ -65,8 +65,14 @@ $(() => {
         `<div class="option">${escape(option.label)}</div>`,
     },
     load: (recherche, callback) => {
+      const callbackPersonnalisee = (options) => {
+        callback(options);
+        document.body.dispatchEvent(
+          new CustomEvent('recharge-siret-entite', { detail: { options } })
+        );
+      };
       $champSelectize[0].selectize.clearOptions();
-      rechercheSuggestions(recherche, callback);
+      rechercheSuggestions(recherche, callbackPersonnalisee);
     },
     onItemAdd: (_value, $item) => {
       siret = $item.data('siret');
