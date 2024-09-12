@@ -236,6 +236,20 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         .catch(done);
     });
 
+    it("n'envoie pas de message de notification à l'utilisateur Agent Connect créé", (done) => {
+      testeur.adaptateurMail().envoieMessageFinalisationInscription = () => {
+        expect().fail("N'aurait pas dû envoyer de message");
+      };
+
+      axios
+        .post('http://localhost:1234/api/utilisateur', {
+          ...donneesRequete,
+          ac: true,
+        })
+        .then(() => done())
+        .catch(done);
+    });
+
     describe("si l'envoi de mail échoue", () => {
       beforeEach(() => {
         testeur.adaptateurMail().envoieMessageFinalisationInscription = () =>

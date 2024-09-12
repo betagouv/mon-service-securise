@@ -73,7 +73,9 @@ const routesNonConnecteApi = ({
         try {
           await creeContactEmail(donnees);
           const utilisateur = await depotDonnees.nouvelUtilisateur(donnees);
-          await envoieMessageFinalisationInscription(utilisateur);
+          if (!requete.body.ac) {
+            await envoieMessageFinalisationInscription(utilisateur);
+          }
 
           await adaptateurTracking.envoieTrackingInscription(utilisateur.email);
 
