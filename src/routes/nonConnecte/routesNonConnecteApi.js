@@ -141,7 +141,8 @@ const routesNonConnecteApi = ({
         requete.session.token = token;
 
         await depotDonnees.enregistreNouvelleConnexionUtilisateur(
-          utilisateur.id
+          utilisateur.id,
+          'MSS'
         );
 
         reponse.sendStatus(200);
