@@ -11,8 +11,11 @@ $(() => {
       }
     });
     $('#prenom').val(urlParams.get('prenom'));
+    $('#prenom').attr('disabled', true);
     $('#nom').val(urlParams.get('nom'));
+    $('#nom').attr('disabled', true);
     $('#email').val(urlParams.get('email'));
+    $('#email').attr('disabled', true);
     const siret = urlParams.get('siret');
     $('#siretEntite').val(siret);
     $('#siretEntite-selectize')[0].selectize.onSearchChange(siret);
