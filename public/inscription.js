@@ -2,7 +2,9 @@ import brancheSoumissionFormulaireUtilisateur from './modules/interactions/branc
 
 $(() => {
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('ac')) {
+
+  const ac = urlParams.has('ac');
+  if (ac) {
     const { selectize } = $('#siretEntite-selectize')[0];
     $(document.body).on('recharge-siret-entite', (evt) => {
       const { options } = evt.originalEvent.detail;
@@ -24,7 +26,7 @@ $(() => {
   const selecteurFormulaire = 'form#inscription';
   const action = (donnees) =>
     axios
-      .post('/api/utilisateur', donnees)
+      .post('/api/utilisateur', { ...donnees, ac })
       .then(() => (window.location = '/activation'));
 
   brancheSoumissionFormulaireUtilisateur(selecteurFormulaire, action);
