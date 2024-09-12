@@ -52,7 +52,13 @@ const recupereJeton = async (requete) => {
 
 const recupereInformationsUtilisateur = async (accessToken) => {
   const client = await recupereClient();
-  return client.userinfo(accessToken);
+  const {
+    given_name: prenom,
+    usual_name: nom,
+    email,
+    siret,
+  } = await client.userinfo(accessToken);
+  return { prenom, nom, email, siret };
 };
 
 module.exports = {

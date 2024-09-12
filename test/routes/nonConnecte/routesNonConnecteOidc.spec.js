@@ -106,7 +106,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       expect(tokenDecode.AgentConnectIdToken).to.be('unIdToken');
     });
 
-    it("renvoi une erreur 401 si l'utilisateur est inconnu", async () => {
+    it("affiche la page d’inscription si l'utilisateur est inconnu", async () => {
       testeur.adaptateurOidc().recupereJeton = async () => ({
         accessToken: 'unAccessToken',
       });
@@ -116,14 +116,40 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         if (accessToken === 'unAccessToken')
           return {
             email: 'unEmailInconnu',
+            nom: 'Dujardin',
+            prenom: 'Jean',
+            siret: '12345',
           };
         throw new Error('La méthode doit être appellée avec un `accessToken`');
       };
 
-      await testeur.verifieRequeteGenereErreurHTTP(
-        401,
-        "Erreur d'authentification",
+      const reponse = await requeteSansRedirection(
         'http://localhost:1234/oidc/apres-authentification'
+      );
+
+      expect(reponse.status).to.be(302);
+      expect(reponse.headers.location).to.be(
+        '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu&siret=12345&ac'
+      );
+    });
+
+    it("affiche la page d’inscription avec un siret vide s'il n'est pas défini", async () => {
+      testeur.adaptateurOidc().recupereJeton = async () => ({
+        accessToken: 'unAccessToken',
+      });
+      testeur.adaptateurOidc().recupereInformationsUtilisateur = async () => ({
+        email: 'unEmailInconnu',
+        nom: 'Dujardin',
+        prenom: 'Jean',
+        siret: undefined,
+      });
+
+      const reponse = await requeteSansRedirection(
+        'http://localhost:1234/oidc/apres-authentification'
+      );
+
+      expect(reponse.headers.location).to.be(
+        '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu&siret=&ac'
       );
     });
 
