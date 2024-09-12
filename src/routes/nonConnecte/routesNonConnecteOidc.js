@@ -47,11 +47,13 @@ const routesNonConnecteOidc = ({ adaptateurOidc, depotDonnees }) => {
         reponse.render('apresAuthentification');
       } else {
         const { nom, prenom, email, siret } = informationsUtilisateur;
-        reponse.redirect(
-          `/inscription?nom=${nom}&prenom=${prenom}&email=${email}&siret=${
-            siret || ''
-          }&ac`
-        );
+        const params = new URLSearchParams({
+          nom,
+          prenom,
+          email,
+          siret: siret || '',
+        });
+        reponse.redirect(`/inscription?${params}&ac`);
       }
     } catch (e) {
       reponse.status(401).send("Erreur d'authentification");
