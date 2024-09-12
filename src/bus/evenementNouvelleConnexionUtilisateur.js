@@ -1,5 +1,5 @@
 class EvenementNouvelleConnexionUtilisateur {
-  constructor({ idUtilisateur, dateDerniereConnexion }) {
+  constructor({ idUtilisateur, dateDerniereConnexion, source }) {
     if (!idUtilisateur)
       throw Error("Impossible d'instancier l'événement sans id utilisateur");
     if (!dateDerniereConnexion)
@@ -13,6 +13,7 @@ class EvenementNouvelleConnexionUtilisateur {
 
     this.idUtilisateur = idUtilisateur;
     this.dateDerniereConnexion = dateDerniereConnexion;
+    this.source = source;
   }
 }
 

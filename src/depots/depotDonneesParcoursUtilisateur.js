@@ -19,7 +19,10 @@ const creeDepot = (config = {}) => {
     );
   };
 
-  const enregistreNouvelleConnexionUtilisateur = async (idUtilisateur) => {
+  const enregistreNouvelleConnexionUtilisateur = async (
+    idUtilisateur,
+    source
+  ) => {
     const parcoursUtilisateur = await lisParcoursUtilisateur(idUtilisateur);
 
     parcoursUtilisateur.enregistreDerniereConnexionMaintenant();
@@ -29,6 +32,7 @@ const creeDepot = (config = {}) => {
       new EvenementNouvelleConnexionUtilisateur({
         idUtilisateur,
         dateDerniereConnexion: parcoursUtilisateur.dateDerniereConnexion,
+        source,
       })
     );
   };

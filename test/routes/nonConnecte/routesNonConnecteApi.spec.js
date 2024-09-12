@@ -448,10 +448,13 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {
         let idUtilisateurPasse = {};
+        let sourcePassee;
         testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = async (
-          idUtilisateur
+          idUtilisateur,
+          source
         ) => {
           idUtilisateurPasse = idUtilisateur;
+          sourcePassee = source;
         };
 
         await axios.post('http://localhost:1234/api/token', {
@@ -459,7 +462,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           motDePasse: 'mdp_12345',
         });
 
-        expect(idUtilisateurPasse).to.eql('456');
+        expect(idUtilisateurPasse).to.be('456');
+        expect(sourcePassee).to.be('MSS');
       });
     });
 

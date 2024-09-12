@@ -40,7 +40,7 @@ describe('Le dépôt de données Parcours utilisateur', () => {
     });
 
     it("publie un événement de 'Nouvelle connexion utilisateur'", async () => {
-      await depot.enregistreNouvelleConnexionUtilisateur('123');
+      await depot.enregistreNouvelleConnexionUtilisateur('123', 'MSS');
 
       expect(
         busEvenements.aRecuUnEvenement(EvenementNouvelleConnexionUtilisateur)
@@ -50,6 +50,7 @@ describe('Le dépôt de données Parcours utilisateur', () => {
       );
       expect(evenement.idUtilisateur).to.be('123');
       expect(evenement.dateDerniereConnexion).not.to.be(undefined);
+      expect(evenement.source).to.be('MSS');
     });
   });
 

@@ -42,7 +42,8 @@ const routesNonConnecteOidc = ({ adaptateurOidc, depotDonnees }) => {
       if (utilisateurExistant) {
         requete.session.token = utilisateurExistant.genereToken();
         await depotDonnees.enregistreNouvelleConnexionUtilisateur(
-          utilisateurExistant.id
+          utilisateurExistant.id,
+          'AGENT_CONNECT'
         );
         reponse.render('apresAuthentification');
       } else {

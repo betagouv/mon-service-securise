@@ -147,10 +147,13 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
     it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {
       let idUtilisateurPasse = {};
+      let sourcePassee;
       testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = async (
-        idUtilisateur
+        idUtilisateur,
+        source
       ) => {
         idUtilisateurPasse = idUtilisateur;
+        sourcePassee = source;
       };
 
       const utilisateurAuthentifie = unUtilisateur().avecId('456').construis();
@@ -162,7 +165,8 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         'http://localhost:1234/oidc/apres-authentification'
       );
 
-      expect(idUtilisateurPasse).to.eql('456');
+      expect(idUtilisateurPasse).to.be('456');
+      expect(sourcePassee).to.be('AGENT_CONNECT');
     });
   });
 });
