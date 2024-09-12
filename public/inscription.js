@@ -27,7 +27,7 @@ $(() => {
   const action = (donnees) =>
     axios
       .post('/api/utilisateur', { ...donnees, ac })
-      .then(() => (window.location = '/activation'));
+      .then(() => (window.location = ac ? '/oidc/connexion' : '/activation'));
 
   brancheSoumissionFormulaireUtilisateur(selecteurFormulaire, action);
 });
