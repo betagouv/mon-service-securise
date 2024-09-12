@@ -153,6 +153,27 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       );
     });
 
+    it("encode les paramètres dans l'url", async () => {
+      testeur.adaptateurOidc().recupereJeton = async () => ({
+        accessToken: 'unAccessToken',
+      });
+      testeur.depotDonnees().utilisateurAvecEmail = () => undefined;
+      testeur.adaptateurOidc().recupereInformationsUtilisateur = async () => ({
+        email: 'unEmailInconnu+tag@mail.com',
+        nom: 'Dujardin',
+        prenom: 'Jean',
+        siret: '123',
+      });
+
+      const reponse = await requeteSansRedirection(
+        'http://localhost:1234/oidc/apres-authentification'
+      );
+
+      expect(reponse.headers.location).to.be(
+        '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu%2Btag%40mail.com&siret=123&ac'
+      );
+    });
+
     it("connecte l'utilisateur s'il existe", async () => {
       const utilisateurAuthentifie = unUtilisateur()
         .avecEmail('jean.dujardin@beta.gouv.fr')
