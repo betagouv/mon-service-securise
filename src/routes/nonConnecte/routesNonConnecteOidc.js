@@ -30,8 +30,6 @@ const routesNonConnecteOidc = ({ adaptateurOidc, depotDonnees }) => {
 
       reponse.clearCookie('AgentConnectInfo');
 
-      requete.session.AgentConnectIdToken = idToken;
-
       const informationsUtilisateur =
         await adaptateurOidc.recupereInformationsUtilisateur(accessToken);
 
@@ -40,6 +38,7 @@ const routesNonConnecteOidc = ({ adaptateurOidc, depotDonnees }) => {
       );
 
       if (utilisateurExistant) {
+        requete.session.AgentConnectIdToken = idToken;
         requete.session.token = utilisateurExistant.genereToken();
         await depotDonnees.enregistreNouvelleConnexionUtilisateur(
           utilisateurExistant.id,
@@ -47,7 +46,12 @@ const routesNonConnecteOidc = ({ adaptateurOidc, depotDonnees }) => {
         );
         reponse.render('apresAuthentification');
       } else {
-        reponse.status(401).send("Erreur d'authentification");
+        const { nom, prenom, email, siret } = informationsUtilisateur;
+        reponse.redirect(
+          `/inscription?nom=${nom}&prenom=${prenom}&email=${email}&siret=${
+            siret || ''
+          }&ac`
+        );
       }
     } catch (e) {
       reponse.status(401).send("Erreur d'authentification");
