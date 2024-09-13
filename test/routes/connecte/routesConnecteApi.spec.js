@@ -20,7 +20,7 @@ const {
   Permissions: { LECTURE },
   tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
-const { enObjet } = require('../../aides/cookie');
+const { decodeTokenDuCookie } = require('../../aides/cookie');
 const SourceAuthentification = require('../../../src/modeles/sourceAuthentification');
 
 describe('Le serveur MSS des routes privées /api/*', () => {
@@ -638,13 +638,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it('pose un nouveau jeton', async () => {
-      const decodeTokenDuCookie = (reponse, indiceHeader) => {
-        const headerCookie = reponse.headers['set-cookie'];
-        const cookieSession = enObjet(headerCookie[indiceHeader]);
-        return JSON.parse(
-          Buffer.from(cookieSession.token, 'base64').toString()
-        );
-      };
       testeur.depotDonnees().valideAcceptationCGUPourUtilisateur = async (u) =>
         u;
 

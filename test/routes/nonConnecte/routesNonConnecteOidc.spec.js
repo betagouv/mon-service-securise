@@ -1,7 +1,7 @@
 const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
-const { enObjet } = require('../../aides/cookie');
+const { enObjet, decodeTokenDuCookie } = require('../../aides/cookie');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
@@ -11,12 +11,6 @@ const requeteSansRedirection = async (url) =>
     validateStatus: () => true, // pour ne pas qu’un statut 302 lance une erreur
     maxRedirects: 0,
   });
-
-const decodeTokenDuCookie = (reponse, indiceHeader) => {
-  const headerCookie = reponse.headers['set-cookie'];
-  const cookieSession = enObjet(headerCookie[indiceHeader]);
-  return JSON.parse(Buffer.from(cookieSession.token, 'base64').toString());
-};
 
 describe('Le serveur MSS des routes publiques /oidc/*', () => {
   const testeur = testeurMSS();
