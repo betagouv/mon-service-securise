@@ -218,7 +218,7 @@ const routesConnecteApi = ({
     const idUtilisateur = requete.idUtilisateurCourant;
     let u = await depotDonnees.utilisateur(idUtilisateur);
     u = await depotDonnees.valideAcceptationCGUPourUtilisateur(u);
-    requete.session.token = u.genereToken(requete.source);
+    requete.session.token = u.genereToken(requete.sourceAuthentification);
     reponse.sendStatus(200);
   });
 
