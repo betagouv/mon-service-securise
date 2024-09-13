@@ -108,6 +108,28 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(apres.id).to.equal('123');
   });
 
+  it("n'authentifie pas un utilisateur sans mot de passe", async () => {
+    const depot = DepotDonneesUtilisateurs.creeDepot({
+      adaptateurChiffrement,
+      adaptateurJWT,
+      adaptateurPersistance: unePersistanceMemoire()
+        .ajouteUnUtilisateur({
+          id: '123',
+          email: 'jean.dupont@mail.fr',
+          emailHash: 'jean.dupont@mail.fr-haché256',
+          motDePasse: '',
+        })
+        .construis(),
+    });
+
+    const resultatAuthentification = await depot.utilisateurAuthentifie(
+      'jean.dupont@mail.fr',
+      ''
+    );
+
+    expect(resultatAuthentification).to.be(undefined);
+  });
+
   describe('sur demande de mise à jour des informations du profil utilisateur', () => {
     let depot;
     let adaptateurPersistance;
@@ -641,6 +663,15 @@ describe('Le dépôt de données des utilisateurs', () => {
         expect(bus.aRecuUnEvenement(EvenementUtilisateurInscrit)).to.be(true);
         const recu = bus.recupereEvenement(EvenementUtilisateurInscrit);
         expect(recu.utilisateur.id).not.to.be(undefined);
+      });
+
+      it("ne crée pas de mot de passe pour l'utilisateur", async () => {
+        // il n’est pas nécessaire de générer un mot de passe pour l’utilisateur car il existe un contrôle
+        // lors de l’authentification qui vérifie que le mot de passe est défini
+        await depot.nouvelUtilisateur(unUtilisateur().donnees);
+
+        const utilisateur = await adaptateurPersistance.utilisateur('1');
+        expect(utilisateur.donnees.motDePasse).to.be(undefined);
       });
     });
 
