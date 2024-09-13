@@ -637,15 +637,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         }
       );
     });
-
-    it('pose un nouveau cookie', (done) => {
-      axios
-        .patch('http://localhost:1234/api/motDePasse', {
-          motDePasse: 'mdp_ABC12345',
-        })
-        .then((reponse) => testeur.verifieJetonDepose(reponse, done))
-        .catch((e) => done(e.response?.data || e));
-    });
   });
 
   describe('quand requête PUT sur `/api/utilisateur`', () => {

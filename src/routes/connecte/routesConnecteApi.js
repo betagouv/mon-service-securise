@@ -231,7 +231,6 @@ const routesConnecteApi = ({
         idUtilisateur,
         motDePasse
       );
-      requete.session.token = utilisateur.genereToken();
       reponse.json({ idUtilisateur });
     }
   );
