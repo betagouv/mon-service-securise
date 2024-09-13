@@ -197,7 +197,7 @@ const middlewareFantaisie = {
   },
 
   verificationJWT: (requete, _reponse, suite) => {
-    requete.source = sourceAuthentification;
+    requete.sourceAuthentification = sourceAuthentification;
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
     verificationJWTMenee = true;

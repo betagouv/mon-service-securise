@@ -86,7 +86,7 @@ const middleware = (configuration = {}) => {
 
     requete.idUtilisateurCourant = token.idUtilisateur;
     requete.cguAcceptees = token.cguAcceptees;
-    requete.source = token.source;
+    requete.sourceAuthentification = token.source;
     return suite();
   };
 
@@ -94,7 +94,7 @@ const middleware = (configuration = {}) => {
     verificationJWT(requete, reponse, () => {
       if (!requete.cguAcceptees) {
         reponse.redirect(
-          requete.source === SourceAuthentification.MSS
+          requete.sourceAuthentification === SourceAuthentification.MSS
             ? '/motDePasse/initialisation'
             : '/acceptationCGU'
         );
