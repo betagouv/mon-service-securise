@@ -15,6 +15,7 @@ const {
 } = require('../erreurs');
 const { ajouteLaRedirectionPostConnexion } = require('./redirection');
 const { extraisIp } = require('./requeteHttp');
+const SourceAuthentification = require('../modeles/sourceAuthentification');
 
 const middleware = (configuration = {}) => {
   const {
@@ -85,13 +86,19 @@ const middleware = (configuration = {}) => {
 
     requete.idUtilisateurCourant = token.idUtilisateur;
     requete.cguAcceptees = token.cguAcceptees;
+    requete.source = token.source;
     return suite();
   };
 
   const verificationAcceptationCGU = (requete, reponse, suite) => {
     verificationJWT(requete, reponse, () => {
-      if (!requete.cguAcceptees) reponse.redirect('/motDePasse/initialisation');
-      else suite();
+      if (!requete.cguAcceptees) {
+        reponse.redirect(
+          requete.source === SourceAuthentification.MSS
+            ? '/motDePasse/initialisation'
+            : '/acceptationCGU'
+        );
+      } else suite();
     });
   };
 
