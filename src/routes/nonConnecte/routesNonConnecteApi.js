@@ -117,7 +117,7 @@ const routesNonConnecteApi = ({
 
         await depotDonnees.enregistreNouvelleConnexionUtilisateur(
           utilisateur.id,
-          'MSS'
+          SourceAuthentification.MSS
         );
 
         reponse.sendStatus(200);
