@@ -20,6 +20,8 @@ const {
   Permissions: { LECTURE },
   tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
+const { enObjet } = require('../../aides/cookie');
+const SourceAuthentification = require('../../../src/modeles/sourceAuthentification');
 
 describe('Le serveur MSS des routes privées /api/*', () => {
   const testeur = testeurMSS();
@@ -586,6 +588,75 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           expect(motDePasseMisAJour).to.be(true);
         });
       });
+    });
+  });
+
+  describe('quand requête PUT sur `/api/utilisateur/acceptationCGU`', () => {
+    let utilisateur;
+    beforeEach(() => {
+      utilisateur = {
+        id: '123',
+        email: 'jean.dujardin@beta.gouv.fr',
+        genereToken: (source) => `untoken-${source}`,
+      };
+
+      const depotDonnees = testeur.depotDonnees();
+      depotDonnees.utilisateur = async () => utilisateur;
+      depotDonnees.valideAcceptationCGUPourUtilisateur = async () =>
+        utilisateur;
+      testeur.middleware().reinitialise({
+        idUtilisateur: utilisateur.id,
+        acceptationCGU: false,
+        authentificationAUtiliser: SourceAuthentification.AGENT_CONNECT,
+      });
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeJWT(
+        {
+          method: 'PUT',
+          url: 'http://localhost:1234/api/utilisateur/acceptationCGU',
+        },
+        done
+      );
+    });
+
+    it("demande au dépôt d'enregistrer que les CGU sont acceptées", async () => {
+      let utilisateurQuiAccepte;
+      testeur.depotDonnees().valideAcceptationCGUPourUtilisateur = async (
+        u
+      ) => {
+        utilisateurQuiAccepte = u;
+        return u;
+      };
+
+      await axios.put('http://localhost:1234/api/utilisateur/acceptationCGU', {
+        cguAcceptees: 'true',
+      });
+
+      expect(utilisateurQuiAccepte.id).to.be('123');
+    });
+
+    it('pose un nouveau jeton', async () => {
+      const decodeTokenDuCookie = (reponse, indiceHeader) => {
+        const headerCookie = reponse.headers['set-cookie'];
+        const cookieSession = enObjet(headerCookie[indiceHeader]);
+        return JSON.parse(
+          Buffer.from(cookieSession.token, 'base64').toString()
+        );
+      };
+      testeur.depotDonnees().valideAcceptationCGUPourUtilisateur = async (u) =>
+        u;
+
+      const reponse = await axios.put(
+        'http://localhost:1234/api/utilisateur/acceptationCGU',
+        {
+          cguAcceptees: 'true',
+        }
+      );
+
+      const token = decodeTokenDuCookie(reponse, 0);
+      expect(token.token).to.be('untoken-AGENT_CONNECT');
     });
   });
 
