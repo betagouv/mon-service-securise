@@ -1,4 +1,5 @@
 const express = require('express');
+const SourceAuthentification = require('../../modeles/sourceAuthentification');
 
 const routesNonConnecteOidc = ({ adaptateurOidc, depotDonnees }) => {
   const routes = express.Router();
@@ -42,7 +43,7 @@ const routesNonConnecteOidc = ({ adaptateurOidc, depotDonnees }) => {
         requete.session.token = utilisateurExistant.genereToken();
         await depotDonnees.enregistreNouvelleConnexionUtilisateur(
           utilisateurExistant.id,
-          'AGENT_CONNECT'
+          SourceAuthentification.AGENT_CONNECT
         );
         reponse.render('apresAuthentification');
       } else {
