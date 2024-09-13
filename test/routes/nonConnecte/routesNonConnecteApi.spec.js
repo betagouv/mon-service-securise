@@ -8,13 +8,7 @@ const {
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
-const { enObjet } = require('../../aides/cookie');
-
-const decodeTokenDuCookie = (reponse, indiceHeader) => {
-  const headerCookie = reponse.headers['set-cookie'];
-  const cookieSession = enObjet(headerCookie[indiceHeader]);
-  return JSON.parse(Buffer.from(cookieSession.token, 'base64').toString());
-};
+const { decodeTokenDuCookie } = require('../../aides/cookie');
 
 describe('Le serveur MSS des routes publiques /api/*', () => {
   const testeur = testeurMSS();
