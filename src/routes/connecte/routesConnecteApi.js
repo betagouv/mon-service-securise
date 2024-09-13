@@ -214,6 +214,14 @@ const routesConnecteApi = ({
     }
   );
 
+  routes.put('/utilisateur/acceptationCGU', async (requete, reponse) => {
+    const idUtilisateur = requete.idUtilisateurCourant;
+    let u = await depotDonnees.utilisateur(idUtilisateur);
+    u = await depotDonnees.valideAcceptationCGUPourUtilisateur(u);
+    requete.session.token = u.genereToken(requete.source);
+    reponse.sendStatus(200);
+  });
+
   routes.patch(
     '/motDePasse',
     middleware.challengeMotDePasse,

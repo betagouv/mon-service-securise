@@ -8,6 +8,7 @@ const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
 const { unService } = require('../constructeurs/constructeurService');
+const SourceAuthentification = require('../../src/modeles/sourceAuthentification');
 
 const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
   const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) => {
@@ -49,6 +50,7 @@ let expirationCookieRepoussee = false;
 let headersPositionnes = false;
 let serviceTrouve;
 let idUtilisateurCourant;
+let sourceAuthentification;
 let listesAseptisees = [];
 let listeAdressesIPsAutorisee = [];
 let parametresAseptises = [];
@@ -71,6 +73,7 @@ const middlewareFantaisie = {
       .avecNomService('un service')
       .construis(),
     autorisationACharger = uneAutorisation().construis(),
+    authentificationAUtiliser = SourceAuthentification.MSS,
   }) => {
     autorisationsChargees = false;
     cguAcceptees = acceptationCGU;
@@ -93,6 +96,7 @@ const middlewareFantaisie = {
     verificationCGUMenee = false;
     challengeMotDePasseEffectue = false;
     versionBuildeeChargee = false;
+    sourceAuthentification = authentificationAUtiliser;
   },
 
   ajouteVersionFichierCompiles: (_requete, _reponse, suite) => {
@@ -193,6 +197,7 @@ const middlewareFantaisie = {
   },
 
   verificationJWT: (requete, _reponse, suite) => {
+    requete.source = sourceAuthentification;
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
     verificationJWTMenee = true;
