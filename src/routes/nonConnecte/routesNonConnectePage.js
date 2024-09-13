@@ -6,6 +6,7 @@ const {
 } = require('../../http/redirection');
 const CmsCrisp = require('../../cms/cmsCrisp');
 const { ErreurArticleCrispIntrouvable } = require('../../erreurs');
+const SourceAuthentification = require('../../modeles/sourceAuthentification');
 
 const routesNonConnectePage = ({
   adaptateurCmsCrisp,
@@ -103,7 +104,9 @@ const routesNonConnectePage = ({
         return;
       }
 
-      requete.session.token = utilisateur.genereToken();
+      requete.session.token = utilisateur.genereToken(
+        SourceAuthentification.MSS
+      );
       reponse.render('motDePasse/edition', { utilisateur });
     }
   );

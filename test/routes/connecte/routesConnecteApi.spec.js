@@ -381,7 +381,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       utilisateur = {
         id: '123',
         email: 'jean.dujardin@beta.gouv.fr',
-        genereToken: () => 'un token',
+        genereToken: (source) => {
+          expect(source).to.be('MSS');
+          return 'un token';
+        },
       };
 
       const depotDonnees = testeur.depotDonnees();
@@ -589,7 +592,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   describe('quand requête PATCH sur `/api/motDePasse', () => {
     let utilisateur;
     beforeEach(() => {
-      utilisateur = { id: '123', genereToken: () => 'un token' };
+      utilisateur = { id: '123' };
       testeur.depotDonnees().metsAJourMotDePasse = async () => utilisateur;
     });
 

@@ -27,6 +27,7 @@ const {
 } = require('../../modeles/autorisations/gestionDroits');
 const routesConnecteApiVisiteGuidee = require('./routesConnecteApiVisiteGuidee');
 const routesConnecteApiNotifications = require('./routesConnecteApiNotifications');
+const SourceAuthentification = require('../../modeles/sourceAuthentification');
 
 const routesConnecteApi = ({
   middleware,
@@ -205,7 +206,7 @@ const routesConnecteApi = ({
             infolettreAcceptee: true,
           });
         }
-        requete.session.token = u.genereToken();
+        requete.session.token = u.genereToken(SourceAuthentification.MSS);
         reponse.json({ idUtilisateur });
       } catch (e) {
         suite(e);
@@ -227,10 +228,7 @@ const routesConnecteApi = ({
         return;
       }
 
-      const utilisateur = await depotDonnees.metsAJourMotDePasse(
-        idUtilisateur,
-        motDePasse
-      );
+      await depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse);
       reponse.json({ idUtilisateur });
     }
   );

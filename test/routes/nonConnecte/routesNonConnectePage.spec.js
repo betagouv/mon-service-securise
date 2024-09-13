@@ -124,7 +124,10 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     describe('avec idReset valide', () => {
       const utilisateur = {
         id: '123',
-        genereToken: () => 'un token',
+        genereToken: (source) => {
+          expect(source).to.be('MSS');
+          return 'un token';
+        },
         accepteCGU: () => false,
       };
 
