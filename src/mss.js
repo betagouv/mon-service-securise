@@ -37,6 +37,7 @@ const creeServeur = (
   adaptateurJournalMSS,
   adaptateurOidc,
   procedures,
+  inscriptionUtilisateur,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
   avecPageErreur = process.env.NODE_ENV === 'production'
 ) => {
@@ -107,6 +108,7 @@ const creeServeur = (
       serviceAnnuaire,
       adaptateurTracking,
       adaptateurMail,
+      inscriptionUtilisateur,
     })
   );
   app.use(

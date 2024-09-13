@@ -9,6 +9,9 @@ const MSS = require('../../src/mss');
 const Referentiel = require('../../src/referentiel');
 const middleware = require('../mocks/middleware');
 const { fabriqueProcedures } = require('../../src/routes/procedures');
+const {
+  fabriqueInscriptionUtilisateur,
+} = require('../../src/modeles/inscriptionUtilisateur');
 
 const testeurMss = () => {
   let serviceAnnuaire;
@@ -27,6 +30,7 @@ const testeurMss = () => {
   let moteurRegles;
   let referentiel;
   let procedures;
+  let inscriptionUtilisateur;
   let serveur;
 
   const verifieJetonDepose = (reponse, suite) => {
@@ -100,10 +104,16 @@ const testeurMss = () => {
       adaptateurMail,
       adaptateurTracking,
     });
+
     moteurRegles = new MoteurRegles(referentiel);
     depotVide()
       .then((depot) => {
         depotDonnees = depot;
+        inscriptionUtilisateur = fabriqueInscriptionUtilisateur({
+          adaptateurMail,
+          adaptateurTracking,
+          depotDonnees,
+        });
         serveur = MSS.creeServeur(
           depotDonnees,
           middleware,
@@ -122,6 +132,7 @@ const testeurMss = () => {
           adaptateurJournalMSS,
           adaptateurOidc,
           procedures,
+          inscriptionUtilisateur,
           false,
           false
         );

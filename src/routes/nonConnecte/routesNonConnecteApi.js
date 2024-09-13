@@ -16,8 +16,8 @@ const routesNonConnecteApi = ({
   referentiel,
   depotDonnees,
   serviceAnnuaire,
-  adaptateurTracking,
   adaptateurMail,
+  inscriptionUtilisateur,
 }) => {
   const routes = express.Router();
 
@@ -26,37 +26,6 @@ const routesNonConnecteApi = ({
     middleware.protegeTrafic(),
     middleware.aseptise(...Utilisateur.nomsProprietesBase(), 'siretEntite'),
     async (requete, reponse, suite) => {
-      const verifieSuccesEnvoiMessage = async (promesseEnvoiMessage) => {
-        try {
-          await promesseEnvoiMessage;
-        } catch {
-          throw new EchecEnvoiMessage();
-        }
-      };
-
-      const creeContactEmail = async (utilisateur) => {
-        await verifieSuccesEnvoiMessage(
-          adaptateurMail.creeContact(
-            utilisateur.email,
-            utilisateur.prenom ?? '',
-            utilisateur.nom ?? '',
-            utilisateur.telephone ?? '',
-            !utilisateur.infolettreAcceptee,
-            false
-          )
-        );
-      };
-
-      const envoieMessageFinalisationInscription = async (utilisateur) => {
-        await verifieSuccesEnvoiMessage(
-          adaptateurMail.envoieMessageFinalisationInscription(
-            utilisateur.email,
-            utilisateur.idResetMotDePasse,
-            utilisateur.prenom
-          )
-        );
-      };
-
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
       donnees.cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
       donnees.email = requete.body.email?.toLowerCase();
@@ -71,13 +40,12 @@ const routesNonConnecteApi = ({
           );
       } else {
         try {
-          await creeContactEmail(donnees);
-          const utilisateur = await depotDonnees.nouvelUtilisateur(donnees);
-          if (!requete.body.agentConnect) {
-            await envoieMessageFinalisationInscription(utilisateur);
-          }
+          const { agentConnect } = requete.body;
 
-          await adaptateurTracking.envoieTrackingInscription(utilisateur.email);
+          const utilisateur = await inscriptionUtilisateur.inscrisUtilisateur(
+            donnees,
+            agentConnect
+          );
 
           reponse.json({ idUtilisateur: utilisateur.id });
         } catch (e) {
