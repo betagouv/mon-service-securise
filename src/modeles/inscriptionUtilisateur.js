@@ -1,4 +1,5 @@
 const { EchecEnvoiMessage } = require('../erreurs');
+const SourceAuthentification = require('./sourceAuthentification');
 
 function fabriqueInscriptionUtilisateur(config = {}) {
   const { adaptateurMail, adaptateurTracking, depotDonnees } = config;
@@ -34,10 +35,10 @@ function fabriqueInscriptionUtilisateur(config = {}) {
     );
   };
 
-  const inscrisUtilisateur = async (donnees, agentConnect) => {
+  const inscrisUtilisateur = async (donnees, source) => {
     await creeContactEmail(donnees);
     const utilisateur = await depotDonnees.nouvelUtilisateur(donnees);
-    if (!agentConnect) {
+    if (source === SourceAuthentification.MSS) {
       await envoieMessageFinalisationInscription(utilisateur);
     }
 
