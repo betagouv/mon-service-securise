@@ -120,15 +120,21 @@ describe('Un utilisateur', () => {
       { adaptateurJWT }
     );
 
-    adaptateurJWT.genereToken = (idUtilisateur, cguAcceptees, callback) => {
+    adaptateurJWT.genereToken = (
+      idUtilisateur,
+      cguAcceptees,
+      source,
+      callback
+    ) => {
       expect(idUtilisateur).to.equal('123');
       expect(cguAcceptees).to.be(false);
+      expect(source).to.be('source');
 
       let aucuneErreur;
       callback(aucuneErreur, 'un jeton');
     };
 
-    utilisateur.genereToken((erreur, token) => {
+    utilisateur.genereToken('source', (erreur, token) => {
       if (erreur) done(erreur);
       expect(token).to.equal('un jeton');
 
