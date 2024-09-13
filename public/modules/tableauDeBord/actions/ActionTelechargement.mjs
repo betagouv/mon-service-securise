@@ -20,12 +20,17 @@ class ActionTelechargement extends ActionAbstraite {
       return;
     }
 
-    const urlBase = `/api/service/${idService}/pdf/`;
+    const lienSansMiseEnCache = (idLien, document) => {
+      $(idLien).attr(
+        'href',
+        `/api/service/${idService}/pdf/${document}?timestamp=${Date.now()}`
+      );
+    };
 
-    $('#lien-synthese').attr('href', `${urlBase}syntheseSecurite.pdf`);
-    $('#lien-annexes').attr('href', `${urlBase}annexes.pdf`);
-    $('#lien-decision').attr('href', `${urlBase}dossierDecision.pdf`);
-    $('#lien-archive').attr('href', `${urlBase}documentsHomologation.zip`);
+    lienSansMiseEnCache('#lien-synthese', 'syntheseSecurite.pdf');
+    lienSansMiseEnCache('#lien-annexes', 'annexes.pdf');
+    lienSansMiseEnCache('#lien-decision', 'dossierDecision.pdf');
+    lienSansMiseEnCache('#lien-archive', 'documentsHomologation.zip');
 
     const domDocuments = {
       dossierDecision: 'decision',
