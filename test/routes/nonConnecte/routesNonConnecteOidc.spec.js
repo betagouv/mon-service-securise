@@ -129,7 +129,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
       expect(reponse.status).to.be(302);
       expect(reponse.headers.location).to.be(
-        '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu&siret=12345&ac'
+        '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu&siret=12345&agentConnect'
       );
     });
 
@@ -149,7 +149,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       );
 
       expect(reponse.headers.location).to.be(
-        '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu&siret=&ac'
+        '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu&siret=&agentConnect'
       );
     });
 
@@ -170,7 +170,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       );
 
       expect(reponse.headers.location).to.be(
-        '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu%2Btag%40mail.com&siret=123&ac'
+        '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu%2Btag%40mail.com&siret=123&agentConnect'
       );
     });
 

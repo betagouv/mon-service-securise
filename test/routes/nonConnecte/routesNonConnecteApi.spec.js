@@ -244,7 +244,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       axios
         .post('http://localhost:1234/api/utilisateur', {
           ...donneesRequete,
-          ac: true,
+          agentConnect: true,
         })
         .then(() => done())
         .catch(done);
