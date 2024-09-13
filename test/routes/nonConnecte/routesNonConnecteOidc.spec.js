@@ -178,7 +178,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       const utilisateurAuthentifie = unUtilisateur()
         .avecEmail('jean.dujardin@beta.gouv.fr')
         .construis();
-      utilisateurAuthentifie.genereToken = () => 'unJetonJWT';
+      utilisateurAuthentifie.genereToken = (source) => `unJetonJWT-${source}`;
       testeur.depotDonnees().utilisateurAvecEmail = (email) =>
         email === 'jean.dujardin@beta.gouv.fr'
           ? utilisateurAuthentifie
@@ -189,7 +189,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       );
 
       const tokenDecode = decodeTokenDuCookie(reponse, 1);
-      expect(tokenDecode.token).to.be('unJetonJWT');
+      expect(tokenDecode.token).to.be('unJetonJWT-AGENT_CONNECT');
     });
 
     it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {
