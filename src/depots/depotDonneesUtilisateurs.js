@@ -176,9 +176,6 @@ const creeDepot = (config = {}) => {
 
     const id = adaptateurUUID.genereUUID();
     const idResetMotDePasse = adaptateurUUID.genereUUID();
-    donneesUtilisateur.motDePasse = await adaptateurChiffrement.hacheBCrypt(
-      adaptateurUUID.genereUUID()
-    );
     donneesUtilisateur.transactionnelAccepte = true;
     if (donneesUtilisateur.entite) {
       donneesUtilisateur.entite = await Entite.completeDonnees(
