@@ -73,7 +73,7 @@ const routesNonConnecteApi = ({
         try {
           await creeContactEmail(donnees);
           const utilisateur = await depotDonnees.nouvelUtilisateur(donnees);
-          if (!requete.body.ac) {
+          if (!requete.body.agentConnect) {
             await envoieMessageFinalisationInscription(utilisateur);
           }
 

@@ -53,7 +53,7 @@ const routesNonConnecteOidc = ({ adaptateurOidc, depotDonnees }) => {
           email,
           siret: siret || '',
         });
-        reponse.redirect(`/inscription?${params}&ac`);
+        reponse.redirect(`/inscription?${params}&agentConnect`);
       }
     } catch (e) {
       reponse.status(401).send("Erreur d'authentification");
