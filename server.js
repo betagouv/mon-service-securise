@@ -33,6 +33,9 @@ const adaptateurCmsCrisp = require('./src/adaptateurs/adaptateurCmsCrisp');
 const {
   fabriqueAdaptateurOidc,
 } = require('./src/adaptateurs/fabriqueAdaptateurOidc');
+const {
+  fabriqueInscriptionUtilisateur,
+} = require('./src/modeles/inscriptionUtilisateur');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
@@ -78,6 +81,12 @@ const procedures = fabriqueProcedures({
   adaptateurTracking,
 });
 
+const inscriptionUtilisateur = fabriqueInscriptionUtilisateur({
+  adaptateurMail,
+  adaptateurTracking,
+  depotDonnees,
+});
+
 const serveur = MSS.creeServeur(
   depotDonnees,
   middleware,
@@ -95,7 +104,8 @@ const serveur = MSS.creeServeur(
   adaptateurProtection,
   adaptateurJournal,
   adaptateurOidc,
-  procedures
+  procedures,
+  inscriptionUtilisateur
 );
 
 serveur.ecoute(port, () => {
