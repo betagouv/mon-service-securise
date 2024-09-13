@@ -10,6 +10,7 @@ const {
   messageErreurDonneesUtilisateur,
   obtentionDonneesDeBaseUtilisateur,
 } = require('../mappeur/utilisateur');
+const SourceAuthentification = require('../../modeles/sourceAuthentification');
 
 const routesNonConnecteApi = ({
   middleware,
@@ -42,9 +43,12 @@ const routesNonConnecteApi = ({
         try {
           const { agentConnect } = requete.body;
 
+          const source = agentConnect
+            ? SourceAuthentification.AGENT_CONNECT
+            : SourceAuthentification.MSS;
           const utilisateur = await inscriptionUtilisateur.inscrisUtilisateur(
             donnees,
-            agentConnect
+            source
           );
 
           reponse.json({ idUtilisateur: utilisateur.id });
