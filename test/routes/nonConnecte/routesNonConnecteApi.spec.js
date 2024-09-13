@@ -8,6 +8,13 @@ const {
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
+const { enObjet } = require('../../aides/cookie');
+
+const decodeTokenDuCookie = (reponse, indiceHeader) => {
+  const headerCookie = reponse.headers['set-cookie'];
+  const cookieSession = enObjet(headerCookie[indiceHeader]);
+  return JSON.parse(Buffer.from(cookieSession.token, 'base64').toString());
+};
 
 describe('Le serveur MSS des routes publiques /api/*', () => {
   const testeur = testeurMSS();
@@ -435,8 +442,10 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     describe("avec authentification réussie de l'utilisateur", () => {
+      let utilisateur;
+
       beforeEach(() => {
-        const utilisateur = {
+        utilisateur = {
           email: 'jean.dupont@mail.fr',
           id: '456',
           toJSON: () => ({ prenomNom: 'Jean Dupont' }),
@@ -478,6 +487,18 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
         expect(idUtilisateurPasse).to.be('456');
         expect(sourcePassee).to.be('MSS');
+      });
+
+      it('ajoute la source dans le jeton', async () => {
+        utilisateur.genereToken = (source) => `un token de-${source}`;
+
+        const reponse = await axios.post('http://localhost:1234/api/token', {
+          login: 'jean.dupont@mail.fr',
+          motDePasse: 'mdp_12345',
+        });
+
+        const token = decodeTokenDuCookie(reponse, 0);
+        expect(token.token).to.be('un token de-MSS');
       });
     });
 

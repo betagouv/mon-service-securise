@@ -117,8 +117,13 @@ class Utilisateur extends Base {
     return !!this.transactionnelAccepte;
   }
 
-  genereToken(callback) {
-    return this.adaptateurJWT.genereToken(this.id, this.cguAcceptees, callback);
+  genereToken(source, callback) {
+    return this.adaptateurJWT.genereToken(
+      this.id,
+      this.cguAcceptees,
+      source,
+      callback
+    );
   }
 
   initiales() {

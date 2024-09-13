@@ -111,8 +111,9 @@ const routesNonConnecteApi = ({
           return;
         }
 
-        const token = utilisateur.genereToken();
-        requete.session.token = token;
+        requete.session.token = utilisateur.genereToken(
+          SourceAuthentification.MSS
+        );
 
         await depotDonnees.enregistreNouvelleConnexionUtilisateur(
           utilisateur.id,
