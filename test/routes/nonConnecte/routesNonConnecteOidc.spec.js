@@ -1,16 +1,10 @@
-const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const { enObjet, decodeTokenDuCookie } = require('../../aides/cookie');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
-
-const requeteSansRedirection = async (url) =>
-  axios.get(url, {
-    validateStatus: () => true, // pour ne pas qu’un statut 302 lance une erreur
-    maxRedirects: 0,
-  });
+const { requeteSansRedirection } = require('../../aides/http');
 
 describe('Le serveur MSS des routes publiques /oidc/*', () => {
   const testeur = testeurMSS();
