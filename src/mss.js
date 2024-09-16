@@ -16,6 +16,7 @@ const routesNonConnecteApiStyles = require('./routes/nonConnecte/routesNonConnec
 const routesNonConnectePage = require('./routes/nonConnecte/routesNonConnectePage');
 const routesConnectePage = require('./routes/connecte/routesConnectePage');
 const routesNonConnecteOidc = require('./routes/nonConnecte/routesNonConnecteOidc');
+const routesConnecteOidc = require('./routes/connecte/routesConnecteOidc');
 
 require('dotenv').config();
 
@@ -116,6 +117,13 @@ const creeServeur = (
     routesNonConnecteOidc({
       adaptateurOidc,
       depotDonnees,
+    })
+  );
+  app.use(
+    '/oidc',
+    routesConnecteOidc({
+      middleware,
+      adaptateurOidc,
     })
   );
   app.use(

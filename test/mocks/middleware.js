@@ -63,6 +63,7 @@ let traficProtege = false;
 let verificationJWTMenee = false;
 let verificationCGUMenee = false;
 let versionBuildeeChargee = false;
+let idTokenAgentConnect;
 
 const middlewareFantaisie = {
   reinitialise: ({
@@ -74,6 +75,7 @@ const middlewareFantaisie = {
       .construis(),
     autorisationACharger = uneAutorisation().construis(),
     authentificationAUtiliser = SourceAuthentification.MSS,
+    idTokenAgentConnectAUtiliser = undefined,
   }) => {
     autorisationsChargees = false;
     cguAcceptees = acceptationCGU;
@@ -97,6 +99,7 @@ const middlewareFantaisie = {
     challengeMotDePasseEffectue = false;
     versionBuildeeChargee = false;
     sourceAuthentification = authentificationAUtiliser;
+    idTokenAgentConnect = idTokenAgentConnectAUtiliser;
   },
 
   ajouteVersionFichierCompiles: (_requete, _reponse, suite) => {
@@ -197,6 +200,9 @@ const middlewareFantaisie = {
   },
 
   verificationJWT: (requete, _reponse, suite) => {
+    if (idTokenAgentConnect) {
+      requete.session.AgentConnectIdToken = idTokenAgentConnect;
+    }
     requete.sourceAuthentification = sourceAuthentification;
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;
