@@ -82,6 +82,9 @@ const {
   consigneConnexionUtilisateurDansJournal,
 } = require('./abonnements/consigneConnexionUtilisateurDansJournal');
 const EvenementNouvelleConnexionUtilisateur = require('./evenementNouvelleConnexionUtilisateur');
+const {
+  sauvegardeEvolutionIndiceCyber,
+} = require('./abonnements/sauvegardeEvolutionIndiceCyber');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -122,6 +125,7 @@ const cableTousLesAbonnes = (
     }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
     consigneActiviteMesure({ depotDonnees }),
+    sauvegardeEvolutionIndiceCyber({ depotDonnees }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementMesureServiceSupprimee, [
