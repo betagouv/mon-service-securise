@@ -16,6 +16,7 @@ class ActionExport extends ActionAbstraite {
   initialise({ idServices }) {
     const queryString = new URLSearchParams();
     idServices.forEach((id) => queryString.append('idsServices', id));
+    queryString.append('timestamp', Date.now().toString());
 
     $('#action-export-csv').attr(
       'href',
