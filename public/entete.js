@@ -12,24 +12,31 @@ $(() => {
 <div class='nom-utilisateur-courant'>${donneesUtilisateur.prenomNom}</div>
   `);
 
-  const creeMenu = () =>
+  const creeMenu = (sourceAuthentification) =>
     $(`
 <div class="menu">
   <a href="/tableauDeBord">Mon tableau de bord</a>
   <a href="/utilisateur/edition">Mettre à jour mon profil</a>
-  <a href="/motDePasse/edition">Changer mon mot de passe</a>  
+  ${
+    sourceAuthentification === 'MSS'
+      ? '<a href="/motDePasse/edition">Changer mon mot de passe</a>'
+      : ''
+  }
 </div>
   `);
 
   const deconnexion = () =>
     '<a class="deconnexion" href="/connexion">Se déconnecter</a>';
 
-  const ajouteUtilisateurCourantDans = (selecteur, donneesUtilisateur) => {
+  const ajouteUtilisateurCourantDans = (
+    selecteur,
+    { utilisateur: donneesUtilisateur, sourceAuthentification }
+  ) => {
     const $conteneur = $(selecteur);
 
     const $identiteUtilisateur =
       creeConteneurUtilisateurCourant(donneesUtilisateur);
-    const $menu = creeMenu();
+    const $menu = creeMenu(sourceAuthentification);
     $menu.toggle();
 
     $conteneur.on('click', () => $menu.toggle());
@@ -49,10 +56,7 @@ $(() => {
   axios
     .get('/api/utilisateurCourant')
     .then((reponse) =>
-      ajouteUtilisateurCourantDans(
-        '.utilisateur-courant',
-        reponse.data.utilisateur
-      )
+      ajouteUtilisateurCourantDans('.utilisateur-courant', reponse.data)
     )
     .catch(() => ajouteBoutonConnexionDans('.utilisateur-courant'));
 });
