@@ -33,6 +33,22 @@ const genereDemandeAutorisation = async () => {
   };
 };
 
+const genereDemandeDeconnexion = async (idToken) => {
+  const state = generators.state(32);
+  const client = await recupereClient();
+  const url = client.endSessionUrl({
+    post_logout_redirect_uri:
+      configurationOidc.urlRedirectionApresDeconnexion(),
+    id_token_hint: idToken,
+    state,
+  });
+
+  return {
+    url,
+    state,
+  };
+};
+
 const recupereJeton = async (requete) => {
   const client = await recupereClient();
   const params = client.callbackParams(requete);
@@ -63,6 +79,7 @@ const recupereInformationsUtilisateur = async (accessToken) => {
 
 module.exports = {
   genereDemandeAutorisation,
+  genereDemandeDeconnexion,
   recupereInformationsUtilisateur,
   recupereJeton,
 };
