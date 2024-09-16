@@ -136,6 +136,10 @@ class StatistiquesMesuresGenerales {
   totauxParTypeEtParCategorie() {
     return this.parTypeEtParCategorie;
   }
+
+  totauxParCategorie() {
+    return this.toutesCategories;
+  }
 }
 
 module.exports = { StatistiquesMesuresGenerales };
