@@ -78,6 +78,8 @@ const routesConnectePage = ({
     }
   );
 
+  routes.get('/deconnexion', (_, reponse) => reponse.redirect('/connexion'));
+
   routes.get(
     '/visiteGuidee/:idEtape',
     middleware.verificationAcceptationCGU,
