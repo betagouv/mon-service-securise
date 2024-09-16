@@ -4,6 +4,7 @@ const testeurMSS = require('../testeurMSS');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
+const { requeteSansRedirection } = require('../../aides/http');
 
 describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   const testeur = testeurMSS();
@@ -94,6 +95,21 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
           'http://localhost:1234/visiteGuidee/decrire',
           done
         );
+    });
+  });
+
+  describe('quand requête GET sur `/deconnexion', () => {
+    describe("en tant qu'utilisateur connecté avec MSS", () => {
+      it('redirige vers /connexion', async () => {
+        testeur.middleware().reinitialise({ sourceAuthentification: 'MSS' });
+
+        const reponse = await requeteSansRedirection(
+          'http://localhost:1234/deconnexion'
+        );
+
+        expect(reponse.status).to.be(302);
+        expect(reponse.headers.location).to.be('/connexion');
+      });
     });
   });
 });

@@ -26,7 +26,7 @@ $(() => {
   `);
 
   const deconnexion = () =>
-    '<a class="deconnexion" href="/connexion">Se déconnecter</a>';
+    '<a class="deconnexion" href="/deconnexion">Se déconnecter</a>';
 
   const ajouteUtilisateurCourantDans = (
     selecteur,
