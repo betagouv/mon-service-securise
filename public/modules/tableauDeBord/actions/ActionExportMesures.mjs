@@ -15,10 +15,14 @@ class ActionExportMesures extends ActionAbstraite {
     const urlBase = `/service/${idService}/mesures/export.csv`;
     $('.document-telechargeable').show();
 
-    $('#lien-sans-donnees-additionnelles').attr('href', `${urlBase}`);
+    const timestamp = `timestamp=${Date.now()}`;
+    $('#lien-sans-donnees-additionnelles').attr(
+      'href',
+      `${urlBase}?${timestamp}`
+    );
     $('#lien-avec-donnees-additionnelles').attr(
       'href',
-      `${urlBase}?avecDonneesAdditionnelles=true`
+      `${urlBase}?avecDonneesAdditionnelles=true&${timestamp}`
     );
   }
 }
