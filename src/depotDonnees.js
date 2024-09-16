@@ -10,6 +10,7 @@ const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
 const depotDonneesNotifications = require('./depots/depotDonneesNotifications');
 const depotDonneesSuggestionsActions = require('./depots/depotDonneesSuggestionsActions');
 const depotDonneesActivitesMesure = require('./depots/depotDonneesActivitesMesure');
+const depotDonneesEvolutionsIndiceCyber = require('./depots/depotDonneesEvolutionsIndiceCyber');
 
 const {
   fabriqueAdaptateurChiffrement,
@@ -77,6 +78,11 @@ const creeDepot = (config = {}) => {
   const depotActivitesMesure = depotDonneesActivitesMesure.creeDepot({
     adaptateurPersistance,
   });
+
+  const depotEvolutionsIndiceCyber =
+    depotDonneesEvolutionsIndiceCyber.creeDepot({
+      adaptateurPersistance,
+    });
 
   const {
     ajouteDescriptionService,
@@ -155,6 +161,9 @@ const creeDepot = (config = {}) => {
 
   const { ajouteActiviteMesure, lisActivitesMesure } = depotActivitesMesure;
 
+  const { lisDernierIndiceCyber, sauvegardeNouvelIndiceCyber } =
+    depotEvolutionsIndiceCyber;
+
   return {
     accesAutorise,
     acquitteSuggestionAction,
@@ -177,6 +186,7 @@ const creeDepot = (config = {}) => {
     enregistreDossier,
     finaliseDossierCourant,
     lisActivitesMesure,
+    lisDernierIndiceCyber,
     lisNotificationsExpirationHomologationEnDate,
     lisParcoursUtilisateur,
     marqueNouveauteLue,
@@ -195,6 +205,7 @@ const creeDepot = (config = {}) => {
     remplaceRisquesSpecifiquesDuService,
     sauvegardeAutorisation,
     sauvegardeParcoursUtilisateur,
+    sauvegardeNouvelIndiceCyber,
     enregistreNouvelleConnexionUtilisateur,
     sauvegardeNotificationsExpirationHomologation,
     supprimeContributeur,
