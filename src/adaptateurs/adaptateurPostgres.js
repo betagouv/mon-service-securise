@@ -474,6 +474,31 @@ const nouvelAdaptateur = (env) => {
       .update({ date_acquittement: knex.fn.now() });
   };
 
+  const sauvegardeNouvelIndiceCyber = async (
+    idService,
+    indiceCyber,
+    indiceCyberPersonnalise,
+    mesuresParStatut
+  ) =>
+    knex('evolutions_indice_cyber').insert({
+      id_service: idService,
+      indice_cyber: indiceCyber,
+      indice_cyber_personnalise: indiceCyberPersonnalise,
+      mesures_par_statut: mesuresParStatut,
+    });
+
+  const lisDernierIndiceCyber = async (idService) =>
+    knex('evolutions_indice_cyber')
+      .where({ id_service: idService })
+      .select({
+        idService: 'id_service',
+        indiceCyber: 'indice_cyber',
+        indiceCyberPersonnalise: 'indice_cyber_personnalise',
+        mesuresParStatut: 'mesures_par_statut',
+      })
+      .orderBy('date', 'desc')
+      .first();
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -490,6 +515,7 @@ const nouvelAdaptateur = (env) => {
     service,
     serviceExisteAvecHashNom,
     services,
+    lisDernierIndiceCyber,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     marqueNouveauteLue,
@@ -503,6 +529,7 @@ const nouvelAdaptateur = (env) => {
     sauvegardeService,
     sauvegardeAutorisation,
     sauvegardeNotificationsExpirationHomologation,
+    sauvegardeNouvelIndiceCyber,
     sauvegardeParcoursUtilisateur,
     suggestionsActionsService,
     supprimeAutorisation,
