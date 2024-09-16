@@ -284,6 +284,7 @@ const routesConnecteApi = ({
     if (idUtilisateur) {
       depotDonnees.utilisateur(idUtilisateur).then((utilisateur) => {
         reponse.json({
+          sourceAuthentification: requete.sourceAuthentification,
           utilisateur: {
             prenomNom: utilisateur.prenomNom(),
           },

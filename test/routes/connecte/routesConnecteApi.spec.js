@@ -848,6 +848,21 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(utilisateur.prenomNom).to.equal('Marie Jeanne');
     });
 
+    it("renvoie la source d'authentification", async () => {
+      testeur
+        .middleware()
+        .reinitialise({ idUtilisateur: '123', sourceAuth: 'MSS' });
+      const depotDonnees = testeur.depotDonnees();
+      depotDonnees.utilisateur = async () => unUtilisateur().construis();
+
+      const response = await axios.get(
+        'http://localhost:1234/api/utilisateurCourant'
+      );
+
+      const { sourceAuthentification } = response.data;
+      expect(sourceAuthentification).to.equal('MSS');
+    });
+
     it("répond avec un code 401 quand il n'y a pas d'identifiant", (done) => {
       testeur.middleware().reinitialise({ idUtilisateur: '' });
 
