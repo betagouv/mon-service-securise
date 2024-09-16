@@ -101,7 +101,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   describe('quand requête GET sur `/deconnexion', () => {
     describe("en tant qu'utilisateur connecté avec MSS", () => {
       it('redirige vers /connexion', async () => {
-        testeur.middleware().reinitialise({ sourceAuthentification: 'MSS' });
+        testeur.middleware().reinitialise({ authentificationAUtiliser: 'MSS' });
 
         const reponse = await requeteSansRedirection(
           'http://localhost:1234/deconnexion'
@@ -109,6 +109,20 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
 
         expect(reponse.status).to.be(302);
         expect(reponse.headers.location).to.be('/connexion');
+      });
+    });
+    describe("en tant qu'utilisateur connecté avec Agent Connect", () => {
+      it('redirige vers /oidc/deconnexion', async () => {
+        testeur
+          .middleware()
+          .reinitialise({ authentificationAUtiliser: 'AGENT_CONNECT' });
+
+        const reponse = await requeteSansRedirection(
+          'http://localhost:1234/deconnexion'
+        );
+
+        expect(reponse.status).to.be(302);
+        expect(reponse.headers.location).to.be('/oidc/deconnexion');
       });
     });
   });
