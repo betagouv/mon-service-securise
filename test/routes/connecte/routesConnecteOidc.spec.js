@@ -1,7 +1,7 @@
 const expect = require('expect.js');
 const { requeteSansRedirection } = require('../../aides/http');
 const testeurMSS = require('../testeurMSS');
-const { decodeTokenDuCookie, enObjet } = require('../../aides/cookie');
+const { enObjet } = require('../../aides/cookie');
 
 describe('Le serveur MSS des routes connectées /oidc/*', () => {
   const testeur = testeurMSS();

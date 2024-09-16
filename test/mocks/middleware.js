@@ -64,6 +64,7 @@ let verificationJWTMenee = false;
 let verificationCGUMenee = false;
 let versionBuildeeChargee = false;
 let idTokenAgentConnect;
+let fonctionDeposeCookie;
 
 const middlewareFantaisie = {
   reinitialise: ({
@@ -76,6 +77,7 @@ const middlewareFantaisie = {
     autorisationACharger = uneAutorisation().construis(),
     authentificationAUtiliser = SourceAuthentification.MSS,
     idTokenAgentConnectAUtiliser = undefined,
+    fonctionDeposeCookieAAppeler = undefined,
   }) => {
     autorisationsChargees = false;
     cguAcceptees = acceptationCGU;
@@ -100,6 +102,7 @@ const middlewareFantaisie = {
     versionBuildeeChargee = false;
     sourceAuthentification = authentificationAUtiliser;
     idTokenAgentConnect = idTokenAgentConnectAUtiliser;
+    fonctionDeposeCookie = fonctionDeposeCookieAAppeler;
   },
 
   ajouteVersionFichierCompiles: (_requete, _reponse, suite) => {
@@ -162,7 +165,10 @@ const middlewareFantaisie = {
 
   idUtilisateurCourant: () => idUtilisateurCourant,
 
-  positionneHeaders: (_requete, _reponse, suite) => {
+  positionneHeaders: (requete, _reponse, suite) => {
+    if (fonctionDeposeCookie) {
+      fonctionDeposeCookie(requete);
+    }
     headersPositionnes = true;
     suite();
   },

@@ -204,4 +204,49 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       expect(sourcePassee).to.be('AGENT_CONNECT');
     });
   });
+
+  describe('quand requête GET sur `/oidc/apres-deconnexion`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({
+        fonctionDeposeCookieAAppeler: (requete) => {
+          requete.cookies.AgentConnectInfo = { state: 'unState' };
+        },
+      });
+    });
+    it('redirige vers la page de connexion', async () => {
+      const reponse = await requeteSansRedirection(
+        'http://localhost:1234/oidc/apres-deconnexion?state=unState'
+      );
+
+      expect(reponse.status).to.be(302);
+      expect(reponse.headers.location).to.be('/connexion');
+    });
+
+    it("supprime la session de l'utilisateur via la page /connexion", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeSuppressionCookie(
+          'http://localhost:1234/oidc/apres-deconnexion?state=unState',
+          done
+        );
+    });
+
+    it("ne déconnecte pas l'utilisateur si le state ne correspond pas", async () => {
+      const reponse = await requeteSansRedirection(
+        'http://localhost:1234/oidc/apres-deconnexion?state=pasLeBonState'
+      );
+
+      expect(reponse.status).to.be(401);
+    });
+
+    it('supprime le cookie contenant le state', async () => {
+      const reponse = await requeteSansRedirection(
+        'http://localhost:1234/oidc/apres-deconnexion?state=unState'
+      );
+
+      const cookies = reponse.headers['set-cookie'];
+      expect(cookies).not.to.be(undefined);
+      expect(enObjet(cookies[0]).AgentConnectInfo).to.be('');
+    });
+  });
 });
