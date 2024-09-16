@@ -78,7 +78,13 @@ const routesConnectePage = ({
     }
   );
 
-  routes.get('/deconnexion', (_, reponse) => reponse.redirect('/connexion'));
+  routes.get('/deconnexion', middleware.verificationJWT, (requete, reponse) => {
+    if (requete.sourceAuthentification === 'MSS') {
+      reponse.redirect('/connexion');
+      return;
+    }
+    reponse.redirect('/oidc/deconnexion');
+  });
 
   routes.get(
     '/visiteGuidee/:idEtape',
