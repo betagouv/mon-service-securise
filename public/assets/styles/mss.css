@@ -173,3 +173,57 @@ section:last-of-type {
   font-weight: 500;
   gap: 12px;
 }
+
+.agentconnect-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.agentconnect-button {
+  background-color: transparent !important;
+  background-image: url('/statique/assets/images/agent_connect.svg');
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  width: 206px;
+  height: 60px;
+  border: none;
+  display: flex;
+  margin: 0 auto;
+}
+
+.agentconnect-button:hover {
+  background-image: url('/statique/assets/images/agent_connect_hover.svg');
+}
+
+.separation-agent-connect {
+  border-top: none;
+  border-color: var(--liseres-fonce);
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+}
+
+.separation-agent-connect::before {
+  content: 'OU';
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: var(--texte-clair);
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 0 8px;
+}
+
+#connexion {
+  margin-bottom: 2em;
+}
