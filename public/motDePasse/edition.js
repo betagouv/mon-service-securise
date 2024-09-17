@@ -22,10 +22,9 @@ $(() => {
   $(selecteurFormulaire).on('submit', (e) => {
     e.preventDefault();
 
-    const challenge = JSON.parse($('#challenge-mot-de-passe').text());
+    const enModeInitialisation = JSON.parse($('#mode-initialisation').text());
     const { estInvitation } = JSON.parse($('#invitation-contributeur').text());
-    const estInitialisation = !challenge.afficheChallengeMotDePasse;
-    if (estInitialisation) {
+    if (enModeInitialisation) {
       axios
         .put('/api/motDePasse', {
           motDePasse: $('#mot-de-passe').val(),

@@ -113,7 +113,10 @@ const routesNonConnectePage = ({
       requete.session.token = utilisateur.genereToken(
         SourceAuthentification.MSS
       );
-      reponse.render('motDePasse/edition', { utilisateur });
+      reponse.render('motDePasse/edition', {
+        utilisateur,
+        enModeInitialisation: true,
+      });
     }
   );
 
