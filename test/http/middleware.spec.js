@@ -1031,4 +1031,19 @@ describe('Le middleware MSS', () => {
       });
     });
   });
+
+  it("ajoute le feature flag 'agentConnectActif' si les variables d'environnement sont présentes", (done) => {
+    const adaptateurEnvironnement = {
+      featureFlag: () => ({
+        avecAgentConnect: () => true,
+      }),
+    };
+
+    const middleware = Middleware({ adaptateurEnvironnement });
+
+    middleware.chargeEtatAgentConnect(requete, reponse, () => {
+      expect(reponse.locals.agentConnectActif).to.be(true);
+      done();
+    });
+  });
 });
