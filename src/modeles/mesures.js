@@ -53,8 +53,11 @@ class Mesures extends InformationsService {
   }
 
   indiceCyberPersonnalise() {
+    const statistiquesSansLesNonPrisesEnCompte =
+      this.statistiquesMesuresGeneralesEtSpecifiques(true);
+
     return new IndiceCyber(
-      this.statistiquesMesuresGeneralesEtSpecifiques().totauxParTypeEtParCategorie(),
+      statistiquesSansLesNonPrisesEnCompte.totauxParTypeEtParCategorie(),
       this.referentiel
     ).indiceCyber();
   }
@@ -153,7 +156,7 @@ class Mesures extends InformationsService {
     );
   }
 
-  statistiquesMesuresGeneralesEtSpecifiques() {
+  statistiquesMesuresGeneralesEtSpecifiques(exclueMesuresNonPrisesEnCompte) {
     return new StatistiquesMesures(
       {
         mesuresGenerales: this.mesuresGenerales,
@@ -161,7 +164,7 @@ class Mesures extends InformationsService {
         mesuresSpecifiques: this.mesuresSpecifiques.items,
       },
       this.referentiel,
-      true
+      exclueMesuresNonPrisesEnCompte
     );
   }
 
