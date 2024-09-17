@@ -441,3 +441,8 @@ button.bouton.en-cours-chargement::before {
 select#estimation-nombre-services {
   appearance: auto;
 }
+
+#bouton-connexion {
+  width: 100%;
+  padding: 8px 0;
+}
