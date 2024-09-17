@@ -52,6 +52,10 @@ const featureFlag = () => ({
   visiteGuideeActive: () => process.env.FEATURE_FLAG_VISITE_GUIDEE === 'true',
   avecPlanAction: () =>
     process.env.VITE_FEATURE_FLAG_AVEC_PLAN_ACTION === 'true',
+  avecAgentConnect: () =>
+    process.env.OIDC_URL_BASE &&
+    process.env.OIDC_CLIENT_ID &&
+    process.env.OIDC_CLIENT_SECRET,
 });
 
 const versionDeBuild = () => {

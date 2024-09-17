@@ -230,6 +230,14 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
+  const chargeEtatAgentConnect = async (_requete, reponse, suite) => {
+    reponse.locals.agentConnectActif = adaptateurEnvironnement
+      .featureFlag()
+      .avecAgentConnect();
+
+    suite();
+  };
+
   const chargePreferencesUtilisateur = (requete, reponse, suite) => {
     reponse.locals.preferencesUtilisateur = {
       etatMenuNavigation: requete.cookies['etat-menu-navigation'],
@@ -342,6 +350,7 @@ const middleware = (configuration = {}) => {
     aseptiseListe,
     aseptiseListes,
     chargeAutorisationsService,
+    chargeEtatAgentConnect,
     chargeEtatVisiteGuidee,
     chargePreferencesUtilisateur,
     positionneHeaders,
