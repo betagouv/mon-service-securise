@@ -132,114 +132,124 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       expect(tokenDecode.AgentConnectIdToken).to.be('unIdToken');
     });
 
-    it("affiche la page d’inscription si l'utilisateur est inconnu", async () => {
-      testeur.adaptateurOidc().recupereJeton = async () => ({
-        accessToken: 'unAccessToken',
+    describe("si l'utilisateur est inconnu", () => {
+      it('affiche la page d’inscription', async () => {
+        testeur.adaptateurOidc().recupereJeton = async () => ({
+          accessToken: 'unAccessToken',
+        });
+        testeur.adaptateurOidc().recupereInformationsUtilisateur = async (
+          accessToken
+        ) => {
+          if (accessToken === 'unAccessToken')
+            return {
+              email: 'unEmailInconnu',
+              nom: 'Dujardin',
+              prenom: 'Jean',
+              siret: '12345',
+            };
+          throw new Error(
+            'La méthode doit être appellée avec un `accessToken`'
+          );
+        };
+
+        const reponse = await requeteSansRedirection(
+          'http://localhost:1234/oidc/apres-authentification'
+        );
+
+        expect(reponse.status).to.be(302);
+        expect(reponse.headers.location).to.be(
+          '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu&siret=12345&agentConnect'
+        );
       });
-      testeur.adaptateurOidc().recupereInformationsUtilisateur = async (
-        accessToken
-      ) => {
-        if (accessToken === 'unAccessToken')
-          return {
+
+      it("affiche la page d’inscription avec un siret vide s'il n'est pas défini", async () => {
+        testeur.adaptateurOidc().recupereJeton = async () => ({
+          accessToken: 'unAccessToken',
+        });
+        testeur.adaptateurOidc().recupereInformationsUtilisateur =
+          async () => ({
             email: 'unEmailInconnu',
             nom: 'Dujardin',
             prenom: 'Jean',
-            siret: '12345',
-          };
-        throw new Error('La méthode doit être appellée avec un `accessToken`');
-      };
+            siret: undefined,
+          });
 
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-authentification'
-      );
+        const reponse = await requeteSansRedirection(
+          'http://localhost:1234/oidc/apres-authentification'
+        );
 
-      expect(reponse.status).to.be(302);
-      expect(reponse.headers.location).to.be(
-        '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu&siret=12345&agentConnect'
-      );
-    });
-
-    it("affiche la page d’inscription avec un siret vide s'il n'est pas défini", async () => {
-      testeur.adaptateurOidc().recupereJeton = async () => ({
-        accessToken: 'unAccessToken',
-      });
-      testeur.adaptateurOidc().recupereInformationsUtilisateur = async () => ({
-        email: 'unEmailInconnu',
-        nom: 'Dujardin',
-        prenom: 'Jean',
-        siret: undefined,
+        expect(reponse.headers.location).to.be(
+          '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu&siret=&agentConnect'
+        );
       });
 
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-authentification'
-      );
+      it("encode les paramètres dans l'url", async () => {
+        testeur.adaptateurOidc().recupereJeton = async () => ({
+          accessToken: 'unAccessToken',
+        });
+        testeur.depotDonnees().utilisateurAvecEmail = () => undefined;
+        testeur.adaptateurOidc().recupereInformationsUtilisateur =
+          async () => ({
+            email: 'unEmailInconnu+tag@mail.com',
+            nom: 'Dujardin',
+            prenom: 'Jean',
+            siret: '123',
+          });
 
-      expect(reponse.headers.location).to.be(
-        '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu&siret=&agentConnect'
-      );
-    });
+        const reponse = await requeteSansRedirection(
+          'http://localhost:1234/oidc/apres-authentification'
+        );
 
-    it("encode les paramètres dans l'url", async () => {
-      testeur.adaptateurOidc().recupereJeton = async () => ({
-        accessToken: 'unAccessToken',
+        expect(reponse.headers.location).to.be(
+          '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu%2Btag%40mail.com&siret=123&agentConnect'
+        );
       });
-      testeur.depotDonnees().utilisateurAvecEmail = () => undefined;
-      testeur.adaptateurOidc().recupereInformationsUtilisateur = async () => ({
-        email: 'unEmailInconnu+tag@mail.com',
-        nom: 'Dujardin',
-        prenom: 'Jean',
-        siret: '123',
+    });
+
+    describe("si l'utilisateur existe", () => {
+      it("connecte l'utilisateur", async () => {
+        const utilisateurAuthentifie = unUtilisateur()
+          .avecEmail('jean.dujardin@beta.gouv.fr')
+          .construis();
+        utilisateurAuthentifie.genereToken = (source) => `unJetonJWT-${source}`;
+        testeur.depotDonnees().utilisateurAvecEmail = (email) =>
+          email === 'jean.dujardin@beta.gouv.fr'
+            ? utilisateurAuthentifie
+            : undefined;
+
+        const reponse = await requeteSansRedirection(
+          'http://localhost:1234/oidc/apres-authentification'
+        );
+
+        const tokenDecode = decodeTokenDuCookie(reponse, 1);
+        expect(tokenDecode.token).to.be('unJetonJWT-AGENT_CONNECT');
       });
 
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-authentification'
-      );
+      it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {
+        let idUtilisateurPasse = {};
+        let sourcePassee;
+        testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = async (
+          idUtilisateur,
+          source
+        ) => {
+          idUtilisateurPasse = idUtilisateur;
+          sourcePassee = source;
+        };
 
-      expect(reponse.headers.location).to.be(
-        '/inscription?nom=Dujardin&prenom=Jean&email=unEmailInconnu%2Btag%40mail.com&siret=123&agentConnect'
-      );
-    });
+        const utilisateurAuthentifie = unUtilisateur()
+          .avecId('456')
+          .construis();
+        utilisateurAuthentifie.genereToken = () => 'unJetonJWT';
+        testeur.depotDonnees().utilisateurAvecEmail = async () =>
+          utilisateurAuthentifie;
 
-    it("connecte l'utilisateur s'il existe", async () => {
-      const utilisateurAuthentifie = unUtilisateur()
-        .avecEmail('jean.dujardin@beta.gouv.fr')
-        .construis();
-      utilisateurAuthentifie.genereToken = (source) => `unJetonJWT-${source}`;
-      testeur.depotDonnees().utilisateurAvecEmail = (email) =>
-        email === 'jean.dujardin@beta.gouv.fr'
-          ? utilisateurAuthentifie
-          : undefined;
+        await requeteSansRedirection(
+          'http://localhost:1234/oidc/apres-authentification'
+        );
 
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-authentification'
-      );
-
-      const tokenDecode = decodeTokenDuCookie(reponse, 1);
-      expect(tokenDecode.token).to.be('unJetonJWT-AGENT_CONNECT');
-    });
-
-    it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {
-      let idUtilisateurPasse = {};
-      let sourcePassee;
-      testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = async (
-        idUtilisateur,
-        source
-      ) => {
-        idUtilisateurPasse = idUtilisateur;
-        sourcePassee = source;
-      };
-
-      const utilisateurAuthentifie = unUtilisateur().avecId('456').construis();
-      utilisateurAuthentifie.genereToken = () => 'unJetonJWT';
-      testeur.depotDonnees().utilisateurAvecEmail = async () =>
-        utilisateurAuthentifie;
-
-      await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-authentification'
-      );
-
-      expect(idUtilisateurPasse).to.be('456');
-      expect(sourcePassee).to.be('AGENT_CONNECT');
+        expect(idUtilisateurPasse).to.be('456');
+        expect(sourcePassee).to.be('AGENT_CONNECT');
+      });
     });
   });
 
