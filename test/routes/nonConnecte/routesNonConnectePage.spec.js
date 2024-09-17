@@ -105,6 +105,15 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
           done
         );
     });
+
+    it("charge l'état d'activation d'AgentConnect", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteChargeActivationAgentConnect(
+          'http://localhost:1234/connexion',
+          done
+        );
+    });
   });
 
   describe('quand requête GET sur `/reinitialisationMotDePasse`', () => {
@@ -120,6 +129,15 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
   describe('quand requête GET sur `/initialisationMotDePasse/:idReset`', () => {
     const uuid = '109156be-c4fb-41ea-b1b4-efe1671c5836';
+
+    it("charge l'état d'activation d'AgentConnect", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteChargeActivationAgentConnect(
+          'http://localhost:1234/initialisationMotDePasse/unUUID',
+          done
+        );
+    });
 
     describe('avec idReset valide', () => {
       const utilisateur = {
