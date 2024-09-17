@@ -117,6 +117,7 @@ const creeServeur = (
     routesNonConnecteOidc({
       adaptateurOidc,
       depotDonnees,
+      middleware,
     })
   );
   app.use(

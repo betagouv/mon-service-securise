@@ -1,28 +1,36 @@
 const express = require('express');
 const SourceAuthentification = require('../../modeles/sourceAuthentification');
 
-const routesNonConnecteOidc = ({ adaptateurOidc, depotDonnees }) => {
+const routesNonConnecteOidc = ({
+  adaptateurOidc,
+  depotDonnees,
+  middleware,
+}) => {
   const routes = express.Router();
 
-  routes.get('/connexion', async (_requete, reponse, suite) => {
-    try {
-      const { url, state, nonce } =
-        await adaptateurOidc.genereDemandeAutorisation();
-      reponse.cookie(
-        'AgentConnectInfo',
-        { state, nonce },
-        {
-          maxAge: 30_000,
-          httpOnly: true,
-          sameSite: 'none',
-          secure: true,
-        }
-      );
-      reponse.redirect(url);
-    } catch (e) {
-      suite(e);
+  routes.get(
+    '/connexion',
+    middleware.suppressionCookie,
+    async (_requete, reponse, suite) => {
+      try {
+        const { url, state, nonce } =
+          await adaptateurOidc.genereDemandeAutorisation();
+        reponse.cookie(
+          'AgentConnectInfo',
+          { state, nonce },
+          {
+            maxAge: 30_000,
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+          }
+        );
+        reponse.redirect(url);
+      } catch (e) {
+        suite(e);
+      }
     }
-  });
+  );
 
   routes.get('/apres-authentification', async (requete, reponse) => {
     try {

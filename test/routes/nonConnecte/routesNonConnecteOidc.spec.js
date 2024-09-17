@@ -24,6 +24,15 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       });
     });
 
+    it("déconnecte l'utilisateur courant", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeSuppressionCookie(
+          'http://localhost:1234/oidc/connexion',
+          done
+        );
+    });
+
     it('redirige vers la page d’autorisation', async () => {
       const reponse = await requeteSansRedirection(
         'http://localhost:1234/oidc/connexion'
