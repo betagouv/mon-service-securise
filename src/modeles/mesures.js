@@ -2,9 +2,7 @@ const InformationsService = require('./informationsService');
 const MesuresGenerales = require('./mesuresGenerales');
 const MesuresSpecifiques = require('./mesuresSpecifiques');
 const Referentiel = require('../referentiel');
-const {
-  StatistiquesMesuresGenerales,
-} = require('./statistiquesMesuresGenerales');
+const { StatistiquesMesures } = require('./statistiquesMesures');
 const { IndiceCyber } = require('./indiceCyber');
 const { CompletudeMesures } = require('./completudeMesures');
 
@@ -74,7 +72,7 @@ class Mesures extends InformationsService {
   }
 
   nombreTotalNonFait() {
-    const statistiquesAvecNonFait = new StatistiquesMesuresGenerales(
+    const statistiquesAvecNonFait = new StatistiquesMesures(
       {
         mesuresGenerales: this.mesuresGenerales,
         mesuresPersonnalisees: this.mesuresPersonnalisees,
@@ -145,7 +143,7 @@ class Mesures extends InformationsService {
   }
 
   statistiquesMesuresGenerales() {
-    return new StatistiquesMesuresGenerales(
+    return new StatistiquesMesures(
       {
         mesuresGenerales: this.mesuresGenerales,
         mesuresPersonnalisees: this.mesuresPersonnalisees,
@@ -155,7 +153,7 @@ class Mesures extends InformationsService {
   }
 
   statistiquesMesures() {
-    return new StatistiquesMesuresGenerales(
+    return new StatistiquesMesures(
       {
         mesuresGenerales: this.mesuresGenerales,
         mesuresPersonnalisees: this.mesuresPersonnalisees,

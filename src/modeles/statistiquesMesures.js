@@ -18,7 +18,7 @@ const initialiseStatsParCategorie = (referentiel, complementaire) =>
     {}
   );
 
-class StatistiquesMesuresGenerales {
+class StatistiquesMesures {
   static valide({ mesuresPersonnalisees }, referentiel) {
     referentiel.verifieCategoriesMesuresSontRepertoriees(
       Object.values(mesuresPersonnalisees).map((m) => m.categorie)
@@ -30,7 +30,7 @@ class StatistiquesMesuresGenerales {
     referentiel,
     ignoreMesuresNonPrisesEnCompte = false
   ) {
-    StatistiquesMesuresGenerales.valide({ mesuresPersonnalisees }, referentiel);
+    StatistiquesMesures.valide({ mesuresPersonnalisees }, referentiel);
 
     this.parCategorie = initialiseStatsParCategorie(referentiel);
     const complementaires = () => ({ total: 0, restant: 0, aRemplir: 0 });
@@ -142,4 +142,4 @@ class StatistiquesMesuresGenerales {
   }
 }
 
-module.exports = { StatistiquesMesuresGenerales };
+module.exports = { StatistiquesMesures };
