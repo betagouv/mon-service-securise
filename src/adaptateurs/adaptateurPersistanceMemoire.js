@@ -261,8 +261,26 @@ const nouvelAdaptateur = (
       (a) => a.idService === idService && a.idMesure === idMesure
     );
 
+  const ajouteActiviteMesure = (
+    idActeur,
+    idService,
+    idMesure,
+    type,
+    typeMesure,
+    details
+  ) =>
+    donnees.activitesMesure.push({
+      idActeur,
+      idService,
+      idMesure,
+      type,
+      typeMesure,
+      details,
+    });
+
   return {
     activitesMesure,
+    ajouteActiviteMesure,
     ajouteAutorisation,
     ajouteSuggestionAction,
     ajouteTacheDeService,
