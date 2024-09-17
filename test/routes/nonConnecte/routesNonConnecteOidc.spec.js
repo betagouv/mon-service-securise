@@ -53,6 +53,28 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       expect(cookie).to.contain('unState');
       expect(cookie).to.contain('unNonce');
     });
+
+    it("ajoute l'url de redirection au cookie si elle est présente dans la query", async () => {
+      const reponse = await requeteSansRedirection(
+        'http://localhost:1234/oidc/connexion?urlRedirection=%2FtableauDeBord'
+      );
+
+      const headerCookie = reponse.headers['set-cookie'];
+      const cookie = enObjet(headerCookie[0]).AgentConnectInfo;
+
+      expect(cookie).to.contain('tableauDeBord');
+    });
+
+    it("n'ajoute pas l'url de redirection au cookie si elle est présente dans la query mais illégale (dangereuse)", async () => {
+      const reponse = await requeteSansRedirection(
+        'http://localhost:1234/oidc/connexion?urlRedirection=https%3A%2F%2Funautresite.com'
+      );
+
+      const headerCookie = reponse.headers['set-cookie'];
+      const cookie = enObjet(headerCookie[0]).AgentConnectInfo;
+
+      expect(cookie).not.to.contain('unautresite');
+    });
   });
 
   describe('quand requête GET sur `/oidc/apres-authentification`', () => {
