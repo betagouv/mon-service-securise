@@ -2,6 +2,7 @@ extends ../mssConnecte
 
 include ../fragments/utilisateur/preferencesCommunication
 include ../fragments/utilisateur/questionCgu
+include ../fragments/connexionAgentConnect
 
 block title
   title Mot de passe | MonServiceSécurisé
@@ -23,6 +24,10 @@ block header-gauche
 
 block main
   form.etroit.mot-de-passe#edition
+    if enModeInitialisation
+      if agentConnectActif
+        +connexionAgentConnect()
+        hr.separation-agent-connect
     .mention champ obligatoire
     section
       div Le mot de passe doit comporter <b>12 caractères mininum</b> contenant au moins :

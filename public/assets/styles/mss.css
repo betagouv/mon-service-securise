@@ -205,10 +205,11 @@ section:last-of-type {
 .separation-agent-connect {
   border-top: none;
   border-color: var(--liseres-fonce);
-  margin-bottom: 32px;
+  margin: 32px 0;
   position: relative;
   z-index: 1;
   overflow: visible;
+  width: 100%;
 }
 
 .separation-agent-connect::before {
