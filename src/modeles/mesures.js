@@ -54,7 +54,7 @@ class Mesures extends InformationsService {
 
   indiceCyberPersonnalise() {
     return new IndiceCyber(
-      this.statistiquesMesures().totauxParTypeEtParCategorie(),
+      this.statistiquesMesuresGeneralesEtSpecifiques().totauxParTypeEtParCategorie(),
       this.referentiel
     ).indiceCyber();
   }
@@ -152,7 +152,7 @@ class Mesures extends InformationsService {
     );
   }
 
-  statistiquesMesures() {
+  statistiquesMesuresGeneralesEtSpecifiques() {
     return new StatistiquesMesures(
       {
         mesuresGenerales: this.mesuresGenerales,

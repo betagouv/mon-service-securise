@@ -269,8 +269,8 @@ class Service {
     return this.risques.risquesSpecifiques;
   }
 
-  statistiquesMesures() {
-    return this.mesures.statistiquesMesures();
+  statistiquesMesuresGeneralesEtSpecifiques() {
+    return this.mesures.statistiquesMesuresGeneralesEtSpecifiques();
   }
 
   statistiquesMesuresGenerales() {
