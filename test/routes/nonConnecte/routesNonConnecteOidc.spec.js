@@ -91,6 +91,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       testeur.depotDonnees().utilisateurAvecEmail = (email) =>
         email === 'unEmailInconnu' ? undefined : utilisateur;
       testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = () => {};
+      testeur.depotDonnees().metsAJourUtilisateur = () => {};
       testeur.middleware().reinitialise({
         fonctionDeposeCookieAAppeler: (requete) =>
           (requete.cookies.AgentConnectInfo = {
@@ -249,6 +250,41 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
         expect(idUtilisateurPasse).to.be('456');
         expect(sourcePassee).to.be('AGENT_CONNECT');
+      });
+
+      it("enrichis le profil de l'utilisateur s'il n'est pas complet avec les informations AgentConnect", async () => {
+        let donneesRecues;
+        testeur.depotDonnees().metsAJourUtilisateur = async (
+          idUtilisateur,
+          donnees
+        ) => {
+          donneesRecues = { idUtilisateur, donnees };
+        };
+        testeur.adaptateurOidc().recupereInformationsUtilisateur =
+          async () => ({
+            email: 'jean.dujardin@beta.gouv.fr',
+            nom: 'Dujardin',
+            prenom: 'Jean',
+            siret: '12345',
+          });
+
+        const utilisateurAuthentifie = unUtilisateur()
+          .avecEmail('jean.dujardin@beta.gouv.fr')
+          .quiSAppelle('')
+          .avecId('456')
+          .construis();
+        utilisateurAuthentifie.genereToken = () => 'unJetonJWT';
+        testeur.depotDonnees().utilisateurAvecEmail = async () =>
+          utilisateurAuthentifie;
+
+        await requeteSansRedirection(
+          'http://localhost:1234/oidc/apres-authentification'
+        );
+
+        expect(donneesRecues.idUtilisateur).to.be('456');
+        expect(donneesRecues.donnees.prenom).to.be('Jean');
+        expect(donneesRecues.donnees.nom).to.be('Dujardin');
+        expect(donneesRecues.donnees.entite.siret).to.be('12345');
       });
     });
   });

@@ -46,25 +46,29 @@ const routesNonConnecteOidc = ({
 
       reponse.clearCookie('AgentConnectInfo');
 
-      const informationsUtilisateur =
+      const { nom, prenom, email, siret } =
         await adaptateurOidc.recupereInformationsUtilisateur(accessToken);
-
-      const utilisateurExistant = await depotDonnees.utilisateurAvecEmail(
-        informationsUtilisateur.email
-      );
+      const utilisateurExistant =
+        await depotDonnees.utilisateurAvecEmail(email);
 
       if (utilisateurExistant) {
         requete.session.AgentConnectIdToken = idToken;
         requete.session.token = utilisateurExistant.genereToken(
           SourceAuthentification.AGENT_CONNECT
         );
+        if (!utilisateurExistant.aLesInformationsAgentConnect()) {
+          await depotDonnees.metsAJourUtilisateur(utilisateurExistant.id, {
+            nom,
+            prenom,
+            entite: { siret },
+          });
+        }
         await depotDonnees.enregistreNouvelleConnexionUtilisateur(
           utilisateurExistant.id,
           SourceAuthentification.AGENT_CONNECT
         );
         reponse.render('apresAuthentification', { urlRedirection });
       } else {
-        const { nom, prenom, email, siret } = informationsUtilisateur;
         const params = new URLSearchParams({
           nom,
           prenom,
