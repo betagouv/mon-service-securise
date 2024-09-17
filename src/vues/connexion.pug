@@ -30,7 +30,7 @@ block main
           input(id='mot-de-passe', type='password')
       .message-erreur L'email et le mot de passe saisis ne correspondent à aucun compte. Veuillez renseigner les identifiants d'un compte existant.
       a(href='/reinitialisationMotDePasse' class='texte-normal') mot de passe oublié
-    button.bouton Valider
+    button.bouton#bouton-connexion Connexion
 
     if agentConnectActif
       hr.separation-agent-connect
