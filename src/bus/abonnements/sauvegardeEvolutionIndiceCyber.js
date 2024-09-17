@@ -25,15 +25,17 @@ function sauvegardeEvolutionIndiceCyber({ depotDonnees }) {
       !dernierIndiceCyber ||
       modificationIndiceCyber ||
       modificationIndiceCyberPersonnalise
-    )
+    ) {
+      const avecLesNonPrisesEnCompte =
+        service.statistiquesMesuresGeneralesEtSpecifiques(false);
+
       await depotDonnees.sauvegardeNouvelIndiceCyber({
         idService: service.id,
         indiceCyber,
         indiceCyberPersonnalise,
-        mesuresParStatut: service
-          .statistiquesMesuresGeneralesEtSpecifiques()
-          .totauxParCategorie(),
+        mesuresParStatut: avecLesNonPrisesEnCompte.totauxParCategorie(),
       });
+    }
   };
 }
 
