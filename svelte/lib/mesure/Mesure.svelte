@@ -4,7 +4,11 @@
   import type { IdService } from '../tableauDesMesures/tableauDesMesures.d';
 
   import { configurationAffichage, store } from './mesure.store';
-  import { enregistreMesures, enregistreRetourUtilisateur } from './mesure.api';
+  import {
+    enregistreCommentaire,
+    enregistreMesures,
+    enregistreRetourUtilisateur,
+  } from './mesure.api';
   import { toasterStore } from '../ui/stores/toaster.store';
   import Onglet from '../ui/Onglet.svelte';
   import { featureFlags } from '../featureFlags';
@@ -62,6 +66,18 @@
 
   const activeOngletMesure = () => {
     ongletActif = 'mesure';
+  };
+
+  $: doitAfficherActions = ongletActif !== 'activite';
+  let contenuCommentaire: string = '';
+  const sauvegardeCommentaire = async () => {
+    const idMesure =
+      $store.mesureEditee.metadonnees.typeMesure === 'GENERALE'
+        ? ($store.mesureEditee.metadonnees.idMesure as string)
+        : $store.mesureEditee.mesure.id;
+    await enregistreCommentaire(idService, idMesure, contenuCommentaire);
+    contenuCommentaire = '';
+    document.body.dispatchEvent(new CustomEvent('activites-modifiees'));
   };
 </script>
 
@@ -123,17 +139,33 @@
       />
     </div>
     <div class="conteneur-actions">
-      {#if $configurationAffichage.doitAfficherSuppression}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <p on:click={store.afficheEtapeSuppression}>Supprimer la mesure</p>
+      {#if doitAfficherActions}
+        {#if $configurationAffichage.doitAfficherSuppression}
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <p on:click={store.afficheEtapeSuppression}>Supprimer la mesure</p>
+        {/if}
+        <button
+          type="submit"
+          class="bouton"
+          class:en-cours-chargement={enCoursEnvoi}
+          disabled={enCoursEnvoi}
+          >Enregistrer
+        </button>
+      {:else}
+        <form on:submit|preventDefault={sauvegardeCommentaire}>
+          <input
+            type="text"
+            placeholder="Écrivez un commentaire..."
+            bind:value={contenuCommentaire}
+          />
+          <button type="submit" class="envoi-commentaire">
+            <img
+              src="/statique/assets/images/icone_envoyer.svg"
+              alt="Envoyer le commentaire"
+            />
+          </button>
+        </form>
       {/if}
-      <button
-        type="submit"
-        class="bouton"
-        class:en-cours-chargement={enCoursEnvoi}
-        disabled={enCoursEnvoi}
-        >Enregistrer
-      </button>
     </div>
   </Formulaire>
 {/if}
@@ -197,5 +229,30 @@
     display: flex;
     gap: 8px;
     margin-bottom: 26px;
+  }
+
+  form {
+    padding: 0 24px 0 36px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+  }
+
+  form input {
+    border: 2px solid #eff6ff;
+    border-radius: 4px;
+    background: white;
+    color: #667892;
+  }
+
+  button[type='submit'].envoi-commentaire {
+    margin: 0;
+    padding: 8px;
+    border: none;
+    background: none;
+    display: flex;
+    cursor: pointer;
   }
 </style>
