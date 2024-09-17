@@ -57,24 +57,29 @@ const routesNonConnectePage = ({
     reponse.render('activation');
   });
 
-  routes.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
-    const { urlRedirection } = requete.query;
+  routes.get(
+    '/connexion',
+    middleware.suppressionCookie,
+    middleware.chargeEtatAgentConnect,
+    (requete, reponse) => {
+      const { urlRedirection } = requete.query;
 
-    if (!urlRedirection) {
-      reponse.render('connexion');
-      return;
+      if (!urlRedirection) {
+        reponse.render('connexion');
+        return;
+      }
+
+      if (!estUrlLegalePourRedirection(urlRedirection)) {
+        // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
+        reponse.redirect('connexion');
+        return;
+      }
+
+      reponse.render('connexion', {
+        urlRedirection: construisUrlAbsolueVersPage(urlRedirection),
+      });
     }
-
-    if (!estUrlLegalePourRedirection(urlRedirection)) {
-      // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
-      reponse.redirect('connexion');
-      return;
-    }
-
-    reponse.render('connexion', {
-      urlRedirection: construisUrlAbsolueVersPage(urlRedirection),
-    });
-  });
+  );
 
   routes.get(
     '/reinitialisationMotDePasse',
@@ -87,6 +92,7 @@ const routesNonConnectePage = ({
   routes.get(
     '/initialisationMotDePasse/:idReset',
     middleware.aseptise('idReset'),
+    middleware.chargeEtatAgentConnect,
     async (requete, reponse) => {
       const { idReset } = requete.params;
 
