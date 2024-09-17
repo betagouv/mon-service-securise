@@ -3,7 +3,7 @@ const expect = require('expect.js');
 const Referentiel = require('../../src/referentiel');
 const {
   desStatistiques,
-} = require('../constructeurs/constructeurStatistiquesMesuresGenerales');
+} = require('../constructeurs/constructeurStatistiquesMesures');
 const { IndiceCyber } = require('../../src/modeles/indiceCyber');
 
 describe("L'indice cyber", () => {

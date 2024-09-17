@@ -1,9 +1,9 @@
 const {
-  StatistiquesMesuresGenerales,
-} = require('../../src/modeles/statistiquesMesuresGenerales');
+  StatistiquesMesures,
+} = require('../../src/modeles/statistiquesMesures');
 const MesuresGenerales = require('../../src/modeles/mesuresGenerales');
 
-class ConstructeurStatistiquesMesuresGenerales {
+class ConstructeurStatistiquesMesures {
   constructor(referentiel) {
     this.donnees = {
       mesuresGenerales: [],
@@ -35,7 +35,7 @@ class ConstructeurStatistiquesMesuresGenerales {
   }
 
   construis() {
-    return new StatistiquesMesuresGenerales(
+    return new StatistiquesMesures(
       {
         mesuresGenerales: new MesuresGenerales(
           { mesuresGenerales: this.donnees.mesuresGenerales },
@@ -51,6 +51,6 @@ class ConstructeurStatistiquesMesuresGenerales {
 }
 
 const desStatistiques = (referentiel) =>
-  new ConstructeurStatistiquesMesuresGenerales(referentiel);
+  new ConstructeurStatistiquesMesures(referentiel);
 
 module.exports = { desStatistiques };

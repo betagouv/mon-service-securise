@@ -2,7 +2,7 @@ const expect = require('expect.js');
 const { CompletudeMesures } = require('../../src/modeles/completudeMesures');
 const {
   desStatistiques,
-} = require('../constructeurs/constructeurStatistiquesMesuresGenerales');
+} = require('../constructeurs/constructeurStatistiquesMesures');
 const Referentiel = require('../../src/referentiel');
 const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
 

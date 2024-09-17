@@ -4,7 +4,7 @@ const Referentiel = require('../../src/referentiel');
 const { ErreurCategorieInconnue } = require('../../src/erreurs');
 const {
   desStatistiques,
-} = require('../constructeurs/constructeurStatistiquesMesuresGenerales');
+} = require('../constructeurs/constructeurStatistiquesMesures');
 
 describe('Les statistiques des mesures générales', () => {
   it('vérifient que les catégories sont présentes dans le référentiel', () => {
