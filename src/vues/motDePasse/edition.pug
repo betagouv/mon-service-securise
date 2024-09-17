@@ -14,7 +14,7 @@ block header-gauche
   .conteneur-logo
     a.logo-mss(href='/tableauDeBord' title='Retour au tableau de bord')
   .titre-page
-    if afficheChallengeMotDePasse
+    if !enModeInitialisation
       h3 Changez votre mot de passe
     else
       h3 Créez votre mot de passe
@@ -36,7 +36,7 @@ block main
         Évitez d'utiliser des mots du dictionnaire, des suites de lettres, des suites de chiffres,
         des dates, des informations personnelles (ex : nom, prénom, date de naissance).
 
-      if afficheChallengeMotDePasse
+      if !enModeInitialisation
         label.requis Mot de passe actuel
           input(id='mot-de-passe-challenge', name = 'motDePasseChallenge', type='password', required)
           .message-erreur-specifique Le mot de passe actuel saisi est incorrect
@@ -57,7 +57,7 @@ block main
 
   script(type = 'module', src = '/statique/motDePasse/brancheValidationMotDePasse.js')
   script(type = 'module', src = '/statique/motDePasse/edition.js')
-  script(id = 'challenge-mot-de-passe', type = 'application/json').
-    !{JSON.stringify({ afficheChallengeMotDePasse })}
+  script(id = 'mode-initialisation', type = 'application/json').
+    !{JSON.stringify({ ...enModeInitialisation })}
   script(id = 'invitation-contributeur', type = 'application/json').
     !{JSON.stringify({ estInvitation: !utilisateur.accepteCGU() })}

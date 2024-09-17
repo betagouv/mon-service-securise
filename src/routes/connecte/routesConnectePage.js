@@ -25,7 +25,6 @@ const routesConnectePage = ({
       depotDonnees.utilisateur(idUtilisateur).then((utilisateur) =>
         reponse.render('motDePasse/edition', {
           utilisateur,
-          afficheChallengeMotDePasse: true,
         })
       );
     }
