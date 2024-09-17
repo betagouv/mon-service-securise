@@ -91,6 +91,13 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       testeur.depotDonnees().utilisateurAvecEmail = (email) =>
         email === 'unEmailInconnu' ? undefined : utilisateur;
       testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = () => {};
+      testeur.middleware().reinitialise({
+        fonctionDeposeCookieAAppeler: (requete) =>
+          (requete.cookies.AgentConnectInfo = {
+            state: 'unState',
+            nonce: 'unNonce',
+          }),
+      });
     });
 
     it('sert une page HTML', async () => {

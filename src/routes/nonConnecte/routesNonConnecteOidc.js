@@ -42,6 +42,7 @@ const routesNonConnecteOidc = ({
     try {
       const { idToken, accessToken } =
         await adaptateurOidc.recupereJeton(requete);
+      const { urlRedirection } = requete.cookies.AgentConnectInfo;
 
       reponse.clearCookie('AgentConnectInfo');
 
@@ -61,7 +62,7 @@ const routesNonConnecteOidc = ({
           utilisateurExistant.id,
           SourceAuthentification.AGENT_CONNECT
         );
-        reponse.render('apresAuthentification');
+        reponse.render('apresAuthentification', { urlRedirection });
       } else {
         const { nom, prenom, email, siret } = informationsUtilisateur;
         const params = new URLSearchParams({
