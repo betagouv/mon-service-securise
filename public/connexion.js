@@ -29,5 +29,20 @@ $(() => {
       });
   });
 
+  const brancheRedirectionAgentConnect = () => {
+    const query = new URLSearchParams(window.location.search);
+
+    if (query.has('urlRedirection')) {
+      const $lienConnexion = $('.agentconnect-button');
+      const lienActuel = $lienConnexion.attr('href');
+      const lienAvecRedirection = `${lienActuel}?urlRedirection=${query.get(
+        'urlRedirection'
+      )}`;
+
+      $lienConnexion.attr('href', lienAvecRedirection);
+    }
+  };
+
   brancheChampsMotDePasse($form);
+  brancheRedirectionAgentConnect();
 });
