@@ -1,5 +1,6 @@
 const express = require('express');
 const SourceAuthentification = require('../../modeles/sourceAuthentification');
+const { estUrlLegalePourRedirection } = require('../../http/redirection');
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
@@ -11,13 +12,18 @@ const routesNonConnecteOidc = ({
   routes.get(
     '/connexion',
     middleware.suppressionCookie,
-    async (_requete, reponse, suite) => {
+    async (requete, reponse, suite) => {
       try {
         const { url, state, nonce } =
           await adaptateurOidc.genereDemandeAutorisation();
+
+        const { urlRedirection } = requete.query;
+        const urlValide =
+          urlRedirection && estUrlLegalePourRedirection(urlRedirection);
+
         reponse.cookie(
           'AgentConnectInfo',
-          { state, nonce },
+          { state, nonce, ...(urlValide && { urlRedirection }) },
           {
             maxAge: 120_000,
             httpOnly: true,
