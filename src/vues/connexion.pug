@@ -30,6 +30,15 @@ block main
       a(href='/reinitialisationMotDePasse' class='texte-normal') mot de passe oublié
     button.bouton Valider
 
+    if agentConnectActif
+      div
+        hr.separation-agent-connect
+        a.agentconnect-button(href='/oidc/connexion')
+          span.agentconnect-sr-only S'identifier avec AgentConnect
+        p
+          a(href='https://agentconnect.gouv.fr/' target='_blank' rel='noopener noreferrer' title='Qu’est-ce que AgentConnect ? - nouvelle fenêtre')
+            | Qu'est-ce que AgentConnect ?
+
   script(type = 'module', src='/statique/connexion.js')
   script(id = 'url-redirection', type = 'application/json').
     !{JSON.stringify({urlRedirection: urlRedirection})}
