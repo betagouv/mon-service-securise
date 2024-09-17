@@ -1,4 +1,6 @@
 extends mss
+include ./fragments/connexionAgentConnect
+
 block variables
   - const meta_description = 'Connectez-vous à MonServiceSécurisé pour accéder à votre tableau de bord et continuer à sécuriser vos services numériques en équipe !'
 
@@ -31,13 +33,8 @@ block main
     button.bouton Valider
 
     if agentConnectActif
-      div
-        hr.separation-agent-connect
-        a.agentconnect-button(href='/oidc/connexion')
-          span.agentconnect-sr-only S'identifier avec AgentConnect
-        p
-          a(href='https://agentconnect.gouv.fr/' target='_blank' rel='noopener noreferrer' title='Qu’est-ce que AgentConnect ? - nouvelle fenêtre')
-            | Qu'est-ce que AgentConnect ?
+      hr.separation-agent-connect
+      +connexionAgentConnect()
 
   script(type = 'module', src='/statique/connexion.js')
   script(id = 'url-redirection', type = 'application/json').
