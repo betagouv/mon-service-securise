@@ -6,3 +6,6 @@ html(lang = 'fr')
     title MonServiceSécurisé | Redirection aprés authentification
 
     script(type = 'module', src = '/statique/apresAuthentification.js')
+
+    script(id = 'url-redirection', type = 'application/json').
+      !{JSON.stringify({urlRedirection: urlRedirection})}
