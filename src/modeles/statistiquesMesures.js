@@ -28,7 +28,7 @@ class StatistiquesMesures {
   constructor(
     { mesuresGenerales, mesuresPersonnalisees, mesuresSpecifiques = [] },
     referentiel,
-    ignoreMesuresNonPrisesEnCompte = false
+    exclueMesuresNonPrisesEnCompte
   ) {
     StatistiquesMesures.valide({ mesuresPersonnalisees }, referentiel);
 
@@ -45,7 +45,7 @@ class StatistiquesMesures {
     };
 
     const filtreMesuresNonPriseEnCompte = (mesure) => {
-      if (ignoreMesuresNonPrisesEnCompte) {
+      if (exclueMesuresNonPrisesEnCompte) {
         return mesure.statut !== 'nonFait';
       }
       return true;
