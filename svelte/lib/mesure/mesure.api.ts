@@ -79,3 +79,13 @@ export const recupereActiviteMesure = async (
   );
   return reponse.data.map((a: any) => ({ ...a, date: new Date(a.date) }));
 };
+
+export const enregistreCommentaire = async (
+  idService: string,
+  idMesure: string,
+  contenu: string
+) =>
+  await axios.post(
+    `/api/service/${idService}/mesures/${idMesure}/activites/commentaires`,
+    { contenu }
+  );
