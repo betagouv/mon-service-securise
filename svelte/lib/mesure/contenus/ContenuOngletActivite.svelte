@@ -24,6 +24,7 @@
     },
   };
 
+  let idMesure: string | number;
   onMount(async () => {
     const chargeActivites = async (idMesure: string | number) =>
       modeVisiteGuidee
@@ -31,19 +32,24 @@
         : recupereActiviteMesure(idService, idMesure);
 
     if ($store.etape === 'Creation') return;
-
-    let id;
     if ($store.mesureEditee.metadonnees.typeMesure === 'SPECIFIQUE')
-      id = $store.mesureEditee.mesure.id;
-    else id = $store.mesureEditee.metadonnees.idMesure;
-    const activites = await chargeActivites(id);
+      idMesure = $store.mesureEditee.mesure.id;
+    else idMesure = $store.mesureEditee.metadonnees.idMesure;
+    const activites = await chargeActivites(idMesure);
     storeActivites.charge(activites);
   });
+
+  const rechargeActivites = async () => {
+    storeActivites.charge(await recupereActiviteMesure(idService, idMesure));
+  };
 </script>
 
+<svelte:body on:activites-modifiees={rechargeActivites} />
 <div id="contenu-onglet-activite" class:visible>
   {#each $storeActivites as activite}
-    <Activite {priorites} {statuts} {activite} />
+    {#key $storeActivites}
+      <Activite {priorites} {statuts} {activite} />
+    {/key}
   {:else}
     <div class="aucune-activite">
       <img src="/statique/assets/images/dossiers.png" alt="" />
