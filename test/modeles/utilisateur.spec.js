@@ -393,5 +393,17 @@ describe('Un utilisateur', () => {
 
       expect(desinscriptionEffectuee).to.be('jean.dupont@mail.fr');
     });
+
+    it('sait dire si un utilisateur a toutes les informations fournies par AgentConnect', () => {
+      const utilisateurComplet = unUtilisateur()
+        .avecEmail('jean.dujardin@beta.gouv.fr')
+        .quiSAppelle('Jean Dujardin')
+        .quiTravaillePourUneEntiteAvecSiret('unSIRET')
+        .construis();
+      const utilisateurIncomplet = unUtilisateur().construis();
+
+      expect(utilisateurComplet.aLesInformationsAgentConnect()).to.be(true);
+      expect(utilisateurIncomplet.aLesInformationsAgentConnect()).to.be(false);
+    });
   });
 });
