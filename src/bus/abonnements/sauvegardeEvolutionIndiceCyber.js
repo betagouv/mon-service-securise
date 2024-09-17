@@ -30,7 +30,9 @@ function sauvegardeEvolutionIndiceCyber({ depotDonnees }) {
         idService: service.id,
         indiceCyber,
         indiceCyberPersonnalise,
-        mesuresParStatut: service.statistiquesMesures().totauxParCategorie(),
+        mesuresParStatut: service
+          .statistiquesMesuresGeneralesEtSpecifiques()
+          .totauxParCategorie(),
       });
   };
 }
