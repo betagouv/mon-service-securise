@@ -65,13 +65,15 @@ type TypeActiviteMesure =
   | 'suppressionResponsable'
   | 'ajoutEcheance'
   | 'suppressionEcheance'
-  | 'miseAJourEcheance';
+  | 'miseAJourEcheance'
+  | 'ajoutCommentaire';
 
 type DetailsActiviteMesure =
   | DetailsAjoutPropriete
   | DetailsSuppressionPropriete
   | DetailsMiseAJourPropriete
-  | DetailsModificationResponsable;
+  | DetailsModificationResponsable
+  | DetailsAjoutCommentaire;
 
 export type ActiviteMesure = {
   idActeur: IdUtilisateur;
@@ -98,4 +100,8 @@ export type DetailsMiseAJourPropriete = {
 
 export type DetailsModificationResponsable = {
   valeur: string;
+};
+
+export type DetailsAjoutCommentaire = {
+  contenu: string;
 };
