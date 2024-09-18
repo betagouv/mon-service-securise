@@ -17,6 +17,7 @@
   import ContenuOngletPlanAction from './contenus/ContenuOngletPlanAction.svelte';
   import { planDActionDisponible } from '../modeles/mesure';
   import ContenuOngletActivite from './contenus/ContenuOngletActivite.svelte';
+  import CommentaireMesure from './commentaire/CommentaireMesure.svelte';
 
   export let idService: IdService;
   export let categories: Record<string, string>;
@@ -152,19 +153,10 @@
           >Enregistrer
         </button>
       {:else}
-        <form on:submit|preventDefault={sauvegardeCommentaire}>
-          <input
-            type="text"
-            placeholder="Écrivez un commentaire..."
-            bind:value={contenuCommentaire}
-          />
-          <button type="submit" class="envoi-commentaire">
-            <img
-              src="/statique/assets/images/icone_envoyer.svg"
-              alt="Envoyer le commentaire"
-            />
-          </button>
-        </form>
+        <CommentaireMesure
+          on:submit={sauvegardeCommentaire}
+          bind:contenuCommentaire
+        />
       {/if}
     </div>
   </Formulaire>
@@ -229,30 +221,5 @@
     display: flex;
     gap: 8px;
     margin-bottom: 26px;
-  }
-
-  form {
-    padding: 0 24px 0 36px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 100%;
-    gap: 12px;
-  }
-
-  form input {
-    border: 2px solid #eff6ff;
-    border-radius: 4px;
-    background: white;
-    color: #667892;
-  }
-
-  button[type='submit'].envoi-commentaire {
-    margin: 0;
-    padding: 8px;
-    border: none;
-    background: none;
-    display: flex;
-    cursor: pointer;
   }
 </style>
