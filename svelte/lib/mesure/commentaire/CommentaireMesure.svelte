@@ -54,7 +54,19 @@
 </script>
 
 <form on:submit|preventDefault={sauvegardeCommentaire}>
-  <EditorContent editor={$editor} />
+  <button
+    type="button"
+    class="mention-commentaire"
+    on:click={() => $editor.commands.insertContent('@')}
+  >
+    <img
+      src="/statique/assets/images/icone_mention.svg"
+      alt="Ajouter une mention"
+    />
+  </button>
+  <div class="conteneur-editeur">
+    <EditorContent editor={$editor} />
+  </div>
   <button type="submit" class="envoi-commentaire">
     <img
       src="/statique/assets/images/icone_envoyer.svg"
@@ -80,7 +92,7 @@
     color: #667892;
   }
 
-  button[type='submit'].envoi-commentaire {
+  button {
     margin: 0;
     padding: 8px;
     border: none;
@@ -114,5 +126,9 @@
     float: left;
     height: 0;
     pointer-events: none;
+  }
+
+  .conteneur-editeur {
+    flex: 1;
   }
 </style>
