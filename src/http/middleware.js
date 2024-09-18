@@ -16,6 +16,7 @@ const {
 const { ajouteLaRedirectionPostConnexion } = require('./redirection');
 const { extraisIp } = require('./requeteHttp');
 const SourceAuthentification = require('../modeles/sourceAuthentification');
+const { nonce: genereNonce } = require('../adaptateurs/adaptateurChiffrement');
 
 const middleware = (configuration = {}) => {
   const {
@@ -34,7 +35,7 @@ const middleware = (configuration = {}) => {
     const mediaCsp = `media-src 'self' ${CSP_BIBLIOTHEQUES.monservicesecurise.media}`;
 
     const styleCsp = nonce ? `style-src 'self' 'nonce-${nonce}'` : '';
-    const scriptCsp = "script-src 'self'";
+    const scriptCsp = `script-src 'self' ${nonce ? `'nonce-${nonce}'` : ''}`;
     const frameCsp = adaptateurEnvironnement.statistiques().domaineMetabaseMSS()
       ? `frame-src ${adaptateurEnvironnement
           .statistiques()
@@ -59,6 +60,13 @@ const middleware = (configuration = {}) => {
     });
 
     suite();
+  };
+
+  const positionneHeadersAvecNonce = async (requete, reponse, suite) => {
+    const nonce = await genereNonce();
+    requete.nonce = nonce;
+    reponse.locals.nonce = nonce;
+    positionneHeaders(requete, reponse, suite);
   };
 
   const repousseExpirationCookie = (requete, _reponse, suite) => {
@@ -354,6 +362,7 @@ const middleware = (configuration = {}) => {
     chargeEtatVisiteGuidee,
     chargePreferencesUtilisateur,
     positionneHeaders,
+    positionneHeadersAvecNonce,
     protegeTrafic,
     filtreIpAutorisees,
     repousseExpirationCookie,

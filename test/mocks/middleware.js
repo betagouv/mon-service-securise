@@ -48,6 +48,7 @@ let challengeMotDePasseEffectue = false;
 let droitVerifie = null;
 let expirationCookieRepoussee = false;
 let headersPositionnes = false;
+let noncePositionne = false;
 let serviceTrouve;
 let idUtilisateurCourant;
 let sourceAuthentification;
@@ -85,6 +86,7 @@ const middlewareFantaisie = {
     droitVerifie = null;
     expirationCookieRepoussee = false;
     headersPositionnes = false;
+    noncePositionne = false;
     serviceTrouve = serviceARenvoyer;
     idUtilisateurCourant = idUtilisateur;
     autorisationChargee = autorisationACharger;
@@ -177,6 +179,11 @@ const middlewareFantaisie = {
       fonctionDeposeCookie(requete);
     }
     headersPositionnes = true;
+    suite();
+  },
+
+  positionneHeadersAvecNonce: (_requete, _reponse, suite) => {
+    noncePositionne = true;
     suite();
   },
 
@@ -353,6 +360,10 @@ const middlewareFantaisie = {
       { lectureEtat: () => headersPositionnes },
       ...params
     );
+  },
+
+  verifieRequetePositionneNonce: async (...params) => {
+    verifieRequeteChangeEtat({ lectureEtat: () => noncePositionne }, ...params);
   },
 
   verifieRequeteRepousseExpirationCookie: (...params) => {

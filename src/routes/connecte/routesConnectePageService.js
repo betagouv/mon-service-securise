@@ -102,6 +102,7 @@ const routesConnectePageService = ({
 
   routes.get(
     '/:id/mesures',
+    middleware.positionneHeadersAvecNonce,
     middleware.trouveService({ [SECURISER]: LECTURE }),
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
