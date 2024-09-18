@@ -27,6 +27,8 @@ block append scripts
     !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax()})}
   script(id = 'indice-cyber-personnalise', type = 'application/json').
     !{JSON.stringify({ indiceCyberPersonnalise: service.indiceCyberPersonnalise().total })}
+  script(id = 'nonce-commentaires', type = 'application/json').
+    !{JSON.stringify(nonce)}
 
 block header-titre-page
   h3

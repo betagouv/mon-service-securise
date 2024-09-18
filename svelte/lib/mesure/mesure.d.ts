@@ -14,6 +14,7 @@ export type MesureProps = {
   retoursUtilisateur: Record<string, string>;
   estLectureSeule: boolean;
   mesureAEditer?: MesureEditee;
+  nonce: string;
 };
 
 type IdUtilisateur = string;
