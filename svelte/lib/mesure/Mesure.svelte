@@ -77,7 +77,6 @@
         ? ($store.mesureEditee.metadonnees.idMesure as string)
         : $store.mesureEditee.mesure.id;
     await enregistreCommentaire(idService, idMesure, contenuCommentaire);
-    contenuCommentaire = '';
     document.body.dispatchEvent(new CustomEvent('activites-modifiees'));
   };
 </script>
