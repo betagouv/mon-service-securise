@@ -21,4 +21,7 @@ export default defineConfig({
     cssCodeSplit: false,
     emptyOutDir: true,
   },
+  define: {
+    'process.env.NODE_ENV': "'production'",
+  },
 });
