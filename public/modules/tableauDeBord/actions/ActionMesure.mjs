@@ -17,6 +17,7 @@ class ActionMesure extends ActionAbstraite {
     modeVisiteGuidee,
   }) {
     super.initialise();
+    const nonce = JSON.parse($('#nonce-commentaires').text());
     document.body.dispatchEvent(
       new CustomEvent('svelte-recharge-mesure', {
         detail: {
@@ -28,6 +29,7 @@ class ActionMesure extends ActionAbstraite {
           estLectureSeule,
           mesureAEditer,
           modeVisiteGuidee,
+          nonce,
         },
       })
     );

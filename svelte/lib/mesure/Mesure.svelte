@@ -26,6 +26,7 @@
   export let estLectureSeule: boolean;
   export let priorites: ReferentielPriorite;
   export let modeVisiteGuidee: boolean;
+  export let nonce: string;
 
   const statutInitial = $store.mesureEditee.mesure.statut;
 
@@ -157,6 +158,7 @@
         <CommentaireMesure
           on:submit={sauvegardeCommentaire}
           bind:contenuCommentaire
+          {nonce}
         />
       {/if}
     </div>
