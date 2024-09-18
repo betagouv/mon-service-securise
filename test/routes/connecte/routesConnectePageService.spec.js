@@ -271,6 +271,15 @@ describe('Le serveur MSS des routes /service/*', () => {
       });
     });
 
+    it('positionne un `nonce` dans les headers', (done) => {
+      testeur
+        .middleware()
+        .verifieRequetePositionneNonce(
+          'http://localhost:1234/service/456/mesures',
+          done
+        );
+    });
+
     it('recherche le service correspondant', (done) => {
       testeur
         .middleware()
