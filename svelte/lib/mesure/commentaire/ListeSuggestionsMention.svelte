@@ -23,6 +23,9 @@
       case 'Enter':
         callback(items[activeIdx]);
         return true;
+      case 'Tab':
+        callback(items[activeIdx]);
+        return true;
     }
 
     return false;
