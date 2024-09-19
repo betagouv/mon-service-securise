@@ -11,7 +11,6 @@
   import { rechercheParCategorie } from '../stores/rechercheParCategorie.store';
   import type { ReferentielPriorite } from '../../ui/types.d';
   import { rechercheParPriorite } from '../stores/rechercheParPriorite.store';
-  import { featureFlags } from '../../featureFlags';
   import { rechercheMesMesures } from '../stores/rechercheMesMesures.store';
   import { createEventDispatcher } from 'svelte';
 
@@ -125,34 +124,32 @@
         <label for="mesure-ajoutee">Mesures ajoutées</label>
       </div>
     </fieldset>
-    {#if featureFlags.planAction()}
-      <fieldset>
-        <legend>Priorité</legend>
-        {#each Object.entries(priorites) as [id, labels]}
-          <div class="case-et-label">
-            <input
-              type="checkbox"
-              {id}
-              name={id}
-              bind:group={$rechercheParPriorite}
-              value={id}
-            />
-            <label for={id}>{labels.libelleComplet}</label>
-          </div>
-        {/each}
-      </fieldset>
-      <fieldset>
-        <legend>Attribution des mesures</legend>
+    <fieldset>
+      <legend>Priorité</legend>
+      {#each Object.entries(priorites) as [id, labels]}
         <div class="case-et-label">
           <input
             type="checkbox"
-            id="mes-mesures"
-            bind:checked={$rechercheMesMesures}
+            {id}
+            name={id}
+            bind:group={$rechercheParPriorite}
+            value={id}
           />
-          <label for="mes-mesures">Mesure(s) dont je suis responsable</label>
+          <label for={id}>{labels.libelleComplet}</label>
         </div>
-      </fieldset>
-    {/if}
+      {/each}
+    </fieldset>
+    <fieldset>
+      <legend>Attribution des mesures</legend>
+      <div class="case-et-label">
+        <input
+          type="checkbox"
+          id="mes-mesures"
+          bind:checked={$rechercheMesMesures}
+        />
+        <label for="mes-mesures">Mesure(s) dont je suis responsable</label>
+      </div>
+    </fieldset>
     <button
       class="bouton bouton-secondaire bouton-effacer-filtre"
       on:click={() => declenche('supprimeFiltres')}
