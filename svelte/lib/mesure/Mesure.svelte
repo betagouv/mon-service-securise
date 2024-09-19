@@ -11,7 +11,6 @@
   } from './mesure.api';
   import { toasterStore } from '../ui/stores/toaster.store';
   import Onglet from '../ui/Onglet.svelte';
-  import { featureFlags } from '../featureFlags';
   import ContenuOngletMesure from './contenus/ContenuOngletMesure.svelte';
   import type { ReferentielPriorite, ReferentielStatut } from '../ui/types';
   import ContenuOngletPlanAction from './contenus/ContenuOngletPlanAction.svelte';
@@ -85,30 +84,28 @@
 {#if $store.etape === 'SuppressionSpecifique'}
   <SuppressionMesureSpecifique {idService} />
 {:else}
-  {#if featureFlags.planAction()}
-    <div class="conteneur-onglet">
-      <Onglet
-        bind:ongletActif
-        cetOnglet="mesure"
-        labelOnglet="Mesure"
-        sansBordureEnBas
-      />
-      <Onglet
-        bind:ongletActif
-        cetOnglet="planAction"
-        labelOnglet="Plan d'action"
-        sansBordureEnBas
-        badge={!planDActionDisponible($store.mesureEditee.mesure.statut) &&
-          'info'}
-      />
-      <Onglet
-        bind:ongletActif
-        cetOnglet="activite"
-        labelOnglet="Activité"
-        sansBordureEnBas
-      />
-    </div>
-  {/if}
+  <div class="conteneur-onglet">
+    <Onglet
+      bind:ongletActif
+      cetOnglet="mesure"
+      labelOnglet="Mesure"
+      sansBordureEnBas
+    />
+    <Onglet
+      bind:ongletActif
+      cetOnglet="planAction"
+      labelOnglet="Plan d'action"
+      sansBordureEnBas
+      badge={!planDActionDisponible($store.mesureEditee.mesure.statut) &&
+        'info'}
+    />
+    <Onglet
+      bind:ongletActif
+      cetOnglet="activite"
+      labelOnglet="Activité"
+      sansBordureEnBas
+    />
+  </div>
 
   <Formulaire
     on:formulaireValide={enregistreMesure}
@@ -143,8 +140,8 @@
       {#if doitAfficherActions}
         {#if $configurationAffichage.doitAfficherSuppression}
           <button on:click={store.afficheEtapeSuppression}>
-          Supprimer la mesure
-        </button>
+            Supprimer la mesure
+          </button>
         {/if}
         <button
           type="submit"

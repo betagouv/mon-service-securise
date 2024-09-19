@@ -41,7 +41,6 @@
   import TagStatutMesure from '../ui/TagStatutMesure.svelte';
   import BandeauActions from './BandeauActions.svelte';
   import { afficheTiroirEditeMesure } from './actionsTiroir';
-  import { featureFlags } from '../featureFlags';
   import { contributeurs } from './stores/contributeurs.store';
   import { storeAutorisations } from '../gestionContributeurs/stores/autorisations.store';
   import { rechercheParCategorie } from './stores/rechercheParCategorie.store';
@@ -142,8 +141,7 @@
     await storeNotifications.marqueLue('nouveaute', 'ongletStatutsMesures');
   };
 
-  $: affichePlanAction =
-    $rechercheParAvancement !== 'statutADefinir' && featureFlags.planAction();
+  $: affichePlanAction = $rechercheParAvancement !== 'statutADefinir';
 
   if (modeVisiteGuidee) {
     $rechercheParAvancement = 'enAction';
