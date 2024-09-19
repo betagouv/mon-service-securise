@@ -6,6 +6,7 @@
   import { enDroitsSurRubrique } from '../gestionContributeurs.d';
   import type { ResumeNiveauDroit } from '../../ui/types';
   import { storeAutorisations } from '../stores/autorisations.store';
+  import BoutonSuppressionContributeur from '../../ui/BoutonSuppressionContributeur.svelte';
 
   export let droitsModifiables: boolean;
   export let afficheDroits: boolean = true;
@@ -53,16 +54,9 @@
     {/if}
 
     {#if droitsModifiables}
-      <button
-        class="conteneur-suppression"
+      <BoutonSuppressionContributeur
         on:click={() => store.navigation.afficheEtapeSuppression(utilisateur)}
-      >
-        <img
-          src="/statique/assets/images/icone_supprimer_gris.svg"
-          alt="supression d'un contributeur"
-          title="Supprimer ce contributeur"
-        />
-      </button>
+      />
     {/if}
   </div>
 </li>
@@ -80,12 +74,5 @@
   .poste-contributeur {
     font-weight: 500;
     color: #667892;
-  }
-
-  .conteneur-suppression {
-    display: flex;
-    cursor: pointer;
-    border: none;
-    background: transparent;
   }
 </style>
