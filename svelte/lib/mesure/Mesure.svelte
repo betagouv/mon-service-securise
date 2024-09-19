@@ -143,8 +143,8 @@
       {#if doitAfficherActions}
         {#if $configurationAffichage.doitAfficherSuppression}
           <button on:click={store.afficheEtapeSuppression}>
-          Supprimer la mesure
-        </button>
+            Supprimer la mesure
+          </button>
         {/if}
         <button
           type="submit"
@@ -183,6 +183,9 @@
   .conteneur-actions button[type='submit'] {
     margin-left: auto;
     margin-right: 2em;
+    background: #0079d0;
+    color: white;
+    padding: 9px 16px;
   }
 
   .conteneur-actions button {
