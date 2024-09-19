@@ -19,8 +19,10 @@
 
 <p class="introduction">Souhaitez-vous vraiment supprimer cette mesure ?</p>
 <div class="banniere-information">
-  <!-- svelte-ignore a11y-missing-attribute -->
-  <img src="/statique/assets/images/icone_danger_bleu.svg" />
+  <img
+    src="/statique/assets/images/icone_danger_bleu.svg"
+    alt="Avertissement de danger - Suppression"
+  />
   <div class="contenu-texte-information">
     <strong>Cette action est irréversible</strong>
     <p>
