@@ -40,6 +40,8 @@
     class="conteneur-responsables"
     on:click|stopPropagation
     on:keypress|stopPropagation
+    role="menu"
+    tabindex="0"
   >
     <div class="entete">
       <span class="titre">Attribuer une mesure</span>
