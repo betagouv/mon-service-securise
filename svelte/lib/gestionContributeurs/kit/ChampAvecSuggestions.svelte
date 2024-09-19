@@ -56,6 +56,8 @@
     {#if proposeAjout && !modeVisiteGuidee}
       <div
         class="create option-ajout"
+        role="button"
+        tabindex="0"
         on:click={() =>
           choisisContributeur({
             email: saisie.toLocaleLowerCase('fr'),
@@ -78,6 +80,8 @@
     {#each suggestions as suggestion}
       <div
         class="option suggestion-contributeur"
+        role="button"
+        tabindex="0"
         on:click={() => {
           if (modeVisiteGuidee) return;
           choisisContributeur(suggestion);
