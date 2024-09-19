@@ -45,8 +45,7 @@
 </script>
 
 <tr class="ligne-de-mesure">
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <td class="titre-mesure" on:click>
+  <td class="titre-mesure" on:click on:keypress>
     <p class="titre">
       {@html texteSurligne}
     </p>
