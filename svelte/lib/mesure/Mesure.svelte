@@ -142,8 +142,9 @@
     <div class="conteneur-actions">
       {#if doitAfficherActions}
         {#if $configurationAffichage.doitAfficherSuppression}
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <p on:click={store.afficheEtapeSuppression}>Supprimer la mesure</p>
+          <button on:click={store.afficheEtapeSuppression}>
+          Supprimer la mesure
+        </button>
         {/if}
         <button
           type="submit"
@@ -183,11 +184,16 @@
     margin-right: 2em;
   }
 
-  .conteneur-actions p {
+  .conteneur-actions button {
     font-weight: 500;
     color: #0079d0;
     cursor: pointer;
     margin: 0 0 0 2em;
+    padding: 0;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
   }
 
   :global(.erreur-champ-saisie) {
