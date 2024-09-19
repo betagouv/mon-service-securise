@@ -10,6 +10,7 @@
   import TagNiveauDroit from '../kit/TagNiveauDroit.svelte';
   import { createEventDispatcher } from 'svelte';
   import type { ResumeNiveauDroit } from '../../ui/types';
+  import BoutonSuppressionContributeur from '../../ui/BoutonSuppressionContributeur.svelte';
 
   export let invitations: Invitation[];
   const dispatch = createEventDispatcher<{
@@ -50,11 +51,7 @@
           on:choixPersonnalisation={() =>
             dispatch('choixPersonnalisation', utilisateur)}
         />
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <img
-          class="bouton-suppression-contributeur"
-          src="/statique/assets/images/icone_supprimer_gris.svg"
-          alt="bouton de suppression d'un contributeur"
+        <BoutonSuppressionContributeur
           on:click={() => dispatch('supprimerInvitation', utilisateur)}
         />
       </div>
