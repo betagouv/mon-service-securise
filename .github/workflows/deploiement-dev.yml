@@ -1,8 +1,6 @@
 name: Déploiement vers un environnement de DEV
 
 on:
-  pull_request:
-    branches: [master]
   workflow_dispatch: # Pour activer le déclenchement manuel
 
 jobs:
