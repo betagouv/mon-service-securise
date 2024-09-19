@@ -180,6 +180,9 @@
   .conteneur-actions button[type='submit'] {
     margin-left: auto;
     margin-right: 2em;
+    background: #0079d0;
+    color: white;
+    padding: 9px 16px;
   }
 
   .conteneur-actions button {
