@@ -4,7 +4,6 @@ const { stripHtml } = require('string-strip-html');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('./fabriqueAdaptateurGestionErreur');
-const { featureFlag } = require('./adaptateurEnvironnement');
 const { dateEnFrancais } = require('../utilitaires/date');
 
 const remplaceBooleen = (booleen) => (booleen ? 'Oui' : 'Non');
@@ -66,12 +65,9 @@ const genereCsvMesures = async (
   if (avecDonneesAdditionnnelles) {
     colonnes.push({ id: 'statut', title: 'Statut' });
     colonnes.push({ id: 'commentaires', title: 'Commentaires' });
-
-    if (featureFlag().avecPlanAction()) {
-      colonnes.push({ id: 'priorite', title: 'Priorité' });
-      colonnes.push({ id: 'echeance', title: 'Échéance' });
-      colonnes.push({ id: 'responsables', title: 'Responsables' });
-    }
+    colonnes.push({ id: 'priorite', title: 'Priorité' });
+    colonnes.push({ id: 'echeance', title: 'Échéance' });
+    colonnes.push({ id: 'responsables', title: 'Responsables' });
   }
 
   const { mesuresGenerales, mesuresSpecifiques } = donneesMesures;
