@@ -10,7 +10,7 @@
     {#each $toasterStore.queue as toast (toast.id)}
       <article
         class={toast.niveau}
-        transition:glisse={{ depuis: 'right', duree: 250 }}
+        transition:glisse|global={{ depuis: 'right', duree: 250 }}
       >
         <div class="conteneur-icone">
           <div class="icone">
