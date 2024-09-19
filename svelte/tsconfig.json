@@ -9,7 +9,8 @@
     "allowJs": true,
     "checkJs": true,
     "isolatedModules": true,
-    "strict": true
+    "strict": true,
+    "ignoreDeprecations": "5.0"
   },
   "include": [
     "vite.config.mts",
