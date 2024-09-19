@@ -67,7 +67,11 @@
   <div class="conteneur-editeur">
     <EditorContent editor={$editor} />
   </div>
-  <button type="submit" class="envoi-commentaire">
+  <button
+    type="submit"
+    class="envoi-commentaire"
+    disabled={!contenuCommentaire}
+  >
     <img
       src="/statique/assets/images/icone_envoyer.svg"
       alt="Envoyer le commentaire"
@@ -118,10 +122,11 @@
 
   :global(.champ-commentaire p) {
     margin: 0;
+    color: var(--texte-fonce);
   }
 
   :global(.champ-commentaire p.is-editor-empty:first-child::before) {
-    color: #adb5bd;
+    color: #667892;
     content: attr(data-placeholder);
     float: left;
     height: 0;
@@ -130,5 +135,10 @@
 
   .conteneur-editeur {
     flex: 1;
+  }
+
+  .envoi-commentaire[disabled] {
+    filter: brightness(0) invert(93%) sepia(5%) saturate(689%)
+      hue-rotate(181deg) brightness(91%) contrast(94%);
   }
 </style>
