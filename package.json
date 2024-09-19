@@ -61,7 +61,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^2.0.2",
+    "@sveltejs/vite-plugin-svelte": "^2.4.1",
     "@tsconfig/svelte": "^3.0.0",
     "@typescript-eslint/parser": "^6.6.0",
     "concurrently": "^8.2.1",
