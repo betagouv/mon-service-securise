@@ -54,7 +54,6 @@
   />
   <div class="liste-suggestions" class:visible={suggestionsVisibles}>
     {#if proposeAjout && !modeVisiteGuidee}
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
         class="create option-ajout"
         on:click={() =>
@@ -63,17 +62,31 @@
             initiales: '',
             prenomNom: saisie.toLocaleLowerCase('fr'),
           })}
+        on:keypress={(e) => {
+          if (e.code === 'Enter') {
+            choisisContributeur({
+              email: saisie.toLocaleLowerCase('fr'),
+              initiales: '',
+              prenomNom: saisie.toLocaleLowerCase('fr'),
+            });
+          }
+        }}
       >
         Ajouter ce contributeur
       </div>
     {/if}
     {#each suggestions as suggestion}
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
         class="option suggestion-contributeur"
         on:click={() => {
           if (modeVisiteGuidee) return;
           choisisContributeur(suggestion);
+        }}
+        on:keypress={(e) => {
+          if (e.code === 'Enter') {
+            if (modeVisiteGuidee) return;
+            choisisContributeur(suggestion);
+          }
         }}
       >
         <Initiales valeur={suggestion.initiales} resumeNiveauDroit="ECRITURE" />
