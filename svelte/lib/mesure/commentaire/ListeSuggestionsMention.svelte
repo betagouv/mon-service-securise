@@ -34,9 +34,15 @@
 
 <ul>
   {#each items as contributeur, i}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <li on:click={() => callback(contributeur)}>
-      <div class:active={i === activeIdx} class="contenu-nom-prenom">
+    <li>
+      <div
+        class:active={i === activeIdx}
+        class="contenu-nom-prenom"
+        on:click={() => callback(contributeur)}
+        on:keypress
+        role="button"
+        tabindex="0"
+      >
         <Initiales
           valeur={contributeur.initiales}
           resumeNiveauDroit={$storeAutorisations.autorisations[contributeur.id]
@@ -58,10 +64,6 @@
     padding: 0;
   }
 
-  li {
-    cursor: pointer;
-  }
-
   .contenu-nom-prenom {
     display: flex;
     align-items: center;
@@ -69,6 +71,7 @@
     font-weight: 500;
     overflow: hidden;
     padding: 9px 16px;
+    cursor: pointer;
   }
 
   .contenu-nom-prenom.active {
