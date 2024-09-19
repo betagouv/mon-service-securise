@@ -36,8 +36,11 @@
     </div>
     <span>{responsables?.length || 0}</span>
   </div>
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div class="conteneur-responsables" on:click|stopPropagation>
+  <div
+    class="conteneur-responsables"
+    on:click|stopPropagation
+    on:keypress|stopPropagation
+  >
     <div class="entete">
       <span class="titre">Attribuer une mesure</span>
       <button class="fermeture" on:click={() => (menuOuvert = false)}>✕</button>
