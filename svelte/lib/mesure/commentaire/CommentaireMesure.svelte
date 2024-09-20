@@ -142,11 +142,14 @@
   }
 
   .envoi-commentaire[disabled] {
+    /* #CBD5E1 */
     filter: brightness(0) invert(93%) sepia(5%) saturate(689%)
       hue-rotate(181deg) brightness(91%) contrast(94%);
   }
 
+  .envoi-commentaire:not([disabled]):hover,
   .mention-commentaire img:hover {
+    /* #08416A  */
     filter: brightness(0) saturate(100%) invert(20%) sepia(67%) saturate(1040%)
       hue-rotate(172deg) brightness(90%) contrast(99%);
   }
