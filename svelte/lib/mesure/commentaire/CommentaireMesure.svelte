@@ -68,6 +68,7 @@
   <button
     type="button"
     class="mention-commentaire"
+    title="Ajouter une mention"
     on:click={() => $editor.commands.insertContent('@')}
   >
     <img
