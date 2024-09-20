@@ -22,6 +22,17 @@
         attributes: {
           class: 'champ-commentaire',
         },
+        handleKeyDown: (vue, evenement) => {
+          if (
+            evenement.key === 'Enter' &&
+            !evenement.shiftKey &&
+            !evenement.altKey &&
+            !evenement.ctrlKey
+          ) {
+            sauvegardeCommentaire();
+            return true;
+          }
+        },
       },
       extensions: [
         StarterKit,
