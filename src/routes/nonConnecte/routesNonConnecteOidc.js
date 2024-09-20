@@ -1,6 +1,9 @@
 const express = require('express');
 const SourceAuthentification = require('../../modeles/sourceAuthentification');
 const { estUrlLegalePourRedirection } = require('../../http/redirection');
+const {
+  fabriqueAdaptateurGestionErreur,
+} = require('../../adaptateurs/fabriqueAdaptateurGestionErreur');
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
@@ -78,6 +81,7 @@ const routesNonConnecteOidc = ({
         reponse.redirect(`/inscription?${params}&agentConnect`);
       }
     } catch (e) {
+      fabriqueAdaptateurGestionErreur().logueErreur(e);
       reponse.status(401).send("Erreur d'authentification");
     }
   });
