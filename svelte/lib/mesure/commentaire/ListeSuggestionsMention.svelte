@@ -30,6 +30,10 @@
 
     return false;
   }
+
+  const survol = (index: number) => {
+    activeIdx = index;
+  };
 </script>
 
 <ul>
@@ -42,6 +46,8 @@
         on:keypress
         role="button"
         tabindex="0"
+        on:mouseover={() => survol(i)}
+        on:focus
       >
         <Initiales
           valeur={contributeur.initiales}
