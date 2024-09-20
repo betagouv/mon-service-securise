@@ -81,7 +81,7 @@
 
 <style>
   form {
-    padding: 0 24px 0 36px;
+    padding: 0 24px 0 2em;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -103,6 +103,10 @@
     background: none;
     display: flex;
     cursor: pointer;
+  }
+
+  .mention-commentaire {
+    padding-left: 6px;
   }
 
   :global(.mention) {
