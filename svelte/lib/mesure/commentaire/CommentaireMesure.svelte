@@ -25,6 +25,7 @@
         handleKeyDown: (vue, evenement) => {
           if (
             evenement.key === 'Enter' &&
+            !vue.state.mention$.active &&
             !evenement.shiftKey &&
             !evenement.altKey &&
             !evenement.ctrlKey
