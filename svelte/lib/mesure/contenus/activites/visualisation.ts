@@ -14,6 +14,8 @@ import ActiviteAjoutCommentaire from './ActiviteAjoutCommentaire.svelte';
 export type VisualisationActivite = {
   titre: string;
   composantContenu: typeof SvelteComponent;
+  aBesoinPriorites?: boolean;
+  aBesoinStatuts?: boolean;
 };
 
 const visualisationsParType: Record<TypeActiviteMesure, VisualisationActivite> =
@@ -21,18 +23,22 @@ const visualisationsParType: Record<TypeActiviteMesure, VisualisationActivite> =
     ajoutPriorite: {
       titre: 'Priorité',
       composantContenu: ActiviteAjoutPriorite,
+      aBesoinPriorites: true,
     },
     miseAJourPriorite: {
       titre: 'Modification de la priorité',
       composantContenu: ActiviteMiseAJourPriorite,
+      aBesoinPriorites: true,
     },
     ajoutStatut: {
       titre: 'Statut',
       composantContenu: ActiviteAjoutStatut,
+      aBesoinStatuts: true,
     },
     miseAJourStatut: {
       titre: 'Modification du statut',
       composantContenu: ActiviteMiseAJourStatut,
+      aBesoinStatuts: true,
     },
     ajoutEcheance: {
       titre: 'Échéance',

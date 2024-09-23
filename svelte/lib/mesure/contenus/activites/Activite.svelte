@@ -42,6 +42,19 @@
                 ?.resumeNiveauDroit,
           };
   }
+  const proprietes: {
+    activite: ActiviteMesure;
+    statuts?: ReferentielStatut;
+    priorites?: ReferentielPriorite;
+  } = {
+    activite,
+  };
+  if (visualisation.aBesoinPriorites) {
+    proprietes.priorites = priorites;
+  }
+  if (visualisation.aBesoinStatuts) {
+    proprietes.statuts = statuts;
+  }
 </script>
 
 <div class="activite">
@@ -60,12 +73,7 @@
       <span>{formatteDateHeureFr(activite.date)}</span>
     </div>
     <div class="description">
-      <svelte:component
-        this={visualisation.composantContenu}
-        {activite}
-        {priorites}
-        {statuts}
-      />
+      <svelte:component this={visualisation.composantContenu} {...proprietes} />
     </div>
   </div>
 </div>
