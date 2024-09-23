@@ -78,6 +78,10 @@ const oidc = () => ({
   clientSecret: () => process.env.OIDC_CLIENT_SECRET,
 });
 
+const mss = () => ({
+  urlBase: () => process.env.URL_BASE_MSS,
+});
+
 module.exports = {
   chiffrement,
   emailMemoire,
@@ -86,6 +90,7 @@ module.exports = {
   journalMSS,
   matomo,
   modeMaintenance,
+  mss,
   oidc,
   sendinblue,
   sentry,

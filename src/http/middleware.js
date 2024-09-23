@@ -352,6 +352,19 @@ const middleware = (configuration = {}) => {
     }
   };
 
+  const redirigeVersUrlBase = (requete, reponse, suite) => {
+    if (
+      requete.headers.host ===
+      new URL(adaptateurEnvironnement.mss().urlBase()).host
+    ) {
+      suite();
+      return;
+    }
+    reponse.redirect(
+      `${adaptateurEnvironnement.mss().urlBase()}${requete.originalUrl}`
+    );
+  };
+
   return {
     ajouteVersionFichierCompiles,
     aseptise,
@@ -372,6 +385,7 @@ const middleware = (configuration = {}) => {
     verificationAcceptationCGU,
     verificationAddresseIP,
     verificationJWT,
+    redirigeVersUrlBase,
     verificationModeMaintenance,
     challengeMotDePasse,
   };

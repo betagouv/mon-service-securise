@@ -95,6 +95,39 @@ describe('Le middleware MSS', () => {
     middleware.verificationJWT(requete, reponse);
   });
 
+  it("redirige l'utilisateur vers l'url de base s'il vient d'un sous domaine", (done) => {
+    requete.headers = { host: 'sousdomaine.domaine:1234' };
+    requete.originalUrl = '/monUrlDemandee';
+    const adaptateurEnvironnement = {
+      mss: () => ({
+        urlBase: () => 'http://domaine:1234',
+      }),
+    };
+
+    prepareVerificationRedirection(
+      reponse,
+      'http://domaine:1234/monUrlDemandee',
+      done
+    );
+
+    const middleware = Middleware({ adaptateurEnvironnement });
+    middleware.redirigeVersUrlBase(requete, reponse);
+  });
+
+  it("ne redirige pas l'utilisateur vers l'url de base s'il en provient déjà", (done) => {
+    requete.headers = { host: 'domaine:1234' };
+    requete.originalUrl = '/monUrlDemandee';
+    const adaptateurEnvironnement = {
+      mss: () => ({
+        urlBase: () => 'http://domaine:1234',
+      }),
+    };
+
+    const middleware = Middleware({ adaptateurEnvironnement });
+
+    middleware.redirigeVersUrlBase(requete, reponse, done);
+  });
+
   it("ajoute l'URL originale à la redirection si elle commence par un '/'", (done) => {
     const adaptateurJWT = { decode: () => null };
     requete.originalUrl = '/tableauDeBord';
