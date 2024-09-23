@@ -230,6 +230,10 @@ const middlewareFantaisie = {
     suite();
   },
 
+  redirigeVersUrlBase: (_requete, _reponse, suite) => {
+    suite();
+  },
+
   verificationModeMaintenance: (_requete, _reponse, suite) => {
     suite();
   },
