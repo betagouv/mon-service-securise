@@ -1,1 +1,12 @@
-title Inscription | MonServiceSécurisé
+extends ./mss
+
+block append styles
+  +feuilleDeStyleSvelte()
+
+block append scripts
+  +composantSvelte('inscription.js')
+
+block main
+  #conteneur-inscription
+
+  script(type = 'module', src = '/statique/inscription-v2.js')
