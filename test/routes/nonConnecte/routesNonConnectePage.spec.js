@@ -18,6 +18,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/mentionsLegales',
     '/statistiques',
     '/inscription',
+    '/inscription-v2',
     '/activation',
     '/connexion',
     '/reinitialisationMotDePasse',

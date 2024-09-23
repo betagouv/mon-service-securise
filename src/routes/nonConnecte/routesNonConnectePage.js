@@ -53,6 +53,10 @@ const routesNonConnectePage = ({
     reponse.render('inscription', { departements, referentiel });
   });
 
+  routes.get('/inscription-v2', (_requete, reponse) => {
+    reponse.render('inscription-v2', {});
+  });
+
   routes.get('/activation', (_requete, reponse) => {
     reponse.render('activation');
   });
