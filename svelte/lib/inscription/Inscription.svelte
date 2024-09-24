@@ -38,6 +38,7 @@
     <Etapier {etapeCourante} nombreEtapes={3} />
   </div>
   <hr />
+  <div class="info-champ-obligatoire">Champ obligatoire</div>
   <div class="contenu-etape" class:active={etapeCourante === 1}>
     <div class="bloc">
       <h1>Votre identité</h1>
@@ -231,5 +232,16 @@
   #fonction-poste,
   #estimation-nombre-services {
     appearance: auto;
+  }
+
+  .info-champ-obligatoire {
+    text-align: right;
+    font-size: 12px;
+  }
+
+  .info-champ-obligatoire:before {
+    content: '*';
+    color: #e1000f;
+    margin-right: 2px;
   }
 </style>
