@@ -1,6 +1,7 @@
 <script>
   import Bouton from '../ui/Bouton.svelte';
   import Etapier from '../ui/Etapier.svelte';
+  import SelectionFonction from './SelectionFonction.svelte';
 
   let etapeCourante = 1;
 
@@ -37,7 +38,6 @@
     <h1>{titreEtape}</h1>
     <Etapier {etapeCourante} nombreEtapes={3} />
   </div>
-  <hr />
   <div class="info-champ-obligatoire">Champ obligatoire</div>
   <div class="contenu-etape" class:active={etapeCourante === 1}>
     <div class="bloc">
@@ -73,15 +73,11 @@
   </div>
 
   <div class="contenu-etape" class:active={etapeCourante === 2}>
-    <div class="bloc">
+    <div class="bloc bloc-avec-separateur">
       <h1>Votre identité</h1>
       <div>
-        <span class="info-label">Fonction / poste occupé :</span>
-        <select id="fonction-poste">
-          <option>Sélectionner une fonction</option>
-        </select>
+        <SelectionFonction />
       </div>
-      <hr />
     </div>
     <div class="bloc">
       <h1>Vos services numériques</h1>
@@ -171,6 +167,11 @@
     padding-bottom: 56px;
   }
 
+  .titre-contenu {
+    padding-bottom: 32px;
+    border-bottom: solid 1px var(--liseres-fonce);
+  }
+
   .contenu-inscription {
     display: flex;
     flex-direction: column;
@@ -198,14 +199,13 @@
     margin-bottom: 16px;
   }
 
-  .bloc div {
-    margin-bottom: 8px;
+  .bloc-avec-separateur {
+    padding-bottom: 24px;
+    border-bottom: solid 1px var(--liseres-fonce);
   }
 
-  hr {
-    margin: 0;
-    border: 0;
-    border-bottom: solid 1px var(--liseres);
+  .bloc div {
+    margin-bottom: 8px;
   }
 
   .etape {
@@ -229,7 +229,6 @@
     display: none;
   }
 
-  #fonction-poste,
   #estimation-nombre-services {
     appearance: auto;
   }
