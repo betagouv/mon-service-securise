@@ -72,8 +72,10 @@ const routesNonConnecteOidc = ({
           SourceAuthentification.AGENT_CONNECT
         );
         reponse.render('apresAuthentification', {
-          urlRedirection:
-            adaptateurEnvironnement.mss().urlBase() + urlRedirection,
+          ...(urlRedirection && {
+            urlRedirection:
+              adaptateurEnvironnement.mss().urlBase() + urlRedirection,
+          }),
         });
       } else {
         const params = new URLSearchParams({
