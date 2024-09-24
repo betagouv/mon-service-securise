@@ -110,6 +110,23 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       expect(reponse.headers['content-type']).to.contain('text/html');
     });
 
+    it('considère une url de redirection comme relative pour se protéger des open redirect', async () => {
+      testeur.middleware().reinitialise({
+        fonctionDeposeCookieAAppeler: (requete) =>
+          (requete.cookies.AgentConnectInfo = {
+            state: 'unState',
+            nonce: 'unNonce',
+            urlRedirection: '//redirect.com',
+          }),
+      });
+
+      const reponse = await requeteSansRedirection(
+        'http://localhost:1234/oidc/apres-authentification'
+      );
+
+      expect(reponse.data).to.contain('http://localhost:1234//redirect.com');
+    });
+
     it("reste robuste en cas d'erreur de récupération du jeton", async () => {
       testeur.adaptateurOidc().recupereJeton = async () => {
         throw new Error();

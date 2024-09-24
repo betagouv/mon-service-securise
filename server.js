@@ -104,6 +104,7 @@ const serveur = MSS.creeServeur(
   adaptateurProtection,
   adaptateurJournal,
   adaptateurOidc,
+  adaptateurEnvironnement,
   procedures,
   inscriptionUtilisateur
 );
