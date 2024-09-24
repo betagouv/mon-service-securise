@@ -10,11 +10,12 @@
   ][etapeCourante - 1];
 
   const etapePrecedente = () => {
-    etapeCourante--;
+    if (etapeCourante > 1) etapeCourante--;
   };
   const etapeSuivante = () => {
-    etapeCourante++;
+    if (etapeCourante < 3) etapeCourante++;
   };
+  const valide = () => {};
 </script>
 
 <div class="entete-inscription">
@@ -123,8 +124,17 @@
   </div>
 
   <div class="actions">
-    <Bouton type="secondaire" titre="Précédent" on:click={etapePrecedente} />
-    <Bouton type="primaire" titre="Suivant" on:click={etapeSuivante} />
+    <Bouton
+      type="secondaire"
+      titre="Précédent"
+      on:click={etapePrecedente}
+      actif={etapeCourante > 1}
+    />
+    {#if etapeCourante === 3}
+      <Bouton type="primaire" titre="Valider" on:click={valide} />
+    {:else}
+      <Bouton type="primaire" titre="Suivant" on:click={etapeSuivante} />
+    {/if}
   </div>
 </div>
 
