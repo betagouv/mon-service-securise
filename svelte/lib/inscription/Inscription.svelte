@@ -1,5 +1,6 @@
 <script>
   import Bouton from '../ui/Bouton.svelte';
+  import Etapier from '../ui/Etapier.svelte';
 
   let etapeCourante = 1;
 
@@ -34,7 +35,7 @@
   <div class="titre-contenu">
     <div class="etape">Étape {etapeCourante} sur 3</div>
     <h1>{titreEtape}</h1>
-    <div class="etapier"></div>
+    <Etapier {etapeCourante} nombreEtapes={3} />
   </div>
   <hr />
   <div class="contenu-etape" class:active={etapeCourante === 1}>
@@ -184,7 +185,7 @@
   .contenu-inscription h1 {
     font-size: 22px;
     font-weight: bold;
-    margin: 0;
+    margin: 0 0 12px;
     padding: 0;
   }
 
