@@ -1,9 +1,10 @@
 <script lang="ts">
   export let titre: string;
   export let type: 'primaire' | 'secondaire';
+  export let actif: boolean = true;
 </script>
 
-<button class="bouton {type}" on:click>{titre}</button>
+<button class="bouton {type}" on:click disabled={!actif}>{titre}</button>
 
 <style>
   button {
@@ -29,5 +30,11 @@
     color: var(--bleu-mise-en-avant);
     border-color: var(--bleu-mise-en-avant);
     background-color: #fff;
+  }
+
+  button:disabled {
+    background-color: var(--gris-inactif);
+    border-color: var(--gris-inactif);
+    color: #fff;
   }
 </style>
