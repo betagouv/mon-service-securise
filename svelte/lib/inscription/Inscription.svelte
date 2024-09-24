@@ -1,3 +1,7 @@
+<script>
+  import Bouton from '../ui/Bouton.svelte';
+</script>
+
 <div class="entete-inscription">
   <div class="contenu">
     <h1>Créez votre compte MonServiceSécurisé</h1>
@@ -48,8 +52,8 @@
     </div>
   </div>
   <div class="actions">
-    <button class="bouton">Précédent</button>
-    <button class="bouton">Suivant</button>
+    <Bouton type="secondaire" titre="Précédent" />
+    <Bouton type="primaire" titre="Suivant" />
   </div>
 </div>
 
@@ -130,9 +134,5 @@
     display: flex;
     justify-content: flex-end;
     gap: 16px;
-  }
-
-  .bouton {
-    margin: 0;
   }
 </style>
