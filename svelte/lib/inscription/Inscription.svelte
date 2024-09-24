@@ -1,5 +1,14 @@
 <script>
   import Bouton from '../ui/Bouton.svelte';
+
+  let etapeCourante = 1;
+
+  const etapePrecedente = () => {
+    etapeCourante--;
+  };
+  const etapeSuivante = () => {
+    etapeCourante++;
+  };
 </script>
 
 <div class="entete-inscription">
@@ -16,44 +25,100 @@
 
 <div class="contenu-inscription">
   <div class="titre-contenu">
-    <div class="etape">Étape 1 sur 3</div>
+    <div class="etape">Étape {etapeCourante} sur 3</div>
     <h1>Vos informations professionnelles</h1>
     <div class="etapier"></div>
   </div>
   <hr />
-  <div class="bloc">
-    <h1>Votre identité</h1>
-    <div>
-      <span class="info-label">Nom :</span>
-      <span class="info-valeur">Dupont</span>
+  <div class="contenu-etape" class:active={etapeCourante === 1}>
+    <div class="bloc">
+      <h1>Votre identité</h1>
+      <div>
+        <span class="info-label">Nom :</span>
+        <span class="info-valeur">Dupont</span>
+      </div>
+      <div>
+        <span class="info-label">Prénom :</span>
+        <span class="info-valeur">Jean-Baptiste</span>
+      </div>
+      <div>
+        <span class="info-label">Mail professionnel :</span>
+        <span class="info-valeur">jean-baptiste@orange.fr</span>
+      </div>
     </div>
-    <div>
-      <span class="info-label">Prénom :</span>
-      <span class="info-valeur">Jean-Baptiste</span>
-    </div>
-    <div>
-      <span class="info-label">Mail professionnel :</span>
-      <span class="info-valeur">jean-baptiste@orange.fr</span>
+    <div class="bloc">
+      <h1>Votre organisation</h1>
+      <div>
+        <span class="info-label">Dénomination légale :</span>
+        <span class="info-valeur">ORANGE</span>
+      </div>
+      <div>
+        <span class="info-label">SIRET :</span>
+        <span class="info-valeur">380 129 866 </span>
+      </div>
+      <div>
+        <span class="info-label">Département de votre organisation :</span>
+        <span class="info-valeur">92</span>
+      </div>
     </div>
   </div>
-  <div class="bloc">
-    <h1>Votre organisation</h1>
-    <div>
-      <span class="info-label">Dénomination légale :</span>
-      <span class="info-valeur">ORANGE</span>
+
+  <div class="contenu-etape" class:active={etapeCourante === 2}>
+    <div class="bloc">
+      <h1>Votre identité</h1>
+      <div>
+        <span class="info-label">Fonction / poste occupé :</span>
+        <select id="fonction-poste">
+          <option>Sélectionner une fonction</option>
+        </select>
+      </div>
+      <hr />
     </div>
-    <div>
-      <span class="info-label">SIRET :</span>
-      <span class="info-valeur">380 129 866 </span>
-    </div>
-    <div>
-      <span class="info-label">Département de votre organisation :</span>
-      <span class="info-valeur">92</span>
+    <div class="bloc">
+      <h1>Vos services numériques</h1>
+      <div>
+        <span class="info-label">
+          * Combien de services publics numériques avez-vous à sécuriser ?
+        </span>
+        <span>
+          Exemple : Systèmes d’information, site web, application mobile, API,
+          téléservices
+        </span>
+        <select id="estimation-nombre-services" required>
+          <option>Sélectionner un nombre</option>
+          <option>1 à 10</option>
+          <option>11 à 20</option>
+        </select>
+      </div>
     </div>
   </div>
+
+  <div class="contenu-etape" class:active={etapeCourante === 3}>
+    <div class="bloc">
+      <div class="case-a-cocher">
+        <input
+          id="infolettreAcceptee"
+          type="checkbox"
+          name="infolettreAcceptee"
+        />
+        <label for="infolettreAcceptee">
+          J'accepte de recevoir la lettre d'information MonServiceSécurisé.
+        </label>
+      </div>
+      <div class="case-a-cocher">
+        <input id="cguAcceptees" type="checkbox" name="cguAcceptees" required />
+        <label for="cguAcceptees">
+          J'accepte les <a href="/cgu">conditions générales d'utilisation</a> et
+          la
+          <a href="/confidentialite">politique de confidentialité</a> de MonServiceSécurisé
+        </label>
+      </div>
+    </div>
+  </div>
+
   <div class="actions">
-    <Bouton type="secondaire" titre="Précédent" />
-    <Bouton type="primaire" titre="Suivant" />
+    <Bouton type="secondaire" titre="Précédent" on:click={etapePrecedente} />
+    <Bouton type="primaire" titre="Suivant" on:click={etapeSuivante} />
   </div>
 </div>
 
@@ -134,5 +199,20 @@
     display: flex;
     justify-content: flex-end;
     gap: 16px;
+  }
+
+  .contenu-etape {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .contenu-etape:not(.active) {
+    display: none;
+  }
+
+  #fonction-poste,
+  #estimation-nombre-services {
+    appearance: auto;
   }
 </style>

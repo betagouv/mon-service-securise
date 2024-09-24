@@ -3,7 +3,7 @@
   export let type: 'primaire' | 'secondaire';
 </script>
 
-<button class="bouton {type}">{titre}</button>
+<button class="bouton {type}" on:click>{titre}</button>
 
 <style>
   button {
