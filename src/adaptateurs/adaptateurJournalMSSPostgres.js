@@ -4,7 +4,7 @@ const uuid = require('uuid');
 const config = {
   client: 'pg',
   connection: process.env.URL_SERVEUR_BASE_DONNEES_JOURNAL,
-  pool: { min: 2, max: 10 },
+  pool: { min: 0, max: 10 },
 };
 
 const nouvelAdaptateur = () => {
