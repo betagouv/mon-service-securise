@@ -936,7 +936,7 @@ p {
   width: 11px;
 }
 
-.synthese-securite .tampon-homologation {
+.tampon-homologation {
   width: calc(288px - 32px);
   margin: -8px;
   padding: 16px;
