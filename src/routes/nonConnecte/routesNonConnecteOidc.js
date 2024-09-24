@@ -9,6 +9,7 @@ const routesNonConnecteOidc = ({
   adaptateurOidc,
   depotDonnees,
   middleware,
+  adaptateurEnvironnement,
 }) => {
   const routes = express.Router();
 
@@ -70,7 +71,10 @@ const routesNonConnecteOidc = ({
           utilisateurExistant.id,
           SourceAuthentification.AGENT_CONNECT
         );
-        reponse.render('apresAuthentification', { urlRedirection });
+        reponse.render('apresAuthentification', {
+          urlRedirection:
+            adaptateurEnvironnement.mss().urlBase() + urlRedirection,
+        });
       } else {
         const params = new URLSearchParams({
           nom,

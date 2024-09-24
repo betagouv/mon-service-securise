@@ -37,6 +37,7 @@ const creeServeur = (
   adaptateurProtection,
   adaptateurJournalMSS,
   adaptateurOidc,
+  adaptateurEnvironnement,
   procedures,
   inscriptionUtilisateur,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
@@ -119,6 +120,7 @@ const creeServeur = (
       adaptateurOidc,
       depotDonnees,
       middleware,
+      adaptateurEnvironnement,
     })
   );
   app.use(

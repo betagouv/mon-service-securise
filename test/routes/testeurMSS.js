@@ -26,6 +26,7 @@ const testeurMss = () => {
   let adaptateurProtection;
   let adaptateurJournalMSS;
   let adaptateurOidc;
+  let adaptateurEnvironnement;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -86,6 +87,11 @@ const testeurMss = () => {
       envoieTrackingInvitationContributeur: () => Promise.resolve(),
       envoieTrackingNouveauServiceCree: () => Promise.resolve(),
     };
+    adaptateurEnvironnement = {
+      mss: () => ({
+        urlBase: () => 'http://localhost:1234',
+      }),
+    };
     adaptateurProtection = {
       protectionCsrf: () => (_requete, _reponse, suite) => suite(),
       protectionLimiteTrafic: () => (_requete, _reponse, suite) => suite(),
@@ -131,6 +137,7 @@ const testeurMss = () => {
           adaptateurProtection,
           adaptateurJournalMSS,
           adaptateurOidc,
+          adaptateurEnvironnement,
           procedures,
           inscriptionUtilisateur,
           false,
