@@ -3,6 +3,12 @@
 
   let etapeCourante = 1;
 
+  $: titreEtape = [
+    'Vos informations professionnelles',
+    'Vos informations complémentaires',
+    'Vos consentements',
+  ][etapeCourante - 1];
+
   const etapePrecedente = () => {
     etapeCourante--;
   };
@@ -26,7 +32,7 @@
 <div class="contenu-inscription">
   <div class="titre-contenu">
     <div class="etape">Étape {etapeCourante} sur 3</div>
-    <h1>Vos informations professionnelles</h1>
+    <h1>{titreEtape}</h1>
     <div class="etapier"></div>
   </div>
   <hr />
