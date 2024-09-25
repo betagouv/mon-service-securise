@@ -2,22 +2,14 @@
   import MenuFlottant from '../ui/MenuFlottant.svelte';
 
   const fonctions = [
-    {
-      id: 'RSSI',
-      libelle: "Responsable de la sécurité des systèmes d'information",
-    },
-    {
-      id: 'DSI',
-      libelle: "Responsable des systèmes d'information",
-    },
-    {
-      id: 'DPO',
-      libelle: 'Délégué/e à la protection des données personnelles',
-    },
-    {
-      id: 'autre',
-      libelle: 'Autre',
-    },
+    { id: 'RSSI', libelle: 'Cybersécurité / SSI' },
+    { id: 'DSI', libelle: 'Numérique et systèmes d’information' },
+    { id: 'METIER', libelle: 'Direction métier' },
+    { id: 'DPO', libelle: 'Protection des données' },
+    { id: 'JURI', libelle: 'Juridique' },
+    { id: 'RISQ', libelle: 'Gestion des risques' },
+    { id: 'DG', libelle: 'Direction générale' },
+    { id: 'autre', libelle: 'Autre' },
   ];
 </script>
 
