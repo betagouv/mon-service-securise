@@ -23,8 +23,6 @@ block main
 
     button(type = 'submit').bouton Enregistrer
 
-
-  script(id = 'infos-completude-profil', type = 'application/json').
-    !{JSON.stringify({completudeProfil: utilisateur.completudeProfil()})}
+  +donneesPartagees('infos-completude-profil', {completudeProfil: utilisateur.completudeProfil()})
 
   script(type = 'module', src = '/statique/utilisateur/edition.js')

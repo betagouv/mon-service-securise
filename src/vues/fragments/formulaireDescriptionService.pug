@@ -1,5 +1,6 @@
 include ./inputChoix
 include ./elementsAjoutables/elementsAjoutablesDescription
+include ./donneesPartagees
 
 block append styles
   link(href = '/statique/assets/styles/homologation/descriptionService.css', rel = 'stylesheet')
@@ -7,8 +8,7 @@ block append styles
   link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
 
 block append scripts
-  script(id = 'donnees-departements', type = 'application/json').
-    !{JSON.stringify(departements || [])}
+  +donneesPartagees('donnees-departements', departements || [])
   script(src = "/statique/bibliotheques/selectize-0.15.2.min.js")
   script(src = "/statique/modules/suggestion/suggestionEntite.js")
 
@@ -247,11 +247,7 @@ mixin formulaireDescriptionService(idService)
             button.bouton#diagnostic(disabled) Commencer à sécuriser le service
 
   script(type = 'module', src = '/statique/service/descriptionService.js')
-  script(id = 'niveau-securite-existant', type = 'application/json').
-    !{JSON.stringify(estEnCreation ? null : service.descriptionService.niveauSecurite)}
-  script(id = 'niveau-securite-recommande-lecture-seule', type = 'application/json').
-    !{JSON.stringify(niveauRecommandeLectureSeule ? niveauRecommandeLectureSeule : null)}
-  script(id = 'decrire-lecture-seule', type = 'application/json').
-    !{JSON.stringify(estLectureSeule)}
-  script(id = 'suggestion-controle-besoins-securite-retrogrades', type = 'application/json').
-    !{JSON.stringify(estEnCreation ? false : service.pourraitFaire('controleBesoinsDeSecuriteRetrogrades'))}
+  +donneesPartagees('niveau-securite-existant', estEnCreation ? null : service.descriptionService.niveauSecurite)
+  +donneesPartagees('niveau-securite-recommande-lecture-seule', niveauRecommandeLectureSeule ? niveauRecommandeLectureSeule : null)
+  +donneesPartagees('decrire-lecture-seule', estLectureSeule)
+  +donneesPartagees('suggestion-controle-besoins-securite-retrogrades', estEnCreation ? false : service.pourraitFaire('controleBesoinsDeSecuriteRetrogrades'))

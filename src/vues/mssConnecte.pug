@@ -36,8 +36,7 @@ block bom-contenu
 block footer-bandeau-mss
 
 block visite-guidee
-  script(id = 'etat-visite-guidee', type = 'application/json').
-    !{JSON.stringify(etatVisiteGuidee || {})}
+  +donneesPartagees('etat-visite-guidee', etatVisiteGuidee || {})
 
   if etatVisiteGuidee && etatVisiteGuidee.dejaTerminee === false
     if etatVisiteGuidee.enPause === false

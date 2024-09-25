@@ -13,10 +13,8 @@ block append styles
 block append scripts
   script(type = 'module', src='/statique/scripts/conseilsCyber.js')
   +composantSvelte('blog.js')
-  script(id = 'sections-blog', type = 'application/json').
-    !{JSON.stringify(sections)}
-  script(id = 'articles-blog', type = 'application/json').
-    !{JSON.stringify(articles)}
+  +donneesPartagees('sections-blog', sections)
+  +donneesPartagees('articles-blog', articles)
 
 block navigation-site-vitrine
   +navigationSiteVitrine('conseils-cyber')
