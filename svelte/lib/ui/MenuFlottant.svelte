@@ -6,6 +6,7 @@
   export let estLectureSeule = false;
   export let menuOuvert = false;
   export let stopPropagation = false;
+  export let classePersonnalisee = '';
 
   let declencheurEl: HTMLButtonElement;
   let contenuEl: HTMLDivElement;
@@ -16,7 +17,7 @@
   };
 </script>
 
-<div class="conteneur">
+<div class="conteneur {classePersonnalisee}">
   <button
     class="declencheur"
     on:click={ouvreLeMenu}
