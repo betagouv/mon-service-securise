@@ -18,40 +18,53 @@
       : selection
           .map((id) => fonctions.find((f) => f.id === id)?.libelle)
           .join(', ');
+  $: afficheAutre = selection.includes('autre');
 </script>
 
-<div class="info-label">Fonction / poste occupé :</div>
-<MenuFlottant parDessusDeclencheur={true}>
-  <div slot="declencheur">
-    <button
-      class="bouton bouton-secondaire contenu-declencheur"
-      class:complete={selection.length > 0}
-    >
-      {label}
-    </button>
-  </div>
-  <div class="fonctions">
-    <div class="rappel-declencheur contenu-declencheur">
-      {label}
+<div class="conteneur">
+  <div class="info-label">Fonction / poste occupé :</div>
+  <MenuFlottant parDessusDeclencheur={true}>
+    <div slot="declencheur">
+      <button
+        class="bouton bouton-secondaire contenu-declencheur"
+        class:complete={selection.length > 0}
+      >
+        {label}
+      </button>
     </div>
-    <div class="options">
-      {#each fonctions as fonction}
-        <div class="case-et-label">
-          <input
-            type="checkbox"
-            bind:group={selection}
-            id={fonction.id}
-            name={fonction.id}
-            value={fonction.id}
-          />
-          <label for={fonction.id}>{fonction.libelle}</label>
-        </div>
-      {/each}
+    <div class="fonctions">
+      <div class="rappel-declencheur contenu-declencheur">
+        {label}
+      </div>
+      <div class="options">
+        {#each fonctions as fonction}
+          <div class="case-et-label">
+            <input
+              type="checkbox"
+              bind:group={selection}
+              id={fonction.id}
+              name={fonction.id}
+              value={fonction.id}
+            />
+            <label for={fonction.id}>{fonction.libelle}</label>
+          </div>
+        {/each}
+      </div>
     </div>
-  </div>
-</MenuFlottant>
+  </MenuFlottant>
+  {#if afficheAutre}
+    <label for="autreFonction">Merci de préciser votre fonction/poste </label>
+    <input type="text" id="autreFonction" name="autreFonction" />
+  {/if}
+</div>
 
 <style>
+  .conteneur {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   .info-label {
     margin-bottom: 8px;
   }
@@ -146,5 +159,13 @@
 
   input[type='checkbox'] + label {
     margin: 0;
+  }
+
+  #autreFonction {
+    border-radius: 5px;
+    border: 1px solid var(--liseres-fonce);
+    font-size: 16px;
+    padding: 8px 16px;
+    line-height: 24px;
   }
 </style>
