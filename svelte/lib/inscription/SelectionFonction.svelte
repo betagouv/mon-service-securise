@@ -23,7 +23,10 @@
 
 <div class="conteneur">
   <div class="info-label">Fonction / poste occupé :</div>
-  <MenuFlottant parDessusDeclencheur={true}>
+  <MenuFlottant
+    parDessusDeclencheur={true}
+    classePersonnalisee="selection-fonction"
+  >
     <div slot="declencheur">
       <button
         class="bouton bouton-secondaire contenu-declencheur"
@@ -120,11 +123,11 @@
     border-color: var(--bleu-mise-en-avant);
   }
 
-  :global(.declencheur) {
+  :global(.selection-fonction .declencheur) {
     width: 100%;
   }
 
-  :global(.svelte-menu-flottant.parDessusDeclencheur) {
+  :global(.selection-fonction .svelte-menu-flottant.parDessusDeclencheur) {
     width: 100%;
     left: 0;
     transform: translate(0, 0) !important;
