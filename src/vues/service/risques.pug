@@ -73,12 +73,8 @@ block formulaire
     if(!estLectureSeule)
       button.bouton(idService = service.id) Enregistrer &nbsp;&nbsp;›
 
-  script(id = 'donnees-referentiel-niveaux-gravite-risque', type = 'application/json').
-    !{JSON.stringify(referentiel.niveauxGravite())}
-  script(id = 'donnees-risques-generaux', type = 'application/json').
-    !{JSON.stringify(service.risques.toJSON().risquesGeneraux || [])}
-  script(id = 'donnees-risques-specifiques', type = 'application/json').
-    !{JSON.stringify(service.risques.toJSON().risquesSpecifiques || [])}
-  script(id = 'autorisations-risques', type = 'application/json').
-    !{JSON.stringify(autorisationsService.RISQUES)}
+  +donneesPartagees('donnees-referentiel-niveaux-gravite-risque', referentiel.niveauxGravite())
+  +donneesPartagees('donnees-risques-generaux', service.risques.toJSON().risquesGeneraux || [])
+  +donneesPartagees('donnees-risques-specifiques', service.risques.toJSON().risquesSpecifiques || [])
+  +donneesPartagees('autorisations-risques', autorisationsService.RISQUES)
   script(type = 'module', src = '/statique/service/risques.js')

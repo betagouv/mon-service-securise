@@ -62,7 +62,5 @@ block main
 
   script(type = 'module', src = '/statique/motDePasse/brancheValidationMotDePasse.js')
   script(type = 'module', src = '/statique/motDePasse/edition.js')
-  script(id = 'mode-initialisation', type = 'application/json').
-    !{JSON.stringify({ ...enModeInitialisation })}
-  script(id = 'invitation-contributeur', type = 'application/json').
-    !{JSON.stringify({ estInvitation: !utilisateur.accepteCGU() })}
+  +donneesPartagees('mode-initialisation', { ...enModeInitialisation })
+  +donneesPartagees('invitation-contributeur', { estInvitation: !utilisateur.accepteCGU() })

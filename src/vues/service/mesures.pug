@@ -13,22 +13,15 @@ block append scripts
   +composantSvelte('indiceCyber.js')
   +composantSvelte('indiceCyberPersonnalise.js')
   script(type = 'module', src = '/statique/service/mesures.js')
-  script(id = 'referentiel-categories-mesures', type = 'application/json').
-    !{JSON.stringify(referentiel.categoriesMesures())}
-  script(id = 'referentiel-statuts-mesures', type = 'application/json').
-    !{JSON.stringify(referentiel.statutsMesures())}
-  script(id = 'referentiel-priorites-mesures', type = 'application/json').
-    !{JSON.stringify(referentiel.prioritesMesures())}
-  script(id = 'referentiel-retours-utilisateur', type = 'application/json').
-    !{JSON.stringify(referentiel.retoursUtilisateurMesure())}
-  script(id = 'securiser-lecture-seule', type = 'application/json').
-    !{JSON.stringify(autorisationsService.SECURISER.estLectureSeule)}
-  script(id = 'indice-cyber', type = 'application/json').
-    !{JSON.stringify({ indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax()})}
-  script(id = 'indice-cyber-personnalise', type = 'application/json').
-    !{JSON.stringify({ indiceCyberPersonnalise: service.indiceCyberPersonnalise().total })}
-  script(id = 'nonce-commentaires', type = 'application/json').
-    !{JSON.stringify(nonce)}
+
+  +donneesPartagees('referentiel-categories-mesures', referentiel.categoriesMesures())
+  +donneesPartagees('referentiel-statuts-mesures', referentiel.statutsMesures())
+  +donneesPartagees('referentiel-priorites-mesures', referentiel.prioritesMesures())
+  +donneesPartagees('referentiel-retours-utilisateur', referentiel.retoursUtilisateurMesure())
+  +donneesPartagees('securiser-lecture-seule', autorisationsService.SECURISER.estLectureSeule)
+  +donneesPartagees('indice-cyber', { indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax()})
+  +donneesPartagees('indice-cyber-personnalise', { indiceCyberPersonnalise: service.indiceCyberPersonnalise().total })
+  +donneesPartagees('nonce-commentaires', nonce)
 
 block header-titre-page
   h3

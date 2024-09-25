@@ -1,5 +1,6 @@
 include ./inputChoix
 include ./utilisateur/preferencesCommunication
+include ./donneesPartagees
 
 block append styles
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
@@ -9,8 +10,7 @@ block append styles
   link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
 
 block append scripts
-  script(id = 'donnees-departements', type = 'application/json').
-    !{JSON.stringify(departements || [])}
+  +donneesPartagees('donnees-departements', departements || [])
   script(src = "/statique/bibliotheques/selectize-0.15.2.min.js")
   script(src = "/statique/modules/suggestion/suggestionEntite.js")
 
