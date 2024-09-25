@@ -1,7 +1,10 @@
-<script>
+<script lang="ts">
   import Bouton from '../ui/Bouton.svelte';
   import Etapier from '../ui/Etapier.svelte';
   import SelectionFonction from './SelectionFonction.svelte';
+  import type { EstimationNombreServices } from './inscription.d';
+
+  export let estimationNombreServices: EstimationNombreServices[];
 
   let etapeCourante = 1;
 
@@ -90,9 +93,11 @@
           téléservices
         </span>
         <select id="estimation-nombre-services" required>
-          <option>Sélectionner un nombre</option>
-          <option>1 à 10</option>
-          <option>11 à 20</option>
+          <option value="" disabled selected>Sélectionner un nombre</option>
+          {#each estimationNombreServices as estimation}
+            {@const valeur = `${estimation.borneBasse}_${estimation.borneHaute}`}
+            <option value={valeur}>{estimation.label}</option>
+          {/each}
         </select>
       </div>
     </div>
