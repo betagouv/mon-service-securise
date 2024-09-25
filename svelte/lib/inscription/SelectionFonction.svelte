@@ -11,24 +11,35 @@
     { id: 'DG', libelle: 'Direction générale' },
     { id: 'autre', libelle: 'Autre' },
   ];
+  let selection: string[] = [];
+  $: label =
+    selection.length === 0
+      ? 'Sélectionner une fonction'
+      : selection
+          .map((id) => fonctions.find((f) => f.id === id)?.libelle)
+          .join(', ');
 </script>
 
 <div class="info-label">Fonction / poste occupé :</div>
 <MenuFlottant parDessusDeclencheur={true}>
   <div slot="declencheur">
-    <button class="bouton bouton-secondaire contenu-declencheur">
-      Sélectionner une fonction
+    <button
+      class="bouton bouton-secondaire contenu-declencheur"
+      class:complete={selection.length > 0}
+    >
+      {label}
     </button>
   </div>
   <div class="fonctions">
     <div class="rappel-declencheur contenu-declencheur">
-      Sélectionner une fonction
+      {label}
     </div>
     <div class="options">
       {#each fonctions as fonction}
         <div class="case-et-label">
           <input
             type="checkbox"
+            bind:group={selection}
             id={fonction.id}
             name={fonction.id}
             value={fonction.id}
@@ -50,6 +61,10 @@
     border-radius: 6px;
     color: var(--texte-clair);
     border-color: var(--liseres-fonce);
+  }
+
+  .bouton.complete {
+    color: black;
   }
 
   .bouton::after {
