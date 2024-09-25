@@ -113,9 +113,8 @@
       <div class="case-a-cocher">
         <input id="cguAcceptees" type="checkbox" name="cguAcceptees" required />
         <label for="cguAcceptees" class="requis">
-          J'accepte les <a href="/cgu">conditions générales d'utilisation</a> et
-          la
-          <a href="/confidentialite">politique de confidentialité</a> de MonServiceSécurisé
+          J'accepte les <a href="/cgu">conditions générales d'utilisation</a> de
+          MonServiceSécurisé
         </label>
       </div>
     </div>
@@ -250,5 +249,15 @@
     color: var(--texte-clair);
     font-size: 12px;
     line-height: 20px;
+  }
+
+  .case-a-cocher {
+    background-color: #eff6ff;
+    border-radius: 6px;
+    padding: 16px;
+  }
+
+  input[type='checkbox'] {
+    transform: none;
   }
 </style>
