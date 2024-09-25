@@ -7,6 +7,8 @@ block append styles
 
 block append scripts
   +composantSvelte('inscription.js')
+  script(id='configuration-composant-svelte', type='application/json').
+    !{JSON.stringify({estimationNombreServices})}
 
 block main
   #conteneur-inscription

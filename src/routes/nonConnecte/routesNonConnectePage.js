@@ -54,7 +54,9 @@ const routesNonConnectePage = ({
   });
 
   routes.get('/inscription-v2', (_requete, reponse) => {
-    reponse.render('inscription-v2', {});
+    reponse.render('inscription-v2', {
+      estimationNombreServices: referentiel.estimationNombreServices(),
+    });
   });
 
   routes.get('/activation', (_requete, reponse) => {

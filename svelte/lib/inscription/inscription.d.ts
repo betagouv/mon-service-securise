@@ -4,4 +4,12 @@ declare global {
   }
 }
 
-export type InscriptionProps = {};
+export type EstimationNombreServices = {
+  label: string;
+  borneBasse: number;
+  borneHaute: number;
+};
+
+export type InscriptionProps = {
+  estimationNombreServices: EstimationNombreServices[];
+};
