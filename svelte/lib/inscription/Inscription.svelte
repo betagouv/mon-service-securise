@@ -38,7 +38,7 @@
     <h1>{titreEtape}</h1>
     <Etapier {etapeCourante} nombreEtapes={3} />
   </div>
-  <div class="info-champ-obligatoire">Champ obligatoire</div>
+  <div class="info-champ-obligatoire requis">Champ obligatoire</div>
   <div class="contenu-etape" class:active={etapeCourante === 1}>
     <div class="bloc">
       <h1>Votre identité</h1>
@@ -82,10 +82,10 @@
     <div class="bloc">
       <h1>Vos services numériques</h1>
       <div>
-        <span class="info-label">
-          * Combien de services publics numériques avez-vous à sécuriser ?
-        </span>
-        <span>
+        <label for="estimation-nombre-services" class="info-label requis">
+          Combien de services publics numériques avez-vous à sécuriser ?
+        </label>
+        <span class="exemple">
           Exemple : Systèmes d’information, site web, application mobile, API,
           téléservices
         </span>
@@ -112,7 +112,7 @@
       </div>
       <div class="case-a-cocher">
         <input id="cguAcceptees" type="checkbox" name="cguAcceptees" required />
-        <label for="cguAcceptees">
+        <label for="cguAcceptees" class="requis">
           J'accepte les <a href="/cgu">conditions générales d'utilisation</a> et
           la
           <a href="/confidentialite">politique de confidentialité</a> de MonServiceSécurisé
@@ -238,9 +238,17 @@
     font-size: 12px;
   }
 
-  .info-champ-obligatoire:before {
+  .requis:before {
     content: '*';
-    color: #e1000f;
-    margin-right: 2px;
+    color: #e3271c;
+    margin-right: 4px;
+    font-size: 16px;
+  }
+
+  .exemple {
+    display: block;
+    color: var(--texte-clair);
+    font-size: 12px;
+    line-height: 20px;
   }
 </style>
