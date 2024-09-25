@@ -231,7 +231,7 @@ const creeDepot = (config = {}) => {
 
   const metsAJourUtilisateur = async (id, donnees) => {
     delete donnees.motDePasse;
-    if (donnees.entite)
+    if (donnees.entite && donnees.entite.siret)
       donnees.entite = await Entite.completeDonnees(
         donnees.entite,
         adaptateurRechercheEntite

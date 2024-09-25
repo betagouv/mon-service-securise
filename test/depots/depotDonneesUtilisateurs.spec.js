@@ -228,6 +228,23 @@ describe('Le dépôt de données des utilisateurs', () => {
       expect(utilisateur.entite.nom).to.equal('MonEntite');
     });
 
+    it("ne complète pas les informations de l'entité si le siret est manquant", async () => {
+      let adaptateurAppele = false;
+      adaptateurRechercheEntite.rechercheOrganisations = async () => {
+        adaptateurAppele = true;
+        return [{ nom: 'MonEntite', departement: '75', siret: '12345' }];
+      };
+
+      await depot.metsAJourUtilisateur(
+        '123',
+        unUtilisateur()
+          .avecId('123')
+          .quiTravaillePourUneEntiteAvecSiret(undefined).donnees
+      );
+
+      expect(adaptateurAppele).to.be(false);
+    });
+
     it('ignore les demandes de changement de mot de passe', async () => {
       await depot.metsAJourMotDePasse('123', 'mdp_12345');
       await depot.metsAJourUtilisateur('123', {
