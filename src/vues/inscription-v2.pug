@@ -1,16 +1,15 @@
 extends ./mss
 
 block append styles
-  +feuilleDeStyleSvelte()
-  link(href = '/statique/assets/styles/inscription-v2.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+    +feuilleDeStyleSvelte()
+    link(href = '/statique/assets/styles/inscription-v2.css', rel = 'stylesheet')
+    link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
 
 block append scripts
-  +composantSvelte('inscription.js')
-  script(id='configuration-composant-svelte', type='application/json').
-    !{JSON.stringify({estimationNombreServices})}
+    +composantSvelte('inscription.js')
+    +donneesPartagees('configuration-composant-svelte',{estimationNombreServices})
 
 block main
-  #conteneur-inscription
+    #conteneur-inscription
 
-  script(type = 'module', src = '/statique/inscription-v2.js')
+    script(type = 'module', src = '/statique/inscription-v2.js')
