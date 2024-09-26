@@ -16,7 +16,15 @@
     { id: 'DG', libelle: 'Direction générale' },
     { id: 'autre', libelle: 'Autre' },
   ];
-  let selection: string[] = [];
+  const idsDesFonctions = fonctions.map((f) => f.id);
+
+  let selection: string[] = valeurs.filter((v) => idsDesFonctions.includes(v));
+  const autreValeur = valeurs.find((v) => !idsDesFonctions.includes(v));
+  if (autreValeur) {
+    selection.push('autre');
+    autreFonction = autreValeur;
+  }
+
   $: label =
     selection.length === 0
       ? 'Sélectionner une fonction'
