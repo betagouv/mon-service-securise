@@ -341,8 +341,20 @@ const creeDepot = (config = {}) => {
     return idService;
   };
 
-  const remplaceRisquesSpecifiquesDuService = (...params) =>
-    remplaceProprieteService('risquesSpecifiques', ...params);
+  const remplaceRisquesSpecifiquesDuService = (
+    idService,
+    listeRisquesSpecifiques
+  ) => {
+    for (let i = 0; i < listeRisquesSpecifiques.nombre(); i += 1) {
+      listeRisquesSpecifiques.items[i].id =
+        listeRisquesSpecifiques.items[i].id || adaptateurUUID.genereUUID();
+    }
+    return remplaceProprieteService(
+      'risquesSpecifiques',
+      idService,
+      listeRisquesSpecifiques
+    );
+  };
 
   const supprimeService = async (idService) => {
     const { contributeurs: avantSuppression } = await p.lis.un(idService);

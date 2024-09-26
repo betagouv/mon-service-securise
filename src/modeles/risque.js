@@ -8,7 +8,7 @@ class Risque extends InformationsService {
     referentiel = Referentiel.creeReferentielVide()
   ) {
     super({
-      proprietesAtomiquesRequises: ['niveauGravite'],
+      proprietesAtomiquesRequises: ['niveauGravite', 'id'],
       proprietesAtomiquesFacultatives: ['commentaire'],
     });
 

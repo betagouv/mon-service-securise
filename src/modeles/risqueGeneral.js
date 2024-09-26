@@ -9,7 +9,6 @@ class RisqueGeneral extends Risque {
   ) {
     super(donneesRisque, referentiel);
 
-    this.proprietesAtomiquesRequises.push('id');
     RisqueGeneral.valide(donneesRisque, referentiel);
     this.renseigneProprietes(donneesRisque);
     this.referentiel = referentiel;
