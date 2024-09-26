@@ -5,6 +5,7 @@
   import type {
     EstimationNombreServices,
     InformationsProfessionnelles,
+    Intervalle,
   } from './inscription.d';
 
   export let estimationNombreServices: EstimationNombreServices[];
@@ -24,7 +25,36 @@
   const etapeSuivante = () => {
     if (etapeCourante < 3) etapeCourante++;
   };
-  const valide = () => {};
+  const valide = () => {
+    axios.post('/api/utilisateur', formulaireInscription);
+  };
+
+  type FormulaireInscription = {
+    prenom: string;
+    nom: string;
+    email: string;
+    siretEntite: string;
+    postes: string[];
+    estimationNombreServices: Intervalle;
+    agentConnect: boolean;
+    infolettreAcceptee: boolean;
+    transactionnelAccepte: boolean;
+  };
+
+  let formulaireInscription: FormulaireInscription = {
+    prenom: informationsProfessionnelles.prenom,
+    nom: informationsProfessionnelles.nom,
+    email: informationsProfessionnelles.email,
+    siretEntite: informationsProfessionnelles.organisation.siret,
+    postes: [],
+    estimationNombreServices: {
+      borneBasse: 1,
+      borneHaute: 2,
+    },
+    agentConnect: true,
+    infolettreAcceptee: true,
+    transactionnelAccepte: true,
+  };
 </script>
 
 <div class="entete-inscription">
