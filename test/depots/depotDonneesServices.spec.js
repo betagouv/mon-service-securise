@@ -528,6 +528,35 @@ describe('Le dépôt de données des services', () => {
     expect(risquesSpecifiques.item(0).description).to.equal('Un risque');
   });
 
+  it("ajoute un identifiant aux risques qui n'en ont pas", async () => {
+    const r = Referentiel.creeReferentielVide();
+    const adaptateurUUID = { genereUUID: () => 'NouveauRS2' };
+    const depot = unDepotDeDonneesServices()
+      .avecAdaptateurUUID(adaptateurUUID)
+      .avecReferentiel(r)
+      .avecConstructeurDePersistance(
+        unePersistanceMemoire().ajouteUnService(
+          unService(r).avecId('S1').donnees
+        )
+      )
+      .construis();
+    const risques = new RisquesSpecifiques({
+      risquesSpecifiques: [
+        { id: 'RS1', description: 'Un risque' },
+        { description: 'Un second risque sans id' },
+      ],
+    });
+
+    await depot.remplaceRisquesSpecifiquesDuService('S1', risques);
+
+    const {
+      risques: { risquesSpecifiques },
+    } = await depot.service('S1');
+    expect(risquesSpecifiques.nombre()).to.equal(2);
+    expect(risquesSpecifiques.item(0).id).to.equal('RS1');
+    expect(risquesSpecifiques.item(1).id).to.equal('NouveauRS2');
+  });
+
   it('supprime les risques spécifiques précédemment associés', async () => {
     const r = Referentiel.creeReferentielVide();
 

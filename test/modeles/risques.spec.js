@@ -34,7 +34,11 @@ describe('Les risques liés à un service', () => {
         const risques = new Risques(
           {
             risquesSpecifiques: [
-              { description: 'Un risque spécifique', niveauGravite: 'grave' },
+              {
+                id: 'RS1',
+                description: 'Un risque spécifique',
+                niveauGravite: 'grave',
+              },
             ],
           },
           referentiel
