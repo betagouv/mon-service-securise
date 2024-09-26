@@ -2,6 +2,7 @@
   import { createEventDispatcher } from 'svelte';
 
   export let id: string = '';
+  export let classe: string = '';
 
   let formulaire: HTMLFormElement;
 
@@ -22,6 +23,7 @@
   on:submit|preventDefault={verifieValidite}
   {id}
   novalidate
+  class={classe}
 >
   <slot />
 </form>
