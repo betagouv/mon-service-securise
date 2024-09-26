@@ -1,9 +1,10 @@
 <script lang="ts">
   export let nom: string;
   export let id: string;
+  export let valeur: string = '';
 </script>
 
-<input type="text" {id} name={nom} />
+<input type="text" {id} name={nom} bind:value={valeur} />
 
 <style>
   input {
