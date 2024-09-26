@@ -428,6 +428,7 @@ module.exports = {
 
   risques: {
     indisponibiliteService: {
+      identifiantNumerique: 'R1',
       description:
         'Indisponibilité partielle ou totale du service numérique pendant plusieurs heures',
       descriptionLongue: `
@@ -442,6 +443,7 @@ module.exports = {
         "L'indisponibilité du service numérique signifie que certaines fonctionnalités ou que la totalité du service n'est plus accessible aux usagers et/ou aux agents publics.",
     },
     donneesModifiees: {
+      identifiantNumerique: 'R2',
       description:
         "Suppression ou modification d'informations personnelles ou sensibles",
       descriptionLongue:
@@ -450,6 +452,7 @@ module.exports = {
         'Ce risque signifie que des informations appartenant à des usagers ou à des agents publics sont supprimées en partie ou en totalité par un attaquant ou sont modifiées en leur avantage ou en leur défaveur.',
     },
     divulgationDonnees: {
+      identifiantNumerique: 'R3',
       description:
         "Divulgation publique d'informations personnelles ou sensibles",
       descriptionLongue:
@@ -458,6 +461,7 @@ module.exports = {
         "Ce risque signifie que des informations concernant des usagers ou des agents publics, traitées dans le cadre du service numérique, sont dérobées par un attaquant puis rendues publiques pour porter préjudice aux personnes concernées et/ou nuire à la réputation de l'entité.",
     },
     defigurationSiteWeb: {
+      identifiantNumerique: 'R4',
       description: "Défiguration visible de l'apparence du service numérique",
       descriptionLongue:
         "La défiguration d'un service numérique signifie que son apparence est modifiée de manière visible par l'ajout de messages ou d'images, le plus souvent à caractère idéologique, ou à des fins de simples détérioration en vue de nuire à la réputation de l'entité publique.<br>Par exemple :<li>Une image satirique apparaît sur la page d'accueil d'un service numérique.</li><li>Des messages de protestation contre la politique d'une collectivité sont insérés sur plusieurs pages du service numérique.</li>",
@@ -465,6 +469,7 @@ module.exports = {
         "La défiguration d'un service numérique signifie que son apparence est modifiée de manière visible par l'ajout de messages ou d'images, le plus souvent à caractère idéologique, ou à des fins de simples détérioration en vue de nuire à la réputation de l'entité publique.",
     },
     arnaques: {
+      identifiantNumerique: 'R5',
       description: "Vol d'informations personnelles à des fins d'escroquerie",
       descriptionLongue: `
         Ce risque signifie que des informations traitées dans le cadre du service numérique sont dérobées par un attaquant,
@@ -482,6 +487,7 @@ module.exports = {
       `,
     },
     logicielsMalveillants: {
+      identifiantNumerique: 'R6',
       description:
         "Détournement de l'usage du service numérique en vue de conduire des activités non prévues par ce dernier",
       descriptionLongue:
@@ -490,6 +496,7 @@ module.exports = {
         'Ce risque signifie que le service numérique est utilisé de manière discrète et illicite afin de conduire des activités ne correspondant pas à sa finalité, la plupart du temps à des fins de gain financier.',
     },
     surveillance: {
+      identifiantNumerique: 'R7',
       description:
         "Vol de données ou interception d'échanges à des fins de renseignement ou d'espionnage",
       descriptionLongue:
