@@ -87,105 +87,114 @@
   </div>
   <div class="info-champ-obligatoire requis">Champ obligatoire</div>
 
-  <div class="contenu-etape" class:active={etapeCourante === 1}>
-    <div class="bloc">
-      <h1>Votre identité</h1>
-      <div>
-        <span class="info-label">Nom :</span>
-        <span class="info-valeur">{informationsProfessionnelles.nom}</span>
+  {#if etapeCourante === 1}
+    <div class="contenu-etape">
+      <div class="bloc">
+        <h1>Votre identité</h1>
+        <div>
+          <span class="info-label">Nom :</span>
+          <span class="info-valeur">{informationsProfessionnelles.nom}</span>
+        </div>
+        <div>
+          <span class="info-label">Prénom :</span>
+          <span class="info-valeur">{informationsProfessionnelles.prenom}</span>
+        </div>
+        <div>
+          <span class="info-label">Mail professionnel :</span>
+          <span class="info-valeur">{informationsProfessionnelles.email}</span>
+        </div>
       </div>
-      <div>
-        <span class="info-label">Prénom :</span>
-        <span class="info-valeur">{informationsProfessionnelles.prenom}</span>
-      </div>
-      <div>
-        <span class="info-label">Mail professionnel :</span>
-        <span class="info-valeur">{informationsProfessionnelles.email}</span>
+      <div class="bloc">
+        <h1>Votre organisation</h1>
+        <div>
+          <span class="info-label">Dénomination légale :</span>
+          <span class="info-valeur"
+            >{informationsProfessionnelles.organisation.denomination}</span
+          >
+        </div>
+        <div>
+          <span class="info-label">SIRET :</span>
+          <span class="info-valeur"
+            >{informationsProfessionnelles.organisation.siret}</span
+          >
+        </div>
+        <div>
+          <span class="info-label">Département de votre organisation :</span>
+          <span class="info-valeur"
+            >{informationsProfessionnelles.organisation.departement}</span
+          >
+        </div>
       </div>
     </div>
-    <div class="bloc">
-      <h1>Votre organisation</h1>
-      <div>
-        <span class="info-label">Dénomination légale :</span>
-        <span class="info-valeur"
-          >{informationsProfessionnelles.organisation.denomination}</span
-        >
-      </div>
-      <div>
-        <span class="info-label">SIRET :</span>
-        <span class="info-valeur"
-          >{informationsProfessionnelles.organisation.siret}</span
-        >
-      </div>
-      <div>
-        <span class="info-label">Département de votre organisation :</span>
-        <span class="info-valeur"
-          >{informationsProfessionnelles.organisation.departement}</span
-        >
-      </div>
-    </div>
-  </div>
+  {/if}
 
-  <div class="contenu-etape" class:active={etapeCourante === 2}>
-    <div class="bloc bloc-avec-separateur">
-      <h1>Votre identité</h1>
-      <div>
-        <SelectionFonction requis bind:valeurs={formulaireInscription.postes} />
+  {#if etapeCourante === 2}
+    <div class="contenu-etape">
+      <div class="bloc bloc-avec-separateur">
+        <h1>Votre identité</h1>
+        <div>
+          <SelectionFonction
+            requis
+            bind:valeurs={formulaireInscription.postes}
+          />
+        </div>
+      </div>
+      <div class="bloc">
+        <h1>Vos services numériques</h1>
+        <div>
+          <label for="estimation-nombre-services" class="info-label requis">
+            Combien de services publics numériques avez-vous à sécuriser ?
+          </label>
+          <span class="exemple">
+            Exemple : Systèmes d’information, site web, application mobile, API,
+            téléservices
+          </span>
+          <select
+            id="estimation-nombre-services"
+            required
+            bind:value={nombreServices}
+          >
+            <option value="" disabled selected>Sélectionner un nombre</option>
+            {#each estimationNombreServices as estimation}
+              {@const valeur = `${estimation.borneBasse}_${estimation.borneHaute}`}
+              <option value={valeur}>{estimation.label}</option>
+            {/each}
+          </select>
+        </div>
       </div>
     </div>
-    <div class="bloc">
-      <h1>Vos services numériques</h1>
-      <div>
-        <label for="estimation-nombre-services" class="info-label requis">
-          Combien de services publics numériques avez-vous à sécuriser ?
-        </label>
-        <span class="exemple">
-          Exemple : Systèmes d’information, site web, application mobile, API,
-          téléservices
-        </span>
-        <select
-          id="estimation-nombre-services"
-          required
-          bind:value={nombreServices}
-        >
-          <option value="" disabled selected>Sélectionner un nombre</option>
-          {#each estimationNombreServices as estimation}
-            {@const valeur = `${estimation.borneBasse}_${estimation.borneHaute}`}
-            <option value={valeur}>{estimation.label}</option>
-          {/each}
-        </select>
-      </div>
-    </div>
-  </div>
+  {/if}
 
-  <div class="contenu-etape" class:active={etapeCourante === 3}>
-    <div class="bloc">
-      <div class="case-a-cocher">
-        <input
-          id="infolettreAcceptee"
-          type="checkbox"
-          bind:checked={formulaireInscription.infolettreAcceptee}
-          name="infolettreAcceptee"
-        />
-        <label for="infolettreAcceptee">
-          J'accepte de recevoir la lettre d'information MonServiceSécurisé.
-        </label>
-      </div>
-      <div class="case-a-cocher">
-        <input
-          id="cguAcceptees"
-          type="checkbox"
-          bind:checked={formulaireInscription.cguAcceptees}
-          name="cguAcceptees"
-          required
-        />
-        <label for="cguAcceptees" class="requis">
-          J'accepte les <a href="/cgu">conditions générales d'utilisation</a> de
-          MonServiceSécurisé
-        </label>
+  {#if etapeCourante === 3}
+    <div class="contenu-etape">
+      <div class="bloc">
+        <div class="case-a-cocher">
+          <input
+            id="infolettreAcceptee"
+            type="checkbox"
+            bind:checked={formulaireInscription.infolettreAcceptee}
+            name="infolettreAcceptee"
+          />
+          <label for="infolettreAcceptee">
+            J'accepte de recevoir la lettre d'information MonServiceSécurisé.
+          </label>
+        </div>
+        <div class="case-a-cocher">
+          <input
+            id="cguAcceptees"
+            type="checkbox"
+            bind:checked={formulaireInscription.cguAcceptees}
+            name="cguAcceptees"
+            required
+          />
+          <label for="cguAcceptees" class="requis">
+            J'accepte les <a href="/cgu">conditions générales d'utilisation</a> de
+            MonServiceSécurisé
+          </label>
+        </div>
       </div>
     </div>
-  </div>
+  {/if}
 
   <div class="actions">
     <Bouton
@@ -290,10 +299,6 @@
     display: flex;
     flex-direction: column;
     gap: 32px;
-  }
-
-  .contenu-etape:not(.active) {
-    display: none;
   }
 
   #estimation-nombre-services {
