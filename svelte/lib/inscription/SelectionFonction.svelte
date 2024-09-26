@@ -2,6 +2,9 @@
   import MenuFlottant from '../ui/MenuFlottant.svelte';
   import ChampTexte from '../ui/ChampTexte.svelte';
 
+  export let valeurs: string[];
+  let autreFonction: string = '';
+
   const fonctions = [
     { id: 'RSSI', libelle: 'Cybersécurité / SSI' },
     { id: 'DSI', libelle: 'Numérique et systèmes d’information' },
@@ -20,6 +23,10 @@
           .map((id) => fonctions.find((f) => f.id === id)?.libelle)
           .join(', ');
   $: afficheAutre = selection.includes('autre');
+  $: valeurs = [
+    ...selection.filter((f) => f !== 'autre'),
+    ...(afficheAutre ? [autreFonction] : ''),
+  ];
 </script>
 
 <div class="conteneur">
@@ -58,7 +65,11 @@
   </MenuFlottant>
   {#if afficheAutre}
     <label for="autreFonction">Merci de préciser votre fonction/poste </label>
-    <ChampTexte id="autreFonction" nom="autreFonction" />
+    <ChampTexte
+      id="autreFonction"
+      nom="autreFonction"
+      bind:valeur={autreFonction}
+    />
   {/if}
 </div>
 
