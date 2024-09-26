@@ -2,9 +2,13 @@
   import Bouton from '../ui/Bouton.svelte';
   import Etapier from '../ui/Etapier.svelte';
   import SelectionFonction from './SelectionFonction.svelte';
-  import type { EstimationNombreServices } from './inscription.d';
+  import type {
+    EstimationNombreServices,
+    InformationsProfessionnelles,
+  } from './inscription.d';
 
   export let estimationNombreServices: EstimationNombreServices[];
+  export let informationsProfessionnelles: InformationsProfessionnelles;
 
   let etapeCourante = 1;
 
@@ -47,30 +51,36 @@
       <h1>Votre identité</h1>
       <div>
         <span class="info-label">Nom :</span>
-        <span class="info-valeur">Dupont</span>
+        <span class="info-valeur">{informationsProfessionnelles.nom}</span>
       </div>
       <div>
         <span class="info-label">Prénom :</span>
-        <span class="info-valeur">Jean-Baptiste</span>
+        <span class="info-valeur">{informationsProfessionnelles.prenom}</span>
       </div>
       <div>
         <span class="info-label">Mail professionnel :</span>
-        <span class="info-valeur">jean-baptiste@orange.fr</span>
+        <span class="info-valeur">{informationsProfessionnelles.email}</span>
       </div>
     </div>
     <div class="bloc">
       <h1>Votre organisation</h1>
       <div>
         <span class="info-label">Dénomination légale :</span>
-        <span class="info-valeur">ORANGE</span>
+        <span class="info-valeur"
+          >{informationsProfessionnelles.organisation.denomination}</span
+        >
       </div>
       <div>
         <span class="info-label">SIRET :</span>
-        <span class="info-valeur">380 129 866 </span>
+        <span class="info-valeur"
+          >{informationsProfessionnelles.organisation.siret}</span
+        >
       </div>
       <div>
         <span class="info-label">Département de votre organisation :</span>
-        <span class="info-valeur">92</span>
+        <span class="info-valeur"
+          >{informationsProfessionnelles.organisation.departement}</span
+        >
       </div>
     </div>
   </div>

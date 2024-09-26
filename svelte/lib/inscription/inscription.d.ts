@@ -10,6 +10,20 @@ export type EstimationNombreServices = {
   borneHaute: number;
 };
 
+export type Organisation = {
+  denomination: string;
+  siret: string;
+  departement: string;
+};
+
+export type InformationsProfessionnelles = {
+  prenom: string;
+  nom: string;
+  email: string;
+  organisation: Organisation;
+};
+
 export type InscriptionProps = {
   estimationNombreServices: EstimationNombreServices[];
+  informationsProfessionnelles: InformationsProfessionnelles;
 };
