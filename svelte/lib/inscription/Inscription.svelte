@@ -130,7 +130,7 @@
     <div class="bloc bloc-avec-separateur">
       <h1>Votre identité</h1>
       <div>
-        <SelectionFonction bind:valeurs={formulaireInscription.postes} />
+        <SelectionFonction requis bind:valeurs={formulaireInscription.postes} />
       </div>
     </div>
     <div class="bloc">

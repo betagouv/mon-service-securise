@@ -3,6 +3,7 @@
   import ChampTexte from '../ui/ChampTexte.svelte';
 
   export let valeurs: string[];
+  export let requis: boolean = false;
   let autreFonction: string = '';
 
   const fonctions = [
@@ -30,7 +31,7 @@
 </script>
 
 <div class="conteneur">
-  <div class="info-label">Fonction / poste occupé :</div>
+  <div class="info-label" class:requis>Fonction / poste occupé :</div>
   <MenuFlottant
     parDessusDeclencheur={true}
     classePersonnalisee="selection-fonction"
@@ -174,5 +175,12 @@
 
   input[type='checkbox'] + label {
     margin: 0;
+  }
+
+  .requis:before {
+    content: '*';
+    color: #e3271c;
+    margin-right: 4px;
+    font-size: 16px;
   }
 </style>
