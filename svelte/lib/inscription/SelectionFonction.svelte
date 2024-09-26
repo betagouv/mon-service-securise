@@ -1,5 +1,6 @@
 <script lang="ts">
   import MenuFlottant from '../ui/MenuFlottant.svelte';
+  import ChampTexte from '../ui/ChampTexte.svelte';
 
   const fonctions = [
     { id: 'RSSI', libelle: 'Cybersécurité / SSI' },
@@ -57,7 +58,7 @@
   </MenuFlottant>
   {#if afficheAutre}
     <label for="autreFonction">Merci de préciser votre fonction/poste </label>
-    <input type="text" id="autreFonction" name="autreFonction" />
+    <ChampTexte id="autreFonction" nom="autreFonction" />
   {/if}
 </div>
 
@@ -162,13 +163,5 @@
 
   input[type='checkbox'] + label {
     margin: 0;
-  }
-
-  #autreFonction {
-    border-radius: 5px;
-    border: 1px solid var(--liseres-fonce);
-    font-size: 16px;
-    padding: 8px 16px;
-    line-height: 24px;
   }
 </style>
