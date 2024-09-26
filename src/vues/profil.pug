@@ -1,0 +1,14 @@
+extends ./mss
+
+block append styles
+  +feuilleDeStyleSvelte()
+  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+
+block append scripts
+  +composantSvelte('profil.js')
+  +donneesPartagees('donnees-profil',{utilisateur, departements})
+
+block main
+  #conteneur-profil
+
+  script(type = 'module', src = '/statique/profil.js')
