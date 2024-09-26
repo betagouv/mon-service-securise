@@ -78,6 +78,7 @@
     <Etapier {etapeCourante} nombreEtapes={3} />
   </div>
   <div class="info-champ-obligatoire requis">Champ obligatoire</div>
+
   <div class="contenu-etape" class:active={etapeCourante === 1}>
     <div class="bloc">
       <h1>Votre identité</h1>
@@ -121,7 +122,7 @@
     <div class="bloc bloc-avec-separateur">
       <h1>Votre identité</h1>
       <div>
-        <SelectionFonction />
+        <SelectionFonction bind:valeurs={formulaireInscription.postes} />
       </div>
     </div>
     <div class="bloc">
