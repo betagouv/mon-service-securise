@@ -57,6 +57,14 @@
     infolettreAcceptee: false,
     transactionnelAccepte: true,
   };
+
+  let nombreServices: string = '';
+  $: {
+    formulaireInscription.estimationNombreServices = {
+      borneBasse: Number(nombreServices.split('_')[0]),
+      borneHaute: Number(nombreServices.split('_')[1]),
+    };
+  }
 </script>
 
 <div class="entete-inscription">
@@ -135,7 +143,11 @@
           Exemple : Systèmes d’information, site web, application mobile, API,
           téléservices
         </span>
-        <select id="estimation-nombre-services" required>
+        <select
+          id="estimation-nombre-services"
+          required
+          bind:value={nombreServices}
+        >
           <option value="" disabled selected>Sélectionner un nombre</option>
           {#each estimationNombreServices as estimation}
             {@const valeur = `${estimation.borneBasse}_${estimation.borneHaute}`}
