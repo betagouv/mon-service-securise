@@ -13,4 +13,8 @@
     padding: 8px 16px;
     line-height: 24px;
   }
+
+  input:hover {
+    border-color: var(--bleu-mise-en-avant);
+  }
 </style>
