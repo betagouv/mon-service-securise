@@ -20,11 +20,20 @@
     'Vos consentements',
   ][etapeCourante - 1];
 
+  let formulaireEtape1: Formulaire;
+  let formulaireEtape2: Formulaire;
+  let formulaireEtape3: Formulaire;
+
+  $: tousFormulaires = [formulaireEtape1, formulaireEtape2, formulaireEtape3];
+  $: formulaireCourant = tousFormulaires[etapeCourante - 1];
+
   const etapePrecedente = () => {
     if (etapeCourante > 1) etapeCourante--;
   };
   const etapeSuivante = () => {
-    if (etapeCourante < 3) etapeCourante++;
+    if (formulaireCourant.estValide() && etapeCourante < 3) {
+      etapeCourante++;
+    }
   };
   const valide = () => {
     axios.post('/api/utilisateur', formulaireInscription);
@@ -89,7 +98,7 @@
   <div class="info-champ-obligatoire requis">Champ obligatoire</div>
 
   {#if etapeCourante === 1}
-    <Formulaire classe="formulaire-inscription">
+    <Formulaire classe="formulaire-inscription" bind:this={formulaireEtape1}>
       <div class="contenu-etape">
         <div class="bloc">
           <h1>Votre identité</h1>
@@ -135,7 +144,7 @@
   {/if}
 
   {#if etapeCourante === 2}
-    <Formulaire classe="formulaire-inscription">
+    <Formulaire classe="formulaire-inscription" bind:this={formulaireEtape2}>
       <div class="contenu-etape">
         <div class="bloc bloc-avec-separateur">
           <h1>Votre identité</h1>
@@ -174,7 +183,7 @@
   {/if}
 
   {#if etapeCourante === 3}
-    <Formulaire classe="formulaire-inscription">
+    <Formulaire classe="formulaire-inscription" bind:this={formulaireEtape3}>
       <div class="contenu-etape">
         <div class="bloc">
           <div class="case-a-cocher">

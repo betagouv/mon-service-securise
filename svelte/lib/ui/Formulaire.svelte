@@ -6,6 +6,10 @@
 
   let formulaire: HTMLFormElement;
 
+  export const estValide = () => {
+    return formulaire.checkValidity();
+  };
+
   const dispatch = createEventDispatcher<{
     formulaireValide: null;
     formulaireInvalide: null;
