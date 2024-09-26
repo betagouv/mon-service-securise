@@ -1,9 +1,11 @@
-type TypeNoeud = HTMLTextAreaElement | HTMLSelectElement;
+type TypeNoeud = HTMLTextAreaElement | HTMLSelectElement | HTMLInputElement;
 
 export const validationChamp = (
   noeud: TypeNoeud,
   messageSiInvalide: string
 ) => {
+  if (!messageSiInvalide) return;
+
   let messageErreur = document.createElement('span');
   messageErreur.classList.add('erreur-champ-saisie');
   messageErreur.style.display = 'none';
