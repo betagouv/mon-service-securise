@@ -69,6 +69,22 @@ const routesConnectePage = ({
   );
 
   routes.get(
+    '/profil',
+    middleware.verificationAcceptationCGU,
+    middleware.chargeEtatVisiteGuidee,
+    async (requete, reponse) => {
+      const departements = referentiel.departements();
+      const idUtilisateur = requete.idUtilisateurCourant;
+      const utilisateur = await depotDonnees.utilisateur(idUtilisateur);
+
+      reponse.render('profil', {
+        utilisateur,
+        departements,
+      });
+    }
+  );
+
+  routes.get(
     '/tableauDeBord',
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,

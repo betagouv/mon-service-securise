@@ -41,6 +41,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   [
     '/motDePasse/edition',
     '/utilisateur/edition',
+    '/profil',
     '/tableauDeBord',
     '/visiteGuidee/decrire',
     '/visiteGuidee/securiser',
@@ -124,6 +125,19 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         expect(reponse.status).to.be(302);
         expect(reponse.headers.location).to.be('/oidc/deconnexion');
       });
+    });
+  });
+
+  describe(`quand GET sur /profil`, () => {
+    it("délègue au dépôt de données la lecture des informations de l'utilisateur", async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: '456' });
+      let idRecu;
+      testeur.depotDonnees().utilisateur = (idUtilisateur) => {
+        idRecu = idUtilisateur;
+      };
+
+      await axios.get(`http://localhost:1234/profil`);
+      expect(idRecu).to.be('456');
     });
   });
 });
