@@ -159,13 +159,13 @@
           <div class="bloc bloc-avec-separateur champs-saisie">
             <h1>Votre organisation</h1>
             <div>
-              <label for="departement requis"
+              <label for="departement" class="requis"
                 >Département de votre organisation</label
               >
               <SelectionDepartement bind:valeur={departement} {departements} />
             </div>
             <div>
-              <label for="nomSiret requis"
+              <label for="nomSiret" class="requis"
                 >Nom ou SIRET de votre organisation</label
               >
               <SelectionOrganisation
@@ -193,7 +193,11 @@
             />
           </div>
           <div>
+            <label class="requis" for="domaine-specialite">
+              Domaine de spécialité
+            </label>
             <SelectionDomaineSpecialite
+              id="domaine-specialite"
               requis
               bind:valeurs={formulaireInscription.postes}
             />
