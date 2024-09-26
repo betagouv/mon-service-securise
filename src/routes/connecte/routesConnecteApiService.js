@@ -13,6 +13,7 @@ const {
   ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
   ErreurResponsablesMesureInvalides,
+  ErreurRisqueInconnu,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -401,6 +402,37 @@ const routesConnecteApiService = ({
       depotDonnees
         .ajouteRolesResponsabilitesAService(idService, rolesResponsabilites)
         .then(() => reponse.send({ idService }));
+    }
+  );
+
+  routes.put(
+    '/:id/risques/:idRisque',
+    middleware.trouveService({ [RISQUES]: ECRITURE }),
+    middleware.aseptise('niveauGravite', 'commentaire'),
+    async (requete, reponse, suite) => {
+      const { niveauGravite, commentaire } = requete.body;
+      try {
+        const risque = new RisqueGeneral(
+          {
+            id: requete.params.idRisque,
+            niveauGravite,
+            commentaire,
+          },
+          referentiel
+        );
+        await depotDonnees.ajouteRisqueGeneralAService(
+          requete.service.id,
+          risque
+        );
+
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurRisqueInconnu) {
+          reponse.status(400).send(e.message);
+        } else {
+          suite(e);
+        }
+      }
     }
   );
 
