@@ -19,6 +19,7 @@
 
 <div class="conteneur {classePersonnalisee}">
   <button
+    type="button"
     class="declencheur"
     on:click={ouvreLeMenu}
     bind:this={declencheurEl}

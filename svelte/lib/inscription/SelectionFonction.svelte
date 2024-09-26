@@ -1,10 +1,13 @@
 <script lang="ts">
   import MenuFlottant from '../ui/MenuFlottant.svelte';
   import ChampTexte from '../ui/ChampTexte.svelte';
+  import { validationChamp } from '../directives/validationChamp';
+  import { tick } from 'svelte';
 
   export let valeurs: string[];
   export let requis: boolean = false;
   let autreFonction: string = '';
+  let champDeclencheur: HTMLInputElement;
 
   const fonctions = [
     { id: 'RSSI', libelle: 'Cybersécurité / SSI' },
@@ -25,12 +28,19 @@
     autreFonction = autreValeur;
   }
 
-  $: label =
-    selection.length === 0
-      ? 'Sélectionner une fonction'
-      : selection
-          .map((id) => fonctions.find((f) => f.id === id)?.libelle)
-          .join(', ');
+  $: label = selection
+    .map((id) => fonctions.find((f) => f.id === id)?.libelle)
+    .join(', ');
+
+  $: {
+    if (label) {
+      tick().then(() => champDeclencheur.dispatchEvent(new Event('input')));
+    }
+  }
+
+  $: labelRappelDeclencheur =
+    selection.length === 0 ? 'Sélectionner une fonction' : label;
+
   $: afficheAutre = selection.includes('autre');
   $: valeurs = [
     ...selection.filter((f) => f !== 'autre'),
@@ -40,21 +50,29 @@
 
 <div class="conteneur">
   <div class="info-label" class:requis>Fonction / poste occupé :</div>
+
   <MenuFlottant
     parDessusDeclencheur={true}
     classePersonnalisee="selection-fonction"
   >
     <div slot="declencheur">
-      <button
+      <input
+        type="text"
+        role="button"
+        placeholder="Sélectionner une fonction"
         class="bouton bouton-secondaire contenu-declencheur"
         class:complete={selection.length > 0}
-      >
-        {label}
-      </button>
+        bind:value={label}
+        required
+        use:validationChamp={requis
+          ? 'Le poste est obligatoire. Veuillez le renseigner.'
+          : ''}
+        bind:this={champDeclencheur}
+      />
     </div>
     <div class="fonctions">
       <div class="rappel-declencheur contenu-declencheur">
-        {label}
+        {labelRappelDeclencheur}
       </div>
       <div class="options">
         {#each fonctions as fonction}
@@ -78,6 +96,8 @@
       id="autreFonction"
       nom="autreFonction"
       bind:valeur={autreFonction}
+      {requis}
+      messageErreur="La précision du poste est obligatoire. Veuillez la renseigner."
     />
   {/if}
 </div>
