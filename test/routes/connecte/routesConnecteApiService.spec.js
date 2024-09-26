@@ -1033,6 +1033,77 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête PUT sur `/api/service/:id/risques/:idRisque`', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().ajouteRisqueGeneralAService = async () => {};
+      testeur.referentiel().recharge({
+        risques: { unRisqueExistant: {} },
+        niveauxGravite: { unNiveau: {} },
+      });
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: RISQUES }],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/risques/unRisqueExistant',
+        },
+        done
+      );
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['niveauGravite', 'commentaire'],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/risques/unRisqueExistant',
+        },
+        done
+      );
+    });
+
+    it('retourne une erreur 400 si les données sont invalides', async () => {
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/risques/unRisqueInexistant'
+        );
+        expect().fail('Aurait du lever une exception');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'Le risque "unRisqueInexistant" n\'est pas répertorié'
+        );
+      }
+    });
+
+    it('délègue au dépôt de donnée la mise à jour du risque', async () => {
+      let idServiceRecu;
+      let donneesRecues;
+      testeur.depotDonnees().ajouteRisqueGeneralAService = async (
+        idService,
+        donnees
+      ) => {
+        idServiceRecu = idService;
+        donneesRecues = donnees;
+      };
+
+      await axios.put(
+        'http://localhost:1234/api/service/456/risques/unRisqueExistant',
+        {
+          niveauGravite: 'unNiveau',
+          commentaire: "c'est important",
+        }
+      );
+
+      expect(idServiceRecu).to.be('456');
+      expect(donneesRecues.niveauGravite).to.eql('unNiveau');
+      expect(donneesRecues.commentaire).to.eql("c'est important");
+      expect(donneesRecues.id).to.eql('unRisqueExistant');
+    });
+  });
+
   describe('quand requête POST sur `/api/service/:id/risques`', () => {
     beforeEach(() => {
       testeur.depotDonnees().remplaceRisquesSpecifiquesDuService =
