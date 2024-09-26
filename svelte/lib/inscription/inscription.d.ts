@@ -4,10 +4,13 @@ declare global {
   }
 }
 
-export type EstimationNombreServices = {
-  label: string;
+type Intervalle = {
   borneBasse: number;
   borneHaute: number;
+};
+
+export type EstimationNombreServices = Intervalle & {
+  label: string;
 };
 
 export type Organisation = {
