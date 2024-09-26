@@ -37,6 +37,7 @@
     postes: string[];
     estimationNombreServices: Intervalle;
     agentConnect: boolean;
+    cguAcceptees: boolean;
     infolettreAcceptee: boolean;
     transactionnelAccepte: boolean;
   };
@@ -52,7 +53,8 @@
       borneHaute: 2,
     },
     agentConnect: true,
-    infolettreAcceptee: true,
+    cguAcceptees: false,
+    infolettreAcceptee: false,
     transactionnelAccepte: true,
   };
 </script>
@@ -149,6 +151,7 @@
         <input
           id="infolettreAcceptee"
           type="checkbox"
+          bind:checked={formulaireInscription.infolettreAcceptee}
           name="infolettreAcceptee"
         />
         <label for="infolettreAcceptee">
@@ -156,7 +159,13 @@
         </label>
       </div>
       <div class="case-a-cocher">
-        <input id="cguAcceptees" type="checkbox" name="cguAcceptees" required />
+        <input
+          id="cguAcceptees"
+          type="checkbox"
+          bind:checked={formulaireInscription.cguAcceptees}
+          name="cguAcceptees"
+          required
+        />
         <label for="cguAcceptees" class="requis">
           J'accepte les <a href="/cgu">conditions générales d'utilisation</a> de
           MonServiceSécurisé
