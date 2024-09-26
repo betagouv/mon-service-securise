@@ -56,6 +56,16 @@ const routesNonConnectePage = ({
   routes.get('/inscription-v2', (_requete, reponse) => {
     reponse.render('inscription-v2', {
       estimationNombreServices: referentiel.estimationNombreServices(),
+      informationsProfessionnelles: {
+        prenom: 'Fabien',
+        nom: 'Durant',
+        email: 'fabien@durant.fr',
+        organisation: {
+          siret: '12P34',
+          departement: '33',
+          denomination: 'VERT',
+        },
+      },
     });
   });
 
