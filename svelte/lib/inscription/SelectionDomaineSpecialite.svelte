@@ -6,6 +6,7 @@
 
   export let valeurs: string[];
   export let requis: boolean = false;
+  export let id: string = '';
   let autreDomaine: string = '';
   let champDeclencheur: HTMLInputElement;
 
@@ -48,9 +49,7 @@
   ];
 </script>
 
-<div class="conteneur">
-  <div class:requis>Domaine de spécialité</div>
-
+<div class="conteneur" {id}>
   <MenuFlottant
     parDessusDeclencheur={true}
     classePersonnalisee="selection-domaine"
@@ -211,12 +210,5 @@
 
   input[type='checkbox'] + label {
     margin: 0;
-  }
-
-  .requis:before {
-    content: '*';
-    color: #e3271c;
-    margin-right: 4px;
-    font-size: 16px;
   }
 </style>
