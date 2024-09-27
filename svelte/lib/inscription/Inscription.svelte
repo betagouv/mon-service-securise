@@ -172,6 +172,7 @@
               id="estimation-nombre-services"
               required
               bind:value={nombreServices}
+              use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
             >
               <option value="" disabled selected>Sélectionner un nombre</option>
               {#each estimationNombreServices as estimation}
