@@ -69,6 +69,7 @@ const routesNonConnectePage = ({
     reponse.render('inscription-v2', {
       estimationNombreServices: referentiel.estimationNombreServices(),
       informationsProfessionnelles: { prenom, nom, email, organisation },
+      departements: referentiel.departements(),
     });
   });
 
