@@ -1,7 +1,7 @@
 <script lang="ts">
   import Bouton from '../ui/Bouton.svelte';
   import Etapier from '../ui/Etapier.svelte';
-  import SelectionFonction from './SelectionFonction.svelte';
+  import SelectionDomaineSpecialite from './SelectionDomaineSpecialite.svelte';
   import { validationChamp } from '../directives/validationChamp';
   import type {
     EstimationNombreServices,
@@ -152,7 +152,7 @@
         <div class="bloc bloc-avec-separateur">
           <h1>Votre identité</h1>
           <div>
-            <SelectionFonction
+            <SelectionDomaineSpecialite
               requis
               bind:valeurs={formulaireInscription.postes}
             />
