@@ -26,9 +26,15 @@ export type InformationsProfessionnelles = {
   organisation: Organisation;
 };
 
+export type Departement = {
+  code: string;
+  nom: string;
+};
+
 export type InscriptionProps = {
   estimationNombreServices: EstimationNombreServices[];
   informationsProfessionnelles: InformationsProfessionnelles;
+  departements: Departement[];
 };
 
 export type FormulaireInscription = {
