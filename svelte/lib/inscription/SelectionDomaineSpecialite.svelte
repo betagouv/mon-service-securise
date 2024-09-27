@@ -6,10 +6,10 @@
 
   export let valeurs: string[];
   export let requis: boolean = false;
-  let autreFonction: string = '';
+  let autreDomaine: string = '';
   let champDeclencheur: HTMLInputElement;
 
-  const fonctions = [
+  const domaines = [
     { id: 'RSSI', libelle: 'Cybersécurité / SSI' },
     { id: 'DSI', libelle: 'Numérique et systèmes d’information' },
     { id: 'METIER', libelle: 'Direction métier' },
@@ -19,17 +19,17 @@
     { id: 'DG', libelle: 'Direction générale' },
     { id: 'autre', libelle: 'Autre' },
   ];
-  const idsDesFonctions = fonctions.map((f) => f.id);
+  const idsDesDomaines = domaines.map((f) => f.id);
 
-  let selection: string[] = valeurs.filter((v) => idsDesFonctions.includes(v));
-  const autreValeur = valeurs.find((v) => !idsDesFonctions.includes(v));
+  let selection: string[] = valeurs.filter((v) => idsDesDomaines.includes(v));
+  const autreValeur = valeurs.find((v) => !idsDesDomaines.includes(v));
   if (autreValeur) {
     selection.push('autre');
-    autreFonction = autreValeur;
+    autreDomaine = autreValeur;
   }
 
   $: label = selection
-    .map((id) => fonctions.find((f) => f.id === id)?.libelle)
+    .map((id) => domaines.find((f) => f.id === id)?.libelle)
     .join(', ');
 
   $: {
@@ -39,65 +39,67 @@
   }
 
   $: labelRappelDeclencheur =
-    selection.length === 0 ? 'Sélectionner une fonction' : label;
+    selection.length === 0 ? 'Sélectionner un domaine de spécialité' : label;
 
   $: afficheAutre = selection.includes('autre');
   $: valeurs = [
     ...selection.filter((f) => f !== 'autre'),
-    ...(afficheAutre ? [autreFonction] : ''),
+    ...(afficheAutre ? [autreDomaine] : ''),
   ];
 </script>
 
 <div class="conteneur">
-  <div class="info-label" class:requis>Fonction / poste occupé :</div>
+  <div class:requis>Domaine de spécialité</div>
 
   <MenuFlottant
     parDessusDeclencheur={true}
-    classePersonnalisee="selection-fonction"
+    classePersonnalisee="selection-domaine"
   >
     <div slot="declencheur">
       <input
         type="text"
         role="button"
-        placeholder="Sélectionner une fonction"
+        placeholder="Sélectionner un domaine de spécialité"
         class="bouton bouton-secondaire contenu-declencheur"
         class:complete={selection.length > 0}
         bind:value={label}
         required
         use:validationChamp={requis
-          ? 'Le poste est obligatoire. Veuillez le renseigner.'
+          ? 'Le domaine est obligatoire. Veuillez le renseigner.'
           : ''}
         bind:this={champDeclencheur}
       />
     </div>
-    <div class="fonctions">
+    <div class="domaines">
       <div class="rappel-declencheur contenu-declencheur">
         {labelRappelDeclencheur}
       </div>
       <div class="options">
-        {#each fonctions as fonction}
+        {#each domaines as domaine}
           <div class="case-et-label">
             <input
               type="checkbox"
               bind:group={selection}
-              id={fonction.id}
-              name={fonction.id}
-              value={fonction.id}
+              id={domaine.id}
+              name={domaine.id}
+              value={domaine.id}
             />
-            <label for={fonction.id}>{fonction.libelle}</label>
+            <label for={domaine.id}>{domaine.libelle}</label>
           </div>
         {/each}
       </div>
     </div>
   </MenuFlottant>
   {#if afficheAutre}
-    <label for="autreFonction">Merci de préciser votre fonction/poste </label>
+    <label for="autreFonction"
+      >Merci de préciser votre domaine de spécialité</label
+    >
     <ChampTexte
-      id="autreFonction"
-      nom="autreFonction"
-      bind:valeur={autreFonction}
+      id="autreDomaine"
+      nom="autreDomaine"
+      bind:valeur={autreDomaine}
       {requis}
-      messageErreur="La précision du poste est obligatoire. Veuillez la renseigner."
+      messageErreur="La précision du domaine de spécialité est obligatoire. Veuillez la renseigner."
     />
   {/if}
 </div>
@@ -107,10 +109,6 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-  }
-
-  .info-label {
-    margin-bottom: 8px;
   }
 
   .bouton {
@@ -164,17 +162,17 @@
     border-color: var(--bleu-mise-en-avant);
   }
 
-  :global(.selection-fonction .declencheur) {
+  :global(.selection-domaine .declencheur) {
     width: 100%;
   }
 
-  :global(.selection-fonction .svelte-menu-flottant.parDessusDeclencheur) {
+  :global(.selection-domaine .svelte-menu-flottant.parDessusDeclencheur) {
     width: 100%;
     left: 0;
     transform: translate(0, 0) !important;
   }
 
-  .fonctions {
+  .domaines {
     border: 1px solid var(--bleu-mise-en-avant);
     background-color: white;
     width: calc(100% - 2px);
