@@ -4,16 +4,19 @@
   import SelectionDomaineSpecialite from './SelectionDomaineSpecialite.svelte';
   import { validationChamp } from '../directives/validationChamp';
   import type {
+    Departement,
     EstimationNombreServices,
     FormulaireInscription,
     InformationsProfessionnelles,
   } from './inscription.d';
   import Formulaire from '../ui/Formulaire.svelte';
   import ChampTexte from '../ui/ChampTexte.svelte';
+  import SelectionDepartement from './SelectionDepartement.svelte';
 
   export let estimationNombreServices: EstimationNombreServices[];
   export let informationsProfessionnelles: InformationsProfessionnelles;
   const modeleTelephone = '^0\\d{9}$';
+  export let departements: Departement[];
 
   let etapeCourante = 1;
 
@@ -68,6 +71,7 @@
       borneHaute: Number(nombreServices.split('_')[1]),
     };
   }
+  let departement: Departement;
 </script>
 
 <div class="entete-inscription">
@@ -139,6 +143,22 @@
   {#if etapeCourante === 2}
     <Formulaire classe="formulaire-inscription" bind:this={formulaireEtape2}>
       <div class="contenu-etape">
+        <div class="bloc bloc-avec-separateur champs-saisie">
+          <h1>Votre organisation</h1>
+          <div>
+            <label for="departement requis"
+              >Département de votre organisation</label
+            >
+            <SelectionDepartement bind:valeur={departement} {departements} />
+          </div>
+          <div>
+            <label for="nomSiret requis"
+              >Nom ou SIRET de votre organisation</label
+            >
+            <ChampTexte id="organisation" nom="organisation"></ChampTexte>
+          </div>
+        </div>
+
         <div class="bloc bloc-avec-separateur champs-saisie">
           <h1>Votre identité</h1>
           <div>
