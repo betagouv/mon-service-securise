@@ -274,5 +274,15 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         },
       });
     });
+
+    it('envoie les départements', async () => {
+      testeur.referentiel().departements = () => [{ nom: 'Gironde' }];
+
+      const reponse = await axios.get(`http://localhost:1234/inscription-v2`);
+
+      expect(donneesPartagees(reponse.data, 'departements')).to.eql({
+        departements: [{ nom: 'Gironde' }],
+      });
+    });
   });
 });
