@@ -9,6 +9,7 @@
     Intervalle,
   } from './inscription.d';
   import Formulaire from '../ui/Formulaire.svelte';
+  import ChampTexte from '../ui/ChampTexte.svelte';
 
   export let estimationNombreServices: EstimationNombreServices[];
   export let informationsProfessionnelles: InformationsProfessionnelles;
@@ -47,6 +48,7 @@
     nom: string;
     email: string;
     siretEntite: string;
+    telephone: string;
     postes: string[];
     estimationNombreServices: Intervalle;
     agentConnect: boolean;
@@ -60,6 +62,7 @@
     nom: informationsProfessionnelles.nom,
     email: informationsProfessionnelles.email,
     siretEntite: informationsProfessionnelles.organisation.siret,
+    telephone: '',
     postes: [],
     estimationNombreServices: {
       borneBasse: 1,
@@ -149,8 +152,20 @@
   {#if etapeCourante === 2}
     <Formulaire classe="formulaire-inscription" bind:this={formulaireEtape2}>
       <div class="contenu-etape">
-        <div class="bloc bloc-avec-separateur">
+        <div class="bloc bloc-avec-separateur champs-saisie">
           <h1>Votre identité</h1>
+          <div>
+            <label for="telephone">Téléphone</label>
+            <span class="exemple">
+              Pour bénéficier d’un accompagement personnalisé
+            </span>
+            <ChampTexte
+              id="telephone"
+              nom="telephone"
+              aideSaisie="Ex : 0XXXXXXXXX"
+              bind:valeur={formulaireInscription.telephone}
+            />
+          </div>
           <div>
             <SelectionDomaineSpecialite
               requis
@@ -300,7 +315,7 @@
   }
 
   .bloc-avec-separateur {
-    padding-bottom: 24px;
+    padding-bottom: 8px;
     border-bottom: solid 1px var(--liseres-fonce);
   }
 
@@ -375,5 +390,9 @@
 
   .cgu label {
     order: -1;
+  }
+
+  .champs-saisie div {
+    margin-bottom: 16px;
   }
 </style>
