@@ -6,6 +6,7 @@
   export let requis: boolean = false;
   export let aideSaisie: string = '';
   export let messageErreur: string = '';
+  export let modele: string | undefined = undefined;
 </script>
 
 <input
@@ -15,7 +16,8 @@
   bind:value={valeur}
   required={requis}
   placeholder={aideSaisie}
-  use:validationChamp={requis ? messageErreur : ''}
+  use:validationChamp={(requis || modele) ? messageErreur : ''}
+  pattern={modele}
 />
 
 <style>

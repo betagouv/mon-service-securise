@@ -13,6 +13,7 @@
 
   export let estimationNombreServices: EstimationNombreServices[];
   export let informationsProfessionnelles: InformationsProfessionnelles;
+  const modeleTelephone = '^0\\d{9}$';
 
   let etapeCourante = 1;
 
@@ -163,7 +164,9 @@
               id="telephone"
               nom="telephone"
               aideSaisie="Ex : 0XXXXXXXXX"
+              modele={modeleTelephone}
               bind:valeur={formulaireInscription.telephone}
+              messageErreur="Le numéro de téléphone doit respecter le format 0000000000."
             />
           </div>
           <div>
