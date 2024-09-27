@@ -2,6 +2,7 @@
   import Bouton from '../ui/Bouton.svelte';
   import Etapier from '../ui/Etapier.svelte';
   import SelectionFonction from './SelectionFonction.svelte';
+  import { validationChamp } from '../directives/validationChamp';
   import type {
     EstimationNombreServices,
     InformationsProfessionnelles,
@@ -36,7 +37,9 @@
     }
   };
   const valide = () => {
-    axios.post('/api/utilisateur', formulaireInscription);
+    if (formulaireCourant.estValide()) {
+      axios.post('/api/utilisateur', formulaireInscription);
+    }
   };
 
   type FormulaireInscription = {
@@ -197,13 +200,14 @@
               J'accepte de recevoir la lettre d'information MonServiceSécurisé.
             </label>
           </div>
-          <div class="case-a-cocher">
+          <div class="case-a-cocher cgu">
             <input
               id="cguAcceptees"
               type="checkbox"
               bind:checked={formulaireInscription.cguAcceptees}
               name="cguAcceptees"
               required
+              use:validationChamp={'Ce champ est obligatoire. Veuillez le cocher.'}
             />
             <label for="cguAcceptees" class="requis">
               J'accepte les <a href="/cgu">conditions générales d'utilisation</a
@@ -356,5 +360,19 @@
   :global(form.formulaire-inscription label) {
     margin: 0;
     font-weight: normal;
+  }
+
+  .case-a-cocher.cgu {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .cgu #cguAcceptees {
+    order: -1;
+  }
+
+  .cgu label {
+    order: -1;
   }
 </style>
