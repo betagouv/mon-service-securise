@@ -30,3 +30,17 @@ export type InscriptionProps = {
   estimationNombreServices: EstimationNombreServices[];
   informationsProfessionnelles: InformationsProfessionnelles;
 };
+
+export type FormulaireInscription = {
+  prenom: string;
+  nom: string;
+  email: string;
+  siretEntite: string;
+  telephone: string;
+  postes: string[];
+  estimationNombreServices: Intervalle;
+  agentConnect: boolean;
+  cguAcceptees: boolean;
+  infolettreAcceptee: boolean;
+  transactionnelAccepte: boolean;
+};

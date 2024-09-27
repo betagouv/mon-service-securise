@@ -5,8 +5,8 @@
   import { validationChamp } from '../directives/validationChamp';
   import type {
     EstimationNombreServices,
+    FormulaireInscription,
     InformationsProfessionnelles,
-    Intervalle,
   } from './inscription.d';
   import Formulaire from '../ui/Formulaire.svelte';
   import ChampTexte from '../ui/ChampTexte.svelte';
@@ -42,20 +42,6 @@
     if (formulaireCourant.estValide()) {
       axios.post('/api/utilisateur', formulaireInscription);
     }
-  };
-
-  type FormulaireInscription = {
-    prenom: string;
-    nom: string;
-    email: string;
-    siretEntite: string;
-    telephone: string;
-    postes: string[];
-    estimationNombreServices: Intervalle;
-    agentConnect: boolean;
-    cguAcceptees: boolean;
-    infolettreAcceptee: boolean;
-    transactionnelAccepte: boolean;
   };
 
   let formulaireInscription: FormulaireInscription = {
