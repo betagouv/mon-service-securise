@@ -18,6 +18,7 @@
   placeholder={aideSaisie}
   use:validationChamp={(requis || modele) ? messageErreur : ''}
   pattern={modele}
+  on:input
 />
 
 <style>

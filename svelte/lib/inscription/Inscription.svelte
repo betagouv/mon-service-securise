@@ -10,8 +10,9 @@
     InformationsProfessionnelles,
   } from './inscription.d';
   import Formulaire from '../ui/Formulaire.svelte';
-  import ChampTexte from '../ui/ChampTexte.svelte';
   import SelectionDepartement from './SelectionDepartement.svelte';
+  import SelectionOrganisation from './SelectionOrganisation.svelte';
+  import ChampTexte from '../ui/ChampTexte.svelte';
 
   export let estimationNombreServices: EstimationNombreServices[];
   export let informationsProfessionnelles: InformationsProfessionnelles;
@@ -72,6 +73,9 @@
     };
   }
   let departement: Departement;
+  const choisisOrganisation = (evenement: any) => {
+    formulaireInscription.siretEntite = evenement.detail.siret;
+  };
 </script>
 
 <div class="entete-inscription">
@@ -155,7 +159,9 @@
             <label for="nomSiret requis"
               >Nom ou SIRET de votre organisation</label
             >
-            <ChampTexte id="organisation" nom="organisation"></ChampTexte>
+            <SelectionOrganisation
+              on:organisationChoisie={choisisOrganisation}
+            />
           </div>
         </div>
 
