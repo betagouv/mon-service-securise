@@ -85,6 +85,7 @@ const creeServeur = (
     '',
     routesNonConnectePage({
       adaptateurCmsCrisp,
+      serviceAnnuaire,
       depotDonnees,
       middleware,
       referentiel,

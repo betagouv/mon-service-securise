@@ -6,4 +6,12 @@ const requeteSansRedirection = async (url) =>
     maxRedirects: 0,
   });
 
-module.exports = { requeteSansRedirection };
+const donneesPartagees = (contenuHtml, idScript) => {
+  const regExp = new RegExp(
+    `<script id="${idScript}" type="application/json">(.*?)</script>`
+  );
+  const match = contenuHtml.match(regExp);
+  return JSON.parse(match[1]);
+};
+
+module.exports = { requeteSansRedirection, donneesPartagees };
