@@ -2,6 +2,7 @@ const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const { ErreurArticleCrispIntrouvable } = require('../../../src/erreurs');
+const { donneesPartagees } = require('../../aides/http');
 
 describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
   const testeur = testeurMSS();
@@ -217,6 +218,61 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
       expect(reponse.status).to.equal(200);
       expect(reponse.headers['content-type']).to.contain('application/xml');
+    });
+  });
+
+  describe('quand requete GET sur `/inscription-v2`', () => {
+    it("ajoute les données de l'organisation quand le siret est fourni", async () => {
+      testeur.serviceAnnuaire().rechercheOrganisations = async (siret) =>
+        siret === '12P34' ? [{ nom: 'VERT', departement: '33' }] : [];
+
+      const reponse = await axios.get(
+        `http://localhost:1234/inscription-v2?siret=12P34`
+      );
+
+      expect(
+        donneesPartagees(reponse.data, 'informations-professionnelles')
+      ).to.eql({
+        informationsProfessionnelles: {
+          organisation: {
+            siret: '12P34',
+            departement: '33',
+            denomination: 'VERT',
+          },
+        },
+      });
+    });
+
+    it("n'ajoute pas les données de l'organisation quand le siret n'est pas fourni", async () => {
+      testeur.serviceAnnuaire().rechercheOrganisations = async (_) => {
+        expect.fail('ne devrait pas appeler cette fonction');
+      };
+
+      const reponse = await axios.get(`http://localhost:1234/inscription-v2`);
+
+      expect(
+        donneesPartagees(reponse.data, 'informations-professionnelles')
+      ).to.eql({
+        informationsProfessionnelles: {
+          organisation: null,
+        },
+      });
+    });
+
+    it("n'ajoute pas les données de l'organisation quand aucune organisation n'est trouvée", async () => {
+      testeur.serviceAnnuaire().rechercheOrganisations = async (_) => [];
+
+      const reponse = await axios.get(
+        `http://localhost:1234/inscription-v2?siret=inconnu`
+      );
+
+      expect(
+        donneesPartagees(reponse.data, 'informations-professionnelles')
+      ).to.eql({
+        informationsProfessionnelles: {
+          organisation: null,
+        },
+      });
     });
   });
 });

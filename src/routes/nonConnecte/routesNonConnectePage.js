@@ -10,6 +10,7 @@ const SourceAuthentification = require('../../modeles/sourceAuthentification');
 
 const routesNonConnectePage = ({
   adaptateurCmsCrisp,
+  serviceAnnuaire,
   depotDonnees,
   middleware,
   referentiel,
@@ -53,19 +54,21 @@ const routesNonConnectePage = ({
     reponse.render('inscription', { departements, referentiel });
   });
 
-  routes.get('/inscription-v2', (_requete, reponse) => {
+  routes.get('/inscription-v2', async (requete, reponse) => {
+    const { prenom, nom, email, siret } = requete.query;
+    let organisation = null;
+    if (siret) {
+      const organisations = await serviceAnnuaire.rechercheOrganisations(siret);
+      if (organisations.length > 0)
+        organisation = {
+          siret,
+          departement: organisations[0].departement,
+          denomination: organisations[0].nom,
+        };
+    }
     reponse.render('inscription-v2', {
       estimationNombreServices: referentiel.estimationNombreServices(),
-      informationsProfessionnelles: {
-        prenom: 'Fabien',
-        nom: 'Durant',
-        email: 'fabien@durant.fr',
-        organisation: {
-          siret: '12P34',
-          departement: '33',
-          denomination: 'VERT',
-        },
-      },
+      informationsProfessionnelles: { prenom, nom, email, organisation },
     });
   });
 
