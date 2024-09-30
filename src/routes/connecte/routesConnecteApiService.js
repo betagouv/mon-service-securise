@@ -14,6 +14,7 @@ const {
   ErreurEcheanceMesureInvalide,
   ErreurResponsablesMesureInvalides,
   ErreurRisqueInconnu,
+  ErreurNiveauGraviteInconnu,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -40,6 +41,7 @@ const objetGetMesures = require('../../modeles/objetsApi/objetGetMesures');
 const EvenementRetourUtilisateurMesure = require('../../modeles/journalMSS/evenementRetourUtilisateurMesure');
 const routesConnecteApiServiceActivitesMesure = require('./routesConnecteApiServiceActivitesMesure');
 const MesureSpecifique = require('../../modeles/mesureSpecifique');
+const RisqueSpecifique = require('../../modeles/risqueSpecifique');
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -433,6 +435,39 @@ const routesConnecteApiService = ({
           suite(e);
         }
       }
+    }
+  );
+
+  routes.post(
+    '/:id/risquesSpecifiques',
+    middleware.trouveService({ [RISQUES]: ECRITURE }),
+    middleware.aseptise(
+      'niveauGravite',
+      'commentaire',
+      'description',
+      'intitule'
+    ),
+    (requete, reponse, suite) => {
+      const { niveauGravite, intitule, commentaire, description } =
+        requete.body;
+      if (!intitule) {
+        reponse.status(400).send("L'intitulé du risque est obligatoire.");
+        return;
+      }
+      try {
+        const risque = new RisqueSpecifique(
+          { niveauGravite, intitule, commentaire, description },
+          referentiel
+        );
+        depotDonnees.ajouteRisqueSpecifiqueAService(requete.service.id, risque);
+      } catch (e) {
+        if (e instanceof ErreurNiveauGraviteInconnu) {
+          reponse.status(400).send(e.message);
+          return;
+        }
+        suite(e);
+      }
+      reponse.sendStatus(201);
     }
   );
 
