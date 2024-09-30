@@ -52,7 +52,7 @@
     prenom: informationsProfessionnelles.prenom,
     nom: informationsProfessionnelles.nom,
     email: informationsProfessionnelles.email,
-    siretEntite: informationsProfessionnelles.organisation.siret,
+    siretEntite: informationsProfessionnelles.organisation?.siret,
     telephone: '',
     postes: [],
     estimationNombreServices: {
@@ -119,27 +119,30 @@
             >
           </div>
         </div>
-        <div class="bloc">
-          <h1>Votre organisation</h1>
-          <div>
-            <span class="info-label">Dénomination légale :</span>
-            <span class="info-valeur"
-              >{informationsProfessionnelles.organisation.denomination}</span
-            >
+        {#if informationsProfessionnelles.organisation}
+          <div class="bloc">
+            <h1>Votre organisation</h1>
+            <div>
+              <span class="info-label">Dénomination légale :</span>
+              <span class="info-valeur"
+                >{informationsProfessionnelles.organisation.denomination}</span
+              >
+            </div>
+            <div>
+              <span class="info-label">SIRET :</span>
+              <span class="info-valeur"
+                >{informationsProfessionnelles.organisation.siret}</span
+              >
+            </div>
+            <div>
+              <span class="info-label">Département de votre organisation :</span
+              >
+              <span class="info-valeur"
+                >{informationsProfessionnelles.organisation.departement}</span
+              >
+            </div>
           </div>
-          <div>
-            <span class="info-label">SIRET :</span>
-            <span class="info-valeur"
-              >{informationsProfessionnelles.organisation.siret}</span
-            >
-          </div>
-          <div>
-            <span class="info-label">Département de votre organisation :</span>
-            <span class="info-valeur"
-              >{informationsProfessionnelles.organisation.departement}</span
-            >
-          </div>
-        </div>
+        {/if}
       </div>
     </Formulaire>
   {/if}
@@ -147,23 +150,25 @@
   {#if etapeCourante === 2}
     <Formulaire classe="formulaire-inscription" bind:this={formulaireEtape2}>
       <div class="contenu-etape">
-        <div class="bloc bloc-avec-separateur champs-saisie">
-          <h1>Votre organisation</h1>
-          <div>
-            <label for="departement requis"
-              >Département de votre organisation</label
-            >
-            <SelectionDepartement bind:valeur={departement} {departements} />
+        {#if !informationsProfessionnelles.organisation}
+          <div class="bloc bloc-avec-separateur champs-saisie">
+            <h1>Votre organisation</h1>
+            <div>
+              <label for="departement requis"
+                >Département de votre organisation</label
+              >
+              <SelectionDepartement bind:valeur={departement} {departements} />
+            </div>
+            <div>
+              <label for="nomSiret requis"
+                >Nom ou SIRET de votre organisation</label
+              >
+              <SelectionOrganisation
+                on:organisationChoisie={choisisOrganisation}
+              />
+            </div>
           </div>
-          <div>
-            <label for="nomSiret requis"
-              >Nom ou SIRET de votre organisation</label
-            >
-            <SelectionOrganisation
-              on:organisationChoisie={choisisOrganisation}
-            />
-          </div>
-        </div>
+        {/if}
 
         <div class="bloc bloc-avec-separateur champs-saisie">
           <h1>Votre identité</h1>
