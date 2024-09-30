@@ -1,7 +1,7 @@
 # MonServiceSécurisé
 
 MonServiceSécurisé est un service numérique développé par le laboratoire
-d'innovation de l'[ANSSI](https://www.ssi.gouv.fr/), en lien avec l'incubateur
+d'innovation de l'[ANSSI](https://www.cyber.gouv.fr/), en lien avec l'incubateur
 [BetaGouv](https://beta.gouv.fr/) de la direction interministérielle du
 numérique. Il vise à aider les collectivités territoriales et les autres
 entités publiques à sécuriser et à homologuer leurs services publics numériques
