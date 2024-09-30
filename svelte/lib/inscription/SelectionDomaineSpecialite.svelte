@@ -55,7 +55,7 @@
     parDessusDeclencheur={true}
     classePersonnalisee="selection-domaine"
   >
-    <div slot="declencheur">
+    <div slot="declencheur" class="avec-fleche">
       <input
         type="text"
         role="button"
@@ -122,7 +122,7 @@
     color: black;
   }
 
-  .bouton::after {
+  .avec-fleche::after {
     content: '';
     display: inline-block;
 
