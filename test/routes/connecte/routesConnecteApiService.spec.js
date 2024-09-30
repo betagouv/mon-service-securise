@@ -1033,6 +1033,87 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête POST sur `/api/service/:id/risquesSpecifiques', () => {
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: RISQUES }],
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/456/risquesSpecifiques',
+        },
+        done
+      );
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['niveauGravite', 'commentaire', 'description', 'intitule'],
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/service/456/risquesSpecifiques',
+        },
+        done
+      );
+    });
+
+    it('retourne une erreur 400 si les données sont invalides', async () => {
+      try {
+        await axios.post(
+          'http://localhost:1234/api/service/456/risquesSpecifiques',
+          { niveauGravite: 'inexistant', intitule: 'risque' }
+        );
+        expect().fail('Aurait du lever une exception');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'Le niveau de gravité "inexistant" n\'est pas répertorié'
+        );
+      }
+    });
+
+    it("retourne une erreur 400 si l'intitulé est vide", async () => {
+      try {
+        await axios.post(
+          'http://localhost:1234/api/service/456/risquesSpecifiques',
+          {}
+        );
+        expect().fail('Aurait du lever une exception');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be("L'intitulé du risque est obligatoire.");
+      }
+    });
+
+    it("délègue au dépôt de donnée l'ajout du risque", async () => {
+      let idServiceRecu;
+      let donneesRecues;
+      testeur.referentiel().recharge({
+        niveauxGravite: { unNiveau: {} },
+      });
+      testeur.depotDonnees().ajouteRisqueSpecifiqueAService = async (
+        idService,
+        donnees
+      ) => {
+        idServiceRecu = idService;
+        donneesRecues = donnees;
+      };
+
+      await axios.post(
+        'http://localhost:1234/api/service/456/risquesSpecifiques',
+        {
+          intitule: 'un risque important',
+          niveauGravite: 'unNiveau',
+          commentaire: "c'est important",
+        }
+      );
+
+      expect(idServiceRecu).to.be('456');
+      expect(donneesRecues.intitule).to.eql('un risque important');
+      expect(donneesRecues.niveauGravite).to.eql('unNiveau');
+      expect(donneesRecues.commentaire).to.eql("c'est important");
+    });
+  });
+
   describe('quand requête PUT sur `/api/service/:id/risques/:idRisque`', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteRisqueGeneralAService = async () => {};
