@@ -1,6 +1,7 @@
 <script lang="ts">
   import ChampTexte from '../ui/ChampTexte.svelte';
   import { createEventDispatcher } from 'svelte';
+  import type { Departement } from './inscription.d';
 
   type Organisation = {
     departement: string;
@@ -8,6 +9,8 @@
     siret: string;
     label: string;
   };
+
+  export let filtreDepartement: Departement;
 
   let saisie: string;
   let minuteur: NodeJS.Timeout;
@@ -50,7 +53,10 @@
       return;
     }
     const reponse = await axios.get('/api/annuaire/organisations', {
-      params: { recherche: saisie },
+      params: {
+        recherche: saisie,
+        departement: filtreDepartement?.code,
+      },
     });
 
     suggestions = reponse.data.suggestions.map(

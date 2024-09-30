@@ -164,6 +164,7 @@
                 >Nom ou SIRET de votre organisation</label
               >
               <SelectionOrganisation
+                filtreDepartement={departement}
                 on:organisationChoisie={choisisOrganisation}
               />
             </div>
