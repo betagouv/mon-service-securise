@@ -38,9 +38,10 @@
       etapeCourante++;
     }
   };
-  const valide = () => {
+  const valide = async () => {
     if (formulaireCourant.estValide()) {
-      axios.post('/api/utilisateur', formulaireInscription);
+      await axios.post('/api/utilisateur', formulaireInscription);
+      window.location.href = '/tableauDeBord';
     }
   };
 
