@@ -1,7 +1,8 @@
 <script lang="ts">
   import ChampTexte from '../ui/ChampTexte.svelte';
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, tick } from 'svelte';
   import type { Departement, Organisation } from './inscription.d';
+  import { validationChamp } from '../directives/validationChamp';
 
   type OrganisationAvecLabel = Organisation & {
     label: string;
@@ -15,6 +16,7 @@
   let dureeDebounceEnMs = 300;
   let suggestions: OrganisationAvecLabel[] = [];
   let suggestionsVisibles = false;
+  let champValeur: HTMLInputElement;
 
   const avecTemporisation = (fonction: () => Promise<any>) => {
     clearTimeout(minuteur);
@@ -71,6 +73,12 @@
     envoiEvenement('organisationChoisie', item);
   };
 
+  $: {
+    if (valeur) {
+      tick().then(() => champValeur.dispatchEvent(new Event('input')));
+    }
+  }
+
   saisie = valeur ? construisLabel(valeur) : '';
 </script>
 
@@ -101,6 +109,14 @@
       </div>
     {/each}
   </div>
+  <input
+    type="text"
+    bind:this={champValeur}
+    bind:value={saisie}
+    class="valeur-cache"
+    required
+    use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une entrée.'}
+  />
 </div>
 
 <style>
@@ -129,5 +145,9 @@
   .option {
     padding: 4px 0;
     cursor: pointer;
+  }
+
+  .valeur-cache {
+    display: none;
   }
 </style>

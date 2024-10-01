@@ -24,13 +24,15 @@
 />
 
 <style>
-  input {
+  input,
+  input[type='text'] {
     border-radius: 5px;
     border: 1px solid var(--liseres-fonce);
     font-size: 14px;
     padding: 8px 16px;
     line-height: 24px;
     background: white;
+    margin-bottom: 0;
   }
 
   input::placeholder {
