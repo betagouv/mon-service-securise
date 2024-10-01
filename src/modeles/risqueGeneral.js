@@ -14,14 +14,14 @@ class RisqueGeneral extends Risque {
     this.referentiel = referentiel;
   }
 
-  descriptionRisque() {
+  intituleRisque() {
     return this.referentiel.descriptionRisque(this.id);
   }
 
   toJSON() {
     return {
       ...super.toJSON(),
-      description: this.descriptionRisque(),
+      intitule: this.intituleRisque(),
     };
   }
 

@@ -19,7 +19,7 @@ block page
                 +niveau-criticite(niveau.identifiant)
                 p.niveau= niveau.description
               .contenu-risque
-                p.description!= risque.description
+                p.description!= risque.intitule
                 if referentiel.definitionRisque(risque.id)
                   p.definition= referentiel.definitionRisque(risque.id)
                 if risque.commentaire

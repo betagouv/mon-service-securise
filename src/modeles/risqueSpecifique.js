@@ -4,12 +4,13 @@ class RisqueSpecifique extends Risque {
   constructor(donneesRisque, referentiel) {
     super(donneesRisque, referentiel);
 
-    this.proprietesAtomiquesRequises.push('description');
+    this.proprietesAtomiquesRequises.push('intitule');
+    this.proprietesAtomiquesFacultatives.push('description');
     this.renseigneProprietes(donneesRisque);
   }
 
-  descriptionRisque() {
-    return this.description;
+  intituleRisque() {
+    return this.intitule;
   }
 }
 

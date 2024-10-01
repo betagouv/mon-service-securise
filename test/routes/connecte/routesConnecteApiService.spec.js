@@ -1168,17 +1168,15 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(reponse.data).to.eql({ idService: '456' });
     });
 
-    it("demande au dépôt d'associer les risques spécifiques au service", async () => {
-      let risquesRemplaces = false;
+    it("[TEMPORAIRE migration vers risques v2] demande au dépôt d'associer les risques spécifiques au service en positionnant la valeur reçue en description comme intitule", async () => {
+      let risquesRecus;
+      let idServiceRecu;
       testeur.depotDonnees().remplaceRisquesSpecifiquesDuService = async (
         idService,
         risques
       ) => {
-        expect(idService).to.equal('456');
-        expect(risques.nombre()).to.equal(1);
-        expect(risques.item(0).description).to.equal('Un risque spécifique');
-        expect(risques.item(0).commentaire).to.equal('Un commentaire');
-        risquesRemplaces = true;
+        idServiceRecu = idService;
+        risquesRecus = risques;
       };
 
       await axios.post('http://localhost:1234/api/service/456/risques', {
@@ -1190,7 +1188,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         ],
       });
 
-      expect(risquesRemplaces).to.be(true);
+      expect(idServiceRecu).to.equal('456');
+      expect(risquesRecus.nombre()).to.equal(1);
+      expect(risquesRecus.item(0).intitule).to.equal('Un risque spécifique');
+      expect(risquesRecus.item(0).commentaire).to.equal('Un commentaire');
     });
 
     it('filtre les risques spécifiques vides', async () => {
