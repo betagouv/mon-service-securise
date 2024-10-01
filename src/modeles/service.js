@@ -331,6 +331,10 @@ class Service {
       .map((s) => s.route());
   }
 
+  ajouteRisqueSpecifique(risque) {
+    this.risques.risquesSpecifiques.ajouteRisque(risque);
+  }
+
   ajouteMesureSpecifique(mesure) {
     this.mesures.mesuresSpecifiques.ajouteMesure(mesure);
   }

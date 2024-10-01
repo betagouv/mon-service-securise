@@ -499,6 +499,13 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const ajouteRisqueSpecifiqueAService = async (idService, risque) => {
+    risque.id = adaptateurUUID.genereUUID();
+    const s = await p.lis.un(idService);
+    s.ajouteRisqueSpecifique(risque);
+    await metsAJourService(s);
+  };
+
   const supprimeContributeur = async (idService, idUtilisateur) => {
     const unService = await p.lis.un(idService);
 
@@ -542,6 +549,7 @@ const creeDepot = (config = {}) => {
     ajouteDossierCourantSiNecessaire,
     ajouteMesureSpecifiqueAuService,
     ajouteRisqueGeneralAService,
+    ajouteRisqueSpecifiqueAService,
     ajouteRolesResponsabilitesAService,
     dupliqueService,
     finaliseDossierCourant,
