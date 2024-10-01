@@ -36,7 +36,7 @@ describe('Les risques liés à un service', () => {
             risquesSpecifiques: [
               {
                 id: 'RS1',
-                description: 'Un risque spécifique',
+                intitule: 'Un risque spécifique',
                 niveauGravite: 'grave',
               },
             ],

@@ -72,7 +72,11 @@ const $saisieRisqueSpecifique = (
   donnees = {},
   lectureSeule = false
 ) => {
-  const { description = '', niveauGravite = '', commentaire = '' } = donnees;
+  const {
+    intitule: description = '',
+    niveauGravite = '',
+    commentaire = '',
+  } = donnees;
 
   const $conteneur = $(
     '<div class="saisie-risque-specifique"><div class="synthese"></div></div>'

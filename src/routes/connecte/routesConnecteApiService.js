@@ -473,12 +473,19 @@ const routesConnecteApiService = ({
 
         ajouts
           .then(() => {
-            const aPersister = risquesSpecifiques.filter(
+            const ceuxAPersister = risquesSpecifiques.filter(
               (r) => r?.description || r?.commentaire || r?.niveauGravite
+            );
+            const donneesRisquesSpecifiques = ceuxAPersister.map(
+              ({ description, commentaire, niveauGravite }) => ({
+                intitule: description,
+                commentaire,
+                niveauGravite,
+              })
             );
             const listeRisquesSpecifiques = new RisquesSpecifiques(
               {
-                risquesSpecifiques: aPersister,
+                risquesSpecifiques: donneesRisquesSpecifiques,
               },
               referentiel
             );

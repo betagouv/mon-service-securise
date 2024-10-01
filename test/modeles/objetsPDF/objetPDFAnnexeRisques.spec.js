@@ -101,7 +101,7 @@ describe("L'objet PDF des descriptions des risques", () => {
     expect(donnees).to.have.key('risquesParNiveauGravite');
     expect(donnees.risquesParNiveauGravite).to.have.key('grave');
     expect(donnees.risquesParNiveauGravite.grave.length).to.equal(1);
-    expect(donnees.risquesParNiveauGravite.grave[0].description).to.equal(
+    expect(donnees.risquesParNiveauGravite.grave[0].intitule).to.equal(
       'Une description'
     );
   });
