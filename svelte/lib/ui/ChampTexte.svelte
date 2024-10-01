@@ -16,9 +16,10 @@
   bind:value={valeur}
   required={requis}
   placeholder={aideSaisie}
-  use:validationChamp={(requis || modele) ? messageErreur : ''}
+  use:validationChamp={requis || modele ? messageErreur : ''}
   pattern={modele}
   on:input
+  on:focus
 />
 
 <style>
