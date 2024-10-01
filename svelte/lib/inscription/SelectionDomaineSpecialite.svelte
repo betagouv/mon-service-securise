@@ -140,6 +140,16 @@
     top: 14px;
   }
 
+  .bouton::placeholder {
+    color: var(--texte-clair);
+    opacity: 1;
+  }
+
+  .bouton::-ms-input-placeholder {
+    /* Edge 12 -18 */
+    color: var(--texte-clair);
+  }
+
   .rappel-declencheur::after {
     content: '';
     display: inline-block;

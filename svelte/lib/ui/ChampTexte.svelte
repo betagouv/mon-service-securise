@@ -1,5 +1,6 @@
 <script lang="ts">
   import { validationChamp } from '../directives/validationChamp';
+
   export let nom: string;
   export let id: string;
   export let valeur: string = '';
@@ -29,6 +30,17 @@
     font-size: 16px;
     padding: 8px 16px;
     line-height: 24px;
+    background: white;
+  }
+
+  input::placeholder {
+    color: var(--texte-clair);
+    opacity: 1;
+  }
+
+  input::-ms-input-placeholder {
+    /* Edge 12 -18 */
+    color: var(--texte-clair);
   }
 
   input:hover {
