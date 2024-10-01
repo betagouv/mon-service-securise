@@ -1,6 +1,7 @@
 <script lang="ts">
   import ChampTexte from '../ui/ChampTexte.svelte';
   import type { Departement } from './inscription.d';
+  import FermetureSurClicEnDehors from '../ui/FermetureSurClicEnDehors.svelte';
 
   export let departements: Departement[];
   export let valeur: Departement | '' = '';
@@ -32,6 +33,8 @@
     valeur = item;
     suggestionsVisibles = false;
   };
+
+  let suggestionsEl: HTMLDivElement;
 </script>
 
 <div class="conteneur">
@@ -43,7 +46,11 @@
     aideSaisie="ex : 33, Morbihan"
     on:focus={() => avecTemporisation(rechercheSuggestions)}
   />
-  <div class="liste-suggestions" class:visible={suggestionsVisibles}>
+  <div
+    class="liste-suggestions"
+    class:visible={suggestionsVisibles}
+    bind:this={suggestionsEl}
+  >
     {#each suggestions as suggestion}
       <div
         class="option"
@@ -63,6 +70,11 @@
     {/each}
   </div>
 </div>
+
+<FermetureSurClicEnDehors
+  bind:doitEtreOuvert={suggestionsVisibles}
+  elements={[suggestionsEl]}
+/>
 
 <style>
   .conteneur {
