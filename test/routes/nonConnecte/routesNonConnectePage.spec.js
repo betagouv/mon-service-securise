@@ -237,7 +237,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
           organisation: {
             siret: '12P34',
             departement: '33',
-            denomination: 'VERT',
+            nom: 'VERT',
           },
         },
       });
