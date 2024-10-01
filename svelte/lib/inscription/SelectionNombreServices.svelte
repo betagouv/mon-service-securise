@@ -23,5 +23,16 @@
 <style>
   select {
     appearance: auto;
+    background: white;
+    border: 1px solid var(--liseres-fonce);
+    font-size: 14px;
+  }
+
+  select:hover {
+    border-color: var(--bleu-mise-en-avant);
+  }
+
+  option {
+    font-size: 14px;
   }
 </style>
