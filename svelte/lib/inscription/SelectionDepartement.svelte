@@ -29,12 +29,15 @@
   };
 
   const choisisDepartement = (item: Departement) => {
-    saisie = `${item.nom} (${item.code})`;
     valeur = item;
+    saisie = `${valeur.nom} (${valeur.code})`;
     suggestionsVisibles = false;
   };
 
   let suggestionsEl: HTMLDivElement;
+  if (valeur) {
+    saisie = `${valeur.nom} (${valeur.code})`;
+  }
 </script>
 
 <div class="conteneur">
