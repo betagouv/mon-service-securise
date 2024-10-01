@@ -1,21 +1,19 @@
 <script lang="ts">
   import ChampTexte from '../ui/ChampTexte.svelte';
   import { createEventDispatcher } from 'svelte';
-  import type { Departement } from './inscription.d';
+  import type { Departement, Organisation } from './inscription.d';
 
-  type Organisation = {
-    departement: string;
-    nom: string;
-    siret: string;
+  type OrganisationAvecLabel = Organisation & {
     label: string;
   };
 
   export let filtreDepartement: Departement;
+  export let valeur: Organisation | undefined;
 
   let saisie: string;
   let minuteur: NodeJS.Timeout;
   let dureeDebounceEnMs = 300;
-  let suggestions: Organisation[] = [];
+  let suggestions: OrganisationAvecLabel[] = [];
   let suggestionsVisibles = false;
 
   const avecTemporisation = (fonction: () => Promise<any>) => {
@@ -25,11 +23,9 @@
     }, dureeDebounceEnMs);
   };
 
-  const uneSuggestion = (
-    departement: string,
-    nom: string,
-    siret: string
-  ): Organisation => {
+  const construisLabel = (organisation: Organisation) => {
+    const siret = organisation.siret;
+
     /* eslint-disable no-irregular-whitespace */
     const siretFormatte =
       siret &&
@@ -37,16 +33,17 @@
         6,
         9
       )} ${siret.substring(9, 14)}`;
-    /* eslint-enable no-irregular-whitespace */
-    return {
-      departement,
-      nom,
-      siret,
-      label: `(${departement}) ${nom} - ${siretFormatte}`,
-    };
+    return `(${organisation.departement}) ${organisation.nom} - ${siretFormatte}`;
+  };
+
+  const uneSuggestion = (organisation: Organisation): OrganisationAvecLabel => {
+    return { ...organisation, label: construisLabel(organisation) };
   };
 
   const rechercheSuggestions = async () => {
+    if (saisie.length === 0) {
+      valeur = undefined;
+    }
     if (saisie.length < 2) {
       suggestionsVisibles = false;
       suggestions = [];
@@ -59,17 +56,7 @@
       },
     });
 
-    suggestions = reponse.data.suggestions.map(
-      ({
-        departement,
-        nom,
-        siret,
-      }: {
-        departement: string;
-        nom: string;
-        siret: string;
-      }) => uneSuggestion(departement, nom, siret)
-    );
+    suggestions = reponse.data.suggestions.map(uneSuggestion);
     suggestionsVisibles = suggestions.length > 0;
   };
 
@@ -77,11 +64,14 @@
     organisationChoisie: Organisation;
   }>();
 
-  const choisisOrganisation = (donnees: Organisation) => {
-    saisie = donnees.label;
+  const choisisOrganisation = (item: OrganisationAvecLabel) => {
+    valeur = item;
+    saisie = item.label;
     suggestionsVisibles = false;
-    envoiEvenement('organisationChoisie', donnees);
+    envoiEvenement('organisationChoisie', item);
   };
+
+  saisie = valeur ? construisLabel(valeur) : '';
 </script>
 
 <div class="conteneur">
