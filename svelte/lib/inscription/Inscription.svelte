@@ -13,6 +13,7 @@
   import SelectionDepartement from './SelectionDepartement.svelte';
   import SelectionOrganisation from './SelectionOrganisation.svelte';
   import ChampTexte from '../ui/ChampTexte.svelte';
+  import SelectionNombreServices from './SelectionNombreServices.svelte';
 
   export let estimationNombreServices: EstimationNombreServices[];
   export let informationsProfessionnelles: InformationsProfessionnelles;
@@ -204,18 +205,11 @@
               Exemple : Systèmes d’information, site web, application mobile,
               API, téléservices
             </span>
-            <select
+            <SelectionNombreServices
               id="estimation-nombre-services"
-              required
-              bind:value={nombreServices}
-              use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
-            >
-              <option value="" disabled selected>Sélectionner un nombre</option>
-              {#each estimationNombreServices as estimation}
-                {@const valeur = `${estimation.borneBasse}_${estimation.borneHaute}`}
-                <option value={valeur}>{estimation.label}</option>
-              {/each}
-            </select>
+              {estimationNombreServices}
+              bind:nombreServices
+            />
           </div>
         </div>
       </div>
@@ -359,10 +353,6 @@
     display: flex;
     flex-direction: column;
     gap: 32px;
-  }
-
-  #estimation-nombre-services {
-    appearance: auto;
   }
 
   .info-champ-obligatoire {
