@@ -12,6 +12,10 @@ class ListeRisques extends ElementsConstructibles {
       return acc;
     }, accumulateur);
   }
+
+  ajouteRisque(risque) {
+    this.items.push(risque);
+  }
 }
 
 module.exports = ListeRisques;

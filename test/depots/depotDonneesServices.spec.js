@@ -503,6 +503,48 @@ describe('Le dépôt de données des services', () => {
     });
   });
 
+  describe('concernant les risques spécifiques', () => {
+    let valideRisque;
+    let depot;
+
+    before(() => {
+      const r = Referentiel.creeReferentielVide();
+      const adaptateurUUID = { genereUUID: () => 'NouveauRS' };
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(r)
+        .avecConstructeurDePersistance(
+          unePersistanceMemoire().ajouteUnService(
+            unService(r).avecId('S1').donnees
+          )
+        )
+        .avecAdaptateurUUID(adaptateurUUID)
+        .construis();
+      valideRisque = RisqueSpecifique.valide;
+      RisqueSpecifique.valide = () => {};
+    });
+
+    after(() => (RisqueSpecifique.valide = valideRisque));
+
+    it('sait associer un risque spécifique à un service', async () => {
+      const risque = new RisqueSpecifique({ intitule: 'risque' });
+
+      await depot.ajouteRisqueSpecifiqueAService('S1', risque);
+
+      const { risques } = await depot.service('S1');
+      expect(risques.risquesSpecifiques.nombre()).to.equal(1);
+      expect(risques.risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
+    });
+
+    it('génère un id pour le nouveau risque', async () => {
+      const risque = new RisqueSpecifique({ intitule: 'risque' });
+
+      await depot.ajouteRisqueSpecifiqueAService('S1', risque);
+
+      const { risques } = await depot.service('S1');
+      expect(risques.risquesSpecifiques.item(0).id).to.equal('NouveauRS');
+    });
+  });
+
   it('sait associer un risque spécifique à un service', async () => {
     const r = Referentiel.creeReferentielVide();
 
