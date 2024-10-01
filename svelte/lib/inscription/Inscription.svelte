@@ -8,6 +8,7 @@
     EstimationNombreServices,
     FormulaireInscription,
     InformationsProfessionnelles,
+    Organisation,
   } from './inscription.d';
   import Formulaire from '../ui/Formulaire.svelte';
   import SelectionDepartement from './SelectionDepartement.svelte';
@@ -74,9 +75,11 @@
     };
   }
   let departement: Departement;
-  const choisisOrganisation = (evenement: any) => {
-    formulaireInscription.siretEntite = evenement.detail.siret;
-  };
+  let organisation: Organisation;
+  $: {
+    formulaireInscription.siretEntite =
+      informationsProfessionnelles.organisation?.siret || organisation?.siret;
+  }
 </script>
 
 <div class="entete-inscription">
@@ -165,8 +168,8 @@
                 >Nom ou SIRET de votre organisation</label
               >
               <SelectionOrganisation
+                bind:valeur={organisation}
                 filtreDepartement={departement}
-                on:organisationChoisie={choisisOrganisation}
               />
             </div>
           </div>
