@@ -63,7 +63,7 @@ const routesNonConnectePage = ({
         organisation = {
           siret,
           departement: organisations[0].departement,
-          denomination: organisations[0].nom,
+          nom: organisations[0].nom,
         };
     }
     reponse.render('inscription-v2', {

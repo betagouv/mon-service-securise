@@ -14,7 +14,7 @@ export type EstimationNombreServices = Intervalle & {
 };
 
 export type Organisation = {
-  denomination: string;
+  nom: string;
   siret: string;
   departement: string;
 };

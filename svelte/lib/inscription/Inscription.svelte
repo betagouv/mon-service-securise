@@ -126,7 +126,7 @@
             <div>
               <span class="info-label">Dénomination légale :</span>
               <span class="info-valeur"
-                >{informationsProfessionnelles.organisation.denomination}</span
+                >{informationsProfessionnelles.organisation.nom}</span
               >
             </div>
             <div>
