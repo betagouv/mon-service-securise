@@ -13,9 +13,7 @@
 
   export let departements: Departement[];
   export let utilisateur: Utilisateur;
-  export let estimationNombreServices: EstimationNombreServices[] = [
-    { borneBasse: 3, borneHaute: 8, label: 'stub' },
-  ];
+  export let estimationNombreServices: EstimationNombreServices[];
 
   const modeleTelephone = '^0\\d{9}$';
   let departement: Departement;
