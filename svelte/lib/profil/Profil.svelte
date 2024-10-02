@@ -29,11 +29,12 @@
     };
   }
 
-  const valide = () => {
-    axios.put('/api/utilisateur', {
+  const valide = async () => {
+    await axios.put('/api/utilisateur', {
       ...utilisateur,
       siretEntite: entite.siret,
     });
+    window.location.href = '/tableauDeBord';
   };
 </script>
 
