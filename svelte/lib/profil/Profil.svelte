@@ -10,6 +10,7 @@
     Organisation,
   } from '../inscription/inscription.d';
   import SelectionNombreServices from '../inscription/SelectionNombreServices.svelte';
+  import Bouton from '../ui/Bouton.svelte';
 
   export let departements: Departement[];
   export let utilisateur: Utilisateur;
@@ -20,13 +21,20 @@
   let departement: Departement | undefined = departements.find(
     (d) => d.code === entite.departement
   );
-  let nombreServices: string = '';
+  let nombreServices: string = `${utilisateur.estimationNombreServices.borneBasse}_${utilisateur.estimationNombreServices.borneHaute}`;
   $: {
     utilisateur.estimationNombreServices = {
       borneBasse: nombreServices.split('_')[0],
       borneHaute: nombreServices.split('_')[1],
     };
   }
+
+  const valide = () => {
+    axios.put('/api/utilisateur', {
+      ...utilisateur,
+      siretEntite: entite.siret,
+    });
+  };
 </script>
 
 <div class="contenu-profil">
@@ -140,11 +148,27 @@
           name="infolettreAcceptee"
         />
         <label for="infolettreAcceptee">
-          J'accepte de recevoir la lettre d'information MonServiceSécurisé.
+          J'accepte de recevoir la lettre d'information MonServiceSécurisé
+        </label>
+      </div>
+      <div class="case-a-cocher">
+        <input
+          id="transactionnelAccepte"
+          type="checkbox"
+          bind:checked={utilisateur.transactionnelAccepte}
+          name="transactionnelAccepte"
+        />
+        <label for="transactionnelAccepte">
+          J'accepte de recevoir des informations relatives à l'utilisation de
+          MonServiceSécurisé
         </label>
       </div>
     </div>
   </Formulaire>
+
+  <div class="actions">
+    <Bouton type="primaire" titre="Valider" on:click={valide} />
+  </div>
 </div>
 
 <style>
@@ -233,7 +257,17 @@
     padding: 16px;
   }
 
+  .case-a-cocher label {
+    font-weight: normal;
+  }
+
   input[type='checkbox'] {
     transform: none;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
   }
 </style>
