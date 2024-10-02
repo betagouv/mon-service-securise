@@ -29,12 +29,16 @@
     };
   }
 
+  let formulaire: Formulaire;
+
   const valide = async () => {
-    await axios.put('/api/utilisateur', {
-      ...utilisateur,
-      siretEntite: entite.siret,
-    });
-    window.location.href = '/tableauDeBord';
+    if (formulaire.estValide()) {
+      await axios.put('/api/utilisateur', {
+        ...utilisateur,
+        siretEntite: entite.siret,
+      });
+      window.location.href = '/tableauDeBord';
+    }
   };
 </script>
 
@@ -47,7 +51,7 @@
     </h2>
   </div>
 
-  <Formulaire classe="formulaire-profil">
+  <Formulaire classe="formulaire-profil" bind:this={formulaire}>
     <div class="bloc">
       <div>
         <div class="info-champ-obligatoire requis">Champ obligatoire</div>
