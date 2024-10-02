@@ -446,3 +446,7 @@ main {
   margin-top: 0;
   width: fit-content;
 }
+
+#home video {
+  width: 100%;
+}
