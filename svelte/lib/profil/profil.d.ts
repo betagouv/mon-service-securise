@@ -1,4 +1,7 @@
-import type { EstimationNombreServices } from '../inscription/inscription';
+import type {
+  EstimationNombreServices,
+  Organisation,
+} from '../inscription/inscription';
 
 declare global {
   interface HTMLElementEventMap {
@@ -30,4 +33,5 @@ export type ProfilProps = {
   departements: Departement[];
   utilisateur: Utilisateur;
   estimationNombreServices: EstimationNombreServices[];
+  entite: Organisation;
 };

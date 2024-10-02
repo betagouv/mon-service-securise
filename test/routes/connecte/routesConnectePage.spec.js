@@ -134,6 +134,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       let idRecu;
       testeur.depotDonnees().utilisateur = (idUtilisateur) => {
         idRecu = idUtilisateur;
+        return unUtilisateur().construis();
       };
 
       await axios.get(`http://localhost:1234/profil`);
