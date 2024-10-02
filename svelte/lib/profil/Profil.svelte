@@ -13,11 +13,13 @@
 
   export let departements: Departement[];
   export let utilisateur: Utilisateur;
+  export let entite: Organisation;
   export let estimationNombreServices: EstimationNombreServices[];
 
   const modeleTelephone = '^0\\d{9}$';
-  let departement: Departement;
-  let organisation: Organisation;
+  let departement: Departement | undefined = departements.find(
+    (d) => d.code === entite.departement
+  );
   let nombreServices: string = '';
   $: {
     utilisateur.estimationNombreServices = {
@@ -103,7 +105,7 @@
           >Nom ou SIRET de votre organisation</label
         >
         <SelectionOrganisation
-          bind:valeur={organisation}
+          bind:valeur={entite}
           filtreDepartement={departement}
         />
       </div>

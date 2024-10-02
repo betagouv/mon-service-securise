@@ -77,11 +77,13 @@ const routesConnectePage = ({
       const estimationNombreServices = referentiel.estimationNombreServices();
       const idUtilisateur = requete.idUtilisateurCourant;
       const utilisateur = await depotDonnees.utilisateur(idUtilisateur);
+      const { entite } = utilisateur;
 
       reponse.render('profil', {
         utilisateur,
         departements,
         estimationNombreServices,
+        entite,
       });
     }
   );

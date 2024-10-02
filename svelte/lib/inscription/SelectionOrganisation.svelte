@@ -8,7 +8,7 @@
     label: string;
   };
 
-  export let filtreDepartement: Departement;
+  export let filtreDepartement: Departement | undefined;
   export let valeur: Organisation | undefined;
 
   let saisie: string;

@@ -11,7 +11,7 @@ const rechargeApp = (props: ProfilProps) => {
   app?.$destroy();
   app = new Profil({
     target: document.getElementById('conteneur-profil')!,
-    props: props,
+    props,
   });
 };
 
