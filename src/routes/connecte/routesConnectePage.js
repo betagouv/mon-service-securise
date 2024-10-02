@@ -74,12 +74,14 @@ const routesConnectePage = ({
     middleware.chargeEtatVisiteGuidee,
     async (requete, reponse) => {
       const departements = referentiel.departements();
+      const estimationNombreServices = referentiel.estimationNombreServices();
       const idUtilisateur = requete.idUtilisateurCourant;
       const utilisateur = await depotDonnees.utilisateur(idUtilisateur);
 
       reponse.render('profil', {
         utilisateur,
         departements,
+        estimationNombreServices,
       });
     }
   );

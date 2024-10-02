@@ -1,3 +1,5 @@
+import type { EstimationNombreServices } from '../inscription/inscription';
+
 declare global {
   interface HTMLElementEventMap {
     'svelte-recharge-profil': CustomEvent;
@@ -27,4 +29,5 @@ export type Utilisateur = {
 export type ProfilProps = {
   departements: Departement[];
   utilisateur: Utilisateur;
+  estimationNombreServices: EstimationNombreServices[];
 };
