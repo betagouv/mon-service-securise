@@ -111,6 +111,7 @@ const creeServeur = (
       depotDonnees,
       serviceAnnuaire,
       adaptateurTracking,
+      adaptateurGestionErreur,
       adaptateurMail,
       inscriptionUtilisateur,
     })
