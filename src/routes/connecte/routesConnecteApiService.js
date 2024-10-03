@@ -445,25 +445,30 @@ const routesConnecteApiService = ({
       'niveauGravite',
       'commentaire',
       'description',
-      'intitule'
+      'intitule',
+      'categories.*'
     ),
     (requete, reponse, suite) => {
-      const { niveauGravite, intitule, commentaire, description } =
+      const { niveauGravite, intitule, commentaire, description, categories } =
         requete.body;
       try {
-        RisqueSpecifique.valide({
-          niveauGravite,
-          intitule,
-          commentaire,
-          description,
-        });
+        RisqueSpecifique.valide(
+          {
+            niveauGravite,
+            intitule,
+            commentaire,
+            description,
+            categories,
+          },
+          referentiel
+        );
       } catch (e) {
         reponse.status(400).send(e.message);
         return;
       }
       try {
         const risque = new RisqueSpecifique(
-          { niveauGravite, intitule, commentaire, description },
+          { niveauGravite, intitule, commentaire, description, categories },
           referentiel
         );
         depotDonnees.ajouteRisqueSpecifiqueAService(requete.service.id, risque);

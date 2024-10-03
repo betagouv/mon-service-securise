@@ -113,6 +113,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const risque = (id) => risques()[id] || {};
   const definitionRisque = (idRisque) => risque(idRisque).definition;
   const categoriesRisque = (idRisque) => risque(idRisque).categories;
+  const identifiantsCategoriesRisque = () =>
+    Object.keys(donnees.categoriesRisques);
   const descriptionRisque = (idRisque) => risque(idRisque).description;
   const statutsDeploiement = () => donnees.statutsDeploiement;
   const descriptionStatutDeploiement = (idStatut) =>
@@ -345,6 +347,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     fonctionnalites,
     formatteListeDeReferentiels,
     identifiantsCategoriesMesures,
+    identifiantsCategoriesRisque,
     identifiantsEcheancesRenouvellement,
     identifiantsLocalisationsDonnees,
     identifiantsMesures,
