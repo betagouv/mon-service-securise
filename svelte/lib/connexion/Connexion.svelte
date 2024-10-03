@@ -59,10 +59,6 @@
               bind:valeur={motDePasse}
             />
           </div>
-          <div class="case-a-cocher">
-            <input id="se-souvenir" type="checkbox" name="se-souvenir" />
-            <label for="se-souvenir"> Se souvenir de moi </label>
-          </div>
           <span class:afficheErreur class="message-erreur">
             L'email et le mot de passe saisis ne correspondent à aucun compte.
             Veuillez renseigner les identifiants d'un compte existant.
@@ -149,15 +145,6 @@
     color: #e3271c;
     margin-right: 4px;
     font-size: 16px;
-  }
-
-  .case-a-cocher label {
-    font-weight: normal;
-    margin: 0;
-  }
-
-  input[type='checkbox'] {
-    transform: none;
   }
 
   .message-erreur {
