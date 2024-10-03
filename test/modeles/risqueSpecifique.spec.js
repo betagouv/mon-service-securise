@@ -11,6 +11,7 @@ describe('Un risque spécifique', () => {
     () =>
       (referentiel = Referentiel.creeReferentiel({
         niveauxGravite: { unNiveau: {} },
+        categoriesRisques: { C1: {}, C2: {} },
       }))
   );
 
@@ -34,6 +35,14 @@ describe('Un risque spécifique', () => {
   it("expose son intitulé en cohérence avec l'API des classes sœurs", () => {
     const risque = new RisqueSpecifique({ intitule: 'Un risque' });
     expect(risque.intituleRisque()).to.equal('Un risque');
+  });
+
+  it("expose ses catégories en cohérence avec l'API des classes sœurs", () => {
+    const risque = new RisqueSpecifique({
+      intitule: 'Un risque',
+      categories: ['C1', 'C2'],
+    });
+    expect(risque.categoriesRisque()).to.eql(['C1', 'C2']);
   });
 
   it('vérifie que le niveau de gravité est bien répertorié', (done) => {
