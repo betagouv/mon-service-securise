@@ -3,6 +3,23 @@
   import Bouton from '../ui/Bouton.svelte';
   import MotDePasse from '../ui/MotDePasse.svelte';
   import Formulaire from '../ui/Formulaire.svelte';
+
+  export let login: string;
+  export let motDePasse: string;
+
+  let afficheErreur: boolean = false;
+
+  export const connecte = async () => {
+    try {
+      await axios.post('/api/token', { login, motDePasse });
+      // TODO : gérer la présence de urlRedirection
+      window.location.href = '/tableauDeBord';
+    } catch (erreur: any) {
+      if (erreur.response.status === 401) {
+        afficheErreur = true;
+      }
+    }
+  };
 </script>
 
 <div class="conteneur">
@@ -27,22 +44,31 @@
         </p>
       </div>
       <hr class="separation-agent-connect" />
-      <Formulaire>
+      <Formulaire on:formulaireValide={connecte}>
         <div class="connexion-mss">
           <span class="mention-obligatoire requis">champ obligatoire</span>
           <div class="champ">
             <label for="email" class="requis">Mail professionnel</label>
-            <ChampTexte id="email" nom="email" />
+            <ChampTexte id="email" nom="email" bind:valeur={login} />
           </div>
           <div class="champ">
             <label for="mot-de-passe" class="requis">Mot de passe</label>
-            <MotDePasse id="mot-de-passe" nom="mot-de-passe" />
+            <MotDePasse
+              id="mot-de-passe"
+              nom="mot-de-passe"
+              bind:valeur={motDePasse}
+            />
           </div>
           <div class="case-a-cocher">
             <input id="se-souvenir" type="checkbox" name="se-souvenir" />
             <label for="se-souvenir"> Se souvenir de moi </label>
           </div>
-          <Bouton type="primaire" titre="Se connecter" actif={false} />
+          <span class:afficheErreur class="message-erreur">
+            L'email et le mot de passe saisis ne correspondent à aucun compte.
+            Veuillez renseigner les identifiants d'un compte existant.
+          </span>
+
+          <Bouton type="primaire" titre="Se connecter" />
           <div class="pas-de-compte">
             <span>Vous n’avez pas encore de compte ?</span>
             <a href="/inscription">S’inscrire</a>
@@ -132,5 +158,32 @@
 
   input[type='checkbox'] {
     transform: none;
+  }
+
+  .message-erreur {
+    position: relative;
+    display: none;
+    /*margin: 1em 0;*/
+    color: var(--rose-anssi);
+    font-weight: normal;
+    align-items: center;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .message-erreur::before {
+    content: '';
+    display: flex;
+    flex-shrink: 0;
+    background-image: url(/statique/assets/images/icone_attention_rose.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+  }
+
+  .afficheErreur {
+    display: flex;
+    align-items: start;
   }
 </style>
