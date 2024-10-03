@@ -14,6 +14,10 @@ class RisqueGeneral extends Risque {
     this.referentiel = referentiel;
   }
 
+  categoriesRisque() {
+    return this.referentiel.categoriesRisque(this.id);
+  }
+
   intituleRisque() {
     return this.referentiel.descriptionRisque(this.id);
   }

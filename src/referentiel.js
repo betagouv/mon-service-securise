@@ -112,6 +112,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const identifiantsRisques = () => Object.keys(donnees.risques);
   const risque = (id) => risques()[id] || {};
   const definitionRisque = (idRisque) => risque(idRisque).definition;
+  const categoriesRisque = (idRisque) => risque(idRisque).categories;
   const descriptionRisque = (idRisque) => risque(idRisque).description;
   const statutsDeploiement = () => donnees.statutsDeploiement;
   const descriptionStatutDeploiement = (idStatut) =>
@@ -306,6 +307,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   valideDonnees();
 
   return {
+    categoriesRisque,
     categoriesMesures,
     codeDepartements,
     coefficientIndiceCyberMesuresIndispensables,
