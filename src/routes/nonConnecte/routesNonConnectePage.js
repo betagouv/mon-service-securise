@@ -50,6 +50,10 @@ const routesNonConnectePage = ({
     reponse.render('statistiques');
   });
 
+  routes.get('/statistiques-v2', (_requete, reponse) => {
+    reponse.render('statistiques-v2');
+  });
+
   routes.get('/inscription', (_requete, reponse) => {
     const departements = referentiel.departements();
     reponse.render('inscription', { departements, referentiel });
