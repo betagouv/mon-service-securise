@@ -1,6 +1,8 @@
 <script lang="ts">
   import ChampTexte from '../ui/ChampTexte.svelte';
   import Bouton from '../ui/Bouton.svelte';
+  import MotDePasse from '../ui/MotDePasse.svelte';
+  import Formulaire from '../ui/Formulaire.svelte';
 </script>
 
 <div class="conteneur">
@@ -25,26 +27,28 @@
         </p>
       </div>
       <hr class="separation-agent-connect" />
-      <div class="connexion-mss">
-        <span class="mention-obligatoire requis">champ obligatoire</span>
-        <div class="champ">
-          <label for="email" class="requis">Mail professionnel</label>
-          <ChampTexte id="email" nom="email" />
+      <Formulaire>
+        <div class="connexion-mss">
+          <span class="mention-obligatoire requis">champ obligatoire</span>
+          <div class="champ">
+            <label for="email" class="requis">Mail professionnel</label>
+            <ChampTexte id="email" nom="email" />
+          </div>
+          <div class="champ">
+            <label for="mot-de-passe" class="requis">Mot de passe</label>
+            <MotDePasse id="mot-de-passe" nom="mot-de-passe" />
+          </div>
+          <div class="case-a-cocher">
+            <input id="se-souvenir" type="checkbox" name="se-souvenir" />
+            <label for="se-souvenir"> Se souvenir de moi </label>
+          </div>
+          <Bouton type="primaire" titre="Se connecter" actif={false} />
+          <div class="pas-de-compte">
+            <span>Vous n’avez pas encore de compte ?</span>
+            <a href="/inscription">S’inscrire</a>
+          </div>
         </div>
-        <div class="champ">
-          <label for="mot-de-passe" class="requis">Mot de passe</label>
-          <ChampTexte id="mot-de-passe" nom="mot-de-passe" />
-        </div>
-        <div class="case-a-cocher">
-          <input id="se-souvenir" type="checkbox" name="se-souvenir" />
-          <label for="se-souvenir"> Se souvenir de moi </label>
-        </div>
-        <Bouton type="primaire" titre="Se connecter" actif={false} />
-        <div class="pas-de-compte">
-          <span>Vous n’avez pas encore de compte ?</span>
-          <a href="/inscription">S’inscrire</a>
-        </div>
-      </div>
+      </Formulaire>
     </div>
   </div>
 
