@@ -105,8 +105,18 @@ const routesNonConnectePage = ({
     '/connexion-v2',
     middleware.suppressionCookie,
     middleware.chargeEtatAgentConnect,
-    (_requete, reponse) => {
-      reponse.render('connexion-v2');
+    (requete, reponse) => {
+      const { urlRedirection } = requete.query;
+      if (!urlRedirection) {
+        reponse.render('connexion-v2');
+        return;
+      }
+      if (!estUrlLegalePourRedirection(urlRedirection)) {
+        // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
+        reponse.redirect('connexion-v2');
+        return;
+      }
+      reponse.render('connexion-v2', { urlRedirection });
     }
   );
 

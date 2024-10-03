@@ -2,7 +2,10 @@ const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const { ErreurArticleCrispIntrouvable } = require('../../../src/erreurs');
-const { donneesPartagees } = require('../../aides/http');
+const {
+  donneesPartagees,
+  requeteSansRedirection,
+} = require('../../aides/http');
 
 describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
   const testeur = testeurMSS();
@@ -304,6 +307,22 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
           'http://localhost:1234/connexion-v2',
           done
         );
+    });
+
+    it('ajoute la redirection', async () => {
+      const reponse = await requeteSansRedirection(
+        'http://localhost:1234/connexion-v2?urlRedirection=/redirige-vers'
+      );
+      expect(donneesPartagees(reponse.data, 'url-redirection')).to.eql({
+        urlRedirection: '/redirige-vers',
+      });
+    });
+
+    it("n'ajoute pas la redirection si l'url n'est pas valide", async () => {
+      const reponse = await requeteSansRedirection(
+        'http://localhost:1234/connexion-v2?urlRedirection=uri-invalide'
+      );
+      expect(donneesPartagees(reponse.data, 'url-redirection')).to.eql({});
     });
   });
 });
