@@ -50,6 +50,7 @@ class ErreurUtilisateurInexistant extends ErreurModele {}
 class ErreurTypeInconnu extends ErreurModele {}
 class ErreurIdentifiantNouveauteInconnu extends ErreurModele {}
 class ErreurIdentifiantTacheInconnu extends ErreurModele {}
+class ErreurIntituleRisqueManquant extends ErreurModele {}
 
 class ErreurUtilisateurExistant extends ErreurModele {
   constructor(message, idUtilisateur) {
@@ -84,6 +85,7 @@ module.exports = {
   ErreurEcheanceMesureInvalide,
   ErreurEmailManquant,
   ErreurIdentifiantNouveauteInconnu,
+  ErreurIntituleRisqueManquant,
   ErreurLocalisationDonneesInvalide,
   ErreurMesureInconnue,
   ErreurMotDePasseIncorrect,

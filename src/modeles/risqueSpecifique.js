@@ -1,4 +1,5 @@
 const Risque = require('./risque');
+const { ErreurIntituleRisqueManquant } = require('../erreurs');
 
 class RisqueSpecifique extends Risque {
   constructor(donneesRisque, referentiel) {
@@ -16,6 +17,14 @@ class RisqueSpecifique extends Risque {
 
   intituleRisque() {
     return this.intitule;
+  }
+
+  static valide({ intitule }) {
+    if (!intitule) {
+      throw new ErreurIntituleRisqueManquant(
+        "L'intitulé du risque est obligatoire."
+      );
+    }
   }
 }
 

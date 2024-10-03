@@ -450,8 +450,15 @@ const routesConnecteApiService = ({
     (requete, reponse, suite) => {
       const { niveauGravite, intitule, commentaire, description } =
         requete.body;
-      if (!intitule) {
-        reponse.status(400).send("L'intitulé du risque est obligatoire.");
+      try {
+        RisqueSpecifique.valide({
+          niveauGravite,
+          intitule,
+          commentaire,
+          description,
+        });
+      } catch (e) {
+        reponse.status(400).send(e.message);
         return;
       }
       try {
