@@ -165,6 +165,10 @@ const creeDepot = (config = {}) => {
   const { lisDernierIndiceCyber, sauvegardeNouvelIndiceCyber } =
     depotEvolutionsIndiceCyber;
 
+  const santeDuDepot = async () => {
+    await adaptateurPersistance.sante();
+  };
+
   return {
     accesAutorise,
     acquitteSuggestionAction,
@@ -205,6 +209,7 @@ const creeDepot = (config = {}) => {
     reinitialiseMotDePasse,
     rechercheContributeurs,
     remplaceRisquesSpecifiquesDuService,
+    santeDuDepot,
     sauvegardeAutorisation,
     sauvegardeParcoursUtilisateur,
     sauvegardeNouvelIndiceCyber,

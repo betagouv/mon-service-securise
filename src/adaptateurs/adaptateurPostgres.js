@@ -499,6 +499,8 @@ const nouvelAdaptateur = (env) => {
       .orderBy('date', 'desc')
       .first();
 
+  const sante = async () => knex.raw('SELECT 1 + 1;');
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -526,6 +528,7 @@ const nouvelAdaptateur = (env) => {
     nbAutorisationsProprietaire,
     nouveautesPourUtilisateur,
     contributeursDesServicesDe,
+    sante,
     sauvegardeService,
     sauvegardeAutorisation,
     sauvegardeNotificationsExpirationHomologation,
