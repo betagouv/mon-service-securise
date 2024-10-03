@@ -1034,6 +1034,14 @@ describe('Le serveur MSS des routes /api/service/*', () => {
   });
 
   describe('quand requête POST sur `/api/service/:id/risquesSpecifiques', () => {
+    beforeEach(() => {
+      testeur.referentiel().recharge({
+        niveauxGravite: { unNiveau: {} },
+        categoriesRisques: { C1: {} },
+      });
+      testeur.depotDonnees().ajouteRisqueSpecifiqueAService = async () => {};
+    });
+
     it('recherche le service correspondant', (done) => {
       testeur.middleware().verifieRechercheService(
         [{ niveau: ECRITURE, rubrique: RISQUES }],
@@ -1047,7 +1055,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['niveauGravite', 'commentaire', 'description', 'intitule'],
+        [
+          'niveauGravite',
+          'commentaire',
+          'description',
+          'intitule',
+          'categories.*',
+        ],
         {
           method: 'post',
           url: 'http://localhost:1234/api/service/456/risquesSpecifiques',
@@ -1056,11 +1070,15 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it('retourne une erreur 400 si les données sont invalides', async () => {
+    it("retourne une erreur 400 si le niveau de gravité n'existe pas", async () => {
       try {
         await axios.post(
           'http://localhost:1234/api/service/456/risquesSpecifiques',
-          { niveauGravite: 'inexistant', intitule: 'risque' }
+          {
+            niveauGravite: 'inexistant',
+            intitule: 'risque',
+            categories: ['C1'],
+          }
         );
         expect().fail('Aurait du lever une exception');
       } catch (e) {
@@ -1075,7 +1093,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       try {
         await axios.post(
           'http://localhost:1234/api/service/456/risquesSpecifiques',
-          {}
+          { categories: ['C1'] }
         );
         expect().fail('Aurait du lever une exception');
       } catch (e) {
@@ -1084,12 +1102,24 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       }
     });
 
+    it("retourne une erreur 400 si la catégorie n'existe pas", async () => {
+      try {
+        await axios.post(
+          'http://localhost:1234/api/service/456/risquesSpecifiques',
+          { categories: ['inexistante'], intitule: 'un risque' }
+        );
+        expect().fail('Aurait du lever une exception');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'La catégorie "inexistante" n\'est pas répertoriée'
+        );
+      }
+    });
+
     it("délègue au dépôt de donnée l'ajout du risque", async () => {
       let idServiceRecu;
       let donneesRecues;
-      testeur.referentiel().recharge({
-        niveauxGravite: { unNiveau: {} },
-      });
       testeur.depotDonnees().ajouteRisqueSpecifiqueAService = async (
         idService,
         donnees
@@ -1104,6 +1134,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           intitule: 'un risque important',
           niveauGravite: 'unNiveau',
           commentaire: "c'est important",
+          categories: ['C1'],
         }
       );
 

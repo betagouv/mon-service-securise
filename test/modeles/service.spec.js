@@ -748,7 +748,9 @@ describe('Un service', () => {
           mesuresGenerales: [{ id: 'uneMesure', statut: 'fait' }],
           mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
           risquesGeneraux: [{ id: 'unRisque' }],
-          risquesSpecifiques: [{ description: 'Un risque' }],
+          risquesSpecifiques: [
+            { intitule: 'Un risque', categories: ['confidentialite'] },
+          ],
           rolesResponsabilites: {
             autoriteHomologation: 'Jean Dupont',
             partiesPrenantes: [{ nom: 'Un hébergeur', type: 'Hebergement' }],
@@ -809,7 +811,9 @@ describe('Un service', () => {
           { description: 'Une mesure spécifique', responsables: [] },
         ],
         risquesGeneraux: [{ id: 'unRisque' }],
-        risquesSpecifiques: [{ description: 'Un risque' }],
+        risquesSpecifiques: [
+          { intitule: 'Un risque', categories: ['confidentialite'] },
+        ],
         rolesResponsabilites: {
           acteursHomologation: [],
           autoriteHomologation: 'Jean Dupont',

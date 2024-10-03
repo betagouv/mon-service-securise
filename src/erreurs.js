@@ -51,6 +51,8 @@ class ErreurTypeInconnu extends ErreurModele {}
 class ErreurIdentifiantNouveauteInconnu extends ErreurModele {}
 class ErreurIdentifiantTacheInconnu extends ErreurModele {}
 class ErreurIntituleRisqueManquant extends ErreurModele {}
+class ErreurCategoriesRisqueManquantes extends ErreurModele {}
+class ErreurCategorieRisqueInconnue extends ErreurModele {}
 
 class ErreurUtilisateurExistant extends ErreurModele {
   constructor(message, idUtilisateur) {
@@ -67,6 +69,8 @@ module.exports = {
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
   ErreurAvisInvalide,
+  ErreurCategoriesRisqueManquantes,
+  ErreurCategorieRisqueInconnue,
   ErreurCategorieInconnue,
   ErreurChainageMiddleware,
   ErreurDateHomologationInvalide,
