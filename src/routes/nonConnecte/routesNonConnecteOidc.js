@@ -43,6 +43,10 @@ const routesNonConnecteOidc = ({
   );
 
   routes.get('/apres-authentification', async (requete, reponse) => {
+    if (!requete.cookies.AgentConnectInfo) {
+      reponse.status(401).send("Erreur d'authentification");
+      return;
+    }
     try {
       const { idToken, accessToken } =
         await adaptateurOidc.recupereJeton(requete);
