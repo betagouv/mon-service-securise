@@ -1,0 +1,14 @@
+extends ./mss
+
+block append styles
+    +feuilleDeStyleSvelte()
+    link(href = '/statique/assets/styles/connexion-v2.css', rel = 'stylesheet')
+    link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+
+block append scripts
+    +composantSvelte('connexion.js')
+
+block main
+    #conteneur-connexion
+
+    script(type = 'module', src = '/statique/connexion-v2.js')

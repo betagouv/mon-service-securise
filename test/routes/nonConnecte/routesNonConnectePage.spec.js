@@ -22,6 +22,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/inscription-v2',
     '/activation',
     '/connexion',
+    '/connexion-v2',
     '/reinitialisationMotDePasse',
     '/devenir-ambassadeurrice-monservicesecurise',
     '/faire-connaitre-et-recommander-monservicesecurise',
