@@ -286,4 +286,24 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       });
     });
   });
+
+  describe('quand requête GET sur `/connexion-v2`', () => {
+    it("déconnecte l'utilisateur courant", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeSuppressionCookie(
+          'http://localhost:1234/connexion-v2',
+          done
+        );
+    });
+
+    it("charge l'état d'activation d'AgentConnect", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteChargeActivationAgentConnect(
+          'http://localhost:1234/connexion-v2',
+          done
+        );
+    });
+  });
 });
