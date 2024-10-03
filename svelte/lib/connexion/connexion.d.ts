@@ -4,4 +4,6 @@ declare global {
   }
 }
 
-export type ConnexionProps = {};
+export type ConnexionProps = {
+  urlRedirection: string;
+};

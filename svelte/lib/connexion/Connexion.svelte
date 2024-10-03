@@ -4,16 +4,17 @@
   import MotDePasse from '../ui/MotDePasse.svelte';
   import Formulaire from '../ui/Formulaire.svelte';
 
-  export let login: string;
-  export let motDePasse: string;
+  export let urlRedirection: string;
+
+  let login: string;
+  let motDePasse: string;
 
   let afficheErreur: boolean = false;
 
   export const connecte = async () => {
     try {
       await axios.post('/api/token', { login, motDePasse });
-      // TODO : gérer la présence de urlRedirection
-      window.location.href = '/tableauDeBord';
+      window.location.href = urlRedirection ?? '/tableauDeBord';
     } catch (erreur: any) {
       if (erreur.response.status === 401) {
         afficheErreur = true;
