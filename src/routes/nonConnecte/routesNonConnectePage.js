@@ -10,6 +10,7 @@ const SourceAuthentification = require('../../modeles/sourceAuthentification');
 
 const routesNonConnectePage = ({
   adaptateurCmsCrisp,
+  adaptateurEnvironnement,
   serviceAnnuaire,
   depotDonnees,
   middleware,
@@ -116,7 +117,12 @@ const routesNonConnectePage = ({
         reponse.redirect('connexion-v2');
         return;
       }
-      reponse.render('connexion-v2', { urlRedirection });
+      const urlRedirectionAvecBase = `${adaptateurEnvironnement
+        .mss()
+        .urlBase()}${urlRedirection}`;
+      reponse.render('connexion-v2', {
+        urlRedirection: urlRedirectionAvecBase,
+      });
     }
   );
 

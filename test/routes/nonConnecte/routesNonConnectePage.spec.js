@@ -314,7 +314,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         'http://localhost:1234/connexion-v2?urlRedirection=/redirige-vers'
       );
       expect(donneesPartagees(reponse.data, 'url-redirection')).to.eql({
-        urlRedirection: '/redirige-vers',
+        urlRedirection: 'http://localhost:1234/redirige-vers',
       });
     });
 
