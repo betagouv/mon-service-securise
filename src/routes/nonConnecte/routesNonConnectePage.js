@@ -101,6 +101,10 @@ const routesNonConnectePage = ({
     }
   );
 
+  routes.get('/connexion-v2', (_requete, reponse) => {
+    reponse.render('connexion-v2');
+  });
+
   routes.get(
     '/reinitialisationMotDePasse',
     middleware.suppressionCookie,
