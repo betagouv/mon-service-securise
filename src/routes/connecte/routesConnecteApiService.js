@@ -15,6 +15,9 @@ const {
   ErreurResponsablesMesureInvalides,
   ErreurRisqueInconnu,
   ErreurNiveauGraviteInconnu,
+  ErreurIntituleRisqueManquant,
+  ErreurCategoriesRisqueManquantes,
+  ErreurCategorieRisqueInconnue,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -462,24 +465,24 @@ const routesConnecteApiService = ({
           },
           referentiel
         );
-      } catch (e) {
-        reponse.status(400).send(e.message);
-        return;
-      }
-      try {
         const risque = new RisqueSpecifique(
           { niveauGravite, intitule, commentaire, description, categories },
           referentiel
         );
         depotDonnees.ajouteRisqueSpecifiqueAService(requete.service.id, risque);
+        reponse.sendStatus(201);
       } catch (e) {
-        if (e instanceof ErreurNiveauGraviteInconnu) {
+        if (
+          e instanceof ErreurNiveauGraviteInconnu ||
+          e instanceof ErreurIntituleRisqueManquant ||
+          e instanceof ErreurCategoriesRisqueManquantes ||
+          e instanceof ErreurCategorieRisqueInconnue
+        ) {
           reponse.status(400).send(e.message);
           return;
         }
         suite(e);
       }
-      reponse.sendStatus(201);
     }
   );
 
