@@ -327,6 +327,7 @@ const middleware = (configuration = {}) => {
     return ipfilter(config.ipAutorisees(), {
       // Seules les IP du WAF doivent être autorisées si jamais le filtrage IP est activé.
       detectIp: (requete) => extraisIp(requete.headers).waf,
+      excluding: ['/api/sante'],
       mode: 'allow',
       log: false,
     });
