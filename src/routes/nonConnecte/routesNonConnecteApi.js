@@ -19,6 +19,7 @@ const routesNonConnecteApi = ({
   serviceAnnuaire,
   adaptateurMail,
   inscriptionUtilisateur,
+  adaptateurGestionErreur,
 }) => {
   const routes = express.Router();
 
@@ -187,6 +188,18 @@ const routesNonConnecteApi = ({
       });
     }
   );
+
+  routes.get('/sante', async (_requete, reponse) => {
+    try {
+      await depotDonnees.santeDuDepot();
+      reponse.sendStatus(200);
+    } catch (e) {
+      adaptateurGestionErreur.logueErreur(
+        new Error('La base de données est injoignable')
+      );
+      reponse.sendStatus(503);
+    }
+  });
 
   return routes;
 };

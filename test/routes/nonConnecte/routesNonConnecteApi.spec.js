@@ -656,4 +656,50 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         .catch((e) => done(e.response?.data || e));
     });
   });
+
+  describe('quand requête GET sur `/api/sante`', () => {
+    it("utilise le dépôt de données pour vérifier l'état de santé de la base", async () => {
+      let depotAppele = false;
+      testeur.depotDonnees().santeDuDepot = () => {
+        depotAppele = true;
+      };
+
+      const reponse = await axios.get('http://localhost:1234/api/sante');
+
+      expect(depotAppele).to.be(true);
+      expect(reponse.status).to.be(200);
+    });
+
+    it('renvoi une erreur 503 si le dépôt est défectueux', async () => {
+      testeur.depotDonnees().santeDuDepot = () => {
+        throw new Error();
+      };
+
+      try {
+        await axios.get('http://localhost:1234/api/sante');
+        expect().fail("L'appel aurait du échouer");
+      } catch (e) {
+        expect(e.response.status).to.be(503);
+      }
+    });
+
+    it('loggue une erreur si le dépôt est défectueux', async () => {
+      testeur.depotDonnees().santeDuDepot = () => {
+        throw new Error();
+      };
+      let erreurLoguee;
+      testeur.adaptateurGestionErreur().logueErreur = (erreur) => {
+        erreurLoguee = erreur;
+      };
+
+      try {
+        await axios.get('http://localhost:1234/api/sante');
+        expect().fail("L'appel aurait du échouer");
+      } catch (e) {
+        expect(erreurLoguee.message).to.be(
+          'La base de données est injoignable'
+        );
+      }
+    });
+  });
 });
