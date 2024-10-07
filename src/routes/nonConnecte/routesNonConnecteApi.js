@@ -195,6 +195,12 @@ const routesNonConnecteApi = ({
     async (_requete, reponse) => {
       try {
         await depotDonnees.santeDuDepot();
+        reponse.setHeader('Surrogate-Control', 'no-store');
+        reponse.setHeader(
+          'Cache-Control',
+          'no-store, no-cache, must-revalidate, proxy-revalidate'
+        );
+        reponse.setHeader('Expires', '0');
         reponse.sendStatus(200);
       } catch (e) {
         adaptateurGestionErreur.logueErreur(

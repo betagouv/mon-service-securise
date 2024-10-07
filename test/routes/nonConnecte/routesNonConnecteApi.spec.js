@@ -713,5 +713,17 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         );
       }
     });
+
+    it('empêche le cache', async () => {
+      testeur.depotDonnees().santeDuDepot = () => {};
+
+      const reponse = await axios.get('http://localhost:1234/api/sante');
+
+      expect(reponse.headers['surrogate-control']).to.be('no-store');
+      expect(reponse.headers['cache-control']).to.be(
+        'no-store, no-cache, must-revalidate, proxy-revalidate'
+      );
+      expect(reponse.headers.expires).to.be('0');
+    });
   });
 });
