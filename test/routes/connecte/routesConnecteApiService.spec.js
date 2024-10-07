@@ -11,6 +11,7 @@ const {
   ErreurNomServiceDejaExistant,
   ErreurResponsablesMesureInvalides,
   ErreurMesureInconnue,
+  ErreurRisqueInconnu,
 } = require('../../../src/erreurs');
 const Service = require('../../../src/modeles/service');
 const {
@@ -27,6 +28,7 @@ const {
 } = require('../../constructeurs/constructeurUtilisateur');
 const Mesures = require('../../../src/modeles/mesures');
 const Referentiel = require('../../../src/referentiel');
+const Risques = require('../../../src/modeles/risques');
 
 const { ECRITURE, LECTURE } = Permissions;
 const { RISQUES, DECRIRE, SECURISER, CONTACTS, HOMOLOGUER } = Rubriques;
@@ -1139,6 +1141,152 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
 
       expect(idServiceRecu).to.be('456');
+      expect(donneesRecues.intitule).to.eql('un risque important');
+      expect(donneesRecues.niveauGravite).to.eql('unNiveau');
+      expect(donneesRecues.commentaire).to.eql("c'est important");
+    });
+  });
+
+  describe('quand requête PUT sur `/api/service/:id/risquesSpecifiques', () => {
+    beforeEach(() => {
+      testeur.referentiel().recharge({
+        niveauxGravite: { unNiveau: {} },
+        categoriesRisques: { C1: {} },
+      });
+      testeur.depotDonnees().metsAJourRisqueSpecifiqueDuService =
+        async () => {};
+      const serviceARenvoyer = unService(testeur.referentiel())
+        .avecId('456')
+        .avecRisques(
+          new Risques({
+            risquesSpecifiques: [
+              { id: 'RS1', categories: ['C1'], intitule: 'intitule1' },
+            ],
+          })
+        )
+        .construis();
+      testeur.middleware().reinitialise({
+        idUtilisateur: '999',
+        serviceARenvoyer,
+      });
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: RISQUES }],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/risquesSpecifiques/RS1',
+        },
+        done
+      );
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        [
+          'niveauGravite',
+          'commentaire',
+          'description',
+          'intitule',
+          'categories.*',
+        ],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/risquesSpecifiques/RS1',
+        },
+        done
+      );
+    });
+
+    it("retourne une erreur 400 si le niveau de gravité n'existe pas", async () => {
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/risquesSpecifiques/RS1',
+          {
+            niveauGravite: 'inexistant',
+            intitule: 'risque',
+            categories: ['C1'],
+          }
+        );
+        expect().fail('Aurait du lever une exception');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'Le niveau de gravité "inexistant" n\'est pas répertorié'
+        );
+      }
+    });
+
+    it("retourne une erreur 400 si l'intitulé est vide", async () => {
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/risquesSpecifiques/RS1',
+          { categories: ['C1'] }
+        );
+        expect().fail('Aurait du lever une exception');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be("L'intitulé du risque est obligatoire.");
+      }
+    });
+
+    it("retourne une erreur 400 si la catégorie n'existe pas", async () => {
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/risquesSpecifiques/RS1',
+          { categories: ['inexistante'], intitule: 'un risque' }
+        );
+        expect().fail('Aurait du lever une exception');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'La catégorie "inexistante" n\'est pas répertoriée'
+        );
+      }
+    });
+
+    it('renvoi une erreur 404 si le risque est introuvable', async () => {
+      testeur.depotDonnees().metsAJourRisqueSpecifiqueDuService = async () => {
+        throw new ErreurRisqueInconnu('Le risque est introuvable');
+      };
+      await testeur.verifieRequeteGenereErreurHTTP(
+        404,
+        'Le risque est introuvable',
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/456/risquesSpecifiques/INTROUVABLE',
+          data: {
+            intitule: 'un risque important',
+            categories: ['C1'],
+          },
+        }
+      );
+    });
+
+    it('délègue au dépôt de donnée la mise à jour du risque', async () => {
+      let idServiceRecu;
+      let donneesRecues;
+      testeur.depotDonnees().metsAJourRisqueSpecifiqueDuService = async (
+        idService,
+        donnees
+      ) => {
+        idServiceRecu = idService;
+        donneesRecues = donnees;
+      };
+
+      await axios.put(
+        'http://localhost:1234/api/service/456/risquesSpecifiques/RS1',
+        {
+          intitule: 'un risque important',
+          niveauGravite: 'unNiveau',
+          commentaire: "c'est important",
+          categories: ['C1'],
+        }
+      );
+
+      expect(idServiceRecu).to.be('456');
+      expect(donneesRecues.id).to.eql('RS1');
       expect(donneesRecues.intitule).to.eql('un risque important');
       expect(donneesRecues.niveauGravite).to.eql('unNiveau');
       expect(donneesRecues.commentaire).to.eql("c'est important");

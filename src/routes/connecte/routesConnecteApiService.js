@@ -489,6 +489,66 @@ const routesConnecteApiService = ({
     }
   );
 
+  routes.put(
+    '/:id/risquesSpecifiques/:idRisque',
+    middleware.trouveService({ [RISQUES]: ECRITURE }),
+    middleware.aseptise(
+      'niveauGravite',
+      'commentaire',
+      'description',
+      'intitule',
+      'categories.*'
+    ),
+    async (requete, reponse, suite) => {
+      const { niveauGravite, intitule, commentaire, description, categories } =
+        requete.body;
+      const { idRisque } = requete.params;
+      try {
+        RisqueSpecifique.valide(
+          {
+            niveauGravite,
+            intitule,
+            commentaire,
+            description,
+            categories,
+          },
+          referentiel
+        );
+        const risque = new RisqueSpecifique(
+          {
+            id: idRisque,
+            niveauGravite,
+            intitule,
+            commentaire,
+            description,
+            categories,
+          },
+          referentiel
+        );
+        await depotDonnees.metsAJourRisqueSpecifiqueDuService(
+          requete.service.id,
+          risque
+        );
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurRisqueInconnu) {
+          reponse.status(404).send(e.message);
+          return;
+        }
+        if (
+          e instanceof ErreurNiveauGraviteInconnu ||
+          e instanceof ErreurIntituleRisqueManquant ||
+          e instanceof ErreurCategoriesRisqueManquantes ||
+          e instanceof ErreurCategorieRisqueInconnue
+        ) {
+          reponse.status(400).send(e.message);
+          return;
+        }
+        suite(e);
+      }
+    }
+  );
+
   routes.post(
     '/:id/risques',
     middleware.trouveService({ [RISQUES]: ECRITURE }),
