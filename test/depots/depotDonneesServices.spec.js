@@ -508,15 +508,16 @@ describe('Le dépôt de données des services', () => {
   describe('concernant les risques spécifiques', () => {
     let valideRisque;
     let depot;
+    let referentiel;
 
     before(() => {
-      const r = Referentiel.creeReferentielVide();
       const adaptateurUUID = { genereUUID: () => 'NouveauRS' };
+      referentiel = Referentiel.creeReferentielVide();
       depot = unDepotDeDonneesServices()
-        .avecReferentiel(r)
+        .avecReferentiel(referentiel)
         .avecConstructeurDePersistance(
           unePersistanceMemoire().ajouteUnService(
-            unService(r).avecId('S1').donnees
+            unService(referentiel).avecId('S1').donnees
           )
         )
         .avecAdaptateurUUID(adaptateurUUID)
@@ -535,6 +536,34 @@ describe('Le dépôt de données des services', () => {
       const { risques } = await depot.service('S1');
       expect(risques.risquesSpecifiques.nombre()).to.equal(1);
       expect(risques.risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
+    });
+
+    it("sait supprimer un risque spécifique d'un service", async () => {
+      const unRisqueExistant = new Risques(
+        {
+          risquesSpecifiques: [
+            { id: 'RS1', categories: ['C1'], intitule: 'un risque' },
+          ],
+        },
+        referentiel
+      );
+      const persistance = unePersistanceMemoire().ajouteUnService(
+        unService(referentiel)
+          .avecId('S1')
+          .avecRisques(unRisqueExistant)
+          .avecNomService('nom')
+          .construis()
+          .donneesAPersister().donnees
+      );
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecConstructeurDePersistance(persistance)
+        .construis();
+
+      await depot.supprimeRisqueSpecifiqueDuService('S1', 'RS1');
+
+      const { risques } = await depot.service('S1');
+      expect(risques.risquesSpecifiques.nombre()).to.equal(0);
     });
 
     describe("sur demande de mise à jour d'un risque spécifique", () => {
@@ -593,6 +622,7 @@ describe('Le dépôt de données des services', () => {
         }
       });
     });
+
     it('génère un id pour le nouveau risque', async () => {
       const risque = new RisqueSpecifique({ intitule: 'risque' });
 

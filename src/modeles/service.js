@@ -335,6 +335,10 @@ class Service {
     this.risques.risquesSpecifiques.ajouteRisque(risque);
   }
 
+  supprimeRisqueSpecifique(idRisque) {
+    this.risques.risquesSpecifiques.supprimeRisque(idRisque);
+  }
+
   metsAJourRisqueSpecifique(risque) {
     this.risques.risquesSpecifiques.metsAJourRisque(risque);
   }
