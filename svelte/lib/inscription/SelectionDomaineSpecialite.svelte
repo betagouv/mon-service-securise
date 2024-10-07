@@ -49,13 +49,14 @@
   ];
 </script>
 
-<div class="conteneur" {id}>
+<div class="conteneur">
   <MenuFlottant
     parDessusDeclencheur={true}
     classePersonnalisee="selection-domaine"
   >
     <div slot="declencheur" class="avec-fleche">
       <input
+        {id}
         type="text"
         role="button"
         placeholder="Sélectionner un domaine de spécialité"
@@ -90,7 +91,7 @@
     </div>
   </MenuFlottant>
   {#if afficheAutre}
-    <label for="autreFonction" class="requis"
+    <label for="autreDomaine" class="requis"
       >Merci de préciser votre domaine de spécialité</label
     >
     <ChampTexte
