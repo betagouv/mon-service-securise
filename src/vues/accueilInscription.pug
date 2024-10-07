@@ -1,0 +1,14 @@
+extends ./mss
+
+block append styles
+    +feuilleDeStyleSvelte()
+    link(href = '/statique/assets/styles/accueilInscription.css', rel = 'stylesheet')
+
+block append scripts
+    +composantSvelte('accueilInscription.js')
+    +donneesPartagees('invite', { invite })
+
+block main
+    #conteneur-accueil-inscription
+
+    script(type = 'module', src = '/statique/accueilInscription.js')
