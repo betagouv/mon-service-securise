@@ -92,9 +92,12 @@ class CentreNotifications {
   async toutesNouveautes(idUtilisateur) {
     const avant = this.referentiel.nouvellesFonctionnalites();
 
+    const utilisateur = await this.depotDonnees.utilisateur(idUtilisateur);
+
     const toutesNouveautes = avant.filter(
       (n) =>
-        new Date(n.dateDeDeploiement) <= this.adaptateurHorloge.maintenant()
+        new Date(n.dateDeDeploiement) <= this.adaptateurHorloge.maintenant() &&
+        new Date(n.dateDeDeploiement) >= new Date(utilisateur?.dateCreation)
     );
 
     const etatLectureNouveautes =
