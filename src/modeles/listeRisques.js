@@ -18,6 +18,10 @@ class ListeRisques extends ElementsConstructibles {
     this.items.push(risque);
   }
 
+  supprimeRisque(idRisque) {
+    this.items = this.items.filter((r) => r.id !== idRisque);
+  }
+
   metsAJourRisque(risque) {
     const index = this.items.findIndex((r) => r.id === risque.id);
     if (index === -1)

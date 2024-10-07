@@ -512,6 +512,12 @@ const creeDepot = (config = {}) => {
     await metsAJourService(s);
   };
 
+  const supprimeRisqueSpecifiqueDuService = async (idService, idRisque) => {
+    const s = await p.lis.un(idService);
+    s.supprimeRisqueSpecifique(idRisque);
+    await metsAJourService(s);
+  };
+
   const supprimeContributeur = async (idService, idUtilisateur) => {
     const unService = await p.lis.un(idService);
 
@@ -573,6 +579,7 @@ const creeDepot = (config = {}) => {
     remplaceRisquesSpecifiquesDuService,
     supprimeContributeur,
     supprimeMesureSpecifiqueDuService,
+    supprimeRisqueSpecifiqueDuService,
     supprimeService,
     tousLesServices,
     trouveIndexDisponible,

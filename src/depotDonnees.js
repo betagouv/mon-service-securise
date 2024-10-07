@@ -107,6 +107,7 @@ const creeDepot = (config = {}) => {
     remplaceRisquesSpecifiquesDuService,
     supprimeService,
     supprimeMesureSpecifiqueDuService,
+    supprimeRisqueSpecifiqueDuService,
     tousLesServices,
   } = depotServices;
 
@@ -219,6 +220,7 @@ const creeDepot = (config = {}) => {
     sauvegardeNotificationsExpirationHomologation,
     supprimeContributeur,
     supprimeMesureSpecifiqueDuService,
+    supprimeRisqueSpecifiqueDuService,
     supprimeService,
     supprimeIdResetMotDePassePourUtilisateur,
     supprimeNotificationsExpirationHomologation,
