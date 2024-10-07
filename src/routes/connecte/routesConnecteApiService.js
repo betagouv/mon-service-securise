@@ -549,6 +549,19 @@ const routesConnecteApiService = ({
     }
   );
 
+  routes.delete(
+    '/:id/risquesSpecifiques/:idRisque',
+    middleware.trouveService({ [RISQUES]: ECRITURE }),
+    async (requete, reponse) => {
+      const { idRisque } = requete.params;
+      const { id: idService } = requete.service;
+
+      await depotDonnees.supprimeRisqueSpecifiqueDuService(idService, idRisque);
+
+      reponse.sendStatus(200);
+    }
+  );
+
   routes.post(
     '/:id/risques',
     middleware.trouveService({ [RISQUES]: ECRITURE }),

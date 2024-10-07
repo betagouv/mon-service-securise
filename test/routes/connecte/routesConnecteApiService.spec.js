@@ -1293,6 +1293,42 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
   });
 
+  describe('quand requête DELETE sur `/api/service/:id/risquesSpecifiques/:idRisque', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().supprimeRisqueSpecifiqueDuService = async () => {};
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: RISQUES }],
+        {
+          method: 'delete',
+          url: 'http://localhost:1234/api/service/456/risquesSpecifiques/RS1',
+        },
+        done
+      );
+    });
+
+    it('délègue au dépôt de donnée la suppression du risque', async () => {
+      let idServiceRecu;
+      let idRisqueRecu;
+      testeur.depotDonnees().supprimeRisqueSpecifiqueDuService = async (
+        idService,
+        idRisque
+      ) => {
+        idServiceRecu = idService;
+        idRisqueRecu = idRisque;
+      };
+
+      await axios.delete(
+        'http://localhost:1234/api/service/456/risquesSpecifiques/RS1'
+      );
+
+      expect(idServiceRecu).to.be('456');
+      expect(idRisqueRecu).to.be('RS1');
+    });
+  });
+
   describe('quand requête PUT sur `/api/service/:id/risques/:idRisque`', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteRisqueGeneralAService = async () => {};
