@@ -506,6 +506,12 @@ const creeDepot = (config = {}) => {
     await metsAJourService(s);
   };
 
+  const metsAJourRisqueSpecifiqueDuService = async (idService, risque) => {
+    const s = await p.lis.un(idService);
+    s.metsAJourRisqueSpecifique(risque);
+    await metsAJourService(s);
+  };
+
   const supprimeContributeur = async (idService, idUtilisateur) => {
     const unService = await p.lis.un(idService);
 
@@ -557,6 +563,7 @@ const creeDepot = (config = {}) => {
     enregistreDossier,
     metsAJourMesureGeneraleDuService,
     metsAJourMesureSpecifiqueDuService,
+    metsAJourRisqueSpecifiqueDuService,
     metsAJourService,
     nombreServices,
     nouveauService,
