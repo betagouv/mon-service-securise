@@ -6,8 +6,24 @@
 
   let formulaire: HTMLFormElement;
 
+  const trouveLibellePour = (element: Element) => {
+    for (const libelle of document.getElementsByTagName('label')) {
+      if (libelle.htmlFor === element.id) return libelle;
+    }
+  };
+
   export const estValide = () => {
-    return formulaire.checkValidity();
+    const valide = formulaire.checkValidity();
+    const champAvecErreur = formulaire.querySelectorAll(
+      'input:invalid, select:invalid'
+    );
+    if (champAvecErreur.length) {
+      let element = champAvecErreur[0];
+      const libelle = trouveLibellePour(element);
+      if (libelle) element = libelle;
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    return valide;
   };
 
   const dispatch = createEventDispatcher<{
