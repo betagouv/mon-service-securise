@@ -90,7 +90,7 @@
     </div>
   </MenuFlottant>
   {#if afficheAutre}
-    <label for="autreFonction"
+    <label for="autreFonction" class="requis"
       >Merci de préciser votre domaine de spécialité</label
     >
     <ChampTexte
@@ -210,5 +210,12 @@
 
   input[type='checkbox'] + label {
     margin: 0;
+  }
+
+  .requis:before {
+    content: '*';
+    color: #e3271c;
+    margin-right: 4px;
+    font-size: 16px;
   }
 </style>
