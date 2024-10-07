@@ -7,6 +7,7 @@ const {
   ErreurServiceInexistant,
   ErreurNomServiceDejaExistant,
   ErreurDonneesNiveauSecuriteInsuffisant,
+  ErreurRisqueInconnu,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 
@@ -61,6 +62,7 @@ const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisate
 const { creeReferentielVide } = require('../../src/referentiel');
 const EvenementMesureServiceModifiee = require('../../src/bus/evenementMesureServiceModifiee');
 const EvenementMesureServiceSupprimee = require('../../src/bus/evenementMesureServiceSupprimee');
+const Risques = require('../../src/modeles/risques');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -535,6 +537,62 @@ describe('Le dépôt de données des services', () => {
       expect(risques.risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
     });
 
+    describe("sur demande de mise à jour d'un risque spécifique", () => {
+      let persistance;
+      beforeEach(() => {
+        const referentiel = Referentiel.creeReferentielVide();
+        const unRisqueExistant = new Risques(
+          {
+            risquesSpecifiques: [
+              { id: 'RS1', categories: ['C1'], intitule: 'un risque' },
+            ],
+          },
+          referentiel
+        );
+        persistance = unePersistanceMemoire().ajouteUnService(
+          unService(referentiel)
+            .avecId('S1')
+            .avecRisques(unRisqueExistant)
+            .avecNomService('nom')
+            .construis()
+            .donneesAPersister().donnees
+        );
+        depot = unDepotDeDonneesServices()
+          .avecReferentiel(referentiel)
+          .avecConstructeurDePersistance(persistance)
+          .construis();
+      });
+
+      it("sait mettre à jour un risque spécifique d'un service", async () => {
+        const risque = new RisqueSpecifique({
+          id: 'RS1',
+          intitule: 'un autre intitulé',
+        });
+
+        await depot.metsAJourRisqueSpecifiqueDuService('S1', risque);
+
+        const { risques } = await depot.service('S1');
+        expect(risques.risquesSpecifiques.nombre()).to.equal(1);
+        expect(risques.risquesSpecifiques.item(0).id).to.equal('RS1');
+        expect(risques.risquesSpecifiques.item(0).intitule).to.equal(
+          'un autre intitulé'
+        );
+      });
+
+      it('lance une exception si le risque spécifique est inconnu', async () => {
+        try {
+          const risque = new RisqueSpecifique({
+            id: 'INTROUVABLE',
+            intitule: 'un intitulé',
+          });
+
+          await depot.metsAJourRisqueSpecifiqueDuService('S1', risque);
+        } catch (e) {
+          expect(e).to.be.an(ErreurRisqueInconnu);
+          expect(e.message).to.be('Le risque "INTROUVABLE" est introuvable.');
+        }
+      });
+    });
     it('génère un id pour le nouveau risque', async () => {
       const risque = new RisqueSpecifique({ intitule: 'risque' });
 
@@ -545,7 +603,7 @@ describe('Le dépôt de données des services', () => {
     });
   });
 
-  it('sait associer un risque spécifique à un service', async () => {
+  it('sait associer des risques spécifiques à un service', async () => {
     const r = Referentiel.creeReferentielVide();
 
     const depot = unDepotDeDonneesServices()

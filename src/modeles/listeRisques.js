@@ -1,4 +1,5 @@
 const ElementsConstructibles = require('./elementsConstructibles');
+const { ErreurRisqueInconnu } = require('../erreurs');
 
 class ListeRisques extends ElementsConstructibles {
   principaux() {
@@ -15,6 +16,15 @@ class ListeRisques extends ElementsConstructibles {
 
   ajouteRisque(risque) {
     this.items.push(risque);
+  }
+
+  metsAJourRisque(risque) {
+    const index = this.items.findIndex((r) => r.id === risque.id);
+    if (index === -1)
+      throw new ErreurRisqueInconnu(
+        `Le risque "${risque.id}" est introuvable.`
+      );
+    this.items[index] = risque;
   }
 }
 
