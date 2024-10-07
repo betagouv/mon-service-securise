@@ -21,13 +21,6 @@
   let departement: Departement | undefined = departements.find(
     (d) => d.code === entite.departement
   );
-  let nombreServices: string = `${utilisateur.estimationNombreServices.borneBasse}_${utilisateur.estimationNombreServices.borneHaute}`;
-  $: {
-    utilisateur.estimationNombreServices = {
-      borneBasse: nombreServices.split('_')[0],
-      borneHaute: nombreServices.split('_')[1],
-    };
-  }
 
   let formulaire: Formulaire;
   let enCoursEnvoi: boolean = false;
@@ -143,7 +136,7 @@
         <SelectionNombreServices
           id="estimation-nombre-services"
           {estimationNombreServices}
-          bind:nombreServices
+          bind:valeur={utilisateur.estimationNombreServices}
         />
       </div>
     </div>

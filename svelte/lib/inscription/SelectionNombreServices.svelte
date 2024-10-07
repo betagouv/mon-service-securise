@@ -1,10 +1,22 @@
 <script lang="ts">
   import { validationChamp } from '../directives/validationChamp';
-  import type { EstimationNombreServices } from './inscription.d';
+  import type { EstimationNombreServices, Intervalle } from './inscription.d';
 
   export let id: string;
-  export let nombreServices: string = '';
   export let estimationNombreServices: EstimationNombreServices[];
+  export let valeur: Intervalle | null;
+
+  let nombreServices: string = valeur
+    ? `${valeur.borneBasse}_${valeur.borneHaute}`
+    : '';
+  $: {
+    valeur = nombreServices
+      ? {
+          borneBasse: nombreServices.split('_')[0],
+          borneHaute: nombreServices.split('_')[1],
+        }
+      : null;
+  }
 </script>
 
 <select

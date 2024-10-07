@@ -58,23 +58,13 @@
     siretEntite: informationsProfessionnelles.organisation?.siret,
     telephone: '',
     postes: [],
-    estimationNombreServices: {
-      borneBasse: 1,
-      borneHaute: 2,
-    },
+    estimationNombreServices: null,
     agentConnect: true,
     cguAcceptees: false,
     infolettreAcceptee: false,
     transactionnelAccepte: true,
   };
 
-  let nombreServices: string = '';
-  $: {
-    formulaireInscription.estimationNombreServices = {
-      borneBasse: Number(nombreServices.split('_')[0]),
-      borneHaute: Number(nombreServices.split('_')[1]),
-    };
-  }
   let departement: Departement;
   let organisation: Organisation;
   $: {
@@ -216,7 +206,7 @@
             <SelectionNombreServices
               id="estimation-nombre-services"
               {estimationNombreServices}
-              bind:nombreServices
+              bind:valeur={formulaireInscription.estimationNombreServices}
             />
           </div>
         </div>
