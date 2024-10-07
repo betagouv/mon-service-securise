@@ -91,6 +91,16 @@ module.exports = {
       image: 'activites.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'lancementRoadmap',
+      dateDeDeploiement: '2024-10-08 08:30:00Z',
+      lien: 'https://avis.monservicesecurise.cyber.gouv.fr/fr/roadmap',
+      titre: 'La feuille de route de MonServiceSécurisé est publique !',
+      sousTitre:
+        'Suivez les développements en cours et à venir, et restez informés des nouvelles fonctionnalités disponibles.',
+      image: 'lancementRoadmap.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
