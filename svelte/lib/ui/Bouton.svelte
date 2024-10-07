@@ -2,9 +2,15 @@
   export let titre: string;
   export let type: 'primaire' | 'secondaire';
   export let actif: boolean = true;
+  export let enCoursEnvoi: boolean = false;
 </script>
 
-<button class="bouton {type}" on:click disabled={!actif}>{titre}</button>
+<button
+  class="bouton {type}"
+  on:click
+  disabled={!actif || enCoursEnvoi}
+  class:en-cours-chargement={enCoursEnvoi}>{titre}</button
+>
 
 <style>
   button {
