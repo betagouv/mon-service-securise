@@ -658,6 +658,18 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
   });
 
   describe('quand requête GET sur `/api/sante`', () => {
+    it('applique une protection de trafic', (done) => {
+      testeur.depotDonnees().santeDuDepot = async () => {};
+
+      testeur.middleware().verifieProtectionTrafic(
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/sante',
+        },
+        done
+      );
+    });
+
     it("utilise le dépôt de données pour vérifier l'état de santé de la base", async () => {
       let depotAppele = false;
       testeur.depotDonnees().santeDuDepot = () => {
