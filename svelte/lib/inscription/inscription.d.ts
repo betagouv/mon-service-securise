@@ -5,8 +5,8 @@ declare global {
 }
 
 type Intervalle = {
-  borneBasse: number;
-  borneHaute: number;
+  borneBasse: string;
+  borneHaute: string;
 };
 
 export type EstimationNombreServices = Intervalle & {
@@ -44,7 +44,7 @@ export type FormulaireInscription = {
   siretEntite: string;
   telephone: string;
   postes: string[];
-  estimationNombreServices: Intervalle;
+  estimationNombreServices: Intervalle | null;
   agentConnect: boolean;
   cguAcceptees: boolean;
   infolettreAcceptee: boolean;
