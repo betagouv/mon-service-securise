@@ -451,7 +451,7 @@ const routesConnecteApiService = ({
       'intitule',
       'categories.*'
     ),
-    (requete, reponse, suite) => {
+    async (requete, reponse, suite) => {
       const { niveauGravite, intitule, commentaire, description, categories } =
         requete.body;
       try {
@@ -469,7 +469,10 @@ const routesConnecteApiService = ({
           { niveauGravite, intitule, commentaire, description, categories },
           referentiel
         );
-        depotDonnees.ajouteRisqueSpecifiqueAService(requete.service.id, risque);
+        await depotDonnees.ajouteRisqueSpecifiqueAService(
+          requete.service.id,
+          risque
+        );
         reponse.sendStatus(201);
       } catch (e) {
         if (
