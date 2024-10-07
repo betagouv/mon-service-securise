@@ -511,6 +511,11 @@ describe('Le dépôt de données des services', () => {
     let referentiel;
 
     before(() => {
+      valideRisque = RisqueSpecifique.valide;
+      RisqueSpecifique.valide = () => {};
+    });
+
+    beforeEach(() => {
       const adaptateurUUID = { genereUUID: () => 'NouveauRS' };
       referentiel = Referentiel.creeReferentielVide();
       depot = unDepotDeDonneesServices()
@@ -522,8 +527,6 @@ describe('Le dépôt de données des services', () => {
         )
         .avecAdaptateurUUID(adaptateurUUID)
         .construis();
-      valideRisque = RisqueSpecifique.valide;
-      RisqueSpecifique.valide = () => {};
     });
 
     after(() => (RisqueSpecifique.valide = valideRisque));
@@ -569,7 +572,6 @@ describe('Le dépôt de données des services', () => {
     describe("sur demande de mise à jour d'un risque spécifique", () => {
       let persistance;
       beforeEach(() => {
-        const referentiel = Referentiel.creeReferentielVide();
         const unRisqueExistant = new Risques(
           {
             risquesSpecifiques: [
