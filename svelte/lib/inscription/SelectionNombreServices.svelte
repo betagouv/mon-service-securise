@@ -37,7 +37,7 @@
     appearance: auto;
     background: white;
     border: 1px solid var(--liseres-fonce);
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   select:hover {
@@ -45,6 +45,6 @@
   }
 
   option {
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 </style>

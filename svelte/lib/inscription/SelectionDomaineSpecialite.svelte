@@ -199,7 +199,7 @@
     padding: 8px 16px;
     margin: 0;
     text-align: left;
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .options {
@@ -217,6 +217,6 @@
     content: '*';
     color: #e3271c;
     margin-right: 4px;
-    font-size: 16px;
+    font-size: 1rem;
   }
 </style>

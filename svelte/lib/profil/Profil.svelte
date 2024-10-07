@@ -191,22 +191,22 @@
   }
 
   .contenu-profil h1 {
-    font-size: 26px;
+    font-size: 1.625rem;
     font-weight: 700;
-    line-height: 28px;
+    line-height: 1.75rem;
     margin: 0 0 16px;
   }
 
   .contenu-profil h2 {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 1.5rem;
     margin: 0;
   }
 
   .info-champ-obligatoire {
     text-align: right;
-    font-size: 12px;
+    font-size: 0.75rem;
     margin-bottom: 24px;
   }
 
@@ -214,13 +214,13 @@
     content: '*';
     color: #e3271c;
     margin-right: 4px;
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .contenu-profil h3 {
-    font-size: 22px;
+    font-size: 1.375rem;
     font-weight: 700;
-    line-height: 28px;
+    line-height: 1.75rem;
     margin: 0;
   }
 
@@ -237,9 +237,9 @@
   }
 
   label {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 700;
-    line-height: 21px;
+    line-height: 1.313rem;
     margin-bottom: 3px;
   }
 
@@ -251,8 +251,8 @@
   .sous-titre {
     display: block;
     color: var(--texte-clair);
-    font-size: 12px;
-    line-height: 20px;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
     margin-bottom: 5px;
   }
 
