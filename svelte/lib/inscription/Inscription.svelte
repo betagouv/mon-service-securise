@@ -267,15 +267,15 @@
   .entete-inscription h1 {
     margin: 0;
     padding: 0;
-    font-size: 40px;
+    font-size: 2.5rem;
     font-weight: bold;
     text-align: left;
   }
 
   .entete-inscription h2 {
-    font-size: 22px;
+    font-size: 1.375rem;
     font-weight: normal;
-    line-height: 30px;
+    line-height: 1.875rem;
     text-align: left;
   }
 
@@ -313,7 +313,7 @@
   }
 
   .contenu-inscription h1 {
-    font-size: 22px;
+    font-size: 1.375rem;
     font-weight: bold;
     margin: 0 0 12px;
     padding: 0;
@@ -338,7 +338,7 @@
 
   .etape {
     color: var(--texte-clair);
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   .actions {
@@ -355,21 +355,21 @@
 
   .info-champ-obligatoire {
     text-align: right;
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 
   .requis:before {
     content: '*';
     color: #e3271c;
     margin-right: 4px;
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .exemple {
     display: block;
     color: var(--texte-clair);
-    font-size: 12px;
-    line-height: 20px;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
   }
 
   .case-a-cocher {
