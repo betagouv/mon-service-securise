@@ -90,7 +90,7 @@
         />
       </div>
       <div class="champ">
-        <label for="prenom">Téléphone</label>
+        <label for="telephone">Téléphone</label>
         <span class="sous-titre"
           >Pour bénéficier d’un accompagnement personnalisé</span
         >
@@ -117,6 +117,7 @@
           >Nom ou SIRET de votre organisation</label
         >
         <SelectionOrganisation
+          id="nomSiret"
           bind:valeur={entite}
           filtreDepartement={departement}
         />

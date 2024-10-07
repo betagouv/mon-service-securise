@@ -10,6 +10,7 @@
 
   export let filtreDepartement: Departement | undefined;
   export let valeur: Organisation | undefined;
+  export let id: string = '';
 
   let saisie: string;
   let minuteur: NodeJS.Timeout;
@@ -84,7 +85,7 @@
 
 <div class="conteneur">
   <ChampTexte
-    id="organisation"
+    {id}
     nom="organisation"
     bind:valeur={saisie}
     on:input={() => avecTemporisation(rechercheSuggestions)}
