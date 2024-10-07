@@ -2,6 +2,9 @@ const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const { ErreurIdentifiantTacheInconnu } = require('../../../src/erreurs');
+const {
+  unUtilisateur,
+} = require('../../constructeurs/constructeurUtilisateur');
 
 describe('Le serveur MSS des routes privées /api/notifications', () => {
   const testeur = testeurMSS();
@@ -16,7 +19,13 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
         { id: 'N1', dateDeDeploiement: '2024-01-01' },
         { id: 'N2', dateDeDeploiement: '2024-02-02' },
       ],
+      tachesCompletudeProfil: [],
     });
+    testeur.depotDonnees().utilisateur = async () =>
+      unUtilisateur()
+        .quiSAppelle('Jean Dujardin')
+        .quiSEstInscritLe('2020-01-01')
+        .construis();
   });
 
   describe('quand requête GET sur `/api/notifications`', () => {

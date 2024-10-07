@@ -23,8 +23,15 @@ describe('Le centre de notifications', () => {
         { id: 'N2', dateDeDeploiement: '2024-02-02' },
       ],
       naturesTachesService: { natureDeTest: { titre: '', lien: '/…' } },
+      tachesCompletudeProfil: [],
     });
     depotDonnees = creeDepot();
+
+    depotDonnees.utilisateur = async () =>
+      unUtilisateur()
+        .quiSAppelle('Jean Dujardin')
+        .quiSEstInscritLe('2020-01-01')
+        .construis();
   });
 
   const centreDeNotification = () =>
@@ -91,12 +98,36 @@ describe('Le centre de notifications', () => {
         nouvellesFonctionnalites: [
           { id: 'N1', dateDeDeploiement: '2024-01-01' },
         ],
+        tachesCompletudeProfil: [],
       });
       const decembre2023 = { maintenant: () => new Date(2023, 11, 1) };
       const centreNotifications = new CentreNotifications({
         referentiel,
         depotDonnees,
         adaptateurHorloge: decembre2023,
+      });
+
+      const notifications = await centreNotifications.toutesNotifications('U1');
+
+      expect(notifications.length).to.be(0);
+    });
+
+    it("ne retourne pas les nouveautés antécédentes à la création de l'utilisateur", async () => {
+      referentiel = Referentiel.creeReferentiel({
+        nouvellesFonctionnalites: [
+          { id: 'N1', dateDeDeploiement: '2023-01-01' },
+        ],
+        tachesCompletudeProfil: [],
+      });
+      depotDonnees.utilisateur = async () =>
+        unUtilisateur()
+          .quiSAppelle('Jean Dujardin')
+          .quiSEstInscritLe('2024-01-01')
+          .construis();
+      const centreNotifications = new CentreNotifications({
+        referentiel,
+        depotDonnees,
+        adaptateurHorloge,
       });
 
       const notifications = await centreNotifications.toutesNotifications('U1');
@@ -198,6 +229,7 @@ describe('Le centre de notifications', () => {
             lien: '/…',
           },
         },
+        tachesCompletudeProfil: [],
       });
 
       const notifs = await centreDeNotification().toutesNotifications('U1');
@@ -410,7 +442,10 @@ describe('Le centre de notifications', () => {
   describe('sur demande de toutes les notifications', () => {
     beforeEach(() => {
       depotDonnees.utilisateur = async () =>
-        unUtilisateur().quiSAppelle('Jean Valjean').construis();
+        unUtilisateur()
+          .quiSAppelle('Jean Valjean')
+          .quiSEstInscritLe('2024-01-01')
+          .construis();
       referentiel = Referentiel.creeReferentiel({
         tachesCompletudeProfil: [{ id: 'siret', titre: 'Titre tâche' }],
         nouvellesFonctionnalites: [

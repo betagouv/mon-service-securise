@@ -96,6 +96,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  quiSEstInscritLe(dateCreation) {
+    this.donnees.dateCreation = dateCreation;
+    return this;
+  }
+
   quiAccepteInfolettre() {
     this.donnees.infolettreAcceptee = true;
     return this;
