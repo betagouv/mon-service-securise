@@ -30,13 +30,19 @@
   }
 
   let formulaire: Formulaire;
+  let enCoursEnvoi: boolean = false;
 
   const valide = async () => {
     if (formulaire.estValide()) {
-      await axios.put('/api/utilisateur', {
-        ...utilisateur,
-        siretEntite: entite.siret,
-      });
+      try {
+        enCoursEnvoi = true;
+        await axios.put('/api/utilisateur', {
+          ...utilisateur,
+          siretEntite: entite.siret,
+        });
+      } finally {
+        enCoursEnvoi = false;
+      }
       window.location.href = '/tableauDeBord';
     }
   };
@@ -172,7 +178,7 @@
   </Formulaire>
 
   <div class="actions">
-    <Bouton type="primaire" titre="Valider" on:click={valide} />
+    <Bouton type="primaire" titre="Valider" on:click={valide} {enCoursEnvoi} />
   </div>
 </div>
 
