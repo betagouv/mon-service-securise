@@ -48,6 +48,7 @@
     on:input={() => avecTemporisation(rechercheSuggestions)}
     aideSaisie="ex : 33, Morbihan"
     on:focus={() => avecTemporisation(rechercheSuggestions)}
+    autocomplete="off"
   />
   <div
     class="liste-suggestions"
