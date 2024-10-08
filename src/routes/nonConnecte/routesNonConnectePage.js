@@ -65,7 +65,7 @@ const routesNonConnectePage = ({
   });
 
   routes.get(
-    '/inscription-v2',
+    '/creation-compte',
     middleware.aseptise('prenom', 'nom', 'email', 'siret'),
     async (requete, reponse) => {
       const { prenom, nom, email, siret } = requete.query;
@@ -80,7 +80,7 @@ const routesNonConnectePage = ({
             nom: organisations[0].nom,
           };
       }
-      reponse.render('inscription-v2', {
+      reponse.render('creation-compte', {
         estimationNombreServices: referentiel.estimationNombreServices(),
         informationsProfessionnelles: { prenom, nom, email, organisation },
         departements: referentiel.departements(),

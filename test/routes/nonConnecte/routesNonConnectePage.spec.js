@@ -21,7 +21,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/confidentialite',
     '/mentionsLegales',
     '/inscription',
-    '/inscription-v2',
+    '/creation-compte',
     '/activation',
     '/connexion',
     '/connexion-v2',
@@ -225,13 +225,13 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
   });
 
-  describe('quand requete GET sur `/inscription-v2`', () => {
+  describe('quand requete GET sur `/creation-compte`', () => {
     it('aseptise les données reçues', (done) => {
       testeur
         .middleware()
         .verifieAseptisationParametres(
           ['prenom', 'nom', 'email', 'siret'],
-          `http://localhost:1234/inscription-v2`,
+          `http://localhost:1234/creation-compte`,
           done
         );
     });
@@ -241,7 +241,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         siret === '12P34' ? [{ nom: 'VERT', departement: '33' }] : [];
 
       const reponse = await axios.get(
-        `http://localhost:1234/inscription-v2?siret=12P34`
+        `http://localhost:1234/creation-compte?siret=12P34`
       );
 
       expect(
@@ -262,7 +262,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         expect.fail('ne devrait pas appeler cette fonction');
       };
 
-      const reponse = await axios.get(`http://localhost:1234/inscription-v2`);
+      const reponse = await axios.get(`http://localhost:1234/creation-compte`);
 
       expect(
         donneesPartagees(reponse.data, 'informations-professionnelles')
@@ -277,7 +277,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       testeur.serviceAnnuaire().rechercheOrganisations = async (_) => [];
 
       const reponse = await axios.get(
-        `http://localhost:1234/inscription-v2?siret=inconnu`
+        `http://localhost:1234/creation-compte?siret=inconnu`
       );
 
       expect(
@@ -292,7 +292,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     it('envoie les départements', async () => {
       testeur.referentiel().departements = () => [{ nom: 'Gironde' }];
 
-      const reponse = await axios.get(`http://localhost:1234/inscription-v2`);
+      const reponse = await axios.get(`http://localhost:1234/creation-compte`);
 
       expect(donneesPartagees(reponse.data, 'departements')).to.eql({
         departements: [{ nom: 'Gironde' }],
