@@ -83,10 +83,14 @@ const routesNonConnectePage = ({
     });
   });
 
-  routes.get('/accueil-inscription', (requete, reponse) => {
-    const { invite } = requete.query;
-    reponse.render('accueilInscription.pug', { invite: !!invite });
-  });
+  routes.get(
+    '/accueil-inscription',
+    middleware.suppressionCookie,
+    (requete, reponse) => {
+      const { invite } = requete.query;
+      reponse.render('accueilInscription.pug', { invite: !!invite });
+    }
+  );
 
   routes.get('/activation', (_requete, reponse) => {
     reponse.render('activation');

@@ -290,6 +290,17 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
   });
 
+  describe('quand requête GET sur `/accueil-inscription`', () => {
+    it("déconnecte l'utilisateur courant", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeSuppressionCookie(
+          'http://localhost:1234/accueil-inscription',
+          done
+        );
+    });
+  });
+
   describe('quand requête GET sur `/connexion-v2`', () => {
     it("déconnecte l'utilisateur courant", (done) => {
       testeur
