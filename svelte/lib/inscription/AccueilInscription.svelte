@@ -32,7 +32,7 @@
         </p>
       </div>
       <p class="deja-un-compte">
-        Vous avez déjà un compte ? <a href="/connexion-v2">Se connecter</a>
+        Vous avez déjà un compte ? <a href="/connexion">Se connecter</a>
       </p>
     </div>
   </div>

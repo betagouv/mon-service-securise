@@ -1,9 +1,6 @@
 const express = require('express');
 const uuid = require('uuid');
-const {
-  estUrlLegalePourRedirection,
-  construisUrlAbsolueVersPage,
-} = require('../../http/redirection');
+const { estUrlLegalePourRedirection } = require('../../http/redirection');
 const CmsCrisp = require('../../cms/cmsCrisp');
 const { ErreurArticleCrispIntrouvable } = require('../../erreurs');
 const SourceAuthentification = require('../../modeles/sourceAuthentification');
@@ -101,52 +98,24 @@ const routesNonConnectePage = ({
     reponse.render('activation');
   });
 
-  routes.get(
-    '/connexion',
-    middleware.suppressionCookie,
-    middleware.chargeEtatAgentConnect,
-    (requete, reponse) => {
-      const { urlRedirection } = requete.query;
-
-      if (!urlRedirection) {
-        reponse.render('connexion');
-        return;
-      }
-
-      if (!estUrlLegalePourRedirection(urlRedirection)) {
-        // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
-        reponse.redirect('connexion');
-        return;
-      }
-
-      reponse.render('connexion', {
-        urlRedirection: construisUrlAbsolueVersPage(urlRedirection),
-      });
+  routes.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
+    const { urlRedirection } = requete.query;
+    if (!urlRedirection) {
+      reponse.render('connexion-v2');
+      return;
     }
-  );
-
-  routes.get(
-    '/connexion-v2',
-    middleware.suppressionCookie,
-    (requete, reponse) => {
-      const { urlRedirection } = requete.query;
-      if (!urlRedirection) {
-        reponse.render('connexion-v2');
-        return;
-      }
-      if (!estUrlLegalePourRedirection(urlRedirection)) {
-        // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
-        reponse.redirect('connexion-v2');
-        return;
-      }
-      const urlRedirectionAvecBase = `${adaptateurEnvironnement
-        .mss()
-        .urlBase()}${urlRedirection}`;
-      reponse.render('connexion-v2', {
-        urlRedirection: urlRedirectionAvecBase,
-      });
+    if (!estUrlLegalePourRedirection(urlRedirection)) {
+      // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
+      reponse.redirect('connexion-v2');
+      return;
     }
-  );
+    const urlRedirectionAvecBase = `${adaptateurEnvironnement
+      .mss()
+      .urlBase()}${urlRedirection}`;
+    reponse.render('connexion-v2', {
+      urlRedirection: urlRedirectionAvecBase,
+    });
+  });
 
   routes.get(
     '/reinitialisationMotDePasse',
