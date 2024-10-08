@@ -31,6 +31,9 @@
           </a>
         </p>
       </div>
+      <p class="deja-un-compte">
+        Vous avez déjà un compte ? <a href="/connexion-v2">Se connecter</a>
+      </p>
     </div>
   </div>
 
@@ -90,5 +93,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
+
+  .deja-un-compte {
+    margin-top: 40px;
   }
 </style>
