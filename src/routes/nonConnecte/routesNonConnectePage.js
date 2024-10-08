@@ -56,11 +56,6 @@ const routesNonConnectePage = ({
     });
   });
 
-  routes.get('/inscription', (_requete, reponse) => {
-    const departements = referentiel.departements();
-    reponse.render('inscription', { departements, referentiel });
-  });
-
   routes.get(
     '/creation-compte',
     middleware.aseptise('prenom', 'nom', 'email', 'siret'),
@@ -86,7 +81,7 @@ const routesNonConnectePage = ({
   );
 
   routes.get(
-    '/accueil-inscription',
+    '/inscription',
     middleware.suppressionCookie,
     (requete, reponse) => {
       const { invite } = requete.query;
