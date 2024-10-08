@@ -92,13 +92,18 @@
   .conteneur {
     display: flex;
     width: 100%;
+    flex-grow: 1;
   }
 
   .contenu-texte {
     flex: 1;
-    padding: 56px 0;
+    padding: 56px 102px;
     color: var(--texte-fonce);
     font-size: 1rem;
+    background-color: white;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
   }
 
   .contenu-connexion {
@@ -116,6 +121,9 @@
     flex: 1;
     padding: 127px 85.5px;
     background-color: var(--cyan-clair);
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
   }
 
   .connexion-mss {
