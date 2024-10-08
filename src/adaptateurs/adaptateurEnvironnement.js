@@ -33,13 +33,6 @@ const sentry = () => ({
     process.env.SENTRY_CHEMINS_IGNORES_PAR_TRACING?.split(',') ?? [],
 });
 
-const statistiques = () => ({
-  domaineMetabaseMSS: () =>
-    process.env.STATISTIQUES_DOMAINE_METABASE_MSS
-      ? new URL('/', process.env.STATISTIQUES_DOMAINE_METABASE_MSS).toString()
-      : '',
-});
-
 const chiffrement = () => ({
   utiliseChiffrementVault: () =>
     process.env.AVEC_CHIFFREMENT_PAR_VAULT === 'true',
@@ -94,6 +87,5 @@ module.exports = {
   oidc,
   sendinblue,
   sentry,
-  statistiques,
   versionDeBuild,
 };
