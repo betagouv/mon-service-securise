@@ -8,10 +8,15 @@
   export let aideSaisie: string = '';
   export let messageErreur: string = '';
   export let modele: string | undefined = undefined;
+  export let type: string = 'text';
+
+  const typeChamp = (node: HTMLInputElement) => {
+    node.type = type;
+  };
 </script>
 
 <input
-  type="text"
+  use:typeChamp
   {id}
   name={nom}
   bind:value={valeur}
@@ -24,8 +29,7 @@
 />
 
 <style>
-  input,
-  input[type='text'] {
+  input {
     border-radius: 5px;
     border: 1px solid var(--liseres-fonce);
     font-size: 14px;

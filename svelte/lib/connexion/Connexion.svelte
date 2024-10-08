@@ -50,7 +50,12 @@
           <span class="mention-obligatoire requis">champ obligatoire</span>
           <div class="champ">
             <label for="email" class="requis">Mail professionnel</label>
-            <ChampTexte id="email" nom="email" bind:valeur={login} />
+            <ChampTexte
+              type="email"
+              id="email"
+              nom="email"
+              bind:valeur={login}
+            />
           </div>
           <div class="champ">
             <label for="mot-de-passe" class="requis">Mot de passe</label>
