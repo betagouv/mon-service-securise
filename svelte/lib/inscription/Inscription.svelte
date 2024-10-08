@@ -47,7 +47,7 @@
   const valide = async () => {
     if (formulaireCourant.estValide()) {
       await axios.post('/api/utilisateur', formulaireInscription);
-      window.location.href = '/tableauDeBord';
+      window.location.href = '/oidc/connexion';
     }
   };
 
