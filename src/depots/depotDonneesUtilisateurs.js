@@ -40,6 +40,7 @@ function fabriquePersistance({
       ...donneesEnClair,
       id: donneesUtilisateur.id,
       idResetMotDePasse: donneesUtilisateur.idResetMotDePasse,
+      dateCreation: donneesUtilisateur.dateCreation,
     };
   };
 
