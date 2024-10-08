@@ -21,7 +21,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/confidentialite',
     '/mentionsLegales',
     '/statistiques',
-    '/statistiques-v2',
     '/inscription',
     '/inscription-v2',
     '/activation',
@@ -315,6 +314,25 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         'http://localhost:1234/connexion-v2?urlRedirection=uri-invalide'
       );
       expect(donneesPartagees(reponse.data, 'url-redirection')).to.eql({});
+    });
+  });
+
+  describe('quand requete GET sur `/statistiques-v2`', () => {
+    it("utilise l'adaptateur de statistiques pour récupérer les données", async () => {
+      let adaptateurAppele = false;
+      testeur.adaptateurStatistiques().recupereStatistiques = async () => {
+        adaptateurAppele = true;
+        return {
+          utilisateurs: { nombre: 0, progression: 0 },
+          services: { nombre: 0, progression: 0 },
+          vulnerabilites: { nombre: 0, progression: 0 },
+          indiceCyber: { nombre: 0, progression: 0 },
+        };
+      };
+
+      const reponse = await axios.get('http://localhost:1234/statistiques-v2');
+      expect(reponse.status).to.be(200);
+      expect(adaptateurAppele).to.be(true);
     });
   });
 });
