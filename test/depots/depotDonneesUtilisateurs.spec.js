@@ -469,8 +469,8 @@ describe('Le dépôt de données des utilisateurs', () => {
               nom: 'Dupont',
               email: 'jean.dupont@mail.fr',
               motDePasse: 'XXX',
-              dateCreation: date,
             },
+            dateCreation: date,
           },
         ],
       }
