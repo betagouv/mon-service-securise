@@ -47,15 +47,11 @@ const routesNonConnectePage = ({
     reponse.render('mentionsLegales');
   });
 
-  routes.get('/statistiques', (_requete, reponse) => {
-    reponse.render('statistiques');
-  });
-
-  routes.get('/statistiques-v2', async (_requete, reponse) => {
+  routes.get('/statistiques', async (_requete, reponse) => {
     const { utilisateurs, services, vulnerabilites, indiceCyber } =
       await adaptateurStatistiques.recupereStatistiques();
 
-    reponse.render('statistiques-v2', {
+    reponse.render('statistiques', {
       utilisateurs,
       services,
       vulnerabilites,
