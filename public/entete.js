@@ -16,7 +16,7 @@ $(() => {
     $(`
 <div class="menu">
   <a href="/tableauDeBord">Mon tableau de bord</a>
-  <a href="/utilisateur/edition">Mettre à jour mon profil</a>
+  <a href="/profil">Mettre à jour mon profil</a>
   ${
     sourceAuthentification === 'MSS'
       ? '<a href="/motDePasse/edition">Changer mon mot de passe</a>'
