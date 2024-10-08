@@ -64,24 +64,29 @@ const routesNonConnectePage = ({
     reponse.render('inscription', { departements, referentiel });
   });
 
-  routes.get('/inscription-v2', async (requete, reponse) => {
-    const { prenom, nom, email, siret } = requete.query;
-    let organisation = null;
-    if (siret) {
-      const organisations = await serviceAnnuaire.rechercheOrganisations(siret);
-      if (organisations.length > 0)
-        organisation = {
-          siret,
-          departement: organisations[0].departement,
-          nom: organisations[0].nom,
-        };
+  routes.get(
+    '/inscription-v2',
+    middleware.aseptise('prenom', 'nom', 'email', 'siret'),
+    async (requete, reponse) => {
+      const { prenom, nom, email, siret } = requete.query;
+      let organisation = null;
+      if (siret) {
+        const organisations =
+          await serviceAnnuaire.rechercheOrganisations(siret);
+        if (organisations.length > 0)
+          organisation = {
+            siret,
+            departement: organisations[0].departement,
+            nom: organisations[0].nom,
+          };
+      }
+      reponse.render('inscription-v2', {
+        estimationNombreServices: referentiel.estimationNombreServices(),
+        informationsProfessionnelles: { prenom, nom, email, organisation },
+        departements: referentiel.departements(),
+      });
     }
-    reponse.render('inscription-v2', {
-      estimationNombreServices: referentiel.estimationNombreServices(),
-      informationsProfessionnelles: { prenom, nom, email, organisation },
-      departements: referentiel.departements(),
-    });
-  });
+  );
 
   routes.get(
     '/accueil-inscription',
