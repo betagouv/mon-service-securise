@@ -36,7 +36,8 @@ block main
   .statistiques
     .cartes
       - const chiffres = new Intl.NumberFormat('fr-FR')
-      +uneCarteDeStats('avatar', chiffres.format(3000), 'Utilisateurs inscrits', '+30%')
-      +uneCarteDeStats('navigateur', chiffres.format(5500), 'Services sécurisés', '+32%')
-      +uneCarteDeStats('data_viz', '+ 60%', "Évolution de l'indice cyber", '+32%')
-      +uneCarteDeStats('connexion_perdue', chiffres.format(60000), "Vulnérabilités corrigées", '+32%')
+      - const progression = (nombre) => nombre > 0 ? `+${nombre}%` : `${nombre}%`;
+      +uneCarteDeStats('avatar', chiffres.format(utilisateurs.nombre), 'Utilisateurs inscrits', progression(utilisateurs.progression))
+      +uneCarteDeStats('navigateur', chiffres.format(services.nombre), 'Services sécurisés', progression(services.progression))
+      +uneCarteDeStats('data_viz', indiceCyber.nombre, "Évolution de l'indice cyber", indiceCyber.progression)
+      +uneCarteDeStats('connexion_perdue', chiffres.format(vulnerabilites.nombre), "Vulnérabilités corrigées", progression(vulnerabilites.progression))

@@ -38,6 +38,7 @@ const creeServeur = (
   adaptateurJournalMSS,
   adaptateurOidc,
   adaptateurEnvironnement,
+  adaptateurStatistiques,
   procedures,
   inscriptionUtilisateur,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
@@ -86,6 +87,7 @@ const creeServeur = (
     routesNonConnectePage({
       adaptateurCmsCrisp,
       adaptateurEnvironnement,
+      adaptateurStatistiques,
       serviceAnnuaire,
       depotDonnees,
       middleware,

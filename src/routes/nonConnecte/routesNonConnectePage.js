@@ -11,6 +11,7 @@ const SourceAuthentification = require('../../modeles/sourceAuthentification');
 const routesNonConnectePage = ({
   adaptateurCmsCrisp,
   adaptateurEnvironnement,
+  adaptateurStatistiques,
   serviceAnnuaire,
   depotDonnees,
   middleware,
@@ -50,8 +51,16 @@ const routesNonConnectePage = ({
     reponse.render('statistiques');
   });
 
-  routes.get('/statistiques-v2', (_requete, reponse) => {
-    reponse.render('statistiques-v2');
+  routes.get('/statistiques-v2', async (_requete, reponse) => {
+    const { utilisateurs, services, vulnerabilites, indiceCyber } =
+      await adaptateurStatistiques.recupereStatistiques();
+
+    reponse.render('statistiques-v2', {
+      utilisateurs,
+      services,
+      vulnerabilites,
+      indiceCyber,
+    });
   });
 
   routes.get('/inscription', (_requete, reponse) => {
