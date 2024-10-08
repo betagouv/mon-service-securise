@@ -300,15 +300,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         );
     });
 
-    it("charge l'état d'activation d'AgentConnect", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteChargeActivationAgentConnect(
-          'http://localhost:1234/connexion-v2',
-          done
-        );
-    });
-
     it('ajoute la redirection', async () => {
       const reponse = await requeteSansRedirection(
         'http://localhost:1234/connexion-v2?urlRedirection=/redirige-vers'

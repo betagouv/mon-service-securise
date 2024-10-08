@@ -105,7 +105,6 @@ const routesNonConnectePage = ({
   routes.get(
     '/connexion-v2',
     middleware.suppressionCookie,
-    middleware.chargeEtatAgentConnect,
     (requete, reponse) => {
       const { urlRedirection } = requete.query;
       if (!urlRedirection) {
