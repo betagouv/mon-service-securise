@@ -36,11 +36,6 @@ const middleware = (configuration = {}) => {
 
     const styleCsp = nonce ? `style-src 'self' 'nonce-${nonce}'` : '';
     const scriptCsp = `script-src 'self' ${nonce ? `'nonce-${nonce}'` : ''}`;
-    const frameCsp = adaptateurEnvironnement.statistiques().domaineMetabaseMSS()
-      ? `frame-src ${adaptateurEnvironnement
-          .statistiques()
-          .domaineMetabaseMSS()}`
-      : '';
 
     const toutesCsp = [
       defaultCsp,
@@ -49,7 +44,6 @@ const middleware = (configuration = {}) => {
       mediaCsp,
       styleCsp,
       scriptCsp,
-      frameCsp,
     ].filter((csp) => csp !== '');
 
     reponse.set({
