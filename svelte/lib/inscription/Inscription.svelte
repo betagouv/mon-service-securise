@@ -44,9 +44,17 @@
       etapeCourante++;
     }
   };
+
+  let enCoursEnvoi = false;
+
   const valide = async () => {
     if (formulaireCourant.estValide()) {
-      await axios.post('/api/utilisateur', formulaireInscription);
+      try {
+        enCoursEnvoi = true;
+        await axios.post('/api/utilisateur', formulaireInscription);
+      } finally {
+        enCoursEnvoi = false;
+      }
       window.location.href = '/oidc/connexion';
     }
   };
@@ -256,7 +264,12 @@
       actif={etapeCourante > 1}
     />
     {#if etapeCourante === 3}
-      <Bouton type="primaire" titre="Valider" on:click={valide} />
+      <Bouton
+        type="primaire"
+        titre="Valider"
+        on:click={valide}
+        {enCoursEnvoi}
+      />
     {:else}
       <Bouton type="primaire" titre="Suivant" on:click={etapeSuivante} />
     {/if}
