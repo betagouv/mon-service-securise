@@ -52,23 +52,6 @@ const routesConnectePage = ({
   );
 
   routes.get(
-    '/utilisateur/edition',
-    middleware.verificationAcceptationCGU,
-    middleware.chargeEtatVisiteGuidee,
-    (requete, reponse) => {
-      const departements = referentiel.departements();
-      const idUtilisateur = requete.idUtilisateurCourant;
-      depotDonnees.utilisateur(idUtilisateur).then((utilisateur) =>
-        reponse.render('utilisateur/edition', {
-          utilisateur,
-          departements,
-          referentiel,
-        })
-      );
-    }
-  );
-
-  routes.get(
     '/profil',
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,

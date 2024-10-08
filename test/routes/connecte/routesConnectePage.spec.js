@@ -40,7 +40,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
 
   [
     '/motDePasse/edition',
-    '/utilisateur/edition',
     '/profil',
     '/tableauDeBord',
     '/visiteGuidee/decrire',
