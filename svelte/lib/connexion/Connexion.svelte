@@ -64,6 +64,7 @@
               nom="mot-de-passe"
               bind:valeur={motDePasse}
             />
+            <a href="/reinitialisationMotDePasse">mot de passe oublié</a>
           </div>
           <span class:afficheErreur class="message-erreur">
             L'email et le mot de passe saisis ne correspondent à aucun compte.
