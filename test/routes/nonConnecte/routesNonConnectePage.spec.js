@@ -226,6 +226,16 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
   });
 
   describe('quand requete GET sur `/inscription-v2`', () => {
+    it('aseptise les données reçues', (done) => {
+      testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['prenom', 'nom', 'email', 'siret'],
+          `http://localhost:1234/inscription-v2`,
+          done
+        );
+    });
+
     it("ajoute les données de l'organisation quand le siret est fourni", async () => {
       testeur.serviceAnnuaire().rechercheOrganisations = async (siret) =>
         siret === '12P34' ? [{ nom: 'VERT', departement: '33' }] : [];
