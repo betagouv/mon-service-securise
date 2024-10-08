@@ -98,7 +98,7 @@
     flex: 1;
     padding: 56px 0;
     color: var(--texte-fonce);
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .contenu-connexion {
@@ -108,7 +108,7 @@
 
   .contenu-texte h1 {
     font-weight: bold;
-    font-size: 36px;
+    font-size: 2.25rem;
     margin-bottom: 40px;
   }
 
@@ -150,13 +150,12 @@
     content: '*';
     color: #e3271c;
     margin-right: 4px;
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .message-erreur {
     position: relative;
     display: none;
-    /*margin: 1em 0;*/
     color: var(--rose-anssi);
     font-weight: normal;
     align-items: center;
