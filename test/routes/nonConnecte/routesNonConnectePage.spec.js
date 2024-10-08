@@ -24,7 +24,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/creation-compte',
     '/activation',
     '/connexion',
-    '/connexion-v2',
     '/reinitialisationMotDePasse',
     '/devenir-ambassadeurrice-monservicesecurise',
     '/faire-connaitre-et-recommander-monservicesecurise',
@@ -99,26 +98,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         `Article Crisp inconnu`,
         `http://localhost:1234/articles/un-slug-inexistant`
       );
-    });
-  });
-
-  describe('quand requête GET sur `/connexion`', () => {
-    it("déconnecte l'utilisateur courant", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeSuppressionCookie(
-          'http://localhost:1234/connexion',
-          done
-        );
-    });
-
-    it("charge l'état d'activation d'AgentConnect", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteChargeActivationAgentConnect(
-          'http://localhost:1234/connexion',
-          done
-        );
     });
   });
 
@@ -311,19 +290,19 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
   });
 
-  describe('quand requête GET sur `/connexion-v2`', () => {
+  describe('quand requête GET sur `/connexion`', () => {
     it("déconnecte l'utilisateur courant", (done) => {
       testeur
         .middleware()
         .verifieRequeteExigeSuppressionCookie(
-          'http://localhost:1234/connexion-v2',
+          'http://localhost:1234/connexion',
           done
         );
     });
 
     it('ajoute la redirection', async () => {
       const reponse = await requeteSansRedirection(
-        'http://localhost:1234/connexion-v2?urlRedirection=/redirige-vers'
+        'http://localhost:1234/connexion?urlRedirection=/redirige-vers'
       );
       expect(donneesPartagees(reponse.data, 'url-redirection')).to.eql({
         urlRedirection: 'http://localhost:1234/redirige-vers',
@@ -332,7 +311,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
     it("n'ajoute pas la redirection si l'url n'est pas valide", async () => {
       const reponse = await requeteSansRedirection(
-        'http://localhost:1234/connexion-v2?urlRedirection=uri-invalide'
+        'http://localhost:1234/connexion?urlRedirection=uri-invalide'
       );
       expect(donneesPartagees(reponse.data, 'url-redirection')).to.eql({});
     });
