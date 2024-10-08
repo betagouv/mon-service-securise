@@ -1,22 +1,43 @@
 extends mssDeconnecte
+include ./fragments/navigationSiteVitrine
+
 block variables
-  - const meta_description = "Découvrez les statistiques d’utilisation de MonServiceSécurisé et l'impact généré sur les services numériques qui utilisent le produit."
+  - const meta_description = "Découvrez les statistiques d'utilisation de MonServiceSécurisé et l'impact généré sur les services numériques qui utilisent le produit."
 
 block title
   title Statistiques | MonServiceSécurisé
 
 block append styles
+  link(href='/statique/assets/styles/entete.responsive.css', rel='stylesheet')
+  link(href='/statique/assets/styles/piedPage.responsive.css', rel='stylesheet')
   link(href='/statique/assets/styles/statistiques.css', rel='stylesheet')
 
-block main
-  .marges-fixes
-    h1 Statistiques
+block navigation-site-vitrine
+  +navigationSiteVitrine()
 
-    if process.env.STATISTIQUES_ID_DASHBOARD_METABASE
-      iframe(
-        src=`${new URL(
-                `/public/dashboard/${process.env.STATISTIQUES_ID_DASHBOARD_METABASE}#titled=false&bordered=false&theme=transparent`,
-                process.env.STATISTIQUES_DOMAINE_METABASE_MSS
-              ).toString()}`
-        sandbox="allow-scripts allow-same-origin"
-      )
+
+mixin uneCarteDeStats(illustration, chiffre, label, evolution)
+  .carte
+    img(src=`/statique/assets/images/${illustration}.svg`)
+    .chiffre #{chiffre}
+    .label #{label}
+    .evolution #{evolution} depuis 1 an
+
+
+block main
+  .bandeau
+    .fil-ariane
+      a(href='/') Accueil
+      img(src='/statique/assets/images/forme_chevron_blanc.svg')
+      span Nos statistiques
+    h1 Nos statistiques
+    h2 L'impact de MonServiceSécurisé en quelques chiffres
+
+  .statistiques
+    .cartes
+      - const chiffres = new Intl.NumberFormat('fr-FR')
+      - const progression = (nombre) => nombre > 0 ? `+${nombre}%` : `${nombre}%`;
+      +uneCarteDeStats('avatar', chiffres.format(utilisateurs.nombre), 'Utilisateurs inscrits', progression(utilisateurs.progression))
+      +uneCarteDeStats('navigateur', chiffres.format(services.nombre), 'Services sécurisés', progression(services.progression))
+      +uneCarteDeStats('data_viz', indiceCyber.nombre, "Évolution de l'indice cyber", indiceCyber.progression)
+      +uneCarteDeStats('connexion_perdue', chiffres.format(vulnerabilites.nombre), "Vulnérabilités corrigées", progression(vulnerabilites.progression))

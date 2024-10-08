@@ -20,7 +20,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/cgu',
     '/confidentialite',
     '/mentionsLegales',
-    '/statistiques',
     '/inscription',
     '/inscription-v2',
     '/activation',
@@ -317,7 +316,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
   });
 
-  describe('quand requete GET sur `/statistiques-v2`', () => {
+  describe('quand requete GET sur `/statistiques`', () => {
     it("utilise l'adaptateur de statistiques pour récupérer les données", async () => {
       let adaptateurAppele = false;
       testeur.adaptateurStatistiques().recupereStatistiques = async () => {
@@ -330,7 +329,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         };
       };
 
-      const reponse = await axios.get('http://localhost:1234/statistiques-v2');
+      const reponse = await axios.get('http://localhost:1234/statistiques');
       expect(reponse.status).to.be(200);
       expect(adaptateurAppele).to.be(true);
     });
