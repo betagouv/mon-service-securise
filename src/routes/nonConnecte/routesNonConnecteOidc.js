@@ -88,7 +88,7 @@ const routesNonConnecteOidc = ({
           email,
           siret: siret || '',
         });
-        reponse.redirect(`/inscription?${params}&agentConnect`);
+        reponse.redirect(`/creation-compte?${params}`);
       }
     } catch (e) {
       fabriqueAdaptateurGestionErreur().logueErreur(e);
