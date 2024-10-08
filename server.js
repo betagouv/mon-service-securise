@@ -36,6 +36,7 @@ const {
 const {
   fabriqueInscriptionUtilisateur,
 } = require('./src/modeles/inscriptionUtilisateur');
+const adaptateurStatistiques = require('./src/adaptateurs/adaptateurStatistiquesMetabase');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
@@ -105,6 +106,7 @@ const serveur = MSS.creeServeur(
   adaptateurJournal,
   adaptateurOidc,
   adaptateurEnvironnement,
+  adaptateurStatistiques,
   procedures,
   inscriptionUtilisateur
 );
