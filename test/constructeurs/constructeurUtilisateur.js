@@ -136,6 +136,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  sansEntite() {
+    this.donnees.entite = undefined;
+    return this;
+  }
+
   construis() {
     return new Utilisateur(this.donnees);
   }

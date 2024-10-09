@@ -10,6 +10,8 @@
   let autreDomaine: string = '';
   let champDeclencheur: HTMLInputElement;
 
+  if (!valeurs) valeurs = [];
+
   const domaines = [
     { id: 'RSSI', libelle: 'Cybersécurité / SSI' },
     { id: 'DSI', libelle: 'Numérique et systèmes d’information' },

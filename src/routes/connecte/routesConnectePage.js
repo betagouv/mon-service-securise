@@ -64,7 +64,7 @@ const routesConnectePage = ({
       const estimationNombreServices = referentiel.estimationNombreServices();
       const idUtilisateur = requete.idUtilisateurCourant;
       const utilisateur = await depotDonnees.utilisateur(idUtilisateur);
-      const { entite } = utilisateur;
+      const entite = utilisateur.entite.siret ? utilisateur.entite : undefined;
 
       reponse.render('profil', {
         utilisateur,
