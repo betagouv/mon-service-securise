@@ -18,9 +18,8 @@
   export let estimationNombreServices: EstimationNombreServices[];
 
   const modeleTelephone = '^0\\d{9}$';
-  let departement: Departement | undefined = departements.find(
-    (d) => d.code === entite.departement
-  );
+  let departement: Departement | undefined =
+    entite && departements.find((d) => d.code === entite.departement);
 
   let formulaire: Formulaire;
   let enCoursEnvoi: boolean = false;
