@@ -4,7 +4,10 @@ const testeurMSS = require('../testeurMSS');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
-const { requeteSansRedirection } = require('../../aides/http');
+const {
+  requeteSansRedirection,
+  donneesPartagees,
+} = require('../../aides/http');
 
 describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   const testeur = testeurMSS();
@@ -138,6 +141,32 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
 
       await axios.get(`http://localhost:1234/profil`);
       expect(idRecu).to.be('456');
+    });
+
+    it("renvoie l'entité si celle-ci est définie", async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: '456' });
+      testeur.depotDonnees().utilisateur = () =>
+        unUtilisateur().quiTravaillePourUneEntiteAvecSiret('1234').construis();
+
+      const reponse = await axios.get(`http://localhost:1234/profil`);
+
+      expect(donneesPartagees(reponse.data, 'donnees-profil').entite).to.eql({
+        siret: '1234',
+        nom: '',
+        departement: '',
+      });
+    });
+
+    it("renvoie undefined pour l'entité si celle-ci n'est pas définie", async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: '456' });
+      testeur.depotDonnees().utilisateur = () =>
+        unUtilisateur().sansEntite().construis();
+
+      const reponse = await axios.get(`http://localhost:1234/profil`);
+
+      expect(donneesPartagees(reponse.data, 'donnees-profil').entite).to.be(
+        undefined
+      );
     });
   });
 });
