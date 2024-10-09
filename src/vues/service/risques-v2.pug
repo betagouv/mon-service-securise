@@ -23,6 +23,9 @@ block sous-titre
 block formulaire
   #conteneur-risques
 
+  +donneesPartagees('donnees-risques', service.risques.toJSON() || {risquesGeneraux: [], risquesSpecifiques: []})
+  +donneesPartagees('donnees-referentiel-categories', referentiel.detailCategoriesRisque())
+  +donneesPartagees('donnees-referentiel-gravite', referentiel.niveauxGravite())
   +donneesPartagees('autorisations-risques', autorisationsService.RISQUES)
   +composantSvelte('risques.js')
   script(type = 'module', src = '/statique/service/risques-v2.js')
