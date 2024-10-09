@@ -749,7 +749,11 @@ describe('Un service', () => {
           mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
           risquesGeneraux: [{ id: 'unRisque' }],
           risquesSpecifiques: [
-            { intitule: 'Un risque', categories: ['confidentialite'] },
+            {
+              intitule: 'Un risque',
+              categories: ['confidentialite'],
+              id: 'abcd',
+            },
           ],
           rolesResponsabilites: {
             autoriteHomologation: 'Jean Dupont',
@@ -808,11 +812,18 @@ describe('Un service', () => {
           { id: 'uneMesure', statut: 'fait', responsables: [] },
         ],
         mesuresSpecifiques: [
-          { description: 'Une mesure spécifique', responsables: [] },
+          {
+            description: 'Une mesure spécifique',
+            responsables: [],
+          },
         ],
         risquesGeneraux: [{ id: 'unRisque' }],
         risquesSpecifiques: [
-          { intitule: 'Un risque', categories: ['confidentialite'] },
+          {
+            intitule: 'Un risque',
+            categories: ['confidentialite'],
+            id: 'abcd',
+          },
         ],
         rolesResponsabilites: {
           acteursHomologation: [],

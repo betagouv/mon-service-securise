@@ -15,12 +15,27 @@ class RisqueSpecifique extends Risque {
     this.renseigneProprietes(donneesRisque);
   }
 
+  identifiantNumeriqueRisque() {
+    return this.id.slice(0, 6);
+  }
+
   categoriesRisque() {
     return this.categories;
   }
 
   intituleRisque() {
     return this.intitule;
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      identifiantNumerique: this.identifiantNumeriqueRisque(),
+    };
+  }
+
+  donneesSerialisees() {
+    return super.toJSON();
   }
 
   static valide({ intitule, categories }, referentiel) {

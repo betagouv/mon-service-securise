@@ -18,10 +18,12 @@ describe('Un risque spécifique', () => {
   it('sait se décrire', () => {
     const risque = new RisqueSpecifique(
       {
+        id: 'ABCDEF-123456',
         intitule: 'Un intitulé',
         description: 'Un risque',
         commentaire: 'Un commentaire',
         niveauGravite: 'unNiveau',
+        categories: ['C1'],
       },
       referentiel
     );
@@ -30,6 +32,15 @@ describe('Un risque spécifique', () => {
     expect(risque.description).to.equal('Un risque');
     expect(risque.commentaire).to.equal('Un commentaire');
     expect(risque.niveauGravite).to.equal('unNiveau');
+    expect(risque.toJSON()).to.eql({
+      id: 'ABCDEF-123456',
+      commentaire: 'Un commentaire',
+      intitule: 'Un intitulé',
+      description: 'Un risque',
+      niveauGravite: 'unNiveau',
+      categories: ['C1'],
+      identifiantNumerique: 'ABCDEF',
+    });
   });
 
   it("expose son intitulé en cohérence avec l'API des classes sœurs", () => {
