@@ -38,7 +38,7 @@
     padding: 8px 16px;
     line-height: 24px;
     background: white;
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
   }
 
   input::placeholder {
