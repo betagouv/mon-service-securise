@@ -22,14 +22,16 @@ class RisqueGeneral extends Risque {
     return this.referentiel.descriptionRisque(this.id);
   }
 
+  identifiantNumeriqueRisque() {
+    return this.referentiel.identifiantNumeriqueRisque(this.id);
+  }
+
   toJSON() {
     return {
       ...super.toJSON(),
       intitule: this.intituleRisque(),
       categories: this.categoriesRisque(),
-      identifiantNumerique: this.referentiel.identifiantNumeriqueRisque(
-        this.id
-      ),
+      identifiantNumerique: this.identifiantNumeriqueRisque(),
     };
   }
 
