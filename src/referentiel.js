@@ -113,6 +113,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const risque = (id) => risques()[id] || {};
   const definitionRisque = (idRisque) => risque(idRisque).definition;
   const categoriesRisque = (idRisque) => risque(idRisque).categories;
+  const identifiantNumeriqueRisque = (idRisque) =>
+    risque(idRisque).identifiantNumerique;
   const identifiantsCategoriesRisque = () =>
     Object.keys(donnees.categoriesRisques);
   const descriptionRisque = (idRisque) => risque(idRisque).description;
@@ -352,6 +354,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     identifiantsLocalisationsDonnees,
     identifiantsMesures,
     identifiantsNiveauxGravite,
+    identifiantNumeriqueRisque,
     identifiantsRisques,
     idEtapeSuivante,
     infosNiveauxGravite,
