@@ -26,6 +26,10 @@ class RisqueGeneral extends Risque {
     return {
       ...super.toJSON(),
       intitule: this.intituleRisque(),
+      categories: this.categoriesRisque(),
+      identifiantNumerique: this.referentiel.identifiantNumeriqueRisque(
+        this.id
+      ),
     };
   }
 
