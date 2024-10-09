@@ -4,6 +4,7 @@ export enum Referentiel {
   ANSSI = 'ANSSI',
   SPECIFIQUE = 'Mesures ajoutées',
   CNIL = 'CNIL',
+  RISQUE_SPECIFIQUE = 'Risques ajoutés',
 }
 
 export type ReferentielStatut = Record<StatutMesure, string>;
