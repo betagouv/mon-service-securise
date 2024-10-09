@@ -59,7 +59,7 @@ const routesNonConnecteOidc = ({
       const utilisateurExistant =
         await depotDonnees.utilisateurAvecEmail(email);
 
-      if (utilisateurExistant) {
+      if (utilisateurExistant && utilisateurExistant.cguAcceptees) {
         requete.session.AgentConnectIdToken = idToken;
         requete.session.token = utilisateurExistant.genereToken(
           SourceAuthentification.AGENT_CONNECT

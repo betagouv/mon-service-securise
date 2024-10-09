@@ -126,6 +126,11 @@ class ConstructeurUtilisateur {
     return this;
   }
 
+  quiAEteInvite() {
+    this.donnees.cguAcceptees = false;
+    return this;
+  }
+
   quiDependDu(departement) {
     this.donnees.entite.departement = departement;
     return this;

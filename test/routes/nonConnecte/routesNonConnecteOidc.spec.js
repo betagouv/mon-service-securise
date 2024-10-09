@@ -79,7 +79,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
   describe('quand requête GET sur `/oidc/apres-authentification`', () => {
     beforeEach(() => {
-      const utilisateur = unUtilisateur().construis();
+      const utilisateur = unUtilisateur().quiAccepteCGU().construis();
       utilisateur.genereToken = () => 'unJetonJWT';
 
       testeur.adaptateurOidc().recupereJeton = async () => ({
@@ -244,6 +244,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       it("connecte l'utilisateur", async () => {
         const utilisateurAuthentifie = unUtilisateur()
           .avecEmail('jean.dujardin@beta.gouv.fr')
+          .quiAccepteCGU()
           .construis();
         utilisateurAuthentifie.genereToken = (source) => `unJetonJWT-${source}`;
         testeur.depotDonnees().utilisateurAvecEmail = (email) =>
@@ -272,6 +273,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
         const utilisateurAuthentifie = unUtilisateur()
           .avecId('456')
+          .quiAccepteCGU()
           .construis();
         utilisateurAuthentifie.genereToken = () => 'unJetonJWT';
         testeur.depotDonnees().utilisateurAvecEmail = async () =>
@@ -305,6 +307,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           .avecEmail('jean.dujardin@beta.gouv.fr')
           .quiSAppelle('')
           .avecId('456')
+          .quiAccepteCGU()
           .construis();
         utilisateurAuthentifie.genereToken = () => 'unJetonJWT';
         testeur.depotDonnees().utilisateurAvecEmail = async () =>
@@ -318,6 +321,25 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         expect(donneesRecues.donnees.prenom).to.be('Jean');
         expect(donneesRecues.donnees.nom).to.be('Dujardin');
         expect(donneesRecues.donnees.entite.siret).to.be('12345');
+      });
+    });
+
+    describe("si l'utilisateur existe et qu'il a été invité", () => {
+      it("ne connecte pas l'utilisateur", async () => {
+        const invite = unUtilisateur()
+          .avecEmail('jean.dujardin@beta.gouv.fr')
+          .quiAEteInvite()
+          .construis();
+        invite.genereToken = () => 'unJetonQuiNeDevraitPasEtreDepose';
+        testeur.depotDonnees().utilisateurAvecEmail = (email) =>
+          email === 'jean.dujardin@beta.gouv.fr' ? invite : undefined;
+
+        const reponse = await requeteSansRedirection(
+          'http://localhost:1234/oidc/apres-authentification'
+        );
+
+        const tokenDecode = decodeTokenDuCookie(reponse, 1);
+        expect(tokenDecode).to.be(undefined);
       });
     });
   });
