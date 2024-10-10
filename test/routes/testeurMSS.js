@@ -12,6 +12,7 @@ const { fabriqueProcedures } = require('../../src/routes/procedures');
 const {
   fabriqueInscriptionUtilisateur,
 } = require('../../src/modeles/inscriptionUtilisateur');
+const adaptateurJWTParDefaut = require('../../src/adaptateurs/adaptateurJWT');
 
 const testeurMss = () => {
   let serviceAnnuaire;
@@ -28,6 +29,7 @@ const testeurMss = () => {
   let adaptateurOidc;
   let adaptateurEnvironnement;
   let adaptateurStatistiques;
+  let adaptateurJWT;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -107,6 +109,7 @@ const testeurMss = () => {
     adaptateurStatistiques = {
       recupereStatistiques: async () => {},
     };
+    adaptateurJWT = adaptateurJWTParDefaut;
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
     procedures = fabriqueProcedures({
@@ -143,6 +146,7 @@ const testeurMss = () => {
           adaptateurOidc,
           adaptateurEnvironnement,
           adaptateurStatistiques,
+          adaptateurJWT,
           procedures,
           inscriptionUtilisateur,
           false,
@@ -168,6 +172,7 @@ const testeurMss = () => {
     adaptateurCmsCrisp: () => adaptateurCmsCrisp,
     adaptateurOidc: () => adaptateurOidc,
     adaptateurStatistiques: () => adaptateurStatistiques,
+    adaptateurJWT: () => adaptateurJWT,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,
