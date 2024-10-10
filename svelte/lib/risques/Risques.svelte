@@ -39,10 +39,14 @@
   </thead>
   <tbody>
     {#each risques as risque (risque.id)}
-      <tr>
+      {@const estSpecifiqueAMettreAJour =
+        risque.type === 'SPECIFIQUE' && !risque.categories.length}
+      <tr class:estSpecifiqueAMettreAJour>
         <td class="identifiant-numerique">{risque.identifiantNumerique}</td>
         <td class="intitule">
-          <p class="intitule-risques">{risque.intitule}</p>
+          <p class="intitule-risques" title="Ce risque doit être mis à jour">
+            {estSpecifiqueAMettreAJour ? '⚠️ ' : ''}{risque.intitule}
+          </p>
           <p class="cartouches-intitule">
             <CartoucheReferentiel
               referentiel={risque.type === 'GENERAL'
@@ -59,7 +63,7 @@
             class="niveau-gravite {risque.niveauGravite}"
             class:vide={!risque.niveauGravite}
             bind:value={risque.niveauGravite}
-            disabled={estLectureSeule}
+            disabled={estLectureSeule || estSpecifiqueAMettreAJour}
             on:change={() => metAJourRisque(risque)}
           >
             <option label="+" value="" disabled />
@@ -191,5 +195,9 @@
   .niveau-gravite.vide {
     background: var(--fond-gris-pale);
     color: var(--texte-clair);
+  }
+
+  .estSpecifiqueAMettreAJour {
+    background: var(--fond-ocre-pale);
   }
 </style>
