@@ -725,6 +725,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         },
         infolettreAcceptee: 'true',
         transactionnelAccepte: 'true',
+        cguAcceptees: 'true',
       };
 
       testeur.referentiel().departement = () => 'Paris';
@@ -798,6 +799,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         'RSSI',
         "Chargé des systèmes d'informations",
       ]);
+      expect(donneesRecues.cguAcceptees).to.be(true);
     });
 
     it("met à jour les préférences de communication de l'utilisateur", async () => {

@@ -12,6 +12,7 @@ const obtentionDonneesDeBaseUtilisateur = (corps) => ({
   infolettreAcceptee: valeurBooleenne(corps.infolettreAcceptee),
   transactionnelAccepte: valeurBooleenne(corps.transactionnelAccepte),
   postes: corps.postes,
+  cguAcceptees: valeurBooleenne(corps.cguAcceptees),
 });
 
 const messageErreurDonneesUtilisateur = (donneesRequete, utilisateurExiste) => {

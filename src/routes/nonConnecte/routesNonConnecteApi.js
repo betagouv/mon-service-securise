@@ -1,6 +1,5 @@
 const express = require('express');
 const Utilisateur = require('../../modeles/utilisateur');
-const { valeurBooleenne } = require('../../utilitaires/aseptisation');
 const {
   ErreurUtilisateurExistant,
   EchecEnvoiMessage,
@@ -29,7 +28,6 @@ const routesNonConnecteApi = ({
     middleware.aseptise(...Utilisateur.nomsProprietesBase(), 'siretEntite'),
     async (requete, reponse, suite) => {
       const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
-      donnees.cguAcceptees = valeurBooleenne(requete.body.cguAcceptees);
       donnees.email = requete.body.email?.toLowerCase();
       const { donneesInvalides, messageErreur } =
         messageErreurDonneesUtilisateur(donnees, false);
