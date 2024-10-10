@@ -8,6 +8,17 @@
   export let risques: Risque[];
   export let categories: Record<string, string>;
   export let niveauxGravite: Record<string, NiveauGravite>;
+
+  const metAJourRisqueGeneral = async (
+    id: string,
+    niveauGravite: string,
+    commentaire: string
+  ) => {
+    await axios.put(`/api/service/${idService}/risques/${id}`, {
+      niveauGravite,
+      commentaire,
+    });
+  };
 </script>
 
 <h3>Risques</h3>
@@ -37,11 +48,25 @@
           </p>
         </td>
         <td>
-          <span
+          <select
             class="niveau-gravite {risque.niveauGravite}"
             class:vide={!risque.niveauGravite}
-            >{niveauxGravite[risque.niveauGravite]?.position ?? '+'}</span
+            bind:value={risque.niveauGravite}
+            disabled={estLectureSeule}
+            on:change={() => {
+              if (risque.type === 'GENERAL')
+                metAJourRisqueGeneral(
+                  risque.id,
+                  risque.niveauGravite,
+                  risque.commentaire
+                );
+            }}
           >
+            <option label="+" value="" disabled />
+            {#each Object.entries(niveauxGravite) as [id, niveauGravite] (id)}
+              <option label={niveauGravite.position.toString()} value={id} />
+            {/each}
+          </select>
         </td>
       </tr>
     {/each}
@@ -139,6 +164,8 @@
     font-weight: 700;
     line-height: 24px;
     box-sizing: border-box;
+    margin: 0;
+    text-align: center;
   }
 
   .niveau-gravite.nonConcerne {
