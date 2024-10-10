@@ -9,15 +9,22 @@
   export let categories: Record<string, string>;
   export let niveauxGravite: Record<string, NiveauGravite>;
 
-  const metAJourRisqueGeneral = async (
-    id: string,
-    niveauGravite: string,
-    commentaire: string
-  ) => {
-    await axios.put(`/api/service/${idService}/risques/${id}`, {
-      niveauGravite,
-      commentaire,
-    });
+  const metAJourRisque = async (risque: Risque) => {
+    if (risque.type === 'GENERAL')
+      await axios.put(`/api/service/${idService}/risques/${risque.id}`, {
+        niveauGravite: risque.niveauGravite,
+        commentaire: risque.commentaire,
+      });
+    else
+      await axios.put(
+        `/api/service/${idService}/risquesSpecifiques/${risque.id}`,
+        {
+          niveauGravite: risque.niveauGravite,
+          commentaire: risque.commentaire,
+          intitule: risque.intitule,
+          categories: risque.categories,
+        }
+      );
   };
 </script>
 
@@ -53,14 +60,7 @@
             class:vide={!risque.niveauGravite}
             bind:value={risque.niveauGravite}
             disabled={estLectureSeule}
-            on:change={() => {
-              if (risque.type === 'GENERAL')
-                metAJourRisqueGeneral(
-                  risque.id,
-                  risque.niveauGravite,
-                  risque.commentaire
-                );
-            }}
+            on:change={() => metAJourRisque(risque)}
           >
             <option label="+" value="" disabled />
             {#each Object.entries(niveauxGravite) as [id, niveauGravite] (id)}
