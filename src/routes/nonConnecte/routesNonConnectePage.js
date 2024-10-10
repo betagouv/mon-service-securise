@@ -9,6 +9,7 @@ const routesNonConnectePage = ({
   adaptateurCmsCrisp,
   adaptateurEnvironnement,
   adaptateurStatistiques,
+  adaptateurJWT,
   serviceAnnuaire,
   depotDonnees,
   middleware,
@@ -56,29 +57,39 @@ const routesNonConnectePage = ({
     });
   });
 
-  routes.get(
-    '/creation-compte',
-    middleware.aseptise('prenom', 'nom', 'email', 'siret'),
-    async (requete, reponse) => {
-      const { prenom, nom, email, siret } = requete.query;
-      let organisation = null;
-      if (siret) {
-        const organisations =
-          await serviceAnnuaire.rechercheOrganisations(siret);
-        if (organisations.length > 0)
-          organisation = {
-            siret,
-            departement: organisations[0].departement,
-            nom: organisations[0].nom,
-          };
-      }
-      reponse.render('creation-compte', {
-        estimationNombreServices: referentiel.estimationNombreServices(),
-        informationsProfessionnelles: { prenom, nom, email, organisation },
-        departements: referentiel.departements(),
-      });
+  routes.get('/creation-compte', async (requete, reponse) => {
+    const { token } = requete.query;
+
+    if (!token) {
+      reponse.sendStatus(400);
+      return;
     }
-  );
+
+    let donneesUtilisateur;
+    try {
+      donneesUtilisateur = adaptateurJWT.decode(token);
+    } catch (e) {
+      reponse.sendStatus(400);
+      return;
+    }
+
+    const { prenom, nom, email, siret } = donneesUtilisateur;
+    let organisation = null;
+    if (siret) {
+      const organisations = await serviceAnnuaire.rechercheOrganisations(siret);
+      if (organisations.length > 0)
+        organisation = {
+          siret,
+          departement: organisations[0].departement,
+          nom: organisations[0].nom,
+        };
+    }
+    reponse.render('creation-compte', {
+      estimationNombreServices: referentiel.estimationNombreServices(),
+      informationsProfessionnelles: { prenom, nom, email, organisation },
+      departements: referentiel.departements(),
+    });
+  });
 
   routes.get(
     '/inscription',

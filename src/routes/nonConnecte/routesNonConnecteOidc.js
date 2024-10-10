@@ -7,6 +7,7 @@ const {
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
+  adaptateurJWT,
   depotDonnees,
   middleware,
   adaptateurEnvironnement,
@@ -82,13 +83,13 @@ const routesNonConnecteOidc = ({
           }),
         });
       } else {
-        const params = new URLSearchParams({
+        const token = adaptateurJWT.signeDonnees({
           nom,
           prenom,
           email,
-          siret: siret || '',
+          siret,
         });
-        reponse.redirect(`/creation-compte?${params}`);
+        reponse.redirect(`/creation-compte?token=${token}`);
       }
     } catch (e) {
       fabriqueAdaptateurGestionErreur().logueErreur(e);
