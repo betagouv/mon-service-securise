@@ -106,7 +106,7 @@ module.exports = {
   tachesCompletudeProfil: [
     {
       id: 'profil',
-      lien: '/utilisateur/edition',
+      lien: '/profil',
       entete: 'Complétez votre profil',
       titre:
         'Nous vous invitons à mettre à jour les informations de votre profil.',
@@ -114,7 +114,7 @@ module.exports = {
     },
     {
       id: 'siret',
-      lien: '/utilisateur/edition#siret',
+      lien: '/profil#siret',
       entete: 'Mettez à jour votre SIRET',
       titre:
         'Nous vous invitons à renseigner le numéro de SIRET de votre organisation.',
@@ -122,7 +122,7 @@ module.exports = {
     },
     {
       id: 'estimationNombreServices',
-      lien: '/utilisateur/edition#estimation-nombre-services',
+      lien: '/profil#estimation-nombre-services',
       entete: 'Estimez les services publics à sécuriser',
       titre:
         'Nous vous invitons à estimer le nombre de services publics à sécuriser.',

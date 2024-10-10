@@ -51,22 +51,9 @@ const routesConnectePage = ({
     }
   );
 
-  routes.get(
-    '/utilisateur/edition',
-    middleware.verificationAcceptationCGU,
-    middleware.chargeEtatVisiteGuidee,
-    (requete, reponse) => {
-      const departements = referentiel.departements();
-      const idUtilisateur = requete.idUtilisateurCourant;
-      depotDonnees.utilisateur(idUtilisateur).then((utilisateur) =>
-        reponse.render('utilisateur/edition', {
-          utilisateur,
-          departements,
-          referentiel,
-        })
-      );
-    }
-  );
+  routes.get('/utilisateur/edition', async (_requete, reponse) => {
+    reponse.redirect(301, '/profil');
+  });
 
   routes.get(
     '/profil',
@@ -77,7 +64,7 @@ const routesConnectePage = ({
       const estimationNombreServices = referentiel.estimationNombreServices();
       const idUtilisateur = requete.idUtilisateurCourant;
       const utilisateur = await depotDonnees.utilisateur(idUtilisateur);
-      const { entite } = utilisateur;
+      const entite = utilisateur.entite.siret ? utilisateur.entite : undefined;
 
       reponse.render('profil', {
         utilisateur,

@@ -1,9 +1,6 @@
 const express = require('express');
 const uuid = require('uuid');
-const {
-  estUrlLegalePourRedirection,
-  construisUrlAbsolueVersPage,
-} = require('../../http/redirection');
+const { estUrlLegalePourRedirection } = require('../../http/redirection');
 const CmsCrisp = require('../../cms/cmsCrisp');
 const { ErreurArticleCrispIntrouvable } = require('../../erreurs');
 const SourceAuthentification = require('../../modeles/sourceAuthentification');
@@ -12,6 +9,7 @@ const routesNonConnectePage = ({
   adaptateurCmsCrisp,
   adaptateurEnvironnement,
   adaptateurStatistiques,
+  adaptateurJWT,
   serviceAnnuaire,
   depotDonnees,
   middleware,
@@ -59,13 +57,23 @@ const routesNonConnectePage = ({
     });
   });
 
-  routes.get('/inscription', (_requete, reponse) => {
-    const departements = referentiel.departements();
-    reponse.render('inscription', { departements, referentiel });
-  });
+  routes.get('/creation-compte', async (requete, reponse) => {
+    const { token } = requete.query;
 
-  routes.get('/inscription-v2', async (requete, reponse) => {
-    const { prenom, nom, email, siret } = requete.query;
+    if (!token) {
+      reponse.sendStatus(400);
+      return;
+    }
+
+    let donneesUtilisateur;
+    try {
+      donneesUtilisateur = adaptateurJWT.decode(token);
+    } catch (e) {
+      reponse.sendStatus(400);
+      return;
+    }
+
+    const { prenom, nom, email, siret, invite } = donneesUtilisateur;
     let organisation = null;
     if (siret) {
       const organisations = await serviceAnnuaire.rechercheOrganisations(siret);
@@ -76,15 +84,16 @@ const routesNonConnectePage = ({
           nom: organisations[0].nom,
         };
     }
-    reponse.render('inscription-v2', {
+    reponse.render('creation-compte', {
       estimationNombreServices: referentiel.estimationNombreServices(),
       informationsProfessionnelles: { prenom, nom, email, organisation },
       departements: referentiel.departements(),
+      invite: !!invite,
     });
   });
 
   routes.get(
-    '/accueil-inscription',
+    '/inscription',
     middleware.suppressionCookie,
     (requete, reponse) => {
       const { invite } = requete.query;
@@ -96,52 +105,24 @@ const routesNonConnectePage = ({
     reponse.render('activation');
   });
 
-  routes.get(
-    '/connexion',
-    middleware.suppressionCookie,
-    middleware.chargeEtatAgentConnect,
-    (requete, reponse) => {
-      const { urlRedirection } = requete.query;
-
-      if (!urlRedirection) {
-        reponse.render('connexion');
-        return;
-      }
-
-      if (!estUrlLegalePourRedirection(urlRedirection)) {
-        // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
-        reponse.redirect('connexion');
-        return;
-      }
-
-      reponse.render('connexion', {
-        urlRedirection: construisUrlAbsolueVersPage(urlRedirection),
-      });
+  routes.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
+    const { urlRedirection } = requete.query;
+    if (!urlRedirection) {
+      reponse.render('connexion-v2');
+      return;
     }
-  );
-
-  routes.get(
-    '/connexion-v2',
-    middleware.suppressionCookie,
-    (requete, reponse) => {
-      const { urlRedirection } = requete.query;
-      if (!urlRedirection) {
-        reponse.render('connexion-v2');
-        return;
-      }
-      if (!estUrlLegalePourRedirection(urlRedirection)) {
-        // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
-        reponse.redirect('connexion-v2');
-        return;
-      }
-      const urlRedirectionAvecBase = `${adaptateurEnvironnement
-        .mss()
-        .urlBase()}${urlRedirection}`;
-      reponse.render('connexion-v2', {
-        urlRedirection: urlRedirectionAvecBase,
-      });
+    if (!estUrlLegalePourRedirection(urlRedirection)) {
+      // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
+      reponse.redirect('connexion-v2');
+      return;
     }
-  );
+    const urlRedirectionAvecBase = `${adaptateurEnvironnement
+      .mss()
+      .urlBase()}${urlRedirection}`;
+    reponse.render('connexion-v2', {
+      urlRedirection: urlRedirectionAvecBase,
+    });
+  });
 
   routes.get(
     '/reinitialisationMotDePasse',

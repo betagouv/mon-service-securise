@@ -21,18 +21,20 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/confidentialite',
     '/mentionsLegales',
     '/inscription',
-    '/inscription-v2',
+    '/creation-compte?token=unToken',
     '/activation',
     '/connexion',
-    '/connexion-v2',
     '/reinitialisationMotDePasse',
     '/devenir-ambassadeurrice-monservicesecurise',
     '/faire-connaitre-et-recommander-monservicesecurise',
     '/promouvoir-monservicesecurise',
     '/co-construire-monservicesecurise',
     '/conseils-cyber',
-    '/accueil-inscription',
   ].forEach((route) => {
+    beforeEach(() => {
+      testeur.adaptateurJWT().decode = () => ({});
+    });
+
     it(`sert le contenu HTML de la page ${route}`, (done) => {
       axios
         .get(`http://localhost:1234${route}`)
@@ -99,26 +101,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         `Article Crisp inconnu`,
         `http://localhost:1234/articles/un-slug-inexistant`
       );
-    });
-  });
-
-  describe('quand requête GET sur `/connexion`', () => {
-    it("déconnecte l'utilisateur courant", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeSuppressionCookie(
-          'http://localhost:1234/connexion',
-          done
-        );
-    });
-
-    it("charge l'état d'activation d'AgentConnect", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteChargeActivationAgentConnect(
-          'http://localhost:1234/connexion',
-          done
-        );
     });
   });
 
@@ -225,13 +207,44 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
   });
 
-  describe('quand requete GET sur `/inscription-v2`', () => {
+  describe('quand requete GET sur `/creation-compte`', () => {
+    beforeEach(() => {
+      testeur.adaptateurJWT().decode = () => ({});
+    });
+
+    it('retourne une erreur 400 si la signature du token est invalide', async () => {
+      testeur.adaptateurJWT().decode = () => {
+        throw new Error('Jeton invalide');
+      };
+
+      try {
+        await axios.get(
+          `http://localhost:1234/creation-compte?token=unFauxToken`
+        );
+        expect().fail("L'appel aurait dû lever une exception");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
+    });
+
+    it('retourne une erreur 400 si le token est vide', async () => {
+      try {
+        await axios.get('http://localhost:1234/creation-compte?token=');
+        expect().fail("L'appel aurait dû lever une exception");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
+    });
+
     it("ajoute les données de l'organisation quand le siret est fourni", async () => {
       testeur.serviceAnnuaire().rechercheOrganisations = async (siret) =>
         siret === '12P34' ? [{ nom: 'VERT', departement: '33' }] : [];
 
+      testeur.adaptateurJWT().decode = (token) =>
+        token === 'unTokenValide' ? { siret: '12P34' } : undefined;
+
       const reponse = await axios.get(
-        `http://localhost:1234/inscription-v2?siret=12P34`
+        `http://localhost:1234/creation-compte?token=unTokenValide`
       );
 
       expect(
@@ -252,7 +265,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         expect.fail('ne devrait pas appeler cette fonction');
       };
 
-      const reponse = await axios.get(`http://localhost:1234/inscription-v2`);
+      const reponse = await axios.get(
+        `http://localhost:1234/creation-compte?token=unTokenSansSiret`
+      );
 
       expect(
         donneesPartagees(reponse.data, 'informations-professionnelles')
@@ -267,7 +282,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       testeur.serviceAnnuaire().rechercheOrganisations = async (_) => [];
 
       const reponse = await axios.get(
-        `http://localhost:1234/inscription-v2?siret=inconnu`
+        `http://localhost:1234/creation-compte?token=unTokenAvecSiretInconnu`
       );
 
       expect(
@@ -282,7 +297,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     it('envoie les départements', async () => {
       testeur.referentiel().departements = () => [{ nom: 'Gironde' }];
 
-      const reponse = await axios.get(`http://localhost:1234/inscription-v2`);
+      const reponse = await axios.get(
+        `http://localhost:1234/creation-compte?token=unTokenValide`
+      );
 
       expect(donneesPartagees(reponse.data, 'departements')).to.eql({
         departements: [{ nom: 'Gironde' }],
@@ -290,30 +307,30 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
   });
 
-  describe('quand requête GET sur `/accueil-inscription`', () => {
+  describe('quand requête GET sur `/inscription`', () => {
     it("déconnecte l'utilisateur courant", (done) => {
       testeur
         .middleware()
         .verifieRequeteExigeSuppressionCookie(
-          'http://localhost:1234/accueil-inscription',
+          'http://localhost:1234/inscription',
           done
         );
     });
   });
 
-  describe('quand requête GET sur `/connexion-v2`', () => {
+  describe('quand requête GET sur `/connexion`', () => {
     it("déconnecte l'utilisateur courant", (done) => {
       testeur
         .middleware()
         .verifieRequeteExigeSuppressionCookie(
-          'http://localhost:1234/connexion-v2',
+          'http://localhost:1234/connexion',
           done
         );
     });
 
     it('ajoute la redirection', async () => {
       const reponse = await requeteSansRedirection(
-        'http://localhost:1234/connexion-v2?urlRedirection=/redirige-vers'
+        'http://localhost:1234/connexion?urlRedirection=/redirige-vers'
       );
       expect(donneesPartagees(reponse.data, 'url-redirection')).to.eql({
         urlRedirection: 'http://localhost:1234/redirige-vers',
@@ -322,7 +339,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
     it("n'ajoute pas la redirection si l'url n'est pas valide", async () => {
       const reponse = await requeteSansRedirection(
-        'http://localhost:1234/connexion-v2?urlRedirection=uri-invalide'
+        'http://localhost:1234/connexion?urlRedirection=uri-invalide'
       );
       expect(donneesPartagees(reponse.data, 'url-redirection')).to.eql({});
     });

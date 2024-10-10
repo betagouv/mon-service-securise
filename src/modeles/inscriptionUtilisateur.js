@@ -37,12 +37,17 @@ function fabriqueInscriptionUtilisateur(config = {}) {
 
   const inscrisUtilisateur = async (donnees, source) => {
     await creeContactEmail(donnees);
-    const utilisateur = await depotDonnees.nouvelUtilisateur(donnees);
-    if (source === SourceAuthentification.MSS) {
-      await envoieMessageFinalisationInscription(utilisateur);
+    let utilisateur = await depotDonnees.utilisateurAvecEmail(donnees.email);
+    if (utilisateur) {
+      await depotDonnees.metsAJourUtilisateur(utilisateur.id, donnees);
+    } else {
+      utilisateur = await depotDonnees.nouvelUtilisateur(donnees);
+      if (source === SourceAuthentification.MSS) {
+        await envoieMessageFinalisationInscription(utilisateur);
+      }
     }
-
     await adaptateurTracking.envoieTrackingInscription(utilisateur.email);
+
     return utilisateur;
   };
 

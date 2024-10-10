@@ -18,9 +18,8 @@
   export let estimationNombreServices: EstimationNombreServices[];
 
   const modeleTelephone = '^0\\d{9}$';
-  let departement: Departement | undefined = departements.find(
-    (d) => d.code === entite.departement
-  );
+  let departement: Departement | undefined =
+    entite && departements.find((d) => d.code === entite.departement);
 
   let formulaire: Formulaire;
   let enCoursEnvoi: boolean = false;
@@ -104,7 +103,7 @@
       </div>
     </div>
 
-    <div class="bloc">
+    <div class="bloc" id="siret">
       <h3>Mon organisation</h3>
       <div class="champ">
         <label for="departement" class="requis"
@@ -124,7 +123,7 @@
       </div>
     </div>
 
-    <div class="bloc">
+    <div class="bloc" id="estimation-nombre-services">
       <h3>Mes services numériques</h3>
       <div class="champ">
         <label for="estimation-nombre-services" class="info-label requis">
@@ -142,7 +141,7 @@
       </div>
     </div>
 
-    <div class="bloc">
+    <div class="bloc" id="consentements">
       <h3>Mes consentements</h3>
 
       <div class="case-a-cocher">

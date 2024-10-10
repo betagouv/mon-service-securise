@@ -1,4 +1,4 @@
-extends ./mss
+extends ./mssConnecte
 
 block append styles
   +feuilleDeStyleSvelte()
@@ -7,6 +7,14 @@ block append styles
 block append scripts
   +composantSvelte('profil.js')
   +donneesPartagees('donnees-profil',{utilisateur, departements, estimationNombreServices, entite})
+
+block header-gauche
+  .conteneur-logo
+    a.logo-mss(href='/tableauDeBord' title='Retour au tableau de bord')
+  .titre-page
+    h3 Profil
+    .retour-tableau-de-bord
+      a(href='/tableauDeBord' title='Retour au tableau de bord') Retour au tableau de bord
 
 block main
   #conteneur-profil

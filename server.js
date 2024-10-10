@@ -51,6 +51,7 @@ const moteurRegles = new MoteurRegles(referentiel);
 const depotDonnees = DepotDonnees.creeDepot({
   adaptateurChiffrement,
   adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
+  adaptateurJWT,
   busEvenements,
 });
 
@@ -107,6 +108,7 @@ const serveur = MSS.creeServeur(
   adaptateurOidc,
   adaptateurEnvironnement,
   adaptateurStatistiques,
+  adaptateurJWT,
   procedures,
   inscriptionUtilisateur
 );

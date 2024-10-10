@@ -9,6 +9,7 @@
   export let messageErreur: string = '';
   export let modele: string | undefined = undefined;
   export let type: string = 'text';
+  export let autocomplete: string = '';
 
   const typeChamp = (node: HTMLInputElement) => {
     node.type = type;
@@ -26,6 +27,7 @@
   pattern={modele}
   on:input
   on:focus
+  {autocomplete}
 />
 
 <style>
@@ -36,7 +38,7 @@
     padding: 8px 16px;
     line-height: 24px;
     background: white;
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
   }
 
   input::placeholder {

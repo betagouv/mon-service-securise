@@ -2,7 +2,7 @@ extends ./mss
 
 block append styles
     +feuilleDeStyleSvelte()
-    link(href = '/statique/assets/styles/inscription-v2.css', rel = 'stylesheet')
+    link(href = '/statique/assets/styles/creation-compte.css', rel = 'stylesheet')
     link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
 
 block append scripts
@@ -10,8 +10,9 @@ block append scripts
     +donneesPartagees('configuration-composant-svelte',{estimationNombreServices})
     +donneesPartagees('informations-professionnelles', { informationsProfessionnelles })
     +donneesPartagees('departements', { departements })
+    +donneesPartagees('invite', invite)
 
 block main
     #conteneur-inscription
 
-    script(type = 'module', src = '/statique/inscription-v2.js')
+    script(type = 'module', src = '/statique/creation-compte.js')

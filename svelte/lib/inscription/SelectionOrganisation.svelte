@@ -90,6 +90,7 @@
     bind:valeur={saisie}
     on:input={() => avecTemporisation(rechercheSuggestions)}
     aideSaisie="ex : 13261762000010, Agglomération de Mansart, Société Y"
+    autocomplete="off"
   />
   <div class="liste-suggestions" class:visible={suggestionsVisibles}>
     {#each suggestions as suggestion}

@@ -20,6 +20,7 @@
   export let informationsProfessionnelles: InformationsProfessionnelles;
   const modeleTelephone = '^0\\d{9}$';
   export let departements: Departement[];
+  export let invite: boolean;
 
   let etapeCourante = 1;
 
@@ -44,10 +45,22 @@
       etapeCourante++;
     }
   };
+
+  let enCoursEnvoi = false;
+
   const valide = async () => {
     if (formulaireCourant.estValide()) {
-      await axios.post('/api/utilisateur', formulaireInscription);
-      window.location.href = '/tableauDeBord';
+      try {
+        enCoursEnvoi = true;
+        if (invite) {
+          await axios.put('/api/utilisateur', formulaireInscription);
+        } else {
+          await axios.post('/api/utilisateur', formulaireInscription);
+        }
+      } finally {
+        enCoursEnvoi = false;
+      }
+      window.location.href = '/oidc/connexion';
     }
   };
 
@@ -256,7 +269,12 @@
       actif={etapeCourante > 1}
     />
     {#if etapeCourante === 3}
-      <Bouton type="primaire" titre="Valider" on:click={valide} />
+      <Bouton
+        type="primaire"
+        titre="Valider"
+        on:click={valide}
+        {enCoursEnvoi}
+      />
     {:else}
       <Bouton type="primaire" titre="Suivant" on:click={etapeSuivante} />
     {/if}
