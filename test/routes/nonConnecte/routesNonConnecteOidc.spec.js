@@ -167,7 +167,8 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
     });
 
     describe("si l'utilisateur est inconnu", () => {
-      it('affiche la page d’inscription', async () => {
+      it('affiche la page d’inscription via un jeton signé en paramètre', async () => {
+        let donneesRecues;
         testeur.adaptateurOidc().recupereJeton = async () => ({
           accessToken: 'unAccessToken',
         });
@@ -185,6 +186,10 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
             'La méthode doit être appellée avec un `accessToken`'
           );
         };
+        testeur.adaptateurJWT().signeDonnees = (donnees) => {
+          donneesRecues = donnees;
+          return 'unJetonSigne';
+        };
 
         const reponse = await requeteSansRedirection(
           'http://localhost:1234/oidc/apres-authentification'
@@ -192,51 +197,14 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
         expect(reponse.status).to.be(302);
         expect(reponse.headers.location).to.be(
-          '/creation-compte?nom=Dujardin&prenom=Jean&email=unEmailInconnu&siret=12345'
+          '/creation-compte?token=unJetonSigne'
         );
-      });
-
-      it("affiche la page d’inscription avec un siret vide s'il n'est pas défini", async () => {
-        testeur.adaptateurOidc().recupereJeton = async () => ({
-          accessToken: 'unAccessToken',
+        expect(donneesRecues).to.eql({
+          email: 'unEmailInconnu',
+          nom: 'Dujardin',
+          prenom: 'Jean',
+          siret: '12345',
         });
-        testeur.adaptateurOidc().recupereInformationsUtilisateur =
-          async () => ({
-            email: 'unEmailInconnu',
-            nom: 'Dujardin',
-            prenom: 'Jean',
-            siret: undefined,
-          });
-
-        const reponse = await requeteSansRedirection(
-          'http://localhost:1234/oidc/apres-authentification'
-        );
-
-        expect(reponse.headers.location).to.be(
-          '/creation-compte?nom=Dujardin&prenom=Jean&email=unEmailInconnu&siret='
-        );
-      });
-
-      it("encode les paramètres dans l'url", async () => {
-        testeur.adaptateurOidc().recupereJeton = async () => ({
-          accessToken: 'unAccessToken',
-        });
-        testeur.depotDonnees().utilisateurAvecEmail = () => undefined;
-        testeur.adaptateurOidc().recupereInformationsUtilisateur =
-          async () => ({
-            email: 'unEmailInconnu+tag@mail.com',
-            nom: 'Dujardin',
-            prenom: 'Jean',
-            siret: '123',
-          });
-
-        const reponse = await requeteSansRedirection(
-          'http://localhost:1234/oidc/apres-authentification'
-        );
-
-        expect(reponse.headers.location).to.be(
-          '/creation-compte?nom=Dujardin&prenom=Jean&email=unEmailInconnu%2Btag%40mail.com&siret=123'
-        );
       });
     });
 

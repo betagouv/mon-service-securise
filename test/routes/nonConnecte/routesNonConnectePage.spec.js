@@ -21,7 +21,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/confidentialite',
     '/mentionsLegales',
     '/inscription',
-    '/creation-compte',
+    '/creation-compte?token=unToken',
     '/activation',
     '/connexion',
     '/reinitialisationMotDePasse',
@@ -31,6 +31,10 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/co-construire-monservicesecurise',
     '/conseils-cyber',
   ].forEach((route) => {
+    beforeEach(() => {
+      testeur.adaptateurJWT().decode = () => ({});
+    });
+
     it(`sert le contenu HTML de la page ${route}`, (done) => {
       axios
         .get(`http://localhost:1234${route}`)
@@ -204,22 +208,43 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
   });
 
   describe('quand requete GET sur `/creation-compte`', () => {
-    it('aseptise les données reçues', (done) => {
-      testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['prenom', 'nom', 'email', 'siret'],
-          `http://localhost:1234/creation-compte`,
-          done
+    beforeEach(() => {
+      testeur.adaptateurJWT().decode = () => ({});
+    });
+
+    it('retourne une erreur 400 si la signature du token est invalide', async () => {
+      testeur.adaptateurJWT().decode = () => {
+        throw new Error('Jeton invalide');
+      };
+
+      try {
+        await axios.get(
+          `http://localhost:1234/creation-compte?token=unFauxToken`
         );
+        expect().fail("L'appel aurait dû lever une exception");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
+    });
+
+    it('retourne une erreur 400 si le token est vide', async () => {
+      try {
+        await axios.get('http://localhost:1234/creation-compte?token=');
+        expect().fail("L'appel aurait dû lever une exception");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
     });
 
     it("ajoute les données de l'organisation quand le siret est fourni", async () => {
       testeur.serviceAnnuaire().rechercheOrganisations = async (siret) =>
         siret === '12P34' ? [{ nom: 'VERT', departement: '33' }] : [];
 
+      testeur.adaptateurJWT().decode = (token) =>
+        token === 'unTokenValide' ? { siret: '12P34' } : undefined;
+
       const reponse = await axios.get(
-        `http://localhost:1234/creation-compte?siret=12P34`
+        `http://localhost:1234/creation-compte?token=unTokenValide`
       );
 
       expect(
@@ -240,7 +265,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         expect.fail('ne devrait pas appeler cette fonction');
       };
 
-      const reponse = await axios.get(`http://localhost:1234/creation-compte`);
+      const reponse = await axios.get(
+        `http://localhost:1234/creation-compte?token=unTokenSansSiret`
+      );
 
       expect(
         donneesPartagees(reponse.data, 'informations-professionnelles')
@@ -255,7 +282,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       testeur.serviceAnnuaire().rechercheOrganisations = async (_) => [];
 
       const reponse = await axios.get(
-        `http://localhost:1234/creation-compte?siret=inconnu`
+        `http://localhost:1234/creation-compte?token=unTokenAvecSiretInconnu`
       );
 
       expect(
@@ -270,7 +297,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     it('envoie les départements', async () => {
       testeur.referentiel().departements = () => [{ nom: 'Gironde' }];
 
-      const reponse = await axios.get(`http://localhost:1234/creation-compte`);
+      const reponse = await axios.get(
+        `http://localhost:1234/creation-compte?token=unTokenValide`
+      );
 
       expect(donneesPartagees(reponse.data, 'departements')).to.eql({
         departements: [{ nom: 'Gironde' }],

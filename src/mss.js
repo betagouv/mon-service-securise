@@ -89,6 +89,7 @@ const creeServeur = (
       adaptateurCmsCrisp,
       adaptateurEnvironnement,
       adaptateurStatistiques,
+      adaptateurJWT,
       serviceAnnuaire,
       depotDonnees,
       middleware,
