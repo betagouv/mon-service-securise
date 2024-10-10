@@ -57,40 +57,45 @@ const routesNonConnecteOidc = ({
 
       const { nom, prenom, email, siret } =
         await adaptateurOidc.recupereInformationsUtilisateur(accessToken);
+      const infosUtilisateur = { nom, prenom, email, siret };
       const utilisateurExistant =
         await depotDonnees.utilisateurAvecEmail(email);
 
-      if (utilisateurExistant && utilisateurExistant.cguAcceptees) {
-        requete.session.AgentConnectIdToken = idToken;
-        requete.session.token = utilisateurExistant.genereToken(
-          SourceAuthentification.AGENT_CONNECT
-        );
-        if (!utilisateurExistant.aLesInformationsAgentConnect()) {
-          await depotDonnees.metsAJourUtilisateur(utilisateurExistant.id, {
-            nom,
-            prenom,
-            entite: { siret },
-          });
-        }
-        await depotDonnees.enregistreNouvelleConnexionUtilisateur(
-          utilisateurExistant.id,
-          SourceAuthentification.AGENT_CONNECT
-        );
-        reponse.render('apresAuthentification', {
-          ...(urlRedirection && {
-            urlRedirection:
-              adaptateurEnvironnement.mss().urlBase() + urlRedirection,
-          }),
-        });
-      } else {
-        const token = adaptateurJWT.signeDonnees({
+      if (!utilisateurExistant) {
+        const token = adaptateurJWT.signeDonnees(infosUtilisateur);
+        reponse.redirect(`/creation-compte?token=${token}`);
+        return;
+      }
+
+      requete.session.AgentConnectIdToken = idToken;
+      requete.session.token = utilisateurExistant.genereToken(
+        SourceAuthentification.AGENT_CONNECT
+      );
+      if (!utilisateurExistant.aLesInformationsAgentConnect()) {
+        await depotDonnees.metsAJourUtilisateur(utilisateurExistant.id, {
           nom,
           prenom,
-          email,
-          siret,
+          entite: { siret },
         });
-        reponse.redirect(`/creation-compte?token=${token}`);
       }
+      await depotDonnees.enregistreNouvelleConnexionUtilisateur(
+        utilisateurExistant.id,
+        SourceAuthentification.AGENT_CONNECT
+      );
+
+      const tokenDonneesInvite = utilisateurExistant.cguAcceptees
+        ? undefined
+        : adaptateurJWT.signeDonnees({
+            ...infosUtilisateur,
+            invite: true,
+          });
+      reponse.render('apresAuthentification', {
+        ...(urlRedirection && {
+          urlRedirection:
+            adaptateurEnvironnement.mss().urlBase() + urlRedirection,
+        }),
+        tokenDonneesInvite,
+      });
     } catch (e) {
       fabriqueAdaptateurGestionErreur().logueErreur(e);
       reponse.status(401).send("Erreur d'authentification");

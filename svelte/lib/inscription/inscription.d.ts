@@ -35,6 +35,7 @@ export type InscriptionProps = {
   estimationNombreServices: EstimationNombreServices[];
   informationsProfessionnelles: InformationsProfessionnelles;
   departements: Departement[];
+  invite: boolean;
 };
 
 export type FormulaireInscription = {
