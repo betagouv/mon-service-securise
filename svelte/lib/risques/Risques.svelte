@@ -42,7 +42,11 @@
       {@const estSpecifiqueAMettreAJour =
         risque.type === 'SPECIFIQUE' && !risque.categories.length}
       <tr class:estSpecifiqueAMettreAJour>
-        <td class="identifiant-numerique">{risque.identifiantNumerique}</td>
+        <td>
+          <span class="identifiant-numerique"
+            >{risque.identifiantNumerique}</span
+          >
+        </td>
         <td class="intitule">
           <p class="intitule-risques" title="Ce risque doit être mis à jour">
             {estSpecifiqueAMettreAJour ? '⚠️ ' : ''}{risque.intitule}
@@ -121,6 +125,14 @@
     font-size: 14px;
     font-weight: 700;
     line-height: 20px;
+    display: flex;
+    height: 24px;
+    padding: 0 10px;
+    align-items: center;
+    gap: 4px;
+    border-radius: 40px;
+    border: 1.5px solid var(--texte-fonce);
+    width: fit-content;
   }
 
   .intitule {
