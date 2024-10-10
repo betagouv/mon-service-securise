@@ -73,7 +73,7 @@ const routesNonConnectePage = ({
       return;
     }
 
-    const { prenom, nom, email, siret } = donneesUtilisateur;
+    const { prenom, nom, email, siret, invite } = donneesUtilisateur;
     let organisation = null;
     if (siret) {
       const organisations = await serviceAnnuaire.rechercheOrganisations(siret);
@@ -88,6 +88,7 @@ const routesNonConnectePage = ({
       estimationNombreServices: referentiel.estimationNombreServices(),
       informationsProfessionnelles: { prenom, nom, email, organisation },
       departements: referentiel.departements(),
+      invite: !!invite,
     });
   });
 

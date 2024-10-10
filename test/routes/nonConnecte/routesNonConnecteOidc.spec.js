@@ -4,7 +4,10 @@ const { enObjet, decodeTokenDuCookie } = require('../../aides/cookie');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
-const { requeteSansRedirection } = require('../../aides/http');
+const {
+  requeteSansRedirection,
+  donneesPartagees,
+} = require('../../aides/http');
 
 describe('Le serveur MSS des routes publiques /oidc/*', () => {
   const testeur = testeurMSS();
@@ -293,21 +296,60 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
     });
 
     describe("si l'utilisateur existe et qu'il a été invité", () => {
-      it("ne connecte pas l'utilisateur", async () => {
-        const invite = unUtilisateur()
+      let invite;
+
+      beforeEach(() => {
+        invite = unUtilisateur()
           .avecEmail('jean.dujardin@beta.gouv.fr')
           .quiAEteInvite()
           .construis();
-        invite.genereToken = () => 'unJetonQuiNeDevraitPasEtreDepose';
         testeur.depotDonnees().utilisateurAvecEmail = (email) =>
           email === 'jean.dujardin@beta.gouv.fr' ? invite : undefined;
+        invite.genereToken = () => 'unJetonJWT-AGENT_CONNECT-INVITE';
+      });
 
+      it("connecte l'utilisateur", async () => {
         const reponse = await requeteSansRedirection(
           'http://localhost:1234/oidc/apres-authentification'
         );
 
         const tokenDecode = decodeTokenDuCookie(reponse, 1);
-        expect(tokenDecode).to.be(undefined);
+        expect(tokenDecode.token).to.be('unJetonJWT-AGENT_CONNECT-INVITE');
+      });
+
+      it("retourne la page `apresAuthentification` avec le jeton signé de l'invité dans les données", async () => {
+        testeur.adaptateurOidc().recupereJeton = async () => ({
+          accessToken: 'unAccessToken',
+        });
+        testeur.adaptateurOidc().recupereInformationsUtilisateur =
+          async () => ({
+            email: 'jean.dujardin@beta.gouv.fr',
+            nom: 'Dujardin',
+            prenom: 'Jean',
+            siret: '12345',
+          });
+        let donneesRecuesPourCreationTokenSigne;
+        testeur.adaptateurJWT().signeDonnees = (donnees) => {
+          donneesRecuesPourCreationTokenSigne = donnees;
+          return 'unJetonSigne';
+        };
+
+        const reponse = await requeteSansRedirection(
+          'http://localhost:1234/oidc/apres-authentification'
+        );
+
+        expect(reponse.status).to.be(200);
+        expect(reponse.headers['content-type']).to.contain('text/html');
+        expect(donneesRecuesPourCreationTokenSigne).to.eql({
+          email: 'jean.dujardin@beta.gouv.fr',
+          nom: 'Dujardin',
+          prenom: 'Jean',
+          siret: '12345',
+          invite: true,
+        });
+        expect(donneesPartagees(reponse.data, 'tokenDonneesInvite')).to.eql({
+          tokenDonneesInvite: 'unJetonSigne',
+        });
       });
     });
   });

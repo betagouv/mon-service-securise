@@ -20,6 +20,7 @@
   export let informationsProfessionnelles: InformationsProfessionnelles;
   const modeleTelephone = '^0\\d{9}$';
   export let departements: Departement[];
+  export let invite: boolean;
 
   let etapeCourante = 1;
 
@@ -51,7 +52,11 @@
     if (formulaireCourant.estValide()) {
       try {
         enCoursEnvoi = true;
-        await axios.post('/api/utilisateur', formulaireInscription);
+        if (invite) {
+          await axios.put('/api/utilisateur', formulaireInscription);
+        } else {
+          await axios.post('/api/utilisateur', formulaireInscription);
+        }
       } finally {
         enCoursEnvoi = false;
       }
