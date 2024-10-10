@@ -39,6 +39,7 @@ const creeServeur = (
   adaptateurOidc,
   adaptateurEnvironnement,
   adaptateurStatistiques,
+  adaptateurJWT,
   procedures,
   inscriptionUtilisateur,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
@@ -123,6 +124,7 @@ const creeServeur = (
     '/oidc',
     routesNonConnecteOidc({
       adaptateurOidc,
+      adaptateurJWT,
       depotDonnees,
       middleware,
       adaptateurEnvironnement,
