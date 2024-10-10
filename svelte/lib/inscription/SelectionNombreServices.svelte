@@ -20,6 +20,7 @@
 </script>
 
 <select
+  class:vide={!nombreServices}
   {id}
   required
   bind:value={nombreServices}
@@ -37,14 +38,20 @@
     appearance: auto;
     background: white;
     border: 1px solid var(--liseres-fonce);
-    font-size: 0.875rem;
+    font-size: 1rem;
+    padding: 8px 16px;
+    line-height: 1.5rem;
   }
 
   select:hover {
     border-color: var(--bleu-mise-en-avant);
   }
 
+  select.vide {
+    color: var(--texte-clair);
+  }
+
   option {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 </style>

@@ -115,7 +115,7 @@
 
   .bouton {
     width: 100%;
-    border-radius: 6px;
+    border-radius: 5px;
     color: var(--texte-clair);
     border-color: var(--liseres-fonce);
   }
@@ -202,6 +202,7 @@
     margin: 0;
     text-align: left;
     font-size: 1rem;
+    line-height: 1.5rem;
   }
 
   .options {
