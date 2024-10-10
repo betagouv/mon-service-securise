@@ -34,9 +34,9 @@
   input {
     border-radius: 5px;
     border: 1px solid var(--liseres-fonce);
-    font-size: 14px;
+    font-size: 1rem;
     padding: 8px 16px;
-    line-height: 24px;
+    line-height: 1.5rem;
     background: white;
     margin-bottom: 0 !important;
   }
