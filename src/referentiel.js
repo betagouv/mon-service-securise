@@ -113,8 +113,11 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const risque = (id) => risques()[id] || {};
   const definitionRisque = (idRisque) => risque(idRisque).definition;
   const categoriesRisque = (idRisque) => risque(idRisque).categories;
+  const identifiantNumeriqueRisque = (idRisque) =>
+    risque(idRisque).identifiantNumerique;
   const identifiantsCategoriesRisque = () =>
     Object.keys(donnees.categoriesRisques);
+  const detailCategoriesRisque = () => donnees.categoriesRisques;
   const descriptionRisque = (idRisque) => risque(idRisque).description;
   const statutsDeploiement = () => donnees.statutsDeploiement;
   const descriptionStatutDeploiement = (idStatut) =>
@@ -331,6 +334,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionsTranchesIndiceCyber,
     descriptionsDonneesCaracterePersonnel,
     descriptionsFonctionnalites,
+    detailCategoriesRisque,
     donneesCaracterePersonnel,
     echeancesRenouvellement,
     enrichis,
@@ -352,6 +356,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     identifiantsLocalisationsDonnees,
     identifiantsMesures,
     identifiantsNiveauxGravite,
+    identifiantNumeriqueRisque,
     identifiantsRisques,
     idEtapeSuivante,
     infosNiveauxGravite,

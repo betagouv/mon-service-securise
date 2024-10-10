@@ -23,6 +23,13 @@ class RisqueSpecifique extends Risque {
     return this.intitule;
   }
 
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      identifiantNumerique: this.id.slice(0, 6),
+    };
+  }
+
   static valide({ intitule, categories }, referentiel) {
     if (!intitule) {
       throw new ErreurIntituleRisqueManquant(

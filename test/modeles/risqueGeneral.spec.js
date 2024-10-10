@@ -11,7 +11,13 @@ describe('Un risque général', () => {
     () =>
       (referentiel = Referentiel.creeReferentiel({
         niveauxGravite: { unNiveau: {} },
-        risques: { unRisque: { description: 'Une description' } },
+        risques: {
+          unRisque: {
+            description: 'Une description',
+            categories: ['CR1'],
+            identifiantNumerique: 'R1',
+          },
+        },
       }))
   );
 
@@ -26,6 +32,7 @@ describe('Un risque général', () => {
         id: 'unRisque',
         commentaire: 'Un commentaire',
         niveauGravite: 'unNiveau',
+        categories: ['CR1'],
       },
       referentiel
     );
@@ -38,6 +45,8 @@ describe('Un risque général', () => {
       commentaire: 'Un commentaire',
       intitule: 'Une description',
       niveauGravite: 'unNiveau',
+      categories: ['CR1'],
+      identifiantNumerique: 'R1',
     });
   });
 
@@ -65,6 +74,8 @@ describe('Un risque général', () => {
     expect(risque.toJSON()).to.eql({
       id: 'unRisque',
       intitule: 'Une description',
+      categories: ['CR1'],
+      identifiantNumerique: 'R1',
     });
   });
 
