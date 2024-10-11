@@ -19,29 +19,53 @@
   }
 </script>
 
-<select
-  class:vide={!nombreServices}
-  {id}
-  required
-  bind:value={nombreServices}
-  use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
->
-  <option value="" disabled selected>Sélectionner un nombre</option>
-  {#each estimationNombreServices as estimation}
-    {@const valeur = `${estimation.borneBasse}_${estimation.borneHaute}`}
-    <option value={valeur}>{estimation.label}</option>
-  {/each}
-</select>
+<div class="conteneur">
+  <select
+    class:vide={!nombreServices}
+    {id}
+    required
+    bind:value={nombreServices}
+    use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
+  >
+    <option value="" disabled selected>Sélectionner un nombre</option>
+    {#each estimationNombreServices as estimation}
+      {@const valeur = `${estimation.borneBasse}_${estimation.borneHaute}`}
+      <option value={valeur}>{estimation.label}</option>
+    {/each}
+  </select>
+</div>
 
 <style>
   select {
-    appearance: auto;
+    appearance: none !important;
     background: white;
     border: 1px solid var(--liseres-fonce);
     font-size: 1rem;
     padding: 8px 16px;
     line-height: 1.5rem;
     margin: 0;
+  }
+
+  .conteneur::after {
+    content: '';
+    display: inline-block;
+
+    width: 0.4rem;
+    height: 0.4rem;
+
+    border: 2px #000 solid;
+    border-left: 0;
+    border-bottom: 0;
+
+    transform: rotate(135deg);
+    filter: brightness(0%);
+    right: 16px;
+    position: absolute;
+    top: 14px;
+  }
+
+  .conteneur {
+    position: relative;
   }
 
   select:hover {

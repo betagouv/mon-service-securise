@@ -127,12 +127,13 @@
     color: black;
   }
 
-  .avec-fleche::after {
+  .avec-fleche::after,
+  .rappel-declencheur::after {
     content: '';
     display: inline-block;
 
-    width: 0.4em;
-    height: 0.4em;
+    width: 0.4rem;
+    height: 0.4rem;
 
     border: 2px #000 solid;
     border-left: 0;
@@ -153,24 +154,6 @@
   .bouton::-ms-input-placeholder {
     /* Edge 12 -18 */
     color: var(--texte-clair);
-  }
-
-  .rappel-declencheur::after {
-    content: '';
-    display: inline-block;
-
-    width: 0.4em;
-    height: 0.4em;
-
-    border: 2px #000 solid;
-    border-left: 0;
-    border-bottom: 0;
-
-    transform: rotate(315deg);
-    filter: brightness(0%);
-    right: 16px;
-    position: absolute;
-    top: 18px;
   }
 
   .bouton:hover {
