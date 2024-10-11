@@ -68,6 +68,28 @@
     position: relative;
   }
 
+  .conteneur::after {
+    content: '';
+    display: inline-block;
+
+    width: 0.4rem;
+    height: 0.4rem;
+
+    border: 2px #000 solid;
+    border-left: 0;
+    border-bottom: 0;
+
+    transform: rotate(135deg);
+    filter: brightness(0%);
+    right: 16px;
+    position: absolute;
+    top: 14px;
+  }
+
+  .conteneur {
+    position: relative;
+  }
+
   select:hover {
     border-color: var(--bleu-mise-en-avant);
   }
