@@ -1,5 +1,8 @@
 extends ./mss
 
+block variables
+    - const classeDuHeader = 'header-a-gauche-uniquement'
+
 block append styles
     +feuilleDeStyleSvelte()
     link(href = '/statique/assets/styles/accueilInscription.css', rel = 'stylesheet')

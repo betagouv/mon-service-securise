@@ -228,3 +228,17 @@ section:last-of-type {
 #connexion {
   margin-bottom: 2em;
 }
+
+.header-a-gauche-uniquement {
+  max-width: none;
+  width: 50%;
+  padding-left: 102px;
+  padding-right: 102px;
+  margin-left: 0;
+  box-sizing: border-box;
+}
+
+.header-a-gauche-uniquement .header-gauche {
+  width: 385px;
+  margin: 0 auto;
+}
