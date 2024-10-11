@@ -98,7 +98,7 @@
 
   .contenu-texte {
     flex: 1;
-    padding: 56px 102px;
+    padding: 30px 102px;
     color: var(--texte-fonce);
     font-size: 1rem;
     background-color: white;
@@ -115,7 +115,8 @@
   .contenu-texte h1 {
     font-weight: bold;
     font-size: 2.25rem;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
+    margin-top: 0;
   }
 
   .contenu-image {
