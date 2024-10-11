@@ -15,6 +15,10 @@
     if (stopPropagation) e.stopPropagation();
     menuOuvert = true;
   };
+
+  export const fermeLeMenu = () => {
+    menuOuvert = false;
+  };
 </script>
 
 <div class="conteneur {classePersonnalisee}">
