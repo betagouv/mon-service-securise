@@ -190,7 +190,6 @@ const envoieMessageInvitationContribution = (
 const envoieMessageInvitationInscription = (
   destinataire,
   prenomNomEmetteur,
-  idResetMotDePasse,
   nbServices
 ) =>
   envoieEmail(
@@ -199,7 +198,7 @@ const envoieMessageInvitationInscription = (
     {
       emetteur: decode(prenomNomEmetteur),
       nb_services_invitation: Number(nbServices),
-      url: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
+      url: `${process.env.URL_BASE_MSS}/inscription?invite=true`,
     }
   );
 
