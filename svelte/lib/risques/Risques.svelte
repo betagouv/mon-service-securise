@@ -3,6 +3,7 @@
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import { Referentiel } from '../ui/types.d';
   import Tiroir from '../ui/Tiroir.svelte';
+  import Bouton from '../ui/Bouton.svelte';
 
   export let idService: string;
   export let estLectureSeule: boolean;
@@ -28,6 +29,12 @@
       );
   };
   let tiroirOuvert = false;
+  let risqueEnEdition: Risque;
+
+  const ouvreRisque = (risque: Risque) => {
+    tiroirOuvert = true;
+    risqueEnEdition = risque;
+  };
 </script>
 
 <h3>Risques</h3>
@@ -43,7 +50,7 @@
     {#each risques as risque (risque.id)}
       {@const estSpecifiqueAMettreAJour =
         risque.type === 'SPECIFIQUE' && !risque.categories.length}
-      <tr class:estSpecifiqueAMettreAJour>
+      <tr class:estSpecifiqueAMettreAJour on:click={() => ouvreRisque(risque)}>
         <td>
           <span class="identifiant-numerique"
             >{risque.identifiantNumerique}</span
@@ -83,7 +90,7 @@
   </tbody>
 </table>
 
-<Tiroir bind:ouvert={tiroirOuvert} />
+<Tiroir bind:ouvert={tiroirOuvert} risque={risqueEnEdition} />
 
 <style>
   h3 {

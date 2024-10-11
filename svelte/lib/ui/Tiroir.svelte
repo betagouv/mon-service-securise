@@ -3,15 +3,17 @@
   import { Referentiel } from './types.d';
   import CartoucheIdentifiantRisque from './CartoucheIdentifiantRisque.svelte';
   import CartoucheCategorieRisque from './CartoucheCategorieRisque.svelte';
+  import type { Risque } from '../risques/risques.d';
 
   export let ouvert = true;
+  export let risque: Risque;
 </script>
 
 <div class="tiroir" class:ouvert>
   <div class="entete-tiroir">
     <div>
       <h3>Risque</h3>
-      <h2 class="titre-tiroir">Titre du tiroir</h2>
+      <h2 class="titre-tiroir">{risque?.intitule}</h2>
       <div class="badges">
         <CartoucheIdentifiantRisque identifiant="Risque 1 (R1)" />
         <CartoucheReferentiel referentiel={Referentiel.ANSSI} />
