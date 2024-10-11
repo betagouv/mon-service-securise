@@ -8,6 +8,7 @@
   export let valeurs: string[];
   export let requis: boolean = false;
   export let id: string = '';
+  let menu: MenuFlottant;
   let autreDomaine: string = '';
   let champDeclencheur: HTMLInputElement;
 
@@ -50,10 +51,13 @@
     ...selection.filter((f) => f !== 'autre'),
     ...(afficheAutre ? [autreDomaine] : ''),
   ];
+
+  const refermeMenu = () => menu.fermeLeMenu();
 </script>
 
 <div class="conteneur">
   <MenuFlottant
+    bind:this={menu}
     parDessusDeclencheur={true}
     classePersonnalisee="selection-domaine"
   >
@@ -74,7 +78,13 @@
       />
     </div>
     <div class="domaines">
-      <div class="rappel-declencheur contenu-declencheur">
+      <div
+        role="button"
+        tabindex="0"
+        on:keypress
+        class="rappel-declencheur contenu-declencheur"
+        on:click|stopPropagation|preventDefault={refermeMenu}
+      >
         {labelRappelDeclencheur}
       </div>
       <div class="options">
