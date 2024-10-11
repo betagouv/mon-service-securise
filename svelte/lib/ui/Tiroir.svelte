@@ -2,6 +2,7 @@
   import CartoucheReferentiel from './CartoucheReferentiel.svelte';
   import { Referentiel } from './types.d';
   import CartoucheIdentifiantRisque from './CartoucheIdentifiantRisque.svelte';
+  import CartoucheCategorieRisque from './CartoucheCategorieRisque.svelte';
 
   export let ouvert = true;
 </script>
@@ -14,6 +15,7 @@
       <div class="badges">
         <CartoucheIdentifiantRisque identifiant="Risque 1 (R1)" />
         <CartoucheReferentiel referentiel={Referentiel.ANSSI} />
+        <CartoucheCategorieRisque libelleCategorie="Traçabilité" />
       </div>
     </div>
     <button class="fermeture" on:click={() => (ouvert = false)}>✕</button>
