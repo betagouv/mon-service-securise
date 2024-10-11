@@ -41,6 +41,7 @@
     font-size: 1rem;
     padding: 8px 16px;
     line-height: 1.5rem;
+    margin: 0;
   }
 
   select:hover {
