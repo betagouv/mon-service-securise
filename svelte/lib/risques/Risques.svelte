@@ -2,6 +2,7 @@
   import type { Risque, NiveauGravite } from './risques.d';
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import { Referentiel } from '../ui/types.d';
+  import Tiroir from '../ui/Tiroir.svelte';
 
   export let idService: string;
   export let estLectureSeule: boolean;
@@ -26,6 +27,7 @@
         }
       );
   };
+  let tiroirOuvert = false;
 </script>
 
 <h3>Risques</h3>
@@ -80,6 +82,8 @@
     {/each}
   </tbody>
 </table>
+
+<Tiroir bind:ouvert={tiroirOuvert} />
 
 <style>
   h3 {
