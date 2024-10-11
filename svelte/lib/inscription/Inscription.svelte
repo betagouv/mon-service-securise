@@ -15,6 +15,7 @@
   import SelectionOrganisation from './SelectionOrganisation.svelte';
   import ChampTexte from '../ui/ChampTexte.svelte';
   import SelectionNombreServices from './SelectionNombreServices.svelte';
+  import ControleFormulaire from '../ui/ControleFormulaire.svelte';
 
   export let estimationNombreServices: EstimationNombreServices[];
   export let informationsProfessionnelles: InformationsProfessionnelles;
@@ -161,31 +162,30 @@
         {#if !informationsProfessionnelles.organisation}
           <div class="bloc bloc-avec-separateur champs-saisie">
             <h1>Votre organisation</h1>
-            <div>
-              <label for="departement" class="requis"
-                >Département de votre organisation</label
-              >
+            <ControleFormulaire
+              requis={true}
+              libelle="Département de votre organisation"
+            >
               <SelectionDepartement bind:valeur={departement} {departements} />
-            </div>
-            <div>
-              <label for="nomSiret" class="requis"
-                >Nom ou SIRET de votre organisation</label
-              >
+            </ControleFormulaire>
+            <ControleFormulaire
+              requis={true}
+              libelle="Nom ou SIRET de votre organisation"
+            >
               <SelectionOrganisation
                 bind:valeur={organisation}
                 filtreDepartement={departement}
               />
-            </div>
+            </ControleFormulaire>
           </div>
         {/if}
 
         <div class="bloc bloc-avec-separateur champs-saisie">
           <h1>Votre identité</h1>
-          <div>
-            <label for="telephone">Téléphone</label>
-            <span class="exemple">
-              Pour bénéficier d’un accompagement personnalisé
-            </span>
+          <ControleFormulaire
+            libelle="Téléphone"
+            sousTitre="Pour bénéficier d'un accompagement personnalisé"
+          >
             <ChampTexte
               id="telephone"
               nom="telephone"
@@ -194,34 +194,28 @@
               bind:valeur={formulaireInscription.telephone}
               messageErreur="Le numéro de téléphone doit respecter le format 0000000000."
             />
-          </div>
-          <div>
-            <label class="requis" for="domaine-specialite">
-              Domaine de spécialité
-            </label>
+          </ControleFormulaire>
+          <ControleFormulaire requis={true} libelle="Domaine de spécialité">
             <SelectionDomaineSpecialite
               id="domaine-specialite"
               requis
               bind:valeurs={formulaireInscription.postes}
             />
-          </div>
+          </ControleFormulaire>
         </div>
         <div class="bloc">
           <h1>Vos services numériques</h1>
-          <div>
-            <label for="estimation-nombre-services" class="info-label requis">
-              Combien de services publics numériques avez-vous à sécuriser ?
-            </label>
-            <span class="exemple">
-              Exemple : Systèmes d’information, site web, application mobile,
-              API, téléservices
-            </span>
+          <ControleFormulaire
+            requis={true}
+            libelle="Combien de services publics numériques avez-vous à sécuriser ?"
+            sousTitre="Exemple : Systèmes d’information, site web, application mobile, API, téléservices"
+          >
             <SelectionNombreServices
               id="estimation-nombre-services"
               {estimationNombreServices}
               bind:valeur={formulaireInscription.estimationNombreServices}
             />
-          </div>
+          </ControleFormulaire>
         </div>
       </div>
     </Formulaire>
@@ -383,11 +377,9 @@
     font-size: 1rem;
   }
 
-  .exemple {
-    display: block;
-    color: var(--texte-clair);
-    font-size: 0.75rem;
-    line-height: 1.25rem;
+  label {
+    font-weight: normal;
+    margin: 0;
   }
 
   .case-a-cocher {
@@ -398,11 +390,6 @@
 
   input[type='checkbox'] {
     transform: none;
-  }
-
-  :global(form.formulaire-inscription label) {
-    margin: 0;
-    font-weight: normal;
   }
 
   .case-a-cocher.cgu {
@@ -417,9 +404,5 @@
 
   .cgu label {
     order: -1;
-  }
-
-  .champs-saisie div {
-    margin-bottom: 16px;
   }
 </style>
