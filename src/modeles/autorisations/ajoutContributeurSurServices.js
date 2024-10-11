@@ -61,7 +61,6 @@ const ajoutContributeurSurServices = ({
         await adaptateurMail.envoieMessageInvitationInscription(
           contributeur.email,
           emetteur.prenomNom(),
-          contributeur.idResetMotDePasse,
           services.length
         );
       } catch (e) {
