@@ -12,6 +12,7 @@ const Autorisation = require('../../modeles/autorisations/autorisation');
 const Service = require('../../modeles/service');
 const { dateYYYYMMDD } = require('../../utilitaires/date');
 const DescriptionService = require('../../modeles/descriptionService');
+const RisqueGeneral = require('../../modeles/risqueGeneral');
 
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -207,10 +208,18 @@ const routesConnectePageService = ({
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { service } = requete;
+      const { risquesGeneraux, risquesSpecifiques } = service.risques.toJSON();
+      const risquesGenerauxAConsiderer = Object.keys(referentiel.risques())
+        .map((id) => risquesGeneraux.find((r) => r.id === id) || { id })
+        .map((donnees) => new RisqueGeneral(donnees, referentiel).toJSON());
       reponse.render('service/risques-v2', {
         InformationsService,
         referentiel,
         service,
+        donneesRisques: {
+          risquesGeneraux: risquesGenerauxAConsiderer,
+          risquesSpecifiques,
+        },
         etapeActive: 'risques',
       });
     }
