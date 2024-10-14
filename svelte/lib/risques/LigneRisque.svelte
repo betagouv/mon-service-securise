@@ -22,11 +22,11 @@
   };
 </script>
 
-<tr class:estSpecifiqueAMettreAJour on:click>
+<tr class:estSpecifiqueAMettreAJour>
   <td>
     <span class="identifiant-numerique">{risque.identifiantNumerique}</span>
   </td>
-  <td class="intitule">
+  <td class="intitule" on:click>
     <p class="intitule-risques" title="Ce risque doit être mis à jour">
       {estSpecifiqueAMettreAJour ? '⚠️ ' : ''}{risque.intitule}
     </p>
@@ -92,6 +92,11 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    cursor: pointer;
+  }
+
+  .intitule:hover .intitule-risques {
+    color: var(--bleu-mise-en-avant);
   }
 
   .intitule-risques {
