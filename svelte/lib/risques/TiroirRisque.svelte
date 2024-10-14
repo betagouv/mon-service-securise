@@ -2,26 +2,42 @@
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import CartoucheIdentifiantRisque from '../ui/CartoucheIdentifiantRisque.svelte';
   import CartoucheCategorieRisque from '../ui/CartoucheCategorieRisque.svelte';
-  import type { Risque } from './risques.d';
+  import type { ReferentielRisques, Risque } from './risques.d';
   import { Referentiel } from '../ui/types.d';
 
   export let ouvert = true;
   export let risque: Risque;
+  export let referentielRisques: ReferentielRisques;
+  export let referentielCategories: Record<string, string>;
+
+  $: risqueDuReferentiel = risque && referentielRisques[risque.id];
 </script>
 
 <div class="tiroir" class:ouvert>
-  <div class="entete-tiroir">
-    <div>
-      <h3>Risque</h3>
-      <h2 class="titre-tiroir">{risque?.intitule}</h2>
-      <div class="badges">
-        <CartoucheIdentifiantRisque identifiant="Risque 1 (R1)" />
-        <CartoucheReferentiel referentiel={Referentiel.ANSSI} />
-        <CartoucheCategorieRisque libelleCategorie="Traçabilité" />
+  {#if risque}
+    <div class="entete-tiroir">
+      <div>
+        <h3>Risque</h3>
+        <h2 class="titre-tiroir">{risque.intitule}</h2>
+        <div class="badges">
+          <CartoucheIdentifiantRisque
+            identifiant={risqueDuReferentiel.identifiantNumerique}
+          />
+          <CartoucheReferentiel referentiel={Referentiel.ANSSI} />
+          {#each risque.categories as categorie}
+            <CartoucheCategorieRisque
+              libelleCategorie={referentielCategories[categorie]}
+            />
+          {/each}
+        </div>
       </div>
+      <button class="fermeture" on:click={() => (ouvert = false)}>✕</button>
     </div>
-    <button class="fermeture" on:click={() => (ouvert = false)}>✕</button>
-  </div>
+    <div class="contenu-risque">
+      <h1>Description du risque</h1>
+      <span>{@html risqueDuReferentiel.descriptionLongue}</span>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -84,5 +100,17 @@
     margin-top: 12px;
     display: flex;
     gap: 8px;
+  }
+
+  .contenu-risque {
+    padding: 32px 36px;
+    text-align: left;
+  }
+
+  .contenu-risque h1 {
+    margin: 0 0 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 1.375rem;
   }
 </style>
