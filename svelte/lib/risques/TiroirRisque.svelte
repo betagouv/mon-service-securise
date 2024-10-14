@@ -1,9 +1,9 @@
 <script lang="ts">
-  import CartoucheReferentiel from './CartoucheReferentiel.svelte';
-  import { Referentiel } from './types.d';
-  import CartoucheIdentifiantRisque from './CartoucheIdentifiantRisque.svelte';
-  import CartoucheCategorieRisque from './CartoucheCategorieRisque.svelte';
-  import type { Risque } from '../risques/risques.d';
+  import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
+  import CartoucheIdentifiantRisque from '../ui/CartoucheIdentifiantRisque.svelte';
+  import CartoucheCategorieRisque from '../ui/CartoucheCategorieRisque.svelte';
+  import type { Risque } from './risques.d';
+  import { Referentiel } from '../ui/types.d';
 
   export let ouvert = true;
   export let risque: Risque;
