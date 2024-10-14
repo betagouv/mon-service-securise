@@ -10,7 +10,8 @@
   export let referentielRisques: ReferentielRisques;
   export let referentielCategories: Record<string, string>;
 
-  $: risqueDuReferentiel = risque && referentielRisques[risque.id];
+  $: risqueDuReferentiel =
+    risque && risque.type === 'GENERAL' && referentielRisques[risque.id];
 </script>
 
 <div class="tiroir" class:ouvert>
