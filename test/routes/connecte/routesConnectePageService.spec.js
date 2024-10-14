@@ -17,6 +17,7 @@ const {
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
+const { donneesPartagees } = require('../../aides/http');
 
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
@@ -582,7 +583,7 @@ describe('Le serveur MSS des routes /service/*', () => {
     });
   });
 
-  describe('quand requête GET sur `/service/:id/risques`', () => {
+  describe('quand requête GET sur `/service/:id/risques-v2`', () => {
     it('recherche le service correspondant', (done) => {
       testeur
         .middleware()
@@ -609,6 +610,42 @@ describe('Le serveur MSS des routes /service/*', () => {
           'http://localhost:1234/service/456/risques-v2',
           done
         );
+    });
+
+    it('merge les données du référentiel et du service pour les risques généraux', async () => {
+      const serviceARenvoyer = unService()
+        .avecId('456')
+        .avecNomService('un service')
+        .construis();
+      testeur.referentiel().recharge({
+        risques: {
+          logicielsMalveillants: {
+            categories: ['integrite'],
+            identifiantNumerique: 'R6',
+            description: "Détournement de l'usage du service numérique",
+          },
+        },
+        categoriesRisques: {
+          integrite: 'Intégrité',
+        },
+      });
+      testeur.middleware().reinitialise({ serviceARenvoyer });
+
+      const reponse = await axios.get(
+        'http://localhost:1234/service/456/risques-v2'
+      );
+
+      const { risquesGeneraux } = donneesPartagees(
+        reponse.data,
+        'donnees-risques'
+      );
+      expect(risquesGeneraux.length).to.be(1);
+      expect(risquesGeneraux[0]).to.eql({
+        id: 'logicielsMalveillants',
+        categories: ['integrite'],
+        identifiantNumerique: 'R6',
+        intitule: "Détournement de l'usage du service numérique",
+      });
     });
   });
 
