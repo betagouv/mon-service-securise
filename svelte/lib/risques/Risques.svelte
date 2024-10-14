@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Risque, NiveauGravite } from './risques.d';
+  import type { Risque, NiveauGravite, ReferentielRisques } from './risques.d';
   import TiroirRisque from './TiroirRisque.svelte';
   import LigneRisque from './LigneRisque.svelte';
 
@@ -8,6 +8,7 @@
   export let risques: Risque[];
   export let categories: Record<string, string>;
   export let niveauxGravite: Record<string, NiveauGravite>;
+  export let referentielRisques: ReferentielRisques;
 
   const metAJourRisque = async (risque: Risque) => {
     if (risque.type === 'GENERAL')
@@ -58,7 +59,12 @@
   </tbody>
 </table>
 
-<TiroirRisque bind:ouvert={tiroirOuvert} risque={risqueEnEdition} />
+<TiroirRisque
+  bind:ouvert={tiroirOuvert}
+  risque={risqueEnEdition}
+  referentielCategories={categories}
+  {referentielRisques}
+/>
 
 <style>
   h3 {
