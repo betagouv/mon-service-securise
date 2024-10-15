@@ -2,16 +2,35 @@
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import CartoucheIdentifiantRisque from '../ui/CartoucheIdentifiantRisque.svelte';
   import CartoucheCategorieRisque from '../ui/CartoucheCategorieRisque.svelte';
-  import type { ReferentielRisques, Risque } from './risques.d';
+  import type {
+    ReferentielGravites,
+    ReferentielRisques,
+    Risque,
+  } from './risques.d';
   import { Referentiel } from '../ui/types.d';
+  import ControleFormulaire from '../ui/ControleFormulaire.svelte';
+  import SelectionGravite from './SelectionGravite.svelte';
+  import { createEventDispatcher } from 'svelte';
+  import Formulaire from '../ui/Formulaire.svelte';
+  import Bouton from '../ui/Bouton.svelte';
 
   export let ouvert = true;
   export let risque: Risque | undefined;
   export let referentielRisques: ReferentielRisques;
   export let referentielCategories: Record<string, string>;
+  export let referentielGravites: ReferentielGravites;
+  export let estLectureSeule;
 
   $: risqueDuReferentiel =
     risque && risque.type === 'GENERAL' && referentielRisques[risque.id];
+
+  const emet = createEventDispatcher<{
+    metsAJourRisque: Risque;
+  }>();
+
+  const metsAJour = () => {
+    if (risque) emet('metsAJourRisque', risque);
+  };
 </script>
 
 <div class="tiroir" class:ouvert>
@@ -38,6 +57,16 @@
       <h1>Description du risque</h1>
       <span>{@html risqueDuReferentiel.descriptionLongue}</span>
     </div>
+    <Formulaire on:formulaireValide={metsAJour}>
+      <ControleFormulaire libelle="Gravité potentielle">
+        <SelectionGravite
+          {referentielGravites}
+          {estLectureSeule}
+          bind:niveauGravite={risque.niveauGravite}
+        />
+      </ControleFormulaire>
+      <Bouton type="primaire" titre="Enregistrer" />
+    </Formulaire>
   {/if}
 </div>
 
