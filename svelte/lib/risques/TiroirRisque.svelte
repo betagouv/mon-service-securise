@@ -72,7 +72,9 @@
             <ZoneTexte bind:valeur={risque.commentaire} />
           </ControleFormulaireTiroir>
         </div>
-        <Bouton type="primaire" titre="Enregistrer" />
+        <div class="conteneur-actions">
+          <Bouton type="primaire" titre="Enregistrer" />
+        </div>
       </Formulaire>
     </div>
   {/if}
@@ -141,20 +143,30 @@
   }
 
   .contenu-risque {
-    padding: 32px 36px;
     text-align: left;
-  }
-
-  .contenu-risque h1 {
-    margin: 0 0 8px;
-    font-weight: bold;
-    font-size: 1rem;
-    line-height: 1.375rem;
+    padding: 0;
+    display: flex;
+    flex: 1;
   }
 
   .champs {
     display: flex;
     gap: 30px;
     flex-direction: column;
+    padding: 32px 36px;
+    flex: 1;
+  }
+
+  .conteneur-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: sticky;
+    bottom: 0;
+    border-top: 1px solid #cbd5e1;
+    padding: 19px 36px;
+    background: white;
+    flex-grow: 0;
+    flex-shrink: 0;
   }
 </style>
