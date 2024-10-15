@@ -5,7 +5,7 @@ declare global {
 }
 
 export type DonneesRisque = {
-  niveauGravite: string;
+  niveauGravite: IdentifiantGravite;
   id: string;
   commentaire: string;
   intitule: string;
@@ -32,6 +32,10 @@ type RisqueDuReferentiel = {
 };
 
 export type ReferentielRisques = Record<string, RisqueDuReferentiel>;
+
+export type IdentifiantGravite = string;
+
+export type ReferentielGravites = Record<IdentifiantGravite, NiveauGravite>;
 
 export type RisquesProps = {
   idService: string;
