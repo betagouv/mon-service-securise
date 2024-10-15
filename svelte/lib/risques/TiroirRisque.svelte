@@ -29,8 +29,15 @@
     metsAJourRisque: Risque;
   }>();
 
+  const fermeTiroir = () => {
+    ouvert = false;
+  };
+
   const metsAJour = () => {
-    if (risque) emet('metsAJourRisque', risque);
+    if (risque) {
+      emet('metsAJourRisque', risque);
+      fermeTiroir();
+    }
   };
 </script>
 
@@ -52,7 +59,7 @@
           {/each}
         </div>
       </div>
-      <button class="fermeture" on:click={() => (ouvert = false)}>✕</button>
+      <button class="fermeture" on:click={fermeTiroir}>✕</button>
     </div>
     <div class="contenu-risque">
       <Formulaire on:formulaireValide={metsAJour}>
