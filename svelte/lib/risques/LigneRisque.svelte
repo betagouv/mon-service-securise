@@ -3,6 +3,7 @@
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import { Referentiel } from '../ui/types.d';
   import { createEventDispatcher } from 'svelte';
+  import SelectionGravite from './SelectionGravite.svelte';
 
   export let categories: Record<string, string>;
   export let niveauxGravite: Record<string, NiveauGravite>;
@@ -42,18 +43,12 @@
     </p>
   </td>
   <td>
-    <select
-      class="niveau-gravite {risque.niveauGravite}"
-      class:vide={!risque.niveauGravite}
-      bind:value={risque.niveauGravite}
-      disabled={estLectureSeule || estSpecifiqueAMettreAJour}
+    <SelectionGravite
+      estLectureSeule={estLectureSeule || estSpecifiqueAMettreAJour}
+      referentielGravites={niveauxGravite}
+      bind:niveauGravite={risque.niveauGravite}
       on:change={metAJourRisque}
-    >
-      <option label="+" value="" disabled />
-      {#each Object.entries(niveauxGravite) as [id, niveauGravite] (id)}
-        <option label={niveauGravite.position.toString()} value={id} />
-      {/each}
-    </select>
+    />
   </td>
 </tr>
 
@@ -123,48 +118,6 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 16px;
-  }
-
-  .niveau-gravite {
-    display: flex;
-    width: 23px;
-    padding: 0 4px;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    border-radius: 4px;
-    color: white;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 24px;
-    box-sizing: border-box;
-    margin: 0;
-    text-align: center;
-  }
-
-  .niveau-gravite.nonConcerne {
-    background: var(--liseres-fonce);
-  }
-
-  .niveau-gravite.minime {
-    background: var(--bleu-mise-en-avant);
-  }
-
-  .niveau-gravite.significatif {
-    background: var(--bleu-survol);
-  }
-
-  .niveau-gravite.grave {
-    background: var(--bleu-anssi);
-  }
-
-  .niveau-gravite.critique {
-    background: black;
-  }
-
-  .niveau-gravite.vide {
-    background: var(--fond-gris-pale);
-    color: var(--texte-clair);
   }
 
   .estSpecifiqueAMettreAJour {
