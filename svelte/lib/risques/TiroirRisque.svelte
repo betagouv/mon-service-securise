@@ -13,6 +13,7 @@
   import Formulaire from '../ui/Formulaire.svelte';
   import Bouton from '../ui/Bouton.svelte';
   import ControleFormulaireTiroir from '../ui/ControleFormulaireTiroir.svelte';
+  import ZoneTexte from '../ui/ZoneTexte.svelte';
 
   export let ouvert = true;
   export let risque: Risque | undefined;
@@ -66,6 +67,9 @@
               avecLibelleOption={true}
               bind:niveauGravite={risque.niveauGravite}
             />
+          </ControleFormulaireTiroir>
+          <ControleFormulaireTiroir libelle="Commentaire">
+            <ZoneTexte bind:valeur={risque.commentaire} />
           </ControleFormulaireTiroir>
         </div>
         <Bouton type="primaire" titre="Enregistrer" />
