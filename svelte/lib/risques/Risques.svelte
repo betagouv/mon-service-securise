@@ -32,6 +32,7 @@
           categories: risque.categories,
         }
       );
+    risques[risques.findIndex((r) => r.id === risque.id)] = risque;
   };
 
   const ouvreRisque = (risque: Risque) => {
