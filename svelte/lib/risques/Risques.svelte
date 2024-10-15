@@ -1,7 +1,6 @@
 <script lang="ts">
   import type {
     Risque,
-    NiveauGravite,
     ReferentielRisques,
     ReferentielGravites,
   } from './risques.d';
@@ -71,6 +70,9 @@
   risque={risqueEnEdition}
   referentielCategories={categories}
   {referentielRisques}
+  referentielGravites={niveauxGravite}
+  {estLectureSeule}
+  on:metsAJourRisque={(e) => metAJourRisque(e.detail)}
 />
 
 <style>

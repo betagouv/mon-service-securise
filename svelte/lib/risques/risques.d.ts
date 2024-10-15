@@ -22,6 +22,7 @@ export type Risque = DonneesRisque & { type: TypeRisque };
 
 export type NiveauGravite = {
   position: number;
+  description: string;
 };
 
 type RisqueDuReferentiel = {
