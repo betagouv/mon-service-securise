@@ -8,11 +8,11 @@
     Risque,
   } from './risques.d';
   import { Referentiel } from '../ui/types.d';
-  import ControleFormulaire from '../ui/ControleFormulaire.svelte';
   import SelectionGravite from './SelectionGravite.svelte';
   import { createEventDispatcher } from 'svelte';
   import Formulaire from '../ui/Formulaire.svelte';
   import Bouton from '../ui/Bouton.svelte';
+  import ControleFormulaireTiroir from '../ui/ControleFormulaireTiroir.svelte';
 
   export let ouvert = true;
   export let risque: Risque | undefined;
@@ -54,19 +54,23 @@
       <button class="fermeture" on:click={() => (ouvert = false)}>✕</button>
     </div>
     <div class="contenu-risque">
-      <h1>Description du risque</h1>
-      <span>{@html risqueDuReferentiel.descriptionLongue}</span>
+      <Formulaire on:formulaireValide={metsAJour}>
+        <div class="champs">
+          <ControleFormulaireTiroir libelle="Description du risque">
+            <span>{@html risqueDuReferentiel.descriptionLongue}</span>
+          </ControleFormulaireTiroir>
+          <ControleFormulaireTiroir libelle="Gravité potentielle">
+            <SelectionGravite
+              {referentielGravites}
+              {estLectureSeule}
+              avecLibelleOption={true}
+              bind:niveauGravite={risque.niveauGravite}
+            />
+          </ControleFormulaireTiroir>
+        </div>
+        <Bouton type="primaire" titre="Enregistrer" />
+      </Formulaire>
     </div>
-    <Formulaire on:formulaireValide={metsAJour}>
-      <ControleFormulaire libelle="Gravité potentielle">
-        <SelectionGravite
-          {referentielGravites}
-          {estLectureSeule}
-          bind:niveauGravite={risque.niveauGravite}
-        />
-      </ControleFormulaire>
-      <Bouton type="primaire" titre="Enregistrer" />
-    </Formulaire>
   {/if}
 </div>
 
@@ -142,5 +146,11 @@
     font-weight: bold;
     font-size: 1rem;
     line-height: 1.375rem;
+  }
+
+  .champs {
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
   }
 </style>
