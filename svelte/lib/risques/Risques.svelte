@@ -9,6 +9,8 @@
   export let categories: Record<string, string>;
   export let niveauxGravite: Record<string, NiveauGravite>;
   export let referentielRisques: ReferentielRisques;
+  let tiroirOuvert = false;
+  let risqueEnEdition: Risque | undefined;
 
   const metAJourRisque = async (risque: Risque) => {
     if (risque.type === 'GENERAL')
@@ -27,8 +29,6 @@
         }
       );
   };
-  let tiroirOuvert = false;
-  let risqueEnEdition: Risque;
 
   const ouvreRisque = (risque: Risque) => {
     if (risque.type === 'GENERAL') {
