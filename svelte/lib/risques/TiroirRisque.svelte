@@ -6,7 +6,7 @@
   import { Referentiel } from '../ui/types.d';
 
   export let ouvert = true;
-  export let risque: Risque;
+  export let risque: Risque | undefined;
   export let referentielRisques: ReferentielRisques;
   export let referentielCategories: Record<string, string>;
 
@@ -15,7 +15,7 @@
 </script>
 
 <div class="tiroir" class:ouvert>
-  {#if risque}
+  {#if risque && risqueDuReferentiel}
     <div class="entete-tiroir">
       <div>
         <h3>Risque</h3>
