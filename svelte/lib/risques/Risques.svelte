@@ -1,5 +1,10 @@
 <script lang="ts">
-  import type { Risque, NiveauGravite, ReferentielRisques } from './risques.d';
+  import type {
+    Risque,
+    NiveauGravite,
+    ReferentielRisques,
+    ReferentielGravites,
+  } from './risques.d';
   import TiroirRisque from './TiroirRisque.svelte';
   import LigneRisque from './LigneRisque.svelte';
 
@@ -7,7 +12,7 @@
   export let estLectureSeule: boolean;
   export let risques: Risque[];
   export let categories: Record<string, string>;
-  export let niveauxGravite: Record<string, NiveauGravite>;
+  export let niveauxGravite: ReferentielGravites;
   export let referentielRisques: ReferentielRisques;
   let tiroirOuvert = false;
   let risqueEnEdition: Risque | undefined;
