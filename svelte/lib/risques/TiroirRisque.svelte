@@ -87,6 +87,17 @@
             </ControleFormulaireTiroir>
           {/if}
           {#if risque.type === 'SPECIFIQUE'}
+            <ControleFormulaireTiroir
+              libelle="Intitulé du risque"
+              requis={true}
+            >
+              <ZoneTexte
+                aideSaisie="ex : lorem ipsum"
+                bind:valeur={risque.intitule}
+                messageErreur="L'intitulé est obligatoire. Veuillez le renseigner."
+                requis={true}
+              />
+            </ControleFormulaireTiroir>
             <ControleFormulaireTiroir libelle="Catégorie" requis={true}>
               <SelectionCategorieRisque
                 bind:valeurs={risque.categories}
