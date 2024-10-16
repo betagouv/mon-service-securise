@@ -1,9 +1,18 @@
 <script lang="ts">
+  import { validationChamp } from '../directives/validationChamp';
+
   export let valeur: string = '';
   export let aideSaisie: string = '';
+  export let requis: boolean = false;
+  export let messageErreur: string = '';
 </script>
 
-<textarea bind:value={valeur} placeholder={aideSaisie}></textarea>
+<textarea
+  bind:value={valeur}
+  required={requis}
+  placeholder={aideSaisie}
+  use:validationChamp={requis ? messageErreur : ''}
+></textarea>
 
 <style>
   textarea {
