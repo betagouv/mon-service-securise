@@ -8,6 +8,7 @@
   import { Referentiel } from '../ui/types.d';
   import { createEventDispatcher } from 'svelte';
   import SelectionGravite from './SelectionGravite.svelte';
+  import { intituleRisque } from './risques';
 
   export let categories: ReferentielCategories;
   export let niveauxGravite: Record<string, NiveauGravite>;
@@ -36,7 +37,7 @@
       class="intitule-risques"
       title={estSpecifiqueAMettreAJour ? 'Ce risque doit être mis à jour' : ''}
     >
-      {estSpecifiqueAMettreAJour ? '⚠️ ' : ''}{risque.intitule}
+      {estSpecifiqueAMettreAJour ? '⚠️ ' : ''}{@html intituleRisque(risque)}
     </p>
     <p class="cartouches-intitule">
       <CartoucheReferentiel
