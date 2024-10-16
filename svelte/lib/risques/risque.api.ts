@@ -14,6 +14,7 @@ export const enregistreRisque = async (idService: string, risque: Risque) => {
         commentaire: risque.commentaire,
         intitule: risque.intitule,
         categories: risque.categories,
+        description: risque.description,
       }
     );
   }

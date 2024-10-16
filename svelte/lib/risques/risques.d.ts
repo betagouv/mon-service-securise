@@ -11,6 +11,7 @@ export type DonneesRisque = {
   intitule: string;
   categories: string[];
   identifiantNumerique: string;
+  description: string;
 };
 
 export type Risques = {

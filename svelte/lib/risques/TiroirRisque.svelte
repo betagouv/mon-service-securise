@@ -99,6 +99,13 @@
                 lignes={2}
               />
             </ControleFormulaireTiroir>
+            <ControleFormulaireTiroir libelle="Description du risque">
+              <ZoneTexte
+                aideSaisie="ex : lorem ipsum"
+                lignes={6}
+                bind:valeur={risque.description}
+              />
+            </ControleFormulaireTiroir>
             <ControleFormulaireTiroir libelle="Catégorie" requis={true}>
               <SelectionCategorieRisque
                 bind:valeurs={risque.categories}
