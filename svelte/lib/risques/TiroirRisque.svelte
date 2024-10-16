@@ -126,6 +126,7 @@
             <ZoneTexte
               bind:valeur={risque.commentaire}
               aideSaisie="Apportez des précisions sur le risque"
+              lignes={4}
             />
           </ControleFormulaireTiroir>
         </div>
