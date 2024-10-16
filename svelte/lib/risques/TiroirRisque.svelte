@@ -51,31 +51,37 @@
 </script>
 
 <div class="tiroir" class:ouvert>
-  {#if risque && risqueDuReferentiel}
+  {#if risque}
     <div class="entete-tiroir">
       <div>
         <h3>Risque</h3>
-        <h2 class="titre-tiroir">{risque.intitule}</h2>
+        <h2 class="titre-tiroir">
+          {risque.type === 'GENERAL' ? risque.intitule : 'Ajouter un risque'}
+        </h2>
         <div class="badges">
-          <CartoucheIdentifiantRisque
-            identifiant={risqueDuReferentiel.identifiantNumerique}
-          />
-          <CartoucheReferentiel referentiel={Referentiel.ANSSI} />
-          {#each risque.categories as categorie}
-            <CartoucheCategorieRisque
-              libelleCategorie={referentielCategories[categorie]}
+          {#if risqueDuReferentiel}
+            <CartoucheIdentifiantRisque
+              identifiant={risqueDuReferentiel.identifiantNumerique}
             />
-          {/each}
+            <CartoucheReferentiel referentiel={Referentiel.ANSSI} />
+            {#each risque.categories as categorie}
+              <CartoucheCategorieRisque
+                libelleCategorie={referentielCategories[categorie]}
+              />
+            {/each}
+          {/if}
         </div>
       </div>
       <button class="fermeture" on:click={fermeTiroir}>✕</button>
     </div>
     <div class="contenu-risque">
-      <Formulaire on:formulaireValide={metsAJour}>
+      <Formulaire on:formulaireValide={metsAJour} classe="formulaire-risque">
         <div class="champs">
-          <ControleFormulaireTiroir libelle="Description du risque">
-            <span>{@html risqueDuReferentiel.descriptionLongue}</span>
-          </ControleFormulaireTiroir>
+          {#if risqueDuReferentiel}
+            <ControleFormulaireTiroir libelle="Description du risque">
+              <span>{@html risqueDuReferentiel.descriptionLongue}</span>
+            </ControleFormulaireTiroir>
+          {/if}
           <ControleFormulaireTiroir libelle="Gravité potentielle">
             <SelectionGravite
               {referentielGravites}
@@ -187,5 +193,9 @@
     background: white;
     flex-grow: 0;
     flex-shrink: 0;
+  }
+
+  :global(.formulaire-risque) {
+    flex: 1;
   }
 </style>
