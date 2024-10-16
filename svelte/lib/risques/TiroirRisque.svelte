@@ -3,6 +3,7 @@
   import CartoucheIdentifiantRisque from '../ui/CartoucheIdentifiantRisque.svelte';
   import CartoucheCategorieRisque from '../ui/CartoucheCategorieRisque.svelte';
   import type {
+    ReferentielCategories,
     ReferentielGravites,
     ReferentielRisques,
     Risque,
@@ -15,11 +16,12 @@
   import ControleFormulaireTiroir from '../ui/ControleFormulaireTiroir.svelte';
   import ZoneTexte from '../ui/ZoneTexte.svelte';
   import { enregistreRisque } from './risque.api';
+  import SelectionCategorieRisque from './SelectionCategorieRisque.svelte';
 
   export let ouvert = true;
   export let risque: Risque | undefined;
   export let referentielRisques: ReferentielRisques;
-  export let referentielCategories: Record<string, string>;
+  export let referentielCategories: ReferentielCategories;
   export let referentielGravites: ReferentielGravites;
   export let estLectureSeule;
   export let idService: string;
@@ -69,6 +71,8 @@
                 libelleCategorie={referentielCategories[categorie]}
               />
             {/each}
+          {:else}
+            <CartoucheReferentiel referentiel={Referentiel.RISQUE_SPECIFIQUE} />
           {/if}
         </div>
       </div>
@@ -80,6 +84,15 @@
           {#if risqueDuReferentiel}
             <ControleFormulaireTiroir libelle="Description du risque">
               <span>{@html risqueDuReferentiel.descriptionLongue}</span>
+            </ControleFormulaireTiroir>
+          {/if}
+          {#if risque.type === 'SPECIFIQUE'}
+            <ControleFormulaireTiroir libelle="Catégorie" requis={true}>
+              <SelectionCategorieRisque
+                bind:valeurs={risque.categories}
+                {referentielCategories}
+                requis={true}
+              />
             </ControleFormulaireTiroir>
           {/if}
           <ControleFormulaireTiroir libelle="Gravité potentielle">

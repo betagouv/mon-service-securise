@@ -38,11 +38,13 @@ export type IdentifiantGravite = string;
 
 export type ReferentielGravites = Record<IdentifiantGravite, NiveauGravite>;
 
+export type ReferentielCategories = Record<string, string>;
+
 export type RisquesProps = {
   idService: string;
   estLectureSeule: boolean;
   risques: Risques;
-  categories: Record<string, string>;
+  categories: ReferentielCategories;
   niveauxGravite: Record<string, NiveauGravite>;
   referentielRisques: ReferentielRisques;
 };

@@ -3,6 +3,7 @@
     Risque,
     ReferentielRisques,
     ReferentielGravites,
+    ReferentielCategories,
   } from './risques.d';
   import TiroirRisque from './TiroirRisque.svelte';
   import LigneRisque from './LigneRisque.svelte';
@@ -11,7 +12,7 @@
   export let idService: string;
   export let estLectureSeule: boolean;
   export let risques: Risque[];
-  export let categories: Record<string, string>;
+  export let categories: ReferentielCategories;
   export let niveauxGravite: ReferentielGravites;
   export let referentielRisques: ReferentielRisques;
   let tiroirOuvert = false;

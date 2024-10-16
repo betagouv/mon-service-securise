@@ -1,11 +1,15 @@
 <script lang="ts">
-  import type { NiveauGravite, Risque } from './risques.d';
+  import type {
+    NiveauGravite,
+    ReferentielCategories,
+    Risque,
+  } from './risques.d';
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import { Referentiel } from '../ui/types.d';
   import { createEventDispatcher } from 'svelte';
   import SelectionGravite from './SelectionGravite.svelte';
 
-  export let categories: Record<string, string>;
+  export let categories: ReferentielCategories;
   export let niveauxGravite: Record<string, NiveauGravite>;
   export let estLectureSeule: boolean;
 
