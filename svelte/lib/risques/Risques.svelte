@@ -6,6 +6,7 @@
   } from './risques.d';
   import TiroirRisque from './TiroirRisque.svelte';
   import LigneRisque from './LigneRisque.svelte';
+  import { enregistreRisque } from './risque.api';
 
   export let idService: string;
   export let estLectureSeule: boolean;
@@ -16,22 +17,10 @@
   let tiroirOuvert = false;
   let risqueEnEdition: Risque | undefined;
 
-  const metAJourRisque = async (risque: Risque) => {
-    if (risque.type === 'GENERAL')
-      await axios.put(`/api/service/${idService}/risques/${risque.id}`, {
-        niveauGravite: risque.niveauGravite,
-        commentaire: risque.commentaire,
-      });
-    else
-      await axios.put(
-        `/api/service/${idService}/risquesSpecifiques/${risque.id}`,
-        {
-          niveauGravite: risque.niveauGravite,
-          commentaire: risque.commentaire,
-          intitule: risque.intitule,
-          categories: risque.categories,
-        }
-      );
+  const metAJourRisque = (risque: Risque) =>
+    enregistreRisque(idService, risque);
+
+  const rafraichisRisqueDansLeTableau = (risque: Risque) => {
     risques[risques.findIndex((r) => r.id === risque.id)] = risque;
   };
 
@@ -73,7 +62,8 @@
   {referentielRisques}
   referentielGravites={niveauxGravite}
   {estLectureSeule}
-  on:metsAJourRisque={(e) => metAJourRisque(e.detail)}
+  on:risqueMisAJour={(e) => rafraichisRisqueDansLeTableau(e.detail)}
+  {idService}
 />
 
 <style>
