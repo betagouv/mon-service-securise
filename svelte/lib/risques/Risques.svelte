@@ -25,10 +25,8 @@
   };
 
   const ouvreRisque = (risque: Risque) => {
-    if (risque.type === 'GENERAL') {
-      tiroirOuvert = true;
-      risqueEnEdition = { ...risque };
-    }
+    tiroirOuvert = true;
+    risqueEnEdition = { ...risque };
   };
 </script>
 
