@@ -17,6 +17,7 @@
   import ZoneTexte from '../ui/ZoneTexte.svelte';
   import { enregistreRisque } from './risque.api';
   import SelectionCategorieRisque from './SelectionCategorieRisque.svelte';
+  import { intituleRisque } from './risques';
 
   export let ouvert = true;
   export let risque: Risque | undefined;
@@ -50,16 +51,15 @@
       }
     }
   };
+  $: titreTiroir = !risque ? '' : intituleRisque(risque);
 </script>
 
-<div class="tiroir" class:ouvert>
+<div class="tiroir {risque?.type}" class:ouvert>
   {#if risque}
     <div class="entete-tiroir">
       <div>
         <h3>Risque</h3>
-        <h2 class="titre-tiroir">
-          {risque.type === 'GENERAL' ? risque.intitule : 'Ajouter un risque'}
-        </h2>
+        <h2 class="titre-tiroir">{@html titreTiroir}</h2>
         <div class="badges">
           {#if risqueDuReferentiel}
             <CartoucheIdentifiantRisque
@@ -174,7 +174,14 @@
   .titre-tiroir {
     font-size: 1.625rem;
     margin: 0;
+  }
+
+  .GENERAL .titre-tiroir {
     padding-top: 7px;
+  }
+
+  .SPECIFIQUE .titre-tiroir {
+    padding-top: 0;
   }
 
   .fermeture {
@@ -194,6 +201,10 @@
     margin: 0;
   }
 
+  .SPECIFIQUE h3 {
+    display: none;
+  }
+
   .badges {
     margin-top: 12px;
     display: flex;
@@ -211,7 +222,7 @@
     display: flex;
     gap: 30px;
     flex-direction: column;
-    padding: 32px 36px;
+    padding: 32px 32px;
     flex: 1;
   }
 
@@ -222,7 +233,7 @@
     position: sticky;
     bottom: 0;
     border-top: 1px solid #cbd5e1;
-    padding: 19px 36px;
+    padding: 19px 32px;
     background: white;
     flex-grow: 0;
     flex-shrink: 0;
