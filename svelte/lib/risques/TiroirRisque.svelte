@@ -96,6 +96,7 @@
                 bind:valeur={risque.intitule}
                 messageErreur="L'intitulé est obligatoire. Veuillez le renseigner."
                 requis={true}
+                lignes={2}
               />
             </ControleFormulaireTiroir>
             <ControleFormulaireTiroir libelle="Catégorie" requis={true}>

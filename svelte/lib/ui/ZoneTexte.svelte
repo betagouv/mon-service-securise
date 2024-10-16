@@ -5,6 +5,7 @@
   export let aideSaisie: string = '';
   export let requis: boolean = false;
   export let messageErreur: string = '';
+  export let lignes: number | undefined = undefined;
 </script>
 
 <textarea
@@ -12,6 +13,8 @@
   required={requis}
   placeholder={aideSaisie}
   use:validationChamp={requis ? messageErreur : ''}
+  rows={lignes}
+  class:sans-hauteur={!lignes}
 ></textarea>
 
 <style>
@@ -23,6 +26,11 @@
     padding: 8px 16px;
     line-height: 1.5rem;
     background: white;
+    height: auto;
+  }
+
+  .sans-hauteur {
+    height: 10rem;
   }
 
   textarea:hover {
