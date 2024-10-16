@@ -14,6 +14,7 @@
   import Bouton from '../ui/Bouton.svelte';
   import ControleFormulaireTiroir from '../ui/ControleFormulaireTiroir.svelte';
   import ZoneTexte from '../ui/ZoneTexte.svelte';
+  import { enregistreRisque } from './risque.api';
 
   export let ouvert = true;
   export let risque: Risque | undefined;
@@ -21,12 +22,13 @@
   export let referentielCategories: Record<string, string>;
   export let referentielGravites: ReferentielGravites;
   export let estLectureSeule;
+  export let idService: string;
 
   $: risqueDuReferentiel =
     risque && risque.type === 'GENERAL' && referentielRisques[risque.id];
 
   const emet = createEventDispatcher<{
-    metsAJourRisque: Risque;
+    risqueMisAJour: Risque;
   }>();
 
   const fermeTiroir = () => {
@@ -35,7 +37,8 @@
 
   const metsAJour = () => {
     if (risque) {
-      emet('metsAJourRisque', risque);
+      enregistreRisque(idService, risque);
+      emet('risqueMisAJour', risque);
       fermeTiroir();
     }
   };
