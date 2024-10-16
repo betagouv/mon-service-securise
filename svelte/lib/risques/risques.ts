@@ -1,3 +1,4 @@
+import { decode } from 'html-entities';
 import Risques from './Risques.svelte';
 import type {
   RisquesProps,
@@ -17,10 +18,14 @@ const rechargeApp = (props: RisquesProps) => {
   const tousRisques: Risque[] = [
     ...props.risques.risquesGeneraux.map((r) => ({
       ...r,
+      commentaire: decode(r.commentaire),
       type: 'GENERAL' as TypeRisque,
     })),
     ...props.risques.risquesSpecifiques.map((r) => ({
       ...r,
+      intitule: decode(r.intitule),
+      commentaire: decode(r.commentaire),
+      description: decode(r.description),
       type: 'SPECIFIQUE' as TypeRisque,
     })),
   ];
