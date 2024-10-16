@@ -23,6 +23,7 @@
   export let referentielGravites: ReferentielGravites;
   export let estLectureSeule;
   export let idService: string;
+  let enCoursEnvoi: boolean = false;
 
   $: risqueDuReferentiel =
     risque && risque.type === 'GENERAL' && referentielRisques[risque.id];
@@ -35,11 +36,16 @@
     ouvert = false;
   };
 
-  const metsAJour = () => {
+  const metsAJour = async () => {
     if (risque) {
-      enregistreRisque(idService, risque);
-      emet('risqueMisAJour', risque);
-      fermeTiroir();
+      try {
+        enCoursEnvoi = true;
+        await enregistreRisque(idService, risque);
+        emet('risqueMisAJour', risque);
+        fermeTiroir();
+      } finally {
+        enCoursEnvoi = false;
+      }
     }
   };
 </script>
@@ -83,7 +89,7 @@
           </ControleFormulaireTiroir>
         </div>
         <div class="conteneur-actions">
-          <Bouton type="primaire" titre="Enregistrer" />
+          <Bouton type="primaire" titre="Enregistrer" {enCoursEnvoi} />
         </div>
       </Formulaire>
     </div>
