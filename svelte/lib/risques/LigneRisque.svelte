@@ -32,7 +32,10 @@
     <span class="identifiant-numerique">{risque.identifiantNumerique}</span>
   </td>
   <td class="intitule" on:click>
-    <p class="intitule-risques" title="Ce risque doit être mis à jour">
+    <p
+      class="intitule-risques"
+      title={estSpecifiqueAMettreAJour ? 'Ce risque doit être mis à jour' : ''}
+    >
       {estSpecifiqueAMettreAJour ? '⚠️ ' : ''}{risque.intitule}
     </p>
     <p class="cartouches-intitule">
