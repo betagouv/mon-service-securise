@@ -85,7 +85,10 @@
             />
           </ControleFormulaireTiroir>
           <ControleFormulaireTiroir libelle="Commentaire">
-            <ZoneTexte bind:valeur={risque.commentaire} />
+            <ZoneTexte
+              bind:valeur={risque.commentaire}
+              aideSaisie="Apportez des précisions sur le risque"
+            />
           </ControleFormulaireTiroir>
         </div>
         <div class="conteneur-actions">

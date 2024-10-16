@@ -1,8 +1,9 @@
 <script lang="ts">
   export let valeur: string = '';
+  export let aideSaisie: string = '';
 </script>
 
-<textarea bind:value={valeur}></textarea>
+<textarea bind:value={valeur} placeholder={aideSaisie}></textarea>
 
 <style>
   textarea {
