@@ -511,19 +511,27 @@ const routesConnecteApiService = ({
     middleware.trouveService({ [RISQUES]: ECRITURE }),
     middleware.aseptise(
       'niveauGravite',
+      'niveauVraisemblance',
       'commentaire',
       'description',
       'intitule',
       'categories.*'
     ),
     async (requete, reponse, suite) => {
-      const { niveauGravite, intitule, commentaire, description, categories } =
-        requete.body;
+      const {
+        niveauGravite,
+        niveauVraisemblance,
+        intitule,
+        commentaire,
+        description,
+        categories,
+      } = requete.body;
       const { idRisque } = requete.params;
       try {
         RisqueSpecifique.valide(
           {
             niveauGravite,
+            niveauVraisemblance,
             intitule,
             commentaire,
             description,
@@ -535,6 +543,7 @@ const routesConnecteApiService = ({
           {
             id: idRisque,
             niveauGravite,
+            niveauVraisemblance,
             intitule,
             commentaire,
             description,
@@ -554,6 +563,7 @@ const routesConnecteApiService = ({
         }
         if (
           e instanceof ErreurNiveauGraviteInconnu ||
+          e instanceof ErreurNiveauVraisemblanceInconnu ||
           e instanceof ErreurIntituleRisqueManquant ||
           e instanceof ErreurCategoriesRisqueManquantes ||
           e instanceof ErreurCategorieRisqueInconnue
