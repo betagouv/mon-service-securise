@@ -1039,6 +1039,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({
         niveauxGravite: { unNiveau: {} },
+        vraisemblancesRisques: { unNiveauVraisemblance: {} },
         categoriesRisques: { C1: {} },
       });
       testeur.depotDonnees().ajouteRisqueSpecifiqueAService = async () => {};
@@ -1059,6 +1060,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.middleware().verifieAseptisationParametres(
         [
           'niveauGravite',
+          'niveauVraisemblance',
           'commentaire',
           'description',
           'intitule',
@@ -1087,6 +1089,25 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         expect(e.response.status).to.be(400);
         expect(e.response.data).to.be(
           'Le niveau de gravité "inexistant" n\'est pas répertorié'
+        );
+      }
+    });
+
+    it("retourne une erreur 400 si le niveau de vraisemblance n'existe pas", async () => {
+      try {
+        await axios.post(
+          'http://localhost:1234/api/service/456/risquesSpecifiques',
+          {
+            niveauVraisemblance: 'inexistant',
+            intitule: 'risque',
+            categories: ['C1'],
+          }
+        );
+        expect().fail('Aurait du lever une exception');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'Le niveau de vraisemblance "inexistant" n\'est pas répertorié'
         );
       }
     });
@@ -1135,6 +1156,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         {
           intitule: 'un risque important',
           niveauGravite: 'unNiveau',
+          niveauVraisemblance: 'unNiveauVraisemblance',
           commentaire: "c'est important",
           categories: ['C1'],
         }
@@ -1143,6 +1165,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(idServiceRecu).to.be('456');
       expect(donneesRecues.intitule).to.eql('un risque important');
       expect(donneesRecues.niveauGravite).to.eql('unNiveau');
+      expect(donneesRecues.niveauVraisemblance).to.eql('unNiveauVraisemblance');
       expect(donneesRecues.commentaire).to.eql("c'est important");
     });
   });

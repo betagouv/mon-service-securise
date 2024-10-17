@@ -1,6 +1,7 @@
 const InformationsService = require('./informationsService');
 const NiveauGravite = require('./niveauGravite');
 const Referentiel = require('../referentiel');
+const { ErreurNiveauVraisemblanceInconnu } = require('../erreurs');
 
 class Risque extends InformationsService {
   constructor(
@@ -8,7 +9,11 @@ class Risque extends InformationsService {
     referentiel = Referentiel.creeReferentielVide()
   ) {
     super({
-      proprietesAtomiquesRequises: ['niveauGravite', 'id'],
+      proprietesAtomiquesRequises: [
+        'id',
+        'niveauGravite',
+        'niveauVraisemblance',
+      ],
       proprietesAtomiquesFacultatives: ['commentaire'],
     });
 
@@ -29,6 +34,19 @@ class Risque extends InformationsService {
 
   positionNiveauGravite() {
     return this.objetNiveauGravite.position;
+  }
+
+  static valide({ niveauVraisemblance }, referentiel) {
+    const identifiantsNiveauxVraisemblance =
+      referentiel.identifiantsNiveauxVraisemblance();
+    if (
+      niveauVraisemblance &&
+      !identifiantsNiveauxVraisemblance.includes(niveauVraisemblance)
+    ) {
+      throw new ErreurNiveauVraisemblanceInconnu(
+        `Le niveau de vraisemblance "${niveauVraisemblance}" n'est pas répertorié`
+      );
+    }
   }
 }
 

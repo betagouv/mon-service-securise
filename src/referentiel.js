@@ -106,7 +106,11 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const niveauxGravite = () => donnees.niveauxGravite || {};
   const niveauGravite = (idNiveau) => niveauxGravite()[idNiveau] || {};
   const niveauxVraisemblance = () => donnees.vraisemblancesRisques || {};
+  const niveauVraisemblance = (idNiveau) =>
+    niveauxVraisemblance()[idNiveau] || {};
   const identifiantsNiveauxGravite = () => Object.keys(niveauxGravite() || {});
+  const identifiantsNiveauxVraisemblance = () =>
+    Object.keys(niveauxVraisemblance() || {});
   const provenancesService = () => donnees.provenancesService;
   const reglesPersonnalisation = () => donnees.reglesPersonnalisation || {};
   const risques = () => donnees.risques;
@@ -357,6 +361,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     identifiantsLocalisationsDonnees,
     identifiantsMesures,
     identifiantsNiveauxGravite,
+    identifiantsNiveauxVraisemblance,
     identifiantNumeriqueRisque,
     identifiantsRisques,
     idEtapeSuivante,
@@ -373,6 +378,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     nbMoisRappelsExpiration,
     niveauGravite,
     niveauxGravite,
+    niveauVraisemblance,
     niveauxVraisemblance,
     nombreOrganisationsUtilisatrices,
     nouvellesFonctionnalites,
