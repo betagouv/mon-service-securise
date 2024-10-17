@@ -530,6 +530,29 @@ module.exports = {
     tracabilite: 'Traçabilité',
   },
 
+  vraisemblancesRisques: {
+    invraisemblable: {
+      libelle: 'Invraisemblable',
+      position: 0,
+    },
+    peuVraisemblable: {
+      libelle: 'Peu vraisemblable',
+      position: 1,
+    },
+    vraisemblable: {
+      libelle: 'Vraisemblable',
+      position: 2,
+    },
+    tresVraisemblable: {
+      libelle: 'Très vraisemblable',
+      position: 3,
+    },
+    quasiCertain: {
+      libelle: 'Quasi-certain',
+      position: 4,
+    },
+  },
+
   categoriesMesures: {
     gouvernance: 'Gouvernance',
     protection: 'Protection',
