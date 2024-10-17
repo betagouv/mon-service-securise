@@ -145,6 +145,10 @@
     transform: translate(0, 0) !important;
   }
 
+  :global(.selection-categorie input.invalide) {
+    border-color: var(--rose-anssi) !important;
+  }
+
   .categories {
     border: 1px solid var(--bleu-mise-en-avant);
     background-color: white;
