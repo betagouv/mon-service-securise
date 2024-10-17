@@ -3,6 +3,9 @@ $(() => {
   const { estLectureSeule } = JSON.parse($('#autorisations-risques').text());
   const risques = JSON.parse($('#donnees-risques').text());
   const categories = JSON.parse($('#donnees-referentiel-categories').text());
+  const niveauxVraisemblance = JSON.parse(
+    $('#donnees-referentiel-vraisemblances').text()
+  );
   const niveauxGravite = JSON.parse($('#donnees-referentiel-gravite').text());
   const referentielRisques = JSON.parse(
     $('#donnees-referentiel-risques').text()
@@ -17,6 +20,7 @@ $(() => {
         categories,
         niveauxGravite,
         referentielRisques,
+        niveauxVraisemblance,
       },
     })
   );
