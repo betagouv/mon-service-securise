@@ -32,6 +32,10 @@
 </select>
 
 <style>
+  select {
+    flex-grow: 1;
+  }
+
   .niveau-vraisemblance {
     display: flex;
     width: 23px;
@@ -77,7 +81,7 @@
   }
 
   select.avecLibelleOption {
-    width: fit-content;
+    width: 100%;
     appearance: auto;
     text-align: left;
     padding: 8px;

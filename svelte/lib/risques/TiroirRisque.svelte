@@ -6,6 +6,7 @@
     ReferentielCategories,
     ReferentielGravites,
     ReferentielRisques,
+    ReferentielVraisemblances,
     Risque,
   } from './risques.d';
   import { Referentiel } from '../ui/types.d';
@@ -18,12 +19,14 @@
   import { enregistreRisque } from './risque.api';
   import SelectionCategorieRisque from './SelectionCategorieRisque.svelte';
   import { intituleRisque } from './risques';
+  import SelectionVraisemblance from './SelectionVraisemblance.svelte';
 
   export let ouvert = true;
   export let risque: Risque | undefined;
   export let referentielRisques: ReferentielRisques;
   export let referentielCategories: ReferentielCategories;
   export let referentielGravites: ReferentielGravites;
+  export let referentielVraisemblances: ReferentielVraisemblances;
   export let estLectureSeule;
   export let idService: string;
   let enCoursEnvoi: boolean = false;
@@ -114,14 +117,24 @@
               />
             </ControleFormulaireTiroir>
           {/if}
-          <ControleFormulaireTiroir libelle="Gravité potentielle">
-            <SelectionGravite
-              {referentielGravites}
-              {estLectureSeule}
-              avecLibelleOption={true}
-              bind:niveauGravite={risque.niveauGravite}
-            />
-          </ControleFormulaireTiroir>
+          <div class="deuxSelecteursParLigne">
+            <ControleFormulaireTiroir libelle="Gravité potentielle">
+              <SelectionGravite
+                {referentielGravites}
+                {estLectureSeule}
+                avecLibelleOption={true}
+                bind:niveauGravite={risque.niveauGravite}
+              />
+            </ControleFormulaireTiroir>
+            <ControleFormulaireTiroir libelle="Vraisemblance initiale">
+              <SelectionVraisemblance
+                {referentielVraisemblances}
+                {estLectureSeule}
+                avecLibelleOption={true}
+                bind:niveauVraisemblance={risque.niveauVraisemblance}
+              />
+            </ControleFormulaireTiroir>
+          </div>
           <ControleFormulaireTiroir libelle="Commentaire">
             <ZoneTexte
               bind:valeur={risque.commentaire}
@@ -237,6 +250,15 @@
     background: white;
     flex-grow: 0;
     flex-shrink: 0;
+  }
+
+  .deuxSelecteursParLigne {
+    display: flex;
+    gap: 24px;
+  }
+
+  :global(.deuxSelecteursParLigne label) {
+    flex: 1 0 0;
   }
 
   :global(.formulaire-risque) {
