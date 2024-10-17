@@ -414,14 +414,15 @@ const routesConnecteApiService = ({
   routes.put(
     '/:id/risques/:idRisque',
     middleware.trouveService({ [RISQUES]: ECRITURE }),
-    middleware.aseptise('niveauGravite', 'commentaire'),
+    middleware.aseptise('niveauGravite', 'niveauVraisemblance', 'commentaire'),
     async (requete, reponse, suite) => {
-      const { niveauGravite, commentaire } = requete.body;
+      const { niveauGravite, niveauVraisemblance, commentaire } = requete.body;
       try {
         const risque = new RisqueGeneral(
           {
             id: requete.params.idRisque,
             niveauGravite,
+            niveauVraisemblance,
             commentaire,
           },
           referentiel
@@ -433,7 +434,10 @@ const routesConnecteApiService = ({
 
         reponse.sendStatus(200);
       } catch (e) {
-        if (e instanceof ErreurRisqueInconnu) {
+        if (
+          e instanceof ErreurRisqueInconnu ||
+          e instanceof ErreurNiveauVraisemblanceInconnu
+        ) {
           reponse.status(400).send(e.message);
         } else {
           suite(e);

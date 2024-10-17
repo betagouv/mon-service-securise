@@ -40,6 +40,7 @@ class RisqueGeneral extends Risque {
   }
 
   static valide(donnees, referentiel) {
+    super.valide(donnees, referentiel);
     const { id } = donnees;
     const identifiantsRisquesRepertories = referentiel.identifiantsRisques();
     if (!identifiantsRisquesRepertories.includes(id)) {
