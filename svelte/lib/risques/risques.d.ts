@@ -6,6 +6,7 @@ declare global {
 
 export type DonneesRisque = {
   niveauGravite: IdentifiantGravite;
+  niveauVraisemblance: IdentifiantVraisemblance;
   id: string;
   commentaire: string;
   intitule: string;
