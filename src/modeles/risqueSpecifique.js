@@ -38,7 +38,9 @@ class RisqueSpecifique extends Risque {
     return super.toJSON();
   }
 
-  static valide({ intitule, categories }, referentiel) {
+  static valide(donneesRisque, referentiel) {
+    super.valide(donneesRisque, referentiel);
+    const { intitule, categories } = donneesRisque;
     if (!intitule) {
       throw new ErreurIntituleRisqueManquant(
         "L'intitulé du risque est obligatoire."
