@@ -77,6 +77,10 @@
     padding: 0 3px 3px;
   }
 
+  .niveau-gravite.vide.avecLibelleOption {
+    padding: 8px;
+  }
+
   select.avecLibelleOption {
     width: 100%;
     appearance: auto;

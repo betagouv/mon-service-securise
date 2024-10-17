@@ -80,6 +80,10 @@
     padding: 0 3px 3px;
   }
 
+  .niveau-vraisemblance.vide.avecLibelleOption {
+    padding: 8px;
+  }
+
   select.avecLibelleOption {
     width: 100%;
     appearance: auto;
