@@ -29,6 +29,10 @@
 </select>
 
 <style>
+  select {
+    flex-grow: 1;
+  }
+
   .niveau-gravite {
     display: flex;
     width: 23px;
