@@ -37,7 +37,7 @@
       class="intitule-risques"
       title={estSpecifiqueAMettreAJour ? 'Ce risque doit être mis à jour' : ''}
     >
-      {estSpecifiqueAMettreAJour ? '⚠️ ' : ''}{@html intituleRisque(risque)}
+      {estSpecifiqueAMettreAJour ? '⚠️ ' : ''}{intituleRisque(risque)}
     </p>
     <p class="cartouches-intitule">
       <CartoucheReferentiel

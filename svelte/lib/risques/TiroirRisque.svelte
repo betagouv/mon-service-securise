@@ -59,7 +59,7 @@
     <div class="entete-tiroir">
       <div>
         <h3>Risque</h3>
-        <h2 class="titre-tiroir">{@html titreTiroir}</h2>
+        <h2 class="titre-tiroir">{titreTiroir}</h2>
         <div class="badges">
           {#if risqueDuReferentiel}
             <CartoucheIdentifiantRisque
