@@ -1381,6 +1381,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.referentiel().recharge({
         risques: { unRisqueExistant: {} },
         niveauxGravite: { unNiveau: {} },
+        vraisemblancesRisques: { unNiveauVraisemblance: {} },
       });
     });
 
@@ -1397,7 +1398,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['niveauGravite', 'commentaire'],
+        ['niveauGravite', 'niveauVraisemblance', 'commentaire'],
         {
           method: 'put',
           url: 'http://localhost:1234/api/service/456/risques/unRisqueExistant',
@@ -1420,6 +1421,23 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       }
     });
 
+    it("retourne une erreur 400 si le niveau de vraisemblance n'existe pas", async () => {
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/risques/unRisqueExistant',
+          {
+            niveauVraisemblance: 'inexistant',
+          }
+        );
+        expect().fail('Aurait du lever une exception');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'Le niveau de vraisemblance "inexistant" n\'est pas répertorié'
+        );
+      }
+    });
+
     it('délègue au dépôt de donnée la mise à jour du risque', async () => {
       let idServiceRecu;
       let donneesRecues;
@@ -1436,11 +1454,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         {
           niveauGravite: 'unNiveau',
           commentaire: "c'est important",
+          niveauVraisemblance: 'unNiveauVraisemblance',
         }
       );
 
       expect(idServiceRecu).to.be('456');
       expect(donneesRecues.niveauGravite).to.eql('unNiveau');
+      expect(donneesRecues.niveauVraisemblance).to.eql('unNiveauVraisemblance');
       expect(donneesRecues.commentaire).to.eql("c'est important");
       expect(donneesRecues.id).to.eql('unRisqueExistant');
     });
