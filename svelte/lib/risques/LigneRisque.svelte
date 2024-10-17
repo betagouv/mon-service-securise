@@ -1,7 +1,8 @@
 <script lang="ts">
   import type {
-    NiveauGravite,
     ReferentielCategories,
+    ReferentielGravites,
+    ReferentielVraisemblances,
     Risque,
   } from './risques.d';
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
@@ -9,9 +10,11 @@
   import { createEventDispatcher } from 'svelte';
   import SelectionGravite from './SelectionGravite.svelte';
   import { intituleRisque } from './risques';
+  import SelectionVraisemblance from './SelectionVraisemblance.svelte';
 
   export let categories: ReferentielCategories;
-  export let niveauxGravite: Record<string, NiveauGravite>;
+  export let niveauxGravite: ReferentielGravites;
+  export let niveauxVraisemblance: ReferentielVraisemblances;
   export let estLectureSeule: boolean;
 
   export let risque: Risque;
@@ -55,6 +58,14 @@
       estLectureSeule={estLectureSeule || estSpecifiqueAMettreAJour}
       referentielGravites={niveauxGravite}
       bind:niveauGravite={risque.niveauGravite}
+      on:change={metAJourRisque}
+    />
+  </td>
+  <td>
+    <SelectionVraisemblance
+      estLectureSeule={estLectureSeule || estSpecifiqueAMettreAJour}
+      referentielVraisemblances={niveauxVraisemblance}
+      bind:niveauVraisemblance={risque.niveauVraisemblance}
       on:change={metAJourRisque}
     />
   </td>

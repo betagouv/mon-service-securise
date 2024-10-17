@@ -4,6 +4,7 @@
     ReferentielRisques,
     ReferentielGravites,
     ReferentielCategories,
+    ReferentielVraisemblances,
   } from './risques.d';
   import TiroirRisque from './TiroirRisque.svelte';
   import LigneRisque from './LigneRisque.svelte';
@@ -14,6 +15,7 @@
   export let risques: Risque[];
   export let categories: ReferentielCategories;
   export let niveauxGravite: ReferentielGravites;
+  export let niveauxVraisemblance: ReferentielVraisemblances;
   export let referentielRisques: ReferentielRisques;
   let tiroirOuvert = false;
   let risqueEnEdition: Risque | undefined;
@@ -38,6 +40,7 @@
       <th>Identifiant</th>
       <th>Intitulé du risque</th>
       <th>Gravité potentielle</th>
+      <th>Vraisemblance initiale</th>
     </tr>
   </thead>
   <tbody>
@@ -47,6 +50,7 @@
         on:click={() => ouvreRisque(risque)}
         {categories}
         {niveauxGravite}
+        {niveauxVraisemblance}
         {estLectureSeule}
         on:metAJourRisque={() => metAJourRisque(risque)}
       />
