@@ -5,12 +5,14 @@ export const enregistreRisque = async (idService: string, risque: Risque) => {
     await axios.put(`/api/service/${idService}/risques/${risque.id}`, {
       niveauGravite: risque.niveauGravite,
       commentaire: risque.commentaire,
+      niveauVraisemblance: risque.niveauVraisemblance,
     });
   } else {
     await axios.put(
       `/api/service/${idService}/risquesSpecifiques/${risque.id}`,
       {
         niveauGravite: risque.niveauGravite,
+        niveauVraisemblance: risque.niveauVraisemblance,
         commentaire: risque.commentaire,
         intitule: risque.intitule,
         categories: risque.categories,
