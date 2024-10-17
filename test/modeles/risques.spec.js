@@ -38,6 +38,7 @@ describe('Les risques liés à un service', () => {
                 id: 'RS1',
                 intitule: 'Un risque spécifique',
                 niveauGravite: 'grave',
+                niveauVraisemblance: 'peuVraisemblable',
               },
             ],
           },

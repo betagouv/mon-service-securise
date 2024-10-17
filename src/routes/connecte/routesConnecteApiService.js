@@ -18,6 +18,7 @@ const {
   ErreurIntituleRisqueManquant,
   ErreurCategoriesRisqueManquantes,
   ErreurCategorieRisqueInconnue,
+  ErreurNiveauVraisemblanceInconnu,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -446,17 +447,25 @@ const routesConnecteApiService = ({
     middleware.trouveService({ [RISQUES]: ECRITURE }),
     middleware.aseptise(
       'niveauGravite',
+      'niveauVraisemblance',
       'commentaire',
       'description',
       'intitule',
       'categories.*'
     ),
     async (requete, reponse, suite) => {
-      const { niveauGravite, intitule, commentaire, description, categories } =
-        requete.body;
+      const {
+        niveauGravite,
+        niveauVraisemblance,
+        intitule,
+        commentaire,
+        description,
+        categories,
+      } = requete.body;
       try {
         RisqueSpecifique.valide(
           {
+            niveauVraisemblance,
             niveauGravite,
             intitule,
             commentaire,
@@ -466,7 +475,14 @@ const routesConnecteApiService = ({
           referentiel
         );
         const risque = new RisqueSpecifique(
-          { niveauGravite, intitule, commentaire, description, categories },
+          {
+            niveauGravite,
+            niveauVraisemblance,
+            intitule,
+            commentaire,
+            description,
+            categories,
+          },
           referentiel
         );
         await depotDonnees.ajouteRisqueSpecifiqueAService(
@@ -477,6 +493,7 @@ const routesConnecteApiService = ({
       } catch (e) {
         if (
           e instanceof ErreurNiveauGraviteInconnu ||
+          e instanceof ErreurNiveauVraisemblanceInconnu ||
           e instanceof ErreurIntituleRisqueManquant ||
           e instanceof ErreurCategoriesRisqueManquantes ||
           e instanceof ErreurCategorieRisqueInconnue

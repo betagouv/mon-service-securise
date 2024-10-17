@@ -38,6 +38,7 @@ class ErreurLocalisationDonneesInvalide extends ErreurModele {}
 class ErreurMesureInconnue extends ErreurModele {}
 class ErreurMotDePasseIncorrect extends ErreurModele {}
 class ErreurNiveauGraviteInconnu extends ErreurModele {}
+class ErreurNiveauVraisemblanceInconnu extends ErreurModele {}
 class ErreurNomServiceDejaExistant extends ErreurModele {}
 class ErreurRisqueInconnu extends ErreurModele {}
 class ErreurStatutDeploiementInvalide extends ErreurModele {}
@@ -95,6 +96,7 @@ module.exports = {
   ErreurMotDePasseIncorrect,
   ErreurModele,
   ErreurNiveauGraviteInconnu,
+  ErreurNiveauVraisemblanceInconnu,
   ErreurNomServiceDejaExistant,
   ErreurRisqueInconnu,
   ErreurServiceInexistant,
