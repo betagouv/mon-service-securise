@@ -64,6 +64,7 @@
   referentielCategories={categories}
   {referentielRisques}
   referentielGravites={niveauxGravite}
+  referentielVraisemblances={niveauxVraisemblance}
   {estLectureSeule}
   on:risqueMisAJour={(e) => rafraichisRisqueDansLeTableau(e.detail)}
   {idService}
