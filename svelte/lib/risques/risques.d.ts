@@ -26,6 +26,11 @@ export type NiveauGravite = {
   description: string;
 };
 
+export type NiveauVraisemblance = {
+  libelle: string;
+  position: number;
+};
+
 type RisqueDuReferentiel = {
   categories: string[];
   identifiantNumerique: string;
@@ -33,13 +38,20 @@ type RisqueDuReferentiel = {
   descriptionLongue: string;
 };
 
-export type ReferentielRisques = Record<string, RisqueDuReferentiel>;
-
 export type IdentifiantGravite = string;
+
+export type IdentifiantVraisemblance = string;
+
+export type ReferentielRisques = Record<string, RisqueDuReferentiel>;
 
 export type ReferentielGravites = Record<IdentifiantGravite, NiveauGravite>;
 
 export type ReferentielCategories = Record<string, string>;
+
+export type ReferentielVraisemblances = Record<
+  IdentifiantVraisemblance,
+  NiveauVraisemblance
+>;
 
 export type RisquesProps = {
   idService: string;
@@ -48,4 +60,5 @@ export type RisquesProps = {
   categories: ReferentielCategories;
   niveauxGravite: Record<string, NiveauGravite>;
   referentielRisques: ReferentielRisques;
+  niveauxVraisemblance: ReferentielVraisemblances;
 };

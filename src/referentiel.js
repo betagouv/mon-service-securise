@@ -105,6 +105,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     echeancesRenouvellement()[idEcheance]?.rappelsExpirationMois;
   const niveauxGravite = () => donnees.niveauxGravite || {};
   const niveauGravite = (idNiveau) => niveauxGravite()[idNiveau] || {};
+  const niveauxVraisemblance = () => donnees.vraisemblancesRisques || {};
   const identifiantsNiveauxGravite = () => Object.keys(niveauxGravite() || {});
   const provenancesService = () => donnees.provenancesService;
   const reglesPersonnalisation = () => donnees.reglesPersonnalisation || {};
@@ -372,6 +373,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     nbMoisRappelsExpiration,
     niveauGravite,
     niveauxGravite,
+    niveauxVraisemblance,
     nombreOrganisationsUtilisatrices,
     nouvellesFonctionnalites,
     numeroEtape,
