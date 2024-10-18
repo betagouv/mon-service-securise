@@ -71,8 +71,8 @@
     if (risque) {
       try {
         enCoursEnvoi = true;
-        await ajouteRisqueSpecifique(idService, risque);
-        emet('risqueAjoute', risque);
+        const risqueAjoute = await ajouteRisqueSpecifique(idService, risque);
+        emet('risqueAjoute', risqueAjoute);
         fermeTiroir();
       } finally {
         enCoursEnvoi = false;
