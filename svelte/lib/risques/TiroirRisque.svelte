@@ -1,3 +1,7 @@
+<script context="module" lang="ts">
+  export type ModeAffichageTiroir = 'AJOUT' | 'EDITION' | '';
+</script>
+
 <script lang="ts">
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import CartoucheIdentifiantRisque from '../ui/CartoucheIdentifiantRisque.svelte';
@@ -16,7 +20,11 @@
   import Bouton from '../ui/Bouton.svelte';
   import ControleFormulaireTiroir from '../ui/ControleFormulaireTiroir.svelte';
   import ZoneTexte from '../ui/ZoneTexte.svelte';
-  import { enregistreRisque, supprimeRisqueSpecifique } from './risque.api';
+  import {
+    ajouteRisqueSpecifique,
+    enregistreRisque,
+    supprimeRisqueSpecifique,
+  } from './risque.api';
   import SelectionCategorieRisque from './SelectionCategorieRisque.svelte';
   import { intituleRisque } from './risques';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
@@ -30,6 +38,7 @@
   export let referentielVraisemblances: ReferentielVraisemblances;
   export let estLectureSeule;
   export let idService: string;
+  export let modeAffichageTiroir: ModeAffichageTiroir = '';
   let enCoursEnvoi: boolean = false;
 
   $: risqueDuReferentiel =
@@ -38,6 +47,7 @@
   const emet = createEventDispatcher<{
     risqueMisAJour: Risque;
     risqueSupprime: Risque;
+    risqueAjoute: Risque;
   }>();
 
   const fermeTiroir = () => {
@@ -56,7 +66,23 @@
       }
     }
   };
-  $: titreTiroir = !risque ? '' : intituleRisque(risque);
+
+  const ajoute = async () => {
+    if (risque) {
+      try {
+        enCoursEnvoi = true;
+        await ajouteRisqueSpecifique(idService, risque);
+        emet('risqueAjoute', risque);
+        fermeTiroir();
+      } finally {
+        enCoursEnvoi = false;
+      }
+    }
+  };
+  $: titreTiroir =
+    risque && modeAffichageTiroir === 'EDITION'
+      ? intituleRisque(risque)
+      : 'Ajouter un risque';
 
   let afficheConfirmationSuppressionRisque = false;
   const supprimeRisque = async () => {
@@ -127,7 +153,12 @@
           </div>
         </div>
       {:else}
-        <Formulaire on:formulaireValide={metsAJour} classe="formulaire-risque">
+        <Formulaire
+          on:formulaireValide={modeAffichageTiroir === 'EDITION'
+            ? metsAJour
+            : ajoute}
+          classe="formulaire-risque"
+        >
           <div class="champs">
             {#if risqueDuReferentiel}
               <ControleFormulaireTiroir libelle="Description du risque">
@@ -189,7 +220,7 @@
             </ControleFormulaireTiroir>
           </div>
           <div class="conteneur-actions">
-            {#if risque.type === 'SPECIFIQUE'}
+            {#if risque.type === 'SPECIFIQUE' && modeAffichageTiroir === 'EDITION'}
               <Bouton
                 type="lien"
                 icone="suppression"
@@ -200,7 +231,13 @@
                 }}
               />
             {/if}
-            <Bouton type="primaire" titre="Enregistrer" {enCoursEnvoi} />
+            <Bouton
+              type="primaire"
+              titre={modeAffichageTiroir === 'EDITION'
+                ? 'Enregistrer'
+                : 'Ajouter un risque'}
+              {enCoursEnvoi}
+            />
           </div>
         </Formulaire>
       {/if}
