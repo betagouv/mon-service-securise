@@ -55,6 +55,8 @@
     }
   };
   $: titreTiroir = !risque ? '' : intituleRisque(risque);
+
+  const supprimeRisque = () => {};
 </script>
 
 <div class="tiroir {risque?.type}" class:ouvert>
@@ -144,6 +146,15 @@
           </ControleFormulaireTiroir>
         </div>
         <div class="conteneur-actions">
+          {#if risque.type === 'SPECIFIQUE'}
+            <Bouton
+              type="lien"
+              icone="poubelle"
+              titre="Supprimer le risque"
+              boutonSoumission={false}
+              on:click={supprimeRisque}
+            />
+          {/if}
           <Bouton type="primaire" titre="Enregistrer" {enCoursEnvoi} />
         </div>
       </Formulaire>
@@ -250,6 +261,7 @@
     background: white;
     flex-grow: 0;
     flex-shrink: 0;
+    gap: 10px;
   }
 
   .deuxSelecteursParLigne {
