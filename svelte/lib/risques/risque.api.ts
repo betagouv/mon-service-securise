@@ -22,6 +22,20 @@ export const enregistreRisque = async (idService: string, risque: Risque) => {
   }
 };
 
+export const ajouteRisqueSpecifique = async (
+  idService: string,
+  risque: Risque
+) => {
+  await axios.post(`/api/service/${idService}/risquesSpecifiques`, {
+    niveauGravite: risque.niveauGravite,
+    niveauVraisemblance: risque.niveauVraisemblance,
+    commentaire: risque.commentaire,
+    intitule: risque.intitule,
+    categories: risque.categories,
+    description: risque.description,
+  });
+};
+
 export const supprimeRisqueSpecifique = async (
   idService: string,
   risque: Risque
