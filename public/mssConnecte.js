@@ -32,10 +32,9 @@ $(() => {
   axios
     .get('/api/dureeSession')
     .then((reponse) => {
-      const duree = parseInt(reponse.data.dureeSession, 10);
-      if (!duree) {
-        return Promise.reject();
-      }
+      const duree = reponse.data.dureeSession
+        ? parseInt(reponse.data.dureeSession, 10)
+        : 0;
       return lanceDecompteDeconnexion(duree);
     })
     /* eslint-disable no-console */
