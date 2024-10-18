@@ -1,11 +1,6 @@
 import { decode } from 'html-entities';
 import Risques from './Risques.svelte';
-import type {
-  RisquesProps,
-  TypeRisque,
-  Risque,
-  DonneesRisque,
-} from './risques.d';
+import type { Risque, RisquesProps, TypeRisque } from './risques.d';
 
 document.body.addEventListener(
   'svelte-recharge-risques',
@@ -19,6 +14,8 @@ const rechargeApp = (props: RisquesProps) => {
     ...props.risques.risquesGeneraux.map((r) => ({
       ...r,
       commentaire: decode(r.commentaire),
+      niveauGravite: r.niveauGravite ?? '',
+      niveauVraisemblance: r.niveauVraisemblance ?? '',
       type: 'GENERAL' as TypeRisque,
     })),
     ...props.risques.risquesSpecifiques.map((r) => ({
@@ -26,6 +23,8 @@ const rechargeApp = (props: RisquesProps) => {
       intitule: decode(r.intitule),
       commentaire: decode(r.commentaire),
       description: decode(r.description),
+      niveauGravite: r.niveauGravite ?? '',
+      niveauVraisemblance: r.niveauVraisemblance ?? '',
       type: 'SPECIFIQUE' as TypeRisque,
     })),
   ];
