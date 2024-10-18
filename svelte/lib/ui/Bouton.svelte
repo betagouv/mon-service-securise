@@ -1,6 +1,6 @@
 <script lang="ts">
   export let titre: string;
-  export let icone: 'suppression' | '' = '';
+  export let icone: 'suppression' | 'ajout' | '' = '';
   export let type: 'primaire' | 'secondaire' | 'lien';
   export let actif: boolean = true;
   export let enCoursEnvoi: boolean = false;
@@ -9,6 +9,7 @@
 
 <button
   class="bouton {type} {icone}"
+  class:avecIcone={!!icone}
   type={boutonSoumission ? 'submit' : 'button'}
   on:click
   disabled={!actif || enCoursEnvoi}
@@ -35,8 +36,17 @@
   }
 
   .suppression:before {
-    content: '';
     background-image: url('/statique/assets/images/icone_poubelle.svg');
+  }
+
+  .ajout:before {
+    background-image: url('/statique/assets/images/icone_plus_gris.svg');
+    filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(245deg)
+      brightness(105%) contrast(101%);
+  }
+
+  .avecIcone:before {
+    content: '';
     display: inline-block;
     width: 24px;
     height: 24px;

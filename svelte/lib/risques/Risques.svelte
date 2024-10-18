@@ -6,9 +6,12 @@
     ReferentielCategories,
     ReferentielVraisemblances,
   } from './risques.d';
-  import TiroirRisque from './TiroirRisque.svelte';
+  import TiroirRisque, {
+    type ModeAffichageTiroir,
+  } from './TiroirRisque.svelte';
   import LigneRisque from './LigneRisque.svelte';
   import { enregistreRisque } from './risque.api';
+  import Bouton from '../ui/Bouton.svelte';
 
   export let idService: string;
   export let estLectureSeule: boolean;
@@ -18,6 +21,7 @@
   export let niveauxVraisemblance: ReferentielVraisemblances;
   export let referentielRisques: ReferentielRisques;
   let tiroirOuvert = false;
+  let modeAffichageTiroir: ModeAffichageTiroir = '';
   let risqueEnEdition: Risque | undefined;
 
   const metAJourRisque = (risque: Risque) =>
@@ -31,13 +35,43 @@
     risques = risques.filter((r) => r.id !== risque.id);
   };
 
+  const ajouteRisqueDansTableau = (risque: Risque) => {
+    risques = [...risques, risque];
+  };
+
   const ouvreRisque = (risque: Risque) => {
     tiroirOuvert = true;
+    modeAffichageTiroir = 'EDITION';
     risqueEnEdition = { ...risque };
+  };
+
+  const ouvreAjoutRisque = () => {
+    tiroirOuvert = true;
+    modeAffichageTiroir = 'AJOUT';
+    risqueEnEdition = {
+      type: 'SPECIFIQUE',
+      categories: [],
+      intitule: '',
+      niveauVraisemblance: '',
+      niveauGravite: '',
+      commentaire: '',
+      id: '',
+      identifiantNumerique: '',
+      description: '',
+    };
   };
 </script>
 
-<h3>Risques</h3>
+<div class="entete-tableau-risques">
+  <h3>Risques</h3>
+  <Bouton
+    type="primaire"
+    titre="Ajouter un risque"
+    icone="ajout"
+    boutonSoumission={false}
+    on:click={ouvreAjoutRisque}
+  />
+</div>
 <table>
   <thead>
     <tr>
@@ -72,6 +106,8 @@
   {estLectureSeule}
   on:risqueMisAJour={(e) => rafraichisRisqueDansLeTableau(e.detail)}
   on:risqueSupprime={(e) => supprimeRisqueDansTableau(e.detail)}
+  on:risqueAjoute={(e) => ajouteRisqueDansTableau(e.detail)}
+  {modeAffichageTiroir}
   {idService}
 />
 
@@ -107,5 +143,11 @@
 
   tr {
     border: 1px solid #cbd5e1;
+  }
+
+  .entete-tableau-risques {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 </style>

@@ -493,7 +493,7 @@ const routesConnecteApiService = ({
           requete.service.id,
           risque
         );
-        reponse.sendStatus(201);
+        reponse.status(201).send(risque.toJSON());
       } catch (e) {
         if (
           e instanceof ErreurNiveauGraviteInconnu ||

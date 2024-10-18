@@ -1,6 +1,11 @@
 import { decode } from 'html-entities';
 import Risques from './Risques.svelte';
-import type { Risque, RisquesProps, TypeRisque } from './risques.d';
+import type {
+  DonneesRisque,
+  Risque,
+  RisquesProps,
+  TypeRisque,
+} from './risques.d';
 
 document.body.addEventListener(
   'svelte-recharge-risques',
@@ -8,25 +13,34 @@ document.body.addEventListener(
 );
 
 let app: Risques;
+
+export const convertisDonneesRisqueGeneral = (
+  donneesRisque: DonneesRisque
+) => ({
+  ...donneesRisque,
+  commentaire: decode(donneesRisque.commentaire),
+  niveauGravite: donneesRisque.niveauGravite ?? '',
+  niveauVraisemblance: donneesRisque.niveauVraisemblance ?? '',
+  type: 'GENERAL' as TypeRisque,
+});
+
+export const convertisDonneesRisqueSpecifique = (
+  donneesRisque: DonneesRisque
+) => ({
+  ...donneesRisque,
+  intitule: decode(donneesRisque.intitule),
+  commentaire: decode(donneesRisque.commentaire),
+  description: decode(donneesRisque.description),
+  niveauGravite: donneesRisque.niveauGravite ?? '',
+  niveauVraisemblance: donneesRisque.niveauVraisemblance ?? '',
+  type: 'SPECIFIQUE' as TypeRisque,
+});
+
 const rechargeApp = (props: RisquesProps) => {
   app?.$destroy();
   const tousRisques: Risque[] = [
-    ...props.risques.risquesGeneraux.map((r) => ({
-      ...r,
-      commentaire: decode(r.commentaire),
-      niveauGravite: r.niveauGravite ?? '',
-      niveauVraisemblance: r.niveauVraisemblance ?? '',
-      type: 'GENERAL' as TypeRisque,
-    })),
-    ...props.risques.risquesSpecifiques.map((r) => ({
-      ...r,
-      intitule: decode(r.intitule),
-      commentaire: decode(r.commentaire),
-      description: decode(r.description),
-      niveauGravite: r.niveauGravite ?? '',
-      niveauVraisemblance: r.niveauVraisemblance ?? '',
-      type: 'SPECIFIQUE' as TypeRisque,
-    })),
+    ...props.risques.risquesGeneraux.map(convertisDonneesRisqueGeneral),
+    ...props.risques.risquesSpecifiques.map(convertisDonneesRisqueSpecifique),
   ];
   app = new Risques({
     target: document.getElementById('conteneur-risques')!,
