@@ -20,6 +20,7 @@
   import SelectionCategorieRisque from './SelectionCategorieRisque.svelte';
   import { intituleRisque } from './risques';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
+  import Avertissement from '../ui/Avertissement.svelte';
 
   export let ouvert = true;
   export let risque: Risque | undefined;
@@ -57,11 +58,17 @@
   };
   $: titreTiroir = !risque ? '' : intituleRisque(risque);
 
+  let afficheConfirmationSuppressionRisque = false;
   const supprimeRisque = async () => {
     if (risque && risque.type === 'SPECIFIQUE') {
-      await supprimeRisqueSpecifique(idService, risque);
-      emet('risqueSupprime', risque);
-      fermeTiroir();
+      try {
+        enCoursEnvoi = true;
+        await supprimeRisqueSpecifique(idService, risque);
+        emet('risqueSupprime', risque);
+        fermeTiroir();
+      } finally {
+        enCoursEnvoi = false;
+      }
     }
   };
 </script>
@@ -91,80 +98,112 @@
       <button class="fermeture" on:click={fermeTiroir}>✕</button>
     </div>
     <div class="contenu-risque">
-      <Formulaire on:formulaireValide={metsAJour} classe="formulaire-risque">
-        <div class="champs">
-          {#if risqueDuReferentiel}
-            <ControleFormulaireTiroir libelle="Description du risque">
-              <span>{@html risqueDuReferentiel.descriptionLongue}</span>
-            </ControleFormulaireTiroir>
-          {/if}
-          {#if risque.type === 'SPECIFIQUE'}
-            <ControleFormulaireTiroir
-              libelle="Intitulé du risque"
-              requis={true}
-            >
-              <ZoneTexte
-                aideSaisie="ex : lorem ipsum"
-                bind:valeur={risque.intitule}
-                messageErreur="L'intitulé est obligatoire. Veuillez le renseigner."
+      {#if afficheConfirmationSuppressionRisque}
+        <div class="contenu-confirmation-suppression">
+          <span> Souhaitez-vous vraiment supprimer ce risque ? </span>
+          <Avertissement niveau="info">
+            <strong>Cette action est irréversible</strong>
+            <span>
+              Les données seront définitivement effacées. Les contributeurs
+              n'auront plus accès à ce risque.
+            </span>
+          </Avertissement>
+          <div class="conteneur-actions-suppression">
+            <Bouton
+              titre="Annuler"
+              type="secondaire"
+              boutonSoumission={false}
+              on:click={() => {
+                afficheConfirmationSuppressionRisque = false;
+              }}
+            />
+            <Bouton
+              type="primaire"
+              boutonSoumission={false}
+              {enCoursEnvoi}
+              on:click={supprimeRisque}
+              titre="Confirmer la suppression"
+            />
+          </div>
+        </div>
+      {:else}
+        <Formulaire on:formulaireValide={metsAJour} classe="formulaire-risque">
+          <div class="champs">
+            {#if risqueDuReferentiel}
+              <ControleFormulaireTiroir libelle="Description du risque">
+                <span>{@html risqueDuReferentiel.descriptionLongue}</span>
+              </ControleFormulaireTiroir>
+            {/if}
+            {#if risque.type === 'SPECIFIQUE'}
+              <ControleFormulaireTiroir
+                libelle="Intitulé du risque"
                 requis={true}
-                lignes={2}
-              />
-            </ControleFormulaireTiroir>
-            <ControleFormulaireTiroir libelle="Description du risque">
+              >
+                <ZoneTexte
+                  aideSaisie="ex : lorem ipsum"
+                  bind:valeur={risque.intitule}
+                  messageErreur="L'intitulé est obligatoire. Veuillez le renseigner."
+                  requis={true}
+                  lignes={2}
+                />
+              </ControleFormulaireTiroir>
+              <ControleFormulaireTiroir libelle="Description du risque">
+                <ZoneTexte
+                  aideSaisie="ex : lorem ipsum"
+                  lignes={6}
+                  bind:valeur={risque.description}
+                />
+              </ControleFormulaireTiroir>
+              <ControleFormulaireTiroir libelle="Catégorie" requis={true}>
+                <SelectionCategorieRisque
+                  bind:valeurs={risque.categories}
+                  {referentielCategories}
+                  requis={true}
+                />
+              </ControleFormulaireTiroir>
+            {/if}
+            <div class="deuxSelecteursParLigne">
+              <ControleFormulaireTiroir libelle="Gravité potentielle">
+                <SelectionGravite
+                  {referentielGravites}
+                  {estLectureSeule}
+                  avecLibelleOption={true}
+                  bind:niveauGravite={risque.niveauGravite}
+                />
+              </ControleFormulaireTiroir>
+              <ControleFormulaireTiroir libelle="Vraisemblance initiale">
+                <SelectionVraisemblance
+                  {referentielVraisemblances}
+                  {estLectureSeule}
+                  avecLibelleOption={true}
+                  bind:niveauVraisemblance={risque.niveauVraisemblance}
+                />
+              </ControleFormulaireTiroir>
+            </div>
+            <ControleFormulaireTiroir libelle="Commentaire">
               <ZoneTexte
-                aideSaisie="ex : lorem ipsum"
-                lignes={6}
-                bind:valeur={risque.description}
-              />
-            </ControleFormulaireTiroir>
-            <ControleFormulaireTiroir libelle="Catégorie" requis={true}>
-              <SelectionCategorieRisque
-                bind:valeurs={risque.categories}
-                {referentielCategories}
-                requis={true}
-              />
-            </ControleFormulaireTiroir>
-          {/if}
-          <div class="deuxSelecteursParLigne">
-            <ControleFormulaireTiroir libelle="Gravité potentielle">
-              <SelectionGravite
-                {referentielGravites}
-                {estLectureSeule}
-                avecLibelleOption={true}
-                bind:niveauGravite={risque.niveauGravite}
-              />
-            </ControleFormulaireTiroir>
-            <ControleFormulaireTiroir libelle="Vraisemblance initiale">
-              <SelectionVraisemblance
-                {referentielVraisemblances}
-                {estLectureSeule}
-                avecLibelleOption={true}
-                bind:niveauVraisemblance={risque.niveauVraisemblance}
+                bind:valeur={risque.commentaire}
+                aideSaisie="Apportez des précisions sur le risque"
+                lignes={4}
               />
             </ControleFormulaireTiroir>
           </div>
-          <ControleFormulaireTiroir libelle="Commentaire">
-            <ZoneTexte
-              bind:valeur={risque.commentaire}
-              aideSaisie="Apportez des précisions sur le risque"
-              lignes={4}
-            />
-          </ControleFormulaireTiroir>
-        </div>
-        <div class="conteneur-actions">
-          {#if risque.type === 'SPECIFIQUE'}
-            <Bouton
-              type="lien"
-              icone="poubelle"
-              titre="Supprimer le risque"
-              boutonSoumission={false}
-              on:click={supprimeRisque}
-            />
-          {/if}
-          <Bouton type="primaire" titre="Enregistrer" {enCoursEnvoi} />
-        </div>
-      </Formulaire>
+          <div class="conteneur-actions">
+            {#if risque.type === 'SPECIFIQUE'}
+              <Bouton
+                type="lien"
+                icone="poubelle"
+                titre="Supprimer le risque"
+                boutonSoumission={false}
+                on:click={() => {
+                  afficheConfirmationSuppressionRisque = true;
+                }}
+              />
+            {/if}
+            <Bouton type="primaire" titre="Enregistrer" {enCoursEnvoi} />
+          </div>
+        </Formulaire>
+      {/if}
     </div>
   {/if}
 </div>
@@ -269,6 +308,20 @@
     flex-grow: 0;
     flex-shrink: 0;
     gap: 10px;
+  }
+
+  .contenu-confirmation-suppression {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .conteneur-actions-suppression {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    justify-content: end;
   }
 
   .deuxSelecteursParLigne {

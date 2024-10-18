@@ -11,7 +11,7 @@
 <div
   {id}
   class="cadre {niveau}"
-  out:glisse|global={{ depuis: 'right', duree: 500 }}
+  out:glisse|global={{ depuis: 'right', duree: avecBoutonFermeture ? 500 : 0 }}
 >
   {#if avecBoutonFermeture}
     <button
@@ -29,10 +29,17 @@
   {:else if niveau === 'avertissement'}
     <img src="/statique/assets/images/icone_danger.svg" alt="Icône de danger" />
   {/if}
-  <slot />
+  <div class="contenu-avertissement">
+    <slot />
+  </div>
 </div>
 
 <style>
+  .contenu-avertissement {
+    display: flex;
+    flex-direction: column;
+  }
+
   .cadre {
     padding: 10px 50px 10px 16px;
     display: flex;
