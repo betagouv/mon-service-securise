@@ -116,7 +116,7 @@
                 libelleCategorie={referentielCategories[categorie]}
               />
             {/each}
-          {:else}
+          {:else if modeAffichageTiroir === 'EDITION'}
             <CartoucheReferentiel referentiel={Referentiel.RISQUE_SPECIFIQUE} />
           {/if}
         </div>
