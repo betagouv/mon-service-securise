@@ -14,6 +14,7 @@
   .contenu {
     margin-top: 4px;
     display: flex;
+    flex-direction: column;
   }
 
   label {

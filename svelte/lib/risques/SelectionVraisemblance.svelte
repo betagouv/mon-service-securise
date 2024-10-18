@@ -85,7 +85,7 @@
   }
 
   select.avecLibelleOption {
-    width: fit-content;
+    width: 100%;
     appearance: auto;
     text-align: left;
     padding: 8px;
