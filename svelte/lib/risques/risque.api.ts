@@ -21,3 +21,12 @@ export const enregistreRisque = async (idService: string, risque: Risque) => {
     );
   }
 };
+
+export const supprimeRisqueSpecifique = async (
+  idService: string,
+  risque: Risque
+) => {
+  await axios.delete(
+    `/api/service/${idService}/risquesSpecifiques/${risque.id}`
+  );
+};
