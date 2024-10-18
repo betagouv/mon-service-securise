@@ -1149,6 +1149,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       ) => {
         idServiceRecu = idService;
         donneesRecues = donnees;
+        donnees.id = 'RS1';
       };
 
       await axios.post(
@@ -1167,6 +1168,29 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(donneesRecues.niveauGravite).to.eql('unNiveau');
       expect(donneesRecues.niveauVraisemblance).to.eql('unNiveauVraisemblance');
       expect(donneesRecues.commentaire).to.eql("c'est important");
+    });
+
+    it('retourne la représentation du risque ajouté', async () => {
+      testeur.depotDonnees().ajouteRisqueSpecifiqueAService = async (
+        _,
+        risque
+      ) => {
+        risque.id = 'RS1';
+      };
+
+      const reponse = await axios.post(
+        'http://localhost:1234/api/service/456/risquesSpecifiques',
+        {
+          intitule: 'un risque important',
+          niveauGravite: 'unNiveau',
+          niveauVraisemblance: 'unNiveauVraisemblance',
+          commentaire: "c'est important",
+          categories: ['C1'],
+        }
+      );
+
+      expect(reponse.data.id).to.be('RS1');
+      expect(reponse.data.identifiantNumerique).to.be('RS1');
     });
   });
 
