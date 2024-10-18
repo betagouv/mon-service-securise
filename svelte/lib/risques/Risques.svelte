@@ -27,6 +27,10 @@
     risques[risques.findIndex((r) => r.id === risque.id)] = risque;
   };
 
+  const supprimeRisqueDansTableau = (risque: Risque) => {
+    risques = risques.filter((r) => r.id !== risque.id);
+  };
+
   const ouvreRisque = (risque: Risque) => {
     tiroirOuvert = true;
     risqueEnEdition = { ...risque };
@@ -67,6 +71,7 @@
   referentielVraisemblances={niveauxVraisemblance}
   {estLectureSeule}
   on:risqueMisAJour={(e) => rafraichisRisqueDansLeTableau(e.detail)}
+  on:risqueSupprime={(e) => supprimeRisqueDansTableau(e.detail)}
   {idService}
 />
 

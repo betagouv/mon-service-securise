@@ -16,7 +16,7 @@
   import Bouton from '../ui/Bouton.svelte';
   import ControleFormulaireTiroir from '../ui/ControleFormulaireTiroir.svelte';
   import ZoneTexte from '../ui/ZoneTexte.svelte';
-  import { enregistreRisque } from './risque.api';
+  import { enregistreRisque, supprimeRisqueSpecifique } from './risque.api';
   import SelectionCategorieRisque from './SelectionCategorieRisque.svelte';
   import { intituleRisque } from './risques';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
@@ -36,6 +36,7 @@
 
   const emet = createEventDispatcher<{
     risqueMisAJour: Risque;
+    risqueSupprime: Risque;
   }>();
 
   const fermeTiroir = () => {
@@ -56,7 +57,13 @@
   };
   $: titreTiroir = !risque ? '' : intituleRisque(risque);
 
-  const supprimeRisque = () => {};
+  const supprimeRisque = async () => {
+    if (risque && risque.type === 'SPECIFIQUE') {
+      await supprimeRisqueSpecifique(idService, risque);
+      emet('risqueSupprime', risque);
+      fermeTiroir();
+    }
+  };
 </script>
 
 <div class="tiroir {risque?.type}" class:ouvert>
