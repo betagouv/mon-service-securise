@@ -139,7 +139,7 @@
     <div class="conteneur-actions">
       {#if doitAfficherActions}
         {#if $configurationAffichage.doitAfficherSuppression}
-          <button on:click={store.afficheEtapeSuppression}>
+          <button type="button" on:click={store.afficheEtapeSuppression}>
             Supprimer la mesure
           </button>
         {/if}
