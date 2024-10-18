@@ -1,6 +1,6 @@
 <script lang="ts">
   export let titre: string;
-  export let icone: string = '';
+  export let icone: 'suppression' | '' = '';
   export let type: 'primaire' | 'secondaire' | 'lien';
   export let actif: boolean = true;
   export let enCoursEnvoi: boolean = false;
@@ -34,7 +34,7 @@
     user-select: none;
   }
 
-  .poubelle:before {
+  .suppression:before {
     content: '';
     background-image: url('/statique/assets/images/icone_poubelle.svg');
     display: inline-block;

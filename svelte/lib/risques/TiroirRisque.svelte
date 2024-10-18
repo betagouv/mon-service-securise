@@ -192,7 +192,7 @@
             {#if risque.type === 'SPECIFIQUE'}
               <Bouton
                 type="lien"
-                icone="poubelle"
+                icone="suppression"
                 titre="Supprimer le risque"
                 boutonSoumission={false}
                 on:click={() => {
