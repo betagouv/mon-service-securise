@@ -1,3 +1,7 @@
 .zone-principale {
   background: white;
 }
+
+.conteneur-page-formulaire {
+  max-width: 1200px;
+}
