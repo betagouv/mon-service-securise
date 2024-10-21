@@ -33,6 +33,7 @@
 
     text-decoration: none;
     user-select: none;
+    justify-content: center;
   }
 
   .suppression:before {
