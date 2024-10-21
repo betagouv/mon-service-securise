@@ -31,7 +31,7 @@
   };
 </script>
 
-<tr class:estSpecifiqueAMettreAJour>
+<tr>
   <td>
     <span class="identifiant-numerique">{risque.identifiantNumerique}</span>
   </td>
@@ -40,7 +40,7 @@
       class="intitule-risques"
       title={estSpecifiqueAMettreAJour ? 'Ce risque doit être mis à jour' : ''}
     >
-      {estSpecifiqueAMettreAJour ? '⚠️ ' : ''}{intituleRisque(risque)}
+      {intituleRisque(risque)}
     </p>
     <p class="cartouches-intitule">
       <CartoucheReferentiel
@@ -52,6 +52,9 @@
         <span class="cartouche-categorie">{categories[categorie]}</span>
       {/each}
     </p>
+    {#if estSpecifiqueAMettreAJour}
+      <span class="a-mettre-a-jour">⚠️ Risque à mettre à jour</span>
+    {/if}
   </td>
   <td>
     <SelectionGravite
@@ -139,7 +142,8 @@
     line-height: 16px;
   }
 
-  .estSpecifiqueAMettreAJour {
-    background: var(--fond-ocre-pale);
+  .a-mettre-a-jour {
+    font-size: 12px;
+    line-height: 20px;
   }
 </style>
