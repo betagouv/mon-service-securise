@@ -96,15 +96,16 @@
     <tr>
       <th>Identifiant</th>
       <th>Intitulé du risque</th>
-      <th
-        >Gravité potentielle <input
+      <th class="entete-gravite"
+        >Gravité potentielle
+        <button
           type="button"
-          title="Infos"
+          class="bouton-info"
           on:click={() => {
             tiroirLegendeGraviteOuvert = true;
           }}
-        /></th
-      >
+        ></button>
+      </th>
       <th>Vraisemblance initiale</th>
     </tr>
   </thead>
@@ -188,6 +189,30 @@
   :global(.avertissement-risques-specifiques) {
     margin-top: 0;
     margin-bottom: 19px !important;
+  }
+
+  .entete-gravite {
+    display: flex;
+    align-items: center;
+  }
+
+  .bouton-info {
+    display: flex;
+    border: none;
+    background-color: transparent;
+  }
+
+  .bouton-info:before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url('/statique/assets/images/icone_information.svg');
+    cursor: pointer;
+    filter: brightness(0) saturate(100%) invert(44%) sepia(44%) saturate(243%)
+      hue-rotate(176deg) brightness(96%) contrast(92%);
   }
 
   .entete-tableau-risques h3 {
