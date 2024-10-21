@@ -10,26 +10,28 @@
   export let avecLibelleOption: boolean = false;
 </script>
 
-<select
-  class="niveau-vraisemblance {niveauVraisemblance}"
-  class:vide={!niveauVraisemblance}
-  class:avecLibelleOption
-  bind:value={niveauVraisemblance}
-  disabled={estLectureSeule}
-  on:change
->
-  <option
-    label={avecLibelleOption ? 'Définir la vraisemblance initiale' : '+'}
-    value=""
-    disabled
-  />
-  {#each Object.entries(referentielVraisemblances) as [id, niveau] (id)}
+<div class="conteneur-vraisemblance">
+  <select
+    class="niveau-vraisemblance {niveauVraisemblance}"
+    class:vide={!niveauVraisemblance}
+    class:avecLibelleOption
+    bind:value={niveauVraisemblance}
+    disabled={estLectureSeule}
+    on:change
+  >
     <option
-      label={`${niveau.position.toString()} - ${niveau.libelle}`}
-      value={id}
+      label={avecLibelleOption ? 'Définir la vraisemblance initiale' : '+'}
+      value=""
+      disabled
     />
-  {/each}
-</select>
+    {#each Object.entries(referentielVraisemblances) as [id, niveau] (id)}
+      <option
+        label={`${niveau.position.toString()} - ${niveau.libelle}`}
+        value={id}
+      />
+    {/each}
+  </select>
+</div>
 
 <style>
   select {
@@ -86,10 +88,39 @@
 
   select.avecLibelleOption {
     width: 100%;
-    appearance: auto;
+    appearance: none;
     text-align: left;
     padding: 8px;
     border-radius: 4px;
     border: 1px solid transparent;
+  }
+
+  .conteneur-vraisemblance {
+    position: relative;
+  }
+
+  .conteneur-vraisemblance:has(select.avecLibelleOption) {
+    --couleur-option: white;
+  }
+
+  .conteneur-vraisemblance:has(select.avecLibelleOption.vide) {
+    --couleur-option: var(--liseres-fonce);
+  }
+
+  .conteneur-vraisemblance::after {
+    content: '';
+    display: inline-block;
+
+    width: 0.4rem;
+    height: 0.4rem;
+
+    border: 2px var(--couleur-option) solid;
+    border-left: 0;
+    border-bottom: 0;
+
+    transform: rotate(135deg);
+    right: 16px;
+    position: absolute;
+    top: 14px;
   }
 </style>
