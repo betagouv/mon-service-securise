@@ -12,6 +12,7 @@
   import LigneRisque from './LigneRisque.svelte';
   import { enregistreRisque } from './risque.api';
   import Bouton from '../ui/Bouton.svelte';
+  import Avertissement from '../ui/Avertissement.svelte';
 
   export let idService: string;
   export let estLectureSeule: boolean;
@@ -60,6 +61,10 @@
       description: '',
     };
   };
+
+  $: doitAfficherAvertissement = risques.some(
+    (risque) => risque.type === 'SPECIFIQUE' && !risque.categories.length
+  );
 </script>
 
 <div class="entete-tableau-risques">
@@ -72,6 +77,19 @@
     on:click={ouvreAjoutRisque}
   />
 </div>
+{#if doitAfficherAvertissement}
+  <Avertissement
+    niveau="avertissement"
+    classeSupplementaire="avertissement-risques-specifiques"
+  >
+    <strong>Risques spécifiques à mettre à jour.</strong>
+    <span
+      >Suite à l'ajout de l'échelle de vraisemblance et de la catégorie sur les
+      risques, nous vous invitons à mettre à jour les risques spécifiques que
+      vous avez ajoutés afin de compléter les informations manquantes</span
+    >
+  </Avertissement>
+{/if}
 <table>
   <thead>
     <tr>
@@ -114,6 +132,7 @@
 <style>
   h3 {
     text-align: left;
+    margin: 0;
   }
 
   table {
@@ -149,5 +168,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 19px;
+  }
+
+  :global(.avertissement-risques-specifiques) {
+    margin-top: 0;
+    margin-bottom: 19px !important;
   }
 </style>
