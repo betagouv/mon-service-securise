@@ -60,6 +60,17 @@
     background: var(--liseres-fonce);
   }
 
+  .niveau-vraisemblance:hover {
+    opacity: 50%;
+    cursor: pointer;
+  }
+
+  .niveau-vraisemblance.vide:hover {
+    opacity: 100%;
+    color: white;
+    background-color: var(--texte-clair);
+  }
+
   .niveau-vraisemblance.peuVraisemblable {
     background: var(--bleu-mise-en-avant);
   }

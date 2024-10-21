@@ -81,6 +81,17 @@
     background: black;
   }
 
+  .niveau-gravite:hover {
+    opacity: 50%;
+    cursor: pointer;
+  }
+
+  .niveau-gravite.vide:hover {
+    opacity: 100%;
+    color: white;
+    background-color: var(--texte-clair);
+  }
+
   .niveau-gravite.vide {
     background: var(--fond-gris-pale);
     color: var(--texte-clair);
