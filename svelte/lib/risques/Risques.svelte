@@ -174,4 +174,8 @@
     margin-top: 0;
     margin-bottom: 19px !important;
   }
+
+  .entete-tableau-risques h3 {
+    font-size: 1.25rem;
+  }
 </style>
