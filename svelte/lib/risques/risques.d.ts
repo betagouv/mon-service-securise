@@ -25,6 +25,7 @@ export type Risque = DonneesRisque & { type: TypeRisque };
 export type NiveauGravite = {
   position: number;
   description: string;
+  descriptionLongue: string;
 };
 
 export type NiveauVraisemblance = {

@@ -12,6 +12,7 @@
   import LigneRisque from './LigneRisque.svelte';
   import { enregistreRisque } from './risque.api';
   import Bouton from '../ui/Bouton.svelte';
+  import TiroirLegendeGravite from './TiroirLegendeGravite.svelte';
   import Avertissement from '../ui/Avertissement.svelte';
   import { risqueAMettreAJour } from './risques';
 
@@ -22,7 +23,8 @@
   export let niveauxGravite: ReferentielGravites;
   export let niveauxVraisemblance: ReferentielVraisemblances;
   export let referentielRisques: ReferentielRisques;
-  let tiroirOuvert = false;
+  let tiroirRisqueOuvert = false;
+  let tiroirLegendeGraviteOuvert = false;
   let modeAffichageTiroir: ModeAffichageTiroir = '';
   let risqueEnEdition: Risque | undefined;
 
@@ -42,13 +44,13 @@
   };
 
   const ouvreRisque = (risque: Risque) => {
-    tiroirOuvert = true;
+    tiroirRisqueOuvert = true;
     modeAffichageTiroir = 'EDITION';
     risqueEnEdition = { ...risque };
   };
 
   const ouvreAjoutRisque = () => {
-    tiroirOuvert = true;
+    tiroirRisqueOuvert = true;
     modeAffichageTiroir = 'AJOUT';
     risqueEnEdition = {
       type: 'SPECIFIQUE',
@@ -94,7 +96,15 @@
     <tr>
       <th>Identifiant</th>
       <th>Intitulé du risque</th>
-      <th>Gravité potentielle</th>
+      <th
+        >Gravité potentielle <input
+          type="button"
+          title="Infos"
+          on:click={() => {
+            tiroirLegendeGraviteOuvert = true;
+          }}
+        /></th
+      >
       <th>Vraisemblance initiale</th>
     </tr>
   </thead>
@@ -113,8 +123,13 @@
   </tbody>
 </table>
 
+<TiroirLegendeGravite
+  bind:ouvert={tiroirLegendeGraviteOuvert}
+  referentielGravites={niveauxGravite}
+/>
+
 <TiroirRisque
-  bind:ouvert={tiroirOuvert}
+  bind:ouvert={tiroirRisqueOuvert}
   risque={risqueEnEdition}
   referentielCategories={categories}
   {referentielRisques}
