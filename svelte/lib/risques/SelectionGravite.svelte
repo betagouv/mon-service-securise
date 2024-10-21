@@ -7,26 +7,28 @@
   export let avecLibelleOption: boolean = false;
 </script>
 
-<select
-  class="niveau-gravite {niveauGravite}"
-  class:vide={!niveauGravite}
-  class:avecLibelleOption
-  bind:value={niveauGravite}
-  disabled={estLectureSeule}
-  on:change
->
-  <option
-    label={avecLibelleOption ? 'Définir la gravité' : '+'}
-    value=""
-    disabled
-  />
-  {#each Object.entries(referentielGravites) as [id, niveau] (id)}
+<div class="conteneur-gravite">
+  <select
+    class="niveau-gravite {niveauGravite}"
+    class:vide={!niveauGravite}
+    class:avecLibelleOption
+    bind:value={niveauGravite}
+    disabled={estLectureSeule}
+    on:change
+  >
     <option
-      label={`${niveau.position.toString()} - ${niveau.description}`}
-      value={id}
+      label={avecLibelleOption ? 'Définir la gravité' : '+'}
+      value=""
+      disabled
     />
-  {/each}
-</select>
+    {#each Object.entries(referentielGravites) as [id, niveau] (id)}
+      <option
+        label={`${niveau.position.toString()} - ${niveau.description}`}
+        value={id}
+      />
+    {/each}
+  </select>
+</div>
 
 <style>
   select {
@@ -49,6 +51,14 @@
     margin: 0;
     text-align: center;
     border: none;
+  }
+
+  .conteneur-gravite:has(select.avecLibelleOption) {
+    --couleur-option: white;
+  }
+
+  .conteneur-gravite:has(select.avecLibelleOption.vide) {
+    --couleur-option: var(--liseres-fonce);
   }
 
   .niveau-gravite.nonConcerne {
@@ -83,10 +93,31 @@
 
   select.avecLibelleOption {
     width: 100%;
-    appearance: auto;
+    appearance: none;
     text-align: left;
     padding: 8px;
     border-radius: 4px;
     border: 1px solid transparent;
+  }
+
+  .conteneur-gravite {
+    position: relative;
+  }
+
+  .conteneur-gravite::after {
+    content: '';
+    display: inline-block;
+
+    width: 0.4rem;
+    height: 0.4rem;
+
+    border: 2px var(--couleur-option) solid;
+    border-left: 0;
+    border-bottom: 0;
+
+    transform: rotate(135deg);
+    right: 16px;
+    position: absolute;
+    top: 14px;
   }
 </style>
