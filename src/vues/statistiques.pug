@@ -39,5 +39,5 @@ block main
       - const progression = (nombre) => nombre > 0 ? `+${nombre}%` : `${nombre}%`;
       +uneCarteDeStats('avatar', chiffres.format(utilisateurs.nombre), 'Utilisateurs inscrits', progression(utilisateurs.progression))
       +uneCarteDeStats('navigateur', chiffres.format(services.nombre), 'Services sécurisés', progression(services.progression))
-      +uneCarteDeStats('data_viz', indiceCyber.nombre, "Évolution de l'indice cyber", indiceCyber.progression)
+      +uneCarteDeStats('data_viz', indiceCyber.nombre, "Progression de l'indice cyber", indiceCyber.progression)
       +uneCarteDeStats('connexion_perdue', chiffres.format(vulnerabilites.nombre), "Vulnérabilités corrigées", progression(vulnerabilites.progression))

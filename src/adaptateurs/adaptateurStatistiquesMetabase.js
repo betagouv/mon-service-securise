@@ -38,7 +38,7 @@ const recupereStatistiques = async () => {
     utilisateurs,
     services,
     vulnerabilites,
-    indiceCyber: { nombre: '+63%', progression: '+60%' },
+    indiceCyber: { nombre: '63%', progression: '+3 points' },
   };
 };
 
