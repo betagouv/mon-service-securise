@@ -90,6 +90,10 @@
     border: 1px solid #cbd5e1;
   }
 
+  tr:has(.intitule:hover) {
+    box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
+  }
+
   .identifiant-numerique {
     font-size: 14px;
     font-weight: 700;
