@@ -9,7 +9,7 @@
   import { Referentiel } from '../ui/types.d';
   import { createEventDispatcher } from 'svelte';
   import SelectionGravite from './SelectionGravite.svelte';
-  import { intituleRisque } from './risques';
+  import { intituleRisque, risqueAMettreAJour } from './risques';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
 
   export let categories: ReferentielCategories;
@@ -19,8 +19,7 @@
 
   export let risque: Risque;
 
-  $: estSpecifiqueAMettreAJour =
-    risque.type === 'SPECIFIQUE' && !risque.categories.length;
+  $: estSpecifiqueAMettreAJour = risqueAMettreAJour(risque);
 
   const emet = createEventDispatcher<{
     metAJourRisque: null;
