@@ -6,11 +6,12 @@
   export let niveau: 'info' | 'avertissement' = 'info';
   export let avecBoutonFermeture: boolean = false;
   export let id: string | undefined = undefined;
+  export let classeSupplementaire: string = '';
 </script>
 
 <div
   {id}
-  class="cadre {niveau}"
+  class="cadre {niveau} {classeSupplementaire}"
   out:glisse|global={{ depuis: 'right', duree: avecBoutonFermeture ? 500 : 0 }}
 >
   {#if avecBoutonFermeture}
