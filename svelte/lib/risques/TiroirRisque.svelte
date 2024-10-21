@@ -52,6 +52,7 @@
 
   const fermeTiroir = () => {
     ouvert = false;
+    afficheConfirmationSuppressionRisque = false;
   };
 
   const metsAJour = async () => {
@@ -97,6 +98,8 @@
       }
     }
   };
+
+  $: risque, (afficheConfirmationSuppressionRisque = false);
 </script>
 
 <div class="tiroir {risque?.type}" class:ouvert>
