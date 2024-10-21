@@ -55,4 +55,7 @@ const ellipse = (chaine: string, n: number) => {
 export const intituleRisque = (risque: Risque) =>
   risque.type === 'GENERAL' ? risque.intitule : ellipse(risque.intitule, 100);
 
+export const risqueAMettreAJour = (risque: Risque) =>
+  risque.type === 'SPECIFIQUE' && !risque.categories.length;
+
 export default app!;

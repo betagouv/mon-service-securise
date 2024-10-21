@@ -13,6 +13,7 @@
   import { enregistreRisque } from './risque.api';
   import Bouton from '../ui/Bouton.svelte';
   import Avertissement from '../ui/Avertissement.svelte';
+  import { risqueAMettreAJour } from './risques';
 
   export let idService: string;
   export let estLectureSeule: boolean;
@@ -62,9 +63,7 @@
     };
   };
 
-  $: doitAfficherAvertissement = risques.some(
-    (risque) => risque.type === 'SPECIFIQUE' && !risque.categories.length
-  );
+  $: doitAfficherAvertissement = risques.some(risqueAMettreAJour);
 </script>
 
 <div class="entete-tableau-risques">
