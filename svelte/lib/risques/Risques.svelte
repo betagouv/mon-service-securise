@@ -150,4 +150,8 @@
     justify-content: space-between;
     align-items: center;
   }
+
+  .entete-tableau-risques h3 {
+    font-size: 1.25rem;
+  }
 </style>
