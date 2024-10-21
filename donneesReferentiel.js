@@ -381,7 +381,9 @@ module.exports = {
       position: 0,
       couleur: 'blanc',
       description: 'Non concerné',
-      descriptionLongue: '',
+      descriptionLongue: `Aucun impact opérationnel ni sur les performances de l'activité ni sur 
+        la sécurité des personnes et des biens. L'organisation surmontera la situation 
+        sans trop de difficultés (consommation des marges)`,
       important: false,
       nonConcerne: true,
     },
