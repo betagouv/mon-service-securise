@@ -35,7 +35,6 @@ describe('Le serveur MSS des routes /service/*', () => {
     '/ID-SERVICE/rolesResponsabilites',
     '/ID-SERVICE/risques',
     '/ID-SERVICE/dossiers',
-    '/ID-SERVICE/risques-v2',
   ].forEach((route) => {
     describe(`quand GET sur /service${route}`, () => {
       beforeEach(() => {
@@ -581,36 +580,6 @@ describe('Le serveur MSS des routes /service/*', () => {
           done
         );
     });
-  });
-
-  describe('quand requête GET sur `/service/:id/risques-v2`', () => {
-    it('recherche le service correspondant', (done) => {
-      testeur
-        .middleware()
-        .verifieRechercheService(
-          [{ niveau: LECTURE, rubrique: RISQUES }],
-          'http://localhost:1234/service/456/risques-v2',
-          done
-        );
-    });
-
-    it("charge les autorisations du service pour l'utilisateur", (done) => {
-      testeur
-        .middleware()
-        .verifieChargementDesAutorisations(
-          'http://localhost:1234/service/456/risques-v2',
-          done
-        );
-    });
-
-    it("charge les préférences de l'utilisateur", (done) => {
-      testeur
-        .middleware()
-        .verifieChargementDesPreferences(
-          'http://localhost:1234/service/456/risques-v2',
-          done
-        );
-    });
 
     it('merge les données du référentiel et du service pour les risques généraux', async () => {
       const serviceARenvoyer = unService()
@@ -632,7 +601,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur.middleware().reinitialise({ serviceARenvoyer });
 
       const reponse = await axios.get(
-        'http://localhost:1234/service/456/risques-v2'
+        'http://localhost:1234/service/456/risques'
       );
 
       const { risquesGeneraux } = donneesPartagees(
