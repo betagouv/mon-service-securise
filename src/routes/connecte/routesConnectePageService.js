@@ -202,7 +202,7 @@ const routesConnectePageService = ({
   );
 
   routes.get(
-    '/:id/risques-v2',
+    '/:id/risques',
     middleware.trouveService({ [RISQUES]: LECTURE }),
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
@@ -220,22 +220,6 @@ const routesConnectePageService = ({
           risquesGeneraux: risquesGenerauxAConsiderer,
           risquesSpecifiques,
         },
-        etapeActive: 'risques',
-      });
-    }
-  );
-
-  routes.get(
-    '/:id/risques',
-    middleware.trouveService({ [RISQUES]: LECTURE }),
-    middleware.chargeAutorisationsService,
-    middleware.chargePreferencesUtilisateur,
-    (requete, reponse) => {
-      const { service } = requete;
-      reponse.render('service/risques', {
-        InformationsService,
-        referentiel,
-        service,
         etapeActive: 'risques',
       });
     }
