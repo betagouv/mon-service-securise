@@ -29,7 +29,6 @@ const MesureGenerale = require('../../modeles/mesureGenerale');
 const PartiesPrenantes = require('../../modeles/partiesPrenantes/partiesPrenantes');
 const PointsAcces = require('../../modeles/pointsAcces');
 const RisqueGeneral = require('../../modeles/risqueGeneral');
-const RisquesSpecifiques = require('../../modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../../modeles/rolesResponsabilites');
 const { dateInvalide } = require('../../utilitaires/date');
 const { valeurBooleenne } = require('../../utilitaires/aseptisation');
@@ -590,73 +589,6 @@ const routesConnecteApiService = ({
       await depotDonnees.supprimeRisqueSpecifiqueDuService(idService, idRisque);
 
       reponse.sendStatus(200);
-    }
-  );
-
-  routes.post(
-    '/:id/risques',
-    middleware.trouveService({ [RISQUES]: ECRITURE }),
-    middleware.aseptise(
-      '*',
-      'risquesSpecifiques.*.description',
-      'risquesSpecifiques.*.niveauGravite',
-      'risquesSpecifiques.*.commentaire'
-    ),
-    (requete, reponse, suite) => {
-      const { risquesSpecifiques = [], ...params } = requete.body;
-      const prefixeAttributRisque = /^(commentaire|niveauGravite)-/;
-      const idService = requete.service.id;
-
-      try {
-        const donneesRisques = Object.keys(params)
-          .filter((p) => p.match(prefixeAttributRisque))
-          .reduce((acc, p) => {
-            const idRisque = p.replace(prefixeAttributRisque, '');
-            const nomAttribut = p.match(prefixeAttributRisque)[1];
-            acc[idRisque] ||= {};
-            Object.assign(acc[idRisque], {
-              id: idRisque,
-              [nomAttribut]: params[p],
-            });
-            return acc;
-          }, {});
-
-        const ajouts = Object.values(donneesRisques).reduce((acc, donnees) => {
-          const risque = new RisqueGeneral(donnees, referentiel);
-          return acc.then(() =>
-            depotDonnees.ajouteRisqueGeneralAService(idService, risque)
-          );
-        }, Promise.resolve());
-
-        ajouts
-          .then(() => {
-            const ceuxAPersister = risquesSpecifiques.filter(
-              (r) => r?.description || r?.commentaire || r?.niveauGravite
-            );
-            const donneesRisquesSpecifiques = ceuxAPersister.map(
-              ({ description, commentaire, niveauGravite }) => ({
-                intitule: description,
-                commentaire,
-                niveauGravite,
-              })
-            );
-            const listeRisquesSpecifiques = new RisquesSpecifiques(
-              {
-                risquesSpecifiques: donneesRisquesSpecifiques,
-              },
-              referentiel
-            );
-
-            return depotDonnees.remplaceRisquesSpecifiquesDuService(
-              idService,
-              listeRisquesSpecifiques
-            );
-          })
-          .then(() => reponse.send({ idService }))
-          .catch(suite);
-      } catch {
-        reponse.status(422).send('Données invalides');
-      }
     }
   );
 

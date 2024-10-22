@@ -26,7 +26,6 @@ const MesureGenerale = require('../../src/modeles/mesureGenerale');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
 const RisqueGeneral = require('../../src/modeles/risqueGeneral');
 const RisqueSpecifique = require('../../src/modeles/risqueSpecifique');
-const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
 const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
 
 const copie = require('../../src/utilitaires/copie');
@@ -633,91 +632,6 @@ describe('Le dépôt de données des services', () => {
       const { risques } = await depot.service('S1');
       expect(risques.risquesSpecifiques.item(0).id).to.equal('NouveauRS');
     });
-  });
-
-  it('sait associer des risques spécifiques à un service', async () => {
-    const r = Referentiel.creeReferentielVide();
-
-    const depot = unDepotDeDonneesServices()
-      .avecReferentiel(r)
-      .avecConstructeurDePersistance(
-        unePersistanceMemoire().ajouteUnService(
-          unService(r).avecId('S1').donnees
-        )
-      )
-      .construis();
-
-    const risque = new RisquesSpecifiques({
-      risquesSpecifiques: [{ description: 'Un risque' }],
-    });
-    await depot.remplaceRisquesSpecifiquesDuService('S1', risque);
-
-    const {
-      risques: { risquesSpecifiques },
-    } = await depot.service('S1');
-    expect(risquesSpecifiques.nombre()).to.equal(1);
-    expect(risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
-    expect(risquesSpecifiques.item(0).description).to.equal('Un risque');
-  });
-
-  it("ajoute un identifiant aux risques qui n'en ont pas", async () => {
-    const r = Referentiel.creeReferentielVide();
-    const adaptateurUUID = { genereUUID: () => 'NouveauRS2' };
-    const depot = unDepotDeDonneesServices()
-      .avecAdaptateurUUID(adaptateurUUID)
-      .avecReferentiel(r)
-      .avecConstructeurDePersistance(
-        unePersistanceMemoire().ajouteUnService(
-          unService(r).avecId('S1').donnees
-        )
-      )
-      .construis();
-    const risques = new RisquesSpecifiques({
-      risquesSpecifiques: [
-        { id: 'RS1', description: 'Un risque' },
-        { description: 'Un second risque sans id' },
-      ],
-    });
-
-    await depot.remplaceRisquesSpecifiquesDuService('S1', risques);
-
-    const {
-      risques: { risquesSpecifiques },
-    } = await depot.service('S1');
-    expect(risquesSpecifiques.nombre()).to.equal(2);
-    expect(risquesSpecifiques.item(0).id).to.equal('RS1');
-    expect(risquesSpecifiques.item(1).id).to.equal('NouveauRS2');
-  });
-
-  it('supprime les risques spécifiques précédemment associés', async () => {
-    const r = Referentiel.creeReferentielVide();
-
-    const depot = unDepotDeDonneesServices()
-      .avecReferentiel(r)
-      .avecConstructeurDePersistance(
-        unePersistanceMemoire().ajouteUnService(
-          unService(r)
-            .avecId('S1')
-            .avecRisques(
-              new RisquesSpecifiques({
-                risquesSpecifiques: [{ description: 'Un ancien risque' }],
-              })
-            ).donnees
-        )
-      )
-      .construis();
-
-    const nouveauxRisques = new RisquesSpecifiques({
-      risquesSpecifiques: [{ description: 'Un nouveau risque' }],
-    });
-    await depot.remplaceRisquesSpecifiquesDuService('S1', nouveauxRisques);
-
-    const {
-      risques: { risquesSpecifiques },
-    } = await depot.service('S1');
-    expect(risquesSpecifiques.nombre()).to.equal(1);
-    expect(risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
-    expect(risquesSpecifiques.item(0).description).to.be('Un nouveau risque');
   });
 
   describe("quand il reçoit une demande d'enregistrement d'un nouveau service", () => {
