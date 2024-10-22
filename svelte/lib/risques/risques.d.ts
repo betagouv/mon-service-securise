@@ -30,6 +30,7 @@ export type NiveauGravite = {
 
 export type NiveauVraisemblance = {
   libelle: string;
+  description: string;
   position: number;
 };
 

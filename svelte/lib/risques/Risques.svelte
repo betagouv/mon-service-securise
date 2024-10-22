@@ -13,6 +13,7 @@
   import { enregistreRisque } from './risque.api';
   import Bouton from '../ui/Bouton.svelte';
   import TiroirLegendeGravite from './TiroirLegendeGravite.svelte';
+  import TiroirLegendeVraisemblance from './TiroirLegendeVraisemblance.svelte';
   import Avertissement from '../ui/Avertissement.svelte';
   import { risqueAMettreAJour } from './risques';
 
@@ -25,6 +26,7 @@
   export let referentielRisques: ReferentielRisques;
   let tiroirRisqueOuvert = false;
   let tiroirLegendeGraviteOuvert = false;
+  let tiroirLegendeVraisemblanceOuvert = false;
   let modeAffichageTiroir: ModeAffichageTiroir = '';
   let risqueEnEdition: Risque | undefined;
 
@@ -106,7 +108,16 @@
           }}
         ></button>
       </th>
-      <th>Vraisemblance initiale</th>
+      <th class="entete-vraisemblance"
+        >Vraisemblance initiale
+        <button
+          type="button"
+          class="bouton-info"
+          on:click={() => {
+            tiroirLegendeVraisemblanceOuvert = true;
+          }}
+        ></button>
+      </th>
     </tr>
   </thead>
   <tbody>
@@ -127,6 +138,11 @@
 <TiroirLegendeGravite
   bind:ouvert={tiroirLegendeGraviteOuvert}
   referentielGravites={niveauxGravite}
+/>
+
+<TiroirLegendeVraisemblance
+  bind:ouvert={tiroirLegendeVraisemblanceOuvert}
+  referentielVraisemblances={niveauxVraisemblance}
 />
 
 <TiroirRisque
@@ -191,7 +207,8 @@
     margin-bottom: 19px !important;
   }
 
-  .entete-gravite {
+  .entete-gravite,
+  .entete-vraisemblance {
     display: flex;
     align-items: center;
   }
