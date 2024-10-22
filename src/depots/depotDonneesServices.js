@@ -192,19 +192,6 @@ const creeDepot = (config = {}) => {
     return p.sauvegarde(id, donnees);
   };
 
-  const remplaceProprieteService = async (
-    nomPropriete,
-    idService,
-    propriete
-  ) => {
-    const s = await p.lis.un(idService);
-    const donneesAPersister = s.donneesAPersister().toutes();
-    donneesAPersister[nomPropriete] = propriete.toJSON();
-
-    const { id, ...donnees } = donneesAPersister;
-    await p.sauvegarde(id, donnees);
-  };
-
   const ajouteDossierCourantSiNecessaire = async (idService) => {
     const s = await p.lis.un(idService);
 
@@ -339,21 +326,6 @@ const creeDepot = (config = {}) => {
     );
 
     return idService;
-  };
-
-  const remplaceRisquesSpecifiquesDuService = (
-    idService,
-    listeRisquesSpecifiques
-  ) => {
-    for (let i = 0; i < listeRisquesSpecifiques.nombre(); i += 1) {
-      listeRisquesSpecifiques.items[i].id =
-        listeRisquesSpecifiques.items[i].id || adaptateurUUID.genereUUID();
-    }
-    return remplaceProprieteService(
-      'risquesSpecifiques',
-      idService,
-      listeRisquesSpecifiques
-    );
   };
 
   const supprimeService = async (idService) => {
@@ -576,7 +548,6 @@ const creeDepot = (config = {}) => {
     service,
     services,
     rechercheContributeurs,
-    remplaceRisquesSpecifiquesDuService,
     supprimeContributeur,
     supprimeMesureSpecifiqueDuService,
     supprimeRisqueSpecifiqueDuService,
