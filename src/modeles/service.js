@@ -40,9 +40,12 @@ class Service {
       risquesSpecifiques = [],
       rolesResponsabilites = {},
       suggestionsActions = [],
+      prochainIdNumeriqueDeRisqueSpecifique = 1,
     } = donnees;
 
     this.id = id;
+    this.prochainIdNumeriqueDeRisqueSpecifique =
+      prochainIdNumeriqueDeRisqueSpecifique;
     this.contributeurs = contributeurs.map((c) => new Utilisateur(c));
     this.descriptionService = new DescriptionService(
       descriptionService,
@@ -169,6 +172,8 @@ class Service {
       risquesGeneraux: this.risquesGeneraux().donneesSerialisees(),
       risquesSpecifiques: this.risquesSpecifiques().donneesSerialisees(),
       rolesResponsabilites: this.rolesResponsabilites.donneesSerialisees(),
+      prochainIdNumeriqueDeRisqueSpecifique:
+        this.prochainIdNumeriqueDeRisqueSpecifique,
     });
   }
 
@@ -332,6 +337,8 @@ class Service {
   }
 
   ajouteRisqueSpecifique(risque) {
+    risque.identifiantNumerique = `RS${this.prochainIdNumeriqueDeRisqueSpecifique}`;
+    this.prochainIdNumeriqueDeRisqueSpecifique += 1;
     this.risques.risquesSpecifiques.ajouteRisque(risque);
   }
 

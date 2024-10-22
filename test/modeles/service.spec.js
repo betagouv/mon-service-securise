@@ -495,6 +495,37 @@ describe('Un service', () => {
     expect(service.risquesSpecifiques().nombre()).to.equal(1);
   });
 
+  describe('sur ajout de risque spécifique', () => {
+    it('assigne le premier identifiant numérique de risque spécifique', () => {
+      const service = new Service({
+        id: '123',
+        risquesSpecifiques: [],
+      });
+
+      service.ajouteRisqueSpecifique({});
+
+      expect(service.risquesSpecifiques().item(0).identifiantNumerique).to.be(
+        'RS1'
+      );
+      expect(service.prochainIdNumeriqueDeRisqueSpecifique).to.be(2);
+    });
+
+    it('assigne le prochain identifiant numérique de risque spécifique', () => {
+      const service = new Service({
+        id: '123',
+        prochainIdNumeriqueDeRisqueSpecifique: 42,
+        risquesSpecifiques: [],
+      });
+
+      service.ajouteRisqueSpecifique({});
+
+      expect(service.risquesSpecifiques().item(0).identifiantNumerique).to.be(
+        'RS42'
+      );
+      expect(service.prochainIdNumeriqueDeRisqueSpecifique).to.be(43);
+    });
+  });
+
   it('se construit en renseignant le caractère indispensable des mesures générales grâce aux mesures personnalisées', () => {
     const moteur = { mesures: () => ({ m1: { indispensable: true } }) };
     const referentiel = Referentiel.creeReferentiel({ mesures: { m1: {} } });
@@ -731,6 +762,7 @@ describe('Un service', () => {
       const service = new Service(
         {
           id: 'id-service',
+          prochainIdNumeriqueDeRisqueSpecifique: 42,
           descriptionService: uneDescriptionValide(
             Referentiel.creeReferentielVide()
           )
@@ -765,6 +797,7 @@ describe('Un service', () => {
 
       expect(service.donneesAPersister().toutes()).to.eql({
         id: 'id-service',
+        prochainIdNumeriqueDeRisqueSpecifique: 42,
         descriptionService: {
           delaiAvantImpactCritique: 'unDelai',
           localisationDonnees: 'uneLocalisation',

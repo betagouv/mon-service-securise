@@ -9,14 +9,14 @@ class RisqueSpecifique extends Risque {
   constructor(donneesRisque, referentiel) {
     super(donneesRisque, referentiel);
 
-    this.proprietesAtomiquesRequises.push('intitule');
+    this.proprietesAtomiquesRequises.push('intitule', 'identifiantNumerique');
     this.proprietesListes.push('categories');
     this.proprietesAtomiquesFacultatives.push('description');
     this.renseigneProprietes(donneesRisque);
   }
 
   identifiantNumeriqueRisque() {
-    return this.id.slice(0, 6);
+    return this.identifiantNumerique;
   }
 
   categoriesRisque() {
