@@ -94,13 +94,13 @@ const middleware = (configuration = {}) => {
 
   const verificationAcceptationCGU = (requete, reponse, suite) => {
     verificationJWT(requete, reponse, () => {
-      if (!requete.cguAcceptees) {
-        reponse.redirect(
-          requete.sourceAuthentification === SourceAuthentification.MSS
-            ? '/motDePasse/initialisation'
-            : '/acceptationCGU'
-        );
-      } else suite();
+      if (requete.cguAcceptees) return suite();
+
+      return reponse.redirect(
+        requete.sourceAuthentification === SourceAuthentification.MSS
+          ? '/motDePasse/initialisation'
+          : '/acceptationCGU'
+      );
     });
   };
 
