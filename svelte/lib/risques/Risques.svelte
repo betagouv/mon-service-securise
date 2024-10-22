@@ -98,25 +98,29 @@
     <tr>
       <th>Identifiant</th>
       <th>Intitulé du risque</th>
-      <th class="entete-gravite"
-        >Gravité potentielle
-        <button
-          type="button"
-          class="bouton-info"
-          on:click={() => {
-            tiroirLegendeGraviteOuvert = true;
-          }}
-        ></button>
+      <th>
+        <div class="entete-gravite">
+          Gravité potentielle
+          <button
+            type="button"
+            class="bouton-info"
+            on:click={() => {
+              tiroirLegendeGraviteOuvert = true;
+            }}
+          ></button>
+        </div>
       </th>
-      <th class="entete-vraisemblance"
-        >Vraisemblance initiale
-        <button
-          type="button"
-          class="bouton-info"
-          on:click={() => {
-            tiroirLegendeVraisemblanceOuvert = true;
-          }}
-        ></button>
+      <th>
+        <div class="entete-vraisemblance">
+          Vraisemblance initiale
+          <button
+            type="button"
+            class="bouton-info"
+            on:click={() => {
+              tiroirLegendeVraisemblanceOuvert = true;
+            }}
+          ></button>
+        </div>
       </th>
     </tr>
   </thead>
