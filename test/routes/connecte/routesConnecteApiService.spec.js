@@ -1175,7 +1175,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         _,
         risque
       ) => {
-        risque.id = 'RS1';
+        risque.id = 'abcd';
+        risque.identifiantNumerique = 'RS1';
       };
 
       const reponse = await axios.post(
@@ -1189,7 +1190,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         }
       );
 
-      expect(reponse.data.id).to.be('RS1');
+      expect(reponse.data.id).to.be('abcd');
       expect(reponse.data.identifiantNumerique).to.be('RS1');
     });
   });

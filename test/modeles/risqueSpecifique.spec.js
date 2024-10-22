@@ -19,6 +19,7 @@ describe('Un risque spécifique', () => {
     const risque = new RisqueSpecifique(
       {
         id: 'ABCDEF-123456',
+        identifiantNumerique: 'RS1',
         intitule: 'Un intitulé',
         description: 'Un risque',
         commentaire: 'Un commentaire',
@@ -39,7 +40,7 @@ describe('Un risque spécifique', () => {
       description: 'Un risque',
       niveauGravite: 'unNiveau',
       categories: ['C1'],
-      identifiantNumerique: 'ABCDEF',
+      identifiantNumerique: 'RS1',
     });
   });
 
