@@ -536,22 +536,32 @@ module.exports = {
     invraisemblable: {
       libelle: 'Invraisemblable',
       position: 0,
+      description: `La source de risque a très peu de chances d’atteindre son objectif visé en 
+      empruntant l’un des modes opératoires envisagés. La vraisemblance du scénario de risque est très faible.`,
     },
     peuVraisemblable: {
       libelle: 'Peu vraisemblable',
       position: 1,
+      description: `La source de risque a relativement peu de chances d’atteindre son objectif en 
+      empruntant l’un des modes opératoires envisagés. La vraisemblance du scénario de risque est faible.`,
     },
     vraisemblable: {
       libelle: 'Vraisemblable',
       position: 2,
+      description: `La source de risque est susceptible d’atteindre son objectif en empruntant 
+      l’un des modes opératoires envisagés. La vraisemblance du scénario de risque est significative.`,
     },
     tresVraisemblable: {
       libelle: 'Très vraisemblable',
       position: 3,
+      description: `La source de risque va probablement atteindre son objectif en empruntant 
+      l’un des modes opératoires envisagés. La vraisemblance du scénario de risque est élevée.`,
     },
     quasiCertain: {
       libelle: 'Quasi-certain',
       position: 4,
+      description: `La source de risque va très certainement atteindre son objectif en empruntant 
+      l’un des modes opératoires envisagés. La vraisemblance du scénario de risque est très élevée`,
     },
   },
 
