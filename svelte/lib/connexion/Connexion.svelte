@@ -21,6 +21,8 @@
       }
     }
   };
+
+  const cheminRedirection = urlRedirection && new URL(urlRedirection).pathname;
 </script>
 
 <div class="conteneur">
@@ -28,7 +30,12 @@
     <h1>Connectez-vous</h1>
     <div class="contenu-connexion">
       <div>
-        <a class="agentconnect-button" href="/oidc/connexion">
+        <a
+          class="agentconnect-button"
+          href={cheminRedirection
+            ? `/oidc/connexion?urlRedirection=${cheminRedirection}`
+            : '/oidc/connexion'}
+        >
           <span class="agentconnect-sr-only">
             S'identifier avec ProConnect</span
           >
