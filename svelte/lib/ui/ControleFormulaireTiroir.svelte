@@ -27,6 +27,8 @@
 
   .libelle {
     font-weight: bold;
+    font-size: 1rem;
+    line-height: 1.375rem;
   }
 
   .requis:before {
