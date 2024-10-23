@@ -11,12 +11,12 @@
   import SelectionGravite from './SelectionGravite.svelte';
   import { intituleRisque, niveauRisque, risqueAMettreAJour } from './risques';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
+  import IdentifiantRisque from './IdentifiantRisque.svelte';
 
   export let categories: ReferentielCategories;
   export let niveauxGravite: ReferentielGravites;
   export let niveauxVraisemblance: ReferentielVraisemblances;
   export let estLectureSeule: boolean;
-
   export let risque: Risque;
 
   $: estSpecifiqueAMettreAJour = risqueAMettreAJour(risque);
@@ -28,15 +28,11 @@
   const metAJourRisque = () => {
     emet('metAJourRisque');
   };
-
-  $: niveau = niveauRisque(risque, niveauxVraisemblance, niveauxGravite);
 </script>
 
 <tr>
   <td>
-    <span class={`identifiant-numerique ${niveau || ''}`}
-      >{risque.identifiantNumerique}</span
-    >
+    <IdentifiantRisque {risque} {niveauxVraisemblance} {niveauxGravite} />
   </td>
   <td class="intitule" on:click>
     <p
@@ -98,22 +94,6 @@
     box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
   }
 
-  .identifiant-numerique {
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 20px;
-    display: flex;
-    height: 24px;
-    padding: 0 10px;
-    align-items: center;
-    gap: 4px;
-    border-radius: 40px;
-    border: 1.5px solid var(--couleur-identifiant-numerique);
-    width: fit-content;
-    color: var(--couleur-identifiant-numerique);
-    --couleur-identifiant-numerique: var(--role-inconnu-texte);
-  }
-
   .intitule {
     display: flex;
     flex-direction: column;
@@ -154,17 +134,5 @@
   .a-mettre-a-jour {
     font-size: 12px;
     line-height: 20px;
-  }
-
-  .identifiant-numerique.faible {
-    --couleur-identifiant-numerique: var(--role-personnalise-texte);
-  }
-
-  .identifiant-numerique.moyen {
-    --couleur-identifiant-numerique: var(--role-proprietaire-texte);
-  }
-
-  .identifiant-numerique.eleve {
-    --couleur-identifiant-numerique: var(--rose-anssi);
   }
 </style>
