@@ -17,6 +17,7 @@
   import Avertissement from '../ui/Avertissement.svelte';
   import { risqueAMettreAJour } from './risques';
   import MatriceRisques from './MatriceRisques.svelte';
+  import LegendeMatriceRisques from './LegendeMatriceRisques.svelte';
 
   export let idService: string;
   export let estLectureSeule: boolean;
@@ -81,6 +82,7 @@
       <div>
         <MatriceRisques {risques} {niveauxGravite} {niveauxVraisemblance} />
       </div>
+      <LegendeMatriceRisques />
     </div>
   </div>
 </div>
