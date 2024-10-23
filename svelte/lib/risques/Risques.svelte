@@ -16,6 +16,7 @@
   import TiroirLegendeVraisemblance from './TiroirLegendeVraisemblance.svelte';
   import Avertissement from '../ui/Avertissement.svelte';
   import { risqueAMettreAJour } from './risques';
+  import MatriceRisques from './MatriceRisques.svelte';
 
   export let idService: string;
   export let estLectureSeule: boolean;
@@ -30,8 +31,10 @@
   let modeAffichageTiroir: ModeAffichageTiroir = '';
   let risqueEnEdition: Risque | undefined;
 
-  const metAJourRisque = (risque: Risque) =>
+  const metAJourRisque = (risque: Risque) => {
     enregistreRisque(idService, risque);
+    rafraichisRisqueDansLeTableau(risque);
+  };
 
   const rafraichisRisqueDansLeTableau = (risque: Risque) => {
     risques[risques.findIndex((r) => r.id === risque.id)] = risque;
@@ -69,6 +72,8 @@
 
   $: doitAfficherAvertissement = risques.some(risqueAMettreAJour);
 </script>
+
+<MatriceRisques {risques} {niveauxGravite} {niveauxVraisemblance} />
 
 <div class="entete-tableau-risques">
   <h3>Risques</h3>
