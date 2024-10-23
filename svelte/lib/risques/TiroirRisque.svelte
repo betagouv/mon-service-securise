@@ -176,7 +176,7 @@
                 requis={true}
               >
                 <ZoneTexte
-                  aideSaisie="ex : lorem ipsum"
+                  aideSaisie="Titre du risque"
                   bind:valeur={risque.intitule}
                   messageErreur="L'intitulé est obligatoire. Veuillez le renseigner."
                   requis={true}
@@ -185,7 +185,7 @@
               </ControleFormulaireTiroir>
               <ControleFormulaireTiroir libelle="Description du risque">
                 <ZoneTexte
-                  aideSaisie="ex : lorem ipsum"
+                  aideSaisie="Ce risque signifie que…"
                   lignes={6}
                   bind:valeur={risque.description}
                 />
