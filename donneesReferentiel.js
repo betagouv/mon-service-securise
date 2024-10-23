@@ -446,11 +446,11 @@ module.exports = {
         'Indisponibilité partielle ou totale du service numérique pendant plusieurs heures',
       descriptionLongue: `
         L'indisponibilité du service numérique signifie que certaines fonctionnalités ou que la totalité du service
-        n'est plus accessible aux usagers et/ou aux agents publics.<br>Par exemple :<li>Un service numérique connaît
+        n'est plus accessible aux usagers et/ou aux agents publics.<h3>Par exemple :</h3><ul><li>Un service numérique connaît
         une panne suite à une attaque de type « déni de service » : un message d'erreur est susceptible de s'afficher en
         lieu et place de la page d'accueil pour un site web.</li><li>Un service numérique devient inaccessible, suite à
         une attaque de type rançongiciel, contre la fausse-promesse de leur restitution en cas de paiement d'une rançon.
-        Cette attaque est l'une des plus courantes et a déjà frappé de nombreuses collectivités et entités publiques.</li>
+        Cette attaque est l'une des plus courantes et a déjà frappé de nombreuses collectivités et entités publiques.</li></ul>
       `,
       definition:
         "L'indisponibilité du service numérique signifie que certaines fonctionnalités ou que la totalité du service n'est plus accessible aux usagers et/ou aux agents publics.",
@@ -460,8 +460,12 @@ module.exports = {
       identifiantNumerique: 'R2',
       description:
         "Suppression ou modification d'informations personnelles ou sensibles",
-      descriptionLongue:
-        "Ce risque signifie que des informations appartenant à des usagers ou à des agents publics sont supprimées en partie ou en totalité par un attaquant ou sont modifiées en leur avantage ou en leur défaveur.<br>Par exemple : <li>Des documents téléversés par des usagers dans le cadre d'une démarche en ligne sont supprimés en partie ou en totalité.</li><li>Un élève modifie ses notes sur un espace numérique de travail (ENT) après avoir dérobé ou deviné l'identifiant et le mot de passe d'un enseignant.</li>",
+      descriptionLongue: `
+        Ce risque signifie que des informations appartenant à des usagers ou à des agents publics sont supprimées 
+        en partie ou en totalité par un attaquant ou sont modifiées en leur avantage ou en leur défaveur.
+        <h3>Par exemple : </h3><ul><li>Des documents téléversés par des usagers dans le cadre d'une démarche en ligne 
+        sont supprimés en partie ou en totalité.</li><li>Un élève modifie ses notes sur un espace numérique de 
+        travail (ENT) après avoir dérobé ou deviné l'identifiant et le mot de passe d'un enseignant.</li></ul>`,
       definition:
         'Ce risque signifie que des informations appartenant à des usagers ou à des agents publics sont supprimées en partie ou en totalité par un attaquant ou sont modifiées en leur avantage ou en leur défaveur.',
     },
@@ -470,8 +474,14 @@ module.exports = {
       identifiantNumerique: 'R3',
       description:
         "Divulgation publique d'informations personnelles ou sensibles",
-      descriptionLongue:
-        "Ce risque signifie que des informations concernant des usagers ou des agents publics, traitées dans le cadre du service numérique, sont dérobées par un attaquant puis rendues publiques pour porter préjudice aux personnes concernées et/ou nuire à la réputation de l'entité. <br>Par exemple :<li>La liste de bénéficiaires d'une aide publique et de leurs coordonnées est divulguée sur internet.</li> <li>L'adresse mail des personnes ayant signalé des incivilités sur la voirie via une application dédiée est divulguée sur internet.</li><li>La divulgation des votes des habitants d'une commune s'étant exprimés dans le cadre d'une consultation publique en ligne.</li>",
+      descriptionLongue: `
+        Ce risque signifie que des informations concernant des usagers ou des agents publics, traitées dans le 
+        cadre du service numérique, sont dérobées par un attaquant puis rendues publiques pour porter préjudice 
+        aux personnes concernées et/ou nuire à la réputation de l'entité. 
+        <h3>Par exemple :</h3><ul><li>La liste de bénéficiaires d'une aide publique et de leurs coordonnées est 
+        divulguée sur internet.</li> <li>L'adresse mail des personnes ayant signalé des incivilités sur la 
+        voirie via une application dédiée est divulguée sur internet.</li><li>La divulgation des votes des 
+        habitants d'une commune s'étant exprimés dans le cadre d'une consultation publique en ligne.</li></ul>`,
       definition:
         "Ce risque signifie que des informations concernant des usagers ou des agents publics, traitées dans le cadre du service numérique, sont dérobées par un attaquant puis rendues publiques pour porter préjudice aux personnes concernées et/ou nuire à la réputation de l'entité.",
     },
@@ -479,8 +489,14 @@ module.exports = {
       categories: ['integrite'],
       identifiantNumerique: 'R4',
       description: "Défiguration visible de l'apparence du service numérique",
-      descriptionLongue:
-        "La défiguration d'un service numérique signifie que son apparence est modifiée de manière visible par l'ajout de messages ou d'images, le plus souvent à caractère idéologique, ou à des fins de simples détérioration en vue de nuire à la réputation de l'entité publique.<br>Par exemple :<li>Une image satirique apparaît sur la page d'accueil d'un service numérique.</li><li>Des messages de protestation contre la politique d'une collectivité sont insérés sur plusieurs pages du service numérique.</li>",
+      descriptionLongue: `
+        La défiguration d'un service numérique signifie que son apparence est modifiée de manière visible 
+        par l'ajout de messages ou d'images, le plus souvent à caractère idéologique, ou à des fins de simples 
+        détérioration en vue de nuire à la réputation de l'entité publique.
+        <h3>Par exemple :</h3><ul>
+        <li>Une image satirique apparaît sur la page d'accueil d'un service numérique.</li>
+        <li>Des messages de protestation contre la politique d'une collectivité sont insérés sur plusieurs pages 
+        du service numérique.</li></ul>`,
       definition:
         "La défiguration d'un service numérique signifie que son apparence est modifiée de manière visible par l'ajout de messages ou d'images, le plus souvent à caractère idéologique, ou à des fins de simples détérioration en vue de nuire à la réputation de l'entité publique.",
     },
@@ -490,13 +506,13 @@ module.exports = {
       description: "Vol d'informations personnelles à des fins d'escroquerie",
       descriptionLongue: `
         Ce risque signifie que des informations traitées dans le cadre du service numérique sont dérobées par un attaquant,
-        le plus souvent à des fins d'usurpation d'identité ou de gain financier.<br>Par exemple :
-        <li>Des moyens de paiement stockés sur le service numérique (ex. numéro de carte bancaire) sont volés en vue de les
+        le plus souvent à des fins d'usurpation d'identité ou de gain financier.<h3>Par exemple :</h3>
+        <ul><li>Des moyens de paiement stockés sur le service numérique (ex. numéro de carte bancaire) sont volés en vue de les
         revendre sur internet ou de procéder à des achats illicites.</li><li>Les coordonnées d'usagers ou d'agents publics
         (ex.email, adresse, numéro de téléphone) sont volées en vue de mener des campagnes de
         <a href="https://www.cybermalveillance.gouv.fr/tous-nos-contenus/fiches-reflexes/spam-electronique">spam</a> ou de
         <a href="https://www.cybermalveillance.gouv.fr/tous-nos-contenus/fiches-reflexes/hameconnage-phishing">hameçonnage</a>.</li>
-        <li>Des documents officiels d'identité sont volés à des fins d'usurpation d'identité.</li>
+        <li>Des documents officiels d'identité sont volés à des fins d'usurpation d'identité.</li></ul>
       `,
       definition: `
         Ce risque signifie que des informations traitées dans le cadre du service numérique sont dérobées par un attaquant,
@@ -508,8 +524,14 @@ module.exports = {
       identifiantNumerique: 'R6',
       description:
         "Détournement de l'usage du service numérique en vue de conduire des activités non prévues par ce dernier",
-      descriptionLongue:
-        "Ce risque signifie que le service numérique est utilisé de manière discrète et illicite afin de conduire des activités ne correspondant pas à sa finalité, la plupart du temps à des fins de gain financier.<br>Par exemple :<li>La puissance d'un service numérique est utilisée dans le but de mener une activité de minage de cryptomonnaie.</li><li>Un logiciel malveillant est introduit sur la page d'accueil d'un service numérique afin d'infecter les équipements informatiques des usagers et/ou des agents publics en vue d'accéder à leurs données ou de mener une autre attaque (ex.rançongiciel).</li>",
+      descriptionLongue: `
+        Ce risque signifie que le service numérique est utilisé de manière discrète et illicite afin de conduire 
+        des activités ne correspondant pas à sa finalité, la plupart du temps à des fins de gain financier.
+        <h3>Par exemple :</h3><ul>
+        <li>La puissance d'un service numérique est utilisée dans le but de mener une activité de minage de cryptomonnaie.</li>
+        <li>Un logiciel malveillant est introduit sur la page d'accueil d'un service numérique afin d'infecter les 
+        équipements informatiques des usagers et/ou des agents publics en vue d'accéder à leurs données ou de mener une
+         autre attaque (ex.rançongiciel).</li></ul>`,
       definition:
         'Ce risque signifie que le service numérique est utilisé de manière discrète et illicite afin de conduire des activités ne correspondant pas à sa finalité, la plupart du temps à des fins de gain financier.',
     },
@@ -518,8 +540,13 @@ module.exports = {
       identifiantNumerique: 'R7',
       description:
         "Vol de données ou interception d'échanges à des fins de renseignement ou d'espionnage",
-      descriptionLongue:
-        "Ce risque signifie que des échanges entre agents publics ou avec des usagers sont interceptés ou que des documents sont dérobés, le plus souvent à des fins de renseignement économique ou politique.<br> Par exemple :<li>Des documents concernant des candidatures à un marché public avant la date finale de dépôt des dossiers sont dérobés par des concurrents afin d'en tirer un avantage concurrentiel.</li><li>Des échanges entre agents publics et entreprises technologiques sont interceptés via la messagerie d'une plateforme permettant l'attribution d'aides publiques, à des fins d'intelligence économique.</li>",
+      descriptionLongue: `
+        Ce risque signifie que des échanges entre agents publics ou avec des usagers sont interceptés ou que des 
+        documents sont dérobés, le plus souvent à des fins de renseignement économique ou politique.
+        <h3>Par exemple :</h3><ul><li>Des documents concernant des candidatures à un marché public avant la date 
+        finale de dépôt des dossiers sont dérobés par des concurrents afin d'en tirer un avantage concurrentiel.</li>
+        <li>Des échanges entre agents publics et entreprises technologiques sont interceptés via la messagerie 
+        d'une plateforme permettant l'attribution d'aides publiques, à des fins d'intelligence économique.</li></ul>`,
       definition:
         'Ce risque signifie que des échanges entre agents publics ou avec des usagers sont interceptés ou que des documents sont dérobés, le plus souvent à des fins de renseignement économique ou politique.',
     },
