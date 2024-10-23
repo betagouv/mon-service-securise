@@ -4,7 +4,6 @@
 
 <script lang="ts">
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
-  import CartoucheIdentifiantRisque from '../ui/CartoucheIdentifiantRisque.svelte';
   import CartoucheCategorieRisque from '../ui/CartoucheCategorieRisque.svelte';
   import type {
     ReferentielCategories,
@@ -29,6 +28,7 @@
   import { intituleRisque } from './risques';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
   import Avertissement from '../ui/Avertissement.svelte';
+  import IdentifiantRisque from './IdentifiantRisque.svelte';
 
   export let ouvert = true;
   export let risque: Risque | undefined;
@@ -110,8 +110,10 @@
         <h2 class="titre-tiroir">{titreTiroir}</h2>
         <div class="badges">
           {#if risqueDuReferentiel}
-            <CartoucheIdentifiantRisque
-              identifiant={risqueDuReferentiel.identifiantNumerique}
+            <IdentifiantRisque
+              {risque}
+              niveauxGravite={referentielGravites}
+              niveauxVraisemblance={referentielVraisemblances}
             />
             <CartoucheReferentiel referentiel={Referentiel.ANSSI} />
             {#each risque.categories as categorie}
