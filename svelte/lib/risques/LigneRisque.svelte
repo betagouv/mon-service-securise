@@ -9,7 +9,7 @@
   import { Referentiel } from '../ui/types.d';
   import { createEventDispatcher } from 'svelte';
   import SelectionGravite from './SelectionGravite.svelte';
-  import { intituleRisque, risqueAMettreAJour } from './risques';
+  import { intituleRisque, niveauRisque, risqueAMettreAJour } from './risques';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
 
   export let categories: ReferentielCategories;
@@ -28,11 +28,15 @@
   const metAJourRisque = () => {
     emet('metAJourRisque');
   };
+
+  $: niveau = niveauRisque(risque, niveauxVraisemblance, niveauxGravite);
 </script>
 
 <tr>
   <td>
-    <span class="identifiant-numerique">{risque.identifiantNumerique}</span>
+    <span class={`identifiant-numerique ${niveau || ''}`}
+      >{risque.identifiantNumerique}</span
+    >
   </td>
   <td class="intitule" on:click>
     <p
@@ -104,8 +108,10 @@
     align-items: center;
     gap: 4px;
     border-radius: 40px;
-    border: 1.5px solid var(--texte-fonce);
+    border: 1.5px solid var(--couleur-identifiant-numerique);
     width: fit-content;
+    color: var(--couleur-identifiant-numerique);
+    --couleur-identifiant-numerique: var(--role-inconnu-texte);
   }
 
   .intitule {
@@ -148,5 +154,17 @@
   .a-mettre-a-jour {
     font-size: 12px;
     line-height: 20px;
+  }
+
+  .identifiant-numerique.faible {
+    --couleur-identifiant-numerique: var(--role-personnalise-texte);
+  }
+
+  .identifiant-numerique.moyen {
+    --couleur-identifiant-numerique: var(--role-proprietaire-texte);
+  }
+
+  .identifiant-numerique.eleve {
+    --couleur-identifiant-numerique: var(--rose-anssi);
   }
 </style>
