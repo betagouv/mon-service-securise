@@ -132,7 +132,7 @@
     column-gap: 3px;
     grid-template-rows: repeat(4, 35px);
     row-gap: 2px;
-    padding: 24px 13px 6px 6px;
+    padding: 15px 13px 6px 6px;
     border-bottom: 1px solid var(--liseres-fonce);
     border-left: 1px solid var(--liseres-fonce);
     width: fit-content;
@@ -196,6 +196,7 @@
     font-weight: 700;
     line-height: 16px;
     color: white;
+    text-align: center;
   }
 
   .cellule-matrice.faible {
