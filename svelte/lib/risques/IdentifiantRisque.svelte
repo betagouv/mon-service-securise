@@ -9,10 +9,16 @@
   export let risque: Risque;
 
   $: niveau = niveauRisque(risque, niveauxVraisemblance, niveauxGravite);
+  $: libelle =
+    risque.type === 'GENERAL'
+      ? `Risque ${risque.identifiantNumerique.substring(1)} (${
+          risque.identifiantNumerique
+        })`
+      : `Risque spécifique ${risque.identifiantNumerique.substring(2)}`;
 </script>
 
 <span class={`identifiant-numerique ${niveau || ''}`}>
-  {risque.identifiantNumerique}
+  {libelle}
 </span>
 
 <style>
@@ -29,6 +35,7 @@
     width: fit-content;
     color: var(--couleur-identifiant-numerique);
     background: white;
+    white-space: nowrap;
     --couleur-identifiant-numerique: var(--role-inconnu-texte);
   }
 
