@@ -21,14 +21,14 @@
     font-weight: 700;
     line-height: 20px;
     display: flex;
-    height: 24px;
-    padding: 0 10px;
+    padding: 4px 10px;
     align-items: center;
     gap: 4px;
     border-radius: 40px;
     border: 1.5px solid var(--couleur-identifiant-numerique);
     width: fit-content;
     color: var(--couleur-identifiant-numerique);
+    background: white;
     --couleur-identifiant-numerique: var(--role-inconnu-texte);
   }
 
