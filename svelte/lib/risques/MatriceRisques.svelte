@@ -1,46 +1,14 @@
 <script lang="ts">
-  import type {
-    ReferentielGravites,
-    ReferentielVraisemblances,
-    Risque,
+  import {
+    type ReferentielGravites,
+    type ReferentielVraisemblances,
+    type Risque,
   } from './risques.d';
+  import { niveauRisqueCellule } from './risques';
 
   export let risques: Risque[];
   export let niveauxGravite: ReferentielGravites;
   export let niveauxVraisemblance: ReferentielVraisemblances;
-
-  enum NiveauRisque {
-    Faible = 'faible',
-    Moyen = 'moyen',
-    Eleve = 'eleve',
-  }
-
-  const referentielNiveauRisque: NiveauRisque[][] = [
-    [
-      NiveauRisque.Moyen,
-      NiveauRisque.Moyen,
-      NiveauRisque.Eleve,
-      NiveauRisque.Eleve,
-    ],
-    [
-      NiveauRisque.Faible,
-      NiveauRisque.Moyen,
-      NiveauRisque.Eleve,
-      NiveauRisque.Eleve,
-    ],
-    [
-      NiveauRisque.Faible,
-      NiveauRisque.Faible,
-      NiveauRisque.Moyen,
-      NiveauRisque.Eleve,
-    ],
-    [
-      NiveauRisque.Faible,
-      NiveauRisque.Faible,
-      NiveauRisque.Moyen,
-      NiveauRisque.Moyen,
-    ],
-  ];
 
   type Cellule = Risque[] | null;
   const positionVraisemblance = (risque: Risque) =>
@@ -92,7 +60,7 @@
     {#each new Array(16).fill(0) as _, index}
       {@const x = index % 4}
       {@const y = Math.floor(index / 4)}
-      {@const classe = referentielNiveauRisque[y][x]}
+      {@const classe = niveauRisqueCellule(x, y)}
       {@const risquesPresent = grille[y][x]}
       <div class="cellule-matrice {classe}">
         {risquesPresent
