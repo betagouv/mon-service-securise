@@ -109,12 +109,12 @@
         <h3>Risque</h3>
         <h2 class="titre-tiroir">{titreTiroir}</h2>
         <div class="badges">
+          <IdentifiantRisque
+            {risque}
+            niveauxGravite={referentielGravites}
+            niveauxVraisemblance={referentielVraisemblances}
+          />
           {#if risqueDuReferentiel}
-            <IdentifiantRisque
-              {risque}
-              niveauxGravite={referentielGravites}
-              niveauxVraisemblance={referentielVraisemblances}
-            />
             <CartoucheReferentiel referentiel={Referentiel.ANSSI} />
             {#each risque.categories as categorie}
               <CartoucheCategorieRisque
