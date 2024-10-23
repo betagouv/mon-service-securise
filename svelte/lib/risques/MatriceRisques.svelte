@@ -11,6 +11,7 @@
   export let niveauxVraisemblance: ReferentielVraisemblances;
 
   type Cellule = Risque[] | null;
+
   const positionVraisemblance = (risque: Risque) =>
     niveauxVraisemblance[risque.niveauVraisemblance].position;
 
