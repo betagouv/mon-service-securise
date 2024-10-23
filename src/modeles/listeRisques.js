@@ -22,12 +22,19 @@ class ListeRisques extends ElementsConstructibles {
     this.items = this.items.filter((r) => r.id !== idRisque);
   }
 
-  metsAJourRisque(risque) {
-    const index = this.items.findIndex((r) => r.id === risque.id);
+  trouveIndex(idRisque) {
+    const index = this.items.findIndex((r) => r.id === idRisque);
     if (index === -1)
-      throw new ErreurRisqueInconnu(
-        `Le risque "${risque.id}" est introuvable.`
-      );
+      throw new ErreurRisqueInconnu(`Le risque "${idRisque}" est introuvable.`);
+    return index;
+  }
+
+  trouveParId(idRisque) {
+    return this.items[this.trouveIndex(idRisque)];
+  }
+
+  metsAJourRisque(risque) {
+    const index = this.trouveIndex(risque.id);
     this.items[index] = risque;
   }
 }
