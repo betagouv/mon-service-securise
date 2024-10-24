@@ -5,6 +5,7 @@
     ReferentielGravites,
     ReferentielCategories,
     ReferentielVraisemblances,
+    ReferentielNiveauxRisque,
   } from './risques.d';
   import TiroirRisque, {
     type ModeAffichageTiroir,
@@ -26,6 +27,7 @@
   export let niveauxGravite: ReferentielGravites;
   export let niveauxVraisemblance: ReferentielVraisemblances;
   export let referentielRisques: ReferentielRisques;
+  export let niveauxRisque: ReferentielNiveauxRisque;
   let tiroirRisqueOuvert = false;
   let tiroirLegendeGraviteOuvert = false;
   let tiroirLegendeVraisemblanceOuvert = false;
@@ -80,7 +82,12 @@
     <div class="contenu-section">
       <h3>Évalué au départ</h3>
       <div>
-        <MatriceRisques {risques} {niveauxGravite} {niveauxVraisemblance} />
+        <MatriceRisques
+          {risques}
+          {niveauxGravite}
+          {niveauxVraisemblance}
+          {niveauxRisque}
+        />
       </div>
       <LegendeMatriceRisques />
     </div>

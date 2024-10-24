@@ -1,48 +1,18 @@
 <script lang="ts">
-  import type {
-    ReferentielGravites,
-    ReferentielVraisemblances,
-    Risque,
+  import {
+    type ReferentielGravites,
+    type ReferentielNiveauxRisque,
+    type ReferentielVraisemblances,
+    type Risque,
   } from './risques.d';
 
   export let risques: Risque[];
   export let niveauxGravite: ReferentielGravites;
   export let niveauxVraisemblance: ReferentielVraisemblances;
-
-  enum NiveauRisque {
-    Faible = 'faible',
-    Moyen = 'moyen',
-    Eleve = 'eleve',
-  }
-
-  const referentielNiveauRisque: NiveauRisque[][] = [
-    [
-      NiveauRisque.Moyen,
-      NiveauRisque.Moyen,
-      NiveauRisque.Eleve,
-      NiveauRisque.Eleve,
-    ],
-    [
-      NiveauRisque.Faible,
-      NiveauRisque.Moyen,
-      NiveauRisque.Eleve,
-      NiveauRisque.Eleve,
-    ],
-    [
-      NiveauRisque.Faible,
-      NiveauRisque.Faible,
-      NiveauRisque.Moyen,
-      NiveauRisque.Eleve,
-    ],
-    [
-      NiveauRisque.Faible,
-      NiveauRisque.Faible,
-      NiveauRisque.Moyen,
-      NiveauRisque.Moyen,
-    ],
-  ];
+  export let niveauxRisque: ReferentielNiveauxRisque;
 
   type Cellule = Risque[] | null;
+
   const positionVraisemblance = (risque: Risque) =>
     niveauxVraisemblance[risque.niveauVraisemblance].position;
 
@@ -71,6 +41,10 @@
     return resultat;
   };
   $: grille = calculeGrille(risques);
+
+  const niveauRisqueCellule = (colonne: number, ligne: number) => {
+    return niveauxRisque[colonne + 1][4 - ligne];
+  };
 </script>
 
 <div class="matrice">
@@ -92,9 +66,9 @@
     {#each new Array(16).fill(0) as _, index}
       {@const x = index % 4}
       {@const y = Math.floor(index / 4)}
-      {@const classe = referentielNiveauRisque[y][x]}
+      {@const classe = niveauRisqueCellule(x, y)}
       {@const risquesPresent = grille[y][x]}
-      <div class="cellule-matrice {classe}">
+      <div class="cellule-matrice {classe} {index}">
         {risquesPresent
           ? risquesPresent.map((r) => r.identifiantNumerique).join(', ')
           : ''}

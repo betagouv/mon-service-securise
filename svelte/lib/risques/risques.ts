@@ -1,10 +1,13 @@
 import { decode } from 'html-entities';
 import Risques from './Risques.svelte';
-import type {
-  DonneesRisque,
-  Risque,
-  RisquesProps,
-  TypeRisque,
+import {
+  type DonneesRisque,
+  NiveauRisque,
+  type ReferentielGravites,
+  type ReferentielVraisemblances,
+  type Risque,
+  type RisquesProps,
+  type TypeRisque,
 } from './risques.d';
 
 document.body.addEventListener(
@@ -57,5 +60,38 @@ export const intituleRisque = (risque: Risque) =>
 
 export const risqueAMettreAJour = (risque: Risque) =>
   risque.type === 'SPECIFIQUE' && !risque.categories.length;
+
+const referentielNiveauRisque: NiveauRisque[][] = [
+  [
+    NiveauRisque.Moyen,
+    NiveauRisque.Moyen,
+    NiveauRisque.Eleve,
+    NiveauRisque.Eleve,
+  ],
+  [
+    NiveauRisque.Faible,
+    NiveauRisque.Moyen,
+    NiveauRisque.Eleve,
+    NiveauRisque.Eleve,
+  ],
+  [
+    NiveauRisque.Faible,
+    NiveauRisque.Faible,
+    NiveauRisque.Moyen,
+    NiveauRisque.Eleve,
+  ],
+  [
+    NiveauRisque.Faible,
+    NiveauRisque.Faible,
+    NiveauRisque.Moyen,
+    NiveauRisque.Moyen,
+  ],
+];
+
+export const niveauRisque = (
+  _risque: Risque,
+  _niveauxVraisemblance: ReferentielVraisemblances,
+  _niveauxGravite: ReferentielGravites
+): NiveauRisque | undefined => undefined;
 
 export default app!;

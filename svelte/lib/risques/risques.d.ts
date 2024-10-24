@@ -56,6 +56,14 @@ export type ReferentielVraisemblances = Record<
   NiveauVraisemblance
 >;
 
+export enum NiveauRisque {
+  Faible = 'faible',
+  Moyen = 'moyen',
+  Eleve = 'eleve',
+}
+
+export type ReferentielNiveauxRisque = NiveauRisque[][];
+
 export type RisquesProps = {
   idService: string;
   estLectureSeule: boolean;
@@ -64,4 +72,5 @@ export type RisquesProps = {
   niveauxGravite: Record<string, NiveauGravite>;
   referentielRisques: ReferentielRisques;
   niveauxVraisemblance: ReferentielVraisemblances;
+  niveauxRisque: ReferentielNiveauxRisque;
 };

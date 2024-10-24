@@ -9,14 +9,14 @@
   import { Referentiel } from '../ui/types.d';
   import { createEventDispatcher } from 'svelte';
   import SelectionGravite from './SelectionGravite.svelte';
-  import { intituleRisque, risqueAMettreAJour } from './risques';
+  import { intituleRisque, niveauRisque, risqueAMettreAJour } from './risques';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
+  import IdentifiantRisque from './IdentifiantRisque.svelte';
 
   export let categories: ReferentielCategories;
   export let niveauxGravite: ReferentielGravites;
   export let niveauxVraisemblance: ReferentielVraisemblances;
   export let estLectureSeule: boolean;
-
   export let risque: Risque;
 
   $: estSpecifiqueAMettreAJour = risqueAMettreAJour(risque);
@@ -32,7 +32,7 @@
 
 <tr>
   <td>
-    <span class="identifiant-numerique">{risque.identifiantNumerique}</span>
+    <IdentifiantRisque {risque} {niveauxVraisemblance} {niveauxGravite} />
   </td>
   <td class="intitule" on:click>
     <p
@@ -92,20 +92,6 @@
 
   tr:has(.intitule:hover) {
     box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
-  }
-
-  .identifiant-numerique {
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 20px;
-    display: flex;
-    height: 24px;
-    padding: 0 10px;
-    align-items: center;
-    gap: 4px;
-    border-radius: 40px;
-    border: 1.5px solid var(--texte-fonce);
-    width: fit-content;
   }
 
   .intitule {

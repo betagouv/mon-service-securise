@@ -1013,4 +1013,114 @@ describe('Le référentiel', () => {
       );
     });
   });
+
+  describe('sur demande de la matrice des niveaux de risques', () => {
+    it("peut construire une matrice d'une case", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxRisques: { vert: [{ gravite: 0, vraisemblance: 0 }] },
+      });
+
+      const matrice = referentiel.matriceNiveauxRisques();
+
+      expect(matrice).to.eql([['vert']]);
+    });
+
+    it('peut construire une matrice 1x2', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxRisques: {
+          vert: [{ gravite: 0, vraisemblance: 0 }],
+          orange: [{ gravite: 0, vraisemblance: 1 }],
+        },
+      });
+
+      const matrice = referentiel.matriceNiveauxRisques();
+
+      expect(matrice).to.eql([['vert'], ['orange']]);
+    });
+
+    it('peut construire une matrice 2x1', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxRisques: {
+          vert: [{ gravite: 0, vraisemblance: 0 }],
+          orange: [{ gravite: 1, vraisemblance: 0 }],
+        },
+      });
+
+      const matrice = referentiel.matriceNiveauxRisques();
+
+      expect(matrice).to.eql([['vert', 'orange']]);
+    });
+
+    it('peut construire une matrice 1x2 dans le désordre', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxRisques: {
+          orange: [{ gravite: 0, vraisemblance: 1 }],
+        },
+      });
+
+      const matrice = referentiel.matriceNiveauxRisques();
+
+      expect(matrice).to.eql([[], ['orange']]);
+    });
+
+    it('peut construire une matrice avec des spécifications de vraisemblance multiples', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxRisques: {
+          orange: [{ gravite: 0, vraisemblance: [0, 1] }],
+        },
+      });
+
+      const matrice = referentiel.matriceNiveauxRisques();
+
+      expect(matrice).to.eql([['orange'], ['orange']]);
+    });
+
+    it('peut construire une matrice avec des spécifications de gravite multiples', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxRisques: {
+          orange: [{ gravite: [0, 1], vraisemblance: 0 }],
+        },
+      });
+
+      const matrice = referentiel.matriceNiveauxRisques();
+
+      expect(matrice).to.eql([['orange', 'orange']]);
+    });
+
+    it('peut construire une matrice avec des spécifications de gravite et vraisemblance multiples', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxRisques: {
+          orange: [{ gravite: [0, 1], vraisemblance: [0, 1] }],
+        },
+      });
+
+      const matrice = referentiel.matriceNiveauxRisques();
+
+      expect(matrice).to.eql([
+        ['orange', 'orange'],
+        ['orange', 'orange'],
+      ]);
+    });
+  });
+
+  describe('sur demande du niveau de risque', () => {
+    it('peut retourner le niveau de la matrice', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxGravite: {
+          grave: { description: 'Une description', position: 1 },
+        },
+        niveauxVraisemblance: {
+          probable: { description: 'Une description', position: 1 },
+        },
+        niveauxRisques: {
+          orange: [{ gravite: 0, vraisemblance: 0 }],
+          rouge: [{ gravite: 1, vraisemblance: 1 }],
+        },
+      });
+
+      const niveau = referentiel.niveauRisque('probable', 'grave');
+
+      expect(niveau).to.be('rouge');
+    });
+  });
 });
