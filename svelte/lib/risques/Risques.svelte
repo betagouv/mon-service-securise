@@ -16,6 +16,8 @@
   import TiroirLegendeVraisemblance from './TiroirLegendeVraisemblance.svelte';
   import Avertissement from '../ui/Avertissement.svelte';
   import { risqueAMettreAJour } from './risques';
+  import MatriceRisques from './MatriceRisques.svelte';
+  import LegendeMatriceRisques from './LegendeMatriceRisques.svelte';
 
   export let idService: string;
   export let estLectureSeule: boolean;
@@ -30,8 +32,10 @@
   let modeAffichageTiroir: ModeAffichageTiroir = '';
   let risqueEnEdition: Risque | undefined;
 
-  const metAJourRisque = (risque: Risque) =>
+  const metAJourRisque = (risque: Risque) => {
     enregistreRisque(idService, risque);
+    rafraichisRisqueDansLeTableau(risque);
+  };
 
   const rafraichisRisqueDansLeTableau = (risque: Risque) => {
     risques[risques.findIndex((r) => r.id === risque.id)] = risque;
@@ -69,6 +73,19 @@
 
   $: doitAfficherAvertissement = risques.some(risqueAMettreAJour);
 </script>
+
+<div class="au-dessus-tableau">
+  <div class="section cartographie">
+    <h2>Cartographie des risques</h2>
+    <div class="contenu-section">
+      <h3>Évalué au départ</h3>
+      <div>
+        <MatriceRisques {risques} {niveauxGravite} {niveauxVraisemblance} />
+      </div>
+      <LegendeMatriceRisques />
+    </div>
+  </div>
+</div>
 
 <div class="entete-tableau-risques">
   <h3>Risques</h3>
@@ -238,5 +255,41 @@
 
   .entete-tableau-risques h3 {
     font-size: 1.25rem;
+  }
+
+  .au-dessus-tableau {
+    display: flex;
+    text-align: left;
+    margin-bottom: 35px;
+  }
+
+  .au-dessus-tableau .section {
+    display: flex;
+    flex-direction: column;
+    gap: 23px;
+  }
+
+  .au-dessus-tableau h2 {
+    font-weight: bold;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin: 0;
+  }
+
+  .au-dessus-tableau h3 {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .au-dessus-tableau .contenu-section {
+    border: 1px solid var(--liseres-fonce);
+    border-radius: 8px;
+    padding: 35px 19px;
+  }
+
+  .cartographie .contenu-section div {
+    padding: 16px 28px 20px 46px;
   }
 </style>
