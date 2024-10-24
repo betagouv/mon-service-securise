@@ -345,6 +345,9 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return resultat;
   };
 
+  const niveauRisque = (_vraisemblance, _gravite) =>
+    matriceNiveauxRisques()[0][0];
+
   valideDonnees();
 
   return {
@@ -410,6 +413,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     nbMoisRappelsExpiration,
     niveauGravite,
     niveauxGravite,
+    niveauRisque,
     niveauVraisemblance,
     niveauxVraisemblance,
     nombreOrganisationsUtilisatrices,

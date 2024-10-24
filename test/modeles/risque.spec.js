@@ -61,4 +61,39 @@ describe('Un risque', () => {
       niveauGravite: 'unNiveau',
     });
   });
+
+  describe('sait calculer son niveau de risque', () => {
+    let referentiel;
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        niveauxGravite: {
+          nonConcerne: { description: 'Une description', position: 0 },
+        },
+        niveauxVraisemblance: {
+          improbable: { description: 'Une description', position: 0 },
+        },
+        niveauxRisques: { eleve: [{ gravite: 0, vraisemblance: 0 }] },
+      });
+    });
+
+    it("quand la gravité n'est pas définie", () => {
+      const risque = new Risque({ niveauGravite: undefined });
+
+      const niveauRisque = risque.niveauRisque();
+
+      expect(niveauRisque).to.be('indeterminable');
+      expect(Risque.NIVEAU_RISQUE_INDETERMINABLE).to.be('indeterminable');
+    });
+
+    it('quand la gravité et la vraisemblance sont définis dans la matrice de risques', () => {
+      const risque = new Risque(
+        { niveauGravite: 'nonConcerne', niveauVraisemblance: 'improbable' },
+        referentiel
+      );
+
+      const niveauRisque = risque.niveauRisque();
+
+      expect(niveauRisque).to.be('eleve');
+    });
+  });
 });
