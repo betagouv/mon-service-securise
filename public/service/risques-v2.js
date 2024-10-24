@@ -10,6 +10,9 @@ $(() => {
   const referentielRisques = JSON.parse(
     $('#donnees-referentiel-risques').text()
   );
+  const niveauxRisque = JSON.parse(
+    $('#donnees-referentiel-niveaux-risque').text()
+  );
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-risques', {
@@ -21,6 +24,7 @@ $(() => {
         niveauxGravite,
         referentielRisques,
         niveauxVraisemblance,
+        niveauxRisque,
       },
     })
   );

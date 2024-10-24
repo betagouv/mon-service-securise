@@ -1,14 +1,15 @@
 <script lang="ts">
   import {
     type ReferentielGravites,
+    type ReferentielNiveauxRisque,
     type ReferentielVraisemblances,
     type Risque,
   } from './risques.d';
-  import { niveauRisqueCellule } from './risques';
 
   export let risques: Risque[];
   export let niveauxGravite: ReferentielGravites;
   export let niveauxVraisemblance: ReferentielVraisemblances;
+  export let niveauxRisque: ReferentielNiveauxRisque;
 
   type Cellule = Risque[] | null;
 
@@ -40,6 +41,10 @@
     return resultat;
   };
   $: grille = calculeGrille(risques);
+
+  const niveauRisqueCellule = (colonne: number, ligne: number) => {
+    return niveauxRisque[colonne + 1][4 - ligne];
+  };
 </script>
 
 <div class="matrice">
@@ -63,7 +68,7 @@
       {@const y = Math.floor(index / 4)}
       {@const classe = niveauRisqueCellule(x, y)}
       {@const risquesPresent = grille[y][x]}
-      <div class="cellule-matrice {classe}">
+      <div class="cellule-matrice {classe} {index}">
         {risquesPresent
           ? risquesPresent.map((r) => r.identifiantNumerique).join(', ')
           : ''}
