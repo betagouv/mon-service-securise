@@ -1,6 +1,7 @@
 const adaptateurJWTParDefaut = require('../adaptateurs/adaptateurJWT');
 const { fabriqueAdaptateurUUID } = require('../adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
+const adaptateurEnvironnementParDefaut = require('../adaptateurs/adaptateurEnvironnement');
 const {
   ErreurEmailManquant,
   ErreurSuppressionImpossible,
@@ -28,6 +29,7 @@ function fabriquePersistance({
   adaptateurPersistance,
   adaptateurJWT,
   adaptateurChiffrement,
+  adaptateurEnvironnement,
 }) {
   const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
@@ -50,7 +52,10 @@ function fabriquePersistance({
     const donneesDechiffrees =
       await dechiffreDonneesUtilisateur(donneesUtilisateur);
 
-    return new Utilisateur(donneesDechiffrees, { adaptateurJWT });
+    return new Utilisateur(donneesDechiffrees, {
+      adaptateurJWT,
+      cguActuelles: adaptateurEnvironnement.cgu().versionActuelle(),
+    });
   };
 
   return {
@@ -147,7 +152,7 @@ function fabriquePersistance({
 const creeDepot = (config = {}) => {
   const {
     adaptateurChiffrement,
-    adaptateurEnvironnement,
+    adaptateurEnvironnement = adaptateurEnvironnementParDefaut,
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = fabriqueAdaptateurUUID(),
@@ -159,6 +164,7 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance,
     adaptateurJWT,
     adaptateurChiffrement,
+    adaptateurEnvironnement,
   });
 
   const dechiffreUtilisateur = async (donneesUtilisateur) =>
@@ -215,8 +221,10 @@ const creeDepot = (config = {}) => {
       motDePasseStocke
     );
 
+    const cguActuelles = adaptateurEnvironnement.cgu().versionActuelle();
+
     return authentificationReussie
-      ? new Utilisateur(u, { adaptateurJWT })
+      ? new Utilisateur(u, { adaptateurJWT, cguActuelles })
       : echecAuthentification;
   };
 

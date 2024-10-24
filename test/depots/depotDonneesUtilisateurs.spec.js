@@ -76,6 +76,46 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
   });
 
+  it("sait dire si l'utilisateur a accepté les CGU actuelles lorsqu'il est récupéré par son hash d'email", async () => {
+    const cguEnV2 = { cgu: () => ({ versionActuelle: () => 'v2.0' }) };
+    const deuxUtilisateurs = unePersistanceMemoire()
+      .ajouteUnUtilisateur({
+        id: 'U1-ACCEPTE-OBSOLETE',
+        cguAcceptees: 'v1.0',
+        email: 'jean@mail.fr',
+        emailHash: 'jean@mail.fr',
+        motDePasse: 'A',
+      })
+      .ajouteUnUtilisateur({
+        id: 'U2-ACCEPTE-OK',
+        cguAcceptees: 'v2.0',
+        email: 'marie@mail.fr',
+        emailHash: 'marie@mail.fr',
+        motDePasse: 'A',
+      });
+
+    const depot = DepotDonneesUtilisateurs.creeDepot({
+      adaptateurEnvironnement: cguEnV2,
+      adaptateurPersistance: deuxUtilisateurs.construis(),
+      adaptateurChiffrement: {
+        hacheBCrypt: async (chaine) => chaine,
+        hacheSha256: (chaine) => chaine,
+        compareBCrypt: async () => true,
+        chiffre: async (donnees) => donnees,
+        dechiffre: async (donnees) => donnees,
+      },
+      adaptateurJWT,
+    });
+
+    const obsolete = await depot.utilisateurAuthentifie('jean@mail.fr', 'A');
+    expect(obsolete.id).to.be('U1-ACCEPTE-OBSOLETE');
+    expect(obsolete.accepteCGU()).to.be(false);
+
+    const correct = await depot.utilisateurAuthentifie('marie@mail.fr', 'A');
+    expect(correct.id).to.be('U2-ACCEPTE-OK');
+    expect(correct.accepteCGU()).to.be(true);
+  });
+
   it("met à jour le mot de passe d'un utilisateur", async () => {
     const depot = DepotDonneesUtilisateurs.creeDepot({
       adaptateurChiffrement,

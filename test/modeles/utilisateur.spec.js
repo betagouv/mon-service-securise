@@ -107,15 +107,24 @@ describe('Un utilisateur', () => {
     expect(token.source).to.be('source');
   });
 
-  it('sait détecter si les conditions générales ont été acceptées', () => {
-    const utilisateur = new Utilisateur({
-      email: 'jean.dupont@mail.fr',
-      cguAcceptees: true,
-    });
-    expect(utilisateur.accepteCGU()).to.be(true);
+  it('sait détecter si les conditions générales actuelles ont été acceptées', () => {
+    const accepteLesActuelles = new Utilisateur(
+      { email: 'jean.dupont@mail.fr', cguAcceptees: 'v1.0' },
+      { cguActuelles: 'v1.0' }
+    );
+    expect(accepteLesActuelles.accepteCGU()).to.be(true);
 
-    const autreUtilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
-    expect(autreUtilisateur.accepteCGU()).to.be(false);
+    const jamaisAcceptees = new Utilisateur(
+      { email: 'jean.dupont@mail.fr' },
+      { cguActuelles: 'v1.0' }
+    );
+    expect(jamaisAcceptees.accepteCGU()).to.be(false);
+
+    const accepteObsoletes = new Utilisateur(
+      { email: 'jean.dupont@mail.fr', cguAcceptees: 'v1.0' },
+      { cguActuelles: 'v1.1-8' }
+    );
+    expect(accepteObsoletes.accepteCGU()).to.be(false);
   });
 
   it('sait détecter si le transactionnel a été acceptée', () => {

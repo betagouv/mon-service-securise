@@ -13,7 +13,7 @@ const valide = (donnees) => {
 };
 
 class Utilisateur extends Base {
-  constructor(donnees = {}, { adaptateurJWT } = {}) {
+  constructor(donnees = {}, { adaptateurJWT, cguActuelles } = {}) {
     super({
       proprietesAtomiquesRequises: [
         'dateCreation',
@@ -34,6 +34,7 @@ class Utilisateur extends Base {
     this.entite = new Entite(donnees.entite);
     this.renseigneProprietes(donnees);
     this.adaptateurJWT = adaptateurJWT;
+    this.cguActuelles = cguActuelles;
     this.identite = new Identite(donnees);
   }
 
@@ -107,7 +108,7 @@ class Utilisateur extends Base {
   }
 
   accepteCGU() {
-    return !!this.cguAcceptees;
+    return this.cguAcceptees === this.cguActuelles;
   }
 
   accepteInfolettre() {
