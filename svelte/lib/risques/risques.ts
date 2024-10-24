@@ -88,39 +88,10 @@ const referentielNiveauRisque: NiveauRisque[][] = [
   ],
 ];
 
-export const niveauRisqueCellule = (colonne: number, ligne: number) => {
-  return referentielNiveauRisque[ligne][colonne];
-};
-
-const positionVraisemblance = (
-  risque: Risque,
-  niveauxVraisemblance: ReferentielVraisemblances
-) =>
-  risque.niveauVraisemblance
-    ? niveauxVraisemblance[risque.niveauVraisemblance].position
-    : undefined;
-
-const positionGravite = (
-  risque: Risque,
-  niveauxGravite: ReferentielGravites
-) =>
-  risque.niveauGravite
-    ? niveauxGravite[risque.niveauGravite].position
-    : undefined;
-
 export const niveauRisque = (
-  risque: Risque,
-  niveauxVraisemblance: ReferentielVraisemblances,
-  niveauxGravite: ReferentielGravites
-): NiveauRisque | undefined => {
-  const vraisemblance = positionVraisemblance(risque, niveauxVraisemblance);
-  const gravite = positionGravite(risque, niveauxGravite);
-  if (!vraisemblance || !gravite) {
-    return undefined;
-  }
-  const x = vraisemblance - 1;
-  const y = Math.abs(4 - gravite);
-  return niveauRisqueCellule(x, y);
-};
+  _risque: Risque,
+  _niveauxVraisemblance: ReferentielVraisemblances,
+  _niveauxGravite: ReferentielGravites
+): NiveauRisque | undefined => undefined;
 
 export default app!;
