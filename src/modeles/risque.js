@@ -3,6 +3,8 @@ const NiveauGravite = require('./niveauGravite');
 const Referentiel = require('../referentiel');
 const { ErreurNiveauVraisemblanceInconnu } = require('../erreurs');
 
+const NiveauRisque = { NIVEAU_RISQUE_INDETERMINABLE: 'indeterminable' };
+
 class Risque extends InformationsService {
   constructor(
     donneesRisque = {},
@@ -22,6 +24,7 @@ class Risque extends InformationsService {
       this.niveauGravite,
       referentiel
     );
+    this.referentiel = referentiel;
   }
 
   descriptionNiveauGravite() {
@@ -34,6 +37,16 @@ class Risque extends InformationsService {
 
   positionNiveauGravite() {
     return this.objetNiveauGravite.position;
+  }
+
+  niveauRisque() {
+    if (!this.niveauVraisemblance || !this.niveauGravite) {
+      return NiveauRisque.NIVEAU_RISQUE_INDETERMINABLE;
+    }
+    return this.referentiel.niveauRisque(
+      this.niveauVraisemblance,
+      this.niveauGravite
+    );
   }
 
   static valide({ niveauVraisemblance }, referentiel) {
@@ -50,4 +63,5 @@ class Risque extends InformationsService {
   }
 }
 
+Object.assign(Risque, NiveauRisque);
 module.exports = Risque;
