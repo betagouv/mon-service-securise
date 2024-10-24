@@ -314,6 +314,37 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return natures[nature];
   };
 
+  const matriceNiveauxRisques = () => {
+    const resultat = [];
+    const niveauxRisque = Object.keys(donnees.niveauxRisques);
+
+    function enTableau(item) {
+      return Array.isArray(item) ? item : [item];
+    }
+
+    function ajouteCorrespondance(vraisemblances, gravites, niveauRisque) {
+      vraisemblances.forEach((valeurVraisemblance) => {
+        while (resultat.length <= valeurVraisemblance) {
+          resultat.push([]);
+        }
+        gravites.forEach((valeurGravite) => {
+          resultat[valeurVraisemblance][valeurGravite] = niveauRisque;
+        });
+      });
+    }
+
+    niveauxRisque.forEach((niveauRisque) => {
+      const correspondances = donnees.niveauxRisques[niveauRisque];
+      correspondances.forEach(({ gravite, vraisemblance }) => {
+        const vraisemblances = enTableau(vraisemblance);
+        const gravites = enTableau(gravite);
+
+        ajouteCorrespondance(vraisemblances, gravites, niveauRisque);
+      });
+    });
+    return resultat;
+  };
+
   valideDonnees();
 
   return {
@@ -370,6 +401,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     libelleEtape,
     localisationDonnees,
     localisationsDonnees,
+    matriceNiveauxRisques,
     mesure,
     mesureIndispensable,
     mesures,
