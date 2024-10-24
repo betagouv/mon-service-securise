@@ -165,7 +165,9 @@
           <div class="champs">
             {#if risqueDuReferentiel}
               <ControleFormulaireTiroir libelle="Description du risque">
-                <span>{@html risqueDuReferentiel.descriptionLongue}</span>
+                <span class="description-longue-risque"
+                  >{@html risqueDuReferentiel.descriptionLongue}</span
+                >
               </ControleFormulaireTiroir>
             {/if}
             {#if risque.type === 'SPECIFIQUE'}
@@ -174,7 +176,7 @@
                 requis={true}
               >
                 <ZoneTexte
-                  aideSaisie="ex : lorem ipsum"
+                  aideSaisie="Titre du risque"
                   bind:valeur={risque.intitule}
                   messageErreur="L'intitulé est obligatoire. Veuillez le renseigner."
                   requis={true}
@@ -183,7 +185,7 @@
               </ControleFormulaireTiroir>
               <ControleFormulaireTiroir libelle="Description du risque">
                 <ZoneTexte
-                  aideSaisie="ex : lorem ipsum"
+                  aideSaisie="Ce risque signifie que…"
                   lignes={6}
                   bind:valeur={risque.description}
                 />
@@ -375,5 +377,21 @@
 
   :global(.formulaire-risque) {
     flex: 1;
+  }
+
+  :global(.description-longue-risque h3) {
+    margin: 24px 0 8px;
+    font-size: 1rem;
+    line-height: 1.375rem;
+  }
+
+  :global(.description-longue-risque ul) {
+    color: var(--texte-clair);
+    padding-left: 24px;
+    margin: 8px 0 0;
+  }
+
+  :global(.description-longue-risque li) {
+    margin-bottom: 16px;
   }
 </style>
