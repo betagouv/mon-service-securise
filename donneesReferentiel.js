@@ -592,6 +592,27 @@ module.exports = {
     },
   },
 
+  niveauxRisques: {
+    eleve: [
+      { gravite: [3, 4], vraisemblance: [3, 4] },
+      { gravite: 2, vraisemblance: 4 },
+    ],
+    moyen: [
+      { gravite: 1, vraisemblance: [3, 4] },
+      { gravite: 2, vraisemblance: 3 },
+      { gravite: 3, vraisemblance: 2 },
+      { gravite: 4, vraisemblance: [1, 2] },
+    ],
+    faible: [
+      { gravite: [1, 2], vraisemblance: [1, 2] },
+      { gravite: 3, vraisemblance: 1 },
+    ],
+    negligeable: [
+      { gravite: 0, vraisemblance: [0, 1, 2, 3, 4] },
+      { gravite: [0, 1, 2, 3, 4], vraisemblance: 0 },
+    ],
+  },
+
   categoriesMesures: {
     gouvernance: 'Gouvernance',
     protection: 'Protection',
