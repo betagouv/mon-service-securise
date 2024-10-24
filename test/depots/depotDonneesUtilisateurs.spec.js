@@ -293,38 +293,27 @@ describe('Le dépôt de données des utilisateurs', () => {
     });
   });
 
-  it("retient qu'un utilisateur accepte les CGU", (done) => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        utilisateurs: [
-          {
-            id: '123',
-            donnees: {
-              prenom: 'Jean',
-              nom: 'Dupont',
-              email: 'jean.dupont@mail.fr',
-              motDePasse: 'XXX',
-            },
-          },
-        ],
-      }
-    );
+  it("retient qu'un utilisateur accepte les CGU", async () => {
+    const jeanDupont = {
+      prenom: 'Jean',
+      nom: 'Dupont',
+      email: 'jean.dupont@mail.fr',
+      motDePasse: 'XXX',
+    };
+
     const depot = DepotDonneesUtilisateurs.creeDepot({
       adaptateurChiffrement,
-      adaptateurPersistance,
+      adaptateurPersistance: AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        utilisateurs: [{ id: '123', donnees: jeanDupont }],
+      }),
     });
 
-    depot
-      .utilisateur('123')
-      .then((utilisateur) => {
-        expect(utilisateur.accepteCGU()).to.be(false);
-        return utilisateur;
-      })
-      .then(depot.valideAcceptationCGUPourUtilisateur)
-      .then(() => depot.utilisateur('123'))
-      .then((utilisateur) => expect(utilisateur.accepteCGU()).to.be(true))
-      .then(() => done())
-      .catch(done);
+    const avant = await depot.utilisateur('123');
+    expect(avant.accepteCGU()).to.be(false);
+
+    await depot.valideAcceptationCGUPourUtilisateur(avant);
+    const apres = await depot.utilisateur('123');
+    expect(apres.accepteCGU()).to.be(true);
   });
 
   it('sait si un utilisateur existe', async () => {
