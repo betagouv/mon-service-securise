@@ -50,6 +50,7 @@ const referentiel = Referentiel.creeReferentiel();
 const moteurRegles = new MoteurRegles(referentiel);
 const depotDonnees = DepotDonnees.creeDepot({
   adaptateurChiffrement,
+  adaptateurEnvironnement,
   adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
   adaptateurJWT,
   busEvenements,

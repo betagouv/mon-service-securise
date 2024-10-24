@@ -147,6 +147,7 @@ function fabriquePersistance({
 const creeDepot = (config = {}) => {
   const {
     adaptateurChiffrement,
+    adaptateurEnvironnement,
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = fabriqueAdaptateurUUID(),
@@ -291,7 +292,8 @@ const creeDepot = (config = {}) => {
   const tousUtilisateurs = async () => p.lis.tous();
 
   const valideAcceptationCGUPourUtilisateur = async (utilisateurAModifier) => {
-    await p.sauvegarde(utilisateurAModifier.id, { cguAcceptees: true });
+    const cguActuelles = adaptateurEnvironnement.cgu().versionActuelle();
+    await p.sauvegarde(utilisateurAModifier.id, { cguAcceptees: cguActuelles });
     return p.lis.un(utilisateurAModifier.id);
   };
 

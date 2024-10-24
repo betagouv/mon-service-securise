@@ -19,6 +19,7 @@ const {
 const creeDepot = (config = {}) => {
   const {
     adaptateurChiffrement = fabriqueAdaptateurChiffrement(),
+    adaptateurEnvironnement,
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = fabriqueAdaptateurUUID(),
@@ -29,6 +30,7 @@ const creeDepot = (config = {}) => {
 
   const depotUtilisateurs = depotDonneesUtilisateurs.creeDepot({
     adaptateurChiffrement,
+    adaptateurEnvironnement,
     adaptateurJWT,
     adaptateurPersistance,
     adaptateurUUID,

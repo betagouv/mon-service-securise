@@ -303,6 +303,9 @@ describe('Le dépôt de données des utilisateurs', () => {
 
     const depot = DepotDonneesUtilisateurs.creeDepot({
       adaptateurChiffrement,
+      adaptateurEnvironnement: {
+        cgu: () => ({ versionActuelle: () => 'v1.0' }),
+      },
       adaptateurPersistance: AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', donnees: jeanDupont }],
       }),
