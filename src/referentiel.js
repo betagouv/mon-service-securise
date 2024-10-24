@@ -345,8 +345,12 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return resultat;
   };
 
-  const niveauRisque = (_vraisemblance, _gravite) =>
-    matriceNiveauxRisques()[0][0];
+  const niveauRisque = (vraisemblance, gravite) => {
+    const positionGravite = donnees.niveauxGravite[gravite].position;
+    const positionVraisemblance =
+      donnees.vraisemblancesRisques[vraisemblance].position;
+    return matriceNiveauxRisques()[positionVraisemblance][positionGravite];
+  };
 
   valideDonnees();
 
