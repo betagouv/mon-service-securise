@@ -1,13 +1,13 @@
 import { decode } from 'html-entities';
 import Risques from './Risques.svelte';
-import {
-  type DonneesRisque,
+import type {
+  DonneesRisque,
   NiveauRisque,
-  type ReferentielGravites,
-  type ReferentielVraisemblances,
-  type Risque,
-  type RisquesProps,
-  type TypeRisque,
+  ReferentielGravites,
+  ReferentielVraisemblances,
+  Risque,
+  RisquesProps,
+  TypeRisque,
 } from './risques.d';
 
 document.body.addEventListener(
@@ -61,66 +61,10 @@ export const intituleRisque = (risque: Risque) =>
 export const risqueAMettreAJour = (risque: Risque) =>
   risque.type === 'SPECIFIQUE' && !risque.categories.length;
 
-const referentielNiveauRisque: NiveauRisque[][] = [
-  [
-    NiveauRisque.Moyen,
-    NiveauRisque.Moyen,
-    NiveauRisque.Eleve,
-    NiveauRisque.Eleve,
-  ],
-  [
-    NiveauRisque.Faible,
-    NiveauRisque.Moyen,
-    NiveauRisque.Eleve,
-    NiveauRisque.Eleve,
-  ],
-  [
-    NiveauRisque.Faible,
-    NiveauRisque.Faible,
-    NiveauRisque.Moyen,
-    NiveauRisque.Eleve,
-  ],
-  [
-    NiveauRisque.Faible,
-    NiveauRisque.Faible,
-    NiveauRisque.Moyen,
-    NiveauRisque.Moyen,
-  ],
-];
-
-export const niveauRisqueCellule = (colonne: number, ligne: number) => {
-  return referentielNiveauRisque[ligne][colonne];
-};
-
-const positionVraisemblance = (
-  risque: Risque,
-  niveauxVraisemblance: ReferentielVraisemblances
-) =>
-  risque.niveauVraisemblance
-    ? niveauxVraisemblance[risque.niveauVraisemblance].position
-    : undefined;
-
-const positionGravite = (
-  risque: Risque,
-  niveauxGravite: ReferentielGravites
-) =>
-  risque.niveauGravite
-    ? niveauxGravite[risque.niveauGravite].position
-    : undefined;
-
 export const niveauRisque = (
-  risque: Risque,
-  niveauxVraisemblance: ReferentielVraisemblances,
-  niveauxGravite: ReferentielGravites
-): NiveauRisque | undefined => {
-  const vraisemblance = positionVraisemblance(risque, niveauxVraisemblance);
-  const gravite = positionGravite(risque, niveauxGravite);
-  if (!vraisemblance || !gravite) {
-    return undefined;
-  }
-  const x = vraisemblance - 1;
-  const y = Math.abs(4 - gravite);
-  return niveauRisqueCellule(x, y);
-};
+  _risque: Risque,
+  _niveauxVraisemblance: ReferentielVraisemblances,
+  _niveauxGravite: ReferentielGravites
+): NiveauRisque | undefined => undefined;
 
 export default app!;
