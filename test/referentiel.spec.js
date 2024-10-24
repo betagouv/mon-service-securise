@@ -1102,4 +1102,25 @@ describe('Le référentiel', () => {
       ]);
     });
   });
+
+  describe('sur demande du niveau de risque', () => {
+    it('peut retourner le niveau de la matrice', () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxGravite: {
+          grave: { description: 'Une description', position: 1 },
+        },
+        vraisemblancesRisques: {
+          probable: { description: 'Une description', position: 1 },
+        },
+        niveauxRisques: {
+          orange: [{ gravite: 0, vraisemblance: 0 }],
+          rouge: [{ gravite: 1, vraisemblance: 1 }],
+        },
+      });
+
+      const niveau = referentiel.niveauRisque('probable', 'grave');
+
+      expect(niveau).to.be('rouge');
+    });
+  });
 });
