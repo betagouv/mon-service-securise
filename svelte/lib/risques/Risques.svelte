@@ -36,6 +36,9 @@
   let tiroirLegendeVraisemblanceOuvert = false;
   let modeAffichageTiroir: ModeAffichageTiroir = '';
   let risqueEnEdition: Risque | undefined;
+  let triParGravite: Tri = 'aucun';
+
+  type Tri = 'aucun' | 'ascendant' | 'descendant';
 
   const metAJourRisque = async (risque: Risque) => {
     const risqueMisAJour = await enregistreRisque(idService, risque);
@@ -77,7 +80,41 @@
     };
   };
 
+  const triSuivant = (triActuel: Tri): Tri => {
+    switch (triActuel) {
+      case 'aucun':
+        return 'descendant';
+      case 'descendant':
+        return 'ascendant';
+      case 'ascendant':
+        return 'aucun';
+    }
+  };
+
+  const triGravite = () => {
+    triParGravite = triSuivant(triParGravite);
+  };
+
   $: doitAfficherAvertissement = risques.some(risqueAMettreAJour);
+
+  function comparateur(r1: Risque, r2: Risque): number {
+    const n1 = r1.niveauGravite
+      ? niveauxGravite[r1.niveauGravite].position
+      : -1;
+    const n2 = r2.niveauGravite
+      ? niveauxGravite[r2.niveauGravite].position
+      : -1;
+    if (triParGravite === 'ascendant') {
+      return n1 - n2;
+    }
+    if (triParGravite === 'descendant') {
+      return n2 - n1;
+    }
+    return 0;
+  }
+
+  let risquesTries: Risque[];
+  $: triParGravite, (risquesTries = [...risques].sort(comparateur));
 </script>
 
 <div class="au-dessus-tableau">
@@ -136,6 +173,11 @@
               tiroirLegendeGraviteOuvert = true;
             }}
           ></button>
+          <button
+            type="button"
+            class={`bouton-tri tri-${triParGravite}`}
+            on:click={triGravite}
+          ></button>
         </div>
       </th>
       <th>
@@ -153,7 +195,7 @@
     </tr>
   </thead>
   <tbody>
-    {#each risques as risque (risque.id)}
+    {#each risquesTries as risque (risque.id)}
       <LigneRisque
         {risque}
         on:click={() => ouvreRisque(risque)}
@@ -262,6 +304,40 @@
     cursor: pointer;
     filter: brightness(0) saturate(100%) invert(44%) sepia(44%) saturate(243%)
       hue-rotate(176deg) brightness(96%) contrast(92%);
+  }
+
+  .bouton-tri:before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    filter: brightness(0) saturate(100%) invert(44%) sepia(44%) saturate(243%)
+      hue-rotate(176deg) brightness(96%) contrast(92%);
+  }
+
+  .bouton-tri {
+    display: flex;
+    border: none;
+    background-color: transparent;
+  }
+
+  .bouton-tri.tri-aucun:before {
+    background-image: url('/statique/assets/images/icone_tri_aucun.svg');
+    filter: invert(49%) sepia(5%) saturate(2221%) hue-rotate(176deg)
+      brightness(92%) contrast(84%);
+  }
+
+  .bouton-tri.tri-ascendant:before {
+    background-image: url('/statique/assets/images/icone_tri_croissant.svg');
+    filter: none;
+  }
+
+  .bouton-tri.tri-descendant:before {
+    background-image: url('/statique/assets/images/icone_tri_decroissant.svg');
+    filter: none;
   }
 
   .entete-tableau-risques h3 {
