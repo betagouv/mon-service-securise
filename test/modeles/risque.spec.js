@@ -59,7 +59,6 @@ describe('Un risque', () => {
     expect(risque.toJSON()).to.eql({
       commentaire: 'Un commentaire',
       niveauGravite: 'unNiveau',
-      niveauRisque: Risque.NIVEAU_RISQUE_INDETERMINABLE,
     });
   });
 
@@ -70,7 +69,7 @@ describe('Un risque', () => {
         niveauxGravite: {
           nonConcerne: { description: 'Une description', position: 0 },
         },
-        niveauxVraisemblance: {
+        vraisemblancesRisques: {
           improbable: { description: 'Une description', position: 0 },
         },
         niveauxRisques: { eleve: [{ gravite: 0, vraisemblance: 0 }] },

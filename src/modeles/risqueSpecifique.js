@@ -31,6 +31,7 @@ class RisqueSpecifique extends Risque {
     return {
       ...super.toJSON(),
       identifiantNumerique: this.identifiantNumeriqueRisque(),
+      niveauRisque: this.niveauRisque(),
     };
   }
 
