@@ -124,7 +124,12 @@ class Utilisateur extends Base {
   }
 
   genereToken(source) {
-    return this.adaptateurJWT.genereToken(this.id, this.cguAcceptees, source);
+    return this.adaptateurJWT.genereToken(
+      this.id,
+      this.accepteCGU(),
+      source,
+      this.estUnInvite()
+    );
   }
 
   initiales() {

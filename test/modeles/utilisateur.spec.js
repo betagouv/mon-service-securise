@@ -86,25 +86,47 @@ describe('Un utilisateur', () => {
     expect(toutEnMemeTemps.posteDetaille()).to.eql('RSSI, DPO et Maire');
   });
 
-  it('sait générer son JWT', () => {
+  describe('concernant la génération de son token JWT', () => {
     const adaptateurJWT = {
-      genereToken: (idUtilisateur, cguAcceptees, source) => ({
+      genereToken: (idUtilisateur, cguAcceptees, source, estInvite) => ({
         idUtilisateur,
         cguAcceptees,
         source,
+        estInvite,
       }),
     };
 
-    const jean = new Utilisateur(
-      { id: '123', email: 'jean.dupont@mail.fr', cguAcceptees: false },
-      { adaptateurJWT }
-    );
+    it('sait générer son JWT', () => {
+      const jean = new Utilisateur(
+        { id: '123', email: 'jean.dupont@mail.fr', cguAcceptees: 'v1' },
+        { adaptateurJWT, cguActuelles: 'v1' }
+      );
 
-    const token = jean.genereToken('source');
+      const token = jean.genereToken('source');
 
-    expect(token.idUtilisateur).to.be('123');
-    expect(token.cguAcceptees).to.be(false);
-    expect(token.source).to.be('source');
+      expect(token.idUtilisateur).to.be('123');
+      expect(token.cguAcceptees).to.be(true);
+      expect(token.estInvite).to.be(false);
+      expect(token.source).to.be('source');
+    });
+
+    it('indique des CGU non-acceptées si ce ne sont pas les CGU *actuelles* qui ont été acceptées', () => {
+      const accepteOsboletes = new Utilisateur(
+        { id: '123', email: 'a@b.fr', cguAcceptees: 'v1.0' },
+        { cguActuelles: 'v2.0', adaptateurJWT }
+      );
+      const tokenAvecObsoletes = accepteOsboletes.genereToken('');
+      expect(tokenAvecObsoletes.cguAcceptees).to.be(false);
+    });
+
+    it("indique qu'il s'agit d'un invité si les CGU n'ont jamais été acceptées (i.e. `cguAcceptees` est `undefined`)", () => {
+      const jamaisAcceptees = new Utilisateur(
+        { id: '123', email: 'a@b.fr', cguAcceptees: undefined },
+        { cguActuelles: 'v1.0', adaptateurJWT }
+      );
+      const tokenInvite = jamaisAcceptees.genereToken('');
+      expect(tokenInvite.estInvite).to.be(true);
+    });
   });
 
   it('sait détecter si les conditions générales actuelles ont été acceptées', () => {
