@@ -5,6 +5,7 @@ const gestionnaireTiroir = {
     const { titre, texteSimple, texteMultiple, initialise } = action;
 
     $('.titre-tiroir').text(titre);
+    $('.type-tiroir').text('').addClass('invisible');
     $('.texte-tiroir').text(estSelectionMulitple ? texteMultiple : texteSimple);
     $('.bloc-contenu').hide();
     action.affiche();

@@ -24,7 +24,7 @@
   position: relative;
   background: #dbecf1;
   text-align: left;
-  padding: 0 2em;
+  padding: 32px;
   overflow: hidden;
   flex-grow: 0;
   flex-shrink: 0;
@@ -37,7 +37,6 @@
 .titre-tiroir {
   font-size: 1.6em;
   margin: 0;
-  padding-top: 30px;
 }
 
 .texte-tiroir {
@@ -49,7 +48,7 @@
 
 .croix-fermeture {
   position: absolute;
-  top: 1.8em;
+  top: 0;
   right: 0;
   font-weight: bold;
   background: none;
@@ -411,4 +410,16 @@
 
 .label-mot-de-passe {
   position: relative;
+}
+
+.invisible {
+  display: none;
+}
+
+h3.type-tiroir {
+  text-align: left;
+  margin: 0;
+  font-weight: normal;
+  font-size: 1rem;
+  padding-bottom: 7px;
 }
