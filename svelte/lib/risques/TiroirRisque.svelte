@@ -59,8 +59,8 @@
     if (risque) {
       try {
         enCoursEnvoi = true;
-        await enregistreRisque(idService, risque);
-        emet('risqueMisAJour', risque);
+        const risqueMisAJour = await enregistreRisque(idService, risque);
+        emet('risqueMisAJour', risqueMisAJour);
         fermeTiroir();
       } finally {
         enCoursEnvoi = false;
