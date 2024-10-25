@@ -86,39 +86,25 @@ describe('Un utilisateur', () => {
     expect(toutEnMemeTemps.posteDetaille()).to.eql('RSSI, DPO et Maire');
   });
 
-  it('sait générer son JWT', (done) => {
-    const adaptateurJWT = {};
-    const utilisateur = new Utilisateur(
-      {
-        id: '123',
-        prenom: 'Jean',
-        nom: 'Dupont',
-        email: 'jean.dupont@mail.fr',
-        cguAcceptees: false,
-      },
+  it('sait générer son JWT', () => {
+    const adaptateurJWT = {
+      genereToken: (idUtilisateur, cguAcceptees, source) => ({
+        idUtilisateur,
+        cguAcceptees,
+        source,
+      }),
+    };
+
+    const jean = new Utilisateur(
+      { id: '123', email: 'jean.dupont@mail.fr', cguAcceptees: false },
       { adaptateurJWT }
     );
 
-    adaptateurJWT.genereToken = (
-      idUtilisateur,
-      cguAcceptees,
-      source,
-      callback
-    ) => {
-      expect(idUtilisateur).to.equal('123');
-      expect(cguAcceptees).to.be(false);
-      expect(source).to.be('source');
+    const token = jean.genereToken('source');
 
-      let aucuneErreur;
-      callback(aucuneErreur, 'un jeton');
-    };
-
-    utilisateur.genereToken('source', (erreur, token) => {
-      if (erreur) done(erreur);
-      expect(token).to.equal('un jeton');
-
-      done();
-    });
+    expect(token.idUtilisateur).to.be('123');
+    expect(token.cguAcceptees).to.be(false);
+    expect(token.source).to.be('source');
   });
 
   it('sait détecter si les conditions générales ont été acceptées', () => {
