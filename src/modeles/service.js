@@ -8,7 +8,6 @@ const Mesures = require('./mesures');
 const ObjetPersistanceService = require('./objetsPersistance/objetPersistanceService');
 const Risques = require('./risques');
 const RolesResponsabilites = require('./rolesResponsabilites');
-const Utilisateur = require('./utilisateur');
 const ObjetPDFAnnexeDescription = require('./objetsPDF/objetPDFAnnexeDescription');
 const ObjetPDFAnnexeMesures = require('./objetsPDF/objetPDFAnnexeMesures');
 const ObjetPDFAnnexeRisques = require('./objetsPDF/objetPDFAnnexeRisques');
@@ -16,6 +15,7 @@ const Autorisation = require('./autorisations/autorisation');
 const SuggestionAction = require('./suggestionAction');
 const { ErreurResponsablesMesureInvalides } = require('../erreurs');
 const { dateEnIso } = require('../utilitaires/date');
+const { Contributeur } = require('./contributeur');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -46,7 +46,7 @@ class Service {
     this.id = id;
     this.prochainIdNumeriqueDeRisqueSpecifique =
       prochainIdNumeriqueDeRisqueSpecifique;
-    this.contributeurs = contributeurs.map((c) => new Utilisateur(c));
+    this.contributeurs = contributeurs.map((c) => new Contributeur(c));
     this.descriptionService = new DescriptionService(
       descriptionService,
       referentiel
