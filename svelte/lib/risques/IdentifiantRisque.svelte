@@ -1,14 +1,7 @@
 <script lang="ts">
-  import { niveauRisque } from './risques';
-  import type { ReferentielGravites } from './risques.d';
-  import type { ReferentielVraisemblances } from './risques.d';
   import type { Risque } from './risques.d';
-
-  export let niveauxGravite: ReferentielGravites;
-  export let niveauxVraisemblance: ReferentielVraisemblances;
   export let risque: Risque;
 
-  $: niveau = niveauRisque(risque, niveauxVraisemblance, niveauxGravite);
   $: libelle =
     risque.type === 'GENERAL'
       ? `Risque ${risque.identifiantNumerique.substring(1)} (${
@@ -17,7 +10,7 @@
       : `Risque spécifique ${risque.identifiantNumerique.substring(2)}`;
 </script>
 
-<span class={`identifiant-numerique ${niveau || ''}`}>
+<span class={`identifiant-numerique ${risque.niveauRisque || ''}`}>
   {libelle}
 </span>
 

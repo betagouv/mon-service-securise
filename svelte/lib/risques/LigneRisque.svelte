@@ -9,7 +9,7 @@
   import { Referentiel } from '../ui/types.d';
   import { createEventDispatcher } from 'svelte';
   import SelectionGravite from './SelectionGravite.svelte';
-  import { intituleRisque, niveauRisque, risqueAMettreAJour } from './risques';
+  import { intituleRisque, risqueAMettreAJour } from './risques';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
   import IdentifiantRisque from './IdentifiantRisque.svelte';
 
@@ -32,7 +32,7 @@
 
 <tr>
   <td>
-    <IdentifiantRisque {risque} {niveauxVraisemblance} {niveauxGravite} />
+    <IdentifiantRisque {risque} />
   </td>
   <td class="intitule" on:click>
     <p

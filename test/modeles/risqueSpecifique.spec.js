@@ -3,6 +3,7 @@ const expect = require('expect.js');
 const { ErreurNiveauGraviteInconnu } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const RisqueSpecifique = require('../../src/modeles/risqueSpecifique');
+const Risque = require('../../src/modeles/risque');
 
 describe('Un risque spécifique', () => {
   let referentiel;
@@ -41,6 +42,7 @@ describe('Un risque spécifique', () => {
       niveauGravite: 'unNiveau',
       categories: ['C1'],
       identifiantNumerique: 'RS1',
+      niveauRisque: Risque.NIVEAU_RISQUE_INDETERMINABLE,
     });
   });
 

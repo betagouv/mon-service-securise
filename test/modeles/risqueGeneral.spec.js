@@ -3,6 +3,7 @@ const expect = require('expect.js');
 const { ErreurRisqueInconnu } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const RisqueGeneral = require('../../src/modeles/risqueGeneral');
+const Risque = require('../../src/modeles/risque');
 
 describe('Un risque général', () => {
   let referentiel;
@@ -47,6 +48,7 @@ describe('Un risque général', () => {
       niveauGravite: 'unNiveau',
       categories: ['CR1'],
       identifiantNumerique: 'R1',
+      niveauRisque: Risque.NIVEAU_RISQUE_INDETERMINABLE,
     });
   });
 
@@ -76,6 +78,7 @@ describe('Un risque général', () => {
       intitule: 'Une description',
       categories: ['CR1'],
       identifiantNumerique: 'R1',
+      niveauRisque: Risque.NIVEAU_RISQUE_INDETERMINABLE,
     });
   });
 
@@ -106,6 +109,7 @@ describe('Un risque général', () => {
       id: 'unRisque',
       commentaire: 'Un commentaire',
       niveauGravite: 'unNiveau',
+      niveauRisque: Risque.NIVEAU_RISQUE_INDETERMINABLE,
     });
   });
 });
