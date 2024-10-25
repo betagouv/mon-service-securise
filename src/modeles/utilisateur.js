@@ -111,6 +111,10 @@ class Utilisateur extends Base {
     return this.cguAcceptees === this.cguActuelles;
   }
 
+  estUnInvite() {
+    return this.cguAcceptees === undefined;
+  }
+
   accepteInfolettre() {
     return !!this.infolettreAcceptee;
   }

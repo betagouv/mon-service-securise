@@ -127,6 +127,24 @@ describe('Un utilisateur', () => {
     expect(accepteObsoletes.accepteCGU()).to.be(false);
   });
 
+  it("est considéré comme « invité » s'il n'a aucune version de CGU acceptée (i.e. les CGU acceptées sont `undefined`)", () => {
+    const unInvite = new Utilisateur({
+      email: 'jean.dupont@mail.fr',
+      cguAcceptees: undefined,
+    });
+
+    expect(unInvite.estUnInvite()).to.be(true);
+  });
+
+  it("n'est plus un invité dès lors qu'une version de CGU a été acceptée, même s'il s'agit de CGU osbolètes", () => {
+    const accepteObsolete = new Utilisateur(
+      { email: 'jean.dupont@mail.fr', cguAcceptees: 'v1' },
+      { cguActuelles: 'v2' }
+    );
+
+    expect(accepteObsolete.estUnInvite()).to.be(false);
+  });
+
   it('sait détecter si le transactionnel a été acceptée', () => {
     const utilisateur = new Utilisateur({
       email: 'jean.dupont@mail.fr',
