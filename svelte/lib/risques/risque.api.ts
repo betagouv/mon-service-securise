@@ -1,15 +1,25 @@
 import type { Risque } from './risques.d';
-import { convertisDonneesRisqueSpecifique } from './risques';
+import {
+  convertisDonneesRisqueGeneral,
+  convertisDonneesRisqueSpecifique,
+} from './risques';
 
-export const enregistreRisque = async (idService: string, risque: Risque) => {
+export const enregistreRisque = async (
+  idService: string,
+  risque: Risque
+): Promise<Risque> => {
   if (risque.type === 'GENERAL') {
-    await axios.put(`/api/service/${idService}/risques/${risque.id}`, {
-      niveauGravite: risque.niveauGravite,
-      commentaire: risque.commentaire,
-      niveauVraisemblance: risque.niveauVraisemblance,
-    });
+    const reponse = await axios.put(
+      `/api/service/${idService}/risques/${risque.id}`,
+      {
+        niveauGravite: risque.niveauGravite,
+        commentaire: risque.commentaire,
+        niveauVraisemblance: risque.niveauVraisemblance,
+      }
+    );
+    return convertisDonneesRisqueGeneral(reponse.data);
   } else {
-    await axios.put(
+    const reponse = await axios.put(
       `/api/service/${idService}/risquesSpecifiques/${risque.id}`,
       {
         niveauGravite: risque.niveauGravite,
@@ -20,6 +30,7 @@ export const enregistreRisque = async (idService: string, risque: Risque) => {
         description: risque.description,
       }
     );
+    return convertisDonneesRisqueSpecifique(reponse.data);
   }
 };
 

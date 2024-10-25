@@ -34,9 +34,9 @@
   let modeAffichageTiroir: ModeAffichageTiroir = '';
   let risqueEnEdition: Risque | undefined;
 
-  const metAJourRisque = (risque: Risque) => {
-    enregistreRisque(idService, risque);
-    rafraichisRisqueDansLeTableau(risque);
+  const metAJourRisque = async (risque: Risque) => {
+    const risqueMisAJour = await enregistreRisque(idService, risque);
+    rafraichisRisqueDansLeTableau(risqueMisAJour);
   };
 
   const rafraichisRisqueDansLeTableau = (risque: Risque) => {
