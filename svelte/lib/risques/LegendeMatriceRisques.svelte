@@ -1,12 +1,20 @@
+<script lang="ts">
+  import type { ReferentielNiveauxRisque } from './risques.d';
+
+  export let niveauxRisque: ReferentielNiveauxRisque;
+  const niveaux = Object.entries(niveauxRisque)
+    .filter(([_, n]) => n.position >= 0)
+    .sort(([_, a], [__, b]) => a.position - b.position);
+</script>
+
 <div class="legende-matrice">
   <ul>
-    <li class="faible">
-      <span class="niveau">Faible :&nbsp;</span>Acceptable en l’état
-    </li>
-    <li class="moyen">
-      <span class="niveau">Moyen :&nbsp;</span>Tolérable sous contrôle
-    </li>
-    <li class="eleve"><span class="niveau">Élevé :&nbsp;</span>Inacceptable</li>
+    {#each niveaux as [id, descriptionNiveau]}
+      <li class={id}>
+        <span class="niveau">{descriptionNiveau.libelle} :&nbsp;</span
+        >{descriptionNiveau.description}
+      </li>
+    {/each}
   </ul>
 </div>
 

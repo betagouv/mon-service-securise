@@ -72,7 +72,9 @@ describe('Un risque', () => {
         vraisemblancesRisques: {
           improbable: { description: 'Une description', position: 0 },
         },
-        niveauxRisques: { eleve: [{ gravite: 0, vraisemblance: 0 }] },
+        niveauxRisques: {
+          eleve: { correspondances: [{ gravite: 0, vraisemblance: 0 }] },
+        },
       });
     });
 

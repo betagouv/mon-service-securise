@@ -46,8 +46,6 @@ export type IdentifiantGravite = string;
 
 export type IdentifiantVraisemblance = string;
 
-export type IdentifiantNiveauRisque = string;
-
 export type ReferentielRisques = Record<string, RisqueDuReferentiel>;
 
 export type ReferentielGravites = Record<IdentifiantGravite, NiveauGravite>;
@@ -59,13 +57,26 @@ export type ReferentielVraisemblances = Record<
   NiveauVraisemblance
 >;
 
-export enum NiveauRisque {
+export enum IdentifiantNiveauRisque {
   Faible = 'faible',
   Moyen = 'moyen',
   Eleve = 'eleve',
+  Negligeable = 'negligeable',
+  Indeterminable = 'indeterminable',
 }
 
-export type ReferentielNiveauxRisque = NiveauRisque[][];
+export type MatriceNiveauxRisque = IdentifiantNiveauRisque[][];
+
+export type ReferentielNiveauxRisque = Record<
+  IdentifiantNiveauRisque,
+  DescriptionNiveauRisque
+>;
+
+export type DescriptionNiveauRisque = {
+  libelle: string;
+  description: string;
+  position: number;
+};
 
 export type RisquesProps = {
   idService: string;
@@ -76,4 +87,5 @@ export type RisquesProps = {
   referentielRisques: ReferentielRisques;
   niveauxVraisemblance: ReferentielVraisemblances;
   niveauxRisque: ReferentielNiveauxRisque;
+  matriceNiveauxRisque: MatriceNiveauxRisque;
 };

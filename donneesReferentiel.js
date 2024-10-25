@@ -593,24 +593,44 @@ module.exports = {
   },
 
   niveauxRisques: {
-    eleve: [
-      { gravite: [3, 4], vraisemblance: [3, 4] },
-      { gravite: 2, vraisemblance: 4 },
-    ],
-    moyen: [
-      { gravite: 1, vraisemblance: [3, 4] },
-      { gravite: 2, vraisemblance: 3 },
-      { gravite: 3, vraisemblance: 2 },
-      { gravite: 4, vraisemblance: [1, 2] },
-    ],
-    faible: [
-      { gravite: [1, 2], vraisemblance: [1, 2] },
-      { gravite: 3, vraisemblance: 1 },
-    ],
-    negligeable: [
-      { gravite: 0, vraisemblance: [0, 1, 2, 3, 4] },
-      { gravite: [0, 1, 2, 3, 4], vraisemblance: 0 },
-    ],
+    eleve: {
+      libelle: 'Élevé',
+      description: 'Inacceptable',
+      position: 2,
+      correspondances: [
+        { gravite: [3, 4], vraisemblance: [3, 4] },
+        { gravite: 2, vraisemblance: 4 },
+      ],
+    },
+    moyen: {
+      libelle: 'Moyen',
+      description: 'Tolérable sous contrôle',
+      position: 1,
+      correspondances: [
+        { gravite: 1, vraisemblance: [3, 4] },
+        { gravite: 2, vraisemblance: 3 },
+        { gravite: 3, vraisemblance: 2 },
+        { gravite: 4, vraisemblance: [1, 2] },
+      ],
+    },
+    faible: {
+      libelle: 'Faible',
+      description: "Acceptable en l'état",
+      position: 0,
+      correspondances: [
+        { gravite: [1, 2], vraisemblance: [1, 2] },
+        { gravite: 3, vraisemblance: 1 },
+      ],
+    },
+    negligeable: {
+      libelle: 'Négligeable',
+      description: 'Négligeable',
+      position: -1,
+      correspondances: [
+        { gravite: 0, vraisemblance: [0, 1, 2, 3, 4] },
+        { gravite: [0, 1, 2, 3, 4], vraisemblance: 0 },
+      ],
+    },
   },
 
   categoriesMesures: {
