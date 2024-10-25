@@ -209,8 +209,8 @@ describe('Le dépôt de données des services', () => {
 
     const { contributeurs } = service;
     expect(contributeurs.length).to.equal(2);
-    expect(contributeurs[0].id).to.equal('U1');
-    expect(contributeurs[1].id).to.equal('U2');
+    expect(contributeurs[0].idUtilisateur).to.equal('U1');
+    expect(contributeurs[1].idUtilisateur).to.equal('U2');
   });
 
   it("délègue au dépôt d'utilisateurs de déchiffrer les contributeurs", async () => {

@@ -339,7 +339,9 @@ const creeDepot = (config = {}) => {
     await busEvenements.publie(
       new EvenementServiceSupprime({
         idService,
-        autorisations: avantSuppression.map((u) => ({ idUtilisateur: u.id })),
+        autorisations: avantSuppression.map((u) => ({
+          idUtilisateur: u.idUtilisateur,
+        })),
       })
     );
   };

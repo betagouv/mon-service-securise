@@ -2,10 +2,10 @@ const expect = require('expect.js');
 const { Contributeur } = require('../../src/modeles/contributeur');
 
 describe('Un contributeur', () => {
-  it('connaît son identifiant', () => {
+  it("connaît l'identifiant de l'utilisateur qu'il représente", () => {
     const contributeur = new Contributeur({ id: 'C-1' });
 
-    expect(contributeur.id).to.be('C-1');
+    expect(contributeur.idUtilisateur).to.be('C-1');
   });
 
   it('connaît son « prénom / nom »', () => {
