@@ -7,7 +7,6 @@ const Referentiel = require('../../src/referentiel');
 const InformationsService = require('../../src/modeles/informationsService');
 const Service = require('../../src/modeles/service');
 const MesureGenerale = require('../../src/modeles/mesureGenerale');
-const Utilisateur = require('../../src/modeles/utilisateur');
 const VueAnnexePDFDescription = require('../../src/modeles/objetsPDF/objetPDFAnnexeDescription');
 const VueAnnexePDFMesures = require('../../src/modeles/objetsPDF/objetPDFAnnexeMesures');
 const VueAnnexePDFRisques = require('../../src/modeles/objetsPDF/objetPDFAnnexeRisques');
@@ -25,6 +24,7 @@ const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const Mesures = require('../../src/modeles/mesures');
 const { ErreurResponsablesMesureInvalides } = require('../../src/erreurs');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
+const { Contributeur } = require('../../src/modeles/contributeur');
 
 describe('Un service', () => {
   it('connaît son nom', () => {
@@ -52,7 +52,7 @@ describe('Un service', () => {
     expect(contributeurs.length).to.equal(1);
 
     const contributeur = contributeurs[0];
-    expect(contributeur).to.be.an(Utilisateur);
+    expect(contributeur).to.be.a(Contributeur);
     expect(contributeur.id).to.equal('456');
   });
 

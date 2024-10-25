@@ -2,9 +2,9 @@ const { Identite } = require('./identite');
 
 class Contributeur {
   constructor(donnees) {
-    const { id, prenom, nom, postes } = donnees;
+    const { id, email, prenom, nom, postes } = donnees;
     this.id = id;
-    this.identite = new Identite({ prenom, nom, postes });
+    this.identite = new Identite({ email, prenom, nom, postes });
   }
 
   prenomNom() {

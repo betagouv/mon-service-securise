@@ -242,8 +242,8 @@ describe('Le dépôt de données des services', () => {
 
     const service = await depot.service('S1');
 
-    expect(service.contributeurs[0].nom).to.equal('U1-déchiffré');
-    expect(service.contributeurs[1].nom).to.equal('U2-déchiffré');
+    expect(service.contributeurs[0].prenomNom()).to.equal('U1-déchiffré');
+    expect(service.contributeurs[1].prenomNom()).to.equal('U2-déchiffré');
   });
 
   it('associe ses suggestions d’actions au service', async () => {
