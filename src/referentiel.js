@@ -109,6 +109,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const niveauxVraisemblance = () => donnees.vraisemblancesRisques || {};
   const niveauVraisemblance = (idNiveau) =>
     niveauxVraisemblance()[idNiveau] || {};
+  const niveauxRisque = () => donnees.niveauxRisques || {};
   const identifiantsNiveauxGravite = () => Object.keys(niveauxGravite() || {});
   const identifiantsNiveauxVraisemblance = () =>
     Object.keys(niveauxVraisemblance() || {});
@@ -317,7 +318,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   const matriceNiveauxRisques = () => {
     const resultat = [];
-    const niveauxRisque = Object.keys(donnees.niveauxRisques);
+    const idNiveauxRisque = Object.keys(donnees.niveauxRisques);
 
     function enTableau(item) {
       return Array.isArray(item) ? item : [item];
@@ -334,8 +335,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
       });
     }
 
-    niveauxRisque.forEach((niveauRisque) => {
-      const correspondances = donnees.niveauxRisques[niveauRisque];
+    idNiveauxRisque.forEach((niveauRisque) => {
+      const { correspondances } = donnees.niveauxRisques[niveauRisque];
       correspondances.forEach(({ gravite, vraisemblance }) => {
         const vraisemblances = enTableau(vraisemblance);
         const gravites = enTableau(gravite);
@@ -432,6 +433,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     niveauGravite,
     niveauxGravite,
     niveauRisque,
+    niveauxRisque,
     niveauVraisemblance,
     niveauxVraisemblance,
     nombreOrganisationsUtilisatrices,

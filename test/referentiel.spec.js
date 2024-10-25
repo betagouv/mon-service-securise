@@ -1018,7 +1018,9 @@ describe('Le référentiel', () => {
   describe('sur demande de la matrice des niveaux de risques', () => {
     it("peut construire une matrice d'une case", () => {
       const referentiel = Referentiel.creeReferentiel({
-        niveauxRisques: { vert: [{ gravite: 0, vraisemblance: 0 }] },
+        niveauxRisques: {
+          vert: { correspondances: [{ gravite: 0, vraisemblance: 0 }] },
+        },
       });
 
       const matrice = referentiel.matriceNiveauxRisques();
@@ -1029,8 +1031,8 @@ describe('Le référentiel', () => {
     it('peut construire une matrice 1x2', () => {
       const referentiel = Referentiel.creeReferentiel({
         niveauxRisques: {
-          vert: [{ gravite: 0, vraisemblance: 0 }],
-          orange: [{ gravite: 0, vraisemblance: 1 }],
+          vert: { correspondances: [{ gravite: 0, vraisemblance: 0 }] },
+          orange: { correspondances: [{ gravite: 0, vraisemblance: 1 }] },
         },
       });
 
@@ -1042,8 +1044,8 @@ describe('Le référentiel', () => {
     it('peut construire une matrice 2x1', () => {
       const referentiel = Referentiel.creeReferentiel({
         niveauxRisques: {
-          vert: [{ gravite: 0, vraisemblance: 0 }],
-          orange: [{ gravite: 1, vraisemblance: 0 }],
+          vert: { correspondances: [{ gravite: 0, vraisemblance: 0 }] },
+          orange: { correspondances: [{ gravite: 1, vraisemblance: 0 }] },
         },
       });
 
@@ -1055,7 +1057,7 @@ describe('Le référentiel', () => {
     it('peut construire une matrice 1x2 dans le désordre', () => {
       const referentiel = Referentiel.creeReferentiel({
         niveauxRisques: {
-          orange: [{ gravite: 0, vraisemblance: 1 }],
+          orange: { correspondances: [{ gravite: 0, vraisemblance: 1 }] },
         },
       });
 
@@ -1067,7 +1069,7 @@ describe('Le référentiel', () => {
     it('peut construire une matrice avec des spécifications de vraisemblance multiples', () => {
       const referentiel = Referentiel.creeReferentiel({
         niveauxRisques: {
-          orange: [{ gravite: 0, vraisemblance: [0, 1] }],
+          orange: { correspondances: [{ gravite: 0, vraisemblance: [0, 1] }] },
         },
       });
 
@@ -1079,7 +1081,7 @@ describe('Le référentiel', () => {
     it('peut construire une matrice avec des spécifications de gravite multiples', () => {
       const referentiel = Referentiel.creeReferentiel({
         niveauxRisques: {
-          orange: [{ gravite: [0, 1], vraisemblance: 0 }],
+          orange: { correspondances: [{ gravite: [0, 1], vraisemblance: 0 }] },
         },
       });
 
@@ -1091,7 +1093,9 @@ describe('Le référentiel', () => {
     it('peut construire une matrice avec des spécifications de gravite et vraisemblance multiples', () => {
       const referentiel = Referentiel.creeReferentiel({
         niveauxRisques: {
-          orange: [{ gravite: [0, 1], vraisemblance: [0, 1] }],
+          orange: {
+            correspondances: [{ gravite: [0, 1], vraisemblance: [0, 1] }],
+          },
         },
       });
 
@@ -1114,8 +1118,8 @@ describe('Le référentiel', () => {
           probable: { description: 'Une description', position: 1 },
         },
         niveauxRisques: {
-          orange: [{ gravite: 0, vraisemblance: 0 }],
-          rouge: [{ gravite: 1, vraisemblance: 1 }],
+          orange: { correspondances: [{ gravite: 0, vraisemblance: 0 }] },
+          rouge: { correspondances: [{ gravite: 1, vraisemblance: 1 }] },
         },
       });
 

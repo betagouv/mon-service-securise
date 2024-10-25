@@ -1,11 +1,13 @@
 <script lang="ts">
-  import type {
-    Risque,
-    ReferentielRisques,
-    ReferentielGravites,
-    ReferentielCategories,
-    ReferentielVraisemblances,
-    ReferentielNiveauxRisque,
+  import {
+    type Risque,
+    type ReferentielRisques,
+    type ReferentielGravites,
+    type ReferentielCategories,
+    type ReferentielVraisemblances,
+    type MatriceNiveauxRisque,
+    type ReferentielNiveauxRisque,
+    IdentifiantNiveauRisque,
   } from './risques.d';
   import TiroirRisque, {
     type ModeAffichageTiroir,
@@ -27,6 +29,7 @@
   export let niveauxGravite: ReferentielGravites;
   export let niveauxVraisemblance: ReferentielVraisemblances;
   export let referentielRisques: ReferentielRisques;
+  export let matriceNiveauxRisque: MatriceNiveauxRisque;
   export let niveauxRisque: ReferentielNiveauxRisque;
   let tiroirRisqueOuvert = false;
   let tiroirLegendeGraviteOuvert = false;
@@ -70,7 +73,7 @@
       id: '',
       identifiantNumerique: '',
       description: '',
-      niveauRisque: '',
+      niveauRisque: IdentifiantNiveauRisque.Indeterminable,
     };
   };
 
@@ -87,10 +90,10 @@
           {risques}
           {niveauxGravite}
           {niveauxVraisemblance}
-          {niveauxRisque}
+          {matriceNiveauxRisque}
         />
       </div>
-      <LegendeMatriceRisques />
+      <LegendeMatriceRisques {niveauxRisque} />
     </div>
   </div>
 </div>

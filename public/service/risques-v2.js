@@ -10,7 +10,7 @@ $(() => {
   const referentielRisques = JSON.parse(
     $('#donnees-referentiel-risques').text()
   );
-  const niveauxRisque = JSON.parse(
+  const { matriceNiveauxRisque, niveauxRisque } = JSON.parse(
     $('#donnees-referentiel-niveaux-risque').text()
   );
 
@@ -24,6 +24,7 @@ $(() => {
         niveauxGravite,
         referentielRisques,
         niveauxVraisemblance,
+        matriceNiveauxRisque,
         niveauxRisque,
       },
     })
