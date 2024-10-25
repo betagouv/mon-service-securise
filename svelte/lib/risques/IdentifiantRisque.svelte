@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Risque } from './risques.d';
+
   export let risque: Risque;
 
   $: libelle =
@@ -20,7 +21,7 @@
     font-weight: 700;
     line-height: 20px;
     display: flex;
-    padding: 4px 10px;
+    padding: 1px 8px 3px;
     align-items: center;
     gap: 4px;
     border-radius: 40px;

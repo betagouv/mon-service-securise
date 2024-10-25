@@ -9,6 +9,7 @@
 <style>
   .identifiant-numerique {
     color: var(--texte-clair);
+    padding: 1px 8px 3px;
     font-size: 12px;
     font-weight: 700;
   }
