@@ -3,8 +3,8 @@ const {
   ErreurEmailManquant,
   ErreurDonneesObligatoiresManquantes,
 } = require('../erreurs');
-const { formatteListeFr } = require('../utilitaires/liste');
 const Entite = require('./entite');
+const { Identite } = require('./identite');
 
 const valide = (donnees) => {
   const { email } = donnees;
@@ -34,6 +34,7 @@ class Utilisateur extends Base {
     this.entite = new Entite(donnees.entite);
     this.renseigneProprietes(donnees);
     this.adaptateurJWT = adaptateurJWT;
+    this.identite = new Identite(donnees);
   }
 
   static valideDonnees(donnees = {}, utilisateurExistant = false) {
@@ -127,22 +128,15 @@ class Utilisateur extends Base {
   }
 
   initiales() {
-    const premiereLettreMajuscule = (s) =>
-      typeof s === 'string' ? s.charAt(0).toUpperCase() : '';
-
-    return (
-      `${premiereLettreMajuscule(this.prenom)}${premiereLettreMajuscule(
-        this.nom
-      )}` || ''
-    );
+    return this.identite.initiales();
   }
 
   posteDetaille() {
-    return formatteListeFr(this.postes);
+    return this.identite.posteDetaille();
   }
 
   prenomNom() {
-    return [this.prenom, this.nom].join(' ').trim() || this.email;
+    return this.identite.prenomNom();
   }
 
   completudeProfil() {
