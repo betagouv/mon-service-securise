@@ -12,15 +12,8 @@ class ConstructeurUtilisateur {
       telephone: '',
       cguAcceptees: '',
       postes: [],
-      entite: {
-        nom: '',
-        departement: '',
-        siret: '',
-      },
-      estimationNombreServices: {
-        borneBasse: '1',
-        borneHaute: '10',
-      },
+      entite: { nom: '', departement: '', siret: '' },
+      estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
       infolettreAcceptee: '',
       transactionnelAccepte: '',
     };
@@ -122,12 +115,12 @@ class ConstructeurUtilisateur {
   }
 
   quiAccepteCGU() {
-    this.donnees.cguAcceptees = true;
+    this.donnees.cguAcceptees = 'v1.0';
     return this;
   }
 
   quiAEteInvite() {
-    this.donnees.cguAcceptees = false;
+    this.donnees.cguAcceptees = undefined;
     return this;
   }
 
@@ -142,7 +135,7 @@ class ConstructeurUtilisateur {
   }
 
   construis() {
-    return new Utilisateur(this.donnees);
+    return new Utilisateur(this.donnees, { cguActuelles: 'v1.0' });
   }
 }
 

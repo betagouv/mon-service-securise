@@ -83,12 +83,10 @@ const routesNonConnecteOidc = ({
         SourceAuthentification.AGENT_CONNECT
       );
 
-      const tokenDonneesInvite = utilisateurExistant.cguAcceptees
-        ? undefined
-        : adaptateurJWT.signeDonnees({
-            ...infosUtilisateur,
-            invite: true,
-          });
+      const tokenDonneesInvite = utilisateurExistant.estUnInvite()
+        ? adaptateurJWT.signeDonnees({ ...infosUtilisateur, invite: true })
+        : undefined;
+
       reponse.render('apresAuthentification', {
         ...(urlRedirection && {
           urlRedirection:
