@@ -1,31 +1,22 @@
-const { formatteListeFr } = require('../utilitaires/liste');
+const { Identite } = require('./identite');
 
 class Contributeur {
   constructor(donnees) {
     const { id, prenom, nom, postes } = donnees;
     this.id = id;
-    this.prenom = prenom;
-    this.nom = nom;
-    this.postes = postes;
+    this.identite = new Identite({ prenom, nom, postes });
   }
 
   prenomNom() {
-    return `${this.prenom} ${this.nom}`;
+    return this.identite.prenomNom();
   }
 
   initiales() {
-    const premiereLettreMajuscule = (s) =>
-      typeof s === 'string' ? s.charAt(0).toUpperCase() : '';
-
-    return (
-      `${premiereLettreMajuscule(this.prenom)}${premiereLettreMajuscule(
-        this.nom
-      )}` || ''
-    );
+    return this.identite.initiales();
   }
 
   posteDetaille() {
-    return formatteListeFr(this.postes);
+    return this.identite.posteDetaille();
   }
 }
 

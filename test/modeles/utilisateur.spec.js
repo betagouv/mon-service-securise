@@ -59,43 +59,22 @@ describe('Un utilisateur', () => {
     });
   });
 
-  describe('sur demande de ses initiales', () => {
-    it('renvoie les initiales du prénom et du nom', () => {
-      const utilisateur = new Utilisateur({
-        prenom: 'Jean',
-        nom: 'Dupont',
-        email: 'jean.dupont@mail.fr',
-      });
-      expect(utilisateur.initiales()).to.equal('JD');
+  it('connaît ses initiales', () => {
+    const jeanDupont = new Utilisateur({
+      prenom: 'Jean',
+      nom: 'Dupont',
+      email: 'jean.dupont@mail.fr',
     });
-
-    it('reste robuste en cas de prénom ou de nom absent', () => {
-      const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
-      expect(utilisateur.initiales()).to.equal('');
-    });
+    expect(jeanDupont.initiales()).to.equal('JD');
   });
 
-  describe('sur demande du « prénom / nom »', () => {
-    it('reste robuste si le nom est absent', () => {
-      const utilisateur = new Utilisateur({
-        prenom: 'Jean',
-        email: 'jean.dupont@mail.fr',
-      });
-      expect(utilisateur.prenomNom()).to.equal('Jean');
+  it('connaît son « prénom / nom »', () => {
+    const jeanDupont = new Utilisateur({
+      prenom: 'Jean',
+      nom: 'Dupont',
+      email: 'jean.dupont@mail.fr',
     });
-
-    it('reste robuste si le prénom est absent', () => {
-      const utilisateur = new Utilisateur({
-        nom: 'Dupont',
-        email: 'jean.dupont@mail.fr',
-      });
-      expect(utilisateur.prenomNom()).to.equal('Dupont');
-    });
-
-    it("retourne l'email si le prénom et le nom sont absents", () => {
-      const utilisateur = new Utilisateur({ email: 'jean.dupont@mail.fr' });
-      expect(utilisateur.prenomNom()).to.equal('jean.dupont@mail.fr');
-    });
+    expect(jeanDupont.prenomNom()).to.equal('Jean Dupont');
   });
 
   it('combine toutes les informations de postes sur demande de son poste détaillé', () => {
