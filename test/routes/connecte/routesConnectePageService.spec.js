@@ -18,6 +18,7 @@ const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
 const { donneesPartagees } = require('../../aides/http');
+const Risque = require('../../../src/modeles/risque');
 
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
@@ -614,6 +615,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         categories: ['integrite'],
         identifiantNumerique: 'R6',
         intitule: "Détournement de l'usage du service numérique",
+        niveauRisque: Risque.NIVEAU_RISQUE_INDETERMINABLE,
       });
     });
   });

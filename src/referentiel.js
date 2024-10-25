@@ -19,6 +19,7 @@ const donneesReferentielVide = {
   risques: {},
   typesService: {},
   niveauxGravite: {},
+  niveauxRisques: {},
   nouvellesFonctionnalites: [],
   provenancesService: {},
   statutsDeploiement: {},
@@ -345,11 +346,24 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return resultat;
   };
 
+  function estDansLaMatrice(positionVraisemblance, positionGravite, matrice) {
+    return (
+      positionVraisemblance !== undefined &&
+      positionGravite !== undefined &&
+      positionVraisemblance < matrice.length
+    );
+  }
+
   const niveauRisque = (vraisemblance, gravite) => {
-    const positionGravite = donnees.niveauxGravite[gravite].position;
     const positionVraisemblance =
-      donnees.vraisemblancesRisques[vraisemblance].position;
-    return matriceNiveauxRisques()[positionVraisemblance][positionGravite];
+      donnees.vraisemblancesRisques[vraisemblance]?.position;
+    const positionGravite = donnees.niveauxGravite[gravite]?.position;
+    const matrice = matriceNiveauxRisques();
+
+    if (!estDansLaMatrice(positionVraisemblance, positionGravite, matrice))
+      return 'indeterminable';
+
+    return matrice[positionVraisemblance][positionGravite];
   };
 
   valideDonnees();

@@ -109,7 +109,6 @@ describe('Un risque général', () => {
       id: 'unRisque',
       commentaire: 'Un commentaire',
       niveauGravite: 'unNiveau',
-      niveauRisque: Risque.NIVEAU_RISQUE_INDETERMINABLE,
     });
   });
 });

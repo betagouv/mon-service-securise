@@ -49,13 +49,6 @@ class Risque extends InformationsService {
     );
   }
 
-  toJSON() {
-    return {
-      ...super.toJSON(),
-      niveauRisque: this.niveauRisque(),
-    };
-  }
-
   static valide({ niveauVraisemblance }, referentiel) {
     const identifiantsNiveauxVraisemblance =
       referentiel.identifiantsNiveauxVraisemblance();

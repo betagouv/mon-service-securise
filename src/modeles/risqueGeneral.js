@@ -32,6 +32,7 @@ class RisqueGeneral extends Risque {
       intitule: this.intituleRisque(),
       categories: this.categoriesRisque(),
       identifiantNumerique: this.identifiantNumeriqueRisque(),
+      niveauRisque: this.niveauRisque(),
     };
   }
 

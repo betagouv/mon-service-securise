@@ -2,6 +2,7 @@ const expect = require('expect.js');
 
 const { ErreurDonneesReferentielIncorrectes } = require('../src/erreurs');
 const Referentiel = require('../src/referentiel');
+const Risque = require('../src/modeles/risque');
 
 describe('Le référentiel', () => {
   describe('à sa création', () => {
@@ -1121,6 +1122,36 @@ describe('Le référentiel', () => {
       const niveau = referentiel.niveauRisque('probable', 'grave');
 
       expect(niveau).to.be('rouge');
+    });
+
+    it("retourne `indeterminable` lorsque le niveau n'est pas trouvé", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxGravite: {
+          grave: { description: 'Une description', position: 1 },
+        },
+        vraisemblancesRisques: {
+          probable: { description: 'Une description', position: 1 },
+        },
+        niveauxRisques: {},
+      });
+
+      const niveau = referentiel.niveauRisque('probable', 'grave');
+
+      expect(niveau).to.be(Risque.NIVEAU_RISQUE_INDETERMINABLE);
+    });
+
+    it("retourne `indeterminable` lorsque la vraisemblance n'est pas trouvée", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        niveauxGravite: {
+          grave: { description: 'Une description', position: 1 },
+        },
+        vraisemblancesRisques: {},
+        niveauxRisques: {},
+      });
+
+      const niveau = referentiel.niveauRisque('probable', 'grave');
+
+      expect(niveau).to.be(Risque.NIVEAU_RISQUE_INDETERMINABLE);
     });
   });
 });
