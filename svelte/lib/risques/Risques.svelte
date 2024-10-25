@@ -21,6 +21,7 @@
   import { risqueAMettreAJour } from './risques';
   import MatriceRisques from './MatriceRisques.svelte';
   import LegendeMatriceRisques from './LegendeMatriceRisques.svelte';
+  import BoutonIcone from '../ui/BoutonIcone.svelte';
 
   export let idService: string;
   export let estLectureSeule: boolean;
@@ -166,30 +167,24 @@
       <th>
         <div class="entete-gravite">
           Gravité potentielle
-          <button
-            type="button"
-            class="bouton-info"
+          <BoutonIcone
+            icone="information"
             on:click={() => {
               tiroirLegendeGraviteOuvert = true;
             }}
-          ></button>
-          <button
-            type="button"
-            class={`bouton-tri tri-${triParGravite}`}
-            on:click={triGravite}
-          ></button>
+          />
+          <BoutonIcone icone={`tri-${triParGravite}`} on:click={triGravite} />
         </div>
       </th>
       <th>
         <div class="entete-vraisemblance">
           Vraisemblance initiale
-          <button
-            type="button"
-            class="bouton-info"
+          <BoutonIcone
+            icone="information"
             on:click={() => {
               tiroirLegendeVraisemblanceOuvert = true;
             }}
-          ></button>
+          />
         </div>
       </th>
     </tr>
@@ -285,59 +280,6 @@
   .entete-vraisemblance {
     display: flex;
     align-items: center;
-  }
-
-  .bouton-info {
-    display: flex;
-    border: none;
-    background-color: transparent;
-  }
-
-  .bouton-info:before {
-    content: '';
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-image: url('/statique/assets/images/icone_information.svg');
-    cursor: pointer;
-    filter: brightness(0) saturate(100%) invert(44%) sepia(44%) saturate(243%)
-      hue-rotate(176deg) brightness(96%) contrast(92%);
-  }
-
-  .bouton-tri:before {
-    content: '';
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    cursor: pointer;
-    filter: brightness(0) saturate(100%) invert(44%) sepia(44%) saturate(243%)
-      hue-rotate(176deg) brightness(96%) contrast(92%);
-  }
-
-  .bouton-tri {
-    display: flex;
-    border: none;
-    background-color: transparent;
-  }
-
-  .bouton-tri.tri-aucun:before {
-    background-image: url('/statique/assets/images/icone_tri_aucun.svg');
-    filter: invert(49%) sepia(5%) saturate(2221%) hue-rotate(176deg)
-      brightness(92%) contrast(84%);
-  }
-
-  .bouton-tri.tri-ascendant:before {
-    background-image: url('/statique/assets/images/icone_tri_croissant.svg');
-    filter: none;
-  }
-
-  .bouton-tri.tri-descendant:before {
-    background-image: url('/statique/assets/images/icone_tri_decroissant.svg');
-    filter: none;
   }
 
   .entete-tableau-risques h3 {
