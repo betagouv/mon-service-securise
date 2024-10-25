@@ -67,6 +67,7 @@ describe('Le middleware MSS', () => {
     requete.params = {};
     requete.body = {};
     requete.cookies = {};
+    requete.originalUrl = undefined;
 
     reponse.headers = {};
     reponse.locals = {};
@@ -79,20 +80,6 @@ describe('Le middleware MSS', () => {
 
     depotDonnees.service = () => Promise.resolve();
     depotDonnees.utilisateurExiste = () => Promise.resolve(true);
-  });
-
-  it("redirige l'utilisateur vers la mire de login quand échec vérification JWT", (done) => {
-    const adaptateurJWT = {
-      decode: (token) => {
-        expect(token).to.equal('XXX');
-      },
-    };
-    expect(adaptateurJWT.decode('XXX')).to.be(undefined);
-
-    prepareVerificationRedirection(reponse, '/connexion', done);
-
-    const middleware = Middleware({ adaptateurJWT });
-    middleware.verificationJWT(requete, reponse);
   });
 
   it("redirige l'utilisateur vers l'url de base s'il vient d'un sous domaine", (done) => {
@@ -128,42 +115,58 @@ describe('Le middleware MSS', () => {
     middleware.redirigeVersUrlBase(requete, reponse, done);
   });
 
-  it("ajoute l'URL originale à la redirection si elle commence par un '/'", (done) => {
-    const adaptateurJWT = { decode: () => null };
-    requete.originalUrl = '/tableauDeBord';
-    prepareVerificationRedirection(
-      reponse,
-      '/connexion?urlRedirection=%2FtableauDeBord',
-      done
-    );
+  describe('sur vérification du token JWT', () => {
+    it("redirige l'utilisateur vers la mire de login quand échec vérification JWT", (done) => {
+      const adaptateurJWT = {
+        decode: (token) => {
+          expect(token).to.equal('XXX');
+        },
+      };
+      expect(adaptateurJWT.decode('XXX')).to.be(undefined);
 
-    const middleware = Middleware({ adaptateurJWT });
-    middleware.verificationJWT(requete, reponse);
-  });
+      prepareVerificationRedirection(reponse, '/connexion', done);
 
-  it("n'ajoute pas l'URL originale à la redirection si elle commence par '/api'", (done) => {
-    const adaptateurJWT = { decode: () => null };
-    requete.originalUrl = '/api/service';
-    prepareVerificationRedirection(reponse, '/connexion', done);
+      const middleware = Middleware({ adaptateurJWT });
+      middleware.verificationJWT(requete, reponse);
+    });
 
-    const middleware = Middleware({ adaptateurJWT });
-    middleware.verificationJWT(requete, reponse);
-  });
+    it("ajoute l'URL originale à la redirection si elle commence par un '/'", (done) => {
+      const adaptateurJWT = { decode: () => null };
+      requete.originalUrl = '/tableauDeBord';
+      prepareVerificationRedirection(
+        reponse,
+        '/connexion?urlRedirection=%2FtableauDeBord',
+        done
+      );
 
-  it('redirige vers mire login si identifiant dans token ne correspond à aucun utilisateur', (done) => {
-    const adaptateurJWT = { decode: () => ({ idUtilisateur: '123' }) };
+      const middleware = Middleware({ adaptateurJWT });
+      middleware.verificationJWT(requete, reponse);
+    });
 
-    depotDonnees.utilisateurExiste = (id) => {
-      expect(id).to.equal('123');
-      return Promise.resolve(false);
-    };
+    it("n'ajoute pas l'URL originale à la redirection si elle commence par '/api'", (done) => {
+      const adaptateurJWT = { decode: () => null };
+      requete.originalUrl = '/api/service';
+      prepareVerificationRedirection(reponse, '/connexion', done);
 
-    prepareVerificationRedirection(reponse, '/connexion', done);
+      const middleware = Middleware({ adaptateurJWT });
+      middleware.verificationJWT(requete, reponse);
+    });
 
-    const middleware = Middleware({ adaptateurJWT, depotDonnees });
-    const suite = () =>
-      done("Le middleware suivant n'aurait pas dû être appelé");
-    middleware.verificationJWT(requete, reponse, suite);
+    it('redirige vers mire login si identifiant dans token ne correspond à aucun utilisateur', (done) => {
+      const adaptateurJWT = { decode: () => ({ idUtilisateur: '123' }) };
+
+      depotDonnees.utilisateurExiste = (id) => {
+        expect(id).to.equal('123');
+        return Promise.resolve(false);
+      };
+
+      prepareVerificationRedirection(reponse, '/connexion', done);
+
+      const middleware = Middleware({ adaptateurJWT, depotDonnees });
+      const suite = () =>
+        done("Le middleware suivant n'aurait pas dû être appelé");
+      middleware.verificationJWT(requete, reponse, suite);
+    });
   });
 
   it('repousse la date expiration du cookie de session en mettant à jour le cookie', (done) => {
