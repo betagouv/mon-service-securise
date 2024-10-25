@@ -3,12 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('tokenDonneesInvite').innerText
   );
 
-  if (tokenDonneesInvite) {
+  const doitTerminerSonInscription = tokenDonneesInvite !== undefined;
+  if (doitTerminerSonInscription) {
     window.location = `/creation-compte?token=${tokenDonneesInvite}`;
-  } else {
-    const { urlRedirection } = JSON.parse(
-      document.getElementById('url-redirection').innerText
-    );
-    window.location = urlRedirection ?? '/tableauDeBord';
+    return;
   }
+
+  const { urlRedirection } = JSON.parse(
+    document.getElementById('url-redirection').innerText
+  );
+  window.location = urlRedirection ?? '/tableauDeBord';
 });
