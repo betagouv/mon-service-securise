@@ -70,6 +70,7 @@
       id: '',
       identifiantNumerique: '',
       description: '',
+      niveauRisque: '',
     };
   };
 

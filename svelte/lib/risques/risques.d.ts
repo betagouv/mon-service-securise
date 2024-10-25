@@ -13,6 +13,7 @@ export type DonneesRisque = {
   categories: string[];
   identifiantNumerique: string;
   description: string;
+  niveauRisque: IdentifiantNiveauRisque;
 };
 
 export type Risques = {
@@ -44,6 +45,8 @@ type RisqueDuReferentiel = {
 export type IdentifiantGravite = string;
 
 export type IdentifiantVraisemblance = string;
+
+export type IdentifiantNiveauRisque = string;
 
 export type ReferentielRisques = Record<string, RisqueDuReferentiel>;
 

@@ -2,9 +2,6 @@ import { decode } from 'html-entities';
 import Risques from './Risques.svelte';
 import type {
   DonneesRisque,
-  NiveauRisque,
-  ReferentielGravites,
-  ReferentielVraisemblances,
   Risque,
   RisquesProps,
   TypeRisque,
@@ -60,11 +57,5 @@ export const intituleRisque = (risque: Risque) =>
 
 export const risqueAMettreAJour = (risque: Risque) =>
   risque.type === 'SPECIFIQUE' && !risque.categories.length;
-
-export const niveauRisque = (
-  _risque: Risque,
-  _niveauxVraisemblance: ReferentielVraisemblances,
-  _niveauxGravite: ReferentielGravites
-): NiveauRisque | undefined => undefined;
 
 export default app!;
