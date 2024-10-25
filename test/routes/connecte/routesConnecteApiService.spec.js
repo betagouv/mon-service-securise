@@ -1362,6 +1362,24 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(donneesRecues.niveauVraisemblance).to.eql('unNiveauVraisemblance');
       expect(donneesRecues.commentaire).to.eql("c'est important");
     });
+
+    it('retourne la représentation du risque modifié', async () => {
+      testeur.depotDonnees().metsAJourRisqueSpecifiqueDuService =
+        async () => {};
+
+      const reponse = await axios.put(
+        'http://localhost:1234/api/service/456/risquesSpecifiques/RS1',
+        {
+          intitule: 'un risque important',
+          niveauGravite: 'unNiveau',
+          niveauVraisemblance: 'unNiveauVraisemblance',
+          commentaire: "c'est important",
+          categories: ['C1'],
+        }
+      );
+
+      expect(reponse.data.intitule).to.be('un risque important');
+    });
   });
 
   describe('quand requête DELETE sur `/api/service/:id/risquesSpecifiques/:idRisque', () => {
@@ -1488,6 +1506,21 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(donneesRecues.niveauVraisemblance).to.eql('unNiveauVraisemblance');
       expect(donneesRecues.commentaire).to.eql("c'est important");
       expect(donneesRecues.id).to.eql('unRisqueExistant');
+    });
+
+    it('retourne la représentation du risque modifié', async () => {
+      testeur.depotDonnees().ajouteRisqueGeneralAService = async () => {};
+
+      const reponse = await axios.put(
+        'http://localhost:1234/api/service/456/risques/unRisqueExistant',
+        {
+          niveauGravite: 'unNiveau',
+          niveauVraisemblance: 'unNiveauVraisemblance',
+          commentaire: "c'est important",
+        }
+      );
+
+      expect(reponse.data.niveauVraisemblance).to.be('unNiveauVraisemblance');
     });
   });
 
