@@ -188,32 +188,34 @@ describe('Le middleware MSS', () => {
     middleware.repousseExpirationCookie(requete, reponse, suite);
   });
 
-  it("vérifie que les CGU sont acceptées et redirige l'utilisateur connecté via MSS si besoin", (done) => {
-    const adaptateurJWT = {
-      decode: () => ({ cguAcceptees: false, source: 'MSS' }),
-    };
-    const middleware = Middleware({ adaptateurJWT, depotDonnees });
+  describe("sur vérification de l'acceptation des CGU", () => {
+    it("vérifie que les CGU sont acceptées et redirige l'utilisateur connecté via MSS si besoin", (done) => {
+      const adaptateurJWT = {
+        decode: () => ({ cguAcceptees: false, source: 'MSS' }),
+      };
+      const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
-    reponse.redirect = (url) => {
-      expect(url).to.equal('/motDePasse/initialisation');
-      done();
-    };
+      reponse.redirect = (url) => {
+        expect(url).to.equal('/motDePasse/initialisation');
+        done();
+      };
 
-    middleware.verificationAcceptationCGU(requete, reponse);
-  });
+      middleware.verificationAcceptationCGU(requete, reponse);
+    });
 
-  it("vérifie que les CGU sont acceptées et redirige l'utilisateur connecté via Agent Connect si besoin", (done) => {
-    const adaptateurJWT = {
-      decode: () => ({ cguAcceptees: false, source: 'AGENT_CONNECT' }),
-    };
-    const middleware = Middleware({ adaptateurJWT, depotDonnees });
+    it("vérifie que les CGU sont acceptées et redirige l'utilisateur connecté via Agent Connect si besoin", (done) => {
+      const adaptateurJWT = {
+        decode: () => ({ cguAcceptees: false, source: 'AGENT_CONNECT' }),
+      };
+      const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
-    reponse.redirect = (url) => {
-      expect(url).to.equal('/acceptationCGU');
-      done();
-    };
+      reponse.redirect = (url) => {
+        expect(url).to.equal('/acceptationCGU');
+        done();
+      };
 
-    middleware.verificationAcceptationCGU(requete, reponse);
+      middleware.verificationAcceptationCGU(requete, reponse);
+    });
   });
 
   it('efface les cookies sur demande', (done) => {
