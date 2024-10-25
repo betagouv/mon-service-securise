@@ -9,7 +9,7 @@
 <style>
   span {
     border-radius: 40px;
-    padding: 4px 10px;
+    padding: 1px 8px 3px;
     font-weight: 500;
     display: flex;
     align-items: center;

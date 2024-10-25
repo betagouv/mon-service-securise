@@ -2,12 +2,13 @@
   export let indispensable: boolean;
 </script>
 
-<span class:indispensable>{indispensable ? 'Indispensable' : 'Recommandée'}</span
+<span class:indispensable
+  >{indispensable ? 'Indispensable' : 'Recommandée'}</span
 >
 
 <style>
   span {
-    padding: 1px 8px 3px 8px;
+    padding: 1px 8px 3px;
     font-size: 0.9em;
     font-weight: 500;
     border-radius: 20px;
