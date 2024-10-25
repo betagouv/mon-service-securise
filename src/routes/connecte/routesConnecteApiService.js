@@ -431,7 +431,7 @@ const routesConnecteApiService = ({
           risque
         );
 
-        reponse.sendStatus(200);
+        reponse.status(200).send(risque.toJSON());
       } catch (e) {
         if (
           e instanceof ErreurRisqueInconnu ||
@@ -558,7 +558,7 @@ const routesConnecteApiService = ({
           requete.service.id,
           risque
         );
-        reponse.sendStatus(200);
+        reponse.status(200).send(risque.toJSON());
       } catch (e) {
         if (e instanceof ErreurRisqueInconnu) {
           reponse.status(404).send(e.message);
