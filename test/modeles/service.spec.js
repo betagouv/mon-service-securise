@@ -53,7 +53,7 @@ describe('Un service', () => {
 
     const contributeur = contributeurs[0];
     expect(contributeur).to.be.a(Contributeur);
-    expect(contributeur.id).to.equal('456');
+    expect(contributeur.idUtilisateur).to.equal('456');
   });
 
   describe("concernant les suggestions d'actions", () => {
