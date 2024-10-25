@@ -46,8 +46,10 @@ function fabriquePersistance({
 
   const dechiffreUtilisateur = async (donneesUtilisateur) => {
     if (!donneesUtilisateur) return undefined;
+
     const donneesDechiffrees =
       await dechiffreDonneesUtilisateur(donneesUtilisateur);
+
     return new Utilisateur(donneesDechiffrees, { adaptateurJWT });
   };
 
