@@ -35,6 +35,7 @@
   let modeAffichageTiroir: ModeAffichageTiroir = '';
   let risqueEnEdition: Risque | undefined;
   let triParGravite: Tri = 'aucun';
+  let triParVraisemblance: Tri = 'aucun';
 
   type Tri = 'aucun' | 'ascendant' | 'descendant';
 
@@ -93,26 +94,49 @@
     triParGravite = triSuivant(triParGravite);
   };
 
+  const triVraisemblance = () => {
+    triParVraisemblance = triSuivant(triParVraisemblance);
+  };
+
   $: doitAfficherAvertissement = risques.some(risqueAMettreAJour);
 
-  function comparateur(r1: Risque, r2: Risque): number {
-    const n1 = r1.niveauGravite
-      ? niveauxGravite[r1.niveauGravite].position
+  const compare = (risque1: Risque, risque2: Risque): number => {
+    const positionGraviteRisque1 = risque1.niveauGravite
+      ? niveauxGravite[risque1.niveauGravite].position
       : -1;
-    const n2 = r2.niveauGravite
-      ? niveauxGravite[r2.niveauGravite].position
+    const positionGraviteRisque2 = risque2.niveauGravite
+      ? niveauxGravite[risque2.niveauGravite].position
       : -1;
+    const positionVraisemblanceRisque1 = risque1.niveauVraisemblance
+      ? niveauxVraisemblance[risque1.niveauVraisemblance].position
+      : -1;
+    const positionVraisemblanceRisque2 = risque2.niveauVraisemblance
+      ? niveauxVraisemblance[risque2.niveauVraisemblance].position
+      : -1;
+
+    const laGraviteNaPasDimpactSurLeTri =
+      triParGravite === 'aucun' ||
+      positionGraviteRisque1 === positionGraviteRisque2;
+
+    if (laGraviteNaPasDimpactSurLeTri && triParVraisemblance === 'ascendant') {
+      return positionVraisemblanceRisque1 - positionVraisemblanceRisque2;
+    }
+    if (laGraviteNaPasDimpactSurLeTri && triParVraisemblance === 'descendant') {
+      return positionVraisemblanceRisque2 - positionVraisemblanceRisque1;
+    }
     if (triParGravite === 'ascendant') {
-      return n1 - n2;
+      return positionGraviteRisque1 - positionGraviteRisque2;
     }
     if (triParGravite === 'descendant') {
-      return n2 - n1;
+      return positionGraviteRisque2 - positionGraviteRisque1;
     }
     return 0;
-  }
+  };
 
   let risquesTries: Risque[];
-  $: triParGravite, (risquesTries = [...risques].sort(comparateur));
+  $: triParGravite,
+    triParVraisemblance,
+    (risquesTries = [...risques].sort(compare));
 </script>
 
 <div class="au-dessus-tableau">
@@ -181,6 +205,10 @@
             on:click={() => {
               tiroirLegendeVraisemblanceOuvert = true;
             }}
+          />
+          <BoutonIcone
+            icone={`tri-${triParVraisemblance}`}
+            on:click={triVraisemblance}
           />
         </div>
       </th>
