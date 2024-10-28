@@ -45,6 +45,14 @@
   const niveauRisqueCellule = (colonne: number, ligne: number) => {
     return matriceNiveauxRisque[colonne + 1][4 - ligne];
   };
+
+  const avecEllipse = (risques: Risque[]) =>
+    risques.length > 6
+      ? `${risques
+          .slice(0, 6)
+          .map((r) => r.identifiantNumerique)
+          .join(', ')}&hellip;`
+      : risques.map((r) => r.identifiantNumerique).join(', ');
 </script>
 
 <div class="matrice">
@@ -68,10 +76,14 @@
       {@const y = Math.floor(index / 4)}
       {@const classe = niveauRisqueCellule(x, y)}
       {@const risquesPresent = grille[y][x]}
-      <div class="cellule-matrice {classe} {index}">
-        {risquesPresent
-          ? risquesPresent.map((r) => r.identifiantNumerique).join(', ')
-          : ''}
+      {@const titreCellule = risquesPresent
+        ? risquesPresent.map((r) => r.identifiantNumerique).join(', ')
+        : 'Aucun risque à ce niveau'}
+      {@const titreCelluleAvecEllipse = risquesPresent
+        ? avecEllipse(risquesPresent)
+        : ''}
+      <div class="cellule-matrice {classe} {index}" title={titreCellule}>
+        {@html titreCelluleAvecEllipse}
       </div>
     {/each}
   </div>
