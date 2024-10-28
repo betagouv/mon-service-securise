@@ -5,87 +5,44 @@ const Referentiel = require('../../../src/referentiel');
 const VueAnnexePDFRisques = require('../../../src/modeles/objetsPDF/objetPDFAnnexeRisques');
 
 describe("L'objet PDF des descriptions des risques", () => {
-  const donneesReferentiel = {
+  const referentiel = Referentiel.creeReferentiel({
     niveauxGravite: {
-      nonConcerne: {
-        position: 0,
-        couleur: 'blanc',
-        description: 'Non concerné',
-        descriptionLongue: '',
-        nonConcerne: true,
-      },
-      grave: {
-        position: 3,
-        couleur: 'orange',
-        description: 'Grave',
-        descriptionLongue: 'Niveaux de gravité grave',
-      },
-      critique: {
-        position: 4,
-        couleur: 'rouge',
-        description: 'Critique',
-        descriptionLongue: 'Niveaux de gravité critique',
+      grave: { description: 'Une description', position: 1 },
+    },
+    vraisemblancesRisques: {
+      probable: { description: 'Une description', position: 1 },
+    },
+    niveauxRisques: {
+      orange: { correspondances: [{ gravite: 0, vraisemblance: 0 }] },
+      rouge: { correspondances: [{ gravite: 1, vraisemblance: 1 }] },
+    },
+    risques: {
+      unRisque: { description: 'Une description', identifiantNumerique: 'R1' },
+      unSecondRisque: {
+        description: 'Une description',
+        identifiantNumerique: 'R2',
       },
     },
-    risques: { unRisque: { description: 'Une description' } },
-  };
+  });
 
   const service = new Service(
     {
       id: '123',
       idUtilisateur: '456',
       descriptionService: { nomService: 'Nom Service' },
-      risquesGeneraux: [{ id: 'unRisque', niveauGravite: 'grave' }],
+      risquesGeneraux: [
+        {
+          id: 'unRisque',
+          niveauGravite: 'grave',
+          niveauVraisemblance: 'probable',
+        },
+      ],
     },
-    Referentiel.creeReferentiel(donneesReferentiel)
+    referentiel
   );
 
-  describe('avec des informations de niveaux de gravité dans le référentiel', () => {
-    let referentiel;
-
-    beforeEach(() => {
-      referentiel = Referentiel.creeReferentiel(donneesReferentiel);
-    });
-
-    it('utilise les informations du référentiel', () => {
-      const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
-
-      const donnees = vueAnnexePDFRisques.donnees();
-
-      expect(donnees).to.have.key('niveauxGravite');
-      const niveauCritique = donnees.niveauxGravite.find(
-        (niveau) => niveau.identifiant === 'critique'
-      );
-      expect(niveauCritique).to.eql({
-        identifiant: 'critique',
-        ...donneesReferentiel.niveauxGravite.critique,
-      });
-    });
-
-    it('ignore le niveau de gravité non concerné', () => {
-      const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
-
-      const { niveauxGravite } = vueAnnexePDFRisques.donnees();
-
-      expect(niveauxGravite.length).to.equal(2);
-      expect(
-        niveauxGravite.map((niveaux) => niveaux.description)
-      ).to.not.contain('Non concerné');
-    });
-
-    it('trie les niveaux de gravité par position décroissante', () => {
-      const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
-
-      const { niveauxGravite } = vueAnnexePDFRisques.donnees();
-
-      const positions = niveauxGravite.map((niveaux) => niveaux.position);
-      expect(positions[0]).to.equal(4);
-      expect(positions[1]).to.equal(3);
-    });
-  });
-
   it('ajoute le nom du service', () => {
-    const vueAnnexePDFRisques = new VueAnnexePDFRisques(service);
+    const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
 
     const donnees = vueAnnexePDFRisques.donnees();
 
@@ -93,16 +50,20 @@ describe("L'objet PDF des descriptions des risques", () => {
     expect(donnees.nomService).to.equal('Nom Service');
   });
 
-  it('ajoute les risques par niveau de gravité', () => {
-    const vueAnnexePDFRisques = new VueAnnexePDFRisques(service);
+  it("ajoute les risques par ordre d'identifiant numérique", () => {
+    const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
 
     const donnees = vueAnnexePDFRisques.donnees();
 
-    expect(donnees).to.have.key('risquesParNiveauGravite');
-    expect(donnees.risquesParNiveauGravite).to.have.key('grave');
-    expect(donnees.risquesParNiveauGravite.grave.length).to.equal(1);
-    expect(donnees.risquesParNiveauGravite.grave[0].intitule).to.equal(
-      'Une description'
-    );
+    expect(donnees).to.have.key('risques');
+    expect(donnees.risques[0].identifiantNumerique).to.be('R1');
+  });
+
+  it('ajoute le risque dans la case de la grille correspondant à sa gravité et sa vraisemblance', () => {
+    const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
+
+    const donnees = vueAnnexePDFRisques.donnees();
+
+    expect(donnees.grilleRisques[3][0]).to.eql(['R1']);
   });
 });
