@@ -21,7 +21,7 @@ module.exports = {
       id: 'encartHomologation',
       dateDeDeploiement: '2024-04-03 14:30:00Z',
       lien: 'https://avis.monservicesecurise.cyber.gouv.fr/fr/changelog',
-      titre: 'Homologuez vos services et faites-le savoir !',
+      titre: 'Homologuez vos services et faites-le savoir !',
       sousTitre:
         "Valorisez l'effort de sécurisation mis en œuvre et renforcez la confiance de vos usagers dans vos services",
       image: 'encart_homologation.png',
@@ -31,7 +31,7 @@ module.exports = {
       id: 'communauteMSS',
       dateDeDeploiement: '2024-06-13 12:30:00Z',
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/comment-rejoindre-la-communaute-xtwbkz/',
-      titre: 'Rejoignez la communauté MonServiceSécurisé !',
+      titre: 'Rejoignez la communauté MonServiceSécurisé !',
       sousTitre:
         'Devenez membre de la communauté MonServiceSécurisé et échangez avec vos pairs',
       image: 'communauteMSS.png',
@@ -41,7 +41,7 @@ module.exports = {
       id: 'mesuresPartielles',
       dateDeDeploiement: '2024-06-27 12:30:00Z',
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/que-signifie-et-comment-est-calcule-lindice-cyber-1l94rzd/',
-      titre: "Le calcul de l'Indice Cyber évolue !",
+      titre: "Le calcul de l'Indice Cyber évolue !",
       sousTitre: 'Il prend désormais en compte les mesures "partielles"',
       image: 'indiceCyber.png',
       canalDiffusion: 'centreNotifications',
@@ -50,7 +50,7 @@ module.exports = {
       id: 'besoinsSecurite',
       dateDeDeploiement: '2024-07-23 12:30:00Z',
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/les-besoins-de-securite-de-vos-services-yhuazp/?bust=1721652611643',
-      titre: 'Découvrez les besoins de sécurité de vos services !',
+      titre: 'Découvrez les besoins de sécurité de vos services !',
       sousTitre:
         "Choisissez les besoins adaptés à vos services et adaptez la démarche d'homologation, grâce aux indications fournies par l'ANSSI",
       image: 'besoinsSecurite.svg',
@@ -64,17 +64,17 @@ module.exports = {
     {
       id: 'planActionDesMesures',
       dateDeDeploiement: '2024-08-12 08:00:00Z',
-      titre: "Le plan d'action cyber est disponible !",
+      titre: "Le plan d'action cyber est disponible !",
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/comment-utiliser-le-plan-daction-cyber-dans-la-liste-des-mesures-de-securite-tft88x/',
       sousTitre:
-        "Pour chaque mesure, attribuez un·e ou des responsables, une date d'échéance et une priorité !",
+        "Pour chaque mesure, attribuez un·e ou des responsables, une date d'échéance et une priorité !",
       image: 'prioritePlanAction.png',
       canalDiffusion: 'centreNotifications',
     },
     {
       id: 'indiceCyberPersonnalise',
       dateDeDeploiement: '2024-08-30 08:00:00Z',
-      titre: "L'indice cyber personnalisé est arrivé !",
+      titre: "L'indice cyber personnalisé est arrivé !",
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/lindice-cyber-personnalise-que-represente-t-il-et-comment-est-il-calcule-13ffv4p/',
       sousTitre:
         'Celui-ci prend en compte les mesures spécifiques ajoutées et retire du calcul les mesures avec le statut "non prise en compte".',
@@ -85,7 +85,7 @@ module.exports = {
       id: 'activites',
       dateDeDeploiement: '2024-09-02 08:30:00Z',
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/historique-des-actions-sur-les-mesures-10c6n77/',
-      titre: 'Suivi de vos activités sur les mesures !',
+      titre: 'Suivi de vos activités sur les mesures !',
       sousTitre:
         'Vous pouvez désormais suivre qui a fait des modifications et à quelle date sur les mesures de sécurité.',
       image: 'activites.png',
@@ -95,7 +95,7 @@ module.exports = {
       id: 'lancementRoadmap',
       dateDeDeploiement: '2024-10-08 08:30:00Z',
       lien: 'https://avis.monservicesecurise.cyber.gouv.fr/fr/roadmap',
-      titre: 'La feuille de route de MonServiceSécurisé est publique !',
+      titre: 'La feuille de route de MonServiceSécurisé est publique !',
       sousTitre:
         'Suivez les développements en cours et à venir, et restez informés des nouvelles fonctionnalités disponibles.',
       image: 'lancementRoadmap.png',
@@ -105,9 +105,9 @@ module.exports = {
       id: 'moduleRisquesV2',
       dateDeDeploiement: '2024-10-29 08:30:00Z',
       lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/le-module-risques-comment-ca-fonctionne-ja82li/',
-      titre: 'Découvrez la nouvelle version de notre module Risques !',
+      titre: 'Découvrez la nouvelle version de notre module Risques !',
       sousTitre:
-        'Échelle de vraisemblance, matrice de risques, nouvelle interface, profitez de toutes les nouveautés !',
+        'Échelle de vraisemblance, matrice de risques, nouvelle interface, profitez de toutes les nouveautés !',
       image: 'moduleRisquesV2.png',
       canalDiffusion: 'centreNotifications',
     },
