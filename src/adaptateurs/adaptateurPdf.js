@@ -78,8 +78,7 @@ const genereAnnexes = async ({
   referentiel,
 }) => {
   try {
-    const risquesPresents =
-      Object.keys(donneesRisques.risquesParNiveauGravite).length > 0;
+    const risquesPresents = Object.keys(donneesRisques.risques).length > 0;
 
     const [description, mesures, risques] = await Promise.all([
       genereHtml(
