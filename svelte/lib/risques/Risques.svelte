@@ -158,6 +158,25 @@
       <LegendeMatriceRisques {niveauxRisque} />
     </div>
   </div>
+  <div class="section article">
+    <h2>Besoin de comprendre ?</h2>
+    <a
+      target="_blank"
+      rel="noopener"
+      class="lien-article"
+      href="https://monservicesecurise.cyber.gouv.fr/articles/realiser-une-analyse-de-risques-de-la-securite-du-service"
+    >
+      <div class="contenu-section">
+        <p class="etiquette-section">Mise en œuvre des mesures de sécurité</p>
+        <h6>Réaliser une analyse de risques de la sécurité du service</h6>
+        <p>
+          L'analyse de risques d'un service numérique ou un système
+          d'information est une démarche essentielle de &hellip;
+        </p>
+        <span class="fleche-navigation"></span>
+      </div>
+    </a>
+  </div>
 </div>
 
 <div class="entete-tableau-risques">
@@ -318,12 +337,31 @@
     display: flex;
     text-align: left;
     margin-bottom: 35px;
+    gap: 24px;
   }
 
   .au-dessus-tableau .section {
     display: flex;
     flex-direction: column;
     gap: 23px;
+  }
+
+  .section.cartographie {
+    flex: 1;
+  }
+
+  .fleche-navigation {
+    content: '';
+    background: url(/statique/assets/images/fleche_gauche_bleue.svg);
+    width: 16px;
+    height: 16px;
+    transform: rotate(180deg);
+    filter: brightness(0) saturate(100%) invert(12%) sepia(63%) saturate(4499%)
+      hue-rotate(239deg) brightness(87%) contrast(141%);
+    background-size: contain;
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
   }
 
   .au-dessus-tableau h2 {
@@ -348,5 +386,53 @@
 
   .cartographie .contenu-section div {
     padding: 16px 28px 20px 46px;
+  }
+
+  a.lien-article {
+    color: black;
+    text-decoration: none;
+    height: 100%;
+    display: flex;
+  }
+
+  a.lien-article:hover {
+    box-shadow: 0px 16px 32px 0px #0000001f;
+  }
+
+  h6 {
+    color: var(--bleu-anssi);
+    font-weight: bold;
+    line-height: 1.75rem;
+    font-size: 1.25rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .etiquette-section {
+    color: var(--violet-indice-cyber);
+    background: #e9ddff;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    line-height: 20px;
+    font-weight: 700;
+    width: fit-content;
+    margin: 0;
+  }
+
+  .section.article {
+    width: 309px;
+  }
+
+  .section.article .contenu-section {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+    position: relative;
   }
 </style>
