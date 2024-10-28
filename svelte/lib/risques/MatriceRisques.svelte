@@ -49,7 +49,7 @@
 
 <div class="matrice">
   <span class="legende legende-y">Gravité</span>
-  <span class="legende legende-x">Vraissemblance</span>
+  <span class="legende legende-x">Vraisemblance</span>
   <div class="axe axe-y">
     <span>4</span>
     <span>3</span>
