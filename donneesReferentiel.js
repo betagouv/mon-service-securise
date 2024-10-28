@@ -101,6 +101,16 @@ module.exports = {
       image: 'lancementRoadmap.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'moduleRisquesV2',
+      dateDeDeploiement: '2024-10-29 08:30:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/le-module-risques-comment-ca-fonctionne-ja82li/',
+      titre: 'Découvrez la nouvelle version de notre module Risques !',
+      sousTitre:
+        'Échelle de vraisemblance, matrice de risques, nouvelle interface, profitez de toutes les nouveautés !',
+      image: 'moduleRisquesV2.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
