@@ -35,6 +35,7 @@ const donneesReferentielVide = {
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   let donnees = donneesReferentiel;
 
+  const versionActuelleCgu = () => donnees.versionActuelleCgu || true;
   const statutsAvisDossierHomologation = () =>
     donnees.statutsAvisDossierHomologation || {};
   const statutHomologation = (idStatut) =>
@@ -465,6 +466,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     nbEtapesVisiteGuidee,
     natureTachesService,
     natureSuggestionAction,
+    versionActuelleCgu,
   };
 };
 const creeReferentielVide = () => creeReferentiel(donneesReferentielVide);

@@ -13,8 +13,11 @@ const Utilisateur = require('../modeles/utilisateur');
 const Entite = require('../modeles/entite');
 const EvenementUtilisateurModifie = require('../bus/evenementUtilisateurModifie');
 const EvenementUtilisateurInscrit = require('../bus/evenementUtilisateurInscrit');
+const { creeReferentielVide } = require('../referentiel');
 
-const serviceCguParDefaut = fabriqueServiceCgu();
+const serviceCguParDefaut = fabriqueServiceCgu({
+  referentiel: creeReferentielVide(),
+});
 
 const fabriqueChiffrement = (adaptateurChiffrement) => ({
   dechiffre: {

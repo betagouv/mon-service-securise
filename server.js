@@ -49,7 +49,7 @@ const port = process.env.PORT || 3000;
 
 const referentiel = Referentiel.creeReferentiel();
 const moteurRegles = new MoteurRegles(referentiel);
-const serviceCgu = fabriqueServiceCgu();
+const serviceCgu = fabriqueServiceCgu({ referentiel });
 const depotDonnees = DepotDonnees.creeDepot({
   adaptateurChiffrement,
   adaptateurEnvironnement,
