@@ -103,6 +103,9 @@ const middleware = (configuration = {}) => {
         );
       }
 
+      if (!requete.cguAcceptees) {
+        return reponse.redirect('/cgu');
+      }
       return suite();
     });
   };
