@@ -1,5 +1,5 @@
-const fabriqueServiceCgu = () => ({
-  versionActuelle: () => true,
+const fabriqueServiceCgu = ({ referentiel }) => ({
+  versionActuelle: () => referentiel.versionActuelleCgu(),
 });
 
 module.exports = {
