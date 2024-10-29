@@ -189,41 +189,59 @@ describe('Le middleware MSS', () => {
   });
 
   describe("sur vérification de l'acceptation des CGU", () => {
-    it("si l'utilisateur est invité, redirige l'utilisateur connecté via MSS", (done) => {
-      const adaptateurJWT = {
-        decode: () => ({ estInvite: true, source: 'MSS' }),
-      };
-      const middleware = Middleware({ adaptateurJWT, depotDonnees });
+    describe('pour un utilisateur invité', () => {
+      it("redirige l'utilisateur connecté via MSS", (done) => {
+        const adaptateurJWT = {
+          decode: () => ({ estInvite: true, source: 'MSS' }),
+        };
+        const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
-      reponse.redirect = (url) => {
-        expect(url).to.equal('/motDePasse/initialisation');
-        done();
-      };
+        reponse.redirect = (url) => {
+          expect(url).to.equal('/motDePasse/initialisation');
+          done();
+        };
 
-      middleware.verificationAcceptationCGU(requete, reponse);
+        middleware.verificationAcceptationCGU(requete, reponse);
+      });
+
+      it("redirige l'utilisateur connecté via Agent Connect", (done) => {
+        const adaptateurJWT = {
+          decode: () => ({ estInvite: true, source: 'AGENT_CONNECT' }),
+        };
+        const middleware = Middleware({ adaptateurJWT, depotDonnees });
+
+        reponse.redirect = (url) => {
+          expect(url).to.equal('/acceptationCGU');
+          done();
+        };
+
+        middleware.verificationAcceptationCGU(requete, reponse);
+      });
     });
 
-    it("si l'utilisateur est invité, redirige l'utilisateur connecté via Agent Connect", (done) => {
-      const adaptateurJWT = {
-        decode: () => ({ estInvite: true, source: 'AGENT_CONNECT' }),
-      };
-      const middleware = Middleware({ adaptateurJWT, depotDonnees });
+    describe("si l'utilisateur n'est pas un invité", () => {
+      it('si la dernière version des CGU est acceptée, appelle le middleware suivant', (done) => {
+        const adaptateurJWT = {
+          decode: () => ({ estInvite: false, cguAcceptees: true }),
+        };
+        const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
-      reponse.redirect = (url) => {
-        expect(url).to.equal('/acceptationCGU');
-        done();
-      };
+        middleware.verificationAcceptationCGU(requete, reponse, done);
+      });
 
-      middleware.verificationAcceptationCGU(requete, reponse);
-    });
+      it("si la dernière version des CGU n'est pas acceptée, redirige vers la page des cgu", (done) => {
+        const adaptateurJWT = {
+          decode: () => ({ estInvite: false, cguAcceptees: false }),
+        };
+        const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
-    it("si les CGU sont acceptées et que l'utilisateur n'est pas invité, appelle le middleware suivant", (done) => {
-      const adaptateurJWT = {
-        decode: () => ({ estInvite: false, cguAcceptees: true }),
-      };
-      const middleware = Middleware({ adaptateurJWT, depotDonnees });
+        reponse.redirect = (url) => {
+          expect(url).to.equal('/cgu');
+          done();
+        };
 
-      middleware.verificationAcceptationCGU(requete, reponse, done);
+        middleware.verificationAcceptationCGU(requete, reponse);
+      });
     });
   });
 
