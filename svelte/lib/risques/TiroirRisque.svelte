@@ -102,7 +102,7 @@
   $: risque, (afficheConfirmationSuppressionRisque = false);
 </script>
 
-<div class="tiroir {risque?.type}" class:ouvert>
+<div class="tiroir-risque {risque?.type}" class:ouvert>
   {#if risque}
     <div class="entete-tiroir">
       <div>
@@ -249,7 +249,7 @@
 </div>
 
 <style>
-  .tiroir {
+  .tiroir-risque {
     height: 100%;
     min-width: 650px;
     max-width: 650px;
