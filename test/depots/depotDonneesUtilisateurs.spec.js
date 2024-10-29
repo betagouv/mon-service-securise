@@ -77,7 +77,7 @@ describe('Le dépôt de données des utilisateurs', () => {
   });
 
   it("sait dire que l'utilisateur a accepté les CGU actuelles lorsqu'il est récupéré par son hash d'email", async () => {
-    const cguEnV2 = { cgu: () => ({ versionActuelle: () => 'v2.0' }) };
+    const cguEnV2 = { versionActuelle: () => 'v2.0' };
     const persistanceAvecUnUtilisateur =
       unePersistanceMemoire().ajouteUnUtilisateur({
         id: 'U2-ACCEPTE-OK',
@@ -88,7 +88,7 @@ describe('Le dépôt de données des utilisateurs', () => {
       });
 
     const depot = DepotDonneesUtilisateurs.creeDepot({
-      adaptateurEnvironnement: cguEnV2,
+      serviceCgu: cguEnV2,
       adaptateurPersistance: persistanceAvecUnUtilisateur.construis(),
       adaptateurChiffrement: {
         hacheBCrypt: async (chaine) => chaine,
@@ -106,7 +106,7 @@ describe('Le dépôt de données des utilisateurs', () => {
   });
 
   it("sait dire que l'utilisateur n'a pas accepté les CGU actuelles lorsqu'il est récupéré par son hash d'email", async () => {
-    const cguEnV2 = { cgu: () => ({ versionActuelle: () => 'v2.0' }) };
+    const cguEnV2 = { versionActuelle: () => 'v2.0' };
     const persistanceAvecUnUtilisateur =
       unePersistanceMemoire().ajouteUnUtilisateur({
         id: 'U1-ACCEPTE-OBSOLETE',
@@ -117,7 +117,7 @@ describe('Le dépôt de données des utilisateurs', () => {
       });
 
     const depot = DepotDonneesUtilisateurs.creeDepot({
-      adaptateurEnvironnement: cguEnV2,
+      serviceCgu: cguEnV2,
       adaptateurPersistance: persistanceAvecUnUtilisateur.construis(),
       adaptateurChiffrement: {
         hacheBCrypt: async (chaine) => chaine,
@@ -361,9 +361,7 @@ describe('Le dépôt de données des utilisateurs', () => {
 
     const depot = DepotDonneesUtilisateurs.creeDepot({
       adaptateurChiffrement,
-      adaptateurEnvironnement: {
-        cgu: () => ({ versionActuelle: () => 'v1.0' }),
-      },
+      serviceCgu: { versionActuelle: () => 'v1.0' },
       adaptateurPersistance: AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [{ id: '123', donnees: jeanDupont }],
       }),

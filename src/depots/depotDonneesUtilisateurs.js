@@ -1,7 +1,7 @@
 const adaptateurJWTParDefaut = require('../adaptateurs/adaptateurJWT');
 const { fabriqueAdaptateurUUID } = require('../adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
-const adaptateurEnvironnementParDefaut = require('../adaptateurs/adaptateurEnvironnement');
+const serviceCguParDefaut = require('../serviceCgu');
 const {
   ErreurEmailManquant,
   ErreurSuppressionImpossible,
@@ -29,7 +29,7 @@ function fabriquePersistance({
   adaptateurPersistance,
   adaptateurJWT,
   adaptateurChiffrement,
-  adaptateurEnvironnement,
+  serviceCgu,
 }) {
   const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
@@ -54,7 +54,7 @@ function fabriquePersistance({
 
     return new Utilisateur(donneesDechiffrees, {
       adaptateurJWT,
-      cguActuelles: adaptateurEnvironnement.cgu().versionActuelle(),
+      cguActuelles: serviceCgu.versionActuelle(),
     });
   };
 
@@ -152,19 +152,19 @@ function fabriquePersistance({
 const creeDepot = (config = {}) => {
   const {
     adaptateurChiffrement,
-    adaptateurEnvironnement = adaptateurEnvironnementParDefaut,
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = fabriqueAdaptateurUUID(),
     adaptateurRechercheEntite,
     busEvenements,
+    serviceCgu = serviceCguParDefaut,
   } = config;
 
   const p = fabriquePersistance({
     adaptateurPersistance,
     adaptateurJWT,
     adaptateurChiffrement,
-    adaptateurEnvironnement,
+    serviceCgu,
   });
 
   const dechiffreUtilisateur = async (donneesUtilisateur) =>
@@ -221,7 +221,7 @@ const creeDepot = (config = {}) => {
       motDePasseStocke
     );
 
-    const cguActuelles = adaptateurEnvironnement.cgu().versionActuelle();
+    const cguActuelles = serviceCgu.versionActuelle();
 
     return authentificationReussie
       ? new Utilisateur(u, { adaptateurJWT, cguActuelles })
@@ -300,7 +300,7 @@ const creeDepot = (config = {}) => {
   const tousUtilisateurs = async () => p.lis.tous();
 
   const valideAcceptationCGUPourUtilisateur = async (utilisateurAModifier) => {
-    const cguActuelles = adaptateurEnvironnement.cgu().versionActuelle();
+    const cguActuelles = serviceCgu.versionActuelle();
     await p.sauvegarde(utilisateurAModifier.id, { cguAcceptees: cguActuelles });
     return p.lis.un(utilisateurAModifier.id);
   };

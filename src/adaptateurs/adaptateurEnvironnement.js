@@ -1,7 +1,3 @@
-const cgu = () => ({
-  versionActuelle: () => true,
-});
-
 const emailMemoire = () => ({
   logEmailDansConsole: () =>
     process.env.AVEC_EMAIL_MEMOIRE_QUI_LOG_CONSOLE === 'true',
@@ -80,7 +76,6 @@ const mss = () => ({
 });
 
 module.exports = {
-  cgu,
   chiffrement,
   emailMemoire,
   featureFlag,

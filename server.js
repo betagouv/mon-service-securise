@@ -37,6 +37,7 @@ const {
   fabriqueInscriptionUtilisateur,
 } = require('./src/modeles/inscriptionUtilisateur');
 const adaptateurStatistiques = require('./src/adaptateurs/adaptateurStatistiquesMetabase');
+const serviceCgu = require('./src/serviceCgu');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
@@ -53,6 +54,7 @@ const depotDonnees = DepotDonnees.creeDepot({
   adaptateurEnvironnement,
   adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
   adaptateurJWT,
+  serviceCgu,
   busEvenements,
 });
 

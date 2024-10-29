@@ -26,6 +26,7 @@ const creeDepot = (config = {}) => {
     referentiel = Referentiel.creeReferentiel(),
     adaptateurRechercheEntite,
     busEvenements,
+    serviceCgu,
   } = config;
 
   const depotUtilisateurs = depotDonneesUtilisateurs.creeDepot({
@@ -36,6 +37,7 @@ const creeDepot = (config = {}) => {
     adaptateurUUID,
     adaptateurRechercheEntite,
     busEvenements,
+    serviceCgu,
   });
 
   const depotServices = depotDonneesServices.creeDepot({

@@ -7,9 +7,8 @@ const depotVide = (
   config = {
     adaptateurChiffrement: fauxAdaptateurChiffrement(),
     adaptateurPersistance: fabriqueAdaptateurPersistance(),
-    adaptateurEnvironnement: {
-      cgu: () => ({ versionActuelle: () => 'v-Vide' }),
-    },
+    adaptateurEnvironnement: {},
+    serviceCgu: { versionActuelle: () => 'v-Vide' },
   }
 ) => {
   const { adaptateurPersistance } = config;
