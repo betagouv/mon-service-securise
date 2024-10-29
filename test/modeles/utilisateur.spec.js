@@ -129,24 +129,31 @@ describe('Un utilisateur', () => {
     });
   });
 
-  it('sait détecter si les conditions générales actuelles ont été acceptées', () => {
+  it('sait détecter que les conditions générales actuelles ont été acceptées', () => {
     const accepteLesActuelles = new Utilisateur(
       { email: 'jean.dupont@mail.fr', cguAcceptees: 'v1.0' },
       { cguActuelles: 'v1.0' }
     );
+
     expect(accepteLesActuelles.accepteCGU()).to.be(true);
+  });
 
-    const jamaisAcceptees = new Utilisateur(
-      { email: 'jean.dupont@mail.fr' },
-      { cguActuelles: 'v1.0' }
-    );
-    expect(jamaisAcceptees.accepteCGU()).to.be(false);
-
+  it("sait détecter que les conditions générales actuelles n'ont pas été acceptées", () => {
     const accepteObsoletes = new Utilisateur(
       { email: 'jean.dupont@mail.fr', cguAcceptees: 'v1.0' },
       { cguActuelles: 'v1.1-8' }
     );
+
     expect(accepteObsoletes.accepteCGU()).to.be(false);
+  });
+
+  it("sait détecter que les conditions générales actuelles n'ont jamais été acceptées", () => {
+    const jamaisAcceptees = new Utilisateur(
+      { email: 'jean.dupont@mail.fr' },
+      { cguActuelles: 'v1.0' }
+    );
+
+    expect(jamaisAcceptees.accepteCGU()).to.be(false);
   });
 
   it("est considéré comme « invité » s'il n'a aucune version de CGU acceptée (i.e. les CGU acceptées sont `undefined`)", () => {
