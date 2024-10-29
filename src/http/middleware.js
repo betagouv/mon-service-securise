@@ -88,19 +88,22 @@ const middleware = (configuration = {}) => {
 
     requete.idUtilisateurCourant = token.idUtilisateur;
     requete.cguAcceptees = token.cguAcceptees;
+    requete.estInvite = token.estInvite;
     requete.sourceAuthentification = token.source;
     return suite();
   };
 
   const verificationAcceptationCGU = (requete, reponse, suite) => {
     verificationJWT(requete, reponse, () => {
-      if (requete.cguAcceptees) return suite();
+      if (requete.estInvite) {
+        return reponse.redirect(
+          requete.sourceAuthentification === SourceAuthentification.MSS
+            ? '/motDePasse/initialisation'
+            : '/acceptationCGU'
+        );
+      }
 
-      return reponse.redirect(
-        requete.sourceAuthentification === SourceAuthentification.MSS
-          ? '/motDePasse/initialisation'
-          : '/acceptationCGU'
-      );
+      return suite();
     });
   };
 
