@@ -1,5 +1,4 @@
 extends mssDeconnecte
-include ./fragments/utilisateur/questionCgu
 
 block variables
   - const meta_description = "Découvrez nos conditions générales d'utilisation sur MonServiceSécurisé. Protégez vos services numériques en toute conformité. Consultez nos engagements pour une sécurité renforcée."
@@ -16,15 +15,12 @@ block append scripts
   script(type = 'module', src='/statique/scripts/cgu.js')
 
 block main
+  - const dateMiseEnVigueur = "13/12/2022"
   .marges-fixes
     .documentation
-      if demandeAcceptation
-        +questionCgu
-        button#valider-cgu.bouton Valider
-
       h1 Conditions générales d'utilisation de MonServiceSécurisé
 
-      p.date-mise-en-vigueur En vigueur à partir du 13.12.2022
+      p.date-mise-en-vigueur En vigueur à partir du #{dateMiseEnVigueur}
 
       p.
         Nous vous invitons à lire avec attention le présent document (ci-après,
@@ -452,3 +448,10 @@ block main
         données à caractère personnel, l'Utilisateur peut contacter l'ANSSI aux
         coordonnées indiquées dans la <a href='/confidentialite'>Politique de
         confidentialité</a>.
+
+    if demandeAcceptation
+      .demande-acceptation
+        p.
+          Nos Conditions Générales d'Utilisation évoluent à compter du #{dateMiseEnVigueur}, merci de les accepter
+          afin d'accéder à MonServiceSécurisé
+        button#valider-cgu.bouton.bouton-secondaire Accepter
