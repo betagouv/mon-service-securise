@@ -189,9 +189,9 @@ describe('Le middleware MSS', () => {
   });
 
   describe("sur vérification de l'acceptation des CGU", () => {
-    it("vérifie que les CGU sont acceptées et redirige l'utilisateur connecté via MSS si besoin", (done) => {
+    it("si l'utilisateur est invité, redirige l'utilisateur connecté via MSS", (done) => {
       const adaptateurJWT = {
-        decode: () => ({ cguAcceptees: false, source: 'MSS' }),
+        decode: () => ({ estInvite: true, source: 'MSS' }),
       };
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
@@ -203,9 +203,9 @@ describe('Le middleware MSS', () => {
       middleware.verificationAcceptationCGU(requete, reponse);
     });
 
-    it("vérifie que les CGU sont acceptées et redirige l'utilisateur connecté via Agent Connect si besoin", (done) => {
+    it("si l'utilisateur est invité, redirige l'utilisateur connecté via Agent Connect", (done) => {
       const adaptateurJWT = {
-        decode: () => ({ cguAcceptees: false, source: 'AGENT_CONNECT' }),
+        decode: () => ({ estInvite: true, source: 'AGENT_CONNECT' }),
       };
       const middleware = Middleware({ adaptateurJWT, depotDonnees });
 
@@ -215,6 +215,15 @@ describe('Le middleware MSS', () => {
       };
 
       middleware.verificationAcceptationCGU(requete, reponse);
+    });
+
+    it("si les CGU sont acceptées et que l'utilisateur n'est pas invité, appelle le middleware suivant", (done) => {
+      const adaptateurJWT = {
+        decode: () => ({ estInvite: false, cguAcceptees: true }),
+      };
+      const middleware = Middleware({ adaptateurJWT, depotDonnees });
+
+      middleware.verificationAcceptationCGU(requete, reponse, done);
     });
   });
 
