@@ -67,6 +67,8 @@
 
   const ouvreAjoutRisque = () => {
     tiroirRisqueOuvert = true;
+    tiroirLegendeGraviteOuvert = false;
+    tiroirLegendeVraisemblanceOuvert = false;
     modeAffichageTiroir = 'AJOUT';
     risqueEnEdition = {
       type: 'SPECIFIQUE',
@@ -214,6 +216,8 @@
             icone="information"
             on:click={() => {
               tiroirLegendeGraviteOuvert = true;
+              tiroirLegendeVraisemblanceOuvert = false;
+              tiroirRisqueOuvert = false;
             }}
           />
           <BoutonIcone icone={`tri-${triParGravite}`} on:click={triGravite} />
@@ -226,6 +230,8 @@
             icone="information"
             on:click={() => {
               tiroirLegendeVraisemblanceOuvert = true;
+              tiroirLegendeGraviteOuvert = false;
+              tiroirRisqueOuvert = false;
             }}
           />
           <BoutonIcone

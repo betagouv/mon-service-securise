@@ -8,7 +8,7 @@
   };
 </script>
 
-<div class="tiroir" class:ouvert>
+<div class="tiroir-legende" class:ouvert>
   <div class="entete-tiroir">
     <div>
       <h2 class="titre-tiroir-legende">{titre}</h2>
@@ -22,7 +22,7 @@
 </div>
 
 <style>
-  .tiroir {
+  .tiroir-legende {
     height: 100%;
     min-width: 650px;
     max-width: 650px;
