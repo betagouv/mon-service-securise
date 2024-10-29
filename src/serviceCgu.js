@@ -1,5 +1,7 @@
-const versionActuelle = () => true;
+const fabriqueServiceCgu = () => ({
+  versionActuelle: () => true,
+});
 
 module.exports = {
-  versionActuelle,
+  fabriqueServiceCgu,
 };

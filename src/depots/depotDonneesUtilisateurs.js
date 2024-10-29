@@ -1,7 +1,7 @@
 const adaptateurJWTParDefaut = require('../adaptateurs/adaptateurJWT');
 const { fabriqueAdaptateurUUID } = require('../adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
-const serviceCguParDefaut = require('../serviceCgu');
+const { fabriqueServiceCgu } = require('../serviceCgu');
 const {
   ErreurEmailManquant,
   ErreurSuppressionImpossible,
@@ -13,6 +13,8 @@ const Utilisateur = require('../modeles/utilisateur');
 const Entite = require('../modeles/entite');
 const EvenementUtilisateurModifie = require('../bus/evenementUtilisateurModifie');
 const EvenementUtilisateurInscrit = require('../bus/evenementUtilisateurInscrit');
+
+const serviceCguParDefaut = fabriqueServiceCgu();
 
 const fabriqueChiffrement = (adaptateurChiffrement) => ({
   dechiffre: {

@@ -37,7 +37,7 @@ const {
   fabriqueInscriptionUtilisateur,
 } = require('./src/modeles/inscriptionUtilisateur');
 const adaptateurStatistiques = require('./src/adaptateurs/adaptateurStatistiquesMetabase');
-const serviceCgu = require('./src/serviceCgu');
+const { fabriqueServiceCgu } = require('./src/serviceCgu');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
@@ -49,6 +49,7 @@ const port = process.env.PORT || 3000;
 
 const referentiel = Referentiel.creeReferentiel();
 const moteurRegles = new MoteurRegles(referentiel);
+const serviceCgu = fabriqueServiceCgu();
 const depotDonnees = DepotDonnees.creeDepot({
   adaptateurChiffrement,
   adaptateurEnvironnement,
