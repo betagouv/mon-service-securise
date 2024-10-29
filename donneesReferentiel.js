@@ -1620,5 +1620,5 @@ module.exports = {
       urlEtape: '/visiteGuidee/piloter',
     },
   },
-  versionActuelleCgu: true,
+  versionActuelleCgu: 'v2_2024-10-30',
 };
