@@ -33,8 +33,10 @@ const routesNonConnectePage = ({
     reponse.render('accessibilite');
   });
 
-  routes.get('/cgu', (_requete, reponse) => {
-    reponse.render('cgu');
+  routes.get('/cgu', (requete, reponse) => {
+    const token = adaptateurJWT.decode(requete.session.token);
+    const demandeAcceptation = token ? !token.cguAcceptees : false;
+    reponse.render('cgu', { demandeAcceptation });
   });
 
   routes.get('/confidentialite', (_requete, reponse) => {
