@@ -1,3 +1,24 @@
-.message-erreur {
-  display: none;
+.demande-acceptation {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--bleu-mise-en-avant);
+  margin: 1em 5em;
+  padding: 2em 6em;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--liseres-fonce);
+}
+
+.demande-acceptation p {
+  text-align: left;
+  font-weight: bold;
+  margin: 0;
+  color: white;
+}
+
+.bouton {
+  padding: 7px 16px;
+  margin: 0;
 }
