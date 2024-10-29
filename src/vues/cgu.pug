@@ -1,4 +1,6 @@
 extends mssDeconnecte
+include ./fragments/utilisateur/questionCgu
+
 block variables
   - const meta_description = "Découvrez nos conditions générales d'utilisation sur MonServiceSécurisé. Protégez vos services numériques en toute conformité. Consultez nos engagements pour une sécurité renforcée."
 
@@ -8,10 +10,18 @@ block title
 
 block append styles
   link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/cgu.css', rel = 'stylesheet')
+
+block append scripts
+  script(type = 'module', src='/statique/scripts/cgu.js')
 
 block main
   .marges-fixes
     .documentation
+      if demandeAcceptation
+        +questionCgu
+        button#valider-cgu.bouton Valider
+
       h1 Conditions générales d'utilisation de MonServiceSécurisé
 
       p.date-mise-en-vigueur En vigueur à partir du 13.12.2022
