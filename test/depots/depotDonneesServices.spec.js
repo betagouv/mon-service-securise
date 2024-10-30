@@ -62,6 +62,7 @@ const { creeReferentielVide } = require('../../src/referentiel');
 const EvenementMesureServiceModifiee = require('../../src/bus/evenementMesureServiceModifiee');
 const EvenementMesureServiceSupprimee = require('../../src/bus/evenementMesureServiceSupprimee');
 const Risques = require('../../src/modeles/risques');
+const EvenementRisqueServiceModifie = require('../../src/bus/evenementRisqueServiceModifie');
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -473,27 +474,26 @@ describe('Le dépôt de données des services', () => {
 
   describe('concernant les risques généraux', () => {
     let valideRisque;
+    let depot;
 
-    before(() => {
+    beforeEach(() => {
       valideRisque = RisqueGeneral.valide;
       RisqueGeneral.valide = () => {};
-    });
-
-    after(() => (RisqueGeneral.valide = valideRisque));
-
-    it('sait associer un risque général à un service', async () => {
-      RisqueGeneral.valide = () => {};
-
       const r = Referentiel.creeReferentielVide();
-      const depot = unDepotDeDonneesServices()
+      depot = unDepotDeDonneesServices()
         .avecReferentiel(r)
+        .avecBusEvenements(busEvenements)
         .avecConstructeurDePersistance(
           unePersistanceMemoire().ajouteUnService(
             unService(r).avecId('S1').donnees
           )
         )
         .construis();
+    });
 
+    afterEach(() => (RisqueGeneral.valide = valideRisque));
+
+    it('sait associer un risque général à un service', async () => {
       const risque = new RisqueGeneral({ id: 'R1' });
       await depot.ajouteRisqueGeneralAService('S1', risque);
 
@@ -501,6 +501,15 @@ describe('Le dépôt de données des services', () => {
       expect(risques.risquesGeneraux.nombre()).to.equal(1);
       expect(risques.risquesGeneraux.item(0)).to.be.a(RisqueGeneral);
       expect(risques.risquesGeneraux.item(0).id).to.equal('R1');
+    });
+
+    it("publie un événement de 'Risques service modifiés'", async () => {
+      const risque = new RisqueGeneral({ id: 'R1' });
+      await depot.ajouteRisqueGeneralAService('S1', risque);
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementRisqueServiceModifie)
+      ).to.be(true);
     });
   });
 
