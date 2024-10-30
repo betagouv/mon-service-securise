@@ -511,6 +511,11 @@ describe('Le dépôt de données des services', () => {
       expect(
         busEvenements.aRecuUnEvenement(EvenementRisqueServiceModifie)
       ).to.be(true);
+      const evenement = busEvenements.recupereEvenement(
+        EvenementRisqueServiceModifie
+      );
+      expect(evenement.service).not.to.be(undefined);
+      expect(evenement.service.id).to.be('S1');
     });
   });
 

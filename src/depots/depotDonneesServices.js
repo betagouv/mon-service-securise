@@ -211,7 +211,9 @@ const creeDepot = (config = {}) => {
   };
 
   const ajouteRisqueGeneralAService = async (unService, risque) => {
-    await busEvenements.publie(new EvenementRisqueServiceModifie());
+    await busEvenements.publie(
+      new EvenementRisqueServiceModifie({ service: unService })
+    );
     return ajouteAItemsDuService('risquesGeneraux', unService.id, risque);
   };
 
