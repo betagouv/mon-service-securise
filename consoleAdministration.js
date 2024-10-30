@@ -37,6 +37,9 @@ const {
 } = require('./src/bus/abonnements/consigneCompletudeDansJournal');
 const adaptateurChiffrementQuiChiffreVraiment = require('./src/adaptateurs/adaptateurChiffrementVault');
 const Autorisation = require('./src/modeles/autorisations/autorisation');
+const {
+  consigneRisquesDansJournal,
+} = require('./src/bus/abonnements/consigneRisquesDansJournal');
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -128,6 +131,33 @@ class ConsoleAdministration {
         log.cyan(`Traitement du service ${i + 1}/${nbServices}\n`);
         await consigneCompletude({ service: services[i] });
         avanceAuSuivant();
+      } else {
+        clearInterval(interval);
+        log.jaune('FIN\n');
+      }
+    };
+    interval = setInterval(() => traiteOuQuitte(), 200);
+  }
+
+  async genereTousEvenementsRisques(persisteEvenements = false) {
+    const journal = persisteEvenements
+      ? this.adaptateurJournalMSS
+      : this.journalConsole;
+
+    const services = await this.depotDonnees.tousLesServices();
+    const consigneRisques = consigneRisquesDansJournal({
+      adaptateurJournal: journal,
+    });
+    const nbServices = services.length;
+    log.jaune(`${nbServices} services à traiter\n`);
+
+    let i = 0;
+    let interval;
+    const traiteOuQuitte = async () => {
+      if (i < nbServices) {
+        log.cyan(`Traitement du service ${i + 1}/${nbServices}\n`);
+        await consigneRisques({ service: services[i] });
+        i += 1;
       } else {
         clearInterval(interval);
         log.jaune('FIN\n');
@@ -570,6 +600,7 @@ class ConsoleAdministration {
         await new Promise((resolve) => setTimeout(resolve, intervalMs));
       }
     }
+
     const donneesDeTousLesServices =
       await this.adaptateurPersistance.tousLesServices();
     await temporise(donneesDeTousLesServices, chiffreEtSauvegardeService);
