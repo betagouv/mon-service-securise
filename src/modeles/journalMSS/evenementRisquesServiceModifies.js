@@ -8,12 +8,27 @@ class EvenementRisquesServiceModifies extends Evenement {
 
     if (!service) throw new ErreurServiceManquant();
 
+    const donneesPerninentesRisqueGeneral = (risqueGeneral) => {
+      const { niveauGravite, id, niveauVraisemblance } = risqueGeneral;
+      return { id, niveauGravite, niveauVraisemblance };
+    };
+
+    const donneesPerninentesRisqueSpecifique = (risqueSpecifique) => {
+      const { niveauGravite, id, niveauVraisemblance, categories } =
+        risqueSpecifique;
+      return { id, niveauGravite, niveauVraisemblance, categories };
+    };
+
     super(
       'RISQUES_SERVICE_MODIFIES',
       {
         idService: adaptateurChiffrement.hacheSha256(service.id),
-        risquesGeneraux: service.risquesGeneraux().donneesSerialisees(),
-        risquesSpecifiques: service.risquesSpecifiques().donneesSerialisees(),
+        risquesGeneraux: service
+          .risquesGeneraux()
+          .items.map(donneesPerninentesRisqueGeneral),
+        risquesSpecifiques: service
+          .risquesSpecifiques()
+          .items.map(donneesPerninentesRisqueSpecifique),
       },
       date
     );

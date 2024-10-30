@@ -9,6 +9,15 @@ const Referentiel = require('../../../src/referentiel');
 
 describe('Un événement de risques modifiés', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
+  let referentiel;
+
+  beforeEach(() => {
+    referentiel = Referentiel.creeReferentiel({
+      risques: { R1: {} },
+      niveauxGravite: { moyen: {}, minime: {} },
+      vraisemblancesRisques: { probable: {}, improbable: {} },
+    });
+  });
 
   it("chiffre l'identifiant du service qui lui est donné", () => {
     const evenement = new EvenementRisquesServiceModifies(
@@ -22,12 +31,6 @@ describe('Un événement de risques modifiés', () => {
   });
 
   it('sait se convertir en JSON', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      risques: { R1: {} },
-      niveauxGravite: { moyen: {}, minime: {} },
-      vraisemblancesRisques: { probable: {}, improbable: {} },
-    });
-
     const risquesGeneraux = [
       { id: 'R1', niveauGravite: 'moyen', niveauVraisemblance: 'probable' },
     ];
@@ -80,5 +83,49 @@ describe('Un événement de risques modifiés', () => {
     ).to.throwException((e) => {
       expect(e).to.be.an(ErreurServiceManquant);
     });
+  });
+
+  it("n'envoie que les données pertinentes du risque général", () => {
+    const risquesGeneraux = [
+      { id: 'R1', commentaire: 'des données hyper sensibles' },
+    ];
+    const service = unService(referentiel)
+      .avecRisques(new Risques({ risquesGeneraux }, referentiel))
+      .construis();
+
+    const evenement = new EvenementRisquesServiceModifies({ service });
+
+    expect(evenement.toJSON().donnees.risquesGeneraux).to.eql([
+      {
+        id: 'R1',
+        niveauGravite: undefined,
+        niveauVraisemblance: undefined,
+      },
+    ]);
+  });
+
+  it("n'envoie que les données pertinentes du risque spécifique", () => {
+    const risquesSpecifiques = [
+      {
+        id: 'RS1',
+        intitule: 'mon titre',
+        description: 'des données sensibles',
+        commentaire: 'des données hyper sensibles',
+      },
+    ];
+    const service = unService(referentiel)
+      .avecRisques(new Risques({ risquesSpecifiques }, referentiel))
+      .construis();
+
+    const evenement = new EvenementRisquesServiceModifies({ service });
+
+    expect(evenement.toJSON().donnees.risquesSpecifiques).to.eql([
+      {
+        id: 'RS1',
+        niveauGravite: undefined,
+        niveauVraisemblance: undefined,
+        categories: [],
+      },
+    ]);
   });
 });
