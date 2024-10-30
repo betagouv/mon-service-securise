@@ -109,15 +109,37 @@ class ConsoleAdministration {
   }
 
   async genereTousEvenementsCompletude(persisteEvenements = false) {
+    const fabriqueFonction = (adaptateurJournal) =>
+      consigneCompletudeDansJournal({
+        adaptateurJournal,
+        adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+      });
+    await this.executeFonctionSurTousLesServices(
+      persisteEvenements,
+      fabriqueFonction
+    );
+  }
+
+  async genereTousEvenementsRisques(persisteEvenements = false) {
+    const fabriqueFonction = (adaptateurJournal) =>
+      consigneRisquesDansJournal({ adaptateurJournal });
+    await this.executeFonctionSurTousLesServices(
+      persisteEvenements,
+      fabriqueFonction
+    );
+  }
+
+  async executeFonctionSurTousLesServices(
+    persisteEvenements,
+    fabriqueFonction
+  ) {
     const journal = persisteEvenements
       ? this.adaptateurJournalMSS
       : this.journalConsole;
 
+    const fonction = fabriqueFonction(journal);
+
     const services = await this.depotDonnees.tousLesServices();
-    const consigneCompletude = consigneCompletudeDansJournal({
-      adaptateurJournal: journal,
-      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
-    });
     const nbServices = services.length;
     log.jaune(`${nbServices} services à traiter\n`);
 
@@ -129,35 +151,8 @@ class ConsoleAdministration {
     const traiteOuQuitte = async () => {
       if (i < nbServices) {
         log.cyan(`Traitement du service ${i + 1}/${nbServices}\n`);
-        await consigneCompletude({ service: services[i] });
+        await fonction({ service: services[i] });
         avanceAuSuivant();
-      } else {
-        clearInterval(interval);
-        log.jaune('FIN\n');
-      }
-    };
-    interval = setInterval(() => traiteOuQuitte(), 200);
-  }
-
-  async genereTousEvenementsRisques(persisteEvenements = false) {
-    const journal = persisteEvenements
-      ? this.adaptateurJournalMSS
-      : this.journalConsole;
-
-    const services = await this.depotDonnees.tousLesServices();
-    const consigneRisques = consigneRisquesDansJournal({
-      adaptateurJournal: journal,
-    });
-    const nbServices = services.length;
-    log.jaune(`${nbServices} services à traiter\n`);
-
-    let i = 0;
-    let interval;
-    const traiteOuQuitte = async () => {
-      if (i < nbServices) {
-        log.cyan(`Traitement du service ${i + 1}/${nbServices}\n`);
-        await consigneRisques({ service: services[i] });
-        i += 1;
       } else {
         clearInterval(interval);
         log.jaune('FIN\n');
