@@ -17,6 +17,7 @@ const EvenementServiceSupprime = require('../bus/evenementServiceSupprime');
 const Entite = require('../modeles/entite');
 const EvenementMesureServiceModifiee = require('../bus/evenementMesureServiceModifiee');
 const EvenementMesureServiceSupprimee = require('../bus/evenementMesureServiceSupprimee');
+const EvenementRisqueServiceModifie = require('../bus/evenementRisqueServiceModifie');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -209,8 +210,10 @@ const creeDepot = (config = {}) => {
     return dossier;
   };
 
-  const ajouteRisqueGeneralAService = (...params) =>
-    ajouteAItemsDuService('risquesGeneraux', ...params);
+  const ajouteRisqueGeneralAService = async (...params) => {
+    await busEvenements.publie(new EvenementRisqueServiceModifie());
+    return ajouteAItemsDuService('risquesGeneraux', ...params);
+  };
 
   const serviceExiste = async (idUtilisateur, nomService, idServiceMisAJour) =>
     p.lis.existeAvecNom(idUtilisateur, nomService, idServiceMisAJour);
