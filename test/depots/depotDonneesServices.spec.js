@@ -534,6 +534,7 @@ describe('Le dépôt de données des services', () => {
       referentiel = Referentiel.creeReferentielVide();
       depot = unDepotDeDonneesServices()
         .avecReferentiel(referentiel)
+        .avecBusEvenements(busEvenements)
         .avecConstructeurDePersistance(
           unePersistanceMemoire().ajouteUnService(
             unService(referentiel).avecId('S1').donnees
@@ -545,14 +546,31 @@ describe('Le dépôt de données des services', () => {
 
     after(() => (RisqueSpecifique.valide = valideRisque));
 
-    it('sait associer un risque spécifique à un service', async () => {
-      const risque = new RisqueSpecifique({ intitule: 'risque' });
+    describe("sur demande d'ajout d'un risque specifique", () => {
+      it('sait associer un risque spécifique à un service', async () => {
+        const risque = new RisqueSpecifique({ intitule: 'risque' });
 
-      await depot.ajouteRisqueSpecifiqueAService('S1', risque);
+        await depot.ajouteRisqueSpecifiqueAService('S1', risque);
 
-      const { risques } = await depot.service('S1');
-      expect(risques.risquesSpecifiques.nombre()).to.equal(1);
-      expect(risques.risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
+        const { risques } = await depot.service('S1');
+        expect(risques.risquesSpecifiques.nombre()).to.equal(1);
+        expect(risques.risquesSpecifiques.item(0)).to.be.a(RisqueSpecifique);
+      });
+
+      it("publie un événement de 'Risques service modifiés'", async () => {
+        const risque = new RisqueSpecifique({ intitule: 'risque' });
+
+        await depot.ajouteRisqueSpecifiqueAService('S1', risque);
+
+        expect(
+          busEvenements.aRecuUnEvenement(EvenementRisqueServiceModifie)
+        ).to.be(true);
+        const evenement = busEvenements.recupereEvenement(
+          EvenementRisqueServiceModifie
+        );
+        expect(evenement.service).not.to.be(undefined);
+        expect(evenement.service.id).to.be('S1');
+      });
     });
 
     it("sait supprimer un risque spécifique d'un service", async () => {
