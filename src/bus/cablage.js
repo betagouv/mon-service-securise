@@ -85,6 +85,10 @@ const EvenementNouvelleConnexionUtilisateur = require('./evenementNouvelleConnex
 const {
   sauvegardeEvolutionIndiceCyber,
 } = require('./abonnements/sauvegardeEvolutionIndiceCyber');
+const EvenementRisqueServiceModifie = require('./evenementRisqueServiceModifie');
+const {
+  consigneRisquesDansJournal,
+} = require('./abonnements/consigneRisquesDansJournal');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -135,6 +139,11 @@ const cableTousLesAbonnes = (
     }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
   ]);
+
+  busEvenements.abonne(
+    EvenementRisqueServiceModifie,
+    consigneRisquesDansJournal({ adaptateurJournal })
+  );
 
   busEvenements.abonnePlusieurs(EvenementDescriptionServiceModifiee, [
     supprimeSuggestionsSurDesChampsObligatoires({ depotDonnees }),
