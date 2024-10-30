@@ -573,32 +573,50 @@ describe('Le dépôt de données des services', () => {
       });
     });
 
-    it("sait supprimer un risque spécifique d'un service", async () => {
-      const unRisqueExistant = new Risques(
-        {
-          risquesSpecifiques: [
-            { id: 'RS1', categories: ['C1'], intitule: 'un risque' },
-          ],
-        },
-        referentiel
-      );
-      const persistance = unePersistanceMemoire().ajouteUnService(
-        unService(referentiel)
-          .avecId('S1')
-          .avecRisques(unRisqueExistant)
-          .avecNomService('nom')
-          .construis()
-          .donneesAPersister().donnees
-      );
-      depot = unDepotDeDonneesServices()
-        .avecReferentiel(referentiel)
-        .avecConstructeurDePersistance(persistance)
-        .construis();
+    describe("sur demande de suppression d'un risque spécifique", () => {
+      beforeEach(() => {
+        const unRisqueExistant = new Risques(
+          {
+            risquesSpecifiques: [
+              { id: 'RS1', categories: ['C1'], intitule: 'un risque' },
+            ],
+          },
+          referentiel
+        );
+        const persistance = unePersistanceMemoire().ajouteUnService(
+          unService(referentiel)
+            .avecId('S1')
+            .avecRisques(unRisqueExistant)
+            .avecNomService('nom')
+            .construis()
+            .donneesAPersister().donnees
+        );
+        depot = unDepotDeDonneesServices()
+          .avecReferentiel(referentiel)
+          .avecBusEvenements(busEvenements)
+          .avecConstructeurDePersistance(persistance)
+          .construis();
+      });
 
-      await depot.supprimeRisqueSpecifiqueDuService('S1', 'RS1');
+      it("sait supprimer un risque spécifique d'un service", async () => {
+        await depot.supprimeRisqueSpecifiqueDuService('S1', 'RS1');
 
-      const { risques } = await depot.service('S1');
-      expect(risques.risquesSpecifiques.nombre()).to.equal(0);
+        const { risques } = await depot.service('S1');
+        expect(risques.risquesSpecifiques.nombre()).to.equal(0);
+      });
+
+      it("publie un événement de 'Risques service modifiés'", async () => {
+        await depot.supprimeRisqueSpecifiqueDuService('S1', 'RS1');
+
+        expect(
+          busEvenements.aRecuUnEvenement(EvenementRisqueServiceModifie)
+        ).to.be(true);
+        const evenement = busEvenements.recupereEvenement(
+          EvenementRisqueServiceModifie
+        );
+        expect(evenement.service).not.to.be(undefined);
+        expect(evenement.service.id).to.be('S1');
+      });
     });
 
     describe("sur demande de mise à jour d'un risque spécifique", () => {
