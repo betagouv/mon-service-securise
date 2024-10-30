@@ -486,6 +486,7 @@ const creeDepot = (config = {}) => {
     const s = await p.lis.un(idService);
     s.ajouteRisqueSpecifique(risque);
     await metsAJourService(s);
+    busEvenements.publie(new EvenementRisqueServiceModifie({ service: s }));
   };
 
   const metsAJourRisqueSpecifiqueDuService = async (idService, risque) => {
