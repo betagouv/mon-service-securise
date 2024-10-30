@@ -1485,10 +1485,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       let idServiceRecu;
       let donneesRecues;
       testeur.depotDonnees().ajouteRisqueGeneralAService = async (
-        idService,
+        service,
         donnees
       ) => {
-        idServiceRecu = idService;
+        idServiceRecu = service.id;
         donneesRecues = donnees;
       };
 

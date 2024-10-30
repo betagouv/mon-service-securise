@@ -210,9 +210,9 @@ const creeDepot = (config = {}) => {
     return dossier;
   };
 
-  const ajouteRisqueGeneralAService = async (idService, risque) => {
+  const ajouteRisqueGeneralAService = async (unService, risque) => {
     await busEvenements.publie(new EvenementRisqueServiceModifie());
-    return ajouteAItemsDuService('risquesGeneraux', idService, risque);
+    return ajouteAItemsDuService('risquesGeneraux', unService.id, risque);
   };
 
   const serviceExiste = async (idUtilisateur, nomService, idServiceMisAJour) =>
