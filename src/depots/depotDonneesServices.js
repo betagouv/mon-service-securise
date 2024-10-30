@@ -481,26 +481,28 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const metsAJourServiceApresModificationDesRisques = async (s) => {
+    await metsAJourService(s);
+    busEvenements.publie(new EvenementRisqueServiceModifie({ service: s }));
+  };
+
   const ajouteRisqueSpecifiqueAService = async (idService, risque) => {
     risque.id = adaptateurUUID.genereUUID();
     const s = await p.lis.un(idService);
     s.ajouteRisqueSpecifique(risque);
-    await metsAJourService(s);
-    busEvenements.publie(new EvenementRisqueServiceModifie({ service: s }));
+    await metsAJourServiceApresModificationDesRisques(s);
   };
 
   const metsAJourRisqueSpecifiqueDuService = async (idService, risque) => {
     const s = await p.lis.un(idService);
     s.metsAJourRisqueSpecifique(risque);
-    await metsAJourService(s);
-    busEvenements.publie(new EvenementRisqueServiceModifie({ service: s }));
+    await metsAJourServiceApresModificationDesRisques(s);
   };
 
   const supprimeRisqueSpecifiqueDuService = async (idService, idRisque) => {
     const s = await p.lis.un(idService);
     s.supprimeRisqueSpecifique(idRisque);
-    await metsAJourService(s);
-    busEvenements.publie(new EvenementRisqueServiceModifie({ service: s }));
+    await metsAJourServiceApresModificationDesRisques(s);
   };
 
   const supprimeContributeur = async (idService, idUtilisateur) => {
