@@ -475,18 +475,19 @@ describe('Le dépôt de données des services', () => {
   describe('concernant les risques généraux', () => {
     let valideRisque;
     let depot;
+    let service;
 
     beforeEach(() => {
       valideRisque = RisqueGeneral.valide;
       RisqueGeneral.valide = () => {};
       const r = Referentiel.creeReferentielVide();
+      const constructeurService = unService(r).avecId('S1');
+      service = constructeurService.construis();
       depot = unDepotDeDonneesServices()
         .avecReferentiel(r)
         .avecBusEvenements(busEvenements)
         .avecConstructeurDePersistance(
-          unePersistanceMemoire().ajouteUnService(
-            unService(r).avecId('S1').donnees
-          )
+          unePersistanceMemoire().ajouteUnService(constructeurService.donnees)
         )
         .construis();
     });
@@ -495,7 +496,7 @@ describe('Le dépôt de données des services', () => {
 
     it('sait associer un risque général à un service', async () => {
       const risque = new RisqueGeneral({ id: 'R1' });
-      await depot.ajouteRisqueGeneralAService('S1', risque);
+      await depot.ajouteRisqueGeneralAService(service, risque);
 
       const { risques } = await depot.service('S1');
       expect(risques.risquesGeneraux.nombre()).to.equal(1);
@@ -505,7 +506,7 @@ describe('Le dépôt de données des services', () => {
 
     it("publie un événement de 'Risques service modifiés'", async () => {
       const risque = new RisqueGeneral({ id: 'R1' });
-      await depot.ajouteRisqueGeneralAService('S1', risque);
+      await depot.ajouteRisqueGeneralAService(service, risque);
 
       expect(
         busEvenements.aRecuUnEvenement(EvenementRisqueServiceModifie)

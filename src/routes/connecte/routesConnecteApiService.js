@@ -426,10 +426,7 @@ const routesConnecteApiService = ({
           },
           referentiel
         );
-        await depotDonnees.ajouteRisqueGeneralAService(
-          requete.service.id,
-          risque
-        );
+        await depotDonnees.ajouteRisqueGeneralAService(requete.service, risque);
 
         reponse.status(200).send(risque.toJSON());
       } catch (e) {
