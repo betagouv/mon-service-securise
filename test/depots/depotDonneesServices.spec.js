@@ -621,6 +621,7 @@ describe('Le dépôt de données des services', () => {
 
     describe("sur demande de mise à jour d'un risque spécifique", () => {
       let persistance;
+
       beforeEach(() => {
         const unRisqueExistant = new Risques(
           {
@@ -640,6 +641,7 @@ describe('Le dépôt de données des services', () => {
         );
         depot = unDepotDeDonneesServices()
           .avecReferentiel(referentiel)
+          .avecBusEvenements(busEvenements)
           .avecConstructeurDePersistance(persistance)
           .construis();
       });
@@ -672,6 +674,24 @@ describe('Le dépôt de données des services', () => {
           expect(e).to.be.an(ErreurRisqueInconnu);
           expect(e.message).to.be('Le risque "INTROUVABLE" est introuvable.');
         }
+      });
+
+      it("publie un événement de 'Risques service modifiés'", async () => {
+        const risque = new RisqueSpecifique({
+          id: 'RS1',
+          intitule: 'un autre intitulé',
+        });
+
+        await depot.metsAJourRisqueSpecifiqueDuService('S1', risque);
+
+        expect(
+          busEvenements.aRecuUnEvenement(EvenementRisqueServiceModifie)
+        ).to.be(true);
+        const evenement = busEvenements.recupereEvenement(
+          EvenementRisqueServiceModifie
+        );
+        expect(evenement.service).not.to.be(undefined);
+        expect(evenement.service.id).to.be('S1');
       });
     });
 

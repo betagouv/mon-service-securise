@@ -493,6 +493,7 @@ const creeDepot = (config = {}) => {
     const s = await p.lis.un(idService);
     s.metsAJourRisqueSpecifique(risque);
     await metsAJourService(s);
+    busEvenements.publie(new EvenementRisqueServiceModifie({ service: s }));
   };
 
   const supprimeRisqueSpecifiqueDuService = async (idService, idRisque) => {
