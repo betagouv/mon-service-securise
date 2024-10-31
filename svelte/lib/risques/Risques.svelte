@@ -166,7 +166,7 @@
       target="_blank"
       rel="noopener"
       class="lien-article"
-      href="https://monservicesecurise.cyber.gouv.fr/articles/realiser-une-analyse-de-risques-de-la-securite-du-service"
+      href="/articles/realiser-une-analyse-de-risques-de-la-securite-du-service"
     >
       <div class="contenu-section">
         <p class="etiquette-section">Mise en œuvre des mesures de sécurité</p>
