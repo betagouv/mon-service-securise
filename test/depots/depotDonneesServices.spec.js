@@ -504,7 +504,7 @@ describe('Le dépôt de données des services', () => {
       expect(risques.risquesGeneraux.item(0).id).to.equal('R1');
     });
 
-    it("publie un événement de 'Risques service modifiés'", async () => {
+    it("publie un événement de 'Risques service modifiés' avec le service à jour", async () => {
       const risque = new RisqueGeneral({ id: 'R1' });
       await depot.ajouteRisqueGeneralAService(service, risque);
 
@@ -516,6 +516,7 @@ describe('Le dépôt de données des services', () => {
       );
       expect(evenement.service).not.to.be(undefined);
       expect(evenement.service.id).to.be('S1');
+      expect(evenement.service.risques.risquesGeneraux.nombre()).to.equal(1);
     });
   });
 
