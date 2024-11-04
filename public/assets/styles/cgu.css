@@ -1,14 +1,11 @@
 .demande-acceptation {
-  position: sticky;
-  bottom: 0;
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  background-color: var(--bleu-mise-en-avant);
-  margin: 1em 5em;
-  padding: 2em 6em;
+  padding: 16px;
   align-items: center;
   gap: 8px;
-  border-top: 1px solid var(--liseres-fonce);
 }
 
 .demande-acceptation p {
@@ -21,4 +18,17 @@
 .bouton {
   padding: 7px 16px;
   margin: 0;
+}
+
+.fond-pied-documentation {
+  position: sticky;
+  bottom: 0;
+  background-color: var(--bleu-mise-en-avant);
+  border-top: 1px solid var(--liseres-fonce);
+}
+
+@media screen and (min-width: 1200px) {
+  .demande-acceptation {
+    padding: 2em 6em;
+  }
 }
