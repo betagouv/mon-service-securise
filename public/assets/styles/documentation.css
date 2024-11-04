@@ -147,7 +147,8 @@ main {
   background: white;
 }
 
-.documentation p:first-of-type {
+.documentation p:first-of-type,
+.documentation h2:first-of-type {
   margin-top: 0;
 }
 
