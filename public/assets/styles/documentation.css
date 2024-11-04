@@ -1,13 +1,13 @@
 .documentation {
   position: relative;
 
-  margin: 1em 5em;
-  padding: 2em 6em;
-
   background: #fff;
   border-radius: 5px;
 
   text-align: left;
+
+  padding: 32px 16px;
+  margin: 0;
 }
 
 .documentation section {
@@ -105,4 +105,80 @@
 
 .documentation table th {
   background: var(--fond-bleu-pale);
+}
+
+body,
+.marges-fixes {
+  min-width: unset;
+  width: unset;
+}
+
+.fond-entete {
+  background-color: var(--bleu-mise-en-avant);
+}
+
+.entete-documentation {
+  color: white;
+  padding: 32px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.entete-documentation h1 {
+  margin: 0;
+}
+
+.fil-d-ariane {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin: 0;
+}
+
+.fil-d-ariane a {
+  color: white;
+  text-decoration: underline;
+}
+
+main {
+  display: block;
+  text-align: left;
+  background: white;
+}
+
+.documentation p:first-of-type {
+  margin-top: 0;
+}
+
+a.nouvel-onglet {
+  display: inline;
+}
+
+@media screen and (min-width: 1200px) {
+  .entete-documentation,
+  .bandeau-mss,
+  .documentation {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .documentation {
+    padding: 48px 96px;
+  }
+
+  header {
+    justify-content: space-between;
+    max-width: 1200px;
+  }
+
+  footer nav ul {
+    width: 1200px;
+    margin: 0 auto;
+  }
+
+  footer nav ul li:first-of-type a {
+    margin-left: 0;
+    padding-left: 0;
+  }
 }
