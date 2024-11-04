@@ -1,16 +1,18 @@
 (() => {
-  window._paq = window._paq || [];
-  const { _paq } = window;
+  if (localStorage.getItem('optOutMatomo') !== 'true') {
+    window._paq = window._paq || [];
+    const { _paq } = window;
 
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  _paq.push(['setTrackerUrl', '/bibliotheques/evenementMatomo']);
-  _paq.push(['setSiteId', $('#script-matomo').data('id-matomo')]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    _paq.push(['setTrackerUrl', '/bibliotheques/evenementMatomo']);
+    _paq.push(['setSiteId', $('#script-matomo').data('id-matomo')]);
 
-  const g = document.createElement('script');
-  g.async = true;
-  g.src = '/bibliotheques/matomo.js';
+    const g = document.createElement('script');
+    g.async = true;
+    g.src = '/bibliotheques/matomo.js';
 
-  const premierScript = document.getElementsByTagName('script')[0];
-  premierScript.parentNode.insertBefore(g, premierScript);
+    const premierScript = document.getElementsByTagName('script')[0];
+    premierScript.parentNode.insertBefore(g, premierScript);
+  }
 })();
