@@ -1,24 +1,15 @@
-extends mssDeconnecte
+extends mssDocumentation
 block variables
   - const meta_description = 'Découvrez les mesures que MonServiceSécurisé met en place pour assurer la sécurité de vos données.'
+  - const titrePage = 'Sécurité'
 
-block title
-  title Sécurité | MonServiceSécurisé
+block contenu-documentation
+  p.
+    L'ANSSI soumet MonServiceSécurisé à un rythme d'homologation soutenu (tous les 6 mois) dans le cadre d'une démarche de renforcement continue de la sécurité du service numérique.
+    En 2023, MonServiceSécurisé a fait l'objet d'une analyse de risques EBIOS Risk Manager et d'un audit de sécurité approfondi par un prestataire qualifié par l'ANSSI (PASSI).
+  p
+  | MonServiceSécurisé est hébergé chez&nbsp;
+  a(href="https://www.clever-cloud.com/" rel="noopener" target="_blank") Clever Cloud
+  | &nbsp; qualifié SecNumCloud.
 
-block append styles
-  link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
-
-block main
-  .marges-fixes
-    .documentation
-      h1 Sécurité
-
-      p.
-        L'ANSSI soumet MonServiceSécurisé à un rythme d'homologation soutenu (tous les 6 mois) dans le cadre d'une démarche de renforcement continue de la sécurité du service numérique.
-        En 2023, MonServiceSécurisé a fait l'objet d'une analyse de risques EBIOS Risk Manager et d'un audit de sécurité approfondi par un prestataire qualifié par l'ANSSI (PASSI).
-      p
-      | MonServiceSécurisé est hébergé chez&nbsp;
-      a(href="https://www.clever-cloud.com/" rel="noopener" target="_blank") Clever Cloud
-      | &nbsp; qualifié SecNumCloud.
-
-      img#tampon-homologation(src="/statique/assets/images/tamponHomologation.png" alt="Tampon d'homologation de MonServiceSécurisé")
+  img#tampon-homologation(src="/statique/assets/images/tamponHomologation.png" alt="Tampon d'homologation de MonServiceSécurisé")
