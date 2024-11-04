@@ -91,3 +91,18 @@
   width: 100%;
   margin-top: 24px;
 }
+
+.documentation table {
+  border-collapse: collapse;
+  border: 1px solid var(--texte-fonce);
+}
+
+.documentation table th,
+.documentation table td {
+  padding: 8px;
+  border: 1px solid var(--texte-fonce);
+}
+
+.documentation table th {
+  background: var(--fond-bleu-pale);
+}
