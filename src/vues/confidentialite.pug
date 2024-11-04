@@ -3,6 +3,9 @@ extends mssDeconnecte
 block title
   title Politique de confidentialité | MonServiceSécurisé
 
+block append scripts
+  script(type = 'module', src = '/statique/scripts/optOutMatomo.js')
+
 block append styles
   link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
 
@@ -134,7 +137,12 @@ block main
       p.
         Ce consentement de la personne concernée constitue une base légale au sens du RGPD (article 6-1 a).
       p.
-        MonServiceSécurisé ne dépose que des cookies et traceurs strictement nécessaires au fonctionnement du service et la solution de mesure d’audience “Matomo”, configurée en mode “exempté” et ne nécessitant pas de recueil du consentement, conformément aux recommandations de la CNIL.
+        MonServiceSécurisé ne dépose que des cookies et traceurs strictement nécessaires au fonctionnement du service et la solution de mesure d’audience “Matomo”, configurée en mode “exempté” et ne nécessitant pas de recueil du consentement, conformément aux recommandations de la CNIL.<br>
+        Toutefois, vous pouvez, à tout moment, refuser d'être suivi de manière anonyme en décochant la case ci-dessous :
+      .conteneur-checkbox
+        input(type="checkbox" id="consentement-matomo" name="consentement-matomo" checked)
+        label(for="consentement-matomo" id="label-consentement-matomo")
+
       p Pour en savoir plus sur les cookies :
       ul
         li

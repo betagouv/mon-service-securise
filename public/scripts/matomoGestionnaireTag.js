@@ -1,13 +1,15 @@
 (() => {
-  window._mtm = window._mtm || [];
-  const { _mtm } = window;
+  if (localStorage.getItem('optOutMatomo') !== 'true') {
+    window._mtm = window._mtm || [];
+    const { _mtm } = window;
 
-  _mtm.push({ 'mtm.startTime': new Date().getTime(), event: 'mtm.Start' });
+    _mtm.push({ 'mtm.startTime': new Date().getTime(), event: 'mtm.Start' });
 
-  const g = document.createElement('script');
-  g.async = true;
-  g.src = '/bibliotheques/matomo-tag-manager.js';
+    const g = document.createElement('script');
+    g.async = true;
+    g.src = '/bibliotheques/matomo-tag-manager.js';
 
-  const premierScript = document.getElementsByTagName('script')[0];
-  premierScript.parentNode.insertBefore(g, premierScript);
+    const premierScript = document.getElementsByTagName('script')[0];
+    premierScript.parentNode.insertBefore(g, premierScript);
+  }
 })();
