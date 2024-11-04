@@ -129,6 +129,11 @@ body,
   margin: 0;
 }
 
+.entete-documentation p.sous-titre {
+  margin: 0;
+  font-weight: 500;
+}
+
 .fil-d-ariane {
   display: flex;
   flex-direction: row;

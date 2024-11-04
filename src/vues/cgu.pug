@@ -1,105 +1,98 @@
-extends mssDeconnecte
+extends mssDocumentation
 
 block variables
     - const meta_description = "Découvrez nos conditions générales d'utilisation sur MonServiceSécurisé. Protégez vos services numériques en toute conformité. Consultez nos engagements pour une sécurité renforcée."
-
-
-block title
-    title Conditions générales d'utilisation | MonServiceSécurisé
+    - const titrePage = 'Conditions générales d\'utilisation de MonServiceSécurisé'
+    - const dateMiseEnVigueur = "30/10/2024"
+    - const sousTitrePage = `En vigueur à partir du ${dateMiseEnVigueur}`
 
 block append styles
-    link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
     link(href = '/statique/assets/styles/cgu.css', rel = 'stylesheet')
 
 block append scripts
     script(type = 'module', src='/statique/scripts/cgu.js')
 
-block main
-    - const dateMiseEnVigueur = "30/10/2024"
-    .marges-fixes
-        .documentation
-            h1 Conditions générales d'utilisation de MonServiceSécurisé
+block contenu-documentation
+    h2 Article 1 - Champ d’application
+    p.
+        Les présentes conditions générales d’utilisation (ci-après “CGU”) précisent
+        le cadre juridique de “MonServiceSécurisé” (ci-après la “Plateforme”) et
+        définissent les conditions d’accès et d’utilisation des Services par
+        l’Utilisateur. Ce dernier  est nécessairement un membre du personnel d'une
+        entité soumise au <a href='https://www.numerique.gouv.fr/publications/referentiel-general-de-securite/' target='_blank'> Référentiel Général de Sécurité (RGS).</a>
 
-            p.date-mise-en-vigueur En vigueur à partir du #{dateMiseEnVigueur}
+    h2 Article 2 - Objet de la Plateforme
+    ul
+        li la création et la gestion de comptes d'utilisateurs ;
+        li d'aider, pas à pas, les entités publiques à sécuriser leurs services numériques et à les faire homologuer selon une approche adaptée aux services les plus courants ;
+        li la création et la gestion des documents d'homologation des services concernés ;
+        li le suivi des documents d'homologation effectués.
 
-            h2 Article 1 - Champ d’application
-            p.
-                Les présentes conditions générales d’utilisation (ci-après “CGU”) précisent
-                le cadre juridique de “MonServiceSécurisé” (ci-après la “Plateforme”) et
-                définissent les conditions d’accès et d’utilisation des Services par
-                l’Utilisateur. Ce dernier  est nécessairement un membre du personnel d'une
-                entité soumise au <a href='https://www.numerique.gouv.fr/publications/referentiel-general-de-securite/' target='_blank'> Référentiel Général de Sécurité (RGS).</a>
+    h2 Article 3 - Définitions
+    p.
+        “L’Utilisateur” est toute personne physique, membre d’une entité soumise au RGS, qui s’inscrit sur la Plateforme.
+    p.
+        Les “Services” sont les fonctionnalités offertes par la Plateforme pour répondre à ses finalités.
+    p.
+        La “Plateforme” est la solution de cybersécurité “MonServiceSécurisé” conçue par le laboratoire d’innovation de l’ANSSI ayant pour mission d’aider les entités publiques à sécuriser et homologuer les services publics numériques.
+    p.
+        “L’Éditeur” est la personne morale qui met à la disposition du public la Plateforme, à savoir l’ANSSI.
 
-            h2 Article 2 - Objet de la Plateforme
-            ul
-                li la création et la gestion de comptes d'utilisateurs ;
-                li d'aider, pas à pas, les entités publiques à sécuriser leurs services numériques et à les faire homologuer selon une approche adaptée aux services les plus courants ;
-                li la création et la gestion des documents d'homologation des services concernés ;
-                li le suivi des documents d'homologation effectués.
+    h2 Article 4 - Fonctionnalités
+    h3 4.1 Compte Utilisateur
+    p.
+        L'Utilisateur est titulaire d'un compte. Il s'engage à choisir un mot de passe sécurisé, protéger la sécurité et la confidentialité de son mot de passe, et est responsable de toute utilisation de son compte. Toute utilisation abusive doit être signalée à l'ANSSI aux coordonnées indiquées dans les <a href="/mentionsLegales">Mentions légales</a>. Tout utilisateur peut procéder à la modification des données liées à son compte et à sa suppression.
+    h3 4.2 Contributeur
+    p.
+        L'Utilisateur peut ajouter un contributeur à un service numérique référencé sur MonServiceSécurisé. Dans ce cas, il renseigne l'adresse de messagerie électronique professionnelle du contributeur, à laquelle la Plateforme adresse une invitation à contribuer au projet d'homologation.
+    p.
+        Lorsque le contributeur a déjà un compte personnel, l'acceptation de l'invitation à contribuer suffit. Lorsque le contributeur n'a pas de compte, il est invité à s'inscrire et se voit alors appliquer les droits et obligations d'un Utilisateur.
+    p.
+        Le contributeur ne peut ajouter un autre contributeur au service numérique référencé auquel il est ajouté.
+    p.
+        Les actions du collaborateur et de l'Utilisateur modifient les informations renseignées concernant le service numérique référencé, ils sont chacun responsables de l'exactitude de leurs déclarations respectives.
+    h3 4.3 Notifications et Messages
+    p.
+        L'Utilisateur comprend que des notifications et des messages peuvent lui être communiqués par les moyens suivants : (i) via la Plateforme (compte Utilisateur) ou (ii) envoyés aux coordonnées fournies par l'Utilisateur (adresse e-mail). Si ses coordonnées ne sont pas à jour, l'Utilisateur est conscient que des notifications importantes sont susceptibles de ne pas lui parvenir. Par conséquent, l'Utilisateur s'engage à tenir à jour ses coordonnées.
 
-            h2 Article 3 - Définitions
-            p.
-                “L’Utilisateur” est toute personne physique, membre d’une entité soumise au RGS, qui s’inscrit sur la Plateforme.
-            p.
-                Les “Services” sont les fonctionnalités offertes par la Plateforme pour répondre à ses finalités.
-            p.
-                La “Plateforme” est la solution de cybersécurité “MonServiceSécurisé” conçue par le laboratoire d’innovation de l’ANSSI ayant pour mission d’aider les entités publiques à sécuriser et homologuer les services publics numériques.
-            p.
-                “L’Éditeur” est la personne morale qui met à la disposition du public la Plateforme, à savoir l’ANSSI.
+    h2 Article 5 - Responsabilités
+    h3 5.1 Responsabilités de l’Éditeur
+    p.
+        Les sources des informations diffusées sur la Plateforme sont réputées fiables mais elle ne garantit pas être exempte de défauts, d’erreurs ou d’omissions.
+    p.
+        L’Éditeur s’engage à la sécurisation de la Plateforme, notamment en prenant toutes les mesures nécessaires permettant de garantir la sécurité et la confidentialité des informations fournies.
+    p.
+        L’Éditeur fournit les moyens nécessaires et raisonnables pour assurer un accès continu à la Plateforme. Il se réserve la liberté de faire évoluer, de modifier ou de suspendre, sans préavis, la Plateforme pour des raisons de maintenance ou pour tout autre motif jugé nécessaire.
+    p.
+        En cas de manquement à une ou plusieurs des stipulations des présentes CGU, l’Éditeur se réserve le droit de supprimer le compte de l'Utilisateur responsable.
+    h3 5.2 Responsabilités de l'Utilisateur
+    p.
+        Dans le cadre de l'utilisation de la Plateforme, l'Utilisateur s'engage à :
+    ul
+        li ne créer qu'un seul compte utilisateur et ne communiquer que des informations, fichiers et autres contenus conformes à la réalité, honnêtes et loyaux ;
+        li ne pas divulguer via la Plateforme des propos ou des contenus illicites, et notamment tous contenus contrefaits, diffamatoires, injurieux, insultants, obscènes, offensants, discriminatoires, violents, xénophobes, incitant à la haine raciale ou faisant l'apologie du terrorisme, ou tout autre contenu contraire à la législation et réglementation applicable ainsi qu'aux bonnes mœurs et aux règles de bienséance ;
+        li ne pas intégrer et diffuser via la Plateforme  du contenu qui serait contraire à la finalité de celui-ci ;
+        li ne pas communiquer ou envoyer, par l'intermédiaire de la Plateforme , du contenu, quel qu'il soit, qui comprendrait des liens pointant vers des sites internet illicites, offensants ou incompatibles avec la finalité de la Plateforme ;
+        li ne pas utiliser la Plateforme pour envoyer massivement des messages non sollicités (publicitaires ou autres).
+    p.
+        Il est rappelé que toute personne procédant à une fausse déclaration pour elle-même ou pour autrui s’expose, notamment, aux sanctions prévues à l’article 441-1 du code pénal, prévoyant des peines pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros d’amende.
 
-            h2 Article 4 - Fonctionnalités
-            h3 4.1 Compte Utilisateur
-            p.
-                L'Utilisateur est titulaire d'un compte. Il s'engage à choisir un mot de passe sécurisé, protéger la sécurité et la confidentialité de son mot de passe, et est responsable de toute utilisation de son compte. Toute utilisation abusive doit être signalée à l'ANSSI aux coordonnées indiquées dans les <a href="/mentionsLegales">Mentions légales</a>. Tout utilisateur peut procéder à la modification des données liées à son compte et à sa suppression.
-            h3 4.2 Contributeur
-            p.
-                L'Utilisateur peut ajouter un contributeur à un service numérique référencé sur MonServiceSécurisé. Dans ce cas, il renseigne l'adresse de messagerie électronique professionnelle du contributeur, à laquelle la Plateforme adresse une invitation à contribuer au projet d'homologation.
-            p.
-                Lorsque le contributeur a déjà un compte personnel, l'acceptation de l'invitation à contribuer suffit. Lorsque le contributeur n'a pas de compte, il est invité à s'inscrire et se voit alors appliquer les droits et obligations d'un Utilisateur.
-            p.
-                Le contributeur ne peut ajouter un autre contributeur au service numérique référencé auquel il est ajouté.
-            p.
-                Les actions du collaborateur et de l'Utilisateur modifient les informations renseignées concernant le service numérique référencé, ils sont chacun responsables de l'exactitude de leurs déclarations respectives.
-            h3 4.3 Notifications et Messages
-            p.
-                L'Utilisateur comprend que des notifications et des messages peuvent lui être communiqués par les moyens suivants : (i) via la Plateforme (compte Utilisateur) ou (ii) envoyés aux coordonnées fournies par l'Utilisateur (adresse e-mail). Si ses coordonnées ne sont pas à jour, l'Utilisateur est conscient que des notifications importantes sont susceptibles de ne pas lui parvenir. Par conséquent, l'Utilisateur s'engage à tenir à jour ses coordonnées.
+    h2 Article 6 - Exclusions de certains services
+    p.
+        Les services numériques suivants ne peuvent pas être référencés sur MonServiceSécurisé :
+    ul
+        li Les services essentiels au fonctionnement de la société ou de l'économie, des opérateurs désignés opérateurs de services essentiels (loi n° 2018-133 du 26 février 2018 qui présente les mesures de transposition de la direction européenne sur la sécurité des réseaux et des systèmes d'information, décret n° 2018-384 du 23 mai 2018 en détaillant les modalités d'application).
+        li Les services pour lesquels l'atteinte à la sécurité ou au bon fonctionnement engendrerait des conséquences importantes sur le potentiel scientifique et technique (décret n° 2011-1425 du 2 novembre 2011 portant application de l'article 413-7 du code pénal relatif à la protection du potentiel scientifique et technique de la nation).
+        li Les services pour lesquels l'atteinte à la sécurité ou au fonctionnement engendrerait des conséquences importantes sur le potentiel de guerre ou économique, la sécurité ou la capacité de survie de la Nation (articles L. 1332-1 à L. 1332-7 du Code de la Défense).
+        li Les services traitant d'informations protégées par le secret de la défense nationale ou équivalent, ou de niveau diffusion restreinte (IGI 1300 relative au secret de la défense nationale, l'IGI 2102 relatives aux informations ou supports classifiés de l'Union européenne, l'IGI 2100 relative à la protection des supports classifiés dans le cadre de l'OTAN, l'IGI 901 définissant les règles relatives à la protection des informations sensibles et à diffusion restreinte).
 
-            h2 Article 5 - Responsabilités
-            h3 5.1 Responsabilités de l’Éditeur
-            p.
-                Les sources des informations diffusées sur la Plateforme sont réputées fiables mais elle ne garantit pas être exempte de défauts, d’erreurs ou d’omissions.
-            p.
-                L’Éditeur s’engage à la sécurisation de la Plateforme, notamment en prenant toutes les mesures nécessaires permettant de garantir la sécurité et la confidentialité des informations fournies.
-            p.
-                L’Éditeur fournit les moyens nécessaires et raisonnables pour assurer un accès continu à la Plateforme. Il se réserve la liberté de faire évoluer, de modifier ou de suspendre, sans préavis, la Plateforme pour des raisons de maintenance ou pour tout autre motif jugé nécessaire.
-            p.
-                En cas de manquement à une ou plusieurs des stipulations des présentes CGU, l’Éditeur se réserve le droit de supprimer le compte de l'Utilisateur responsable.
-            h3 5.2 Responsabilités de l'Utilisateur
-            p.
-                Dans le cadre de l'utilisation de la Plateforme, l'Utilisateur s'engage à :
-            ul
-                li ne créer qu'un seul compte utilisateur et ne communiquer que des informations, fichiers et autres contenus conformes à la réalité, honnêtes et loyaux ;
-                li ne pas divulguer via la Plateforme des propos ou des contenus illicites, et notamment tous contenus contrefaits, diffamatoires, injurieux, insultants, obscènes, offensants, discriminatoires, violents, xénophobes, incitant à la haine raciale ou faisant l'apologie du terrorisme, ou tout autre contenu contraire à la législation et réglementation applicable ainsi qu'aux bonnes mœurs et aux règles de bienséance ;
-                li ne pas intégrer et diffuser via la Plateforme  du contenu qui serait contraire à la finalité de celui-ci ;
-                li ne pas communiquer ou envoyer, par l'intermédiaire de la Plateforme , du contenu, quel qu'il soit, qui comprendrait des liens pointant vers des sites internet illicites, offensants ou incompatibles avec la finalité de la Plateforme ;
-                li ne pas utiliser la Plateforme pour envoyer massivement des messages non sollicités (publicitaires ou autres).
-            p.
-                Il est rappelé que toute personne procédant à une fausse déclaration pour elle-même ou pour autrui s’expose, notamment, aux sanctions prévues à l’article 441-1 du code pénal, prévoyant des peines pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros d’amende.
+    h2 Article 7 - Mise à jour des conditions générales d’utilisation
+    p.
+        Les termes des présentes CGU peuvent être amendés à tout moment, en fonction des modifications apportées à la Plateforme, de l’évolution de la législation ou pour tout autre motif jugé nécessaire. Chaque modification donne lieu à une nouvelle version qui est acceptée par les parties.
 
-            h2 Article 6 - Exclusions de certains services
-            p.
-                Les services numériques suivants ne peuvent pas être référencés sur MonServiceSécurisé :
-            ul
-                li Les services essentiels au fonctionnement de la société ou de l'économie, des opérateurs désignés opérateurs de services essentiels (loi n° 2018-133 du 26 février 2018 qui présente les mesures de transposition de la direction européenne sur la sécurité des réseaux et des systèmes d'information, décret n° 2018-384 du 23 mai 2018 en détaillant les modalités d'application).
-                li Les services pour lesquels l'atteinte à la sécurité ou au bon fonctionnement engendrerait des conséquences importantes sur le potentiel scientifique et technique (décret n° 2011-1425 du 2 novembre 2011 portant application de l'article 413-7 du code pénal relatif à la protection du potentiel scientifique et technique de la nation).
-                li Les services pour lesquels l'atteinte à la sécurité ou au fonctionnement engendrerait des conséquences importantes sur le potentiel de guerre ou économique, la sécurité ou la capacité de survie de la Nation (articles L. 1332-1 à L. 1332-7 du Code de la Défense).
-                li Les services traitant d'informations protégées par le secret de la défense nationale ou équivalent, ou de niveau diffusion restreinte (IGI 1300 relative au secret de la défense nationale, l'IGI 2102 relatives aux informations ou supports classifiés de l'Union européenne, l'IGI 2100 relative à la protection des supports classifiés dans le cadre de l'OTAN, l'IGI 901 définissant les règles relatives à la protection des informations sensibles et à diffusion restreinte).
-
-            h2 Article 7 - Mise à jour des conditions générales d’utilisation
-            p.
-                Les termes des présentes CGU peuvent être amendés à tout moment, en fonction des modifications apportées à la Plateforme, de l’évolution de la législation ou pour tout autre motif jugé nécessaire. Chaque modification donne lieu à une nouvelle version qui est acceptée par les parties.
-
-        if demandeAcceptation
+block pied-documentation
+    if demandeAcceptation
+        .fond-pied-documentation
             .demande-acceptation
                 p.
                     Nos Conditions Générales d'Utilisation évoluent à compter du #{dateMiseEnVigueur}, merci de les accepter
