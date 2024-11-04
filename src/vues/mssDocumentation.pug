@@ -1,0 +1,19 @@
+extends mssDeconnecte
+
+block title
+  title #{titrePage} | MonServiceSécurisé
+
+block append styles
+  link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
+
+block main
+  .fond-entete
+    .entete-documentation
+      p.fil-d-ariane
+        a(href="/") Accueil
+        span >
+        span #{titrePage}
+      h1 #{titrePage}
+
+  .documentation
+    block contenu-documentation
