@@ -9,35 +9,40 @@ block append styles
   link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
 
 block main
-  .marges-fixes
-    .documentation
+  .fond-entete
+    .entete-documentation
+      p.fil-d-ariane
+        a(href="/") Accueil
+        span >
+        span À propos
       h1 À propos
 
-      p.
-        MonServiceSécurisé est une solution de cybersécurité conçue par
-        <a href="https://cyber.gouv.fr/rapports-dactivites/">le laboratoire d'innovation de l'ANSSI</a>,
-        en lien avec l'incubateur de services numériques <a href="https://beta.gouv.fr/startups/">"BetaGouv"</a>
-        de la direction interministérielle du numérique (DINUM). Pensé pour et par les
-        entités publiques, MonServiceSécurisé a pour mission d'aider les
-        entités publiques à sécuriser et homologuer les services publics
-        numériques (sites web, applications mobiles et API).
+  .documentation
+    p.
+      MonServiceSécurisé est une solution de cybersécurité conçue par
+      <a href="https://cyber.gouv.fr/rapports-dactivites/">le laboratoire d'innovation de l'ANSSI</a>,
+      en lien avec l'incubateur de services numériques <a href="https://beta.gouv.fr/startups/">"BetaGouv"</a>
+      de la direction interministérielle du numérique (DINUM). Pensé pour et par les
+      entités publiques, MonServiceSécurisé a pour mission d'aider les
+      entités publiques à sécuriser et homologuer les services publics
+      numériques (sites web, applications mobiles et API).
 
-      p Cette solution est :
+    p Cette solution est :
 
-      ul
-        li.
-          développée par une équipe de développeurs et de designers UX/UI via
-          <a href="https://omnicite.fr/">Omnicité</a>;
-        li.
-          hébergée chez
-          <a href="https://www.clever-cloud">Clever Cloud</a> qualifié SecNumCloud et certifié ISO 27001 ainsi que HDS;
-        li.
-          sous licence
-          <a href="https://github.com/betagouv/mon-service-securise/blob/master/LICENSE">Apache-2.0</a>.
+    ul
+      li.
+        développée par une équipe de développeurs et de designers UX/UI via
+        <a href="https://omnicite.fr/">Omnicité</a>;
+      li.
+        hébergée chez
+        <a href="https://www.clever-cloud">Clever Cloud</a> qualifié SecNumCloud et certifié ISO 27001 ainsi que HDS;
+      li.
+        sous licence
+        <a href="https://github.com/betagouv/mon-service-securise/blob/master/LICENSE">Apache-2.0</a>.
 
-      p: a(href = 'https://github.com/betagouv/mon-service-securise') Le code est accessible en ligne.
+    p: a(href = 'https://github.com/betagouv/mon-service-securise') Le code est accessible en ligne.
 
-      p.
-        Pour toute question ou suggestion concernant les
-        fonctionnalités de MonServiceSécurisé ou sa sécurité, contactez l'équipe à
-        <a href="mailto:contact@monservicesecurise.beta.gouv.fr">contact@monservicesecurise.beta.gouv.fr</a>.
+    p.
+      Pour toute question ou suggestion concernant les
+      fonctionnalités de MonServiceSécurisé ou sa sécurité, contactez l'équipe à
+      <a href="mailto:contact@monservicesecurise.beta.gouv.fr">contact@monservicesecurise.beta.gouv.fr</a>.
