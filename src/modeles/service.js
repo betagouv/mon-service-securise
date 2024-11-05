@@ -274,6 +274,10 @@ class Service {
     return this.risques.risquesSpecifiques;
   }
 
+  siretDeOrganisation() {
+    return this.descriptionService.organisationResponsable.siret;
+  }
+
   statistiquesMesuresGeneralesEtSpecifiques(exclueMesuresNonPrisesEnCompte) {
     return this.mesures.statistiquesMesuresGeneralesEtSpecifiques(
       exclueMesuresNonPrisesEnCompte
