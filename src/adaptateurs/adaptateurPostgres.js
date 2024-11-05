@@ -501,6 +501,13 @@ const nouvelAdaptateur = (env) => {
 
   const sante = async () => knex.raw('SELECT 1 + 1;');
 
+  const lisSuperviseursConcernes = async (siret) =>
+    (
+      await knex('superviseurs')
+        .where({ siret_supervise: siret })
+        .select({ idSuperviseur: 'id_superviseur' })
+    ).map(({ idSuperviseur }) => idSuperviseur);
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -520,6 +527,7 @@ const nouvelAdaptateur = (env) => {
     lisDernierIndiceCyber,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
+    lisSuperviseursConcernes,
     marqueNouveauteLue,
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
