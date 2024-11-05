@@ -36,6 +36,7 @@ const {
 const {
   fabriqueInscriptionUtilisateur,
 } = require('./src/modeles/inscriptionUtilisateur');
+const fabriqueAdaptateurSupervision = require('./src/adaptateurs/fabriqueAdaptateurSupervision');
 const adaptateurStatistiques = require('./src/adaptateurs/adaptateurStatistiquesMetabase');
 const { fabriqueServiceCgu } = require('./src/serviceCgu');
 
@@ -44,6 +45,7 @@ const adaptateurTracking = fabriqueAdaptateurTracking();
 const adaptateurJournal = fabriqueAdaptateurJournalMSS();
 const adaptateurChiffrement = fabriqueAdaptateurChiffrement();
 const adaptateurOidc = fabriqueAdaptateurOidc();
+const adaptateurSupervision = fabriqueAdaptateurSupervision();
 const busEvenements = new BusEvenements({ adaptateurGestionErreur });
 const port = process.env.PORT || 3000;
 
@@ -70,6 +72,7 @@ cableTousLesAbonnes(busEvenements, {
   adaptateurJournal,
   adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
   adaptateurMail,
+  adaptateurSupervision,
   depotDonnees,
   referentiel,
 });
