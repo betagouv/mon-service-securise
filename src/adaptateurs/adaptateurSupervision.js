@@ -10,8 +10,11 @@ const adaptateurSupervision = ({ adaptateurChiffrement }) => {
   const knex = Knex(config);
 
   return {
-    relieSuperviseursAService: async (idService, idSuperviseurs) => {
-      const idServiceHash = adaptateurChiffrement.hacheSha256(idService);
+    relieSuperviseursAService: async (service, idSuperviseurs) => {
+      const idServiceHash = adaptateurChiffrement.hacheSha256(service.id);
+      const siretServiceHash = adaptateurChiffrement.hacheSha256(
+        service.siretDeOrganisation()
+      );
       const idSuperviseursHash = idSuperviseurs.map(
         adaptateurChiffrement.hacheSha256
       );
@@ -20,6 +23,7 @@ const adaptateurSupervision = ({ adaptateurChiffrement }) => {
         idSuperviseursHash.map((idSuperviseur) => ({
           id_superviseur: idSuperviseur,
           id_service: idServiceHash,
+          siret_service: siretServiceHash,
         }))
       );
     },

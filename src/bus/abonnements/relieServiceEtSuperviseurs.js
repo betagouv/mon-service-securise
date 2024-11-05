@@ -7,7 +7,7 @@ function relieServiceEtSuperviseurs({ depotDonnees, adaptateurSupervision }) {
     if (!superviseurs.length) return;
 
     await adaptateurSupervision.relieSuperviseursAService(
-      service.id,
+      service,
       superviseurs
     );
   };
