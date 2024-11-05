@@ -89,6 +89,9 @@ const EvenementRisqueServiceModifie = require('./evenementRisqueServiceModifie')
 const {
   consigneRisquesDansJournal,
 } = require('./abonnements/consigneRisquesDansJournal');
+const {
+  relieServiceEtSuperviseurs,
+} = require('./abonnements/relieServiceEtSuperviseurs');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -98,6 +101,7 @@ const cableTousLesAbonnes = (
     adaptateurJournal,
     adaptateurRechercheEntreprise,
     adaptateurMail,
+    adaptateurSupervision,
     depotDonnees,
     referentiel,
   }
@@ -120,6 +124,7 @@ const cableTousLesAbonnes = (
       crmBrevo,
       depotDonnees,
     }),
+    relieServiceEtSuperviseurs({ depotDonnees, adaptateurSupervision }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementMesureServiceModifiee, [
