@@ -11,6 +11,7 @@ const depotDonneesNotifications = require('./depots/depotDonneesNotifications');
 const depotDonneesSuggestionsActions = require('./depots/depotDonneesSuggestionsActions');
 const depotDonneesActivitesMesure = require('./depots/depotDonneesActivitesMesure');
 const depotDonneesEvolutionsIndiceCyber = require('./depots/depotDonneesEvolutionsIndiceCyber');
+const depotDonneesSuperviseurs = require('./depots/depotDonneesSuperviseurs');
 
 const {
   fabriqueAdaptateurChiffrement,
@@ -87,6 +88,10 @@ const creeDepot = (config = {}) => {
     depotDonneesEvolutionsIndiceCyber.creeDepot({
       adaptateurPersistance,
     });
+
+  const depotSuperviseurs = depotDonneesSuperviseurs.creeDepot({
+    adaptateurPersistance,
+  });
 
   const {
     ajouteDescriptionService,
@@ -170,6 +175,8 @@ const creeDepot = (config = {}) => {
   const { lisDernierIndiceCyber, sauvegardeNouvelIndiceCyber } =
     depotEvolutionsIndiceCyber;
 
+  const { lisSuperviseurs } = depotSuperviseurs;
+
   const santeDuDepot = async () => {
     await adaptateurPersistance.sante();
   };
@@ -200,6 +207,7 @@ const creeDepot = (config = {}) => {
     lisDernierIndiceCyber,
     lisNotificationsExpirationHomologationEnDate,
     lisParcoursUtilisateur,
+    lisSuperviseurs,
     marqueNouveauteLue,
     marqueTacheDeServiceLue,
     metsAJourMotDePasse,
