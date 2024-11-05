@@ -12,6 +12,7 @@ const nouvelAdaptateur = (
   donnees.notifications ||= [];
   donnees.suggestionsActions ||= [];
   donnees.activitesMesure ||= [];
+  donnees.superviseurs ||= [];
 
   const supprimeEnregistrement = async (nomTable, id) => {
     donnees[nomTable] = donnees[nomTable].filter((e) => e.id !== id);
@@ -278,6 +279,11 @@ const nouvelAdaptateur = (
       details,
     });
 
+  const lisSuperviseursConcernes = async (siret) =>
+    donnees.superviseurs
+      .filter(({ siretSupervise }) => siretSupervise === siret)
+      .map(({ idSuperviseur }) => idSuperviseur);
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -296,6 +302,7 @@ const nouvelAdaptateur = (
     services,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
+    lisSuperviseursConcernes,
     marqueNouveauteLue,
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
