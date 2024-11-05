@@ -1,151 +1,143 @@
-extends mssDeconnecte
-
-block title
-  title Politique de confidentialité | MonServiceSécurisé
+extends mssDocumentation
+block variables
+  - const meta_description = 'Découvrez notre politique de confidentialité. Consultez notre façon de traiter vos données personnelles.'
+  - const titrePage = 'Politique de confidentialité'
+  - const sousTitrePage = 'En vigueur à partir du 04/11/2024'
 
 block append scripts
   script(type = 'module', src = '/statique/scripts/optOutMatomo.js')
 
-block append styles
-  link(href = '/statique/assets/styles/documentation.css', rel = 'stylesheet')
+block contenu-documentation
+  h2 Qui sommes-nous ?
+  p.
+    MonServiceSécurisé est une solution de cybersécurité conçue par le laboratoire d’innovation de l’ANSSI en tant que responsable de traitement, en lien avec l’incubateur des services numériques de la DINUM. L’objectif de la solution est d’aider les entités publiques à sécuriser et homologuer les services publics numériques (sites web, applications mobiles et API).
 
-block main
-  .marges-fixes
-    .documentation
-      h1 Politique de confidentialité de MonServiceSécurisé
+  h2 Pourquoi traitons-nous des données à caractère personnel ?
+  p.
+    L’ANSSI traite des données identifiantes dans le but de :
+  ul
+    li constituer le dossier d'homologation de sécurité du ou des services numériques nécessitant une telle homologation en application de la réglementation en vigueur ;
+    li pouvoir bénéficier des services proposés par le Site (constitution du dossier d'homologation, génération du dossier d'homologation à faire signer à l'autorité d'homologation, conservation des dossiers d'homologation) ;
+    li gérer la liste de diffusion de la lettre d’information de la solution.
 
-      p.
-        En vigueur à partir du 04/11/2024
+  h2 Quelles sont les données à caractère personnel que nous traitons ?
+  ul
+    li données d'inscription : nom, prénom, adresse e-mail, numéro de téléphone (facultatif), mot de passe ;
+    li données relatives à la constitution du dossier d’homologation : nom, prénom, adresse e-mail, mot de passe, coordonnées des personnes qui composent la Commission d’homologation (prénom, nom, fonction) ;
+    li données relatives à la lettre d’information : nom, prénom, adresse e-mail ;
+    li données relatives à la traçabilité : logs et adresse IP.
 
-      h2 Qui sommes-nous ?
-      p.
-        MonServiceSécurisé est une solution de cybersécurité conçue par le laboratoire d’innovation de l’ANSSI en tant que responsable de traitement, en lien avec l’incubateur des services numériques de la DINUM. L’objectif de la solution est d’aider les entités publiques à sécuriser et homologuer les services publics numériques (sites web, applications mobiles et API).
+  h2 Qu’est-ce qui nous autorise à traiter vos données à caractère personnel ?
+  p.
+    L’ANSSI traite des données à caractère personnel en application de l’exécution de sa mission d’intérêt public dont elle est investie en qualité de responsable de traitement, conformément à l’article 6-1 e) du RGPD.
+  p.
+    Cette mission d’intérêt public est mise en œuvre par le décret n° 2009-834 du 7 juillet 2009 portant création d’un service à compétence nationale dénommé “Agence nationale de la sécurité des systèmes d’information”, notamment ses articles 3 et 4.
 
-      h2 Pourquoi traitons-nous des données à caractère personnel ?
-      p.
-        L’ANSSI traite des données identifiantes dans le but de :
-      ul
-        li constituer le dossier d'homologation de sécurité du ou des services numériques nécessitant une telle homologation en application de la réglementation en vigueur ;
-        li pouvoir bénéficier des services proposés par le Site (constitution du dossier d'homologation, génération du dossier d'homologation à faire signer à l'autorité d'homologation, conservation des dossiers d'homologation) ;
-        li gérer la liste de diffusion de la lettre d’information de la solution.
+  h2 Pendant combien de temps conservons-nous vos données ?
+  table
+    thead
+      tr
+        th(scope="col") Catégories de données traitées
+        th(scope="col") Durée de conservation
+    tbody
+      tr
+        td(data-label="Catégories de données") Données d’inscription
+        td(data-label="Durée de conservation") 1 an à compter du dernier contact avec l’Utilisateur
+      tr
+        td(data-label="Catégories de données") Données relatives à la constitution du dossier d’homologation
+        td(data-label="Durée de conservation") 1 an à compter du dernier contact avec l’Utilisateur
+      tr
+        td(data-label="Catégories de données") Données relatives à la lettre d’information
+        td(data-label="Durée de conservation") Pendant toute la durée de l’abonnement, et pendant 6 mois après la désinscription
+      tr
+        td(data-label="Catégories de données") Données relatives à la traçabilité
+        td(data-label="Durée de conservation") Pendant 1 an, conformément à la LCEN
 
-      h2 Quelles sont les données à caractère personnel que nous traitons ?
-      ul
-        li données d'inscription : nom, prénom, adresse e-mail, numéro de téléphone (facultatif), mot de passe ;
-        li données relatives à la constitution du dossier d’homologation : nom, prénom, adresse e-mail, mot de passe, coordonnées des personnes qui composent la Commission d’homologation (prénom, nom, fonction) ;
-        li données relatives à la lettre d’information : nom, prénom, adresse e-mail ;
-        li données relatives à la traçabilité : logs et adresse IP.
+  h2 Qui peut avoir accès à vos données ?
+  p.
+    Les destinataires des données à caractère personnel de l'utilisateur sont le personnel de l'ANSSI impliqué dans l'administration et la gestion du site ou de la lettre d'information.
 
-      h2 Qu’est-ce qui nous autorise à traiter vos données à caractère personnel ?
-      p.
-        L’ANSSI traite des données à caractère personnel en application de l’exécution de sa mission d’intérêt public dont elle est investie en qualité de responsable de traitement, conformément à l’article 6-1 e) du RGPD.
-      p.
-        Cette mission d’intérêt public est mise en œuvre par le décret n° 2009-834 du 7 juillet 2009 portant création d’un service à compétence nationale dénommé “Agence nationale de la sécurité des systèmes d’information”, notamment ses articles 3 et 4.
+  h2 Qui nous aide à traiter vos données à caractère personnel ?
+  p.
+    Certaines données sont envoyées à des sous-traitants, qui agissent pour le compte de l’ANSSI et sur ses instructions.
 
-      h2 Pendant combien de temps conservons-nous vos données ?
-      table
-        thead
-          tr
-            th Catégories de données traitées
-            th Durée de conservation
-        tbody
-          tr
-            td Données d’inscription
-            td(rowspan=2) 1 an à compter du dernier contact avec l’Utilisateur
-          tr
-            td Données relatives à la constitution du dossier d’homologation
-          tr
-            td Données relatives à la lettre d’information
-            td Pendant toute la durée de l’abonnement, et pendant 6 mois après la désinscription
-          tr
-            td Données relatives à la traçabilité
-            td Pendant 1 an, conformément à la LCEN
+  table
+    thead
+      tr
+        th(scope="col") Sous-traitant
+        th(scope="col") Traitement réalisé
+        th(scope="col") Pays destinataire
+        th(scope="col") Garanties
+    tbody
+      tr
+        td(data-label="Sous-traitant") Clever Cloud
+        td(data-label="Traitement réalisé") Hébergement des données
+        td(data-label="Pays destinataire") France
+        td(data-label="Garanties") <a href='https://www.clever-cloud.com/fr/conditions-generales-dutilisation/accord-de-traitement-des-donnees/' target='_blank'>https://www.clever-cloud.com/fr/conditions-generales-dutilisation/accord-de-traitement-des-donnees/</a>
+      tr
+        td(data-label="Sous-traitant") Brevo
+        td(data-label="Traitement réalisé") Gestion de la lettre d’information
+        td(data-label="Pays destinataire") France
+        td(data-label="Garanties") <a href='https://www.brevo.com/legal/termsofuse/#annex-list-of-sub-processors' target='_blank'>https://www.brevo.com/legal/termsofuse/#annex-list-of-sub-processors</a>
+      tr
+        td(data-label="Sous-traitant") Calendly
+        td(data-label="Traitement réalisé") Planification des webinaires
+        td(data-label="Pays destinataire") États-Unis
+        td(data-label="Garanties") <a href='https://calendly.com/legal/data-processing-addendum' target='_blank'>https://calendly.com/legal/data-processing-addendum</a>
+      tr
+        td(data-label="Sous-traitant") Crisp
+        td(data-label="Traitement réalisé") Outil de support
+        td(data-label="Pays destinataire") France
+        td(data-label="Garanties") <a href='https://crisp.chat/fr/privacy/' target='_blank'>https://crisp.chat/fr/privacy/</a>
 
-      h2 Qui peut avoir accès à vos données ?
-      p.
-        Les destinataires des données à caractère personnel de l'utilisateur sont le personnel de l'ANSSI impliqué dans l'administration et la gestion du site ou de la lettre d'information.
+  h2 Quels sont vos droits ?
+  p Vous disposez des droits suivants :
+  ul
+    li droit d’information (articles 13 et 14 du RGPD) ;
+    li droit d'accès (article 15 du RGPD), de rectification, de mise à jour et de complétude de ses données (article 16 du RGPD) ;
+    li droit à la limitation du traitement de ses données (article 18 du RGPD) ;
+    li droit d’opposition (article 21 RGPD).
+  p Vous pouvez exercer vos droits en contactant l'ANSSI :
+  ul
+    li.
+      par courriel à l'adresse suivante : <a href='mailto:lab-innov@ssi.gouv.fr'>lab-innov@ssi.gouv.fr</a>
+    li.
+      par courrier postal à l'adresse suivante : <br>
+      Agence nationale de la sécurité des systèmes d'information <br>
+      À l'attention du Lab Inno <br>
+      51 boulevard de la Tour-Maubourg <br>
+      75007 PARIS 07 SP <br>
+  p.
+    Puisque ce sont des droits personnels, nous ne traiterons votre demande que si nous sommes en mesure de vous identifier. Dans le cas contraire, nous pouvons être amenés à vous demander une preuve de votre identité.
+  p.
+    Le responsable de traitement s’engage à vous répondre dans un délai raisonnable qui ne dépasse pas 1 mois à compter de la réception de votre demande d’exercice de droits.
+  p.
+    Pour la lettre d'information du service, un lien de désinscription est proposé lors de chaque envoi de la lettre.
+  p.
+    Si l'Utilisateur estime après avoir contacté l'ANSSI que les droits sur ses données n'ont pas été respectés, il peut introduire une réclamation auprès de la CNIL.
+  a(href='https://www.cnil.fr/fr/mes-demarches/les-droits-pour-maitriser-vos-donnees-personnelles' target='_blank') Voir le site de la CNIL pour plus d'informations sur les droits prévus par le RGPD.
 
-      h2 Qui nous aide à traiter vos données à caractère personnel ?
-      p.
-        Certaines données sont envoyées à des sous-traitants, qui agissent pour le compte de l’ANSSI et sur ses instructions.
+  h2 Cookies et traceurs
+  p.
+    Un cookie est un fichier déposé sur votre terminal lors de la visite d’un site. Il a pour objectif de collecter des informations relatives à votre navigation et de vous adresser des services adaptés à votre terminal (ordinateur, mobile ou tablette).
+  p.
+    En application de l’article 5-3 de la directive ePrivacy, transposée à l’article 82 de la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, les cookies et traceurs suivent deux régimes distincts.
+  p.
+    D’une part, les cookies strictement nécessaires au service ou ayant pour finalité exclusive de faciliter la communication par voie électronique, sont dispensés de consentement préalable (article 82 susvisé).
+  p.
+    D’autre part, les cookies n’étant pas strictement nécessaires au service ou n’ayant pas pour finalité exclusive de faciliter la communication par voie électronique, doivent être consenti par l’utilisateur.
+  p.
+    Ce consentement de la personne concernée constitue une base légale au sens du RGPD (article 6-1 a).
+  p.
+    MonServiceSécurisé ne dépose que des cookies et traceurs strictement nécessaires au fonctionnement du service et la solution de mesure d’audience “Matomo”, configurée en mode “exempté” et ne nécessitant pas de recueil du consentement, conformément aux recommandations de la CNIL.<br>
+    Toutefois, vous pouvez, à tout moment, refuser d'être suivi de manière anonyme en décochant la case ci-dessous :
+  .conteneur-checkbox
+    input(type="checkbox" id="consentement-matomo" name="consentement-matomo" checked)
+    label(for="consentement-matomo" id="label-consentement-matomo")
 
-      table
-        thead
-          tr
-            th Sous-traitant
-            th Traitement réalisé
-            th Pays destinataire
-            th Garanties
-        tbody
-          tr
-            td Clever Cloud
-            td Hébergement des données
-            td France
-            td <a href='https://www.clever-cloud.com/fr/conditions-generales-dutilisation/accord-de-traitement-des-donnees/' target='_blank'>https://www.clever-cloud.com/fr/conditions-generales-dutilisation/accord-de-traitement-des-donnees/</a>
-          tr
-            td Brevo
-            td Gestion de la lettre d’information
-            td France
-            td <a href='https://www.brevo.com/legal/termsofuse/#annex-list-of-sub-processors' target='_blank'>https://www.brevo.com/legal/termsofuse/#annex-list-of-sub-processors</a>
-          tr
-            td Calendly
-            td Planification des webinaires
-            td États-Unis
-            td <a href='https://calendly.com/legal/data-processing-addendum' target='_blank'>https://calendly.com/legal/data-processing-addendum</a>
-          tr
-            td Crisp
-            td Outil de support
-            td France
-            td <a href='https://crisp.chat/fr/privacy/' target='_blank'>https://crisp.chat/fr/privacy/</a>
-
-      h2 Quels sont vos droits ?
-      p Vous disposez des droits suivants :
-      ul
-        li droit d’information (articles 13 et 14 du RGPD) ;
-        li droit d'accès (article 15 du RGPD), de rectification, de mise à jour et de complétude de ses données (article 16 du RGPD) ;
-        li droit à la limitation du traitement de ses données (article 18 du RGPD) ;
-        li droit d’opposition (article 21 RGPD).
-      p Vous pouvez exercer vos droits en contactant l'ANSSI :
-      ul
-        li.
-          par courriel à l'adresse suivante : <a href='mailto:lab-innov@ssi.gouv.fr'>lab-innov@ssi.gouv.fr</a>
-        li.
-          par courrier postal à l'adresse suivante : <br>
-          Agence nationale de la sécurité des systèmes d'information <br>
-          À l'attention du Lab Inno <br>
-          51 boulevard de la Tour-Maubourg <br>
-          75007 PARIS 07 SP <br>
-      p.
-        Puisque ce sont des droits personnels, nous ne traiterons votre demande que si nous sommes en mesure de vous identifier. Dans le cas contraire, nous pouvons être amenés à vous demander une preuve de votre identité.
-      p.
-        Le responsable de traitement s’engage à vous répondre dans un délai raisonnable qui ne dépasse pas 1 mois à compter de la réception de votre demande d’exercice de droits.
-      p.
-        Pour la lettre d'information du service, un lien de désinscription est proposé lors de chaque envoi de la lettre.
-      p.
-        Si l'Utilisateur estime après avoir contacté l'ANSSI que les droits sur ses données n'ont pas été respectés, il peut introduire une réclamation auprès de la CNIL.
-      a(href='https://www.cnil.fr/fr/mes-demarches/les-droits-pour-maitriser-vos-donnees-personnelles' target='_blank') Voir le site de la CNIL pour plus d'informations sur les droits prévus par le RGPD.
-
-      h2 Cookies et traceurs
-      p.
-        Un cookie est un fichier déposé sur votre terminal lors de la visite d’un site. Il a pour objectif de collecter des informations relatives à votre navigation et de vous adresser des services adaptés à votre terminal (ordinateur, mobile ou tablette).
-      p.
-        En application de l’article 5-3 de la directive ePrivacy, transposée à l’article 82 de la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, les cookies et traceurs suivent deux régimes distincts.
-      p.
-        D’une part, les cookies strictement nécessaires au service ou ayant pour finalité exclusive de faciliter la communication par voie électronique, sont dispensés de consentement préalable (article 82 susvisé).
-      p.
-        D’autre part, les cookies n’étant pas strictement nécessaires au service ou n’ayant pas pour finalité exclusive de faciliter la communication par voie électronique, doivent être consenti par l’utilisateur.
-      p.
-        Ce consentement de la personne concernée constitue une base légale au sens du RGPD (article 6-1 a).
-      p.
-        MonServiceSécurisé ne dépose que des cookies et traceurs strictement nécessaires au fonctionnement du service et la solution de mesure d’audience “Matomo”, configurée en mode “exempté” et ne nécessitant pas de recueil du consentement, conformément aux recommandations de la CNIL.<br>
-        Toutefois, vous pouvez, à tout moment, refuser d'être suivi de manière anonyme en décochant la case ci-dessous :
-      .conteneur-checkbox
-        input(type="checkbox" id="consentement-matomo" name="consentement-matomo" checked)
-        label(for="consentement-matomo" id="label-consentement-matomo")
-
-      p Pour en savoir plus sur les cookies :
-      ul
-        li
-          a(href='https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/que-dit-la-loi' target='_blank') Cookies et traceurs : que dit la loi ?
-        li
-          a(href='https://www.cnil.fr/fr/cookies-et-autres-traceurs/comment-se-proteger/maitriser-votre-navigateur' target='_blank') Cookies : les outils pour les maîtriser
+  p Pour en savoir plus sur les cookies :
+  ul
+    li
+      a(href='https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/que-dit-la-loi' target='_blank') Cookies et traceurs : que dit la loi ?
+    li
+      a(href='https://www.cnil.fr/fr/cookies-et-autres-traceurs/comment-se-proteger/maitriser-votre-navigateur' target='_blank') Cookies : les outils pour les maîtriser
