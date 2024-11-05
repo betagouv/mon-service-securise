@@ -36,25 +36,28 @@ describe("L'abonné en charge de relier un nouveau service à ses superviseurs",
 
   it('délègue à la supervision la création du lien entre les superviseurs et le service', async () => {
     let idsSuperviseurRecus;
-    let idServiceRecu;
+    let serviceRecu;
     adaptateurSupervision.relieSuperviseursAService = async (
-      idService,
+      service,
       idsSuperviseurs
     ) => {
       idsSuperviseurRecus = idsSuperviseurs;
-      idServiceRecu = idService;
+      serviceRecu = service;
     };
 
     depotDonnees.lisSuperviseurs = async () => ['US1'];
 
-    const service = unService().avecId('S1').construis();
+    const service = unService()
+      .avecOrganisationResponsable({ siret: '12345' })
+      .avecId('S1')
+      .construis();
 
     await relieServiceEtSuperviseurs({ depotDonnees, adaptateurSupervision })({
       service,
     });
 
     expect(idsSuperviseurRecus).to.eql(['US1']);
-    expect(idServiceRecu).to.be('S1');
+    expect(serviceRecu).to.be(service);
   });
 
   it("n'appelle pas la supervision si aucun superviseur n'est concerné par le service", async () => {
