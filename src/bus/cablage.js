@@ -92,6 +92,9 @@ const {
 const {
   relieServiceEtSuperviseurs,
 } = require('./abonnements/relieServiceEtSuperviseurs');
+const {
+  delieServiceEtSuperviseurs,
+} = require('./abonnements/delieServiceEtSuperviseurs');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -206,6 +209,7 @@ const cableTousLesAbonnes = (
     consigneServiceSupprimeDansJournal({ adaptateurJournal }),
     supprimeNotificationsExpirationHomologation({ depotDonnees }),
     metAJourContactsBrevoDesContributeurs({ crmBrevo, depotDonnees }),
+    delieServiceEtSuperviseurs({ adaptateurSupervision }),
   ]);
 };
 
