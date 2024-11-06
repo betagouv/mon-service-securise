@@ -40,6 +40,7 @@ const Autorisation = require('./src/modeles/autorisations/autorisation');
 const {
   consigneRisquesDansJournal,
 } = require('./src/bus/abonnements/consigneRisquesDansJournal');
+const fabriqueAdaptateurSupervision = require('./src/adaptateurs/fabriqueAdaptateurSupervision');
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -74,12 +75,14 @@ class ConsoleAdministration {
     });
 
     const adaptateurTracking = fabriqueAdaptateurTracking();
+    const adaptateurSupervision = fabriqueAdaptateurSupervision();
     cableTousLesAbonnes(busEvenements, {
       adaptateurHorloge,
       adaptateurTracking,
       adaptateurJournal: this.adaptateurJournalMSS,
       adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
       adaptateurMail,
+      adaptateurSupervision,
       depotDonnees: this.depotDonnees,
       referentiel: this.referentiel,
     });
