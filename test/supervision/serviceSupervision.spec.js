@@ -97,4 +97,24 @@ describe('Le service de supervision', () => {
       expect(idServiceRecu).to.be('S1');
     });
   });
+
+  describe('sur demande de modification du lien entre un service et des superviseurs', () => {
+    it("appele successivement les méthodes de suppression et d'ajout de lien", async () => {
+      let idServiceRecuParSuppression;
+      let serviceRecuParAjout;
+      serviceSupervision.delieServiceEtSuperviseurs = async (idService) => {
+        idServiceRecuParSuppression = idService;
+      };
+      serviceSupervision.relieServiceEtSuperviseurs = async (service) => {
+        serviceRecuParAjout = service;
+      };
+
+      const service = unService().avecId('S1').construis();
+
+      await serviceSupervision.modifieLienServiceEtSuperviseurs(service);
+
+      expect(idServiceRecuParSuppression).to.be('S1');
+      expect(serviceRecuParAjout.id).to.be('S1');
+    });
+  });
 });
