@@ -279,7 +279,11 @@ const creeDepot = (config = {}) => {
     const s = await p.lis.un(idService);
     const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
     await busEvenements.publie(
-      new EvenementDescriptionServiceModifiee({ service: s, utilisateur: u })
+      new EvenementDescriptionServiceModifiee({
+        service: s,
+        utilisateur: u,
+        ancienneDescription: existant.descriptionService,
+      })
     );
   };
 
