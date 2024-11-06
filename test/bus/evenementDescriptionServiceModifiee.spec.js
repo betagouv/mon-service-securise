@@ -12,6 +12,7 @@ describe("L'événement `descriptionServiceModifiee", () => {
         new EvenementDescriptionServiceModifiee({
           service: null,
           utilisateur: unUtilisateur().construis(),
+          ancienneDescription: { nomService: 'Service 1' },
         })
     ).to.throwError();
   });
@@ -22,6 +23,18 @@ describe("L'événement `descriptionServiceModifiee", () => {
         new EvenementDescriptionServiceModifiee({
           service: unService().construis(),
           utilisateur: null,
+          ancienneDescription: { nomService: 'Service 1' },
+        })
+    ).to.throwError();
+  });
+
+  it("lève une exception s'il est instancié sans l'ancienne description", () => {
+    expect(
+      () =>
+        new EvenementDescriptionServiceModifiee({
+          service: unService().construis(),
+          utilisateur: unUtilisateur().construis(),
+          ancienneDescription: null,
         })
     ).to.throwError();
   });
