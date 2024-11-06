@@ -1,7 +1,8 @@
 const DescriptionService = require('../../src/modeles/descriptionService');
+const Referentiel = require('../../src/referentiel');
 
 class ConstructeurDescriptionService {
-  constructor(referentiel) {
+  constructor(referentiel = Referentiel.creeReferentiel()) {
     this.referentiel = referentiel;
     this.referentiel.enrichis({
       statutsDeploiement: { unStatutDeploiement: {} },
