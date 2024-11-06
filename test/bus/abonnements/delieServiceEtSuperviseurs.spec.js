@@ -4,15 +4,15 @@ const {
 } = require('../../../src/bus/abonnements/delieServiceEtSuperviseurs');
 
 describe("L'abonné en charge de délier un service supprimé à ses superviseurs", () => {
-  it('délègue à la supervision la suppression du lien entre les superviseurs et le service', async () => {
+  it('délègue la suppression du lien au service de supervision', async () => {
     let idServiceRecu;
-    const adaptateurSupervision = {
-      delieServiceDesSuperviseurs: async (idService) => {
+    const serviceSupervision = {
+      delieServiceEtSuperviseurs: async (idService) => {
         idServiceRecu = idService;
       },
     };
 
-    await delieServiceEtSuperviseurs({ adaptateurSupervision })({
+    await delieServiceEtSuperviseurs({ serviceSupervision })({
       idService: 'S1',
     });
 

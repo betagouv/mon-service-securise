@@ -1,6 +1,6 @@
-function delieServiceEtSuperviseurs({ adaptateurSupervision }) {
+function delieServiceEtSuperviseurs({ serviceSupervision }) {
   return async ({ idService }) => {
-    await adaptateurSupervision.delieServiceDesSuperviseurs(idService);
+    await serviceSupervision.delieServiceEtSuperviseurs(idService);
   };
 }
 

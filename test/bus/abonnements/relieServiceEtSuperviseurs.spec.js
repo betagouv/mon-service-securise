@@ -5,75 +5,20 @@ const {
 } = require('../../../src/bus/abonnements/relieServiceEtSuperviseurs');
 
 describe("L'abonné en charge de relier un nouveau service à ses superviseurs", () => {
-  let adaptateurSupervision;
-  let depotDonnees;
-
-  beforeEach(() => {
-    adaptateurSupervision = {
-      relieSuperviseursAService: async () => {},
-    };
-    depotDonnees = {
-      lisSuperviseurs: async () => {},
-    };
-  });
-
-  it('délègue au dépôt la lecture des superviseurs concernés', async () => {
-    let siretRecu;
-    depotDonnees.lisSuperviseurs = async (siret) => {
-      siretRecu = siret;
-      return [];
-    };
-    const service = unService()
-      .avecOrganisationResponsable({ siret: '12345' })
-      .construis();
-
-    await relieServiceEtSuperviseurs({ depotDonnees, adaptateurSupervision })({
-      service,
-    });
-
-    expect(siretRecu).to.be('12345');
-  });
-
-  it('délègue à la supervision la création du lien entre les superviseurs et le service', async () => {
-    let idsSuperviseurRecus;
+  it('délègue la création du lien au service de supervision', async () => {
     let serviceRecu;
-    adaptateurSupervision.relieSuperviseursAService = async (
-      service,
-      idsSuperviseurs
-    ) => {
-      idsSuperviseurRecus = idsSuperviseurs;
-      serviceRecu = service;
+    const serviceSupervision = {
+      relieServiceEtSuperviseurs: async (service) => {
+        serviceRecu = service;
+      },
     };
 
-    depotDonnees.lisSuperviseurs = async () => ['US1'];
+    const service = unService().avecId('S1').construis();
 
-    const service = unService()
-      .avecOrganisationResponsable({ siret: '12345' })
-      .avecId('S1')
-      .construis();
-
-    await relieServiceEtSuperviseurs({ depotDonnees, adaptateurSupervision })({
+    await relieServiceEtSuperviseurs({ serviceSupervision })({
       service,
     });
 
-    expect(idsSuperviseurRecus).to.eql(['US1']);
-    expect(serviceRecu).to.be(service);
-  });
-
-  it("n'appelle pas la supervision si aucun superviseur n'est concerné par le service", async () => {
-    let supervisionAppelee = false;
-    adaptateurSupervision.relieSuperviseursAService = async () => {
-      supervisionAppelee = true;
-    };
-
-    depotDonnees.lisSuperviseurs = async () => [];
-
-    const service = unService().construis();
-
-    await relieServiceEtSuperviseurs({ depotDonnees, adaptateurSupervision })({
-      service,
-    });
-
-    expect(supervisionAppelee).to.be(false);
+    expect(serviceRecu.id).to.eql('S1');
   });
 });

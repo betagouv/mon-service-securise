@@ -95,6 +95,7 @@ const {
 const {
   delieServiceEtSuperviseurs,
 } = require('./abonnements/delieServiceEtSuperviseurs');
+const ServiceSupervision = require('../supervision/serviceSupervision');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -113,6 +114,10 @@ const cableTousLesAbonnes = (
     adaptateurRechercheEntreprise,
     adaptateurMail,
   });
+  const serviceSupervision = new ServiceSupervision({
+    adaptateurSupervision,
+    depotDonnees,
+  });
 
   busEvenements.abonnePlusieurs(EvenementNouveauServiceCree, [
     consigneNouveauServiceDansJournal({ adaptateurJournal }),
@@ -127,7 +132,7 @@ const cableTousLesAbonnes = (
       crmBrevo,
       depotDonnees,
     }),
-    relieServiceEtSuperviseurs({ depotDonnees, adaptateurSupervision }),
+    relieServiceEtSuperviseurs({ serviceSupervision }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementMesureServiceModifiee, [
@@ -209,7 +214,7 @@ const cableTousLesAbonnes = (
     consigneServiceSupprimeDansJournal({ adaptateurJournal }),
     supprimeNotificationsExpirationHomologation({ depotDonnees }),
     metAJourContactsBrevoDesContributeurs({ crmBrevo, depotDonnees }),
-    delieServiceEtSuperviseurs({ adaptateurSupervision }),
+    delieServiceEtSuperviseurs({ serviceSupervision }),
   ]);
 };
 
