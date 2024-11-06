@@ -25,6 +25,11 @@ class ServiceSupervision {
       superviseurs
     );
   }
+
+  async modifieLienServiceEtSuperviseurs(service) {
+    await this.delieServiceEtSuperviseurs(service.id);
+    await this.relieServiceEtSuperviseurs(service);
+  }
 }
 
 module.exports = ServiceSupervision;
