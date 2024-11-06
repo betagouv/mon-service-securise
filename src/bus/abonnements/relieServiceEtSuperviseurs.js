@@ -1,15 +1,6 @@
-function relieServiceEtSuperviseurs({ depotDonnees, adaptateurSupervision }) {
+function relieServiceEtSuperviseurs({ serviceSupervision }) {
   return async ({ service }) => {
-    const superviseurs = await depotDonnees.lisSuperviseurs(
-      service.siretDeOrganisation()
-    );
-
-    if (!superviseurs.length) return;
-
-    await adaptateurSupervision.relieSuperviseursAService(
-      service,
-      superviseurs
-    );
+    await serviceSupervision.relieServiceEtSuperviseurs(service);
   };
 }
 
