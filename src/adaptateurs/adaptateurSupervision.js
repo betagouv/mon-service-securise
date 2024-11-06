@@ -9,15 +9,19 @@ const adaptateurSupervision = ({ adaptateurChiffrement }) => {
 
   const knex = Knex(config);
 
+  const hache = (id) => adaptateurChiffrement.hacheSha256(id);
+
   return {
+    delieServiceDesSuperviseurs: async (idService) => {
+      const idServiceHash = hache(idService);
+      await knex('journal_mss.superviseurs')
+        .where('id_service', idServiceHash)
+        .del();
+    },
     relieSuperviseursAService: async (service, idSuperviseurs) => {
-      const idServiceHash = adaptateurChiffrement.hacheSha256(service.id);
-      const siretServiceHash = adaptateurChiffrement.hacheSha256(
-        service.siretDeOrganisation()
-      );
-      const idSuperviseursHash = idSuperviseurs.map(
-        adaptateurChiffrement.hacheSha256
-      );
+      const idServiceHash = hache(service.id);
+      const siretServiceHash = hache(service.siretDeOrganisation());
+      const idSuperviseursHash = idSuperviseurs.map(hache);
 
       await knex('journal_mss.superviseurs').insert(
         idSuperviseursHash.map((idSuperviseur) => ({
