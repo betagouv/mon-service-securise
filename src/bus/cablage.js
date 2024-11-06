@@ -96,6 +96,9 @@ const {
   delieServiceEtSuperviseurs,
 } = require('./abonnements/delieServiceEtSuperviseurs');
 const ServiceSupervision = require('../supervision/serviceSupervision');
+const {
+  modifieLienServiceEtSuperviseurs,
+} = require('./abonnements/modifieLienServiceEtSuperviseurs');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -165,6 +168,7 @@ const cableTousLesAbonnes = (
       adaptateurRechercheEntreprise,
     }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
+    modifieLienServiceEtSuperviseurs({ serviceSupervision }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementAutorisationsServiceModifiees, [
