@@ -76,8 +76,13 @@ const nouvelAdaptateur = (env) => {
   const supprimeEnregistrement = (nomTable, id) =>
     knex(nomTable).where({ id }).del();
 
-  const ajouteService = async (id, donnees, nomServiceHash) =>
-    knex('services').insert({ id, donnees, nom_service_hash: nomServiceHash });
+  const ajouteService = async (id, donnees, nomServiceHash, siretHash) =>
+    knex('services').insert({
+      id,
+      donnees,
+      nom_service_hash: nomServiceHash,
+      siret_hash: siretHash,
+    });
 
   const ajouteUtilisateur = (id, donnees, emailHash) =>
     knex('utilisateurs').insert({
@@ -177,7 +182,7 @@ const nouvelAdaptateur = (env) => {
     return avecPMapPourChaqueElement(Promise.resolve(ids), service);
   };
 
-  const metsAJourService = (id, donnees, nomServiceHash) =>
+  const metsAJourService = (id, donnees, nomServiceHash, siretHash) =>
     knex('services')
       .where({ id })
       .first()
@@ -185,6 +190,7 @@ const nouvelAdaptateur = (env) => {
         knex('services').where({ id }).update({
           donnees,
           nom_service_hash: nomServiceHash,
+          siret_hash: siretHash,
         })
       );
 
@@ -278,7 +284,7 @@ const nouvelAdaptateur = (env) => {
       .whereRaw("(donnees->>'estProprietaire')::boolean=true")
       .then(([{ count }]) => parseInt(count, 10));
 
-  const sauvegardeService = (id, donneesService, nomServiceHash) => {
+  const sauvegardeService = (id, donneesService, nomServiceHash, siretHash) => {
     const testExistence = knex('services')
       .where('id', id)
       .select({ id: 'id' })
@@ -287,8 +293,8 @@ const nouvelAdaptateur = (env) => {
 
     return testExistence.then((dejaConnu) =>
       dejaConnu
-        ? metsAJourService(id, donneesService, nomServiceHash)
-        : ajouteService(id, donneesService, nomServiceHash)
+        ? metsAJourService(id, donneesService, nomServiceHash, siretHash)
+        : ajouteService(id, donneesService, nomServiceHash, siretHash)
     );
   };
 
