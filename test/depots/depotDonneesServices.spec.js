@@ -351,6 +351,17 @@ describe('Le dépôt de données des services', () => {
       expect(donnees.nomServiceHash).to.be('Nouveau Nom-haché256');
     });
 
+    it('met à jour le SHA-256 du SIRET du service', async () => {
+      const description = uneDescriptionValide(referentiel)
+        .deLOrganisation({ siret: 'unSIRET' })
+        .construis();
+
+      await depot.ajouteDescriptionService('U1', 'S1', description);
+
+      const donnees = await adaptateurPersistance.service('S1');
+      expect(donnees.siretHash).to.be('unSIRET-haché256');
+    });
+
     it('lève une exception si des propriétés obligatoires ne sont pas renseignées', async () => {
       const descriptionIncomplete = uneDescriptionValide(referentiel)
         .avecNomService('')
@@ -829,6 +840,20 @@ describe('Le dépôt de données des services', () => {
 
       const donnees = await adaptateurPersistance.service(idNouveau);
       expect(donnees.nomServiceHash).to.be('Super Service-haché256');
+    });
+
+    it('stocke le SHA-256 du SIRET du service', async () => {
+      const descriptionService = uneDescriptionValide(referentiel)
+        .deLOrganisation({ siret: 'unSIRET' })
+        .construis()
+        .donneesSerialisees();
+
+      const idNouveau = await depot.nouveauService('123', {
+        descriptionService,
+      });
+
+      const donnees = await adaptateurPersistance.service(idNouveau);
+      expect(donnees.siretHash).to.be('unSIRET-haché256');
     });
 
     it("déclare un accès en écriture entre l'utilisateur et le service", async () => {
