@@ -72,6 +72,13 @@ const fabriquePersistance = (
         if (!s) return undefined;
         return enrichisService(s);
       },
+      ceuxAvecSiret: async (siret) => {
+        const hashSiret = adaptateurChiffrement.hacheSha256(siret);
+
+        const donneesServices =
+          await adaptateurPersistance.servicesAvecHashSiret(hashSiret);
+        return Promise.all(donneesServices.map((d) => enrichisService(d)));
+      },
       ceuxDeUtilisateur: async (idUtilisateur) => {
         const donneesServices =
           await adaptateurPersistance.services(idUtilisateur);
@@ -293,6 +300,8 @@ const creeDepot = (config = {}) => {
   };
 
   const tousLesServices = () => p.lis.tous();
+
+  const tousLesServicesAvecSiret = (siret) => p.lis.ceuxAvecSiret(siret);
 
   const enregistreDossier = (idHomologation, dossier) =>
     ajouteAItemsDuService('dossiers', idHomologation, dossier);
@@ -576,6 +585,7 @@ const creeDepot = (config = {}) => {
     supprimeRisqueSpecifiqueDuService,
     supprimeService,
     tousLesServices,
+    tousLesServicesAvecSiret,
     trouveIndexDisponible,
   };
 };

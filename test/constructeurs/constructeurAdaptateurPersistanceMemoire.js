@@ -25,6 +25,9 @@ class ConstructeurAdaptateurPersistanceMemoire {
       nomServiceHash: this.adaptateurChiffrement.hacheSha256(
         service.descriptionService.nomService
       ),
+      siretHash: this.adaptateurChiffrement.hacheSha256(
+        service.descriptionService?.organisationResponsable?.siret
+      ),
     });
     return this;
   }
