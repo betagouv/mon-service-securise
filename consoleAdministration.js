@@ -41,6 +41,7 @@ const {
   consigneRisquesDansJournal,
 } = require('./src/bus/abonnements/consigneRisquesDansJournal');
 const fabriqueAdaptateurSupervision = require('./src/adaptateurs/fabriqueAdaptateurSupervision');
+const ServiceSupervision = require('./src/supervision/serviceSupervision');
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -75,14 +76,14 @@ class ConsoleAdministration {
     });
 
     const adaptateurTracking = fabriqueAdaptateurTracking();
-    const adaptateurSupervision = fabriqueAdaptateurSupervision();
+    this.adaptateurSupervision = fabriqueAdaptateurSupervision();
     cableTousLesAbonnes(busEvenements, {
       adaptateurHorloge,
       adaptateurTracking,
       adaptateurJournal: this.adaptateurJournalMSS,
       adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
       adaptateurMail,
-      adaptateurSupervision,
+      adaptateurSupervision: this.adaptateurSupervision,
       depotDonnees: this.depotDonnees,
       referentiel: this.referentiel,
     });
@@ -617,6 +618,54 @@ class ConsoleAdministration {
       idService,
     });
     await this.depotDonnees.ajouteContributeurAuService(autorisation);
+  }
+
+  async ajouteSiretsAuSuperviseur(emailSuperviseur, sirets) {
+    const superviseur =
+      await this.depotDonnees.utilisateurAvecEmail(emailSuperviseur);
+    if (!superviseur)
+      throw new Error(
+        `Impossible de trouve l'utilisateur avec l'email ${emailSuperviseur}`
+      );
+
+    const serviceSupervision = new ServiceSupervision({
+      depotDonnees: this.depotDonnees,
+      adaptateurSupervision: this.adaptateurSupervision,
+    });
+
+    /* eslint-disable no-restricted-syntax */
+    /* eslint-disable no-await-in-loop */
+    /* eslint-disable no-continue */
+    for (const siret of sirets) {
+      console.log(`Ajout du SIRET ${siret}`);
+      try {
+        await this.depotDonnees.ajouteSiretAuSuperviseur(superviseur.id, siret);
+      } catch (e) {
+        if (e.detail.includes('already exists')) {
+          console.log(`Le superviseur supervise déjà le SIRET ${siret}`);
+          continue;
+        } else {
+          throw e;
+        }
+      }
+
+      const services = await this.depotDonnees.tousLesServicesAvecSiret(siret);
+
+      console.log(`${services.length} services trouvés pour ce siret`);
+      for (const s of services) {
+        try {
+          await serviceSupervision.relieServiceEtSuperviseurs(s);
+        } catch (e) {
+          console.warn(
+            `Une erreur est survenu lors de la liaison du service ${s.id}`
+          );
+          console.warn(e);
+        }
+      }
+    }
+    /* eslint-enable no-restricted-syntax */
+    /* eslint-enable no-await-in-loop */
+    /* eslint-enable no-continue */
   }
 }
 
