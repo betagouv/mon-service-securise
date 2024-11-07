@@ -299,10 +299,14 @@ const nouvelAdaptateur = (
       .filter(({ siretSupervise }) => siretSupervise === siret)
       .map(({ idSuperviseur }) => idSuperviseur);
 
+  const ajouteSiretAuSuperviseur = async (idSuperviseur, siret) =>
+    donnees.superviseurs.push({ idSuperviseur, siretSupervise: siret });
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
     ajouteAutorisation,
+    ajouteSiretAuSuperviseur,
     ajouteSuggestionAction,
     ajouteTacheDeService,
     ajouteUtilisateur,

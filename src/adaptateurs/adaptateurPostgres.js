@@ -514,9 +514,16 @@ const nouvelAdaptateur = (env) => {
         .select({ idSuperviseur: 'id_superviseur' })
     ).map(({ idSuperviseur }) => idSuperviseur);
 
+  const ajouteSiretAuSuperviseur = async (idSuperviseur, siret) =>
+    knex('superviseurs').insert({
+      id_superviseur: idSuperviseur,
+      siret_supervise: siret,
+    });
+
   return {
     activitesMesure,
     ajouteAutorisation,
+    ajouteSiretAuSuperviseur,
     ajouteSuggestionAction,
     ajouteTacheDeService,
     ajouteUtilisateur,
