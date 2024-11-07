@@ -18,8 +18,18 @@ const nouvelAdaptateur = (
     donnees[nomTable] = donnees[nomTable].filter((e) => e.id !== id);
   };
 
-  const ajouteService = async (id, donneesService, nomServiceHash) => {
-    donnees.services.push({ id, donnees: donneesService, nomServiceHash });
+  const ajouteService = async (
+    id,
+    donneesService,
+    nomServiceHash,
+    siretHash
+  ) => {
+    donnees.services.push({
+      id,
+      donnees: donneesService,
+      nomServiceHash,
+      siretHash,
+    });
   };
 
   const ajouteUtilisateur = async (id, donneesUtilisateur, emailHash) => {
@@ -72,9 +82,14 @@ const nouvelAdaptateur = (
     );
   };
 
-  const metsAJourService = async (id, donneesService, nomServiceHash) => {
+  const metsAJourService = async (
+    id,
+    donneesService,
+    nomServiceHash,
+    siretHash
+  ) => {
     const s = await service(id);
-    Object.assign(s, { nomServiceHash, donnees: donneesService });
+    Object.assign(s, { nomServiceHash, siretHash, donnees: donneesService });
   };
 
   const sauvegardeAutorisation = async (id, donneesAutorisation) => {
@@ -84,11 +99,11 @@ const nouvelAdaptateur = (
     else Object.assign(dejaConnue, { ...donneesAutorisation });
   };
 
-  const sauvegardeService = (id, donneesService, nomServiceHash) => {
+  const sauvegardeService = (id, donneesService, nomServiceHash, siretHash) => {
     const dejaConnu = donnees.services.find((s) => s.id === id) !== undefined;
     return dejaConnu
-      ? metsAJourService(id, donneesService, nomServiceHash)
-      : ajouteService(id, donneesService, nomServiceHash);
+      ? metsAJourService(id, donneesService, nomServiceHash, siretHash)
+      : ajouteService(id, donneesService, nomServiceHash, siretHash);
   };
 
   const supprimeService = (...params) =>
