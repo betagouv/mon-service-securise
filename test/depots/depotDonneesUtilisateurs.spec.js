@@ -438,34 +438,66 @@ describe('Le dépôt de données des utilisateurs', () => {
     });
   });
 
-  it("retourne l'utilisateur associé à un email donné", async () => {
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        utilisateurs: [
-          {
-            id: '123',
-            donnees: {
-              prenom: 'Jean',
-              nom: 'Dupont',
-              email: 'jean.dupont@mail.fr',
-              motDePasse: 'XXX',
+  describe("sur demande d'utilisateur associé à un email", () => {
+    it("retourne l'utilisateur", async () => {
+      const adaptateurPersistance =
+        AdaptateurPersistanceMemoire.nouvelAdaptateur({
+          utilisateurs: [
+            {
+              id: '123',
+              donnees: {
+                prenom: 'Jean',
+                nom: 'Dupont',
+                email: 'jean.dupont@mail.fr',
+                motDePasse: 'XXX',
+              },
+              emailHash: 'jean.dupont@mail.fr-haché256',
             },
-            emailHash: 'jean.dupont@mail.fr-haché256',
-          },
-        ],
-      }
-    );
-    const depot = DepotDonneesUtilisateurs.creeDepot({
-      adaptateurChiffrement,
-      adaptateurJWT,
-      adaptateurPersistance,
+          ],
+        });
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurJWT,
+        adaptateurPersistance,
+      });
+
+      const utilisateur = await depot.utilisateurAvecEmail(
+        'jean.dupont@mail.fr'
+      );
+
+      expect(utilisateur).to.be.an(Utilisateur);
+      expect(utilisateur.id).to.equal('123');
+      expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
     });
 
-    const utilisateur = await depot.utilisateurAvecEmail('jean.dupont@mail.fr');
+    it('ne tient pas compte de la casse', async () => {
+      const adaptateurPersistance =
+        AdaptateurPersistanceMemoire.nouvelAdaptateur({
+          utilisateurs: [
+            {
+              id: '123',
+              donnees: {
+                prenom: 'Jean',
+                nom: 'Dupont',
+                email: 'jean.dupont@mail.fr',
+                motDePasse: 'XXX',
+              },
+              emailHash: 'jean.dupont@mail.fr-haché256',
+            },
+          ],
+        });
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurJWT,
+        adaptateurPersistance,
+      });
 
-    expect(utilisateur).to.be.an(Utilisateur);
-    expect(utilisateur.id).to.equal('123');
-    expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
+      const utilisateur = await depot.utilisateurAvecEmail(
+        'Jean.Dupont@mail.fr'
+      );
+
+      expect(utilisateur.id).to.equal('123');
+    });
   });
 
   it('retourne tous les utilisateurs enregistrés', async () => {
