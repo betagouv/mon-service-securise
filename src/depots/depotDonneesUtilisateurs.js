@@ -85,7 +85,8 @@ function fabriquePersistance({
         return dechiffreUtilisateur(donnees);
       },
       celuiAvecEmail: async (email) => {
-        const emailHash = adaptateurChiffrement.hacheSha256(email);
+        const emailMinuscule = email.toLowerCase();
+        const emailHash = adaptateurChiffrement.hacheSha256(emailMinuscule);
         const donnees =
           await adaptateurPersistance.utilisateurAvecEmailHash(emailHash);
         return dechiffreUtilisateur(donnees);
