@@ -23,4 +23,21 @@ describe('Le dépôt de données des superviseurs', () => {
 
     expect(siretRecu).to.eql('SIRET');
   });
+
+  it("délègue à la persistance l'ajout d'établissements supervisés", async () => {
+    let siretRecu;
+    let idSuperviseurRecu;
+    adaptateurPersistance.ajouteSiretAuSuperviseur = async (
+      idSuperviseur,
+      siret
+    ) => {
+      idSuperviseurRecu = idSuperviseur;
+      siretRecu = siret;
+    };
+
+    await depot.ajouteSiretAuSuperviseur('US1', 'SIRET-123');
+
+    expect(idSuperviseurRecu).to.eql('US1');
+    expect(siretRecu).to.eql('SIRET-123');
+  });
 });
