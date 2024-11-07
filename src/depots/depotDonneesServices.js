@@ -114,10 +114,15 @@ const fabriquePersistance = (
         donneesService.descriptionService.nomService
       );
 
+      const siret =
+        donneesService.descriptionService?.organisationResponsable?.siret;
+      const siretHash = siret ? adaptateurChiffrement.hacheSha256(siret) : null;
+
       return adaptateurPersistance.sauvegardeService(
         id,
         donneesChiffrees,
-        nomServiceHash
+        nomServiceHash,
+        siretHash
       );
     },
     supprime: async (idService) => {
