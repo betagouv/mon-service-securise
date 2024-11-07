@@ -117,6 +117,7 @@ const creeDepot = (config = {}) => {
     supprimeMesureSpecifiqueDuService,
     supprimeRisqueSpecifiqueDuService,
     tousLesServices,
+    tousLesServicesAvecSiret,
   } = depotServices;
 
   const {
@@ -240,6 +241,7 @@ const creeDepot = (config = {}) => {
     tachesDesServices,
     tousUtilisateurs,
     tousLesServices,
+    tousLesServicesAvecSiret,
     utilisateur,
     utilisateurAFinaliser,
     utilisateurAuthentifie,

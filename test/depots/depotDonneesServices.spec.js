@@ -2157,6 +2157,63 @@ describe('Le dépôt de données des services', () => {
     });
   });
 
+  describe('sur demande de tous les services associés à un SIRET', () => {
+    let depot;
+    let adaptateurPersistance;
+    let depotDonneesUtilisateurs;
+    let referentiel;
+
+    beforeEach(() => {
+      referentiel = creeReferentielVide();
+      adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('moi').donnees)
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('S1')
+            .avecOrganisationResponsable({ siret: 'unSIRET' }).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('moi', 'S1').donnees
+        )
+        .construis();
+      depotDonneesUtilisateurs = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+      });
+      depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurPersistance,
+        depotDonneesUtilisateurs,
+        referentiel,
+      });
+    });
+
+    it('délègue à la persistance la lecture de ces services', async () => {
+      let hashSiretRecu;
+      depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement: {
+          hacheSha256: (chaine) => `${chaine}-SHA256`,
+        },
+        adaptateurPersistance: {
+          servicesAvecHashSiret: async (hashSiret) => {
+            hashSiretRecu = hashSiret;
+            return [];
+          },
+        },
+      });
+
+      await depot.tousLesServicesAvecSiret('unSIRET');
+
+      expect(hashSiretRecu).to.be('unSIRET-SHA256');
+    });
+
+    it('enrichis les services récupérés', async () => {
+      const services = await depot.tousLesServicesAvecSiret('unSIRET');
+
+      expect(services[0].contributeurs.length).to.be(1);
+    });
+  });
+
   describe("sur demande d'ajout de mesure spécifique", () => {
     let depot;
     let adaptateurPersistance;
