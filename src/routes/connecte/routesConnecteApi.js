@@ -41,6 +41,7 @@ const routesConnecteApi = ({
   adaptateurJournalMSS,
   procedures,
   serviceAnnuaire,
+  serviceSupervision,
 }) => {
   const routes = express.Router();
 
@@ -398,6 +399,24 @@ const routesConnecteApi = ({
           initiales: c.initiales(),
         })),
       });
+    }
+  );
+
+  routes.get(
+    '/supervision',
+    middleware.verificationAcceptationCGU,
+    async (requete, reponse) => {
+      const idUtilisateur = requete.idUtilisateurCourant;
+      const estSuperviseur = await depotDonnees.estSuperviseur(idUtilisateur);
+      if (!estSuperviseur) {
+        reponse.sendStatus(401);
+        return;
+      }
+
+      const urlSupervision =
+        serviceSupervision.genereURLSupervision(idUtilisateur);
+
+      reponse.status(200).json({ urlSupervision });
     }
   );
 

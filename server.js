@@ -39,6 +39,7 @@ const {
 const fabriqueAdaptateurSupervision = require('./src/adaptateurs/fabriqueAdaptateurSupervision');
 const adaptateurStatistiques = require('./src/adaptateurs/adaptateurStatistiquesMetabase');
 const { fabriqueServiceCgu } = require('./src/serviceCgu');
+const ServiceSupervision = require('./src/supervision/serviceSupervision');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
@@ -96,6 +97,11 @@ const inscriptionUtilisateur = fabriqueInscriptionUtilisateur({
   depotDonnees,
 });
 
+const serviceSupervision = new ServiceSupervision({
+  depotDonnees,
+  adaptateurSupervision,
+});
+
 const serveur = MSS.creeServeur(
   depotDonnees,
   middleware,
@@ -116,6 +122,7 @@ const serveur = MSS.creeServeur(
   adaptateurEnvironnement,
   adaptateurStatistiques,
   adaptateurJWT,
+  serviceSupervision,
   procedures,
   inscriptionUtilisateur
 );

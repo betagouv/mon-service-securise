@@ -16,6 +16,7 @@ const adaptateurJWTParDefaut = require('../../src/adaptateurs/adaptateurJWT');
 
 const testeurMss = () => {
   let serviceAnnuaire;
+  let serviceSupervision;
   let adaptateurHorloge;
   let adaptateurCmsCrisp;
   let adaptateurMail;
@@ -61,6 +62,7 @@ const testeurMss = () => {
 
   const initialise = (done) => {
     serviceAnnuaire = {};
+    serviceSupervision = {};
     adaptateurHorloge = {
       maintenant: () => new Date(),
     };
@@ -147,6 +149,7 @@ const testeurMss = () => {
           adaptateurEnvironnement,
           adaptateurStatistiques,
           adaptateurJWT,
+          serviceSupervision,
           procedures,
           inscriptionUtilisateur,
           false,
@@ -161,6 +164,7 @@ const testeurMss = () => {
 
   return {
     serviceAnnuaire: () => serviceAnnuaire,
+    serviceSupervision: () => serviceSupervision,
     adaptateurGestionErreur: () => adaptateurGestionErreur,
     adaptateurHorloge: () => adaptateurHorloge,
     adaptateurMail: () => adaptateurMail,
