@@ -75,6 +75,12 @@ label[for='recherche-service'] {
   margin-left: 0;
 }
 
+.carte .conteneur-texte a {
+  margin-top: 8px;
+  font-size: 0.7em;
+  text-decoration: underline;
+}
+
 .carte .conteneur-texte .nombre {
   font-size: 1.7em;
   font-weight: bold;
