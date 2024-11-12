@@ -1,0 +1,8 @@
+extends mssConnecte
+
+block append scripts
+  +composantSvelte('supervision.js')
+  script(type = 'module', src = '/statique/supervision.js')
+
+block main
+  #conteneur-supervision
