@@ -176,7 +176,8 @@ const creeDepot = (config = {}) => {
   const { lisDernierIndiceCyber, sauvegardeNouvelIndiceCyber } =
     depotEvolutionsIndiceCyber;
 
-  const { ajouteSiretAuSuperviseur, lisSuperviseurs } = depotSuperviseurs;
+  const { ajouteSiretAuSuperviseur, estSuperviseur, lisSuperviseurs } =
+    depotSuperviseurs;
 
   const santeDuDepot = async () => {
     await adaptateurPersistance.sante();
@@ -200,6 +201,7 @@ const creeDepot = (config = {}) => {
     autorisations,
     autorisationsDuService,
     dupliqueService,
+    estSuperviseur,
     service,
     serviceExiste,
     services,

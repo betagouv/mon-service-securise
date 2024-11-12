@@ -31,6 +31,22 @@ const routesConnectePage = ({
   );
 
   routes.get(
+    '/supervision',
+    middleware.verificationAcceptationCGU,
+    async (requete, reponse) => {
+      const estSuperviseur = await depotDonnees.estSuperviseur(
+        requete.idUtilisateurCourant
+      );
+
+      if (!estSuperviseur) {
+        reponse.sendStatus(401);
+        return;
+      }
+      reponse.render('supervision');
+    }
+  );
+
+  routes.get(
     '/motDePasse/initialisation',
     middleware.verificationJWT,
     (requete, reponse) => {
