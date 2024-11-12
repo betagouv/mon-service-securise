@@ -40,4 +40,15 @@ describe('Le dépôt de données des superviseurs', () => {
     expect(idSuperviseurRecu).to.eql('US1');
     expect(siretRecu).to.eql('SIRET-123');
   });
+
+  it("délègue à la persistance la vérification qu'un utilisateur est superviseur", async () => {
+    let idRecu;
+    adaptateurPersistance.estSuperviseur = async (idUtilisateur) => {
+      idRecu = idUtilisateur;
+    };
+
+    await depot.estSuperviseur('U1');
+
+    expect(idRecu).to.eql('U1');
+  });
 });

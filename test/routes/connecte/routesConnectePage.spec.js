@@ -169,4 +169,25 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       );
     });
   });
+
+  describe('quand GET sur /supervision', () => {
+    it("vérifie que l'utilisateur a accepté les CGU", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(
+          `http://localhost:1234/supervision`,
+          done
+        );
+    });
+
+    it("renvoie une erreur 401 si l'utilisateur n'est pas un superviseur", async () => {
+      testeur.depotDonnees().estSuperviseur = async () => false;
+      try {
+        await axios.get(`http://localhost:1234/supervision`);
+        expect().fail('La requête aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(401);
+      }
+    });
+  });
 });

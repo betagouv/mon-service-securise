@@ -305,6 +305,11 @@ const nouvelAdaptateur = (
   const servicesAvecHashSiret = async (hashSiret) =>
     donnees.services.filter((s) => s.siretHash === hashSiret);
 
+  const estSuperviseur = async (idUtilisateur) =>
+    donnees.superviseurs.some(
+      ({ idSuperviseur }) => idSuperviseur === idUtilisateur
+    );
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -318,6 +323,7 @@ const nouvelAdaptateur = (
     autorisations,
     autorisationsDuService,
     contributeursService,
+    estSuperviseur,
     suggestionsActionsService,
     service,
     serviceExisteAvecHashNom,

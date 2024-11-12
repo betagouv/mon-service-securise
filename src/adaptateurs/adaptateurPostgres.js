@@ -529,6 +529,13 @@ const nouvelAdaptateur = (env) => {
     return avecPMapPourChaqueElement(Promise.resolve(ids), service);
   };
 
+  const estSuperviseur = async (idUtilisateur) =>
+    (
+      await knex('superviseurs')
+        .where({ id_superviseur: idUtilisateur })
+        .count('id_superviseur')
+    )[0].count >= 1;
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -543,6 +550,7 @@ const nouvelAdaptateur = (env) => {
     autorisations,
     autorisationsDuService,
     contributeursService,
+    estSuperviseur,
     service,
     serviceExisteAvecHashNom,
     services,
