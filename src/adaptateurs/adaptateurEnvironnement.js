@@ -33,6 +33,20 @@ const sentry = () => ({
     process.env.SENTRY_CHEMINS_IGNORES_PAR_TRACING?.split(',') ?? [],
 });
 
+const supervision = () => ({
+  domaineMetabaseMSS: () =>
+    process.env.STATISTIQUES_DOMAINE_METABASE_MSS
+      ? new URL('/', process.env.STATISTIQUES_DOMAINE_METABASE_MSS).toString()
+      : '',
+  cleSecreteIntegrationMetabase: () =>
+    process.env.CLE_SECRETE_INTEGRATION_METABASE_MSS,
+  identifiantDashboardSupervision: () =>
+    parseInt(
+      process.env.IDENTIFIANT_DASHBOARD_SUPERVISION_METABASE_MSS ?? '0',
+      10
+    ),
+});
+
 const chiffrement = () => ({
   utiliseChiffrementVault: () =>
     process.env.AVEC_CHIFFREMENT_PAR_VAULT === 'true',
@@ -87,5 +101,6 @@ module.exports = {
   oidc,
   sendinblue,
   sentry,
+  supervision,
   versionDeBuild,
 };
