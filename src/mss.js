@@ -40,6 +40,7 @@ const creeServeur = (
   adaptateurEnvironnement,
   adaptateurStatistiques,
   adaptateurJWT,
+  serviceSupervision,
   procedures,
   inscriptionUtilisateur,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
@@ -153,6 +154,7 @@ const creeServeur = (
       adaptateurJournalMSS,
       procedures,
       serviceAnnuaire,
+      serviceSupervision,
     })
   );
   app.use('/bibliotheques', routesNonConnecteApiBibliotheques());

@@ -1244,4 +1244,38 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       ]);
     });
   });
+
+  describe('quand requête GET sur `/api/supervision`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(
+          'http://localhost:1234/api/supervision',
+          done
+        );
+    });
+
+    it("retourne une erreur HTTP 401 si l'utilisateur n'est pas superviseur", async () => {
+      testeur.depotDonnees().estSuperviseur = async () => false;
+      await testeur.verifieRequeteGenereErreurHTTP(401, 'Unauthorized', {
+        method: 'get',
+        url: 'http://localhost:1234/api/supervision',
+      });
+    });
+
+    it("délègue au service de supervision la génération de l'URL du tableau de supervision", async () => {
+      let idRecu;
+      testeur.depotDonnees().estSuperviseur = async () => true;
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.serviceSupervision().genereURLSupervision = (idSuperviseur) => {
+        idRecu = idSuperviseur;
+        return 'https://uneURLSupervision.fr';
+      };
+
+      const reponse = await axios.get('http://localhost:1234/api/supervision');
+
+      expect(idRecu).to.be('U1');
+      expect(reponse.data.urlSupervision).to.be('https://uneURLSupervision.fr');
+    });
+  });
 });
