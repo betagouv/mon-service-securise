@@ -117,4 +117,19 @@ describe('Le service de supervision', () => {
       expect(serviceRecuParAjout.id).to.be('S1');
     });
   });
+
+  describe("sur demande de génération de l'URL de supervision", () => {
+    it("délègue la génération à l'adaptateur de supervision", () => {
+      let idRecu;
+      adaptateurSupervision.genereURLSupervision = (idSuperviseur) => {
+        idRecu = idSuperviseur;
+        return 'URL1';
+      };
+
+      const url = serviceSupervision.genereURLSupervision('S1');
+
+      expect(idRecu).to.be('S1');
+      expect(url).to.be('URL1');
+    });
+  });
 });

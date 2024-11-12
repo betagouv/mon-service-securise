@@ -13,6 +13,10 @@ class ServiceSupervision {
     await this.adaptateurSupervision.delieServiceDesSuperviseurs(idService);
   }
 
+  genereURLSupervision(idSuperviseur) {
+    return this.adaptateurSupervision.genereURLSupervision(idSuperviseur);
+  }
+
   async relieServiceEtSuperviseurs(service) {
     const superviseurs = await this.depotDonnees.lisSuperviseurs(
       service.siretDeOrganisation()

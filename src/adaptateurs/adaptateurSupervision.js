@@ -1,6 +1,10 @@
 const Knex = require('knex');
+const { sign } = require('jsonwebtoken');
 
-const adaptateurSupervision = ({ adaptateurChiffrement }) => {
+const adaptateurSupervision = ({
+  adaptateurChiffrement,
+  adaptateurEnvironnement,
+}) => {
   const config = {
     client: 'pg',
     connection: process.env.URL_SERVEUR_BASE_DONNEES_JOURNAL,
@@ -17,6 +21,33 @@ const adaptateurSupervision = ({ adaptateurChiffrement }) => {
       await knex('journal_mss.superviseurs')
         .where('id_service', idServiceHash)
         .del();
+    },
+    genereURLSupervision: (idSuperviseur) => {
+      const urlDeBase = adaptateurEnvironnement
+        .supervision()
+        .domaineMetabaseMSS();
+      const cleSecreteIntegration = adaptateurEnvironnement
+        .supervision()
+        .cleSecreteIntegrationMetabase();
+      const idDashboardSupervision = adaptateurEnvironnement
+        .supervision()
+        .identifiantDashboardSupervision();
+
+      const idSuperviseurHash = hache(idSuperviseur);
+
+      const donnees = {
+        resource: { dashboard: idDashboardSupervision },
+        params: {
+          id_superviseur: [idSuperviseurHash],
+          besoins_de_securite: [],
+          siret: [],
+          date: [],
+        },
+        exp: Math.round(Date.now() / 1000) + 10 * 60,
+      };
+
+      const jeton = sign(donnees, cleSecreteIntegration);
+      return `${urlDeBase}embed/dashboard/${jeton}#bordered=false&titled=false`;
     },
     relieSuperviseursAService: async (service, idSuperviseurs) => {
       const idServiceHash = hache(service.id);
