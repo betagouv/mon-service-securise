@@ -517,6 +517,25 @@ describe('Le middleware MSS', () => {
       );
     });
 
+    it('autorise le chargements des iframes venant du domaine du « journal Metabase MSS »', (done) => {
+      const adaptateurEnvironnement = {
+        supervision: () => ({
+          domaineMetabaseMSS: () => 'https://journal-mss.fr/',
+        }),
+      };
+
+      const middleware = Middleware({ adaptateurEnvironnement });
+
+      middleware.positionneHeaders(requete, reponse, () => {
+        verifieValeurHeader(
+          'content-security-policy',
+          'frame-src https://journal-mss.fr/',
+          reponse
+        );
+        done();
+      });
+    });
+
     it('interdit le chargement de la page dans une iFrame', (done) => {
       verifiePositionnementHeader('x-frame-options', /^deny$/, done);
     });
