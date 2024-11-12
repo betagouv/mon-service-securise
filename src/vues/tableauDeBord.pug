@@ -1,15 +1,18 @@
 extends mssConnecte
 include ./tiroirs/tiroir.pug
 
-mixin carteInformation(sourceImage, classeFondImage, idNombre, textePremiereLigne, texteDeuxiemeLigne)
+mixin carteInformation(sourceImage, classeFondImage, idNombre, textePremiereLigne, texteDeuxiemeLigne, lien)
   .carte
     .conteneur-image(class=classeFondImage)
       img(src=sourceImage alt='')
     .conteneur-texte
       dl
-        dt.nombre(id=idNombre) -
+        if idNombre
+          dt.nombre(id=idNombre) -
         dd!= textePremiereLigne
         dd!= texteDeuxiemeLigne
+        if lien
+          a(href=lien.lien)!= lien.label
 
 mixin actionAvecIcone(sourceImage, texteAction, action, id)
   button.action.ouvre-tiroir(data-action=action, id=id)
@@ -47,6 +50,8 @@ block main
             +carteInformation('/statique/assets/images/icone_services_enregistres.svg', '', 'nombre-services', 'Services', 'enregistrés')
             +carteInformation('/statique/assets/images/icone_services_homologues.svg', 'vert', 'nombre-services-homologues', 'Services', 'homologués')
             +carteInformation('/statique/assets/images/icone_indice_cyber_moyen.svg', 'bleu', 'indice-cyber-moyen', 'Indice cyber', 'moyen')
+            if estSuperviseur
+              +carteInformation('/statique/assets/images/icone_statistiques.svg', '', null, 'Découvrir les', 'statistiques', {lien: '/supervision', label: 'Voir le tableau'})
           a.nouveau-service.bouton#nouveau-service(href='/service/creation') Ajouter un service
         .recherche
           label(for='recherche-service') Rechercher

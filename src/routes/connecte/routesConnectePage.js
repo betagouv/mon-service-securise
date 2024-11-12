@@ -95,8 +95,11 @@ const routesConnectePage = ({
     '/tableauDeBord',
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
-    (_requete, reponse) => {
-      reponse.render('tableauDeBord');
+    async (requete, reponse) => {
+      const estSuperviseur = await depotDonnees.estSuperviseur(
+        requete.idUtilisateurCourant
+      );
+      reponse.render('tableauDeBord', { estSuperviseur });
     }
   );
 
