@@ -1,0 +1,14 @@
+extends mssDeconnecte
+
+block variables
+  - const meta_description = 'Liste des composants visuels présents sur la plateforme MonServiceSécurisé'
+
+block append styles
+  +feuilleDeStyleSvelte()
+
+block append scripts
+  +composantSvelte('uiKit.js')
+  script(type = 'module', src = '/statique/uiKit.js')
+
+block main
+  #ui-kit
