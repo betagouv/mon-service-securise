@@ -242,3 +242,37 @@ section:last-of-type {
   width: 385px;
   margin: 0 auto;
 }
+
+.erreur-champ-saisie-dsfr,
+.valide-champ-saisie-dsfr {
+  font-size: 12px;
+  line-height: 14px;
+  margin-top: 16px;
+}
+
+.erreur-champ-saisie-dsfr {
+  color: var(--erreur-texte);
+}
+
+.valide-champ-saisie-dsfr {
+  color: var(--succes-texte);
+}
+
+.erreur-champ-saisie-dsfr:before,
+.valide-champ-saisie-dsfr:before {
+  content: '';
+  display: flex;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+
+.erreur-champ-saisie-dsfr:before {
+  background-image: url('/statique/assets/images/ui-kit/erreur.svg');
+}
+
+.valide-champ-saisie-dsfr:before {
+  background-image: url('/statique/assets/images/ui-kit/succes.svg');
+}
