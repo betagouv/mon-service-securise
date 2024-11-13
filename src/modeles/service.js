@@ -363,7 +363,7 @@ class Service {
   }
 
   metsAJourMesureSpecifique(mesure) {
-    const idContributeurs = this.contributeurs.map((u) => u.id);
+    const idContributeurs = this.contributeurs.map((u) => u.idUtilisateur);
     if (mesure.responsables.some((r) => !idContributeurs.includes(r))) {
       throw new ErreurResponsablesMesureInvalides(
         "Les responsables d'une mesure spécifique doivent être des contributeurs du service."
