@@ -1062,5 +1062,29 @@ describe('Un service', () => {
 
       expect(donneesRecues.id).to.be('M1');
     });
+
+    it('peut ajouter un responsable', async () => {
+      const service = unService()
+        .ajouteUnContributeur(
+          unUtilisateur().avecId('id-utilisateur').construis()
+        )
+        .construis();
+      let donneesRecues;
+      service.mesures.mesuresSpecifiques.metsAJourMesure = (mesureRecu) => {
+        donneesRecues = mesureRecu;
+      };
+      const mesure = new MesureSpecifique(
+        {
+          id: 'M1',
+          statut: 'fait',
+          responsables: ['id-utilisateur'],
+        },
+        referentiel
+      );
+
+      await service.metsAJourMesureSpecifique(mesure);
+
+      expect(donneesRecues.responsables).to.eql(['id-utilisateur']);
+    });
   });
 });
