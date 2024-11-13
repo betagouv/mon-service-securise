@@ -10,6 +10,7 @@
   --gris-fonce: #2f3a43;
   --gris-inactif: #929292;
   --fond-composant-secondaire: #0f7ac71a;
+  --gris-texte-additionnel: #666666;
 
   --texte-fonce: var(--gris-fonce);
   --texte-moyen-fonce: #5e5e5e;
@@ -24,6 +25,7 @@
   --fond-gris-pale: #f1f5f9;
   --fond-bleu-pale: #dbeeff;
   --fond-ocre-pale: #fff2de;
+  --fond-gris-pale-composant: #eeeeee;
 
   --pdf-bleu-clair: #e4efff;
 
@@ -66,4 +68,7 @@
   --role-editeur-texte: #0079d0;
   --role-personnalise: #d4f4db;
   --role-personnalise-texte: #0c8626;
+
+  --erreur-texte: #ce0500;
+  --succes-texte: #18753c;
 }
