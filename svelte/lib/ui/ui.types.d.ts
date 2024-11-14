@@ -4,3 +4,8 @@ export type OptionListeDeroulante<T> = {
 };
 
 export type OptionsListeDeroulante<T> = OptionListeDeroulante<T>[];
+
+export type ItemFilAriane = {
+  label: string;
+  lien?: string;
+};
