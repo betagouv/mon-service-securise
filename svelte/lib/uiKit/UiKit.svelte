@@ -1,6 +1,7 @@
 <script lang="ts">
   import ListeDeroulante from '../ui/ListeDeroulante.svelte';
   import { tick } from 'svelte';
+  import FilAriane from '../ui/FilAriane.svelte';
 
   const optionsListeDeroulante = [
     { label: 'Option 1', valeur: 1 },
@@ -19,6 +20,31 @@
 
 <div class="conteneur">
   <h1>Système de Design de MonServiceSécurisé</h1>
+
+  <h2>Fil d'Ariane - Breadcrumb</h2>
+  <p>
+    Le fil d’Ariane est un système de navigation secondaire qui permet à
+    l’utilisateur de se situer sur le site qu’il consulte.
+  </p>
+  <p>
+    Le fil d’Ariane donne des informations sur l’architecture du site. Il
+    indique à l’utilisateur sa position courante et lui permet de se repérer
+    dans l’arborescence du site. Le fil d’Ariane est présent sur l’ensemble des
+    pages à l’exception de la page d'accueil. Sa position dans la page doit
+    toujours être la même, de préférence entre le header et le contenu principal
+    de la page. L’ensemble de ses éléments sont cliquables, à l’exception de la
+    page consultée.
+  </p>
+  <div class="conteneur-composant">
+    <FilAriane
+      items={[
+        { label: 'Accueil', lien: '/' },
+        { label: 'Page N2', lien: '/' },
+        { label: 'Page N3', lien: '/' },
+        { label: 'Page en cours' },
+      ]}
+    />
+  </div>
 
   <h2>Liste déroulante - Select</h2>
   <p>
