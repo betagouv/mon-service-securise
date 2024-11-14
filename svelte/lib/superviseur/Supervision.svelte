@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
+  import FilAriane from '../ui/FilAriane.svelte';
 
   let urlSupervision: string;
   let enCoursChargement: boolean = false;
@@ -16,17 +17,27 @@
   };
 </script>
 
+<div class="conteneur-fil-ariane">
+  <FilAriane
+    items={[
+      { label: 'Tableau de bord', lien: '/tableauDeBord' },
+      { label: 'Statistiques' },
+    ]}
+  />
+</div>
+<h1>Statistiques</h1>
 {#if enCoursChargement}
   <div class="conteneur-loader">
     <ChargementEnCours />
   </div>
 {/if}
+
 {#if urlSupervision}
   <iframe
     title="Dashboard supervision"
     src={urlSupervision}
     width="800"
-    height="600"
+    height="1000"
     allowtransparency
     on:load={() => (enCoursChargement = false)}
   />
@@ -36,11 +47,12 @@
   :global(#conteneur-supervision) {
     width: 100%;
     height: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   iframe {
     width: 100%;
-    height: 100%;
     border: none;
   }
 
@@ -48,7 +60,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
     background: white;
+    margin-top: 128px;
+    position: absolute;
+    left: 50%;
+  }
+
+  .conteneur-fil-ariane {
+    padding: 48px 0 32px 0;
+  }
+
+  h1 {
+    margin: 0 0 24px;
   }
 </style>
