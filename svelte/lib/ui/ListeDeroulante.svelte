@@ -53,6 +53,7 @@
     line-height: 1.5em;
     display: block;
     margin-bottom: 8px;
+    width: fit-content;
   }
 
   .conteneur-liste-deroulante {
@@ -80,6 +81,7 @@
     position: absolute;
     right: 12px;
     top: 12px;
+    pointer-events: none;
   }
 
   select {
@@ -95,6 +97,15 @@
     background: var(--fond-gris-pale-composant);
     background-size: 1.11em 1.11em;
     min-width: 288px;
+  }
+
+  select:hover {
+    background: var(--fond-gris-fonce);
+  }
+
+  select:focus-visible {
+    outline: 2px solid var(--bleu-mise-en-avant);
+    outline-offset: 2px;
   }
 
   select:invalid {
