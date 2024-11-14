@@ -11,6 +11,16 @@ const adaptateurSupervision = ({
     pool: { min: 0, max: 10 },
   };
 
+  const correspondancesFiltreDate = {
+    aujourdhui: 'thisday',
+    hier: 'past1days',
+    septDerniersJours: 'past7days',
+    trenteDerniersJours: 'past30days',
+    unDernierMois: 'past1months',
+    troisDerniersMois: 'past3months',
+    douzeDerniersMois: 'past12months',
+  };
+
   const knex = Knex(config);
 
   const hache = (id) => adaptateurChiffrement.hacheSha256(id);
@@ -22,7 +32,7 @@ const adaptateurSupervision = ({
         .where('id_service', idServiceHash)
         .del();
     },
-    genereURLSupervision: (idSuperviseur) => {
+    genereURLSupervision: (idSuperviseur, filtreDate) => {
       const urlDeBase = adaptateurEnvironnement
         .supervision()
         .domaineMetabaseMSS();
@@ -33,6 +43,10 @@ const adaptateurSupervision = ({
         .supervision()
         .identifiantDashboardSupervision();
 
+      const filtreDateMetabase = filtreDate
+        ? correspondancesFiltreDate[filtreDate]
+        : undefined;
+
       const idSuperviseurHash = hache(idSuperviseur);
 
       const donnees = {
@@ -41,7 +55,7 @@ const adaptateurSupervision = ({
           id_superviseur: [idSuperviseurHash],
           besoins_de_securite: [],
           siret: [],
-          date: [],
+          date: filtreDateMetabase || [],
         },
         exp: Math.round(Date.now() / 1000) + 10 * 60,
       };

@@ -14,15 +14,17 @@
     await recupereUrlIframe();
   });
 
-  const recupereUrlIframe = async () => {
+  const recupereUrlIframe = async (parametres?: string) => {
     enCoursChargement = true;
-    const resultat = await axios.get(`/api/supervision`);
+    const resultat = await axios.get(
+      `/api/supervision${parametres ? `?${parametres}` : ''}`
+    );
     urlSupervision = resultat.data.urlSupervision;
   };
 
   const metAJourFiltres = async () => {
     const parametres = new URLSearchParams({
-      ...(filtreDate && { date: filtreDate }),
+      ...(filtreDate && { filtreDate }),
     });
     await recupereUrlIframe(parametres.toString());
   };

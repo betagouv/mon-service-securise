@@ -1263,6 +1263,25 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
     });
 
+    it('aseptise le filtre de date', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['filtreDate'],
+        {
+          method: 'get',
+          url: 'http://localhost:1234/api/supervision',
+        },
+        done
+      );
+    });
+
+    it("retourne une erreur HTTP 400 si le filtre de date n'existe pas dans le référentiel", async () => {
+      testeur.depotDonnees().estSuperviseur = async () => true;
+      await testeur.verifieRequeteGenereErreurHTTP(400, 'Bad Request', {
+        method: 'get',
+        url: 'http://localhost:1234/api/supervision?filtreDate=nexistePas',
+      });
+    });
+
     it("délègue au service de supervision la génération de l'URL du tableau de supervision", async () => {
       let idRecu;
       testeur.depotDonnees().estSuperviseur = async () => true;
@@ -1276,6 +1295,27 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       expect(idRecu).to.be('U1');
       expect(reponse.data.urlSupervision).to.be('https://uneURLSupervision.fr');
+    });
+
+    it('transmet le filtre de date au service de supervision', async () => {
+      let filtrageDateRecu;
+      testeur.referentiel().recharge({
+        optionsFiltrageDate: {
+          unFiltreDate: '',
+        },
+      });
+      testeur.depotDonnees().estSuperviseur = async () => true;
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.serviceSupervision().genereURLSupervision = (_, filtrageDate) => {
+        filtrageDateRecu = filtrageDate;
+        return 'https://uneURLSupervision.fr';
+      };
+
+      await axios.get(
+        'http://localhost:1234/api/supervision?filtreDate=unFiltreDate'
+      );
+
+      expect(filtrageDateRecu).to.be('unFiltreDate');
     });
   });
 });

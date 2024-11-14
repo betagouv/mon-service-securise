@@ -121,14 +121,20 @@ describe('Le service de supervision', () => {
   describe("sur demande de génération de l'URL de supervision", () => {
     it("délègue la génération à l'adaptateur de supervision", () => {
       let idRecu;
-      adaptateurSupervision.genereURLSupervision = (idSuperviseur) => {
+      let filtreDateRecu;
+      adaptateurSupervision.genereURLSupervision = (
+        idSuperviseur,
+        filtreDate
+      ) => {
         idRecu = idSuperviseur;
+        filtreDateRecu = filtreDate;
         return 'URL1';
       };
 
-      const url = serviceSupervision.genereURLSupervision('S1');
+      const url = serviceSupervision.genereURLSupervision('S1', 'unFiltreDate');
 
       expect(idRecu).to.be('S1');
+      expect(filtreDateRecu).to.be('unFiltreDate');
       expect(url).to.be('URL1');
     });
   });
