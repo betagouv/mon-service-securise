@@ -405,6 +405,7 @@ const routesConnecteApi = ({
   routes.get(
     '/supervision',
     middleware.verificationAcceptationCGU,
+    middleware.aseptise('filtreDate'),
     async (requete, reponse) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const estSuperviseur = await depotDonnees.estSuperviseur(idUtilisateur);
@@ -413,8 +414,16 @@ const routesConnecteApi = ({
         return;
       }
 
-      const urlSupervision =
-        serviceSupervision.genereURLSupervision(idUtilisateur);
+      const { filtreDate } = requete.query;
+      if (filtreDate && !referentiel.estOptionFiltrageDateConnue(filtreDate)) {
+        reponse.sendStatus(400);
+        return;
+      }
+
+      const urlSupervision = serviceSupervision.genereURLSupervision(
+        idUtilisateur,
+        filtreDate
+      );
 
       reponse.status(200).json({ urlSupervision });
     }

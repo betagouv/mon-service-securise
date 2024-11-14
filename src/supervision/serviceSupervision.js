@@ -13,8 +13,11 @@ class ServiceSupervision {
     await this.adaptateurSupervision.delieServiceDesSuperviseurs(idService);
   }
 
-  genereURLSupervision(idSuperviseur) {
-    return this.adaptateurSupervision.genereURLSupervision(idSuperviseur);
+  genereURLSupervision(idSuperviseur, filtreDate) {
+    return this.adaptateurSupervision.genereURLSupervision(
+      idSuperviseur,
+      filtreDate
+    );
   }
 
   async relieServiceEtSuperviseurs(service) {

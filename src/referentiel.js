@@ -112,6 +112,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     niveauxVraisemblance()[idNiveau] || {};
   const niveauxRisque = () => donnees.niveauxRisques || {};
   const optionsFiltrageDate = () => donnees.optionsFiltrageDate || {};
+  const estOptionFiltrageDateConnue = (filtreDate) =>
+    Object.keys(optionsFiltrageDate()).includes(filtreDate);
   const identifiantsNiveauxGravite = () => Object.keys(niveauxGravite() || {});
   const identifiantsNiveauxVraisemblance = () =>
     Object.keys(niveauxVraisemblance() || {});
@@ -404,6 +406,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     estIdentifiantMesureConnu,
     estIdentifiantStatutAvisDossierHomologationConnu,
     estimationNombreServices,
+    estOptionFiltrageDateConnue,
     etapeDossierAutorisee,
     etapeExiste,
     etapesParcoursHomologation,
