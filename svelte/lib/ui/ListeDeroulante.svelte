@@ -97,6 +97,7 @@
     background: var(--fond-gris-pale-composant);
     background-size: 1.11em 1.11em;
     min-width: 288px;
+    font-family: 'Marianne';
   }
 
   select:hover {
