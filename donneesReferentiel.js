@@ -1621,4 +1621,13 @@ module.exports = {
     },
   },
   versionActuelleCgu: 'v2_2024-10-30',
+  optionsFiltrageDate: {
+    aujourdhui: "Aujourd'hui",
+    hier: 'Hier',
+    septDerniersJours: '7 derniers jours',
+    trenteDerniersJours: '30 derniers jours',
+    unDernierMois: 'Le mois dernier',
+    troisDerniersMois: '3 derniers mois',
+    douzeDerniersMois: '12 derniers mois',
+  },
 };
