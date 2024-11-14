@@ -42,7 +42,7 @@ const routesConnectePage = ({
         reponse.sendStatus(401);
         return;
       }
-      reponse.render('supervision');
+      reponse.render('supervision', { referentiel });
     }
   );
 

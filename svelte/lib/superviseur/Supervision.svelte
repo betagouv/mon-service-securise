@@ -2,9 +2,13 @@
   import { onMount } from 'svelte';
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
   import FilAriane from '../ui/FilAriane.svelte';
+  import ListeDeroulante from '../ui/ListeDeroulante.svelte';
 
+  export let optionsFiltrageDate: Record<string, string>;
   let urlSupervision: string;
   let enCoursChargement: boolean = false;
+
+  let filtreDate: string;
 
   onMount(async () => {
     await recupereUrlIframe();
@@ -14,6 +18,13 @@
     enCoursChargement = true;
     const resultat = await axios.get(`/api/supervision`);
     urlSupervision = resultat.data.urlSupervision;
+  };
+
+  const metAJourFiltres = async () => {
+    const parametres = new URLSearchParams({
+      ...(filtreDate && { date: filtreDate }),
+    });
+    await recupereUrlIframe(parametres.toString());
   };
 </script>
 
@@ -26,6 +37,22 @@
   />
 </div>
 <h1>Statistiques</h1>
+<div class="conteneur-filtres">
+  <ListeDeroulante
+    bind:valeur={filtreDate}
+    on:change={metAJourFiltres}
+    label="Date"
+    id="filtre-date"
+    options={[
+      { label: 'Aucune date', valeur: '' },
+      ...Object.entries(optionsFiltrageDate).map(([valeur, libelle]) => ({
+        label: libelle,
+        valeur,
+      })),
+    ]}
+    aideSaisie="Sélectionner une date"
+  />
+</div>
 {#if enCoursChargement}
   <div class="conteneur-loader">
     <ChargementEnCours />

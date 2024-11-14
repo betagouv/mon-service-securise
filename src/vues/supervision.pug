@@ -2,6 +2,7 @@ extends mssConnecte
 
 block append scripts
   +composantSvelte('supervision.js')
+  +donneesPartagees('referentiel-options-filtrage-date', referentiel.optionsFiltrageDate())
   script(type = 'module', src = '/statique/supervision.js')
 
 block main
