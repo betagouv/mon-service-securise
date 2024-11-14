@@ -38,6 +38,7 @@
         ? { invalide: messageErreur, valide: messageValide }
         : { invalide: '', valide: '' }}
       class:avecValidation={messageValide !== ''}
+      on:change
     >
       <option value={null} selected disabled hidden>{aideSaisie}</option>
       {#each options as option}
