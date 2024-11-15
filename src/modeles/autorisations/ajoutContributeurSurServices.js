@@ -1,11 +1,13 @@
 const { EchecAutorisation, EchecEnvoiMessage } = require('../../erreurs');
 const { fabriqueServiceTracking } = require('../../tracking/serviceTracking');
 const Autorisation = require('./autorisation');
+const EvenementInvitationUtilisateurEnvoyee = require('../../bus/evenementInvitationUtilisateurEnvoyee');
 
 const ajoutContributeurSurServices = ({
   depotDonnees,
   adaptateurMail,
   adaptateurTracking,
+  busEvenements,
 }) => {
   const verifiePermission = async (idUtilisateur, services) => {
     const verifieLeService = async (service) => {
@@ -120,6 +122,18 @@ const ajoutContributeurSurServices = ({
     );
   };
 
+  const publieEvenementInvitationEnvoyee = async (
+    nouvelUtilisateur,
+    emetteur
+  ) => {
+    await busEvenements.publie(
+      new EvenementInvitationUtilisateurEnvoyee({
+        idUtilisateurDestinataire: nouvelUtilisateur.id,
+        idUtilisateurEmetteur: emetteur.id,
+      })
+    );
+  };
+
   const inviteNouveauContributeur = async (
     emailNouvelInvite,
     cibles,
@@ -129,6 +143,7 @@ const ajoutContributeurSurServices = ({
     const nouvelUtilisateur = await creeUtilisateur(emailNouvelInvite);
     try {
       await envoieEmailInvitation(nouvelUtilisateur, emetteur, cibles);
+      await publieEvenementInvitationEnvoyee(nouvelUtilisateur, emetteur);
       await ajouteContributeur(nouvelUtilisateur, cibles, droits);
     } catch (e) {
       if (e instanceof EchecEnvoiMessage) {

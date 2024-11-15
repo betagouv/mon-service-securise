@@ -89,6 +89,7 @@ const procedures = fabriqueProcedures({
   depotDonnees,
   adaptateurMail,
   adaptateurTracking,
+  busEvenements,
 });
 
 const inscriptionUtilisateur = fabriqueInscriptionUtilisateur({
