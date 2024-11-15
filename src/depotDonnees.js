@@ -184,7 +184,8 @@ const creeDepot = (config = {}) => {
   const { ajouteSiretAuSuperviseur, estSuperviseur, lisSuperviseurs } =
     depotSuperviseurs;
 
-  const { ajouteParrainage } = depotParrainages;
+  const { ajouteParrainage, parrainagePour, metsAJourParrainage } =
+    depotParrainages;
 
   const santeDuDepot = async () => {
     await adaptateurPersistance.sante();
@@ -225,6 +226,7 @@ const creeDepot = (config = {}) => {
     metsAJourMotDePasse,
     metsAJourMesureGeneraleDuService,
     metsAJourMesureSpecifiqueDuService,
+    metsAJourParrainage,
     metsAJourRisqueSpecifiqueDuService,
     metsAJourUtilisateur,
     metsAJourService,
@@ -232,6 +234,7 @@ const creeDepot = (config = {}) => {
     nouveauService,
     nouveautesPourUtilisateur,
     nouvelUtilisateur,
+    parrainagePour,
     reinitialiseMotDePasse,
     rechercheContributeurs,
     santeDuDepot,

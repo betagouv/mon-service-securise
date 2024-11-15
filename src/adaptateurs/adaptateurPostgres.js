@@ -547,6 +547,26 @@ const nouvelAdaptateur = (env) => {
       filleul_a_finalise_compte: filleulAFinaliseCompte,
     });
 
+  const parrainagePour = async (idUtilisateurFilleul) =>
+    knex('parrainages')
+      .where({ id_utilisateur_filleul: idUtilisateurFilleul })
+      .select({
+        idUtilisateurFilleul: 'id_utilisateur_filleul',
+        idUtilisateurParrain: 'id_utilisateur_parrain',
+        filleulAFinaliseCompte: 'filleul_a_finalise_compte',
+      })
+      .first();
+
+  const metsAJourParrainage = async (
+    idUtilisateurFilleul,
+    filleulAFinaliseCompte
+  ) =>
+    knex('parrainages')
+      .update({
+        filleul_a_finalise_compte: filleulAFinaliseCompte,
+      })
+      .where({ id_utilisateur_filleul: idUtilisateurFilleul });
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -574,9 +594,11 @@ const nouvelAdaptateur = (env) => {
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
     metsAJourIdResetMdpUtilisateur,
+    metsAJourParrainage,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
     nouveautesPourUtilisateur,
+    parrainagePour,
     contributeursDesServicesDe,
     sante,
     sauvegardeService,
