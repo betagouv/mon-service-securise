@@ -99,6 +99,10 @@ const ServiceSupervision = require('../supervision/serviceSupervision');
 const {
   modifieLienServiceEtSuperviseurs,
 } = require('./abonnements/modifieLienServiceEtSuperviseurs');
+const EvenementInvitationUtilisateurEnvoyee = require('./evenementInvitationUtilisateurEnvoyee');
+const {
+  consigneNouveauParrainage,
+} = require('./abonnements/consigneNouveauParrainage');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -195,6 +199,11 @@ const cableTousLesAbonnes = (
     relieEntrepriseEtContactBrevo({ crmBrevo }),
     metAJourEstimationNombreServicesContactBrevo({ crmBrevo }),
   ]);
+
+  busEvenements.abonne(
+    EvenementInvitationUtilisateurEnvoyee,
+    consigneNouveauParrainage({ depotDonnees })
+  );
 
   busEvenements.abonnePlusieurs(EvenementNouvelleConnexionUtilisateur, [
     consigneConnexionUtilisateurDansJournal({ adaptateurJournal }),
