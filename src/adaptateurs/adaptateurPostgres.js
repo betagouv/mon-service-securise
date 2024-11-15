@@ -536,9 +536,21 @@ const nouvelAdaptateur = (env) => {
         .count('id_superviseur')
     )[0].count >= 1;
 
+  const ajouteParrainage = async (
+    idUtilisateurFilleul,
+    idUtilisateurParrain,
+    filleulAFinaliseCompte
+  ) =>
+    knex('parrainages').insert({
+      id_utilisateur_filleul: idUtilisateurFilleul,
+      id_utilisateur_parrain: idUtilisateurParrain,
+      filleul_a_finalise_compte: filleulAFinaliseCompte,
+    });
+
   return {
     activitesMesure,
     ajouteAutorisation,
+    ajouteParrainage,
     ajouteSiretAuSuperviseur,
     ajouteSuggestionAction,
     ajouteTacheDeService,
