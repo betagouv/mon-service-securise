@@ -9,7 +9,10 @@ const {
 const {
   fabriqueAdaptateurTrackingMemoire,
 } = require('../../../src/adaptateurs/adaptateurTrackingMemoire');
-const { EchecAutorisation } = require('../../../src/erreurs');
+const {
+  EchecAutorisation,
+  EchecEnvoiMessage,
+} = require('../../../src/erreurs');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
@@ -350,6 +353,33 @@ describe("L'ajout d'un contributeur sur des services", () => {
         'jean.dujardin@beta.gouv.com'
       );
       expect(emailEnvoye.nbServices).to.be(2);
+    });
+
+    it("délègue au dépôt de données la suppression de l'utilisateur créé si l'envoi d'email d'invitation a échoué", async () => {
+      let idUtilisateurSupprime;
+      depotDonnees.supprimeUtilisateur = async (idUtilisateur) => {
+        idUtilisateurSupprime = idUtilisateur;
+      };
+      adaptateurMail.envoieMessageInvitationInscription = async () => {
+        throw new Error();
+      };
+
+      try {
+        await ajoutContributeurSurServices({
+          depotDonnees,
+          adaptateurMail,
+          adaptateurTracking,
+        }).executer(
+          'jean.dupont@mail.fr',
+          [leService('123'), leService('888')],
+          tousDroitsEnEcriture(),
+          unEmetteur()
+        );
+        expect().fail('Aurait dû lever une exception');
+      } catch (e) {
+        expect(e).to.be.an(EchecEnvoiMessage);
+        expect(idUtilisateurSupprime).to.be('789');
+      }
     });
   });
 
