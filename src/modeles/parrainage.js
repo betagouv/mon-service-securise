@@ -9,6 +9,14 @@ class Parrainage {
     this.filleulAFinaliseCompte = filleulAFinaliseCompte;
   }
 
+  confirmeFinalisationCompteFilleul() {
+    this.filleulAFinaliseCompte = true;
+  }
+
+  compteFilleulEstFinalise() {
+    return this.filleulAFinaliseCompte;
+  }
+
   static nouveauParrainage(idUtilisateurFilleul, idUtilisateurParrain) {
     return new Parrainage({
       idUtilisateurFilleul,

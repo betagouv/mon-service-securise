@@ -103,6 +103,7 @@ const EvenementInvitationUtilisateurEnvoyee = require('./evenementInvitationUtil
 const {
   consigneNouveauParrainage,
 } = require('./abonnements/consigneNouveauParrainage');
+const { metAJourParrainage } = require('./abonnements/metAJourParrainage');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -188,6 +189,7 @@ const cableTousLesAbonnes = (
     modifieLienEntrepriseEtContactBrevo({ crmBrevo }),
     metAJourEstimationNombreServicesContactBrevo({ crmBrevo }),
     metAJourContactBrevoDeLUtilisateur({ crmBrevo }),
+    metAJourParrainage({ depotDonnees }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementUtilisateurInscrit, [
