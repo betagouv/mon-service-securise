@@ -44,29 +44,32 @@ const ajoutContributeurSurServices = ({
     return utilisateur;
   };
 
-  const informeContributeur = async (
+  const supprimeUtilisateur = async (contributeur) => {
+    await depotDonnees.supprimeUtilisateur(contributeur.id);
+  };
+
+  const envoieEmailNouvelleContribution = async (
     contributeur,
-    contributeurEstExistant,
     emetteur,
     services
   ) => {
-    if (contributeurEstExistant)
-      await adaptateurMail.envoieMessageInvitationContribution(
+    await adaptateurMail.envoieMessageInvitationContribution(
+      contributeur.email,
+      emetteur.prenomNom(),
+      services.length
+    );
+  };
+
+  const envoieEmailInvitation = async (contributeur, emetteur, services) => {
+    try {
+      await adaptateurMail.envoieMessageInvitationInscription(
         contributeur.email,
         emetteur.prenomNom(),
         services.length
       );
-    else
-      try {
-        await adaptateurMail.envoieMessageInvitationInscription(
-          contributeur.email,
-          emetteur.prenomNom(),
-          services.length
-        );
-      } catch (e) {
-        await depotDonnees.supprimeUtilisateur(contributeur.id);
-        throw new EchecEnvoiMessage();
-      }
+    } catch (e) {
+      throw new EchecEnvoiMessage();
+    }
   };
 
   const envoieTracking = async (emetteur) => {
@@ -103,6 +106,38 @@ const ajoutContributeurSurServices = ({
     await Promise.all(services.map(ajouteAuService));
   };
 
+  const ajouteUtilisateurExistantEnContributeur = async (
+    utilisateurExistant,
+    cibles,
+    droits,
+    emetteur
+  ) => {
+    await ajouteContributeur(utilisateurExistant, cibles, droits);
+    await envoieEmailNouvelleContribution(
+      utilisateurExistant,
+      emetteur,
+      cibles
+    );
+  };
+
+  const inviteNouveauContributeur = async (
+    emailNouvelInvite,
+    cibles,
+    droits,
+    emetteur
+  ) => {
+    const nouvelUtilisateur = await creeUtilisateur(emailNouvelInvite);
+    try {
+      await envoieEmailInvitation(nouvelUtilisateur, emetteur, cibles);
+      await ajouteContributeur(nouvelUtilisateur, cibles, droits);
+    } catch (e) {
+      if (e instanceof EchecEnvoiMessage) {
+        await supprimeUtilisateur(nouvelUtilisateur);
+      }
+      throw e;
+    }
+  };
+
   return {
     executer: async (emailContributeur, services, droits, emetteur) => {
       await verifiePermission(emetteur.id, services);
@@ -117,12 +152,20 @@ const ajoutContributeurSurServices = ({
       if (rienAFaire) return;
 
       const dejaInscrit = !!utilisateur;
-      const contributeur = dejaInscrit
-        ? utilisateur
-        : await creeUtilisateur(emailContributeur);
-
-      await ajouteContributeur(contributeur, cibles, droits);
-      await informeContributeur(contributeur, dejaInscrit, emetteur, cibles);
+      if (dejaInscrit)
+        await ajouteUtilisateurExistantEnContributeur(
+          utilisateur,
+          cibles,
+          droits,
+          emetteur
+        );
+      else
+        await inviteNouveauContributeur(
+          emailContributeur,
+          cibles,
+          droits,
+          emetteur
+        );
       await envoieTracking(emetteur);
     },
   };
