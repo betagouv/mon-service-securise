@@ -12,6 +12,7 @@ const depotDonneesSuggestionsActions = require('./depots/depotDonneesSuggestions
 const depotDonneesActivitesMesure = require('./depots/depotDonneesActivitesMesure');
 const depotDonneesEvolutionsIndiceCyber = require('./depots/depotDonneesEvolutionsIndiceCyber');
 const depotDonneesSuperviseurs = require('./depots/depotDonneesSuperviseurs');
+const depotDonneesParrainages = require('./depots/depotDonneesParrainages');
 
 const {
   fabriqueAdaptateurChiffrement,
@@ -90,6 +91,10 @@ const creeDepot = (config = {}) => {
     });
 
   const depotSuperviseurs = depotDonneesSuperviseurs.creeDepot({
+    adaptateurPersistance,
+  });
+
+  const depotParrainages = depotDonneesParrainages.creeDepot({
     adaptateurPersistance,
   });
 
@@ -179,6 +184,8 @@ const creeDepot = (config = {}) => {
   const { ajouteSiretAuSuperviseur, estSuperviseur, lisSuperviseurs } =
     depotSuperviseurs;
 
+  const { ajouteParrainage } = depotParrainages;
+
   const santeDuDepot = async () => {
     await adaptateurPersistance.sante();
   };
@@ -191,6 +198,7 @@ const creeDepot = (config = {}) => {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
     ajouteMesureSpecifiqueAuService,
+    ajouteParrainage,
     ajouteRisqueGeneralAService,
     ajouteRisqueSpecifiqueAService,
     ajouteRolesResponsabilitesAService,
