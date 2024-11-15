@@ -23,6 +23,8 @@ const {
 const {
   uneAutorisation,
 } = require('../../constructeurs/constructeurAutorisation');
+const { fabriqueBusPourLesTests } = require('../../bus/aides/busPourLesTests');
+const EvenementInvitationUtilisateurEnvoyee = require('../../../src/bus/evenementInvitationUtilisateurEnvoyee');
 
 describe("L'ajout d'un contributeur sur des services", () => {
   const unEmetteur = (idUtilisateur) =>
@@ -245,8 +247,10 @@ describe("L'ajout d'un contributeur sur des services", () => {
 
   describe("si le contributeur n'existe pas déjà", () => {
     let contributeurCree;
+    let busEvenements;
 
     beforeEach(() => {
+      busEvenements = fabriqueBusPourLesTests();
       let utilisateurInexistant;
       depotDonnees.utilisateurAvecEmail = async () => utilisateurInexistant;
       contributeurCree = {
@@ -273,11 +277,12 @@ describe("L'ajout d'un contributeur sur des services", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
+        busEvenements,
       }).executer(
         'jean.dupont@mail.fr',
         [leService('123')],
         tousDroitsEnEcriture(),
-        unEmetteur()
+        unEmetteur('456')
       );
 
       expect(emailAjoute).to.be('jean.dupont@mail.fr');
@@ -307,11 +312,12 @@ describe("L'ajout d'un contributeur sur des services", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
+        busEvenements,
       }).executer(
         'jean.dupont@mail.fr',
         [leService('123')],
         tousDroitsEnEcriture(),
-        unEmetteur()
+        unEmetteur('456')
       );
 
       expect(contactCree.destinataire).to.be('jean.dupont@mail.fr');
@@ -341,11 +347,12 @@ describe("L'ajout d'un contributeur sur des services", () => {
         depotDonnees,
         adaptateurMail,
         adaptateurTracking,
+        busEvenements,
       }).executer(
         'jean.dupont@mail.fr',
         [leService('123'), leService('888')],
         tousDroitsEnEcriture(),
-        unEmetteur()
+        unEmetteur('456')
       );
 
       expect(emailEnvoye.destinataire).to.be('jean.dupont@mail.fr');
@@ -373,13 +380,36 @@ describe("L'ajout d'un contributeur sur des services", () => {
           'jean.dupont@mail.fr',
           [leService('123'), leService('888')],
           tousDroitsEnEcriture(),
-          unEmetteur()
+          unEmetteur('456')
         );
         expect().fail('Aurait dû lever une exception');
       } catch (e) {
         expect(e).to.be.an(EchecEnvoiMessage);
         expect(idUtilisateurSupprime).to.be('789');
       }
+    });
+
+    it("publie un événement de 'Nouvelle invitation utilisateur'", async () => {
+      await ajoutContributeurSurServices({
+        depotDonnees,
+        adaptateurMail,
+        adaptateurTracking,
+        busEvenements,
+      }).executer(
+        'jean.dupont@mail.fr',
+        [leService('123')],
+        tousDroitsEnEcriture(),
+        unEmetteur('456')
+      );
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementInvitationUtilisateurEnvoyee)
+      ).to.be(true);
+      const evenement = busEvenements.recupereEvenement(
+        EvenementInvitationUtilisateurEnvoyee
+      );
+      expect(evenement.idUtilisateurDestinataire).to.be('789');
+      expect(evenement.idUtilisateurEmetteur).to.be('456');
     });
   });
 

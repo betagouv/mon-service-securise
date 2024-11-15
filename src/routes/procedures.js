@@ -6,6 +6,7 @@ const fabriqueProcedures = ({
   depotDonnees,
   adaptateurMail,
   adaptateurTracking,
+  busEvenements,
 }) => ({
   ajoutContributeurSurServices: async (
     emailContributeur,
@@ -17,6 +18,7 @@ const fabriqueProcedures = ({
       depotDonnees,
       adaptateurMail,
       adaptateurTracking,
+      busEvenements,
     }).executer(emailContributeur, service, droits, emetteur),
 });
 
