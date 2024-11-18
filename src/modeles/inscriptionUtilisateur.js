@@ -38,8 +38,6 @@ function fabriqueInscriptionUtilisateur(config = {}) {
   const inscrisUtilisateur = async (donnees, source) => {
     await creeContactEmail(donnees);
     const utilisateur = await depotDonnees.nouvelUtilisateur(donnees);
-    if (utilisateur.cguAcceptees)
-      await depotDonnees.valideAcceptationCGUPourUtilisateur(utilisateur);
     if (source === SourceAuthentification.MSS) {
       await envoieMessageFinalisationInscription(utilisateur);
     }
