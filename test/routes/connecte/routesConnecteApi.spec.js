@@ -773,7 +773,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it("met à jour les autres informations de l'utilisateur", async () => {
       let idRecu;
       let donneesRecues;
-
+      testeur.referentiel().recharge({ versionActuelleCgu: 'v2.0' });
       testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
       testeur.depotDonnees().metsAJourUtilisateur = async (id, donnees) => {
         idRecu = id;
@@ -799,7 +799,40 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         'RSSI',
         "Chargé des systèmes d'informations",
       ]);
-      expect(donneesRecues.cguAcceptees).to.be(true);
+    });
+
+    describe("concernant l'acceptation des CGU", () => {
+      it('quand les CGU sont acceptées, passe la dernière version des CGU au dépôt de données', async () => {
+        let versionCGURecue;
+        testeur.referentiel().recharge({ versionActuelleCgu: 'v2.0' });
+        testeur.depotDonnees().metsAJourUtilisateur = async (_, donnees) => {
+          versionCGURecue = donnees.cguAcceptees;
+          return utilisateur;
+        };
+
+        await axios.put(
+          'http://localhost:1234/api/utilisateur',
+          donneesRequete
+        );
+
+        expect(versionCGURecue).to.be('v2.0');
+      });
+
+      it('quand les CGU ne sont pas présentes, ne les passe pas au dépôt de données', async () => {
+        let versionCGURecue;
+        testeur.depotDonnees().metsAJourUtilisateur = async (_, donnees) => {
+          versionCGURecue = donnees.cguAcceptees;
+          return utilisateur;
+        };
+        delete donneesRequete.cguAcceptees;
+
+        await axios.put(
+          'http://localhost:1234/api/utilisateur',
+          donneesRequete
+        );
+
+        expect(versionCGURecue).to.be(undefined);
+      });
     });
 
     it("met à jour les préférences de communication de l'utilisateur", async () => {

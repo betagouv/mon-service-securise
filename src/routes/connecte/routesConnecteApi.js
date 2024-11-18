@@ -42,6 +42,7 @@ const routesConnecteApi = ({
   procedures,
   serviceAnnuaire,
   serviceSupervision,
+  serviceCGU,
 }) => {
   const routes = express.Router();
 
@@ -250,7 +251,10 @@ const routesConnecteApi = ({
     ),
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
-      const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
+      const donnees = obtentionDonneesDeBaseUtilisateur(
+        requete.body,
+        serviceCGU
+      );
       const { donneesInvalides, messageErreur } =
         messageErreurDonneesUtilisateur(donnees, true);
 

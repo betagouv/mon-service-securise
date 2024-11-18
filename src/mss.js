@@ -157,6 +157,7 @@ const creeServeur = (
       procedures,
       serviceAnnuaire,
       serviceSupervision,
+      serviceCGU,
     })
   );
   app.use('/bibliotheques', routesNonConnecteApiBibliotheques());
