@@ -80,4 +80,24 @@ describe('L’abonnement qui met à jour les parrainages', () => {
 
     // n'est pas passé dans expect().fail() de metsAJourParrainage
   });
+
+  it('ne fait pas de modification si le compte parrainé est encore un invité', async () => {
+    const depotDonnees = {
+      metsAJourParrainage: async () => {
+        expect().fail("n'aurait pas dû appeler la mise à jour");
+      },
+      parrainagePour: async () =>
+        new Parrainage({
+          idUtilisateurFilleul: 'U1',
+          filleulAFinaliseCompte: false,
+        }),
+    };
+
+    const abonnement = metAJourParrainage({ depotDonnees });
+    await abonnement({
+      utilisateur: unUtilisateur().avecId('U1').quiAEteInvite().construis(),
+    });
+
+    // n'est pas passé dans expect().fail() de metsAJourParrainage
+  });
 });
