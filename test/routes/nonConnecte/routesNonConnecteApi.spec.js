@@ -96,18 +96,19 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         .catch(done);
     });
 
-    it('convertit les cgu acceptées en valeur booléenne', (done) => {
-      testeur.depotDonnees().nouvelUtilisateur = ({ cguAcceptees }) => {
-        expect(cguAcceptees).to.equal(true);
-        return Promise.resolve(utilisateur);
+    it('si les CGU sont acceptées, passe la valeur de la version actuelle des CGU au dépôt', async () => {
+      let cguRecues;
+      testeur.referentiel().recharge({ versionActuelleCgu: 'v2.0' });
+      testeur.depotDonnees().nouvelUtilisateur = async ({ cguAcceptees }) => {
+        cguRecues = cguAcceptees;
+        return utilisateur;
       };
 
       donneesRequete.cguAcceptees = 'true';
 
-      axios
-        .post('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then(() => done())
-        .catch(done);
+      await axios.post('http://localhost:1234/api/utilisateur', donneesRequete);
+
+      expect(cguRecues).to.be('v2.0');
     });
 
     it("convertit l'infolettre acceptée en valeur booléenne", (done) => {

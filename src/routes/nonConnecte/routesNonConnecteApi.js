@@ -19,6 +19,7 @@ const routesNonConnecteApi = ({
   adaptateurMail,
   inscriptionUtilisateur,
   adaptateurGestionErreur,
+  serviceCGU,
 }) => {
   const routes = express.Router();
 
@@ -27,7 +28,10 @@ const routesNonConnecteApi = ({
     middleware.protegeTrafic(),
     middleware.aseptise(...Utilisateur.nomsProprietesBase(), 'siretEntite'),
     async (requete, reponse, suite) => {
-      const donnees = obtentionDonneesDeBaseUtilisateur(requete.body);
+      const donnees = obtentionDonneesDeBaseUtilisateur(
+        requete.body,
+        serviceCGU
+      );
       donnees.email = requete.body.email?.toLowerCase();
       const { donneesInvalides, messageErreur } =
         messageErreurDonneesUtilisateur(donnees, false);

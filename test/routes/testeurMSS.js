@@ -13,10 +13,12 @@ const {
   fabriqueInscriptionUtilisateur,
 } = require('../../src/modeles/inscriptionUtilisateur');
 const adaptateurJWTParDefaut = require('../../src/adaptateurs/adaptateurJWT');
+const { fabriqueServiceCgu } = require('../../src/serviceCgu');
 
 const testeurMss = () => {
   let serviceAnnuaire;
   let serviceSupervision;
+  let serviceCGU;
   let adaptateurHorloge;
   let adaptateurCmsCrisp;
   let adaptateurMail;
@@ -119,6 +121,7 @@ const testeurMss = () => {
       adaptateurMail,
       adaptateurTracking,
     });
+    serviceCGU = fabriqueServiceCgu({ referentiel });
 
     moteurRegles = new MoteurRegles(referentiel);
     depotVide()
@@ -150,6 +153,7 @@ const testeurMss = () => {
           adaptateurStatistiques,
           adaptateurJWT,
           serviceSupervision,
+          serviceCGU,
           procedures,
           inscriptionUtilisateur,
           false,
