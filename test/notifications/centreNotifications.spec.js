@@ -422,7 +422,7 @@ describe('Le centre de notifications', () => {
     describe("lorsque l'utilisateur vient d'être invité, donc son profil a plein de champs non renseignés", () => {
       it('renvoie uniquement la notification « globale » de profil à mettre à jour', async () => {
         depotDonnees.utilisateur = async () =>
-          unUtilisateur().quiEstInvite().construis();
+          unUtilisateur().quiNAPasRempliSonProfil().construis();
         referentiel = Referentiel.creeReferentiel({
           tachesCompletudeProfil: [
             { id: 'profil', titre: 'Titre tâche' },

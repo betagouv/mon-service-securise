@@ -19,7 +19,7 @@ class ConstructeurUtilisateur {
     };
   }
 
-  quiEstInvite() {
+  quiNAPasRempliSonProfil() {
     this.donnees.prenom = '';
     this.donnees.nom = '';
     this.donnees.siret = '';
