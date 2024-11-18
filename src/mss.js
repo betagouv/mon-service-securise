@@ -41,6 +41,7 @@ const creeServeur = (
   adaptateurStatistiques,
   adaptateurJWT,
   serviceSupervision,
+  serviceCGU,
   procedures,
   inscriptionUtilisateur,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
@@ -120,6 +121,7 @@ const creeServeur = (
       adaptateurGestionErreur,
       adaptateurMail,
       inscriptionUtilisateur,
+      serviceCGU,
     })
   );
   app.use(

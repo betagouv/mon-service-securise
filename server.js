@@ -124,6 +124,7 @@ const serveur = MSS.creeServeur(
   adaptateurStatistiques,
   adaptateurJWT,
   serviceSupervision,
+  serviceCgu,
   procedures,
   inscriptionUtilisateur
 );
