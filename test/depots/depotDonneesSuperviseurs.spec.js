@@ -3,12 +3,15 @@ const depotDonneesSuperviseurs = require('../../src/depots/depotDonneesSupervise
 const {
   unePersistanceMemoire,
 } = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
+const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
 
 describe('Le dépôt de données des superviseurs', () => {
   let depot;
   let adaptateurPersistance;
+  let adaptateurRechercheEntite;
 
   beforeEach(() => {
+    adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
     adaptateurPersistance = unePersistanceMemoire().construis();
     depot = depotDonneesSuperviseurs.creeDepot({ adaptateurPersistance });
   });
@@ -24,21 +27,34 @@ describe('Le dépôt de données des superviseurs', () => {
     expect(siretRecu).to.eql('SIRET');
   });
 
-  it("délègue à la persistance l'ajout d'établissements supervisés", async () => {
-    let siretRecu;
+  it("complète les informations de l'organisation responsable et délègue à la persistance l'ajout d'établissements supervisés", async () => {
+    adaptateurRechercheEntite.rechercheOrganisations = async () => [
+      {
+        nom: 'MonEntite',
+        departement: '75',
+        siret: 'SIRET-123',
+      },
+    ];
     let idSuperviseurRecu;
-    adaptateurPersistance.ajouteSiretAuSuperviseur = async (
+    let entiteRecue;
+    adaptateurPersistance.ajouteEntiteAuSuperviseur = async (
       idSuperviseur,
-      siret
+      entite
     ) => {
       idSuperviseurRecu = idSuperviseur;
-      siretRecu = siret;
+      entiteRecue = entite;
     };
+    depot = depotDonneesSuperviseurs.creeDepot({
+      adaptateurPersistance,
+      adaptateurRechercheEntite,
+    });
 
     await depot.ajouteSiretAuSuperviseur('US1', 'SIRET-123');
 
     expect(idSuperviseurRecu).to.eql('US1');
-    expect(siretRecu).to.eql('SIRET-123');
+    expect(entiteRecue.nom).to.eql('MonEntite');
+    expect(entiteRecue.departement).to.eql('75');
+    expect(entiteRecue.siret).to.eql('SIRET-123');
   });
 
   it("délègue à la persistance la vérification qu'un utilisateur est superviseur", async () => {
