@@ -1,11 +1,11 @@
-const adaptateurSupervision = require('./adaptateurSupervision');
+const adaptateurSupervisionMetabase = require('./adaptateurSupervisionMetabase');
 const adaptateurEnvironnement = require('./adaptateurEnvironnement');
 const {
   fabriqueAdaptateurChiffrement,
 } = require('./fabriqueAdaptateurChiffrement');
 
 const fabriqueAdaptateurSupervision = () =>
-  adaptateurSupervision({
+  adaptateurSupervisionMetabase({
     adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
     adaptateurEnvironnement,
   });
