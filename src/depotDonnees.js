@@ -182,8 +182,12 @@ const creeDepot = (config = {}) => {
   const { lisDernierIndiceCyber, sauvegardeNouvelIndiceCyber } =
     depotEvolutionsIndiceCyber;
 
-  const { ajouteSiretAuSuperviseur, estSuperviseur, lisSuperviseurs } =
-    depotSuperviseurs;
+  const {
+    ajouteSiretAuSuperviseur,
+    estSuperviseur,
+    superviseur,
+    lisSuperviseurs,
+  } = depotSuperviseurs;
 
   const { ajouteParrainage, parrainagePour, metsAJourParrainage } =
     depotParrainages;
@@ -244,6 +248,7 @@ const creeDepot = (config = {}) => {
     sauvegardeNouvelIndiceCyber,
     enregistreNouvelleConnexionUtilisateur,
     sauvegardeNotificationsExpirationHomologation,
+    superviseur,
     supprimeContributeur,
     supprimeMesureSpecifiqueDuService,
     supprimeRisqueSpecifiqueDuService,

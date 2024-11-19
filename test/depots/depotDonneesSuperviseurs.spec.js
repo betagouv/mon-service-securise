@@ -4,6 +4,8 @@ const {
   unePersistanceMemoire,
 } = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
 const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
+const Superviseur = require('../../src/modeles/superviseur');
+const Entite = require('../../src/modeles/entite');
 
 describe('Le dépôt de données des superviseurs', () => {
   let depot;
@@ -66,5 +68,20 @@ describe('Le dépôt de données des superviseurs', () => {
     await depot.estSuperviseur('U1');
 
     expect(idRecu).to.eql('U1');
+  });
+
+  it('délègue à la persistance la lecture des données du superviseur et retourne un superviseur', async () => {
+    let idRecu;
+    adaptateurPersistance.superviseur = async (idUtilisateur) => {
+      idRecu = idUtilisateur;
+      return { idUtilisateur, entitesSupervisees: [{ nom: 'NomEntite' }] };
+    };
+
+    const superviseur = await depot.superviseur('U1');
+
+    expect(idRecu).to.eql('U1');
+    expect(superviseur).to.be.a(Superviseur);
+    expect(superviseur.entitesSupervisees[0]).to.be.an(Entite);
+    expect(superviseur.entitesSupervisees[0].nom).to.be('NomEntite');
   });
 });

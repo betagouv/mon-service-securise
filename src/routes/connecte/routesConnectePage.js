@@ -34,15 +34,18 @@ const routesConnectePage = ({
     '/supervision',
     middleware.verificationAcceptationCGU,
     async (requete, reponse) => {
-      const estSuperviseur = await depotDonnees.estSuperviseur(
+      const superviseur = await depotDonnees.superviseur(
         requete.idUtilisateurCourant
       );
 
-      if (!estSuperviseur) {
+      if (!superviseur) {
         reponse.sendStatus(401);
         return;
       }
-      reponse.render('supervision', { referentiel });
+      reponse.render('supervision', {
+        referentiel,
+        entitesSupervisees: superviseur.entitesSupervisees,
+      });
     }
   );
 

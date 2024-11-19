@@ -538,6 +538,20 @@ const nouvelAdaptateur = (env) => {
         .count('id_superviseur')
     )[0].count >= 1;
 
+  const superviseur = async (idUtilisateur) => {
+    const entitesSupervisees = await knex('superviseurs')
+      .where({ id_superviseur: idUtilisateur })
+      .select({
+        nom: 'nom_entite_supervisee',
+        departement: 'departement_entite_supervisee',
+        siret: 'siret_entite_supervisee',
+      });
+    if (entitesSupervisees && entitesSupervisees.length > 0) {
+      return { idUtilisateur, entitesSupervisees };
+    }
+    return undefined;
+  };
+
   const ajouteParrainage = async (
     idUtilisateurFilleul,
     idUtilisateurParrain,
@@ -610,6 +624,7 @@ const nouvelAdaptateur = (env) => {
     sauvegardeParcoursUtilisateur,
     servicesAvecHashSiret,
     suggestionsActionsService,
+    superviseur,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,

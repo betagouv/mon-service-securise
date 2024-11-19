@@ -310,6 +310,16 @@ const nouvelAdaptateur = (
       ({ idSuperviseur }) => idSuperviseur === idUtilisateur
     );
 
+  const superviseur = async (idUtilisateur) => {
+    const entitesSupervisees = donnees.superviseurs
+      .filter(({ idSuperviseur }) => idSuperviseur === idUtilisateur)
+      .map(({ entiteSupervisee }) => entiteSupervisee);
+    if (entitesSupervisees && entitesSupervisees.length > 0) {
+      return { idUtilisateur, entitesSupervisees };
+    }
+    return undefined;
+  };
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -344,6 +354,7 @@ const nouvelAdaptateur = (
     sauvegardeParcoursUtilisateur,
     sauvegardeService,
     servicesAvecHashSiret,
+    superviseur,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
