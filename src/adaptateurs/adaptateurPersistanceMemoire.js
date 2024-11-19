@@ -296,11 +296,11 @@ const nouvelAdaptateur = (
 
   const lisSuperviseursConcernes = async (siret) =>
     donnees.superviseurs
-      .filter(({ siretSupervise }) => siretSupervise === siret)
+      .filter(({ entiteSupervisee }) => entiteSupervisee.siret === siret)
       .map(({ idSuperviseur }) => idSuperviseur);
 
-  const ajouteSiretAuSuperviseur = async (idSuperviseur, siret) =>
-    donnees.superviseurs.push({ idSuperviseur, siretSupervise: siret });
+  const ajouteEntiteAuSuperviseur = async (idSuperviseur, entite) =>
+    donnees.superviseurs.push({ idSuperviseur, entiteSupervisee: entite });
 
   const servicesAvecHashSiret = async (hashSiret) =>
     donnees.services.filter((s) => s.siretHash === hashSiret);
@@ -314,7 +314,7 @@ const nouvelAdaptateur = (
     activitesMesure,
     ajouteActiviteMesure,
     ajouteAutorisation,
-    ajouteSiretAuSuperviseur,
+    ajouteEntiteAuSuperviseur,
     ajouteSuggestionAction,
     ajouteTacheDeService,
     ajouteUtilisateur,

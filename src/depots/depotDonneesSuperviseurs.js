@@ -1,6 +1,16 @@
-const creeDepot = ({ adaptateurPersistance }) => {
-  const ajouteSiretAuSuperviseur = async (idSuperviseur, siret) =>
-    adaptateurPersistance.ajouteSiretAuSuperviseur(idSuperviseur, siret);
+const Entite = require('../modeles/entite');
+
+const creeDepot = ({ adaptateurPersistance, adaptateurRechercheEntite }) => {
+  const ajouteSiretAuSuperviseur = async (idSuperviseur, siret) => {
+    const entite = await Entite.completeDonnees(
+      { siret },
+      adaptateurRechercheEntite
+    );
+    return adaptateurPersistance.ajouteEntiteAuSuperviseur(
+      idSuperviseur,
+      entite
+    );
+  };
 
   const estSuperviseur = async (idUtilisateur) =>
     adaptateurPersistance.estSuperviseur(idUtilisateur);

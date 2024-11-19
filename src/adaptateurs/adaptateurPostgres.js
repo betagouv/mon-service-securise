@@ -510,14 +510,16 @@ const nouvelAdaptateur = (env) => {
   const lisSuperviseursConcernes = async (siret) =>
     (
       await knex('superviseurs')
-        .where({ siret_supervise: siret })
+        .where({ siret_entite_supervisee: siret })
         .select({ idSuperviseur: 'id_superviseur' })
     ).map(({ idSuperviseur }) => idSuperviseur);
 
-  const ajouteSiretAuSuperviseur = async (idSuperviseur, siret) =>
+  const ajouteEntiteAuSuperviseur = async (idSuperviseur, entite) =>
     knex('superviseurs').insert({
       id_superviseur: idSuperviseur,
-      siret_supervise: siret,
+      siret_entite_supervisee: entite.siret,
+      nom_entite_supervisee: entite.nom,
+      departement_entite_supervisee: entite.departement,
     });
 
   const servicesAvecHashSiret = async (hashSiret) => {
@@ -571,7 +573,7 @@ const nouvelAdaptateur = (env) => {
     activitesMesure,
     ajouteAutorisation,
     ajouteParrainage,
-    ajouteSiretAuSuperviseur,
+    ajouteEntiteAuSuperviseur,
     ajouteSuggestionAction,
     ajouteTacheDeService,
     ajouteUtilisateur,
