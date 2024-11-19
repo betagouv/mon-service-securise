@@ -1,15 +1,18 @@
 <script lang="ts">
+  import type { EntiteSupervisee } from './supervision.d';
   import { onMount } from 'svelte';
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
   import FilAriane from '../ui/FilAriane.svelte';
   import ListeDeroulante from '../ui/ListeDeroulante.svelte';
 
   export let optionsFiltrageDate: Record<string, string>;
+  export let entitesSupervisees: EntiteSupervisee[];
   let urlSupervision: string;
   let enCoursChargement: boolean = false;
 
   let filtreDate: string;
   let filtreBesoinsSecurite: string;
+  let filtreEntite: string;
 
   onMount(async () => {
     await recupereUrlIframe();
@@ -68,6 +71,20 @@
       })),
     ]}
     aideSaisie="Sélectionner une date"
+  />
+  <ListeDeroulante
+    bind:valeur={filtreEntite}
+    on:change={metAJourFiltres}
+    label="Entité"
+    id="filtre-entite"
+    options={[
+      { label: 'Toutes les entités', valeur: '' },
+      ...entitesSupervisees.map(({ nom, departement, siret }) => ({
+        label: `${nom} (${departement}) - ${siret}`,
+        valeur: siret,
+      })),
+    ]}
+    aideSaisie="Sélectionner une entité"
   />
 </div>
 {#if enCoursChargement}

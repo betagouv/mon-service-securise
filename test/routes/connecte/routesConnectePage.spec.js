@@ -8,6 +8,7 @@ const {
   requeteSansRedirection,
   donneesPartagees,
 } = require('../../aides/http');
+const Superviseur = require('../../../src/modeles/superviseur');
 
 describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   const testeur = testeurMSS();
@@ -187,6 +188,10 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   });
 
   describe('quand GET sur /supervision', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().superviseur = async () => {};
+    });
+
     it("vérifie que l'utilisateur a accepté les CGU", (done) => {
       testeur
         .middleware()
@@ -197,13 +202,27 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     });
 
     it("renvoie une erreur 401 si l'utilisateur n'est pas un superviseur", async () => {
-      testeur.depotDonnees().estSuperviseur = async () => false;
+      testeur.depotDonnees().superviseur = async () => undefined;
       try {
         await axios.get(`http://localhost:1234/supervision`);
         expect().fail('La requête aurait dû lever une erreur');
       } catch (e) {
         expect(e.response.status).to.be(401);
       }
+    });
+
+    it("insère les entités supervisées dans la page si l'utilisateur est superviseur", async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: '456' });
+      testeur.depotDonnees().superviseur = async () =>
+        new Superviseur({
+          entitesSupervisees: [{ nom: 'MonEntite' }],
+        });
+
+      const reponse = await axios.get(`http://localhost:1234/supervision`);
+
+      const donnees = donneesPartagees(reponse.data, 'entites-supervisees');
+      expect(donnees.length).to.be(1);
+      expect(donnees[0].nom).to.be('MonEntite');
     });
   });
 });
