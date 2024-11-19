@@ -1303,7 +1303,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['filtreDate', 'filtreBesoinsSecurite'],
+        ['filtreDate', 'filtreBesoinsSecurite', 'filtreEntite'],
         {
           method: 'get',
           url: 'http://localhost:1234/api/supervision',
@@ -1340,7 +1340,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(reponse.data.urlSupervision).to.be('https://uneURLSupervision.fr');
     });
 
-    it('transmet les filtres de date et besoins de sécurité au service de supervision', async () => {
+    it('transmet les filtres de date, entité et besoins de sécurité au service de supervision', async () => {
       let filtrageRecu;
       testeur.referentiel().recharge({
         optionsFiltrageDate: {
@@ -1354,11 +1354,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       };
 
       await axios.get(
-        'http://localhost:1234/api/supervision?filtreDate=unFiltreDate&filtreBesoinsSecurite=niveau1'
+        'http://localhost:1234/api/supervision?filtreDate=unFiltreDate&filtreBesoinsSecurite=niveau1&filtreEntite=unSiret'
       );
 
       expect(filtrageRecu.filtreDate).to.be('unFiltreDate');
       expect(filtrageRecu.filtreBesoinsSecurite).to.be('niveau1');
+      expect(filtrageRecu.filtreEntite).to.be('unSiret');
     });
   });
 });

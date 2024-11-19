@@ -30,6 +30,7 @@
     const parametres = new URLSearchParams({
       ...(filtreDate && { filtreDate }),
       ...(filtreBesoinsSecurite && { filtreBesoinsSecurite }),
+      ...(filtreEntite && { filtreEntite }),
     });
     await recupereUrlIframe(parametres.toString());
   };

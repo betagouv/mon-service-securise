@@ -43,20 +43,21 @@ const adaptateurSupervisionMetabase = ({
         .supervision()
         .identifiantDashboardSupervision();
 
-      const { filtreDate, filtreBesoinsSecurite } = filtres;
+      const { filtreDate, filtreBesoinsSecurite, filtreEntite } = filtres;
 
       const filtreDateMetabase = filtreDate
         ? correspondancesFiltreDate[filtreDate]
         : undefined;
 
       const idSuperviseurHash = hache(idSuperviseur);
+      const filtreEntiteHache = filtreEntite ? hache(filtreEntite) : undefined;
 
       const donnees = {
         resource: { dashboard: idDashboardSupervision },
         params: {
           id_superviseur: [idSuperviseurHash],
           besoins_de_securite: filtreBesoinsSecurite || [],
-          siret: [],
+          siret: filtreEntiteHache || [],
           date: filtreDateMetabase || [],
         },
         exp: Math.round(Date.now() / 1000) + 10 * 60,
