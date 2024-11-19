@@ -28,6 +28,9 @@ const {
 const routesConnecteApiVisiteGuidee = require('./routesConnecteApiVisiteGuidee');
 const routesConnecteApiNotifications = require('./routesConnecteApiNotifications');
 const SourceAuthentification = require('../../modeles/sourceAuthentification');
+const {
+  estNiveauDeSecuriteValide,
+} = require('../../modeles/descriptionService');
 
 const routesConnecteApi = ({
   middleware,
@@ -409,7 +412,7 @@ const routesConnecteApi = ({
   routes.get(
     '/supervision',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('filtreDate'),
+    middleware.aseptise('filtreDate', 'filtreBesoinsSecurite'),
     async (requete, reponse) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const estSuperviseur = await depotDonnees.estSuperviseur(idUtilisateur);
@@ -418,15 +421,23 @@ const routesConnecteApi = ({
         return;
       }
 
-      const { filtreDate } = requete.query;
+      const { filtreDate, filtreBesoinsSecurite } = requete.query;
+
       if (filtreDate && !referentiel.estOptionFiltrageDateConnue(filtreDate)) {
+        reponse.sendStatus(400);
+        return;
+      }
+      if (
+        filtreBesoinsSecurite &&
+        !estNiveauDeSecuriteValide(filtreBesoinsSecurite)
+      ) {
         reponse.sendStatus(400);
         return;
       }
 
       const urlSupervision = serviceSupervision.genereURLSupervision(
         idUtilisateur,
-        filtreDate
+        { filtreDate, filtreBesoinsSecurite }
       );
 
       reponse.status(200).json({ urlSupervision });

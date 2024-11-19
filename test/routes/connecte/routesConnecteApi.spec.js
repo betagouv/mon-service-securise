@@ -1279,6 +1279,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête GET sur `/api/supervision`', () => {
+    beforeEach(() => {
+      testeur.serviceSupervision().genereURLSupervision = () => '';
+      testeur.depotDonnees().estSuperviseur = async () => true;
+    });
+
     it("vérifie que l'utilisateur est authentifié", (done) => {
       testeur
         .middleware()
@@ -1296,9 +1301,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
     });
 
-    it('aseptise le filtre de date', (done) => {
+    it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['filtreDate'],
+        ['filtreDate', 'filtreBesoinsSecurite'],
         {
           method: 'get',
           url: 'http://localhost:1234/api/supervision',
@@ -1308,16 +1313,21 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it("retourne une erreur HTTP 400 si le filtre de date n'existe pas dans le référentiel", async () => {
-      testeur.depotDonnees().estSuperviseur = async () => true;
       await testeur.verifieRequeteGenereErreurHTTP(400, 'Bad Request', {
         method: 'get',
         url: 'http://localhost:1234/api/supervision?filtreDate=nexistePas',
       });
     });
 
+    it('retourne une erreur HTTP 400 si le filtre de besoinsDeSecurite a une valeur inconnue', async () => {
+      await testeur.verifieRequeteGenereErreurHTTP(400, 'Bad Request', {
+        method: 'get',
+        url: 'http://localhost:1234/api/supervision?filtreBesoinsSecurite=nexistePas',
+      });
+    });
+
     it("délègue au service de supervision la génération de l'URL du tableau de supervision", async () => {
       let idRecu;
-      testeur.depotDonnees().estSuperviseur = async () => true;
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
       testeur.serviceSupervision().genereURLSupervision = (idSuperviseur) => {
         idRecu = idSuperviseur;
@@ -1330,25 +1340,25 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(reponse.data.urlSupervision).to.be('https://uneURLSupervision.fr');
     });
 
-    it('transmet le filtre de date au service de supervision', async () => {
-      let filtrageDateRecu;
+    it('transmet les filtres de date et besoins de sécurité au service de supervision', async () => {
+      let filtrageRecu;
       testeur.referentiel().recharge({
         optionsFiltrageDate: {
           unFiltreDate: '',
         },
       });
-      testeur.depotDonnees().estSuperviseur = async () => true;
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
-      testeur.serviceSupervision().genereURLSupervision = (_, filtrageDate) => {
-        filtrageDateRecu = filtrageDate;
+      testeur.serviceSupervision().genereURLSupervision = (_, filtrage) => {
+        filtrageRecu = filtrage;
         return 'https://uneURLSupervision.fr';
       };
 
       await axios.get(
-        'http://localhost:1234/api/supervision?filtreDate=unFiltreDate'
+        'http://localhost:1234/api/supervision?filtreDate=unFiltreDate&filtreBesoinsSecurite=niveau1'
       );
 
-      expect(filtrageDateRecu).to.be('unFiltreDate');
+      expect(filtrageRecu.filtreDate).to.be('unFiltreDate');
+      expect(filtrageRecu.filtreBesoinsSecurite).to.be('niveau1');
     });
   });
 });

@@ -9,6 +9,7 @@
   let enCoursChargement: boolean = false;
 
   let filtreDate: string;
+  let filtreBesoinsSecurite: string;
 
   onMount(async () => {
     await recupereUrlIframe();
@@ -25,6 +26,7 @@
   const metAJourFiltres = async () => {
     const parametres = new URLSearchParams({
       ...(filtreDate && { filtreDate }),
+      ...(filtreBesoinsSecurite && { filtreBesoinsSecurite }),
     });
     await recupereUrlIframe(parametres.toString());
   };
@@ -40,6 +42,19 @@
 </div>
 <h1>Statistiques</h1>
 <div class="conteneur-filtres">
+  <ListeDeroulante
+    bind:valeur={filtreBesoinsSecurite}
+    on:change={metAJourFiltres}
+    label="Besoins de sécurité"
+    id="filtre-besoins-securite"
+    options={[
+      { label: 'Tous besoins de sécurité', valeur: '' },
+      { label: 'Élémentaire', valeur: 'niveau1' },
+      { label: 'Modéré', valeur: 'niveau2' },
+      { label: 'Important', valeur: 'niveau3' },
+    ]}
+    aideSaisie="Sélectionner un besoin de sécurité"
+  />
   <ListeDeroulante
     bind:valeur={filtreDate}
     on:change={metAJourFiltres}
@@ -101,5 +116,10 @@
 
   h1 {
     margin: 0 0 24px;
+  }
+
+  .conteneur-filtres {
+    display: flex;
+    gap: 16px;
   }
 </style>
