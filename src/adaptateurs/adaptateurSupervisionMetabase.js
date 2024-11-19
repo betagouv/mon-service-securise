@@ -1,7 +1,7 @@
 const Knex = require('knex');
 const { sign } = require('jsonwebtoken');
 
-const adaptateurSupervision = ({
+const adaptateurSupervisionMetabase = ({
   adaptateurChiffrement,
   adaptateurEnvironnement,
 }) => {
@@ -81,4 +81,4 @@ const adaptateurSupervision = ({
   };
 };
 
-module.exports = adaptateurSupervision;
+module.exports = adaptateurSupervisionMetabase;
