@@ -32,7 +32,7 @@ const adaptateurSupervision = ({
         .where('id_service', idServiceHash)
         .del();
     },
-    genereURLSupervision: (idSuperviseur, filtreDate) => {
+    genereURLSupervision: (idSuperviseur, filtres) => {
       const urlDeBase = adaptateurEnvironnement
         .supervision()
         .domaineMetabaseMSS();
@@ -42,6 +42,8 @@ const adaptateurSupervision = ({
       const idDashboardSupervision = adaptateurEnvironnement
         .supervision()
         .identifiantDashboardSupervision();
+
+      const { filtreDate, filtreBesoinsSecurite } = filtres;
 
       const filtreDateMetabase = filtreDate
         ? correspondancesFiltreDate[filtreDate]
@@ -53,7 +55,7 @@ const adaptateurSupervision = ({
         resource: { dashboard: idDashboardSupervision },
         params: {
           id_superviseur: [idSuperviseurHash],
-          besoins_de_securite: [],
+          besoins_de_securite: filtreBesoinsSecurite || [],
           siret: [],
           date: filtreDateMetabase || [],
         },

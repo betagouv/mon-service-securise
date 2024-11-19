@@ -153,6 +153,10 @@ class DescriptionService extends InformationsService {
     return 'niveau1';
   }
 
+  static estNiveauDeSecuriteValide(niveauSecurite) {
+    return tousNiveauxSecurite.indexOf(niveauSecurite) >= 0;
+  }
+
   static niveauSecuriteChoisiSuffisant(donnees) {
     const niveauMinimal = DescriptionService.estimeNiveauDeSecurite(donnees);
     return (

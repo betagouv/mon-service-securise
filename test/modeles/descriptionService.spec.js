@@ -318,5 +318,20 @@ describe('La description du service', () => {
         expect(estimation).to.be('niveau1');
       });
     });
+
+    ['niveau1', 'niveau2', 'niveau3'].forEach((cle) => {
+      it(`valide le niveau de sécurité ${cle}`, () => {
+        const estValide = DescriptionService.estNiveauDeSecuriteValide(cle);
+
+        expect(estValide).to.be(true);
+      });
+    });
+
+    it('ne valide pas un niveau de sécurité inexistant', () => {
+      const estValide =
+        DescriptionService.estNiveauDeSecuriteValide('inexistant');
+
+      expect(estValide).to.be(false);
+    });
   });
 });
