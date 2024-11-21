@@ -98,6 +98,7 @@
     background: var(--fond-gris-pale-composant);
     background-size: 1.11em 1.11em;
     min-width: 288px;
+    max-width: 400px;
     font-family: 'Marianne';
   }
 
