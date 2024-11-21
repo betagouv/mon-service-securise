@@ -71,13 +71,16 @@ const adaptateurSupervisionMetabase = ({
       const siretServiceHash = hache(service.siretDeOrganisation());
       const idSuperviseursHash = idSuperviseurs.map(hache);
 
-      await knex('journal_mss.superviseurs').insert(
-        idSuperviseursHash.map((idSuperviseur) => ({
-          id_superviseur: idSuperviseur,
-          id_service: idServiceHash,
-          siret_service: siretServiceHash,
-        }))
-      );
+      await knex('journal_mss.superviseurs')
+        .insert(
+          idSuperviseursHash.map((idSuperviseur) => ({
+            id_superviseur: idSuperviseur,
+            id_service: idServiceHash,
+            siret_service: siretServiceHash,
+          }))
+        )
+        .onConflict()
+        .ignore();
     },
   };
 };
