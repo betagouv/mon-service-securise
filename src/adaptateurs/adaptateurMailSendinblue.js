@@ -76,6 +76,7 @@ const creeContact = (
     .post(
       `${urlBase}/contacts`,
       {
+        updateEnabled: true,
         email: destinataire,
         emailBlacklisted: bloqueMarketing,
         attributes: {
