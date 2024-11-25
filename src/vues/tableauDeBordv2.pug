@@ -1,0 +1,8 @@
+extends mssConnecte
+
+block append scripts
+  +composantSvelte('tableauDeBord.js')
+  script(type = 'module', src = '/statique/tableauDeBord-v2.js')
+
+block main
+  #tableau-de-bord
