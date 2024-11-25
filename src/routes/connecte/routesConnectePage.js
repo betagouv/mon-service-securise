@@ -106,6 +106,15 @@ const routesConnectePage = ({
     }
   );
 
+  routes.get(
+    '/tableauDeBord-v2',
+    middleware.verificationAcceptationCGU,
+    middleware.chargeEtatVisiteGuidee,
+    async (_requete, reponse) => {
+      reponse.render('tableauDeBordv2');
+    }
+  );
+
   routes.get('/deconnexion', middleware.verificationJWT, (requete, reponse) => {
     if (requete.sourceAuthentification === 'MSS') {
       reponse.redirect('/connexion');
