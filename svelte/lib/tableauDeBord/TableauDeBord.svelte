@@ -10,6 +10,7 @@
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
   import EtiquetteProprietaire from './elementsDeService/EtiquetteProprietaire.svelte';
   import EtiquetteContributeurs from './elementsDeService/EtiquetteContributeurs.svelte';
+  import EtiquetteIndiceCyber from './elementsDeService/EtiquetteIndiceCyber.svelte';
 
   let enCoursChargement = false;
 
@@ -55,7 +56,7 @@
       {#each services as service (service.id)}
         {@const indiceCyberDuService = indicesCybers.find(
           (i) => i.id === service.id
-        )}
+        )?.indiceCyber}
         <tr>
           <td>
             <a class="lien-service" href="/service/{service.id}">
@@ -70,7 +71,14 @@
               nombreContributeurs={service.nombreContributeurs}
             />
           </td>
-          <td>{indiceCyberDuService?.indiceCyber}</td>
+          <td>
+            {#if indiceCyberDuService !== undefined}
+              <EtiquetteIndiceCyber
+                score={indiceCyberDuService}
+                idService={service.id}
+              />
+            {/if}
+          </td>
           <td>{service.statutHomologation.libelle}</td>
         </tr>
       {/each}
