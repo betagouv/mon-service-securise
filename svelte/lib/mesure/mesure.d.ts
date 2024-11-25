@@ -1,5 +1,5 @@
 import type { PrioriteMesure, Referentiel } from '../ui/types.d';
-import type { StatutMesure } from '../modeles/mesure';
+import type { StatutMesure } from '../modeles/modeleMesure';
 
 declare global {
   interface HTMLElementEventMap {

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ActiviteMesure, DetailsAjoutPropriete } from '../../mesure.d';
   import type { ReferentielStatut } from '../../../ui/types';
-  import type { StatutMesure } from '../../../modeles/mesure';
+  import type { StatutMesure } from '../../../modeles/modeleMesure';
   import TagStatutMesure from '../../../ui/TagStatutMesure.svelte';
   import DesignationMesureActivite from './DesignationMesureActivite.svelte';
 

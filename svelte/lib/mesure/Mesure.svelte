@@ -14,7 +14,7 @@
   import ContenuOngletMesure from './contenus/ContenuOngletMesure.svelte';
   import type { ReferentielPriorite, ReferentielStatut } from '../ui/types';
   import ContenuOngletPlanAction from './contenus/ContenuOngletPlanAction.svelte';
-  import { planDActionDisponible } from '../modeles/mesure';
+  import { planDActionDisponible } from '../modeles/modeleMesure';
   import ContenuOngletActivite from './contenus/ContenuOngletActivite.svelte';
   import CommentaireMesure from './commentaire/CommentaireMesure.svelte';
 
