@@ -42,7 +42,7 @@
 
 <div class="contenu-profil">
   <div>
-    <h1>Mes informations MonServiceSecurisé</h1>
+    <h1>Mes informations MonServiceSécurisé</h1>
     <h2>
       Informations recueillies dans le cadre de votre inscription à
       MonServiceSécurisé.
