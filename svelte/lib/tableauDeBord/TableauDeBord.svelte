@@ -9,6 +9,7 @@
   } from './tableauDeBord.d';
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
   import EtiquetteProprietaire from './elementsDeService/EtiquetteProprietaire.svelte';
+  import EtiquetteContributeurs from './elementsDeService/EtiquetteContributeurs.svelte';
 
   let enCoursChargement = false;
 
@@ -64,7 +65,11 @@
               <span class="nom-service">{decode(service.nomService)}</span>
             </a>
           </td>
-          <td>{service.nombreContributeurs}</td>
+          <td>
+            <EtiquetteContributeurs
+              nombreContributeurs={service.nombreContributeurs}
+            />
+          </td>
           <td>{indiceCyberDuService?.indiceCyber}</td>
           <td>{service.statutHomologation.libelle}</td>
         </tr>
