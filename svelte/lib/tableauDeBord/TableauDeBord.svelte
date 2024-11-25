@@ -11,6 +11,7 @@
   import EtiquetteProprietaire from './elementsDeService/EtiquetteProprietaire.svelte';
   import EtiquetteContributeurs from './elementsDeService/EtiquetteContributeurs.svelte';
   import EtiquetteIndiceCyber from './elementsDeService/EtiquetteIndiceCyber.svelte';
+  import IconeChargementEnCours from '../ui/IconeChargementEnCours.svelte';
 
   let enCoursChargement = false;
 
@@ -77,6 +78,8 @@
                 score={indiceCyberDuService}
                 idService={service.id}
               />
+            {:else}
+              <IconeChargementEnCours />
             {/if}
           </td>
           <td>{service.statutHomologation.libelle}</td>
