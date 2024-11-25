@@ -3,7 +3,7 @@ import type {
   MesureGenerale,
   MesureSpecifique,
 } from '../../tableauDesMesures/tableauDesMesures.d';
-import type { StatutMesure } from '../../modeles/mesure';
+import type { StatutMesure } from '../../modeles/modeleMesure';
 
 export type NiveauMessage = 'info' | 'succes';
 

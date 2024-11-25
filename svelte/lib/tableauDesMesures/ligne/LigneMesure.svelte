@@ -17,7 +17,7 @@
   import { rechercheTextuelle } from '../stores/rechercheTextuelle.store';
   import SelectionPriorite from '../../ui/SelectionPriorite.svelte';
   import SelectionEcheance from '../../ui/SelectionEcheance.svelte';
-  import { planDActionDisponible } from '../../modeles/mesure';
+  import { planDActionDisponible } from '../../modeles/modeleMesure';
   import SelectionResponsables from '../../ui/SelectionResponsables.svelte';
 
   type IdDom = string;

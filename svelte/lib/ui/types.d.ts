@@ -1,4 +1,4 @@
-import type { StatutMesure } from '../modeles/mesure';
+import type { StatutMesure } from '../modeles/modeleMesure';
 
 export enum Referentiel {
   ANSSI = 'ANSSI',
