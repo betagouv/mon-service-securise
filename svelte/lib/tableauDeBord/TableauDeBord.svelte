@@ -10,8 +10,10 @@
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
   import TableauDesServices from './TableauDesServices.svelte';
   import BandeauInfo from './BandeauInfo.svelte';
+  import { donneesVisiteGuidee } from './tableauDeBord';
 
   export let estSuperviseur: boolean;
+  export let modeVisiteGuidee: boolean;
 
   let enCoursChargement = false;
 
@@ -20,6 +22,20 @@
   let nombreServices: number;
   let nombreServicesHomologues: number;
   let indiceCyberMoyen: IndiceCyberMoyen | undefined;
+
+  onMount(async () => {
+    if (modeVisiteGuidee) {
+      services = donneesVisiteGuidee.services;
+      nombreServices = donneesVisiteGuidee.resume.nombreServices;
+      nombreServicesHomologues =
+        donneesVisiteGuidee.resume.nombreServicesHomologues;
+      indicesCybers = donneesVisiteGuidee.indicesCyber;
+      indiceCyberMoyen = donneesVisiteGuidee.indiceCyber;
+    } else {
+      await recupereServices();
+      await recupereIndicesCybers();
+    }
+  });
 
   const recupereServices = async () => {
     enCoursChargement = true;
@@ -37,11 +53,6 @@
     indicesCybers = reponse.services;
     indiceCyberMoyen = reponse.resume.indiceCyberMoyen;
   };
-
-  onMount(async () => {
-    await recupereServices();
-    await recupereIndicesCybers();
-  });
 </script>
 
 <div class="tableau-de-bord">
