@@ -5,6 +5,7 @@
     ReponseApiIndicesCyber,
     Service,
     IndiceCyber,
+    IndiceCyberMoyen,
   } from './tableauDeBord.d';
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
   import TableauDesServices from './TableauDesServices.svelte';
@@ -16,6 +17,7 @@
   let indicesCybers: IndiceCyber[] = [];
   let nombreServices: number;
   let nombreServicesHomologues: number;
+  let indiceCyberMoyen: IndiceCyberMoyen;
 
   const recupereServices = async () => {
     enCoursChargement = true;
@@ -31,6 +33,7 @@
       await axios.get('/api/services/indices-cyber')
     ).data;
     indicesCybers = reponse.services;
+    indiceCyberMoyen = reponse.resume.indiceCyberMoyen;
   };
 
   onMount(async () => {
@@ -47,7 +50,11 @@
       <ChargementEnCours />
     </div>
   {:else}
-    <BandeauInfo {nombreServices} {nombreServicesHomologues} />
+    <BandeauInfo
+      {nombreServices}
+      {nombreServicesHomologues}
+      {indiceCyberMoyen}
+    />
     <TableauDesServices {services} {indicesCybers} />
   {/if}
 </div>
