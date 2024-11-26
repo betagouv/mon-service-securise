@@ -11,6 +11,8 @@
   import TableauDesServices from './TableauDesServices.svelte';
   import BandeauInfo from './BandeauInfo.svelte';
 
+  export let estSuperviseur: boolean;
+
   let enCoursChargement = false;
 
   let services: Service[] = [];
@@ -43,7 +45,14 @@
 </script>
 
 <div class="tableau-de-bord">
-  <h1>Mon tableau de bord</h1>
+  <span class="entete-tableau-de-bord">
+    <h1>Mon tableau de bord</h1>
+    {#if estSuperviseur}
+      <span class="lien-supervision"
+        ><a href="/supervision">Voir les statistiques</a></span
+      >
+    {/if}
+  </span>
 
   {#if enCoursChargement}
     <div class="conteneur-loader">
@@ -81,5 +90,27 @@
     display: flex;
     flex-direction: column;
     gap: 32px;
+  }
+
+  .entete-tableau-de-bord {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .lien-supervision a {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .lien-supervision a::before {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-size: contain;
+    background: url('/statique/assets/images/tableauDeBord/icone_graphique.svg')
+      no-repeat center;
   }
 </style>
