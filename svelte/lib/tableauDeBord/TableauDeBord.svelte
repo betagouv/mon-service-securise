@@ -19,7 +19,7 @@
   let indicesCybers: IndiceCyber[] = [];
   let nombreServices: number;
   let nombreServicesHomologues: number;
-  let indiceCyberMoyen: IndiceCyberMoyen;
+  let indiceCyberMoyen: IndiceCyberMoyen | undefined;
 
   const recupereServices = async () => {
     enCoursChargement = true;

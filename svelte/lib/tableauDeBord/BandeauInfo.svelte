@@ -3,10 +3,10 @@
 
   export let nombreServices: number;
   export let nombreServicesHomologues: number;
-  export let indiceCyberMoyen: IndiceCyberMoyen;
+  export let indiceCyberMoyen: IndiceCyberMoyen | undefined;
 
   $: valeurIndiceCyberMoyen = (): string =>
-    indiceCyberMoyen === '-'
+    indiceCyberMoyen === undefined || indiceCyberMoyen === '-'
       ? '-'
       : new Intl.NumberFormat('fr-FR', { maximumSignificantDigits: 2 }).format(
           indiceCyberMoyen
