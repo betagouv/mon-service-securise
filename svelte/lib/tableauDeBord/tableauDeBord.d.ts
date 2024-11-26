@@ -45,9 +45,11 @@ export type IndiceCyber = {
   indiceCyber: number;
 };
 
+export type IndiceCyberMoyen = number | '-';
+
 export type ReponseApiIndicesCyber = {
   services: IndiceCyber[];
   resume: {
-    indiceCyberMoyen: number;
+    indiceCyberMoyen: IndiceCyberMoyen;
   };
 };

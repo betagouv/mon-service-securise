@@ -1,6 +1,16 @@
 <script lang="ts">
+  import type { IndiceCyberMoyen } from './tableauDeBord.d';
+
   export let nombreServices: number;
   export let nombreServicesHomologues: number;
+  export let indiceCyberMoyen: IndiceCyberMoyen;
+
+  $: valeurIndiceCyberMoyen = (): string =>
+    indiceCyberMoyen === '-'
+      ? '-'
+      : new Intl.NumberFormat('fr-FR', { maximumSignificantDigits: 2 }).format(
+          indiceCyberMoyen
+        );
 </script>
 
 <div class="bandeau-cartes-info">
@@ -15,6 +25,13 @@
     <span class="contenu-carte">
       <span class="libelle-carte">
         <span class="metrique">{nombreServicesHomologues}</span> Services homologués</span
+      >
+    </span>
+  </div>
+  <div class="carte-info" id="carte-info-indice-cyber-moyen">
+    <span class="contenu-carte">
+      <span class="libelle-carte">
+        <span class="metrique">{valeurIndiceCyberMoyen()}</span> Indice cyber moyen</span
       >
     </span>
   </div>
@@ -54,12 +71,21 @@
       no-repeat center;
   }
 
+  #carte-info-indice-cyber-moyen .contenu-carte::before {
+    background: url('/statique/assets/images/tableauDeBord/icone_indice_cyber_moyen.svg')
+      no-repeat center;
+  }
+
   #carte-info-nombre-services {
     background-color: #e9ddff;
   }
 
   #carte-info-nombre-services-homologues {
     background-color: #defbe5;
+  }
+
+  #carte-info-indice-cyber-moyen {
+    background-color: #eaf5ff;
   }
 
   .contenu-carte {
