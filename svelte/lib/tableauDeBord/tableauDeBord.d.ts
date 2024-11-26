@@ -6,6 +6,7 @@ declare global {
 
 export type TableauDeBordProps = {
   estSuperviseur: boolean;
+  modeVisiteGuidee: boolean;
 };
 
 type Contributeur = {
