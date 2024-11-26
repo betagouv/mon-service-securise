@@ -8,15 +8,19 @@
   } from './tableauDeBord.d';
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
   import TableauDesServices from './TableauDesServices.svelte';
+  import BandeauInfo from './BandeauInfo.svelte';
 
   let enCoursChargement = false;
 
   let services: Service[] = [];
   let indicesCybers: IndiceCyber[] = [];
+  let nombreServices: number;
+
   const recupereServices = async () => {
     enCoursChargement = true;
     const reponse: ReponseApiServices = (await axios.get('/api/services')).data;
     services = reponse.services;
+    nombreServices = reponse.resume.nombreServices;
     enCoursChargement = false;
   };
 
@@ -33,15 +37,18 @@
   });
 </script>
 
-<h1>Mon tableau de bord</h1>
+<div class="tableau-de-bord">
+  <h1>Mon tableau de bord</h1>
 
-{#if enCoursChargement}
-  <div class="conteneur-loader">
-    <ChargementEnCours />
-  </div>
-{:else}
-  <TableauDesServices {services} {indicesCybers} />
-{/if}
+  {#if enCoursChargement}
+    <div class="conteneur-loader">
+      <ChargementEnCours />
+    </div>
+  {:else}
+    <BandeauInfo {nombreServices} />
+    <TableauDesServices {services} {indicesCybers} />
+  {/if}
+</div>
 
 <style>
   :global(#tableau-de-bord) {
@@ -58,6 +65,12 @@
   }
 
   h1 {
-    margin: 0 0 32px;
+    margin: 0;
+  }
+
+  .tableau-de-bord {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
   }
 </style>
