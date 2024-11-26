@@ -15,12 +15,14 @@
   let services: Service[] = [];
   let indicesCybers: IndiceCyber[] = [];
   let nombreServices: number;
+  let nombreServicesHomologues: number;
 
   const recupereServices = async () => {
     enCoursChargement = true;
     const reponse: ReponseApiServices = (await axios.get('/api/services')).data;
     services = reponse.services;
     nombreServices = reponse.resume.nombreServices;
+    nombreServicesHomologues = reponse.resume.nombreServicesHomologues;
     enCoursChargement = false;
   };
 
@@ -45,7 +47,7 @@
       <ChargementEnCours />
     </div>
   {:else}
-    <BandeauInfo {nombreServices} />
+    <BandeauInfo {nombreServices} {nombreServicesHomologues} />
     <TableauDesServices {services} {indicesCybers} />
   {/if}
 </div>
