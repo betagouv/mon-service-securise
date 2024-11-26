@@ -3,7 +3,6 @@ extends mssConnecte
 block append scripts
   +composantSvelte('tableauDeBord.js')
   +donneesPartagees('utilisateur-superviseur', {estSuperviseur})
-  +donneesPartagees('etat-visite-guidee', {etatVisiteGuidee})
   script(type = 'module', src = '/statique/tableauDeBord-v2.js')
 
 block main
