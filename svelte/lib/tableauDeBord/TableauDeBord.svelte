@@ -12,6 +12,7 @@
   import EtiquetteContributeurs from './elementsDeService/EtiquetteContributeurs.svelte';
   import EtiquetteIndiceCyber from './elementsDeService/EtiquetteIndiceCyber.svelte';
   import IconeChargementEnCours from '../ui/IconeChargementEnCours.svelte';
+  import EtiquetteHomologation from './elementsDeService/EtiquetteHomologation.svelte';
 
   let enCoursChargement = false;
 
@@ -55,12 +56,13 @@
     </thead>
     <tbody>
       {#each services as service (service.id)}
+        {@const idService = service.id}
         {@const indiceCyberDuService = indicesCybers.find(
-          (i) => i.id === service.id
+          (i) => i.id === idService
         )?.indiceCyber}
         <tr>
           <td>
-            <a class="lien-service" href="/service/{service.id}">
+            <a class="lien-service" href="/service/{idService}">
               {#if service.estProprietaire}
                 <EtiquetteProprietaire />
               {/if}
@@ -74,15 +76,18 @@
           </td>
           <td>
             {#if indiceCyberDuService !== undefined}
-              <EtiquetteIndiceCyber
-                score={indiceCyberDuService}
-                idService={service.id}
-              />
+              <EtiquetteIndiceCyber score={indiceCyberDuService} {idService} />
             {:else}
               <IconeChargementEnCours />
             {/if}
           </td>
-          <td>{service.statutHomologation.libelle}</td>
+          <td>
+            <EtiquetteHomologation
+              statutHomologation={service.statutHomologation.id}
+              label={service.statutHomologation.libelle}
+              {idService}
+            />
+          </td>
         </tr>
       {/each}
     </tbody>
