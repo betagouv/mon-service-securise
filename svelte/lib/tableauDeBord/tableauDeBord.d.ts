@@ -4,6 +4,10 @@ declare global {
   }
 }
 
+export type TableauDeBordProps = {
+  estSuperviseur: boolean;
+};
+
 type Contributeur = {
   id: string;
   prenomNom: string;

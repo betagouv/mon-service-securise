@@ -188,6 +188,17 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     });
   });
 
+  describe('quand GET sur /tableauDeBord-v2', () => {
+    it("ajoute la donnée partagée indiquant si l'utilisateur est superviseur", async () => {
+      testeur.depotDonnees().estSuperviseur = async () => true;
+
+      const reponse = await axios.get(`http://localhost:1234/tableauDeBord-v2`);
+
+      const donnees = donneesPartagees(reponse.data, 'utilisateur-superviseur');
+      expect(donnees).to.eql({ estSuperviseur: true });
+    });
+  });
+
   describe('quand GET sur /supervision', () => {
     beforeEach(() => {
       testeur.depotDonnees().superviseur = async () => {};
