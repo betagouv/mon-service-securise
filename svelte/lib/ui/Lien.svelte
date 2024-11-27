@@ -1,11 +1,17 @@
 <script lang="ts">
   export let titre: string;
   export let href: string;
-  export let icone: 'plus' = '';
-  export let type: 'bouton-primaire' = 'bouton-primaire';
+  export let icone: 'plus' | 'attention' | undefined = undefined;
+  export let type: 'bouton-primaire' | 'bouton-secondaire' = 'bouton-primaire';
+  export let taille: 'petit' | 'moyen' = 'moyen';
 </script>
 
-<a class="{type} {icone}" class:avecIcone={!!icone} {href} rel="noopener">
+<a
+  class="{type} {icone} {taille}"
+  class:avecIcone={!!icone}
+  {href}
+  rel="noopener"
+>
   {titre}
 </a>
 
@@ -15,25 +21,42 @@
     gap: 8px;
     display: flex;
     margin: 0;
-    padding: 7px 16px;
 
     border: solid 1px var(--bleu-mise-en-avant);
     border-radius: 4px;
 
     color: #fff;
 
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-
     text-decoration: none;
     user-select: none;
     justify-content: center;
+
+    white-space: nowrap;
+    width: fit-content;
+  }
+
+  .petit {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 24px;
+    padding: 3px 12px;
+  }
+
+  .moyen {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    padding: 7px 16px;
   }
 
   .plus:before {
     background-image: url('/statique/assets/images/icone_plus_dsfr.svg');
     transform: translateY(1px);
+  }
+
+  .attention:before {
+    background-image: url('/statique/assets/images/icone_warning.svg');
+    /*transform: translateY(1px);*/
   }
 
   .avecIcone:before {
@@ -58,6 +81,23 @@
   }
 
   .bouton-primaire:focus-visible {
+    outline: 2px solid var(--bleu-mise-en-avant);
+    outline-offset: 2px;
+  }
+
+  .bouton-secondaire {
+    color: var(--bleu-mise-en-avant);
+  }
+
+  .bouton-secondaire:hover {
+    background: #f5f5f5;
+  }
+
+  .bouton-secondaire:active {
+    background: #eeeeee;
+  }
+
+  .bouton-secondaire:focus-visible {
     outline: 2px solid var(--bleu-mise-en-avant);
     outline-offset: 2px;
   }

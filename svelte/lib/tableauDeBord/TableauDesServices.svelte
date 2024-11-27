@@ -5,6 +5,7 @@
   import EtiquetteContributeurs from './elementsDeService/EtiquetteContributeurs.svelte';
   import IconeChargementEnCours from '../ui/IconeChargementEnCours.svelte';
   import EtiquetteProprietaire from './elementsDeService/EtiquetteProprietaire.svelte';
+  import ActionRecommandee from './elementsDeService/ActionRecommandee.svelte';
   import type { IndiceCyber } from './tableauDeBord.d';
   import { resultatsDeRecherche } from './stores/resultatDeRecherche.store';
 
@@ -18,6 +19,7 @@
       <th>Contributeurs</th>
       <th>Indice cyber</th>
       <th>Homologation</th>
+      <th>Actions recommandées</th>
     </tr>
   </thead>
   <tbody>
@@ -53,6 +55,9 @@
             label={service.statutHomologation.libelle}
             {idService}
           />
+        </td>
+        <td>
+          <ActionRecommandee action={service.actionRecommandee} {idService} />
         </td>
       </tr>
     {/each}
