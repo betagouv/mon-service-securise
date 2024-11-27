@@ -24,6 +24,10 @@ const NIVEAUX = {
   NIVEAU_SECURITE_INSUFFISANT: 'insuffisant',
 };
 
+const ACTIONS_RECOMMANDEES = {
+  METTRE_A_JOUR: 'mettreAJour',
+};
+
 class Service {
   constructor(
     donnees,
@@ -324,6 +328,11 @@ class Service {
 
   vueAnnexePDFRisques() {
     return new ObjetPDFAnnexeRisques(this, this.referentiel);
+  }
+
+  actionRecommandee() {
+    if (this.aUneSuggestionDAction()) return ACTIONS_RECOMMANDEES.METTRE_A_JOUR;
+    return undefined;
   }
 
   aUneSuggestionDAction() {
