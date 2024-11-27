@@ -11,6 +11,7 @@
   import BandeauInfo from './BandeauInfo.svelte';
   import { donneesVisiteGuidee } from './tableauDeBord';
   import { services } from './stores/services.store';
+  import BandeauFiltres from './BandeauFiltres.svelte';
 
   export let estSuperviseur: boolean;
   export let modeVisiteGuidee: boolean;
@@ -74,6 +75,7 @@
       {nombreServicesHomologues}
       {indiceCyberMoyen}
     />
+    <BandeauFiltres />
     <TableauDesServices {indicesCybers} />
   {/if}
 </div>
