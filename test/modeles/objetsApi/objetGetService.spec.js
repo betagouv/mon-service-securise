@@ -99,6 +99,7 @@ describe("L'objet d'API de `GET /service`", () => {
       documentsPdfDisponibles: [],
       permissions: { gestionContributeurs: false },
       aUneSuggestionAction: true,
+      actionRecommandee: 'mettreAJour',
     });
   });
 
