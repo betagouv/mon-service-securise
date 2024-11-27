@@ -35,6 +35,7 @@ export type Service = {
     gestionContributeurs: boolean;
   };
   aUneSuggestionAction: boolean;
+  actionRecommandee: ActionRecommandee;
 };
 
 export type ReponseApiServices = {
@@ -58,3 +59,5 @@ export type ReponseApiIndicesCyber = {
     indiceCyberMoyen: IndiceCyberMoyen;
   };
 };
+
+export type ActionRecommandee = 'mettreAJour' | undefined;
