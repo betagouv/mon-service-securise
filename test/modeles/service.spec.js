@@ -1087,4 +1087,24 @@ describe('Un service', () => {
       expect(donneesRecues.responsables).to.eql(['id-utilisateur']);
     });
   });
+
+  describe("sur demande de l'action recommandée", () => {
+    it("retourne 'mettreAJour' si le service a une suggestion d'action", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        naturesSuggestionsActions: { 'siret-a-renseigner': { lien: '' } },
+      });
+
+      const service = unService(referentiel)
+        .avecSuggestionAction({ nature: 'siret-a-renseigner' })
+        .construis();
+
+      expect(service.actionRecommandee()).to.be('mettreAJour');
+    });
+
+    it("retourne 'undefined' si aucune action recommandée", () => {
+      const service = unService().construis();
+
+      expect(service.actionRecommandee()).to.be(undefined);
+    });
+  });
 });
