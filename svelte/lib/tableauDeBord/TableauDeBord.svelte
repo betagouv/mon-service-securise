@@ -84,6 +84,7 @@
   :global(#tableau-de-bord) {
     width: 100%;
     padding: 32px 48px;
+    text-align: left;
   }
 
   .conteneur-loader {
