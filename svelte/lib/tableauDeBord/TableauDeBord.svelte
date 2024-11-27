@@ -3,7 +3,6 @@
   import type {
     ReponseApiServices,
     ReponseApiIndicesCyber,
-    Service,
     IndiceCyber,
     IndiceCyberMoyen,
   } from './tableauDeBord.d';
@@ -11,13 +10,13 @@
   import TableauDesServices from './TableauDesServices.svelte';
   import BandeauInfo from './BandeauInfo.svelte';
   import { donneesVisiteGuidee } from './tableauDeBord';
+  import { services } from './stores/services.store';
 
   export let estSuperviseur: boolean;
   export let modeVisiteGuidee: boolean;
 
   let enCoursChargement = false;
 
-  let services: Service[] = [];
   let indicesCybers: IndiceCyber[] = [];
   let nombreServices: number;
   let nombreServicesHomologues: number;
@@ -25,7 +24,7 @@
 
   onMount(async () => {
     if (modeVisiteGuidee) {
-      services = donneesVisiteGuidee.services;
+      services.reinitialise(donneesVisiteGuidee.services);
       nombreServices = donneesVisiteGuidee.resume.nombreServices;
       nombreServicesHomologues =
         donneesVisiteGuidee.resume.nombreServicesHomologues;
@@ -40,7 +39,7 @@
   const recupereServices = async () => {
     enCoursChargement = true;
     const reponse: ReponseApiServices = (await axios.get('/api/services')).data;
-    services = reponse.services;
+    services.reinitialise(reponse.services);
     nombreServices = reponse.resume.nombreServices;
     nombreServicesHomologues = reponse.resume.nombreServicesHomologues;
     enCoursChargement = false;
@@ -75,7 +74,7 @@
       {nombreServicesHomologues}
       {indiceCyberMoyen}
     />
-    <TableauDesServices {services} {indicesCybers} />
+    <TableauDesServices {indicesCybers} />
   {/if}
 </div>
 

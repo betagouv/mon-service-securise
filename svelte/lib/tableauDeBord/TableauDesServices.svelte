@@ -5,9 +5,9 @@
   import EtiquetteContributeurs from './elementsDeService/EtiquetteContributeurs.svelte';
   import IconeChargementEnCours from '../ui/IconeChargementEnCours.svelte';
   import EtiquetteProprietaire from './elementsDeService/EtiquetteProprietaire.svelte';
-  import type { IndiceCyber, Service } from './tableauDeBord.d';
+  import type { IndiceCyber } from './tableauDeBord.d';
+  import { services } from './stores/services.store';
 
-  export let services: Service[] = [];
   export let indicesCybers: IndiceCyber[] = [];
 </script>
 
@@ -21,7 +21,7 @@
     </tr>
   </thead>
   <tbody>
-    {#each services as service (service.id)}
+    {#each $services as service (service.id)}
       {@const idService = service.id}
       {@const indiceCyberDuService = indicesCybers.find(
         (i) => i.id === idService
