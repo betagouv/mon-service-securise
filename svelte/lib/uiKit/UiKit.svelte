@@ -2,6 +2,7 @@
   import ListeDeroulante from '../ui/ListeDeroulante.svelte';
   import { tick } from 'svelte';
   import FilAriane from '../ui/FilAriane.svelte';
+  import BarreDeRecherche from '../ui/BarreDeRecherche.svelte';
 
   const optionsListeDeroulante = [
     { label: 'Option 1', valeur: 1 },
@@ -11,7 +12,8 @@
   ];
   let desactiveListeDeroulante = false,
     descriptionListeDeroulante = false,
-    avecErreurListeDeroulante = false;
+    avecErreurListeDeroulante = false,
+    tailleBarreRecherche = false;
 
   const declencheValidation = async (id: string) => {
     (document.getElementById(id) as HTMLInputElement)?.reportValidity();
@@ -20,6 +22,33 @@
 
 <div class="conteneur">
   <h1>Système de Design de MonServiceSécurisé</h1>
+
+  <h2>Barre de recherche - Search</h2>
+  <p>
+    La barre de recherche est un système de navigation qui permet à
+    l'utilisateur d’accéder rapidement à un contenu en lançant une recherche sur
+    un mot clé ou une expression.
+  </p>
+  <div class="conteneur-composant">
+    <BarreDeRecherche
+      recherche=""
+      taille={tailleBarreRecherche ? 'grand' : 'moyen'}
+    />
+    <div class="options-composant">
+      <div>
+        <input
+          type="checkbox"
+          id="barre-recherche-taille"
+          bind:checked={tailleBarreRecherche}
+        />
+        <label for="barre-recherche-taille"
+          >{tailleBarreRecherche
+            ? 'Grande taille'
+            : 'Taille moyenne (défault)'}</label
+        >
+      </div>
+    </div>
+  </div>
 
   <h2>Fil d'Ariane - Breadcrumb</h2>
   <p>
