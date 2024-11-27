@@ -110,18 +110,16 @@
 </div>
 
 <style>
-  :global(main) {
+  :global(#ui-kit) {
     text-align: left;
     background: white;
-  }
-
-  :global(#ui-kit) {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
   }
 
   .conteneur {
     padding-bottom: 64px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   .conteneur-composant {
