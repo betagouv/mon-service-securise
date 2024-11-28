@@ -13,15 +13,16 @@ function metAJourContactsBrevoDesContributeurs({ crmBrevo, depotDonnees }) {
     const rapportExecution = await Promise.allSettled(
       autorisations.map(async (a) => {
         const utilisateur = await depotDonnees.utilisateur(a.idUtilisateur);
-        const autorisationsUtilisateur = await depotDonnees.autorisations(
+        const sesAutorisations = await depotDonnees.autorisations(
           utilisateur.id
         );
         await crmBrevo.metAJourNombresContributionsContact(
           utilisateur,
-          autorisationsUtilisateur
+          sesAutorisations
         );
       })
     );
+
     rapportExecution
       .filter((r) => r.status === 'rejected')
       .forEach((r) =>

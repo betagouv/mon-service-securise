@@ -32,6 +32,7 @@ describe("L'abonnement qui met à jour les contacts Brevo des contributeurs", ()
       metAJourContact: async () => {},
     };
   });
+
   it("lève une exception s'il ne reçoit pas d'autorisation en paramètre", async () => {
     try {
       await metAJourContactsBrevoDesContributeurs({
