@@ -41,11 +41,11 @@ const routesConnecteApi = ({
   adaptateurPdf,
   adaptateurCsv,
   adaptateurZip,
-  adaptateurJournalMSS,
+  adaptateurJournal,
   procedures,
   serviceAnnuaire,
   serviceSupervision,
-  serviceCGU,
+  serviceCgu,
 }) => {
   const routes = express.Router();
 
@@ -151,7 +151,7 @@ const routesConnecteApi = ({
       adaptateurHorloge,
       adaptateurPdf,
       adaptateurZip,
-      adaptateurJournalMSS,
+      adaptateurJournal,
     })
   );
 
@@ -256,7 +256,7 @@ const routesConnecteApi = ({
       const idUtilisateur = requete.idUtilisateurCourant;
       const donnees = obtentionDonneesDeBaseUtilisateur(
         requete.body,
-        serviceCGU
+        serviceCgu
       );
       const { donneesInvalides, messageErreur } =
         messageErreurDonneesUtilisateur(donnees, true);

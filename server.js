@@ -103,7 +103,7 @@ const serviceSupervision = new ServiceSupervision({
   adaptateurSupervision,
 });
 
-const serveur = MSS.creeServeur(
+const serveur = MSS.creeServeur({
   depotDonnees,
   middleware,
   referentiel,
@@ -126,8 +126,8 @@ const serveur = MSS.creeServeur(
   serviceSupervision,
   serviceCgu,
   procedures,
-  inscriptionUtilisateur
-);
+  inscriptionUtilisateur,
+});
 
 serveur.ecoute(port, () => {
   /* eslint-disable no-console */

@@ -20,7 +20,7 @@ const routesConnecteOidc = require('./routes/connecte/routesConnecteOidc');
 
 require('dotenv').config();
 
-const creeServeur = (
+const creeServeur = ({
   depotDonnees,
   middleware,
   referentiel,
@@ -35,18 +35,18 @@ const creeServeur = (
   adaptateurZip,
   adaptateurTracking,
   adaptateurProtection,
-  adaptateurJournalMSS,
+  adaptateurJournal,
   adaptateurOidc,
   adaptateurEnvironnement,
   adaptateurStatistiques,
   adaptateurJWT,
   serviceSupervision,
-  serviceCGU,
+  serviceCgu,
   procedures,
   inscriptionUtilisateur,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
-  avecPageErreur = process.env.NODE_ENV === 'production'
-) => {
+  avecPageErreur = process.env.NODE_ENV === 'production',
+}) => {
   let serveur;
 
   const app = express();
@@ -121,7 +121,7 @@ const creeServeur = (
       adaptateurGestionErreur,
       adaptateurMail,
       inscriptionUtilisateur,
-      serviceCGU,
+      serviceCgu,
     })
   );
   app.use(
@@ -153,11 +153,11 @@ const creeServeur = (
       adaptateurPdf,
       adaptateurCsv,
       adaptateurZip,
-      adaptateurJournalMSS,
+      adaptateurJournal,
       procedures,
       serviceAnnuaire,
       serviceSupervision,
-      serviceCGU,
+      serviceCgu,
     })
   );
   app.use('/bibliotheques', routesNonConnecteApiBibliotheques());
