@@ -10,7 +10,7 @@ block append styles
 block append scripts
   +donneesPartagees('donnees-departements', departements || [])
   script(src = "/statique/bibliotheques/selectize-0.15.2.min.js")
-  script(src = "/statique/modules/suggestion/suggestionEntite.js")
+  script(type="module", src = "/statique/modules/suggestion/suggestionEntite.mjs")
 
 mixin formulaireDescriptionService(idService)
   - const estEnCreation = !idService;
@@ -246,7 +246,7 @@ mixin formulaireDescriptionService(idService)
           else
             button.bouton#diagnostic(disabled) Commencer à sécuriser le service
 
-  script(type = 'module', src = '/statique/service/descriptionService.js')
+  script(type = 'module', src = '/statique/service/descriptionService.mjs')
   +donneesPartagees('niveau-securite-existant', estEnCreation ? null : service.descriptionService.niveauSecurite)
   +donneesPartagees('niveau-securite-recommande-lecture-seule', niveauRecommandeLectureSeule ? niveauRecommandeLectureSeule : null)
   +donneesPartagees('decrire-lecture-seule', estLectureSeule)

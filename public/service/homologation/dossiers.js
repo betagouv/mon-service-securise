@@ -1,4 +1,4 @@
-import brancheComportemenFormulaireEtape from './formulaireEtape.js';
+import brancheComportemenFormulaireEtape from './formulaireEtape.mjs';
 import ActionTelechargementTamponHomologation from '../../modules/tableauDeBord/actions/ActionTelechargementTamponHomologation.js';
 import { gestionnaireTiroir } from '../../modules/tableauDeBord/gestionnaireTiroir.mjs';
 import ActionTelechargement from '../../modules/tableauDeBord/actions/ActionTelechargement.mjs';

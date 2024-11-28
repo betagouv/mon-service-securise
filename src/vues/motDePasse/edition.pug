@@ -61,6 +61,6 @@ block main
     button(type = 'submit').bouton Valider
 
   script(type = 'module', src = '/statique/motDePasse/brancheValidationMotDePasse.js')
-  script(type = 'module', src = '/statique/motDePasse/edition.js')
+  script(type = 'module', src = '/statique/motDePasse/edition.mjs')
   +donneesPartagees('mode-initialisation', { ...enModeInitialisation })
   +donneesPartagees('invitation-contributeur', { estInvitation: !utilisateur.accepteCGU() })

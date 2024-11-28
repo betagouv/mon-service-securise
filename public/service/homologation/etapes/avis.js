@@ -1,5 +1,5 @@
 import arrangeParametresAvis from '../../../modules/arrangeParametresAvis.mjs';
-import brancheComportemenFormulaireEtape from '../formulaireEtape.js';
+import brancheComportemenFormulaireEtape from '../formulaireEtape.mjs';
 import { brancheConteneur } from '../../../modules/interactions/validation.mjs';
 import brancheElementsAjoutables from '../../../modules/brancheElementsAjoutables.js';
 import { EVENEMENT_SUPPRESSION_ELEMENT } from '../../../modules/saisieListeItems.js';

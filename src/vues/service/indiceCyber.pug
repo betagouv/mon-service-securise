@@ -11,7 +11,7 @@ block append styles
 block append scripts
   +composantSvelte('indiceCyber.js')
   +composantSvelte('indiceCyberPersonnalise.js')
-  script(type = 'module', src = '/statique/service/indiceCyber.js')
+  script(type = 'module', src = '/statique/service/indiceCyber.mjs')
   +donneesPartagees('donnees-indice-cyber', { indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax() })
   +donneesPartagees('donnees-indice-cyber-personnalise', { indiceCyberPersonnalise: service.indiceCyberPersonnalise().total })
 
