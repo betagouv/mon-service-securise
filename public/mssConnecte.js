@@ -1,4 +1,4 @@
-import { initialiseComportementModale } from './modules/interactions/modale.mjs';
+import initialiseComportementModale from './modules/interactions/modale.mjs';
 import lanceDecompteDeconnexion from './modules/deconnexion.js';
 
 $(() => {
