@@ -1,8 +1,8 @@
 import lanceDecompteDeconnexion from '../modules/deconnexion.js';
+import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 
 $(() => {
-  const $infos = $('#infos-csrf');
-  const { token } = JSON.parse($infos.text());
+  const { token } = lisDonneesPartagees('infos-csrf');
   axios.defaults.headers.common['X-CSRF-Token'] = token;
 
   axios.interceptors.response.use(

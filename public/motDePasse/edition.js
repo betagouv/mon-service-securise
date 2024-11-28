@@ -3,6 +3,7 @@ import {
   brancheValidation,
   declencheValidation,
 } from '../modules/interactions/validation.mjs';
+import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 
 $(() => {
   const reponseAcceptee = (nom) =>
@@ -22,8 +23,8 @@ $(() => {
   $(selecteurFormulaire).on('submit', (e) => {
     e.preventDefault();
 
-    const enModeInitialisation = JSON.parse($('#mode-initialisation').text());
-    const { estInvitation } = JSON.parse($('#invitation-contributeur').text());
+    const enModeInitialisation = lisDonneesPartagees('mode-initialisation');
+    const { estInvitation } = lisDonneesPartagees('invitation-contributeur');
     if (enModeInitialisation) {
       axios
         .put('/api/motDePasse', {

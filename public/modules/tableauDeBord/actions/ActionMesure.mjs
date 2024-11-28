@@ -1,4 +1,5 @@
 import ActionAbstraite from './Action.mjs';
+import lisDonneesPartagees from '../../donneesPartagees.mjs';
 
 class ActionMesure extends ActionAbstraite {
   constructor(titre = '') {
@@ -17,7 +18,7 @@ class ActionMesure extends ActionAbstraite {
     modeVisiteGuidee,
   }) {
     super.initialise();
-    const nonce = JSON.parse($('#nonce-commentaires').text());
+    const nonce = lisDonneesPartagees('nonce-commentaires');
     document.body.dispatchEvent(
       new CustomEvent('svelte-recharge-mesure', {
         detail: {

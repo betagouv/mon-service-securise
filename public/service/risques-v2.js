@@ -1,17 +1,17 @@
+import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
+
 $(() => {
   const idService = $('.page-service').data('id-service');
-  const { estLectureSeule } = JSON.parse($('#autorisations-risques').text());
-  const risques = JSON.parse($('#donnees-risques').text());
-  const categories = JSON.parse($('#donnees-referentiel-categories').text());
-  const niveauxVraisemblance = JSON.parse(
-    $('#donnees-referentiel-vraisemblances').text()
+  const { estLectureSeule } = lisDonneesPartagees('autorisations-risques');
+  const risques = lisDonneesPartagees('donnees-risques');
+  const categories = lisDonneesPartagees('donnees-referentiel-categories');
+  const niveauxVraisemblance = lisDonneesPartagees(
+    'donnees-referentiel-vraisemblances'
   );
-  const niveauxGravite = JSON.parse($('#donnees-referentiel-gravite').text());
-  const referentielRisques = JSON.parse(
-    $('#donnees-referentiel-risques').text()
-  );
-  const { matriceNiveauxRisque, niveauxRisque } = JSON.parse(
-    $('#donnees-referentiel-niveaux-risque').text()
+  const niveauxGravite = lisDonneesPartagees('donnees-referentiel-gravite');
+  const referentielRisques = lisDonneesPartagees('donnees-referentiel-risques');
+  const { matriceNiveauxRisque, niveauxRisque } = lisDonneesPartagees(
+    'donnees-referentiel-niveaux-risque'
   );
 
   document.body.dispatchEvent(

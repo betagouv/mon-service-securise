@@ -1,3 +1,5 @@
+import lisDonneesPartagees from '../donneesPartagees.mjs';
+
 const ORDRE_DE_TRI = {
   AUCUN: 0,
   ASC: 1,
@@ -19,7 +21,7 @@ const remplisCarteInformationIndiceCyber = (indiceCyberMoyen) => {
   $('#indice-cyber-moyen').text(indiceCyberMoyen);
 };
 
-const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
+const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
 const visiteGuideeActive =
   etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause;
 const modeVisiteGuidee =

@@ -1,3 +1,5 @@
+import lisDonneesPartagees from '../donneesPartagees.mjs';
+
 const uneSuggestion = (departement, nom, siret) => {
   /* eslint-disable no-irregular-whitespace */
   const siretFormatte =
@@ -93,7 +95,7 @@ $(() => {
     },
   });
 
-  const departements = JSON.parse($('#donnees-departements').text());
+  const departements = lisDonneesPartagees('donnees-departements');
   $champSelectizeDepartement = $('#departementEntite-selectize').selectize({
     plugins: ['clear_button'],
     options: departements.map((d) => ({ ...d, label: `${d.nom} (${d.code})` })),

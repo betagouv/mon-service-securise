@@ -1,7 +1,8 @@
+import lisDonneesPartagees from './modules/donneesPartagees.mjs';
+
 $(() => {
-  const $donneesProfil = $('#donnees-profil');
   const { utilisateur, departements, estimationNombreServices, entite } =
-    JSON.parse($donneesProfil.text());
+    lisDonneesPartagees('donnees-profil');
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-profil', {
       detail: { utilisateur, departements, estimationNombreServices, entite },
