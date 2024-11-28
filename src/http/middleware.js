@@ -211,14 +211,6 @@ const middleware = (configuration = {}) => {
     aseptiseListes([{ nom: nomListe, proprietes: proprietesParametre }]);
 
   const chargeEtatVisiteGuidee = async (requete, reponse, suite) => {
-    const visiteGuideeActive = adaptateurEnvironnement
-      .featureFlag()
-      .visiteGuideeActive();
-    reponse.locals.visiteGuideeActive = visiteGuideeActive;
-    if (!visiteGuideeActive) {
-      suite();
-      return;
-    }
     if (!requete.idUtilisateurCourant)
       throw new ErreurChainageMiddleware(
         'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
