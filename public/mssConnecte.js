@@ -1,5 +1,6 @@
 import initialiseComportementModale from './modules/interactions/modale.mjs';
 import lanceDecompteDeconnexion from './modules/deconnexion.js';
+import lisDonneesPartagees from './modules/donneesPartagees.mjs';
 
 $(() => {
   initialiseComportementModale($('.rideau#deconnexion'));
@@ -8,7 +9,7 @@ $(() => {
     new CustomEvent('svelte-recharge-centre-notifications')
   );
 
-  const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
+  const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
   if (etatVisiteGuidee.dejaTerminee === false) {
     document.body.dispatchEvent(
       new CustomEvent('svelte-recharge-visite-guidee', {

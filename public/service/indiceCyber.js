@@ -1,10 +1,10 @@
+import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
+
 $(() => {
   const idService = $('.page-service').data('id-service');
-  const { indiceCyber, noteMax } = JSON.parse(
-    $('#donnees-indice-cyber').text()
-  );
-  const { indiceCyberPersonnalise } = JSON.parse(
-    $('#donnees-indice-cyber-personnalise').text()
+  const { indiceCyber, noteMax } = lisDonneesPartagees('donnees-indice-cyber');
+  const { indiceCyberPersonnalise } = lisDonneesPartagees(
+    'donnees-indice-cyber-personnalise'
   );
 
   const brancheOnglets = () => {

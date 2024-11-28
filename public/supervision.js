@@ -1,8 +1,10 @@
+import lisDonneesPartagees from './modules/donneesPartagees.mjs';
+
 $(() => {
-  const optionsFiltrageDate = JSON.parse(
-    $('#referentiel-options-filtrage-date').text()
+  const optionsFiltrageDate = lisDonneesPartagees(
+    'referentiel-options-filtrage-date'
   );
-  const entitesSupervisees = JSON.parse($('#entites-supervisees').text());
+  const entitesSupervisees = lisDonneesPartagees('entites-supervisees');
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-supervision', {

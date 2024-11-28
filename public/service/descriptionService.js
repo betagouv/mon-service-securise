@@ -5,6 +5,7 @@ import {
   brancheValidation,
   declencheValidation,
 } from '../modules/interactions/validation.mjs';
+import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 
 const $boutonPrecedent = () => $('#etape-precedente');
 const $boutonSuivant = () => $('#etape-suivante');
@@ -48,7 +49,7 @@ const estNomServiceDejaUtilise = (reponseErreur) =>
   reponseErreur.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT';
 
 const estEnVisiteGuidee = () => {
-  const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
+  const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
   const visiteGuideeActive =
     etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause;
   const modeVisiteGuidee =
@@ -81,8 +82,8 @@ const brancheComportementNavigationEtapes = () => {
         cacheBouton($boutonPrecedent());
         cacheBouton($conteneurBoutonFinaliser());
 
-        const niveauRecommandeLectureSeule = JSON.parse(
-          $('#niveau-securite-recommande-lecture-seule').text()
+        const niveauRecommandeLectureSeule = lisDonneesPartagees(
+          'niveau-securite-recommande-lecture-seule'
         );
 
         let niveauDeSecuriteMinimal;
@@ -98,13 +99,13 @@ const brancheComportementNavigationEtapes = () => {
         }
         $('.icone-chargement', '#decrire-etape-3').hide();
 
-        const niveauSecuriteExistant = JSON.parse(
-          $('#niveau-securite-existant').text()
+        const niveauSecuriteExistant = lisDonneesPartagees(
+          'niveau-securite-existant'
         );
 
-        const lectureSeule = JSON.parse($('#decrire-lecture-seule').text());
-        const avecSuggestionBesoinsSecuriteRetrogrades = JSON.parse(
-          $('#suggestion-controle-besoins-securite-retrogrades').text()
+        const lectureSeule = lisDonneesPartagees('decrire-lecture-seule');
+        const avecSuggestionBesoinsSecuriteRetrogrades = lisDonneesPartagees(
+          'suggestion-controle-besoins-securite-retrogrades'
         );
         const idService = $('.page-service').data('id-service');
 

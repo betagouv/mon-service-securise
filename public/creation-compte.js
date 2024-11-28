@@ -1,17 +1,14 @@
-$(() => {
-  const $configurationComposantSvelte = $('#configuration-composant-svelte');
-  const { estimationNombreServices } = JSON.parse(
-    $configurationComposantSvelte.text()
-  );
-  const $informationsProfessionnelles = $('#informations-professionnelles');
-  const { informationsProfessionnelles } = JSON.parse(
-    $informationsProfessionnelles.text()
-  );
-  const $departements = $('#departements');
-  const { departements } = JSON.parse($departements.text());
+import lisDonneesPartagees from './modules/donneesPartagees.mjs';
 
-  const $invite = $('#invite');
-  const invite = JSON.parse($invite.text());
+$(() => {
+  const { estimationNombreServices } = lisDonneesPartagees(
+    'configuration-composant-svelte'
+  );
+  const { informationsProfessionnelles } = lisDonneesPartagees(
+    'informations-professionnelles'
+  );
+  const { departements } = lisDonneesPartagees('departements');
+  const invite = lisDonneesPartagees('invite');
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-inscription', {

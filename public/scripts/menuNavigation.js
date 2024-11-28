@@ -1,6 +1,7 @@
 import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
 import ActionContributeurs from '../modules/tableauDeBord/actions/ActionContributeurs.mjs';
 import ActionTelechargement from '../modules/tableauDeBord/actions/ActionTelechargement.mjs';
+import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 
 const tiroirContributeur = (idService, modeVisiteGuidee = false) => {
   const contributeurs = new ActionContributeurs();
@@ -131,7 +132,7 @@ const repliMenu = () => {
 
 $(async () => {
   const idService = $('.page-service').data('id-service');
-  const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
+  const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
   const modeVisiteGuidee =
     etatVisiteGuidee.dejaTerminee === false &&
     etatVisiteGuidee.enPause === false;

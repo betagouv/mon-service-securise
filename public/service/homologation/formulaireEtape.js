@@ -3,11 +3,12 @@ import {
   declencheValidation,
 } from '../../modules/interactions/validation.mjs';
 import basculeEnCoursChargement from '../../modules/enregistreRubrique.mjs';
+import lisDonneesPartagees from '../../modules/donneesPartagees.mjs';
 
 let formulaireDejaSoumis = false;
 
 const brancheComportemenFormulaireEtape = (actionSoumission) => {
-  const { estLectureSeule } = JSON.parse($('#autorisations-homologuer').text());
+  const { estLectureSeule } = lisDonneesPartagees('autorisations-homologuer');
   const $boutonSuivant = $('.bouton#suivant');
 
   const selecteurFormulaire = 'form.homologation';

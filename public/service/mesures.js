@@ -1,20 +1,21 @@
 import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
 import ActionMesure from '../modules/tableauDeBord/actions/ActionMesure.mjs';
 import ActionExportMesures from '../modules/tableauDeBord/actions/ActionExportMesures.mjs';
+import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 
 $(() => {
-  const categories = JSON.parse($('#referentiel-categories-mesures').text());
-  const statuts = JSON.parse($('#referentiel-statuts-mesures').text());
-  const priorites = JSON.parse($('#referentiel-priorites-mesures').text());
-  const retoursUtilisateur = JSON.parse(
-    $('#referentiel-retours-utilisateur').text()
+  const categories = lisDonneesPartagees('referentiel-categories-mesures');
+  const statuts = lisDonneesPartagees('referentiel-statuts-mesures');
+  const priorites = lisDonneesPartagees('referentiel-priorites-mesures');
+  const retoursUtilisateur = lisDonneesPartagees(
+    'referentiel-retours-utilisateur'
   );
-  const estLectureSeule = JSON.parse($('#securiser-lecture-seule').text());
+  const estLectureSeule = lisDonneesPartagees('securiser-lecture-seule');
   const idService = $('.page-service').data('id-service');
-  const { indiceCyber, noteMax } = JSON.parse($('#indice-cyber').text());
-  const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
-  const { indiceCyberPersonnalise } = JSON.parse(
-    $('#indice-cyber-personnalise').text()
+  const { indiceCyber, noteMax } = lisDonneesPartagees('indice-cyber');
+  const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
+  const { indiceCyberPersonnalise } = lisDonneesPartagees(
+    'indice-cyber-personnalise'
   );
 
   const enVisiteGuidee = () =>

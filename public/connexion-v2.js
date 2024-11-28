@@ -1,6 +1,7 @@
+import lisDonneesPartagees from './modules/donneesPartagees.mjs';
+
 $(() => {
-  const $urlRedirection = $('#url-redirection');
-  const { urlRedirection } = JSON.parse($urlRedirection.text());
+  const { urlRedirection } = lisDonneesPartagees('url-redirection');
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-connexion', {

@@ -1,6 +1,8 @@
+import lisDonneesPartagees from './modules/donneesPartagees.mjs';
+
 $(() => {
-  const { estSuperviseur } = JSON.parse($('#utilisateur-superviseur').text());
-  const etatVisiteGuidee = JSON.parse($('#etat-visite-guidee').text());
+  const { estSuperviseur } = lisDonneesPartagees('utilisateur-superviseur');
+  const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
   const visiteGuideeActive =
     etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause;
   const modeVisiteGuidee =
