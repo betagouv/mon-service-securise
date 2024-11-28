@@ -51,28 +51,8 @@ const brancheAjoutItem = (
   });
 };
 
-const peupleListeItems = (
-  selecteurConteneur,
-  selecteurDonnees,
-  cbZoneSaisie,
-  options = { ordreInverse: false, lectureSeule: false }
-) => {
-  const donneesItems = JSON.parse($(selecteurDonnees).text());
-  donneesItems.forEach((donnees, index) => {
-    afficheZoneSaisieItem(
-      selecteurConteneur,
-      cbZoneSaisie(index, donnees),
-      options.ordreInverse,
-      options.lectureSeule
-    );
-  });
-
-  return donneesItems.length;
-};
-
 export {
   brancheAjoutItem,
-  peupleListeItems,
   brancheSuppressionElement,
   EVENEMENT_SUPPRESSION_ELEMENT,
 };
