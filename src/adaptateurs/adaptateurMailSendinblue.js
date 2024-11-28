@@ -4,6 +4,7 @@ const {
   fabriqueAdaptateurGestionErreur,
 } = require('./fabriqueAdaptateurGestionErreur');
 const { ErreurApiBrevo } = require('../erreurs');
+const { enCadence } = require('../utilitaires/pThrottle');
 
 const enteteJSON = {
   headers: {
@@ -98,21 +99,27 @@ const creeContact = (
       return Promise.reject(e);
     });
 
-const metAJourDonneesContact = (destinataire, donnees) =>
-  axios
-    .put(
+const metAJourDonneesContact = async (destinataire, donnees) => {
+  try {
+    await axios.put(
       `${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
-      {
-        attributes: donnees,
-      },
+      { attributes: donnees },
       enteteJSON
-    )
-    .catch((e) => {
-      fabriqueAdaptateurGestionErreur().logueErreur(e, {
-        'Erreur renvoyée par API Brevo': e.response.data,
-      });
-      return Promise.reject(e);
+    );
+  } catch (e) {
+    fabriqueAdaptateurGestionErreur().logueErreur(e, {
+      'Erreur renvoyée par API Brevo': e.response.data,
     });
+    throw e;
+  }
+};
+
+let cadencee;
+const metAJourDonneesContactCadencee = async (destinataire, donnees) => {
+  // On limite à 3 appels par seconde pour ne pas prendre de 429 de Brevo.
+  if (!cadencee) cadencee = enCadence(300, metAJourDonneesContact);
+  await cadencee(destinataire, donnees);
+};
 
 const metAJourContact = (destinataire, prenom, nom, telephone) =>
   metAJourDonneesContact(destinataire, {
@@ -359,7 +366,7 @@ const supprimeContact = async (email) => {
 module.exports = {
   creeContact,
   metAJourContact,
-  metAJourDonneesContact,
+  metAJourDonneesContact: metAJourDonneesContactCadencee,
   creeEntreprise,
   desinscrisEmailsTransactionnels,
   desinscrisInfolettre,
