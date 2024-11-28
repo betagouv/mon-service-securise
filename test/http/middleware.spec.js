@@ -876,9 +876,6 @@ describe('Le middleware MSS', () => {
       let middleware;
 
       beforeEach(() => {
-        const adaptateurEnvironnement = {
-          featureFlag: () => ({ visiteGuideeActive: () => true }),
-        };
         const referentiel = creeReferentiel({
           etapesVisiteGuidee: {
             DECRIRE: {},
@@ -899,7 +896,6 @@ describe('Le middleware MSS', () => {
           });
         middleware = Middleware({
           depotDonnees,
-          adaptateurEnvironnement,
         });
       });
 
@@ -923,15 +919,6 @@ describe('Le middleware MSS', () => {
           .catch(done);
       });
 
-      it("ajoute le statut d'activation de la fonctionnalité visite guidée à `reponse.locals`", (done) => {
-        requete.idUtilisateurCourant = '1234';
-
-        middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
-          expect(reponse.locals.visiteGuideeActive).to.equal(true);
-          done();
-        });
-      });
-
       it("ajoute l'état de la visite guidée de l'utilisateur à `reponse.locals`", (done) => {
         requete.idUtilisateurCourant = '1234';
 
@@ -944,35 +931,6 @@ describe('Le middleware MSS', () => {
             prenom: 'Jeanne',
             profilComplet: false,
           });
-          done();
-        });
-      });
-    });
-
-    describe("quand la fonctionnalité visite guidée n'est pas active", () => {
-      let middleware;
-
-      beforeEach(() => {
-        const adaptateurEnvironnement = {
-          featureFlag: () => ({ visiteGuideeActive: () => false }),
-        };
-        middleware = Middleware({
-          adaptateurEnvironnement,
-        });
-      });
-
-      it("ajoute le statut d'activation de la fonctionnalité visite guidée à `reponse.locals`", (done) => {
-        requete.idUtilisateurCourant = '1234';
-
-        middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
-          expect(reponse.locals.visiteGuideeActive).to.equal(false);
-          done();
-        });
-      });
-
-      it("n'ajoute pas un objet d'état de visite guidée à `reponse.locals` quand la fonctionnalité visite guidée n'est pas active", (done) => {
-        middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
-          expect(reponse.locals.etatVisiteGuidee).to.be(undefined);
           done();
         });
       });

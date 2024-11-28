@@ -56,7 +56,6 @@ const chiffrement = () => ({
 });
 
 const featureFlag = () => ({
-  visiteGuideeActive: () => process.env.FEATURE_FLAG_VISITE_GUIDEE === 'true',
   avecAgentConnect: () =>
     process.env.OIDC_URL_BASE &&
     process.env.OIDC_CLIENT_ID &&
