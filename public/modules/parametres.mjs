@@ -92,22 +92,8 @@ const modifieParametresGroupementElements = (
   return params;
 };
 
-const parametresAvecItemsExtraits = (
-  selecteurForm,
-  nomListeItems,
-  sourceRegExpParamsItem
-) => {
-  const params = parametres(selecteurForm);
-  return modifieParametresAvecItemsExtraits(
-    params,
-    nomListeItems,
-    sourceRegExpParamsItem
-  );
-};
-
 export default parametres;
 export {
-  parametresAvecItemsExtraits,
   modifieParametresAvecItemsExtraits,
   modifieParametresGroupementElements,
 };
