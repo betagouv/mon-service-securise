@@ -56,7 +56,7 @@ const routesConnecteApiService = ({
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurZip,
-  adaptateurJournalMSS,
+  adaptateurJournal,
 }) => {
   const routes = express.Router();
 
@@ -926,7 +926,7 @@ const routesConnecteApiService = ({
         return;
       }
 
-      await adaptateurJournalMSS.consigneEvenement(
+      await adaptateurJournal.consigneEvenement(
         new EvenementRetourUtilisateurMesure({
           idService: service.id,
           idUtilisateur: idUtilisateurCourant,

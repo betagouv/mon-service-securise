@@ -19,7 +19,7 @@ const routesNonConnecteApi = ({
   adaptateurMail,
   inscriptionUtilisateur,
   adaptateurGestionErreur,
-  serviceCGU,
+  serviceCgu,
 }) => {
   const routes = express.Router();
 
@@ -30,7 +30,7 @@ const routesNonConnecteApi = ({
     async (requete, reponse, suite) => {
       const donnees = obtentionDonneesDeBaseUtilisateur(
         requete.body,
-        serviceCGU
+        serviceCgu
       );
       donnees.email = requete.body.email?.toLowerCase();
       const { donneesInvalides, messageErreur } =

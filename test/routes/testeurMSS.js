@@ -18,7 +18,7 @@ const { fabriqueServiceCgu } = require('../../src/serviceCgu');
 const testeurMss = () => {
   let serviceAnnuaire;
   let serviceSupervision;
-  let serviceCGU;
+  let serviceCgu;
   let adaptateurHorloge;
   let adaptateurCmsCrisp;
   let adaptateurMail;
@@ -28,7 +28,7 @@ const testeurMss = () => {
   let adaptateurZip;
   let adaptateurTracking;
   let adaptateurProtection;
-  let adaptateurJournalMSS;
+  let adaptateurJournal;
   let adaptateurOidc;
   let adaptateurEnvironnement;
   let adaptateurStatistiques;
@@ -106,7 +106,7 @@ const testeurMss = () => {
         () => (_requete, _reponse, suite) =>
           suite(),
     };
-    adaptateurJournalMSS = {
+    adaptateurJournal = {
       consigneEvenement: async () => {},
     };
     adaptateurOidc = {};
@@ -121,7 +121,7 @@ const testeurMss = () => {
       adaptateurMail,
       adaptateurTracking,
     });
-    serviceCGU = fabriqueServiceCgu({ referentiel });
+    serviceCgu = fabriqueServiceCgu({ referentiel });
 
     moteurRegles = new MoteurRegles(referentiel);
     depotVide()
@@ -132,7 +132,7 @@ const testeurMss = () => {
           adaptateurTracking,
           depotDonnees,
         });
-        serveur = MSS.creeServeur(
+        serveur = MSS.creeServeur({
           depotDonnees,
           middleware,
           referentiel,
@@ -147,18 +147,18 @@ const testeurMss = () => {
           adaptateurZip,
           adaptateurTracking,
           adaptateurProtection,
-          adaptateurJournalMSS,
+          adaptateurJournal,
           adaptateurOidc,
           adaptateurEnvironnement,
           adaptateurStatistiques,
           adaptateurJWT,
           serviceSupervision,
-          serviceCGU,
+          serviceCgu,
           procedures,
           inscriptionUtilisateur,
-          false,
-          false
-        );
+          avecCookieSecurise: false,
+          avecPageErreur: false,
+        });
         serveur.ecoute(1234, done);
       })
       .catch(done);
@@ -176,7 +176,7 @@ const testeurMss = () => {
     adaptateurCsv: () => adaptateurCsv,
     adaptateurZip: () => adaptateurZip,
     adaptateurTracking: () => adaptateurTracking,
-    adaptateurJournalMSS: () => adaptateurJournalMSS,
+    adaptateurJournalMSS: () => adaptateurJournal,
     adaptateurCmsCrisp: () => adaptateurCmsCrisp,
     adaptateurOidc: () => adaptateurOidc,
     adaptateurStatistiques: () => adaptateurStatistiques,
