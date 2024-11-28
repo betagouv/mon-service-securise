@@ -212,7 +212,7 @@ const routesConnectePageService = ({
       const risquesGenerauxAConsiderer = Object.keys(referentiel.risques())
         .map((id) => risquesGeneraux.find((r) => r.id === id) || { id })
         .map((donnees) => new RisqueGeneral(donnees, referentiel).toJSON());
-      reponse.render('service/risques-v2', {
+      reponse.render('service/risques', {
         InformationsService,
         referentiel,
         service,
