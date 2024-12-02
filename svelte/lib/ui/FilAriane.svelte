@@ -34,5 +34,10 @@
   a {
     color: var(--texte-gris);
     text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  a:hover {
+    text-decoration-thickness: 2px;
   }
 </style>
