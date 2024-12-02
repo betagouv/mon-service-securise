@@ -174,7 +174,7 @@ const creeServeur = ({
   app.use(adaptateurGestionErreur.controleurErreurs);
 
   if (avecPageErreur) {
-    app.use((_erreur, _requete, reponse, _suite) => {
+    app.use((_erreur, _requete, reponse) => {
       reponse.render('erreur');
     });
   }
