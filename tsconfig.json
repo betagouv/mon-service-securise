@@ -10,5 +10,5 @@
     "outDir": "dist",
     "allowJs": true
   },
-  "include": ["src/**/*", "server", "creeUtilisateurDemo.js"]
+  "include": ["src/**/*", "server.ts", "*.js"]
 }

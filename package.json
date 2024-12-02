@@ -7,12 +7,12 @@
     "npm": "10"
   },
   "scripts": {
-    "build": "knex migrate:latest && npm run cree-utilisateur-demo && npx vite build --config svelte/vite.config.mts",
-    "cree-utilisateur-demo": "node creeUtilisateurDemo.js",
+    "build": "knex migrate:latest && npm run cree-utilisateur-demo && npx vite build --config svelte/vite.config.mts  && npx tsc",
+    "cree-utilisateur-demo": "node dist/creeUtilisateurDemo.js",
     "test": "eslint . && mocha",
     "test:mocha": "mocha",
     "test:watch": "nodemon --exec mocha",
-    "start": "node --require dotenv/config server.ts",
+    "start": "node --require dotenv/config dist/server.js",
     "prepare": "husky install"
   },
   "lint-staged": {

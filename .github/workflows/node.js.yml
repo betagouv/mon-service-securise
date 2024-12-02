@@ -32,6 +32,9 @@ jobs:
       - name: Contrôler la mise en forme avec Prettier
         run: npx prettier --check .
 
+      - name: Contrôler le Typescript du Backend
+        run: npx tsc --noEmit
+
       - name: Contrôler le Typescript de Svelte
         run: npx tsc --noEmit -p svelte/tsconfig.json
 
