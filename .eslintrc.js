@@ -18,6 +18,7 @@ module.exports = {
     'public/bibliotheques/*.js',
     'public/composants-svelte/*.js',
     'public/composants-svelte/*.mjs',
+    'dist/',
   ],
   plugins: ['mocha'],
   rules: {
@@ -53,6 +54,20 @@ module.exports = {
     {
       files: ['src/erreurs.js', 'src/modeles/journalMSS/erreurs.js'],
       rules: { 'max-classes-per-file': ['off'] },
+    },
+    {
+      files: ['src/**/*.*ts'],
+      parser: '@typescript-eslint/parser',
+      extends: [
+        'airbnb-base',
+        'prettier',
+        'plugin:@typescript-eslint/recommended',
+      ],
+      plugins: ['mocha', '@typescript-eslint'],
+      rules: {
+        '@typescript-eslint/no-require-imports': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
+      },
     },
   ],
 };
