@@ -10,11 +10,47 @@
   import { resultatsDeRecherche } from './stores/resultatDeRecherche.store';
 
   export let indicesCybers: IndiceCyber[] = [];
+
+  let selection: string[] = [];
+
+  $: toutEstCoche = selection.length === $resultatsDeRecherche.length;
+  const basculeSelectionTousServices = () => {
+    if (toutEstCoche) selection = [];
+    else selection = $resultatsDeRecherche.map((s) => s.id);
+  };
+
+  $: $resultatsDeRecherche, supprimeSelection();
+  const supprimeSelection = () => {
+    selection = [];
+  };
 </script>
 
 <table>
   <thead>
     <tr>
+      <td colspan="6" class="case-conteneur-action">
+        <div class="conteneur-actions">
+          {#if selection.length}
+            {@const pluriel = selection.length > 1 ? 's' : ''}
+            <span class="nombre-selection">
+              {selection.length}
+              ligne{pluriel}
+              sélectionnée{pluriel}
+            </span>
+          {/if}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input
+          type="checkbox"
+          on:change={basculeSelectionTousServices}
+          checked={toutEstCoche}
+          indeterminate={!toutEstCoche && selection.length > 0}
+          title="Sélection de tous les services"
+        />
+      </td>
       <th>Nom du service</th>
       <th>Contributeurs</th>
       <th>Indice cyber</th>
@@ -29,6 +65,14 @@
         (i) => i.id === idService
       )?.indiceCyber}
       <tr>
+        <td>
+          <input
+            type="checkbox"
+            bind:group={selection}
+            value={idService}
+            title="Sélection du service {service.nomService}"
+          />
+        </td>
         <td>
           <a class="lien-service" href="/service/{idService}">
             {#if service.estProprietaire}
@@ -86,6 +130,10 @@
     line-height: 24px;
   }
 
+  table td:first-of-type {
+    border-right: 1px solid #ddd;
+  }
+
   .lien-service {
     display: flex;
     flex-direction: column;
@@ -98,5 +146,62 @@
 
   .lien-service:hover .nom-service {
     color: var(--bleu-mise-en-avant);
+  }
+
+  input[type='checkbox'] {
+    appearance: none;
+    border-radius: 4px;
+    border: 1px solid #042794;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  input[type='checkbox']:checked,
+  input[type='checkbox']:indeterminate {
+    background: var(--bleu-mise-en-avant);
+    border-color: var(--bleu-mise-en-avant);
+  }
+
+  input[type='checkbox']:checked::before {
+    content: '';
+    width: 4px;
+    height: 8px;
+    border-right: 1.5px solid white;
+    border-bottom: 1.5px solid white;
+    display: block;
+    transform: translate(4px, 1px) rotate(45deg);
+  }
+
+  input[type='checkbox']:focus-visible {
+    outline: 2px solid var(--bleu-mise-en-avant);
+    outline-offset: 2px;
+  }
+
+  input[type='checkbox']:indeterminate::before {
+    content: '';
+    height: 8px;
+    border-bottom: 1.5px solid white;
+    display: block;
+    transform: translate(4px, -1.5px) rotate(0);
+    border-right: 0;
+    width: 6px;
+  }
+
+  .case-conteneur-action {
+    padding: 0;
+  }
+
+  .conteneur-actions {
+    padding: 12px 24px;
+  }
+
+  .nombre-selection {
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5rem;
+    color: var(--gris-texte-additionnel);
   }
 </style>
