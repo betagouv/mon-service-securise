@@ -174,7 +174,8 @@ const creeServeur = ({
   app.use(adaptateurGestionErreur.controleurErreurs);
 
   if (avecPageErreur) {
-    app.use((_erreur, _requete, reponse) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    app.use((_erreur, _requete, reponse, _suite) => {
       reponse.render('erreur');
     });
   }
