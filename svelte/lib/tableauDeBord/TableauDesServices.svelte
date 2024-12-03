@@ -8,6 +8,9 @@
   import ActionRecommandee from './elementsDeService/ActionRecommandee.svelte';
   import type { IndiceCyber } from './tableauDeBord.d';
   import { resultatsDeRecherche } from './stores/resultatDeRecherche.store';
+  import Bouton from '../ui/Bouton.svelte';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
+  import TiroirDuplication from '../ui/tiroirs/TiroirDuplication.svelte';
 
   export let indicesCybers: IndiceCyber[] = [];
 
@@ -23,14 +26,20 @@
   const supprimeSelection = () => {
     selection = [];
   };
+
+  $: actionsDisponibles = selection.length !== 0;
+  $: selectionUnique = selection.length === 1;
 </script>
 
 <table>
   <thead>
     <tr>
       <td colspan="6" class="case-conteneur-action">
-        <div class="conteneur-actions">
-          {#if selection.length}
+        <div
+          class="conteneur-actions"
+          class:avec-nombre-lignes={actionsDisponibles}
+        >
+          {#if actionsDisponibles}
             {@const pluriel = selection.length > 1 ? 's' : ''}
             <span class="nombre-selection">
               {selection.length}
@@ -38,6 +47,24 @@
               sélectionnée{pluriel}
             </span>
           {/if}
+          <div class="boutons-actions">
+            <Bouton
+              titre="Dupliquer"
+              icone="copie"
+              type="lien"
+              actif={actionsDisponibles && selectionUnique}
+              on:click={() =>
+                tiroirStore.afficheContenu(
+                  TiroirDuplication,
+                  { idService: selection[0] },
+                  {
+                    titre: 'Dupliquer',
+                    sousTitre:
+                      "Créer une ou plusieurs copies du services sélectionné. Cette copie n'inclut pas les données concernant son homologation.",
+                  }
+                )}
+            />
+          </div>
         </div>
       </td>
     </tr>
@@ -195,6 +222,13 @@
 
   .conteneur-actions {
     padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+  }
+
+  .conteneur-actions.avec-nombre-lignes {
+    justify-content: space-between;
   }
 
   .nombre-selection {

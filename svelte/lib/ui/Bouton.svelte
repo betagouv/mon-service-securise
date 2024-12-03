@@ -1,6 +1,6 @@
 <script lang="ts">
   export let titre: string;
-  export let icone: 'suppression' | 'ajout' | '' = '';
+  export let icone: 'suppression' | 'ajout' | 'copie' | '' = '';
   export let type: 'primaire' | 'secondaire' | 'lien';
   export let actif: boolean = true;
   export let enCoursEnvoi: boolean = false;
@@ -38,6 +38,10 @@
 
   .suppression:before {
     background-image: url('/statique/assets/images/icone_poubelle.svg');
+  }
+
+  .copie:before {
+    background-image: url('/statique/assets/images/icone_copier.svg');
   }
 
   .ajout:before {
