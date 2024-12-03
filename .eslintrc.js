@@ -56,17 +56,25 @@ module.exports = {
       rules: { 'max-classes-per-file': ['off'] },
     },
     {
-      files: ['src/**/*.*ts'],
+      files: ['src/**/*.*ts', '*.ts'],
       parser: '@typescript-eslint/parser',
       extends: [
         'airbnb-base',
         'prettier',
         'plugin:@typescript-eslint/recommended',
       ],
+      settings: {
+        'import/resolver': {
+          node: {
+            extensions: ['.mjs', '.js', '.json', '.ts'],
+          },
+        },
+      },
       plugins: ['mocha', '@typescript-eslint'],
       rules: {
         '@typescript-eslint/no-require-imports': 'off',
         '@typescript-eslint/no-var-requires': 'off',
+        'import/extensions': ['error', { ts: 'never' }],
       },
     },
   ],
