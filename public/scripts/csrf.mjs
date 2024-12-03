@@ -8,7 +8,10 @@ $(() => {
   axios.interceptors.response.use(
     (response) => response,
     (error) => {
-      if (error.response.data.includes('CSRF token mismatch')) {
+      if (
+        typeof error.response.data === 'string' &&
+        error.response.data.includes('CSRF token mismatch')
+      ) {
         lanceDecompteDeconnexion(0);
       }
       return Promise.reject(error);
