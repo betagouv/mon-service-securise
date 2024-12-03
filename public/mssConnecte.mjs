@@ -9,6 +9,8 @@ $(() => {
     new CustomEvent('svelte-recharge-centre-notifications')
   );
 
+  document.body.dispatchEvent(new CustomEvent('svelte-recharge-tiroir'));
+
   const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
   if (etatVisiteGuidee.dejaTerminee === false) {
     document.body.dispatchEvent(
