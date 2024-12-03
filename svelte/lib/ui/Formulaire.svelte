@@ -3,6 +3,7 @@
 
   export let id: string = '';
   export let classe: string = '';
+  export let formulaireDuTiroir: boolean = false;
 
   let formulaire: HTMLFormElement;
 
@@ -44,6 +45,15 @@
   {id}
   novalidate
   class={classe}
+  class:formulaireDuTiroir
 >
   <slot />
 </form>
+
+<style>
+  .formulaireDuTiroir {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+</style>
