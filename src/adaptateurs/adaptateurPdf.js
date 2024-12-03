@@ -205,7 +205,10 @@ const genereTamponHomologation = async (donnees) => {
     });
 
     const imageTamponHomologation = await readFile(
-      resolve(__dirname, '../../public/assets/images/tampon_homologation.png')
+      resolve(
+        __dirname,
+        '../../../public/assets/images/tampon_homologation.png'
+      )
     );
     fichiers.push({
       nom: 'tamponHomologation.png',
