@@ -76,4 +76,43 @@
     border-color: var(--gris-inactif);
     color: #fff;
   }
+
+  button.lien:disabled {
+    background: none;
+    border: none;
+    color: #929292;
+  }
+
+  button.lien.avecIcone:disabled:before {
+    filter: brightness(0) invert(71%) sepia(13%) saturate(0%) hue-rotate(190deg)
+      brightness(80%) contrast(86%);
+  }
+
+  button.en-cours-chargement {
+    color: transparent;
+  }
+
+  button.en-cours-chargement::before {
+    position: absolute;
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    border-radius: 50%;
+    border: 2px solid white;
+    border-color: white transparent;
+    animation: rotation 1.2s linear infinite;
+    top: calc(50% - 10px);
+    left: calc(50% - 10px);
+  }
+
+  @keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 </style>
