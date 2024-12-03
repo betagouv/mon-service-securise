@@ -1,9 +1,10 @@
 // Axios est importé globalement depuis le pug
 // On veut utiliser Axios ici car il est configuré pour utiliser le token CSRF
 import type { ResumeNiveauDroit } from '../ui/types';
+import type { AxiosStatic } from 'axios';
 
 declare global {
-  const axios: any;
+  const axios: AxiosStatic;
   interface HTMLElementEventMap {
     'svelte-recharge-contributeurs': CustomEvent;
   }
