@@ -79,6 +79,9 @@
               <EtiquetteProprietaire />
             {/if}
             <span class="nom-service">{decode(service.nomService)}</span>
+            <span class="nom-organisation"
+              >{decode(service.organisationResponsable)}</span
+            >
           </a>
         </td>
         <td>
@@ -137,11 +140,18 @@
   .lien-service {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
     font-size: 14px;
     font-weight: 700;
     line-height: 24px;
     color: var(--texte-fonce);
+  }
+
+  .nom-organisation {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
   }
 
   .lien-service:hover .nom-service {
