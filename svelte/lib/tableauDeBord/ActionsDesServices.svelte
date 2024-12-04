@@ -12,6 +12,7 @@
   $: estProprietaireDesServicesSelectionnes = selection.every(
     (s) => s.estProprietaire
   );
+  $: ontDesDocuments = selection.every((s) => s.documentsPdfDisponibles.length);
 </script>
 
 <div class="conteneur-actions" class:avec-nombre-lignes={actionsDisponibles}>
@@ -28,7 +29,7 @@
       titre="Télécharger PDFs"
       icone="telechargement"
       type="lien"
-      actif={actionsDisponibles && selectionUnique}
+      actif={actionsDisponibles && selectionUnique && ontDesDocuments}
     />
     <Bouton
       titre="Exporter la sélection"
