@@ -1,6 +1,12 @@
 <script lang="ts">
   export let titre: string;
-  export let icone: 'suppression' | 'ajout' | 'copie' | 'export' | '' = '';
+  export let icone:
+    | 'suppression'
+    | 'ajout'
+    | 'copie'
+    | 'export'
+    | 'telechargement'
+    | '' = '';
   export let type: 'primaire' | 'secondaire' | 'lien';
   export let actif: boolean = true;
   export let enCoursEnvoi: boolean = false;
@@ -46,6 +52,10 @@
 
   .export:before {
     background-image: url('/statique/assets/images/icone_export_2.svg');
+  }
+
+  .telechargement:before {
+    background-image: url('/statique/assets/images/icone_telechargement_bleu_carre.svg');
   }
 
   .ajout:before {

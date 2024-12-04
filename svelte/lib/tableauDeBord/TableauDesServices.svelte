@@ -50,6 +50,12 @@
           {/if}
           <div class="boutons-actions">
             <Bouton
+              titre="Télécharger PDFs"
+              icone="telechargement"
+              type="lien"
+              actif={actionsDisponibles && selectionUnique}
+            />
+            <Bouton
               titre="Exporter la sélection"
               icone="export"
               type="lien"
