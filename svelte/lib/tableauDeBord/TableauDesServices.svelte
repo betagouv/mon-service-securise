@@ -9,6 +9,7 @@
   import type { IndiceCyber } from './tableauDeBord.d';
   import { resultatsDeRecherche } from './stores/resultatDeRecherche.store';
   import ActionsDesServices from './ActionsDesServices.svelte';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
 
   export let indicesCybers: IndiceCyber[] = [];
 
@@ -27,6 +28,8 @@
   const supprimeSelection = () => {
     selection = [];
   };
+
+  $: selection, tiroirStore.ferme();
 </script>
 
 <table>
