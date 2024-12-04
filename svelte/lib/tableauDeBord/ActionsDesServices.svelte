@@ -4,6 +4,7 @@
   import TiroirDuplication from '../ui/tiroirs/TiroirDuplication.svelte';
   import TiroirExportServices from '../ui/tiroirs/TiroirExportServices.svelte';
   import type { Service } from './tableauDeBord.d';
+  import TiroirTelechargementDocumentsService from '../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
 
   export let selection: Service[];
 
@@ -30,6 +31,16 @@
       icone="telechargement"
       type="lien"
       actif={actionsDisponibles && selectionUnique && ontDesDocuments}
+      on:click={() =>
+        tiroirStore.afficheContenu(
+          TiroirTelechargementDocumentsService,
+          { service: selection[0] },
+          {
+            titre: 'Télécharger les PDF',
+            sousTitre:
+              "Obtenir les documents utiles à la sécurisation et à l'homologation du service sélectionné.",
+          }
+        )}
     />
     <Bouton
       titre="Exporter la sélection"

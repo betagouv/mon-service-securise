@@ -1,4 +1,13 @@
 <script lang="ts">
+  import type { HTMLAnchorAttributes } from 'svelte/elements';
+
+  interface $$Props extends HTMLAnchorAttributes {
+    titre: string;
+    icone?: 'plus' | 'attention' | undefined;
+    type: 'bouton-primaire' | 'bouton-secondaire';
+    taille?: 'petit' | 'moyen';
+    href: string;
+  }
   export let titre: string;
   export let href: string;
   export let icone: 'plus' | 'attention' | undefined = undefined;
@@ -10,7 +19,8 @@
   class="{type} {icone} {taille}"
   class:avecIcone={!!icone}
   {href}
-  rel="noopener"
+  rel={$$restProps.rel || 'noopener'}
+  {...$$restProps}
 >
   {titre}
 </a>
