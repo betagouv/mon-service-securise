@@ -1,5 +1,10 @@
 extends mssConnecte
 
+block append styles
+  link(href = '/statique/assets/styles/tiroir.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
+
 block append scripts
   +composantSvelte('tableauDeBord.js')
   +donneesPartagees('utilisateur-superviseur', {estSuperviseur})
