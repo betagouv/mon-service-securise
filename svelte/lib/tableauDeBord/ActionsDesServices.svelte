@@ -3,8 +3,9 @@
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirDuplication from '../ui/tiroirs/TiroirDuplication.svelte';
   import TiroirExportServices from '../ui/tiroirs/TiroirExportServices.svelte';
+  import type { Service } from './tableauDeBord.d';
 
-  export let selection: string[];
+  export let selection: Service[];
 
   $: actionsDisponibles = selection.length !== 0;
   $: selectionUnique = selection.length === 1;
@@ -34,7 +35,7 @@
       on:click={() =>
         tiroirStore.afficheContenu(
           TiroirExportServices,
-          { idServices: selection },
+          { services: selection },
           {
             titre: 'Exporter la sélection',
             sousTitre:
@@ -50,7 +51,7 @@
       on:click={() =>
         tiroirStore.afficheContenu(
           TiroirDuplication,
-          { idService: selection[0] },
+          { service: selection[0] },
           {
             titre: 'Dupliquer',
             sousTitre:

@@ -12,12 +12,15 @@
 
   export let indicesCybers: IndiceCyber[] = [];
 
-  let selection: string[] = [];
+  let idsSelectionnes: string[] = [];
+  $: selection = $resultatsDeRecherche.filter((service) =>
+    idsSelectionnes.includes(service.id)
+  );
 
   $: toutEstCoche = selection.length === $resultatsDeRecherche.length;
   const basculeSelectionTousServices = () => {
-    if (toutEstCoche) selection = [];
-    else selection = $resultatsDeRecherche.map((s) => s.id);
+    if (toutEstCoche) idsSelectionnes = [];
+    else idsSelectionnes = $resultatsDeRecherche.map((service) => service.id);
   };
 
   $: $resultatsDeRecherche, supprimeSelection();
@@ -60,7 +63,7 @@
         <td>
           <input
             type="checkbox"
-            bind:group={selection}
+            bind:group={idsSelectionnes}
             value={idService}
             title="Sélection du service {service.nomService}"
           />
