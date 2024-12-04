@@ -53,8 +53,9 @@
           { services: selection },
           {
             titre: 'Exporter la sélection',
-            sousTitre:
-              'Télécharger les données du service sélectionné dans le tableau de bord.',
+            sousTitre: selectionUnique
+              ? 'Télécharger les données du service sélectionné dans le tableau de bord.'
+              : 'Télécharger la liste des services sélectionnés dans le tableau de bord.',
           }
         )}
     />
