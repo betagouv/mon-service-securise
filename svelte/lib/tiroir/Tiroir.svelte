@@ -34,6 +34,7 @@
     z-index: 20;
     display: flex;
     flex-direction: column;
+    color: var(--texte-fonce);
   }
 
   .tiroir.ouvert {
