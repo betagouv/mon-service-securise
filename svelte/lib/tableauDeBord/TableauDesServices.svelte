@@ -10,6 +10,7 @@
   import { resultatsDeRecherche } from './stores/resultatDeRecherche.store';
   import ActionsDesServices from './ActionsDesServices.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
+  import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
 
   export let indicesCybers: IndiceCyber[] = [];
 
@@ -85,6 +86,16 @@
         <td>
           <EtiquetteContributeurs
             nombreContributeurs={service.nombreContributeurs}
+            on:click={() =>
+              tiroirStore.afficheContenu(
+                TiroirGestionContributeurs,
+                { services: [service] },
+                {
+                  titre: 'Gérer les contributeurs',
+                  sousTitre:
+                    'Gérer la liste des personnes invitées à contribuer au service.',
+                }
+              )}
           />
         </td>
         <td>
