@@ -2,7 +2,7 @@
   import { tiroirStore } from '../ui/stores/tiroir.store';
 </script>
 
-<div class="tiroir" class:ouvert={$tiroirStore.ouvert}>
+<div id="tiroir" class:ouvert={$tiroirStore.ouvert}>
   {#if $tiroirStore.contenu}
     <div class="entete-tiroir">
       <button class="fermeture-tiroir" on:click={() => tiroirStore.ferme()}>
@@ -19,7 +19,7 @@
 </div>
 
 <style>
-  .tiroir {
+  #tiroir {
     height: 100%;
     min-width: 650px;
     max-width: 650px;
@@ -37,7 +37,7 @@
     color: var(--texte-fonce);
   }
 
-  .tiroir.ouvert {
+  #tiroir.ouvert {
     transform: translateX(-100%);
     visibility: visible;
   }
