@@ -4,7 +4,10 @@
   export let type: 'PDF' | 'ZIP';
   export let nom: string;
   export let description: string;
-  export let lien: string;
+  export let cheminDocument: string;
+  export let idService: string;
+
+  const lien = `/api/service/${idService}/pdf/${cheminDocument}?timestamp=${Date.now()}`;
 </script>
 
 <div class="document-telechargeable">
