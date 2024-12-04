@@ -6,8 +6,9 @@
   import { tiroirStore } from '../stores/tiroir.store';
   import Formulaire from '../Formulaire.svelte';
   import Lien from '../Lien.svelte';
+  import type { Service } from '../../tableauDeBord/tableauDeBord.d';
 
-  export let idService: string;
+  export let service: Service;
 
   let nombreCopies: number = 1;
   let enCoursEnvoi = false;
@@ -15,7 +16,7 @@
   const dupliqueService = async () => {
     enCoursEnvoi = true;
     const uneCopie = () =>
-      axios({ method: 'copy', url: `/api/service/${idService}` });
+      axios({ method: 'copy', url: `/api/service/${service.id}` });
 
     try {
       for (let i = 0; i < nombreCopies; i++) {
@@ -74,7 +75,7 @@
       <Lien
         type="bouton-primaire"
         titre="Aller dans « Décrire »"
-        href="/service/{idService}/descriptionService"
+        href="/service/{service.id}/descriptionService"
       />
     {:else}
       <Bouton

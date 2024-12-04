@@ -1,11 +1,12 @@
 <script lang="ts">
   import ContenuTiroir from './ContenuTiroir.svelte';
   import Lien from '../Lien.svelte';
+  import type { Service } from '../../tableauDeBord/tableauDeBord.d';
 
-  export let idServices: string[];
+  export let services: Service[];
 
   const queryString = new URLSearchParams();
-  idServices.forEach((id) => queryString.append('idsServices', id));
+  services.forEach((service) => queryString.append('idsServices', service.id));
   queryString.append('timestamp', Date.now().toString());
 
   const formatDateCourt = Intl.DateTimeFormat('fr-CA', {
