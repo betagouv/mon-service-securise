@@ -164,6 +164,7 @@
     height: 16px;
     margin: 0;
     cursor: pointer;
+    transform: none;
   }
 
   input[type='checkbox']:checked,
@@ -180,6 +181,7 @@
     border-bottom: 1.5px solid white;
     display: block;
     transform: translate(4px, 1px) rotate(45deg);
+    margin: 0;
   }
 
   input[type='checkbox']:focus-visible {
