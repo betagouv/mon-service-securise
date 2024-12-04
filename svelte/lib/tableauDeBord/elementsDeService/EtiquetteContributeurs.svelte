@@ -2,16 +2,16 @@
   export let nombreContributeurs: number;
 </script>
 
-<span>
+<button on:click>
   <img
     src="/statique/assets/images/icone_contributeurs.svg"
     alt="Icône du nombre de contributeurs"
   />
   {nombreContributeurs}
-</span>
+</button>
 
 <style>
-  span {
+  button {
     padding: 0 6px;
     display: flex;
     gap: 4px;
@@ -24,6 +24,16 @@
     color: var(--bleu-mise-en-avant);
     background: var(--cyan-clair);
     width: fit-content;
+    border: none;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #b6cffb;
+  }
+
+  button:active {
+    background: #7badef;
   }
 
   img {

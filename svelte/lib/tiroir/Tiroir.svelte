@@ -3,19 +3,23 @@
 </script>
 
 <div id="tiroir" class:ouvert={$tiroirStore.ouvert}>
-  {#if $tiroirStore.contenu}
-    <div class="entete-tiroir">
-      <button class="fermeture-tiroir" on:click={() => tiroirStore.ferme()}>
-        ✕
-      </button>
-      <h2 class="titre-tiroir">{$tiroirStore.contenu.configuration.titre}</h2>
-      <p class="texte-tiroir">{$tiroirStore.contenu.configuration.sousTitre}</p>
-    </div>
-    <svelte:component
-      this={$tiroirStore.contenu.composant}
-      {...$tiroirStore.contenu.props}
-    />
-  {/if}
+  {#key $tiroirStore}
+    {#if $tiroirStore.contenu}
+      <div class="entete-tiroir">
+        <button class="fermeture-tiroir" on:click={() => tiroirStore.ferme()}>
+          ✕
+        </button>
+        <h2 class="titre-tiroir">{$tiroirStore.contenu.configuration.titre}</h2>
+        <p class="texte-tiroir">
+          {$tiroirStore.contenu.configuration.sousTitre}
+        </p>
+      </div>
+      <svelte:component
+        this={$tiroirStore.contenu.composant}
+        {...$tiroirStore.contenu.props}
+      />
+    {/if}
+  {/key}
 </div>
 
 <style>
