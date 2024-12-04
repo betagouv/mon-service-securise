@@ -1,6 +1,6 @@
 <script lang="ts">
   export let titre: string;
-  export let icone: 'suppression' | 'ajout' | 'copie' | '' = '';
+  export let icone: 'suppression' | 'ajout' | 'copie' | 'export' | '' = '';
   export let type: 'primaire' | 'secondaire' | 'lien';
   export let actif: boolean = true;
   export let enCoursEnvoi: boolean = false;
@@ -42,6 +42,10 @@
 
   .copie:before {
     background-image: url('/statique/assets/images/icone_copier.svg');
+  }
+
+  .export:before {
+    background-image: url('/statique/assets/images/icone_export_2.svg');
   }
 
   .ajout:before {
