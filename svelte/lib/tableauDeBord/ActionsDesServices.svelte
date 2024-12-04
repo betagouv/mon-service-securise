@@ -9,6 +9,9 @@
 
   $: actionsDisponibles = selection.length !== 0;
   $: selectionUnique = selection.length === 1;
+  $: estProprietaireDesServicesSelectionnes = selection.every(
+    (s) => s.estProprietaire
+  );
 </script>
 
 <div class="conteneur-actions" class:avec-nombre-lignes={actionsDisponibles}>
@@ -47,7 +50,9 @@
       titre="Dupliquer"
       icone="copie"
       type="lien"
-      actif={actionsDisponibles && selectionUnique}
+      actif={actionsDisponibles &&
+        selectionUnique &&
+        estProprietaireDesServicesSelectionnes}
       on:click={() =>
         tiroirStore.afficheContenu(
           TiroirDuplication,
