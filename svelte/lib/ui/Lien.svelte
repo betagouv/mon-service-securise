@@ -4,7 +4,7 @@
   interface $$Props extends HTMLAnchorAttributes {
     titre: string;
     icone?: 'plus' | 'attention' | undefined;
-    type: 'bouton-primaire' | 'bouton-secondaire';
+    type?: 'bouton-primaire' | 'bouton-secondaire';
     taille?: 'petit' | 'moyen';
     href: string;
   }
