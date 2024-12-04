@@ -4,6 +4,7 @@
   import DocumentTelechargeable from './DocumentTelechargeable.svelte';
 
   export let service: Service;
+  export let modeVisiteGuidee: boolean = false;
 
   const idService = service.id;
   const nbPdfDisponibles = service.documentsPdfDisponibles.length;
@@ -22,6 +23,7 @@
       nom="Synthèse de la sécurité du service"
       description="Ce PDF résume en 1 page l'état de la sécurité du service."
       cheminDocument="syntheseSecurite.pdf"
+      {modeVisiteGuidee}
     />
   {/if}
   {#if documentDisponible('annexes')}
@@ -31,6 +33,7 @@
       nom="Annexes"
       description="Ce PDF détaille toutes les informations renseignées sur la sécurité du service."
       cheminDocument="annexes.pdf"
+      {modeVisiteGuidee}
     />
   {/if}
   {#if documentDisponible('dossierDecision')}
@@ -40,6 +43,7 @@
       nom="Décision d'homologation de sécurité"
       description="Ce PDF est le document de décision pouvant être signé par l'autorité d'homologation."
       cheminDocument="dossierDecision.pdf"
+      {modeVisiteGuidee}
     />
   {/if}
   {#if documentDisponible('archive')}
@@ -49,6 +53,7 @@
       nom="Tous les documents"
       description="Ce fichier .ZIP contient les {nbPdfDisponibles} PDF."
       cheminDocument="documentsHomologation.zip"
+      {modeVisiteGuidee}
     />
   {/if}
 </ContenuTiroir>

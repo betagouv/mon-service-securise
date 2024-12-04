@@ -6,6 +6,7 @@
   export let description: string;
   export let cheminDocument: string;
   export let idService: string;
+  export let modeVisiteGuidee: boolean = false;
 
   const lien = `/api/service/${idService}/pdf/${cheminDocument}?timestamp=${Date.now()}`;
 </script>
@@ -24,6 +25,7 @@
     type="bouton-primaire"
     href={lien}
     target="_blank"
+    inert={modeVisiteGuidee || null}
   />
 </div>
 
