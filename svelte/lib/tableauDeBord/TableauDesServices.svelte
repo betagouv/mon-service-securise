@@ -11,6 +11,7 @@
   import Bouton from '../ui/Bouton.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirDuplication from '../ui/tiroirs/TiroirDuplication.svelte';
+  import TiroirExportServices from '../ui/tiroirs/TiroirExportServices.svelte';
 
   export let indicesCybers: IndiceCyber[] = [];
 
@@ -48,6 +49,22 @@
             </span>
           {/if}
           <div class="boutons-actions">
+            <Bouton
+              titre="Exporter la sélection"
+              icone="export"
+              type="lien"
+              actif={actionsDisponibles}
+              on:click={() =>
+                tiroirStore.afficheContenu(
+                  TiroirExportServices,
+                  { idServices: selection },
+                  {
+                    titre: 'Exporter la sélection',
+                    sousTitre:
+                      'Télécharger les données du service sélectionné dans le tableau de bord.',
+                  }
+                )}
+            />
             <Bouton
               titre="Dupliquer"
               icone="copie"
@@ -247,5 +264,10 @@
     font-weight: 400;
     line-height: 1.5rem;
     color: var(--gris-texte-additionnel);
+  }
+
+  .boutons-actions {
+    display: flex;
+    gap: 16px;
   }
 </style>
