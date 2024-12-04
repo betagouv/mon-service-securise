@@ -59,7 +59,10 @@
   };
 </script>
 
-<svelte:body on:rafraichis-services={rafraichisServices} />
+<svelte:body
+  on:rafraichis-services={rafraichisServices}
+  on:collaboratif-service-modifie={rafraichisServices}
+/>
 <div class="tableau-de-bord">
   <span class="entete-tableau-de-bord">
     <h1>Mon tableau de bord</h1>

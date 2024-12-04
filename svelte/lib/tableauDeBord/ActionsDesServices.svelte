@@ -5,6 +5,7 @@
   import TiroirExportServices from '../ui/tiroirs/TiroirExportServices.svelte';
   import type { Service } from './tableauDeBord.d';
   import TiroirTelechargementDocumentsService from '../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
+  import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
 
   export let selection: Service[];
 
@@ -26,6 +27,23 @@
     </span>
   {/if}
   <div class="boutons-actions">
+    <Bouton
+      titre="Gérer les contributeurs"
+      icone="contributeurs"
+      type="lien"
+      actif={actionsDisponibles && estProprietaireDesServicesSelectionnes}
+      on:click={() =>
+        tiroirStore.afficheContenu(
+          TiroirGestionContributeurs,
+          { services: selection },
+          {
+            titre: 'Gérer les contributeurs',
+            sousTitre: selectionUnique
+              ? 'Gérer la liste des personnes invitées à contribuer au service.'
+              : 'Gérer la liste des personnes invitées à contribuer aux services.',
+          }
+        )}
+    />
     <Bouton
       titre="Télécharger PDFs"
       icone="telechargement"
