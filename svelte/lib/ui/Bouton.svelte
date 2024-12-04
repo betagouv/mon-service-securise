@@ -6,6 +6,7 @@
     | 'copie'
     | 'export'
     | 'telechargement'
+    | 'contributeurs'
     | '' = '';
   export let type: 'primaire' | 'secondaire' | 'lien';
   export let actif: boolean = true;
@@ -56,6 +57,10 @@
 
   .telechargement:before {
     background-image: url('/statique/assets/images/icone_telechargement_bleu_carre.svg');
+  }
+
+  .contributeurs:before {
+    background-image: url('/statique/assets/images/icone_gestion_contributeurs.svg');
   }
 
   .ajout:before {
