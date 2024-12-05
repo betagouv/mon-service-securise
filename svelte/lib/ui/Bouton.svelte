@@ -7,6 +7,7 @@
     | 'export'
     | 'telechargement'
     | 'contributeurs'
+    | 'rafraichir'
     | '' = '';
   export let type: 'primaire' | 'secondaire' | 'lien';
   export let actif: boolean = true;
@@ -61,6 +62,10 @@
 
   .contributeurs:before {
     background-image: url('/statique/assets/images/icone_gestion_contributeurs.svg');
+  }
+
+  .rafraichir:before {
+    background-image: url('/statique/assets/images/icone_rafraichir.svg');
   }
 
   .ajout:before {

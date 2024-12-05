@@ -11,6 +11,8 @@
   import ActionsDesServices from './ActionsDesServices.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
+  import Bouton from '../ui/Bouton.svelte';
+  import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
 
   export let indicesCybers: IndiceCyber[] = [];
 
@@ -31,93 +33,113 @@
   };
 
   $: selection, tiroirStore.ferme();
+
+  const supprimeRechercheEtFiltres = () => {
+    $rechercheTextuelle = '';
+  };
 </script>
 
 <table>
-  <thead>
-    <tr>
-      <td colspan="6" class="case-conteneur-action">
-        <ActionsDesServices {selection} />
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <input
-          type="checkbox"
-          on:change={basculeSelectionTousServices}
-          checked={toutEstCoche}
-          indeterminate={!toutEstCoche && selection.length > 0}
-          title="Sélection de tous les services"
-        />
-      </td>
-      <th>Nom du service</th>
-      <th>Contributeurs</th>
-      <th>Indice cyber</th>
-      <th>Homologation</th>
-      <th>Actions recommandées</th>
-    </tr>
-  </thead>
-  <tbody>
-    {#each $resultatsDeRecherche as service (service.id)}
-      {@const idService = service.id}
-      {@const indiceCyberDuService = indicesCybers.find(
-        (i) => i.id === idService
-      )?.indiceCyber}
+  {#if $resultatsDeRecherche.length === 0}
+    <div class="aucun-resultat">
+      <img
+        src="/statique/assets/images/illustration_recherche_vide.svg"
+        alt=""
+      />
+      Aucun service ne correspond à la recherche.
+      <Bouton
+        titre="Effacer la recherche"
+        type="secondaire"
+        icone="rafraichir"
+        on:click={supprimeRechercheEtFiltres}
+      />
+    </div>
+  {:else}
+    <thead>
+      <tr>
+        <td colspan="6" class="case-conteneur-action">
+          <ActionsDesServices {selection} />
+        </td>
+      </tr>
       <tr>
         <td>
           <input
             type="checkbox"
-            bind:group={idsSelectionnes}
-            value={idService}
-            title="Sélection du service {service.nomService}"
+            on:change={basculeSelectionTousServices}
+            checked={toutEstCoche}
+            indeterminate={!toutEstCoche && selection.length > 0}
+            title="Sélection de tous les services"
           />
         </td>
-        <td>
-          <a class="lien-service" href="/service/{idService}">
-            {#if service.estProprietaire}
-              <EtiquetteProprietaire />
-            {/if}
-            <span class="nom-service">{decode(service.nomService)}</span>
-            <span class="nom-organisation"
-              >{decode(service.organisationResponsable)}</span
-            >
-          </a>
-        </td>
-        <td>
-          <EtiquetteContributeurs
-            nombreContributeurs={service.nombreContributeurs}
-            on:click={() =>
-              tiroirStore.afficheContenu(
-                TiroirGestionContributeurs,
-                { services: [service] },
-                {
-                  titre: 'Gérer les contributeurs',
-                  sousTitre:
-                    'Gérer la liste des personnes invitées à contribuer au service.',
-                }
-              )}
-          />
-        </td>
-        <td>
-          {#if indiceCyberDuService !== undefined}
-            <EtiquetteIndiceCyber score={indiceCyberDuService} {idService} />
-          {:else}
-            <IconeChargementEnCours />
-          {/if}
-        </td>
-        <td>
-          <EtiquetteHomologation
-            statutHomologation={service.statutHomologation.id}
-            label={service.statutHomologation.libelle}
-            {idService}
-          />
-        </td>
-        <td>
-          <ActionRecommandee action={service.actionRecommandee} {idService} />
-        </td>
+        <th>Nom du service</th>
+        <th>Contributeurs</th>
+        <th>Indice cyber</th>
+        <th>Homologation</th>
+        <th>Actions recommandées</th>
       </tr>
-    {/each}
-  </tbody>
+    </thead>
+    <tbody>
+      {#each $resultatsDeRecherche as service (service.id)}
+        {@const idService = service.id}
+        {@const indiceCyberDuService = indicesCybers.find(
+          (i) => i.id === idService
+        )?.indiceCyber}
+        <tr>
+          <td>
+            <input
+              type="checkbox"
+              bind:group={idsSelectionnes}
+              value={idService}
+              title="Sélection du service {service.nomService}"
+            />
+          </td>
+          <td>
+            <a class="lien-service" href="/service/{idService}">
+              {#if service.estProprietaire}
+                <EtiquetteProprietaire />
+              {/if}
+              <span class="nom-service">{decode(service.nomService)}</span>
+              <span class="nom-organisation"
+                >{decode(service.organisationResponsable)}</span
+              >
+            </a>
+          </td>
+          <td>
+            <EtiquetteContributeurs
+              nombreContributeurs={service.nombreContributeurs}
+              on:click={() =>
+                tiroirStore.afficheContenu(
+                  TiroirGestionContributeurs,
+                  { services: [service] },
+                  {
+                    titre: 'Gérer les contributeurs',
+                    sousTitre:
+                      'Gérer la liste des personnes invitées à contribuer au service.',
+                  }
+                )}
+            />
+          </td>
+          <td>
+            {#if indiceCyberDuService !== undefined}
+              <EtiquetteIndiceCyber score={indiceCyberDuService} {idService} />
+            {:else}
+              <IconeChargementEnCours />
+            {/if}
+          </td>
+          <td>
+            <EtiquetteHomologation
+              statutHomologation={service.statutHomologation.id}
+              label={service.statutHomologation.libelle}
+              {idService}
+            />
+          </td>
+          <td>
+            <ActionRecommandee action={service.actionRecommandee} {idService} />
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  {/if}
 </table>
 
 <style>
@@ -212,5 +234,18 @@
 
   .case-conteneur-action {
     padding: 0;
+  }
+
+  .aucun-resultat {
+    padding: 36px 0;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-direction: column;
+    color: var(--texte-clair);
+  }
+
+  .aucun-resultat img {
+    max-width: 128px;
   }
 </style>
