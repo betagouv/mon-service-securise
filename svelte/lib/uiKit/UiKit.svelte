@@ -1,6 +1,6 @@
 <script lang="ts">
   import ListeDeroulante from '../ui/ListeDeroulante.svelte';
-  import { tick } from 'svelte';
+  import { onMount } from 'svelte';
   import FilAriane from '../ui/FilAriane.svelte';
   import BarreDeRecherche from '../ui/BarreDeRecherche.svelte';
 
@@ -18,8 +18,27 @@
   const declencheValidation = async (id: string) => {
     (document.getElementById(id) as HTMLInputElement)?.reportValidity();
   };
+
+  let entreesMenu: { titre: string; id: string }[] = [];
+  onMount(() => {
+    const titresComposants = document.querySelectorAll('h2');
+    titresComposants.forEach((element: HTMLHeadingElement) => {
+      const titre = element.innerText;
+      const id = titre.toLowerCase().replaceAll(/[^a-z]/g, '');
+      element.id = id;
+      entreesMenu = [...entreesMenu, { titre, id }];
+    });
+  });
 </script>
 
+<ul class="menu-navigation-ui-kit">
+  <h3>Liste des composants</h3>
+  {#each entreesMenu as entree}
+    <li>
+      <a href="#{entree.id}">{entree.titre}</a>
+    </li>
+  {/each}
+</ul>
 <div class="conteneur">
   <h1>Système de Design de MonServiceSécurisé</h1>
 
@@ -35,6 +54,7 @@
       taille={tailleBarreRecherche ? 'grand' : 'moyen'}
     />
     <div class="options-composant">
+      <h3>Options du composant</h3>
       <div>
         <input
           type="checkbox"
@@ -143,6 +163,10 @@
     text-align: left;
     background: white;
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    padding: 0 32px;
   }
 
   .conteneur {
@@ -159,5 +183,26 @@
   .options-composant {
     margin-top: 16px;
     padding: 8px 0;
+  }
+
+  ul {
+    margin-top: 32px;
+    padding: 0;
+    list-style: none;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: sticky;
+    top: 32px;
+    height: fit-content;
+  }
+
+  ul h3 {
+    margin: 0;
+  }
+
+  ul li a {
+    color: var(--texte-fonce);
   }
 </style>
