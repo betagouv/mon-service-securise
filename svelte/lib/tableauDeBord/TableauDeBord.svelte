@@ -16,7 +16,7 @@
   export let estSuperviseur: boolean;
   export let modeVisiteGuidee: boolean;
 
-  let enCoursChargement = false;
+  let enCoursChargement = true;
 
   let indicesCybers: IndiceCyber[] = [];
   let nombreServices: number;
@@ -37,7 +37,6 @@
   });
 
   const recupereServices = async () => {
-    enCoursChargement = true;
     const reponse: ReponseApiServices = (await axios.get('/api/services')).data;
     services.reinitialise(reponse.services);
     nombreServices = reponse.resume.nombreServices;
