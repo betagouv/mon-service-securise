@@ -12,6 +12,7 @@
   import { donneesVisiteGuidee } from './tableauDeBord';
   import { services } from './stores/services.store';
   import BandeauFiltres from './BandeauFiltres.svelte';
+  import { selectionIdsServices } from './stores/selectionService.store';
 
   export let estSuperviseur: boolean;
   export let modeVisiteGuidee: boolean;
@@ -39,6 +40,7 @@
   const recupereServices = async () => {
     const reponse: ReponseApiServices = (await axios.get('/api/services')).data;
     services.reinitialise(reponse.services);
+    selectionIdsServices.vide();
     nombreServices = reponse.resume.nombreServices;
     nombreServicesHomologues = reponse.resume.nombreServicesHomologues;
     enCoursChargement = false;
