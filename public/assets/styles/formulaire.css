@@ -359,7 +359,7 @@ input[type='checkbox'] + label.label-checkbox {
   background-image: url('/statique/assets/images/icone_cacher_mot_de_passe.svg');
 }
 
-.label-mot-de-passe {
+.label-confirmation {
   margin-bottom: 0.2em !important;
 }
 

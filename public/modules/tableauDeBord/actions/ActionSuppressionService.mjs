@@ -13,24 +13,24 @@ class ActionSuppressionService extends ActionAbstraite {
   initialise({ nomDuService, nbServicesSelectionnes }) {
     super.initialise();
     $('#action-suppression').show();
-    const $msgErreurChallenge = $(
-      '#mot-de-passe-challenge-suppression ~ .message-erreur-specifique'
-    );
-    const $champChallenge = $('#mot-de-passe-challenge-suppression');
-    $msgErreurChallenge.hide();
-    $champChallenge.val('');
-
-    $champChallenge.off('input');
-    $champChallenge.on('input', () => $msgErreurChallenge.hide());
+    const champConfirmation = $('#confirmation-suppression');
+    champConfirmation.val('');
+    champConfirmation.removeClass('touche');
 
     if (nbServicesSelectionnes === 1) {
       $('#nombre-service-suppression').html(
         `le service <strong>${nomDuService}</strong> `
       );
+      $('#intitule-confirmation').html(`<strong>${nomDuService}</strong>`);
+      champConfirmation.attr('pattern', nomDuService);
     } else {
       $('#nombre-service-suppression').html(
         `<strong>les ${nbServicesSelectionnes} services sélectionnés</strong> `
       );
+      $('#intitule-confirmation').html(
+        `<strong>${nbServicesSelectionnes} services</strong>`
+      );
+      champConfirmation.attr('pattern', `${nbServicesSelectionnes} services`);
     }
   }
 
@@ -41,7 +41,6 @@ class ActionSuppressionService extends ActionAbstraite {
 
   execute({ idServices }) {
     const $actionSuppression = $('#action-suppression');
-    const motDePasseChallenge = $('#mot-de-passe-challenge-suppression').val();
 
     if (!this.formulaireEstValide) return Promise.reject();
 
@@ -49,23 +48,10 @@ class ActionSuppressionService extends ActionAbstraite {
     this.basculeLoader(true);
 
     const suppressions = idServices.map((idService) =>
-      axios.delete(`/api/service/${idService}`, {
-        data: { motDePasseChallenge },
-      })
+      axios.delete(`/api/service/${idService}`)
     );
 
-    return Promise.all(suppressions).catch((exc) => {
-      if (exc.response.status === 401) {
-        const $msgErreurChallenge = $(
-          '#mot-de-passe-challenge-suppression ~ .message-erreur-specifique'
-        );
-        $msgErreurChallenge.css('display', 'flex');
-        $actionSuppression.show();
-        this.basculeLoader(false);
-
-        throw exc;
-      }
-    });
+    return Promise.all(suppressions);
   }
 }
 

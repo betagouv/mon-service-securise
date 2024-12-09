@@ -750,7 +750,6 @@ const routesConnecteApiService = ({
   routes.delete(
     '/:id',
     middleware.trouveService({}),
-    middleware.challengeMotDePasse,
     middleware.chargeAutorisationsService,
     (requete, reponse, suite) => {
       const verifiePermissionSuppressionService = () =>
