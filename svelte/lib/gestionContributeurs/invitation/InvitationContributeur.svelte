@@ -15,6 +15,7 @@
   import EnvoiEnCours from './EnvoiEnCours.svelte';
   import Rapport from './Rapport.svelte';
   import { contributeursRechercheVisiteGuidee } from '../modeVisiteGuidee/donneesVisiteGuidee';
+  import { toasterStore } from '../../ui/stores/toaster.store';
 
   export let modeVisiteGuidee: boolean;
 
@@ -70,6 +71,7 @@
     await api.envoieInvitations(Object.values(invitations), services);
     invitations = {};
     etapeCourante = 'Rapport';
+    toasterStore.succes('Succès', "Un e-mail d'invitation a bien été envoyé");
     document.body.dispatchEvent(
       new CustomEvent('collaboratif-service-modifie')
     );

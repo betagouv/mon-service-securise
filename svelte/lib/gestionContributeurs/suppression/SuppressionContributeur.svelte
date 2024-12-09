@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Utilisateur } from '../gestionContributeurs.d';
   import { store } from '../gestionContributeurs.store';
+  import { toasterStore } from '../../ui/stores/toaster.store';
 
   $: service = $store.services[0];
   $: utilisateur = $store.utilisateurEnCoursDeSuppression as Utilisateur;
@@ -10,6 +11,7 @@
       params: { idService: service.id, idContributeur: utilisateur.id },
     });
     store.contributeurs.supprime(utilisateur);
+    toasterStore.succes('Succès', 'Le contributeur a été retiré du service');
     document.body.dispatchEvent(
       new CustomEvent('collaboratif-service-modifie')
     );

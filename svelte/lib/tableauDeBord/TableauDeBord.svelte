@@ -12,6 +12,8 @@
   import { donneesVisiteGuidee } from './tableauDeBord';
   import { services } from './stores/services.store';
   import BandeauFiltres from './BandeauFiltres.svelte';
+  import { selectionIdsServices } from './stores/selectionService.store';
+  import Toaster from '../ui/Toaster.svelte';
 
   export let estSuperviseur: boolean;
   export let modeVisiteGuidee: boolean;
@@ -39,6 +41,7 @@
   const recupereServices = async () => {
     const reponse: ReponseApiServices = (await axios.get('/api/services')).data;
     services.reinitialise(reponse.services);
+    selectionIdsServices.vide();
     nombreServices = reponse.resume.nombreServices;
     nombreServicesHomologues = reponse.resume.nombreServicesHomologues;
     enCoursChargement = false;
@@ -62,6 +65,7 @@
   on:rafraichis-services={rafraichisServices}
   on:collaboratif-service-modifie={rafraichisServices}
 />
+<Toaster />
 <div class="tableau-de-bord">
   <span class="entete-tableau-de-bord">
     <h1>Mon tableau de bord</h1>

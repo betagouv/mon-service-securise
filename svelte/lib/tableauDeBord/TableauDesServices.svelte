@@ -13,26 +13,26 @@
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import Bouton from '../ui/Bouton.svelte';
   import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
+  import { selectionIdsServices } from './stores/selectionService.store';
 
   export let indicesCybers: IndiceCyber[] = [];
 
-  let idsSelectionnes: string[] = [];
   $: selection = $resultatsDeRecherche.filter((service) =>
-    idsSelectionnes.includes(service.id)
+    $selectionIdsServices.includes(service.id)
   );
 
   $: toutEstCoche = selection.length === $resultatsDeRecherche.length;
   const basculeSelectionTousServices = () => {
-    if (toutEstCoche) idsSelectionnes = [];
-    else idsSelectionnes = $resultatsDeRecherche.map((service) => service.id);
+    if (toutEstCoche) $selectionIdsServices = [];
+    else
+      $selectionIdsServices = $resultatsDeRecherche.map(
+        (service) => service.id
+      );
   };
 
-  $: $resultatsDeRecherche, supprimeSelection();
-  const supprimeSelection = () => {
-    selection = [];
-  };
+  $: $resultatsDeRecherche, selectionIdsServices.vide();
 
-  $: selection, tiroirStore.ferme();
+  $: $selectionIdsServices, tiroirStore.ferme();
 
   const supprimeRechercheEtFiltres = () => {
     $rechercheTextuelle = '';
@@ -88,7 +88,7 @@
           <td>
             <input
               type="checkbox"
-              bind:group={idsSelectionnes}
+              bind:group={$selectionIdsServices}
               value={idService}
               title="Sélection du service {service.nomService}"
             />
