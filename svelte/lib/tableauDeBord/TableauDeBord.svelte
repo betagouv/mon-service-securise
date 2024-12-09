@@ -13,6 +13,7 @@
   import { services } from './stores/services.store';
   import BandeauFiltres from './BandeauFiltres.svelte';
   import { selectionIdsServices } from './stores/selectionService.store';
+  import Toaster from '../ui/Toaster.svelte';
 
   export let estSuperviseur: boolean;
   export let modeVisiteGuidee: boolean;
@@ -64,6 +65,7 @@
   on:rafraichis-services={rafraichisServices}
   on:collaboratif-service-modifie={rafraichisServices}
 />
+<Toaster />
 <div class="tableau-de-bord">
   <span class="entete-tableau-de-bord">
     <h1>Mon tableau de bord</h1>
