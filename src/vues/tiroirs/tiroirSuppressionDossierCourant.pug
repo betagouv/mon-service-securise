@@ -11,11 +11,12 @@
     .banniere.banniere-information
       img(src='/statique/assets/images/icone_information_suppression.svg' alt='')
       .contenu-texte-information
-        p Pour permettre la suppression, veuillez saisir votre mot de passe actuel.
-    label.requis Mot de passe actuel
-      input(id='mot-de-passe-challenge-suppression-dossier-courant', name = 'motDePasseChallengeSuppression', type='password', required)
-      .message-erreur Ce champ est obligatoire. Veuillez le renseigner.
-      .message-erreur-specifique Le mot de passe actuel saisi est incorrect
+        p Pour confirmer la suppression du projet d'homologation, veuillez saisir l'intitulé "
+          strong projet d'homologation
+          span " dans le champ ci-dessous
+    label.requis.label-confirmation Confirmation
+      input(id='confirmation-suppression', name = 'confirmationSuppression', type='text', required, pattern="projet d'homologation")
+      .message-erreur La confirmation saisie est incorrecte
     .conteneur-loader
       .icone-chargement
       .titre-loader Suppression en cours…
