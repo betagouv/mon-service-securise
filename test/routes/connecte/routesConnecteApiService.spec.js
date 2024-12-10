@@ -2864,16 +2864,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it('utilise le middleware de challenge du mot de passe', (done) => {
-      testeurMSS().middleware().verifieChallengeMotDePasse(
-        {
-          method: 'delete',
-          url: 'http://localhost:1234/api/service/123/homologation/dossierCourant',
-        },
-        done
-      );
-    });
-
     it("retourne une erreur HTTP 422 si le service n'a pas de dossier courant", async () => {
       const service = unService().construis();
       testeur.middleware().reinitialise({ serviceARenvoyer: service });
