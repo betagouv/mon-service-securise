@@ -1,8 +1,14 @@
+import Express = require('express');
+import adaptateurEnvironnement = require('./adaptateurEnvironnement');
+import AdaptateurGestionErreur = require('./adaptateurGestionErreur.interface');
+
 const Sentry = require('@sentry/node');
 const { IpDeniedError } = require('express-ipfilter');
-const adaptateurEnvironnement = require('./adaptateurEnvironnement');
 
-const logueErreur = (erreur, infosDeContexte = {}) => {
+const logueErreur = (
+  erreur: Error,
+  infosDeContexte: Record<string, string> = {}
+) => {
   Sentry.withScope(() => {
     Object.entries(infosDeContexte).forEach(([cle, valeur]) =>
       Sentry.setExtra(cle, valeur)
@@ -11,7 +17,7 @@ const logueErreur = (erreur, infosDeContexte = {}) => {
   });
 };
 
-const initialise = (applicationExpress) => {
+const initialise = (applicationExpress: Express.Application) => {
   const config = adaptateurEnvironnement.sentry();
 
   Sentry.init({
@@ -30,7 +36,12 @@ const initialise = (applicationExpress) => {
   applicationExpress.use(Sentry.Handlers.tracingHandler());
 };
 
-const controleurErreurs = (erreur, requete, reponse, suite) => {
+const controleurErreurs = (
+  erreur: Error,
+  requete: Express.Request,
+  reponse: Express.Response,
+  suite: Express.NextFunction
+) => {
   const estErreurDeFiltrageIp = erreur instanceof IpDeniedError;
   if (estErreurDeFiltrageIp) {
     // On termine la connexion directement si qqun nous appelle sans passer par Baleen.
@@ -40,12 +51,13 @@ const controleurErreurs = (erreur, requete, reponse, suite) => {
   const estErreurCSRF = erreur.message === 'CSRF token mismatch';
   if (estErreurCSRF) {
     logueErreur(new Error('Une erreur CSRF mismatch a été détectée'), {
-      'Token CSRF du client': requete.headers['x-csrf-token'],
+      'Token CSRF du client': requete.headers['x-csrf-token'] as string,
     });
   }
 
   if (requete && requete.body) {
     Object.keys(requete.body).forEach((cle) => {
+      // eslint-disable-next-line no-param-reassign
       if (cle.includes('motDePasse')) requete.body[cle] = '********';
     });
   }
@@ -53,8 +65,10 @@ const controleurErreurs = (erreur, requete, reponse, suite) => {
   return Sentry.Handlers.errorHandler()(erreur, requete, reponse, suite);
 };
 
-module.exports = {
+const adaptateurGestionErreurSentry: AdaptateurGestionErreur = {
   initialise,
   controleurErreurs,
   logueErreur,
 };
+
+module.exports = adaptateurGestionErreurSentry;
