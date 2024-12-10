@@ -1,3 +1,5 @@
+import AdaptateurGestionErreur = require('./adaptateurs/adaptateurGestionErreur.interface');
+
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const express = require('express');
@@ -19,6 +21,36 @@ const routesNonConnecteOidc = require('./routes/nonConnecte/routesNonConnecteOid
 const routesConnecteOidc = require('./routes/connecte/routesConnecteOidc');
 
 require('dotenv').config();
+
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+type ConfigurationServeur = {
+  depotDonnees: any;
+  middleware: any;
+  referentiel: any;
+  moteurRegles: any;
+  adaptateurCmsCrisp: any;
+  adaptateurMail: any;
+  adaptateurPdf: any;
+  adaptateurHorloge: any;
+  adaptateurGestionErreur: AdaptateurGestionErreur;
+  serviceAnnuaire: any;
+  adaptateurCsv: any;
+  adaptateurZip: any;
+  adaptateurTracking: any;
+  adaptateurProtection: any;
+  adaptateurJournal: any;
+  adaptateurOidc: any;
+  adaptateurEnvironnement: any;
+  adaptateurStatistiques: any;
+  adaptateurJWT: any;
+  serviceSupervision: any;
+  serviceCgu: any;
+  procedures: any;
+  inscriptionUtilisateur: any;
+  avecCookieSecurise: boolean;
+  avecPageErreur: boolean;
+};
+/* eslint-enable  @typescript-eslint/no-explicit-any */
 
 const creeServeur = ({
   depotDonnees,
@@ -46,7 +78,7 @@ const creeServeur = ({
   inscriptionUtilisateur,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
   avecPageErreur = process.env.NODE_ENV === 'production',
-}) => {
+}: ConfigurationServeur) => {
   let serveur;
 
   const app = express();
