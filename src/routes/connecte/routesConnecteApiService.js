@@ -732,7 +732,6 @@ const routesConnecteApiService = ({
   routes.delete(
     '/:id/homologation/dossierCourant',
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
-    middleware.challengeMotDePasse,
     async (requete, reponse, suite) => {
       const { service } = requete;
       try {
