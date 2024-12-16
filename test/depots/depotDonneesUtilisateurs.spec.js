@@ -600,6 +600,7 @@ describe('Le dépôt de données des utilisateurs', () => {
     describe("quand l'utilisateur n'existe pas déjà", () => {
       const adaptateurHorloge = {};
       let adaptateurPersistance;
+      let adaptateurProfilAnssi;
 
       beforeEach(() => {
         let compteurId = 0;
@@ -614,12 +615,16 @@ describe('Le dépôt de données des utilisateurs', () => {
           { utilisateurs: [] },
           adaptateurHorloge
         );
+        adaptateurProfilAnssi = {
+          inscris: () => {},
+        };
         depot = DepotDonneesUtilisateurs.creeDepot({
           adaptateurChiffrement,
           adaptateurJWT,
           adaptateurPersistance,
           adaptateurUUID,
           adaptateurRechercheEntite,
+          adaptateurProfilAnssi,
           busEvenements: bus,
         });
       });
@@ -769,6 +774,21 @@ describe('Le dépôt de données des utilisateurs', () => {
 
         const utilisateur = await adaptateurPersistance.utilisateur('1');
         expect(utilisateur.donnees.motDePasse).to.be(undefined);
+      });
+
+      it("inscris l'utilisateur dans MonProfilAnssi", async () => {
+        let profilAnssiEnvoyeAAdaptateur;
+        adaptateurProfilAnssi.inscris = (utilisateur) =>
+          (profilAnssiEnvoyeAAdaptateur = utilisateur);
+
+        await depot.nouvelUtilisateur(
+          unUtilisateur()
+            .quiSAppelle('Jean Dupont')
+            .avecEmail('jean.dupont@mail.fr').donnees
+        );
+
+        const utilisateur = await depot.utilisateur('1');
+        expect(profilAnssiEnvoyeAAdaptateur).to.eql(utilisateur);
       });
     });
 
