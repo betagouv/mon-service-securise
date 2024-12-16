@@ -14,6 +14,7 @@ const Entite = require('../modeles/entite');
 const EvenementUtilisateurModifie = require('../bus/evenementUtilisateurModifie');
 const EvenementUtilisateurInscrit = require('../bus/evenementUtilisateurInscrit');
 const { creeReferentielVide } = require('../referentiel');
+const adaptateurMonProfilAnssiParDefaut = require('../adaptateurs/adaptateurProfilAnssi');
 
 const serviceCguParDefaut = fabriqueServiceCgu({
   referentiel: creeReferentielVide(),
@@ -161,6 +162,7 @@ const creeDepot = (config = {}) => {
     adaptateurJWT = adaptateurJWTParDefaut,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = fabriqueAdaptateurUUID(),
+    adaptateurProfilAnssi = adaptateurMonProfilAnssiParDefaut,
     adaptateurRechercheEntite,
     busEvenements,
     serviceCgu = serviceCguParDefaut,
@@ -203,6 +205,8 @@ const creeDepot = (config = {}) => {
     await p.ajoute(id, donneesUtilisateur);
     await p.idResetMotDePasse.sauvegarde(id, idResetMotDePasse);
     u = await p.lis.un(id);
+
+    adaptateurProfilAnssi.inscris(u);
 
     await busEvenements.publie(
       new EvenementUtilisateurInscrit({ utilisateur: u })
