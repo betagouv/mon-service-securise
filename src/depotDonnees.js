@@ -17,6 +17,9 @@ const depotDonneesParrainages = require('./depots/depotDonneesParrainages');
 const {
   fabriqueAdaptateurChiffrement,
 } = require('./adaptateurs/fabriqueAdaptateurChiffrement');
+const {
+  fabriqueAdaptateurProfilAnssi,
+} = require('./adaptateurs/fabriqueAdaptateurProfilAnssi');
 
 const creeDepot = (config = {}) => {
   const {
@@ -38,6 +41,7 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance,
     adaptateurUUID,
     adaptateurRechercheEntite,
+    adaptateurProfilAnssi: fabriqueAdaptateurProfilAnssi(),
     busEvenements,
     serviceCgu,
   });

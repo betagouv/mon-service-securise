@@ -14,7 +14,7 @@ const Entite = require('../modeles/entite');
 const EvenementUtilisateurModifie = require('../bus/evenementUtilisateurModifie');
 const EvenementUtilisateurInscrit = require('../bus/evenementUtilisateurInscrit');
 const { creeReferentielVide } = require('../referentiel');
-const adaptateurMonProfilAnssiParDefaut = require('../adaptateurs/adaptateurProfilAnssi');
+const adaptateurMonProfilAnssiParDefaut = require('../adaptateurs/adaptateurProfilAnssiVide');
 
 const serviceCguParDefaut = fabriqueServiceCgu({
   referentiel: creeReferentielVide(),
