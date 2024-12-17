@@ -56,6 +56,7 @@ const chiffrement = () => ({
 });
 
 const featureFlag = () => ({
+  avecServiceMonProfilAnssi: () => process.env.PROFIL_ANSSI_ACTIF === 'true',
   avecAgentConnect: () =>
     process.env.OIDC_URL_BASE &&
     process.env.OIDC_CLIENT_ID &&
