@@ -63,6 +63,7 @@ services:
       - PUPPETEER_SKIP_DOWNLOAD=true
     networks:
       - mss-network
+      - lab-network
     ports:
       - '${PORT_MSS}:3000'
       - '9229:9229'
@@ -86,6 +87,8 @@ services:
 
 networks:
   mss-network:
+    external: true
+  lab-network:
     external: true
 
 volumes:
