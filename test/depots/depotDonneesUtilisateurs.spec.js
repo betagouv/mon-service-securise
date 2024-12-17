@@ -29,12 +29,16 @@ describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurChiffrement;
   let adaptateurRechercheEntite;
   let bus;
+  let adaptateurProfilAnssi;
 
   beforeEach(() => {
     adaptateurJWT = 'Un adaptateur';
     adaptateurChiffrement = fauxAdaptateurChiffrement();
     adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
     bus = fabriqueBusPourLesTests();
+    adaptateurProfilAnssi = {
+      inscris: () => {},
+    };
   });
 
   it("retourne l'utilisateur authentifié en cherchant par hash d'email", async () => {
@@ -201,11 +205,18 @@ describe('Le dépôt de données des utilisateurs', () => {
             .quiSAppelle('Jean Dupont')
             .avecEmail('jean.dupont@mail.fr').donnees
         )
+        .ajouteUnUtilisateur(
+          unUtilisateur()
+            .avecId('124')
+            .avecEmail('invite@mail.fr')
+            .quiAEteInvite().donnees
+        )
         .construis();
       depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurChiffrement,
         adaptateurPersistance,
         adaptateurRechercheEntite,
+        adaptateurProfilAnssi,
         busEvenements: bus,
       });
     });
@@ -348,6 +359,33 @@ describe('Le dépôt de données des utilisateurs', () => {
       expect(recu.utilisateur.id).to.be('123');
       expect(recu.utilisateur.prenom).to.be('Jérôme');
       expect(recu.utilisateur.nom).to.be('Dubois');
+    });
+
+    it("inscris l'invité confirmant son compte MSS dans MonProfilAnssi", async () => {
+      let profilAnssiEnvoyeAAdaptateur;
+      adaptateurProfilAnssi.inscris = (utilisateur) =>
+        (profilAnssiEnvoyeAAdaptateur = utilisateur);
+
+      await depot.metsAJourUtilisateur(
+        '124',
+        unUtilisateur().avecId('124').quiSAppelle('Justine Lange').donnees
+      );
+
+      const utilisateur = await depot.utilisateur('124');
+      expect(profilAnssiEnvoyeAAdaptateur).to.eql(utilisateur);
+    });
+
+    it('ne réinscris pas dans MonProfilAnssi un utilisateur MSS qui met à jour son compte', async () => {
+      let profilAnssiEnvoyeAAdaptateur;
+      adaptateurProfilAnssi.inscris = (utilisateur) =>
+        (profilAnssiEnvoyeAAdaptateur = utilisateur);
+
+      await depot.metsAJourUtilisateur(
+        '123',
+        unUtilisateur().avecId('123').quiSAppelle('Justine Lange').donnees
+      );
+
+      expect(profilAnssiEnvoyeAAdaptateur).to.eql(undefined);
     });
   });
 
@@ -600,7 +638,6 @@ describe('Le dépôt de données des utilisateurs', () => {
     describe("quand l'utilisateur n'existe pas déjà", () => {
       const adaptateurHorloge = {};
       let adaptateurPersistance;
-      let adaptateurProfilAnssi;
 
       beforeEach(() => {
         let compteurId = 0;
@@ -615,9 +652,6 @@ describe('Le dépôt de données des utilisateurs', () => {
           { utilisateurs: [] },
           adaptateurHorloge
         );
-        adaptateurProfilAnssi = {
-          inscris: () => {},
-        };
         depot = DepotDonneesUtilisateurs.creeDepot({
           adaptateurChiffrement,
           adaptateurJWT,
