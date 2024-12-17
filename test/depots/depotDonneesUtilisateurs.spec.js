@@ -810,7 +810,7 @@ describe('Le dépôt de données des utilisateurs', () => {
         expect(utilisateur.donnees.motDePasse).to.be(undefined);
       });
 
-      it("inscris l'utilisateur dans MonProfilAnssi", async () => {
+      it("inscris l'utilisateur avec un compte complet dans MonProfilAnssi", async () => {
         let profilAnssiEnvoyeAAdaptateur;
         adaptateurProfilAnssi.inscris = (utilisateur) =>
           (profilAnssiEnvoyeAAdaptateur = utilisateur);
@@ -823,6 +823,19 @@ describe('Le dépôt de données des utilisateurs', () => {
 
         const utilisateur = await depot.utilisateur('1');
         expect(profilAnssiEnvoyeAAdaptateur).to.eql(utilisateur);
+      });
+
+      it("n'inscris pas l'utilisateur invité dans MonProfilAnssi", async () => {
+        let profilAnssiEnvoyeAAdaptateur;
+        adaptateurProfilAnssi.inscris = (utilisateur) =>
+          (profilAnssiEnvoyeAAdaptateur = utilisateur);
+
+        await depot.nouvelUtilisateur(
+          unUtilisateur().avecEmail('jean.dupont@mail.fr').quiAEteInvite()
+            .donnees
+        );
+
+        expect(profilAnssiEnvoyeAAdaptateur).to.eql(undefined);
       });
     });
 

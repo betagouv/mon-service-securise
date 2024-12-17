@@ -206,7 +206,9 @@ const creeDepot = (config = {}) => {
     await p.idResetMotDePasse.sauvegarde(id, idResetMotDePasse);
     u = await p.lis.un(id);
 
-    adaptateurProfilAnssi.inscris(u);
+    if (!u.estUnInvite()) {
+      await adaptateurProfilAnssi.inscris(u);
+    }
 
     await busEvenements.publie(
       new EvenementUtilisateurInscrit({ utilisateur: u })
