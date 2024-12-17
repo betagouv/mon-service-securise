@@ -24,6 +24,12 @@ Créer un `network` Docker pour accueillir MonServiceSécurisé en local.
 $ docker network create mss-network
 ```
 
+Créer un `network` Docker pour accueillir les services du Lab en local, s'il n'existe pas déjà.
+
+```sh
+$ docker network create lab-network
+```
+
 Créer un fichier `.env` à partir du fichier `.env.template` et renseigner les diverses variables d'environnement.
 
 Lancer le script `scripts/start.sh`
