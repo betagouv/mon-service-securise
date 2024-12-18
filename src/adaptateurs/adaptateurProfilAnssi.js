@@ -41,7 +41,10 @@ const metsAJour = async ({ nom, prenom, email, entite, telephone, postes }) => {
   );
 };
 
+const recupere = async () => undefined;
+
 module.exports = {
   inscris,
+  recupere,
   metsAJour,
 };

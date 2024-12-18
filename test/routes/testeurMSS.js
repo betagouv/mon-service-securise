@@ -13,6 +13,7 @@ const {
   fabriqueInscriptionUtilisateur,
 } = require('../../src/modeles/inscriptionUtilisateur');
 const adaptateurJWTParDefaut = require('../../src/adaptateurs/adaptateurJWT');
+const adaptateurProfilAnssiParDefaut = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
 const { fabriqueServiceCgu } = require('../../src/serviceCgu');
 
 const testeurMss = () => {
@@ -33,6 +34,7 @@ const testeurMss = () => {
   let adaptateurEnvironnement;
   let adaptateurStatistiques;
   let adaptateurJWT;
+  let adaptateurProfilAnssi;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -114,6 +116,7 @@ const testeurMss = () => {
       recupereStatistiques: async () => {},
     };
     adaptateurJWT = adaptateurJWTParDefaut;
+    adaptateurProfilAnssi = adaptateurProfilAnssiParDefaut;
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
     procedures = fabriqueProcedures({
@@ -152,6 +155,7 @@ const testeurMss = () => {
           adaptateurEnvironnement,
           adaptateurStatistiques,
           adaptateurJWT,
+          adaptateurProfilAnssi,
           serviceSupervision,
           serviceCgu,
           procedures,
@@ -181,6 +185,7 @@ const testeurMss = () => {
     adaptateurOidc: () => adaptateurOidc,
     adaptateurStatistiques: () => adaptateurStatistiques,
     adaptateurJWT: () => adaptateurJWT,
+    adaptateurProfilAnssi: () => adaptateurProfilAnssi,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,

@@ -40,6 +40,7 @@ const fabriqueAdaptateurSupervision = require('./src/adaptateurs/fabriqueAdaptat
 const adaptateurStatistiques = require('./src/adaptateurs/adaptateurStatistiquesMetabase');
 const { fabriqueServiceCgu } = require('./src/serviceCgu');
 const ServiceSupervision = require('./src/supervision/serviceSupervision');
+const adaptateurProfilAnssi = require('./src/adaptateurs/adaptateurProfilAnssi');
 
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
@@ -123,6 +124,7 @@ const serveur = MSS.creeServeur({
   adaptateurEnvironnement,
   adaptateurStatistiques,
   adaptateurJWT,
+  adaptateurProfilAnssi,
   serviceSupervision,
   serviceCgu,
   procedures,
