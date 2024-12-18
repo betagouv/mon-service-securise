@@ -273,9 +273,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       expect(
         donneesPartagees(reponse.data, 'informations-professionnelles')
       ).to.eql({
-        informationsProfessionnelles: {
-          organisation: null,
-        },
+        informationsProfessionnelles: {},
       });
     });
 
@@ -289,9 +287,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       expect(
         donneesPartagees(reponse.data, 'informations-professionnelles')
       ).to.eql({
-        informationsProfessionnelles: {
-          organisation: null,
-        },
+        informationsProfessionnelles: {},
       });
     });
 
@@ -304,6 +300,37 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
       expect(donneesPartagees(reponse.data, 'departements')).to.eql({
         departements: [{ nom: 'Gironde' }],
+      });
+    });
+
+    it('ajoute les informations provenant du profil Anssi', async () => {
+      testeur.adaptateurJWT().decode = () => ({ email: 'jeand@beta.fr' });
+      testeur.adaptateurProfilAnssi().recupere = (email) =>
+        email === 'jeand@beta.fr'
+          ? {
+              organisation: { siret: '1234', nom: 'BLEU', departement: '75' },
+              telephone: '0607080910',
+              domainesSpecialite: ['RSSI', 'DEV'],
+            }
+          : undefined;
+
+      const reponse = await axios.get(
+        `http://localhost:1234/creation-compte?token=unTokenValide`
+      );
+
+      expect(
+        donneesPartagees(reponse.data, 'informations-professionnelles')
+      ).to.eql({
+        informationsProfessionnelles: {
+          email: 'jeand@beta.fr',
+          organisation: {
+            siret: '1234',
+            departement: '75',
+            nom: 'BLEU',
+          },
+          telephone: '0607080910',
+          domainesSpecialite: ['RSSI', 'DEV'],
+        },
       });
     });
   });

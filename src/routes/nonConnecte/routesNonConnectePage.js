@@ -10,6 +10,7 @@ const routesNonConnectePage = ({
   adaptateurEnvironnement,
   adaptateurStatistiques,
   adaptateurJWT,
+  adaptateurProfilAnssi,
   serviceAnnuaire,
   depotDonnees,
   middleware,
@@ -76,7 +77,16 @@ const routesNonConnectePage = ({
     }
 
     const { prenom, nom, email, siret, invite } = donneesUtilisateur;
-    let organisation = null;
+
+    const profilAnssi = await adaptateurProfilAnssi.recupere(email);
+
+    let organisation;
+    let telephone;
+    let domainesSpecialite;
+    if (profilAnssi) {
+      ({ telephone, domainesSpecialite, organisation } = profilAnssi);
+    }
+
     if (siret) {
       const organisations = await serviceAnnuaire.rechercheOrganisations(siret);
       if (organisations.length > 0)
@@ -88,7 +98,14 @@ const routesNonConnectePage = ({
     }
     reponse.render('creation-compte', {
       estimationNombreServices: referentiel.estimationNombreServices(),
-      informationsProfessionnelles: { prenom, nom, email, organisation },
+      informationsProfessionnelles: {
+        prenom,
+        nom,
+        email,
+        organisation,
+        telephone,
+        domainesSpecialite,
+      },
       departements: referentiel.departements(),
       invite: !!invite,
     });
