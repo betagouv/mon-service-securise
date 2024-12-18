@@ -21,7 +21,25 @@ const inscris = async ({ nom, prenom, email, entite, telephone, postes }) => {
   );
 };
 
-const metsAJour = async (_utilisateur) => {};
+const metsAJour = async ({ nom, prenom, email, entite, telephone, postes }) => {
+  const jeton = process.env.PROFIL_ANSSI_JETON_API;
+  const urlProfil = `${process.env.PROFIL_ANSSI_URL_BASE}/profil/${email}`;
+  await axios.put(
+    urlProfil,
+    {
+      nom,
+      prenom,
+      organisation: entite,
+      telephone,
+      domainesSpecialite: postes,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${jeton}`,
+      },
+    }
+  );
+};
 
 module.exports = {
   inscris,
