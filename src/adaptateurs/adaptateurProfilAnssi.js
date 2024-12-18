@@ -21,6 +21,9 @@ const inscris = async ({ nom, prenom, email, entite, telephone, postes }) => {
   );
 };
 
+const metsAJour = async (_utilisateur) => {};
+
 module.exports = {
   inscris,
+  metsAJour,
 };

@@ -23,6 +23,7 @@ const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
 const EvenementUtilisateurModifie = require('../../src/bus/evenementUtilisateurModifie');
 const EvenementUtilisateurInscrit = require('../../src/bus/evenementUtilisateurInscrit');
+const adaptateurProfilAnssiVide = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
 
 describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurJWT;
@@ -36,9 +37,7 @@ describe('Le dépôt de données des utilisateurs', () => {
     adaptateurChiffrement = fauxAdaptateurChiffrement();
     adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
     bus = fabriqueBusPourLesTests();
-    adaptateurProfilAnssi = {
-      inscris: () => {},
-    };
+    adaptateurProfilAnssi = adaptateurProfilAnssiVide;
   });
 
   it("retourne l'utilisateur authentifié en cherchant par hash d'email", async () => {
@@ -386,6 +385,32 @@ describe('Le dépôt de données des utilisateurs', () => {
       );
 
       expect(profilAnssiEnvoyeAAdaptateur).to.eql(undefined);
+    });
+
+    it('mets à jour MonProfilAnssi pour un utilisateur MSS qui met à jour son compte', async () => {
+      let profilAnssiEnvoyeAAdaptateurPourMiseAJour;
+      adaptateurProfilAnssi.metsAJour = (utilisateur) =>
+        (profilAnssiEnvoyeAAdaptateurPourMiseAJour = utilisateur);
+
+      await depot.metsAJourUtilisateur(
+        '123',
+        unUtilisateur().avecId('123').quiSAppelle('Justine Lange').donnees
+      );
+
+      const utilisateur = await depot.utilisateur('123');
+      expect(profilAnssiEnvoyeAAdaptateurPourMiseAJour).to.eql(utilisateur);
+    });
+
+    it("ne mets pas à jour l'invité après son inscription dans MonProfilAnssi", async () => {
+      let miseAJourAppelee = false;
+      adaptateurProfilAnssi.metsAJour = () => (miseAJourAppelee = true);
+
+      await depot.metsAJourUtilisateur(
+        '124',
+        unUtilisateur().avecId('124').quiSAppelle('Justine Lange').donnees
+      );
+
+      expect(miseAJourAppelee).to.be(false);
     });
   });
 

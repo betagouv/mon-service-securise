@@ -271,6 +271,8 @@ const creeDepot = (config = {}) => {
 
     if (etaitUnInvite) {
       await adaptateurProfilAnssi.inscris(u);
+    } else {
+      await adaptateurProfilAnssi.metsAJour(u);
     }
 
     await busEvenements.publie(
