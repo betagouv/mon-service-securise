@@ -1,3 +1,5 @@
+import { fabriqueAdaptateurProfilAnssi } from './src/adaptateurs/fabriqueAdaptateurProfilAnssi';
+
 const Middleware = require('./src/http/middleware');
 const DepotDonnees = require('./src/depotDonnees');
 const MoteurRegles = require('./src/moteurRegles');
@@ -40,8 +42,8 @@ const fabriqueAdaptateurSupervision = require('./src/adaptateurs/fabriqueAdaptat
 const adaptateurStatistiques = require('./src/adaptateurs/adaptateurStatistiquesMetabase');
 const { fabriqueServiceCgu } = require('./src/serviceCgu');
 const ServiceSupervision = require('./src/supervision/serviceSupervision');
-const adaptateurProfilAnssi = require('./src/adaptateurs/adaptateurProfilAnssi');
 
+const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurTracking = fabriqueAdaptateurTracking();
 const adaptateurJournal = fabriqueAdaptateurJournalMSS();
