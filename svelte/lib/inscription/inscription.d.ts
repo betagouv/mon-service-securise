@@ -24,6 +24,8 @@ export type InformationsProfessionnelles = {
   nom: string;
   email: string;
   organisation: Organisation;
+  telephone: string;
+  domainesSpecialite: string[];
 };
 
 export type Departement = {
