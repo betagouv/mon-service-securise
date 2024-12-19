@@ -39,7 +39,8 @@ const metsAJour = async ({ nom, prenom, email, entite, telephone, postes }) => {
 
 const recupere = async (email) => {
   const urlProfil = `${process.env.PROFIL_ANSSI_URL_BASE}/profil/${email}`;
-  return axios.get(urlProfil, CONFIGURATION_AUTHENTIFICATION);
+  const reponse = await axios.get(urlProfil, CONFIGURATION_AUTHENTIFICATION);
+  return reponse.data;
 };
 
 module.exports = {
