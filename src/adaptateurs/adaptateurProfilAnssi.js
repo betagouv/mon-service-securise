@@ -41,7 +41,15 @@ const metsAJour = async ({ nom, prenom, email, entite, telephone, postes }) => {
   );
 };
 
-const recupere = async () => undefined;
+const recupere = async (email) => {
+  const jeton = process.env.PROFIL_ANSSI_JETON_API;
+  const urlProfil = `${process.env.PROFIL_ANSSI_URL_BASE}/profil/${email}`;
+  return axios.get(urlProfil, {
+    headers: {
+      Authorization: `Bearer ${jeton}`,
+    },
+  });
+};
 
 module.exports = {
   inscris,
