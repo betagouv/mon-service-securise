@@ -1,5 +1,5 @@
 name: Déploiement vers un environnement de DEV
-
+permissions: {}
 on:
   workflow_dispatch: # Pour activer le déclenchement manuel
 
