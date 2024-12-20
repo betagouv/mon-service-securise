@@ -40,12 +40,6 @@ Se connecter au conteneur de la base de données et créer une nouvelle base `ms
 $ docker compose exec mss-db createdb -U postgres mss
 ```
 
-Exécuter les migrations depuis le conteneur du serveur web.
-
-```sh
-$ docker compose exec web npx knex migrate:latest
-```
-
 Le serveur est configuré et prêt à être redémarré.
 
 ## Lancement du serveur
@@ -72,6 +66,15 @@ Il est alors possible de créer un compte utilisateur à l'url `http://localhost
 Les tests peuvent être lancés depuis un conteneur Docker en exécutant le script
 `scripts/tests.sh`. Les tests sont alors rejoués à chaque modification de
 fichier du projet sur la machine hôte.
+
+## Migration de la base de données
+
+Les scripts de migration de la base de données sont exécutés automatiquement au démarrage du service.
+Si vous avez besoin d'exécuter manuellement ces migrations vous pouvez le faire en exécutant la commande suivante :
+
+```sh
+$ docker compose exec web npx knex migrate:latest
+```
 
 ## Conception
 
