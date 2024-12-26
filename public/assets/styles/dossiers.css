@@ -24,8 +24,8 @@
 }
 
 .homologation .dossier:not(.dossier-courant) {
-  padding-top: 26px;
-  padding-bottom: 26px;
+  padding-top: 18px;
+  padding-bottom: 18px;
 }
 
 .homologation .dossier.dossier-courant:hover {
