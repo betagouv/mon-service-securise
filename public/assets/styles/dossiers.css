@@ -63,7 +63,6 @@
   display: flex;
   flex-direction: row;
   gap: 32px;
-  align-items: baseline;
 }
 
 .homologation .contenu-details {
@@ -111,11 +110,6 @@
 
 .homologation #supprime-dossier-courant:before {
   content: url('/statique/assets/images/icone_poubelle.svg');
-}
-
-.homologation .contenu-dossier {
-  display: flex;
-  align-items: center;
 }
 
 .homologation .conteneur-actions {

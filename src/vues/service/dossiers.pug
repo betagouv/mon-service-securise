@@ -15,10 +15,10 @@ mixin dossier({ statut, dossier, service, indiceCyber, indiceCyberPersonnalise, 
     }
 
   .dossier(class=classeCss)
-    .contenu-dossier
+    div
+      .statut= statut
       .contenu-gauche
         .contenu-statut
-          .statut= statut
           .conteneur-statut-indice-cyber
             if afficheStatutHomologation
               - const statutHomologation = dossier.statutHomologation()
