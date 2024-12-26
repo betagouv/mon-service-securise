@@ -28,6 +28,10 @@
   padding-bottom: 26px;
 }
 
+.homologation .dossier.dossier-courant:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.12);
+}
+
 .homologation .statut {
   font-size: 1.11em;
   white-space: nowrap;
