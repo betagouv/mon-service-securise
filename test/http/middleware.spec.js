@@ -62,10 +62,17 @@ describe('Le middleware MSS', () => {
   const reponse = {};
   const depotDonnees = {};
 
-  const leMiddleware = ({ adaptateurJWT, adaptateurEnvironnement } = {}) =>
+  const leMiddleware = ({
+    adaptateurJWT,
+    adaptateurEnvironnement,
+    adaptateurGestionErreur,
+  } = {}) =>
     Middleware({
       adaptateurJWT: adaptateurJWT || { decode: () => ({}) },
       adaptateurEnvironnement,
+      adaptateurGestionErreur: adaptateurGestionErreur || {
+        identifieUtilisateur: () => {},
+      },
       depotDonnees,
     });
 
@@ -169,6 +176,44 @@ describe('Le middleware MSS', () => {
       const suite = () =>
         done("Le middleware suivant n'aurait pas dû être appelé");
       middleware.verificationJWT(requete, reponse, suite);
+    });
+
+    describe("identifie l'utilisateur pour la gestion d'erreur", () => {
+      it("par l'identifiant présent dans son token", async () => {
+        let idCourant;
+        const adaptateurGestionErreur = {
+          identifieUtilisateur: (idUtilisateur) => {
+            idCourant = idUtilisateur;
+          },
+        };
+
+        const middleware = leMiddleware({
+          adaptateurJWT: { decode: () => ({ idUtilisateur: '123' }) },
+          adaptateurGestionErreur,
+        });
+
+        await middleware.verificationJWT(requete, reponse, () => {});
+
+        expect(idCourant).to.be('123');
+      });
+
+      it('en conservant le timestamp de création de son token', async () => {
+        let timestampToken;
+        const adaptateurGestionErreur = {
+          identifieUtilisateur: (_idUtilisateur, timestampTokenJwt) => {
+            timestampToken = timestampTokenJwt;
+          },
+        };
+
+        const middleware = leMiddleware({
+          adaptateurJWT: { decode: () => ({ iat: 123456789 }) },
+          adaptateurGestionErreur,
+        });
+
+        await middleware.verificationJWT(requete, reponse, () => {});
+
+        expect(timestampToken).to.be(123456789);
+      });
     });
   });
 
