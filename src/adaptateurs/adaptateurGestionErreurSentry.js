@@ -53,8 +53,16 @@ const controleurErreurs = (erreur, requete, reponse, suite) => {
   return Sentry.Handlers.errorHandler()(erreur, requete, reponse, suite);
 };
 
+const identifieUtilisateur = (idUtilisateur, timestampTokenJwt) => {
+  Sentry.setUser({
+    id: idUtilisateur,
+    'Connexion UTC': new Date(timestampTokenJwt * 1_000),
+  });
+};
+
 module.exports = {
   initialise,
+  identifieUtilisateur,
   controleurErreurs,
   logueErreur,
 };

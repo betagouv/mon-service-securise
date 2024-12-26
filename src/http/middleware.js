@@ -24,6 +24,7 @@ const middleware = (configuration = {}) => {
     adaptateurEnvironnement = adaptateurEnvironnementParDefaut,
     adaptateurJWT,
     adaptateurProtection,
+    adaptateurGestionErreur,
   } = configuration;
 
   const positionneHeaders = (requete, reponse, suite) => {
@@ -91,6 +92,11 @@ const middleware = (configuration = {}) => {
       token.idUtilisateur
     );
     if (!utilisateurExiste) return reponse.redirect('/connexion');
+
+    adaptateurGestionErreur.identifieUtilisateur(
+      token.idUtilisateur,
+      token.iat
+    );
 
     requete.idUtilisateurCourant = token.idUtilisateur;
     requete.cguAcceptees = token.cguAcceptees;

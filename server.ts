@@ -85,6 +85,7 @@ const middleware = Middleware({
   adaptateurEnvironnement,
   adaptateurJWT,
   adaptateurProtection,
+  adaptateurGestionErreur,
   depotDonnees,
 });
 
