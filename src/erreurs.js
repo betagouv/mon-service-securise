@@ -3,6 +3,12 @@ class EchecEnvoiMessage extends Error {}
 class ErreurApiBrevo extends Error {}
 class ErreurDroitsIncoherents extends Error {}
 class ErreurChainageMiddleware extends Error {}
+class ErreurBusEvenements extends Error {
+  constructor(typeEvenement, erreurDeAbonne) {
+    const details = { cause: erreurDeAbonne };
+    super(`Erreur dans un abonné à [${typeEvenement}]`, details);
+  }
+}
 class ErreurModele extends Error {}
 class ErreurArticleCrispIntrouvable extends ErreurModele {}
 class ErreurAutorisationExisteDeja extends ErreurModele {}
@@ -70,6 +76,7 @@ module.exports = {
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
   ErreurAvisInvalide,
+  ErreurBusEvenements,
   ErreurCategoriesRisqueManquantes,
   ErreurCategorieRisqueInconnue,
   ErreurCategorieInconnue,

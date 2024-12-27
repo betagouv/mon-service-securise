@@ -1,3 +1,5 @@
+const { ErreurBusEvenements } = require('../erreurs');
+
 class BusEvenements {
   constructor({ adaptateurGestionErreur }) {
     this.handlers = {};
@@ -18,7 +20,9 @@ class BusEvenements {
     // Dans un souci de performance : on ne veut pas attendre les exécutions.
     this.handlers[evenement.constructor.name]?.forEach((handler) => {
       handler(evenement).catch((e) => {
-        this.adaptateurGestionErreur.logueErreur(e);
+        this.adaptateurGestionErreur.logueErreur(
+          new ErreurBusEvenements(evenement.constructor.name, e)
+        );
       });
     });
   }
