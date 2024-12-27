@@ -1,6 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 const expect = require('expect.js');
 const BusEvenements = require('../../src/bus/busEvenements');
+const { ErreurBusEvenements } = require('../../src/erreurs');
 
 class EvenementTestA {
   constructor(increment) {
@@ -103,7 +104,7 @@ describe("Le bus d'événements", () => {
     expect(compteur).to.be(1);
   });
 
-  it("envoie les erreurs des handlers à l'adaptateur de gestion d'erreur", async () => {
+  it("logue les erreurs des abonnés, sans oublier la cause de l'erreur", async () => {
     let erreurEnregistree;
 
     const bus = creeBusEvenements({
@@ -112,12 +113,17 @@ describe("Le bus d'événements", () => {
       },
     });
     bus.abonne(EvenementTestA, async () => {
-      throw new Error('BOUM');
+      throw new Error('BOOM DANS ABONNÉ');
     });
 
     await bus.publie(new EvenementTestA());
 
-    expect(erreurEnregistree).to.eql(new Error('BOUM'));
+    expect(erreurEnregistree).to.be.an(ErreurBusEvenements);
+    expect(erreurEnregistree.message).to.be(
+      'Erreur dans un abonné à [EvenementTestA]'
+    );
+    expect(erreurEnregistree.cause).to.be.an(Error);
+    expect(erreurEnregistree.cause.message).to.be('BOOM DANS ABONNÉ');
   });
 
   it("reste robuste si aucun handler n'existe pour l'événement", async () => {
