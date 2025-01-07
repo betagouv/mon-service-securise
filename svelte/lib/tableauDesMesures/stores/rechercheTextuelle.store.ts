@@ -12,4 +12,5 @@ export const appliqueFiltreTextuel = (
 ) =>
   contientEnMinuscule(mesure.description, valeur) ||
   contientEnMinuscule((mesure as MesureGenerale).descriptionLongue, valeur) ||
-  contientEnMinuscule(mesure.identifiantNumerique, valeur);
+  contientEnMinuscule(mesure.identifiantNumerique, valeur) ||
+  contientEnMinuscule(mesure.modalites, valeur);
