@@ -9,6 +9,7 @@
     | 'contributeurs'
     | 'rafraichir'
     | '' = '';
+  export let taille: 'moyen' | 'grand' = 'grand';
   export let type: 'primaire' | 'secondaire' | 'lien';
   export let actif: boolean = true;
   export let enCoursEnvoi: boolean = false;
@@ -16,7 +17,7 @@
 </script>
 
 <button
-  class="bouton {type} {icone}"
+  class="bouton {type} {icone} {taille}"
   class:avecIcone={!!icone}
   type={boutonSoumission ? 'submit' : 'button'}
   on:click
@@ -45,7 +46,7 @@
   }
 
   .suppression:before {
-    background-image: url('/statique/assets/images/icone_poubelle.svg');
+    background-image: url('/statique/assets/images/icone_poubelle_2.svg');
   }
 
   .copie:before {
@@ -77,10 +78,18 @@
   .avecIcone:before {
     content: '';
     display: inline-block;
-    width: 24px;
-    height: 24px;
     background-repeat: no-repeat;
     background-size: contain;
+  }
+
+  .grand.avecIcone:before {
+    width: 24px;
+    height: 24px;
+  }
+
+  .moyen.avecIcone:before {
+    width: 16px;
+    height: 16px;
   }
 
   .primaire {

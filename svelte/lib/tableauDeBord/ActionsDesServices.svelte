@@ -30,6 +30,7 @@
     <Bouton
       titre="Gérer les contributeurs"
       icone="contributeurs"
+      taille="moyen"
       type="lien"
       actif={actionsDisponibles && estProprietaireDesServicesSelectionnes}
       on:click={() =>
@@ -47,6 +48,7 @@
     <Bouton
       titre="Télécharger PDFs"
       icone="telechargement"
+      taille="moyen"
       type="lien"
       actif={actionsDisponibles && selectionUnique && ontDesDocuments}
       on:click={() =>
@@ -63,6 +65,7 @@
     <Bouton
       titre="Exporter la sélection"
       icone="export"
+      taille="moyen"
       type="lien"
       actif={actionsDisponibles}
       on:click={() =>
@@ -80,6 +83,7 @@
     <Bouton
       titre="Dupliquer"
       icone="copie"
+      taille="moyen"
       type="lien"
       actif={actionsDisponibles &&
         selectionUnique &&
@@ -94,6 +98,15 @@
               "Créer une ou plusieurs copies du services sélectionné. Cette copie n'inclut pas les données concernant son homologation.",
           }
         )}
+    />
+    <Bouton
+      titre="Supprimer"
+      icone="suppression"
+      taille="moyen"
+      type="lien"
+      actif={actionsDisponibles &&
+        selectionUnique &&
+        estProprietaireDesServicesSelectionnes}
     />
   </div>
 </div>
