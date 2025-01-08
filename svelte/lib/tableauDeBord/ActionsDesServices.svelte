@@ -6,6 +6,7 @@
   import type { Service } from './tableauDeBord.d';
   import TiroirTelechargementDocumentsService from '../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
+  import TiroirSuppression from '../ui/tiroirs/TiroirSuppression.svelte';
 
   export let selection: Service[];
 
@@ -104,9 +105,18 @@
       icone="suppression"
       taille="moyen"
       type="lien"
-      actif={actionsDisponibles &&
-        selectionUnique &&
-        estProprietaireDesServicesSelectionnes}
+      actif={actionsDisponibles && estProprietaireDesServicesSelectionnes}
+      on:click={() =>
+        tiroirStore.afficheContenu(
+          TiroirSuppression,
+          { services: selection },
+          {
+            titre: 'Supprimer',
+            sousTitre: selectionUnique
+              ? 'Effacer toutes les données du service sélectionné.'
+              : 'Effacer toutes les données des services sélectionnés.',
+          }
+        )}
     />
   </div>
 </div>
