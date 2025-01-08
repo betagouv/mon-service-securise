@@ -73,4 +73,7 @@
   --succes-texte: #18753c;
   --fond-gris-fonce: #e5e5e5;
   --texte-gris: #666666;
+
+  --btn-primaire-survol: #026ab5;
+  --btn-primaire-clique: #025591;
 }
