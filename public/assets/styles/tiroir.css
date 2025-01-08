@@ -222,6 +222,10 @@
   margin: 0;
 }
 
+#contenu-suppression-dossier-courant .conteneur-actions {
+  margin-top: 24px;
+}
+
 #contenu-suppression .banniere img {
   width: 32px;
 }
