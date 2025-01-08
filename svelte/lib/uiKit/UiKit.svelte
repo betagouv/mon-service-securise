@@ -13,7 +13,8 @@
   let desactiveListeDeroulante = false,
     descriptionListeDeroulante = false,
     avecErreurListeDeroulante = false,
-    tailleBarreRecherche = false;
+    tailleBarreRecherche = false,
+    desactiveBarreRecherche = false;
 
   const declencheValidation = async (id: string) => {
     (document.getElementById(id) as HTMLInputElement)?.reportValidity();
@@ -52,6 +53,7 @@
     <BarreDeRecherche
       recherche=""
       taille={tailleBarreRecherche ? 'grand' : 'moyen'}
+      desactive={desactiveBarreRecherche}
     />
     <div class="options-composant">
       <h3>Options du composant</h3>
@@ -66,6 +68,14 @@
             ? 'Grande taille'
             : 'Taille moyenne (défault)'}</label
         >
+      </div>
+      <div>
+        <input
+          type="checkbox"
+          id="barre-recherche-desactive"
+          bind:checked={desactiveBarreRecherche}
+        />
+        <label for="barre-recherche-desactive">Désactivé</label>
       </div>
     </div>
   </div>
