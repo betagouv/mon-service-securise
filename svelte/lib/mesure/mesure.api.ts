@@ -77,6 +77,9 @@ export const recupereActiviteMesure = async (
   const reponse = await axios.get(
     `/api/service/${idService}/mesures/${idMesure}/activites`
   );
+
+  if (!Array.isArray(reponse.data)) return [];
+
   return reponse.data.map((a: any) => ({ ...a, date: new Date(a.date) }));
 };
 
