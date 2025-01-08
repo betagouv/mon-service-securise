@@ -40,6 +40,7 @@ export const donneesVisiteGuidee = {
         gestionContributeurs: true,
       },
       aUneSuggestionAction: false,
+      actionRecommandee: undefined,
     },
   ],
   indicesCyber: [{ id: 'ID-SERVICE-VISITE-GUIDEE', indiceCyber: 4.3 }],
