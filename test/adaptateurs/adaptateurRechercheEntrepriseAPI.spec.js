@@ -183,6 +183,30 @@ describe("L'adaptateur recherche entreprise qui utilise l'API Recherche Entrepri
         expect(resultat[0].departement).to.eql('75');
       });
     });
+
+    it("retourne les informations du siège s'il n'y a pas de matching établissement", async () => {
+      const reponseAPI = {
+        nom_complet: 'NOM SIEGE',
+        siege: {
+          departement: 'DEPARTEMENT SIEGE',
+          siret: 'SIRET SIEGE',
+        },
+        matching_etablissements: [],
+      };
+      const fauxAxios = {
+        get: async () => ({ data: { results: [reponseAPI] } }),
+      };
+
+      const resultat = await rechercheOrganisations(
+        '1300 07669 00019',
+        '75',
+        fauxAxios
+      );
+
+      expect(resultat[0].nom).to.eql('NOM SIEGE');
+      expect(resultat[0].siret).to.eql('SIRET SIEGE');
+      expect(resultat[0].departement).to.eql('DEPARTEMENT SIEGE');
+    });
   });
 
   describe("sur demande de détails d'une organisation", () => {

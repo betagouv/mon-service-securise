@@ -18,8 +18,16 @@ const extraisInfosEtablissement = (terme, resultat) => {
   let { departement, siret } = resultat.siege;
 
   const estUneRechercheParSiret = terme.match('^[0-9 ]+$');
-  if (estUneRechercheParSiret) {
-    if (resultat.matching_etablissements[0].liste_enseignes) {
+
+  const aUnEtablissement =
+    resultat.matching_etablissements &&
+    resultat.matching_etablissements.length > 0;
+
+  if (estUneRechercheParSiret && aUnEtablissement) {
+    const aUneListeEnseigne =
+      resultat.matching_etablissements[0].liste_enseignes &&
+      resultat.matching_etablissements[0].liste_enseignes.length > 0;
+    if (aUneListeEnseigne) {
       // eslint-disable-next-line prefer-destructuring
       nom = resultat.matching_etablissements[0].liste_enseignes[0];
     }
