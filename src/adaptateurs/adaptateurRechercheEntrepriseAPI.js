@@ -3,9 +3,46 @@ const {
   fabriqueAdaptateurGestionErreur,
 } = require('./fabriqueAdaptateurGestionErreur');
 
-const rechercheOrganisations = async (terme, departement) => {
+const extraisDepartement = (commune) => {
+  if (!commune) {
+    return null;
+  }
+
+  return commune.startsWith('97') || commune.startsWith('98')
+    ? commune.slice(0, 3)
+    : commune.slice(0, 2);
+};
+
+const extraisInfosEtablissement = (terme, resultat) => {
+  let nom = resultat.nom_complet;
+  let { departement, siret } = resultat.siege;
+
+  const estUneRechercheParSiret = terme.match('^[0-9 ]+$');
+  if (estUneRechercheParSiret) {
+    if (resultat.matching_etablissements[0].liste_enseignes) {
+      // eslint-disable-next-line prefer-destructuring
+      nom = resultat.matching_etablissements[0].liste_enseignes[0];
+    }
+    departement = extraisDepartement(
+      resultat.matching_etablissements[0].commune
+    );
+    siret = resultat.matching_etablissements[0].siret;
+  }
+
+  return {
+    nom,
+    departement,
+    siret,
+  };
+};
+
+const rechercheOrganisations = async (
+  terme,
+  departement,
+  instanceAxios = axios
+) => {
   try {
-    const reponse = await axios.get(
+    const reponse = await instanceAxios.get(
       'https://recherche-entreprises.api.gouv.fr/search',
       {
         params: {
@@ -22,11 +59,7 @@ const rechercheOrganisations = async (terme, departement) => {
 
     return reponse.data.results
       .filter((r) => r.siege.departement !== null)
-      .map((r) => ({
-        nom: r.nom_complet,
-        departement: r.siege.departement,
-        siret: r.siege.siret,
-      }));
+      .map((r) => extraisInfosEtablissement(terme, r));
   } catch (e) {
     fabriqueAdaptateurGestionErreur().logueErreur(e, {
       'Erreur renvoyée par API recherche-entreprise': e.response?.data,
