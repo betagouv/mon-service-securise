@@ -70,9 +70,9 @@ const rechercheOrganisations = async (
   }
 };
 
-const recupereDetailsOrganisation = async (siret) => {
+const recupereDetailsOrganisation = async (siret, instanceAxios = axios) => {
   try {
-    const reponse = await axios.get(
+    const reponse = await instanceAxios.get(
       'https://recherche-entreprises.api.gouv.fr/search',
       {
         params: {
@@ -96,6 +96,7 @@ const recupereDetailsOrganisation = async (siret) => {
     }
 
     const [entiteApi] = reponse.data.results;
+    const etablissement = entiteApi.matching_etablissements[0];
 
     return {
       estServicePublic: entiteApi.complements.est_service_public,
@@ -105,13 +106,13 @@ const recupereDetailsOrganisation = async (siret) => {
         entiteApi.complements.est_entrepreneur_individuel,
       estAssociation: entiteApi.complements.est_association,
       categorieEntreprise: entiteApi.categorie_entreprise,
-      activitePrincipale: entiteApi.activite_principale,
-      trancheEffectifSalarie: entiteApi.tranche_effectif_salarie,
+      activitePrincipale: etablissement.activite_principale,
+      trancheEffectifSalarie: etablissement.tranche_effectif_salarie,
       natureJuridique: entiteApi.nature_juridique,
       sectionActivitePrincipale: entiteApi.section_activite_principale,
-      anneeTrancheEffectifSalarie: entiteApi.annee_tranche_effectif_salarie,
-      commune: entiteApi.siege.commune,
-      departement: entiteApi.siege.departement,
+      anneeTrancheEffectifSalarie: etablissement.annee_tranche_effectif_salarie,
+      commune: etablissement.commune,
+      departement: extraisDepartement(etablissement.commune),
     };
   } catch (e) {
     fabriqueAdaptateurGestionErreur().logueErreur(e, {

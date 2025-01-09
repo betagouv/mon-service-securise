@@ -1,6 +1,7 @@
 const expect = require('expect.js');
 const {
   rechercheOrganisations,
+  recupereDetailsOrganisation,
 } = require('../../src/adaptateurs/adaptateurRechercheEntrepriseAPI');
 
 describe("L'adaptateur recherche entreprise qui utilise l'API Recherche Entreprise", () => {
@@ -181,6 +182,45 @@ describe("L'adaptateur recherche entreprise qui utilise l'API Recherche Entrepri
         expect(resultat[0].siret).to.eql('SIRET ETABLISSEMENT');
         expect(resultat[0].departement).to.eql('75');
       });
+    });
+  });
+
+  describe("sur demande de détails d'une organisation", () => {
+    it("utilise les données pertinentes de l'enseigne", async () => {
+      const reponseAPI = {
+        activite_principale: 'ACTIVITE SIEGE',
+        annee_tranche_effectif_salarie: 'ANNEE TRANCHE SIEGE',
+        tranche_effectif_salarie: 'TRANCHE SIEGE',
+        complements: {},
+        siege: {
+          commune: 'COMMUNE SIEGE',
+          departement: 'DEPARTEMENT SIEGE',
+        },
+        matching_etablissements: [
+          {
+            activite_principale: 'ACTIVITE ENSEIGNE',
+            annee_tranche_effectif_salarie: 'ANNEE TRANCHE ENSEIGNE',
+            tranche_effectif_salarie: 'TRANCHE ENSEIGNE',
+            commune: '75000',
+          },
+        ],
+      };
+      const fauxAxios = {
+        get: async () => ({ data: { results: [reponseAPI] } }),
+      };
+
+      const resultat = await recupereDetailsOrganisation(
+        '123456789',
+        fauxAxios
+      );
+
+      expect(resultat.activitePrincipale).to.eql('ACTIVITE ENSEIGNE');
+      expect(resultat.trancheEffectifSalarie).to.eql('TRANCHE ENSEIGNE');
+      expect(resultat.anneeTrancheEffectifSalarie).to.eql(
+        'ANNEE TRANCHE ENSEIGNE'
+      );
+      expect(resultat.commune).to.eql('75000');
+      expect(resultat.departement).to.eql('75');
     });
   });
 });
