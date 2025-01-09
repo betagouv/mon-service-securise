@@ -302,7 +302,10 @@ const routesConnecteApi = ({
   });
 
   routes.get('/dureeSession', (_requete, reponse) => {
-    reponse.send({ dureeSession: DUREE_SESSION });
+    const MARGE_DE_SECURITE_CSRF_MISMATCH = 2 * 60_000;
+    reponse.send({
+      dureeSession: DUREE_SESSION - MARGE_DE_SECURITE_CSRF_MISMATCH,
+    });
   });
 
   routes.post(
