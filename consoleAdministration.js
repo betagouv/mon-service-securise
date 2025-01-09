@@ -620,6 +620,54 @@ class ConsoleAdministration {
     await this.depotDonnees.ajouteContributeurAuService(autorisation);
   }
 
+  async transfereAutorisationsApresDepart(
+    emailCollaborateurParti,
+    emailNouveauProprietaire
+  ) {
+    const nouveauProprietaire = await this.utilisateurAvecEmail(
+      emailNouveauProprietaire
+    );
+    const collaborateurParti = await this.utilisateurAvecEmail(
+      emailCollaborateurParti
+    );
+    if (!nouveauProprietaire || !collaborateurParti) {
+      throw new Error('Utilisateurs inexistants');
+    }
+
+    const autorisations = await this.depotDonnees.autorisations(
+      collaborateurParti.id
+    );
+    const autorisationsProprietaire = autorisations.filter(
+      (autorisation) => autorisation.estProprietaire
+    );
+    // eslint-disable-next-line no-restricted-syntax
+    for (const autorisationExistante of autorisationsProprietaire) {
+      const { idService } = autorisationExistante;
+      const nouvelleAutorisation =
+        Autorisation.NouvelleAutorisationProprietaire({
+          idUtilisateur: nouveauProprietaire.id,
+          idService,
+        });
+      // eslint-disable-next-line no-await-in-loop
+      await this.depotDonnees.ajouteContributeurAuService(nouvelleAutorisation);
+      console.log(`Droit de propriété ajouté au service ${idService}`);
+    }
+    // eslint-disable-next-line no-restricted-syntax
+    for (const autorisationExistante of autorisations) {
+      // eslint-disable-next-line no-await-in-loop
+      await this.depotDonnees.supprimeContributeur(
+        collaborateurParti.id,
+        autorisationExistante.idService,
+        nouveauProprietaire.id
+      );
+      console.log(
+        `Autorisation supprimée pour le service ${autorisationExistante.idService}`
+      );
+    }
+    await this.supprimeUtilisateur(collaborateurParti.id);
+    console.log(`Utilisateur ${emailCollaborateurParti} supprimé`);
+  }
+
   async ajouteSiretsAuSuperviseur(emailSuperviseur, sirets) {
     const superviseur =
       await this.depotDonnees.utilisateurAvecEmail(emailSuperviseur);
