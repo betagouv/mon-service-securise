@@ -45,21 +45,6 @@
   background: white;
 }
 
-.rideau .modale .fermeture-modale {
-  cursor: pointer;
-
-  position: absolute;
-  top: 1em;
-  right: 1em;
-
-  width: 0.8em;
-  height: 0.8em;
-
-  background-image: url(../images/icone_fermer.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
 .rideau .modale h1 {
   padding: 1em 0;
 
@@ -132,10 +117,6 @@
 
 .modale.deconnexion p {
   margin: 0;
-}
-
-.modale.deconnexion .fermeture-modale {
-  display: none;
 }
 
 .modale.deconnexion #reconnexion {
