@@ -20,10 +20,10 @@ block append session
   .rideau#deconnexion
     .modale.deconnexion
       .fermeture-modale
-      .image-deconnexion
+      img.image-deconnexion(src="/statique/assets/images/session_expiree.svg" alt="Illustration de la session expirée")
       h1 Session expirée
       p Veuillez vous reconnecter.
-      a.bouton(href = '/connexion') Reconnexion
+      a.bouton#reconnexion(href = '/connexion') Reconnexion
 
   script(type = 'module', src = '/statique/mssConnecte.mjs')
   +composantSvelte('visiteGuidee.js')
