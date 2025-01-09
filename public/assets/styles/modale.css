@@ -138,14 +138,9 @@
   display: none;
 }
 
-.modale.deconnexion .image-deconnexion {
-  background-image: url('../images/fermeture_coffre_fort.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-
-  width: 100%;
-  background-position-x: center;
-  height: 180px;
+.modale.deconnexion #reconnexion {
+  padding: 7px 16px;
+  margin: 24px 0;
 }
 
 .contenu-modale {
