@@ -1,0 +1,186 @@
+const expect = require('expect.js');
+const {
+  rechercheOrganisations,
+} = require('../../src/adaptateurs/adaptateurRechercheEntrepriseAPI');
+
+describe("L'adaptateur recherche entreprise qui utilise l'API Recherche Entreprise", () => {
+  describe("sur demande du nom de l'établissement ou de l'entreprise", () => {
+    it('retourne les informations du siège si la recherche est textuelle', async () => {
+      const reponseAPI = {
+        nom_complet: 'NOM SIEGE',
+        siege: {
+          departement: 'DEPARTEMENT SIEGE',
+          siret: 'SIRET SIEGE',
+        },
+        matching_etablissements: [
+          {
+            siret: 'SIRET ETABLISSEMENT',
+          },
+        ],
+      };
+      const fauxAxios = {
+        get: async () => ({ data: { results: [reponseAPI] } }),
+      };
+
+      const resultat = await rechercheOrganisations(
+        'un texte',
+        '75',
+        fauxAxios
+      );
+
+      expect(resultat[0].nom).to.eql('NOM SIEGE');
+      expect(resultat[0].siret).to.eql('SIRET SIEGE');
+      expect(resultat[0].departement).to.eql('DEPARTEMENT SIEGE');
+    });
+
+    it('retourne les informations du siège si la recherche est textuelle avec des chiffres au début', async () => {
+      const reponseAPI = {
+        nom_complet: 'NOM SIEGE',
+        siege: {
+          departement: 'DEPARTEMENT SIEGE',
+          siret: 'SIRET SIEGE',
+        },
+        matching_etablissements: [
+          {
+            siret: 'SIRET ETABLISSEMENT',
+          },
+        ],
+      };
+      const fauxAxios = {
+        get: async () => ({ data: { results: [reponseAPI] } }),
+      };
+
+      const resultat = await rechercheOrganisations(
+        '12345 un texte',
+        '75',
+        fauxAxios
+      );
+
+      expect(resultat[0].nom).to.eql('NOM SIEGE');
+      expect(resultat[0].siret).to.eql('SIRET SIEGE');
+      expect(resultat[0].departement).to.eql('DEPARTEMENT SIEGE');
+    });
+
+    describe('si on recherche par siret', () => {
+      it("retourne le nom de l'enseigne et les infos de l'établissement non siège si l'enseigne est renseignée", async () => {
+        const reponseAPI = {
+          nom_complet: 'NOM SIEGE',
+          siege: {
+            departement: 'DEPARTEMENT SIEGE',
+            siret: 'SIRET SIEGE',
+          },
+          matching_etablissements: [
+            {
+              commune: '75107',
+              siret: 'SIRET ETABLISSEMENT',
+              liste_enseignes: ['ENSEIGNE'],
+            },
+          ],
+        };
+        const fauxAxios = {
+          get: async () => ({ data: { results: [reponseAPI] } }),
+        };
+
+        const resultat = await rechercheOrganisations(
+          '13000766900019',
+          '75',
+          fauxAxios
+        );
+
+        expect(resultat[0].nom).to.eql('ENSEIGNE');
+        expect(resultat[0].siret).to.eql('SIRET ETABLISSEMENT');
+        expect(resultat[0].departement).to.eql('75');
+      });
+
+      it("parvient à extraire le département dans le cas d'un DROM COM", async () => {
+        const reponseAPI = {
+          nom_complet: 'NOM SIEGE',
+          siege: {
+            departement: 'DEPARTEMENT SIEGE',
+            siret: 'SIRET SIEGE',
+          },
+          matching_etablissements: [
+            {
+              commune: '97121',
+              siret: 'SIRET ETABLISSEMENT',
+              liste_enseignes: ['ENSEIGNE'],
+            },
+          ],
+        };
+        const fauxAxios = {
+          get: async () => ({ data: { results: [reponseAPI] } }),
+        };
+
+        const resultat = await rechercheOrganisations(
+          '13000766900019',
+          '75',
+          fauxAxios
+        );
+
+        expect(resultat[0].nom).to.eql('ENSEIGNE');
+        expect(resultat[0].siret).to.eql('SIRET ETABLISSEMENT');
+        expect(resultat[0].departement).to.eql('971');
+      });
+
+      it("retourne le nom de l'entreprise si aucune enseigne n'est renseignée", async () => {
+        const reponseAPI = {
+          nom_complet: 'NOM SIEGE',
+          siege: {
+            departement: 'DEPARTEMENT SIEGE',
+            siret: 'SIRET SIEGE',
+          },
+          matching_etablissements: [
+            {
+              commune: '75107',
+              siret: 'SIRET ETABLISSEMENT',
+              liste_enseignes: null,
+            },
+          ],
+        };
+        const fauxAxios = {
+          get: async () => ({ data: { results: [reponseAPI] } }),
+        };
+
+        const resultat = await rechercheOrganisations(
+          '13000766900019',
+          '75',
+          fauxAxios
+        );
+
+        expect(resultat[0].nom).to.eql('NOM SIEGE');
+        expect(resultat[0].siret).to.eql('SIRET ETABLISSEMENT');
+        expect(resultat[0].departement).to.eql('75');
+      });
+
+      it("parvient à extraire le siret dans le cas d'une recherche avec espace", async () => {
+        const reponseAPI = {
+          nom_complet: 'NOM SIEGE',
+          siege: {
+            departement: 'DEPARTEMENT SIEGE',
+            siret: 'SIRET SIEGE',
+          },
+          matching_etablissements: [
+            {
+              commune: '75107',
+              siret: 'SIRET ETABLISSEMENT',
+              liste_enseignes: null,
+            },
+          ],
+        };
+        const fauxAxios = {
+          get: async () => ({ data: { results: [reponseAPI] } }),
+        };
+
+        const resultat = await rechercheOrganisations(
+          '1300 07669 00019',
+          '75',
+          fauxAxios
+        );
+
+        expect(resultat[0].nom).to.eql('NOM SIEGE');
+        expect(resultat[0].siret).to.eql('SIRET ETABLISSEMENT');
+        expect(resultat[0].departement).to.eql('75');
+      });
+    });
+  });
+});
