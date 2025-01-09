@@ -38,6 +38,16 @@
       window.location.href = '/tableauDeBord';
     }
   };
+
+  let elementSelectionDepartement: SelectionDepartement;
+  const modifieDepartementApresChoixOrganisation = (
+    e: CustomEvent<Organisation>
+  ) => {
+    const d = departements.find((d) => d.code === e.detail.departement);
+    if (d) {
+      elementSelectionDepartement.choisisDepartement(d);
+    }
+  };
 </script>
 
 <div class="contenu-profil">
@@ -109,7 +119,11 @@
         <label for="departement" class="requis"
           >Département de votre organisation</label
         >
-        <SelectionDepartement bind:valeur={departement} {departements} />
+        <SelectionDepartement
+          bind:valeur={departement}
+          {departements}
+          bind:this={elementSelectionDepartement}
+        />
       </div>
       <div class="champ">
         <label for="nomSiret" class="requis"
@@ -119,6 +133,7 @@
           id="nomSiret"
           bind:valeur={entite}
           filtreDepartement={departement}
+          on:organisationChoisie={modifieDepartementApresChoixOrganisation}
         />
       </div>
     </div>
