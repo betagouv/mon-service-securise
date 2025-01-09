@@ -28,7 +28,7 @@
     suggestionsVisibles = suggestions.length > 0;
   };
 
-  const choisisDepartement = (item: Departement) => {
+  export const choisisDepartement = (item: Departement) => {
     valeur = item;
     saisie = `${valeur.nom} (${valeur.code})`;
     suggestionsVisibles = false;
