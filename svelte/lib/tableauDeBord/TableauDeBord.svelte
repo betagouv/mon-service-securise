@@ -139,4 +139,18 @@
     background: url('/statique/assets/images/tableauDeBord/icone_graphique.svg')
       no-repeat center;
   }
+
+  .lien-supervision a:hover {
+    background: #f5f5f5;
+  }
+
+  .lien-supervision a:active {
+    background: var(--fond-gris-pale-composant);
+    color: var(--systeme-design-etat-bleu);
+  }
+
+  .lien-supervision a:active::before {
+    filter: brightness(0) invert(8%) sepia(52%) saturate(5373%)
+      hue-rotate(237deg) brightness(125%) contrast(140%);
+  }
 </style>
