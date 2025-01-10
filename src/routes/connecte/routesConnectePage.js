@@ -177,7 +177,7 @@ const routesConnectePage = ({
           referentiel,
         });
       } else if (idEtape === 'piloter') {
-        reponse.render('tableauDeBord');
+        reponse.render('tableauDeBordv2');
       }
     }
   );

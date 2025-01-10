@@ -78,22 +78,23 @@
         <th>Actions recommandées</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="contenu-tableau-services">
       {#each $resultatsDeRecherche as service (service.id)}
         {@const idService = service.id}
         {@const indiceCyberDuService = indicesCybers.find(
           (i) => i.id === idService
         )?.indiceCyber}
-        <tr>
+        <tr class="ligne-service">
           <td>
             <input
+              class="selection-service"
               type="checkbox"
               bind:group={$selectionIdsServices}
               value={idService}
               title="Sélection du service {service.nomService}"
             />
           </td>
-          <td>
+          <td class="cellule-noms">
             <a class="lien-service" href="/service/{idService}">
               {#if service.estProprietaire}
                 <EtiquetteProprietaire />
