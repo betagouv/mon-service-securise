@@ -6,6 +6,7 @@ export type PositionModale =
   | 'HautGauche'
   | 'BasGauche'
   | 'BasMilieu'
+  | 'HautMilieu'
   | 'DeuxTiersCentre';
 
 export type SousEtape = {
@@ -22,4 +23,9 @@ export type SousEtape = {
   texteBoutonDerniereEtape?: string;
 };
 
-export type PositionRond = 'Droite' | 'Gauche' | 'Bas' | 'DeuxTiersCentre';
+export type PositionRond =
+  | 'Droite'
+  | 'Gauche'
+  | 'Bas'
+  | 'Haut'
+  | 'DeuxTiersCentre';
