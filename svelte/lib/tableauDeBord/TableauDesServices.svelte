@@ -78,7 +78,7 @@
         </td>
       </tr>
       <tr>
-        <td>
+        <td class="cellule-selection">
           <input
             type="checkbox"
             on:change={basculeSelectionTousServices}
@@ -101,7 +101,7 @@
           (i) => i.id === idService
         )?.indiceCyber}
         <tr class="ligne-service">
-          <td>
+          <td class="cellule-selection">
             <input
               class="selection-service"
               type="checkbox"
@@ -289,5 +289,9 @@
     line-height: 1.5rem;
     color: var(--texte-gris);
     margin: 0 0 8px;
+  }
+
+  .cellule-selection {
+    text-align: center;
   }
 </style>
