@@ -8,12 +8,14 @@
   import ActionRecommandee from './elementsDeService/ActionRecommandee.svelte';
   import type { IndiceCyber } from './tableauDeBord.d';
   import { resultatsDeRecherche } from './stores/resultatDeRecherche.store';
+  import { services } from './stores/services.store';
   import ActionsDesServices from './ActionsDesServices.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import Bouton from '../ui/Bouton.svelte';
   import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
   import { selectionIdsServices } from './stores/selectionService.store';
+  import Lien from '../ui/Lien.svelte';
 
   export let indicesCybers: IndiceCyber[] = [];
 
@@ -40,7 +42,21 @@
 </script>
 
 <table>
-  {#if $resultatsDeRecherche.length === 0}
+  {#if $services.length === 0}
+    <div class="aucun-service">
+      <h4>Laissez vous guider !</h4>
+      <p>
+        Nous vous accompagnons sur toutes les étapes de sécurisation de votre
+        service numérique.
+      </p>
+      <Lien
+        titre="Ajouter votre premier service"
+        type="bouton-primaire"
+        icone="plus"
+        href="/service/creation"
+      />
+    </div>
+  {:else if $resultatsDeRecherche.length === 0}
     <div class="aucun-resultat">
       <img
         src="/statique/assets/images/illustration_recherche_vide.svg"
@@ -248,5 +264,30 @@
 
   .aucun-resultat img {
     max-width: 128px;
+  }
+
+  .aucun-service {
+    margin: 59px auto 47px;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    width: 389px;
+    flex-direction: column;
+  }
+
+  .aucun-service h4 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: bold;
+  }
+
+  .aucun-service p {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    color: var(--texte-gris);
+    margin: 0 0 8px;
   }
 </style>
