@@ -121,6 +121,16 @@
             leftPointe: '50%',
           };
           break;
+        case 'HautMilieu':
+          positionModale = {
+            top: `${positionCible.top - 7}px`,
+            left: `${positionCible.right - positionCible.width / 2}px`,
+            transformY: '100%',
+            transformX: '-50%',
+            positionRond: 'Haut',
+            leftPointe: '50%',
+          };
+          break;
       }
     }
   }
@@ -189,6 +199,12 @@
         case 'Bas':
           decallageRond = {
             top: positionCible.bottom - 9,
+            left: positionCible.left + positionCible.width / 2 - 9,
+          };
+          break;
+        case 'Haut':
+          decallageRond = {
+            top: positionCible.top - 9,
             left: positionCible.left + positionCible.width / 2 - 9,
           };
           break;
