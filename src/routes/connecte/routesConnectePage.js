@@ -102,18 +102,6 @@ const routesConnectePage = ({
       const estSuperviseur = await depotDonnees.estSuperviseur(
         requete.idUtilisateurCourant
       );
-      reponse.render('tableauDeBord', { estSuperviseur });
-    }
-  );
-
-  routes.get(
-    '/tableauDeBord-v2',
-    middleware.verificationAcceptationCGU,
-    middleware.chargeEtatVisiteGuidee,
-    async (requete, reponse) => {
-      const estSuperviseur = await depotDonnees.estSuperviseur(
-        requete.idUtilisateurCourant
-      );
       reponse.render('tableauDeBordv2', { estSuperviseur });
     }
   );

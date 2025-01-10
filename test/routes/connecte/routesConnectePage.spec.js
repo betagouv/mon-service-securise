@@ -46,7 +46,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     '/motDePasse/edition',
     '/profil',
     '/tableauDeBord',
-    '/tableauDeBord-v2',
     '/visiteGuidee/decrire',
     '/visiteGuidee/securiser',
     '/visiteGuidee/homologuer',
@@ -173,26 +172,10 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   });
 
   describe('quand GET sur /tableauDeBord', () => {
-    it("affiche l'encart de superviseur si l'utilisateur en est un", async () => {
-      testeur.depotDonnees().estSuperviseur = async () => true;
-      const reponse = await axios.get(`http://localhost:1234/tableauDeBord`);
-
-      expect(reponse.data).to.contain('Voir le tableau');
-    });
-
-    it("n'affiche pas l'encart de superviseur si l'utilisateur n'en est pas un", async () => {
-      testeur.depotDonnees().estSuperviseur = async () => false;
-      const reponse = await axios.get(`http://localhost:1234/tableauDeBord`);
-
-      expect(reponse.data).not.to.contain('Voir le tableau');
-    });
-  });
-
-  describe('quand GET sur /tableauDeBord-v2', () => {
     it("ajoute la donnée partagée indiquant si l'utilisateur est superviseur", async () => {
       testeur.depotDonnees().estSuperviseur = async () => true;
 
-      const reponse = await axios.get(`http://localhost:1234/tableauDeBord-v2`);
+      const reponse = await axios.get(`http://localhost:1234/tableauDeBord`);
 
       const donnees = donneesPartagees(reponse.data, 'utilisateur-superviseur');
       expect(donnees).to.eql({ estSuperviseur: true });
