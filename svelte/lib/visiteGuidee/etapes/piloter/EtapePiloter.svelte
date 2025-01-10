@@ -14,23 +14,8 @@
     document.getElementsByClassName(classe)[0]! as HTMLElement;
 
   onMount(() => {
-    // On utilise ici un mutation observer pour attendre que l'appel API
-    // du tableau des services ait ajouté au DOM les éléments de ligne service
-    const observateur = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((noeud) => {
-          if (noeud.classList.contains('ligne-service')) {
-            cibleNomService = elementDeClasse('cellule-noms');
-            cibleLignePremierService = elementDeClasse('ligne-service');
-          }
-        });
-      });
-    });
-    observateur.observe(elementDeClasse('contenu-tableau-services'), {
-      childList: true,
-      subtree: false,
-    });
-
+    cibleNomService = elementDeClasse('cellule-noms');
+    cibleLignePremierService = elementDeClasse('ligne-service');
     cibleCentreNotifications = elementDeClasse('centre-notifications');
     cibleBOM = elementDeClasse('bom-modale');
     cibleNouveauService = elementDeClasse('nouveau-service');
@@ -60,7 +45,7 @@
     }
     return {
       cible: cibleLignePremierService,
-      positionnementModale: 'BasMilieu',
+      positionnementModale: 'HautMilieu',
       callbackInitialeCible: (cible) => {
         cible.inert = true;
       },
@@ -77,10 +62,10 @@
     sousEtapes={[
       {
         cible: cibleNomService,
-        positionnementModale: 'MilieuDroite',
+        positionnementModale: 'BasDroite',
         callbackInitialeCible: () => {
           document
-            .getElementsByClassName('conteneur-noms')[0]
+            .getElementsByClassName('lien-service')[0]
             .removeAttribute('href');
           document.getElementsByClassName(
             'selection-service'
