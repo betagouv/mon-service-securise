@@ -10,13 +10,14 @@
   }
   export let titre: string;
   export let href: string;
+  export let classe: string | undefined = undefined;
   export let icone: 'plus' | 'attention' | undefined = undefined;
   export let type: 'bouton-primaire' | 'bouton-secondaire' = 'bouton-primaire';
   export let taille: 'petit' | 'moyen' = 'moyen';
 </script>
 
 <a
-  class="{type} {icone} {taille}"
+  class="{type} {icone} {taille} {classe || ''}"
   class:avecIcone={!!icone}
   {href}
   rel={$$restProps.rel || 'noopener'}
