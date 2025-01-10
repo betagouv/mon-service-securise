@@ -114,10 +114,25 @@
     color: #fff;
   }
 
-  button.lien:disabled {
+  button.lien:disabled,
+  button.lien:disabled:hover {
     background: none;
     border: none;
     color: #929292;
+  }
+
+  button.lien:hover {
+    background: #f5f5f5;
+  }
+
+  button.lien:active {
+    background: var(--fond-gris-pale-composant);
+    color: var(--systeme-design-etat-bleu);
+  }
+
+  button.lien.avecIcone:active::before {
+    filter: brightness(0) invert(8%) sepia(52%) saturate(5373%)
+      hue-rotate(237deg) brightness(125%) contrast(140%);
   }
 
   button.lien.avecIcone:disabled:before {
