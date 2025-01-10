@@ -33,6 +33,7 @@
         donneesVisiteGuidee.resume.nombreServicesHomologues;
       indicesCybers = donneesVisiteGuidee.indicesCyber;
       indiceCyberMoyen = donneesVisiteGuidee.indiceCyber;
+      enCoursChargement = false;
     } else {
       await rafraichisServices();
     }
