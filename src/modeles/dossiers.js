@@ -6,6 +6,7 @@ const {
   ErreurDossierCourantInexistant,
 } = require('../erreurs');
 const Referentiel = require('../referentiel');
+const { dateEnFrancais } = require('../utilitaires/date');
 
 const STATUTS_HOMOLOGATION = {
   NON_REALISEE: 'nonRealisee',
@@ -41,6 +42,13 @@ class Dossiers extends ElementsConstructibles {
     if (!dossierActif) return false;
     const statut = dossierActif.statutHomologation();
     return statut === Dossiers.ACTIVEE || statut === Dossiers.BIENTOT_EXPIREE;
+  }
+
+  dateExpiration() {
+    if (!this.dossierActif()) {
+      return undefined;
+    }
+    return dateEnFrancais(this.dossierActif().dateProchaineHomologation());
   }
 
   dossierCourant() {

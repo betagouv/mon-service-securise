@@ -1,5 +1,6 @@
 const Dossiers = require('../dossiers');
 const Autorisation = require('../autorisations/autorisation');
+const { dateEnFrancais } = require('../../utilitaires/date');
 
 const { DROITS_VOIR_STATUT_HOMOLOGATION } = Autorisation;
 
@@ -10,6 +11,7 @@ const donnees = (service, autorisation, referentiel) => {
     service.dossiers.dossierCourant()?.etapeCourante(),
     autorisation.peutHomologuer()
   );
+  const dateExpiration = service.dossiers.dateExpiration();
   return {
     id: service.id,
     nomService: service.nomService(),
@@ -26,6 +28,7 @@ const donnees = (service, autorisation, referentiel) => {
       statutHomologation: {
         id: service.dossiers.statutHomologation(),
         enCoursEdition,
+        ...(dateExpiration && { dateExpiration }),
         ...(enCoursEdition && { etapeCourante: etapeCouranteAutorisee }),
         ...referentiel.statutHomologation(
           service.dossiers.statutHomologation()

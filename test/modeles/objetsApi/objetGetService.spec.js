@@ -14,13 +14,16 @@ const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
 const { unDossier } = require('../../constructeurs/constructeurDossier');
+const { dateEnFrancais } = require('../../../src/utilitaires/date');
 
 describe("L'objet d'API de `GET /service`", () => {
   const referentiel = Referentiel.creeReferentiel({
     statutsHomologation: {
       nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
     },
-    echeancesRenouvellement: { unAn: {} },
+    echeancesRenouvellement: {
+      unAn: { nbMoisDecalage: 12, nbMoisBientotExpire: 3 },
+    },
     statutsAvisDossierHomologation: { favorable: {} },
     etapesParcoursHomologation: [
       {
@@ -101,6 +104,25 @@ describe("L'objet d'API de `GET /service`", () => {
       aUneSuggestionAction: true,
       actionRecommandee: 'mettreAJour',
     });
+  });
+
+  it("ajoute la date d'expiration du dossier en cours lorsqu'il est bientôt expiré", () => {
+    const unServiceAvecDossierBientotExpire = unService(referentiel)
+      .avecDossiers([
+        unDossier(referentiel).quiEstComplet().quiVaExpirer(3, 'unAn').donnees,
+      ])
+      .construis();
+
+    const donnees = objetGetService.donnees(
+      unServiceAvecDossierBientotExpire,
+      lectureSurHomologuer,
+      referentiel
+    );
+
+    const dans3jours = dateEnFrancais(
+      new Date().setDate(new Date().getDate() + 3)
+    );
+    expect(donnees.statutHomologation.dateExpiration).to.equal(dans3jours);
   });
 
   it("masque le statut d'homologation si l'utilisateur n'a pas la permission", () => {
