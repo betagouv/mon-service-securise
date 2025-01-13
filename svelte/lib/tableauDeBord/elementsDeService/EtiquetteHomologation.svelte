@@ -40,9 +40,9 @@
   }
 
   .nonRealisee {
-    --fond: #e9ddff;
-    --fond-hover: #d4bcff;
-    --fond-actif: #c19eff;
+    --fond: #e6ebf1;
+    --fond-hover: #e6ebf1;
+    --fond-actif: #dadfe6;
   }
 
   .bientotActivee {
