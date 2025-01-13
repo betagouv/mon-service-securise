@@ -14,12 +14,20 @@
     document.getElementsByClassName(classe)[0]! as HTMLElement;
 
   onMount(() => {
+    rechargeEtape();
+  });
+
+  const rechargeEtape = () => {
     cibleNomService = elementDeClasse('cellule-noms');
     cibleLignePremierService = elementDeClasse('ligne-service');
     cibleCentreNotifications = elementDeClasse('centre-notifications');
     cibleBOM = elementDeClasse('bom-modale');
     cibleNouveauService = elementDeClasse('nouveau-service');
-  });
+  };
+
+  document.body.addEventListener('svelte-tableau-des-services-rafraichi', () =>
+    rechargeEtape()
+  );
 
   const derniereSousEtape = (): SousEtape | null => {
     if (!cibleNouveauService || !cibleLignePremierService) {

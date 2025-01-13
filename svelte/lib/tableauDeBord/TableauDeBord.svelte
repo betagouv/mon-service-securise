@@ -17,6 +17,7 @@
 
   export let estSuperviseur: boolean;
   export let modeVisiteGuidee: boolean;
+  export let profilUtilisateurComplet: boolean = true;
 
   let enCoursChargement = true;
 
@@ -26,7 +27,7 @@
   let indiceCyberMoyen: IndiceCyberMoyen | undefined;
 
   onMount(async () => {
-    if (modeVisiteGuidee) {
+    if (modeVisiteGuidee && profilUtilisateurComplet) {
       services.reinitialise(donneesVisiteGuidee.services);
       nombreServices = donneesVisiteGuidee.resume.nombreServices;
       nombreServicesHomologues =
@@ -59,6 +60,9 @@
   const rafraichisServices = async () => {
     await recupereServices();
     await recupereIndicesCybers();
+    document.body.dispatchEvent(
+      new CustomEvent('svelte-tableau-des-services-rafraichi')
+    );
   };
 </script>
 
