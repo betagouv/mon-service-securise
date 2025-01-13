@@ -257,7 +257,6 @@ module.exports = {
     expiree: { libelle: 'Expirée', ordre: 0 },
     bientotExpiree: { libelle: 'Expire le ', ordre: 1 },
     nonRealisee: { libelle: 'Aucune', ordre: 3 },
-    bientotActivee: { libelle: 'Bientôt activée', ordre: 4 },
     activee: { libelle: 'Réalisée', ordre: 5 },
   },
 

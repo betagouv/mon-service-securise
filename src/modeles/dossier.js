@@ -190,14 +190,14 @@ class Dossier extends InformationsService {
   statutHomologation() {
     if (!this.finalise) return 'nonRealisee';
 
+    if (this.estBientotExpire()) return 'bientotExpiree';
+
     const activeDansLeFutur =
       new Date(this.decision.dateHomologation) >
       this.adaptateurHorloge.maintenant();
-    if (activeDansLeFutur) return 'bientotActivee';
 
-    if (this.estBientotExpire()) return 'bientotExpiree';
-
-    if (this.decision.periodeHomologationEstEnCours()) return 'activee';
+    if (activeDansLeFutur || this.decision.periodeHomologationEstEnCours())
+      return 'activee';
 
     if (this.estExpire()) return 'expiree';
 

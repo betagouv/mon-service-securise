@@ -269,7 +269,7 @@ describe("Un dossier d'homologation", () => {
       expect(nonFinalise.statutHomologation()).to.be('nonRealisee');
     });
 
-    it('est « Bientôt activée » si le dossier est finalisé avec une date de début dans le futur', () => {
+    it('est « Réalisée » même si le dossier est finalisé avec une date de début dans le futur', () => {
       const maintenantPremierJuin = {
         maintenant: () => new Date('2023-06-01'),
       };
@@ -278,7 +278,7 @@ describe("Un dossier d'homologation", () => {
         .avecDateHomologation(new Date('2023-06-02'))
         .construit();
 
-      expect(actifLeDeuxJuin.statutHomologation()).to.be('bientotActivee');
+      expect(actifLeDeuxJuin.statutHomologation()).to.be('activee');
     });
 
     it('est « Bientôt expirée » si le dossier est finalisé avec une date de fin qui est proche', () => {
