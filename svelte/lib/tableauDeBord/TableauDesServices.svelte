@@ -100,7 +100,7 @@
         {@const indiceCyberDuService = indicesCybers.find(
           (i) => i.id === idService
         )}
-        <tr class="ligne-service">
+        <tr class="ligne-service" data-id-service={idService}>
           <td class="cellule-selection">
             <input
               class="selection-service"
