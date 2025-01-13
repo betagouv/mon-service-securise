@@ -258,7 +258,7 @@ module.exports = {
     bientotExpiree: { libelle: 'Expire le ', ordre: 1 },
     nonRealisee: { libelle: 'Aucune', ordre: 3 },
     bientotActivee: { libelle: 'Bientôt activée', ordre: 4 },
-    activee: { libelle: 'Active', ordre: 5 },
+    activee: { libelle: 'Réalisée', ordre: 5 },
   },
 
   typesService: {
