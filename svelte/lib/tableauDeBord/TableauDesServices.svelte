@@ -99,7 +99,7 @@
         {@const idService = service.id}
         {@const indiceCyberDuService = indicesCybers.find(
           (i) => i.id === idService
-        )?.indiceCyber}
+        )}
         <tr class="ligne-service">
           <td class="cellule-selection">
             <input
@@ -138,17 +138,22 @@
           </td>
           <td>
             {#if indiceCyberDuService !== undefined}
-              <EtiquetteIndiceCyber score={indiceCyberDuService} {idService} />
+              <EtiquetteIndiceCyber
+                score={indiceCyberDuService.indiceCyber}
+                {idService}
+              />
             {:else}
               <IconeChargementEnCours />
             {/if}
           </td>
           <td>
-            <EtiquetteHomologation
-              statutHomologation={service.statutHomologation.id}
-              label={service.statutHomologation.libelle}
-              {idService}
-            />
+            {#if service.statutHomologation}
+              <EtiquetteHomologation
+                statutHomologation={service.statutHomologation.id}
+                label={service.statutHomologation.libelle}
+                {idService}
+              />
+            {/if}
           </td>
           <td>
             <ActionRecommandee action={service.actionRecommandee} {idService} />
