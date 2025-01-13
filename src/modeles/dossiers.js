@@ -11,7 +11,6 @@ const { dateEnFrancais } = require('../utilitaires/date');
 const STATUTS_HOMOLOGATION = {
   NON_REALISEE: 'nonRealisee',
   ACTIVEE: 'activee',
-  BIENTOT_ACTIVEE: 'bientotActivee',
   EXPIREE: 'expiree',
   BIENTOT_EXPIREE: 'bientotExpiree',
 };

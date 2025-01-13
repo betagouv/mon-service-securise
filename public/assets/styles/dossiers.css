@@ -131,10 +131,6 @@
   height: fit-content;
 }
 
-.homologation .dossier .statut-homologation.bientotActivee {
-  background: #e7f8d7;
-}
-
 .homologation .dossier .statut-homologation.activee {
   background: #d4f4db;
 }

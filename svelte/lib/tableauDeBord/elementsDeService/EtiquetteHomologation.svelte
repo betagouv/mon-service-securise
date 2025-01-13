@@ -49,12 +49,6 @@
     --fond-actif: #dadfe6;
   }
 
-  .bientotActivee {
-    --fond: #eaf5ff;
-    --fond-hover: #b6cffb;
-    --fond-actif: #7badef;
-  }
-
   .activee {
     --fond: #defbe5;
     --fond-hover: #c0edcb;
