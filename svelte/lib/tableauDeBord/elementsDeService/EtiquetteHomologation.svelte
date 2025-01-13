@@ -21,6 +21,7 @@
     line-height: 20px;
     background: var(--fond);
     color: var(--texte-fonce);
+    white-space: nowrap;
   }
 
   a:hover {
