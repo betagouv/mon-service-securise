@@ -28,6 +28,7 @@ export type Service = {
     enCoursEdition: boolean;
     libelle: string;
     ordre: number;
+    dateExpiration?: string;
   };
   nombreContributeurs: number;
   estProprietaire: boolean;

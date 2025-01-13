@@ -2,10 +2,14 @@
   export let statutHomologation: string;
   export let label: string;
   export let idService: string;
+  export let dateExpiration: string = '';
 </script>
 
 <a class={statutHomologation} href="/service/{idService}/dossiers">
   {label}
+  {#if statutHomologation === 'bientotExpiree'}
+    {dateExpiration}
+  {/if}
 </a>
 
 <style>

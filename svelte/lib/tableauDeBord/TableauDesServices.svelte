@@ -151,6 +151,7 @@
               <EtiquetteHomologation
                 statutHomologation={service.statutHomologation.id}
                 label={service.statutHomologation.libelle}
+                dateExpiration={service.statutHomologation.dateExpiration}
                 {idService}
               />
             {/if}
