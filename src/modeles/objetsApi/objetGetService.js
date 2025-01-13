@@ -1,6 +1,5 @@
 const Dossiers = require('../dossiers');
 const Autorisation = require('../autorisations/autorisation');
-const { dateEnFrancais } = require('../../utilitaires/date');
 
 const { DROITS_VOIR_STATUT_HOMOLOGATION } = Autorisation;
 
