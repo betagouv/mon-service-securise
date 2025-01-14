@@ -38,6 +38,11 @@
         on:click={supprimeRechercheEtFiltres}
       />
     </div>
+  {:else if $affichageTableauVide.etat === 'aucunDossierHomologationEnCours'}
+    <div class="aucun-dossier-en-cours">
+      <img src="/statique/assets/images/dossiers.png" alt="" />
+      Aucune homologation en cours
+    </div>
   {/if}
 </div>
 
@@ -46,7 +51,8 @@
     border: 1px solid #ddd;
   }
 
-  .aucun-resultat {
+  .aucun-resultat,
+  .aucun-dossier-en-cours {
     padding: 36px 0;
     display: flex;
     gap: 16px;
@@ -55,7 +61,8 @@
     color: var(--texte-clair);
   }
 
-  .aucun-resultat img {
+  .aucun-resultat img,
+  .aucun-dossier-en-cours img {
     max-width: 128px;
   }
 
