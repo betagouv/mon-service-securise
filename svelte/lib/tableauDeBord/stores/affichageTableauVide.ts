@@ -7,6 +7,8 @@ type Etat =
   | 'aucunService'
   | 'aucunResultatDeRecherche'
   | 'aucunDossierHomologationEnCours'
+  | 'aucunDossierHomologationBientotExpiree'
+  | 'aucunDossierHomologationExpiree'
   | null;
 type EtatAffichage = {
   doitAfficher: boolean;
@@ -40,6 +42,19 @@ export const affichageTableauVide = derived<
         .length === 0
     ) {
       etat = 'aucunDossierHomologationEnCours' as Etat;
+    } else if (
+      $affichageParStatutHomologationSelectionne === 'bientotExpiree' &&
+      $resultatsDeRecherche.filter(
+        (s) => s.statutHomologation.id === 'bientotExpiree'
+      ).length === 0
+    ) {
+      etat = 'aucunDossierHomologationBientotExpiree' as Etat;
+    } else if (
+      $affichageParStatutHomologationSelectionne === 'expiree' &&
+      $resultatsDeRecherche.filter((s) => s.statutHomologation.id === 'expiree')
+        .length === 0
+    ) {
+      etat = 'aucunDossierHomologationExpiree' as Etat;
     } else {
       doitAfficher = false;
     }

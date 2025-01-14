@@ -43,6 +43,16 @@
       <img src="/statique/assets/images/dossiers.png" alt="" />
       Aucune homologation en cours
     </div>
+  {:else if $affichageTableauVide.etat === 'aucunDossierHomologationBientotExpiree'}
+    <div class="aucun-dossier-en-cours">
+      <img src="/statique/assets/images/dossiers.png" alt="" />
+      Aucune homologation bientôt expirée
+    </div>
+  {:else if $affichageTableauVide.etat === 'aucunDossierHomologationExpiree'}
+    <div class="aucun-dossier-en-cours">
+      <img src="/statique/assets/images/dossiers.png" alt="" />
+      Aucune homologation expirée
+    </div>
   {/if}
 </div>
 
