@@ -14,8 +14,14 @@
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import Bouton from '../ui/Bouton.svelte';
   import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
+  import {
+    affichageParStatutHomologation,
+    affichageParStatutHomologationSelectionne,
+    resultatsDeRechercheDuStatutHomologationSelectionne,
+  } from './stores/affichageParStatutHomologation';
   import { selectionIdsServices } from './stores/selectionService.store';
   import Lien from '../ui/Lien.svelte';
+  import Onglet from '../ui/Onglet.svelte';
 
   export let indicesCybers: IndiceCyber[] = [];
 
@@ -72,6 +78,36 @@
     </div>
   {:else}
     <thead>
+      <tr class="ligne-onglet">
+        <th colspan="6">
+          <div class="conteneur-onglet">
+            <Onglet
+              bind:ongletActif={$affichageParStatutHomologationSelectionne}
+              cetOnglet="tous"
+              labelOnglet="Tous les services"
+              badge={$affichageParStatutHomologation.tous.length}
+            />
+            <Onglet
+              bind:ongletActif={$affichageParStatutHomologationSelectionne}
+              cetOnglet="enCoursEdition"
+              labelOnglet="Homologation en cours"
+              badge={$affichageParStatutHomologation.enCoursEdition.length}
+            />
+            <Onglet
+              bind:ongletActif={$affichageParStatutHomologationSelectionne}
+              cetOnglet="bientotExpiree"
+              labelOnglet="Homologation bientôt expirée"
+              badge={$affichageParStatutHomologation.bientotExpiree.length}
+            />
+            <Onglet
+              bind:ongletActif={$affichageParStatutHomologationSelectionne}
+              cetOnglet="expiree"
+              labelOnglet="Homologation expirée"
+              badge={$affichageParStatutHomologation.expiree.length}
+            />
+          </div>
+        </th>
+      </tr>
       <tr>
         <td colspan="6" class="case-conteneur-action">
           <ActionsDesServices {selection} />
@@ -95,7 +131,7 @@
       </tr>
     </thead>
     <tbody class="contenu-tableau-services">
-      {#each $resultatsDeRecherche as service (service.id)}
+      {#each $resultatsDeRechercheDuStatutHomologationSelectionne as service (service.id)}
         {@const idService = service.id}
         {@const indiceCyberDuService = indicesCybers.find(
           (i) => i.id === idService
@@ -168,7 +204,6 @@
 <style>
   table {
     border-collapse: collapse;
-    border: 1px solid #ddd;
     width: 100%;
   }
 
@@ -299,5 +334,20 @@
 
   .cellule-selection {
     text-align: center;
+  }
+
+  .ligne-onglet {
+    border: none;
+  }
+
+  .ligne-onglet th {
+    padding: 0;
+  }
+
+  .conteneur-onglet {
+    margin: 0 0 -1px -1px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
   }
 </style>
