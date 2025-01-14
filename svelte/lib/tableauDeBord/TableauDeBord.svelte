@@ -24,6 +24,7 @@
   let indicesCybers: IndiceCyber[] = [];
   let nombreServices: number;
   let nombreServicesHomologues: number;
+  let nombreHomologationsExpirees: number;
   let indiceCyberMoyen: IndiceCyberMoyen | undefined;
 
   onMount(async () => {
@@ -32,6 +33,8 @@
       nombreServices = donneesVisiteGuidee.resume.nombreServices;
       nombreServicesHomologues =
         donneesVisiteGuidee.resume.nombreServicesHomologues;
+      nombreHomologationsExpirees =
+        donneesVisiteGuidee.resume.nombreHomologationsExpirees;
       indicesCybers = donneesVisiteGuidee.indicesCyber;
       indiceCyberMoyen = donneesVisiteGuidee.indiceCyber;
       enCoursChargement = false;
@@ -46,6 +49,7 @@
     selectionIdsServices.vide();
     nombreServices = reponse.resume.nombreServices;
     nombreServicesHomologues = reponse.resume.nombreServicesHomologues;
+    nombreHomologationsExpirees = reponse.resume.nombreHomologationsExpirees;
     enCoursChargement = false;
   };
 
@@ -89,6 +93,7 @@
     <BandeauInfo
       {nombreServices}
       {nombreServicesHomologues}
+      {nombreHomologationsExpirees}
       {indiceCyberMoyen}
     />
     <BandeauFiltres />
