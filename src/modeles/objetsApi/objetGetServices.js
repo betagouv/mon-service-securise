@@ -22,6 +22,13 @@ const donnees = (services, autorisations, referentiel) => ({
           .find((a) => a.idService === s.id)
           .aLesPermissions(DROITS_VOIR_STATUT_HOMOLOGATION)
     ).length,
+    nombreHomologationsExpirees: services.filter(
+      (s) =>
+        s.dossiers.statutHomologation() === Dossiers.EXPIREE &&
+        autorisations
+          .find((a) => a.idService === s.id)
+          .aLesPermissions(DROITS_VOIR_STATUT_HOMOLOGATION)
+    ).length,
   },
 });
 
