@@ -24,13 +24,13 @@ export const affichageParStatutHomologation = derived<
 >([resultatsDeRecherche], ([$resultatsDeRecherche]) => ({
   tous: $resultatsDeRecherche,
   bientotExpiree: $resultatsDeRecherche.filter(
-    (s) => s.statutHomologation.id === 'bientotExpiree'
+    (s) => s.statutHomologation?.id === 'bientotExpiree'
   ),
   expiree: $resultatsDeRecherche.filter(
-    (s) => s.statutHomologation.id === 'expiree'
+    (s) => s.statutHomologation?.id === 'expiree'
   ),
   enCoursEdition: $resultatsDeRecherche.filter(
-    (s) => s.statutHomologation.enCoursEdition
+    (s) => s.statutHomologation?.enCoursEdition
   ),
 }));
 

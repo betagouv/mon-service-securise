@@ -38,21 +38,22 @@ export const affichageTableauVide = derived<
       etat = 'aucunResultatDeRecherche' as Etat;
     } else if (
       $affichageParStatutHomologationSelectionne === 'enCoursEdition' &&
-      $resultatsDeRecherche.filter((s) => s.statutHomologation.enCoursEdition)
+      $resultatsDeRecherche.filter((s) => s.statutHomologation?.enCoursEdition)
         .length === 0
     ) {
       etat = 'aucunDossierHomologationEnCours' as Etat;
     } else if (
       $affichageParStatutHomologationSelectionne === 'bientotExpiree' &&
       $resultatsDeRecherche.filter(
-        (s) => s.statutHomologation.id === 'bientotExpiree'
+        (s) => s.statutHomologation?.id === 'bientotExpiree'
       ).length === 0
     ) {
       etat = 'aucunDossierHomologationBientotExpiree' as Etat;
     } else if (
       $affichageParStatutHomologationSelectionne === 'expiree' &&
-      $resultatsDeRecherche.filter((s) => s.statutHomologation.id === 'expiree')
-        .length === 0
+      $resultatsDeRecherche.filter(
+        (s) => s.statutHomologation?.id === 'expiree'
+      ).length === 0
     ) {
       etat = 'aucunDossierHomologationExpiree' as Etat;
     } else {
