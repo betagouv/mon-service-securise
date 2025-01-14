@@ -50,6 +50,11 @@ describe("L'objet d'API de `GET /services`", () => {
     .avecNomService('Un autre service')
     .construis();
 
+  const unTroisiemeService = unService()
+    .avecId('789')
+    .avecNomService('Un troisième service')
+    .construis();
+
   it('fournit les données des services', () => {
     const autorisationComplete = uneAutorisation()
       .deProprietaire('A', '123')
@@ -65,8 +70,10 @@ describe("L'objet d'API de `GET /services`", () => {
   });
 
   it('fournit les données de résumé des services', () => {
-    service.dossiers.statutHomologation = () => Dossiers.BIENTOT_EXPIREE;
+    service.dossiers.statutHomologation = () => Dossiers.EXPIREE;
     unAutreService.dossiers.statutHomologation = () => Dossiers.ACTIVEE;
+    unTroisiemeService.dossiers.statutHomologation = () =>
+      Dossiers.BIENTOT_EXPIREE;
 
     const autorisationPourUnService = uneAutorisation()
       .deProprietaire('999', service.id)
@@ -82,20 +89,32 @@ describe("L'objet d'API de `GET /services`", () => {
       })
       .construis();
 
-    const services = [service, unAutreService];
+    const autorisationPourUnTroisiemeService = uneAutorisation()
+      .deProprietaire('999', unTroisiemeService.id)
+      .avecDroits({
+        [HOMOLOGUER]: LECTURE,
+      })
+      .construis();
+
+    const services = [service, unAutreService, unTroisiemeService];
     expect(
       objetGetServices.donnees(
         services,
-        [autorisationPourUnService, autorisationPourUnAutreService],
+        [
+          autorisationPourUnService,
+          autorisationPourUnAutreService,
+          autorisationPourUnTroisiemeService,
+        ],
         referentiel
       ).resume
     ).to.eql({
-      nombreServices: 2,
+      nombreServices: 3,
       nombreServicesHomologues: 2,
+      nombreHomologationsExpirees: 1,
     });
   });
 
-  it("ne considère pas les services dont le statut d'homologation est masqué pour le calcul du nombre de services homologués", () => {
+  it("ne considère pas les services dont le statut d'homologation est masqué pour l'utilisateur pour le calcul du nombre de services homologués", () => {
     service.dossiers.statutHomologation = () => Dossiers.ACTIVEE;
     unAutreService.dossiers.statutHomologation = () => Dossiers.ACTIVEE;
 
@@ -119,5 +138,23 @@ describe("L'objet d'API de `GET /services`", () => {
     );
     expect(donnees.resume.nombreServices).to.equal(2);
     expect(donnees.resume.nombreServicesHomologues).to.equal(1);
+  });
+
+  it("ne considère pas les services dont le statut d'homologation est masqué pour l'utilisateur pour le calcul du nombre de services expirés", () => {
+    unAutreService.dossiers.statutHomologation = () => Dossiers.EXPIREE;
+
+    const autorisationSansHomologuerPourUnAutreService = uneAutorisation()
+      .deContributeur('999', '456')
+      .avecDroits({})
+      .construis();
+
+    const services = [unAutreService];
+    const donnees = objetGetServices.donnees(
+      services,
+      [autorisationSansHomologuerPourUnAutreService],
+      referentiel
+    );
+    expect(donnees.resume.nombreServices).to.equal(1);
+    expect(donnees.resume.nombreHomologationsExpirees).to.equal(0);
   });
 });
