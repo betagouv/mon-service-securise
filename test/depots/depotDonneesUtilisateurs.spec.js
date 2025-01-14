@@ -362,7 +362,7 @@ describe('Le dépôt de données des utilisateurs', () => {
 
     it("inscris l'invité confirmant son compte MSS dans MonProfilAnssi", async () => {
       let profilAnssiEnvoyeAAdaptateur;
-      adaptateurProfilAnssi.inscris = (utilisateur) =>
+      adaptateurProfilAnssi.metsAJour = (utilisateur) =>
         (profilAnssiEnvoyeAAdaptateur = utilisateur);
 
       await depot.metsAJourUtilisateur(
@@ -372,19 +372,6 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       const utilisateur = await depot.utilisateur('124');
       expect(profilAnssiEnvoyeAAdaptateur).to.eql(utilisateur);
-    });
-
-    it('ne réinscris pas dans MonProfilAnssi un utilisateur MSS qui met à jour son compte', async () => {
-      let profilAnssiEnvoyeAAdaptateur;
-      adaptateurProfilAnssi.inscris = (utilisateur) =>
-        (profilAnssiEnvoyeAAdaptateur = utilisateur);
-
-      await depot.metsAJourUtilisateur(
-        '123',
-        unUtilisateur().avecId('123').quiSAppelle('Justine Lange').donnees
-      );
-
-      expect(profilAnssiEnvoyeAAdaptateur).to.eql(undefined);
     });
 
     it('mets à jour MonProfilAnssi pour un utilisateur MSS qui met à jour son compte', async () => {
@@ -399,18 +386,6 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       const utilisateur = await depot.utilisateur('123');
       expect(profilAnssiEnvoyeAAdaptateurPourMiseAJour).to.eql(utilisateur);
-    });
-
-    it("ne mets pas à jour l'invité après son inscription dans MonProfilAnssi", async () => {
-      let miseAJourAppelee = false;
-      adaptateurProfilAnssi.metsAJour = () => (miseAJourAppelee = true);
-
-      await depot.metsAJourUtilisateur(
-        '124',
-        unUtilisateur().avecId('124').quiSAppelle('Justine Lange').donnees
-      );
-
-      expect(miseAJourAppelee).to.be(false);
     });
   });
 
@@ -837,7 +812,7 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       it("inscris l'utilisateur avec un compte complet dans MonProfilAnssi", async () => {
         let profilAnssiEnvoyeAAdaptateur;
-        adaptateurProfilAnssi.inscris = (utilisateur) =>
+        adaptateurProfilAnssi.metsAJour = (utilisateur) =>
           (profilAnssiEnvoyeAAdaptateur = utilisateur);
 
         await depot.nouvelUtilisateur(
@@ -852,7 +827,7 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       it("n'inscris pas l'utilisateur invité dans MonProfilAnssi", async () => {
         let profilAnssiEnvoyeAAdaptateur;
-        adaptateurProfilAnssi.inscris = (utilisateur) =>
+        adaptateurProfilAnssi.metsAJour = (utilisateur) =>
           (profilAnssiEnvoyeAAdaptateur = utilisateur);
 
         await depot.nouvelUtilisateur(

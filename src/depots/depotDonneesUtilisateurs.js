@@ -207,7 +207,7 @@ const creeDepot = (config = {}) => {
     u = await p.lis.un(id);
 
     if (!u.estUnInvite()) {
-      await adaptateurProfilAnssi.inscris(u);
+      await adaptateurProfilAnssi.metsAJour(u);
     }
 
     await busEvenements.publie(
@@ -256,9 +256,6 @@ const creeDepot = (config = {}) => {
   const metsAJourUtilisateur = async (id, donnees) => {
     delete donnees.motDePasse;
 
-    let u = await p.lis.un(id);
-    const etaitUnInvite = u.estUnInvite();
-
     if (donnees.entite && donnees.entite.siret)
       donnees.entite = await Entite.completeDonnees(
         donnees.entite,
@@ -267,13 +264,9 @@ const creeDepot = (config = {}) => {
 
     await p.sauvegarde(id, donnees);
 
-    u = await p.lis.un(id);
+    const u = await p.lis.un(id);
 
-    if (etaitUnInvite) {
-      await adaptateurProfilAnssi.inscris(u);
-    } else {
-      await adaptateurProfilAnssi.metsAJour(u);
-    }
+    await adaptateurProfilAnssi.metsAJour(u);
 
     await busEvenements.publie(
       new EvenementUtilisateurModifie({ utilisateur: u })
