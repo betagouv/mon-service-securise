@@ -23,7 +23,7 @@ export type Service = {
   nomService: string;
   organisationResponsable: string;
   contributeurs: Contributeur[];
-  statutHomologation: {
+  statutHomologation?: {
     id: string;
     enCoursEdition: boolean;
     libelle: string;
