@@ -5,13 +5,22 @@ import {
 } from './rechercheTextuelle.store';
 import type { ServiceAvecIndiceCyber } from '../tableauDeBord.d';
 import { services } from './services.store';
+import {
+  appliqueFiltrageParIndiceCyber,
+  appliqueFiltrageParProprietaire,
+  filtrageServices,
+  type OptionsDeFiltrage,
+} from './filtrageServices.store';
 
 type Filtre = (service: ServiceAvecIndiceCyber) => boolean;
 type Predicats = {
   filtres: Filtre[];
 };
 
-const construisFiltres = (rechercheTextuelle: string) => {
+const construisFiltres = (
+  rechercheTextuelle: string,
+  filtrageServices: OptionsDeFiltrage
+) => {
   const filtres: Filtre[] = [];
 
   if (rechercheTextuelle)
@@ -19,13 +28,26 @@ const construisFiltres = (rechercheTextuelle: string) => {
       appliqueFiltreTextuel(service, rechercheTextuelle)
     );
 
+  if (filtrageServices.indiceCyber.length)
+    filtres.push((service: ServiceAvecIndiceCyber) =>
+      appliqueFiltrageParIndiceCyber(service, filtrageServices.indiceCyber)
+    );
+
+  if (filtrageServices.propriete.length)
+    filtres.push((service: ServiceAvecIndiceCyber) =>
+      appliqueFiltrageParProprietaire(service, filtrageServices.propriete)
+    );
+
   return filtres;
 };
 
-const predicats = derived<[typeof rechercheTextuelle], Predicats>(
-  [rechercheTextuelle],
-  ([$rechercheTextuelle]) => ({
-    filtres: construisFiltres($rechercheTextuelle),
+const predicats = derived<
+  [typeof rechercheTextuelle, typeof filtrageServices],
+  Predicats
+>(
+  [rechercheTextuelle, filtrageServices],
+  ([$rechercheTextuelle, $filtrageServices]) => ({
+    filtres: construisFiltres($rechercheTextuelle, $filtrageServices),
   })
 );
 
