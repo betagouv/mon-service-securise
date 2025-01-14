@@ -3,6 +3,7 @@
 
   export let nombreServices: number;
   export let nombreServicesHomologues: number;
+  export let nombreHomologationsExpirees: number;
   export let indiceCyberMoyen: IndiceCyberMoyen | undefined;
 
   $: valeurIndiceCyberMoyen = (): string =>
@@ -25,6 +26,14 @@
     <span class="contenu-carte">
       <span class="libelle-carte">
         <span class="metrique">{nombreServicesHomologues}</span> Services homologués</span
+      >
+    </span>
+  </div>
+  <div class="carte-info" id="carte-info-nombre-services-homologation-expirees">
+    <span class="contenu-carte">
+      <span class="libelle-carte">
+        <span class="metrique">{nombreHomologationsExpirees}</span> Homologation
+        expirées</span
       >
     </span>
   </div>
@@ -71,6 +80,11 @@
       no-repeat center;
   }
 
+  #carte-info-nombre-services-homologation-expirees .contenu-carte::before {
+    background: url('/statique/assets/images/tableauDeBord/icone_nombre_homologation_expirees.svg')
+      no-repeat center;
+  }
+
   #carte-info-indice-cyber-moyen .contenu-carte::before {
     background: url('/statique/assets/images/tableauDeBord/icone_indice_cyber_moyen.svg')
       no-repeat center;
@@ -82,6 +96,10 @@
 
   #carte-info-nombre-services-homologues {
     background-color: #defbe5;
+  }
+
+  #carte-info-nombre-services-homologation-expirees {
+    background-color: #feecc2;
   }
 
   #carte-info-indice-cyber-moyen {

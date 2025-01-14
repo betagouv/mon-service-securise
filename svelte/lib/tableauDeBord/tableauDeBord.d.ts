@@ -45,6 +45,7 @@ export type ReponseApiServices = {
   resume: {
     nombreServices: number;
     nombreServicesHomologues: number;
+    nombreHomologationsExpirees: number;
   };
 };
 

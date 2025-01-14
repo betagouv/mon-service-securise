@@ -19,6 +19,7 @@ export const donneesVisiteGuidee = {
   resume: {
     nombreServices: 1,
     nombreServicesHomologues: 0,
+    nombreHomologationsExpirees: 0,
   },
   indiceCyber: 4.3,
   services: [
