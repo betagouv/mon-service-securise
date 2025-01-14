@@ -9,22 +9,6 @@ const CONFIGURATION_AUTHENTIFICATION = {
   },
 };
 
-const inscris = async ({ nom, prenom, email, entite, telephone, postes }) => {
-  const urlInscription = `${process.env.PROFIL_ANSSI_URL_BASE}/inscription`;
-  await axios.post(
-    urlInscription,
-    {
-      nom,
-      prenom,
-      email,
-      organisation: entite,
-      telephone,
-      domainesSpecialite: postes,
-    },
-    CONFIGURATION_AUTHENTIFICATION
-  );
-};
-
 const metsAJour = async ({ nom, prenom, email, entite, telephone, postes }) => {
   const urlProfil = `${process.env.PROFIL_ANSSI_URL_BASE}/profil/${email}`;
   await axios.put(
@@ -57,7 +41,6 @@ const recupere = async (email) => {
 };
 
 module.exports = {
-  inscris,
   recupere,
   metsAJour,
 };
