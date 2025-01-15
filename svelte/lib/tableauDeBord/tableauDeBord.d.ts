@@ -51,10 +51,12 @@ export type ReponseApiServices = {
 
 export type IndiceCyber = {
   id: string;
-  indiceCyber: number;
+  indiceCyber: string;
 };
 
 export type IndiceCyberMoyen = number | '-';
+
+export type ServiceAvecIndiceCyber = Service & { indiceCyber?: number };
 
 export type ReponseApiIndicesCyber = {
   services: IndiceCyber[];

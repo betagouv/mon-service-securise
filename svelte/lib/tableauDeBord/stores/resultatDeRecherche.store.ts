@@ -3,10 +3,10 @@ import {
   appliqueFiltreTextuel,
   rechercheTextuelle,
 } from './rechercheTextuelle.store';
-import type { Service } from '../tableauDeBord.d';
+import type { ServiceAvecIndiceCyber } from '../tableauDeBord.d';
 import { services } from './services.store';
 
-type Filtre = (service: Service) => boolean;
+type Filtre = (service: ServiceAvecIndiceCyber) => boolean;
 type Predicats = {
   filtres: Filtre[];
 };
@@ -15,7 +15,7 @@ const construisFiltres = (rechercheTextuelle: string) => {
   const filtres: Filtre[] = [];
 
   if (rechercheTextuelle)
-    filtres.push((service: Service) =>
+    filtres.push((service: ServiceAvecIndiceCyber) =>
       appliqueFiltreTextuel(service, rechercheTextuelle)
     );
 
@@ -29,7 +29,7 @@ const predicats = derived<[typeof rechercheTextuelle], Predicats>(
   })
 );
 
-type ResultatsRecherche = Service[];
+type ResultatsRecherche = ServiceAvecIndiceCyber[];
 
 export const resultatsDeRecherche = derived<
   [typeof services, typeof predicats],

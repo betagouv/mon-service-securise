@@ -44,7 +44,7 @@ export const donneesVisiteGuidee = {
       actionRecommandee: undefined,
     },
   ],
-  indicesCyber: [{ id: 'ID-SERVICE-VISITE-GUIDEE', indiceCyber: 4.3 }],
+  indicesCyber: [{ id: 'ID-SERVICE-VISITE-GUIDEE', indiceCyber: '4.3' }],
 };
 
 export default app!;

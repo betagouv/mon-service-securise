@@ -1,6 +1,6 @@
 import { derived, writable } from 'svelte/store';
 import { resultatsDeRecherche } from './resultatDeRecherche.store';
-import type { Service } from '../tableauDeBord.d';
+import type { ServiceAvecIndiceCyber } from '../tableauDeBord.d';
 
 export type StatutHomologation =
   | 'bientotExpiree'
@@ -9,10 +9,10 @@ export type StatutHomologation =
   | 'tous';
 
 type ServicesParStatutHomologation = {
-  tous: Service[];
-  bientotExpiree: Service[];
-  expiree: Service[];
-  enCoursEdition: Service[];
+  tous: ServiceAvecIndiceCyber[];
+  bientotExpiree: ServiceAvecIndiceCyber[];
+  expiree: ServiceAvecIndiceCyber[];
+  enCoursEdition: ServiceAvecIndiceCyber[];
 };
 
 export const affichageParStatutHomologationSelectionne =
@@ -39,7 +39,7 @@ export const resultatsDeRechercheDuStatutHomologationSelectionne = derived<
     typeof affichageParStatutHomologation,
     typeof affichageParStatutHomologationSelectionne,
   ],
-  Service[]
+  ServiceAvecIndiceCyber[]
 >(
   [affichageParStatutHomologation, affichageParStatutHomologationSelectionne],
   ([

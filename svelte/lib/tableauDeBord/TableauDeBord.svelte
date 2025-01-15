@@ -21,7 +21,6 @@
 
   let enCoursChargement = true;
 
-  let indicesCybers: IndiceCyber[] = [];
   let nombreServices: number;
   let nombreServicesHomologues: number;
   let nombreHomologationsExpirees: number;
@@ -35,7 +34,7 @@
         donneesVisiteGuidee.resume.nombreServicesHomologues;
       nombreHomologationsExpirees =
         donneesVisiteGuidee.resume.nombreHomologationsExpirees;
-      indicesCybers = donneesVisiteGuidee.indicesCyber;
+      services.ajouteIndicesCyber(donneesVisiteGuidee.indicesCyber);
       indiceCyberMoyen = donneesVisiteGuidee.indiceCyber;
       enCoursChargement = false;
     } else {
@@ -57,7 +56,7 @@
     const reponse: ReponseApiIndicesCyber = (
       await axios.get('/api/services/indices-cyber')
     ).data;
-    indicesCybers = reponse.services;
+    services.ajouteIndicesCyber(reponse.services);
     indiceCyberMoyen = reponse.resume.indiceCyberMoyen;
   };
 
@@ -97,7 +96,7 @@
       {indiceCyberMoyen}
     />
     <BandeauFiltres />
-    <TableauDesServices {indicesCybers} />
+    <TableauDesServices />
   {/if}
 </div>
 

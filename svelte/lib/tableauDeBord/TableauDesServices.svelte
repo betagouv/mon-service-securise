@@ -22,8 +22,6 @@
   import Onglet from '../ui/Onglet.svelte';
   import TableauVide from './TableauVide.svelte';
 
-  export let indicesCybers: IndiceCyber[] = [];
-
   $: selection = $resultatsDeRecherche.filter((service) =>
     $selectionIdsServices.includes(service.id)
   );
@@ -108,9 +106,7 @@
     <tbody class="contenu-tableau-services">
       {#each $resultatsDeRechercheDuStatutHomologationSelectionne as service (service.id)}
         {@const idService = service.id}
-        {@const indiceCyberDuService = indicesCybers.find(
-          (i) => i.id === idService
-        )}
+        {@const indiceCyberDuService = service.indiceCyber}
         <tr class="ligne-service" data-id-service={idService}>
           <td class="cellule-selection">
             <input
@@ -149,10 +145,7 @@
           </td>
           <td>
             {#if indiceCyberDuService !== undefined}
-              <EtiquetteIndiceCyber
-                score={indiceCyberDuService.indiceCyber}
-                {idService}
-              />
+              <EtiquetteIndiceCyber score={indiceCyberDuService} {idService} />
             {:else}
               <IconeChargementEnCours />
             {/if}
