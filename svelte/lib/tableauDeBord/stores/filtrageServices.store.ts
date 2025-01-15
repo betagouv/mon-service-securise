@@ -14,11 +14,14 @@ export type OptionsDeFiltrage = {
 };
 export type FiltreCompletude = '<50%' | '50%-80%' | '>80%';
 
-export const filtrageServices = writable<OptionsDeFiltrage>({
+export const filtrageServicesVide = {
   indiceCyber: [],
   propriete: [],
   niveauSecurite: [],
   completude: [],
+};
+export const filtrageServices = writable<OptionsDeFiltrage>({
+  ...filtrageServicesVide,
 });
 
 const entreBornes = (
