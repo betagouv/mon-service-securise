@@ -69,4 +69,12 @@ export type ReponseApiIndicesCyber = {
   };
 };
 
-export type ActionRecommandee = 'mettreAJour' | undefined;
+export type ActionRecommandee =
+  | 'mettreAJour'
+  | 'continuerHomologation'
+  | 'augmenterIndiceCyber'
+  | 'telechargerEncartHomologation'
+  | 'homologuerANouveau'
+  | 'homologuerService'
+  | 'inviterContributeur'
+  | undefined;

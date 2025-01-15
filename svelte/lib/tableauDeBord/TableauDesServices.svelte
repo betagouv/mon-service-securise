@@ -6,7 +6,6 @@
   import IconeChargementEnCours from '../ui/IconeChargementEnCours.svelte';
   import EtiquetteProprietaire from './elementsDeService/EtiquetteProprietaire.svelte';
   import ActionRecommandee from './elementsDeService/ActionRecommandee.svelte';
-  import type { IndiceCyber } from './tableauDeBord.d';
   import { resultatsDeRecherche } from './stores/resultatDeRecherche.store';
   import ActionsDesServices from './ActionsDesServices.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
@@ -178,7 +177,7 @@
             {/if}
           </td>
           <td>
-            <ActionRecommandee action={service.actionRecommandee} {idService} />
+            <ActionRecommandee action={service.actionRecommandee} {service} />
           </td>
         </tr>
       {/each}
