@@ -74,6 +74,9 @@
   on:collaboratif-service-modifie={rafraichisServices}
 />
 <Toaster />
+<div class="entete-pdf">
+  <h1>Mon tableau de bord</h1>
+</div>
 <div class="tableau-de-bord">
   <span class="entete-tableau-de-bord">
     <h1>Mon tableau de bord</h1>
@@ -160,5 +163,43 @@
   .lien-supervision a:active::before {
     filter: brightness(0) invert(8%) sepia(52%) saturate(5373%)
       hue-rotate(237deg) brightness(125%) contrast(140%);
+  }
+
+  .entete-pdf {
+    display: none;
+  }
+
+  @media print {
+    @page {
+      size: auto;
+      margin: 0;
+      background: white;
+    }
+
+    :global(
+        .conteneur-filtres,
+        .ligne-onglet,
+        .case-conteneur-action,
+        .header-droit,
+        .entete-tableau-de-bord,
+        footer,
+        .bom,
+        table tr td:first-of-type,
+        table tr td:last-of-type,
+        table tr th:last-of-type
+      ) {
+      display: none !important;
+    }
+
+    :global(main) {
+      border-bottom: none;
+    }
+
+    .entete-pdf {
+      display: flex;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
   }
 </style>
