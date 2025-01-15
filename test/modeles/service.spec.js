@@ -1089,8 +1089,37 @@ describe('Un service', () => {
   });
 
   describe("sur demande de l'action recommandée", () => {
+    let referentiel;
+    let mesuresToutesFaites;
+    let mesuresNonFaites;
+    let mesuresNonRemplies;
+
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
+        statutsAvisDossierHomologation: { favorable: {} },
+        categoriesMesures: { gouvernance: {} },
+        statutsMesures: { fait: {}, enCours: {} },
+        mesures: { mesureA: {} },
+        indiceCyber: { noteMax: 5 },
+      });
+      mesuresToutesFaites = new Mesures(
+        { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
+        referentiel,
+        { mesureA: { categorie: 'gouvernance' } }
+      );
+      mesuresNonFaites = new Mesures(
+        { mesuresGenerales: [{ id: 'mesureA', statut: 'enCours' }] },
+        referentiel,
+        { mesureA: { categorie: 'gouvernance' } }
+      );
+      mesuresNonRemplies = new Mesures({ mesuresGenerales: [] }, referentiel, {
+        mesureA: { categorie: 'gouvernance' },
+      });
+    });
+
     it("retourne 'mettreAJour' si le service a une suggestion d'action", () => {
-      const referentiel = Referentiel.creeReferentiel({
+      referentiel = Referentiel.creeReferentiel({
         naturesSuggestionsActions: { 'siret-a-renseigner': { lien: '' } },
       });
 
@@ -1099,6 +1128,76 @@ describe('Un service', () => {
         .construis();
 
       expect(service.actionRecommandee()).to.be('mettreAJour');
+    });
+
+    it("retourne 'continuerHomologation' si le service a un un dossier d'homologation en cours et un indice cyber supérieur à 4", () => {
+      const service = unService(referentiel)
+        .avecDossiers([
+          unDossier(referentiel).quiEstComplet().quiEstNonFinalise().donnees,
+        ])
+        .avecMesures(mesuresToutesFaites)
+        .construis();
+
+      expect(service.actionRecommandee()).to.be('continuerHomologation');
+    });
+
+    it("retourne 'augmenterIndiceCyber' si le service a un un dossier d'homologation en cours et un indice cyber inférieur à 4", () => {
+      const service = unService(referentiel)
+        .avecDossiers([
+          unDossier(referentiel).quiEstComplet().quiEstNonFinalise().donnees,
+        ])
+        .avecMesures(mesuresNonFaites)
+        .construis();
+
+      expect(service.actionRecommandee()).to.be('augmenterIndiceCyber');
+    });
+
+    it("retourne 'telechargerEncartHomologation' si le service a un un dossier d'homologation actif et en cours de validité", () => {
+      const service = unService(referentiel)
+        .avecDossiers([
+          unDossier(referentiel).quiEstComplet().quiEstActif().donnees,
+        ])
+        .construis();
+
+      expect(service.actionRecommandee()).to.be(
+        'telechargerEncartHomologation'
+      );
+    });
+
+    it("retourne 'homologuerANouveau' si le service a un un dossier d'homologation expirée", () => {
+      const service = unService(referentiel)
+        .avecDossiers([
+          unDossier(referentiel).quiEstComplet().quiEstExpire().donnees,
+        ])
+        .construis();
+
+      expect(service.actionRecommandee()).to.be('homologuerANouveau');
+    });
+
+    it("retourne 'inviterContributeur' si le service n'a qu'un contributeur, un taux de complétion inférieur à 80% et indice cyber inférieur à 4", () => {
+      const service = unService(referentiel)
+        .avecNContributeurs(1)
+        .avecMesures(mesuresNonRemplies)
+        .construis();
+
+      expect(service.actionRecommandee()).to.be('inviterContributeur');
+    });
+
+    it("retourne 'augmenterIndiceCyber' si le service a plus d'un contributeur, un taux de complétion inférieur à 80% et indice cyber inférieur à 4", () => {
+      const service = unService(referentiel)
+        .avecNContributeurs(2)
+        .avecMesures(mesuresNonRemplies)
+        .construis();
+
+      expect(service.actionRecommandee()).to.be('augmenterIndiceCyber');
+    });
+
+    it("retourne 'homologuerService' si le service a un taux de complétion supérieur à 80% et indice cyber supérieur à 4", () => {
+      const service = unService(referentiel)
+        .avecMesures(mesuresToutesFaites)
+        .construis();
+
+      expect(service.actionRecommandee()).to.be('homologuerService');
     });
 
     it("retourne 'undefined' si aucune action recommandée", () => {
