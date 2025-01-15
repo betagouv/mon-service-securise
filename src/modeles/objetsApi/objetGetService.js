@@ -11,6 +11,7 @@ const donnees = (service, autorisation, referentiel) => {
     autorisation.peutHomologuer()
   );
   const dateExpiration = service.dossiers.dateExpiration();
+  const completude = service.completudeMesures();
   return {
     id: service.id,
     nomService: service.nomService(),
@@ -43,6 +44,8 @@ const donnees = (service, autorisation, referentiel) => {
     aUneSuggestionAction: !!service.aUneSuggestionDAction(),
     actionRecommandee: service.actionRecommandee(),
     niveauSecurite: service.descriptionService.niveauSecurite,
+    pourcentageCompletude:
+      completude.nombreMesuresCompletes / completude.nombreTotalMesures || 0,
   };
 };
 
