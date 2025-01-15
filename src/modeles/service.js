@@ -26,6 +26,12 @@ const NIVEAUX = {
 
 const ACTIONS_RECOMMANDEES = {
   METTRE_A_JOUR: 'mettreAJour',
+  CONTINUER_HOMOLOGATION: 'continuerHomologation',
+  AUGMENTER_INDICE_CYBER: 'augmenterIndiceCyber',
+  TELECHARGER_ENCART_HOMOLOGATION: 'telechargerEncartHomologation',
+  HOMOLOGUER_A_NOUVEAU: 'homologuerANouveau',
+  HOMOLOGUER_SERVICE: 'homologuerService',
+  INVITER_CONTRIBUTEUR: 'inviterContributeur',
 };
 
 class Service {
@@ -332,6 +338,33 @@ class Service {
 
   actionRecommandee() {
     if (this.aUneSuggestionDAction()) return ACTIONS_RECOMMANDEES.METTRE_A_JOUR;
+
+    const indiceCyber = this.indiceCyber().total;
+    if (this.dossierCourant() && indiceCyber >= 4)
+      return ACTIONS_RECOMMANDEES.CONTINUER_HOMOLOGATION;
+
+    if (this.dossierCourant() && indiceCyber < 4)
+      return ACTIONS_RECOMMANDEES.AUGMENTER_INDICE_CYBER;
+
+    if (this.dossiers.aUnDossierEnCoursDeValidite())
+      return ACTIONS_RECOMMANDEES.TELECHARGER_ENCART_HOMOLOGATION;
+
+    if (this.dossiers.dossierActif()?.statutHomologation() === 'expiree')
+      return ACTIONS_RECOMMANDEES.HOMOLOGUER_A_NOUVEAU;
+
+    const completude = this.completudeMesures();
+    const pourcentageCompletude =
+      completude.nombreMesuresCompletes / completude.nombreTotalMesures || 0;
+    const nbContributeurs = this.contributeurs.length;
+    if (nbContributeurs === 1 && pourcentageCompletude < 0.8 && indiceCyber < 4)
+      return ACTIONS_RECOMMANDEES.INVITER_CONTRIBUTEUR;
+
+    if (nbContributeurs > 1 && pourcentageCompletude < 0.8 && indiceCyber < 4)
+      return ACTIONS_RECOMMANDEES.AUGMENTER_INDICE_CYBER;
+
+    if (pourcentageCompletude >= 0.8 && indiceCyber >= 4)
+      return ACTIONS_RECOMMANDEES.HOMOLOGUER_SERVICE;
+
     return undefined;
   }
 
