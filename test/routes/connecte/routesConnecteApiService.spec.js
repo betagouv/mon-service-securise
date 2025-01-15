@@ -2250,6 +2250,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         etapesParcoursHomologation: [{ numero: 1, id: 'autorite' }],
         statutsAvisDossierHomologation: { favorable: {} },
         statutsHomologation: { nonRealisee: {} },
+        categoriesMesures: { gouvernance: {} },
+        statutsMesures: { fait: {} },
       });
 
       const donneesDossier = unDossier(testeur.referentiel())
@@ -2337,6 +2339,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         permissions: { gestionContributeurs: false },
         aUneSuggestionAction: false,
         niveauSecurite: 'niveau1',
+        pourcentageCompletude: 0,
       });
     });
   });

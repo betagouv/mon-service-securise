@@ -15,6 +15,7 @@ const {
 } = require('../../constructeurs/constructeurUtilisateur');
 const { unDossier } = require('../../constructeurs/constructeurDossier');
 const { dateEnFrancais } = require('../../../src/utilitaires/date');
+const Mesures = require('../../../src/modeles/mesures');
 
 describe("L'objet d'API de `GET /service`", () => {
   const referentiel = Referentiel.creeReferentiel({
@@ -38,6 +39,9 @@ describe("L'objet d'API de `GET /service`", () => {
         permissionRequise: { rubrique: 'DECRIRE', niveau: 2 },
       },
     },
+    categoriesMesures: { gouvernance: {} },
+    statutsMesures: { fait: {}, enCours: {}, nonFait: {} },
+    mesures: { mesureA: {} },
   });
   const lectureSurHomologuer = uneAutorisation()
     .avecDroits({ [HOMOLOGUER]: LECTURE })
@@ -64,6 +68,16 @@ describe("L'objet d'API de `GET /service`", () => {
     .avecDossiers([
       unDossier(referentiel).quiEstComplet().quiEstNonFinalise().donnees,
     ])
+    .avecMesures(
+      new Mesures(
+        { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
+        referentiel,
+        {
+          mesureA: { categorie: 'gouvernance' },
+          mesureB: { categorie: 'gouvernance' },
+        }
+      )
+    )
     .avecSuggestionAction({ nature: 'siret-a-renseigner' })
     .construis();
 
@@ -104,6 +118,7 @@ describe("L'objet d'API de `GET /service`", () => {
       aUneSuggestionAction: true,
       actionRecommandee: 'mettreAJour',
       niveauSecurite: 'niveau1',
+      pourcentageCompletude: 0.5,
     });
   });
 
@@ -154,6 +169,8 @@ describe("L'objet d'API de `GET /service`", () => {
           reserveePeutHomologuer: true,
         },
       ],
+      categoriesMesures: {},
+      statutsMesures: {},
     });
 
     const serviceAvecDossierFinalise = unService(referentielDeuxEtapes)
