@@ -42,12 +42,18 @@
   const supprimeRechercheEtFiltres = () => {
     $rechercheTextuelle = '';
   };
+
+  const libellesNiveauSecurite = {
+    niveau1: 'Élémentaire',
+    niveau2: 'Modéré',
+    niveau3: 'Important',
+  };
 </script>
 
 <table>
   <thead>
     <tr class="ligne-onglet">
-      <th colspan="6">
+      <th colspan="7">
         <div class="conteneur-onglet">
           <Onglet
             bind:ongletActif={$affichageParStatutHomologationSelectionne}
@@ -78,7 +84,7 @@
     </tr>
     {#if !$affichageTableauVide.doitAfficher}
       <tr>
-        <td colspan="6" class="case-conteneur-action">
+        <td colspan="7" class="case-conteneur-action">
           <ActionsDesServices {selection} />
         </td>
       </tr>
@@ -94,6 +100,7 @@
         </td>
         <th>Nom du service</th>
         <th>Contributeurs</th>
+        <th>Besoins de sécurité</th>
         <th>Indice cyber</th>
         <th>Homologation</th>
         <th>Actions recommandées</th>
@@ -144,6 +151,9 @@
             />
           </td>
           <td>
+            {libellesNiveauSecurite[service.niveauSecurite]}
+          </td>
+          <td>
             {#if indiceCyberDuService !== undefined}
               <EtiquetteIndiceCyber score={indiceCyberDuService} {idService} />
             {:else}
@@ -188,6 +198,7 @@
     font-size: 14px;
     font-weight: 700;
     line-height: 24px;
+    white-space: nowrap;
   }
 
   table td:first-of-type {

@@ -18,6 +18,8 @@ type Contributeur = {
   estUtilisateurCourant: boolean;
 };
 
+type NiveauSecuriteService = 'niveau1' | 'niveau2' | 'niveau3';
+
 export type Service = {
   id: string;
   nomService: string;
@@ -38,6 +40,7 @@ export type Service = {
   };
   aUneSuggestionAction: boolean;
   actionRecommandee: ActionRecommandee;
+  niveauSecurite: NiveauSecuriteService;
 };
 
 export type ReponseApiServices = {
