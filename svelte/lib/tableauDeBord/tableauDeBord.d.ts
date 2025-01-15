@@ -41,6 +41,7 @@ export type Service = {
   aUneSuggestionAction: boolean;
   actionRecommandee: ActionRecommandee;
   niveauSecurite: NiveauSecuriteService;
+  pourcentageCompletude: number;
 };
 
 export type ReponseApiServices = {
