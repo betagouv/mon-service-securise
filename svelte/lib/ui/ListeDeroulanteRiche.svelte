@@ -1,5 +1,6 @@
 <script lang="ts" generics="T extends string">
   import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
+  import Pastille from './Pastille.svelte';
 
   type OptionsListeDeroulanteRiche<T> = {
     categories: {
@@ -20,6 +21,8 @@
   let menuOuvert: boolean = false;
   let declencheurEl: HTMLButtonElement;
   let contenuEl: HTMLDivElement;
+
+  $: nbFiltresActifs = Object.values(valeursSelectionnees).flat().length;
 </script>
 
 <FermetureSurClicEnDehors
@@ -34,6 +37,9 @@
   >
     <label for={id}>
       {libelle}
+      {#if nbFiltresActifs}
+        <Pastille contenu={nbFiltresActifs.toString()} active />
+      {/if}
     </label>
     <img
       src="/statique/assets/images/ui-kit/fleche_bas.svg"
@@ -107,7 +113,9 @@
   label {
     font-size: 1.11em;
     line-height: 1.5em;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     width: fit-content;
     margin: 0;
   }
