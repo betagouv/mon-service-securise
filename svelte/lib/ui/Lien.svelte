@@ -3,15 +3,30 @@
 
   interface $$Props extends HTMLAnchorAttributes {
     titre: string;
-    icone?: 'plus' | 'attention' | undefined;
+    icone?:
+      | 'plus'
+      | 'attention'
+      | 'homologation'
+      | 'indiceCyber'
+      | 'telecharger'
+      | 'medaille'
+      | undefined;
     type?: 'bouton-primaire' | 'bouton-secondaire';
     taille?: 'petit' | 'moyen';
+    classe?: string;
     href: string;
   }
   export let titre: string;
   export let href: string;
   export let classe: string | undefined = undefined;
-  export let icone: 'plus' | 'attention' | undefined = undefined;
+  export let icone:
+    | 'plus'
+    | 'attention'
+    | 'homologation'
+    | 'indiceCyber'
+    | 'telecharger'
+    | 'medaille'
+    | undefined = undefined;
   export let type: 'bouton-primaire' | 'bouton-secondaire' = 'bouton-primaire';
   export let taille: 'petit' | 'moyen' = 'moyen';
 </script>
@@ -67,7 +82,22 @@
 
   .attention:before {
     background-image: url('/statique/assets/images/icone_warning.svg');
-    /*transform: translateY(1px);*/
+  }
+
+  .homologation:before {
+    background-image: url('/statique/assets/images/icone_homologuer.svg');
+  }
+
+  .indiceCyber:before {
+    background-image: url('/statique/assets/images/icone_indice_cyber.svg');
+  }
+
+  .telecharger:before {
+    background-image: url('/statique/assets/images/icone_telecharger.svg');
+  }
+
+  .medaille:before {
+    background-image: url('/statique/assets/images/icone_medaille.svg');
   }
 
   .avecIcone:before {
