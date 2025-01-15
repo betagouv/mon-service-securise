@@ -21,6 +21,7 @@
   import { affichageTableauVide } from './stores/affichageTableauVide';
   import Onglet from '../ui/Onglet.svelte';
   import TableauVide from './TableauVide.svelte';
+  import EtiquetteCompletude from './elementsDeService/EtiquetteCompletude.svelte';
 
   $: selection = $resultatsDeRecherche.filter((service) =>
     $selectionIdsServices.includes(service.id)
@@ -53,7 +54,7 @@
 <table>
   <thead>
     <tr class="ligne-onglet">
-      <th colspan="7">
+      <th colspan="8">
         <div class="conteneur-onglet">
           <Onglet
             bind:ongletActif={$affichageParStatutHomologationSelectionne}
@@ -84,7 +85,7 @@
     </tr>
     {#if !$affichageTableauVide.doitAfficher}
       <tr>
-        <td colspan="7" class="case-conteneur-action">
+        <td colspan="8" class="case-conteneur-action">
           <ActionsDesServices {selection} />
         </td>
       </tr>
@@ -101,6 +102,7 @@
         <th>Nom du service</th>
         <th>Contributeurs</th>
         <th>Besoins de sécurité</th>
+        <th>Complétion</th>
         <th>Indice cyber</th>
         <th>Homologation</th>
         <th>Actions recommandées</th>
@@ -152,6 +154,11 @@
           </td>
           <td>
             {libellesNiveauSecurite[service.niveauSecurite]}
+          </td>
+          <td>
+            <EtiquetteCompletude
+              pourcentageCompletude={service.pourcentageCompletude}
+            />
           </td>
           <td>
             {#if indiceCyberDuService !== undefined}
