@@ -14,6 +14,7 @@
   import BandeauBlog from './BandeauBlog.svelte';
   import { selectionIdsServices } from './stores/selectionService.store';
   import Toaster from '../ui/Toaster.svelte';
+  import Bouton from '../ui/Bouton.svelte';
 
   export let estSuperviseur: boolean;
   export let modeVisiteGuidee: boolean;
@@ -75,15 +76,26 @@
   on:collaboratif-service-modifie={rafraichisServices}
 />
 <Toaster />
+<div class="entete-pdf">
+  <h1>Mon tableau de bord</h1>
+</div>
 <div class="tableau-de-bord">
-  <span class="entete-tableau-de-bord">
+  <div class="entete-tableau-de-bord">
     <h1>Mon tableau de bord</h1>
-    {#if estSuperviseur}
-      <span class="lien-supervision"
-        ><a href="/supervision">Voir les statistiques</a></span
-      >
-    {/if}
-  </span>
+    <div class="entete-action">
+      <Bouton
+        titre="Exporter le tableau de bord en PDF"
+        type="lien"
+        icone="export"
+        taille="petit"
+        on:click={() => window.print()}
+      />
+      {#if estSuperviseur}
+        <a href="/supervision" class="lien-supervision">Voir les statistiques</a
+        >
+      {/if}
+    </div>
+  </div>
 
   {#if enCoursChargement}
     <div class="conteneur-loader">
@@ -134,13 +146,15 @@
     align-items: center;
   }
 
-  .lien-supervision a {
+  .lien-supervision {
     display: flex;
     gap: 8px;
     align-items: center;
+    padding: 3px 12px;
+    border-radius: 4px;
   }
 
-  .lien-supervision a::before {
+  .lien-supervision::before {
     content: '';
     display: block;
     width: 16px;
@@ -150,17 +164,63 @@
       no-repeat center;
   }
 
-  .lien-supervision a:hover {
+  .lien-supervision:hover {
     background: #f5f5f5;
   }
 
-  .lien-supervision a:active {
+  .lien-supervision:active {
     background: var(--fond-gris-pale-composant);
     color: var(--systeme-design-etat-bleu);
   }
 
-  .lien-supervision a:active::before {
+  .lien-supervision:active::before {
     filter: brightness(0) invert(8%) sepia(52%) saturate(5373%)
       hue-rotate(237deg) brightness(125%) contrast(140%);
+  }
+
+  .entete-action {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .entete-pdf {
+    display: none;
+  }
+
+  @media print {
+    @page {
+      size: auto;
+      margin: 0;
+      background: white;
+    }
+
+    :global(
+        .conteneur-filtres,
+        .ligne-onglet,
+        .case-conteneur-action,
+        .header-droit,
+        .entete-tableau-de-bord,
+        .contenu-blog,
+        #visite-guidee-menu-navigation,
+        footer,
+        .bom,
+        table tr td:first-of-type,
+        table tr td:last-of-type,
+        table tr th:last-of-type
+      ) {
+      display: none !important;
+    }
+
+    :global(main) {
+      border-bottom: none;
+    }
+
+    .entete-pdf {
+      display: flex;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
   }
 </style>
