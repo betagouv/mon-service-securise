@@ -103,6 +103,7 @@ describe("L'objet d'API de `GET /service`", () => {
       permissions: { gestionContributeurs: false },
       aUneSuggestionAction: true,
       actionRecommandee: 'mettreAJour',
+      niveauSecurite: 'niveau1',
     });
   });
 

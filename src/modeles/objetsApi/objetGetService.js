@@ -42,6 +42,7 @@ const donnees = (service, autorisation, referentiel) => {
     },
     aUneSuggestionAction: !!service.aUneSuggestionDAction(),
     actionRecommandee: service.actionRecommandee(),
+    niveauSecurite: service.descriptionService.niveauSecurite,
   };
 };
 
