@@ -10,12 +10,15 @@ export type OptionsDeFiltrage = {
   indiceCyber: FiltreIndiceCyber[];
   propriete: FiltrePropriete[];
   niveauSecurite: NiveauSecuriteService[];
+  completude: FiltreCompletude[];
 };
+export type FiltreCompletude = '<50%' | '50%-80%' | '>80%';
 
 export const filtrageServices = writable<OptionsDeFiltrage>({
   indiceCyber: [],
   propriete: [],
   niveauSecurite: [],
+  completude: [],
 });
 
 const entreBornes = (
@@ -55,3 +58,21 @@ export const appliqueFiltrageParNiveauDeSecurite = (
   service: ServiceAvecIndiceCyber,
   filtres: NiveauSecuriteService[]
 ) => filtres.includes(service.niveauSecurite);
+
+export const appliqueFiltrageParCompletude = (
+  service: ServiceAvecIndiceCyber,
+  filtres: FiltreCompletude[]
+) => {
+  if (filtres.includes('<50%') && service.pourcentageCompletude < 0.5)
+    return true;
+  if (
+    filtres.includes('50%-80%') &&
+    service.pourcentageCompletude >= 0.5 &&
+    service.pourcentageCompletude <= 0.8
+  )
+    return true;
+  if (filtres.includes('>80%') && service.pourcentageCompletude > 0.8)
+    return true;
+
+  return false;
+};

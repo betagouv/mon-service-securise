@@ -6,6 +6,7 @@ import {
 import type { ServiceAvecIndiceCyber } from '../tableauDeBord.d';
 import { services } from './services.store';
 import {
+  appliqueFiltrageParCompletude,
   appliqueFiltrageParIndiceCyber,
   appliqueFiltrageParNiveauDeSecurite,
   appliqueFiltrageParProprietaire,
@@ -45,6 +46,11 @@ const construisFiltres = (
   if (filtrageServices.propriete.length)
     filtres.push((service: ServiceAvecIndiceCyber) =>
       appliqueFiltrageParProprietaire(service, filtrageServices.propriete)
+    );
+
+  if (filtrageServices.completude.length)
+    filtres.push((service: ServiceAvecIndiceCyber) =>
+      appliqueFiltrageParCompletude(service, filtrageServices.completude)
     );
 
   return filtres;
