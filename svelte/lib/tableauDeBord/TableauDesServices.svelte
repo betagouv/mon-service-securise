@@ -222,6 +222,14 @@
     color: var(--texte-fonce);
   }
 
+  .nom-service,
+  .nom-organisation {
+    white-space: nowrap;
+    max-width: 340px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
   .nom-organisation {
     font-size: 14px;
     font-style: normal;
