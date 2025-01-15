@@ -1,4 +1,6 @@
 <script lang="ts" generics="T extends string">
+  import Pastille from './Pastille.svelte';
+
   export let ongletActif: T;
   export let cetOnglet: T;
   export let labelOnglet: string;
@@ -20,7 +22,7 @@
       alt="Icône d'information"
     />
   {:else if badge}
-    <span class="badge">{badge}</span>
+    <Pastille contenu={badge.toString()} active={ongletActif === cetOnglet} />
   {/if}
 </button>
 
@@ -61,25 +63,5 @@
     border-bottom: 1px solid white;
     color: var(--bleu-mise-en-avant);
     font-weight: bold;
-  }
-
-  .badge {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    border: 1px solid white;
-    background: var(--fond-gris-pale);
-    color: var(--texte-clair);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    line-height: 12px;
-  }
-
-  .onglet.active .badge {
-    background: var(--bleu-mise-en-avant);
-    border: 1px solid transparent;
-    color: white;
   }
 </style>
