@@ -19,6 +19,7 @@
           { id: 'niveauSecurite', libelle: 'Besoin de sécurité' },
           { id: 'indiceCyber', libelle: 'Indice cyber' },
           { id: 'propriete', libelle: 'Propriété' },
+          { id: 'completude', libelle: 'Complétion' },
         ],
         items: [
           {
@@ -65,6 +66,21 @@
             libelle: 'Je suis propriétaire du service',
             valeur: 'proprietaire',
             idCategorie: 'propriete',
+          },
+          {
+            libelle: 'Inférieur à 50%',
+            valeur: '<50%',
+            idCategorie: 'completude',
+          },
+          {
+            libelle: 'Entre 50% et 80%',
+            valeur: '50%-80%',
+            idCategorie: 'completude',
+          },
+          {
+            libelle: 'Supérieur à 80%',
+            valeur: '>80%',
+            idCategorie: 'completude',
           },
         ],
       }}
