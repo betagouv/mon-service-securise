@@ -7,6 +7,7 @@ import type { ServiceAvecIndiceCyber } from '../tableauDeBord.d';
 import { services } from './services.store';
 import {
   appliqueFiltrageParIndiceCyber,
+  appliqueFiltrageParNiveauDeSecurite,
   appliqueFiltrageParProprietaire,
   filtrageServices,
   type OptionsDeFiltrage,
@@ -26,6 +27,14 @@ const construisFiltres = (
   if (rechercheTextuelle)
     filtres.push((service: ServiceAvecIndiceCyber) =>
       appliqueFiltreTextuel(service, rechercheTextuelle)
+    );
+
+  if (filtrageServices.niveauSecurite.length)
+    filtres.push((service: ServiceAvecIndiceCyber) =>
+      appliqueFiltrageParNiveauDeSecurite(
+        service,
+        filtrageServices.niveauSecurite
+      )
     );
 
   if (filtrageServices.indiceCyber.length)

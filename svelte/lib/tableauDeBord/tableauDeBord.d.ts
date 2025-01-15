@@ -18,7 +18,7 @@ type Contributeur = {
   estUtilisateurCourant: boolean;
 };
 
-type NiveauSecuriteService = 'niveau1' | 'niveau2' | 'niveau3';
+export type NiveauSecuriteService = 'niveau1' | 'niveau2' | 'niveau3';
 
 export type Service = {
   id: string;
