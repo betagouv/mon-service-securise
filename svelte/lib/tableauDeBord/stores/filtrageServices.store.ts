@@ -1,16 +1,21 @@
 import { writable } from 'svelte/store';
-import type { ServiceAvecIndiceCyber } from '../tableauDeBord.d';
+import type {
+  ServiceAvecIndiceCyber,
+  NiveauSecuriteService,
+} from '../tableauDeBord.d';
 
 export type FiltreIndiceCyber = '<1' | '1-2' | '2-3' | '3-4' | '4-5';
 export type FiltrePropriete = 'proprietaire';
 export type OptionsDeFiltrage = {
   indiceCyber: FiltreIndiceCyber[];
   propriete: FiltrePropriete[];
+  niveauSecurite: NiveauSecuriteService[];
 };
 
 export const filtrageServices = writable<OptionsDeFiltrage>({
   indiceCyber: [],
   propriete: [],
+  niveauSecurite: [],
 });
 
 const entreBornes = (
@@ -45,3 +50,8 @@ export const appliqueFiltrageParProprietaire = (
   if (filtres.includes('proprietaire')) return service.estProprietaire;
   return true;
 };
+
+export const appliqueFiltrageParNiveauDeSecurite = (
+  service: ServiceAvecIndiceCyber,
+  filtres: NiveauSecuriteService[]
+) => filtres.includes(service.niveauSecurite);

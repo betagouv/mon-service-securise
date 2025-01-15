@@ -16,10 +16,26 @@
       libelle="Filtrer"
       options={{
         categories: [
+          { id: 'niveauSecurite', libelle: 'Besoin de sécurité' },
           { id: 'indiceCyber', libelle: 'Indice cyber' },
           { id: 'propriete', libelle: 'Propriété' },
         ],
         items: [
+          {
+            libelle: 'Élémentaires',
+            valeur: 'niveau1',
+            idCategorie: 'niveauSecurite',
+          },
+          {
+            libelle: 'Modérés',
+            valeur: 'niveau2',
+            idCategorie: 'niveauSecurite',
+          },
+          {
+            libelle: 'Importants',
+            valeur: 'niveau3',
+            idCategorie: 'niveauSecurite',
+          },
           {
             libelle: 'Inférieur à 1',
             valeur: '<1',
