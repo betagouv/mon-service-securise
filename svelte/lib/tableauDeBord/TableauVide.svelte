@@ -3,9 +3,14 @@
   import Bouton from '../ui/Bouton.svelte';
   import { affichageTableauVide } from './stores/affichageTableauVide';
   import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
+  import {
+    filtrageServices,
+    filtrageServicesVide,
+  } from './stores/filtrageServices.store';
 
   const supprimeRechercheEtFiltres = () => {
     $rechercheTextuelle = '';
+    $filtrageServices = { ...filtrageServicesVide };
   };
 </script>
 
