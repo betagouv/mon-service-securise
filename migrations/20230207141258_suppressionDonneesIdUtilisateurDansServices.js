@@ -1,4 +1,4 @@
-const pourChaqueLigne = require('./utilitaires/pourChaqueLigne');
+const pourChaqueLigne = require('./utilitaires/pourChaqueLigne.js');
 
 const supprimeIdUtilisateur = (knex, table) =>
   pourChaqueLigne(

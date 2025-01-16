@@ -1,4 +1,4 @@
-const DescriptionService = require('../src/modeles/descriptionService');
+const DescriptionService = require('../src/modeles/descriptionService.ts');
 
 exports.up = (knex) =>
   Promise.all(

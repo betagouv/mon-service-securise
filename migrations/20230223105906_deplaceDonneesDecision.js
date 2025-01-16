@@ -1,4 +1,4 @@
-const pourChaqueLigne = require('./utilitaires/pourChaqueLigne');
+const pourChaqueLigne = require('./utilitaires/pourChaqueLigne.js');
 
 function rangeDonneesDansDecision(knex, table) {
   const traiteDossiers = (dossiers) =>

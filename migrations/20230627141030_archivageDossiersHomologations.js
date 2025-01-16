@@ -1,4 +1,4 @@
-const { avecPMapPourChaqueElement } = require('../src/utilitaires/pMap');
+const { avecPMapPourChaqueElement } = require('../src/utilitaires/pMap.ts');
 
 const archiveDossiers = (dossiers) => {
   const candidats = dossiers

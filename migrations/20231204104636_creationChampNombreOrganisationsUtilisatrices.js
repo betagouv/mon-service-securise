@@ -1,4 +1,4 @@
-const pourChaqueLigne = require('./utilitaires/pourChaqueLigne');
+const pourChaqueLigne = require('./utilitaires/pourChaqueLigne.js');
 
 const ajouteChamp = async (knex, table) =>
   pourChaqueLigne(knex(table), async ({ id, donnees }) => {

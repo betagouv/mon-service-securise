@@ -1,4 +1,4 @@
-const pourChaqueLigne = require('./utilitaires/pourChaqueLigne');
+const pourChaqueLigne = require('./utilitaires/pourChaqueLigne.js');
 
 exports.up = (knex) =>
   pourChaqueLigne(knex('autorisations'), ({ id, donnees }) => {

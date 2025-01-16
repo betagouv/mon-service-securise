@@ -1,4 +1,4 @@
-const { hacheSha256 } = require('../src/adaptateurs/adaptateurChiffrement');
+const { hacheSha256 } = require('../src/adaptateurs/adaptateurChiffrement.ts');
 
 const hache = (nom) => hacheSha256(nom);
 

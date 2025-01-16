@@ -1,4 +1,4 @@
-const adaptateurUUID = require('../src/adaptateurs/adaptateurUUID');
+const adaptateurUUID = require('../src/adaptateurs/adaptateurUUID.ts');
 
 exports.up = (knex) =>
   knex('services').then((lignes) => {
