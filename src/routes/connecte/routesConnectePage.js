@@ -102,7 +102,7 @@ const routesConnectePage = ({
       const estSuperviseur = await depotDonnees.estSuperviseur(
         requete.idUtilisateurCourant
       );
-      reponse.render('tableauDeBordv2', { estSuperviseur });
+      reponse.render('tableauDeBord', { estSuperviseur });
     }
   );
 
@@ -177,7 +177,7 @@ const routesConnectePage = ({
           referentiel,
         });
       } else if (idEtape === 'piloter') {
-        reponse.render('tableauDeBordv2');
+        reponse.render('tableauDeBord');
       }
     }
   );
