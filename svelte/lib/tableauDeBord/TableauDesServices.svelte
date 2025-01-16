@@ -126,6 +126,13 @@
             />
           </td>
           <td class="cellule-noms">
+            <div class="icone-voir-service">
+              <img
+                src="/statique/assets/images/icone_cacher_mot_de_passe.svg"
+                alt=""
+              />
+              <span>Voir le service</span>
+            </div>
             <a class="lien-service" href="/service/{idService}">
               {#if service.estProprietaire}
                 <EtiquetteProprietaire />
@@ -209,6 +216,37 @@
 
   table td:first-of-type {
     border-right: 1px solid #ddd;
+  }
+
+  .ligne-service:hover {
+    box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
+  }
+
+  .cellule-noms {
+    position: relative;
+  }
+
+  .cellule-noms:hover .icone-voir-service {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+  }
+
+  .icone-voir-service img {
+    width: 16px;
+  }
+
+  .icone-voir-service {
+    display: none;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    color: var(--bleu-mise-en-avant);
+    font-weight: 500;
+    font-size: 0.8rem;
+    pointer-events: none;
   }
 
   .lien-service {
