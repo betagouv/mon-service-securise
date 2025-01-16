@@ -115,7 +115,11 @@
       {#each $resultatsDeRechercheDuStatutHomologationSelectionne as service (service.id)}
         {@const idService = service.id}
         {@const indiceCyberDuService = service.indiceCyber}
-        <tr class="ligne-service" data-id-service={idService}>
+        <tr
+          class="ligne-service"
+          data-id-service={idService}
+          class:selectionnee={$selectionIdsServices.includes(idService)}
+        >
           <td class="cellule-selection">
             <input
               class="selection-service"
@@ -126,14 +130,27 @@
             />
           </td>
           <td class="cellule-noms">
-            <a class="lien-service" href="/service/{idService}">
-              {#if service.estProprietaire}
-                <EtiquetteProprietaire />
-              {/if}
-              <span class="nom-service">{decode(service.nomService)}</span>
-              <span class="nom-organisation"
-                >{decode(service.organisationResponsable)}</span
-              >
+            <a
+              class="lien-service"
+              href="/service/{idService}"
+              title="Ouvrir la page du service"
+            >
+              <span class="denomination-service">
+                {#if service.estProprietaire}
+                  <EtiquetteProprietaire />
+                {/if}
+                <span class="nom-service">{decode(service.nomService)}</span>
+                <span class="nom-organisation"
+                  >{decode(service.organisationResponsable)}</span
+                >
+              </span>
+              <div class="icone-voir-service">
+                <img
+                  src="/statique/assets/images/tableauDeBord/icone_ouvrir_agrandir.svg"
+                  alt="Ouvrir la page du service"
+                />
+                <span>Ouvrir</span>
+              </div>
             </a>
           </td>
           <td>
@@ -221,7 +238,60 @@
     border-right: 1px solid #ddd;
   }
 
+  .ligne-service:hover {
+    background-color: #f5f5f5;
+  }
+
+  .ligne-service:has(a:active) {
+    background-color: #eee;
+  }
+
+  table tr.ligne-service.selectionnee td {
+    border-top: 1px solid var(--bleu-mise-en-avant);
+    border-bottom: 1px solid var(--bleu-mise-en-avant);
+  }
+
+  table tr.ligne-service.selectionnee td:first-of-type {
+    border-left: 1px solid var(--bleu-mise-en-avant);
+  }
+
+  table tr.ligne-service.selectionnee td:last-of-type {
+    border-right: 1px solid var(--bleu-mise-en-avant);
+  }
+
   .lien-service {
+    display: flex;
+    gap: 4px;
+    align-content: stretch;
+    max-width: 340px;
+  }
+
+  .icone-voir-service img {
+    width: 16px;
+  }
+
+  .icone-voir-service {
+    color: var(--bleu-mise-en-avant);
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    pointer-events: none;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+  }
+
+  .cellule-noms:not(:hover) .icone-voir-service {
+    display: none;
+  }
+
+  .denomination-service {
+    overflow: hidden;
+  }
+
+  .denomination-service {
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -233,9 +303,8 @@
 
   .nom-service,
   .nom-organisation {
-    white-space: nowrap;
-    max-width: 340px;
     text-overflow: ellipsis;
+    white-space: nowrap;
     overflow: hidden;
   }
 
