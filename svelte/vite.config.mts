@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
@@ -6,7 +7,15 @@ import { glob } from 'glob';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [svelte({ preprocess: vitePreprocess() })],
+  plugins: [
+    svelte({ preprocess: vitePreprocess() }),
+    sentryVitePlugin({
+      disable:
+        !process.env.SENTRY_AUTH_TOKEN || process.env.NODE_ENV !== 'production',
+      project: process.env.SENTRY_PROJET,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+    }),
+  ],
   root: './lib',
   build: {
     // on build vers le dossier de fichiers statiques /public pour servir les bundles depuis le pug
@@ -20,6 +29,7 @@ export default defineConfig({
     },
     cssCodeSplit: false,
     emptyOutDir: true,
+    sourcemap: true,
   },
   define: {
     'process.env.NODE_ENV': "'production'",
