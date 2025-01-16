@@ -1,5 +1,8 @@
 import TableauDeBord from './TableauDeBord.svelte';
-import type { TableauDeBordProps } from './tableauDeBord.d';
+import type {
+  TableauDeBordProps,
+  NiveauSecuriteService,
+} from './tableauDeBord.d';
 
 document.body.addEventListener(
   'svelte-recharge-tableau-de-bord',
@@ -42,6 +45,8 @@ export const donneesVisiteGuidee = {
       },
       aUneSuggestionAction: false,
       actionRecommandee: undefined,
+      niveauSecurite: 'niveau1' as NiveauSecuriteService,
+      pourcentageCompletude: 0.5,
     },
   ],
   indicesCyber: [{ id: 'ID-SERVICE-VISITE-GUIDEE', indiceCyber: '4.3' }],
