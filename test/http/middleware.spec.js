@@ -522,62 +522,64 @@ describe('Le middleware MSS', () => {
       });
     };
 
-    it('autorise le chargement de toutes les ressources du domaine', (done) => {
-      verifiePositionnementHeader(
-        'content-security-policy',
-        "default-src 'self'",
-        done
-      );
-    });
-
-    it('autorise le chargement des images venant de CRISP', (done) => {
-      verifiePositionnementHeader(
-        'content-security-policy',
-        "img-src 'self' https://storage.crisp.chat;",
-        done
-      );
-    });
-
-    it("autorise le chargement des vidéos provenant du 'CellarStorage' de MSS", (done) => {
-      verifiePositionnementHeader(
-        'content-security-policy',
-        "media-src 'self' https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com;",
-        done
-      );
-    });
-
-    it('autorise le chargement de tous les scripts du domaine (et uniquement ceux-là)', (done) => {
-      verifiePositionnementHeader(
-        'content-security-policy',
-        "script-src 'self'",
-        done
-      );
-    });
-
-    it('autorise la connexion vers MSS et stats.beta.gouv (pour Matomo)', (done) => {
-      verifiePositionnementHeader(
-        'content-security-policy',
-        "connect-src 'self' https://stats.beta.gouv.fr/matomo.php",
-        done
-      );
-    });
-
-    it('autorise le chargements des iframes venant du domaine du « journal Metabase MSS »', (done) => {
-      const adaptateurEnvironnement = {
-        supervision: () => ({
-          domaineMetabaseMSS: () => 'https://journal-mss.fr/',
-        }),
-      };
-
-      const middleware = leMiddleware({ adaptateurEnvironnement });
-
-      middleware.positionneHeaders(requete, reponse, () => {
-        verifieValeurHeader(
+    describe('concernant les CSP', () => {
+      it('autorise le chargement de toutes les ressources du domaine', (done) => {
+        verifiePositionnementHeader(
           'content-security-policy',
-          'frame-src https://journal-mss.fr/',
-          reponse
+          "default-src 'self'",
+          done
         );
-        done();
+      });
+
+      it('autorise le chargement des images venant de CRISP', (done) => {
+        verifiePositionnementHeader(
+          'content-security-policy',
+          "img-src 'self' https://storage.crisp.chat;",
+          done
+        );
+      });
+
+      it("autorise le chargement des vidéos provenant du 'CellarStorage' de MSS", (done) => {
+        verifiePositionnementHeader(
+          'content-security-policy',
+          "media-src 'self' https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com;",
+          done
+        );
+      });
+
+      it('autorise le chargement de tous les scripts du domaine et de sentry côté client', (done) => {
+        verifiePositionnementHeader(
+          'content-security-policy',
+          "script-src 'self' https://browser.sentry-cdn.com",
+          done
+        );
+      });
+
+      it('autorise la connexion vers MSS, Sentry et stats.beta.gouv (pour Matomo)', (done) => {
+        verifiePositionnementHeader(
+          'content-security-policy',
+          "connect-src 'self' https://sentry.incubateur.net https://stats.beta.gouv.fr/matomo.php",
+          done
+        );
+      });
+
+      it('autorise le chargements des iframes venant du domaine du « journal Metabase MSS »', (done) => {
+        const adaptateurEnvironnement = {
+          supervision: () => ({
+            domaineMetabaseMSS: () => 'https://journal-mss.fr/',
+          }),
+        };
+
+        const middleware = leMiddleware({ adaptateurEnvironnement });
+
+        middleware.positionneHeaders(requete, reponse, () => {
+          verifieValeurHeader(
+            'content-security-policy',
+            'frame-src https://journal-mss.fr/',
+            reponse
+          );
+          done();
+        });
       });
     });
 

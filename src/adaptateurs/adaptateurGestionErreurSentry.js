@@ -25,6 +25,7 @@ const initialise = (applicationExpress) => {
     ignoreTransactions: config.cheminsIgnoresParTracing(),
     tracesSampleRate: config.sampleRateDuTracing(),
   });
+  Sentry.setTag('mss-source', 'backend');
 
   applicationExpress.use(Sentry.Handlers.requestHandler());
   applicationExpress.use(Sentry.Handlers.tracingHandler());

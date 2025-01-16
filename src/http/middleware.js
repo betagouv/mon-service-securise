@@ -31,12 +31,14 @@ const middleware = (configuration = {}) => {
     const { nonce } = requete;
 
     const defaultCsp = "default-src 'self'";
-    const connectCsp = `connect-src 'self' ${CSP_BIBLIOTHEQUES.matomo.connect}`;
+    const connectCsp = `connect-src 'self' https://sentry.incubateur.net ${CSP_BIBLIOTHEQUES.matomo.connect}`;
     const imgCsp = `img-src 'self' ${CSP_BIBLIOTHEQUES.crisp.image}`;
     const mediaCsp = `media-src 'self' ${CSP_BIBLIOTHEQUES.monservicesecurise.media}`;
 
     const styleCsp = nonce ? `style-src 'self' 'nonce-${nonce}'` : '';
-    const scriptCsp = `script-src 'self' ${nonce ? `'nonce-${nonce}'` : ''}`;
+    const scriptCsp = `script-src 'self' https://browser.sentry-cdn.com ${
+      nonce ? `'nonce-${nonce}'` : ''
+    }`;
     const frameCsp = adaptateurEnvironnement.supervision().domaineMetabaseMSS()
       ? `frame-src ${adaptateurEnvironnement
           .supervision()
