@@ -1,10 +1,12 @@
 <script lang="ts">
   export let pourcentageCompletude: number;
+
+  const valeurCompletude = pourcentageCompletude || 0;
 </script>
 
 <div class="conteneur-completude">
-  <span>{Math.round(pourcentageCompletude * 100)}%</span>
-  <progress max="1" value={pourcentageCompletude} />
+  <span>{Math.round(valeurCompletude * 100)}%</span>
+  <progress max="1" value={valeurCompletude} />
 </div>
 
 <style>
