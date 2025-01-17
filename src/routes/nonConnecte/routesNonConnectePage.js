@@ -172,6 +172,11 @@ const routesNonConnectePage = ({
         return;
       }
 
+      if (utilisateur.estUnInvite()) {
+        reponse.redirect('/inscription');
+        return;
+      }
+
       requete.session.token = utilisateur.genereToken(
         SourceAuthentification.MSS
       );
