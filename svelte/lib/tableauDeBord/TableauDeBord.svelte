@@ -3,7 +3,6 @@
   import type {
     ReponseApiServices,
     ReponseApiIndicesCyber,
-    IndiceCyber,
     IndiceCyberMoyen,
   } from './tableauDeBord.d';
   import ChargementEnCours from '../ui/ChargementEnCours.svelte';
@@ -12,6 +11,7 @@
   import { donneesVisiteGuidee } from './tableauDeBord';
   import { services } from './stores/services.store';
   import BandeauFiltres from './BandeauFiltres.svelte';
+  import BandeauBlog from './BandeauBlog.svelte';
   import { selectionIdsServices } from './stores/selectionService.store';
   import Toaster from '../ui/Toaster.svelte';
 
@@ -98,6 +98,7 @@
     />
     <BandeauFiltres />
     <TableauDesServices />
+    <BandeauBlog {dateInscriptionUtilisateur} />
   {/if}
 </div>
 
