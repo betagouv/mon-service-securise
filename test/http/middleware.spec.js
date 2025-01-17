@@ -935,6 +935,7 @@ describe('Le middleware MSS', () => {
           new Utilisateur({
             email: 'jeanne.delajardiniere@gouv.fr',
             prenom: 'Jeanne',
+            dateCreation: '2025-01-01',
           });
 
         middleware = leMiddleware({ depotDonnees });
@@ -973,6 +974,7 @@ describe('Le middleware MSS', () => {
           expect(reponse.locals.etatVisiteGuidee.utilisateurCourant).to.eql({
             prenom: 'Jeanne',
             profilComplet: false,
+            dateInscription: '2025-01-01',
           });
 
           done();
