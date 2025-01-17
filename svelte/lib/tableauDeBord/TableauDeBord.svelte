@@ -17,6 +17,7 @@
 
   export let estSuperviseur: boolean;
   export let modeVisiteGuidee: boolean;
+  export let dateInscriptionUtilisateur: Date;
   export let profilUtilisateurComplet: boolean = true;
 
   let enCoursChargement = true;

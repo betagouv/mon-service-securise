@@ -236,6 +236,7 @@ const middleware = (configuration = {}) => {
       utilisateurCourant: {
         prenom: utilisateur.prenom,
         profilComplet: utilisateur.completudeProfil().estComplet,
+        dateInscription: utilisateur.dateCreation,
       },
       nombreEtapesRestantes:
         parcoursUtilisateur.etatVisiteGuidee.nombreEtapesRestantes(),
