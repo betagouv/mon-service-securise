@@ -136,6 +136,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
           return 'un token';
         },
         accepteCGU: () => false,
+        estUnInvite: () => false,
       };
 
       beforeEach(() => {
@@ -167,6 +168,26 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
             done();
           })
           .catch(done);
+      });
+
+      it("pour un utilisateur invité, redirige vers la page d'inscription pour l'empêcher de créer un compte avec mot de passe MSS", async () => {
+        const utilisateurInvite = {
+          id: '123',
+          genereToken: () => {
+            expect().fail("N'aurait pas dû générer de token");
+          },
+          estUnInvite: () => true,
+        };
+        testeur.depotDonnees().utilisateurAFinaliser = async () =>
+          utilisateurInvite;
+        testeur.depotDonnees().utilisateur = async () => utilisateurInvite;
+
+        const reponse = await requeteSansRedirection(
+          `http://localhost:1234/initialisationMotDePasse/${uuid}`
+        );
+
+        expect(reponse.status).to.be(302);
+        expect(reponse.headers.location).to.be('/inscription');
       });
     });
 
