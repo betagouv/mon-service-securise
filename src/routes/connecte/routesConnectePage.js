@@ -62,14 +62,6 @@ const routesConnectePage = ({
     }
   );
 
-  routes.get(
-    '/acceptationCGU',
-    middleware.verificationJWT,
-    async (_requete, reponse) => {
-      reponse.render('acceptationCGU');
-    }
-  );
-
   routes.get('/utilisateur/edition', async (_requete, reponse) => {
     reponse.redirect(301, '/profil');
   });
