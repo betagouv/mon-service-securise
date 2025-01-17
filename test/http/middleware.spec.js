@@ -245,7 +245,7 @@ describe('Le middleware MSS', () => {
         const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
         reponse.redirect = (url) => {
-          expect(url).to.equal('/motDePasse/initialisation');
+          expect(url).to.equal('/connexion');
           done();
         };
 
@@ -259,7 +259,7 @@ describe('Le middleware MSS', () => {
         const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
         reponse.redirect = (url) => {
-          expect(url).to.equal('/acceptationCGU');
+          expect(url).to.equal('/oidc/connexion');
           done();
         };
 

@@ -112,8 +112,8 @@ const middleware = (configuration = {}) => {
       if (requete.estInvite) {
         return reponse.redirect(
           requete.sourceAuthentification === SourceAuthentification.MSS
-            ? '/motDePasse/initialisation'
-            : '/acceptationCGU'
+            ? '/connexion'
+            : '/oidc/connexion'
         );
       }
 
