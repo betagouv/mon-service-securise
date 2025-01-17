@@ -127,18 +127,18 @@ const routesNonConnectePage = ({
   routes.get('/connexion', middleware.suppressionCookie, (requete, reponse) => {
     const { urlRedirection } = requete.query;
     if (!urlRedirection) {
-      reponse.render('connexion-v2');
+      reponse.render('connexion');
       return;
     }
     if (!estUrlLegalePourRedirection(urlRedirection)) {
       // Ici c'est un redirect, pour nettoyer l'URL de la redirection invalide.
-      reponse.redirect('connexion-v2');
+      reponse.redirect('connexion');
       return;
     }
     const urlRedirectionAvecBase = `${adaptateurEnvironnement
       .mss()
       .urlBase()}${urlRedirection}`;
-    reponse.render('connexion-v2', {
+    reponse.render('connexion', {
       urlRedirection: urlRedirectionAvecBase,
     });
   });
