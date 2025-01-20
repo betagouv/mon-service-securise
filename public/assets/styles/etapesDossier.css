@@ -103,9 +103,12 @@ section.autorite {
 .boutons-etape #suivant:after {
   content: '';
   background: url(/statique/assets/images/fleche_gauche_bleue.svg);
+  filter: invert(36%) sepia(59%) saturate(1758%) hue-rotate(181deg)
+    brightness(88%) contrast(105%);
   transform: rotate(180deg);
   filter: brightness(0) invert(100%);
   display: flex;
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
+  align-self: center;
 }

@@ -546,9 +546,12 @@
   .precedent .fleche-navigation:before {
     content: '';
     background: url(/statique/assets/images/fleche_gauche_bleue.svg);
+    filter: invert(36%) sepia(59%) saturate(1758%) hue-rotate(181deg)
+      brightness(88%) contrast(105%);
     display: flex;
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
+    align-self: center;
   }
 
   .suivant {
@@ -558,9 +561,12 @@
   .suivant .fleche-navigation:after {
     content: '';
     background: url(/statique/assets/images/fleche_gauche_bleue.svg);
+    filter: invert(36%) sepia(59%) saturate(1758%) hue-rotate(181deg)
+      brightness(88%) contrast(105%);
     display: flex;
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
+    align-self: center;
     transform: rotate(180deg);
   }
 
