@@ -6,8 +6,8 @@ const {
   uneAutorisation,
 } = require('../../constructeurs/constructeurAutorisation');
 const {
-  Rubriques: { HOMOLOGUER },
-  Permissions: { LECTURE },
+  Rubriques: { HOMOLOGUER, DECRIRE },
+  Permissions: { LECTURE, ECRITURE },
 } = require('../../../src/modeles/autorisations/gestionDroits');
 const { unService } = require('../../constructeurs/constructeurService');
 const {
@@ -43,8 +43,8 @@ describe("L'objet d'API de `GET /service`", () => {
     statutsMesures: { fait: {}, enCours: {}, nonFait: {} },
     mesures: { mesureA: {} },
   });
-  const lectureSurHomologuer = uneAutorisation()
-    .avecDroits({ [HOMOLOGUER]: LECTURE })
+  const autorisation = uneAutorisation()
+    .avecDroits({ [HOMOLOGUER]: LECTURE, [DECRIRE]: ECRITURE })
     .construis();
 
   const service = unService(referentiel)
@@ -82,9 +82,7 @@ describe("L'objet d'API de `GET /service`", () => {
     .construis();
 
   it('fournit les données nécessaires', () => {
-    expect(
-      objetGetService.donnees(service, lectureSurHomologuer, referentiel)
-    ).to.eql({
+    expect(objetGetService.donnees(service, autorisation, referentiel)).to.eql({
       id: '123',
       nomService: 'Un service',
       organisationResponsable: 'Une organisation',
@@ -116,7 +114,7 @@ describe("L'objet d'API de `GET /service`", () => {
       documentsPdfDisponibles: [],
       permissions: { gestionContributeurs: false },
       aUneSuggestionAction: true,
-      actionRecommandee: 'mettreAJour',
+      actionRecommandee: { id: 'mettreAJour', autorisee: true },
       niveauSecurite: 'niveau1',
       pourcentageCompletude: 0.5,
     });
@@ -131,7 +129,7 @@ describe("L'objet d'API de `GET /service`", () => {
 
     const donnees = objetGetService.donnees(
       unServiceAvecDossierBientotExpire,
-      lectureSurHomologuer,
+      autorisation,
       referentiel
     );
 
@@ -182,7 +180,7 @@ describe("L'objet d'API de `GET /service`", () => {
 
     const donnees = objetGetService.donnees(
       serviceAvecDossierFinalise,
-      lectureSurHomologuer,
+      autorisation,
       referentielDeuxEtapes
     );
     expect(donnees.statutHomologation.etapeCourante).to.be('autorite');
@@ -220,7 +218,7 @@ describe("L'objet d'API de `GET /service`", () => {
       expect(
         objetGetService.donnees(
           unServiceDontAestCreateur,
-          lectureSurHomologuer,
+          autorisation,
           referentiel
         ).permissions
       ).to.eql({ gestionContributeurs: false });

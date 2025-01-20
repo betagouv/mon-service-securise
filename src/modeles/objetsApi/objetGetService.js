@@ -12,6 +12,7 @@ const donnees = (service, autorisation, referentiel) => {
   );
   const dateExpiration = service.dossiers.dateExpiration();
   const completude = service.completudeMesures();
+  const actionRecommandee = service.actionRecommandee();
   return {
     id: service.id,
     nomService: service.nomService(),
@@ -42,7 +43,12 @@ const donnees = (service, autorisation, referentiel) => {
       gestionContributeurs: autorisation.peutGererContributeurs(),
     },
     aUneSuggestionAction: !!service.aUneSuggestionDAction(),
-    actionRecommandee: service.actionRecommandee(),
+    ...(actionRecommandee && {
+      actionRecommandee: {
+        id: actionRecommandee.id,
+        autorisee: autorisation.peutFaireActionRecommandee(actionRecommandee),
+      },
+    }),
     niveauSecurite: service.descriptionService.niveauSecurite,
     pourcentageCompletude:
       completude.nombreMesuresCompletes / completude.nombreTotalMesures || 0,
