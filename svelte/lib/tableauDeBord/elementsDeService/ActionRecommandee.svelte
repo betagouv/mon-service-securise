@@ -12,8 +12,9 @@
   const idService = service.id;
 </script>
 
-{#if action === 'mettreAJour'}
+{#if action.id === 'mettreAJour'}
   <Lien
+    inactif={!action.autorisee}
     titre="Mettre à jour les informations"
     type="bouton-secondaire"
     href="/service/{idService}"
@@ -21,8 +22,9 @@
     icone="attention"
     classe="mettreAJour"
   />
-{:else if action === 'continuerHomologation'}
+{:else if action.id === 'continuerHomologation'}
   <Lien
+    inactif={!action.autorisee}
     titre="Continuer l'homologation"
     type="bouton-secondaire"
     href="/service/{idService}/homologation/edition/etape/recapitulatif"
@@ -30,8 +32,9 @@
     icone="homologation"
     classe="continuerHomologation"
   />
-{:else if action === 'augmenterIndiceCyber'}
+{:else if action.id === 'augmenterIndiceCyber'}
   <Lien
+    inactif={!action.autorisee}
     titre="Augmenter l’indice cyber"
     type="bouton-secondaire"
     href="/service/{idService}/mesures"
@@ -39,8 +42,9 @@
     icone="indiceCyber"
     classe="augmenterIndiceCyber"
   />
-{:else if action === 'telechargerEncartHomologation'}
+{:else if action.id === 'telechargerEncartHomologation'}
   <Lien
+    inactif={!action.autorisee}
     titre="Télécharger l'encart"
     type="bouton-secondaire"
     href="/service/{idService}/dossiers?succesHomologation"
@@ -48,8 +52,9 @@
     icone="telecharger"
     classe="telechargerEncartHomologation"
   />
-{:else if action === 'homologuerANouveau'}
+{:else if action.id === 'homologuerANouveau'}
   <Lien
+    inactif={!action.autorisee}
     titre="Homologuer à nouveau"
     type="bouton-secondaire"
     href="/service/{idService}/dossiers"
@@ -57,8 +62,9 @@
     icone="medaille"
     classe="homologuerANouveau"
   />
-{:else if action === 'homologuerService'}
+{:else if action.id === 'homologuerService'}
   <Lien
+    inactif={!action.autorisee}
     titre="Homologuer le service"
     type="bouton-secondaire"
     href="/service/{idService}/dossiers"
@@ -66,8 +72,9 @@
     icone="medaille"
     classe="homologuerService"
   />
-{:else if action === 'inviterContributeur'}
+{:else if action.id === 'inviterContributeur'}
   <Bouton
+    actif={action.autorisee}
     titre="Inviter un contributeur"
     type="secondaire"
     taille="petit"

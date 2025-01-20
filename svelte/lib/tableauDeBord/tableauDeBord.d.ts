@@ -39,7 +39,7 @@ export type Service = {
     gestionContributeurs: boolean;
   };
   aUneSuggestionAction: boolean;
-  actionRecommandee: ActionRecommandee;
+  actionRecommandee?: ActionRecommandee;
   niveauSecurite: NiveauSecuriteService;
   pourcentageCompletude: number;
 };
@@ -69,12 +69,16 @@ export type ReponseApiIndicesCyber = {
   };
 };
 
-export type ActionRecommandee =
+export type IdActionRecommandee =
   | 'mettreAJour'
   | 'continuerHomologation'
   | 'augmenterIndiceCyber'
   | 'telechargerEncartHomologation'
   | 'homologuerANouveau'
   | 'homologuerService'
-  | 'inviterContributeur'
-  | undefined;
+  | 'inviterContributeur';
+
+export type ActionRecommandee = {
+  id: IdActionRecommandee;
+  autorisee: boolean;
+};
