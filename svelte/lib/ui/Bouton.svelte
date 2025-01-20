@@ -124,10 +124,23 @@
     border: none;
   }
 
-  button:disabled {
-    background-color: var(--gris-inactif);
-    border-color: var(--gris-inactif);
-    color: #fff;
+  button.primaire:disabled,
+  button.primaire:disabled:hover,
+  button.secondaire:disabled,
+  button.secondaire:disabled:hover {
+    cursor: not-allowed;
+    border-color: var(--fond-gris-fonce);
+    color: var(--gris-inactif);
+  }
+
+  button.primaire:disabled,
+  button.primaire:disabled:hover {
+    background-color: var(--fond-gris-fonce);
+  }
+
+  button.secondaire:disabled,
+  button.secondaire:disabled:hover {
+    background-color: white;
   }
 
   button.lien:disabled,
@@ -151,9 +164,11 @@
       hue-rotate(237deg) brightness(125%) contrast(140%);
   }
 
-  button.lien.avecIcone:disabled:before {
-    filter: brightness(0) invert(71%) sepia(13%) saturate(0%) hue-rotate(190deg)
-      brightness(80%) contrast(86%);
+  button.lien.avecIcone:disabled::before,
+  button.primaire.avecIcone:disabled::before,
+  button.secondaire.avecIcone:disabled::before {
+    filter: invert(65%) sepia(1%) saturate(0%) hue-rotate(358deg)
+      brightness(90%) contrast(84%);
   }
 
   button.secondaire.avecIcone::before {
