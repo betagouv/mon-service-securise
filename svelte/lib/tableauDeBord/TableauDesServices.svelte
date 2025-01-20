@@ -177,7 +177,9 @@
             {/if}
           </td>
           <td>
-            <ActionRecommandee action={service.actionRecommandee} {service} />
+            {#if service.actionRecommandee}
+              <ActionRecommandee action={service.actionRecommandee} {service} />
+            {/if}
           </td>
         </tr>
       {/each}
