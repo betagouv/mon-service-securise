@@ -44,9 +44,9 @@
   };
 
   const libellesNiveauSecurite = {
-    niveau1: 'Élémentaire',
-    niveau2: 'Modéré',
-    niveau3: 'Important',
+    niveau1: 'Élémentaires',
+    niveau2: 'Modérés',
+    niveau3: 'Importants',
   };
 </script>
 
