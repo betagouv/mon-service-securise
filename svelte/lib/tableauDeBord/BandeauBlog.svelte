@@ -8,32 +8,6 @@
 
 <h2>Des contenus qui pourraient vous intéresser</h2>
 <div class="conteneur-liens-blog">
-  <a class="carte avec-image decouvrez-blog" href="/conseils-cyber">
-    <div class="contenu-carte">
-      <h3>Découvrez le blog</h3>
-      <p>
-        Toutes les réponses à vos questions sur l'homologation de sécurité, la
-        mise en oeuvre des mesures
-      </p>
-    </div>
-    <span class="fleche-navigation"></span>
-  </a>
-
-  <a
-    class="carte avec-image rejoignez-communaute"
-    href="https://tally.so/r/wa6o22"
-    target="_blank"
-    rel="noopener"
-  >
-    <div class="contenu-carte">
-      <h3>Rejoignez la communauté</h3>
-      <p>
-        <b>Échangez</b> directement avec vos pairs pour une collaboration facilitée.
-      </p>
-    </div>
-    <span class="fleche-navigation"></span>
-  </a>
-
   {#if utilisateurInscritDepuisPlusD1Mois}
     <a class="carte" href="/promouvoir-monservicesecurise">
       <div class="contenu-carte">
@@ -63,6 +37,32 @@
       <span class="fleche-navigation"></span>
     </a>
   {/if}
+
+  <a
+    class="carte avec-image rejoignez-communaute"
+    href="https://tally.so/r/wa6o22"
+    target="_blank"
+    rel="noopener"
+  >
+    <div class="contenu-carte">
+      <h3>Rejoignez la communauté</h3>
+      <p>
+        <b>Échangez</b> directement avec vos pairs pour une collaboration facilitée.
+      </p>
+    </div>
+    <span class="fleche-navigation"></span>
+  </a>
+
+  <a class="carte avec-image decouvrez-blog" href="/conseils-cyber">
+    <div class="contenu-carte">
+      <h3>Découvrez le blog</h3>
+      <p>
+        Toutes les réponses à vos questions sur l'homologation de sécurité, la
+        mise en oeuvre des mesures
+      </p>
+    </div>
+    <span class="fleche-navigation"></span>
+  </a>
 </div>
 
 <style>
