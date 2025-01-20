@@ -1127,7 +1127,7 @@ describe('Un service', () => {
         .avecSuggestionAction({ nature: 'siret-a-renseigner' })
         .construis();
 
-      expect(service.actionRecommandee()).to.be('mettreAJour');
+      expect(service.actionRecommandee().id).to.be('mettreAJour');
     });
 
     it("retourne 'continuerHomologation' si le service a un un dossier d'homologation en cours et un indice cyber supérieur à 4", () => {
@@ -1138,7 +1138,7 @@ describe('Un service', () => {
         .avecMesures(mesuresToutesFaites)
         .construis();
 
-      expect(service.actionRecommandee()).to.be('continuerHomologation');
+      expect(service.actionRecommandee().id).to.be('continuerHomologation');
     });
 
     it("retourne 'augmenterIndiceCyber' si le service a un un dossier d'homologation en cours et un indice cyber inférieur à 4", () => {
@@ -1149,7 +1149,7 @@ describe('Un service', () => {
         .avecMesures(mesuresNonFaites)
         .construis();
 
-      expect(service.actionRecommandee()).to.be('augmenterIndiceCyber');
+      expect(service.actionRecommandee().id).to.be('augmenterIndiceCyber');
     });
 
     it("retourne 'telechargerEncartHomologation' si le service a un un dossier d'homologation actif et en cours de validité", () => {
@@ -1159,7 +1159,7 @@ describe('Un service', () => {
         ])
         .construis();
 
-      expect(service.actionRecommandee()).to.be(
+      expect(service.actionRecommandee().id).to.be(
         'telechargerEncartHomologation'
       );
     });
@@ -1171,7 +1171,7 @@ describe('Un service', () => {
         ])
         .construis();
 
-      expect(service.actionRecommandee()).to.be('homologuerANouveau');
+      expect(service.actionRecommandee().id).to.be('homologuerANouveau');
     });
 
     it("retourne 'inviterContributeur' si le service n'a qu'un contributeur, un taux de complétion inférieur à 80% et indice cyber inférieur à 4", () => {
@@ -1180,7 +1180,7 @@ describe('Un service', () => {
         .avecMesures(mesuresNonRemplies)
         .construis();
 
-      expect(service.actionRecommandee()).to.be('inviterContributeur');
+      expect(service.actionRecommandee().id).to.be('inviterContributeur');
     });
 
     it("retourne 'augmenterIndiceCyber' si le service a plus d'un contributeur, un taux de complétion inférieur à 80% et indice cyber inférieur à 4", () => {
@@ -1189,7 +1189,7 @@ describe('Un service', () => {
         .avecMesures(mesuresNonRemplies)
         .construis();
 
-      expect(service.actionRecommandee()).to.be('augmenterIndiceCyber');
+      expect(service.actionRecommandee().id).to.be('augmenterIndiceCyber');
     });
 
     it("retourne 'homologuerService' si le service a un taux de complétion supérieur à 80% et indice cyber supérieur à 4", () => {
@@ -1197,7 +1197,7 @@ describe('Un service', () => {
         .avecMesures(mesuresToutesFaites)
         .construis();
 
-      expect(service.actionRecommandee()).to.be('homologuerService');
+      expect(service.actionRecommandee().id).to.be('homologuerService');
     });
 
     it("retourne 'undefined' si aucune action recommandée", () => {

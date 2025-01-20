@@ -108,8 +108,16 @@ class Autorisation extends Base {
     [SECURISER]: LECTURE,
   };
 
+  static DROITS_EDITER_MESURES = {
+    [SECURISER]: ECRITURE,
+  };
+
   static DROITS_VOIR_STATUT_HOMOLOGATION = {
     [HOMOLOGUER]: LECTURE,
+  };
+
+  static DROITS_EDITER_HOMOLOGATION = {
+    [HOMOLOGUER]: ECRITURE,
   };
 
   static DROITS_ANNEXES_PDF = {
@@ -132,6 +140,12 @@ class Autorisation extends Base {
     [DECRIRE]: LECTURE,
   };
 
+  static DROIT_INVITER_CONTRIBUTEUR = 'peutInviterContributeur';
+
+  static DROITS_EDITER_DESCRIPTION = {
+    [DECRIRE]: ECRITURE,
+  };
+
   appliqueDroits(nouveauxDroits) {
     if (nouveauxDroits.estProprietaire) {
       this.estProprietaire = true;
@@ -141,6 +155,16 @@ class Autorisation extends Base {
 
     this.estProprietaire = false;
     this.droits = { ...this.droits, ...nouveauxDroits };
+  }
+
+  peutFaireActionRecommandee(actionRecommandee) {
+    if (
+      actionRecommandee.droitsNecessaires ===
+      Autorisation.DROIT_INVITER_CONTRIBUTEUR
+    )
+      return this.peutGererContributeurs();
+
+    return this.aLesPermissions(actionRecommandee.droitsNecessaires);
   }
 }
 

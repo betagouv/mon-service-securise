@@ -6,6 +6,7 @@ const {
   Rubriques,
   tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
+const Service = require('../../../src/modeles/service');
 
 const { ECRITURE, LECTURE, INVISIBLE } = Permissions;
 const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS } = Rubriques;
@@ -268,6 +269,83 @@ describe('Une autorisation', () => {
           RISQUES: 2,
           SECURISER: 2,
         },
+      });
+    });
+  });
+
+  describe("sur demande de permission d'action recommandée", () => {
+    [
+      Service.ACTIONS_RECOMMANDEES.METTRE_A_JOUR,
+      Service.ACTIONS_RECOMMANDEES.CONTINUER_HOMOLOGATION,
+      Service.ACTIONS_RECOMMANDEES.AUGMENTER_INDICE_CYBER,
+      Service.ACTIONS_RECOMMANDEES.TELECHARGER_ENCART_HOMOLOGATION,
+      Service.ACTIONS_RECOMMANDEES.HOMOLOGUER_A_NOUVEAU,
+      Service.ACTIONS_RECOMMANDEES.HOMOLOGUER_SERVICE,
+    ].forEach((action) => {
+      it(`vérifie que les droits sont présents pour l'action '${action.id}'`, () => {
+        const autorisationAvecDroits =
+          Autorisation.NouvelleAutorisationProprietaire({
+            id: 'uuid',
+            idService: '123',
+            idUtilisateur: '999',
+            droits: action.droitsNecessaires,
+          });
+
+        expect(autorisationAvecDroits.peutFaireActionRecommandee(action)).to.be(
+          true
+        );
+      });
+
+      it(`interdis l'action '${action.id}' si les droits ne sont pas présents`, () => {
+        const autorisationSansDroits =
+          Autorisation.NouvelleAutorisationContributeur({
+            id: 'uuid',
+            idService: '123',
+            idUtilisateur: '999',
+            droits: {},
+          });
+
+        expect(autorisationSansDroits.peutFaireActionRecommandee(action)).to.be(
+          false
+        );
+      });
+    });
+
+    describe("Dans le cas particulier de l'invitation de contributeurs", () => {
+      it("peut faire l'action si l'utilisateur est propriétaire", () => {
+        const autorisationAvecDroitInvitation =
+          Autorisation.NouvelleAutorisationProprietaire({
+            id: 'uuid',
+            idService: '123',
+            idUtilisateur: '999',
+            droits: {},
+          });
+        const action = {
+          id: Service.ACTIONS_RECOMMANDEES.INVITER_CONTRIBUTEUR,
+          droitsNecessaires: Autorisation.DROIT_INVITER_CONTRIBUTEUR,
+        };
+
+        expect(
+          autorisationAvecDroitInvitation.peutFaireActionRecommandee(action)
+        ).to.be(true);
+      });
+
+      it("ne peut pas faire l'action si l'utilisateur n'est pas propriétaire", () => {
+        const autorisationSansDroitInvitation =
+          Autorisation.NouvelleAutorisationContributeur({
+            id: 'uuid',
+            idService: '123',
+            idUtilisateur: '999',
+            droits: {},
+          });
+        const action = {
+          id: Service.ACTIONS_RECOMMANDEES.INVITER_CONTRIBUTEUR,
+          droitsNecessaires: Autorisation.DROIT_INVITER_CONTRIBUTEUR,
+        };
+
+        expect(
+          autorisationSansDroitInvitation.peutFaireActionRecommandee(action)
+        ).to.be(false);
       });
     });
   });
