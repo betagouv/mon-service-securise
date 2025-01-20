@@ -35,6 +35,31 @@
 
     enCoursEnvoi = false;
   };
+
+  const echappeTexte = (texte: string) => {
+    const char = [
+      '//',
+      '\\',
+      '^',
+      '$',
+      '.',
+      '|',
+      '?',
+      '*',
+      '+',
+      '(',
+      ')',
+      '[',
+      ']',
+      '{',
+      '}',
+    ];
+    let resultat = texte;
+    for (const c of char) {
+      resultat = resultat.replaceAll(c, `\\${c}`);
+    }
+    return resultat;
+  };
 </script>
 
 <Formulaire on:formulaireValide={supprimeService} formulaireDuTiroir>
@@ -65,7 +90,7 @@
         id="confirmation-suppression"
         nom="confirmation-suppression"
         bind:valeur={confirmation}
-        modele={confirmationSuppression}
+        modele={echappeTexte(confirmationSuppression)}
         requis
         messageErreur="La confirmation saisie est incorrecte"
       />
