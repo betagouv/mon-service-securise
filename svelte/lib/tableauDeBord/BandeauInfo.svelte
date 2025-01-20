@@ -50,6 +50,7 @@
   .bandeau-cartes-info {
     display: flex;
     gap: 12px;
+    margin-bottom: 24px;
   }
 
   .carte-info {

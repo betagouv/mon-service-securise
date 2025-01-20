@@ -83,12 +83,12 @@
       </th>
     </tr>
     {#if !$affichageTableauVide.doitAfficher}
-      <tr>
+      <tr id="ligne-entete-action">
         <td colspan="8" class="case-conteneur-action">
           <ActionsDesServices {selection} />
         </td>
       </tr>
-      <tr>
+      <tr id="ligne-entete-tableau">
         <td class="cellule-selection" id="selection-toutes-lignes">
           <input
             type="checkbox"
@@ -193,6 +193,20 @@
     width: 100%;
   }
 
+  thead {
+    position: sticky;
+    top: 83px;
+    background-color: white;
+    z-index: 1;
+  }
+
+  #ligne-entete-tableau,
+  #ligne-entete-action {
+    box-shadow: inset 0 -1px #ddd;
+    border-top: none;
+    border-bottom: none;
+  }
+
   table tr {
     border: 1px solid #ddd;
   }
@@ -295,6 +309,7 @@
 
   .ligne-onglet {
     border: none;
+    box-shadow: inset 0 -1px #ddd;
   }
 
   .ligne-onglet th {
@@ -302,9 +317,14 @@
   }
 
   .conteneur-onglet {
-    margin: 0 0 -1px -1px;
+    margin: 0 0 0 -0.5px;
     display: flex;
     flex-direction: row;
     gap: 8px;
+  }
+
+  tbody tr:first-of-type,
+  tbody tr:first-of-type td {
+    border-top: none;
   }
 </style>

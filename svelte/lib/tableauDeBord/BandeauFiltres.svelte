@@ -102,6 +102,12 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    position: sticky;
+    padding-top: 8px;
+    padding-bottom: 32px;
+    top: 0;
+    background-color: white;
+    z-index: 1;
   }
 
   .recherche {
