@@ -15,6 +15,7 @@
     taille?: 'petit' | 'moyen';
     classe?: string;
     href: string;
+    inactif?: boolean;
   }
   export let titre: string;
   export let href: string;
@@ -29,12 +30,14 @@
     | undefined = undefined;
   export let type: 'bouton-primaire' | 'bouton-secondaire' = 'bouton-primaire';
   export let taille: 'petit' | 'moyen' = 'moyen';
+  export let inactif: boolean = false;
 </script>
 
 <a
   class="{type} {icone} {taille} {classe || ''}"
   class:avecIcone={!!icone}
-  {href}
+  class:inactif
+  href={inactif ? '#' : href}
   rel={$$restProps.rel || 'noopener'}
   {...$$restProps}
 >
@@ -141,5 +144,29 @@
   .bouton-secondaire:focus-visible {
     outline: 2px solid var(--bleu-mise-en-avant);
     outline-offset: 2px;
+  }
+
+  .bouton-primaire.inactif,
+  .bouton-primaire.inactif:hover,
+  .bouton-secondaire.inactif,
+  .bouton-secondaire.inactif:hover {
+    color: var(--gris-inactif);
+    cursor: not-allowed;
+    border-color: var(--fond-gris-fonce);
+  }
+
+  .bouton-primaire.inactif,
+  .bouton-primaire.inactif:hover {
+    background-color: var(--fond-gris-fonce);
+  }
+
+  .bouton-secondaire.inactif,
+  .bouton-secondaire.inactif:hover {
+    background-color: white;
+  }
+
+  .bouton-secondaire.avecIcone.inactif::before {
+    filter: invert(65%) sepia(1%) saturate(0%) hue-rotate(358deg)
+      brightness(90%) contrast(84%);
   }
 </style>
