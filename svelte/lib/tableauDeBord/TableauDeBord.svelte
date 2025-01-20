@@ -125,13 +125,13 @@
   .tableau-de-bord {
     display: flex;
     flex-direction: column;
-    gap: 32px;
   }
 
   .entete-tableau-de-bord {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 32px;
   }
 
   .lien-supervision a {
