@@ -89,7 +89,7 @@
         </td>
       </tr>
       <tr>
-        <td class="cellule-selection">
+        <td class="cellule-selection" id="selection-toutes-lignes">
           <input
             type="checkbox"
             on:change={basculeSelectionTousServices}

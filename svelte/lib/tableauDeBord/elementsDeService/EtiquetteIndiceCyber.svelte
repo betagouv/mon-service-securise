@@ -6,7 +6,10 @@
   const couleur = couleurs[Math.floor(score)];
 </script>
 
-<a class={couleur} href="/service/{idService}/indiceCyber">
+<a
+  class={couleur + 'indice-cyber-service'}
+  href="/service/{idService}/indiceCyber"
+>
   <span>{score}</span>
   <span class="total">/5</span>
 </a>

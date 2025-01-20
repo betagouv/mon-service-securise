@@ -2,7 +2,7 @@
   export let nombreContributeurs: number;
 </script>
 
-<button on:click>
+<button class="contributeurs-service" on:click>
   <img
     src="/statique/assets/images/icone_contributeurs.svg"
     alt="Icône du nombre de contributeurs"

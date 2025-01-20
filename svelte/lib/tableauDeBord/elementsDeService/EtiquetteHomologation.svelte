@@ -5,7 +5,10 @@
   export let dateExpiration: string = '';
 </script>
 
-<a class={statutHomologation} href="/service/{idService}/dossiers">
+<a
+  class={statutHomologation + 'statut-homologation-service'}
+  href="/service/{idService}/dossiers"
+>
   {label}
   {#if statutHomologation === 'bientotExpiree'}
     {dateExpiration}
