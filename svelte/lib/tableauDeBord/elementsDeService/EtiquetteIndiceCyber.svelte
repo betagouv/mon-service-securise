@@ -7,7 +7,7 @@
 </script>
 
 <a
-  class={couleur + 'indice-cyber-service'}
+  class={couleur + ' indice-cyber-service'}
   href="/service/{idService}/indiceCyber"
 >
   <span>{score}</span>

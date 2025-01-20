@@ -6,7 +6,7 @@
 </script>
 
 <a
-  class={statutHomologation + 'statut-homologation-service'}
+  class={statutHomologation + ' statut-homologation-service'}
   href="/service/{idService}/dossiers"
 >
   {label}
