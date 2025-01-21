@@ -32,7 +32,7 @@
   <div class="carte-info" id="carte-info-nombre-services-homologation-expirees">
     <span class="contenu-carte">
       <span class="libelle-carte">
-        <span class="metrique">{nombreHomologationsExpirees}</span> Homologation
+        <span class="metrique">{nombreHomologationsExpirees}</span> Homologations
         expirées</span
       >
     </span>
