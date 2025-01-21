@@ -4,6 +4,11 @@
   import type { Service } from '../../tableauDeBord/tableauDeBord.d';
 
   export let services: Service[];
+  export const titre = 'Exporter la sélection';
+  export const sousTitre =
+    services.length > 1
+      ? 'Télécharger la liste des services sélectionnés dans le tableau de bord.'
+      : 'Télécharger les données du service sélectionné dans le tableau de bord.';
 
   const queryString = new URLSearchParams();
   services.forEach((service) => queryString.append('idsServices', service.id));

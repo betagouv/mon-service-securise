@@ -81,14 +81,8 @@
     icone="inviter"
     classe="inviterContributeur"
     on:click={() =>
-      tiroirStore.afficheContenu(
-        TiroirGestionContributeurs,
-        { services: [service] },
-        {
-          titre: 'Gérer les contributeurs',
-          sousTitre:
-            'Gérer la liste des personnes invitées à contribuer au service.',
-        }
-      )}
+      tiroirStore.afficheContenu(TiroirGestionContributeurs, {
+        services: [service],
+      })}
   />
 {/if}

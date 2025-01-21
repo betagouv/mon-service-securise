@@ -11,6 +11,11 @@
   import ChampTexte from '../ChampTexte.svelte';
 
   export let services: Service[];
+  export const titre = 'Supprimer';
+  export const sousTitre =
+    services.length > 1
+      ? 'Effacer toutes les données des services sélectionnés.'
+      : 'Effacer toutes les données du service sélectionné.';
 
   const confirmationSuppression =
     services.length > 1

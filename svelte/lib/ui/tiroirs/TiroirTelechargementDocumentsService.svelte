@@ -6,6 +6,10 @@
   export let service: Service;
   export let modeVisiteGuidee: boolean = false;
 
+  export const titre = 'Télécharger les PDF';
+  export const sousTitre =
+    "Obtenir les documents utiles à la sécurisation et à l'homologation du service sélectionné.";
+
   const idService = service.id;
   const nbPdfDisponibles = service.documentsPdfDisponibles.length;
 

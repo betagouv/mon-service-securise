@@ -9,6 +9,9 @@
   import type { Service } from '../../tableauDeBord/tableauDeBord.d';
 
   export let service: Service;
+  export const titre = 'Dupliquer';
+  export const sousTitre =
+    "Créer une ou plusieurs copies du services sélectionné. Cette copie n'inclut pas les données concernant son homologation.";
 
   let nombreCopies: number = 1;
   let enCoursEnvoi = false;

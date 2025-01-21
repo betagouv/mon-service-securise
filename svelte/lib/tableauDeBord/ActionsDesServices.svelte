@@ -35,16 +35,9 @@
       type="lien"
       actif={actionsDisponibles && estProprietaireDesServicesSelectionnes}
       on:click={() =>
-        tiroirStore.afficheContenu(
-          TiroirGestionContributeurs,
-          { services: selection },
-          {
-            titre: 'Gérer les contributeurs',
-            sousTitre: selectionUnique
-              ? 'Gérer la liste des personnes invitées à contribuer au service.'
-              : 'Gérer la liste des personnes invitées à contribuer aux services.',
-          }
-        )}
+        tiroirStore.afficheContenu(TiroirGestionContributeurs, {
+          services: selection,
+        })}
     />
     <Bouton
       titre="Télécharger PDFs"
@@ -53,15 +46,9 @@
       type="lien"
       actif={actionsDisponibles && selectionUnique && ontDesDocuments}
       on:click={() =>
-        tiroirStore.afficheContenu(
-          TiroirTelechargementDocumentsService,
-          { service: selection[0] },
-          {
-            titre: 'Télécharger les PDF',
-            sousTitre:
-              "Obtenir les documents utiles à la sécurisation et à l'homologation du service sélectionné.",
-          }
-        )}
+        tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
+          service: selection[0],
+        })}
     />
     <Bouton
       titre="Exporter la sélection"
@@ -70,16 +57,9 @@
       type="lien"
       actif={actionsDisponibles}
       on:click={() =>
-        tiroirStore.afficheContenu(
-          TiroirExportServices,
-          { services: selection },
-          {
-            titre: 'Exporter la sélection',
-            sousTitre: selectionUnique
-              ? 'Télécharger les données du service sélectionné dans le tableau de bord.'
-              : 'Télécharger la liste des services sélectionnés dans le tableau de bord.',
-          }
-        )}
+        tiroirStore.afficheContenu(TiroirExportServices, {
+          services: selection,
+        })}
     />
     <Bouton
       titre="Dupliquer"
@@ -90,15 +70,9 @@
         selectionUnique &&
         estProprietaireDesServicesSelectionnes}
       on:click={() =>
-        tiroirStore.afficheContenu(
-          TiroirDuplication,
-          { service: selection[0] },
-          {
-            titre: 'Dupliquer',
-            sousTitre:
-              "Créer une ou plusieurs copies du services sélectionné. Cette copie n'inclut pas les données concernant son homologation.",
-          }
-        )}
+        tiroirStore.afficheContenu(TiroirDuplication, {
+          service: selection[0],
+        })}
     />
     <Bouton
       titre="Supprimer"
@@ -107,16 +81,7 @@
       type="lien"
       actif={actionsDisponibles && estProprietaireDesServicesSelectionnes}
       on:click={() =>
-        tiroirStore.afficheContenu(
-          TiroirSuppression,
-          { services: selection },
-          {
-            titre: 'Supprimer',
-            sousTitre: selectionUnique
-              ? 'Effacer toutes les données du service sélectionné.'
-              : 'Effacer toutes les données des services sélectionnés.',
-          }
-        )}
+        tiroirStore.afficheContenu(TiroirSuppression, { services: selection })}
     />
   </div>
 </div>
