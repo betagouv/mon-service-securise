@@ -5,6 +5,11 @@
   import { store } from '../../gestionContributeurs/gestionContributeurs.store';
 
   export let services: Service[];
+  export const titre: string = 'Gérer les contributeurs';
+  export const sousTitre: string =
+    services.length > 1
+      ? 'Gérer la liste des personnes invitées à contribuer aux services.'
+      : 'Gérer la liste des personnes invitées à contribuer au service.';
 
   store.reinitialise(services);
 </script>
