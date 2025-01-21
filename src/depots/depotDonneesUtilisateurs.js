@@ -127,8 +127,10 @@ function fabriquePersistance({
         await dechiffreDonneesUtilisateur(donneesSauvegardees);
       const donneesEnClairAJour = Object.assign(donneesEnClair, deltaDonnees);
       const {
-        emailHash: _,
-        idResetMotDePasse: __,
+        id: _,
+        dateCreation: __,
+        emailHash: ___,
+        idResetMotDePasse: ____,
         ...donneesEnClairASauvegarder
       } = donneesEnClairAJour;
       const donneesChiffreesASauvegarder = await chiffre.donneesUtilisateur(
