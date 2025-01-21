@@ -347,6 +347,19 @@ describe('Le dépôt de données des utilisateurs', () => {
       // Le test passe si aucune exception n'est levée
     });
 
+    it("n'inscris pas les identifiants et la date de création dans l'objet de données", async () => {
+      const utilisateurInitial = unUtilisateur()
+        .avecId('123')
+        .quiSAppelle('Jérôme Dubois').donnees;
+
+      await depot.metsAJourUtilisateur('123', utilisateurInitial);
+
+      const u = await adaptateurPersistance.utilisateur('123');
+      expect(u.donnees.id).to.be(undefined);
+      expect(u.donnees.idResetMotDePasse).to.be(undefined);
+      expect(u.donnees.dateCreation).to.be(undefined);
+    });
+
     it("publie sur le bus d'événements l'utilisateur modifié", async () => {
       await depot.metsAJourUtilisateur(
         '123',
