@@ -1,16 +1,15 @@
 import { writable } from 'svelte/store';
 import type { ComponentProps, ComponentType, SvelteComponent } from 'svelte';
 
-type ConfigurationTiroir = {
+export type ConfigurationTiroir = SvelteComponent & {
   titre: string;
   sousTitre: string;
 };
 
 type TiroirStoreProps = {
   contenu?: {
-    composant: ComponentType;
-    props: any;
-    configuration: ConfigurationTiroir;
+    composant: ComponentType<ConfigurationTiroir>;
+    props: ComponentProps<ConfigurationTiroir>;
   };
   ouvert: boolean;
 };
@@ -19,10 +18,9 @@ const { set, subscribe } = writable<TiroirStoreProps>({ ouvert: false });
 
 export const tiroirStore = {
   subscribe,
-  afficheContenu: <T extends SvelteComponent>(
+  afficheContenu: <T extends ConfigurationTiroir>(
     composant: ComponentType<T>,
-    props: ComponentProps<T>,
-    configuration: ConfigurationTiroir
-  ) => set({ contenu: { composant, props, configuration }, ouvert: true }),
+    props: ComponentProps<T>
+  ) => set({ contenu: { composant, props }, ouvert: true }),
   ferme: () => set({ ouvert: false }),
 };

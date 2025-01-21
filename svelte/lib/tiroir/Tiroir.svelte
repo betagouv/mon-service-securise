@@ -1,5 +1,10 @@
-<script>
-  import { tiroirStore } from '../ui/stores/tiroir.store';
+<script lang="ts">
+  import {
+    type ConfigurationTiroir,
+    tiroirStore,
+  } from '../ui/stores/tiroir.store';
+
+  let composant: ConfigurationTiroir;
 </script>
 
 <div id="tiroir" class:ouvert={$tiroirStore.ouvert}>
@@ -9,13 +14,14 @@
         <button class="fermeture-tiroir" on:click={() => tiroirStore.ferme()}>
           ✕
         </button>
-        <h2 class="titre-tiroir">{$tiroirStore.contenu.configuration.titre}</h2>
+        <h2 class="titre-tiroir">{composant?.titre}</h2>
         <p class="texte-tiroir">
-          {$tiroirStore.contenu.configuration.sousTitre}
+          {composant?.sousTitre}
         </p>
       </div>
       <svelte:component
         this={$tiroirStore.contenu.composant}
+        bind:this={composant}
         {...$tiroirStore.contenu.props}
       />
     {/if}
