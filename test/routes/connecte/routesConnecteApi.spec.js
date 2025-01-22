@@ -20,7 +20,10 @@ const {
   Permissions: { LECTURE },
   tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
-const { decodeTokenDuCookie } = require('../../aides/cookie');
+const {
+  decodeTokenDuCookie,
+  expectContenuSessionValide,
+} = require('../../aides/cookie');
 const SourceAuthentification = require('../../../src/modeles/sourceAuthentification');
 
 describe('Le serveur MSS des routes privées /api/*', () => {
@@ -383,10 +386,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       utilisateur = {
         id: '123',
         email: 'jean.dujardin@beta.gouv.fr',
-        genereToken: (source) => {
-          expect(source).to.be('MSS');
-          return 'un token';
-        },
+        genereToken: (source) => `un token de source ${source}`,
+        accepteCGU: () => true,
+        estUnInvite: () => false,
       };
 
       const depotDonnees = testeur.depotDonnees();
@@ -453,6 +455,14 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         })
         .then((reponse) => testeur.verifieJetonDepose(reponse, done))
         .catch((e) => done(e.response?.data || e));
+    });
+
+    it('ajoute une session utilisateur', async () => {
+      const reponse = await axios.put('http://localhost:1234/api/motDePasse', {
+        motDePasse: 'mdp_ABC12345',
+      });
+
+      expectContenuSessionValide(reponse, 'MSS', true, false);
     });
 
     it("inscrit l'utilisateur aux emails transactionnels Brevo", async () => {
