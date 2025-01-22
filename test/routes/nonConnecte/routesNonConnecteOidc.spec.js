@@ -1,6 +1,10 @@
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
-const { enObjet, decodeTokenDuCookie } = require('../../aides/cookie');
+const {
+  enObjet,
+  decodeTokenDuCookie,
+  expectContenuSessionValide,
+} = require('../../aides/cookie');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
@@ -229,6 +233,25 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
         const tokenDecode = decodeTokenDuCookie(reponse, 1);
         expect(tokenDecode.token).to.be('unJetonJWT-AGENT_CONNECT');
+      });
+
+      it('ajoute une session utilisateur', async () => {
+        const utilisateurAuthentifie = unUtilisateur()
+          .avecEmail('jean.dujardin@beta.gouv.fr')
+          .quiAccepteCGU()
+          .construis();
+        utilisateurAuthentifie.genereToken = (source) =>
+          `un token de source ${source}`;
+        testeur.depotDonnees().utilisateurAvecEmail = (email) =>
+          email === 'jean.dujardin@beta.gouv.fr'
+            ? utilisateurAuthentifie
+            : undefined;
+
+        const reponse = await requeteSansRedirection(
+          'http://localhost:1234/oidc/apres-authentification'
+        );
+
+        expectContenuSessionValide(reponse, 'AGENT_CONNECT', true, false, 1);
       });
 
       it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {

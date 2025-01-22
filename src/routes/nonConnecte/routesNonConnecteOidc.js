@@ -71,6 +71,9 @@ const routesNonConnecteOidc = ({
       requete.session.token = utilisateurExistant.genereToken(
         SourceAuthentification.AGENT_CONNECT
       );
+      requete.session.cguAcceptees = utilisateurExistant.accepteCGU();
+      requete.session.estInvite = utilisateurExistant.estUnInvite();
+
       if (!utilisateurExistant.aLesInformationsAgentConnect()) {
         await depotDonnees.metsAJourUtilisateur(utilisateurExistant.id, {
           nom,
