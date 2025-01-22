@@ -77,7 +77,7 @@ describe('Le middleware MSS', () => {
     });
 
   beforeEach(() => {
-    requete.session = { token: 'XXX' };
+    requete.session = { token: 'XXX', cguAcceptees: true };
     requete.params = {};
     requete.body = {};
     requete.cookies = {};
@@ -215,6 +215,15 @@ describe('Le middleware MSS', () => {
         expect(timestampToken).to.be(123456789);
       });
     });
+
+    it('ajoute les informations de `cguAcceptees` provenant de la session à la requête', async () => {
+      const middleware = leMiddleware();
+      requete.session.cguAcceptees = 'CGU';
+
+      await middleware.verificationJWT(requete, reponse, () => {});
+
+      expect(requete.cguAcceptees).to.be('CGU');
+    });
   });
 
   it('repousse la date expiration du cookie de session en mettant à jour le cookie', (done) => {
@@ -269,8 +278,9 @@ describe('Le middleware MSS', () => {
 
     describe("si l'utilisateur n'est pas un invité", () => {
       it('si la dernière version des CGU est acceptée, appelle le middleware suivant', (done) => {
+        requete.session = { ...requete.session };
         const adaptateurJWT = {
-          decode: () => ({ estInvite: false, cguAcceptees: true }),
+          decode: () => ({ estInvite: false }),
         };
         const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
@@ -278,8 +288,9 @@ describe('Le middleware MSS', () => {
       });
 
       it("si la dernière version des CGU n'est pas acceptée, redirige vers la page des cgu", (done) => {
+        requete.session = { ...requete.session, cguAcceptees: false };
         const adaptateurJWT = {
-          decode: () => ({ estInvite: false, cguAcceptees: false }),
+          decode: () => ({ estInvite: false }),
         };
         const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
@@ -305,7 +316,7 @@ describe('Le middleware MSS', () => {
 
   describe("sur recherche d'un service existant", () => {
     const adaptateurJWT = {
-      decode: () => ({ idUtilisateur: '999', cguAcceptees: true }),
+      decode: () => ({ idUtilisateur: '999' }),
     };
     beforeEach(() => (depotDonnees.service = () => Promise.resolve()));
 

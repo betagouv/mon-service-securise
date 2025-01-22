@@ -88,9 +88,8 @@ describe('Un utilisateur', () => {
 
   describe('concernant la génération de son token JWT', () => {
     const adaptateurJWT = {
-      genereToken: (idUtilisateur, cguAcceptees, source, estInvite) => ({
+      genereToken: (idUtilisateur, source, estInvite) => ({
         idUtilisateur,
-        cguAcceptees,
         source,
         estInvite,
       }),
@@ -105,18 +104,8 @@ describe('Un utilisateur', () => {
       const token = jean.genereToken('source');
 
       expect(token.idUtilisateur).to.be('123');
-      expect(token.cguAcceptees).to.be(true);
       expect(token.estInvite).to.be(false);
       expect(token.source).to.be('source');
-    });
-
-    it('indique des CGU non-acceptées si ce ne sont pas les CGU *actuelles* qui ont été acceptées', () => {
-      const accepteOsboletes = new Utilisateur(
-        { id: '123', email: 'a@b.fr', cguAcceptees: 'v1.0' },
-        { cguActuelles: 'v2.0', adaptateurJWT }
-      );
-      const tokenAvecObsoletes = accepteOsboletes.genereToken('');
-      expect(tokenAvecObsoletes.cguAcceptees).to.be(false);
     });
 
     it("indique qu'il s'agit d'un invité si les CGU n'ont jamais été acceptées (i.e. `cguAcceptees` est `undefined`)", () => {

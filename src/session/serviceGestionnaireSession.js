@@ -4,6 +4,7 @@ const fabriqueServiceGestionnaireSession = () => ({
     requete.session.cguAcceptees = utilisateur.accepteCGU();
     requete.session.estInvite = utilisateur.estUnInvite();
   },
+  cguAcceptees: (requete) => requete.session.cguAcceptees,
 });
 
 module.exports = { fabriqueServiceGestionnaireSession };

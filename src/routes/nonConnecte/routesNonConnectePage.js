@@ -36,8 +36,9 @@ const routesNonConnectePage = ({
   });
 
   routes.get('/cgu', (requete, reponse) => {
-    const token = adaptateurJWT.decode(requete.session.token);
-    const demandeAcceptation = token ? !token.cguAcceptees : false;
+    const cguAcceptees = serviceGestionnaireSession.cguAcceptees(requete);
+    const demandeAcceptation =
+      cguAcceptees === undefined ? false : !cguAcceptees;
     reponse.render('cgu', { demandeAcceptation });
   });
 

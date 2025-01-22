@@ -5,13 +5,17 @@ const {
 const SourceAuthentification = require('../../src/modeles/sourceAuthentification');
 
 describe('Le service gestionnaire de session', () => {
+  let gestionnaireSession;
+
+  beforeEach(() => {
+    gestionnaireSession = fabriqueServiceGestionnaireSession();
+  });
+
   describe("sur demande d'enregistrement de session", () => {
-    let gestionnaireSession;
     let requete;
     let utilisateur;
 
     beforeEach(() => {
-      gestionnaireSession = fabriqueServiceGestionnaireSession();
       requete = {
         session: {},
       };
@@ -47,6 +51,22 @@ describe('Le service gestionnaire de session', () => {
         SourceAuthentification.MSS
       );
       expect(requete.session.token).to.be('un token de source MSS');
+    });
+  });
+
+  it('sur demande de lecture de `cguAcceptees`', () => {
+    it('peut lire depuis la session', () => {
+      const requete = { session: { cguAcceptees: true } };
+      const cguAcceptees = gestionnaireSession.cguAcceptees(requete);
+
+      expect(cguAcceptees).to.be(true);
+    });
+
+    it("reste robuste si la requête n'a pas de session", () => {
+      const requete = { session: null };
+      const cguAcceptees = gestionnaireSession.cguAcceptees(requete);
+
+      expect(cguAcceptees).to.be(undefined);
     });
   });
 });
