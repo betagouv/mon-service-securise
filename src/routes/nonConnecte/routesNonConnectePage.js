@@ -180,6 +180,9 @@ const routesNonConnectePage = ({
       requete.session.token = utilisateur.genereToken(
         SourceAuthentification.MSS
       );
+      requete.session.cguAcceptees = utilisateur.accepteCGU();
+      requete.session.estInvite = utilisateur.estUnInvite();
+
       reponse.render('motDePasse/edition', {
         utilisateur,
         enModeInitialisation: true,

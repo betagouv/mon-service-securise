@@ -6,6 +6,7 @@ const {
   donneesPartagees,
   requeteSansRedirection,
 } = require('../../aides/http');
+const { expectContenuSessionValide } = require('../../aides/cookie');
 
 describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
   const testeur = testeurMSS();
@@ -133,7 +134,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         id: '123',
         genereToken: (source) => {
           expect(source).to.be('MSS');
-          return 'un token';
+          return `un token de source ${source}`;
         },
         accepteCGU: () => false,
         estUnInvite: () => false,
@@ -157,6 +158,14 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
         expect(idRecu).to.be(uuid);
         await testeur.verifieJetonDepose(reponse, () => {});
+      });
+
+      it('ajoute une session utilisateur', async () => {
+        const reponse = await axios.get(
+          `http://localhost:1234/initialisationMotDePasse/${uuid}`
+        );
+
+        expectContenuSessionValide(reponse, 'MSS', false, false);
       });
 
       it('sert le contenu HTML de la page', (done) => {
