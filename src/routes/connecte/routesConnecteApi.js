@@ -211,7 +211,11 @@ const routesConnecteApi = ({
             infolettreAcceptee: true,
           });
         }
+
         requete.session.token = u.genereToken(SourceAuthentification.MSS);
+        requete.session.cguAcceptees = u.accepteCGU();
+        requete.session.estInvite = u.estUnInvite();
+
         reponse.json({ idUtilisateur });
       } catch (e) {
         suite(e);
