@@ -44,6 +44,7 @@ const routesConnecteApi = ({
   adaptateurJournal,
   procedures,
   serviceAnnuaire,
+  serviceGestionnaireSession,
   serviceSupervision,
   serviceCgu,
 }) => {
@@ -212,9 +213,11 @@ const routesConnecteApi = ({
           });
         }
 
-        requete.session.token = u.genereToken(SourceAuthentification.MSS);
-        requete.session.cguAcceptees = u.accepteCGU();
-        requete.session.estInvite = u.estUnInvite();
+        serviceGestionnaireSession.enregistreSession(
+          requete,
+          u,
+          SourceAuthentification.MSS
+        );
 
         reponse.json({ idUtilisateur });
       } catch (e) {
@@ -228,9 +231,11 @@ const routesConnecteApi = ({
     let u = await depotDonnees.utilisateur(idUtilisateur);
     u = await depotDonnees.valideAcceptationCGUPourUtilisateur(u);
 
-    requete.session.token = u.genereToken(requete.sourceAuthentification);
-    requete.session.cguAcceptees = u.accepteCGU();
-    requete.session.estInvite = u.estUnInvite();
+    serviceGestionnaireSession.enregistreSession(
+      requete,
+      u,
+      requete.sourceAuthentification
+    );
 
     reponse.sendStatus(200);
   });

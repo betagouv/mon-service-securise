@@ -42,6 +42,9 @@ const fabriqueAdaptateurSupervision = require('./src/adaptateurs/fabriqueAdaptat
 const adaptateurStatistiques = require('./src/adaptateurs/adaptateurStatistiquesMetabase');
 const { fabriqueServiceCgu } = require('./src/serviceCgu');
 const ServiceSupervision = require('./src/supervision/serviceSupervision');
+const {
+  fabriqueServiceGestionnaireSession,
+} = require('./src/session/serviceGestionnaireSession');
 
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
@@ -69,6 +72,8 @@ const serviceAnnuaire = fabriqueAnnuaire({
   adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
   depotDonnees,
 });
+
+const serviceGestionnaireSession = fabriqueServiceGestionnaireSession();
 
 cableTousLesAbonnes(busEvenements, {
   adaptateurHorloge,
@@ -128,6 +133,7 @@ const serveur = MSS.creeServeur({
   adaptateurStatistiques,
   adaptateurJWT,
   adaptateurProfilAnssi,
+  serviceGestionnaireSession,
   serviceSupervision,
   serviceCgu,
   procedures,
