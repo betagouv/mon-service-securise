@@ -21,13 +21,18 @@ const expectContenuSessionValide = (
   reponse,
   source,
   cguAcceptees,
-  estInvite
+  estInvite,
+  indiceDuHeader = 0
 ) => {
-  expect(decodeTokenDuCookie(reponse, 0).token).to.be(
+  expect(decodeTokenDuCookie(reponse, indiceDuHeader).token).to.be(
     `un token de source ${source}`
   );
-  expect(decodeTokenDuCookie(reponse, 0).cguAcceptees).to.be(cguAcceptees);
-  expect(decodeTokenDuCookie(reponse, 0).estInvite).to.be(estInvite);
+  expect(decodeTokenDuCookie(reponse, indiceDuHeader).cguAcceptees).to.be(
+    cguAcceptees
+  );
+  expect(decodeTokenDuCookie(reponse, indiceDuHeader).estInvite).to.be(
+    estInvite
+  );
 };
 
 module.exports = { enObjet, decodeTokenDuCookie, expectContenuSessionValide };
