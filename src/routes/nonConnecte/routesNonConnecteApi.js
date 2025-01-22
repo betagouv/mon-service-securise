@@ -117,6 +117,8 @@ const routesNonConnecteApi = ({
         requete.session.token = utilisateur.genereToken(
           SourceAuthentification.MSS
         );
+        requete.session.cguAcceptees = utilisateur.accepteCGU();
+        requete.session.estInvite = utilisateur.estUnInvite();
 
         await depotDonnees.enregistreNouvelleConnexionUtilisateur(
           utilisateur.id,

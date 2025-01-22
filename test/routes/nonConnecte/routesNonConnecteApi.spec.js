@@ -8,7 +8,10 @@ const {
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
-const { decodeTokenDuCookie } = require('../../aides/cookie');
+const {
+  decodeTokenDuCookie,
+  expectContenuSessionValide,
+} = require('../../aides/cookie');
 
 describe('Le serveur MSS des routes publiques /api/*', () => {
   const testeur = testeurMSS();
@@ -415,7 +418,12 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur =
         async () => {};
 
-      const utilisateur = { toJSON: () => {}, genereToken: () => {} };
+      const utilisateur = {
+        toJSON: () => {},
+        genereToken: () => {},
+        accepteCGU: () => true,
+        estUnInvite: () => false,
+      };
 
       testeur.depotDonnees().utilisateurAuthentifie = (login, motDePasse) => {
         try {
@@ -444,7 +452,9 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           email: 'jean.dupont@mail.fr',
           id: '456',
           toJSON: () => ({ prenomNom: 'Jean Dupont' }),
-          genereToken: () => 'un token',
+          genereToken: (source) => `un token de source ${source}`,
+          accepteCGU: () => true,
+          estUnInvite: () => false,
         };
 
         testeur.depotDonnees().utilisateurAuthentifie = () =>
@@ -462,6 +472,15 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           })
           .then((reponse) => testeur.verifieJetonDepose(reponse, done))
           .catch(done);
+      });
+
+      it('ajoute une session utilisateur', async () => {
+        const reponse = await axios.post('http://localhost:1234/api/token', {
+          login: 'jean.dupont@mail.fr',
+          motDePasse: 'mdp_12345',
+        });
+
+        expectContenuSessionValide(reponse, 'MSS', true, false);
       });
 
       it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {
