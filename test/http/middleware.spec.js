@@ -77,7 +77,7 @@ describe('Le middleware MSS', () => {
     });
 
   beforeEach(() => {
-    requete.session = { token: 'XXX', cguAcceptees: true };
+    requete.session = { token: 'XXX', cguAcceptees: true, estInvite: false };
     requete.params = {};
     requete.body = {};
     requete.cookies = {};
@@ -224,6 +224,15 @@ describe('Le middleware MSS', () => {
 
       expect(requete.cguAcceptees).to.be('CGU');
     });
+
+    it('ajoute les informations de `estInvite` provenant de la session à la requête', async () => {
+      const middleware = leMiddleware();
+      requete.session.estInvite = 'INVITÉ';
+
+      await middleware.verificationJWT(requete, reponse, () => {});
+
+      expect(requete.estInvite).to.be('INVITÉ');
+    });
   });
 
   it('repousse la date expiration du cookie de session en mettant à jour le cookie', (done) => {
@@ -248,8 +257,9 @@ describe('Le middleware MSS', () => {
   describe("sur vérification de l'acceptation des CGU", () => {
     describe('pour un utilisateur invité', () => {
       it("redirige l'utilisateur connecté via MSS", (done) => {
+        requete.session = { ...requete.session, estInvite: true };
         const adaptateurJWT = {
-          decode: () => ({ estInvite: true, source: 'MSS' }),
+          decode: () => ({ source: 'MSS' }),
         };
         const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
@@ -262,8 +272,9 @@ describe('Le middleware MSS', () => {
       });
 
       it("redirige l'utilisateur connecté via Agent Connect", (done) => {
+        requete.session = { ...requete.session, estInvite: true };
         const adaptateurJWT = {
-          decode: () => ({ estInvite: true, source: 'AGENT_CONNECT' }),
+          decode: () => ({ source: 'AGENT_CONNECT' }),
         };
         const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
@@ -277,11 +288,11 @@ describe('Le middleware MSS', () => {
     });
 
     describe("si l'utilisateur n'est pas un invité", () => {
+      const adaptateurJWT = {
+        decode: () => ({}),
+      };
+
       it('si la dernière version des CGU est acceptée, appelle le middleware suivant', (done) => {
-        requete.session = { ...requete.session };
-        const adaptateurJWT = {
-          decode: () => ({ estInvite: false }),
-        };
         const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
         middleware.verificationAcceptationCGU(requete, reponse, done);
@@ -289,9 +300,6 @@ describe('Le middleware MSS', () => {
 
       it("si la dernière version des CGU n'est pas acceptée, redirige vers la page des cgu", (done) => {
         requete.session = { ...requete.session, cguAcceptees: false };
-        const adaptateurJWT = {
-          decode: () => ({ estInvite: false }),
-        };
         const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
         reponse.redirect = (url) => {
