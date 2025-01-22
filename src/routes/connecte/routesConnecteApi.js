@@ -227,7 +227,11 @@ const routesConnecteApi = ({
     const idUtilisateur = requete.idUtilisateurCourant;
     let u = await depotDonnees.utilisateur(idUtilisateur);
     u = await depotDonnees.valideAcceptationCGUPourUtilisateur(u);
+
     requete.session.token = u.genereToken(requete.sourceAuthentification);
+    requete.session.cguAcceptees = u.accepteCGU();
+    requete.session.estInvite = u.estUnInvite();
+
     reponse.sendStatus(200);
   });
 

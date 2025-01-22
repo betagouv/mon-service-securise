@@ -20,10 +20,7 @@ const {
   Permissions: { LECTURE },
   tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
-const {
-  decodeTokenDuCookie,
-  expectContenuSessionValide,
-} = require('../../aides/cookie');
+const { expectContenuSessionValide } = require('../../aides/cookie');
 const SourceAuthentification = require('../../../src/modeles/sourceAuthentification');
 
 describe('Le serveur MSS des routes privées /api/*', () => {
@@ -607,7 +604,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       utilisateur = {
         id: '123',
         email: 'jean.dujardin@beta.gouv.fr',
-        genereToken: (source) => `untoken-${source}`,
+        genereToken: (source) => `un token de source ${source}`,
+        accepteCGU: () => true,
+        estUnInvite: () => false,
       };
 
       const depotDonnees = testeur.depotDonnees();
@@ -647,19 +646,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(utilisateurQuiAccepte.id).to.be('123');
     });
 
-    it('pose un nouveau jeton', async () => {
-      testeur.depotDonnees().valideAcceptationCGUPourUtilisateur = async (u) =>
-        u;
-
+    it('ajoute une session utilisateur', async () => {
       const reponse = await axios.put(
         'http://localhost:1234/api/utilisateur/acceptationCGU',
-        {
-          cguAcceptees: 'true',
-        }
+        { cguAcceptees: 'true' }
       );
 
-      const token = decodeTokenDuCookie(reponse, 0);
-      expect(token.token).to.be('untoken-AGENT_CONNECT');
+      expectContenuSessionValide(reponse, 'AGENT_CONNECT', true, false);
     });
   });
 
