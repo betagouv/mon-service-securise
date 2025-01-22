@@ -43,6 +43,7 @@ const creeServeur = ({
   adaptateurProfilAnssi,
   serviceSupervision,
   serviceCgu,
+  serviceGestionnaireSession,
   procedures,
   inscriptionUtilisateur,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
@@ -98,6 +99,7 @@ const creeServeur = ({
       depotDonnees,
       middleware,
       referentiel,
+      serviceGestionnaireSession,
     })
   );
   app.use(
@@ -124,6 +126,7 @@ const creeServeur = ({
       adaptateurMail,
       inscriptionUtilisateur,
       serviceCgu,
+      serviceGestionnaireSession,
     })
   );
   app.use(
@@ -134,6 +137,7 @@ const creeServeur = ({
       depotDonnees,
       middleware,
       adaptateurEnvironnement,
+      serviceGestionnaireSession,
     })
   );
   app.use(
@@ -158,6 +162,7 @@ const creeServeur = ({
       adaptateurJournal,
       procedures,
       serviceAnnuaire,
+      serviceGestionnaireSession,
       serviceSupervision,
       serviceCgu,
     })

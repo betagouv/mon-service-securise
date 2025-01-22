@@ -11,6 +11,7 @@ const routesNonConnecteOidc = ({
   depotDonnees,
   middleware,
   adaptateurEnvironnement,
+  serviceGestionnaireSession,
 }) => {
   const routes = express.Router();
 
@@ -68,11 +69,11 @@ const routesNonConnecteOidc = ({
       }
 
       requete.session.AgentConnectIdToken = idToken;
-      requete.session.token = utilisateurExistant.genereToken(
+      serviceGestionnaireSession.enregistreSession(
+        requete,
+        utilisateurExistant,
         SourceAuthentification.AGENT_CONNECT
       );
-      requete.session.cguAcceptees = utilisateurExistant.accepteCGU();
-      requete.session.estInvite = utilisateurExistant.estUnInvite();
 
       if (!utilisateurExistant.aLesInformationsAgentConnect()) {
         await depotDonnees.metsAJourUtilisateur(utilisateurExistant.id, {

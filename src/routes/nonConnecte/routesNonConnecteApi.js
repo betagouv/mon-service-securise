@@ -20,6 +20,7 @@ const routesNonConnecteApi = ({
   inscriptionUtilisateur,
   adaptateurGestionErreur,
   serviceCgu,
+  serviceGestionnaireSession,
 }) => {
   const routes = express.Router();
 
@@ -114,11 +115,11 @@ const routesNonConnecteApi = ({
           return;
         }
 
-        requete.session.token = utilisateur.genereToken(
+        serviceGestionnaireSession.enregistreSession(
+          requete,
+          utilisateur,
           SourceAuthentification.MSS
         );
-        requete.session.cguAcceptees = utilisateur.accepteCGU();
-        requete.session.estInvite = utilisateur.estUnInvite();
 
         await depotDonnees.enregistreNouvelleConnexionUtilisateur(
           utilisateur.id,

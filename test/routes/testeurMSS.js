@@ -15,9 +15,13 @@ const {
 const adaptateurJWTParDefaut = require('../../src/adaptateurs/adaptateurJWT');
 const adaptateurProfilAnssiParDefaut = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
 const { fabriqueServiceCgu } = require('../../src/serviceCgu');
+const {
+  fabriqueServiceGestionnaireSession,
+} = require('../../src/session/serviceGestionnaireSession');
 
 const testeurMss = () => {
   let serviceAnnuaire;
+  let serviceGestionnaireSession;
   let serviceSupervision;
   let serviceCgu;
   let adaptateurHorloge;
@@ -125,6 +129,7 @@ const testeurMss = () => {
       adaptateurTracking,
     });
     serviceCgu = fabriqueServiceCgu({ referentiel });
+    serviceGestionnaireSession = fabriqueServiceGestionnaireSession();
 
     moteurRegles = new MoteurRegles(referentiel);
     depotVide()
@@ -157,6 +162,7 @@ const testeurMss = () => {
           adaptateurJWT,
           adaptateurProfilAnssi,
           serviceSupervision,
+          serviceGestionnaireSession,
           serviceCgu,
           procedures,
           inscriptionUtilisateur,

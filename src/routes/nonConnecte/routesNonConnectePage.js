@@ -15,6 +15,7 @@ const routesNonConnectePage = ({
   depotDonnees,
   middleware,
   referentiel,
+  serviceGestionnaireSession,
 }) => {
   const routes = express.Router();
 
@@ -177,11 +178,11 @@ const routesNonConnectePage = ({
         return;
       }
 
-      requete.session.token = utilisateur.genereToken(
+      serviceGestionnaireSession.enregistreSession(
+        requete,
+        utilisateur,
         SourceAuthentification.MSS
       );
-      requete.session.cguAcceptees = utilisateur.accepteCGU();
-      requete.session.estInvite = utilisateur.estUnInvite();
 
       reponse.render('motDePasse/edition', {
         utilisateur,
