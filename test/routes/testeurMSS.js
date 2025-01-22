@@ -178,6 +178,7 @@ const testeurMss = () => {
 
   return {
     serviceAnnuaire: () => serviceAnnuaire,
+    serviceGestionnaireSession: () => serviceGestionnaireSession,
     serviceSupervision: () => serviceSupervision,
     adaptateurGestionErreur: () => adaptateurGestionErreur,
     adaptateurHorloge: () => adaptateurHorloge,

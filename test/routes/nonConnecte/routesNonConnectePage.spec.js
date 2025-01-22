@@ -421,4 +421,22 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       expect(adaptateurAppele).to.be(true);
     });
   });
+
+  describe('quand requete GET sur `/cgu`', () => {
+    it("affiche la demande d'acceptation si l'utilisateur connecté n'a pas accepté les CGU", async () => {
+      testeur.serviceGestionnaireSession().cguAcceptees = () => false;
+
+      const reponse = await axios.get('http://localhost:1234/cgu');
+
+      expect(reponse.data).to.contain('class="demande-acceptation"');
+    });
+
+    it("n'affiche pas la demande d'acceptation si l'utilisateur connecté a accepté les CGU", async () => {
+      testeur.serviceGestionnaireSession().cguAcceptees = () => true;
+
+      const reponse = await axios.get('http://localhost:1234/cgu');
+
+      expect(reponse.data).not.to.contain('class="demande-acceptation"');
+    });
+  });
 });

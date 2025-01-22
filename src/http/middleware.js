@@ -101,7 +101,7 @@ const middleware = (configuration = {}) => {
     );
 
     requete.idUtilisateurCourant = token.idUtilisateur;
-    requete.cguAcceptees = token.cguAcceptees;
+    requete.cguAcceptees = requete.session.cguAcceptees;
     requete.estInvite = token.estInvite;
     requete.sourceAuthentification = token.source;
     return suite();

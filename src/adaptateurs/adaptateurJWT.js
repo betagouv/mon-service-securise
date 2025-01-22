@@ -5,7 +5,7 @@ const decode = (token) => (token ? jwt.verify(token, secret) : undefined);
 
 const signeDonnees = (donnees) => jwt.sign(donnees, secret);
 
-const genereToken = (idUtilisateur, cguAcceptees, source, estInvite) =>
-  signeDonnees({ idUtilisateur, cguAcceptees, source, estInvite });
+const genereToken = (idUtilisateur, source, estInvite) =>
+  signeDonnees({ idUtilisateur, source, estInvite });
 
 module.exports = { decode, genereToken, signeDonnees };
