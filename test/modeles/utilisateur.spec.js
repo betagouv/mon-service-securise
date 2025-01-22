@@ -104,17 +104,7 @@ describe('Un utilisateur', () => {
       const token = jean.genereToken('source');
 
       expect(token.idUtilisateur).to.be('123');
-      expect(token.estInvite).to.be(false);
       expect(token.source).to.be('source');
-    });
-
-    it("indique qu'il s'agit d'un invité si les CGU n'ont jamais été acceptées (i.e. `cguAcceptees` est `undefined`)", () => {
-      const jamaisAcceptees = new Utilisateur(
-        { id: '123', email: 'a@b.fr', cguAcceptees: undefined },
-        { cguActuelles: 'v1.0', adaptateurJWT }
-      );
-      const tokenInvite = jamaisAcceptees.genereToken('');
-      expect(tokenInvite.estInvite).to.be(true);
     });
   });
 
