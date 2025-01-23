@@ -13,6 +13,7 @@ const {
   routesNonConnecteApiBibliotheques,
 } = require('./routes/nonConnecte/routesNonConnecteApiBibliotheques');
 const routesNonConnecteApiStyles = require('./routes/nonConnecte/routesNonConnecteApiStyles');
+const routesConnecteApiSansVerifCGU = require('./routes/connecte/routesConnecteApiSansVerifCGU');
 const routesNonConnectePage = require('./routes/nonConnecte/routesNonConnectePage');
 const routesConnectePage = require('./routes/connecte/routesConnectePage');
 const routesNonConnecteOidc = require('./routes/nonConnecte/routesNonConnecteOidc');
@@ -150,9 +151,19 @@ const creeServeur = ({
   app.use(
     '/api',
     middleware.verificationJWT,
-    routesConnecteApi({
+    routesConnecteApiSansVerifCGU({
       middleware,
       adaptateurMail,
+      depotDonnees,
+      serviceGestionnaireSession,
+      serviceCgu,
+    })
+  );
+  app.use(
+    '/api',
+    middleware.verificationJWT,
+    routesConnecteApi({
+      middleware,
       depotDonnees,
       referentiel,
       adaptateurHorloge,
@@ -162,9 +173,7 @@ const creeServeur = ({
       adaptateurJournal,
       procedures,
       serviceAnnuaire,
-      serviceGestionnaireSession,
       serviceSupervision,
-      serviceCgu,
     })
   );
   app.use('/bibliotheques', routesNonConnecteApiBibliotheques());
