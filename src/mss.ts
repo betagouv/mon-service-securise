@@ -162,6 +162,7 @@ const creeServeur = ({
   app.use(
     '/api',
     middleware.verificationJWT,
+    middleware.verificationAcceptationCGUAPI,
     routesConnecteApi({
       middleware,
       depotDonnees,

@@ -64,6 +64,7 @@ let suppressionCookieEffectuee = false;
 let traficProtege = false;
 let verificationJWTMenee = false;
 let verificationCGUMenee = false;
+let verificationCGUAPIMenee = false;
 let versionBuildeeChargee = false;
 let idTokenAgentConnect;
 let fonctionDeposeCookie;
@@ -87,6 +88,7 @@ const middlewareFantaisie = {
     expirationCookieRepoussee = false;
     headersPositionnes = false;
     noncePositionne = false;
+    verificationCGUAPIMenee = false;
     serviceTrouve = serviceARenvoyer;
     idUtilisateurCourant = idUtilisateur;
     autorisationChargee = autorisationACharger;
@@ -248,6 +250,11 @@ const middlewareFantaisie = {
     suite();
   },
 
+  verificationAcceptationCGUAPI: (_requete, _reponse, suite) => {
+    verificationCGUAPIMenee = true;
+    suite();
+  },
+
   verificationAddresseIP: (listeAdressesIPs) => (_requete, _reponse, suite) => {
     listeAdressesIPsAutorisee = listeAdressesIPs;
     suite();
@@ -320,6 +327,13 @@ const middlewareFantaisie = {
   verifieRechercheDossierCourant: (...params) => {
     verifieRequeteChangeEtat(
       { lectureEtat: () => rechercheDossierCourantEffectuee },
+      ...params
+    );
+  },
+
+  verifieRequeteExigeAcceptationCGUAPI: (...params) => {
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => verificationCGUAPIMenee },
       ...params
     );
   },

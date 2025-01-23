@@ -35,43 +35,30 @@ const routesConnecteApi = ({
 }) => {
   const routes = express.Router();
 
-  routes.get(
-    '/services',
-    middleware.verificationAcceptationCGU,
-    async (requete, reponse) => {
-      const services = await depotDonnees.services(
-        requete.idUtilisateurCourant
-      );
-      const autorisations = await depotDonnees.autorisations(
-        requete.idUtilisateurCourant
-      );
-      const donnees = objetGetServices.donnees(
-        services,
-        autorisations,
-        referentiel
-      );
-      reponse.json(donnees);
-    }
-  );
+  routes.get('/services', async (requete, reponse) => {
+    const services = await depotDonnees.services(requete.idUtilisateurCourant);
+    const autorisations = await depotDonnees.autorisations(
+      requete.idUtilisateurCourant
+    );
+    const donnees = objetGetServices.donnees(
+      services,
+      autorisations,
+      referentiel
+    );
+    reponse.json(donnees);
+  });
 
-  routes.get(
-    '/services/indices-cyber',
-    middleware.verificationAcceptationCGU,
-    async (requete, reponse) => {
-      const services = await depotDonnees.services(
-        requete.idUtilisateurCourant
-      );
-      const autorisations = await depotDonnees.autorisations(
-        requete.idUtilisateurCourant
-      );
-      const donnees = objetGetIndicesCyber.donnees(services, autorisations);
-      reponse.json(donnees);
-    }
-  );
+  routes.get('/services/indices-cyber', async (requete, reponse) => {
+    const services = await depotDonnees.services(requete.idUtilisateurCourant);
+    const autorisations = await depotDonnees.autorisations(
+      requete.idUtilisateurCourant
+    );
+    const donnees = objetGetIndicesCyber.donnees(services, autorisations);
+    reponse.json(donnees);
+  });
 
   routes.get(
     '/services/export.csv',
-    middleware.verificationAcceptationCGU,
     middleware.aseptise('idsServices.*'),
     async (requete, reponse) => {
       const { idsServices = [] } = requete.query;
@@ -163,7 +150,6 @@ const routesConnecteApi = ({
 
   routes.post(
     '/autorisation',
-    middleware.verificationAcceptationCGU,
     middleware.aseptise('idServices.*', 'emailContributeur'),
     async (requete, reponse, suite) => {
       const { idServices = [], droits } = requete.body;
@@ -207,7 +193,6 @@ const routesConnecteApi = ({
 
   routes.delete(
     '/autorisation',
-    middleware.verificationAcceptationCGU,
     middleware.aseptise('idService', 'idContributeur'),
     async (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
@@ -240,7 +225,6 @@ const routesConnecteApi = ({
 
   routes.get(
     '/annuaire/contributeurs',
-    middleware.verificationAcceptationCGU,
     middleware.aseptise('recherche'),
     async (requete, reponse) => {
       const { recherche = '' } = requete.query;
@@ -267,7 +251,6 @@ const routesConnecteApi = ({
 
   routes.get(
     '/supervision',
-    middleware.verificationAcceptationCGU,
     middleware.aseptise('filtreDate', 'filtreBesoinsSecurite', 'filtreEntite'),
     async (requete, reponse) => {
       const idUtilisateur = requete.idUtilisateurCourant;

@@ -44,6 +44,18 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       .verifieRequeteExigeJWT('http://localhost:1234/api/services', done);
   });
 
+  it("vérifie que l'utilisateur a accepté les CGU sur toutes les routes", (done) => {
+    // On vérifie une seule route privée.
+    // Par construction, les autres seront protégées aussi puisque la protection est ajoutée comme middleware
+    // devant le routeur dédié aux routes privées.
+    testeur
+      .middleware()
+      .verifieRequeteExigeAcceptationCGUAPI(
+        'http://localhost:1234/api/services',
+        done
+      );
+  });
+
   describe('quand requête GET sur `/api/services`', () => {
     beforeEach(() => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
@@ -52,15 +64,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
         },
       });
-    });
-
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/services',
-          done
-        );
     });
 
     it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
@@ -116,15 +119,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête GET sur `/api/services/indices-cyber`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/services/indices-cyber',
-          done
-        );
-    });
-
     it("interroge le dépôt de données pour récupérer les autorisations de l'utilisateur", async () => {
       let donneesPassees = {};
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
@@ -188,15 +182,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           .avecDroits({ [SECURISER]: LECTURE })
           .construis(),
       ];
-    });
-
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/services/export.csv',
-          done
-        );
     });
 
     it('aseptise les identifiants des services à exporter', (done) => {
@@ -395,17 +380,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       );
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/autorisation',
-          data: { droits: tousDroitsEnEcriture() },
-        },
-        done
-      );
-    });
-
     it("appelle la procédure d'ajout de contributeur avec les droits envoyés", async () => {
       let ajout;
 
@@ -566,16 +540,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         );
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        {
-          method: 'delete',
-          url: 'http://localhost:1234/api/autorisation',
-        },
-        done
-      );
-    });
-
     it("vérifie que l'utilisateur a le droit de supprimer un contributeur", async () => {
       let autorisationCherchee = {};
       testeur.depotDonnees().autorisationPour = async (
@@ -659,15 +623,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête GET sur `/api/annuaire/contributeurs`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/annuaire/contributeurs',
-          done
-        );
-    });
-
     it('aseptise la chaine de recherche', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         ['recherche'],
@@ -728,15 +683,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     beforeEach(() => {
       testeur.serviceSupervision().genereURLSupervision = () => '';
       testeur.depotDonnees().estSuperviseur = async () => true;
-    });
-
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/supervision',
-          done
-        );
     });
 
     it("retourne une erreur HTTP 401 si l'utilisateur n'est pas superviseur", async () => {
