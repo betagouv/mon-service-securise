@@ -254,6 +254,44 @@ describe('Le middleware MSS', () => {
     middleware.repousseExpirationCookie(requete, reponse, suite);
   });
 
+  describe("sur vérification de l'acceptation des CGU pour les routes d'API", () => {
+    it('jette une erreur 403 si les CGU ne sont pas acceptées', async () => {
+      requete.cguAcceptees = false;
+      requete.idUtilisateurCourant = '123';
+      let statutRecu;
+      reponse.status = (s) => {
+        statutRecu = s;
+        return reponse;
+      };
+      const middleware = leMiddleware({});
+
+      middleware.verificationAcceptationCGUAPI(requete, reponse);
+
+      expect(statutRecu).to.be(403);
+    });
+    it('continue la chaîne si les CGU sont acceptées', async () => {
+      requete.cguAcceptees = true;
+      requete.idUtilisateurCourant = '123';
+      let suiteAppelee = false;
+      const suite = () => {
+        suiteAppelee = true;
+      };
+      const middleware = leMiddleware({});
+
+      middleware.verificationAcceptationCGUAPI(requete, reponse, suite);
+
+      expect(suiteAppelee).to.be(true);
+    });
+    it("jette une exception s'il n'a pas été appelé après le middleware de vérification jwt", async () => {
+      requete.idUtilisateurCourant = undefined;
+      const middleware = leMiddleware({});
+
+      expect(() =>
+        middleware.verificationAcceptationCGUAPI(requete, reponse)
+      ).to.throwError((e) => expect(e).to.be.an(ErreurChainageMiddleware));
+    });
+  });
+
   describe("sur vérification de l'acceptation des CGU", () => {
     describe('pour un utilisateur invité', () => {
       it("redirige l'utilisateur connecté via MSS", (done) => {

@@ -107,6 +107,21 @@ const middleware = (configuration = {}) => {
     return suite();
   };
 
+  const verificationAcceptationCGUAPI = (requete, reponse, suite) => {
+    if (!requete.idUtilisateurCourant) {
+      throw new ErreurChainageMiddleware(
+        "Un id d'utilisateur devrait être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?"
+      );
+    }
+
+    if (!requete.cguAcceptees) {
+      reponse.status(403).send();
+      return;
+    }
+
+    suite();
+  };
+
   const verificationAcceptationCGU = (requete, reponse, suite) => {
     verificationJWT(requete, reponse, () => {
       if (requete.estInvite) {
@@ -391,6 +406,7 @@ const middleware = (configuration = {}) => {
     trouveService,
     trouveDossierCourant,
     verificationAcceptationCGU,
+    verificationAcceptationCGUAPI,
     verificationAddresseIP,
     verificationJWT,
     redirigeVersUrlBase,
