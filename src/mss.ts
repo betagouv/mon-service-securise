@@ -182,8 +182,11 @@ const creeServeur = ({
 
   if (avecPageErreur) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    app.use((_erreur, _requete, reponse, _suite) => {
-      reponse.render('erreur');
+    app.use((erreur, _requete, reponse, suite) => {
+      if (erreur.message === 'CSRF token mismatch') {
+        return suite(erreur);
+      }
+      return reponse.render('erreur');
     });
   }
 
