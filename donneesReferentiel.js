@@ -111,6 +111,16 @@ module.exports = {
       image: 'moduleRisquesV2.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'tableauDeBordV2',
+      dateDeDeploiement: '2025-01-24 08:30:00Z',
+      lien: 'https://monservicescurise.featurebase.app/en/changelog',
+      titre: "Profitez d'un nouveau tableau de bord !",
+      sousTitre:
+        "Plus d'informations, plus ergonomique, pour encore mieux vous aider à piloter la cybersécurité de l'ensemble de vos services !",
+      image: 'tableauDeBordV2.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
