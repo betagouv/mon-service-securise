@@ -164,12 +164,14 @@
             />
           </td>
           <td>
-            <Lien
-              titre={libellesNiveauSecurite[service.niveauSecurite]}
-              href="/service/{service.id}/descriptionService?etape=3"
-              type="lien"
-              taille="petit"
-            />
+            {#if service.niveauSecurite}
+              <Lien
+                titre={libellesNiveauSecurite[service.niveauSecurite]}
+                href="/service/{service.id}/descriptionService?etape=3"
+                type="lien"
+                taille="petit"
+              />
+            {/if}
           </td>
           <td>
             <EtiquetteCompletude

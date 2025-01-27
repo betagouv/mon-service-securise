@@ -2271,7 +2271,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         serviceARenvoyer,
         idUtilisateur: '123',
         autorisationACharger: uneAutorisation()
-          .avecDroits({ [HOMOLOGUER]: LECTURE })
+          .avecDroits({
+            [HOMOLOGUER]: LECTURE,
+            [SECURISER]: LECTURE,
+            [DECRIRE]: LECTURE,
+          })
           .construis(),
       });
     });
@@ -2335,7 +2339,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         },
         nombreContributeurs: 2,
         estProprietaire: false,
-        documentsPdfDisponibles: [],
+        documentsPdfDisponibles: ['syntheseSecurite'],
         permissions: { gestionContributeurs: false },
         aUneSuggestionAction: false,
         niveauSecurite: 'niveau1',

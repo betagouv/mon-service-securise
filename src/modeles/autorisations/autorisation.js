@@ -146,6 +146,10 @@ class Autorisation extends Base {
     [DECRIRE]: ECRITURE,
   };
 
+  static DROITS_VOIR_DESCRIPTION = {
+    [DECRIRE]: LECTURE,
+  };
+
   appliqueDroits(nouveauxDroits) {
     if (nouveauxDroits.estProprietaire) {
       this.estProprietaire = true;
