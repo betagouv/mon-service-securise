@@ -166,6 +166,7 @@
           <td>
             {#if service.niveauSecurite}
               <Lien
+                classe="lien-niveau-securite"
                 titre={libellesNiveauSecurite[service.niveauSecurite]}
                 href="/service/{service.id}/descriptionService?etape=3"
                 type="lien"
