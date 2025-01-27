@@ -21,6 +21,7 @@
   import Onglet from '../ui/Onglet.svelte';
   import TableauVide from './TableauVide.svelte';
   import EtiquetteCompletude from './elementsDeService/EtiquetteCompletude.svelte';
+  import Lien from '../ui/Lien.svelte';
 
   $: selection = $resultatsDeRecherche.filter((service) =>
     $selectionIdsServices.includes(service.id)
@@ -163,7 +164,12 @@
             />
           </td>
           <td>
-            {libellesNiveauSecurite[service.niveauSecurite]}
+            <Lien
+              titre={libellesNiveauSecurite[service.niveauSecurite]}
+              href="/service/{service.id}/descriptionService?etape=3"
+              type="lien"
+              taille="petit"
+            />
           </td>
           <td>
             <EtiquetteCompletude
