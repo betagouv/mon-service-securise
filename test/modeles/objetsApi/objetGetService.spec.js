@@ -6,7 +6,7 @@ const {
   uneAutorisation,
 } = require('../../constructeurs/constructeurAutorisation');
 const {
-  Rubriques: { HOMOLOGUER, DECRIRE },
+  Rubriques: { HOMOLOGUER, DECRIRE, SECURISER },
   Permissions: { LECTURE, ECRITURE },
 } = require('../../../src/modeles/autorisations/gestionDroits');
 const { unService } = require('../../constructeurs/constructeurService');
@@ -44,7 +44,11 @@ describe("L'objet d'API de `GET /service`", () => {
     mesures: { mesureA: {} },
   });
   const autorisation = uneAutorisation()
-    .avecDroits({ [HOMOLOGUER]: LECTURE, [DECRIRE]: ECRITURE })
+    .avecDroits({
+      [HOMOLOGUER]: LECTURE,
+      [DECRIRE]: ECRITURE,
+      [SECURISER]: ECRITURE,
+    })
     .construis();
 
   const service = unService(referentiel)
@@ -111,7 +115,7 @@ describe("L'objet d'API de `GET /service`", () => {
       },
       nombreContributeurs: 1 + 1,
       estProprietaire: false,
-      documentsPdfDisponibles: [],
+      documentsPdfDisponibles: ['syntheseSecurite'],
       permissions: { gestionContributeurs: false },
       aUneSuggestionAction: true,
       actionRecommandee: { id: 'mettreAJour', autorisee: true },
@@ -161,6 +165,18 @@ describe("L'objet d'API de `GET /service`", () => {
       referentiel
     );
     expect(donnees.niveauSecurite).to.be(undefined);
+  });
+
+  it("masque la complétude si l'utilisateur n'a pas la permission", () => {
+    const autorisationSansSecuriser = uneAutorisation()
+      .avecDroits({})
+      .construis();
+    const donnees = objetGetService.donnees(
+      service,
+      autorisationSansSecuriser,
+      referentiel
+    );
+    expect(donnees.pourcentageCompletude).to.be(undefined);
   });
 
   it("montre la dernière étape disponible si l'utilisateur n'a pas le droit d'homologuer", () => {

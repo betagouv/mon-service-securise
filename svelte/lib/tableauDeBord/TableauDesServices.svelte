@@ -175,10 +175,12 @@
             {/if}
           </td>
           <td>
-            <EtiquetteCompletude
-              {idService}
-              pourcentageCompletude={service.pourcentageCompletude}
-            />
+            {#if service.pourcentageCompletude !== undefined}
+              <EtiquetteCompletude
+                {idService}
+                pourcentageCompletude={service.pourcentageCompletude}
+              />
+            {/if}
           </td>
           <td>
             {#if indiceCyberDuService !== undefined}

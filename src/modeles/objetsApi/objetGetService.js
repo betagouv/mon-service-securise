@@ -1,8 +1,11 @@
 const Dossiers = require('../dossiers');
 const Autorisation = require('../autorisations/autorisation');
 
-const { DROITS_VOIR_STATUT_HOMOLOGATION, DROITS_VOIR_DESCRIPTION } =
-  Autorisation;
+const {
+  DROITS_VOIR_STATUT_HOMOLOGATION,
+  DROITS_VOIR_DESCRIPTION,
+  DROITS_VOIR_MESURES,
+} = Autorisation;
 
 const donnees = (service, autorisation, referentiel) => {
   const enCoursEdition =
@@ -53,8 +56,10 @@ const donnees = (service, autorisation, referentiel) => {
     ...(autorisation.aLesPermissions(DROITS_VOIR_DESCRIPTION) && {
       niveauSecurite: service.descriptionService.niveauSecurite,
     }),
-    pourcentageCompletude:
-      completude.nombreMesuresCompletes / completude.nombreTotalMesures || 0,
+    ...(autorisation.aLesPermissions(DROITS_VOIR_MESURES) && {
+      pourcentageCompletude:
+        completude.nombreMesuresCompletes / completude.nombreTotalMesures || 0,
+    }),
   };
 };
 
