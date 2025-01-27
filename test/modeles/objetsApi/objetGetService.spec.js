@@ -151,6 +151,18 @@ describe("L'objet d'API de `GET /service`", () => {
     expect(donnees.statutHomologation).to.be(undefined);
   });
 
+  it("masque les besoins de sécurité si l'utilisateur n'a pas la permission", () => {
+    const autorisationSansDecrire = uneAutorisation()
+      .avecDroits({})
+      .construis();
+    const donnees = objetGetService.donnees(
+      service,
+      autorisationSansDecrire,
+      referentiel
+    );
+    expect(donnees.niveauSecurite).to.be(undefined);
+  });
+
   it("montre la dernière étape disponible si l'utilisateur n'a pas le droit d'homologuer", () => {
     const referentielDeuxEtapes = Referentiel.creeReferentiel({
       echeancesRenouvellement: { unAn: {} },

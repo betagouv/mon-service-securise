@@ -40,7 +40,7 @@ export type Service = {
   };
   aUneSuggestionAction: boolean;
   actionRecommandee?: ActionRecommandee;
-  niveauSecurite: NiveauSecuriteService;
+  niveauSecurite?: NiveauSecuriteService;
   pourcentageCompletude: number;
 };
 

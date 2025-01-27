@@ -60,7 +60,8 @@ export const appliqueFiltrageParProprietaire = (
 export const appliqueFiltrageParNiveauDeSecurite = (
   service: ServiceAvecIndiceCyber,
   filtres: NiveauSecuriteService[]
-) => filtres.includes(service.niveauSecurite);
+) =>
+  service.niveauSecurite ? filtres.includes(service.niveauSecurite) : false;
 
 export const appliqueFiltrageParCompletude = (
   service: ServiceAvecIndiceCyber,
