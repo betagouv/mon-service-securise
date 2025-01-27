@@ -11,7 +11,7 @@
       | 'telecharger'
       | 'medaille'
       | undefined;
-    type?: 'bouton-primaire' | 'bouton-secondaire';
+    type?: 'bouton-primaire' | 'bouton-secondaire' | 'lien';
     taille?: 'petit' | 'moyen';
     classe?: string;
     href: string;
@@ -28,7 +28,8 @@
     | 'telecharger'
     | 'medaille'
     | undefined = undefined;
-  export let type: 'bouton-primaire' | 'bouton-secondaire' = 'bouton-primaire';
+  export let type: 'bouton-primaire' | 'bouton-secondaire' | 'lien' =
+    'bouton-primaire';
   export let taille: 'petit' | 'moyen' = 'moyen';
   export let inactif: boolean = false;
 </script>
@@ -50,9 +51,6 @@
     gap: 8px;
     display: flex;
     margin: 0;
-
-    border: solid 1px var(--bleu-mise-en-avant);
-    border-radius: 4px;
 
     color: #fff;
 
@@ -110,6 +108,33 @@
     height: 16px;
     background-repeat: no-repeat;
     background-size: contain;
+  }
+
+  .lien {
+    color: #042794;
+    font-weight: 400;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+    padding: 0;
+  }
+
+  .lien:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .lien:focus-visible {
+    outline: 2px solid var(--bleu-mise-en-avant);
+    outline-offset: 2px;
+  }
+
+  .lien:active {
+    background-color: #eee;
+  }
+
+  .bouton-primaire,
+  .bouton-secondaire {
+    border: solid 1px var(--bleu-mise-en-avant);
+    border-radius: 4px;
   }
 
   .bouton-primaire {
