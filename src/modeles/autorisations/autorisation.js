@@ -108,6 +108,10 @@ class Autorisation extends Base {
     [SECURISER]: LECTURE,
   };
 
+  static DROITS_VOIR_MESURES = {
+    [SECURISER]: LECTURE,
+  };
+
   static DROITS_EDITER_MESURES = {
     [SECURISER]: ECRITURE,
   };

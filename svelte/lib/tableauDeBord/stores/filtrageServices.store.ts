@@ -67,6 +67,8 @@ export const appliqueFiltrageParCompletude = (
   service: ServiceAvecIndiceCyber,
   filtres: FiltreCompletude[]
 ) => {
+  if (service.pourcentageCompletude === undefined) return false;
+
   if (filtres.includes('<50%') && service.pourcentageCompletude < 0.5)
     return true;
   if (
