@@ -1,13 +1,14 @@
 <script lang="ts">
   export let pourcentageCompletude: number;
+  export let idService: string;
 
   const valeurCompletude = pourcentageCompletude || 0;
 </script>
 
-<div class="conteneur-completude">
+<a class="conteneur-completude" href="/service/{idService}/mesures">
   <span>{Math.round(valeurCompletude * 100)}%</span>
   <progress max="1" value={valeurCompletude} />
-</div>
+</a>
 
 <style>
   .conteneur-completude {
@@ -15,9 +16,24 @@
     flex-direction: row;
     align-items: center;
     gap: 8px;
+    color: var(--texte-clair);
+    border-radius: 4px;
   }
 
-  span {
+  .conteneur-completude:hover {
+    background-color: #f5f5f5;
+  }
+
+  .conteneur-completude:focus-visible {
+    outline: 2px solid var(--bleu-mise-en-avant);
+    outline-offset: 2px;
+  }
+
+  .conteneur-completude:active {
+    background-color: #eee;
+  }
+
+  .conteneur-completude span {
     font-size: 0.88rem;
     line-height: 1.5rem;
   }

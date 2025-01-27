@@ -168,7 +168,7 @@
               <Lien
                 classe="lien-niveau-securite"
                 titre={libellesNiveauSecurite[service.niveauSecurite]}
-                href="/service/{service.id}/descriptionService?etape=3"
+                href="/service/{idService}/descriptionService?etape=3"
                 type="lien"
                 taille="petit"
               />
@@ -176,6 +176,7 @@
           </td>
           <td>
             <EtiquetteCompletude
+              {idService}
               pourcentageCompletude={service.pourcentageCompletude}
             />
           </td>
