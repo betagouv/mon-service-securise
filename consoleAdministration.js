@@ -100,14 +100,6 @@ class ConsoleAdministration {
     return this.depotDonnees.supprimeService(idService);
   }
 
-  async supprimeUtilisateur(id) {
-    const utilisateur = await this.depotDonnees.utilisateur(id);
-    if (utilisateur) {
-      await this.depotDonnees.supprimeUtilisateur(id);
-      await adaptateurMail.supprimeContact(utilisateur.email);
-    }
-  }
-
   async genereTousEvenementsCompletude(persisteEvenements = false) {
     const fabriqueFonction = (adaptateurJournal) =>
       consigneCompletudeDansJournal({
@@ -648,20 +640,38 @@ class ConsoleAdministration {
       await this.depotDonnees.ajouteContributeurAuService(nouvelleAutorisation);
       console.log(`Droit de propriété ajouté au service ${idService}`);
     }
+    await this.supprimeUtilisateur(collaborateurParti.id);
+  }
+
+  async supprimeUtilisateur(id) {
+    const utilisateur = await this.depotDonnees.utilisateur(id);
+
+    if (!utilisateur) {
+      console.log(
+        `L'utilisateur d'identifiant ${id} n'existe pas. Rien n'a été supprimé.`
+      );
+      return;
+    }
+
+    const autorisations = await this.depotDonnees.autorisations(id);
+
     // eslint-disable-next-line no-restricted-syntax
     for (const autorisationExistante of autorisations) {
       // eslint-disable-next-line no-await-in-loop
       await this.depotDonnees.supprimeContributeur(
-        collaborateurParti.id,
+        id,
         autorisationExistante.idService,
-        nouveauProprietaire.id
+        'consoleAdmin'
       );
       console.log(
         `Autorisation supprimée pour le service ${autorisationExistante.idService}`
       );
     }
-    await this.supprimeUtilisateur(collaborateurParti.id);
-    console.log(`Utilisateur ${emailCollaborateurParti} supprimé`);
+
+    await this.depotDonnees.supprimeUtilisateur(id);
+    await adaptateurMail.supprimeContact(utilisateur.email);
+
+    console.log(`Utilisateur ${utilisateur.email} supprimé`);
   }
 
   async ajouteSiretsAuSuperviseur(emailSuperviseur, sirets) {
