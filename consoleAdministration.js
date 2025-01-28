@@ -640,26 +640,26 @@ class ConsoleAdministration {
       await this.depotDonnees.ajouteContributeurAuService(nouvelleAutorisation);
       console.log(`Droit de propriété ajouté au service ${idService}`);
     }
-    await this.supprimeUtilisateur(collaborateurParti.id);
+    await this.supprimeUtilisateurParEmail(collaborateurParti.email);
   }
 
-  async supprimeUtilisateur(id) {
-    const utilisateur = await this.depotDonnees.utilisateur(id);
+  async supprimeUtilisateurParEmail(email) {
+    const utilisateur = await this.utilisateurAvecEmail(email);
 
     if (!utilisateur) {
       console.log(
-        `L'utilisateur d'identifiant ${id} n'existe pas. Rien n'a été supprimé.`
+        `L'utilisateur d'email ${email} n'existe pas. Rien n'a été supprimé.`
       );
       return;
     }
 
-    const autorisations = await this.depotDonnees.autorisations(id);
+    const autorisations = await this.depotDonnees.autorisations(utilisateur.id);
 
     // eslint-disable-next-line no-restricted-syntax
     for (const autorisationExistante of autorisations) {
       // eslint-disable-next-line no-await-in-loop
       await this.depotDonnees.supprimeContributeur(
-        id,
+        utilisateur.id,
         autorisationExistante.idService,
         'consoleAdmin'
       );
@@ -668,7 +668,7 @@ class ConsoleAdministration {
       );
     }
 
-    await this.depotDonnees.supprimeUtilisateur(id);
+    await this.depotDonnees.supprimeUtilisateur(utilisateur.id);
     await adaptateurMail.supprimeContact(utilisateur.email);
 
     console.log(`Utilisateur ${utilisateur.email} supprimé`);
