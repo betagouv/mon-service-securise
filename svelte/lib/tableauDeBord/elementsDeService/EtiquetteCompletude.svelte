@@ -21,6 +21,7 @@
     padding: 0 4px;
     outline-offset: 2px;
     border: 1px solid transparent;
+    width: fit-content;
   }
 
   .conteneur-completude:hover {
