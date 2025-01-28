@@ -18,10 +18,18 @@
     gap: 8px;
     color: var(--texte-clair);
     border-radius: 4px;
+    padding: 0 4px;
+    outline-offset: 2px;
+    border: 1px solid transparent;
   }
 
   .conteneur-completude:hover {
-    background-color: #f5f5f5;
+    border-color: var(--bleu-mise-en-avant);
+  }
+
+  .conteneur-completude:focus-visible {
+    border-color: var(--bleu-mise-en-avant);
+    outline: 2px solid var(--bleu-mise-en-avant);
   }
 
   .conteneur-completude:focus-visible {
@@ -30,7 +38,7 @@
   }
 
   .conteneur-completude:active {
-    background-color: #eee;
+    background-color: #dadfe6;
   }
 
   .conteneur-completude span {
