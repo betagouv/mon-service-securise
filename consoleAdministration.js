@@ -96,11 +96,7 @@ class ConsoleAdministration {
     };
   }
 
-  supprimeContributeur(idContributeur, idService) {
-    return this.depotDonnees.supprimeContributeur(idContributeur, idService);
-  }
-
-  supprimeService(idService) {
+  async supprimeService(idService) {
     return this.depotDonnees.supprimeService(idService);
   }
 
