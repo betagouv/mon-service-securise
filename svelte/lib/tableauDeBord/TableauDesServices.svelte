@@ -44,6 +44,8 @@
     $rechercheTextuelle = '';
   };
 
+  export let indicesCyberCharges: boolean = false;
+
   const libellesNiveauSecurite = {
     niveau1: 'Élémentaires',
     niveau2: 'Modérés',
@@ -185,7 +187,7 @@
           <td>
             {#if indiceCyberDuService !== undefined}
               <EtiquetteIndiceCyber score={indiceCyberDuService} {idService} />
-            {:else}
+            {:else if !indicesCyberCharges}
               <IconeChargementEnCours />
             {/if}
           </td>

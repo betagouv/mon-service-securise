@@ -13,9 +13,10 @@ export const services = {
         );
         return {
           ...service,
-          ...(indiceCyberDuService && {
-            indiceCyber: parseFloat(indiceCyberDuService.indiceCyber),
-          }),
+          ...(indiceCyberDuService &&
+            indiceCyberDuService.indiceCyber !== undefined && {
+              indiceCyber: parseFloat(indiceCyberDuService.indiceCyber),
+            }),
         };
       });
     });

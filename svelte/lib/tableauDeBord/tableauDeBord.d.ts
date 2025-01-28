@@ -55,7 +55,7 @@ export type ReponseApiServices = {
 
 export type IndiceCyber = {
   id: string;
-  indiceCyber: string;
+  indiceCyber?: string;
 };
 
 export type IndiceCyberMoyen = number | '-';

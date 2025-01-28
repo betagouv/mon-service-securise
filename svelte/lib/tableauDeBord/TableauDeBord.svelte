@@ -97,7 +97,7 @@
       {indiceCyberMoyen}
     />
     <BandeauFiltres />
-    <TableauDesServices />
+    <TableauDesServices indicesCyberCharges={indiceCyberMoyen !== undefined} />
     <BandeauBlog {dateInscriptionUtilisateur} />
   {/if}
 </div>
