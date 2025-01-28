@@ -262,8 +262,7 @@
   .lien-service {
     display: flex;
     gap: 4px;
-    align-content: stretch;
-    max-width: 340px;
+    justify-content: space-between;
   }
 
   .icone-voir-service img {
@@ -281,6 +280,11 @@
     align-items: center;
     justify-content: center;
     padding: 2px;
+  }
+
+  .cellule-noms {
+    max-width: 340px;
+    min-width: 340px;
   }
 
   .cellule-noms:not(:hover) .icone-voir-service {
