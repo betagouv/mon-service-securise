@@ -19,29 +19,36 @@ const envoieMailsNotificationExpirationHomologation = async (config = {}) => {
       adaptateurHorloge.maintenant()
     );
 
-  const premierProprietaireDe = async (idService) => {
-    const autorisationProprietaire = (
-      await depotDonnees.autorisationsDuService(idService)
-    ).find((a) => a.estProprietaire);
-
-    const utilisateur = await depotDonnees.utilisateur(
-      autorisationProprietaire.idUtilisateur
+  const contributeursDuService = async (idService) => {
+    const autorisations = await depotDonnees.autorisationsDuService(idService);
+    const utilisateurs = await Promise.all(
+      autorisations.map((a) => depotDonnees.utilisateur(a.idUtilisateur))
     );
 
-    return utilisateur.email;
+    return utilisateurs.map((u) => u.email);
   };
 
   const resultats = await Promise.allSettled(
     notifications.map(async (notification) => {
       try {
-        const destinataire = await premierProprietaireDe(
+        const destinataires = await contributeursDuService(
           notification.idService
         );
 
-        await adaptateurMail.envoieNotificationExpirationHomologation(
-          destinataire,
-          notification.idService,
-          notification.delaiAvantExpirationMois
+        if (destinataires.length === 0) {
+          throw new Error(
+            `Aucun destinataire pour le service ${notification.idService}`
+          );
+        }
+
+        await Promise.all(
+          destinataires.map((d) =>
+            adaptateurMail.envoieNotificationExpirationHomologation(
+              d,
+              notification.idService,
+              notification.delaiAvantExpirationMois
+            )
+          )
         );
 
         await depotDonnees.supprimeNotificationsExpirationHomologation([

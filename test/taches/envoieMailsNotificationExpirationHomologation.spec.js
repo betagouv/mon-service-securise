@@ -91,6 +91,64 @@ describe("La tâche d'envoie des emails de notifications d'expiration d'homologa
     });
   });
 
+  it('envoi la notification à tous les contributeurs du service', async () => {
+    const destinataires = [];
+    adaptateurMail.envoieNotificationExpirationHomologation = (
+      destinataire,
+      idService,
+      delai
+    ) => {
+      if (idService === 'S1' && delai === 6) {
+        destinataires.push(destinataire);
+      }
+    };
+    const adaptateurPersistance = unePersistanceMemoire()
+      .ajouteUneAutorisation(
+        uneAutorisation().deProprietaire('U1', 'S1').donnees
+      )
+      .ajouteUneAutorisation(
+        uneAutorisation().deProprietaire('U2', 'S1').donnees
+      )
+      .ajouteUneAutorisation(
+        uneAutorisation().deContributeur('U3', 'S1').donnees
+      )
+      .ajouteUnUtilisateur(
+        unUtilisateur().avecId('U1').avecEmail('jean.1@beta.gouv.fr').donnees
+      )
+      .ajouteUnUtilisateur(
+        unUtilisateur().avecId('U2').avecEmail('jean.2@beta.gouv.fr').donnees
+      )
+      .ajouteUnUtilisateur(
+        unUtilisateur().avecId('U3').avecEmail('jean.3@beta.gouv.fr').donnees
+      )
+      .ajouteUneNotificationExpirationHomologation({
+        id: 'N1',
+        idService: 'S1',
+        delaiAvantExpirationMois: 6,
+        dateProchainEnvoi: new Date('2024-01-01T00:00:00.000Z'),
+      })
+      .construis();
+    depotDonnees = creeDepot({
+      adaptateurPersistance,
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
+    });
+    adaptateurHorloge = {
+      maintenant: () => new Date('2024-01-01'),
+    };
+
+    await envoieMailsNotificationExpirationHomologation({
+      depotDonnees,
+      adaptateurHorloge,
+      adaptateurMail,
+    });
+
+    expect(destinataires).to.eql([
+      'jean.1@beta.gouv.fr',
+      'jean.2@beta.gouv.fr',
+      'jean.3@beta.gouv.fr',
+    ]);
+  });
+
   it('utilise le dépôt de données pour supprimer les notifications après envoi', async () => {
     const adaptateurPersistance = unePersistanceMemoire()
       .ajouteUneAutorisation(
