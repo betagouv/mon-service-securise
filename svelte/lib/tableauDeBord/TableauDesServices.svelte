@@ -92,7 +92,7 @@
         </td>
       </tr>
       <tr id="ligne-entete-tableau">
-        <td class="cellule-selection" id="selection-toutes-lignes">
+        <th class="cellule-selection" id="selection-toutes-lignes">
           <input
             type="checkbox"
             on:change={basculeSelectionTousServices}
@@ -100,7 +100,7 @@
             indeterminate={!toutEstCoche && selection.length > 0}
             title="Sélection de tous les services"
           />
-        </td>
+        </th>
         <th>Nom du service</th>
         <th>Contributeurs</th>
         <th>Besoins de sécurité</th>
@@ -123,7 +123,7 @@
           data-id-service={idService}
           class:selectionnee={$selectionIdsServices.includes(idService)}
         >
-          <td class="cellule-selection">
+          <th class="cellule-selection" scope="row">
             <input
               class="selection-service"
               type="checkbox"
@@ -131,7 +131,7 @@
               value={idService}
               title="Sélection du service {service.nomService}"
             />
-          </td>
+          </th>
           <td class="cellule-noms">
             <a
               class="lien-service"
@@ -229,7 +229,6 @@
 
   #ligne-entete-tableau,
   #ligne-entete-action {
-    border: none;
     position: relative;
   }
 
@@ -266,10 +265,6 @@
       100% 1px;
   }
 
-  table tr {
-    border: 1px solid #ddd;
-  }
-
   table td,
   table th {
     padding: 8px 16px;
@@ -282,9 +277,55 @@
     white-space: nowrap;
   }
 
-  table td:first-of-type {
-    -webkit-box-shadow: 1px 0 0 0 #ddd;
-    box-shadow: 1px 0 0 0 #ddd;
+  .ligne-service td {
+    background-image: linear-gradient(0deg, #ddd, #ddd),
+      linear-gradient(0deg, #ddd, #ddd);
+    background-position: 100% 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+  }
+
+  .ligne-service th,
+  #ligne-entete-tableau th:first-of-type {
+    background-image: linear-gradient(0deg, #ddd, #ddd),
+      linear-gradient(0deg, #ddd, #ddd);
+    background-position:
+      0 100%,
+      100% 0;
+    background-repeat: no-repeat, no-repeat;
+    background-size:
+      100% 1px,
+      1px 100%;
+  }
+
+  table:after {
+    background-position:
+      0 0,
+      0 0,
+      100% 100%,
+      0 100%;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    background-size:
+      100% 1px,
+      1px 100%,
+      1px 100%,
+      100% 1px;
+    content: '';
+    display: block;
+    height: 100%;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    background-image: linear-gradient(0deg, #ddd, #ddd),
+      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd),
+      linear-gradient(0deg, #ddd, #ddd);
+  }
+
+  table {
+    position: relative;
   }
 
   .ligne-service:hover {
@@ -491,7 +532,6 @@
   }
 
   .ligne-onglet {
-    border: none;
     position: relative;
     transform: translateY(1px);
     z-index: 3;
@@ -531,10 +571,5 @@
     display: flex;
     flex-direction: row;
     gap: 8px;
-  }
-
-  tbody tr:first-of-type,
-  tbody tr:first-of-type td {
-    border-top: none;
   }
 </style>
