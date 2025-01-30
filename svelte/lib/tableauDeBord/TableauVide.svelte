@@ -63,7 +63,33 @@
 
 <style>
   .conteneur-tableau-vide {
-    border: 1px solid #ddd;
+    position: relative;
+    z-index: 3;
+  }
+
+  .conteneur-tableau-vide:after {
+    background-image: linear-gradient(0deg, #ddd, #ddd),
+      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd),
+      linear-gradient(0deg, #ddd, #ddd);
+    background-position:
+      0 0,
+      100% 0,
+      0 0,
+      0 100%;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    background-size:
+      1px 100%,
+      1px 100%,
+      100% 1px,
+      100% 1px;
+    height: 100%;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    z-index: 2;
+    content: '';
   }
 
   .aucun-resultat,
