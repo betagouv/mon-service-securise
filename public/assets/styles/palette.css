@@ -76,4 +76,8 @@
 
   --btn-primaire-survol: #026ab5;
   --btn-primaire-clique: #025591;
+
+  --ombre-sm: 0px 2px 6px 0px rgba(0, 0, 18, 0.16);
+  --ombre-md: 0px 4px 12px 0px rgba(0, 0, 18, 0.16);
+  --ombre-lg: 0px 6px 18px 0px rgba(0, 0, 18, 0.16);
 }

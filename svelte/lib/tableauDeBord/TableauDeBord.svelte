@@ -78,11 +78,6 @@
 <div class="tableau-de-bord">
   <span class="entete-tableau-de-bord">
     <h1>Mon tableau de bord</h1>
-    {#if estSuperviseur}
-      <span class="lien-supervision"
-        ><a href="/supervision">Voir les statistiques</a></span
-      >
-    {/if}
   </span>
 
   {#if enCoursChargement}
@@ -95,6 +90,7 @@
       {nombreServicesHomologues}
       {nombreHomologationsExpirees}
       {indiceCyberMoyen}
+      {estSuperviseur}
     />
     <BandeauFiltres />
     <TableauDesServices indicesCyberCharges={indiceCyberMoyen !== undefined} />
@@ -132,35 +128,5 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 32px;
-  }
-
-  .lien-supervision a {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .lien-supervision a::before {
-    content: '';
-    display: block;
-    width: 16px;
-    height: 16px;
-    background-size: contain;
-    background: url('/statique/assets/images/tableauDeBord/icone_graphique.svg')
-      no-repeat center;
-  }
-
-  .lien-supervision a:hover {
-    background: #f5f5f5;
-  }
-
-  .lien-supervision a:active {
-    background: var(--fond-gris-pale-composant);
-    color: var(--systeme-design-etat-bleu);
-  }
-
-  .lien-supervision a:active::before {
-    filter: brightness(0) invert(8%) sepia(52%) saturate(5373%)
-      hue-rotate(237deg) brightness(125%) contrast(140%);
   }
 </style>
