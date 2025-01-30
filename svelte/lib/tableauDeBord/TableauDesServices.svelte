@@ -371,6 +371,10 @@
       0 0;
   }
 
+  table tr.ligne-service:last-of-type.selectionnee::after {
+    border-bottom: 2px solid var(--bleu-mise-en-avant);
+  }
+
   .lien-service {
     display: flex;
     gap: 4px;
