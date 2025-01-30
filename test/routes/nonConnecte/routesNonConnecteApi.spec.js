@@ -9,7 +9,7 @@ const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
 const {
-  decodeTokenDuCookie,
+  decodeSessionDuCookie,
   expectContenuSessionValide,
 } = require('../../aides/cookie');
 
@@ -470,7 +470,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             login: 'jean.dupont@mail.fr',
             motDePasse: 'mdp_12345',
           })
-          .then((reponse) => testeur.verifieJetonDepose(reponse, done))
+          .then((reponse) => testeur.verifieSessionDeposee(reponse, done))
           .catch(done);
       });
 
@@ -511,7 +511,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           motDePasse: 'mdp_12345',
         });
 
-        const token = decodeTokenDuCookie(reponse, 0);
+        const token = decodeSessionDuCookie(reponse, 0);
         expect(token.token).to.be('un token de-MSS');
       });
     });

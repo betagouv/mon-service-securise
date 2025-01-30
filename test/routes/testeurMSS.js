@@ -46,7 +46,7 @@ const testeurMss = () => {
   let inscriptionUtilisateur;
   let serveur;
 
-  const verifieJetonDepose = (reponse, suite) => {
+  const verifieSessionDeposee = (reponse, suite) => {
     const valeurHeader = reponse.headers['set-cookie'][0];
     expect(valeurHeader).to.match(
       /^session=.+; path=\/; expires=.+; samesite=strict; httponly$/
@@ -201,7 +201,7 @@ const testeurMss = () => {
     arrete,
     initialise,
     verifieRequeteGenereErreurHTTP,
-    verifieJetonDepose,
+    verifieSessionDeposee,
   };
 };
 

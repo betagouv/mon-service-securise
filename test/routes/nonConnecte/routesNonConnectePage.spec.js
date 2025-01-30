@@ -157,7 +157,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         );
 
         expect(idRecu).to.be(uuid);
-        await testeur.verifieJetonDepose(reponse, () => {});
+        await testeur.verifieSessionDeposee(reponse, () => {});
       });
 
       it('ajoute une session utilisateur', async () => {

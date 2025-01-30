@@ -450,7 +450,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         .put('http://localhost:1234/api/motDePasse', {
           motDePasse: 'mdp_ABC12345',
         })
-        .then((reponse) => testeur.verifieJetonDepose(reponse, done))
+        .then((reponse) => testeur.verifieSessionDeposee(reponse, done))
         .catch((e) => done(e.response?.data || e));
     });
 

@@ -7,7 +7,7 @@ const enObjet = (cookie) =>
     return acc;
   }, {});
 
-const decodeTokenDuCookie = (reponse, indiceHeader) => {
+const decodeSessionDuCookie = (reponse, indiceHeader) => {
   try {
     const headerCookie = reponse.headers['set-cookie'];
     const cookieSession = enObjet(headerCookie[indiceHeader]);
@@ -24,15 +24,15 @@ const expectContenuSessionValide = (
   estInvite,
   indiceDuHeader = 0
 ) => {
-  expect(decodeTokenDuCookie(reponse, indiceDuHeader).token).to.be(
+  expect(decodeSessionDuCookie(reponse, indiceDuHeader).token).to.be(
     `un token de source ${source}`
   );
-  expect(decodeTokenDuCookie(reponse, indiceDuHeader).cguAcceptees).to.be(
+  expect(decodeSessionDuCookie(reponse, indiceDuHeader).cguAcceptees).to.be(
     cguAcceptees
   );
-  expect(decodeTokenDuCookie(reponse, indiceDuHeader).estInvite).to.be(
+  expect(decodeSessionDuCookie(reponse, indiceDuHeader).estInvite).to.be(
     estInvite
   );
 };
 
-module.exports = { enObjet, decodeTokenDuCookie, expectContenuSessionValide };
+module.exports = { enObjet, decodeSessionDuCookie, expectContenuSessionValide };
