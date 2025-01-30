@@ -9,7 +9,12 @@
 <h2>Des contenus qui pourraient vous intéresser</h2>
 <div class="conteneur-liens-blog">
   {#if utilisateurInscritDepuisPlusD1Mois}
-    <a class="carte" href="/promouvoir-monservicesecurise">
+    <a
+      class="carte"
+      href="/promouvoir-monservicesecurise"
+      target="_blank"
+      rel="noopener"
+    >
       <div class="contenu-carte">
         <h3>🚀 Promouvoir MonServiceSécurisé</h3>
         <p>
@@ -53,7 +58,12 @@
     <span class="fleche-navigation"></span>
   </a>
 
-  <a class="carte avec-image decouvrez-blog" href="/conseils-cyber">
+  <a
+    class="carte avec-image decouvrez-blog"
+    href="/conseils-cyber"
+    target="_blank"
+    rel="noopener"
+  >
     <div class="contenu-carte">
       <h3>Découvrez le blog</h3>
       <p>
@@ -107,6 +117,7 @@
     font-size: 1.375rem;
     line-height: 1.75rem;
     font-weight: bold;
+    margin-top: 32px;
   }
 
   h3 {
@@ -128,7 +139,7 @@
   }
 
   .carte:hover {
-    box-shadow: 0px 16px 32px 0px #0000001f;
+    box-shadow: var(--ombre-md);
   }
 
   .carte p {
@@ -136,8 +147,6 @@
     color: #282828;
     font-size: 0.875rem;
     line-height: 1.5rem;
-    max-height: 3.45em;
-    overflow: hidden;
   }
 
   .fleche-navigation {
