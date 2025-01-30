@@ -187,7 +187,7 @@
 
   .bouton-secondaire.inactif,
   .bouton-secondaire.inactif:hover {
-    background-color: white;
+    background-color: transparent;
   }
 
   .bouton-secondaire.avecIcone.inactif::before {
