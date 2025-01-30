@@ -2,7 +2,7 @@ const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const {
   enObjet,
-  decodeTokenDuCookie,
+  decodeSessionDuCookie,
   expectContenuSessionValide,
 } = require('../../aides/cookie');
 const {
@@ -169,7 +169,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       const reponse = await requeteSansRedirection(
         'http://localhost:1234/oidc/apres-authentification'
       );
-      const tokenDecode = decodeTokenDuCookie(reponse, 1);
+      const tokenDecode = decodeSessionDuCookie(reponse, 1);
       expect(tokenDecode.AgentConnectIdToken).to.be('unIdToken');
     });
 
@@ -231,7 +231,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           'http://localhost:1234/oidc/apres-authentification'
         );
 
-        const tokenDecode = decodeTokenDuCookie(reponse, 1);
+        const tokenDecode = decodeSessionDuCookie(reponse, 1);
         expect(tokenDecode.token).to.be('unJetonJWT-AGENT_CONNECT');
       });
 
@@ -336,7 +336,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           'http://localhost:1234/oidc/apres-authentification'
         );
 
-        const tokenDecode = decodeTokenDuCookie(reponse, 1);
+        const tokenDecode = decodeSessionDuCookie(reponse, 1);
         expect(tokenDecode.token).to.be('unJetonJWT-AGENT_CONNECT-INVITE');
       });
 
