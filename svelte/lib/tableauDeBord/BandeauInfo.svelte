@@ -5,6 +5,7 @@
   export let nombreServicesHomologues: number;
   export let nombreHomologationsExpirees: number;
   export let indiceCyberMoyen: IndiceCyberMoyen | undefined;
+  export let estSuperviseur: boolean;
 
   $: valeurIndiceCyberMoyen = (): string =>
     indiceCyberMoyen === undefined || indiceCyberMoyen === '-'
@@ -44,6 +45,19 @@
       >
     </span>
   </div>
+  {#if estSuperviseur}
+    <a class="carte-info" id="carte-superviseur" href="/supervision">
+      <span class="contenu-carte">
+        <span class="contenu-carte-superviseur">
+          <span class="libelle-carte"> Suivre les statistiques </span>
+          <img
+            src="/statique/assets/images/fleche_gauche_bleue.svg"
+            alt="Flèche vers la droite"
+          />
+        </span>
+      </span>
+    </a>
+  {/if}
 </div>
 
 <style>
@@ -91,6 +105,11 @@
       no-repeat center;
   }
 
+  #carte-superviseur .contenu-carte::before {
+    background: url('/statique/assets/images/tableauDeBord/icone_superviseur.svg')
+      no-repeat center;
+  }
+
   #carte-info-nombre-services {
     background-color: #e9ddff;
   }
@@ -105,6 +124,26 @@
 
   #carte-info-indice-cyber-moyen {
     background-color: #eaf5ff;
+  }
+
+  #carte-superviseur {
+    border: 1px solid #ddd;
+    color: #666666;
+  }
+
+  #carte-superviseur:hover {
+    box-shadow: var(--ombre-md);
+  }
+
+  .contenu-carte-superviseur .libelle-carte {
+    margin-bottom: 12px;
+  }
+
+  .contenu-carte-superviseur img {
+    width: 24px;
+    height: 24px;
+    margin-left: 72px;
+    transform: rotate(180deg);
   }
 
   .contenu-carte {
