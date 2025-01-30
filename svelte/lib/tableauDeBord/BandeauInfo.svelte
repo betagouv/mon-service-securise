@@ -129,26 +129,24 @@
   #carte-superviseur {
     border: 1px solid #ddd;
     color: #666666;
+    position: relative;
   }
 
   #carte-superviseur:hover {
     box-shadow: var(--ombre-md);
   }
 
-  .contenu-carte-superviseur .libelle-carte {
-    margin-bottom: 12px;
-  }
-
   .contenu-carte-superviseur img {
-    width: 24px;
-    height: 24px;
-    margin-left: 72px;
     transform: rotate(180deg);
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
   }
 
   .contenu-carte {
     display: flex;
     gap: 32px;
+    align-items: center;
   }
 
   .libelle-carte {
