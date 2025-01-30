@@ -222,14 +222,49 @@
     position: sticky;
     top: 83px;
     background-color: white;
-    z-index: 1;
+    z-index: 3;
+    -webkit-box-shadow: 5px 0 0 0 #ffffff;
+    box-shadow: 5px 0 0 0 #ffffff;
   }
 
   #ligne-entete-tableau,
   #ligne-entete-action {
-    box-shadow: inset 0 -1px #ddd;
-    border-top: none;
-    border-bottom: none;
+    border: none;
+    position: relative;
+  }
+
+  #ligne-entete-tableau:after,
+  #ligne-entete-action:after {
+    content: '';
+    background-image: linear-gradient(0deg, #ddd, #ddd),
+      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd),
+      linear-gradient(0deg, #ddd, #ddd);
+    background-position:
+      0 0,
+      100% 0,
+      0 0,
+      0 100%;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    background-size:
+      1px 100%,
+      1px 100%,
+      100% 1px,
+      0 0;
+    height: 100%;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    /*transform: translateY(-2px);*/
+    width: 100%;
+    z-index: 2;
+  }
+
+  #ligne-entete-tableau::after {
+    background-size:
+      1px 100%,
+      1px 100%,
+      100% 1px,
+      100% 1px;
   }
 
   table tr {
@@ -249,7 +284,8 @@
   }
 
   table td:first-of-type {
-    border-right: 1px solid #ddd;
+    -webkit-box-shadow: 1px 0 0 0 #ddd;
+    box-shadow: 1px 0 0 0 #ddd;
   }
 
   .ligne-service:hover {
@@ -260,17 +296,80 @@
     background-color: #eee;
   }
 
-  table tr.ligne-service.selectionnee td {
-    border-top: 1px solid var(--bleu-mise-en-avant);
-    border-bottom: 1px solid var(--bleu-mise-en-avant);
+  table tr.ligne-service {
+    position: relative;
   }
 
-  table tr.ligne-service.selectionnee td:first-of-type {
-    border-left: 1px solid var(--bleu-mise-en-avant);
+  table tr.ligne-service::after {
+    background-image: linear-gradient(
+        0deg,
+        var(--bleu-mise-en-avant),
+        var(--bleu-mise-en-avant)
+      ),
+      linear-gradient(
+        0deg,
+        var(--bleu-mise-en-avant),
+        var(--bleu-mise-en-avant)
+      ),
+      linear-gradient(
+        0deg,
+        var(--bleu-mise-en-avant),
+        var(--bleu-mise-en-avant)
+      ),
+      linear-gradient(
+        0deg,
+        var(--bleu-mise-en-avant),
+        var(--bleu-mise-en-avant)
+      );
+    background-position:
+      0 0,
+      100% 0,
+      0 0,
+      0 100%;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    background-size:
+      2px 100%,
+      2px 100%,
+      100% 2px,
+      0 0;
+    height: 100%;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    transform: translateY(-2px);
+    width: 100%;
+    z-index: 2;
   }
 
-  table tr.ligne-service.selectionnee td:last-of-type {
-    border-right: 1px solid var(--bleu-mise-en-avant);
+  table tr.ligne-service.selectionnee + tr.ligne-service.selectionnee::after {
+    background-size:
+      2px 100%,
+      2px 100%,
+      0 0,
+      0 0;
+  }
+
+  table tr.ligne-service.selectionnee + tr::after,
+  table tr.ligne-service.selectionnee::after {
+    content: '';
+  }
+
+  table
+    tr.ligne-service.selectionnee
+    + tr.ligne-service:not(.selectionnee)::after {
+    background-size:
+      0 0,
+      0 0,
+      100% 2px,
+      0 0;
+  }
+
+  table tr.ligne-service:first-of-type.selectionnee::after {
+    background-size:
+      2px 100%,
+      2px 100%,
+      100% 4px,
+      0 0;
   }
 
   .lien-service {
@@ -390,7 +489,34 @@
 
   .ligne-onglet {
     border: none;
-    box-shadow: inset 0 -1px #ddd;
+    position: relative;
+    transform: translateY(1px);
+    z-index: 3;
+  }
+
+  .ligne-onglet:after {
+    background-image: linear-gradient(0deg, white, white),
+      linear-gradient(0deg, white, white), linear-gradient(0deg, white, white),
+      linear-gradient(0deg, white, white);
+    background-position:
+      0 0,
+      100% 0,
+      0 0,
+      0 100%;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    background-size:
+      0 0,
+      2px 100%,
+      0 0,
+      0 0;
+    height: 100%;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    transform: translateY(-2px);
+    width: 100%;
+    z-index: 2;
+    content: '';
   }
 
   .ligne-onglet th {
