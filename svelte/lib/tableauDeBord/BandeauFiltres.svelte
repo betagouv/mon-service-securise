@@ -107,7 +107,7 @@
     padding-bottom: 32px;
     top: 0;
     background-color: white;
-    z-index: 3;
+    z-index: 5;
   }
 
   .recherche {
