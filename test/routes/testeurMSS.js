@@ -49,7 +49,7 @@ const testeurMss = () => {
   const verifieJetonDepose = (reponse, suite) => {
     const valeurHeader = reponse.headers['set-cookie'][0];
     expect(valeurHeader).to.match(
-      /^token=.+; path=\/; expires=.+; samesite=strict; httponly$/
+      /^session=.+; path=\/; expires=.+; samesite=strict; httponly$/
     );
     suite();
   };
