@@ -289,7 +289,7 @@
   }
 
   .ligne-service:hover {
-    background-color: #f5f5f5;
+    background-color: #fafbfc;
   }
 
   .ligne-service:has(a:active) {
