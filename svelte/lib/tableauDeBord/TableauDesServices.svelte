@@ -254,7 +254,6 @@
     left: 0;
     pointer-events: none;
     position: absolute;
-    /*transform: translateY(-2px);*/
     width: 100%;
     z-index: 2;
   }
@@ -426,10 +425,10 @@
   }
 
   .nom-organisation {
-    font-size: 14px;
+    font-size: 12px;
     font-style: normal;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 18px;
   }
 
   .lien-service:hover .nom-service {

@@ -115,7 +115,7 @@
   .secondaire {
     color: var(--bleu-mise-en-avant);
     border-color: var(--bleu-mise-en-avant);
-    background-color: #fff;
+    background-color: transparent;
   }
 
   .lien {
@@ -140,7 +140,7 @@
 
   button.secondaire:disabled,
   button.secondaire:disabled:hover {
-    background-color: white;
+    background-color: transparent;
   }
 
   button.lien:disabled,
