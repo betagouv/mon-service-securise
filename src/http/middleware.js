@@ -373,6 +373,11 @@ const middleware = (configuration = {}) => {
     );
   };
 
+  const chargeTypeRequete = (typeRequete) => (requete, _reponse, suite) => {
+    requete.typeRequete = typeRequete;
+    suite();
+  };
+
   return {
     ajouteVersionFichierCompiles,
     aseptise,
@@ -382,6 +387,7 @@ const middleware = (configuration = {}) => {
     chargeEtatAgentConnect,
     chargeEtatVisiteGuidee,
     chargePreferencesUtilisateur,
+    chargeTypeRequete,
     positionneHeaders,
     positionneHeadersAvecNonce,
     protegeTrafic,
