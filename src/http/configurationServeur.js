@@ -1,5 +1,11 @@
 const DUREE_SESSION = 60 * 60 * 1000;
 
+const TYPES_REQUETES = {
+  API: 'API',
+  NAVIGATION: 'NAVIGATION',
+  RESSOURCE: 'RESSOURCE',
+};
+
 const ENDPOINTS_SANS_CSRF = [
   // Inspiration : https://stackoverflow.com/a/60941601
   // L'obtention du token nécessite une action utilisateur (saisie Login + MDP) donc on la protège pas.
@@ -16,6 +22,7 @@ const ENDPOINTS_SANS_CSRF = [
 const { CACHE_CONTROL_FICHIERS_STATIQUES } = process.env;
 
 module.exports = {
+  TYPES_REQUETES,
   CACHE_CONTROL_FICHIERS_STATIQUES,
   DUREE_SESSION,
   ENDPOINTS_SANS_CSRF,
