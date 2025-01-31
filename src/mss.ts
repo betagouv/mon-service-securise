@@ -6,6 +6,7 @@ const {
   CACHE_CONTROL_FICHIERS_STATIQUES,
   DUREE_SESSION,
   ENDPOINTS_SANS_CSRF,
+  TYPES_REQUETES,
 } = require('./http/configurationServeur');
 const routesConnecteApi = require('./routes/connecte/routesConnecteApi');
 const routesNonConnecteApi = require('./routes/nonConnecte/routesNonConnecteApi');
@@ -89,6 +90,7 @@ const creeServeur = ({
 
   app.use(
     '',
+    middleware.chargeTypeRequete(TYPES_REQUETES.NAVIGATION),
     routesNonConnectePage({
       adaptateurCmsCrisp,
       adaptateurEnvironnement,
@@ -104,6 +106,7 @@ const creeServeur = ({
   );
   app.use(
     '',
+    middleware.chargeTypeRequete(TYPES_REQUETES.NAVIGATION),
     routesConnectePage({
       depotDonnees,
       middleware,
@@ -116,6 +119,7 @@ const creeServeur = ({
   );
   app.use(
     '/api',
+    middleware.chargeTypeRequete(TYPES_REQUETES.API),
     routesNonConnecteApi({
       middleware,
       referentiel,
@@ -131,6 +135,7 @@ const creeServeur = ({
   );
   app.use(
     '/oidc',
+    middleware.chargeTypeRequete(TYPES_REQUETES.NAVIGATION),
     routesNonConnecteOidc({
       adaptateurOidc,
       adaptateurJWT,
@@ -142,6 +147,7 @@ const creeServeur = ({
   );
   app.use(
     '/oidc',
+    middleware.chargeTypeRequete(TYPES_REQUETES.NAVIGATION),
     routesConnecteOidc({
       middleware,
       adaptateurOidc,
@@ -149,6 +155,7 @@ const creeServeur = ({
   );
   app.use(
     '/api',
+    middleware.chargeTypeRequete(TYPES_REQUETES.API),
     middleware.verificationJWT,
     routesConnecteApi({
       middleware,
@@ -167,8 +174,16 @@ const creeServeur = ({
       serviceCgu,
     })
   );
-  app.use('/bibliotheques', routesNonConnecteApiBibliotheques());
-  app.use('/styles', routesNonConnecteApiStyles());
+  app.use(
+    '/bibliotheques',
+    middleware.chargeTypeRequete(TYPES_REQUETES.RESSOURCE),
+    routesNonConnecteApiBibliotheques()
+  );
+  app.use(
+    '/styles',
+    middleware.chargeTypeRequete(TYPES_REQUETES.RESSOURCE),
+    routesNonConnecteApiStyles()
+  );
 
   app.use(
     '/statique',

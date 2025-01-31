@@ -65,6 +65,7 @@ let traficProtege = false;
 let verificationJWTMenee = false;
 let verificationCGUMenee = false;
 let versionBuildeeChargee = false;
+let typeRequeteCharge = null;
 let idTokenAgentConnect;
 let fonctionDeposeCookie;
 
@@ -107,6 +108,7 @@ const middlewareFantaisie = {
     sourceAuthentification = authentificationAUtiliser;
     idTokenAgentConnect = idTokenAgentConnectAUtiliser;
     fonctionDeposeCookie = fonctionDeposeCookieAAppeler;
+    typeRequeteCharge = null;
   },
 
   ajouteVersionFichierCompiles: (_requete, _reponse, suite) => {
@@ -234,8 +236,8 @@ const middlewareFantaisie = {
     suite();
   },
 
-  chargeTypeRequete: (typeRequete) => (requete, _reponse, suite) => {
-    requete.typeRequete = typeRequete;
+  chargeTypeRequete: (typeRequete) => (_requete, _reponse, suite) => {
+    typeRequeteCharge = typeRequete;
     suite();
   },
 
@@ -392,6 +394,17 @@ const middlewareFantaisie = {
   verifieChargementDeLaVersionBuildee: (...params) => {
     verifieRequeteChangeEtat(
       { lectureEtat: () => versionBuildeeChargee },
+      ...params
+    );
+  },
+
+  verifieTypeRequeteCharge: (typeRequeteAttendu, ...params) => {
+    verifieRequeteChangeEtat(
+      {
+        lectureEtat: () => typeRequeteCharge,
+        etatInitial: null,
+        etatFinal: typeRequeteAttendu,
+      },
       ...params
     );
   },
