@@ -234,6 +234,11 @@ const middlewareFantaisie = {
     suite();
   },
 
+  chargeTypeRequete: (typeRequete) => (requete, _reponse, suite) => {
+    requete.typeRequete = typeRequete;
+    suite();
+  },
+
   verificationModeMaintenance: (_requete, _reponse, suite) => {
     suite();
   },

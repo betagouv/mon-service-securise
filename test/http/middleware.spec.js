@@ -1132,4 +1132,15 @@ describe('Le middleware MSS', () => {
       done();
     });
   });
+
+  describe('concernant le type de requête', () => {
+    it('sait charger le type de requête', (done) => {
+      const middleware = leMiddleware({});
+
+      middleware.chargeTypeRequete('API')(requete, reponse, () => {
+        expect(requete.typeRequete).to.be('API');
+        done();
+      });
+    });
+  });
 });
