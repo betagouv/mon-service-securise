@@ -114,13 +114,6 @@ const metAJourDonneesContact = async (destinataire, donnees) => {
   }
 };
 
-let cadencee;
-const metAJourDonneesContactCadencee = async (destinataire, donnees) => {
-  // On limite à 3 appels par seconde pour ne pas prendre de 429 de Brevo.
-  if (!cadencee) cadencee = enCadence(300, metAJourDonneesContact);
-  await cadencee(destinataire, donnees);
-};
-
 const metAJourContact = (destinataire, prenom, nom, telephone) =>
   metAJourDonneesContact(destinataire, {
     PRENOM: decode(prenom),
@@ -363,6 +356,27 @@ const supprimeContact = async (email) => {
   }
 };
 
+// On limite les prochains méthodes à 3 appels par seconde pour ne pas prendre de 429 de Brevo.
+let cadenceMiseAJourContact;
+const metAJourDonneesContactCadencee = async (destinataire, donnees) => {
+  if (!cadenceMiseAJourContact)
+    cadenceMiseAJourContact = enCadence(300, metAJourDonneesContact);
+  await cadenceMiseAJourContact(destinataire, donnees);
+};
+
+let cadenceEnvoieNotification;
+const envoieNotificationExpirationHomologationCadencee = async (
+  destinataire,
+  donnees
+) => {
+  if (!cadenceEnvoieNotification)
+    cadenceEnvoieNotification = enCadence(
+      300,
+      envoieNotificationExpirationHomologation
+    );
+  await cadenceEnvoieNotification(destinataire, donnees);
+};
+
 module.exports = {
   creeContact,
   metAJourContact,
@@ -377,7 +391,8 @@ module.exports = {
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,
   envoieMessageReinitialisationMotDePasse,
-  envoieNotificationExpirationHomologation,
+  envoieNotificationExpirationHomologation:
+    envoieNotificationExpirationHomologationCadencee,
   envoieNotificationTentativeReinscription,
   recupereEntreprise,
   recupereEntrepriseDuContact,
