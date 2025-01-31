@@ -30,37 +30,37 @@ const envoieMailsNotificationExpirationHomologation = async (config = {}) => {
 
   const resultats = await Promise.allSettled(
     notifications.map(async (notification) => {
-      try {
-        const destinataires = await contributeursDuService(
-          notification.idService
+      const destinataires = await contributeursDuService(
+        notification.idService
+      );
+
+      if (destinataires.length === 0) {
+        throw new Error(
+          `Aucun destinataire pour le service ${notification.idService}`
         );
-
-        if (destinataires.length === 0) {
-          throw new Error(
-            `Aucun destinataire pour le service ${notification.idService}`
-          );
-        }
-
-        await Promise.all(
-          destinataires.map((d) =>
-            adaptateurMail.envoieNotificationExpirationHomologation(
-              d,
-              notification.idService,
-              notification.delaiAvantExpirationMois
-            )
-          )
-        );
-
-        await depotDonnees.supprimeNotificationsExpirationHomologation([
-          notification.id,
-        ]);
-      } catch (e) {
-        fabriqueAdaptateurGestionErreur().logueErreur(e);
-        // Throw pour compter un échec dans le rapport d'exécution
-        throw e;
       }
+
+      await Promise.all(
+        destinataires.map((d) =>
+          adaptateurMail.envoieNotificationExpirationHomologation(
+            d,
+            notification.idService,
+            notification.delaiAvantExpirationMois
+          )
+        )
+      );
+
+      await depotDonnees.supprimeNotificationsExpirationHomologation([
+        notification.id,
+      ]);
     })
   );
+
+  resultats
+    .filter((r) => r.status === 'rejected')
+    .forEach((r) =>
+      fabriqueAdaptateurGestionErreur().logueErreur(new Error(r.reason))
+    );
 
   return rapportExecution(resultats);
 };
