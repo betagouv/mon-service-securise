@@ -1,6 +1,9 @@
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('../adaptateurs/fabriqueAdaptateurGestionErreur');
+const Autorisation = require('../modeles/autorisations/autorisation');
+
+const { DROITS_VOIR_STATUT_HOMOLOGATION } = Autorisation;
 
 const rapportExecution = (resultats) => {
   const succes = resultats.filter((r) => r.status === 'fulfilled');
@@ -21,8 +24,13 @@ const envoieMailsNotificationExpirationHomologation = async (config = {}) => {
 
   const contributeursDuService = async (idService) => {
     const autorisations = await depotDonnees.autorisationsDuService(idService);
+    const autorisationsAvecDroitLectureHomologation = autorisations.filter(
+      (a) => a.aLesPermissions(DROITS_VOIR_STATUT_HOMOLOGATION)
+    );
     const utilisateurs = await Promise.all(
-      autorisations.map((a) => depotDonnees.utilisateur(a.idUtilisateur))
+      autorisationsAvecDroitLectureHomologation.map((a) =>
+        depotDonnees.utilisateur(a.idUtilisateur)
+      )
     );
 
     return utilisateurs.map((u) => u.email);

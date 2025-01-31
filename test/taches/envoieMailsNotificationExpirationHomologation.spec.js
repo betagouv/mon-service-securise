@@ -13,6 +13,9 @@ const {
 } = require('../constructeurs/constructeurAutorisation');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
+const Autorisation = require('../../src/modeles/autorisations/autorisation');
+
+const { DROITS_VOIR_STATUT_HOMOLOGATION } = Autorisation;
 
 describe("La tâche d'envoie des emails de notifications d'expiration d'homologation", () => {
   let depotDonnees;
@@ -110,7 +113,9 @@ describe("La tâche d'envoie des emails de notifications d'expiration d'homologa
         uneAutorisation().deProprietaire('U2', 'S1').donnees
       )
       .ajouteUneAutorisation(
-        uneAutorisation().deContributeur('U3', 'S1').donnees
+        uneAutorisation()
+          .deContributeur('U3', 'S1')
+          .avecDroits(DROITS_VOIR_STATUT_HOMOLOGATION).donnees
       )
       .ajouteUnUtilisateur(
         unUtilisateur().avecId('U1').avecEmail('jean.1@beta.gouv.fr').donnees
@@ -147,6 +152,48 @@ describe("La tâche d'envoie des emails de notifications d'expiration d'homologa
       'jean.2@beta.gouv.fr',
       'jean.3@beta.gouv.fr',
     ]);
+  });
+
+  it("n'envoie pas la notification aux contributeurs n'ayant pas les droits de lecture sur HOMOLOGUER pour le service", async () => {
+    const destinataires = [];
+    adaptateurMail.envoieNotificationExpirationHomologation = (
+      destinataire,
+      idService,
+      delai
+    ) => {
+      if (idService === 'S1' && delai === 6) {
+        destinataires.push(destinataire);
+      }
+    };
+    const adaptateurPersistance = unePersistanceMemoire()
+      .ajouteUneAutorisation(
+        uneAutorisation().deContributeur('U1', 'S1').avecDroits({}).donnees
+      )
+      .ajouteUnUtilisateur(
+        unUtilisateur().avecId('U1').avecEmail('jean.1@beta.gouv.fr').donnees
+      )
+      .ajouteUneNotificationExpirationHomologation({
+        id: 'N1',
+        idService: 'S1',
+        delaiAvantExpirationMois: 6,
+        dateProchainEnvoi: new Date('2024-01-01T00:00:00.000Z'),
+      })
+      .construis();
+    depotDonnees = creeDepot({
+      adaptateurPersistance,
+      adaptateurChiffrement: fauxAdaptateurChiffrement(),
+    });
+    adaptateurHorloge = {
+      maintenant: () => new Date('2024-01-01'),
+    };
+
+    await envoieMailsNotificationExpirationHomologation({
+      depotDonnees,
+      adaptateurHorloge,
+      adaptateurMail,
+    });
+
+    expect(destinataires.length).to.be(0);
   });
 
   it('utilise le dépôt de données pour supprimer les notifications après envoi', async () => {
