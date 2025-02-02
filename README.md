@@ -1,5 +1,19 @@
 # MonServiceSécurisé
 
+![Version Node](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbetagouv%2Fmon-service-securise%2Frefs%2Fheads%2Fmaster%2Fpackage.json&query=%24.engines.node&label=Node&logo=nodedotjs&color=%23689f63)
+![Version Typescript](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbetagouv%2Fmon-service-securise%2Frefs%2Fheads%2Fmaster%2Fpackage.json&query=%24.devDependencies.typescript&logo=typescript&label=Typescript&color=%232d79c7)
+![Version Svelte](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbetagouv%2Fmon-service-securise%2Frefs%2Fheads%2Fmaster%2Fpackage.json&query=%24.devDependencies.svelte&logo=svelte&label=Svelte&color=%23ff3e00)
+
+![État Build](https://img.shields.io/github/actions/workflow/status/betagouv/mon-service-securise/node.js.yml?label=Int%C3%A9gration%20%20continue&logo=github)
+![État CodeQL](https://img.shields.io/github/actions/workflow/status/betagouv/mon-service-securise/codeql-analysis.yml?label=CodeQL&logo=github)
+![État Déploiement](https://img.shields.io/github/actions/workflow/status/betagouv/mon-service-securise/deploiement.yml?label=D%C3%A9ploiement&logo=github)
+
+---
+
+<div style="display: flex; align-items: center; justify-content: center;">
+    <img src="https://raw.githubusercontent.com/betagouv/mon-service-securise/refs/heads/master/public/assets/images/logo_mss.svg" width="400"/>
+</div>
+
 MonServiceSécurisé est un service numérique développé par le laboratoire
 d'innovation de l'[ANSSI](https://www.cyber.gouv.fr/), en lien avec l'incubateur
 [BetaGouv](https://beta.gouv.fr/) de la direction interministérielle du
@@ -7,10 +21,10 @@ numérique. Il vise à aider les collectivités territoriales et les autres
 entités publiques à sécuriser et à homologuer leurs services publics numériques
 (sites web, applications mobiles, API).
 
-## Configuration de l'environnement de développement
+## ⚙️ Configuration de l'environnement de développement
 
 Il est nécessaire en prérequis d'avoir installé [Git](https://git-scm.com/),
-[Docker](https://www.docker.com/) et [Node.js v16](https://nodejs.org/en/).
+[Docker](https://www.docker.com/) et [Node.js v18](https://nodejs.org/en/).
 
 Commencer par récupérer les sources du projet et aller dans le répertoire créé.
 
@@ -42,7 +56,7 @@ $ docker compose exec mss-db createdb -U postgres mss
 
 Le serveur est configuré et prêt à être redémarré.
 
-## Lancement du serveur
+## 🌐 Lancement du serveur
 
 ```sh
 $ docker-compose restart web
@@ -56,18 +70,17 @@ dans le fichier `.env`).
 
 Il est alors possible de créer un compte utilisateur à l'url `http://localhost:[PORT_MSS]/inscription`.
 
-### Outils en local
+### 🛠️ Outils en local
 
-- Il est possible d'attacher un debugger `nodejs` car MSS est démarré avec `--inspect=0.0.0.0`.
 - `Postgres` est relayé sur le port `5432` de l'hôte. Donc le requêtage via un outil graphique est possible.
 
-## Exécution de la suite de tests automatisés
+## 🧪 Exécution de la suite de tests automatisés
 
 Les tests peuvent être lancés depuis un conteneur Docker en exécutant le script
 `scripts/tests.sh`. Les tests sont alors rejoués à chaque modification de
 fichier du projet sur la machine hôte.
 
-## Migration de la base de données
+## 🎯 Migration de la base de données
 
 Les scripts de migration de la base de données sont exécutés automatiquement au démarrage du service.
 Si vous avez besoin d'exécuter manuellement ces migrations vous pouvez le faire en exécutant la commande suivante :
@@ -76,9 +89,9 @@ Si vous avez besoin d'exécuter manuellement ces migrations vous pouvez le faire
 $ docker compose exec web npx knex migrate:latest
 ```
 
-## Conception
+## 🏗️ Conception
 
-### Composants Svelte
+### 🧩 Composants Svelte
 
 Certaines parties du frontend sont suffisament compliquées pour ne pas être codées en jQuery.
 Pour celles-ci, on utilise `Svelte`. Le code est rangé dans `/svelte`.
