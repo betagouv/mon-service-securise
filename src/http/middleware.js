@@ -97,10 +97,8 @@ const middleware = (configuration = {}) => {
         return redirigeVersConnexionAvecUrlDemandee();
       }
 
-      const utilisateurExiste = await depotDonnees.utilisateurExiste(
-        token.idUtilisateur
-      );
-      if (!utilisateurExiste) return reponse.redirect('/connexion');
+      const utilisateur = await depotDonnees.utilisateur(token.idUtilisateur);
+      if (!utilisateur) return reponse.redirect('/connexion');
 
       adaptateurGestionErreur.identifieUtilisateur(
         token.idUtilisateur,
@@ -111,6 +109,8 @@ const middleware = (configuration = {}) => {
       requete.cguAcceptees = requete.session.cguAcceptees;
       requete.estInvite = requete.session.estInvite;
       requete.sourceAuthentification = token.source;
+
+      requete.session.token = utilisateur.genereToken(token.source);
     } catch (e) {
       if (e instanceof TokenExpiredError) {
         if (requete.typeRequete === TYPES_REQUETES.API) {
