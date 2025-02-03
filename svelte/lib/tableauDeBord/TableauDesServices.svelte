@@ -572,4 +572,15 @@
     flex-direction: row;
     gap: 8px;
   }
+
+  @media screen and (max-width: 1280px) {
+    table thead th {
+      padding: 8px;
+    }
+
+    .cellule-noms {
+      max-width: 280px;
+      min-width: 280px;
+    }
+  }
 </style>
