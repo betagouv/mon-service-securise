@@ -1,4 +1,5 @@
 const expect = require('expect.js');
+const { TokenExpiredError } = require('jsonwebtoken');
 const Middleware = require('../../src/http/middleware');
 const {
   ErreurDroitsIncoherents,
@@ -14,6 +15,7 @@ const {
 const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
 const { creeReferentiel } = require('../../src/referentiel');
 const Utilisateur = require('../../src/modeles/utilisateur');
+const { TYPES_REQUETES } = require('../../src/http/configurationServeur');
 
 const prepareVerificationReponse = (reponse, status, ...params) => {
   let message;
@@ -232,6 +234,57 @@ describe('Le middleware MSS', () => {
       await middleware.verificationJWT(requete, reponse, () => {});
 
       expect(requete.estInvite).to.be('INVITÉ');
+    });
+
+    describe('quand le JWT est expiré', () => {
+      const adaptateurJWT = {
+        decode: () => {
+          throw new TokenExpiredError();
+        },
+      };
+      const middleware = leMiddleware({ adaptateurJWT });
+      it('redirige vers la page de connexion pour une requête de type NAVIGATION', async () => {
+        requete.typeRequete = TYPES_REQUETES.NAVIGATION;
+        let urlRecue;
+        reponse.redirect = (url) => {
+          urlRecue = url;
+        };
+
+        await middleware.verificationJWT(requete, reponse, () => {});
+
+        expect(urlRecue).to.be('/connexion');
+      });
+
+      it("redirige vers la page de connexion en ajoutant l'URL originale à la redirection", async () => {
+        requete.typeRequete = TYPES_REQUETES.NAVIGATION;
+        requete.originalUrl = '/tableauDeBord';
+        let urlRecue;
+        reponse.redirect = (url) => {
+          urlRecue = url;
+        };
+
+        await middleware.verificationJWT(requete, reponse);
+
+        expect(urlRecue).to.be('/connexion?urlRedirection=%2FtableauDeBord');
+      });
+
+      it('retourne une erreur technique pour une requête de type API', async () => {
+        requete.typeRequete = TYPES_REQUETES.API;
+        let donneesRecues;
+        let statutRecu;
+        reponse.status = (statut) => {
+          statutRecu = statut;
+          return reponse;
+        };
+        reponse.send = (donnees) => {
+          donneesRecues = donnees;
+        };
+
+        await middleware.verificationJWT(requete, reponse, () => {});
+
+        expect(donneesRecues).to.eql({ cause: 'TOKEN_EXPIRE' });
+        expect(statutRecu).to.be(401);
+      });
     });
   });
 
