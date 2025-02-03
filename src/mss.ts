@@ -63,7 +63,6 @@ const creeServeur = ({
 
   app.use(
     cookieSession({
-      maxAge: DUREE_SESSION,
       name: 'session',
       sameSite: true,
       secret: process.env.SECRET_COOKIE,
