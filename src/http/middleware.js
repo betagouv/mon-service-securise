@@ -1,6 +1,7 @@
 const controlAcces = require('express-ip-access-control');
 const { check } = require('express-validator');
 const ipfilter = require('express-ipfilter').IpFilter;
+const { TokenExpiredError } = require('jsonwebtoken');
 const adaptateurEnvironnementParDefaut = require('../adaptateurs/adaptateurEnvironnement');
 const {
   CSP_BIBLIOTHEQUES,
@@ -17,6 +18,7 @@ const { ajouteLaRedirectionPostConnexion } = require('./redirection');
 const { extraisIp } = require('./requeteHttp');
 const SourceAuthentification = require('../modeles/sourceAuthentification');
 const { nonce: genereNonce } = require('../adaptateurs/adaptateurChiffrement');
+const { TYPES_REQUETES } = require('./configurationServeur');
 
 const middleware = (configuration = {}) => {
   const {
@@ -83,27 +85,40 @@ const middleware = (configuration = {}) => {
   };
 
   const verificationJWT = async (requete, reponse, suite) => {
-    const token = adaptateurJWT.decode(requete.session.token);
-    if (!token) {
+    function redirigeVersConnexionAvecUrlDemandee() {
       const urlDemandee = requete.originalUrl;
       const urlAvecRedirection = ajouteLaRedirectionPostConnexion(urlDemandee);
       return reponse.redirect(urlAvecRedirection);
     }
 
-    const utilisateurExiste = await depotDonnees.utilisateurExiste(
-      token.idUtilisateur
-    );
-    if (!utilisateurExiste) return reponse.redirect('/connexion');
+    try {
+      const token = adaptateurJWT.decode(requete.session.token);
+      if (!token) {
+        return redirigeVersConnexionAvecUrlDemandee();
+      }
 
-    adaptateurGestionErreur.identifieUtilisateur(
-      token.idUtilisateur,
-      token.iat
-    );
+      const utilisateurExiste = await depotDonnees.utilisateurExiste(
+        token.idUtilisateur
+      );
+      if (!utilisateurExiste) return reponse.redirect('/connexion');
 
-    requete.idUtilisateurCourant = token.idUtilisateur;
-    requete.cguAcceptees = requete.session.cguAcceptees;
-    requete.estInvite = requete.session.estInvite;
-    requete.sourceAuthentification = token.source;
+      adaptateurGestionErreur.identifieUtilisateur(
+        token.idUtilisateur,
+        token.iat
+      );
+
+      requete.idUtilisateurCourant = token.idUtilisateur;
+      requete.cguAcceptees = requete.session.cguAcceptees;
+      requete.estInvite = requete.session.estInvite;
+      requete.sourceAuthentification = token.source;
+    } catch (e) {
+      if (e instanceof TokenExpiredError) {
+        if (requete.typeRequete === TYPES_REQUETES.API) {
+          return reponse.status(401).send({ cause: 'TOKEN_EXPIRE' });
+        }
+        return redirigeVersConnexionAvecUrlDemandee();
+      }
+    }
     return suite();
   };
 
