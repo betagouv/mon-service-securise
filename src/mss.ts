@@ -4,7 +4,6 @@ const express = require('express');
 
 const {
   CACHE_CONTROL_FICHIERS_STATIQUES,
-  DUREE_SESSION,
   ENDPOINTS_SANS_CSRF,
   TYPES_REQUETES,
 } = require('./http/configurationServeur');

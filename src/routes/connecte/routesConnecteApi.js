@@ -17,7 +17,6 @@ const routesConnecteApiService = require('./routesConnecteApiService');
 const Utilisateur = require('../../modeles/utilisateur');
 const objetGetServices = require('../../modeles/objetsApi/objetGetServices');
 const objetGetIndicesCyber = require('../../modeles/objetsApi/objetGetIndicesCyber');
-const { DUREE_SESSION } = require('../../http/configurationServeur');
 const {
   messageErreurDonneesUtilisateur,
   obtentionDonneesDeBaseUtilisateur,
@@ -312,13 +311,6 @@ const routesConnecteApi = ({
         });
       });
     } else reponse.status(401).send("Pas d'utilisateur courant");
-  });
-
-  routes.get('/dureeSession', (_requete, reponse) => {
-    const MARGE_DE_SECURITE_CSRF_MISMATCH = 2 * 60_000;
-    reponse.send({
-      dureeSession: DUREE_SESSION - MARGE_DE_SECURITE_CSRF_MISMATCH,
-    });
   });
 
   routes.post(
