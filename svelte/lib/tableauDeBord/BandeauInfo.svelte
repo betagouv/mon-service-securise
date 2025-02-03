@@ -73,8 +73,7 @@
     border-radius: 10px;
     box-sizing: border-box;
     border: 1px;
-    width: 280px;
-    height: 140px;
+    max-width: 280px;
   }
 
   .contenu-carte::before {
@@ -161,5 +160,23 @@
     font-size: 1.25rem;
     font-weight: bold;
     line-height: 1.75rem;
+  }
+
+  @media screen and (max-width: 1280px) {
+    .carte-info {
+      padding: 24px;
+    }
+
+    .libelle-carte {
+      font-size: 0.875rem;
+    }
+
+    .libelle-carte .metrique {
+      font-size: 1rem;
+    }
+
+    .contenu-carte {
+      gap: 24px;
+    }
   }
 </style>
