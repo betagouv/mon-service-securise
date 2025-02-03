@@ -16,6 +16,7 @@ const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
 const { creeReferentiel } = require('../../src/referentiel');
 const Utilisateur = require('../../src/modeles/utilisateur');
 const { TYPES_REQUETES } = require('../../src/http/configurationServeur');
+const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 
 const prepareVerificationReponse = (reponse, status, ...params) => {
   let message;
@@ -95,7 +96,8 @@ describe('Le middleware MSS', () => {
     reponse.render = () => {};
 
     depotDonnees.service = async () => {};
-    depotDonnees.utilisateurExiste = async () => true;
+    depotDonnees.utilisateur = async () =>
+      unUtilisateur().avecId('123').construis();
   });
 
   it("redirige l'utilisateur vers l'url de base s'il vient d'un sous domaine", (done) => {
@@ -167,9 +169,9 @@ describe('Le middleware MSS', () => {
     it('redirige vers mire login si identifiant dans token ne correspond à aucun utilisateur', (done) => {
       const adaptateurJWT = { decode: () => ({ idUtilisateur: '123' }) };
 
-      depotDonnees.utilisateurExiste = (id) => {
+      depotDonnees.utilisateur = (id) => {
         expect(id).to.equal('123');
-        return Promise.resolve(false);
+        return Promise.resolve(undefined);
       };
 
       prepareVerificationRedirection(reponse, '/connexion', done);
@@ -234,6 +236,17 @@ describe('Le middleware MSS', () => {
       await middleware.verificationJWT(requete, reponse, () => {});
 
       expect(requete.estInvite).to.be('INVITÉ');
+    });
+
+    it("regénère un JWT et le sauvegarde dans la session de l'utilisateur", async () => {
+      const adaptateurJWT = { decode: () => ({ idUtilisateur: '123' }) };
+      depotDonnees.utilisateur = () => ({ genereToken: () => 'NOUVEAU_TOKEN' });
+
+      const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
+
+      await middleware.verificationJWT(requete, reponse, () => {});
+
+      expect(requete.session.token).to.be('NOUVEAU_TOKEN');
     });
 
     describe('quand le JWT est expiré', () => {
