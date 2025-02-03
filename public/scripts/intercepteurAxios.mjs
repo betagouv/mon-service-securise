@@ -1,8 +1,12 @@
 import lanceDecompteDeconnexion from '../modules/deconnexion.js';
+import DUREE_SESSION from '../configuration.js';
 
 $(() => {
   axios.interceptors.response.use(
-    (response) => response,
+    (response) => {
+      lanceDecompteDeconnexion(DUREE_SESSION);
+      return response;
+    },
     (error) => {
       if (
         error?.response?.status === 401 &&
