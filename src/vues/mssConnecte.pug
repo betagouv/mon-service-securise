@@ -6,6 +6,7 @@ block append styles
   +feuilleDeStyleSvelte()
 
 block append scripts
+  script(type = 'module', src = '/statique/scripts/intercepteurAxios.mjs')
   +composantSvelte('centreNotifications.js')
   +composantSvelte('tiroir.js')
 
