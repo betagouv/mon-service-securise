@@ -25,11 +25,15 @@ const creeDepot = ({ adaptateurPersistance, adaptateurRechercheEntite }) => {
   const lisSuperviseurs = async (siret) =>
     adaptateurPersistance.lisSuperviseursConcernes(siret);
 
+  const revoqueSuperviseur = async (idUtilisateur) =>
+    adaptateurPersistance.revoqueSuperviseur(idUtilisateur);
+
   return {
     ajouteSiretAuSuperviseur,
     estSuperviseur,
     superviseur,
     lisSuperviseurs,
+    revoqueSuperviseur,
   };
 };
 
