@@ -41,7 +41,8 @@
   <div class="carte-info" id="carte-info-indice-cyber-moyen">
     <span class="contenu-carte">
       <span class="libelle-carte">
-        <span class="metrique">{valeurIndiceCyberMoyen()}</span> Indice cyber moyen</span
+        <span class="metrique">{valeurIndiceCyberMoyen()}</span> Indice&nbsp;cyber
+        moyen</span
       >
     </span>
   </div>
@@ -80,6 +81,7 @@
     content: '';
     display: block;
     width: 64px;
+    min-width: 64px;
     height: 64px;
     background-size: contain;
   }
