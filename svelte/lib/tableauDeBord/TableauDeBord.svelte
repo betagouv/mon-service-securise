@@ -119,7 +119,6 @@
   }
 
   .tableau-de-bord {
-    width: fit-content;
     display: flex;
     flex-direction: column;
   }
