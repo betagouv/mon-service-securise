@@ -22,11 +22,15 @@ Sentry.init({
   environment: config.environnement(),
 });
 
+const checkInId = Sentry.captureCheckIn({
+  monitorSlug: 'envoie-mails-notification-expiration',
+  status: 'in_progress',
+});
+
 main().then((rapport) => {
-  Sentry.captureMessage(`[TACHE][ENVOI NOTIFICATIONS HOMOLOGATION]`, {
-    extra: {
-      'Notifications envoyees': rapport.nbNotificationsEnvoyees,
-      'Notifications en echec': rapport.nbEchecs,
-    },
+  Sentry.captureCheckIn({
+    checkInId,
+    monitorSlug: 'envoie-mails-notification-expiration',
+    status: rapport.nbEchecs ? 'error' : 'ok',
   });
 });
