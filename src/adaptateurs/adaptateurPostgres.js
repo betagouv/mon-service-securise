@@ -514,6 +514,9 @@ const nouvelAdaptateur = (env) => {
         .select({ idSuperviseur: 'id_superviseur' })
     ).map(({ idSuperviseur }) => idSuperviseur);
 
+  const revoqueSuperviseur = async (idSuperviseur) =>
+    knex('superviseurs').where({ id_superviseur: idSuperviseur }).delete();
+
   const ajouteEntiteAuSuperviseur = async (idSuperviseur, entite) =>
     knex('superviseurs').insert({
       id_superviseur: idSuperviseur,
@@ -616,6 +619,7 @@ const nouvelAdaptateur = (env) => {
     nouveautesPourUtilisateur,
     parrainagePour,
     contributeursDesServicesDe,
+    revoqueSuperviseur,
     sante,
     sauvegardeService,
     sauvegardeAutorisation,
