@@ -108,12 +108,11 @@
   }
 
   .aucun-service {
-    margin: 59px auto 47px;
+    padding: 36px 0;
     text-align: center;
     align-items: center;
     display: flex;
     gap: 8px;
-    width: 389px;
     flex-direction: column;
   }
 
@@ -130,5 +129,6 @@
     line-height: 1.5rem;
     color: var(--texte-gris);
     margin: 0 0 8px;
+    max-width: 389px;
   }
 </style>
