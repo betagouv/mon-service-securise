@@ -46,7 +46,6 @@ let autorisationsChargees = false;
 let cguAcceptees;
 let challengeMotDePasseEffectue = false;
 let droitVerifie = null;
-let expirationCookieRepoussee = false;
 let headersPositionnes = false;
 let noncePositionne = false;
 let serviceTrouve;
@@ -85,7 +84,6 @@ const middlewareFantaisie = {
     autorisationsChargees = false;
     cguAcceptees = acceptationCGU;
     droitVerifie = null;
-    expirationCookieRepoussee = false;
     headersPositionnes = false;
     noncePositionne = false;
     serviceTrouve = serviceARenvoyer;
@@ -191,11 +189,6 @@ const middlewareFantaisie = {
 
   protegeTrafic: () => (_requete, _reponse, suite) => {
     traficProtege = true;
-    suite();
-  },
-
-  repousseExpirationCookie: (_requete, _reponse, suite) => {
-    expirationCookieRepoussee = true;
     suite();
   },
 
@@ -375,13 +368,6 @@ const middlewareFantaisie = {
 
   verifieRequetePositionneNonce: async (...params) => {
     verifieRequeteChangeEtat({ lectureEtat: () => noncePositionne }, ...params);
-  },
-
-  verifieRequeteRepousseExpirationCookie: (...params) => {
-    verifieRequeteChangeEtat(
-      { lectureEtat: () => expirationCookieRepoussee },
-      ...params
-    );
   },
 
   verifieChallengeMotDePasse: (...params) => {

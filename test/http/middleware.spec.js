@@ -301,25 +301,6 @@ describe('Le middleware MSS', () => {
     });
   });
 
-  it('repousse la date expiration du cookie de session en mettant à jour le cookie', (done) => {
-    const middleware = leMiddleware();
-
-    const suite = () => {
-      try {
-        const dateAttendueArrondieAMinuteInferieure = 2;
-        expect(requete.session.maintenant).to.equal(
-          dateAttendueArrondieAMinuteInferieure
-        );
-        done();
-      } catch (e) {
-        done(e);
-      }
-    };
-
-    Date.now = () => 120_999;
-    middleware.repousseExpirationCookie(requete, reponse, suite);
-  });
-
   describe("sur vérification de l'acceptation des CGU", () => {
     describe('pour un utilisateur invité', () => {
       it("redirige l'utilisateur connecté via MSS", (done) => {
