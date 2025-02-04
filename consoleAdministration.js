@@ -653,6 +653,10 @@ class ConsoleAdministration {
       return;
     }
 
+    if (await this.depotDonnees.estSuperviseur(utilisateur.id)) {
+      await this.supprimeSupervisionDeUtilisateur(utilisateur.id);
+    }
+
     const autorisations = await this.depotDonnees.autorisations(utilisateur.id);
 
     // eslint-disable-next-line no-restricted-syntax
@@ -672,6 +676,19 @@ class ConsoleAdministration {
     await adaptateurMail.supprimeContact(utilisateur.email);
 
     console.log(`Utilisateur ${utilisateur.email} supprimé`);
+  }
+
+  async supprimeSupervisionDeUtilisateur(idUtilisateur) {
+    console.log(
+      `Suppression des droits de supervision pour l'utilisateur ${idUtilisateur}`
+    );
+
+    const serviceSupervision = new ServiceSupervision({
+      depotDonnees: this.depotDonnees,
+      adaptateurSupervision: this.adaptateurSupervision,
+    });
+
+    await serviceSupervision.revoqueSuperviseur(idUtilisateur);
   }
 
   async ajouteSiretsAuSuperviseur(emailSuperviseur, sirets) {
