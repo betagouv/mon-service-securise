@@ -54,6 +54,18 @@
 </script>
 
 <table>
+  {#if !$affichageTableauVide.doitAfficher}
+    <colgroup>
+      <col class="selection-service" />
+      <col class="nom-service" />
+      <col class="contributeurs" />
+      <col class="besoins-securite" />
+      <col class="completion" />
+      <col class="indice-cyber" />
+      <col class="homologation" />
+      <col class="actions-recommandees" />
+    </colgroup>
+  {/if}
   <thead>
     <tr class="ligne-onglet">
       <th colspan="8">
@@ -92,7 +104,7 @@
         </td>
       </tr>
       <tr id="ligne-entete-tableau">
-        <th class="cellule-selection" id="selection-toutes-lignes">
+        <th class="cellule-selection" id="selection-toutes-lignes" scope="row">
           <input
             type="checkbox"
             on:change={basculeSelectionTousServices}
@@ -105,7 +117,7 @@
         <th>Contributeurs</th>
         <th>Besoins de sécurité</th>
         <th>Complétion</th>
-        <th>Indice cyber</th>
+        <th>Indice&nbsp;cyber</th>
         <th>Homologation</th>
         <th>Actions recommandées</th>
       </tr>
@@ -571,6 +583,38 @@
     display: flex;
     flex-direction: row;
     gap: 8px;
+  }
+
+  col.selection-service {
+    width: 3.8%;
+  }
+
+  col.nom-service {
+    width: 23.8%;
+  }
+
+  col.contributeurs {
+    width: 10.3%;
+  }
+
+  col.besoins-securite {
+    width: 13%;
+  }
+
+  col.completion {
+    width: 9.1%;
+  }
+
+  col.indice-cyber {
+    width: 8.3%;
+  }
+
+  col.homologation {
+    width: 13%;
+  }
+
+  col.actions-recommandees {
+    width: 18.7%;
   }
 
   @media screen and (max-width: 1280px) {
