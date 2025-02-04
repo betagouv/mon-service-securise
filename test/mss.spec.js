@@ -37,12 +37,6 @@ describe('Le serveur MSS', () => {
         })
         .catch(done);
     });
-
-    it("repousse l'expiration du cookie", (done) => {
-      testeur
-        .middleware()
-        .verifieRequeteRepousseExpirationCookie('http://localhost:1234/', done);
-    });
   });
 
   describe('sur configuration des types de requête', () => {

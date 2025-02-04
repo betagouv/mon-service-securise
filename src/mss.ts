@@ -75,7 +75,6 @@ const creeServeur = ({
   app.use(adaptateurProtection.protectionLimiteTrafic());
 
   app.use(middleware.positionneHeaders);
-  app.use(middleware.repousseExpirationCookie);
   app.use(middleware.ajouteVersionFichierCompiles);
 
   app.disable('x-powered-by');

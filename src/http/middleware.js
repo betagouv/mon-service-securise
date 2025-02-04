@@ -74,11 +74,6 @@ const middleware = (configuration = {}) => {
     positionneHeaders(requete, reponse, suite);
   };
 
-  const repousseExpirationCookie = (requete, _reponse, suite) => {
-    requete.session.maintenant = Math.floor(Date.now() / 60_000);
-    suite();
-  };
-
   const suppressionCookie = (requete, _reponse, suite) => {
     requete.session = null;
     suite();
@@ -407,7 +402,6 @@ const middleware = (configuration = {}) => {
     positionneHeadersAvecNonce,
     protegeTrafic,
     filtreIpAutorisees,
-    repousseExpirationCookie,
     suppressionCookie,
     trouveService,
     trouveDossierCourant,
