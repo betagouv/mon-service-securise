@@ -45,6 +45,7 @@
     text-decoration: none;
     user-select: none;
     justify-content: center;
+    white-space: nowrap;
   }
 
   button.petit {
