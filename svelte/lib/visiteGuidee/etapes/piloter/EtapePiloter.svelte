@@ -81,7 +81,7 @@
         },
         titre: 'Pilotez vos services grâce au tableau de bord',
         description:
-          "Gérez de manière centralisée vos services, avec des outils de productivité intégrés comme la duplication et l'invitation de contributeurs.",
+          "Suivez l'état de vos homologations, la progression de vos mesures de sécurité et bénéficiez de recommandations personnalisées pour optimiser la protection de vos services.",
         animation: '/statique/assets/images/visiteGuidee/tableau_de_bord.gif',
       },
       {
