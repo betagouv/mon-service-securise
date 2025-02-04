@@ -191,6 +191,7 @@ const creeDepot = (config = {}) => {
     estSuperviseur,
     superviseur,
     lisSuperviseurs,
+    revoqueSuperviseur,
   } = depotSuperviseurs;
 
   const { ajouteParrainage, parrainagePour, metsAJourParrainage } =
@@ -246,6 +247,7 @@ const creeDepot = (config = {}) => {
     parrainagePour,
     reinitialiseMotDePasse,
     rechercheContributeurs,
+    revoqueSuperviseur,
     santeDuDepot,
     sauvegardeAutorisation,
     sauvegardeParcoursUtilisateur,

@@ -9,11 +9,13 @@ describe('Le service de supervision', () => {
 
   beforeEach(() => {
     adaptateurSupervision = {
+      revoqueSuperviseur: async () => {},
       relieSuperviseursAService: async () => {},
       delieServiceDesSuperviseurs: async () => {},
     };
     depotDonnees = {
       lisSuperviseurs: async () => {},
+      revoqueSuperviseur: async () => {},
     };
     serviceSupervision = new ServiceSupervision({
       depotDonnees,
@@ -136,6 +138,30 @@ describe('Le service de supervision', () => {
       expect(idRecu).to.be('S1');
       expect(filtreDateRecu).to.be('unFiltreDate');
       expect(url).to.be('URL1');
+    });
+  });
+
+  describe('sur demande de révocation des droits de supervision', () => {
+    it("délègue à l'adaptateur de supervision la suppression côté supervision", async () => {
+      let idRecu;
+      adaptateurSupervision.revoqueSuperviseur = (idSuperviseur) => {
+        idRecu = idSuperviseur;
+      };
+
+      await serviceSupervision.revoqueSuperviseur('U1');
+
+      expect(idRecu).to.be('U1');
+    });
+
+    it('délègue au dépôt de données la suppression des liens siret-superviseur', async () => {
+      let idRecu;
+      depotDonnees.revoqueSuperviseur = (idSuperviseur) => {
+        idRecu = idSuperviseur;
+      };
+
+      await serviceSupervision.revoqueSuperviseur('U1');
+
+      expect(idRecu).to.be('U1');
     });
   });
 });

@@ -82,6 +82,13 @@ const adaptateurSupervisionMetabase = ({
         .onConflict()
         .ignore();
     },
+    revoqueSuperviseur: async (idSuperviseur) => {
+      const idSuperviseurHash = hache(idSuperviseur);
+
+      await knex('journal_mss.superviseurs')
+        .where({ id_superviseur: idSuperviseurHash })
+        .del();
+    },
   };
 };
 

@@ -37,6 +37,11 @@ class ServiceSupervision {
     await this.delieServiceEtSuperviseurs(service.id);
     await this.relieServiceEtSuperviseurs(service);
   }
+
+  async revoqueSuperviseur(idUtilisateur) {
+    await this.adaptateurSupervision.revoqueSuperviseur(idUtilisateur);
+    await this.depotDonnees.revoqueSuperviseur(idUtilisateur);
+  }
 }
 
 module.exports = ServiceSupervision;
