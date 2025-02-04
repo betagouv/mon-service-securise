@@ -84,4 +84,15 @@ describe('Le dépôt de données des superviseurs', () => {
     expect(superviseur.entitesSupervisees[0]).to.be.an(Entite);
     expect(superviseur.entitesSupervisees[0].nom).to.be('NomEntite');
   });
+
+  it("délègue à la persistance la révocation d'un superviseur", async () => {
+    let idRecu;
+    adaptateurPersistance.revoqueSuperviseur = async (idUtilisateur) => {
+      idRecu = idUtilisateur;
+    };
+
+    await depot.revoqueSuperviseur('U1');
+
+    expect(idRecu).to.eql('U1');
+  });
 });
