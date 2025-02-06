@@ -1,12 +1,13 @@
-const { chiffrement } = require('./adaptateurEnvironnement');
-const adaptateurChiffrement = require('./adaptateurChiffrement');
-const adaptateurChiffrementVault = require('./adaptateurChiffrementVault');
+const adaptateurEnvironnement = require('./adaptateurEnvironnement');
+const adaptateurChiffrementPassePlat = require('./adaptateurChiffrement');
+const {
+  adaptateurChiffrementChaCha20,
+} = require('./adaptateurChiffrementChaCha20');
 
 const fabriqueAdaptateurChiffrement = () => {
-  if (chiffrement().utiliseChiffrementVault())
-    return adaptateurChiffrementVault;
+  if (adaptateurEnvironnement.chiffrement().utiliseChiffrementChaCha20())
+    return adaptateurChiffrementChaCha20({ adaptateurEnvironnement });
 
-  return adaptateurChiffrement;
+  return adaptateurChiffrementPassePlat;
 };
-
 module.exports = { fabriqueAdaptateurChiffrement };
