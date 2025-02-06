@@ -2,6 +2,8 @@
 const axios = require('axios');
 const { AxiosError } = require('axios');
 const { inspect } = require('util');
+const Knex = require('knex');
+const configKnex = require('./knexfile');
 const donneesReferentiel = require('./donneesReferentiel');
 const DepotDonnees = require('./src/depotDonnees');
 const Referentiel = require('./src/referentiel');
@@ -42,6 +44,10 @@ const {
 } = require('./src/bus/abonnements/consigneRisquesDansJournal');
 const fabriqueAdaptateurSupervision = require('./src/adaptateurs/fabriqueAdaptateurSupervision');
 const ServiceSupervision = require('./src/supervision/serviceSupervision');
+const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
+const {
+  adaptateurChiffrementChaCha20,
+} = require('./src/adaptateurs/adaptateurChiffrementChaCha20');
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -737,6 +743,70 @@ class ConsoleAdministration {
     /* eslint-enable no-restricted-syntax */
     /* eslint-enable no-await-in-loop */
     /* eslint-enable no-continue */
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async chiffreDonneesChaCha20() {
+    const knex = Knex(configKnex.production);
+    const { chiffre } = adaptateurChiffrementChaCha20({
+      adaptateurEnvironnement,
+    });
+
+    await knex.transaction(async (trx) => {
+      const utilisateurs = await trx('utilisateurs');
+
+      const majUtilisateurs = utilisateurs.map(async ({ id, donnees }) => {
+        const donneesChiffrees = await chiffre(donnees);
+        return trx('utilisateurs')
+          .where({ id })
+          .update({ donnees: donneesChiffrees });
+      });
+
+      await Promise.all(majUtilisateurs);
+
+      const services = await trx('services');
+
+      const majServices = services.map(async ({ id, donnees }) => {
+        const donneesChiffrees = await chiffre(donnees);
+        return trx('services')
+          .where({ id })
+          .update({ donnees: donneesChiffrees });
+      });
+
+      await Promise.all(majServices);
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async dechiffreDonneesChaCha20() {
+    const knex = Knex(configKnex.production);
+    const { dechiffre } = adaptateurChiffrementChaCha20({
+      adaptateurEnvironnement,
+    });
+
+    await knex.transaction(async (trx) => {
+      const utilisateurs = await trx('utilisateurs');
+
+      const majUtilisateurs = utilisateurs.map(async ({ id, donnees }) => {
+        const donneesDechiffrees = await dechiffre(donnees);
+        return trx('utilisateurs')
+          .where({ id })
+          .update({ donnees: donneesDechiffrees });
+      });
+
+      await Promise.all(majUtilisateurs);
+
+      const services = await trx('services');
+
+      const majServices = services.map(async ({ id, donnees }) => {
+        const donneesDechiffrees = await dechiffre(donnees);
+        return trx('services')
+          .where({ id })
+          .update({ donnees: donneesDechiffrees });
+      });
+
+      await Promise.all(majServices);
+    });
   }
 }
 
