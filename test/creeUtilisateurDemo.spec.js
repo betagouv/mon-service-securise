@@ -12,7 +12,6 @@ describe("Le script de création d'un utilisateur de Démo", () => {
       'NOM_ENTITE_UTILISATEUR_DEMO=ANSSI',
       'DEPARTEMENT_ENTITE_UTILISATEUR_DEMO=75',
       'NODE_ENV=TEST',
-      'AVEC_CHIFFREMENT_PAR_VAULT=false',
       'PROFIL_ANSSI_ACTIF=false',
     ].join(' ');
 

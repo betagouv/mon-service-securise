@@ -37,7 +37,6 @@ const fabriqueAdaptateurTracking = require('./src/adaptateurs/fabriqueAdaptateur
 const {
   consigneCompletudeDansJournal,
 } = require('./src/bus/abonnements/consigneCompletudeDansJournal');
-const adaptateurChiffrementQuiChiffreVraiment = require('./src/adaptateurs/adaptateurChiffrementVault');
 const Autorisation = require('./src/modeles/autorisations/autorisation');
 const {
   consigneRisquesDansJournal,
@@ -538,69 +537,6 @@ class ConsoleAdministration {
         })
       );
     }
-  }
-
-  async chiffreDonneesServiceEtUtilisateur(
-    tailleDesChunks = 10,
-    intervalMs = 500
-  ) {
-    const chiffreEtSauvegardeService = async ({ id, donnees }) => {
-      if (!donnees.descriptionService)
-        throw new Error(
-          'Cette méthode ne peut être utilisée que sur une base de données non chiffrée !'
-        );
-
-      const donneesChiffrees =
-        await adaptateurChiffrementQuiChiffreVraiment.chiffre(donnees);
-
-      const nomServiceHash =
-        adaptateurChiffrementQuiChiffreVraiment.hacheSha256(
-          donnees.descriptionService.nomService
-        );
-
-      return this.adaptateurPersistance.sauvegardeService(
-        id,
-        donneesChiffrees,
-        nomServiceHash
-      );
-    };
-
-    const chiffreEtSauvegardeUtilisateur = async ({ donnees, id }) => {
-      const emailHash = adaptateurChiffrementQuiChiffreVraiment.hacheSha256(
-        donnees.email
-      );
-      const donneesChiffreesASauvegarder =
-        await adaptateurChiffrementQuiChiffreVraiment.chiffre(donnees);
-      await this.adaptateurPersistance.metsAJourUtilisateur(
-        id,
-        donneesChiffreesASauvegarder,
-        emailHash
-      );
-    };
-
-    async function temporise(donnees, methode) {
-      while (donnees.length) {
-        const chunk = donnees.splice(0, tailleDesChunks);
-        // eslint-disable-next-line no-console
-        console.log(
-          `[${new Date().toISOString()}]: Nouveau chunk avec ${
-            chunk.length
-          } données`
-        );
-        // eslint-disable-next-line no-await-in-loop
-        await Promise.all(chunk.map(methode));
-        // eslint-disable-next-line no-await-in-loop,no-promise-executor-return
-        await new Promise((resolve) => setTimeout(resolve, intervalMs));
-      }
-    }
-
-    const donneesDeTousLesServices =
-      await this.adaptateurPersistance.tousLesServices();
-    await temporise(donneesDeTousLesServices, chiffreEtSauvegardeService);
-
-    const donneesDeTousUtilisateurs =
-      await this.adaptateurPersistance.tousUtilisateurs();
-    await temporise(donneesDeTousUtilisateurs, chiffreEtSauvegardeUtilisateur);
   }
 
   async ajouteProprietaireAuService(idService, emailNouveauProprietaire) {
