@@ -51,6 +51,18 @@ const chiffrement = () => ({
   utiliseChiffrementChaCha20: () =>
     process.env.CHIFFREMENT_CHACHA20_ACTIF === 'true',
   cleChaCha20Hex: () => process.env.CHIFFREMENT_CHACHA20_CLE_HEX,
+  tousLesSelsDeHachage: () =>
+    Object.entries(process.env)
+      .map(([cle, valeur]) => {
+        const matches = cle.match(/CHIFFREMENT_SEL_DE_HASHAGE_(\d+)/);
+        return [matches ? matches[1] : undefined, valeur];
+      })
+      .filter(([cle, _]) => !!cle)
+      .sort(([version1, _], [version2, __]) => version1 - version2)
+      .map(([version, valeur]) => ({
+        version: parseInt(version, 10),
+        sel: valeur,
+      })),
 });
 
 const featureFlag = () => ({
