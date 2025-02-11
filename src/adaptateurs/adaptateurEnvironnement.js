@@ -48,11 +48,6 @@ const supervision = () => ({
 });
 
 const chiffrement = () => ({
-  utiliseChiffrementVault: () =>
-    process.env.AVEC_CHIFFREMENT_PAR_VAULT === 'true',
-  urlBaseDuService: () => process.env.CHIFFREMENT_URL_BASE_DU_SERVICE,
-  cleDuMoteurTransit: () => process.env.CHIFFREMENT_CLE_DU_MOTEUR_TRANSIT,
-  tokenVault: () => process.env.CHIFFREMENT_TOKEN_VAULT,
   utiliseChiffrementChaCha20: () =>
     process.env.CHIFFREMENT_CHACHA20_ACTIF === 'true',
   cleChaCha20Hex: () => process.env.CHIFFREMENT_CHACHA20_CLE_HEX,
