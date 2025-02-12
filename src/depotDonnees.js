@@ -13,6 +13,7 @@ const depotDonneesActivitesMesure = require('./depots/depotDonneesActivitesMesur
 const depotDonneesEvolutionsIndiceCyber = require('./depots/depotDonneesEvolutionsIndiceCyber');
 const depotDonneesSuperviseurs = require('./depots/depotDonneesSuperviseurs');
 const depotDonneesParrainages = require('./depots/depotDonneesParrainages');
+const depotDonneesSelsDeHachage = require('./depots/depotDonneesSelsDeHachage');
 
 const {
   fabriqueAdaptateurChiffrement,
@@ -101,6 +102,12 @@ const creeDepot = (config = {}) => {
 
   const depotParrainages = depotDonneesParrainages.creeDepot({
     adaptateurPersistance,
+  });
+
+  const depotSelsDeHachage = depotDonneesSelsDeHachage.creeDepot({
+    adaptateurPersistance,
+    adaptateurChiffrement,
+    adaptateurEnvironnement,
   });
 
   const {
@@ -197,6 +204,8 @@ const creeDepot = (config = {}) => {
   const { ajouteParrainage, parrainagePour, metsAJourParrainage } =
     depotParrainages;
 
+  const { verifieLaCoherenceDesSels } = depotSelsDeHachage;
+
   const santeDuDepot = async () => {
     await adaptateurPersistance.sante();
   };
@@ -273,6 +282,7 @@ const creeDepot = (config = {}) => {
     utilisateurExiste,
     utilisateurAvecEmail,
     valideAcceptationCGUPourUtilisateur,
+    verifieLaCoherenceDesSels,
     verifieMotDePasse,
   };
 };
