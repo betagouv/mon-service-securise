@@ -1,5 +1,6 @@
 const { createHash } = require('crypto');
 const bcrypt = require('bcrypt');
+const adaptateurEnvironnement = require('./adaptateurEnvironnement');
 
 const chiffre = async (chaineOuObjet) => chaineOuObjet;
 
@@ -11,8 +12,20 @@ const hacheBCrypt = (chaineEnClair) =>
 
 const { compare } = bcrypt;
 
-const hacheSha256 = (chaine) =>
-  createHash('sha256').update(chaine).digest('hex');
+const hacheSha256AvecSel = (chaine, sel) =>
+  createHash('sha256')
+    .update(chaine + sel)
+    .digest('hex');
+
+const hacheSha256AvecTousLesSels = (chaineEnClair) => {
+  const tousLesSelsDeHachage = adaptateurEnvironnement
+    .chiffrement()
+    .tousLesSelsDeHachage();
+  return tousLesSelsDeHachage.reduce(
+    (acc, { sel }) => hacheSha256AvecSel(acc, sel),
+    chaineEnClair
+  );
+};
 
 const nonce = () =>
   hacheBCrypt(`${Math.random()}`).then((s) => s.replace(/[/$.]/g, ''));
@@ -22,6 +35,6 @@ module.exports = {
   dechiffre,
   compareBCrypt: compare,
   hacheBCrypt,
-  hacheSha256,
+  hacheSha256: hacheSha256AvecTousLesSels,
   nonce,
 };
