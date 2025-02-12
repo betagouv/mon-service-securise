@@ -45,6 +45,9 @@ const ServiceSupervision = require('./src/supervision/serviceSupervision');
 const {
   fabriqueServiceGestionnaireSession,
 } = require('./src/session/serviceGestionnaireSession');
+const {
+  fabriqueServiceVerificationCoherenceSels,
+} = require('./src/sel/serviceVerificationCoherenceSels');
 
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
@@ -74,6 +77,12 @@ const serviceAnnuaire = fabriqueAnnuaire({
 });
 
 const serviceGestionnaireSession = fabriqueServiceGestionnaireSession();
+
+const serviceVerificationCoherenceSels =
+  fabriqueServiceVerificationCoherenceSels({
+    adaptateurEnvironnement,
+    depotDonnees,
+  });
 
 cableTousLesAbonnes(busEvenements, {
   adaptateurHorloge,
@@ -112,38 +121,38 @@ const serviceSupervision = new ServiceSupervision({
   adaptateurSupervision,
 });
 
-const serveur = MSS.creeServeur({
-  depotDonnees,
-  middleware,
-  referentiel,
-  moteurRegles,
-  adaptateurCmsCrisp,
-  adaptateurMail,
-  adaptateurPdf,
-  adaptateurHorloge,
-  adaptateurGestionErreur,
-  serviceAnnuaire,
-  adaptateurCsv,
-  adaptateurZip,
-  adaptateurTracking,
-  adaptateurProtection,
-  adaptateurJournal,
-  adaptateurOidc,
-  adaptateurEnvironnement,
-  adaptateurStatistiques,
-  adaptateurJWT,
-  adaptateurProfilAnssi,
-  serviceGestionnaireSession,
-  serviceSupervision,
-  serviceCgu,
-  procedures,
-  inscriptionUtilisateur,
-});
+serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
+  const serveur = MSS.creeServeur({
+    depotDonnees,
+    middleware,
+    referentiel,
+    moteurRegles,
+    adaptateurCmsCrisp,
+    adaptateurMail,
+    adaptateurPdf,
+    adaptateurHorloge,
+    adaptateurGestionErreur,
+    serviceAnnuaire,
+    adaptateurCsv,
+    adaptateurZip,
+    adaptateurTracking,
+    adaptateurProtection,
+    adaptateurJournal,
+    adaptateurOidc,
+    adaptateurEnvironnement,
+    adaptateurStatistiques,
+    adaptateurJWT,
+    adaptateurProfilAnssi,
+    serviceGestionnaireSession,
+    serviceSupervision,
+    serviceCgu,
+    procedures,
+    inscriptionUtilisateur,
+  });
 
-serveur.ecoute(port, () => {
-  /* eslint-disable no-console */
-
-  console.log(`MonServiceSécurisé est démarré et écoute le port ${port} !…`);
-
-  /* eslint-enable no-console */
+  serveur.ecoute(port, () => {
+    /* eslint-disable no-console */
+    console.log(`MonServiceSécurisé est démarré et écoute le port ${port} !…`);
+    /* eslint-enable no-console */
+  });
 });
