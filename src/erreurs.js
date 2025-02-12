@@ -9,6 +9,9 @@ class ErreurBusEvenements extends Error {
     super(`Erreur dans un abonné à [${typeEvenement}]`, details);
   }
 }
+class ErreurHashDeSelInvalide extends Error {}
+class ErreurSelManquant extends Error {}
+
 class ErreurModele extends Error {}
 class ErreurArticleCrispIntrouvable extends ErreurModele {}
 class ErreurAutorisationExisteDeja extends ErreurModele {}
@@ -96,6 +99,7 @@ module.exports = {
   ErreurDureeValiditeInvalide,
   ErreurEcheanceMesureInvalide,
   ErreurEmailManquant,
+  ErreurHashDeSelInvalide,
   ErreurIdentifiantNouveauteInconnu,
   ErreurIntituleRisqueManquant,
   ErreurLocalisationDonneesInvalide,
@@ -106,6 +110,7 @@ module.exports = {
   ErreurNiveauVraisemblanceInconnu,
   ErreurNomServiceDejaExistant,
   ErreurRisqueInconnu,
+  ErreurSelManquant,
   ErreurServiceInexistant,
   ErreurStatutDeploiementInvalide,
   ErreurStatutMesureInvalide,

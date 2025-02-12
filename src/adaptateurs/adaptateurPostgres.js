@@ -586,6 +586,12 @@ const nouvelAdaptateur = (env) => {
       })
       .where({ id_utilisateur_filleul: idUtilisateurFilleul });
 
+  const tousLesSelsDeHachage = async () =>
+    knex('sels_de_hachage').select({
+      version: 'version',
+      empreinte: 'empreinte',
+    });
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -640,6 +646,7 @@ const nouvelAdaptateur = (env) => {
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tachesDeServicePour,
+    tousLesSelsDeHachage,
     tousLesServices,
     tousUtilisateurs,
     utilisateur,
