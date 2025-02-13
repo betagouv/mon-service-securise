@@ -5,6 +5,7 @@ $(() => {
   Sentry.init({
     dsn: $('#script-sentry').data('dsn'),
     environment: $('#script-sentry').data('environnement'),
+    denyUrls: [/\/bibliotheques\/matomo.js/],
   });
   // eslint-disable-next-line no-undef
   Sentry.setTag('mss-source', 'frontend');
