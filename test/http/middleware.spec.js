@@ -1,5 +1,4 @@
 const expect = require('expect.js');
-const { TokenExpiredError } = require('jsonwebtoken');
 const Middleware = require('../../src/http/middleware');
 const {
   ErreurDroitsIncoherents,
@@ -252,7 +251,7 @@ describe('Le middleware MSS', () => {
     describe('quand le JWT est expiré', () => {
       const adaptateurJWT = {
         decode: () => {
-          throw new TokenExpiredError();
+          throw new Error('Erreur JWT');
         },
       };
       const middleware = leMiddleware({ adaptateurJWT });
@@ -302,6 +301,10 @@ describe('Le middleware MSS', () => {
   });
 
   describe("sur vérification de l'acceptation des CGU", () => {
+    beforeEach(() => {
+      depotDonnees.utilisateur = () => ({ genereToken: () => 'NOUVEAU_TOKEN' });
+    });
+
     describe('pour un utilisateur invité', () => {
       it("redirige l'utilisateur connecté via MSS", (done) => {
         requete.session = { ...requete.session, estInvite: true };
@@ -373,7 +376,10 @@ describe('Le middleware MSS', () => {
     const adaptateurJWT = {
       decode: () => ({ idUtilisateur: '999' }),
     };
-    beforeEach(() => (depotDonnees.service = () => Promise.resolve()));
+    beforeEach(() => {
+      depotDonnees.service = () => Promise.resolve();
+      depotDonnees.utilisateur = () => ({ genereToken: () => 'NOUVEAU_TOKEN' });
+    });
 
     it('requête le dépôt de données', (done) => {
       depotDonnees.service = async (id) => {
