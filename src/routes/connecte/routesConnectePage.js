@@ -128,7 +128,9 @@ const routesConnectePage = ({
         ...reponse.locals.etatVisiteGuidee,
         etapeCourante: idEtapeCourante,
         urlEtapePrecedente: etapePrecedente?.urlEtape,
+        dejaTerminee: false,
       };
+
       reponse.locals.autorisationsService = {
         DECRIRE: { estMasque: false },
         SECURISER: { estMasque: false, estLectureSeule: false },
