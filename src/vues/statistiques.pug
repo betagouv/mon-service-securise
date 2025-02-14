@@ -38,5 +38,4 @@ block main
       - const chiffres = new Intl.NumberFormat('fr-FR')
       +uneCarteDeStats('avatar', chiffres.format(utilisateurs.nombre), 'Utilisateurs inscrits', '', false)
       +uneCarteDeStats('navigateur', chiffres.format(services.nombre), 'Services sécurisés', '', false)
-      +uneCarteDeStats('data_viz', indiceCyber.nombre, "Progression moyenne de l'indice cyber sur 1 an", "chiffre calculé en décembre 2024", false)
       +uneCarteDeStats('connexion_perdue', chiffres.format(vulnerabilites.nombre), "Vulnérabilités corrigées", '', false)
