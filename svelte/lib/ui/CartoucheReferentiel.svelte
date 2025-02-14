@@ -12,6 +12,7 @@
     padding: 1px 8px 3px;
     font-weight: 500;
     display: flex;
+    white-space: nowrap;
     align-items: center;
     justify-content: center;
     width: fit-content;
