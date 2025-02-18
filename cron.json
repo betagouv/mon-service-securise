@@ -1,7 +1,0 @@
-{
-  "jobs": [
-    {
-      "command": "0 10,13,15 * * * node scripts/taches/tacheEnvoieMailsNotificationExpiration.js"
-    }
-  ]
-}
