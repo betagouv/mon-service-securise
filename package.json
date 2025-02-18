@@ -85,7 +85,7 @@
     "jquery": "^3.6.3",
     "jsdom": "^21.1.0",
     "lint-staged": "^13.2.2",
-    "mocha": "^10.2.0",
+    "mocha": "^10.8.2",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3",
     "prettier-plugin-svelte": "^3.0.3",
