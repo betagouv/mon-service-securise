@@ -34,9 +34,8 @@
       <div class="contenu-carte">
         <h3>Notre équipe est à votre écoute</h3>
         <p>
-          Antoine et Fabien vous guideront dans la découverte et la prise en
-          main de MonServiceSécurisé au sein de votre organisation. Notre
-          priorité&nbsp;: vous accompagner.
+          Nous vous guiderons dans la découverte et prise en main de
+          MonServiceSécurisé au sein de votre organisation.
         </p>
       </div>
       <span class="fleche-navigation"></span>
