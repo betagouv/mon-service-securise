@@ -12,7 +12,7 @@ const hacheBCrypt = (chaineEnClair) =>
 const { compare } = bcrypt;
 
 const hacheSha256 = (chaine) =>
-  createHash('sha256').update(chaine).digest('hex');
+  `v1:${createHash('sha256').update(chaine).digest('hex')}`;
 
 const nonce = () =>
   hacheBCrypt(`${Math.random()}`).then((s) => s.replace(/[/$.]/g, ''));
