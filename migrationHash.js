@@ -3,6 +3,7 @@ const config = require('./knexfile');
 const {
   adaptateurChiffrement,
 } = require('./src/adaptateurs/adaptateurChiffrement');
+const { journalMSS } = require('./src/adaptateurs/adaptateurEnvironnement');
 
 /* eslint-disable no-console */
 class MigrationHash {
@@ -10,7 +11,7 @@ class MigrationHash {
     const configDuJournal = {
       client: 'pg',
       connection: process.env.URL_SERVEUR_BASE_DONNEES_JOURNAL,
-      pool: { min: 0, max: 10 },
+      pool: { min: 0, max: journalMSS().poolMaximumConnexion() },
     };
     this.knexMSSJournal = Knex(configDuJournal);
     this.knexMSS = Knex(config[environnementNode]);

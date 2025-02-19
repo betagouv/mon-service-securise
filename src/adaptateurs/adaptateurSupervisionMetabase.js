@@ -1,5 +1,6 @@
 const Knex = require('knex');
 const { sign } = require('jsonwebtoken');
+const { journalMSS } = require('./adaptateurEnvironnement');
 
 const adaptateurSupervisionMetabase = ({
   adaptateurChiffrement,
@@ -8,7 +9,7 @@ const adaptateurSupervisionMetabase = ({
   const config = {
     client: 'pg',
     connection: process.env.URL_SERVEUR_BASE_DONNEES_JOURNAL,
-    pool: { min: 0, max: 10 },
+    pool: { min: 0, max: journalMSS().poolMaximumConnexion() },
   };
 
   const correspondancesFiltreDate = {

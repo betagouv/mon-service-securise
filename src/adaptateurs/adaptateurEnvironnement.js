@@ -1,11 +1,24 @@
+const nombreOuDefautDepuisChaine = (nombre, defaut) =>
+  Number.isNaN(parseInt(nombre, 10)) ? defaut : parseInt(nombre, 10);
+
 const emailMemoire = () => ({
   logEmailDansConsole: () =>
     process.env.AVEC_EMAIL_MEMOIRE_QUI_LOG_CONSOLE === 'true',
 });
 
+const baseDeDonnees = () => ({
+  poolMaximumConnexion: () =>
+    nombreOuDefautDepuisChaine(process.env.BASE_DONNEES_POOL_CONNEXION_MAX, 10),
+});
+
 const journalMSS = () => ({
   logEvenementDansConsole: () =>
     process.env.AVEC_JOURNAL_MEMOIRE_QUI_LOG_CONSOLE === 'true',
+  poolMaximumConnexion: () =>
+    nombreOuDefautDepuisChaine(
+      process.env.BASE_DONNEES_JOURNAL_POOL_CONNEXION_MAX,
+      10
+    ),
 });
 
 const filtrageIp = () => ({
@@ -100,6 +113,7 @@ const mss = () => ({
 });
 
 module.exports = {
+  baseDeDonnees,
   chiffrement,
   emailMemoire,
   featureFlag,

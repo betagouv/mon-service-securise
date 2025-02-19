@@ -1,10 +1,11 @@
 const Knex = require('knex');
 const uuid = require('uuid');
+const { journalMSS } = require('./adaptateurEnvironnement');
 
 const config = {
   client: 'pg',
   connection: process.env.URL_SERVEUR_BASE_DONNEES_JOURNAL,
-  pool: { min: 0, max: 10 },
+  pool: { min: 0, max: journalMSS().poolMaximumConnexion() },
 };
 
 const nouvelAdaptateur = () => {
