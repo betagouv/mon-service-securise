@@ -95,8 +95,17 @@ class MigrationHash {
   async migreLesEvenementsDuJournal() {
     await this.knexMSSJournal.transaction(async (trx) => {
       const evenements = await trx('journal_mss.evenements');
+      process.stdout.write('\n');
+      let compteur = 0;
 
-      const majEvenements = evenements.map(({ id, type, donnees }) => {
+      const majEvenements = evenements.map(({ id, type, donnees }, index) => {
+        process.stdout.write(
+          `\rConstruction des données: ${(
+            (index / (evenements.length - 1)) *
+            100.0
+          ).toFixed(2)}% (${index}/${evenements.length - 1})`
+        );
+
         let nouvellesDonnees;
 
         switch (type) {
@@ -141,10 +150,21 @@ class MigrationHash {
 
         return trx('journal_mss.evenements')
           .where({ id })
-          .update({ donnees: nouvellesDonnees });
+          .update({ donnees: nouvellesDonnees })
+          .then(() => {
+            compteur += 1;
+            process.stdout.write(
+              `\rExécution des promesses: ${(
+                (compteur / (evenements.length - 1)) *
+                100.0
+              ).toFixed(2)}% (${compteur}/${evenements.length - 1})`
+            );
+          });
       });
 
+      process.stdout.write('\n');
       await Promise.all(majEvenements);
+      process.stdout.write('\n');
     });
   }
 
