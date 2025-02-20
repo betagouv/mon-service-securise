@@ -58,6 +58,8 @@ const creeServeur = ({
   app.use(middleware.filtreIpAutorisees());
   app.use(middleware.redirigeVersUrlBase);
 
+  app.use(middleware.interdisLaMiseEnCache);
+
   app.use(express.json());
 
   app.use(

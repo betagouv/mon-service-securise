@@ -1196,4 +1196,20 @@ describe('Le middleware MSS', () => {
       });
     });
   });
+
+  describe("sur demande d'interdiction de mise en cache", () => {
+    it('interdit la mise en cache', (done) => {
+      const middleware = leMiddleware({});
+
+      middleware.interdisLaMiseEnCache(requete, reponse, () => {
+        expect(reponse.headers['cache-control']).to.be(
+          'no-store, no-cache, must-revalidate, proxy-revalidate'
+        );
+        expect(reponse.headers.pragma).to.be('no-cache');
+        expect(reponse.headers.expires).to.be('0');
+        expect(reponse.headers['surrogate-control']).to.be('no-store');
+        done();
+      });
+    });
+  });
 });
