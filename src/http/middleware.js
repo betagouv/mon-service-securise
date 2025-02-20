@@ -385,6 +385,16 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
+  const interdisLaMiseEnCache = (_requete, reponse, suite) => {
+    reponse.set({
+      'cache-control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      pragma: 'no-cache',
+      expires: '0',
+      'surrogate-control': 'no-store',
+    });
+    suite();
+  };
+
   return {
     ajouteVersionFichierCompiles,
     aseptise,
@@ -395,6 +405,7 @@ const middleware = (configuration = {}) => {
     chargeEtatVisiteGuidee,
     chargePreferencesUtilisateur,
     chargeTypeRequete,
+    interdisLaMiseEnCache,
     positionneHeaders,
     positionneHeadersAvecNonce,
     protegeTrafic,

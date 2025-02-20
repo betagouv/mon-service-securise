@@ -394,6 +394,10 @@ const middlewareFantaisie = {
       ...params
     );
   },
+
+  interdisLaMiseEnCache: (_requete, _reponse, suite) => {
+    suite();
+  },
 };
 
 module.exports = middlewareFantaisie;
