@@ -1,27 +1,28 @@
 const { createHash } = require('crypto');
 const bcrypt = require('bcrypt');
 
-const chiffre = async (chaineOuObjet) => chaineOuObjet;
+const adaptateurChiffrement = () => {
+  const NOMBRE_DE_PASSES = 10;
+  const hacheBCrypt = (chaineEnClair) =>
+    bcrypt.hash(chaineEnClair, NOMBRE_DE_PASSES);
 
-const dechiffre = async (chaineChiffree) => chaineChiffree;
+  return {
+    chiffre: async (chaineOuObjet) => chaineOuObjet,
 
-const NOMBRE_DE_PASSES = 10;
-const hacheBCrypt = (chaineEnClair) =>
-  bcrypt.hash(chaineEnClair, NOMBRE_DE_PASSES);
+    dechiffre: async (chaineChiffree) => chaineChiffree,
 
-const { compare } = bcrypt;
+    hacheBCrypt,
 
-const hacheSha256 = (chaine) =>
-  `v1:${createHash('sha256').update(chaine).digest('hex')}`;
+    compareBCrypt: bcrypt.compare,
 
-const nonce = () =>
-  hacheBCrypt(`${Math.random()}`).then((s) => s.replace(/[/$.]/g, ''));
+    hacheSha256: (chaine) =>
+      `v1:${createHash('sha256').update(chaine).digest('hex')}`,
+
+    nonce: () =>
+      hacheBCrypt(`${Math.random()}`).then((s) => s.replace(/[/$.]/g, '')),
+  };
+};
 
 module.exports = {
-  chiffre,
-  dechiffre,
-  compareBCrypt: compare,
-  hacheBCrypt,
-  hacheSha256,
-  nonce,
+  adaptateurChiffrement,
 };

@@ -1,12 +1,9 @@
 const { randomBytes, createCipheriv, createDecipheriv } = require('crypto');
-const {
-  compareBCrypt,
-  hacheBCrypt,
-  hacheSha256,
-  nonce,
-} = require('./adaptateurChiffrement');
+const { adaptateurChiffrement } = require('./adaptateurChiffrement');
 
 const adaptateurChiffrementChaCha20 = ({ adaptateurEnvironnement }) => {
+  const adaptateurChiffrementDeBase = adaptateurChiffrement();
+
   const clefSecrete = Buffer.from(
     adaptateurEnvironnement.chiffrement().cleChaCha20Hex(),
     'hex'
@@ -57,10 +54,10 @@ const adaptateurChiffrementChaCha20 = ({ adaptateurEnvironnement }) => {
       ]);
       return JSON.parse(chaineDechiffree);
     },
-    compareBCrypt,
-    hacheBCrypt,
-    hacheSha256,
-    nonce,
+    compareBCrypt: adaptateurChiffrementDeBase.compareBCrypt,
+    hacheBCrypt: adaptateurChiffrementDeBase.hacheBCrypt,
+    hacheSha256: adaptateurChiffrementDeBase.hacheSha256,
+    nonce: adaptateurChiffrementDeBase.nonce,
   };
 };
 

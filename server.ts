@@ -101,6 +101,7 @@ const middleware = Middleware({
   adaptateurProtection,
   adaptateurGestionErreur,
   depotDonnees,
+  adaptateurChiffrement,
 });
 
 const procedures = fabriqueProcedures({
