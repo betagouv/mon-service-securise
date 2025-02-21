@@ -1,7 +1,7 @@
 const { createHash } = require('crypto');
 const bcrypt = require('bcrypt');
 
-const adaptateurChiffrement = () => {
+const adaptateurChiffrement = ({ adaptateurEnvironnement }) => {
   const NOMBRE_DE_PASSES = 10;
   const hacheBCrypt = (chaineEnClair) =>
     bcrypt.hash(chaineEnClair, NOMBRE_DE_PASSES);
@@ -15,8 +15,27 @@ const adaptateurChiffrement = () => {
 
     compareBCrypt: bcrypt.compare,
 
-    hacheSha256: (chaine) =>
-      `v1:${createHash('sha256').update(chaine).digest('hex')}`,
+    hacheSha256: (chaineEnClair) => {
+      const hacheSha256AvecSel = (chaine, sel) =>
+        createHash('sha256')
+          .update(chaine + sel)
+          .digest('hex');
+
+      const tousLesSelsDeHachage = adaptateurEnvironnement
+        .chiffrement()
+        .tousLesSelsDeHachage();
+
+      const hashFinal = tousLesSelsDeHachage.reduce(
+        (acc, { sel }) => hacheSha256AvecSel(acc, sel),
+        chaineEnClair
+      );
+
+      const version = tousLesSelsDeHachage
+        .map(({ version: numVersion }) => `v${numVersion}`)
+        .join('-');
+
+      return `${version}:${hashFinal}`;
+    },
 
     nonce: () =>
       hacheBCrypt(`${Math.random()}`).then((s) => s.replace(/[/$.]/g, '')),

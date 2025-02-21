@@ -8,6 +8,6 @@ const fabriqueAdaptateurChiffrement = () => {
   if (adaptateurEnvironnement.chiffrement().utiliseChiffrementChaCha20())
     return adaptateurChiffrementChaCha20({ adaptateurEnvironnement });
 
-  return adaptateurChiffrement();
+  return adaptateurChiffrement({ adaptateurEnvironnement });
 };
 module.exports = { fabriqueAdaptateurChiffrement };
