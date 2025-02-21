@@ -2,7 +2,9 @@ const { randomBytes, createCipheriv, createDecipheriv } = require('crypto');
 const { adaptateurChiffrement } = require('./adaptateurChiffrement');
 
 const adaptateurChiffrementChaCha20 = ({ adaptateurEnvironnement }) => {
-  const adaptateurChiffrementDeBase = adaptateurChiffrement();
+  const adaptateurChiffrementDeBase = adaptateurChiffrement({
+    adaptateurEnvironnement,
+  });
 
   const clefSecrete = Buffer.from(
     adaptateurEnvironnement.chiffrement().cleChaCha20Hex(),
