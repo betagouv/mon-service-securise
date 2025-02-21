@@ -1,6 +1,8 @@
 const Knex = require('knex');
 const config = require('./knexfile');
-const { hacheBCrypt } = require('./src/adaptateurs/adaptateurChiffrement');
+const {
+  adaptateurChiffrement,
+} = require('./src/adaptateurs/adaptateurChiffrement');
 
 /* eslint-disable no-console */
 class MigrationHash {
@@ -149,7 +151,7 @@ class MigrationHash {
   }
 
   async ajouteVersion1DansTableDesSels() {
-    const empreinte = await hacheBCrypt('');
+    const empreinte = await adaptateurChiffrement().hacheBCrypt('');
     await this.knexMSS('sels_de_hachage').insert({
       version: 1,
       empreinte,

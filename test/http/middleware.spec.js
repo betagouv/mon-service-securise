@@ -16,6 +16,9 @@ const { creeReferentiel } = require('../../src/referentiel');
 const Utilisateur = require('../../src/modeles/utilisateur');
 const { TYPES_REQUETES } = require('../../src/http/configurationServeur');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
+const {
+  fabriqueAdaptateurChiffrement,
+} = require('../../src/adaptateurs/fabriqueAdaptateurChiffrement');
 
 const prepareVerificationReponse = (reponse, status, ...params) => {
   let message;
@@ -76,6 +79,7 @@ describe('Le middleware MSS', () => {
         identifieUtilisateur: () => {},
       },
       depotDonnees,
+      adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
     });
 
   beforeEach(() => {

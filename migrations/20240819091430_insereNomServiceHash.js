@@ -1,6 +1,7 @@
-const { hacheSha256 } = require('../src/adaptateurs/adaptateurChiffrement');
+const { createHash } = require('crypto');
 
-const hache = (nom) => hacheSha256(nom);
+const hache = (chaine) =>
+  `v1:${createHash('sha256').update(chaine).digest('hex')}`;
 
 exports.up = async (knex) => {
   await knex.transaction(async (trx) => {

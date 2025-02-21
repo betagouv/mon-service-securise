@@ -16,7 +16,6 @@ const {
 const { ajouteLaRedirectionPostConnexion } = require('./redirection');
 const { extraisIp } = require('./requeteHttp');
 const SourceAuthentification = require('../modeles/sourceAuthentification');
-const { nonce: genereNonce } = require('../adaptateurs/adaptateurChiffrement');
 const { TYPES_REQUETES } = require('./configurationServeur');
 
 const middleware = (configuration = {}) => {
@@ -26,6 +25,7 @@ const middleware = (configuration = {}) => {
     adaptateurJWT,
     adaptateurProtection,
     adaptateurGestionErreur,
+    adaptateurChiffrement,
   } = configuration;
 
   const positionneHeaders = (requete, reponse, suite) => {
@@ -67,7 +67,7 @@ const middleware = (configuration = {}) => {
   };
 
   const positionneHeadersAvecNonce = async (requete, reponse, suite) => {
-    const nonce = await genereNonce();
+    const nonce = await adaptateurChiffrement.nonce();
     requete.nonce = nonce;
     reponse.locals.nonce = nonce;
     positionneHeaders(requete, reponse, suite);
