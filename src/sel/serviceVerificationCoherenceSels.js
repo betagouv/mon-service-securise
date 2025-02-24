@@ -6,6 +6,7 @@ const fabriqueServiceVerificationCoherenceSels = ({
   verifieLaCoherenceDesSels: async () => {
     if (adaptateurEnvironnement.modeMaintenance().actif()) {
       console.log('🏗 Pas de vérification des sels en mode maintenance');
+      return;
     }
 
     try {
