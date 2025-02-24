@@ -3,8 +3,14 @@ const bcrypt = require('bcrypt');
 
 const adaptateurChiffrement = ({ adaptateurEnvironnement }) => {
   const NOMBRE_DE_PASSES = 10;
+
   const hacheBCrypt = (chaineEnClair) =>
     bcrypt.hash(chaineEnClair, NOMBRE_DE_PASSES);
+
+  const hacheSha256AvecUnSeulSel = (chaine, sel) =>
+    createHash('sha256')
+      .update(chaine + sel)
+      .digest('hex');
 
   return {
     chiffre: async (chaineOuObjet) => chaineOuObjet,
@@ -15,18 +21,15 @@ const adaptateurChiffrement = ({ adaptateurEnvironnement }) => {
 
     compareBCrypt: bcrypt.compare,
 
-    hacheSha256: (chaineEnClair) => {
-      const hacheSha256AvecSel = (chaine, sel) =>
-        createHash('sha256')
-          .update(chaine + sel)
-          .digest('hex');
+    hacheSha256AvecUnSeulSel,
 
+    hacheSha256: (chaineEnClair) => {
       const tousLesSelsDeHachage = adaptateurEnvironnement
         .chiffrement()
         .tousLesSelsDeHachage();
 
       const hashFinal = tousLesSelsDeHachage.reduce(
-        (acc, { sel }) => hacheSha256AvecSel(acc, sel),
+        (acc, { sel }) => hacheSha256AvecUnSeulSel(acc, sel),
         chaineEnClair
       );
 
