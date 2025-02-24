@@ -367,14 +367,14 @@ const metAJourDonneesContactCadencee = async (destinataire, donnees) => {
 let cadenceEnvoieNotification;
 const envoieNotificationExpirationHomologationCadencee = async (
   destinataire,
-  donnees
+  ...donnees
 ) => {
   if (!cadenceEnvoieNotification)
     cadenceEnvoieNotification = enCadence(
       300,
       envoieNotificationExpirationHomologation
     );
-  await cadenceEnvoieNotification(destinataire, donnees);
+  await cadenceEnvoieNotification(destinataire, ...donnees);
 };
 
 module.exports = {
