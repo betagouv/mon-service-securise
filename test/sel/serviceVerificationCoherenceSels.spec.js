@@ -28,12 +28,14 @@ describe('Le service de vérification de cohérence des sels de hashage', () => 
 
     it("ne fait rien si l'application est en mode maintenance", async () => {
       const exitActuel = process.exit;
-      let codeRecu;
-      process.exit = (codeDeRetour) => (codeRecu = codeDeRetour);
+      let depotAppele = false;
+      depotDonnees.verifieLaCoherenceDesSels = () => {
+        depotAppele = true;
+      };
       adaptateurEnvironnement.modeMaintenance = () => ({ actif: () => true });
 
       await serviceVerificationCoherenceSels.verifieLaCoherenceDesSels();
-      expect(codeRecu).to.be(undefined);
+      expect(depotAppele).to.be(false);
 
       process.exit = exitActuel;
     });
