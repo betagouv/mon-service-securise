@@ -11,6 +11,8 @@ class ErreurBusEvenements extends Error {
 }
 class ErreurHashDeSelInvalide extends Error {}
 class ErreurSelManquant extends Error {}
+class ErreurValeurSelIncoherente extends Error {}
+class ErreurVersionSelInvalide extends Error {}
 
 class ErreurModele extends Error {}
 class ErreurArticleCrispIntrouvable extends ErreurModele {}
@@ -120,6 +122,8 @@ module.exports = {
   ErreurTypeInconnu,
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
+  ErreurValeurSelIncoherente,
+  ErreurVersionSelInvalide,
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurIdentifiantTacheInconnu,
 };
