@@ -3,7 +3,26 @@ const config = require('./knexfile');
 const {
   adaptateurChiffrement,
 } = require('./src/adaptateurs/adaptateurChiffrement');
-const { journalMSS } = require('./src/adaptateurs/adaptateurEnvironnement');
+const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
+const { creeDepot } = require('./src/depots/depotDonneesSelsDeHachage');
+const AdaptateurPostgres = require('./src/adaptateurs/adaptateurPostgres');
+
+const tenteDeHacherAvecUnNouveauSel = (
+  chaine,
+  version,
+  sel,
+  fonctionDeHashage,
+  versionPrecedenteAttendue
+) => {
+  if (!chaine) return undefined;
+  const [versionActuelle, hashActuel] = chaine.split(':');
+  if (versionActuelle !== versionPrecedenteAttendue) {
+    return chaine;
+  }
+  const nouvelleVersion = `${versionActuelle}-v${version}`;
+  const chaineHachee = fonctionDeHashage(hashActuel, sel);
+  return `${nouvelleVersion}:${chaineHachee}`;
+};
 
 /* eslint-disable no-console */
 class MigrationHash {
@@ -11,10 +30,27 @@ class MigrationHash {
     const configDuJournal = {
       client: 'pg',
       connection: process.env.URL_SERVEUR_BASE_DONNEES_JOURNAL,
-      pool: { min: 0, max: journalMSS().poolMaximumConnexion() },
+      pool: {
+        min: 0,
+        max: adaptateurEnvironnement.journalMSS().poolMaximumConnexion(),
+      },
     };
     this.knexMSSJournal = Knex(configDuJournal);
     this.knexMSS = Knex(config[environnementNode]);
+    if (!adaptateurEnvironnement.modeMaintenance().actif()) {
+      throw new Error(
+        `La migration des hash requiert que l'application soit en mode maintenance !`
+      );
+    }
+    this.adaptateurChiffrement = adaptateurChiffrement({
+      adaptateurEnvironnement,
+    });
+    this.depotDonneesSelsDeHachage = creeDepot({
+      adaptateurPersistance:
+        AdaptateurPostgres.nouvelAdaptateur(environnementNode),
+      adaptateurEnvironnement,
+      adaptateurChiffrement: this.adaptateurChiffrement,
+    });
   }
 
   async migreLesHashDeMss(fonctionDeMigration) {
@@ -168,7 +204,7 @@ class MigrationHash {
   }
 
   async ajouteVersionDansTableDesSels(version, sel) {
-    const empreinte = await adaptateurChiffrement().hacheBCrypt(sel);
+    const empreinte = await this.adaptateurChiffrement.hacheBCrypt(sel);
     await this.knexMSS('sels_de_hachage').insert({
       version,
       empreinte,
@@ -190,8 +226,52 @@ class MigrationHash {
     await this.ajouteVersionDansTableDesSels(1, '');
     console.log('Migration terminée.');
   }
+
+  async migreTout(version, sel) {
+    await this.depotDonneesSelsDeHachage.verifieLaCoherenceDesSelsAvantMigration(
+      version,
+      sel
+    );
+
+    console.log('Configuration des sels cohérente');
+
+    const versionPrecedenteAttendue = adaptateurEnvironnement
+      .chiffrement()
+      .tousLesSelsDeHachage()
+      .filter(({ version: numVersion }) => numVersion !== version)
+      .map(({ version: numVersion }) => `v${numVersion}`)
+      .join('-');
+
+    console.log(
+      `Version précédente de sel attendue pour les données à migrer : ${versionPrecedenteAttendue}`
+    );
+    console.log(
+      `Nouvelle version après migration : ${versionPrecedenteAttendue}-v${version}`
+    );
+
+    const appliqueNouveauSel = (chaine) =>
+      tenteDeHacherAvecUnNouveauSel(
+        chaine,
+        version,
+        sel,
+        this.adaptateurChiffrement.hacheSha256AvecUnSeulSel,
+        versionPrecedenteAttendue
+      );
+
+    console.log('Migration des Hash de MSS (utilisateurs et services)...');
+    await this.migreLesHashDeMss(appliqueNouveauSel);
+    console.log('Migration des Hash de la supervision...');
+    await this.migreLesHashDeLaSupervision(appliqueNouveauSel);
+    console.log('Migration des Hash des évènements du journal...');
+    await this.migreLesEvenementsDuJournal(appliqueNouveauSel);
+    console.log(
+      `Ajout de la version ${version} dans la table sels_de_hachage...`
+    );
+    await this.ajouteVersionDansTableDesSels(version, sel);
+    console.log('Migration terminée.');
+  }
 }
 
 /* eslint-enable no-console */
 
-module.exports = MigrationHash;
+module.exports = { MigrationHash, tenteDeHacherAvecUnNouveauSel };
