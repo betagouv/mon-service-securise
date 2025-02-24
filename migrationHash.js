@@ -15,13 +15,9 @@ class MigrationHash {
     };
     this.knexMSSJournal = Knex(configDuJournal);
     this.knexMSS = Knex(config[environnementNode]);
-    this.ajouteVersion1 = (chaine) => {
-      if (!chaine) return undefined;
-      return chaine.startsWith('v1:') ? chaine : `v1:${chaine}`;
-    };
   }
 
-  async migreLesHashDeMss() {
+  async migreLesHashDeMss(fonctionDeMigration) {
     await this.knexMSS.transaction(async (trx) => {
       const services = await trx('services');
 
@@ -32,10 +28,10 @@ class MigrationHash {
           nom_service_hash: nomServiceHacheActuel,
         }) => {
           const siretHacheV1 = siretHacheActuel
-            ? this.ajouteVersion1(siretHacheActuel)
+            ? fonctionDeMigration(siretHacheActuel)
             : null;
           const nomServiceHacheV1 = nomServiceHacheActuel
-            ? this.ajouteVersion1(nomServiceHacheActuel)
+            ? fonctionDeMigration(nomServiceHacheActuel)
             : null;
 
           return trx('services').where({ id }).update({
@@ -49,7 +45,7 @@ class MigrationHash {
 
       const majUtilisateurs = utilisateurs.map(
         ({ id, email_hash: emailHacheActuel }) => {
-          const emailHacheV1 = this.ajouteVersion1(emailHacheActuel);
+          const emailHacheV1 = fonctionDeMigration(emailHacheActuel);
 
           return trx('utilisateurs')
             .where({ id })
@@ -61,7 +57,7 @@ class MigrationHash {
     });
   }
 
-  async migreLesHashDeLaSupervision() {
+  async migreLesHashDeLaSupervision(fonctionDeMigration) {
     await this.knexMSSJournal.transaction(async (trx) => {
       const superviseurs = await trx('journal_mss.superviseurs');
 
@@ -71,11 +67,11 @@ class MigrationHash {
           id_superviseur: idSuperviseurHacheActuel,
           siret_service: siretHacheActuel,
         }) => {
-          const idServiceHacheV1 = this.ajouteVersion1(idServiceHacheActuel);
-          const idSuperviseurHacheV1 = this.ajouteVersion1(
+          const idServiceHacheV1 = fonctionDeMigration(idServiceHacheActuel);
+          const idSuperviseurHacheV1 = fonctionDeMigration(
             idSuperviseurHacheActuel
           );
-          const siretHacheV1 = this.ajouteVersion1(siretHacheActuel);
+          const siretHacheV1 = fonctionDeMigration(siretHacheActuel);
 
           return trx('journal_mss.superviseurs')
             .where({
@@ -95,7 +91,7 @@ class MigrationHash {
     });
   }
 
-  async migreLesEvenementsDuJournal() {
+  async migreLesEvenementsDuJournal(fonctionDeMigration) {
     await this.knexMSSJournal.transaction(async (trx) => {
       const evenements = await trx('journal_mss.evenements');
       process.stdout.write('\n');
@@ -115,10 +111,10 @@ class MigrationHash {
           case 'COLLABORATIF_SERVICE_MODIFIE':
             nouvellesDonnees = {
               ...donnees,
-              idService: this.ajouteVersion1(donnees.idService),
+              idService: fonctionDeMigration(donnees.idService),
               autorisations: donnees.autorisations.map((a) => ({
                 ...a,
-                idUtilisateur: this.ajouteVersion1(a.idUtilisateur),
+                idUtilisateur: fonctionDeMigration(a.idUtilisateur),
               })),
             };
             break;
@@ -128,7 +124,7 @@ class MigrationHash {
           case 'SERVICE_SUPPRIME':
             nouvellesDonnees = {
               ...donnees,
-              idService: this.ajouteVersion1(donnees.idService),
+              idService: fonctionDeMigration(donnees.idService),
             };
             break;
           case 'CONNEXION_UTILISATEUR':
@@ -136,15 +132,15 @@ class MigrationHash {
           case 'PROFIL_UTILISATEUR_MODIFIE':
             nouvellesDonnees = {
               ...donnees,
-              idUtilisateur: this.ajouteVersion1(donnees.idUtilisateur),
+              idUtilisateur: fonctionDeMigration(donnees.idUtilisateur),
             };
             break;
           case 'RETOUR_UTILISATEUR_MESURE_RECU':
           case 'NOUVEAU_SERVICE_CREE':
             nouvellesDonnees = {
               ...donnees,
-              idUtilisateur: this.ajouteVersion1(donnees.idUtilisateur),
-              idService: this.ajouteVersion1(donnees.idService),
+              idUtilisateur: fonctionDeMigration(donnees.idUtilisateur),
+              idService: fonctionDeMigration(donnees.idService),
             };
             break;
           default:
@@ -171,23 +167,27 @@ class MigrationHash {
     });
   }
 
-  async ajouteVersion1DansTableDesSels() {
-    const empreinte = await adaptateurChiffrement().hacheBCrypt('');
+  async ajouteVersionDansTableDesSels(version, sel) {
+    const empreinte = await adaptateurChiffrement().hacheBCrypt(sel);
     await this.knexMSS('sels_de_hachage').insert({
-      version: 1,
+      version,
       empreinte,
     });
   }
 
-  async migreTout() {
+  async migreToutEnVersionV1() {
+    const ajouteVersion1 = (chaine) => {
+      if (!chaine) return undefined;
+      return chaine.startsWith('v1:') ? chaine : `v1:${chaine}`;
+    };
     console.log('Migration des Hash de MSS (utilisateurs et services)...');
-    await this.migreLesHashDeMss();
+    await this.migreLesHashDeMss(ajouteVersion1);
     console.log('Migration des Hash de la supervision...');
-    await this.migreLesHashDeLaSupervision();
+    await this.migreLesHashDeLaSupervision(ajouteVersion1);
     console.log('Migration des Hash des évènements du journal...');
-    await this.migreLesEvenementsDuJournal();
+    await this.migreLesEvenementsDuJournal(ajouteVersion1);
     console.log('Ajout de la version dans la table sels_de_hachage...');
-    await this.ajouteVersion1DansTableDesSels();
+    await this.ajouteVersionDansTableDesSels(1, '');
     console.log('Migration terminée.');
   }
 }
