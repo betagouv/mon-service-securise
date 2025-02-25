@@ -1,19 +1,19 @@
-.conteneur-maintenance {
+.conteneur-erreur {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
-.contenu-texte {
+.conteneur-erreur .contenu-texte {
   flex: 1;
   text-align: left;
 }
 
-.contenu-image {
+.conteneur-erreur .contenu-image {
   flex: 2;
 }
 
-.contenu-image img {
+.conteneur-erreur .contenu-image img {
   max-width: 714px;
 }
