@@ -9,8 +9,8 @@ $(() => {
     (response) => response,
     (error) => {
       if (
-        typeof error.response.data === 'string' &&
-        error.response.data.includes('CSRF token mismatch')
+        typeof error?.response?.data === 'string' &&
+        error?.response?.data?.includes('CSRF token mismatch')
       ) {
         lanceDecompteDeconnexion(0);
       }
