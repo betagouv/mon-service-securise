@@ -3,6 +3,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  padding: 97px 0;
 }
 
 .conteneur-erreur .contenu-texte {
@@ -16,4 +17,11 @@
 
 .conteneur-erreur .contenu-image img {
   max-width: 714px;
+}
+
+.conteneur-erreur .bouton {
+  font-weight: 500;
+  line-height: 24px;
+  padding: 7px 16px 9px 16px;
+  margin: 0;
 }

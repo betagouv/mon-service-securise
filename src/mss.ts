@@ -192,6 +192,10 @@ const creeServeur = ({
     })
   );
 
+  app.use((_requete, reponse) => {
+    reponse.status(404).render('404');
+  });
+
   app.use(adaptateurGestionErreur.controleurErreurs);
 
   if (avecPageErreur) {
