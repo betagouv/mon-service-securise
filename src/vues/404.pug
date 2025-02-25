@@ -1,0 +1,21 @@
+extends mssDeconnecte
+block variables
+  - const meta_description = "Cette page est introuvable sur MonServiceSécurisé"
+
+block title
+  title Page introuvable | MonServiceSécurisé
+
+block append styles
+  link(href = '/statique/assets/styles/erreur.css', rel = 'stylesheet')
+
+block navigation
+
+block main
+  .marges-fixes
+    .conteneur-erreur
+      .contenu-texte
+        h1 Oups ! Cette page est introuvable.
+        p Nous sommes désolés, la page que vous recherchez n'existe pas.
+        a.bouton.bouton-primaire(href="/tableauDeBord") Revenir à l'accueil
+      .contenu-image
+        img(src="/statique/assets/images/illustration_404.svg" alt="Illustration de page introuvable")
