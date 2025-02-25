@@ -7,6 +7,12 @@
   export let indiceCyberMoyen: IndiceCyberMoyen | undefined;
   export let estSuperviseur: boolean;
 
+  const pluraliseChaine = (chaine: string, nombre: number) =>
+    chaine
+      .split(' ')
+      .map((mot) => `${mot}${nombre > 1 ? 's' : ''}`)
+      .join(' ');
+
   $: valeurIndiceCyberMoyen = (): string =>
     indiceCyberMoyen === undefined || indiceCyberMoyen === '-'
       ? '-'
@@ -19,23 +25,25 @@
   <div class="carte-info" id="carte-info-nombre-services">
     <span class="contenu-carte">
       <span class="libelle-carte">
-        <span class="metrique">{nombreServices}</span> Services enregistrés</span
-      >
+        <span class="metrique">{nombreServices}</span>
+        {pluraliseChaine('Service enregistré', nombreServices)}
+      </span>
     </span>
   </div>
   <div class="carte-info" id="carte-info-nombre-services-homologues">
     <span class="contenu-carte">
       <span class="libelle-carte">
-        <span class="metrique">{nombreServicesHomologues}</span> Services homologués</span
-      >
+        <span class="metrique">{nombreServicesHomologues}</span>
+        {pluraliseChaine('Service homologué', nombreServicesHomologues)}
+      </span>
     </span>
   </div>
   <div class="carte-info" id="carte-info-nombre-services-homologation-expirees">
     <span class="contenu-carte">
       <span class="libelle-carte">
-        <span class="metrique">{nombreHomologationsExpirees}</span> Homologations
-        expirées</span
-      >
+        <span class="metrique">{nombreHomologationsExpirees}</span>
+        {pluraliseChaine('Homologation expirée', nombreHomologationsExpirees)}
+      </span>
     </span>
   </div>
   <div class="carte-info" id="carte-info-indice-cyber-moyen">
