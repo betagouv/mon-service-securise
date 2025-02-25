@@ -204,7 +204,7 @@ const creeServeur = ({
       if (erreur.message === 'CSRF token mismatch') {
         return suite(erreur);
       }
-      return reponse.render('erreur');
+      return reponse.render('erreur', { idSentry: reponse.sentry });
     });
   }
 
