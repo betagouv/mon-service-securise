@@ -6,6 +6,10 @@
   padding: 97px 0;
 }
 
+.conteneur-erreur.sans-marge {
+  padding: 24px 0;
+}
+
 .conteneur-erreur .contenu-texte {
   flex: 1;
   text-align: left;

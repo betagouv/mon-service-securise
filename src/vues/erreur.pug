@@ -6,10 +6,18 @@ block title
 block append styles
   link(href='/statique/assets/styles/entete.responsive.css', rel='stylesheet')
   link(href='/statique/assets/styles/piedPage.responsive.css', rel='stylesheet')
+  link(href = '/statique/assets/styles/erreur.css', rel = 'stylesheet')
 
 block main
   .marges-fixes
-    h1 Désolé, une erreur est survenue
-    p Nos équipes techniques ont été mises au courant.
-    p N'hésitez pas à utiliser le bouton « Aide » en bas à droite de votre écran pour obtenir de l'assistance.
-    a.bouton(href = '/') Retourner à l'accueil
+    .conteneur-erreur.sans-marge
+      .contenu-texte
+        h1 Oups, une erreur est survenue !
+        if (idSentry)
+          p
+            span Vous pouvez transmettre l'identifiant
+            code!= ` ${idSentry} `
+            span à notre équipe support pour faciliter la résolution de l'erreur.
+        a.bouton.bouton-primaire(href="https://aide.monservicesecurise.cyber.gouv.fr/fr/") Contacter le support
+      .contenu-image
+        img(src="/statique/assets/images/illustration_maintenance.svg" alt="Illustration d'erreur")
