@@ -36,29 +36,40 @@ function fabriquePersistance({
   adaptateurJWT,
   adaptateurChiffrement,
   serviceCgu,
+  adaptateurProfilAnssi,
 }) {
   const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
 
-  const dechiffreDonneesUtilisateur = async (donneesUtilisateur) => {
-    if (!donneesUtilisateur) return undefined;
+  const lisDonneesUtilisateur = async (donneesPersistees) => {
+    if (!donneesPersistees) return undefined;
+
     const donneesEnClair = await dechiffre.donneesUtilisateur(
-      donneesUtilisateur.donnees
+      donneesPersistees.donnees
     );
+
+    const profilAnssi = await adaptateurProfilAnssi.recupere(
+      donneesEnClair.email
+    );
+
     return {
       ...donneesEnClair,
-      id: donneesUtilisateur.id,
-      idResetMotDePasse: donneesUtilisateur.idResetMotDePasse,
-      dateCreation: donneesUtilisateur.dateCreation,
+      id: donneesPersistees.id,
+      idResetMotDePasse: donneesPersistees.idResetMotDePasse,
+      dateCreation: donneesPersistees.dateCreation,
+      nom: profilAnssi.nom,
+      prenom: profilAnssi.prenom,
+      telephone: profilAnssi.telephone,
+      postes: profilAnssi.domainesSpecialite,
+      entite: profilAnssi.organisation,
     };
   };
 
-  const dechiffreUtilisateur = async (donneesUtilisateur) => {
-    if (!donneesUtilisateur) return undefined;
+  const dechiffreUtilisateur = async (donneesPersistees) => {
+    if (!donneesPersistees) return undefined;
 
-    const donneesDechiffrees =
-      await dechiffreDonneesUtilisateur(donneesUtilisateur);
+    const donneesUtilisateur = await lisDonneesUtilisateur(donneesPersistees);
 
-    return new Utilisateur(donneesDechiffrees, {
+    return new Utilisateur(donneesUtilisateur, {
       adaptateurJWT,
       cguActuelles: serviceCgu.versionActuelle(),
     });
@@ -70,15 +81,15 @@ function fabriquePersistance({
     lis: {
       donnees: {
         de: async (idUtilisateur) => {
-          const donnees =
+          const donneesPersistees =
             await adaptateurPersistance.utilisateur(idUtilisateur);
-          return dechiffreDonneesUtilisateur(donnees);
+          return lisDonneesUtilisateur(donneesPersistees);
         },
         deCeluiAvecEmail: async (email) => {
           const emailHash = adaptateurChiffrement.hacheSha256(email);
-          const donnees =
+          const donneesPersistees =
             await adaptateurPersistance.utilisateurAvecEmailHash(emailHash);
-          return dechiffreDonneesUtilisateur(donnees);
+          return lisDonneesUtilisateur(donneesPersistees);
         },
       },
       un: async (idUtilisateur) => {
@@ -123,8 +134,7 @@ function fabriquePersistance({
         ? adaptateurChiffrement.hacheSha256(deltaDonnees.email)
         : undefined;
       const donneesSauvegardees = await adaptateurPersistance.utilisateur(id);
-      const donneesEnClair =
-        await dechiffreDonneesUtilisateur(donneesSauvegardees);
+      const donneesEnClair = await lisDonneesUtilisateur(donneesSauvegardees);
       const donneesEnClairAJour = Object.assign(donneesEnClair, deltaDonnees);
       const {
         id: _,
@@ -175,6 +185,7 @@ const creeDepot = (config = {}) => {
     adaptateurJWT,
     adaptateurChiffrement,
     serviceCgu,
+    adaptateurProfilAnssi,
   });
 
   const dechiffreUtilisateur = async (donneesUtilisateur) =>

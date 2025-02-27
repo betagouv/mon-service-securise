@@ -447,45 +447,95 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(connait999).to.be(false);
   });
 
-  it("retourne l'utilisateur associé à un identifiant donné en le déchiffrant", async () => {
-    let donneeDechiffree;
-    adaptateurChiffrement.dechiffre = async (objetDonnee) => {
-      donneeDechiffree = objetDonnee;
-      return { ...objetDonnee, email: 'dechiffre' };
-    };
+  describe("sur lecture d'un utilisateur par identifiant", () => {
+    it("retourne l'utilisateur associé à un identifiant donné en le déchiffrant", async () => {
+      let donneeDechiffree;
+      adaptateurChiffrement.dechiffre = async (objetDonnee) => {
+        donneeDechiffree = objetDonnee;
+        return { ...objetDonnee, email: 'dechiffre' };
+      };
 
-    const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
-      {
-        utilisateurs: [
-          {
-            id: '123',
-            donnees: {
-              prenom: 'Jean',
-              nom: 'Dupont',
-              email: 'jean.dupont@mail.fr',
-              motDePasse: 'XXX',
+      const adaptateurPersistance =
+        AdaptateurPersistanceMemoire.nouvelAdaptateur({
+          utilisateurs: [
+            {
+              id: '123',
+              donnees: {
+                prenom: 'Jean',
+                nom: 'Dupont',
+                email: 'jean.dupont@mail.fr',
+                motDePasse: 'XXX',
+              },
             },
-          },
-        ],
-      }
-    );
-    const depot = DepotDonneesUtilisateurs.creeDepot({
-      adaptateurChiffrement,
-      adaptateurJWT,
-      adaptateurPersistance,
+          ],
+        });
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurJWT,
+        adaptateurPersistance,
+      });
+
+      const utilisateur = await depot.utilisateur('123');
+
+      expect(utilisateur).to.be.an(Utilisateur);
+      expect(utilisateur.id).to.equal('123');
+      expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
+      expect(utilisateur.email).to.equal('dechiffre');
+      expect(donneeDechiffree).to.eql({
+        prenom: 'Jean',
+        nom: 'Dupont',
+        email: 'jean.dupont@mail.fr',
+        motDePasse: 'XXX',
+      });
     });
 
-    const utilisateur = await depot.utilisateur('123');
+    it('complète les informations avec le profil ANSSI', async () => {
+      const adaptateurPersistance =
+        AdaptateurPersistanceMemoire.nouvelAdaptateur({
+          utilisateurs: [
+            {
+              id: '123',
+              donnees: { email: 'jeanne.dujardin@mail.fr' },
+            },
+          ],
+        });
+      let emailUtilise;
+      adaptateurProfilAnssi.recupere = (email) => {
+        emailUtilise = email;
+        return {
+          nom: 'Dujardin',
+          prenom: 'Jeanne',
+          organisation: {
+            nom: 'ANSSI',
+            siret: '13000766900018',
+            departement: '75',
+          },
+          telephone: '0102030405',
+          domainesSpecialite: ['RSSI'],
+        };
+      };
 
-    expect(utilisateur).to.be.an(Utilisateur);
-    expect(utilisateur.id).to.equal('123');
-    expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
-    expect(utilisateur.email).to.equal('dechiffre');
-    expect(donneeDechiffree).to.eql({
-      prenom: 'Jean',
-      nom: 'Dupont',
-      email: 'jean.dupont@mail.fr',
-      motDePasse: 'XXX',
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurJWT,
+        adaptateurPersistance,
+        adaptateurProfilAnssi,
+      });
+
+      const utilisateur = await depot.utilisateur('123');
+
+      expect(utilisateur).to.be.an(Utilisateur);
+      expect(utilisateur.id).to.equal('123');
+      expect(utilisateur.email).to.equal('jeanne.dujardin@mail.fr');
+
+      expect(emailUtilise).to.be('jeanne.dujardin@mail.fr');
+      expect(utilisateur.prenom).to.equal('Jeanne');
+      expect(utilisateur.nom).to.equal('Dujardin');
+      expect(utilisateur.telephone).to.equal('0102030405');
+      expect(utilisateur.postes).to.eql(['RSSI']);
+      expect(utilisateur.entite.nom).to.be('ANSSI');
+      expect(utilisateur.entite.siret).to.be('13000766900018');
+      expect(utilisateur.entite.departement).to.be('75');
     });
   });
 
