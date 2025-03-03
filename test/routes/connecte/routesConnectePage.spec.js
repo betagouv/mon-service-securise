@@ -132,6 +132,17 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   });
 
   describe(`quand GET sur /profil`, () => {
+    it('synchronise le profil utilisateur avec MonProfilAnssi', async () => {
+      let profilAnssiSynchronise = false;
+      testeur.serviceProfilAnssi().synchroniseProfilUtilisateur = async () => {
+        profilAnssiSynchronise = true;
+      };
+
+      await axios.get(`http://localhost:1234/profil`);
+
+      expect(profilAnssiSynchronise).to.be(true);
+    });
+
     it("délègue au dépôt de données la lecture des informations de l'utilisateur", async () => {
       testeur.middleware().reinitialise({ idUtilisateur: '456' });
       let idRecu;

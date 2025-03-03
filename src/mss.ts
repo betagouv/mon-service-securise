@@ -115,6 +115,7 @@ const creeServeur = ({
       adaptateurCsv,
       adaptateurGestionErreur,
       adaptateurHorloge,
+      serviceProfilAnssi,
     })
   );
   app.use(

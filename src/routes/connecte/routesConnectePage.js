@@ -13,6 +13,7 @@ const routesConnectePage = ({
   adaptateurCsv,
   adaptateurGestionErreur,
   adaptateurHorloge,
+  serviceProfilAnssi,
 }) => {
   const routes = express.Router();
 
@@ -74,6 +75,7 @@ const routesConnectePage = ({
       const departements = referentiel.departements();
       const estimationNombreServices = referentiel.estimationNombreServices();
       const idUtilisateur = requete.idUtilisateurCourant;
+      await serviceProfilAnssi.synchroniseProfilUtilisateur(idUtilisateur);
       const utilisateur = await depotDonnees.utilisateur(idUtilisateur);
       const entite = utilisateur.entite.siret ? utilisateur.entite : undefined;
 
