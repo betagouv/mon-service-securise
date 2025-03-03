@@ -46,6 +46,7 @@ const creeServeur = ({
   serviceGestionnaireSession,
   procedures,
   inscriptionUtilisateur,
+  serviceProfilAnssi,
   avecCookieSecurise = process.env.NODE_ENV === 'production',
   avecPageErreur = process.env.NODE_ENV === 'production',
 }) => {
@@ -130,6 +131,7 @@ const creeServeur = ({
       inscriptionUtilisateur,
       serviceCgu,
       serviceGestionnaireSession,
+      serviceProfilAnssi,
     })
   );
   app.use(

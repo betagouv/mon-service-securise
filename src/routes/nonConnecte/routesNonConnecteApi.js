@@ -21,6 +21,7 @@ const routesNonConnecteApi = ({
   adaptateurGestionErreur,
   serviceCgu,
   serviceGestionnaireSession,
+  serviceProfilAnssi,
 }) => {
   const routes = express.Router();
 
@@ -120,6 +121,8 @@ const routesNonConnecteApi = ({
           utilisateur,
           SourceAuthentification.MSS
         );
+
+        await serviceProfilAnssi.synchroniseProfilUtilisateur(utilisateur.id);
 
         await depotDonnees.enregistreNouvelleConnexionUtilisateur(
           utilisateur.id,

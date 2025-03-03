@@ -1,4 +1,5 @@
 import { fabriqueAdaptateurProfilAnssi } from './src/adaptateurs/fabriqueAdaptateurProfilAnssi';
+import ServiceProfilAnssi from './src/profilAnssi/serviceProfilAnssi';
 
 const Middleware = require('./src/http/middleware');
 const DepotDonnees = require('./src/depotDonnees');
@@ -122,6 +123,11 @@ const serviceSupervision = new ServiceSupervision({
   adaptateurSupervision,
 });
 
+const serviceProfilAnssi = new ServiceProfilAnssi({
+  depotDonnees,
+  adaptateurProfilAnssi,
+});
+
 serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
   const serveur = MSS.creeServeur({
     depotDonnees,
@@ -149,6 +155,7 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     serviceCgu,
     procedures,
     inscriptionUtilisateur,
+    serviceProfilAnssi,
   });
 
   serveur.ecoute(port, () => {

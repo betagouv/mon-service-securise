@@ -45,6 +45,7 @@ const testeurMss = () => {
   let procedures;
   let inscriptionUtilisateur;
   let serveur;
+  let serviceProfilAnssi;
 
   const verifieSessionDeposee = (reponse, suite) => {
     const valeurHeader = reponse.headers['set-cookie'][0];
@@ -71,6 +72,9 @@ const testeurMss = () => {
   const initialise = (done) => {
     serviceAnnuaire = {};
     serviceSupervision = {};
+    serviceProfilAnssi = {
+      synchroniseProfilUtilisateur: async () => {},
+    };
     adaptateurHorloge = {
       maintenant: () => new Date(),
     };
@@ -166,6 +170,7 @@ const testeurMss = () => {
           serviceCgu,
           procedures,
           inscriptionUtilisateur,
+          serviceProfilAnssi,
           avecCookieSecurise: false,
           avecPageErreur: false,
         });
@@ -193,6 +198,7 @@ const testeurMss = () => {
     adaptateurStatistiques: () => adaptateurStatistiques,
     adaptateurJWT: () => adaptateurJWT,
     adaptateurProfilAnssi: () => adaptateurProfilAnssi,
+    serviceProfilAnssi: () => serviceProfilAnssi,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,

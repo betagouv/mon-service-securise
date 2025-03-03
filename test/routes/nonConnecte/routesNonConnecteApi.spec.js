@@ -514,6 +514,21 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         const token = decodeSessionDuCookie(reponse, 0);
         expect(token.token).to.be('un token de-MSS');
       });
+
+      it('synchronise le profil utilisateur avec MonProfilAnssi', async () => {
+        let profilAnssiSynchronise = false;
+        testeur.serviceProfilAnssi().synchroniseProfilUtilisateur =
+          async () => {
+            profilAnssiSynchronise = true;
+          };
+
+        await axios.post('http://localhost:1234/api/token', {
+          login: 'jean.dupont@mail.fr',
+          motDePasse: 'mdp_12345',
+        });
+
+        expect(profilAnssiSynchronise).to.be(true);
+      });
     });
 
     describe("avec échec de l'authentification de l'utilisateur", () => {
