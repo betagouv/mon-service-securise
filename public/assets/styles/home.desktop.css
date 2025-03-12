@@ -1,4 +1,8 @@
 @media screen and (min-width: 1440px) {
+  #home .tag-impact-national {
+    margin-top: 0;
+  }
+
   #home .alignement-gauche-desktop {
     text-align: left;
   }

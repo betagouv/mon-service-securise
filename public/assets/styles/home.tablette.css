@@ -3,6 +3,10 @@
     width: 100%;
   }
 
+  #home .tag-impact-national {
+    margin-top: 76px;
+  }
+
   #home .bloc-contenu {
     padding: 56px 112px;
     overflow-x: hidden;
