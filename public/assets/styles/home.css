@@ -224,11 +224,6 @@ main {
   margin-left: var(--marge);
 }
 
-#home hr {
-  border: none;
-  border-top: 1px solid white;
-}
-
 #home .etapes {
   display: flex;
   flex-direction: column;
@@ -488,4 +483,8 @@ main {
   margin-top: 40px;
   width: 100%;
   max-width: 340px;
+}
+
+#home .fond-couleur-principale-attenuee h3.police-noire {
+  color: black;
 }
