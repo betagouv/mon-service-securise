@@ -186,6 +186,22 @@
   #home #rejoignez-communaute .conteneur-communaute > div {
     flex: 1;
   }
+
+  #home .bloc-impact-national .conteneur-droite-gauche {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  #home .bloc-impact-national .conteneur-gauche,
+  #home .bloc-impact-national .conteneur-droite {
+    flex: 1;
+  }
+
+  #home .bloc-impact-national .conteneur-centre {
+    margin-top: -32px;
+  }
 }
 
 @media screen and (max-width: 1439px) {

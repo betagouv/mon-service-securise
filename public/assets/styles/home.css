@@ -479,3 +479,13 @@ main {
 #home video {
   width: 100%;
 }
+
+#home .bloc-impact-national h3 {
+  margin: 8px 0 12px 0;
+}
+
+#home .bloc-impact-national img {
+  margin-top: 40px;
+  width: 100%;
+  max-width: 340px;
+}
