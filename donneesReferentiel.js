@@ -121,6 +121,16 @@ module.exports = {
       image: 'tableauDeBordV2.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'serviceImpactNational',
+      dateDeDeploiement: '2025-03-14 08:30:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/service-a-impact-national-quest-ce-que-ca-signifie-67i3tq/',
+      titre: 'MonServiceSécurisé, service à impact national !',
+      sousTitre:
+        'Une reconnaissance obtenue auprès de la Direction interministérielle du Numérique',
+      image: 'serviceImpactNational.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
