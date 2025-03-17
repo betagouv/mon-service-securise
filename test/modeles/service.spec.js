@@ -1008,32 +1008,27 @@ describe('Un service', () => {
       });
     });
 
-    it('jette une erreur si les responsables de la mesure ne font pas tous partie des contributeurs', async () => {
-      try {
-        const utilisateur = unUtilisateur()
-          .avecId('unIdDeContributeur')
-          .construis();
-        const service = unService()
-          .ajouteUnContributeur(utilisateur)
-          .construis();
-        const mesure = new MesureSpecifique(
-          {
-            id: 'M1',
-            statut: 'fait',
-            responsables: ['unIdDeContributeur', 'pasUnIdDeContributeur'],
-          },
-          referentiel
-        );
+    it('ignore les responsables de la mesure qui ne font pas partie des contributeurs', async () => {
+      const utilisateur = unUtilisateur()
+        .avecId('unIdDeContributeur')
+        .construis();
+      const mesure = new MesureSpecifique(
+        {
+          id: 'M1',
+          statut: 'fait',
+          responsables: ['unIdDeContributeur', 'pasUnIdDeContributeur'],
+        },
+        referentiel
+      );
+      const service = unService().ajouteUnContributeur(utilisateur).construis();
+      let donneesRecues;
+      service.mesures.mesuresSpecifiques.metsAJourMesure = (mesureRecu) => {
+        donneesRecues = mesureRecu;
+      };
 
-        await service.metsAJourMesureSpecifique(mesure);
+      await service.metsAJourMesureSpecifique(mesure);
 
-        expect().fail("L'appel aurait dû échouer");
-      } catch (e) {
-        expect(e).to.be.an(ErreurResponsablesMesureInvalides);
-        expect(e.message).to.be(
-          "Les responsables d'une mesure spécifique doivent être des contributeurs du service."
-        );
-      }
+      expect(donneesRecues.responsables).to.eql(['unIdDeContributeur']);
     });
 
     it('mets à jour la mesure', async () => {

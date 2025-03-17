@@ -13,7 +13,6 @@ const ObjetPDFAnnexeMesures = require('./objetsPDF/objetPDFAnnexeMesures');
 const ObjetPDFAnnexeRisques = require('./objetsPDF/objetPDFAnnexeRisques');
 const Autorisation = require('./autorisations/autorisation');
 const SuggestionAction = require('./suggestionAction');
-const { ErreurResponsablesMesureInvalides } = require('../erreurs');
 const { dateEnIso } = require('../utilitaires/date');
 const { Contributeur } = require('./contributeur');
 
@@ -395,11 +394,9 @@ class Service {
 
   metsAJourMesureSpecifique(mesure) {
     const idContributeurs = this.contributeurs.map((u) => u.idUtilisateur);
-    if (mesure.responsables.some((r) => !idContributeurs.includes(r))) {
-      throw new ErreurResponsablesMesureInvalides(
-        "Les responsables d'une mesure spécifique doivent être des contributeurs du service."
-      );
-    }
+    mesure.responsables = mesure.responsables.filter((r) =>
+      idContributeurs.includes(r)
+    );
     this.mesures.mesuresSpecifiques.metsAJourMesure(mesure);
   }
 
