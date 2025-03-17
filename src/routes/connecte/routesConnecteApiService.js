@@ -12,7 +12,6 @@ const {
   ErreurDonneesReferentielIncorrectes,
   ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
-  ErreurResponsablesMesureInvalides,
   ErreurRisqueInconnu,
   ErreurNiveauGraviteInconnu,
   ErreurIntituleRisqueManquant,
@@ -310,10 +309,6 @@ const routesConnecteApiService = ({
           return;
         }
 
-        if (e instanceof ErreurResponsablesMesureInvalides) {
-          reponse.status(403).send(e.message);
-          return;
-        }
         reponse.status(400).send(e.message);
       }
     }
@@ -377,10 +372,6 @@ const routesConnecteApiService = ({
           e instanceof ErreurEcheanceMesureInvalide
         ) {
           reponse.status(400).send('La mesure est invalide.');
-          return;
-        }
-        if (e instanceof ErreurResponsablesMesureInvalides) {
-          reponse.status(403).send(e.message);
           return;
         }
         suite(e);
