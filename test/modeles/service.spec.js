@@ -22,7 +22,6 @@ const {
 } = require('../constructeurs/constructeurAutorisation');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const Mesures = require('../../src/modeles/mesures');
-const { ErreurResponsablesMesureInvalides } = require('../../src/erreurs');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
 const { Contributeur } = require('../../src/modeles/contributeur');
 

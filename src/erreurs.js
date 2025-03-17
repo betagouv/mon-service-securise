@@ -56,7 +56,6 @@ class ErreurStatutDeploiementInvalide extends ErreurModele {}
 class ErreurPrioriteMesureInvalide extends ErreurModele {}
 class ErreurEcheanceMesureInvalide extends ErreurModele {}
 class ErreurStatutMesureInvalide extends ErreurModele {}
-class ErreurResponsablesMesureInvalides extends ErreurModele {}
 class ErreurSuppressionImpossible extends Error {}
 class ErreurUtilisateurInexistant extends ErreurModele {}
 class ErreurTypeInconnu extends ErreurModele {}
@@ -117,7 +116,6 @@ module.exports = {
   ErreurStatutDeploiementInvalide,
   ErreurStatutMesureInvalide,
   ErreurPrioriteMesureInvalide,
-  ErreurResponsablesMesureInvalides,
   ErreurSuppressionImpossible,
   ErreurTypeInconnu,
   ErreurUtilisateurExistant,
