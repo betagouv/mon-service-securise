@@ -9,6 +9,12 @@
   export let responsables: IdUtilisateur[] | null;
   export let estLectureSeule: boolean;
 
+  $: responsablesAffiches = responsables
+    ? [...responsables].filter((r) =>
+        $contributeurs.map((c) => c.id).includes(r)
+      )
+    : [];
+
   let menuOuvert = false;
 
   const ouvreTiroirContributeurs = () => {
@@ -34,7 +40,7 @@
     <div class="conteneur-image">
       <img src="/statique/assets/images/icone_utilisateur_trait.svg" alt="" />
     </div>
-    <span>{responsables?.length || 0}</span>
+    <span>{responsablesAffiches.length}</span>
   </div>
   <div
     class="conteneur-responsables"
