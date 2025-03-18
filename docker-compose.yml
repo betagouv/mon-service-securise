@@ -1,5 +1,3 @@
-version: '3'
-
 x-app: &configuration-base
   build:
     context: .
