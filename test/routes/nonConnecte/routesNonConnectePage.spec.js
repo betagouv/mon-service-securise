@@ -31,6 +31,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/promouvoir-monservicesecurise',
     '/co-construire-monservicesecurise',
     '/conseils-cyber',
+    '/doctrine-homologation-anssi',
     '/ui-kit',
   ].forEach((route) => {
     beforeEach(() => {
