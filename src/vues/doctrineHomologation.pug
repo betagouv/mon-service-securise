@@ -1,0 +1,13 @@
+extends mssDeconnecte
+include ./fragments/navigationSiteVitrine
+block variables
+  - const meta_description = "La nouvelle doctrine d'homologation de sécurité de l'ANSSI est là !"
+
+block append scripts
+  +composantSvelte('doctrineHomologation.js')
+
+block navigation-site-vitrine
+  +navigationSiteVitrine("doctrine-homologation-anssi")
+
+block main
+  #doctrine-homologation
