@@ -12,7 +12,11 @@
       | 'telecharger-blanc'
       | 'medaille'
       | undefined;
-    type?: 'bouton-primaire' | 'bouton-secondaire' | 'lien';
+    type?:
+      | 'bouton-primaire'
+      | 'bouton-secondaire'
+      | 'bouton-tertiaire'
+      | 'lien';
     taille?: 'petit' | 'moyen';
     classe?: string;
     href: string;
@@ -30,8 +34,11 @@
     | 'telecharger-blanc'
     | 'medaille'
     | undefined = undefined;
-  export let type: 'bouton-primaire' | 'bouton-secondaire' | 'lien' =
-    'bouton-primaire';
+  export let type:
+    | 'bouton-primaire'
+    | 'bouton-secondaire'
+    | 'bouton-tertiaire'
+    | 'lien' = 'bouton-primaire';
   export let taille: 'petit' | 'moyen' = 'moyen';
   export let inactif: boolean = false;
 </script>
@@ -161,6 +168,12 @@
   }
 
   .bouton-secondaire {
+    color: var(--bleu-mise-en-avant);
+  }
+
+  .bouton-tertiaire {
+    background: white;
+    border-radius: 4px;
     color: var(--bleu-mise-en-avant);
   }
 

@@ -1,6 +1,9 @@
 <script lang="ts">
   import Bloc from './composants/Bloc.svelte';
+  import Tuile from './composants/Tuile.svelte';
   import Lien from '../ui/Lien.svelte';
+  import CarrouselTuiles from './composants/CarrouselTuiles.svelte';
+  import TuileTelechargement from './composants/TuileTelechargement.svelte';
 </script>
 
 <Bloc variation="attenue">
@@ -24,9 +27,136 @@
     />
   </div>
   <img
-    src="/statique/assets/images/illustration_doctrine_homologation.svg"
+    src="/statique/assets/images/doctrine-homologation/illustration_doctrine_homologation.svg"
     alt="Illustration de la nouvelle doctrine d'homologation"
   />
+</Bloc>
+<Bloc variation="primaire" sansMargeLaterale>
+  <CarrouselTuiles />
+</Bloc>
+<Bloc>
+  <h2 class="centre">Découvrez la doctrine</h2>
+  <video controls src="/todo" />
+</Bloc>
+<Bloc variation="attenue">
+  <h2>L'enjeu pour vous</h2>
+  <img
+    src="/statique/assets/images/doctrine-homologation/illustration_ordinateurs.svg"
+    alt="Illustration de l'enjeu"
+    class="illustration"
+  />
+  <p class="sous-texte">
+    <b>
+      L'homologation de sécurité est une obligation pour tous les systèmes
+      d'information de l'Etat, les services numériques des collectivités et de
+      certains autres organismes.
+    </b>
+  </p>
+  <ul>
+    <li>
+      🤝 Comment participer à une démarche d'homologation lorsque l'on n'est pas
+      soit-même <b>spécialiste cyber</b> ?
+    </li>
+    <li>
+      ⏳ Comment réussir à homologuer tous ses systèmes quand on <b
+        >manque de temps pour le faire</b
+      > ?
+    </li>
+  </ul>
+  <h2>Notre proposition</h2>
+  <img
+    src="/statique/assets/images/doctrine-homologation/illustration_homologuation_personnages.svg"
+    alt="Illustration de notre proposition"
+    class="illustration"
+  />
+  <p class="sous-texte">
+    <b>
+      Proportionner vos efforts de sécurisation et d'homologation de chaque
+      système et clarifier les attentes pour chaque niveau de démarche. Cela
+      signifie :
+    </b>
+  </p>
+  <ul>
+    <li>
+      ⚡ S'autoriser <b>une démarche simplifiée</b>, plus légère et accélérée,
+      pour les systèmes à besoins de sécurité les moins élevés : moins de
+      documentation, moins de réunions, plus d'efficacité, plus de sécurité.
+    </li>
+    <li>
+      💡 Adopter <b>une démarche renforcée</b>, rigoureuse et approfondie, pour
+      les systèmes aux besoins beaucoup plus importants : tout savoir de la
+      sécurité d'un système et contrôler pour une décision éclairée !
+    </li>
+  </ul>
+</Bloc>
+<Bloc variation="primaire">
+  <h2>Mon&ZeroWidthSpace;Service&ZeroWidthSpace;Sécurisé,</h2>
+  <p class="sans-marge-basse">
+    <b
+      >La solution de l’ANSSI pour vous permettre de piloter en équipe la
+      sécurité et l'homologation tous vos services publics numériques !</b
+    >
+  </p>
+  <img
+    src="/statique/assets/images/doctrine-homologation/illustration_tdb.svg"
+    alt="Illustration de la nouvelle doctrine d'homologation"
+    class="illustration sans-marge-basse"
+  />
+  <ul class="liste-mss">
+    <li>
+      <p class="titre-element-liste">
+        Des efforts de sécurisation proportionnés !
+      </p>
+      <p class="contenu-element-liste">
+        Obtenez une évaluation des besoins de sécurité de chaque service et
+        découvrez une liste de mesure de sécurité personnalisée.
+      </p>
+    </li>
+    <li>
+      <p class="titre-element-liste">Un plan d’action cyber collaboratif</p>
+      <p class="contenu-element-liste">
+        Construisez en équipe votre plan d'action cyber.
+      </p>
+    </li>
+    <li>
+      <p class="titre-element-liste">L’homologation, en toute simplicité</p>
+      <p class="contenu-element-liste">
+        Téléchargez un projet de dossier d'homologation clé-en-main.
+      </p>
+    </li>
+    <li>
+      <p class="titre-element-liste">
+        Pilotez tous vos services au même endroit
+      </p>
+      <p class="contenu-element-liste">
+        Supervisez tous vos services depuis votre tableau de bord.
+      </p>
+    </li>
+  </ul>
+  <Lien
+    titre="Commencer à homologuer"
+    type="bouton-tertiaire"
+    href="/inscription"
+  />
+</Bloc>
+<Bloc variation="defaut">
+  <h2 class="grande-marge-basse">Télécharger la documentation</h2>
+  <div class="conteneur-tuiles-telechargement">
+    <TuileTelechargement
+      titre="L’homologation simplifiée"
+      contenu="Une présentation pédagogique présentant les grands principes de l'homologation de sécurité accessible à toutes et tous."
+      illustration="/statique/assets/images/doctrine-homologation/thumbnail-pdf-doctrine.png"
+      href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/Doctrine_Homologation_A4.pdf"
+    />
+    {#if false}
+      <TuileTelechargement
+        titre="Le guide d’homologation de la sécurité des SI"
+        contenu="Le guide d'homologation détaillé de l'ANSSI pour les spécialistes de l'homologation de sécurité."
+        illustration="/statique/assets/images/doctrine-homologation/thumbnail-pdf-anssi.png"
+        href="/todo"
+      />
+    {/if}
+  </div>
 </Bloc>
 
 <style>
@@ -48,5 +178,84 @@
     flex-direction: column;
     gap: 16px;
     margin-bottom: 24px;
+  }
+
+  .centre {
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 40px;
+    margin: 0;
+  }
+
+  video {
+    margin: 56px 0 24px 0;
+    width: 100%;
+  }
+
+  .illustration {
+    margin-top: 48px;
+    margin-bottom: 24px;
+    width: 100%;
+  }
+
+  .sous-texte {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  ul {
+    padding-left: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  ul li {
+    font-size: 16px;
+  }
+
+  .sans-marge-basse {
+    margin-bottom: 0;
+  }
+
+  .liste-mss {
+    margin-top: 0;
+    padding-left: 0;
+    list-style-type: none;
+  }
+
+  .liste-mss li {
+    padding-left: 32px;
+    border-left: 4px solid #fff;
+  }
+
+  .titre-element-liste {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 28px;
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  .contenu-element-liste {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    margin: 0;
+  }
+
+  .grande-marge-basse {
+    margin-bottom: 56px;
+  }
+
+  .conteneur-tuiles-telechargement {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 </style>
