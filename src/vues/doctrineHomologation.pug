@@ -3,6 +3,12 @@ include ./fragments/navigationSiteVitrine
 block variables
   - const meta_description = "La nouvelle doctrine d'homologation de sécurité de l'ANSSI est là !"
 
+block append styles
+  link(href='/statique/assets/styles/entete.responsive.css', rel='stylesheet')
+  link(href='/statique/assets/styles/piedPage.responsive.css', rel='stylesheet')
+  link(href='/statique/assets/styles/doctrineHomologation.css', rel='stylesheet')
+  +feuilleDeStyleSvelte()
+
 block append scripts
   +composantSvelte('doctrineHomologation.js')
 

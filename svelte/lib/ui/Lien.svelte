@@ -9,6 +9,7 @@
       | 'homologation'
       | 'indiceCyber'
       | 'telecharger'
+      | 'telecharger-blanc'
       | 'medaille'
       | undefined;
     type?: 'bouton-primaire' | 'bouton-secondaire' | 'lien';
@@ -26,6 +27,7 @@
     | 'homologation'
     | 'indiceCyber'
     | 'telecharger'
+    | 'telecharger-blanc'
     | 'medaille'
     | undefined = undefined;
   export let type: 'bouton-primaire' | 'bouton-secondaire' | 'lien' =
@@ -95,6 +97,10 @@
 
   .telecharger:before {
     background-image: url('/statique/assets/images/icone_telecharger.svg');
+  }
+
+  .telecharger-blanc:before {
+    background-image: url('/statique/assets/images/icone_telecharger_blanc.svg');
   }
 
   .medaille:before {
