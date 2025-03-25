@@ -25,6 +25,7 @@
     gap: 12px;
     text-align: center;
     color: var(--texte-fonce);
+    max-width: 384px;
   }
 
   p {

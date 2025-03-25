@@ -4,22 +4,26 @@
   export let classe = '';
 </script>
 
-<div
-  class="{variation} {classe ?? ''}"
-  class:sans-marge-laterale={sansMargeLaterale}
->
-  <slot />
+<div class="bloc {variation}" class:sans-marge-laterale={sansMargeLaterale}>
+  <div class="contenu-bloc {classe ?? ''}">
+    <slot />
+  </div>
 </div>
 
 <style>
-  div {
+  .bloc {
     padding: 48px 16px;
     text-align: left;
     width: calc(100vw - 32px);
   }
 
+  .contenu-bloc {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
   @media screen and (min-width: 577px) {
-    div {
+    .bloc:not(.sans-marge-laterale) {
       padding: 72px 24px;
       width: calc(100vw - 48px);
     }

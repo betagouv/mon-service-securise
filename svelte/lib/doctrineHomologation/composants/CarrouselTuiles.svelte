@@ -123,4 +123,18 @@
       --espacement: 24px;
     }
   }
+
+  @media screen and (min-width: 1247px) {
+    .conteneur-actions {
+      display: none;
+    }
+
+    :global(.tuile-presentation:first-of-type) {
+      margin-left: 0;
+    }
+
+    :global(.tuile-presentation:last-of-type) {
+      margin-right: 0;
+    }
+  }
 </style>

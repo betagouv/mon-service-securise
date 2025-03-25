@@ -39,7 +39,10 @@
 </Bloc>
 <Bloc>
   <h2 class="centre">Découvrez la doctrine</h2>
-  <video controls src="/todo" />
+  <div class="conteneur-video">
+    <!-- svelte-ignore a11y-media-has-caption -->
+    <video controls src="/todo" />
+  </div>
 </Bloc>
 <Bloc variation="attenue">
   <div class="enjeu">
@@ -201,9 +204,15 @@
     margin: 0;
   }
 
+  .conteneur-video {
+    display: flex;
+    justify-content: center;
+  }
+
   video {
     margin: 56px 0 24px 0;
     width: 100%;
+    max-width: 792px;
   }
 
   .illustration {
@@ -300,6 +309,7 @@
         'illustration liste';
       grid-template-columns: 50%;
       grid-column-gap: 16px;
+      margin-top: 32px;
     }
 
     .enjeu h2,
@@ -338,6 +348,14 @@
 
     .mon-service-securise ul {
       grid-area: liste;
+      align-self: center;
+    }
+  }
+
+  @media screen and (min-width: 1247px) {
+    .enjeu,
+    .proposition {
+      grid-column-gap: 24px;
     }
   }
 </style>
