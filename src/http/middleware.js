@@ -65,13 +65,6 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
-  const positionneHeadersAvecNonce = async (requete, reponse, suite) => {
-    const nonce = await adaptateurChiffrement.nonce();
-    requete.nonce = nonce;
-    reponse.locals.nonce = nonce;
-    positionneHeaders(requete, reponse, suite);
-  };
-
   const suppressionCookie = (requete, _reponse, suite) => {
     requete.session = null;
     suite();
@@ -406,7 +399,6 @@ const middleware = (configuration = {}) => {
     chargeTypeRequete,
     interdisLaMiseEnCache,
     positionneHeaders,
-    positionneHeadersAvecNonce,
     protegeTrafic,
     filtreIpAutorisees,
     suppressionCookie,
