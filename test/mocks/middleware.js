@@ -179,10 +179,6 @@ const middlewareFantaisie = {
       fonctionDeposeCookie(requete);
     }
     headersPositionnes = true;
-    suite();
-  },
-
-  positionneHeadersAvecNonce: (_requete, _reponse, suite) => {
     noncePositionne = true;
     suite();
   },

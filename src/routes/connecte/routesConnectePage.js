@@ -108,7 +108,6 @@ const routesConnectePage = ({
 
   routes.get(
     '/visiteGuidee/:idEtape',
-    middleware.positionneHeadersAvecNonce,
     middleware.verificationAcceptationCGU,
     middleware.chargePreferencesUtilisateur,
     middleware.chargeEtatVisiteGuidee,
