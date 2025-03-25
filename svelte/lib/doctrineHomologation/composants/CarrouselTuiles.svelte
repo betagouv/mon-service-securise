@@ -106,6 +106,7 @@
     width: 24px;
     height: 24px;
     filter: brightness(0) invert(1);
+    line-height: 28px;
   }
 
   .conteneur-actions .suivant:after {

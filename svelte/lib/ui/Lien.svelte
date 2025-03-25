@@ -177,6 +177,14 @@
     color: var(--bleu-mise-en-avant);
   }
 
+  .bouton-tertiaire:hover {
+    background: #f6f6f6;
+  }
+
+  .bouton-tertiaire:active {
+    background: #ededed;
+  }
+
   .bouton-secondaire:hover {
     background: #f5f5f5;
   }
