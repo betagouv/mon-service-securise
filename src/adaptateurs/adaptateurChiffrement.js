@@ -1,4 +1,4 @@
-const { createHash } = require('crypto');
+const { createHash, randomBytes } = require('crypto');
 const bcrypt = require('bcrypt');
 
 const adaptateurChiffrement = ({ adaptateurEnvironnement }) => {
@@ -40,8 +40,7 @@ const adaptateurChiffrement = ({ adaptateurEnvironnement }) => {
       return `${version}:${hashFinal}`;
     },
 
-    nonce: () =>
-      hacheBCrypt(`${Math.random()}`).then((s) => s.replace(/[/$.]/g, '')),
+    nonce: () => randomBytes(16).toString('base64'),
   };
 };
 
