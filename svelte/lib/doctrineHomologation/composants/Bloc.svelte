@@ -1,9 +1,13 @@
 <script lang="ts">
   export let variation: 'attenue' | 'primaire' | 'defaut' = 'defaut';
   export let sansMargeLaterale = false;
+  export let classe = '';
 </script>
 
-<div class={variation} class:sans-marge-laterale={sansMargeLaterale}>
+<div
+  class="{variation} {classe ?? ''}"
+  class:sans-marge-laterale={sansMargeLaterale}
+>
   <slot />
 </div>
 
@@ -12,6 +16,13 @@
     padding: 48px 16px;
     text-align: left;
     width: calc(100vw - 32px);
+  }
+
+  @media screen and (min-width: 577px) {
+    div {
+      padding: 72px 24px;
+      width: calc(100vw - 48px);
+    }
   }
 
   .sans-marge-laterale {

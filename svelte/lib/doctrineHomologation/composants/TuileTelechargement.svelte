@@ -28,6 +28,7 @@
     color: var(--texte-fonce);
     overflow: hidden;
     transition: box-shadow 0.1s ease-in-out;
+    max-width: 385px;
   }
 
   .conteneur-image {

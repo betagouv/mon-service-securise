@@ -6,29 +6,32 @@
   import TuileTelechargement from './composants/TuileTelechargement.svelte';
 </script>
 
-<Bloc variation="attenue">
-  <h1>La nouvelle doctrine d'homologation de sécurité de l'ANSSI est là !</h1>
-  <p>
-    Découvrez la doctrine, partagez la au sein de votre organisation afin
-    d’accélérer vos efforts d’homologation !
-  </p>
-  <div class="conteneur-actions">
-    <Lien
-      titre="Télécharger la documentation"
-      type="bouton-primaire"
-      href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/Doctrine_Homologation_A4.pdf"
-      target="_blank"
-      icone="telecharger-blanc"
-    />
-    <Lien
-      titre="Consulter la FAQ"
-      type="bouton-secondaire"
-      href="/conseils-cyber"
-    />
+<Bloc variation="attenue" classe="hero">
+  <div>
+    <h1>La nouvelle doctrine d'homologation de sécurité de l'ANSSI est là !</h1>
+    <p>
+      Découvrez la doctrine, partagez la au sein de votre organisation afin
+      d’accélérer vos efforts d’homologation !
+    </p>
+    <div class="conteneur-actions">
+      <Lien
+        titre="Télécharger la documentation"
+        type="bouton-primaire"
+        href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/Doctrine_Homologation_A4.pdf"
+        target="_blank"
+        icone="telecharger-blanc"
+      />
+      <Lien
+        titre="Consulter la FAQ"
+        type="bouton-secondaire"
+        href="/conseils-cyber"
+      />
+    </div>
   </div>
   <img
     src="/statique/assets/images/doctrine-homologation/illustration_doctrine_homologation.svg"
     alt="Illustration de la nouvelle doctrine d'homologation"
+    class="illustration"
   />
 </Bloc>
 <Bloc variation="primaire" sansMargeLaterale>
@@ -39,55 +42,59 @@
   <video controls src="/todo" />
 </Bloc>
 <Bloc variation="attenue">
-  <h2>L'enjeu pour vous</h2>
-  <img
-    src="/statique/assets/images/doctrine-homologation/illustration_ordinateurs.svg"
-    alt="Illustration de l'enjeu"
-    class="illustration"
-  />
-  <p class="sous-texte">
-    <b>
-      L'homologation de sécurité est une obligation pour tous les systèmes
-      d'information de l'Etat, les services numériques des collectivités et de
-      certains autres organismes.
-    </b>
-  </p>
-  <ul>
-    <li>
-      🤝 Comment participer à une démarche d'homologation lorsque l'on n'est pas
-      soit-même <b>spécialiste cyber</b> ?
-    </li>
-    <li>
-      ⏳ Comment réussir à homologuer tous ses systèmes quand on <b
-        >manque de temps pour le faire</b
-      > ?
-    </li>
-  </ul>
-  <h2>Notre proposition</h2>
-  <img
-    src="/statique/assets/images/doctrine-homologation/illustration_homologuation_personnages.svg"
-    alt="Illustration de notre proposition"
-    class="illustration"
-  />
-  <p class="sous-texte">
-    <b>
-      Proportionner vos efforts de sécurisation et d'homologation de chaque
-      système et clarifier les attentes pour chaque niveau de démarche. Cela
-      signifie :
-    </b>
-  </p>
-  <ul>
-    <li>
-      ⚡ S'autoriser <b>une démarche simplifiée</b>, plus légère et accélérée,
-      pour les systèmes à besoins de sécurité les moins élevés : moins de
-      documentation, moins de réunions, plus d'efficacité, plus de sécurité.
-    </li>
-    <li>
-      💡 Adopter <b>une démarche renforcée</b>, rigoureuse et approfondie, pour
-      les systèmes aux besoins beaucoup plus importants : tout savoir de la
-      sécurité d'un système et contrôler pour une décision éclairée !
-    </li>
-  </ul>
+  <div class="enjeu">
+    <h2>L'enjeu pour vous</h2>
+    <img
+      src="/statique/assets/images/doctrine-homologation/illustration_ordinateurs.svg"
+      alt="Illustration de l'enjeu"
+      class="illustration invisible-tablette"
+    />
+    <p class="sous-texte">
+      <b>
+        L'homologation de sécurité est une obligation pour tous les systèmes
+        d'information de l'Etat, les services numériques des collectivités et de
+        certains autres organismes.
+      </b>
+    </p>
+    <ul>
+      <li>
+        🤝 Comment participer à une démarche d'homologation lorsque l'on n'est
+        pas soit-même <b>spécialiste cyber</b> ?
+      </li>
+      <li>
+        ⏳ Comment réussir à homologuer tous ses systèmes quand on <b
+          >manque de temps pour le faire</b
+        > ?
+      </li>
+    </ul>
+  </div>
+  <div class="proposition">
+    <h2>Notre proposition</h2>
+    <img
+      src="/statique/assets/images/doctrine-homologation/illustration_homologuation_personnages.svg"
+      alt="Illustration de notre proposition"
+      class="illustration"
+    />
+    <p class="sous-texte">
+      <b>
+        Proportionner vos efforts de sécurisation et d'homologation de chaque
+        système et clarifier les attentes pour chaque niveau de démarche. Cela
+        signifie :
+      </b>
+    </p>
+    <ul>
+      <li>
+        ⚡ S'autoriser <b>une démarche simplifiée</b>, plus légère et accélérée,
+        pour les systèmes à besoins de sécurité les moins élevés : moins de
+        documentation, moins de réunions, plus d'efficacité, plus de sécurité.
+      </li>
+      <li>
+        💡 Adopter <b>une démarche renforcée</b>, rigoureuse et approfondie,
+        pour les systèmes aux besoins beaucoup plus importants : tout savoir de
+        la sécurité d'un système et contrôler pour une décision éclairée !
+      </li>
+    </ul>
+  </div>
 </Bloc>
 <Bloc variation="primaire">
   <h2>Mon&ZeroWidthSpace;Service&ZeroWidthSpace;Sécurisé,</h2>
@@ -97,46 +104,49 @@
       sécurité et l'homologation tous vos services publics numériques !</b
     >
   </p>
-  <img
-    src="/statique/assets/images/doctrine-homologation/illustration_tdb.svg"
-    alt="Illustration de la nouvelle doctrine d'homologation"
-    class="illustration sans-marge-basse"
-  />
-  <ul class="liste-mss">
-    <li>
-      <p class="titre-element-liste">
-        Des efforts de sécurisation proportionnés !
-      </p>
-      <p class="contenu-element-liste">
-        Obtenez une évaluation des besoins de sécurité de chaque service et
-        découvrez une liste de mesure de sécurité personnalisée.
-      </p>
-    </li>
-    <li>
-      <p class="titre-element-liste">Un plan d’action cyber collaboratif</p>
-      <p class="contenu-element-liste">
-        Construisez en équipe votre plan d'action cyber.
-      </p>
-    </li>
-    <li>
-      <p class="titre-element-liste">L’homologation, en toute simplicité</p>
-      <p class="contenu-element-liste">
-        Téléchargez un projet de dossier d'homologation clé-en-main.
-      </p>
-    </li>
-    <li>
-      <p class="titre-element-liste">
-        Pilotez tous vos services au même endroit
-      </p>
-      <p class="contenu-element-liste">
-        Supervisez tous vos services depuis votre tableau de bord.
-      </p>
-    </li>
-  </ul>
+  <div class="mon-service-securise">
+    <img
+      src="/statique/assets/images/doctrine-homologation/illustration_tdb.svg"
+      alt="Illustration de la nouvelle doctrine d'homologation"
+      class="illustration sans-marge-basse"
+    />
+    <ul class="liste-mss">
+      <li>
+        <p class="titre-element-liste">
+          Des efforts de sécurisation proportionnés !
+        </p>
+        <p class="contenu-element-liste">
+          Obtenez une évaluation des besoins de sécurité de chaque service et
+          découvrez une liste de mesure de sécurité personnalisée.
+        </p>
+      </li>
+      <li>
+        <p class="titre-element-liste">Un plan d’action cyber collaboratif</p>
+        <p class="contenu-element-liste">
+          Construisez en équipe votre plan d'action cyber.
+        </p>
+      </li>
+      <li>
+        <p class="titre-element-liste">L’homologation, en toute simplicité</p>
+        <p class="contenu-element-liste">
+          Téléchargez un projet de dossier d'homologation clé-en-main.
+        </p>
+      </li>
+      <li>
+        <p class="titre-element-liste">
+          Pilotez tous vos services au même endroit
+        </p>
+        <p class="contenu-element-liste">
+          Supervisez tous vos services depuis votre tableau de bord.
+        </p>
+      </li>
+    </ul>
+  </div>
   <Lien
     titre="Commencer à homologuer"
     type="bouton-tertiaire"
     href="/inscription"
+    classe="lien-commencer-homologuer"
   />
 </Bloc>
 <Bloc variation="defaut">
@@ -257,5 +267,77 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+
+  :global(#doctrine-homologation .lien-commencer-homologuer) {
+    margin: 0 auto;
+  }
+
+  @media screen and (min-width: 577px) {
+    :global(#doctrine-homologation .hero) {
+      display: flex;
+    }
+
+    :global(#doctrine-homologation .hero > *) {
+      flex: 1;
+    }
+
+    .enjeu {
+      display: grid;
+      grid-template-areas:
+        'titre illustration'
+        'contenu illustration'
+        'liste illustration';
+      grid-template-columns: 50%;
+      grid-column-gap: 16px;
+    }
+
+    .proposition {
+      display: grid;
+      grid-template-areas:
+        'illustration titre'
+        'illustration contenu'
+        'illustration liste';
+      grid-template-columns: 50%;
+      grid-column-gap: 16px;
+    }
+
+    .enjeu h2,
+    .proposition h2 {
+      grid-area: titre;
+    }
+
+    .enjeu p,
+    .proposition p {
+      grid-area: contenu;
+    }
+
+    .enjeu ul,
+    .proposition ul {
+      grid-area: liste;
+    }
+
+    .enjeu .illustration,
+    .proposition .illustration {
+      grid-area: illustration;
+      align-self: center;
+    }
+
+    .mon-service-securise {
+      display: grid;
+      grid-template-areas: 'liste illustration';
+      grid-template-columns: 50%;
+      grid-column-gap: 16px;
+      margin-top: 32px;
+    }
+
+    .mon-service-securise .illustration {
+      grid-area: illustration;
+      align-self: center;
+    }
+
+    .mon-service-securise ul {
+      grid-area: liste;
+    }
   }
 </style>
