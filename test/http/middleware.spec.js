@@ -71,6 +71,7 @@ describe('Le middleware MSS', () => {
     adaptateurJWT,
     adaptateurEnvironnement,
     adaptateurGestionErreur,
+    adaptateurChiffrement = fabriqueAdaptateurChiffrement(),
   } = {}) =>
     Middleware({
       adaptateurJWT: adaptateurJWT || { decode: () => ({}) },
@@ -79,7 +80,7 @@ describe('Le middleware MSS', () => {
         identifieUtilisateur: () => {},
       },
       depotDonnees,
-      adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
+      adaptateurChiffrement,
     });
 
   beforeEach(() => {
@@ -665,6 +666,18 @@ describe('Le middleware MSS', () => {
 
     it("n'affiche pas l'URL de provenance quand l'utilisateur change de page", (done) => {
       verifiePositionnementHeader('referrer-policy', /^no-referrer$/, done);
+    });
+
+    it('positionne un nonce dans le reponse.locals', (done) => {
+      const middleware = leMiddleware({
+        adaptateurChiffrement: {
+          nonce: () => 'UN-NONCE',
+        },
+      });
+      middleware.positionneHeaders(requete, reponse, () => {
+        expect(reponse.locals.nonce).to.eql('UN-NONCE');
+        done();
+      });
     });
   });
 
