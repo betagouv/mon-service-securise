@@ -9,7 +9,11 @@ describe('Le service de vérification de cohérence des sels de hashage', () => 
     let serviceVerificationCoherenceSels;
     let depotDonnees;
     let adaptateurEnvironnement;
+    let consoleLogActuel;
+    let exitActuel;
+    let stdoutActuel;
 
+    /* eslint-disable no-console */
     beforeEach(() => {
       depotDonnees = {
         verifieLaCoherenceDesSels: () => {},
@@ -24,10 +28,21 @@ describe('Le service de vérification de cohérence des sels de hashage', () => 
           depotDonnees,
           adaptateurEnvironnement,
         });
+      consoleLogActuel = console.log;
+      console.log = () => {};
+      exitActuel = process.exit;
+      process.exit = () => {};
+      stdoutActuel = process.stdout.write;
     });
 
+    afterEach(() => {
+      console.log = consoleLogActuel;
+      process.exit = exitActuel;
+      process.stdout.write = stdoutActuel;
+    });
+    /* eslint-enable no-console */
+
     it("ne fait rien si l'application est en mode maintenance", async () => {
-      const exitActuel = process.exit;
       let depotAppele = false;
       depotDonnees.verifieLaCoherenceDesSels = () => {
         depotAppele = true;
@@ -36,8 +51,6 @@ describe('Le service de vérification de cohérence des sels de hashage', () => 
 
       await serviceVerificationCoherenceSels.verifieLaCoherenceDesSels();
       expect(depotAppele).to.be(false);
-
-      process.exit = exitActuel;
     });
 
     it('ne fait rien si les sels sont cohérents', async () => {
@@ -49,16 +62,6 @@ describe('Le service de vérification de cohérence des sels de hashage', () => 
     });
 
     describe('lorsque les sels sont incohérents', () => {
-      let exitActuel;
-
-      beforeEach(() => {
-        exitActuel = process.exit;
-      });
-
-      afterEach(() => {
-        process.exit = exitActuel;
-      });
-
       it("termine l'application", async () => {
         let codeRecu;
         process.exit = (codeDeRetour) => (codeRecu = codeDeRetour);
