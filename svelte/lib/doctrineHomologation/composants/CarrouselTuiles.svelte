@@ -47,9 +47,10 @@
 
 <style>
   .conteneur-tuiles {
+    --espacement: 16px;
     display: flex;
     overflow-x: auto;
-    gap: 16px;
+    gap: var(--espacement);
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
@@ -62,11 +63,11 @@
   }
 
   :global(.tuile-presentation:first-of-type) {
-    margin-left: 16px;
+    margin-left: var(--espacement);
   }
 
   :global(.tuile-presentation:last-of-type) {
-    margin-right: 16px;
+    margin-right: var(--espacement);
   }
 
   :global(.tuile-presentation) {
@@ -74,13 +75,14 @@
     scroll-snap-align: center;
     flex-shrink: 0;
     width: calc(100vw - 60px);
+    max-width: 266px;
   }
 
   .conteneur-actions {
     display: flex;
     margin-top: 32px;
     justify-content: center;
-    padding: 0 16px;
+    padding: 0 var(--espacement);
     gap: 24px;
   }
 
@@ -114,5 +116,11 @@
     text-decoration: underline;
     text-underline-offset: 4px;
     text-decoration-thickness: 2px;
+  }
+
+  @media screen and (min-width: 577px) {
+    .conteneur-tuiles {
+      --espacement: 24px;
+    }
   }
 </style>
