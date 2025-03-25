@@ -101,7 +101,7 @@
 </Bloc>
 <Bloc variation="primaire">
   <h2>Mon&ZeroWidthSpace;Service&ZeroWidthSpace;Sécurisé,</h2>
-  <p class="sans-marge-basse">
+  <p class="sans-marge-basse solution-anssi">
     <b
       >La solution de l’ANSSI pour vous permettre de piloter en équipe la
       sécurité et l'homologation tous vos services publics numériques !</b
@@ -349,6 +349,15 @@
     .mon-service-securise ul {
       grid-area: liste;
       align-self: center;
+    }
+
+    .solution-anssi {
+      max-width: 808px;
+    }
+
+    .titre-element-liste {
+      font-size: 24px;
+      line-height: 32px;
     }
   }
 
