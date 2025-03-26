@@ -29,13 +29,13 @@
     <Tuile
       illustration="/statique/assets/images/doctrine-homologation/icone-balance.svg"
       titre="Proportionnée"
-      contenu={`D'une démarche "simplifiée" à une démarche "renforcée", l'homologation doit être adaptée à la criticité d'un système et à son exposition.`}
+      contenu={`D'une démarche "simplifiée" à une démarche "renforcée", l'homologation doit être adaptée à la criticité d'un système et à son exposition au risque.`}
       classe="tuile-presentation"
     />
     <Tuile
       illustration="/statique/assets/images/doctrine-homologation/icone-utilisateur.svg"
       titre="Adaptée à vos usages"
-      contenu="Une doctrine construite grâce à l'expérience de l'ANSSI auprès de l'immense diversité des entités publiques et privées concernées par l'obligation d'homologation."
+      contenu="Une doctrine pensée pour répondre à la diversité des contextes de mise en oeuvre de l'homologation de sécurité de vos systèmes d'homologation."
       classe="tuile-presentation"
     />
   </div>
