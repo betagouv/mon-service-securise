@@ -2,6 +2,7 @@
   import CarteDePromotion from './CarteDePromotion.svelte';
 
   export let dateInscriptionUtilisateur: Date;
+  export let avecPromotionDeMsc: boolean;
 
   const ilYA1Mois = new Date().setMonth(new Date().getMonth() - 1);
   const utilisateurInscritDepuisPlusD1Mois =
@@ -42,15 +43,31 @@
     <b>Échangez</b> directement avec vos pairs pour une collaboration facilitée.
   </CarteDePromotion>
 
-  <CarteDePromotion titre="Découvrez le blog" href="/conseils-cyber">
-    <img
-      slot="illustration"
-      src="/statique/assets/images/tableauDeBord/image_decouvrez_blog.svg"
-      alt=""
-    />
-    Toutes les réponses à vos questions sur l'homologation de sécurité, la mise en
-    oeuvre des mesures
-  </CarteDePromotion>
+  {#if avecPromotionDeMsc}
+    <CarteDePromotion
+      titre="Découvez MesServicesCyber !"
+      href="https://messervices.cyber.gouv.fr/"
+      fondIllustration="jaune"
+    >
+      <img
+        slot="illustration"
+        src="/statique/assets/images/tableauDeBord/image_promotion_msc.png"
+        alt=""
+      />
+      MesServicesCyber, la plateforme pour faciliter l'accès de tous aux services
+      et ressources de l'ANSSI et de ses partenaires.
+    </CarteDePromotion>
+  {:else}
+    <CarteDePromotion titre="Découvrez le blog" href="/conseils-cyber">
+      <img
+        slot="illustration"
+        src="/statique/assets/images/tableauDeBord/image_decouvrez_blog.svg"
+        alt=""
+      />
+      Toutes les réponses à vos questions sur l'homologation de sécurité, la mise
+      en oeuvre des mesures
+    </CarteDePromotion>
+  {/if}
 </div>
 
 <style>
