@@ -78,6 +78,7 @@ const creeServeur = ({
 
   app.use(middleware.positionneHeaders);
   app.use(middleware.ajouteVersionFichierCompiles);
+  app.use(middleware.chargeFeatureFlags);
 
   app.disable('x-powered-by');
 
