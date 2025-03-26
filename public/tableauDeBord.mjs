@@ -19,6 +19,7 @@ $(() => {
         modeVisiteGuidee,
         profilUtilisateurComplet,
         dateInscriptionUtilisateur,
+        avecPromotionDeMsc: false,
       },
     })
   );
