@@ -50,10 +50,10 @@ const donneesNiveauxDeSecurite: NiveauDeSecurite[] = [
   },
   {
     id: 'niveau3',
-    nom: 'Importants',
+    nom: 'Avancés',
     titreNiveau: 'important',
     resume:
-      'Les besoins de sécurité sont importants compte tenu de la sensibilité des données traitées ou des fonctionnalités proposées.',
+      'Les besoins de sécurité sont avancés compte tenu de la sensibilité des données traitées ou des fonctionnalités proposées.',
     description: {
       exemplesServicesNumeriques: [
         "Service numérique d'ampleur régionale ou nationale traitant de données à caractère personnel ou d'autres sensibles.",

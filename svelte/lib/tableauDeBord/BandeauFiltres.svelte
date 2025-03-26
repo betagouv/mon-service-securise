@@ -33,7 +33,7 @@
             idCategorie: 'niveauSecurite',
           },
           {
-            libelle: 'Importants',
+            libelle: 'Avancés',
             valeur: 'niveau3',
             idCategorie: 'niveauSecurite',
           },
