@@ -394,6 +394,10 @@ const middlewareFantaisie = {
   interdisLaMiseEnCache: (_requete, _reponse, suite) => {
     suite();
   },
+
+  chargeFeatureFlags: (_requete, _reponse, suite) => {
+    suite();
+  },
 };
 
 module.exports = middlewareFantaisie;
