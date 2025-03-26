@@ -34,7 +34,10 @@
     </CarteDePromotion>
   {/if}
 
-  <CarteDePromotion titre="Rejoignez la communauté" href="https://malea.dev">
+  <CarteDePromotion
+    titre="Rejoignez la communauté"
+    href="https://tally.so/r/wa6o22"
+  >
     <img
       slot="illustration"
       src="/statique/assets/images/tableauDeBord/image_rejoignez_communaute.svg"
@@ -58,7 +61,11 @@
       et ressources de l'ANSSI et de ses partenaires.
     </CarteDePromotion>
   {:else}
-    <CarteDePromotion titre="Découvrez le blog" href="/conseils-cyber">
+    <CarteDePromotion
+      titre="Découvrez le blog"
+      href="/conseils-cyber"
+      fondIllustration="bleu-clair"
+    >
       <img
         slot="illustration"
         src="/statique/assets/images/tableauDeBord/image_decouvrez_blog.svg"

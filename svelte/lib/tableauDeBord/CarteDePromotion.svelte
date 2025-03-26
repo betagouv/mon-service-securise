@@ -1,7 +1,7 @@
 <script lang="ts">
   export let href: string;
   export let titre: string;
-  export let fondIllustration: 'bleu' | 'jaune' = 'bleu';
+  export let fondIllustration: 'bleu' | 'jaune' | 'bleu-clair' = 'bleu';
 
   let avecIllustration = $$slots.illustration;
 </script>
@@ -56,6 +56,9 @@
       }
       &.fond-bleu {
         background-color: var(--bleu-mise-en-avant);
+      }
+      &.fond-bleu-clair {
+        background-color: #dbecf1;
       }
 
       :global(img) {
