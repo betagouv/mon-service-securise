@@ -35,7 +35,7 @@ const middleware = (configuration = {}) => {
 
     const defaultCsp = "default-src 'self'";
     const connectCsp = `connect-src 'self' https://sentry.incubateur.net ${CSP_BIBLIOTHEQUES.matomo.connect}`;
-    const imgCsp = `img-src 'self' ${CSP_BIBLIOTHEQUES.crisp.image}`;
+    const imgCsp = `img-src 'self' ${CSP_BIBLIOTHEQUES.crisp.image} ${CSP_BIBLIOTHEQUES['lab-anssi-ui-kit'].img}`;
     const mediaCsp = `media-src 'self' ${CSP_BIBLIOTHEQUES.monservicesecurise.media}`;
 
     const styleCsp = `style-src 'self' 'nonce-${nonce}'`;

@@ -8,6 +8,7 @@ block page
   block scripts
     script(src='/statique/bibliotheques/axios-1.0.0.min.js')
     script(src='/statique/bibliotheques/jquery-3.6.0.min.js')
+    script(src='/statique/bibliotheques/lab-anssi-ui-kit-1.1.1.min.js' nonce=nonce)
 
   block styles
     link(href='/statique/assets/styles/palette.css', rel='stylesheet')
@@ -50,11 +51,12 @@ block page
           span La plateforme sera inaccessible. Nous nous excusons pour la gêne occasionée.
 
 
-
   block session
     include csrf.pug
 
   block visite-guidee
+
+  block bandeau-promotion-msc
 
   block navigation-site-vitrine
 

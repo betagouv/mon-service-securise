@@ -19,6 +19,9 @@ const CSP_BIBLIOTHEQUES = {
     media:
       'https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com',
   },
+  'lab-anssi-ui-kit': {
+    img: 'https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com',
+  },
 };
 
 const routesNonConnecteApiBibliotheques = () => {
