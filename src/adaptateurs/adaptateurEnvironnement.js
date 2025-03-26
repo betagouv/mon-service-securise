@@ -84,6 +84,7 @@ const featureFlag = () => ({
     process.env.OIDC_URL_BASE &&
     process.env.OIDC_CLIENT_ID &&
     process.env.OIDC_CLIENT_SECRET,
+  dateDebutBandeauMSC: () => process.env.FEATURE_FLAG_MSC_BANDEAU_DATE_DEBUT,
 });
 
 const versionDeBuild = () => {
