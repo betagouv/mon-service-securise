@@ -133,7 +133,7 @@ module.exports = {
     },
     {
       id: 'sortieDeMesServicesCyber',
-      dateDeDeploiement: '2025-04-02 07:00:00Z',
+      dateDeDeploiement: '2025-04-01 07:00:00Z',
       lien: 'https://messervices.cyber.gouv.fr/',
       titre: "Découvrez MessServiceCyber, la nouvelle innovation de l'ANSSI",
       sousTitre:
@@ -143,7 +143,7 @@ module.exports = {
     },
     {
       id: 'nouvelleDoctrineHomologation',
-      dateDeDeploiement: '2025-04-02 07:00:00Z',
+      dateDeDeploiement: '2025-04-01 07:00:00Z',
       lien: 'https://messervices.cyber.gouv.fr/doctrine-homologation-anssi',
       titre: "Découvrez la nouvelle doctrine d'homologation de l'ANSSI !",
       sousTitre:
