@@ -7,6 +7,7 @@ declare global {
 export type TableauDeBordProps = {
   estSuperviseur: boolean;
   modeVisiteGuidee: boolean;
+  dateInscriptionUtilisateur: Date;
   profilUtilisateurComplet?: boolean;
 };
 
