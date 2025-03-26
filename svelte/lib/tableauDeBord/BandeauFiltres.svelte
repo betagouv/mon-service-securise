@@ -23,7 +23,7 @@
         ],
         items: [
           {
-            libelle: 'Élémentaires',
+            libelle: 'Basiques',
             valeur: 'niveau1',
             idCategorie: 'niveauSecurite',
           },

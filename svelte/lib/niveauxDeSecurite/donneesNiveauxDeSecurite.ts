@@ -3,10 +3,10 @@ import type { NiveauDeSecurite } from './niveauxDeSecurite.d';
 const donneesNiveauxDeSecurite: NiveauDeSecurite[] = [
   {
     id: 'niveau1',
-    nom: 'Élémentaires',
+    nom: 'Basiques',
     titreNiveau: 'élémentaire',
     resume:
-      "Les besoins de sécurité sont élémentaires en l'absence de données ou de fonctionnalités sensibles.",
+      "Les besoins de sécurité sont basiques en l'absence de données ou de fonctionnalités sensibles.",
     description: {
       exemplesServicesNumeriques: [
         "Site vitrine d'un établissement public",
