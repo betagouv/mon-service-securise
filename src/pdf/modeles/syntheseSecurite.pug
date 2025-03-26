@@ -78,7 +78,7 @@ block page
       fieldset(class='besoins-securite')
         -
           const niveauService = service.descriptionService.niveauSecurite
-          const labelNiveaux = {niveau1: 'Élémentaires', niveau2: 'Modérés', niveau3: 'Importants'}
+          const labelNiveaux = {niveau1: 'Basiques', niveau2: 'Modérés', niveau3: 'Importants'}
         p.titre-besoins Besoins de sécurité
         p.niveau-besoins!= labelNiveaux[niveauService]
         img.illustration-niveau(class=niveauService)
