@@ -131,6 +131,16 @@ module.exports = {
       image: 'serviceImpactNational.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'sortieDeMesServicesCyber',
+      dateDeDeploiement: '2025-04-02 07:00:00Z',
+      lien: 'https://messervices.cyber.gouv.fr/',
+      titre: "Découvrez MessServiceCyber, la nouvelle innovation de l'ANSSI",
+      sousTitre:
+        "MesServicesCyber, la plateforme pour faciliter l'accès de tous aux services et ressources de l'ANSSI et de ses partenaires.",
+      image: 'mesServicesCyber.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
