@@ -60,10 +60,6 @@
       &.fond-bleu-clair {
         background-color: #dbecf1;
       }
-
-      :global(img) {
-        width: 100%;
-      }
     }
 
     .promotion {
