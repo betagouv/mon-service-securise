@@ -1,6 +1,7 @@
 <script lang="ts">
   export let href: string;
   export let titre: string;
+  export let fondIllustration: 'bleu' | 'jaune' = 'bleu';
 
   let avecIllustration = $$slots.illustration;
 </script>
@@ -12,7 +13,7 @@
   class="carte"
   class:avec-illustration={avecIllustration}
 >
-  <div class="illustration">
+  <div class={`illustration fond-${fondIllustration}`}>
     <slot name="illustration" />
   </div>
 
@@ -47,9 +48,19 @@
       justify-content: center;
       align-items: center;
       flex: 0 0 135px;
-      background-color: var(--bleu-mise-en-avant);
       border-top-left-radius: 8px;
       border-bottom-left-radius: 8px;
+
+      &.fond-jaune {
+        background-color: #fff6d7;
+      }
+      &.fond-bleu {
+        background-color: var(--bleu-mise-en-avant);
+      }
+
+      :global(img) {
+        width: 100%;
+      }
     }
 
     .promotion {
