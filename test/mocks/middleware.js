@@ -395,7 +395,10 @@ const middlewareFantaisie = {
     suite();
   },
 
-  chargeFeatureFlags: (_requete, _reponse, suite) => {
+  chargeFeatureFlags: (_requete, reponse, suite) => {
+    reponse.locals.featureFlags = {
+      avecBandeauMSC: false,
+    };
     suite();
   },
 };
