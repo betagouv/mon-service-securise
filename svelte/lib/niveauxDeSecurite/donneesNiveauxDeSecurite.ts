@@ -12,7 +12,7 @@ const donneesNiveauxDeSecurite: NiveauDeSecurite[] = [
         "Site vitrine d'un établissement public",
         "Site de la médiathèque d'une commune",
       ],
-      demarcheIndicative: 'initiale',
+      demarcheIndicative: 'simplifiée',
       securisation: [
         'Mettez en œuvre <b>le socle de mesures de sécurité</b> proposé par MonServiceSécurisé afin de protéger contre les risques les plus courants, incluant la réalisation de tests de sécurité automatiques.',
       ],
