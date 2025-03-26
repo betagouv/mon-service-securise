@@ -47,9 +47,9 @@
   export let indicesCyberCharges: boolean = false;
 
   const libellesNiveauSecurite = {
-    niveau1: 'Élémentaires',
+    niveau1: 'Basiques',
     niveau2: 'Modérés',
-    niveau3: 'Importants',
+    niveau3: 'Avancés',
   };
 </script>
 

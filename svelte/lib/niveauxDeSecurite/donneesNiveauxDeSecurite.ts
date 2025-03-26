@@ -3,16 +3,16 @@ import type { NiveauDeSecurite } from './niveauxDeSecurite.d';
 const donneesNiveauxDeSecurite: NiveauDeSecurite[] = [
   {
     id: 'niveau1',
-    nom: 'Élémentaires',
+    nom: 'Basiques',
     titreNiveau: 'élémentaire',
     resume:
-      "Les besoins de sécurité sont élémentaires en l'absence de données ou de fonctionnalités sensibles.",
+      "Les besoins de sécurité sont basiques en l'absence de données ou de fonctionnalités sensibles.",
     description: {
       exemplesServicesNumeriques: [
         "Site vitrine d'un établissement public",
         "Site de la médiathèque d'une commune",
       ],
-      demarcheIndicative: 'initiale',
+      demarcheIndicative: 'simplifiée',
       securisation: [
         'Mettez en œuvre <b>le socle de mesures de sécurité</b> proposé par MonServiceSécurisé afin de protéger contre les risques les plus courants, incluant la réalisation de tests de sécurité automatiques.',
       ],
@@ -50,10 +50,10 @@ const donneesNiveauxDeSecurite: NiveauDeSecurite[] = [
   },
   {
     id: 'niveau3',
-    nom: 'Importants',
+    nom: 'Avancés',
     titreNiveau: 'important',
     resume:
-      'Les besoins de sécurité sont importants compte tenu de la sensibilité des données traitées ou des fonctionnalités proposées.',
+      'Les besoins de sécurité sont avancés compte tenu de la sensibilité des données traitées ou des fonctionnalités proposées.',
     description: {
       exemplesServicesNumeriques: [
         "Service numérique d'ampleur régionale ou nationale traitant de données à caractère personnel ou d'autres sensibles.",

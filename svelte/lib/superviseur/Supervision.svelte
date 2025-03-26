@@ -53,9 +53,9 @@
     id="filtre-besoins-securite"
     options={[
       { label: 'Tous besoins de sécurité', valeur: '' },
-      { label: 'Élémentaire', valeur: 'niveau1' },
+      { label: 'Basique', valeur: 'niveau1' },
       { label: 'Modéré', valeur: 'niveau2' },
-      { label: 'Important', valeur: 'niveau3' },
+      { label: 'Avancés', valeur: 'niveau3' },
     ]}
     aideSaisie="Sélectionner un besoin de sécurité"
   />
