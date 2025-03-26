@@ -141,6 +141,16 @@ module.exports = {
       image: 'mesServicesCyber.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'nouvelleDoctrineHomologation',
+      dateDeDeploiement: '2025-04-02 07:00:00Z',
+      lien: 'https://messervices.cyber.gouv.fr/doctrine-homologation-anssi',
+      titre: "Découvrez la nouvelle doctrine d'homologation de l'ANSSI !",
+      sousTitre:
+        'Plus pédagogique, plus proportionnée, plus adaptée à vos usages',
+      image: 'nouvelleDoctrineHomologation.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
