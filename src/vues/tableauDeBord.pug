@@ -8,6 +8,7 @@ block append styles
 block append scripts
   +composantSvelte('tableauDeBord.js')
   +donneesPartagees('utilisateur-superviseur', {estSuperviseur})
+  +donneesPartagees('avec-promotion-de-msc', featureFlags.avecBandeauMSC)
   script(type = 'module', src = '/statique/tableauDeBord.mjs')
 
 block main
