@@ -27,7 +27,8 @@
       <img
         slot="illustration"
         alt=""
-        src="/statique/assets/images/tableauDeBord/image_equipe_webinaire.svg"
+        src="/statique/assets/images/tableauDeBord/image_equipe_webinaire.png"
+        width="78"
       />
       Nous vous guiderons dans la découverte et prise en main de MonServiceSécurisé
       au sein de votre organisation.
@@ -55,6 +56,7 @@
       <img
         slot="illustration"
         src="/statique/assets/images/tableauDeBord/image_promotion_msc.png"
+        width="135"
         alt=""
       />
       MesServicesCyber, la plateforme pour faciliter l'accès de tous aux services
