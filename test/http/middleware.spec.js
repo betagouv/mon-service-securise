@@ -1229,4 +1229,54 @@ describe('Le middleware MSS', () => {
       });
     });
   });
+
+  describe('sur demande de chargement des `feature flags`', () => {
+    let middleware;
+    let adaptateurHorloge;
+    let adaptateurEnvironnement;
+
+    beforeEach(() => {
+      adaptateurEnvironnement = {
+        featureFlag: () => ({
+          dateDebutBandeauMSC: () => '2025-01-01 00:00:00Z',
+        }),
+      };
+      adaptateurHorloge = {
+        maintenant: () => new Date('2024-01-01 00:00:00Z'),
+      };
+      middleware = Middleware({
+        adaptateurEnvironnement,
+        adaptateurHorloge,
+      });
+    });
+
+    it('ajoute un objet de feature flags à `reponse.locals`, le rendant ainsi accessible aux `.pug`', (done) => {
+      middleware.chargeFeatureFlags(requete, reponse, () => {
+        expect(reponse.locals.featureFlags).not.to.be(undefined);
+        done();
+      });
+    });
+
+    describe("concernant l'affichage du bandeau de promotion MesServicesCyber", () => {
+      it("n'affiche pas le bandeau si la date du jour est antérieure à la date d'affichage", (done) => {
+        middleware.chargeFeatureFlags(requete, reponse, () => {
+          expect(reponse.locals.featureFlags.avecBandeauMSC).to.be(false);
+          done();
+        });
+      });
+
+      it("affiche le bandeau si la date d'affichage est passée", (done) => {
+        adaptateurHorloge.maintenant = () => new Date('2026-01-01 00:00:00Z');
+        middleware = Middleware({
+          adaptateurEnvironnement,
+          adaptateurHorloge,
+        });
+
+        middleware.chargeFeatureFlags(requete, reponse, () => {
+          expect(reponse.locals.featureFlags.avecBandeauMSC).to.be(true);
+          done();
+        });
+      });
+    });
+  });
 });

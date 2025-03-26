@@ -22,6 +22,7 @@ const middleware = (configuration = {}) => {
   const {
     depotDonnees,
     adaptateurEnvironnement = adaptateurEnvironnementParDefaut,
+    adaptateurHorloge,
     adaptateurJWT,
     adaptateurProtection,
     adaptateurGestionErreur,
@@ -387,6 +388,15 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
+  const chargeFeatureFlags = (_requete, reponse, suite) => {
+    reponse.locals.featureFlags = {
+      avecBandeauMSC:
+        adaptateurHorloge.maintenant() >
+        new Date(adaptateurEnvironnement.featureFlag().dateDebutBandeauMSC()),
+    };
+    suite();
+  };
+
   return {
     ajouteVersionFichierCompiles,
     aseptise,
@@ -395,6 +405,7 @@ const middleware = (configuration = {}) => {
     chargeAutorisationsService,
     chargeEtatAgentConnect,
     chargeEtatVisiteGuidee,
+    chargeFeatureFlags,
     chargePreferencesUtilisateur,
     chargeTypeRequete,
     interdisLaMiseEnCache,
