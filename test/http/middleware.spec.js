@@ -608,10 +608,10 @@ describe('Le middleware MSS', () => {
         );
       });
 
-      it('autorise le chargement des images venant de CRISP', (done) => {
+      it("autorise le chargement des images venant de CRISP et du S3 de l'UI Kit", (done) => {
         verifiePositionnementHeader(
           'content-security-policy',
-          "img-src 'self' https://storage.crisp.chat;",
+          "img-src 'self' https://storage.crisp.chat https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com;",
           done
         );
       });
