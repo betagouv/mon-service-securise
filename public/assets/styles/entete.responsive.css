@@ -20,6 +20,7 @@
     cursor: pointer;
     border: none;
     display: flex;
+    margin: 8px;
   }
 
   header nav.visible {
