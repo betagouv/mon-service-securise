@@ -9,9 +9,14 @@
       | 'homologation'
       | 'indiceCyber'
       | 'telecharger'
+      | 'telecharger-blanc'
       | 'medaille'
       | undefined;
-    type?: 'bouton-primaire' | 'bouton-secondaire' | 'lien';
+    type?:
+      | 'bouton-primaire'
+      | 'bouton-secondaire'
+      | 'bouton-tertiaire'
+      | 'lien';
     taille?: 'petit' | 'moyen';
     classe?: string;
     href: string;
@@ -26,10 +31,14 @@
     | 'homologation'
     | 'indiceCyber'
     | 'telecharger'
+    | 'telecharger-blanc'
     | 'medaille'
     | undefined = undefined;
-  export let type: 'bouton-primaire' | 'bouton-secondaire' | 'lien' =
-    'bouton-primaire';
+  export let type:
+    | 'bouton-primaire'
+    | 'bouton-secondaire'
+    | 'bouton-tertiaire'
+    | 'lien' = 'bouton-primaire';
   export let taille: 'petit' | 'moyen' = 'moyen';
   export let inactif: boolean = false;
 </script>
@@ -97,6 +106,10 @@
     background-image: url('/statique/assets/images/icone_telecharger.svg');
   }
 
+  .telecharger-blanc:before {
+    background-image: url('/statique/assets/images/icone_telecharger_blanc.svg');
+  }
+
   .medaille:before {
     background-image: url('/statique/assets/images/icone_medaille.svg');
   }
@@ -156,6 +169,20 @@
 
   .bouton-secondaire {
     color: var(--bleu-mise-en-avant);
+  }
+
+  .bouton-tertiaire {
+    background: white;
+    border-radius: 4px;
+    color: var(--bleu-mise-en-avant);
+  }
+
+  .bouton-tertiaire:hover {
+    background: #f6f6f6;
+  }
+
+  .bouton-tertiaire:active {
+    background: #ededed;
   }
 
   .bouton-secondaire:hover {

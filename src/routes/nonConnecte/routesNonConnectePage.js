@@ -27,6 +27,10 @@ const routesNonConnectePage = ({
     reponse.render('aPropos');
   });
 
+  routes.get('/doctrine-homologation-anssi', (_requete, reponse) => {
+    reponse.render('doctrineHomologation');
+  });
+
   routes.get('/securite', (_requete, reponse) => {
     reponse.render('securite');
   });
