@@ -39,7 +39,7 @@
     "@tiptap/extension-mention": "^2.7.1",
     "@tiptap/extension-placeholder": "^2.7.1",
     "@tiptap/starter-kit": "^2.7.1",
-    "axios": "^0.28.0",
+    "axios": "^0.30.0",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cookie-session": "^2.0.0",
