@@ -40,8 +40,18 @@
 <Bloc>
   <h2 class="centre">Découvrez la doctrine</h2>
   <div class="conteneur-video">
-    <!-- svelte-ignore a11y-media-has-caption -->
-    <video controls src="/todo" />
+    <video controls crossorigin="anonymous">
+      <source
+        src="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/Nouvelle_doctrine_homologation.mp4"
+        type="video/mp4"
+      />
+      <track
+        src="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/Nouvelle_doctrine_homologation.vtt"
+        kind="captions"
+        srclang="fr"
+        label="Français"
+      />
+    </video>
   </div>
 </Bloc>
 <Bloc variation="attenue">
