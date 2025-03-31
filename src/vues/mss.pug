@@ -20,8 +20,6 @@ block page
     link(href='/statique/assets/styles/entete.responsive.css', rel='stylesheet')
     link(href='/statique/assets/styles/piedPage.css', rel='stylesheet')
     link(href='/statique/assets/styles/piedPage.responsive.css', rel='stylesheet')
-    link(href='/statique/assets/styles/bom.css', rel='stylesheet')
-    link(href='/statique/assets/styles/bom.responsive.css', rel='stylesheet')
     link(href='/statique/assets/styles/theme-ui-kit.css', rel='stylesheet')
 
   title MonServiceSécurisé
@@ -74,21 +72,6 @@ block page
 
   main
     block main
-    .bom
-      button.bom-titre
-        | Aide
-      .bom-modale
-        .bandeau-titre Aide
-          .bandeau-sous-titre Une question ?
-        .contenu
-          block bom-contenu
-            p Vous souhaitez :
-            ul
-              a(href = 'https://aide.monservicesecurise.cyber.gouv.fr/' target='_blank' rel = 'noopener'): li Nous contacter
-              a(href = 'https://calendly.com/fabien-giraud/presentation-de-monservicesecurise-1' target='_blank' rel = 'noopener'): li Bénéficier d'une présentation de MonServiceSécurisé
-              a(href = 'https://aide.monservicesecurise.cyber.gouv.fr/' target='_blank' rel = 'noopener'): li Consulter la F.A.Q.
-        button.fermeture
-          p Fermer
 
   footer
     block footer-bandeau-mss
@@ -129,4 +112,3 @@ block page
           a(href = '/accessibilite') Accessibilité : non conforme
 
   script(type = 'module', src = '/statique/entete.js')
-  script(type = 'module', src = '/statique/scripts/bom.js')
