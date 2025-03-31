@@ -6,7 +6,6 @@
 
   let cibleNomService: HTMLElement;
   let cibleCentreNotifications: HTMLElement;
-  let cibleBOM: HTMLElement;
   let cibleNouveauService: HTMLElement;
   let cibleLignePremierService: HTMLElement;
 
@@ -21,7 +20,6 @@
     cibleNomService = elementDeClasse('cellule-noms');
     cibleLignePremierService = elementDeClasse('ligne-service');
     cibleCentreNotifications = elementDeClasse('centre-notifications');
-    cibleBOM = elementDeClasse('bom-modale');
     cibleNouveauService = elementDeClasse('nouveau-service');
   };
 
@@ -65,7 +63,7 @@
   };
 </script>
 
-{#if cibleNomService && cibleCentreNotifications && cibleBOM && cibleNouveauService && cibleLignePremierService}
+{#if cibleNomService && cibleCentreNotifications && cibleNouveauService && cibleLignePremierService}
   <ModaleSousEtape
     sousEtapes={[
       {
@@ -95,29 +93,6 @@
         description:
           'Ne ratez aucune information ou nouveauté importante de MonServiceSécurisé !',
         animation: '/statique/assets/images/visiteGuidee/nouveautes.gif',
-      },
-      {
-        cible: cibleBOM,
-        positionnementModale: 'BasGauche',
-        margeElementMisEnAvant: 3,
-        callbackInitialeCible: () => {
-          document
-            .getElementsByClassName('bom-titre')[0]
-            .dispatchEvent(new Event('click'));
-          document.querySelector('.bom-modale .fermeture').disabled = true;
-          document
-            .querySelectorAll('.bom-modale .contenu a')
-            .forEach((lien) => lien.removeAttribute('href'));
-        },
-        callbackFinaleCible: () => {
-          document
-            .querySelector('.bom-modale .fermeture')
-            .dispatchEvent(new Event('click'));
-        },
-        titre: 'Trouvez des réponses à vos questions',
-        description:
-          'Notre équipe est à votre disposition pour vous accompagner, par chat, webinaire ou FAQ. N’hésitez pas à nous faire vos retours sur le produit, nous les lirons avec attention.',
-        animation: '/statique/assets/images/visiteGuidee/bom.gif',
       },
       derniereSousEtape(),
     ]}
