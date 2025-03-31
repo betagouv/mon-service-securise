@@ -21,16 +21,18 @@ $(() => {
     );
   }
 
-  $('#lien-reinitialise-visite-guidee').on('click', () => {
-    axios
-      .post('/api/visiteGuidee/reinitialise')
-      .then(() => {
-        window.location.href = '/tableauDeBord';
-      })
-      /* eslint-disable no-console */
-      .catch(() =>
-        console.warn('Impossible de réinitialiser la visite guidée')
-      );
+  $('lab-anssi-centre-aide').on('lienclique', (e) => {
+    if (e.detail.target.id === 'centre-aide-visite-guidee') {
+      axios
+        .post('/api/visiteGuidee/reinitialise')
+        .then(() => {
+          window.location.href = '/tableauDeBord';
+        })
+        /* eslint-disable no-console */
+        .catch(() =>
+          console.warn('Impossible de réinitialiser la visite guidée')
+        );
+    }
   });
 
   lanceDecompteDeconnexion(DUREE_SESSION);

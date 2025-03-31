@@ -28,6 +28,21 @@ block append session
   script(type = 'module', src = '/statique/mssConnecte.mjs')
   +composantSvelte('visiteGuidee.js')
 
+block centre-aide
+  lab-anssi-centre-aide(nomService="MonServiceSécurisé" liens=JSON.stringify([
+    { texte: '💬 Nous contacter par chat', href: 'https://aide.monservicesecurise.cyber.gouv.fr/' },
+    {
+      texte: "👩‍💻 Participer à un webinaire",
+      href: 'https://calendly.com/fabien-giraud/presentation-de-monservicesecurise-1'
+    },
+    {
+      texte: "🔎 Parcourir la visite guidée",
+      preventDefault: true,
+      id: "centre-aide-visite-guidee"
+    },
+    { texte: '🙌 Consulter la F.A.Q.', href: 'https://aide.monservicesecurise.cyber.gouv.fr/' },
+  ]))
+
 block bom-contenu
   p Vous souhaitez :
   ul
