@@ -22,6 +22,7 @@ block page
     link(href='/statique/assets/styles/piedPage.responsive.css', rel='stylesheet')
     link(href='/statique/assets/styles/bom.css', rel='stylesheet')
     link(href='/statique/assets/styles/bom.responsive.css', rel='stylesheet')
+    link(href='/statique/assets/styles/theme-ui-kit.css', rel='stylesheet')
 
   title MonServiceSécurisé
 
@@ -63,6 +64,13 @@ block page
   block navigation-site-vitrine
 
   block tiroir
+
+  block centre-aide
+    lab-anssi-centre-aide(nomService="MonServiceSécurisé" liens=JSON.stringify([
+      { texte: '💬 Nous contacter par chat', href: 'https://aide.monservicesecurise.cyber.gouv.fr/' },
+      { texte: "👩‍💻 Participer à un webinaire", href: 'https://calendly.com/fabien-giraud/presentation-de-monservicesecurise-1' },
+      { texte: '🙌 Consulter la F.A.Q.', href: 'https://aide.monservicesecurise.cyber.gouv.fr/' },
+    ]))
 
   main
     block main
