@@ -3,6 +3,7 @@
   export let illustration: string;
   export let contenu: string;
   export let href: string;
+  export let lienExterne: boolean = false;
 </script>
 
 <a class="tuile-telechargement" {href} title={titre}>
@@ -12,7 +13,9 @@
   <div class="conteneur-texte">
     <p class="titre">{titre}</p>
     <p class="contenu">{contenu}</p>
-    <a {href} target="_blank" class="lien">Télécharger le PDF</a>
+    <a {href} target="_blank" class="lien" class:lien-externe={lienExterne}
+      >{lienExterne ? 'Découvrir le document' : 'Télécharger le PDF'}</a
+    >
   </div>
 </a>
 
@@ -29,6 +32,7 @@
     overflow: hidden;
     transition: box-shadow 0.1s ease-in-out;
     max-width: 385px;
+    flex: 1;
   }
 
   .conteneur-image {
@@ -83,6 +87,10 @@
     display: flex;
     width: 16px;
     height: 16px;
+  }
+
+  a.lien.lien-externe:after {
+    content: url(/statique/assets/images/icone_lien_nouvel_onglet.svg);
   }
 
   .tuile-telechargement:hover {

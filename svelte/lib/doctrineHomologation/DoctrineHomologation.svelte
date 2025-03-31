@@ -153,7 +153,7 @@
   />
 </Bloc>
 <Bloc variation="defaut">
-  <h2 class="grande-marge-basse">Télécharger la documentation</h2>
+  <h2 class="grande-marge-basse">Les documents utiles</h2>
   <div class="conteneur-tuiles-telechargement">
     <TuileTelechargement
       titre="L’homologation simplifiée"
@@ -161,14 +161,13 @@
       illustration="/statique/assets/images/doctrine-homologation/thumbnail-pdf-doctrine.png"
       href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/Doctrine_Homologation_A4.pdf"
     />
-    {#if false}
-      <TuileTelechargement
-        titre="Le guide d’homologation de la sécurité des SI"
-        contenu="Le guide d'homologation détaillé de l'ANSSI pour les spécialistes de l'homologation de sécurité."
-        illustration="/statique/assets/images/doctrine-homologation/thumbnail-pdf-anssi.png"
-        href="/todo"
-      />
-    {/if}
+    <TuileTelechargement
+      titre="Le guide d’homologation de la sécurité des SI"
+      contenu="Le guide d'homologation détaillé de l'ANSSI pour les spécialistes de l'homologation de sécurité."
+      illustration="/statique/assets/images/doctrine-homologation/thumbnail-pdf-anssi.png"
+      href="https://cyber.gouv.fr/lhomologation-de-securite"
+      lienExterne
+    />
   </div>
 </Bloc>
 
@@ -358,6 +357,10 @@
     .titre-element-liste {
       font-size: 24px;
       line-height: 32px;
+    }
+
+    .conteneur-tuiles-telechargement {
+      flex-direction: row;
     }
   }
 
