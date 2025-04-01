@@ -392,22 +392,31 @@ const creeDepot = (config = {}) => {
     return indexMax(sesServices);
   };
 
-  const dupliqueService = async (idService, idProprietaire) => {
+  const dupliqueService = async (
+    idService,
+    idProprietaire,
+    nouveauNomEtSiret = null
+  ) => {
     const duplique = async (s) => {
-      const nomDuplication = `${s.nomService()} - Copie`;
-      const donneesADupliquer = (index) =>
-        s.donneesADupliquer(`${nomDuplication} ${index}`);
+      if (nouveauNomEtSiret) {
+        const donnees = s.donneesADupliquer(
+          nouveauNomEtSiret.nomService,
+          nouveauNomEtSiret.siret
+        );
+        return nouveauService(idProprietaire, donnees);
+      }
 
-      const index = await trouveIndexDisponible(idProprietaire, nomDuplication);
-      const donnees = donneesADupliquer(index);
-      await nouveauService(idProprietaire, donnees);
+      const nomCopie = `${s.nomService()} - Copie`;
+      const index = await trouveIndexDisponible(idProprietaire, nomCopie);
+      const donnees = s.donneesADupliquer(`${nomCopie} ${index}`);
+      return nouveauService(idProprietaire, donnees);
     };
 
     const s = await p.lis.un(idService);
     if (typeof s === 'undefined')
       throw new ErreurServiceInexistant(`Service "${idService}" non trouvé`);
 
-    await duplique(s);
+    return duplique(s);
   };
 
   const metsAJourService = async (unService) => {

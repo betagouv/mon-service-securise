@@ -1562,6 +1562,25 @@ describe('Le dépôt de données des services', () => {
       expect(s2.nomService()).to.equal('Service à dupliquer - Copie 1');
       expect(s3.nomService()).to.equal('Service à dupliquer - Copie 2');
     });
+
+    it('peut utiliser un nom et un siret prédéfini pour le service dupliqué', async () => {
+      await depot.dupliqueService('123-1', '123', {
+        nomService: 'Un nom prédéfini',
+        siret: 'UN_SIRET',
+      });
+
+      // eslint-disable-next-line no-unused-vars
+      const [_, s2] = await depot.services('123');
+
+      expect(s2.nomService()).to.equal('Un nom prédéfini');
+      expect(s2.siretDeOrganisation()).to.equal('UN_SIRET');
+    });
+
+    it("retourne l'id du service dupliqué", async () => {
+      const idServiceDuplique = await depot.dupliqueService('123-1', '123');
+
+      expect(idServiceDuplique).to.match(/[a-zA-Z0-9-]{36}/);
+    });
   });
 
   describe("sur une demande d'un index de copie disponible pour un service à dupliquer", () => {

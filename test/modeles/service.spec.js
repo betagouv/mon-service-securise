@@ -896,6 +896,22 @@ describe('Un service', () => {
       );
     });
 
+    it("utilise le siret s'il est passé en paramètre", () => {
+      const service = new Service(
+        { id: 'id-service', descriptionService },
+        referentiel
+      );
+
+      const duplicata = service.donneesADupliquer(
+        'Nouveau service',
+        'NOUVEAU_SIRET'
+      );
+
+      expect(
+        duplicata.descriptionService.organisationResponsable.siret
+      ).to.equal('NOUVEAU_SIRET');
+    });
+
     it("ne duplique pas les dossiers de l'homologation", () => {
       const service = new Service(
         {
