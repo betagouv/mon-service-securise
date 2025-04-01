@@ -72,7 +72,7 @@
     <ul>
       <li>
         🤝 Comment participer à une démarche d'homologation lorsque l'on n'est
-        pas soit-même <b>spécialiste cyber</b> ?
+        pas soi-même <b>spécialiste cyber</b> ?
       </li>
       <li>
         ⏳ Comment réussir à homologuer tous ses systèmes quand on <b
