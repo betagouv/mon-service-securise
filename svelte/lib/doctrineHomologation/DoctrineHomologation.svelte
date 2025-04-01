@@ -22,7 +22,7 @@
         icone="telecharger-blanc"
       />
       <Lien
-        titre="Consulter la FAQ"
+        titre="Consulter les articles"
         type="bouton-secondaire"
         href="/conseils-cyber"
       />
