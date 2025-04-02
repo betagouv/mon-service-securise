@@ -147,7 +147,7 @@
   display: none;
 }
 
-.homologation #suivant {
+.homologation #commencer-homologation {
   margin-top: 24px;
   margin-bottom: 8px;
 }
@@ -172,7 +172,7 @@
   font-size: 16px;
 }
 
-.homologation .aucun-projets #suivant {
+.homologation .aucun-projets #commencer-homologation {
   margin: 0;
 }
 
