@@ -112,3 +112,159 @@ section.autorite {
   height: 16px;
   align-self: center;
 }
+
+#modale-parcours-homologation::backdrop {
+  background: rgba(22, 22, 22, 0.64);
+}
+
+#modale-parcours-homologation {
+  max-width: 890px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px 0 rgba(0, 0, 18, 0.16);
+  outline: none;
+  padding: 16px;
+  text-align: left;
+}
+
+#modale-parcours-homologation .conteneur-modale-parcours-homologation {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#modale-parcours-homologation .conteneur-fermeture {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+#modale-parcours-homologation .conteneur-fermeture button {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--bleu-mise-en-avant);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+  padding: 4px 8px 4px 12px;
+  border-radius: 4px;
+}
+
+#modale-parcours-homologation .conteneur-fermeture button:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+#modale-parcours-homologation .conteneur-fermeture button img {
+  width: 10px;
+  height: 10px;
+  margin-top: 3px;
+  filter: brightness(0) invert(32%) sepia(67%) saturate(1923%)
+    hue-rotate(185deg) brightness(93%) contrast(101%);
+}
+
+#modale-parcours-homologation .conteneur-parcours-homologation {
+  padding: 0 16px;
+}
+
+#modale-parcours-homologation h4 {
+  margin: 0 0 32px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 36px;
+}
+
+#modale-parcours-homologation .contenu-parcours-homologation {
+  padding: 24px 32px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+}
+
+#modale-parcours-homologation .entete-parcours-homologation {
+  display: flex;
+  flex-direction: row;
+}
+
+#modale-parcours-homologation .entete-parcours-homologation div {
+  padding: 40px 40px 40px 8px;
+}
+
+#modale-parcours-homologation .entete-parcours-homologation h5 {
+  margin: 0 0 16px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  white-space: nowrap;
+}
+
+#modale-parcours-homologation .entete-parcours-homologation p {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+#modale-parcours-homologation .entete-parcours-homologation img {
+  padding: 0 50px;
+}
+
+#modale-parcours-homologation .detail-parcours-homologation h5 {
+  margin: 0 0 16px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+}
+
+#modale-parcours-homologation .detail-parcours-homologation table {
+  border-collapse: collapse;
+}
+
+#modale-parcours-homologation .detail-parcours-homologation table :is(th, td) {
+  padding: 8px 16px;
+  border: 1px solid #dddddd;
+  color: #3a3a3a;
+}
+
+#modale-parcours-homologation .detail-parcours-homologation table th {
+  white-space: nowrap;
+}
+
+#modale-parcours-homologation .detail-parcours-homologation {
+  margin-bottom: 24px;
+}
+
+#modale-parcours-homologation .contenu-parcours-homologation a {
+  color: #042794;
+  align-self: end;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: end;
+  border-bottom: 1px solid #042794;
+  padding-bottom: 1px;
+}
+#modale-parcours-homologation .contenu-parcours-homologation a:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+#modale-parcours-homologation .contenu-parcours-homologation a:after {
+  content: url('/statique/assets/images/icone_telecharger_dsfr.svg');
+  width: 16px;
+  height: 16px;
+  display: flex;
+}
+
+#modale-parcours-homologation .conteneur-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  padding-top: 48px;
+  padding-bottom: 16px;
+  gap: 16px;
+}
