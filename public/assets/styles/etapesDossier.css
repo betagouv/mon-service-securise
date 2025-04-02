@@ -268,3 +268,37 @@ section.autorite {
   padding-bottom: 16px;
   gap: 16px;
 }
+
+form.homologation .contenu-demarche-homologation {
+  display: flex;
+  justify-content: end;
+}
+
+.contenu-demarche-homologation #affiche-demarche-homologation {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #042794;
+  border-bottom: 1px solid #042794;
+  padding-bottom: 1px;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 24px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.contenu-demarche-homologation #affiche-demarche-homologation:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.contenu-demarche-homologation #affiche-demarche-homologation:after {
+  content: url('/statique/assets/images/icone_question_dsfr.svg');
+  width: 16px;
+  height: 16px;
+  display: flex;
+}
