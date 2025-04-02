@@ -2,7 +2,7 @@ const { PDFDocument } = require('pdf-lib');
 const pug = require('pug');
 const { readFile } = require('fs/promises');
 const { decode } = require('html-entities');
-const { resolve } = require('path');
+const { join } = require('path');
 const { lanceNavigateur } = require('./adaptateurPdf.puppeteer');
 const {
   fabriqueAdaptateurGestionErreur,
@@ -205,10 +205,7 @@ const genereTamponHomologation = async (donnees) => {
     });
 
     const imageTamponHomologation = await readFile(
-      resolve(
-        __dirname,
-        '../../../public/assets/images/tampon_homologation.png'
-      )
+      join(process.cwd(), '/public/assets/images/tampon_homologation.png')
     );
     fichiers.push({
       nom: 'tamponHomologation.png',
