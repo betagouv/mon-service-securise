@@ -40,6 +40,17 @@ const brancheComportemenFormulaireEtape = (actionSoumission) => {
   });
 
   $boutonSuivant.on('click', () => declencheValidation(selecteurFormulaire));
+
+  const modale = $('#modale-parcours-homologation')[0];
+  $('#affiche-demarche-homologation').on('click', () => {
+    modale.inert = true;
+    modale.showModal();
+    modale.inert = false;
+  });
+
+  $('#nouvelle-homologation').on('click', () => {
+    modale.close();
+  });
 };
 
 export default brancheComportemenFormulaireEtape;
