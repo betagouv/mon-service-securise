@@ -1,4 +1,4 @@
 {
-  "ext": "js,json,mjs,pug",
+  "ext": "js,json,mjs",
   "watch": ["src/", "server.ts"]
 }
