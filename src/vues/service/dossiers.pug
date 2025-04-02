@@ -72,6 +72,7 @@ block append styles
 
 block modale
   include modaleEncartHomologation
+  include modaleParcoursHomologation
 
 block title
   title Homologuer - Accueil | MonServiceSécurisé
@@ -93,10 +94,7 @@ block contenu-etape
       +dossierCourant({ dossier: dossierCourant, service })
     else
       if(!estLectureSeule && !aucunDossier)
-        button.bouton#suivant(
-          data-id-homologation = service.id,
-          data-id-etape-suivante = etapeSuivante
-        ) Nouvelle homologation
+        button.bouton#commencer-homologation(type="button") Nouvelle homologation
 
     if dossierActif
       h3.titre-section Dernière homologation validée
@@ -111,6 +109,6 @@ block contenu-etape
       .aucun-projets
         img(src="/statique/assets/images/dossiers.png" alt="Illustration du dossier d'homologation vide")
         p Aucun projet d’homologation n’est en cours, ni aucune homologation n’a été validée.
-        button.bouton#suivant(data-id-homologation = service.id, data-id-etape-suivante = etapeSuivante) Commencer une nouvelle homologation
+        button.bouton#commencer-homologation(type="button") Commencer une nouvelle homologation
 
     script(type = "module", src = "/statique/service/homologation/dossiers.js")

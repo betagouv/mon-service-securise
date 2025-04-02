@@ -1,4 +1,3 @@
-import brancheComportemenFormulaireEtape from './formulaireEtape.mjs';
 import ActionTelechargementTamponHomologation from '../../modules/tableauDeBord/actions/ActionTelechargementTamponHomologation.js';
 import { gestionnaireTiroir } from '../../modules/tableauDeBord/gestionnaireTiroir.mjs';
 import ActionTelechargement from '../../modules/tableauDeBord/actions/ActionTelechargement.mjs';
@@ -58,5 +57,18 @@ $(() => {
     window.location.reload();
   });
 
-  brancheComportemenFormulaireEtape(() => Promise.resolve());
+  const afficheModaleParcoursHomologation = () => {
+    const modale = $('#modale-parcours-homologation')[0];
+    modale.inert = true;
+    modale.showModal();
+    modale.inert = false;
+  };
+
+  $('#commencer-homologation').on('click', () =>
+    afficheModaleParcoursHomologation()
+  );
+
+  $('#nouvelle-homologation').on('click', () => {
+    window.location = `/service/${idService}/homologation/edition/etape/autorite`;
+  });
 });
