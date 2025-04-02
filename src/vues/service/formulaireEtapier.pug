@@ -19,6 +19,9 @@ block titre
   else
     h1 Homologuer
 
+block modale
+  include modaleParcoursHomologation
+
 block avancement-etape
   if idEtape
     +avancementEtape(referentiel.numeroEtape(idEtape), referentiel.derniereEtapeParcours(autorisationsService.peutHomologuer).numero)
@@ -41,6 +44,10 @@ block formulaire
   form.homologation.conteneur-page-formulaire
 
     block contenu-etape
+
+    block contenu-demarche-homologation
+      .contenu-demarche-homologation
+        button(id="affiche-demarche-homologation" type="button") Voir la démarche d'homologation indicative
 
     .enregistrement
       .boutons
