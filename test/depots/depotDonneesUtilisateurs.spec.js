@@ -924,6 +924,7 @@ describe('Le dépôt de données des utilisateurs', () => {
             id: '123',
             email: 'jean.dupont@mail.fr',
             emailHash: 'jean.dupont@mail.fr-haché256',
+            motDePasse: 'UnMDP',
           })
           .construis(),
       });
@@ -941,6 +942,24 @@ describe('Le dépôt de données des utilisateurs', () => {
       const depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurChiffrement,
         adaptateurPersistance: unePersistanceMemoire().construis(),
+      });
+
+      const u = await depot.reinitialiseMotDePasse('jean.dupont@mail.fr');
+
+      expect(u).to.be(undefined);
+    });
+
+    it("échoue silencieusement si l'utilisateur est ProConnecté", async () => {
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        adaptateurPersistance: unePersistanceMemoire()
+          .ajouteUnUtilisateur({
+            id: '123',
+            email: 'jean.dupont@mail.fr',
+            emailHash: 'jean.dupont@mail.fr-haché256',
+            motDePasse: undefined,
+          })
+          .construis(),
       });
 
       const u = await depot.reinitialiseMotDePasse('jean.dupont@mail.fr');

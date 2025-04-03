@@ -155,6 +155,15 @@ function fabriquePersistance({
       efface: async (id) =>
         adaptateurPersistance.metsAJourIdResetMdpUtilisateur(id, undefined),
     },
+    estProConnecte: async (email) => {
+      const emailMinuscule = email.toLowerCase();
+      const emailHash = adaptateurChiffrement.hacheSha256(emailMinuscule);
+      const donnees =
+        await adaptateurPersistance.utilisateurAvecEmailHash(emailHash);
+      const donneesDechiffrees = await dechiffreDonneesUtilisateur(donnees);
+
+      return !donneesDechiffrees.motDePasse;
+    },
   };
 }
 
@@ -280,6 +289,8 @@ const creeDepot = (config = {}) => {
   const reinitialiseMotDePasse = async (email) => {
     const u = await p.lis.celuiAvecEmail(email);
     if (!u) return undefined;
+
+    if (await p.estProConnecte(email)) return undefined;
 
     const idResetMotDePasse = adaptateurUUID.genereUUID();
     await p.idResetMotDePasse.sauvegarde(u.id, idResetMotDePasse);
