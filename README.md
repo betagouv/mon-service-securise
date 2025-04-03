@@ -46,7 +46,13 @@ $ docker network create lab-network
 
 Créer un fichier `.env` à partir du fichier `.env.template` et renseigner les diverses variables d'environnement.
 
-Lancer le script `scripts/start.sh`
+⚠ La première fois: ne renseignez pas `CHIFFREMENT_SEL_DE_HASHAGE_1`
+
+Démarrer la base de données
+
+```sh
+$ docker compose up mss-db -d
+```
 
 Se connecter au conteneur de la base de données et créer une nouvelle base `mss` pour un utilisateur postgres.
 
@@ -59,10 +65,26 @@ Le serveur est configuré et prêt à être redémarré.
 ## 🌐 Lancement du serveur
 
 ```sh
-$ docker-compose restart web
+$ docker compose up web
 ```
 
-(Ou arret et ré-exécution de `./script/start.sh`)
+⚠ La première fois: l'erreur suivante sur le sels doit s'afficher :
+
+```
+[SERVEUR] 💥 Erreur de vérification des sels: Aucun sel de hachage dans la config.
+```
+
+Exécutez le script suivant pour configurer le sel des hashs (en développement uniquement) :
+
+```sh
+$ ./scripts/dev_init_sel.sh
+```
+
+Redémarrez le serveur :
+
+```sh
+$ docker compose up web
+```
 
 Le serveur devrait être accessible depuis un navigateur à l'URL
 `http://localhost:[PORT_MSS]` (avec comme valeur pour `PORT_MSS` celle indiquée
