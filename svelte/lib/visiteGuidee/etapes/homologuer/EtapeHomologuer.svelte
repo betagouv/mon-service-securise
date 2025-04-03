@@ -5,7 +5,9 @@
   let cibleNouvelleHomologation: HTMLElement;
   let cibleTelechargement: HTMLElement;
   onMount(() => {
-    cibleNouvelleHomologation = document.getElementById('suivant')!;
+    cibleNouvelleHomologation = document.getElementById(
+      'commencer-homologation'
+    )!;
     cibleTelechargement = document.getElementById('voir-telechargement')!;
   });
 </script>
@@ -16,7 +18,7 @@
       {
         cible: cibleNouvelleHomologation,
         callbackInitialeCible: () => {
-          document.getElementById('suivant').inert = true;
+          document.getElementById('commencer-homologation').inert = true;
         },
         positionnementModale: 'BasGauche',
         titre: 'Homologuez votre service',
