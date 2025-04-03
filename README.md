@@ -51,7 +51,7 @@ Créer un fichier `.env` à partir du fichier `.env.template` et renseigner les 
 Démarrer la base de données
 
 ```sh
-$ docker compose up mss-db -d
+$ docker compose up mss-db --build -d
 ```
 
 Se connecter au conteneur de la base de données et créer une nouvelle base `mss` pour un utilisateur postgres.
@@ -65,7 +65,7 @@ Le serveur est configuré et prêt à être redémarré.
 ## 🌐 Lancement du serveur
 
 ```sh
-$ docker compose up web
+$ ./scripts/start.sh
 ```
 
 ⚠ La première fois: l'erreur suivante sur le sels doit s'afficher :
@@ -83,7 +83,7 @@ $ ./scripts/dev_init_sel.sh
 Redémarrez le serveur :
 
 ```sh
-$ docker compose up web
+$ ./scripts/start.sh
 ```
 
 Le serveur devrait être accessible depuis un navigateur à l'URL
