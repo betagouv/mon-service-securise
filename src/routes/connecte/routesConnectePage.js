@@ -117,6 +117,7 @@ const routesConnectePage = ({
       });
       const service = Service.creePourUnUtilisateur(utilisateurVisiteGuidee);
       service.id = 'ID-SERVICE-VISITE-GUIDEE';
+      service.descriptionService.niveauSecurite = 'niveau2';
 
       const { idEtape } = requete.params;
       const idEtapeCourante = idEtape.toUpperCase();
