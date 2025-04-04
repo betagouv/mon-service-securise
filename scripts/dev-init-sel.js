@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const {
   adaptateurChiffrement,
 } = require('../src/adaptateurs/adaptateurChiffrement');
