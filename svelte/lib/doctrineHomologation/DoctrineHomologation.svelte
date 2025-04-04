@@ -8,10 +8,9 @@
 
 <Bloc variation="attenue" classe="hero">
   <div>
-    <h1>La nouvelle doctrine d'homologation de sécurité de l'ANSSI est là !</h1>
+    <h1>Les nouveaux principes et étapes de l'homologation de sécurité de l'ANSSI sont là !</h1>
     <p>
-      Découvrez la doctrine, partagez la au sein de votre organisation afin
-      d’accélérer vos efforts d’homologation !
+      Découvrez-les et partagez-les sein de votre organisation afin d’accélérer vos efforts d’homologation !
     </p>
     <div class="conteneur-actions">
       <Lien
