@@ -1,11 +1,11 @@
 const Knex = require('knex');
-const config = require('./knexfile');
+const config = require('../knexfile');
 const {
   adaptateurChiffrement,
-} = require('./src/adaptateurs/adaptateurChiffrement');
-const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
-const { creeDepot } = require('./src/depots/depotDonneesSelsDeHachage');
-const AdaptateurPostgres = require('./src/adaptateurs/adaptateurPostgres');
+} = require('../src/adaptateurs/adaptateurChiffrement');
+const adaptateurEnvironnement = require('../src/adaptateurs/adaptateurEnvironnement');
+const { creeDepot } = require('../src/depots/depotDonneesSelsDeHachage');
+const AdaptateurPostgres = require('../src/adaptateurs/adaptateurPostgres');
 
 const tenteDeHacherAvecUnNouveauSel = (
   chaine,
