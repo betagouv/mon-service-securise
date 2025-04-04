@@ -1,3 +1,3 @@
 #!/bin/bash
 
-node -e 'const admin = new (require("./consoleAdministration"))()' -i
+node -e 'const admin = new (require("./admin/consoleAdministration"))()' -i

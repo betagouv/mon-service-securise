@@ -3,50 +3,50 @@ const axios = require('axios');
 const { AxiosError } = require('axios');
 const { inspect } = require('util');
 const Knex = require('knex');
-const configKnex = require('./knexfile');
-const donneesReferentiel = require('./donneesReferentiel');
-const DepotDonnees = require('./src/depotDonnees');
-const Referentiel = require('./src/referentiel');
-const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
-const AdaptateurPostgres = require('./src/adaptateurs/adaptateurPostgres');
-const { fabriqueAdaptateurUUID } = require('./src/adaptateurs/adaptateurUUID');
-const fabriqueAdaptateurJournalMSS = require('./src/adaptateurs/fabriqueAdaptateurJournalMSS');
-const EvenementNouvelleHomologationCreee = require('./src/modeles/journalMSS/evenementNouvelleHomologationCreee');
-const EvenementNouvelUtilisateurInscrit = require('./src/modeles/journalMSS/evenementNouvelUtilisateurInscrit');
-const { avecPMapPourChaqueElement } = require('./src/utilitaires/pMap');
-const FabriqueAutorisation = require('./src/modeles/autorisations/fabriqueAutorisation');
+const configKnex = require('../knexfile');
+const donneesReferentiel = require('../donneesReferentiel');
+const DepotDonnees = require('../src/depotDonnees');
+const Referentiel = require('../src/referentiel');
+const adaptateurJWT = require('../src/adaptateurs/adaptateurJWT');
+const AdaptateurPostgres = require('../src/adaptateurs/adaptateurPostgres');
+const { fabriqueAdaptateurUUID } = require('../src/adaptateurs/adaptateurUUID');
+const fabriqueAdaptateurJournalMSS = require('../src/adaptateurs/fabriqueAdaptateurJournalMSS');
+const EvenementNouvelleHomologationCreee = require('../src/modeles/journalMSS/evenementNouvelleHomologationCreee');
+const EvenementNouvelUtilisateurInscrit = require('../src/modeles/journalMSS/evenementNouvelUtilisateurInscrit');
+const { avecPMapPourChaqueElement } = require('../src/utilitaires/pMap');
+const FabriqueAutorisation = require('../src/modeles/autorisations/fabriqueAutorisation');
 const {
   EvenementCollaboratifServiceModifie,
-} = require('./src/modeles/journalMSS/evenementCollaboratifServiceModifie');
+} = require('../src/modeles/journalMSS/evenementCollaboratifServiceModifie');
 const {
   fabriqueAdaptateurChiffrement,
-} = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
-const adaptateurRechercheEntrepriseAPI = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
-const adaptateurMail = require('./src/adaptateurs/adaptateurMailSendinblue');
-const CrmBrevo = require('./src/crm/crmBrevo');
+} = require('../src/adaptateurs/fabriqueAdaptateurChiffrement');
+const adaptateurRechercheEntrepriseAPI = require('../src/adaptateurs/adaptateurRechercheEntrepriseAPI');
+const adaptateurMail = require('../src/adaptateurs/adaptateurMailSendinblue');
+const CrmBrevo = require('../src/crm/crmBrevo');
 const {
   verifieCoherenceDesDroits,
-} = require('./src/modeles/autorisations/gestionDroits');
-const BusEvenements = require('./src/bus/busEvenements');
+} = require('../src/modeles/autorisations/gestionDroits');
+const BusEvenements = require('../src/bus/busEvenements');
 const {
   fabriqueAdaptateurGestionErreur,
-} = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
-const { cableTousLesAbonnes } = require('./src/bus/cablage');
-const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
-const fabriqueAdaptateurTracking = require('./src/adaptateurs/fabriqueAdaptateurTracking');
+} = require('../src/adaptateurs/fabriqueAdaptateurGestionErreur');
+const { cableTousLesAbonnes } = require('../src/bus/cablage');
+const adaptateurHorloge = require('../src/adaptateurs/adaptateurHorloge');
+const fabriqueAdaptateurTracking = require('../src/adaptateurs/fabriqueAdaptateurTracking');
 const {
   consigneCompletudeDansJournal,
-} = require('./src/bus/abonnements/consigneCompletudeDansJournal');
-const Autorisation = require('./src/modeles/autorisations/autorisation');
+} = require('../src/bus/abonnements/consigneCompletudeDansJournal');
+const Autorisation = require('../src/modeles/autorisations/autorisation');
 const {
   consigneRisquesDansJournal,
-} = require('./src/bus/abonnements/consigneRisquesDansJournal');
-const fabriqueAdaptateurSupervision = require('./src/adaptateurs/fabriqueAdaptateurSupervision');
-const ServiceSupervision = require('./src/supervision/serviceSupervision');
-const adaptateurEnvironnement = require('./src/adaptateurs/adaptateurEnvironnement');
+} = require('../src/bus/abonnements/consigneRisquesDansJournal');
+const fabriqueAdaptateurSupervision = require('../src/adaptateurs/fabriqueAdaptateurSupervision');
+const ServiceSupervision = require('../src/supervision/serviceSupervision');
+const adaptateurEnvironnement = require('../src/adaptateurs/adaptateurEnvironnement');
 const {
   adaptateurChiffrementChaCha20,
-} = require('./src/adaptateurs/adaptateurChiffrementChaCha20');
+} = require('../src/adaptateurs/adaptateurChiffrementChaCha20');
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
