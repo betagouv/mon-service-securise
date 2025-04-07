@@ -37,7 +37,7 @@
   <CarrouselTuiles />
 </Bloc>
 <Bloc>
-  <h2 class="centre">Découvrez la doctrine</h2>
+  <h2 class="centre">Découvrez l'homologation simplifiée</h2>
   <div class="conteneur-video">
     <video controls crossorigin="anonymous">
       <source
