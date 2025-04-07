@@ -58,12 +58,11 @@ const routesNonConnecteOidc = ({
 
       const { nom, prenom, email, siret } =
         await adaptateurOidc.recupereInformationsUtilisateur(accessToken);
-      const infosUtilisateur = { nom, prenom, email, siret };
-      const utilisateurExistant =
-        await depotDonnees.utilisateurAvecEmail(email);
+      const profilProConnect = { nom, prenom, email, siret };
+      let utilisateurExistant = await depotDonnees.utilisateurAvecEmail(email);
 
       if (!utilisateurExistant) {
-        const token = adaptateurJWT.signeDonnees(infosUtilisateur);
+        const token = adaptateurJWT.signeDonnees(profilProConnect);
         reponse.redirect(`/creation-compte?token=${token}`);
         return;
       }
@@ -76,19 +75,35 @@ const routesNonConnecteOidc = ({
       );
 
       if (!utilisateurExistant.aLesInformationsAgentConnect()) {
+        // On considère que ProConnect a les données "les plus à jour", donc on maj MSS (et donc MPA)
         await depotDonnees.metsAJourUtilisateur(utilisateurExistant.id, {
           nom,
           prenom,
           entite: { siret },
         });
+      } else {
+        // La copie locale de MSS contient des données, mais peut être obsolète. On demande donc un rafraichissement à MPA
+        await depotDonnees.rafraichisProfilUtilisateurLocal(
+          utilisateurExistant.id
+        );
       }
+
       await depotDonnees.enregistreNouvelleConnexionUtilisateur(
         utilisateurExistant.id,
         SourceAuthentification.AGENT_CONNECT
       );
 
+      utilisateurExistant = await depotDonnees.utilisateur(
+        utilisateurExistant.id
+      );
+      const profilAJour = {
+        nom: utilisateurExistant.nom,
+        prenom: utilisateurExistant.prenom,
+        siret: utilisateurExistant.entite.siret,
+        email: utilisateurExistant.email,
+      };
       const tokenDonneesInvite = utilisateurExistant.estUnInvite()
-        ? adaptateurJWT.signeDonnees({ ...infosUtilisateur, invite: true })
+        ? adaptateurJWT.signeDonnees({ ...profilAJour, invite: true })
         : undefined;
 
       reponse.render('apresAuthentification', {
