@@ -35,7 +35,7 @@
     <Tuile
       illustration="/statique/assets/images/doctrine-homologation/icone-utilisateur.svg"
       titre="Adaptée à vos usages"
-      contenu="Une doctrine pensée pour répondre à la diversité des contextes de mise en oeuvre de l'homologation de sécurité de vos systèmes d'homologation."
+      contenu="Une homologation simplifiée pensée pour répondre à la diversité des contextes de mise en oeuvre de l'homologation de sécurité de vos systèmes d'homologation."
       classe="tuile-presentation"
     />
   </div>
