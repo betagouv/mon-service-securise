@@ -105,7 +105,7 @@ const routesNonConnecteApi = ({
       const { motDePasse } = requete.body;
 
       try {
-        const utilisateur = await depotDonnees.utilisateurAuthentifie(
+        let utilisateur = await depotDonnees.utilisateurAuthentifie(
           login,
           motDePasse
         );
@@ -114,6 +114,9 @@ const routesNonConnecteApi = ({
           reponse.status(401).send("L'authentification a échoué");
           return;
         }
+
+        await depotDonnees.rafraichisProfilUtilisateurLocal(utilisateur.id);
+        utilisateur = await depotDonnees.utilisateur(utilisateur.id);
 
         serviceGestionnaireSession.enregistreSession(
           requete,
