@@ -97,6 +97,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       });
       testeur.depotDonnees().utilisateurAvecEmail = (email) =>
         email === 'unEmailInconnu' ? undefined : utilisateur;
+      testeur.depotDonnees().utilisateur = () => utilisateur;
       testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = () => {};
       testeur.depotDonnees().metsAJourUtilisateur = () => {};
       testeur.middleware().reinitialise({
@@ -281,7 +282,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         expect(sourcePassee).to.be('AGENT_CONNECT');
       });
 
-      it("enrichis le profil de l'utilisateur s'il n'est pas complet avec les informations AgentConnect", async () => {
+      it("enrichis le profil de l'utilisateur avec les informations ProConnect dans le cas d'un profil incomplet", async () => {
         let donneesRecues;
         testeur.depotDonnees().metsAJourUtilisateur = async (
           idUtilisateur,
@@ -297,15 +298,15 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
             siret: '12345',
           });
 
-        const utilisateurAuthentifie = unUtilisateur()
+        const profilIncomplet = unUtilisateur()
           .avecEmail('jean.dujardin@beta.gouv.fr')
           .quiSAppelle('')
           .avecId('456')
           .quiAccepteCGU()
           .construis();
-        utilisateurAuthentifie.genereToken = () => 'unJetonJWT';
+        profilIncomplet.genereToken = () => 'unJetonJWT';
         testeur.depotDonnees().utilisateurAvecEmail = async () =>
-          utilisateurAuthentifie;
+          profilIncomplet;
 
         await requeteSansRedirection(
           'http://localhost:1234/oidc/apres-authentification'
@@ -315,6 +316,38 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         expect(donneesRecues.donnees.prenom).to.be('Jean');
         expect(donneesRecues.donnees.nom).to.be('Dujardin');
         expect(donneesRecues.donnees.entite.siret).to.be('12345');
+      });
+
+      it("rafraîchis la copie locale du profil Utilisateur dans le cas d'un profil complet : on veut rappatrier les données MPA chez MSS", async () => {
+        let idRafraichi;
+        testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async (
+          idUtilisateur
+        ) => {
+          idRafraichi = idUtilisateur;
+        };
+        testeur.adaptateurOidc().recupereInformationsUtilisateur =
+          async () => ({
+            email: 'jean.dujardin@beta.gouv.fr',
+            nom: 'Dujardin',
+            prenom: 'Jean',
+            siret: '12345',
+          });
+
+        const profilComplet = unUtilisateur()
+          .avecEmail('jean.dujardin@beta.gouv.fr')
+          .quiSAppelle('Jean Dujardin')
+          .quiTravaillePourUneEntiteAvecSiret('12345')
+          .avecId('456')
+          .quiAccepteCGU()
+          .construis();
+        profilComplet.genereToken = () => 'unJetonJWT';
+        testeur.depotDonnees().utilisateurAvecEmail = async () => profilComplet;
+
+        await requeteSansRedirection(
+          'http://localhost:1234/oidc/apres-authentification'
+        );
+
+        expect(idRafraichi).to.be('456');
       });
     });
 
@@ -344,17 +377,20 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         testeur.adaptateurOidc().recupereJeton = async () => ({
           accessToken: 'unAccessToken',
         });
-        testeur.adaptateurOidc().recupereInformationsUtilisateur =
-          async () => ({
-            email: 'jean.dujardin@beta.gouv.fr',
-            nom: 'Dujardin',
-            prenom: 'Jean',
-            siret: '12345',
-          });
         let donneesRecuesPourCreationTokenSigne;
         testeur.adaptateurJWT().signeDonnees = (donnees) => {
           donneesRecuesPourCreationTokenSigne = donnees;
           return 'unJetonSigne';
+        };
+        testeur.depotDonnees().utilisateur = async () => {
+          const utilisateurExistant = unUtilisateur()
+            .avecEmail('jean.dujardin@beta.gouv.fr')
+            .quiSAppelle('Jean Dujardin')
+            .quiTravaillePourUneEntiteAvecSiret('12345')
+            .quiAEteInvite()
+            .construis();
+          utilisateurExistant.genereToken = () => 'un token';
+          return utilisateurExistant;
         };
 
         const reponse = await requeteSansRedirection(
