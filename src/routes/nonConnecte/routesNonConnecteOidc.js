@@ -114,6 +114,7 @@ const routesNonConnecteOidc = ({
         tokenDonneesInvite,
       });
     } catch (e) {
+      console.warn(e);
       fabriqueAdaptateurGestionErreur().logueErreur(e);
       reponse.status(401).send("Erreur d'authentification");
     }
