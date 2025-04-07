@@ -434,6 +434,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           return Promise.reject(e);
         }
       };
+      testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async () => {};
+      testeur.depotDonnees().utilisateur = async () => utilisateur;
 
       axios
         .post('http://localhost:1234/api/token', {
@@ -459,6 +461,9 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
         testeur.depotDonnees().utilisateurAuthentifie = () =>
           Promise.resolve(utilisateur);
+        testeur.depotDonnees().utilisateur = async () => utilisateur;
+        testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
+          async () => {};
 
         testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur =
           async () => {};
@@ -501,6 +506,37 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
         expect(idUtilisateurPasse).to.be('456');
         expect(sourcePassee).to.be('MSS');
+      });
+
+      it('déclenche un rafraîchissement de la copie locale du profil utilisateur (pour recopier les données MPA)', async () => {
+        let idUtilisateurPasse;
+        testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async (
+          idUtilisateur
+        ) => {
+          idUtilisateurPasse = idUtilisateur;
+        };
+
+        await axios.post('http://localhost:1234/api/token', {
+          login: 'jean.dupont@mail.fr',
+          motDePasse: 'mdp_12345',
+        });
+
+        expect(idUtilisateurPasse).to.be('456');
+      });
+
+      it('lis de nouveau le profil utilisateur après rafraichissement', async () => {
+        let idUtilisateurPasse;
+        testeur.depotDonnees().utilisateur = async (idUtilisateur) => {
+          idUtilisateurPasse = idUtilisateur;
+          return utilisateur;
+        };
+
+        await axios.post('http://localhost:1234/api/token', {
+          login: 'jean.dupont@mail.fr',
+          motDePasse: 'mdp_12345',
+        });
+
+        expect(idUtilisateurPasse).to.be('456');
       });
 
       it('ajoute la source dans le jeton', async () => {
