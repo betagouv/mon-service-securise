@@ -37,7 +37,7 @@ describe('Le dépôt de données des utilisateurs', () => {
     adaptateurChiffrement = fauxAdaptateurChiffrement();
     adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
     bus = fabriqueBusPourLesTests();
-    adaptateurProfilAnssi = adaptateurProfilAnssiVide;
+    adaptateurProfilAnssi = { ...adaptateurProfilAnssiVide };
   });
 
   it("retourne l'utilisateur authentifié en cherchant par hash d'email", async () => {
@@ -1132,6 +1132,92 @@ describe('Le dépôt de données des utilisateurs', () => {
       });
 
       await depot.verifieMotDePasse('123', 'MDP');
+    });
+  });
+
+  describe('sur demande de rafraîchissement du profil local', () => {
+    it("n'écrase PAS le profil local si MPA ne renvoie aucune donnée pour l'utilisateur : on ne veut surtout pas écraser la copie locale avec du vide", async () => {
+      const utilisateurInconnu = undefined;
+      adaptateurProfilAnssi.recupere = async () => utilisateurInconnu;
+
+      const avecU1 = unePersistanceMemoire()
+        .ajouteUnUtilisateur(
+          unUtilisateur()
+            .avecId('U1')
+            .quiSAppelle('nom1 prenom1')
+            .quiAccepteCGU()
+            .avecNomEntite('nomEntite1')
+            .avecEmail('email1').donnees
+        )
+        .construis();
+
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance: avecU1,
+        adaptateurProfilAnssi,
+        adaptateurChiffrement,
+      });
+
+      const avant = (await avecU1.utilisateur('U1')).donnees;
+
+      await depot.rafraichisProfilUtilisateurLocal('U1');
+
+      const apres = (await avecU1.utilisateur('U1')).donnees;
+
+      expect(avant).to.eql(apres);
+    });
+
+    it('remplace les données locales par les données MPA lorsque MPA renvoie des données', async () => {
+      adaptateurProfilAnssi.recupere = async () => ({
+        email: 'email2',
+        nom: 'nom2',
+        prenom: 'prenom2',
+        telephone: 'tel2',
+        organisation: {
+          nom: 'nomEntite2',
+          departement: 'departement2',
+          siret: 'siret2',
+        },
+        domainesSpecialite: ['domaine2'],
+      });
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(
+          unUtilisateur()
+            .avecId('U1')
+            .quiSAppelle('nom1 prenom1')
+            .quiAccepteCGU()
+            .avecNomEntite('nomEntite1')
+            .avecEmail('email1').donnees
+        )
+        .construis();
+
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurProfilAnssi,
+        adaptateurChiffrement,
+      });
+
+      await depot.rafraichisProfilUtilisateurLocal('U1');
+
+      const apresRafraichissement = (
+        await adaptateurPersistance.utilisateur('U1')
+      ).donnees;
+
+      expect(apresRafraichissement).to.eql({
+        email: 'email2',
+        nom: 'nom2',
+        prenom: 'prenom2',
+        telephone: 'tel2',
+        postes: ['domaine2'],
+        entite: {
+          departement: 'departement2',
+          nom: 'nomEntite2',
+          siret: 'siret2',
+        },
+        cguAcceptees: 'v1.0',
+        estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
+        infolettreAcceptee: '',
+        transactionnelAccepte: '',
+      });
     });
   });
 });

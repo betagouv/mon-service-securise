@@ -353,11 +353,35 @@ const creeDepot = (config = {}) => {
     if (!authentificationReussie) throw erreurMotDePasseIncorrect;
   };
 
+  const rafraichisProfilUtilisateurLocal = async (id) => {
+    const donneesMSS = await p.lis.donnees.de(id);
+    const donneesMPA = await adaptateurProfilAnssi.recupere(donneesMSS.email);
+
+    if (donneesMPA) {
+      const donneesAJour = {
+        ...donneesMSS,
+        email: donneesMPA.email,
+        nom: donneesMPA.nom,
+        prenom: donneesMPA.prenom,
+        telephone: donneesMPA.telephone,
+        entite: {
+          nom: donneesMPA.organisation.nom,
+          departement: donneesMPA.organisation.departement,
+          siret: donneesMPA.organisation.siret,
+        },
+        postes: donneesMPA.domainesSpecialite,
+      };
+
+      await p.sauvegarde(id, donneesAJour);
+    }
+  };
+
   return {
     dechiffreUtilisateur,
     metsAJourMotDePasse,
     metsAJourUtilisateur,
     nouvelUtilisateur,
+    rafraichisProfilUtilisateurLocal,
     reinitialiseMotDePasse,
     supprimeIdResetMotDePassePourUtilisateur,
     supprimeUtilisateur,
