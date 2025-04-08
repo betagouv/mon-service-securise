@@ -168,7 +168,7 @@
       titre="L’homologation simplifiée"
       contenu="Une présentation pédagogique présentant les grands principes de l'homologation de sécurité accessible à toutes et tous."
       illustration="/statique/assets/images/doctrine-homologation/thumbnail-pdf-doctrine.png"
-      href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/Doctrine_Homologation_A4.pdf"
+      href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/LAB_Homologation_Simplifiee.pdf"
     />
     <TuileTelechargement
       titre="Le guide d’homologation de la sécurité des SI"
