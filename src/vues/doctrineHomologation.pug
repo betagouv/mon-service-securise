@@ -1,7 +1,10 @@
 extends mssDeconnecte
 include ./fragments/navigationSiteVitrine
 block variables
-  - const meta_description = "La nouvelle doctrine d'homologation de sécurité de l'ANSSI est là !"
+  - const meta_description = "L'homologation simplifiée de l'ANSSI est là !"
+
+block title
+  title L'homologation simplifiée | MonServiceSécurisé
 
 block append styles
   link(href='/statique/assets/styles/entete.responsive.css', rel='stylesheet')
