@@ -74,6 +74,7 @@ const routesConnectePage = ({
       const departements = referentiel.departements();
       const estimationNombreServices = referentiel.estimationNombreServices();
       const idUtilisateur = requete.idUtilisateurCourant;
+      await depotDonnees.rafraichisProfilUtilisateurLocal(idUtilisateur);
       const utilisateur = await depotDonnees.utilisateur(idUtilisateur);
       const entite = utilisateur.entite.siret ? utilisateur.entite : undefined;
 
