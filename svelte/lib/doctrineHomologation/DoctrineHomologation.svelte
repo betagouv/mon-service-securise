@@ -8,15 +8,19 @@
 
 <Bloc variation="attenue" classe="hero">
   <div>
-    <h1>Les nouveaux principes et étapes de l'homologation de sécurité de l'ANSSI sont là !</h1>
+    <h1>
+      Les nouveaux principes et étapes de l'homologation de sécurité de l'ANSSI
+      sont là !
+    </h1>
     <p>
-      Découvrez-les et partagez-les sein de votre organisation afin d’accélérer vos efforts d’homologation !
+      Découvrez-les et partagez-les sein de votre organisation afin d’accélérer
+      vos efforts d’homologation !
     </p>
     <div class="conteneur-actions">
       <Lien
         titre="Télécharger la documentation"
         type="bouton-primaire"
-        href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/Doctrine_Homologation_A4.pdf"
+        href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/LAB_Homologation_Simplifiee.pdf"
         target="_blank"
         icone="telecharger-blanc"
       />
@@ -168,7 +172,7 @@
       titre="L’homologation simplifiée"
       contenu="Une présentation pédagogique présentant les grands principes de l'homologation de sécurité accessible à toutes et tous."
       illustration="/statique/assets/images/doctrine-homologation/thumbnail-pdf-doctrine.png"
-      href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/Doctrine_Homologation_A4.pdf"
+      href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/LAB_Homologation_Simplifiee.pdf"
     />
     <TuileTelechargement
       titre="Le guide d’homologation de la sécurité des SI"
