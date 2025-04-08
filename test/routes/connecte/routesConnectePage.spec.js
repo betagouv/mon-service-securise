@@ -55,6 +55,8 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       beforeEach(() => {
         const utilisateur = unUtilisateur().construis();
         testeur.depotDonnees().utilisateur = async () => utilisateur;
+        testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
+          async () => {};
         testeur.referentiel().recharge({
           etapesParcoursHomologation: [{ numero: 1 }],
         });
@@ -132,6 +134,13 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   });
 
   describe(`quand GET sur /profil`, () => {
+    beforeEach(() => {
+      testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
+        async () => ({});
+      testeur.depotDonnees().utilisateur = () =>
+        unUtilisateur().avecId('456').construis();
+    });
+
     it("délègue au dépôt de données la lecture des informations de l'utilisateur", async () => {
       testeur.middleware().reinitialise({ idUtilisateur: '456' });
       let idRecu;
@@ -188,6 +197,16 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       expect(donneesUtilisateur.prenom).to.be("un'e");
       expect(donneesUtilisateur.nom).to.be("apo'strophe");
       expect(donneesUtilisateur.postes).to.eql(["Apo'strophe"]);
+    });
+
+    it('rafraîchis les données avec le Profil ANSSI', async () => {
+      let depotAppele = false;
+      testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async () => {
+        depotAppele = true;
+      };
+
+      await axios.get(`http://localhost:1234/profil`);
+      expect(depotAppele).to.be(true);
     });
   });
 
