@@ -166,13 +166,11 @@ const genereTamponHomologation = async (donnees) => {
     /* eslint-disable no-restricted-syntax */
     for (const {
       tailleDispositif,
-      taillesTexte,
       largeur,
       hauteur,
     } of configurationsDispositifs) {
       const corps = pug.compileFile('src/pdf/modeles/tamponHomologation.pug')({
         ...donnees,
-        taillesTexte,
         tailleDispositif,
         decode,
       });
