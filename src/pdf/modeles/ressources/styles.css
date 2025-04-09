@@ -1030,107 +1030,49 @@ p {
 }
 
 .tampon-homologation.tablette {
-  width: calc(656px - 48px);
-  padding: 24px;
-  background-size: auto 358px;
-  font-size: 16px;
+  width: 656px;
 }
 
 .tampon-homologation:is(.tablette, .desktop) h1 {
-  font-size: 25px;
-  line-height: 31px;
+  font-size: 32px;
+  line-height: 40px;
 }
 
 .tampon-homologation.tablette .entete {
-  height: 342px;
+  padding: 24px 48px;
 }
 
 .tampon-homologation:is(.tablette, .desktop) .cartouche {
   flex-direction: row;
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-
-.tampon-homologation:is(.tablette, .desktop) .cartouche:last-of-type {
-  margin-bottom: 24px;
-}
-
-.tampon-homologation:is(.tablette, .desktop) .cartouche .titre {
-  border-radius: 16px 0 0 16px;
-  padding: 4px 8px 6px 8px;
-  min-width: 264px;
-  display: flex;
+  gap: 12px;
+  width: fit-content;
+  padding: 12px;
   align-items: center;
 }
 
-.tampon-homologation:is(.tablette, .desktop) .cartouche .conteneur-description {
-  border-radius: 0 16px 16px 0;
-  padding: 4px 16px 6px 8px;
+.tampon-homologation:is(.tablette, .desktop) .cartouche .titre {
+  white-space: nowrap;
+  margin-bottom: 0;
 }
 
-.tampon-homologation:is(.tablette, .desktop)
-  .cartouche
-  .conteneur-description
-  span {
-  padding: 0;
-}
-
-.tampon-homologation:is(.tablette, .desktop)
-  .cartouche:nth-of-type(2)
-  .conteneur-description {
-  flex-direction: row;
-}
-
-.tampon-homologation:is(.tablette, .desktop)
-  .cartouche:nth-of-type(2)
-  .separateur {
-  display: flex;
-  height: 100%;
-}
-
-.tampon-homologation:is(.tablette, .desktop)
-  .cartouche:nth-of-type(2)
-  .conteneur-description
-  span:first-of-type {
-  border-bottom: none;
+.tampon-homologation:is(.tablette, .desktop) .pied-page {
+  padding: 24px 64px;
 }
 
 .tampon-homologation:is(.tablette, .desktop) .conteneur-images {
-  position: relative;
-}
-
-.tampon-homologation:is(.tablette, .desktop) #logo-mss {
-  margin-top: 0;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .tampon-homologation:is(.tablette, .desktop) #logo-tampon {
-  width: 214px;
-  height: 214px;
+  width: 155px;
+  height: 155px;
   position: absolute;
-  right: 0;
-  top: -64px;
+  right: -40px;
+  top: -90px;
 }
 
 .tampon-homologation.tablette .footer {
-  width: 390px;
-  font-size: 14px;
-  margin-bottom: 16px;
-  padding-top: 0;
-}
-
-.tampon-homologation:is(.tablette, .desktop) .conteneur-extras {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  font-size: 14px;
-}
-
-.tampon-homologation:is(.tablette, .desktop) .separateur-extra {
-  display: flex;
-  width: 1px;
-  height: 24px;
-  background: #0c5c98;
+  width: 398px;
 }
 
 .tampon-homologation.desktop {
