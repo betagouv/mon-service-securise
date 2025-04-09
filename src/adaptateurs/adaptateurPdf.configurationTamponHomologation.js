@@ -22,31 +22,16 @@ const configurationsDispositifs = [
     tailleDispositif: 'mobile',
     largeur: 288,
     hauteur: 878,
-    taillesTexte: {
-      nomService: 67,
-      organisationResponsable: 77,
-      autoriteHomologation: 37,
-    },
   },
   {
     tailleDispositif: 'tablette',
     largeur: 656,
     hauteur: 611,
-    taillesTexte: {
-      nomService: 117,
-      organisationResponsable: 77,
-      autoriteHomologation: 37,
-    },
   },
   {
     tailleDispositif: 'desktop',
     largeur: 996,
     hauteur: 464,
-    taillesTexte: {
-      nomService: 117,
-      organisationResponsable: 77,
-      autoriteHomologation: 37,
-    },
   },
 ];
 
