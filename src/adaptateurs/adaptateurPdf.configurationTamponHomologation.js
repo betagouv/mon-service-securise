@@ -21,17 +21,14 @@ const configurationsDispositifs = [
   {
     tailleDispositif: 'mobile',
     largeur: 288,
-    hauteur: 878,
   },
   {
     tailleDispositif: 'tablette',
     largeur: 656,
-    hauteur: 611,
   },
   {
     tailleDispositif: 'desktop',
     largeur: 996,
-    hauteur: 464,
   },
 ];
 

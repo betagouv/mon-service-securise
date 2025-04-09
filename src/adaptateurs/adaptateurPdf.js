@@ -151,12 +151,11 @@ const genereTamponHomologation = async (donnees) => {
   let navigateur = null;
   try {
     navigateur = await lanceNavigateur();
-    const compileImageEnHTMLBase64 = (buffer, largeur, hauteur) =>
+    const compileImageEnHTMLBase64 = (buffer, largeur) =>
       Buffer.from(
         pug.compileFile('src/pdf/modeles/tamponHomologation.base64.pug')({
           base64: buffer.toString('base64'),
           largeur,
-          hauteur,
         }),
         'utf-8'
       );
@@ -164,11 +163,7 @@ const genereTamponHomologation = async (donnees) => {
     const fichiers = [];
     /* eslint-disable no-await-in-loop */
     /* eslint-disable no-restricted-syntax */
-    for (const {
-      tailleDispositif,
-      largeur,
-      hauteur,
-    } of configurationsDispositifs) {
+    for (const { tailleDispositif, largeur } of configurationsDispositifs) {
       const corps = pug.compileFile('src/pdf/modeles/tamponHomologation.pug')({
         ...donnees,
         tailleDispositif,
@@ -177,11 +172,16 @@ const genereTamponHomologation = async (donnees) => {
 
       const page = await navigateur.newPage();
       await page.setContent(corps);
-      const screenshotBase64 = await page.screenshot({
+      await page.setViewport({
+        width: 1280,
+        height: 800,
+        deviceScaleFactor: 4,
+      });
+      const elementHtml = await page.$('.tampon-homologation');
+      const screenshotBase64 = await elementHtml.screenshot({
         encoding: 'base64',
         type: 'png',
         omitBackground: true,
-        clip: { width: largeur, height: hauteur, x: 0, y: 0, scale: 4 },
       });
 
       const bufferImage = Buffer.from(screenshotBase64, 'base64');
@@ -192,7 +192,7 @@ const genereTamponHomologation = async (donnees) => {
 
       fichiers.push({
         nom: `encartHomologation.${tailleDispositif}.html`,
-        buffer: compileImageEnHTMLBase64(bufferImage, largeur, hauteur),
+        buffer: compileImageEnHTMLBase64(bufferImage, largeur),
       });
     }
     /* eslint-enable no-await-in-loop */
