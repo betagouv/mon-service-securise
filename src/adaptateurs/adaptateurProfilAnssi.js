@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { decode } = require('html-entities');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('./fabriqueAdaptateurGestionErreur');
@@ -14,8 +15,8 @@ const metsAJour = async ({ nom, prenom, email, entite, telephone, postes }) => {
   await axios.put(
     urlProfil,
     {
-      nom,
-      prenom,
+      nom: decode(nom),
+      prenom: decode(prenom),
       organisation: entite,
       telephone,
       domainesSpecialite: postes,
