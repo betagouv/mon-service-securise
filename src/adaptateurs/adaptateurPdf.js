@@ -211,7 +211,7 @@ const genereTamponHomologation = async (donnees) => {
     });
     fichiers.push({
       nom: `tamponHomologation.html`,
-      buffer: compileImageEnHTMLBase64(imageTamponHomologation, 214, 214),
+      buffer: compileImageEnHTMLBase64(imageTamponHomologation, 226, 226),
     });
 
     return fichiers;
