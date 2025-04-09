@@ -937,90 +937,69 @@ p {
 }
 
 .tampon-homologation {
-  width: calc(288px - 32px);
+  width: 288px;
   margin: -8px;
-  padding: 16px;
-  border-radius: 24px;
-  background-image: var(--fond-tampon-homologation);
-  background-repeat: no-repeat;
-  background-size: auto 545px;
-  background-color: white;
   font-size: 14px;
 }
 
 .tampon-homologation .entete {
-  height: 529px;
+  padding: 24px;
+  background: #dbecf1;
 }
 
 .tampon-homologation h1 {
-  font-size: 20px;
-  font-weight: bold;
-  color: #0c5c98;
-  margin: 0 0 16px 0;
+  color: #0d0c21;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 36px;
+  margin: 0 0 28px;
+}
+
+.tampon-homologation .conteneur-cartouches {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .tampon-homologation .cartouche {
   display: flex;
   flex-direction: column;
-  margin-bottom: 8px;
-}
-
-.tampon-homologation .cartouche:last-of-type {
-  margin-bottom: 32px;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
+  padding: 12px 24px;
 }
 
 .tampon-homologation .cartouche .titre {
-  border-radius: 16px 16px 0 0;
-  padding: 4px 16px 6px 16px;
-  background: white;
-  color: #0c5c98;
-}
-
-.tampon-homologation .separateur {
-  height: 24px;
-  width: 1px;
-  background: white;
-  min-width: 1px;
-  margin: 0 8px;
+  color: #1c293b;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  margin-bottom: 8px;
 }
 
 .tampon-homologation .cartouche .conteneur-description {
-  border-radius: 0 0 16px 16px;
-  padding: 4px 8px 6px 8px;
-  background: #0c5c98;
-  color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.tampon-homologation .cartouche:nth-of-type(2) .conteneur-description {
-  flex-direction: column;
-}
-
-.tampon-homologation .cartouche:nth-of-type(2) .separateur {
-  display: none;
-}
-
-.tampon-homologation .cartouche:nth-of-type(2) .conteneur-description span {
-  padding: 4px 8px 6px 8px;
-}
-
-.tampon-homologation
-  .cartouche:nth-of-type(2)
-  .conteneur-description
-  span:first-of-type {
-  border-bottom: 1px solid white;
+  border-radius: 4px;
+  background: #e8edff;
+  padding: 0 8px;
+  color: #0163cb;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 24px;
+  width: fit-content;
 }
 
 .tampon-homologation .pied-page {
-  padding-top: 16px;
+  padding: 24px 16px;
+  background: white;
 }
 
 .tampon-homologation .conteneur-images {
   display: flex;
   flex-direction: row;
   position: relative;
+  margin-bottom: 24px;
 }
 
 .tampon-homologation .conteneur-images #logo-mss {
@@ -1030,26 +1009,24 @@ p {
 }
 
 .tampon-homologation .conteneur-images #logo-tampon {
-  width: 100px;
-  height: 100px;
-  top: -30px;
-  right: -12px;
+  width: 94px;
+  height: 94px;
+  top: -40px;
+  right: 0;
   content: var(--logo-tampon-homologation);
   position: absolute;
 }
 
 .tampon-homologation .footer {
-  padding-top: 8px;
-  color: #08416a;
-  margin-bottom: 24px;
+  color: #3a3a3a;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
 }
 
-.tampon-homologation .extra {
-  color: #08416a;
-}
-
-.tampon-homologation .separateur-extra {
-  display: none;
+.tampon-homologation .conteneur-extras {
+  margin-bottom: 16px;
 }
 
 .tampon-homologation.tablette {
