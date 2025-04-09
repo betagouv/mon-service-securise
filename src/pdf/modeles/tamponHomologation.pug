@@ -1,13 +1,10 @@
 extends base
 
-mixin cartouche(titre, description, descriptionSecondaire = null)
+mixin cartouche(titre, description)
   .cartouche
     span.titre!= titre
     .conteneur-description
       span!= description
-      if descriptionSecondaire
-        .separateur
-        span!= descriptionSecondaire
 
 block page
   .tampon-homologation(class=tailleDispositif)
@@ -21,25 +18,18 @@ block page
           if (resultat.length < longueurInitiale) resultat += '…';
           return resultat
         }
-      h1!= texteTronque(service.nomService(), taillesTexte.nomService)
-      +cartouche('Organisation responsable', texteTronque(service.descriptionService.organisationResponsable.nom, taillesTexte.organisationResponsable))
-      +cartouche("Autorité d'homologation", texteTronque(dossier.autorite.nom, taillesTexte.autoriteHomologation), texteTronque(dossier.autorite.fonction, taillesTexte.autoriteHomologation))
-      +cartouche("Date d’homologation", formatteDateFrancaise(new Date(dossier.decision.dateHomologation)))
-      +cartouche("Durée et échéance de l’homologation", referentiel.descriptionEcheanceRenouvellement(dossier.decision.dureeValidite), formatteDateFrancaise(dossier.dateProchaineHomologation()))
+      h1!= texteTronque(service.nomService(), 60)
+      .conteneur-cartouches
+        +cartouche('Organisation responsable', texteTronque(service.descriptionService.organisationResponsable.nom, 60))
+        +cartouche("Date d’homologation", formatteDateFrancaise(new Date(dossier.decision.dateHomologation)))
+        +cartouche("Durée et échéance de l’homologation", `${referentiel.descriptionEcheanceRenouvellement(dossier.decision.dureeValidite)} | ${formatteDateFrancaise(dossier.dateProchaineHomologation())}`)
     .pied-page
       .conteneur-images
         img#logo-mss
         img#logo-tampon
-      p.footer
-        | Ce service a été sécurisé et homologué avec l’aide de&nbsp;
-        b MonServiceSécurisé : un outil gratuit et 100% en ligne&nbsp;
-        | proposé par&nbsp;
-        b l’Agence nationale de la sécurité des systèmes d’information (ANSSI)&nbsp;
-        | pour&nbsp;
-        b les entités publiques et leurs prestataires.
+      p.footer Ce service a été sécurisé et homologué avec l’aide de MonServiceSécurisé : un outil gratuit et 100% en ligne proposé par l’Agence nationale de la sécurité des systèmes d’information (ANSSI) pour les entités publiques et leurs prestataires.
       .conteneur-extras
-        p.extra
-          b Protégeons les services publics en ligne
-        .separateur-extra
-        p.extra
+        p
+          | Protégeons les services publics en ligne
+          | |
           b monservicesecurise.cyber.gouv.fr
