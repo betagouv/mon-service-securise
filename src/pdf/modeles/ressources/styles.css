@@ -1076,21 +1076,20 @@ p {
 }
 
 .tampon-homologation.desktop {
-  width: calc(996px - 80px);
-  padding: 16px 40px;
-  background-size: auto 336px;
+  width: 996px;
+}
+
+.tampon-homologation.desktop h1,
+.tampon-homologation.desktop .conteneur-cartouches {
+  max-width: 644px;
 }
 
 .tampon-homologation.desktop h1 {
-  margin-bottom: 16px;
+  margin-bottom: 28px;
 }
 
 .tampon-homologation.desktop .entete {
-  height: 320px;
-}
-
-.tampon-homologation.desktop .cartouche {
-  font-size: 16px;
+  padding: 47px 64px;
 }
 
 .tampon-homologation.desktop .cartouche .titre {
@@ -1102,27 +1101,23 @@ p {
 }
 
 .tampon-homologation.desktop #logo-mss {
-  margin-top: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .tampon-homologation.desktop #logo-tampon {
-  right: -16px;
-  top: -260px;
-  transform: rotate(15deg);
+  right: -22px;
+  top: -236px;
+  width: 226px;
+  height: 226px;
 }
 
-.tampon-homologation.desktop .pied-page {
-  position: relative;
-  padding-top: 24px;
+.tampon-homologation.desktop .conteneur-images {
+  margin: 0;
 }
 
-.tampon-homologation.desktop .footer {
-  width: 752px;
-  position: absolute;
-  top: 14px;
-  left: 164px;
-}
-
+.tampon-homologation.desktop .footer,
 .tampon-homologation.desktop .conteneur-extras {
   margin-left: 164px;
 }
