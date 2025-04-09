@@ -334,7 +334,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       });
     });
 
-    it('ajoute les informations provenant du profil Anssi', async () => {
+    it("ajoute les informations provenant du profil ANSSI pour que l'utilisateur voie des infos pré-remplies à l'écran", async () => {
       testeur.adaptateurJWT().decode = () => ({ email: 'jeand@beta.fr' });
       testeur.adaptateurProfilAnssi().recupere = (email) =>
         email === 'jeand@beta.fr'

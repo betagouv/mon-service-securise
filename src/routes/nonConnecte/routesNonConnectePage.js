@@ -87,13 +87,8 @@ const routesNonConnectePage = ({
     const profilAnssi = await adaptateurProfilAnssi.recupere(email);
 
     let organisation;
-    let telephone;
-    let domainesSpecialite;
-    if (profilAnssi) {
-      ({ telephone, domainesSpecialite, organisation } = profilAnssi);
-    }
-
-    if (siret) {
+    if (profilAnssi) organisation = profilAnssi.organisation;
+    else if (siret) {
       const organisations = await serviceAnnuaire.rechercheOrganisations(siret);
       if (organisations.length > 0)
         organisation = {
@@ -102,6 +97,7 @@ const routesNonConnectePage = ({
           nom: organisations[0].nom,
         };
     }
+
     reponse.render('creation-compte', {
       estimationNombreServices: referentiel.estimationNombreServices(),
       informationsProfessionnelles: {
@@ -109,8 +105,8 @@ const routesNonConnectePage = ({
         nom,
         email,
         organisation,
-        telephone,
-        domainesSpecialite,
+        telephone: profilAnssi?.telephone,
+        domainesSpecialite: profilAnssi?.domainesSpecialite,
       },
       departements: referentiel.departements(),
       invite: !!invite,
