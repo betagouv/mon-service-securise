@@ -78,7 +78,12 @@ const routesConnectePage = ({
       const entite = utilisateur.entite.siret ? utilisateur.entite : undefined;
 
       reponse.render('profil', {
-        utilisateur,
+        utilisateur: {
+          ...utilisateur,
+          nom: decode(utilisateur.nom),
+          prenom: decode(utilisateur.prenom),
+          postes: utilisateur.postes.map(decode),
+        },
         departements,
         estimationNombreServices,
         entite,
