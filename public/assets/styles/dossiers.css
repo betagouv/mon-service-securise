@@ -265,6 +265,7 @@ dialog.modale-encart-homologation h1 {
 
 dialog.modale-encart-homologation .page img {
   margin-bottom: 24px;
+  width: 100%;
 }
 
 #bouton-tampon-homologation-modale:before {
