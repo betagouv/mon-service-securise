@@ -744,6 +744,33 @@ class ConsoleAdministration {
       await Promise.all(majServices);
     });
   }
+
+  async extraitResultatsParrainage(nombre = 30) {
+    const knex = Knex(configKnex.production);
+    const resultats = (
+      await knex.raw(
+        `
+          SELECT id_utilisateur_parrain, COUNT(*) AS total_parrainages FROM parrainages
+          WHERE filleul_a_finalise_compte = true
+          GROUP BY id_utilisateur_parrain
+          ORDER BY total_parrainages DESC
+          LIMIT ?;
+    `,
+        [nombre]
+      )
+    ).rows;
+
+    console.log('| Email | Nombre de parrainages |');
+    console.log('| --- | --- |');
+    // eslint-disable-next-line no-restricted-syntax
+    for (const resultat of resultats) {
+      // eslint-disable-next-line no-await-in-loop
+      const parrain = await this.depotDonnees.utilisateur(
+        resultat.id_utilisateur_parrain
+      );
+      console.log(`| ${parrain?.email} | ${resultat.total_parrainages} |`);
+    }
+  }
 }
 
 module.exports = ConsoleAdministration;
