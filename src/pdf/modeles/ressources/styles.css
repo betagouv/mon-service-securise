@@ -940,6 +940,8 @@ p {
   width: 288px;
   margin: -8px;
   font-size: 14px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .tampon-homologation .entete {
@@ -991,7 +993,7 @@ p {
 }
 
 .tampon-homologation .pied-page {
-  padding: 24px 16px;
+  padding: 24px;
   background: white;
 }
 
@@ -1055,7 +1057,11 @@ p {
   margin-bottom: 0;
 }
 
-.tampon-homologation:is(.tablette, .desktop) .pied-page {
+.tampon-homologation.tablette .pied-page {
+  padding: 24px 48px;
+}
+
+.tampon-homologation.desktop .pied-page {
   padding: 24px 64px;
 }
 
@@ -1067,7 +1073,7 @@ p {
   width: 155px;
   height: 155px;
   position: absolute;
-  right: -40px;
+  right: -20px;
   top: -90px;
 }
 

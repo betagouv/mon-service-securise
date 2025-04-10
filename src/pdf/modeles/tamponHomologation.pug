@@ -20,7 +20,7 @@ block page
         }
       h1!= texteTronque(service.nomService(), 60)
       .conteneur-cartouches
-        +cartouche('Organisation responsable', texteTronque(service.descriptionService.organisationResponsable.nom, 60))
+        +cartouche('Organisation responsable', texteTronque(service.descriptionService.organisationResponsable.nom, 67))
         +cartouche("Date d’homologation", formatteDateFrancaise(new Date(dossier.decision.dateHomologation)))
         +cartouche("Durée et échéance de l’homologation", `${referentiel.descriptionEcheanceRenouvellement(dossier.decision.dureeValidite)} | ${formatteDateFrancaise(dossier.dateProchaineHomologation())}`)
     .pied-page
