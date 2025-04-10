@@ -37,5 +37,6 @@ block main
     .cartes
       - const chiffres = new Intl.NumberFormat('fr-FR')
       +uneCarteDeStats('avatar', chiffres.format(utilisateurs.nombre), 'Utilisateurs inscrits', '', false)
+      +uneCarteDeStats('satisfaction', '9/10', 'Taux de satisfaction', '', false)
       +uneCarteDeStats('navigateur', chiffres.format(services.nombre), 'Services sécurisés', '', false)
       +uneCarteDeStats('connexion_perdue', chiffres.format(vulnerabilites.nombre), "Vulnérabilités corrigées", '', false)
