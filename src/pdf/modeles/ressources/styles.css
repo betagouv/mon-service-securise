@@ -955,6 +955,7 @@ p {
   font-weight: 700;
   line-height: 36px;
   margin: 0 0 28px;
+  word-wrap: break-word;
 }
 
 .tampon-homologation .conteneur-cartouches {
