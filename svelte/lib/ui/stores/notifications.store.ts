@@ -19,7 +19,7 @@ export const storeNotifications = {
   subscribe,
   rafraichis: async () => {
     const reponse = await axios.get('/api/notifications');
-    const toutesNotifications = reponse.data.notifications;
+    const toutesNotifications = reponse.data.notifications ?? [];
     set({
       pourCentreNotifications: toutesNotifications.filter(
         (n: Notification) => n.canalDiffusion === 'centreNotifications'
