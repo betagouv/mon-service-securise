@@ -87,9 +87,41 @@
   margin-bottom: 2.5em;
 }
 
-.documentation #tampon-homologation {
-  width: 100%;
+.documentation .conteneur-image {
+  display: flex;
+  justify-content: center;
   margin-top: 24px;
+}
+
+.documentation .conteneur-image img {
+  width: 100%;
+}
+
+.documentation #tampon-homologation-tablette,
+.documentation #tampon-homologation-desktop {
+  display: none;
+}
+
+@media screen and (min-width: 576px) {
+  .documentation #tampon-homologation-tablette {
+    display: unset;
+  }
+
+  .documentation #tampon-homologation-mobile,
+  .documentation #tampon-homologation-desktop {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 932px) {
+  .documentation #tampon-homologation-desktop {
+    display: unset;
+  }
+
+  .documentation #tampon-homologation-mobile,
+  .documentation #tampon-homologation-tablette {
+    display: none;
+  }
 }
 
 .documentation table th,
