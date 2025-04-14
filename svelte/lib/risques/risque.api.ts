@@ -15,6 +15,7 @@ export const enregistreRisque = async (
         niveauGravite: risque.niveauGravite,
         commentaire: risque.commentaire,
         niveauVraisemblance: risque.niveauVraisemblance,
+        desactive: risque.desactive,
       }
     );
     return convertisDonneesRisqueGeneral(reponse.data);
