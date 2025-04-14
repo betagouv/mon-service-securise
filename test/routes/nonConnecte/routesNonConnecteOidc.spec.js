@@ -318,6 +318,26 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         expect(donneesRecues.donnees.entite.siret).to.be('12345');
       });
 
+      it("n'enrichis pas le profil de l'utilisateur s'il est invité, pour éviter qu'une erreur de profil incomplet soit jetée par MPA", async () => {
+        let depotAppele = false;
+        testeur.depotDonnees().metsAJourUtilisateur = async () => {
+          depotAppele = true;
+        };
+
+        const profilInvite = unUtilisateur()
+          .avecEmail('jean.dujardin@beta.gouv.fr')
+          .quiAEteInvite()
+          .construis();
+        profilInvite.genereToken = () => 'unJetonJWT';
+        testeur.depotDonnees().utilisateurAvecEmail = async () => profilInvite;
+
+        await requeteSansRedirection(
+          'http://localhost:1234/oidc/apres-authentification'
+        );
+
+        expect(depotAppele).to.be(false);
+      });
+
       it("rafraîchis la copie locale du profil Utilisateur dans le cas d'un profil complet : on veut rappatrier les données MPA chez MSS", async () => {
         let idRafraichi;
         testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async (
@@ -392,6 +412,8 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           utilisateurExistant.genereToken = () => 'un token';
           return utilisateurExistant;
         };
+        testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
+          async () => {};
 
         const reponse = await requeteSansRedirection(
           'http://localhost:1234/oidc/apres-authentification'
