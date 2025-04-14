@@ -22,6 +22,10 @@ describe("L'objet PDF des descriptions des risques", () => {
         description: 'Une description',
         identifiantNumerique: 'R2',
       },
+      unRisqueDesactive: {
+        description: 'Une description',
+        identifiantNumerique: 'R3',
+      },
     },
   });
 
@@ -35,6 +39,12 @@ describe("L'objet PDF des descriptions des risques", () => {
           id: 'unRisque',
           niveauGravite: 'grave',
           niveauVraisemblance: 'probable',
+        },
+        {
+          id: 'unRisqueDesactive',
+          niveauGravite: 'grave',
+          niveauVraisemblance: 'probable',
+          desactive: true,
         },
       ],
     },
@@ -57,6 +67,14 @@ describe("L'objet PDF des descriptions des risques", () => {
 
     expect(donnees).to.have.key('risques');
     expect(donnees.risques[0].identifiantNumerique).to.be('R1');
+  });
+
+  it("n'ajoute pas les risques désactivés", () => {
+    const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
+
+    const donnees = vueAnnexePDFRisques.donnees();
+
+    expect(donnees.risques.length).to.be(1);
   });
 
   it('ajoute le risque dans la case de la grille correspondant à sa gravité et sa vraisemblance', () => {

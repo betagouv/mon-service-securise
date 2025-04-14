@@ -25,7 +25,8 @@ class ObjetPDFAnnexeRisques {
         risque.niveauGravite &&
         risque.niveauVraisemblance &&
         positionVraisemblance(risque) > 0 &&
-        positionGravite(risque) > 0
+        positionGravite(risque) > 0 &&
+        !risque.desactive
     );
 
     risquesCartographies.forEach((risque) => {
@@ -40,7 +41,7 @@ class ObjetPDFAnnexeRisques {
   donnees() {
     return {
       nomService: this.service.nomService(),
-      risques: this.risques.map((r) => r.toJSON()),
+      risques: this.risques.map((r) => r.toJSON()).filter((r) => !r.desactive),
       grilleRisques: this.calculeGrille(),
       matriceNiveauxRisque: this.referentiel.matriceNiveauxRisques(),
     };
