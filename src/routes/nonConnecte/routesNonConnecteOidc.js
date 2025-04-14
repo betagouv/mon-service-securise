@@ -74,18 +74,22 @@ const routesNonConnecteOidc = ({
         SourceAuthentification.AGENT_CONNECT
       );
 
-      if (!utilisateurExistant.aLesInformationsAgentConnect()) {
+      const doitSeulementRafraichir =
+        utilisateurExistant.aLesInformationsAgentConnect() ||
+        utilisateurExistant.estUnInvite();
+
+      if (doitSeulementRafraichir) {
+        // La copie locale de MSS contient des données, mais peut être obsolète. On demande donc un rafraichissement à MPA
+        await depotDonnees.rafraichisProfilUtilisateurLocal(
+          utilisateurExistant.id
+        );
+      } else {
         // On considère que ProConnect a les données "les plus à jour", donc on maj MSS (et donc MPA)
         await depotDonnees.metsAJourUtilisateur(utilisateurExistant.id, {
           nom,
           prenom,
           entite: { siret },
         });
-      } else {
-        // La copie locale de MSS contient des données, mais peut être obsolète. On demande donc un rafraichissement à MPA
-        await depotDonnees.rafraichisProfilUtilisateurLocal(
-          utilisateurExistant.id
-        );
       }
 
       await depotDonnees.enregistreNouvelleConnexionUtilisateur(
