@@ -35,7 +35,7 @@
   <td>
     <IdentifiantRisque {risque} />
   </td>
-  <td class="intitule" on:click>
+  <td class="intitule" class:inactif={risque.desactive} on:click>
     <p
       class="intitule-risques"
       title={estSpecifiqueAMettreAJour ? 'Ce risque doit être mis à jour' : ''}
@@ -58,7 +58,9 @@
   </td>
   <td>
     <SelectionGravite
-      estLectureSeule={estLectureSeule || estSpecifiqueAMettreAJour}
+      estLectureSeule={estLectureSeule ||
+        estSpecifiqueAMettreAJour ||
+        risque.desactive}
       referentielGravites={niveauxGravite}
       bind:niveauGravite={risque.niveauGravite}
       on:change={metAJourRisque}
@@ -66,7 +68,9 @@
   </td>
   <td>
     <SelectionVraisemblance
-      estLectureSeule={estLectureSeule || estSpecifiqueAMettreAJour}
+      estLectureSeule={estLectureSeule ||
+        estSpecifiqueAMettreAJour ||
+        risque.desactive}
       referentielVraisemblances={niveauxVraisemblance}
       bind:niveauVraisemblance={risque.niveauVraisemblance}
       on:change={metAJourRisque}
@@ -86,7 +90,7 @@
   </td>
 </tr>
 
-<style>
+<style lang="scss">
   tr td:first-of-type {
     padding-left: 24px;
   }
@@ -112,6 +116,11 @@
     flex-direction: column;
     gap: 8px;
     cursor: pointer;
+
+    &.inactif {
+      opacity: 0.2;
+      pointer-events: none;
+    }
   }
 
   .intitule:hover .intitule-risques {
