@@ -30,9 +30,15 @@
   </select>
 </div>
 
-<style>
-  select {
+<style lang="scss">
+  select.niveau-gravite {
     flex-grow: 1;
+
+    &[disabled] {
+      pointer-events: none;
+      background: #f1f5f9;
+      color: #cbd5e1;
+    }
   }
 
   .niveau-gravite {

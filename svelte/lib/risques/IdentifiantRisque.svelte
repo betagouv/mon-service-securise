@@ -11,7 +11,10 @@
       : `Risque spécifique ${risque.identifiantNumerique.substring(2)}`;
 </script>
 
-<span class={`identifiant-numerique ${risque.niveauRisque || ''}`}>
+<span
+  class:inactif={risque.desactive}
+  class={`identifiant-numerique ${risque.niveauRisque || ''}`}
+>
   {libelle}
 </span>
 
@@ -43,5 +46,10 @@
 
   .identifiant-numerique.eleve {
     --couleur-identifiant-numerique: var(--rose-anssi);
+  }
+
+  .identifiant-numerique.inactif {
+    --couleur-identifiant-numerique: #f1f5f9;
+    color: #cbd5e1;
   }
 </style>
