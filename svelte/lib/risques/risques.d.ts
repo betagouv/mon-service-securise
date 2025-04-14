@@ -14,6 +14,7 @@ export type DonneesRisque = {
   identifiantNumerique: string;
   description: string;
   niveauRisque: IdentifiantNiveauRisque;
+  desactive?: boolean;
 };
 
 export type Risques = {

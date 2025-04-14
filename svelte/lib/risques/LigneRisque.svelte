@@ -12,6 +12,7 @@
   import { intituleRisque, risqueAMettreAJour } from './risques';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
   import IdentifiantRisque from './IdentifiantRisque.svelte';
+  import Switch from '../ui/Switch.svelte';
 
   export let categories: ReferentielCategories;
   export let niveauxGravite: ReferentielGravites;
@@ -70,6 +71,18 @@
       bind:niveauVraisemblance={risque.niveauVraisemblance}
       on:change={metAJourRisque}
     />
+  </td>
+  <td class="actions">
+    {#if risque.type === 'GENERAL'}
+      <Switch
+        actif={!risque.desactive}
+        id="switch-{risque.id}"
+        on:change={(e) => {
+          risque.desactive = !e.detail;
+          metAJourRisque();
+        }}
+      />
+    {/if}
   </td>
 </tr>
 
@@ -134,5 +147,9 @@
   .a-mettre-a-jour {
     font-size: 12px;
     line-height: 20px;
+  }
+
+  .actions {
+    min-width: 132px;
   }
 </style>
