@@ -8,6 +8,7 @@ class RisqueGeneral extends Risque {
     referentiel = Referentiel.creeReferentielVide()
   ) {
     super(donneesRisque, referentiel);
+    this.proprietesAtomiquesFacultatives.push('desactive');
 
     RisqueGeneral.valide(donneesRisque, referentiel);
     this.renseigneProprietes(donneesRisque);
