@@ -34,6 +34,7 @@ describe('Un risque général', () => {
         commentaire: 'Un commentaire',
         niveauGravite: 'unNiveau',
         categories: ['CR1'],
+        desactive: true,
       },
       referentiel
     );
@@ -41,6 +42,7 @@ describe('Un risque général', () => {
     expect(risque.id).to.equal('unRisque');
     expect(risque.commentaire).to.equal('Un commentaire');
     expect(risque.niveauGravite).to.equal('unNiveau');
+    expect(risque.desactive).to.equal(true);
     expect(risque.toJSON()).to.eql({
       id: 'unRisque',
       commentaire: 'Un commentaire',
@@ -49,6 +51,7 @@ describe('Un risque général', () => {
       categories: ['CR1'],
       identifiantNumerique: 'R1',
       niveauRisque: Risque.NIVEAU_RISQUE_INDETERMINABLE,
+      desactive: true,
     });
   });
 
@@ -101,6 +104,7 @@ describe('Un risque général', () => {
         id: 'unRisque',
         commentaire: 'Un commentaire',
         niveauGravite: 'unNiveau',
+        desactive: true,
       },
       referentiel
     );
@@ -109,6 +113,7 @@ describe('Un risque général', () => {
       id: 'unRisque',
       commentaire: 'Un commentaire',
       niveauGravite: 'unNiveau',
+      desactive: true,
     });
   });
 });
