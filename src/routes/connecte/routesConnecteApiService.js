@@ -404,9 +404,15 @@ const routesConnecteApiService = ({
   routes.put(
     '/:id/risques/:idRisque',
     middleware.trouveService({ [RISQUES]: ECRITURE }),
-    middleware.aseptise('niveauGravite', 'niveauVraisemblance', 'commentaire'),
+    middleware.aseptise(
+      'niveauGravite',
+      'niveauVraisemblance',
+      'commentaire',
+      'desactive'
+    ),
     async (requete, reponse, suite) => {
-      const { niveauGravite, niveauVraisemblance, commentaire } = requete.body;
+      const { niveauGravite, niveauVraisemblance, commentaire, desactive } =
+        requete.body;
       try {
         const risque = new RisqueGeneral(
           {
@@ -414,6 +420,7 @@ const routesConnecteApiService = ({
             niveauGravite,
             niveauVraisemblance,
             commentaire,
+            desactive: valeurBooleenne(desactive),
           },
           referentiel
         );
