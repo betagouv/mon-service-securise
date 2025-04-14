@@ -29,7 +29,8 @@
         risque.niveauGravite &&
         risque.niveauVraisemblance &&
         positionVraisemblance(risque) > 0 &&
-        positionGravite(risque) > 0
+        positionGravite(risque) > 0 &&
+        !risque.desactive
     );
 
     risquesCartographies.forEach((risque) => {
