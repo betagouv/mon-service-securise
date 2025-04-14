@@ -29,6 +29,7 @@
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
   import Avertissement from '../ui/Avertissement.svelte';
   import IdentifiantRisque from './IdentifiantRisque.svelte';
+  import Switch from '../ui/Switch.svelte';
 
   export let ouvert = true;
   export let risque: Risque | undefined;
@@ -234,6 +235,15 @@
                 }}
               />
             {/if}
+            {#if risque.type === 'GENERAL' && modeAffichageTiroir === 'EDITION'}
+              <Switch
+                actif={!risque.desactive}
+                id="switch-{risque.id}-tiroir"
+                on:change={(e) => {
+                  risque.desactive = !e.detail;
+                }}
+              />
+            {/if}
             <Bouton
               type="primaire"
               titre={modeAffichageTiroir === 'EDITION'
@@ -261,7 +271,7 @@
     box-shadow: -10px 0 34px 0 #00000026;
     background: #fff;
     visibility: hidden;
-    z-index: 20;
+    z-index: 2000;
     display: flex;
     flex-direction: column;
   }
@@ -347,7 +357,7 @@
     background: white;
     flex-grow: 0;
     flex-shrink: 0;
-    gap: 10px;
+    gap: 24px;
   }
 
   .contenu-confirmation-suppression {
