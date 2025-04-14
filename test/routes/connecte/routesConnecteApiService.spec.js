@@ -1388,7 +1388,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
-        ['niveauGravite', 'niveauVraisemblance', 'commentaire'],
+        ['niveauGravite', 'niveauVraisemblance', 'commentaire', 'desactive'],
         {
           method: 'put',
           url: 'http://localhost:1234/api/service/456/risques/unRisqueExistant',
@@ -1445,6 +1445,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           niveauGravite: 'unNiveau',
           commentaire: "c'est important",
           niveauVraisemblance: 'unNiveauVraisemblance',
+          desactive: 'true',
         }
       );
 
@@ -1452,6 +1453,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(donneesRecues.niveauGravite).to.eql('unNiveau');
       expect(donneesRecues.niveauVraisemblance).to.eql('unNiveauVraisemblance');
       expect(donneesRecues.commentaire).to.eql("c'est important");
+      expect(donneesRecues.desactive).to.eql(true);
       expect(donneesRecues.id).to.eql('unRisqueExistant');
     });
 
