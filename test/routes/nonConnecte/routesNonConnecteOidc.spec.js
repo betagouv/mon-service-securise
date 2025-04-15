@@ -432,6 +432,51 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           tokenDonneesInvite: 'unJetonSigne',
         });
       });
+
+      it("utilise les informations ProConnect pour le jeton signé de l'invité s'il n'existe pas dans MPA", async () => {
+        testeur.adaptateurOidc().recupereJeton = async () => ({
+          accessToken: 'unAccessToken',
+        });
+        let donneesRecuesPourCreationTokenSigne;
+        testeur.adaptateurJWT().signeDonnees = (donnees) => {
+          donneesRecuesPourCreationTokenSigne = donnees;
+          return 'unJetonSigne';
+        };
+        testeur.adaptateurOidc().recupereInformationsUtilisateur =
+          async () => ({
+            nom: 'Dujardin ProConnect',
+            prenom: 'Jean ProConnect',
+            email: 'jean.dujardin@beta.gouv.fr',
+            siret: '12345',
+          });
+        testeur.depotDonnees().utilisateur = async () => {
+          const utilisateurExistant = unUtilisateur()
+            .avecEmail('jean.dujardin@beta.gouv.fr')
+            .quiAEteInvite()
+            .construis();
+          utilisateurExistant.genereToken = () => 'un token';
+          return utilisateurExistant;
+        };
+        testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
+          async () => {};
+
+        const reponse = await requeteSansRedirection(
+          'http://localhost:1234/oidc/apres-authentification'
+        );
+
+        expect(reponse.status).to.be(200);
+        expect(reponse.headers['content-type']).to.contain('text/html');
+        expect(donneesRecuesPourCreationTokenSigne).to.eql({
+          email: 'jean.dujardin@beta.gouv.fr',
+          nom: 'Dujardin ProConnect',
+          prenom: 'Jean ProConnect',
+          siret: '12345',
+          invite: true,
+        });
+        expect(donneesPartagees(reponse.data, 'tokenDonneesInvite')).to.eql({
+          tokenDonneesInvite: 'unJetonSigne',
+        });
+      });
     });
   });
 

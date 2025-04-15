@@ -101,9 +101,9 @@ const routesNonConnecteOidc = ({
         utilisateurExistant.id
       );
       const profilAJour = {
-        nom: utilisateurExistant.nom,
-        prenom: utilisateurExistant.prenom,
-        siret: utilisateurExistant.entite.siret,
+        nom: utilisateurExistant.nom || nom,
+        prenom: utilisateurExistant.prenom || prenom,
+        siret: utilisateurExistant.entite.siret || siret,
         email: utilisateurExistant.email,
       };
       const tokenDonneesInvite = utilisateurExistant.estUnInvite()
