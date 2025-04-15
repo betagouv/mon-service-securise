@@ -199,6 +199,20 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       expect(donneesUtilisateur.postes).to.eql(["Apo'strophe"]);
     });
 
+    it("reste robuste si l'utilisateur n'a pas de postes, qui est possible si l'utilisateur n'a jamais fini de remplir son profil", async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: '456' });
+      testeur.depotDonnees().utilisateur = () =>
+        unUtilisateur().avecPostes(null).construis();
+
+      const reponse = await axios.get(`http://localhost:1234/profil`);
+
+      const donneesUtilisateur = donneesPartagees(
+        reponse.data,
+        'donnees-profil'
+      ).utilisateur;
+      expect(donneesUtilisateur.postes).to.eql([]);
+    });
+
     it('rafraîchis les données avec le Profil ANSSI', async () => {
       let depotAppele = false;
       testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async () => {
