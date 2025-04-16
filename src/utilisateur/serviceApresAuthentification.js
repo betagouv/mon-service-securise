@@ -1,16 +1,10 @@
-const serviceApresAuthentification = async ({
+const recupereDonneesUtilisateur = async ({
   adaptateurProfilAnssi,
-  serviceAnnuaire,
   profilProConnect,
-  depotDonnees,
+  serviceAnnuaire,
 }) => {
   const profilAnssi = await adaptateurProfilAnssi.recupere();
   let donnees = profilAnssi;
-
-  const utilisateur = await depotDonnees.utilisateurAvecEmail(
-    profilProConnect.email
-  );
-
   if (!profilAnssi) {
     let organisation;
     if (profilProConnect.siret) {
@@ -28,14 +22,55 @@ const serviceApresAuthentification = async ({
       prenom: profilProConnect.prenom,
       email: profilProConnect.email,
       organisation,
-      ...(utilisateur && { invite: true }),
+    };
+  }
+  return donnees;
+};
+
+const serviceApresAuthentification = async ({
+  adaptateurProfilAnssi,
+  serviceAnnuaire,
+  profilProConnect,
+  depotDonnees,
+}) => {
+  const utilisateur = await depotDonnees.utilisateurAvecEmail(
+    profilProConnect.email
+  );
+
+  if (!utilisateur) {
+    return {
+      type: 'redirection',
+      cible: '/creation-compte',
+      donnees: await recupereDonneesUtilisateur({
+        adaptateurProfilAnssi,
+        profilProConnect,
+        serviceAnnuaire,
+      }),
     };
   }
 
+  if (utilisateur.estUnInvite()) {
+    const donneesUtilisateur = await recupereDonneesUtilisateur({
+      adaptateurProfilAnssi,
+      profilProConnect,
+      serviceAnnuaire,
+    });
+    return {
+      type: 'redirection',
+      cible: '/apres-authentification',
+      donnees: {
+        ...donneesUtilisateur,
+        invite: true,
+      },
+      utilisateurAConnecter: utilisateur,
+    };
+  }
+
+  await depotDonnees.rafraichisProfilUtilisateurLocal(utilisateur.id);
+
   return {
     type: 'redirection',
-    cible: utilisateur ? '/apres-authentification' : '/creation-compte',
-    donnees,
+    cible: '/apres-authentification',
     utilisateurAConnecter: utilisateur,
   };
 };
