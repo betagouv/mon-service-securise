@@ -83,7 +83,7 @@ const routesConnectePage = ({
           ...utilisateur,
           nom: decode(utilisateur.nom),
           prenom: decode(utilisateur.prenom),
-          postes: utilisateur.postes?.map(decode) || [],
+          postes: utilisateur.postes.map(decode),
         },
         departements,
         estimationNombreServices,
