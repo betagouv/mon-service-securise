@@ -19,6 +19,13 @@ class ConstructeurUtilisateur {
     };
   }
 
+  quiEstComplet() {
+    return this.quiSAppelle('Jean Dujardin')
+      .quiTravaillePourUneEntiteAvecSiret('1234')
+      .avecEstimationNombreServices(50, 100)
+      .quiAccepteCGU();
+  }
+
   quiNAPasRempliSonProfil() {
     this.donnees.prenom = '';
     this.donnees.nom = '';

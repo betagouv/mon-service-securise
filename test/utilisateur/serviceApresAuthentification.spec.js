@@ -31,7 +31,10 @@ describe("Le service d'après authentification", () => {
         siret: undefined,
       }),
     };
-    depotDonnees = { utilisateurAvecEmail: (_) => undefined };
+    depotDonnees = {
+      utilisateurAvecEmail: async (_) => undefined,
+      rafraichisProfilUtilisateurLocal: async () => {},
+    };
     parametresParDefaut = {
       adaptateurProfilAnssi,
       serviceAnnuaire,
@@ -169,8 +172,58 @@ describe("Le service d'après authentification", () => {
 
         expect(resultat.donnees.invite).to.be(true);
       });
+
+      it('ne rafraîchit pas son profil utilisateur local', async () => {
+        let utilisateurRafraichisAppele = false;
+        depotDonnees.rafraichisProfilUtilisateurLocal = (_) => {
+          utilisateurRafraichisAppele = true;
+        };
+
+        await serviceApresAuthentification(parametresParDefaut);
+
+        expect(utilisateurRafraichisAppele).to.be(false);
+      });
     });
 
-    describe("s'il n'est pas invité", () => {});
+    describe("s'il n'est pas invité", () => {
+      describe('si son profil MSS est complet', () => {
+        beforeEach(() => {
+          depotDonnees.utilisateurAvecEmail = async (email) =>
+            unUtilisateur()
+              .avecId('U1')
+              .avecEmail(email)
+              .quiEstComplet()
+              .construis();
+        });
+
+        it('rafraîchis son profil utilisateur local', async () => {
+          let idUtilisateurRafraichis;
+          depotDonnees.rafraichisProfilUtilisateurLocal = (id) => {
+            idUtilisateurRafraichis = id;
+          };
+
+          await serviceApresAuthentification(parametresParDefaut);
+
+          expect(idUtilisateurRafraichis).to.be('U1');
+        });
+
+        it('redirige vers la page après authentification', async () => {
+          const resultat =
+            await serviceApresAuthentification(parametresParDefaut);
+
+          expect(resultat.type).to.be('redirection');
+          expect(resultat.cible).to.be('/apres-authentification');
+        });
+
+        it('ne contient pas de données utilisateur', async () => {
+          const resultat =
+            await serviceApresAuthentification(parametresParDefaut);
+
+          expect(resultat.donnees).to.be(undefined);
+        });
+      });
+
+      describe('si son profil MSS est incomplet', () => {});
+    });
   });
 });
