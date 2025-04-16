@@ -215,6 +215,15 @@ describe('Un utilisateur', () => {
     expect(Utilisateur.nomsProprietesBase()).to.eql(nomsProprietes);
   });
 
+  it("initialise les postes s'ils ne sont pas définis", () => {
+    const utilisateur = new Utilisateur({
+      email: 'email',
+      postes: undefined,
+    });
+
+    expect(utilisateur.postes).to.eql([]);
+  });
+
   describe("sur une demande de validation des données d'un utilisateur", () => {
     let donnees;
 
