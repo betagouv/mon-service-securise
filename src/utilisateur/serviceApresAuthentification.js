@@ -2,9 +2,14 @@ const serviceApresAuthentification = async ({
   adaptateurProfilAnssi,
   serviceAnnuaire,
   profilProConnect,
+  depotDonnees,
 }) => {
   const profilAnssi = await adaptateurProfilAnssi.recupere();
   let donnees = profilAnssi;
+
+  const utilisateur = await depotDonnees.utilisateurAvecEmail(
+    profilProConnect.email
+  );
 
   if (!profilAnssi) {
     let organisation;
@@ -23,13 +28,15 @@ const serviceApresAuthentification = async ({
       prenom: profilProConnect.prenom,
       email: profilProConnect.email,
       organisation,
+      ...(utilisateur && { invite: true }),
     };
   }
 
   return {
     type: 'redirection',
-    cible: '/creation-compte',
+    cible: utilisateur ? '/apres-authentification' : '/creation-compte',
     donnees,
+    utilisateurAConnecter: utilisateur,
   };
 };
 

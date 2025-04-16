@@ -2,11 +2,15 @@ const expect = require('expect.js');
 const {
   serviceApresAuthentification,
 } = require('../../src/utilisateur/serviceApresAuthentification');
+const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
+const Utilisateur = require('../../src/modeles/utilisateur');
 
 describe("Le service d'après authentification", () => {
   let adaptateurProfilAnssi;
   let serviceAnnuaire;
   let profilProConnect;
+  let depotDonnees;
+  let parametresParDefaut;
 
   beforeEach(() => {
     adaptateurProfilAnssi = {
@@ -27,20 +31,27 @@ describe("Le service d'après authentification", () => {
         siret: undefined,
       }),
     };
+    depotDonnees = { utilisateurAvecEmail: (_) => undefined };
+    parametresParDefaut = {
+      adaptateurProfilAnssi,
+      serviceAnnuaire,
+      profilProConnect: profilProConnect.complet(),
+      depotDonnees,
+    };
   });
 
   describe("lorsque MSS ne connaît pas l'utilisateur", () => {
     it('redirige vers la page de création de compte', async () => {
-      const resultat = await serviceApresAuthentification({
-        adaptateurProfilAnssi,
-        serviceAnnuaire,
-        profilProConnect: {
-          siret: undefined,
-        },
-      });
+      const resultat = await serviceApresAuthentification(parametresParDefaut);
 
       expect(resultat.type).to.be('redirection');
       expect(resultat.cible).to.be('/creation-compte');
+    });
+
+    it('ne le connecte pas', async () => {
+      const resultat = await serviceApresAuthentification(parametresParDefaut);
+
+      expect(resultat.utilisateurAConnecter).to.be(undefined);
     });
 
     describe('concernant les données utilisateur', () => {
@@ -58,9 +69,8 @@ describe("Le service d'après authentification", () => {
             },
             domainesSpecialite: ['RSSI'],
           });
-          const resultat = await serviceApresAuthentification({
-            adaptateurProfilAnssi,
-          });
+          const resultat =
+            await serviceApresAuthentification(parametresParDefaut);
 
           expect(resultat.donnees).to.eql({
             email: 'jean.dujardin@beta.gouv.fr',
@@ -84,11 +94,8 @@ describe("Le service d'après authentification", () => {
               ? [{ nom: 'MonOrganisation', departement: '75' }]
               : [];
 
-          const resultat = await serviceApresAuthentification({
-            adaptateurProfilAnssi,
-            serviceAnnuaire,
-            profilProConnect: profilProConnect.complet(),
-          });
+          const resultat =
+            await serviceApresAuthentification(parametresParDefaut);
 
           expect(resultat.donnees).to.eql({
             email: 'jean.dujardin@beta.gouv.fr',
@@ -104,8 +111,7 @@ describe("Le service d'après authentification", () => {
 
         it("reste robuste si le siret n'est pas dans ProConnect", async () => {
           const resultat = await serviceApresAuthentification({
-            adaptateurProfilAnssi,
-            serviceAnnuaire,
+            ...parametresParDefaut,
             profilProConnect: profilProConnect.sansSiret(),
           });
 
@@ -114,11 +120,10 @@ describe("Le service d'après authentification", () => {
 
         it("reste robuste si l'entreprise n'est pas trouvée", async () => {
           const resultat = await serviceApresAuthentification({
-            adaptateurProfilAnssi,
+            ...parametresParDefaut,
             serviceAnnuaire: {
               rechercheOrganisations: async () => [],
             },
-            profilProConnect: profilProConnect.complet(),
           });
 
           expect(resultat.donnees.organisation).to.be(undefined);
@@ -127,5 +132,45 @@ describe("Le service d'après authentification", () => {
     });
   });
 
-  describe("lorsque MSS connaît l'utilisateur", () => {});
+  describe("lorsque MSS connaît l'utilisateur", () => {
+    beforeEach(() => {
+      depotDonnees.utilisateurAvecEmail = async (email) =>
+        email === 'jean.dujardin@beta.gouv.fr'
+          ? unUtilisateur().avecEmail(email).construis()
+          : undefined;
+    });
+
+    it('le connecte', async () => {
+      const resultat = await serviceApresAuthentification(parametresParDefaut);
+
+      expect(resultat.utilisateurAConnecter).to.be.an(Utilisateur);
+      expect(resultat.utilisateurAConnecter.email).to.be(
+        'jean.dujardin@beta.gouv.fr'
+      );
+    });
+
+    describe("s'il est invité", () => {
+      beforeEach(() => {
+        depotDonnees.utilisateurAvecEmail = async (email) =>
+          unUtilisateur().avecEmail(email).quiAEteInvite().construis();
+      });
+
+      it('redirige vers la page après authentification', async () => {
+        const resultat =
+          await serviceApresAuthentification(parametresParDefaut);
+
+        expect(resultat.type).to.be('redirection');
+        expect(resultat.cible).to.be('/apres-authentification');
+      });
+
+      it('enrichit les données avec la propriété `invite`', async () => {
+        const resultat =
+          await serviceApresAuthentification(parametresParDefaut);
+
+        expect(resultat.donnees.invite).to.be(true);
+      });
+    });
+
+    describe("s'il n'est pas invité", () => {});
+  });
 });
