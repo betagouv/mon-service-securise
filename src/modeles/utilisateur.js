@@ -24,11 +24,11 @@ class Utilisateur extends Base {
         'email',
         'telephone',
         'cguAcceptees',
-        'postes',
         'infolettreAcceptee',
         'transactionnelAccepte',
         'estimationNombreServices',
       ],
+      proprietesListes: ['postes'],
     });
     valide(donnees);
     this.entite = new Entite(donnees.entite);
