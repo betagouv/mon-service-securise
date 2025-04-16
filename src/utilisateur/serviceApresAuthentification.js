@@ -56,8 +56,8 @@ const serviceApresAuthentification = async ({
       serviceAnnuaire,
     });
     return {
-      type: 'redirection',
-      cible: '/apres-authentification',
+      type: 'rendu',
+      cible: 'apresAuthentification',
       donnees: {
         ...donneesUtilisateur,
         invite: true,
@@ -68,9 +68,20 @@ const serviceApresAuthentification = async ({
 
   await depotDonnees.rafraichisProfilUtilisateurLocal(utilisateur.id);
 
+  const utilisateurAJour = await depotDonnees.utilisateur(utilisateur.id);
+  if (!utilisateurAJour.aLesInformationsAgentConnect()) {
+    await depotDonnees.metsAJourUtilisateur(utilisateur.id, {
+      nom: profilProConnect.nom,
+      prenom: profilProConnect.prenom,
+      entite: {
+        siret: profilProConnect.siret,
+      },
+    });
+  }
+
   return {
-    type: 'redirection',
-    cible: '/apres-authentification',
+    type: 'rendu',
+    cible: 'apresAuthentification',
     utilisateurAConnecter: utilisateur,
   };
 };
