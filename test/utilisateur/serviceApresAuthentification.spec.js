@@ -33,6 +33,8 @@ describe("Le service d'après authentification", () => {
     };
     depotDonnees = {
       utilisateurAvecEmail: async (_) => undefined,
+      utilisateur: async () => undefined,
+      metsAJourUtilisateur: async () => undefined,
       rafraichisProfilUtilisateurLocal: async () => {},
     };
     parametresParDefaut = {
@@ -141,6 +143,7 @@ describe("Le service d'après authentification", () => {
         email === 'jean.dujardin@beta.gouv.fr'
           ? unUtilisateur().avecEmail(email).construis()
           : undefined;
+      depotDonnees.utilisateur = async () => unUtilisateur().construis();
     });
 
     it('le connecte', async () => {
@@ -162,8 +165,8 @@ describe("Le service d'après authentification", () => {
         const resultat =
           await serviceApresAuthentification(parametresParDefaut);
 
-        expect(resultat.type).to.be('redirection');
-        expect(resultat.cible).to.be('/apres-authentification');
+        expect(resultat.type).to.be('rendu');
+        expect(resultat.cible).to.be('apresAuthentification');
       });
 
       it('enrichit les données avec la propriété `invite`', async () => {
@@ -186,44 +189,93 @@ describe("Le service d'après authentification", () => {
     });
 
     describe("s'il n'est pas invité", () => {
-      describe('si son profil MSS est complet', () => {
+      beforeEach(() => {
+        depotDonnees.utilisateurAvecEmail = async (email) =>
+          unUtilisateur()
+            .avecId('U1')
+            .avecEmail(email)
+            .quiEstComplet()
+            .construis();
+      });
+
+      it('rafraîchis son profil utilisateur local', async () => {
+        let idUtilisateurRafraichis;
+        depotDonnees.rafraichisProfilUtilisateurLocal = (id) => {
+          idUtilisateurRafraichis = id;
+        };
+
+        await serviceApresAuthentification(parametresParDefaut);
+
+        expect(idUtilisateurRafraichis).to.be('U1');
+      });
+
+      it('rend la page `après-authentification`', async () => {
+        const resultat =
+          await serviceApresAuthentification(parametresParDefaut);
+
+        expect(resultat.type).to.be('rendu');
+        expect(resultat.cible).to.be('apresAuthentification');
+      });
+
+      it('ne contient pas de données utilisateur', async () => {
+        const resultat =
+          await serviceApresAuthentification(parametresParDefaut);
+
+        expect(resultat.donnees).to.be(undefined);
+      });
+
+      describe('si son profil MSS est complet après rafraîchissement', () => {
         beforeEach(() => {
-          depotDonnees.utilisateurAvecEmail = async (email) =>
-            unUtilisateur()
-              .avecId('U1')
-              .avecEmail(email)
-              .quiEstComplet()
-              .construis();
+          depotDonnees.utilisateur = (id) =>
+            unUtilisateur().avecId(id).quiEstComplet().construis();
         });
 
-        it('rafraîchis son profil utilisateur local', async () => {
-          let idUtilisateurRafraichis;
-          depotDonnees.rafraichisProfilUtilisateurLocal = (id) => {
-            idUtilisateurRafraichis = id;
+        it('ne mets pas à jour les informations', async () => {
+          let miseAJourAppelee = false;
+          depotDonnees.metsAJourUtilisateur = () => {
+            miseAJourAppelee = true;
           };
 
           await serviceApresAuthentification(parametresParDefaut);
 
-          expect(idUtilisateurRafraichis).to.be('U1');
-        });
-
-        it('redirige vers la page après authentification', async () => {
-          const resultat =
-            await serviceApresAuthentification(parametresParDefaut);
-
-          expect(resultat.type).to.be('redirection');
-          expect(resultat.cible).to.be('/apres-authentification');
-        });
-
-        it('ne contient pas de données utilisateur', async () => {
-          const resultat =
-            await serviceApresAuthentification(parametresParDefaut);
-
-          expect(resultat.donnees).to.be(undefined);
+          expect(miseAJourAppelee).to.be(false);
         });
       });
 
-      describe('si son profil MSS est incomplet', () => {});
+      describe('si son profil MSS est incomplet', () => {
+        beforeEach(() => {
+          depotDonnees.utilisateur = async (id) =>
+            unUtilisateur()
+              .avecId(id)
+              .quiNAPasRempliSonProfil()
+              .quiAccepteCGU()
+              .construis();
+        });
+
+        it('complète le profil avec les données de ProConnect', async () => {
+          let donneesRecues;
+          depotDonnees.metsAJourUtilisateur = (id, donnees) => {
+            if (id === 'U1') {
+              donneesRecues = donnees;
+            }
+          };
+
+          await serviceApresAuthentification({
+            ...parametresParDefaut,
+            profilProConnect: {
+              nom: 'Nom PC',
+              prenom: 'Prenom PC',
+              email: 'Email PC',
+              siret: 'Siret PC',
+            },
+          });
+          expect(donneesRecues).to.eql({
+            nom: 'Nom PC',
+            prenom: 'Prenom PC',
+            entite: { siret: 'Siret PC' },
+          });
+        });
+      });
     });
   });
 });
