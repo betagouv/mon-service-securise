@@ -363,7 +363,7 @@ const creeDepot = (config = {}) => {
         email: donneesMPA.email,
         nom: donneesMPA.nom,
         prenom: donneesMPA.prenom,
-        telephone: donneesMPA.telephone,
+        telephone: donneesMPA.telephone || donneesMSS.telephone,
         entite: {
           nom: donneesMPA.organisation.nom,
           departement: donneesMPA.organisation.departement,

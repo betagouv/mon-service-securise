@@ -1219,5 +1219,44 @@ describe('Le dépôt de données des utilisateurs', () => {
         transactionnelAccepte: '',
       });
     });
+    it("n'écrase pas le téléphone si MPA ne l'a pas", async () => {
+      adaptateurProfilAnssi.recupere = async () => ({
+        email: 'email2',
+        nom: 'nom2',
+        prenom: 'prenom2',
+        telephone: '',
+        organisation: {
+          nom: 'nomEntite2',
+          departement: 'departement2',
+          siret: 'siret2',
+        },
+        domainesSpecialite: ['domaine2'],
+      });
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(
+          unUtilisateur()
+            .avecId('U1')
+            .quiSAppelle('nom1 prenom1')
+            .quiAccepteCGU()
+            .avecNomEntite('nomEntite1')
+            .avecTelephone('monTelephoneDansMSS')
+            .avecEmail('email1').donnees
+        )
+        .construis();
+
+      const depot = DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurProfilAnssi,
+        adaptateurChiffrement,
+      });
+
+      await depot.rafraichisProfilUtilisateurLocal('U1');
+
+      const apresRafraichissement = (
+        await adaptateurPersistance.utilisateur('U1')
+      ).donnees;
+
+      expect(apresRafraichissement.telephone).to.be('monTelephoneDansMSS');
+    });
   });
 });
