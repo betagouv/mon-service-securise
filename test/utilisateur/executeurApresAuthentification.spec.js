@@ -50,6 +50,16 @@ describe("L'executeur après authentification", () => {
   });
 
   describe("lorsque le type de l'ordre est un rendu", () => {
+    let adaptateurEnvironnement;
+
+    beforeEach(() => {
+      adaptateurEnvironnement = {
+        mss: () => ({
+          urlBase: () => 'http://mss',
+        }),
+      };
+    });
+
     it('rend une page', () => {
       const ordre = {
         type: 'rendu',
@@ -61,22 +71,61 @@ describe("L'executeur après authentification", () => {
       expect(reponse.pageRendue).to.be('un-pug');
     });
 
-    it("génère un token avec les données de l'ordre", () => {
-      const ordre = {
-        type: 'rendu',
-        cible: 'un-pug',
-        donnees: {
-          champ: 'valeur',
-        },
-      };
-      const adaptateurJWT = {
-        signeDonnees: (donnees) => `${donnees.champ}-jwt`,
-      };
+    describe('lorsque des données sont fournies', () => {
+      let adaptateurJWT;
+      let ordre;
 
-      executeurApresAuthentification(ordre, { reponse, adaptateurJWT });
+      beforeEach(() => {
+        adaptateurJWT = {
+          signeDonnees: (donnees) => `${donnees.champ}-jwt`,
+        };
+        ordre = {
+          type: 'rendu',
+          cible: 'un-pug',
+          donnees: {
+            champ: 'valeur',
+          },
+        };
+      });
 
-      expect(reponse.donneesDeRenduDePage).to.eql({
-        tokenDonneesInvite: 'valeur-jwt',
+      it("génère un token avec les données de l'ordre", () => {
+        executeurApresAuthentification(ordre, { reponse, adaptateurJWT });
+
+        expect(reponse.donneesDeRenduDePage).to.eql({
+          tokenDonneesInvite: 'valeur-jwt',
+        });
+      });
+
+      it("ajoute l'url de redirection si elle est fournie", () => {
+        executeurApresAuthentification(ordre, {
+          reponse,
+          adaptateurEnvironnement,
+          urlRedirection: '/tableau-bord',
+          adaptateurJWT,
+        });
+
+        expect(reponse.donneesDeRenduDePage).to.eql({
+          urlRedirection: 'http://mss/tableau-bord',
+          tokenDonneesInvite: 'valeur-jwt',
+        });
+      });
+    });
+    describe("lorsqu'aucune donnée n'est fournie", () => {
+      it("ajoute l'url de redirection si elle est fournie", () => {
+        const ordre = {
+          type: 'rendu',
+          cible: 'un-pug',
+        };
+
+        executeurApresAuthentification(ordre, {
+          reponse,
+          adaptateurEnvironnement,
+          urlRedirection: '/tableau-bord',
+        });
+
+        expect(reponse.donneesDeRenduDePage).to.eql({
+          urlRedirection: 'http://mss/tableau-bord',
+        });
       });
     });
   });

@@ -1,13 +1,19 @@
-const executeurApresAuthentification = (ordre, { reponse, adaptateurJWT }) => {
+const executeurApresAuthentification = (
+  ordre,
+  { reponse, adaptateurJWT, urlRedirection, adaptateurEnvironnement }
+) => {
   switch (ordre.type) {
     case 'rendu':
-      if (ordre.donnees) {
-        reponse.render(ordre.cible, {
+      reponse.render(ordre.cible, {
+        ...(ordre.donnees && {
           tokenDonneesInvite: adaptateurJWT.signeDonnees(ordre.donnees),
-        });
-      } else {
-        reponse.render(ordre.cible);
-      }
+        }),
+        ...(urlRedirection && {
+          urlRedirection: `${adaptateurEnvironnement
+            .mss()
+            .urlBase()}${urlRedirection}`,
+        }),
+      });
       break;
     case 'redirection':
       if (ordre.donnees) {
