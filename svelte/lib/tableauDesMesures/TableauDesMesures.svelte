@@ -265,7 +265,7 @@
         on:supprimeFiltres={supprimeFiltres}
       />
     {:else}
-      {#each Object.entries($resultatsDeRecherche.mesuresGenerales) as [id, mesure] (id)}
+      {#each Object.entries($resultatsDeRecherche.mesuresGenerales).sort(([_, mesure1], [__, mesure2]) => parseInt(mesure1.identifiantNumerique) - parseInt(mesure2.identifiantNumerique)) as [id, mesure] (id)}
         <LigneMesure
           {id}
           referentiel={mesure.referentiel}
