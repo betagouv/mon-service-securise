@@ -1,5 +1,4 @@
 const express = require('express');
-const SourceAuthentification = require('../../modeles/sourceAuthentification');
 const { estUrlLegalePourRedirection } = require('../../http/redirection');
 const {
   fabriqueAdaptateurGestionErreur,
@@ -7,6 +6,9 @@ const {
 const {
   serviceApresAuthentification,
 } = require('../../utilisateur/serviceApresAuthentification');
+const {
+  executeurApresAuthentification,
+} = require('../../utilisateur/executeurApresAuthentification');
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
@@ -65,70 +67,22 @@ const routesNonConnecteOidc = ({
         await adaptateurOidc.recupereInformationsUtilisateur(accessToken);
       const profilProConnect = { nom, prenom, email, siret };
 
-      await serviceApresAuthentification({
+      const ordre = await serviceApresAuthentification({
         adaptateurProfilAnssi,
         serviceAnnuaire,
         profilProConnect,
         depotDonnees,
       });
 
-      let utilisateurExistant = await depotDonnees.utilisateurAvecEmail(email);
-
-      if (!utilisateurExistant) {
-        const token = adaptateurJWT.signeDonnees(profilProConnect);
-        reponse.redirect(`/creation-compte?token=${token}`);
-        return;
-      }
-
-      requete.session.AgentConnectIdToken = idToken;
-      serviceGestionnaireSession.enregistreSession(
+      await executeurApresAuthentification(ordre, {
         requete,
-        utilisateurExistant,
-        SourceAuthentification.AGENT_CONNECT
-      );
-
-      const doitSeulementRafraichir =
-        utilisateurExistant.aLesInformationsAgentConnect() ||
-        utilisateurExistant.estUnInvite();
-
-      if (doitSeulementRafraichir) {
-        // La copie locale de MSS contient des données, mais peut être obsolète. On demande donc un rafraichissement à MPA
-        await depotDonnees.rafraichisProfilUtilisateurLocal(
-          utilisateurExistant.id
-        );
-      } else {
-        // On considère que ProConnect a les données "les plus à jour", donc on maj MSS (et donc MPA)
-        await depotDonnees.metsAJourUtilisateur(utilisateurExistant.id, {
-          nom,
-          prenom,
-          entite: { siret },
-        });
-      }
-
-      await depotDonnees.enregistreNouvelleConnexionUtilisateur(
-        utilisateurExistant.id,
-        SourceAuthentification.AGENT_CONNECT
-      );
-
-      utilisateurExistant = await depotDonnees.utilisateur(
-        utilisateurExistant.id
-      );
-      const profilAJour = {
-        nom: utilisateurExistant.nom || nom,
-        prenom: utilisateurExistant.prenom || prenom,
-        siret: utilisateurExistant.entite.siret || siret,
-        email: utilisateurExistant.email,
-      };
-      const tokenDonneesInvite = utilisateurExistant.estUnInvite()
-        ? adaptateurJWT.signeDonnees({ ...profilAJour, invite: true })
-        : undefined;
-
-      reponse.render('apresAuthentification', {
-        ...(urlRedirection && {
-          urlRedirection:
-            adaptateurEnvironnement.mss().urlBase() + urlRedirection,
-        }),
-        tokenDonneesInvite,
+        reponse,
+        agentConnectIdToken: idToken,
+        adaptateurJWT,
+        depotDonnees,
+        urlRedirection,
+        adaptateurEnvironnement,
+        serviceGestionnaireSession,
       });
     } catch (e) {
       fabriqueAdaptateurGestionErreur().logueErreur(e);

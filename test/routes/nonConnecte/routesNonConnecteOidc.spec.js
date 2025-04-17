@@ -214,7 +214,6 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           email: 'unEmailInconnu',
           nom: 'Dujardin',
           prenom: 'Jean',
-          siret: '12345',
         });
       });
     });
@@ -405,11 +404,15 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           donneesRecuesPourCreationTokenSigne = donnees;
           return 'unJetonSigne';
         };
+        testeur.adaptateurOidc().recupereInformationsUtilisateur =
+          async () => ({
+            email: 'jean.dujardin@beta.gouv.fr',
+            nom: 'Dujardin',
+            prenom: 'Jean',
+          });
         testeur.depotDonnees().utilisateur = async () => {
           const utilisateurExistant = unUtilisateur()
             .avecEmail('jean.dujardin@beta.gouv.fr')
-            .quiSAppelle('Jean Dujardin')
-            .quiTravaillePourUneEntiteAvecSiret('12345')
             .quiAEteInvite()
             .construis();
           utilisateurExistant.genereToken = () => 'un token';
@@ -428,7 +431,6 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           email: 'jean.dujardin@beta.gouv.fr',
           nom: 'Dujardin',
           prenom: 'Jean',
-          siret: '12345',
           invite: true,
         });
         expect(donneesPartagees(reponse.data, 'tokenDonneesInvite')).to.eql({
@@ -473,7 +475,6 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           email: 'jean.dujardin@beta.gouv.fr',
           nom: 'Dujardin ProConnect',
           prenom: 'Jean ProConnect',
-          siret: '12345',
           invite: true,
         });
         expect(donneesPartagees(reponse.data, 'tokenDonneesInvite')).to.eql({
