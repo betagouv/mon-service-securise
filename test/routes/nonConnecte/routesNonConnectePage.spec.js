@@ -268,60 +268,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       }
     });
 
-    it("ajoute les données de l'organisation quand le siret est fourni", async () => {
-      testeur.serviceAnnuaire().rechercheOrganisations = async (siret) =>
-        siret === '12P34' ? [{ nom: 'VERT', departement: '33' }] : [];
-
-      testeur.adaptateurJWT().decode = (token) =>
-        token === 'unTokenValide' ? { siret: '12P34' } : undefined;
-
-      const reponse = await axios.get(
-        `http://localhost:1234/creation-compte?token=unTokenValide`
-      );
-
-      expect(
-        donneesPartagees(reponse.data, 'informations-professionnelles')
-      ).to.eql({
-        informationsProfessionnelles: {
-          organisation: {
-            siret: '12P34',
-            departement: '33',
-            nom: 'VERT',
-          },
-        },
-      });
-    });
-
-    it("n'ajoute pas les données de l'organisation quand le siret n'est pas fourni", async () => {
-      testeur.serviceAnnuaire().rechercheOrganisations = async (_) => {
-        expect.fail('ne devrait pas appeler cette fonction');
-      };
-
-      const reponse = await axios.get(
-        `http://localhost:1234/creation-compte?token=unTokenSansSiret`
-      );
-
-      expect(
-        donneesPartagees(reponse.data, 'informations-professionnelles')
-      ).to.eql({
-        informationsProfessionnelles: {},
-      });
-    });
-
-    it("n'ajoute pas les données de l'organisation quand aucune organisation n'est trouvée", async () => {
-      testeur.serviceAnnuaire().rechercheOrganisations = async (_) => [];
-
-      const reponse = await axios.get(
-        `http://localhost:1234/creation-compte?token=unTokenAvecSiretInconnu`
-      );
-
-      expect(
-        donneesPartagees(reponse.data, 'informations-professionnelles')
-      ).to.eql({
-        informationsProfessionnelles: {},
-      });
-    });
-
     it('envoie les départements', async () => {
       testeur.referentiel().departements = () => [{ nom: 'Gironde' }];
 
@@ -334,16 +280,19 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       });
     });
 
-    it("ajoute les informations provenant du profil ANSSI pour que l'utilisateur voie des infos pré-remplies à l'écran", async () => {
-      testeur.adaptateurJWT().decode = () => ({ email: 'jeand@beta.fr' });
-      testeur.adaptateurProfilAnssi().recupere = (email) =>
-        email === 'jeand@beta.fr'
-          ? {
-              organisation: { siret: '1234', nom: 'BLEU', departement: '75' },
-              telephone: '0607080910',
-              domainesSpecialite: ['RSSI', 'DEV'],
-            }
-          : undefined;
+    it("ajoute les informations provenant du token pour que l'utilisateur voie des infos pré-remplies à l'écran", async () => {
+      testeur.adaptateurJWT().decode = () => ({
+        email: 'jeand@beta.fr',
+        nom: 'Dujardin',
+        prenom: 'Jean',
+        organisation: {
+          siret: '1234',
+          departement: '75',
+          nom: 'BLEU',
+        },
+        telephone: '0607080910',
+        domainesSpecialite: ['RSSI', 'DEV'],
+      });
 
       const reponse = await axios.get(
         `http://localhost:1234/creation-compte?token=unTokenValide`
@@ -354,6 +303,8 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       ).to.eql({
         informationsProfessionnelles: {
           email: 'jeand@beta.fr',
+          nom: 'Dujardin',
+          prenom: 'Jean',
           organisation: {
             siret: '1234',
             departement: '75',
