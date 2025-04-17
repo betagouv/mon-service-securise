@@ -3,7 +3,9 @@ const recupereDonneesUtilisateur = async ({
   profilProConnect,
   serviceAnnuaire,
 }) => {
-  const profilAnssi = await adaptateurProfilAnssi.recupere();
+  const profilAnssi = await adaptateurProfilAnssi.recupere(
+    profilProConnect.email
+  );
   let donnees = profilAnssi;
   if (!profilAnssi) {
     let organisation;
