@@ -62,18 +62,21 @@ describe("Le service d'après authentification", () => {
     describe('concernant les données utilisateur', () => {
       describe("si l'utilisateur est connu dans MPA", () => {
         it('renvoie les données de MPA', async () => {
-          adaptateurProfilAnssi.recupere = async () => ({
-            email: 'jean.dujardin@beta.gouv.fr',
-            nom: 'Dujardin',
-            prenom: 'Jean',
-            telephone: '0102030405',
-            organisation: {
-              nom: 'MonOrganisation',
-              departement: '75',
-              siret: '1234',
-            },
-            domainesSpecialite: ['RSSI'],
-          });
+          adaptateurProfilAnssi.recupere = async (email) =>
+            email === 'jean.dujardin@beta.gouv.fr'
+              ? {
+                  email: 'jean.dujardin@beta.gouv.fr',
+                  nom: 'Dujardin',
+                  prenom: 'Jean',
+                  telephone: '0102030405',
+                  organisation: {
+                    nom: 'MonOrganisation',
+                    departement: '75',
+                    siret: '1234',
+                  },
+                  domainesSpecialite: ['RSSI'],
+                }
+              : undefined;
           const resultat =
             await serviceApresAuthentification(parametresParDefaut);
 
