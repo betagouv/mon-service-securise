@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "knex migrate:latest && npx vite build --config svelte/vite.config.mts  && npx tsc && npm run cree-utilisateur-demo",
-    "cree-utilisateur-demo": "node dist/creeUtilisateurDemo.js",
+    "cree-utilisateur-demo": "npx tsc && node dist/creeUtilisateurDemo.js",
     "test": "eslint . && mocha",
     "test:mocha": "mocha",
     "test:watch": "nodemon --exec mocha",
