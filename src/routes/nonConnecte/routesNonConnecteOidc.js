@@ -4,6 +4,9 @@ const { estUrlLegalePourRedirection } = require('../../http/redirection');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('../../adaptateurs/fabriqueAdaptateurGestionErreur');
+const {
+  serviceApresAuthentification,
+} = require('../../utilisateur/serviceApresAuthentification');
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
@@ -12,6 +15,8 @@ const routesNonConnecteOidc = ({
   middleware,
   adaptateurEnvironnement,
   serviceGestionnaireSession,
+  adaptateurProfilAnssi,
+  serviceAnnuaire,
 }) => {
   const routes = express.Router();
 
@@ -59,6 +64,14 @@ const routesNonConnecteOidc = ({
       const { nom, prenom, email, siret } =
         await adaptateurOidc.recupereInformationsUtilisateur(accessToken);
       const profilProConnect = { nom, prenom, email, siret };
+
+      await serviceApresAuthentification({
+        adaptateurProfilAnssi,
+        serviceAnnuaire,
+        profilProConnect,
+        depotDonnees,
+      });
+
       let utilisateurExistant = await depotDonnees.utilisateurAvecEmail(email);
 
       if (!utilisateurExistant) {

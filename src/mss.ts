@@ -143,6 +143,8 @@ const creeServeur = ({
       middleware,
       adaptateurEnvironnement,
       serviceGestionnaireSession,
+      adaptateurProfilAnssi,
+      serviceAnnuaire,
     })
   );
   app.use(
