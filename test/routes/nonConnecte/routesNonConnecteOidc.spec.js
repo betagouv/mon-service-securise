@@ -100,6 +100,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       testeur.depotDonnees().utilisateur = () => utilisateur;
       testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = () => {};
       testeur.depotDonnees().metsAJourUtilisateur = () => {};
+      testeur.depotDonnees().rafraichisProfilUtilisateurLocal = () => {};
       testeur.middleware().reinitialise({
         fonctionDeposeCookieAAppeler: (requete) =>
           (requete.cookies.AgentConnectInfo = {
@@ -107,6 +108,8 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
             nonce: 'unNonce',
           }),
       });
+      testeur.adaptateurProfilAnssi().recupere = () => undefined;
+      testeur.serviceAnnuaire().rechercheOrganisations = () => [];
     });
 
     it('sert une page HTML', async () => {
