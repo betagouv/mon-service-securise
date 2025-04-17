@@ -1,7 +1,31 @@
-const executeurApresAuthentification = (
+const SourceAuthentification = require('../modeles/sourceAuthentification');
+
+const executeurApresAuthentification = async (
   ordre,
-  { reponse, adaptateurJWT, urlRedirection, adaptateurEnvironnement }
+  {
+    requete,
+    reponse,
+    agentConnectIdToken,
+    adaptateurJWT,
+    depotDonnees,
+    urlRedirection,
+    adaptateurEnvironnement,
+    serviceGestionnaireSession,
+  }
 ) => {
+  if (ordre.utilisateurAConnecter) {
+    serviceGestionnaireSession.enregistreSession(
+      requete,
+      ordre.utilisateurAConnecter,
+      SourceAuthentification.AGENT_CONNECT
+    );
+    requete.session.AgentConnectIdToken = agentConnectIdToken;
+    await depotDonnees.enregistreNouvelleConnexionUtilisateur(
+      ordre.utilisateurAConnecter.id,
+      SourceAuthentification.AGENT_CONNECT
+    );
+  }
+
   switch (ordre.type) {
     case 'rendu':
       reponse.render(ordre.cible, {
