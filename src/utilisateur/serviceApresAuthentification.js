@@ -21,7 +21,7 @@ const recupereDonneesUtilisateur = async ({
       nom: profilProConnect.nom,
       prenom: profilProConnect.prenom,
       email: profilProConnect.email,
-      organisation,
+      ...(organisation && { organisation }),
     };
   }
   return donnees;
