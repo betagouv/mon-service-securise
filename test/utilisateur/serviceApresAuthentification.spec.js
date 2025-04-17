@@ -132,6 +132,7 @@ describe("Le service d'après authentification", () => {
           });
 
           expect(resultat.donnees.organisation).to.be(undefined);
+          expect(Object.keys(resultat.donnees)).to.not.contain('organisation');
         });
       });
     });
