@@ -1,3 +1,4 @@
+const { isAxiosError } = require('axios');
 const Sentry = require('@sentry/node');
 const { IpDeniedError } = require('express-ipfilter');
 const adaptateurEnvironnement = require('./adaptateurEnvironnement');
@@ -7,6 +8,29 @@ const logueErreur = (erreur, infosDeContexte = {}) => {
     Object.entries(infosDeContexte).forEach(([cle, valeur]) =>
       Sentry.setExtra(cle, valeur)
     );
+
+    if (isAxiosError(erreur)) {
+      Sentry.captureException(erreur, {
+        extra: {
+          message: erreur.message,
+          name: erreur.name,
+          code: erreur.code,
+          response: {
+            status: erreur.response?.status,
+            headers: erreur.response?.headers,
+            data: erreur.response?.data,
+          },
+          request: {
+            method: erreur.request?.method,
+            body: erreur.request?.body,
+            path: erreur.request?.path,
+            protocol: erreur.request?.protocol,
+          },
+        },
+      });
+      return;
+    }
+
     Sentry.captureException(erreur);
   });
 };
