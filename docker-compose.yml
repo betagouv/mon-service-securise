@@ -45,11 +45,11 @@ services:
 
   web:
     <<: *configuration-base
-
+    tty: true
     command: bash -c "
       export PUPPETEER_EXECUTABLE_PATH=$$(which chromium)
       && npx knex migrate:latest
-      && npx concurrently -n \"SERVEUR,FRONT SVELTE\"
+      && npx concurrently -n \"SERVEUR,FRONT SVELTE\" -c \"blue.bold,magenta.underline\"
       \"npx nodemon server.ts\"
       \"npx vite build --watch --minify false --config svelte/vite.config.mts\"
       "
