@@ -59,8 +59,9 @@ const controleurErreurs = (erreur, requete, reponse, suite) => {
   const estErreurDeFiltrageIp = erreur instanceof IpDeniedError;
   if (estErreurDeFiltrageIp) {
     // On termine la connexion directement si qqun nous appelle sans passer par Baleen.
+    reponse.status(401);
     reponse.end();
-    return suite();
+    return;
   }
   const estErreurCSRF = erreur.message === 'CSRF token mismatch';
   if (estErreurCSRF) {
@@ -75,7 +76,7 @@ const controleurErreurs = (erreur, requete, reponse, suite) => {
     });
   }
 
-  return Sentry.Handlers.errorHandler()(erreur, requete, reponse, suite);
+  Sentry.Handlers.errorHandler()(erreur, requete, reponse, suite);
 };
 
 const identifieUtilisateur = (idUtilisateur, timestampTokenJwt) => {
