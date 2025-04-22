@@ -91,7 +91,7 @@ const routesNonConnecteOidc = ({
   });
 
   routes.get('/apres-deconnexion', async (requete, reponse) => {
-    const { state } = requete.cookies.AgentConnectInfo;
+    const state = requete.cookies.AgentConnectInfo?.state;
     if (state !== requete.query.state) {
       reponse.sendStatus(401);
       return;

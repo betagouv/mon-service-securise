@@ -518,6 +518,20 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       expect(reponse.status).to.be(401);
     });
 
+    it("ne déconnecte pas l'utilisateur si le cookie n'est pas positionné", async () => {
+      testeur.middleware().reinitialise({
+        fonctionDeposeCookieAAppeler: (requete) => {
+          requete.cookies.AgentConnectInfo = null;
+        },
+      });
+
+      const reponse = await requeteSansRedirection(
+        'http://localhost:1234/oidc/apres-deconnexion?state=unState'
+      );
+
+      expect(reponse.status).to.be(401);
+    });
+
     it('supprime le cookie contenant le state', async () => {
       const reponse = await requeteSansRedirection(
         'http://localhost:1234/oidc/apres-deconnexion?state=unState'
