@@ -29,13 +29,8 @@ class MoteurRegles {
             rendreIndispensables: profils[profil].mesuresARendreIndispensables,
           })
       )
-      .flatMap((profil) => profil[mesuresACibler](valeursDescriptionService))
-      .reduce(
-        (accumulateur, mesure) => ({ ...accumulateur, [mesure]: mesure }),
-        {}
-      );
-
-    return Object.keys(mapMesures);
+      .flatMap((profil) => profil[mesuresACibler](valeursDescriptionService));
+    return [...new Set(mapMesures)];
   }
 
   mesuresAAjouter(descriptionService) {
