@@ -60,27 +60,18 @@ class MoteurRegles {
       .concat(mesuresAAjouter)
       .filter((mesure) => !mesuresARetirer.includes(mesure));
 
-    const mesureAvecImportanceAjustee = (idsMesuresReference, idMesure) => {
-      const mesure = this.referentiel.mesure(idMesure);
-      mesure.indispensable ||= idsMesuresReference.includes(idMesure);
+    const litMesuresEtRendIndispensable = () => {
+      const idsARendreIndispensables = new Set(mesuresARendreIndispensables);
+      const resultat = new Map();
 
-      return mesure;
-    };
-
-    const ajouteEtRendsIndispensable = (
-      idsMesuresReference,
-      accumulateur,
-      idMesure
-    ) =>
-      Object.assign(accumulateur, {
-        [idMesure]: mesureAvecImportanceAjustee(idsMesuresReference, idMesure),
+      idsMesures.forEach((idMesure) => {
+        const mesure = this.referentiel.mesure(idMesure);
+        mesure.indispensable = idsARendreIndispensables.has(idMesure);
+        resultat.set(idMesure, mesure);
       });
-
-    return idsMesures.reduce(
-      (...parametres) =>
-        ajouteEtRendsIndispensable(mesuresARendreIndispensables, ...parametres),
-      {}
-    );
+      return Object.fromEntries(resultat.entries());
+    };
+    return litMesuresEtRendIndispensable();
   }
 }
 
