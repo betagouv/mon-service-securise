@@ -380,7 +380,10 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       await depot.metsAJourUtilisateur(
         '124',
-        unUtilisateur().avecId('124').quiSAppelle('Justine Lange').donnees
+        unUtilisateur()
+          .avecId('124')
+          .quiSAppelle('Justine Lange')
+          .quiEstComplet().donnees
       );
 
       const utilisateur = await depot.utilisateur('124');
@@ -394,11 +397,31 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       await depot.metsAJourUtilisateur(
         '123',
-        unUtilisateur().avecId('123').quiSAppelle('Justine Lange').donnees
+        unUtilisateur()
+          .avecId('123')
+          .quiSAppelle('Justine Lange')
+          .quiEstComplet().donnees
       );
 
       const utilisateur = await depot.utilisateur('123');
       expect(profilAnssiEnvoyeAAdaptateurPourMiseAJour).to.eql(utilisateur);
+    });
+
+    it('ne mets pas à jour MonProfilAnssi pour un utilisateur MSS qui a un profil incomplet', async () => {
+      let miseAJourFaite = false;
+      adaptateurProfilAnssi.metsAJour = () => {
+        miseAJourFaite = true;
+      };
+
+      await depot.metsAJourUtilisateur(
+        '124',
+        unUtilisateur()
+          .avecId('124')
+          .quiSAppelle('Justine Lange')
+          .quiNAPasRempliSonProfil().donnees
+      );
+
+      expect(miseAJourFaite).to.be(false);
     });
   });
 
