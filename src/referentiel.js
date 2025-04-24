@@ -94,10 +94,10 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     Object.keys(localisationsDonnees());
   const mesureIndispensable = (idMesure) =>
     !!donnees.mesures[idMesure].indispensable;
-  const mesures = () => JSON.parse(JSON.stringify(donnees.mesures));
-  const identifiantsMesures = () => Object.keys(mesures());
+  const mesures = () => structuredClone(donnees.mesures);
+  const identifiantsMesures = () => Object.keys(donnees.mesures);
   const estIdentifiantMesureConnu = (id) => identifiantsMesures().includes(id);
-  const mesure = (id) => mesures()[id];
+  const mesure = (id) => structuredClone(donnees.mesures[id]);
   const typesService = () => donnees.typesService;
   const nbMoisDecalage = (idEcheance) =>
     echeancesRenouvellement()[idEcheance]?.nbMoisDecalage;

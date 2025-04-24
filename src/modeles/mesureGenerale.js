@@ -18,7 +18,7 @@ class MesureGenerale extends Mesure {
   }
 
   donneesReferentiel() {
-    return this.referentiel.mesures()[this.id];
+    return this.referentiel.mesure(this.id);
   }
 
   descriptionMesure() {
