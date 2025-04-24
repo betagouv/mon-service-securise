@@ -66,7 +66,7 @@ class MoteurRegles {
 
       idsMesures.forEach((idMesure) => {
         const mesure = this.referentiel.mesure(idMesure);
-        mesure.indispensable = idsARendreIndispensables.has(idMesure);
+        mesure.indispensable ||= idsARendreIndispensables.has(idMesure);
         resultat.set(idMesure, mesure);
       });
       return Object.fromEntries(resultat.entries());
