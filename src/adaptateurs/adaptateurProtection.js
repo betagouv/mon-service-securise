@@ -3,14 +3,12 @@ const rateLimit = require('express-rate-limit');
 const {
   fabriqueAdaptateurGestionErreur,
 } = require('./fabriqueAdaptateurGestionErreur');
-const { extraisIp } = require('../http/requeteHttp');
 
 const uneMinute = 60 * 1000;
 const parametresCommuns = (typeRequete, doitFermerConnexion = false) => ({
   windowMs: uneMinute,
-  keyGenerator: (requete, _reponse) => extraisIp(requete.headers).client,
   handler: (requete, reponse) => {
-    const attaque = extraisIp(requete.headers).client?.replaceAll('.', '*');
+    const attaque = requete.ip.replaceAll('.', '*');
 
     if (typeRequete === 'Navigation')
       // eslint-disable-next-line no-console
