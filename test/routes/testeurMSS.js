@@ -104,6 +104,7 @@ const testeurMss = () => {
       mss: () => ({
         urlBase: () => 'http://localhost:1234',
       }),
+      trustProxy: () => 0,
     };
     adaptateurProtection = {
       protectionCsrf: () => (_requete, _reponse, suite) => suite(),

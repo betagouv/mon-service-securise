@@ -109,6 +109,20 @@ const oidc = () => ({
   clientSecret: () => process.env.OIDC_CLIENT_SECRET,
 });
 
+const trustProxy = () => {
+  const trustProxyEnChaine = process.env.NB_REQUETES_TRUST_PROXY || '0';
+  const trustProxyEnNombre = Number(trustProxyEnChaine);
+  if (Number.isNaN(trustProxyEnNombre)) {
+    /* eslint-disable no-console */
+    console.warn(
+      `Attention ! NB_REQUETES_TRUST_PROXY positionné à ${trustProxyEnChaine}`
+    );
+    /* eslint-enable no-console */
+    return trustProxyEnChaine;
+  }
+  return trustProxyEnNombre;
+};
+
 const mss = () => ({
   urlBase: () => process.env.URL_BASE_MSS,
 });
@@ -127,5 +141,6 @@ module.exports = {
   sendinblue,
   sentry,
   supervision,
+  trustProxy,
   versionDeBuild,
 };

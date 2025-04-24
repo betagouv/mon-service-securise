@@ -82,7 +82,7 @@ const creeServeur = ({
 
   app.disable('x-powered-by');
 
-  app.set('trust proxy', 1);
+  app.set('trust proxy', adaptateurEnvironnement.trustProxy());
   app.set('view engine', 'pug');
   app.set('views', './src/vues');
 
