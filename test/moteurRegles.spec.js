@@ -222,10 +222,11 @@ describe('Le moteur de règles', () => {
     const referentiel = Referentiel.creeReferentiel({
       mesures: {
         supervision: {},
+        dejaIndispensable: { indispensable: true },
       },
       reglesPersonnalisation: {
         clefsDescriptionServiceAConsiderer: ['delaiAvantImpactCritique'],
-        mesuresBase: [],
+        mesuresBase: ['dejaIndispensable'],
         profils: {
           mssPlusPlus: {
             regles: [
@@ -244,8 +245,10 @@ describe('Le moteur de règles', () => {
     const service = new DescriptionService({
       delaiAvantImpactCritique: ['moinsUneHeure'],
     });
-    expect(moteur.mesures(service)).to.eql({
+    const mesures = moteur.mesures(service);
+    expect(mesures).to.eql({
       supervision: { indispensable: true },
+      dejaIndispensable: { indispensable: true },
     });
   });
 
