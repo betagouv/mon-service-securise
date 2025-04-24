@@ -30,7 +30,7 @@ const routesConnecteApiServiceActivitesMesure = ({
         idActeur: a.idActeur,
         identifiantNumeriqueMesure:
           a.typeMesure === 'generale'
-            ? referentiel.mesures()[a.idMesure].identifiantNumerique
+            ? referentiel.mesure(a.idMesure).identifiantNumerique
             : undefined,
         type: a.type,
         details: a.details,
