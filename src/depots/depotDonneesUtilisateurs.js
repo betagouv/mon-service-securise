@@ -277,7 +277,8 @@ const creeDepot = (config = {}) => {
 
     const u = await p.lis.un(id);
 
-    await adaptateurProfilAnssi.metsAJour(u);
+    if (u.completudeProfil().estComplet)
+      await adaptateurProfilAnssi.metsAJour(u);
 
     await busEvenements.publie(
       new EvenementUtilisateurModifie({ utilisateur: u })
