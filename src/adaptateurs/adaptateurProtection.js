@@ -5,7 +5,7 @@ const {
 } = require('./fabriqueAdaptateurGestionErreur');
 
 const uneMinute = 60 * 1000;
-const parametresCommuns = (typeRequete, doitFermerConnexion = false) => ({
+const parametresCommuns = (typeRequete) => ({
   windowMs: uneMinute,
   handler: (requete, reponse) => {
     const attaque = requete.ip.replaceAll('.', '*');
@@ -21,8 +21,7 @@ const parametresCommuns = (typeRequete, doitFermerConnexion = false) => ({
         { typeRequete, 'IP de la requete': attaque }
       );
 
-    if (doitFermerConnexion) reponse.end();
-    else reponse.render('erreurTropDeTrafic');
+    return reponse.status(429).end();
   },
 });
 
@@ -47,7 +46,7 @@ const adaptateurProtection = {
       process.env.NB_REQUETES_MAX_PAR_MINUTE_ENDPOINT_SENSIBLE ?? 0;
 
     return rateLimit({
-      ...parametresCommuns('API', true),
+      ...parametresCommuns('API'),
       max: maxParFenetreParIp,
     });
   },
