@@ -41,6 +41,14 @@ module.exports = {
       rules: { 'import/extensions': ['error', 'always'] },
     },
     {
+      files: ['admin/**/*.*js'],
+      settings: {
+        'import/resolver': {
+          typescript: {},
+        },
+      },
+    },
+    {
       files: ['test*/**/*.*js'],
       rules: {
         'no-new': ['off'],
