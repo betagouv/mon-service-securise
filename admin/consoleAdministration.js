@@ -3,6 +3,7 @@ const axios = require('axios');
 const { AxiosError } = require('axios');
 const { inspect } = require('util');
 const Knex = require('knex');
+const { AdaptateurProfilAnssi } = require('@lab-anssi/lib');
 const configKnex = require('../knexfile');
 const donneesReferentiel = require('../donneesReferentiel');
 const DepotDonnees = require('../src/depotDonnees');
@@ -770,6 +771,47 @@ class ConsoleAdministration {
       );
       console.log(`| ${parrain?.email} | ${resultat.total_parrainages} |`);
     }
+  }
+
+  async migreProfilsDansMPA() {
+    const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
+    const utilisateursComplets = tousUtilisateurs
+      .filter((u) => u.completudeProfil().estComplet)
+      .filter((u) => u.postes && u.postes.length > 0);
+
+    console.log(
+      `${utilisateursComplets.length} utilisateurs avec profil complet`
+    );
+    const donneesProfils = utilisateursComplets.map((u) => ({
+      dateInscription: u.dateCreation,
+      donneesProfil: {
+        email: u.email,
+        nom: u.nom,
+        prenom: u.prenom,
+        organisation: {
+          nom: u.entite.nom,
+          siret: u.entite.siret,
+          departement: u.entite.departement,
+        },
+        domainesSpecialite: u.postes,
+        ...(u.telephone && { telephone: u.telephone }),
+      },
+    }));
+
+    const adaptateurProfilAnssi = new AdaptateurProfilAnssi(
+      process.env.PROFIL_ANSSI_URL_BASE,
+      process.env.PROFIL_ANSSI_JETON_API
+    );
+
+    try {
+      await adaptateurProfilAnssi.inscris(donneesProfils);
+    } catch (e) {
+      console.warn('Erreur lors de la migration');
+      console.warn(e?.response?.data);
+      return;
+    }
+
+    console.log('Migration effectuée');
   }
 }
 
