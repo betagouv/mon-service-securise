@@ -782,10 +782,14 @@ class ConsoleAdministration {
         (u) => u.entite?.siret && u.entite?.nom?.trim() && u.entite?.departement
       );
 
-    console.log(
-      `${utilisateursComplets.length} utilisateurs avec profil complet`
+    const utilisateursUniques = Array.from(
+      new Map(utilisateursComplets.map((u) => [u.email, u])).values()
     );
-    const donneesProfils = utilisateursComplets.map((u) => ({
+
+    console.log(
+      `${utilisateursUniques.length} utilisateurs avec profil complet`
+    );
+    const donneesProfils = utilisateursUniques.map((u) => ({
       dateInscription: u.dateCreation,
       donneesProfil: {
         email: u.email,
