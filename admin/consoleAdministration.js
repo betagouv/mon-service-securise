@@ -777,7 +777,10 @@ class ConsoleAdministration {
     const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
     const utilisateursComplets = tousUtilisateurs
       .filter((u) => u.completudeProfil().estComplet)
-      .filter((u) => u.postes && u.postes.length > 0);
+      .filter((u) => u.postes && u.postes.length > 0)
+      .filter(
+        (u) => u.entite?.siret && u.entite?.nom?.trim() && u.entite?.departement
+      );
 
     console.log(
       `${utilisateursComplets.length} utilisateurs avec profil complet`
