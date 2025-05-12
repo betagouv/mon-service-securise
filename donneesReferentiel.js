@@ -206,6 +206,11 @@ module.exports = {
       permissionRequise: { rubrique: 'DECRIRE', niveau: 1 },
       priorite: 20,
     },
+    finalisationDescriptionServiceImporte: {
+      lien: '/descriptionService',
+      permissionRequise: { rubrique: 'DECRIRE', niveau: 2 },
+      priorite: 1,
+    },
   },
 
   nombreOrganisationsUtilisatrices: [
