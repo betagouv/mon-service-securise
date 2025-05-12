@@ -13,6 +13,10 @@ function supprimeSuggestionsSurDesChampsObligatoires({ depotDonnees }) {
       service.id,
       'controleBesoinsDeSecuriteRetrogrades'
     );
+    await depotDonnees.acquitteSuggestionAction(
+      service.id,
+      'finalisationDescriptionServiceImporte'
+    );
   };
 }
 
