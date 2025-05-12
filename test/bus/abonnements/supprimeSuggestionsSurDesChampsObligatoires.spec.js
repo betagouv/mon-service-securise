@@ -55,4 +55,20 @@ describe('L’abonnement qui supprime les suggestions portant sur des données o
 
     expect(idServiceAcquitte).to.be('S1');
   });
+
+  it('utilise le dépôt pour supprimer la suggestion service importé à finaliser', async () => {
+    let idServiceAcquitte;
+    const depotDonnees = {
+      acquitteSuggestionAction: (idService, nature) => {
+        if (nature === 'finalisationDescriptionServiceImporte')
+          idServiceAcquitte = idService;
+      },
+    };
+
+    await supprimeSuggestionsSurDesChampsObligatoires({
+      depotDonnees,
+    })({ service: unService().avecId('S1').construis() });
+
+    expect(idServiceAcquitte).to.be('S1');
+  });
 });
