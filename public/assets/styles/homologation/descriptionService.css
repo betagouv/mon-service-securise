@@ -229,3 +229,35 @@ form#decrire-etape-3 .icone-chargement::after {
   width: 562px;
   text-align: center;
 }
+
+.finalisationDescriptionServiceImporte {
+  margin-top: 24px;
+  border-radius: 8px;
+  border: 1px solid var(--bleu-mise-en-avant);
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+  gap: 0;
+}
+
+.finalisationDescriptionServiceImporte strong {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.finalisationDescriptionServiceImporte p {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.finalisationDescriptionServiceImporte .conteneur-image {
+  background: var(--bleu-mise-en-avant);
+  padding: 16px 8px;
+}
+
+.finalisationDescriptionServiceImporte .contenu-texte-information {
+  padding: 16px;
+}

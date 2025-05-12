@@ -19,6 +19,13 @@ mixin formulaireDescriptionService(idService)
   .homologation#homologation
     form.etape-decrire#decrire-etape-1
       section
+        if service.pourraitFaire('finalisationDescriptionServiceImporte')
+          .banniere.banniere-information.finalisationDescriptionServiceImporte
+            .conteneur-image
+              img(src='/statique/assets/images/toasts/icone_info.svg' alt='')
+            .contenu-texte-information
+              strong Nous vous conseillons de remplir les différentes étapes.
+              p Pour obtenir un résultat au plus proche des besoins de sécurité de votre service, veuillez compléter la description, les fonctionnalités et les données de celui-ci.
         .mention champ obligatoire
         .requis
           label Nom du service numérique à homologuer
