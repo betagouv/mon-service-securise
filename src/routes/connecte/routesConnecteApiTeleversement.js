@@ -4,12 +4,18 @@ const { ErreurFichierXlsInvalide } = require('../../erreurs');
 const routesConnecteApiTeleversement = ({
   adaptateurControleFichier,
   adaptateurXLS,
+  depotDonnees,
 }) => {
   const routes = express.Router();
   routes.post('/services', async (requete, reponse) => {
     try {
       const buffer = await adaptateurControleFichier.extraisDonneesXLS(requete);
-      await adaptateurXLS.extraisTeleversementServices(buffer);
+      const donneesTeleversement =
+        await adaptateurXLS.extraisTeleversementServices(buffer);
+      await depotDonnees.nouveauTeleversementServices(
+        requete.idUtilisateurCourant,
+        donneesTeleversement
+      );
     } catch (e) {
       if (e instanceof ErreurFichierXlsInvalide) {
         reponse.sendStatus(400);

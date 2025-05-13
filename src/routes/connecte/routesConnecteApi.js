@@ -184,6 +184,7 @@ const routesConnecteApi = ({
     routesConnecteApiTeleversement({
       adaptateurControleFichier,
       adaptateurXLS,
+      depotDonnees,
     })
   );
 
