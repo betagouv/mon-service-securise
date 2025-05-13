@@ -10,6 +10,10 @@ describe('Les routes connecté de téléversement', () => {
   afterEach(testeur.arrete);
 
   describe('Pour les téléversements de services', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().nouveauTeleversementServices = async () => {};
+    });
+
     describe('Quand requête POST sur `/api/televersement/services`', () => {
       it("vérifie que l'utilisateur est authentifié", (done) => {
         testeur.middleware().verifieRequeteExigeAcceptationCGU(
@@ -64,6 +68,27 @@ describe('Les routes connecté de téléversement', () => {
         } catch (e) {
           expect(e.response.status).to.be(400);
         }
+      });
+
+      it('délègue au dépôt de données la sauvegarde du téléversement', async () => {
+        testeur.middleware().reinitialise({ idUtilisateur: '123' });
+        testeur.adaptateurXLS().extraisTeleversementServices = async () => [
+          { nom: 'Un service' },
+        ];
+        let donneesRecues;
+        let idUtilisateurCourantRecue;
+        testeur.depotDonnees().nouveauTeleversementServices = async (
+          idUtilisateurCourant,
+          donnees
+        ) => {
+          donneesRecues = donnees;
+          idUtilisateurCourantRecue = idUtilisateurCourant;
+        };
+
+        await axios.post('http://localhost:1234/api/televersement/services');
+
+        expect(idUtilisateurCourantRecue).to.equal('123');
+        expect(donneesRecues).to.eql([{ nom: 'Un service' }]);
       });
     });
   });
