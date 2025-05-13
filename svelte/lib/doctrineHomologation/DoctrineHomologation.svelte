@@ -41,7 +41,9 @@
   <CarrouselTuiles />
 </Bloc>
 <Bloc>
-  <h2 class="centre">Découvrez l'homologation simplifiée</h2>
+  <h2 class="centre" id="video-decouvrez-homologation-simplifiee">
+    Découvrez l'homologation simplifiée
+  </h2>
   <div class="conteneur-video">
     <video controls crossorigin="anonymous">
       <source
