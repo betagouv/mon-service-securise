@@ -113,6 +113,7 @@ const creeDepot = (config = {}) => {
 
   const depotTeleversementServices =
     depotDonneesTeleversementServices.creeDepot({
+      adaptateurChiffrement,
       adaptateurPersistance,
     });
 
