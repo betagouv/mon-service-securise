@@ -1,11 +1,15 @@
 const express = require('express');
 const { ErreurFichierXlsInvalide } = require('../../erreurs');
 
-const routesConnecteApiTeleversement = ({ adaptateurControleFichier }) => {
+const routesConnecteApiTeleversement = ({
+  adaptateurControleFichier,
+  adaptateurXLS,
+}) => {
   const routes = express.Router();
   routes.post('/services', async (requete, reponse) => {
     try {
-      await adaptateurControleFichier.verifieFichierXls(requete);
+      const buffer = await adaptateurControleFichier.verifieFichierXls(requete);
+      await adaptateurXLS.extraisTeleversementServices(buffer);
     } catch (e) {
       if (e instanceof ErreurFichierXlsInvalide) {
         reponse.sendStatus(400);

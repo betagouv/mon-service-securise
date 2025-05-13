@@ -37,6 +37,22 @@ describe('Les routes connecté de téléversement', () => {
         expect(requeteRecue).not.to.be(undefined);
       });
 
+      it("délègue la conversion du contenu à l'adaptateur XLS", async () => {
+        let adaptateurAppele = false;
+        let bufferRecu;
+        testeur.adaptateurXLS().extraisTeleversementServices = async (
+          buffer
+        ) => {
+          adaptateurAppele = true;
+          bufferRecu = buffer;
+        };
+
+        await axios.post('http://localhost:1234/api/televersement/services');
+
+        expect(adaptateurAppele).to.be(true);
+        expect(bufferRecu).not.to.be(undefined);
+      });
+
       it('jette une erreur 400 si le fichier est invalide', async () => {
         testeur.adaptateurControleFichier().verifieFichierXls = async () => {
           throw new ErreurFichierXlsInvalide();
