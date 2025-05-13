@@ -592,6 +592,15 @@ const nouvelAdaptateur = (env) => {
       empreinte: 'empreinte',
     });
 
+  const ajouteTeleversementServices = async (idUtilisateur, donnees) =>
+    knex('televersement_services')
+      .insert({
+        id_utilisateur: idUtilisateur,
+        donnees: { services: donnees },
+      })
+      .onConflict('id_utilisateur')
+      .merge();
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -601,6 +610,7 @@ const nouvelAdaptateur = (env) => {
     ajouteTacheDeService,
     ajouteUtilisateur,
     ajouteActiviteMesure,
+    ajouteTeleversementServices,
     arreteTout,
     autorisation,
     autorisationPour,

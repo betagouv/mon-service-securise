@@ -14,6 +14,7 @@ const depotDonneesEvolutionsIndiceCyber = require('./depots/depotDonneesEvolutio
 const depotDonneesSuperviseurs = require('./depots/depotDonneesSuperviseurs');
 const depotDonneesParrainages = require('./depots/depotDonneesParrainages');
 const depotDonneesSelsDeHachage = require('./depots/depotDonneesSelsDeHachage');
+const depotDonneesTeleversementServices = require('./depots/depotDonneesTeleversementServices');
 
 const {
   fabriqueAdaptateurChiffrement,
@@ -109,6 +110,11 @@ const creeDepot = (config = {}) => {
     adaptateurChiffrement,
     adaptateurEnvironnement,
   });
+
+  const depotTeleversementServices =
+    depotDonneesTeleversementServices.creeDepot({
+      adaptateurPersistance,
+    });
 
   const {
     ajouteDescriptionService,
@@ -211,6 +217,8 @@ const creeDepot = (config = {}) => {
     await adaptateurPersistance.sante();
   };
 
+  const { nouveauTeleversementServices } = depotTeleversementServices;
+
   return {
     accesAutorise,
     acquitteSuggestionAction,
@@ -252,6 +260,7 @@ const creeDepot = (config = {}) => {
     metsAJourService,
     nombreServices,
     nouveauService,
+    nouveauTeleversementServices,
     nouveautesPourUtilisateur,
     nouvelUtilisateur,
     parrainagePour,
