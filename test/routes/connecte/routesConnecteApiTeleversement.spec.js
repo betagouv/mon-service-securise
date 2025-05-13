@@ -24,7 +24,7 @@ describe('Les routes connecté de téléversement', () => {
       it("délègue la vérification de surface à l'adaptateur de vérification de fichier", async () => {
         let adaptateurAppele = false;
         let requeteRecue;
-        testeur.adaptateurControleFichier().verifieFichierXls = async (
+        testeur.adaptateurControleFichier().extraisDonneesXLS = async (
           requete
         ) => {
           adaptateurAppele = true;
@@ -54,7 +54,7 @@ describe('Les routes connecté de téléversement', () => {
       });
 
       it('jette une erreur 400 si le fichier est invalide', async () => {
-        testeur.adaptateurControleFichier().verifieFichierXls = async () => {
+        testeur.adaptateurControleFichier().extraisDonneesXLS = async () => {
           throw new ErreurFichierXlsInvalide();
         };
 
