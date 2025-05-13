@@ -20,8 +20,7 @@
       <Lien
         titre="Télécharger la documentation"
         type="bouton-primaire"
-        href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/LAB_Homologation_Simplifiee.pdf"
-        target="_blank"
+        href="#les-documents-utiles"
         icone="telecharger-blanc"
       />
       <Lien
@@ -168,7 +167,9 @@
   />
 </Bloc>
 <Bloc variation="defaut">
-  <h2 class="grande-marge-basse">Les documents utiles</h2>
+  <h2 class="grande-marge-basse" id="les-documents-utiles">
+    Les documents utiles
+  </h2>
   <div class="conteneur-tuiles-telechargement">
     <TuileTelechargement
       titre="L’homologation simplifiée"
