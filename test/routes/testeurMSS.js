@@ -134,7 +134,7 @@ const testeurMss = () => {
     serviceCgu = fabriqueServiceCgu({ referentiel });
     serviceGestionnaireSession = fabriqueServiceGestionnaireSession();
     adaptateurControleFichier = {
-      verifieFichierXls: async () => Buffer.from([]),
+      extraisDonneesXLS: async () => Buffer.from([]),
     };
     adaptateurXLS = {
       extraisTeleversementServices: async () => {},

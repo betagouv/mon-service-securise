@@ -8,7 +8,7 @@ const routesConnecteApiTeleversement = ({
   const routes = express.Router();
   routes.post('/services', async (requete, reponse) => {
     try {
-      const buffer = await adaptateurControleFichier.verifieFichierXls(requete);
+      const buffer = await adaptateurControleFichier.extraisDonneesXLS(requete);
       await adaptateurXLS.extraisTeleversementServices(buffer);
     } catch (e) {
       if (e instanceof ErreurFichierXlsInvalide) {
