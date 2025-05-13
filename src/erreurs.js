@@ -64,6 +64,7 @@ class ErreurIdentifiantTacheInconnu extends ErreurModele {}
 class ErreurIntituleRisqueManquant extends ErreurModele {}
 class ErreurCategoriesRisqueManquantes extends ErreurModele {}
 class ErreurCategorieRisqueInconnue extends ErreurModele {}
+class ErreurFichierXlsInvalide extends ErreurModele {}
 
 class ErreurUtilisateurExistant extends ErreurModele {
   constructor(message, idUtilisateur) {
@@ -124,4 +125,5 @@ module.exports = {
   ErreurVersionSelInvalide,
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurIdentifiantTacheInconnu,
+  ErreurFichierXlsInvalide,
 };

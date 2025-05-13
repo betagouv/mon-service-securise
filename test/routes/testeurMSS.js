@@ -39,6 +39,7 @@ const testeurMss = () => {
   let adaptateurStatistiques;
   let adaptateurJWT;
   let adaptateurProfilAnssi;
+  let adaptateurControleFichier;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -131,6 +132,9 @@ const testeurMss = () => {
     });
     serviceCgu = fabriqueServiceCgu({ referentiel });
     serviceGestionnaireSession = fabriqueServiceGestionnaireSession();
+    adaptateurControleFichier = {
+      verifieFichierXls: () => {},
+    };
 
     moteurRegles = new MoteurRegles(referentiel);
     depotVide()
@@ -162,6 +166,7 @@ const testeurMss = () => {
           adaptateurStatistiques,
           adaptateurJWT,
           adaptateurProfilAnssi,
+          adaptateurControleFichier,
           serviceSupervision,
           serviceGestionnaireSession,
           serviceCgu,
@@ -194,6 +199,7 @@ const testeurMss = () => {
     adaptateurStatistiques: () => adaptateurStatistiques,
     adaptateurJWT: () => adaptateurJWT,
     adaptateurProfilAnssi: () => adaptateurProfilAnssi,
+    adaptateurControleFichier: () => adaptateurControleFichier,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,
