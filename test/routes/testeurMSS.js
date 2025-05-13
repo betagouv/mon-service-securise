@@ -40,6 +40,7 @@ const testeurMss = () => {
   let adaptateurJWT;
   let adaptateurProfilAnssi;
   let adaptateurControleFichier;
+  let adaptateurXLS;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -133,7 +134,10 @@ const testeurMss = () => {
     serviceCgu = fabriqueServiceCgu({ referentiel });
     serviceGestionnaireSession = fabriqueServiceGestionnaireSession();
     adaptateurControleFichier = {
-      verifieFichierXls: () => {},
+      verifieFichierXls: async () => Buffer.from([]),
+    };
+    adaptateurXLS = {
+      extraisTeleversementServices: async () => {},
     };
 
     moteurRegles = new MoteurRegles(referentiel);
@@ -167,6 +171,7 @@ const testeurMss = () => {
           adaptateurJWT,
           adaptateurProfilAnssi,
           adaptateurControleFichier,
+          adaptateurXLS,
           serviceSupervision,
           serviceGestionnaireSession,
           serviceCgu,
@@ -200,6 +205,7 @@ const testeurMss = () => {
     adaptateurJWT: () => adaptateurJWT,
     adaptateurProfilAnssi: () => adaptateurProfilAnssi,
     adaptateurControleFichier: () => adaptateurControleFichier,
+    adaptateurXLS: () => adaptateurXLS,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,

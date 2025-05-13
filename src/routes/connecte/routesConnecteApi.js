@@ -43,6 +43,7 @@ const routesConnecteApi = ({
   adaptateurZip,
   adaptateurJournal,
   adaptateurControleFichier,
+  adaptateurXLS,
   procedures,
   serviceAnnuaire,
   serviceGestionnaireSession,
@@ -182,6 +183,7 @@ const routesConnecteApi = ({
     middleware.verificationAcceptationCGU,
     routesConnecteApiTeleversement({
       adaptateurControleFichier,
+      adaptateurXLS,
     })
   );
 
