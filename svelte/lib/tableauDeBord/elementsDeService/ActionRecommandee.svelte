@@ -15,11 +15,11 @@
 {#if action.id === 'mettreAJour'}
   <Lien
     inactif={!action.autorisee}
-    titre="Mettre à jour les informations"
+    titre="Finaliser la description"
     type="bouton-secondaire"
     href="/service/{idService}"
     taille="petit"
-    icone="attention"
+    icone="editer"
     classe="mettreAJour"
   />
 {:else if action.id === 'continuerHomologation'}

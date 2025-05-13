@@ -5,7 +5,7 @@
     titre: string;
     icone?:
       | 'plus'
-      | 'attention'
+      | 'editer'
       | 'homologation'
       | 'indiceCyber'
       | 'telecharger'
@@ -27,7 +27,7 @@
   export let classe: string | undefined = undefined;
   export let icone:
     | 'plus'
-    | 'attention'
+    | 'editer'
     | 'homologation'
     | 'indiceCyber'
     | 'telecharger'
@@ -90,8 +90,8 @@
     transform: translateY(1px);
   }
 
-  .attention:before {
-    background-image: url('/statique/assets/images/icone_warning.svg');
+  .editer:before {
+    background-image: url('/statique/assets/images/icone_editer.svg');
   }
 
   .homologation:before {
