@@ -30,6 +30,7 @@ const SourceAuthentification = require('../../modeles/sourceAuthentification');
 const {
   estNiveauDeSecuriteValide,
 } = require('../../modeles/descriptionService');
+const routesConnecteApiTeleversement = require('./routesConnecteApiTeleversement');
 
 const routesConnecteApi = ({
   middleware,
@@ -41,6 +42,7 @@ const routesConnecteApi = ({
   adaptateurCsv,
   adaptateurZip,
   adaptateurJournal,
+  adaptateurControleFichier,
   procedures,
   serviceAnnuaire,
   serviceGestionnaireSession,
@@ -172,6 +174,14 @@ const routesConnecteApi = ({
       adaptateurHorloge,
       depotDonnees,
       referentiel,
+    })
+  );
+
+  routes.use(
+    '/televersement',
+    middleware.verificationAcceptationCGU,
+    routesConnecteApiTeleversement({
+      adaptateurControleFichier,
     })
   );
 
