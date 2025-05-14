@@ -14,11 +14,18 @@ mixin dossier({ statut, dossier, service, indiceCyber, indiceCyberPersonnalise, 
       return resultat
     }
     const dateExpiration = service.dossiers.dateExpiration();
+    const estImporte = dossier.importe
 
   .dossier(class=classeCss)
     div
       .statut
         span= statut
+        if estImporte
+          .infobulle-importe
+            .conteneur-image
+              img(src="/statique/assets/images/icone_infobulle.svg" alt="Information sur le dossier importé")
+            .conteneur-information
+              p Vous n'avez pas utilisé MonServiceSécurisé pour l'homologation de ce service, ainsi il ne dispose pas d'Indice Cyber, de tampon d'homologation ni de documents associés.
         if afficheStatutHomologation
           - const statutHomologation = dossier.statutHomologation()
           .statut-homologation(class=statutHomologation)
