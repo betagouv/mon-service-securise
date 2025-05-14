@@ -1,6 +1,8 @@
 const Base = require('../base');
 
 const ERREURS_VALIDATION = {
+  NOM_INVALIDE: 'NOM_INVALIDE',
+  NOM_EXISTANT: 'NOM_EXISTANT',
   SIRET_INVALIDE: 'SIRET_INVALIDE',
   TYPE_INVALIDE: 'TYPE_INVALIDE',
   PROVENANCE_INVALIDE: 'PROVENANCE_INVALIDE',
@@ -44,6 +46,7 @@ class ServiceTeleverse extends Base {
   constructor(donnees = {}) {
     super({
       proprietesAtomiquesRequises: [
+        'nom',
         'siret',
         'type',
         'provenance',
@@ -65,8 +68,12 @@ class ServiceTeleverse extends Base {
     return this.siret.replaceAll(' ', '');
   }
 
-  valide() {
+  valide(nomServicesExistants = []) {
     const erreurs = [];
+
+    if (!this.nom) erreurs.push(ERREURS_VALIDATION.NOM_INVALIDE);
+    if (nomServicesExistants.includes(this.nom))
+      erreurs.push(ERREURS_VALIDATION.NOM_EXISTANT);
 
     if (!/^\d{14}$/.test(this.siretFormatte()))
       erreurs.push(ERREURS_VALIDATION.SIRET_INVALIDE);

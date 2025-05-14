@@ -4,6 +4,7 @@ const ServiceTeleverse = require('../../../src/modeles/televersement/serviceTele
 describe('Un service téléversé', () => {
   describe('sur demande de validation', () => {
     const donneesServiceValide = {
+      nom: 'Nom du service',
       siret: '13000000000000',
       type: 'Site Internet',
       provenance: 'Proposé en ligne par un fournisseur',
@@ -37,6 +38,28 @@ describe('Un service téléversé', () => {
 
           expect(erreursValidation.length).to.be(1);
           expect(erreursValidation[0]).to.be(idErreur);
+        });
+      });
+
+      describe('concernant le nom', () => {
+        it('retourne un erreur si le nom est vide', () => {
+          const erreursValidation = new ServiceTeleverse({
+            ...donneesServiceValide,
+            nom: '',
+          }).valide();
+
+          expect(erreursValidation.length).to.be(1);
+          expect(erreursValidation[0]).to.be('NOM_INVALIDE');
+        });
+
+        it("retourne une erreur si le nom existe déjà pour l'utilisateur", () => {
+          const erreursValidation = new ServiceTeleverse({
+            ...donneesServiceValide,
+            nom: 'Un nom existant',
+          }).valide(['Un nom existant']);
+
+          expect(erreursValidation.length).to.be(1);
+          expect(erreursValidation[0]).to.be('NOM_EXISTANT');
         });
       });
     });
