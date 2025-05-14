@@ -45,4 +45,41 @@ describe('Un téléversement de services', () => {
       expect(erreursValidation[2][0]).to.be('NOM_EXISTANT');
     });
   });
+
+  describe('sur demande de rapport détaillé', () => {
+    it("renvoie les services avec leur rapport d'erreur", () => {
+      const serviceA = { ...donneesServiceValide, nom: 'Service A' };
+      const serviceB = {
+        ...donneesServiceValide,
+        nom: 'Service B',
+        siret: 'pasUnSiret',
+      };
+      const rapport = new TeleversementServices({
+        services: [serviceA, serviceB],
+      }).rapportDetaille();
+
+      expect(rapport.services).to.eql([
+        { service: serviceA, erreurs: [] },
+        { service: serviceB, erreurs: ['SIRET_INVALIDE'] },
+      ]);
+    });
+
+    describe('concernant le statut renvoyé', () => {
+      it('renvoie un statut "Invalide" si des erreurs sont présentes', () => {
+        const rapport = new TeleversementServices({
+          services: [{ ...donneesServiceValide, siret: 'pasUnSiret' }],
+        }).rapportDetaille();
+
+        expect(rapport.statut).to.be('INVALIDE');
+      });
+
+      it('renvoie un statut "Valide" si aucune erreur n\'est présente', () => {
+        const rapport = new TeleversementServices({
+          services: [{ ...donneesServiceValide }],
+        }).rapportDetaille();
+
+        expect(rapport.statut).to.be('VALIDE');
+      });
+    });
+  });
 });
