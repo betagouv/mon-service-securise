@@ -185,6 +185,7 @@ const routesConnecteApi = ({
       adaptateurControleFichier,
       adaptateurXLS,
       depotDonnees,
+      middleware,
     })
   );
 
