@@ -25,6 +25,16 @@ describe('Les routes connecté de téléversement', () => {
         );
       });
 
+      it('applique une protection de trafic', (done) => {
+        testeur.middleware().verifieProtectionTrafic(
+          {
+            method: 'post',
+            url: 'http://localhost:1234/api/televersement/services',
+          },
+          done
+        );
+      });
+
       it("délègue la vérification de surface à l'adaptateur de vérification de fichier", async () => {
         let adaptateurAppele = false;
         let requeteRecue;
