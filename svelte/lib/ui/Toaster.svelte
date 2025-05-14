@@ -42,7 +42,7 @@
     align-items: flex-end;
     gap: 1em;
     padding-top: 2em;
-    z-index: 99;
+    z-index: 1002;
   }
 
   article {
