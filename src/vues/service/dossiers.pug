@@ -65,14 +65,14 @@ mixin dossier({ statut, dossier, service, indiceCyber, indiceCyberPersonnalise, 
                 .titre-etape!= titreEtape.libelle
     if afficheActions
       .conteneur-actions
-        button.bouton.bouton-avec-icone.bouton-tertiaire#affiche-documents(type='button') Accéder aux documents
+        button.bouton.bouton-avec-icone.bouton-tertiaire#affiche-documents(type='button', disabled=estImporte) Accéder aux documents
 
         if !estLectureSeule
-          button.bouton.bouton-avec-icone.bouton-tertiaire#supprime-dossier-courant(type='button') Supprimer le projet d'homologation
+          button.bouton.bouton-avec-icone.bouton-tertiaire#supprime-dossier-courant(type='button', disabled=estImporte) Supprimer le projet d'homologation
 
         a.lien-etape-courante(href = `/service/${service.id}/homologation/edition/etape/${etapeCourante}`)
     if afficheTamponHomologation
-      button.bouton.bouton-tertiaire.bouton-avec-icone#bouton-tampon-homologation(type='button') Télécharger l'encart d'homologation
+      button.bouton.bouton-tertiaire.bouton-avec-icone#bouton-tampon-homologation(type='button', disabled=estImporte) Télécharger l'encart d'homologation
 
 
 mixin dossierFinalise({ dossier, service, afficheStatutHomologation, afficheTamponHomologation })

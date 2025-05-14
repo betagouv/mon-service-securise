@@ -139,6 +139,23 @@
   padding: 8px 16px 8px 12px;
 }
 
+.homologation .conteneur-actions button[disabled],
+.homologation #bouton-tampon-homologation[disabled] {
+  border: 1px solid var(--fond-gris-fonce);
+  color: var(--gris-inactif);
+}
+
+.homologation .conteneur-actions button[disabled]:before,
+.homologation #bouton-tampon-homologation[disabled]:before {
+  filter: brightness(0) invert(56%) sepia(0%) saturate(1103%) hue-rotate(209deg)
+    brightness(103%) contrast(91%);
+}
+
+.homologation .conteneur-actions button[disabled]:hover,
+.homologation #bouton-tampon-homologation[disabled]:hover {
+  background: none;
+}
+
 .homologation .details {
   color: #667892;
   display: flex;
