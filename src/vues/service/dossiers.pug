@@ -17,16 +17,17 @@ mixin dossier({ statut, dossier, service, indiceCyber, indiceCyberPersonnalise, 
 
   .dossier(class=classeCss)
     div
-      .statut= statut
+      .statut
+        span= statut
+        if afficheStatutHomologation
+          - const statutHomologation = dossier.statutHomologation()
+          .statut-homologation(class=statutHomologation)
+            span!= referentiel.statutHomologation(statutHomologation).libelle
+              if dateExpiration && statutHomologation === 'bientotExpiree'
+                span!= dateExpiration
       .contenu-gauche
         .contenu-statut
           .conteneur-statut-indice-cyber
-            if afficheStatutHomologation
-              - const statutHomologation = dossier.statutHomologation()
-              .statut-homologation(class=statutHomologation)
-                span!= referentiel.statutHomologation(statutHomologation).libelle
-                  if dateExpiration && statutHomologation === 'bientotExpiree'
-                    span!= dateExpiration
             .indices-cyber
               if indiceCyber !== undefined
                 .indice-cyber
@@ -35,7 +36,7 @@ mixin dossier({ statut, dossier, service, indiceCyber, indiceCyberPersonnalise, 
                     span.note-indice-cyber!= `${indiceCyber.toFixed(1)}/${referentiel.indiceCyberNoteMax()}`
               if indiceCyberPersonnalise !== undefined
                 .indice-cyber.personnalise
-                  b Indice cyber Personnalisé&nbsp;&nbsp;&nbsp;
+                  b Indice personnalisé&nbsp;&nbsp;&nbsp;
                   span.conteneur-indice-cyber
                     span.note-indice-cyber!= `${indiceCyberPersonnalise.toFixed(1)}/${referentiel.indiceCyberNoteMax()}`
         .contenu-details

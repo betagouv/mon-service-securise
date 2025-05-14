@@ -83,9 +83,8 @@ section.autorite {
 
 #bouton-tampon-homologation:before {
   content: url('/statique/assets/images/icone_telecharger_tampon.svg');
-  width: 30px;
-  height: 30px;
-  margin-right: -4px;
+  width: 24px;
+  height: 24px;
 }
 
 .conteneur-page-formulaire section {
