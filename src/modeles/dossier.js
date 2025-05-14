@@ -28,6 +28,7 @@ class Dossier extends InformationsService {
         'archive',
         'indiceCyber',
         'indiceCyberPersonnalise',
+        'importe',
       ],
     });
     this.renseigneProprietes(donneesDossier, referentiel);
