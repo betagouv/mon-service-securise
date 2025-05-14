@@ -355,3 +355,44 @@ dialog.modale-encart-homologation .page img {
 .homologation .infobulle-importe:hover .conteneur-information {
   display: flex;
 }
+
+.homologation .conteneur-importe {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.homologation .badge-importe {
+  display: flex;
+  padding: 0 6px;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  background: #eaf5ff;
+  color: var(--bleu-mise-en-avant);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.homologation .badge-importe:before {
+  content: url('/statique/assets/images/icone_info.svg');
+  display: flex;
+  width: 12px;
+  height: 12px;
+}
+
+.homologation .badge-aucun-indice-cyber {
+  padding: 0 8px;
+  gap: 4px;
+  border-radius: 4px;
+  background: var(--fond-gris-fonce);
+  color: var(--gris-inactif);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  width: fit-content;
+}
