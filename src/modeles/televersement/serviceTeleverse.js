@@ -9,7 +9,7 @@ const ERREURS_VALIDATION = {
   PROVENANCE_INVALIDE: 'PROVENANCE_INVALIDE',
   STATUT_INVALIDE: 'STATUT_INVALIDE',
   LOCALISATION_INVALIDE: 'LOCALISATION_INVALIDE',
-  DUREE_DYSFONCTIONNEMENT_INVALIDE: 'DUREE_DYSFONCTIONNEMENT_INVALIDE',
+  DELAI_AVANT_IMPACT_CRITIQUE_INVALIDE: 'DELAI_AVANT_IMPACT_CRITIQUE_INVALIDE',
   DOSSIER_HOMOLOGATION_INCOMPLET: 'DOSSIER_HOMOLOGATION_INCOMPLET',
   DATE_HOMOLOGATION_INVALIDE: 'DATE_HOMOLOGATION_INVALIDE',
   DUREE_HOMOLOGATION_INVALIDE: 'DUREE_HOMOLOGATION_INVALIDE',
@@ -28,7 +28,7 @@ class ServiceTeleverse extends Base {
         'provenance',
         'statut',
         'localisation',
-        'dureeDysfonctionnement',
+        'delaiAvantImpactCritique',
       ],
       proprietesAtomiquesFacultatives: [
         'dateHomologation',
@@ -77,9 +77,9 @@ class ServiceTeleverse extends Base {
         ERREURS_VALIDATION.LOCALISATION_INVALIDE,
       ],
       [
-        this.dureeDysfonctionnement,
+        this.delaiAvantImpactCritique,
         this.referentiel.descriptionsDelaiAvantImpactCritique(),
-        ERREURS_VALIDATION.DUREE_DYSFONCTIONNEMENT_INVALIDE,
+        ERREURS_VALIDATION.DELAI_AVANT_IMPACT_CRITIQUE_INVALIDE,
       ],
     ].forEach(([propriete, referentiel, typeErreur]) => {
       if (proprieteNEstPasAdmise(propriete, referentiel))
