@@ -15,9 +15,9 @@ class TeleversementServices extends ElementsConstructibles {
 
   valide(nomServicesExistants = []) {
     const nomsAggreges = [...nomServicesExistants];
-    return this.tous().map((s) => {
-      const resultat = s.valide(nomsAggreges);
-      nomsAggreges.push(s.nom);
+    return this.tous().map((serviceTeleverse) => {
+      const resultat = serviceTeleverse.valide(nomsAggreges);
+      nomsAggreges.push(serviceTeleverse.nom);
       return resultat;
     });
   }
@@ -29,8 +29,8 @@ class TeleversementServices extends ElementsConstructibles {
       : STATUT.VALIDE;
     return {
       statut,
-      services: this.tous().map((s, index) => ({
-        service: s.toJSON(),
+      services: this.tous().map((serviceTeleverse, index) => ({
+        service: serviceTeleverse.toJSON(),
         erreurs: erreurs[index],
       })),
     };
