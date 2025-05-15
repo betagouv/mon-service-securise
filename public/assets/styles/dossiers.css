@@ -33,7 +33,7 @@
 }
 
 .homologation .statut {
-  font-size: 16px;
+  font-size: 1rem;
   white-space: nowrap;
   display: flex;
   gap: 12px;
@@ -81,8 +81,8 @@
 
 .homologation .titre-etape {
   color: #0279d0;
-  font-size: 14px;
-  line-height: 24px;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -169,7 +169,7 @@
   color: #2f3a43;
   width: fit-content;
   height: fit-content;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: normal;
 }
 
@@ -350,10 +350,10 @@ dialog.modale-encart-homologation .page img {
 .homologation .infobulle-importe .conteneur-information p {
   margin: 0;
   color: #3a3a3a;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 20px;
+  line-height: 1.25rem;
   text-wrap: initial;
 }
 
@@ -388,7 +388,7 @@ dialog.modale-encart-homologation .page img {
   border-radius: 4px;
   background: #eaf5ff;
   color: var(--bleu-mise-en-avant);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 700;
   line-height: 20px;
   text-transform: uppercase;
@@ -408,8 +408,8 @@ dialog.modale-encart-homologation .page img {
   border-radius: 4px;
   background: var(--fond-gris-fonce);
   color: var(--gris-inactif);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 400;
-  line-height: 24px;
+  line-height: 1.5rem;
   width: fit-content;
 }
