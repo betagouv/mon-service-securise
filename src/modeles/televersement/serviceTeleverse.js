@@ -1,4 +1,5 @@
 const Base = require('../base');
+const Referentiel = require('../../referentiel');
 
 const ERREURS_VALIDATION = {
   NOM_INVALIDE: 'NOM_INVALIDE',
@@ -14,36 +15,11 @@ const ERREURS_VALIDATION = {
   DUREE_HOMOLOGATION_INVALIDE: 'DUREE_HOMOLOGATION_INVALIDE',
 };
 
-const PROPRIETES_ADMISES = {
-  TYPE: [
-    'Site Internet',
-    'Application Mobile',
-    "API mise à disposition par l'organisation",
-  ],
-  PROVENANCE: [
-    "Développé pour les besoins de l'organisation",
-    "Déployé à partir d'un outil existant",
-    'Proposé en ligne par un fournisseur',
-  ],
-  STATUT: [
-    'En projet',
-    'En cours de développement ou de déploiement',
-    'En ligne et accessible aux usagers et/ou agents',
-  ],
-  LOCALISATION: ['France', 'Union européenne', 'Hors Union européenne'],
-  DUREE_DYSFONCTIONNEMENT: [
-    "Moins d'une heure",
-    'Une journée',
-    "Plus d'une journée",
-  ],
-  DUREE_HOMOLOGATION: ['6 mois', '1 an', '2 ans', '3 ans'],
-};
-
 const proprieteNEstPasAdmise = (propriete, referentiel) =>
   !referentiel.includes(propriete);
 
 class ServiceTeleverse extends Base {
-  constructor(donnees = {}) {
+  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
     super({
       proprietesAtomiquesRequises: [
         'nom',
@@ -62,6 +38,7 @@ class ServiceTeleverse extends Base {
       ],
     });
     this.renseigneProprietes(donnees);
+    this.referentiel = referentiel;
   }
 
   siretFormatte() {
@@ -79,25 +56,29 @@ class ServiceTeleverse extends Base {
       erreurs.push(ERREURS_VALIDATION.SIRET_INVALIDE);
 
     [
-      [this.type, PROPRIETES_ADMISES.TYPE, ERREURS_VALIDATION.TYPE_INVALIDE],
+      [
+        this.type,
+        this.referentiel.descriptionsTypeService(),
+        ERREURS_VALIDATION.TYPE_INVALIDE,
+      ],
       [
         this.provenance,
-        PROPRIETES_ADMISES.PROVENANCE,
+        this.referentiel.descriptionsProvenanceService(),
         ERREURS_VALIDATION.PROVENANCE_INVALIDE,
       ],
       [
         this.statut,
-        PROPRIETES_ADMISES.STATUT,
+        this.referentiel.descriptionsStatutDeploiement(),
         ERREURS_VALIDATION.STATUT_INVALIDE,
       ],
       [
         this.localisation,
-        PROPRIETES_ADMISES.LOCALISATION,
+        this.referentiel.descriptionLocalisationDonnees(),
         ERREURS_VALIDATION.LOCALISATION_INVALIDE,
       ],
       [
         this.dureeDysfonctionnement,
-        PROPRIETES_ADMISES.DUREE_DYSFONCTIONNEMENT,
+        this.referentiel.descriptionsDelaiAvantImpactCritique(),
         ERREURS_VALIDATION.DUREE_DYSFONCTIONNEMENT_INVALIDE,
       ],
     ].forEach(([propriete, referentiel, typeErreur]) => {
@@ -124,7 +105,7 @@ class ServiceTeleverse extends Base {
       if (
         proprieteNEstPasAdmise(
           this.dureeHomologation,
-          PROPRIETES_ADMISES.DUREE_HOMOLOGATION
+          this.referentiel.descriptionsEcheanceRenouvellement()
         )
       )
         erreurs.push(ERREURS_VALIDATION.DUREE_HOMOLOGATION_INVALIDE);
