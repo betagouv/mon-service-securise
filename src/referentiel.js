@@ -371,6 +371,27 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return matrice[positionVraisemblance][positionGravite];
   };
 
+  const recupereDescriptions = (proprietes) =>
+    Object.values(proprietes).map((v) => v.description);
+
+  const descriptionsTypeService = () =>
+    recupereDescriptions(donnees.typesService);
+
+  const descriptionsProvenanceService = () =>
+    recupereDescriptions(donnees.provenancesService);
+
+  const descriptionsStatutDeploiement = () =>
+    recupereDescriptions(donnees.statutsDeploiement);
+
+  const descriptionLocalisationDonnees = () =>
+    recupereDescriptions(donnees.localisationsDonnees);
+
+  const descriptionsDelaiAvantImpactCritique = () =>
+    recupereDescriptions(donnees.delaisAvantImpactCritique);
+
+  const descriptionsEcheanceRenouvellement = () =>
+    recupereDescriptions(donnees.echeancesRenouvellement);
+
   valideDonnees();
 
   return {
@@ -472,6 +493,12 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     natureTachesService,
     natureSuggestionAction,
     versionActuelleCgu,
+    descriptionsTypeService,
+    descriptionsProvenanceService,
+    descriptionsStatutDeploiement,
+    descriptionLocalisationDonnees,
+    descriptionsDelaiAvantImpactCritique,
+    descriptionsEcheanceRenouvellement,
   };
 };
 const creeReferentielVide = () => creeReferentiel(donneesReferentielVide);
