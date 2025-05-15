@@ -1,5 +1,6 @@
 const Base = require('../base');
 const Referentiel = require('../../referentiel');
+const { dateInvalide } = require('../../utilitaires/date');
 
 const ERREURS_VALIDATION = {
   NOM_INVALIDE: 'NOM_INVALIDE',
@@ -98,8 +99,9 @@ class ServiceTeleverse extends Base {
     )
       erreurs.push(ERREURS_VALIDATION.DOSSIER_HOMOLOGATION_INCOMPLET);
 
-    if (nbProprieteDossierHomologationVide === 0) {
-      if (Number.isNaN(new Date(this.dateHomologation).valueOf()))
+    const dossierHomologationComplet = nbProprieteDossierHomologationVide === 0;
+    if (dossierHomologationComplet) {
+      if (dateInvalide(this.dateHomologation))
         erreurs.push(ERREURS_VALIDATION.DATE_HOMOLOGATION_INVALIDE);
 
       if (
