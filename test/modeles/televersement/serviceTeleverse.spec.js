@@ -18,7 +18,7 @@ describe('Un service téléversé', () => {
       provenance: 'Proposé en ligne par un fournisseur',
       statut: 'En projet',
       localisation: 'France',
-      dureeDysfonctionnement: "Plus d'une journée",
+      delaiAvantImpactCritique: "Plus d'une journée",
       dateHomologation: '01/01/2025',
       dureeHomologation: '6 mois',
       nomAutoriteHomologation: 'Nom Prénom',
@@ -42,9 +42,9 @@ describe('Un service téléversé', () => {
         ['statut', 'pasUnStatut', 'STATUT_INVALIDE'],
         ['localisation', 'pasUneLocalisation', 'LOCALISATION_INVALIDE'],
         [
-          'dureeDysfonctionnement',
+          'delaiAvantImpactCritique',
           'pasUneDurée',
-          'DUREE_DYSFONCTIONNEMENT_INVALIDE',
+          'DELAI_AVANT_IMPACT_CRITIQUE_INVALIDE',
         ],
       ].forEach(([propriete, valeurInvalide, idErreur]) => {
         it(`retourne une erreur si '${propriete}' est invalide`, () => {

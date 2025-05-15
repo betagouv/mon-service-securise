@@ -8,7 +8,7 @@ const ENTETE_TYPE = 'Type(s) *';
 const ENTETE_PROVENANCE = 'Provenance *';
 const ENTETE_STATUT = 'Statut *';
 const ENTETE_LOCALISATION = 'Localisation des données *';
-const ENTETE_DUREE_DYSFONCTIONNEMENT =
+const ENTETE_DELAI_AVANT_IMPACT_CRITIQUE =
   'Estimation de la durée maximale acceptable de dysfonctionnement grave du service *';
 const ENTETE_DATE_HOMOLOGATION = "Date d'homologation";
 const ENTETE_DUREE_HOMOLOGATION = "Durée d'homologation";
@@ -22,7 +22,7 @@ const toutesLesEntetesNecessaires = [
   ENTETE_PROVENANCE,
   ENTETE_STATUT,
   ENTETE_LOCALISATION,
-  ENTETE_DUREE_DYSFONCTIONNEMENT,
+  ENTETE_DELAI_AVANT_IMPACT_CRITIQUE,
   ENTETE_DATE_HOMOLOGATION,
   ENTETE_DUREE_HOMOLOGATION,
   ENTETE_NOM_AUTORITE,
@@ -64,7 +64,7 @@ const extraisTeleversementServices = async (buffer) => {
     provenance: service[ENTETE_PROVENANCE],
     statut: service[ENTETE_STATUT],
     localisation: service[ENTETE_LOCALISATION],
-    dureeDysfonctionnement: service[ENTETE_DUREE_DYSFONCTIONNEMENT],
+    delaiAvantImpactCritique: service[ENTETE_DELAI_AVANT_IMPACT_CRITIQUE],
     dateHomologation: service[ENTETE_DATE_HOMOLOGATION],
     dureeHomologation: service[ENTETE_DUREE_HOMOLOGATION],
     nomAutoriteHomologation: encode(service[ENTETE_NOM_AUTORITE]),
