@@ -1,5 +1,6 @@
 const ElementsConstructibles = require('../elementsConstructibles');
 const ServiceTeleverse = require('./serviceTeleverse');
+const Referentiel = require('../../referentiel');
 
 const STATUT = {
   INVALIDE: 'INVALIDE',
@@ -7,9 +8,9 @@ const STATUT = {
 };
 
 class TeleversementServices extends ElementsConstructibles {
-  constructor(donnees) {
+  constructor(donnees, referentiel = Referentiel.creeReferentielVide()) {
     const { services } = donnees;
-    super(ServiceTeleverse, { items: services });
+    super(ServiceTeleverse, { items: services }, referentiel);
   }
 
   valide(nomServicesExistants = []) {
