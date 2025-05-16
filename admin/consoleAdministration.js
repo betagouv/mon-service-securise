@@ -110,7 +110,6 @@ class ConsoleAdministration {
     const fabriqueFonction = (adaptateurJournal) =>
       consigneCompletudeDansJournal({
         adaptateurJournal,
-        adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
       });
     await this.executeFonctionSurTousLesServices(
       persisteEvenements,
