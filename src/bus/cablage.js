@@ -180,7 +180,6 @@ const cableTousLesAbonnes = (
   busEvenements.abonnePlusieurs(EvenementUtilisateurModifie, [
     consigneProfilUtilisateurModifieDansJournal({
       adaptateurJournal,
-      adaptateurRechercheEntreprise,
     }),
     modifieLienEntrepriseEtContactBrevo({ crmBrevo }),
     metAJourEstimationNombreServicesContactBrevo({ crmBrevo }),
@@ -192,7 +191,6 @@ const cableTousLesAbonnes = (
     consigneNouvelUtilisateurInscritDansJournal({ adaptateurJournal }),
     consigneProfilUtilisateurModifieDansJournal({
       adaptateurJournal,
-      adaptateurRechercheEntreprise,
     }),
     relieEntrepriseEtContactBrevo({ crmBrevo }),
     metAJourEstimationNombreServicesContactBrevo({ crmBrevo }),
