@@ -3,7 +3,7 @@ const { ErreurUtilisateurManquant } = require('./erreurs');
 const Utilisateur = require('../utilisateur');
 
 class EvenementProfilUtilisateurModifie extends Evenement {
-  constructor(utilisateur, entite, options = {}) {
+  constructor(utilisateur, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
     const valide = () => {
@@ -20,7 +20,6 @@ class EvenementProfilUtilisateurModifie extends Evenement {
         departementOrganisation: utilisateur.entite?.departement,
         roles: utilisateur.postes ?? [],
         estimationNombreServices: utilisateur.estimationNombreServices ?? {},
-        entite: entite || {},
       },
       date
     );

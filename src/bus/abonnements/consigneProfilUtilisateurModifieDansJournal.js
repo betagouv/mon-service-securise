@@ -1,26 +1,14 @@
 const EvenementProfilUtilisateurModifie = require('../../modeles/journalMSS/evenementProfilUtilisateurModifie');
 
-function consigneProfilUtilisateurModifieDansJournal({
-  adaptateurJournal,
-  adaptateurRechercheEntreprise,
-}) {
+function consigneProfilUtilisateurModifieDansJournal({ adaptateurJournal }) {
   return async ({ utilisateur }) => {
     if (!utilisateur)
       throw new Error(
         `Impossible de consigner les mises à jour de profil utilisateur sans avoir l'utilisateur en paramètre.`
       );
 
-    let entite = {};
-    const estUnInvite = !utilisateur.entite.siret;
-    if (!estUnInvite) {
-      entite = await adaptateurRechercheEntreprise.recupereDetailsOrganisation(
-        utilisateur.entite.siret
-      );
-    }
-
     const profilUtilisateurModifie = new EvenementProfilUtilisateurModifie(
-      utilisateur,
-      entite
+      utilisateur
     );
 
     await adaptateurJournal.consigneEvenement(
