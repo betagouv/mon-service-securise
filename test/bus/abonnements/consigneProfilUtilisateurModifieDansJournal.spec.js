@@ -6,15 +6,12 @@ const {
 const {
   consigneProfilUtilisateurModifieDansJournal,
 } = require('../../../src/bus/abonnements/consigneProfilUtilisateurModifieDansJournal');
-const fauxAdaptateurRechercheEntreprise = require('../../mocks/adaptateurRechercheEntreprise');
 
 describe("L'abonnement qui consigne (dans le journal MSS) la mise à jour du profil d'un utilisateur", () => {
   let adaptateurJournal;
-  let adaptateurRechercheEntreprise;
 
   beforeEach(() => {
     adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
-    adaptateurRechercheEntreprise = fauxAdaptateurRechercheEntreprise();
   });
 
   it('consigne un événement de "profil utilisateur modifié"', async () => {
@@ -25,7 +22,6 @@ describe("L'abonnement qui consigne (dans le journal MSS) la mise à jour du pro
 
     await consigneProfilUtilisateurModifieDansJournal({
       adaptateurJournal,
-      adaptateurRechercheEntreprise,
     })({
       utilisateur: unUtilisateur().construis(),
     });
@@ -33,33 +29,14 @@ describe("L'abonnement qui consigne (dans le journal MSS) la mise à jour du pro
     expect(evenementRecu.type).to.be('PROFIL_UTILISATEUR_MODIFIE');
   });
 
-  it("complète l'évènement avec les détails de l'entité de l'utilisateur", async () => {
-    const entite = {
-      estServicePublic: false,
-      estFiness: false,
-      estEss: true,
-      estEntrepreneurIndividuel: false,
-      estAssociation: false,
-      categorieEntreprise: null,
-      activitePrincipale: '68.20B',
-      trancheEffectifSalarie: null,
-      natureJuridique: '6540',
-      sectionActivitePrincipale: 'L',
-      anneeTrancheEffectifSalarie: null,
-      commune: '33376',
-      departement: '33',
-    };
-
+  it("complète l'évènement avec les détails de l'utilisateur", async () => {
     let evenementRecu = {};
     adaptateurJournal.consigneEvenement = async (evenement) => {
       evenementRecu = evenement;
     };
-    adaptateurRechercheEntreprise.recupereDetailsOrganisation = async () =>
-      entite;
 
     await consigneProfilUtilisateurModifieDansJournal({
       adaptateurJournal,
-      adaptateurRechercheEntreprise,
     })({
       utilisateur: unUtilisateur()
         .avecId('123')
@@ -68,7 +45,6 @@ describe("L'abonnement qui consigne (dans le journal MSS) la mise à jour du pro
         .construis(),
     });
 
-    expect(evenementRecu.donnees.entite).to.eql(entite);
     expect(evenementRecu.donnees.idUtilisateur).to.not.be(null);
     expect(evenementRecu.donnees.roles).to.eql(['AB', 'CD']);
   });
@@ -77,7 +53,6 @@ describe("L'abonnement qui consigne (dans le journal MSS) la mise à jour du pro
     try {
       await consigneProfilUtilisateurModifieDansJournal({
         adaptateurJournal,
-        adaptateurRechercheEntreprise,
       })({
         utilisateur: null,
       });
@@ -87,22 +62,5 @@ describe("L'abonnement qui consigne (dans le journal MSS) la mise à jour du pro
         "Impossible de consigner les mises à jour de profil utilisateur sans avoir l'utilisateur en paramètre."
       );
     }
-  });
-
-  it("ne complète pas les détails de l'entité si l'utilisateur n'a pas d'entité, comme dans le cas d'une invitation", async () => {
-    const utilisateurInvite = unUtilisateur()
-      .avecEmail('invite@mail.com')
-      .quiTravaillePour({})
-      .construis();
-
-    adaptateurRechercheEntreprise.recupereDetailsOrganisation = async () =>
-      expect().fail("L'adaptateur ne devrait pas être appelé pour un invité");
-
-    await consigneProfilUtilisateurModifieDansJournal({
-      adaptateurJournal,
-      adaptateurRechercheEntreprise,
-    })({
-      utilisateur: utilisateurInvite,
-    });
   });
 });
