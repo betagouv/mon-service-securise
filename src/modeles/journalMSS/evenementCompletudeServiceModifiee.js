@@ -20,7 +20,7 @@ class EvenementCompletudeServiceModifiee extends Evenement {
 
     valide();
 
-    const { service, organisationResponsable } = donnees;
+    const { service } = donnees;
     const niveauSecuriteMinimal = estimeNiveauDeSecurite(
       service.descriptionService
     );
@@ -65,7 +65,6 @@ class EvenementCompletudeServiceModifiee extends Evenement {
         donneesSensiblesSpecifiques: donneesSensiblesSpecifiques.nombre(),
         localisationDonnees,
         delaiAvantImpactCritique,
-        organisationResponsable,
         niveauSecurite,
         niveauSecuriteMinimal,
       },

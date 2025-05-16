@@ -133,7 +133,6 @@ const cableTousLesAbonnes = (
     envoieTrackingDeNouveauService({ adaptateurTracking, depotDonnees }),
     consigneCompletudeDansJournal({
       adaptateurJournal,
-      adaptateurRechercheEntreprise,
     }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
     metAJourContactBrevoDuContributeur({
@@ -146,7 +145,6 @@ const cableTousLesAbonnes = (
   busEvenements.abonnePlusieurs(EvenementMesureServiceModifiee, [
     consigneCompletudeDansJournal({
       adaptateurJournal,
-      adaptateurRechercheEntreprise,
     }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
     consigneActiviteMesure({ depotDonnees }),
@@ -156,7 +154,6 @@ const cableTousLesAbonnes = (
   busEvenements.abonnePlusieurs(EvenementMesureServiceSupprimee, [
     consigneCompletudeDansJournal({
       adaptateurJournal,
-      adaptateurRechercheEntreprise,
     }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
   ]);
@@ -170,7 +167,6 @@ const cableTousLesAbonnes = (
     supprimeSuggestionsSurDesChampsObligatoires({ depotDonnees }),
     consigneCompletudeDansJournal({
       adaptateurJournal,
-      adaptateurRechercheEntreprise,
     }),
     envoieTrackingCompletude({ adaptateurTracking, depotDonnees }),
     modifieLienServiceEtSuperviseurs({ serviceSupervision }),
