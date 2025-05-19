@@ -193,5 +193,44 @@ describe('Les routes connecté de téléversement', () => {
         expect(reponse.data.services[0].erreurs.length).to.be(0);
       });
     });
+
+    describe('Quand requête DELETE sur `/api/televersement/services`', () => {
+      beforeEach(() => {
+        testeur.middleware().reinitialise({ idUtilisateur: '123' });
+        testeur.depotDonnees().supprimeTeleversementServices = async () => true;
+      });
+
+      it("vérifie que l'utilisateur est authentifié", (done) => {
+        testeur.middleware().verifieRequeteExigeAcceptationCGU(
+          {
+            method: 'delete',
+            url: 'http://localhost:1234/api/televersement/services',
+          },
+          done
+        );
+      });
+
+      it('renvoie une réponse 200 si un téléversement a été supprimé', async () => {
+        testeur.depotDonnees().supprimeTeleversementServices = async () => 1;
+        const reponse = await axios.delete(
+          'http://localhost:1234/api/televersement/services'
+        );
+
+        expect(reponse.status).to.be(200);
+      });
+
+      it("renvoie une réponse 404 si aucun téléversement n'existe pour cet utilisateur", async () => {
+        testeur.depotDonnees().supprimeTeleversementServices = async () => 0;
+
+        try {
+          await axios.delete(
+            'http://localhost:1234/api/televersement/services'
+          );
+          expect().fail("L'appel aurait dû lever une erreur");
+        } catch (e) {
+          expect(e.response.status).to.be(404);
+        }
+      });
+    });
   });
 });
