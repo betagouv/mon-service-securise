@@ -26,9 +26,13 @@ const creeDepot = (config = {}) => {
     return new TeleversementServices({ services }, referentiel);
   };
 
+  const supprimeTeleversementServices = async (idUtilisateur) =>
+    adaptateurPersistance.supprimeTeleversementServices(idUtilisateur);
+
   return {
     lisTeleversementServices,
     nouveauTeleversementServices,
+    supprimeTeleversementServices,
   };
 };
 module.exports = { creeDepot };
