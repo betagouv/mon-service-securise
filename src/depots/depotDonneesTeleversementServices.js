@@ -1,5 +1,7 @@
+const TeleversementServices = require('../modeles/televersement/televersementServices');
+
 const creeDepot = (config = {}) => {
-  const { adaptateurPersistance, adaptateurChiffrement } = config;
+  const { adaptateurPersistance, adaptateurChiffrement, referentiel } = config;
 
   const nouveauTeleversementServices = async (
     idUtilisateur,
@@ -14,7 +16,18 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const lisTeleversementServices = async (idUtilisateur) => {
+    const donneesChiffrees =
+      await adaptateurPersistance.lisTeleversementServices(idUtilisateur);
+    if (!donneesChiffrees) return undefined;
+    const services = await adaptateurChiffrement.dechiffre(
+      donneesChiffrees.donnees.services
+    );
+    return new TeleversementServices({ services }, referentiel);
+  };
+
   return {
+    lisTeleversementServices,
     nouveauTeleversementServices,
   };
 };
