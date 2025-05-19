@@ -115,6 +115,7 @@ const creeDepot = (config = {}) => {
     depotDonneesTeleversementServices.creeDepot({
       adaptateurChiffrement,
       adaptateurPersistance,
+      referentiel,
     });
 
   const {
@@ -218,7 +219,8 @@ const creeDepot = (config = {}) => {
     await adaptateurPersistance.sante();
   };
 
-  const { nouveauTeleversementServices } = depotTeleversementServices;
+  const { lisTeleversementServices, nouveauTeleversementServices } =
+    depotTeleversementServices;
 
   return {
     accesAutorise,
@@ -250,6 +252,7 @@ const creeDepot = (config = {}) => {
     lisNotificationsExpirationHomologationEnDate,
     lisParcoursUtilisateur,
     lisSuperviseurs,
+    lisTeleversementServices,
     marqueNouveauteLue,
     marqueTacheDeServiceLue,
     metsAJourMotDePasse,

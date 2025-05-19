@@ -601,6 +601,12 @@ const nouvelAdaptateur = (env) => {
       .onConflict('id_utilisateur')
       .merge();
 
+  const lisTeleversementServices = async (idUtilisateur) =>
+    knex('televersement_services')
+      .where({ id_utilisateur: idUtilisateur })
+      .select('donnees')
+      .first();
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -625,6 +631,7 @@ const nouvelAdaptateur = (env) => {
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     lisSuperviseursConcernes,
+    lisTeleversementServices,
     marqueNouveauteLue,
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
