@@ -51,6 +51,13 @@ const routesConnecteApiTeleversement = ({
     return reponse.json(rapportDetaille);
   });
 
+  routes.delete('/services', async (requete, reponse) => {
+    const aSupprime = await depotDonnees.supprimeTeleversementServices(
+      requete.idUtilisateurCourant
+    );
+    reponse.sendStatus(aSupprime ? 200 : 404);
+  });
+
   return routes;
 };
 
