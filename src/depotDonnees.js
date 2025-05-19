@@ -219,8 +219,11 @@ const creeDepot = (config = {}) => {
     await adaptateurPersistance.sante();
   };
 
-  const { lisTeleversementServices, nouveauTeleversementServices } =
-    depotTeleversementServices;
+  const {
+    lisTeleversementServices,
+    nouveauTeleversementServices,
+    supprimeTeleversementServices,
+  } = depotTeleversementServices;
 
   return {
     accesAutorise,
@@ -283,6 +286,7 @@ const creeDepot = (config = {}) => {
     supprimeMesureSpecifiqueDuService,
     supprimeRisqueSpecifiqueDuService,
     supprimeService,
+    supprimeTeleversementServices,
     supprimeIdResetMotDePassePourUtilisateur,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,

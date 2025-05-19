@@ -607,6 +607,11 @@ const nouvelAdaptateur = (env) => {
       .select('donnees')
       .first();
 
+  const supprimeTeleversementServices = async (idUtilisateur) =>
+    knex('televersement_services')
+      .where({ id_utilisateur: idUtilisateur })
+      .delete();
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -660,6 +665,7 @@ const nouvelAdaptateur = (env) => {
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
     supprimeServices,
+    supprimeTeleversementServices,
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tachesDeServicePour,
