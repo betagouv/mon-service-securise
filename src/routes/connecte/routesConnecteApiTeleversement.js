@@ -8,6 +8,7 @@ const routesConnecteApiTeleversement = ({
   middleware,
 }) => {
   const routes = express.Router();
+
   routes.post(
     '/services',
     middleware.protegeTrafic(),
@@ -31,6 +32,25 @@ const routesConnecteApiTeleversement = ({
       reponse.sendStatus(201);
     }
   );
+
+  routes.get('/services', async (requete, reponse) => {
+    const services = await depotDonnees.services(requete.idUtilisateurCourant);
+    const nomsServicesExistants = services.map((service) =>
+      service.nomService()
+    );
+    const televersementServices = await depotDonnees.lisTeleversementServices(
+      requete.idUtilisateurCourant
+    );
+
+    if (!televersementServices) return reponse.sendStatus(404);
+
+    const rapportDetaille = televersementServices.rapportDetaille(
+      nomsServicesExistants
+    );
+
+    return reponse.json(rapportDetaille);
+  });
+
   return routes;
 };
 
