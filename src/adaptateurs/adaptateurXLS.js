@@ -53,7 +53,7 @@ const extraisTeleversementServices = async (buffer) => {
     );
   });
 
-  if (!toutesLignesValides) {
+  if (donneesBrutes.length > 1000 || !toutesLignesValides) {
     throw new ErreurFichierXlsInvalide();
   }
 
