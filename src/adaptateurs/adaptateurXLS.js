@@ -44,6 +44,7 @@ const extraisTeleversementServices = async (buffer) => {
     range: 5,
     header: 5,
     defval: '',
+    raw: false,
   });
 
   const toutesLignesValides = donneesBrutes.every((ligneDonnee) => {
