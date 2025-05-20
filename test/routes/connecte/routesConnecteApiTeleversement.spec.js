@@ -17,17 +17,17 @@ describe('Les routes connecté de téléversement', () => {
       testeur.depotDonnees().nouveauTeleversementServices = async () => {};
     });
 
-    describe('Quand requête POST sur `/api/televersement/services`', () => {
-      it("vérifie que l'utilisateur est authentifié", (done) => {
-        testeur.middleware().verifieRequeteExigeAcceptationCGU(
-          {
-            method: 'post',
-            url: 'http://localhost:1234/api/televersement/services',
-          },
-          done
-        );
-      });
+    it("vérifie que l'utilisateur est authentifié, 1 seul test suffit car le middleware est placé au niveau de l'instanciation du routeur", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/televersement/services',
+        },
+        done
+      );
+    });
 
+    describe('Quand requête POST sur `/api/televersement/services`', () => {
       it('applique une protection de trafic', (done) => {
         testeur.middleware().verifieProtectionTrafic(
           {
@@ -136,16 +136,6 @@ describe('Les routes connecté de téléversement', () => {
           televersementService;
       });
 
-      it("vérifie que l'utilisateur est authentifié", (done) => {
-        testeur.middleware().verifieRequeteExigeAcceptationCGU(
-          {
-            method: 'get',
-            url: 'http://localhost:1234/api/televersement/services',
-          },
-          done
-        );
-      });
-
       it('délègue la récupération des noms de services existants au dépôt de données', async () => {
         let idUtilisateurRecu;
         testeur.depotDonnees().services = async (idUtilisateur) => {
@@ -198,16 +188,6 @@ describe('Les routes connecté de téléversement', () => {
       beforeEach(() => {
         testeur.middleware().reinitialise({ idUtilisateur: '123' });
         testeur.depotDonnees().supprimeTeleversementServices = async () => true;
-      });
-
-      it("vérifie que l'utilisateur est authentifié", (done) => {
-        testeur.middleware().verifieRequeteExigeAcceptationCGU(
-          {
-            method: 'delete',
-            url: 'http://localhost:1234/api/televersement/services',
-          },
-          done
-        );
       });
 
       it('renvoie une réponse 200 si un téléversement a été supprimé', async () => {
