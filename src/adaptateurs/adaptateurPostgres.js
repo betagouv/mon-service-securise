@@ -604,9 +604,7 @@ const nouvelAdaptateur = (env) => {
   const lisTeleversementServices = async (idUtilisateur) =>
     knex('televersement_services')
       .where({ id_utilisateur: idUtilisateur })
-      .select({
-        donnees: 'donnees',
-      })
+      .select('donnees')
       .first();
 
   return {
