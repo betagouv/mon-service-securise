@@ -127,7 +127,7 @@ describe('Les routes connecté de téléversement', () => {
           ...donneesReferentiel,
         });
         televersementService = new TeleversementServices(
-          { services: [{ ...donneesServiceValide }] },
+          { services: [structuredClone(donneesServiceValide)] },
           referentiel
         );
         testeur.middleware().reinitialise({ idUtilisateur: '123' });

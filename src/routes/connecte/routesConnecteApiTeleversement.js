@@ -42,16 +42,13 @@ const routesConnecteApiTeleversement = ({
       requete.idUtilisateurCourant
     );
 
-    if (!televersementServices) {
-      reponse.sendStatus(404);
-      return;
-    }
+    if (!televersementServices) return reponse.sendStatus(404);
 
     const rapportDetaille = televersementServices.rapportDetaille(
       nomsServicesExistants
     );
 
-    reponse.json(rapportDetaille);
+    return reponse.json(rapportDetaille);
   });
 
   return routes;
