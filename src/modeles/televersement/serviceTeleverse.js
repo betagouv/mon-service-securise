@@ -46,17 +46,25 @@ class ServiceTeleverse extends Base {
     return this.siret.replaceAll(' ', '');
   }
 
-  valide(nomServicesExistants = []) {
-    const erreurs = [];
+  aUnDossierHomologationComplet() {
+    const nbProprieteDossierHomologationVide = [
+      this.dateHomologation,
+      this.dureeHomologation,
+      this.nomAutoriteHomologation,
+      this.fonctionAutoriteHomologation,
+    ].filter((p) => p === '' || p === undefined).length;
+    return nbProprieteDossierHomologationVide === 0;
+  }
 
-    if (!this.nom) erreurs.push(ERREURS_VALIDATION.NOM_INVALIDE);
+  *valideDescriptionService(nomServicesExistants) {
+    if (!this.nom) yield ERREURS_VALIDATION.NOM_INVALIDE;
     if (nomServicesExistants.includes(this.nom))
-      erreurs.push(ERREURS_VALIDATION.NOM_EXISTANT);
+      yield ERREURS_VALIDATION.NOM_EXISTANT;
 
     if (!/^\d{14}$/.test(this.siretFormatte()))
-      erreurs.push(ERREURS_VALIDATION.SIRET_INVALIDE);
+      yield ERREURS_VALIDATION.SIRET_INVALIDE;
 
-    [
+    yield* [
       [
         this.type,
         this.referentiel.descriptionsTypeService(),
@@ -82,11 +90,14 @@ class ServiceTeleverse extends Base {
         this.referentiel.descriptionsDelaiAvantImpactCritique(),
         ERREURS_VALIDATION.DELAI_AVANT_IMPACT_CRITIQUE_INVALIDE,
       ],
-    ].forEach(([propriete, referentiel, typeErreur]) => {
-      if (proprieteNEstPasAdmise(propriete, referentiel))
-        erreurs.push(typeErreur);
-    });
+    ]
+      .filter(([propriete, referentiel]) =>
+        proprieteNEstPasAdmise(propriete, referentiel)
+      )
+      .map(([, , typeErreur]) => typeErreur);
+  }
 
+  *valideDossierHomologation() {
     const nbProprieteDossierHomologationVide = [
       this.dateHomologation,
       this.dureeHomologation,
@@ -97,12 +108,11 @@ class ServiceTeleverse extends Base {
       nbProprieteDossierHomologationVide > 0 &&
       nbProprieteDossierHomologationVide < 4
     )
-      erreurs.push(ERREURS_VALIDATION.DOSSIER_HOMOLOGATION_INCOMPLET);
+      yield ERREURS_VALIDATION.DOSSIER_HOMOLOGATION_INCOMPLET;
 
-    const dossierHomologationComplet = nbProprieteDossierHomologationVide === 0;
-    if (dossierHomologationComplet) {
+    if (this.aUnDossierHomologationComplet()) {
       if (dateInvalide(this.dateHomologation))
-        erreurs.push(ERREURS_VALIDATION.DATE_HOMOLOGATION_INVALIDE);
+        yield ERREURS_VALIDATION.DATE_HOMOLOGATION_INVALIDE;
 
       if (
         proprieteNEstPasAdmise(
@@ -110,10 +120,56 @@ class ServiceTeleverse extends Base {
           this.referentiel.descriptionsEcheanceRenouvellement()
         )
       )
-        erreurs.push(ERREURS_VALIDATION.DUREE_HOMOLOGATION_INVALIDE);
+        yield ERREURS_VALIDATION.DUREE_HOMOLOGATION_INVALIDE;
     }
+  }
 
-    return erreurs;
+  valide(nomServicesExistants = []) {
+    return [
+      ...this.valideDescriptionService(nomServicesExistants),
+      ...this.valideDossierHomologation(),
+    ];
+  }
+
+  enDonneesService() {
+    return {
+      descriptionService: {
+        delaiAvantImpactCritique:
+          this.referentiel.delaiAvantImpactCritiqueAvecDescription(
+            this.delaiAvantImpactCritique
+          ),
+        localisationDonnees:
+          this.referentiel.localisationDonneesAvecDescription(
+            this.localisation
+          ),
+        nomService: this.nom,
+        provenanceService: this.referentiel.provenanceServiceAvecDescription(
+          this.provenance
+        ),
+        statutDeploiement: this.referentiel.statutDeploiementAvecDescription(
+          this.statut
+        ),
+        typeService: [this.referentiel.typeServiceAvecDescription(this.type)],
+        organisationResponsable: {
+          siret: this.siretFormatte(),
+        },
+      },
+      ...(this.aUnDossierHomologationComplet() && {
+        dossier: {
+          decision: {
+            dateHomologation: this.dateHomologation,
+            dureeValidite:
+              this.referentiel.echeanceRenouvellementAvecDescription(
+                this.dureeHomologation
+              ),
+          },
+          autorite: {
+            nom: this.nomAutoriteHomologation,
+            fonction: this.fonctionAutoriteHomologation,
+          },
+        },
+      }),
+    };
   }
 }
 

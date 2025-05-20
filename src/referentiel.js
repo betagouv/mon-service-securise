@@ -392,6 +392,29 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const descriptionsEcheanceRenouvellement = () =>
     recupereDescriptions(donnees.echeancesRenouvellement);
 
+  const proprieteAvecDescription = (proprietes, description) =>
+    Object.entries(proprietes).find(
+      ([_cle, valeur]) => valeur.description === description
+    )[0];
+
+  const typeServiceAvecDescription = (description) =>
+    proprieteAvecDescription(donnees.typesService, description);
+
+  const provenanceServiceAvecDescription = (description) =>
+    proprieteAvecDescription(donnees.provenancesService, description);
+
+  const statutDeploiementAvecDescription = (description) =>
+    proprieteAvecDescription(donnees.statutsDeploiement, description);
+
+  const localisationDonneesAvecDescription = (description) =>
+    proprieteAvecDescription(donnees.localisationsDonnees, description);
+
+  const delaiAvantImpactCritiqueAvecDescription = (description) =>
+    proprieteAvecDescription(donnees.delaisAvantImpactCritique, description);
+
+  const echeanceRenouvellementAvecDescription = (description) =>
+    proprieteAvecDescription(donnees.echeancesRenouvellement, description);
+
   valideDonnees();
 
   return {
@@ -403,6 +426,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     coefficientIndiceCyberStatutPartiel,
     indiceCyberNoteMax,
     definitionRisque,
+    delaiAvantImpactCritiqueAvecDescription,
     delaisAvantImpactCritique,
     departement,
     departements,
@@ -419,6 +443,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionsFonctionnalites,
     detailCategoriesRisque,
     donneesCaracterePersonnel,
+    echeanceRenouvellementAvecDescription,
     echeancesRenouvellement,
     enrichis,
     estCodeDepartement,
@@ -448,6 +473,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     infosNiveauxGraviteConcernes,
     libelleEtape,
     localisationDonnees,
+    localisationDonneesAvecDescription,
     localisationsDonnees,
     matriceNiveauxRisques,
     mesure,
@@ -469,6 +495,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     premiereEtapeParcours,
     prioritesMesures,
     provenancesService,
+    provenanceServiceAvecDescription,
     recharge,
     reglesPersonnalisation,
     retoursUtilisateurMesure,
@@ -477,12 +504,14 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionStatutDeploiement,
     statutsAvisDossierHomologation,
     statutsDeploiement,
+    statutDeploiementAvecDescription,
     statutDeploiementValide,
     statutHomologation,
     statutsMesures,
     tacheCompletudeProfil,
     trancheIndiceCyber,
     typeService,
+    typeServiceAvecDescription,
     typesService,
     verifieCategoriesMesuresSontRepertoriees,
     etapePrecedenteVisiteGuidee,
