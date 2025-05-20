@@ -18,9 +18,6 @@
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
   },
-  "mocha": {
-    "spec": "./test*/**/*.spec.*js"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/betagouv/mon-service-securise.git"
