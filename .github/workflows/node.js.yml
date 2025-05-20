@@ -42,13 +42,21 @@ jobs:
       - name: Exécuter les tests
         run: npm test
 
-      - name: Exécuter les tests Svelte
-        run: npx vitest run svelte/test
-
-      - name: Rapport des tests
+      - name: Rapport des tests Backend
         uses: dorny/test-reporter@v2
         if: ${{ !cancelled() }} # On force l'exécution même si l'étape précédente a échoué
         with:
-          name: Tests Backend
+          name: Tests
           path: ./backend-test-report.json
           reporter: mocha-json
+
+      - name: Exécuter les tests Svelte
+        run: npx vitest run svelte/test --reporter junit --outputFile=./frontend-test-report.xml
+
+      - name: Rapport des tests Frontend
+        uses: dorny/test-reporter@v2
+        if: ${{ !cancelled() }} # On force l'exécution même si l'étape précédente a échoué
+        with:
+          name: Tests
+          path: ./frontend-test-report.xml
+          reporter: jest-junit
