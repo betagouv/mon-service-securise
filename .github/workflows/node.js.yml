@@ -44,3 +44,11 @@ jobs:
 
       - name: Exécuter les tests Svelte
         run: npx vitest run svelte/test
+
+      - name: Rapport des tests
+        uses: dorny/test-reporter@v2
+        if: ${{ !cancelled() }} # On force l'exécution même si l'étape précédente a échoué
+        with:
+          name: Tests Backend
+          path: ./backend-test-report.json
+          reporter: mocha-json
