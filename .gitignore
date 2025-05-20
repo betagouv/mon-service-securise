@@ -7,3 +7,4 @@ node_modules/
 public/composants-svelte
 /dist/
 *report.json
+*report.xml
