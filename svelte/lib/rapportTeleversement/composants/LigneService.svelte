@@ -84,20 +84,21 @@
     font-size: 0.875rem;
     line-height: 1.5rem;
     background: var(--fond-pale);
-    border-top: 1px solid #dddddd;
-    border-bottom: 1px solid #dddddd;
+    border-top: 1px solid var(--systeme-design-etat-contour-champs);
+    border-bottom: 1px solid var(--systeme-design-etat-contour-champs);
   }
 
   th:first-of-type {
-    border-left: 1px solid #dddddd;
+    border-left: 1px solid var(--systeme-design-etat-contour-champs);
   }
 
   th:last-of-type {
-    border-right: 1px solid #dddddd;
+    border-right: 1px solid var(--systeme-design-etat-contour-champs);
   }
 
   .message-erreur {
     min-width: 224px;
+    font-weight: normal;
 
     &.aUneErreur {
       color: var(--erreur-texte);

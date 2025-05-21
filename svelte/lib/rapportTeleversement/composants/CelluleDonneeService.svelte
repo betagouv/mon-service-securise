@@ -14,8 +14,8 @@
     padding: 8px 16px;
     max-width: 188px;
     text-align: left;
-    border-top: 1px solid #dddddd;
-    border-bottom: 1px solid #dddddd;
+    border-top: 1px solid var(--systeme-design-etat-contour-champs);
+    border-bottom: 1px solid var(--systeme-design-etat-contour-champs);
   }
 
   .enErreur {
@@ -28,6 +28,6 @@
   }
 
   .dernier {
-    border-right: 1px solid #dddddd;
+    border-right: 1px solid var(--systeme-design-etat-contour-champs);
   }
 </style>
