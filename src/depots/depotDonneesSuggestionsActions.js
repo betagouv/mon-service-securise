@@ -6,7 +6,14 @@ const creeDepot = ({ adaptateurPersistance }) => {
     );
   };
 
-  return { acquitteSuggestionAction };
+  const ajouteSuggestionAction = async (idService, natureSuggestion) => {
+    await adaptateurPersistance.ajouteSuggestionAction(
+      idService,
+      natureSuggestion
+    );
+  };
+
+  return { acquitteSuggestionAction, ajouteSuggestionAction };
 };
 
 module.exports = { creeDepot };
