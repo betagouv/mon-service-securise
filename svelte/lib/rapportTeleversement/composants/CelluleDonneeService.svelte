@@ -3,9 +3,10 @@
   export let enErreur: boolean = false;
   export let large: boolean = false;
   export let dernier: boolean = false;
+  export let gras: boolean = false;
 </script>
 
-<td class:enErreur class:large class:dernier>{donnee || '-'}</td>
+<td class:enErreur class:large class:dernier class:gras>{donnee || '-'}</td>
 
 <style lang="scss">
   td {
@@ -16,6 +17,7 @@
     text-align: left;
     border-top: 1px solid var(--systeme-design-etat-contour-champs);
     border-bottom: 1px solid var(--systeme-design-etat-contour-champs);
+    color: #3a3a3a;
   }
 
   .enErreur {
@@ -29,5 +31,9 @@
 
   .dernier {
     border-right: 1px solid var(--systeme-design-etat-contour-champs);
+  }
+
+  .gras {
+    font-weight: 700;
   }
 </style>
