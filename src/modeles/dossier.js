@@ -156,6 +156,12 @@ class Dossier extends InformationsService {
     this.indiceCyberPersonnalise = indiceCyberPersonnalise;
   }
 
+  declareImporte() {
+    if (this.finalise) throw new ErreurDossierDejaFinalise();
+
+    this.importe = true;
+  }
+
   estComplet() {
     return Dossier.etapesObligatoires().every((etape) =>
       this[etape].estComplete()
