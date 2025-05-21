@@ -65,6 +65,7 @@ class ErreurIntituleRisqueManquant extends ErreurModele {}
 class ErreurCategoriesRisqueManquantes extends ErreurModele {}
 class ErreurCategorieRisqueInconnue extends ErreurModele {}
 class ErreurFichierXlsInvalide extends ErreurModele {}
+class ErreurTeleversementServicesInvalide extends ErreurModele {}
 
 class ErreurUtilisateurExistant extends ErreurModele {
   constructor(message, idUtilisateur) {
@@ -118,6 +119,7 @@ module.exports = {
   ErreurStatutMesureInvalide,
   ErreurPrioriteMesureInvalide,
   ErreurSuppressionImpossible,
+  ErreurTeleversementServicesInvalide,
   ErreurTypeInconnu,
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
