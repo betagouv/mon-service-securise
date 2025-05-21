@@ -6,12 +6,14 @@
   } from '../rapportTeleversement.d';
   import CelluleDonneeService from './CelluleDonneeService.svelte';
   import TagEtat from './TagEtat.svelte';
+  import TooltipErreursMultiple from './TooltipErreursMultiple.svelte';
 
   export let service: RapportService;
   export let numeroLigne: number;
 
   const donneesService = service.service;
   const aUneErreur = service.erreurs.length > 0;
+  const aDesErreurs = service.erreurs.length > 1;
 
   const contientErreur = (erreur: ErreurService) =>
     service.erreurs.includes(erreur);
@@ -19,13 +21,23 @@
 
 <tr>
   <th scope="row"><TagEtat valide={!aUneErreur} /></th>
-  <th scope="row" class="message-erreur" class:aUneErreur
-    >{aUneErreur ? MessagesErreur[service.erreurs[0]] : 'Aucune erreur'}</th
-  >
+  <th scope="row" class="message-erreur" class:aUneErreur>
+    <div class="cellule-erreur">
+      {aUneErreur
+        ? `${MessagesErreur[service.erreurs[0]]}${aDesErreurs ? '...' : ''}`
+        : 'Aucune erreur'}
+      {#if aDesErreurs}
+        <TooltipErreursMultiple
+          erreurs={service.erreurs.map((e) => MessagesErreur[e])}
+        />
+      {/if}
+    </div>
+  </th>
   <CelluleDonneeService donnee={numeroLigne.toString()} />
   <CelluleDonneeService
     donnee={donneesService.nom}
     enErreur={contientErreur('NOM_EXISTANT') || contientErreur('NOM_INVALIDE')}
+    gras
   />
   <CelluleDonneeService
     donnee={donneesService.siret}
@@ -86,6 +98,7 @@
     background: var(--fond-pale);
     border-top: 1px solid var(--systeme-design-etat-contour-champs);
     border-bottom: 1px solid var(--systeme-design-etat-contour-champs);
+    color: #3a3a3a;
   }
 
   th:first-of-type {
@@ -94,6 +107,13 @@
 
   th:last-of-type {
     border-right: 1px solid var(--systeme-design-etat-contour-champs);
+  }
+
+  .cellule-erreur {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
   }
 
   .message-erreur {

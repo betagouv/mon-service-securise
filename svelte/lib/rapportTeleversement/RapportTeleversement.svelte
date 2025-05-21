@@ -172,6 +172,7 @@
     font-weight: 700;
     border-top: 1px solid var(--systeme-design-etat-contour-champs);
     border-bottom: 1px solid var(--systeme-design-etat-contour-champs);
+    color: #3a3a3a;
   }
 
   tr th:first-of-type {
