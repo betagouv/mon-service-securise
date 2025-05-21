@@ -1,6 +1,6 @@
 import type { RapportDetaille } from './rapportTeleversement.d';
 
-export const recuperRapportDetaille = async () => {
+export const recupereRapportDetaille = async () => {
   try {
     const reponse = await axios.get<RapportDetaille>(
       '/api/televersement/services'
@@ -10,3 +10,6 @@ export const recuperRapportDetaille = async () => {
     return;
   }
 };
+
+export const supprimeTeleversement = async () =>
+  axios.delete('/api/televersement/services');
