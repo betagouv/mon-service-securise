@@ -44,7 +44,14 @@
         <tbody>
           {#if rapportDetaille.statut === 'INVALIDE'}
             {#each rapportDetaille.services as service, idx (idx)}
-              <LigneService {service} numeroLigne={idx + 1} />
+              {#if service.erreurs.length > 0}
+                <LigneService {service} numeroLigne={idx + 1} />
+              {/if}
+            {/each}
+            {#each rapportDetaille.services as service, idx (idx)}
+              {#if service.erreurs.length === 0}
+                <LigneService {service} numeroLigne={idx + 1} />
+              {/if}
             {/each}
           {/if}
         </tbody>
