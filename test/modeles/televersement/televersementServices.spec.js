@@ -2,6 +2,10 @@ const expect = require('expect.js');
 const TeleversementServices = require('../../../src/modeles/televersement/televersementServices');
 const Referentiel = require('../../../src/referentiel');
 const donneesReferentiel = require('../../../donneesReferentiel');
+const { ErreurTeleversementServicesInvalide } = require('../../../src/erreurs');
+const Dossier = require('../../../src/modeles/dossier');
+const { fabriqueBusPourLesTests } = require('../../bus/aides/busPourLesTests');
+const EvenementServicesImportes = require('../../../src/bus/evenementServicesImportes');
 
 describe('Un téléversement de services', () => {
   let referentiel;
@@ -102,6 +106,236 @@ describe('Un téléversement de services', () => {
 
         expect(rapport.statut).to.be('VALIDE');
       });
+    });
+  });
+
+  describe('sur demande de création des services', () => {
+    let depotDonnees;
+    let busEvenement;
+
+    beforeEach(() => {
+      depotDonnees = {
+        nouveauService: async () => 'S1',
+        ajouteSuggestionAction: async () => {},
+        ajouteDossierCourantSiNecessaire: async () => new Dossier({ id: 'D1' }),
+        enregistreDossier: async () => {},
+      };
+      busEvenement = fabriqueBusPourLesTests();
+    });
+
+    it('jette une erreur si son contenu est invalide', async () => {
+      const nomsServicesExistants = ['Service A'];
+      const donneesServiceNomIdentique = {
+        ...donneesServiceValide,
+        nom: 'Service A',
+      };
+      const televersementInvalide = new TeleversementServices(
+        { services: [donneesServiceNomIdentique] },
+        referentiel
+      );
+
+      try {
+        await televersementInvalide.creeLesServices(
+          'U1',
+          nomsServicesExistants,
+          depotDonnees,
+          busEvenement
+        );
+        expect().fail("L'appel aurai dû lever une erreur");
+      } catch (e) {
+        expect(e).to.be.an(ErreurTeleversementServicesInvalide);
+      }
+    });
+
+    describe('pour chaque service à créer', () => {
+      let televersement;
+
+      beforeEach(() => {
+        televersement = new TeleversementServices(
+          { services: [structuredClone(donneesServiceValide)] },
+          referentiel
+        );
+      });
+
+      it('délègue au dépôt de données la création du service', async () => {
+        let donneesRecues;
+        depotDonnees.nouveauService = async (idUtilisateur, donnees) => {
+          donneesRecues = { idUtilisateur, donnees };
+        };
+
+        await televersement.creeLesServices(
+          'U1',
+          [],
+          depotDonnees,
+          busEvenement
+        );
+        expect(donneesRecues.idUtilisateur).to.be('U1');
+        expect(donneesRecues.donnees).not.to.be(undefined);
+      });
+
+      describe("si le service a un dossier d'homologation", () => {
+        it("délègue au dépôt de données la création d'un dossier", async () => {
+          let idRecu;
+          depotDonnees.ajouteDossierCourantSiNecessaire = async (idService) => {
+            idRecu = idService;
+            return new Dossier({ id: 'D1' });
+          };
+
+          await televersement.creeLesServices(
+            'U1',
+            [],
+            depotDonnees,
+            busEvenement
+          );
+          expect(idRecu).to.be('S1');
+        });
+
+        it('complète le dossier avec les données du téléversement', async () => {
+          const dossierRecu = new Dossier({ id: 'D1' }, referentiel);
+          depotDonnees.ajouteDossierCourantSiNecessaire = async () =>
+            dossierRecu;
+
+          await televersement.creeLesServices(
+            'U1',
+            [],
+            depotDonnees,
+            busEvenement
+          );
+
+          expect(dossierRecu.toJSON()).to.eql({
+            id: 'D1',
+            finalise: true,
+            importe: true,
+            decision: {
+              dateHomologation: '01/01/2025',
+              dureeValidite: 'sixMois',
+            },
+            autorite: {
+              nom: 'Nom Prénom',
+              fonction: 'Fonction',
+            },
+            avecAvis: false,
+            avis: [],
+            avecDocuments: false,
+            documents: [],
+            dateTelechargement: {
+              date: '01/01/2025',
+            },
+          });
+        });
+
+        it("délègue au dépôt de données l'enregistrement du dossier finalisé", async () => {
+          let donneesRecues;
+          depotDonnees.enregistreDossier = async (idService, dossier) => {
+            donneesRecues = { idService, dossier };
+          };
+
+          await televersement.creeLesServices(
+            'U1',
+            [],
+            depotDonnees,
+            busEvenement
+          );
+
+          expect(donneesRecues.idService).to.be('S1');
+          expect(donneesRecues.dossier.finalise).to.be(true);
+          expect(donneesRecues.dossier.importe).to.be(true);
+        });
+      });
+
+      it("ne créé pas de dossier si le service téléversé n'en a pas", async () => {
+        let depotAppele = false;
+        depotDonnees.ajouteDossierCourantSiNecessaire = async () => {
+          depotAppele = true;
+        };
+
+        televersement = new TeleversementServices(
+          {
+            services: [
+              {
+                ...donneesServiceValide,
+                dateHomologation: undefined,
+                dureeHomologation: undefined,
+                nomAutoriteHomologation: undefined,
+                fonctionAutoriteHomologation: undefined,
+              },
+            ],
+          },
+          referentiel
+        );
+
+        await televersement.creeLesServices(
+          'U1',
+          [],
+          depotDonnees,
+          busEvenement
+        );
+        expect(depotAppele).to.be(false);
+      });
+
+      it("délègue au dépôt de données l'ajout d'une suggestion d'action invitant à compléter la description du service", async () => {
+        let donneesRecues;
+        depotDonnees.ajouteSuggestionAction = async (
+          idService,
+          natureSuggestion
+        ) => {
+          donneesRecues = { idService, natureSuggestion };
+        };
+
+        await televersement.creeLesServices(
+          'U1',
+          [],
+          depotDonnees,
+          busEvenement
+        );
+        expect(donneesRecues.idService).to.be('S1');
+        expect(donneesRecues.natureSuggestion).to.be(
+          'finalisationDescriptionServiceImporte'
+        );
+      });
+
+      it('publie un évènement sur le bus', async () => {
+        await televersement.creeLesServices(
+          'U1',
+          [],
+          depotDonnees,
+          busEvenement
+        );
+
+        expect(busEvenement.aRecuUnEvenement(EvenementServicesImportes)).to.be(
+          true
+        );
+        expect(
+          busEvenement.recupereEvenement(EvenementServicesImportes)
+            .nbServicesImportes
+        ).to.be(1);
+      });
+    });
+
+    it('fais les opérations pour tous les services', async () => {
+      const televersement = new TeleversementServices(
+        {
+          services: [
+            structuredClone(donneesServiceValide),
+            { ...donneesServiceValide, nom: 'Service B' },
+          ],
+        },
+        referentiel
+      );
+
+      let servicesCrees = 0;
+      depotDonnees.nouveauService = async () => {
+        servicesCrees += 1;
+        return 'S1';
+      };
+
+      await televersement.creeLesServices('U1', [], depotDonnees, busEvenement);
+
+      expect(servicesCrees).to.be(2);
+      expect(
+        busEvenement.recupereEvenement(EvenementServicesImportes)
+          .nbServicesImportes
+      ).to.be(2);
     });
   });
 });

@@ -1,6 +1,8 @@
 const ElementsConstructibles = require('../elementsConstructibles');
 const ServiceTeleverse = require('./serviceTeleverse');
 const Referentiel = require('../../referentiel');
+const { ErreurTeleversementServicesInvalide } = require('../../erreurs');
+const EvenementServicesImportes = require('../../bus/evenementServicesImportes');
 
 const STATUT = {
   INVALIDE: 'INVALIDE',
@@ -34,6 +36,59 @@ class TeleversementServices extends ElementsConstructibles {
         erreurs: erreurs[index],
       })),
     };
+  }
+
+  async creeLesServices(
+    idUtilisateur,
+    nomServicesExistants,
+    depotDonnees,
+    busEvenements
+  ) {
+    const rapport = this.rapportDetaille(nomServicesExistants);
+    if (rapport.statut === STATUT.INVALIDE)
+      throw new ErreurTeleversementServicesInvalide();
+
+    const creeUnService = async (serviceTeleverse) => {
+      const { descriptionService, dossier } =
+        serviceTeleverse.enDonneesService();
+      const idService = await depotDonnees.nouveauService(idUtilisateur, {
+        descriptionService,
+      });
+
+      if (dossier) {
+        const { autorite, decision } = dossier;
+        const dossierMetier =
+          await depotDonnees.ajouteDossierCourantSiNecessaire(idService);
+        dossierMetier.enregistreAutoriteHomologation(
+          autorite.nom,
+          autorite.fonction
+        );
+        dossierMetier.declareSansAvis();
+        dossierMetier.declareSansDocument();
+        dossierMetier.enregistreDateTelechargement(decision.dateHomologation);
+        dossierMetier.enregistreDecision(
+          decision.dateHomologation,
+          decision.dureeValidite
+        );
+        dossierMetier.declareImporte();
+        dossierMetier.enregistreFinalisation();
+        await depotDonnees.enregistreDossier(idService, dossierMetier);
+      }
+
+      await depotDonnees.ajouteSuggestionAction(
+        idService,
+        'finalisationDescriptionServiceImporte'
+      );
+    };
+
+    const promessesCreationService = this.tous().map((serviceTeleverse) =>
+      creeUnService(serviceTeleverse)
+    );
+    await Promise.all(promessesCreationService);
+
+    await busEvenements.publie(
+      new EvenementServicesImportes({ nbServicesImportes: this.tous().length })
+    );
   }
 }
 
