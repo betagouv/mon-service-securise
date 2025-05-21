@@ -538,4 +538,22 @@ describe("Un dossier d'homologation", () => {
       });
     });
   });
+
+  describe('sur demande de déclaration comme "importé"', () => {
+    it('jette une erreur si le dossier est déjà finalisé', () => {
+      const dossierFinalise = new Dossier({ finalise: true });
+
+      expect(() => dossierFinalise.declareImporte()).to.throwError((e) =>
+        expect(e).to.be.an(ErreurDossierDejaFinalise)
+      );
+    });
+
+    it('le déclare comme importé', () => {
+      const dossier = new Dossier({}, referentiel);
+
+      dossier.declareImporte();
+
+      expect(dossier.importe).to.be(true);
+    });
+  });
 });
