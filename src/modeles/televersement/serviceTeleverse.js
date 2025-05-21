@@ -43,7 +43,7 @@ class ServiceTeleverse extends Base {
   }
 
   siretFormatte() {
-    return this.siret.replaceAll(' ', '');
+    return this.siret.replace(/[^0-9]/g, '');
   }
 
   aUnDossierHomologationComplet() {

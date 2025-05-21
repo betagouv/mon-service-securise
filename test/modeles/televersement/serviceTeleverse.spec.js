@@ -224,4 +224,15 @@ describe('Un service téléversé', () => {
       });
     });
   });
+
+  describe('sur demande de siret formatté', () => {
+    it('supprime tous les caractères non-numérique', () => {
+      const serviceTeleverse = new ServiceTeleverse(
+        { siret: '123 456 abc  124124 ' },
+        referentiel
+      );
+
+      expect(serviceTeleverse.siretFormatte()).to.be('123456124124');
+    });
+  });
 });
