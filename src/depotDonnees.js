@@ -195,7 +195,8 @@ const creeDepot = (config = {}) => {
     supprimeNotificationsExpirationHomologationPourService,
   } = depotNotificationsExpirationHomologation;
 
-  const { acquitteSuggestionAction } = depotSuggestionsActions;
+  const { acquitteSuggestionAction, ajouteSuggestionAction } =
+    depotSuggestionsActions;
 
   const { ajouteActiviteMesure, lisActivitesMesure } = depotActivitesMesure;
 
@@ -238,6 +239,7 @@ const creeDepot = (config = {}) => {
     ajouteRisqueSpecifiqueAService,
     ajouteRolesResponsabilitesAService,
     ajouteSiretAuSuperviseur,
+    ajouteSuggestionAction,
     autorisation,
     autorisationExiste,
     autorisationPour,

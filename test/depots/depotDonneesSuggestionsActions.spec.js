@@ -26,4 +26,18 @@ describe("Le dépôt de données des suggestions d'actions", () => {
 
     expect(persistanceAppelee).to.eql({ idService: 'S1', nature: 'SIRET' });
   });
+
+  it('peut ajouter une suggestion', async () => {
+    let persistanceAppelee = {};
+    adaptateurPersistance.ajouteSuggestionAction = async (
+      idService,
+      nature
+    ) => {
+      persistanceAppelee = { idService, nature };
+    };
+
+    await depot.ajouteSuggestionAction('S1', 'SIRET');
+
+    expect(persistanceAppelee).to.eql({ idService: 'S1', nature: 'SIRET' });
+  });
 });
