@@ -6,6 +6,7 @@
     supprimeTeleversement,
   } from './rapportTeleversement.api';
   import LigneService from './composants/LigneService.svelte';
+  import Toast from '../ui/Toast.svelte';
 
   let elementModale: HTMLDialogElement;
 
@@ -21,6 +22,12 @@
   });
 
   $: estValide = rapportDetaille?.statut === 'VALIDE';
+  $: nbServicesInvalides = rapportDetaille?.services.filter(
+    (s) => s.erreurs.length > 0
+  ).length;
+  $: nbServicesValides = rapportDetaille?.services.filter(
+    (s) => s.erreurs.length === 0
+  ).length;
 
   const fermeRapport = async () => {
     await supprimeTeleversement();
@@ -29,15 +36,46 @@
     window.history.replaceState({}, '', url);
     elementModale.close();
   };
+
+  const pluraliseChaine = (chaine: string, nombre: number) =>
+    chaine
+      .split(' ')
+      .map((mot) => `${mot}${nombre > 1 ? 's' : ''}`)
+      .join(' ');
 </script>
 
 <dialog bind:this={elementModale}>
-  <div class="conteneur-fermeture">
-    <button on:click={() => fermeRapport()}>Fermer</button>
-  </div>
-  <h2>Rapport détaillé</h2>
-  <div class="conteneur-rapport-detaille">
-    {#if rapportDetaille}
+  {#if rapportDetaille}
+    <h2>Rapport du téléversement des services</h2>
+    <div class="conteneur-toasts">
+      {#if rapportDetaille.statut === 'INVALIDE'}
+        <Toast
+          niveau="erreur"
+          titre={`${nbServicesInvalides} ${pluraliseChaine(
+            'service invalide',
+            nbServicesInvalides
+          )}`}
+          contenu="Corriger le fichier XLSX et réimportez-le"
+          avecOmbre={false}
+          avecAnimation={false}
+        />
+      {/if}
+      <Toast
+        niveau="succes"
+        titre={`${nbServicesValides} ${pluraliseChaine(
+          'service valide',
+          nbServicesValides
+        )}`}
+        contenu="Aucune erreur détéctée"
+        avecOmbre={false}
+        avecAnimation={false}
+      />
+    </div>
+    <div class="conteneur-fermeture">
+      <button on:click={() => fermeRapport()}>Fermer</button>
+    </div>
+    <h2>Rapport détaillé</h2>
+    <div class="conteneur-rapport-detaille">
       <table>
         <thead>
           <tr>
@@ -72,22 +110,25 @@
           {/if}
         </tbody>
       </table>
-    {/if}
-  </div>
-  <div class="conteneur-actions">
-    <button class="bouton bouton-secondaire" on:click={() => fermeRapport()}
-      >Annuler</button
-    >
-    <button
-      class="bouton bouton-primaire bouton-accepter"
-      class:estValide
-      on:click={() => (estValide ? Promise.resolve() : fermeRapport())}
-    >
-      {estValide
-        ? `Importer les ${rapportDetaille.services.length} services`
-        : 'Ré-importer le fichier XLSX corrigé'}
-    </button>
-  </div>
+    </div>
+    <div class="conteneur-actions">
+      <button class="bouton bouton-secondaire" on:click={() => fermeRapport()}
+        >Annuler
+      </button>
+      <button
+        class="bouton bouton-primaire bouton-accepter"
+        class:estValide
+        on:click={() => (estValide ? Promise.resolve() : fermeRapport())}
+      >
+        {estValide
+          ? `Importer les ${rapportDetaille.services.length} ${pluraliseChaine(
+              'service',
+              rapportDetaille.services.length
+            )}`
+          : 'Réimporter le fichier XLSX corrigé'}
+      </button>
+    </div>
+  {/if}
 </dialog>
 
 <style lang="scss">
@@ -222,5 +263,12 @@
         height: 16px;
       }
     }
+  }
+
+  .conteneur-toasts {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    margin-bottom: 48px;
   }
 </style>
