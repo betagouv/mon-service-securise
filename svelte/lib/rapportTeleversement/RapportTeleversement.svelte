@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { RapportDetaille } from './rapportTeleversement.d';
+  import type { RapportDetaille } from './rapportTeleversement.types';
   import {
     recupereRapportDetaille,
     supprimeTeleversement,
@@ -37,11 +37,11 @@
     elementModale.close();
   };
 
-  const pluraliseChaine = (chaine: string, nombre: number) =>
-    chaine
-      .split(' ')
-      .map((mot) => `${mot}${nombre > 1 ? 's' : ''}`)
-      .join(' ');
+  const pluraliseChaine = (
+    chaineSingulier: string,
+    chainePluriel: string,
+    nombre: number
+  ) => (nombre > 1 ? chainePluriel : chaineSingulier);
 </script>
 
 <dialog bind:this={elementModale}>
@@ -53,6 +53,7 @@
           niveau="erreur"
           titre={`${nbServicesInvalides} ${pluraliseChaine(
             'service invalide',
+            'services invalides',
             nbServicesInvalides
           )}`}
           contenu="Corriger le fichier XLSX et réimportez-le"
@@ -64,6 +65,7 @@
         niveau="succes"
         titre={`${nbServicesValides} ${pluraliseChaine(
           'service valide',
+          'services valides',
           nbServicesValides
         )}`}
         contenu="Aucune erreur détéctée"
@@ -96,18 +98,16 @@
           </tr>
         </thead>
         <tbody>
-          {#if rapportDetaille.statut === 'INVALIDE'}
-            {#each rapportDetaille.services as service, idx (idx)}
-              {#if service.erreurs.length > 0}
-                <LigneService {service} numeroLigne={idx + 1} />
-              {/if}
-            {/each}
-            {#each rapportDetaille.services as service, idx (idx)}
-              {#if service.erreurs.length === 0}
-                <LigneService {service} numeroLigne={idx + 1} />
-              {/if}
-            {/each}
-          {/if}
+          {#each rapportDetaille.services as service, idx (idx)}
+            {#if service.erreurs.length > 0}
+              <LigneService {service} numeroLigne={idx + 1} />
+            {/if}
+          {/each}
+          {#each rapportDetaille.services as service, idx (idx)}
+            {#if service.erreurs.length === 0}
+              <LigneService {service} numeroLigne={idx + 1} />
+            {/if}
+          {/each}
         </tbody>
       </table>
     </div>
@@ -123,6 +123,7 @@
         {estValide
           ? `Importer les ${rapportDetaille.services.length} ${pluraliseChaine(
               'service',
+              'services',
               rapportDetaille.services.length
             )}`
           : 'Réimporter le fichier XLSX corrigé'}
@@ -137,10 +138,8 @@
   }
 
   dialog {
-    max-width: 1868px;
-    max-height: 1010px;
-    width: calc(100vw - 52px);
-    height: calc(100vh - 70px);
+    width: min(calc(100vw - 52px), 1868px);
+    height: min(calc(100vh - 70px), 1010px);
     padding: 64px 32px 0 32px;
     border: none;
     border-radius: 8px;

@@ -1,12 +1,12 @@
 <script lang="ts">
-  export let donnee: string;
+  export let contenu: string;
   export let enErreur: boolean = false;
   export let large: boolean = false;
   export let dernier: boolean = false;
   export let gras: boolean = false;
 </script>
 
-<td class:enErreur class:large class:dernier class:gras>{donnee || '-'}</td>
+<td class:enErreur class:large class:dernier class:gras>{contenu || '-'}</td>
 
 <style lang="scss">
   td {
