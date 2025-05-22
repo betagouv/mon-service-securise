@@ -1,4 +1,4 @@
-import type { RapportDetaille } from './rapportTeleversement.d';
+import type { RapportDetaille } from './rapportTeleversement.types';
 
 export const recupereRapportDetaille = async () => {
   try {

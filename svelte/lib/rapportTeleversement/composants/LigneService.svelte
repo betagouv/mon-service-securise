@@ -3,7 +3,7 @@
     MessagesErreur,
     type RapportService,
     type ErreurService,
-  } from '../rapportTeleversement.d';
+  } from '../rapportTeleversement.types';
   import CelluleDonneeService from './CelluleDonneeService.svelte';
   import TagEtat from './TagEtat.svelte';
   import TooltipErreursMultiple from './TooltipErreursMultiple.svelte';
@@ -33,56 +33,56 @@
       {/if}
     </div>
   </th>
-  <CelluleDonneeService donnee={numeroLigne.toString()} />
+  <CelluleDonneeService contenu={numeroLigne.toString()} />
   <CelluleDonneeService
-    donnee={donneesService.nom}
+    contenu={donneesService.nom}
     enErreur={contientErreur('NOM_EXISTANT') || contientErreur('NOM_INVALIDE')}
     gras
   />
   <CelluleDonneeService
-    donnee={donneesService.siret}
+    contenu={donneesService.siret}
     enErreur={contientErreur('SIRET_INVALIDE')}
   />
   <CelluleDonneeService
-    donnee={donneesService.type}
+    contenu={donneesService.type}
     enErreur={contientErreur('TYPE_INVALIDE')}
     large
   />
   <CelluleDonneeService
-    donnee={donneesService.provenance}
+    contenu={donneesService.provenance}
     enErreur={contientErreur('PROVENANCE_INVALIDE')}
     large
   />
   <CelluleDonneeService
-    donnee={donneesService.statut}
+    contenu={donneesService.statut}
     enErreur={contientErreur('STATUT_INVALIDE')}
     large
   />
   <CelluleDonneeService
-    donnee={donneesService.localisation}
+    contenu={donneesService.localisation}
     enErreur={contientErreur('LOCALISATION_INVALIDE')}
   />
   <CelluleDonneeService
-    donnee={donneesService.delaiAvantImpactCritique}
+    contenu={donneesService.delaiAvantImpactCritique}
     enErreur={contientErreur('DELAI_AVANT_IMPACT_CRITIQUE_INVALIDE')}
   />
   <CelluleDonneeService
-    donnee={donneesService.dateHomologation}
+    contenu={donneesService.dateHomologation}
     enErreur={contientErreur('DOSSIER_HOMOLOGATION_INCOMPLET') ||
       contientErreur('DATE_HOMOLOGATION_INVALIDE')}
   />
   <CelluleDonneeService
-    donnee={donneesService.dureeHomologation}
+    contenu={donneesService.dureeHomologation}
     enErreur={contientErreur('DOSSIER_HOMOLOGATION_INCOMPLET') ||
       contientErreur('DUREE_HOMOLOGATION_INVALIDE')}
   />
   <CelluleDonneeService
-    donnee={donneesService.nomAutoriteHomologation}
+    contenu={donneesService.nomAutoriteHomologation}
     enErreur={contientErreur('DOSSIER_HOMOLOGATION_INCOMPLET')}
     large
   />
   <CelluleDonneeService
-    donnee={donneesService.fonctionAutoriteHomologation}
+    contenu={donneesService.fonctionAutoriteHomologation}
     enErreur={contientErreur('DOSSIER_HOMOLOGATION_INCOMPLET')}
     dernier
   />
