@@ -4,7 +4,7 @@ function consigneNouvelleHomologationCreeeDansJournal({
   adaptateurJournal,
   referentiel,
 }) {
-  return async ({ idService, dossier }) => {
+  return async ({ idService, dossier, importe }) => {
     if (!idService)
       throw new Error(
         "Impossible de consigner la finalisation d'un dossier d'homologation sans avoir l'ID du service en paramètre."
@@ -21,6 +21,7 @@ function consigneNouvelleHomologationCreeeDansJournal({
       dureeHomologationMois: referentiel.nbMoisDecalage(
         dossier.decision.dureeValidite
       ),
+      importe,
     });
 
     await adaptateurJournal.consigneEvenement(

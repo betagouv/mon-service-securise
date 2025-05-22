@@ -35,6 +35,25 @@ describe("L'abonnement qui consigne (dans le journal MSS) la finalisation d'un d
     expect(evenementRecu.type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
   });
 
+  it('peut consigner un événement de "nouvelle homologation `importee`"', async () => {
+    let evenementRecu = {};
+    adaptateurJournal.consigneEvenement = async (evenement) => {
+      evenementRecu = evenement;
+    };
+
+    await consigneNouvelleHomologationCreeeDansJournal({
+      adaptateurJournal,
+      referentiel,
+    })({
+      idService: '123',
+      dossier: unDossier(referentiel).quiEstComplet().quiEstActif().construit(),
+      importe: true,
+    });
+
+    expect(evenementRecu.type).to.be('NOUVELLE_HOMOLOGATION_CREEE');
+    expect(evenementRecu.donnees.importe).to.be(true);
+  });
+
   [
     { propriete: 'idService', nom: "l'ID du service" },
     { propriete: 'dossier', nom: 'le dossier' },
