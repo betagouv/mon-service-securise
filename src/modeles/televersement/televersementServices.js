@@ -3,6 +3,7 @@ const ServiceTeleverse = require('./serviceTeleverse');
 const Referentiel = require('../../referentiel');
 const { ErreurTeleversementServicesInvalide } = require('../../erreurs');
 const EvenementServicesImportes = require('../../bus/evenementServicesImportes');
+const EvenementDossierHomologationImporte = require('../../bus/evenementDossierHomologationImporte');
 
 const STATUT = {
   INVALIDE: 'INVALIDE',
@@ -71,6 +72,12 @@ class TeleversementServices extends ElementsConstructibles {
           decision.dureeValidite
         );
         dossierMetier.declareImporte();
+        await busEvenements.publie(
+          new EvenementDossierHomologationImporte({
+            idService,
+            dossier: dossierMetier,
+          })
+        );
         dossierMetier.enregistreFinalisation();
         await depotDonnees.enregistreDossier(idService, dossierMetier);
       }

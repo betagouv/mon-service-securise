@@ -28,6 +28,7 @@ class EvenementNouvelleHomologationCreee extends Evenement {
         idService: adaptateurChiffrement.hacheSha256(donnees.idService),
         dateHomologation: donnees.dateHomologation,
         dureeHomologationMois: donnees.dureeHomologationMois,
+        ...(donnees.importe && { importe: true }),
       },
       date
     );

@@ -104,6 +104,7 @@ const {
   consigneNouveauParrainage,
 } = require('./abonnements/consigneNouveauParrainage');
 const { metAJourParrainage } = require('./abonnements/metAJourParrainage');
+const EvenementDossierHomologationImporte = require('./evenementDossierHomologationImporte');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -217,6 +218,18 @@ const cableTousLesAbonnes = (
       referentiel,
     }),
     envoieMailFelicitationHomologation({ depotDonnees, adaptateurMail }),
+  ]);
+
+  busEvenements.abonnePlusieurs(EvenementDossierHomologationImporte, [
+    consigneNouvelleHomologationCreeeDansJournal({
+      adaptateurJournal,
+      referentiel,
+    }),
+    sauvegardeNotificationsExpirationHomologation({
+      adaptateurHorloge,
+      depotDonnees,
+      referentiel,
+    }),
   ]);
 
   busEvenements.abonnePlusieurs(EvenementServiceSupprime, [

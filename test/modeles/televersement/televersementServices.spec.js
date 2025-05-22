@@ -6,6 +6,7 @@ const { ErreurTeleversementServicesInvalide } = require('../../../src/erreurs');
 const Dossier = require('../../../src/modeles/dossier');
 const { fabriqueBusPourLesTests } = require('../../bus/aides/busPourLesTests');
 const EvenementServicesImportes = require('../../../src/bus/evenementServicesImportes');
+const EvenementDossierHomologationImporte = require('../../../src/bus/evenementDossierHomologationImporte');
 
 describe('Un téléversement de services', () => {
   let referentiel;
@@ -161,6 +162,7 @@ describe('Un téléversement de services', () => {
         let donneesRecues;
         depotDonnees.nouveauService = async (idUtilisateur, donnees) => {
           donneesRecues = { idUtilisateur, donnees };
+          return 'S1';
         };
 
         await televersement.creeLesServices(
@@ -240,6 +242,23 @@ describe('Un téléversement de services', () => {
           expect(donneesRecues.idService).to.be('S1');
           expect(donneesRecues.dossier.finalise).to.be(true);
           expect(donneesRecues.dossier.importe).to.be(true);
+        });
+
+        it("publie un évènement d'homologation importée sur le bus", async () => {
+          await televersement.creeLesServices(
+            'U1',
+            [],
+            depotDonnees,
+            busEvenement
+          );
+
+          expect(
+            busEvenement.aRecuUnEvenement(EvenementDossierHomologationImporte)
+          ).to.be(true);
+          expect(
+            busEvenement.recupereEvenement(EvenementDossierHomologationImporte)
+              .idService
+          ).to.be('S1');
         });
       });
 

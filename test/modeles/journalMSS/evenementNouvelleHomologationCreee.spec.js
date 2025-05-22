@@ -72,4 +72,18 @@ describe('Un événement de nouvelle homologation', () => {
       expect(e).to.be.an(ErreurDureeHomologationManquante);
     });
   });
+
+  it('peut avoir un attribut "importé"', () => {
+    const evenement = new EvenementNouvelleHomologationCreee(
+      {
+        idService: 'abc',
+        dateHomologation: '25/03/2023',
+        dureeHomologationMois: 24,
+        importe: true,
+      },
+      { date: '27/03/2023', adaptateurChiffrement: hacheEnMajuscules }
+    );
+
+    expect(evenement.toJSON().donnees.importe).to.be(true);
+  });
 });
