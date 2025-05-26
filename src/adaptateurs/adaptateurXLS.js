@@ -4,6 +4,8 @@ const { ErreurFichierXlsInvalide } = require('../erreurs');
 
 const ENTETE_NOM = 'Nom du service numérique *';
 const ENTETE_SIRET = "Siret de l'organisation *";
+const ENTETE_NB_ORGANISATIONS_UTILISATRICES =
+  "Nombre d'organisations utilisatrices *";
 const ENTETE_TYPE = 'Type(s) *';
 const ENTETE_PROVENANCE = 'Provenance *';
 const ENTETE_STATUT = 'Statut *';
@@ -18,6 +20,7 @@ const ENTETE_FONCTION_AUTORITE = 'Autorité\nFonction';
 const toutesLesEntetesNecessaires = [
   ENTETE_NOM,
   ENTETE_SIRET,
+  ENTETE_NB_ORGANISATIONS_UTILISATRICES,
   ENTETE_TYPE,
   ENTETE_PROVENANCE,
   ENTETE_STATUT,
@@ -61,6 +64,8 @@ const extraisTeleversementServices = async (buffer) => {
   return donneesBrutes.map((service) => ({
     nom: encode(service[ENTETE_NOM]),
     siret: service[ENTETE_SIRET],
+    nombreOrganisationsUtilisatrices:
+      service[ENTETE_NB_ORGANISATIONS_UTILISATRICES],
     type: service[ENTETE_TYPE],
     provenance: service[ENTETE_PROVENANCE],
     statut: service[ENTETE_STATUT],
