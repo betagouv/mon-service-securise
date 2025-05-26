@@ -8,6 +8,7 @@ export type ErreurService =
   | 'NOM_INVALIDE'
   | 'NOM_EXISTANT'
   | 'SIRET_INVALIDE'
+  | 'NOMBRE_ORGANISATIONS_UTILISATRICES_INVALIDE'
   | 'TYPE_INVALIDE'
   | 'PROVENANCE_INVALIDE'
   | 'STATUT_INVALIDE'
@@ -26,6 +27,7 @@ export type RapportService = {
     localisation: string;
     nom: string;
     nomAutoriteHomologation: string;
+    nombreOrganisationsUtilisatrices: string;
     provenance: string;
     siret: string;
     statut: string;
@@ -42,6 +44,8 @@ export type RapportDetaille = {
 export const MessagesErreur: Record<ErreurService, string> = {
   NOM_INVALIDE: 'Le nom est manquant',
   NOM_EXISTANT: 'Le nom est déjà utilisé',
+  NOMBRE_ORGANISATIONS_UTILISATRICES_INVALIDE:
+    "Le nombre d'organisation(s) utilisatrice(s) est invalide",
   SIRET_INVALIDE: 'Le SIRET est invalide',
   TYPE_INVALIDE: 'Le type est invalide',
   PROVENANCE_INVALIDE: 'La provenance est invalide',
