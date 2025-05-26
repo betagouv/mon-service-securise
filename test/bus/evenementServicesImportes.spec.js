@@ -7,6 +7,17 @@ describe("L'événement `ServicesImportes`", () => {
       () =>
         new EvenementServicesImportes({
           nbServicesImportes: null,
+          idUtilisateur: 'U1',
+        })
+    ).to.throwError();
+  });
+
+  it("lève une exception s'il est instancié sans identifiant utilisateur", () => {
+    expect(
+      () =>
+        new EvenementServicesImportes({
+          nbServicesImportes: 42,
+          idUtilisateur: null,
         })
     ).to.throwError();
   });
