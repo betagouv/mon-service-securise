@@ -27,9 +27,10 @@ class TeleversementServices extends ElementsConstructibles {
 
   rapportDetaille(nomServicesExistants = []) {
     const erreurs = this.valide(nomServicesExistants);
-    const statut = erreurs.some((e) => e.length)
-      ? STATUT.INVALIDE
-      : STATUT.VALIDE;
+    const statut =
+      erreurs.some((e) => e.length) || this.tous().length === 0
+        ? STATUT.INVALIDE
+        : STATUT.VALIDE;
     return {
       statut,
       services: this.tous().map((serviceTeleverse, index) => ({

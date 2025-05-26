@@ -98,6 +98,17 @@ describe('Un téléversement de services', () => {
         expect(rapport.statut).to.be('INVALIDE');
       });
 
+      it("renvoie un statut 'Invalide' si aucun service n'est présent", () => {
+        const rapport = new TeleversementServices(
+          {
+            services: [],
+          },
+          referentiel
+        ).rapportDetaille();
+
+        expect(rapport.statut).to.be('INVALIDE');
+      });
+
       it('renvoie un statut "Valide" si aucune erreur n\'est présente', () => {
         const rapport = new TeleversementServices(
           {
