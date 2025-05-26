@@ -9,6 +9,7 @@
     | 'contributeurs'
     | 'rafraichir'
     | 'inviter'
+    | 'plus'
     | '' = '';
   export let taille: 'petit' | 'moyen' | 'grand' = 'grand';
   export let type: 'primaire' | 'secondaire' | 'lien';
@@ -89,6 +90,11 @@
     background-image: url('/statique/assets/images/icone_inviter.svg');
     filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(245deg)
       brightness(105%) contrast(101%);
+  }
+
+  .plus:before {
+    background-image: url('/statique/assets/images/icone_plus_dsfr.svg');
+    transform: translateY(1px);
   }
 
   .avecIcone:before {
