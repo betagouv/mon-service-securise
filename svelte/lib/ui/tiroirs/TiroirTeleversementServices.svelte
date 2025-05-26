@@ -12,6 +12,7 @@
 
   let elementFichier: HTMLInputElement;
   let fichier: FileList;
+  let enCoursDeDrop = false;
 
   let etatTeleversement: 'EnAttente' | 'EnCoursEnvoi' | 'Invalide' | 'Valide' =
     'EnAttente';
@@ -41,6 +42,15 @@
   const supprimeFichierTeleverse = () => {
     etatTeleversement = 'EnAttente';
   };
+
+  const gereDropFichier = (e: DragEvent) => {
+    enCoursDeDrop = false;
+
+    if (e.dataTransfer?.files.length === 1) {
+      fichier = e.dataTransfer.files;
+      gereVerificationFichier();
+    }
+  };
 </script>
 
 <Formulaire formulaireDuTiroir>
@@ -56,7 +66,16 @@
     </div>
     <div>
       <h3>2. Importez le template</h3>
-      <div class="conteneur-drag-and-drop">
+      <div
+        role="button"
+        tabindex="0"
+        aria-label="Zone de dépôt pour téléverser un fichier"
+        class="conteneur-drag-and-drop"
+        class:pret-a-drop={enCoursDeDrop}
+        on:drop|preventDefault={gereDropFichier}
+        on:dragover|preventDefault={(e) => (enCoursDeDrop = true)}
+        on:dragleave={() => (enCoursDeDrop = false)}
+      >
         <img
           src="/statique/assets/images/icone_documents.svg"
           alt="Icône de document à téléverser"
@@ -179,6 +198,11 @@
     border-radius: 8px;
     border: 1px dashed var(--systeme-design-etat-contour-champs);
     margin-bottom: 12px;
+
+    &.pret-a-drop {
+      border: 1px dashed var(--bleu-mise-en-avant);
+      background: #eff6ff;
+    }
 
     input[type='file'] {
       display: none;
