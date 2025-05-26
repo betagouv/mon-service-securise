@@ -35,6 +35,7 @@ const routesConnecteApiTeleversement = require('./routesConnecteApiTeleversement
 const routesConnecteApi = ({
   middleware,
   adaptateurMail,
+  busEvenements,
   depotDonnees,
   referentiel,
   adaptateurHorloge,
@@ -184,6 +185,7 @@ const routesConnecteApi = ({
     routesConnecteApiTeleversement({
       adaptateurControleFichier,
       adaptateurXLS,
+      busEvenements,
       depotDonnees,
       middleware,
     })

@@ -43,6 +43,7 @@ const creeServeur = ({
   adaptateurProfilAnssi,
   adaptateurControleFichier,
   adaptateurXLS,
+  busEvenements,
   serviceSupervision,
   serviceCgu,
   serviceGestionnaireSession,
@@ -164,6 +165,7 @@ const creeServeur = ({
     routesConnecteApi({
       middleware,
       adaptateurMail,
+      busEvenements,
       depotDonnees,
       referentiel,
       adaptateurHorloge,

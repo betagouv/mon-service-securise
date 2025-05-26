@@ -128,6 +128,7 @@ const serviceSupervision = new ServiceSupervision({
 serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
   const serveur = MSS.creeServeur({
     depotDonnees,
+    busEvenements,
     middleware,
     referentiel,
     moteurRegles,
