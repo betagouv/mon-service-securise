@@ -7,10 +7,10 @@ const creeDepot = ({ adaptateurPersistance }) => {
   };
 
   const ajouteSuggestionAction = async (idService, natureSuggestion) => {
-    await adaptateurPersistance.ajouteSuggestionAction(
+    await adaptateurPersistance.ajouteSuggestionAction({
       idService,
-      natureSuggestion
-    );
+      nature: natureSuggestion,
+    });
   };
 
   return { acquitteSuggestionAction, ajouteSuggestionAction };

@@ -29,10 +29,10 @@ describe("Le dépôt de données des suggestions d'actions", () => {
 
   it('peut ajouter une suggestion', async () => {
     let persistanceAppelee = {};
-    adaptateurPersistance.ajouteSuggestionAction = async (
+    adaptateurPersistance.ajouteSuggestionAction = async ({
       idService,
-      nature
-    ) => {
+      nature,
+    }) => {
       persistanceAppelee = { idService, nature };
     };
 
