@@ -4,6 +4,7 @@ const { ErreurFichierXlsInvalide } = require('../../erreurs');
 const routesConnecteApiTeleversement = ({
   adaptateurControleFichier,
   adaptateurXLS,
+  busEvenements,
   depotDonnees,
   middleware,
 }) => {
@@ -56,6 +57,31 @@ const routesConnecteApiTeleversement = ({
       requete.idUtilisateurCourant
     );
     reponse.sendStatus(aSupprime ? 200 : 404);
+  });
+
+  routes.post('/services/confirme', async (requete, reponse) => {
+    const services = await depotDonnees.services(requete.idUtilisateurCourant);
+    const nomsServicesExistants = services.map((service) =>
+      service.nomService()
+    );
+    const televersementServices = await depotDonnees.lisTeleversementServices(
+      requete.idUtilisateurCourant
+    );
+
+    if (!televersementServices) return reponse.sendStatus(404);
+
+    try {
+      await televersementServices.creeLesServices(
+        requete.idUtilisateurCourant,
+        nomsServicesExistants,
+        depotDonnees,
+        busEvenements
+      );
+
+      return reponse.sendStatus(200);
+    } catch (e) {
+      return reponse.sendStatus(400);
+    }
   });
 
   return routes;

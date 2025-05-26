@@ -1,7 +1,10 @@
 const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
-const { ErreurFichierXlsInvalide } = require('../../../src/erreurs');
+const {
+  ErreurFichierXlsInvalide,
+  ErreurTeleversementServicesInvalide,
+} = require('../../../src/erreurs');
 const TeleversementServices = require('../../../src/modeles/televersement/televersementServices');
 const Referentiel = require('../../../src/referentiel');
 const donneesReferentiel = require('../../../donneesReferentiel');
@@ -210,6 +213,124 @@ describe('Les routes connecté de téléversement', () => {
           expect().fail("L'appel aurait dû lever une erreur");
         } catch (e) {
           expect(e.response.status).to.be(404);
+        }
+      });
+    });
+
+    describe('Quand requête POST sur `/api/televersement/services/confirme`', () => {
+      const donneesServiceValide = {
+        nom: 'Nom du service',
+        siret: '13000000000000',
+        nombreOrganisationsUtilisatrices: '2',
+        type: 'Site Internet',
+        provenance: 'Proposé en ligne par un fournisseur',
+        statut: 'En projet',
+        localisation: 'France',
+        delaiAvantImpactCritique: "Plus d'une journée",
+        dateHomologation: '01/01/2025',
+        dureeHomologation: '6 mois',
+        nomAutoriteHomologation: 'Nom Prénom',
+        fonctionAutoriteHomologation: 'Fonction',
+      };
+      let referentiel;
+      let televersementService;
+
+      beforeEach(() => {
+        referentiel = Referentiel.creeReferentiel({
+          ...donneesReferentiel,
+        });
+        televersementService = new TeleversementServices(
+          { services: [structuredClone(donneesServiceValide)] },
+          referentiel
+        );
+        televersementService.creeLesServices = async () => {};
+        testeur.middleware().reinitialise({ idUtilisateur: '123' });
+        testeur.depotDonnees().services = async () => [];
+        testeur.depotDonnees().lisTeleversementServices = async () =>
+          televersementService;
+      });
+
+      it('délègue la récupération des noms de services existants au dépôt de données', async () => {
+        let idUtilisateurRecu;
+        testeur.depotDonnees().services = async (idUtilisateur) => {
+          idUtilisateurRecu = idUtilisateur;
+          return [];
+        };
+
+        await axios.post(
+          'http://localhost:1234/api/televersement/services/confirme'
+        );
+
+        expect(idUtilisateurRecu).to.be('123');
+      });
+
+      it('délègue la récupération du téléversement de service au dépôt de données', async () => {
+        let idUtilisateurRecu;
+        testeur.depotDonnees().lisTeleversementServices = async (
+          idUtilisateur
+        ) => {
+          idUtilisateurRecu = idUtilisateur;
+          return televersementService;
+        };
+
+        await axios.post(
+          'http://localhost:1234/api/televersement/services/confirme'
+        );
+
+        expect(idUtilisateurRecu).to.be('123');
+      });
+
+      it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
+        testeur.depotDonnees().lisTeleversementServices = async () => undefined;
+
+        try {
+          await axios.post(
+            'http://localhost:1234/api/televersement/services/confirme'
+          );
+          expect().fail("L'appel aurait dû lever une erreur");
+        } catch (e) {
+          expect(e.response.status).to.be(404);
+        }
+      });
+
+      it('créé les services via le modèle métier', async () => {
+        let donneesRecues;
+        televersementService.creeLesServices = async (
+          idUtilisateur,
+          nomServicesExistants,
+          depotDonnees,
+          busEvenements
+        ) => {
+          donneesRecues = {
+            idUtilisateur,
+            nomServicesExistants,
+            depotDonnees,
+            busEvenements,
+          };
+        };
+
+        await axios.post(
+          'http://localhost:1234/api/televersement/services/confirme'
+        );
+
+        expect(donneesRecues.idUtilisateur).to.be('123');
+        expect(donneesRecues.nomServicesExistants).to.eql([]);
+        expect(donneesRecues.depotDonnees).not.to.be(undefined);
+        expect(donneesRecues.busEvenements).not.to.be(undefined);
+      });
+
+      it('renvoie une erreur 400 si le téléversement est invalide', async () => {
+        televersementService.creeLesServices = async () => {
+          throw new ErreurTeleversementServicesInvalide();
+        };
+
+        try {
+          await axios.post(
+            'http://localhost:1234/api/televersement/services/confirme'
+          );
+          expect().fail("L'appel aurait dû lever une erreur");
+        } catch (e) {
+          expect(e.response.status).to.be(400);
         }
       });
     });
