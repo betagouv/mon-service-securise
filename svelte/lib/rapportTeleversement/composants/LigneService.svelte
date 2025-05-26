@@ -44,6 +44,10 @@
     enErreur={contientErreur('SIRET_INVALIDE')}
   />
   <CelluleDonneeService
+    contenu={donneesService.nombreOrganisationsUtilisatrices}
+    enErreur={contientErreur('NOMBRE_ORGANISATIONS_UTILISATRICES_INVALIDE')}
+  />
+  <CelluleDonneeService
     contenu={donneesService.type}
     enErreur={contientErreur('TYPE_INVALIDE')}
     large

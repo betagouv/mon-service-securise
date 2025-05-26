@@ -86,6 +86,7 @@
             <th>Ligne</th>
             <th>Nom du service numérique</th>
             <th>SIRET de l'organisation</th>
+            <th>Nombre d'organisation(s) utilisatrice(s)</th>
             <th>Type</th>
             <th>Provenance</th>
             <th>Statut</th>
