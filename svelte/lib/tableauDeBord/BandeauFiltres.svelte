@@ -2,10 +2,11 @@
   import BarreDeRecherche from '../ui/BarreDeRecherche.svelte';
   import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
   import { services } from './stores/services.store';
-  import Lien from '../ui/Lien.svelte';
   import ListeDeroulanteRiche from '../ui/ListeDeroulanteRiche.svelte';
   import { filtrageServices } from './stores/filtrageServices.store';
   import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
+  import TiroirTeleversementServices from '../ui/tiroirs/TiroirTeleversementServices.svelte';
 </script>
 
 <div class="conteneur-filtres">
@@ -99,7 +100,8 @@
         {
           label: 'Téléverser des sevices',
           icone: 'televerser',
-          action: () => {},
+          action: () =>
+            tiroirStore.afficheContenu(TiroirTeleversementServices, {}),
         },
       ]}
     />
