@@ -6,6 +6,8 @@ const ERREURS_VALIDATION = {
   NOM_INVALIDE: 'NOM_INVALIDE',
   NOM_EXISTANT: 'NOM_EXISTANT',
   SIRET_INVALIDE: 'SIRET_INVALIDE',
+  NOMBRE_ORGANISATIONS_UTILISATRICES_INVALIDE:
+    'NOMBRE_ORGANISATIONS_UTILISATRICES_INVALIDE',
   TYPE_INVALIDE: 'TYPE_INVALIDE',
   PROVENANCE_INVALIDE: 'PROVENANCE_INVALIDE',
   STATUT_INVALIDE: 'STATUT_INVALIDE',
@@ -25,6 +27,7 @@ class ServiceTeleverse extends Base {
       proprietesAtomiquesRequises: [
         'nom',
         'siret',
+        'nombreOrganisationsUtilisatrices',
         'type',
         'provenance',
         'statut',
@@ -69,6 +72,11 @@ class ServiceTeleverse extends Base {
         this.type,
         this.referentiel.descriptionsTypeService(),
         ERREURS_VALIDATION.TYPE_INVALIDE,
+      ],
+      [
+        this.nombreOrganisationsUtilisatrices,
+        this.referentiel.labelsNombreOrganisationsUtilisatrices(),
+        ERREURS_VALIDATION.NOMBRE_ORGANISATIONS_UTILISATRICES_INVALIDE,
       ],
       [
         this.provenance,
@@ -153,6 +161,10 @@ class ServiceTeleverse extends Base {
         organisationResponsable: {
           siret: this.siretFormatte(),
         },
+        nombreOrganisationsUtilisatrices:
+          this.referentiel.nombreOrganisationsUtilisatricesAvecLabel(
+            this.nombreOrganisationsUtilisatrices
+          ),
       },
       ...(this.aUnDossierHomologationComplet() && {
         dossier: {

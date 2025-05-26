@@ -392,6 +392,9 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const descriptionsEcheanceRenouvellement = () =>
     recupereDescriptions(donnees.echeancesRenouvellement);
 
+  const labelsNombreOrganisationsUtilisatrices = () =>
+    Object.values(donnees.nombreOrganisationsUtilisatrices).map((v) => v.label);
+
   const proprieteAvecDescription = (proprietes, description) =>
     Object.entries(proprietes).find(
       ([_cle, valeur]) => valeur.description === description
@@ -414,6 +417,18 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   const echeanceRenouvellementAvecDescription = (description) =>
     proprieteAvecDescription(donnees.echeancesRenouvellement, description);
+
+  const nombreOrganisationsUtilisatricesAvecLabel = (label) => {
+    const nombreAvecLabel = donnees.nombreOrganisationsUtilisatrices.find(
+      (description) => description.label === label
+    );
+    if (!nombreAvecLabel) return undefined;
+
+    return {
+      borneBasse: nombreAvecLabel.borneBasse,
+      borneHaute: nombreAvecLabel.borneHaute,
+    };
+  };
 
   valideDonnees();
 
@@ -472,6 +487,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     infosNiveauxGravite,
     infosNiveauxGraviteConcernes,
     libelleEtape,
+    labelsNombreOrganisationsUtilisatrices,
     localisationDonnees,
     localisationDonneesAvecDescription,
     localisationsDonnees,
@@ -489,6 +505,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     niveauVraisemblance,
     niveauxVraisemblance,
     nombreOrganisationsUtilisatrices,
+    nombreOrganisationsUtilisatricesAvecLabel,
     nouvellesFonctionnalites,
     numeroEtape,
     optionsFiltrageDate,
