@@ -1,6 +1,7 @@
 const Base = require('../base');
 const Referentiel = require('../../referentiel');
 const { dateInvalide } = require('../../utilitaires/date');
+const DescriptionService = require('../descriptionService');
 
 const ERREURS_VALIDATION = {
   NOM_INVALIDE: 'NOM_INVALIDE',
@@ -140,32 +141,37 @@ class ServiceTeleverse extends Base {
   }
 
   enDonneesService() {
-    return {
-      descriptionService: {
-        delaiAvantImpactCritique:
-          this.referentiel.delaiAvantImpactCritiqueAvecDescription(
-            this.delaiAvantImpactCritique
-          ),
-        localisationDonnees:
-          this.referentiel.localisationDonneesAvecDescription(
-            this.localisation
-          ),
-        nomService: this.nom,
-        provenanceService: this.referentiel.provenanceServiceAvecDescription(
-          this.provenance
+    const donneesDescriptionService = {
+      delaiAvantImpactCritique:
+        this.referentiel.delaiAvantImpactCritiqueAvecDescription(
+          this.delaiAvantImpactCritique
         ),
-        statutDeploiement: this.referentiel.statutDeploiementAvecDescription(
-          this.statut
-        ),
-        typeService: [this.referentiel.typeServiceAvecDescription(this.type)],
-        organisationResponsable: {
-          siret: this.siretFormatte(),
-        },
-        nombreOrganisationsUtilisatrices:
-          this.referentiel.nombreOrganisationsUtilisatricesAvecLabel(
-            this.nombreOrganisationsUtilisatrices
-          ),
+      localisationDonnees: this.referentiel.localisationDonneesAvecDescription(
+        this.localisation
+      ),
+      nomService: this.nom,
+      provenanceService: this.referentiel.provenanceServiceAvecDescription(
+        this.provenance
+      ),
+      statutDeploiement: this.referentiel.statutDeploiementAvecDescription(
+        this.statut
+      ),
+      typeService: [this.referentiel.typeServiceAvecDescription(this.type)],
+      organisationResponsable: {
+        siret: this.siretFormatte(),
       },
+      nombreOrganisationsUtilisatrices:
+        this.referentiel.nombreOrganisationsUtilisatricesAvecLabel(
+          this.nombreOrganisationsUtilisatrices
+        ),
+    };
+
+    const niveauSecurite = DescriptionService.estimeNiveauDeSecurite(
+      donneesDescriptionService
+    );
+
+    return {
+      descriptionService: { ...donneesDescriptionService, niveauSecurite },
       ...(this.aUnDossierHomologationComplet() && {
         dossier: {
           decision: {

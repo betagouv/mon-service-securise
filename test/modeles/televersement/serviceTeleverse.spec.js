@@ -188,9 +188,10 @@ describe('Un service téléversé', () => {
         provenanceService: 'achat',
         statutDeploiement: 'enProjet',
         typeService: ['siteInternet'],
+        niveauSecurite: 'niveau1',
         nombreOrganisationsUtilisatrices: {
-          borneBasse: '1',
-          borneHaute: '1',
+          borneBasse: 1,
+          borneHaute: 1,
         },
         organisationResponsable: {
           siret: '13000000000000',
