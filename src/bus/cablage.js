@@ -105,6 +105,10 @@ const {
 } = require('./abonnements/consigneNouveauParrainage');
 const { metAJourParrainage } = require('./abonnements/metAJourParrainage');
 const EvenementDossierHomologationImporte = require('./evenementDossierHomologationImporte');
+const EvenementServicesImportes = require('./evenementServicesImportes');
+const {
+  consigneTeleversementServicesRealiseDansJournal,
+} = require('./abonnements/consigneTeleversementServicesRealiseDansJournal');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -238,6 +242,11 @@ const cableTousLesAbonnes = (
     metAJourContactsBrevoDesContributeurs({ crmBrevo, depotDonnees }),
     delieServiceEtSuperviseurs({ serviceSupervision }),
   ]);
+
+  busEvenements.abonne(
+    EvenementServicesImportes,
+    consigneTeleversementServicesRealiseDansJournal({ adaptateurJournal })
+  );
 };
 
 module.exports = { cableTousLesAbonnes };
