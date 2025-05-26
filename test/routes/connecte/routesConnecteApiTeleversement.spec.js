@@ -246,6 +246,7 @@ describe('Les routes connecté de téléversement', () => {
         televersementService.creeLesServices = async () => {};
         testeur.middleware().reinitialise({ idUtilisateur: '123' });
         testeur.depotDonnees().services = async () => [];
+        testeur.depotDonnees().supprimeTeleversementServices = async () => {};
         testeur.depotDonnees().lisTeleversementServices = async () =>
           televersementService;
       });
@@ -317,6 +318,22 @@ describe('Les routes connecté de téléversement', () => {
         expect(donneesRecues.nomServicesExistants).to.eql([]);
         expect(donneesRecues.depotDonnees).not.to.be(undefined);
         expect(donneesRecues.busEvenements).not.to.be(undefined);
+      });
+
+      it('délègue la suppression du téléversement de service au dépôt de données', async () => {
+        let idUtilisateurRecu;
+        testeur.depotDonnees().supprimeTeleversementServices = async (
+          idUtilisateur
+        ) => {
+          idUtilisateurRecu = idUtilisateur;
+          return televersementService;
+        };
+
+        await axios.post(
+          'http://localhost:1234/api/televersement/services/confirme'
+        );
+
+        expect(idUtilisateurRecu).to.be('123');
       });
 
       it('renvoie une erreur 400 si le téléversement est invalide', async () => {

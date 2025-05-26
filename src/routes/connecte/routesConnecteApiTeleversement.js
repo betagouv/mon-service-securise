@@ -78,6 +78,10 @@ const routesConnecteApiTeleversement = ({
         busEvenements
       );
 
+      await depotDonnees.supprimeTeleversementServices(
+        requete.idUtilisateurCourant
+      );
+
       return reponse.sendStatus(200);
     } catch (e) {
       return reponse.sendStatus(400);
