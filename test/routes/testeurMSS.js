@@ -18,6 +18,7 @@ const { fabriqueServiceCgu } = require('../../src/serviceCgu');
 const {
   fabriqueServiceGestionnaireSession,
 } = require('../../src/session/serviceGestionnaireSession');
+const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
 
 const testeurMss = () => {
   let serviceAnnuaire;
@@ -46,6 +47,7 @@ const testeurMss = () => {
   let referentiel;
   let procedures;
   let inscriptionUtilisateur;
+  let busEvenements;
   let serveur;
 
   const verifieSessionDeposee = (reponse, suite) => {
@@ -139,6 +141,7 @@ const testeurMss = () => {
     adaptateurXLS = {
       extraisTeleversementServices: async () => {},
     };
+    busEvenements = fabriqueBusPourLesTests();
 
     moteurRegles = new MoteurRegles(referentiel);
     depotVide()
@@ -177,6 +180,7 @@ const testeurMss = () => {
           serviceCgu,
           procedures,
           inscriptionUtilisateur,
+          busEvenements,
           avecCookieSecurise: false,
           avecPageErreur: false,
         });
@@ -206,6 +210,7 @@ const testeurMss = () => {
     adaptateurProfilAnssi: () => adaptateurProfilAnssi,
     adaptateurControleFichier: () => adaptateurControleFichier,
     adaptateurXLS: () => adaptateurXLS,
+    busEvenements: () => busEvenements,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,
