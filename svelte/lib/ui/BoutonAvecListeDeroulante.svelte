@@ -53,6 +53,7 @@
 <style lang="scss">
   .conteneur-bouton {
     position: relative;
+    z-index: 3;
 
     .contenu-deroulant {
       position: absolute;
