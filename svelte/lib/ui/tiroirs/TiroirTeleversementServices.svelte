@@ -51,6 +51,18 @@
       gereVerificationFichier();
     }
   };
+
+  const gereValidationTeleversement = async () => {
+    if (etatTeleversement === 'Valide') {
+      document.body.dispatchEvent(
+        new CustomEvent('svelte-recharge-rapport-televersement')
+      );
+      const url = new URL(window.location.href);
+      url.searchParams.append('rapportTeleversement', 'true');
+      window.history.replaceState({}, '', url);
+      tiroirStore.ferme();
+    }
+  };
 </script>
 
 <Formulaire formulaireDuTiroir>
@@ -154,6 +166,7 @@
       boutonSoumission
       enCoursEnvoi={etatTeleversement === 'EnCoursEnvoi'}
       actif={etatTeleversement === 'Valide'}
+      on:click={gereValidationTeleversement}
     />
   </ActionsTiroir>
 </Formulaire>
