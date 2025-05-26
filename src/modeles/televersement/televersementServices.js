@@ -94,7 +94,10 @@ class TeleversementServices extends ElementsConstructibles {
     await Promise.all(promessesCreationService);
 
     await busEvenements.publie(
-      new EvenementServicesImportes({ nbServicesImportes: this.tous().length })
+      new EvenementServicesImportes({
+        idUtilisateur,
+        nbServicesImportes: this.tous().length,
+      })
     );
   }
 }
