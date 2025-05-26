@@ -6,6 +6,7 @@ const donneesReferentiel = require('../../../donneesReferentiel');
 const donneesServiceValide = {
   nom: 'Nom du service',
   siret: '13000000000000',
+  nombreOrganisationsUtilisatrices: 'Mon organisation uniquement',
   type: 'Site Internet',
   provenance: 'Proposé en ligne par un fournisseur',
   statut: 'En projet',
@@ -38,6 +39,11 @@ describe('Un service téléversé', () => {
       [
         ['siret', 'abc', 'SIRET_INVALIDE'],
         ['type', 'pasUnType', 'TYPE_INVALIDE'],
+        [
+          'nombreOrganisationsUtilisatrices',
+          'pasUnNombre',
+          'NOMBRE_ORGANISATIONS_UTILISATRICES_INVALIDE',
+        ],
         ['provenance', 'pasUneProvenance', 'PROVENANCE_INVALIDE'],
         ['statut', 'pasUnStatut', 'STATUT_INVALIDE'],
         ['localisation', 'pasUneLocalisation', 'LOCALISATION_INVALIDE'],
@@ -182,6 +188,10 @@ describe('Un service téléversé', () => {
         provenanceService: 'achat',
         statutDeploiement: 'enProjet',
         typeService: ['siteInternet'],
+        nombreOrganisationsUtilisatrices: {
+          borneBasse: '1',
+          borneHaute: '1',
+        },
         organisationResponsable: {
           siret: '13000000000000',
         },

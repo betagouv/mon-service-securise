@@ -109,6 +109,7 @@ describe('Les routes connecté de téléversement', () => {
       const donneesServiceValide = {
         nom: 'Nom du service',
         siret: '13000000000000',
+        nombreOrganisationsUtilisatrices: '2',
         type: 'Site Internet',
         provenance: 'Proposé en ligne par un fournisseur',
         statut: 'En projet',
