@@ -819,6 +819,15 @@ class ConsoleAdministration {
 
     console.log('Migration effectuée');
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  async rattrapageSuppressionSuggestionsActions() {
+    const knex = Knex(configKnex.production);
+    const nbSuppression = await knex('suggestions_actions')
+      .whereNotIn('id_service', knex('services').select('id'))
+      .del();
+    console.log(`${nbSuppression} suggestions supprimées`);
+  }
 }
 
 module.exports = ConsoleAdministration;
