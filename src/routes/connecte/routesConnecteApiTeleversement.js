@@ -74,13 +74,13 @@ const routesConnecteApiTeleversement = ({
     );
     if (rapport.statut === 'INVALIDE') return reponse.sendStatus(400);
 
-    await televersementServices.creeLesServices(
+    televersementServices.creeLesServices(
       requete.idUtilisateurCourant,
       depotDonnees,
       busEvenements
     );
 
-    return reponse.sendStatus(200);
+    return reponse.sendStatus(201);
   });
 
   return routes;
