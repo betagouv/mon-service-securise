@@ -615,6 +615,14 @@ const nouvelAdaptateur = (env) => {
       .where({ id_utilisateur: idUtilisateur })
       .delete();
 
+  const metsAJourProgressionTeleversement = async (
+    idUtilisateur,
+    progression
+  ) =>
+    knex('televersement_services')
+      .where({ id_utilisateur: idUtilisateur })
+      .update({ progression });
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -645,6 +653,7 @@ const nouvelAdaptateur = (env) => {
     marqueTacheDeServiceLue,
     metsAJourIdResetMdpUtilisateur,
     metsAJourParrainage,
+    metsAJourProgressionTeleversement,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
     nouveautesPourUtilisateur,
