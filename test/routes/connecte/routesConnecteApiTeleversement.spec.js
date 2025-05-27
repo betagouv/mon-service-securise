@@ -336,5 +336,42 @@ describe('Les routes connecté de téléversement', () => {
         }
       });
     });
+
+    describe('Quand requête GET sur `/api/televersement/services/progression`', () => {
+      beforeEach(() => {
+        testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      });
+
+      it('retourne le pourcentage de progression', async () => {
+        let idUtilisateurRecu;
+        testeur.depotDonnees().lisPourcentageProgressionTeleversementServices =
+          async (idUtilisateur) => {
+            idUtilisateurRecu = idUtilisateur;
+            return 50;
+          };
+
+        const reponse = await axios.get(
+          'http://localhost:1234/api/televersement/services/progression'
+        );
+
+        expect(idUtilisateurRecu).to.be('123');
+        expect(reponse.status).to.be(200);
+        expect(reponse.data.progression).to.be(50);
+      });
+
+      it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
+        testeur.depotDonnees().lisPourcentageProgressionTeleversementServices =
+          async () => undefined;
+
+        try {
+          await axios.get(
+            'http://localhost:1234/api/televersement/services/progression'
+          );
+          expect().fail("L'appel aurait dû lever une erreur");
+        } catch (e) {
+          expect(e.response.status).to.be(404);
+        }
+      });
+    });
   });
 });
