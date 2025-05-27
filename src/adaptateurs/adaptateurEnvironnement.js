@@ -110,7 +110,12 @@ const oidc = () => ({
 });
 
 const trustProxy = () => {
-  const trustProxyEnChaine = process.env.NB_REQUETES_TRUST_PROXY || '0';
+  if (process.env.NB_REQUETES_TRUST_PROXY === undefined) {
+    throw new Error(
+      `la variable d'environnement NB_REQUETES_TRUST_PROXY est obligatoire mais absente`
+    );
+  }
+  const trustProxyEnChaine = process.env.NB_REQUETES_TRUST_PROXY;
   const trustProxyEnNombre = Number(trustProxyEnChaine);
   if (Number.isNaN(trustProxyEnNombre)) {
     /* eslint-disable no-console */
