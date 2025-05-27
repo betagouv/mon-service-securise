@@ -79,15 +79,17 @@ class TeleversementServices extends ElementsConstructibles {
       );
     };
 
-    const promessesCreationService = this.tous().map((serviceTeleverse) =>
-      creeUnService(serviceTeleverse)
-    );
-    await Promise.all(promessesCreationService);
+    const tousLesServices = this.tous();
+    // eslint-disable-next-line no-restricted-syntax
+    for (const serviceTeleverse of tousLesServices) {
+      // eslint-disable-next-line no-await-in-loop
+      await creeUnService(serviceTeleverse);
+    }
 
     await busEvenements.publie(
       new EvenementServicesImportes({
         idUtilisateur,
-        nbServicesImportes: this.tous().length,
+        nbServicesImportes: tousLesServices.length,
       })
     );
   }
