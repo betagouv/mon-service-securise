@@ -13,7 +13,14 @@ const creeDepot = ({ adaptateurPersistance }) => {
     });
   };
 
-  return { acquitteSuggestionAction, ajouteSuggestionAction };
+  const supprimeSuggestionsActionsPourService = async (idService) =>
+    adaptateurPersistance.supprimeSuggestionsActionsPourService(idService);
+
+  return {
+    acquitteSuggestionAction,
+    ajouteSuggestionAction,
+    supprimeSuggestionsActionsPourService,
+  };
 };
 
 module.exports = { creeDepot };

@@ -480,6 +480,9 @@ const nouvelAdaptateur = (env) => {
       .update({ date_acquittement: knex.fn.now() });
   };
 
+  const supprimeSuggestionsActionsPourService = async (idService) =>
+    knex('suggestions_actions').where({ id_service: idService }).del();
+
   const sauvegardeNouvelIndiceCyber = async (
     idService,
     indiceCyber,
@@ -665,6 +668,7 @@ const nouvelAdaptateur = (env) => {
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
     supprimeServices,
+    supprimeSuggestionsActionsPourService,
     supprimeTeleversementServices,
     supprimeUtilisateur,
     supprimeUtilisateurs,
