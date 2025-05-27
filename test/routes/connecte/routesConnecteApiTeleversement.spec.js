@@ -234,6 +234,14 @@ describe('Les routes connecté de téléversement', () => {
           televersementService;
       });
 
+      it('répond 201', async () => {
+        const reponse = await axios.post(
+          'http://localhost:1234/api/televersement/services/confirme'
+        );
+
+        expect(reponse.status).to.be(201);
+      });
+
       it('délègue la récupération des noms de services existants au dépôt de données', async () => {
         let idUtilisateurRecu;
         testeur.depotDonnees().services = async (idUtilisateur) => {
@@ -278,23 +286,35 @@ describe('Les routes connecté de téléversement', () => {
       });
 
       it('créé les services via le modèle métier', async () => {
+        const resolutionPromesse = {
+          resous: () => {},
+          resolue: false,
+        };
+        const promesse = new Promise((resolve) => {
+          resolutionPromesse.resous = () => {
+            resolve();
+            resolutionPromesse.resolue = true;
+          };
+        });
+
         let donneesRecues;
         televersementService.creeLesServices = async (
           idUtilisateur,
           depotDonnees,
           busEvenements
         ) => {
-          donneesRecues = {
-            idUtilisateur,
-            depotDonnees,
-            busEvenements,
-          };
+          donneesRecues = { idUtilisateur, depotDonnees, busEvenements };
+          return promesse;
         };
 
         await axios.post(
           'http://localhost:1234/api/televersement/services/confirme'
         );
 
+        expect(resolutionPromesse.resolue).to.be(false);
+        resolutionPromesse.resous();
+
+        expect(resolutionPromesse.resolue).to.be(true);
         expect(donneesRecues.idUtilisateur).to.be('123');
         expect(donneesRecues.depotDonnees).not.to.be(undefined);
         expect(donneesRecues.busEvenements).not.to.be(undefined);
