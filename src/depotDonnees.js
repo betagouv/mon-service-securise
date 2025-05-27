@@ -224,6 +224,7 @@ const creeDepot = (config = {}) => {
   };
 
   const {
+    lisPourcentageProgressionTeleversementServices,
     lisTeleversementServices,
     metsAJourProgressionTeleversement,
     nouveauTeleversementServices,
@@ -260,6 +261,7 @@ const creeDepot = (config = {}) => {
     lisDernierIndiceCyber,
     lisNotificationsExpirationHomologationEnDate,
     lisParcoursUtilisateur,
+    lisPourcentageProgressionTeleversementServices,
     lisSuperviseurs,
     lisTeleversementServices,
     marqueNouveauteLue,
