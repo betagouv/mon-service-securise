@@ -53,10 +53,10 @@ const routesConnecteApiTeleversement = ({
   });
 
   routes.delete('/services', async (requete, reponse) => {
-    const aSupprime = await depotDonnees.supprimeTeleversementServices(
+    await depotDonnees.supprimeTeleversementServices(
       requete.idUtilisateurCourant
     );
-    reponse.sendStatus(aSupprime ? 200 : 404);
+    reponse.sendStatus(200);
   });
 
   routes.post('/services/confirme', async (requete, reponse) => {
