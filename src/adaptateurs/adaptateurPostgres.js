@@ -610,6 +610,12 @@ const nouvelAdaptateur = (env) => {
       .select('donnees')
       .first();
 
+  const lisProgressionTeleversementServices = async (idUtilisateur) =>
+    knex('televersement_services')
+      .where({ id_utilisateur: idUtilisateur })
+      .select('progression')
+      .first();
+
   const supprimeTeleversementServices = async (idUtilisateur) =>
     knex('televersement_services')
       .where({ id_utilisateur: idUtilisateur })
@@ -646,6 +652,7 @@ const nouvelAdaptateur = (env) => {
     lisDernierIndiceCyber,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
+    lisProgressionTeleversementServices,
     lisSuperviseursConcernes,
     lisTeleversementServices,
     marqueNouveauteLue,

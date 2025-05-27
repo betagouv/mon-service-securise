@@ -26,6 +26,19 @@ const creeDepot = (config = {}) => {
     return new TeleversementServices({ services }, referentiel);
   };
 
+  const lisPourcentageProgressionTeleversementServices = async (
+    idUtilisateur
+  ) => {
+    const televersement = await lisTeleversementServices(idUtilisateur);
+    if (!televersement) return undefined;
+
+    const { progression } =
+      await adaptateurPersistance.lisProgressionTeleversementServices(
+        idUtilisateur
+      );
+    return Math.floor(((progression + 1) / televersement.nombre()) * 100);
+  };
+
   const supprimeTeleversementServices = async (idUtilisateur) =>
     adaptateurPersistance.supprimeTeleversementServices(idUtilisateur);
 
@@ -39,6 +52,7 @@ const creeDepot = (config = {}) => {
     );
 
   return {
+    lisPourcentageProgressionTeleversementServices,
     lisTeleversementServices,
     metsAJourProgressionTeleversement,
     nouveauTeleversementServices,
