@@ -1,7 +1,6 @@
 const ElementsConstructibles = require('../elementsConstructibles');
 const ServiceTeleverse = require('./serviceTeleverse');
 const Referentiel = require('../../referentiel');
-const { ErreurTeleversementServicesInvalide } = require('../../erreurs');
 const EvenementServicesImportes = require('../../bus/evenementServicesImportes');
 const EvenementDossierHomologationImporte = require('../../bus/evenementDossierHomologationImporte');
 
@@ -40,16 +39,7 @@ class TeleversementServices extends ElementsConstructibles {
     };
   }
 
-  async creeLesServices(
-    idUtilisateur,
-    nomServicesExistants,
-    depotDonnees,
-    busEvenements
-  ) {
-    const rapport = this.rapportDetaille(nomServicesExistants);
-    if (rapport.statut === STATUT.INVALIDE)
-      throw new ErreurTeleversementServicesInvalide();
-
+  async creeLesServices(idUtilisateur, depotDonnees, busEvenements) {
     const creeUnService = async (serviceTeleverse) => {
       const { descriptionService, dossier } =
         serviceTeleverse.enDonneesService();

@@ -1,10 +1,7 @@
 const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
-const {
-  ErreurFichierXlsInvalide,
-  ErreurTeleversementServicesInvalide,
-} = require('../../../src/erreurs');
+const { ErreurFichierXlsInvalide } = require('../../../src/erreurs');
 const TeleversementServices = require('../../../src/modeles/televersement/televersementServices');
 const Referentiel = require('../../../src/referentiel');
 const donneesReferentiel = require('../../../donneesReferentiel');
@@ -298,13 +295,11 @@ describe('Les routes connecté de téléversement', () => {
         let donneesRecues;
         televersementService.creeLesServices = async (
           idUtilisateur,
-          nomServicesExistants,
           depotDonnees,
           busEvenements
         ) => {
           donneesRecues = {
             idUtilisateur,
-            nomServicesExistants,
             depotDonnees,
             busEvenements,
           };
@@ -315,7 +310,6 @@ describe('Les routes connecté de téléversement', () => {
         );
 
         expect(donneesRecues.idUtilisateur).to.be('123');
-        expect(donneesRecues.nomServicesExistants).to.eql([]);
         expect(donneesRecues.depotDonnees).not.to.be(undefined);
         expect(donneesRecues.busEvenements).not.to.be(undefined);
       });
@@ -337,9 +331,10 @@ describe('Les routes connecté de téléversement', () => {
       });
 
       it('renvoie une erreur 400 si le téléversement est invalide', async () => {
-        televersementService.creeLesServices = async () => {
-          throw new ErreurTeleversementServicesInvalide();
-        };
+        televersementService = new TeleversementServices(
+          { services: [{ ...donneesServiceValide, type: 'pasUnType' }] },
+          referentiel
+        );
 
         try {
           await axios.post(
