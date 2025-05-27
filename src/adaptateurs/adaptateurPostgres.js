@@ -600,6 +600,7 @@ const nouvelAdaptateur = (env) => {
       .insert({
         id_utilisateur: idUtilisateur,
         donnees: { services: donnees },
+        progression: -1,
       })
       .onConflict('id_utilisateur')
       .merge();
