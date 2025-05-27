@@ -80,10 +80,17 @@ class TeleversementServices extends ElementsConstructibles {
     };
 
     const tousLesServices = this.tous();
+    let index = 0;
     // eslint-disable-next-line no-restricted-syntax
     for (const serviceTeleverse of tousLesServices) {
       // eslint-disable-next-line no-await-in-loop
       await creeUnService(serviceTeleverse);
+      // eslint-disable-next-line no-await-in-loop
+      await depotDonnees.metsAJourProgressionTeleversement(
+        idUtilisateur,
+        index
+      );
+      index += 1;
     }
 
     await busEvenements.publie(

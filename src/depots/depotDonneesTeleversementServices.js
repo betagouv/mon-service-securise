@@ -29,8 +29,18 @@ const creeDepot = (config = {}) => {
   const supprimeTeleversementServices = async (idUtilisateur) =>
     adaptateurPersistance.supprimeTeleversementServices(idUtilisateur);
 
+  const metsAJourProgressionTeleversement = async (
+    idUtilisateur,
+    progression
+  ) =>
+    adaptateurPersistance.metsAJourProgressionTeleversement(
+      idUtilisateur,
+      progression
+    );
+
   return {
     lisTeleversementServices,
+    metsAJourProgressionTeleversement,
     nouveauTeleversementServices,
     supprimeTeleversementServices,
   };
