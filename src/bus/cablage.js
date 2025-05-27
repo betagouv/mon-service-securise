@@ -109,6 +109,9 @@ const EvenementServicesImportes = require('./evenementServicesImportes');
 const {
   consigneTeleversementServicesRealiseDansJournal,
 } = require('./abonnements/consigneTeleversementServicesRealiseDansJournal');
+const {
+  supprimeSuggestionsActions,
+} = require('./abonnements/supprimeSuggestionsActions');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -241,6 +244,7 @@ const cableTousLesAbonnes = (
     supprimeNotificationsExpirationHomologation({ depotDonnees }),
     metAJourContactsBrevoDesContributeurs({ crmBrevo, depotDonnees }),
     delieServiceEtSuperviseurs({ serviceSupervision }),
+    supprimeSuggestionsActions({ depotDonnees }),
   ]);
 
   busEvenements.abonne(
