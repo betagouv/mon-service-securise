@@ -195,8 +195,11 @@ const creeDepot = (config = {}) => {
     supprimeNotificationsExpirationHomologationPourService,
   } = depotNotificationsExpirationHomologation;
 
-  const { acquitteSuggestionAction, ajouteSuggestionAction } =
-    depotSuggestionsActions;
+  const {
+    acquitteSuggestionAction,
+    ajouteSuggestionAction,
+    supprimeSuggestionsActionsPourService,
+  } = depotSuggestionsActions;
 
   const { ajouteActiviteMesure, lisActivitesMesure } = depotActivitesMesure;
 
@@ -292,6 +295,7 @@ const creeDepot = (config = {}) => {
     supprimeIdResetMotDePassePourUtilisateur,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
+    supprimeSuggestionsActionsPourService,
     supprimeUtilisateur,
     tachesDesServices,
     tousUtilisateurs,

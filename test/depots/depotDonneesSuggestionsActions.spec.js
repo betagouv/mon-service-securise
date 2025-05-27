@@ -40,4 +40,17 @@ describe("Le dépôt de données des suggestions d'actions", () => {
 
     expect(persistanceAppelee).to.eql({ idService: 'S1', nature: 'SIRET' });
   });
+
+  it('peut supprimer une suggestion', async () => {
+    let idRecu = {};
+    adaptateurPersistance.supprimeSuggestionsActionsPourService = async (
+      idService
+    ) => {
+      idRecu = idService;
+    };
+
+    await depot.supprimeSuggestionsActionsPourService('S1');
+
+    expect(idRecu).to.eql('S1');
+  });
 });
