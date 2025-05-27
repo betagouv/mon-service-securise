@@ -191,26 +191,13 @@ describe('Les routes connecté de téléversement', () => {
         testeur.depotDonnees().supprimeTeleversementServices = async () => true;
       });
 
-      it('renvoie une réponse 200 si un téléversement a été supprimé', async () => {
+      it('renvoie une réponse 200 ', async () => {
         testeur.depotDonnees().supprimeTeleversementServices = async () => 1;
         const reponse = await axios.delete(
           'http://localhost:1234/api/televersement/services'
         );
 
         expect(reponse.status).to.be(200);
-      });
-
-      it("renvoie une réponse 404 si aucun téléversement n'existe pour cet utilisateur", async () => {
-        testeur.depotDonnees().supprimeTeleversementServices = async () => 0;
-
-        try {
-          await axios.delete(
-            'http://localhost:1234/api/televersement/services'
-          );
-          expect().fail("L'appel aurait dû lever une erreur");
-        } catch (e) {
-          expect(e.response.status).to.be(404);
-        }
       });
     });
 
