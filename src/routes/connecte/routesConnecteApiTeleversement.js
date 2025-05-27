@@ -83,6 +83,17 @@ const routesConnecteApiTeleversement = ({
     return reponse.sendStatus(201);
   });
 
+  routes.get('/services/progression', async (requete, reponse) => {
+    const progression =
+      await depotDonnees.lisPourcentageProgressionTeleversementServices(
+        requete.idUtilisateurCourant
+      );
+
+    if (progression === undefined) return reponse.sendStatus(404);
+
+    return reponse.json({ progression });
+  });
+
   return routes;
 };
 
