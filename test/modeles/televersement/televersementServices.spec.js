@@ -2,7 +2,6 @@ const expect = require('expect.js');
 const TeleversementServices = require('../../../src/modeles/televersement/televersementServices');
 const Referentiel = require('../../../src/referentiel');
 const donneesReferentiel = require('../../../donneesReferentiel');
-const { ErreurTeleversementServicesInvalide } = require('../../../src/erreurs');
 const Dossier = require('../../../src/modeles/dossier');
 const { fabriqueBusPourLesTests } = require('../../bus/aides/busPourLesTests');
 const EvenementServicesImportes = require('../../../src/bus/evenementServicesImportes');
@@ -136,30 +135,6 @@ describe('Un téléversement de services', () => {
       busEvenement = fabriqueBusPourLesTests();
     });
 
-    it('jette une erreur si son contenu est invalide', async () => {
-      const nomsServicesExistants = ['Service A'];
-      const donneesServiceNomIdentique = {
-        ...donneesServiceValide,
-        nom: 'Service A',
-      };
-      const televersementInvalide = new TeleversementServices(
-        { services: [donneesServiceNomIdentique] },
-        referentiel
-      );
-
-      try {
-        await televersementInvalide.creeLesServices(
-          'U1',
-          nomsServicesExistants,
-          depotDonnees,
-          busEvenement
-        );
-        expect().fail("L'appel aurai dû lever une erreur");
-      } catch (e) {
-        expect(e).to.be.an(ErreurTeleversementServicesInvalide);
-      }
-    });
-
     describe('pour chaque service à créer', () => {
       let televersement;
 
@@ -177,12 +152,7 @@ describe('Un téléversement de services', () => {
           return 'S1';
         };
 
-        await televersement.creeLesServices(
-          'U1',
-          [],
-          depotDonnees,
-          busEvenement
-        );
+        await televersement.creeLesServices('U1', depotDonnees, busEvenement);
         expect(donneesRecues.idUtilisateur).to.be('U1');
         expect(donneesRecues.donnees).not.to.be(undefined);
       });
@@ -195,12 +165,7 @@ describe('Un téléversement de services', () => {
             return new Dossier({ id: 'D1' });
           };
 
-          await televersement.creeLesServices(
-            'U1',
-            [],
-            depotDonnees,
-            busEvenement
-          );
+          await televersement.creeLesServices('U1', depotDonnees, busEvenement);
           expect(idRecu).to.be('S1');
         });
 
@@ -209,12 +174,7 @@ describe('Un téléversement de services', () => {
           depotDonnees.ajouteDossierCourantSiNecessaire = async () =>
             dossierRecu;
 
-          await televersement.creeLesServices(
-            'U1',
-            [],
-            depotDonnees,
-            busEvenement
-          );
+          await televersement.creeLesServices('U1', depotDonnees, busEvenement);
 
           expect(dossierRecu.toJSON()).to.eql({
             id: 'D1',
@@ -244,12 +204,7 @@ describe('Un téléversement de services', () => {
             donneesRecues = { idService, dossier };
           };
 
-          await televersement.creeLesServices(
-            'U1',
-            [],
-            depotDonnees,
-            busEvenement
-          );
+          await televersement.creeLesServices('U1', depotDonnees, busEvenement);
 
           expect(donneesRecues.idService).to.be('S1');
           expect(donneesRecues.dossier.finalise).to.be(true);
@@ -257,12 +212,7 @@ describe('Un téléversement de services', () => {
         });
 
         it("publie un évènement d'homologation importée sur le bus", async () => {
-          await televersement.creeLesServices(
-            'U1',
-            [],
-            depotDonnees,
-            busEvenement
-          );
+          await televersement.creeLesServices('U1', depotDonnees, busEvenement);
 
           expect(
             busEvenement.aRecuUnEvenement(EvenementDossierHomologationImporte)
@@ -295,12 +245,7 @@ describe('Un téléversement de services', () => {
           referentiel
         );
 
-        await televersement.creeLesServices(
-          'U1',
-          [],
-          depotDonnees,
-          busEvenement
-        );
+        await televersement.creeLesServices('U1', depotDonnees, busEvenement);
         expect(depotAppele).to.be(false);
       });
 
@@ -313,12 +258,7 @@ describe('Un téléversement de services', () => {
           donneesRecues = { idService, natureSuggestion };
         };
 
-        await televersement.creeLesServices(
-          'U1',
-          [],
-          depotDonnees,
-          busEvenement
-        );
+        await televersement.creeLesServices('U1', depotDonnees, busEvenement);
         expect(donneesRecues.idService).to.be('S1');
         expect(donneesRecues.natureSuggestion).to.be(
           'finalisationDescriptionServiceImporte'
@@ -326,12 +266,7 @@ describe('Un téléversement de services', () => {
       });
 
       it('publie un évènement sur le bus', async () => {
-        await televersement.creeLesServices(
-          'U1',
-          [],
-          depotDonnees,
-          busEvenement
-        );
+        await televersement.creeLesServices('U1', depotDonnees, busEvenement);
 
         expect(busEvenement.aRecuUnEvenement(EvenementServicesImportes)).to.be(
           true
@@ -360,7 +295,7 @@ describe('Un téléversement de services', () => {
         return 'S1';
       };
 
-      await televersement.creeLesServices('U1', [], depotDonnees, busEvenement);
+      await televersement.creeLesServices('U1', depotDonnees, busEvenement);
 
       expect(servicesCrees).to.be(2);
       expect(

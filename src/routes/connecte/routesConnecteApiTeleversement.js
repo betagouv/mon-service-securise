@@ -69,23 +69,22 @@ const routesConnecteApiTeleversement = ({
     );
 
     if (!televersementServices) return reponse.sendStatus(404);
+    const rapport = televersementServices.rapportDetaille(
+      nomsServicesExistants
+    );
+    if (rapport.statut === 'INVALIDE') return reponse.sendStatus(400);
 
-    try {
-      await televersementServices.creeLesServices(
-        requete.idUtilisateurCourant,
-        nomsServicesExistants,
-        depotDonnees,
-        busEvenements
-      );
+    await televersementServices.creeLesServices(
+      requete.idUtilisateurCourant,
+      depotDonnees,
+      busEvenements
+    );
 
-      await depotDonnees.supprimeTeleversementServices(
-        requete.idUtilisateurCourant
-      );
+    await depotDonnees.supprimeTeleversementServices(
+      requete.idUtilisateurCourant
+    );
 
-      return reponse.sendStatus(200);
-    } catch (e) {
-      return reponse.sendStatus(400);
-    }
+    return reponse.sendStatus(200);
   });
 
   return routes;
