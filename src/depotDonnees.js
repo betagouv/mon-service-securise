@@ -222,6 +222,7 @@ const creeDepot = (config = {}) => {
 
   const {
     lisTeleversementServices,
+    metsAJourProgressionTeleversement,
     nouveauTeleversementServices,
     supprimeTeleversementServices,
   } = depotTeleversementServices;
@@ -264,6 +265,7 @@ const creeDepot = (config = {}) => {
     metsAJourMesureGeneraleDuService,
     metsAJourMesureSpecifiqueDuService,
     metsAJourParrainage,
+    metsAJourProgressionTeleversement,
     metsAJourRisqueSpecifiqueDuService,
     metsAJourUtilisateur,
     metsAJourService,

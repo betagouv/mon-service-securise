@@ -131,6 +131,7 @@ describe('Un téléversement de services', () => {
         ajouteSuggestionAction: async () => {},
         ajouteDossierCourantSiNecessaire: async () => new Dossier({ id: 'D1' }),
         enregistreDossier: async () => {},
+        metsAJourProgressionTeleversement: async () => {},
       };
       busEvenement = fabriqueBusPourLesTests();
     });
@@ -278,30 +279,61 @@ describe('Un téléversement de services', () => {
       });
     });
 
-    it('fais les opérations pour tous les services', async () => {
-      const televersement = new TeleversementServices(
-        {
-          services: [
-            structuredClone(donneesServiceValide),
-            { ...donneesServiceValide, nom: 'Service B' },
-          ],
-        },
-        referentiel
-      );
+    describe('pour tous les services', () => {
+      let televersementAvecDeuxServices;
 
-      let servicesCrees = 0;
-      depotDonnees.nouveauService = async () => {
-        servicesCrees += 1;
-        return 'S1';
-      };
+      beforeEach(() => {
+        televersementAvecDeuxServices = new TeleversementServices(
+          {
+            services: [
+              structuredClone(donneesServiceValide),
+              { ...donneesServiceValide, nom: 'Service B' },
+            ],
+          },
+          referentiel
+        );
+      });
 
-      await televersement.creeLesServices('U1', depotDonnees, busEvenement);
+      it('fais les opérations pour tous les services', async () => {
+        let servicesCrees = 0;
+        depotDonnees.nouveauService = async () => {
+          servicesCrees += 1;
+          return 'S1';
+        };
 
-      expect(servicesCrees).to.be(2);
-      expect(
-        busEvenement.recupereEvenement(EvenementServicesImportes)
-          .nbServicesImportes
-      ).to.be(2);
+        await televersementAvecDeuxServices.creeLesServices(
+          'U1',
+          depotDonnees,
+          busEvenement
+        );
+
+        expect(servicesCrees).to.be(2);
+        expect(
+          busEvenement.recupereEvenement(EvenementServicesImportes)
+            .nbServicesImportes
+        ).to.be(2);
+      });
+
+      it('délègue au dépôt de données la mise à jour successive de la progression de création des services du téléversement', async () => {
+        const progressionsMiseAJour = [];
+        let idUtilisateurRecu;
+        depotDonnees.metsAJourProgressionTeleversement = async (
+          idUtilisateur,
+          index
+        ) => {
+          idUtilisateurRecu = idUtilisateur;
+          progressionsMiseAJour.push(index);
+        };
+
+        await televersementAvecDeuxServices.creeLesServices(
+          'U1',
+          depotDonnees,
+          busEvenement
+        );
+
+        expect(idUtilisateurRecu).to.be('U1');
+        expect(progressionsMiseAJour).to.eql([0, 1]);
+      });
     });
   });
 });
