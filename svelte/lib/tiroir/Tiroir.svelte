@@ -71,7 +71,7 @@
     margin: 0;
     padding-top: 0.8em;
     font-weight: 500;
-    padding-bottom: 30px;
+    padding-bottom: 0;
   }
 
   .fermeture-tiroir {

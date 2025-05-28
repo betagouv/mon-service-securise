@@ -2,11 +2,16 @@
   import { onMount } from 'svelte';
   import type { RapportDetaille } from './rapportTeleversement.types';
   import {
+    confirmeImport,
+    progressionTeleversement,
     recupereRapportDetaille,
     supprimeTeleversement,
   } from './rapportTeleversement.api';
   import LigneService from './composants/LigneService.svelte';
   import Toast from '../ui/Toast.svelte';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
+  import TiroirTeleversementServices from '../ui/tiroirs/TiroirTeleversementServices.svelte';
+  import { toasterStore } from '../ui/stores/toaster.store';
 
   let elementModale: HTMLDialogElement;
 
@@ -29,12 +34,54 @@
     (s) => s.erreurs.length === 0
   ).length;
 
-  const fermeRapport = async () => {
-    await supprimeTeleversement();
+  const fermeModale = () => {
     const url = new URL(window.location.href);
     url.searchParams.delete('rapportTeleversement');
     window.history.replaceState({}, '', url);
     elementModale.close();
+  };
+
+  const fermeRapport = async () => {
+    await supprimeTeleversement();
+    fermeModale();
+  };
+
+  const fermeRapportEtOuvreTiroir = async () => {
+    await fermeRapport();
+    tiroirStore.afficheContenu(TiroirTeleversementServices, {});
+  };
+
+  let progression = 0;
+  const recupereProgression = async () => {
+    const resultat = await progressionTeleversement();
+    progression = resultat.data.progression;
+    if (progression === 100) {
+      document.body.dispatchEvent(new CustomEvent('rafraichis-services'));
+      enCoursEnvoi = false;
+      fermeModale();
+      const nbServices = rapportDetaille.services.length;
+      toasterStore.succes(
+        `${nbServices} ${pluraliseChaine(
+          'service importé avec succès',
+          'services importés avec succès',
+          nbServices
+        )}`,
+        `Nous vous invitons à <b>finaliser la description</b> de ${pluraliseChaine(
+          'votre service importé',
+          'vos services importés',
+          nbServices
+        )} afin d’accéder à une évaluation personnalisée de leur sécurité et bénéficier de recommandations adaptées.`
+      );
+    } else {
+      setTimeout(recupereProgression, 1000);
+    }
+  };
+
+  let enCoursEnvoi = false;
+  const valideImport = async () => {
+    enCoursEnvoi = true;
+    await confirmeImport();
+    await recupereProgression();
   };
 
   const pluraliseChaine = (
@@ -44,8 +91,20 @@
   ) => (nombre > 1 ? chainePluriel : chaineSingulier);
 </script>
 
-<dialog bind:this={elementModale}>
-  {#if rapportDetaille}
+<dialog bind:this={elementModale} class:enCoursEnvoi>
+  {#if enCoursEnvoi}
+    <div class="conteneur-progression">
+      <div class="texte-progression">
+        <h2>
+          Téléversement en cours... <span class="pourcentage-progression"
+            >{progression}%</span
+          >
+        </h2>
+        <span>Merci de ne pas rafraichir votre navigateur</span>
+      </div>
+      <progress value={progression} max="100" />
+    </div>
+  {:else if rapportDetaille}
     <h2>Rapport du téléversement des services</h2>
     <div class="conteneur-toasts">
       {#if rapportDetaille.statut === 'INVALIDE'}
@@ -119,7 +178,8 @@
       <button
         class="bouton bouton-primaire bouton-accepter"
         class:estValide
-        on:click={() => (estValide ? Promise.resolve() : fermeRapport())}
+        on:click={() =>
+          estValide ? valideImport() : fermeRapportEtOuvreTiroir()}
       >
         {estValide
           ? `Importer les ${rapportDetaille.services.length} ${pluraliseChaine(
@@ -147,6 +207,12 @@
     box-shadow: 0 6px 18px 0 rgba(0, 0, 18, 0.16);
     box-sizing: border-box;
     position: relative;
+
+    &.enCoursEnvoi {
+      width: 556px;
+      height: fit-content;
+      padding: 48px 32px;
+    }
   }
 
   .conteneur-fermeture {
@@ -270,5 +336,65 @@
     flex-direction: row;
     gap: 24px;
     margin-bottom: 48px;
+  }
+
+  .conteneur-progression {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+
+    .texte-progression {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      span {
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5rem;
+      }
+
+      h2 {
+        margin-bottom: 8px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 2rem;
+
+        span {
+          margin-bottom: 8px;
+          font-size: 1.5rem;
+          font-weight: 700;
+          line-height: 2rem;
+          color: #137bcd;
+        }
+      }
+    }
+
+    progress {
+      width: 100%;
+      margin: 24px 0;
+      height: 15px;
+      border-radius: 95px;
+      border: none;
+      accent-color: var(--bleu-mise-en-avant);
+      background-color: var(--cyan-clair);
+      -webkit-appearence: none;
+      appearance: none;
+      overflow: hidden;
+
+      &::-webkit-progress-bar {
+        background-color: var(--cyan-clair);
+      }
+
+      &::-webkit-progress-value {
+        background-color: var(--bleu-mise-en-avant);
+      }
+
+      &::-moz-progress-bar {
+        background-color: var(--bleu-mise-en-avant);
+      }
+    }
   }
 </style>

@@ -2,9 +2,11 @@
   import BarreDeRecherche from '../ui/BarreDeRecherche.svelte';
   import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
   import { services } from './stores/services.store';
-  import Lien from '../ui/Lien.svelte';
   import ListeDeroulanteRiche from '../ui/ListeDeroulanteRiche.svelte';
   import { filtrageServices } from './stores/filtrageServices.store';
+  import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
+  import TiroirTeleversementServices from '../ui/tiroirs/TiroirTeleversementServices.svelte';
 </script>
 
 <div class="conteneur-filtres">
@@ -87,12 +89,21 @@
     />
   </div>
   {#if $services.length > 0}
-    <Lien
-      classe="nouveau-service"
-      titre="Ajouter un service"
-      type="bouton-primaire"
-      icone="plus"
-      href="/service/creation"
+    <BoutonAvecListeDeroulante
+      titre="Ajouter un / des services"
+      options={[
+        {
+          label: 'Ajouter un service',
+          icone: 'plus',
+          href: '/service/creation',
+        },
+        {
+          label: 'Téléverser des services',
+          icone: 'televerser',
+          action: () =>
+            tiroirStore.afficheContenu(TiroirTeleversementServices, {}),
+        },
+      ]}
     />
   {/if}
 </div>

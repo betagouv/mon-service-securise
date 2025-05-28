@@ -26,7 +26,7 @@ const redirigeApresFinalisationVisite = () => {
   )[0] as HTMLElement;
   const { idService } = ligneService.dataset;
   window.location.href = get(utilisateurCourant).profilComplet
-    ? '/service/creation'
+    ? '/tableauDeBord'
     : `/service/${idService}`;
 };
 

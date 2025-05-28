@@ -35,13 +35,12 @@
       return {
         cible: cibleNouveauService,
         positionnementModale: 'HautGauche',
-        margeElementMisEnAvant: 3,
+        margesElementMisEnAvant: '3 3 -3 3',
         callbackInitialeCible: (cible) => {
-          cible.addEventListener(
-            'click',
-            async () => await visiteGuidee.finalise()
-          );
-          cible.removeAttribute('href');
+          const cibleBouton = cible.getElementsByClassName(
+            'bouton'
+          )[0] as HTMLButtonElement;
+          cibleBouton.inert = true;
         },
         titre: 'Créez votre premier service !',
         description:
