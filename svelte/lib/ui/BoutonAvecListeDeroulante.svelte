@@ -19,7 +19,10 @@
   bind:doitEtreOuvert={ouvert}
   elements={[elementBoutonDeroulant]}
 />
-<div class="conteneur-bouton" bind:this={elementBoutonDeroulant}>
+<div
+  class="conteneur-bouton nouveau-service"
+  bind:this={elementBoutonDeroulant}
+>
   <Bouton
     {titre}
     type="primaire"
