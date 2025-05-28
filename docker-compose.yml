@@ -19,24 +19,6 @@ services:
     volumes:
       - dbvol:/var/lib/postgresql/data
 
-  mss-browserless:
-    image: browserless/chrome:1.61-chrome-stable
-    environment:
-      - DEBUG=browserless:*
-      - MAX_CONCURRENT_SESSIONS=10
-      - CONNECTION_TIMEOUT=60000
-      - MAX_QUEUE_LENGTH=20
-      - PREBOOT_CHROME=true
-      - DEMO_MODE=false
-      - HOST=0.0.0.0
-      - ENABLE_DEBUGGER=false
-      - TOKEN=dev-en-local
-      - PORT=9090
-    networks:
-      - mss-network
-    ports:
-      - '9090:9090'
-
   test:
     <<: *configuration-base
     command: 'npm run test:watch'
@@ -47,18 +29,13 @@ services:
     <<: *configuration-base
     tty: true
     command: bash -c "
-      export PUPPETEER_EXECUTABLE_PATH=$$(which chromium)
-      && npx knex migrate:latest
+      npx knex migrate:latest
       && npx concurrently -n \"SERVEUR,FRONT SVELTE\" -c \"blue.bold,magenta.underline\"
       \"npx nodemon server.ts\"
       \"npx vite build --watch --minify false --config svelte/vite.config.mts\"
       "
     environment:
       - NODE_ENV=development
-      # Sur Mac M1 le téléchargement de Chromium échoue, car aucune version compatible `arm64`.
-      # Donc, on ordonne à Puppeteer de nous laisser gérer le téléchargement.
-      # Il est fait dans le Dockerfile en `apt-get`.
-      - PUPPETEER_SKIP_DOWNLOAD=true
     networks:
       - mss-network
       - lab-network
@@ -67,7 +44,6 @@ services:
       - '9229:9229'
     depends_on:
       - mss-db
-      - mss-browserless
 
 networks:
   mss-network:

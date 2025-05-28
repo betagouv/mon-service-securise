@@ -2,8 +2,11 @@
 #checkov:skip=CKV_DOCKER_3:Uniquement utilisé en local pour le dev
 FROM node:18
 
-RUN apt-get update && \
-    apt-get install --yes chromium fonts-noto-color-emoji --fix-missing
+# La génération de PDF utilise Puppeteer pour se connecter à un navigateur distant
+# **MAIS** on ne veut pas que Puppeteer déclenche le téléchargement d'un navigateur local.
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+
+RUN apt-get update
 
 RUN npm install -g npm
 
