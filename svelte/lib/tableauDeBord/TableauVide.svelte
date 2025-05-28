@@ -29,12 +29,12 @@
         titre="Ajouter votre premier service"
         options={[
           {
-            label: 'Ajouter un sevice',
+            label: 'Ajouter un service',
             icone: 'plus',
             href: '/service/creation',
           },
           {
-            label: 'Téléverser des sevices',
+            label: 'Téléverser des services',
             icone: 'televerser',
             action: () =>
               tiroirStore.afficheContenu(TiroirTeleversementServices, {}),
