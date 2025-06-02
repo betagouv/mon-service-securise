@@ -22,6 +22,11 @@ const extraisDonneesXLS = async (requete) => {
 
   return new Promise((resolve, reject) => {
     extracteurFichier.single('fichier')(requete, undefined, (erreur) => {
+      if (!requete.file) {
+        reject(new ErreurFichierXlsInvalide());
+        return;
+      }
+
       if (erreur) {
         if (
           erreur.message === 'File too large' ||
@@ -33,6 +38,7 @@ const extraisDonneesXLS = async (requete) => {
         reject(erreur);
         return;
       }
+
       resolve(requete.file.buffer);
     });
   });
