@@ -18,6 +18,9 @@ const Entite = require('../modeles/entite');
 const EvenementMesureServiceModifiee = require('../bus/evenementMesureServiceModifiee');
 const EvenementMesureServiceSupprimee = require('../bus/evenementMesureServiceSupprimee');
 const EvenementRisqueServiceModifie = require('../bus/evenementRisqueServiceModifie');
+const {
+  avecPMapPourChaqueElementSansPromesse,
+} = require('../utilitaires/pMap');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -83,8 +86,9 @@ const fabriquePersistance = (
         const donneesServices =
           await adaptateurPersistance.services(idUtilisateur);
 
-        const servicesEnrichis = await Promise.all(
-          donneesServices.map(async (ds) => enrichisService(ds))
+        const servicesEnrichis = await avecPMapPourChaqueElementSansPromesse(
+          donneesServices,
+          enrichisService
         );
 
         return servicesEnrichis.sort((s1, s2) =>
