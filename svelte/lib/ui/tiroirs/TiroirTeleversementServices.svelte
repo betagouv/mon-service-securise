@@ -113,7 +113,7 @@
         />
         <p>ou faites glisser un fichier ici</p>
         <div>
-          <span>Nombre de services maximum : 1000</span>
+          <span>Nombre de services maximum : 250</span>
           <span>Taille maximale : 1 Mo. Format supporté : XLSX.</span>
         </div>
       </div>
