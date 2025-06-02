@@ -1167,6 +1167,19 @@ describe('Un service', () => {
       );
     });
 
+    it("ne retourne pas 'telechargerEncartHomologation' si le service a un un dossier d'homologation actif mais qu'il a été importé", () => {
+      const service = unService(referentiel)
+        .avecDossiers([
+          unDossier(referentiel).quiEstComplet().quiEstActif().quiAEteImporte()
+            .donnees,
+        ])
+        .construis();
+
+      expect(service.actionRecommandee()?.id).not.to.be(
+        'telechargerEncartHomologation'
+      );
+    });
+
     it("retourne 'homologuerANouveau' si le service a un un dossier d'homologation expirée", () => {
       const service = unService(referentiel)
         .avecDossiers([

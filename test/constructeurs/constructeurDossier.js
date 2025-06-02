@@ -92,6 +92,11 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
+  quiAEteImporte() {
+    this.donnees.importe = true;
+    return this;
+  }
+
   nonArchive() {
     this.donnees.archive = false;
     return this;
