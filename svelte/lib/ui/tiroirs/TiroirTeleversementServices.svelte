@@ -25,6 +25,10 @@
   });
 
   const gereVerificationFichier = async () => {
+    if (fichier.length === 0) {
+      etatTeleversement = 'EnAttente';
+      return;
+    }
     etatTeleversement = 'EnCoursEnvoi';
 
     const donnees = new FormData();
