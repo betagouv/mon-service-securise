@@ -53,8 +53,13 @@
 
   let progression = 0;
   const recupereProgression = async () => {
-    const resultat = await progressionTeleversement();
-    progression = resultat.data.progression;
+    try {
+      const resultat = await progressionTeleversement();
+      progression = resultat.data.progression;
+    } catch (e) {
+      setTimeout(recupereProgression, 5000);
+      return;
+    }
     if (progression === 100) {
       document.body.dispatchEvent(new CustomEvent('rafraichis-services'));
       enCoursEnvoi = false;
