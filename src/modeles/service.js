@@ -337,7 +337,10 @@ class Service {
     if (this.dossierCourant() && indiceCyber < 4)
       return Service.ACTIONS_RECOMMANDEES.AUGMENTER_INDICE_CYBER;
 
-    if (this.dossiers.aUnDossierEnCoursDeValidite())
+    if (
+      this.dossiers.aUnDossierEnCoursDeValidite() &&
+      !this.dossiers.dossierActif()?.importe
+    )
       return Service.ACTIONS_RECOMMANDEES.TELECHARGER_ENCART_HOMOLOGATION;
 
     if (this.dossiers.dossierActif()?.statutHomologation() === 'expiree')
