@@ -151,6 +151,16 @@ module.exports = {
       image: 'nouvelleDoctrineHomologation.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'televersementServices',
+      dateDeDeploiement: '2025-06-03 07:00:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/comment-televerser-de-nombreux-services-a-securiser-en-une-seule-fois-13wset2/',
+      titre: 'Téléversez tous vos services à sécuriser en une seule fois !',
+      sousTitre:
+        "Visualisez tous vos services sur votre tableau de bord et pilotez plus facilement leur sécurisation grâce aux notifications, mails de rappel concernant l'homologation, etc.",
+      image: 'televersementServices.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
