@@ -45,6 +45,7 @@ const brancheComportementNombreOrganisationsUtilisatrices = () => {
 };
 
 const estNomServiceDejaUtilise = (reponseErreur) =>
+  reponseErreur &&
   reponseErreur.status === 422 &&
   reponseErreur.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT';
 
