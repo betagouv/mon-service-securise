@@ -393,6 +393,7 @@ dialog.modale-encart-homologation .page img {
   line-height: 20px;
   text-transform: uppercase;
   width: fit-content;
+  white-space: nowrap;
 }
 
 .homologation .badge-importe:before {
