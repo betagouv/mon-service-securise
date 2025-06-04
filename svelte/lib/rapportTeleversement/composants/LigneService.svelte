@@ -1,8 +1,8 @@
 <script lang="ts">
   import {
+    type ErreurService,
     MessagesErreur,
     type RapportService,
-    type ErreurService,
   } from '../rapportTeleversement.types';
   import CelluleDonneeService from './CelluleDonneeService.svelte';
   import TagEtat from './TagEtat.svelte';
@@ -17,6 +17,12 @@
 
   const contientErreur = (erreur: ErreurService) =>
     service.erreurs.includes(erreur);
+
+  const dateEnFrancais = (chaineDateISO: string) => {
+    return new Date(chaineDateISO).toLocaleString('fr-FR', {
+      dateStyle: 'short',
+    });
+  };
 </script>
 
 <tr>
@@ -71,7 +77,7 @@
     enErreur={contientErreur('DELAI_AVANT_IMPACT_CRITIQUE_INVALIDE')}
   />
   <CelluleDonneeService
-    contenu={donneesService.dateHomologation}
+    contenu={dateEnFrancais(donneesService.dateHomologation)}
     enErreur={contientErreur('DOSSIER_HOMOLOGATION_INCOMPLET') ||
       contientErreur('DATE_HOMOLOGATION_INVALIDE')}
   />
