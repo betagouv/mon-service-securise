@@ -28,10 +28,16 @@ const dateYYYYMMDD = (date) => dateEnIso(date).replaceAll('-', '');
 const dateInvalide = (chaineDate) =>
   Number.isNaN(new Date(chaineDate).valueOf());
 
+const chaineDateFrEnChaineDateISO = (chaineDateFr) => {
+  const [jour, mois, annee] = chaineDateFr.split('/');
+  return `${annee}-${mois}-${jour}`;
+};
+
 module.exports = {
   ajouteMoisADate,
   dateEnFrancais,
   dateEnIso,
+  chaineDateFrEnChaineDateISO,
   dateInvalide,
   dateYYYYMMDD,
 };

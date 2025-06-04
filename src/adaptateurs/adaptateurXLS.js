@@ -1,6 +1,7 @@
 const xlsx = require('xlsx');
 const { encode } = require('html-entities');
 const { ErreurFichierXlsInvalide } = require('../erreurs');
+const { chaineDateFrEnChaineDateISO } = require('../utilitaires/date');
 
 const ENTETE_NOM = 'Nom du service numérique *';
 const ENTETE_SIRET = "Siret de l'organisation *";
@@ -71,7 +72,9 @@ const extraisTeleversementServices = async (buffer) => {
     statut: service[ENTETE_STATUT],
     localisation: service[ENTETE_LOCALISATION],
     delaiAvantImpactCritique: service[ENTETE_DELAI_AVANT_IMPACT_CRITIQUE],
-    dateHomologation: service[ENTETE_DATE_HOMOLOGATION],
+    dateHomologation: service[ENTETE_DATE_HOMOLOGATION]
+      ? chaineDateFrEnChaineDateISO(service[ENTETE_DATE_HOMOLOGATION])
+      : undefined,
     dureeHomologation: service[ENTETE_DUREE_HOMOLOGATION],
     nomAutoriteHomologation: encode(service[ENTETE_NOM_AUTORITE]),
     fonctionAutoriteHomologation: encode(service[ENTETE_FONCTION_AUTORITE]),
