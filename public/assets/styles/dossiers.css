@@ -46,6 +46,7 @@
   background: #dbeeff;
   width: fit-content;
   border: 1px solid transparent;
+  white-space: nowrap;
 }
 
 .homologation .indice-cyber.personnalise {
