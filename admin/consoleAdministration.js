@@ -710,6 +710,23 @@ class ConsoleAdministration {
       });
 
       await Promise.all(majServices);
+
+      const televersementsServices = await trx('televersement_services');
+
+      const majTeleversementsServices = televersementsServices.map(
+        // eslint-disable-next-line camelcase
+        async ({ id_utilisateur, donnees }) => {
+          const donneesServicesChiffrees = await chiffre(donnees.services);
+          return (
+            trx('televersement_services')
+              // eslint-disable-next-line camelcase
+              .where({ id_utilisateur })
+              .update({ donnees: { services: donneesServicesChiffrees } })
+          );
+        }
+      );
+
+      await Promise.all(majTeleversementsServices);
     });
   }
 
@@ -742,6 +759,23 @@ class ConsoleAdministration {
       });
 
       await Promise.all(majServices);
+
+      const televersementsServices = await trx('televersement_services');
+
+      const majTeleversementsServices = televersementsServices.map(
+        // eslint-disable-next-line camelcase
+        async ({ id_utilisateur, donnees }) => {
+          const donneesServicesDechiffrees = await dechiffre(donnees.services);
+          return (
+            trx('televersement_services')
+              // eslint-disable-next-line camelcase
+              .where({ id_utilisateur })
+              .update({ donnees: { services: donneesServicesDechiffrees } })
+          );
+        }
+      );
+
+      await Promise.all(majTeleversementsServices);
     });
   }
 
