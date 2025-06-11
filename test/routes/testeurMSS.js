@@ -26,7 +26,6 @@ const testeurMss = () => {
   let serviceSupervision;
   let serviceCgu;
   let adaptateurHorloge;
-  let adaptateurCmsCrisp;
   let adaptateurMail;
   let adaptateurGestionErreur;
   let adaptateurPdf;
@@ -79,30 +78,20 @@ const testeurMss = () => {
     adaptateurHorloge = {
       maintenant: () => new Date(),
     };
-    const contenuCrisp = { contenuMarkdown: 'Un contenu', titre: 'Un titre' };
-    const contenuCrispComplet = {
+    const contenuCrisp = {
       contenuMarkdown: 'Un contenu',
       titre: 'Un titre',
       section: {},
       tableDesMatieres: [],
     };
-    adaptateurCmsCrisp = {
+    cmsCrisp = {
       recuperePromouvoir: async () => contenuCrisp,
       recupereDevenirAmbassadeur: async () => contenuCrisp,
-      recupereFaireConnaitreMSS: async () => contenuCrisp,
+      recupereFaireConnaitre: async () => contenuCrisp,
       recupereSectionsBlog: async () => [],
       recupereArticlesBlog: async () => [],
       recupereArticleBlog: async () => contenuCrisp,
       recupereRoadmap: async () => contenuCrisp,
-    };
-    cmsCrisp = {
-      recuperePromouvoir: async () => contenuCrispComplet,
-      recupereDevenirAmbassadeur: async () => contenuCrispComplet,
-      recupereFaireConnaitre: async () => contenuCrispComplet,
-      recupereSectionsBlog: async () => [],
-      recupereArticlesBlog: async () => [],
-      recupereArticleBlog: async () => contenuCrispComplet,
-      recupereRoadmap: async () => contenuCrispComplet,
     };
     adaptateurMail = adaptateurMailMemoire.fabriqueAdaptateurMailMemoire();
     adaptateurPdf = {
@@ -173,7 +162,6 @@ const testeurMss = () => {
           middleware,
           referentiel,
           moteurRegles,
-          adaptateurCmsCrisp,
           adaptateurMail,
           adaptateurPdf,
           adaptateurHorloge,
@@ -220,7 +208,6 @@ const testeurMss = () => {
     adaptateurZip: () => adaptateurZip,
     adaptateurTracking: () => adaptateurTracking,
     adaptateurJournalMSS: () => adaptateurJournal,
-    adaptateurCmsCrisp: () => adaptateurCmsCrisp,
     adaptateurOidc: () => adaptateurOidc,
     adaptateurStatistiques: () => adaptateurStatistiques,
     adaptateurJWT: () => adaptateurJWT,

@@ -34,7 +34,6 @@ const {
   fabriqueAdaptateurChiffrement,
 } = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
 const adaptateurRechercheEntrepriseAPI = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
-const adaptateurCmsCrisp = require('./src/adaptateurs/adaptateurCmsCrisp');
 const {
   fabriqueAdaptateurOidc,
 } = require('./src/adaptateurs/fabriqueAdaptateurOidc');
@@ -135,7 +134,6 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     middleware,
     referentiel,
     moteurRegles,
-    adaptateurCmsCrisp,
     adaptateurMail,
     adaptateurPdf,
     adaptateurHorloge,

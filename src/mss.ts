@@ -25,7 +25,6 @@ const creeServeur = ({
   middleware,
   referentiel,
   moteurRegles,
-  adaptateurCmsCrisp,
   adaptateurMail,
   adaptateurPdf,
   adaptateurHorloge,
@@ -96,7 +95,6 @@ const creeServeur = ({
     '',
     middleware.chargeTypeRequete(TYPES_REQUETES.NAVIGATION),
     routesNonConnectePage({
-      adaptateurCmsCrisp,
       adaptateurEnvironnement,
       adaptateurStatistiques,
       adaptateurJWT,
