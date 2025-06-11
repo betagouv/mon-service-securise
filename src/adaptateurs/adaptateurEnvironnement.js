@@ -132,9 +132,21 @@ const mss = () => ({
   urlBase: () => process.env.URL_BASE_MSS,
 });
 
+const crisp = () => ({
+  idSite: () => process.env.CRISP_ID_SITE,
+  cleApi: () => process.env.CRISP_CLE_API,
+  idCategorieBlog: () => process.env.CRISP_ID_CATEGORIE_BLOG,
+  idArticleDevenirAmbassadeur: () =>
+    process.env.CRISP_ID_ARTICLE_DEVENIR_AMBASSADEUR,
+  idArticleFaireConnaitre: () => process.env.CRISP_ID_ARTICLE_FAIRE_CONNAITRE,
+  idArticlePromouvoir: () => process.env.CRISP_ID_ARTICLE_PROMOUVOIR,
+  idArticleRoadmap: () => process.env.CRISP_ID_ARTICLE_ROADMAP,
+});
+
 module.exports = {
   baseDeDonnees,
   chiffrement,
+  crisp,
   emailMemoire,
   featureFlag,
   filtrageIp,
