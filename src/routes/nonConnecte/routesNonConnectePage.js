@@ -175,7 +175,6 @@ const routesNonConnectePage = ({
 
       reponse.render('article', {
         ...donneesArticle,
-        avecTitreTableDesMatieres: false,
         ongletActif: 'promouvoir-monservicesecurise',
       });
     }
@@ -188,7 +187,6 @@ const routesNonConnectePage = ({
 
       reponse.render('article', {
         ...donneesArticle,
-        avecTitreTableDesMatieres: false,
         ongletActif: 'promouvoir-monservicesecurise',
       });
     }
@@ -199,7 +197,6 @@ const routesNonConnectePage = ({
 
     reponse.render('article', {
       ...donneesArticle,
-      avecTitreTableDesMatieres: false,
       ongletActif: 'promouvoir-monservicesecurise',
     });
   });
@@ -209,7 +206,6 @@ const routesNonConnectePage = ({
 
     reponse.render('article', {
       ...donneesArticle,
-      avecTitreTableDesMatieres: false,
       ongletActif: 'co-construire-monservicesecurise',
     });
   });
@@ -219,8 +215,6 @@ const routesNonConnectePage = ({
       const article = await cmsCrisp.recupereArticleBlog(requete.params.slug);
       reponse.render('article', {
         ...article,
-        avecTitreTableDesMatieres: true,
-        avecFilAriane: true,
         ongletActif: 'conseils-cyber',
       });
     } catch (e) {
