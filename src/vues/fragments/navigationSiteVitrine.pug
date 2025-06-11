@@ -5,7 +5,14 @@ mixin navigationSiteVitrine(ongletActif)
   nav#navigation-site-vitrine
     .contenu-navigation
       a(href='/' class=`${ongletActif === 'accueil' ? 'actif': ''}`) Accueil
-      a(href='/promouvoir-monservicesecurise' class=`${ongletActif === 'promouvoir-monservicesecurise' ? 'actif': ''}`) Promouvoir MonServiceSécurisé
+      details
+        summary(class=`${ongletActif && ongletActif.includes('promouvoir/') ? 'actif': ''}`)
+          span Promouvoir
+        ul.menu-deroulant
+          li(class=`${ongletActif && ongletActif.includes('/faire-connaitre') ? 'actif': ''}`)
+            a(href='/faire-connaitre-et-recommander-monservicesecurise') Promouvoir MonServiceSécurisé
+          li(class=`${ongletActif && ongletActif.includes('/devenir-ambassadeurrice') ? 'actif': ''}`)
+            a(href='/devenir-ambassadeurrice-monservicesecurise') Devenir Ambassadeur/rice
       a(href='/co-construire-monservicesecurise' class=`${ongletActif === 'co-construire-monservicesecurise' ? 'actif': ''}`) Co-construire MonServiceSécurisé
       a(href='/conseils-cyber' class=`${ongletActif === 'conseils-cyber' ? 'actif': ''}`) Conseils Cyber
       a(href='/doctrine-homologation-anssi' class=`${ongletActif === 'doctrine-homologation-anssi' ? 'actif': ''}`) L'homologation simplifiée
