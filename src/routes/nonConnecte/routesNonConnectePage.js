@@ -174,7 +174,7 @@ const routesNonConnectePage = ({
       const donneesArticle = await cmsCrisp.recupereDevenirAmbassadeur();
       reponse.render('article', {
         ...donneesArticle,
-        ongletActif: 'promouvoir-monservicesecurise',
+        ongletActif: 'promouvoir/devenir-ambassadeurrice',
       });
     }
   );
@@ -186,7 +186,7 @@ const routesNonConnectePage = ({
 
       reponse.render('article', {
         ...donneesArticle,
-        ongletActif: 'promouvoir-monservicesecurise',
+        ongletActif: 'promouvoir/faire-connaitre',
       });
     }
   );

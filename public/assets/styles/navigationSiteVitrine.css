@@ -27,7 +27,8 @@
     align-items: center;
   }
 
-  #navigation-site-vitrine .contenu-navigation a {
+  #navigation-site-vitrine .contenu-navigation a,
+  #navigation-site-vitrine .contenu-navigation summary {
     color: var(--texte-fonce);
     font-weight: normal;
     line-height: 24px;
@@ -39,12 +40,93 @@
     text-decoration: none;
   }
 
-  #navigation-site-vitrine .contenu-navigation a.actif {
+  #navigation-site-vitrine .contenu-navigation a.actif,
+  #navigation-site-vitrine .contenu-navigation summary.actif {
     color: var(--bleu-anssi);
     border-bottom: 2px solid var(--bleu-anssi);
   }
 
-  #navigation-site-vitrine .contenu-navigation a:hover {
+  #navigation-site-vitrine .contenu-navigation a:hover,
+  #navigation-site-vitrine .contenu-navigation summary:hover {
     background: #f1f5f9;
+  }
+
+  #navigation-site-vitrine .contenu-navigation summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  #navigation-site-vitrine .contenu-navigation summary:after {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-image: url('/statique/assets/images/chevron_noir.svg');
+    background-size: 16px 16px;
+    transform: rotate(90deg);
+  }
+
+  #navigation-site-vitrine .contenu-navigation details[open] summary:after {
+    transform: rotate(-90deg);
+  }
+
+  #navigation-site-vitrine .contenu-navigation summary::marker {
+    content: '';
+  }
+
+  #navigation-site-vitrine .contenu-navigation summary::-webkit-details-marker {
+    display: none;
+  }
+
+  #navigation-site-vitrine .contenu-navigation details {
+    position: relative;
+  }
+
+  #navigation-site-vitrine .contenu-navigation .menu-deroulant {
+    position: absolute;
+    background: white;
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 18, 0.16);
+    left: 0;
+    width: fit-content;
+    min-width: 320px;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    z-index: 5;
+    border-top: 1px solid #ddd;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #navigation-site-vitrine .contenu-navigation .menu-deroulant li {
+    padding: 0 16px;
+    display: flex;
+  }
+
+  #navigation-site-vitrine
+    .contenu-navigation
+    .menu-deroulant
+    li.actif
+    a:before {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 24px;
+    background: #09416a;
+    position: absolute;
+    left: 0;
+  }
+
+  #navigation-site-vitrine .contenu-navigation .menu-deroulant li:hover {
+    background: #f1f5f9;
+  }
+
+  #navigation-site-vitrine .contenu-navigation .menu-deroulant a {
+    padding: 12px 0;
+    border-bottom: 1px solid #dddddd;
+    width: 100%;
   }
 }
