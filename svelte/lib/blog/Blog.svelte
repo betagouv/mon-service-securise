@@ -11,7 +11,7 @@
     (s) => s.id === sectionSelectionnee
   )?.nom;
   $: articlesVisibles = articles
-    .filter((a) => a.url)
+    .filter((a) => a.slug)
     .filter((a) =>
       sectionSelectionnee ? a.section.id === sectionSelectionnee : true
     );
@@ -87,7 +87,7 @@
   <div class="conteneur-articles">
     {#each articlesVisibles as article (article.id)}
       {@const donneesSection = donneesSections[article.section.id]}
-      <a class="article" href={article.url}>
+      <a class="article" href={`/articles/${article.slug}`}>
         <p
           class="etiquette-section"
           style="color: {donneesSection.couleurTexte}; background: {donneesSection.couleurFond}"

@@ -19,6 +19,6 @@ export type Section = {
 export type Article = {
   id: string;
   titre: string;
-  url?: string;
+  slug: string | null;
   section: Section;
 };
