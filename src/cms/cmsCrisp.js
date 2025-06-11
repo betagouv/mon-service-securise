@@ -1,91 +1,56 @@
-const fabriqueCrispMarkdown = require('./fabriqueCrispMarkdown');
-const { ErreurArticleCrispIntrouvable } = require('../erreurs');
+const { CmsCrisp } = require('@lab-anssi/lib');
 
-const extraitSlugArticle = (article) => {
-  try {
-    const regex = /\/article\/(.*)-[a-zA-Z0-9]{1,10}\//gm;
-    return regex.exec(article.url)[1];
-  } catch (e) {
-    return null;
-  }
-};
-
-class CmsCrisp {
-  constructor({
-    adaptateurCmsCrisp,
-    constructeurCrispMarkdown = fabriqueCrispMarkdown,
-  }) {
-    if (!adaptateurCmsCrisp) {
-      throw new Error("Impossible d'instancier le CMS sans adaptateur");
-    }
-    this.adaptateurCmsCrisp = adaptateurCmsCrisp;
-    this.constructeurCrispMarkdown = constructeurCrispMarkdown;
-  }
-
-  convertitArticle(article) {
-    const { contenuMarkdown, titre, description } = article;
-    const crispMarkdown = this.constructeurCrispMarkdown(contenuMarkdown);
-    const contenu = crispMarkdown.versHTML();
-
-    return {
-      titre,
-      contenu,
-      description,
-      tableDesMatieres: crispMarkdown.tableDesMatieres(),
-    };
+class CmsCrispMss extends CmsCrisp {
+  constructor({ adaptateurEnvironnement }) {
+    super(
+      adaptateurEnvironnement.crisp().idSite(),
+      adaptateurEnvironnement.crisp().cleApi()
+    );
+    this.adaptateurEnvironnement = adaptateurEnvironnement;
   }
 
   async recupereDevenirAmbassadeur() {
-    const article = await this.adaptateurCmsCrisp.recupereDevenirAmbassadeur();
-    return this.convertitArticle(article);
+    return this.recupereArticle(
+      this.adaptateurEnvironnement.crisp().idArticleDevenirAmbassadeur()
+    );
   }
 
   async recupereFaireConnaitre() {
-    const article = await this.adaptateurCmsCrisp.recupereFaireConnaitreMSS();
-    return this.convertitArticle(article);
+    return this.recupereArticle(
+      this.adaptateurEnvironnement.crisp().idArticleFaireConnaitre()
+    );
   }
 
   async recuperePromouvoir() {
-    const article = await this.adaptateurCmsCrisp.recuperePromouvoir();
-    return this.convertitArticle(article);
+    return this.recupereArticle(
+      this.adaptateurEnvironnement.crisp().idArticlePromouvoir()
+    );
   }
 
   async recupereRoadmap() {
-    const article = await this.adaptateurCmsCrisp.recupereRoadmap();
-    return this.convertitArticle(article);
+    return this.recupereArticle(
+      this.adaptateurEnvironnement.crisp().idArticleRoadmap()
+    );
   }
 
   async recupereArticleBlog(slug) {
-    try {
-      const articles = await this.adaptateurCmsCrisp.recupereArticlesBlog();
-      const article = articles.find((a) => extraitSlugArticle(a) === slug);
-      if (!article) {
-        throw new ErreurArticleCrispIntrouvable();
-      }
-      const articleCrisp = await this.adaptateurCmsCrisp.recupereArticle(
-        article.id
-      );
-      return {
-        ...this.convertitArticle(articleCrisp),
-        section: { id: article.section?.id, nom: article.section?.nom },
-      };
-    } catch (e) {
-      throw new ErreurArticleCrispIntrouvable();
-    }
+    return this.recupereArticleCategorie(
+      slug,
+      this.adaptateurEnvironnement.crisp().idCategorieBlog()
+    );
   }
 
   async recupereSectionsBlog() {
-    return this.adaptateurCmsCrisp.recupereSectionsBlog();
+    return this.recupereSectionsCategorie(
+      this.adaptateurEnvironnement.crisp().idCategorieBlog()
+    );
   }
 
   async recupereArticlesBlog() {
-    const articles = await this.adaptateurCmsCrisp.recupereArticlesBlog();
-    return articles.map((article) => {
-      const slug = extraitSlugArticle(article);
-      const url = slug ? `/articles/${slug}` : null;
-      return { ...article, url };
-    });
+    return this.recupereArticlesCategorie(
+      this.adaptateurEnvironnement.crisp().idCategorieBlog()
+    );
   }
 }
 
-module.exports = CmsCrisp;
+module.exports = CmsCrispMss;

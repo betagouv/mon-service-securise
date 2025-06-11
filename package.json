@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/betagouv/mon-service-securise#readme",
   "dependencies": {
-    "@lab-anssi/lib": "^1.3.0",
+    "@lab-anssi/lib": "^1.4.2",
     "@lab-anssi/ui-kit": "1.1.1",
     "@sentry/node": "^7.102.1",
     "@tiptap/core": "^2.7.1",

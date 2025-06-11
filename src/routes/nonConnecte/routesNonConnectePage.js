@@ -1,8 +1,8 @@
 const express = require('express');
 const uuid = require('uuid');
+const { ErreurArticleCrispIntrouvable } = require('@lab-anssi/lib');
 const { estUrlLegalePourRedirection } = require('../../http/redirection');
 const CmsCrisp = require('../../cms/cmsCrisp');
-const { ErreurArticleCrispIntrouvable } = require('../../erreurs');
 const SourceAuthentification = require('../../modeles/sourceAuthentification');
 
 const routesNonConnectePage = ({
