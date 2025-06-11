@@ -35,6 +35,11 @@ module.exports = {
       },
     ],
   },
+  settings: {
+    'import/resolver': {
+      typescript: {},
+    },
+  },
   overrides: [
     {
       files: ['public/**/*.*js'],
@@ -42,11 +47,6 @@ module.exports = {
     },
     {
       files: ['admin/**/*.*js'],
-      settings: {
-        'import/resolver': {
-          typescript: {},
-        },
-      },
     },
     {
       files: ['test*/**/*.*js'],
@@ -56,7 +56,7 @@ module.exports = {
           'error',
           { devDependencies: true },
         ],
-        'import/extensions': ['error', { mjs: 'always' }],
+        'import/extensions': ['off'],
       },
     },
     {
