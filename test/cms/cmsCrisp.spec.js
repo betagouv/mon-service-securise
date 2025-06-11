@@ -83,12 +83,6 @@ describe('Le CMS Crisp', () => {
         idArticle: 'faire-connaitre',
       },
       {
-        titre: 'Promouvoir MSS',
-        nomMethodeCMS: 'recuperePromouvoir',
-        nomMethodeAdaptateurEnvironnement: 'idArticlePromouvoir',
-        idArticle: 'promouvoir',
-      },
-      {
         titre: 'Roadmap MSS',
         nomMethodeCMS: 'recupereRoadmap',
         nomMethodeAdaptateurEnvironnement: 'idArticleRoadmap',

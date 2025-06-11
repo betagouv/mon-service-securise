@@ -14,7 +14,7 @@
   {#if utilisateurInscritDepuisPlusD1Mois}
     <CarteDePromotion
       titre="🚀 Promouvoir MonServiceSécurisé"
-      href="/promouvoir-monservicesecurise"
+      href="/faire-connaitre-et-recommander-monservicesecurise"
     >
       Vous appréciez MonServiceSécurisé ? N'hésitez pas à en parler autour de
       vous !
