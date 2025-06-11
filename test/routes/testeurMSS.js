@@ -48,6 +48,7 @@ const testeurMss = () => {
   let procedures;
   let inscriptionUtilisateur;
   let busEvenements;
+  let cmsCrisp;
   let serveur;
 
   const verifieSessionDeposee = (reponse, suite) => {
@@ -79,6 +80,12 @@ const testeurMss = () => {
       maintenant: () => new Date(),
     };
     const contenuCrisp = { contenuMarkdown: 'Un contenu', titre: 'Un titre' };
+    const contenuCrispComplet = {
+      contenuMarkdown: 'Un contenu',
+      titre: 'Un titre',
+      section: {},
+      tableDesMatieres: [],
+    };
     adaptateurCmsCrisp = {
       recuperePromouvoir: async () => contenuCrisp,
       recupereDevenirAmbassadeur: async () => contenuCrisp,
@@ -87,6 +94,15 @@ const testeurMss = () => {
       recupereArticlesBlog: async () => [],
       recupereArticleBlog: async () => contenuCrisp,
       recupereRoadmap: async () => contenuCrisp,
+    };
+    cmsCrisp = {
+      recuperePromouvoir: async () => contenuCrispComplet,
+      recupereDevenirAmbassadeur: async () => contenuCrispComplet,
+      recupereFaireConnaitre: async () => contenuCrispComplet,
+      recupereSectionsBlog: async () => [],
+      recupereArticlesBlog: async () => [],
+      recupereArticleBlog: async () => contenuCrispComplet,
+      recupereRoadmap: async () => contenuCrispComplet,
     };
     adaptateurMail = adaptateurMailMemoire.fabriqueAdaptateurMailMemoire();
     adaptateurPdf = {
@@ -175,6 +191,7 @@ const testeurMss = () => {
           adaptateurProfilAnssi,
           adaptateurControleFichier,
           adaptateurXLS,
+          cmsCrisp,
           serviceSupervision,
           serviceGestionnaireSession,
           serviceCgu,
@@ -211,6 +228,7 @@ const testeurMss = () => {
     adaptateurControleFichier: () => adaptateurControleFichier,
     adaptateurXLS: () => adaptateurXLS,
     busEvenements: () => busEvenements,
+    cmsCrisp: () => cmsCrisp,
     depotDonnees: () => depotDonnees,
     middleware: () => middleware,
     moteurRegles: () => moteurRegles,

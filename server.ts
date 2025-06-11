@@ -1,4 +1,5 @@
 import { fabriqueAdaptateurProfilAnssi } from './src/adaptateurs/fabriqueAdaptateurProfilAnssi';
+import CmsCrisp from './src/cms/cmsCrisp';
 
 const Middleware = require('./src/http/middleware');
 const DepotDonnees = require('./src/depotDonnees');
@@ -125,6 +126,8 @@ const serviceSupervision = new ServiceSupervision({
   adaptateurSupervision,
 });
 
+const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });
+
 serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
   const serveur = MSS.creeServeur({
     depotDonnees,
@@ -150,6 +153,7 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     adaptateurControleFichier,
     adaptateurXLS,
     adaptateurProfilAnssi,
+    cmsCrisp,
     serviceGestionnaireSession,
     serviceSupervision,
     serviceCgu,
