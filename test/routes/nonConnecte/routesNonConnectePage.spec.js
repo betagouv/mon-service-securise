@@ -28,7 +28,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/reinitialisationMotDePasse',
     '/devenir-ambassadeurrice-monservicesecurise',
     '/faire-connaitre-et-recommander-monservicesecurise',
-    '/promouvoir-monservicesecurise',
     '/co-construire-monservicesecurise',
     '/conseils-cyber',
     '/doctrine-homologation-anssi',

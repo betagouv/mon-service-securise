@@ -139,7 +139,6 @@ const crisp = () => ({
   idArticleDevenirAmbassadeur: () =>
     process.env.CRISP_ID_ARTICLE_DEVENIR_AMBASSADEUR,
   idArticleFaireConnaitre: () => process.env.CRISP_ID_ARTICLE_FAIRE_CONNAITRE,
-  idArticlePromouvoir: () => process.env.CRISP_ID_ARTICLE_PROMOUVOIR,
   idArticleRoadmap: () => process.env.CRISP_ID_ARTICLE_ROADMAP,
 });
 

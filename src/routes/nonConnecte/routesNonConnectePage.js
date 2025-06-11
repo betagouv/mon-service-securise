@@ -191,15 +191,6 @@ const routesNonConnectePage = ({
     }
   );
 
-  routes.get('/promouvoir-monservicesecurise', async (_requete, reponse) => {
-    const donneesArticle = await cmsCrisp.recuperePromouvoir();
-
-    reponse.render('article', {
-      ...donneesArticle,
-      ongletActif: 'promouvoir-monservicesecurise',
-    });
-  });
-
   routes.get('/co-construire-monservicesecurise', async (_requete, reponse) => {
     const donneesArticle = await cmsCrisp.recupereRoadmap();
 
