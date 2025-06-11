@@ -172,7 +172,6 @@ const routesNonConnectePage = ({
     '/devenir-ambassadeurrice-monservicesecurise',
     async (_requete, reponse) => {
       const donneesArticle = await cmsCrisp.recupereDevenirAmbassadeur();
-
       reponse.render('article', {
         ...donneesArticle,
         ongletActif: 'promouvoir-monservicesecurise',
@@ -215,6 +214,7 @@ const routesNonConnectePage = ({
       const article = await cmsCrisp.recupereArticleBlog(requete.params.slug);
       reponse.render('article', {
         ...article,
+        masqueDescription: true,
         ongletActif: 'conseils-cyber',
       });
     } catch (e) {

@@ -31,6 +31,7 @@ block main
     const tag = (section?.id && tags[section.id]) ? { label: section.nom, couleurTexte: tags[section.id].texte, couleurFond: tags[section.id].fond } : undefined;
   lab-anssi-bandeau-titre(
     titre=titre
+    description=(masqueDescription ? false : description)
     fil-ariane=JSON.stringify([
       { label: "Accueil", href: "/" },
       { label: "Conseils Cyber", href: "/conseils-cyber" },
