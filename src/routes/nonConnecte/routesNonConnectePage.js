@@ -6,7 +6,6 @@ const CmsCrisp = require('../../cms/cmsCrisp');
 const SourceAuthentification = require('../../modeles/sourceAuthentification');
 
 const routesNonConnectePage = ({
-  adaptateurCmsCrisp,
   adaptateurEnvironnement,
   adaptateurStatistiques,
   adaptateurJWT,
@@ -172,7 +171,7 @@ const routesNonConnectePage = ({
   routes.get(
     '/devenir-ambassadeurrice-monservicesecurise',
     async (_requete, reponse) => {
-      const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
+      const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });
       const donneesArticle = await cmsCrisp.recupereDevenirAmbassadeur();
 
       reponse.render('article', {
@@ -186,7 +185,7 @@ const routesNonConnectePage = ({
   routes.get(
     '/faire-connaitre-et-recommander-monservicesecurise',
     async (_requete, reponse) => {
-      const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
+      const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });
       const donneesArticle = await cmsCrisp.recupereFaireConnaitre();
 
       reponse.render('article', {
@@ -198,7 +197,7 @@ const routesNonConnectePage = ({
   );
 
   routes.get('/promouvoir-monservicesecurise', async (_requete, reponse) => {
-    const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
+    const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });
     const donneesArticle = await cmsCrisp.recuperePromouvoir();
 
     reponse.render('article', {
@@ -209,7 +208,7 @@ const routesNonConnectePage = ({
   });
 
   routes.get('/co-construire-monservicesecurise', async (_requete, reponse) => {
-    const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
+    const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });
     const donneesArticle = await cmsCrisp.recupereRoadmap();
 
     reponse.render('article', {
@@ -221,7 +220,7 @@ const routesNonConnectePage = ({
 
   routes.get('/articles/:slug', async (requete, reponse, suite) => {
     try {
-      const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
+      const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });
       const article = await cmsCrisp.recupereArticleBlog(requete.params.slug);
       reponse.render('article', {
         ...article,
@@ -239,7 +238,7 @@ const routesNonConnectePage = ({
   });
 
   routes.get('/conseils-cyber', async (_requete, reponse) => {
-    const cmsCrisp = new CmsCrisp({ adaptateurCmsCrisp });
+    const cmsCrisp = new CmsCrisp({ adaptateurEnvironnement });
     const sections = await cmsCrisp.recupereSectionsBlog();
     const articles = await cmsCrisp.recupereArticlesBlog();
     reponse.render('conseilsCyber', { sections, articles });
