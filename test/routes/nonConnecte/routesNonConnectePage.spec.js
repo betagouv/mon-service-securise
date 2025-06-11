@@ -1,7 +1,7 @@
 const axios = require('axios');
 const expect = require('expect.js');
+const { ErreurArticleCrispIntrouvable } = require('@lab-anssi/lib');
 const testeurMSS = require('../testeurMSS');
-const { ErreurArticleCrispIntrouvable } = require('../../../src/erreurs');
 const {
   donneesPartagees,
   requeteSansRedirection,
