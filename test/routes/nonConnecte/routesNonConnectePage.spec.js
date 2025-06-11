@@ -52,39 +52,37 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
   describe('quand requête GET sur `/articles/:slug`', () => {
     it('utilise le CMS Crisp pour récupérer un article de blog', async () => {
-      let idRecu;
-      testeur.adaptateurCmsCrisp().recupereArticle = async (id) => {
-        idRecu = id;
+      let slugRecu;
+      testeur.cmsCrisp().recupereArticleBlog = async (slug) => {
+        slugRecu = slug;
         return {
           contenuMarkdown: 'Un contenu',
           titre: 'Un titre',
           description: 'Une description',
+          tableDesMatieres: [],
+          section: {
+            id: 'IdSection',
+            nom: 'Une section',
+          },
         };
       };
-      testeur.adaptateurCmsCrisp().recupereArticlesBlog = async () => [
-        {
-          id: '1',
-          url: 'http://localhost://crisp/article/un-slug-generique-1ab2c3/',
-        },
-      ];
 
       await axios.get(`http://localhost:1234/articles/un-slug-generique`);
 
-      expect(idRecu).to.be('1');
+      expect(slugRecu).to.be('un-slug-generique');
     });
 
     it('sert le contenu HTML de la page', async () => {
-      testeur.adaptateurCmsCrisp().recupereArticle = async () => ({
+      testeur.cmsCrisp().recupereArticleBlog = async () => ({
         contenuMarkdown: 'Un contenu',
         titre: 'Un titre',
         description: 'Une description',
-      });
-      testeur.adaptateurCmsCrisp().recupereArticlesBlog = async () => [
-        {
-          id: '1',
-          url: 'http://localhost://crisp/article/un-slug-generique-1ab2c3/',
+        tableDesMatieres: [],
+        section: {
+          id: 'IdSection',
+          nom: 'Une section',
         },
-      ];
+      });
 
       const reponse = await axios.get(
         `http://localhost:1234/articles/un-slug-generique`
@@ -96,7 +94,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
 
     it("renvoie une erreur 404 si l'article n'existe pas", async () => {
-      testeur.adaptateurCmsCrisp().recupereArticleBlog = async () => {
+      testeur.cmsCrisp().recupereArticleBlog = async () => {
         throw new ErreurArticleCrispIntrouvable();
       };
       await testeur.verifieRequeteGenereErreurHTTP(
