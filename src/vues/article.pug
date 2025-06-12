@@ -29,14 +29,15 @@ block main
   -
     const tags = { "0cef9600-977a-4817-9735-8717942a4920": { fond: '#dceeff', texte: '#0079d0'}, "09d78fb4-fe9a-4f60-9dd7-91232e98d419": { fond: "#e9ddff", texte: "#7025da"} }
     const tag = (section?.id && tags[section.id]) ? { label: section.nom, couleurTexte: tags[section.id].texte, couleurFond: tags[section.id].fond } : undefined;
+    const filAriane = [
+      { label: "Accueil", href: "/" },
+      ...(ongletActif === 'conseils-cyber' ? [{ label: "Conseils Cyber", href: "/conseils-cyber" }] : []),
+      { label: titre }
+    ]
   lab-anssi-bandeau-titre(
     titre=titre
     description=(masqueDescription ? false : description)
-    fil-ariane=JSON.stringify([
-      { label: "Accueil", href: "/" },
-      { label: "Conseils Cyber", href: "/conseils-cyber" },
-      { label: titre }
-    ])
+    fil-ariane=JSON.stringify(filAriane)
     tag=(tag ? JSON.stringify(tag) : false)
   )
   lab-anssi-page-crisp(contenu=contenu table-des-matieres=JSON.stringify(tableDesMatieres))
