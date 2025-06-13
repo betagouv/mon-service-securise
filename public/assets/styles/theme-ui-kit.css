@@ -1,7 +1,7 @@
 :root {
   --centre-aide-background-entete: #0279d0;
   --centre-aide-background-bouton: var(--centre-aide-background-entete);
-  --centre-aide-font-color-bouton: white;
+  --centre-aide-font-color-bouton: #ffffff;
   --centre-aide-border-lien-secondaire: var(--centre-aide-background-entete);
   --centre-aide-font-color-lien-secondaire: var(
     --centre-aide-background-entete
@@ -10,4 +10,41 @@
   --centre-aide-background-hover-declencheur: var(
     --centre-aide-background-hover-lien
   );
+  --brique-background-primaire: var(--centre-aide-background-entete);
+  --brique-background-secondaire: transparent;
+  --brique-hero-bouton-gauche-background: #ffffff;
+  --brique-hero-bouton-gauche-background-hover: #f6f6f6;
+  --brique-hero-bouton-gauche-background-active: #f6f6f6;
+  --brique-hero-bouton-gauche-texte: #0279d0;
+  --brique-hero-bouton-droite-background: transparent;
+  --brique-hero-bouton-droite-background-hover: rgba(255, 255, 255, 0.08);
+  --brique-hero-bouton-droite-background-active: rgba(255, 255, 255, 0.16);
+  --brique-hero-bouton-droite-texte: #ffffff;
+  --titre-couleur-primaire: #09416a;
+  --brique-carrousel-bouton-action-texte-couleur: #0279d0;
+  --brique-marelle-titre-couleur: #09416a;
+  --brique-marelle-etapes-numero-etape-couleur: #0279d0;
+  --brique-marelle-etapes-lien-couleur: #0279d0;
+  --brique-marelle-bouton-background: #0c5c98;
+  --brique-marelle-bouton-background-hover: #0279d0;
+  --brique-marelle-bouton-background-active: #0279d0;
+  --brique-marelle-bouton-texte: #ffffff;
+  --brique-temoignages-titre-couleur: #09416a;
+  --brique-temoignages-icone-couleur: #0279d0;
+  --brique-contenu-deux-colonnes-action-bouton-background: #ffffff;
+  --brique-contenu-deux-colonnes-action-bouton-background-hover: #f6f6f6;
+  --brique-contenu-deux-colonnes-action-bouton-background-active: #f6f6f6;
+  --brique-contenu-deux-colonnes-action-bouton-texte: #0279d0;
+  --brique-presentation-anssi-titre-couleur: #09416a;
+  --brique-presentation-anssi-bouton-background: transparent;
+  --brique-presentation-anssi-bouton-background-hover: rgba(0, 0, 0, 0.04);
+  --brique-presentation-anssi-bouton-background-active: rgba(0, 0, 0, 0.08);
+  --brique-presentation-anssi-bouton-texte: #0279d0;
+  --bandeau-titre-background: var(--centre-aide-background-entete);
+  --couleur-lien: #0079d0;
+  --filtre-couleur-primaire: brightness(0) invert(29%) sepia(95%)
+    saturate(1420%) hue-rotate(184deg) brightness(98%) contrast(101%);
+  --sommaire-actif-indicateur-couleur: #0079d0;
+  --sommaire-actif-couleur: #0079d0;
+  --sommaire-mobile-fond: #f1f5f9;
 }

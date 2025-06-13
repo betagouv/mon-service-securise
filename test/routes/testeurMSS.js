@@ -85,7 +85,6 @@ const testeurMss = () => {
       tableDesMatieres: [],
     };
     cmsCrisp = {
-      recuperePromouvoir: async () => contenuCrisp,
       recupereDevenirAmbassadeur: async () => contenuCrisp,
       recupereFaireConnaitre: async () => contenuCrisp,
       recupereSectionsBlog: async () => [],

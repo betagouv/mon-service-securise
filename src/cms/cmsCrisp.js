@@ -21,12 +21,6 @@ class CmsCrispMss extends CmsCrisp {
     );
   }
 
-  async recuperePromouvoir() {
-    return this.recupereArticle(
-      this.adaptateurEnvironnement.crisp().idArticlePromouvoir()
-    );
-  }
-
   async recupereRoadmap() {
     return this.recupereArticle(
       this.adaptateurEnvironnement.crisp().idArticleRoadmap()

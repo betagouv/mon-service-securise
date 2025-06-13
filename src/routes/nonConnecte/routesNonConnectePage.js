@@ -172,11 +172,9 @@ const routesNonConnectePage = ({
     '/devenir-ambassadeurrice-monservicesecurise',
     async (_requete, reponse) => {
       const donneesArticle = await cmsCrisp.recupereDevenirAmbassadeur();
-
       reponse.render('article', {
         ...donneesArticle,
-        avecTitreTableDesMatieres: false,
-        ongletActif: 'promouvoir-monservicesecurise',
+        ongletActif: 'promouvoir/devenir-ambassadeurrice',
       });
     }
   );
@@ -188,28 +186,16 @@ const routesNonConnectePage = ({
 
       reponse.render('article', {
         ...donneesArticle,
-        avecTitreTableDesMatieres: false,
-        ongletActif: 'promouvoir-monservicesecurise',
+        ongletActif: 'promouvoir/faire-connaitre',
       });
     }
   );
-
-  routes.get('/promouvoir-monservicesecurise', async (_requete, reponse) => {
-    const donneesArticle = await cmsCrisp.recuperePromouvoir();
-
-    reponse.render('article', {
-      ...donneesArticle,
-      avecTitreTableDesMatieres: false,
-      ongletActif: 'promouvoir-monservicesecurise',
-    });
-  });
 
   routes.get('/co-construire-monservicesecurise', async (_requete, reponse) => {
     const donneesArticle = await cmsCrisp.recupereRoadmap();
 
     reponse.render('article', {
       ...donneesArticle,
-      avecTitreTableDesMatieres: false,
       ongletActif: 'co-construire-monservicesecurise',
     });
   });
@@ -219,8 +205,7 @@ const routesNonConnectePage = ({
       const article = await cmsCrisp.recupereArticleBlog(requete.params.slug);
       reponse.render('article', {
         ...article,
-        avecTitreTableDesMatieres: true,
-        avecFilAriane: true,
+        masqueDescription: true,
         ongletActif: 'conseils-cyber',
       });
     } catch (e) {
