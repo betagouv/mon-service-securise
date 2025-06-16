@@ -47,4 +47,7 @@
   --sommaire-actif-indicateur-couleur: #0079d0;
   --sommaire-actif-couleur: #0079d0;
   --sommaire-mobile-fond: #f1f5f9;
+  --liste-articles-couleur-fleche: #0079d0;
+  --liste-articles-couleur-texte: #09416a;
+  --couleur-focus: #0a76f6;
 }
