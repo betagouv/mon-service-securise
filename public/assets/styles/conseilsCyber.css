@@ -1,0 +1,9 @@
+main {
+  text-align: left;
+  display: unset;
+  background: white;
+}
+
+body {
+  min-width: unset;
+}

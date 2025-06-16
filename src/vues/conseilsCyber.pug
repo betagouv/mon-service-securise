@@ -8,17 +8,39 @@ block title
   title!= 'Conseils Cyber | MonServiceSécurisé'
 
 block append styles
-  +feuilleDeStyleSvelte()
+  link(href = '/statique/assets/styles/conseilsCyber.css', rel = 'stylesheet')
 
 block append scripts
   script(type = 'module', src='/statique/scripts/conseilsCyber.mjs')
-  +composantSvelte('blog.js')
-  +donneesPartagees('sections-blog', sections)
-  +donneesPartagees('articles-blog', articles)
 
 block navigation-site-vitrine
   +navigationSiteVitrine('conseils-cyber')
 
 block main
-  .marges-fixes
-    #blog
+  -
+    const donneesArticles = articles.map(a => ({
+      idCategorie: a.section.id,
+      titre: a.titre,
+      href: `/articles/${a.slug}`,
+    }))
+    const couleurs = {
+      "0cef9600-977a-4817-9735-8717942a4920": { fond: '#dceeff', texte: '#0079d0'},
+      "09d78fb4-fe9a-4f60-9dd7-91232e98d419": { fond: "#e9ddff", texte: "#7025da"}
+    }
+    const categories = sections.reduce((acc, v) => ({
+      ...acc,
+      [v.id]: { label: v.nom, couleurTexte: couleurs[v.id].texte, couleurFond: couleurs[v.id].fond }
+    }), {});
+    const filAriane = [
+      { label: "Accueil", href: "/" },
+      { label: "Conseils Cyber" }
+    ]
+  lab-anssi-bandeau-titre(
+    titre="Conseils cyber"
+    description="Tous nos conseils à propos de la mise en œuvre des mesures de sécurité, de l'homologation, et de l'utilisation de MonServiceSécurisé"
+    fil-ariane=JSON.stringify(filAriane)
+  )
+  lab-anssi-liste-articles(
+    articles=JSON.stringify(donneesArticles)
+    categories=JSON.stringify(categories)
+  )
