@@ -80,7 +80,9 @@ describe('Le dépôt de données des services', () => {
     let depot;
     let referentiel;
     beforeEach(() => {
-      referentiel = Referentiel.creeReferentielVide();
+      referentiel = Referentiel.creeReferentiel({
+        naturesSuggestionsActions: { siret: {} },
+      });
       const persistance = unePersistanceMemoire()
         .ajouteUnService(unService(referentiel).avecId('123').donnees)
         .ajouteUnService(unService(referentiel).avecId('789').donnees)
@@ -90,7 +92,8 @@ describe('Le dépôt de données des services', () => {
         )
         .ajouteUneAutorisation(
           uneAutorisation().deProprietaire('999', '789').donnees
-        );
+        )
+        .avecUneSuggestionAction({ idService: '123', nature: 'siret' });
       depot = unDepotDeDonneesServices()
         .avecConstructeurDePersistance(persistance)
         .avecReferentiel(referentiel)
@@ -104,6 +107,12 @@ describe('Le dépôt de données des services', () => {
       expect(services[0]).to.be.a(Service);
       expect(services[0].id).to.equal('123');
       expect(services[0].referentiel).to.equal(referentiel);
+
+      expect(services[0].contributeurs.length).to.equal(1);
+      expect(services[0].contributeurs[0].idUtilisateur).to.equal('456');
+
+      expect(services[0].suggestionsActions.length).to.equal(1);
+      expect(services[0].suggestionsActions[0].nature).to.equal('siret');
     });
 
     it("connaît le nombre de services d'un utilisateur donné", async () => {

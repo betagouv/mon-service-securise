@@ -66,6 +66,17 @@ const nouvelAdaptateur = (
     return Promise.all(as.map(({ idService }) => service(idService)));
   };
 
+  const servicesComplets = async (idUtilisateur) => {
+    const s = await services(idUtilisateur);
+    return s.map((unService) => ({
+      ...unService,
+      utilisateurs: contributeursService(unService.id),
+      suggestions: suggestionsActionsService(unService.id).map(
+        (suggestion) => suggestion.nature
+      ),
+    }));
+  };
+
   const tousLesServices = async () => {
     const lesIds = donnees.services.map((s) => s.id);
     return Promise.all(lesIds.map(service));
@@ -338,6 +349,7 @@ const nouvelAdaptateur = (
     service,
     serviceExisteAvecHashNom,
     services,
+    servicesComplets,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     lisSuperviseursConcernes,
