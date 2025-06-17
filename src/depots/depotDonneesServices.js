@@ -19,9 +19,6 @@ const Entite = require('../modeles/entite');
 const EvenementMesureServiceModifiee = require('../bus/evenementMesureServiceModifiee');
 const EvenementMesureServiceSupprimee = require('../bus/evenementMesureServiceSupprimee');
 const EvenementRisqueServiceModifie = require('../bus/evenementRisqueServiceModifie');
-const {
-  avecPMapPourChaqueElementSansPromesse,
-} = require('../utilitaires/pMap');
 const MesureGenerale = require('../modeles/mesureGenerale');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
@@ -85,12 +82,29 @@ const fabriquePersistance = (
         return Promise.all(donneesServices.map((d) => enrichisService(d)));
       },
       ceuxDeUtilisateur: async (idUtilisateur) => {
-        const donneesServices =
-          await adaptateurPersistance.services(idUtilisateur);
+        const toutesDonnees =
+          await adaptateurPersistance.servicesComplets(idUtilisateur);
 
-        const servicesEnrichis = await avecPMapPourChaqueElementSansPromesse(
-          donneesServices,
-          enrichisService
+        const unServiceEnClair = async (donnees) => {
+          const serviceEnClair = await dechiffreDonneesService(donnees);
+
+          serviceEnClair.contributeurs = await Promise.all(
+            serviceEnClair.utilisateurs.map((d) =>
+              depotDonneesUtilisateurs.dechiffreUtilisateur(d)
+            )
+          );
+          delete serviceEnClair.utilisateurs;
+
+          serviceEnClair.suggestionsActions = serviceEnClair.suggestions.map(
+            (nature) => ({ nature })
+          );
+          delete serviceEnClair.suggestions;
+
+          return new Service(serviceEnClair, referentiel);
+        };
+
+        const servicesEnrichis = await Promise.all(
+          toutesDonnees.map((donnees) => unServiceEnClair(donnees))
         );
 
         return servicesEnrichis.sort((s1, s2) =>
