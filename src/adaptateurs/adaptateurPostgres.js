@@ -210,6 +210,13 @@ const nouvelAdaptateur = (env) => {
     return d.rows;
   };
 
+  const nombreServices = async (idUtilisateur) => {
+    const total = await knex('autorisations')
+      .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
+      .count();
+    return total[0]?.count;
+  };
+
   const tousLesServices = async () => {
     const lignes = await knex('services').select({ id: 'id' });
     const ids = lignes.map(({ id }) => id);
@@ -699,6 +706,7 @@ const nouvelAdaptateur = (env) => {
     metsAJourProgressionTeleversement,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
+    nombreServices,
     nouveautesPourUtilisateur,
     parrainagePour,
     contributeursDesServicesDe,
