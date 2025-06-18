@@ -47,9 +47,6 @@
         cible: cibleBesoinsSecurite,
         callbackInitialeCible: (cible) => {
           document.body.dispatchEvent(
-            new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
-          );
-          document.body.dispatchEvent(
             new CustomEvent('jquery-affiche-decrire-etape-3')
           );
           cible.scrollIntoView({ block: 'start' });
@@ -84,6 +81,7 @@
           document
             .getElementsByClassName('fermeture-tiroir')[0]
             .dispatchEvent(new Event('click')),
+        delaiAvantAffichage: 500,
         positionnementModale: 'HautDroite',
         titre: 'Collaborez avec votre équipe',
         description:
