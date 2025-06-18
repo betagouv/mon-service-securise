@@ -77,6 +77,11 @@ const nouvelAdaptateur = (
     }));
   };
 
+  const nombreServices = async (idUtilisateur) => {
+    const as = await autorisations(idUtilisateur);
+    return as.length;
+  };
+
   const tousLesServices = async () => {
     const lesIds = donnees.services.map((s) => s.id);
     return Promise.all(lesIds.map(service));
@@ -359,6 +364,7 @@ const nouvelAdaptateur = (
     metsAJourIdResetMdpUtilisateur,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
+    nombreServices,
     nouveautesPourUtilisateur,
     contributeursDesServicesDe,
     sauvegardeAutorisation,
