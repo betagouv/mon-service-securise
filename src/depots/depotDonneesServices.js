@@ -111,12 +111,8 @@ const fabriquePersistance = (
           s1.nomService().localeCompare(s2.nomService())
         );
       },
-      nombreDeUtilisateur: async (idUtilisateur) => {
-        const donneesServices =
-          await adaptateurPersistance.services(idUtilisateur);
-
-        return donneesServices.length;
-      },
+      nombreDeUtilisateur: async (idUtilisateur) =>
+        adaptateurPersistance.nombreServices(idUtilisateur),
       tous: async () => {
         const donneesServices = await adaptateurPersistance.tousLesServices();
         return Promise.all(donneesServices.map((d) => enrichisService(d)));
