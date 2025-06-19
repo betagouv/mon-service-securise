@@ -52,3 +52,17 @@ export type ResumeNiveauDroit =
   | 'ECRITURE'
   | 'LECTURE'
   | 'PERSONNALISE';
+
+export enum CategorieReferentiel {
+  GOUVERNANCE = 'gouvernance',
+  PROTECTION = 'protection',
+  DEFENSE = 'defense',
+  RESILIENCE = 'resilience',
+}
+
+export type MesureReferentiel = {
+  categorie: CategorieReferentiel;
+  description: string;
+  identifiantNumerique: string;
+  referentiel: Referentiel;
+};
