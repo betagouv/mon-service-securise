@@ -10,6 +10,7 @@
   import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
   import BarreDeRecherche from '../ui/BarreDeRecherche.svelte';
   import ListeDeroulanteRiche from '../ui/ListeDeroulanteRiche.svelte';
+  import AucunResultat from './AucunResultat.svelte';
 
   let mesuresReferentiel: Record<string, MesureReferentiel> = {};
   let recherche = '';
@@ -22,6 +23,13 @@
     );
     mesuresReferentiel = reponse.data;
   });
+
+  const effaceRechercheEtFiltres = () => {
+    recherche = '';
+    filtrageMesures = {};
+  };
+
+  const entetes = ['Intitulé de la mesure'];
 
   let itemsFiltre: { libelle: string; valeur: string; idCategorie: string }[] =
     [
@@ -101,7 +109,9 @@
 <table>
   <thead>
     <tr>
-      <th>Intitulé de la mesure</th>
+      {#each entetes as entete}
+        <th>{entete}</th>
+      {/each}
     </tr>
   </thead>
   <tbody>
@@ -121,6 +131,13 @@
         </td>
       </tr>
     {/each}
+    {#if Object.keys(mesuresVisibles).length === 0}
+      <tr>
+        <td colspan={entetes.length}>
+          <AucunResultat on:click={effaceRechercheEtFiltres} />
+        </td>
+      </tr>
+    {/if}
   </tbody>
 </table>
 
