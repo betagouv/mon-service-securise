@@ -3,5 +3,20 @@ block variables
   - const meta_description = "Retrouvez ici le référentiel de l'ANSSI et de la CNIL regroupant l'ensemble des mesures de sécurité."
   - const titrePage = 'Liste de mesures'
 
+block append styles
+  link(href = '/statique/assets/styles/main-responsive.css', rel = 'stylesheet')
+
 block main
+  -
+    const filAriane = [
+      {label: "Mon tableau de bord", href: "/tableauDeBord"},
+      {label: "Liste de mesures"}
+    ]
+
+  lab-anssi-bandeau-titre(
+    titre="Liste de mesures"
+    description="Retrouvez ici le référentiel de l'ANSSI et de la CNIL regroupant l'ensemble des mesures de sécurité."
+    fil-ariane=JSON.stringify(filAriane)
+  )
+
   #liste-mesures
