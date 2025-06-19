@@ -4,8 +4,11 @@
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
   import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
+  import BarreDeRecherche from '../ui/BarreDeRecherche.svelte';
 
   let mesuresReferentiel: Record<string, MesureReferentiel> = {};
+  let recherche = '';
+  let mesuresVisibles: Record<string, MesureReferentiel> = {};
 
   onMount(async () => {
     const reponse = await axios.get<Record<string, MesureReferentiel>>(
@@ -13,7 +16,21 @@
     );
     mesuresReferentiel = reponse.data;
   });
+
+  $: {
+    mesuresVisibles = Object.fromEntries(
+      Object.entries(mesuresReferentiel).filter(
+        ([_, mesure]) =>
+          mesure.description.toLowerCase().includes(recherche.toLowerCase()) ||
+          mesure.identifiantNumerique.includes(recherche)
+      )
+    );
+  }
 </script>
+
+<div class="filtres">
+  <BarreDeRecherche bind:recherche />
+</div>
 
 <table>
   <thead>
@@ -22,7 +39,7 @@
     </tr>
   </thead>
   <tbody>
-    {#each Object.values(mesuresReferentiel) as mesure}
+    {#each Object.values(mesuresVisibles) as mesure}
       <tr>
         <td>
           <div>
@@ -46,12 +63,13 @@
     text-align: left;
     width: 100%;
     max-width: 1200px;
+    margin: 32px 0;
   }
 
   table {
     border-collapse: collapse;
-    margin: 32px 0;
     width: 100%;
+    margin-top: 24px;
 
     thead {
       border: 1px solid #dddddd;
