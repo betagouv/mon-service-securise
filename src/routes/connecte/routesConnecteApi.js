@@ -468,6 +468,14 @@ const routesConnecteApi = ({
     }
   );
 
+  routes.get(
+    '/referentiel/mesures',
+    middleware.verificationAcceptationCGU,
+    async (_requete, reponse) => {
+      reponse.json(referentiel.mesures());
+    }
+  );
+
   return routes;
 };
 

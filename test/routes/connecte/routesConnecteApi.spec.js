@@ -1350,4 +1350,34 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(filtrageRecu.filtreEntite).to.be('unSiret');
     });
   });
+
+  describe('quand requête GET sur `/api/referentiel/mesures`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(
+          'http://localhost:1234/api/referentiel/mesures',
+          done
+        );
+    });
+
+    it('retourne la liste des mesures du référentiel', async () => {
+      testeur.referentiel().recharge({
+        mesures: {
+          mesureA: 'une mesure A',
+          mesureB: 'une mesure B',
+        },
+      });
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/referentiel/mesures'
+      );
+
+      expect(reponse.status).to.be(200);
+      expect(reponse.data).to.eql({
+        mesureA: 'une mesure A',
+        mesureB: 'une mesure B',
+      });
+    });
+  });
 });
