@@ -22,6 +22,7 @@ const {
 } = require('../../../src/modeles/autorisations/gestionDroits');
 const { expectContenuSessionValide } = require('../../aides/cookie');
 const SourceAuthentification = require('../../../src/modeles/sourceAuthentification');
+const Mesures = require('../../../src/modeles/mesures');
 
 describe('Le serveur MSS des routes privées /api/*', () => {
   const testeur = testeurMSS();
@@ -173,6 +174,76 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           done();
         })
         .catch(done);
+    });
+  });
+
+  describe('quand requête GET sur `/api/services/mesures`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(
+          'http://localhost:1234/api/services/mesures',
+          done
+        );
+    });
+
+    it("interroge le dépôt de données pour récupérer les services de l'utilisateur", async () => {
+      let idRecu;
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.depotDonnees().services = async (idUtilisateur) => {
+        idRecu = idUtilisateur;
+        return [];
+      };
+
+      await axios.get('http://localhost:1234/api/services/mesures');
+
+      expect(idRecu).to.be('U1');
+    });
+
+    it('retourne une liste de services avec leurs mesures associées', async () => {
+      const mesuresReferentiel = {
+        A: { categorie: 'gouvernance' },
+        B: { categorie: 'gouvernance' },
+      };
+      testeur.referentiel().recharge({
+        mesures: mesuresReferentiel,
+        categoriesMesures: { gouvernance: 'Gouvernance' },
+        reglesPersonnalisation: { mesuresBase: ['A', 'B'] },
+      });
+      const mesures = new Mesures(
+        {
+          mesuresGenerales: [
+            { id: 'A', statut: 'fait', modalites: 'Mon commentaire' },
+          ],
+        },
+        testeur.referentiel(),
+        mesuresReferentiel
+      );
+      testeur.depotDonnees().services = () => [
+        unService(testeur.referentiel())
+          .avecId('S1')
+          .avecNomService('Mon service')
+          .avecOrganisationResponsable({ nom: 'Mon organisation' })
+          .avecMesures(mesures)
+          .construis(),
+      ];
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/services/mesures'
+      );
+
+      expect(reponse.status).to.be(200);
+      expect(reponse.data).to.eql([
+        {
+          id: 'S1',
+          nomService: 'Mon service',
+          organisationResponsable: 'Mon organisation',
+          mesuresAssociees: {
+            A: { statut: 'fait', modalites: 'Mon commentaire' },
+            B: {},
+          },
+        },
+      ]);
     });
   });
 

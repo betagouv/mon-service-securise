@@ -17,6 +17,7 @@ const routesConnecteApiService = require('./routesConnecteApiService');
 const Utilisateur = require('../../modeles/utilisateur');
 const objetGetServices = require('../../modeles/objetsApi/objetGetServices');
 const objetGetIndicesCyber = require('../../modeles/objetsApi/objetGetIndicesCyber');
+const objetGetMesures = require('../../modeles/objetsApi/objetGetMesures');
 const {
   messageErreurDonneesUtilisateur,
   obtentionDonneesDeBaseUtilisateur,
@@ -83,6 +84,42 @@ const routesConnecteApi = ({
         requete.idUtilisateurCourant
       );
       const donnees = objetGetIndicesCyber.donnees(services, autorisations);
+      reponse.json(donnees);
+    }
+  );
+
+  routes.get(
+    '/services/mesures',
+    middleware.verificationAcceptationCGU,
+    async (requete, reponse) => {
+      const services = await depotDonnees.services(
+        requete.idUtilisateurCourant
+      );
+      const donnees = services.map((service) => {
+        const { mesuresGenerales } = objetGetMesures.donnees(service);
+
+        const mesuresAssociees = Object.fromEntries(
+          Object.entries(mesuresGenerales).map(([idMesure, donneesMesure]) => {
+            const { statut, modalites } = donneesMesure;
+            return [
+              idMesure,
+              {
+                ...(statut && { statut }),
+                ...(modalites && { modalites }),
+              },
+            ];
+          })
+        );
+
+        return {
+          id: service.id,
+          nomService: service.nomService(),
+          organisationResponsable:
+            service.descriptionService.organisationResponsable.nom,
+          mesuresAssociees,
+        };
+      });
+
       reponse.json(donnees);
     }
   );
