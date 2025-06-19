@@ -1,14 +1,20 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { MesureReferentiel } from '../ui/types.d';
+  import {
+    CategorieMesure,
+    type MesureReferentiel,
+    Referentiel,
+  } from '../ui/types.d';
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
   import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
   import BarreDeRecherche from '../ui/BarreDeRecherche.svelte';
+  import ListeDeroulanteRiche from '../ui/ListeDeroulanteRiche.svelte';
 
   let mesuresReferentiel: Record<string, MesureReferentiel> = {};
   let recherche = '';
   let mesuresVisibles: Record<string, MesureReferentiel> = {};
+  let filtrageMesures: Record<string, string[]> = {};
 
   onMount(async () => {
     const reponse = await axios.get<Record<string, MesureReferentiel>>(
@@ -16,6 +22,40 @@
     );
     mesuresReferentiel = reponse.data;
   });
+
+  let itemsFiltre: { libelle: string; valeur: string; idCategorie: string }[] =
+    [
+      {
+        libelle: 'ANSSI',
+        valeur: Referentiel.ANSSI,
+        idCategorie: 'referentiel',
+      },
+      {
+        libelle: 'CNIL',
+        valeur: Referentiel.CNIL,
+        idCategorie: 'referentiel',
+      },
+      {
+        libelle: 'Défense',
+        valeur: CategorieMesure.DEFENSE,
+        idCategorie: 'categories',
+      },
+      {
+        libelle: 'Gouvernance',
+        valeur: CategorieMesure.GOUVERNANCE,
+        idCategorie: 'categories',
+      },
+      {
+        libelle: 'Protection',
+        valeur: CategorieMesure.PROTECTION,
+        idCategorie: 'categories',
+      },
+      {
+        libelle: 'Résilience',
+        valeur: CategorieMesure.RESILIENCE,
+        idCategorie: 'categories',
+      },
+    ];
 
   $: {
     mesuresVisibles = Object.fromEntries(
@@ -25,11 +65,37 @@
           mesure.identifiantNumerique.includes(recherche)
       )
     );
+    if (filtrageMesures.categories?.length > 0) {
+      mesuresVisibles = Object.fromEntries(
+        Object.entries(mesuresVisibles).filter(([_, mesure]) =>
+          filtrageMesures.categories.includes(mesure.categorie)
+        )
+      );
+    }
+    if (filtrageMesures.referentiel?.length > 0) {
+      mesuresVisibles = Object.fromEntries(
+        Object.entries(mesuresVisibles).filter(([_, mesure]) =>
+          filtrageMesures.referentiel.includes(mesure.referentiel)
+        )
+      );
+    }
   }
 </script>
 
 <div class="filtres">
   <BarreDeRecherche bind:recherche />
+  <ListeDeroulanteRiche
+    bind:valeursSelectionnees={filtrageMesures}
+    id="filtres"
+    libelle="Filtrer"
+    options={{
+      categories: [
+        { id: 'referentiel', libelle: 'Référentiel' },
+        { id: 'categories', libelle: 'Catégories' },
+      ],
+      items: itemsFiltre,
+    }}
+  />
 </div>
 
 <table>
@@ -64,6 +130,12 @@
     width: 100%;
     max-width: 1200px;
     margin: 32px 0;
+  }
+
+  .filtres {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
   }
 
   table {
