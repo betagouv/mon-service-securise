@@ -11,7 +11,7 @@ block append scripts
   +composantSvelte('listeMesures.js')
   script(type = 'module', src = '/statique/listeMesures.mjs')
 
-block main
+block bandeau-titre
   -
     const filAriane = [
       {label: "Mon tableau de bord", href: "/tableauDeBord"},
@@ -24,4 +24,5 @@ block main
     fil-ariane=JSON.stringify(filAriane)
   )
 
+block main
   #liste-mesures
