@@ -50,6 +50,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     '/visiteGuidee/securiser',
     '/visiteGuidee/homologuer',
     '/visiteGuidee/piloter',
+    '/mesures',
   ].forEach((route) => {
     describe(`quand GET sur ${route}`, () => {
       beforeEach(() => {

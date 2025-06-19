@@ -182,6 +182,15 @@ const routesConnectePage = ({
     }
   );
 
+  routes.get(
+    '/mesures',
+    middleware.verificationAcceptationCGU,
+    middleware.chargeEtatVisiteGuidee,
+    async (_, reponse) => {
+      reponse.render('listeMesures');
+    }
+  );
+
   routes.use(
     '/service',
     middleware.verificationAcceptationCGU,
