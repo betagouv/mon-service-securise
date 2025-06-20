@@ -5,12 +5,10 @@
     type MesureReferentiel,
     Referentiel,
   } from '../ui/types.d';
-  import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
-  import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
-  import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
   import BarreDeRecherche from '../ui/BarreDeRecherche.svelte';
   import ListeDeroulanteRiche from '../ui/ListeDeroulanteRiche.svelte';
   import AucunResultat from './AucunResultat.svelte';
+  import LigneMesure from './LigneMesure.svelte';
 
   let mesuresReferentiel: Record<string, MesureReferentiel> = {};
   let recherche = '';
@@ -116,20 +114,7 @@
   </thead>
   <tbody>
     {#each Object.values(mesuresVisibles) as mesure}
-      <tr>
-        <td>
-          <div>
-            <span>{mesure.description}</span>
-            <div>
-              <CartoucheReferentiel referentiel={mesure.referentiel} />
-              <CartoucheCategorieMesure categorie={mesure.categorie} />
-              <CartoucheIdentifiantMesure
-                identifiant={mesure.identifiantNumerique}
-              />
-            </div>
-          </div>
-        </td>
-      </tr>
+      <LigneMesure {mesure} />
     {/each}
     {#if Object.keys(mesuresVisibles).length === 0}
       <tr>
@@ -169,31 +154,6 @@
         font-size: 0.875rem;
         font-weight: bold;
         line-height: 1.5rem;
-      }
-    }
-
-    tbody {
-      td {
-        padding: 8px 16px;
-        border: 1px solid #dddddd;
-
-        & > div {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-
-          span {
-            font-size: 0.875rem;
-            font-weight: bold;
-            line-height: 1.5rem;
-          }
-
-          div {
-            display: flex;
-            flex-direction: row;
-            gap: 8px;
-          }
-        }
       }
     }
   }
