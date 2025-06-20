@@ -7,6 +7,10 @@
   import BarreFiltres from './BarreFiltres.svelte';
   import { servicesAvecMesuresAssociees } from './servicesAvecMesuresAssociees.store';
   import { onMount } from 'svelte';
+  import DetailsMesure from './DetailsMesure.svelte';
+  import type { MesureReferentiel, ReferentielStatut } from '../ui/types';
+
+  export let statuts: ReferentielStatut;
 
   const effaceRechercheEtFiltres = () => {
     rechercheMesures.reinitialise();
@@ -18,7 +22,15 @@
   });
 
   const entetes = ['Intitulé de la mesure', 'Services associés'];
+
+  let modaleDetailsMesure: DetailsMesure;
+
+  const afficheModaleDetailsMesure = (mesure: MesureReferentiel) => {
+    modaleDetailsMesure.affiche(mesure);
+  };
 </script>
+
+<DetailsMesure bind:this={modaleDetailsMesure} referentielStatuts={statuts} />
 
 <BarreFiltres />
 
@@ -32,7 +44,10 @@
   </thead>
   <tbody>
     {#each Object.values($mesuresReferentielFiltrees) as mesure}
-      <LigneMesure {mesure} />
+      <LigneMesure
+        {mesure}
+        on:servicesCliques={() => afficheModaleDetailsMesure(mesure)}
+      />
     {/each}
     {#if Object.keys($mesuresReferentielFiltrees).length === 0}
       <tr>

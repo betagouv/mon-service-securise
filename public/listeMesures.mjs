@@ -1,3 +1,8 @@
+import lisDonneesPartagees from './modules/donneesPartagees.mjs';
+
 $(() => {
-  document.body.dispatchEvent(new CustomEvent('svelte-recharge-liste-mesures'));
+  const statuts = lisDonneesPartagees('referentiel-statuts-mesures');
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-liste-mesures', { detail: { statuts } })
+  );
 });

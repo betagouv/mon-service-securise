@@ -1,9 +1,10 @@
 <script lang="ts">
   export let description: string;
   export let lienBlog: string | undefined = undefined;
+  export let repliee: boolean = false;
 </script>
 
-<details open={true}>
+<details open={!repliee}>
   <summary />
   <p>
     {@html description}
