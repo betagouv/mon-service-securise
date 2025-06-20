@@ -4,9 +4,19 @@
   import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
   import { mesuresAvecServicesAssociesStore } from './mesuresAvecServicesAssocies.store';
   import type { MesureReferentiel } from '../ui/types';
+  import Bouton from '../ui/Bouton.svelte';
+  import { createEventDispatcher } from 'svelte';
 
   export let mesure: MesureReferentiel;
   $: mesureAvecServicesAssocies = $mesuresAvecServicesAssociesStore[mesure.id];
+
+  const emet = createEventDispatcher<{
+    servicesCliques: null;
+  }>();
+
+  const servicesCliques = () => {
+    emet('servicesCliques');
+  };
 </script>
 
 <tr>
@@ -22,8 +32,14 @@
   </td>
   <td class="services-associes">
     {#if mesureAvecServicesAssocies?.length > 0}
-      Cette mesure est associée à {mesureAvecServicesAssocies.length}
-      {mesureAvecServicesAssocies.length > 1 ? 'services' : 'service'}
+      Cette mesure est associée à
+      <Bouton
+        type="lien-dsfr"
+        titre={`${mesureAvecServicesAssocies.length} ${
+          mesureAvecServicesAssocies.length > 1 ? 'services' : 'service'
+        }`}
+        on:click={servicesCliques}
+      />
     {:else}
       <span class="aucun-service">Aucun service associé</span>
     {/if}
