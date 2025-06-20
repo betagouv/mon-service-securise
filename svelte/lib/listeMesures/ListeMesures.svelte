@@ -1,30 +1,16 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import {
-    CategorieMesure,
-    type MesureReferentiel,
-    Referentiel,
-  } from '../ui/types.d';
+  import { CategorieMesure, Referentiel } from '../ui/types.d';
   import BarreDeRecherche from '../ui/BarreDeRecherche.svelte';
   import ListeDeroulanteRiche from '../ui/ListeDeroulanteRiche.svelte';
   import AucunResultat from './AucunResultat.svelte';
   import LigneMesure from './LigneMesure.svelte';
-
-  let mesuresReferentiel: Record<string, MesureReferentiel> = {};
-  let recherche = '';
-  let mesuresVisibles: Record<string, MesureReferentiel> = {};
-  let filtrageMesures: Record<string, string[]> = {};
-
-  onMount(async () => {
-    const reponse = await axios.get<Record<string, MesureReferentiel>>(
-      '/api/referentiel/mesures'
-    );
-    mesuresReferentiel = reponse.data;
-  });
+  import { filtrageMesures } from './filtrageMesures.store';
+  import { mesuresReferentielFiltrees } from './mesuresReferentielFiltrees.store';
+  import { rechercheMesures } from './rechercheMesures.store';
 
   const effaceRechercheEtFiltres = () => {
-    recherche = '';
-    filtrageMesures = {};
+    rechercheMesures.reinitialise();
+    filtrageMesures.reinitialise();
   };
 
   const entetes = ['Intitulé de la mesure'];
@@ -62,36 +48,12 @@
         idCategorie: 'categories',
       },
     ];
-
-  $: {
-    mesuresVisibles = Object.fromEntries(
-      Object.entries(mesuresReferentiel).filter(
-        ([_, mesure]) =>
-          mesure.description.toLowerCase().includes(recherche.toLowerCase()) ||
-          mesure.identifiantNumerique.includes(recherche)
-      )
-    );
-    if (filtrageMesures.categories?.length > 0) {
-      mesuresVisibles = Object.fromEntries(
-        Object.entries(mesuresVisibles).filter(([_, mesure]) =>
-          filtrageMesures.categories.includes(mesure.categorie)
-        )
-      );
-    }
-    if (filtrageMesures.referentiel?.length > 0) {
-      mesuresVisibles = Object.fromEntries(
-        Object.entries(mesuresVisibles).filter(([_, mesure]) =>
-          filtrageMesures.referentiel.includes(mesure.referentiel)
-        )
-      );
-    }
-  }
 </script>
 
 <div class="filtres">
-  <BarreDeRecherche bind:recherche />
+  <BarreDeRecherche bind:recherche={$rechercheMesures} />
   <ListeDeroulanteRiche
-    bind:valeursSelectionnees={filtrageMesures}
+    bind:valeursSelectionnees={$filtrageMesures}
     id="filtres"
     libelle="Filtrer"
     options={{
@@ -113,10 +75,10 @@
     </tr>
   </thead>
   <tbody>
-    {#each Object.values(mesuresVisibles) as mesure}
+    {#each Object.values($mesuresReferentielFiltrees) as mesure}
       <LigneMesure {mesure} />
     {/each}
-    {#if Object.keys(mesuresVisibles).length === 0}
+    {#if Object.keys($mesuresReferentielFiltrees).length === 0}
       <tr>
         <td colspan={entetes.length}>
           <AucunResultat on:click={effaceRechercheEtFiltres} />
