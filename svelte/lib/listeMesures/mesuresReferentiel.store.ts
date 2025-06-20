@@ -7,7 +7,14 @@ const { subscribe, set } = writable<Record<string, MesureReferentiel>>({});
 axios
   .get<ReferentielMesures>('/api/referentiel/mesures')
   .then(({ data: mesures }) => {
-    set(mesures);
+    set(
+      Object.fromEntries(
+        Object.entries(mesures).map(([idMesure, donneesMesure]) => [
+          idMesure,
+          { ...donneesMesure, id: idMesure },
+        ])
+      )
+    );
   });
 
 export const mesuresReferentiel = {

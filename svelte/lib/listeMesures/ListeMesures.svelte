@@ -5,13 +5,19 @@
   import { filtrageMesures } from './filtrageMesures.store';
   import { rechercheMesures } from './rechercheMesures.store';
   import BarreFiltres from './BarreFiltres.svelte';
+  import { servicesAvecMesuresAssociees } from './servicesAvecMesuresAssociees.store';
+  import { onMount } from 'svelte';
 
   const effaceRechercheEtFiltres = () => {
     rechercheMesures.reinitialise();
     filtrageMesures.reinitialise();
   };
 
-  const entetes = ['Intitulé de la mesure'];
+  onMount(() => {
+    servicesAvecMesuresAssociees.rafraichis();
+  });
+
+  const entetes = ['Intitulé de la mesure', 'Services associés'];
 </script>
 
 <BarreFiltres />

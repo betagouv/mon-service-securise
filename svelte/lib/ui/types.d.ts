@@ -61,6 +61,7 @@ export enum CategorieMesure {
 }
 
 export type MesureReferentiel = {
+  id: string;
   categorie: CategorieMesure;
   description: string;
   identifiantNumerique: string;
