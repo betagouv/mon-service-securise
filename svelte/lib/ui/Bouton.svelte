@@ -12,7 +12,7 @@
     | 'plus'
     | '' = '';
   export let taille: 'petit' | 'moyen' | 'grand' = 'grand';
-  export let type: 'primaire' | 'secondaire' | 'lien';
+  export let type: 'primaire' | 'secondaire' | 'lien' | 'lien-dsfr';
   export let actif: boolean = true;
   export let enCoursEnvoi: boolean = false;
   export let boutonSoumission: boolean = true;
@@ -30,7 +30,7 @@
   {titre}
 </button>
 
-<style>
+<style lang="scss">
   button {
     align-items: center;
     gap: 8px;
@@ -217,6 +217,34 @@
     }
     100% {
       transform: rotate(360deg);
+    }
+  }
+
+  .lien-dsfr {
+    color: #042794;
+    background-color: #fff;
+    border: none;
+    text-decoration: underline;
+    text-decoration-color: #042794;
+    text-underline-offset: 5px;
+    padding: 2px 0;
+    margin-left: 2px;
+    display: inline;
+    border-radius: 0;
+
+    &:hover {
+      text-decoration-thickness: 2px;
+    }
+
+    &:active {
+      background-color: #eee;
+    }
+
+    &:focus {
+      background-color: white;
+      outline: 2px solid #0079d0;
+      outline-offset: 1px;
+      text-decoration: none;
     }
   }
 </style>

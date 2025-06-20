@@ -187,7 +187,9 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
     async (_, reponse) => {
-      reponse.render('listeMesures');
+      reponse.render('listeMesures', {
+        referentiel,
+      });
     }
   );
 

@@ -66,4 +66,5 @@ export type MesureReferentiel = {
   description: string;
   identifiantNumerique: string;
   referentiel: Referentiel;
+  descriptionLongue: string;
 };

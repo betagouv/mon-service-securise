@@ -9,6 +9,7 @@ block append styles
 
 block append scripts
   +composantSvelte('listeMesures.js')
+  +donneesPartagees('referentiel-statuts-mesures', referentiel.statutsMesures())
   script(type = 'module', src = '/statique/listeMesures.mjs')
 
 block bandeau-titre
