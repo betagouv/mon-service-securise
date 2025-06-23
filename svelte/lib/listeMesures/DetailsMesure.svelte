@@ -29,72 +29,105 @@
 </script>
 
 <dialog bind:this={elementModale}>
-  <h4>Mesure</h4>
+  <div class="conteneur-fermeture">
+    <button on:click={() => ferme()}>Fermer</button>
+  </div>
   {#if mesure}
-    <p class="description">{mesure.description}</p>
-    <div class="cartouches">
-      <CartoucheReferentiel referentiel={mesure.referentiel} />
-      <CartoucheCategorieMesure categorie={mesure.categorie} />
-      <CartoucheIdentifiantMesure identifiant={mesure.identifiantNumerique} />
-    </div>
+    <div class="conteneur-modale">
+      <div class="entete-modale">
+        <h4>Mesure</h4>
+        <p class="description">{mesure.description}</p>
+        <div class="cartouches">
+          <CartoucheReferentiel referentiel={mesure.referentiel} />
+          <CartoucheCategorieMesure categorie={mesure.categorie} />
+          <CartoucheIdentifiantMesure
+            identifiant={mesure.identifiantNumerique}
+          />
+        </div>
 
-    <DescriptionLongueMesure
-      description={mesure.descriptionLongue}
-      repliee={true}
-    />
+        <DescriptionLongueMesure
+          description={mesure.descriptionLongue}
+          repliee={true}
+        />
 
-    <h4>
-      {servicesAssocies.length}
-      {servicesAssocies.length > 1 ? 'services associés' : 'service associé'} à cette
-      mesure
-    </h4>
-    <table>
-      <thead>
-        <tr>
-          <th>Nom du service</th>
-          <th>Statut actuel</th>
-          <th>Précision actuelle</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each servicesAssocies as service}
-          <tr>
-            <td>
-              <div class="intitule-service">
-                <span class="nom">{service.nomService}</span>
-                <span class="organisation"
-                  >{service.organisationResponsable}</span
+        <h4>
+          {servicesAssocies.length}
+          {servicesAssocies.length > 1
+            ? 'services associés'
+            : 'service associé'} à cette mesure
+        </h4>
+      </div>
+      <div class="contenu-modale">
+        <table>
+          <thead>
+            <tr>
+              <th>Nom du service</th>
+              <th>Statut actuel</th>
+              <th>Précision actuelle</th>
+            </tr>
+          </thead>
+          <tbody>
+            {#each servicesAssocies as service}
+              <tr>
+                <td>
+                  <div class="intitule-service">
+                    <span class="nom">{service.nomService}</span>
+                    <span class="organisation"
+                      >{service.organisationResponsable}</span
+                    >
+                  </div>
+                </td>
+                <td
+                  ><TagStatutMesure
+                    {referentielStatuts}
+                    statut={service.mesuresAssociees[mesure.id].statut}
+                  /></td
                 >
-              </div>
-            </td>
-            <td
-              ><TagStatutMesure
-                {referentielStatuts}
-                statut={service.mesuresAssociees[mesure.id].statut}
-              /></td
-            >
-            <td>{service.mesuresAssociees[mesure.id].modalites || ''}</td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-
-    <div class="conteneur-fermeture">
-      <button on:click={() => ferme()}>Fermer</button>
-    </div>
-    <div class="conteneur-actions">
-      <button class="bouton bouton-secondaire" on:click={() => ferme()}
-        >Retour à la liste de mesures
-      </button>
+                <td>{service.mesuresAssociees[mesure.id].modalites || ''}</td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
+      <div class="pied-modale">
+        <div class="conteneur-actions">
+          <button class="bouton bouton-secondaire" on:click={() => ferme()}
+            >Retour à la liste de mesures
+          </button>
+        </div>
+      </div>
     </div>
   {/if}
 </dialog>
 
 <style lang="scss">
+  .conteneur-modale {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+  }
+  .pied-modale,
+  .entete-modale {
+    flex-shrink: 0;
+    position: sticky;
+    z-index: 1;
+    background: white;
+  }
+  .entete-modale {
+    top: 0;
+  }
+  .pied-modale {
+    bottom: 0;
+  }
+  .contenu-modale {
+    flex-grow: 1;
+    margin-top: 24px;
+    overflow-y: auto;
+  }
   table {
     border-collapse: collapse;
     width: 100%;
-    margin-top: 24px;
     color: #3a3a3a;
     font-size: 0.875rem;
     line-height: 1.5rem;
@@ -161,7 +194,7 @@
   .conteneur-fermeture {
     position: absolute;
     top: 16px;
-    right: 16px;
+    right: 35px;
 
     button {
       border: none;
@@ -207,8 +240,6 @@
 
   .conteneur-actions {
     border-top: 1px solid var(--systeme-design-etat-contour-champs);
-    position: sticky;
-    bottom: 0;
     width: 100%;
     background: white;
     display: flex;
