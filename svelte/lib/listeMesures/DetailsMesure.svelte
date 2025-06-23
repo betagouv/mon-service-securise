@@ -109,9 +109,13 @@
       }
     }
 
-    td {
-      padding: 8px 16px;
+    tbody {
       border: 1px solid #dddddd;
+
+      td {
+        padding: 8px 16px;
+        border-top: 1px solid #dddddd;
+      }
     }
 
     .intitule-service {
