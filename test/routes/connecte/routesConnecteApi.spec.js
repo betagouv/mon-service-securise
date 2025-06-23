@@ -247,6 +247,136 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
   });
 
+  describe('quand requête POST sur `/api/services/mesures/:id`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/services/mesures/unIdDeMesure',
+        },
+        done
+      );
+    });
+
+    it('aseptise les données', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['idsServices.*', 'id', 'statut', 'modalites'],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/services/mesures/unIdDeMesure',
+        },
+        done
+      );
+    });
+
+    it('jette une erreur si le statut ET les modalités ne sont pas précisés', async () => {
+      try {
+        await axios.put(
+          'http://localhost:1234/api/services/mesures/unIdDeMesure',
+          {
+            statut: undefined,
+            modalites: undefined,
+          }
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
+    });
+
+    it("jette une erreur si l'identifiant de la mesure est inconnu", async () => {
+      testeur.referentiel().recharge({
+        mesures: {
+          uneMesureConnue: {},
+        },
+      });
+      try {
+        await axios.put(
+          'http://localhost:1234/api/services/mesures/uneMesureInconnue',
+          {
+            statut: 'fait',
+          }
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
+    });
+
+    it('jette une erreur si le statut est inconnu', async () => {
+      testeur.referentiel().recharge({
+        mesures: { uneMesureConnue: {} },
+        statutsMesures: { unStatut: {} },
+      });
+      try {
+        await axios.put(
+          'http://localhost:1234/api/services/mesures/uneMesureConnue',
+          {
+            statut: 'unStatutInconnu',
+          }
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
+    });
+
+    it("ne jette pas d'erreur si le statut est vide", async () => {
+      testeur.referentiel().recharge({
+        mesures: { uneMesureConnue: {} },
+      });
+      testeur.depotDonnees().metsAJourMesureGeneraleDesServices =
+        async () => {};
+
+      const reponse = await axios.put(
+        'http://localhost:1234/api/services/mesures/uneMesureConnue',
+        {
+          statut: '',
+          modalites: 'une modalité',
+        }
+      );
+
+      expect(reponse.status).to.be(200);
+    });
+
+    it('délègue au dépôt de données la mise à jour de la mesure pour les services concernés', async () => {
+      let donneesRecues;
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.depotDonnees().metsAJourMesureGeneraleDesServices = async (
+        idUtilisateur,
+        idsServices,
+        id,
+        statut,
+        modalites
+      ) => {
+        donneesRecues = { idUtilisateur, idsServices, id, statut, modalites };
+      };
+      testeur.referentiel().recharge({
+        mesures: {
+          uneMesureConnue: {},
+        },
+        statutsMesures: { fait: {} },
+      });
+
+      await axios.put(
+        'http://localhost:1234/api/services/mesures/uneMesureConnue',
+        {
+          statut: 'fait',
+          modalites: 'une modalité',
+          idsServices: ['S1', 'S2'],
+        }
+      );
+
+      expect(donneesRecues).to.eql({
+        idUtilisateur: 'U1',
+        idsServices: ['S1', 'S2'],
+        id: 'uneMesureConnue',
+        statut: 'fait',
+        modalites: 'une modalité',
+      });
+    });
+  });
+
   describe('quand requête GET sur `/api/services/export.csv`', () => {
     beforeEach(() => {
       testeur.adaptateurCsv().genereCsvServices = async () => {};

@@ -430,6 +430,9 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     };
   };
 
+  const estStatutMesureConnu = (statut) =>
+    Object.keys(statutsMesures()).includes(statut);
+
   valideDonnees();
 
   return {
@@ -468,6 +471,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     estIdentifiantStatutAvisDossierHomologationConnu,
     estimationNombreServices,
     estOptionFiltrageDateConnue,
+    estStatutMesureConnu,
     etapeDossierAutorisee,
     etapeExiste,
     etapesParcoursHomologation,
