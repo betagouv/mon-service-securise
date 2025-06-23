@@ -175,6 +175,48 @@ const nouvelAdaptateur = (env) => {
     return avecPMapPourChaqueElement(idsServices, service);
   };
 
+  const servicesComplets = async (idUtilisateur) => {
+    const d = await knex.raw(
+      `
+      SELECT
+        s.*,
+        COALESCE(sugg_agg.suggestions, '[]') AS suggestions,
+        COALESCE(u_agg.utilisateurs, '[]') AS utilisateurs
+      FROM services s
+      
+      LEFT JOIN (
+        SELECT id_service, json_agg(nature) FILTER (WHERE date_acquittement IS NULL) AS suggestions
+        FROM suggestions_actions
+        GROUP BY id_service
+      ) sugg_agg ON sugg_agg.id_service = s.id
+      
+      LEFT JOIN (
+        SELECT 
+          (a.donnees->>'idService')::uuid AS service_id,
+          json_agg(u.*) AS utilisateurs
+        FROM autorisations a
+        JOIN utilisateurs u ON (a.donnees->>'idUtilisateur')::uuid = u.id
+        GROUP BY service_id
+      ) u_agg ON u_agg.service_id = s.id
+    
+      WHERE s.id IN (
+        SELECT (a2.donnees->>'idService')::uuid
+        FROM autorisations a2
+        WHERE (a2.donnees->>'idUtilisateur')::uuid = ?
+      );
+      `,
+      [idUtilisateur]
+    );
+    return d.rows;
+  };
+
+  const nombreServices = async (idUtilisateur) => {
+    const total = await knex('autorisations')
+      .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
+      .count();
+    return total[0]?.count;
+  };
+
   const tousLesServices = async () => {
     const lignes = await knex('services').select({ id: 'id' });
     const ids = lignes.map(({ id }) => id);
@@ -664,6 +706,7 @@ const nouvelAdaptateur = (env) => {
     metsAJourProgressionTeleversement,
     metsAJourUtilisateur,
     nbAutorisationsProprietaire,
+    nombreServices,
     nouveautesPourUtilisateur,
     parrainagePour,
     contributeursDesServicesDe,
@@ -696,6 +739,7 @@ const nouvelAdaptateur = (env) => {
     utilisateur,
     utilisateurAvecEmailHash,
     utilisateurAvecIdReset,
+    servicesComplets,
   };
 };
 
