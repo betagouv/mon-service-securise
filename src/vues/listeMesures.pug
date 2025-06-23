@@ -3,10 +3,6 @@ block variables
   - const meta_description = "Retrouvez ici le référentiel de l'ANSSI et de la CNIL regroupant l'ensemble des mesures de sécurité."
   - const titrePage = 'Liste de mesures'
 
-block append styles
-  link(href = '/statique/assets/styles/main-responsive.css', rel = 'stylesheet')
-
-
 block append scripts
   +composantSvelte('listeMesures.js')
   +donneesPartagees('referentiel-statuts-mesures', referentiel.statutsMesures())
