@@ -124,6 +124,39 @@ const routesConnecteApi = ({
     }
   );
 
+  routes.put(
+    '/services/mesures/:id',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise('idsServices.*', 'id', 'statut', 'modalites'),
+    async (requete, reponse) => {
+      const { statut, modalites, idsServices } = requete.body;
+      const { id } = requete.params;
+
+      if (
+        (!statut && !modalites) ||
+        !referentiel.estIdentifiantMesureConnu(id)
+      ) {
+        reponse.sendStatus(400);
+        return;
+      }
+
+      if (statut && !referentiel.estStatutMesureConnu(statut)) {
+        reponse.sendStatus(400);
+        return;
+      }
+
+      await depotDonnees.metsAJourMesureGeneraleDesServices(
+        requete.idUtilisateurCourant,
+        idsServices,
+        id,
+        statut,
+        modalites
+      );
+
+      reponse.sendStatus(200);
+    }
+  );
+
   routes.get(
     '/services/export.csv',
     middleware.verificationAcceptationCGU,
