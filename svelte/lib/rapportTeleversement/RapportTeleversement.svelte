@@ -97,110 +97,150 @@
 </script>
 
 <dialog bind:this={elementModale} class:enCoursEnvoi>
-  {#if enCoursEnvoi}
-    <div class="conteneur-progression">
-      <div class="texte-progression">
-        <h2>
-          Téléversement en cours... <span class="pourcentage-progression"
-            >{progression}%</span
-          >
-        </h2>
-        <span>Merci de ne pas rafraichir votre navigateur</span>
-      </div>
-      <progress value={progression} max="100" />
-    </div>
-  {:else if rapportDetaille}
-    <h2>Rapport du téléversement des services</h2>
-    <div class="conteneur-toasts">
-      {#if rapportDetaille.statut === 'INVALIDE'}
-        <Toast
-          niveau="erreur"
-          titre={`${nbServicesInvalides} ${pluraliseChaine(
-            'service invalide',
-            'services invalides',
-            nbServicesInvalides
-          )}`}
-          contenu="Corriger le fichier XLSX et réimportez-le"
-          avecOmbre={false}
-          avecAnimation={false}
-        />
-      {/if}
-      <Toast
-        niveau="succes"
-        titre={`${nbServicesValides} ${pluraliseChaine(
-          'service valide',
-          'services valides',
-          nbServicesValides
-        )}`}
-        contenu="Aucune erreur détéctée"
-        avecOmbre={false}
-        avecAnimation={false}
-      />
-    </div>
+  {#if !enCoursEnvoi}
     <div class="conteneur-fermeture">
       <button on:click={() => fermeRapport()}>Fermer</button>
     </div>
-    <h2>Rapport détaillé</h2>
-    <div class="conteneur-rapport-detaille">
-      <table>
-        <thead>
-          <tr>
-            <th scope="colgroup">État</th>
-            <th scope="colgroup" class="bordure-droite">Raison de l'erreur</th>
-            <th>Ligne</th>
-            <th>Nom du service numérique</th>
-            <th>SIRET de l'organisation</th>
-            <th>Nombre d'organisation(s) utilisatrice(s)</th>
-            <th>Type</th>
-            <th>Provenance</th>
-            <th>Statut</th>
-            <th>Localisation des données</th>
-            <th>Durée maximale de dysfonctionnement</th>
-            <th>Date d'homologation</th>
-            <th>Durée d'homologation</th>
-            <th>Autorité</th>
-            <th>Fonction de l'autorité</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each rapportDetaille.services as service, idx (idx)}
-            {#if service.erreurs.length > 0}
-              <LigneService {service} numeroLigne={idx + 1} />
-            {/if}
-          {/each}
-          {#each rapportDetaille.services as service, idx (idx)}
-            {#if service.erreurs.length === 0}
-              <LigneService {service} numeroLigne={idx + 1} />
-            {/if}
-          {/each}
-        </tbody>
-      </table>
-    </div>
-    <div class="conteneur-actions">
-      <button class="bouton bouton-secondaire" on:click={() => fermeRapport()}
-        >Annuler
-      </button>
-      <button
-        class="bouton bouton-primaire bouton-accepter"
-        class:estValide
-        on:click={() =>
-          estValide ? valideImport() : fermeRapportEtOuvreTiroir()}
-      >
-        {estValide
-          ? `Importer les ${rapportDetaille.services.length} ${pluraliseChaine(
-              'service',
-              'services',
-              rapportDetaille.services.length
-            )}`
-          : 'Réimporter le fichier XLSX corrigé'}
-      </button>
-    </div>
   {/if}
+  <div class="conteneur-modale">
+    {#if enCoursEnvoi}
+      <div class="conteneur-progression">
+        <div class="texte-progression">
+          <h2>
+            Téléversement en cours... <span class="pourcentage-progression"
+              >{progression}%</span
+            >
+          </h2>
+          <span>Merci de ne pas rafraichir votre navigateur</span>
+        </div>
+        <progress value={progression} max="100" />
+      </div>
+    {:else if rapportDetaille}
+      <div class="entete-modale">
+        <h2>Rapport du téléversement des services</h2>
+        <div class="conteneur-toasts">
+          {#if rapportDetaille.statut === 'INVALIDE'}
+            <Toast
+              niveau="erreur"
+              titre={`${nbServicesInvalides} ${pluraliseChaine(
+                'service invalide',
+                'services invalides',
+                nbServicesInvalides
+              )}`}
+              contenu="Corriger le fichier XLSX et réimportez-le"
+              avecOmbre={false}
+              avecAnimation={false}
+            />
+          {/if}
+          <Toast
+            niveau="succes"
+            titre={`${nbServicesValides} ${pluraliseChaine(
+              'service valide',
+              'services valides',
+              nbServicesValides
+            )}`}
+            contenu="Aucune erreur détéctée"
+            avecOmbre={false}
+            avecAnimation={false}
+          />
+        </div>
+      </div>
+      <div class="contenu-modale">
+        <h2>Rapport détaillé</h2>
+        <div class="conteneur-rapport-detaille">
+          <table>
+            <thead>
+              <tr>
+                <th scope="colgroup">État</th>
+                <th scope="colgroup" class="bordure-droite"
+                  >Raison de l'erreur</th
+                >
+                <th>Ligne</th>
+                <th>Nom du service numérique</th>
+                <th>SIRET de l'organisation</th>
+                <th>Nombre d'organisation(s) utilisatrice(s)</th>
+                <th>Type</th>
+                <th>Provenance</th>
+                <th>Statut</th>
+                <th>Localisation des données</th>
+                <th>Durée maximale de dysfonctionnement</th>
+                <th>Date d'homologation</th>
+                <th>Durée d'homologation</th>
+                <th>Autorité</th>
+                <th>Fonction de l'autorité</th>
+              </tr>
+            </thead>
+            <tbody>
+              {#each rapportDetaille.services as service, idx (idx)}
+                {#if service.erreurs.length > 0}
+                  <LigneService {service} numeroLigne={idx + 1} />
+                {/if}
+              {/each}
+              {#each rapportDetaille.services as service, idx (idx)}
+                {#if service.erreurs.length === 0}
+                  <LigneService {service} numeroLigne={idx + 1} />
+                {/if}
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="pied-modale">
+        <div class="conteneur-actions">
+          <button
+            class="bouton bouton-secondaire"
+            on:click={() => fermeRapport()}
+            >Annuler
+          </button>
+          <button
+            class="bouton bouton-primaire bouton-accepter"
+            class:estValide
+            on:click={() =>
+              estValide ? valideImport() : fermeRapportEtOuvreTiroir()}
+          >
+            {estValide
+              ? `Importer les ${
+                  rapportDetaille.services.length
+                } ${pluraliseChaine(
+                  'service',
+                  'services',
+                  rapportDetaille.services.length
+                )}`
+              : 'Réimporter le fichier XLSX corrigé'}
+          </button>
+        </div>
+      </div>
+    {/if}
+  </div>
 </dialog>
 
 <style lang="scss">
   dialog::backdrop {
     background: rgba(22, 22, 22, 0.64);
+  }
+  .conteneur-modale {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+  }
+  .pied-modale,
+  .entete-modale {
+    flex-shrink: 0;
+    position: sticky;
+    z-index: 1;
+    background: white;
+  }
+  .entete-modale {
+    top: 0;
+  }
+  .pied-modale {
+    bottom: 0;
+  }
+  .contenu-modale {
+    flex-grow: 1;
+    margin-top: 24px;
+    overflow-y: auto;
   }
 
   dialog {
@@ -223,7 +263,7 @@
   .conteneur-fermeture {
     position: absolute;
     top: 16px;
-    right: 16px;
+    right: 35px;
 
     button {
       border: none;
@@ -302,8 +342,6 @@
 
   .conteneur-actions {
     border-top: 1px solid var(--systeme-design-etat-contour-champs);
-    position: sticky;
-    bottom: 0;
     width: 100%;
     background: white;
     display: flex;
