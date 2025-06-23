@@ -3,6 +3,7 @@ const {
   ErreurServiceInexistant,
   ErreurNomServiceDejaExistant,
   ErreurDonneesNiveauSecuriteInsuffisant,
+  ErreurStatutMesureManquant,
 } = require('../erreurs');
 const DescriptionService = require('../modeles/descriptionService');
 const Dossier = require('../modeles/dossier');
@@ -21,6 +22,7 @@ const EvenementRisqueServiceModifie = require('../bus/evenementRisqueServiceModi
 const {
   avecPMapPourChaqueElementSansPromesse,
 } = require('../utilitaires/pMap');
+const MesureGenerale = require('../modeles/mesureGenerale');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -453,6 +455,60 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const metsAJourMesureGeneraleDesServices = async (
+    idUtilisateur,
+    idsServices,
+    idMesure,
+    statut,
+    modalites
+  ) => {
+    const utilisateur =
+      await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
+    const servicesDeUtilisateur = await p.lis.ceuxDeUtilisateur(idUtilisateur);
+    const servicesConcernes = servicesDeUtilisateur.filter((s) =>
+      idsServices.includes(s.id)
+    );
+
+    const pourUnService = async (s) => {
+      const ancienneMesure = s.mesuresGenerales().avecId(idMesure);
+      let nouvelleMesure;
+      if (!ancienneMesure) {
+        if (!statut) throw new ErreurStatutMesureManquant();
+
+        nouvelleMesure = new MesureGenerale(
+          {
+            id: idMesure,
+            statut,
+            modalites,
+          },
+          referentiel
+        );
+      } else {
+        nouvelleMesure = new MesureGenerale(
+          { ...s.mesuresGenerales().avecId(idMesure) },
+          referentiel
+        );
+        if (statut) nouvelleMesure.statut = statut;
+        if (modalites) nouvelleMesure.modalites = modalites;
+      }
+
+      s.metsAJourMesureGenerale(nouvelleMesure);
+      await metsAJourService(s);
+
+      await busEvenements.publie(
+        new EvenementMesureServiceModifiee({
+          service: s,
+          utilisateur,
+          ancienneMesure,
+          nouvelleMesure,
+          typeMesure: 'generale',
+        })
+      );
+    };
+
+    await Promise.all(servicesConcernes.map(pourUnService));
+  };
+
   const metsAJourMesureSpecifiqueDuService = async (
     idService,
     idUtilisateur,
@@ -584,6 +640,7 @@ const creeDepot = (config = {}) => {
     finaliseDossierCourant,
     serviceExiste,
     enregistreDossier,
+    metsAJourMesureGeneraleDesServices,
     metsAJourMesureGeneraleDuService,
     metsAJourMesureSpecifiqueDuService,
     metsAJourRisqueSpecifiqueDuService,

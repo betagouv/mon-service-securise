@@ -13,6 +13,7 @@ const fabriqueBusPourLesTests = () => {
     },
     recupereEvenement: (typeAttendu) =>
       evenementsRecus.find((e) => e instanceof typeAttendu),
+    tousEvenements: () => [...evenementsRecus],
   };
 };
 
