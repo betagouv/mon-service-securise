@@ -83,5 +83,9 @@
         line-height: 1.5rem;
       }
     }
+
+    tbody {
+      border: 1px solid #dddddd;
+    }
   }
 </style>

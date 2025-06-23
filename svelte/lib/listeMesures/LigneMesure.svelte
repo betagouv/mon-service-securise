@@ -57,7 +57,7 @@
 
   td {
     padding: 8px 16px;
-    border: 1px solid #dddddd;
+    border-top: 1px solid #dddddd;
 
     & > div {
       display: flex;
