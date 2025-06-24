@@ -7,6 +7,7 @@
   import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
   import Bouton from '../../../ui/Bouton.svelte';
   import PremiereEtape from './etapes/PremiereEtape.svelte';
+  import SecondeEtape from './etapes/SecondeEtape.svelte';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -20,24 +21,35 @@
 </script>
 
 <ContenuTiroir>
-  <div>
-    <DescriptionCompleteMesure {mesure} />
-    <hr />
-  </div>
-  <EtapierTiroir etapeCourante={1} />
+  {#if etapeCourante === 1}
+    <div>
+      <DescriptionCompleteMesure {mesure} />
+      <hr />
+    </div>
+  {/if}
+  <EtapierTiroir {etapeCourante} />
   <hr />
-  <PremiereEtape {statuts} bind:statutSelectionne bind:precision />
+  {#if etapeCourante === 1}
+    <PremiereEtape {statuts} bind:statutSelectionne bind:precision />
+  {:else if etapeCourante === 2}
+    <SecondeEtape {statuts} {mesure} />
+  {/if}
 </ContenuTiroir>
 <ActionsTiroir>
-  <Bouton
-    type="lien"
-    titre="Retour à la liste de mesure"
-    on:click={() => tiroirStore.ferme()}
-  />
+  {#if etapeCourante === 1}
+    <Bouton
+      type="lien"
+      titre="Retour à la liste de mesure"
+      on:click={() => tiroirStore.ferme()}
+    />
+  {:else}
+    <Bouton type="lien" titre="Précédent" on:click={() => etapeCourante--} />
+  {/if}
   <Bouton
     titre="Suivant"
     type="primaire"
     actif={!!statutSelectionne || !!precision}
+    on:click={() => etapeCourante++}
   />
 </ActionsTiroir>
 
