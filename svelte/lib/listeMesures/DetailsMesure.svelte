@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { decode } from 'html-entities';
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
   import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
@@ -71,7 +72,7 @@
               <tr>
                 <td>
                   <div class="intitule-service">
-                    <span class="nom">{service.nomService}</span>
+                    <span class="nom">{decode(service.nomService)}</span>
                     <span class="organisation"
                       >{service.organisationResponsable}</span
                     >
@@ -83,7 +84,10 @@
                     statut={service.mesuresAssociees[mesure.id].statut}
                   /></td
                 >
-                <td>{service.mesuresAssociees[mesure.id].modalites || ''}</td>
+                <td
+                  >{decode(service.mesuresAssociees[mesure.id].modalites) ||
+                    ''}</td
+                >
               </tr>
             {/each}
           </tbody>
