@@ -1,11 +1,11 @@
 <script lang="ts">
   import AucunResultat from './AucunResultat.svelte';
-  import { mesuresReferentielFiltrees } from './mesuresReferentielFiltrees.store';
+  import { mesuresReferentielFiltrees } from './stores/mesuresReferentielFiltrees.store';
   import LigneMesure from './LigneMesure.svelte';
-  import { filtrageMesures } from './filtrageMesures.store';
-  import { rechercheMesures } from './rechercheMesures.store';
+  import { filtrageMesures } from './stores/filtrageMesures.store';
+  import { rechercheMesures } from './stores/rechercheMesures.store';
   import BarreFiltres from './BarreFiltres.svelte';
-  import { servicesAvecMesuresAssociees } from './servicesAvecMesuresAssociees.store';
+  import { servicesAvecMesuresAssociees } from './stores/servicesAvecMesuresAssociees.store';
   import { onMount } from 'svelte';
   import DetailsMesure from './DetailsMesure.svelte';
   import type { MesureReferentiel, ReferentielStatut } from '../ui/types';

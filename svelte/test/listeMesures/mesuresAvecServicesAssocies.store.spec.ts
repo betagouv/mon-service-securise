@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { mesuresAvecServicesAssociesStore } from '../../lib/listeMesures/mesuresAvecServicesAssocies.store';
-import { servicesAvecMesuresAssociees } from '../../lib/listeMesures/servicesAvecMesuresAssociees.store';
+import { mesuresAvecServicesAssociesStore } from '../../lib/listeMesures/stores/mesuresAvecServicesAssocies.store';
+import { servicesAvecMesuresAssociees } from '../../lib/listeMesures/stores/servicesAvecMesuresAssociees.store';
 import { get } from 'svelte/store';
 
 describe('Le store des mesures avec services associés', () => {

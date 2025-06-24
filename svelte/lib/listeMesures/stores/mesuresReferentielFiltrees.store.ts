@@ -1,7 +1,7 @@
 import { mesuresReferentiel } from './mesuresReferentiel.store';
 import { derived } from 'svelte/store';
 import { filtrageMesures } from './filtrageMesures.store';
-import type { ReferentielMesures } from './listeMesures.d';
+import type { ReferentielMesures } from '../listeMesures.d';
 import { rechercheMesures } from './rechercheMesures.store';
 
 const { subscribe } = derived<

@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { ServiceAvecMesuresAssociees } from './listeMesures.d';
+import type { ServiceAvecMesuresAssociees } from '../listeMesures.d';
 
 const { subscribe, set } = writable<ServiceAvecMesuresAssociees[]>([]);
 

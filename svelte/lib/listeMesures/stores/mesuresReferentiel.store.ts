@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
-import type { MesureReferentiel } from '../ui/types';
-import type { ReferentielMesures } from './listeMesures.d';
+import type { MesureReferentiel } from '../../ui/types';
+import type { ReferentielMesures } from '../listeMesures.d';
 
 const { subscribe, set } = writable<Record<string, MesureReferentiel>>({});
 
