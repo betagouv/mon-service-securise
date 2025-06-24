@@ -10,6 +10,7 @@
     | 'rafraichir'
     | 'inviter'
     | 'plus'
+    | 'configuration'
     | '' = '';
   export let taille: 'petit' | 'moyen' | 'grand' = 'grand';
   export let type: 'primaire' | 'secondaire' | 'lien' | 'lien-dsfr';
@@ -95,6 +96,10 @@
   .plus:before {
     background-image: url('/statique/assets/images/icone_plus_dsfr.svg');
     transform: translateY(1px);
+  }
+
+  .configuration:before {
+    background-image: url('/statique/assets/images/icone_configuration.svg');
   }
 
   .avecIcone:before {
