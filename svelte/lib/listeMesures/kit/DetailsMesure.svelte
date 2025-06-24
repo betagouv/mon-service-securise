@@ -1,13 +1,9 @@
 <script lang="ts">
   import { decode } from 'html-entities';
-  import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
-  import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
-  import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
-  import type { MesureReferentiel, ReferentielStatut } from '../ui/types.d';
-  import DescriptionLongueMesure from '../ui/DescriptionLongueMesure.svelte';
-  import { mesuresAvecServicesAssociesStore } from './stores/mesuresAvecServicesAssocies.store';
-  import { servicesAvecMesuresAssociees } from './stores/servicesAvecMesuresAssociees.store';
-  import TagStatutMesure from '../ui/TagStatutMesure.svelte';
+  import type { MesureReferentiel, ReferentielStatut } from '../../ui/types.d';
+  import { mesuresAvecServicesAssociesStore } from '../stores/mesuresAvecServicesAssocies.store';
+  import { servicesAvecMesuresAssociees } from '../stores/servicesAvecMesuresAssociees.store';
+  import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import DescriptionCompleteMesure from './DescriptionCompleteMesure.svelte';
 
   export let referentielStatuts: ReferentielStatut;
