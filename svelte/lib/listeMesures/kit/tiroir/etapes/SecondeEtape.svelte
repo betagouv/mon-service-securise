@@ -9,16 +9,40 @@
   import TagStatutMesure from '../../../../ui/TagStatutMesure.svelte';
   import { servicesAvecMesuresAssociees } from '../../../stores/servicesAvecMesuresAssociees.store';
   import { mesuresAvecServicesAssociesStore } from '../../../stores/mesuresAvecServicesAssocies.store';
+  import AucunResultat from '../../AucunResultat.svelte';
 
   export let statuts: ReferentielStatut;
   export let mesure: MesureReferentiel;
   let recherche: string = '';
-  let filtrageStatut: Record<'statut', string[]>;
+  let filtrageStatut: Record<'statut', string[]> = { statut: [] };
+
+  const effaceRechercheEtFiltres = () => {
+    recherche = '';
+    filtrageStatut = { statut: [] };
+  };
+
   $: servicesAssocies =
     mesure &&
     $servicesAvecMesuresAssociees.filter((s) => {
       return $mesuresAvecServicesAssociesStore[mesure.id].includes(s?.id);
     });
+
+  $: servicesFiltres = servicesAssocies
+    .filter((s) =>
+      recherche
+        ? s.nomService.toLowerCase().includes(recherche.toLowerCase()) ||
+          s.organisationResponsable
+            .toLowerCase()
+            .includes(recherche.toLowerCase())
+        : true
+    )
+    .filter((s) =>
+      filtrageStatut.statut.length > 0
+        ? filtrageStatut.statut.includes(
+            s.mesuresAssociees[mesure.id].statut || 'aDefinir'
+          )
+        : true
+    );
 </script>
 
 <span>
@@ -33,11 +57,14 @@
     libelle="Filtrer"
     options={{
       categories: [{ id: 'statut', libelle: 'Statuts' }],
-      items: Object.entries(statuts).map(([id, statut]) => ({
-        libelle: statut,
-        valeur: id,
-        idCategorie: 'statut',
-      })),
+      items: [
+        { libelle: 'À définir', valeur: 'aDefinir', idCategorie: 'statut' },
+        ...Object.entries(statuts).map(([id, statut]) => ({
+          libelle: statut,
+          valeur: id,
+          idCategorie: 'statut',
+        })),
+      ],
     }}
   />
 </div>
@@ -50,7 +77,7 @@
     </tr>
   </thead>
   <tbody>
-    {#each servicesAssocies as service}
+    {#each servicesFiltres as service}
       <tr>
         <td>
           <div class="intitule-service">
@@ -67,6 +94,13 @@
         <td>{decode(service.mesuresAssociees[mesure.id].modalites) || ''}</td>
       </tr>
     {/each}
+    {#if servicesFiltres.length === 0}
+      <tr>
+        <td colspan="3">
+          <AucunResultat on:click={effaceRechercheEtFiltres} />
+        </td>
+      </tr>
+    {/if}
   </tbody>
 </table>
 
