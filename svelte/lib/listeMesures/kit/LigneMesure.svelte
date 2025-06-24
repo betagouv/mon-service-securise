@@ -13,7 +13,7 @@
   export let statuts: ReferentielStatut;
 
   $: mesureAvecServicesAssocies = $mesuresAvecServicesAssociesStore[mesure.id];
-  $: actionDisponible = mesureAvecServicesAssocies?.length > 0;
+  $: aDesServicesAssocies = mesureAvecServicesAssocies?.length > 0;
 
   const emet = createEventDispatcher<{
     servicesCliques: null;
@@ -36,7 +36,7 @@
     </div>
   </td>
   <td class="services-associes">
-    {#if actionDisponible}
+    {#if aDesServicesAssocies}
       Cette mesure est associée à
       <Bouton
         type="lien-dsfr"
@@ -55,7 +55,7 @@
       type="secondaire"
       taille="petit"
       icone="configuration"
-      actif={actionDisponible}
+      actif={aDesServicesAssocies}
       on:click={() =>
         tiroirStore.afficheContenu(TiroirConfigurationMesure, {
           mesure,
