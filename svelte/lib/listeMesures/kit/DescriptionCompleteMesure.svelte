@@ -1,9 +1,9 @@
 <script lang="ts">
-  import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
-  import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
-  import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
-  import type { MesureReferentiel } from '../ui/types';
-  import DescriptionLongueMesure from '../ui/DescriptionLongueMesure.svelte';
+  import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
+  import CartoucheCategorieMesure from '../../ui/CartoucheCategorieMesure.svelte';
+  import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
+  import type { MesureReferentiel } from '../../ui/types.d';
+  import DescriptionLongueMesure from '../../ui/DescriptionLongueMesure.svelte';
 
   export let mesure: MesureReferentiel;
 </script>

@@ -1,13 +1,11 @@
 <script lang="ts">
-  import ContenuTiroir from '../ui/tiroirs/ContenuTiroir.svelte';
-  import DescriptionCompleteMesure from './DescriptionCompleteMesure.svelte';
-  import type { MesureReferentiel, ReferentielStatut } from '../ui/types';
+  import ContenuTiroir from '../../../ui/tiroirs/ContenuTiroir.svelte';
+  import DescriptionCompleteMesure from '../DescriptionCompleteMesure.svelte';
+  import type { MesureReferentiel, ReferentielStatut } from '../../../ui/types';
   import EtapierTiroir from './EtapierTiroir.svelte';
-  import SelectionStatut from '../ui/SelectionStatut.svelte';
-  import { tiroirStore } from '../ui/stores/tiroir.store';
-  import Lien from '../ui/Lien.svelte';
-  import ActionsTiroir from '../ui/tiroirs/ActionsTiroir.svelte';
-  import Bouton from '../ui/Bouton.svelte';
+  import { tiroirStore } from '../../../ui/stores/tiroir.store';
+  import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
+  import Bouton from '../../../ui/Bouton.svelte';
   import PremiereEtape from './etapes/PremiereEtape.svelte';
 
   export const titre: string = 'Configurer la mesure';

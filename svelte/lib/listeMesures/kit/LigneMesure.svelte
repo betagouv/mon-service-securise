@@ -1,13 +1,13 @@
 <script lang="ts">
-  import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
-  import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
-  import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
-  import { mesuresAvecServicesAssociesStore } from './stores/mesuresAvecServicesAssocies.store';
-  import type { MesureReferentiel, ReferentielStatut } from '../ui/types';
-  import Bouton from '../ui/Bouton.svelte';
+  import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
+  import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
+  import CartoucheCategorieMesure from '../../ui/CartoucheCategorieMesure.svelte';
+  import { mesuresAvecServicesAssociesStore } from '../stores/mesuresAvecServicesAssocies.store';
+  import type { MesureReferentiel, ReferentielStatut } from '../../ui/types.d';
+  import Bouton from '../../ui/Bouton.svelte';
   import { createEventDispatcher } from 'svelte';
-  import { tiroirStore } from '../ui/stores/tiroir.store';
-  import TiroirConfigurationMesure from './TiroirConfigurationMesure.svelte';
+  import { tiroirStore } from '../../ui/stores/tiroir.store';
+  import TiroirConfigurationMesure from './tiroir/TiroirConfigurationMesure.svelte';
 
   export let mesure: MesureReferentiel;
   export let statuts: ReferentielStatut;

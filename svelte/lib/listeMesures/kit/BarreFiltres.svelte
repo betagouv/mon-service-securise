@@ -1,9 +1,9 @@
 <script lang="ts">
-  import BarreDeRecherche from '../ui/BarreDeRecherche.svelte';
-  import ListeDeroulanteRiche from '../ui/ListeDeroulanteRiche.svelte';
-  import { filtrageMesures } from './stores/filtrageMesures.store';
-  import { rechercheMesures } from './stores/rechercheMesures.store';
-  import { CategorieMesure, Referentiel } from '../ui/types.d';
+  import BarreDeRecherche from '../../ui/BarreDeRecherche.svelte';
+  import ListeDeroulanteRiche from '../../ui/ListeDeroulanteRiche.svelte';
+  import { filtrageMesures } from '../stores/filtrageMesures.store';
+  import { rechercheMesures } from '../stores/rechercheMesures.store';
+  import { CategorieMesure, Referentiel } from '../../ui/types.d';
 
   let itemsFiltre: { libelle: string; valeur: string; idCategorie: string }[] =
     [

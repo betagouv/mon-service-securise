@@ -1,13 +1,13 @@
 <script lang="ts">
-  import AucunResultat from './AucunResultat.svelte';
+  import AucunResultat from './kit/AucunResultat.svelte';
   import { mesuresReferentielFiltrees } from './stores/mesuresReferentielFiltrees.store';
-  import LigneMesure from './LigneMesure.svelte';
+  import LigneMesure from './kit/LigneMesure.svelte';
   import { filtrageMesures } from './stores/filtrageMesures.store';
   import { rechercheMesures } from './stores/rechercheMesures.store';
-  import BarreFiltres from './BarreFiltres.svelte';
+  import BarreFiltres from './kit/BarreFiltres.svelte';
   import { servicesAvecMesuresAssociees } from './stores/servicesAvecMesuresAssociees.store';
   import { onMount } from 'svelte';
-  import DetailsMesure from './DetailsMesure.svelte';
+  import DetailsMesure from './kit/DetailsMesure.svelte';
   import type { MesureReferentiel, ReferentielStatut } from '../ui/types';
 
   export let statuts: ReferentielStatut;
