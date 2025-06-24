@@ -11,6 +11,7 @@
   export let estLectureSeule = false;
   export let requis = false;
   export let version: 'normale' | 'accentuee' = 'normale';
+  export let labelChoixVide: string = '';
 
   const dispatch = createEventDispatcher<{ input: { statut: string } }>();
 
@@ -26,6 +27,7 @@
     id={`statut-${id}`}
     class={`${statut} ${version}`}
     class:vide={!statut}
+    class:labelChoixVide
     disabled={estLectureSeule}
     required={requis}
     use:validationChamp={requis
@@ -36,7 +38,9 @@
     }}
     on:click|stopPropagation
   >
-    <option value="" disabled selected>Statut à définir</option>
+    <option value="" disabled={requis} selected
+      >{labelChoixVide || 'Statut à définir'}</option
+    >
     {#each Object.entries(referentielStatuts) as [valeur, label]}
       <option value={valeur}>{label}</option>
     {/each}
@@ -71,6 +75,7 @@
     font-weight: bold;
     text-transform: uppercase;
     width: var(--taille);
+    font-family: Marianne;
   }
 
   select:not(:disabled) {
@@ -124,6 +129,10 @@
     --couleur-claire: #f1f5f9;
     --couleur-foncee: #667892;
     --taille: 124px;
+  }
+
+  select.vide.labelChoixVide {
+    --taille: fit-content;
   }
 
   option {
