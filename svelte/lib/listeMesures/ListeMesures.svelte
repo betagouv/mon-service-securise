@@ -21,7 +21,7 @@
     servicesAvecMesuresAssociees.rafraichis();
   });
 
-  const entetes = ['Intitulé de la mesure', 'Services associés'];
+  const entetes = ['Intitulé de la mesure', 'Services associés', 'Action'];
 
   let modaleDetailsMesure: DetailsMesure;
 
@@ -47,6 +47,7 @@
       <LigneMesure
         {mesure}
         on:servicesCliques={() => afficheModaleDetailsMesure(mesure)}
+        {statuts}
       />
     {/each}
     {#if Object.keys($mesuresReferentielFiltrees).length === 0}

@@ -3,12 +3,17 @@
   import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
   import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
   import { mesuresAvecServicesAssociesStore } from './mesuresAvecServicesAssocies.store';
-  import type { MesureReferentiel } from '../ui/types';
+  import type { MesureReferentiel, ReferentielStatut } from '../ui/types';
   import Bouton from '../ui/Bouton.svelte';
   import { createEventDispatcher } from 'svelte';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
+  import TiroirConfigurationMesure from './TiroirConfigurationMesure.svelte';
 
   export let mesure: MesureReferentiel;
+  export let statuts: ReferentielStatut;
+
   $: mesureAvecServicesAssocies = $mesuresAvecServicesAssociesStore[mesure.id];
+  $: actionDisponible = mesureAvecServicesAssocies?.length > 0;
 
   const emet = createEventDispatcher<{
     servicesCliques: null;
@@ -31,7 +36,7 @@
     </div>
   </td>
   <td class="services-associes">
-    {#if mesureAvecServicesAssocies?.length > 0}
+    {#if actionDisponible}
       Cette mesure est associée à
       <Bouton
         type="lien-dsfr"
@@ -44,11 +49,26 @@
       <span class="aucun-service">Aucun service associé</span>
     {/if}
   </td>
+  <td>
+    <Bouton
+      titre="Configurer la mesure"
+      type="secondaire"
+      taille="petit"
+      icone="configuration"
+      actif={actionDisponible}
+      on:click={() =>
+        tiroirStore.afficheContenu(TiroirConfigurationMesure, {
+          mesure,
+          statuts,
+        })}
+    />
+  </td>
 </tr>
 
 <style lang="scss">
   .services-associes {
     color: var(--gris-fonce);
+    white-space: nowrap;
   }
 
   .aucun-service {
