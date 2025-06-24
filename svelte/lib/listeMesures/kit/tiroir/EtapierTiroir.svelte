@@ -1,25 +1,27 @@
 <script lang="ts">
   export let etapeCourante: number;
 
-  const nbEtapes = 3;
   const etapes = [
     'Mettre à jour le statut et/ou la précision',
     'Sélectionner les services à modifier',
     'Résumé des modifications',
   ];
+  const nbEtapes = etapes.length;
+
+  $: indiceEtapeCourante = etapeCourante - 1;
 </script>
 
 <div class="etapier">
   <span class="avancement">Étape {etapeCourante} sur {nbEtapes}</span>
-  <h3>{etapes[etapeCourante - 1]}</h3>
+  <h3>{etapes[indiceEtapeCourante]}</h3>
   <div class="indicateurs-etape">
     {#each new Array(nbEtapes)
       .fill(0)
-      .map((_, index) => (index + 1 <= etapeCourante ? 'actif' : '')) as actif}
+      .map( (_, index) => (index <= indiceEtapeCourante ? 'actif' : '') ) as actif}
       <div class="indicateur-etape {actif}" />
     {/each}
   </div>
-  {#if etapes[etapeCourante]}
+  {#if etapes[indiceEtapeCourante + 1]}
     <span class="etape-suivante"
       ><b>Étape suivante :</b> {etapes[etapeCourante]}</span
     >
