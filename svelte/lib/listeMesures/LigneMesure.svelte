@@ -2,7 +2,7 @@
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
   import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
-  import { mesuresAvecServicesAssociesStore } from './mesuresAvecServicesAssocies.store';
+  import { mesuresAvecServicesAssociesStore } from './stores/mesuresAvecServicesAssocies.store';
   import type { MesureReferentiel, ReferentielStatut } from '../ui/types';
   import Bouton from '../ui/Bouton.svelte';
   import { createEventDispatcher } from 'svelte';
