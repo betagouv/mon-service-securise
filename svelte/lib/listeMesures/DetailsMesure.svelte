@@ -8,6 +8,7 @@
   import { mesuresAvecServicesAssociesStore } from './mesuresAvecServicesAssocies.store';
   import { servicesAvecMesuresAssociees } from './servicesAvecMesuresAssociees.store';
   import TagStatutMesure from '../ui/TagStatutMesure.svelte';
+  import DescriptionCompleteMesure from './DescriptionCompleteMesure.svelte';
 
   export let referentielStatuts: ReferentielStatut;
 
@@ -37,19 +38,7 @@
     <div class="conteneur-modale">
       <div class="entete-modale">
         <h4>Mesure</h4>
-        <p class="description">{mesure.description}</p>
-        <div class="cartouches">
-          <CartoucheReferentiel referentiel={mesure.referentiel} />
-          <CartoucheCategorieMesure categorie={mesure.categorie} />
-          <CartoucheIdentifiantMesure
-            identifiant={mesure.identifiantNumerique}
-          />
-        </div>
-
-        <DescriptionLongueMesure
-          description={mesure.descriptionLongue}
-          repliee={true}
-        />
+        <DescriptionCompleteMesure {mesure} />
 
         <h4>
           {servicesAssocies.length}
@@ -179,20 +168,6 @@
     box-shadow: 0 6px 18px 0 rgba(0, 0, 18, 0.16);
     box-sizing: border-box;
     position: relative;
-  }
-
-  .description {
-    font-size: 1rem;
-    line-height: 1.5rem;
-    color: #3a3a3a;
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-
-  .cartouches {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 30px;
   }
 
   .conteneur-fermeture {
