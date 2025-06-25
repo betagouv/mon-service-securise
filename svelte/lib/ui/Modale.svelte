@@ -1,16 +1,30 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
+
   let elementModale: HTMLDialogElement;
 
   export const ferme = () => {
     elementModale.close();
+    debloqueScroll();
   };
 
   export const affiche = () => {
     elementModale.showModal();
+    bloqueScroll();
   };
+
+  const bloqueScroll = () => {
+    document.body.style.overflow = 'hidden';
+  };
+
+  const debloqueScroll = () => {
+    document.body.style.overflow = '';
+  };
+
+  onDestroy(() => debloqueScroll());
 </script>
 
-<dialog bind:this={elementModale}>
+<dialog bind:this={elementModale} on:close={() => debloqueScroll()}>
   <div class="conteneur-fermeture">
     <button on:click={() => ferme()}>Fermer</button>
   </div>
