@@ -32,14 +32,21 @@
 
 <div class="contenu-resume">
   <h3>Modifications prévues</h3>
-  <div>
-    <span class="sous-titre-resume">Statut</span>
-    <TagStatutMesure referentielStatuts={statuts} statut={statutSelectionne} />
-  </div>
-  <div>
-    <span class="sous-titre-resume">Précision</span>
-    <span>{precision}</span>
-  </div>
+  {#if statutSelectionne}
+    <div>
+      <span class="sous-titre-resume">Statut</span>
+      <TagStatutMesure
+        referentielStatuts={statuts}
+        statut={statutSelectionne}
+      />
+    </div>
+  {/if}
+  {#if precision}
+    <div>
+      <span class="sous-titre-resume">Précision</span>
+      <span>{precision}</span>
+    </div>
+  {/if}
 </div>
 
 <hr />
