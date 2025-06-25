@@ -5,6 +5,7 @@
   import { servicesAvecMesuresAssociees } from '../stores/servicesAvecMesuresAssociees.store';
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import DescriptionCompleteMesure from './DescriptionCompleteMesure.svelte';
+  import Tableau from '../../ui/Tableau.svelte';
 
   export let referentielStatuts: ReferentielStatut;
 
@@ -44,39 +45,32 @@
         </h4>
       </div>
       <div class="contenu-modale">
-        <table>
-          <thead>
-            <tr>
-              <th>Nom du service</th>
-              <th>Statut actuel</th>
-              <th>Précision actuelle</th>
-            </tr>
-          </thead>
-          <tbody>
-            {#each servicesAssocies as service}
-              <tr>
-                <td>
-                  <div class="intitule-service">
-                    <span class="nom">{decode(service.nomService)}</span>
-                    <span class="organisation"
-                      >{service.organisationResponsable}</span
-                    >
-                  </div>
-                </td>
-                <td
-                  ><TagStatutMesure
-                    {referentielStatuts}
-                    statut={service.mesuresAssociees[mesure.id].statut}
-                  /></td
+        <Tableau
+          colonnes={[
+            { cle: 'nom', libelle: 'Nom du service' },
+            { cle: 'statut', libelle: 'Statut actuel' },
+            { cle: 'modalites', libelle: 'Précision actuelle' },
+          ]}
+          donnees={servicesAssocies}
+        >
+          <svelte:fragment slot="cellule" let:donnee let:colonne>
+            {#if colonne.cle === 'nom'}
+              <div class="intitule-service">
+                <span class="nom">{decode(donnee.nomService)}</span>
+                <span class="organisation"
+                  >{donnee.organisationResponsable}</span
                 >
-                <td
-                  >{decode(service.mesuresAssociees[mesure.id].modalites) ||
-                    ''}</td
-                >
-              </tr>
-            {/each}
-          </tbody>
-        </table>
+              </div>
+            {:else if colonne.cle === 'statut'}
+              <TagStatutMesure
+                {referentielStatuts}
+                statut={donnee.mesuresAssociees[mesure.id].statut}
+              />
+            {:else if colonne.cle === 'modalites'}
+              {decode(donnee.mesuresAssociees[mesure.id].modalites) || ''}
+            {/if}
+          </svelte:fragment>
+        </Tableau>
       </div>
       <div class="pied-modale">
         <div class="conteneur-actions">
@@ -96,6 +90,7 @@
     height: 100%;
     position: relative;
   }
+
   .pied-modale,
   .entete-modale {
     flex-shrink: 0;
@@ -103,51 +98,28 @@
     z-index: 1;
     background: white;
   }
+
   .entete-modale {
     top: 0;
   }
+
   .pied-modale {
     bottom: 0;
   }
+
   .contenu-modale {
     flex-grow: 1;
     margin-top: 24px;
     overflow-y: auto;
   }
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    color: #3a3a3a;
-    font-size: 0.875rem;
-    line-height: 1.5rem;
 
-    thead {
-      border: 1px solid #dddddd;
+  .intitule-service {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 
-      th {
-        padding: 8px 16px;
-        color: #666666;
-        font-weight: bold;
-      }
-    }
-
-    tbody {
-      border: 1px solid #dddddd;
-
-      td {
-        padding: 8px 16px;
-        border-top: 1px solid #dddddd;
-      }
-    }
-
-    .intitule-service {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-
-      .nom {
-        font-weight: bold;
-      }
+    .nom {
+      font-weight: bold;
     }
   }
 
