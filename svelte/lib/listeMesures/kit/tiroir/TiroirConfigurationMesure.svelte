@@ -10,6 +10,8 @@
   import SecondeEtape from './etapes/SecondeEtape.svelte';
   import type { StatutMesure } from '../../../modeles/modeleMesure';
   import TroisiemeEtape from './etapes/TroisiemeEtape.svelte';
+  import { enregistreModificationMesureSurServicesMultiple } from '../../listeMesures.api';
+  import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -41,6 +43,20 @@
         break;
     }
   }
+
+  const etapeSuivante = async () => {
+    if (etapeCourante < 3) etapeCourante++;
+    else {
+      await enregistreModificationMesureSurServicesMultiple({
+        idMesure: mesure.id,
+        statut: statutSelectionne,
+        modalites: precision,
+        idsServices: idsServicesSelectionnes,
+      });
+      tiroirStore.ferme();
+      servicesAvecMesuresAssociees.rafraichis();
+    }
+  };
 </script>
 
 <ContenuTiroir>
@@ -82,10 +98,10 @@
     <Bouton type="lien" titre="Précédent" on:click={() => etapeCourante--} />
   {/if}
   <Bouton
-    titre="Suivant"
+    titre={etapeCourante < 3 ? 'Suivant' : 'Appliquer les modifications'}
     type="primaire"
     actif={boutonSuivantActif}
-    on:click={() => etapeCourante++}
+    on:click={etapeSuivante}
   />
 </ActionsTiroir>
 
