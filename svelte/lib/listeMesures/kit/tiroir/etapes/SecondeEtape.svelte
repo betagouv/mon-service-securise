@@ -13,6 +13,7 @@
   export let statuts: ReferentielStatut;
   export let mesure: MesureReferentiel;
   export let modificationPrecisionUniquement: boolean;
+  export let idsServicesSelectionnes: string[];
 
   $: servicesAssocies =
     mesure &&
@@ -53,6 +54,15 @@
     champsRecherche: ['nomService', 'organisationResponsable'],
   }}
   configurationFiltrage={{ options: optionsFiltrage }}
+  configurationSelection={{
+    texteIndicatif: {
+      vide: 'Aucun service séléctionné',
+      unique: 'service séléctionné',
+      multiple: 'services séléctionnés',
+    },
+    champSelection: 'id',
+  }}
+  bind:selection={idsServicesSelectionnes}
 >
   <svelte:fragment slot="cellule" let:donnee let:colonne>
     {#if colonne.cle === 'nom'}

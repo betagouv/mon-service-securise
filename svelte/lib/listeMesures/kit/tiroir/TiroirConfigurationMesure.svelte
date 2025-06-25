@@ -18,10 +18,23 @@
 
   let statutSelectionne: keyof ReferentielStatut | '' = '';
   let precision: string = '';
+  let idsServicesSelectionnes: string[] = [];
 
   let etapeCourante = 1;
 
   $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
+
+  let boutonSuivantActif = false;
+  $: {
+    switch (etapeCourante) {
+      case 1:
+        boutonSuivantActif = !!statutSelectionne || !!precision;
+        break;
+      case 2:
+        boutonSuivantActif = idsServicesSelectionnes.length > 0;
+        break;
+    }
+  }
 </script>
 
 <ContenuTiroir>
@@ -36,7 +49,12 @@
   {#if etapeCourante === 1}
     <PremiereEtape {statuts} bind:statutSelectionne bind:precision />
   {:else if etapeCourante === 2}
-    <SecondeEtape {statuts} {mesure} {modificationPrecisionUniquement} />
+    <SecondeEtape
+      {statuts}
+      {mesure}
+      {modificationPrecisionUniquement}
+      bind:idsServicesSelectionnes
+    />
   {/if}
 </ContenuTiroir>
 <ActionsTiroir>
@@ -52,7 +70,7 @@
   <Bouton
     titre="Suivant"
     type="primaire"
-    actif={!!statutSelectionne || !!precision}
+    actif={boutonSuivantActif}
     on:click={() => etapeCourante++}
   />
 </ActionsTiroir>

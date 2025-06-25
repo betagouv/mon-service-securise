@@ -27,6 +27,7 @@
     text-transform: uppercase;
     width: fit-content;
     height: fit-content;
+    white-space: nowrap;
   }
 
   span.actif {
