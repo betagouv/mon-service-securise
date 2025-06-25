@@ -18,6 +18,8 @@
 
   let statutSelectionne: keyof ReferentielStatut | '' = '';
   let precision: string = '';
+
+  let etapeCourante = 1;
 </script>
 
 <ContenuTiroir>

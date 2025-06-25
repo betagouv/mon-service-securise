@@ -1,64 +1,135 @@
 <script lang="ts">
-  import AucunResultat from './kit/AucunResultat.svelte';
-  import { mesuresReferentielFiltrees } from './stores/mesuresReferentielFiltrees.store';
-  import LigneMesure from './kit/LigneMesure.svelte';
-  import { filtrageMesures } from './stores/filtrageMesures.store';
-  import { rechercheMesures } from './stores/rechercheMesures.store';
-  import BarreFiltres from './kit/BarreFiltres.svelte';
   import { servicesAvecMesuresAssociees } from './stores/servicesAvecMesuresAssociees.store';
   import { onMount } from 'svelte';
   import DetailsMesure from './kit/DetailsMesure.svelte';
-  import type { MesureReferentiel, ReferentielStatut } from '../ui/types';
+  import {
+    CategorieMesure,
+    type MesureReferentiel,
+    Referentiel,
+    type ReferentielStatut,
+  } from '../ui/types.d';
+  import Tableau from '../ui/Tableau.svelte';
+  import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
+  import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
+  import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
+  import { mesuresAvecServicesAssociesStore } from './stores/mesuresAvecServicesAssocies.store';
+  import Bouton from '../ui/Bouton.svelte';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
+  import TiroirConfigurationMesure from './kit/tiroir/TiroirConfigurationMesure.svelte';
+  import { mesuresReferentiel } from './stores/mesuresReferentiel.store';
 
   export let statuts: ReferentielStatut;
-
-  const effaceRechercheEtFiltres = () => {
-    rechercheMesures.reinitialise();
-    filtrageMesures.reinitialise();
-  };
 
   onMount(() => {
     servicesAvecMesuresAssociees.rafraichis();
   });
-
-  const entetes = ['Intitulé de la mesure', 'Services associés', 'Action'];
 
   let modaleDetailsMesure: DetailsMesure;
 
   const afficheModaleDetailsMesure = (mesure: MesureReferentiel) => {
     modaleDetailsMesure.affiche(mesure);
   };
+
+  const optionsFiltrage = {
+    categories: [
+      { id: 'referentiel', libelle: 'Référentiel' },
+      { id: 'categorie', libelle: 'Catégories' },
+    ],
+    items: [
+      {
+        libelle: 'ANSSI',
+        valeur: Referentiel.ANSSI,
+        idCategorie: 'referentiel',
+      },
+      {
+        libelle: 'CNIL',
+        valeur: Referentiel.CNIL,
+        idCategorie: 'referentiel',
+      },
+      {
+        libelle: 'Défense',
+        valeur: CategorieMesure.DEFENSE,
+        idCategorie: 'categorie',
+      },
+      {
+        libelle: 'Gouvernance',
+        valeur: CategorieMesure.GOUVERNANCE,
+        idCategorie: 'categorie',
+      },
+      {
+        libelle: 'Protection',
+        valeur: CategorieMesure.PROTECTION,
+        idCategorie: 'categorie',
+      },
+      {
+        libelle: 'Résilience',
+        valeur: CategorieMesure.RESILIENCE,
+        idCategorie: 'categorie',
+      },
+    ],
+  };
 </script>
 
 <DetailsMesure bind:this={modaleDetailsMesure} referentielStatuts={statuts} />
 
-<BarreFiltres />
-
-<table>
-  <thead>
-    <tr>
-      {#each entetes as entete}
-        <th>{entete}</th>
-      {/each}
-    </tr>
-  </thead>
-  <tbody>
-    {#each Object.values($mesuresReferentielFiltrees) as mesure}
-      <LigneMesure
-        {mesure}
-        on:servicesCliques={() => afficheModaleDetailsMesure(mesure)}
-        {statuts}
+<Tableau
+  colonnes={[
+    { cle: 'description', libelle: 'Intitulé de la mesure' },
+    { cle: 'servicesAssocies', libelle: 'Services associés' },
+    { cle: 'actions', libelle: 'Action' },
+  ]}
+  donnees={Object.values($mesuresReferentiel)}
+  configurationRecherche={{
+    champsRecherche: ['description', 'identifiantNumerique'],
+  }}
+  configurationFiltrage={{ options: optionsFiltrage }}
+>
+  <svelte:fragment slot="cellule" let:donnee let:colonne>
+    {@const mesureAvecServicesAssocies =
+      $mesuresAvecServicesAssociesStore[donnee.id]}
+    {@const aDesServicesAssocies = mesureAvecServicesAssocies?.length > 0}
+    {#if colonne.cle === 'description'}
+      <div class="description-mesure">
+        <span>{donnee.description}</span>
+        <div>
+          <CartoucheReferentiel referentiel={donnee.referentiel} />
+          <CartoucheCategorieMesure categorie={donnee.categorie} />
+          <CartoucheIdentifiantMesure
+            identifiant={donnee.identifiantNumerique}
+          />
+        </div>
+      </div>
+    {:else if colonne.cle === 'servicesAssocies'}
+      <div class="services-associes">
+        {#if aDesServicesAssocies}
+          Cette mesure est associée à
+          <Bouton
+            type="lien-dsfr"
+            titre={`${mesureAvecServicesAssocies.length} ${
+              mesureAvecServicesAssocies.length > 1 ? 'services' : 'service'
+            }`}
+            on:click={() => afficheModaleDetailsMesure(donnee)}
+          />
+        {:else}
+          <span class="aucun-service">Aucun service associé</span>
+        {/if}
+      </div>
+    {:else if colonne.cle === 'actions'}
+      <Bouton
+        titre="Configurer la mesure"
+        type="secondaire"
+        taille="petit"
+        icone="configuration"
+        actif={aDesServicesAssocies}
+        on:click={() =>
+          tiroirStore.afficheContenu(TiroirConfigurationMesure, {
+            mesure: donnee,
+            statuts,
+          })}
       />
-    {/each}
-    {#if Object.keys($mesuresReferentielFiltrees).length === 0}
-      <tr>
-        <td colspan={entetes.length}>
-          <AucunResultat on:click={effaceRechercheEtFiltres} />
-        </td>
-      </tr>
     {/if}
-  </tbody>
-</table>
+  </svelte:fragment>
+</Tableau>
 
 <style lang="scss">
   :global(#liste-mesures) {
@@ -68,25 +139,26 @@
     margin: 32px 0;
   }
 
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-top: 24px;
+  .description-mesure {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
-    thead {
-      border: 1px solid #dddddd;
-
-      th {
-        padding: 8px 16px;
-        color: #666666;
-        font-size: 0.875rem;
-        font-weight: bold;
-        line-height: 1.5rem;
-      }
+    span {
+      font-size: 0.875rem;
+      font-weight: bold;
+      line-height: 1.5rem;
     }
 
-    tbody {
-      border: 1px solid #dddddd;
+    div {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
     }
+  }
+
+  .services-associes {
+    color: var(--gris-fonce);
+    white-space: nowrap;
   }
 </style>
