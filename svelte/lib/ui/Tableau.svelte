@@ -20,6 +20,7 @@
       multiple: string;
     };
     champSelection: string;
+    predicatSelectionDesactive?: (donnee: T) => boolean;
   };
 
   export let colonnes: { cle: string; libelle: string }[];
@@ -141,6 +142,9 @@
               title="Sélection du service {donnee[
                 configurationSelection.champSelection
               ]}"
+              disabled={configurationSelection.predicatSelectionDesactive?.(
+                donnee
+              )}
             />
           </td>
         {/if}
@@ -209,6 +213,7 @@
 
   .cellule-selection {
     border-right: 1px solid #dddddd;
+    width: 0;
   }
 
   input[type='checkbox'] {

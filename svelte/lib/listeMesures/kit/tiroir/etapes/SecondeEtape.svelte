@@ -61,6 +61,8 @@
       multiple: 'services séléctionnés',
     },
     champSelection: 'id',
+    predicatSelectionDesactive: (donnee) =>
+      modificationPrecisionUniquement && !donnee.statut,
   }}
   bind:selection={idsServicesSelectionnes}
 >
