@@ -8,9 +8,11 @@
   import { servicesAvecMesuresAssociees } from '../../../stores/servicesAvecMesuresAssociees.store';
   import { mesuresAvecServicesAssociesStore } from '../../../stores/mesuresAvecServicesAssocies.store';
   import Tableau from '../../../../ui/Tableau.svelte';
+  import Infobulle from '../../../../ui/Infobulle.svelte';
 
   export let statuts: ReferentielStatut;
   export let mesure: MesureReferentiel;
+  export let modificationPrecisionUniquement: boolean;
 
   $: servicesAssocies =
     mesure &&
@@ -59,7 +61,14 @@
         <span class="organisation">{donnee.organisationResponsable}</span>
       </div>
     {:else if colonne.cle === 'statut'}
-      <TagStatutMesure referentielStatuts={statuts} statut={donnee.statut} />
+      <div class="conteneur-statut">
+        <TagStatutMesure referentielStatuts={statuts} statut={donnee.statut} />
+        {#if modificationPrecisionUniquement && !donnee.statut}
+          <Infobulle
+            contenu="Cette précision ne peut pas être appliquée à ce service, car il ne dispose pas actuellement d'un statut."
+          ></Infobulle>
+        {/if}
+      </div>
     {:else if colonne.cle === 'modalites'}
       {decode(donnee.modalites) || ''}
     {/if}
@@ -81,5 +90,12 @@
     .nom {
       font-weight: bold;
     }
+  }
+
+  .conteneur-statut {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
   }
 </style>

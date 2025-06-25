@@ -20,6 +20,8 @@
   let precision: string = '';
 
   let etapeCourante = 1;
+
+  $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
 </script>
 
 <ContenuTiroir>
@@ -34,7 +36,7 @@
   {#if etapeCourante === 1}
     <PremiereEtape {statuts} bind:statutSelectionne bind:precision />
   {:else if etapeCourante === 2}
-    <SecondeEtape {statuts} {mesure} />
+    <SecondeEtape {statuts} {mesure} {modificationPrecisionUniquement} />
   {/if}
 </ContenuTiroir>
 <ActionsTiroir>
