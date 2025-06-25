@@ -1,7 +1,7 @@
 <script lang="ts">
   import { servicesAvecMesuresAssociees } from './stores/servicesAvecMesuresAssociees.store';
   import { onMount } from 'svelte';
-  import DetailsMesure from './kit/DetailsMesure.svelte';
+  import ModaleDetailsMesure from './kit/ModaleDetailsMesure.svelte';
   import {
     CategorieMesure,
     type MesureReferentiel,
@@ -24,10 +24,10 @@
     servicesAvecMesuresAssociees.rafraichis();
   });
 
-  let modaleDetailsMesure: DetailsMesure;
+  let modaleDetailsMesure: ModaleDetailsMesure;
 
-  const afficheModaleDetailsMesure = (mesure: MesureReferentiel) => {
-    modaleDetailsMesure.affiche(mesure);
+  const afficheModaleDetailsMesure = async (mesure: MesureReferentiel) => {
+    await modaleDetailsMesure.affiche(mesure);
   };
 
   const optionsFiltrage = {
@@ -70,7 +70,10 @@
   };
 </script>
 
-<DetailsMesure bind:this={modaleDetailsMesure} referentielStatuts={statuts} />
+<ModaleDetailsMesure
+  bind:this={modaleDetailsMesure}
+  referentielStatuts={statuts}
+/>
 
 <Tableau
   colonnes={[
@@ -108,7 +111,7 @@
             titre={`${mesureAvecServicesAssocies.length} ${
               mesureAvecServicesAssocies.length > 1 ? 'services' : 'service'
             }`}
-            on:click={() => afficheModaleDetailsMesure(donnee)}
+            on:click={async () => await afficheModaleDetailsMesure(donnee)}
           />
         {:else}
           <span class="aucun-service">Aucun service associé</span>
