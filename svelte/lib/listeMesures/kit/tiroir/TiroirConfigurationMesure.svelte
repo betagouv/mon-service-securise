@@ -8,6 +8,8 @@
   import Bouton from '../../../ui/Bouton.svelte';
   import PremiereEtape from './etapes/PremiereEtape.svelte';
   import SecondeEtape from './etapes/SecondeEtape.svelte';
+  import type { StatutMesure } from '../../../modeles/modeleMesure';
+  import TroisiemeEtape from './etapes/TroisiemeEtape.svelte';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -17,7 +19,7 @@
   export let mesure: MesureReferentiel;
   export let statuts: ReferentielStatut;
 
-  let statutSelectionne: keyof ReferentielStatut | '' = '';
+  let statutSelectionne: StatutMesure | '' = '';
   let precision: string = '';
   let idsServicesSelectionnes: string[] = [];
 
@@ -33,6 +35,9 @@
         break;
       case 2:
         boutonSuivantActif = idsServicesSelectionnes.length > 0;
+        break;
+      case 3:
+        boutonSuivantActif = true;
         break;
     }
   }
@@ -55,6 +60,14 @@
       {mesure}
       {modificationPrecisionUniquement}
       bind:idsServicesSelectionnes
+    />
+  {:else if etapeCourante === 3}
+    <TroisiemeEtape
+      {mesure}
+      {precision}
+      {statuts}
+      {statutSelectionne}
+      {idsServicesSelectionnes}
     />
   {/if}
 </ContenuTiroir>

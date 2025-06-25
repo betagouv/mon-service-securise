@@ -84,88 +84,90 @@
   };
 </script>
 
-<div class="filtres">
-  {#if configurationRecherche}
-    <BarreDeRecherche bind:recherche />
-  {/if}
-  {#if configurationFiltrage}
-    <ListeDeroulanteRiche
-      bind:valeursSelectionnees={filtrage}
-      id="filtres-tableau"
-      libelle="Filtrer"
-      options={configurationFiltrage.options}
-    />
-  {/if}
-</div>
-<table>
-  <thead>
-    {#if configurationSelection}
-      {@const { vide, unique, multiple } =
-        configurationSelection.texteIndicatif}
-      <tr>
-        <th colspan={nbColonnes} class="ligne-texte-selection">
-          {selection.length === 0
-            ? vide
-            : selection.length === 1
-            ? `1 ${unique}`
-            : `${selection.length} ${multiple}`}
-        </th>
-      </tr>
+<div>
+  <div class="filtres">
+    {#if configurationRecherche}
+      <BarreDeRecherche bind:recherche />
     {/if}
-    <tr>
+    {#if configurationFiltrage}
+      <ListeDeroulanteRiche
+        bind:valeursSelectionnees={filtrage}
+        id="filtres-tableau"
+        libelle="Filtrer"
+        options={configurationFiltrage.options}
+      />
+    {/if}
+  </div>
+  <table>
+    <thead>
       {#if configurationSelection}
-        <th class="cellule-selection">
-          <input
-            type="checkbox"
-            on:change={basculeSelectionTous}
-            disabled={donneesFiltrees.length === 0}
-            checked={toutEstSelectionne && donneesFiltrees.length > 0}
-            indeterminate={!toutEstSelectionne && selection.length > 0}
-            title="Sélection de tous"
-          />
-        </th>
+        {@const { vide, unique, multiple } =
+          configurationSelection.texteIndicatif}
+        <tr>
+          <th colspan={nbColonnes} class="ligne-texte-selection">
+            {selection.length === 0
+              ? vide
+              : selection.length === 1
+              ? `1 ${unique}`
+              : `${selection.length} ${multiple}`}
+          </th>
+        </tr>
       {/if}
-      {#each colonnes as colonne (colonne.cle)}
-        <th>{colonne.libelle}</th>
-      {/each}
-    </tr>
-  </thead>
-  <tbody>
-    {#each donneesFiltrees as donnee, index (index)}
       <tr>
         {#if configurationSelection}
-          <td class="cellule-selection">
+          <th class="cellule-selection">
             <input
               type="checkbox"
-              bind:group={selection}
-              value={donnee[configurationSelection.champSelection]}
-              title="Sélection du service {donnee[
-                configurationSelection.champSelection
-              ]}"
-              disabled={configurationSelection.predicatSelectionDesactive?.(
-                donnee
-              )}
+              on:change={basculeSelectionTous}
+              disabled={donneesFiltrees.length === 0}
+              checked={toutEstSelectionne && donneesFiltrees.length > 0}
+              indeterminate={!toutEstSelectionne && selection.length > 0}
+              title="Sélection de tous"
             />
-          </td>
+          </th>
         {/if}
         {#each colonnes as colonne (colonne.cle)}
-          <td>
-            <slot name="cellule" {donnee} {colonne}>
-              {donnee[colonne.cle]}
-            </slot>
-          </td>
+          <th>{colonne.libelle}</th>
         {/each}
       </tr>
-    {/each}
-    {#if donneesFiltrees.length === 0}
-      <tr>
-        <td colspan={nbColonnes}>
-          <TableauVideAucunResultat on:click={effaceRechercheEtFiltres} />
-        </td>
-      </tr>
-    {/if}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#each donneesFiltrees as donnee, index (index)}
+        <tr>
+          {#if configurationSelection}
+            <td class="cellule-selection">
+              <input
+                type="checkbox"
+                bind:group={selection}
+                value={donnee[configurationSelection.champSelection]}
+                title="Sélection du service {donnee[
+                  configurationSelection.champSelection
+                ]}"
+                disabled={configurationSelection.predicatSelectionDesactive?.(
+                  donnee
+                )}
+              />
+            </td>
+          {/if}
+          {#each colonnes as colonne (colonne.cle)}
+            <td>
+              <slot name="cellule" {donnee} {colonne}>
+                {donnee[colonne.cle]}
+              </slot>
+            </td>
+          {/each}
+        </tr>
+      {/each}
+      {#if donneesFiltrees.length === 0}
+        <tr>
+          <td colspan={nbColonnes}>
+            <TableauVideAucunResultat on:click={effaceRechercheEtFiltres} />
+          </td>
+        </tr>
+      {/if}
+    </tbody>
+  </table>
+</div>
 
 <style lang="scss">
   .filtres {
