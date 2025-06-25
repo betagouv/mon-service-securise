@@ -1,18 +1,7 @@
 <script lang="ts" generics="T extends string">
   import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
   import Pastille from './Pastille.svelte';
-
-  type OptionsListeDeroulanteRiche<T> = {
-    categories: {
-      id: string;
-      libelle: string;
-    }[];
-    items: {
-      libelle: string;
-      valeur: T;
-      idCategorie: string;
-    }[];
-  };
+  import type { OptionsListeDeroulanteRiche } from './ui.types.d';
 
   export let id: string;
   export let libelle: string;

@@ -68,3 +68,5 @@ export type MesureReferentiel = {
   referentiel: Referentiel;
   descriptionLongue: string;
 };
+
+export type ObjetDeDonnees = Record<string, any>;
