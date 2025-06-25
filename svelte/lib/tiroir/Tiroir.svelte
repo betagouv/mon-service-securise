@@ -7,7 +7,7 @@
   let composant: ConfigurationTiroir;
 </script>
 
-<div id="tiroir" class:ouvert={$tiroirStore.ouvert}>
+<div id="tiroir" class={composant?.taille} class:ouvert={$tiroirStore.ouvert}>
   {#key $tiroirStore}
     {#if $tiroirStore.contenu}
       <div class="entete-tiroir">
@@ -31,8 +31,7 @@
 <style>
   #tiroir {
     height: 100%;
-    min-width: 650px;
-    max-width: 650px;
+    width: 650px;
     position: fixed;
     left: 100vw;
     top: 0;
@@ -45,6 +44,10 @@
     display: flex;
     flex-direction: column;
     color: var(--texte-fonce);
+  }
+
+  #tiroir.large {
+    width: 830px;
   }
 
   #tiroir.ouvert {

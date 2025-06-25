@@ -12,6 +12,7 @@
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
     'Le statut et la précision de cette mesure peuvent être modifiés et appliqués simultanément à plusieurs services.';
+  export const taille = 'large';
 
   export let mesure: MesureReferentiel;
   export let statuts: ReferentielStatut;
