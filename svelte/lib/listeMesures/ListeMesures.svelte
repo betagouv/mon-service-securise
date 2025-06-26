@@ -17,6 +17,7 @@
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirConfigurationMesure from './kit/tiroir/TiroirConfigurationMesure.svelte';
   import { mesuresReferentiel } from './stores/mesuresReferentiel.store';
+  import ModaleRapportModification from './kit/ModaleRapportModification.svelte';
 
   export let statuts: ReferentielStatut;
 
@@ -69,6 +70,8 @@
     ],
   };
 </script>
+
+<ModaleRapportModification referentielStatuts={statuts} />
 
 <ModaleDetailsMesure
   bind:this={modaleDetailsMesure}
