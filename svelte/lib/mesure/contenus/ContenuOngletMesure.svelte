@@ -14,10 +14,15 @@
   export let retourUtilisateur: string;
   export let commentaireRetourUtilisateur: string;
 
-  $: texteSurligne = $store.mesureEditee.mesure.descriptionLongue?.replace(
-    new RegExp($rechercheTextuelle, 'ig'),
-    (texte: string) => ($rechercheTextuelle ? `<mark>${texte}</mark>` : texte)
-  );
+  $: texteSurligne = $store.mesureEditee.mesure.descriptionLongue
+    ?.replace(new RegExp($rechercheTextuelle, 'ig'), (texte: string) =>
+      $rechercheTextuelle ? `<mark>${texte}</mark>` : texte
+    )
+    .replace(
+      new RegExp(/<a.*(<mark>(.*)<\/mark>).*\/a>/gi),
+      (chaineEntiere: string, baliseMark: string, contenuSansBalise: string) =>
+        chaineEntiere.replaceAll(baliseMark, contenuSansBalise)
+    );
 </script>
 
 <div class:visible id="contenu-onglet-mesure">
