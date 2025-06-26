@@ -62,15 +62,23 @@
     },
     champSelection: 'id',
     predicatSelectionDesactive: (donnee) =>
-      modificationPrecisionUniquement && !donnee.statut,
+      (modificationPrecisionUniquement && !donnee.statut) ||
+      !donnee.peutEtreModifie,
   }}
   bind:selection={idsServicesSelectionnes}
 >
   <svelte:fragment slot="cellule" let:donnee let:colonne>
     {#if colonne.cle === 'nom'}
-      <div class="intitule-service">
-        <span class="nom">{decode(donnee.nomService)}</span>
-        <span class="organisation">{donnee.organisationResponsable}</span>
+      <div class="contenu-nom-service">
+        <div class="intitule-service">
+          <span class="nom">{decode(donnee.nomService)}</span>
+          <span class="organisation">{donnee.organisationResponsable}</span>
+        </div>
+        {#if !donnee.peutEtreModifie}
+          <Infobulle
+            contenu="Vous ne pouvez pas sélectionner ce service car vous ne disposez pas des droits d’écriture."
+          />
+        {/if}
       </div>
     {:else if colonne.cle === 'statut'}
       <div class="conteneur-statut">
@@ -92,6 +100,13 @@
     color: #3a3a3a;
     font-size: 0.875rem;
     line-height: 1.5rem;
+  }
+
+  .contenu-nom-service {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
   }
 
   .intitule-service {
