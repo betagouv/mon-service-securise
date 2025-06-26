@@ -4,7 +4,7 @@ import type { ComponentProps, ComponentType, SvelteComponent } from 'svelte';
 export type ConfigurationTiroir = SvelteComponent & {
   titre: string;
   sousTitre: string;
-  taille?: 'large';
+  taille?: 'normal' | 'large';
 };
 
 type TiroirStoreProps = {
