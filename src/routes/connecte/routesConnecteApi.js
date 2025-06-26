@@ -135,6 +135,9 @@ const routesConnecteApi = ({
             organisationResponsable:
               service.descriptionService.organisationResponsable.nom,
             mesuresAssociees,
+            peutEtreModifie: autorisations
+              .find((a) => a.idService === service.id)
+              .aLesPermissions({ [SECURISER]: ECRITURE }),
           };
         });
 

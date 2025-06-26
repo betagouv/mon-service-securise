@@ -245,6 +245,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
             A: { statut: 'fait', modalites: 'Mon commentaire' },
             B: {},
           },
+          peutEtreModifie: true,
         },
       ]);
     });
@@ -296,6 +297,58 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(reponse.status).to.be(200);
       expect(reponse.data.length).to.be(1);
       expect(reponse.data[0].id).to.be('S1');
+    });
+
+    it("indique pour chaque service s'il peut être modifié par l'utilisateur", async () => {
+      const mesuresReferentiel = {
+        A: { categorie: 'gouvernance' },
+        B: { categorie: 'gouvernance' },
+      };
+      testeur.referentiel().recharge({
+        mesures: mesuresReferentiel,
+        categoriesMesures: { gouvernance: 'Gouvernance' },
+        reglesPersonnalisation: { mesuresBase: ['A', 'B'] },
+      });
+      const mesures = new Mesures(
+        {
+          mesuresGenerales: [
+            { id: 'A', statut: 'fait', modalites: 'Mon commentaire' },
+          ],
+        },
+        testeur.referentiel(),
+        mesuresReferentiel
+      );
+      testeur.depotDonnees().autorisations = () => [
+        uneAutorisation().deProprietaire('U1', 'S1').construis(),
+        uneAutorisation()
+          .deContributeur('U1', 'S2')
+          .avecDroits({ [SECURISER]: LECTURE })
+          .construis(),
+      ];
+      testeur.depotDonnees().services = () => [
+        unService(testeur.referentiel())
+          .avecId('S1')
+          .avecNomService('Mon service')
+          .avecOrganisationResponsable({ nom: 'Mon organisation' })
+          .avecMesures(mesures)
+          .construis(),
+        unService(testeur.referentiel())
+          .avecId('S2')
+          .avecNomService('Mon service non autorisé')
+          .avecOrganisationResponsable({ nom: 'Mon organisation' })
+          .avecMesures(mesures)
+          .construis(),
+      ];
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/services/mesures'
+      );
+
+      expect(reponse.status).to.be(200);
+      expect(reponse.data[0].id).to.be('S1');
+      expect(reponse.data[0].peutEtreModifie).to.be(true);
+      expect(reponse.data[1].id).to.be('S2');
+      expect(reponse.data[1].peutEtreModifie).to.be(false);
     });
   });
 
