@@ -166,6 +166,7 @@ const creeDepot = (config = {}) => {
 
   const {
     accesAutorise,
+    accesAutoriseAUneListeDeService,
     ajouteContributeurAuService,
     autorisation,
     autorisationExiste,
@@ -234,6 +235,7 @@ const creeDepot = (config = {}) => {
 
   return {
     accesAutorise,
+    accesAutoriseAUneListeDeService,
     acquitteSuggestionAction,
     ajouteActiviteMesure,
     ajouteContributeurAuService,

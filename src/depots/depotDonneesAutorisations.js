@@ -35,6 +35,19 @@ const creeDepot = (config = {}) => {
     return autorisationPourService.aLesPermissions(droitsRequis);
   };
 
+  const accesAutoriseAUneListeDeService = async (
+    idUtilisateur,
+    idsServices,
+    droitsRequis
+  ) => {
+    const as = await autorisations(idUtilisateur);
+    const servicesAutorises = as
+      .filter((a) => a.aLesPermissions(droitsRequis))
+      .map((a) => a.idService);
+
+    return idsServices.every((id) => servicesAutorises.includes(id));
+  };
+
   const autorisation = (id) =>
     adaptateurPersistance
       .autorisation(id)
@@ -145,6 +158,7 @@ const creeDepot = (config = {}) => {
 
   return {
     accesAutorise,
+    accesAutoriseAUneListeDeService,
     ajouteContributeurAuService,
     autorisation,
     autorisationExiste,

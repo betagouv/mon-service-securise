@@ -247,7 +247,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
   });
 
-  describe('quand requête POST sur `/api/services/mesures/:id`', () => {
+  describe('quand requête PUT sur `/api/services/mesures/:id`', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().accesAutoriseAUneListeDeService = async () => true;
+    });
+
     it("vérifie que l'utilisateur est authentifié", (done) => {
       testeur.middleware().verifieRequeteExigeAcceptationCGU(
         {
@@ -337,6 +341,30 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       );
 
       expect(reponse.status).to.be(200);
+    });
+
+    it("jette une erreur si l'utilisateur n'a pas les droits d'écriture sur un des services ciblés", async () => {
+      testeur.depotDonnees().accesAutoriseAUneListeDeService = async () =>
+        false;
+      testeur.referentiel().recharge({
+        mesures: {
+          uneMesureConnue: {},
+        },
+        statutsMesures: { unStatut: {} },
+      });
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/services/mesures/uneMesureConnue',
+          {
+            statut: 'unStatut',
+            idsServices: ['S1'],
+          }
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(403);
+      }
     });
 
     it('délègue au dépôt de données la mise à jour de la mesure pour les services concernés', async () => {
