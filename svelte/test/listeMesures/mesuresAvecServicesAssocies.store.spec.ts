@@ -13,6 +13,7 @@ describe('Le store des mesures avec services associés', () => {
         mesuresAssociees: {
           M1: {},
         },
+        peutEtreModifie: true,
       },
     ]);
 
@@ -30,6 +31,7 @@ describe('Le store des mesures avec services associés', () => {
         mesuresAssociees: {
           M1: {},
         },
+        peutEtreModifie: true,
       },
       {
         id: 'S2',
@@ -38,6 +40,7 @@ describe('Le store des mesures avec services associés', () => {
         mesuresAssociees: {
           M1: {},
         },
+        peutEtreModifie: true,
       },
     ]);
 
@@ -56,6 +59,7 @@ describe('Le store des mesures avec services associés', () => {
           M1: {},
           M2: {},
         },
+        peutEtreModifie: true,
       },
       {
         id: 'S2',
@@ -64,6 +68,7 @@ describe('Le store des mesures avec services associés', () => {
         mesuresAssociees: {
           M3: {},
         },
+        peutEtreModifie: true,
       },
     ]);
 

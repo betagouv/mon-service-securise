@@ -22,6 +22,7 @@ export type ServiceAvecMesuresAssociees = {
   nomService: string;
   organisationResponsable: string;
   mesuresAssociees: Record<string, PersonnalisationMesure>;
+  peutEtreModifie: boolean;
 };
 
 export type ServiceAssocieAUneMesure = {
@@ -29,4 +30,5 @@ export type ServiceAssocieAUneMesure = {
   nomService: string;
   organisationResponsable: string;
   mesure: PersonnalisationMesure;
+  peutEtreModifie: boolean;
 };
