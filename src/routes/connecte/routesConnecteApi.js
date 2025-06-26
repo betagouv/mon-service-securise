@@ -24,6 +24,8 @@ const {
 } = require('../mappeur/utilisateur');
 const {
   verifieCoherenceDesDroits,
+  Permissions,
+  Rubriques,
 } = require('../../modeles/autorisations/gestionDroits');
 const routesConnecteApiVisiteGuidee = require('./routesConnecteApiVisiteGuidee');
 const routesConnecteApiNotifications = require('./routesConnecteApiNotifications');
@@ -32,6 +34,9 @@ const {
   estNiveauDeSecuriteValide,
 } = require('../../modeles/descriptionService');
 const routesConnecteApiTeleversement = require('./routesConnecteApiTeleversement');
+
+const { ECRITURE } = Permissions;
+const { SECURISER } = Rubriques;
 
 const routesConnecteApi = ({
   middleware,
@@ -142,6 +147,17 @@ const routesConnecteApi = ({
 
       if (statut && !referentiel.estStatutMesureConnu(statut)) {
         reponse.sendStatus(400);
+        return;
+      }
+
+      const aLesDroits = await depotDonnees.accesAutoriseAUneListeDeService(
+        requete.idUtilisateurCourant,
+        idsServices,
+        { [SECURISER]: ECRITURE }
+      );
+
+      if (!aLesDroits) {
+        reponse.sendStatus(403);
         return;
       }
 

@@ -515,4 +515,83 @@ describe('Le dépôt de données des autorisations', () => {
       });
     });
   });
+
+  describe("sur demande de validation d'autorisation d'accés pour une liste de services", () => {
+    it("retourne `false` si aucune autorisation n'existe pour cet utilisateur et ces services", async () => {
+      const depot = creeDepot(unePersistanceMemoire().construis());
+
+      const accesAutorise = await depot.accesAutoriseAUneListeDeService(
+        'U1',
+        ['S1'],
+        {}
+      );
+
+      expect(accesAutorise).to.be(false);
+    });
+
+    it("retourne `false` si le niveau de permission n'est pas suffisant pour cette rubrique dans ces services", async () => {
+      const avecDroitLecture = unePersistanceMemoire()
+        .ajouteUneAutorisation(
+          uneAutorisation()
+            .deContributeur('U1', 'S1')
+            .avecDroits({ [DECRIRE]: LECTURE }).donnees
+        )
+        .construis();
+      const depot = creeDepot(avecDroitLecture);
+
+      const accesAutoriseEnEcriture =
+        await depot.accesAutoriseAUneListeDeService('U1', ['S1'], {
+          [DECRIRE]: ECRITURE,
+        });
+
+      expect(accesAutoriseEnEcriture).to.be(false);
+    });
+
+    it("retourne `false` si le niveau de permission n'est pas suffisant pour cette rubrique dans tous les services", async () => {
+      const avecDroitLecture = unePersistanceMemoire()
+        .ajouteUneAutorisation(
+          uneAutorisation()
+            .deContributeur('U1', 'S1')
+            .avecDroits({ [DECRIRE]: LECTURE }).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation()
+            .deContributeur('U1', 'S2')
+            .avecDroits({ [DECRIRE]: ECRITURE }).donnees
+        )
+        .construis();
+      const depot = creeDepot(avecDroitLecture);
+
+      const accesAutoriseEnEcriture =
+        await depot.accesAutoriseAUneListeDeService('U1', ['S1', 'S2'], {
+          [DECRIRE]: ECRITURE,
+        });
+
+      expect(accesAutoriseEnEcriture).to.be(false);
+    });
+
+    it('retourne `true` si le niveau de permission est suffisant pour cette rubrique sur tous les services', async () => {
+      const avecDroitEcriture = unePersistanceMemoire()
+        .ajouteUneAutorisation(
+          uneAutorisation()
+            .deProprietaire('U1', 'S1')
+            .avecDroits({ [DECRIRE]: ECRITURE }).donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation()
+            .deProprietaire('U1', 'S2')
+            .avecDroits({ [DECRIRE]: LECTURE }).donnees
+        )
+        .construis();
+
+      const depot = creeDepot(avecDroitEcriture);
+
+      const accesAutoriseEnLecture =
+        await depot.accesAutoriseAUneListeDeService('U1', ['S1', 'S2'], {
+          [DECRIRE]: LECTURE,
+        });
+
+      expect(accesAutoriseEnLecture).to.be(true);
+    });
+  });
 });
