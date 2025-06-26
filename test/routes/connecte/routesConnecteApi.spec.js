@@ -17,7 +17,7 @@ const {
 } = require('../../constructeurs/constructeurAutorisation');
 const {
   Rubriques: { SECURISER },
-  Permissions: { LECTURE },
+  Permissions: { LECTURE, INVISIBLE },
   tousDroitsEnEcriture,
 } = require('../../../src/modeles/autorisations/gestionDroits');
 const { expectContenuSessionValide } = require('../../aides/cookie');
@@ -219,6 +219,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         testeur.referentiel(),
         mesuresReferentiel
       );
+      testeur.depotDonnees().autorisations = () => [
+        uneAutorisation().deProprietaire('U1', 'S1').construis(),
+      ];
       testeur.depotDonnees().services = () => [
         unService(testeur.referentiel())
           .avecId('S1')
@@ -244,6 +247,55 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           },
         },
       ]);
+    });
+
+    it('filtre sur les services autorisés (en lecture sur SECURISER)', async () => {
+      const mesuresReferentiel = {
+        A: { categorie: 'gouvernance' },
+      };
+      testeur.referentiel().recharge({
+        mesures: mesuresReferentiel,
+        categoriesMesures: { gouvernance: 'Gouvernance' },
+        reglesPersonnalisation: { mesuresBase: ['A'] },
+      });
+      const mesures = new Mesures(
+        {
+          mesuresGenerales: [
+            { id: 'A', statut: 'fait', modalites: 'Mon commentaire' },
+          ],
+        },
+        testeur.referentiel(),
+        mesuresReferentiel
+      );
+      testeur.depotDonnees().autorisations = () => [
+        uneAutorisation().deProprietaire('U1', 'S1').construis(),
+        uneAutorisation()
+          .deContributeur('U1', 'S2')
+          .avecDroits({ [SECURISER]: INVISIBLE })
+          .construis(),
+      ];
+      testeur.depotDonnees().services = () => [
+        unService(testeur.referentiel())
+          .avecId('S1')
+          .avecNomService('Mon service')
+          .avecOrganisationResponsable({ nom: 'Mon organisation' })
+          .avecMesures(mesures)
+          .construis(),
+        unService(testeur.referentiel())
+          .avecId('S2')
+          .avecNomService('Mon service non autorisé')
+          .avecOrganisationResponsable({ nom: 'Mon organisation' })
+          .avecMesures(mesures)
+          .construis(),
+      ];
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/services/mesures'
+      );
+
+      expect(reponse.status).to.be(200);
+      expect(reponse.data.length).to.be(1);
+      expect(reponse.data[0].id).to.be('S1');
     });
   });
 
