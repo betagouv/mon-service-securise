@@ -35,7 +35,7 @@ const {
 } = require('../../modeles/descriptionService');
 const routesConnecteApiTeleversement = require('./routesConnecteApiTeleversement');
 
-const { ECRITURE } = Permissions;
+const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
 
 const routesConnecteApi = ({
@@ -100,30 +100,43 @@ const routesConnecteApi = ({
       const services = await depotDonnees.services(
         requete.idUtilisateurCourant
       );
-      const donnees = services.map((service) => {
-        const { mesuresGenerales } = objetGetMesures.donnees(service);
 
-        const mesuresAssociees = Object.fromEntries(
-          Object.entries(mesuresGenerales).map(([idMesure, donneesMesure]) => {
-            const { statut, modalites } = donneesMesure;
-            return [
-              idMesure,
-              {
-                ...(statut && { statut }),
-                ...(modalites && { modalites }),
-              },
-            ];
-          })
-        );
+      const autorisations = await depotDonnees.autorisations(
+        requete.idUtilisateurCourant
+      );
 
-        return {
-          id: service.id,
-          nomService: service.nomService(),
-          organisationResponsable:
-            service.descriptionService.organisationResponsable.nom,
-          mesuresAssociees,
-        };
-      });
+      const donnees = services
+        .filter((s) =>
+          autorisations
+            .find((a) => a.idService === s.id)
+            .aLesPermissions({ [SECURISER]: LECTURE })
+        )
+        .map((service) => {
+          const { mesuresGenerales } = objetGetMesures.donnees(service);
+
+          const mesuresAssociees = Object.fromEntries(
+            Object.entries(mesuresGenerales).map(
+              ([idMesure, donneesMesure]) => {
+                const { statut, modalites } = donneesMesure;
+                return [
+                  idMesure,
+                  {
+                    ...(statut && { statut }),
+                    ...(modalites && { modalites }),
+                  },
+                ];
+              }
+            )
+          );
+
+          return {
+            id: service.id,
+            nomService: service.nomService(),
+            organisationResponsable:
+              service.descriptionService.organisationResponsable.nom,
+            mesuresAssociees,
+          };
+        });
 
       reponse.json(donnees);
     }
