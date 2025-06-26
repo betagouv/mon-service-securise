@@ -83,11 +83,11 @@
   }
 
   h3 {
-    margin: 0;
     color: #161616;
     font-size: 1.375rem;
     font-weight: 700;
     line-height: 1.75rem;
+    margin: 0 0 24px;
   }
 
   hr {

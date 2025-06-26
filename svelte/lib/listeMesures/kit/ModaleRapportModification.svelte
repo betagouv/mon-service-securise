@@ -23,16 +23,50 @@
   modaleRapportStore.subscribe(({ ouvert }) =>
     ouvert ? elementModale?.affiche() : elementModale?.ferme()
   );
+
+  let titre = '';
+  let contenu = '';
+  $: {
+    const { champsModifies, idServicesModifies, mesure } = $modaleRapportStore;
+    if (champsModifies && idServicesModifies && mesure) {
+      const servicesMultiples = idServicesModifies.length > 1;
+      let sujetChaine = '';
+      let verbe = '';
+
+      if (
+        champsModifies.includes('statut') &&
+        champsModifies.includes('modalites')
+      ) {
+        sujetChaine = 'Le nouveau statut et la précision';
+        verbe = 'ont été appliqués';
+        titre = 'Statut et précision mis à jour avec succès';
+      } else if (champsModifies.includes('statut')) {
+        sujetChaine = 'Le nouveau statut';
+        verbe = 'a été appliqué';
+        titre = 'Statut mis à jour avec succès';
+      } else if (champsModifies.includes('modalites')) {
+        sujetChaine = 'La nouvelle précision';
+        verbe = 'a été appliquée';
+        titre = 'Précision mise à jour avec succès';
+      }
+
+      contenu = `${sujetChaine} de la mesure <b>${
+        mesure!.description
+      }</b> ${verbe} à ${idServicesModifies.length} service${
+        servicesMultiples ? 's' : ''
+      }.`;
+    }
+  }
 </script>
 
 <Modale bind:this={elementModale}>
   <svelte:fragment slot="entete">
     <Toast
       avecOmbre={false}
-      titre="Statut et précision mis à jour avec succès"
+      {titre}
       avecAnimation={false}
       niveau="succes"
-      contenu="Le nouveau statut et la précision de la mesure Activer l'authentification multifacteur pour l'accès des administrateurs au service ont été appliqués à 2 services."
+      {contenu}
     />
     <h4>
       {servicesAvecMesure.length}
@@ -63,7 +97,7 @@
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 2rem;
-    margin: 0 0 24px;
     text-align: left;
+    margin: 48px 0 0;
   }
 </style>
