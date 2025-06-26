@@ -79,7 +79,7 @@
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 2rem;
-    margin: 0 0 24px;
+    margin: 0;
     text-align: left;
   }
 </style>

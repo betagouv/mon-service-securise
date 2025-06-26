@@ -55,7 +55,10 @@
     tiroirStore.ferme();
     servicesAvecMesuresAssociees.rafraichis();
     modaleRapportStore.affiche({
-      champsModifies: ['statut'],
+      champsModifies: [
+        ...(statutSelectionne && ['statut']),
+        ...(precision && ['modalites']),
+      ] as ('statut' | 'modalites')[],
       idServicesModifies: idsServicesSelectionnes,
       mesure,
     });

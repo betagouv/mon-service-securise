@@ -59,6 +59,7 @@
     border-radius: 8px;
     width: fit-content;
     min-width: 430px;
+    max-width: 790px;
 
     &.avecOmbre {
       box-shadow: 0 12px 20px 0 #0000001f;

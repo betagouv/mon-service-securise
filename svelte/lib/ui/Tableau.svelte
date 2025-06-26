@@ -84,20 +84,22 @@
   };
 </script>
 
-<div>
-  <div class="filtres">
-    {#if configurationRecherche}
-      <BarreDeRecherche bind:recherche />
-    {/if}
-    {#if configurationFiltrage}
-      <ListeDeroulanteRiche
-        bind:valeursSelectionnees={filtrage}
-        id="filtres-tableau"
-        libelle="Filtrer"
-        options={configurationFiltrage.options}
-      />
-    {/if}
-  </div>
+<div class="conteneur-tableau">
+  {#if configurationRecherche || configurationFiltrage}
+    <div class="filtres">
+      {#if configurationRecherche}
+        <BarreDeRecherche bind:recherche />
+      {/if}
+      {#if configurationFiltrage}
+        <ListeDeroulanteRiche
+          bind:valeursSelectionnees={filtrage}
+          id="filtres-tableau"
+          libelle="Filtrer"
+          options={configurationFiltrage.options}
+        />
+      {/if}
+    </div>
+  {/if}
   <table>
     <thead>
       {#if configurationSelection}
@@ -176,13 +178,18 @@
     gap: 12px;
   }
 
+  .conteneur-tableau {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
   table {
     border-collapse: collapse;
     width: 100%;
     color: #3a3a3a;
     font-size: 0.875rem;
     line-height: 1.5rem;
-    margin-top: 24px;
 
     thead {
       border: 1px solid #dddddd;
