@@ -23,3 +23,10 @@ export type ServiceAvecMesuresAssociees = {
   organisationResponsable: string;
   mesuresAssociees: Record<string, PersonnalisationMesure>;
 };
+
+export type ServiceAssocieAUneMesure = {
+  id: string;
+  nomService: string;
+  organisationResponsable: string;
+  mesure: PersonnalisationMesure;
+};
