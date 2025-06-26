@@ -125,14 +125,16 @@
       <tr>
         {#if configurationSelection}
           <th class="cellule-selection">
-            <input
-              type="checkbox"
-              on:change={basculeSelectionTous}
-              disabled={donneesFiltrees.length === 0}
-              checked={toutEstSelectionne && donneesFiltrees.length > 0}
-              indeterminate={!toutEstSelectionne && selection.length > 0}
-              title="Sélection de tous"
-            />
+            <div>
+              <input
+                type="checkbox"
+                on:change={basculeSelectionTous}
+                disabled={donneesFiltrees.length === 0}
+                checked={toutEstSelectionne && donneesFiltrees.length > 0}
+                indeterminate={!toutEstSelectionne && selection.length > 0}
+                title="Sélection de tous"
+              />
+            </div>
           </th>
         {/if}
         {#each colonnes as colonne (colonne.cle)}
@@ -145,17 +147,19 @@
         <tr>
           {#if configurationSelection}
             <td class="cellule-selection">
-              <input
-                type="checkbox"
-                bind:group={selection}
-                value={donnee[configurationSelection.champSelection]}
-                title="Sélection du service {donnee[
-                  configurationSelection.champSelection
-                ]}"
-                disabled={configurationSelection.predicatSelectionDesactive?.(
-                  donnee
-                )}
-              />
+              <div>
+                <input
+                  type="checkbox"
+                  bind:group={selection}
+                  value={donnee[configurationSelection.champSelection]}
+                  title="Sélection du service {donnee[
+                    configurationSelection.champSelection
+                  ]}"
+                  disabled={configurationSelection.predicatSelectionDesactive?.(
+                    donnee
+                  )}
+                />
+              </div>
             </td>
           {/if}
           {#each colonnes as colonne (colonne.cle)}
@@ -230,6 +234,12 @@
   .cellule-selection {
     border-right: 1px solid #dddddd;
     width: 0;
+
+    & > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   input[type='checkbox'] {
