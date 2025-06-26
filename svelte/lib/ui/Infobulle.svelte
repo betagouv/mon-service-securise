@@ -4,10 +4,7 @@
 
 <div class="infobulle">
   <div class="conteneur-image">
-    <img
-      src="/statique/assets/images/icone_infobulle.svg"
-      alt="Information sur les erreurs d'import"
-    />
+    <img src="/statique/assets/images/icone_infobulle.svg" alt={contenu} />
   </div>
   <div class="conteneur-information">
     <p>{contenu}</p>

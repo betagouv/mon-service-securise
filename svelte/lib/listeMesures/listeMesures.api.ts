@@ -1,6 +1,6 @@
 import type { StatutMesure } from '../modeles/modeleMesure';
 
-export const enregistreModificationMesureSurServicesMultiple = async ({
+export const enregistreModificationMesureSurServicesMultiples = async ({
   idMesure,
   idsServices,
   statut,

@@ -56,9 +56,9 @@
   configurationFiltrage={{ options: optionsFiltrage }}
   configurationSelection={{
     texteIndicatif: {
-      vide: 'Aucun service séléctionné',
-      unique: 'service séléctionné',
-      multiple: 'services séléctionnés',
+      vide: 'Aucun service sélectionné',
+      unique: 'service sélectionné',
+      multiple: 'services sélectionnés',
     },
     champSelection: 'id',
     predicatSelectionDesactive: (donnee) =>

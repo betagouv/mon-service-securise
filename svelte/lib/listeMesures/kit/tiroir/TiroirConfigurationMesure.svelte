@@ -10,7 +10,7 @@
   import SecondeEtape from './etapes/SecondeEtape.svelte';
   import type { StatutMesure } from '../../../modeles/modeleMesure';
   import TroisiemeEtape from './etapes/TroisiemeEtape.svelte';
-  import { enregistreModificationMesureSurServicesMultiple } from '../../listeMesures.api';
+  import { enregistreModificationMesureSurServicesMultiples } from '../../listeMesures.api';
   import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
 
   export const titre: string = 'Configurer la mesure';
@@ -47,7 +47,7 @@
   const etapeSuivante = async () => {
     if (etapeCourante < 3) etapeCourante++;
     else {
-      await enregistreModificationMesureSurServicesMultiple({
+      await enregistreModificationMesureSurServicesMultiples({
         idMesure: mesure.id,
         statut: statutSelectionne,
         modalites: precision,
