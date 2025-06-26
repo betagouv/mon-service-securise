@@ -12,6 +12,7 @@
   import TroisiemeEtape from './etapes/TroisiemeEtape.svelte';
   import { enregistreModificationMesureSurServicesMultiples } from '../../listeMesures.api';
   import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
+  import { modaleRapportStore } from '../../stores/modaleRapport.store';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -44,18 +45,25 @@
     }
   }
 
+  const appliqueModifications = async () => {
+    await enregistreModificationMesureSurServicesMultiples({
+      idMesure: mesure.id,
+      statut: statutSelectionne,
+      modalites: precision,
+      idsServices: idsServicesSelectionnes,
+    });
+    tiroirStore.ferme();
+    servicesAvecMesuresAssociees.rafraichis();
+    modaleRapportStore.affiche({
+      champsModifies: ['statut'],
+      idServicesModifies: idsServicesSelectionnes,
+      mesure,
+    });
+  };
+
   const etapeSuivante = async () => {
     if (etapeCourante < 3) etapeCourante++;
-    else {
-      await enregistreModificationMesureSurServicesMultiples({
-        idMesure: mesure.id,
-        statut: statutSelectionne,
-        modalites: precision,
-        idsServices: idsServicesSelectionnes,
-      });
-      tiroirStore.ferme();
-      servicesAvecMesuresAssociees.rafraichis();
-    }
+    else await appliqueModifications();
   };
 </script>
 
