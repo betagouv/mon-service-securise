@@ -9,11 +9,22 @@
   import { mesuresAvecServicesAssociesStore } from '../../../stores/mesuresAvecServicesAssocies.store';
   import Tableau from '../../../../ui/Tableau.svelte';
   import Infobulle from '../../../../ui/Infobulle.svelte';
+  import type { ServiceAssocieAUneMesure } from '../../../listeMesures.d';
 
   export let statuts: ReferentielStatut;
   export let mesure: MesureReferentiel;
   export let modificationPrecisionUniquement: boolean;
   export let idsServicesSelectionnes: string[];
+
+  const doitEtreALaFin = (service: {
+    peutEtreModifie: boolean;
+    statut?: string;
+  }) => {
+    return (
+      !service.peutEtreModifie ||
+      (modificationPrecisionUniquement && !service.statut)
+    );
+  };
 
   $: servicesAssocies =
     mesure &&
@@ -24,7 +35,16 @@
       .map(({ mesuresAssociees, ...autresDonnees }) => ({
         ...mesuresAssociees[mesure.id],
         ...autresDonnees,
-      }));
+      }))
+      .sort((a, b) => {
+        if (
+          (doitEtreALaFin(a) && doitEtreALaFin(b)) ||
+          (!doitEtreALaFin(a) && !doitEtreALaFin(b))
+        ) {
+          return a.nomService.localeCompare(b.nomService);
+        }
+        return doitEtreALaFin(a) ? 1 : -1;
+      });
 
   const optionsFiltrage = {
     categories: [{ id: 'statut', libelle: 'Statuts' }],
