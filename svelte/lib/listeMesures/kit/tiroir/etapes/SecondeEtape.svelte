@@ -88,9 +88,12 @@
   bind:selection={idsServicesSelectionnes}
 >
   <svelte:fragment slot="cellule" let:donnee let:colonne>
+    {@const desactive =
+      !donnee.peutEtreModifie ||
+      (modificationPrecisionUniquement && !donnee.statut)}
     {#if colonne.cle === 'nom'}
       <div class="contenu-nom-service">
-        <div class="intitule-service">
+        <div class="intitule-service" class:desactive>
           <span class="nom">{decode(donnee.nomService)}</span>
           <span class="organisation">{donnee.organisationResponsable}</span>
         </div>
@@ -102,7 +105,12 @@
       </div>
     {:else if colonne.cle === 'statut'}
       <div class="conteneur-statut">
-        <TagStatutMesure referentielStatuts={statuts} statut={donnee.statut} />
+        <div class:desactive>
+          <TagStatutMesure
+            referentielStatuts={statuts}
+            statut={donnee.statut}
+          />
+        </div>
         {#if modificationPrecisionUniquement && !donnee.statut}
           <Infobulle
             contenu="Cette précision ne peut pas être appliquée à ce service, car il ne dispose pas actuellement d'un statut."
@@ -110,7 +118,9 @@
         {/if}
       </div>
     {:else if colonne.cle === 'modalites'}
-      {decode(donnee.modalites) || ''}
+      <div class:desactive>
+        {decode(donnee.modalites) || ''}
+      </div>
     {/if}
   </svelte:fragment>
 </Tableau>
@@ -144,5 +154,9 @@
     flex-direction: row;
     gap: 8px;
     align-items: center;
+  }
+
+  .desactive {
+    opacity: 0.5;
   }
 </style>
