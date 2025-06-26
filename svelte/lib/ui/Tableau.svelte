@@ -41,6 +41,11 @@
   };
 
   let donneesFiltrees: T[] = [];
+  $: donneesFiltreesSelectionnables = donneesFiltrees.filter((donnee) =>
+    configurationSelection?.predicatSelectionDesactive
+      ? !configurationSelection.predicatSelectionDesactive(donnee)
+      : true
+  );
   $: {
     donneesFiltrees = donnees;
 
@@ -67,7 +72,8 @@
     selection = [];
   };
 
-  $: toutEstSelectionne = selection.length === donneesFiltrees.length;
+  $: toutEstSelectionne =
+    selection.length === donneesFiltreesSelectionnables.length;
   $: {
     if (recherche || filtrage) {
       // On appelle ici une méthode plutot que de vider nous même `selection` afin de ne pas
@@ -76,10 +82,11 @@
     }
   }
   const basculeSelectionTous = () => {
+    if (!configurationSelection) return;
     if (toutEstSelectionne) selection = [];
     else
-      selection = donneesFiltrees.map(
-        (donnee) => donnee[configurationSelection!.champSelection]
+      selection = donneesFiltreesSelectionnables.map(
+        (donnee) => donnee[configurationSelection.champSelection]
       );
   };
 </script>
