@@ -5,10 +5,9 @@
     ReferentielStatut,
   } from '../../../../ui/types';
   import type { StatutMesure } from '../../../../modeles/modeleMesure';
-  import { decode } from 'html-entities';
-  import Tableau from '../../../../ui/Tableau.svelte';
   import { servicesAvecMesuresAssociees } from '../../../stores/servicesAvecMesuresAssociees.store';
   import { mesuresAvecServicesAssociesStore } from '../../../stores/mesuresAvecServicesAssocies.store';
+  import TableauServicesAssocies from '../../TableauServicesAssocies.svelte';
 
   export let mesure: MesureReferentiel;
   export let statuts: ReferentielStatut;
@@ -22,7 +21,11 @@
       .filter((s) => {
         return $mesuresAvecServicesAssociesStore[mesure.id].includes(s?.id);
       })
-      .filter((s) => idsServicesSelectionnes.includes(s.id));
+      .filter((s) => idsServicesSelectionnes.includes(s.id))
+      .map(({ mesuresAssociees, ...autresDonnees }) => ({
+        ...autresDonnees,
+        mesure: mesuresAssociees[mesure.id],
+      }));
 
   const intitulePluralise =
     idsServicesSelectionnes.length > 1
@@ -53,30 +56,10 @@
 
 <div>
   <h3>{idsServicesSelectionnes.length} {intitulePluralise}</h3>
-  <Tableau
-    colonnes={[
-      { cle: 'nom', libelle: 'Nom du service' },
-      { cle: 'statut', libelle: 'Statut actuel' },
-      { cle: 'modalites', libelle: 'Précision actuelle' },
-    ]}
-    donnees={servicesConcernes}
-  >
-    <svelte:fragment slot="cellule" let:donnee let:colonne>
-      {#if colonne.cle === 'nom'}
-        <div class="intitule-service">
-          <span class="nom">{decode(donnee.nomService)}</span>
-          <span class="organisation">{donnee.organisationResponsable}</span>
-        </div>
-      {:else if colonne.cle === 'statut'}
-        <TagStatutMesure
-          referentielStatuts={statuts}
-          statut={donnee.mesuresAssociees[mesure.id].statut}
-        />
-      {:else if colonne.cle === 'modalites'}
-        {decode(donnee.mesuresAssociees[mesure.id].modalites) || ''}
-      {/if}
-    </svelte:fragment>
-  </Tableau>
+  <TableauServicesAssocies
+    servicesAssocies={servicesConcernes}
+    referentielStatuts={statuts}
+  />
 </div>
 
 <style lang="scss">
@@ -111,15 +94,5 @@
     width: 100%;
     border-top: none;
     border-bottom: 1px solid #dddddd;
-  }
-
-  .intitule-service {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
-    .nom {
-      font-weight: bold;
-    }
   }
 </style>
