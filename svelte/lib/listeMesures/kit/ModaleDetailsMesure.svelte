@@ -9,6 +9,8 @@
   import Modale from '../../ui/Modale.svelte';
   import { tick } from 'svelte';
   import Bouton from '../../ui/Bouton.svelte';
+  import { tiroirStore } from '../../ui/stores/tiroir.store';
+  import TiroirConfigurationMesure from './tiroir/TiroirConfigurationMesure.svelte';
 
   export let referentielStatuts: ReferentielStatut;
 
@@ -68,7 +70,21 @@
       <Bouton
         titre="Retour à la liste de mesures"
         type="secondaire"
+        taille="moyen"
         on:click={() => elementModale.ferme()}
+      />
+      <Bouton
+        titre="Configurer la mesure"
+        type="primaire"
+        taille="moyen"
+        icone="configuration"
+        on:click={() => {
+          tiroirStore.afficheContenu(TiroirConfigurationMesure, {
+            mesure,
+            statuts: referentielStatuts,
+          });
+          elementModale.ferme();
+        }}
       />
     </svelte:fragment>
   </Modale>
