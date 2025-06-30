@@ -166,15 +166,6 @@ const nouvelAdaptateur = (env) => {
         .count('services.*')
     )[0].count >= 1;
 
-  const services = (idUtilisateur) => {
-    const idsServices = knex('autorisations')
-      .whereRaw("(donnees->>'idUtilisateur')::uuid = ?", idUtilisateur)
-      .select({ idService: knex.raw("(donnees->>'idService')") })
-      .then((lignes) => lignes.map(({ idService }) => idService));
-
-    return avecPMapPourChaqueElement(idsServices, service);
-  };
-
   const servicesComplets = async (idUtilisateur) => {
     const requete = await knex.raw(
       `
@@ -693,7 +684,6 @@ const nouvelAdaptateur = (env) => {
     estSuperviseur,
     service,
     serviceExisteAvecHashNom,
-    services,
     lisDernierIndiceCyber,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,

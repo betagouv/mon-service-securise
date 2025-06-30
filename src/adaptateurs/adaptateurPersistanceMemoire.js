@@ -353,7 +353,6 @@ const nouvelAdaptateur = (
     suggestionsActionsService,
     service,
     serviceExisteAvecHashNom,
-    services,
     servicesComplets,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
