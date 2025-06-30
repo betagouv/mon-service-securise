@@ -49,6 +49,7 @@ const {
 } = require('../../src/modeles/autorisations/gestionDroits');
 const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
 const EvenementNouveauServiceCree = require('../../src/bus/evenementNouveauServiceCree');
+const EvenementMesureModifieeEnMasse = require('../../src/bus/evenementMesureModifieeEnMasse');
 const {
   EvenementDescriptionServiceModifiee,
 } = require('../../src/bus/evenementDescriptionServiceModifiee');
@@ -2504,7 +2505,9 @@ describe('Le dépôt de données des services', () => {
       expect(
         busEvenements.aRecuUnEvenement(EvenementMesureServiceModifiee)
       ).to.be(true);
-      const tousEvenements = busEvenements.tousEvenements();
+      const tousEvenements = busEvenements.recupereEvenements(
+        EvenementMesureServiceModifiee
+      );
       expect(tousEvenements.length).to.be(2);
       expect(tousEvenements[0].ancienneMesure).to.be(undefined);
       expect(tousEvenements[0].nouvelleMesure.id).to.be('uneMesure');
@@ -2512,6 +2515,29 @@ describe('Le dépôt de données des services', () => {
       expect(tousEvenements[1].ancienneMesure.id).to.be('uneMesure');
       expect(tousEvenements[1].nouvelleMesure.id).to.be('uneMesure');
       expect(tousEvenements[1].service.id).to.be('S2');
+    });
+
+    it("publie un événement de 'Mesure modifiée en masse'", async () => {
+      await depot.metsAJourMesureGeneraleDesServices(
+        'U1',
+        ['S1', 'S2'],
+        'uneMesure',
+        'fait',
+        ''
+      );
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementMesureModifieeEnMasse)
+      ).to.be(true);
+      const evenement = busEvenements.recupereEvenement(
+        EvenementMesureModifieeEnMasse
+      );
+      expect(evenement.utilisateur.id).to.be('U1');
+      expect(evenement.idMesure).to.be('uneMesure');
+      expect(evenement.statutModifie).to.be(true);
+      expect(evenement.modalitesModifiees).to.be(false);
+      expect(evenement.nombreServicesConcernes).to.be(2);
+      expect(evenement.type).to.be('generale');
     });
   });
 });
