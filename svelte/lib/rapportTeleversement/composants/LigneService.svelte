@@ -18,11 +18,12 @@
   const contientErreur = (erreur: ErreurService) =>
     service.erreurs.includes(erreur);
 
-  const dateEnFrancais = (chaineDateISO: string) => {
-    return new Date(chaineDateISO).toLocaleString('fr-FR', {
-      dateStyle: 'short',
-    });
-  };
+  const dateEnFrancais = (chaineDateISO: string) =>
+    chaineDateISO
+      ? new Date(chaineDateISO).toLocaleString('fr-FR', {
+          dateStyle: 'short',
+        })
+      : '';
 </script>
 
 <tr>
