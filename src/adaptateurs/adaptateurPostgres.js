@@ -176,28 +176,29 @@ const nouvelAdaptateur = (env) => {
   };
 
   const servicesComplets = async (idUtilisateur) => {
-    const d = await knex.raw(
+    const requete = await knex.raw(
       `
       SELECT
         s.*,
-        COALESCE(sugg_agg.suggestions, '[]') AS suggestions,
-        COALESCE(u_agg.utilisateurs, '[]') AS utilisateurs
+        COALESCE(suggestions_du_service.suggestions, '[]') AS suggestions,
+        COALESCE(utilisateurs_du_service.utilisateurs, '[]') AS utilisateurs
       FROM services s
       
       LEFT JOIN (
-        SELECT id_service, json_agg(nature) FILTER (WHERE date_acquittement IS NULL) AS suggestions
+        SELECT id_service, json_agg(nature) AS suggestions
         FROM suggestions_actions
+        WHERE date_acquittement IS NULL
         GROUP BY id_service
-      ) sugg_agg ON sugg_agg.id_service = s.id
+      ) suggestions_du_service ON suggestions_du_service.id_service = s.id
       
       LEFT JOIN (
         SELECT 
-          (a.donnees->>'idService')::uuid AS service_id,
+          (a.donnees->>'idService')::uuid AS id_service,
           json_agg(u.*) AS utilisateurs
         FROM autorisations a
         JOIN utilisateurs u ON (a.donnees->>'idUtilisateur')::uuid = u.id
-        GROUP BY service_id
-      ) u_agg ON u_agg.service_id = s.id
+        GROUP BY id_service
+      ) utilisateurs_du_service ON utilisateurs_du_service.id_service = s.id
     
       WHERE s.id IN (
         SELECT (a2.donnees->>'idService')::uuid
@@ -207,7 +208,8 @@ const nouvelAdaptateur = (env) => {
       `,
       [idUtilisateur]
     );
-    return d.rows;
+
+    return requete.rows;
   };
 
   const nombreServices = async (idUtilisateur) => {
