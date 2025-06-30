@@ -112,6 +112,10 @@ const {
 const {
   supprimeSuggestionsActions,
 } = require('./abonnements/supprimeSuggestionsActions');
+const EvenementMesureModifieeEnMasse = require('./evenementMesureModifieeEnMasse');
+const {
+  consigneModificationMesureEnMasseDansJournal,
+} = require('./abonnements/consigneModificationMesureEnMasseDansJournal');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -149,6 +153,11 @@ const cableTousLesAbonnes = (
     }),
     relieServiceEtSuperviseurs({ serviceSupervision }),
   ]);
+
+  busEvenements.abonne(
+    EvenementMesureModifieeEnMasse,
+    consigneModificationMesureEnMasseDansJournal({ adaptateurJournal })
+  );
 
   busEvenements.abonnePlusieurs(EvenementMesureServiceModifiee, [
     consigneCompletudeDansJournal({
