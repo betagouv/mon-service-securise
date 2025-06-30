@@ -23,6 +23,7 @@ const {
   avecPMapPourChaqueElementSansPromesse,
 } = require('../utilitaires/pMap');
 const MesureGenerale = require('../modeles/mesureGenerale');
+const EvenementMesureModifieeEnMasse = require('../bus/evenementMesureModifieeEnMasse');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -507,6 +508,15 @@ const creeDepot = (config = {}) => {
     };
 
     await Promise.all(servicesConcernes.map(pourUnService));
+    await busEvenements.publie(
+      new EvenementMesureModifieeEnMasse({
+        utilisateur,
+        idMesure,
+        statutModifie: !!statut,
+        modalitesModifiees: !!modalites,
+        nombreServicesConcernes: servicesConcernes.length,
+      })
+    );
   };
 
   const metsAJourMesureSpecifiqueDuService = async (
