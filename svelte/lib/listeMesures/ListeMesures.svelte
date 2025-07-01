@@ -18,6 +18,7 @@
   import TiroirConfigurationMesure from './kit/tiroir/TiroirConfigurationMesure.svelte';
   import { mesuresReferentiel } from './stores/mesuresReferentiel.store';
   import ModaleRapportModification from './kit/ModaleRapportModification.svelte';
+  import { modaleRapportStore } from './stores/modaleRapport.store';
 
   export let statuts: ReferentielStatut;
 
@@ -71,7 +72,10 @@
   };
 </script>
 
-<ModaleRapportModification referentielStatuts={statuts} />
+<ModaleRapportModification
+  referentielStatuts={statuts}
+  on:close={() => modaleRapportStore.metEnAvantMesureApresModification()}
+/>
 
 <ModaleDetailsMesure
   bind:this={modaleDetailsMesure}
@@ -89,6 +93,7 @@
     champsRecherche: ['description', 'identifiantNumerique'],
   }}
   configurationFiltrage={{ options: optionsFiltrage }}
+  champIdentifiantLigne="id"
 >
   <svelte:fragment slot="cellule" let:donnee let:colonne>
     {@const mesureAvecServicesAssocies =
@@ -166,5 +171,24 @@
   .services-associes {
     color: var(--gris-fonce);
     white-space: nowrap;
+  }
+
+  :global(tr.met-en-avant) {
+    animation: montre-ligne 2s ease-out 0.5s;
+  }
+
+  @keyframes montre-ligne {
+    0% {
+      background-color: inherit;
+    }
+    40% {
+      background-color: var(--fond-bleu-pale);
+    }
+    60% {
+      background-color: var(--fond-bleu-pale);
+    }
+    100% {
+      background-color: inherit;
+    }
   }
 </style>

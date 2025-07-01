@@ -30,6 +30,7 @@
   export let configurationFiltrage: ConfigurationFiltrage | null = null;
   export let configurationSelection: ConfigurationSelection | null = null;
   export let selection: string[] = [];
+  export let champIdentifiantLigne: string = '';
 
   let recherche: string = '';
   let filtrage: Record<string, any> = {};
@@ -144,7 +145,11 @@
     </thead>
     <tbody>
       {#each donneesFiltrees as donnee, index (index)}
-        <tr>
+        <tr
+          id={champIdentifiantLigne
+            ? `ligne-${donnee[champIdentifiantLigne]}`
+            : undefined}
+        >
           {#if configurationSelection}
             <td class="cellule-selection">
               <div>

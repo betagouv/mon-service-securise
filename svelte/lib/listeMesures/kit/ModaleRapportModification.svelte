@@ -59,7 +59,7 @@
   }
 </script>
 
-<Modale bind:this={elementModale}>
+<Modale bind:this={elementModale} on:close>
   <svelte:fragment slot="entete">
     <Toast
       avecOmbre={false}

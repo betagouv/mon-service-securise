@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte';
+  import { onDestroy, createEventDispatcher } from 'svelte';
 
   let elementModale: HTMLDialogElement;
 
@@ -24,7 +24,14 @@
   onDestroy(() => debloqueScroll());
 </script>
 
-<dialog bind:this={elementModale} on:close={() => debloqueScroll()}>
+<dialog
+  bind:this={elementModale}
+  on:close={() => {
+    debloqueScroll();
+    const emetEvent = createEventDispatcher();
+    emetEvent('close');
+  }}
+>
   <div class="conteneur-fermeture">
     <button on:click={() => ferme()}>Fermer</button>
   </div>
