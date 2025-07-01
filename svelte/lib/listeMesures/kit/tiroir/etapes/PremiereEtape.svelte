@@ -43,6 +43,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: 1.5rem;
+    max-width: 500px;
   }
 
   :global(label[for='statut-configuration-mesure']) {
@@ -62,6 +63,7 @@
 
   textarea {
     width: 100%;
+    max-width: 700px;
     border: none;
     border-radius: 4px 4px 0 0;
     border-bottom: 2px solid #3a3a3a;
