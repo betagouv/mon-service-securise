@@ -19,6 +19,7 @@
   import { mesuresReferentiel } from './stores/mesuresReferentiel.store';
   import ModaleRapportModification from './kit/ModaleRapportModification.svelte';
   import { modaleRapportStore } from './stores/modaleRapport.store';
+  import Lien from '../ui/Lien.svelte';
 
   export let statuts: ReferentielStatut;
 
@@ -95,6 +96,15 @@
   configurationFiltrage={{ options: optionsFiltrage }}
   champIdentifiantLigne="id"
 >
+  <div slot="actionsComplementaires" class="conteneur-actions-complementaires">
+    <Lien
+      type="bouton-tertiaire"
+      href="/mesures/export.csv"
+      titre="Télécharger la liste de mesures"
+      target="_blank"
+      icone="telecharger"
+    />
+  </div>
   <svelte:fragment slot="cellule" let:donnee let:colonne>
     {@const mesureAvecServicesAssocies =
       $mesuresAvecServicesAssociesStore[donnee.id]}
@@ -175,6 +185,10 @@
 
   :global(tr.met-en-avant) {
     animation: montre-ligne 2s ease-out 0.5s;
+  }
+
+  .conteneur-actions-complementaires {
+    margin-left: auto;
   }
 
   @keyframes montre-ligne {
