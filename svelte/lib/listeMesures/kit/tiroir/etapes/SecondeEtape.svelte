@@ -59,7 +59,7 @@
   };
 </script>
 
-<span>
+<span class="explication">
   Sélectionnez les services concernés par ces modifications. Les données
   existantes seront remplacées.
 </span>
@@ -158,5 +158,9 @@
 
   .desactive {
     opacity: 0.5;
+  }
+
+  .explication {
+    max-width: 500px;
   }
 </style>

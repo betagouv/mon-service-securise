@@ -82,6 +82,7 @@
     padding-top: 0.8em;
     font-weight: 500;
     padding-bottom: 0;
+    max-width: 650px;
   }
 
   .fermeture-tiroir {

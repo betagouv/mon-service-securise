@@ -26,6 +26,7 @@
     color: #3a3a3a;
     font-weight: bold;
     margin-bottom: 8px;
+    margin-top: 0;
   }
 
   .cartouches {

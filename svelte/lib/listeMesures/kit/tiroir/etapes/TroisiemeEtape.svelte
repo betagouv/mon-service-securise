@@ -47,7 +47,7 @@
   {#if precision}
     <div>
       <span class="sous-titre-resume">Précision</span>
-      <span>{precision}</span>
+      <span class="contenu-precision">{precision}</span>
     </div>
   {/if}
 </div>
@@ -94,5 +94,9 @@
     width: 100%;
     border-top: none;
     border-bottom: 1px solid #dddddd;
+  }
+
+  .contenu-precision {
+    max-width: 500px;
   }
 </style>
