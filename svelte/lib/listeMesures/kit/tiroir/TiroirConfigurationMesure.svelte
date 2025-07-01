@@ -102,7 +102,7 @@
   {#if etapeCourante === 1}
     <Bouton
       type="lien"
-      titre="Retour à la liste de mesure"
+      titre="Retour à la liste de mesures"
       on:click={() => tiroirStore.ferme()}
     />
   {:else}
