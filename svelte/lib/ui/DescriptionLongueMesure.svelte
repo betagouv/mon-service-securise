@@ -6,7 +6,7 @@
 
 <details open={!repliee}>
   <summary />
-  <p>
+  <p class="description">
     {@html description}
   </p>
   {#if lienBlog}
@@ -66,5 +66,9 @@
       brightness(70%) contrast(132%);
     margin: auto 5px;
     background-position-y: 2px;
+  }
+
+  .description {
+    max-width: 700px;
   }
 </style>
