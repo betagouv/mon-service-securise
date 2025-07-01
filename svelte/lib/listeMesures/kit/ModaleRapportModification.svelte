@@ -79,6 +79,7 @@
       <TableauServicesAssocies
         servicesAssocies={servicesAvecMesure}
         {referentielStatuts}
+        avecNomCliquable
       />
     {/if}
   </svelte:fragment>

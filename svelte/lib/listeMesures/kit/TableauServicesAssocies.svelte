@@ -7,6 +7,7 @@
 
   export let referentielStatuts: ReferentielStatut;
   export let servicesAssocies: ServiceAssocieAUneMesure[];
+  export let avecNomCliquable: boolean = false;
 </script>
 
 <Tableau
@@ -19,10 +20,20 @@
 >
   <svelte:fragment slot="cellule" let:donnee let:colonne>
     {#if colonne.cle === 'nom'}
-      <div class="intitule-service">
-        <span class="nom">{decode(donnee.nomService)}</span>
-        <span class="organisation">{donnee.organisationResponsable}</span>
-      </div>
+      {#if avecNomCliquable}
+        <a
+          class="intitule-service intitule-service-cliquable"
+          href="/service/{donnee.id}/mesures"
+        >
+          <span class="nom">{decode(donnee.nomService)}</span>
+          <span class="organisation">{donnee.organisationResponsable}</span>
+        </a>
+      {:else}
+        <div class="intitule-service">
+          <span class="nom">{decode(donnee.nomService)}</span>
+          <span class="organisation">{donnee.organisationResponsable}</span>
+        </div>
+      {/if}
     {:else if colonne.cle === 'statut'}
       <TagStatutMesure {referentielStatuts} statut={donnee.mesure.statut} />
     {:else if colonne.cle === 'modalites'}
@@ -32,13 +43,24 @@
 </Tableau>
 
 <style lang="scss">
+  :global(tr:has(.intitule-service-cliquable:hover)) {
+    box-shadow: var(--ombre-md);
+  }
+
   .intitule-service {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    color: #3a3a3a;
 
     .nom {
       font-weight: bold;
+    }
+  }
+
+  .intitule-service-cliquable:hover {
+    .nom {
+      color: var(--bleu-mise-en-avant);
     }
   }
 </style>
