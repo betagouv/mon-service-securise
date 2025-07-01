@@ -9,6 +9,10 @@ const {
   donneesPartagees,
 } = require('../../aides/http');
 const Superviseur = require('../../../src/modeles/superviseur');
+const {
+  verifieTypeFichierServiEstCSV,
+  verifieNomFichierServi,
+} = require('../../aides/verifieFichierServi');
 
 describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   const testeur = testeurMSS();
@@ -272,6 +276,102 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       const donnees = donneesPartagees(reponse.data, 'entites-supervisees');
       expect(donnees.length).to.be(1);
       expect(donnees[0].nom).to.be('MonEntite');
+    });
+  });
+
+  describe('quand GET sur /mesures/export.csv', () => {
+    beforeEach(() => {
+      testeur.adaptateurCsv().genereCsvMesures = async () => Buffer.from('');
+    });
+
+    it("vérifie que l'utilisateur a accepté les CGU", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(
+          `http://localhost:1234/mesures/export.csv`,
+          done
+        );
+    });
+
+    it('utilise un adaptateur CSV pour la génération', async () => {
+      let donneesRecues;
+      testeur.referentiel().recharge({
+        mesures: {
+          uneMesure: {},
+        },
+      });
+      testeur.adaptateurCsv().genereCsvMesures = async (
+        donneesMesures,
+        contributeurs,
+        avecDonneesAdditionnnelles,
+        _,
+        avecTypeMesure
+      ) => {
+        donneesRecues = {
+          donneesMesures,
+          contributeurs,
+          avecDonneesAdditionnnelles,
+          avecTypeMesure,
+        };
+      };
+
+      await axios.get('http://localhost:1234/mesures/export.csv');
+
+      expect(donneesRecues.avecDonneesAdditionnnelles).to.be(false);
+      expect(donneesRecues.avecTypeMesure).to.be(false);
+      expect(donneesRecues.contributeurs).to.eql([]);
+      expect(donneesRecues.donneesMesures.mesuresSpecifiques).to.eql([]);
+      expect(donneesRecues.donneesMesures.mesuresGenerales).to.eql({
+        uneMesure: {},
+      });
+    });
+
+    it('sert un fichier de type CSV', (done) => {
+      verifieTypeFichierServiEstCSV(
+        'http://localhost:1234/mesures/export.csv',
+        done
+      );
+    });
+
+    it('nomme le fichier CSV referentiel-mesures-MSS.csv', (done) => {
+      verifieNomFichierServi(
+        'http://localhost:1234/mesures/export.csv',
+        'referentiel-mesures-MSS.csv',
+        done
+      );
+    });
+
+    it("reste robuste en cas d'erreur de génération CSV", async () => {
+      testeur.adaptateurCsv().genereCsvMesures = async () => {
+        throw Error('BOOM');
+      };
+
+      let executionOK;
+      try {
+        await axios.get('http://localhost:1234/mesures/export.csv');
+        executionOK = true;
+      } catch (e) {
+        expect(e.response.status).to.be(424);
+      } finally {
+        if (executionOK) expect().fail('Une exception aurait dû être levée');
+      }
+    });
+
+    it("logue l'erreur survenue le cas échéant", async () => {
+      let erreurLoguee;
+
+      testeur.adaptateurCsv().genereCsvMesures = async () => {
+        throw Error('BOOM');
+      };
+      testeur.adaptateurGestionErreur().logueErreur = (erreur) => {
+        erreurLoguee = erreur;
+      };
+
+      try {
+        await axios.get('http://localhost:1234/mesures/export.csv');
+      } catch (e) {
+        expect(erreurLoguee).to.be.an(Error);
+      }
     });
   });
 });

@@ -50,14 +50,15 @@ const genereCsvMesures = async (
   donneesMesures,
   contributeurs,
   avecDonneesAdditionnnelles,
-  referentiel
+  referentiel,
+  avecTypeMesure = true
 ) => {
   // Les `id` doivent correspondrent aux champs des objets dans `donneesCsv`
   const colonnes = [
     { id: 'identifiant', title: 'Identifiant de la mesure' },
     { id: 'description', title: 'Nom de la mesure' },
     { id: 'referentiel', title: 'Référentiel' },
-    { id: 'type', title: 'Type' },
+    ...(avecTypeMesure ? [{ id: 'type', title: 'Type' }] : []),
     { id: 'categorie', title: 'Catégorie' },
     { id: 'descriptionLongue', title: 'Description' },
   ];
