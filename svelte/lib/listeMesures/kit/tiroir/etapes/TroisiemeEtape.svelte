@@ -87,7 +87,7 @@
     font-size: 1.375rem;
     font-weight: 700;
     line-height: 1.75rem;
-    margin: 0 0 24px;
+    margin: 0;
   }
 
   hr {
