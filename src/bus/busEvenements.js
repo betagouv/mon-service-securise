@@ -7,7 +7,6 @@ class BusEvenements {
   }
 
   abonne(classeEvenement, handler) {
-    console.log(classeEvenement);
     this.handlers[classeEvenement.name] ??= [];
     this.handlers[classeEvenement.name].push(handler);
   }
