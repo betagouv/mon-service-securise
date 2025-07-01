@@ -50,7 +50,11 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 8px !important;
+  }
+
+  :global(label[for='statut-configuration-mesure'] select) {
+    margin-top: 0 !important;
   }
 
   .sans-modification-statut {
