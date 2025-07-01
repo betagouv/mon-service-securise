@@ -16,7 +16,7 @@
     {#if $tiroirStore.contenu}
       <div class="entete-tiroir">
         <button class="fermeture-tiroir" on:click={() => tiroirStore.ferme()}>
-          ✕
+          Fermer
         </button>
         <h2 class="titre-tiroir">{composant?.titre}</h2>
         <p class="texte-tiroir">
@@ -91,5 +91,19 @@
     border: none;
     background: none;
     cursor: pointer;
+    color: var(--bleu-mise-en-avant);
+    border-radius: 4px;
+    padding: 4px 8px 4px 12px;
+    font-size: 0.875em;
+  }
+
+  .fermeture-tiroir::after {
+    content: '✕';
+    display: inline-flex;
+    margin-left: 8px;
+  }
+
+  .fermeture-tiroir:hover {
+    background-color: #f5f5f5;
   }
 </style>
