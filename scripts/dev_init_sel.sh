@@ -14,7 +14,7 @@ grep -q CHIFFREMENT_SEL_DE_HASHAGE_1 ../.env && usage CHIFFREMENT_SEL_DE_HASHAGE
 
 SEL="$(cat /dev/random | head -c 10 | xxd -p)"
 
-echo "CHIFFREMENT_SEL_DE_HASHAGE_1=$SEL" >> ../.env
+printf "\nCHIFFREMENT_SEL_DE_HASHAGE_1=$SEL" >> ../.env
 
 HASH_DU_SEL="$(node ./dev-init-sel.js "$SEL")"
 
