@@ -193,6 +193,32 @@ const routesConnectePage = ({
     }
   );
 
+  routes.get(
+    '/mesures/export.csv',
+    middleware.verificationAcceptationCGU,
+    async (_, reponse) => {
+      try {
+        const bufferCsv = await adaptateurCsv.genereCsvMesures(
+          { mesuresGenerales: referentiel.mesures(), mesuresSpecifiques: [] },
+          [],
+          false,
+          referentiel,
+          false
+        );
+        reponse
+          .contentType('text/csv;charset=utf-8')
+          .set(
+            'Content-Disposition',
+            `attachment; filename="referentiel-mesures-MSS.csv"`
+          )
+          .send(bufferCsv);
+      } catch (e) {
+        adaptateurGestionErreur.logueErreur(e);
+        reponse.sendStatus(424);
+      }
+    }
+  );
+
   routes.use(
     '/service',
     middleware.verificationAcceptationCGU,
