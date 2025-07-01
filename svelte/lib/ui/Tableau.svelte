@@ -106,6 +106,7 @@
           options={configurationFiltrage.options}
         />
       {/if}
+      <slot name="actionsComplementaires" />
     </div>
   {/if}
   <table>
@@ -192,6 +193,7 @@
     display: flex;
     flex-direction: row;
     gap: 12px;
+    align-items: center;
   }
 
   .conteneur-tableau {
