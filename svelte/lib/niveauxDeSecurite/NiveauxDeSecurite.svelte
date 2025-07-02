@@ -1,11 +1,9 @@
 <script lang="ts">
-  import {
-    type IdNiveauDeSecurite,
-    ordreDesNiveaux,
-  } from './niveauxDeSecurite.d';
+  import { ordreDesNiveaux } from './niveauxDeSecurite.d';
   import donneesNiveauxDeSecurite from './donneesNiveauxDeSecurite';
   import { acquitteSuggestionBesoinsSecuriteRetrogrades } from './niveauxDeSecurite.api';
   import Avertissement from '../ui/Avertissement.svelte';
+  import type { IdNiveauDeSecurite } from '../ui/types';
 
   export let idService: string;
   export let niveauDeSecuriteMinimal: IdNiveauDeSecurite;

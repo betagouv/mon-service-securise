@@ -1,3 +1,5 @@
+import type { IdNiveauDeSecurite } from '../ui/types.d';
+
 declare global {
   interface HTMLElementEventMap {
     'svelte-recharge-niveaux-de-securite': CustomEvent;
@@ -12,8 +14,6 @@ export type NiveauxDeSecuriteProps = {
   avecSuggestionBesoinsSecuriteRetrogrades: boolean;
   modeVisiteGuidee: boolean;
 };
-
-export type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';
 
 export type NiveauDeSecurite = {
   id: IdNiveauDeSecurite;
