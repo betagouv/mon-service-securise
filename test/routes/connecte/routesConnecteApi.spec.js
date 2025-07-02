@@ -23,6 +23,7 @@ const {
 const { expectContenuSessionValide } = require('../../aides/cookie');
 const SourceAuthentification = require('../../../src/modeles/sourceAuthentification');
 const Mesures = require('../../../src/modeles/mesures');
+const uneDescriptionValide = require('../../constructeurs/constructeurDescriptionService');
 
 describe('Le serveur MSS des routes privées /api/*', () => {
   const testeur = testeurMSS();
@@ -222,11 +223,15 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.depotDonnees().autorisations = () => [
         uneAutorisation().deProprietaire('U1', 'S1').construis(),
       ];
+      const descriptionService = uneDescriptionValide(testeur.referentiel())
+        .avecNomService('Mon service')
+        .deLOrganisation({ nom: 'Mon organisation' })
+        .deNiveau2()
+        .avecTypes(['api', 'siteInternet']).donnees;
       testeur.depotDonnees().services = () => [
         unService(testeur.referentiel())
           .avecId('S1')
-          .avecNomService('Mon service')
-          .avecOrganisationResponsable({ nom: 'Mon organisation' })
+          .avecDescription(descriptionService)
           .avecMesures(mesures)
           .construis(),
       ];
@@ -245,6 +250,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
             A: { statut: 'fait', modalites: 'Mon commentaire' },
             B: {},
           },
+          niveauSecurite: 'niveau2',
+          typeService: ['api', 'siteInternet'],
           peutEtreModifie: true,
         },
       ]);

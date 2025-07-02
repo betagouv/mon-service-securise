@@ -37,6 +37,11 @@ class ConstructeurDescriptionService {
     return this;
   }
 
+  avecTypes(types) {
+    this.donnees.typeService = types;
+    return this;
+  }
+
   deLOrganisation(organisationResponsable) {
     this.donnees.organisationResponsable = organisationResponsable;
     return this;
@@ -49,11 +54,13 @@ class ConstructeurDescriptionService {
 
   deNiveau3() {
     this.donnees.delaiAvantImpactCritique = 'moinsUneHeure';
+    this.donnees.niveauSecurite = 'niveau3';
     return this;
   }
 
   deNiveau2() {
     this.donnees.fonctionnalites = ['reseauSocial'];
+    this.donnees.niveauSecurite = 'niveau2';
     return this;
   }
 
