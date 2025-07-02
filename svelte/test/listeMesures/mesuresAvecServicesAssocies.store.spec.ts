@@ -2,17 +2,20 @@ import { describe, expect, it } from 'vitest';
 import { mesuresAvecServicesAssociesStore } from '../../lib/listeMesures/stores/mesuresAvecServicesAssocies.store';
 import { servicesAvecMesuresAssociees } from '../../lib/listeMesures/stores/servicesAvecMesuresAssociees.store';
 import { get } from 'svelte/store';
+import type { ServiceAvecMesuresAssociees } from '../../lib/listeMesures/listeMesures.d';
 
 const unService = (
   id: string = 'S1',
   nomService: string = 'ServiceS1',
   mesuresAssociees: Record<string, any> = { M1: {} }
-) => ({
+): ServiceAvecMesuresAssociees => ({
   id,
   nomService,
   organisationResponsable: 'SuperEntreprise',
   mesuresAssociees,
   peutEtreModifie: true,
+  niveauSecurite: 'niveau1',
+  typeService: ['api'],
 });
 
 describe('Le store des mesures avec services associés', () => {
