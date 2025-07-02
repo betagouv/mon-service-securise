@@ -1,5 +1,6 @@
 <script lang="ts">
   import { glisse } from './animations/transitions';
+  import { createEventDispatcher } from 'svelte';
 
   export let niveau: 'info' | 'succes' | 'erreur';
   export let titre: string;
@@ -7,6 +8,7 @@
 
   export let avecOmbre: boolean = true;
   export let avecAnimation: boolean = true;
+  export let avecFermeture: boolean = false;
 
   const icones = {
     info: 'icone_info',
@@ -20,6 +22,8 @@
   ) => {
     if (avecAnimation) return options.fonction(noeud, options);
   };
+
+  const emetEvenement = createEventDispatcher();
 </script>
 
 <article
@@ -31,6 +35,13 @@
     duree: 250,
   }}
 >
+  {#if avecFermeture}
+    <button
+      class="fermeture"
+      on:click={() => emetEvenement('close')}
+      title="Fermeture du toast">✕</button
+    >
+  {/if}
   <div class="conteneur-icone">
     <div class="icone">
       <img
@@ -60,6 +71,7 @@
     width: fit-content;
     min-width: 430px;
     max-width: 790px;
+    position: relative;
 
     &.avecOmbre {
       box-shadow: 0 12px 20px 0 #0000001f;
@@ -75,6 +87,20 @@
 
     &.erreur {
       --couleur: #ce0500;
+    }
+
+    .fermeture {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      border: none;
+      cursor: pointer;
+      margin: 0;
+      padding: 0;
+      font-size: 0.875rem;
+      font-weight: bold;
+      color: var(--texte-fonce);
+      background: none;
     }
 
     .conteneur-icone {
