@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { servicesAvecMesuresAssociees } from './stores/servicesAvecMesuresAssociees.store';
+  import {
+    servicesAvecMesuresAssociees,
+    servicesAvecMesuresAssocieesEnCoursDeChargement,
+  } from './stores/servicesAvecMesuresAssociees.store';
   import { onMount } from 'svelte';
   import ModaleDetailsMesure from './kit/ModaleDetailsMesure.svelte';
   import {
@@ -21,6 +24,7 @@
   import ModaleRapportModification from './kit/ModaleRapportModification.svelte';
   import { modaleRapportStore } from './stores/modaleRapport.store';
   import Lien from '../ui/Lien.svelte';
+  import Loader from '../ui/Loader.svelte';
 
   export let statuts: ReferentielStatut;
   export let typesService: ReferentielTypesService;
@@ -126,7 +130,9 @@
       </div>
     {:else if colonne.cle === 'servicesAssocies'}
       <div class="services-associes">
-        {#if aDesServicesAssocies}
+        {#if $servicesAvecMesuresAssocieesEnCoursDeChargement}
+          <Loader />
+        {:else if aDesServicesAssocies}
           Cette mesure est associée à
           <Bouton
             type="lien-dsfr"
