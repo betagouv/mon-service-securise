@@ -54,7 +54,7 @@
   }
 
   #tiroir.large {
-    width: 830px;
+    width: 900px;
   }
 
   #tiroir.ouvert {

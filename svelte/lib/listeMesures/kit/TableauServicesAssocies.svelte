@@ -53,7 +53,7 @@
         </div>
       {/if}
     {:else if colonne.cle === 'typeService' && referentielTypesService}
-      <div>
+      <div class="type-service">
         <span
           >{donnee.typeService
             .map((t) => referentielTypesService[t].description)
@@ -61,11 +61,13 @@
         >
       </div>
     {:else if colonne.cle === 'niveauSecurite'}
-      <div>
+      <div class="besoin-securite">
         <span>{libellesNiveauSecurite[donnee.niveauSecurite]}</span>
       </div>
     {:else if colonne.cle === 'statut'}
-      <TagStatutMesure {referentielStatuts} statut={donnee.mesure.statut} />
+      <div class="statut">
+        <TagStatutMesure {referentielStatuts} statut={donnee.mesure.statut} />
+      </div>
     {:else if colonne.cle === 'modalites'}
       {decode(donnee.mesure.modalites) || ''}
     {/if}
@@ -82,9 +84,17 @@
     flex-direction: column;
     gap: 4px;
     color: #3a3a3a;
+    width: 318px;
 
     .nom {
       font-weight: bold;
+    }
+
+    .nom,
+    .organisation {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -92,5 +102,14 @@
     .nom {
       color: var(--bleu-mise-en-avant);
     }
+  }
+
+  .type-service,
+  .besoin-securite {
+    width: 128px;
+  }
+
+  .statut {
+    width: 148px;
   }
 </style>
