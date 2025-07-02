@@ -1,5 +1,9 @@
 <script lang="ts">
-  import type { MesureReferentiel, ReferentielStatut } from '../../ui/types.d';
+  import type {
+    MesureReferentiel,
+    ReferentielStatut,
+    ReferentielTypesService,
+  } from '../../ui/types.d';
   import { mesuresAvecServicesAssociesStore } from '../stores/mesuresAvecServicesAssocies.store';
   import { servicesAvecMesuresAssociees } from '../stores/servicesAvecMesuresAssociees.store';
   import DescriptionCompleteMesure from './DescriptionCompleteMesure.svelte';
@@ -11,6 +15,7 @@
   import TableauServicesAssocies from './TableauServicesAssocies.svelte';
 
   export let referentielStatuts: ReferentielStatut;
+  export let referentielTypesService: ReferentielTypesService;
 
   let elementModale: Modale;
   let mesure: MesureReferentiel;
@@ -48,6 +53,8 @@
       <TableauServicesAssocies
         servicesAssocies={servicesAvecMesure}
         {referentielStatuts}
+        {referentielTypesService}
+        avecTypeEtBesoinDeSecurite
       />
     </svelte:fragment>
     <svelte:fragment slot="actions">

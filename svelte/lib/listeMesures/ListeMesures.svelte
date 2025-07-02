@@ -7,6 +7,7 @@
     type MesureReferentiel,
     Referentiel,
     type ReferentielStatut,
+    type ReferentielTypesService,
   } from '../ui/types.d';
   import Tableau from '../ui/Tableau.svelte';
   import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
@@ -22,6 +23,7 @@
   import Lien from '../ui/Lien.svelte';
 
   export let statuts: ReferentielStatut;
+  export let typesService: ReferentielTypesService;
 
   onMount(() => {
     servicesAvecMesuresAssociees.rafraichis();
@@ -75,12 +77,14 @@
 
 <ModaleRapportModification
   referentielStatuts={statuts}
+  referentielTypesService={typesService}
   on:close={() => modaleRapportStore.metEnAvantMesureApresModification()}
 />
 
 <ModaleDetailsMesure
   bind:this={modaleDetailsMesure}
   referentielStatuts={statuts}
+  referentielTypesService={typesService}
 />
 
 <Tableau

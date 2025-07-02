@@ -5,9 +5,13 @@
   import TableauServicesAssocies from './TableauServicesAssocies.svelte';
   import Toast from '../../ui/Toast.svelte';
   import { modaleRapportStore } from '../stores/modaleRapport.store';
-  import type { ReferentielStatut } from '../../ui/types';
+  import type {
+    ReferentielStatut,
+    ReferentielTypesService,
+  } from '../../ui/types';
 
   export let referentielStatuts: ReferentielStatut;
+  export let referentielTypesService: ReferentielTypesService;
 
   let elementModale: Modale;
 
@@ -79,7 +83,9 @@
       <TableauServicesAssocies
         servicesAssocies={servicesAvecMesure}
         {referentielStatuts}
+        {referentielTypesService}
         avecNomCliquable
+        avecTypeEtBesoinDeSecurite
       />
     {/if}
   </svelte:fragment>

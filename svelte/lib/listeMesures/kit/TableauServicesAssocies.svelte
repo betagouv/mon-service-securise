@@ -2,17 +2,35 @@
   import { decode } from 'html-entities';
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import Tableau from '../../ui/Tableau.svelte';
-  import type { ReferentielStatut } from '../../ui/types.d';
+  import type {
+    ReferentielStatut,
+    ReferentielTypesService,
+  } from '../../ui/types.d';
   import type { ServiceAssocieAUneMesure } from '../listeMesures.d';
 
   export let referentielStatuts: ReferentielStatut;
+  export let referentielTypesService: ReferentielTypesService | undefined =
+    undefined;
   export let servicesAssocies: ServiceAssocieAUneMesure[];
   export let avecNomCliquable: boolean = false;
+  export let avecTypeEtBesoinDeSecurite: boolean = false;
+
+  const libellesNiveauSecurite = {
+    niveau1: 'Basiques',
+    niveau2: 'Modérés',
+    niveau3: 'Avancés',
+  };
 </script>
 
 <Tableau
   colonnes={[
     { cle: 'nom', libelle: 'Nom du service' },
+    ...(avecTypeEtBesoinDeSecurite
+      ? [
+          { cle: 'typeService', libelle: 'Type de service' },
+          { cle: 'niveauSecurite', libelle: 'Besoin de sécurité' },
+        ]
+      : []),
     { cle: 'statut', libelle: 'Statut actuel' },
     { cle: 'modalites', libelle: 'Précision actuelle' },
   ]}
@@ -34,6 +52,18 @@
           <span class="organisation">{donnee.organisationResponsable}</span>
         </div>
       {/if}
+    {:else if colonne.cle === 'typeService' && referentielTypesService}
+      <div>
+        <span
+          >{donnee.typeService
+            .map((t) => referentielTypesService[t].description)
+            .join(', ')}</span
+        >
+      </div>
+    {:else if colonne.cle === 'niveauSecurite'}
+      <div>
+        <span>{libellesNiveauSecurite[donnee.niveauSecurite]}</span>
+      </div>
     {:else if colonne.cle === 'statut'}
       <TagStatutMesure {referentielStatuts} statut={donnee.mesure.statut} />
     {:else if colonne.cle === 'modalites'}
