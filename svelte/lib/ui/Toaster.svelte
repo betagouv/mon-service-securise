@@ -9,7 +9,13 @@
 {#if $toasterStore.queue.length}
   <aside>
     {#each $toasterStore.queue as { niveau, contenu, titre, id } (id)}
-      <Toast {niveau} {titre} {contenu} />
+      <Toast
+        {niveau}
+        {titre}
+        {contenu}
+        avecFermeture
+        on:close={() => toasterStore.fermeToast(id)}
+      />
     {/each}
   </aside>
 {/if}

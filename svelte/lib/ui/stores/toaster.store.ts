@@ -49,6 +49,11 @@ export const toasterStore = {
       );
     }
   },
+  fermeToast: (id?: number) =>
+    update((etatActuel) => {
+      etatActuel.queue = etatActuel.queue.filter((toast) => toast.id !== id);
+      return etatActuel;
+    }),
 };
 
 const fabriqueToast = (
@@ -69,13 +74,13 @@ const fabriqueToast = (
 function afficheToast(titre: string, contenu: string, niveau: NiveauMessage) {
   const message = fabriqueToast(titre, contenu, niveau);
   setTimeout(() => {
-    update((self) => {
-      self.queue.shift();
-      return self;
+    update((etatActuel) => {
+      etatActuel.queue.shift();
+      return etatActuel;
     });
   }, message.timeout);
-  update((self) => {
-    self.queue = [...self.queue, message];
-    return self;
+  update((etatActuel) => {
+    etatActuel.queue = [...etatActuel.queue, message];
+    return etatActuel;
   });
 }
