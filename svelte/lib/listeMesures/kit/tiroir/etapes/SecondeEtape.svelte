@@ -9,7 +9,6 @@
   import { mesuresAvecServicesAssociesStore } from '../../../stores/mesuresAvecServicesAssocies.store';
   import Tableau from '../../../../ui/Tableau.svelte';
   import Infobulle from '../../../../ui/Infobulle.svelte';
-  import type { ServiceAssocieAUneMesure } from '../../../listeMesures.d';
 
   export let statuts: ReferentielStatut;
   export let mesure: MesureReferentiel;
@@ -118,8 +117,19 @@
         {/if}
       </div>
     {:else if colonne.cle === 'modalites'}
-      <div class:desactive>
-        {decode(donnee.modalites) || ''}
+      {@const contenu = decode(donnee.modalites)}
+      {@const contenuTropLong = contenu.length > 90}
+      <div class="precision">
+        <span>{contenuTropLong ? contenu.slice(0, 90) + '...' : contenu}</span>
+        {#if contenuTropLong}
+          <img
+            src="/statique/assets/images/icone_voir_plus.svg"
+            alt={contenu}
+            title={contenu}
+            width="16px"
+            height="16px"
+          />
+        {/if}
       </div>
     {/if}
   </svelte:fragment>
@@ -174,5 +184,12 @@
 
   .explication {
     max-width: 500px;
+  }
+
+  .precision {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
   }
 </style>
