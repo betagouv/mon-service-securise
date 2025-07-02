@@ -55,6 +55,7 @@
         {referentielStatuts}
         {referentielTypesService}
         avecTypeEtBesoinDeSecurite
+        avecNomCliquable
       />
     </svelte:fragment>
     <svelte:fragment slot="actions">
