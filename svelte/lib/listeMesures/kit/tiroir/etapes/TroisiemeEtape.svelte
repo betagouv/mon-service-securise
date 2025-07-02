@@ -55,7 +55,10 @@
 <hr />
 
 <div>
-  <h3>{idsServicesSelectionnes.length} {intitulePluralise}</h3>
+  <h3 class="titre-etape">
+    {idsServicesSelectionnes.length}
+    {intitulePluralise}
+  </h3>
   <TableauServicesAssocies
     servicesAssocies={servicesConcernes}
     referentielStatuts={statuts}
@@ -87,7 +90,11 @@
     font-size: 1.375rem;
     font-weight: 700;
     line-height: 1.75rem;
-    margin: 0 0 24px;
+    margin: 0;
+
+    &.titre-etape {
+      margin: 0 0 24px;
+    }
   }
 
   hr {
