@@ -89,7 +89,7 @@
 
   .contenu-menu-deroulant.menuOuvert {
     width: calc(100% - 32px);
-    box-shadow: 0px 4px 12px 0px rgba(0, 0, 18, 0.16);
+    box-shadow: var(--ombre-md);
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -129,8 +129,8 @@
     border: none;
     box-shadow: inset 0 -2px 0 0 var(--gris-fonce);
     cursor: pointer;
-    font-size: 1.11em;
-    line-height: 1.5em;
+    font-size: 1rem;
+    line-height: 1.5rem;
     background: var(--fond-gris-pale-composant);
     background-size: 1.11em 1.11em;
     min-width: 288px;
