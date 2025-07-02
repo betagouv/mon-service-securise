@@ -22,13 +22,13 @@
   };
 
   onDestroy(() => debloqueScroll());
+  const emetEvent = createEventDispatcher();
 </script>
 
 <dialog
   bind:this={elementModale}
   on:close={() => {
     debloqueScroll();
-    const emetEvent = createEventDispatcher();
     emetEvent('close');
   }}
 >
