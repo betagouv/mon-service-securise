@@ -11,6 +11,7 @@
       | 'telecharger'
       | 'telecharger-blanc'
       | 'medaille'
+      | 'ajout-liste'
       | undefined;
     type?:
       | 'bouton-primaire'
@@ -33,6 +34,7 @@
     | 'telecharger'
     | 'telecharger-blanc'
     | 'medaille'
+    | 'ajout-liste'
     | undefined = undefined;
   export let type:
     | 'bouton-primaire'
@@ -112,6 +114,10 @@
 
   .medaille:before {
     background-image: url('/statique/assets/images/icone_medaille.svg');
+  }
+
+  .ajout-liste:before {
+    background-image: url('/statique/assets/images/icone_ajout_liste.svg');
   }
 
   .avecIcone:before {
@@ -220,5 +226,10 @@
   .bouton-secondaire.avecIcone.inactif::before {
     filter: invert(65%) sepia(1%) saturate(0%) hue-rotate(358deg)
       brightness(90%) contrast(84%);
+  }
+
+  .bouton-tertiaire.avecIcone::before {
+    filter: brightness(0) invert(34%) sepia(21%) saturate(5161%)
+      hue-rotate(183deg) brightness(97%) contrast(103%);
   }
 </style>

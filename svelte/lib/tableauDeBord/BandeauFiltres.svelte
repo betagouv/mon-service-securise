@@ -7,6 +7,7 @@
   import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirTeleversementServices from '../ui/tiroirs/TiroirTeleversementServices.svelte';
+  import Lien from '../ui/Lien.svelte';
 </script>
 
 <div class="conteneur-filtres">
@@ -88,24 +89,33 @@
       }}
     />
   </div>
-  {#if $services.length > 0}
-    <BoutonAvecListeDeroulante
-      titre="Ajouter un / des services"
-      options={[
-        {
-          label: 'Ajouter un service',
-          icone: 'plus',
-          href: '/service/creation',
-        },
-        {
-          label: 'Téléverser des services',
-          icone: 'televerser',
-          action: () =>
-            tiroirStore.afficheContenu(TiroirTeleversementServices, {}),
-        },
-      ]}
+  <div class="actions">
+    <Lien
+      type="bouton-tertiaire"
+      href="/mesures"
+      titre="Liste de mesures"
+      taille="moyen"
+      icone="ajout-liste"
     />
-  {/if}
+    {#if $services.length > 0}
+      <BoutonAvecListeDeroulante
+        titre="Ajouter un / des services"
+        options={[
+          {
+            label: 'Ajouter un service',
+            icone: 'plus',
+            href: '/service/creation',
+          },
+          {
+            label: 'Téléverser des services',
+            icone: 'televerser',
+            action: () =>
+              tiroirStore.afficheContenu(TiroirTeleversementServices, {}),
+          },
+        ]}
+      />
+    {/if}
+  </div>
 </div>
 
 <style>
@@ -121,7 +131,8 @@
     z-index: 5;
   }
 
-  .recherche {
+  .recherche,
+  .actions {
     display: flex;
     flex-direction: row;
     gap: 12px;
