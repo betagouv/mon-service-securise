@@ -138,6 +138,8 @@ const routesConnecteApi = ({
             peutEtreModifie: autorisations
               .find((a) => a.idService === service.id)
               .aLesPermissions({ [SECURISER]: ECRITURE }),
+            niveauSecurite: service.descriptionService.niveauSecurite,
+            typeService: service.descriptionService.typeService,
           };
         });
 
