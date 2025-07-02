@@ -1,4 +1,9 @@
-import type { MesureReferentiel } from '../ui/types';
+import type {
+  IdNiveauDeSecurite,
+  MesureReferentiel,
+  IdTypeService,
+  ReferentielStatut,
+} from '../ui/types.d';
 import type { StatutMesure } from '../modeles/modeleMesure';
 
 declare global {
@@ -9,6 +14,7 @@ declare global {
 
 export type ListeMesuresProps = {
   statuts: ReferentielStatut;
+  typesService: ReferentielTypesService;
 };
 export type ReferentielMesures = Record<string, MesureReferentiel>;
 
@@ -23,6 +29,8 @@ export type ServiceAvecMesuresAssociees = {
   organisationResponsable: string;
   mesuresAssociees: Record<string, PersonnalisationMesure>;
   peutEtreModifie: boolean;
+  niveauSecurite: IdNiveauDeSecurite;
+  typeService: IdTypeService[];
 };
 
 export type ServiceAssocieAUneMesure = {
@@ -31,4 +39,6 @@ export type ServiceAssocieAUneMesure = {
   organisationResponsable: string;
   mesure: PersonnalisationMesure;
   peutEtreModifie: boolean;
+  niveauSecurite: IdNiveauDeSecurite;
+  typeService: IdTypeService[];
 };

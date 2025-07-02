@@ -72,3 +72,10 @@ export type MesureReferentiel = {
 export type ObjetDeDonnees = Record<string, any>;
 
 export type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';
+
+export type IdTypeService = 'api' | 'applicationMobile' | 'siteInternet';
+
+export type ReferentielTypesService = Record<
+  IdTypeService,
+  { description: string }
+>;
