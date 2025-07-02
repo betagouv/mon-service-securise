@@ -70,3 +70,5 @@ export type MesureReferentiel = {
 };
 
 export type ObjetDeDonnees = Record<string, any>;
+
+export type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';
