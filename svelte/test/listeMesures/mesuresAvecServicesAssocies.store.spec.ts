@@ -3,19 +3,21 @@ import { mesuresAvecServicesAssociesStore } from '../../lib/listeMesures/stores/
 import { servicesAvecMesuresAssociees } from '../../lib/listeMesures/stores/servicesAvecMesuresAssociees.store';
 import { get } from 'svelte/store';
 
+const unService = (
+  id: string = 'S1',
+  nomService: string = 'ServiceS1',
+  mesuresAssociees: Record<string, any> = { M1: {} }
+) => ({
+  id,
+  nomService,
+  organisationResponsable: 'SuperEntreprise',
+  mesuresAssociees,
+  peutEtreModifie: true,
+});
+
 describe('Le store des mesures avec services associés', () => {
   it('construis le résultat pour une mesure et un service', () => {
-    servicesAvecMesuresAssociees.set([
-      {
-        id: 'S1',
-        nomService: 'ServiceS1',
-        organisationResponsable: 'SuperEntreprise',
-        mesuresAssociees: {
-          M1: {},
-        },
-        peutEtreModifie: true,
-      },
-    ]);
+    servicesAvecMesuresAssociees.set([unService()]);
 
     expect(get(mesuresAvecServicesAssociesStore)).toStrictEqual({
       M1: ['S1'],
@@ -24,24 +26,8 @@ describe('Le store des mesures avec services associés', () => {
 
   it('agrège pour plusieurs services', () => {
     servicesAvecMesuresAssociees.set([
-      {
-        id: 'S1',
-        nomService: 'ServiceS1',
-        organisationResponsable: 'SuperEntreprise',
-        mesuresAssociees: {
-          M1: {},
-        },
-        peutEtreModifie: true,
-      },
-      {
-        id: 'S2',
-        nomService: 'ServiceS2',
-        organisationResponsable: 'SuperEntreprise',
-        mesuresAssociees: {
-          M1: {},
-        },
-        peutEtreModifie: true,
-      },
+      unService(),
+      unService('S2', 'ServiceS2'),
     ]);
 
     expect(get(mesuresAvecServicesAssociesStore)).toStrictEqual({
@@ -51,25 +37,8 @@ describe('Le store des mesures avec services associés', () => {
 
   it('agrège pour plusieurs mesures', () => {
     servicesAvecMesuresAssociees.set([
-      {
-        id: 'S1',
-        nomService: 'ServiceS1',
-        organisationResponsable: 'SuperEntreprise',
-        mesuresAssociees: {
-          M1: {},
-          M2: {},
-        },
-        peutEtreModifie: true,
-      },
-      {
-        id: 'S2',
-        nomService: 'ServiceS2',
-        organisationResponsable: 'SuperEntreprise',
-        mesuresAssociees: {
-          M3: {},
-        },
-        peutEtreModifie: true,
-      },
+      unService('S1', 'ServiceS1', { M1: {}, M2: {} }),
+      unService('S2', 'ServiceS2', { M3: {} }),
     ]);
 
     expect(get(mesuresAvecServicesAssociesStore)).toStrictEqual({
