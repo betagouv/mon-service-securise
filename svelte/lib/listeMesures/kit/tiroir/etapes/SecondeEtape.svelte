@@ -143,10 +143,22 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    width: 318px;
 
     .nom {
       font-weight: bold;
     }
+
+    .nom,
+    .organisation {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .conteneur-statut {
+    width: 148px;
   }
 
   .conteneur-statut {
