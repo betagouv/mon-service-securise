@@ -27,6 +27,7 @@
   let idsServicesSelectionnes: string[] = [];
 
   let etapeCourante = 1;
+  let enCoursEnvoi = false;
 
   $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
 
@@ -46,6 +47,7 @@
   }
 
   const appliqueModifications = async () => {
+    enCoursEnvoi = true;
     await enregistreModificationMesureSurServicesMultiples({
       idMesure: mesure.id,
       statut: statutSelectionne,
@@ -62,6 +64,7 @@
       idServicesModifies: idsServicesSelectionnes,
       mesure,
     });
+    enCoursEnvoi = false;
   };
 
   const etapeSuivante = async () => {
@@ -112,6 +115,7 @@
     titre={etapeCourante < 3 ? 'Suivant' : 'Appliquer les modifications'}
     type="primaire"
     actif={boutonSuivantActif}
+    {enCoursEnvoi}
     on:click={etapeSuivante}
   />
 </ActionsTiroir>
