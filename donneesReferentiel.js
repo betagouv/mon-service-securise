@@ -161,6 +161,17 @@ module.exports = {
       image: 'televersementServices.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'listeMesure',
+      dateDeDeploiement: '2025-07-04 07:00:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/comment-modifier-le-statut-et-la-precision-dune-mesure-sur-plusieurs-services-a-la-fois-1eb70y9/',
+      titre:
+        'Gagnez du temps, modifiez vos mesures sur plusieurs services en quelques clics !',
+      sousTitre:
+        'Il est maintenant possible de modifier le statut et les précisions d’une mesure sur plusieurs services à la fois !',
+      image: 'listeMesure.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
