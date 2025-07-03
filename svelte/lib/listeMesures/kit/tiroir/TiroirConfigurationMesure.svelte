@@ -13,6 +13,7 @@
   import { enregistreModificationMesureSurServicesMultiples } from '../../listeMesures.api';
   import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
   import { modaleRapportStore } from '../../stores/modaleRapport.store';
+  import { toasterStore } from '../../../ui/stores/toaster.store';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -48,23 +49,32 @@
 
   const appliqueModifications = async () => {
     enCoursEnvoi = true;
-    await enregistreModificationMesureSurServicesMultiples({
-      idMesure: mesure.id,
-      statut: statutSelectionne,
-      modalites: precision,
-      idsServices: idsServicesSelectionnes,
-    });
-    tiroirStore.ferme();
-    servicesAvecMesuresAssociees.rafraichis();
-    modaleRapportStore.affiche({
-      champsModifies: [
-        ...(statutSelectionne && ['statut']),
-        ...(precision && ['modalites']),
-      ] as ('statut' | 'modalites')[],
-      idServicesModifies: idsServicesSelectionnes,
-      mesure,
-    });
-    enCoursEnvoi = false;
+    try {
+      await enregistreModificationMesureSurServicesMultiples({
+        idMesure: mesure.id,
+        statut: statutSelectionne,
+        modalites: precision,
+        idsServices: idsServicesSelectionnes,
+      });
+      tiroirStore.ferme();
+      servicesAvecMesuresAssociees.rafraichis();
+      modaleRapportStore.affiche({
+        champsModifies: [
+          ...(statutSelectionne && ['statut']),
+          ...(precision && ['modalites']),
+        ] as ('statut' | 'modalites')[],
+        idServicesModifies: idsServicesSelectionnes,
+        mesure,
+      });
+    } catch (e) {
+      tiroirStore.ferme();
+      toasterStore.erreur(
+        'Une erreur est survenue',
+        "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
+      );
+    } finally {
+      enCoursEnvoi = false;
+    }
   };
 
   const etapeSuivante = async () => {
