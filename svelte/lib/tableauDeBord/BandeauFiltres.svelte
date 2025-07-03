@@ -134,6 +134,7 @@
   .recherche,
   .actions {
     display: flex;
+    align-items: center;
     flex-direction: row;
     gap: 12px;
   }
