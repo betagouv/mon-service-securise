@@ -25,6 +25,7 @@
   import { modaleRapportStore } from './stores/modaleRapport.store';
   import Lien from '../ui/Lien.svelte';
   import Loader from '../ui/Loader.svelte';
+  import Toaster from '../ui/Toaster.svelte';
 
   export let statuts: ReferentielStatut;
   export let typesService: ReferentielTypesService;
@@ -78,6 +79,8 @@
     ],
   };
 </script>
+
+<Toaster />
 
 <ModaleRapportModification
   referentielStatuts={statuts}

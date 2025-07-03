@@ -5,7 +5,7 @@ import type {
 } from '../../tableauDesMesures/tableauDesMesures.d';
 import type { StatutMesure } from '../../modeles/modeleMesure';
 
-export type NiveauMessage = 'info' | 'succes';
+export type NiveauMessage = 'info' | 'succes' | 'erreur';
 
 export type MessageToast = {
   niveau: NiveauMessage;
@@ -30,6 +30,9 @@ export const toasterStore = {
   },
   succes: (titre: string, contenu: string) => {
     afficheToast(titre, contenu, 'succes');
+  },
+  erreur: (titre: string, contenu: string) => {
+    afficheToast(titre, contenu, 'erreur');
   },
   afficheToastChangementStatutMesure: (
     mesure: MesureGenerale | MesureSpecifique,
