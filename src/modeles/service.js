@@ -15,6 +15,7 @@ const Autorisation = require('./autorisations/autorisation');
 const SuggestionAction = require('./suggestionAction');
 const { dateEnIso } = require('../utilitaires/date');
 const { Contributeur } = require('./contributeur');
+const ReferentielUtilisateur = require('./referentielUtilisateur');
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -35,6 +36,7 @@ class Service {
       descriptionService = {},
       dossiers = [],
       mesuresSpecifiques = [],
+      modelesMesuresSpecifiques = {},
       risquesGeneraux = [],
       risquesSpecifiques = [],
       rolesResponsabilites = {},
@@ -58,8 +60,15 @@ class Service {
       ...mesure,
       rendueIndispensable: !!mesuresPersonnalisees[mesure.id]?.indispensable,
     }));
+
+    const referentielUtilisateur = new ReferentielUtilisateur({
+      modelesMesuresSpecifiques,
+    });
+    const toutesMesuresSpecifiques =
+      referentielUtilisateur.toutesMesuresSpecifiques(mesuresSpecifiques);
+
     this.mesures = new Mesures(
-      { mesuresGenerales, mesuresSpecifiques },
+      { mesuresGenerales, mesuresSpecifiques: toutesMesuresSpecifiques },
       referentiel,
       mesuresPersonnalisees
     );

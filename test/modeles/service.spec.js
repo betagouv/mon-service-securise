@@ -545,13 +545,43 @@ describe('Un service', () => {
     ).to.be(true);
   });
 
-  it('connaît ses mesures spécifiques', () => {
-    const service = new Service({
-      id: '123',
-      mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+  describe('concernant les mesures spécifiques', () => {
+    it('connaît ses mesures spécifiques', () => {
+      const service = new Service({
+        id: '123',
+        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+      });
+
+      expect(service.mesuresSpecifiques().nombre()).to.equal(1);
     });
 
-    expect(service.mesuresSpecifiques().nombre()).to.equal(1);
+    it("sait enrichir les mesures spécifiques qui proviennent d'un référentiel utilisateur", () => {
+      const referentiel = Referentiel.creeReferentiel({
+        categoriesMesures: { gouvernance: {} },
+      });
+
+      const service = new Service(
+        {
+          id: '123',
+          mesuresSpecifiques: [{ idModele: 'MS1', statut: 'fait' }],
+          modelesMesuresSpecifiques: {
+            MS1: {
+              description: 'Une mesure spécifique',
+              categorie: 'gouvernance',
+            },
+          },
+        },
+        referentiel
+      );
+
+      expect(service.mesuresSpecifiques().item(0).toJSON()).to.eql({
+        idModele: 'MS1',
+        statut: 'fait',
+        description: 'Une mesure spécifique',
+        categorie: 'gouvernance',
+        responsables: [],
+      });
+    });
   });
 
   describe('sur évaluation du statut de saisie des mesures', () => {
