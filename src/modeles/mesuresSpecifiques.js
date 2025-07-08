@@ -1,7 +1,10 @@
 const ElementsConstructibles = require('./elementsConstructibles');
 const MesureSpecifique = require('./mesureSpecifique');
 const Referentiel = require('../referentiel');
-const { ErreurMesureInconnue } = require('../erreurs');
+const {
+  ErreurMesureInconnue,
+  ErreurModeleDeMesureSpecifiqueIntrouvable,
+} = require('../erreurs');
 
 class MesuresSpecifiques extends ElementsConstructibles {
   constructor(
@@ -15,8 +18,11 @@ class MesuresSpecifiques extends ElementsConstructibles {
       const lieeAUnModele = m.idModele;
       if (!lieeAUnModele) return m;
 
-      const { description, descriptionLongue, categorie } =
-        modelesDeMesureSpecifique[m.idModele];
+      const modele = modelesDeMesureSpecifique[m.idModele];
+      if (!modele)
+        throw new ErreurModeleDeMesureSpecifiqueIntrouvable(m.idModele);
+
+      const { description, descriptionLongue, categorie } = modele;
 
       return { ...m, description, descriptionLongue, categorie };
     });

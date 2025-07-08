@@ -46,6 +46,13 @@ class ErreurEmailManquant extends ErreurModele {}
 class ErreurServiceInexistant extends ErreurModele {}
 class ErreurLocalisationDonneesInvalide extends ErreurModele {}
 class ErreurMesureInconnue extends ErreurModele {}
+class ErreurModeleDeMesureSpecifiqueIntrouvable extends ErreurModele {
+  constructor(identifiantInconnu) {
+    super(
+      `Le modèle de mesure spécifique '${identifiantInconnu}' est introuvable.`
+    );
+  }
+}
 class ErreurMotDePasseIncorrect extends ErreurModele {}
 class ErreurNiveauGraviteInconnu extends ErreurModele {}
 class ErreurNiveauVraisemblanceInconnu extends ErreurModele {}
@@ -105,6 +112,7 @@ module.exports = {
   ErreurIntituleRisqueManquant,
   ErreurLocalisationDonneesInvalide,
   ErreurMesureInconnue,
+  ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurMotDePasseIncorrect,
   ErreurModele,
   ErreurNiveauGraviteInconnu,
