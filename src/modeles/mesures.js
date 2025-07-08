@@ -30,12 +30,16 @@ class Mesures extends InformationsService {
     super({
       listesAgregats: {
         mesuresGenerales: MesuresGenerales,
-        mesuresSpecifiques: MesuresSpecifiques,
       },
     });
     this.renseigneProprietes(donnees, referentiel);
     this.referentiel = referentiel;
     this.mesuresPersonnalisees = mesuresPersonnalisees;
+
+    this.mesuresSpecifiques = new MesuresSpecifiques(
+      { mesuresSpecifiques: donnees.mesuresSpecifiques || [] },
+      referentiel
+    );
   }
 
   completude() {
