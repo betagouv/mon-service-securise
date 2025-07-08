@@ -4,9 +4,24 @@ const Referentiel = require('../referentiel');
 const { ErreurMesureInconnue } = require('../erreurs');
 
 class MesuresSpecifiques extends ElementsConstructibles {
-  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(
+    donnees = {},
+    referentiel = Referentiel.creeReferentielVide(),
+    modelesDeMesureSpecifique = {}
+  ) {
     const { mesuresSpecifiques = [] } = donnees;
-    super(MesureSpecifique, { items: mesuresSpecifiques }, referentiel);
+
+    const mesuresCompletees = mesuresSpecifiques.map((m) => {
+      const lieeAUnModele = m.idModele;
+      if (!lieeAUnModele) return m;
+
+      const { description, descriptionLongue, categorie } =
+        modelesDeMesureSpecifique[m.idModele];
+
+      return { ...m, description, descriptionLongue, categorie };
+    });
+
+    super(MesureSpecifique, { items: mesuresCompletees }, referentiel);
   }
 
   metsAJourMesure(mesure) {
