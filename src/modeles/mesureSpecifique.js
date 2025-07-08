@@ -35,8 +35,17 @@ class MesureSpecifique extends Mesure {
   }
 
   donneesSerialisees() {
+    const toutesDonnees = super.donneesSerialisees();
+
+    const lieeAUnModele = toutesDonnees.idModele;
+    if (lieeAUnModele) {
+      delete toutesDonnees.description;
+      delete toutesDonnees.descriptionLongue;
+      delete toutesDonnees.categorie;
+    }
+
     return {
-      ...super.donneesSerialisees(),
+      ...toutesDonnees,
       ...(this.echeance && { echeance: new Date(this.echeance).toISOString() }),
     };
   }
