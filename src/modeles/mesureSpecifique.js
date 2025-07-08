@@ -9,7 +9,12 @@ class MesureSpecifique extends Mesure {
   ) {
     super({
       proprietesAtomiquesRequises: MesureSpecifique.proprietesObligatoires(),
-      proprietesAtomiquesFacultatives: ['modalites', 'priorite', 'echeance'],
+      proprietesAtomiquesFacultatives: [
+        'modalites',
+        'priorite',
+        'echeance',
+        'descriptionLongue',
+      ],
       proprietesListes: ['responsables'],
     });
 
