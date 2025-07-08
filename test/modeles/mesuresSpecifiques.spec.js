@@ -235,6 +235,26 @@ describe('La liste des mesures spécifiques', () => {
       expect(mesureCompletee.descriptionLongue).to.be('Longue du modèle');
       expect(mesureCompletee.categorie).to.be('categorie1');
     });
+
+    it('jette une erreur lorsque le modèle de la mesure est introuvable', () => {
+      const modelesVide = {};
+
+      expect(() => {
+        new MesuresSpecifiques(
+          {
+            mesuresSpecifiques: [
+              { id: 'M-1', idModele: 'MODELE-INTROUVABLE-1', statut: 'fait' },
+            ],
+          },
+          referentiel,
+          modelesVide
+        );
+      }).to.throwError((e) => {
+        expect(e.message).to.be(
+          "Le modèle de mesure spécifique 'MODELE-INTROUVABLE-1' est introuvable."
+        );
+      });
+    });
   });
 
   describe('sur demande de mise à jour', () => {
