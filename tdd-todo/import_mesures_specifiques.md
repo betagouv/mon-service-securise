@@ -6,7 +6,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 
 ## Du point de vue de la Mesure Spécifique
 
-- [ ] Une mesure spé peut avoir une description longue : nouvel attribut à rajouter
+- [x] Une mesure spé peut avoir une description longue : nouvel attribut à rajouter
 - [ ] Une mesure spé peut avoir un identifiant de modèle
   - Conséquence : la description, la description longue et la catégorie ne sont pas persistées
 
