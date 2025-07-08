@@ -210,6 +210,33 @@ describe('La liste des mesures spécifiques', () => {
     expect(mesures.items.length).to.be(0);
   });
 
+  describe('concernant les mesures spécifiques liées à un modèle', () => {
+    it('complète les mesures rattachées à un modèle avec les données extraites du modèle… pour que les consommateurs ne fassent pas la différence avec des mesures "classiques"', () => {
+      const modelesDeMesureSpecifique = {
+        'MOD-1': {
+          description: 'Description du modèle',
+          descriptionLongue: 'Longue du modèle',
+          categorie: 'categorie1',
+        },
+      };
+
+      const avecUnModele = new MesuresSpecifiques(
+        {
+          mesuresSpecifiques: [
+            { id: 'M-1', idModele: 'MOD-1', statut: 'fait' },
+          ],
+        },
+        referentiel,
+        modelesDeMesureSpecifique
+      );
+
+      const mesureCompletee = avecUnModele.toutes()[0];
+      expect(mesureCompletee.description).to.be('Description du modèle');
+      expect(mesureCompletee.descriptionLongue).to.be('Longue du modèle');
+      expect(mesureCompletee.categorie).to.be('categorie1');
+    });
+  });
+
   describe('sur demande de mise à jour', () => {
     it('peut mettre à jour une mesure spécifique', () => {
       const donneesMesure = {
