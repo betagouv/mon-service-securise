@@ -27,19 +27,20 @@ class Mesures extends InformationsService {
     referentiel = Referentiel.creeReferentielVide(),
     mesuresPersonnalisees = {}
   ) {
-    super({
-      listesAgregats: {
-        mesuresGenerales: MesuresGenerales,
-      },
-    });
-    this.renseigneProprietes(donnees, referentiel);
-    this.referentiel = referentiel;
-    this.mesuresPersonnalisees = mesuresPersonnalisees;
+    super();
+
+    this.mesuresGenerales = new MesuresGenerales(
+      { mesuresGenerales: donnees.mesuresGenerales || [] },
+      referentiel
+    );
 
     this.mesuresSpecifiques = new MesuresSpecifiques(
       { mesuresSpecifiques: donnees.mesuresSpecifiques || [] },
       referentiel
     );
+
+    this.referentiel = referentiel;
+    this.mesuresPersonnalisees = mesuresPersonnalisees;
   }
 
   completude() {
