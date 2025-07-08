@@ -14,7 +14,19 @@ class MesuresSpecifiques extends ElementsConstructibles {
   ) {
     const { mesuresSpecifiques = [] } = donnees;
 
-    const mesuresCompletees = mesuresSpecifiques.map((m) => {
+    const mesuresCompletees = MesuresSpecifiques.completeMesuresSpecifiques(
+      mesuresSpecifiques,
+      modelesDeMesureSpecifique
+    );
+
+    super(MesureSpecifique, { items: mesuresCompletees }, referentiel);
+  }
+
+  static completeMesuresSpecifiques(
+    mesuresSpecifiques,
+    modelesDeMesureSpecifique
+  ) {
+    return mesuresSpecifiques.map((m) => {
       const lieeAUnModele = m.idModele;
       if (!lieeAUnModele) return m;
 
@@ -26,8 +38,6 @@ class MesuresSpecifiques extends ElementsConstructibles {
 
       return { ...m, description, descriptionLongue, categorie };
     });
-
-    super(MesureSpecifique, { items: mesuresCompletees }, referentiel);
   }
 
   metsAJourMesure(mesure) {
