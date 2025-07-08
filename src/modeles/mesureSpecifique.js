@@ -14,6 +14,7 @@ class MesureSpecifique extends Mesure {
         'priorite',
         'echeance',
         'descriptionLongue',
+        'idModele',
       ],
       proprietesListes: ['responsables'],
     });

@@ -24,6 +24,7 @@ describe('Une mesure spécifique', () => {
       {
         description: 'Une mesure spécifique',
         descriptionLongue: 'Une description longue',
+        idModele: 'M1',
         categorie: 'uneCategorie',
         statut: 'fait',
         modalites: 'Des modalités de mise en œuvre',
@@ -36,6 +37,7 @@ describe('Une mesure spécifique', () => {
 
     expect(mesure.description).to.equal('Une mesure spécifique');
     expect(mesure.descriptionLongue).to.equal('Une description longue');
+    expect(mesure.idModele).to.equal('M1');
     expect(mesure.categorie).to.equal('uneCategorie');
     expect(mesure.statut).to.equal('fait');
     expect(mesure.modalites).to.equal('Des modalités de mise en œuvre');
