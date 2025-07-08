@@ -151,15 +151,71 @@ describe('Une mesure spécifique', () => {
     expect(mesure.statutRenseigne()).to.be(true);
   });
 
-  elle("persiste sa date d'échéance au format ISO en UTC", () => {
-    const janvierNonIso = '01/23/2024 10:00Z';
-    const avecEcheance = new MesureSpecifique(
-      { echeance: janvierNonIso },
-      referentiel
+  describe('concernant la persistance', () => {
+    let donneesMesureSpecifique;
+
+    beforeEach(() => {
+      referentiel.enrichis({ prioritesMesures: { p3: {} } });
+      donneesMesureSpecifique = {
+        id: 'M1',
+        description: 'Une mesure spécifique',
+        descriptionLongue: 'Une description longue',
+        categorie: 'uneCategorie',
+        statut: 'fait',
+        modalites: 'Des modalités de mise en œuvre',
+        priorite: 'p3',
+        echeance: '01/23/2024 10:00Z',
+        responsables: ['unIdUtilisateur', 'unAutreIdUtilisateur'],
+      };
+    });
+
+    elle("persiste sa date d'échéance au format ISO en UTC", () => {
+      const janvierNonIso = '01/23/2024 10:00Z';
+      const avecEcheance = new MesureSpecifique(
+        { echeance: janvierNonIso },
+        referentiel
+      );
+
+      const persistance = avecEcheance.donneesSerialisees();
+
+      expect(persistance.echeance).to.be('2024-01-23T10:00:00.000Z');
+    });
+
+    elle('persiste toutes ses données', () => {
+      const mesureSpecifique = new MesureSpecifique(
+        donneesMesureSpecifique,
+        referentiel
+      );
+
+      const persistance = mesureSpecifique.donneesSerialisees();
+
+      expect(persistance).to.eql({
+        id: 'M1',
+        description: 'Une mesure spécifique',
+        descriptionLongue: 'Une description longue',
+        categorie: 'uneCategorie',
+        statut: 'fait',
+        modalites: 'Des modalités de mise en œuvre',
+        priorite: 'p3',
+        echeance: '2024-01-23T10:00:00.000Z',
+        responsables: ['unIdUtilisateur', 'unAutreIdUtilisateur'],
+      });
+    });
+
+    elle(
+      'ne persiste pas les données du modèle si la mesure a un modèle, car elles ne doivent apparaître que dans le modèle',
+      () => {
+        const mesureAvecModele = new MesureSpecifique(
+          { ...donneesMesureSpecifique, idModele: 'MS1' },
+          referentiel
+        );
+
+        const persistance = mesureAvecModele.donneesSerialisees();
+
+        expect(persistance.description).to.be(undefined);
+        expect(persistance.descriptionLongue).to.be(undefined);
+        expect(persistance.categorie).to.be(undefined);
+      }
     );
-
-    const persistance = avecEcheance.donneesSerialisees();
-
-    expect(persistance.echeance).to.be('2024-01-23T10:00:00.000Z');
   });
 });
