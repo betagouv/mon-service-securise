@@ -101,11 +101,12 @@ const fabriquePersistance = (
         return Promise.all(donneesServices.map((d) => enrichisService(d)));
       },
       ceuxDeUtilisateur: async (idUtilisateur) => {
-        const toutesDonnees =
-          await adaptateurPersistance.servicesComplets(idUtilisateur);
+        const donnees = await adaptateurPersistance.servicesComplets({
+          idUtilisateur,
+        });
 
         const services = await Promise.all(
-          toutesDonnees.map((donnees) => mappeDonneesVersDomaine(donnees))
+          donnees.map((d) => mappeDonneesVersDomaine(d))
         );
 
         return services.sort((s1, s2) =>
