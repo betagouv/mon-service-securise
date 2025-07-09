@@ -167,7 +167,7 @@ const nouvelAdaptateur = (env) => {
     )[0].count >= 1;
 
   const servicesComplets = async (configurationDuWhere) => {
-    const { idUtilisateur } = configurationDuWhere;
+    const { idUtilisateur, idService } = configurationDuWhere;
 
     const erreurDeConfiguration = () => {
       const json = JSON.stringify(configurationDuWhere);
@@ -184,6 +184,8 @@ const nouvelAdaptateur = (env) => {
                 FROM autorisations a
                 WHERE (a.donnees->>'idUtilisateur')::uuid = :idUtilisateur
             )`;
+
+      if (idService) return `WHERE S.id = :idService`;
 
       throw erreurDeConfiguration();
     };
@@ -214,7 +216,7 @@ const nouvelAdaptateur = (env) => {
     
       ${where()};
       `,
-      { idUtilisateur }
+      { idUtilisateur, idService }
     );
 
     return requete.rows;
