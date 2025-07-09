@@ -192,9 +192,9 @@ const nouvelAdaptateur = (env) => {
       ) utilisateurs_du_service ON utilisateurs_du_service.id_service = s.id
     
       WHERE s.id IN (
-        SELECT (a2.donnees->>'idService')::uuid
-        FROM autorisations a2
-        WHERE (a2.donnees->>'idUtilisateur')::uuid = ?
+        SELECT (a.donnees->>'idService')::uuid
+        FROM autorisations a
+        WHERE (a.donnees->>'idUtilisateur')::uuid = ?
       );
       `,
       [idUtilisateur]
