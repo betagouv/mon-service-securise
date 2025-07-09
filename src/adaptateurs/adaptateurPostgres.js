@@ -166,7 +166,28 @@ const nouvelAdaptateur = (env) => {
         .count('services.*')
     )[0].count >= 1;
 
-  const servicesComplets = async ({ idUtilisateur }) => {
+  const servicesComplets = async (configurationDuWhere) => {
+    const { idUtilisateur } = configurationDuWhere;
+
+    const erreurDeConfiguration = () => {
+      const json = JSON.stringify(configurationDuWhere);
+      return new Error(
+        `La configuration passée pour la lecture de service est invalide. Reçue : ${json}`
+      );
+    };
+
+    const where = () => {
+      if (idUtilisateur)
+        return `
+            WHERE s.id IN (
+                SELECT (a.donnees->>'idService')::uuid
+                FROM autorisations a
+                WHERE (a.donnees->>'idUtilisateur')::uuid = :idUtilisateur
+            )`;
+
+      throw erreurDeConfiguration();
+    };
+
     const requete = await knex.raw(
       `
       SELECT
@@ -191,13 +212,9 @@ const nouvelAdaptateur = (env) => {
         GROUP BY id_service
       ) utilisateurs_du_service ON utilisateurs_du_service.id_service = s.id
     
-      WHERE s.id IN (
-        SELECT (a.donnees->>'idService')::uuid
-        FROM autorisations a
-        WHERE (a.donnees->>'idUtilisateur')::uuid = ?
-      );
+      ${where()};
       `,
-      [idUtilisateur]
+      { idUtilisateur }
     );
 
     return requete.rows;
