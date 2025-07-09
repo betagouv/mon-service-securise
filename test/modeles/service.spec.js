@@ -1222,4 +1222,18 @@ describe('Un service', () => {
       expect(service.actionRecommandee()).to.be(undefined);
     });
   });
+
+  it('Passe les modèles de mesures spécifiques à la classe de Mesures, afin de faire passe plat pour les Mesures Spécifiques', () => {
+    const service = new Service({
+      id: '123',
+      modelesDeMesureSpecifique: {
+        'MOD-1': { description: 'Mon modèle de mesure' },
+      },
+      mesuresSpecifiques: [{ idModele: 'MOD-1' }],
+    });
+
+    const mesureSpecifique = service.mesuresSpecifiques().item(0);
+    expect(mesureSpecifique.idModele).to.be('MOD-1');
+    expect(mesureSpecifique.description).to.be('Mon modèle de mesure');
+  });
 });
