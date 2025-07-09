@@ -129,25 +129,6 @@ const nouvelAdaptateur = (env) => {
       .select({ id: 'id', donnees: 'donnees' })
       .first();
 
-  const contributeursService = async (id) =>
-    knex('autorisations as a')
-      .join(
-        'utilisateurs as u',
-        knex.raw("(a.donnees->>'idUtilisateur')::uuid"),
-        'u.id'
-      )
-      .whereRaw("(a.donnees->>'idService')::uuid = ?", id)
-      .select({
-        id: 'u.id',
-        dateCreation: 'u.date_creation',
-        donnees: 'u.donnees',
-      });
-
-  const suggestionsActionsService = async (id) =>
-    knex('suggestions_actions')
-      .where({ id_service: id, date_acquittement: null })
-      .select({ nature: 'nature' });
-
   const serviceExisteAvecHashNom = async (
     idUtilisateur,
     hashNomService,
@@ -703,7 +684,6 @@ const nouvelAdaptateur = (env) => {
     autorisationPour,
     autorisations,
     autorisationsDuService,
-    contributeursService,
     estSuperviseur,
     service,
     serviceExisteAvecHashNom,
@@ -733,7 +713,6 @@ const nouvelAdaptateur = (env) => {
     sauvegardeNouvelIndiceCyber,
     sauvegardeParcoursUtilisateur,
     servicesAvecHashSiret,
-    suggestionsActionsService,
     superviseur,
     supprimeAutorisation,
     supprimeAutorisations,

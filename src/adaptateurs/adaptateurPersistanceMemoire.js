@@ -51,14 +51,6 @@ const nouvelAdaptateur = (
     return donnees.autorisations.filter(filtre);
   };
 
-  const contributeursService = (idService) =>
-    donnees.autorisations
-      .filter((a) => a.idService === idService)
-      .map((a) => donnees.utilisateurs.find((u) => u.id === a.idUtilisateur));
-
-  const suggestionsActionsService = (idService) =>
-    donnees.suggestionsActions.filter((s) => s.idService === idService);
-
   const service = async (id) => donnees.services.find((s) => s.id === id);
 
   const services = async (idUtilisateur) => {
@@ -98,10 +90,12 @@ const nouvelAdaptateur = (
 
     return servicesRetenus.map((unService) => ({
       ...unService,
-      utilisateurs: contributeursService(unService.id),
-      suggestions: suggestionsActionsService(unService.id).map(
-        (suggestion) => suggestion.nature
-      ),
+      utilisateurs: donnees.autorisations
+        .filter((a) => a.idService === unService.id)
+        .map((a) => donnees.utilisateurs.find((u) => u.id === a.idUtilisateur)),
+      suggestions: donnees.suggestionsActions
+        .filter((s) => s.idService === unService.id)
+        .map((suggestion) => suggestion.nature),
     }));
   };
 
@@ -368,9 +362,7 @@ const nouvelAdaptateur = (
     autorisationPour,
     autorisations,
     autorisationsDuService,
-    contributeursService,
     estSuperviseur,
-    suggestionsActionsService,
     service,
     serviceExisteAvecHashNom,
     servicesComplets,

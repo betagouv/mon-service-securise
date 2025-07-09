@@ -7,5 +7,5 @@ Que ce soit PLUSIEURS (ceux d'un utilisateur / par hash de SIRET) ou UN SEUL (pa
 - [x] Lecture d'un service par ID de service
 - [x] Lecture de plusieurs services par hash de siret
 - [x] Remplacer aussi les appels à `adaptateurPersistance.tousLesServices()`…
-- [ ] Ne plus avoir de méthode du type `depot.enrichisService()` qui rappelle de la persistance plusieurs fois pour hydrater un Service.
+- [x] Ne plus avoir de méthode du type `depot.enrichisService()` qui rappelle de la persistance plusieurs fois pour hydrater un Service.
 - [ ] … et donc pouvoir supprimer `adaptateurPersistance.service()` (et peut-être `adaptateurPersistance.autorisationsDuService()` etc.)

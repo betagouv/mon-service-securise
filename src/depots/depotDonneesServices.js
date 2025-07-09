@@ -50,23 +50,6 @@ const fabriquePersistance = (
     return { ...autreProprietes, ...donneesEnClair };
   };
 
-  const enrichisService = async (service) => {
-    const serviceEnClair = await dechiffreDonneesService(service);
-
-    const donneesContributeurs =
-      await adaptateurPersistance.contributeursService(service.id);
-    serviceEnClair.contributeurs = await Promise.all(
-      donneesContributeurs.map((d) =>
-        depotDonneesUtilisateurs.dechiffreUtilisateur(d)
-      )
-    );
-
-    serviceEnClair.suggestionsActions =
-      await adaptateurPersistance.suggestionsActionsService(service.id);
-
-    return new Service(serviceEnClair, referentiel);
-  };
-
   const mappeDonneesVersDomaine = async (donneesService) => {
     const serviceEnClair = await dechiffreDonneesService(donneesService);
 
