@@ -214,13 +214,6 @@ const nouvelAdaptateur = (env) => {
     return total[0]?.count;
   };
 
-  const tousLesServices = async () => {
-    const lignes = await knex('services').select({ id: 'id' });
-    const ids = lignes.map(({ id }) => id);
-
-    return avecPMapPourChaqueElement(Promise.resolve(ids), service);
-  };
-
   const metsAJourService = (id, donnees, nomServiceHash, siretHash) =>
     knex('services')
       .where({ id })
@@ -718,7 +711,6 @@ const nouvelAdaptateur = (env) => {
     supprimeUtilisateurs,
     tachesDeServicePour,
     tousLesSelsDeHachage,
-    tousLesServices,
     tousUtilisateurs,
     utilisateur,
     utilisateurAvecEmailHash,
