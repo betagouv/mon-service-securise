@@ -166,7 +166,7 @@ const nouvelAdaptateur = (env) => {
         .count('services.*')
     )[0].count >= 1;
 
-  const servicesComplets = async (idUtilisateur) => {
+  const servicesComplets = async ({ idUtilisateur }) => {
     const requete = await knex.raw(
       `
       SELECT
