@@ -100,7 +100,9 @@ const creeDepot = (config = {}) => {
     };
 
     const verifieServiceExiste = async (id) => {
-      const s = await depotServices.service(nouvelleAutorisation.idService);
+      const s = await adaptateurPersistance.verifieServiceExiste(
+        nouvelleAutorisation.idService
+      );
       if (!s)
         throw new ErreurServiceInexistant(`Le service "${id}" n'existe pas`);
     };

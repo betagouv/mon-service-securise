@@ -51,11 +51,11 @@ const nouvelAdaptateur = (
     return donnees.autorisations.filter(filtre);
   };
 
-  const service = async (id) => donnees.services.find((s) => s.id === id);
+  const serviceParId = async (id) => donnees.services.find((s) => s.id === id);
 
   const services = async (idUtilisateur) => {
     const as = await autorisations(idUtilisateur);
-    return Promise.all(as.map(({ idService }) => service(idService)));
+    return Promise.all(as.map(({ idService }) => serviceParId(idService)));
   };
 
   const servicesComplets = async ({
@@ -67,7 +67,7 @@ const nouvelAdaptateur = (
     const servicesRetenus = [];
 
     if (idService) {
-      const parId = await service(idService);
+      const parId = await serviceParId(idService);
       if (parId) servicesRetenus.push(parId);
     } else if (idUtilisateur) {
       const deUtilisateur = await services(idUtilisateur);
@@ -77,7 +77,7 @@ const nouvelAdaptateur = (
       servicesRetenus.push(...duSiret);
     } else if (tous) {
       const tousServices = await Promise.all(
-        donnees.services.map((s) => s.id).map(service)
+        donnees.services.map((s) => s.id).map(serviceParId)
       );
       servicesRetenus.push(...tousServices);
     }
@@ -115,7 +115,7 @@ const nouvelAdaptateur = (
     nomServiceHash,
     siretHash
   ) => {
-    const s = await service(id);
+    const s = await serviceParId(id);
     Object.assign(s, { nomServiceHash, siretHash, donnees: donneesService });
   };
 
@@ -344,6 +344,9 @@ const nouvelAdaptateur = (
     return undefined;
   };
 
+  const verifieServiceExiste = async (idService) =>
+    donnees.services.find((s) => s.id === idService) !== undefined;
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -357,7 +360,6 @@ const nouvelAdaptateur = (
     autorisations,
     autorisationsDuService,
     estSuperviseur,
-    service,
     serviceExisteAvecHashNom,
     servicesComplets,
     lisNotificationsExpirationHomologationDansIntervalle,
@@ -392,6 +394,7 @@ const nouvelAdaptateur = (
     utilisateur,
     utilisateurAvecEmailHash,
     utilisateurAvecIdReset,
+    verifieServiceExiste,
   };
 };
 
