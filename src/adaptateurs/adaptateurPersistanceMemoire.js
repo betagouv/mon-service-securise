@@ -69,7 +69,17 @@ const nouvelAdaptateur = (
   const servicesAvecHashSiret = async (hashSiret) =>
     donnees.services.filter((s) => s.siretHash === hashSiret);
 
-  const servicesComplets = async ({ idUtilisateur, idService, hashSiret }) => {
+  const tousLesServices = async () => {
+    const lesIds = donnees.services.map((s) => s.id);
+    return Promise.all(lesIds.map(service));
+  };
+
+  const servicesComplets = async ({
+    idUtilisateur,
+    idService,
+    hashSiret,
+    tous,
+  }) => {
     const servicesRetenus = [];
 
     if (idService) {
@@ -81,6 +91,9 @@ const nouvelAdaptateur = (
     } else if (hashSiret) {
       const duSiret = await servicesAvecHashSiret(hashSiret);
       servicesRetenus.push(...duSiret);
+    } else if (tous) {
+      const tousServices = await tousLesServices();
+      servicesRetenus.push(...tousServices);
     }
 
     return servicesRetenus.map((unService) => ({
@@ -95,11 +108,6 @@ const nouvelAdaptateur = (
   const nombreServices = async (idUtilisateur) => {
     const as = await autorisations(idUtilisateur);
     return as.length;
-  };
-
-  const tousLesServices = async () => {
-    const lesIds = donnees.services.map((s) => s.id);
-    return Promise.all(lesIds.map(service));
   };
 
   const serviceExisteAvecHashNom = async (
