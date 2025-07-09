@@ -88,10 +88,10 @@ const fabriquePersistance = (
   const persistance = {
     lis: {
       un: async (idService) => {
-        const s = await adaptateurPersistance.service(idService);
+        const [s] = await adaptateurPersistance.servicesComplets({ idService });
 
         if (!s) return undefined;
-        return enrichisService(s);
+        return mappeDonneesVersDomaine(s);
       },
       ceuxAvecSiret: async (siret) => {
         const hashSiret = adaptateurChiffrement.hacheSha256(siret);

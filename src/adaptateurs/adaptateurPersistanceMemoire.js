@@ -66,9 +66,18 @@ const nouvelAdaptateur = (
     return Promise.all(as.map(({ idService }) => service(idService)));
   };
 
-  const servicesComplets = async ({ idUtilisateur }) => {
-    const s = await services(idUtilisateur);
-    return s.map((unService) => ({
+  const servicesComplets = async ({ idUtilisateur, idService }) => {
+    const servicesRetenus = [];
+
+    if (idService) {
+      const parId = await service(idService);
+      if (parId) servicesRetenus.push(parId);
+    } else if (idUtilisateur) {
+      const deUtilisateur = await services(idUtilisateur);
+      servicesRetenus.push(...deUtilisateur);
+    }
+
+    return servicesRetenus.map((unService) => ({
       ...unService,
       utilisateurs: contributeursService(unService.id),
       suggestions: suggestionsActionsService(unService.id).map(
