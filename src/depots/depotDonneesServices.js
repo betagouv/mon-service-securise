@@ -67,6 +67,24 @@ const fabriquePersistance = (
     return new Service(serviceEnClair, referentiel);
   };
 
+  const mappeDonneesVersDomaine = async (donneesService) => {
+    const serviceEnClair = await dechiffreDonneesService(donneesService);
+
+    serviceEnClair.contributeurs = await Promise.all(
+      serviceEnClair.utilisateurs.map((d) =>
+        depotDonneesUtilisateurs.dechiffreUtilisateur(d)
+      )
+    );
+    delete serviceEnClair.utilisateurs;
+
+    serviceEnClair.suggestionsActions = serviceEnClair.suggestions.map(
+      (nature) => ({ nature })
+    );
+    delete serviceEnClair.suggestions;
+
+    return new Service(serviceEnClair, referentiel);
+  };
+
   const persistance = {
     lis: {
       un: async (idService) => {
@@ -86,29 +104,11 @@ const fabriquePersistance = (
         const toutesDonnees =
           await adaptateurPersistance.servicesComplets(idUtilisateur);
 
-        const unServiceEnClair = async (donnees) => {
-          const serviceEnClair = await dechiffreDonneesService(donnees);
-
-          serviceEnClair.contributeurs = await Promise.all(
-            serviceEnClair.utilisateurs.map((d) =>
-              depotDonneesUtilisateurs.dechiffreUtilisateur(d)
-            )
-          );
-          delete serviceEnClair.utilisateurs;
-
-          serviceEnClair.suggestionsActions = serviceEnClair.suggestions.map(
-            (nature) => ({ nature })
-          );
-          delete serviceEnClair.suggestions;
-
-          return new Service(serviceEnClair, referentiel);
-        };
-
-        const servicesEnrichis = await Promise.all(
-          toutesDonnees.map((donnees) => unServiceEnClair(donnees))
+        const services = await Promise.all(
+          toutesDonnees.map((donnees) => mappeDonneesVersDomaine(donnees))
         );
 
-        return servicesEnrichis.sort((s1, s2) =>
+        return services.sort((s1, s2) =>
           s1.nomService().localeCompare(s2.nomService())
         );
       },
