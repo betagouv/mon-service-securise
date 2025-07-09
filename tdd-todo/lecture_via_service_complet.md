@@ -12,5 +12,5 @@ Que ce soit PLUSIEURS (ceux d'un utilisateur / par hash de SIRET) ou UN SEUL (pa
   - il est seulement utilisé par `depotAutorisations.verifieServiceExiste()`
   - on peut imaginer créer `persistance.verifieServiceExiste()` qui fait un `SELECT WHERE ID =`
 - [x] supprimer `adaptateurPersistance.servicesAvecHashSiret()` qui n'était utilisé que par `persistance.lis.ceuxAvecSiret` : facile
-- [ ] supprimer `adaptateurPersistance.tousLesServices()` qui n'était utilisé que par `persistance.lis.tous` : facile
+- [x] supprimer `adaptateurPersistance.tousLesServices()` qui n'était utilisé que par `persistance.lis.tous` : facile
 - [ ] peut-être supprimer `adaptateurPersistance.autorisationsDuService()` etc.

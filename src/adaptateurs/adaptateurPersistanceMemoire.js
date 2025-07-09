@@ -58,11 +58,6 @@ const nouvelAdaptateur = (
     return Promise.all(as.map(({ idService }) => service(idService)));
   };
 
-  const tousLesServices = async () => {
-    const lesIds = donnees.services.map((s) => s.id);
-    return Promise.all(lesIds.map(service));
-  };
-
   const servicesComplets = async ({
     idUtilisateur,
     idService,
@@ -81,7 +76,9 @@ const nouvelAdaptateur = (
       const duSiret = donnees.services.filter((s) => s.siretHash === hashSiret);
       servicesRetenus.push(...duSiret);
     } else if (tous) {
-      const tousServices = await tousLesServices();
+      const tousServices = await Promise.all(
+        donnees.services.map((s) => s.id).map(service)
+      );
       servicesRetenus.push(...tousServices);
     }
 
@@ -391,7 +388,6 @@ const nouvelAdaptateur = (
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tachesDeServicePour,
-    tousLesServices,
     tousUtilisateurs,
     utilisateur,
     utilisateurAvecEmailHash,
