@@ -58,9 +58,6 @@ const nouvelAdaptateur = (
     return Promise.all(as.map(({ idService }) => service(idService)));
   };
 
-  const servicesAvecHashSiret = async (hashSiret) =>
-    donnees.services.filter((s) => s.siretHash === hashSiret);
-
   const tousLesServices = async () => {
     const lesIds = donnees.services.map((s) => s.id);
     return Promise.all(lesIds.map(service));
@@ -81,7 +78,7 @@ const nouvelAdaptateur = (
       const deUtilisateur = await services(idUtilisateur);
       servicesRetenus.push(...deUtilisateur);
     } else if (hashSiret) {
-      const duSiret = await servicesAvecHashSiret(hashSiret);
+      const duSiret = donnees.services.filter((s) => s.siretHash === hashSiret);
       servicesRetenus.push(...duSiret);
     } else if (tous) {
       const tousServices = await tousLesServices();
@@ -382,7 +379,6 @@ const nouvelAdaptateur = (
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
     sauvegardeService,
-    servicesAvecHashSiret,
     superviseur,
     supprimeAutorisation,
     supprimeAutorisations,

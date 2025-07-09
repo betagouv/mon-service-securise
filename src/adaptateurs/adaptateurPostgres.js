@@ -567,15 +567,6 @@ const nouvelAdaptateur = (env) => {
       departement_entite_supervisee: entite.departement,
     });
 
-  const servicesAvecHashSiret = async (hashSiret) => {
-    const lignes = await knex('services')
-      .select({ id: 'id' })
-      .where({ siret_hash: hashSiret });
-    const ids = lignes.map(({ id }) => id);
-
-    return avecPMapPourChaqueElement(Promise.resolve(ids), service);
-  };
-
   const estSuperviseur = async (idUtilisateur) =>
     (
       await knex('superviseurs')
@@ -712,7 +703,6 @@ const nouvelAdaptateur = (env) => {
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeNouvelIndiceCyber,
     sauvegardeParcoursUtilisateur,
-    servicesAvecHashSiret,
     superviseur,
     supprimeAutorisation,
     supprimeAutorisations,
