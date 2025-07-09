@@ -358,7 +358,9 @@ describe('Le dépôt de données des services', () => {
 
       await depot.ajouteDescriptionService('U1', 'S1', description);
 
-      const donnees = await adaptateurPersistance.service('S1');
+      const [donnees] = await adaptateurPersistance.servicesComplets({
+        idService: 'S1',
+      });
       expect(donnees.nomServiceHash).to.be('Nouveau Nom-haché256');
     });
 
@@ -369,7 +371,9 @@ describe('Le dépôt de données des services', () => {
 
       await depot.ajouteDescriptionService('U1', 'S1', description);
 
-      const donnees = await adaptateurPersistance.service('S1');
+      const [donnees] = await adaptateurPersistance.servicesComplets({
+        idService: 'S1',
+      });
       expect(donnees.siretHash).to.be('unSIRET-haché256');
     });
 
@@ -849,7 +853,9 @@ describe('Le dépôt de données des services', () => {
         descriptionService,
       });
 
-      const donnees = await adaptateurPersistance.service(idNouveau);
+      const [donnees] = await adaptateurPersistance.servicesComplets({
+        idService: idNouveau,
+      });
       expect(donnees.nomServiceHash).to.be('Super Service-haché256');
     });
 
@@ -863,7 +869,9 @@ describe('Le dépôt de données des services', () => {
         descriptionService,
       });
 
-      const donnees = await adaptateurPersistance.service(idNouveau);
+      const [donnees] = await adaptateurPersistance.servicesComplets({
+        idService: idNouveau,
+      });
       expect(donnees.siretHash).to.be('unSIRET-haché256');
     });
 
@@ -1091,17 +1099,18 @@ describe('Le dépôt de données des services', () => {
       });
     });
 
-    it('supprime le service', (done) => {
-      adaptateurPersistance
-        .service('123')
-        .then((s) => expect(s).to.be.an(Object))
-        .then(() => depot.supprimeService('123'))
-        .then(() => adaptateurPersistance.service('123'))
-        .then((s) => {
-          expect(s).to.be(undefined);
-          done();
-        })
-        .catch(done);
+    it('supprime le service', async () => {
+      const [avant] = await adaptateurPersistance.servicesComplets({
+        idService: '123',
+      });
+      expect(avant).to.be.an(Object);
+
+      await depot.supprimeService('123');
+
+      const apres = await adaptateurPersistance.servicesComplets({
+        idService: '123',
+      });
+      expect(apres).to.eql([]);
     });
 
     it('supprime les autorisations associées', (done) => {

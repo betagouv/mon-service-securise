@@ -1,5 +1,4 @@
 const Knex = require('knex');
-const { avecPMapPourChaqueElement } = require('../utilitaires/pMap');
 
 const config = require('../../knexfile');
 
@@ -122,12 +121,6 @@ const nouvelAdaptateur = (env) => {
       );
 
   const arreteTout = () => knex.destroy();
-
-  const service = async (id) =>
-    knex('services')
-      .where('id', id)
-      .select({ id: 'id', donnees: 'donnees' })
-      .first();
 
   const serviceExisteAvecHashNom = async (
     idUtilisateur,
@@ -653,6 +646,15 @@ const nouvelAdaptateur = (env) => {
       .where({ id_utilisateur: idUtilisateur })
       .update({ progression });
 
+  const verifieServiceExiste = async (idService) => {
+    const resultat = await knex.raw(
+      'SELECT 1 FROM services WHERE id = :idService;',
+      { idService }
+    );
+
+    return resultat.rows.length === 1;
+  };
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -669,7 +671,6 @@ const nouvelAdaptateur = (env) => {
     autorisations,
     autorisationsDuService,
     estSuperviseur,
-    service,
     serviceExisteAvecHashNom,
     lisDernierIndiceCyber,
     lisNotificationsExpirationHomologationDansIntervalle,
@@ -716,6 +717,7 @@ const nouvelAdaptateur = (env) => {
     utilisateurAvecEmailHash,
     utilisateurAvecIdReset,
     servicesComplets,
+    verifieServiceExiste,
   };
 };
 
