@@ -25,7 +25,8 @@ class Mesures extends InformationsService {
   constructor(
     donnees = {},
     referentiel = Referentiel.creeReferentielVide(),
-    mesuresPersonnalisees = {}
+    mesuresPersonnalisees = {},
+    modelesDeMesureSpecifique = {}
   ) {
     super();
 
@@ -36,7 +37,8 @@ class Mesures extends InformationsService {
 
     this.mesuresSpecifiques = new MesuresSpecifiques(
       { mesuresSpecifiques: donnees.mesuresSpecifiques || [] },
-      referentiel
+      referentiel,
+      modelesDeMesureSpecifique
     );
 
     this.referentiel = referentiel;
