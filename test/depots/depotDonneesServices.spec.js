@@ -125,8 +125,8 @@ describe('Le dépôt de données des services', () => {
   it("utilise l'adaptateur de persistance pour récupérer tous les services du système", async () => {
     let adaptateurAppele;
     const adaptateurPersistance = unePersistanceMemoire().construis();
-    adaptateurPersistance.tousLesServices = async () => {
-      adaptateurAppele = true;
+    adaptateurPersistance.servicesComplets = async ({ tous }) => {
+      adaptateurAppele = tous;
       return [];
     };
 

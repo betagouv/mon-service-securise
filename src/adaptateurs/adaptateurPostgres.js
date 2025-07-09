@@ -167,7 +167,7 @@ const nouvelAdaptateur = (env) => {
     )[0].count >= 1;
 
   const servicesComplets = async (configurationDuWhere) => {
-    const { idUtilisateur, idService, hashSiret } = configurationDuWhere;
+    const { idUtilisateur, idService, hashSiret, tous } = configurationDuWhere;
 
     const erreurDeConfiguration = () => {
       const json = JSON.stringify(configurationDuWhere);
@@ -188,6 +188,8 @@ const nouvelAdaptateur = (env) => {
       if (idService) return `WHERE s.id = :idService`;
 
       if (hashSiret) return `WHERE s.siret_hash = :hashSiret`;
+
+      if (tous) return '';
 
       throw erreurDeConfiguration();
     };

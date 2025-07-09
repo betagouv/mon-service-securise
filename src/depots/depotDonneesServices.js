@@ -118,8 +118,11 @@ const fabriquePersistance = (
       nombreDeUtilisateur: async (idUtilisateur) =>
         adaptateurPersistance.nombreServices(idUtilisateur),
       tous: async () => {
-        const donneesServices = await adaptateurPersistance.tousLesServices();
-        return Promise.all(donneesServices.map((d) => enrichisService(d)));
+        const donnees = await adaptateurPersistance.servicesComplets({
+          tous: true,
+        });
+
+        return Promise.all(donnees.map((d) => mappeDonneesVersDomaine(d)));
       },
       existeAvecNom: async (
         idUtilisateur,
