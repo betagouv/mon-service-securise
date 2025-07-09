@@ -2225,7 +2225,7 @@ describe('Le dépôt de données des services', () => {
           hacheSha256: (chaine) => `${chaine}-SHA256`,
         },
         adaptateurPersistance: {
-          servicesAvecHashSiret: async (hashSiret) => {
+          servicesComplets: async ({ hashSiret }) => {
             hashSiretRecu = hashSiret;
             return [];
           },

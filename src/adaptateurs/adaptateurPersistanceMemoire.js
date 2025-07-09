@@ -66,7 +66,10 @@ const nouvelAdaptateur = (
     return Promise.all(as.map(({ idService }) => service(idService)));
   };
 
-  const servicesComplets = async ({ idUtilisateur, idService }) => {
+  const servicesAvecHashSiret = async (hashSiret) =>
+    donnees.services.filter((s) => s.siretHash === hashSiret);
+
+  const servicesComplets = async ({ idUtilisateur, idService, hashSiret }) => {
     const servicesRetenus = [];
 
     if (idService) {
@@ -75,6 +78,9 @@ const nouvelAdaptateur = (
     } else if (idUtilisateur) {
       const deUtilisateur = await services(idUtilisateur);
       servicesRetenus.push(...deUtilisateur);
+    } else if (hashSiret) {
+      const duSiret = await servicesAvecHashSiret(hashSiret);
+      servicesRetenus.push(...duSiret);
     }
 
     return servicesRetenus.map((unService) => ({
@@ -326,9 +332,6 @@ const nouvelAdaptateur = (
 
   const ajouteEntiteAuSuperviseur = async (idSuperviseur, entite) =>
     donnees.superviseurs.push({ idSuperviseur, entiteSupervisee: entite });
-
-  const servicesAvecHashSiret = async (hashSiret) =>
-    donnees.services.filter((s) => s.siretHash === hashSiret);
 
   const estSuperviseur = async (idUtilisateur) =>
     donnees.superviseurs.some(
