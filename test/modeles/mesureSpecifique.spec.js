@@ -5,6 +5,7 @@ const {
   ErreurStatutMesureInvalide,
   ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
+  ErreurDetachementModeleMesureSpecifiqueImpossible,
 } = require('../../src/erreurs');
 const Referentiel = require('../../src/referentiel');
 const InformationsService = require('../../src/modeles/informationsService');
@@ -217,5 +218,36 @@ describe('Une mesure spécifique', () => {
         expect(persistance.categorie).to.be(undefined);
       }
     );
+  });
+
+  describe('concernant le détachement de son modèle', () => {
+    it("jette une erreur si la mesure n'est pas reliée à un modèle", () => {
+      const mesure = new MesureSpecifique({ id: 'MS1', idModele: undefined });
+
+      expect(() => mesure.detacheDeSonModele()).to.throwError((e) => {
+        expect(e).to.be.an(ErreurDetachementModeleMesureSpecifiqueImpossible);
+        expect(e.message).to.be(
+          "Impossible de détacher la mesure 'MS1' : elle n'est pas reliée à un modèle."
+        );
+      });
+    });
+
+    it("supprime l'identifiant du modèle, la rendant donc autonome", () => {
+      const mesure = new MesureSpecifique({
+        id: 'MS1',
+        idModele: 'MOD-1',
+        statut: 'fait',
+        description: 'Ma mesure spécifique',
+      });
+
+      mesure.detacheDeSonModele();
+
+      expect(mesure.donneesSerialisees()).to.eql({
+        id: 'MS1',
+        description: 'Ma mesure spécifique',
+        responsables: [],
+        statut: 'fait',
+      });
+    });
   });
 });

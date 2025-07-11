@@ -53,6 +53,7 @@ class ErreurModeleDeMesureSpecifiqueIntrouvable extends ErreurModele {
     );
   }
 }
+class ErreurDetachementModeleMesureSpecifiqueImpossible extends ErreurModele {}
 class ErreurMotDePasseIncorrect extends ErreurModele {}
 class ErreurNiveauGraviteInconnu extends ErreurModele {}
 class ErreurNiveauVraisemblanceInconnu extends ErreurModele {}
@@ -94,6 +95,7 @@ module.exports = {
   ErreurChainageMiddleware,
   ErreurDateHomologationInvalide,
   ErreurDateRenouvellementInvalide,
+  ErreurDetachementModeleMesureSpecifiqueImpossible,
   ErreurDonneesObligatoiresManquantes,
   ErreurDonneesReferentielIncorrectes,
   ErreurDonneesStatistiques,
