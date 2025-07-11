@@ -662,6 +662,26 @@ const nouvelAdaptateur = (env) => {
       donnees,
     });
 
+  const associeModeleMesureSpecifiqueAuxServices = async (
+    idModele,
+    idsServices
+  ) =>
+    knex('modeles_mesure_specifique_association_aux_services').insert(
+      idsServices.map((idService) => ({
+        id_modele: idModele,
+        id_service: idService,
+      }))
+    );
+
+  const verifieModeleMesureSpecifiqueExiste = async (idModele) => {
+    const resultat = await knex.raw(
+      'SELECT 1 FROM modeles_mesure_specifique WHERE id = :idModele;',
+      { idModele }
+    );
+
+    return resultat.rows.length === 1;
+  };
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -674,6 +694,7 @@ const nouvelAdaptateur = (env) => {
     ajouteModeleMesureSpecifique,
     ajouteTeleversementServices,
     arreteTout,
+    associeModeleMesureSpecifiqueAuxServices,
     autorisation,
     autorisationPour,
     autorisations,
@@ -725,6 +746,7 @@ const nouvelAdaptateur = (env) => {
     utilisateurAvecEmailHash,
     utilisateurAvecIdReset,
     servicesComplets,
+    verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
   };
 };

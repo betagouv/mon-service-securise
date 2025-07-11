@@ -14,6 +14,7 @@ const nouvelAdaptateur = (
   donnees.activitesMesure ||= [];
   donnees.superviseurs ||= [];
   donnees.modelesMesureSpecifique ||= [];
+  donnees.associationModelesMesureSpecifiqueServices ||= [];
 
   const supprimeEnregistrement = async (nomTable, id) => {
     donnees[nomTable] = donnees[nomTable].filter((e) => e.id !== id);
@@ -359,6 +360,17 @@ const nouvelAdaptateur = (
       donnees: donneesModele,
     });
 
+  const associeModeleMesureSpecifiqueAuxServices = async (
+    idModele,
+    idsServices
+  ) =>
+    idsServices.forEach((idService) =>
+      donnees.associationModelesMesureSpecifiqueServices.push({
+        idModele,
+        idService,
+      })
+    );
+
   const verifieModeleMesureSpecifiqueExiste = async (idModele) =>
     donnees.modelesMesureSpecifique.find((m) => m.id === idModele) !==
     undefined;
@@ -372,6 +384,7 @@ const nouvelAdaptateur = (
     ajouteSuggestionAction,
     ajouteTacheDeService,
     ajouteUtilisateur,
+    associeModeleMesureSpecifiqueAuxServices,
     autorisation,
     autorisationPour,
     autorisations,
