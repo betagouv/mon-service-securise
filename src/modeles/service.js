@@ -217,6 +217,10 @@ class Service {
     return this.mesures.mesuresSpecifiques;
   }
 
+  detacheMesureSpecfiqueDuModele(idModele) {
+    this.mesures.mesuresSpecifiques.detacheMesureDuModele(idModele);
+  }
+
   metsAJourMesureGenerale(mesure) {
     const idUtilisateurs = this.contributeurs.map((u) => u.idUtilisateur);
     mesure.responsables = mesure.responsables.filter((r) =>

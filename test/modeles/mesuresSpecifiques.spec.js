@@ -303,4 +303,46 @@ describe('La liste des mesures spécifiques', () => {
       });
     });
   });
+
+  describe("sur demande de détachement d'un modèle", () => {
+    it('détache la mesure spécifique liée à ce modèle', () => {
+      const modelesDeMesureSpecifique = {
+        'MOD-1': {
+          description: 'Description du modèle 1',
+          descriptionLongue: 'Longue du modèle 1',
+          categorie: 'categorie1',
+        },
+        'MOD-2': {
+          description: 'Description du modèle 2',
+          descriptionLongue: 'Longue du modèle 2',
+          categorie: 'categorie1',
+        },
+      };
+
+      const mesures = new MesuresSpecifiques(
+        {
+          mesuresSpecifiques: [
+            { id: 'M1', idModele: 'MOD-1', statut: 'fait' },
+            { id: 'M2', idModele: 'MOD-2', statut: 'fait' },
+          ],
+        },
+        referentiel,
+        modelesDeMesureSpecifique
+      );
+
+      mesures.detacheMesureDuModele('MOD-1');
+
+      expect(mesures.donneesSerialisees()).to.eql([
+        {
+          id: 'M1',
+          categorie: 'categorie1',
+          description: 'Description du modèle 1',
+          descriptionLongue: 'Longue du modèle 1',
+          responsables: [],
+          statut: 'fait',
+        },
+        { id: 'M2', idModele: 'MOD-2', responsables: [], statut: 'fait' },
+      ]);
+    });
+  });
 });
