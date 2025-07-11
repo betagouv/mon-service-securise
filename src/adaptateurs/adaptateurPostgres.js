@@ -655,6 +655,13 @@ const nouvelAdaptateur = (env) => {
     return resultat.rows.length === 1;
   };
 
+  const ajouteModeleMesureSpecifique = async (id, idUtilisateur, donnees) =>
+    knex('modeles_mesure_specifique').insert({
+      id,
+      id_utilisateur: idUtilisateur,
+      donnees,
+    });
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -664,6 +671,7 @@ const nouvelAdaptateur = (env) => {
     ajouteTacheDeService,
     ajouteUtilisateur,
     ajouteActiviteMesure,
+    ajouteModeleMesureSpecifique,
     ajouteTeleversementServices,
     arreteTout,
     autorisation,
