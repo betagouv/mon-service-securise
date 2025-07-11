@@ -6,6 +6,7 @@ const {
 const {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurServiceInexistant,
+  ErreurUtilisateurInexistant,
 } = require('../../src/erreurs');
 
 describe('Le dépôt de données des modèles de mesure spécifique', () => {
@@ -27,6 +28,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         id: 'S2',
         descriptionService: { nomService: 'Service 2' },
       })
+      .ajouteUnUtilisateur({ id: 'U1' })
       .avecUnModeleDeMesureSpecifique({ id: 'MOD-1' })
       .construis();
   });
@@ -64,6 +66,16 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         descriptionLongue: 'Une description longue',
         categorie: 'gouvernance',
       });
+    });
+
+    it("jette une erreur si l'utilisateur n'existe pas", async () => {
+      const depot = leDepot();
+      try {
+        await depot.ajouteModeleMesureSpecifique('U-INTROUVABLE-1', {});
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurUtilisateurInexistant);
+      }
     });
   });
 
