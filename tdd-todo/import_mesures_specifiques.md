@@ -13,9 +13,9 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 ## Du point de vue du Service
 
 - [ ] Le service va chercher le détail d'une mesure spécifique liée à un [modèle de mesure spécifique] lors de sa construction
-- [ ] Le servir peut détacher une mesure spécifique de son modèle de mesure
-  - Conséquence : tout le détail du modèle (label, description, catégorie) est recopiée **dans** les mesures spés du service et
-    le lien entre modèle et service disparaît
+- [ ] Le service peut détacher une mesure spécifique de son modèle de mesure
+  - [x] Conséquence : tout le détail du modèle (label, description, catégorie) est recopiée **dans** les mesures spés du service
+  - [ ] et le lien entre modèle et service disparaît
 - [ ] Un service peut être relié à un modèle de mesure, à condition que le modèle appartienne à un utilisateur avec les droits d'écriture
       sur le service
   - [?] Question en cours : quel niveau de droit le contributeur doit avoir au minimum pour pouvoir lier un service à ses modèles
