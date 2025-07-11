@@ -241,7 +241,10 @@ const creeDepot = (config = {}) => {
     supprimeTeleversementServices,
   } = depotTeleversementServices;
 
-  const { ajouteModeleMesureSpecifique } = depotModelesMesureSpecifique;
+  const {
+    ajouteModeleMesureSpecifique,
+    associeModeleMesureSpecifiqueAuxServices,
+  } = depotModelesMesureSpecifique;
 
   return {
     accesAutorise,
@@ -259,6 +262,7 @@ const creeDepot = (config = {}) => {
     ajouteRolesResponsabilitesAService,
     ajouteSiretAuSuperviseur,
     ajouteSuggestionAction,
+    associeModeleMesureSpecifiqueAuxServices,
     autorisation,
     autorisationExiste,
     autorisationPour,
