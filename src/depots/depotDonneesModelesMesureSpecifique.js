@@ -1,6 +1,7 @@
 const {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurServiceInexistant,
+  ErreurUtilisateurInexistant,
 } = require('../erreurs');
 
 const creeDepot = (config = {}) => {
@@ -8,6 +9,9 @@ const creeDepot = (config = {}) => {
     config;
 
   const ajouteModeleMesureSpecifique = async (idUtilisateur, donnees) => {
+    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
+    if (!utilisateur) throw new ErreurUtilisateurInexistant();
+
     const idModele = adaptateurUUID.genereUUID();
     const donneesChiffrees = await adaptateurChiffrement.chiffre(donnees);
 
