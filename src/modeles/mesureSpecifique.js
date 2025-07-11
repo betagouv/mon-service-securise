@@ -1,5 +1,8 @@
 const Mesure = require('./mesure');
-const { ErreurCategorieInconnue } = require('../erreurs');
+const {
+  ErreurCategorieInconnue,
+  ErreurDetachementModeleMesureSpecifiqueImpossible,
+} = require('../erreurs');
 const Referentiel = require('../referentiel');
 
 class MesureSpecifique extends Mesure {
@@ -52,6 +55,15 @@ class MesureSpecifique extends Mesure {
 
   supprimeResponsable(idUtilisateur) {
     this.responsables = this.responsables.filter((r) => r !== idUtilisateur);
+  }
+
+  detacheDeSonModele() {
+    if (!this.idModele)
+      throw new ErreurDetachementModeleMesureSpecifiqueImpossible(
+        `Impossible de détacher la mesure '${this.id}' : elle n'est pas reliée à un modèle.`
+      );
+
+    delete this.idModele;
   }
 
   static proprietesObligatoires() {
