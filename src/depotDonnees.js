@@ -15,6 +15,7 @@ const depotDonneesSuperviseurs = require('./depots/depotDonneesSuperviseurs');
 const depotDonneesParrainages = require('./depots/depotDonneesParrainages');
 const depotDonneesSelsDeHachage = require('./depots/depotDonneesSelsDeHachage');
 const depotDonneesTeleversementServices = require('./depots/depotDonneesTeleversementServices');
+const depotDonneesModelesMesureSpecifique = require('./depots/depotDonneesModelesMesureSpecifique');
 
 const {
   fabriqueAdaptateurChiffrement,
@@ -116,6 +117,13 @@ const creeDepot = (config = {}) => {
       adaptateurChiffrement,
       adaptateurPersistance,
       referentiel,
+    });
+
+  const depotModelesMesureSpecifique =
+    depotDonneesModelesMesureSpecifique.creeDepot({
+      adaptateurChiffrement,
+      adaptateurPersistance,
+      adaptateurUUID,
     });
 
   const {
@@ -233,6 +241,11 @@ const creeDepot = (config = {}) => {
     supprimeTeleversementServices,
   } = depotTeleversementServices;
 
+  const {
+    ajouteModeleMesureSpecifique,
+    associeModeleMesureSpecifiqueAuxServices,
+  } = depotModelesMesureSpecifique;
+
   return {
     accesAutorise,
     accesAutoriseAUneListeDeService,
@@ -242,12 +255,14 @@ const creeDepot = (config = {}) => {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
     ajouteMesureSpecifiqueAuService,
+    ajouteModeleMesureSpecifique,
     ajouteParrainage,
     ajouteRisqueGeneralAService,
     ajouteRisqueSpecifiqueAService,
     ajouteRolesResponsabilitesAService,
     ajouteSiretAuSuperviseur,
     ajouteSuggestionAction,
+    associeModeleMesureSpecifiqueAuxServices,
     autorisation,
     autorisationExiste,
     autorisationPour,
