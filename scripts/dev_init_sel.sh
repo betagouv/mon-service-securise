@@ -18,4 +18,8 @@ printf "\nCHIFFREMENT_SEL_DE_HASHAGE_1=$SEL" >> ../.env
 
 HASH_DU_SEL="$(node ./dev-init-sel.js "$SEL")"
 
-psql -h localhost -U postgres mss -c "insert into sels_de_hachage (version, empreinte) values (1, '$HASH_DU_SEL');"
+if [ "$HASH_DU_SEL" != "" ]; then
+  psql -h localhost -U postgres mss -c "insert into sels_de_hachage (version, empreinte) values (1, '$HASH_DU_SEL');"
+else
+  echo "Problème à la création du sel"
+fi
