@@ -346,8 +346,11 @@ const nouvelAdaptateur = (
     return undefined;
   };
 
+  const verifieTousLesServicesExistent = async (idsServices) =>
+    idsServices.every((unId) => donnees.services.find((s) => s.id === unId));
+
   const verifieServiceExiste = async (idService) =>
-    donnees.services.find((s) => s.id === idService) !== undefined;
+    verifieTousLesServicesExistent([idService]);
 
   const ajouteModeleMesureSpecifique = async (
     id,
@@ -426,6 +429,7 @@ const nouvelAdaptateur = (
     utilisateurAvecIdReset,
     verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
+    verifieTousLesServicesExistent,
   };
 };
 

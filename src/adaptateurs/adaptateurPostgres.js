@@ -646,14 +646,19 @@ const nouvelAdaptateur = (env) => {
       .where({ id_utilisateur: idUtilisateur })
       .update({ progression });
 
-  const verifieServiceExiste = async (idService) => {
+  const verifieTousLesServicesExistent = async (idsServices) => {
     const resultat = await knex.raw(
-      'SELECT 1 FROM services WHERE id = :idService;',
-      { idService }
+      `SELECT id FROM services where id IN (${idsServices
+        .map(() => '?')
+        .join(',')})`,
+      idsServices
     );
 
-    return resultat.rows.length === 1;
+    return resultat.rows.length === idsServices.length;
   };
+
+  const verifieServiceExiste = async (idService) =>
+    verifieTousLesServicesExistent([idService]);
 
   const ajouteModeleMesureSpecifique = async (id, idUtilisateur, donnees) =>
     knex('modeles_mesure_specifique').insert({
@@ -748,6 +753,7 @@ const nouvelAdaptateur = (env) => {
     servicesComplets,
     verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
+    verifieTousLesServicesExistent,
   };
 };
 
