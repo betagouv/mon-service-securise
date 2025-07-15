@@ -16,10 +16,11 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 - [ ] Le service peut détacher une mesure spécifique de son modèle de mesure
   - [x] Conséquence : tout le détail du modèle (label, description, catégorie) est recopiée **dans** les mesures spés du service
   - [ ] et le lien entre modèle et service disparaît
-- [ ] Un service peut être relié à un modèle de mesure, à condition que le modèle appartienne à un utilisateur avec les droits d'écriture
-      sur le service
-  - [?] Question en cours : quel niveau de droit le contributeur doit avoir au minimum pour pouvoir lier un service à ses modèles
-  - Conséquence : le service se retrouve avec une mesure spécifique au statut « À lancer ». Cette mesure est reliée au modèle **et** elle apparaît dans la table d'association.
+- [ ] Un service peut être relié à un modèle de mesure, à condition que le modèle appartienne à un utilisateur avec les droits [ECRITURE sur SÉCURISER]
+  - Conséquence :
+    - [ ] le service se retrouve avec une mesure spécifique au statut « À lancer ».
+    - [ ] Cette mesure est reliée au modèle
+    - [x] **et** elle apparaît dans la table d'association.
 
 ## Du point de vue des Modèles de mesure
 
