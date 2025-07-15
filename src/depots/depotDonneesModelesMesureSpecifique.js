@@ -31,14 +31,9 @@ const creeDepot = (config = {}) => {
     if (!modeleExiste)
       throw new ErreurModeleDeMesureSpecifiqueIntrouvable(idModele);
 
-    const promessesVerificationServices = idsServices.map((id) =>
-      adaptateurPersistance.verifieServiceExiste(id)
-    );
-    const serviceInexistant = (
-      await Promise.all(promessesVerificationServices)
-    ).some((resultat) => resultat === false);
-
-    if (serviceInexistant) throw new ErreurServiceInexistant();
+    const tousExistent =
+      await adaptateurPersistance.verifieTousLesServicesExistent(idsServices);
+    if (!tousExistent) throw new ErreurServiceInexistant();
 
     await adaptateurPersistance.associeModeleMesureSpecifiqueAuxServices(
       idModele,
