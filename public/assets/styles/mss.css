@@ -203,6 +203,15 @@ section:last-of-type {
   background-image: url('/statique/assets/images/agent_connect_hover.svg');
 }
 
+.agentconnect-button::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  background-image: url('/statique/assets/images/agent_connect_hover.svg');
+}
+
 .separation-agent-connect {
   border-top: none;
   border-color: var(--liseres-fonce);
