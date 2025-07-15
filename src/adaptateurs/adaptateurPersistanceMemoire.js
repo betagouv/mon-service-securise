@@ -349,15 +349,19 @@ const nouvelAdaptateur = (
     donnees.services.find((s) => s.id === idService) !== undefined;
 
   const ajouteModeleMesureSpecifique = async (
-    idModele,
+    id,
     idUtilisateur,
     donneesModele
   ) =>
     donnees.modelesMesureSpecifique.push({
-      idModele,
+      id,
       idUtilisateur,
       donnees: donneesModele,
     });
+
+  const verifieModeleMesureSpecifiqueExiste = async (idModele) =>
+    donnees.modelesMesureSpecifique.find((m) => m.id === idModele) !==
+    undefined;
 
   return {
     activitesMesure,
@@ -407,6 +411,7 @@ const nouvelAdaptateur = (
     utilisateur,
     utilisateurAvecEmailHash,
     utilisateurAvecIdReset,
+    verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
   };
 };
