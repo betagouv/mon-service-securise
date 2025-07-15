@@ -655,13 +655,9 @@ const nouvelAdaptateur = (env) => {
     return resultat.rows.length === 1;
   };
 
-  const ajouteModeleMesureSpecifique = async (
-    idModele,
-    idUtilisateur,
-    donnees
-  ) =>
+  const ajouteModeleMesureSpecifique = async (id, idUtilisateur, donnees) =>
     knex('modeles_mesure_specifique').insert({
-      id: idModele,
+      id,
       id_utilisateur: idUtilisateur,
       donnees,
     });
