@@ -1,6 +1,6 @@
 #checkov:skip=CKV_DOCKER_2:Uniquement utilisé en local pour le dev
 #checkov:skip=CKV_DOCKER_3:Uniquement utilisé en local pour le dev
-FROM docker.io/node:18
+FROM docker.io/node:20
 
 # La génération de PDF utilise Puppeteer pour se connecter à un navigateur distant
 # **MAIS** on ne veut pas que Puppeteer déclenche le téléchargement d'un navigateur local.

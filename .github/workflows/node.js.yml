@@ -20,10 +20,10 @@ jobs:
       - name: Cloner le dépôt Git
         uses: actions/checkout@v4
 
-      - name: Utiliser la version Node.js 18
+      - name: Utiliser la version Node.js 20
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Installer les dépendances
         run: npm ci

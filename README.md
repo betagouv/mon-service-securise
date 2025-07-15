@@ -24,7 +24,7 @@ entités publiques à sécuriser et à homologuer leurs services publics numéri
 ## ⚙️ Configuration de l'environnement de développement
 
 Il est nécessaire en prérequis d'avoir installé [Git](https://git-scm.com/),
-[Docker](https://www.docker.com/) et [Node.js v18](https://nodejs.org/en/).
+[Docker](https://www.docker.com/) et une version récente (>= 18) de [Node.js](https://nodejs.org/en/).
 
 Commencer par récupérer les sources du projet et aller dans le répertoire créé.
 
