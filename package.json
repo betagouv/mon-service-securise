@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "engines": {
-    "node": "18",
-    "npm": "10"
+    "node": ">=18",
+    "npm": "11"
   },
   "scripts": {
     "build": "knex migrate:latest && npx vite build --config svelte/vite.config.mts  && npx tsc && npm run cree-utilisateur-demo",
