@@ -363,6 +363,11 @@ const nouvelAdaptateur = (
       donnees: donneesModele,
     });
 
+  const modeleMesureSpecifiqueAppartientA = async (idUtilisateur, idModele) =>
+    donnees.modelesMesureSpecifique.find(
+      (m) => m.id === idModele && m.idUtilisateur === idUtilisateur
+    ) !== undefined;
+
   const associeModeleMesureSpecifiqueAuxServices = async (
     idModele,
     idsServices
@@ -403,6 +408,7 @@ const nouvelAdaptateur = (
     marqueTacheDeServiceLue,
     metsAJourIdResetMdpUtilisateur,
     metsAJourUtilisateur,
+    modeleMesureSpecifiqueAppartientA,
     nbAutorisationsProprietaire,
     nombreServices,
     nouveautesPourUtilisateur,
