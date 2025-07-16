@@ -7,7 +7,12 @@ const {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurServiceInexistant,
   ErreurUtilisateurInexistant,
+  ErreurDroitsInsuffisants,
 } = require('../../src/erreurs');
+const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
+const {
+  uneAutorisation,
+} = require('../constructeurs/constructeurAutorisation');
 
 describe('Le dépôt de données des modèles de mesure spécifique', () => {
   let adaptateurChiffrement;
@@ -29,6 +34,12 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         descriptionService: { nomService: 'Service 2' },
       })
       .ajouteUnUtilisateur({ id: 'U1' })
+      .ajouteUneAutorisation(
+        uneAutorisation().deProprietaire('U1', 'S1').construis()
+      )
+      .ajouteUneAutorisation(
+        uneAutorisation().deProprietaire('U1', 'S2').construis()
+      )
       .avecUnModeleDeMesureSpecifique({ id: 'MOD-1' })
       .construis();
   });
@@ -37,6 +48,9 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     DepotDonneesModelesMesureSpecifique.creeDepot({
       adaptateurChiffrement,
       adaptateurPersistance,
+      depotAutorisations: DepotDonneesAutorisations.creeDepot({
+        adaptateurPersistance,
+      }),
       adaptateurUUID,
     });
 
@@ -90,10 +104,11 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       };
       const depot = leDepot();
 
-      await depot.associeModeleMesureSpecifiqueAuxServices('MOD-1', [
-        'S1',
-        'S2',
-      ]);
+      await depot.associeModeleMesureSpecifiqueAuxServices(
+        'MOD-1',
+        ['S1', 'S2'],
+        'U1'
+      );
 
       expect(donneesPersistees.idModele).to.be('MOD-1');
       expect(donneesPersistees.idsServices).to.eql(['S1', 'S2']);
@@ -107,7 +122,8 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       try {
         await depot.associeModeleMesureSpecifiqueAuxServices(
           'MOD-INTROUVABLE-1',
-          ['S1']
+          ['S1'],
+          'U1'
         );
         expect().fail("L'appel aurait dû lever une erreur.");
       } catch (e) {
@@ -119,12 +135,29 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       const depot = leDepot();
 
       try {
-        await depot.associeModeleMesureSpecifiqueAuxServices('MOD-1', [
-          'S-INTROUVABLE-1',
-        ]);
+        await depot.associeModeleMesureSpecifiqueAuxServices(
+          'MOD-1',
+          ['S-INTROUVABLE-1'],
+          'U1'
+        );
         expect().fail("L'appel aurait dû lever une erreur.");
       } catch (e) {
         expect(e).to.be.an(ErreurServiceInexistant);
+      }
+    });
+
+    it("jette une erreur si l'utilisateur qui veut associer la mesure n'a pas les droits en écriture sur tous les services", async () => {
+      const depot = leDepot();
+
+      try {
+        await depot.associeModeleMesureSpecifiqueAuxServices(
+          'MOD-1',
+          ['S1'],
+          'U-SANS-DROIT'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurDroitsInsuffisants);
       }
     });
   });

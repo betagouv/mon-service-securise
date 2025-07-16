@@ -2,11 +2,23 @@ const {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurServiceInexistant,
   ErreurUtilisateurInexistant,
+  ErreurDroitsInsuffisants,
 } = require('../erreurs');
+const {
+  Permissions,
+  Rubriques,
+} = require('../modeles/autorisations/gestionDroits');
+
+const { ECRITURE } = Permissions;
+const { SECURISER } = Rubriques;
 
 const creeDepot = (config = {}) => {
-  const { adaptateurChiffrement, adaptateurPersistance, adaptateurUUID } =
-    config;
+  const {
+    adaptateurChiffrement,
+    adaptateurPersistance,
+    adaptateurUUID,
+    depotAutorisations,
+  } = config;
 
   const ajouteModeleMesureSpecifique = async (idUtilisateur, donnees) => {
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
@@ -24,7 +36,8 @@ const creeDepot = (config = {}) => {
 
   const associeModeleMesureSpecifiqueAuxServices = async (
     idModele,
-    idsServices
+    idsServices,
+    idUtilisateurAssociant
   ) => {
     const modeleExiste =
       await adaptateurPersistance.verifieModeleMesureSpecifiqueExiste(idModele);
@@ -34,6 +47,14 @@ const creeDepot = (config = {}) => {
     const tousExistent =
       await adaptateurPersistance.verifieTousLesServicesExistent(idsServices);
     if (!tousExistent) throw new ErreurServiceInexistant();
+
+    const droitsSontSuffisants =
+      await depotAutorisations.accesAutoriseAUneListeDeService(
+        idUtilisateurAssociant,
+        idsServices,
+        { [SECURISER]: ECRITURE }
+      );
+    if (!droitsSontSuffisants) throw new ErreurDroitsInsuffisants();
 
     await adaptateurPersistance.associeModeleMesureSpecifiqueAuxServices(
       idModele,
