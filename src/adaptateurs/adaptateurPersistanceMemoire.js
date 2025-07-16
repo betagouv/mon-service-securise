@@ -84,15 +84,27 @@ const nouvelAdaptateur = (
       servicesRetenus.push(...tousServices);
     }
 
-    return servicesRetenus.map((unService) => ({
-      ...unService,
-      utilisateurs: donnees.autorisations
-        .filter((a) => a.idService === unService.id)
-        .map((a) => donnees.utilisateurs.find((u) => u.id === a.idUtilisateur)),
-      suggestions: donnees.suggestionsActions
-        .filter((s) => s.idService === unService.id)
-        .map((suggestion) => suggestion.nature),
-    }));
+    return servicesRetenus.map((unService) => {
+      const autorisationsDuService = donnees.autorisations.filter(
+        (a) => a.idService === unService.id
+      );
+      const modelesDuService = donnees.modelesMesureSpecifique.filter(
+        ({ idUtilisateur: idU }) =>
+          autorisationsDuService.map((a) => a.idUtilisateur).includes(idU)
+      );
+      return {
+        ...unService,
+        utilisateurs: autorisationsDuService.map((a) =>
+          donnees.utilisateurs.find((u) => u.id === a.idUtilisateur)
+        ),
+        suggestions: donnees.suggestionsActions
+          .filter((s) => s.idService === unService.id)
+          .map((suggestion) => suggestion.nature),
+        modelesDeMesureSpecifique: Object.fromEntries(
+          modelesDuService.map(({ id, donnees: d }) => [id, d])
+        ),
+      };
+    });
   };
 
   const nombreServices = async (idUtilisateur) => {

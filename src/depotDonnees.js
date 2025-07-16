@@ -125,6 +125,7 @@ const creeDepot = (config = {}) => {
       adaptateurPersistance,
       adaptateurUUID,
       depotAutorisations,
+      depotServices,
     });
 
   const {

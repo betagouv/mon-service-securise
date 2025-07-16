@@ -217,6 +217,10 @@ class Service {
     return this.mesures.mesuresSpecifiques;
   }
 
+  associeMesureSpecifiqueAuModele(idModele) {
+    this.mesures.mesuresSpecifiques.associeAuModele(idModele);
+  }
+
   detacheMesureSpecfiqueDuModele(idModele) {
     this.mesures.mesuresSpecifiques.detacheMesureDuModele(idModele);
   }
