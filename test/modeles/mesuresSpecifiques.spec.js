@@ -3,7 +3,10 @@ const expect = require('expect.js');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
 const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
 const Referentiel = require('../../src/referentiel');
-const { ErreurMesureInconnue } = require('../../src/erreurs');
+const {
+  ErreurMesureInconnue,
+  ErreurModeleDeMesureSpecifiqueIntrouvable,
+} = require('../../src/erreurs');
 
 describe('La liste des mesures spécifiques', () => {
   let referentiel;
@@ -300,6 +303,43 @@ describe('La liste des mesures spécifiques', () => {
 
       expect(() => mesures.metsAJourMesure(mesureAJour)).to.throwError((e) => {
         expect(e).to.be.an(ErreurMesureInconnue);
+      });
+    });
+  });
+
+  describe("sur demande d'association à un modèle", () => {
+    it('ajoute une mesure spécifique qui reprend les données du modèle, avec un statut « À lancer »', () => {
+      const modelesAvecM1 = {
+        'M-1': { description: 'Mesure M1', categorie: 'categorie1' },
+      };
+      const connaitM1 = new MesuresSpecifiques(
+        { mesuresSpecifiques: [] },
+        referentiel,
+        modelesAvecM1
+      );
+
+      connaitM1.associeAuModele('M-1');
+
+      expect(connaitM1.toutes()[0].toJSON()).to.eql({
+        idModele: 'M-1',
+        categorie: 'categorie1',
+        description: 'Mesure M1',
+        statut: 'aLancer',
+        responsables: [],
+      });
+    });
+
+    it('jette une erreur si le modèle est introuvable', () => {
+      const modelesAvecM1 = { 'M-1': {} };
+
+      const connaitM1 = new MesuresSpecifiques(
+        { mesuresSpecifiques: [] },
+        referentiel,
+        modelesAvecM1
+      );
+
+      expect(() => connaitM1.associeAuModele('M-2')).to.throwError((e) => {
+        expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueIntrouvable);
       });
     });
   });

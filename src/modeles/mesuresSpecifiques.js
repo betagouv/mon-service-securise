@@ -5,6 +5,7 @@ const {
   ErreurMesureInconnue,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
 } = require('../erreurs');
+const Mesure = require('./mesure');
 
 class MesuresSpecifiques extends ElementsConstructibles {
   constructor(
@@ -20,6 +21,7 @@ class MesuresSpecifiques extends ElementsConstructibles {
     );
 
     super(MesureSpecifique, { items: mesuresCompletees }, referentiel);
+    this.modelesDeMesureSpecifique = modelesDeMesureSpecifique;
   }
 
   static completeMesuresSpecifiques(
@@ -86,6 +88,28 @@ class MesuresSpecifiques extends ElementsConstructibles {
         m.detacheDeSonModele();
       }
     });
+  }
+
+  associeAuModele(idModele) {
+    const modele = this.modelesDeMesureSpecifique[idModele];
+
+    const modeleInconnu = !modele;
+    if (modeleInconnu)
+      throw new ErreurModeleDeMesureSpecifiqueIntrouvable(idModele);
+
+    const { description, descriptionLongue, categorie } = modele;
+    this.items.push(
+      new MesureSpecifique(
+        {
+          idModele,
+          description,
+          descriptionLongue,
+          categorie,
+          statut: Mesure.STATUT_A_LANCER,
+        },
+        this.referentiel
+      )
+    );
   }
 }
 
