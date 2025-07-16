@@ -17,7 +17,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
   - [x] Conséquence : tout le détail du modèle (label, description, catégorie) est recopiée **dans** les mesures spés du service
   - [ ] et le lien entre modèle et service disparaît
   - [ ] le service relu ne connait plus l'association
-- [ ] Un service peut être relié à un modèle de mesure
+- [x] Un service peut être relié à un modèle de mesure
   - [x] à condition que le modèle appartienne à un utilisateur avec les droits [ECRITURE sur SÉCURISER]
     - [x] une erreur qui montre les détails utilisateur et id service
   - [x] à condition que l'utilisateur soit propriétaire du modèle
@@ -25,7 +25,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
     - [x] le service se retrouve avec une mesure spécifique au statut « À lancer ».
     - [x] Cette mesure est reliée au modèle
     - [x] **et** elle apparaît dans la table d'association.
-    - [ ] **et** elle a un identifiant de mesure (en plus de l'identifiant du modèle)
+    - [x] **et** elle a un identifiant de mesure (en plus de l'identifiant du modèle)
     - [x] le service relu depuis le dépôt connaitrait l'association
 - [x] `depotDonneesService.metAjour` devrait utiliser une fonction "SELECT 1" pour vérifier l'existence du service
 

@@ -90,7 +90,7 @@ class MesuresSpecifiques extends ElementsConstructibles {
     });
   }
 
-  associeAuModele(idModele) {
+  associeAuModele(idModele, idNouvelleMesure) {
     const modele = this.modelesDeMesureSpecifique[idModele];
 
     const modeleInconnu = !modele;
@@ -102,6 +102,7 @@ class MesuresSpecifiques extends ElementsConstructibles {
       new MesureSpecifique(
         {
           idModele,
+          id: idNouvelleMesure,
           description,
           descriptionLongue,
           categorie,
