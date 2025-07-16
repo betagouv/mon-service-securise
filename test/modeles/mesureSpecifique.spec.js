@@ -11,14 +11,12 @@ const Referentiel = require('../../src/referentiel');
 const InformationsService = require('../../src/modeles/informationsService');
 const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
 
-const elle = it;
-
 describe('Une mesure spécifique', () => {
   const referentiel = Referentiel.creeReferentiel({
     categoriesMesures: { uneCategorie: 'Une catégorie' },
   });
 
-  elle('sait se décrire', () => {
+  it('sait se décrire', () => {
     referentiel.enrichis({ prioritesMesures: { p3: {} } });
 
     const mesure = new MesureSpecifique(
@@ -52,7 +50,7 @@ describe('Une mesure spécifique', () => {
     ]);
   });
 
-  elle('connaît ses propriétés obligatoires', () => {
+  it('connaît ses propriétés obligatoires', () => {
     expect(MesureSpecifique.proprietesObligatoires()).to.eql([
       'id',
       'description',
@@ -61,24 +59,21 @@ describe('Une mesure spécifique', () => {
     ]);
   });
 
-  elle(
-    'ne tient pas compte du champ `modalites` ni de la priorite pour déterminer le statut de saisie',
-    () => {
-      const mesure = new MesureSpecifique(
-        {
-          id: 'x',
-          description: 'Une mesure spécifique',
-          categorie: 'uneCategorie',
-          statut: 'fait',
-        },
-        referentiel
-      );
+  it('ne tient pas compte du champ `modalites` ni de la priorite pour déterminer le statut de saisie', () => {
+    const mesure = new MesureSpecifique(
+      {
+        id: 'x',
+        description: 'Une mesure spécifique',
+        categorie: 'uneCategorie',
+        statut: 'fait',
+      },
+      referentiel
+    );
 
-      expect(mesure.statutSaisie()).to.equal(InformationsService.COMPLETES);
-    }
-  );
+    expect(mesure.statutSaisie()).to.equal(InformationsService.COMPLETES);
+  });
 
-  elle('vérifie que le statut est bien valide', (done) => {
+  it('vérifie que le statut est bien valide', (done) => {
     try {
       new MesureSpecifique({ statut: 'statutInconnu' });
       done('La création de la mesure aurait dû lever une exception.');
@@ -110,7 +105,7 @@ describe('Une mesure spécifique', () => {
     }
   });
 
-  elle('vérifie que la catégorie est bien répertoriée', (done) => {
+  it('vérifie que la catégorie est bien répertoriée', (done) => {
     try {
       new MesureSpecifique({ categorie: 'categorieInconnue' });
       done('La création de la mesure aurait dû lever une exception.');
@@ -123,31 +118,28 @@ describe('Une mesure spécifique', () => {
     }
   });
 
-  elle(
-    "ne tient pas compte de la catégorie si elle n'est pas renseignée",
-    (done) => {
-      try {
-        new MesureSpecifique();
-        done();
-      } catch {
-        done(
-          "La création de la mesure sans catégorie n'aurait pas dû lever d'exception."
-        );
-      }
+  it("ne tient pas compte de la catégorie si elle n'est pas renseignée", (done) => {
+    try {
+      new MesureSpecifique();
+      done();
+    } catch {
+      done(
+        "La création de la mesure sans catégorie n'aurait pas dû lever d'exception."
+      );
     }
-  );
+  });
 
-  elle("n'est pas indispensable selon l'ANSSI", () => {
+  it("n'est pas indispensable selon l'ANSSI", () => {
     const mesure = new MesureSpecifique();
     expect(mesure.estIndispensable()).to.be(false);
   });
 
-  elle("n'est pas recommandée par l'ANSSI", () => {
+  it("n'est pas recommandée par l'ANSSI", () => {
     const mesure = new MesureSpecifique();
     expect(mesure.estRecommandee()).to.be(false);
   });
 
-  elle('sait si son statut est renseigné', () => {
+  it('sait si son statut est renseigné', () => {
     const mesure = new MesureSpecifique({ statut: 'fait' });
     expect(mesure.statutRenseigne()).to.be(true);
   });
@@ -170,7 +162,7 @@ describe('Une mesure spécifique', () => {
       };
     });
 
-    elle("persiste sa date d'échéance au format ISO en UTC", () => {
+    it("persiste sa date d'échéance au format ISO en UTC", () => {
       const janvierNonIso = '01/23/2024 10:00Z';
       const avecEcheance = new MesureSpecifique(
         { echeance: janvierNonIso },
@@ -182,7 +174,7 @@ describe('Une mesure spécifique', () => {
       expect(persistance.echeance).to.be('2024-01-23T10:00:00.000Z');
     });
 
-    elle('persiste toutes ses données', () => {
+    it('persiste toutes ses données', () => {
       const mesureSpecifique = new MesureSpecifique(
         donneesMesureSpecifique,
         referentiel
@@ -203,21 +195,18 @@ describe('Une mesure spécifique', () => {
       });
     });
 
-    elle(
-      'ne persiste pas les données du modèle si la mesure a un modèle, car elles ne doivent apparaître que dans le modèle',
-      () => {
-        const mesureAvecModele = new MesureSpecifique(
-          { ...donneesMesureSpecifique, idModele: 'MS1' },
-          referentiel
-        );
+    it('ne persiste pas les données du modèle si la mesure a un modèle, car elles ne doivent apparaître que dans le modèle', () => {
+      const mesureAvecModele = new MesureSpecifique(
+        { ...donneesMesureSpecifique, idModele: 'MS1' },
+        referentiel
+      );
 
-        const persistance = mesureAvecModele.donneesSerialisees();
+      const persistance = mesureAvecModele.donneesSerialisees();
 
-        expect(persistance.description).to.be(undefined);
-        expect(persistance.descriptionLongue).to.be(undefined);
-        expect(persistance.categorie).to.be(undefined);
-      }
-    );
+      expect(persistance.description).to.be(undefined);
+      expect(persistance.descriptionLongue).to.be(undefined);
+      expect(persistance.categorie).to.be(undefined);
+    });
   });
 
   describe('concernant le détachement de son modèle', () => {
