@@ -137,6 +137,13 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     });
 
     it("met à jour chaque service pour qu'il connaisse la mesure associée", async () => {
+      let compteur = 0;
+      adaptateurUUID = {
+        genereUUID: () => {
+          compteur += 1;
+          return `UUID-${compteur}`;
+        },
+      };
       const depot = leDepot();
 
       await depot.associeModeleMesureSpecifiqueAuxServices(
@@ -148,6 +155,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       const s1 = await depotServices.service('S1');
       expect(s1.mesuresSpecifiques().toutes()[0].toJSON()).to.eql({
         idModele: 'MOD-1',
+        id: 'UUID-1',
         statut: 'aLancer',
         responsables: [],
         description: 'Il faut faire A,B,C',
@@ -155,6 +163,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       const s2 = await depotServices.service('S2');
       expect(s2.mesuresSpecifiques().toutes()[0].toJSON()).to.eql({
         idModele: 'MOD-1',
+        id: 'UUID-2',
         statut: 'aLancer',
         responsables: [],
         description: 'Il faut faire A,B,C',

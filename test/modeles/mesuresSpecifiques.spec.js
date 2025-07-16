@@ -308,7 +308,7 @@ describe('La liste des mesures spécifiques', () => {
   });
 
   describe("sur demande d'association à un modèle", () => {
-    it('ajoute une mesure spécifique qui reprend les données du modèle, avec un statut « À lancer »', () => {
+    it('ajoute une mesure spécifique qui reprend les données du modèle, avec un statut « À lancer » et un identifiant', () => {
       const modelesAvecM1 = {
         'M-1': { description: 'Mesure M1', categorie: 'categorie1' },
       };
@@ -318,10 +318,11 @@ describe('La liste des mesures spécifiques', () => {
         modelesAvecM1
       );
 
-      connaitM1.associeAuModele('M-1');
+      connaitM1.associeAuModele('M-1', 'ID-MESURE-1');
 
       expect(connaitM1.toutes()[0].toJSON()).to.eql({
         idModele: 'M-1',
+        id: 'ID-MESURE-1',
         categorie: 'categorie1',
         description: 'Mesure M1',
         statut: 'aLancer',

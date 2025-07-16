@@ -76,7 +76,8 @@ const creeDepot = (config = {}) => {
 
     const majServices = idsServices.map(async (unId) => {
       const s = await depotServices.service(unId);
-      s.associeMesureSpecifiqueAuModele(idModele);
+      const idNouvelleMesure = adaptateurUUID.genereUUID();
+      s.associeMesureSpecifiqueAuModele(idModele, idNouvelleMesure);
       await depotServices.metsAJourService(s);
     });
     await Promise.all(majServices);

@@ -217,8 +217,8 @@ class Service {
     return this.mesures.mesuresSpecifiques;
   }
 
-  associeMesureSpecifiqueAuModele(idModele) {
-    this.mesures.mesuresSpecifiques.associeAuModele(idModele);
+  associeMesureSpecifiqueAuModele(idModele, idNouvelleMesure) {
+    this.mesures.mesuresSpecifiques.associeAuModele(idModele, idNouvelleMesure);
   }
 
   detacheMesureSpecfiqueDuModele(idModele) {
