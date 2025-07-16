@@ -14,16 +14,19 @@ const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisa
 const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
+const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
+const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
+const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
+const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 
 describe('Le dépôt de données des modèles de mesure spécifique', () => {
   let adaptateurChiffrement;
   let adaptateurPersistance;
   let adaptateurUUID;
+  let depotServices;
 
   beforeEach(() => {
-    adaptateurChiffrement = {
-      chiffre: async (donnees) => ({ ...donnees, chiffree: true }),
-    };
+    adaptateurChiffrement = fauxAdaptateurChiffrement();
     adaptateurUUID = { genereUUID: () => 'UUID-1' };
     adaptateurPersistance = unePersistanceMemoire()
       .ajouteUnService({
@@ -34,31 +37,48 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         id: 'S2',
         descriptionService: { nomService: 'Service 2' },
       })
-      .ajouteUnUtilisateur({ id: 'U1' })
+      .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
       .ajouteUneAutorisation(
-        uneAutorisation().deProprietaire('U1', 'S1').construis()
+        uneAutorisation().deProprietaire('U1', 'S1').donnees
       )
       .ajouteUneAutorisation(
-        uneAutorisation().deProprietaire('U1', 'S2').construis()
+        uneAutorisation().deProprietaire('U1', 'S2').donnees
       )
-      .avecUnModeleDeMesureSpecifique({ id: 'MOD-1', idUtilisateur: 'U1' })
+      .avecUnModeleDeMesureSpecifique({
+        id: 'MOD-1',
+        idUtilisateur: 'U1',
+        donnees: { description: 'Il faut faire A,B,C' },
+      })
       .avecUnModeleDeMesureSpecifique({ id: 'MOD-2', idUtilisateur: 'U2' })
       .construis();
+    depotServices = DepotDonneesServices.creeDepot({
+      adaptateurPersistance,
+      adaptateurChiffrement,
+      depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+        adaptateurPersistance,
+        adaptateurChiffrement,
+      }),
+    });
   });
 
   const leDepot = () =>
     DepotDonneesModelesMesureSpecifique.creeDepot({
+      adaptateurUUID,
       adaptateurChiffrement,
       adaptateurPersistance,
       depotAutorisations: DepotDonneesAutorisations.creeDepot({
         adaptateurPersistance,
       }),
-      adaptateurUUID,
+      depotServices,
     });
 
   describe("concernant l'ajout d'un modèle de mesure", () => {
     it('sait ajouter un modèle en chiffrant son contenu', async () => {
       let donneesPersistees = {};
+      adaptateurChiffrement.chiffre = async (donnees) => ({
+        ...donnees,
+        chiffree: true,
+      });
       adaptateurPersistance.ajouteModeleMesureSpecifique = async (
         idModele,
         idUtilisateur,
@@ -114,6 +134,31 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
 
       expect(donneesPersistees.idModele).to.be('MOD-1');
       expect(donneesPersistees.idsServices).to.eql(['S1', 'S2']);
+    });
+
+    it("met à jour chaque service pour qu'il connaisse la mesure associée", async () => {
+      const depot = leDepot();
+
+      await depot.associeModeleMesureSpecifiqueAuxServices(
+        'MOD-1',
+        ['S1', 'S2'],
+        'U1'
+      );
+
+      const s1 = await depotServices.service('S1');
+      expect(s1.mesuresSpecifiques().toutes()[0].toJSON()).to.eql({
+        idModele: 'MOD-1',
+        statut: 'aLancer',
+        responsables: [],
+        description: 'Il faut faire A,B,C',
+      });
+      const s2 = await depotServices.service('S2');
+      expect(s2.mesuresSpecifiques().toutes()[0].toJSON()).to.eql({
+        idModele: 'MOD-1',
+        statut: 'aLancer',
+        responsables: [],
+        description: 'Il faut faire A,B,C',
+      });
     });
 
     it("jette une erreur si le modèle n'existe pas", async () => {

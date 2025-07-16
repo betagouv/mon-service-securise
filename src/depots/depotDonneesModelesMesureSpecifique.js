@@ -19,6 +19,7 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance,
     adaptateurUUID,
     depotAutorisations,
+    depotServices,
   } = config;
 
   const ajouteModeleMesureSpecifique = async (idUtilisateur, donnees) => {
@@ -72,6 +73,13 @@ const creeDepot = (config = {}) => {
         idsServices,
         droitsRequis
       );
+
+    const majServices = idsServices.map(async (unId) => {
+      const s = await depotServices.service(unId);
+      s.associeMesureSpecifiqueAuModele(idModele);
+      await depotServices.metsAJourService(s);
+    });
+    await Promise.all(majServices);
 
     await adaptateurPersistance.associeModeleMesureSpecifiqueAuxServices(
       idModele,
