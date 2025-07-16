@@ -8,6 +8,7 @@ const {
   ErreurServiceInexistant,
   ErreurUtilisateurInexistant,
   ErreurDroitsInsuffisants,
+  ErreurAutorisationInexistante,
 } = require('../../src/erreurs');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const {
@@ -40,7 +41,8 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       .ajouteUneAutorisation(
         uneAutorisation().deProprietaire('U1', 'S2').construis()
       )
-      .avecUnModeleDeMesureSpecifique({ id: 'MOD-1' })
+      .avecUnModeleDeMesureSpecifique({ id: 'MOD-1', idUtilisateur: 'U1' })
+      .avecUnModeleDeMesureSpecifique({ id: 'MOD-2', idUtilisateur: 'U2' })
       .construis();
   });
 
@@ -151,15 +153,41 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
 
       try {
         await depot.associeModeleMesureSpecifiqueAuxServices(
-          'MOD-1',
+          'MOD-2',
           ['S1'],
-          'U-SANS-DROIT'
+          'U2'
         );
         expect().fail("L'appel aurait dû lever une erreur.");
       } catch (e) {
         expect(e).to.be.an(ErreurDroitsInsuffisants);
         expect(e.message).to.be(
-          'L\'utilisateur U-SANS-DROIT n\'a pas les droits suffisants sur S1. Droits requis pour associer un modèle : {"SECURISER":2}'
+          'L\'utilisateur U2 n\'a pas les droits suffisants sur S1. Droits requis pour associer un modèle : {"SECURISER":2}'
+        );
+      }
+    });
+
+    it("jette une erreur si le modèle n'appartient pas à l'utilisateur qui veut associer", async () => {
+      adaptateurPersistance.modeleMesureSpecifiqueAppartientA = async (
+        idUtilisateur,
+        idModele
+      ) => {
+        if (idUtilisateur !== 'U-NON-PROPRIETAIRE' || idModele !== 'MOD-1')
+          throw new Error('Adaptateur mal appelé');
+        return false;
+      };
+      const depot = leDepot();
+
+      try {
+        await depot.associeModeleMesureSpecifiqueAuxServices(
+          'MOD-1',
+          ['S1'],
+          'U-NON-PROPRIETAIRE'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurAutorisationInexistante);
+        expect(e.message).to.be(
+          "L'utilisateur U-NON-PROPRIETAIRE n'est pas propriétaire du modèle MOD-1 qu'il veut associer"
         );
       }
     });

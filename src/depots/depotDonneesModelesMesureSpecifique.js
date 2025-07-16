@@ -3,6 +3,7 @@ const {
   ErreurServiceInexistant,
   ErreurUtilisateurInexistant,
   ErreurDroitsInsuffisants,
+  ErreurAutorisationInexistante,
 } = require('../erreurs');
 const {
   Permissions,
@@ -44,9 +45,19 @@ const creeDepot = (config = {}) => {
     if (!modeleExiste)
       throw new ErreurModeleDeMesureSpecifiqueIntrouvable(idModele);
 
-    const tousExistent =
+    const possedeLeModele =
+      await adaptateurPersistance.modeleMesureSpecifiqueAppartientA(
+        idUtilisateurAssociant,
+        idModele
+      );
+    if (!possedeLeModele)
+      throw new ErreurAutorisationInexistante(
+        `L'utilisateur ${idUtilisateurAssociant} n'est pas propriétaire du modèle ${idModele} qu'il veut associer`
+      );
+
+    const tousServicesExistent =
       await adaptateurPersistance.verifieTousLesServicesExistent(idsServices);
-    if (!tousExistent) throw new ErreurServiceInexistant();
+    if (!tousServicesExistent) throw new ErreurServiceInexistant();
 
     const droitsRequis = { [SECURISER]: ECRITURE };
     const droitsSontSuffisants =

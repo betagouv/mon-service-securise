@@ -667,6 +667,15 @@ const nouvelAdaptateur = (env) => {
       donnees,
     });
 
+  const modeleMesureSpecifiqueAppartientA = async (idUtilisateur, idModele) => {
+    const resultat = await knex.raw(
+      'SELECT 1 FROM modeles_mesure_specifique WHERE id_utilisateur = :idUtilisateur AND id = :idModele;',
+      { idUtilisateur, idModele }
+    );
+
+    return resultat.rows.length === 1;
+  };
+
   const associeModeleMesureSpecifiqueAuxServices = async (
     idModele,
     idsServices
@@ -719,6 +728,7 @@ const nouvelAdaptateur = (env) => {
     metsAJourParrainage,
     metsAJourProgressionTeleversement,
     metsAJourUtilisateur,
+    modeleMesureSpecifiqueAppartientA,
     nbAutorisationsProprietaire,
     nombreServices,
     nouveautesPourUtilisateur,
