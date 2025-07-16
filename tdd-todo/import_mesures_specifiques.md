@@ -18,7 +18,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
   - [ ] et le lien entre modèle et service disparaît
 - [ ] Un service peut être relié à un modèle de mesure
   - [x] à condition que le modèle appartienne à un utilisateur avec les droits [ECRITURE sur SÉCURISER]
-    - [ ] une erreur qui montre les détails utilisateur et id service
+    - [x] une erreur qui montre les détails utilisateur et id service
   - [ ] à condition que l'utilisateur soit propriétaire du modèle
   - Conséquence :
     - [x] le service se retrouve avec une mesure spécifique au statut « À lancer ».
