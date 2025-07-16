@@ -48,13 +48,19 @@ const creeDepot = (config = {}) => {
       await adaptateurPersistance.verifieTousLesServicesExistent(idsServices);
     if (!tousExistent) throw new ErreurServiceInexistant();
 
+    const droitsRequis = { [SECURISER]: ECRITURE };
     const droitsSontSuffisants =
       await depotAutorisations.accesAutoriseAUneListeDeService(
         idUtilisateurAssociant,
         idsServices,
-        { [SECURISER]: ECRITURE }
+        droitsRequis
       );
-    if (!droitsSontSuffisants) throw new ErreurDroitsInsuffisants();
+    if (!droitsSontSuffisants)
+      throw new ErreurDroitsInsuffisants(
+        idUtilisateurAssociant,
+        idsServices,
+        droitsRequis
+      );
 
     await adaptateurPersistance.associeModeleMesureSpecifiqueAuxServices(
       idModele,

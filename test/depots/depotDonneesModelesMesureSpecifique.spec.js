@@ -158,6 +158,9 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         expect().fail("L'appel aurait dû lever une erreur.");
       } catch (e) {
         expect(e).to.be.an(ErreurDroitsInsuffisants);
+        expect(e.message).to.be(
+          'L\'utilisateur U-SANS-DROIT n\'a pas les droits suffisants sur S1. Droits requis pour associer un modèle : {"SECURISER":2}'
+        );
       }
     });
   });
