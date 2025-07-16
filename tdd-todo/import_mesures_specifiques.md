@@ -25,6 +25,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
     - [x] Cette mesure est reliée au modèle
     - [x] **et** elle apparaît dans la table d'association.
     - [ ] le service relu depuis le dépôt connaitrait l'association
+- [x] `depotDonneesService.metAjour` devrait utiliser une fonction "SELECT 1" pour vérifier l'existence du service
 
 ## Du point de vue des Modèles de mesure
 
