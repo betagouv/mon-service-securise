@@ -426,8 +426,10 @@ const creeDepot = (config = {}) => {
   };
 
   const metsAJourService = async (unService) => {
-    const s = await p.lis.un(unService.id);
-    if (typeof s === 'undefined')
+    const existe = await adaptateurPersistance.verifieServiceExiste(
+      unService.id
+    );
+    if (!existe)
       throw new ErreurServiceInexistant(`Service "${unService.id}" non trouvé`);
 
     const { id, ...donnees } = unService.donneesAPersister().toutes();
