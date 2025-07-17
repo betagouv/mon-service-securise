@@ -2,10 +2,6 @@
   "name": "MonServiceSécurisé",
   "version": "1.0.0",
   "description": "",
-  "engines": {
-    "node": ">=18 <22",
-    "npm": "11"
-  },
   "scripts": {
     "build": "knex migrate:latest && npx vite build --config svelte/vite.config.mts  && npx tsc && npm run cree-utilisateur-demo",
     "cree-utilisateur-demo": "npx tsc && node dist/creeUtilisateurDemo.js",
