@@ -20,10 +20,14 @@ jobs:
       - name: Cloner le dépôt Git
         uses: actions/checkout@v4
 
-      - name: Utiliser la version Node.js 20
+      - name: Déterminer la version de Node.js à utiliser
+        run: |
+          echo "NODE_VERSION=$(./scripts/get-node-version.sh)" >> $GITHUB_ENV
+
+      - name: Utiliser la version Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Installer les dépendances
         run: npm ci
