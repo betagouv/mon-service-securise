@@ -119,6 +119,16 @@ const creeDepot = (config = {}) => {
       idUtilisateurDetachant,
       idsServices
     );
+
+    const possedeLeModele =
+      await adaptateurPersistance.modeleMesureSpecifiqueAppartientA(
+        idUtilisateurDetachant,
+        idModele
+      );
+    if (!possedeLeModele)
+      throw new ErreurAutorisationInexistante(
+        `L'utilisateur ${idUtilisateurDetachant} n'est pas propriétaire du modèle ${idModele} qu'il veut associer/détacher`
+      );
   };
 
   return {

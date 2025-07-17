@@ -38,6 +38,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         id: 'S2',
         descriptionService: { nomService: 'Service 2' },
       })
+      // U1 a deux services et un modèle
       .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
       .ajouteUneAutorisation(
         uneAutorisation().deProprietaire('U1', 'S1').donnees
@@ -50,8 +51,16 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         idUtilisateur: 'U1',
         donnees: { description: 'Il faut faire A,B,C' },
       })
+      // Pour tester le détachement : on dit que U1-bis est *aussi* propriétaire
+      // de S1, mais d'aucun modèle.
+      .ajouteUnUtilisateur(unUtilisateur().avecId('U1-bis').donnees)
+      .ajouteUneAutorisation(
+        uneAutorisation().deProprietaire('U1-bis', 'S1').donnees
+      )
+      // U2 a seulement un modèle
       .avecUnModeleDeMesureSpecifique({ id: 'MOD-2', idUtilisateur: 'U2' })
       .construis();
+
     depotServices = DepotDonneesServices.creeDepot({
       adaptateurPersistance,
       adaptateurChiffrement,
@@ -317,6 +326,34 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         );
         expect(e.message).to.be(
           'L\'utilisateur U2 n\'a pas les droits suffisants sur S1. Droits requis pour associer/détacher un modèle : {"SECURISER":2}'
+        );
+      }
+    });
+
+    it("jette une erreur si le modèle n'appartient pas à l'utilisateur qui veut détacher", async () => {
+      adaptateurPersistance.modeleMesureSpecifiqueAppartientA = async (
+        idUtilisateur,
+        _idModele
+      ) => idUtilisateur === 'U1';
+
+      const depot = leDepot();
+      await depot.associeModeleMesureSpecifiqueAuxServices(
+        'MOD-1',
+        ['S1'],
+        'U1'
+      );
+
+      try {
+        await depot.detacheModeleMesureSpecifiqueDesServices(
+          'MOD-1',
+          ['S1'],
+          'U1-bis'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurAutorisationInexistante);
+        expect(e.message).to.be(
+          "L'utilisateur U1-bis n'est pas propriétaire du modèle MOD-1 qu'il veut associer/détacher"
         );
       }
     });
