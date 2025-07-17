@@ -15,10 +15,9 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 - [ ] Le service va chercher le détail d'une mesure spécifique liée à un [modèle de mesure spécifique] lors de sa construction
 - [ ] Le service est hydraté avec TOUS les modèles disponibles (pas seulement les modèles déjà associés)
 - [ ] Le service peut détacher une mesure spécifique de son modèle de mesure
-  - [ ] à condition que le modèle appartienne à un utilisateur avec les droits [ECRITURE sur SÉCURISER]
-    - [ ] une erreur qui montre les détails utilisateur et id service
-  - [ ] à condition que l'utilisateur soit propriétaire du modèle
+  - [x] à condition que le modèle appartienne à un utilisateur avec les droits [ECRITURE sur SÉCURISER]
   - [x] à condition que tous les services soient associés au modèle
+  - [ ] à condition que l'utilisateur soit propriétaire du modèle
   - Conséquence
     - [x] tout le détail du modèle (label, description, catégorie) est recopiée **dans** les mesures spés du service
     - [ ] et le lien entre modèle et service disparaît
