@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-docker compose up test
+docker compose \
+  up test --build --build-arg "NODE_VERSION=$(cat .nvmrc)"
