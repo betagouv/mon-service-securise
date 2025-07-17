@@ -74,13 +74,15 @@ const creeDepot = (config = {}) => {
         droitsRequis
       );
 
-    const majServices = idsServices.map(async (unId) => {
+    const mutationDesServices = idsServices.map(async (unId) => {
       const s = await depotServices.service(unId);
       const idNouvelleMesure = adaptateurUUID.genereUUID();
       s.associeMesureSpecifiqueAuModele(idModele, idNouvelleMesure);
-      await depotServices.metsAJourService(s);
+      return s;
     });
-    await Promise.all(majServices);
+    const aPersister = await Promise.all(mutationDesServices);
+
+    await Promise.all(aPersister.map(depotServices.metsAJourService));
 
     await adaptateurPersistance.associeModeleMesureSpecifiqueAuxServices(
       idModele,
