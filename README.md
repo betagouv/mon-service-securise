@@ -23,8 +23,12 @@ entités publiques à sécuriser et à homologuer leurs services publics numéri
 
 ## ⚙️ Configuration de l'environnement de développement
 
-Il est nécessaire en prérequis d'avoir installé [Git](https://git-scm.com/),
-[Docker](https://www.docker.com/) et une version récente (>= 18) de [Node.js](https://nodejs.org/en/).
+Il est nécessaire en prérequis d'avoir installé
+
+- [Git](https://git-scm.com/),
+- [Docker](https://www.docker.com/)
+- Une version récente (>= 18) de [Node.js](https://nodejs.org/en/) :\
+  Nous vous conseillons d'utiliser [`nvm use`](https://github.com/nvm-sh/nvm), pour utiliser la même version que dans les environnements d'intégration continue et de production, car nous spécifions la version de Node.js à utiliser dans le fichier `.nvmrc`.
 
 Commencer par récupérer les sources du projet et aller dans le répertoire créé.
 
