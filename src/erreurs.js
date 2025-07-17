@@ -70,6 +70,14 @@ class ErreurModeleDeMesureSpecifiqueDejaAssociee extends ErreurModele {
     );
   }
 }
+class ErreurServiceNonAssocieAuModele extends ErreurModele {
+  constructor(idsServices, idModele) {
+    const s = idsServices.join(',');
+    super(
+      `Les services [${s}] ne sont pas tous associés au modèle ${idModele}`
+    );
+  }
+}
 class ErreurDetachementModeleMesureSpecifiqueImpossible extends ErreurModele {}
 class ErreurMotDePasseIncorrect extends ErreurModele {}
 class ErreurNiveauGraviteInconnu extends ErreurModele {}
@@ -142,6 +150,7 @@ module.exports = {
   ErreurRisqueInconnu,
   ErreurSelManquant,
   ErreurServiceInexistant,
+  ErreurServiceNonAssocieAuModele,
   ErreurStatutDeploiementInvalide,
   ErreurStatutMesureInvalide,
   ErreurStatutMesureManquant,
