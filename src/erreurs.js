@@ -63,6 +63,13 @@ class ErreurModeleDeMesureSpecifiqueIntrouvable extends ErreurModele {
     );
   }
 }
+class ErreurModeleDeMesureSpecifiqueDejaAssociee extends ErreurModele {
+  constructor(idModele, idMesureDejaAssociee) {
+    super(
+      `Le modèle de mesure spécifique ${idModele} est déjà associé à la mesure ${idMesureDejaAssociee}`
+    );
+  }
+}
 class ErreurDetachementModeleMesureSpecifiqueImpossible extends ErreurModele {}
 class ErreurMotDePasseIncorrect extends ErreurModele {}
 class ErreurNiveauGraviteInconnu extends ErreurModele {}
@@ -125,6 +132,7 @@ module.exports = {
   ErreurIntituleRisqueManquant,
   ErreurLocalisationDonneesInvalide,
   ErreurMesureInconnue,
+  ErreurModeleDeMesureSpecifiqueDejaAssociee,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurMotDePasseIncorrect,
   ErreurModele,
