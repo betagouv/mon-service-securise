@@ -2,7 +2,7 @@ const {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurServiceInexistant,
   ErreurUtilisateurInexistant,
-  ErreurDroitsInsuffisants,
+  ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurAutorisationInexistante,
   ErreurServiceNonAssocieAuModele,
 } = require('../erreurs');
@@ -22,6 +22,25 @@ const creeDepot = (config = {}) => {
     depotAutorisations,
     depotServices,
   } = config;
+
+  async function verifiePeutModifierUnModeleSurLesServices(
+    idUtilisateur,
+    idsServices
+  ) {
+    const droitsRequis = { [SECURISER]: ECRITURE };
+    const droitsSontSuffisants =
+      await depotAutorisations.accesAutoriseAUneListeDeService(
+        idUtilisateur,
+        idsServices,
+        droitsRequis
+      );
+    if (!droitsSontSuffisants)
+      throw new ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique(
+        idUtilisateur,
+        idsServices,
+        droitsRequis
+      );
+  }
 
   const ajouteModeleMesureSpecifique = async (idUtilisateur, donnees) => {
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
@@ -61,19 +80,10 @@ const creeDepot = (config = {}) => {
       await adaptateurPersistance.verifieTousLesServicesExistent(idsServices);
     if (!tousServicesExistent) throw new ErreurServiceInexistant();
 
-    const droitsRequis = { [SECURISER]: ECRITURE };
-    const droitsSontSuffisants =
-      await depotAutorisations.accesAutoriseAUneListeDeService(
-        idUtilisateurAssociant,
-        idsServices,
-        droitsRequis
-      );
-    if (!droitsSontSuffisants)
-      throw new ErreurDroitsInsuffisants(
-        idUtilisateurAssociant,
-        idsServices,
-        droitsRequis
-      );
+    await verifiePeutModifierUnModeleSurLesServices(
+      idUtilisateurAssociant,
+      idsServices
+    );
 
     const mutationDesServices = idsServices.map(async (unId) => {
       const s = await depotServices.service(unId);
@@ -101,8 +111,14 @@ const creeDepot = (config = {}) => {
         idsServices,
         idModele
       );
+
     if (!tousAssocies)
       throw new ErreurServiceNonAssocieAuModele(idsServices, idModele);
+
+    await verifiePeutModifierUnModeleSurLesServices(
+      idUtilisateurDetachant,
+      idsServices
+    );
   };
 
   return {
@@ -111,4 +127,5 @@ const creeDepot = (config = {}) => {
     detacheModeleMesureSpecifiqueDesServices,
   };
 };
+
 module.exports = { creeDepot };

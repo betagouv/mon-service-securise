@@ -7,7 +7,7 @@ const {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurServiceInexistant,
   ErreurUtilisateurInexistant,
-  ErreurDroitsInsuffisants,
+  ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurAutorisationInexistante,
   ErreurServiceNonAssocieAuModele,
 } = require('../../src/erreurs');
@@ -214,9 +214,11 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         );
         expect().fail("L'appel aurait dû lever une erreur.");
       } catch (e) {
-        expect(e).to.be.an(ErreurDroitsInsuffisants);
+        expect(e).to.be.an(
+          ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
+        );
         expect(e.message).to.be(
-          'L\'utilisateur U2 n\'a pas les droits suffisants sur S1. Droits requis pour associer un modèle : {"SECURISER":2}'
+          'L\'utilisateur U2 n\'a pas les droits suffisants sur S1. Droits requis pour associer/détacher un modèle : {"SECURISER":2}'
         );
       }
     });
@@ -290,6 +292,31 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         expect(e).to.be.an(ErreurServiceNonAssocieAuModele);
         expect(e.message).to.be(
           'Les services [S1] ne sont pas tous associés au modèle MOD-NON-ASSOCIÉ'
+        );
+      }
+    });
+
+    it("jette une erreur si l'utilisateur qui veut détacher la mesure n'a pas les droits en écriture sur tous les services", async () => {
+      const depot = leDepot();
+      await depot.associeModeleMesureSpecifiqueAuxServices(
+        'MOD-1',
+        ['S1'],
+        'U1'
+      );
+
+      try {
+        await depot.detacheModeleMesureSpecifiqueDesServices(
+          'MOD-1',
+          ['S1'],
+          'U2'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(
+          ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
+        );
+        expect(e.message).to.be(
+          'L\'utilisateur U2 n\'a pas les droits suffisants sur S1. Droits requis pour associer/détacher un modèle : {"SECURISER":2}'
         );
       }
     });
