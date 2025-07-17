@@ -245,5 +245,32 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         );
       }
     });
+
+    it("ne modifie aucun service si l'un des services est déjà associé au modèle : pour garder une cohérence globale", async () => {
+      const depot = leDepot();
+
+      await depot.associeModeleMesureSpecifiqueAuxServices(
+        'MOD-1',
+        ['S1'],
+        'U1'
+      );
+      const apresUneAssociation = await depotServices.service('S1');
+      expect(apresUneAssociation.mesuresSpecifiques().toutes().length).to.be(1);
+
+      try {
+        await depot.associeModeleMesureSpecifiqueAuxServices(
+          'MOD-1',
+          ['S1', 'S2'],
+          'U1'
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        const s1ApresTentative = await depotServices.service('S1');
+        expect(s1ApresTentative.mesuresSpecifiques().toutes().length).to.be(1);
+
+        const s2ApresTentative = await depotServices.service('S2');
+        expect(s2ApresTentative.mesuresSpecifiques().toutes().length).to.be(0);
+      }
+    });
   });
 });
