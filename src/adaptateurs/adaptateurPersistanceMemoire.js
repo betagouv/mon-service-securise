@@ -395,6 +395,17 @@ const nouvelAdaptateur = (
     donnees.modelesMesureSpecifique.find((m) => m.id === idModele) !==
     undefined;
 
+  const tousServicesSontAssociesAuModeleMesureSpecifique = async (
+    idsServices,
+    idModele
+  ) =>
+    idsServices.every(
+      (unId) =>
+        donnees.associationModelesMesureSpecifiqueServices.find(
+          (a) => a.idService === unId && a.idModele === idModele
+        ) !== undefined
+    );
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -441,6 +452,7 @@ const nouvelAdaptateur = (
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tachesDeServicePour,
+    tousServicesSontAssociesAuModeleMesureSpecifique,
     tousUtilisateurs,
     utilisateur,
     utilisateurAvecEmailHash,

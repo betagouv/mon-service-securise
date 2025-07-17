@@ -4,6 +4,7 @@ const {
   ErreurUtilisateurInexistant,
   ErreurDroitsInsuffisants,
   ErreurAutorisationInexistante,
+  ErreurServiceNonAssocieAuModele,
 } = require('../erreurs');
 const {
   Permissions,
@@ -90,9 +91,24 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const detacheModeleMesureSpecifiqueDesServices = async (
+    idModele,
+    idsServices,
+    idUtilisateurDetachant
+  ) => {
+    const tousAssocies =
+      await adaptateurPersistance.tousServicesSontAssociesAuModeleMesureSpecifique(
+        idsServices,
+        idModele
+      );
+    if (!tousAssocies)
+      throw new ErreurServiceNonAssocieAuModele(idsServices, idModele);
+  };
+
   return {
     ajouteModeleMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
+    detacheModeleMesureSpecifiqueDesServices,
   };
 };
 module.exports = { creeDepot };

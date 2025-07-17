@@ -9,6 +9,7 @@ const {
   ErreurUtilisateurInexistant,
   ErreurDroitsInsuffisants,
   ErreurAutorisationInexistante,
+  ErreurServiceNonAssocieAuModele,
 } = require('../../src/erreurs');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const {
@@ -270,6 +271,26 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
 
         const s2ApresTentative = await depotServices.service('S2');
         expect(s2ApresTentative.mesuresSpecifiques().toutes().length).to.be(0);
+      }
+    });
+  });
+
+  describe('concernant le détachement entre un modèle de mesure et des services y étant associés', () => {
+    it("jette une erreur dès qu'un service n'est pas associé au modèle", async () => {
+      const depot = leDepot();
+
+      try {
+        await depot.detacheModeleMesureSpecifiqueDesServices(
+          'MOD-NON-ASSOCIÉ',
+          ['S1'],
+          'U1'
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurServiceNonAssocieAuModele);
+        expect(e.message).to.be(
+          'Les services [S1] ne sont pas tous associés au modèle MOD-NON-ASSOCIÉ'
+        );
       }
     });
   });

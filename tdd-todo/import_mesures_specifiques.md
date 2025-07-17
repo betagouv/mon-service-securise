@@ -18,6 +18,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
   - [ ] à condition que le modèle appartienne à un utilisateur avec les droits [ECRITURE sur SÉCURISER]
     - [ ] une erreur qui montre les détails utilisateur et id service
   - [ ] à condition que l'utilisateur soit propriétaire du modèle
+  - [x] à condition que tous les services soient associés au modèle
   - Conséquence
     - [x] tout le détail du modèle (label, description, catégorie) est recopiée **dans** les mesures spés du service
     - [ ] et le lien entre modèle et service disparaît
