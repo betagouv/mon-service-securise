@@ -4,6 +4,7 @@ const Referentiel = require('../referentiel');
 const {
   ErreurMesureInconnue,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
+  ErreurModeleDeMesureSpecifiqueDejaAssociee,
 } = require('../erreurs');
 const Mesure = require('./mesure');
 
@@ -97,6 +98,13 @@ class MesuresSpecifiques extends ElementsConstructibles {
     const modeleInconnu = !modele;
     if (modeleInconnu)
       throw new ErreurModeleDeMesureSpecifiqueIntrouvable(idModele);
+
+    const dejaAssociee = this.items.find((m) => m.idModele === idModele);
+    if (dejaAssociee)
+      throw new ErreurModeleDeMesureSpecifiqueDejaAssociee(
+        idModele,
+        dejaAssociee.id
+      );
 
     const { description, descriptionLongue, categorie } = modele;
     this.items.push(

@@ -6,6 +6,7 @@ const Referentiel = require('../../src/referentiel');
 const {
   ErreurMesureInconnue,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
+  ErreurModeleDeMesureSpecifiqueDejaAssociee,
 } = require('../../src/erreurs');
 
 describe('La liste des mesures spécifiques', () => {
@@ -341,6 +342,28 @@ describe('La liste des mesures spécifiques', () => {
 
       expect(() => connaitM1.associeAuModele('M-2')).to.throwError((e) => {
         expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueIntrouvable);
+      });
+    });
+
+    it('jette une erreur si une mesure spécifique est déjà associée au modèle', () => {
+      const modelesAvecM1 = {
+        'M-1': { description: 'Mesure M1', categorie: 'categorie1' },
+      };
+
+      const connaitraM1 = new MesuresSpecifiques(
+        { mesuresSpecifiques: [] },
+        referentiel,
+        modelesAvecM1
+      );
+      connaitraM1.associeAuModele('M-1', 'ID-MESURE-1');
+
+      expect(() => {
+        connaitraM1.associeAuModele('M-1', 'ID-MESURE-1');
+      }).to.throwError((e) => {
+        expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueDejaAssociee);
+        expect(e.message).to.be(
+          'Le modèle de mesure spécifique M-1 est déjà associé à la mesure ID-MESURE-1'
+        );
       });
     });
   });
