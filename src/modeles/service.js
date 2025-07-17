@@ -40,7 +40,7 @@ class Service {
       rolesResponsabilites = {},
       suggestionsActions = [],
       prochainIdNumeriqueDeRisqueSpecifique = 1,
-      modelesDeMesureSpecifique = {},
+      modelesDisponiblesDeMesureSpecifique = {},
     } = donnees;
 
     this.id = id;
@@ -63,7 +63,7 @@ class Service {
       { mesuresGenerales, mesuresSpecifiques },
       referentiel,
       mesuresPersonnalisees,
-      modelesDeMesureSpecifique
+      modelesDisponiblesDeMesureSpecifique
     );
 
     this.rolesResponsabilites = new RolesResponsabilites(rolesResponsabilites);

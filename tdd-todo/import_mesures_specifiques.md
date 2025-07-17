@@ -28,6 +28,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
     - [x] **et** elle a un identifiant de mesure (en plus de l'identifiant du modèle)
     - [x] le service relu depuis le dépôt connaitrait l'association
 - [x] `depotDonneesService.metAjour` devrait utiliser une fonction "SELECT 1" pour vérifier l'existence du service
+- [x] On appelle `modelesDisponiblesDeMesureSpecifique` la liste de tous les modèles associables.
 
 ## Du point de vue des Modèles de mesure
 

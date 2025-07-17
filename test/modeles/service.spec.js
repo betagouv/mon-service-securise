@@ -1226,7 +1226,7 @@ describe('Un service', () => {
   it('Passe les modèles de mesures spécifiques à la classe de Mesures, afin de faire passe plat pour les Mesures Spécifiques', () => {
     const service = new Service({
       id: '123',
-      modelesDeMesureSpecifique: {
+      modelesDisponiblesDeMesureSpecifique: {
         'MOD-1': { description: 'Mon modèle de mesure' },
       },
       mesuresSpecifiques: [{ idModele: 'MOD-1' }],

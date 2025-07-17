@@ -215,7 +215,7 @@ describe('La liste des mesures spécifiques', () => {
 
   describe('concernant les mesures spécifiques liées à un modèle', () => {
     it('complète les mesures rattachées à un modèle avec les données extraites du modèle… pour que les consommateurs ne fassent pas la différence avec des mesures "classiques"', () => {
-      const modelesDeMesureSpecifique = {
+      const modelesDisponiblesDeMesureSpecifique = {
         'MOD-1': {
           description: 'Description du modèle',
           descriptionLongue: 'Longue du modèle',
@@ -230,7 +230,7 @@ describe('La liste des mesures spécifiques', () => {
           ],
         },
         referentiel,
-        modelesDeMesureSpecifique
+        modelesDisponiblesDeMesureSpecifique
       );
 
       const mesureCompletee = avecUnModele.toutes()[0];
@@ -347,7 +347,7 @@ describe('La liste des mesures spécifiques', () => {
 
   describe("sur demande de détachement d'un modèle", () => {
     it('détache la mesure spécifique liée à ce modèle', () => {
-      const modelesDeMesureSpecifique = {
+      const modelesDisponiblesDeMesureSpecifique = {
         'MOD-1': {
           description: 'Description du modèle 1',
           descriptionLongue: 'Longue du modèle 1',
@@ -368,7 +368,7 @@ describe('La liste des mesures spécifiques', () => {
           ],
         },
         referentiel,
-        modelesDeMesureSpecifique
+        modelesDisponiblesDeMesureSpecifique
       );
 
       mesures.detacheMesureDuModele('MOD-1');

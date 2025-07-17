@@ -11,28 +11,29 @@ class MesuresSpecifiques extends ElementsConstructibles {
   constructor(
     donnees = {},
     referentiel = Referentiel.creeReferentielVide(),
-    modelesDeMesureSpecifique = {}
+    modelesDisponiblesDeMesureSpecifique = {}
   ) {
     const { mesuresSpecifiques = [] } = donnees;
 
     const mesuresCompletees = MesuresSpecifiques.completeMesuresSpecifiques(
       mesuresSpecifiques,
-      modelesDeMesureSpecifique
+      modelesDisponiblesDeMesureSpecifique
     );
 
     super(MesureSpecifique, { items: mesuresCompletees }, referentiel);
-    this.modelesDeMesureSpecifique = modelesDeMesureSpecifique;
+    this.modelesDisponiblesDeMesureSpecifique =
+      modelesDisponiblesDeMesureSpecifique;
   }
 
   static completeMesuresSpecifiques(
     mesuresSpecifiques,
-    modelesDeMesureSpecifique
+    modelesDisponiblesDeMesureSpecifique
   ) {
     return mesuresSpecifiques.map((m) => {
       const lieeAUnModele = m.idModele;
       if (!lieeAUnModele) return m;
 
-      const modele = modelesDeMesureSpecifique[m.idModele];
+      const modele = modelesDisponiblesDeMesureSpecifique[m.idModele];
       if (!modele)
         throw new ErreurModeleDeMesureSpecifiqueIntrouvable(m.idModele);
 
@@ -91,7 +92,7 @@ class MesuresSpecifiques extends ElementsConstructibles {
   }
 
   associeAuModele(idModele, idNouvelleMesure) {
-    const modele = this.modelesDeMesureSpecifique[idModele];
+    const modele = this.modelesDisponiblesDeMesureSpecifique[idModele];
 
     const modeleInconnu = !modele;
     if (modeleInconnu)
