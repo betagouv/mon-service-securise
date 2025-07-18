@@ -36,7 +36,7 @@
     "axios": "^0.30.0",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.7",
-    "cookie-session": "^2.0.0",
+    "cookie-session": "^2.1.1",
     "csv-writer": "^1.6.0",
     "dotenv": "^16.0.3",
     "express": "^4.21.2",
