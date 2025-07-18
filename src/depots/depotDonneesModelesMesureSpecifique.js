@@ -77,9 +77,17 @@ const creeDepot = (config = {}) => {
         idsServices,
         idModele
       );
-
     if (!tousAssocies)
       throw new ErreurServiceNonAssocieAuModele(idsServices, idModele);
+
+    const detacheDesServices = idsServices.map(async (unId) => {
+      const s = await depotServices.service(unId);
+      s.detacheMesureSpecfiqueDuModele(idModele);
+      return s;
+    });
+    const aPersister = await Promise.all(detacheDesServices);
+
+    await Promise.all(aPersister.map(depotServices.metsAJourService));
   };
 
   return {
