@@ -2,13 +2,13 @@ class EchecAutorisation extends Error {}
 class EchecEnvoiMessage extends Error {}
 class ErreurApiBrevo extends Error {}
 class ErreurDroitsIncoherents extends Error {}
-class ErreurDroitsInsuffisants extends Error {
+class ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique extends Error {
   constructor(idUtilisateur, idServices, droitsRequis) {
     const u = idUtilisateur;
     const s = idServices.join(',');
     const d = JSON.stringify(droitsRequis);
     super(
-      `L'utilisateur ${u} n'a pas les droits suffisants sur ${s}. Droits requis pour associer un modèle : ${d}`
+      `L'utilisateur ${u} n'a pas les droits suffisants sur ${s}. Droits requis pour associer/détacher un modèle : ${d}`
     );
   }
 }
@@ -70,6 +70,14 @@ class ErreurModeleDeMesureSpecifiqueDejaAssociee extends ErreurModele {
     );
   }
 }
+class ErreurServiceNonAssocieAuModele extends ErreurModele {
+  constructor(idsServices, idModele) {
+    const s = idsServices.join(',');
+    super(
+      `Les services [${s}] ne sont pas tous associés au modèle ${idModele}`
+    );
+  }
+}
 class ErreurDetachementModeleMesureSpecifiqueImpossible extends ErreurModele {}
 class ErreurMotDePasseIncorrect extends ErreurModele {}
 class ErreurNiveauGraviteInconnu extends ErreurModele {}
@@ -123,7 +131,7 @@ module.exports = {
   ErreurDossierNonFinalise,
   ErreurDossiersInvalides,
   ErreurDroitsIncoherents,
-  ErreurDroitsInsuffisants,
+  ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurDureeValiditeInvalide,
   ErreurEcheanceMesureInvalide,
   ErreurEmailManquant,
@@ -142,6 +150,7 @@ module.exports = {
   ErreurRisqueInconnu,
   ErreurSelManquant,
   ErreurServiceInexistant,
+  ErreurServiceNonAssocieAuModele,
   ErreurStatutDeploiementInvalide,
   ErreurStatutMesureInvalide,
   ErreurStatutMesureManquant,

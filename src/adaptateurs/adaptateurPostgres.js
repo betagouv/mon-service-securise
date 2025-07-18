@@ -696,6 +696,37 @@ const nouvelAdaptateur = (env) => {
     return resultat.rows.length === 1;
   };
 
+  const tousServicesSontAssociesAuModeleMesureSpecifique = async (
+    idsServices,
+    idModele
+  ) => {
+    const bindingIdsServices = idsServices.map(() => '?').join(',');
+
+    const resultat = await knex.raw(
+      `SELECT DISTINCT id_service
+       FROM modeles_mesure_specifique_association_aux_services
+       WHERE id_modele = ? 
+       AND id_service IN (${bindingIdsServices}) ;`,
+      [idModele, ...idsServices]
+    );
+
+    return resultat.rows.length === idsServices.length;
+  };
+
+  const supprimeLeLienEntreLeModeleEtLesServices = async (
+    idModele,
+    idsServices
+  ) => {
+    const bindingIdsServices = idsServices.map(() => '?').join(',');
+    await knex.raw(
+      `DELETE
+       FROM modeles_mesure_specifique_association_aux_services
+       WHERE id_modele = ? 
+       AND id_service IN (${bindingIdsServices}) ;`,
+      [idModele, ...idsServices]
+    );
+  };
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -756,11 +787,13 @@ const nouvelAdaptateur = (env) => {
     supprimeUtilisateurs,
     tachesDeServicePour,
     tousLesSelsDeHachage,
+    tousServicesSontAssociesAuModeleMesureSpecifique,
     tousUtilisateurs,
     utilisateur,
     utilisateurAvecEmailHash,
     utilisateurAvecIdReset,
     servicesComplets,
+    supprimeLeLienEntreLeModeleEtLesServices,
     verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
     verifieTousLesServicesExistent,

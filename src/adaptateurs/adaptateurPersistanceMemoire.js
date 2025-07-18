@@ -391,9 +391,32 @@ const nouvelAdaptateur = (
       })
     );
 
+  const supprimeLeLienEntreLeModeleEtLesServices = async (
+    idModele,
+    idsServices
+  ) => {
+    donnees.associationModelesMesureSpecifiqueServices =
+      donnees.associationModelesMesureSpecifiqueServices.filter((a) => {
+        const estUnLien =
+          a.idModele === idModele && idsServices.includes(a.idService);
+        return !estUnLien;
+      });
+  };
+
   const verifieModeleMesureSpecifiqueExiste = async (idModele) =>
     donnees.modelesMesureSpecifique.find((m) => m.id === idModele) !==
     undefined;
+
+  const tousServicesSontAssociesAuModeleMesureSpecifique = async (
+    idsServices,
+    idModele
+  ) =>
+    idsServices.every(
+      (unId) =>
+        donnees.associationModelesMesureSpecifiqueServices.find(
+          (a) => a.idService === unId && a.idModele === idModele
+        ) !== undefined
+    );
 
   return {
     activitesMesure,
@@ -434,6 +457,7 @@ const nouvelAdaptateur = (
     supprimeAutorisations,
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
+    supprimeLeLienEntreLeModeleEtLesServices,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
@@ -441,6 +465,7 @@ const nouvelAdaptateur = (
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tachesDeServicePour,
+    tousServicesSontAssociesAuModeleMesureSpecifique,
     tousUtilisateurs,
     utilisateur,
     utilisateurAvecEmailHash,

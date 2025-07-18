@@ -1,35 +1,33 @@
 const {
-  ErreurModeleDeMesureSpecifiqueIntrouvable,
-  ErreurServiceInexistant,
   ErreurUtilisateurInexistant,
-  ErreurDroitsInsuffisants,
-  ErreurAutorisationInexistante,
+  ErreurServiceNonAssocieAuModele,
 } = require('../erreurs');
 const {
-  Permissions,
-  Rubriques,
-} = require('../modeles/autorisations/gestionDroits');
-
-const { ECRITURE } = Permissions;
-const { SECURISER } = Rubriques;
+  VerificationsAssocieOuDetache,
+} = require('./modelesMesureSpecifique/VerificationsAssocieOuDetache');
 
 const creeDepot = (config = {}) => {
   const {
     adaptateurChiffrement,
-    adaptateurPersistance,
+    adaptateurPersistance: persistance,
     adaptateurUUID,
     depotAutorisations,
     depotServices,
   } = config;
 
+  const verificationsAssocieOuDetache = new VerificationsAssocieOuDetache({
+    adaptateurPersistance: persistance,
+    depotAutorisations,
+  });
+
   const ajouteModeleMesureSpecifique = async (idUtilisateur, donnees) => {
-    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
+    const utilisateur = await persistance.utilisateur(idUtilisateur);
     if (!utilisateur) throw new ErreurUtilisateurInexistant();
 
     const idModele = adaptateurUUID.genereUUID();
     const donneesChiffrees = await adaptateurChiffrement.chiffre(donnees);
 
-    await adaptateurPersistance.ajouteModeleMesureSpecifique(
+    await persistance.ajouteModeleMesureSpecifique(
       idModele,
       idUtilisateur,
       donneesChiffrees
@@ -41,38 +39,11 @@ const creeDepot = (config = {}) => {
     idsServices,
     idUtilisateurAssociant
   ) => {
-    const modeleExiste =
-      await adaptateurPersistance.verifieModeleMesureSpecifiqueExiste(idModele);
-    if (!modeleExiste)
-      throw new ErreurModeleDeMesureSpecifiqueIntrouvable(idModele);
-
-    const possedeLeModele =
-      await adaptateurPersistance.modeleMesureSpecifiqueAppartientA(
-        idUtilisateurAssociant,
-        idModele
-      );
-    if (!possedeLeModele)
-      throw new ErreurAutorisationInexistante(
-        `L'utilisateur ${idUtilisateurAssociant} n'est pas propriétaire du modèle ${idModele} qu'il veut associer`
-      );
-
-    const tousServicesExistent =
-      await adaptateurPersistance.verifieTousLesServicesExistent(idsServices);
-    if (!tousServicesExistent) throw new ErreurServiceInexistant();
-
-    const droitsRequis = { [SECURISER]: ECRITURE };
-    const droitsSontSuffisants =
-      await depotAutorisations.accesAutoriseAUneListeDeService(
-        idUtilisateurAssociant,
-        idsServices,
-        droitsRequis
-      );
-    if (!droitsSontSuffisants)
-      throw new ErreurDroitsInsuffisants(
-        idUtilisateurAssociant,
-        idsServices,
-        droitsRequis
-      );
+    await verificationsAssocieOuDetache.toutes(
+      idModele,
+      idsServices,
+      idUtilisateurAssociant
+    );
 
     const mutationDesServices = idsServices.map(async (unId) => {
       const s = await depotServices.service(unId);
@@ -84,7 +55,40 @@ const creeDepot = (config = {}) => {
 
     await Promise.all(aPersister.map(depotServices.metsAJourService));
 
-    await adaptateurPersistance.associeModeleMesureSpecifiqueAuxServices(
+    await persistance.associeModeleMesureSpecifiqueAuxServices(
+      idModele,
+      idsServices
+    );
+  };
+
+  const detacheModeleMesureSpecifiqueDesServices = async (
+    idModele,
+    idsServices,
+    idUtilisateurDetachant
+  ) => {
+    await verificationsAssocieOuDetache.toutes(
+      idModele,
+      idsServices,
+      idUtilisateurDetachant
+    );
+
+    const tousAssocies =
+      await persistance.tousServicesSontAssociesAuModeleMesureSpecifique(
+        idsServices,
+        idModele
+      );
+    if (!tousAssocies)
+      throw new ErreurServiceNonAssocieAuModele(idsServices, idModele);
+
+    const detacheDesServices = idsServices.map(async (unId) => {
+      const s = await depotServices.service(unId);
+      s.detacheMesureSpecfiqueDuModele(idModele);
+      return s;
+    });
+    const aPersister = await Promise.all(detacheDesServices);
+
+    await Promise.all(aPersister.map(depotServices.metsAJourService));
+    await persistance.supprimeLeLienEntreLeModeleEtLesServices(
       idModele,
       idsServices
     );
@@ -93,6 +97,8 @@ const creeDepot = (config = {}) => {
   return {
     ajouteModeleMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
+    detacheModeleMesureSpecifiqueDesServices,
   };
 };
+
 module.exports = { creeDepot };
