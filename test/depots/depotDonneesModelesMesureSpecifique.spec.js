@@ -12,9 +12,6 @@ const {
   ErreurServiceNonAssocieAuModele,
 } = require('../../src/erreurs');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
 const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
@@ -295,7 +292,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         .ajouteUnService({
           id: 'S10',
           descriptionService: { nomService: 'Service 10' },
-          mesuresSpecifiques: [{ idModele: 'MOD-10' }, { idModele: 'MOD-11' }],
+          mesuresSpecifiques: [{ idModele: 'MOD-10' }],
         })
         .associeLeServiceAuxModelesDeMesureSpecifique('S10', [
           'MOD-10',
@@ -310,12 +307,10 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
           donnees: { description: 'Le modèle 10' },
         })
         .ajouteUnUtilisateur(unUtilisateur().avecId('U11').donnees)
-        .avecUnModeleDeMesureSpecifique({
-          id: 'MOD-11',
-          idUtilisateur: 'U11',
-        })
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-11', idUtilisateur: 'U11' })
         .ajouteUnUtilisateur(unUtilisateur().avecId('U12').donnees)
         .nommeCommeProprietaire('U12', ['S10'])
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-12', idUtilisateur: 'U12' })
         .construis();
 
       depotServices = DepotDonneesServices.creeDepot({
@@ -326,6 +321,20 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
           adaptateurChiffrement,
         }),
       });
+    });
+
+    it('transforme la mesure spécifique liée au modèle en une mesure indépendante, mais qui reste dans le service : elle perd son `idModele`', async () => {
+      const depot = leDepot();
+
+      await depot.detacheModeleMesureSpecifiqueDesServices(
+        'MOD-10',
+        ['S10'],
+        'U10'
+      );
+
+      const apres = await depotServices.service('S10');
+      const mesureDetachee = apres.mesuresSpecifiques().toutes()[0];
+      expect(mesureDetachee.toJSON().idModele).to.be(undefined);
     });
 
     it("jette une erreur si le modèle n'existe pas", async () => {
