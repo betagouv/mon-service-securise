@@ -10,6 +10,7 @@ class ConstructeurAdaptateurPersistanceMemoire {
     this.suggestionsActions = [];
     this.activitesMesure = [];
     this.modelesMesureSpecifique = [];
+    this.associationModelesMesureSpecifiqueServices = [];
     this.adaptateurChiffrement = adaptateurChiffrement;
   }
 
@@ -66,6 +67,16 @@ class ConstructeurAdaptateurPersistanceMemoire {
     return this;
   }
 
+  associeLeServiceAuxModelesDeMesureSpecifique(idService, idsModeles) {
+    idsModeles.map((unModele) =>
+      this.associationModelesMesureSpecifiqueServices.push({
+        idService,
+        idModele: unModele,
+      })
+    );
+    return this;
+  }
+
   construis() {
     return AdaptateurPersistanceMemoire.nouvelAdaptateur({
       autorisations: this.autorisations,
@@ -76,6 +87,8 @@ class ConstructeurAdaptateurPersistanceMemoire {
       suggestionsActions: this.suggestionsActions,
       activitesMesure: this.activitesMesure,
       modelesMesureSpecifique: this.modelesMesureSpecifique,
+      associationModelesMesureSpecifiqueServices:
+        this.associationModelesMesureSpecifiqueServices,
     });
   }
 }
