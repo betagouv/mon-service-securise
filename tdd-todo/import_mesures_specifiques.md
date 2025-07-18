@@ -36,8 +36,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 - [x] On appelle `modelesDisponiblesDeMesureSpecifique` la liste de tous les modèles associables.
 - [x] On ne peut pas associer 2 fois un service à un même modèle
   - On peut séparer la boucle sur le domaine de la boucle sur le `depotServices.metsAJourService(s);` comme ça le domaine peut `throw` avant même qu'on déclenche les MAJ en BDD
-- [ ] On aimerait mutualiser le code qui vérifie les permissions de associer/détacher
-  - MAIS ça signifie des setups de tests compliqués, car il faut mimer les changements de permissions pendant les tests…
+- [x] On aimerait mutualiser le code qui vérifie les permissions de associer/détacher
 
 ## Du point de vue des Modèles de mesure
 
