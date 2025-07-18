@@ -56,15 +56,19 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  async function verifieModeleExiste(idModele) {
+    const modeleExiste =
+      await adaptateurPersistance.verifieModeleMesureSpecifiqueExiste(idModele);
+    if (!modeleExiste)
+      throw new ErreurModeleDeMesureSpecifiqueIntrouvable(idModele);
+  }
+
   const associeModeleMesureSpecifiqueAuxServices = async (
     idModele,
     idsServices,
     idUtilisateurAssociant
   ) => {
-    const modeleExiste =
-      await adaptateurPersistance.verifieModeleMesureSpecifiqueExiste(idModele);
-    if (!modeleExiste)
-      throw new ErreurModeleDeMesureSpecifiqueIntrouvable(idModele);
+    await verifieModeleExiste(idModele);
 
     const possedeLeModele =
       await adaptateurPersistance.modeleMesureSpecifiqueAppartientA(
@@ -106,10 +110,7 @@ const creeDepot = (config = {}) => {
     idsServices,
     idUtilisateurDetachant
   ) => {
-    const modeleExiste =
-      await adaptateurPersistance.verifieModeleMesureSpecifiqueExiste(idModele);
-    if (!modeleExiste)
-      throw new ErreurModeleDeMesureSpecifiqueIntrouvable(idModele);
+    await verifieModeleExiste(idModele);
 
     const tousAssocies =
       await adaptateurPersistance.tousServicesSontAssociesAuModeleMesureSpecifique(
