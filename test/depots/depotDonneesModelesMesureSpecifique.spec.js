@@ -302,6 +302,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
           'MOD-10',
           'MOD-11',
         ])
+        .ajouteUnService({ id: 'S11', descriptionService: {} })
         // U10 a un service et un modèle
         .ajouteUnUtilisateur(unUtilisateur().avecId('U10').donnees)
         .ajouteUneAutorisation(
@@ -406,6 +407,21 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         expect(e.message).to.be(
           "L'utilisateur U12 n'est pas propriétaire du modèle MOD-10 qu'il veut associer/détacher"
         );
+      }
+    });
+
+    it("jette une erreur si au moins un des services n'existe pas", async () => {
+      const depot = leDepot();
+
+      try {
+        await depot.detacheModeleMesureSpecifiqueDesServices(
+          'MOD-10',
+          ['S-INTROUVABLE-1'],
+          'U10'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurServiceInexistant);
       }
     });
   });
