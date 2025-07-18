@@ -87,12 +87,11 @@ const creeDepot = (config = {}) => {
     idUtilisateurAssociant
   ) => {
     await verifieModeleExiste(idModele);
+    await verifieQueTousLesServicesExistent(idsServices);
     await verifieQueUtilisateurPossedeLeModele(
       idUtilisateurAssociant,
       idModele
     );
-    await verifieQueTousLesServicesExistent(idsServices);
-
     await verifiePeutModifierUnModeleSurLesServices(
       idUtilisateurAssociant,
       idsServices
@@ -121,6 +120,14 @@ const creeDepot = (config = {}) => {
   ) => {
     await verifieModeleExiste(idModele);
     await verifieQueTousLesServicesExistent(idsServices);
+    await verifieQueUtilisateurPossedeLeModele(
+      idUtilisateurDetachant,
+      idModele
+    );
+    await verifiePeutModifierUnModeleSurLesServices(
+      idUtilisateurDetachant,
+      idsServices
+    );
 
     const tousAssocies =
       await adaptateurPersistance.tousServicesSontAssociesAuModeleMesureSpecifique(
@@ -130,16 +137,6 @@ const creeDepot = (config = {}) => {
 
     if (!tousAssocies)
       throw new ErreurServiceNonAssocieAuModele(idsServices, idModele);
-
-    await verifiePeutModifierUnModeleSurLesServices(
-      idUtilisateurDetachant,
-      idsServices
-    );
-
-    await verifieQueUtilisateurPossedeLeModele(
-      idUtilisateurDetachant,
-      idModele
-    );
   };
 
   return {

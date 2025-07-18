@@ -292,7 +292,11 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
   describe('concernant le détachement entre un modèle de mesure et des services y étant associés', () => {
     beforeEach(() => {
       adaptateurPersistance = unePersistanceMemoire()
-        // S10 est déjà associé à MOD-10 et MOD-11
+        // On a un service (S10) déjà associé à deux modèles (MOD-10 et MOD-11).
+        // On a un service vide (S11).
+        // L'utilisateur U10 est propriétaire des services et du premier modèle.
+        // L'utilisateur U11 est propriétaire du second modèle.
+        // C'est un gros jeu de données… mais ça semble nécessaire pour tester nos cas.
         .ajouteUnService({
           id: 'S10',
           descriptionService: { nomService: 'Service 10' },
@@ -303,23 +307,23 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
           'MOD-11',
         ])
         .ajouteUnService({ id: 'S11', descriptionService: {} })
-        // U10 a un service et un modèle
         .ajouteUnUtilisateur(unUtilisateur().avecId('U10').donnees)
         .ajouteUneAutorisation(
           uneAutorisation().deProprietaire('U10', 'S10').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U10', 'S11').donnees
         )
         .avecUnModeleDeMesureSpecifique({
           id: 'MOD-10',
           idUtilisateur: 'U10',
           donnees: { description: 'Le modèle 10' },
         })
-        // U11 a seulement un modèle
         .ajouteUnUtilisateur(unUtilisateur().avecId('U11').donnees)
         .avecUnModeleDeMesureSpecifique({
           id: 'MOD-11',
           idUtilisateur: 'U11',
         })
-        // U12 est seulement propriétaire de S10
         .ajouteUnUtilisateur(unUtilisateur().avecId('U12').donnees)
         .ajouteUneAutorisation(
           uneAutorisation().deProprietaire('U12', 'S10').donnees
