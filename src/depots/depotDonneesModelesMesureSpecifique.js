@@ -9,25 +9,25 @@ const {
 const creeDepot = (config = {}) => {
   const {
     adaptateurChiffrement,
-    adaptateurPersistance,
+    adaptateurPersistance: persistance,
     adaptateurUUID,
     depotAutorisations,
     depotServices,
   } = config;
 
   const verificationsAssocieOuDetache = new VerificationsAssocieOuDetache({
-    adaptateurPersistance,
+    adaptateurPersistance: persistance,
     depotAutorisations,
   });
 
   const ajouteModeleMesureSpecifique = async (idUtilisateur, donnees) => {
-    const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
+    const utilisateur = await persistance.utilisateur(idUtilisateur);
     if (!utilisateur) throw new ErreurUtilisateurInexistant();
 
     const idModele = adaptateurUUID.genereUUID();
     const donneesChiffrees = await adaptateurChiffrement.chiffre(donnees);
 
-    await adaptateurPersistance.ajouteModeleMesureSpecifique(
+    await persistance.ajouteModeleMesureSpecifique(
       idModele,
       idUtilisateur,
       donneesChiffrees
@@ -55,7 +55,7 @@ const creeDepot = (config = {}) => {
 
     await Promise.all(aPersister.map(depotServices.metsAJourService));
 
-    await adaptateurPersistance.associeModeleMesureSpecifiqueAuxServices(
+    await persistance.associeModeleMesureSpecifiqueAuxServices(
       idModele,
       idsServices
     );
@@ -73,7 +73,7 @@ const creeDepot = (config = {}) => {
     );
 
     const tousAssocies =
-      await adaptateurPersistance.tousServicesSontAssociesAuModeleMesureSpecifique(
+      await persistance.tousServicesSontAssociesAuModeleMesureSpecifique(
         idsServices,
         idModele
       );
@@ -88,7 +88,7 @@ const creeDepot = (config = {}) => {
     const aPersister = await Promise.all(detacheDesServices);
 
     await Promise.all(aPersister.map(depotServices.metsAJourService));
-    await adaptateurPersistance.supprimeLeLienEntreLeModeleEtLesServices(
+    await persistance.supprimeLeLienEntreLeModeleEtLesServices(
       idModele,
       idsServices
     );
