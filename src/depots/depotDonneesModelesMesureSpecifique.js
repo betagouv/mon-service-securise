@@ -117,6 +117,9 @@ const creeDepot = (config = {}) => {
     idUtilisateurDetachant
   ) => {
     await verifieModeleExiste(idModele);
+    const tousServicesExistent =
+      await adaptateurPersistance.verifieTousLesServicesExistent(idsServices);
+    if (!tousServicesExistent) throw new ErreurServiceInexistant();
 
     const tousAssocies =
       await adaptateurPersistance.tousServicesSontAssociesAuModeleMesureSpecifique(
