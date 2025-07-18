@@ -256,7 +256,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       } catch (e) {
         expect(e).to.be.an(ErreurAutorisationInexistante);
         expect(e.message).to.be(
-          "L'utilisateur U-NON-PROPRIETAIRE n'est pas propriétaire du modèle MOD-1 qu'il veut associer"
+          "L'utilisateur U-NON-PROPRIETAIRE n'est pas propriétaire du modèle MOD-1 qu'il veut associer/détacher"
         );
       }
     });
