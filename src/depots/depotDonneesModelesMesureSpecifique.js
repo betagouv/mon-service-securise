@@ -88,6 +88,10 @@ const creeDepot = (config = {}) => {
     const aPersister = await Promise.all(detacheDesServices);
 
     await Promise.all(aPersister.map(depotServices.metsAJourService));
+    await adaptateurPersistance.supprimeLeLienEntreLeModeleEtLesServices(
+      idModele,
+      idsServices
+    );
   };
 
   return {
