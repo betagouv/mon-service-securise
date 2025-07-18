@@ -75,6 +75,12 @@ const creeDepot = (config = {}) => {
       );
   }
 
+  async function verifieQueTousLesServicesExistent(idsServices) {
+    const tousServicesExistent =
+      await adaptateurPersistance.verifieTousLesServicesExistent(idsServices);
+    if (!tousServicesExistent) throw new ErreurServiceInexistant();
+  }
+
   const associeModeleMesureSpecifiqueAuxServices = async (
     idModele,
     idsServices,
@@ -85,10 +91,7 @@ const creeDepot = (config = {}) => {
       idUtilisateurAssociant,
       idModele
     );
-
-    const tousServicesExistent =
-      await adaptateurPersistance.verifieTousLesServicesExistent(idsServices);
-    if (!tousServicesExistent) throw new ErreurServiceInexistant();
+    await verifieQueTousLesServicesExistent(idsServices);
 
     await verifiePeutModifierUnModeleSurLesServices(
       idUtilisateurAssociant,
@@ -117,9 +120,7 @@ const creeDepot = (config = {}) => {
     idUtilisateurDetachant
   ) => {
     await verifieModeleExiste(idModele);
-    const tousServicesExistent =
-      await adaptateurPersistance.verifieTousLesServicesExistent(idsServices);
-    if (!tousServicesExistent) throw new ErreurServiceInexistant();
+    await verifieQueTousLesServicesExistent(idsServices);
 
     const tousAssocies =
       await adaptateurPersistance.tousServicesSontAssociesAuModeleMesureSpecifique(
