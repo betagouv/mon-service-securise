@@ -391,6 +391,18 @@ const nouvelAdaptateur = (
       })
     );
 
+  const supprimeLeLienEntreLeModeleEtLesServices = async (
+    idModele,
+    idsServices
+  ) => {
+    donnees.associationModelesMesureSpecifiqueServices =
+      donnees.associationModelesMesureSpecifiqueServices.filter((a) => {
+        const estUnLien =
+          a.idModele === idModele && idsServices.includes(a.idService);
+        return !estUnLien;
+      });
+  };
+
   const verifieModeleMesureSpecifiqueExiste = async (idModele) =>
     donnees.modelesMesureSpecifique.find((m) => m.id === idModele) !==
     undefined;
@@ -445,6 +457,7 @@ const nouvelAdaptateur = (
     supprimeAutorisations,
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
+    supprimeLeLienEntreLeModeleEtLesServices,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,

@@ -337,6 +337,29 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       expect(mesureDetachee.toJSON().idModele).to.be(undefined);
     });
 
+    it('supprime le lien entre le modèle et le service, dans la table de liaison', async () => {
+      const avant =
+        await adaptateurPersistance.tousServicesSontAssociesAuModeleMesureSpecifique(
+          ['S10'],
+          'MOD-10'
+        );
+      expect(avant).to.be(true);
+
+      const depot = leDepot();
+      await depot.detacheModeleMesureSpecifiqueDesServices(
+        'MOD-10',
+        ['S10'],
+        'U10'
+      );
+
+      const apres =
+        await adaptateurPersistance.tousServicesSontAssociesAuModeleMesureSpecifique(
+          ['S10'],
+          'MOD-10'
+        );
+      expect(apres).to.be(false);
+    });
+
     it("jette une erreur si le modèle n'existe pas", async () => {
       adaptateurPersistance.verifieModeleMesureSpecifiqueExiste = async () =>
         false;

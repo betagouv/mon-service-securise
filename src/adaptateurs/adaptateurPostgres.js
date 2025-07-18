@@ -706,11 +706,25 @@ const nouvelAdaptateur = (env) => {
       `SELECT DISTINCT id_service
        FROM modeles_mesure_specifique_association_aux_services
        WHERE id_modele = ? 
-       AND id_service IN (${bindingIdsServices})`,
+       AND id_service IN (${bindingIdsServices}) ;`,
       [idModele, ...idsServices]
     );
 
     return resultat.rows.length === idsServices.length;
+  };
+
+  const supprimeLeLienEntreLeModeleEtLesServices = async (
+    idModele,
+    idsServices
+  ) => {
+    const bindingIdsServices = idsServices.map(() => '?').join(',');
+    await knex.raw(
+      `DELETE
+       FROM modeles_mesure_specifique_association_aux_services
+       WHERE id_modele = ? 
+       AND id_service IN (${bindingIdsServices}) ;`,
+      [idModele, ...idsServices]
+    );
   };
 
   return {
@@ -779,6 +793,7 @@ const nouvelAdaptateur = (env) => {
     utilisateurAvecEmailHash,
     utilisateurAvecIdReset,
     servicesComplets,
+    supprimeLeLienEntreLeModeleEtLesServices,
     verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
     verifieTousLesServicesExistent,
