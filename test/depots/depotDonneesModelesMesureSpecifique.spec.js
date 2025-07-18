@@ -19,7 +19,7 @@ const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 
 describe('Le dépôt de données des modèles de mesure spécifique', () => {
   let adaptateurChiffrement;
-  let adaptateurPersistance;
+  let persistance;
   let adaptateurUUID;
   let depotServices;
 
@@ -27,9 +27,9 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     DepotDonneesModelesMesureSpecifique.creeDepot({
       adaptateurUUID,
       adaptateurChiffrement,
-      adaptateurPersistance,
+      adaptateurPersistance: persistance,
       depotAutorisations: DepotDonneesAutorisations.creeDepot({
-        adaptateurPersistance,
+        adaptateurPersistance: persistance,
       }),
       depotServices,
     });
@@ -41,7 +41,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
 
   describe("concernant l'ajout d'un modèle de mesure", () => {
     beforeEach(() => {
-      adaptateurPersistance = unePersistanceMemoire()
+      persistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
         .construis();
     });
@@ -52,7 +52,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         ...donnees,
         chiffree: true,
       });
-      adaptateurPersistance.ajouteModeleMesureSpecifique = async (
+      persistance.ajouteModeleMesureSpecifique = async (
         idModele,
         idUtilisateur,
         donnees
@@ -90,7 +90,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
 
   describe("concernant l'association d'un modèle et de services", () => {
     beforeEach(() => {
-      adaptateurPersistance = unePersistanceMemoire()
+      persistance = unePersistanceMemoire()
         .ajouteUnService({
           id: 'S1',
           descriptionService: { nomService: 'Service 1' },
@@ -112,10 +112,10 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         .construis();
 
       depotServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance,
+        adaptateurPersistance: persistance,
         adaptateurChiffrement,
         depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
-          adaptateurPersistance,
+          adaptateurPersistance: persistance,
           adaptateurChiffrement,
         }),
       });
@@ -123,7 +123,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
 
     it('associe les services au modèle via la persistance', async () => {
       let donneesPersistees = {};
-      adaptateurPersistance.associeModeleMesureSpecifiqueAuxServices = async (
+      persistance.associeModeleMesureSpecifiqueAuxServices = async (
         idModele,
         idsServices
       ) => {
@@ -176,8 +176,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     });
 
     it("jette une erreur si le modèle n'existe pas", async () => {
-      adaptateurPersistance.verifieModeleMesureSpecifiqueExiste = async () =>
-        false;
+      persistance.verifieModeleMesureSpecifiqueExiste = async () => false;
       const depot = leDepot();
 
       try {
@@ -228,7 +227,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     });
 
     it("jette une erreur si le modèle n'appartient pas à l'utilisateur qui veut associer", async () => {
-      adaptateurPersistance.modeleMesureSpecifiqueAppartientA = async (
+      persistance.modeleMesureSpecifiqueAppartientA = async (
         idUtilisateur,
         idModele
       ) => {
@@ -283,7 +282,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
 
   describe('concernant le détachement entre un modèle de mesure et des services y étant associés', () => {
     beforeEach(() => {
-      adaptateurPersistance = unePersistanceMemoire()
+      persistance = unePersistanceMemoire()
         // On a un service (S10) déjà associé à deux modèles (MOD-10 et MOD-11).
         // On a un service vide (S11).
         // L'utilisateur U10 est propriétaire des services et du premier modèle.
@@ -314,10 +313,10 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         .construis();
 
       depotServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance,
+        adaptateurPersistance: persistance,
         adaptateurChiffrement,
         depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
-          adaptateurPersistance,
+          adaptateurPersistance: persistance,
           adaptateurChiffrement,
         }),
       });
@@ -339,7 +338,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
 
     it('supprime le lien entre le modèle et le service, dans la table de liaison', async () => {
       const avant =
-        await adaptateurPersistance.tousServicesSontAssociesAuModeleMesureSpecifique(
+        await persistance.tousServicesSontAssociesAuModeleMesureSpecifique(
           ['S10'],
           'MOD-10'
         );
@@ -353,7 +352,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       );
 
       const apres =
-        await adaptateurPersistance.tousServicesSontAssociesAuModeleMesureSpecifique(
+        await persistance.tousServicesSontAssociesAuModeleMesureSpecifique(
           ['S10'],
           'MOD-10'
         );
@@ -361,8 +360,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     });
 
     it("jette une erreur si le modèle n'existe pas", async () => {
-      adaptateurPersistance.verifieModeleMesureSpecifiqueExiste = async () =>
-        false;
+      persistance.verifieModeleMesureSpecifiqueExiste = async () => false;
 
       const depot = leDepot();
 
