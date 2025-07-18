@@ -1,18 +1,10 @@
 const {
-  ErreurModeleDeMesureSpecifiqueIntrouvable,
-  ErreurServiceInexistant,
   ErreurUtilisateurInexistant,
-  ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
-  ErreurAutorisationInexistante,
   ErreurServiceNonAssocieAuModele,
 } = require('../erreurs');
 const {
-  Permissions,
-  Rubriques,
-} = require('../modeles/autorisations/gestionDroits');
-
-const { ECRITURE } = Permissions;
-const { SECURISER } = Rubriques;
+  VerificationsAssocieOuDetache,
+} = require('./modelesMesureSpecifique/VerificationsAssocieOuDetache');
 
 const creeDepot = (config = {}) => {
   const {
@@ -23,24 +15,10 @@ const creeDepot = (config = {}) => {
     depotServices,
   } = config;
 
-  async function verifiePeutModifierUnModeleSurLesServices(
-    idUtilisateur,
-    idsServices
-  ) {
-    const droitsRequis = { [SECURISER]: ECRITURE };
-    const droitsSontSuffisants =
-      await depotAutorisations.accesAutoriseAUneListeDeService(
-        idUtilisateur,
-        idsServices,
-        droitsRequis
-      );
-    if (!droitsSontSuffisants)
-      throw new ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique(
-        idUtilisateur,
-        idsServices,
-        droitsRequis
-      );
-  }
+  const verificationsAssocieOuDetache = new VerificationsAssocieOuDetache({
+    adaptateurPersistance,
+    depotAutorisations,
+  });
 
   const ajouteModeleMesureSpecifique = async (idUtilisateur, donnees) => {
     const utilisateur = await adaptateurPersistance.utilisateur(idUtilisateur);
@@ -56,45 +34,15 @@ const creeDepot = (config = {}) => {
     );
   };
 
-  async function verifieModeleExiste(idModele) {
-    const modeleExiste =
-      await adaptateurPersistance.verifieModeleMesureSpecifiqueExiste(idModele);
-    if (!modeleExiste)
-      throw new ErreurModeleDeMesureSpecifiqueIntrouvable(idModele);
-  }
-
-  async function verifieQueUtilisateurPossedeLeModele(idUtilisateur, idModele) {
-    const possedeLeModele =
-      await adaptateurPersistance.modeleMesureSpecifiqueAppartientA(
-        idUtilisateur,
-        idModele
-      );
-    if (!possedeLeModele)
-      throw new ErreurAutorisationInexistante(
-        `L'utilisateur ${idUtilisateur} n'est pas propriétaire du modèle ${idModele} qu'il veut associer/détacher`
-      );
-  }
-
-  async function verifieQueTousLesServicesExistent(idsServices) {
-    const tousServicesExistent =
-      await adaptateurPersistance.verifieTousLesServicesExistent(idsServices);
-    if (!tousServicesExistent) throw new ErreurServiceInexistant();
-  }
-
   const associeModeleMesureSpecifiqueAuxServices = async (
     idModele,
     idsServices,
     idUtilisateurAssociant
   ) => {
-    await verifieModeleExiste(idModele);
-    await verifieQueTousLesServicesExistent(idsServices);
-    await verifieQueUtilisateurPossedeLeModele(
-      idUtilisateurAssociant,
-      idModele
-    );
-    await verifiePeutModifierUnModeleSurLesServices(
-      idUtilisateurAssociant,
-      idsServices
+    await verificationsAssocieOuDetache.toutes(
+      idModele,
+      idsServices,
+      idUtilisateurAssociant
     );
 
     const mutationDesServices = idsServices.map(async (unId) => {
@@ -118,15 +66,10 @@ const creeDepot = (config = {}) => {
     idsServices,
     idUtilisateurDetachant
   ) => {
-    await verifieModeleExiste(idModele);
-    await verifieQueTousLesServicesExistent(idsServices);
-    await verifieQueUtilisateurPossedeLeModele(
-      idUtilisateurDetachant,
-      idModele
-    );
-    await verifiePeutModifierUnModeleSurLesServices(
-      idUtilisateurDetachant,
-      idsServices
+    await verificationsAssocieOuDetache.toutes(
+      idModele,
+      idsServices,
+      idUtilisateurDetachant
     );
 
     const tousAssocies =
