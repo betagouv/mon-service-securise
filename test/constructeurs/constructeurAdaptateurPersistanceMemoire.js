@@ -1,5 +1,6 @@
 const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
+const { uneAutorisation } = require('./constructeurAutorisation');
 
 class ConstructeurAdaptateurPersistanceMemoire {
   constructor(adaptateurChiffrement) {
@@ -16,6 +17,16 @@ class ConstructeurAdaptateurPersistanceMemoire {
 
   ajouteUneAutorisation(autorisation) {
     this.autorisations.push(autorisation);
+    return this;
+  }
+
+  nommeCommeProprietaire(idUtilisateur, idsServices) {
+    idsServices
+      .map((unService) =>
+        uneAutorisation().deProprietaire(idUtilisateur, unService)
+      )
+      .map((autorisation) => this.ajouteUneAutorisation(autorisation.donnees));
+
     return this;
   }
 

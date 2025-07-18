@@ -104,12 +104,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         })
         // U1 a deux services et un modèle
         .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
-        .ajouteUneAutorisation(
-          uneAutorisation().deProprietaire('U1', 'S1').donnees
-        )
-        .ajouteUneAutorisation(
-          uneAutorisation().deProprietaire('U1', 'S2').donnees
-        )
+        .nommeCommeProprietaire('U1', ['S1', 'S2'])
         .avecUnModeleDeMesureSpecifique({
           id: 'MOD-1',
           idUtilisateur: 'U1',
@@ -308,12 +303,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         ])
         .ajouteUnService({ id: 'S11', descriptionService: {} })
         .ajouteUnUtilisateur(unUtilisateur().avecId('U10').donnees)
-        .ajouteUneAutorisation(
-          uneAutorisation().deProprietaire('U10', 'S10').donnees
-        )
-        .ajouteUneAutorisation(
-          uneAutorisation().deProprietaire('U10', 'S11').donnees
-        )
+        .nommeCommeProprietaire('U10', ['S10', 'S11'])
         .avecUnModeleDeMesureSpecifique({
           id: 'MOD-10',
           idUtilisateur: 'U10',
@@ -325,9 +315,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
           idUtilisateur: 'U11',
         })
         .ajouteUnUtilisateur(unUtilisateur().avecId('U12').donnees)
-        .ajouteUneAutorisation(
-          uneAutorisation().deProprietaire('U12', 'S10').donnees
-        )
+        .nommeCommeProprietaire('U12', ['S10'])
         .construis();
 
       depotServices = DepotDonneesServices.creeDepot({
