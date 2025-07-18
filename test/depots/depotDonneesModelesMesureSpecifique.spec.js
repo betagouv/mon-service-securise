@@ -335,20 +335,38 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       });
     });
 
+    it("jette une erreur si le modèle n'existe pas", async () => {
+      adaptateurPersistance.verifieModeleMesureSpecifiqueExiste = async () =>
+        false;
+
+      const depot = leDepot();
+
+      try {
+        await depot.detacheModeleMesureSpecifiqueDesServices(
+          'MOD-10',
+          ['S10'],
+          'U10'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueIntrouvable);
+      }
+    });
+
     it("jette une erreur dès qu'un service n'est pas associé au modèle", async () => {
       const depot = leDepot();
 
       try {
         await depot.detacheModeleMesureSpecifiqueDesServices(
-          'MOD-NON-ASSOCIÉ',
-          ['S10'],
+          'MOD-10',
+          ['S11'],
           'U10'
         );
         expect().fail("L'appel aurait du lever une erreur.");
       } catch (e) {
         expect(e).to.be.an(ErreurServiceNonAssocieAuModele);
         expect(e.message).to.be(
-          'Les services [S10] ne sont pas tous associés au modèle MOD-NON-ASSOCIÉ'
+          'Les services [S11] ne sont pas tous associés au modèle MOD-10'
         );
       }
     });
