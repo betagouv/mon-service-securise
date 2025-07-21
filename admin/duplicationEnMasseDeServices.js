@@ -74,8 +74,9 @@ const transformeEntreeEnTableau = (donnees) => {
 
 class DuplicationEnMasseDeServices {
   constructor(environnementNode = process.env.NODE_ENV || 'development') {
-    this.adaptateurPersistance =
-      AdaptateurPostgres.nouvelAdaptateur(environnementNode);
+    this.adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur({
+      env: environnementNode,
+    });
 
     this.referentiel = Referentiel.creeReferentiel(donneesReferentiel);
 

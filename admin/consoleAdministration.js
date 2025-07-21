@@ -58,8 +58,9 @@ const log = {
 
 class ConsoleAdministration {
   constructor(environnementNode = process.env.NODE_ENV || 'development') {
-    this.adaptateurPersistance =
-      AdaptateurPostgres.nouvelAdaptateur(environnementNode);
+    this.adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur({
+      env: environnementNode,
+    });
     this.referentiel = Referentiel.creeReferentiel(donneesReferentiel);
 
     const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
@@ -784,12 +785,12 @@ class ConsoleAdministration {
     const resultats = (
       await knex.raw(
         `
-          SELECT id_utilisateur_parrain, COUNT(*) AS total_parrainages FROM parrainages
+          SELECT id_utilisateur_parrain, COUNT(*) AS total_parrainages
+          FROM parrainages
           WHERE filleul_a_finalise_compte = true
           GROUP BY id_utilisateur_parrain
-          ORDER BY total_parrainages DESC
-          LIMIT ?;
-    `,
+          ORDER BY total_parrainages DESC LIMIT ?;
+        `,
         [nombre]
       )
     ).rows;
