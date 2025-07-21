@@ -172,7 +172,8 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       `
         SELECT s.*,
                COALESCE(suggestions_du_service.suggestions, '[]')   AS suggestions,
-               COALESCE(utilisateurs_du_service.utilisateurs, '[]') AS utilisateurs
+               COALESCE(utilisateurs_du_service.utilisateurs, '[]') AS utilisateurs,
+               COALESCE(modeles_de_mesure_specifique.tous_les_modeles_disponibles, '[]') AS "modelesDisponiblesDeMesureSpecifique"
         FROM services s
 
                LEFT JOIN (SELECT id_service, json_agg(nature) AS suggestions
@@ -184,6 +185,11 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
                           FROM autorisations a
                                  JOIN utilisateurs u ON (a.donnees ->>'idUtilisateur')::uuid = u.id
                           GROUP BY id_service) utilisateurs_du_service ON utilisateurs_du_service.id_service = s.id
+
+               LEFT JOIN (SELECT (a.donnees ->> 'idService')::uuid AS id_service, json_agg(m.*) AS tous_les_modeles_disponibles
+                          FROM autorisations a
+                                JOIN modeles_mesure_specifique m ON (a.donnees ->> 'idUtilisateur')::uuid = m.id_utilisateur
+                          GROUP BY id_service) modeles_de_mesure_specifique ON modeles_de_mesure_specifique.id_service = s.id
           ${where()};
       `,
       { idUtilisateur, idService, hashSiret }
