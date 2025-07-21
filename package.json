@@ -66,6 +66,7 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.3.5",
     "@sentry/vite-plugin": "^3.0.0",
     "@sveltejs/vite-plugin-svelte": "^2.4.1",
     "@tsconfig/svelte": "^3.0.0",
@@ -83,6 +84,7 @@
     "husky": "^8.0.3",
     "jquery": "^3.6.3",
     "jsdom": "^21.1.0",
+    "knex-pglite": "^0.11.0",
     "lint-staged": "^13.2.2",
     "mocha": "^10.8.2",
     "nodemon": "^3.0.1",
