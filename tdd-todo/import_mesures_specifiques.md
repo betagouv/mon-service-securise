@@ -12,8 +12,8 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 
 ## Du point de vue du Service
 
-- [ ] Le service va chercher le détail d'une mesure spécifique liée à un [modèle de mesure spécifique] lors de sa construction
-- [ ] Le service est hydraté avec TOUS les modèles disponibles (pas seulement les modèles déjà associés)
+- [x] Le service va chercher le détail d'une mesure spécifique liée à un [modèle de mesure spécifique] lors de sa construction
+- [x] Le service est hydraté avec TOUS les modèles disponibles (pas seulement les modèles déjà associés)
 - [x] Le service peut détacher une mesure spécifique de son modèle de mesure
   - [x] à condition que le modèle appartienne à un utilisateur avec les droits [ECRITURE sur SÉCURISER]
   - [x] à condition que tous les services soient associés au modèle

@@ -277,6 +277,40 @@ describe('Le dépôt de données des services', () => {
     expect(service.routesDesSuggestionsActions()[0].route).to.be('/lien');
   });
 
+  it('associe et déchiffre les modèles de mesure spécifique', async () => {
+    const r = Referentiel.creeReferentielVide();
+    const persistance = unePersistanceMemoire()
+      .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+      .ajouteUnService(unService(r).avecId('S1').donnees)
+      .ajouteUneAutorisation(
+        uneAutorisation().deProprietaire('U1', 'S1').donnees
+      )
+      .avecUnModeleDeMesureSpecifique({
+        id: 'MOD-1',
+        idUtilisateur: 'U1',
+        donnees: { description: 'une description', chiffre: true },
+      });
+
+    const depot = unDepotDeDonneesServices()
+      .avecAdaptateurChiffrement({
+        dechiffre: async (donnees) => ({ ...donnees, chiffre: false }),
+      })
+      .avecReferentiel(r)
+      .avecConstructeurDePersistance(persistance)
+      .construis();
+
+    const service = await depot.service('S1');
+
+    expect(
+      service.mesuresSpecifiques().modelesDisponiblesDeMesureSpecifique
+    ).to.eql({
+      'MOD-1': {
+        description: 'une description',
+        chiffre: false,
+      },
+    });
+  });
+
   it('renseigne les mesures générales associées à un service', async () => {
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: { gouvernance: 'Gouvernance' },
