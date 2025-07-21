@@ -45,6 +45,10 @@ describe("L'adaptateur persistance Postgres", () => {
     );
   });
 
+  after(async () => {
+    await knex.destroy();
+  });
+
   async function insereService() {
     const idService = genereUUID();
     await persistance.sauvegardeService(idService, {}, 'service-1', 'siret-1');
