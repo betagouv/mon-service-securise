@@ -46,8 +46,9 @@ class MigrationHash {
       adaptateurEnvironnement,
     });
     this.depotDonneesSelsDeHachage = creeDepot({
-      adaptateurPersistance:
-        AdaptateurPostgres.nouvelAdaptateur(environnementNode),
+      adaptateurPersistance: AdaptateurPostgres.nouvelAdaptateur({
+        env: environnementNode,
+      }),
       adaptateurEnvironnement,
       adaptateurChiffrement: this.adaptateurChiffrement,
     });
