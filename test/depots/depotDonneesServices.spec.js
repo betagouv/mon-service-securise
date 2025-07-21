@@ -171,143 +171,145 @@ describe('Le dépôt de données des services', () => {
     expect(services[2].nomService()).to.equal('C-service');
   });
 
-  it('peut retrouver un service à partir de son identifiant', async () => {
-    const adaptateurChiffrement = {
-      dechiffre: async (objetDonnee) => {
-        objetDonnee.descriptionService.nomService = `${objetDonnee.descriptionService.nomService}-dechiffre`;
-        return objetDonnee;
-      },
-    };
+  describe("sur demande de lecture d'un service", () => {
+    it('peut retrouver un service à partir de son identifiant', async () => {
+      const adaptateurChiffrement = {
+        dechiffre: async (objetDonnee) => {
+          objetDonnee.descriptionService.nomService = `${objetDonnee.descriptionService.nomService}-dechiffre`;
+          return objetDonnee;
+        },
+      };
 
-    const adaptateurPersistance = unePersistanceMemoire()
-      .ajouteUnService({
-        id: '789',
-        descriptionService: { nomService: 'nom' },
-      })
-      .construis();
-    const referentiel = Referentiel.creeReferentielVide();
-    const depot = DepotDonneesServices.creeDepot({
-      adaptateurChiffrement,
-      adaptateurPersistance,
-      referentiel,
-    });
-
-    const service = await depot.service('789');
-
-    expect(service).to.be.a(Service);
-    expect(service.id).to.equal('789');
-    expect(service.referentiel).to.equal(referentiel);
-    expect(service.nomService()).to.be('nom-dechiffre');
-  });
-
-  it('associe ses contributeurs au service', async () => {
-    const r = Referentiel.creeReferentielVide();
-    const persistance = unePersistanceMemoire()
-      .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
-      .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
-      .ajouteUnService(unService(r).avecId('S1').donnees)
-      .ajouteUneAutorisation(
-        uneAutorisation().deProprietaire('U1', 'S1').donnees
-      )
-      .ajouteUneAutorisation(
-        uneAutorisation().deContributeur('U2', 'S1').donnees
-      );
-    const depot = unDepotDeDonneesServices()
-      .avecReferentiel(r)
-      .avecConstructeurDePersistance(persistance)
-      .construis();
-
-    const service = await depot.service('S1');
-
-    const { contributeurs } = service;
-    expect(contributeurs.length).to.equal(2);
-    expect(contributeurs[0].idUtilisateur).to.equal('U1');
-    expect(contributeurs[1].idUtilisateur).to.equal('U2');
-  });
-
-  it("délègue au dépôt d'utilisateurs de déchiffrer les contributeurs", async () => {
-    const r = Referentiel.creeReferentielVide();
-    const persistance = unePersistanceMemoire()
-      .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
-      .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
-      .ajouteUnService(unService(r).avecId('S1').donnees)
-      .ajouteUneAutorisation(
-        uneAutorisation().deProprietaire('U1', 'S1').donnees
-      )
-      .ajouteUneAutorisation(
-        uneAutorisation().deContributeur('U2', 'S1').donnees
-      );
-    const unDepotUtilisateur = {
-      dechiffreUtilisateur: async (donneesUtilisateur) => {
-        donneesUtilisateur.donnees.nom = `${donneesUtilisateur.id}-déchiffré`;
-        return new Utilisateur({
-          id: donneesUtilisateur.id,
-          ...donneesUtilisateur.donnees,
-        });
-      },
-    };
-    const depot = unDepotDeDonneesServices()
-      .avecDepotDonneesUtilisateurs(unDepotUtilisateur)
-      .avecReferentiel(r)
-      .avecConstructeurDePersistance(persistance)
-      .construis();
-
-    const service = await depot.service('S1');
-
-    expect(service.contributeurs[0].prenomNom()).to.equal('U1-déchiffré');
-    expect(service.contributeurs[1].prenomNom()).to.equal('U2-déchiffré');
-  });
-
-  it('associe ses suggestions d’actions au service', async () => {
-    const r = Referentiel.creeReferentiel({
-      naturesSuggestionsActions: {
-        siret: { lien: '/lien', permissionRequise: {} },
-      },
-    });
-    const persistance = unePersistanceMemoire()
-      .ajouteUnService(unService(r).avecId('S1').donnees)
-      .avecUneSuggestionAction({ idService: 'S1', nature: 'siret' });
-    const depot = unDepotDeDonneesServices()
-      .avecReferentiel(r)
-      .avecConstructeurDePersistance(persistance)
-      .construis();
-
-    const service = await depot.service('S1');
-
-    expect(service.routesDesSuggestionsActions()[0].route).to.be('/lien');
-  });
-
-  it('associe et déchiffre les modèles de mesure spécifique', async () => {
-    const r = Referentiel.creeReferentielVide();
-    const persistance = unePersistanceMemoire()
-      .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
-      .ajouteUnService(unService(r).avecId('S1').donnees)
-      .ajouteUneAutorisation(
-        uneAutorisation().deProprietaire('U1', 'S1').donnees
-      )
-      .avecUnModeleDeMesureSpecifique({
-        id: 'MOD-1',
-        idUtilisateur: 'U1',
-        donnees: { description: 'une description', chiffre: true },
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnService({
+          id: '789',
+          descriptionService: { nomService: 'nom' },
+        })
+        .construis();
+      const referentiel = Referentiel.creeReferentielVide();
+      const depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement,
+        adaptateurPersistance,
+        referentiel,
       });
 
-    const depot = unDepotDeDonneesServices()
-      .avecAdaptateurChiffrement({
-        dechiffre: async (donnees) => ({ ...donnees, chiffre: false }),
-      })
-      .avecReferentiel(r)
-      .avecConstructeurDePersistance(persistance)
-      .construis();
+      const service = await depot.service('789');
 
-    const service = await depot.service('S1');
+      expect(service).to.be.a(Service);
+      expect(service.id).to.equal('789');
+      expect(service.referentiel).to.equal(referentiel);
+      expect(service.nomService()).to.be('nom-dechiffre');
+    });
 
-    expect(
-      service.mesuresSpecifiques().modelesDisponiblesDeMesureSpecifique
-    ).to.eql({
-      'MOD-1': {
-        description: 'une description',
-        chiffre: false,
-      },
+    it('associe ses contributeurs au service', async () => {
+      const r = Referentiel.creeReferentielVide();
+      const persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+        .ajouteUnService(unService(r).avecId('S1').donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U1', 'S1').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur('U2', 'S1').donnees
+        );
+      const depot = unDepotDeDonneesServices()
+        .avecReferentiel(r)
+        .avecConstructeurDePersistance(persistance)
+        .construis();
+
+      const service = await depot.service('S1');
+
+      const { contributeurs } = service;
+      expect(contributeurs.length).to.equal(2);
+      expect(contributeurs[0].idUtilisateur).to.equal('U1');
+      expect(contributeurs[1].idUtilisateur).to.equal('U2');
+    });
+
+    it("délègue au dépôt d'utilisateurs de déchiffrer les contributeurs", async () => {
+      const r = Referentiel.creeReferentielVide();
+      const persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+        .ajouteUnService(unService(r).avecId('S1').donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U1', 'S1').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur('U2', 'S1').donnees
+        );
+      const unDepotUtilisateur = {
+        dechiffreUtilisateur: async (donneesUtilisateur) => {
+          donneesUtilisateur.donnees.nom = `${donneesUtilisateur.id}-déchiffré`;
+          return new Utilisateur({
+            id: donneesUtilisateur.id,
+            ...donneesUtilisateur.donnees,
+          });
+        },
+      };
+      const depot = unDepotDeDonneesServices()
+        .avecDepotDonneesUtilisateurs(unDepotUtilisateur)
+        .avecReferentiel(r)
+        .avecConstructeurDePersistance(persistance)
+        .construis();
+
+      const service = await depot.service('S1');
+
+      expect(service.contributeurs[0].prenomNom()).to.equal('U1-déchiffré');
+      expect(service.contributeurs[1].prenomNom()).to.equal('U2-déchiffré');
+    });
+
+    it('associe ses suggestions d’actions au service', async () => {
+      const r = Referentiel.creeReferentiel({
+        naturesSuggestionsActions: {
+          siret: { lien: '/lien', permissionRequise: {} },
+        },
+      });
+      const persistance = unePersistanceMemoire()
+        .ajouteUnService(unService(r).avecId('S1').donnees)
+        .avecUneSuggestionAction({ idService: 'S1', nature: 'siret' });
+      const depot = unDepotDeDonneesServices()
+        .avecReferentiel(r)
+        .avecConstructeurDePersistance(persistance)
+        .construis();
+
+      const service = await depot.service('S1');
+
+      expect(service.routesDesSuggestionsActions()[0].route).to.be('/lien');
+    });
+
+    it('associe et déchiffre les modèles de mesure spécifique', async () => {
+      const r = Referentiel.creeReferentielVide();
+      const persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnService(unService(r).avecId('S1').donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U1', 'S1').donnees
+        )
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-1',
+          idUtilisateur: 'U1',
+          donnees: { description: 'une description', chiffre: true },
+        });
+
+      const depot = unDepotDeDonneesServices()
+        .avecAdaptateurChiffrement({
+          dechiffre: async (donnees) => ({ ...donnees, chiffre: false }),
+        })
+        .avecReferentiel(r)
+        .avecConstructeurDePersistance(persistance)
+        .construis();
+
+      const service = await depot.service('S1');
+
+      expect(
+        service.mesuresSpecifiques().modelesDisponiblesDeMesureSpecifique
+      ).to.eql({
+        'MOD-1': {
+          description: 'une description',
+          chiffre: false,
+        },
+      });
     });
   });
 
