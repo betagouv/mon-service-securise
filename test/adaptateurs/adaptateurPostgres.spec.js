@@ -14,6 +14,7 @@ function patchKnexFirst(knexInstance) {
 
   const firstOriginal = prototypeQueryBuilder.first;
 
+  // eslint-disable-next-line func-names
   prototypeQueryBuilder.first = async function (...args) {
     const resultat = firstOriginal.apply(this, args);
     if (typeof resultat.then === 'function') {
