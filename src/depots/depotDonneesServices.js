@@ -65,6 +65,18 @@ const fabriquePersistance = (
     );
     delete serviceEnClair.suggestions;
 
+    serviceEnClair.modelesDisponiblesDeMesureSpecifique = Object.fromEntries(
+      await Promise.all(
+        serviceEnClair.modelesDisponiblesDeMesureSpecifique.map(
+          async ({ id, donnees }) => {
+            const donneesEnClair =
+              await adaptateurChiffrement.dechiffre(donnees);
+            return [id, donneesEnClair];
+          }
+        )
+      )
+    );
+
     return new Service(serviceEnClair, referentiel);
   };
 
