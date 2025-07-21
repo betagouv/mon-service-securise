@@ -92,4 +92,25 @@ describe("L'adaptateur persistance Postgres", () => {
     expect(proprietaire.id).to.be(idUtilisateur);
     expect(proprietaire.email_hash).to.be('email');
   });
+
+  it('sait lire les modèles de mesure spécifique disponible pour un service', async () => {
+    const idService = await insereService();
+    const idUtilisateur = await insereUtilisateur();
+    await insereAutorisation(idUtilisateur, idService);
+
+    const idModele = genereUUID();
+    await persistance.ajouteModeleMesureSpecifique(idModele, idUtilisateur, {
+      description: 'Une description',
+    });
+
+    const services = await persistance.servicesComplets({ idService });
+
+    expect(services[0].modelesDisponiblesDeMesureSpecifique).to.eql([
+      {
+        id: idModele,
+        donnees: { description: 'Une description' },
+        id_utilisateur: idUtilisateur,
+      },
+    ]);
+  });
 });
