@@ -460,5 +460,30 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
 
       expect(modeles).to.eql([{ id: 'MOD-1' }]);
     });
+
+    it('déchiffre les données des modèles', async () => {
+      persistance = unePersistanceMemoire()
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-1',
+          idUtilisateur: 'U1',
+          donnees: { description: 'une description', chiffre: true },
+        })
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .construis();
+
+      adaptateurChiffrement.dechiffre = async (donnees) => ({
+        ...donnees,
+        chiffre: false,
+      });
+
+      const modeles =
+        await leDepot().lisModelesMesureSpecifiquePourUtilisateur('U1');
+
+      expect(modeles[0]).to.eql({
+        id: 'MOD-1',
+        chiffre: false,
+        description: 'une description',
+      });
+    });
   });
 });
