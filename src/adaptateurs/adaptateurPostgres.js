@@ -725,6 +725,11 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     );
   };
 
+  const lisModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) =>
+    knex('modeles_mesure_specifique')
+      .where({ id_utilisateur: idUtilisateur })
+      .select();
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -745,6 +750,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     estSuperviseur,
     serviceExisteAvecHashNom,
     lisDernierIndiceCyber,
+    lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     lisProgressionTeleversementServices,

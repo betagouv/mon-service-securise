@@ -24,6 +24,8 @@ function patchKnexFirst(knexInstance) {
 describe("L'adaptateur persistance Postgres", () => {
   let knex;
   let persistance;
+  const ID_UTILISATEUR_1 = genereUUID();
+  const ID_UTILISATEUR_2 = genereUUID();
 
   before(async () => {
     knex = Knex({
@@ -112,6 +114,35 @@ describe("L'adaptateur persistance Postgres", () => {
         donnees: { description: 'Une description' },
         id_utilisateur: idUtilisateur,
       },
+    ]);
+  });
+
+  async function insereModeleMesureSpecifique(donnees) {
+    const id = genereUUID();
+    await knex('modeles_mesure_specifique').insert({
+      ...donnees,
+      id,
+    });
+    return id;
+  }
+
+  it("sait lire les modèles de mesure spécifique d'un utilisateur", async () => {
+    const idModele1 = await insereModeleMesureSpecifique({
+      id_utilisateur: ID_UTILISATEUR_1,
+      donnees: {},
+    });
+    await insereModeleMesureSpecifique({
+      id_utilisateur: ID_UTILISATEUR_2,
+      donnees: {},
+    });
+
+    const modeles =
+      await persistance.lisModelesMesureSpecifiquePourUtilisateur(
+        ID_UTILISATEUR_1
+      );
+
+    expect(modeles).to.eql([
+      { id: idModele1, id_utilisateur: ID_UTILISATEUR_1, donnees: {} },
     ]);
   });
 });
