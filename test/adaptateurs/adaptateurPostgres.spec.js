@@ -1,6 +1,7 @@
 const expect = require('expect.js');
 const Knex = require('knex');
 const ClientPgLite = require('knex-pglite');
+
 const {
   nouvelAdaptateur,
 } = require('../../src/adaptateurs/adaptateurPostgres');
@@ -21,7 +22,10 @@ function patchKnexFirst(knexInstance) {
   };
 }
 
-describe("L'adaptateur persistance Postgres", () => {
+// eslint-disable-next-line func-names
+describe("L'adaptateur persistance Postgres", function () {
+  this.timeout(5000);
+
   let knex;
   let persistance;
   const ID_UTILISATEUR_1 = genereUUID();
@@ -40,7 +44,14 @@ describe("L'adaptateur persistance Postgres", () => {
 
   afterEach(async () => {
     await Promise.all(
-      ['services', 'suggestions_actions'].map((table) => knex(table).truncate())
+      [
+        'services',
+        'suggestions_actions',
+        'utilisateurs',
+        'autorisations',
+        'modeles_mesure_specifique',
+        'modeles_mesure_specifique_association_aux_services',
+      ].map((table) => knex(table).truncate())
     );
   });
 
@@ -129,6 +140,16 @@ describe("L'adaptateur persistance Postgres", () => {
       return id;
     }
 
+    async function insereAssociationModeleMesureSpecifique(
+      idModele,
+      idService
+    ) {
+      await knex('modeles_mesure_specifique_association_aux_services').insert({
+        id_modele: idModele,
+        id_service: idService,
+      });
+    }
+
     it("sait lire les modèles de mesure spécifique d'un utilisateur", async () => {
       const idModele1 = await insereModeleMesureSpecifique({
         id_utilisateur: ID_UTILISATEUR_1,
@@ -145,8 +166,30 @@ describe("L'adaptateur persistance Postgres", () => {
         );
 
       expect(modeles).to.eql([
-        { id: idModele1, id_utilisateur: ID_UTILISATEUR_1, donnees: {} },
+        {
+          id: idModele1,
+          id_utilisateur: ID_UTILISATEUR_1,
+          donnees: {},
+          ids_services_associes: [],
+        },
       ]);
+    });
+
+    it('sait lire les services associés', async () => {
+      const idModele = await insereModeleMesureSpecifique({
+        id_utilisateur: ID_UTILISATEUR_1,
+        donnees: {},
+      });
+
+      const idService = genereUUID();
+      await insereAssociationModeleMesureSpecifique(idModele, idService);
+
+      const modeles =
+        await persistance.lisModelesMesureSpecifiquePourUtilisateur(
+          ID_UTILISATEUR_1
+        );
+
+      expect(modeles[0].ids_services_associes).to.eql([idService]);
     });
   });
 });
