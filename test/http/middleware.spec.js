@@ -1234,12 +1234,14 @@ describe('Le middleware MSS', () => {
     let middleware;
     let adaptateurHorloge;
     let adaptateurEnvironnement;
+    const featureFlag = {
+      dateDebutBandeauMSC: () => '2025-01-01 00:00:00Z',
+      avecModelesMesureSpecifique: () => false,
+    };
 
     beforeEach(() => {
       adaptateurEnvironnement = {
-        featureFlag: () => ({
-          dateDebutBandeauMSC: () => '2025-01-01 00:00:00Z',
-        }),
+        featureFlag: () => featureFlag,
       };
       adaptateurHorloge = {
         maintenant: () => new Date('2024-01-01 00:00:00Z'),
@@ -1274,6 +1276,30 @@ describe('Le middleware MSS', () => {
 
         middleware.chargeFeatureFlags(requete, reponse, () => {
           expect(reponse.locals.featureFlags.avecBandeauMSC).to.be(true);
+          done();
+        });
+      });
+    });
+
+    describe("concernant l'affichage des modèles de mesure spécifique", () => {
+      it('affiche les modèles si la fonctionnalité est activée', (done) => {
+        featureFlag.avecModelesMesureSpecifique = () => true;
+
+        middleware.chargeFeatureFlags(requete, reponse, () => {
+          expect(
+            reponse.locals.featureFlags.afficheModelesMesureSpecifique
+          ).to.be(true);
+          done();
+        });
+      });
+
+      it('masque les modèles si la fonctionnalité est désactivée', (done) => {
+        featureFlag.avecModelesMesureSpecifique = () => false;
+
+        middleware.chargeFeatureFlags(requete, reponse, () => {
+          expect(
+            reponse.locals.featureFlags.afficheModelesMesureSpecifique
+          ).to.be(false);
           done();
         });
       });
