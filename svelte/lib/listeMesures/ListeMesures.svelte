@@ -8,6 +8,7 @@
   import {
     CategorieMesure,
     type MesureReferentiel,
+    type ModeleMesureSpecifique,
     Referentiel,
     type ReferentielStatut,
     type ReferentielTypesService,
@@ -26,7 +27,10 @@
   import Lien from '../ui/Lien.svelte';
   import Loader from '../ui/Loader.svelte';
   import Toaster from '../ui/Toaster.svelte';
-  import Onglet from '../ui/Onglet.svelte';
+  import OngletsListeMesures, {
+    type CleOngletListeMesure,
+  } from './kit/OngletsListeMesures.svelte';
+  import { modelesMesureSpecifique } from './stores/modelesMesureSpecifique.store';
 
   export let statuts: ReferentielStatut;
   export let typesService: ReferentielTypesService;
@@ -37,7 +41,7 @@
   });
 
   let modaleDetailsMesure: ModaleDetailsMesure;
-  let ongletActif = 'generales';
+  let ongletActif: CleOngletListeMesure = 'generales';
 
   const afficheModaleDetailsMesure = async (mesure: MesureReferentiel) => {
     await modaleDetailsMesure.affiche(mesure);
@@ -81,6 +85,53 @@
       },
     ],
   };
+
+  type MesureDeLaListe = {
+    id: string;
+    categorie: CategorieMesure;
+    description: string;
+    descriptionLongue: string;
+    identifiantNumerique?: string;
+    referentiel: Referentiel;
+    idsServicesAssocies: string[];
+    type: 'generale' | 'specifique';
+  };
+
+  let donneesMesures: MesureDeLaListe[];
+  $: {
+    if (ongletActif === 'generales')
+      donneesMesures = Object.values($mesuresReferentiel).map((m) => ({
+        ...m,
+        idsServicesAssocies: $mesuresAvecServicesAssociesStore[m.id],
+        type: 'generale',
+      }));
+    else if (ongletActif === 'specifiques')
+      donneesMesures = $modelesMesureSpecifique.map((m) => ({
+        ...m,
+        referentiel: Referentiel.SPECIFIQUE,
+        type: 'specifique',
+      }));
+  }
+
+  const estMesureGenerale = (
+    mesure: MesureDeLaListe
+  ): mesure is MesureReferentiel => mesure.type === 'generale';
+
+  const estMesureSpecifique = (
+    mesure: MesureDeLaListe
+  ): mesure is ModeleMesureSpecifique => mesure.type === 'specifique';
+
+  const afficheDetailServiceAssocies = async (mesure: MesureDeLaListe) => {
+    if (estMesureGenerale(mesure)) await afficheModaleDetailsMesure(mesure);
+  };
+
+  const afficheTiroirConfigurationMesure = (mesure: MesureDeLaListe) => {
+    if (estMesureGenerale(mesure))
+      tiroirStore.afficheContenu(TiroirConfigurationMesure, {
+        mesure,
+        statuts,
+      });
+  };
 </script>
 
 <Toaster />
@@ -103,7 +154,7 @@
     { cle: 'servicesAssocies', libelle: 'Services associés' },
     { cle: 'actions', libelle: 'Action' },
   ]}
-  donnees={Object.values($mesuresReferentiel)}
+  donnees={donneesMesures}
   configurationRecherche={{
     champsRecherche: ['description', 'identifiantNumerique'],
   }}
@@ -120,21 +171,14 @@
     />
   </div>
 
-  <div class="conteneur-onglets" slot="onglets">
+  <div slot="onglets">
     {#if afficheModelesMesureSpecifique}
-      <Onglet
-        bind:ongletActif
-        cetOnglet="generales"
-        labelOnglet="Les mesures ANSSI & CNIL"
-        badge={Object.keys($mesuresReferentiel).length}
-      />
+      <OngletsListeMesures bind:ongletActif />
     {/if}
   </div>
-
   <svelte:fragment slot="cellule" let:donnee let:colonne>
-    {@const mesureAvecServicesAssocies =
-      $mesuresAvecServicesAssociesStore[donnee.id]}
-    {@const aDesServicesAssocies = mesureAvecServicesAssocies?.length > 0}
+    {@const aDesServicesAssocies = donnee.idsServicesAssocies?.length > 0}
+    {@const typeMesure = donnee.type}
     {#if colonne.cle === 'description'}
       <div class="description-mesure">
         <span>{donnee.description}</span>
@@ -154,10 +198,13 @@
           Cette mesure est associée à
           <Bouton
             type="lien-dsfr"
-            titre={`${mesureAvecServicesAssocies.length} ${
-              mesureAvecServicesAssocies.length > 1 ? 'services' : 'service'
+            titre={`${donnee.idsServicesAssocies.length} ${
+              donnee.idsServicesAssocies.length > 1 ? 'services' : 'service'
             }`}
-            on:click={async () => await afficheModaleDetailsMesure(donnee)}
+            actif={typeMesure === 'generale'}
+            on:click={async () => {
+              await afficheDetailServiceAssocies(donnee);
+            }}
           />
         {:else}
           <span class="aucun-service">Aucun service associé</span>
@@ -169,12 +216,10 @@
         type="secondaire"
         taille="petit"
         icone="configuration"
-        actif={aDesServicesAssocies}
-        on:click={() =>
-          tiroirStore.afficheContenu(TiroirConfigurationMesure, {
-            mesure: donnee,
-            statuts,
-          })}
+        actif={aDesServicesAssocies && typeMesure === 'generale'}
+        on:click={() => {
+          afficheTiroirConfigurationMesure(donnee);
+        }}
       />
     {/if}
   </svelte:fragment>

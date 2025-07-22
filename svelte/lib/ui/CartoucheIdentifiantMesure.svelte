@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let identifiant: string;
+  export let identifiant: string = '';
 </script>
 
 {#if identifiant}
