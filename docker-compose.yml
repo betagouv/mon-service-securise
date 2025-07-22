@@ -1,6 +1,8 @@
 x-app: &configuration-base
   build:
     context: .
+    args:
+      NODE_VERSION: ${NODE_VERSION:-latest}
   env_file:
     - .env
   volumes:
