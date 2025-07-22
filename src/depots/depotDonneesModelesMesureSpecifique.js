@@ -99,7 +99,13 @@ const creeDepot = (config = {}) => {
       await persistance.lisModelesMesureSpecifiquePourUtilisateur(
         idUtilisateur
       );
-    return modeles.map((m) => ({ id: m.id }));
+
+    return Promise.all(
+      modeles.map(async (m) => {
+        const donneesEnClair = await adaptateurChiffrement.dechiffre(m.donnees);
+        return { id: m.id, ...donneesEnClair };
+      })
+    );
   };
 
   return {
