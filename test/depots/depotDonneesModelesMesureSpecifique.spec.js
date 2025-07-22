@@ -458,7 +458,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       const modeles =
         await leDepot().lisModelesMesureSpecifiquePourUtilisateur('U1');
 
-      expect(modeles).to.eql([{ id: 'MOD-1' }]);
+      expect(modeles).to.eql([{ id: 'MOD-1', idsServicesAssocies: [] }]);
     });
 
     it('déchiffre les données des modèles', async () => {
@@ -483,7 +483,21 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         id: 'MOD-1',
         chiffre: false,
         description: 'une description',
+        idsServicesAssocies: [],
       });
+    });
+
+    it('aggrége les identifiants des services associés', async () => {
+      persistance = unePersistanceMemoire()
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-1', idUtilisateur: 'U1' })
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .associeLeServiceAuxModelesDeMesureSpecifique('S1', ['MOD-1'])
+        .construis();
+
+      const modeles =
+        await leDepot().lisModelesMesureSpecifiquePourUtilisateur('U1');
+
+      expect(modeles[0].idsServicesAssocies).to.eql(['S1']);
     });
   });
 });
