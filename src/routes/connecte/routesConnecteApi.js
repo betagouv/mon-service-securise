@@ -580,6 +580,19 @@ const routesConnecteApi = ({
     }
   );
 
+  routes.get(
+    '/modeles/mesureSpecifique',
+    middleware.verificationAcceptationCGU,
+    async (requete, reponse) => {
+      const modeles =
+        await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
+          requete.idUtilisateurCourant
+        );
+
+      reponse.json(modeles);
+    }
+  );
+
   return routes;
 };
 

@@ -1721,4 +1721,34 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
     });
   });
+
+  describe('quand requête GET sur `/api/modeles/mesureSpecifique`', () => {
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(
+          'http://localhost:1234/api/modeles/mesureSpecifique',
+          done
+        );
+    });
+
+    it("délègue au dépôt de données la lecture des modèles de mesure spécifique de l'utilisateur courant", async () => {
+      let idRecu;
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur = async (
+        idUtilisateur
+      ) => {
+        idRecu = idUtilisateur;
+        return [];
+      };
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/modeles/mesureSpecifique'
+      );
+
+      expect(reponse.status).to.be(200);
+      expect(reponse.data).to.eql([]);
+      expect(idRecu).to.be('U1');
+    });
+  });
 });
