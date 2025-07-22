@@ -246,6 +246,8 @@ const creeDepot = (config = {}) => {
   const {
     ajouteModeleMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
+    detacheModeleMesureSpecifiqueDesServices,
+    lisModelesMesureSpecifiquePourUtilisateur,
   } = depotModelesMesureSpecifique;
 
   return {
@@ -270,6 +272,7 @@ const creeDepot = (config = {}) => {
     autorisationPour,
     autorisations,
     autorisationsDuService,
+    detacheModeleMesureSpecifiqueDesServices,
     dupliqueService,
     estSuperviseur,
     service,
@@ -279,6 +282,7 @@ const creeDepot = (config = {}) => {
     finaliseDossierCourant,
     lisActivitesMesure,
     lisDernierIndiceCyber,
+    lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationEnDate,
     lisParcoursUtilisateur,
     lisPourcentageProgressionTeleversementServices,
