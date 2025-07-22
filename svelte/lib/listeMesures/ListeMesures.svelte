@@ -26,15 +26,18 @@
   import Lien from '../ui/Lien.svelte';
   import Loader from '../ui/Loader.svelte';
   import Toaster from '../ui/Toaster.svelte';
+  import Onglet from '../ui/Onglet.svelte';
 
   export let statuts: ReferentielStatut;
   export let typesService: ReferentielTypesService;
+  export let afficheModelesMesureSpecifique: boolean;
 
   onMount(() => {
     servicesAvecMesuresAssociees.rafraichis();
   });
 
   let modaleDetailsMesure: ModaleDetailsMesure;
+  let ongletActif = 'generales';
 
   const afficheModaleDetailsMesure = async (mesure: MesureReferentiel) => {
     await modaleDetailsMesure.affiche(mesure);
@@ -116,6 +119,18 @@
       icone="telecharger"
     />
   </div>
+
+  <div class="conteneur-onglets" slot="onglets">
+    {#if afficheModelesMesureSpecifique}
+      <Onglet
+        bind:ongletActif
+        cetOnglet="generales"
+        labelOnglet="Les mesures ANSSI & CNIL"
+        badge={Object.keys($mesuresReferentiel).length}
+      />
+    {/if}
+  </div>
+
   <svelte:fragment slot="cellule" let:donnee let:colonne>
     {@const mesureAvecServicesAssocies =
       $mesuresAvecServicesAssociesStore[donnee.id]}
