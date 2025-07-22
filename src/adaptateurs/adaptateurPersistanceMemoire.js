@@ -418,6 +418,11 @@ const nouvelAdaptateur = (
         ) !== undefined
     );
 
+  const lisModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) =>
+    donnees.modelesMesureSpecifique.filter(
+      (m) => m.idUtilisateur === idUtilisateur
+    );
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -435,6 +440,7 @@ const nouvelAdaptateur = (
     estSuperviseur,
     serviceExisteAvecHashNom,
     servicesComplets,
+    lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     lisSuperviseursConcernes,
