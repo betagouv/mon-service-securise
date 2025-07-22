@@ -725,10 +725,19 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     );
   };
 
-  const lisModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) =>
-    knex('modeles_mesure_specifique')
-      .where({ id_utilisateur: idUtilisateur })
-      .select();
+  const lisModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) => {
+    const resultat = await knex.raw(
+      `SELECT modeles.*, COALESCE(associations.ids_services_associes, '[]') as ids_services_associes
+        FROM modeles_mesure_specifique as modeles
+             LEFT JOIN (SELECT id_modele, json_agg(id_service) AS ids_services_associes
+                        FROM modeles_mesure_specifique_association_aux_services
+                        GROUP BY id_modele) associations ON associations.id_modele = modeles.id
+        WHERE id_utilisateur = :idUtilisateur;
+      `,
+      { idUtilisateur }
+    );
+    return resultat.rows;
+  };
 
   return {
     activitesMesure,
