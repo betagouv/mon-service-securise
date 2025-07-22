@@ -103,7 +103,11 @@ const creeDepot = (config = {}) => {
     return Promise.all(
       modeles.map(async (m) => {
         const donneesEnClair = await adaptateurChiffrement.dechiffre(m.donnees);
-        return { id: m.id, ...donneesEnClair };
+        return {
+          id: m.id,
+          idsServicesAssocies: m.ids_services_associes,
+          ...donneesEnClair,
+        };
       })
     );
   };

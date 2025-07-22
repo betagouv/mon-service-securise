@@ -49,6 +49,6 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 - [x] On peut créer un modèle de mesure (description, description longue, catégorie) lié à son identifiant utilisateur de manière unitaire
 - [ ] On peut créer des modèles de mesure (description, description longue, catégorie) lié à son identifiant utilisateur via un import de CSV
   - Cet import aura une limite en nombre total de modèles détenu par l'utilisateur
-- [ ] On peut lire tous les modèles d’un utilisateur
+- [x] On peut lire tous les modèles d’un utilisateur
   - [x] Les données du modèle doivent être déchiffrées
-  - [ ] On veut aggréger les identifiants de services associés à cette mesure
+  - [x] On veut aggréger les identifiants de services associés à cette mesure

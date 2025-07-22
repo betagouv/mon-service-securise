@@ -419,9 +419,15 @@ const nouvelAdaptateur = (
     );
 
   const lisModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) =>
-    donnees.modelesMesureSpecifique.filter(
-      (m) => m.idUtilisateur === idUtilisateur
-    );
+    donnees.modelesMesureSpecifique
+      .filter((m) => m.idUtilisateur === idUtilisateur)
+      .map((m) => ({
+        ...m,
+        ids_services_associes:
+          donnees.associationModelesMesureSpecifiqueServices
+            .filter((a) => a.idModele === m.id)
+            .map((a) => a.idService),
+      }));
 
   return {
     activitesMesure,
