@@ -72,77 +72,81 @@ describe("L'adaptateur persistance Postgres", () => {
     );
   }
 
-  it("sait lire les suggestions d'action d'un service", async () => {
-    const idService = await insereService();
-    await persistance.ajouteSuggestionAction({
-      idService,
-      nature: 'une nature',
+  describe('concernant la lecture complète de service', () => {
+    it("sait lire les suggestions d'action d'un service", async () => {
+      const idService = await insereService();
+      await persistance.ajouteSuggestionAction({
+        idService,
+        nature: 'une nature',
+      });
+
+      const services = await persistance.servicesComplets({ idService });
+
+      expect(services[0].suggestions).to.eql(['une nature']);
     });
 
-    const services = await persistance.servicesComplets({ idService });
+    it("sait lire les contributeurs d'un service", async () => {
+      const idService = await insereService();
+      const idUtilisateur = await insereUtilisateur();
+      await insereAutorisation(idUtilisateur, idService);
 
-    expect(services[0].suggestions).to.eql(['une nature']);
+      const services = await persistance.servicesComplets({ idService });
+
+      const proprietaire = services[0].utilisateurs[0];
+      expect(proprietaire.id).to.be(idUtilisateur);
+      expect(proprietaire.email_hash).to.be('email');
+    });
+
+    it('sait lire les modèles de mesure spécifique disponible pour un service', async () => {
+      const idService = await insereService();
+      const idUtilisateur = await insereUtilisateur();
+      await insereAutorisation(idUtilisateur, idService);
+
+      const idModele = genereUUID();
+      await persistance.ajouteModeleMesureSpecifique(idModele, idUtilisateur, {
+        description: 'Une description',
+      });
+
+      const services = await persistance.servicesComplets({ idService });
+
+      expect(services[0].modelesDisponiblesDeMesureSpecifique).to.eql([
+        {
+          id: idModele,
+          donnees: { description: 'Une description' },
+          id_utilisateur: idUtilisateur,
+        },
+      ]);
+    });
   });
 
-  it("sait lire les contributeurs d'un service", async () => {
-    const idService = await insereService();
-    const idUtilisateur = await insereUtilisateur();
-    await insereAutorisation(idUtilisateur, idService);
+  describe('concernant la lecture des modèles de mesure spécifique', () => {
+    async function insereModeleMesureSpecifique(donnees) {
+      const id = genereUUID();
+      await knex('modeles_mesure_specifique').insert({
+        ...donnees,
+        id,
+      });
+      return id;
+    }
 
-    const services = await persistance.servicesComplets({ idService });
+    it("sait lire les modèles de mesure spécifique d'un utilisateur", async () => {
+      const idModele1 = await insereModeleMesureSpecifique({
+        id_utilisateur: ID_UTILISATEUR_1,
+        donnees: {},
+      });
+      await insereModeleMesureSpecifique({
+        id_utilisateur: ID_UTILISATEUR_2,
+        donnees: {},
+      });
 
-    const proprietaire = services[0].utilisateurs[0];
-    expect(proprietaire.id).to.be(idUtilisateur);
-    expect(proprietaire.email_hash).to.be('email');
-  });
+      const modeles =
+        await persistance.lisModelesMesureSpecifiquePourUtilisateur(
+          ID_UTILISATEUR_1
+        );
 
-  it('sait lire les modèles de mesure spécifique disponible pour un service', async () => {
-    const idService = await insereService();
-    const idUtilisateur = await insereUtilisateur();
-    await insereAutorisation(idUtilisateur, idService);
-
-    const idModele = genereUUID();
-    await persistance.ajouteModeleMesureSpecifique(idModele, idUtilisateur, {
-      description: 'Une description',
+      expect(modeles).to.eql([
+        { id: idModele1, id_utilisateur: ID_UTILISATEUR_1, donnees: {} },
+      ]);
     });
-
-    const services = await persistance.servicesComplets({ idService });
-
-    expect(services[0].modelesDisponiblesDeMesureSpecifique).to.eql([
-      {
-        id: idModele,
-        donnees: { description: 'Une description' },
-        id_utilisateur: idUtilisateur,
-      },
-    ]);
-  });
-
-  async function insereModeleMesureSpecifique(donnees) {
-    const id = genereUUID();
-    await knex('modeles_mesure_specifique').insert({
-      ...donnees,
-      id,
-    });
-    return id;
-  }
-
-  it("sait lire les modèles de mesure spécifique d'un utilisateur", async () => {
-    const idModele1 = await insereModeleMesureSpecifique({
-      id_utilisateur: ID_UTILISATEUR_1,
-      donnees: {},
-    });
-    await insereModeleMesureSpecifique({
-      id_utilisateur: ID_UTILISATEUR_2,
-      donnees: {},
-    });
-
-    const modeles =
-      await persistance.lisModelesMesureSpecifiquePourUtilisateur(
-        ID_UTILISATEUR_1
-      );
-
-    expect(modeles).to.eql([
-      { id: idModele1, id_utilisateur: ID_UTILISATEUR_1, donnees: {} },
-    ]);
   });
 });
