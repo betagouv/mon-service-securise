@@ -15,6 +15,7 @@ declare global {
 export type ListeMesuresProps = {
   statuts: ReferentielStatut;
   typesService: ReferentielTypesService;
+  afficheModelesMesureSpecifique: boolean;
 };
 export type ReferentielMesures = Record<string, MesureReferentiel>;
 
