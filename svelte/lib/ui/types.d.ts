@@ -69,6 +69,14 @@ export type MesureReferentiel = {
   descriptionLongue: string;
 };
 
+export type ModeleMesureSpecifique = {
+  id: string;
+  description: string;
+  descriptionLongue: string;
+  categorie: CategorieMesure;
+  idsServicesAssocies: string[];
+};
+
 export type ObjetDeDonnees = Record<string, any>;
 
 export type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';
