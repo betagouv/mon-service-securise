@@ -447,4 +447,18 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       }
     });
   });
+
+  describe("concernant la lecture des modèles de mesure spécifique d'un utilisateur", () => {
+    it('retourne les modèles', async () => {
+      persistance = unePersistanceMemoire()
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-1', idUtilisateur: 'U1' })
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .construis();
+
+      const modeles =
+        await leDepot().lisModelesMesureSpecifiquePourUtilisateur('U1');
+
+      expect(modeles).to.eql([{ id: 'MOD-1' }]);
+    });
+  });
 });

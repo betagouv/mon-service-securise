@@ -94,10 +94,19 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const lisModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) => {
+    const modeles =
+      await persistance.lisModelesMesureSpecifiquePourUtilisateur(
+        idUtilisateur
+      );
+    return modeles.map((m) => ({ id: m.id }));
+  };
+
   return {
     ajouteModeleMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
     detacheModeleMesureSpecifiqueDesServices,
+    lisModelesMesureSpecifiquePourUtilisateur,
   };
 };
 
