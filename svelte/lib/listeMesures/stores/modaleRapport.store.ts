@@ -1,9 +1,9 @@
 import { get, writable } from 'svelte/store';
-import type { MesureReferentiel } from '../../ui/types';
+import type { ModeleMesureGenerale } from '../../ui/types';
 
 type ModaleRapportStoreProps = {
   idServicesModifies?: string[];
-  mesure?: MesureReferentiel;
+  modeleMesureGenerale?: ModeleMesureGenerale;
   champsModifies?: ('statut' | 'modalites')[];
   ouvert: boolean;
 };
@@ -18,8 +18,10 @@ export const modaleRapportStore = {
     set({ ...props, ouvert: true }),
   metEnAvantMesureApresModification: () => {
     const props = get(modaleRapportStore);
-    if (props.mesure) {
-      const cible = document.querySelector(`#ligne-${props.mesure.id}`);
+    if (props.modeleMesureGenerale) {
+      const cible = document.querySelector(
+        `#ligne-${props.modeleMesureGenerale.id}`
+      );
       cible?.scrollIntoView({
         behavior: 'smooth',
         block: 'center',

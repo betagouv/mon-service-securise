@@ -1,8 +1,8 @@
 import { writable } from 'svelte/store';
-import type { MesureReferentiel } from '../../ui/types';
+import type { ModeleMesureGenerale } from '../../ui/types';
 import type { ReferentielMesures } from '../listeMesures.d';
 
-const { subscribe, set } = writable<Record<string, MesureReferentiel>>({});
+const { subscribe, set } = writable<Record<string, ModeleMesureGenerale>>({});
 
 axios
   .get<ReferentielMesures>('/api/referentiel/mesures')

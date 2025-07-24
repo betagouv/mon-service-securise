@@ -1,7 +1,7 @@
 <script lang="ts">
   import TagStatutMesure from '../../../../ui/TagStatutMesure.svelte';
   import type {
-    MesureReferentiel,
+    ModeleMesureGenerale,
     ReferentielStatut,
   } from '../../../../ui/types';
   import type { StatutMesure } from '../../../../modeles/modeleMesure';
@@ -9,22 +9,24 @@
   import { mesuresAvecServicesAssociesStore } from '../../../stores/mesuresAvecServicesAssocies.store';
   import TableauServicesAssocies from '../../TableauServicesAssocies.svelte';
 
-  export let mesure: MesureReferentiel;
+  export let modeleMesureGenerale: ModeleMesureGenerale;
   export let statuts: ReferentielStatut;
   export let statutSelectionne: StatutMesure | '';
   export let precision: string;
   export let idsServicesSelectionnes: string[];
 
   $: servicesConcernes =
-    mesure &&
+    modeleMesureGenerale &&
     $servicesAvecMesuresAssociees
       .filter((s) => {
-        return $mesuresAvecServicesAssociesStore[mesure.id].includes(s?.id);
+        return $mesuresAvecServicesAssociesStore[
+          modeleMesureGenerale.id
+        ].includes(s?.id);
       })
       .filter((s) => idsServicesSelectionnes.includes(s.id))
       .map(({ mesuresAssociees, ...autresDonnees }) => ({
         ...autresDonnees,
-        mesure: mesuresAssociees[mesure.id],
+        mesure: mesuresAssociees[modeleMesureGenerale.id],
       }));
 
   const intitulePluralise =

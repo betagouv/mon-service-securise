@@ -60,7 +60,7 @@ export enum CategorieMesure {
   RESILIENCE = 'resilience',
 }
 
-export type MesureReferentiel = {
+export type ModeleMesureGenerale = {
   id: string;
   categorie: CategorieMesure;
   description: string;

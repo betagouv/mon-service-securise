@@ -15,12 +15,13 @@
 
   let elementModale: Modale;
 
-  $: servicesAvecMesure = $modaleRapportStore.mesure
+  $: servicesAvecMesure = $modaleRapportStore.modeleMesureGenerale
     ? $servicesAvecMesuresAssociees
         .filter((s) => $modaleRapportStore.idServicesModifies?.includes(s.id))
         .map(({ mesuresAssociees, ...autresDonnees }) => ({
           ...autresDonnees,
-          mesure: mesuresAssociees[$modaleRapportStore.mesure!.id],
+          mesure:
+            mesuresAssociees[$modaleRapportStore.modeleMesureGenerale!.id],
         }))
     : [];
 
@@ -31,8 +32,9 @@
   let titre = '';
   let contenu = '';
   $: {
-    const { champsModifies, idServicesModifies, mesure } = $modaleRapportStore;
-    if (champsModifies && idServicesModifies && mesure) {
+    const { champsModifies, idServicesModifies, modeleMesureGenerale } =
+      $modaleRapportStore;
+    if (champsModifies && idServicesModifies && modeleMesureGenerale) {
       const servicesMultiples = idServicesModifies.length > 1;
       let sujetChaine = '';
       let verbe = '';
@@ -55,7 +57,7 @@
       }
 
       contenu = `${sujetChaine} de la mesure <b>${
-        mesure!.description
+        modeleMesureGenerale!.description
       }</b> ${verbe} à ${idServicesModifies.length} service${
         servicesMultiples ? 's' : ''
       }.`;

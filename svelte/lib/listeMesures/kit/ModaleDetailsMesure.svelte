@@ -1,6 +1,6 @@
 <script lang="ts">
   import type {
-    MesureReferentiel,
+    ModeleMesureGenerale,
     ReferentielStatut,
     ReferentielTypesService,
   } from '../../ui/types.d';
@@ -48,7 +48,7 @@
   const configureMesure = () => {
     if (modeleDeMesure.type === 'generale') {
       tiroirStore.afficheContenu(TiroirConfigurationMesure, {
-        mesure: modeleDeMesure as MesureReferentiel,
+        modeleMesureGenerale: modeleDeMesure as ModeleMesureGenerale,
         statuts: referentielStatuts,
       });
       elementModale.ferme();

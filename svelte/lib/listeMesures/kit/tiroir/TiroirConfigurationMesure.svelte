@@ -1,7 +1,10 @@
 <script lang="ts">
   import ContenuTiroir from '../../../ui/tiroirs/ContenuTiroir.svelte';
   import DescriptionCompleteMesure from '../DescriptionCompleteMesure.svelte';
-  import type { MesureReferentiel, ReferentielStatut } from '../../../ui/types';
+  import type {
+    ModeleMesureGenerale,
+    ReferentielStatut,
+  } from '../../../ui/types';
   import EtapierTiroir from './EtapierTiroir.svelte';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
   import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
@@ -20,7 +23,7 @@
     'Le statut et la précision de cette mesure peuvent être modifiés et appliqués simultanément à plusieurs services.';
   export const taille = 'large';
 
-  export let mesure: MesureReferentiel;
+  export let modeleMesureGenerale: ModeleMesureGenerale;
   export let statuts: ReferentielStatut;
 
   let statutSelectionne: StatutMesure | '' = '';
@@ -51,7 +54,7 @@
     enCoursEnvoi = true;
     try {
       await enregistreModificationMesureSurServicesMultiples({
-        idMesure: mesure.id,
+        idMesure: modeleMesureGenerale.id,
         statut: statutSelectionne,
         modalites: precision,
         idsServices: idsServicesSelectionnes,
@@ -64,7 +67,7 @@
           ...(precision && ['modalites']),
         ] as ('statut' | 'modalites')[],
         idServicesModifies: idsServicesSelectionnes,
-        mesure,
+        modeleMesureGenerale,
       });
     } catch (e) {
       tiroirStore.ferme();
@@ -86,7 +89,7 @@
 <ContenuTiroir>
   {#if etapeCourante === 1}
     <div>
-      <DescriptionCompleteMesure modeleDeMesure={mesure} />
+      <DescriptionCompleteMesure modeleDeMesure={modeleMesureGenerale} />
       <hr />
     </div>
   {/if}
@@ -97,13 +100,13 @@
   {:else if etapeCourante === 2}
     <SecondeEtape
       {statuts}
-      {mesure}
+      {modeleMesureGenerale}
       {modificationPrecisionUniquement}
       bind:idsServicesSelectionnes
     />
   {:else if etapeCourante === 3}
     <TroisiemeEtape
-      {mesure}
+      {modeleMesureGenerale}
       {precision}
       {statuts}
       {statutSelectionne}
