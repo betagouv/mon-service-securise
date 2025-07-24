@@ -2,20 +2,25 @@
   import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
   import CartoucheCategorieMesure from '../../ui/CartoucheCategorieMesure.svelte';
   import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
-  import type { MesureReferentiel } from '../../ui/types.d';
   import DescriptionLongueMesure from '../../ui/DescriptionLongueMesure.svelte';
+  import type { ModeleDeMesure } from '../listeMesures.d';
 
-  export let mesure: MesureReferentiel;
+  export let modeleDeMesure: Omit<
+    ModeleDeMesure,
+    'type' | 'idsServicesAssocies'
+  >;
 </script>
 
-<p class="description">{mesure.description}</p>
+<p class="description">{modeleDeMesure.description}</p>
 <div class="cartouches">
-  <CartoucheReferentiel referentiel={mesure.referentiel} />
-  <CartoucheCategorieMesure categorie={mesure.categorie} />
-  <CartoucheIdentifiantMesure identifiant={mesure.identifiantNumerique} />
+  <CartoucheReferentiel referentiel={modeleDeMesure.referentiel} />
+  <CartoucheCategorieMesure categorie={modeleDeMesure.categorie} />
+  <CartoucheIdentifiantMesure
+    identifiant={modeleDeMesure.identifiantNumerique}
+  />
 </div>
 <DescriptionLongueMesure
-  description={mesure.descriptionLongue}
+  description={modeleDeMesure.descriptionLongue}
   repliee={true}
 />
 

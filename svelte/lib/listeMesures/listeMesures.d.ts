@@ -45,7 +45,7 @@ export type ServiceAssocieAUneMesure = {
   typeService: IdTypeService[];
 };
 
-export type MesureDeLaListe = {
+export type ModeleDeMesure = {
   id: string;
   categorie: CategorieMesure;
   description: string;
