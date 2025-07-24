@@ -29,6 +29,7 @@
   import { modelesMesureSpecifique } from './stores/modelesMesureSpecifique.store';
   import type { ModeleDeMesure } from './listeMesures.d';
   import Onglets from '../ui/Onglets.svelte';
+  import TiroirAjoutModeleMesureSpecifique from './kit/tiroir/TiroirAjoutModeleMesureSpecifique.svelte';
 
   export let statuts: ReferentielStatut;
   export let typesService: ReferentielTypesService;
@@ -119,7 +120,6 @@
   };
 
   const afficheTiroirAjout = () => {
-    console.log('afficheTiroirAjout');
     tiroirStore.afficheContenu(TiroirAjoutModeleMesureSpecifique, {});
   };
 </script>
