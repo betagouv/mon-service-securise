@@ -4,9 +4,10 @@
   export let referentiel: Referentiel;
 </script>
 
-<span>{referentiel}</span>
+<span class={referentiel.toLowerCase().replaceAll(' ', '-')}>{referentiel}</span
+>
 
-<style>
+<style lang="scss">
   span {
     border-radius: 40px;
     padding: 1px 8px 3px;
@@ -18,6 +19,11 @@
     width: fit-content;
     color: var(--bleu-survol);
     background: #f1f5f9;
-    font-size: 0.9em;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+
+    &.mesures-ajoutées {
+      color: var(--bleu-mise-en-avant);
+    }
   }
 </style>
