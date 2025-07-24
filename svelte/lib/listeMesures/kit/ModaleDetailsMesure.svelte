@@ -1,5 +1,6 @@
 <script lang="ts">
   import type {
+    MesureReferentiel,
     ReferentielStatut,
     ReferentielTypesService,
   } from '../../ui/types.d';
@@ -11,13 +12,18 @@
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import TiroirConfigurationMesure from './tiroir/TiroirConfigurationMesure.svelte';
   import TableauServicesAssocies from './TableauServicesAssocies.svelte';
-  import type { ModeleDeMesure } from '../listeMesures.d';
+  import type {
+    ModeleDeMesure,
+    ServiceAssocieAUneMesure,
+  } from '../listeMesures.d';
 
   export let referentielStatuts: ReferentielStatut;
   export let referentielTypesService: ReferentielTypesService;
 
   let elementModale: Modale;
   let modeleDeMesure: ModeleDeMesure;
+
+  let servicesAvecMesure: ServiceAssocieAUneMesure[] = [];
 
   $: servicesAvecMesure =
     modeleDeMesure &&
@@ -30,13 +36,23 @@
             ? mesuresAssociees[modeleDeMesure.id]
             : mesuresSpecifiques.find(
                 (ms) => ms.idModele === modeleDeMesure.id
-              ),
+              )!,
       }));
 
   export const affiche = async (modeleMesureAAfficher: ModeleDeMesure) => {
     modeleDeMesure = modeleMesureAAfficher;
     await tick();
     elementModale.affiche();
+  };
+
+  const configureMesure = () => {
+    if (modeleDeMesure.type === 'generale') {
+      tiroirStore.afficheContenu(TiroirConfigurationMesure, {
+        mesure: modeleDeMesure as MesureReferentiel,
+        statuts: referentielStatuts,
+      });
+      elementModale.ferme();
+    }
   };
 </script>
 
@@ -73,13 +89,7 @@
         type="primaire"
         taille="moyen"
         icone="configuration"
-        on:click={() => {
-          tiroirStore.afficheContenu(TiroirConfigurationMesure, {
-            mesure: modeleDeMesure,
-            statuts: referentielStatuts,
-          });
-          elementModale.ferme();
-        }}
+        on:click={configureMesure}
       />
     </svelte:fragment>
   </Modale>
