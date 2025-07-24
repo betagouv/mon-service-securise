@@ -89,6 +89,7 @@
         type="primaire"
         taille="moyen"
         icone="configuration"
+        actif={modeleDeMesure.type === 'generale'}
         on:click={configureMesure}
       />
     </svelte:fragment>
