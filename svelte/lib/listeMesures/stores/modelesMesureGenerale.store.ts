@@ -17,6 +17,6 @@ axios
     );
   });
 
-export const mesuresReferentiel = {
+export const modelesMesureGenerale = {
   subscribe,
 };
