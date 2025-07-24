@@ -13,6 +13,7 @@ const unService = (
   nomService,
   organisationResponsable: 'SuperEntreprise',
   mesuresAssociees,
+  mesuresSpecifiques: [],
   peutEtreModifie: true,
   niveauSecurite: 'niveau1',
   typeService: ['api'],

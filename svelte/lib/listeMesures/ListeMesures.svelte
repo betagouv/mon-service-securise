@@ -31,6 +31,7 @@
     type CleOngletListeMesure,
   } from './kit/OngletsListeMesures.svelte';
   import { modelesMesureSpecifique } from './stores/modelesMesureSpecifique.store';
+  import type { MesureDeLaListe } from './listeMesures.d';
 
   export let statuts: ReferentielStatut;
   export let typesService: ReferentielTypesService;
@@ -43,7 +44,7 @@
   let modaleDetailsMesure: ModaleDetailsMesure;
   let ongletActif: CleOngletListeMesure = 'generales';
 
-  const afficheModaleDetailsMesure = async (mesure: MesureReferentiel) => {
+  const afficheModaleDetailsMesure = async (mesure: MesureDeLaListe) => {
     await modaleDetailsMesure.affiche(mesure);
   };
 
@@ -86,17 +87,6 @@
     ],
   };
 
-  type MesureDeLaListe = {
-    id: string;
-    categorie: CategorieMesure;
-    description: string;
-    descriptionLongue: string;
-    identifiantNumerique?: string;
-    referentiel: Referentiel;
-    idsServicesAssocies: string[];
-    type: 'generale' | 'specifique';
-  };
-
   let donneesMesures: MesureDeLaListe[];
   $: {
     if (ongletActif === 'generales')
@@ -122,7 +112,7 @@
   ): mesure is ModeleMesureSpecifique => mesure.type === 'specifique';
 
   const afficheDetailServiceAssocies = async (mesure: MesureDeLaListe) => {
-    if (estMesureGenerale(mesure)) await afficheModaleDetailsMesure(mesure);
+    await afficheModaleDetailsMesure(mesure);
   };
 
   const afficheTiroirConfigurationMesure = (mesure: MesureDeLaListe) => {
@@ -201,7 +191,6 @@
             titre={`${donnee.idsServicesAssocies.length} ${
               donnee.idsServicesAssocies.length > 1 ? 'services' : 'service'
             }`}
-            actif={typeMesure === 'generale'}
             on:click={async () => {
               await afficheDetailServiceAssocies(donnee);
             }}
