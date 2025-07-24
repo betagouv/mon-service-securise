@@ -31,7 +31,7 @@
     type CleOngletListeMesure,
   } from './kit/OngletsListeMesures.svelte';
   import { modelesMesureSpecifique } from './stores/modelesMesureSpecifique.store';
-  import type { MesureDeLaListe } from './listeMesures.d';
+  import type { ModeleDeMesure } from './listeMesures.d';
 
   export let statuts: ReferentielStatut;
   export let typesService: ReferentielTypesService;
@@ -44,8 +44,8 @@
   let modaleDetailsMesure: ModaleDetailsMesure;
   let ongletActif: CleOngletListeMesure = 'generales';
 
-  const afficheModaleDetailsMesure = async (mesure: MesureDeLaListe) => {
-    await modaleDetailsMesure.affiche(mesure);
+  const afficheModaleDetailsMesure = async (modeleMesure: ModeleDeMesure) => {
+    await modaleDetailsMesure.affiche(modeleMesure);
   };
 
   const optionsFiltrage = {
@@ -87,7 +87,7 @@
     ],
   };
 
-  let donneesMesures: MesureDeLaListe[];
+  let donneesMesures: ModeleDeMesure[];
   $: {
     if (ongletActif === 'generales')
       donneesMesures = Object.values($mesuresReferentiel).map((m) => ({
@@ -103,22 +103,18 @@
       }));
   }
 
-  const estMesureGenerale = (
-    mesure: MesureDeLaListe
-  ): mesure is MesureReferentiel => mesure.type === 'generale';
+  const estModeleMesureGenerale = (
+    modeleMesure: ModeleDeMesure
+  ): modeleMesure is MesureReferentiel => modeleMesure.type === 'generale';
 
-  const estMesureSpecifique = (
-    mesure: MesureDeLaListe
-  ): mesure is ModeleMesureSpecifique => mesure.type === 'specifique';
-
-  const afficheDetailServiceAssocies = async (mesure: MesureDeLaListe) => {
-    await afficheModaleDetailsMesure(mesure);
+  const afficheDetailServiceAssocies = async (modeleMesure: ModeleDeMesure) => {
+    await afficheModaleDetailsMesure(modeleMesure);
   };
 
-  const afficheTiroirConfigurationMesure = (mesure: MesureDeLaListe) => {
-    if (estMesureGenerale(mesure))
+  const afficheTiroirConfigurationMesure = (modeleMesure: ModeleDeMesure) => {
+    if (estModeleMesureGenerale(modeleMesure))
       tiroirStore.afficheContenu(TiroirConfigurationMesure, {
-        mesure,
+        mesure: modeleMesure,
         statuts,
       });
   };

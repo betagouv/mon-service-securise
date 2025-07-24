@@ -11,37 +11,40 @@
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import TiroirConfigurationMesure from './tiroir/TiroirConfigurationMesure.svelte';
   import TableauServicesAssocies from './TableauServicesAssocies.svelte';
-  import type { MesureDeLaListe } from '../listeMesures.d';
+  import type { ModeleDeMesure } from '../listeMesures.d';
 
   export let referentielStatuts: ReferentielStatut;
   export let referentielTypesService: ReferentielTypesService;
 
   let elementModale: Modale;
-  let mesure: MesureDeLaListe;
+  let modeleDeMesure: ModeleDeMesure;
+
   $: servicesAvecMesure =
-    mesure &&
+    modeleDeMesure &&
     $servicesAvecMesuresAssociees
-      .filter((s) => mesure.idsServicesAssocies.includes(s?.id))
+      .filter((s) => modeleDeMesure.idsServicesAssocies.includes(s?.id))
       .map(({ mesuresAssociees, mesuresSpecifiques, ...autresDonnees }) => ({
         ...autresDonnees,
         mesure:
-          mesure.type === 'generale'
-            ? mesuresAssociees[mesure.id]
-            : mesuresSpecifiques.find((ms) => ms.idModele === mesure.id),
+          modeleDeMesure.type === 'generale'
+            ? mesuresAssociees[modeleDeMesure.id]
+            : mesuresSpecifiques.find(
+                (ms) => ms.idModele === modeleDeMesure.id
+              ),
       }));
 
-  export const affiche = async (mesureAAfficher: MesureDeLaListe) => {
-    mesure = mesureAAfficher;
+  export const affiche = async (modeleMesureAAfficher: ModeleDeMesure) => {
+    modeleDeMesure = modeleMesureAAfficher;
     await tick();
     elementModale.affiche();
   };
 </script>
 
-{#if mesure}
+{#if modeleDeMesure}
   <Modale bind:this={elementModale}>
     <svelte:fragment slot="entete">
       <h4>Mesure</h4>
-      <DescriptionCompleteMesure {mesure} />
+      <DescriptionCompleteMesure {modeleDeMesure} />
       <h4>
         {servicesAvecMesure.length}
         {servicesAvecMesure.length > 1
@@ -72,7 +75,7 @@
         icone="configuration"
         on:click={() => {
           tiroirStore.afficheContenu(TiroirConfigurationMesure, {
-            mesure,
+            mesure: modeleDeMesure,
             statuts: referentielStatuts,
           });
           elementModale.ferme();

@@ -86,7 +86,7 @@
 <ContenuTiroir>
   {#if etapeCourante === 1}
     <div>
-      <DescriptionCompleteMesure {mesure} />
+      <DescriptionCompleteMesure modeleDeMesure={mesure} />
       <hr />
     </div>
   {/if}
