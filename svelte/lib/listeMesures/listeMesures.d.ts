@@ -17,7 +17,6 @@ export type ListeMesuresProps = {
   typesService: ReferentielTypesService;
   afficheModelesMesureSpecifique: boolean;
 };
-export type ReferentielMesures = Record<string, ModeleMesureGenerale>;
 
 export type PersonnalisationMesure = {
   statut?: string;

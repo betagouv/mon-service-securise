@@ -1,11 +1,19 @@
 import { writable } from 'svelte/store';
 import type { ModeleMesureGenerale } from '../../ui/types';
-import type { ReferentielMesures } from '../listeMesures.d';
 
-const { subscribe, set } = writable<Record<string, ModeleMesureGenerale>>({});
+type IdModeleMesureGenerale = string;
+
+type ModelesMesureGeneraleAPI = Record<
+  IdModeleMesureGenerale,
+  Omit<ModeleMesureGenerale, 'id'>
+>;
+
+const { subscribe, set } = writable<
+  Record<IdModeleMesureGenerale, ModeleMesureGenerale>
+>({});
 
 axios
-  .get<ReferentielMesures>('/api/referentiel/mesures')
+  .get<ModelesMesureGeneraleAPI>('/api/referentiel/mesures')
   .then(({ data: mesures }) => {
     set(
       Object.fromEntries(
