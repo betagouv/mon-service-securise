@@ -26,11 +26,9 @@
   import Lien from '../ui/Lien.svelte';
   import Loader from '../ui/Loader.svelte';
   import Toaster from '../ui/Toaster.svelte';
-  import OngletsListeMesures, {
-    type CleOngletListeMesure,
-  } from './kit/OngletsListeMesures.svelte';
   import { modelesMesureSpecifique } from './stores/modelesMesureSpecifique.store';
   import type { ModeleDeMesure } from './listeMesures.d';
+  import Onglets from '../ui/Onglets.svelte';
 
   export let statuts: ReferentielStatut;
   export let typesService: ReferentielTypesService;
@@ -41,7 +39,7 @@
   });
 
   let modaleDetailsMesure: ModaleDetailsMesure;
-  let ongletActif: CleOngletListeMesure = 'generales';
+  let ongletActif: 'generales' | 'specifiques' = 'generales';
 
   const afficheModaleDetailsMesure = async (modeleMesure: ModeleDeMesure) => {
     await modaleDetailsMesure.affiche(modeleMesure);
@@ -119,6 +117,11 @@
         statuts,
       });
   };
+
+  const afficheTiroirAjout = () => {
+    console.log('afficheTiroirAjout');
+    tiroirStore.afficheContenu(TiroirAjoutModeleMesureSpecifique, {});
+  };
 </script>
 
 <Toaster />
@@ -162,12 +165,27 @@
       titre="Ajouter une mesure"
       icone="add-line"
       position-icone="gauche"
+      on:click={afficheTiroirAjout}
     />
   </div>
 
   <div slot="onglets">
     {#if afficheModelesMesureSpecifique}
-      <OngletsListeMesures bind:ongletActif />
+      <Onglets
+        bind:ongletActif
+        onglets={[
+          {
+            id: 'generales',
+            label: 'Les mesures ANSSI & CNIL',
+            badge: Object.keys($modelesMesureGenerale).length,
+          },
+          {
+            id: 'specifiques',
+            label: 'Mes mesures ajoutées',
+            badge: $modelesMesureSpecifique.length,
+          },
+        ]}
+      />
     {/if}
   </div>
   <svelte:fragment slot="cellule" let:donnee let:colonne>
