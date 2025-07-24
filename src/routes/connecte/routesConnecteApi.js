@@ -112,7 +112,8 @@ const routesConnecteApi = ({
             .aLesPermissions({ [SECURISER]: LECTURE })
         )
         .map((service) => {
-          const { mesuresGenerales } = objetGetMesures.donnees(service);
+          const { mesuresGenerales, mesuresSpecifiques } =
+            objetGetMesures.donnees(service);
 
           const mesuresAssociees = Object.fromEntries(
             Object.entries(mesuresGenerales).map(
@@ -135,6 +136,7 @@ const routesConnecteApi = ({
             organisationResponsable:
               service.descriptionService.organisationResponsable.nom,
             mesuresAssociees,
+            mesuresSpecifiques,
             peutEtreModifie: autorisations
               .find((a) => a.idService === service.id)
               .aLesPermissions({ [SECURISER]: ECRITURE }),
