@@ -11,7 +11,7 @@
 
   export let mesure: MesureReferentiel;
   export let statuts: ReferentielStatut;
-  export let statutSelectionne: StatutMesure;
+  export let statutSelectionne: StatutMesure | '';
   export let precision: string;
   export let idsServicesSelectionnes: string[];
 

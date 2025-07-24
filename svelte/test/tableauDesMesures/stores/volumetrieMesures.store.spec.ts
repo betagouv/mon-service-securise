@@ -20,7 +20,7 @@ describe('Le store dérivé de volumétrie des mesures', () => {
             id: 'M1',
             categorie: 'Protection',
             modalites: '',
-            statut: 'Fait',
+            statut: 'fait',
             description: '',
             identifiantNumerique: '000',
           },
@@ -60,7 +60,7 @@ describe('Le store dérivé de volumétrie des mesures', () => {
           mesureFaite: {
             categorie: 'Protection',
             indispensable: true,
-            statut: 'Faite',
+            statut: 'fait',
             descriptionLongue: '',
             referentiel: Referentiel.ANSSI,
             modalites: '',

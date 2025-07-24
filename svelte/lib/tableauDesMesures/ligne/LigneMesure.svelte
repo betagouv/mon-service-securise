@@ -17,7 +17,10 @@
   import { rechercheTextuelle } from '../stores/rechercheTextuelle.store';
   import SelectionPriorite from '../../ui/SelectionPriorite.svelte';
   import SelectionEcheance from '../../ui/SelectionEcheance.svelte';
-  import { planDActionDisponible } from '../../modeles/modeleMesure';
+  import {
+    planDActionDisponible,
+    type StatutMesure,
+  } from '../../modeles/modeleMesure';
   import SelectionResponsables from '../../ui/SelectionResponsables.svelte';
 
   type IdDom = string;
@@ -34,7 +37,7 @@
   export let priorites: ReferentielPriorite;
 
   const dispatch = createEventDispatcher<{
-    modificationStatut: { statut: string };
+    modificationStatut: { statut: StatutMesure };
     modificationPriorite: { priorite: PrioriteMesure | undefined };
   }>();
 
