@@ -50,4 +50,20 @@
   --liste-articles-couleur-fleche: #0079d0;
   --liste-articles-couleur-texte: #09416a;
   --couleur-focus: #0a76f6;
+  --bouton-secondaire-tertiaire-couleur-texte: #0079d0;
+  --bouton-primaire-couleur-texte: #ffffff;
+  --bouton-primaire-couleur-fond: #0079d0;
+  --bouton-primaire-couleur-fond-survol: #0c5c98;
+  --bouton-primaire-couleur-fond-clique: #09416a;
+  --bouton-arrondi: 4px;
+  --tag-couleur-fond: #eee;
+  --tag-couleur-texte: #161616;
+  --tag-selectionnable-couleur-texte: #000091;
+  --tag-selectionnable-couleur-fond: #e3e3fd;
+  --tag-selectionnable-couleur-fond-survol: #c1c1fb;
+  --tag-selectionnable-couleur-fond-clique: #adadf9;
+  --tag-selectionne-couleur-texte: #f5f5fe;
+  --tag-selectionne-couleur-fond: #000091;
+  --tag-selectionne-couleur-fond-survol: #1212ff;
+  --tag-selectionne-couleur-fond-clique: #2323ff;
 }
