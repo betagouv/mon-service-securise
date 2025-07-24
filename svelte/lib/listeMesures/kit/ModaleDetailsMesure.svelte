@@ -1,10 +1,8 @@
 <script lang="ts">
   import type {
-    MesureReferentiel,
     ReferentielStatut,
     ReferentielTypesService,
   } from '../../ui/types.d';
-  import { mesuresAvecServicesAssociesStore } from '../stores/mesuresAvecServicesAssocies.store';
   import { servicesAvecMesuresAssociees } from '../stores/servicesAvecMesuresAssociees.store';
   import DescriptionCompleteMesure from './DescriptionCompleteMesure.svelte';
   import Modale from '../../ui/Modale.svelte';
@@ -13,24 +11,26 @@
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import TiroirConfigurationMesure from './tiroir/TiroirConfigurationMesure.svelte';
   import TableauServicesAssocies from './TableauServicesAssocies.svelte';
+  import type { MesureDeLaListe } from '../listeMesures.d';
 
   export let referentielStatuts: ReferentielStatut;
   export let referentielTypesService: ReferentielTypesService;
 
   let elementModale: Modale;
-  let mesure: MesureReferentiel;
+  let mesure: MesureDeLaListe;
   $: servicesAvecMesure =
     mesure &&
     $servicesAvecMesuresAssociees
-      .filter((s) => {
-        return $mesuresAvecServicesAssociesStore[mesure.id].includes(s?.id);
-      })
-      .map(({ mesuresAssociees, ...autresDonnees }) => ({
+      .filter((s) => mesure.idsServicesAssocies.includes(s?.id))
+      .map(({ mesuresAssociees, mesuresSpecifiques, ...autresDonnees }) => ({
         ...autresDonnees,
-        mesure: mesuresAssociees[mesure.id],
+        mesure:
+          mesure.type === 'generale'
+            ? mesuresAssociees[mesure.id]
+            : mesuresSpecifiques.find((ms) => ms.idModele === mesure.id),
       }));
 
-  export const affiche = async (mesureAAfficher: MesureReferentiel) => {
+  export const affiche = async (mesureAAfficher: MesureDeLaListe) => {
     mesure = mesureAAfficher;
     await tick();
     elementModale.affiche();

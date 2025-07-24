@@ -1,10 +1,10 @@
 import type {
   IdNiveauDeSecurite,
-  MesureReferentiel,
   IdTypeService,
+  MesureReferentiel,
+  MesureSpecifique,
   ReferentielStatut,
 } from '../ui/types.d';
-import type { StatutMesure } from '../modeles/modeleMesure';
 
 declare global {
   interface HTMLElementEventMap {
@@ -29,6 +29,7 @@ export type ServiceAvecMesuresAssociees = {
   nomService: string;
   organisationResponsable: string;
   mesuresAssociees: Record<string, PersonnalisationMesure>;
+  mesuresSpecifiques: MesureSpecifique[];
   peutEtreModifie: boolean;
   niveauSecurite: IdNiveauDeSecurite;
   typeService: IdTypeService[];
@@ -42,4 +43,15 @@ export type ServiceAssocieAUneMesure = {
   peutEtreModifie: boolean;
   niveauSecurite: IdNiveauDeSecurite;
   typeService: IdTypeService[];
+};
+
+export type MesureDeLaListe = {
+  id: string;
+  categorie: CategorieMesure;
+  description: string;
+  descriptionLongue: string;
+  identifiantNumerique?: string;
+  referentiel: Referentiel;
+  idsServicesAssocies: string[];
+  type: 'generale' | 'specifique';
 };

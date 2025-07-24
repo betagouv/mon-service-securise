@@ -77,6 +77,17 @@ export type ModeleMesureSpecifique = {
   idsServicesAssocies: string[];
 };
 
+export type MesureSpecifique = {
+  id: string;
+  categorie: CategorieMesure;
+  description: string;
+  descriptionLongue?: string;
+  idModele?: string;
+  responsables: string[];
+  statut: StatutMesure;
+  modalite: string;
+};
+
 export type ObjetDeDonnees = Record<string, any>;
 
 export type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';
