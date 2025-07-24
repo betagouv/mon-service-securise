@@ -4,7 +4,7 @@
 
 <script lang="ts">
   import Onglet from '../../ui/Onglet.svelte';
-  import { mesuresReferentiel } from '../stores/mesuresReferentiel.store';
+  import { modelesMesureGenerale } from '../stores/modelesMesureGenerale.store';
   import { modelesMesureSpecifique } from '../stores/modelesMesureSpecifique.store';
 
   export let ongletActif: CleOngletListeMesure;
@@ -15,7 +15,7 @@
     bind:ongletActif
     cetOnglet="generales"
     labelOnglet="Les mesures ANSSI & CNIL"
-    badge={Object.keys($mesuresReferentiel).length}
+    badge={Object.keys($modelesMesureGenerale).length}
   />
   <Onglet
     bind:ongletActif

@@ -21,7 +21,7 @@
   import Bouton from '../ui/Bouton.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirConfigurationMesure from './kit/tiroir/TiroirConfigurationMesure.svelte';
-  import { mesuresReferentiel } from './stores/mesuresReferentiel.store';
+  import { modelesMesureGenerale } from './stores/modelesMesureGenerale.store';
   import ModaleRapportModification from './kit/ModaleRapportModification.svelte';
   import { modaleRapportStore } from './stores/modaleRapport.store';
   import Lien from '../ui/Lien.svelte';
@@ -87,16 +87,16 @@
     ],
   };
 
-  let donneesMesures: ModeleDeMesure[];
+  let donneesModelesMesure: ModeleDeMesure[];
   $: {
     if (ongletActif === 'generales')
-      donneesMesures = Object.values($mesuresReferentiel).map((m) => ({
+      donneesModelesMesure = Object.values($modelesMesureGenerale).map((m) => ({
         ...m,
         idsServicesAssocies: $mesuresAvecServicesAssociesStore[m.id],
         type: 'generale',
       }));
     else if (ongletActif === 'specifiques')
-      donneesMesures = $modelesMesureSpecifique.map((m) => ({
+      donneesModelesMesure = $modelesMesureSpecifique.map((m) => ({
         ...m,
         referentiel: Referentiel.SPECIFIQUE,
         type: 'specifique',
@@ -140,7 +140,7 @@
     { cle: 'servicesAssocies', libelle: 'Services associés' },
     { cle: 'actions', libelle: 'Action' },
   ]}
-  donnees={donneesMesures}
+  donnees={donneesModelesMesure}
   configurationRecherche={{
     champsRecherche: ['description', 'identifiantNumerique'],
   }}
