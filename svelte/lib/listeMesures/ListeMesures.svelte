@@ -8,7 +8,6 @@
   import {
     CategorieMesure,
     type ModeleMesureGenerale,
-    type ModeleMesureSpecifique,
     Referentiel,
     type ReferentielStatut,
     type ReferentielTypesService,
@@ -157,6 +156,13 @@
       target="_blank"
       icone="telecharger"
     />
+    <lab-anssi-bouton
+      variante="primaire"
+      taille="md"
+      titre="Ajouter une mesure"
+      icone="add-line"
+      position-icone="gauche"
+    />
   </div>
 
   <div slot="onglets">
@@ -249,6 +255,8 @@
 
   .conteneur-actions-complementaires {
     margin-left: auto;
+    display: flex;
+    gap: 12px;
   }
 
   @keyframes montre-ligne {
