@@ -61,6 +61,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
   - [ ] Les filtres fonctionnent encore
   - [ ] Les badges des onglets sont mis à jour en fonction de la recherche
 - [x] On peut afficher les services associés à un modèle, avec le statut et la précision actuelle
+- [ ] On veut voir un écran dédié quand la liste de modèle de mesure est vide
 - [ ] On veut pouvoir ajouter un modèle de mesure
   - [ ] Via un bouton à côté du téléchargement de la liste
   - [ ] En passant par un tiroir de création
