@@ -20,7 +20,7 @@
   import { mesuresAvecServicesAssociesStore } from './stores/mesuresAvecServicesAssocies.store';
   import Bouton from '../ui/Bouton.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
-  import TiroirConfigurationMesure from './kit/tiroir/TiroirConfigurationMesure.svelte';
+  import TiroirModificationMultipleMesuresGenerales from './kit/tiroir/TiroirModificationMultipleMesuresGenerales.svelte';
   import { modelesMesureGenerale } from './stores/modelesMesureGenerale.store';
   import ModaleRapportModification from './kit/ModaleRapportModification.svelte';
   import { modaleRapportStore } from './stores/modaleRapport.store';
@@ -111,9 +111,11 @@
     await afficheModaleDetailsMesure(modeleMesure);
   };
 
-  const afficheTiroirConfigurationMesure = (modeleMesure: ModeleDeMesure) => {
+  const afficheTiroirModificationMultipleMesuresGenerales = (
+    modeleMesure: ModeleDeMesure
+  ) => {
     if (estModeleMesureGenerale(modeleMesure))
-      tiroirStore.afficheContenu(TiroirConfigurationMesure, {
+      tiroirStore.afficheContenu(TiroirModificationMultipleMesuresGenerales, {
         modeleMesureGenerale: modeleMesure,
         statuts,
       });
@@ -203,7 +205,7 @@
         icone="configuration"
         actif={aDesServicesAssocies && typeMesure === 'generale'}
         on:click={() => {
-          afficheTiroirConfigurationMesure(donnee);
+          afficheTiroirModificationMultipleMesuresGenerales(donnee);
         }}
       />
     {/if}

@@ -65,8 +65,8 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
   - [ ] Via un bouton à côté du téléchargement de la liste
   - [ ] En passant par un tiroir de création
   - [ ] Depuis la modale du détail d'une mesure spécifique
-- [ ] [SOIN] Renommage des modèles
+- [x] [SOIN] Renommage des modèles
   - [x] Renommer `MesureReferentiel` en `ModeleMesureGenerale`
   - [x] Renommer le store `mesuresReferentiel.store`
   - [x] Renommer le type `ReferentielMesures`
-  - [ ] Renommer `TiroirConfigurationMesure` en `TiroirConfigurationModeleMesureGenerale`
+  - [x] Renommer `TiroirConfigurationMesure` en `TiroirConfigurationModeleMesureGenerale`
