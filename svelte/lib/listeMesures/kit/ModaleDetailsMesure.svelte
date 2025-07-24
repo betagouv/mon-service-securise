@@ -10,7 +10,7 @@
   import { tick } from 'svelte';
   import Bouton from '../../ui/Bouton.svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
-  import TiroirConfigurationMesure from './tiroir/TiroirConfigurationMesure.svelte';
+  import TiroirModificationMultipleMesuresGenerales from './tiroir/TiroirModificationMultipleMesuresGenerales.svelte';
   import TableauServicesAssocies from './TableauServicesAssocies.svelte';
   import type {
     ModeleDeMesure,
@@ -47,7 +47,7 @@
 
   const configureMesure = () => {
     if (modeleDeMesure.type === 'generale') {
-      tiroirStore.afficheContenu(TiroirConfigurationMesure, {
+      tiroirStore.afficheContenu(TiroirModificationMultipleMesuresGenerales, {
         modeleMesureGenerale: modeleDeMesure as ModeleMesureGenerale,
         statuts: referentielStatuts,
       });
