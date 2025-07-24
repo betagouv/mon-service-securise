@@ -250,9 +250,50 @@ describe('Le serveur MSS des routes privées /api/*', () => {
             A: { statut: 'fait', modalites: 'Mon commentaire' },
             B: {},
           },
+          mesuresSpecifiques: [],
           niveauSecurite: 'niveau2',
           typeService: ['api', 'siteInternet'],
           peutEtreModifie: true,
+        },
+      ]);
+    });
+
+    it('retourne une liste de services avec leurs mesures spécifiques associées', async () => {
+      const mesures = new Mesures(
+        {
+          mesuresSpecifiques: [
+            { id: 'MS1', idModele: 'MOD-1', statut: 'enCours' },
+          ],
+        },
+        testeur.referentiel(),
+        {},
+        { 'MOD-1': {} }
+      );
+      testeur.depotDonnees().autorisations = () => [
+        uneAutorisation().deProprietaire('U1', 'S1').construis(),
+      ];
+      const descriptionService = uneDescriptionValide(
+        testeur.referentiel()
+      ).donnees;
+      testeur.depotDonnees().services = () => [
+        unService(testeur.referentiel())
+          .avecId('S1')
+          .avecDescription(descriptionService)
+          .avecMesures(mesures)
+          .construis(),
+      ];
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/services/mesures'
+      );
+
+      expect(reponse.status).to.be(200);
+      expect(reponse.data[0].mesuresSpecifiques).to.eql([
+        {
+          id: 'MS1',
+          idModele: 'MOD-1',
+          statut: 'enCours',
+          responsables: [],
         },
       ]);
     });
