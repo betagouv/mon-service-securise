@@ -1,6 +1,7 @@
 <script lang="ts">
   import SelectionStatut from '../../../../ui/SelectionStatut.svelte';
   import type { ReferentielStatut } from '../../../../ui/types';
+  import ChampDeSaisie from '../../../../ui/ChampDeSaisie.svelte';
 
   export let statuts: ReferentielStatut;
   export let statutSelectionne: keyof ReferentielStatut | '' = '';
@@ -26,14 +27,11 @@
   {/if}
 </div>
 <div>
-  <label>
-    Précision sur la mesure
-    <textarea
-      bind:value={precision}
-      rows="3"
-      placeholder="Apportez des précisions sur la mesure, ses modalités de mise en oeuvre, etc."
-    />
-  </label>
+  <ChampDeSaisie
+    bind:contenu={precision}
+    label="Précision sur la mesure"
+    aideSaisie="Apportez des précisions sur la mesure, ses modalités de mise en oeuvre, etc."
+  />
 </div>
 
 <style lang="scss">
@@ -63,22 +61,5 @@
     font-style: normal;
     font-weight: 400;
     line-height: 1.5rem;
-  }
-
-  textarea {
-    width: 100%;
-    max-width: 700px;
-    border: none;
-    border-radius: 4px 4px 0 0;
-    border-bottom: 2px solid #3a3a3a;
-    background: #eee;
-    color: #3a3a3a;
-    font-family: Marianne;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5rem;
-    padding: 8px 16px;
-    box-sizing: border-box;
-    margin-top: 8px;
   }
 </style>
