@@ -2,6 +2,7 @@
   import type { ReferentielStatut } from './types.d';
   import { validationChamp } from '../directives/validationChamp';
   import { createEventDispatcher } from 'svelte';
+  import type { StatutMesure } from '../modeles/modeleMesure';
 
   export let id: string;
   export let statut: string | undefined;
@@ -13,7 +14,7 @@
   export let version: 'normale' | 'accentuee' = 'normale';
   export let labelChoixVide: string = '';
 
-  const dispatch = createEventDispatcher<{ input: { statut: string } }>();
+  const dispatch = createEventDispatcher<{ input: { statut: StatutMesure } }>();
 
   $: {
     if (!statut) statut = '';

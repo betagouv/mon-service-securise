@@ -8,7 +8,7 @@ export const enregistreModificationMesureSurServicesMultiples = async ({
 }: {
   idMesure: string;
   idsServices: string[];
-  statut: StatutMesure | null;
+  statut: StatutMesure | '';
   modalites: string | null;
 }) => {
   await axios.put(`/api/services/mesures/${idMesure}`, {

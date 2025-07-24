@@ -1,6 +1,7 @@
 import type { Mesures, IdUtilisateur } from '../tableauDesMesures.d';
 import { writable } from 'svelte/store';
 import type { EcheanceMesure, PrioriteMesure } from '../../ui/types';
+import type { StatutMesure } from '../../modeles/modeleMesure';
 
 export const mesuresParDefaut = (): Mesures => ({
   mesuresGenerales: {},
@@ -48,12 +49,12 @@ export const mesures = {
       valeur.mesuresSpecifiques[idMesure].responsables = responsables;
       return valeur;
     }),
-  metAJourStatutMesureGenerale: (idMesure: string, statut: string) =>
+  metAJourStatutMesureGenerale: (idMesure: string, statut: StatutMesure) =>
     toutesLesMesures.update((valeur) => {
       valeur.mesuresGenerales[idMesure].statut = statut;
       return valeur;
     }),
-  metAJourStatutMesureSpecifique: (idMesure: number, statut: string) =>
+  metAJourStatutMesureSpecifique: (idMesure: number, statut: StatutMesure) =>
     toutesLesMesures.update((valeur) => {
       valeur.mesuresSpecifiques[idMesure].statut = statut;
       return valeur;
