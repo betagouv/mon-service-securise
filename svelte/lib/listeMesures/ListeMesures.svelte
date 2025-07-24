@@ -7,7 +7,7 @@
   import ModaleDetailsMesure from './kit/ModaleDetailsMesure.svelte';
   import {
     CategorieMesure,
-    type MesureReferentiel,
+    type ModeleMesureGenerale,
     type ModeleMesureSpecifique,
     Referentiel,
     type ReferentielStatut,
@@ -105,7 +105,7 @@
 
   const estModeleMesureGenerale = (
     modeleMesure: ModeleDeMesure
-  ): modeleMesure is MesureReferentiel => modeleMesure.type === 'generale';
+  ): modeleMesure is ModeleMesureGenerale => modeleMesure.type === 'generale';
 
   const afficheDetailServiceAssocies = async (modeleMesure: ModeleDeMesure) => {
     await afficheModaleDetailsMesure(modeleMesure);
@@ -114,7 +114,7 @@
   const afficheTiroirConfigurationMesure = (modeleMesure: ModeleDeMesure) => {
     if (estModeleMesureGenerale(modeleMesure))
       tiroirStore.afficheContenu(TiroirConfigurationMesure, {
-        mesure: modeleMesure,
+        modeleMesureGenerale: modeleMesure,
         statuts,
       });
   };

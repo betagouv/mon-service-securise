@@ -1,6 +1,6 @@
 <script lang="ts">
   import type {
-    MesureReferentiel,
+    ModeleMesureGenerale,
     ReferentielStatut,
   } from '../../../../ui/types';
   import { decode } from 'html-entities';
@@ -11,7 +11,7 @@
   import Infobulle from '../../../../ui/Infobulle.svelte';
 
   export let statuts: ReferentielStatut;
-  export let mesure: MesureReferentiel;
+  export let modeleMesureGenerale: ModeleMesureGenerale;
   export let modificationPrecisionUniquement: boolean;
   export let idsServicesSelectionnes: string[];
 
@@ -26,13 +26,15 @@
   };
 
   $: servicesAssocies =
-    mesure &&
+    modeleMesureGenerale &&
     $servicesAvecMesuresAssociees
       .filter((s) => {
-        return $mesuresAvecServicesAssociesStore[mesure.id].includes(s?.id);
+        return $mesuresAvecServicesAssociesStore[
+          modeleMesureGenerale.id
+        ].includes(s?.id);
       })
       .map(({ mesuresAssociees, ...autresDonnees }) => ({
-        ...mesuresAssociees[mesure.id],
+        ...mesuresAssociees[modeleMesureGenerale.id],
         ...autresDonnees,
       }))
       .sort((a, b) => {

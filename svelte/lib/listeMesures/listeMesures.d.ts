@@ -1,7 +1,7 @@
 import type {
   IdNiveauDeSecurite,
   IdTypeService,
-  MesureReferentiel,
+  ModeleMesureGenerale,
   MesureSpecifique,
   ReferentielStatut,
 } from '../ui/types.d';
@@ -17,7 +17,7 @@ export type ListeMesuresProps = {
   typesService: ReferentielTypesService;
   afficheModelesMesureSpecifique: boolean;
 };
-export type ReferentielMesures = Record<string, MesureReferentiel>;
+export type ReferentielMesures = Record<string, ModeleMesureGenerale>;
 
 export type PersonnalisationMesure = {
   statut?: string;
