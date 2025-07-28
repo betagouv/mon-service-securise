@@ -159,14 +159,16 @@
       target="_blank"
       icone="telecharger"
     />
-    <lab-anssi-bouton
-      variante="primaire"
-      taille="md"
-      titre="Ajouter une mesure"
-      icone="add-line"
-      position-icone="gauche"
-      on:click={afficheTiroirAjout}
-    />
+    {#if afficheModelesMesureSpecifique}
+      <lab-anssi-bouton
+        variante="primaire"
+        taille="md"
+        titre="Ajouter une mesure"
+        icone="add-line"
+        position-icone="gauche"
+        on:click={afficheTiroirAjout}
+      />
+    {/if}
   </div>
 
   <div slot="onglets">
