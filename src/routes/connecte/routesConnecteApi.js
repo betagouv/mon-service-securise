@@ -607,7 +607,7 @@ const routesConnecteApi = ({
         referentiel.verifieCategoriesMesuresSontRepertoriees([categorie]);
       } catch (e) {
         if (e instanceof ErreurCategorieInconnue) {
-          reponse.status(400).send(e.message);
+          reponse.status(400).send('La catégorie est invalide');
           return;
         }
       }
