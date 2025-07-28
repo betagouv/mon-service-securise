@@ -1,5 +1,6 @@
 const axios = require('axios');
 const expect = require('expect.js');
+const { JsonWebTokenError } = require('jsonwebtoken');
 const testeurMSS = require('../testeurMSS');
 const {
   ErreurUtilisateurExistant,
@@ -26,9 +27,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
     beforeEach(() => {
       donneesRequete = {
-        prenom: 'Jean',
-        nom: 'Dupont',
-        email: 'jean.dupont@mail.fr',
         telephone: '0100000000',
         postes: ['RSSI', "Chargé des systèmes d'informations"],
         siretEntite: '13000766900018',
@@ -39,8 +37,21 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         cguAcceptees: 'true',
         infolettreAcceptee: 'true',
         transactionnelAccepte: 'true',
+        token: 'unTokenValide',
       };
 
+      testeur.adaptateurJWT().decode = (token) => {
+        if (token === 'unTokenValide')
+          return {
+            prenom: 'Jean',
+            nom: 'Dupont',
+            email: 'jean.dupont@mail.fr',
+          };
+        if (token === 'tokenInvalide') {
+          throw new JsonWebTokenError();
+        }
+        return undefined;
+      };
       testeur.referentiel().departement = () => 'Paris';
       testeur.adaptateurMail().creeContact = () => Promise.resolve();
       testeur.adaptateurMail().envoieMessageFinalisationInscription = () =>
@@ -65,9 +76,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         [
-          'prenom',
-          'nom',
-          'email',
           'telephone',
           'cguAcceptees',
           'infolettreAcceptee',
@@ -91,7 +99,11 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         return Promise.resolve(utilisateur);
       };
 
-      donneesRequete.email = 'Jean.DUPONT@mail.fr';
+      testeur.adaptateurJWT().decode = () => ({
+        prenom: 'Jean',
+        nom: 'Dupont',
+        email: 'Jean.DUPONT@mail.fr',
+      });
 
       axios
         .post('http://localhost:1234/api/utilisateur', donneesRequete)
@@ -129,11 +141,11 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", async () => {
-      donneesRequete.prenom = '';
+      donneesRequete.siretEntite = '';
 
       await testeur.verifieRequeteGenereErreurHTTP(
         422,
-        'La création d\'un nouvel utilisateur a échoué car les paramètres sont invalides. La propriété "prenom" est requise',
+        'La création d\'un nouvel utilisateur a échoué car les paramètres sont invalides. La propriété "entite.siret" est requise',
         {
           method: 'post',
           url: 'http://localhost:1234/api/utilisateur',
@@ -276,7 +288,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it('envoie un email de notification de tentative de réinscription', (done) => {
-      expect(donneesRequete.email).to.equal('jean.dupont@mail.fr');
       let notificationEnvoyee = false;
 
       testeur.depotDonnees().nouvelUtilisateur = () =>
@@ -305,6 +316,32 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       };
 
       await testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
+        method: 'post',
+        url: 'http://localhost:1234/api/utilisateur',
+        data: donneesRequete,
+      });
+    });
+
+    it('jette une erreur si le token est invalide', async () => {
+      donneesRequete.token = 'tokenInvalide';
+
+      await testeur.verifieRequeteGenereErreurHTTP(
+        422,
+        'Le token est invalide',
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/utilisateur',
+          data: donneesRequete,
+        }
+      );
+    });
+
+    it('jette une erreur si le token est absent', async () => {
+      testeur.adaptateurJWT().decode = () => undefined;
+
+      donneesRequete.token = '';
+
+      await testeur.verifieRequeteGenereErreurHTTP(422, 'Le token est requis', {
         method: 'post',
         url: 'http://localhost:1234/api/utilisateur',
         data: donneesRequete,

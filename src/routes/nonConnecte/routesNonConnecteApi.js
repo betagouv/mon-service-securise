@@ -17,6 +17,7 @@ const routesNonConnecteApi = ({
   depotDonnees,
   serviceAnnuaire,
   adaptateurMail,
+  adaptateurJWT,
   inscriptionUtilisateur,
   adaptateurGestionErreur,
   serviceCgu,
@@ -27,13 +28,36 @@ const routesNonConnecteApi = ({
   routes.post(
     '/utilisateur',
     middleware.protegeTrafic(),
-    middleware.aseptise(...Utilisateur.nomsProprietesBase(), 'siretEntite'),
+    middleware.aseptise(
+      ...Utilisateur.nomsProprietesBase().filter(
+        (propriete) => !['prenom', 'nom', 'email'].includes(propriete)
+      ),
+      'siretEntite'
+    ),
     async (requete, reponse, suite) => {
+      const { token } = requete.body;
+
+      if (!token) {
+        reponse.status(422).send('Le token est requis');
+        return;
+      }
+
+      let donneesToken;
+      try {
+        donneesToken = await adaptateurJWT.decode(token);
+      } catch (e) {
+        reponse.status(422).send('Le token est invalide');
+        return;
+      }
+
       const donnees = obtentionDonneesDeBaseUtilisateur(
         requete.body,
         serviceCgu
       );
-      donnees.email = requete.body.email?.toLowerCase();
+
+      donnees.prenom = donneesToken.prenom;
+      donnees.nom = donneesToken.nom;
+      donnees.email = donneesToken.email?.toLowerCase();
       const { donneesInvalides, messageErreur } =
         messageErreurDonneesUtilisateur(donnees, false);
 

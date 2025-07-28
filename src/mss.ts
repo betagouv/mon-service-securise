@@ -130,6 +130,7 @@ const creeServeur = ({
       serviceAnnuaire,
       adaptateurTracking,
       adaptateurGestionErreur,
+      adaptateurJWT,
       adaptateurMail,
       inscriptionUtilisateur,
       serviceCgu,
