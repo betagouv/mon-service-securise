@@ -57,7 +57,7 @@
       requis
     />
     <ChampDeSaisie
-      aideSaisie="Apportez des précisions sur la mesure "
+      aideSaisie="Apportez des précisions sur la mesure"
       label="Description de la mesure"
       bind:contenu={donneesModeleMesureAjoute.descriptionLongue}
     />
