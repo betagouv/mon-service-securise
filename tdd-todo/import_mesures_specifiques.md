@@ -62,10 +62,13 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
   - [ ] Les badges des onglets sont mis à jour en fonction de la recherche
 - [x] On peut afficher les services associés à un modèle, avec le statut et la précision actuelle
 - [ ] On veut voir un écran dédié quand la liste de modèle de mesure est vide
-- [ ] On veut pouvoir ajouter un modèle de mesure
-  - [ ] Via un bouton à côté du téléchargement de la liste
-  - [ ] En passant par un tiroir de création
-  - [ ] Depuis la modale du détail d'une mesure spécifique
+- [x] On veut pouvoir ajouter un modèle de mesure
+  - [x] Via un bouton à côté du téléchargement de la liste
+  - [x] En passant par un tiroir de création
+- [ ] On veut pouvoir associer un modèle à des services
+  - [ ] Après avoir ajouté un modèle
+  - [ ] Depuis la modale de détail d'un modèle de mesure
+  - [ ] Depuis l'action du tableau
 - [x] [SOIN] Renommage des modèles
   - [x] Renommer `MesureReferentiel` en `ModeleMesureGenerale`
   - [x] Renommer le store `mesuresReferentiel.store`

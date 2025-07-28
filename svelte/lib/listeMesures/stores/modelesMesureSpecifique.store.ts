@@ -3,10 +3,14 @@ import type { ModeleMesureSpecifique } from '../../ui/types';
 
 const { subscribe, set } = writable<ModeleMesureSpecifique[]>([]);
 
-axios
-  .get<ModeleMesureSpecifique[]>('/api/modeles/mesureSpecifique')
-  .then(({ data: modelesMesureSpecifique }) => set(modelesMesureSpecifique));
+const rafraichis = async () =>
+  axios
+    .get<ModeleMesureSpecifique[]>('/api/modeles/mesureSpecifique')
+    .then(({ data: modelesMesureSpecifique }) => set(modelesMesureSpecifique));
+
+rafraichis();
 
 export const modelesMesureSpecifique = {
   subscribe,
+  rafraichis,
 };

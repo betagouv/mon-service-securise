@@ -17,3 +17,19 @@ export const enregistreModificationMesureSurServicesMultiples = async ({
     modalites,
   });
 };
+
+export const ajouteModeleMesureSpecifique = async ({
+  description,
+  descriptionLongue,
+  categorie,
+}: {
+  description: string;
+  descriptionLongue: string;
+  categorie: string;
+}) => {
+  await axios.post(`/api/modeles/mesureSpecifique`, {
+    description,
+    descriptionLongue,
+    categorie,
+  });
+};
