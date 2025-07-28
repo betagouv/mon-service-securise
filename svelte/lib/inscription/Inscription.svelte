@@ -22,6 +22,7 @@
   const modeleTelephone = '^0\\d{9}$';
   export let departements: Departement[];
   export let invite: boolean;
+  export let token: string;
 
   let etapeCourante = 1;
 
@@ -66,9 +67,6 @@
   };
 
   let formulaireInscription: FormulaireInscription = {
-    prenom: informationsProfessionnelles.prenom,
-    nom: informationsProfessionnelles.nom,
-    email: informationsProfessionnelles.email,
     siretEntite: informationsProfessionnelles.organisation?.siret,
     telephone: informationsProfessionnelles.telephone,
     postes: informationsProfessionnelles.domainesSpecialite,
@@ -77,6 +75,7 @@
     cguAcceptees: false,
     infolettreAcceptee: false,
     transactionnelAccepte: true,
+    token,
   };
 
   let departement: Departement;
