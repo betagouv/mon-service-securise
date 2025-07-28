@@ -1792,4 +1792,95 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(idRecu).to.be('U1');
     });
   });
+
+  describe('quand requête POST sur `/api/modeles/mesureSpecifique`', () => {
+    beforeEach(() => {
+      testeur.referentiel().recharge({
+        categoriesMesures: {
+          gouvernance: {},
+        },
+      });
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/modeles/mesureSpecifique',
+        },
+        done
+      );
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['description', 'descriptionLongue', 'categorie'],
+        {
+          method: 'post',
+          url: 'http://localhost:1234/api/modeles/mesureSpecifique',
+        },
+        done
+      );
+    });
+
+    it('jette une erreur si la catégorie est invalide', async () => {
+      try {
+        await axios.post('http://localhost:1234/api/modeles/mesureSpecifique', {
+          description: 'une description',
+          descriptionLongue: 'une description longue',
+          categorie: 'une categorie invalide',
+        });
+
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'La catégorie "une categorie invalide" n\'est pas répertoriée'
+        );
+      }
+    });
+
+    it("jette une erreur si la description n'est pas renseignée", async () => {
+      try {
+        await axios.post('http://localhost:1234/api/modeles/mesureSpecifique', {
+          description: '',
+          descriptionLongue: 'une description longue',
+          categorie: 'gouvernance',
+        });
+
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be('La description est obligatoire');
+      }
+    });
+
+    it("délègue au dépôt de données l'ajout du modèle de mesure spécifique", async () => {
+      let donneesRecues;
+      testeur.depotDonnees().ajouteModeleMesureSpecifique = async (
+        idUtilisateur,
+        donnees
+      ) => {
+        donneesRecues = { idUtilisateur, donnees };
+      };
+
+      const reponse = await axios.post(
+        'http://localhost:1234/api/modeles/mesureSpecifique',
+        {
+          description: 'une description',
+          descriptionLongue: 'une description longue',
+          categorie: 'gouvernance',
+        }
+      );
+
+      expect(donneesRecues.idUtilisateur).to.be('U1');
+      expect(donneesRecues.donnees).to.eql({
+        description: 'une description',
+        descriptionLongue: 'une description longue',
+        categorie: 'gouvernance',
+      });
+      expect(reponse.status).to.be(201);
+    });
+  });
 });
