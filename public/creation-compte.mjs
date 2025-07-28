@@ -9,6 +9,7 @@ $(() => {
   );
   const { departements } = lisDonneesPartagees('departements');
   const invite = lisDonneesPartagees('invite');
+  const { token } = lisDonneesPartagees('token');
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-inscription', {
@@ -17,6 +18,7 @@ $(() => {
         informationsProfessionnelles,
         departements,
         invite,
+        token,
       },
     })
   );
