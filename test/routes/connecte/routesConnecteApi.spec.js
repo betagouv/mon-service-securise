@@ -1835,9 +1835,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         expect().fail('Aurait dû lever une erreur');
       } catch (e) {
         expect(e.response.status).to.be(400);
-        expect(e.response.data).to.be(
-          'La catégorie "une categorie invalide" n\'est pas répertoriée'
-        );
+        expect(e.response.data).to.be('La catégorie est invalide');
       }
     });
 
