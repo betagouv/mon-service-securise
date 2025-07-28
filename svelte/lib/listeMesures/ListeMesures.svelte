@@ -160,6 +160,7 @@
       icone="telecharger"
     />
     {#if afficheModelesMesureSpecifique}
+      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
       <lab-anssi-bouton
         variante="primaire"
         taille="md"
