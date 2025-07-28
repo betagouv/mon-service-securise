@@ -5,11 +5,12 @@
   import Onglets from '../../../ui/Onglets.svelte';
   import ChampDeSaisie from '../../../ui/ChampDeSaisie.svelte';
   import ListeDeroulante from '../../../ui/ListeDeroulante.svelte';
-  import { CategorieMesure } from '../../../ui/types.d';
   import { ajouteModeleMesureSpecifique } from '../../listeMesures.api';
   import { modelesMesureSpecifique } from '../../stores/modelesMesureSpecifique.store';
   import { toasterStore } from '../../../ui/stores/toaster.store';
+  import type { ListeMesuresProps } from '../../listeMesures.d';
 
+  export let categories: ListeMesuresProps['categories'];
   export const titre: string = 'Ajouter une mesure';
   export const sousTitre: string =
     'Ajoutez une mesure, associez-la aux services de votre choix et ajustez le statut ou la précision sur plusieurs services simultanément.';
@@ -65,12 +66,7 @@
       label="Catégorie"
       id="categorie"
       requis={true}
-      options={[
-        { label: 'Gouvernance', valeur: CategorieMesure.GOUVERNANCE },
-        { label: 'Protection', valeur: CategorieMesure.PROTECTION },
-        { label: 'Défense', valeur: CategorieMesure.DEFENSE },
-        { label: 'Résilience', valeur: CategorieMesure.RESILIENCE },
-      ]}
+      options={categories.map(({ id, label }) => ({ label, valeur: id }))}
       bind:valeur={donneesModeleMesureAjoute.categorie}
     />
   </div>

@@ -27,11 +27,12 @@
   import Loader from '../ui/Loader.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import { modelesMesureSpecifique } from './stores/modelesMesureSpecifique.store';
-  import type { ModeleDeMesure } from './listeMesures.d';
+  import type { ListeMesuresProps, ModeleDeMesure } from './listeMesures.d';
   import Onglets from '../ui/Onglets.svelte';
   import TiroirAjoutModeleMesureSpecifique from './kit/tiroir/TiroirAjoutModeleMesureSpecifique.svelte';
 
   export let statuts: ReferentielStatut;
+  export let categories: ListeMesuresProps['categories'];
   export let typesService: ReferentielTypesService;
   export let afficheModelesMesureSpecifique: boolean;
 
@@ -62,26 +63,11 @@
         valeur: Referentiel.CNIL,
         idCategorie: 'referentiel',
       },
-      {
-        libelle: 'Défense',
-        valeur: CategorieMesure.DEFENSE,
+      ...categories.map((c) => ({
+        libelle: c.label,
+        valeur: c.id,
         idCategorie: 'categorie',
-      },
-      {
-        libelle: 'Gouvernance',
-        valeur: CategorieMesure.GOUVERNANCE,
-        idCategorie: 'categorie',
-      },
-      {
-        libelle: 'Protection',
-        valeur: CategorieMesure.PROTECTION,
-        idCategorie: 'categorie',
-      },
-      {
-        libelle: 'Résilience',
-        valeur: CategorieMesure.RESILIENCE,
-        idCategorie: 'categorie',
-      },
+      })),
     ],
   };
 
@@ -120,7 +106,9 @@
   };
 
   const afficheTiroirAjout = () => {
-    tiroirStore.afficheContenu(TiroirAjoutModeleMesureSpecifique, {});
+    tiroirStore.afficheContenu(TiroirAjoutModeleMesureSpecifique, {
+      categories,
+    });
   };
 </script>
 

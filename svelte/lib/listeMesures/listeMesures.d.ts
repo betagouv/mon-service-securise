@@ -14,6 +14,7 @@ declare global {
 
 export type ListeMesuresProps = {
   statuts: ReferentielStatut;
+  categories: { id: string; label: string }[];
   typesService: ReferentielTypesService;
   afficheModelesMesureSpecifique: boolean;
 };
