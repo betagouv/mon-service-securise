@@ -36,5 +36,9 @@
     padding: 8px 16px;
     box-sizing: border-box;
     margin-top: 8px;
+
+    &:user-invalid {
+      border-bottom-color: var(--erreur-texte);
+    }
   }
 </style>
