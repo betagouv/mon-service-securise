@@ -312,6 +312,16 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         },
       });
     });
+
+    it('envoie le token', async () => {
+      const reponse = await axios.get(
+        `http://localhost:1234/creation-compte?token=unTokenValide`
+      );
+
+      expect(donneesPartagees(reponse.data, 'token')).to.eql({
+        token: 'unTokenValide',
+      });
+    });
   });
 
   describe('quand requête GET sur `/inscription`', () => {

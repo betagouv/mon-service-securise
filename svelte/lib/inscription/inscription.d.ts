@@ -38,6 +38,7 @@ export type InscriptionProps = {
   informationsProfessionnelles: InformationsProfessionnelles;
   departements: Departement[];
   invite: boolean;
+  token: string;
 };
 
 export type FormulaireInscription = {
@@ -52,4 +53,5 @@ export type FormulaireInscription = {
   cguAcceptees: boolean;
   infolettreAcceptee: boolean;
   transactionnelAccepte: boolean;
+  token: string;
 };

@@ -86,6 +86,7 @@ const routesNonConnectePage = ({
       informationsProfessionnelles,
       departements: referentiel.departements(),
       invite: !!invite,
+      token,
     });
   });
 
