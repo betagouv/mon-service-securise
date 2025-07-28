@@ -12,6 +12,7 @@ const {
   EchecEnvoiMessage,
   ErreurAutorisationExisteDeja,
   ErreurModele,
+  ErreurCategorieInconnue,
 } = require('../../erreurs');
 const routesConnecteApiService = require('./routesConnecteApiService');
 const Utilisateur = require('../../modeles/utilisateur');
@@ -592,6 +593,35 @@ const routesConnecteApi = ({
         );
 
       reponse.json(modeles);
+    }
+  );
+
+  routes.post(
+    '/modeles/mesureSpecifique',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise('description', 'descriptionLongue', 'categorie'),
+    async (requete, reponse) => {
+      const { categorie, description, descriptionLongue } = requete.body;
+
+      try {
+        referentiel.verifieCategoriesMesuresSontRepertoriees([categorie]);
+      } catch (e) {
+        if (e instanceof ErreurCategorieInconnue) {
+          reponse.status(400).send(e.message);
+          return;
+        }
+      }
+      if (!description) {
+        reponse.status(400).send('La description est obligatoire');
+        return;
+      }
+
+      await depotDonnees.ajouteModeleMesureSpecifique(
+        requete.idUtilisateurCourant,
+        { description, descriptionLongue, categorie }
+      );
+
+      reponse.sendStatus(201);
     }
   );
 
