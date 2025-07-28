@@ -90,7 +90,7 @@
     titre="Ajouter cette mesure"
     icone="add-line"
     position-icone="gauche"
-    on:click={() => ajouteModele()}
+    on:click={async () => await ajouteModele()}
     actif={formulaireValide && !enCoursDenvoi}
   />
 </ActionsTiroir>
