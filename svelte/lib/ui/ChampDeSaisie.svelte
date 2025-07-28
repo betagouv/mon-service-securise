@@ -1,12 +1,23 @@
 <script lang="ts">
+  import AsterisqueChampRequis from './AsterisqueChampRequis.svelte';
+
   export let contenu: string;
   export let label: string;
   export let aideSaisie: string = '';
+  export let requis: boolean = false;
 </script>
 
 <label>
+  {#if requis}
+    <AsterisqueChampRequis />
+  {/if}
   {label}
-  <textarea bind:value={contenu} rows="3" placeholder={aideSaisie} />
+  <textarea
+    bind:value={contenu}
+    rows="3"
+    placeholder={aideSaisie}
+    required={requis}
+  />
 </label>
 
 <style lang="scss">

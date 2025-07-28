@@ -1,6 +1,7 @@
 <script lang="ts" generics="T extends any">
   import type { OptionsListeDeroulante } from './ui.types.d';
   import { validationChampDsfr } from '../directives/validationChampDsfr';
+  import AsterisqueChampRequis from './AsterisqueChampRequis.svelte';
 
   export let label: string;
   export let id: string;
@@ -18,6 +19,9 @@
 
 <div class="conteneur-liste-deroulante" class:desactive>
   <label for={id}>
+    {#if requis}
+      <AsterisqueChampRequis />
+    {/if}
     {label}
     {#if texteDescriptionAdditionnel}
       <span>{texteDescriptionAdditionnel}</span>
@@ -111,7 +115,7 @@
     outline-offset: 2px;
   }
 
-  select:invalid {
+  select:user-invalid {
     box-shadow: inset 0 -2px 0 0 var(--erreur-texte);
   }
 
@@ -136,7 +140,7 @@
       hue-rotate(144deg) brightness(88%) contrast(84%);
   }
 
-  .conteneur-liste-deroulante:has(select:invalid) label {
+  .conteneur-liste-deroulante:has(select:user-invalid) label {
     color: var(--erreur-texte);
   }
 
@@ -144,7 +148,7 @@
     color: var(--succes-texte);
   }
 
-  .conteneur-liste-deroulante:has(select:invalid):before {
+  .conteneur-liste-deroulante:has(select:user-invalid):before {
     content: '';
     display: block;
     position: absolute;
