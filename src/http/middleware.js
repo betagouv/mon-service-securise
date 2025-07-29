@@ -61,6 +61,8 @@ const middleware = (configuration = {}) => {
       'x-frame-options': 'deny',
       'x-content-type-options': 'nosniff',
       'referrer-policy': 'no-referrer',
+      'cross-origin-opener-policy': 'same-origin',
+      'cross-origin-resource-policy': 'same-origin',
     });
 
     suite();
