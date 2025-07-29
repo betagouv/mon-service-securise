@@ -248,6 +248,7 @@ const creeDepot = (config = {}) => {
     associeModeleMesureSpecifiqueAuxServices,
     detacheModeleMesureSpecifiqueDesServices,
     lisModelesMesureSpecifiquePourUtilisateur,
+    metsAJourModeleMesureSpecifique,
   } = depotModelesMesureSpecifique;
 
   return {
@@ -290,6 +291,7 @@ const creeDepot = (config = {}) => {
     lisTeleversementServices,
     marqueNouveauteLue,
     marqueTacheDeServiceLue,
+    metsAJourModeleMesureSpecifique,
     metsAJourMotDePasse,
     metsAJourMesureGeneraleDesServices,
     metsAJourMesureGeneraleDuService,
