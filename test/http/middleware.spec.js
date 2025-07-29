@@ -668,6 +668,22 @@ describe('Le middleware MSS', () => {
       verifiePositionnementHeader('referrer-policy', /^no-referrer$/, done);
     });
 
+    it("applique une politique 'same-origin' sur les 'cross-origin-opener'", (done) => {
+      verifiePositionnementHeader(
+        'cross-origin-opener-policy',
+        /^same-origin$/,
+        done
+      );
+    });
+
+    it("applique une politique 'same-origin' sur les 'cross-origin-resource'", (done) => {
+      verifiePositionnementHeader(
+        'cross-origin-resource-policy',
+        /^same-origin$/,
+        done
+      );
+    });
+
     it('positionne un nonce dans le reponse.locals', (done) => {
       const middleware = leMiddleware({
         adaptateurChiffrement: {
