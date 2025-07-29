@@ -625,6 +625,51 @@ const routesConnecteApi = ({
     }
   );
 
+  routes.put(
+    '/modeles/mesureSpecifique/:id',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise('description', 'descriptionLongue', 'categorie'),
+    async (requete, reponse) => {
+      const idModele = requete.params.id;
+      const { categorie, description, descriptionLongue } = requete.body;
+
+      const modelesMesureDeUtilisateur =
+        await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
+          requete.idUtilisateurCourant
+        );
+      const modele = modelesMesureDeUtilisateur.find((m) => m.id === idModele);
+      if (!modele) {
+        reponse.sendStatus(404);
+        return;
+      }
+
+      try {
+        referentiel.verifieCategoriesMesuresSontRepertoriees([categorie]);
+      } catch (e) {
+        if (e instanceof ErreurCategorieInconnue) {
+          reponse.status(400).send('La catégorie est invalide');
+          return;
+        }
+      }
+      if (!description) {
+        reponse.status(400).send('La description est obligatoire');
+        return;
+      }
+
+      await depotDonnees.metsAJourModeleMesureSpecifique(
+        requete.idUtilisateurCourant,
+        idModele,
+        {
+          categorie,
+          description,
+          descriptionLongue,
+        }
+      );
+
+      reponse.sendStatus(200);
+    }
+  );
+
   return routes;
 };
 
