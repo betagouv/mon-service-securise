@@ -83,9 +83,6 @@ const middleware = (configuration = {}) => {
 
     try {
       const token = adaptateurJWT.decode(requete.session.token);
-      if (!token) {
-        return renvoieUtilisateurSansJWTValide();
-      }
 
       const utilisateur = await depotDonnees.utilisateur(token.idUtilisateur);
       if (!utilisateur) return renvoieUtilisateurSansJWTValide();

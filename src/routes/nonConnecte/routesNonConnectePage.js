@@ -66,11 +66,6 @@ const routesNonConnectePage = ({
   routes.get('/creation-compte', async (requete, reponse) => {
     const { token } = requete.query;
 
-    if (!token) {
-      reponse.sendStatus(400);
-      return;
-    }
-
     let informationsProfessionnelles;
     try {
       informationsProfessionnelles = adaptateurJWT.decode(token);
