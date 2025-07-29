@@ -51,24 +51,27 @@
   />
   <h3>Modifier les informations de la mesure</h3>
   <div class="contenu-formulaire">
-    <ChampDeSaisie
-      bind:contenu={donneesModeleMesureAjoute.description}
-      aideSaisie="Indiquez un intitulé clair pour votre mesure"
-      label="Intitulé de la mesure"
-      requis
-    />
-    <ChampDeSaisie
-      aideSaisie="Apportez des précisions sur la mesure"
-      label="Description de la mesure"
-      bind:contenu={donneesModeleMesureAjoute.descriptionLongue}
-    />
-    <ListeDeroulante
-      label="Catégorie"
-      id="categorie"
-      requis={true}
-      options={categories.map(({ id, label }) => ({ label, valeur: id }))}
-      bind:valeur={donneesModeleMesureAjoute.categorie}
-    />
+    <div class="info-champ-obligatoire">Champ obligatoire</div>
+    <div class="champs-de-saisie">
+      <ChampDeSaisie
+        bind:contenu={donneesModeleMesureAjoute.description}
+        aideSaisie="Indiquez un intitulé clair pour votre mesure"
+        label="Intitulé de la mesure"
+        requis
+      />
+      <ChampDeSaisie
+        aideSaisie="Apportez des précisions sur la mesure"
+        label="Description de la mesure"
+        bind:contenu={donneesModeleMesureAjoute.descriptionLongue}
+      />
+      <ListeDeroulante
+        label="Catégorie"
+        id="categorie"
+        requis={true}
+        options={categories.map(({ id, label }) => ({ label, valeur: id }))}
+        bind:valeur={donneesModeleMesureAjoute.categorie}
+      />
+    </div>
   </div>
 </ContenuTiroir>
 <ActionsTiroir>
@@ -92,9 +95,34 @@
 </ActionsTiroir>
 
 <style lang="scss">
+  h3 {
+    margin: 2px 0 0 0;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
   .contenu-formulaire {
     display: flex;
+    gap: 16px;
     flex-direction: column;
-    gap: 24px;
+
+    .info-champ-obligatoire {
+      text-align: right;
+      font-size: 0.875rem;
+      width: 700px;
+
+      &:before {
+        content: '*';
+        color: var(--erreur-texte);
+        margin-right: 4px;
+        font-size: 1rem;
+      }
+    }
+
+    .champs-de-saisie {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
   }
 </style>
