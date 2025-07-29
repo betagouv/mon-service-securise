@@ -88,6 +88,72 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     });
   });
 
+  describe("concernant la mise à jour d'un modèle de mesure", () => {
+    beforeEach(() => {
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .construis();
+    });
+
+    it("jette une erreur si l'utilisateur n'existe pas", async () => {
+      const depot = leDepot();
+      try {
+        await depot.metsAJourModeleMesureSpecifique(
+          'U-INTROUVABLE-1',
+          'MOD-1',
+          {}
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurUtilisateurInexistant);
+      }
+    });
+
+    it("jette une erreur si le modèle n'existe pas", async () => {
+      const depot = leDepot();
+      try {
+        await depot.metsAJourModeleMesureSpecifique('U1', 'MOD-INEXISTANT', {});
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueIntrouvable);
+      }
+    });
+
+    it('sait mettre à jour le modèle en chiffrant son contenu', async () => {
+      await persistance.ajouteModeleMesureSpecifique('MOD-1', 'U1', {
+        description: 'avant description',
+        descriptionLongue: 'avant longue',
+        categorie: 'gouvernance',
+      });
+
+      let lesDonneesSontChiffrees = false;
+      adaptateurChiffrement.chiffre = async (donnees) => {
+        lesDonneesSontChiffrees = true;
+        return donnees;
+      };
+
+      const depot = leDepot();
+
+      await depot.metsAJourModeleMesureSpecifique('U1', 'MOD-1', {
+        description: 'après description',
+        descriptionLongue: 'après longue',
+        categorie: 'gouvernance',
+      });
+
+      const modelesPersistes =
+        await depot.lisModelesMesureSpecifiquePourUtilisateur('U1');
+
+      expect(lesDonneesSontChiffrees).to.be(true);
+      expect(modelesPersistes[0]).to.eql({
+        description: 'après description',
+        descriptionLongue: 'après longue',
+        categorie: 'gouvernance',
+        id: 'MOD-1',
+        idsServicesAssocies: [],
+      });
+    });
+  });
+
   describe("concernant l'association d'un modèle et de services", () => {
     beforeEach(() => {
       persistance = unePersistanceMemoire()

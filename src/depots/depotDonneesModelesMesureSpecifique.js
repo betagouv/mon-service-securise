@@ -1,6 +1,7 @@
 const {
   ErreurUtilisateurInexistant,
   ErreurServiceNonAssocieAuModele,
+  ErreurModeleDeMesureSpecifiqueIntrouvable,
 } = require('../erreurs');
 const {
   VerificationsAssocieOuDetache,
@@ -28,6 +29,27 @@ const creeDepot = (config = {}) => {
     const donneesChiffrees = await adaptateurChiffrement.chiffre(donnees);
 
     await persistance.ajouteModeleMesureSpecifique(
+      idModele,
+      idUtilisateur,
+      donneesChiffrees
+    );
+  };
+
+  const metsAJourModeleMesureSpecifique = async (
+    idUtilisateur,
+    idModele,
+    donnees
+  ) => {
+    const utilisateur = await persistance.utilisateur(idUtilisateur);
+    if (!utilisateur) throw new ErreurUtilisateurInexistant();
+
+    const modeleExiste =
+      await persistance.verifieModeleMesureSpecifiqueExiste(idModele);
+    if (!modeleExiste)
+      throw new ErreurModeleDeMesureSpecifiqueIntrouvable(idModele);
+
+    const donneesChiffrees = await adaptateurChiffrement.chiffre(donnees);
+    await persistance.metsAJourModeleMesureSpecifique(
       idModele,
       idUtilisateur,
       donneesChiffrees
@@ -117,6 +139,7 @@ const creeDepot = (config = {}) => {
     associeModeleMesureSpecifiqueAuxServices,
     detacheModeleMesureSpecifiqueDesServices,
     lisModelesMesureSpecifiquePourUtilisateur,
+    metsAJourModeleMesureSpecifique,
   };
 };
 

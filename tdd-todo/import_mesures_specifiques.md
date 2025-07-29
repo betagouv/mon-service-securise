@@ -65,7 +65,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 - [x] On veut pouvoir ajouter un modèle de mesure
   - [x] Via un bouton à côté du téléchargement de la liste
   - [x] En passant par un tiroir de création
-- [ ] On peut modifier les informations d'un modèle, quand on clique sur « Configurer la mesure »
+- [x] On peut modifier les informations d'un modèle, quand on clique sur « Configurer la mesure »
 - [ ] On veut pouvoir associer un modèle à des services
   - [ ] Après avoir ajouté un modèle
   - [ ] Depuis la modale de détail d'un modèle de mesure

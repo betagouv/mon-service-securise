@@ -665,6 +665,15 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       donnees,
     });
 
+  const metsAJourModeleMesureSpecifique = async (
+    id,
+    idUtilisateur,
+    donneesModele
+  ) =>
+    knex('modeles_mesure_specifique')
+      .where({ id, id_utilisateur: idUtilisateur })
+      .update({ donnees: donneesModele });
+
   const modeleMesureSpecifiqueAppartientA = async (idUtilisateur, idModele) => {
     const resultat = await knex.raw(
       'SELECT 1 FROM modeles_mesure_specifique WHERE id_utilisateur = :idUtilisateur AND id = :idModele;',
@@ -769,6 +778,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
     metsAJourIdResetMdpUtilisateur,
+    metsAJourModeleMesureSpecifique,
     metsAJourParrainage,
     metsAJourProgressionTeleversement,
     metsAJourUtilisateur,

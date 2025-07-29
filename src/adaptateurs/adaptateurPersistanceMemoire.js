@@ -375,6 +375,17 @@ const nouvelAdaptateur = (
       donnees: donneesModele,
     });
 
+  const metsAJourModeleMesureSpecifique = async (
+    id,
+    idUtilisateur,
+    donneesModele
+  ) => {
+    const leModele = donnees.modelesMesureSpecifique.find(
+      (m) => m.id === id && m.idUtilisateur === idUtilisateur
+    );
+    leModele.donnees = donneesModele;
+  };
+
   const modeleMesureSpecifiqueAppartientA = async (idUtilisateur, idModele) =>
     donnees.modelesMesureSpecifique.find(
       (m) => m.id === idModele && m.idUtilisateur === idUtilisateur
@@ -454,6 +465,7 @@ const nouvelAdaptateur = (
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
     metsAJourIdResetMdpUtilisateur,
+    metsAJourModeleMesureSpecifique,
     metsAJourUtilisateur,
     modeleMesureSpecifiqueAppartientA,
     nbAutorisationsProprietaire,
