@@ -33,3 +33,21 @@ export const ajouteModeleMesureSpecifique = async ({
     categorie,
   });
 };
+
+export const sauvegardeModeleMesureSpecifique = async ({
+  id,
+  description,
+  descriptionLongue,
+  categorie,
+}: {
+  id: string;
+  description: string;
+  descriptionLongue: string;
+  categorie: string;
+}) => {
+  await axios.put(`/api/modeles/mesureSpecifique/${id}`, {
+    description,
+    descriptionLongue,
+    categorie,
+  });
+};
