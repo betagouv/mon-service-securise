@@ -3,12 +3,11 @@
   import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
   import Onglets from '../../../ui/Onglets.svelte';
-  import ChampDeSaisie from '../../../ui/ChampDeSaisie.svelte';
-  import ListeDeroulante from '../../../ui/ListeDeroulante.svelte';
   import { ajouteModeleMesureSpecifique } from '../../listeMesures.api';
   import { modelesMesureSpecifique } from '../../stores/modelesMesureSpecifique.store';
   import { toasterStore } from '../../../ui/stores/toaster.store';
   import type { ListeMesuresProps } from '../../listeMesures.d';
+  import InformationsModeleMesureSpecifique from '../InformationsModeleMesureSpecifique.svelte';
 
   export let categories: ListeMesuresProps['categories'];
   export const titre: string = 'Ajouter une mesure';
@@ -49,30 +48,10 @@
     onglets={[{ id: 'info', label: 'Informations' }]}
     ongletActif="info"
   />
-  <h3>Modifier les informations de la mesure</h3>
-  <div class="contenu-formulaire">
-    <div class="info-champ-obligatoire">Champ obligatoire</div>
-    <div class="champs-de-saisie">
-      <ChampDeSaisie
-        bind:contenu={donneesModeleMesureAjoute.description}
-        aideSaisie="Indiquez un intitulé clair pour votre mesure"
-        label="Intitulé de la mesure"
-        requis
-      />
-      <ChampDeSaisie
-        aideSaisie="Apportez des précisions sur la mesure"
-        label="Description de la mesure"
-        bind:contenu={donneesModeleMesureAjoute.descriptionLongue}
-      />
-      <ListeDeroulante
-        label="Catégorie"
-        id="categorie"
-        requis={true}
-        options={categories.map(({ id, label }) => ({ label, valeur: id }))}
-        bind:valeur={donneesModeleMesureAjoute.categorie}
-      />
-    </div>
-  </div>
+  <InformationsModeleMesureSpecifique
+    {categories}
+    bind:donneesModeleMesure={donneesModeleMesureAjoute}
+  />
 </ContenuTiroir>
 <ActionsTiroir>
   <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
@@ -93,36 +72,3 @@
     actif={formulaireValide && !enCoursDenvoi}
   />
 </ActionsTiroir>
-
-<style lang="scss">
-  h3 {
-    margin: 2px 0 0 0;
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
-
-  .contenu-formulaire {
-    display: flex;
-    gap: 16px;
-    flex-direction: column;
-
-    .info-champ-obligatoire {
-      text-align: right;
-      font-size: 0.875rem;
-      width: 700px;
-
-      &:before {
-        content: '*';
-        color: var(--erreur-texte);
-        margin-right: 4px;
-        font-size: 1rem;
-      }
-    }
-
-    .champs-de-saisie {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-  }
-</style>
