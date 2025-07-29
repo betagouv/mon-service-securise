@@ -30,6 +30,7 @@
   import type { ListeMesuresProps, ModeleDeMesure } from './listeMesures.d';
   import Onglets from '../ui/Onglets.svelte';
   import TiroirAjoutModeleMesureSpecifique from './kit/tiroir/TiroirAjoutModeleMesureSpecifique.svelte';
+  import TiroirConfigurationModeleMesureSpecifique from './kit/tiroir/TiroirConfigurationModeleMesureSpecifique.svelte';
 
   export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
@@ -108,6 +109,15 @@
   const afficheTiroirAjout = () => {
     tiroirStore.afficheContenu(TiroirAjoutModeleMesureSpecifique, {
       categories,
+    });
+  };
+
+  const afficheTiroirModificationModeleMesureSpecifique = (
+    modele: ModeleDeMesure
+  ) => {
+    tiroirStore.afficheContenu(TiroirConfigurationModeleMesureSpecifique, {
+      categories,
+      modeleMesure: modele,
     });
   };
 </script>
@@ -213,16 +223,28 @@
         {/if}
       </div>
     {:else if colonne.cle === 'actions'}
-      <Bouton
-        titre="Configurer la mesure"
-        type="secondaire"
-        taille="petit"
-        icone="configuration"
-        actif={aDesServicesAssocies && typeMesure === 'generale'}
-        on:click={() => {
-          afficheTiroirModificationMultipleMesuresGenerales(donnee);
-        }}
-      />
+      {#if typeMesure === 'generale'}
+        <Bouton
+          titre="Configurer la mesure"
+          type="secondaire"
+          taille="petit"
+          icone="configuration"
+          actif={aDesServicesAssocies}
+          on:click={() => {
+            afficheTiroirModificationMultipleMesuresGenerales(donnee);
+          }}
+        />
+      {:else if typeMesure === 'specifique'}
+        <Bouton
+          titre="Configurer la mesure"
+          type="secondaire"
+          taille="petit"
+          icone="configuration"
+          on:click={() => {
+            afficheTiroirModificationModeleMesureSpecifique(donnee);
+          }}
+        />
+      {/if}
     {/if}
   </svelte:fragment>
 </Tableau>
