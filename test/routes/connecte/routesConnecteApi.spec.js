@@ -5,7 +5,11 @@ const {
   verifieNomFichierServi,
   verifieTypeFichierServiEstCSV,
 } = require('../../aides/verifieFichierServi');
-const { ErreurModele, EchecAutorisation } = require('../../../src/erreurs');
+const {
+  ErreurModele,
+  EchecAutorisation,
+  ErreurModeleDeMesureSpecifiqueDejaAssociee,
+} = require('../../../src/erreurs');
 
 const testeurMSS = require('../testeurMSS');
 const {
@@ -2010,6 +2014,95 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         });
         expect(reponse.status).to.be(200);
       });
+    });
+  });
+
+  describe('quand requête PUT sur `/api/modeles/mesureSpecifique/:idModele/services`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.depotDonnees().associeModeleMesureSpecifiqueAuxServices =
+        () => {};
+      testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur =
+        async () => [
+          {
+            id: 'MOD-1',
+            description: 'une description',
+            categorie: 'gouvernance',
+            descriptionLongue: 'une description longue',
+          },
+        ];
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services',
+        },
+        done
+      );
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['idsServicesAAssocier.*'],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services',
+        },
+        done
+      );
+    });
+
+    it("jette une erreur si le modele de mesure spécifique n'existe pas", async () => {
+      try {
+        await axios.put(
+          'http://localhost:1234/api/modeles/mesureSpecifique/unIdInexistant/services'
+        );
+
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(404);
+      }
+    });
+
+    it("délègue au dépôt de données l'association des services au modèle de mesure spécifique", async () => {
+      let donneesRecues;
+      testeur.depotDonnees().associeModeleMesureSpecifiqueAuxServices = async (
+        idModele,
+        idsServices,
+        idUtilisateurAssociant
+      ) => {
+        donneesRecues = { idModele, idsServices, idUtilisateurAssociant };
+      };
+
+      const reponse = await axios.put(
+        'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services',
+        {
+          idsServicesAAssocier: ['S1', 'S2'],
+        }
+      );
+
+      expect(donneesRecues.idUtilisateurAssociant).to.be('U1');
+      expect(donneesRecues.idModele).to.be('MOD-1');
+      expect(donneesRecues.idsServices).to.eql(['S1', 'S2']);
+      expect(reponse.status).to.be(200);
+    });
+
+    it('jette une erreur si un service est déjà associé', async () => {
+      testeur.depotDonnees().associeModeleMesureSpecifiqueAuxServices =
+        async () => {
+          throw new ErreurModeleDeMesureSpecifiqueDejaAssociee();
+        };
+      try {
+        await axios.put(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
+        );
+
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
     });
   });
 });

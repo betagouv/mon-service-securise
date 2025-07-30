@@ -13,6 +13,7 @@ const {
   ErreurAutorisationExisteDeja,
   ErreurModele,
   ErreurCategorieInconnue,
+  ErreurModeleDeMesureSpecifiqueDejaAssociee,
 } = require('../../erreurs');
 const routesConnecteApiService = require('./routesConnecteApiService');
 const Utilisateur = require('../../modeles/utilisateur');
@@ -667,6 +668,40 @@ const routesConnecteApi = ({
       );
 
       reponse.sendStatus(200);
+    }
+  );
+
+  routes.put(
+    '/modeles/mesureSpecifique/:id/services',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise('idsServicesAAssocier.*'),
+    async (requete, reponse) => {
+      const { id: idModele } = requete.params;
+      const { idsServicesAAssocier } = requete.body;
+
+      const modelesMesureDeUtilisateur =
+        await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
+          requete.idUtilisateurCourant
+        );
+      const modele = modelesMesureDeUtilisateur.find((m) => m.id === idModele);
+      if (!modele) {
+        reponse.sendStatus(404);
+        return;
+      }
+      try {
+        await depotDonnees.associeModeleMesureSpecifiqueAuxServices(
+          idModele,
+          idsServicesAAssocier,
+          requete.idUtilisateurCourant
+        );
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurModeleDeMesureSpecifiqueDejaAssociee) {
+          reponse.sendStatus(400);
+          return;
+        }
+        throw e;
+      }
     }
   );
 
