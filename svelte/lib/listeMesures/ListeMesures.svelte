@@ -118,6 +118,7 @@
     tiroirStore.afficheContenu(TiroirConfigurationModeleMesureSpecifique, {
       categories,
       modeleMesure: modele,
+      referentielTypesService: typesService,
     });
   };
 </script>

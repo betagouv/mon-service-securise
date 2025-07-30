@@ -3,12 +3,16 @@
   import ContenuTiroir from '../../../ui/tiroirs/ContenuTiroir.svelte';
   import Onglets from '../../../ui/Onglets.svelte';
   import InformationsModeleMesureSpecifique from '../InformationsModeleMesureSpecifique.svelte';
-  import type { ModeleMesureSpecifique } from '../../../ui/types';
+  import type {
+    ModeleMesureSpecifique,
+    ReferentielTypesService,
+  } from '../../../ui/types.d';
   import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
   import { sauvegardeModeleMesureSpecifique } from '../../listeMesures.api';
   import { toasterStore } from '../../../ui/stores/toaster.store';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
   import { modelesMesureSpecifique } from '../../stores/modelesMesureSpecifique.store';
+  import ServicesAssociesModeleMesureSpecifique from '../ServicesAssociesModeleMesureSpecifique.svelte';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -17,6 +21,9 @@
 
   export let categories: ListeMesuresProps['categories'];
   export let modeleMesure: ModeleMesureSpecifique;
+  export let referentielTypesService: ReferentielTypesService;
+
+  let ongletActif: 'info' | 'servicesAssocies' = 'servicesAssocies';
 
   let donneesModeleMesureEdite = structuredClone(modeleMesure);
 
@@ -49,23 +56,48 @@
 
 <ContenuTiroir>
   <Onglets
-    onglets={[{ id: 'info', label: 'Informations' }]}
-    ongletActif="info"
+    onglets={[
+      { id: 'info', label: 'Informations' },
+      { id: 'servicesAssocies', label: 'Services associés' },
+    ]}
+    bind:ongletActif
   />
-  <InformationsModeleMesureSpecifique
-    {categories}
-    bind:donneesModeleMesure={donneesModeleMesureEdite}
-  />
+  {#if ongletActif === 'info'}
+    <InformationsModeleMesureSpecifique
+      {categories}
+      bind:donneesModeleMesure={donneesModeleMesureEdite}
+    />
+  {:else if ongletActif === 'servicesAssocies'}
+    <ServicesAssociesModeleMesureSpecifique
+      idMesure={donneesModeleMesureEdite.id}
+      {referentielTypesService}
+      bind:etapeActive
+      bind:idsServicesSelectionnes
+    />
+  {/if}
 </ContenuTiroir>
 <ActionsTiroir>
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-  <lab-anssi-bouton
-    titre="Enregistrer les modifications"
-    variante="primaire"
-    taille="md"
-    icone="save-line"
-    position-icone="gauche"
-    on:click={async () => await sauvegardeInformations()}
-    actif={formulaireValide && !enCoursDenvoi}
-  />
+  {#if ongletActif === 'info'}
+    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <lab-anssi-bouton
+      titre="Enregistrer les modifications"
+      variante="primaire"
+      taille="md"
+      icone="save-line"
+      position-icone="gauche"
+      on:click={async () => await sauvegardeInformations()}
+      actif={formulaireValide && !enCoursDenvoi}
+    />
+  {:else if ongletActif === 'servicesAssocies'}
+    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <lab-anssi-bouton
+      titre="Enregistrer les modifications"
+      variante="primaire"
+      taille="md"
+      icone="save-line"
+      position-icone="gauche"
+      on:click={() => {}}
+      actif={!enCoursDenvoi}
+    />
+  {/if}
 </ActionsTiroir>
