@@ -4,15 +4,16 @@
   import type { ServiceAvecMesuresAssociees } from '../listeMesures.d';
   import type {
     IdNiveauDeSecurite,
+    ModeleMesureSpecifique,
     ReferentielTypesService,
   } from '../../ui/types';
   import { decode } from 'html-entities';
   import { servicesAvecMesuresAssociees } from '../stores/servicesAvecMesuresAssociees.store';
   import Toast from '../../ui/Toast.svelte';
 
-  export let idMesure: string;
+  export let modeleMesure: ModeleMesureSpecifique;
   export let referentielTypesService: ReferentielTypesService;
-  export let idsServicesSelectionnes: string[] = [];
+  export let idsServicesSelectionnes: string[];
 
   export let etapeActive: 1 | 2 | 3;
 
@@ -62,7 +63,7 @@
           },
           champSelection: 'id',
           predicatSelectionDesactive: (donnee: ServiceAvecMesuresAssociees) =>
-            donnee.mesuresSpecifiques.some((mesure) => mesure.id === idMesure),
+            modeleMesure!.idsServicesAssocies.includes(donnee.id),
         }
       : null;
 </script>
@@ -111,10 +112,11 @@
   {configurationFiltrage}
   {configurationSelection}
   bind:selection={idsServicesSelectionnes}
+  preSelectionImmuable={modeleMesure.idsServicesAssocies}
 >
   <svelte:fragment slot="cellule" let:donnee let:colonne>
     {@const desactive = donnee.mesuresSpecifiques.some(
-      (mesure) => mesure.id === idMesure
+      (mesure) => mesure.idModele === modeleMesure.id
     )}
     {#if colonne.cle === 'nom'}
       <div class="contenu-nom-service">
@@ -138,7 +140,7 @@
           >
         </div>
       </div>
-    {:else if colonne.cle === 'besoinSecurite'}
+    {:else if colonne.cle === 'niveauSecurite'}
       <div class="contenu-besoin-securite">
         <div class:desactive>
           <span class="besoin-securite"
