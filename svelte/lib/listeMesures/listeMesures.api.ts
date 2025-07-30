@@ -51,3 +51,12 @@ export const sauvegardeModeleMesureSpecifique = async ({
     categorie,
   });
 };
+
+export const associeServicesModeleMesureSpecifique = async (
+  idMesure: string,
+  idsServicesAAssocier: string[]
+) => {
+  await axios.put(`/api/modeles/mesureSpecifique/${idMesure}/services`, {
+    idsServicesAAssocier,
+  });
+};

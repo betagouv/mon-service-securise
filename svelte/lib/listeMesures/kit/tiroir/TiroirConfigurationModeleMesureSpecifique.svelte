@@ -8,11 +8,15 @@
     ReferentielTypesService,
   } from '../../../ui/types.d';
   import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
-  import { sauvegardeModeleMesureSpecifique } from '../../listeMesures.api';
+  import {
+    associeServicesModeleMesureSpecifique,
+    sauvegardeModeleMesureSpecifique,
+  } from '../../listeMesures.api';
   import { toasterStore } from '../../../ui/stores/toaster.store';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
   import { modelesMesureSpecifique } from '../../stores/modelesMesureSpecifique.store';
   import ServicesAssociesModeleMesureSpecifique from '../ServicesAssociesModeleMesureSpecifique.svelte';
+  import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -24,6 +28,7 @@
   export let referentielTypesService: ReferentielTypesService;
 
   let ongletActif: 'info' | 'servicesAssocies' = 'servicesAssocies';
+  let etapeActive: 1 | 2 | 3 = 1;
 
   let donneesModeleMesureEdite = structuredClone(modeleMesure);
 
@@ -32,6 +37,26 @@
     !!donneesModeleMesureEdite.categorie;
 
   let enCoursDenvoi = false;
+  let idsServicesSelectionnes: string[] = [];
+
+  const associeServices = async () => {
+    enCoursDenvoi = true;
+    try {
+      await associeServicesModeleMesureSpecifique(
+        donneesModeleMesureEdite.id,
+        idsServicesSelectionnes
+      );
+      servicesAvecMesuresAssociees.rafraichis();
+      etapeActive = 3;
+    } catch (e) {
+      toasterStore.erreur(
+        'Une erreur est survenue',
+        "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
+      );
+    } finally {
+      enCoursDenvoi = false;
+    }
+  };
 
   const sauvegardeInformations = async () => {
     enCoursDenvoi = true;
@@ -89,15 +114,26 @@
       actif={formulaireValide && !enCoursDenvoi}
     />
   {:else if ongletActif === 'servicesAssocies'}
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-    <lab-anssi-bouton
-      titre="Enregistrer les modifications"
-      variante="primaire"
-      taille="md"
-      icone="save-line"
-      position-icone="gauche"
-      on:click={() => {}}
-      actif={!enCoursDenvoi}
-    />
+    {#if etapeActive === 1}
+      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <lab-anssi-bouton
+        titre="Enregistrer les modifications"
+        variante="primaire"
+        taille="md"
+        icone="save-line"
+        position-icone="gauche"
+        on:click={() => (etapeActive = 2)}
+        actif={idsServicesSelectionnes.length > 0}
+      />
+    {:else if etapeActive === 2}
+      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <lab-anssi-bouton
+        titre="Valider les modifications"
+        variante="primaire"
+        taille="md"
+        on:click={async () => await associeServices()}
+        actif={!enCoursDenvoi}
+      />
+    {/if}
   {/if}
 </ActionsTiroir>
