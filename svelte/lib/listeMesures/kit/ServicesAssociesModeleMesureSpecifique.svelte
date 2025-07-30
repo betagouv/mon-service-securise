@@ -1,22 +1,33 @@
 <script lang="ts">
   import Tableau from '../../ui/Tableau.svelte';
   import Infobulle from '../../ui/Infobulle.svelte';
+  import type { ServiceAvecMesuresAssociees } from '../listeMesures.d';
   import type {
     IdNiveauDeSecurite,
     ReferentielTypesService,
   } from '../../ui/types';
   import { decode } from 'html-entities';
   import { servicesAvecMesuresAssociees } from '../stores/servicesAvecMesuresAssociees.store';
+  import Toast from '../../ui/Toast.svelte';
 
   export let idMesure: string;
   export let referentielTypesService: ReferentielTypesService;
-  let idsServicesSelectionnes: string[] = [];
+  export let idsServicesSelectionnes: string[] = [];
+
+  export let etapeActive: 1 | 2 | 3;
 
   const libellesBesoinsSecurite: Record<IdNiveauDeSecurite, string> = {
     niveau1: 'Basiques',
     niveau2: 'Modérés',
     niveau3: 'Avancés',
   };
+
+  $: configurationRecherche =
+    etapeActive === 1
+      ? {
+          champsRecherche: ['nomService', 'organisationResponsable'],
+        }
+      : null;
 
   const optionsFiltrage = {
     categories: [
@@ -38,13 +49,52 @@
       })),
     ],
   };
+
+  $: configurationFiltrage =
+    etapeActive === 1 ? { options: optionsFiltrage } : null;
+  $: configurationSelection =
+    etapeActive === 1
+      ? {
+          texteIndicatif: {
+            vide: 'Aucun service sélectionné',
+            unique: 'service sélectionné',
+            multiple: 'services sélectionnés',
+          },
+          champSelection: 'id',
+          predicatSelectionDesactive: (donnee: ServiceAvecMesuresAssociees) =>
+            donnee.mesuresSpecifiques.some((mesure) => mesure.id === idMesure),
+        }
+      : null;
 </script>
 
 <span class="entete">
   <h3>Associer cette mesures à un/des services</h3>
-  <span class="explication">
-    Sélectionnez les services que vous souhaitez associer à cette mesure.
-  </span>
+  {#if etapeActive === 1}
+    <span class="explication">
+      Sélectionnez les services que vous souhaitez associer à cette mesure.
+    </span>
+  {:else if etapeActive === 2}
+    <Toast
+      avecOmbre={false}
+      titre="Cette action peut avoir un impact significatif."
+      avecAnimation={false}
+      niveau="info"
+      contenu="Vous vous apprêtez à associer cette mesure à {idsServicesSelectionnes.length} {idsServicesSelectionnes.length ===
+      1
+        ? 'service'
+        : 'services'}. Cela aura un impact sur {idsServicesSelectionnes.length ===
+      1
+        ? 'son'
+        : 'leur'} indice cyber."
+    />
+    <hr />
+    <h5>
+      {idsServicesSelectionnes.length}
+      {idsServicesSelectionnes.length === 1
+        ? 'service concerné'
+        : 'services concernés'} par cette modification
+    </h5>
+  {/if}
 </span>
 <Tableau
   colonnes={[
@@ -52,21 +102,14 @@
     { cle: 'typeService', libelle: 'Type de service' },
     { cle: 'niveauSecurite', libelle: 'Besoins de sécurité' },
   ]}
-  donnees={$servicesAvecMesuresAssociees}
-  configurationRecherche={{
-    champsRecherche: ['nomService', 'organisationResponsable'],
-  }}
-  configurationFiltrage={{ options: optionsFiltrage }}
-  configurationSelection={{
-    texteIndicatif: {
-      vide: 'Aucun service sélectionné',
-      unique: 'service sélectionné',
-      multiple: 'services sélectionnés',
-    },
-    champSelection: 'id',
-    predicatSelectionDesactive: (donnee) =>
-      donnee.mesuresSpecifiques.some((mesure) => mesure.id === idMesure),
-  }}
+  donnees={etapeActive === 1
+    ? $servicesAvecMesuresAssociees
+    : $servicesAvecMesuresAssociees.filter((s) =>
+        idsServicesSelectionnes.includes(s.id)
+      )}
+  {configurationRecherche}
+  {configurationFiltrage}
+  {configurationSelection}
   bind:selection={idsServicesSelectionnes}
 >
   <svelte:fragment slot="cellule" let:donnee let:colonne>
@@ -109,7 +152,7 @@
 
 <style lang="scss">
   h3 {
-    margin: 2px 0 0 0;
+    margin: 2px 0 8px;
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
@@ -157,14 +200,29 @@
     opacity: 0.5;
   }
 
-  .explication {
-    max-width: 500px;
-  }
-
   .entete {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 24px;
     margin-bottom: -6px;
+
+    .explication {
+      max-width: 500px;
+    }
+
+    hr {
+      width: 100%;
+      border-top: none;
+      border-bottom: 1px solid #dddddd;
+      margin: 0;
+    }
+
+    h5 {
+      margin: 0;
+      font-size: 1.375rem;
+      font-weight: bold;
+      line-height: 1.75rem;
+      color: #161616;
+    }
   }
 </style>
