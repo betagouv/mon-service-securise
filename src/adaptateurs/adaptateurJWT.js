@@ -22,4 +22,4 @@ const adaptateurJWT = ({ adaptateurEnvironnement }) => {
 const fabriqueAdaptateurJWT = () =>
   adaptateurJWT({ adaptateurEnvironnement: environnement });
 
-module.exports = { fabriqueAdaptateurJWT };
+module.exports = { adaptateurJWT, fabriqueAdaptateurJWT };
