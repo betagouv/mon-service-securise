@@ -9,4 +9,6 @@ const signeDonnees = (donnees) =>
 const genereToken = (idUtilisateur, source, estInvite) =>
   signeDonnees({ idUtilisateur, source, estInvite });
 
-module.exports = { decode, genereToken, signeDonnees };
+const fabriqueAdaptateurJWT = () => ({ decode, genereToken, signeDonnees });
+
+module.exports = { fabriqueAdaptateurJWT };

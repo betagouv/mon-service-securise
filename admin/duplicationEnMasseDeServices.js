@@ -4,7 +4,7 @@ const DepotDonnees = require('../src/depotDonnees');
 const {
   fabriqueAdaptateurChiffrement,
 } = require('../src/adaptateurs/fabriqueAdaptateurChiffrement');
-const adaptateurJWT = require('../src/adaptateurs/adaptateurJWT');
+const { fabriqueAdaptateurJWT } = require('../src/adaptateurs/adaptateurJWT');
 const { fabriqueAdaptateurUUID } = require('../src/adaptateurs/adaptateurUUID');
 const adaptateurRechercheEntrepriseAPI = require('../src/adaptateurs/adaptateurRechercheEntrepriseAPI');
 const BusEvenements = require('../src/bus/busEvenements');
@@ -86,7 +86,7 @@ class DuplicationEnMasseDeServices {
 
     this.depotDonnees = DepotDonnees.creeDepot({
       adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
-      adaptateurJWT,
+      adaptateurJWT: fabriqueAdaptateurJWT(),
       adaptateurPersistance: this.adaptateurPersistance,
       adaptateurUUID: fabriqueAdaptateurUUID(),
       referentiel: this.referentiel,
