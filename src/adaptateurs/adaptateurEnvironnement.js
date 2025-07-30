@@ -144,6 +144,10 @@ const crisp = () => ({
   idArticleRoadmap: () => process.env.CRISP_ID_ARTICLE_ROADMAP,
 });
 
+const JWT = () => ({
+  secret: () => process.env.SECRET_JWT,
+});
+
 module.exports = {
   baseDeDonnees,
   chiffrement,
@@ -151,6 +155,7 @@ module.exports = {
   emailMemoire,
   featureFlag,
   filtrageIp,
+  JWT,
   journalMSS,
   matomo,
   modeMaintenance,

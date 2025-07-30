@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const { JWT: environnement } = require('./adaptateurEnvironnement');
 
-const secret = process.env.SECRET_JWT;
+const secret = environnement().secret();
 const decode = (token) => (token ? jwt.verify(token, secret) : undefined);
 
 const signeDonnees = (donnees) =>
