@@ -1,15 +1,25 @@
 const jwt = require('jsonwebtoken');
-const { JWT: environnement } = require('./adaptateurEnvironnement');
+const environnement = require('./adaptateurEnvironnement');
 
-const secret = environnement().secret();
-const decode = (token) => (token ? jwt.verify(token, secret) : undefined);
+const adaptateurJWT = ({ adaptateurEnvironnement }) => {
+  const secret = adaptateurEnvironnement.JWT().secret();
 
-const signeDonnees = (donnees) =>
-  jwt.sign(donnees, secret, { expiresIn: '1h' });
+  const decode = (token) => (token ? jwt.verify(token, secret) : undefined);
 
-const genereToken = (idUtilisateur, source, estInvite) =>
-  signeDonnees({ idUtilisateur, source, estInvite });
+  const signeDonnees = (donnees) =>
+    jwt.sign(donnees, secret, { expiresIn: '1h' });
 
-const fabriqueAdaptateurJWT = () => ({ decode, genereToken, signeDonnees });
+  const genereToken = (idUtilisateur, source, estInvite) =>
+    signeDonnees({ idUtilisateur, source, estInvite });
+
+  return {
+    decode,
+    signeDonnees,
+    genereToken,
+  };
+};
+
+const fabriqueAdaptateurJWT = () =>
+  adaptateurJWT({ adaptateurEnvironnement: environnement });
 
 module.exports = { fabriqueAdaptateurJWT };
