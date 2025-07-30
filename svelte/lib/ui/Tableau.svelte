@@ -60,9 +60,13 @@
     if (configurationFiltrage && filtrage) {
       Object.entries(filtrage).forEach(([cleFiltrage, valeurs]) => {
         if (valeurs && valeurs.length)
-          donneesFiltrees = donneesFiltrees.filter((d) =>
-            valeurs.includes(d[cleFiltrage])
-          );
+          donneesFiltrees = donneesFiltrees.filter((d) => {
+            const donnee = d[cleFiltrage];
+            if (Array.isArray(donnee)) {
+              return donnee.some((v) => valeurs.includes(v));
+            }
+            return valeurs.includes(donnee);
+          });
       });
     }
   }
