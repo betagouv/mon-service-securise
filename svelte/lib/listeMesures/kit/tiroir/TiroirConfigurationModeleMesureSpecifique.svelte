@@ -26,6 +26,7 @@
   export let categories: ListeMesuresProps['categories'];
   export let modeleMesure: ModeleMesureSpecifique;
   export let referentielTypesService: ReferentielTypesService;
+  let idsServicesSelectionnes: string[] = [];
 
   let ongletActif: 'info' | 'servicesAssocies' = 'servicesAssocies';
   let etapeActive: 1 | 2 | 3 = 1;
@@ -37,7 +38,6 @@
     !!donneesModeleMesureEdite.categorie;
 
   let enCoursDenvoi = false;
-  let idsServicesSelectionnes: string[] = [];
 
   const associeServices = async () => {
     enCoursDenvoi = true;
@@ -47,6 +47,7 @@
         idsServicesSelectionnes
       );
       servicesAvecMesuresAssociees.rafraichis();
+      await modelesMesureSpecifique.rafraichis();
       etapeActive = 3;
     } catch (e) {
       toasterStore.erreur(
@@ -94,7 +95,7 @@
     />
   {:else if ongletActif === 'servicesAssocies'}
     <ServicesAssociesModeleMesureSpecifique
-      idMesure={donneesModeleMesureEdite.id}
+      {modeleMesure}
       {referentielTypesService}
       bind:etapeActive
       bind:idsServicesSelectionnes

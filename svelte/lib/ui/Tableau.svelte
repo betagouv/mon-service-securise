@@ -30,6 +30,7 @@
   export let configurationFiltrage: ConfigurationFiltrage | null = null;
   export let configurationSelection: ConfigurationSelection | null = null;
   export let selection: string[] = [];
+  export let preSelectionImmuable: string[] = [];
   export let champIdentifiantLigne: string = '';
 
   let recherche: string = '';
@@ -78,6 +79,7 @@
   };
 
   $: toutEstSelectionne =
+    selection.length !== 0 &&
     selection.length === donneesFiltreesSelectionnables.length;
   $: {
     if (recherche || filtrage) {
@@ -137,7 +139,8 @@
                 <input
                   type="checkbox"
                   on:change={basculeSelectionTous}
-                  disabled={donneesFiltrees.length === 0}
+                  disabled={donneesFiltrees.length === 0 ||
+                    preSelectionImmuable.length === donnees.length}
                   checked={toutEstSelectionne && donneesFiltrees.length > 0}
                   indeterminate={!toutEstSelectionne && selection.length > 0}
                   title="Sélection de tous"
@@ -158,19 +161,33 @@
               : undefined}
           >
             {#if configurationSelection}
+              {@const id = donnee[configurationSelection.champSelection]}
+              {@const estImmuable = preSelectionImmuable.includes(id)}
               <td class="cellule-selection">
                 <div>
-                  <input
-                    type="checkbox"
-                    bind:group={selection}
-                    value={donnee[configurationSelection.champSelection]}
-                    title="Sélection du service {donnee[
-                      configurationSelection.champSelection
-                    ]}"
-                    disabled={configurationSelection.predicatSelectionDesactive?.(
-                      donnee
-                    )}
-                  />
+                  {#if estImmuable}
+                    <input
+                      type="checkbox"
+                      value={id}
+                      title="Sélection du service {donnee[
+                        configurationSelection.champSelection
+                      ]}"
+                      disabled={true}
+                      checked={true}
+                    />
+                  {:else}
+                    <input
+                      type="checkbox"
+                      bind:group={selection}
+                      value={id}
+                      title="Sélection du service {donnee[
+                        configurationSelection.champSelection
+                      ]}"
+                      disabled={configurationSelection.predicatSelectionDesactive?.(
+                        donnee
+                      )}
+                    />
+                  {/if}
                 </div>
               </td>
             {/if}
@@ -301,6 +318,11 @@
     &:disabled {
       cursor: not-allowed;
       border-color: #dddddd;
+      background-color: #e5e5e5;
+
+      &::before {
+        border-color: #929292;
+      }
     }
   }
 </style>
