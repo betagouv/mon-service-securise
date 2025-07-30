@@ -4,6 +4,7 @@ const {
   ErreurUtilisateurExistant,
   EchecEnvoiMessage,
   ErreurModele,
+  ErreurJWTManquant,
 } = require('../../erreurs');
 const {
   messageErreurDonneesUtilisateur,
@@ -41,7 +42,11 @@ const routesNonConnecteApi = ({
       try {
         donneesToken = await adaptateurJWT.decode(token);
       } catch (e) {
-        reponse.status(422).send('Le token est invalide');
+        const message =
+          e instanceof ErreurJWTManquant
+            ? 'Le token est requis'
+            : 'Le token est invalide';
+        reponse.status(422).send(message);
         return;
       }
 
