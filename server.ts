@@ -14,7 +14,7 @@ const {
 } = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
 const fabriqueAdaptateurTracking = require('./src/adaptateurs/fabriqueAdaptateurTracking');
 const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
-const adaptateurJWT = require('./src/adaptateurs/adaptateurJWT');
+const { fabriqueAdaptateurJWT } = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPIEmail()
   ? require('./src/adaptateurs/adaptateurMailSendinblue')
   : require('./src/adaptateurs/adaptateurMailMemoire').fabriqueAdaptateurMailMemoire();
@@ -53,6 +53,7 @@ const {
 
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
+const adaptateurJWT = fabriqueAdaptateurJWT();
 const adaptateurTracking = fabriqueAdaptateurTracking();
 const adaptateurJournal = fabriqueAdaptateurJournalMSS();
 const adaptateurChiffrement = fabriqueAdaptateurChiffrement();

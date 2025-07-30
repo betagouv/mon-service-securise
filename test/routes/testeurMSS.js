@@ -12,7 +12,9 @@ const { fabriqueProcedures } = require('../../src/routes/procedures');
 const {
   fabriqueInscriptionUtilisateur,
 } = require('../../src/modeles/inscriptionUtilisateur');
-const adaptateurJWTParDefaut = require('../../src/adaptateurs/adaptateurJWT');
+const {
+  fabriqueAdaptateurJWT,
+} = require('../../src/adaptateurs/adaptateurJWT');
 const adaptateurProfilAnssiParDefaut = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
 const { fabriqueServiceCgu } = require('../../src/serviceCgu');
 const {
@@ -128,7 +130,7 @@ const testeurMss = () => {
     adaptateurStatistiques = {
       recupereStatistiques: async () => {},
     };
-    adaptateurJWT = adaptateurJWTParDefaut;
+    adaptateurJWT = fabriqueAdaptateurJWT();
     adaptateurProfilAnssi = adaptateurProfilAnssiParDefaut;
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();

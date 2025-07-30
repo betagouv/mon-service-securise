@@ -1,4 +1,3 @@
-const adaptateurJWTParDefaut = require('../adaptateurs/adaptateurJWT');
 const { fabriqueAdaptateurUUID } = require('../adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
 const { fabriqueServiceCgu } = require('../serviceCgu');
@@ -170,7 +169,7 @@ function fabriquePersistance({
 const creeDepot = (config = {}) => {
   const {
     adaptateurChiffrement,
-    adaptateurJWT = adaptateurJWTParDefaut,
+    adaptateurJWT,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = fabriqueAdaptateurUUID(),
     adaptateurProfilAnssi = adaptateurMonProfilAnssiParDefaut,

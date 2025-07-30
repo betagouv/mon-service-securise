@@ -8,7 +8,7 @@ const configKnex = require('../knexfile');
 const donneesReferentiel = require('../donneesReferentiel');
 const DepotDonnees = require('../src/depotDonnees');
 const Referentiel = require('../src/referentiel');
-const adaptateurJWT = require('../src/adaptateurs/adaptateurJWT');
+const { fabriqueAdaptateurJWT } = require('../src/adaptateurs/adaptateurJWT');
 const AdaptateurPostgres = require('../src/adaptateurs/adaptateurPostgres');
 const { fabriqueAdaptateurUUID } = require('../src/adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurJournalMSS = require('../src/adaptateurs/fabriqueAdaptateurJournalMSS');
@@ -68,7 +68,7 @@ class ConsoleAdministration {
 
     this.depotDonnees = DepotDonnees.creeDepot({
       adaptateurChiffrement: fabriqueAdaptateurChiffrement(),
-      adaptateurJWT,
+      adaptateurJWT: fabriqueAdaptateurJWT(),
       adaptateurPersistance: this.adaptateurPersistance,
       adaptateurUUID: fabriqueAdaptateurUUID(),
       referentiel: this.referentiel,
