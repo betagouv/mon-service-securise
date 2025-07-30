@@ -37,11 +37,6 @@ const routesNonConnecteApi = ({
     async (requete, reponse, suite) => {
       const { token } = requete.body;
 
-      if (!token) {
-        reponse.status(422).send('Le token est requis');
-        return;
-      }
-
       let donneesToken;
       try {
         donneesToken = await adaptateurJWT.decode(token);
