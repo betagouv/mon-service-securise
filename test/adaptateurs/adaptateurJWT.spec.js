@@ -1,9 +1,10 @@
 const expect = require('expect.js');
 const { adaptateurJWT } = require('../../src/adaptateurs/adaptateurJWT');
+const { ErreurJWTManquant, ErreurJWTInvalide } = require('../../src/erreurs');
 
 describe("L'adaptateur JWT", () => {
   describe('sur demande de décodage des données', () => {
-    it('retourne undefined lorsque les données à décoder ne sont pas définies', () => {
+    it('jette une erreur lorsque les données à décoder ne sont pas définies', () => {
       const adaptateurEnvironnement = {
         JWT: () => ({
           secret: () => 'unsecret',
@@ -14,8 +15,14 @@ describe("L'adaptateur JWT", () => {
         adaptateurEnvironnement,
       });
 
-      expect(decode(null)).to.be(undefined);
-      expect(decode(undefined)).to.be(undefined);
+      [null, undefined].forEach((valeurNonDefinie) => {
+        try {
+          decode(valeurNonDefinie);
+          expect().fail("L'appel aurait dû jeter une erreur");
+        } catch (e) {
+          expect(e).to.be.an(ErreurJWTManquant);
+        }
+      });
     });
 
     it('décode les données signées avec le même secret', () => {
@@ -59,8 +66,7 @@ describe("L'adaptateur JWT", () => {
         }).decode(donneesSignees);
         expect().fail("L'appel aurait dû jeter une erreur");
       } catch (e) {
-        expect(e).to.be.an(Error);
-        expect(e.message).to.be('invalid signature');
+        expect(e).to.be.an(ErreurJWTInvalide);
       }
     });
   });

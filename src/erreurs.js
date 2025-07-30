@@ -21,6 +21,8 @@ class ErreurBusEvenements extends Error {
 }
 class ErreurHashDeSelInvalide extends Error {}
 class ErreurSelManquant extends Error {}
+class ErreurJWTInvalide extends Error {}
+class ErreurJWTManquant extends Error {}
 class ErreurValeurSelIncoherente extends Error {}
 class ErreurVersionSelInvalide extends Error {}
 
@@ -138,6 +140,8 @@ module.exports = {
   ErreurHashDeSelInvalide,
   ErreurIdentifiantNouveauteInconnu,
   ErreurIntituleRisqueManquant,
+  ErreurJWTInvalide,
+  ErreurJWTManquant,
   ErreurLocalisationDonneesInvalide,
   ErreurMesureInconnue,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,

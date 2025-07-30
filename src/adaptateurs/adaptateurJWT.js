@@ -1,10 +1,21 @@
 const jwt = require('jsonwebtoken');
+const { ErreurJWTInvalide, ErreurJWTManquant } = require('../erreurs');
 const environnement = require('./adaptateurEnvironnement');
 
 const adaptateurJWT = ({ adaptateurEnvironnement }) => {
   const secret = adaptateurEnvironnement.JWT().secret();
 
-  const decode = (token) => (token ? jwt.verify(token, secret) : undefined);
+  const decode = (token) => {
+    if (!token) {
+      throw new ErreurJWTManquant();
+    }
+
+    try {
+      return jwt.verify(token, secret);
+    } catch (e) {
+      throw new ErreurJWTInvalide();
+    }
+  };
 
   const signeDonnees = (donnees) =>
     jwt.sign(donnees, secret, { expiresIn: '1h' });
