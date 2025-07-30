@@ -1,10 +1,11 @@
 const axios = require('axios');
 const expect = require('expect.js');
-const { JsonWebTokenError } = require('jsonwebtoken');
 const testeurMSS = require('../testeurMSS');
 const {
   ErreurUtilisateurExistant,
   ErreurEmailManquant,
+  ErreurJWTInvalide,
+  ErreurJWTManquant,
 } = require('../../../src/erreurs');
 const {
   unUtilisateur,
@@ -48,9 +49,9 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             email: 'jean.dupont@mail.fr',
           };
         if (token === 'tokenInvalide') {
-          throw new JsonWebTokenError();
+          throw new ErreurJWTInvalide();
         }
-        return undefined;
+        throw new ErreurJWTManquant();
       };
       testeur.referentiel().departement = () => 'Paris';
       testeur.adaptateurMail().creeContact = () => Promise.resolve();
@@ -337,8 +338,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it('jette une erreur si le token est absent', async () => {
-      testeur.adaptateurJWT().decode = () => undefined;
-
       donneesRequete.token = '';
 
       await testeur.verifieRequeteGenereErreurHTTP(422, 'Le token est requis', {

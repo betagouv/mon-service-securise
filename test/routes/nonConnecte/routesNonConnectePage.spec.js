@@ -7,6 +7,10 @@ const {
   requeteSansRedirection,
 } = require('../../aides/http');
 const { expectContenuSessionValide } = require('../../aides/cookie');
+const {
+  ErreurJWTInvalide,
+  ErreurJWTManquant,
+} = require('../../../src/erreurs');
 
 describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
   const testeur = testeurMSS();
@@ -243,7 +247,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
 
     it('retourne une erreur 400 si la signature du token est invalide', async () => {
       testeur.adaptateurJWT().decode = () => {
-        throw new Error('Jeton invalide');
+        throw new ErreurJWTInvalide();
       };
 
       try {
@@ -257,6 +261,10 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
 
     it('retourne une erreur 400 si le token est vide', async () => {
+      testeur.adaptateurJWT().decode = () => {
+        throw new ErreurJWTManquant();
+      };
+
       try {
         await axios.get('http://localhost:1234/creation-compte?token=');
         expect().fail("L'appel aurait dû lever une exception");
