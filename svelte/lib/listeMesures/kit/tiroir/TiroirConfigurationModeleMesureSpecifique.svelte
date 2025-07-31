@@ -29,7 +29,7 @@
   let idsServicesSelectionnes: string[] = [];
 
   let ongletActif: 'info' | 'servicesAssocies' = 'servicesAssocies';
-  let etapeActive: 1 | 2 | 3 = 1;
+  let etapeActive: 1 | 2 = 1;
 
   let donneesModeleMesureEdite = structuredClone(modeleMesure);
 
@@ -48,7 +48,19 @@
       );
       servicesAvecMesuresAssociees.rafraichis();
       await modelesMesureSpecifique.rafraichis();
-      etapeActive = 3;
+      modeleMesure = $modelesMesureSpecifique.find(
+        (m) => m.id === modeleMesure.id
+      )!;
+      toasterStore.succes(
+        'Succès',
+        `${
+          idsServicesSelectionnes.length === 1
+            ? 'Le service a été associé'
+            : 'Les services ont été associés'
+        } à la mesure`
+      );
+      etapeActive = 1;
+      idsServicesSelectionnes = [];
     } catch (e) {
       toasterStore.erreur(
         'Une erreur est survenue',

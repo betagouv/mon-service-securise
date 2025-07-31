@@ -15,7 +15,7 @@
   export let referentielTypesService: ReferentielTypesService;
   export let idsServicesSelectionnes: string[];
 
-  export let etapeActive: 1 | 2 | 3;
+  export let etapeActive: 1 | 2;
 
   const libellesBesoinsSecurite: Record<IdNiveauDeSecurite, string> = {
     niveau1: 'Basiques',
