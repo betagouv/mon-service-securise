@@ -33,6 +33,8 @@ const creeDepot = (config = {}) => {
       idUtilisateur,
       donneesChiffrees
     );
+
+    return idModele;
   };
 
   const metsAJourModeleMesureSpecifique = async (

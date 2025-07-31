@@ -8,7 +8,10 @@
   import { toasterStore } from '../../../ui/stores/toaster.store';
   import type { ListeMesuresProps } from '../../listeMesures.d';
   import InformationsModeleMesureSpecifique from '../InformationsModeleMesureSpecifique.svelte';
+  import TiroirConfigurationModeleMesureSpecifique from './TiroirConfigurationModeleMesureSpecifique.svelte';
+  import type { ReferentielTypesService } from '../../../ui/types';
 
+  export let referentielTypesService: ReferentielTypesService;
   export let categories: ListeMesuresProps['categories'];
   export const titre: string = 'Ajouter une mesure';
   export const sousTitre: string =
@@ -29,9 +32,16 @@
   const ajouteModele = async () => {
     enCoursDenvoi = true;
     try {
-      await ajouteModeleMesureSpecifique(donneesModeleMesureAjoute);
+      const idModele = await ajouteModeleMesureSpecifique(
+        donneesModeleMesureAjoute
+      );
       await modelesMesureSpecifique.rafraichis();
-      tiroirStore.ferme();
+      tiroirStore.afficheContenu(TiroirConfigurationModeleMesureSpecifique, {
+        categories,
+        modeleMesure: $modelesMesureSpecifique.find((m) => m.id === idModele)!,
+        referentielTypesService,
+      });
+      toasterStore.succes('Succès', 'La mesure a été créée');
     } catch (e) {
       toasterStore.erreur(
         'Une erreur est survenue',

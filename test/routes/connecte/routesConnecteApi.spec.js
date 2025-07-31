@@ -1867,14 +1867,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         donneesRecues = { idUtilisateur, donnees };
       };
 
-      const reponse = await axios.post(
-        'http://localhost:1234/api/modeles/mesureSpecifique',
-        {
-          description: 'une description',
-          descriptionLongue: 'une description longue',
-          categorie: 'gouvernance',
-        }
-      );
+      await axios.post('http://localhost:1234/api/modeles/mesureSpecifique', {
+        description: 'une description',
+        descriptionLongue: 'une description longue',
+        categorie: 'gouvernance',
+      });
 
       expect(donneesRecues.idUtilisateur).to.be('U1');
       expect(donneesRecues.donnees).to.eql({
@@ -1882,7 +1879,23 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         descriptionLongue: 'une description longue',
         categorie: 'gouvernance',
       });
+    });
+
+    it("retourne 201 et l'identifiant du modèle créé", async () => {
+      testeur.depotDonnees().ajouteModeleMesureSpecifique = async () => 'MOD-1';
+
+      const reponse = await axios.post(
+        'http://localhost:1234/api/modeles/mesureSpecifique',
+        {
+          description: 'une description',
+          categorie: 'gouvernance',
+        }
+      );
+
       expect(reponse.status).to.be(201);
+      expect(reponse.data).to.eql({
+        id: 'MOD-1',
+      });
     });
   });
 

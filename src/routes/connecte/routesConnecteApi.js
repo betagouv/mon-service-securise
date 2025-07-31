@@ -617,12 +617,12 @@ const routesConnecteApi = ({
         return;
       }
 
-      await depotDonnees.ajouteModeleMesureSpecifique(
+      const idModele = await depotDonnees.ajouteModeleMesureSpecifique(
         requete.idUtilisateurCourant,
         { description, descriptionLongue, categorie }
       );
 
-      reponse.sendStatus(201);
+      reponse.status(201).send({ id: idModele });
     }
   );
 
