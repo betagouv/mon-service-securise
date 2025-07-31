@@ -14,6 +14,7 @@ const {
   ErreurModele,
   ErreurCategorieInconnue,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
+  ErreurJWTManquant,
 } = require('../../erreurs');
 const routesConnecteApiService = require('./routesConnecteApiService');
 const Utilisateur = require('../../modeles/utilisateur');
@@ -53,6 +54,7 @@ const routesConnecteApi = ({
   adaptateurJournal,
   adaptateurControleFichier,
   adaptateurXLS,
+  adaptateurJWT,
   procedures,
   serviceAnnuaire,
   serviceGestionnaireSession,
@@ -385,15 +387,33 @@ const routesConnecteApi = ({
   routes.put(
     '/utilisateur',
     middleware.aseptise(
-      ...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email'),
+      ...Utilisateur.nomsProprietesBase().filter(
+        (propriete) => !['prenom', 'nom', 'email'].includes(propriete)
+      ),
       'siretEntite'
     ),
-    (requete, reponse, suite) => {
+    async (requete, reponse, suite) => {
+      const { token } = requete.body;
+
+      let donneesToken;
+      try {
+        donneesToken = await adaptateurJWT.decode(token);
+      } catch (e) {
+        const message =
+          e instanceof ErreurJWTManquant
+            ? 'Le token est requis'
+            : 'Le token est invalide';
+        reponse.status(422).send(message);
+        return;
+      }
+
       const idUtilisateur = requete.idUtilisateurCourant;
       const donnees = obtentionDonneesDeBaseUtilisateur(
         requete.body,
         serviceCgu
       );
+      donnees.prenom = donneesToken.prenom;
+      donnees.nom = donneesToken.nom;
       const { donneesInvalides, messageErreur } =
         messageErreurDonneesUtilisateur(donnees, true);
 

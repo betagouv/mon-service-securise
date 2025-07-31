@@ -9,6 +9,8 @@ const {
   ErreurModele,
   EchecAutorisation,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
+  ErreurJWTInvalide,
+  ErreurJWTManquant,
 } = require('../../../src/erreurs');
 
 const testeurMSS = require('../testeurMSS');
@@ -1103,8 +1105,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       utilisateur = unUtilisateur().avecId('123').construis();
 
       donneesRequete = {
-        prenom: 'Jean',
-        nom: 'Dupont',
         telephone: '0100000000',
         postes: ['RSSI', "Chargé des systèmes d'informations"],
         siretEntite: '13000766900018',
@@ -1115,6 +1115,19 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         infolettreAcceptee: 'true',
         transactionnelAccepte: 'true',
         cguAcceptees: 'true',
+        token: 'unTokenValide',
+      };
+
+      testeur.adaptateurJWT().decode = (token) => {
+        if (token === 'unTokenValide')
+          return {
+            prenom: 'Jean',
+            nom: 'Dupont',
+          };
+        if (token === 'tokenInvalide') {
+          throw new ErreurJWTInvalide();
+        }
+        throw new ErreurJWTManquant();
       };
 
       testeur.referentiel().departement = () => 'Paris';
@@ -1126,8 +1139,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it('aseptise les paramètres de la requête', (done) => {
       testeur.middleware().verifieAseptisationParametres(
         [
-          'prenom',
-          'nom',
           'telephone',
           'cguAcceptees',
           'infolettreAcceptee',
@@ -1146,11 +1157,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", async () => {
-      donneesRequete.prenom = '';
+      donneesRequete.siretEntite = '';
 
       await testeur.verifieRequeteGenereErreurHTTP(
         422,
-        'La mise à jour de l\'utilisateur a échoué car les paramètres sont invalides. La propriété "prenom" est requise',
+        'La mise à jour de l\'utilisateur a échoué car les paramètres sont invalides. La propriété "entite.siret" est requise',
         {
           method: 'put',
           url: 'http://localhost:1234/api/utilisateur',
@@ -1245,6 +1256,30 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(preferencesChangees).to.eql({
         infolettreAcceptee: true,
         transactionnelAccepte: true,
+      });
+    });
+
+    it('jette une erreur si le token est invalide', async () => {
+      donneesRequete.token = 'tokenInvalide';
+
+      await testeur.verifieRequeteGenereErreurHTTP(
+        422,
+        'Le token est invalide',
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/utilisateur',
+          data: donneesRequete,
+        }
+      );
+    });
+
+    it('jette une erreur si le token est absent', async () => {
+      donneesRequete.token = '';
+
+      await testeur.verifieRequeteGenereErreurHTTP(422, 'Le token est requis', {
+        method: 'put',
+        url: 'http://localhost:1234/api/utilisateur',
+        data: donneesRequete,
       });
     });
   });
