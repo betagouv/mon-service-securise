@@ -96,7 +96,11 @@
   <Onglets
     onglets={[
       { id: 'info', label: 'Informations' },
-      { id: 'servicesAssocies', label: 'Services associés' },
+      {
+        id: 'servicesAssocies',
+        label: 'Services associés',
+        badge: modeleMesure.idsServicesAssocies.length,
+      },
     ]}
     bind:ongletActif
     sansBordureEnBas={true}
