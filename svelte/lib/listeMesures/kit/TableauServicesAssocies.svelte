@@ -66,10 +66,10 @@
       </div>
     {:else if colonne.cle === 'statut'}
       <div class="statut">
-        <TagStatutMesure {referentielStatuts} statut={donnee.mesure.statut} />
+        <TagStatutMesure {referentielStatuts} statut={donnee.mesure?.statut} />
       </div>
     {:else if colonne.cle === 'modalites'}
-      {@const contenu = decode(donnee.mesure.modalites)}
+      {@const contenu = decode(donnee.mesure?.modalites)}
       {@const contenuTropLong = contenu.length > 90}
       <div class="precision">
         <span>{contenuTropLong ? contenu.slice(0, 90) + '...' : contenu}</span>
