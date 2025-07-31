@@ -60,20 +60,19 @@ export enum CategorieMesure {
   RESILIENCE = 'resilience',
 }
 
-export type ModeleMesureGenerale = {
+export type ModeleMesure = {
   id: string;
-  categorie: CategorieMesure;
   description: string;
-  identifiantNumerique: string;
-  referentiel: Referentiel;
   descriptionLongue: string;
+  categorie: CategorieMesure;
 };
 
-export type ModeleMesureSpecifique = {
-  id: string;
-  description: string;
-  descriptionLongue: string;
-  categorie: CategorieMesure;
+export type ModeleMesureGenerale = ModeleMesure & {
+  identifiantNumerique: string;
+  referentiel: Referentiel;
+};
+
+export type ModeleMesureSpecifique = ModeleMesure & {
   idsServicesAssocies: string[];
 };
 

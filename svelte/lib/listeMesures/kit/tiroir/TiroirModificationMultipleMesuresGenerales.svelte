@@ -5,18 +5,15 @@
     ModeleMesureGenerale,
     ReferentielStatut,
   } from '../../../ui/types';
-  import EtapierTiroir from './EtapierTiroir.svelte';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
   import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
   import Bouton from '../../../ui/Bouton.svelte';
-  import PremiereEtape from './etapes/PremiereEtape.svelte';
-  import SecondeEtape from './etapes/SecondeEtape.svelte';
   import type { StatutMesure } from '../../../modeles/modeleMesure';
-  import TroisiemeEtape from './etapes/TroisiemeEtape.svelte';
   import { enregistreModificationMesureSurServicesMultiples } from '../../listeMesures.api';
   import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
   import { modaleRapportStore } from '../../stores/modaleRapport.store';
   import { toasterStore } from '../../../ui/stores/toaster.store';
+  import EtapesModificationMultipleStatutPrecision from './etapes/EtapesModificationMultipleStatutPrecision.svelte';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -32,8 +29,6 @@
 
   let etapeCourante = 1;
   let enCoursEnvoi = false;
-
-  $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
 
   let boutonSuivantActif = false;
   $: {
@@ -93,26 +88,14 @@
       <hr />
     </div>
   {/if}
-  <EtapierTiroir {etapeCourante} />
-  <hr />
-  {#if etapeCourante === 1}
-    <PremiereEtape {statuts} bind:statutSelectionne bind:precision />
-  {:else if etapeCourante === 2}
-    <SecondeEtape
-      {statuts}
-      {modeleMesureGenerale}
-      {modificationPrecisionUniquement}
-      bind:idsServicesSelectionnes
-    />
-  {:else if etapeCourante === 3}
-    <TroisiemeEtape
-      {modeleMesureGenerale}
-      {precision}
-      {statuts}
-      {statutSelectionne}
-      {idsServicesSelectionnes}
-    />
-  {/if}
+  <EtapesModificationMultipleStatutPrecision
+    {statuts}
+    modeleMesure={modeleMesureGenerale}
+    bind:statutSelectionne
+    bind:precision
+    bind:etapeCourante
+    bind:idsServicesSelectionnes
+  />
 </ContenuTiroir>
 <ActionsTiroir>
   {#if etapeCourante === 1}
@@ -132,11 +115,3 @@
     on:click={etapeSuivante}
   />
 </ActionsTiroir>
-
-<style lang="scss">
-  hr {
-    width: 100%;
-    border-top: none;
-    border-bottom: 1px solid #dddddd;
-  }
-</style>

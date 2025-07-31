@@ -1,32 +1,29 @@
 <script lang="ts">
   import TagStatutMesure from '../../../../ui/TagStatutMesure.svelte';
-  import type {
-    ModeleMesureGenerale,
-    ReferentielStatut,
-  } from '../../../../ui/types';
+  import type { ModeleMesure, ReferentielStatut } from '../../../../ui/types';
   import type { StatutMesure } from '../../../../modeles/modeleMesure';
   import { servicesAvecMesuresAssociees } from '../../../stores/servicesAvecMesuresAssociees.store';
   import { mesuresAvecServicesAssociesStore } from '../../../stores/mesuresAvecServicesAssocies.store';
   import TableauServicesAssocies from '../../TableauServicesAssocies.svelte';
 
-  export let modeleMesureGenerale: ModeleMesureGenerale;
+  export let modeleMesure: ModeleMesure;
   export let statuts: ReferentielStatut;
   export let statutSelectionne: StatutMesure | '';
   export let precision: string;
   export let idsServicesSelectionnes: string[];
 
   $: servicesConcernes =
-    modeleMesureGenerale &&
+    modeleMesure &&
     $servicesAvecMesuresAssociees
       .filter((s) => {
-        return $mesuresAvecServicesAssociesStore[
-          modeleMesureGenerale.id
-        ].includes(s?.id);
+        return $mesuresAvecServicesAssociesStore[modeleMesure.id].includes(
+          s?.id
+        );
       })
       .filter((s) => idsServicesSelectionnes.includes(s.id))
       .map(({ mesuresAssociees, ...autresDonnees }) => ({
         ...autresDonnees,
-        mesure: mesuresAssociees[modeleMesureGenerale.id],
+        mesure: mesuresAssociees[modeleMesure.id],
       }));
 
   const intitulePluralise =
