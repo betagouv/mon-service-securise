@@ -140,6 +140,13 @@
   {/if}
 </ContenuTiroir>
 <ActionsTiroir>
+  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <lab-anssi-bouton
+    variante="tertiaire-sans-bordure"
+    taille="md"
+    titre="Annuler"
+    on:click={() => tiroirStore.ferme()}
+  />
   {#if ongletActif === 'info'}
     <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
     <lab-anssi-bouton
