@@ -19,6 +19,7 @@
   import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
   import Avertissement from '../../../ui/Avertissement.svelte';
   import Lien from '../../../ui/Lien.svelte';
+  import Bouton from '../../../ui/Bouton.svelte';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -30,7 +31,8 @@
   export let referentielTypesService: ReferentielTypesService;
   let idsServicesSelectionnes: string[] = [];
 
-  export let ongletActif: 'info' | 'servicesAssocies' = 'servicesAssocies';
+  export let ongletActif: 'info' | 'servicesAssocies' | 'statut-precision' =
+    'servicesAssocies';
   let etapeActive: 1 | 2 = 1;
 
   let donneesModeleMesureEdite = structuredClone(modeleMesure);
@@ -103,6 +105,7 @@
         label: 'Services associés',
         badge: modeleMesure.idsServicesAssocies.length,
       },
+      { id: 'statut-precision', label: 'Statut et précision' },
     ]}
     bind:ongletActif
     sansBordureEnBas={true}
@@ -137,6 +140,27 @@
         bind:idsServicesSelectionnes
       />
     {/if}
+  {:else if ongletActif === 'statut-precision'}
+    {#if modeleMesure.idsServicesAssocies.length === 0}
+      <Avertissement niveau="info">
+        <div class="info-pas-de-service">
+          <p>
+            Vous devez d’abord associer des services pour modifier le statut et/
+            ou la précision.
+          </p>
+          <div class="retour-onglet-services">
+            <Bouton
+              on:click={() => (ongletActif = 'servicesAssocies')}
+              type="secondaire"
+              titre="Associer des services"
+            />
+          </div>
+        </div>
+      </Avertissement>
+    {:else}
+      <!--StatutEtPrecisionServicesAssocies /-->
+      hello
+    {/if}
   {/if}
 </ContenuTiroir>
 <ActionsTiroir>
@@ -157,6 +181,15 @@
       position-icone="gauche"
       on:click={async () => await sauvegardeInformations()}
       actif={formulaireValide && !enCoursDenvoi}
+    />
+  {:else if ongletActif === 'statut-precision'}
+    <lab-anssi-bouton
+      titre="Enregistrer les modifications"
+      variante="primaire"
+      taille="md"
+      icone="save-line"
+      position-icone="gauche"
+      actif={false}
     />
   {:else if ongletActif === 'servicesAssocies'}
     {#if etapeActive === 1}
