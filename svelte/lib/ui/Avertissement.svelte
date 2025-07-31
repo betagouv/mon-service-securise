@@ -50,6 +50,7 @@
     margin-bottom: 28px;
     text-align: left;
     position: relative;
+    max-width: fit-content;
   }
 
   .cadre.info {
