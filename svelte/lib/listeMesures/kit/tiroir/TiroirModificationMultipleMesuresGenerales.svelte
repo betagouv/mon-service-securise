@@ -5,18 +5,16 @@
     ModeleMesureGenerale,
     ReferentielStatut,
   } from '../../../ui/types';
-  import EtapierTiroir from './EtapierTiroir.svelte';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
   import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
   import Bouton from '../../../ui/Bouton.svelte';
-  import PremiereEtape from './etapes/PremiereEtape.svelte';
-  import SecondeEtape from './etapes/SecondeEtape.svelte';
   import type { StatutMesure } from '../../../modeles/modeleMesure';
-  import TroisiemeEtape from './etapes/TroisiemeEtape.svelte';
   import { enregistreModificationMesureSurServicesMultiples } from '../../listeMesures.api';
   import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
   import { modaleRapportStore } from '../../stores/modaleRapport.store';
   import { toasterStore } from '../../../ui/stores/toaster.store';
+  import EtapesModificationMultipleStatutPrecision from './etapes/EtapesModificationMultipleStatutPrecision.svelte';
+  import { mesuresAvecServicesAssociesStore } from '../../stores/mesuresAvecServicesAssocies.store';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -33,7 +31,19 @@
   let etapeCourante = 1;
   let enCoursEnvoi = false;
 
-  $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
+  $: servicesConcernesParMaj =
+    modeleMesureGenerale &&
+    $servicesAvecMesuresAssociees
+      .filter((s) => {
+        return $mesuresAvecServicesAssociesStore[
+          modeleMesureGenerale.id
+        ].includes(s?.id);
+      })
+      .filter((s) => idsServicesSelectionnes.includes(s.id))
+      .map(({ mesuresAssociees, ...autresDonnees }) => ({
+        ...autresDonnees,
+        mesure: mesuresAssociees[modeleMesureGenerale.id],
+      }));
 
   let boutonSuivantActif = false;
   $: {
@@ -49,6 +59,40 @@
         break;
     }
   }
+
+  $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
+
+  const doitEtreALaFin = (service: {
+    peutEtreModifie: boolean;
+    statut?: string;
+  }) => {
+    return (
+      !service.peutEtreModifie ||
+      (modificationPrecisionUniquement && !service.statut)
+    );
+  };
+
+  $: servicesAssocies =
+    modeleMesureGenerale &&
+    $servicesAvecMesuresAssociees
+      .filter((s) => {
+        return $mesuresAvecServicesAssociesStore[
+          modeleMesureGenerale.id
+        ].includes(s?.id);
+      })
+      .map(({ mesuresAssociees, ...autresDonnees }) => ({
+        ...mesuresAssociees[modeleMesureGenerale.id],
+        ...autresDonnees,
+      }))
+      .sort((a, b) => {
+        if (
+          (doitEtreALaFin(a) && doitEtreALaFin(b)) ||
+          (!doitEtreALaFin(a) && !doitEtreALaFin(b))
+        ) {
+          return a.nomService.localeCompare(b.nomService);
+        }
+        return doitEtreALaFin(a) ? 1 : -1;
+      });
 
   const appliqueModifications = async () => {
     enCoursEnvoi = true;
@@ -93,26 +137,16 @@
       <hr />
     </div>
   {/if}
-  <EtapierTiroir {etapeCourante} />
-  <hr />
-  {#if etapeCourante === 1}
-    <PremiereEtape {statuts} bind:statutSelectionne bind:precision />
-  {:else if etapeCourante === 2}
-    <SecondeEtape
-      {statuts}
-      {modeleMesureGenerale}
-      {modificationPrecisionUniquement}
-      bind:idsServicesSelectionnes
-    />
-  {:else if etapeCourante === 3}
-    <TroisiemeEtape
-      {modeleMesureGenerale}
-      {precision}
-      {statuts}
-      {statutSelectionne}
-      {idsServicesSelectionnes}
-    />
-  {/if}
+  <EtapesModificationMultipleStatutPrecision
+    {statuts}
+    bind:statutSelectionne
+    bind:precision
+    bind:etapeCourante
+    bind:idsServicesSelectionnes
+    {servicesAssocies}
+    {modificationPrecisionUniquement}
+    {servicesConcernesParMaj}
+  />
 </ContenuTiroir>
 <ActionsTiroir>
   {#if etapeCourante === 1}
@@ -132,11 +166,3 @@
     on:click={etapeSuivante}
   />
 </ActionsTiroir>
-
-<style lang="scss">
-  hr {
-    width: 100%;
-    border-top: none;
-    border-bottom: 1px solid #dddddd;
-  }
-</style>

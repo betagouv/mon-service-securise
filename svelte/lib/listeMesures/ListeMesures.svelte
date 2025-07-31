@@ -117,6 +117,7 @@
   ) => {
     tiroirStore.afficheContenu(TiroirConfigurationModeleMesureSpecifique, {
       categories,
+      statuts,
       modeleMesure: modele,
       referentielTypesService: typesService,
       ongletActif: 'info',
