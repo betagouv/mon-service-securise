@@ -6,7 +6,6 @@
   import { onMount } from 'svelte';
   import ModaleDetailsMesure from './kit/ModaleDetailsMesure.svelte';
   import {
-    CategorieMesure,
     type ModeleMesureGenerale,
     Referentiel,
     type ReferentielStatut,
@@ -109,6 +108,7 @@
   const afficheTiroirAjout = () => {
     tiroirStore.afficheContenu(TiroirAjoutModeleMesureSpecifique, {
       categories,
+      referentielTypesService: typesService,
     });
   };
 

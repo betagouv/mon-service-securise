@@ -26,12 +26,13 @@ export const ajouteModeleMesureSpecifique = async ({
   description: string;
   descriptionLongue: string;
   categorie: string;
-}) => {
-  await axios.post(`/api/modeles/mesureSpecifique`, {
+}): Promise<string> => {
+  const reponse = await axios.post(`/api/modeles/mesureSpecifique`, {
     description,
     descriptionLongue,
     categorie,
   });
+  return reponse.data?.id;
 };
 
 export const sauvegardeModeleMesureSpecifique = async ({
