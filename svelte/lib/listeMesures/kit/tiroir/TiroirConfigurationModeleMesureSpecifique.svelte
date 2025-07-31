@@ -17,6 +17,8 @@
   import { modelesMesureSpecifique } from '../../stores/modelesMesureSpecifique.store';
   import ServicesAssociesModeleMesureSpecifique from '../ServicesAssociesModeleMesureSpecifique.svelte';
   import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
+  import Avertissement from '../../../ui/Avertissement.svelte';
+  import Lien from '../../../ui/Lien.svelte';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -111,12 +113,30 @@
       bind:donneesModeleMesure={donneesModeleMesureEdite}
     />
   {:else if ongletActif === 'servicesAssocies'}
-    <ServicesAssociesModeleMesureSpecifique
-      {modeleMesure}
-      {referentielTypesService}
-      bind:etapeActive
-      bind:idsServicesSelectionnes
-    />
+    {#if $servicesAvecMesuresAssociees.length === 0}
+      <Avertissement niveau="info">
+        <div class="info-pas-de-service">
+          <p>
+            Vous devez d’abord ajouter un/des service(s) afin de les associer à
+            cette mesure depuis le tableau de bord.
+          </p>
+          <div class="retour-tableau-de-bord">
+            <Lien
+              type="bouton-secondaire"
+              href="/tableauDeBord"
+              titre="Retourner au tableau de bord"
+            />
+          </div>
+        </div>
+      </Avertissement>
+    {:else}
+      <ServicesAssociesModeleMesureSpecifique
+        {modeleMesure}
+        {referentielTypesService}
+        bind:etapeActive
+        bind:idsServicesSelectionnes
+      />
+    {/if}
   {/if}
 </ContenuTiroir>
 <ActionsTiroir>
@@ -155,3 +175,17 @@
     {/if}
   {/if}
 </ActionsTiroir>
+
+<style lang="scss">
+  .info-pas-de-service {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 4px 0;
+    max-width: 550px;
+
+    p {
+      margin: 0;
+    }
+  }
+</style>
