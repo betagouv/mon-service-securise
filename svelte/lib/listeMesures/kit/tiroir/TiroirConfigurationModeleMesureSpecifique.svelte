@@ -99,6 +99,7 @@
       { id: 'servicesAssocies', label: 'Services associés' },
     ]}
     bind:ongletActif
+    sansBordureEnBas={true}
   />
   {#if ongletActif === 'info'}
     <InformationsModeleMesureSpecifique
