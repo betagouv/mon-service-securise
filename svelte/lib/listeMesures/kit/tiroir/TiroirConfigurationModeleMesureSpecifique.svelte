@@ -30,7 +30,7 @@
   export let referentielTypesService: ReferentielTypesService;
   let idsServicesSelectionnes: string[] = [];
 
-  let ongletActif: 'info' | 'servicesAssocies' = 'servicesAssocies';
+  export let ongletActif: 'info' | 'servicesAssocies' = 'servicesAssocies';
   let etapeActive: 1 | 2 = 1;
 
   let donneesModeleMesureEdite = structuredClone(modeleMesure);

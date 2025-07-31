@@ -119,6 +119,7 @@
       categories,
       modeleMesure: modele,
       referentielTypesService: typesService,
+      ongletActif: 'info',
     });
   };
 </script>

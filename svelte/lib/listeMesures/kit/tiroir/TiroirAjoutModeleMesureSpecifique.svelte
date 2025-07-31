@@ -40,6 +40,7 @@
         categories,
         modeleMesure: $modelesMesureSpecifique.find((m) => m.id === idModele)!,
         referentielTypesService,
+        ongletActif: 'servicesAssocies',
       });
       toasterStore.succes('Succès', 'La mesure a été créée');
     } catch (e) {
