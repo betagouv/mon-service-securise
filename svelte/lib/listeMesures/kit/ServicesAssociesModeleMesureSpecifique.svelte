@@ -75,19 +75,20 @@
       Sélectionnez les services que vous souhaitez associer à cette mesure.
     </span>
   {:else if etapeActive === 2}
-    <Toast
-      avecOmbre={false}
-      titre="Cette action peut avoir un impact significatif."
-      avecAnimation={false}
-      niveau="info"
-      contenu="Vous vous apprêtez à associer cette mesure à {idsServicesSelectionnes.length} {idsServicesSelectionnes.length ===
-      1
-        ? 'service'
-        : 'services'}. Cela aura un impact sur {idsServicesSelectionnes.length ===
-      1
-        ? 'son'
-        : 'leur'} indice cyber."
-    />
+    <span class="alerte-modification-indice-cyber">
+      <Toast
+        avecOmbre={false}
+        titre="Cette action peut avoir un impact significatif."
+        avecAnimation={false}
+        niveau="info"
+        contenu="Vous vous apprêtez à associer cette mesure à <b>{idsServicesSelectionnes.length}
+        {idsServicesSelectionnes.length === 1 ? 'service' : 'services'}</b>.
+        Cela aura un impact sur {idsServicesSelectionnes.length === 1
+          ? 'son'
+          : 'leur'}
+        indice cyber."
+      />
+    </span>
     <hr />
     <h5>
       {idsServicesSelectionnes.length}
@@ -154,7 +155,7 @@
 
 <style lang="scss">
   h3 {
-    margin: 2px 0 8px;
+    margin: 2px 0 0;
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
@@ -205,8 +206,13 @@
   .entete {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 8px;
     margin-bottom: -6px;
+
+    .alerte-modification-indice-cyber {
+      max-width: 590px;
+      margin-top: 16px;
+    }
 
     .explication {
       max-width: 500px;
@@ -216,7 +222,7 @@
       width: 100%;
       border-top: none;
       border-bottom: 1px solid #dddddd;
-      margin: 0;
+      margin: 16px 0;
     }
 
     h5 {
