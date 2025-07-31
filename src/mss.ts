@@ -176,6 +176,7 @@ const creeServeur = ({
       adaptateurJournal,
       adaptateurControleFichier,
       adaptateurXLS,
+      adaptateurJWT,
       procedures,
       serviceAnnuaire,
       serviceGestionnaireSession,
