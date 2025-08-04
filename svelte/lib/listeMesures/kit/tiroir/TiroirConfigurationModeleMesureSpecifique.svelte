@@ -12,6 +12,7 @@
   import ServicesAssociesModeleMesureSpecifique from '../ServicesAssociesModeleMesureSpecifique.svelte';
   import {
     associeServicesModeleMesureSpecifique,
+    enregistreModificationMesuresSpecifiquesSurServicesMultiples,
     sauvegardeModeleMesureSpecifique,
   } from '../../listeMesures.api';
   import { toasterStore } from '../../../ui/stores/toaster.store';
@@ -21,7 +22,9 @@
   import Avertissement from '../../../ui/Avertissement.svelte';
   import Lien from '../../../ui/Lien.svelte';
   import Bouton from '../../../ui/Bouton.svelte';
-  import EtapesModificationMultipleStatutPrecision from './etapes/EtapesModificationMultipleStatutPrecision.svelte';
+  import EtapesModificationMultipleStatutPrecision, {
+    type DonneesModificationAAppliquer,
+  } from './etapes/EtapesModificationMultipleStatutPrecision.svelte';
   import type { ServiceAssocie } from './TiroirModificationMultipleMesuresGenerales.svelte';
 
   export const titre: string = 'Configurer la mesure';
@@ -37,7 +40,35 @@
 
   let etapeCourante = 1;
 
-  const appliqueModifications = async () => {};
+  const appliqueModifications = async (
+    e: CustomEvent<DonneesModificationAAppliquer>
+  ) => {
+    enCoursDenvoi = true;
+    try {
+      const { idsServices, modalites, statut } = e.detail;
+      await enregistreModificationMesuresSpecifiquesSurServicesMultiples({
+        idModele: modeleMesure.id,
+        statut,
+        modalites,
+        idsServices,
+      });
+      tiroirStore.ferme();
+      servicesAvecMesuresAssociees.rafraichis();
+      const pluriel = idsServices.length > 1 ? 's' : '';
+      toasterStore.succes(
+        `Mesure${pluriel} modifiée${pluriel} avec succès !`,
+        `Vous avez modifié la mesure ${modeleMesure.description} sur ${idsServices.length} service${pluriel}.`
+      );
+    } catch (e) {
+      tiroirStore.ferme();
+      toasterStore.erreur(
+        'Une erreur est survenue',
+        "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
+      );
+    } finally {
+      enCoursDenvoi = false;
+    }
+  };
 
   export let ongletActif: 'info' | 'servicesAssocies' | 'statut-precision' =
     'servicesAssocies';
