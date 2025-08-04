@@ -31,9 +31,7 @@ describe('Les routes connecté de téléversement des modèles de mesure', () =>
     it("délègue la vérification de surface à l'adaptateur de vérification de fichier", async () => {
       let adaptateurAppele = false;
       let requeteRecue;
-      testeur.adaptateurControleFichier().extraisDonneesXLS = async (
-        requete
-      ) => {
+      testeur.lecteurDeFormData().extraisDonneesXLS = async (requete) => {
         adaptateurAppele = true;
         requeteRecue = requete;
       };

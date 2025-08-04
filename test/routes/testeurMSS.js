@@ -41,7 +41,7 @@ const testeurMss = () => {
   let adaptateurStatistiques;
   let adaptateurJWT;
   let adaptateurProfilAnssi;
-  let adaptateurControleFichier;
+  let lecteurDeFormData;
   let adaptateurXLS;
   let depotDonnees;
   let moteurRegles;
@@ -141,7 +141,7 @@ const testeurMss = () => {
     });
     serviceCgu = fabriqueServiceCgu({ referentiel });
     serviceGestionnaireSession = fabriqueServiceGestionnaireSession();
-    adaptateurControleFichier = {
+    lecteurDeFormData = {
       extraisDonneesXLS: async () => Buffer.from([]),
     };
     adaptateurXLS = {
@@ -178,7 +178,7 @@ const testeurMss = () => {
           adaptateurStatistiques,
           adaptateurJWT,
           adaptateurProfilAnssi,
-          adaptateurControleFichier,
+          lecteurDeFormData,
           adaptateurXLS,
           cmsCrisp,
           serviceSupervision,
@@ -213,7 +213,7 @@ const testeurMss = () => {
     adaptateurStatistiques: () => adaptateurStatistiques,
     adaptateurJWT: () => adaptateurJWT,
     adaptateurProfilAnssi: () => adaptateurProfilAnssi,
-    adaptateurControleFichier: () => adaptateurControleFichier,
+    lecteurDeFormData: () => lecteurDeFormData,
     adaptateurXLS: () => adaptateurXLS,
     busEvenements: () => busEvenements,
     cmsCrisp: () => cmsCrisp,
