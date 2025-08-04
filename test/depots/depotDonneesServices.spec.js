@@ -2594,4 +2594,198 @@ describe('Le dépôt de données des services', () => {
       expect(evenement.type).to.be('generale');
     });
   });
+
+  describe('sur demande de mise à jour de mesures spécifiques pour plusieurs services', () => {
+    let depot;
+    let referentiel;
+    let persistance;
+
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        statutsMesures: { fait: {}, nonFait: {} },
+        prioritesMesures: { p1: {} },
+        categoriesMesures: { gouvernance: {} },
+      });
+      const mesuresDeS1 = new Mesures(
+        { mesuresSpecifiques: [{ idModele: 'MOD1', id: 'MS1' }] },
+        referentiel,
+        {},
+        { MOD1: { categorie: 'gouvernance' } }
+      );
+      const mesuresDeS2 = new Mesures(
+        {
+          mesuresSpecifiques: [
+            {
+              idModele: 'MOD1',
+              id: 'MS2',
+              statut: 'nonFait',
+              modalites: 'une modalité',
+              priorite: 'p1',
+            },
+          ],
+        },
+        referentiel,
+        {},
+        { MOD1: { categorie: 'gouvernance' } }
+      );
+
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD1',
+          idUtilisateur: 'U1',
+          donnees: { categorie: 'gouvernance' },
+        })
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('S1')
+            .avecMesures(mesuresDeS1)
+            .construis()
+            .donneesAPersister().donnees
+        )
+        .associeLeServiceAuxModelesDeMesureSpecifique('S1', ['MOD1'])
+        .ajouteUnService(
+          unService(referentiel)
+            .avecId('S2')
+            .avecMesures(mesuresDeS2)
+            .construis()
+            .donneesAPersister().donnees
+        )
+        .associeLeServiceAuxModelesDeMesureSpecifique('S2', ['MOD1'])
+        .nommeCommeProprietaire('U1', ['S1', 'S2']);
+
+      depot = unDepotDeDonneesServices()
+        .avecReferentiel(referentiel)
+        .avecConstructeurDePersistance(persistance)
+        .avecBusEvenements(busEvenements)
+        .construis();
+    });
+
+    it('jette une erreur si une modification des modalités seules est tentée sur une mesure sans statut', async () => {
+      try {
+        await depot.metsAJourMesuresSpecifiquesDesServices(
+          'U1',
+          ['S1'],
+          'MOD1',
+          '',
+          'une modalité'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e).to.be.an(ErreurStatutMesureManquant);
+      }
+    });
+
+    it('met à jour les mesures spécifiques pour des services', async () => {
+      await depot.metsAJourMesuresSpecifiquesDesServices(
+        'U1',
+        ['S1', 'S2'],
+        'MOD1',
+        'fait',
+        'une nouvelle modalité'
+      );
+
+      const s1Apres = await depot.service('S1');
+      const mesureDeS1AJour = s1Apres.mesuresSpecifiques().avecId('MS1');
+      expect(mesureDeS1AJour.statut).to.be('fait');
+      expect(mesureDeS1AJour.modalites).to.be('une nouvelle modalité');
+      const s2Apres = await depot.service('S2');
+      const mesureDeS2AJour = s2Apres.mesuresSpecifiques().avecId('MS2');
+      expect(mesureDeS2AJour.statut).to.be('fait');
+      expect(mesureDeS2AJour.modalites).to.be('une nouvelle modalité');
+    });
+
+    it('met à jour la mesure spécifique sans écraser les informations existantes', async () => {
+      await depot.metsAJourMesuresSpecifiquesDesServices(
+        'U1',
+        ['S2'],
+        'MOD1',
+        'fait',
+        'une nouvelle modalité'
+      );
+
+      const s2Apres = await depot.service('S2');
+      const mesureAJour = s2Apres.mesuresSpecifiques().avecId('MS2');
+      expect(mesureAJour.priorite).to.be('p1');
+    });
+
+    it('sait mettre à jour uniquement la modalité si elle est définie', async () => {
+      await depot.metsAJourMesuresSpecifiquesDesServices(
+        'U1',
+        ['S2'],
+        'MOD1',
+        '',
+        'une nouvelle modalité'
+      );
+
+      const s2Apres = await depot.service('S2');
+      const mesureAJour = s2Apres.mesuresSpecifiques().avecId('MS2');
+      expect(mesureAJour.statut).to.be('nonFait');
+      expect(mesureAJour.modalites).to.be('une nouvelle modalité');
+    });
+
+    it("sait mettre à jour uniquement le statut s'il est défini", async () => {
+      await depot.metsAJourMesuresSpecifiquesDesServices(
+        'U1',
+        ['S2'],
+        'MOD1',
+        'fait',
+        ''
+      );
+
+      const s2Apres = await depot.service('S2');
+      const mesureAJour = s2Apres.mesuresSpecifiques().avecId('MS2');
+      expect(mesureAJour.statut).to.be('fait');
+      expect(mesureAJour.modalites).to.be('une modalité');
+    });
+
+    it("publie un événement de 'Mesure service modifiée' pour chaque service", async () => {
+      await depot.metsAJourMesuresSpecifiquesDesServices(
+        'U1',
+        ['S1', 'S2'],
+        'MOD1',
+        'fait',
+        ''
+      );
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementMesureServiceModifiee)
+      ).to.be(true);
+      const tousEvenements = busEvenements.recupereEvenements(
+        EvenementMesureServiceModifiee
+      );
+      expect(tousEvenements.length).to.be(2);
+      expect(tousEvenements[0].ancienneMesure.id).to.be('MS1');
+      expect(tousEvenements[0].nouvelleMesure.id).to.be('MS1');
+      expect(tousEvenements[0].service.id).to.be('S1');
+      expect(tousEvenements[0].typeMesure).to.be('specifique');
+      expect(tousEvenements[1].ancienneMesure.id).to.be('MS2');
+      expect(tousEvenements[1].nouvelleMesure.id).to.be('MS2');
+      expect(tousEvenements[1].service.id).to.be('S2');
+      expect(tousEvenements[1].typeMesure).to.be('specifique');
+    });
+
+    it("publie un événement de 'Mesure modifiée en masse'", async () => {
+      await depot.metsAJourMesuresSpecifiquesDesServices(
+        'U1',
+        ['S1', 'S2'],
+        'MOD1',
+        'fait',
+        ''
+      );
+
+      expect(
+        busEvenements.aRecuUnEvenement(EvenementMesureModifieeEnMasse)
+      ).to.be(true);
+      const evenement = busEvenements.recupereEvenement(
+        EvenementMesureModifieeEnMasse
+      );
+      expect(evenement.utilisateur.id).to.be('U1');
+      expect(evenement.idMesure).to.be(undefined);
+      expect(evenement.statutModifie).to.be(true);
+      expect(evenement.modalitesModifiees).to.be(false);
+      expect(evenement.nombreServicesConcernes).to.be(2);
+      expect(evenement.type).to.be('specifique');
+    });
+  });
 });

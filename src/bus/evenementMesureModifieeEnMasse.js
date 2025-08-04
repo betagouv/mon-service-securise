@@ -5,13 +5,14 @@ class EvenementMesureModifieeEnMasse {
     statutModifie,
     modalitesModifiees,
     nombreServicesConcernes,
+    typeMesure,
   }) {
     this.utilisateur = utilisateur;
     this.idMesure = idMesure;
     this.statutModifie = statutModifie;
     this.modalitesModifiees = modalitesModifiees;
     this.nombreServicesConcernes = nombreServicesConcernes;
-    this.type = 'generale';
+    this.type = typeMesure;
   }
 }
 

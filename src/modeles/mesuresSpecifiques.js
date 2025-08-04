@@ -84,6 +84,10 @@ class MesuresSpecifiques extends ElementsConstructibles {
     return this.toutes().find((m) => m.id === idMesure);
   }
 
+  avecIdModele(idModele) {
+    return this.toutes().find((m) => m.idModele === idModele);
+  }
+
   detacheMesureDuModele(idModele) {
     this.items.forEach((m) => {
       if (m.idModele === idModele) {
