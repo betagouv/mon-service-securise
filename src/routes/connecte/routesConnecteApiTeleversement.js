@@ -1,5 +1,6 @@
 const express = require('express');
 const routesConnecteApiTeleversementServices = require('./routesConnecteApiTeleversement.services');
+const routesConnecteApiTeleversementModelesMesure = require('./routesConnecteApiTeleversement.modelesMesure');
 
 const routesConnecteApiTeleversement = ({
   adaptateurControleFichier,
@@ -17,6 +18,14 @@ const routesConnecteApiTeleversement = ({
       adaptateurXLS,
       busEvenements,
       depotDonnees,
+      middleware,
+    })
+  );
+
+  routes.use(
+    '/modeles-de-mesure',
+    routesConnecteApiTeleversementModelesMesure({
+      adaptateurControleFichier,
       middleware,
     })
   );
