@@ -18,7 +18,7 @@
       titre: 'Template de mesures à télécharger',
       sousTitre: 'XLSX - 56 kB',
     }}
-    lesLimitations={['Format supporté : XLSX.']}
+    lesLimitations={['Taille maximale : 1 Mo. Format supporté : XLSX.']}
     apiPostDuTeleversement="/api/televersement/modeles-de-mesure"
     formatAccepte={FormatAccepte.Excel}
     on:televersementChange={(e) => {
