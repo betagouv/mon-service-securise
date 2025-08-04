@@ -14,6 +14,7 @@
   import { modaleRapportStore } from '../../stores/modaleRapport.store';
   import { toasterStore } from '../../../ui/stores/toaster.store';
   import EtapesModificationMultipleStatutPrecision from './etapes/EtapesModificationMultipleStatutPrecision.svelte';
+  import { mesuresAvecServicesAssociesStore } from '../../stores/mesuresAvecServicesAssocies.store';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -30,6 +31,20 @@
   let etapeCourante = 1;
   let enCoursEnvoi = false;
 
+  $: servicesConcernesParMaj =
+    modeleMesureGenerale &&
+    $servicesAvecMesuresAssociees
+      .filter((s) => {
+        return $mesuresAvecServicesAssociesStore[
+          modeleMesureGenerale.id
+        ].includes(s?.id);
+      })
+      .filter((s) => idsServicesSelectionnes.includes(s.id))
+      .map(({ mesuresAssociees, ...autresDonnees }) => ({
+        ...autresDonnees,
+        mesure: mesuresAssociees[modeleMesureGenerale.id],
+      }));
+
   let boutonSuivantActif = false;
   $: {
     switch (etapeCourante) {
@@ -44,6 +59,40 @@
         break;
     }
   }
+
+  $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
+
+  const doitEtreALaFin = (service: {
+    peutEtreModifie: boolean;
+    statut?: string;
+  }) => {
+    return (
+      !service.peutEtreModifie ||
+      (modificationPrecisionUniquement && !service.statut)
+    );
+  };
+
+  $: servicesAssocies =
+    modeleMesureGenerale &&
+    $servicesAvecMesuresAssociees
+      .filter((s) => {
+        return $mesuresAvecServicesAssociesStore[
+          modeleMesureGenerale.id
+        ].includes(s?.id);
+      })
+      .map(({ mesuresAssociees, ...autresDonnees }) => ({
+        ...mesuresAssociees[modeleMesureGenerale.id],
+        ...autresDonnees,
+      }))
+      .sort((a, b) => {
+        if (
+          (doitEtreALaFin(a) && doitEtreALaFin(b)) ||
+          (!doitEtreALaFin(a) && !doitEtreALaFin(b))
+        ) {
+          return a.nomService.localeCompare(b.nomService);
+        }
+        return doitEtreALaFin(a) ? 1 : -1;
+      });
 
   const appliqueModifications = async () => {
     enCoursEnvoi = true;
@@ -90,11 +139,13 @@
   {/if}
   <EtapesModificationMultipleStatutPrecision
     {statuts}
-    modeleMesure={modeleMesureGenerale}
     bind:statutSelectionne
     bind:precision
     bind:etapeCourante
     bind:idsServicesSelectionnes
+    {servicesAssocies}
+    {modificationPrecisionUniquement}
+    {servicesConcernesParMaj}
   />
 </ContenuTiroir>
 <ActionsTiroir>
@@ -115,3 +166,11 @@
     on:click={etapeSuivante}
   />
 </ActionsTiroir>
+
+<style lang="scss">
+  hr {
+    width: 100%;
+    border-top: none;
+    border-bottom: 1px solid #dddddd;
+  }
+</style>

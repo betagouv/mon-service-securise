@@ -1,33 +1,16 @@
 <script lang="ts">
   import TagStatutMesure from '../../../../ui/TagStatutMesure.svelte';
-  import type { ModeleMesure, ReferentielStatut } from '../../../../ui/types';
+  import type { ReferentielStatut } from '../../../../ui/types';
   import type { StatutMesure } from '../../../../modeles/modeleMesure';
-  import { servicesAvecMesuresAssociees } from '../../../stores/servicesAvecMesuresAssociees.store';
-  import { mesuresAvecServicesAssociesStore } from '../../../stores/mesuresAvecServicesAssocies.store';
   import TableauServicesAssocies from '../../TableauServicesAssocies.svelte';
 
-  export let modeleMesure: ModeleMesure;
   export let statuts: ReferentielStatut;
   export let statutSelectionne: StatutMesure | '';
   export let precision: string;
-  export let idsServicesSelectionnes: string[];
-
-  $: servicesConcernes =
-    modeleMesure &&
-    $servicesAvecMesuresAssociees
-      .filter((s) => {
-        return $mesuresAvecServicesAssociesStore[modeleMesure.id].includes(
-          s?.id
-        );
-      })
-      .filter((s) => idsServicesSelectionnes.includes(s.id))
-      .map(({ mesuresAssociees, ...autresDonnees }) => ({
-        ...autresDonnees,
-        mesure: mesuresAssociees[modeleMesure.id],
-      }));
+  export let servicesConcernes;
 
   const intitulePluralise =
-    idsServicesSelectionnes.length > 1
+    servicesConcernes.length > 1
       ? 'services concernés par ces modifications'
       : 'service concerné par cette modification';
 </script>
@@ -55,7 +38,7 @@
 
 <div>
   <h3 class="titre-etape">
-    {idsServicesSelectionnes.length}
+    {servicesConcernes.length}
     {intitulePluralise}
   </h3>
   <TableauServicesAssocies

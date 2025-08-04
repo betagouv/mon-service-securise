@@ -3,17 +3,17 @@
   import SecondeEtape from './SecondeEtape.svelte';
   import TroisiemeEtape from './TroisiemeEtape.svelte';
   import PremiereEtape from './PremiereEtape.svelte';
-  import type { ModeleMesure, ReferentielStatut } from '../../../../ui/types';
+  import type { ReferentielStatut } from '../../../../ui/types';
   import type { StatutMesure } from '../../../../modeles/modeleMesure';
 
   export let etapeCourante;
-  export let modeleMesure: ModeleMesure;
   export let statuts: ReferentielStatut;
   export let statutSelectionne: StatutMesure | '';
   export let precision: string;
   export let idsServicesSelectionnes: string[];
-
-  $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
+  export let servicesAssocies;
+  export let modificationPrecisionUniquement;
+  export let servicesConcernesParMaj;
 </script>
 
 <EtapierTiroir {etapeCourante} />
@@ -23,17 +23,16 @@
 {:else if etapeCourante === 2}
   <SecondeEtape
     {statuts}
-    {modeleMesure}
     {modificationPrecisionUniquement}
+    {servicesAssocies}
     bind:idsServicesSelectionnes
   />
 {:else if etapeCourante === 3}
   <TroisiemeEtape
-    {modeleMesure}
     {precision}
     {statuts}
     {statutSelectionne}
-    {idsServicesSelectionnes}
+    servicesConcernes={servicesConcernesParMaj}
   />
 {/if}
 

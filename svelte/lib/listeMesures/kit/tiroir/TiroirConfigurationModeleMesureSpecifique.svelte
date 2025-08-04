@@ -5,9 +5,11 @@
   import InformationsModeleMesureSpecifique from '../InformationsModeleMesureSpecifique.svelte';
   import type {
     ModeleMesureSpecifique,
+    ReferentielStatut,
     ReferentielTypesService,
   } from '../../../ui/types.d';
   import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
+  import ServicesAssociesModeleMesureSpecifique from '../ServicesAssociesModeleMesureSpecifique.svelte';
   import {
     associeServicesModeleMesureSpecifique,
     sauvegardeModeleMesureSpecifique,
@@ -15,21 +17,36 @@
   import { toasterStore } from '../../../ui/stores/toaster.store';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
   import { modelesMesureSpecifique } from '../../stores/modelesMesureSpecifique.store';
-  import ServicesAssociesModeleMesureSpecifique from '../ServicesAssociesModeleMesureSpecifique.svelte';
   import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
   import Avertissement from '../../../ui/Avertissement.svelte';
   import Lien from '../../../ui/Lien.svelte';
   import Bouton from '../../../ui/Bouton.svelte';
+  import EtapesModificationMultipleStatutPrecision from './etapes/EtapesModificationMultipleStatutPrecision.svelte';
+  import type { StatutMesure } from '../../../modeles/modeleMesure';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
     'Le statut et la précision de cette mesure peuvent être modifiés et appliqués simultanément à plusieurs services.';
   export const taille = 'large';
 
+  export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
   export let modeleMesure: ModeleMesureSpecifique;
   export let referentielTypesService: ReferentielTypesService;
   let idsServicesSelectionnes: string[] = [];
+
+  let statutSelectionne: StatutMesure | '' = '';
+  let precision: string = '';
+
+  let etapeCourante = 1;
+  let idsServicesSelectionnesPourStatuts: string[] = [];
+
+  const appliqueModifications = async () => {};
+
+  const etapeSuivante = async () => {
+    if (etapeCourante < 3) etapeCourante++;
+    else await appliqueModifications();
+  };
 
   export let ongletActif: 'info' | 'servicesAssocies' | 'statut-precision' =
     'servicesAssocies';
@@ -41,7 +58,46 @@
     !!donneesModeleMesureEdite.description &&
     !!donneesModeleMesureEdite.categorie;
 
+  $: servicesAssocies =
+    modeleMesure &&
+    modeleMesure.idsServicesAssocies
+      .map((id) => $servicesAvecMesuresAssociees.find((s) => s.id === id))
+      .map((s) => ({
+        ...s,
+        mesure: s!.mesuresSpecifiques.find(
+          (ms) => ms.idModele === modeleMesure.id
+        ),
+      }))
+      .map((s) => ({
+        ...s,
+        statut: s.mesure!.statut,
+        modalite: s.mesure!.modalite,
+      }));
+
+  $: servicesConcernesParMaj =
+    modeleMesure &&
+    idsServicesSelectionnesPourStatuts.map((id) =>
+      servicesAssocies.find((s) => s.id === id)
+    );
+
+  $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
+
   let enCoursDenvoi = false;
+
+  let boutonSuivantActif = false;
+  $: {
+    switch (etapeCourante) {
+      case 1:
+        boutonSuivantActif = !!statutSelectionne || !!precision;
+        break;
+      case 2:
+        boutonSuivantActif = idsServicesSelectionnesPourStatuts.length > 0;
+        break;
+      case 3:
+        boutonSuivantActif = true;
+        break;
+    }
+  }
 
   const associeServices = async () => {
     enCoursDenvoi = true;
@@ -158,19 +214,29 @@
         </div>
       </Avertissement>
     {:else}
-      <!--StatutEtPrecisionServicesAssocies /-->
-      hello
+      <EtapesModificationMultipleStatutPrecision
+        {statuts}
+        {servicesAssocies}
+        {servicesConcernesParMaj}
+        {modificationPrecisionUniquement}
+        bind:statutSelectionne
+        bind:precision
+        bind:etapeCourante
+        bind:idsServicesSelectionnes={idsServicesSelectionnesPourStatuts}
+      />
     {/if}
   {/if}
 </ContenuTiroir>
 <ActionsTiroir>
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-  <lab-anssi-bouton
-    variante="tertiaire-sans-bordure"
-    taille="md"
-    titre="Annuler"
-    on:click={() => tiroirStore.ferme()}
-  />
+  {#if ongletActif === 'info' || ongletActif === 'servicesAssocies'}
+    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <lab-anssi-bouton
+      variante="tertiaire-sans-bordure"
+      taille="md"
+      titre="Annuler"
+      on:click={() => tiroirStore.ferme()}
+    />
+  {/if}
   {#if ongletActif === 'info'}
     <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
     <lab-anssi-bouton
@@ -183,13 +249,21 @@
       actif={formulaireValide && !enCoursDenvoi}
     />
   {:else if ongletActif === 'statut-precision'}
-    <lab-anssi-bouton
-      titre="Enregistrer les modifications"
-      variante="primaire"
-      taille="md"
-      icone="save-line"
-      position-icone="gauche"
-      actif={false}
+    {#if etapeCourante === 1}
+      <Bouton
+        type="lien"
+        titre="Retour à la liste de mesures"
+        on:click={() => tiroirStore.ferme()}
+      />
+    {:else}
+      <Bouton type="lien" titre="Précédent" on:click={() => etapeCourante--} />
+    {/if}
+    <Bouton
+      titre={etapeCourante < 3 ? 'Suivant' : 'Appliquer les modifications'}
+      type="primaire"
+      actif={boutonSuivantActif}
+      enCoursEnvoi={enCoursDenvoi}
+      on:click={etapeSuivante}
     />
   {:else if ongletActif === 'servicesAssocies'}
     {#if etapeActive === 1}
