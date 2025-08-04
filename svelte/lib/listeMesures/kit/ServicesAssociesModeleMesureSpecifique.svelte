@@ -66,6 +66,22 @@
             modeleMesure!.idsServicesAssocies.includes(donnee.id),
         }
       : null;
+
+  const doitEtreALaFin = (service: ServiceAvecMesuresAssociees) =>
+    !service.peutEtreModifie ||
+    modeleMesure.idsServicesAssocies.includes(service.id);
+
+  $: servicesAvecMesuresAssocieesOrdonnes = $servicesAvecMesuresAssociees.sort(
+    (a, b) => {
+      if (
+        (doitEtreALaFin(a) && doitEtreALaFin(b)) ||
+        (!doitEtreALaFin(a) && !doitEtreALaFin(b))
+      ) {
+        return a.nomService.localeCompare(b.nomService);
+      }
+      return doitEtreALaFin(a) ? 1 : -1;
+    }
+  );
 </script>
 
 <span class="entete">
@@ -105,8 +121,8 @@
     { cle: 'niveauSecurite', libelle: 'Besoins de sécurité' },
   ]}
   donnees={etapeActive === 1
-    ? $servicesAvecMesuresAssociees
-    : $servicesAvecMesuresAssociees.filter((s) =>
+    ? servicesAvecMesuresAssocieesOrdonnes
+    : servicesAvecMesuresAssocieesOrdonnes.filter((s) =>
         idsServicesSelectionnes.includes(s.id)
       )}
   {configurationRecherche}
