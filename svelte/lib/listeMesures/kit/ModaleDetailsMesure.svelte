@@ -15,10 +15,13 @@
   import type {
     ModeleDeMesure,
     ServiceAssocieAUneMesure,
+    ListeMesuresProps,
   } from '../listeMesures.d';
+  import TiroirConfigurationModeleMesureSpecifique from './tiroir/TiroirConfigurationModeleMesureSpecifique.svelte';
 
   export let referentielStatuts: ReferentielStatut;
   export let referentielTypesService: ReferentielTypesService;
+  export let categories: ListeMesuresProps['categories'];
 
   let elementModale: Modale;
   let modeleDeMesure: ModeleDeMesure;
@@ -51,8 +54,16 @@
         modeleMesureGenerale: modeleDeMesure as ModeleMesureGenerale,
         statuts: referentielStatuts,
       });
-      elementModale.ferme();
+    } else {
+      tiroirStore.afficheContenu(TiroirConfigurationModeleMesureSpecifique, {
+        categories,
+        statuts: referentielStatuts,
+        modeleMesure: modeleDeMesure,
+        referentielTypesService,
+        ongletActif: 'info',
+      });
     }
+    elementModale.ferme();
   };
 </script>
 
@@ -89,7 +100,6 @@
         type="primaire"
         taille="moyen"
         icone="configuration"
-        actif={modeleDeMesure.type === 'generale'}
         on:click={configureMesure}
       />
     </svelte:fragment>
