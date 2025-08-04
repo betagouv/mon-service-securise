@@ -76,7 +76,7 @@
 
 <div>
   <h3>1. {etape1}</h3>
-  <a href={template.href} download="Template services - MSS.xlsx">
+  <a href={template.href} download={template.nom}>
     {template.titre}
   </a>
   <p>{template.sousTitre}</p>
