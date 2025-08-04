@@ -1,48 +1,14 @@
 <script lang="ts">
-  import type { ModeleMesure, ReferentielStatut } from '../../../../ui/types';
+  import type { ReferentielStatut } from '../../../../ui/types';
   import { decode } from 'html-entities';
   import TagStatutMesure from '../../../../ui/TagStatutMesure.svelte';
-  import { servicesAvecMesuresAssociees } from '../../../stores/servicesAvecMesuresAssociees.store';
-  import { mesuresAvecServicesAssociesStore } from '../../../stores/mesuresAvecServicesAssocies.store';
   import Tableau from '../../../../ui/Tableau.svelte';
   import Infobulle from '../../../../ui/Infobulle.svelte';
 
   export let statuts: ReferentielStatut;
-  export let modeleMesure: ModeleMesure;
   export let modificationPrecisionUniquement: boolean;
   export let idsServicesSelectionnes: string[];
-
-  const doitEtreALaFin = (service: {
-    peutEtreModifie: boolean;
-    statut?: string;
-  }) => {
-    return (
-      !service.peutEtreModifie ||
-      (modificationPrecisionUniquement && !service.statut)
-    );
-  };
-
-  $: servicesAssocies =
-    modeleMesure &&
-    $servicesAvecMesuresAssociees
-      .filter((s) => {
-        return $mesuresAvecServicesAssociesStore[modeleMesure.id].includes(
-          s?.id
-        );
-      })
-      .map(({ mesuresAssociees, ...autresDonnees }) => ({
-        ...mesuresAssociees[modeleMesure.id],
-        ...autresDonnees,
-      }))
-      .sort((a, b) => {
-        if (
-          (doitEtreALaFin(a) && doitEtreALaFin(b)) ||
-          (!doitEtreALaFin(a) && !doitEtreALaFin(b))
-        ) {
-          return a.nomService.localeCompare(b.nomService);
-        }
-        return doitEtreALaFin(a) ? 1 : -1;
-      });
+  export let servicesAssocies;
 
   const optionsFiltrage = {
     categories: [{ id: 'statut', libelle: 'Statuts' }],
