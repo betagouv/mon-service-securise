@@ -1,7 +1,17 @@
+<script context="module" lang="ts">
+  export type ServiceAssocie = Omit<
+    ServiceAvecMesuresAssociees,
+    'mesuresAssociees'
+  > & {
+    mesure: PersonnalisationMesure;
+  };
+</script>
+
 <script lang="ts">
   import ContenuTiroir from '../../../ui/tiroirs/ContenuTiroir.svelte';
   import DescriptionCompleteMesure from '../DescriptionCompleteMesure.svelte';
   import type {
+    ModeleMesure,
     ModeleMesureGenerale,
     ReferentielStatut,
   } from '../../../ui/types';
@@ -13,8 +23,14 @@
   import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
   import { modaleRapportStore } from '../../stores/modaleRapport.store';
   import { toasterStore } from '../../../ui/stores/toaster.store';
-  import EtapesModificationMultipleStatutPrecision from './etapes/EtapesModificationMultipleStatutPrecision.svelte';
+  import EtapesModificationMultipleStatutPrecision, {
+    type DonneesModificationAAppliquer,
+  } from './etapes/EtapesModificationMultipleStatutPrecision.svelte';
   import { mesuresAvecServicesAssociesStore } from '../../stores/mesuresAvecServicesAssocies.store';
+  import type {
+    PersonnalisationMesure,
+    ServiceAvecMesuresAssociees,
+  } from '../../listeMesures.d';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -24,54 +40,12 @@
   export let modeleMesureGenerale: ModeleMesureGenerale;
   export let statuts: ReferentielStatut;
 
-  let statutSelectionne: StatutMesure | '' = '';
-  let precision: string = '';
-  let idsServicesSelectionnes: string[] = [];
-
   let etapeCourante = 1;
   let enCoursEnvoi = false;
 
-  $: servicesConcernesParMaj =
-    modeleMesureGenerale &&
-    $servicesAvecMesuresAssociees
-      .filter((s) => {
-        return $mesuresAvecServicesAssociesStore[
-          modeleMesureGenerale.id
-        ].includes(s?.id);
-      })
-      .filter((s) => idsServicesSelectionnes.includes(s.id))
-      .map(({ mesuresAssociees, ...autresDonnees }) => ({
-        ...autresDonnees,
-        mesure: mesuresAssociees[modeleMesureGenerale.id],
-      }));
-
   let boutonSuivantActif = false;
-  $: {
-    switch (etapeCourante) {
-      case 1:
-        boutonSuivantActif = !!statutSelectionne || !!precision;
-        break;
-      case 2:
-        boutonSuivantActif = idsServicesSelectionnes.length > 0;
-        break;
-      case 3:
-        boutonSuivantActif = true;
-        break;
-    }
-  }
 
-  $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
-
-  const doitEtreALaFin = (service: {
-    peutEtreModifie: boolean;
-    statut?: string;
-  }) => {
-    return (
-      !service.peutEtreModifie ||
-      (modificationPrecisionUniquement && !service.statut)
-    );
-  };
-
+  let servicesAssocies: ServiceAssocie[] = [];
   $: servicesAssocies =
     modeleMesureGenerale &&
     $servicesAvecMesuresAssociees
@@ -81,36 +55,30 @@
         ].includes(s?.id);
       })
       .map(({ mesuresAssociees, ...autresDonnees }) => ({
-        ...mesuresAssociees[modeleMesureGenerale.id],
+        mesure: mesuresAssociees[modeleMesureGenerale.id],
         ...autresDonnees,
-      }))
-      .sort((a, b) => {
-        if (
-          (doitEtreALaFin(a) && doitEtreALaFin(b)) ||
-          (!doitEtreALaFin(a) && !doitEtreALaFin(b))
-        ) {
-          return a.nomService.localeCompare(b.nomService);
-        }
-        return doitEtreALaFin(a) ? 1 : -1;
-      });
+      }));
 
-  const appliqueModifications = async () => {
+  const appliqueModifications = async (
+    e: CustomEvent<DonneesModificationAAppliquer>
+  ) => {
     enCoursEnvoi = true;
     try {
+      const { idsServices, modalites, statut } = e.detail;
       await enregistreModificationMesureSurServicesMultiples({
         idMesure: modeleMesureGenerale.id,
-        statut: statutSelectionne,
-        modalites: precision,
-        idsServices: idsServicesSelectionnes,
+        statut,
+        modalites,
+        idsServices,
       });
       tiroirStore.ferme();
       servicesAvecMesuresAssociees.rafraichis();
       modaleRapportStore.affiche({
         champsModifies: [
-          ...(statutSelectionne && ['statut']),
-          ...(precision && ['modalites']),
+          ...(statut && ['statut']),
+          ...(modalites && ['modalites']),
         ] as ('statut' | 'modalites')[],
-        idServicesModifies: idsServicesSelectionnes,
+        idServicesModifies: idsServices,
         modeleMesureGenerale,
       });
     } catch (e) {
@@ -124,10 +92,7 @@
     }
   };
 
-  const etapeSuivante = async () => {
-    if (etapeCourante < 3) etapeCourante++;
-    else await appliqueModifications();
-  };
+  let elementEtapesModification: EtapesModificationMultipleStatutPrecision;
 </script>
 
 <ContenuTiroir>
@@ -138,14 +103,12 @@
     </div>
   {/if}
   <EtapesModificationMultipleStatutPrecision
-    {statuts}
-    bind:statutSelectionne
-    bind:precision
+    bind:this={elementEtapesModification}
     bind:etapeCourante
-    bind:idsServicesSelectionnes
+    bind:boutonSuivantActif
+    {statuts}
     {servicesAssocies}
-    {modificationPrecisionUniquement}
-    {servicesConcernesParMaj}
+    on:modification-a-appliquer={appliqueModifications}
   />
 </ContenuTiroir>
 <ActionsTiroir>
@@ -156,14 +119,18 @@
       on:click={() => tiroirStore.ferme()}
     />
   {:else}
-    <Bouton type="lien" titre="Précédent" on:click={() => etapeCourante--} />
+    <Bouton
+      type="lien"
+      titre="Précédent"
+      on:click={() => elementEtapesModification.etapePrecedente()}
+    />
   {/if}
   <Bouton
     titre={etapeCourante < 3 ? 'Suivant' : 'Appliquer les modifications'}
     type="primaire"
     actif={boutonSuivantActif}
     {enCoursEnvoi}
-    on:click={etapeSuivante}
+    on:click={() => elementEtapesModification.etapeSuivante()}
   />
 </ActionsTiroir>
 

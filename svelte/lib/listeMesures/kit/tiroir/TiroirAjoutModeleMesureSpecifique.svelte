@@ -9,8 +9,12 @@
   import type { ListeMesuresProps } from '../../listeMesures.d';
   import InformationsModeleMesureSpecifique from '../InformationsModeleMesureSpecifique.svelte';
   import TiroirConfigurationModeleMesureSpecifique from './TiroirConfigurationModeleMesureSpecifique.svelte';
-  import type { ReferentielTypesService } from '../../../ui/types';
+  import type {
+    ReferentielStatut,
+    ReferentielTypesService,
+  } from '../../../ui/types';
 
+  export let statuts: ReferentielStatut;
   export let referentielTypesService: ReferentielTypesService;
   export let categories: ListeMesuresProps['categories'];
   export const titre: string = 'Ajouter une mesure';
@@ -38,6 +42,7 @@
       await modelesMesureSpecifique.rafraichis();
       tiroirStore.afficheContenu(TiroirConfigurationModeleMesureSpecifique, {
         categories,
+        statuts,
         modeleMesure: $modelesMesureSpecifique.find((m) => m.id === idModele)!,
         referentielTypesService,
         ongletActif: 'servicesAssocies',

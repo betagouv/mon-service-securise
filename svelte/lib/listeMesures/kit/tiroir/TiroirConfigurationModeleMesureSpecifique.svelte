@@ -22,7 +22,7 @@
   import Lien from '../../../ui/Lien.svelte';
   import Bouton from '../../../ui/Bouton.svelte';
   import EtapesModificationMultipleStatutPrecision from './etapes/EtapesModificationMultipleStatutPrecision.svelte';
-  import type { StatutMesure } from '../../../modeles/modeleMesure';
+  import type { ServiceAssocie } from './TiroirModificationMultipleMesuresGenerales.svelte';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -35,18 +35,9 @@
   export let referentielTypesService: ReferentielTypesService;
   let idsServicesSelectionnes: string[] = [];
 
-  let statutSelectionne: StatutMesure | '' = '';
-  let precision: string = '';
-
   let etapeCourante = 1;
-  let idsServicesSelectionnesPourStatuts: string[] = [];
 
   const appliqueModifications = async () => {};
-
-  const etapeSuivante = async () => {
-    if (etapeCourante < 3) etapeCourante++;
-    else await appliqueModifications();
-  };
 
   export let ongletActif: 'info' | 'servicesAssocies' | 'statut-precision' =
     'servicesAssocies';
@@ -58,46 +49,27 @@
     !!donneesModeleMesureEdite.description &&
     !!donneesModeleMesureEdite.categorie;
 
+  let servicesAssocies: ServiceAssocie[] = [];
   $: servicesAssocies =
     modeleMesure &&
-    modeleMesure.idsServicesAssocies
-      .map((id) => $servicesAvecMesuresAssociees.find((s) => s.id === id))
-      .map((s) => ({
-        ...s,
-        mesure: s!.mesuresSpecifiques.find(
+    $servicesAvecMesuresAssociees
+      .filter((s) => modeleMesure.idsServicesAssocies.includes(s.id))
+      .map((s) => {
+        const mesureSpecifique = s!.mesuresSpecifiques.find(
           (ms) => ms.idModele === modeleMesure.id
-        ),
-      }))
-      .map((s) => ({
-        ...s,
-        statut: s.mesure!.statut,
-        modalite: s.mesure!.modalite,
-      }));
-
-  $: servicesConcernesParMaj =
-    modeleMesure &&
-    idsServicesSelectionnesPourStatuts.map((id) =>
-      servicesAssocies.find((s) => s.id === id)
-    );
-
-  $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
+        );
+        return {
+          ...s,
+          mesure: {
+            statut: mesureSpecifique?.statut,
+            modalites: mesureSpecifique?.modalite,
+          },
+        };
+      });
 
   let enCoursDenvoi = false;
 
   let boutonSuivantActif = false;
-  $: {
-    switch (etapeCourante) {
-      case 1:
-        boutonSuivantActif = !!statutSelectionne || !!precision;
-        break;
-      case 2:
-        boutonSuivantActif = idsServicesSelectionnesPourStatuts.length > 0;
-        break;
-      case 3:
-        boutonSuivantActif = true;
-        break;
-    }
-  }
 
   const associeServices = async () => {
     enCoursDenvoi = true;
@@ -150,6 +122,15 @@
       enCoursDenvoi = false;
     }
   };
+
+  $: {
+    if (ongletActif) {
+      etapeActive = 1;
+      etapeCourante = 1;
+    }
+  }
+
+  let elementEtapesModification: EtapesModificationMultipleStatutPrecision;
 </script>
 
 <ContenuTiroir>
@@ -215,14 +196,12 @@
       </Avertissement>
     {:else}
       <EtapesModificationMultipleStatutPrecision
+        bind:this={elementEtapesModification}
+        bind:etapeCourante
+        bind:boutonSuivantActif
         {statuts}
         {servicesAssocies}
-        {servicesConcernesParMaj}
-        {modificationPrecisionUniquement}
-        bind:statutSelectionne
-        bind:precision
-        bind:etapeCourante
-        bind:idsServicesSelectionnes={idsServicesSelectionnesPourStatuts}
+        on:modification-a-appliquer={appliqueModifications}
       />
     {/if}
   {/if}
@@ -256,14 +235,18 @@
         on:click={() => tiroirStore.ferme()}
       />
     {:else}
-      <Bouton type="lien" titre="Précédent" on:click={() => etapeCourante--} />
+      <Bouton
+        type="lien"
+        titre="Précédent"
+        on:click={() => elementEtapesModification.etapePrecedente()}
+      />
     {/if}
     <Bouton
       titre={etapeCourante < 3 ? 'Suivant' : 'Appliquer les modifications'}
       type="primaire"
       actif={boutonSuivantActif}
       enCoursEnvoi={enCoursDenvoi}
-      on:click={etapeSuivante}
+      on:click={() => elementEtapesModification.etapeSuivante()}
     />
   {:else if ongletActif === 'servicesAssocies'}
     {#if etapeActive === 1}
