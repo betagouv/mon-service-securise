@@ -30,6 +30,8 @@
   import Onglets from '../ui/Onglets.svelte';
   import TiroirAjoutModeleMesureSpecifique from './kit/tiroir/TiroirAjoutModeleMesureSpecifique.svelte';
   import TiroirConfigurationModeleMesureSpecifique from './kit/tiroir/TiroirConfigurationModeleMesureSpecifique.svelte';
+  import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
+  import TiroirTeleversementModeleMesureSpecifique from './kit/tiroir/TiroirTeleversementModeleMesureSpecifique.svelte';
 
   export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
@@ -112,6 +114,10 @@
     });
   };
 
+  const afficheTiroirTeleversement = () => {
+    tiroirStore.afficheContenu(TiroirTeleversementModeleMesureSpecifique, {});
+  };
+
   const afficheTiroirModificationModeleMesureSpecifique = (
     modele: ModeleDeMesure
   ) => {
@@ -160,14 +166,20 @@
       icone="telecharger"
     />
     {#if afficheModelesMesureSpecifique}
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-      <lab-anssi-bouton
-        variante="primaire"
-        taille="md"
-        titre="Ajouter une mesure"
-        icone="add-line"
-        position-icone="gauche"
-        on:click={afficheTiroirAjout}
+      <BoutonAvecListeDeroulante
+        titre="Ajouter une / des mesures"
+        options={[
+          {
+            label: 'Ajouter une mesure',
+            icone: 'plus',
+            action: afficheTiroirAjout,
+          },
+          {
+            label: 'Téléverser des mesures',
+            icone: 'televerser',
+            action: afficheTiroirTeleversement,
+          },
+        ]}
       />
     {/if}
   </div>
