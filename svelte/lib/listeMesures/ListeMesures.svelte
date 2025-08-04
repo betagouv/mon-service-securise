@@ -31,7 +31,7 @@
   import TiroirAjoutModeleMesureSpecifique from './kit/tiroir/TiroirAjoutModeleMesureSpecifique.svelte';
   import TiroirConfigurationModeleMesureSpecifique from './kit/tiroir/TiroirConfigurationModeleMesureSpecifique.svelte';
   import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
-  import TiroirTeleversementModeleMesureSpecifique from './kit/tiroir/TiroirTeleversementModeleMesureSpecifique.svelte';
+  import TiroirTeleversementModeleMesureSpecifique from './televersement/TiroirTeleversementModeleMesureSpecifique.svelte';
 
   export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
