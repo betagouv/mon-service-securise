@@ -154,7 +154,7 @@ const routesConnecteApi = ({
   );
 
   routes.put(
-    '/services/mesures/:id',
+    '/services/mesuresGenerales/:id',
     middleware.verificationAcceptationCGU,
     middleware.aseptise('idsServices.*', 'id', 'statut', 'modalites'),
     async (requete, reponse) => {

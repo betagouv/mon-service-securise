@@ -406,7 +406,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
   });
 
-  describe('quand requête PUT sur `/api/services/mesures/:id`', () => {
+  describe('quand requête PUT sur `/api/services/mesuresGenerales/:id`', () => {
     beforeEach(() => {
       testeur.depotDonnees().accesAutoriseAUneListeDeService = async () => true;
     });
@@ -415,7 +415,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.middleware().verifieRequeteExigeAcceptationCGU(
         {
           method: 'put',
-          url: 'http://localhost:1234/api/services/mesures/unIdDeMesure',
+          url: 'http://localhost:1234/api/services/mesuresGenerales/unIdDeMesure',
         },
         done
       );
@@ -426,7 +426,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         ['idsServices.*', 'id', 'statut', 'modalites'],
         {
           method: 'put',
-          url: 'http://localhost:1234/api/services/mesures/unIdDeMesure',
+          url: 'http://localhost:1234/api/services/mesuresGenerales/unIdDeMesure',
         },
         done
       );
@@ -435,7 +435,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it('jette une erreur si le statut ET les modalités ne sont pas précisés', async () => {
       try {
         await axios.put(
-          'http://localhost:1234/api/services/mesures/unIdDeMesure',
+          'http://localhost:1234/api/services/mesuresGenerales/unIdDeMesure',
           {
             statut: undefined,
             modalites: undefined,
@@ -455,7 +455,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
       try {
         await axios.put(
-          'http://localhost:1234/api/services/mesures/uneMesureInconnue',
+          'http://localhost:1234/api/services/mesuresGenerales/uneMesureInconnue',
           {
             statut: 'fait',
           }
@@ -473,7 +473,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
       try {
         await axios.put(
-          'http://localhost:1234/api/services/mesures/uneMesureConnue',
+          'http://localhost:1234/api/services/mesuresGenerales/uneMesureConnue',
           {
             statut: 'unStatutInconnu',
           }
@@ -492,7 +492,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         async () => {};
 
       const reponse = await axios.put(
-        'http://localhost:1234/api/services/mesures/uneMesureConnue',
+        'http://localhost:1234/api/services/mesuresGenerales/uneMesureConnue',
         {
           statut: '',
           modalites: 'une modalité',
@@ -514,7 +514,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       try {
         await axios.put(
-          'http://localhost:1234/api/services/mesures/uneMesureConnue',
+          'http://localhost:1234/api/services/mesuresGenerales/uneMesureConnue',
           {
             statut: 'unStatut',
             idsServices: ['S1'],
@@ -546,7 +546,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
 
       await axios.put(
-        'http://localhost:1234/api/services/mesures/uneMesureConnue',
+        'http://localhost:1234/api/services/mesuresGenerales/uneMesureConnue',
         {
           statut: 'fait',
           modalites: 'une modalité',
