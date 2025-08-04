@@ -19,7 +19,7 @@ const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPIEmail()
   ? require('./src/adaptateurs/adaptateurMailSendinblue')
   : require('./src/adaptateurs/adaptateurMailMemoire').fabriqueAdaptateurMailMemoire();
 const adaptateurPdf = require('./src/adaptateurs/adaptateurPdf');
-const adaptateurControleFichier = require('./src/adaptateurs/adaptateurControleFichier');
+const lecteurDeFormData = require('./src/http/lecteurDeFormData');
 const adaptateurXLS = require('./src/adaptateurs/adaptateurXLS');
 
 const adaptateurZip = require('./src/adaptateurs/adaptateurZip');
@@ -149,10 +149,10 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     adaptateurEnvironnement,
     adaptateurStatistiques,
     adaptateurJWT,
-    adaptateurControleFichier,
     adaptateurXLS,
     adaptateurProfilAnssi,
     cmsCrisp,
+    lecteurDeFormData,
     serviceGestionnaireSession,
     serviceSupervision,
     serviceCgu,

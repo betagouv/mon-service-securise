@@ -52,7 +52,7 @@ const routesConnecteApi = ({
   adaptateurCsv,
   adaptateurZip,
   adaptateurJournal,
-  adaptateurControleFichier,
+  lecteurDeFormData,
   adaptateurXLS,
   adaptateurJWT,
   procedures,
@@ -343,7 +343,7 @@ const routesConnecteApi = ({
     '/televersement',
     middleware.verificationAcceptationCGU,
     routesConnecteApiTeleversement({
-      adaptateurControleFichier,
+      lecteurDeFormData,
       adaptateurXLS,
       busEvenements,
       depotDonnees,

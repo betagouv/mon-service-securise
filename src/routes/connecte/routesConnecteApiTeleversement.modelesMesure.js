@@ -2,11 +2,11 @@ const express = require('express');
 
 const routesConnecteApiTeleversementModelesMesure = ({
   middleware,
-  adaptateurControleFichier,
+  lecteurDeFormData,
 }) => {
   const routes = express.Router();
   routes.post('/', middleware.protegeTrafic(), async (requete, reponse) => {
-    await adaptateurControleFichier.extraisDonneesXLS(requete);
+    await lecteurDeFormData.extraisDonneesXLS(requete);
 
     reponse.sendStatus(201);
   });

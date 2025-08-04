@@ -3,7 +3,7 @@ const routesConnecteApiTeleversementServices = require('./routesConnecteApiTelev
 const routesConnecteApiTeleversementModelesMesure = require('./routesConnecteApiTeleversement.modelesMesure');
 
 const routesConnecteApiTeleversement = ({
-  adaptateurControleFichier,
+  lecteurDeFormData,
   adaptateurXLS,
   busEvenements,
   depotDonnees,
@@ -14,7 +14,7 @@ const routesConnecteApiTeleversement = ({
   routes.use(
     '/services',
     routesConnecteApiTeleversementServices({
-      adaptateurControleFichier,
+      lecteurDeFormData,
       adaptateurXLS,
       busEvenements,
       depotDonnees,
@@ -25,7 +25,7 @@ const routesConnecteApiTeleversement = ({
   routes.use(
     '/modeles-de-mesure',
     routesConnecteApiTeleversementModelesMesure({
-      adaptateurControleFichier,
+      lecteurDeFormData,
       middleware,
     })
   );
