@@ -1,6 +1,7 @@
 const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
+const { ErreurFichierXlsInvalide } = require('../../../src/erreurs');
 
 describe('Les routes connecté de téléversement des modèles de mesure', () => {
   const testeur = testeurMSS();
@@ -42,6 +43,21 @@ describe('Les routes connecté de téléversement des modèles de mesure', () =>
 
       expect(adaptateurAppele).to.be(true);
       expect(requeteRecue).not.to.be(undefined);
+    });
+
+    it('jette une erreur 400 si le fichier est invalide', async () => {
+      testeur.lecteurDeFormData().extraisDonneesXLS = async () => {
+        throw new ErreurFichierXlsInvalide();
+      };
+
+      try {
+        await axios.post(
+          'http://localhost:1234/api/televersement/modeles-de-mesure'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
     });
   });
 });
