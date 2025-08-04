@@ -1,8 +1,8 @@
 <script lang="ts">
-  import ContenuTiroir from '../../../ui/tiroirs/ContenuTiroir.svelte';
-  import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
+  import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
+  import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
 
-  export const titre: string = 'Importer vos mesures';
+  export const titre: string = 'Téléverser des mesures';
   export const sousTitre: string = '';
   export const taille = 'large';
 </script>
