@@ -11,15 +11,13 @@
   import ContenuTiroir from '../../../ui/tiroirs/ContenuTiroir.svelte';
   import DescriptionCompleteMesure from '../DescriptionCompleteMesure.svelte';
   import type {
-    ModeleMesure,
     ModeleMesureGenerale,
     ReferentielStatut,
   } from '../../../ui/types';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
   import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
   import Bouton from '../../../ui/Bouton.svelte';
-  import type { StatutMesure } from '../../../modeles/modeleMesure';
-  import { enregistreModificationMesureSurServicesMultiples } from '../../listeMesures.api';
+  import { enregistreModificationMesureGeneraleSurServicesMultiples } from '../../listeMesures.api';
   import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
   import { modaleRapportStore } from '../../stores/modaleRapport.store';
   import { toasterStore } from '../../../ui/stores/toaster.store';
@@ -65,7 +63,7 @@
     enCoursEnvoi = true;
     try {
       const { idsServices, modalites, statut } = e.detail;
-      await enregistreModificationMesureSurServicesMultiples({
+      await enregistreModificationMesureGeneraleSurServicesMultiples({
         idMesure: modeleMesureGenerale.id,
         statut,
         modalites,

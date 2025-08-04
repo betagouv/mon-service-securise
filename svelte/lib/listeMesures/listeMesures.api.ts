@@ -1,6 +1,6 @@
 import type { StatutMesure } from '../modeles/modeleMesure';
 
-export const enregistreModificationMesureSurServicesMultiples = async ({
+export const enregistreModificationMesureGeneraleSurServicesMultiples = async ({
   idMesure,
   idsServices,
   statut,
@@ -17,6 +17,25 @@ export const enregistreModificationMesureSurServicesMultiples = async ({
     modalites,
   });
 };
+
+export const enregistreModificationMesuresSpecifiquesSurServicesMultiples =
+  async ({
+    idModele,
+    idsServices,
+    statut,
+    modalites,
+  }: {
+    idModele: string;
+    idsServices: string[];
+    statut: StatutMesure | '';
+    modalites: string | null;
+  }) => {
+    await axios.put(`/api/services/mesuresSpecifiques/${idModele}`, {
+      idsServices,
+      statut,
+      modalites,
+    });
+  };
 
 export const ajouteModeleMesureSpecifique = async ({
   description,
