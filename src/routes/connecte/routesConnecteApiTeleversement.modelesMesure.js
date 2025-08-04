@@ -1,4 +1,5 @@
 const express = require('express');
+const { ErreurFichierXlsInvalide } = require('../../erreurs');
 
 const routesConnecteApiTeleversementModelesMesure = ({
   middleware,
@@ -6,9 +7,17 @@ const routesConnecteApiTeleversementModelesMesure = ({
 }) => {
   const routes = express.Router();
   routes.post('/', middleware.protegeTrafic(), async (requete, reponse) => {
-    await lecteurDeFormData.extraisDonneesXLS(requete);
+    try {
+      await lecteurDeFormData.extraisDonneesXLS(requete);
+      reponse.sendStatus(201);
+    } catch (e) {
+      if (e instanceof ErreurFichierXlsInvalide) {
+        reponse.sendStatus(400);
+        return;
+      }
 
-    reponse.sendStatus(201);
+      throw e;
+    }
   });
 
   return routes;
