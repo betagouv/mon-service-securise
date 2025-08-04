@@ -562,6 +562,171 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
   });
 
+  describe('quand requête PUT sur `/api/services/mesuresSpecifiques/:id`', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().accesAutoriseAUneListeDeService = async () => true;
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/services/mesuresSpecifiques/unIdDeModele',
+        },
+        done
+      );
+    });
+
+    it('aseptise les données', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['idsServices.*', 'idModele', 'statut', 'modalites'],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/services/mesuresSpecifiques/unIdDeModele',
+        },
+        done
+      );
+    });
+
+    it('jette une erreur si le statut ET les modalités ne sont pas précisés', async () => {
+      try {
+        await axios.put(
+          'http://localhost:1234/api/services/mesuresSpecifiques/unIdDeModele',
+          {
+            statut: undefined,
+            modalites: undefined,
+          }
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
+    });
+
+    it("jette une erreur si l'identifiant du modèle de mesure est inconnu", async () => {
+      testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur =
+        async () => [];
+
+      try {
+        await axios.put(
+          'http://localhost:1234/api/services/mesuresSpecifiques/unModeleInconnu',
+          {
+            statut: 'fait',
+          }
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(404);
+      }
+    });
+
+    describe('lorsque le modèle de mesure est connu', () => {
+      beforeEach(() => {
+        testeur.depotDonnees().metsAJourMesuresSpecifiquesDesServices =
+          async () => {};
+        testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur =
+          async () => [
+            {
+              id: 'unModeleConnu',
+              description: 'une description',
+              categorie: 'gouvernance',
+              descriptionLongue: 'une description longue',
+            },
+          ];
+      });
+
+      it('jette une erreur si le statut est inconnu', async () => {
+        testeur.referentiel().recharge({
+          statutsMesures: { unStatut: {} },
+        });
+        try {
+          await axios.put(
+            'http://localhost:1234/api/services/mesuresSpecifiques/unModeleConnu',
+            {
+              statut: 'unStatutInconnu',
+            }
+          );
+          expect().fail("L'appel aurait dû lever une erreur.");
+        } catch (e) {
+          expect(e.response.status).to.be(400);
+        }
+      });
+
+      it("ne jette pas d'erreur si le statut est vide", async () => {
+        const reponse = await axios.put(
+          'http://localhost:1234/api/services/mesuresSpecifiques/unModeleConnu',
+          {
+            statut: '',
+            modalites: 'une modalité',
+          }
+        );
+
+        expect(reponse.status).to.be(200);
+      });
+
+      it("jette une erreur si l'utilisateur n'a pas les droits d'écriture sur un des services ciblés", async () => {
+        testeur.depotDonnees().accesAutoriseAUneListeDeService = async () =>
+          false;
+        testeur.referentiel().recharge({
+          statutsMesures: { unStatut: {} },
+        });
+
+        try {
+          await axios.put(
+            'http://localhost:1234/api/services/mesuresSpecifiques/unModeleConnu',
+            {
+              statut: 'unStatut',
+              idsServices: ['S1'],
+            }
+          );
+          expect().fail("L'appel aurait dû lever une erreur.");
+        } catch (e) {
+          expect(e.response.status).to.be(403);
+        }
+      });
+
+      it('délègue au dépôt de données la mise à jour de chaque mesure pour les services concernés', async () => {
+        let donneesRecues;
+        testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+        testeur.depotDonnees().metsAJourMesuresSpecifiquesDesServices = async (
+          idUtilisateur,
+          idsServices,
+          idModele,
+          statut,
+          modalites
+        ) => {
+          donneesRecues = {
+            idUtilisateur,
+            idsServices,
+            idModele,
+            statut,
+            modalites,
+          };
+        };
+        testeur.referentiel().recharge({
+          statutsMesures: { fait: {} },
+        });
+
+        await axios.put(
+          'http://localhost:1234/api/services/mesuresSpecifiques/unModeleConnu',
+          {
+            statut: 'fait',
+            modalites: 'une modalité',
+            idsServices: ['S1', 'S2'],
+          }
+        );
+
+        expect(donneesRecues).to.eql({
+          idUtilisateur: 'U1',
+          idsServices: ['S1', 'S2'],
+          idModele: 'unModeleConnu',
+          statut: 'fait',
+          modalites: 'une modalité',
+        });
+      });
+    });
+  });
+
   describe('quand requête GET sur `/api/services/export.csv`', () => {
     beforeEach(() => {
       testeur.adaptateurCsv().genereCsvServices = async () => {};

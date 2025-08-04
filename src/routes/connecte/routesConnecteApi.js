@@ -195,6 +195,56 @@ const routesConnecteApi = ({
     }
   );
 
+  routes.put(
+    '/services/mesuresSpecifiques/:idModele',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise('idsServices.*', 'idModele', 'statut', 'modalites'),
+    async (requete, reponse) => {
+      const { statut, modalites, idsServices } = requete.body;
+      const { idModele } = requete.params;
+
+      if (!statut && !modalites) {
+        reponse.sendStatus(400);
+        return;
+      }
+
+      const modelesExistants =
+        await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
+          requete.idUtilisateurCourant
+        );
+      if (!modelesExistants.some((m) => m.id === idModele)) {
+        reponse.sendStatus(404);
+        return;
+      }
+
+      if (statut && !referentiel.estStatutMesureConnu(statut)) {
+        reponse.sendStatus(400);
+        return;
+      }
+
+      const aLesDroits = await depotDonnees.accesAutoriseAUneListeDeService(
+        requete.idUtilisateurCourant,
+        idsServices,
+        { [SECURISER]: ECRITURE }
+      );
+
+      if (!aLesDroits) {
+        reponse.sendStatus(403);
+        return;
+      }
+
+      await depotDonnees.metsAJourMesuresSpecifiquesDesServices(
+        requete.idUtilisateurCourant,
+        idsServices,
+        idModele,
+        statut,
+        modalites
+      );
+
+      reponse.sendStatus(200);
+    }
+  );
+
   routes.get(
     '/services/export.csv',
     middleware.verificationAcceptationCGU,
