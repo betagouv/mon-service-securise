@@ -4,11 +4,12 @@
   import TagStatutMesure from '../../../../ui/TagStatutMesure.svelte';
   import Tableau from '../../../../ui/Tableau.svelte';
   import Infobulle from '../../../../ui/Infobulle.svelte';
+  import type { ServiceAssocie } from '../TiroirModificationMultipleMesuresGenerales.svelte';
 
   export let statuts: ReferentielStatut;
   export let modificationPrecisionUniquement: boolean;
   export let idsServicesSelectionnes: string[];
-  export let servicesAssocies;
+  export let servicesAssocies: ServiceAssocie[];
 
   const optionsFiltrage = {
     categories: [{ id: 'statut', libelle: 'Statuts' }],
@@ -21,6 +22,20 @@
       })),
     ],
   };
+
+  const doitEtreALaFin = (service: ServiceAssocie) =>
+    !service.peutEtreModifie ||
+    (modificationPrecisionUniquement && !service.mesure.statut);
+
+  $: servicesOrdonnes = servicesAssocies.sort((a, b) => {
+    if (
+      (doitEtreALaFin(a) && doitEtreALaFin(b)) ||
+      (!doitEtreALaFin(a) && !doitEtreALaFin(b))
+    ) {
+      return a.nomService.localeCompare(b.nomService);
+    }
+    return doitEtreALaFin(a) ? 1 : -1;
+  });
 </script>
 
 <span class="explication">
@@ -33,7 +48,7 @@
     { cle: 'statut', libelle: 'Statut actuel' },
     { cle: 'modalites', libelle: 'Précision actuelle' },
   ]}
-  donnees={servicesAssocies}
+  donnees={servicesOrdonnes}
   configurationRecherche={{
     champsRecherche: ['nomService', 'organisationResponsable'],
   }}
@@ -46,7 +61,7 @@
     },
     champSelection: 'id',
     predicatSelectionDesactive: (donnee) =>
-      (modificationPrecisionUniquement && !donnee.statut) ||
+      (modificationPrecisionUniquement && !donnee.mesure.statut) ||
       !donnee.peutEtreModifie,
   }}
   bind:selection={idsServicesSelectionnes}
@@ -54,7 +69,7 @@
   <svelte:fragment slot="cellule" let:donnee let:colonne>
     {@const desactive =
       !donnee.peutEtreModifie ||
-      (modificationPrecisionUniquement && !donnee.statut)}
+      (modificationPrecisionUniquement && !donnee.mesure.statut)}
     {#if colonne.cle === 'nom'}
       <div class="contenu-nom-service">
         <div class="intitule-service" class:desactive>
@@ -72,17 +87,17 @@
         <div class:desactive>
           <TagStatutMesure
             referentielStatuts={statuts}
-            statut={donnee.statut}
+            statut={donnee.mesure.statut}
           />
         </div>
-        {#if modificationPrecisionUniquement && !donnee.statut}
+        {#if modificationPrecisionUniquement && !donnee.mesure.statut}
           <Infobulle
             contenu="Cette précision ne peut pas être appliquée à ce service, car il ne dispose pas actuellement d'un statut."
           ></Infobulle>
         {/if}
       </div>
     {:else if colonne.cle === 'modalites'}
-      {@const contenu = decode(donnee.modalites)}
+      {@const contenu = decode(donnee.mesure.modalites)}
       {@const contenuTropLong = contenu.length > 90}
       <div class="precision">
         <span>{contenuTropLong ? contenu.slice(0, 90) + '...' : contenu}</span>

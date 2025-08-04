@@ -110,6 +110,7 @@
   const afficheTiroirAjout = () => {
     tiroirStore.afficheContenu(TiroirAjoutModeleMesureSpecifique, {
       categories,
+      statuts,
       referentielTypesService: typesService,
     });
   };
