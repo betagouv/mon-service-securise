@@ -142,6 +142,7 @@
 
 <ModaleDetailsMesure
   bind:this={modaleDetailsMesure}
+  {categories}
   referentielStatuts={statuts}
   referentielTypesService={typesService}
 />
