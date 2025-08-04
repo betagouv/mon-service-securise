@@ -21,6 +21,7 @@ const EvenementMesureServiceSupprimee = require('../bus/evenementMesureServiceSu
 const EvenementRisqueServiceModifie = require('../bus/evenementRisqueServiceModifie');
 const MesureGenerale = require('../modeles/mesureGenerale');
 const EvenementMesureModifieeEnMasse = require('../bus/evenementMesureModifieeEnMasse');
+const MesureSpecifique = require('../modeles/mesureSpecifique');
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -528,6 +529,57 @@ const creeDepot = (config = {}) => {
         statutModifie: !!statut,
         modalitesModifiees: !!modalites,
         nombreServicesConcernes: servicesConcernes.length,
+        typeMesure: 'generale',
+      })
+    );
+  };
+
+  const metsAJourMesuresSpecifiquesDesServices = async (
+    idUtilisateur,
+    idsServices,
+    idModele,
+    statut,
+    modalites
+  ) => {
+    const utilisateur =
+      await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
+    const servicesDeUtilisateur = await p.lis.ceuxDeUtilisateur(idUtilisateur);
+    const servicesConcernes = servicesDeUtilisateur.filter((s) =>
+      idsServices.includes(s.id)
+    );
+
+    const pourUnService = async (s) => {
+      const ancienneMesure = s.mesuresSpecifiques().avecIdModele(idModele);
+
+      if (!ancienneMesure.statut && !statut)
+        throw new ErreurStatutMesureManquant();
+
+      const nouvelleMesure = new MesureSpecifique(ancienneMesure, referentiel);
+      if (statut) nouvelleMesure.statut = statut;
+      if (modalites) nouvelleMesure.modalites = modalites;
+
+      s.metsAJourMesureSpecifique(nouvelleMesure);
+      await metsAJourService(s);
+
+      await busEvenements.publie(
+        new EvenementMesureServiceModifiee({
+          service: s,
+          utilisateur,
+          ancienneMesure,
+          nouvelleMesure,
+          typeMesure: 'specifique',
+        })
+      );
+    };
+    await Promise.all(servicesConcernes.map(pourUnService));
+
+    await busEvenements.publie(
+      new EvenementMesureModifieeEnMasse({
+        utilisateur,
+        statutModifie: !!statut,
+        modalitesModifiees: !!modalites,
+        nombreServicesConcernes: servicesConcernes.length,
+        typeMesure: 'specifique',
       })
     );
   };
@@ -666,6 +718,7 @@ const creeDepot = (config = {}) => {
     metsAJourMesureGeneraleDesServices,
     metsAJourMesureGeneraleDuService,
     metsAJourMesureSpecifiqueDuService,
+    metsAJourMesuresSpecifiquesDesServices,
     metsAJourRisqueSpecifiqueDuService,
     metsAJourService,
     nombreServices,
