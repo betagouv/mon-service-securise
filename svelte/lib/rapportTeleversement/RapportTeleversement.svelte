@@ -10,7 +10,7 @@
   import LigneService from './composants/LigneService.svelte';
   import Toast from '../ui/Toast.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
-  import TiroirTeleversementServices from '../ui/tiroirs/TiroirTeleversementServices.svelte';
+  import TiroirTeleversementServices from '../tableauDeBord/televersementServices/TiroirTeleversementServices.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
 
   let elementModale: HTMLDialogElement;

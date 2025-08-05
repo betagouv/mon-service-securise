@@ -1,14 +1,14 @@
 <script lang="ts">
-  import ActionsTiroir from './ActionsTiroir.svelte';
-  import Bouton from '../Bouton.svelte';
-  import ContenuTiroir from './ContenuTiroir.svelte';
-  import { tiroirStore } from '../stores/tiroir.store';
-  import Formulaire from '../Formulaire.svelte';
+  import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
+  import Bouton from '../../ui/Bouton.svelte';
+  import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
+  import { tiroirStore } from '../../ui/stores/tiroir.store';
+  import Formulaire from '../../ui/Formulaire.svelte';
   import {
     type EtatTeleversement,
     FormatAccepte,
-  } from '../televersement/KitDeTeleversement.types';
-  import KitDeTeleversement from '../televersement/KitDeTeleversement.svelte';
+  } from '../../ui/televersement/KitDeTeleversement.types';
+  import KitDeTeleversement from '../../ui/televersement/KitDeTeleversement.svelte';
 
   export const titre = 'Téléverser des services';
   export const sousTitre =

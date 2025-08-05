@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Lien from '../ui/Lien.svelte';
   import Bouton from '../ui/Bouton.svelte';
   import { affichageTableauVide } from './stores/affichageTableauVide';
   import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
@@ -8,7 +7,7 @@
     filtrageServicesVide,
   } from './stores/filtrageServices.store';
   import { tiroirStore } from '../ui/stores/tiroir.store';
-  import TiroirTeleversementServices from '../ui/tiroirs/TiroirTeleversementServices.svelte';
+  import TiroirTeleversementServices from './televersementServices/TiroirTeleversementServices.svelte';
   import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
 
   const supprimeRechercheEtFiltres = () => {

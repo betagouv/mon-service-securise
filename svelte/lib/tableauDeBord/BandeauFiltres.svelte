@@ -6,7 +6,7 @@
   import { filtrageServices } from './stores/filtrageServices.store';
   import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
-  import TiroirTeleversementServices from '../ui/tiroirs/TiroirTeleversementServices.svelte';
+  import TiroirTeleversementServices from './televersementServices/TiroirTeleversementServices.svelte';
   import Lien from '../ui/Lien.svelte';
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
 </script>
