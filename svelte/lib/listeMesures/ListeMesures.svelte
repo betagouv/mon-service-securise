@@ -73,20 +73,38 @@
     ],
   };
 
-  let donneesModelesMesure: ModeleDeMesure[];
+  type ConfigurationTableau = {
+    donnees: ModeleDeMesure[];
+    configurationRecherche: { champsRecherche: string[] };
+  };
+  let configurationTableau: ConfigurationTableau = {
+    donnees: [],
+    configurationRecherche: { champsRecherche: [] },
+  };
+
   $: {
-    if (ongletActif === 'generales')
-      donneesModelesMesure = Object.values($modelesMesureGenerale).map((m) => ({
-        ...m,
-        idsServicesAssocies: $mesuresAvecServicesAssociesStore[m.id],
-        type: 'generale',
-      }));
-    else if (ongletActif === 'specifiques')
-      donneesModelesMesure = $modelesMesureSpecifique.map((m) => ({
+    if (ongletActif === 'generales') {
+      configurationTableau.donnees = Object.values($modelesMesureGenerale).map(
+        (m) => ({
+          ...m,
+          idsServicesAssocies: $mesuresAvecServicesAssociesStore[m.id],
+          type: 'generale',
+        })
+      );
+      configurationTableau.configurationRecherche.champsRecherche = [
+        'description',
+        'identifiantNumerique',
+      ];
+    } else if (ongletActif === 'specifiques') {
+      configurationTableau.donnees = $modelesMesureSpecifique.map((m) => ({
         ...m,
         referentiel: Referentiel.SPECIFIQUE,
         type: 'specifique',
       }));
+      configurationTableau.configurationRecherche.champsRecherche = [
+        'description',
+      ];
+    }
   }
 
   const estModeleMesureGenerale = (
@@ -153,10 +171,8 @@
     { cle: 'servicesAssocies', libelle: 'Services associés' },
     { cle: 'actions', libelle: 'Action' },
   ]}
-  donnees={donneesModelesMesure}
-  configurationRecherche={{
-    champsRecherche: ['description', 'identifiantNumerique'],
-  }}
+  donnees={configurationTableau.donnees}
+  configurationRecherche={configurationTableau.configurationRecherche}
   configurationFiltrage={{ options: optionsFiltrage }}
   champIdentifiantLigne="id"
 >
