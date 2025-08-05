@@ -16,22 +16,24 @@ export const modaleRapportStore = {
   subscribe,
   affiche: (props: Omit<ModaleRapportStoreProps, 'ouvert'>) =>
     set({ ...props, ouvert: true }),
-  metEnAvantMesureApresModification: () => {
-    const props = get(modaleRapportStore);
-    if (props.modeleMesureGenerale) {
-      const cible = document.querySelector(
-        `#ligne-${props.modeleMesureGenerale.id}`
-      );
-      cible?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'start',
-      });
-      cible?.classList.add('met-en-avant');
-      cible?.addEventListener('animationend', () => {
-        cible?.classList.remove('met-en-avant');
-      });
+  metEnAvantMesureApresModification: (id: string | null = null) => {
+    if (!id) {
+      const props = get(modaleRapportStore);
+      if (props.modeleMesureGenerale) {
+        id = props.modeleMesureGenerale.id;
+      }
     }
+    if (!id) return;
+    const cible = document.querySelector(`#ligne-${id}`);
+    cible?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'start',
+    });
+    cible?.classList.add('met-en-avant');
+    cible?.addEventListener('animationend', () => {
+      cible?.classList.remove('met-en-avant');
+    });
   },
   ferme: () =>
     update((props) => {
