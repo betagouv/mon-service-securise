@@ -19,7 +19,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 
 - [ ] On veut pouvoir afficher la liste des modèles de mesure dans un onglet à coté de la liste des mesures générales
   - [x] Les modèles de mesure sont affichés correctement, avec leur référentiel, leur catégorie et le nombre de services associés
-  - [ ] La recherche fonctionne encore
+  - [x] La recherche fonctionne encore
   - [ ] Les filtres fonctionnent encore
     - [ ] On affiche uniquement les filtres de "catégories" pour les mesures spécifiques
   - [ ] Les badges des onglets sont mis à jour en fonction de la recherche
