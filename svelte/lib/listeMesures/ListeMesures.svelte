@@ -45,7 +45,8 @@
   });
 
   let modaleDetailsMesure: ModaleDetailsMesure;
-  let ongletActif: 'generales' | 'specifiques' = 'generales';
+  let ongletActif: 'toutes' | 'generales' | 'specifiques' =
+    afficheModelesMesureSpecifique ? 'toutes' : 'generales';
 
   const afficheModaleDetailsMesure = async (modeleMesure: ModeleDeMesure) => {
     await modaleDetailsMesure.affiche(modeleMesure);
@@ -60,6 +61,14 @@
     {
       libelle: 'CNIL',
       valeur: Referentiel.CNIL,
+      idCategorie: 'referentiel',
+    },
+  ];
+  const itemsFiltrageReferentielAvecMesureSpecifiques = [
+    ...itemsFiltrageReferentiel,
+    {
+      libelle: 'Mesures ajoutées',
+      valeur: Referentiel.SPECIFIQUE,
       idCategorie: 'referentiel',
     },
   ];
@@ -84,14 +93,22 @@
   };
 
   $: {
+    const listeModeleMesuresGenerales: ModeleDeMesure[] = Object.values(
+      $modelesMesureGenerale
+    ).map((m) => ({
+      ...m,
+      idsServicesAssocies: $mesuresAvecServicesAssociesStore[m.id],
+      type: 'generale',
+    }));
+    const listeModelesMesureSpecifique: ModeleDeMesure[] =
+      $modelesMesureSpecifique.map((m) => ({
+        ...m,
+        referentiel: Referentiel.SPECIFIQUE,
+        type: 'specifique',
+      }));
+
     if (ongletActif === 'generales') {
-      configurationTableau.donnees = Object.values($modelesMesureGenerale).map(
-        (m) => ({
-          ...m,
-          idsServicesAssocies: $mesuresAvecServicesAssociesStore[m.id],
-          type: 'generale',
-        })
-      );
+      configurationTableau.donnees = listeModeleMesuresGenerales;
       configurationTableau.configurationRecherche.champsRecherche = [
         'description',
         'identifiantNumerique',
@@ -101,17 +118,29 @@
         items: [...itemsFiltrageReferentiel, ...itemsFiltrageCategories],
       };
     } else if (ongletActif === 'specifiques') {
-      configurationTableau.donnees = $modelesMesureSpecifique.map((m) => ({
-        ...m,
-        referentiel: Referentiel.SPECIFIQUE,
-        type: 'specifique',
-      }));
+      configurationTableau.donnees = listeModelesMesureSpecifique;
       configurationTableau.configurationRecherche.champsRecherche = [
         'description',
       ];
       configurationTableau.configurationFiltrage.options = {
         categories: [groupeCategorie],
         items: [...itemsFiltrageCategories],
+      };
+    } else if (ongletActif === 'toutes') {
+      configurationTableau.donnees = [
+        ...listeModeleMesuresGenerales,
+        ...listeModelesMesureSpecifique,
+      ];
+      configurationTableau.configurationRecherche.champsRecherche = [
+        'description',
+        'identifiantNumerique',
+      ];
+      configurationTableau.configurationFiltrage.options = {
+        categories: [groupeReferentiel, groupeCategorie],
+        items: [
+          ...itemsFiltrageReferentielAvecMesureSpecifiques,
+          ...itemsFiltrageCategories,
+        ],
       };
     }
   }
@@ -224,6 +253,13 @@
       <Onglets
         bind:ongletActif
         onglets={[
+          {
+            id: 'toutes',
+            label: 'Toutes les mesures',
+            badge:
+              Object.keys($modelesMesureGenerale).length +
+              $modelesMesureSpecifique.length,
+          },
           {
             id: 'generales',
             label: 'Les mesures ANSSI & CNIL',
