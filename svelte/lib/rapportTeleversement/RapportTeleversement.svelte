@@ -198,13 +198,11 @@
           <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
           <lab-anssi-bouton
             titre={estValide
-              ? `Importer les ${
+              ? pluraliseChaine(
+                  `Importer le service`,
+                  `Importer les ${rapportDetaille.services.length} services`,
                   rapportDetaille.services.length
-                } ${pluraliseChaine(
-                  'service',
-                  'services',
-                  rapportDetaille.services.length
-                )}`
+                )
               : 'Réimporter le fichier XLSX corrigé'}
             variante="primaire"
             taille="md"
