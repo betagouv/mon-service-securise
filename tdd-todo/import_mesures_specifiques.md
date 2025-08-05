@@ -34,5 +34,5 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 
 ## Du point de vue de la page "SÉCURISER"
 
-- [ ] Le filtre "Mesures ajoutées" affiche bien les mesures issues d'un modèle
+- [x] Le filtre "Mesures ajoutées" affiche bien les mesures issues d'un modèle
 - [ ] Une mesure spécifique associée, supprimée depuis l'interface, doit supprimé l'association entre le service et le modèle
