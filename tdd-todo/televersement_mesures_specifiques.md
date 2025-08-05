@@ -3,7 +3,7 @@
 - [x] Dans le tableau des mesures, le bouton « ajouter une/des mesures » est à tiroir et permet d'ouvrir le tiroir de téléversement
 - [x] Le tiroir de téléversement propose un template de mesures à DL
 - [x] Le tiroir de téléversement propose de choisir OU de drap/drop le fichier des mesures
-- [ ] Le tiroir permet de « Valider » l'envoi du fichier
+- [x] Le tiroir permet de « Valider » l'envoi du fichier
 - [ ] Une erreur est affichée en cas de « trop de mesures » : les mesures déjà existantes + celles du fichier = dépasse la limite autorisée
 - [ ] Les mesures du fichier sont persistées, pour servir de base à l'import ensuite
 - [ ] Le backend fait des contrôles de surface du fichier uploadé : voir comment ça se traduit sur le front
