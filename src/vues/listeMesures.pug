@@ -11,6 +11,9 @@ block append scripts
   +donneesPartagees('affiche-modeles-mesure-specifique', featureFlags.afficheModelesMesureSpecifique)
   script(type = 'module', src = '/statique/listeMesures.mjs')
 
+block append styles
+  link(href = '/statique/assets/styles/fond-blanc.css', rel = 'stylesheet')
+
 block bandeau-titre
   -
     const filAriane = [
