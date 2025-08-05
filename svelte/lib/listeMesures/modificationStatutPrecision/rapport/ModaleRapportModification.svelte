@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { servicesAvecMesuresAssociees } from '../stores/servicesAvecMesuresAssociees.store';
-  import Modale from '../../ui/Modale.svelte';
-  import Bouton from '../../ui/Bouton.svelte';
-  import TableauServicesAssocies from './TableauServicesAssocies.svelte';
-  import Toast from '../../ui/Toast.svelte';
-  import { modaleRapportStore } from '../stores/modaleRapport.store';
+  import { servicesAvecMesuresAssociees } from '../../servicesAssocies/servicesAvecMesuresAssociees.store';
+  import Modale from '../../../ui/Modale.svelte';
+  import Bouton from '../../../ui/Bouton.svelte';
+  import TableauServicesAssocies from '../../servicesAssocies/TableauServicesAssocies.svelte';
+  import Toast from '../../../ui/Toast.svelte';
+  import { modaleRapportStore } from './modaleRapport.store';
   import type {
     ReferentielStatut,
     ReferentielTypesService,
-  } from '../../ui/types';
+  } from '../../../ui/types.d';
 
   export let referentielStatuts: ReferentielStatut;
   export let referentielTypesService: ReferentielTypesService;

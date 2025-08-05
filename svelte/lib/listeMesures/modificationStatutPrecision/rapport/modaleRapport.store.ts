@@ -1,5 +1,5 @@
 import { get, writable } from 'svelte/store';
-import type { ModeleMesureGenerale } from '../../ui/types';
+import type { ModeleMesureGenerale } from '../../../ui/types.d';
 
 type ModaleRapportStoreProps = {
   idServicesModifies?: string[];

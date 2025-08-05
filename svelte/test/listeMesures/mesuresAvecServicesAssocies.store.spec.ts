@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { mesuresAvecServicesAssociesStore } from '../../lib/listeMesures/stores/mesuresAvecServicesAssocies.store';
-import { servicesAvecMesuresAssociees } from '../../lib/listeMesures/stores/servicesAvecMesuresAssociees.store';
+import { mesuresAvecServicesAssociesStore } from '../../lib/listeMesures/servicesAssocies/mesuresAvecServicesAssocies.store';
+import { servicesAvecMesuresAssociees } from '../../lib/listeMesures/servicesAssocies/servicesAvecMesuresAssociees.store';
 import { get } from 'svelte/store';
 import type { ServiceAvecMesuresAssociees } from '../../lib/listeMesures/listeMesures.d';
 

@@ -17,15 +17,15 @@
   } from '../../listeMesures.api';
   import { toasterStore } from '../../../ui/stores/toaster.store';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
-  import { modelesMesureSpecifique } from '../../stores/modelesMesureSpecifique.store';
-  import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
+  import { modelesMesureSpecifique } from '../modelesMesureSpecifique.store';
+  import { servicesAvecMesuresAssociees } from '../../servicesAssocies/servicesAvecMesuresAssociees.store';
   import Avertissement from '../../../ui/Avertissement.svelte';
   import Lien from '../../../ui/Lien.svelte';
   import Bouton from '../../../ui/Bouton.svelte';
   import EtapesModificationMultipleStatutPrecision, {
     type DonneesModificationAAppliquer,
-  } from './etapes/EtapesModificationMultipleStatutPrecision.svelte';
-  import type { ServiceAssocie } from './TiroirModificationMultipleMesuresGenerales.svelte';
+  } from '../../modificationStatutPrecision/etapes/EtapesModificationMultipleStatutPrecision.svelte';
+  import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =

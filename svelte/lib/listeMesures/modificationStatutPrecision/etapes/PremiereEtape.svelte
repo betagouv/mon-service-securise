@@ -1,7 +1,7 @@
 <script lang="ts">
-  import SelectionStatut from '../../../../ui/SelectionStatut.svelte';
-  import type { ReferentielStatut } from '../../../../ui/types';
-  import ChampDeSaisie from '../../../../ui/ChampDeSaisie.svelte';
+  import SelectionStatut from '../../../ui/SelectionStatut.svelte';
+  import type { ReferentielStatut } from '../../../ui/types.d';
+  import ChampDeSaisie from '../../../ui/ChampDeSaisie.svelte';
 
   export let statuts: ReferentielStatut;
   export let statutSelectionne: keyof ReferentielStatut | '' = '';

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import TagStatutMesure from '../../../../ui/TagStatutMesure.svelte';
-  import type { ReferentielStatut } from '../../../../ui/types';
-  import type { StatutMesure } from '../../../../modeles/modeleMesure';
-  import TableauServicesAssocies from '../../TableauServicesAssocies.svelte';
+  import TagStatutMesure from '../../../ui/TagStatutMesure.svelte';
+  import type { ReferentielStatut } from '../../../ui/types.d';
+  import type { StatutMesure } from '../../../modeles/modeleMesure';
+  import TableauServicesAssocies from '../../servicesAssocies/TableauServicesAssocies.svelte';
 
   export let statuts: ReferentielStatut;
   export let statutSelectionne: StatutMesure | '';
