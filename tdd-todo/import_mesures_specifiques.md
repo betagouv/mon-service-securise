@@ -23,9 +23,8 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
   - [x] Les filtres fonctionnent encore
     - [x] On affiche uniquement les filtres de "catégories" pour les mesures spécifiques
   - [ ] Les badges des onglets sont mis à jour en fonction de la recherche
-- [ ] On veut voir un écran dédié quand la liste de modèle de mesure est vide
+- [x] On veut voir un écran dédié quand la liste de modèle de mesure est vide
 - [ ] On montre une étape de confirmation lors de la modification d'un modèle
-- [ ] On affiche des CTA quand la liste de mesure spécifique est vide (hors filtre/recherche)
 - [ ] On affiche un onglet "Toutes les mesures"
   - [ ] On affiche les filtres de catégories et de mesures par référentiel (Cf. SÉCURISER)
 - [ ] On veut pouvoir supprimer un modèle de mesure

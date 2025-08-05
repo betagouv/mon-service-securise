@@ -33,6 +33,7 @@
   import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
   import TiroirTeleversementModeleMesureSpecifique from './televersement/TiroirTeleversementModeleMesureSpecifique.svelte';
   import type { ConfigurationFiltrage } from '../ui/Tableau.svelte';
+  import TableauVideMesuresSpecifiques from './mesureSpecifique/TableauVideMesuresSpecifiques.svelte';
 
   export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
@@ -183,6 +184,13 @@
   configurationRecherche={configurationTableau.configurationRecherche}
   configurationFiltrage={configurationTableau.configurationFiltrage}
   champIdentifiantLigne="id"
+  composantTableauVide={ongletActif === 'specifiques' &&
+  configurationTableau.donnees.length === 0
+    ? {
+        composant: TableauVideMesuresSpecifiques,
+        props: { statuts, categories, typesService },
+      }
+    : undefined}
 >
   <div slot="actionsComplementaires" class="conteneur-actions-complementaires">
     <Lien
