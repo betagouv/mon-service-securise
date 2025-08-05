@@ -52,19 +52,24 @@
   </ContenuTiroir>
 
   <ActionsTiroir>
-    <Bouton
+    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <lab-anssi-bouton
       titre="Annuler"
-      type="secondaire"
+      variante="tertiaire-sans-bordure"
+      taille="md"
+      positionIcone="sans"
       actif={etatTeleversement !== 'EnCoursEnvoi'}
       on:click={() => {
         if (etatTeleversement !== 'EnCoursEnvoi') tiroirStore.ferme();
       }}
     />
-    <Bouton
+    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <lab-anssi-bouton
       titre="Valider le fichier"
-      type="primaire"
-      boutonSoumission
-      enCoursEnvoi={etatTeleversement === 'EnCoursEnvoi'}
+      variante="primaire"
+      taille="md"
+      icone="check-line"
+      positionIcone="gauche"
       actif={etatTeleversement === 'Valide'}
       on:click={gereValidationTeleversement}
     />
