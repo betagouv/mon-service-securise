@@ -83,6 +83,11 @@
     'servicesAssocies';
 
   let donneesModeleMesureEdite = structuredClone(modeleMesure);
+  $: mesureAEteEditee =
+    modeleMesure.description !== donneesModeleMesureEdite.description ||
+    modeleMesure.descriptionLongue !==
+      donneesModeleMesureEdite.descriptionLongue ||
+    modeleMesure.categorie !== donneesModeleMesureEdite.categorie;
 
   $: formulaireValide =
     !!donneesModeleMesureEdite.description &&
@@ -275,7 +280,7 @@
         icone="save-line"
         position-icone="gauche"
         on:click={() => (etapeInformations = 2)}
-        actif={formulaireValide}
+        actif={formulaireValide && mesureAEteEditee}
       />
     {:else}
       <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
