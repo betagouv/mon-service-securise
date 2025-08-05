@@ -1,4 +1,9 @@
 <script context="module" lang="ts">
+  import type {
+    PersonnalisationMesure,
+    ServiceAvecMesuresAssociees,
+  } from '../../listeMesures.d';
+
   export type ServiceAssocie = Omit<
     ServiceAvecMesuresAssociees,
     'mesuresAssociees'
@@ -9,7 +14,7 @@
 
 <script lang="ts">
   import ContenuTiroir from '../../../ui/tiroirs/ContenuTiroir.svelte';
-  import DescriptionCompleteMesure from '../DescriptionCompleteMesure.svelte';
+  import DescriptionCompleteMesure from '../../kit/DescriptionCompleteMesure.svelte';
   import type {
     ModeleMesureGenerale,
     ReferentielStatut,
@@ -18,17 +23,13 @@
   import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
   import Bouton from '../../../ui/Bouton.svelte';
   import { enregistreModificationMesureGeneraleSurServicesMultiples } from '../../listeMesures.api';
-  import { servicesAvecMesuresAssociees } from '../../stores/servicesAvecMesuresAssociees.store';
-  import { modaleRapportStore } from '../../stores/modaleRapport.store';
+  import { servicesAvecMesuresAssociees } from '../../servicesAssocies/servicesAvecMesuresAssociees.store';
+  import { modaleRapportStore } from '../../modificationStatutPrecision/rapport/modaleRapport.store';
   import { toasterStore } from '../../../ui/stores/toaster.store';
   import EtapesModificationMultipleStatutPrecision, {
     type DonneesModificationAAppliquer,
-  } from './etapes/EtapesModificationMultipleStatutPrecision.svelte';
-  import { mesuresAvecServicesAssociesStore } from '../../stores/mesuresAvecServicesAssocies.store';
-  import type {
-    PersonnalisationMesure,
-    ServiceAvecMesuresAssociees,
-  } from '../../listeMesures.d';
+  } from '../../modificationStatutPrecision/etapes/EtapesModificationMultipleStatutPrecision.svelte';
+  import { mesuresAvecServicesAssociesStore } from '../../servicesAssocies/mesuresAvecServicesAssocies.store';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =

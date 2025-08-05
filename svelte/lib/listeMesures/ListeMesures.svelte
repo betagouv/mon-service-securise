@@ -2,7 +2,7 @@
   import {
     servicesAvecMesuresAssociees,
     servicesAvecMesuresAssocieesEnCoursDeChargement,
-  } from './stores/servicesAvecMesuresAssociees.store';
+  } from './servicesAssocies/servicesAvecMesuresAssociees.store';
   import { onMount } from 'svelte';
   import ModaleDetailsMesure from './kit/ModaleDetailsMesure.svelte';
   import {
@@ -15,21 +15,21 @@
   import CartoucheIdentifiantMesure from '../ui/CartoucheIdentifiantMesure.svelte';
   import CartoucheCategorieMesure from '../ui/CartoucheCategorieMesure.svelte';
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
-  import { mesuresAvecServicesAssociesStore } from './stores/mesuresAvecServicesAssocies.store';
+  import { mesuresAvecServicesAssociesStore } from './servicesAssocies/mesuresAvecServicesAssocies.store';
   import Bouton from '../ui/Bouton.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
-  import TiroirModificationMultipleMesuresGenerales from './kit/tiroir/TiroirModificationMultipleMesuresGenerales.svelte';
-  import { modelesMesureGenerale } from './stores/modelesMesureGenerale.store';
-  import ModaleRapportModification from './kit/ModaleRapportModification.svelte';
-  import { modaleRapportStore } from './stores/modaleRapport.store';
+  import TiroirModificationMultipleMesuresGenerales from './mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
+  import { modelesMesureGenerale } from './mesureGenerale/modelesMesureGenerale.store';
+  import ModaleRapportModification from './modificationStatutPrecision/rapport/ModaleRapportModification.svelte';
+  import { modaleRapportStore } from './modificationStatutPrecision/rapport/modaleRapport.store';
   import Lien from '../ui/Lien.svelte';
   import Loader from '../ui/Loader.svelte';
   import Toaster from '../ui/Toaster.svelte';
-  import { modelesMesureSpecifique } from './stores/modelesMesureSpecifique.store';
+  import { modelesMesureSpecifique } from './mesureSpecifique/modelesMesureSpecifique.store';
   import type { ListeMesuresProps, ModeleDeMesure } from './listeMesures.d';
   import Onglets from '../ui/Onglets.svelte';
-  import TiroirAjoutModeleMesureSpecifique from './kit/tiroir/TiroirAjoutModeleMesureSpecifique.svelte';
-  import TiroirConfigurationModeleMesureSpecifique from './kit/tiroir/TiroirConfigurationModeleMesureSpecifique.svelte';
+  import TiroirAjoutModeleMesureSpecifique from './mesureSpecifique/ajout/TiroirAjoutModeleMesureSpecifique.svelte';
+  import TiroirConfigurationModeleMesureSpecifique from './mesureSpecifique/configuration/TiroirConfigurationModeleMesureSpecifique.svelte';
   import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
   import TiroirTeleversementModeleMesureSpecifique from './televersement/TiroirTeleversementModeleMesureSpecifique.svelte';
 

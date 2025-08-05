@@ -4,20 +4,20 @@
     ReferentielStatut,
     ReferentielTypesService,
   } from '../../ui/types.d';
-  import { servicesAvecMesuresAssociees } from '../stores/servicesAvecMesuresAssociees.store';
+  import { servicesAvecMesuresAssociees } from '../servicesAssocies/servicesAvecMesuresAssociees.store';
   import DescriptionCompleteMesure from './DescriptionCompleteMesure.svelte';
   import Modale from '../../ui/Modale.svelte';
   import { tick } from 'svelte';
   import Bouton from '../../ui/Bouton.svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
-  import TiroirModificationMultipleMesuresGenerales from './tiroir/TiroirModificationMultipleMesuresGenerales.svelte';
-  import TableauServicesAssocies from './TableauServicesAssocies.svelte';
+  import TiroirModificationMultipleMesuresGenerales from '../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
+  import TableauServicesAssocies from '../servicesAssocies/TableauServicesAssocies.svelte';
   import type {
     ModeleDeMesure,
     ServiceAssocieAUneMesure,
     ListeMesuresProps,
   } from '../listeMesures.d';
-  import TiroirConfigurationModeleMesureSpecifique from './tiroir/TiroirConfigurationModeleMesureSpecifique.svelte';
+  import TiroirConfigurationModeleMesureSpecifique from '../mesureSpecifique/configuration/TiroirConfigurationModeleMesureSpecifique.svelte';
 
   export let referentielStatuts: ReferentielStatut;
   export let referentielTypesService: ReferentielTypesService;

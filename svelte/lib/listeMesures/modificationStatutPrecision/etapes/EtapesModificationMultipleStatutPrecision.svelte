@@ -11,10 +11,10 @@
   import SecondeEtape from './SecondeEtape.svelte';
   import TroisiemeEtape from './TroisiemeEtape.svelte';
   import PremiereEtape from './PremiereEtape.svelte';
-  import type { ReferentielStatut } from '../../../../ui/types';
-  import type { StatutMesure } from '../../../../modeles/modeleMesure';
+  import type { ReferentielStatut } from '../../../ui/types';
+  import type { StatutMesure } from '../../../modeles/modeleMesure';
   import { createEventDispatcher } from 'svelte';
-  import type { ServiceAssocie } from '../TiroirModificationMultipleMesuresGenerales.svelte';
+  import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
 
   export let etapeCourante: number;
   export let statuts: ReferentielStatut;

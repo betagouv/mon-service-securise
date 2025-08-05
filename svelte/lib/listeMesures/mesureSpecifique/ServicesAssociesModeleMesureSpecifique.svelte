@@ -8,7 +8,7 @@
     ReferentielTypesService,
   } from '../../ui/types';
   import { decode } from 'html-entities';
-  import { servicesAvecMesuresAssociees } from '../stores/servicesAvecMesuresAssociees.store';
+  import { servicesAvecMesuresAssociees } from '../servicesAssocies/servicesAvecMesuresAssociees.store';
   import Toast from '../../ui/Toast.svelte';
 
   export let modeleMesure: ModeleMesureSpecifique;

@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { ReferentielStatut } from '../../../../ui/types';
+  import type { ReferentielStatut } from '../../../ui/types.d';
   import { decode } from 'html-entities';
-  import TagStatutMesure from '../../../../ui/TagStatutMesure.svelte';
-  import Tableau from '../../../../ui/Tableau.svelte';
-  import Infobulle from '../../../../ui/Infobulle.svelte';
-  import type { ServiceAssocie } from '../TiroirModificationMultipleMesuresGenerales.svelte';
+  import TagStatutMesure from '../../../ui/TagStatutMesure.svelte';
+  import Tableau from '../../../ui/Tableau.svelte';
+  import Infobulle from '../../../ui/Infobulle.svelte';
+  import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
 
   export let statuts: ReferentielStatut;
   export let modificationPrecisionUniquement: boolean;
