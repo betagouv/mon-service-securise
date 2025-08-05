@@ -10,18 +10,13 @@
   import { decode } from 'html-entities';
   import { servicesAvecMesuresAssociees } from '../servicesAssocies/servicesAvecMesuresAssociees.store';
   import Toast from '../../ui/Toast.svelte';
+  import { referentielNiveauxSecurite } from '../../ui/referentielNiveauxSecurite';
 
   export let modeleMesure: ModeleMesureSpecifique;
   export let referentielTypesService: ReferentielTypesService;
   export let idsServicesSelectionnes: string[];
 
   export let etapeActive: 1 | 2;
-
-  const libellesBesoinsSecurite: Record<IdNiveauDeSecurite, string> = {
-    niveau1: 'Basiques',
-    niveau2: 'Modérés',
-    niveau3: 'Avancés',
-  };
 
   $: configurationRecherche =
     etapeActive === 1
@@ -43,7 +38,7 @@
           idCategorie: 'typeService',
         })
       ),
-      ...Object.entries(libellesBesoinsSecurite).map(([id, valeur]) => ({
+      ...Object.entries(referentielNiveauxSecurite).map(([id, valeur]) => ({
         libelle: valeur,
         valeur: id,
         idCategorie: 'niveauSecurite',
@@ -161,7 +156,7 @@
       <div class="contenu-besoin-securite">
         <div class:desactive>
           <span class="besoin-securite"
-            >{libellesBesoinsSecurite[donnee.niveauSecurite]}</span
+            >{referentielNiveauxSecurite[donnee.niveauSecurite]}</span
           >
         </div>
       </div>
