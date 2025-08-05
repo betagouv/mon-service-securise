@@ -1,7 +1,7 @@
 const express = require('express');
 const { ErreurFichierXlsInvalide } = require('../../erreurs');
 
-const routesConnecteApiTeleversementModelesMesure = ({
+const routesConnecteApiTeleversementModelesMesureSpecifique = ({
   middleware,
   lecteurDeFormData,
 }) => {
@@ -23,4 +23,4 @@ const routesConnecteApiTeleversementModelesMesure = ({
   return routes;
 };
 
-module.exports = routesConnecteApiTeleversementModelesMesure;
+module.exports = routesConnecteApiTeleversementModelesMesureSpecifique;
