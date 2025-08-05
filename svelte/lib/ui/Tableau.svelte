@@ -1,19 +1,14 @@
-<script lang="ts" generics="T extends ObjetDeDonnees">
-  import TableauVideAucunResultat from './TableauVideAucunResultat.svelte';
-  import ListeDeroulanteRiche from './ListeDeroulanteRiche.svelte';
-  import BarreDeRecherche from './BarreDeRecherche.svelte';
+<script lang="ts" context="module">
   import type { OptionsListeDeroulanteRiche } from './ui.types';
-  import type { ObjetDeDonnees } from './types';
-
-  type ConfigurationRecherche = {
+  export type ConfigurationRecherche = {
     champsRecherche: string[];
   };
 
-  type ConfigurationFiltrage = {
+  export type ConfigurationFiltrage = {
     options: OptionsListeDeroulanteRiche<any>;
   };
 
-  type ConfigurationSelection = {
+  export type ConfigurationSelection = {
     texteIndicatif: {
       vide: string;
       unique: string;
@@ -22,6 +17,13 @@
     champSelection: string;
     predicatSelectionDesactive?: (donnee: T) => boolean;
   };
+</script>
+
+<script lang="ts" generics="T extends ObjetDeDonnees">
+  import type { ObjetDeDonnees } from './types';
+  import TableauVideAucunResultat from './TableauVideAucunResultat.svelte';
+  import ListeDeroulanteRiche from './ListeDeroulanteRiche.svelte';
+  import BarreDeRecherche from './BarreDeRecherche.svelte';
 
   export let colonnes: { cle: string; libelle: string }[];
   export let donnees: T[];
