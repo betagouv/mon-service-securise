@@ -19,7 +19,7 @@
       sousTitre: 'XLSX - 56 kB',
     }}
     lesLimitations={['Taille maximale : 1 Mo. Format supporté : XLSX.']}
-    apiPostDuTeleversement="/api/televersement/modeles-de-mesure"
+    apiPostDuTeleversement="/api/televersement/modelesMesureSpecifique"
     formatAccepte={FormatAccepte.Excel}
     on:televersementChange={(e) => {
       console.log(e);

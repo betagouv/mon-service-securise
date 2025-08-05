@@ -12,18 +12,18 @@ describe('Les routes connecté de téléversement des modèles de mesure', () =>
     testeur.middleware().verifieRequeteExigeAcceptationCGU(
       {
         method: 'post',
-        url: 'http://localhost:1234/api/televersement/modeles-de-mesure',
+        url: 'http://localhost:1234/api/televersement/modelesMesureSpecifique',
       },
       done
     );
   });
 
-  describe('Quand requête POST sur `/api/televersement/modeles-de-mesure`', () => {
+  describe('Quand requête POST sur `/api/televersement/modelesMesureSpecifique`', () => {
     it('applique une protection de trafic', (done) => {
       testeur.middleware().verifieProtectionTrafic(
         {
           method: 'post',
-          url: 'http://localhost:1234/api/televersement/modeles-de-mesure',
+          url: 'http://localhost:1234/api/televersement/modelesMesureSpecifique',
         },
         done
       );
@@ -38,7 +38,7 @@ describe('Les routes connecté de téléversement des modèles de mesure', () =>
       };
 
       await axios.post(
-        'http://localhost:1234/api/televersement/modeles-de-mesure'
+        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
       );
 
       expect(adaptateurAppele).to.be(true);
@@ -52,7 +52,7 @@ describe('Les routes connecté de téléversement des modèles de mesure', () =>
 
       try {
         await axios.post(
-          'http://localhost:1234/api/televersement/modeles-de-mesure'
+          'http://localhost:1234/api/televersement/modelesMesureSpecifique'
         );
         expect().fail("L'appel aurait dû lever une erreur");
       } catch (e) {

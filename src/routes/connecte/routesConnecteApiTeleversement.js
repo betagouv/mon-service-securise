@@ -1,6 +1,6 @@
 const express = require('express');
 const routesConnecteApiTeleversementServices = require('./routesConnecteApiTeleversement.services');
-const routesConnecteApiTeleversementModelesMesure = require('./routesConnecteApiTeleversement.modelesMesure');
+const routesConnecteApiTeleversementModelesMesure = require('./routesConnecteApiTeleversement.modelesMesureSpecifique');
 
 const routesConnecteApiTeleversement = ({
   lecteurDeFormData,
@@ -23,7 +23,7 @@ const routesConnecteApiTeleversement = ({
   );
 
   routes.use(
-    '/modeles-de-mesure',
+    '/modelesMesureSpecifique',
     routesConnecteApiTeleversementModelesMesure({
       lecteurDeFormData,
       middleware,
