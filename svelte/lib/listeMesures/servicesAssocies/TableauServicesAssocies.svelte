@@ -7,6 +7,7 @@
     ReferentielTypesService,
   } from '../../ui/types.d';
   import type { ServiceAssocieAUneMesure } from '../listeMesures.d';
+  import { referentielNiveauxSecurite } from '../../ui/referentielNiveauxSecurite';
 
   export let referentielStatuts: ReferentielStatut;
   export let referentielTypesService: ReferentielTypesService | undefined =
@@ -14,12 +15,6 @@
   export let servicesAssocies: ServiceAssocieAUneMesure[];
   export let avecNomCliquable: boolean = false;
   export let avecTypeEtBesoinDeSecurite: boolean = false;
-
-  const libellesNiveauSecurite = {
-    niveau1: 'Basiques',
-    niveau2: 'Modérés',
-    niveau3: 'Avancés',
-  };
 </script>
 
 <Tableau
@@ -62,7 +57,7 @@
       </div>
     {:else if colonne.cle === 'niveauSecurite'}
       <div class="besoin-securite">
-        <span>{libellesNiveauSecurite[donnee.niveauSecurite]}</span>
+        <span>{referentielNiveauxSecurite[donnee.niveauSecurite]}</span>
       </div>
     {:else if colonne.cle === 'statut'}
       <div class="statut">

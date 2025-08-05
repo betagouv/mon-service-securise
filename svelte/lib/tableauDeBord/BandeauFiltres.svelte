@@ -8,6 +8,7 @@
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirTeleversementServices from '../ui/tiroirs/TiroirTeleversementServices.svelte';
   import Lien from '../ui/Lien.svelte';
+  import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
 </script>
 
 <div class="conteneur-filtres">
@@ -25,21 +26,13 @@
           { id: 'completude', libelle: 'Complétion' },
         ],
         items: [
-          {
-            libelle: 'Basiques',
-            valeur: 'niveau1',
-            idCategorie: 'niveauSecurite',
-          },
-          {
-            libelle: 'Modérés',
-            valeur: 'niveau2',
-            idCategorie: 'niveauSecurite',
-          },
-          {
-            libelle: 'Avancés',
-            valeur: 'niveau3',
-            idCategorie: 'niveauSecurite',
-          },
+          ...Object.entries(referentielNiveauxSecurite).map(
+            ([valeur, libelle]) => ({
+              libelle,
+              valeur,
+              idCategorie: 'niveauSecurite',
+            })
+          ),
           {
             libelle: 'Inférieur à 1',
             valeur: '<1',

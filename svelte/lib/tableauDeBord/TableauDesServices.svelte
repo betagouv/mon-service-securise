@@ -22,6 +22,7 @@
   import TableauVide from './TableauVide.svelte';
   import EtiquetteCompletude from './elementsDeService/EtiquetteCompletude.svelte';
   import Lien from '../ui/Lien.svelte';
+  import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
 
   $: selection = $resultatsDeRecherche.filter((service) =>
     $selectionIdsServices.includes(service.id)
@@ -45,12 +46,6 @@
   };
 
   export let indicesCyberCharges: boolean = false;
-
-  const libellesNiveauSecurite = {
-    niveau1: 'Basiques',
-    niveau2: 'Modérés',
-    niveau3: 'Avancés',
-  };
 </script>
 
 <table>
@@ -181,7 +176,7 @@
             {#if service.niveauSecurite}
               <Lien
                 classe="lien-niveau-securite"
-                titre={libellesNiveauSecurite[service.niveauSecurite]}
+                titre={referentielNiveauxSecurite[service.niveauSecurite]}
                 href="/service/{idService}/descriptionService?etape=3"
                 type="lien"
                 taille="petit"
