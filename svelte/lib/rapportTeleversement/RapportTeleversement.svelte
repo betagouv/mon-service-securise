@@ -187,18 +187,17 @@
       </div>
       <div class="pied-modale">
         <div class="conteneur-actions">
-          <button
-            class="bouton bouton-secondaire"
+          <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+          <lab-anssi-bouton
+            titre="Annuler"
+            variante="tertiaire-sans-bordure"
+            taille="md"
+            positionIcone="sans"
             on:click={() => fermeRapport()}
-            >Annuler
-          </button>
-          <button
-            class="bouton bouton-primaire bouton-accepter"
-            class:estValide
-            on:click={() =>
-              estValide ? valideImport() : fermeRapportEtOuvreTiroir()}
-          >
-            {estValide
+          />
+          <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+          <lab-anssi-bouton
+            titre={estValide
               ? `Importer les ${
                   rapportDetaille.services.length
                 } ${pluraliseChaine(
@@ -207,7 +206,13 @@
                   rapportDetaille.services.length
                 )}`
               : 'Réimporter le fichier XLSX corrigé'}
-          </button>
+            variante="primaire"
+            taille="md"
+            icone={estValide ? 'check-line' : 'refresh-line'}
+            positionIcone="gauche"
+            on:click={() =>
+              estValide ? valideImport() : fermeRapportEtOuvreTiroir()}
+          />
         </div>
       </div>
     {/if}
@@ -350,28 +355,6 @@
     flex-direction: row;
     gap: 16px;
     justify-content: end;
-
-    button {
-      margin: 0;
-      padding: 8px 12px;
-      font-size: 1rem;
-      font-weight: 500;
-      line-height: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      &.bouton-accepter.estValide:before {
-        content: url(/statique/assets/images/icone_import_services.svg);
-      }
-
-      &.bouton-accepter:before {
-        content: url(/statique/assets/images/icone_import_fichier.svg);
-        display: flex;
-        width: 16px;
-        height: 16px;
-      }
-    }
   }
 
   .conteneur-toasts {
