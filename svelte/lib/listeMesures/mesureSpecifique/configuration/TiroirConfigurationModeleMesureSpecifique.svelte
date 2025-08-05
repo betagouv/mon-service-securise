@@ -27,6 +27,7 @@
   } from '../../modificationStatutPrecision/etapes/EtapesModificationMultipleStatutPrecision.svelte';
   import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
   import { modaleRapportStore } from '../../modificationStatutPrecision/rapport/modaleRapport.store';
+  import ConfirmationModificationModeleMesureSpecifique from '../modification/ConfirmationModificationModeleMesureSpecifique.svelte';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -41,6 +42,7 @@
 
   let etapeStatutEtPrecision: 1 | 2 | 3 = 1;
   let etapeServicesAssocies: 1 | 2 = 1;
+  let etapeInformations: 1 | 2 = 1;
 
   const metEnAvantMesureApresModification = () => {
     modaleRapportStore.metEnAvantMesureApresModification(modeleMesure.id);
@@ -166,6 +168,7 @@
     if (ongletActif) {
       etapeServicesAssocies = 1;
       etapeStatutEtPrecision = 1;
+      etapeInformations = 1;
     }
   }
 
@@ -187,10 +190,17 @@
     sansBordureEnBas={true}
   />
   {#if ongletActif === 'info'}
-    <InformationsModeleMesureSpecifique
-      {categories}
-      bind:donneesModeleMesure={donneesModeleMesureEdite}
-    />
+    {#if etapeInformations === 1}
+      <InformationsModeleMesureSpecifique
+        {categories}
+        bind:donneesModeleMesure={donneesModeleMesureEdite}
+      />
+    {:else}
+      <ConfirmationModificationModeleMesureSpecifique
+        {modeleMesure}
+        {referentielTypesService}
+      />
+    {/if}
   {:else if ongletActif === 'servicesAssocies'}
     {#if $servicesAvecMesuresAssociees.length === 0}
       <Avertissement niveau="info">
@@ -256,16 +266,27 @@
     />
   {/if}
   {#if ongletActif === 'info'}
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-    <lab-anssi-bouton
-      titre="Enregistrer les modifications"
-      variante="primaire"
-      taille="md"
-      icone="save-line"
-      position-icone="gauche"
-      on:click={async () => await sauvegardeInformations()}
-      actif={formulaireValide && !enCoursDenvoi}
-    />
+    {#if etapeInformations === 1}
+      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <lab-anssi-bouton
+        titre="Enregistrer les modifications"
+        variante="primaire"
+        taille="md"
+        icone="save-line"
+        position-icone="gauche"
+        on:click={() => (etapeInformations = 2)}
+        actif={formulaireValide}
+      />
+    {:else}
+      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <lab-anssi-bouton
+        titre="Valider les modifications"
+        variante="primaire"
+        taille="md"
+        on:click={async () => await sauvegardeInformations()}
+        actif={!enCoursDenvoi}
+      />
+    {/if}
   {:else if ongletActif === 'statut-precision'}
     {#if etapeStatutEtPrecision === 1}
       <Bouton
