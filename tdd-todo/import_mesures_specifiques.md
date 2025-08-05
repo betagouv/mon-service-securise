@@ -25,8 +25,8 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
   - [ ] Les badges des onglets sont mis à jour en fonction de la recherche
 - [x] On veut voir un écran dédié quand la liste de modèle de mesure est vide
 - [ ] On montre une étape de confirmation lors de la modification d'un modèle
-- [ ] On affiche un onglet "Toutes les mesures"
-  - [ ] On affiche les filtres de catégories et de mesures par référentiel (Cf. SÉCURISER)
+- [x] On affiche un onglet "Toutes les mesures"
+  - [x] On affiche les filtres de catégories et de mesures par référentiel (Cf. SÉCURISER)
 - [ ] On veut pouvoir supprimer un modèle de mesure
   - [ ] La mesure est supprimée de la liste & des services (on retire l'association, les mesures spécifiques concernées et le modèle)
   - [ ] La mesure est supprimée de la liste, mais détachée des services (on retire l'association et le modèle, mais on conserve les mesures spécifiques une fois détachées)

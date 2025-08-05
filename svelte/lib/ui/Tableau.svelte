@@ -60,7 +60,7 @@
     if (configurationRecherche && recherche)
       donneesFiltrees = donneesFiltrees.filter((donnee) =>
         configurationRecherche.champsRecherche.some((champ) =>
-          donnee[champ].toLowerCase().includes(recherche.toLowerCase())
+          donnee[champ]?.toLowerCase().includes(recherche.toLowerCase())
         )
       );
 
