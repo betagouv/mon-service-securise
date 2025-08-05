@@ -36,7 +36,7 @@ const estMesureGenerale = (
   mesure: MesureSpecifique | MesureGenerale
 ): mesure is MesureGenerale =>
   // On utilise ici un typeguard, et on se base sur une propriété qui est uniquement présente dans les mesures générales
-  'descriptionLongue' in mesure && mesure.descriptionLongue !== undefined;
+  'referentiel' in mesure && mesure.referentiel !== undefined;
 
 export const appliqueRechercheParReferentiel = (
   mesure: MesureSpecifique | MesureGenerale,
