@@ -32,6 +32,7 @@
   import TiroirConfigurationModeleMesureSpecifique from './mesureSpecifique/configuration/TiroirConfigurationModeleMesureSpecifique.svelte';
   import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
   import TiroirTeleversementModeleMesureSpecifique from './televersement/TiroirTeleversementModeleMesureSpecifique.svelte';
+  import type { ConfigurationFiltrage } from '../ui/Tableau.svelte';
 
   export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
@@ -49,37 +50,36 @@
     await modaleDetailsMesure.affiche(modeleMesure);
   };
 
-  const optionsFiltrage = {
-    categories: [
-      { id: 'referentiel', libelle: 'Référentiel' },
-      { id: 'categorie', libelle: 'Catégories' },
-    ],
-    items: [
-      {
-        libelle: 'ANSSI',
-        valeur: Referentiel.ANSSI,
-        idCategorie: 'referentiel',
-      },
-      {
-        libelle: 'CNIL',
-        valeur: Referentiel.CNIL,
-        idCategorie: 'referentiel',
-      },
-      ...categories.map((c) => ({
-        libelle: c.label,
-        valeur: c.id,
-        idCategorie: 'categorie',
-      })),
-    ],
-  };
+  const itemsFiltrageReferentiel = [
+    {
+      libelle: 'ANSSI',
+      valeur: Referentiel.ANSSI,
+      idCategorie: 'referentiel',
+    },
+    {
+      libelle: 'CNIL',
+      valeur: Referentiel.CNIL,
+      idCategorie: 'referentiel',
+    },
+  ];
+  const itemsFiltrageCategories = categories.map((c) => ({
+    libelle: c.label,
+    valeur: c.id,
+    idCategorie: 'categorie',
+  }));
+
+  const groupeReferentiel = { id: 'referentiel', libelle: 'Référentiel' };
+  const groupeCategorie = { id: 'categorie', libelle: 'Catégories' };
 
   type ConfigurationTableau = {
     donnees: ModeleDeMesure[];
     configurationRecherche: { champsRecherche: string[] };
+    configurationFiltrage: ConfigurationFiltrage;
   };
   let configurationTableau: ConfigurationTableau = {
     donnees: [],
     configurationRecherche: { champsRecherche: [] },
+    configurationFiltrage: { options: { categories: [], items: [] } },
   };
 
   $: {
@@ -95,6 +95,10 @@
         'description',
         'identifiantNumerique',
       ];
+      configurationTableau.configurationFiltrage.options = {
+        categories: [groupeReferentiel, groupeCategorie],
+        items: [...itemsFiltrageReferentiel, ...itemsFiltrageCategories],
+      };
     } else if (ongletActif === 'specifiques') {
       configurationTableau.donnees = $modelesMesureSpecifique.map((m) => ({
         ...m,
@@ -104,6 +108,10 @@
       configurationTableau.configurationRecherche.champsRecherche = [
         'description',
       ];
+      configurationTableau.configurationFiltrage.options = {
+        categories: [groupeCategorie],
+        items: [...itemsFiltrageCategories],
+      };
     }
   }
 
@@ -173,7 +181,7 @@
   ]}
   donnees={configurationTableau.donnees}
   configurationRecherche={configurationTableau.configurationRecherche}
-  configurationFiltrage={{ options: optionsFiltrage }}
+  configurationFiltrage={configurationTableau.configurationFiltrage}
   champIdentifiantLigne="id"
 >
   <div slot="actionsComplementaires" class="conteneur-actions-complementaires">
