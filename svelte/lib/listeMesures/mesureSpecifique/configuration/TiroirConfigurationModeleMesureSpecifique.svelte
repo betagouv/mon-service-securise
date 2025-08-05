@@ -39,7 +39,8 @@
   export let referentielTypesService: ReferentielTypesService;
   let idsServicesSelectionnes: string[] = [];
 
-  let etapeCourante = 1;
+  let etapeStatutEtPrecision: 1 | 2 | 3 = 1;
+  let etapeServicesAssocies: 1 | 2 = 1;
 
   const metEnAvantMesureApresModification = () => {
     modaleRapportStore.metEnAvantMesureApresModification(modeleMesure.id);
@@ -78,7 +79,6 @@
 
   export let ongletActif: 'info' | 'servicesAssocies' | 'statut-precision' =
     'servicesAssocies';
-  let etapeActive: 1 | 2 = 1;
 
   let donneesModeleMesureEdite = structuredClone(modeleMesure);
 
@@ -128,7 +128,7 @@
             : 'Les services ont été associés'
         } à la mesure`
       );
-      etapeActive = 1;
+      etapeServicesAssocies = 1;
       idsServicesSelectionnes = [];
       metEnAvantMesureApresModification();
     } catch (e) {
@@ -164,8 +164,8 @@
 
   $: {
     if (ongletActif) {
-      etapeActive = 1;
-      etapeCourante = 1;
+      etapeServicesAssocies = 1;
+      etapeStatutEtPrecision = 1;
     }
   }
 
@@ -212,7 +212,7 @@
       <ServicesAssociesModeleMesureSpecifique
         {modeleMesure}
         {referentielTypesService}
-        bind:etapeActive
+        bind:etapeActive={etapeServicesAssocies}
         bind:idsServicesSelectionnes
       />
     {/if}
@@ -236,7 +236,7 @@
     {:else}
       <EtapesModificationMultipleStatutPrecision
         bind:this={elementEtapesModification}
-        bind:etapeCourante
+        bind:etapeCourante={etapeStatutEtPrecision}
         bind:boutonSuivantActif
         {statuts}
         {servicesAssocies}
@@ -267,7 +267,7 @@
       actif={formulaireValide && !enCoursDenvoi}
     />
   {:else if ongletActif === 'statut-precision'}
-    {#if etapeCourante === 1}
+    {#if etapeStatutEtPrecision === 1}
       <Bouton
         type="lien"
         titre="Retour à la liste de mesures"
@@ -281,14 +281,16 @@
       />
     {/if}
     <Bouton
-      titre={etapeCourante < 3 ? 'Suivant' : 'Appliquer les modifications'}
+      titre={etapeStatutEtPrecision < 3
+        ? 'Suivant'
+        : 'Appliquer les modifications'}
       type="primaire"
       actif={boutonSuivantActif}
       enCoursEnvoi={enCoursDenvoi}
       on:click={() => elementEtapesModification.etapeSuivante()}
     />
   {:else if ongletActif === 'servicesAssocies'}
-    {#if etapeActive === 1}
+    {#if etapeServicesAssocies === 1}
       <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
       <lab-anssi-bouton
         titre="Enregistrer les modifications"
@@ -296,10 +298,10 @@
         taille="md"
         icone="save-line"
         position-icone="gauche"
-        on:click={() => (etapeActive = 2)}
+        on:click={() => (etapeServicesAssocies = 2)}
         actif={idsServicesSelectionnes.length > 0}
       />
-    {:else if etapeActive === 2}
+    {:else if etapeServicesAssocies === 2}
       <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
       <lab-anssi-bouton
         titre="Valider les modifications"
