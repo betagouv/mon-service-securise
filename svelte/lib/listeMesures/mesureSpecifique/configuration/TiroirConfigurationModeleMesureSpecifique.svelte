@@ -26,6 +26,7 @@
     type DonneesModificationAAppliquer,
   } from '../../modificationStatutPrecision/etapes/EtapesModificationMultipleStatutPrecision.svelte';
   import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
+  import { modaleRapportStore } from '../../modificationStatutPrecision/rapport/modaleRapport.store';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -39,6 +40,10 @@
   let idsServicesSelectionnes: string[] = [];
 
   let etapeCourante = 1;
+
+  const metEnAvantMesureApresModification = () => {
+    modaleRapportStore.metEnAvantMesureApresModification(modeleMesure.id);
+  };
 
   const appliqueModifications = async (
     e: CustomEvent<DonneesModificationAAppliquer>
@@ -59,6 +64,7 @@
         `Mesure${pluriel} modifiée${pluriel} avec succès !`,
         `Vous avez modifié la mesure ${modeleMesure.description} sur ${idsServices.length} service${pluriel}.`
       );
+      metEnAvantMesureApresModification();
     } catch (e) {
       tiroirStore.ferme();
       toasterStore.erreur(
@@ -124,6 +130,7 @@
       );
       etapeActive = 1;
       idsServicesSelectionnes = [];
+      metEnAvantMesureApresModification();
     } catch (e) {
       toasterStore.erreur(
         'Une erreur est survenue',
@@ -144,6 +151,7 @@
         'Succès',
         'Les informations de la mesure ont été mises à jour'
       );
+      metEnAvantMesureApresModification();
     } catch (e) {
       toasterStore.erreur(
         'Une erreur est survenue',
