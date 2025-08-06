@@ -317,7 +317,7 @@
     {#if etapeStatutEtPrecision === 1}
       <Bouton
         type="lien"
-        titre="Retour à la liste de mesures"
+        titre="Annuler"
         on:click={() => tiroirStore.ferme()}
       />
     {:else}
