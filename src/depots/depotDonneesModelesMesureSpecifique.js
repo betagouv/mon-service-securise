@@ -41,6 +41,22 @@ const creeDepot = (config = {}) => {
     idUtilisateur,
     idModele
   ) => {
+    const modeles =
+      await persistance.lisModelesMesureSpecifiquePourUtilisateur(
+        idUtilisateur
+      );
+    const modeleASupprimer = modeles.find((m) => m.id === idModele);
+    const idsServicesAssocies = modeleASupprimer.ids_services_associes;
+    const supprimeMesureSpecifiqueAssociee = idsServicesAssocies.map(
+      async (unId) => {
+        const s = await depotServices.service(unId);
+        s.supprimeMesureSpecifiqueAssocieeAuModele(idModele);
+        return s;
+      }
+    );
+    const aPersister = await Promise.all(supprimeMesureSpecifiqueAssociee);
+    await Promise.all(aPersister.map(depotServices.metsAJourService));
+
     await persistance.supprimeModeleMesureSpecifique(idModele);
   };
 

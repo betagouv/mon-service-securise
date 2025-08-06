@@ -568,12 +568,32 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
   });
 
   describe("concernant la suppression d'un modèle et de toutes les mesures associées", () => {
-    it('supprime le modèle', async () => {
+    beforeEach(() => {
       persistance = unePersistanceMemoire()
-        .avecUnModeleDeMesureSpecifique({ id: 'MOD-1', idUtilisateur: 'U1' })
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-1',
+          idUtilisateur: 'U1',
+          donnees: { description: 'description' },
+        })
+        .ajouteUnService({
+          id: 'S1',
+          descriptionService: { nomService: 'Service 1' },
+          mesuresSpecifiques: [{ idModele: 'MOD-1' }],
+        })
         .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .nommeCommeProprietaire('U1', ['S1'])
+        .associeLeServiceAuxModelesDeMesureSpecifique('S1', ['MOD-1'])
         .construis();
-
+      depotServices = DepotDonneesServices.creeDepot({
+        adaptateurPersistance: persistance,
+        adaptateurChiffrement,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance: persistance,
+          adaptateurChiffrement,
+        }),
+      });
+    });
+    it('supprime le modèle', async () => {
       const depot = leDepot();
       await depot.supprimeModeleMesureSpecifiqueEtMesuresAssociees(
         'U1',
@@ -586,12 +606,6 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     });
 
     it('supprime les associations des services à ce modèle', async () => {
-      persistance = unePersistanceMemoire()
-        .avecUnModeleDeMesureSpecifique({ id: 'MOD-1', idUtilisateur: 'U1' })
-        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
-        .associeLeServiceAuxModelesDeMesureSpecifique('S1', ['MOD-1'])
-        .construis();
-
       const depot = leDepot();
       await depot.supprimeModeleMesureSpecifiqueEtMesuresAssociees(
         'U1',
@@ -604,6 +618,17 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
           'MOD-1'
         );
       expect(estAssocie).to.eql(false);
+    });
+
+    it('supprime les mesures spécifiques associées au sein des services', async () => {
+      const depot = leDepot();
+      await depot.supprimeModeleMesureSpecifiqueEtMesuresAssociees(
+        'U1',
+        'MOD-1'
+      );
+
+      const service = await depotServices.service('S1');
+      expect(service.mesuresSpecifiques().toutes().length).to.eql(0);
     });
   });
 });
