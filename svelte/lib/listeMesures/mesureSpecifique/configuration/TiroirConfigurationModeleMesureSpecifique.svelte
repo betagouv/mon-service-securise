@@ -28,6 +28,7 @@
   import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
   import { modaleRapportStore } from '../../modificationStatutPrecision/rapport/modaleRapport.store';
   import ConfirmationModificationModeleMesureSpecifique from '../modification/ConfirmationModificationModeleMesureSpecifique.svelte';
+  import TiroirSuppressionModeleMesureSpecifique from '../suppression/TiroirSuppressionModeleMesureSpecifique.svelte';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -261,7 +262,7 @@
   {/if}
 </ContenuTiroir>
 <ActionsTiroir>
-  {#if ongletActif === 'info' || ongletActif === 'servicesAssocies'}
+  {#if ongletActif === 'servicesAssocies'}
     <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
     <lab-anssi-bouton
       variante="tertiaire-sans-bordure"
@@ -274,6 +275,19 @@
     {#if etapeInformations === 1}
       <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
       <lab-anssi-bouton
+        variante="tertiaire-sans-bordure"
+        taille="md"
+        titre="Supprimer la mesure"
+        icone="delete-line"
+        position-icone="gauche"
+        on:click={() =>
+          tiroirStore.afficheContenu(
+            TiroirSuppressionModeleMesureSpecifique,
+            {}
+          )}
+      />
+      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <lab-anssi-bouton
         titre="Enregistrer les modifications"
         variante="primaire"
         taille="md"
@@ -283,6 +297,13 @@
         actif={formulaireValide && mesureAEteEditee}
       />
     {:else}
+      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <lab-anssi-bouton
+        variante="tertiaire-sans-bordure"
+        taille="md"
+        titre="Annuler"
+        on:click={() => tiroirStore.ferme()}
+      />
       <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
       <lab-anssi-bouton
         titre="Valider les modifications"
