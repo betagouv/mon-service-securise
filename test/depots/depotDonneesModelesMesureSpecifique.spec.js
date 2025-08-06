@@ -95,6 +95,16 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     beforeEach(() => {
       persistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-99',
+          idUtilisateur: 'U1',
+          donnees: {
+            description: 'avant description',
+            descriptionLongue: 'avant longue',
+            categorie: 'gouvernance',
+          },
+        })
         .construis();
     });
 
@@ -119,6 +129,16 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         expect().fail("L'appel aurait dû lever une erreur.");
       } catch (e) {
         expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueIntrouvable);
+      }
+    });
+
+    it("jette une erreur si l'utilisateur n'est pas propriétaire du modèle", async () => {
+      const depot = leDepot();
+      try {
+        await depot.metsAJourModeleMesureSpecifique('U2', 'MOD-99', {});
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurAutorisationInexistante);
       }
     });
 
@@ -147,7 +167,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         await depot.lisModelesMesureSpecifiquePourUtilisateur('U1');
 
       expect(lesDonneesSontChiffrees).to.be(true);
-      expect(modelesPersistes[0]).to.eql({
+      expect(modelesPersistes[1]).to.eql({
         description: 'après description',
         descriptionLongue: 'après longue',
         categorie: 'gouvernance',

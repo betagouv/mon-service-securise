@@ -1,7 +1,6 @@
 const {
   ErreurUtilisateurInexistant,
   ErreurServiceNonAssocieAuModele,
-  ErreurModeleDeMesureSpecifiqueIntrouvable,
 } = require('../erreurs');
 const {
   VerificationsUtilisateurPeutMuterModele,
@@ -16,7 +15,7 @@ const creeDepot = (config = {}) => {
     depotServices,
   } = config;
 
-  const verificationsAssocieOuDetache =
+  const verificationsModificationModele =
     new VerificationsUtilisateurPeutMuterModele({
       adaptateurPersistance: persistance,
       depotAutorisations,
@@ -49,7 +48,7 @@ const creeDepot = (config = {}) => {
     const modeleASupprimer = modeles.find((m) => m.id === idModele);
     const idsServicesAssocies = modeleASupprimer?.ids_services_associes || [];
 
-    await verificationsAssocieOuDetache.toutes(
+    await verificationsModificationModele.toutes(
       idModele,
       idsServicesAssocies,
       idUtilisateur
@@ -76,10 +75,11 @@ const creeDepot = (config = {}) => {
     const utilisateur = await persistance.utilisateur(idUtilisateur);
     if (!utilisateur) throw new ErreurUtilisateurInexistant();
 
-    const modeleExiste =
-      await persistance.verifieModeleMesureSpecifiqueExiste(idModele);
-    if (!modeleExiste)
-      throw new ErreurModeleDeMesureSpecifiqueIntrouvable(idModele);
+    await verificationsModificationModele.queModeleExiste(idModele);
+    await verificationsModificationModele.queUtilisateurPossedeLeModele(
+      idUtilisateur,
+      idModele
+    );
 
     const donneesChiffrees = await adaptateurChiffrement.chiffre(donnees);
     await persistance.metsAJourModeleMesureSpecifique(
@@ -94,7 +94,7 @@ const creeDepot = (config = {}) => {
     idsServices,
     idUtilisateurAssociant
   ) => {
-    await verificationsAssocieOuDetache.toutes(
+    await verificationsModificationModele.toutes(
       idModele,
       idsServices,
       idUtilisateurAssociant
@@ -121,7 +121,7 @@ const creeDepot = (config = {}) => {
     idsServices,
     idUtilisateurDetachant
   ) => {
-    await verificationsAssocieOuDetache.toutes(
+    await verificationsModificationModele.toutes(
       idModele,
       idsServices,
       idUtilisateurDetachant
