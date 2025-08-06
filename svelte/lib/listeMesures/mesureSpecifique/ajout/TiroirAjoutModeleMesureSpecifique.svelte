@@ -13,6 +13,7 @@
     ReferentielStatut,
     ReferentielTypesService,
   } from '../../../ui/types';
+  import { servicesAvecMesuresAssociees } from '../../servicesAssocies/servicesAvecMesuresAssociees.store';
 
   export let statuts: ReferentielStatut;
   export let referentielTypesService: ReferentielTypesService;
@@ -40,6 +41,7 @@
         donneesModeleMesureAjoute
       );
       await modelesMesureSpecifique.rafraichis();
+      await servicesAvecMesuresAssociees.rafraichis();
       tiroirStore.afficheContenu(TiroirConfigurationModeleMesureSpecifique, {
         categories,
         statuts,

@@ -54,6 +54,12 @@ export const ajouteModeleMesureSpecifique = async ({
   return reponse.data?.id;
 };
 
+export const supprimeCompletementModeleMesureSpecifique = async (
+  idModele: string
+) => {
+  await axios.delete(`/api/modeles/mesureSpecifique/${idModele}`);
+};
+
 export const sauvegardeModeleMesureSpecifique = async ({
   id,
   description,

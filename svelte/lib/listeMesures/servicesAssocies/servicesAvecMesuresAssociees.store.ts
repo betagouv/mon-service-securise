@@ -9,9 +9,9 @@ const { set: setEnCoursDeChargement, subscribe: subscribeEnCoursDeChargement } =
 export const servicesAvecMesuresAssociees = {
   subscribe,
   set,
-  rafraichis: () => {
+  rafraichis: async () => {
     setEnCoursDeChargement(true);
-    axios
+    return axios
       .get<ServiceAvecMesuresAssociees[]>('/api/services/mesures')
       .then(({ data: services }) => {
         set(services);

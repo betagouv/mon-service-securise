@@ -4,11 +4,60 @@
   import BoutonsRadio from '../../../ui/BoutonsRadio.svelte';
   import Toast from '../../../ui/Toast.svelte';
   import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
+  import TableauServicesAssocies from '../../servicesAssocies/TableauServicesAssocies.svelte';
+  import type {
+    ModeleMesureSpecifique,
+    ReferentielStatut,
+  } from '../../../ui/types';
+  import { servicesAvecMesuresAssociees } from '../../servicesAssocies/servicesAvecMesuresAssociees.store';
+  import { tiroirStore } from '../../../ui/stores/tiroir.store';
+  import { supprimeCompletementModeleMesureSpecifique } from '../../listeMesures.api';
+  import { toasterStore } from '../../../ui/stores/toaster.store';
+  import { modelesMesureSpecifique } from '../modelesMesureSpecifique.store';
 
   export const titre: string = 'Supprimer la mesure';
   export const sousTitre: string =
-    'Le statut et la précision de cette mesure peuvent être modifiés et appliqués simultanément à plusieurs services.';
+    'Choisissez où cette mesure doit être supprimée : partout, partiellement ou uniquement de la liste centralisée.';
   export const taille = 'large';
+
+  export let modeleMesure: ModeleMesureSpecifique;
+  export let statuts: ReferentielStatut;
+
+  let enCoursEnvoi = false;
+
+  $: servicesAvecMesure = modeleMesure
+    ? $servicesAvecMesuresAssociees
+        .filter((s) => modeleMesure.idsServicesAssocies.includes(s.id))
+        .map(({ mesuresAssociees, mesuresSpecifiques, ...autresDonnees }) => ({
+          ...autresDonnees,
+          mesure: mesuresSpecifiques.find(
+            (m) => m.idModele === modeleMesure.id
+          )!,
+        }))
+    : [];
+
+  const supprimeCompletement = async () => {
+    enCoursEnvoi = true;
+
+    try {
+      await supprimeCompletementModeleMesureSpecifique(modeleMesure.id);
+      toasterStore.succes(
+        `Mesure supprimée avec succès !`,
+        `Vous avez supprimé la mesure ${modeleMesure.description}.`
+      );
+      tiroirStore.ferme();
+      await servicesAvecMesuresAssociees.rafraichis();
+      await modelesMesureSpecifique.rafraichis();
+    } catch (e) {
+      tiroirStore.ferme();
+      toasterStore.erreur(
+        'Une erreur est survenue',
+        "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
+      );
+    } finally {
+      enCoursEnvoi = false;
+    }
+  };
 
   enum ModeDeSuppression {
     COMPLET = 'COMPLET',
@@ -21,7 +70,9 @@
 
 <ContenuTiroir>
   <div class="marge-24">
-    <h4>Où souhaitez vous supprimer cette mesure ?</h4>
+    <h4>
+      Où souhaitez vous supprimer la mesure « {modeleMesure.description} » ?
+    </h4>
     <div class="conteneur-boutons-radio">
       <BoutonsRadio
         bind:valeurSelectionnee
@@ -44,10 +95,32 @@
         contenu="Cette action impactera tous les services associés à cette mesure."
       />
       <SeparateurHorizontal />
+      <TableauServicesAssocies
+        servicesAssocies={servicesAvecMesure}
+        referentielStatuts={statuts}
+      />
     {/if}
   </div>
 </ContenuTiroir>
-<ActionsTiroir></ActionsTiroir>
+<ActionsTiroir>
+  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <lab-anssi-bouton
+    variante="tertiaire-sans-bordure"
+    taille="md"
+    titre="Annuler"
+    on:click={() => tiroirStore.ferme()}
+  />
+  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <lab-anssi-bouton
+    titre="Valider la suppression"
+    variante="primaire"
+    taille="md"
+    icone="delete-line"
+    position-icone="gauche"
+    on:click={supprimeCompletement}
+    actif={!enCoursEnvoi}
+  />
+</ActionsTiroir>
 
 <style lang="scss">
   h4 {

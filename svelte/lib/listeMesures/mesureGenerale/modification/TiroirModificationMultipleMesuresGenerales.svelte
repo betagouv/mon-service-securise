@@ -72,7 +72,7 @@
         idsServices,
       });
       tiroirStore.ferme();
-      servicesAvecMesuresAssociees.rafraichis();
+      await servicesAvecMesuresAssociees.rafraichis();
       modaleRapportStore.affiche({
         champsModifies: [
           ...(statut && ['statut']),
