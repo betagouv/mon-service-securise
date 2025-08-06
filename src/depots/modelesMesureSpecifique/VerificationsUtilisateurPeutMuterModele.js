@@ -19,13 +19,13 @@ class VerificationsUtilisateurPeutMuterModele {
   }
 
   async toutes(idModele, idsServices, idUtilisateur) {
-    await this.#queModeleExiste(idModele);
+    await this.queModeleExiste(idModele);
     await this.#queTousLesServicesExistent(idsServices);
-    await this.#queUtilisateurPossedeLeModele(idUtilisateur, idModele);
+    await this.queUtilisateurPossedeLeModele(idUtilisateur, idModele);
     await this.#peutModifierUnModeleSurLesServices(idUtilisateur, idsServices);
   }
 
-  async #queModeleExiste(idModele) {
+  async queModeleExiste(idModele) {
     const modeleExiste =
       await this.persistance.verifieModeleMesureSpecifiqueExiste(idModele);
     if (!modeleExiste)
@@ -39,7 +39,7 @@ class VerificationsUtilisateurPeutMuterModele {
     if (!tousServicesExistent) throw new ErreurServiceInexistant();
   }
 
-  async #queUtilisateurPossedeLeModele(idUtilisateur, idModele) {
+  async queUtilisateurPossedeLeModele(idUtilisateur, idModele) {
     const possedeLeModele =
       await this.persistance.modeleMesureSpecifiqueAppartientA(
         idUtilisateur,
