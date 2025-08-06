@@ -30,6 +30,7 @@
     type DonneesModificationAAppliquer,
   } from '../../modificationStatutPrecision/etapes/EtapesModificationMultipleStatutPrecision.svelte';
   import { mesuresAvecServicesAssociesStore } from '../../servicesAssocies/mesuresAvecServicesAssocies.store';
+  import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -98,7 +99,7 @@
   {#if etapeCourante === 1}
     <div>
       <DescriptionCompleteMesure modeleDeMesure={modeleMesureGenerale} />
-      <hr />
+      <SeparateurHorizontal />
     </div>
   {/if}
   <EtapesModificationMultipleStatutPrecision
@@ -132,11 +133,3 @@
     on:click={() => elementEtapesModification.etapeSuivante()}
   />
 </ActionsTiroir>
-
-<style lang="scss">
-  hr {
-    width: 100%;
-    border-top: none;
-    border-bottom: 1px solid #dddddd;
-  }
-</style>

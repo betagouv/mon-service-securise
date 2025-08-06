@@ -8,6 +8,7 @@
   import Tableau from '../../../ui/Tableau.svelte';
   import { decode } from 'html-entities';
   import { referentielNiveauxSecurite } from '../../../ui/referentielNiveauxSecurite';
+  import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
 
   export let modeleMesure: ModeleMesureSpecifique;
   export let referentielTypesService: ReferentielTypesService;
@@ -31,7 +32,9 @@
       {servicesAssocies.length === 1 ? 'service' : 'services'}</b>."
     />
   </div>
-  <hr />
+  <div class="conteneur-separateur">
+    <SeparateurHorizontal />
+  </div>
   <h5>
     {servicesAssocies.length}
     {servicesAssocies.length === 1 ? 'service concerné' : 'services concernés'} par
@@ -133,10 +136,7 @@
       margin-top: 16px;
     }
 
-    hr {
-      width: 100%;
-      border-top: none;
-      border-bottom: 1px solid #dddddd;
+    .conteneur-separateur {
       margin: 16px 0;
     }
 

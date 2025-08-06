@@ -11,6 +11,7 @@
   import { servicesAvecMesuresAssociees } from '../servicesAssocies/servicesAvecMesuresAssociees.store';
   import Toast from '../../ui/Toast.svelte';
   import { referentielNiveauxSecurite } from '../../ui/referentielNiveauxSecurite';
+  import SeparateurHorizontal from '../../ui/SeparateurHorizontal.svelte';
 
   export let modeleMesure: ModeleMesureSpecifique;
   export let referentielTypesService: ReferentielTypesService;
@@ -100,7 +101,9 @@
         indice cyber."
       />
     </span>
-    <hr />
+    <div class="conteneur-separateur">
+      <SeparateurHorizontal />
+    </div>
     <h5>
       {idsServicesSelectionnes.length}
       {idsServicesSelectionnes.length === 1
@@ -229,10 +232,7 @@
       max-width: 500px;
     }
 
-    hr {
-      width: 100%;
-      border-top: none;
-      border-bottom: 1px solid #dddddd;
+    .conteneur-separateur {
       margin: 16px 0;
     }
 
