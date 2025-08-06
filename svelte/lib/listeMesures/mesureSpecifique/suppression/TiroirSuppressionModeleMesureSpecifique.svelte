@@ -2,6 +2,8 @@
   import ContenuTiroir from '../../../ui/tiroirs/ContenuTiroir.svelte';
   import ActionsTiroir from '../../../ui/tiroirs/ActionsTiroir.svelte';
   import BoutonsRadio from '../../../ui/BoutonsRadio.svelte';
+  import Toast from '../../../ui/Toast.svelte';
+  import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
 
   export const titre: string = 'Supprimer la mesure';
   export const sousTitre: string =
@@ -33,6 +35,16 @@
         ]}
       />
     </div>
+    {#if valeurSelectionnee === ModeDeSuppression.COMPLET}
+      <Toast
+        avecOmbre={false}
+        titre="Cette action est irréversible"
+        avecAnimation={false}
+        niveau="alerte"
+        contenu="Cette action impactera tous les services associés à cette mesure."
+      />
+      <SeparateurHorizontal />
+    {/if}
   </div>
 </ContenuTiroir>
 <ActionsTiroir></ActionsTiroir>
