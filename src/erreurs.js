@@ -8,7 +8,7 @@ class ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique extends Error {
     const s = idServices.join(',');
     const d = JSON.stringify(droitsRequis);
     super(
-      `L'utilisateur ${u} n'a pas les droits suffisants sur ${s}. Droits requis pour associer/détacher un modèle : ${d}`
+      `L'utilisateur ${u} n'a pas les droits suffisants sur ${s}. Droits requis pour modifier un modèle : ${d}`
     );
   }
 }

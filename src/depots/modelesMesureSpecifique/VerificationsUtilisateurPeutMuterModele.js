@@ -12,7 +12,7 @@ const {
 const { ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
 
-class VerificationsAssocieOuDetache {
+class VerificationsUtilisateurPeutMuterModele {
   constructor({ adaptateurPersistance, depotAutorisations }) {
     this.persistance = adaptateurPersistance;
     this.depotAutorisations = depotAutorisations;
@@ -48,7 +48,7 @@ class VerificationsAssocieOuDetache {
 
     if (!possedeLeModele)
       throw new ErreurAutorisationInexistante(
-        `L'utilisateur ${idUtilisateur} n'est pas propriétaire du modèle ${idModele} qu'il veut associer/détacher`
+        `L'utilisateur ${idUtilisateur} n'est pas propriétaire du modèle ${idModele} qu'il veut modifier.`
       );
   }
 
@@ -70,4 +70,4 @@ class VerificationsAssocieOuDetache {
   }
 }
 
-module.exports = { VerificationsAssocieOuDetache };
+module.exports = { VerificationsUtilisateurPeutMuterModele };
