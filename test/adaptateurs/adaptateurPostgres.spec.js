@@ -59,6 +59,22 @@ describe("L'adaptateur persistance Postgres", function () {
     await knex.destroy();
   });
 
+  async function insereModeleMesureSpecifique(donnees) {
+    const id = genereUUID();
+    await knex('modeles_mesure_specifique').insert({
+      ...donnees,
+      id,
+    });
+    return id;
+  }
+
+  async function insereAssociationModeleMesureSpecifique(idModele, idService) {
+    await knex('modeles_mesure_specifique_association_aux_services').insert({
+      id_modele: idModele,
+      id_service: idService,
+    });
+  }
+
   async function insereService() {
     const idService = genereUUID();
     await persistance.sauvegardeService(idService, {}, 'service-1', 'siret-1');
@@ -131,25 +147,6 @@ describe("L'adaptateur persistance Postgres", function () {
   });
 
   describe('concernant la lecture des modèles de mesure spécifique', () => {
-    async function insereModeleMesureSpecifique(donnees) {
-      const id = genereUUID();
-      await knex('modeles_mesure_specifique').insert({
-        ...donnees,
-        id,
-      });
-      return id;
-    }
-
-    async function insereAssociationModeleMesureSpecifique(
-      idModele,
-      idService
-    ) {
-      await knex('modeles_mesure_specifique_association_aux_services').insert({
-        id_modele: idModele,
-        id_service: idService,
-      });
-    }
-
     it("sait lire les modèles de mesure spécifique d'un utilisateur", async () => {
       const idModele1 = await insereModeleMesureSpecifique({
         id_utilisateur: ID_UTILISATEUR_1,
@@ -190,6 +187,39 @@ describe("L'adaptateur persistance Postgres", function () {
         );
 
       expect(modeles[0].ids_services_associes).to.eql([idService]);
+    });
+  });
+
+  describe("concernant la suppression d'un modèle de mesure spécifique", () => {
+    it('supprime le modèle', async () => {
+      const idModele = await insereModeleMesureSpecifique({
+        id_utilisateur: ID_UTILISATEUR_1,
+        donnees: {},
+      });
+
+      await persistance.supprimeModeleMesureSpecifique(idModele);
+
+      const modeles =
+        await persistance.lisModelesMesureSpecifiquePourUtilisateur(
+          ID_UTILISATEUR_1
+        );
+      expect(modeles).to.eql([]);
+    });
+
+    it('supprime ses associations à des services', async () => {
+      const idModele = await insereModeleMesureSpecifique({
+        id_utilisateur: ID_UTILISATEUR_1,
+        donnees: {},
+      });
+      const idService = genereUUID();
+      await insereAssociationModeleMesureSpecifique(idModele, idService);
+
+      await persistance.supprimeModeleMesureSpecifique(idModele);
+
+      const associations = await knex(
+        'modeles_mesure_specifique_association_aux_services'
+      ).select();
+      expect(associations).to.eql([]);
     });
   });
 });
