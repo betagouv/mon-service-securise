@@ -20,9 +20,14 @@ class VerificationsUtilisateurPeutMuterModele {
 
   async toutes(idModele, idsServices, idUtilisateur) {
     await this.queModeleExiste(idModele);
-    await this.#queTousLesServicesExistent(idsServices);
     await this.queUtilisateurPossedeLeModele(idUtilisateur, idModele);
-    await this.#peutModifierUnModeleSurLesServices(idUtilisateur, idsServices);
+    if (idsServices.length > 0) {
+      await this.#queTousLesServicesExistent(idsServices);
+      await this.#peutModifierUnModeleSurLesServices(
+        idUtilisateur,
+        idsServices
+      );
+    }
   }
 
   async queModeleExiste(idModele) {
