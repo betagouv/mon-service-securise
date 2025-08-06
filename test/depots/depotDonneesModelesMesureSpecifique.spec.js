@@ -566,4 +566,44 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       expect(modeles[0].idsServicesAssocies).to.eql(['S1']);
     });
   });
+
+  describe("concernant la suppression d'un modèle et de toutes les mesures associées", () => {
+    it('supprime le modèle', async () => {
+      persistance = unePersistanceMemoire()
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-1', idUtilisateur: 'U1' })
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .construis();
+
+      const depot = leDepot();
+      await depot.supprimeModeleMesureSpecifiqueEtMesuresAssociees(
+        'U1',
+        'MOD-1'
+      );
+
+      const modelesVides =
+        await depot.lisModelesMesureSpecifiquePourUtilisateur('U1');
+      expect(modelesVides).to.eql([]);
+    });
+
+    it('supprime les associations des services à ce modèle', async () => {
+      persistance = unePersistanceMemoire()
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-1', idUtilisateur: 'U1' })
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .associeLeServiceAuxModelesDeMesureSpecifique('S1', ['MOD-1'])
+        .construis();
+
+      const depot = leDepot();
+      await depot.supprimeModeleMesureSpecifiqueEtMesuresAssociees(
+        'U1',
+        'MOD-1'
+      );
+
+      const estAssocie =
+        await persistance.tousServicesSontAssociesAuModeleMesureSpecifique(
+          ['S1'],
+          'MOD-1'
+        );
+      expect(estAssocie).to.eql(false);
+    });
+  });
 });

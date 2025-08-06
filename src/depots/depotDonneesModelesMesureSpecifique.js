@@ -37,6 +37,13 @@ const creeDepot = (config = {}) => {
     return idModele;
   };
 
+  const supprimeModeleMesureSpecifiqueEtMesuresAssociees = async (
+    idUtilisateur,
+    idModele
+  ) => {
+    await persistance.supprimeModeleMesureSpecifique(idModele);
+  };
+
   const metsAJourModeleMesureSpecifique = async (
     idUtilisateur,
     idModele,
@@ -142,6 +149,7 @@ const creeDepot = (config = {}) => {
     detacheModeleMesureSpecifiqueDesServices,
     lisModelesMesureSpecifiquePourUtilisateur,
     metsAJourModeleMesureSpecifique,
+    supprimeModeleMesureSpecifiqueEtMesuresAssociees,
   };
 };
 

@@ -375,6 +375,16 @@ const nouvelAdaptateur = (
       donnees: donneesModele,
     });
 
+  const supprimeModeleMesureSpecifique = async (id) => {
+    donnees.modelesMesureSpecifique = donnees.modelesMesureSpecifique.filter(
+      (m) => m.id !== id
+    );
+    donnees.associationModelesMesureSpecifiqueServices =
+      donnees.associationModelesMesureSpecifiqueServices.filter(
+        (a) => a.idModele !== id
+      );
+  };
+
   const metsAJourModeleMesureSpecifique = async (
     id,
     idUtilisateur,
@@ -482,6 +492,7 @@ const nouvelAdaptateur = (
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
     supprimeLeLienEntreLeModeleEtLesServices,
+    supprimeModeleMesureSpecifique,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,

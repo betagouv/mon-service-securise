@@ -748,6 +748,13 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     return resultat.rows;
   };
 
+  const supprimeModeleMesureSpecifique = async (idModele) => {
+    await knex('modeles_mesure_specifique').where({ id: idModele }).del();
+    await knex('modeles_mesure_specifique_association_aux_services')
+      .where({ id_modele: idModele })
+      .del();
+  };
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -800,6 +807,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     supprimeAutorisations,
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
+    supprimeModeleMesureSpecifique,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
