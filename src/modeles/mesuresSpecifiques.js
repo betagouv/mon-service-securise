@@ -96,6 +96,10 @@ class MesuresSpecifiques extends ElementsConstructibles {
     });
   }
 
+  supprimeMesureAssocieeAuModele(idModele) {
+    this.items = this.items.filter((m) => m.idModele !== idModele);
+  }
+
   associeAuModele(idModele, idNouvelleMesure) {
     const modele = this.modelesDisponiblesDeMesureSpecifique[idModele];
 

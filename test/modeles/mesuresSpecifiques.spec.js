@@ -409,4 +409,24 @@ describe('La liste des mesures spécifiques', () => {
       ]);
     });
   });
+
+  describe("sur demande de suppression d'une mesure associée à un modèle", () => {
+    it('supprime la mesure', () => {
+      const modelesDisponiblesDeMesureSpecifique = {
+        'MOD-1': { categorie: 'categorie1' },
+      };
+
+      const mesures = new MesuresSpecifiques(
+        {
+          mesuresSpecifiques: [{ id: 'M1', idModele: 'MOD-1', statut: 'fait' }],
+        },
+        referentiel,
+        modelesDisponiblesDeMesureSpecifique
+      );
+
+      mesures.supprimeMesureAssocieeAuModele('MOD-1');
+
+      expect(mesures.donneesSerialisees()).to.eql([]);
+    });
+  });
 });

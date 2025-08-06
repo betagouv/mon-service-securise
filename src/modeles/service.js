@@ -225,6 +225,10 @@ class Service {
     this.mesures.mesuresSpecifiques.detacheMesureDuModele(idModele);
   }
 
+  supprimeMesureSpecifiqueAssocieeAuModele(idModele) {
+    this.mesures.mesuresSpecifiques.supprimeMesureAssocieeAuModele(idModele);
+  }
+
   metsAJourMesureGenerale(mesure) {
     const idUtilisateurs = this.contributeurs.map((u) => u.idUtilisateur);
     mesure.responsables = mesure.responsables.filter((r) =>
