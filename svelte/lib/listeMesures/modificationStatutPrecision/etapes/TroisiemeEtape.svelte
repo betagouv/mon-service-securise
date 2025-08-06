@@ -3,6 +3,7 @@
   import type { ReferentielStatut } from '../../../ui/types.d';
   import type { StatutMesure } from '../../../modeles/modeleMesure';
   import TableauServicesAssocies from '../../servicesAssocies/TableauServicesAssocies.svelte';
+  import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
 
   export let statuts: ReferentielStatut;
   export let statutSelectionne: StatutMesure | '';
@@ -34,7 +35,7 @@
   {/if}
 </div>
 
-<hr />
+<SeparateurHorizontal />
 
 <div>
   <h3 class="titre-etape">
@@ -77,12 +78,6 @@
     &.titre-etape {
       margin: 0 0 24px;
     }
-  }
-
-  hr {
-    width: 100%;
-    border-top: none;
-    border-bottom: 1px solid #dddddd;
   }
 
   .contenu-precision {

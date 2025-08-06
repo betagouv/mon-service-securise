@@ -15,6 +15,7 @@
   import type { StatutMesure } from '../../../modeles/modeleMesure';
   import { createEventDispatcher } from 'svelte';
   import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
+  import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
 
   export let etapeCourante: number;
   export let statuts: ReferentielStatut;
@@ -61,7 +62,7 @@
 </script>
 
 <EtapierTiroir {etapeCourante} />
-<hr />
+<SeparateurHorizontal />
 {#if etapeCourante === 1}
   <PremiereEtape {statuts} bind:statutSelectionne bind:precision />
 {:else if etapeCourante === 2}
@@ -81,11 +82,3 @@
     )}
   />
 {/if}
-
-<style lang="scss">
-  hr {
-    width: 100%;
-    border-top: none;
-    border-bottom: 1px solid #dddddd;
-  }
-</style>
