@@ -40,8 +40,8 @@
   export let typesService: ReferentielTypesService;
   export let afficheModelesMesureSpecifique: boolean;
 
-  onMount(() => {
-    servicesAvecMesuresAssociees.rafraichis();
+  onMount(async () => {
+    await servicesAvecMesuresAssociees.rafraichis();
   });
 
   let modaleDetailsMesure: ModaleDetailsMesure;

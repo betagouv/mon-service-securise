@@ -62,7 +62,7 @@
         idsServices,
       });
       tiroirStore.ferme();
-      servicesAvecMesuresAssociees.rafraichis();
+      await servicesAvecMesuresAssociees.rafraichis();
       const pluriel = idsServices.length > 1 ? 's' : '';
       toasterStore.succes(
         `Mesure${pluriel} modifiée${pluriel} avec succès !`,
@@ -123,7 +123,7 @@
         donneesModeleMesureEdite.id,
         idsServicesSelectionnes
       );
-      servicesAvecMesuresAssociees.rafraichis();
+      await servicesAvecMesuresAssociees.rafraichis();
       await modelesMesureSpecifique.rafraichis();
       modeleMesure = $modelesMesureSpecifique.find(
         (m) => m.id === modeleMesure.id
@@ -281,10 +281,10 @@
         icone="delete-line"
         position-icone="gauche"
         on:click={() =>
-          tiroirStore.afficheContenu(
-            TiroirSuppressionModeleMesureSpecifique,
-            {}
-          )}
+          tiroirStore.afficheContenu(TiroirSuppressionModeleMesureSpecifique, {
+            statuts,
+            modeleMesure,
+          })}
       />
       <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
       <lab-anssi-bouton
