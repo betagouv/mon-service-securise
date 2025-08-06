@@ -16,6 +16,9 @@ const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
 const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
+const {
+  uneAutorisation,
+} = require('../constructeurs/constructeurAutorisation');
 
 describe('Le dépôt de données des modèles de mesure spécifique', () => {
   let adaptateurChiffrement;
@@ -287,7 +290,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
           ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
         );
         expect(e.message).to.be(
-          'L\'utilisateur U2 n\'a pas les droits suffisants sur S1. Droits requis pour associer/détacher un modèle : {"SECURISER":2}'
+          'L\'utilisateur U2 n\'a pas les droits suffisants sur S1. Droits requis pour modifier un modèle : {"SECURISER":2}'
         );
       }
     });
@@ -313,7 +316,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       } catch (e) {
         expect(e).to.be.an(ErreurAutorisationInexistante);
         expect(e.message).to.be(
-          "L'utilisateur U-NON-PROPRIETAIRE n'est pas propriétaire du modèle MOD-1 qu'il veut associer/détacher"
+          "L'utilisateur U-NON-PROPRIETAIRE n'est pas propriétaire du modèle MOD-1 qu'il veut modifier."
         );
       }
     });
@@ -475,7 +478,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
           ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
         );
         expect(e.message).to.be(
-          'L\'utilisateur U11 n\'a pas les droits suffisants sur S10. Droits requis pour associer/détacher un modèle : {"SECURISER":2}'
+          'L\'utilisateur U11 n\'a pas les droits suffisants sur S10. Droits requis pour modifier un modèle : {"SECURISER":2}'
         );
       }
     });
@@ -493,7 +496,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       } catch (e) {
         expect(e).to.be.an(ErreurAutorisationInexistante);
         expect(e.message).to.be(
-          "L'utilisateur U12 n'est pas propriétaire du modèle MOD-10 qu'il veut associer/détacher"
+          "L'utilisateur U12 n'est pas propriétaire du modèle MOD-10 qu'il veut modifier."
         );
       }
     });
@@ -570,19 +573,28 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
   describe("concernant la suppression d'un modèle et de toutes les mesures associées", () => {
     beforeEach(() => {
       persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U12').donnees)
         .avecUnModeleDeMesureSpecifique({
           id: 'MOD-1',
           idUtilisateur: 'U1',
           donnees: { description: 'description' },
         })
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-12',
+          idUtilisateur: 'U12',
+          donnees: { description: 'description' },
+        })
         .ajouteUnService({
           id: 'S1',
           descriptionService: { nomService: 'Service 1' },
-          mesuresSpecifiques: [{ idModele: 'MOD-1' }],
+          mesuresSpecifiques: [{ idModele: 'MOD-1' }, { idModele: 'MOD-12' }],
         })
-        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
         .nommeCommeProprietaire('U1', ['S1'])
-        .associeLeServiceAuxModelesDeMesureSpecifique('S1', ['MOD-1'])
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur('U12', 'S1').avecDroits({}).donnees
+        )
+        .associeLeServiceAuxModelesDeMesureSpecifique('S1', ['MOD-1', 'MOD-12'])
         .construis();
       depotServices = DepotDonneesServices.creeDepot({
         adaptateurPersistance: persistance,
@@ -628,7 +640,59 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       );
 
       const service = await depotServices.service('S1');
-      expect(service.mesuresSpecifiques().toutes().length).to.eql(0);
+      expect(service.mesuresSpecifiques().toutes().length).to.eql(1);
+    });
+
+    it("jette une erreur si le modèle n'existe pas", async () => {
+      persistance.verifieModeleMesureSpecifiqueExiste = async () => false;
+
+      const depot = leDepot();
+
+      try {
+        await depot.supprimeModeleMesureSpecifiqueEtMesuresAssociees(
+          'U1',
+          'MOD-10'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueIntrouvable);
+      }
+    });
+
+    it("jette une erreur si l'utilisateur qui veut supprimer le modèle n'a pas les droits en écriture sur tous les services", async () => {
+      const depot = leDepot();
+
+      try {
+        await depot.supprimeModeleMesureSpecifiqueEtMesuresAssociees(
+          'U12',
+          'MOD-12'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(
+          ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
+        );
+        expect(e.message).to.be(
+          'L\'utilisateur U12 n\'a pas les droits suffisants sur S1. Droits requis pour modifier un modèle : {"SECURISER":2}'
+        );
+      }
+    });
+
+    it("jette une erreur si le modèle n'appartient pas à l'utilisateur qui veut supprimer", async () => {
+      const depot = leDepot();
+
+      try {
+        await depot.supprimeModeleMesureSpecifiqueEtMesuresAssociees(
+          'U12',
+          'MOD-1'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurAutorisationInexistante);
+        expect(e.message).to.be(
+          "L'utilisateur U12 n'est pas propriétaire du modèle MOD-1 qu'il veut modifier."
+        );
+      }
     });
   });
 });

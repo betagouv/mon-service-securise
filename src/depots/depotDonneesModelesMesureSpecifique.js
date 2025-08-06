@@ -4,8 +4,8 @@ const {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
 } = require('../erreurs');
 const {
-  VerificationsAssocieOuDetache,
-} = require('./modelesMesureSpecifique/VerificationsAssocieOuDetache');
+  VerificationsUtilisateurPeutMuterModele,
+} = require('./modelesMesureSpecifique/VerificationsUtilisateurPeutMuterModele');
 
 const creeDepot = (config = {}) => {
   const {
@@ -16,10 +16,11 @@ const creeDepot = (config = {}) => {
     depotServices,
   } = config;
 
-  const verificationsAssocieOuDetache = new VerificationsAssocieOuDetache({
-    adaptateurPersistance: persistance,
-    depotAutorisations,
-  });
+  const verificationsAssocieOuDetache =
+    new VerificationsUtilisateurPeutMuterModele({
+      adaptateurPersistance: persistance,
+      depotAutorisations,
+    });
 
   const ajouteModeleMesureSpecifique = async (idUtilisateur, donnees) => {
     const utilisateur = await persistance.utilisateur(idUtilisateur);
@@ -46,7 +47,14 @@ const creeDepot = (config = {}) => {
         idUtilisateur
       );
     const modeleASupprimer = modeles.find((m) => m.id === idModele);
-    const idsServicesAssocies = modeleASupprimer.ids_services_associes;
+    const idsServicesAssocies = modeleASupprimer?.ids_services_associes || [];
+
+    await verificationsAssocieOuDetache.toutes(
+      idModele,
+      idsServicesAssocies,
+      idUtilisateur
+    );
+
     const supprimeMesureSpecifiqueAssociee = idsServicesAssocies.map(
       async (unId) => {
         const s = await depotServices.service(unId);
