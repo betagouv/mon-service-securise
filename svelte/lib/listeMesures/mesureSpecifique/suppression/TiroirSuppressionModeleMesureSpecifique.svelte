@@ -70,35 +70,50 @@
 
 <ContenuTiroir>
   <div class="marge-24">
-    <h4>
-      Où souhaitez vous supprimer la mesure « {modeleMesure.description} » ?
-    </h4>
-    <div class="conteneur-boutons-radio">
-      <BoutonsRadio
-        bind:valeurSelectionnee
-        options={[
-          {
-            titre: 'Supprimer complètement la mesure',
-            sousTitre:
-              'La mesure sera définitivement supprimée de la liste centralisée ainsi que de tous les services où elle est utilisée.',
-            valeur: ModeDeSuppression.COMPLET,
-          },
-        ]}
-      />
-    </div>
-    {#if valeurSelectionnee === ModeDeSuppression.COMPLET}
+    {#if modeleMesure.idsServicesAssocies.length === 0}
+      <h4>
+        Êtes-vous sûr de vouloir supprimer la mesure «&nbsp;{modeleMesure.description}&nbsp;»
+        ?
+      </h4>
       <Toast
         avecOmbre={false}
         titre="Cette action est irréversible"
         avecAnimation={false}
-        niveau="alerte"
-        contenu="Cette action impactera tous les services associés à cette mesure."
+        niveau="info"
+        contenu="La mesure sera définitivement supprimée de la liste centralisée."
       />
-      <SeparateurHorizontal />
-      <TableauServicesAssocies
-        servicesAssocies={servicesAvecMesure}
-        referentielStatuts={statuts}
-      />
+    {:else}
+      <h4>
+        Où souhaitez vous supprimer la mesure «&nbsp;{modeleMesure.description}&nbsp;»
+        ?
+      </h4>
+      <div class="conteneur-boutons-radio">
+        <BoutonsRadio
+          bind:valeurSelectionnee
+          options={[
+            {
+              titre: 'Supprimer complètement la mesure',
+              sousTitre:
+                'La mesure sera définitivement supprimée de la liste centralisée ainsi que de tous les services où elle est utilisée.',
+              valeur: ModeDeSuppression.COMPLET,
+            },
+          ]}
+        />
+      </div>
+      {#if valeurSelectionnee === ModeDeSuppression.COMPLET}
+        <Toast
+          avecOmbre={false}
+          titre="Cette action est irréversible"
+          avecAnimation={false}
+          niveau="alerte"
+          contenu="Cette action impactera tous les services associés à cette mesure."
+        />
+        <SeparateurHorizontal />
+        <TableauServicesAssocies
+          servicesAssocies={servicesAvecMesure}
+          referentielStatuts={statuts}
+        />
+      {/if}
     {/if}
   </div>
 </ContenuTiroir>
@@ -128,6 +143,7 @@
     font-weight: 700;
     line-height: 1.75rem;
     margin: 0;
+    max-width: 550px;
   }
 
   .conteneur-boutons-radio {
