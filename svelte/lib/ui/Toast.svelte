@@ -2,7 +2,7 @@
   import { glisse } from './animations/transitions';
   import { createEventDispatcher } from 'svelte';
 
-  export let niveau: 'info' | 'succes' | 'erreur';
+  export let niveau: 'info' | 'succes' | 'erreur' | 'alerte';
   export let titre: string;
   export let contenu: string;
 
@@ -14,6 +14,7 @@
     info: 'icone_info',
     succes: 'icone_succes',
     erreur: 'icone_erreur',
+    alerte: 'icone_alerte',
   };
 
   const transitionConditionnelle = (
@@ -87,6 +88,10 @@
 
     &.erreur {
       --couleur: #ce0500;
+    }
+
+    &.alerte {
+      --couleur: #e48800;
     }
 
     .fermeture {
