@@ -11,6 +11,9 @@ const {
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
   ErreurJWTInvalide,
   ErreurJWTManquant,
+  ErreurModeleDeMesureSpecifiqueIntrouvable,
+  ErreurAutorisationInexistante,
+  ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
 } = require('../../../src/erreurs');
 
 const testeurMSS = require('../testeurMSS');
@@ -2315,6 +2318,88 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         expect().fail('Aurait dû lever une erreur');
       } catch (e) {
         expect(e.response.status).to.be(400);
+      }
+    });
+  });
+
+  describe('quand requête DELETE sur `/api/modeles/mesureSpecifique/:idModele`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
+        () => {};
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'delete',
+          url: 'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1',
+        },
+        done
+      );
+    });
+
+    it('délègue au dépôt de données la suppression du service', async () => {
+      let donneesRecues;
+      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
+        async (idUtilisateur, idModele) => {
+          donneesRecues = { idUtilisateur, idModele };
+        };
+
+      await axios.delete(
+        'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1'
+      );
+
+      expect(donneesRecues.idUtilisateur).to.be('U1');
+      expect(donneesRecues.idModele).to.be('MOD-1');
+    });
+
+    it("jette une 404 si le modele n'existe pas", async () => {
+      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
+        async () => {
+          throw new ErreurModeleDeMesureSpecifiqueIntrouvable('MOD-INEXISTANT');
+        };
+      try {
+        await axios.delete(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-INEXISTANT'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(404);
+      }
+    });
+
+    it("jette une 403 si l'utilisateur ne possède pas le modèle", async () => {
+      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
+        async () => {
+          throw new ErreurAutorisationInexistante();
+        };
+      try {
+        await axios.delete(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-INEXISTANT'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(403);
+      }
+    });
+
+    it("jette une 403 si l'utilisateur ne peut pas modifier tous les services associés", async () => {
+      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
+        async () => {
+          throw new ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique(
+            'U1',
+            ['S1'],
+            {}
+          );
+        };
+      try {
+        await axios.delete(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(403);
       }
     });
   });
