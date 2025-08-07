@@ -20,7 +20,7 @@
     if (etatTeleversement !== 'Valide') return;
 
     document.body.dispatchEvent(
-      new CustomEvent('svelte-recharge-rapport-televersement')
+      new CustomEvent('svelte-recharge-rapport-televersement-services')
     );
     const url = new URL(window.location.href);
     url.searchParams.append('rapportTeleversement', 'true');

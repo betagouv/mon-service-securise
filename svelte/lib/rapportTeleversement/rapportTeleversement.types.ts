@@ -1,9 +1,3 @@
-declare global {
-  interface HTMLElementEventMap {
-    'svelte-recharge-rapport-televersement': CustomEvent;
-  }
-}
-
 export type ErreurService =
   | 'NOM_INVALIDE'
   | 'NOM_EXISTANT'

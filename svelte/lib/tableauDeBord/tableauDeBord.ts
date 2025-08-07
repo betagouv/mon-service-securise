@@ -3,18 +3,32 @@ import type {
   TableauDeBordProps,
   NiveauSecuriteService,
 } from './tableauDeBord.d';
+import RapportTeleversementServices from './televersementServices/RapportTeleversementServices.svelte';
 
 document.body.addEventListener(
   'svelte-recharge-tableau-de-bord',
-  (e: CustomEvent<TableauDeBordProps>) => rechargeApp({ ...e.detail })
+  (e: CustomEvent<TableauDeBordProps>) => rechargeTableauDeBord({ ...e.detail })
 );
 
-let app: TableauDeBord;
-const rechargeApp = (props: TableauDeBordProps) => {
-  app?.$destroy();
-  app = new TableauDeBord({
+document.body.addEventListener(
+  'svelte-recharge-rapport-televersement-services',
+  (e: CustomEvent) => rechargeRapportTeleversement()
+);
+
+let tdb: TableauDeBord;
+const rechargeTableauDeBord = (props: TableauDeBordProps) => {
+  tdb?.$destroy();
+  tdb = new TableauDeBord({
     target: document.getElementById('tableau-de-bord')!,
     props,
+  });
+};
+
+let rapport: RapportTeleversementServices;
+const rechargeRapportTeleversement = () => {
+  rapport?.$destroy();
+  rapport = new RapportTeleversementServices({
+    target: document.getElementById('rapport-televersement')!,
   });
 };
 
@@ -52,4 +66,4 @@ export const donneesVisiteGuidee = {
   indicesCyber: [{ id: 'ID-SERVICE-VISITE-GUIDEE', indiceCyber: '4.3' }],
 };
 
-export default app!;
+export default tdb!;
