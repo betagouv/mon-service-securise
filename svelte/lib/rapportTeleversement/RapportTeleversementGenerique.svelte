@@ -46,7 +46,7 @@
           <Toast
             niveau="succes"
             titre={resume.elementsValide.label}
-            contenu="Aucune erreur détéctée"
+            contenu="Aucune erreur détectée"
             avecOmbre={false}
             avecAnimation={false}
           />
