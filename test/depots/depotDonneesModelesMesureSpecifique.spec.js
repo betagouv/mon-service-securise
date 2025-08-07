@@ -809,5 +809,89 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         }
       });
     });
+
+    describe('concernant la suppression de mesures associées à un modèle', () => {
+      it('supprime les associations des services passés en paramètre', async () => {
+        const depot = leDepot();
+        await depot.supprimeDesMesuresAssocieesAuModele('U1', 'MOD-1', ['S1']);
+
+        const estAssocie =
+          await persistance.tousServicesSontAssociesAuModeleMesureSpecifique(
+            ['S1'],
+            'MOD-1'
+          );
+        expect(estAssocie).to.eql(false);
+      });
+
+      it('supprime les mesures spécifiques associées au sein des services', async () => {
+        const depot = leDepot();
+        await depot.supprimeDesMesuresAssocieesAuModele('U1', 'MOD-1', ['S1']);
+
+        const service = await depotServices.service('S1');
+        expect(service.mesuresSpecifiques().toutes().length).to.eql(1);
+      });
+
+      it("jette une erreur si le modèle n'existe pas", async () => {
+        persistance.verifieModeleMesureSpecifiqueExiste = async () => false;
+
+        const depot = leDepot();
+
+        try {
+          await depot.supprimeDesMesuresAssocieesAuModele('U1', 'MOD-10', [
+            'S1',
+          ]);
+          expect().fail("L'appel aurait dû lever une erreur.");
+        } catch (e) {
+          expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueIntrouvable);
+        }
+      });
+
+      it("jette une erreur si l'utilisateur qui veut supprimer le modèle n'a pas les droits en écriture sur tous les services", async () => {
+        const depot = leDepot();
+
+        try {
+          await depot.supprimeDesMesuresAssocieesAuModele('U12', 'MOD-12', [
+            'S1',
+          ]);
+          expect().fail("L'appel aurait dû lever une erreur.");
+        } catch (e) {
+          expect(e).to.be.an(
+            ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
+          );
+          expect(e.message).to.be(
+            'L\'utilisateur U12 n\'a pas les droits suffisants sur S1. Droits requis pour modifier un modèle : {"SECURISER":2}'
+          );
+        }
+      });
+
+      it("jette une erreur si le modèle n'appartient pas à l'utilisateur qui veut supprimer", async () => {
+        const depot = leDepot();
+
+        try {
+          await depot.supprimeDesMesuresAssocieesAuModele('U12', 'MOD-1', [
+            'S1',
+          ]);
+          expect().fail("L'appel aurait dû lever une erreur.");
+        } catch (e) {
+          expect(e).to.be.an(ErreurAutorisationInexistante);
+          expect(e.message).to.be(
+            "L'utilisateur U12 n'est pas propriétaire du modèle MOD-1 qu'il veut modifier."
+          );
+        }
+      });
+
+      it("jette une erreur si au moins un des services n'existe pas", async () => {
+        const depot = leDepot();
+
+        try {
+          await depot.supprimeDesMesuresAssocieesAuModele('U1', 'MOD-1', [
+            'S-INTROUVABLE-1',
+          ]);
+          expect().fail("L'appel aurait dû lever une erreur.");
+        } catch (e) {
+          expect(e).to.be.an(ErreurServiceInexistant);
+        }
+      });
+    });
   });
 });
