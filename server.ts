@@ -21,6 +21,7 @@ const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPIEmail()
 const adaptateurPdf = require('./src/adaptateurs/adaptateurPdf');
 const lecteurDeFormData = require('./src/http/lecteurDeFormData');
 const adaptateurTeleversementServices = require('./src/adaptateurs/adaptateurTeleversementServices.xls');
+const adaptateurTeleversementModelesMesureSpecifique = require('./src/adaptateurs/adaptateurTeleversementModelesMesureSpecifique.xls');
 
 const adaptateurZip = require('./src/adaptateurs/adaptateurZip');
 const {
@@ -150,6 +151,7 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     adaptateurStatistiques,
     adaptateurJWT,
     adaptateurTeleversementServices,
+    adaptateurTeleversementModelesMesureSpecifique,
     adaptateurProfilAnssi,
     cmsCrisp,
     lecteurDeFormData,

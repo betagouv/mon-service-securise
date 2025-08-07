@@ -58,6 +58,7 @@ const routesConnecteApi = ({
   adaptateurJournal,
   lecteurDeFormData,
   adaptateurTeleversementServices,
+  adaptateurTeleversementModelesMesureSpecifique,
   adaptateurJWT,
   procedures,
   serviceAnnuaire,
@@ -349,6 +350,7 @@ const routesConnecteApi = ({
     routesConnecteApiTeleversement({
       lecteurDeFormData,
       adaptateurTeleversementServices,
+      adaptateurTeleversementModelesMesureSpecifique,
       busEvenements,
       depotDonnees,
       middleware,
