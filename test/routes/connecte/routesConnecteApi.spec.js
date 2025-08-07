@@ -2327,6 +2327,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
       testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
         () => {};
+      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees =
+        () => {};
     });
 
     it("vérifie que l'utilisateur est authentifié", (done) => {
@@ -2339,29 +2341,109 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       );
     });
 
-    it('délègue au dépôt de données la suppression du service', async () => {
-      let donneesRecues;
-      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
-        async (idUtilisateur, idModele) => {
-          donneesRecues = { idUtilisateur, idModele };
-        };
-
-      await axios.delete(
-        'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1'
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['detacheMesures'],
+        {
+          method: 'delete',
+          url: 'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1',
+        },
+        done
       );
+    });
 
-      expect(donneesRecues.idUtilisateur).to.be('U1');
-      expect(donneesRecues.idModele).to.be('MOD-1');
+    describe('sans paramètre pour conserver les mesures associées', () => {
+      it('délègue au dépôt de données la suppression du service', async () => {
+        let donneesRecues;
+        testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
+          async (idUtilisateur, idModele) => {
+            donneesRecues = { idUtilisateur, idModele };
+          };
+
+        await axios.delete(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1'
+        );
+
+        expect(donneesRecues.idUtilisateur).to.be('U1');
+        expect(donneesRecues.idModele).to.be('MOD-1');
+      });
+
+      it("jette une 404 si le modele n'existe pas", async () => {
+        testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
+          async () => {
+            throw new ErreurModeleDeMesureSpecifiqueIntrouvable(
+              'MOD-INEXISTANT'
+            );
+          };
+        try {
+          await axios.delete(
+            'http://localhost:1234/api/modeles/mesureSpecifique/MOD-INEXISTANT'
+          );
+          expect().fail("L'appel aurait dû lever une erreur");
+        } catch (e) {
+          expect(e.response.status).to.be(404);
+        }
+      });
+
+      it("jette une 403 si l'utilisateur ne possède pas le modèle", async () => {
+        testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
+          async () => {
+            throw new ErreurAutorisationInexistante();
+          };
+        try {
+          await axios.delete(
+            'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1'
+          );
+          expect().fail("L'appel aurait dû lever une erreur");
+        } catch (e) {
+          expect(e.response.status).to.be(403);
+        }
+      });
+
+      it("jette une 403 si l'utilisateur ne peut pas modifier tous les services associés", async () => {
+        testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
+          async () => {
+            throw new ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique(
+              'U1',
+              ['S1'],
+              {}
+            );
+          };
+        try {
+          await axios.delete(
+            'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1'
+          );
+          expect().fail("L'appel aurait dû lever une erreur");
+        } catch (e) {
+          expect(e.response.status).to.be(403);
+        }
+      });
+    });
+    describe('avec paramètre pour détacher les mesures associées', () => {
+      it('délègue au dépôt de données la suppression du service et le détachement des mesures associées', async () => {
+        let donneesRecues;
+        testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees =
+          async (idUtilisateur, idModele) => {
+            donneesRecues = { idUtilisateur, idModele };
+          };
+
+        await axios.delete(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1?detacheMesures=true'
+        );
+
+        expect(donneesRecues.idUtilisateur).to.be('U1');
+        expect(donneesRecues.idModele).to.be('MOD-1');
+      });
     });
 
     it("jette une 404 si le modele n'existe pas", async () => {
-      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
+      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees =
         async () => {
           throw new ErreurModeleDeMesureSpecifiqueIntrouvable('MOD-INEXISTANT');
         };
       try {
         await axios.delete(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-INEXISTANT'
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-INEXISTANT?detacheMesures=true'
         );
         expect().fail("L'appel aurait dû lever une erreur");
       } catch (e) {
@@ -2370,13 +2452,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it("jette une 403 si l'utilisateur ne possède pas le modèle", async () => {
-      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
+      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees =
         async () => {
           throw new ErreurAutorisationInexistante();
         };
       try {
         await axios.delete(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-INEXISTANT'
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1?detacheMesures=true'
         );
         expect().fail("L'appel aurait dû lever une erreur");
       } catch (e) {
@@ -2385,7 +2467,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it("jette une 403 si l'utilisateur ne peut pas modifier tous les services associés", async () => {
-      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
+      testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees =
         async () => {
           throw new ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique(
             'U1',
@@ -2395,7 +2477,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         };
       try {
         await axios.delete(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1'
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1?detacheMesures=true'
         );
         expect().fail("L'appel aurait dû lever une erreur");
       } catch (e) {

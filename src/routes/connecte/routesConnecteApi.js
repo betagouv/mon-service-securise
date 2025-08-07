@@ -747,12 +747,20 @@ const routesConnecteApi = ({
   routes.delete(
     '/modeles/mesureSpecifique/:id',
     middleware.verificationAcceptationCGU,
+    middleware.aseptise('detacheMesures'),
     async (requete, reponse) => {
       try {
-        await depotDonnees.supprimeModeleMesureSpecifiqueEtMesuresAssociees(
-          requete.idUtilisateurCourant,
-          requete.params.id
-        );
+        if (requete.query.detacheMesures === 'true') {
+          await depotDonnees.supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees(
+            requete.idUtilisateurCourant,
+            requete.params.id
+          );
+        } else {
+          await depotDonnees.supprimeModeleMesureSpecifiqueEtMesuresAssociees(
+            requete.idUtilisateurCourant,
+            requete.params.id
+          );
+        }
         reponse.sendStatus(200);
       } catch (e) {
         if (e instanceof ErreurModeleDeMesureSpecifiqueIntrouvable) {
