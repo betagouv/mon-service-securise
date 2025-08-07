@@ -1,9 +1,11 @@
 <script lang="ts">
   import Toast from '../ui/Toast.svelte';
   import { onMount } from 'svelte';
+  import type { ResumeRapportTeleversement } from './rapportTeleversementGenerique.types';
 
   export let titreDuRapport: string;
-  export let resume: { elementsValide: { label: string } } | undefined;
+
+  export let resume: undefined | ResumeRapportTeleversement;
 
   let elementModale: HTMLDialogElement;
 
@@ -19,6 +21,15 @@
     <div class="entete-modale">
       <h2>{titreDuRapport}</h2>
       <div class="conteneur-toasts">
+        {#if resume?.elementsErreur}
+          <Toast
+            niveau="erreur"
+            titre={resume.elementsErreur.label}
+            contenu="Corriger le fichier XLSX et réimportez-le"
+            avecOmbre={false}
+            avecAnimation={false}
+          />
+        {/if}
         {#if resume?.elementsValide}
           <Toast
             niveau="succes"
