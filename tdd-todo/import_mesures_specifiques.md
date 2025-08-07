@@ -18,7 +18,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 
 - [ ] Un bouton derrière le feature flag, permettant d'associer une liste de modèle à un service
   - [ ] Un tiroir d'association dédié
-  - [ ] Une route d'association à des modèles multiple dédiés
+  - [x] Une route d'association à des modèles multiple dédiés
 - [ ] Le tiroir de configuration d'une mesure spécifique est modifié, via un feature flag
   - [ ] Un affichage particulier pour un propriétaire du modèle de mesure
     - [ ] Un affichage similaire pour un utilisateur avec les droits d'écriture, seul l'infobulle change

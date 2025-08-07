@@ -11,6 +11,9 @@ const {
   ErreurNomServiceDejaExistant,
   ErreurMesureInconnue,
   ErreurRisqueInconnu,
+  ErreurModeleDeMesureSpecifiqueIntrouvable,
+  ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
+  ErreurModeleDeMesureSpecifiqueDejaAssociee,
 } = require('../../../src/erreurs');
 const Service = require('../../../src/modeles/service');
 const {
@@ -926,6 +929,123 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(donneesRecues.echeance.getTime()).to.equal(
         new Date('01/01/2024').getTime()
       );
+    });
+  });
+
+  describe('quand requête PUT sur `/api/service/:id/modeles/mesureSpecifique`', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().associeModelesMesureSpecifiqueAuService =
+        async () => {};
+      const serviceARenvoyer = unService(testeur.referentiel())
+        .avecId('S1')
+        .construis();
+      testeur.middleware().reinitialise({
+        idUtilisateur: 'U1',
+        serviceARenvoyer,
+      });
+    });
+
+    it("vérifie que l'utilisateur a accepté les CGU", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/S1/modeles/mesureSpecifique',
+        },
+        done
+      );
+    });
+
+    it('recherche le service correspondant', (done) => {
+      testeur.middleware().verifieRechercheService(
+        [{ niveau: ECRITURE, rubrique: SECURISER }],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/S1/modeles/mesureSpecifique',
+        },
+        done
+      );
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['idsModeles.*'],
+        {
+          method: 'put',
+          url: 'http://localhost:1234/api/service/S1/modeles/mesureSpecifique',
+        },
+        done
+      );
+    });
+
+    it("délègue au dépôt de données l'association des modèles au service", async () => {
+      let donnesRecues;
+      testeur.depotDonnees().associeModelesMesureSpecifiqueAuService = async (
+        idsModeles,
+        idService,
+        idUtilisateur
+      ) => {
+        donnesRecues = { idsModeles, idService, idUtilisateur };
+      };
+
+      await axios.put(
+        'http://localhost:1234/api/service/S1/modeles/mesureSpecifique',
+        {
+          idsModeles: ['MOD-1', 'MOD-2'],
+        }
+      );
+
+      expect(donnesRecues.idsModeles).to.eql(['MOD-1', 'MOD-2']);
+      expect(donnesRecues.idService).to.be('S1');
+      expect(donnesRecues.idUtilisateur).to.be('U1');
+    });
+
+    it("jette une 403 si l'utilisateur ne possède pas un des modèles", async () => {
+      testeur.depotDonnees().associeModelesMesureSpecifiqueAuService =
+        async () => {
+          throw new ErreurModeleDeMesureSpecifiqueIntrouvable();
+        };
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/S1/modeles/mesureSpecifique'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(403);
+      }
+    });
+
+    it("jette une 403 si l'utilisateur ne peut pas modifier tous les services passés en paramètres", async () => {
+      testeur.depotDonnees().associeModelesMesureSpecifiqueAuService =
+        async () => {
+          throw new ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique(
+            'U1',
+            ['S1'],
+            {}
+          );
+        };
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/S1/modeles/mesureSpecifique'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(403);
+      }
+    });
+
+    it("jette une 400 si le service est déjà associé à l'un des modèles", async () => {
+      testeur.depotDonnees().associeModelesMesureSpecifiqueAuService =
+        async () => {
+          throw new ErreurModeleDeMesureSpecifiqueDejaAssociee();
+        };
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/S1/modeles/mesureSpecifique'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
     });
   });
 
