@@ -6,28 +6,22 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 
 ## Du point de vue des Modèles de mesure
 
-### Suppression
-
-- [x] On peut supprimer un modèle du référentiel, mais **sans** supprimer les mesures : elles seront détachées sur chaque service où elles
-      sont liées. Supprime et détache
-- [x] On peut supprimer un modèle du référentiel **et** supprimer les mesures associées : les mesures disparaisssent totalement
-      de tous les services où elles apparaissaient. Supprime et supprime
-- [x] On peut supprime une mesure de certains services tout en **conservant** le modèle : les mesures spécifiques disparaissent du service
-      et le lien entre modèle et service disparaît aussi. Conserve et supprime
-
 ### CSV
 
-- [ ] On peut créer des modèles de mesure (description, description longue, catégorie) lié à son identifiant utilisateur via un import de CSV
-  - Cet import aura une limite en nombre total de modèles détenu par l'utilisateur
+- Voir [la todo dédiée](televersement_mesures_specifiques.md)
 
 ## Du point de vue du Front
 
 - [ ] Les badges des onglets sont mis à jour en fonction de la recherche
-- [x] On veut pouvoir supprimer un modèle de mesure
-  - [x] La mesure est supprimée de la liste & des services (on retire l'association, les mesures spécifiques concernées et le modèle)
-  - [x] La mesure est supprimée de la liste, mais détachée des services (on retire l'association et le modèle, mais on conserve les mesures spécifiques une fois détachées)
-  - [x] La mesure est supprimée de certains services (on retire l'association et la mesure spécifique concernée, mais on conserve le modèle)
 
 ## Du point de vue de la page "SÉCURISER"
 
-- [ ] Une mesure spécifique associée, supprimée depuis l'interface, doit supprimer l'association entre le service et le modèle
+- [ ] Un bouton derrière le feature flag, permettant d'associer une liste de modèle à un service
+  - [ ] Un tiroir d'association dédié
+  - [ ] Une route d'association à des modèles multiple dédiés
+- [ ] Le tiroir de configuration d'une mesure spécifique est modifié, via un feature flag
+  - [ ] Un affichage particulier pour un propriétaire du modèle de mesure
+    - [ ] Un affichage similaire pour un utilisateur avec les droits d'écriture, seul l'infobulle change
+    - [ ] Une mesure spécifique associée, supprimée depuis l'interface, doit supprimer l'association entre le service et le modèle
+  - [ ] Un affichage en lecture seule si l'utilisateur n'a pas les droits de modification
+  - [ ] Une mesure spécifique qui ne provient pas d'un modèle a maintenant une entrée "Description" (descriptionLognue)
