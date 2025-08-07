@@ -7,7 +7,7 @@
     recupereRapportDetaille,
     supprimeTeleversement,
   } from './rapportTeleversementServices.api';
-  import { singulierPluriel } from '../../ui/string';
+  import { singulierPluriel } from '../../outils/string';
   import type { ResumeRapportTeleversement } from '../../rapportTeleversement/rapportTeleversementGenerique.types';
   import LigneService from './LigneService.svelte';
   import type { RapportDetaille } from './rapportTeleversementServices.types';
