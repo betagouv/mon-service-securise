@@ -1,6 +1,8 @@
 const {
   ErreurUtilisateurInexistant,
   ErreurServiceNonAssocieAuModele,
+  ErreurServiceInexistant,
+  ErreurModeleDeMesureSpecifiqueIntrouvable,
 } = require('../erreurs');
 const {
   VerificationsUtilisateurPeutMuterModele,
@@ -83,6 +85,43 @@ const creeDepot = (config = {}) => {
     await persistance.associeModeleMesureSpecifiqueAuxServices(
       idModele,
       idsServices
+    );
+  };
+
+  const associeModelesMesureSpecifiqueAuService = async (
+    idsModeles,
+    idService,
+    idUtilisateurAssociant
+  ) => {
+    const service = await depotServices.service(idService);
+    if (!service) throw new ErreurServiceInexistant();
+
+    await verificationsModificationModele.aLesDroitsSuffisantsPourModifierUneMesureSurDesServices(
+      idUtilisateurAssociant,
+      [idService]
+    );
+
+    const idsModelesDeUtilisateur = (
+      await persistance.lisModelesMesureSpecifiquePourUtilisateur(
+        idUtilisateurAssociant
+      )
+    ).map((modele) => modele.id);
+    if (
+      !idsModeles.every((idModele) =>
+        idsModelesDeUtilisateur.includes(idModele)
+      )
+    )
+      throw new ErreurModeleDeMesureSpecifiqueIntrouvable();
+
+    idsModeles.forEach((idModele) => {
+      const idNouvelleMesure = adaptateurUUID.genereUUID();
+      service.associeMesureSpecifiqueAuModele(idModele, idNouvelleMesure);
+    });
+    await depotServices.metsAJourService(service);
+
+    await persistance.associeModelesMesureSpecifiqueAuService(
+      idsModeles,
+      idService
     );
   };
 
@@ -207,6 +246,7 @@ const creeDepot = (config = {}) => {
   return {
     ajouteModeleMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
+    associeModelesMesureSpecifiqueAuService,
     detacheModeleMesureSpecifiqueDesServices,
     lisModelesMesureSpecifiquePourUtilisateur,
     metsAJourModeleMesureSpecifique,

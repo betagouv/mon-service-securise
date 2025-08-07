@@ -247,6 +247,7 @@ const creeDepot = (config = {}) => {
   const {
     ajouteModeleMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
+    associeModelesMesureSpecifiqueAuService,
     detacheModeleMesureSpecifiqueDesServices,
     lisModelesMesureSpecifiquePourUtilisateur,
     metsAJourModeleMesureSpecifique,
@@ -272,6 +273,7 @@ const creeDepot = (config = {}) => {
     ajouteSiretAuSuperviseur,
     ajouteSuggestionAction,
     associeModeleMesureSpecifiqueAuxServices,
+    associeModelesMesureSpecifiqueAuService,
     autorisation,
     autorisationExiste,
     autorisationPour,

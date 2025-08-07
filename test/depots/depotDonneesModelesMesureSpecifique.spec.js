@@ -369,6 +369,176 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     });
   });
 
+  describe("concernant l'association de plusieurs modèles et d'un service", () => {
+    beforeEach(() => {
+      persistance = unePersistanceMemoire()
+        .ajouteUnService({
+          id: 'S1',
+          descriptionService: { nomService: 'Service 1' },
+        })
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .nommeCommeProprietaire('U1', ['S1'])
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-1',
+          idUtilisateur: 'U1',
+          donnees: { description: 'Il faut faire A,B,C' },
+        })
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-2',
+          idUtilisateur: 'U1',
+          donnees: { description: 'Il faut faire D,E,F' },
+        })
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur('U2', 'S1').avecDroits({}).donnees
+        )
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-DE-U2',
+          idUtilisateur: 'U2',
+          donnees: { description: 'Il faut faire G,H,I' },
+        })
+        .construis();
+
+      depotServices = DepotDonneesServices.creeDepot({
+        adaptateurPersistance: persistance,
+        adaptateurChiffrement,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance: persistance,
+          adaptateurChiffrement,
+        }),
+      });
+    });
+
+    it('associe le service aux modèles via la persistance', async () => {
+      let donneesPersistees = {};
+      persistance.associeModelesMesureSpecifiqueAuService = async (
+        idsModeles,
+        idService
+      ) => {
+        donneesPersistees = { idsModeles, idService };
+      };
+      const depot = leDepot();
+
+      await depot.associeModelesMesureSpecifiqueAuService(
+        ['MOD-1', 'MOD-2'],
+        'S1',
+        'U1'
+      );
+
+      expect(donneesPersistees.idsModeles).to.eql(['MOD-1', 'MOD-2']);
+      expect(donneesPersistees.idService).to.be('S1');
+    });
+
+    it("met à jour le service pour qu'il connaisse chaque mesure associée", async () => {
+      let compteur = 0;
+      adaptateurUUID = {
+        genereUUID: () => {
+          compteur += 1;
+          return `UUID-${compteur}`;
+        },
+      };
+      const depot = leDepot();
+
+      await depot.associeModelesMesureSpecifiqueAuService(
+        ['MOD-1', 'MOD-2'],
+        'S1',
+        'U1'
+      );
+
+      const s1 = await depotServices.service('S1');
+      const mesuresSpecifiquesDeS1 = s1.mesuresSpecifiques().toutes();
+      expect(mesuresSpecifiquesDeS1.length).to.be(2);
+      expect(mesuresSpecifiquesDeS1[0].toJSON()).to.eql({
+        idModele: 'MOD-1',
+        id: 'UUID-1',
+        statut: 'aLancer',
+        responsables: [],
+        description: 'Il faut faire A,B,C',
+      });
+      expect(mesuresSpecifiquesDeS1[1].toJSON()).to.eql({
+        idModele: 'MOD-2',
+        id: 'UUID-2',
+        statut: 'aLancer',
+        responsables: [],
+        description: 'Il faut faire D,E,F',
+      });
+    });
+
+    it("jette une erreur si un des modèles est introuvable : il peut exister mais l'utilisateur n'en est pas propriétaire", async () => {
+      const depot = leDepot();
+
+      try {
+        await depot.associeModelesMesureSpecifiqueAuService(
+          ['MOD-1', 'MOD-DE-U2'],
+          'S1',
+          'U1'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueIntrouvable);
+      }
+    });
+
+    it("jette une erreur si le service n'existe pas", async () => {
+      const depot = leDepot();
+
+      try {
+        await depot.associeModelesMesureSpecifiqueAuService(
+          ['MOD-1', 'MOD-2'],
+          'S-INTROUVABLE',
+          'U1'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurServiceInexistant);
+      }
+    });
+
+    it("jette une erreur si l'utilisateur qui veut associer les mesures n'a pas les droits en écriture sur le service", async () => {
+      const depot = leDepot();
+
+      try {
+        await depot.associeModelesMesureSpecifiqueAuService(
+          ['MOD-1', 'MOD-2'],
+          'S1',
+          'U2'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(
+          ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
+        );
+        expect(e.message).to.be(
+          'L\'utilisateur U2 n\'a pas les droits suffisants sur S1. Droits requis pour modifier un modèle : {"SECURISER":2}'
+        );
+      }
+    });
+
+    it("ne modifie pas le service si il est déjà associé à l'un des modèles", async () => {
+      const depot = leDepot();
+
+      await depot.associeModeleMesureSpecifiqueAuxServices(
+        'MOD-1',
+        ['S1'],
+        'U1'
+      );
+      const apresUneAssociation = await depotServices.service('S1');
+      expect(apresUneAssociation.mesuresSpecifiques().toutes().length).to.be(1);
+
+      try {
+        await depot.associeModelesMesureSpecifiqueAuService(
+          ['MOD-1', 'MOD-2'],
+          'S1',
+          'U1'
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        const s1ApresTentative = await depotServices.service('S1');
+        expect(s1ApresTentative.mesuresSpecifiques().toutes().length).to.be(1);
+      }
+    });
+  });
+
   describe('concernant le détachement entre un modèle de mesure et des services y étant associés', () => {
     beforeEach(() => {
       persistance = unePersistanceMemoire()
