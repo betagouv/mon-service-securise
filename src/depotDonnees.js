@@ -250,6 +250,7 @@ const creeDepot = (config = {}) => {
     detacheModeleMesureSpecifiqueDesServices,
     lisModelesMesureSpecifiquePourUtilisateur,
     metsAJourModeleMesureSpecifique,
+    supprimeDesMesuresAssocieesAuModele,
     supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees,
     supprimeModeleMesureSpecifiqueEtMesuresAssociees,
   } = depotModelesMesureSpecifique;
@@ -323,6 +324,7 @@ const creeDepot = (config = {}) => {
     sauvegardeNotificationsExpirationHomologation,
     superviseur,
     supprimeContributeur,
+    supprimeDesMesuresAssocieesAuModele,
     supprimeMesureSpecifiqueDuService,
     supprimeRisqueSpecifiqueDuService,
     supprimeService,
