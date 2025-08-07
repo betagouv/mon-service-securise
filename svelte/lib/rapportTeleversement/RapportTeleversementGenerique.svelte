@@ -2,9 +2,15 @@
   import Toast from '../ui/Toast.svelte';
   import { onMount } from 'svelte';
   import type { ResumeRapportTeleversement } from './rapportTeleversementGenerique.types';
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher<{
+    valideTeleversement: null;
+    retenteTeleversement: null;
+    annule: null;
+  }>();
 
   export let titreDuRapport: string;
-
   export let resume: undefined | ResumeRapportTeleversement;
 
   let elementModale: HTMLDialogElement;
@@ -47,14 +53,39 @@
         <slot name="tableau-du-rapport" />
       </div>
     </div>
+    <div class="pied-modale">
+      <div class="conteneur-actions">
+        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+        <lab-anssi-bouton
+          titre="Annuler"
+          variante="tertiaire-sans-bordure"
+          taille="md"
+          positionIcone="sans"
+          on:click={() => dispatch('annule')}
+        />
+
+        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+        <lab-anssi-bouton
+          titre={resume?.statut === 'VALIDE'
+            ? resume.labelValiderTeleversement
+            : 'Réimporter le fichier XLSX corrigé'}
+          variante="primaire"
+          taille="md"
+          icone={resume?.statut === 'VALIDE' ? 'check-line' : 'refresh-line'}
+          positionIcone="gauche"
+          on:click={() =>
+            dispatch(
+              resume?.statut === 'VALIDE'
+                ? 'valideTeleversement'
+                : 'retenteTeleversement'
+            )}
+        />
+      </div>
+    </div>
   </div>
 </dialog>
 
 <style lang="scss">
-  dialog::backdrop {
-    background: rgba(22, 22, 22, 0.64);
-  }
-
   dialog {
     width: min(calc(100vw - 52px), 1868px);
     height: min(calc(100vh - 70px), 1010px);
@@ -64,6 +95,10 @@
     box-shadow: 0 6px 18px 0 rgba(0, 0, 18, 0.16);
     box-sizing: border-box;
     position: relative;
+
+    &::backdrop {
+      background: rgba(22, 22, 22, 0.64);
+    }
   }
 
   .conteneur-modale {
@@ -73,11 +108,18 @@
     position: relative;
   }
 
-  .entete-modale {
+  .entete-modale,
+  .pied-modale {
     flex-shrink: 0;
     position: sticky;
     z-index: 1;
     background: white;
+  }
+
+  .contenu-modale {
+    flex-grow: 1;
+    margin-top: 24px;
+    overflow-y: auto;
   }
 
   h2 {
@@ -97,6 +139,20 @@
 
   .conteneur-rapport-detaille {
     overflow-x: scroll;
+  }
+
+  .pied-modale {
+    .conteneur-actions {
+      border-top: 1px solid var(--systeme-design-etat-contour-champs);
+      width: 100%;
+      background: white;
+      display: flex;
+      margin-left: -32px;
+      padding: 32px;
+      flex-direction: row;
+      gap: 16px;
+      justify-content: end;
+    }
   }
 
   :global(table) {
