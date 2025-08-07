@@ -1,9 +1,20 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin';
-import { defineConfig } from 'vite';
+import { defineConfig, createLogger } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { resolve } from 'path';
 import { glob } from 'glob';
+
+const loggerPersonnalise = createLogger();
+const loggerWarnOnce = loggerPersonnalise.warnOnce;
+
+loggerPersonnalise.warnOnce = (msg, options) => {
+  const regexp =
+    /assets\/.* referenced in .* didn't resolve at build time, it will remain unchanged to be resolved at runtime/;
+  if (msg.match(regexp)) return;
+
+  loggerWarnOnce(msg, options);
+};
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -34,4 +45,5 @@ export default defineConfig({
   define: {
     'process.env.NODE_ENV': "'production'",
   },
+  customLogger: loggerPersonnalise,
 });
