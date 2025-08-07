@@ -19,6 +19,9 @@ const {
   ErreurCategoriesRisqueManquantes,
   ErreurCategorieRisqueInconnue,
   ErreurNiveauVraisemblanceInconnu,
+  ErreurModeleDeMesureSpecifiqueIntrouvable,
+  ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
+  ErreurModeleDeMesureSpecifiqueDejaAssociee,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -381,6 +384,36 @@ const routesConnecteApiService = ({
           return;
         }
         suite(e);
+      }
+    }
+  );
+
+  routes.put(
+    '/:id/modeles/mesureSpecifique',
+    middleware.verificationAcceptationCGU,
+    middleware.trouveService({ [SECURISER]: ECRITURE }),
+    middleware.aseptise('idsModeles.*'),
+    async (requete, reponse) => {
+      try {
+        await depotDonnees.associeModelesMesureSpecifiqueAuService(
+          requete.body.idsModeles,
+          requete.service.id,
+          requete.idUtilisateurCourant
+        );
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (
+          e instanceof ErreurModeleDeMesureSpecifiqueIntrouvable ||
+          e instanceof ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
+        ) {
+          reponse.sendStatus(403);
+          return;
+        }
+        if (e instanceof ErreurModeleDeMesureSpecifiqueDejaAssociee) {
+          reponse.sendStatus(400);
+          return;
+        }
+        throw e;
       }
     }
   );
