@@ -57,6 +57,18 @@
 
   const supprime = async () => {
     enCoursEnvoi = true;
+    let titreToaster =
+      modeSuppressionSelectionne ===
+      ModeDeSuppression.UNIQUEMENT_SERVICES_CHOISIS
+        ? 'Succès !'
+        : 'Mesure supprimée avec succès !';
+    let soustitreToaster =
+      modeSuppressionSelectionne ===
+      ModeDeSuppression.UNIQUEMENT_SERVICES_CHOISIS
+        ? `Mesure supprimée avec succès sur ${idsServicesSelectionnes.length} ${
+            idsServicesSelectionnes.length === 1 ? 'service' : 'services'
+          }.`
+        : `Vous avez supprimé la mesure «&nbsp;${modeleMesure.description}&nbsp;».`;
 
     try {
       if (modeSuppressionSelectionne === ModeDeSuppression.COMPLET) {
@@ -76,10 +88,7 @@
           idsServicesSelectionnes
         );
       }
-      toasterStore.succes(
-        `Mesure supprimée avec succès !`,
-        `Vous avez supprimé la mesure ${modeleMesure.description}.`
-      );
+      toasterStore.succes(titreToaster, soustitreToaster);
       tiroirStore.ferme();
       await servicesAvecMesuresAssociees.rafraichis();
       await modelesMesureSpecifique.rafraichis();
