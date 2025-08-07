@@ -57,7 +57,7 @@ const routesConnecteApi = ({
   adaptateurZip,
   adaptateurJournal,
   lecteurDeFormData,
-  adaptateurXLS,
+  adaptateurTeleversementServices,
   adaptateurJWT,
   procedures,
   serviceAnnuaire,
@@ -348,7 +348,7 @@ const routesConnecteApi = ({
     middleware.verificationAcceptationCGU,
     routesConnecteApiTeleversement({
       lecteurDeFormData,
-      adaptateurXLS,
+      adaptateurTeleversementServices,
       busEvenements,
       depotDonnees,
       middleware,

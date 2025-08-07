@@ -4,7 +4,7 @@ const routesConnecteApiTeleversementModelesMesure = require('./routesConnecteApi
 
 const routesConnecteApiTeleversement = ({
   lecteurDeFormData,
-  adaptateurXLS,
+  adaptateurTeleversementServices,
   busEvenements,
   depotDonnees,
   middleware,
@@ -15,7 +15,7 @@ const routesConnecteApiTeleversement = ({
     '/services',
     routesConnecteApiTeleversementServices({
       lecteurDeFormData,
-      adaptateurXLS,
+      adaptateurTeleversementServices,
       busEvenements,
       depotDonnees,
       middleware,
