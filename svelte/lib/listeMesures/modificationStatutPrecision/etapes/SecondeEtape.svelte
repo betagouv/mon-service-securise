@@ -9,20 +9,6 @@
   export let idsServicesSelectionnes: string[];
   export let servicesAssocies: ServiceAssocie[];
 
-  const doitEtreALaFin = (service: ServiceAssocie) =>
-    !service.peutEtreModifie ||
-    (modificationPrecisionUniquement && !service.mesure.statut);
-
-  $: servicesOrdonnes = servicesAssocies.sort((a, b) => {
-    if (
-      (doitEtreALaFin(a) && doitEtreALaFin(b)) ||
-      (!doitEtreALaFin(a) && !doitEtreALaFin(b))
-    ) {
-      return a.nomService.localeCompare(b.nomService);
-    }
-    return doitEtreALaFin(a) ? 1 : -1;
-  });
-
   const predicationDesactivation = (donnee: ServiceAssocie) =>
     (modificationPrecisionUniquement && !donnee.mesure.statut) ||
     !donnee.peutEtreModifie;
@@ -36,7 +22,7 @@
 <TableauSelectionServices
   {statuts}
   bind:idsServicesSelectionnes
-  {servicesOrdonnes}
+  services={servicesAssocies}
   {predicationDesactivation}
 >
   <svelte:fragment slot="infoStatutMesure" let:donnee>

@@ -6,15 +6,25 @@
   import type { ServiceAssocie } from '../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
   import type { ReferentielStatut } from '../../ui/types';
 
-  export let servicesOrdonnes: ServiceAssocie[];
+  export let services: ServiceAssocie[];
   export let statuts: ReferentielStatut;
   export let predicationDesactivation: (donnee: ServiceAssocie) => boolean;
   export let idsServicesSelectionnes: string[];
 
-  $: servicesOrdonnesAvecStatutAPlat = servicesOrdonnes.map((s) => ({
-    ...s,
-    statut: s.mesure.statut,
-  }));
+  $: servicesOrdonnesAvecStatutAPlat = services
+    .sort((a, b) => {
+      if (
+        (predicationDesactivation(a) && predicationDesactivation(b)) ||
+        (!predicationDesactivation(a) && !predicationDesactivation(b))
+      ) {
+        return a.nomService.localeCompare(b.nomService);
+      }
+      return predicationDesactivation(a) ? 1 : -1;
+    })
+    .map((s) => ({
+      ...s,
+      statut: s.mesure.statut,
+    }));
 
   const optionsFiltrage = {
     categories: [{ id: 'statut', libelle: 'Statuts' }],
