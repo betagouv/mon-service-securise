@@ -6,7 +6,7 @@
     progressionTeleversement,
     recupereRapportDetaille,
     supprimeTeleversement,
-  } from '../../rapportTeleversement/rapportTeleversement.api';
+  } from './rapportTeleversementServices.api';
   import { singulierPluriel } from '../../ui/string';
   import type { ResumeRapportTeleversement } from '../../rapportTeleversement/rapportTeleversementGenerique.types';
   import LigneService from '../../rapportTeleversement/composants/LigneService.svelte';
