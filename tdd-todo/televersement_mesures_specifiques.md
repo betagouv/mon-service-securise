@@ -6,7 +6,7 @@
 - [x] Le tiroir permet de « Valider » l'envoi du fichier
 - [ ] Une erreur est affichée en cas de « trop de mesures » : les mesures déjà existantes + celles du fichier = dépasse la limite autorisée
 - [ ] Les mesures du fichier sont persistées, pour servir de base à l'import ensuite
-- [ ] Le backend fait des contrôles de surface du fichier uploadé : voir comment ça se traduit sur le front
+- [x] Le backend fait des contrôles de surface du fichier uploadé : voir comment ça se traduit sur le front
 - [ ] Le bouton « ajouter une/des mesures » est grisé si l'utilisateur a déjà atteint le nombre limites
 - [ ] Un rapport de téléversement est affiché, basé sur les mesures persistées ci-dessus
   - [x] Le rapport de téléversement des services est réutilisable
