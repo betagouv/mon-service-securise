@@ -3,7 +3,7 @@ const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const { ErreurFichierXlsInvalide } = require('../../../src/erreurs');
 
-describe('Les routes connecté de téléversement des modèles de mesure', () => {
+describe('Les routes connecté de téléversement des modèles de mesure spécifique', () => {
   const testeur = testeurMSS();
   beforeEach(testeur.initialise);
   afterEach(testeur.arrete);
