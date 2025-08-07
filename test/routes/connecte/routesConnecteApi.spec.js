@@ -14,6 +14,7 @@ const {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurAutorisationInexistante,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
+  ErreurServiceInexistant,
 } = require('../../../src/erreurs');
 
 const testeurMSS = require('../testeurMSS');
@@ -2482,6 +2483,115 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         expect().fail("L'appel aurait dû lever une erreur");
       } catch (e) {
         expect(e.response.status).to.be(403);
+      }
+    });
+  });
+
+  describe('quand requête DELETE sur `/api/modeles/mesureSpecifique/:idModele/services`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.depotDonnees().supprimeDesMesuresAssocieesAuModele =
+        async () => {};
+    });
+
+    it("vérifie que l'utilisateur est authentifié", (done) => {
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(
+        {
+          method: 'delete',
+          url: 'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services',
+        },
+        done
+      );
+    });
+
+    it('aseptise les paramètres de la requête', (done) => {
+      testeur.middleware().verifieAseptisationParametres(
+        ['idsServices.*'],
+        {
+          method: 'delete',
+          url: 'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services',
+        },
+        done
+      );
+    });
+
+    it('délègue au dépôt de données la suppression des mesures associées au modèle', async () => {
+      let donneesRecues;
+      testeur.depotDonnees().supprimeDesMesuresAssocieesAuModele = async (
+        idUtilisateur,
+        idModele,
+        idsServices
+      ) => {
+        donneesRecues = { idUtilisateur, idModele, idsServices };
+      };
+
+      await axios.delete(
+        'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services',
+        { data: { idsServices: ['S1'] } }
+      );
+
+      expect(donneesRecues.idUtilisateur).to.be('U1');
+      expect(donneesRecues.idModele).to.be('MOD-1');
+      expect(donneesRecues.idsServices).to.eql(['S1']);
+    });
+
+    it("jette une 404 si le modele n'existe pas", async () => {
+      testeur.depotDonnees().supprimeDesMesuresAssocieesAuModele = async () => {
+        throw new ErreurModeleDeMesureSpecifiqueIntrouvable('MOD-INEXISTANT');
+      };
+      try {
+        await axios.delete(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-INEXISTANT/services'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(404);
+      }
+    });
+
+    it("jette une 403 si l'utilisateur ne possède pas le modèle", async () => {
+      testeur.depotDonnees().supprimeDesMesuresAssocieesAuModele = async () => {
+        throw new ErreurAutorisationInexistante();
+      };
+      try {
+        await axios.delete(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(403);
+      }
+    });
+
+    it("jette une 403 si l'utilisateur ne peut pas modifier tous les services passés en paramètres", async () => {
+      testeur.depotDonnees().supprimeDesMesuresAssocieesAuModele = async () => {
+        throw new ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique(
+          'U1',
+          ['S1'],
+          {}
+        );
+      };
+      try {
+        await axios.delete(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(403);
+      }
+    });
+
+    it("jette une 400 si l'un des services passés en paramètres n'existe pas", async () => {
+      testeur.depotDonnees().supprimeDesMesuresAssocieesAuModele = async () => {
+        throw new ErreurServiceInexistant();
+      };
+      try {
+        await axios.delete(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
       }
     });
   });

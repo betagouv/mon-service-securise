@@ -18,6 +18,7 @@ const {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurAutorisationInexistante,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
+  ErreurServiceInexistant,
 } = require('../../erreurs');
 const routesConnecteApiService = require('./routesConnecteApiService');
 const Utilisateur = require('../../modeles/utilisateur');
@@ -805,6 +806,39 @@ const routesConnecteApi = ({
         reponse.sendStatus(200);
       } catch (e) {
         if (e instanceof ErreurModeleDeMesureSpecifiqueDejaAssociee) {
+          reponse.sendStatus(400);
+          return;
+        }
+        throw e;
+      }
+    }
+  );
+
+  routes.delete(
+    '/modeles/mesureSpecifique/:id/services',
+    middleware.verificationAcceptationCGU,
+    middleware.aseptise('idsServices.*'),
+    async (requete, reponse) => {
+      try {
+        await depotDonnees.supprimeDesMesuresAssocieesAuModele(
+          requete.idUtilisateurCourant,
+          requete.params.id,
+          requete.body.idsServices
+        );
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurModeleDeMesureSpecifiqueIntrouvable) {
+          reponse.sendStatus(404);
+          return;
+        }
+        if (
+          e instanceof ErreurAutorisationInexistante ||
+          e instanceof ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
+        ) {
+          reponse.sendStatus(403);
+          return;
+        }
+        if (e instanceof ErreurServiceInexistant) {
           reponse.sendStatus(400);
           return;
         }

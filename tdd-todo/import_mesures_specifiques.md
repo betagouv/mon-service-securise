@@ -12,7 +12,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
       sont liées. Supprime et détache
 - [x] On peut supprimer un modèle du référentiel **et** supprimer les mesures associées : les mesures disparaisssent totalement
       de tous les services où elles apparaissaient. Supprime et supprime
-- [ ] On peut dissocier une mesure de certains services tout en **conservant** le modèle : les mesures spécifiques disparaissent du service
+- [x] On peut supprime une mesure de certains services tout en **conservant** le modèle : les mesures spécifiques disparaissent du service
       et le lien entre modèle et service disparaît aussi. Conserve et supprime
 
 ### CSV
