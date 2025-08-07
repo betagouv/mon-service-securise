@@ -1,14 +1,25 @@
 <script lang="ts">
   import RapportTeleversementGenerique from '../../rapportTeleversement/RapportTeleversementGenerique.svelte';
   import { onMount } from 'svelte';
-  import { recupereRapportDetaille } from '../../rapportTeleversement/rapportTeleversement.api';
+  import {
+    confirmeImport,
+    progressionTeleversement,
+    recupereRapportDetaille,
+  } from '../../rapportTeleversement/rapportTeleversement.api';
   import { singulierPluriel } from '../../ui/string';
   import type { ResumeRapportTeleversement } from '../../rapportTeleversement/rapportTeleversementGenerique.types';
   import LigneService from '../../rapportTeleversement/composants/LigneService.svelte';
   import type { RapportDetaille } from '../../rapportTeleversement/rapportTeleversement.types';
+  import ModaleDeProgression from '../../rapportTeleversement/ModaleDeProgression.svelte';
 
   let rapport: RapportDetaille;
   let resume: ResumeRapportTeleversement;
+
+  let etatReseau:
+    | 'CHARGEMENT_DU_RAPPORT'
+    | 'RAPPORT_OBTENU'
+    | 'IMPORT_EN_COURS'
+    | 'IMPORT_FINI' = 'CHARGEMENT_DU_RAPPORT';
 
   onMount(async () => {
     const resultat = await recupereRapportDetaille();
@@ -39,18 +50,25 @@
         nbOK
       ),
     };
+
+    etatReseau = 'RAPPORT_OBTENU';
   });
 </script>
 
-<RapportTeleversementGenerique
-  titreDuRapport="Rapport du téléversement des services"
-  {resume}
-  on:valideTeleversement={() => console.log('✅')}
-  on:retenteTeleversement={() => console.log('🔄')}
-  on:annule={() => console.log('❌')}
->
-  <table slot="tableau-du-rapport">
-    {#if rapport}
+{#if etatReseau === 'RAPPORT_OBTENU'}
+  <RapportTeleversementGenerique
+    titreDuRapport="Rapport du téléversement des services"
+    {resume}
+    on:valideTeleversement={async () => {
+      etatReseau = 'IMPORT_EN_COURS';
+      await confirmeImport();
+    }}
+    on:retenteTeleversement={() => console.log('🔄')}
+    on:annule={() => {
+      etatReseau = 'IMPORT_FINI';
+    }}
+  >
+    <table slot="tableau-du-rapport">
       <thead>
         <tr>
           <th scope="colgroup">État</th>
@@ -82,6 +100,16 @@
           {/if}
         {/each}
       </tbody>
-    {/if}
-  </table>
-</RapportTeleversementGenerique>
+    </table>
+  </RapportTeleversementGenerique>
+{:else if etatReseau === 'IMPORT_EN_COURS'}
+  <ModaleDeProgression
+    apiGetProgression={async () => {
+      const { data } = await progressionTeleversement();
+      return data.progression;
+    }}
+    on:fini={() => {
+      etatReseau = 'IMPORT_FINI';
+    }}
+  />
+{/if}
