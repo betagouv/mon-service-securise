@@ -17,14 +17,13 @@
   } from '../../listeMesures.api';
   import { toasterStore } from '../../../ui/stores/toaster.store';
   import { modelesMesureSpecifique } from '../modelesMesureSpecifique.store';
+  import TableauSelectionServices from '../../kit/TableauSelectionServices.svelte';
+  import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
 
   export const titre: string = 'Supprimer la mesure';
   export const sousTitre: string =
     'Choisissez où cette mesure doit être supprimée : partout, partiellement ou uniquement de la liste centralisée.';
   export const taille = 'large';
-
-  export let modeleMesure: ModeleMesureSpecifique;
-  export let statuts: ReferentielStatut;
 
   enum ModeDeSuppression {
     COMPLET = 'COMPLET',
@@ -32,15 +31,22 @@
     UNIQUEMENT_SERVICES_CHOISIS = 'UNIQUEMENT_SERVICES_CHOISIS',
   }
 
-  let modeSuppressionSelectionne: ModeDeSuppression = ModeDeSuppression.COMPLET;
+  export let modeleMesure: ModeleMesureSpecifique;
+  export let statuts: ReferentielStatut;
 
+  let idsServicesSelectionnes: string[] = [];
+  let modeSuppressionSelectionne: ModeDeSuppression = ModeDeSuppression.COMPLET;
   let enCoursEnvoi = false;
+
+  const predicationDesactivation = (donnee: ServiceAssocie) =>
+    !donnee.peutEtreModifie;
 
   $: servicesAvecMesure = modeleMesure
     ? $servicesAvecMesuresAssociees
         .filter((s) => modeleMesure.idsServicesAssocies.includes(s.id))
         .map(({ mesuresAssociees, mesuresSpecifiques, ...autresDonnees }) => ({
           ...autresDonnees,
+          mesuresSpecifiques,
           mesure: mesuresSpecifiques.find(
             (m) => m.idModele === modeleMesure.id
           )!,
@@ -137,15 +143,23 @@
           referentielStatuts={statuts}
         />
       {:else if modeSuppressionSelectionne === ModeDeSuppression.UNIQUEMENT_MODELE}
-        <Toast
-          avecOmbre={false}
-          titre="Cette action est irréversible"
-          avecAnimation={false}
-          niveau="alerte"
-          contenu="Les services actuels continueront d’utiliser cette mesure, mais elle ne pourra plus être ajoutée à de nouveaux services."
-        />
+        <div class="conteneur-toast">
+          <Toast
+            avecOmbre={false}
+            titre="Cette action est irréversible"
+            avecAnimation={false}
+            niveau="alerte"
+            contenu="Les services actuels continueront d’utiliser cette mesure, mais elle ne pourra plus être ajoutée à de nouveaux services."
+          />
+        </div>
       {:else if modeSuppressionSelectionne === ModeDeSuppression.UNIQUEMENT_SERVICES_CHOISIS}
         <SeparateurHorizontal />
+        <TableauSelectionServices
+          {statuts}
+          bind:idsServicesSelectionnes
+          services={servicesAvecMesure}
+          {predicationDesactivation}
+        />
       {/if}
     {/if}
   </div>
@@ -179,8 +193,12 @@
     max-width: 550px;
   }
 
-  .marge-24 {
+  .conteneur-boutons-radio,
+  .conteneur-toast {
     max-width: 660px;
+  }
+
+  .marge-24 {
     display: flex;
     flex-direction: column;
     gap: 24px;
