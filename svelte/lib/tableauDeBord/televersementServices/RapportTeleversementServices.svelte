@@ -5,6 +5,7 @@
     confirmeImport,
     progressionTeleversement,
     recupereRapportDetaille,
+    supprimeTeleversement,
   } from '../../rapportTeleversement/rapportTeleversement.api';
   import { singulierPluriel } from '../../ui/string';
   import type { ResumeRapportTeleversement } from '../../rapportTeleversement/rapportTeleversementGenerique.types';
@@ -12,6 +13,8 @@
   import type { RapportDetaille } from '../../rapportTeleversement/rapportTeleversement.types';
   import ModaleDeProgression from '../../rapportTeleversement/ModaleDeProgression.svelte';
   import { toasterStore } from '../../ui/stores/toaster.store';
+  import { tiroirStore } from '../../ui/stores/tiroir.store';
+  import TiroirTeleversementServices from './TiroirTeleversementServices.svelte';
 
   let rapport: RapportDetaille;
   let resume: ResumeRapportTeleversement;
@@ -64,7 +67,11 @@
       etatReseau = 'IMPORT_EN_COURS';
       await confirmeImport();
     }}
-    on:retenteTeleversement={() => console.log('🔄')}
+    on:retenteTeleversement={async () => {
+      await supprimeTeleversement();
+      etatReseau = 'IMPORT_FINI';
+      tiroirStore.afficheContenu(TiroirTeleversementServices, {});
+    }}
     on:annule={() => {
       etatReseau = 'IMPORT_FINI';
     }}
