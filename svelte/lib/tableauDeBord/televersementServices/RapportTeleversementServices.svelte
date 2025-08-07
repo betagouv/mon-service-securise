@@ -15,6 +15,7 @@
   import { toasterStore } from '../../ui/stores/toaster.store';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import TiroirTeleversementServices from './TiroirTeleversementServices.svelte';
+  import { enleveParametreDeUrl } from '../../outils/url';
 
   let rapport: RapportDetaille;
   let resume: ResumeRapportTeleversement;
@@ -74,6 +75,7 @@
     }}
     on:annule={() => {
       etatReseau = 'IMPORT_FINI';
+      enleveParametreDeUrl('rapportTeleversement');
     }}
   >
     <table slot="tableau-du-rapport">
