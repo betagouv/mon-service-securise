@@ -3,7 +3,7 @@ const { ErreurFichierXlsInvalide } = require('../../erreurs');
 
 const routesConnecteApiTeleversementServices = ({
   lecteurDeFormData,
-  adaptateurXLS,
+  adaptateurTeleversementServices,
   busEvenements,
   depotDonnees,
   middleware,
@@ -14,7 +14,9 @@ const routesConnecteApiTeleversementServices = ({
     try {
       const buffer = await lecteurDeFormData.extraisDonneesXLS(requete);
       const donneesTeleversement =
-        await adaptateurXLS.extraisTeleversementServices(buffer);
+        await adaptateurTeleversementServices.extraisTeleversementServices(
+          buffer
+        );
       await depotDonnees.nouveauTeleversementServices(
         requete.idUtilisateurCourant,
         donneesTeleversement
