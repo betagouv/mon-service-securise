@@ -68,6 +68,16 @@ export const supprimeModeleMesureSpecifiqueEtDetacheMesureAssociees = async (
   );
 };
 
+export const supprimeMesuresSpecifiquesDesServices = async (
+  idModele: string,
+  idsServices: string[]
+) =>
+  await axios.delete(`/api/modeles/mesureSpecifique/${idModele}/services`, {
+    data: {
+      idsServices,
+    },
+  });
+
 export const sauvegardeModeleMesureSpecifique = async ({
   id,
   description,
