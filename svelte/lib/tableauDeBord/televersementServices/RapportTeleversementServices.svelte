@@ -9,7 +9,7 @@
   } from './rapportTeleversementServices.api';
   import { singulierPluriel } from '../../ui/string';
   import type { ResumeRapportTeleversement } from '../../rapportTeleversement/rapportTeleversementGenerique.types';
-  import LigneService from '../../rapportTeleversement/composants/LigneService.svelte';
+  import LigneService from './LigneService.svelte';
   import type { RapportDetaille } from './rapportTeleversementServices.types';
   import ModaleDeProgression from '../../rapportTeleversement/ModaleDeProgression.svelte';
   import { toasterStore } from '../../ui/stores/toaster.store';

@@ -3,10 +3,10 @@
     type ErreurService,
     MessagesErreur,
     type RapportService,
-  } from '../../tableauDeBord/televersementServices/rapportTeleversementServices.types';
-  import CelluleDonneeService from './CelluleDonneeService.svelte';
-  import TagEtat from './TagEtat.svelte';
-  import TooltipErreursMultiple from './TooltipErreursMultiple.svelte';
+  } from './rapportTeleversementServices.types';
+  import CelluleDonneeService from '../../rapportTeleversement/composants/CelluleDonneeService.svelte';
+  import TagEtat from '../../rapportTeleversement/composants/TagEtat.svelte';
+  import TooltipErreursMultiple from '../../rapportTeleversement/composants/TooltipErreursMultiple.svelte';
 
   export let service: RapportService;
   export let numeroLigne: number;
