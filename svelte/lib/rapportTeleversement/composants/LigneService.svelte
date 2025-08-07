@@ -3,7 +3,7 @@
     type ErreurService,
     MessagesErreur,
     type RapportService,
-  } from '../rapportTeleversement.types';
+  } from '../../tableauDeBord/televersementServices/rapportTeleversementServices.types';
   import CelluleDonneeService from './CelluleDonneeService.svelte';
   import TagEtat from './TagEtat.svelte';
   import TooltipErreursMultiple from './TooltipErreursMultiple.svelte';

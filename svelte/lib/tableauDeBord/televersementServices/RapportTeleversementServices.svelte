@@ -10,7 +10,7 @@
   import { singulierPluriel } from '../../ui/string';
   import type { ResumeRapportTeleversement } from '../../rapportTeleversement/rapportTeleversementGenerique.types';
   import LigneService from '../../rapportTeleversement/composants/LigneService.svelte';
-  import type { RapportDetaille } from '../../rapportTeleversement/rapportTeleversement.types';
+  import type { RapportDetaille } from './rapportTeleversementServices.types';
   import ModaleDeProgression from '../../rapportTeleversement/ModaleDeProgression.svelte';
   import { toasterStore } from '../../ui/stores/toaster.store';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
