@@ -7,6 +7,7 @@ import { glob } from 'glob';
 
 const loggerPersonnalise = createLogger();
 const loggerWarnOnce = loggerPersonnalise.warnOnce;
+const loggerInfo = loggerPersonnalise.info;
 
 loggerPersonnalise.warnOnce = (msg, options) => {
   const regexp =
@@ -14,6 +15,13 @@ loggerPersonnalise.warnOnce = (msg, options) => {
   if (msg.match(regexp)) return;
 
   loggerWarnOnce(msg, options);
+};
+
+loggerPersonnalise.info = (msg, options) => {
+  const regexp = /\/public\/composants-svelte\/.*[.js .css .mjs]/;
+  if (msg.match(regexp)) return;
+
+  loggerInfo(msg, options);
 };
 
 // https://vitejs.dev/config/
