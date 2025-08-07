@@ -22,12 +22,11 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 
 ## Du point de vue du Front
 
-- [ ] On veut pouvoir afficher la liste des modèles de mesure dans un onglet à coté de la liste des mesures générales
-  - [ ] Les badges des onglets sont mis à jour en fonction de la recherche
-- [ ] On veut pouvoir supprimer un modèle de mesure
+- [ ] Les badges des onglets sont mis à jour en fonction de la recherche
+- [x] On veut pouvoir supprimer un modèle de mesure
   - [x] La mesure est supprimée de la liste & des services (on retire l'association, les mesures spécifiques concernées et le modèle)
   - [x] La mesure est supprimée de la liste, mais détachée des services (on retire l'association et le modèle, mais on conserve les mesures spécifiques une fois détachées)
-  - [ ] La mesure est supprimée de certains services (on retire l'association et la mesure spécifique concernée, mais on conserve le modèle)
+  - [x] La mesure est supprimée de certains services (on retire l'association et la mesure spécifique concernée, mais on conserve le modèle)
 
 ## Du point de vue de la page "SÉCURISER"
 

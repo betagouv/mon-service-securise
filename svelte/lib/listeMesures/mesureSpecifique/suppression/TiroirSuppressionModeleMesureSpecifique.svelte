@@ -109,6 +109,37 @@
         niveau="info"
         contenu="La mesure sera définitivement supprimée de la liste centralisée."
       />
+    {:else if modeSuppressionSelectionne === ModeDeSuppression.UNIQUEMENT_SERVICES_CHOISIS && etapeSuppressionSelectionService === 2}
+      {@const intitulePluralise =
+        idsServicesSelectionnes.length > 1
+          ? 'services concernés par ces modifications'
+          : 'service concerné par cette modification'}
+      <h4>
+        Souhaitez-vous vraiment supprimer la mesure «&nbsp;{modeleMesure.description}&nbsp;»
+        {idsServicesSelectionnes.length === 1
+          ? 'du service sélectionné'
+          : `des ${idsServicesSelectionnes.length} services sélectionnés`} ?
+      </h4>
+      <div class="conteneur-toast">
+        <Toast
+          avecOmbre={false}
+          titre="Cette action est irréversible"
+          avecAnimation={false}
+          niveau="alerte"
+          contenu="Toutes les données liées à cette mesure seront définitivement supprimées de ces services, ce qui impactera leur indice cyber personnalisé."
+        />
+      </div>
+      <SeparateurHorizontal />
+      <h4 class="titre-etape">
+        {idsServicesSelectionnes.length}
+        {intitulePluralise}
+      </h4>
+      <TableauServicesAssocies
+        servicesAssocies={servicesAvecMesure.filter((s) =>
+          idsServicesSelectionnes.includes(s.id)
+        )}
+        referentielStatuts={statuts}
+      />
     {:else}
       <h4>
         Où souhaitez vous supprimer la mesure «&nbsp;{modeleMesure.description}&nbsp;»
