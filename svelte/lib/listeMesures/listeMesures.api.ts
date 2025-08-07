@@ -60,6 +60,14 @@ export const supprimeCompletementModeleMesureSpecifique = async (
   await axios.delete(`/api/modeles/mesureSpecifique/${idModele}`);
 };
 
+export const supprimeModeleMesureSpecifiqueEtDetacheMesureAssociees = async (
+  idModele: string
+) => {
+  await axios.delete(
+    `/api/modeles/mesureSpecifique/${idModele}?detacheMesures=true`
+  );
+};
+
 export const sauvegardeModeleMesureSpecifique = async ({
   id,
   description,
