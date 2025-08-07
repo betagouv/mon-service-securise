@@ -59,5 +59,22 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
         expect(e.response.status).to.be(400);
       }
     });
+
+    it("délègue la conversion du contenu à l'adaptateur de lecture de données téléversées", async () => {
+      let adaptateurAppele = false;
+      let bufferRecu;
+      testeur.adaptateurTeleversementModelesMesureSpecifique().extraisDonneesTeleversees =
+        async (buffer) => {
+          adaptateurAppele = true;
+          bufferRecu = buffer;
+        };
+
+      await axios.post(
+        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      );
+
+      expect(adaptateurAppele).to.be(true);
+      expect(bufferRecu).not.to.be(undefined);
+    });
   });
 });

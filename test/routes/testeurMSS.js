@@ -43,6 +43,7 @@ const testeurMss = () => {
   let adaptateurProfilAnssi;
   let lecteurDeFormData;
   let adaptateurTeleversementServices;
+  let adaptateurTeleversementModelesMesureSpecifique;
   let depotDonnees;
   let moteurRegles;
   let referentiel;
@@ -147,6 +148,9 @@ const testeurMss = () => {
     adaptateurTeleversementServices = {
       extraisTeleversementServices: async () => {},
     };
+    adaptateurTeleversementModelesMesureSpecifique = {
+      extraisDonneesTeleversees: async () => {},
+    };
     busEvenements = fabriqueBusPourLesTests();
 
     moteurRegles = new MoteurRegles(referentiel);
@@ -180,6 +184,7 @@ const testeurMss = () => {
           adaptateurProfilAnssi,
           lecteurDeFormData,
           adaptateurTeleversementServices,
+          adaptateurTeleversementModelesMesureSpecifique,
           cmsCrisp,
           serviceSupervision,
           serviceGestionnaireSession,
@@ -215,6 +220,8 @@ const testeurMss = () => {
     adaptateurProfilAnssi: () => adaptateurProfilAnssi,
     lecteurDeFormData: () => lecteurDeFormData,
     adaptateurTeleversementServices: () => adaptateurTeleversementServices,
+    adaptateurTeleversementModelesMesureSpecifique: () =>
+      adaptateurTeleversementModelesMesureSpecifique,
     busEvenements: () => busEvenements,
     cmsCrisp: () => cmsCrisp,
     depotDonnees: () => depotDonnees,

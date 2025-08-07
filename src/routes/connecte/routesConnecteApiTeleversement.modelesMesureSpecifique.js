@@ -4,11 +4,16 @@ const { ErreurFichierXlsInvalide } = require('../../erreurs');
 const routesConnecteApiTeleversementModelesMesureSpecifique = ({
   middleware,
   lecteurDeFormData,
+  adaptateurTeleversementModelesMesureSpecifique,
 }) => {
   const routes = express.Router();
   routes.post('/', middleware.protegeTrafic(), async (requete, reponse) => {
     try {
-      await lecteurDeFormData.extraisDonneesXLS(requete);
+      const buffer = await lecteurDeFormData.extraisDonneesXLS(requete);
+      await adaptateurTeleversementModelesMesureSpecifique.extraisDonneesTeleversees(
+        buffer
+      );
+
       reponse.sendStatus(201);
     } catch (e) {
       if (e instanceof ErreurFichierXlsInvalide) {
