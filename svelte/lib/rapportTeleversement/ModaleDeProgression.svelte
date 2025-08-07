@@ -22,9 +22,14 @@
   onMount(async () => {
     await monitoreProgression();
 
-    elementModale.inert = true;
-    elementModale.showModal();
-    elementModale.inert = false;
+    // Lorsque le process monitoré est très rapide, il se peut que la modale
+    // soit montée puis supprimée très vite. Sans `if`, ce cas provoque une
+    // erreur.
+    if (elementModale) {
+      elementModale.inert = true;
+      elementModale.showModal();
+      elementModale.inert = false;
+    }
   });
 </script>
 
