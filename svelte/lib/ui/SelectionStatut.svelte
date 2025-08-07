@@ -21,7 +21,12 @@
   }
 </script>
 
-<label for={`statut-${id}`} class:requis class:a-label={label !== ''}>
+<label
+  for={`statut-${id}`}
+  class:requis
+  class:a-label={label !== ''}
+  class:avecAsterisqueRequis={!!label}
+>
   {label}
   <select
     bind:value={statut}
@@ -140,7 +145,7 @@
     background: white;
   }
 
-  label.requis:before {
+  label.requis.avecAsterisqueRequis:before {
     content: '*';
     color: var(--rose-anssi);
     transform: translate(6px, -3px);

@@ -98,6 +98,7 @@
       {referentielStatuts}
       on:input={(e) =>
         dispatch('modificationStatut', { statut: e.detail.statut })}
+      requis
     />
   </td>
 </tr>
