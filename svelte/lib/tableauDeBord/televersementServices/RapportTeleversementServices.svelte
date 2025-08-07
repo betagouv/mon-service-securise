@@ -11,6 +11,7 @@
   import LigneService from '../../rapportTeleversement/composants/LigneService.svelte';
   import type { RapportDetaille } from '../../rapportTeleversement/rapportTeleversement.types';
   import ModaleDeProgression from '../../rapportTeleversement/ModaleDeProgression.svelte';
+  import { toasterStore } from '../../ui/stores/toaster.store';
 
   let rapport: RapportDetaille;
   let resume: ResumeRapportTeleversement;
@@ -109,6 +110,20 @@
       return data.progression;
     }}
     on:fini={() => {
+      const nb = rapport.services.length;
+      toasterStore.succes(
+        singulierPluriel(
+          '1 service importé avec succès',
+          `${nb} services importés avec succès`,
+          nb
+        ),
+        `Nous vous invitons à <b>finaliser la description</b> de ${singulierPluriel(
+          'votre service importé',
+          'vos services importés',
+          nb
+        )} afin d’accéder à une évaluation personnalisée de leur sécurité et bénéficier de recommandations adaptées.`
+      );
+
       etatReseau = 'IMPORT_FINI';
     }}
   />
