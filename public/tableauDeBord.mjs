@@ -29,7 +29,7 @@ $(() => {
   const requete = new URLSearchParams(window.location.search);
   if (requete.has('rapportTeleversement')) {
     document.body.dispatchEvent(
-      new CustomEvent('svelte-recharge-rapport-televersement')
+      new CustomEvent('svelte-recharge-rapport-televersement-services')
     );
   }
 });

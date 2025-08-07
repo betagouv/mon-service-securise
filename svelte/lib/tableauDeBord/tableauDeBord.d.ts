@@ -1,6 +1,7 @@
 declare global {
   interface HTMLElementEventMap {
     'svelte-recharge-tableau-de-bord': CustomEvent;
+    'svelte-recharge-rapport-televersement-services': CustomEvent;
   }
 }
 

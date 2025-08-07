@@ -9,7 +9,7 @@
 - [ ] Le backend fait des contrôles de surface du fichier uploadé : voir comment ça se traduit sur le front
 - [ ] Le bouton « ajouter une/des mesures » est grisé si l'utilisateur a déjà atteint le nombre limites
 - [ ] Un rapport de téléversement est affiché, basé sur les mesures persistées ci-dessus
-  - [ ] Le rapport de téléversement des services est réutilisable
+  - [x] Le rapport de téléversement des services est réutilisable
 - [ ] Sur le rapport, un bouton « Importer » permet de déclencher la création des modèles
 - [ ] Le tiroir de téléversement montre, dans les limitations, combien de mesures sont encore ajoutables (idéalement on veut soustraire la varenv et le nombre actuel)
 
