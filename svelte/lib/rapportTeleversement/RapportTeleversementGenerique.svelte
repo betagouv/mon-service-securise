@@ -41,6 +41,12 @@
         {/if}
       </div>
     </div>
+    <div class="contenu-modale">
+      <h2>Rapport détaillé</h2>
+      <div class="conteneur-rapport-detaille">
+        <slot name="tableau-du-rapport" />
+      </div>
+    </div>
   </div>
 </dialog>
 
@@ -48,6 +54,7 @@
   dialog::backdrop {
     background: rgba(22, 22, 22, 0.64);
   }
+
   dialog {
     width: min(calc(100vw - 52px), 1868px);
     height: min(calc(100vh - 70px), 1010px);
@@ -86,5 +93,37 @@
     flex-direction: row;
     gap: 24px;
     margin-bottom: 48px;
+  }
+
+  .conteneur-rapport-detaille {
+    overflow-x: scroll;
+  }
+
+  :global(table) {
+    border-collapse: collapse;
+  }
+
+  :global(th) {
+    white-space: nowrap;
+    padding: 8px 16px;
+    text-align: left;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    font-weight: 700;
+    border-top: 1px solid var(--systeme-design-etat-contour-champs);
+    border-bottom: 1px solid var(--systeme-design-etat-contour-champs);
+    color: #3a3a3a;
+  }
+
+  :global(tr th:first-of-type) {
+    border-left: 1px solid var(--systeme-design-etat-contour-champs);
+  }
+
+  :global(tr th:last-of-type, .bordure-droite) {
+    border-right: 1px solid var(--systeme-design-etat-contour-champs);
+  }
+
+  :global(th[scope='colgroup']) {
+    background: var(--fond-pale);
   }
 </style>
