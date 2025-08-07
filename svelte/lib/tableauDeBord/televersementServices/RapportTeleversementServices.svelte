@@ -64,7 +64,7 @@
   <RapportTeleversementGenerique
     titreDuRapport="Rapport du téléversement des services"
     {resume}
-    on:valideTeleversement={async () => {
+    on:confirmeTeleversement={async () => {
       etatReseau = 'IMPORT_EN_COURS';
       await confirmeImport();
     }}

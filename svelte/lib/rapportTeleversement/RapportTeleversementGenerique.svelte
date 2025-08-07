@@ -5,7 +5,7 @@
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher<{
-    valideTeleversement: null;
+    confirmeTeleversement: null;
     retenteTeleversement: null;
     annule: null;
   }>();
@@ -82,7 +82,7 @@
           on:click={() =>
             dispatch(
               resume?.statut === 'VALIDE'
-                ? 'valideTeleversement'
+                ? 'confirmeTeleversement'
                 : 'retenteTeleversement'
             )}
         />
