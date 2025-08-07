@@ -242,7 +242,12 @@ const routesConnecteApiService = ({
     async (requete, reponse, _suite) => {
       const { service } = requete;
       const { idMesure } = requete.params;
-      const { echeance } = requete.body;
+      const { echeance, statut } = requete.body;
+
+      if (!statut) {
+        reponse.status(400).send('Le statut de la mesure est obligatoire.');
+        return;
+      }
 
       try {
         const mesureSpecifique = new MesureSpecifique(
@@ -299,7 +304,7 @@ const routesConnecteApiService = ({
           idUtilisateur,
           service.id
         );
-        reponse.send(201);
+        reponse.sendStatus(201);
       } catch (e) {
         if (
           e instanceof ErreurStatutMesureInvalide ||

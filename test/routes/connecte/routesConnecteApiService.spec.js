@@ -733,6 +733,25 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         }
       );
     });
+
+    it('renvoi une erreur 400 si le statut est vide', async () => {
+      try {
+        await axios.put(
+          'http://localhost:1234/api/service/456/mesuresSpecifiques/M1',
+          {
+            description: 'une description',
+            categorie: 'gouvernance',
+            statut: '',
+          }
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+        expect(e.response.data).to.be(
+          'Le statut de la mesure est obligatoire.'
+        );
+      }
+    });
   });
 
   describe('quand requête PUT sur `/api/service/:id/mesures/:idMesure`', () => {
