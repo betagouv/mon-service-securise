@@ -11,7 +11,10 @@
   } from '../../../ui/types';
   import { servicesAvecMesuresAssociees } from '../../servicesAssocies/servicesAvecMesuresAssociees.store';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
-  import { supprimeCompletementModeleMesureSpecifique } from '../../listeMesures.api';
+  import {
+    supprimeCompletementModeleMesureSpecifique,
+    supprimeModeleMesureSpecifiqueEtDetacheMesureAssociees,
+  } from '../../listeMesures.api';
   import { toasterStore } from '../../../ui/stores/toaster.store';
   import { modelesMesureSpecifique } from '../modelesMesureSpecifique.store';
 
@@ -22,6 +25,14 @@
 
   export let modeleMesure: ModeleMesureSpecifique;
   export let statuts: ReferentielStatut;
+
+  enum ModeDeSuppression {
+    COMPLET = 'COMPLET',
+    UNIQUEMENT_MODELE = 'UNIQUEMENT_MODELE',
+    UNIQUEMENT_SERVICES_CHOISIS = 'UNIQUEMENT_SERVICES_CHOISIS',
+  }
+
+  let modeSuppressionSelectionne: ModeDeSuppression = ModeDeSuppression.COMPLET;
 
   let enCoursEnvoi = false;
 
@@ -36,11 +47,19 @@
         }))
     : [];
 
-  const supprimeCompletement = async () => {
+  const supprime = async () => {
     enCoursEnvoi = true;
 
     try {
-      await supprimeCompletementModeleMesureSpecifique(modeleMesure.id);
+      if (modeSuppressionSelectionne === ModeDeSuppression.COMPLET) {
+        await supprimeCompletementModeleMesureSpecifique(modeleMesure.id);
+      } else if (
+        modeSuppressionSelectionne === ModeDeSuppression.UNIQUEMENT_MODELE
+      ) {
+        await supprimeModeleMesureSpecifiqueEtDetacheMesureAssociees(
+          modeleMesure.id
+        );
+      }
       toasterStore.succes(
         `Mesure supprimée avec succès !`,
         `Vous avez supprimé la mesure ${modeleMesure.description}.`
@@ -58,14 +77,6 @@
       enCoursEnvoi = false;
     }
   };
-
-  enum ModeDeSuppression {
-    COMPLET = 'COMPLET',
-    UNIQUEMENT_MODELE = 'UNIQUEMENT_MODELE',
-    UNIQUEMENT_SERVICES_CHOISIS = 'UNIQUEMENT_SERVICES_CHOISIS',
-  }
-
-  let valeurSelectionnee: ModeDeSuppression = ModeDeSuppression.COMPLET;
 </script>
 
 <ContenuTiroir>
@@ -89,7 +100,7 @@
       </h4>
       <div class="conteneur-boutons-radio">
         <BoutonsRadio
-          bind:valeurSelectionnee
+          bind:valeurSelectionnee={modeSuppressionSelectionne}
           options={[
             {
               titre: 'Supprimer complètement la mesure',
@@ -97,10 +108,16 @@
                 'La mesure sera définitivement supprimée de la liste centralisée ainsi que de tous les services où elle est utilisée.',
               valeur: ModeDeSuppression.COMPLET,
             },
+            {
+              titre: 'Supprimer uniquement de la liste centralisée',
+              sousTitre:
+                'La mesure sera retirée de la liste centralisée, mais restera disponible dans les services où elle est déjà utilisée.',
+              valeur: ModeDeSuppression.UNIQUEMENT_MODELE,
+            },
           ]}
         />
       </div>
-      {#if valeurSelectionnee === ModeDeSuppression.COMPLET}
+      {#if modeSuppressionSelectionne === ModeDeSuppression.COMPLET}
         <Toast
           avecOmbre={false}
           titre="Cette action est irréversible"
@@ -112,6 +129,14 @@
         <TableauServicesAssocies
           servicesAssocies={servicesAvecMesure}
           referentielStatuts={statuts}
+        />
+      {:else if modeSuppressionSelectionne === ModeDeSuppression.UNIQUEMENT_MODELE}
+        <Toast
+          avecOmbre={false}
+          titre="Cette action est irréversible"
+          avecAnimation={false}
+          niveau="alerte"
+          contenu="Les services actuels continueront d’utiliser cette mesure, mais elle ne pourra plus être ajoutée à de nouveaux services."
         />
       {/if}
     {/if}
@@ -132,7 +157,7 @@
     taille="md"
     icone="delete-line"
     position-icone="gauche"
-    on:click={supprimeCompletement}
+    on:click={supprime}
     actif={!enCoursEnvoi}
   />
 </ActionsTiroir>
@@ -146,11 +171,8 @@
     max-width: 550px;
   }
 
-  .conteneur-boutons-radio {
-    max-width: 660px;
-  }
-
   .marge-24 {
+    max-width: 660px;
     display: flex;
     flex-direction: column;
     gap: 24px;
