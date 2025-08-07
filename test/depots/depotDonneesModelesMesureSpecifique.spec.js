@@ -715,4 +715,130 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       }
     });
   });
+
+  describe("concernant la suppression d'un modèle et le détachement des mesures associées", () => {
+    beforeEach(() => {
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U12').donnees)
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-1',
+          idUtilisateur: 'U1',
+          donnees: { description: 'description' },
+        })
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-12',
+          idUtilisateur: 'U12',
+          donnees: { description: 'description' },
+        })
+        .ajouteUnService({
+          id: 'S1',
+          descriptionService: { nomService: 'Service 1' },
+          mesuresSpecifiques: [{ idModele: 'MOD-1' }, { idModele: 'MOD-12' }],
+        })
+        .nommeCommeProprietaire('U1', ['S1'])
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur('U12', 'S1').avecDroits({}).donnees
+        )
+        .associeLeServiceAuxModelesDeMesureSpecifique('S1', ['MOD-1', 'MOD-12'])
+        .construis();
+      depotServices = DepotDonneesServices.creeDepot({
+        adaptateurPersistance: persistance,
+        adaptateurChiffrement,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance: persistance,
+          adaptateurChiffrement,
+        }),
+      });
+    });
+    it('supprime le modèle', async () => {
+      const depot = leDepot();
+      await depot.supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees(
+        'U1',
+        'MOD-1'
+      );
+
+      const modelesVides =
+        await depot.lisModelesMesureSpecifiquePourUtilisateur('U1');
+      expect(modelesVides).to.eql([]);
+    });
+
+    it('supprime les associations de service à ce modèle', async () => {
+      const depot = leDepot();
+      await depot.supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees(
+        'U1',
+        'MOD-1'
+      );
+
+      const estAssocie =
+        await persistance.tousServicesSontAssociesAuModeleMesureSpecifique(
+          ['S1'],
+          'MOD-1'
+        );
+      expect(estAssocie).to.eql(false);
+    });
+
+    it('détache les mesures spécifiques associées au sein des services', async () => {
+      const depot = leDepot();
+      await depot.supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees(
+        'U1',
+        'MOD-1'
+      );
+
+      const service = await depotServices.service('S1');
+      expect(service.mesuresSpecifiques().toutes().length).to.eql(2);
+    });
+
+    it("jette une erreur si le modèle n'existe pas", async () => {
+      persistance.verifieModeleMesureSpecifiqueExiste = async () => false;
+
+      const depot = leDepot();
+
+      try {
+        await depot.supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees(
+          'U1',
+          'MOD-10'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueIntrouvable);
+      }
+    });
+
+    it("jette une erreur si l'utilisateur qui veut supprimer le modèle n'a pas les droits en écriture sur tous les services", async () => {
+      const depot = leDepot();
+
+      try {
+        await depot.supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees(
+          'U12',
+          'MOD-12'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(
+          ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
+        );
+        expect(e.message).to.be(
+          'L\'utilisateur U12 n\'a pas les droits suffisants sur S1. Droits requis pour modifier un modèle : {"SECURISER":2}'
+        );
+      }
+    });
+
+    it("jette une erreur si le modèle n'appartient pas à l'utilisateur qui veut supprimer", async () => {
+      const depot = leDepot();
+
+      try {
+        await depot.supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees(
+          'U12',
+          'MOD-1'
+        );
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurAutorisationInexistante);
+        expect(e.message).to.be(
+          "L'utilisateur U12 n'est pas propriétaire du modèle MOD-1 qu'il veut modifier."
+        );
+      }
+    });
+  });
 });
