@@ -13,6 +13,7 @@
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
   import {
     supprimeCompletementModeleMesureSpecifique,
+    supprimeMesuresSpecifiquesDesServices,
     supprimeModeleMesureSpecifiqueEtDetacheMesureAssociees,
   } from '../../listeMesures.api';
   import { toasterStore } from '../../../ui/stores/toaster.store';
@@ -37,6 +38,7 @@
   let idsServicesSelectionnes: string[] = [];
   let modeSuppressionSelectionne: ModeDeSuppression = ModeDeSuppression.COMPLET;
   let enCoursEnvoi = false;
+  let etapeSuppressionSelectionService: 1 | 2 = 1;
 
   const predicationDesactivation = (donnee: ServiceAssocie) =>
     !donnee.peutEtreModifie;
@@ -64,6 +66,14 @@
       ) {
         await supprimeModeleMesureSpecifiqueEtDetacheMesureAssociees(
           modeleMesure.id
+        );
+      } else if (
+        modeSuppressionSelectionne ===
+        ModeDeSuppression.UNIQUEMENT_SERVICES_CHOISIS
+      ) {
+        await supprimeMesuresSpecifiquesDesServices(
+          modeleMesure.id,
+          idsServicesSelectionnes
         );
       }
       toasterStore.succes(
@@ -153,13 +163,15 @@
           />
         </div>
       {:else if modeSuppressionSelectionne === ModeDeSuppression.UNIQUEMENT_SERVICES_CHOISIS}
-        <SeparateurHorizontal />
-        <TableauSelectionServices
-          {statuts}
-          bind:idsServicesSelectionnes
-          services={servicesAvecMesure}
-          {predicationDesactivation}
-        />
+        {#if etapeSuppressionSelectionService === 1}
+          <SeparateurHorizontal />
+          <TableauSelectionServices
+            {statuts}
+            bind:idsServicesSelectionnes
+            services={servicesAvecMesure}
+            {predicationDesactivation}
+          />
+        {/if}
       {/if}
     {/if}
   </div>
@@ -172,16 +184,39 @@
     titre="Annuler"
     on:click={() => tiroirStore.ferme()}
   />
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-  <lab-anssi-bouton
-    titre="Valider la suppression"
-    variante="primaire"
-    taille="md"
-    icone="delete-line"
-    position-icone="gauche"
-    on:click={supprime}
-    actif={!enCoursEnvoi}
-  />
+  {#if modeSuppressionSelectionne === ModeDeSuppression.COMPLET || modeSuppressionSelectionne === ModeDeSuppression.UNIQUEMENT_MODELE}
+    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <lab-anssi-bouton
+      titre="Valider la suppression"
+      variante="primaire"
+      taille="md"
+      icone="delete-line"
+      position-icone="gauche"
+      on:click={supprime}
+      actif={!enCoursEnvoi}
+    />
+  {:else if etapeSuppressionSelectionService === 1}
+    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <lab-anssi-bouton
+      titre="Valider la suppression"
+      variante="primaire"
+      taille="md"
+      icone="delete-line"
+      position-icone="gauche"
+      on:click={() => (etapeSuppressionSelectionService = 2)}
+      actif={idsServicesSelectionnes.length > 0}
+    />
+  {:else}
+    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <lab-anssi-bouton
+      titre="Confirmer la suppression"
+      variante="primaire"
+      taille="md"
+      icone="delete-line"
+      position-icone="gauche"
+      on:click={supprime}
+    />
+  {/if}
 </ActionsTiroir>
 
 <style lang="scss">
