@@ -11,6 +11,11 @@
   export let predicationDesactivation: (donnee: ServiceAssocie) => boolean;
   export let idsServicesSelectionnes: string[];
 
+  $: servicesOrdonnesAvecStatutAPlat = servicesOrdonnes.map((s) => ({
+    ...s,
+    statut: s.mesure.statut,
+  }));
+
   const optionsFiltrage = {
     categories: [{ id: 'statut', libelle: 'Statuts' }],
     items: [
@@ -30,7 +35,7 @@
     { cle: 'statut', libelle: 'Statut actuel' },
     { cle: 'modalites', libelle: 'Précision actuelle' },
   ]}
-  donnees={servicesOrdonnes}
+  donnees={servicesOrdonnesAvecStatutAPlat}
   configurationRecherche={{
     champsRecherche: ['nomService', 'organisationResponsable'],
   }}
