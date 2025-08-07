@@ -694,6 +694,17 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       }))
     );
 
+  const associeModelesMesureSpecifiqueAuService = async (
+    idsModeles,
+    idService
+  ) =>
+    knex('modeles_mesure_specifique_association_aux_services').insert(
+      idsModeles.map((idModele) => ({
+        id_modele: idModele,
+        id_service: idService,
+      }))
+    );
+
   const verifieModeleMesureSpecifiqueExiste = async (idModele) => {
     const resultat = await knex.raw(
       'SELECT 1 FROM modeles_mesure_specifique WHERE id = :idModele;',
@@ -768,6 +779,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     ajouteTeleversementServices,
     arreteTout,
     associeModeleMesureSpecifiqueAuxServices,
+    associeModelesMesureSpecifiqueAuService,
     autorisation,
     autorisationPour,
     autorisations,

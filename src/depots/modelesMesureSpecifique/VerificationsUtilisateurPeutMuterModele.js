@@ -23,7 +23,7 @@ class VerificationsUtilisateurPeutMuterModele {
     await this.queUtilisateurPossedeLeModele(idUtilisateur, idModele);
     if (idsServices.length > 0) {
       await this.#queTousLesServicesExistent(idsServices);
-      await this.#peutModifierUnModeleSurLesServices(
+      await this.aLesDroitsSuffisantsPourModifierUneMesureSurDesServices(
         idUtilisateur,
         idsServices
       );
@@ -57,7 +57,10 @@ class VerificationsUtilisateurPeutMuterModele {
       );
   }
 
-  async #peutModifierUnModeleSurLesServices(idUtilisateur, idsServices) {
+  async aLesDroitsSuffisantsPourModifierUneMesureSurDesServices(
+    idUtilisateur,
+    idsServices
+  ) {
     const droitsRequis = { [SECURISER]: ECRITURE };
     const droitsSontSuffisants =
       await this.depotAutorisations.accesAutoriseAUneListeDeService(

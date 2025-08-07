@@ -412,6 +412,17 @@ const nouvelAdaptateur = (
       })
     );
 
+  const associeModelesMesureSpecifiqueAuService = async (
+    idsModeles,
+    idService
+  ) =>
+    idsModeles.forEach((idModele) =>
+      donnees.associationModelesMesureSpecifiqueServices.push({
+        idModele,
+        idService,
+      })
+    );
+
   const supprimeLeLienEntreLeModeleEtLesServices = async (
     idModele,
     idsServices
@@ -460,6 +471,7 @@ const nouvelAdaptateur = (
     ajouteTacheDeService,
     ajouteUtilisateur,
     associeModeleMesureSpecifiqueAuxServices,
+    associeModelesMesureSpecifiqueAuService,
     autorisation,
     autorisationPour,
     autorisations,
