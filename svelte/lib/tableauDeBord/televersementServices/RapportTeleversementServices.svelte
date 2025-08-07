@@ -32,6 +32,12 @@
     resume = {
       elementsValide: { label: labelOK },
       elementsErreur: erreurs ? { label: labelErreurs } : null,
+      statut: rapport.statut,
+      labelValiderTeleversement: singulierPluriel(
+        'Importer le service',
+        `Importer les ${nbOK} services`,
+        nbOK
+      ),
     };
   });
 </script>
@@ -39,6 +45,9 @@
 <RapportTeleversementGenerique
   titreDuRapport="Rapport du téléversement des services"
   {resume}
+  on:valideTeleversement={() => console.log('✅')}
+  on:retenteTeleversement={() => console.log('🔄')}
+  on:annule={() => console.log('❌')}
 >
   <table slot="tableau-du-rapport">
     {#if rapport}
