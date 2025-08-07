@@ -22,7 +22,10 @@
   });
 </script>
 
-<dialog bind:this={elementModale}>
+<dialog
+  bind:this={elementModale}
+  class="dialog-rapport-televersement-generique"
+>
   <div class="conteneur-fermeture">
     <button on:click={() => dispatch('annule')}>Fermer</button>
   </div>
@@ -197,11 +200,11 @@
     }
   }
 
-  :global(table) {
+  :global(.dialog-rapport-televersement-generique table) {
     border-collapse: collapse;
   }
 
-  :global(th) {
+  :global(.dialog-rapport-televersement-generique th) {
     white-space: nowrap;
     padding: 8px 16px;
     text-align: left;
@@ -213,15 +216,18 @@
     color: #3a3a3a;
   }
 
-  :global(tr th:first-of-type) {
+  :global(.dialog-rapport-televersement-generique tr th:first-of-type) {
     border-left: 1px solid var(--systeme-design-etat-contour-champs);
   }
 
-  :global(tr th:last-of-type, .bordure-droite) {
+  :global(
+      .dialog-rapport-televersement-generique tr th:last-of-type,
+      .dialog-rapport-televersement-generique .bordure-droite
+    ) {
     border-right: 1px solid var(--systeme-design-etat-contour-champs);
   }
 
-  :global(th[scope='colgroup']) {
+  :global(.dialog-rapport-televersement-generique th[scope='colgroup']) {
     background: var(--fond-pale);
   }
 </style>
