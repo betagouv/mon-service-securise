@@ -114,6 +114,12 @@
                 'La mesure sera retirée de la liste centralisée, mais restera disponible dans les services où elle est déjà utilisée.',
               valeur: ModeDeSuppression.UNIQUEMENT_MODELE,
             },
+            {
+              titre: 'Supprimer uniquement de certains services',
+              sousTitre:
+                'Vous pouvez choisir de retirer cette mesure de certains services spécifiques, tout en la conservant dans la liste centralisée et dans les autres services.',
+              valeur: ModeDeSuppression.UNIQUEMENT_SERVICES_CHOISIS,
+            },
           ]}
         />
       </div>
@@ -138,6 +144,8 @@
           niveau="alerte"
           contenu="Les services actuels continueront d’utiliser cette mesure, mais elle ne pourra plus être ajoutée à de nouveaux services."
         />
+      {:else if modeSuppressionSelectionne === ModeDeSuppression.UNIQUEMENT_SERVICES_CHOISIS}
+        <SeparateurHorizontal />
       {/if}
     {/if}
   </div>
