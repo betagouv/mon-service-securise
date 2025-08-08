@@ -24,6 +24,14 @@ class LecteurExcel {
       raw: false,
     });
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  lesLignesSontCompletes(tableauDeLignes, proprietesAttendues) {
+    return tableauDeLignes.every((ligneDonnee) => {
+      const proprietesDeLaLigne = new Set(Object.keys(ligneDonnee));
+      return proprietesAttendues.every((p) => proprietesDeLaLigne.has(p));
+    });
+  }
 }
 
 module.exports = { LecteurExcel };
