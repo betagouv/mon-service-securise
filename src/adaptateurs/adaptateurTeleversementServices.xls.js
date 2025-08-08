@@ -37,12 +37,10 @@ const extraisTeleversementServices = async (buffer) => {
   const lecteur = new LecteurExcel(buffer);
   const donneesBrutes = lecteur.donneesDeFeuille('Template services', 6);
 
-  const toutesLignesValides = donneesBrutes.every((ligneDonnee) => {
-    const headersDeLaLigne = new Set(Object.keys(ligneDonnee));
-    return toutesLesEntetesNecessaires.every((header) =>
-      headersDeLaLigne.has(header)
-    );
-  });
+  const toutesLignesValides = lecteur.lesLignesSontCompletes(
+    donneesBrutes,
+    toutesLesEntetesNecessaires
+  );
 
   if (donneesBrutes.length > 250 || !toutesLignesValides) {
     throw new ErreurFichierXlsInvalide();
