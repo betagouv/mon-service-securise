@@ -20,7 +20,6 @@ class LecteurExcel {
 
     return xlsx.utils.sheet_to_json(feuille, {
       range: indexLigneDuHeader - 1,
-      header: 5,
       defval: '',
       raw: false,
     });
