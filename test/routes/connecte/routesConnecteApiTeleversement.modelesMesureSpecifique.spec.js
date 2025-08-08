@@ -98,4 +98,26 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
       expect(donneesRecues).to.eql([{ description: 'Mesure téléversée' }]);
     });
   });
+
+  describe('Quand requête GET sur `/api/televersement/modelesMesuresSpecifique`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+    });
+
+    it("récupère le téléversement de l'utilisateur courant grâce au dépôt de données", async () => {
+      let idDemande;
+      testeur.depotDonnees().lisTeleversementModelesMesureSpecifique = async (
+        idUtilisateur
+      ) => {
+        idDemande = idUtilisateur;
+        return {};
+      };
+
+      await axios.get(
+        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      );
+
+      expect(idDemande).to.be('U1');
+    });
+  });
 });
