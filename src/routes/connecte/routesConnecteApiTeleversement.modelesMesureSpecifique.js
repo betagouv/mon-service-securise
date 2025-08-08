@@ -31,6 +31,17 @@ const routesConnecteApiTeleversementModelesMesureSpecifique = ({
     }
   });
 
+  routes.get('/', async (requete, reponse) => {
+    const televersement =
+      await depotDonnees.lisTeleversementModelesMesureSpecifique(
+        requete.idUtilisateurCourant
+      );
+
+    if (!televersement) return reponse.sendStatus(404);
+
+    return reponse.json(televersement.rapportDetaille());
+  });
+
   return routes;
 };
 

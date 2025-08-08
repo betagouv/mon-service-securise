@@ -18,9 +18,9 @@ async function extraisDonneesTeleversees(buffer) {
   if (!lignesCompletes) throw new ErreurFichierXlsInvalide();
 
   return donneesBrutes.map((ligne) => ({
-    description: encode(ligne[ENTETE_INTITULE]), // Chez MSS, l'intitulé va bien dans "description"
-    modalites: encode(ligne[ENTETE_MODALITES]),
-    categorie: ligne[ENTETE_CATEGORIE],
+    description: encode(ligne[ENTETE_INTITULE]?.trim()), // Chez MSS, l'intitulé va bien dans "description"
+    modalites: encode(ligne[ENTETE_MODALITES]?.trim()),
+    categorie: ligne[ENTETE_CATEGORIE]?.trim()?.toLowerCase(),
   }));
 }
 

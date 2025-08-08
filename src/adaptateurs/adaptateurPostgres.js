@@ -619,18 +619,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       .onConflict('id_utilisateur')
       .merge();
 
-  const ajouteTeleversementModelesMesureSpecifique = async (
-    idUtilisateur,
-    donnees
-  ) =>
-    knex('televersement_modeles_mesure_specifique')
-      .insert({
-        id_utilisateur: idUtilisateur,
-        donnees: { modeles_mesure_specifique: donnees },
-      })
-      .onConflict('id_utilisateur')
-      .merge();
-
   const lisTeleversementServices = async (idUtilisateur) =>
     knex('televersement_services')
       .where({ id_utilisateur: idUtilisateur })
@@ -655,6 +643,28 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     knex('televersement_services')
       .where({ id_utilisateur: idUtilisateur })
       .update({ progression });
+
+  const ajouteTeleversementModelesMesureSpecifique = async (
+    idUtilisateur,
+    donnees
+  ) =>
+    knex('televersement_modeles_mesure_specifique')
+      .insert({
+        id_utilisateur: idUtilisateur,
+        donnees: { modeles_mesure_specifique: donnees },
+      })
+      .onConflict('id_utilisateur')
+      .merge();
+
+  const lisTeleversementModelesMesureSpecifique = async (idUtilisateur) => {
+    const resultat = await knex.raw(
+      `SELECT donnees->>'modeles_mesure_specifique' as "modeles"
+        FROM televersement_modeles_mesure_specifique
+        WHERE id_utilisateur = ?`,
+      [idUtilisateur]
+    );
+    return JSON.parse(resultat.rows[0].modeles);
+  };
 
   const verifieTousLesServicesExistent = async (idsServices) => {
     const resultat = await knex.raw(
@@ -805,6 +815,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     lisParcoursUtilisateur,
     lisProgressionTeleversementServices,
     lisSuperviseursConcernes,
+    lisTeleversementModelesMesureSpecifique,
     lisTeleversementServices,
     marqueNouveauteLue,
     marqueSuggestionActionFaiteMaintenant,

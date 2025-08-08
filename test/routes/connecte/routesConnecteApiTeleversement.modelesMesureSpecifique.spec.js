@@ -2,6 +2,7 @@ const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const { ErreurFichierXlsInvalide } = require('../../../src/erreurs');
+const TeleversementModelesMesureSpecifique = require('../../../src/modeles/televersement/televersementModelesMesureSpecifique');
 
 describe('Les routes connecté de téléversement des modèles de mesure spécifique', () => {
   const testeur = testeurMSS();
@@ -96,6 +97,42 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
 
       expect(idUtilisateurQuiTeleverse).to.equal('123');
       expect(donneesRecues).to.eql([{ description: 'Mesure téléversée' }]);
+    });
+  });
+
+  describe('Quand requête GET sur `/api/televersement/modelesMesuresSpecifique`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+    });
+
+    it("récupère le téléversement de l'utilisateur courant grâce au dépôt de données", async () => {
+      let idDemande;
+      testeur.depotDonnees().lisTeleversementModelesMesureSpecifique = async (
+        idUtilisateur
+      ) => {
+        idDemande = idUtilisateur;
+        return new TeleversementModelesMesureSpecifique([]);
+      };
+
+      await axios.get(
+        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      );
+
+      expect(idDemande).to.be('U1');
+    });
+
+    it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
+      testeur.depotDonnees().lisTeleversementModelesMesureSpecifique =
+        async () => undefined;
+
+      try {
+        await axios.get(
+          'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(404);
+      }
     });
   });
 });
