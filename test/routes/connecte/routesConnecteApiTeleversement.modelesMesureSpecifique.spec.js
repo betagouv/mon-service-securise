@@ -2,6 +2,7 @@ const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const { ErreurFichierXlsInvalide } = require('../../../src/erreurs');
+const TeleversementModelesMesureSpecifique = require('../../../src/modeles/televersement/televersementModelesMesureSpecifique');
 
 describe('Les routes connecté de téléversement des modèles de mesure spécifique', () => {
   const testeur = testeurMSS();
@@ -110,7 +111,7 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
         idUtilisateur
       ) => {
         idDemande = idUtilisateur;
-        return {};
+        return new TeleversementModelesMesureSpecifique([]);
       };
 
       await axios.get(

@@ -36,7 +36,8 @@ const routesConnecteApiTeleversementModelesMesureSpecifique = ({
       await depotDonnees.lisTeleversementModelesMesureSpecifique(
         requete.idUtilisateurCourant
       );
-    reponse.json(televersement);
+
+    reponse.json(televersement.rapportDetaille());
   });
 
   return routes;
