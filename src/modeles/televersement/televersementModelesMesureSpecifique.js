@@ -1,6 +1,9 @@
+const Referentiel = require('../../referentiel');
+
 class TeleversementModelesMesureSpecifique {
-  constructor(donnees) {
+  constructor(donnees, referentiel = Referentiel.creeReferentielVide()) {
     this.modelesTeleverses = donnees;
+    this.referentiel = referentiel;
   }
 
   rapportDetaille() {
@@ -16,11 +19,14 @@ class TeleversementModelesMesureSpecifique {
   #controleUnModele(modele) {
     const erreurs = [];
 
-    if (!modele.description || modele.description.trim() === '')
-      erreurs.push('INTITULE_MANQUANT');
+    if (!modele.description) erreurs.push('INTITULE_MANQUANT');
 
-    if (!modele.categorie || modele.categorie.trim() === '')
-      erreurs.push('CATEGORIE_MANQUANTE');
+    if (
+      !this.referentiel
+        .identifiantsCategoriesMesures()
+        .includes(modele.categorie)
+    )
+      erreurs.push('CATEGORIE_INCONNUE');
 
     return erreurs;
   }

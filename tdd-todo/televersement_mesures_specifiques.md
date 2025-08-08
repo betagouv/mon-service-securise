@@ -12,7 +12,7 @@
   - [x] Le rapport de téléversement des services est réutilisable
   - [x] Le rapport contient les erreurs d'intitulé manquant
   - [x] Le rapport contient les erreurs de catégorie manquante
-  - [ ] Le rapport contient les erreurs de catégorie inconnue
+  - [x] Le rapport contient les erreurs de catégorie inconnue
   - [ ] Le rapport contient les erreurs de mesures en double
 - [ ] Sur le rapport, un bouton « Importer » permet de déclencher la création des modèles
 - [ ] Le tiroir de téléversement montre, dans les limitations, combien de mesures sont encore ajoutables (idéalement on veut soustraire la varenv et le nombre actuel)
