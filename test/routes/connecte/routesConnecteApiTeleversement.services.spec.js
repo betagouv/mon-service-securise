@@ -82,19 +82,19 @@ describe('Les routes connecté de téléversement de services', () => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
       testeur.adaptateurTeleversementServices().extraisTeleversementServices =
         async () => [{ nom: 'Un service' }];
+      let idUtilisateurQuiTeleverse;
       let donneesRecues;
-      let idUtilisateurCourantRecue;
       testeur.depotDonnees().nouveauTeleversementServices = async (
         idUtilisateurCourant,
         donnees
       ) => {
+        idUtilisateurQuiTeleverse = idUtilisateurCourant;
         donneesRecues = donnees;
-        idUtilisateurCourantRecue = idUtilisateurCourant;
       };
 
       await axios.post('http://localhost:1234/api/televersement/services');
 
-      expect(idUtilisateurCourantRecue).to.equal('123');
+      expect(idUtilisateurQuiTeleverse).to.equal('123');
       expect(donneesRecues).to.eql([{ nom: 'Un service' }]);
     });
   });
