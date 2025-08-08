@@ -121,7 +121,10 @@ const creeDepot = (config = {}) => {
     });
 
   const depotTeleversementModelesMesureSpecifique =
-    depotDonneesTeleversementModelesMesureSpecifique.creeDepot();
+    depotDonneesTeleversementModelesMesureSpecifique.creeDepot({
+      adaptateurPersistance,
+      adaptateurChiffrement,
+    });
 
   const depotModelesMesureSpecifique =
     depotDonneesModelesMesureSpecifique.creeDepot({
