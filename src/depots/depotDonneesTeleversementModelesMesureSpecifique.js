@@ -1,9 +1,20 @@
-const creeDepot = (_config = {}) => {
+const creeDepot = (config = {}) => {
+  const {
+    adaptateurPersistance: persistance,
+    adaptateurChiffrement: chiffrement,
+  } = config;
+
   const nouveauTeleversementModelesMesureSpecifique = async (
-    _idUtilisateur,
-    _donneesTeleversementServices
+    idUtilisateur,
+    donneesTeleversementServices
   ) => {
-    console.log('💾 SAUVEGARDE DES MODÈLES TÉLÉVERSÉS');
+    const donneesChiffrees = await chiffrement.chiffre(
+      donneesTeleversementServices
+    );
+    await persistance.ajouteTeleversementModelesMesureSpecifique(
+      idUtilisateur,
+      donneesChiffrees
+    );
   };
 
   return {

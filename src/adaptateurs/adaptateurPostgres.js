@@ -619,6 +619,18 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       .onConflict('id_utilisateur')
       .merge();
 
+  const ajouteTeleversementModelesMesureSpecifique = async (
+    idUtilisateur,
+    donnees
+  ) =>
+    knex('televersement_modeles_mesure_specifique')
+      .insert({
+        id_utilisateur: idUtilisateur,
+        donnees: { modeles_mesure_specifique: donnees },
+      })
+      .onConflict('id_utilisateur')
+      .merge();
+
   const lisTeleversementServices = async (idUtilisateur) =>
     knex('televersement_services')
       .where({ id_utilisateur: idUtilisateur })
@@ -777,6 +789,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     ajouteActiviteMesure,
     ajouteModeleMesureSpecifique,
     ajouteTeleversementServices,
+    ajouteTeleversementModelesMesureSpecifique,
     arreteTout,
     associeModeleMesureSpecifiqueAuxServices,
     associeModelesMesureSpecifiqueAuService,

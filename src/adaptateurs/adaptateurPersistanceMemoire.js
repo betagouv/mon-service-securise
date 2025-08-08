@@ -461,6 +461,11 @@ const nouvelAdaptateur = (
             .map((a) => a.idService),
       }));
 
+  const ajouteTeleversementModelesMesureSpecifique = async (
+    _idUtilisateur,
+    _donnees
+  ) => {};
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -469,6 +474,7 @@ const nouvelAdaptateur = (
     ajouteModeleMesureSpecifique,
     ajouteSuggestionAction,
     ajouteTacheDeService,
+    ajouteTeleversementModelesMesureSpecifique,
     ajouteUtilisateur,
     associeModeleMesureSpecifiqueAuxServices,
     associeModelesMesureSpecifiqueAuService,
