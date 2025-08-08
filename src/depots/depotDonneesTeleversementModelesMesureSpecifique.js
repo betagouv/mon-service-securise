@@ -1,3 +1,5 @@
+const TeleversementModelesMesureSpecifique = require('../modeles/televersement/televersementModelesMesureSpecifique');
+
 const creeDepot = (config = {}) => {
   const {
     adaptateurPersistance: persistance,
@@ -17,8 +19,19 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const lisTeleversementModelesMesureSpecifique = async (idUtilisateur) => {
+    const persistees =
+      await persistance.lisTeleversementModelesMesureSpecifique(idUtilisateur);
+
+    if (!persistees) return undefined;
+
+    const enClair = await chiffrement.dechiffre(persistees);
+    return new TeleversementModelesMesureSpecifique(enClair);
+  };
+
   return {
     nouveauTeleversementModelesMesureSpecifique,
+    lisTeleversementModelesMesureSpecifique,
   };
 };
 

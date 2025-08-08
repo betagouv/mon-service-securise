@@ -251,8 +251,10 @@ const creeDepot = (config = {}) => {
     supprimeTeleversementServices,
   } = depotTeleversementServices;
 
-  const { nouveauTeleversementModelesMesureSpecifique } =
-    depotTeleversementModelesMesureSpecifique;
+  const {
+    nouveauTeleversementModelesMesureSpecifique,
+    lisTeleversementModelesMesureSpecifique,
+  } = depotTeleversementModelesMesureSpecifique;
 
   const {
     ajouteModeleMesureSpecifique,
@@ -304,6 +306,7 @@ const creeDepot = (config = {}) => {
     lisParcoursUtilisateur,
     lisPourcentageProgressionTeleversementServices,
     lisSuperviseurs,
+    lisTeleversementModelesMesureSpecifique,
     lisTeleversementServices,
     marqueNouveauteLue,
     marqueTacheDeServiceLue,
