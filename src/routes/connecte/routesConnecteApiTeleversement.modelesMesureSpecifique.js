@@ -37,7 +37,9 @@ const routesConnecteApiTeleversementModelesMesureSpecifique = ({
         requete.idUtilisateurCourant
       );
 
-    reponse.json(televersement.rapportDetaille());
+    if (!televersement) return reponse.sendStatus(404);
+
+    return reponse.json(televersement.rapportDetaille());
   });
 
   return routes;

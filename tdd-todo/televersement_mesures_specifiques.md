@@ -14,6 +14,7 @@
   - [x] Le rapport contient les erreurs de catégorie manquante
   - [x] Le rapport contient les erreurs de catégorie inconnue
   - [ ] Le rapport contient les erreurs de mesures en double
+- [x] On a une 404 si le rapport est démandé mais que rien n'a été téléversé
 - [ ] Sur le rapport, un bouton « Importer » permet de déclencher la création des modèles
 - [ ] Le tiroir de téléversement montre, dans les limitations, combien de mesures sont encore ajoutables (idéalement on veut soustraire la varenv et le nombre actuel)
 
