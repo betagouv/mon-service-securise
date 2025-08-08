@@ -15,6 +15,7 @@ const depotDonneesSuperviseurs = require('./depots/depotDonneesSuperviseurs');
 const depotDonneesParrainages = require('./depots/depotDonneesParrainages');
 const depotDonneesSelsDeHachage = require('./depots/depotDonneesSelsDeHachage');
 const depotDonneesTeleversementServices = require('./depots/depotDonneesTeleversementServices');
+const depotDonneesTeleversementModelesMesureSpecifique = require('./depots/depotDonneesTeleversementModelesMesureSpecifique');
 const depotDonneesModelesMesureSpecifique = require('./depots/depotDonneesModelesMesureSpecifique');
 
 const {
@@ -117,6 +118,12 @@ const creeDepot = (config = {}) => {
       adaptateurChiffrement,
       adaptateurPersistance,
       referentiel,
+    });
+
+  const depotTeleversementModelesMesureSpecifique =
+    depotDonneesTeleversementModelesMesureSpecifique.creeDepot({
+      adaptateurPersistance,
+      adaptateurChiffrement,
     });
 
   const depotModelesMesureSpecifique =
@@ -244,6 +251,9 @@ const creeDepot = (config = {}) => {
     supprimeTeleversementServices,
   } = depotTeleversementServices;
 
+  const { nouveauTeleversementModelesMesureSpecifique } =
+    depotTeleversementModelesMesureSpecifique;
+
   const {
     ajouteModeleMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
@@ -311,6 +321,7 @@ const creeDepot = (config = {}) => {
     nombreServices,
     nouveauService,
     nouveauTeleversementServices,
+    nouveauTeleversementModelesMesureSpecifique,
     nouveautesPourUtilisateur,
     nouvelUtilisateur,
     parrainagePour,

@@ -37,7 +37,7 @@
           <Toast
             niveau="erreur"
             titre={resume.elementsErreur.label}
-            contenu="Corriger le fichier XLSX et réimportez-le"
+            contenu="Corrigez le fichier XLSX et réimportez-le"
             avecOmbre={false}
             avecAnimation={false}
           />

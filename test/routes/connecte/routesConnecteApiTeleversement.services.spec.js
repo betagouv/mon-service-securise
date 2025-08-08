@@ -53,10 +53,11 @@ describe('Les routes connecté de téléversement de services', () => {
     it("délègue la conversion du contenu à l'adaptateur XLS", async () => {
       let adaptateurAppele = false;
       let bufferRecu;
-      testeur.adaptateurXLS().extraisTeleversementServices = async (buffer) => {
-        adaptateurAppele = true;
-        bufferRecu = buffer;
-      };
+      testeur.adaptateurTeleversementServices().extraisTeleversementServices =
+        async (buffer) => {
+          adaptateurAppele = true;
+          bufferRecu = buffer;
+        };
 
       await axios.post('http://localhost:1234/api/televersement/services');
 
@@ -79,22 +80,21 @@ describe('Les routes connecté de téléversement de services', () => {
 
     it('délègue au dépôt de données la sauvegarde du téléversement', async () => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
-      testeur.adaptateurXLS().extraisTeleversementServices = async () => [
-        { nom: 'Un service' },
-      ];
+      testeur.adaptateurTeleversementServices().extraisTeleversementServices =
+        async () => [{ nom: 'Un service' }];
+      let idUtilisateurQuiTeleverse;
       let donneesRecues;
-      let idUtilisateurCourantRecue;
       testeur.depotDonnees().nouveauTeleversementServices = async (
         idUtilisateurCourant,
         donnees
       ) => {
+        idUtilisateurQuiTeleverse = idUtilisateurCourant;
         donneesRecues = donnees;
-        idUtilisateurCourantRecue = idUtilisateurCourant;
       };
 
       await axios.post('http://localhost:1234/api/televersement/services');
 
-      expect(idUtilisateurCourantRecue).to.equal('123');
+      expect(idUtilisateurQuiTeleverse).to.equal('123');
       expect(donneesRecues).to.eql([{ nom: 'Un service' }]);
     });
   });

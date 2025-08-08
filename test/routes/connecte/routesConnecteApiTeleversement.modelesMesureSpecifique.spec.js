@@ -3,7 +3,7 @@ const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const { ErreurFichierXlsInvalide } = require('../../../src/erreurs');
 
-describe('Les routes connecté de téléversement des modèles de mesure', () => {
+describe('Les routes connecté de téléversement des modèles de mesure spécifique', () => {
   const testeur = testeurMSS();
   beforeEach(testeur.initialise);
   afterEach(testeur.arrete);
@@ -58,6 +58,44 @@ describe('Les routes connecté de téléversement des modèles de mesure', () =>
       } catch (e) {
         expect(e.response.status).to.be(400);
       }
+    });
+
+    it("délègue la conversion du contenu à l'adaptateur de lecture de données téléversées", async () => {
+      let adaptateurAppele = false;
+      let bufferRecu;
+      testeur.adaptateurTeleversementModelesMesureSpecifique().extraisDonneesTeleversees =
+        async (buffer) => {
+          adaptateurAppele = true;
+          bufferRecu = buffer;
+        };
+
+      await axios.post(
+        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      );
+
+      expect(adaptateurAppele).to.be(true);
+      expect(bufferRecu).not.to.be(undefined);
+    });
+
+    it('délègue au dépôt de données la sauvegarde du téléversement', async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      testeur.adaptateurTeleversementModelesMesureSpecifique().extraisDonneesTeleversees =
+        async () => [{ description: 'Mesure téléversée' }];
+
+      let donneesRecues;
+      let idUtilisateurQuiTeleverse;
+      testeur.depotDonnees().nouveauTeleversementModelesMesureSpecifique =
+        async (idUtilisateurCourant, donnees) => {
+          idUtilisateurQuiTeleverse = idUtilisateurCourant;
+          donneesRecues = donnees;
+        };
+
+      await axios.post(
+        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      );
+
+      expect(idUtilisateurQuiTeleverse).to.equal('123');
+      expect(donneesRecues).to.eql([{ description: 'Mesure téléversée' }]);
     });
   });
 });

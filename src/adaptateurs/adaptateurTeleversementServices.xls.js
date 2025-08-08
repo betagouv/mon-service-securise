@@ -1,7 +1,7 @@
-const xlsx = require('xlsx');
 const { encode } = require('html-entities');
 const { ErreurFichierXlsInvalide } = require('../erreurs');
 const { chaineDateFrEnChaineDateISO } = require('../utilitaires/date');
+const { LecteurExcel } = require('./excel/LecteurExcel');
 
 const ENTETE_NOM = 'Nom du service numérique *';
 const ENTETE_SIRET = "Siret de l'organisation *";
@@ -34,29 +34,13 @@ const toutesLesEntetesNecessaires = [
 ];
 
 const extraisTeleversementServices = async (buffer) => {
-  const fichierXLS = xlsx.read(buffer, { type: 'buffer' });
+  const lecteur = new LecteurExcel(buffer);
+  const donneesBrutes = lecteur.donneesDeFeuille('Template services', 6);
 
-  if (
-    Object.keys(fichierXLS.Sheets).length > 1 ||
-    !fichierXLS.Sheets['Template services']
-  ) {
-    throw new ErreurFichierXlsInvalide();
-  }
-
-  const feuille = fichierXLS.Sheets['Template services'];
-  const donneesBrutes = xlsx.utils.sheet_to_json(feuille, {
-    range: 5,
-    header: 5,
-    defval: '',
-    raw: false,
-  });
-
-  const toutesLignesValides = donneesBrutes.every((ligneDonnee) => {
-    const headersDeLaLigne = new Set(Object.keys(ligneDonnee));
-    return toutesLesEntetesNecessaires.every((header) =>
-      headersDeLaLigne.has(header)
-    );
-  });
+  const toutesLignesValides = lecteur.lesLignesSontCompletes(
+    donneesBrutes,
+    toutesLesEntetesNecessaires
+  );
 
   if (donneesBrutes.length > 250 || !toutesLignesValides) {
     throw new ErreurFichierXlsInvalide();
