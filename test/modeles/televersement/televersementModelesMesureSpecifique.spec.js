@@ -1,9 +1,18 @@
 const expect = require('expect.js');
 const TeleversementModelesMesureSpecifique = require('../../../src/modeles/televersement/televersementModelesMesureSpecifique');
+const Referentiel = require('../../../src/referentiel');
 
 describe('Un téléversement de modèles de mesure spécifique', () => {
+  let referentiel;
+
+  beforeEach(() => {
+    referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: { gouvernance: {} },
+    });
+  });
+
   const unTeleversement = (donnees) =>
-    new TeleversementModelesMesureSpecifique(donnees);
+    new TeleversementModelesMesureSpecifique(donnees, referentiel);
 
   describe('sur demande de rapport détaillé', () => {
     it('met dans chaque ligne du rapport le modèle concerné', () => {
@@ -20,7 +29,7 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
 
     it('sait détecter une erreur de description manquante (colonne Intitulé dans le Excel)', () => {
       const sansDescription = {
-        description: '  ',
+        description: '',
         modalites: '',
         categorie: 'gouvernance',
       };
@@ -32,17 +41,23 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
       ]);
     });
 
-    it('sait détecter une erreur de catégorie manquante', () => {
-      const sansCategorie = {
-        categorie: '',
-        description: 'D1',
-        modalites: '',
-      };
+    it('sait détecter une erreur de catégorie inconnue du référentiel', () => {
+      const categorieZ = { categorie: 'Z', description: 'D…', modalites: '' };
+
+      const rapport = unTeleversement([categorieZ]).rapportDetaille();
+
+      expect(rapport.modelesTeleverses[0].erreurs).to.eql([
+        'CATEGORIE_INCONNUE',
+      ]);
+    });
+
+    it('indique une erreur de catégorie inconnue en cas de catégorie manquante', () => {
+      const sansCategorie = { categorie: '', description: 'D…', modalites: '' };
 
       const rapport = unTeleversement([sansCategorie]).rapportDetaille();
 
       expect(rapport.modelesTeleverses[0].erreurs).to.eql([
-        'CATEGORIE_MANQUANTE',
+        'CATEGORIE_INCONNUE',
       ]);
     });
   });
