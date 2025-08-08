@@ -1,5 +1,11 @@
 async function extraisDonneesTeleversees() {
-  throw new Error('Pas encore implémentée');
+  return [
+    {
+      description: '[EN DUR] Description',
+      descriptionLongue: '[EN DUR] Description longue',
+      categorie: 'gouvernance',
+    },
+  ];
 }
 
 module.exports = { extraisDonneesTeleversees };
