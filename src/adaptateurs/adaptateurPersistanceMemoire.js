@@ -15,6 +15,9 @@ const nouvelAdaptateur = (
   donnees.superviseurs ||= [];
   donnees.modelesMesureSpecifique ||= [];
   donnees.associationModelesMesureSpecifiqueServices ||= [];
+  donnees.televersements = {
+    modelesMesureSpecifique: [],
+  };
 
   const supprimeEnregistrement = async (nomTable, id) => {
     donnees[nomTable] = donnees[nomTable].filter((e) => e.id !== id);
@@ -462,9 +465,19 @@ const nouvelAdaptateur = (
       }));
 
   const ajouteTeleversementModelesMesureSpecifique = async (
-    _idUtilisateur,
-    _donnees
-  ) => {};
+    idUtilisateur,
+    donneesTeleversement
+  ) => {
+    donnees.televersements.modelesMesureSpecifique.push({
+      idUtilisateur,
+      donneesTeleversement,
+    });
+  };
+
+  const lisTeleversementModelesMesureSpecifique = async (idUtilisateur) =>
+    donnees.televersements.modelesMesureSpecifique.find(
+      (m) => m.idUtilisateur === idUtilisateur
+    ).donneesTeleversement;
 
   return {
     activitesMesure,
@@ -489,6 +502,7 @@ const nouvelAdaptateur = (
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     lisSuperviseursConcernes,
+    lisTeleversementModelesMesureSpecifique,
     marqueNouveauteLue,
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
