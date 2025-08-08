@@ -29,6 +29,7 @@ const routesConnecteApiTeleversement = ({
       lecteurDeFormData,
       middleware,
       adaptateurTeleversementModelesMesureSpecifique,
+      depotDonnees,
     })
   );
 
