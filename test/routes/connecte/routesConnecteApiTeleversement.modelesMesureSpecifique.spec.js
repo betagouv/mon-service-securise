@@ -120,5 +120,19 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
 
       expect(idDemande).to.be('U1');
     });
+
+    it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
+      testeur.depotDonnees().lisTeleversementModelesMesureSpecifique =
+        async () => undefined;
+
+      try {
+        await axios.get(
+          'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e.response.status).to.be(404);
+      }
+    });
   });
 });
