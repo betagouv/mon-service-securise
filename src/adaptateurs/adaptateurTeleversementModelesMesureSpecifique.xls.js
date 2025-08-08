@@ -20,7 +20,7 @@ async function extraisDonneesTeleversees(buffer) {
   return donneesBrutes.map((ligne) => ({
     description: encode(ligne[ENTETE_INTITULE]?.trim()), // Chez MSS, l'intitulé va bien dans "description"
     modalites: encode(ligne[ENTETE_MODALITES]?.trim()),
-    categorie: ligne[ENTETE_CATEGORIE]?.trim(),
+    categorie: ligne[ENTETE_CATEGORIE]?.trim()?.toLowerCase(),
   }));
 }
 
