@@ -19,9 +19,9 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 
 ## Du point de vue de la page "SÉCURISER"
 
-- [ ] Un bouton derrière le feature flag, permettant d'associer une liste de modèle à un service
-  - [ ] Un tiroir d'association dédié
-    - [ ] Rendre les modèles déjà associé au service "sélection immuable"
+- [x] Un bouton derrière le feature flag, permettant d'associer une liste de modèle à un service
+  - [x] Un tiroir d'association dédié
+    - [x] Rendre les modèles déjà associé au service "sélection immuable"
   - [x] Une route d'association à des modèles multiple dédiés
 - [ ] Le tiroir de configuration d'une mesure spécifique est modifié, via un feature flag
   - [ ] Un affichage particulier pour un propriétaire du modèle de mesure
