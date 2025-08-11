@@ -61,6 +61,7 @@
       document.body.dispatchEvent(
         new CustomEvent('modeles-mesure-specifique-associes')
       );
+      await modelesMesureSpecifique.rafraichis();
       tiroirStore.ferme();
     } catch (e) {
       tiroirStore.ferme();
