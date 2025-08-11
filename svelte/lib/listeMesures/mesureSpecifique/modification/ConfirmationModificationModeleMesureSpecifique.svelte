@@ -25,7 +25,9 @@
   <div class="alerte-modification-indice-cyber">
     <Toast
       avecOmbre={false}
-      titre="Modification sur plusieurs services"
+      titre="Modification sur {servicesAssocies.length === 1
+        ? 'un service'
+        : 'plusieurs services'}"
       avecAnimation={false}
       niveau="info"
       contenu="Vous vous apprêtez à modifier cette mesure sur <b>{servicesAssocies.length}
