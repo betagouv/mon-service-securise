@@ -12,6 +12,7 @@
   import { toasterStore } from '../../ui/stores/toaster.store';
   import { singulierPluriel } from '../../outils/string';
   import Infobulle from '../../ui/Infobulle.svelte';
+  import type { ModeleMesureSpecifique } from '../../ui/types';
 
   export const titre: string = 'Ajouter des mesures depuis ma liste';
   export const sousTitre: string =
@@ -35,6 +36,19 @@
   $: modelesAssociesACeService = $modelesMesureSpecifique.filter((m) =>
     m.idsServicesAssocies.includes(idService)
   );
+
+  const doitEtreALaFin = (modeleMesure: ModeleMesureSpecifique) =>
+    modeleMesure.idsServicesAssocies.includes(idService);
+
+  $: modelesMesureSpecifiqueOrdonnes = $modelesMesureSpecifique.sort((a, b) => {
+    if (
+      (doitEtreALaFin(a) && doitEtreALaFin(b)) ||
+      (!doitEtreALaFin(a) && !doitEtreALaFin(b))
+    ) {
+      return 0;
+    }
+    return doitEtreALaFin(a) ? 1 : -1;
+  });
 
   const associeModeles = async () => {
     try {
@@ -90,7 +104,7 @@
         { cle: 'descriptionLongue', libelle: 'Description' },
         { cle: 'categorie', libelle: 'Catégorie' },
       ]}
-      donnees={$modelesMesureSpecifique}
+      donnees={modelesMesureSpecifiqueOrdonnes}
       configurationRecherche={{
         champsRecherche: ['description', 'descriptionLongue'],
       }}
