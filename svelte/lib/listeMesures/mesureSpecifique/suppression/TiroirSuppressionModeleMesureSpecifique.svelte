@@ -17,7 +17,7 @@
     supprimeModeleMesureSpecifiqueEtDetacheMesureAssociees,
   } from '../../listeMesures.api';
   import { toasterStore } from '../../../ui/stores/toaster.store';
-  import { modelesMesureSpecifique } from '../modelesMesureSpecifique.store';
+  import { modelesMesureSpecifique } from '../../../ui/stores/modelesMesureSpecifique.store';
   import TableauSelectionServices from '../../kit/TableauSelectionServices.svelte';
   import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
 

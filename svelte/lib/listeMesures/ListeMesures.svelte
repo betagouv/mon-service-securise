@@ -25,7 +25,7 @@
   import Lien from '../ui/Lien.svelte';
   import Loader from '../ui/Loader.svelte';
   import Toaster from '../ui/Toaster.svelte';
-  import { modelesMesureSpecifique } from './mesureSpecifique/modelesMesureSpecifique.store';
+  import { modelesMesureSpecifique } from '../ui/stores/modelesMesureSpecifique.store';
   import type { ListeMesuresProps, ModeleDeMesure } from './listeMesures.d';
   import Onglets from '../ui/Onglets.svelte';
   import TiroirAjoutModeleMesureSpecifique from './mesureSpecifique/ajout/TiroirAjoutModeleMesureSpecifique.svelte';

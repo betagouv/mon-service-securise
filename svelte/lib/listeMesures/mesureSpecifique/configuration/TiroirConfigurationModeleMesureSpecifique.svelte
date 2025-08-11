@@ -17,7 +17,7 @@
   } from '../../listeMesures.api';
   import { toasterStore } from '../../../ui/stores/toaster.store';
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
-  import { modelesMesureSpecifique } from '../modelesMesureSpecifique.store';
+  import { modelesMesureSpecifique } from '../../../ui/stores/modelesMesureSpecifique.store';
   import { servicesAvecMesuresAssociees } from '../../servicesAssocies/servicesAvecMesuresAssociees.store';
   import Avertissement from '../../../ui/Avertissement.svelte';
   import Lien from '../../../ui/Lien.svelte';
