@@ -1,16 +1,24 @@
 <script lang="ts">
-  import { EtatEnregistrement } from './tableauDesMesures.d';
+  import { EtatEnregistrement, type IdCategorie } from './tableauDesMesures.d';
   import {
     afficheTiroirCreeMesure,
     afficheTiroirExportDesMesures,
   } from './actionsTiroir';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
+  import TiroirAssociationModelesMesureSpecifiqueAuService from './mesuresSpecifiques/TiroirAssociationModelesMesureSpecifiqueAuService.svelte';
 
   const { EnCours } = EtatEnregistrement;
 
   export let etatEnregistrement: EtatEnregistrement;
   export let afficheModelesMesureSpecifique: boolean;
+  export let categories: Record<IdCategorie, string>;
 
-  const afficheTiroirAssociationModeles = () => {};
+  const afficheTiroirAssociationModeles = () => {
+    tiroirStore.afficheContenu(
+      TiroirAssociationModelesMesureSpecifiqueAuService,
+      { categories }
+    );
+  };
 </script>
 
 <tr>
