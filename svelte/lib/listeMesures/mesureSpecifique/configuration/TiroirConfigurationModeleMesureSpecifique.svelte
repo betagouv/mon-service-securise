@@ -293,7 +293,13 @@
         taille="md"
         icone="save-line"
         position-icone="gauche"
-        on:click={() => (etapeInformations = 2)}
+        on:click={async () => {
+          if (servicesAssocies.length === 0) {
+            await sauvegardeInformations();
+          } else {
+            etapeInformations = 2;
+          }
+        }}
         actif={formulaireValide && mesureAEteEditee}
       />
     {:else}
