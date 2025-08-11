@@ -119,7 +119,7 @@
     { cle: 'niveauSecurite', libelle: 'Besoins de sécurité' },
   ]}
   donnees={etapeActive === 1
-    ? servicesAvecMesuresAssocieesOrdonnes
+    ? servicesAvecMesuresAssocieesOrdonnes.filter((s) => s.peutEtreModifie)
     : servicesAvecMesuresAssocieesOrdonnes.filter((s) =>
         idsServicesSelectionnes.includes(s.id)
       )}
