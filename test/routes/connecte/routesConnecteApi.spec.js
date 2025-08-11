@@ -2321,6 +2321,54 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         expect(e.response.status).to.be(400);
       }
     });
+
+    it('jette une erreur si les droits de modification de services sont insuffisants', async () => {
+      testeur.depotDonnees().associeModeleMesureSpecifiqueAuxServices =
+        async () => {
+          throw new ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique();
+        };
+      try {
+        await axios.put(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
+        );
+
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(403);
+      }
+    });
+
+    it("jette une erreur si l'utilisateur ne possède pas le modèle", async () => {
+      testeur.depotDonnees().associeModeleMesureSpecifiqueAuxServices =
+        async () => {
+          throw new ErreurAutorisationInexistante();
+        };
+      try {
+        await axios.put(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
+        );
+
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(404);
+      }
+    });
+
+    it("jette une erreur si l'un des services n'existe pas", async () => {
+      testeur.depotDonnees().associeModeleMesureSpecifiqueAuxServices =
+        async () => {
+          throw new ErreurServiceInexistant();
+        };
+      try {
+        await axios.put(
+          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
+        );
+
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
+    });
   });
 
   describe('quand requête DELETE sur `/api/modeles/mesureSpecifique/:idModele`', () => {

@@ -5,7 +5,7 @@ class ErreurDroitsIncoherents extends Error {}
 class ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique extends Error {
   constructor(idUtilisateur, idServices, droitsRequis) {
     const u = idUtilisateur;
-    const s = idServices.join(',');
+    const s = idServices?.join(',');
     const d = JSON.stringify(droitsRequis);
     super(
       `L'utilisateur ${u} n'a pas les droits suffisants sur ${s}. Droits requis pour modifier un modèle : ${d}`
