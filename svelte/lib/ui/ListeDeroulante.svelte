@@ -54,8 +54,8 @@
 
 <style>
   label {
-    font-size: 1.11em;
-    line-height: 1.5em;
+    font-size: 1rem;
+    line-height: 1.5rem;
     display: block;
     margin-bottom: 8px;
     width: fit-content;
