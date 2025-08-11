@@ -164,6 +164,8 @@
       rafraichisAutorisations(), // Pour avoir des pastilles de couleur à jour sur les droits
       rafraichisMesures(), // Pour avoir les responsables de mesures à jour
     ])}
+  on:modeles-mesure-specifique-associes={() =>
+    ($rechercheParAvancement = 'enAction')}
 />
 <Toaster />
 <div class="barre-filtres">

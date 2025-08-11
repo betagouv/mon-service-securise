@@ -53,6 +53,9 @@
           detail: { sourceDeModification: 'tiroir' },
         })
       );
+      document.body.dispatchEvent(
+        new CustomEvent('modeles-mesure-specifique-associes')
+      );
       tiroirStore.ferme();
     } catch (e) {
       tiroirStore.ferme();
