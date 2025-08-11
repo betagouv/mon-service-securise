@@ -56,6 +56,7 @@
 <style lang="scss">
   .conteneur-bouton {
     position: relative;
+    font-size: 1rem;
     z-index: 3;
 
     .contenu-deroulant {
