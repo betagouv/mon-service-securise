@@ -11,6 +11,7 @@
   import { associeModelesMesureSpecifiqueAuService } from '../tableauDesMesures.api';
   import { toasterStore } from '../../ui/stores/toaster.store';
   import { singulierPluriel } from '../../outils/string';
+  import Infobulle from '../../ui/Infobulle.svelte';
 
   export const titre: string = 'Ajouter des mesures depuis ma liste';
   export const sousTitre: string =
@@ -29,6 +30,10 @@
       valeur: id,
       idCategorie: 'categorie',
     })
+  );
+
+  $: modelesAssociesACeService = $modelesMesureSpecifique.filter((m) =>
+    m.idsServicesAssocies.includes(idService)
   );
 
   const associeModeles = async () => {
@@ -101,17 +106,30 @@
           multiple: 'mesures sélectionnées',
         },
         champSelection: 'id',
+        predicatSelectionDesactive: (donnee) =>
+          donnee.idsServicesAssocies.includes(idService),
       }}
+      preSelectionImmuable={modelesAssociesACeService.map((m) => m.id)}
       bind:selection={idsModelesSelectionnes}
     >
       <svelte:fragment slot="cellule" let:donnee let:colonne>
         {@const { description, descriptionLongue, categorie } = donnee}
+        {@const desactive = donnee.idsServicesAssocies.includes(idService)}
         {#if colonne.cle === 'description'}
-          <b>{description}</b>
+          <div class="contenu-intitule">
+            <b class:desactive>{description}</b>
+            {#if desactive}
+              <Infobulle
+                contenu="Vous ne pouvez pas sélectionner cette mesure car elle est déjà associée à ce service."
+              />
+            {/if}
+          </div>
         {:else if colonne.cle === 'descriptionLongue'}
-          {descriptionLongue}
+          <span class:desactive>{descriptionLongue}</span>
         {:else if colonne.cle === 'categorie'}
-          <CartoucheCategorieMesure {categorie} />
+          <div class:desactive>
+            <CartoucheCategorieMesure {categorie} />
+          </div>
         {/if}
       </svelte:fragment>
     </Tableau>
@@ -201,5 +219,16 @@
     line-height: 1.75rem;
     margin: 0;
     max-width: 550px;
+  }
+
+  .contenu-intitule {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .desactive {
+    opacity: 0.5;
   }
 </style>
