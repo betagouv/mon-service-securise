@@ -282,6 +282,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   describe('quand GET sur /mesures/export.csv', () => {
     beforeEach(() => {
       testeur.adaptateurCsv().genereCsvMesures = async () => Buffer.from('');
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
     });
 
     it("vérifie que l'utilisateur a accepté les CGU", (done) => {
@@ -372,6 +373,29 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       } catch (e) {
         expect(erreurLoguee).to.be.an(Error);
       }
+    });
+
+    it("lis les modèles de mesure spécifique pour l'utilisateur", async () => {
+      let idRecu;
+      testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur = async (
+        idUtilisateur
+      ) => {
+        idRecu = idUtilisateur;
+        return [{ description: 'Un modèle de mesure spécifique' }];
+      };
+
+      let donneesModelesMesureSpecifique;
+      testeur.adaptateurCsv().genereCsvMesures = async (donneesMesures) => {
+        donneesModelesMesureSpecifique = donneesMesures.mesuresSpecifiques;
+      };
+
+      await axios.get('http://localhost:1234/mesures/export.csv');
+
+      expect(idRecu).to.be('U1');
+      expect(donneesModelesMesureSpecifique.length).to.be(1);
+      expect(donneesModelesMesureSpecifique[0].description).to.be(
+        'Un modèle de mesure spécifique'
+      );
     });
   });
 });

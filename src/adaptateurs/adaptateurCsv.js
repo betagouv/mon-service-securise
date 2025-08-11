@@ -101,7 +101,9 @@ const genereCsvMesures = async (
         referentiel: 'Mesures ajoutées',
         type: '',
         categorie: referentiel.descriptionCategorie(m.categorie),
-        descriptionLongue: '',
+        descriptionLongue: m.descriptionLongue
+          ? decode(m.descriptionLongue)
+          : '',
         statut: referentiel.descriptionStatutMesure(m.statut),
         commentaires: sansRetoursChariots(decode(m.modalites)),
         priorite: referentiel.prioritesMesures()[m.priorite]?.libelleCourt,

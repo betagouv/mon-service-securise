@@ -196,10 +196,17 @@ const routesConnectePage = ({
   routes.get(
     '/mesures/export.csv',
     middleware.verificationAcceptationCGU,
-    async (_, reponse) => {
+    async (requete, reponse) => {
       try {
+        const modelesMesureSpecifique =
+          await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
+            requete.idUtilisateurCourant
+          );
         const bufferCsv = await adaptateurCsv.genereCsvMesures(
-          { mesuresGenerales: referentiel.mesures(), mesuresSpecifiques: [] },
+          {
+            mesuresGenerales: referentiel.mesures(),
+            mesuresSpecifiques: modelesMesureSpecifique,
+          },
           [],
           false,
           referentiel,
