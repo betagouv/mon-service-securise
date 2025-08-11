@@ -108,8 +108,7 @@
   <div class="marge-24">
     {#if modeleMesure.idsServicesAssocies.length === 0}
       <h4>
-        Êtes-vous sûr de vouloir supprimer la mesure «&nbsp;{modeleMesure.description}&nbsp;»
-        ?
+        Êtes-vous sûr de vouloir supprimer la mesure «&nbsp;{modeleMesure.description}&nbsp;»&nbsp;?
       </h4>
       <Toast
         avecOmbre={false}
