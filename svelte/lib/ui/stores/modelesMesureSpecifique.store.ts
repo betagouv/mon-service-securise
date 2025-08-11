@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { ModeleMesureSpecifique } from '../../ui/types';
+import type { ModeleMesureSpecifique } from '../types';
 
 const { subscribe, set } = writable<ModeleMesureSpecifique[]>([]);
 

@@ -4,7 +4,7 @@
   import { tiroirStore } from '../../../ui/stores/tiroir.store';
   import Onglets from '../../../ui/Onglets.svelte';
   import { ajouteModeleMesureSpecifique } from '../../listeMesures.api';
-  import { modelesMesureSpecifique } from '../modelesMesureSpecifique.store';
+  import { modelesMesureSpecifique } from '../../../ui/stores/modelesMesureSpecifique.store';
   import { toasterStore } from '../../../ui/stores/toaster.store';
   import type { ListeMesuresProps } from '../../listeMesures.d';
   import InformationsModeleMesureSpecifique from '../InformationsModeleMesureSpecifique.svelte';
