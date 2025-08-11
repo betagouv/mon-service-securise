@@ -227,7 +227,7 @@
 
   .lien-dsfr {
     color: #042794;
-    background-color: #fff;
+    background-color: transparent;
     border: none;
     text-decoration: underline;
     text-decoration-color: #042794;
