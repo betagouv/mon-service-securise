@@ -56,6 +56,7 @@
   export let priorites: ReferentielPriorite;
   export let estLectureSeule: boolean;
   export let modeVisiteGuidee: boolean;
+  export let afficheModelesMesureSpecifique: boolean;
 
   const rafraichisMesures = async () => {
     mesures.reinitialise(
@@ -244,7 +245,7 @@
       </th>
     </tr>
     {#if !estLectureSeule}
-      <BandeauActions {etatEnregistrement} />
+      <BandeauActions {etatEnregistrement} {afficheModelesMesureSpecifique} />
     {/if}
     {#if !$nombreResultats.aucunResultat}
       <tr class="titres">
