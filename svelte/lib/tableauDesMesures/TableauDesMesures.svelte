@@ -249,6 +249,7 @@
         {etatEnregistrement}
         {afficheModelesMesureSpecifique}
         {categories}
+        {idService}
       />
     {/if}
     {#if !$nombreResultats.aucunResultat}

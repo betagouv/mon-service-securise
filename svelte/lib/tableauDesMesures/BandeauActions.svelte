@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { EtatEnregistrement, type IdCategorie } from './tableauDesMesures.d';
+  import {
+    EtatEnregistrement,
+    type IdCategorie,
+    type IdService,
+  } from './tableauDesMesures.d';
   import {
     afficheTiroirCreeMesure,
     afficheTiroirExportDesMesures,
@@ -12,11 +16,12 @@
   export let etatEnregistrement: EtatEnregistrement;
   export let afficheModelesMesureSpecifique: boolean;
   export let categories: Record<IdCategorie, string>;
+  export let idService: IdService;
 
   const afficheTiroirAssociationModeles = () => {
     tiroirStore.afficheContenu(
       TiroirAssociationModelesMesureSpecifiqueAuService,
-      { categories }
+      { categories, idService }
     );
   };
 </script>

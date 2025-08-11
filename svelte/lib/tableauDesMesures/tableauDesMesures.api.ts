@@ -107,3 +107,12 @@ export const enregistreMesureGenerale = async (
     ...(donneesMesure.modalites && { modalites: donneesMesure.modalites }),
   });
 };
+
+export const associeModelesMesureSpecifiqueAuService = async (
+  idService: IdService,
+  idsModeles: string[]
+) => {
+  await axios.put(`/api/service/${idService}/modeles/mesureSpecifique`, {
+    idsModeles,
+  });
+};
