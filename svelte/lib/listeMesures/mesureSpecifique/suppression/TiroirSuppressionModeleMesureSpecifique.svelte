@@ -212,6 +212,15 @@
       {:else if modeSuppressionSelectionne === ModeDeSuppression.UNIQUEMENT_SERVICES_CHOISIS}
         {#if etapeSuppressionSelectionService === 1}
           <SeparateurHorizontal />
+          <div>
+            <h4 class="titre-etape">
+              Supprimer cette mesure de certains services
+            </h4>
+            <span class="sous-titre"
+              >Sélectionnez les services sur lesquels vous souhaitez supprimer
+              cette mesure</span
+            >
+          </div>
           <TableauSelectionServices
             {statuts}
             bind:idsServicesSelectionnes
@@ -284,5 +293,13 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+  }
+
+  .sous-titre {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: normal;
+    margin-top: 8px;
+    display: inline-block;
   }
 </style>
