@@ -13,6 +13,9 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 ## Du point de vue du Front
 
 - [ ] Les badges des onglets sont mis à jour en fonction de la recherche
+- [x] Le "Téléchargement de la liste de mesure" inclue les modèles de mesure spécifique
+  - [x] Ils n'ont pas d'identifiant numérique
+  - [x] Le référentiel est "Ajoutée"
 
 ## Du point de vue de la page "SÉCURISER"
 
