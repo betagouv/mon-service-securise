@@ -17,6 +17,9 @@ $(() => {
   const { indiceCyberPersonnalise } = lisDonneesPartagees(
     'indice-cyber-personnalise'
   );
+  const afficheModelesMesureSpecifique = lisDonneesPartagees(
+    'affiche-modeles-mesure-specifique'
+  );
 
   const enVisiteGuidee = () =>
     etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause;
@@ -30,6 +33,7 @@ $(() => {
         idService,
         estLectureSeule,
         modeVisiteGuidee: enVisiteGuidee(),
+        afficheModelesMesureSpecifique,
       },
     })
   );

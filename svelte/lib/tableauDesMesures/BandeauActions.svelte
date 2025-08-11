@@ -8,11 +8,24 @@
   const { EnCours } = EtatEnregistrement;
 
   export let etatEnregistrement: EtatEnregistrement;
+  export let afficheModelesMesureSpecifique: boolean;
+
+  const afficheTiroirAssociationModeles = () => {};
 </script>
 
 <tr>
   <th colspan="5">
     <div class="actions">
+      {#if afficheModelesMesureSpecifique}
+        <button
+          class="bouton-action-mesure association-modeles"
+          on:click={() => afficheTiroirAssociationModeles()}
+          disabled={etatEnregistrement === EnCours}
+        >
+          <img src="/statique/assets/images/icone_ajout_liste.svg" alt="" />
+          Ajouter des mesures depuis ma liste
+        </button>
+      {/if}
       <button
         class="bouton-action-mesure"
         on:click={() => afficheTiroirCreeMesure()}
@@ -91,6 +104,16 @@
   .bouton-action-mesure:hover img {
     filter: brightness(0) invert(21%) sepia(87%) saturate(646%)
       hue-rotate(168deg) brightness(89%) contrast(103%);
+  }
+
+  .bouton-action-mesure.association-modeles img {
+    filter: brightness(0) invert(7%) sepia(11%) saturate(0%) hue-rotate(275deg)
+      brightness(89%) contrast(79%);
+  }
+
+  .bouton-action-mesure.association-modeles:hover img {
+    filter: brightness(0) invert(19%) sepia(91%) saturate(862%)
+      hue-rotate(175deg) brightness(89%) contrast(99%);
   }
 
   .actions {
