@@ -5,9 +5,12 @@
   import Tableau from '../../ui/Tableau.svelte';
   import { modelesMesureSpecifique } from '../../ui/stores/modelesMesureSpecifique.store';
   import CartoucheCategorieMesure from '../../ui/CartoucheCategorieMesure.svelte';
-  import type { IdCategorie } from '../tableauDesMesures.d';
+  import type { IdCategorie, IdService } from '../tableauDesMesures.d';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import SeparateurHorizontal from '../../ui/SeparateurHorizontal.svelte';
+  import { associeModelesMesureSpecifiqueAuService } from '../tableauDesMesures.api';
+  import { toasterStore } from '../../ui/stores/toaster.store';
+  import { singulierPluriel } from '../../outils/string';
 
   export const titre: string = 'Ajouter des mesures depuis ma liste';
   export const sousTitre: string =
@@ -15,6 +18,7 @@
   export const taille = 'large';
 
   export let categories: Record<IdCategorie, string>;
+  export let idService: IdService;
 
   let etapeCourante: 1 | 2 = 1;
   let idsModelesSelectionnes: string[] = [];
@@ -26,6 +30,38 @@
       idCategorie: 'categorie',
     })
   );
+
+  const associeModeles = async () => {
+    try {
+      await associeModelesMesureSpecifiqueAuService(
+        idService,
+        idsModelesSelectionnes
+      );
+      const titrePluralise = singulierPluriel(
+        'Mesures ajoutées avec succès !',
+        'Mesure ajoutée avec succès !',
+        idsModelesSelectionnes.length
+      );
+      const sousTitrePluralise = singulierPluriel(
+        `1 mesure a été appliquée à votre service. Elles est désormais prête à être lancée (statut “À lancer”).`,
+        `${idsModelesSelectionnes.length} mesures ont été appliquées à votre service. Elles sont désormais prêtes à être lancées (statut “À lancer”).`,
+        idsModelesSelectionnes.length
+      );
+      toasterStore.succes(titrePluralise, sousTitrePluralise);
+      document.body.dispatchEvent(
+        new CustomEvent('mesure-modifiee', {
+          detail: { sourceDeModification: 'tiroir' },
+        })
+      );
+      tiroirStore.ferme();
+    } catch (e) {
+      tiroirStore.ferme();
+      toasterStore.erreur(
+        'Une erreur est survenue',
+        "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
+      );
+    }
+  };
 </script>
 
 <ContenuTiroir>
@@ -135,6 +171,14 @@
       position-icone="gauche"
       on:click={() => (etapeCourante = 2)}
       actif={idsModelesSelectionnes.length > 0}
+    />
+  {:else}
+    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <lab-anssi-bouton
+      variante="primaire"
+      taille="md"
+      titre="Valider les modifications"
+      on:click={associeModeles}
     />
   {/if}
 </ActionsTiroir>
