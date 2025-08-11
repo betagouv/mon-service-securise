@@ -245,7 +245,11 @@
       </th>
     </tr>
     {#if !estLectureSeule}
-      <BandeauActions {etatEnregistrement} {afficheModelesMesureSpecifique} />
+      <BandeauActions
+        {etatEnregistrement}
+        {afficheModelesMesureSpecifique}
+        {categories}
+      />
     {/if}
     {#if !$nombreResultats.aucunResultat}
       <tr class="titres">
