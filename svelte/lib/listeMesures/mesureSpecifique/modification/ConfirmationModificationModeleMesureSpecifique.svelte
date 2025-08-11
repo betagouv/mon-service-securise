@@ -21,11 +21,11 @@
 </script>
 
 <div class="entete">
-  <h3>Modifer les informations de la mesure</h3>
+  <h3>Modifier les informations de la mesure</h3>
   <div class="alerte-modification-indice-cyber">
     <Toast
       avecOmbre={false}
-      titre="Cette action est irréversible"
+      titre="Modification sur plusieurs services"
       avecAnimation={false}
       niveau="info"
       contenu="Vous vous apprêtez à modifier cette mesure sur <b>{servicesAssocies.length}
