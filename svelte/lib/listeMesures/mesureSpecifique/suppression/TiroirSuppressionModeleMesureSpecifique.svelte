@@ -187,6 +187,14 @@
           contenu="Cette action impactera tous les services associés à cette mesure."
         />
         <SeparateurHorizontal />
+        {@const intitulePluralise =
+          modeleMesure.idsServicesAssocies.length > 1
+            ? 'services concernés par ces modifications'
+            : 'service concerné par cette modification'}
+        <h4 class="titre-etape">
+          {modeleMesure.idsServicesAssocies.length}
+          {intitulePluralise}
+        </h4>
         <TableauServicesAssocies
           servicesAssocies={servicesAvecMesure}
           referentielStatuts={statuts}
