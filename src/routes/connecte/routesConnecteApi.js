@@ -809,6 +809,20 @@ const routesConnecteApi = ({
           reponse.sendStatus(400);
           return;
         }
+        if (
+          e instanceof ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
+        ) {
+          reponse.sendStatus(403);
+          return;
+        }
+        if (e instanceof ErreurAutorisationInexistante) {
+          reponse.sendStatus(404);
+          return;
+        }
+        if (e instanceof ErreurServiceInexistant) {
+          reponse.sendStatus(400);
+          return;
+        }
         throw e;
       }
     }
