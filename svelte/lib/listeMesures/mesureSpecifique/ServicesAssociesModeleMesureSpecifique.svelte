@@ -98,7 +98,7 @@
         Cela aura un impact sur {idsServicesSelectionnes.length === 1
           ? 'son'
           : 'leur'}
-        indice cyber."
+        indice cyber personnalisé."
       />
     </span>
     <div class="conteneur-separateur">
