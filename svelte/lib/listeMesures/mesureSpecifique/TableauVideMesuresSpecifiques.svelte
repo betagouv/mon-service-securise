@@ -29,15 +29,15 @@
   <div class="entete">
     <h4>Ajoutez vos propres mesures</h4>
     <p>
-      Téléversez un fichier CSV contenant vos mesures existantes, ou ajoutez-les
-      manuellement
+      Téléversez un fichier XLSX contenant vos mesures existantes, ou
+      ajoutez-les manuellement
     </p>
   </div>
   <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
   <lab-anssi-bouton
     variante="primaire"
     taille="lg"
-    titre="Importer des mesures depuis un CSV"
+    titre="Importer des mesures depuis un fichier XLSX"
     on:click={afficheTiroirTeleversement}
   />
   <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
