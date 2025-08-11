@@ -164,6 +164,7 @@
   };
 
   const afficheTiroirAjout = () => {
+    ongletActif = 'specifiques';
     tiroirStore.afficheContenu(TiroirAjoutModeleMesureSpecifique, {
       categories,
       statuts,
@@ -172,6 +173,7 @@
   };
 
   const afficheTiroirTeleversement = () => {
+    ongletActif = 'specifiques';
     tiroirStore.afficheContenu(TiroirTeleversementModeleMesureSpecifique, {});
   };
 
