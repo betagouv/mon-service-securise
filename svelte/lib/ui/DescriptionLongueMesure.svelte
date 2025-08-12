@@ -31,6 +31,8 @@
 
   summary:before {
     content: 'Description de la mesure';
+    font-size: 1rem;
+    line-height: 1.5rem;
   }
 
   summary:after {
