@@ -143,25 +143,25 @@ class ServiceTeleverse extends Base {
   enDonneesService() {
     const donneesDescriptionService = {
       delaiAvantImpactCritique:
-        this.referentiel.delaiAvantImpactCritiqueAvecDescription(
+        this.referentiel.delaiAvantImpactCritiqueParDescription(
           this.delaiAvantImpactCritique
         ),
-      localisationDonnees: this.referentiel.localisationDonneesAvecDescription(
+      localisationDonnees: this.referentiel.localisationDonneesParDescription(
         this.localisation
       ),
       nomService: this.nom,
-      provenanceService: this.referentiel.provenanceServiceAvecDescription(
+      provenanceService: this.referentiel.provenanceServiceParDescription(
         this.provenance
       ),
-      statutDeploiement: this.referentiel.statutDeploiementAvecDescription(
+      statutDeploiement: this.referentiel.statutDeploiementParDescription(
         this.statut
       ),
-      typeService: [this.referentiel.typeServiceAvecDescription(this.type)],
+      typeService: [this.referentiel.typeServiceParDescription(this.type)],
       organisationResponsable: {
         siret: this.siretFormatte(),
       },
       nombreOrganisationsUtilisatrices:
-        this.referentiel.nombreOrganisationsUtilisatricesAvecLabel(
+        this.referentiel.nombreOrganisationsUtilisatricesParLabel(
           this.nombreOrganisationsUtilisatrices
         ),
     };
@@ -177,7 +177,7 @@ class ServiceTeleverse extends Base {
           decision: {
             dateHomologation: this.dateHomologation,
             dureeValidite:
-              this.referentiel.echeanceRenouvellementAvecDescription(
+              this.referentiel.echeanceRenouvellementParDescription(
                 this.dureeHomologation
               ),
           },

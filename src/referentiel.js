@@ -395,30 +395,30 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const labelsNombreOrganisationsUtilisatrices = () =>
     Object.values(donnees.nombreOrganisationsUtilisatrices).map((v) => v.label);
 
-  const proprieteAvecDescription = (proprietes, description) =>
+  const proprieteParDescription = (proprietes, description) =>
     Object.entries(proprietes).find(
       ([_cle, valeur]) => valeur.description === description
     )[0];
 
-  const typeServiceAvecDescription = (description) =>
-    proprieteAvecDescription(donnees.typesService, description);
+  const typeServiceParDescription = (description) =>
+    proprieteParDescription(donnees.typesService, description);
 
-  const provenanceServiceAvecDescription = (description) =>
-    proprieteAvecDescription(donnees.provenancesService, description);
+  const provenanceServiceParDescription = (description) =>
+    proprieteParDescription(donnees.provenancesService, description);
 
-  const statutDeploiementAvecDescription = (description) =>
-    proprieteAvecDescription(donnees.statutsDeploiement, description);
+  const statutDeploiementParDescription = (description) =>
+    proprieteParDescription(donnees.statutsDeploiement, description);
 
-  const localisationDonneesAvecDescription = (description) =>
-    proprieteAvecDescription(donnees.localisationsDonnees, description);
+  const localisationDonneesParDescription = (description) =>
+    proprieteParDescription(donnees.localisationsDonnees, description);
 
-  const delaiAvantImpactCritiqueAvecDescription = (description) =>
-    proprieteAvecDescription(donnees.delaisAvantImpactCritique, description);
+  const delaiAvantImpactCritiqueParDescription = (description) =>
+    proprieteParDescription(donnees.delaisAvantImpactCritique, description);
 
-  const echeanceRenouvellementAvecDescription = (description) =>
-    proprieteAvecDescription(donnees.echeancesRenouvellement, description);
+  const echeanceRenouvellementParDescription = (description) =>
+    proprieteParDescription(donnees.echeancesRenouvellement, description);
 
-  const nombreOrganisationsUtilisatricesAvecLabel = (label) => {
+  const nombreOrganisationsUtilisatricesParLabel = (label) => {
     const nombreAvecLabel = donnees.nombreOrganisationsUtilisatrices.find(
       (description) => description.label === label
     );
@@ -444,7 +444,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     coefficientIndiceCyberStatutPartiel,
     indiceCyberNoteMax,
     definitionRisque,
-    delaiAvantImpactCritiqueAvecDescription,
+    delaiAvantImpactCritiqueParDescription,
     delaisAvantImpactCritique,
     departement,
     departements,
@@ -461,7 +461,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionsFonctionnalites,
     detailCategoriesRisque,
     donneesCaracterePersonnel,
-    echeanceRenouvellementAvecDescription,
+    echeanceRenouvellementParDescription,
     echeancesRenouvellement,
     enrichis,
     estCodeDepartement,
@@ -493,7 +493,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     libelleEtape,
     labelsNombreOrganisationsUtilisatrices,
     localisationDonnees,
-    localisationDonneesAvecDescription,
+    localisationDonneesParDescription,
     localisationsDonnees,
     matriceNiveauxRisques,
     mesure,
@@ -509,14 +509,14 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     niveauVraisemblance,
     niveauxVraisemblance,
     nombreOrganisationsUtilisatrices,
-    nombreOrganisationsUtilisatricesAvecLabel,
+    nombreOrganisationsUtilisatricesParLabel,
     nouvellesFonctionnalites,
     numeroEtape,
     optionsFiltrageDate,
     premiereEtapeParcours,
     prioritesMesures,
     provenancesService,
-    provenanceServiceAvecDescription,
+    provenanceServiceParDescription,
     recharge,
     reglesPersonnalisation,
     retoursUtilisateurMesure,
@@ -525,14 +525,14 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionStatutDeploiement,
     statutsAvisDossierHomologation,
     statutsDeploiement,
-    statutDeploiementAvecDescription,
+    statutDeploiementParDescription,
     statutDeploiementValide,
     statutHomologation,
     statutsMesures,
     tacheCompletudeProfil,
     trancheIndiceCyber,
     typeService,
-    typeServiceAvecDescription,
+    typeServiceParDescription,
     typesService,
     verifieCategoriesMesuresSontRepertoriees,
     etapePrecedenteVisiteGuidee,
