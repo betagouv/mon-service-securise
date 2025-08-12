@@ -7,6 +7,7 @@
     FormatAccepte,
   } from '../../ui/televersement/KitDeTeleversement.types';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
+  import { ajouteParametreAUrl } from '../../outils/url';
 
   export const titre: string = 'Téléverser des mesures';
   export const sousTitre: string =
@@ -17,7 +18,13 @@
   const afficheRapportDuTeleversement = async () => {
     if (etatTeleversement !== 'Valide') return;
 
-    console.log('📋 Vers le rapport de téléversement… ');
+    document.body.dispatchEvent(
+      new CustomEvent(
+        'svelte-recharge-rapport-televersement-modeles-mesure-specifique'
+      )
+    );
+    ajouteParametreAUrl('rapportTeleversement', 'true');
+    tiroirStore.ferme();
   };
 </script>
 

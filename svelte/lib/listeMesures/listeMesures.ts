@@ -6,6 +6,13 @@ document.body.addEventListener(
   (e: CustomEvent<ListeMesuresProps>) => rechargeApp({ ...e.detail })
 );
 
+document.body.addEventListener(
+  'svelte-recharge-rapport-televersement-modeles-mesure-specifique',
+  () => {
+    console.log('🗒️ Affiche le rapport de téléversement…');
+  }
+);
+
 let app: ListeMesures;
 const rechargeApp = (props: ListeMesuresProps) => {
   app?.$destroy();
