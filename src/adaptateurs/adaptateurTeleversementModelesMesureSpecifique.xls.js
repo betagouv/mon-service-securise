@@ -6,14 +6,20 @@ const ENTETE_INTITULE = 'Intitulé de la mesure *';
 const ENTETE_DESCRIPTION = 'Description de la mesure';
 const ENTETE_CATEGORIE = 'Catégorie *';
 
+const touteLesProprietes = [
+  ENTETE_INTITULE,
+  ENTETE_DESCRIPTION,
+  ENTETE_CATEGORIE,
+];
+
 async function extraisDonneesTeleversees(buffer) {
   const lecteur = new LecteurExcel(buffer);
-  const donneesBrutes = lecteur.donneesDeFeuille('Template mesures', 6);
 
-  const lignesCompletes = lecteur.lesLignesSontCompletes(donneesBrutes, [
-    ENTETE_INTITULE,
-    ENTETE_CATEGORIE,
-  ]);
+  const donneesBrutes = lecteur.donneesDeFeuille('Template mesures', 6);
+  const lignesCompletes = lecteur.lesLignesSontCompletes(
+    donneesBrutes,
+    touteLesProprietes
+  );
 
   if (!lignesCompletes) throw new ErreurFichierXlsInvalide();
 
