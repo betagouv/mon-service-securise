@@ -72,6 +72,8 @@ export const configurationAffichage = derived(store, ($store) => {
     doitAfficherChoixCategorie:
       $store.etape === 'Creation' || $store.etape === 'EditionSpecifique',
     doitAfficherDescriptionLongue: $store.etape === 'EditionGenerale',
+    doitAfficherDescriptionLongueEditable:
+      $store.etape === 'Creation' || $store.etape === 'EditionSpecifique',
     doitAfficherSuppression: $store.etape === 'EditionSpecifique',
     doitAfficherRetourUtilisateur: $store.etape === 'EditionGenerale',
   };

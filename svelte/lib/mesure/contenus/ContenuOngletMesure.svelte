@@ -46,6 +46,18 @@
       lienBlog={$store.mesureEditee.mesure.lienBlog}
     />
   {/if}
+  {#if $configurationAffichage.doitAfficherDescriptionLongueEditable}
+    <label for="descriptionLongue">
+      Description de la mesure
+      <textarea
+        rows="2"
+        bind:value={$store.mesureEditee.mesure.descriptionLongue}
+        id="descriptionLongue"
+        placeholder="Description de la mesure"
+        readonly={estLectureSeule}
+      />
+    </label>
+  {/if}
 
   <div class="conteneur-statut">
     <SelectionStatut
@@ -126,6 +138,8 @@
 
   label {
     font-weight: bold;
+    font-size: 1rem;
+    line-height: 1.5rem;
   }
 
   select {
