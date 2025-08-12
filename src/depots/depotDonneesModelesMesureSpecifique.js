@@ -1,6 +1,5 @@
 const {
   ErreurUtilisateurInexistant,
-  ErreurServiceNonAssocieAuModele,
   ErreurServiceInexistant,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
 } = require('../erreurs');
@@ -125,39 +124,6 @@ const creeDepot = (config = {}) => {
     );
   };
 
-  const detacheModeleMesureSpecifiqueDesServices = async (
-    idModele,
-    idsServices,
-    idUtilisateurDetachant
-  ) => {
-    await verificationsModificationModele.toutes(
-      idModele,
-      idsServices,
-      idUtilisateurDetachant
-    );
-
-    const tousAssocies =
-      await persistance.tousServicesSontAssociesAuModeleMesureSpecifique(
-        idsServices,
-        idModele
-      );
-    if (!tousAssocies)
-      throw new ErreurServiceNonAssocieAuModele(idsServices, idModele);
-
-    const detacheDesServices = idsServices.map(async (unId) => {
-      const s = await depotServices.service(unId);
-      s.detacheMesureSpecfiqueDuModele(idModele);
-      return s;
-    });
-    const aPersister = await Promise.all(detacheDesServices);
-
-    await Promise.all(aPersister.map(depotServices.metsAJourService));
-    await persistance.supprimeLeLienEntreLeModeleEtLesServices(
-      idModele,
-      idsServices
-    );
-  };
-
   const lisModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) => {
     const modeles =
       await persistance.lisModelesMesureSpecifiquePourUtilisateur(
@@ -187,10 +153,22 @@ const creeDepot = (config = {}) => {
     const modeleASupprimer = modeles.find((m) => m.id === idModele);
     const idsServicesAssocies = modeleASupprimer?.ids_services_associes || [];
 
-    await detacheModeleMesureSpecifiqueDesServices(
+    await verificationsModificationModele.toutes(
       idModele,
       idsServicesAssocies,
       idUtilisateur
+    );
+
+    const detacheDesServices = idsServicesAssocies.map(async (unId) => {
+      const s = await depotServices.service(unId);
+      s.detacheMesureSpecfiqueDuModele(idModele);
+      return s;
+    });
+    const aPersister = await Promise.all(detacheDesServices);
+    await Promise.all(aPersister.map(depotServices.metsAJourService));
+    await persistance.supprimeLeLienEntreLeModeleEtLesServices(
+      idModele,
+      idsServicesAssocies
     );
 
     await persistance.supprimeModeleMesureSpecifique(idModele);
@@ -201,11 +179,16 @@ const creeDepot = (config = {}) => {
     idModele,
     idsServices
   ) => {
-    await verificationsModificationModele.toutes(
-      idModele,
-      idsServices,
-      idUtilisateur
-    );
+    await verificationsModificationModele.queModeleExiste(idModele);
+    if (idsServices.length > 0) {
+      await verificationsModificationModele.queTousLesServicesExistent(
+        idsServices
+      );
+      await verificationsModificationModele.aLesDroitsSuffisantsPourModifierUneMesureSurDesServices(
+        idUtilisateur,
+        idsServices
+      );
+    }
 
     if (idsServices.length === 0) return;
 
@@ -231,6 +214,12 @@ const creeDepot = (config = {}) => {
       await persistance.lisModelesMesureSpecifiquePourUtilisateur(
         idUtilisateur
       );
+
+    await verificationsModificationModele.queModeleExiste(idModele);
+    await verificationsModificationModele.queUtilisateurPossedeLeModele(
+      idUtilisateur,
+      idModele
+    );
     const modeleASupprimer = modeles.find((m) => m.id === idModele);
     const idsServicesAssocies = modeleASupprimer?.ids_services_associes || [];
 
@@ -247,7 +236,6 @@ const creeDepot = (config = {}) => {
     ajouteModeleMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
     associeModelesMesureSpecifiqueAuService,
-    detacheModeleMesureSpecifiqueDesServices,
     lisModelesMesureSpecifiquePourUtilisateur,
     metsAJourModeleMesureSpecifique,
     supprimeDesMesuresAssocieesAuModele,
