@@ -418,6 +418,11 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const echeanceRenouvellementParDescription = (description) =>
     proprieteParDescription(donnees.echeancesRenouvellement, description);
 
+  const categorieMesureParLabel = (label) =>
+    Object.entries(donnees.categoriesMesures).find(
+      ([, leLabel]) => label === leLabel
+    );
+
   const nombreOrganisationsUtilisatricesParLabel = (label) => {
     const nombreAvecLabel = donnees.nombreOrganisationsUtilisatrices.find(
       (description) => description.label === label
@@ -436,6 +441,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   valideDonnees();
 
   return {
+    categorieMesureParLabel,
     categoriesRisque,
     categoriesMesures,
     codeDepartements,

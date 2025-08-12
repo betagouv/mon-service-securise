@@ -7,7 +7,7 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
 
   beforeEach(() => {
     referentiel = Referentiel.creeReferentiel({
-      categoriesMesures: { gouvernance: {} },
+      categoriesMesures: { gouvernance: 'Gouvernance' },
     });
   });
 
@@ -17,8 +17,8 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
   describe('sur demande de rapport détaillé', () => {
     it('met dans chaque ligne du rapport le modèle concerné', () => {
       const rapport = unTeleversement([
-        { description: 'D1', categorie: 'gouvernance' },
-        { description: 'D2', categorie: 'gouvernance' },
+        { description: 'D1', categorie: 'Gouvernance' },
+        { description: 'D2', categorie: 'Gouvernance' },
       ]).rapportDetaille();
 
       expect(rapport.modelesTeleverses.length).to.be(2);
@@ -31,7 +31,7 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
       const sansDescription = {
         description: '',
         descriptionLongue: '',
-        categorie: 'gouvernance',
+        categorie: 'Gouvernance',
       };
 
       const rapport = unTeleversement([sansDescription]).rapportDetaille();

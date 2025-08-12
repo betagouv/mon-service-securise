@@ -26,7 +26,7 @@ async function extraisDonneesTeleversees(buffer) {
   return donneesBrutes.map((ligne) => ({
     description: encode(ligne[ENTETE_INTITULE]?.trim()), // Chez MSS, l'intitulé va bien dans "description".
     descriptionLongue: encode(ligne[ENTETE_DESCRIPTION]?.trim()),
-    categorie: ligne[ENTETE_CATEGORIE]?.trim()?.toLowerCase(),
+    categorie: ligne[ENTETE_CATEGORIE]?.trim(),
   }));
 }
 
