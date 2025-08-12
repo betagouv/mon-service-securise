@@ -17,7 +17,7 @@
 - [x] On a une 404 si le rapport est démandé mais que rien n'a été téléversé
 - [ ] Sur le rapport, un bouton « Importer » permet de déclencher la création des modèles
 - [ ] Le téléversement est supprimé quand l'utilisateur clique sur "retente"
-- [ ] Le rapport a un statut global (utilisé par le front)
+- [x] Le rapport a un statut global (utilisé par le front)
 - [ ] Le tiroir de téléversement montre, dans les limitations, combien de mesures sont encore ajoutables (idéalement on veut soustraire la varenv et le nombre actuel)
 - [ ] Il faut envoyer des data vers Metabase
 - [ ] Il faut que l'endpoint de création unitaire de modèle empêche de dépasser la limite du nombre max (qui serait une var env ?)
