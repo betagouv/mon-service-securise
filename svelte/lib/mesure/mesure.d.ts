@@ -15,6 +15,7 @@ export type MesureProps = {
   estLectureSeule: boolean;
   mesureAEditer?: MesureEditee;
   nonce: string;
+  afficheModelesMesureSpecifique: boolean;
 };
 
 type IdUtilisateur = string;
@@ -42,10 +43,12 @@ export type MesureGeneraleEnrichie = MesureGenerale & {
 
 export type MesureSpecifique = PlanAction & {
   id: string;
+  idModele?: string;
   statut?: StatutMesure;
   modalites?: string;
   categorie: string;
   description: string;
+  descriptionLongue?: string;
   identifiantNumerique: string;
 };
 

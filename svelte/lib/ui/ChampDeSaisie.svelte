@@ -5,6 +5,7 @@
   export let label: string;
   export let aideSaisie: string = '';
   export let requis: boolean = false;
+  export let tailleMinimale: number = 3;
 </script>
 
 <label>
@@ -14,13 +15,20 @@
   {label}
   <textarea
     bind:value={contenu}
-    rows="3"
+    rows={tailleMinimale}
     placeholder={aideSaisie}
     required={requis}
   />
 </label>
 
 <style lang="scss">
+  label {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+  }
+
   textarea {
     width: 100%;
     max-width: 700px;
@@ -36,6 +44,7 @@
     padding: 8px 16px;
     box-sizing: border-box;
     margin-top: 8px;
+    height: unset;
 
     &:user-invalid {
       border-bottom-color: var(--erreur-texte);

@@ -17,6 +17,8 @@
   import { planDActionDisponible } from '../modeles/modeleMesure';
   import ContenuOngletActivite from './contenus/ContenuOngletActivite.svelte';
   import CommentaireMesure from './commentaire/CommentaireMesure.svelte';
+  import ContenuOngletMesureSpecifiqueLieeAModele from './contenus/ContenuOngletMesureSpecifiqueLieeAModele.svelte';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
 
   export let idService: IdService;
   export let categories: Record<string, string>;
@@ -26,6 +28,7 @@
   export let priorites: ReferentielPriorite;
   export let modeVisiteGuidee: boolean;
   export let nonce: string;
+  export let afficheModelesMesureSpecifique: boolean;
 
   const statutInitial = $store.mesureEditee.mesure.statut;
 
@@ -79,6 +82,11 @@
     await enregistreCommentaire(idService, idMesure, contenuCommentaire);
     document.body.dispatchEvent(new CustomEvent('activites-modifiees'));
   };
+
+  $: doitAfficherTiroirModeleMesureSpecifique =
+    afficheModelesMesureSpecifique &&
+    ongletActif === 'mesure' &&
+    !!$store.mesureEditee.mesure.idModele;
 </script>
 
 {#if $store.etape === 'SuppressionSpecifique'}
@@ -113,15 +121,23 @@
     on:formulaireInvalide={activeOngletMesure}
   >
     <div class="corps-formulaire">
-      <ContenuOngletMesure
-        visible={ongletActif === 'mesure'}
-        {estLectureSeule}
-        {categories}
-        {retoursUtilisateur}
-        {statuts}
-        bind:retourUtilisateur
-        bind:commentaireRetourUtilisateur
-      />
+      {#if doitAfficherTiroirModeleMesureSpecifique}
+        <ContenuOngletMesureSpecifiqueLieeAModele
+          {estLectureSeule}
+          {categories}
+          {statuts}
+        />
+      {:else}
+        <ContenuOngletMesure
+          visible={ongletActif === 'mesure'}
+          {estLectureSeule}
+          {categories}
+          {retoursUtilisateur}
+          {statuts}
+          bind:retourUtilisateur
+          bind:commentaireRetourUtilisateur
+        />
+      {/if}
       <ContenuOngletPlanAction
         visible={ongletActif === 'planAction'}
         {estLectureSeule}
@@ -138,18 +154,42 @@
     </div>
     <div class="conteneur-actions">
       {#if doitAfficherActions}
-        {#if $configurationAffichage.doitAfficherSuppression}
-          <button type="button" on:click={store.afficheEtapeSuppression}>
-            Supprimer la mesure
+        {#if doitAfficherTiroirModeleMesureSpecifique}
+          <div class="conteneur-boutons-modele-mesure-specifique">
+            <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+            <lab-anssi-bouton
+              titre="Supprimer la mesure du service"
+              variante="tertiaire-sans-bordure"
+              taille="md"
+              icone="delete-line"
+              position-icone="gauche"
+              on:click={() => console.log('SUPPRIME')}
+            />
+            <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+            <lab-anssi-bouton
+              titre="Enregistrer"
+              variante="primaire"
+              taille="md"
+              icone="save-line"
+              position-icone="gauche"
+              actif={!enCoursEnvoi}
+              on:click={() => enregistreMesure()}
+            />
+          </div>
+        {:else}
+          {#if $configurationAffichage.doitAfficherSuppression}
+            <button type="button" on:click={store.afficheEtapeSuppression}>
+              Supprimer la mesure
+            </button>
+          {/if}
+          <button
+            type="submit"
+            class="bouton"
+            class:en-cours-chargement={enCoursEnvoi}
+            disabled={enCoursEnvoi}
+            >Enregistrer
           </button>
         {/if}
-        <button
-          type="submit"
-          class="bouton"
-          class:en-cours-chargement={enCoursEnvoi}
-          disabled={enCoursEnvoi}
-          >Enregistrer
-        </button>
       {:else}
         <CommentaireMesure
           on:submit={sauvegardeCommentaire}
@@ -228,5 +268,13 @@
     display: flex;
     gap: 8px;
     margin-bottom: 26px;
+  }
+
+  .conteneur-boutons-modele-mesure-specifique {
+    display: flex;
+    align-items: end;
+    gap: 10px;
+    margin-left: auto;
+    margin-right: 32px;
   }
 </style>

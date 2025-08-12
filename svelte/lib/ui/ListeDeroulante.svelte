@@ -92,8 +92,7 @@
   select {
     appearance: none;
     padding: 8px 38px 8px 16px;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    border-radius: 4px 4px 0 0;
     border: none;
     box-shadow: inset 0 -2px 0 0 var(--gris-fonce);
     cursor: pointer;
