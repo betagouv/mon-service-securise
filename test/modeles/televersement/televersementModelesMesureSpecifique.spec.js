@@ -81,5 +81,33 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
       expect(b.numeroLigne).to.be(2);
       expect(b.modele.description).to.be('D2');
     });
+
+    describe('concernant le statut renvoyé', () => {
+      it("renvoie un statut INVALIDE dès qu'une erreur est présente", () => {
+        const sansDescription = {
+          description: '',
+          descriptionLongue: '',
+          categorie: 'Gouvernance',
+        };
+
+        const rapport = unTeleversement([sansDescription]).rapportDetaille();
+
+        expect(rapport.statut).to.be('INVALIDE');
+      });
+
+      it("renvoie un statut INVALIDE si aucun modèle n'est présent", () => {
+        const rapportVide = unTeleversement([]).rapportDetaille();
+
+        expect(rapportVide.statut).to.be('INVALIDE');
+      });
+
+      it("renvoie un statut VALIDE quand il n'y a aucune erreur", () => {
+        const rapportValide = unTeleversement([
+          { description: 'D1', categorie: 'Gouvernance' },
+        ]).rapportDetaille();
+
+        expect(rapportValide.statut).to.be('VALIDE');
+      });
+    });
   });
 });
