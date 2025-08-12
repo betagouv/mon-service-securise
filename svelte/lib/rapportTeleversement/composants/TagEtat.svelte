@@ -20,6 +20,7 @@
     flex-direction: row;
     gap: 4px;
     align-items: center;
+    width: fit-content;
 
     &:before {
       content: url(/statique/assets/images/ui-kit/erreur.svg);
