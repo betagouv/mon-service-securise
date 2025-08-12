@@ -68,5 +68,18 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
         'CATEGORIE_INCONNUE',
       ]);
     });
+
+    it('attribue un numéro à chaque ligne, en commençant à 1', () => {
+      const rapport = unTeleversement([
+        { description: 'D1', categorie: 'Gouvernance' },
+        { description: 'D2', categorie: 'Gouvernance' },
+      ]).rapportDetaille();
+
+      const [a, b] = rapport.modelesTeleverses;
+      expect(a.numeroLigne).to.be(1);
+      expect(a.modele.description).to.be('D1');
+      expect(b.numeroLigne).to.be(2);
+      expect(b.modele.description).to.be('D2');
+    });
   });
 });
