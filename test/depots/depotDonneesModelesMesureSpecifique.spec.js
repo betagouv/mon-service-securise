@@ -9,7 +9,6 @@ const {
   ErreurUtilisateurInexistant,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurAutorisationInexistante,
-  ErreurServiceNonAssocieAuModele,
 } = require('../../src/erreurs');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
@@ -539,174 +538,6 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     });
   });
 
-  describe('concernant le détachement entre un modèle de mesure et des services y étant associés', () => {
-    beforeEach(() => {
-      persistance = unePersistanceMemoire()
-        // On a un service (S10) déjà associé à deux modèles (MOD-10 et MOD-11).
-        // On a un service vide (S11).
-        // L'utilisateur U10 est propriétaire des services et du premier modèle.
-        // L'utilisateur U11 est propriétaire du second modèle.
-        // C'est un gros jeu de données… mais ça semble nécessaire pour tester nos cas.
-        .ajouteUnService({
-          id: 'S10',
-          descriptionService: { nomService: 'Service 10' },
-          mesuresSpecifiques: [{ idModele: 'MOD-10' }],
-        })
-        .associeLeServiceAuxModelesDeMesureSpecifique('S10', [
-          'MOD-10',
-          'MOD-11',
-        ])
-        .ajouteUnService({ id: 'S11', descriptionService: {} })
-        .ajouteUnUtilisateur(unUtilisateur().avecId('U10').donnees)
-        .nommeCommeProprietaire('U10', ['S10', 'S11'])
-        .avecUnModeleDeMesureSpecifique({
-          id: 'MOD-10',
-          idUtilisateur: 'U10',
-          donnees: { description: 'Le modèle 10' },
-        })
-        .ajouteUnUtilisateur(unUtilisateur().avecId('U11').donnees)
-        .avecUnModeleDeMesureSpecifique({ id: 'MOD-11', idUtilisateur: 'U11' })
-        .ajouteUnUtilisateur(unUtilisateur().avecId('U12').donnees)
-        .nommeCommeProprietaire('U12', ['S10'])
-        .avecUnModeleDeMesureSpecifique({ id: 'MOD-12', idUtilisateur: 'U12' })
-        .construis();
-
-      depotServices = DepotDonneesServices.creeDepot({
-        adaptateurPersistance: persistance,
-        adaptateurChiffrement,
-        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
-          adaptateurPersistance: persistance,
-          adaptateurChiffrement,
-        }),
-      });
-    });
-
-    it('transforme la mesure spécifique liée au modèle en une mesure indépendante, mais qui reste dans le service : elle perd son `idModele`', async () => {
-      const depot = leDepot();
-
-      await depot.detacheModeleMesureSpecifiqueDesServices(
-        'MOD-10',
-        ['S10'],
-        'U10'
-      );
-
-      const apres = await depotServices.service('S10');
-      const mesureDetachee = apres.mesuresSpecifiques().toutes()[0];
-      expect(mesureDetachee.toJSON().idModele).to.be(undefined);
-    });
-
-    it('supprime le lien entre le modèle et le service, dans la table de liaison', async () => {
-      const avant =
-        await persistance.tousServicesSontAssociesAuModeleMesureSpecifique(
-          ['S10'],
-          'MOD-10'
-        );
-      expect(avant).to.be(true);
-
-      const depot = leDepot();
-      await depot.detacheModeleMesureSpecifiqueDesServices(
-        'MOD-10',
-        ['S10'],
-        'U10'
-      );
-
-      const apres =
-        await persistance.tousServicesSontAssociesAuModeleMesureSpecifique(
-          ['S10'],
-          'MOD-10'
-        );
-      expect(apres).to.be(false);
-    });
-
-    it("jette une erreur si le modèle n'existe pas", async () => {
-      persistance.verifieModeleMesureSpecifiqueExiste = async () => false;
-
-      const depot = leDepot();
-
-      try {
-        await depot.detacheModeleMesureSpecifiqueDesServices(
-          'MOD-10',
-          ['S10'],
-          'U10'
-        );
-        expect().fail("L'appel aurait dû lever une erreur.");
-      } catch (e) {
-        expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueIntrouvable);
-      }
-    });
-
-    it("jette une erreur dès qu'un service n'est pas associé au modèle", async () => {
-      const depot = leDepot();
-
-      try {
-        await depot.detacheModeleMesureSpecifiqueDesServices(
-          'MOD-10',
-          ['S11'],
-          'U10'
-        );
-        expect().fail("L'appel aurait du lever une erreur.");
-      } catch (e) {
-        expect(e).to.be.an(ErreurServiceNonAssocieAuModele);
-        expect(e.message).to.be(
-          'Les services [S11] ne sont pas tous associés au modèle MOD-10'
-        );
-      }
-    });
-
-    it("jette une erreur si l'utilisateur qui veut détacher la mesure n'a pas les droits en écriture sur tous les services", async () => {
-      const depot = leDepot();
-
-      try {
-        await depot.detacheModeleMesureSpecifiqueDesServices(
-          'MOD-11',
-          ['S10'],
-          'U11'
-        );
-        expect().fail("L'appel aurait dû lever une erreur.");
-      } catch (e) {
-        expect(e).to.be.an(
-          ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
-        );
-        expect(e.message).to.be(
-          'L\'utilisateur U11 n\'a pas les droits suffisants sur S10. Droits requis pour modifier un modèle : {"SECURISER":2}'
-        );
-      }
-    });
-
-    it("jette une erreur si le modèle n'appartient pas à l'utilisateur qui veut détacher", async () => {
-      const depot = leDepot();
-
-      try {
-        await depot.detacheModeleMesureSpecifiqueDesServices(
-          'MOD-10',
-          ['S10'],
-          'U12'
-        );
-        expect().fail("L'appel aurait dû lever une erreur.");
-      } catch (e) {
-        expect(e).to.be.an(ErreurAutorisationInexistante);
-        expect(e.message).to.be(
-          "L'utilisateur U12 n'est pas propriétaire du modèle MOD-10 qu'il veut modifier."
-        );
-      }
-    });
-
-    it("jette une erreur si au moins un des services n'existe pas", async () => {
-      const depot = leDepot();
-
-      try {
-        await depot.detacheModeleMesureSpecifiqueDesServices(
-          'MOD-10',
-          ['S-INTROUVABLE-1'],
-          'U10'
-        );
-        expect().fail("L'appel aurait dû lever une erreur.");
-      } catch (e) {
-        expect(e).to.be.an(ErreurServiceInexistant);
-      }
-    });
-  });
-
   describe("concernant la lecture des modèles de mesure spécifique d'un utilisateur", () => {
     it('retourne les modèles', async () => {
       persistance = unePersistanceMemoire()
@@ -1016,7 +847,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         }
       });
 
-      it("jette une erreur si l'utilisateur qui veut supprimer le modèle n'a pas les droits en écriture sur tous les services", async () => {
+      it("jette une erreur si l'utilisateur qui veut supprimer la mesure associée au modèle n'a pas les droits en écriture sur tous les services", async () => {
         const depot = leDepot();
 
         try {
@@ -1030,22 +861,6 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
           );
           expect(e.message).to.be(
             'L\'utilisateur U12 n\'a pas les droits suffisants sur S1. Droits requis pour modifier un modèle : {"SECURISER":2}'
-          );
-        }
-      });
-
-      it("jette une erreur si le modèle n'appartient pas à l'utilisateur qui veut supprimer", async () => {
-        const depot = leDepot();
-
-        try {
-          await depot.supprimeDesMesuresAssocieesAuModele('U12', 'MOD-1', [
-            'S1',
-          ]);
-          expect().fail("L'appel aurait dû lever une erreur.");
-        } catch (e) {
-          expect(e).to.be.an(ErreurAutorisationInexistante);
-          expect(e.message).to.be(
-            "L'utilisateur U12 n'est pas propriétaire du modèle MOD-1 qu'il veut modifier."
           );
         }
       });

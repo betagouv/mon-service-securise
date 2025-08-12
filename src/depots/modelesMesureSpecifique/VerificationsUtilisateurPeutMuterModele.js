@@ -22,7 +22,7 @@ class VerificationsUtilisateurPeutMuterModele {
     await this.queModeleExiste(idModele);
     await this.queUtilisateurPossedeLeModele(idUtilisateur, idModele);
     if (idsServices.length > 0) {
-      await this.#queTousLesServicesExistent(idsServices);
+      await this.queTousLesServicesExistent(idsServices);
       await this.aLesDroitsSuffisantsPourModifierUneMesureSurDesServices(
         idUtilisateur,
         idsServices
@@ -37,7 +37,7 @@ class VerificationsUtilisateurPeutMuterModele {
       throw new ErreurModeleDeMesureSpecifiqueIntrouvable(idModele);
   }
 
-  async #queTousLesServicesExistent(idsServices) {
+  async queTousLesServicesExistent(idsServices) {
     const tousServicesExistent =
       await this.persistance.verifieTousLesServicesExistent(idsServices);
 
