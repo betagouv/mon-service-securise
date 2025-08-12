@@ -21,4 +21,13 @@ $(() => {
       },
     })
   );
+
+  const url = new URLSearchParams(window.location.search);
+  if (url.has('rapportTeleversement')) {
+    document.body.dispatchEvent(
+      new CustomEvent(
+        'svelte-recharge-rapport-televersement-modeles-mesure-specifique'
+      )
+    );
+  }
 });
