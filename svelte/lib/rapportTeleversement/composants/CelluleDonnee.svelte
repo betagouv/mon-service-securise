@@ -2,11 +2,10 @@
   export let contenu: string;
   export let enErreur: boolean = false;
   export let large: boolean = false;
-  export let dernier: boolean = false;
   export let gras: boolean = false;
 </script>
 
-<td class:enErreur class:large class:dernier class:gras>{contenu || '-'}</td>
+<td class:enErreur class:large class:gras>{contenu || '-'}</td>
 
 <style lang="scss">
   td {
@@ -27,10 +26,6 @@
 
   .large {
     min-width: 200px;
-  }
-
-  .dernier {
-    border-right: 1px solid var(--systeme-design-etat-contour-champs);
   }
 
   .gras {

@@ -222,6 +222,7 @@
 
   :global(
       .dialog-rapport-televersement-generique tr th:last-of-type,
+      .dialog-rapport-televersement-generique tr td:last-of-type,
       .dialog-rapport-televersement-generique .bordure-droite
     ) {
     border-right: 1px solid var(--systeme-design-etat-contour-champs);
