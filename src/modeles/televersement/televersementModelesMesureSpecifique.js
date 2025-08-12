@@ -8,9 +8,10 @@ class TeleversementModelesMesureSpecifique {
 
   rapportDetaille() {
     return {
-      modelesTeleverses: this.modelesTeleverses.map((m) => ({
+      modelesTeleverses: this.modelesTeleverses.map((m, idx) => ({
         modele: m,
         erreurs: this.#controleUnModele(m),
+        numeroLigne: idx + 1,
       })),
     };
   }
