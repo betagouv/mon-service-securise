@@ -1,6 +1,6 @@
 export type ResumeRapportTeleversement = {
   statut: 'VALIDE' | 'INVALIDE';
-  elementsValide: { label: string };
+  elementsValide: null | { label: string };
   elementsErreur: null | { label: string };
   labelValiderTeleversement: string;
 };

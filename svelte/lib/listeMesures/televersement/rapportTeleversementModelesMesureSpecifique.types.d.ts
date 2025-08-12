@@ -1,12 +1,16 @@
 export type RapportDetaille = {
-  modelesTeleverses: {
-    modele: {
-      categorie: string;
-      description: string;
-      decriptionLongue: string;
-    };
-    erreurs: ErreurModele[];
-  }[];
+  statut: 'VALIDE' | 'INVALIDE';
+  modelesTeleverses: ModeleTeleverse[];
+};
+
+export type ModeleTeleverse = {
+  modele: {
+    categorie: string;
+    description: string;
+    descriptionLongue: string;
+  };
+  erreurs: ErreurModele[];
+  numeroLigne: number;
 };
 
 export type ErreurModele = 'INTITULE_MANQUANT' | 'CATEGORIE_INCONNUE';
