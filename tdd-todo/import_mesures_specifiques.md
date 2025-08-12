@@ -30,3 +30,4 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
   - [ ] Un affichage en lecture seule si l'utilisateur n'a pas les droits de modification
   - [ ] Une mesure spécifique qui ne provient pas d'un modèle a maintenant une entrée "Description" (descriptionLognue)
 - Bonus : pouvoir ouvrir la page Sécuriser avec une mesure mise en valeur (tiroir ouvert et onglet correspondant ouvert)
+- Bonus : voir les lignes concernées par l'association clignoter en bleu
