@@ -14,3 +14,8 @@ export type ModeleTeleverse = {
 };
 
 export type ErreurModele = 'INTITULE_MANQUANT' | 'CATEGORIE_INCONNUE';
+
+export const MessagesErreur: Record<ErreurModele, string> = {
+  INTITULE_MANQUANT: 'Intitulé manquant',
+  CATEGORIE_INCONNUE: 'Catégorie inconnue',
+};
