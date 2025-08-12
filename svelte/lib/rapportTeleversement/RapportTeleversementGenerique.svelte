@@ -230,4 +230,32 @@
   :global(.dialog-rapport-televersement-generique th[scope='colgroup']) {
     background: var(--fond-pale);
   }
+
+  :global(.dialog-rapport-televersement-generique th[scope='row']) {
+    padding: 8px 16px;
+    max-width: 280px;
+    text-align: left;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    background: var(--fond-pale);
+    border-top: 1px solid var(--systeme-design-etat-contour-champs);
+    border-bottom: 1px solid var(--systeme-design-etat-contour-champs);
+    color: #3a3a3a;
+  }
+
+  :global(.dialog-rapport-televersement-generique .cellule-erreur) {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+  }
+
+  :global(.dialog-rapport-televersement-generique .message-erreur) {
+    min-width: 224px;
+    font-weight: normal;
+  }
+
+  :global(.dialog-rapport-televersement-generique .message-erreur.aUneErreur) {
+    color: var(--erreur-texte);
+  }
 </style>
