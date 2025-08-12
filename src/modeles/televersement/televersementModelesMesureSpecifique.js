@@ -1,5 +1,8 @@
 const Referentiel = require('../../referentiel');
 
+const chainesSontIdentiques = (a, b) =>
+  a.localeCompare(b, 'fr', { sensitivity: 'base' }) === 0;
+
 class TeleversementModelesMesureSpecifique {
   constructor(donnees, referentiel = Referentiel.creeReferentielVide()) {
     this.modelesTeleverses = donnees;
@@ -9,7 +12,10 @@ class TeleversementModelesMesureSpecifique {
   rapportDetaille() {
     const modelesTeleverses = this.modelesTeleverses.map((m, idx) => ({
       modele: m,
-      erreurs: this.#controleUnModele(m),
+      erreurs: this.#controleUnModele(
+        m,
+        this.modelesTeleverses.filter((autre) => autre !== m)
+      ),
       numeroLigne: idx + 1,
     }));
 
@@ -23,13 +29,23 @@ class TeleversementModelesMesureSpecifique {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  #controleUnModele(modele) {
+  #controleUnModele(modele, lesAutresModeles) {
     const erreurs = [];
 
     if (!modele.description) erreurs.push('INTITULE_MANQUANT');
 
     if (!this.referentiel.categorieMesureParLabel(modele.categorie))
       erreurs.push('CATEGORIE_INCONNUE');
+
+    if (
+      modele.description &&
+      lesAutresModeles.some(
+        (autre) =>
+          autre.description &&
+          chainesSontIdentiques(autre.description, modele.description)
+      )
+    )
+      erreurs.push('MESURE_DUPLIQUEE');
 
     return erreurs;
   }
