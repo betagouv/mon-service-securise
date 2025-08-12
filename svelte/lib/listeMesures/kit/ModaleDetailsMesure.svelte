@@ -36,10 +36,18 @@
         ...autresDonnees,
         mesure:
           modeleDeMesure.type === 'generale'
-            ? mesuresAssociees[modeleDeMesure.id]
-            : mesuresSpecifiques.find(
-                (ms) => ms.idModele === modeleDeMesure.id
-              )!,
+            ? {
+                ...mesuresAssociees[modeleDeMesure.id],
+                id: modeleDeMesure.id,
+                type: 'generale',
+              }
+            : {
+                ...mesuresSpecifiques.find(
+                  (ms) => ms.idModele === modeleDeMesure.id
+                ),
+                id: modeleDeMesure.id,
+                type: 'specifique',
+              },
       }));
 
   export const affiche = async (modeleMesureAAfficher: ModeleDeMesure) => {

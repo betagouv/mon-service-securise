@@ -22,6 +22,8 @@ export type ListeMesuresProps = {
 export type PersonnalisationMesure = {
   statut?: string;
   modalites?: string;
+  id?: string;
+  type?: 'generale' | 'specifique';
 };
 
 export type ServiceAvecMesuresAssociees = {
