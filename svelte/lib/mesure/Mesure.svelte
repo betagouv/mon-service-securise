@@ -43,6 +43,10 @@
     );
   };
 
+  const fermeTiroir = () => {
+    document.body.dispatchEvent(new CustomEvent('ferme-tiroir'));
+  };
+
   const enregistreMesure = async () => {
     enCoursEnvoi = true;
     const promesses = [enregistreMesures(idService, $store)];
@@ -188,7 +192,15 @@
       {#if doitAfficherActions}
         {#if doitAfficherTiroirModeleMesureSpecifique}
           <div class="conteneur-boutons-modele-mesure-specifique">
-            {#if etapeCouranteModeleMesureSpecifique === 1}
+            {#if estLectureSeule}
+              <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+              <lab-anssi-bouton
+                titre="Fermer"
+                variante="primaire"
+                taille="md"
+                on:click={fermeTiroir}
+              />
+            {:else if etapeCouranteModeleMesureSpecifique === 1}
               <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
               <lab-anssi-bouton
                 titre="Supprimer la mesure du service"
@@ -214,8 +226,7 @@
                 titre="Annuler"
                 variante="tertiaire-sans-bordure"
                 taille="md"
-                on:click={() =>
-                  document.body.dispatchEvent(new CustomEvent('ferme-tiroir'))}
+                on:click={fermeTiroir}
               />
               <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
               <lab-anssi-bouton

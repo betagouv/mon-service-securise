@@ -30,28 +30,40 @@
 </script>
 
 <div class="conteneur-onglet-mesure-specifique">
+  {#if estLectureSeule}
+    <span class="lecture-seule">Lecture seule</span>
+  {/if}
   {#if etapeCouranteModeleMesureSpecifique === 1}
     <div>
       <div class="titre-avec-infobulle">
         <h4>Intitulé de la mesure</h4>
-        <Infobulle contenu={contenuInfobulle} />
+        {#if !estLectureSeule}
+          <Infobulle contenu={contenuInfobulle} />
+        {/if}
       </div>
       <span>{mesureSpecifique.description}</span>
     </div>
     <div>
       <div class="titre-avec-infobulle">
         <h4>Description de la mesure</h4>
-        <Infobulle contenu={contenuInfobulle} />
+        {#if !estLectureSeule}
+          <Infobulle contenu={contenuInfobulle} />
+        {/if}
       </div>
       <span>{mesureSpecifique.descriptionLongue}</span>
     </div>
     <div>
-      <ChampDeSaisie
-        bind:contenu={$store.mesureEditee.mesure.modalites}
-        aideSaisie="Apportez des précisions sur la mesure, ses modalités de mise en œuvre, etc."
-        label="Précisions de la mesure"
-        tailleMinimale={2}
-      />
+      {#if estLectureSeule}
+        <h4>Précisions de la mesure</h4>
+        <span>{mesureSpecifique.modalites}</span>
+      {:else}
+        <ChampDeSaisie
+          bind:contenu={$store.mesureEditee.mesure.modalites}
+          aideSaisie="Apportez des précisions sur la mesure, ses modalités de mise en œuvre, etc."
+          label="Précisions de la mesure"
+          tailleMinimale={2}
+        />
+      {/if}
     </div>
     <div>
       <SelectionStatut
@@ -65,7 +77,9 @@
       <div>
         <div class="titre-avec-infobulle">
           <h4>Catégorie</h4>
-          <Infobulle contenu={contenuInfobulle} />
+          {#if !estLectureSeule}
+            <Infobulle contenu={contenuInfobulle} />
+          {/if}
         </div>
         <ListeDeroulante
           label=""
@@ -120,5 +134,27 @@
     display: flex;
     gap: 4px;
     align-items: center;
+  }
+
+  .lecture-seule {
+    padding: 2px 12px 5px;
+    background-color: #eeeeee;
+    color: #e48800;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    font-weight: 400;
+    border-radius: 16px;
+    width: fit-content;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .lecture-seule:before {
+    content: url('/statique/assets/images/icone_point_interrogation_orange.svg');
+    width: 16px;
+    height: 16px;
+    line-height: 1.5rem;
+    transform: translateY(-1px);
   }
 </style>
