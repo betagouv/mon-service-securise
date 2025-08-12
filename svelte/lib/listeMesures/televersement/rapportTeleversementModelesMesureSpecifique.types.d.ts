@@ -13,9 +13,13 @@ export type ModeleTeleverse = {
   numeroLigne: number;
 };
 
-export type ErreurModele = 'INTITULE_MANQUANT' | 'CATEGORIE_INCONNUE';
+export type ErreurModele =
+  | 'INTITULE_MANQUANT'
+  | 'CATEGORIE_INCONNUE'
+  | 'MESURE_DUPLIQUEE';
 
 export const MessagesErreur: Record<ErreurModele, string> = {
   INTITULE_MANQUANT: 'Intitulé manquant',
   CATEGORIE_INCONNUE: 'Catégorie inconnue',
+  MESURE_DUPLIQUEE: 'Mesure en double',
 };

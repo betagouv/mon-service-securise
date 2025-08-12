@@ -35,7 +35,8 @@
   <CelluleDonnee contenu={ligne.numeroLigne.toString()} />
   <CelluleDonnee
     contenu={decode(ligne.modele.description)}
-    enErreur={contientErreur('INTITULE_MANQUANT')}
+    enErreur={contientErreur('INTITULE_MANQUANT') ||
+      contientErreur('MESURE_DUPLIQUEE')}
     gras
   />
   <CelluleDonnee contenu={decode(ligne.modele.descriptionLongue)} />

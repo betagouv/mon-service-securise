@@ -27,6 +27,22 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
       expect(d2.modele.description).to.be('D2');
     });
 
+    it('sait détecter une erreur de nom de mesure dupliqué', () => {
+      const dupliquee = {
+        description: 'M1 qui existe déjà',
+        categorie: 'Gouvernance',
+      };
+
+      const rapportAvecDuplicata = unTeleversement([
+        structuredClone(dupliquee),
+        structuredClone(dupliquee),
+      ]).rapportDetaille();
+
+      const [d1, d2] = rapportAvecDuplicata.modelesTeleverses;
+      expect(d1.erreurs).to.eql(['MESURE_DUPLIQUEE']);
+      expect(d2.erreurs).to.eql(['MESURE_DUPLIQUEE']);
+    });
+
     it('sait détecter une erreur de description manquante (colonne Intitulé dans le Excel)', () => {
       const sansDescription = {
         description: '',
