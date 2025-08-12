@@ -24,6 +24,7 @@
 
   let etapeCourante: 1 | 2 = 1;
   let idsModelesSelectionnes: string[] = [];
+  let enCoursEnvoi = false;
 
   const itemsFiltrageCategories = Object.entries(categories).map(
     ([id, label]) => ({
@@ -51,6 +52,7 @@
   });
 
   const associeModeles = async () => {
+    enCoursEnvoi = true;
     try {
       await associeModelesMesureSpecifiqueAuService(
         idService,
@@ -78,11 +80,12 @@
       await modelesMesureSpecifique.rafraichis();
       tiroirStore.ferme();
     } catch (e) {
-      tiroirStore.ferme();
       toasterStore.erreur(
         'Une erreur est survenue',
         "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
       );
+    } finally {
+      enCoursEnvoi = false;
     }
   };
 </script>
@@ -215,6 +218,7 @@
       taille="md"
       titre="Valider les modifications"
       on:click={associeModeles}
+      disabled={enCoursEnvoi}
     />
   {/if}
 </ActionsTiroir>
