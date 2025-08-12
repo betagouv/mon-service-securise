@@ -8,6 +8,7 @@
     enregistreCommentaire,
     enregistreMesures,
     enregistreRetourUtilisateur,
+    supprimeMesureSpecifiqueAssocieeAUnModele,
   } from './mesure.api';
   import { toasterStore } from '../ui/stores/toaster.store';
   import Onglet from '../ui/Onglet.svelte';
@@ -33,6 +34,15 @@
   const statutInitial = $store.mesureEditee.mesure.statut;
 
   let enCoursEnvoi = false;
+
+  const rafraichisListeMesure = () => {
+    document.body.dispatchEvent(
+      new CustomEvent('mesure-modifiee', {
+        detail: { sourceDeModification: 'tiroir' },
+      })
+    );
+  };
+
   const enregistreMesure = async () => {
     enCoursEnvoi = true;
     const promesses = [enregistreMesures(idService, $store)];
@@ -51,11 +61,7 @@
     }
     await Promise.all(promesses);
     enCoursEnvoi = false;
-    document.body.dispatchEvent(
-      new CustomEvent('mesure-modifiee', {
-        detail: { sourceDeModification: 'tiroir' },
-      })
-    );
+    rafraichisListeMesure();
     if (statutInitial !== $store.mesureEditee.mesure.statut) {
       toasterStore.afficheToastChangementStatutMesure(
         $store.mesureEditee.mesure,
@@ -87,6 +93,31 @@
     afficheModelesMesureSpecifique &&
     ongletActif === 'mesure' &&
     !!$store.mesureEditee.mesure.idModele;
+
+  let etapeCouranteModeleMesureSpecifique: 1 | 2 = 1;
+
+  const supprimeMesureSpecifiqueAssocieeAuModele = async () => {
+    enCoursEnvoi = true;
+    const nomMesure = $store.mesureEditee.mesure.description;
+    try {
+      await supprimeMesureSpecifiqueAssocieeAUnModele(
+        $store.mesureEditee.mesure.idModele,
+        idService
+      );
+      rafraichisListeMesure();
+      toasterStore.succes(
+        'Mesure supprimée avec succès !',
+        `Vous avez supprimé la mesure <b>${nomMesure}</b>.`
+      );
+    } catch (e) {
+      toasterStore.erreur(
+        'Une erreur est survenue',
+        "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
+      );
+    } finally {
+      enCoursEnvoi = false;
+    }
+  };
 </script>
 
 {#if $store.etape === 'SuppressionSpecifique'}
@@ -126,6 +157,7 @@
           {estLectureSeule}
           {categories}
           {statuts}
+          bind:etapeCouranteModeleMesureSpecifique
         />
       {:else}
         <ContenuOngletMesure
@@ -156,25 +188,46 @@
       {#if doitAfficherActions}
         {#if doitAfficherTiroirModeleMesureSpecifique}
           <div class="conteneur-boutons-modele-mesure-specifique">
-            <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-            <lab-anssi-bouton
-              titre="Supprimer la mesure du service"
-              variante="tertiaire-sans-bordure"
-              taille="md"
-              icone="delete-line"
-              position-icone="gauche"
-              on:click={() => console.log('SUPPRIME')}
-            />
-            <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-            <lab-anssi-bouton
-              titre="Enregistrer"
-              variante="primaire"
-              taille="md"
-              icone="save-line"
-              position-icone="gauche"
-              actif={!enCoursEnvoi}
-              on:click={() => enregistreMesure()}
-            />
+            {#if etapeCouranteModeleMesureSpecifique === 1}
+              <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+              <lab-anssi-bouton
+                titre="Supprimer la mesure du service"
+                variante="tertiaire-sans-bordure"
+                taille="md"
+                icone="delete-line"
+                position-icone="gauche"
+                on:click={() => (etapeCouranteModeleMesureSpecifique = 2)}
+              />
+              <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+              <lab-anssi-bouton
+                titre="Enregistrer"
+                variante="primaire"
+                taille="md"
+                icone="save-line"
+                position-icone="gauche"
+                actif={!enCoursEnvoi}
+                on:click={() => enregistreMesure()}
+              />
+            {:else}
+              <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+              <lab-anssi-bouton
+                titre="Annuler"
+                variante="tertiaire-sans-bordure"
+                taille="md"
+                on:click={() =>
+                  document.body.dispatchEvent(new CustomEvent('ferme-tiroir'))}
+              />
+              <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+              <lab-anssi-bouton
+                titre="Confirmer la suppression"
+                variante="primaire"
+                taille="md"
+                icone="delete-line"
+                position-icone="gauche"
+                actif={!enCoursEnvoi}
+                on:click={() => supprimeMesureSpecifiqueAssocieeAuModele()}
+              />
+            {/if}
           </div>
         {:else}
           {#if $configurationAffichage.doitAfficherSuppression}

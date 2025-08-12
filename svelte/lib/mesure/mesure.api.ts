@@ -92,3 +92,11 @@ export const enregistreCommentaire = async (
     `/api/service/${idService}/mesures/${idMesure}/activites/commentaires`,
     { contenu }
   );
+
+export const supprimeMesureSpecifiqueAssocieeAUnModele = async (
+  idModele: string,
+  idService: string
+) =>
+  await axios.delete(`/api/modeles/mesureSpecifique/${idModele}/services`, {
+    data: { idsServices: [idService] },
+  });
