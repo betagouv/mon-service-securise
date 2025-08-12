@@ -4,6 +4,7 @@ const creeDepot = (config = {}) => {
   const {
     adaptateurPersistance: persistance,
     adaptateurChiffrement: chiffrement,
+    referentiel,
   } = config;
 
   const nouveauTeleversementModelesMesureSpecifique = async (
@@ -26,7 +27,7 @@ const creeDepot = (config = {}) => {
     if (!persistees) return undefined;
 
     const enClair = await chiffrement.dechiffre(persistees);
-    return new TeleversementModelesMesureSpecifique(enClair);
+    return new TeleversementModelesMesureSpecifique(enClair, referentiel);
   };
 
   return {
@@ -34,5 +35,4 @@ const creeDepot = (config = {}) => {
     lisTeleversementModelesMesureSpecifique,
   };
 };
-
 module.exports = { creeDepot };

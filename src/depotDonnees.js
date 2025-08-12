@@ -124,6 +124,7 @@ const creeDepot = (config = {}) => {
     depotDonneesTeleversementModelesMesureSpecifique.creeDepot({
       adaptateurPersistance,
       adaptateurChiffrement,
+      referentiel,
     });
 
   const depotModelesMesureSpecifique =
