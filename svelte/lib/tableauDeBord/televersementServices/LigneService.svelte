@@ -89,6 +89,5 @@
   <CelluleDonnee
     contenu={donneesService.fonctionAutoriteHomologation}
     enErreur={contientErreur('DOSSIER_HOMOLOGATION_INCOMPLET')}
-    dernier
   />
 </tr>
