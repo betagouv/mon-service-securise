@@ -1,6 +1,5 @@
 <script lang="ts">
   import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
-  import Bouton from '../../ui/Bouton.svelte';
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import Formulaire from '../../ui/Formulaire.svelte';
@@ -9,6 +8,7 @@
     FormatAccepte,
   } from '../../ui/televersement/KitDeTeleversement.types';
   import KitDeTeleversement from '../../ui/televersement/KitDeTeleversement.svelte';
+  import { ajouteParametreAUrl } from '../../outils/url';
 
   export const titre = 'Téléverser des services';
   export const sousTitre =
@@ -22,9 +22,7 @@
     document.body.dispatchEvent(
       new CustomEvent('svelte-recharge-rapport-televersement-services')
     );
-    const url = new URL(window.location.href);
-    url.searchParams.append('rapportTeleversement', 'true');
-    window.history.replaceState({}, '', url);
+    ajouteParametreAUrl('rapportTeleversement', 'true');
     tiroirStore.ferme();
   };
 </script>
