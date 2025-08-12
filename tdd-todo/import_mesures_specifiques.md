@@ -25,9 +25,10 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
   - [x] Une route d'association à des modèles multiple dédiés
 - [ ] Le tiroir de configuration d'une mesure spécifique est modifié, via un feature flag
   - [ ] Un affichage particulier pour un propriétaire du modèle de mesure
-    - [ ] Un affichage similaire pour un utilisateur avec les droits d'écriture, seul l'infobulle change
+    - [ ] Une mesure spécifique associée, supprimée depuis l'interface, doit supprimer l'association entre le service et le modèle
+  - [ ] Un affichage similaire pour un utilisateur non propriétaire mais avec les droits d'écriture, seul l'infobulle change
     - [ ] Une mesure spécifique associée, supprimée depuis l'interface, doit supprimer l'association entre le service et le modèle
   - [ ] Un affichage en lecture seule si l'utilisateur n'a pas les droits de modification
-  - [ ] Une mesure spécifique qui ne provient pas d'un modèle a maintenant une entrée "Description" (descriptionLognue)
+- [ ] Une mesure spécifique qui ne provient pas d'un modèle a maintenant une entrée "Description" (descriptionLognue)
 - Bonus : pouvoir ouvrir la page Sécuriser avec une mesure mise en valeur (tiroir ouvert et onglet correspondant ouvert)
 - Bonus : voir les lignes concernées par l'association clignoter en bleu
