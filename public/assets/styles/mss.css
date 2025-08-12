@@ -277,3 +277,35 @@ section:last-of-type {
 .valide-champ-saisie-dsfr:before {
   background-image: url('/statique/assets/images/ui-kit/succes.svg');
 }
+
+.conteneur-infobulle {
+  display: none;
+  width: 360px;
+  padding: 8px;
+  position: fixed;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 18, 0.16);
+  background: white;
+  flex-direction: column;
+  z-index: 10000;
+}
+
+.conteneur-infobulle:after {
+  content: '';
+  background: white;
+  width: 8px;
+  height: 8px;
+  display: flex;
+  position: absolute;
+  bottom: -4px;
+  left: calc(50% - 4px);
+  transform: rotate(45deg);
+}
+
+.conteneur-infobulle p {
+  margin: 0;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.25rem;
+  color: var(--texte-fonce);
+}
