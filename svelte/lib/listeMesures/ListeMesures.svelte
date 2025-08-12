@@ -44,9 +44,24 @@
     await servicesAvecMesuresAssociees.rafraichis();
   });
 
+  const requete = new URLSearchParams(window.location.search);
+
+  const valeursOnglets = ['toutes', 'generales', 'specifiques'];
+  type OngletListeMesures = (typeof valeursOnglets)[number];
+
   let modaleDetailsMesure: ModaleDetailsMesure;
-  let ongletActif: 'toutes' | 'generales' | 'specifiques' =
-    afficheModelesMesureSpecifique ? 'toutes' : 'generales';
+
+  let ongletActif: OngletListeMesures;
+
+  $: {
+    ongletActif = 'generales';
+    const ongletDemande = requete.get('ongletActif') as OngletListeMesures;
+    if (afficheModelesMesureSpecifique) {
+      ongletActif = valeursOnglets.includes(ongletDemande)
+        ? ongletDemande
+        : 'toutes';
+    }
+  }
 
   const afficheModaleDetailsMesure = async (modeleMesure: ModeleDeMesure) => {
     await modaleDetailsMesure.affiche(modeleMesure);

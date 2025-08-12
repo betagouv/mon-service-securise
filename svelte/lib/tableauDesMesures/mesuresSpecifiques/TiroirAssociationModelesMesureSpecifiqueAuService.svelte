@@ -13,6 +13,8 @@
   import { singulierPluriel } from '../../outils/string';
   import Infobulle from '../../ui/Infobulle.svelte';
   import type { ModeleMesureSpecifique } from '../../ui/types';
+  import Avertissement from '../../ui/Avertissement.svelte';
+  import Lien from '../../ui/Lien.svelte';
 
   export const titre: string = 'Ajouter des mesures depuis ma liste';
   export const sousTitre: string =
@@ -92,65 +94,83 @@
 
 <ContenuTiroir>
   {#if etapeCourante === 1}
-    <div class="largeur-contrainte">
-      <Toast
-        avecOmbre={false}
-        avecAnimation={false}
-        titre="Une mesure ajoutée reçoit automatiquement le statut «&nbsp;À lancer&nbsp;»."
-        niveau="info"
-        contenu="Ce statut est obligatoire : il n’est pas possible d’ajouter une mesure sans statut."
-      />
-    </div>
-    <Tableau
-      colonnes={[
-        { cle: 'description', libelle: 'Intitulé de la mesure' },
-        { cle: 'descriptionLongue', libelle: 'Description' },
-        { cle: 'categorie', libelle: 'Catégorie' },
-      ]}
-      donnees={modelesMesureSpecifiqueOrdonnes}
-      configurationRecherche={{
-        champsRecherche: ['description', 'descriptionLongue'],
-      }}
-      configurationFiltrage={{
-        options: {
-          categories: [{ id: 'categorie', libelle: 'Catégories' }],
-          items: itemsFiltrageCategories,
-        },
-      }}
-      configurationSelection={{
-        texteIndicatif: {
-          vide: 'Aucune mesure sélectionnée',
-          unique: 'mesure sélectionnée',
-          multiple: 'mesures sélectionnées',
-        },
-        champSelection: 'id',
-        predicatSelectionDesactive: (donnee) =>
-          donnee.idsServicesAssocies.includes(idService),
-      }}
-      preSelectionImmuable={modelesAssociesACeService.map((m) => m.id)}
-      bind:selection={idsModelesSelectionnes}
-    >
-      <svelte:fragment slot="cellule" let:donnee let:colonne>
-        {@const { description, descriptionLongue, categorie } = donnee}
-        {@const desactive = donnee.idsServicesAssocies.includes(idService)}
-        {#if colonne.cle === 'description'}
-          <div class="contenu-intitule">
-            <b class:desactive>{description}</b>
-            {#if desactive}
-              <Infobulle
-                contenu="Vous ne pouvez pas sélectionner cette mesure car elle est déjà associée à ce service."
-              />
-            {/if}
+    {#if $modelesMesureSpecifique.length === 0}
+      <Avertissement niveau="info">
+        <div class="info-pas-de-modele">
+          <p>
+            Vous devez d’abord ajouter une/des mesure(s) afin de les associer à
+            ce service depuis votre liste de mesures.
+          </p>
+          <div class="retour-tableau-de-bord">
+            <Lien
+              type="bouton-secondaire"
+              href="/mesures?ongletActif=specifiques"
+              titre="Aller à ma liste de mesures"
+            />
           </div>
-        {:else if colonne.cle === 'descriptionLongue'}
-          <span class:desactive>{descriptionLongue}</span>
-        {:else if colonne.cle === 'categorie'}
-          <div class:desactive>
-            <CartoucheCategorieMesure {categorie} />
-          </div>
-        {/if}
-      </svelte:fragment>
-    </Tableau>
+        </div>
+      </Avertissement>
+    {:else}
+      <div class="largeur-contrainte">
+        <Toast
+          avecOmbre={false}
+          avecAnimation={false}
+          titre="Une mesure ajoutée reçoit automatiquement le statut «&nbsp;À lancer&nbsp;»."
+          niveau="info"
+          contenu="Ce statut est obligatoire : il n’est pas possible d’ajouter une mesure sans statut."
+        />
+      </div>
+      <Tableau
+        colonnes={[
+          { cle: 'description', libelle: 'Intitulé de la mesure' },
+          { cle: 'descriptionLongue', libelle: 'Description' },
+          { cle: 'categorie', libelle: 'Catégorie' },
+        ]}
+        donnees={modelesMesureSpecifiqueOrdonnes}
+        configurationRecherche={{
+          champsRecherche: ['description', 'descriptionLongue'],
+        }}
+        configurationFiltrage={{
+          options: {
+            categories: [{ id: 'categorie', libelle: 'Catégories' }],
+            items: itemsFiltrageCategories,
+          },
+        }}
+        configurationSelection={{
+          texteIndicatif: {
+            vide: 'Aucune mesure sélectionnée',
+            unique: 'mesure sélectionnée',
+            multiple: 'mesures sélectionnées',
+          },
+          champSelection: 'id',
+          predicatSelectionDesactive: (donnee) =>
+            donnee.idsServicesAssocies.includes(idService),
+        }}
+        preSelectionImmuable={modelesAssociesACeService.map((m) => m.id)}
+        bind:selection={idsModelesSelectionnes}
+      >
+        <svelte:fragment slot="cellule" let:donnee let:colonne>
+          {@const { description, descriptionLongue, categorie } = donnee}
+          {@const desactive = donnee.idsServicesAssocies.includes(idService)}
+          {#if colonne.cle === 'description'}
+            <div class="contenu-intitule">
+              <b class:desactive>{description}</b>
+              {#if desactive}
+                <Infobulle
+                  contenu="Vous ne pouvez pas sélectionner cette mesure car elle est déjà associée à ce service."
+                />
+              {/if}
+            </div>
+          {:else if colonne.cle === 'descriptionLongue'}
+            <span class:desactive>{descriptionLongue}</span>
+          {:else if colonne.cle === 'categorie'}
+            <div class:desactive>
+              <CartoucheCategorieMesure {categorie} />
+            </div>
+          {/if}
+        </svelte:fragment>
+      </Tableau>
+    {/if}
   {:else}
     {@const pluralise = idsModelesSelectionnes.length > 1 ? 's' : ''}
     <div class="largeur-contrainte">
@@ -249,5 +269,17 @@
 
   .desactive {
     opacity: 0.5;
+  }
+
+  .info-pas-de-modele {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 4px 0;
+    max-width: 550px;
+
+    p {
+      margin: 0;
+    }
   }
 </style>
