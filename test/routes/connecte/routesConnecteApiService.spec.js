@@ -14,6 +14,7 @@ const {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
+  ErreurSuppressionImpossible,
 } = require('../../../src/erreurs');
 const Service = require('../../../src/modeles/service');
 const {
@@ -605,6 +606,21 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(idServiceRecu).to.be('456');
       expect(idUtilisateurRecu).to.be('999');
       expect(idMesureRecue).to.be('M1');
+    });
+
+    it('jette une erreur si la mesure spécifique est associée à un modèle', async () => {
+      testeur.depotDonnees().supprimeMesureSpecifiqueDuService = async () => {
+        throw new ErreurSuppressionImpossible();
+      };
+
+      try {
+        await axios.delete(
+          'http://localhost:1234/api/service/456/mesuresSpecifiques/M1'
+        );
+        expect().fail("L'appel aurait du lever une erreur.");
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
     });
   });
 

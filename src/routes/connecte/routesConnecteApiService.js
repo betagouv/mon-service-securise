@@ -22,6 +22,7 @@ const {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
+  ErreurSuppressionImpossible,
 } = require('../../erreurs');
 const ActeursHomologation = require('../../modeles/acteursHomologation');
 const Avis = require('../../modeles/avis');
@@ -331,13 +332,20 @@ const routesConnecteApiService = ({
       const { service, idUtilisateurCourant } = requete;
       const { idMesure } = requete.params;
 
-      await depotDonnees.supprimeMesureSpecifiqueDuService(
-        service.id,
-        idUtilisateurCourant,
-        idMesure
-      );
-
-      reponse.sendStatus(200);
+      try {
+        await depotDonnees.supprimeMesureSpecifiqueDuService(
+          service.id,
+          idUtilisateurCourant,
+          idMesure
+        );
+        reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurSuppressionImpossible) {
+          reponse.sendStatus(400);
+          return;
+        }
+        throw e;
+      }
     }
   );
 
