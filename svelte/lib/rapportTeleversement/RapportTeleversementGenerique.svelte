@@ -202,6 +202,7 @@
 
   :global(.dialog-rapport-televersement-generique table) {
     border-collapse: collapse;
+    width: 100%;
   }
 
   :global(.dialog-rapport-televersement-generique th) {
