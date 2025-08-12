@@ -7,6 +7,7 @@ const {
   ErreurMesureInconnue,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
+  ErreurSuppressionImpossible,
 } = require('../../src/erreurs');
 
 describe('La liste des mesures spécifiques', () => {
@@ -212,6 +213,32 @@ describe('La liste des mesures spécifiques', () => {
     mesures.supprimeMesure('M1');
 
     expect(mesures.items.length).to.be(0);
+  });
+
+  it("jette une erreur lors de la suppression d'une mesure spécifique associée à un modèle", () => {
+    try {
+      const mesures = new MesuresSpecifiques(
+        {
+          mesuresSpecifiques: [
+            {
+              id: 'M1',
+              idModele: 'MOD-1',
+            },
+          ],
+        },
+        referentiel,
+        { 'MOD-1': {} }
+      );
+
+      mesures.supprimeMesure('M1');
+
+      expect().fail("L'appel aurait dû jeter une erreur");
+    } catch (e) {
+      expect(e).to.be.an(ErreurSuppressionImpossible);
+      expect(e.message).to.be(
+        'Impossible de supprimer directement une mesure spécifique associée à un modèle.'
+      );
+    }
   });
 
   describe('concernant les mesures spécifiques liées à un modèle', () => {

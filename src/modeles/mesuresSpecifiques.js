@@ -5,6 +5,7 @@ const {
   ErreurMesureInconnue,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
+  ErreurSuppressionImpossible,
 } = require('../erreurs');
 const Mesure = require('./mesure');
 
@@ -69,6 +70,11 @@ class MesuresSpecifiques extends ElementsConstructibles {
   }
 
   supprimeMesure(idMesure) {
+    if (this.avecId(idMesure)?.idModele) {
+      throw new ErreurSuppressionImpossible(
+        'Impossible de supprimer directement une mesure spécifique associée à un modèle.'
+      );
+    }
     this.items = this.items.filter((m) => m.id !== idMesure);
   }
 
