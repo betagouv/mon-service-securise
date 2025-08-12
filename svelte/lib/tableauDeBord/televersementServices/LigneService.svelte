@@ -7,6 +7,7 @@
   import CelluleDonnee from '../../rapportTeleversement/composants/CelluleDonnee.svelte';
   import TagEtat from '../../rapportTeleversement/composants/TagEtat.svelte';
   import TooltipErreursMultiple from '../../rapportTeleversement/composants/TooltipErreursMultiple.svelte';
+  import { dateEnFrancais } from '../../outils/date';
 
   export let service: RapportService;
   export let numeroLigne: number;
@@ -17,13 +18,6 @@
 
   const contientErreur = (erreur: ErreurService) =>
     service.erreurs.includes(erreur);
-
-  const dateEnFrancais = (chaineDateISO: string) =>
-    chaineDateISO
-      ? new Date(chaineDateISO).toLocaleString('fr-FR', {
-          dateStyle: 'short',
-        })
-      : '';
 </script>
 
 <tr>
