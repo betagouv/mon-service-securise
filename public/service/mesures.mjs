@@ -82,4 +82,8 @@ $(() => {
     const doitFermerTiroir = e.detail?.sourceDeModification === 'tiroir';
     if (doitFermerTiroir) gestionnaireTiroir.basculeOuvert(false);
   });
+
+  $(document.body).on('ferme-tiroir', () => {
+    gestionnaireTiroir.basculeOuvert(false);
+  });
 });
