@@ -32,7 +32,10 @@
   import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
   import { resultatsDeRecherche } from './stores/resultatsDeRecherche.store';
   import { mesures } from './stores/mesures.store';
-  import { rechercheParAvancement } from './stores/rechercheParAvancement.store';
+  import {
+    avancementDeLaMesure,
+    rechercheParAvancement,
+  } from './stores/rechercheParAvancement.store';
   import AucunResultat from './aucunResultat/AucunResultat.svelte';
   import { volumetrieMesures } from './stores/volumetrieMesures.store';
   import { nouveautesPage } from '../ui/stores/nouveautesPage.store';
@@ -47,6 +50,7 @@
   import { rechercheParReferentiel } from './stores/rechercheParReferentiel.store';
   import { rechercheParPriorite } from './stores/rechercheParPriorite.store';
   import { rechercheMesMesures } from './stores/rechercheMesMesures.store';
+  import { enleveParametreDeUrl } from '../outils/url';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -57,6 +61,37 @@
   export let estLectureSeule: boolean;
   export let modeVisiteGuidee: boolean;
   export let afficheModelesMesureSpecifique: boolean;
+
+  $: {
+    const requete = new URLSearchParams(window.location.search);
+    const idModele = requete.get('idModele');
+    const idMesure = requete.get('idMesure');
+    if (idModele) {
+      const mesureAssociee = $mesures.mesuresSpecifiques.find(
+        (m) => m.idModele === idModele
+      );
+      if (mesureAssociee) {
+        $rechercheParAvancement = avancementDeLaMesure(mesureAssociee);
+        const index = $mesures.mesuresSpecifiques.indexOf(mesureAssociee);
+        afficheTiroirEditeMesure({
+          mesure: { ...mesureAssociee },
+          metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: index },
+        });
+        enleveParametreDeUrl('idModele');
+      }
+    }
+    if (idMesure) {
+      const mesureAssociee = $mesures.mesuresGenerales[idMesure];
+      if (mesureAssociee) {
+        $rechercheParAvancement = avancementDeLaMesure(mesureAssociee);
+        afficheTiroirEditeMesure({
+          mesure: { ...mesureAssociee },
+          metadonnees: { typeMesure: 'GENERALE', idMesure: idMesure },
+        });
+        enleveParametreDeUrl('idMesure');
+      }
+    }
+  }
 
   const rafraichisMesures = async () => {
     mesures.reinitialise(

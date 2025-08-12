@@ -19,3 +19,16 @@ export const appliqueFiltreAvancement = (
 
   return true;
 };
+
+export const avancementDeLaMesure = (
+  mesure: MesureSpecifique | MesureGenerale
+): Avancement => {
+  if (!mesure.statut) return 'statutADefinir';
+
+  if (mesure.statut === 'aLancer' || mesure.statut === 'enCours')
+    return 'enAction';
+
+  if (mesure.statut === 'fait' || mesure.statut === 'nonFait') return 'traite';
+
+  return 'statutADefinir';
+};
