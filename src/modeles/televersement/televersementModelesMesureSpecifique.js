@@ -21,11 +21,7 @@ class TeleversementModelesMesureSpecifique {
 
     if (!modele.description) erreurs.push('INTITULE_MANQUANT');
 
-    if (
-      !this.referentiel
-        .identifiantsCategoriesMesures()
-        .includes(modele.categorie)
-    )
+    if (!this.referentiel.categorieMesureParLabel(modele.categorie))
       erreurs.push('CATEGORIE_INCONNUE');
 
     return erreurs;
