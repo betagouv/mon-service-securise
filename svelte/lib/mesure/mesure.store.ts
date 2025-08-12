@@ -63,6 +63,10 @@ export const configurationAffichage = derived(store, ($store) => {
       $store.etape === 'EditionGenerale'
         ? $store.mesureEditee.mesure.identifiantNumerique
         : '',
+    categorie:
+      $store.etape === 'EditionGenerale' || $store.etape === 'EditionSpecifique'
+        ? $store.mesureEditee.mesure.categorie
+        : '',
     doitAfficherIntitule:
       $store.etape === 'Creation' || $store.etape === 'EditionSpecifique',
     doitAfficherChoixCategorie:
