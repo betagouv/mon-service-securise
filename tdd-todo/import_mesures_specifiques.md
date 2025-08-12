@@ -17,7 +17,7 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 ## Du point de vue de la page "SÉCURISER"
 
 - [ ] Une mesure spécifique qui ne provient pas d'un modèle a maintenant une entrée "Description" (descriptionLognue)
-- Bonus : pouvoir ouvrir la page Sécuriser avec une mesure mise en valeur (tiroir ouvert et onglet correspondant ouvert)
+- [x] Bonus : pouvoir ouvrir la page Sécuriser avec une mesure mise en valeur (tiroir ouvert et onglet correspondant ouvert)
 - Bonus : voir les lignes concernées par l'association clignoter en bleu
 
 ## Du point de vue du service

@@ -34,9 +34,12 @@
   <svelte:fragment slot="cellule" let:donnee let:colonne>
     {#if colonne.cle === 'nom'}
       {#if avecNomCliquable}
+        {@const urlSecuriserService = `/service/${donnee.id}/mesures?${
+          donnee.mesure.type === 'generale' ? 'idMesure=' : 'idModele='
+        }${donnee.mesure.id}`}
         <a
           class="intitule-service intitule-service-cliquable"
-          href="/service/{donnee.id}/mesures"
+          href={urlSecuriserService}
         >
           <span class="nom">{decode(donnee.nomService)}</span>
           <span class="organisation">{donnee.organisationResponsable}</span>

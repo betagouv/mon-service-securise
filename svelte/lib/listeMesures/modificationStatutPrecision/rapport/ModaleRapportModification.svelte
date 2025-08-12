@@ -20,8 +20,11 @@
         .filter((s) => $modaleRapportStore.idServicesModifies?.includes(s.id))
         .map(({ mesuresAssociees, ...autresDonnees }) => ({
           ...autresDonnees,
-          mesure:
-            mesuresAssociees[$modaleRapportStore.modeleMesureGenerale!.id],
+          mesure: {
+            ...mesuresAssociees[$modaleRapportStore.modeleMesureGenerale!.id],
+            id: $modaleRapportStore.modeleMesureGenerale!.id,
+            type: 'generale',
+          },
         }))
     : [];
 
