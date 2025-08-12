@@ -4,13 +4,17 @@
   import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
   import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
   import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
+  import CartoucheCategorieMesure from '../../ui/CartoucheCategorieMesure.svelte';
 
-  const { referentiel, indispensable, identifiantNumerique } =
+  const { referentiel, indispensable, identifiantNumerique, categorie } =
     $configurationAffichage;
 </script>
 
 <div class="conteneur">
   <CartoucheReferentiel {referentiel} />
+  {#if categorie}
+    <CartoucheCategorieMesure {categorie} />
+  {/if}
   {#if referentiel !== Referentiel.SPECIFIQUE}
     <CartoucheIndispensable indispensable={indispensable ?? false} />
   {/if}

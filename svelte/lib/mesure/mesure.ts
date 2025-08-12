@@ -11,9 +11,6 @@ document.body.addEventListener(
 let enteteTiroir: EnteteTiroir;
 const changeCartoucheDuReferentiel = () => {
   enteteTiroir?.$destroy();
-  const cibleIntituleType = document.querySelector('.type-tiroir');
-  cibleIntituleType!.innerHTML = 'Mesure';
-  cibleIntituleType!.classList.remove('invisible');
   const cible = document.querySelector('.titre-tiroir');
   if (!cible) {
     throw new Error('Element titre du tiroir non trouvé');

@@ -15,10 +15,7 @@ export const afficheTiroirEditeMesure = (mesureAEditer: MesureAEditer) => {
   document.body.dispatchEvent(
     new CustomEvent('svelte-affiche-tiroir-ajout-mesure-specifique', {
       detail: {
-        titreTiroir:
-          mesureAEditer.metadonnees.typeMesure === 'GENERALE'
-            ? mesureAEditer.mesure.description
-            : 'Ajouter une mesure',
+        titreTiroir: mesureAEditer.mesure.description,
         mesureAEditer,
       },
     })
