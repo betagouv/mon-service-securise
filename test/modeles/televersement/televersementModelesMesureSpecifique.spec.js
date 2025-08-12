@@ -30,7 +30,7 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
     it('sait détecter une erreur de description manquante (colonne Intitulé dans le Excel)', () => {
       const sansDescription = {
         description: '',
-        modalites: '',
+        descriptionLongue: '',
         categorie: 'gouvernance',
       };
 
@@ -42,7 +42,11 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
     });
 
     it('sait détecter une erreur de catégorie inconnue du référentiel', () => {
-      const categorieZ = { categorie: 'Z', description: 'D…', modalites: '' };
+      const categorieZ = {
+        categorie: 'Z',
+        description: 'D…',
+        descriptionLongue: '',
+      };
 
       const rapport = unTeleversement([categorieZ]).rapportDetaille();
 
@@ -52,7 +56,11 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
     });
 
     it('indique une erreur de catégorie inconnue en cas de catégorie manquante', () => {
-      const sansCategorie = { categorie: '', description: 'D…', modalites: '' };
+      const sansCategorie = {
+        categorie: '',
+        description: 'D…',
+        descriptionLongue: '',
+      };
 
       const rapport = unTeleversement([sansCategorie]).rapportDetaille();
 
