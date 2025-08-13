@@ -126,7 +126,10 @@ class DuplicationEnMasseDeServices {
       const idNouveauService = await this.depotDonnees.dupliqueService(
         idServiceModele,
         proprietaire.id,
-        { nomService: serviceADupliquer.ENTITE, siret: serviceADupliquer.SIRET }
+        {
+          nomService: serviceADupliquer.ENTITE,
+          siret: serviceADupliquer.SIRET,
+        }
       );
       for (const emailUtilisateurAInviter of serviceADupliquer.PROPRIETAIRE) {
         await this.procedures.ajoutContributeurSurServices(

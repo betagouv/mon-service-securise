@@ -102,6 +102,23 @@ class MesuresSpecifiques extends ElementsConstructibles {
     });
   }
 
+  detacheMesuresNonAssocieesA(idUtilisateurProprietaireDesModelesAConserver) {
+    this.items.forEach((m) => {
+      if (!m.idModele) {
+        return;
+      }
+      const modele = this.modelesDisponiblesDeMesureSpecifique[m.idModele];
+      if (!modele) {
+        return;
+      }
+      if (
+        modele.idUtilisateur !== idUtilisateurProprietaireDesModelesAConserver
+      ) {
+        m.detacheDeSonModele();
+      }
+    });
+  }
+
   listeIdentifiantsModelesAssocies() {
     return this.items.map((m) => m.idModele).filter(Boolean);
   }

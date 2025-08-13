@@ -104,7 +104,11 @@ const nouvelAdaptateur = (
           .filter((s) => s.idService === unService.id)
           .map((suggestion) => suggestion.nature),
         modelesDisponiblesDeMesureSpecifique: modelesDuService.map(
-          ({ id, donnees: d }) => ({ id, donnees: d })
+          ({ id, donnees: d, idUtilisateur: id_utilisateur }) => ({
+            id,
+            donnees: d,
+            id_utilisateur,
+          })
         ),
       };
     });

@@ -306,6 +306,7 @@ describe('Le dépôt de données des services', () => {
         service.mesuresSpecifiques().modelesDisponiblesDeMesureSpecifique
       ).to.eql({
         'MOD-1': {
+          idUtilisateur: 'U1',
           description: 'une description',
           chiffre: false,
         },
@@ -1642,6 +1643,48 @@ describe('Le dépôt de données des services', () => {
 
       expect(s2.nomService()).to.equal('Un nom prédéfini');
       expect(s2.siretDeOrganisation()).to.equal('UN_SIRET');
+    });
+
+    it("détache les mesures associées à des modèles n'appartenant pas au propriétaire dans le service dupliqué", async () => {
+      const referentiel = Referentiel.creeReferentielVide();
+      const persistance = unePersistanceMemoire()
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-1',
+          idUtilisateur: 'U1',
+          donnees: { description: 'description' },
+        })
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-2',
+          idUtilisateur: 'U2',
+          donnees: { description: 'description' },
+        })
+        .ajouteUnService({
+          id: 'S1',
+          descriptionService: uneDescriptionValide(referentiel).donnees,
+          mesuresSpecifiques: [{ idModele: 'MOD-1' }, { idModele: 'MOD-2' }],
+        })
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+        .nommeCommeProprietaire('U1', ['S1'])
+        .nommeCommeProprietaire('U2', ['S1'])
+        .associeLeServiceAuxModelesDeMesureSpecifique('S1', ['MOD-1', 'MOD-2'])
+        .construis();
+
+      depot = unDepotDeDonneesServices()
+        .avecAdaptateurPersistance(persistance)
+        .avecAdaptateurUUID(fabriqueAdaptateurUUID())
+        .avecReferentiel(referentiel)
+        .construis();
+
+      const idServiceDuplique = await depot.dupliqueService('S1', 'U1');
+
+      const serviceDuplique = await depot.service(idServiceDuplique);
+      const toutesMesuresSpecifiques = serviceDuplique
+        .mesuresSpecifiques()
+        .toutes();
+      expect(toutesMesuresSpecifiques.length).to.be(2);
+      expect(toutesMesuresSpecifiques[0].idModele).to.be('MOD-1');
+      expect(toutesMesuresSpecifiques[1].idModele).to.be(undefined);
     });
 
     it("retourne l'id du service dupliqué", async () => {
