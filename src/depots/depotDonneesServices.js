@@ -69,10 +69,10 @@ const fabriquePersistance = (
     serviceEnClair.modelesDisponiblesDeMesureSpecifique = Object.fromEntries(
       await Promise.all(
         serviceEnClair.modelesDisponiblesDeMesureSpecifique.map(
-          async ({ id, donnees }) => {
+          async ({ id, donnees, id_utilisateur }) => {
             const donneesEnClair =
               await adaptateurChiffrement.dechiffre(donnees);
-            return [id, donneesEnClair];
+            return [id, { ...donneesEnClair, idUtilisateur: id_utilisateur }];
           }
         )
       )
@@ -419,31 +419,32 @@ const creeDepot = (config = {}) => {
     idProprietaire,
     nouveauNomEtSiret = null
   ) => {
-    const dupliqueAvecNomEtSiret = async (s) => {
-      const donnees = s.donneesADupliquer(
+    const donneesADupliquerAvecNomEtSiret = (s) =>
+      s.donneesADupliquer(
         nouveauNomEtSiret.nomService,
         nouveauNomEtSiret.siret
       );
-      return nouveauService(idProprietaire, donnees);
-    };
 
-    const dupliqueAvecNomCopie = async (s) => {
+    const donneesADupliquerAvecNomCopie = async (s) => {
       const nomCopie = `${s.nomService()} - Copie`;
       const index = await trouveIndexDisponible(idProprietaire, nomCopie);
-      const donnees = s.donneesADupliquer(
+      return s.donneesADupliquer(
         `${nomCopie} ${index}`,
         s.siretDeOrganisation()
       );
-      return nouveauService(idProprietaire, donnees);
     };
 
     const s = await p.lis.un(idService);
     if (typeof s === 'undefined')
       throw new ErreurServiceInexistant(`Service "${idService}" non trouvé`);
 
-    return nouveauNomEtSiret
-      ? dupliqueAvecNomEtSiret(s)
-      : dupliqueAvecNomCopie(s);
+    s.mesuresSpecifiques().detacheMesuresNonAssocieesA(idProprietaire);
+
+    const donnees = nouveauNomEtSiret
+      ? donneesADupliquerAvecNomEtSiret(s)
+      : await donneesADupliquerAvecNomCopie(s);
+
+    return nouveauService(idProprietaire, donnees);
   };
 
   const metsAJourService = async (unService) => {

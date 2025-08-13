@@ -479,4 +479,31 @@ describe('La liste des mesures spécifiques', () => {
       expect(listeModeles).to.eql(['MOD-1']);
     });
   });
+
+  describe("sur demande de détachement de toutes les mesures associées à un modèle qui n'appartient pas à un utilisateur", () => {
+    it('détache ces mesures uniquement', () => {
+      const modelesDisponiblesDeMesureSpecifique = {
+        'MOD-1': { categorie: 'categorie1', idUtilisateur: 'U1' },
+        'MOD-2': { categorie: 'categorie1', idUtilisateur: 'U2' },
+      };
+
+      const mesures = new MesuresSpecifiques(
+        {
+          mesuresSpecifiques: [
+            { id: 'M1', idModele: 'MOD-1', statut: 'fait' },
+            { id: 'M2', idModele: 'MOD-2', statut: 'fait' },
+          ],
+        },
+        referentiel,
+        modelesDisponiblesDeMesureSpecifique
+      );
+
+      mesures.detacheMesuresNonAssocieesA('U1');
+
+      const toutesMesures = mesures.toutes();
+      expect(toutesMesures.length).to.be(2);
+      expect(toutesMesures[0].idModele).to.be('MOD-1');
+      expect(toutesMesures[1].idModele).to.be(undefined);
+    });
+  });
 });
