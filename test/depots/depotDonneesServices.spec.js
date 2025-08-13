@@ -1191,6 +1191,18 @@ describe('Le dépôt de données des services', () => {
         .catch(done);
     });
 
+    it('supprime les liens avec des modèles de mesure spécifique', async () => {
+      let idRecu;
+      adaptateurPersistance.supprimeTousLiensEntreUnServiceEtModelesMesureSpecifique =
+        async (idService) => {
+          idRecu = idService;
+        };
+
+      await depot.supprimeService('123');
+
+      expect(idRecu).to.be('123');
+    });
+
     it("publie sur le bus d'événements le service supprimé", async () => {
       adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [

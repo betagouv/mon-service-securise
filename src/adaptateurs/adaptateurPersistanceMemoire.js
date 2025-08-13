@@ -438,6 +438,15 @@ const nouvelAdaptateur = (
       });
   };
 
+  const supprimeTousLiensEntreUnServiceEtModelesMesureSpecifique = async (
+    idService
+  ) => {
+    donnees.associationModelesMesureSpecifiqueServices =
+      donnees.associationModelesMesureSpecifiqueServices.filter(
+        (a) => a.idService === idService
+      );
+  };
+
   const verifieModeleMesureSpecifiqueExiste = async (idModele) =>
     donnees.modelesMesureSpecifique.find((m) => m.id === idModele) !==
     undefined;
@@ -529,6 +538,7 @@ const nouvelAdaptateur = (
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
     supprimeServices,
+    supprimeTousLiensEntreUnServiceEtModelesMesureSpecifique,
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tachesDeServicePour,
