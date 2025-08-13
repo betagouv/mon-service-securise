@@ -49,6 +49,7 @@ const EvenementRetourUtilisateurMesure = require('../../modeles/journalMSS/evene
 const routesConnecteApiServiceActivitesMesure = require('./routesConnecteApiServiceActivitesMesure');
 const MesureSpecifique = require('../../modeles/mesureSpecifique');
 const RisqueSpecifique = require('../../modeles/risqueSpecifique');
+const Autorisation = require('../../modeles/autorisations/autorisation');
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -916,7 +917,21 @@ const routesConnecteApiService = ({
         return;
       }
 
+      const avaitLesDroits = ciblee.aLesPermissions(
+        Autorisation.DROITS_EDITER_MESURES
+      );
+
       ciblee.appliqueDroits(nouveauxDroits);
+
+      const aActuellementLesDroits = ciblee.aLesPermissions(
+        Autorisation.DROITS_EDITER_MESURES
+      );
+      if (avaitLesDroits && !aActuellementLesDroits) {
+        await depotDonnees.dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService(
+          ciblee.idUtilisateur,
+          service.id
+        );
+      }
       await depotDonnees.sauvegardeAutorisation(ciblee);
 
       reponse.json(objetGetAutorisation.donnees(ciblee));

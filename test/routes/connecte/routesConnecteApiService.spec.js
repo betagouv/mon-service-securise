@@ -2677,6 +2677,96 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(autorisationPersistee.droits).to.eql(droitsCible);
     });
 
+    describe("concernant la dissociation des modèles de l'utilisateur concerné", () => {
+      beforeEach(() => {
+        const service = unService().avecId('S1').construis();
+        const proprietaire = uneAutorisation()
+          .deProprietaire('P1', 'S1')
+          .construis();
+        testeur.middleware().reinitialise({
+          idUtilisateur: 'P1',
+          serviceARenvoyer: service,
+          autorisationACharger: proprietaire,
+        });
+      });
+      it("délègue au dépôt de données la dissociation si l'utilisateur perds les droits d'écriture sur sécuriser", async () => {
+        testeur.depotDonnees().autorisation = async () =>
+          uneAutorisation().avecId('A1').deProprietaire('U1', 'S1').construis();
+        let donneesRecues;
+        testeur.depotDonnees().dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService =
+          async (idUtilisateur, idService) => {
+            donneesRecues = { idUtilisateur, idService };
+          };
+        const droitsCible = {
+          DECRIRE: 1,
+          SECURISER: 1,
+          HOMOLOGUER: 0,
+          RISQUES: 0,
+          CONTACTS: 2,
+        };
+        await axios.patch(
+          'http://localhost:1234/api/service/S1/autorisations/A1',
+          { droits: droitsCible }
+        );
+
+        expect(donneesRecues).to.eql({ idUtilisateur: 'U1', idService: 'S1' });
+      });
+
+      it("ne fait rien si l'utilisateur n'avait pas les droits d'écriture sur sécuriser", async () => {
+        testeur.depotDonnees().autorisation = async () =>
+          uneAutorisation()
+            .avecId('A1')
+            .deContributeur('U1', 'S1')
+            .avecDroits({})
+            .construis();
+        let depotAppele = false;
+        testeur.depotDonnees().dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService =
+          async () => {
+            depotAppele = true;
+          };
+        const droitsCible = {
+          DECRIRE: 1,
+          SECURISER: 2,
+          HOMOLOGUER: 0,
+          RISQUES: 0,
+          CONTACTS: 2,
+        };
+        await axios.patch(
+          'http://localhost:1234/api/service/S1/autorisations/A1',
+          { droits: droitsCible }
+        );
+
+        expect(depotAppele).to.be(false);
+      });
+
+      it("ne fait rien si l'utilisateur avait les droits d'écriture sur sécuriser et ne les perds pas", async () => {
+        testeur.depotDonnees().autorisation = async () =>
+          uneAutorisation()
+            .avecId('A1')
+            .deContributeur('U1', 'S1')
+            .avecDroits({ SECURISER: 2 })
+            .construis();
+        let depotAppele = false;
+        testeur.depotDonnees().dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService =
+          async () => {
+            depotAppele = true;
+          };
+        const droitsCible = {
+          DECRIRE: 1,
+          SECURISER: 2,
+          HOMOLOGUER: 0,
+          RISQUES: 0,
+          CONTACTS: 2,
+        };
+        await axios.patch(
+          'http://localhost:1234/api/service/S1/autorisations/A1',
+          { droits: droitsCible }
+        );
+
+        expect(depotAppele).to.be(false);
+      });
+    });
+
     it("renvoie la représentation API de l'autorisation mise à jour", async () => {
       testeur.depotDonnees().autorisation = async (id) =>
         uneAutorisation().avecId(id).deContributeur('888', '456').construis();
