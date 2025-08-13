@@ -30,6 +30,7 @@ describe("L'adaptateur persistance Postgres", function () {
   let persistance;
   const ID_UTILISATEUR_1 = genereUUID();
   const ID_UTILISATEUR_2 = genereUUID();
+  const ID_SERVICE_1 = genereUUID();
 
   before(async () => {
     knex = Knex({
@@ -215,6 +216,26 @@ describe("L'adaptateur persistance Postgres", function () {
       await insereAssociationModeleMesureSpecifique(idModele, idService);
 
       await persistance.supprimeModeleMesureSpecifique(idModele);
+
+      const associations = await knex(
+        'modeles_mesure_specifique_association_aux_services'
+      ).select();
+      expect(associations).to.eql([]);
+    });
+  });
+
+  describe("concernant la suppression d'association entre des modèles de mesure spécifique appartenant à un utilisateur et un service", () => {
+    it('supprime les associations', async () => {
+      const idModele = await insereModeleMesureSpecifique({
+        id_utilisateur: ID_UTILISATEUR_1,
+        donnees: {},
+      });
+      await insereAssociationModeleMesureSpecifique(idModele, ID_SERVICE_1);
+
+      await persistance.supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService(
+        ID_UTILISATEUR_1,
+        ID_SERVICE_1
+      );
 
       const associations = await knex(
         'modeles_mesure_specifique_association_aux_services'

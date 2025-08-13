@@ -473,6 +473,17 @@ const nouvelAdaptateur = (
             .map((a) => a.idService),
       }));
 
+  const supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService =
+    async (idUtilisateur, idService) => {
+      const modeles =
+        await lisModelesMesureSpecifiquePourUtilisateur(idUtilisateur);
+      const idsModeles = modeles.map((m) => m.id);
+      donnees.associationModelesMesureSpecifiqueServices =
+        donnees.associationModelesMesureSpecifiqueServices.filter(
+          (a) => !(a.idService === idService && idsModeles.includes(a.idModele))
+        );
+    };
+
   const ajouteTeleversementModelesMesureSpecifique = async (
     idUtilisateur,
     donneesTeleversement
@@ -528,6 +539,7 @@ const nouvelAdaptateur = (
     sauvegardeParcoursUtilisateur,
     sauvegardeService,
     superviseur,
+    supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
