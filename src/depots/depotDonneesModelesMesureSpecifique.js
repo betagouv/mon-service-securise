@@ -135,6 +135,7 @@ const creeDepot = (config = {}) => {
         const donneesEnClair = await adaptateurChiffrement.dechiffre(m.donnees);
         return {
           id: m.id,
+          idUtilisateur: m.id_utilisateur,
           idsServicesAssocies: m.ids_services_associes,
           ...donneesEnClair,
         };
