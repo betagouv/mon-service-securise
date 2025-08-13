@@ -319,12 +319,10 @@ class Service {
     this.dossiers.supprimeDossierCourant();
   }
 
-  donneesADupliquer(nomService, siret = '') {
+  donneesADupliquer(nomService, siret) {
     const donnees = this.donneesAPersister().sauf('dossiers', 'id');
     donnees.descriptionService.nomService = nomService;
-    if (siret) {
-      donnees.descriptionService.organisationResponsable.siret = siret;
-    }
+    donnees.descriptionService.organisationResponsable.siret = siret;
     return donnees;
   }
 

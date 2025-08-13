@@ -419,18 +419,21 @@ const creeDepot = (config = {}) => {
     idProprietaire,
     nouveauNomEtSiret = null
   ) => {
-    const duplique = async (s) => {
-      if (nouveauNomEtSiret) {
-        const donnees = s.donneesADupliquer(
-          nouveauNomEtSiret.nomService,
-          nouveauNomEtSiret.siret
-        );
-        return nouveauService(idProprietaire, donnees);
-      }
+    const dupliqueAvecNomEtSiret = async (s) => {
+      const donnees = s.donneesADupliquer(
+        nouveauNomEtSiret.nomService,
+        nouveauNomEtSiret.siret
+      );
+      return nouveauService(idProprietaire, donnees);
+    };
 
+    const dupliqueAvecNomCopie = async (s) => {
       const nomCopie = `${s.nomService()} - Copie`;
       const index = await trouveIndexDisponible(idProprietaire, nomCopie);
-      const donnees = s.donneesADupliquer(`${nomCopie} ${index}`);
+      const donnees = s.donneesADupliquer(
+        `${nomCopie} ${index}`,
+        s.siretDeOrganisation()
+      );
       return nouveauService(idProprietaire, donnees);
     };
 
@@ -438,7 +441,9 @@ const creeDepot = (config = {}) => {
     if (typeof s === 'undefined')
       throw new ErreurServiceInexistant(`Service "${idService}" non trouvé`);
 
-    return duplique(s);
+    return nouveauNomEtSiret
+      ? dupliqueAvecNomEtSiret(s)
+      : dupliqueAvecNomCopie(s);
   };
 
   const metsAJourService = async (unService) => {
