@@ -142,6 +142,36 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService = async (
+    idUtilisateur,
+    idService
+  ) => {
+    const modelesDeUtilisateur =
+      await lisModelesMesureSpecifiquePourUtilisateur(idUtilisateur);
+    if (!modelesDeUtilisateur.length) return;
+
+    const service = await depotServices.service(idService);
+    const idsModelesDuService = service
+      .mesuresSpecifiques()
+      .listeIdentifiantsModelesAssocies();
+    if (!idsModelesDuService.length) return;
+
+    const idsModelesADissocier = modelesDeUtilisateur
+      .filter((m) => idsModelesDuService.includes(m.id))
+      .map((m) => m.id);
+    if (!idsModelesADissocier.length) return;
+
+    idsModelesADissocier.forEach((idModeleADissocier) => {
+      service.detacheMesureSpecfiqueDuModele(idModeleADissocier);
+    });
+
+    await depotServices.metsAJourService(service);
+    await persistance.supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService(
+      idUtilisateur,
+      idService
+    );
+  };
+
   const supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees = async (
     idUtilisateur,
     idModele
@@ -236,6 +266,7 @@ const creeDepot = (config = {}) => {
     ajouteModeleMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
     associeModelesMesureSpecifiqueAuService,
+    dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     lisModelesMesureSpecifiquePourUtilisateur,
     metsAJourModeleMesureSpecifique,
     supprimeDesMesuresAssocieesAuModele,
