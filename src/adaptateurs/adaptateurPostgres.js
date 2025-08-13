@@ -195,7 +195,18 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       { idUtilisateur, idService, hashSiret }
     );
 
-    return requete.rows;
+    return requete.rows.map((s) => ({
+      ...s,
+      modelesDisponiblesDeMesureSpecifique:
+        s.modelesDisponiblesDeMesureSpecifique.map(
+          // eslint-disable-next-line camelcase
+          ({ id_utilisateur, ...autresDonnees }) => ({
+            ...autresDonnees,
+            // eslint-disable-next-line camelcase
+            idUtilisateur: id_utilisateur,
+          })
+        ),
+    }));
   };
 
   const nombreServices = async (idUtilisateur) => {

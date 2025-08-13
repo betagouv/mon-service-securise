@@ -141,7 +141,7 @@ describe("L'adaptateur persistance Postgres", function () {
         {
           id: idModele,
           donnees: { description: 'Une description' },
-          id_utilisateur: idUtilisateur,
+          idUtilisateur,
         },
       ]);
     });
