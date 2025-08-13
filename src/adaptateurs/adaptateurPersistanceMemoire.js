@@ -104,10 +104,10 @@ const nouvelAdaptateur = (
           .filter((s) => s.idService === unService.id)
           .map((suggestion) => suggestion.nature),
         modelesDisponiblesDeMesureSpecifique: modelesDuService.map(
-          ({ id, donnees: d, idUtilisateur: id_utilisateur }) => ({
+          ({ id, donnees: d, idUtilisateur: u }) => ({
             id,
             donnees: d,
-            id_utilisateur,
+            idUtilisateur: u,
           })
         ),
       };
@@ -471,7 +471,6 @@ const nouvelAdaptateur = (
       .filter((m) => m.idUtilisateur === idUtilisateur)
       .map((m) => ({
         ...m,
-        id_utilisateur: m.idUtilisateur,
         ids_services_associes:
           donnees.associationModelesMesureSpecifiqueServices
             .filter((a) => a.idModele === m.id)

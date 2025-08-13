@@ -69,10 +69,10 @@ const fabriquePersistance = (
     serviceEnClair.modelesDisponiblesDeMesureSpecifique = Object.fromEntries(
       await Promise.all(
         serviceEnClair.modelesDisponiblesDeMesureSpecifique.map(
-          async ({ id, donnees, id_utilisateur }) => {
+          async ({ id, donnees, idUtilisateur }) => {
             const donneesEnClair =
               await adaptateurChiffrement.dechiffre(donnees);
-            return [id, { ...donneesEnClair, idUtilisateur: id_utilisateur }];
+            return [id, { ...donneesEnClair, idUtilisateur }];
           }
         )
       )
