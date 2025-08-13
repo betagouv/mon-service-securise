@@ -896,7 +896,7 @@ describe('Un service', () => {
       );
     });
 
-    it("utilise le siret s'il est passé en paramètre", () => {
+    it('utilise le siret passé en paramètre', () => {
       const service = new Service(
         { id: 'id-service', descriptionService },
         referentiel
