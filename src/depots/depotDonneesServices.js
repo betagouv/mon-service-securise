@@ -153,6 +153,9 @@ const fabriquePersistance = (
     },
     supprime: async (idService) => {
       await adaptateurPersistance.supprimeAutorisationsHomologation(idService);
+      await adaptateurPersistance.supprimeTousLiensEntreUnServiceEtModelesMesureSpecifique(
+        idService
+      );
       await adaptateurPersistance.supprimeService(idService);
     },
     autorisations: {

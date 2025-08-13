@@ -16,11 +16,18 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 
 ## Du point de vue de la page "SÉCURISER"
 
-- [x] Une mesure spécifique qui ne provient pas d'un modèle a maintenant une entrée "Description" (descriptionLognue)
-- [x] Bonus : pouvoir ouvrir la page Sécuriser avec une mesure mise en valeur (tiroir ouvert et onglet correspondant ouvert)
-- Bonus : voir les lignes concernées par l'association clignoter en bleu
+- [ ] Bonus : voir les lignes concernées par l'association clignoter en bleu
 
 ## Du point de vue du service
 
-- la suppression d'un utilisateur du service ou le retrait des droits d'écriture sur sécuriser doit détacher les
-  mesures appartenant à cet utilisateur
+- [x] L'association des mesures est supprimée lorsqu'un service est supprimé
+  - [x] sur la route DELETE `/api/service/id`
+  - [x] Dans `ConsoleAdministration.supprimeService`
+- [ ] Les mesures associées sont dissociées lorsqu'un utilisateur est supprimé de la contribution d'un service depuis l'interface
+  - [ ] sur la route DELETE `/api/autorisation?idService=&idContributeur=`
+- [ ] Les mesures associées sont dissociées lorsqu'un utilisateur perd les droits d'écriture sur SÉCURISER depuis l'interface
+  - [ ] sur la route PATCH `/api/service/:id/autorisations/:idAutorisation`
+- [ ] Les mesures associées sont dissociées lorsqu'un utilisateur est supprimé depuis la console admin
+  - [ ] `ConsoleAdministration.supprimeUtilisateurParEmail` qui appelle `depotDonneesUtilisateur.supprimeUtilisateur`
+- [ ] La duplication d'un service entraine la duplication des associations entre idServiceADuplique <=> idModele vers idServiceDuplique <=> idModele
+  - [ ] sur la route COPY `/api/service/id`

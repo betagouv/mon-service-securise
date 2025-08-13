@@ -767,6 +767,15 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     );
   };
 
+  const supprimeTousLiensEntreUnServiceEtModelesMesureSpecifique = async (
+    idService
+  ) => {
+    await knex.raw(
+      `DELETE FROM modeles_mesure_specifique_association_aux_services WHERE id_service =:idService;`,
+      { idService }
+    );
+  };
+
   const lisModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) => {
     const resultat = await knex.raw(
       `SELECT modeles.*, COALESCE(associations.ids_services_associes, '[]') as ids_services_associes
@@ -850,6 +859,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     supprimeServices,
     supprimeSuggestionsActionsPourService,
     supprimeTeleversementServices,
+    supprimeTousLiensEntreUnServiceEtModelesMesureSpecifique,
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tachesDeServicePour,
