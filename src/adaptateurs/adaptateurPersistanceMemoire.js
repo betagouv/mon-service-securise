@@ -467,6 +467,7 @@ const nouvelAdaptateur = (
       .filter((m) => m.idUtilisateur === idUtilisateur)
       .map((m) => ({
         ...m,
+        id_utilisateur: m.idUtilisateur,
         ids_services_associes:
           donnees.associationModelesMesureSpecifiqueServices
             .filter((a) => a.idModele === m.id)

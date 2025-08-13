@@ -171,6 +171,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         descriptionLongue: 'après longue',
         categorie: 'gouvernance',
         id: 'MOD-1',
+        idUtilisateur: 'U1',
         idsServicesAssocies: [],
       });
     });
@@ -548,7 +549,9 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       const modeles =
         await leDepot().lisModelesMesureSpecifiquePourUtilisateur('U1');
 
-      expect(modeles).to.eql([{ id: 'MOD-1', idsServicesAssocies: [] }]);
+      expect(modeles).to.eql([
+        { id: 'MOD-1', idsServicesAssocies: [], idUtilisateur: 'U1' },
+      ]);
     });
 
     it('déchiffre les données des modèles', async () => {
@@ -571,6 +574,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
 
       expect(modeles[0]).to.eql({
         id: 'MOD-1',
+        idUtilisateur: 'U1',
         chiffre: false,
         description: 'une description',
         idsServicesAssocies: [],
