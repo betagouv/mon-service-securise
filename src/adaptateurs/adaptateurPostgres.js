@@ -753,6 +753,19 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     return resultat.rows.length === idsServices.length;
   };
 
+  const supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService =
+    async (idUtilisateur, idService) =>
+      knex.raw(
+        `
+      DELETE FROM modeles_mesure_specifique_association_aux_services as associations
+        USING modeles_mesure_specifique as modeles
+              WHERE modeles.id = associations.id_modele
+                AND associations.id_service = :idService
+                AND modeles.id_utilisateur = :idUtilisateur
+    `,
+        { idService, idUtilisateur }
+      );
+
   const supprimeLeLienEntreLeModeleEtLesServices = async (
     idModele,
     idsServices
@@ -848,6 +861,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     sauvegardeNouvelIndiceCyber,
     sauvegardeParcoursUtilisateur,
     superviseur,
+    supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService,
     supprimeAutorisation,
     supprimeAutorisations,
     supprimeAutorisationsContribution,
