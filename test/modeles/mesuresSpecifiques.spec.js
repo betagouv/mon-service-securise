@@ -456,4 +456,27 @@ describe('La liste des mesures spécifiques', () => {
       expect(mesures.donneesSerialisees()).to.eql([]);
     });
   });
+
+  describe('sur demande de liste des modèles associés', () => {
+    it('retourne une liste des id de modèles', () => {
+      const modelesDisponiblesDeMesureSpecifique = {
+        'MOD-1': { categorie: 'categorie1' },
+      };
+
+      const mesures = new MesuresSpecifiques(
+        {
+          mesuresSpecifiques: [
+            { id: 'M1', idModele: 'MOD-1', statut: 'fait' },
+            { id: 'M2', statut: 'fait' },
+          ],
+        },
+        referentiel,
+        modelesDisponiblesDeMesureSpecifique
+      );
+
+      const listeModeles = mesures.listeIdentifiantsModelesAssocies();
+
+      expect(listeModeles).to.eql(['MOD-1']);
+    });
+  });
 });
