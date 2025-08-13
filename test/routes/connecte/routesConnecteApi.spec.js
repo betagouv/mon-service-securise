@@ -1770,6 +1770,27 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(suppressionDemandee.idUtilisateurCourant).to.be('456');
     });
 
+    it('utilise le dépôt de données pour dissocier les modèles de mesure spécifique pour cet utilisateur et ce service', async () => {
+      let suppressionDemandee = {};
+      testeur.depotDonnees().dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService =
+        async (idContributeur, idService) => {
+          suppressionDemandee = {
+            idContributeur,
+            idService,
+          };
+        };
+
+      await axios.delete('http://localhost:1234/api/autorisation', {
+        params: {
+          idService: 'ABC',
+          idContributeur: '999',
+        },
+      });
+
+      expect(suppressionDemandee.idContributeur).to.be('999');
+      expect(suppressionDemandee.idService).to.be('ABC');
+    });
+
     it("retourne une erreur HTTP 424 si le dépôt ne peut pas supprimer l'autorisation", async () => {
       testeur.depotDonnees().supprimeContributeur = async () => {
         throw new Error("Un message d'erreur");
