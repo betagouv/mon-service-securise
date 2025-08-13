@@ -605,6 +605,11 @@ class ConsoleAdministration {
     // eslint-disable-next-line no-restricted-syntax
     for (const autorisationExistante of autorisations) {
       // eslint-disable-next-line no-await-in-loop
+      await this.depotDonnees.dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService(
+        utilisateur.id,
+        autorisationExistante.idService
+      );
+      // eslint-disable-next-line no-await-in-loop
       await this.depotDonnees.supprimeContributeur(
         utilisateur.id,
         autorisationExistante.idService,

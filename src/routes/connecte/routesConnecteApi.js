@@ -572,6 +572,10 @@ const routesConnecteApi = ({
 
       try {
         await verifiePermissionSuppression();
+        await depotDonnees.dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService(
+          idContributeur,
+          idService
+        );
         await depotDonnees.supprimeContributeur(
           idContributeur,
           idService,
