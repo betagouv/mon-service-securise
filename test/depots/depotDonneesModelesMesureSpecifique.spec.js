@@ -879,4 +879,129 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       });
     });
   });
+
+  describe('concernant la dissociation de modèles pour un utilisateur sur un service', () => {
+    it('dissocie tous les modèles de cet utilisateur sur le service', async () => {
+      persistance = unePersistanceMemoire()
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-1',
+          idUtilisateur: 'U1',
+          donnees: { description: 'description' },
+        })
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-2',
+          idUtilisateur: 'U1',
+          donnees: { description: 'description' },
+        })
+        .ajouteUnService({
+          id: 'S1',
+          descriptionService: { nomService: 'Service 1' },
+          mesuresSpecifiques: [{ idModele: 'MOD-1' }, { idModele: 'MOD-2' }],
+        })
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .nommeCommeProprietaire('U1', ['S1'])
+        .associeLeServiceAuxModelesDeMesureSpecifique('S1', ['MOD-1', 'MOD-2'])
+        .construis();
+
+      depotServices = DepotDonneesServices.creeDepot({
+        adaptateurPersistance: persistance,
+        adaptateurChiffrement,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance: persistance,
+          adaptateurChiffrement,
+        }),
+      });
+
+      const depot = leDepot();
+      await depot.dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService(
+        'U1',
+        'S1'
+      );
+
+      const service = await depotServices.service('S1');
+      const mesures = service.mesuresSpecifiques().toutes();
+      expect(mesures.length).to.be(2);
+      expect(mesures[0].idModele).to.be(undefined);
+      expect(mesures[1].idModele).to.be(undefined);
+    });
+
+    it('ne dissocie pas les modèles des autres utilisateurs', async () => {
+      persistance = unePersistanceMemoire()
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-1',
+          idUtilisateur: 'U1',
+          donnees: { description: 'description' },
+        })
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-2',
+          idUtilisateur: 'U2',
+          donnees: { description: 'description' },
+        })
+        .ajouteUnService({
+          id: 'S1',
+          descriptionService: { nomService: 'Service 1' },
+          mesuresSpecifiques: [{ idModele: 'MOD-1' }, { idModele: 'MOD-2' }],
+        })
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .nommeCommeProprietaire('U1', ['S1'])
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U2').donnees)
+        .nommeCommeProprietaire('U2', ['S1'])
+        .associeLeServiceAuxModelesDeMesureSpecifique('S1', ['MOD-1', 'MOD-2'])
+        .construis();
+
+      depotServices = DepotDonneesServices.creeDepot({
+        adaptateurPersistance: persistance,
+        adaptateurChiffrement,
+        depotDonneesUtilisateurs: DepotDonneesUtilisateurs.creeDepot({
+          adaptateurPersistance: persistance,
+          adaptateurChiffrement,
+        }),
+      });
+
+      const depot = leDepot();
+      await depot.dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService(
+        'U2',
+        'S1'
+      );
+
+      const service = await depotServices.service('S1');
+      const mesures = service.mesuresSpecifiques().toutes();
+      expect(mesures.length).to.be(2);
+      expect(mesures[0].idModele).to.be('MOD-1');
+      expect(mesures[1].idModele).to.be(undefined);
+    });
+
+    it("supprime toutes les associations entre un service et des modèles d'un utilisateur", async () => {
+      persistance = unePersistanceMemoire()
+        .avecUnModeleDeMesureSpecifique({
+          id: 'MOD-1',
+          idUtilisateur: 'U1',
+          donnees: { description: 'description' },
+        })
+        .ajouteUnService({
+          id: 'S1',
+          descriptionService: { nomService: 'Service 1' },
+          mesuresSpecifiques: [{ idModele: 'MOD-1' }],
+        })
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .nommeCommeProprietaire('U1', ['S1'])
+        .associeLeServiceAuxModelesDeMesureSpecifique('S1', ['MOD-1'])
+        .construis();
+
+      let donneesRecues;
+      persistance.supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService =
+        async (idUtilisateur, idService) => {
+          donneesRecues = { idUtilisateur, idService };
+        };
+
+      const depot = leDepot();
+      await depot.dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService(
+        'U1',
+        'S1'
+      );
+
+      expect(donneesRecues.idUtilisateur).to.be('U1');
+      expect(donneesRecues.idService).to.be('S1');
+    });
+  });
 });
