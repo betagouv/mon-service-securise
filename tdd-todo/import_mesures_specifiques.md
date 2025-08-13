@@ -17,18 +17,3 @@ On dit [Modèles de mesure spécifique] pour parler de la partie « référentie
 ## Du point de vue de la page "SÉCURISER"
 
 - [ ] Bonus : voir les lignes concernées par l'association clignoter en bleu
-
-## Du point de vue du service
-
-- [x] L'association des mesures est supprimée lorsqu'un service est supprimé
-  - [x] sur la route DELETE `/api/service/id`
-  - [x] Dans `ConsoleAdministration.supprimeService`
-- [x] Les mesures associées sont dissociées lorsqu'un utilisateur est supprimé de la contribution d'un service depuis l'interface
-  - [x] sur la route DELETE `/api/autorisation?idService=&idContributeur=`
-  - [x] `ConsoleAdministration.supprimeUtilisateurParEmail`
-- [x] Les mesures associées sont dissociées lorsqu'un utilisateur perd les droits d'écriture sur SÉCURISER depuis l'interface
-  - [x] sur la route PATCH `/api/service/:id/autorisations/:idAutorisation`
-- [x] Les mesures associées sont dissociées lorsqu'un utilisateur est supprimé depuis la console admin
-  - [x] `ConsoleAdministration.supprimeUtilisateurParEmail` qui appelle `depotDonneesUtilisateur.supprimeUtilisateur`
-- [ ] La duplication d'un service entraine la duplication des associations entre idServiceADuplique <=> idModele vers idServiceDuplique <=> idModele
-  - [ ] sur la route COPY `/api/service/id`

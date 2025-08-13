@@ -444,7 +444,13 @@ const creeDepot = (config = {}) => {
       ? donneesADupliquerAvecNomEtSiret(s)
       : await donneesADupliquerAvecNomCopie(s);
 
-    return nouveauService(idProprietaire, donnees);
+    const idServiceDuplique = await nouveauService(idProprietaire, donnees);
+    await adaptateurPersistance.associeModelesMesureSpecifiqueAuService(
+      s.mesuresSpecifiques().listeIdentifiantsModelesAssocies(),
+      idServiceDuplique
+    );
+
+    return idServiceDuplique;
   };
 
   const metsAJourService = async (unService) => {
