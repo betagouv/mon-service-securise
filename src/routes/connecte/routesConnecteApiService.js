@@ -825,7 +825,7 @@ const routesConnecteApiService = ({
     middleware.protegeTrafic(),
     middleware.trouveService({}),
     middleware.chargeAutorisationsService,
-    (requete, reponse, suite) => {
+    async (requete, reponse, suite) => {
       const verifiePermissionDuplicationService = () =>
         requete.autorisationService.peutDupliquer()
           ? Promise.resolve()
@@ -834,26 +834,30 @@ const routesConnecteApiService = ({
       const { idUtilisateurCourant } = requete;
       const idService = requete.params.id;
 
-      verifiePermissionDuplicationService(idUtilisateurCourant, idService)
-        .then(() =>
-          depotDonnees.dupliqueService(idService, idUtilisateurCourant)
-        )
-        .then(() => reponse.send('Service dupliqué'))
-        .catch((e) => {
-          if (e instanceof EchecAutorisation) {
-            reponse
-              .status(403)
-              .send('Droits insuffisants pour dupliquer le service');
-          } else if (e instanceof ErreurDonneesObligatoiresManquantes) {
-            reponse.status(424).send({
-              type: 'DONNEES_OBLIGATOIRES_MANQUANTES',
-              message:
-                'La duplication a échoué car certaines données obligatoires ne sont pas renseignées',
-            });
-          } else {
-            suite(e);
-          }
-        });
+      try {
+        await verifiePermissionDuplicationService(
+          idUtilisateurCourant,
+          idService
+        );
+        await depotDonnees.dupliqueService(idService, idUtilisateurCourant);
+        reponse.send('Service dupliqué');
+      } catch (e) {
+        if (e instanceof EchecAutorisation) {
+          reponse
+            .status(403)
+            .send('Droits insuffisants pour dupliquer le service');
+          return;
+        }
+        if (e instanceof ErreurDonneesObligatoiresManquantes) {
+          reponse.status(424).send({
+            type: 'DONNEES_OBLIGATOIRES_MANQUANTES',
+            message:
+              'La duplication a échoué car certaines données obligatoires ne sont pas renseignées',
+          });
+          return;
+        }
+        suite(e);
+      }
     }
   );
 
