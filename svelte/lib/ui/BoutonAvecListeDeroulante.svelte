@@ -10,6 +10,7 @@
   }[];
   export let titre: string;
   export let options: Options;
+  export let disabled: boolean = false;
 
   let ouvert = false;
   let elementBoutonDeroulant: HTMLDivElement;
@@ -28,6 +29,7 @@
     type="primaire"
     icone="plus"
     taille="moyen"
+    actif={!disabled}
     on:click={() => (ouvert = !ouvert)}
   />
   {#if ouvert}

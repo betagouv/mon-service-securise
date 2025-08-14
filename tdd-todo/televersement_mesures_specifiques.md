@@ -33,3 +33,4 @@
   - [x] Le rapport contient les erreurs de mesures en double
 - [x] Le téléversement est supprimé quand l'utilisateur clique sur "retente"
 - [x] Le téléversement est supprimé quand l'utilisateur ferme la modale de rapport
+- [x] Une erreur est affichée en cas de « trop de mesures » : les mesures déjà existantes + celles du fichier = dépasse la limite autorisée
