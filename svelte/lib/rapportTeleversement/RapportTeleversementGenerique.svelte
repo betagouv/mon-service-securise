@@ -250,6 +250,7 @@
     flex-direction: row;
     gap: 8px;
     align-items: center;
+    white-space: normal;
   }
 
   :global(.dialog-rapport-televersement-generique .message-erreur) {
