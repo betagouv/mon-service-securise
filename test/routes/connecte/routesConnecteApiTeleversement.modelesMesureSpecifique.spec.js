@@ -152,4 +152,89 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
       expect(idRecu).to.be('U1');
     });
   });
+
+  describe('quand requête POST sur `/api/televersement/modelesMesureSpecifique/confirme`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur
+        .referentiel()
+        .recharge({ categoriesMesures: { gouvernance: 'Gouvernance' } });
+      testeur.depotDonnees().lisTeleversementModelesMesureSpecifique =
+        async () =>
+          new TeleversementModelesMesureSpecifique(
+            [{ description: 'une description 1', categorie: 'Gouvernance' }],
+            testeur.referentiel()
+          );
+      testeur.depotDonnees().ajouteModelesMesureSpecifique = async () => {};
+    });
+
+    it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
+      try {
+        await axios.post(
+          'http://localhost:1234/api/televersement/modelesMesureSpecifique/confirme'
+        );
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(404);
+      }
+    });
+
+    it('renvoie une erreur 400 si le téléversement en cours est invalide', async () => {
+      testeur.depotDonnees().lisTeleversementModelesMesureSpecifique =
+        async () =>
+          new TeleversementModelesMesureSpecifique([
+            { description: undefined },
+          ]);
+
+      try {
+        await axios.post(
+          'http://localhost:1234/api/televersement/modelesMesureSpecifique/confirme'
+        );
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
+    });
+
+    it('délègue au dépôt de données la création des modèles de mesure spécifique', async () => {
+      const televersement = new TeleversementModelesMesureSpecifique(
+        [
+          { description: 'une description 1', categorie: 'Gouvernance' },
+          { description: 'une description 2', categorie: 'Gouvernance' },
+        ],
+        testeur.referentiel()
+      );
+      testeur.depotDonnees().lisTeleversementModelesMesureSpecifique =
+        async () => televersement;
+      let donneesRecues;
+      testeur.depotDonnees().ajouteModelesMesureSpecifique = async (
+        idUtilisateur,
+        donneesModeles
+      ) => {
+        donneesRecues = { idUtilisateur, donneesModeles };
+      };
+
+      await axios.post(
+        'http://localhost:1234/api/televersement/modelesMesureSpecifique/confirme'
+      );
+
+      expect(donneesRecues.idUtilisateur).to.be('U1');
+      expect(donneesRecues.donneesModeles.length).to.be(2);
+      expect(donneesRecues.donneesModeles[0].categorie).to.be('gouvernance');
+    });
+
+    it("supprime le téléversement de l'utilisateur", async () => {
+      let idRecu;
+      testeur.depotDonnees().supprimeTeleversementModelesMesureSpecifique =
+        async (idUtilisateur) => {
+          idRecu = idUtilisateur;
+        };
+
+      await axios.post(
+        'http://localhost:1234/api/televersement/modelesMesureSpecifique/confirme'
+      );
+
+      expect(idRecu).to.be('U1');
+    });
+  });
 });
