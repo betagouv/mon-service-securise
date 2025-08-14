@@ -714,6 +714,17 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       donnees,
     });
 
+  const ajouteModelesMesureSpecifique = async (idUtilisateur, donnees) => {
+    const donneesAPersister = Object.entries(donnees).map(
+      ([id, donneesModele]) => ({
+        id_utilisateur: idUtilisateur,
+        id,
+        donnees: donneesModele,
+      })
+    );
+    await knex('modeles_mesure_specifique').insert(donneesAPersister);
+  };
+
   const metsAJourModeleMesureSpecifique = async (
     id,
     idUtilisateur,
@@ -847,6 +858,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     ajouteUtilisateur,
     ajouteActiviteMesure,
     ajouteModeleMesureSpecifique,
+    ajouteModelesMesureSpecifique,
     ajouteTeleversementServices,
     ajouteTeleversementModelesMesureSpecifique,
     arreteTout,
