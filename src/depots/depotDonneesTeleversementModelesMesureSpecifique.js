@@ -1,19 +1,23 @@
 const TeleversementModelesMesureSpecifique = require('../modeles/televersement/televersementModelesMesureSpecifique');
+const {
+  ErreurUtilisateurInexistant,
+  ErreurTeleversementInexistant,
+  ErreurTeleversementInvalide,
+} = require('../erreurs');
 
 const creeDepot = (config = {}) => {
   const {
     adaptateurPersistance: persistance,
     adaptateurChiffrement: chiffrement,
     referentiel,
+    depotModelesMesureSpecifique,
   } = config;
 
   const nouveauTeleversementModelesMesureSpecifique = async (
     idUtilisateur,
-    donneesTeleversementServices
+    donneesTeleversement
   ) => {
-    const donneesChiffrees = await chiffrement.chiffre(
-      donneesTeleversementServices
-    );
+    const donneesChiffrees = await chiffrement.chiffre(donneesTeleversement);
     await persistance.ajouteTeleversementModelesMesureSpecifique(
       idUtilisateur,
       donneesChiffrees
@@ -33,9 +37,41 @@ const creeDepot = (config = {}) => {
   const supprimeTeleversementModelesMesureSpecifique = async (idUtilisateur) =>
     persistance.supprimeTeleversementModelesMesureSpecifique(idUtilisateur);
 
+  const confirmeTeleversementModelesMesureSpecifique = async (
+    idUtilisateur
+  ) => {
+    const utilisateur = await persistance.utilisateur(idUtilisateur);
+    if (!utilisateur) throw new ErreurUtilisateurInexistant();
+
+    const televersement =
+      await lisTeleversementModelesMesureSpecifique(idUtilisateur);
+    if (!televersement) throw new ErreurTeleversementInexistant();
+
+    const nbActuel =
+      await depotModelesMesureSpecifique.nbModelesMesureSpecifiquePourUtilisateur(
+        idUtilisateur
+      );
+
+    if (
+      televersement.rapportDetaille({
+        nbActuelModelesMesureSpecifique: nbActuel,
+      }).statut === 'INVALIDE'
+    ) {
+      throw new ErreurTeleversementInvalide();
+    }
+
+    await depotModelesMesureSpecifique.ajouteModelesMesureSpecifique(
+      idUtilisateur,
+      televersement.donneesModelesMesureSpecifique()
+    );
+
+    await supprimeTeleversementModelesMesureSpecifique(idUtilisateur);
+  };
+
   return {
-    nouveauTeleversementModelesMesureSpecifique,
+    confirmeTeleversementModelesMesureSpecifique,
     lisTeleversementModelesMesureSpecifique,
+    nouveauTeleversementModelesMesureSpecifique,
     supprimeTeleversementModelesMesureSpecifique,
   };
 };

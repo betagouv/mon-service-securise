@@ -1,5 +1,9 @@
 const express = require('express');
-const { ErreurFichierXlsInvalide } = require('../../erreurs');
+const {
+  ErreurFichierXlsInvalide,
+  ErreurTeleversementInexistant,
+  ErreurTeleversementInvalide,
+} = require('../../erreurs');
 
 const routesConnecteApiTeleversementModelesMesureSpecifique = ({
   middleware,
@@ -60,30 +64,22 @@ const routesConnecteApiTeleversementModelesMesureSpecifique = ({
 
   routes.post('/confirme', async (requete, reponse) => {
     const { idUtilisateurCourant } = requete;
-
-    const televersement =
-      await depotDonnees.lisTeleversementModelesMesureSpecifique(
+    try {
+      await depotDonnees.confirmeTeleversementModelesMesureSpecifique(
         idUtilisateurCourant
       );
-    if (!televersement) {
-      reponse.sendStatus(404);
-      return;
+      reponse.sendStatus(201);
+    } catch (e) {
+      if (e instanceof ErreurTeleversementInexistant) {
+        reponse.sendStatus(404);
+        return;
+      }
+      if (e instanceof ErreurTeleversementInvalide) {
+        reponse.sendStatus(400);
+        return;
+      }
+      throw e;
     }
-
-    if (televersement.rapportDetaille().statut === 'INVALIDE') {
-      reponse.sendStatus(400);
-      return;
-    }
-
-    await depotDonnees.ajouteModelesMesureSpecifique(
-      idUtilisateurCourant,
-      televersement.donneesModelesMesureSpecifique()
-    );
-    await depotDonnees.supprimeTeleversementModelesMesureSpecifique(
-      idUtilisateurCourant
-    );
-
-    reponse.sendStatus(201);
   });
 
   return routes;

@@ -53,7 +53,7 @@ class TeleversementModelesMesureSpecifique {
     return this.modelesTeleverses.map(
       ({ descriptionLongue, description, categorie: libelleCategorie }) => ({
         description,
-        descriptionLongue,
+        ...(descriptionLongue && { descriptionLongue }),
         categorie:
           this.referentiel.categorieMesureParLabel(libelleCategorie)[0],
       })
