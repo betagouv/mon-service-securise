@@ -72,17 +72,33 @@ describe('Un téléversement de services', () => {
         nom: 'Service B',
         siret: 'pasUnSiret',
       };
+
       const rapport = new TeleversementServices(
-        {
-          services: [serviceA, serviceB],
-        },
+        { services: [serviceA, serviceB] },
         referentiel
       ).rapportDetaille();
 
-      expect(rapport.services).to.eql([
-        { service: serviceA, erreurs: [] },
-        { service: serviceB, erreurs: ['SIRET_INVALIDE'] },
-      ]);
+      const [a, b] = rapport.services;
+      expect(a.service).to.eql(serviceA);
+      expect(a.erreurs).to.eql([]);
+      expect(b.service).to.eql(serviceB);
+      expect(b.erreurs).to.eql(['SIRET_INVALIDE']);
+    });
+
+    it('ajoute un numéro de ligne à chaque élément, en démarrant à 1', () => {
+      const serviceA = { ...donneesServiceValide, nom: 'A' };
+      const serviceB = { ...donneesServiceValide, nom: 'B' };
+
+      const rapport = new TeleversementServices(
+        { services: [serviceA, serviceB] },
+        referentiel
+      ).rapportDetaille();
+
+      const [a, b] = rapport.services;
+      expect(a.numeroLigne).to.be(1);
+      expect(a.service.nom).to.be('A');
+      expect(b.numeroLigne).to.be(2);
+      expect(b.service.nom).to.be('B');
     });
 
     describe('concernant le statut renvoyé', () => {
