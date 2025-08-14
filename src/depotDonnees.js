@@ -255,6 +255,7 @@ const creeDepot = (config = {}) => {
   const {
     nouveauTeleversementModelesMesureSpecifique,
     lisTeleversementModelesMesureSpecifique,
+    supprimeTeleversementModelesMesureSpecifique,
   } = depotTeleversementModelesMesureSpecifique;
 
   const {
@@ -345,6 +346,7 @@ const creeDepot = (config = {}) => {
     supprimeMesureSpecifiqueDuService,
     supprimeRisqueSpecifiqueDuService,
     supprimeService,
+    supprimeTeleversementModelesMesureSpecifique,
     supprimeTeleversementServices,
     supprimeIdResetMotDePassePourUtilisateur,
     supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees,

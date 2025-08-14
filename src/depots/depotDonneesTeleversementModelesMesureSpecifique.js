@@ -30,9 +30,13 @@ const creeDepot = (config = {}) => {
     return new TeleversementModelesMesureSpecifique(enClair, referentiel);
   };
 
+  const supprimeTeleversementModelesMesureSpecifique = async (idUtilisateur) =>
+    persistance.supprimeTeleversementModelesMesureSpecifique(idUtilisateur);
+
   return {
     nouveauTeleversementModelesMesureSpecifique,
     lisTeleversementModelesMesureSpecifique,
+    supprimeTeleversementModelesMesureSpecifique,
   };
 };
 module.exports = { creeDepot };

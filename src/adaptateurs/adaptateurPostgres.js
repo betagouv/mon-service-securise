@@ -677,6 +677,11 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     return JSON.parse(resultat.rows[0].modeles);
   };
 
+  const supprimeTeleversementModelesMesureSpecifique = async (idUtilisateur) =>
+    knex('televersement_modeles_mesure_specifique')
+      .where({ id_utilisateur: idUtilisateur })
+      .delete();
+
   const verifieTousLesServicesExistent = async (idsServices) => {
     const resultat = await knex.raw(
       `SELECT id
@@ -883,6 +888,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     supprimeService,
     supprimeServices,
     supprimeSuggestionsActionsPourService,
+    supprimeTeleversementModelesMesureSpecifique,
     supprimeTeleversementServices,
     supprimeTousLiensEntreUnServiceEtModelesMesureSpecifique,
     supprimeUtilisateur,
