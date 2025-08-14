@@ -18,6 +18,11 @@ $(() => {
         })),
         typesService,
         afficheModelesMesureSpecifique,
+        capaciteAjoutDeMesure: {
+          peutAjouter: true,
+          nombreActuel: 1,
+          nombreMaximum: 40,
+        },
       },
     })
   );

@@ -17,6 +17,7 @@ export type ListeMesuresProps = {
   categories: { id: string; label: string }[];
   typesService: ReferentielTypesService;
   afficheModelesMesureSpecifique: boolean;
+  capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
 };
 
 export type PersonnalisationMesure = {
@@ -56,4 +57,10 @@ export type ModeleDeMesure = {
   referentiel: Referentiel;
   idsServicesAssocies: string[];
   type: 'generale' | 'specifique';
+};
+
+export type CapaciteAjoutDeMesure = {
+  peutAjouter: boolean;
+  nombreActuel: number;
+  nombreMaximum: number;
 };

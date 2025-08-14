@@ -2,7 +2,6 @@
 
 ## TODO
 
-- [x] Une erreur est affichée en cas de « trop de mesures » : les mesures déjà existantes + celles du fichier = dépasse la limite autorisée
 - [ ] Le bouton « ajouter une/des mesures » est grisé si l'utilisateur a déjà atteint le nombre limites
 - [ ] Sur le rapport, un bouton « Importer » permet de déclencher la création des modèles
 - [ ] Le tiroir de téléversement montre, dans les limitations, combien de mesures sont encore ajoutables (idéalement on veut soustraire la varenv et le nombre actuel)
@@ -28,3 +27,4 @@
   - [x] Le rapport contient les erreurs de mesures en double
 - [x] Le téléversement est supprimé quand l'utilisateur clique sur "retente"
 - [x] Le téléversement est supprimé quand l'utilisateur ferme la modale de rapport
+- [x] Une erreur est affichée en cas de « trop de mesures » : les mesures déjà existantes + celles du fichier = dépasse la limite autorisée
