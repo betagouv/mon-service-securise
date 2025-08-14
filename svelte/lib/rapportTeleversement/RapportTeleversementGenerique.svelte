@@ -33,23 +33,33 @@
     <div class="entete-modale">
       <h2>{titreDuRapport}</h2>
       <div class="conteneur-toasts">
-        {#if resume?.elementsErreur}
+        {#if resume?.erreurGenerale}
           <Toast
             niveau="erreur"
-            titre={resume.elementsErreur.label}
+            titre={resume.erreurGenerale}
             contenu="Corrigez le fichier XLSX et réimportez-le"
             avecOmbre={false}
             avecAnimation={false}
           />
-        {/if}
-        {#if resume?.elementsValide}
-          <Toast
-            niveau="succes"
-            titre={resume.elementsValide.label}
-            contenu="Aucune erreur détectée"
-            avecOmbre={false}
-            avecAnimation={false}
-          />
+        {:else}
+          {#if resume?.elementsErreur}
+            <Toast
+              niveau="erreur"
+              titre={resume.elementsErreur.label}
+              contenu="Corrigez le fichier XLSX et réimportez-le"
+              avecOmbre={false}
+              avecAnimation={false}
+            />
+          {/if}
+          {#if resume?.elementsValide}
+            <Toast
+              niveau="succes"
+              titre={resume.elementsValide.label}
+              contenu="Aucune erreur détectée"
+              avecOmbre={false}
+              avecAnimation={false}
+            />
+          {/if}
         {/if}
       </div>
     </div>
