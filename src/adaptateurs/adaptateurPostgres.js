@@ -674,6 +674,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
         WHERE id_utilisateur = ?`,
       [idUtilisateur]
     );
+    if (resultat.rows.length === 0) return undefined;
     return JSON.parse(resultat.rows[0].modeles);
   };
 
@@ -713,6 +714,17 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       id_utilisateur: idUtilisateur,
       donnees,
     });
+
+  const ajouteModelesMesureSpecifique = async (idUtilisateur, donnees) => {
+    const donneesAPersister = Object.entries(donnees).map(
+      ([id, donneesModele]) => ({
+        id_utilisateur: idUtilisateur,
+        id,
+        donnees: donneesModele,
+      })
+    );
+    await knex('modeles_mesure_specifique').insert(donneesAPersister);
+  };
 
   const metsAJourModeleMesureSpecifique = async (
     id,
@@ -847,6 +859,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     ajouteUtilisateur,
     ajouteActiviteMesure,
     ajouteModeleMesureSpecifique,
+    ajouteModelesMesureSpecifique,
     ajouteTeleversementServices,
     ajouteTeleversementModelesMesureSpecifique,
     arreteTout,

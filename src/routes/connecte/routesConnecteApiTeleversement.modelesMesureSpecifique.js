@@ -1,5 +1,9 @@
 const express = require('express');
-const { ErreurFichierXlsInvalide } = require('../../erreurs');
+const {
+  ErreurFichierXlsInvalide,
+  ErreurTeleversementInexistant,
+  ErreurTeleversementInvalide,
+} = require('../../erreurs');
 
 const routesConnecteApiTeleversementModelesMesureSpecifique = ({
   middleware,
@@ -56,6 +60,26 @@ const routesConnecteApiTeleversementModelesMesureSpecifique = ({
       requete.idUtilisateurCourant
     );
     reponse.sendStatus(200);
+  });
+
+  routes.post('/confirme', async (requete, reponse) => {
+    const { idUtilisateurCourant } = requete;
+    try {
+      await depotDonnees.confirmeTeleversementModelesMesureSpecifique(
+        idUtilisateurCourant
+      );
+      reponse.sendStatus(201);
+    } catch (e) {
+      if (e instanceof ErreurTeleversementInexistant) {
+        reponse.sendStatus(404);
+        return;
+      }
+      if (e instanceof ErreurTeleversementInvalide) {
+        reponse.sendStatus(400);
+        return;
+      }
+      throw e;
+    }
   });
 
   return routes;

@@ -68,11 +68,13 @@
     on:confirmeTeleversement={async () => {
       etatReseau = 'IMPORT_EN_COURS';
       await confirmeImport();
+      enleveParametreDeUrl('rapportTeleversement');
     }}
     on:retenteTeleversement={async () => {
       await supprimeTeleversement();
       etatReseau = 'IMPORT_FINI';
       tiroirStore.afficheContenu(TiroirTeleversementServices, {});
+      enleveParametreDeUrl('rapportTeleversement');
     }}
     on:annule={() => {
       etatReseau = 'IMPORT_FINI';

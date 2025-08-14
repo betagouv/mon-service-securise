@@ -120,13 +120,6 @@ const creeDepot = (config = {}) => {
       referentiel,
     });
 
-  const depotTeleversementModelesMesureSpecifique =
-    depotDonneesTeleversementModelesMesureSpecifique.creeDepot({
-      adaptateurPersistance,
-      adaptateurChiffrement,
-      referentiel,
-    });
-
   const depotModelesMesureSpecifique =
     depotDonneesModelesMesureSpecifique.creeDepot({
       adaptateurChiffrement,
@@ -134,6 +127,14 @@ const creeDepot = (config = {}) => {
       adaptateurUUID,
       depotAutorisations,
       depotServices,
+    });
+
+  const depotTeleversementModelesMesureSpecifique =
+    depotDonneesTeleversementModelesMesureSpecifique.creeDepot({
+      adaptateurPersistance,
+      adaptateurChiffrement,
+      referentiel,
+      depotModelesMesureSpecifique,
     });
 
   const {
@@ -253,13 +254,15 @@ const creeDepot = (config = {}) => {
   } = depotTeleversementServices;
 
   const {
-    nouveauTeleversementModelesMesureSpecifique,
+    confirmeTeleversementModelesMesureSpecifique,
     lisTeleversementModelesMesureSpecifique,
+    nouveauTeleversementModelesMesureSpecifique,
     supprimeTeleversementModelesMesureSpecifique,
   } = depotTeleversementModelesMesureSpecifique;
 
   const {
     ajouteModeleMesureSpecifique,
+    ajouteModelesMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
     associeModelesMesureSpecifiqueAuService,
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
@@ -281,6 +284,7 @@ const creeDepot = (config = {}) => {
     ajouteDossierCourantSiNecessaire,
     ajouteMesureSpecifiqueAuService,
     ajouteModeleMesureSpecifique,
+    ajouteModelesMesureSpecifique,
     ajouteParrainage,
     ajouteRisqueGeneralAService,
     ajouteRisqueSpecifiqueAService,
@@ -294,6 +298,7 @@ const creeDepot = (config = {}) => {
     autorisationPour,
     autorisations,
     autorisationsDuService,
+    confirmeTeleversementModelesMesureSpecifique,
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     dupliqueService,
     estSuperviseur,

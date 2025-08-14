@@ -1,7 +1,11 @@
 const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
-const { ErreurFichierXlsInvalide } = require('../../../src/erreurs');
+const {
+  ErreurFichierXlsInvalide,
+  ErreurTeleversementInvalide,
+  ErreurTeleversementInexistant,
+} = require('../../../src/erreurs');
 const TeleversementModelesMesureSpecifique = require('../../../src/modeles/televersement/televersementModelesMesureSpecifique');
 
 describe('Les routes connecté de téléversement des modèles de mesure spécifique', () => {
@@ -150,6 +154,68 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
       );
 
       expect(idRecu).to.be('U1');
+    });
+  });
+
+  describe('quand requête POST sur `/api/televersement/modelesMesuresSpecifique/confirme`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur
+        .referentiel()
+        .recharge({ categoriesMesures: { gouvernance: 'Gouvernance' } });
+      testeur.depotDonnees().lisTeleversementModelesMesureSpecifique =
+        async () =>
+          new TeleversementModelesMesureSpecifique(
+            [{ description: 'une description 1', categorie: 'Gouvernance' }],
+            testeur.referentiel()
+          );
+      testeur.depotDonnees().ajouteModelesMesureSpecifique = async () => {};
+    });
+
+    it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
+      testeur.depotDonnees().confirmeTeleversementModelesMesureSpecifique =
+        async () => {
+          throw new ErreurTeleversementInexistant();
+        };
+
+      try {
+        await axios.post(
+          'http://localhost:1234/api/televersement/modelesMesuresSpecifique/confirme'
+        );
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(404);
+      }
+    });
+
+    it('renvoie une erreur 400 si le téléversement en cours est invalide', async () => {
+      testeur.depotDonnees().confirmeTeleversementModelesMesureSpecifique =
+        async () => {
+          throw new ErreurTeleversementInvalide();
+        };
+
+      try {
+        await axios.post(
+          'http://localhost:1234/api/televersement/modelesMesureSpecifique/confirme'
+        );
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(400);
+      }
+    });
+
+    it('délègue au dépôt de données la confirmation du téléversement', async () => {
+      let idUtilisateurRecu;
+      testeur.depotDonnees().confirmeTeleversementModelesMesureSpecifique =
+        async (idUtilisateur) => {
+          idUtilisateurRecu = idUtilisateur;
+        };
+
+      await axios.post(
+        'http://localhost:1234/api/televersement/modelesMesureSpecifique/confirme'
+      );
+
+      expect(idUtilisateurRecu).to.be('U1');
     });
   });
 });

@@ -382,6 +382,15 @@ const nouvelAdaptateur = (
       donnees: donneesModele,
     });
 
+  const ajouteModelesMesureSpecifique = async (idUtilisateur, donneesModeles) =>
+    Object.entries(donneesModeles).forEach(([id, donneesModele]) => {
+      donnees.modelesMesureSpecifique.push({
+        id,
+        idUtilisateur,
+        donnees: donneesModele,
+      });
+    });
+
   const supprimeModeleMesureSpecifique = async (id) => {
     donnees.modelesMesureSpecifique = donnees.modelesMesureSpecifique.filter(
       (m) => m.id !== id
@@ -523,6 +532,7 @@ const nouvelAdaptateur = (
     ajouteAutorisation,
     ajouteEntiteAuSuperviseur,
     ajouteModeleMesureSpecifique,
+    ajouteModelesMesureSpecifique,
     ajouteSuggestionAction,
     ajouteTacheDeService,
     ajouteTeleversementModelesMesureSpecifique,

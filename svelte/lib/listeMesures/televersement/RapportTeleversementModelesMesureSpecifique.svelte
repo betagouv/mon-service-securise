@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import {
+    confirmeTeleversementEnCours,
     recupereRapportDetaille,
     supprimeTeleversementEnCours,
   } from './rapportTeleversementModelesMesureSpecifique.api';
@@ -13,6 +14,10 @@
   import LigneDeRapport from './LigneDeRapport.svelte';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import TiroirTeleversementModeleMesureSpecifique from './TiroirTeleversementModeleMesureSpecifique.svelte';
+  import { toasterStore } from '../../ui/stores/toaster.store';
+  import ModaleDeProgression from '../../rapportTeleversement/ModaleDeProgression.svelte';
+  import { modelesMesureSpecifique } from '../../ui/stores/modelesMesureSpecifique.store';
+  import { servicesAvecMesuresAssociees } from '../servicesAssocies/servicesAvecMesuresAssociees.store';
 
   let rapport: RapportDetaille;
   let resume: ResumeRapportTeleversement;
@@ -64,20 +69,29 @@
 
     etatReseau = 'RAPPORT_OBTENU';
   });
+
+  let progression = 0;
+  const fausseProgression = async () => {
+    progression += 5;
+    return progression;
+  };
 </script>
 
 {#if etatReseau === 'RAPPORT_OBTENU'}
   <RapportTeleversementGenerique
     titreDuRapport="Rapport du téléversement des mesures"
     {resume}
-    on:confirmeTeleversement={() => {
-      console.log('✅ Confirmé');
+    on:confirmeTeleversement={async () => {
+      etatReseau = 'IMPORT_EN_COURS';
+      await confirmeTeleversementEnCours();
+      enleveParametreDeUrl('rapportTeleversement');
     }}
     on:retenteTeleversement={async () => {
       enleveParametreDeUrl('rapportTeleversement');
       await supprimeTeleversementEnCours();
       etatReseau = 'IMPORT_FINI';
       tiroirStore.afficheContenu(TiroirTeleversementModeleMesureSpecifique, {});
+      enleveParametreDeUrl('rapportTeleversement');
     }}
     on:annule={async () => {
       etatReseau = 'IMPORT_FINI';
@@ -103,4 +117,29 @@
       </tbody>
     </table>
   </RapportTeleversementGenerique>
+{:else if etatReseau === 'IMPORT_EN_COURS'}
+  <ModaleDeProgression
+    delaiRafraichissement={50}
+    apiGetProgression={async () => await fausseProgression()}
+    on:fini={async () => {
+      const nb = rapport.modelesTeleverses.length;
+      toasterStore.succes(
+        singulierPluriel(
+          '1 mesure importée avec succès',
+          `${nb} mesures importées avec succès`,
+          nb
+        ),
+        `Vous avez importé ${nb} ${singulierPluriel(
+          'mesure',
+          'mesures',
+          nb
+        )} dans votre liste de mesures ajoutées.`
+      );
+
+      await modelesMesureSpecifique.rafraichis();
+      await servicesAvecMesuresAssociees.rafraichis();
+
+      etatReseau = 'IMPORT_FINI';
+    }}
+  />
 {/if}
