@@ -58,6 +58,34 @@ const routesConnecteApiTeleversementModelesMesureSpecifique = ({
     reponse.sendStatus(200);
   });
 
+  routes.post('/confirme', async (requete, reponse) => {
+    const { idUtilisateurCourant } = requete;
+
+    const televersement =
+      await depotDonnees.lisTeleversementModelesMesureSpecifique(
+        idUtilisateurCourant
+      );
+    if (!televersement) {
+      reponse.sendStatus(404);
+      return;
+    }
+
+    if (televersement.rapportDetaille().statut === 'INVALIDE') {
+      reponse.sendStatus(400);
+      return;
+    }
+
+    await depotDonnees.ajouteModelesMesureSpecifique(
+      idUtilisateurCourant,
+      televersement.donneesModelesMesureSpecifique()
+    );
+    await depotDonnees.supprimeTeleversementModelesMesureSpecifique(
+      idUtilisateurCourant
+    );
+
+    reponse.sendStatus(201);
+  });
+
   return routes;
 };
 

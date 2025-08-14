@@ -148,4 +148,22 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
       });
     });
   });
+  describe('sur demande des données des modèles de mesure', () => {
+    it('retourne les données en convertissant le libellé de catégorie en code', () => {
+      const televersement = unTeleversement([
+        {
+          description: 'D1',
+          categorie: 'Gouvernance',
+          descriptionLongue: 'description',
+        },
+      ]);
+
+      const donneesModeles = televersement.donneesModelesMesureSpecifique();
+
+      expect(donneesModeles.length).to.be(1);
+      expect(donneesModeles[0].description).to.be('D1');
+      expect(donneesModeles[0].descriptionLongue).to.be('description');
+      expect(donneesModeles[0].categorie).to.be('gouvernance');
+    });
+  });
 });
