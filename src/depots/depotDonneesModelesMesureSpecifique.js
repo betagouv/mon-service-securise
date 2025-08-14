@@ -143,8 +143,8 @@ const creeDepot = (config = {}) => {
     );
   };
 
-  const nombreModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) =>
-    persistance.nombreModelesMesureSpecifiquePourUtilisateur(idUtilisateur);
+  const nbModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) =>
+    persistance.nbModelesMesureSpecifiquePourUtilisateur(idUtilisateur);
 
   const dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService = async (
     idUtilisateur,
@@ -273,7 +273,7 @@ const creeDepot = (config = {}) => {
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     lisModelesMesureSpecifiquePourUtilisateur,
     metsAJourModeleMesureSpecifique,
-    nombreModelesMesureSpecifiquePourUtilisateur,
+    nbModelesMesureSpecifiquePourUtilisateur,
     supprimeDesMesuresAssocieesAuModele,
     supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees,
     supprimeModeleMesureSpecifiqueEtMesuresAssociees,

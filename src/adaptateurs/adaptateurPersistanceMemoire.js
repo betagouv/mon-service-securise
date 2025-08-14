@@ -477,7 +477,7 @@ const nouvelAdaptateur = (
             .map((a) => a.idService),
       }));
 
-  const nombreModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) =>
+  const nbModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) =>
     donnees.modelesMesureSpecifique.filter(
       (m) => m.idUtilisateur === idUtilisateur
     ).length;
@@ -549,7 +549,7 @@ const nouvelAdaptateur = (
     metsAJourUtilisateur,
     modeleMesureSpecifiqueAppartientA,
     nbAutorisationsProprietaire,
-    nombreModelesMesureSpecifiquePourUtilisateur,
+    nbModelesMesureSpecifiquePourUtilisateur,
     nombreServices,
     nouveautesPourUtilisateur,
     contributeursDesServicesDe,

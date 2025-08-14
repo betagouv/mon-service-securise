@@ -39,7 +39,16 @@ const routesConnecteApiTeleversementModelesMesureSpecifique = ({
 
     if (!televersement) return reponse.sendStatus(404);
 
-    return reponse.json(televersement.rapportDetaille());
+    const nbPourUtilisateur =
+      await depotDonnees.nbModelesMesureSpecifiquePourUtilisateur(
+        requete.idUtilisateurCourant
+      );
+
+    return reponse.json(
+      televersement.rapportDetaille({
+        nbActuelModelesMesureSpecifique: nbPourUtilisateur,
+      })
+    );
   });
 
   routes.delete('/', async (requete, reponse) => {

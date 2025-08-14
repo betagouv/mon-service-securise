@@ -603,7 +603,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         .construis();
 
       const nombre =
-        await leDepot().nombreModelesMesureSpecifiquePourUtilisateur('U1');
+        await leDepot().nbModelesMesureSpecifiquePourUtilisateur('U1');
 
       expect(nombre).to.be(2);
     });

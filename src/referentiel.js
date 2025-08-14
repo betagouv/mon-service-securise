@@ -15,6 +15,7 @@ const donneesReferentielVide = {
   etapesParcoursHomologation: [],
   fonctionnalites: {},
   localisationsDonnees: {},
+  modelesMesureSpecifique: {},
   mesures: {},
   risques: {},
   typesService: {},
@@ -438,6 +439,9 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const estStatutMesureConnu = (statut) =>
     Object.keys(statutsMesures()).includes(statut);
 
+  const nombreMaximumDeModelesMesureSpecifiqueParUtilisateur = () =>
+    donnees.modelesMesureSpecifique.nombreMaximumParUtilisateur;
+
   valideDonnees();
 
   return {
@@ -514,6 +518,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     niveauxRisque,
     niveauVraisemblance,
     niveauxVraisemblance,
+    nombreMaximumDeModelesMesureSpecifiqueParUtilisateur,
     nombreOrganisationsUtilisatrices,
     nombreOrganisationsUtilisatricesParLabel,
     nouvellesFonctionnalites,

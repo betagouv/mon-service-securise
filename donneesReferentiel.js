@@ -1695,4 +1695,7 @@ module.exports = {
     troisDerniersMois: '3 derniers mois',
     douzeDerniersMois: '12 derniers mois',
   },
+  modelesMesureSpecifique: {
+    nombreMaximumParUtilisateur: 40,
+  },
 };
