@@ -260,6 +260,7 @@
             action: afficheTiroirTeleversement,
           },
         ]}
+        disabled={!capaciteAjoutDeMesure.peutAjouter}
       />
     {/if}
   </div>
