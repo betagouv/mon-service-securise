@@ -120,13 +120,6 @@ const creeDepot = (config = {}) => {
       referentiel,
     });
 
-  const depotTeleversementModelesMesureSpecifique =
-    depotDonneesTeleversementModelesMesureSpecifique.creeDepot({
-      adaptateurPersistance,
-      adaptateurChiffrement,
-      referentiel,
-    });
-
   const depotModelesMesureSpecifique =
     depotDonneesModelesMesureSpecifique.creeDepot({
       adaptateurChiffrement,
@@ -134,6 +127,14 @@ const creeDepot = (config = {}) => {
       adaptateurUUID,
       depotAutorisations,
       depotServices,
+    });
+
+  const depotTeleversementModelesMesureSpecifique =
+    depotDonneesTeleversementModelesMesureSpecifique.creeDepot({
+      adaptateurPersistance,
+      adaptateurChiffrement,
+      referentiel,
+      depotModelesMesureSpecifique,
     });
 
   const {
@@ -253,8 +254,9 @@ const creeDepot = (config = {}) => {
   } = depotTeleversementServices;
 
   const {
-    nouveauTeleversementModelesMesureSpecifique,
+    confirmeTeleversementModelesMesureSpecifique,
     lisTeleversementModelesMesureSpecifique,
+    nouveauTeleversementModelesMesureSpecifique,
     supprimeTeleversementModelesMesureSpecifique,
   } = depotTeleversementModelesMesureSpecifique;
 
@@ -296,6 +298,7 @@ const creeDepot = (config = {}) => {
     autorisationPour,
     autorisations,
     autorisationsDuService,
+    confirmeTeleversementModelesMesureSpecifique,
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     dupliqueService,
     estSuperviseur,

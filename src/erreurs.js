@@ -100,6 +100,9 @@ class ErreurUtilisateurExistant extends ErreurModele {
   }
 }
 
+class ErreurTeleversementInexistant extends ErreurModele {}
+class ErreurTeleversementInvalide extends ErreurModele {}
+
 module.exports = {
   EchecAutorisation,
   EchecEnvoiMessage,
@@ -151,6 +154,8 @@ module.exports = {
   ErreurStatutMesureManquant,
   ErreurPrioriteMesureInvalide,
   ErreurSuppressionImpossible,
+  ErreurTeleversementInexistant,
+  ErreurTeleversementInvalide,
   ErreurTypeInconnu,
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,

@@ -1,7 +1,11 @@
 const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
-const { ErreurFichierXlsInvalide } = require('../../../src/erreurs');
+const {
+  ErreurFichierXlsInvalide,
+  ErreurTeleversementInvalide,
+  ErreurTeleversementInexistant,
+} = require('../../../src/erreurs');
 const TeleversementModelesMesureSpecifique = require('../../../src/modeles/televersement/televersementModelesMesureSpecifique');
 
 describe('Les routes connecté de téléversement des modèles de mesure spécifique', () => {
@@ -169,6 +173,11 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
     });
 
     it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
+      testeur.depotDonnees().confirmeTeleversementModelesMesureSpecifique =
+        async () => {
+          throw new ErreurTeleversementInexistant();
+        };
+
       try {
         await axios.post(
           'http://localhost:1234/api/televersement/modelesMesureSpecifique/confirme'
@@ -180,11 +189,10 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
     });
 
     it('renvoie une erreur 400 si le téléversement en cours est invalide', async () => {
-      testeur.depotDonnees().lisTeleversementModelesMesureSpecifique =
-        async () =>
-          new TeleversementModelesMesureSpecifique([
-            { description: undefined },
-          ]);
+      testeur.depotDonnees().confirmeTeleversementModelesMesureSpecifique =
+        async () => {
+          throw new ErreurTeleversementInvalide();
+        };
 
       try {
         await axios.post(
@@ -196,45 +204,18 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
       }
     });
 
-    it('délègue au dépôt de données la création des modèles de mesure spécifique', async () => {
-      const televersement = new TeleversementModelesMesureSpecifique(
-        [
-          { description: 'une description 1', categorie: 'Gouvernance' },
-          { description: 'une description 2', categorie: 'Gouvernance' },
-        ],
-        testeur.referentiel()
-      );
-      testeur.depotDonnees().lisTeleversementModelesMesureSpecifique =
-        async () => televersement;
-      let donneesRecues;
-      testeur.depotDonnees().ajouteModelesMesureSpecifique = async (
-        idUtilisateur,
-        donneesModeles
-      ) => {
-        donneesRecues = { idUtilisateur, donneesModeles };
-      };
-
-      await axios.post(
-        'http://localhost:1234/api/televersement/modelesMesureSpecifique/confirme'
-      );
-
-      expect(donneesRecues.idUtilisateur).to.be('U1');
-      expect(donneesRecues.donneesModeles.length).to.be(2);
-      expect(donneesRecues.donneesModeles[0].categorie).to.be('gouvernance');
-    });
-
-    it("supprime le téléversement de l'utilisateur", async () => {
-      let idRecu;
-      testeur.depotDonnees().supprimeTeleversementModelesMesureSpecifique =
+    it('délègue au dépôt de données la confirmation du téléversement', async () => {
+      let idUtilisateurRecu;
+      testeur.depotDonnees().confirmeTeleversementModelesMesureSpecifique =
         async (idUtilisateur) => {
-          idRecu = idUtilisateur;
+          idUtilisateurRecu = idUtilisateur;
         };
 
       await axios.post(
         'http://localhost:1234/api/televersement/modelesMesureSpecifique/confirme'
       );
 
-      expect(idRecu).to.be('U1');
+      expect(idUtilisateurRecu).to.be('U1');
     });
   });
 });
