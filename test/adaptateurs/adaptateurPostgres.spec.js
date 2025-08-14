@@ -243,4 +243,29 @@ describe("L'adaptateur persistance Postgres", function () {
       expect(associations).to.eql([]);
     });
   });
+
+  describe("concernant l'ajout multiple de modèles de mesure specifique", () => {
+    it('ajoute les modèles', async () => {
+      const idMod1 = genereUUID();
+      const idMod2 = genereUUID();
+      const modelesAAjouter = {
+        [idMod1]: { description: 'mod1' },
+        [idMod2]: { description: 'mod2' },
+      };
+
+      await persistance.ajouteModelesMesureSpecifique(
+        ID_UTILISATEUR_1,
+        modelesAAjouter
+      );
+
+      const modeles =
+        await persistance.lisModelesMesureSpecifiquePourUtilisateur(
+          ID_UTILISATEUR_1
+        );
+      const idModelesSauvegardes = modeles.map((m) => m.id);
+      expect(modeles.length).to.be(2);
+      expect(idModelesSauvegardes.includes(idMod1)).to.be(true);
+      expect(idModelesSauvegardes.includes(idMod2)).to.be(true);
+    });
+  });
 });
