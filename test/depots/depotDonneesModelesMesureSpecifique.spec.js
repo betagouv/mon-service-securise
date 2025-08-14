@@ -595,6 +595,20 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     });
   });
 
+  describe("concernant le nombre de modèles de mesure spécifique d'un utilisateur", () => {
+    it('renvoie le nombre', async () => {
+      persistance = unePersistanceMemoire()
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-1', idUtilisateur: 'U1' })
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-2', idUtilisateur: 'U1' })
+        .construis();
+
+      const nombre =
+        await leDepot().nombreModelesMesureSpecifiquePourUtilisateur('U1');
+
+      expect(nombre).to.be(2);
+    });
+  });
+
   describe('concernant les différents modes de suppression', () => {
     beforeEach(() => {
       persistance = unePersistanceMemoire()
