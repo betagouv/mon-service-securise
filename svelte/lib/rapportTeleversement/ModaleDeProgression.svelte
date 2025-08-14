@@ -2,6 +2,7 @@
   import { createEventDispatcher, onMount } from 'svelte';
 
   export let apiGetProgression: () => Promise<number>;
+  export let delaiRafraichissement = 1_000;
 
   const dispatch = createEventDispatcher<{ fini: null }>();
   let elementModale: HTMLDialogElement;
@@ -12,7 +13,7 @@
       progression = await apiGetProgression();
 
       if (progression === 100) dispatch('fini');
-      else setTimeout(monitoreProgression, 1_000);
+      else setTimeout(monitoreProgression, delaiRafraichissement);
     } catch (e) {
       setTimeout(monitoreProgression, 5_000);
       return;
