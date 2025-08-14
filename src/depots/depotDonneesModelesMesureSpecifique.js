@@ -38,6 +38,29 @@ const creeDepot = (config = {}) => {
     return idModele;
   };
 
+  const ajouteModelesMesureSpecifique = async (
+    idUtilisateur,
+    donneesModeles
+  ) => {
+    const utilisateur = await persistance.utilisateur(idUtilisateur);
+    if (!utilisateur) throw new ErreurUtilisateurInexistant();
+
+    if (donneesModeles.length === 0) return;
+
+    const donneesAPersister = await Promise.all(
+      donneesModeles.map(async (donnees) => {
+        const idModele = adaptateurUUID.genereUUID();
+        const donneesChiffrees = await adaptateurChiffrement.chiffre(donnees);
+        return [idModele, donneesChiffrees];
+      })
+    );
+
+    await persistance.ajouteModelesMesureSpecifique(
+      idUtilisateur,
+      Object.fromEntries(donneesAPersister)
+    );
+  };
+
   const metsAJourModeleMesureSpecifique = async (
     idUtilisateur,
     idModele,
@@ -268,6 +291,7 @@ const creeDepot = (config = {}) => {
 
   return {
     ajouteModeleMesureSpecifique,
+    ajouteModelesMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
     associeModelesMesureSpecifiqueAuService,
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,

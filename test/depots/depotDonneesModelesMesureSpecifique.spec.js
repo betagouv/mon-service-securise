@@ -90,6 +90,56 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     });
   });
 
+  describe("concernant l'ajout de plusieurs modèles de mesure", () => {
+    beforeEach(() => {
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .construis();
+    });
+
+    it("jette une erreur si l'utilisateur n'existe pas", async () => {
+      const depot = leDepot();
+      try {
+        await depot.ajouteModelesMesureSpecifique('U-INTROUVABLE-1', [{}]);
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurUtilisateurInexistant);
+      }
+    });
+
+    it('sait ajouter des modèles en chiffrant leur contenu', async () => {
+      let donneesPersistees = {};
+      adaptateurChiffrement.chiffre = async (donnees) => ({
+        ...donnees,
+        chiffree: true,
+      });
+      persistance.ajouteModelesMesureSpecifique = async (
+        idUtilisateur,
+        donneesModeles
+      ) => {
+        donneesPersistees = { idUtilisateur, donneesModeles };
+      };
+      const depot = leDepot();
+
+      await depot.ajouteModelesMesureSpecifique('U1', [
+        {
+          description: 'Une description',
+          descriptionLongue: 'Une description longue',
+          categorie: 'gouvernance',
+        },
+      ]);
+
+      expect(donneesPersistees.idUtilisateur).to.be('U1');
+      expect(Object.keys(donneesPersistees.donneesModeles)).to.eql(['UUID-1']);
+      expect(donneesPersistees.donneesModeles['UUID-1']).to.eql({
+        chiffree: true,
+        description: 'Une description',
+        descriptionLongue: 'Une description longue',
+        categorie: 'gouvernance',
+      });
+    });
+  });
+
   describe("concernant la mise à jour d'un modèle de mesure", () => {
     beforeEach(() => {
       persistance = unePersistanceMemoire()
