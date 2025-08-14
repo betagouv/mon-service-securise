@@ -42,4 +42,19 @@ describe('Le dépôt de données des téléversements de modèles de mesure spé
       });
     });
   });
+
+  describe("sur demande de suppression du téléversement d'un utilisateur", () => {
+    it('supprime le téléversement', async () => {
+      const depot = leDepot();
+      await depot.nouveauTeleversementModelesMesureSpecifique('U1', {
+        description: 'la mesure téléversée',
+      });
+
+      await depot.supprimeTeleversementModelesMesureSpecifique('U1');
+
+      const televersement =
+        await depot.lisTeleversementModelesMesureSpecifique('U1');
+      expect(televersement).to.be(undefined);
+    });
+  });
 });

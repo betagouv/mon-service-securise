@@ -501,7 +501,16 @@ const nouvelAdaptateur = (
   const lisTeleversementModelesMesureSpecifique = async (idUtilisateur) =>
     donnees.televersements.modelesMesureSpecifique.find(
       (m) => m.idUtilisateur === idUtilisateur
-    ).donneesTeleversement;
+    )?.donneesTeleversement;
+
+  const supprimeTeleversementModelesMesureSpecifique = async (
+    idUtilisateur
+  ) => {
+    donnees.televersements.modelesMesureSpecifique =
+      donnees.televersements.modelesMesureSpecifique.filter(
+        (m) => m.idUtilisateur !== idUtilisateur
+      );
+  };
 
   return {
     activitesMesure,
@@ -554,6 +563,7 @@ const nouvelAdaptateur = (
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
     supprimeServices,
+    supprimeTeleversementModelesMesureSpecifique,
     supprimeTousLiensEntreUnServiceEtModelesMesureSpecifique,
     supprimeUtilisateur,
     supprimeUtilisateurs,
