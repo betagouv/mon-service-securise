@@ -28,6 +28,17 @@ class TeleversementModelesMesureSpecifique {
     return { modelesTeleverses, statut };
   }
 
+  donneesModelesMesureSpecifique() {
+    return this.modelesTeleverses.map(
+      ({ descriptionLongue, description, categorie: libelleCategorie }) => ({
+        description,
+        descriptionLongue,
+        categorie:
+          this.referentiel.categorieMesureParLabel(libelleCategorie)[0],
+      })
+    );
+  }
+
   // eslint-disable-next-line class-methods-use-this
   #controleUnModele(modele, lesAutresModeles) {
     const erreurs = [];
