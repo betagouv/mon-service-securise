@@ -1,6 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { recupereRapportDetaille } from './rapportTeleversementModelesMesureSpecifique.api';
+  import {
+    recupereRapportDetaille,
+    supprimeTeleversementEnCours,
+  } from './rapportTeleversementModelesMesureSpecifique.api';
   import type { RapportDetaille } from './rapportTeleversementModelesMesureSpecifique.types';
   import { singulierPluriel } from '../../outils/string';
   import type { ResumeRapportTeleversement } from '../../rapportTeleversement/rapportTeleversementGenerique.types';
@@ -8,6 +11,8 @@
   import { enleveParametreDeUrl } from '../../outils/url';
   import { triRapportDetaille } from '../../rapportTeleversement/tri';
   import LigneDeRapport from './LigneDeRapport.svelte';
+  import { tiroirStore } from '../../ui/stores/tiroir.store';
+  import TiroirTeleversementModeleMesureSpecifique from './TiroirTeleversementModeleMesureSpecifique.svelte';
 
   let rapport: RapportDetaille;
   let resume: ResumeRapportTeleversement;
@@ -63,12 +68,15 @@
     on:confirmeTeleversement={() => {
       console.log('✅ Confirmé');
     }}
-    on:retenteTeleversement={() => {
-      console.log('🔄 Retente');
+    on:retenteTeleversement={async () => {
+      await supprimeTeleversementEnCours();
+      etatReseau = 'IMPORT_FINI';
+      tiroirStore.afficheContenu(TiroirTeleversementModeleMesureSpecifique, {});
     }}
-    on:annule={() => {
+    on:annule={async () => {
       etatReseau = 'IMPORT_FINI';
       enleveParametreDeUrl('rapportTeleversement');
+      await supprimeTeleversementEnCours();
     }}
   >
     <table slot="tableau-du-rapport">

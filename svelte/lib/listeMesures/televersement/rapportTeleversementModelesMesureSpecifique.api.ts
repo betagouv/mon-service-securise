@@ -10,3 +10,6 @@ export const recupereRapportDetaille = async () => {
     return;
   }
 };
+
+export const supprimeTeleversementEnCours = async () =>
+  await axios.delete('/api/televersement/modelesMesureSpecifique');
