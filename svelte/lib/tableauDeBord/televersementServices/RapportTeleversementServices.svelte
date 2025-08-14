@@ -46,7 +46,7 @@
     );
 
     resume = {
-      elementsValide: { label: labelOK },
+      elementsValide: nbOK ? { label: labelOK } : null,
       elementsErreur: erreurs ? { label: labelErreurs } : null,
       statut: rapport.statut,
       labelValiderTeleversement: singulierPluriel(
