@@ -9,15 +9,14 @@
   import TooltipErreursMultiple from '../../rapportTeleversement/composants/TooltipErreursMultiple.svelte';
   import { dateEnFrancais } from '../../outils/date';
 
-  export let service: RapportService;
-  export let numeroLigne: number;
+  export let ligne: RapportService;
 
-  const donneesService = service.service;
-  const aUneErreur = service.erreurs.length > 0;
-  const aDesErreurs = service.erreurs.length > 1;
+  const donneesService = ligne.service;
+  const aUneErreur = ligne.erreurs.length > 0;
+  const aDesErreurs = ligne.erreurs.length > 1;
 
   const contientErreur = (erreur: ErreurService) =>
-    service.erreurs.includes(erreur);
+    ligne.erreurs.includes(erreur);
 </script>
 
 <tr>
@@ -25,16 +24,16 @@
   <th scope="row" class="message-erreur" class:aUneErreur>
     <div class="cellule-erreur">
       {aUneErreur
-        ? `${MessagesErreur[service.erreurs[0]]}${aDesErreurs ? '...' : ''}`
+        ? `${MessagesErreur[ligne.erreurs[0]]}${aDesErreurs ? '...' : ''}`
         : 'Aucune erreur'}
       {#if aDesErreurs}
         <TooltipErreursMultiple
-          erreurs={service.erreurs.map((e) => MessagesErreur[e])}
+          erreurs={ligne.erreurs.map((e) => MessagesErreur[e])}
         />
       {/if}
     </div>
   </th>
-  <CelluleDonnee contenu={numeroLigne.toString()} />
+  <CelluleDonnee contenu={ligne.numeroLigne.toString()} />
   <CelluleDonnee
     contenu={donneesService.nom}
     enErreur={contientErreur('NOM_EXISTANT') || contientErreur('NOM_INVALIDE')}

@@ -100,8 +100,8 @@
         </tr>
       </thead>
       <tbody>
-        {#each rapport.services.toSorted(triRapportDetaille) as service, idx (idx)}
-          <LigneService {service} numeroLigne={service.numeroLigne} />
+        {#each rapport.services.toSorted(triRapportDetaille) as ligne}
+          <LigneService {ligne} />
         {/each}
       </tbody>
     </table>
