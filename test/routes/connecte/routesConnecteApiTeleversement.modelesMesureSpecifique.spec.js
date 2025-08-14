@@ -19,7 +19,7 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
     );
   });
 
-  describe('Quand requête POST sur `/api/televersement/modelesMesureSpecifique`', () => {
+  describe('quand requête POST sur `/api/televersement/modelesMesureSpecifique`', () => {
     it('applique une protection de trafic', (done) => {
       testeur.middleware().verifieProtectionTrafic(
         {
@@ -100,7 +100,7 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
     });
   });
 
-  describe('Quand requête GET sur `/api/televersement/modelesMesuresSpecifique`', () => {
+  describe('quand requête GET sur `/api/televersement/modelesMesuresSpecifique`', () => {
     beforeEach(() => {
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
     });
@@ -133,6 +133,23 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
       } catch (e) {
         expect(e.response.status).to.be(404);
       }
+    });
+  });
+
+  describe('quand requête DELETE sur `/api/televersement/modelesMesuresSpecifique`', () => {
+    it("délègue au dépôt de données la suppression du téléversement de l'utilisateur", async () => {
+      let idRecu;
+      testeur.depotDonnees().supprimeTeleversementModelesMesureSpecifique =
+        async (idUtilisateur) => {
+          idRecu = idUtilisateur;
+        };
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+
+      await axios.delete(
+        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      );
+
+      expect(idRecu).to.be('U1');
     });
   });
 });
