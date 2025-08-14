@@ -73,16 +73,8 @@
   };
 
   const itemsFiltrageReferentiel = [
-    {
-      libelle: 'ANSSI',
-      valeur: Referentiel.ANSSI,
-      idCategorie: 'referentiel',
-    },
-    {
-      libelle: 'CNIL',
-      valeur: Referentiel.CNIL,
-      idCategorie: 'referentiel',
-    },
+    { libelle: 'ANSSI', valeur: Referentiel.ANSSI, idCategorie: 'referentiel' },
+    { libelle: 'CNIL', valeur: Referentiel.CNIL, idCategorie: 'referentiel' },
   ];
   const itemsFiltrageReferentielAvecMesureSpecifiques = [
     ...itemsFiltrageReferentiel,
