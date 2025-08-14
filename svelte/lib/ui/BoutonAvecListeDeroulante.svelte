@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Bouton from './Bouton.svelte';
   import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
 
   type Options = {
@@ -23,11 +22,13 @@
   class="conteneur-bouton nouveau-service"
   bind:this={elementBoutonDeroulant}
 >
-  <Bouton
+  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <lab-anssi-bouton
     {titre}
-    type="primaire"
-    icone="plus"
-    taille="moyen"
+    variante="primaire"
+    icone="add-line"
+    positionIcone="gauche"
+    taille="md"
     on:click={() => (ouvert = !ouvert)}
   />
   {#if ouvert}
