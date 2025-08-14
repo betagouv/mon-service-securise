@@ -677,6 +677,19 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     return JSON.parse(resultat.rows[0].modeles);
   };
 
+  const nombreModelesMesureSpecifiquePourUtilisateur = async (
+    idUtilisateur
+  ) => {
+    const resultat = await knex.raw(
+      `SELECT COUNT(*) as combien
+        FROM modeles_mesure_specifique
+       WHERE id_utilisateur = ?`,
+      [idUtilisateur]
+    );
+
+    return Number(resultat.rows[0].combien);
+  };
+
   const supprimeTeleversementModelesMesureSpecifique = async (idUtilisateur) =>
     knex('televersement_modeles_mesure_specifique')
       .where({ id_utilisateur: idUtilisateur })
@@ -865,6 +878,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     metsAJourUtilisateur,
     modeleMesureSpecifiqueAppartientA,
     nbAutorisationsProprietaire,
+    nombreModelesMesureSpecifiquePourUtilisateur,
     nombreServices,
     nouveautesPourUtilisateur,
     parrainagePour,
