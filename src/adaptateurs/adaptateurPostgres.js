@@ -677,9 +677,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     return JSON.parse(resultat.rows[0].modeles);
   };
 
-  const nombreModelesMesureSpecifiquePourUtilisateur = async (
-    idUtilisateur
-  ) => {
+  const nbModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) => {
     const resultat = await knex.raw(
       `SELECT COUNT(*) as combien
         FROM modeles_mesure_specifique
@@ -878,7 +876,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     metsAJourUtilisateur,
     modeleMesureSpecifiqueAppartientA,
     nbAutorisationsProprietaire,
-    nombreModelesMesureSpecifiquePourUtilisateur,
+    nbModelesMesureSpecifiquePourUtilisateur,
     nombreServices,
     nouveautesPourUtilisateur,
     parrainagePour,
