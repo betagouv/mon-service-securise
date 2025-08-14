@@ -42,6 +42,13 @@ const routesConnecteApiTeleversementModelesMesureSpecifique = ({
     return reponse.json(televersement.rapportDetaille());
   });
 
+  routes.delete('/', async (requete, reponse) => {
+    await depotDonnees.supprimeTeleversementModelesMesureSpecifique(
+      requete.idUtilisateurCourant
+    );
+    reponse.sendStatus(200);
+  });
+
   return routes;
 };
 
