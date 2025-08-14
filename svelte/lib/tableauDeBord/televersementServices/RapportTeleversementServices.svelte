@@ -16,6 +16,7 @@
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import TiroirTeleversementServices from './TiroirTeleversementServices.svelte';
   import { enleveParametreDeUrl } from '../../outils/url';
+  import { triRapportDetaille } from '../../rapportTeleversement/tri';
 
   let rapport: RapportDetaille;
   let resume: ResumeRapportTeleversement;
@@ -99,15 +100,8 @@
         </tr>
       </thead>
       <tbody>
-        {#each rapport.services as service, idx (idx)}
-          {#if service.erreurs.length > 0}
-            <LigneService {service} numeroLigne={idx + 1} />
-          {/if}
-        {/each}
-        {#each rapport.services as service, idx (idx)}
-          {#if service.erreurs.length === 0}
-            <LigneService {service} numeroLigne={idx + 1} />
-          {/if}
+        {#each rapport.services.toSorted(triRapportDetaille) as service, idx (idx)}
+          <LigneService {service} numeroLigne={service.numeroLigne} />
         {/each}
       </tbody>
     </table>

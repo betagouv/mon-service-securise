@@ -28,6 +28,7 @@ export type RapportService = {
     type: string;
   };
   erreurs: ErreurService[];
+  numeroLigne: number;
 };
 
 export type RapportDetaille = {
