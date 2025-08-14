@@ -674,6 +674,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
         WHERE id_utilisateur = ?`,
       [idUtilisateur]
     );
+    if (resultat.rows.length === 0) return undefined;
     return JSON.parse(resultat.rows[0].modeles);
   };
 
