@@ -46,6 +46,8 @@
       erreurs
     );
 
+    const { depassementDuNombreMaximum: depassement } = rapport;
+
     resume = {
       elementsValide: nbOK ? { label: labelOK } : null,
       elementsErreur: erreurs ? { label: labelErreurs } : null,
@@ -55,6 +57,9 @@
         `Importer les ${nbOK} mesures`,
         nbOK
       ),
+      erreurGenerale: depassement
+        ? `Votre fichier dépasse la limite des ${depassement.nombreMaximum} mesures (${depassement.nombreSiAccepte} détectées)`
+        : null,
     };
 
     etatReseau = 'RAPPORT_OBTENU';
