@@ -74,6 +74,7 @@
       console.log('✅ Confirmé');
     }}
     on:retenteTeleversement={async () => {
+      enleveParametreDeUrl('rapportTeleversement');
       await supprimeTeleversementEnCours();
       etatReseau = 'IMPORT_FINI';
       tiroirStore.afficheContenu(TiroirTeleversementModeleMesureSpecifique, {});
