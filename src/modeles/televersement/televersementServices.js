@@ -35,6 +35,7 @@ class TeleversementServices extends ElementsConstructibles {
       services: this.tous().map((serviceTeleverse, index) => ({
         service: serviceTeleverse.toJSON(),
         erreurs: erreurs[index],
+        numeroLigne: index + 1,
       })),
     };
   }
