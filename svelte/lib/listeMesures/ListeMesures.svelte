@@ -266,7 +266,7 @@
         />
         {#if !capaciteAjoutDeMesure.peutAjouter}
           <Infobulle
-            contenu={"Vous avez atteint la limite maximale de 30 mesures. Pour ajouter des mesures, veuillez d'abord en supprimer."}
+            contenu={`Vous avez atteint la limite maximale de ${capaciteAjoutDeMesure.nombreMaximum} mesures. Pour ajouter des mesures, veuillez d'abord en supprimer.`}
           />
         {/if}
       </div>
