@@ -262,7 +262,7 @@ const creeDepot = (config = {}) => {
 
   const {
     ajouteModeleMesureSpecifique,
-    ajouteModelesMesureSpecifique,
+    ajoutePlusieursModelesMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
     associeModelesMesureSpecifiqueAuService,
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
@@ -284,7 +284,7 @@ const creeDepot = (config = {}) => {
     ajouteDossierCourantSiNecessaire,
     ajouteMesureSpecifiqueAuService,
     ajouteModeleMesureSpecifique,
-    ajouteModelesMesureSpecifique,
+    ajoutePlusieursModelesMesureSpecifique,
     ajouteParrainage,
     ajouteRisqueGeneralAService,
     ajouteRisqueSpecifiqueAService,

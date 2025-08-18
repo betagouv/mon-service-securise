@@ -253,7 +253,7 @@ describe("L'adaptateur persistance Postgres", function () {
         [idMod2]: { description: 'mod2' },
       };
 
-      await persistance.ajouteModelesMesureSpecifique(
+      await persistance.ajoutePlusieursModelesMesureSpecifique(
         ID_UTILISATEUR_1,
         modelesAAjouter
       );

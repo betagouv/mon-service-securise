@@ -100,7 +100,9 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     it("jette une erreur si l'utilisateur n'existe pas", async () => {
       const depot = leDepot();
       try {
-        await depot.ajouteModelesMesureSpecifique('U-INTROUVABLE-1', [{}]);
+        await depot.ajoutePlusieursModelesMesureSpecifique('U-INTROUVABLE-1', [
+          {},
+        ]);
         expect().fail("L'appel aurait dû lever une erreur.");
       } catch (e) {
         expect(e).to.be.an(ErreurUtilisateurInexistant);
@@ -113,7 +115,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         ...donnees,
         chiffree: true,
       });
-      persistance.ajouteModelesMesureSpecifique = async (
+      persistance.ajoutePlusieursModelesMesureSpecifique = async (
         idUtilisateur,
         donneesModeles
       ) => {
@@ -121,7 +123,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
       };
       const depot = leDepot();
 
-      await depot.ajouteModelesMesureSpecifique('U1', [
+      await depot.ajoutePlusieursModelesMesureSpecifique('U1', [
         {
           description: 'Une description',
           descriptionLongue: 'Une description longue',

@@ -143,12 +143,10 @@ describe('Le dépôt de données des téléversements de modèles de mesure spé
 
       it("délègue au dépôt de modèles de mesures spécifiques l'ajout des nouveaux modèles", async () => {
         let donneesRecues;
-        depotModelesMesureSpecifique.ajouteModelesMesureSpecifique = async (
-          idUtilisateur,
-          donnees
-        ) => {
-          donneesRecues = { idUtilisateur, donnees };
-        };
+        depotModelesMesureSpecifique.ajoutePlusieursModelesMesureSpecifique =
+          async (idUtilisateur, donnees) => {
+            donneesRecues = { idUtilisateur, donnees };
+          };
 
         await depot.confirmeTeleversementModelesMesureSpecifique('U1');
 

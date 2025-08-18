@@ -382,7 +382,10 @@ const nouvelAdaptateur = (
       donnees: donneesModele,
     });
 
-  const ajouteModelesMesureSpecifique = async (idUtilisateur, donneesModeles) =>
+  const ajoutePlusieursModelesMesureSpecifique = async (
+    idUtilisateur,
+    donneesModeles
+  ) =>
     Object.entries(donneesModeles).forEach(([id, donneesModele]) => {
       donnees.modelesMesureSpecifique.push({
         id,
@@ -532,7 +535,7 @@ const nouvelAdaptateur = (
     ajouteAutorisation,
     ajouteEntiteAuSuperviseur,
     ajouteModeleMesureSpecifique,
-    ajouteModelesMesureSpecifique,
+    ajoutePlusieursModelesMesureSpecifique,
     ajouteSuggestionAction,
     ajouteTacheDeService,
     ajouteTeleversementModelesMesureSpecifique,
