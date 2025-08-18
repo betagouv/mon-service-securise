@@ -31,7 +31,16 @@ const creeDepot = (config = {}) => {
     if (!persistees) return undefined;
 
     const enClair = await chiffrement.dechiffre(persistees);
-    return new TeleversementModelesMesureSpecifique(enClair, referentiel);
+    const nbMaximumLignesAutorisees =
+      await depotModelesMesureSpecifique.nbRestantModelesMesureSpecifiquePourUtilisateur(
+        idUtilisateur
+      );
+
+    return new TeleversementModelesMesureSpecifique(
+      enClair,
+      { nbMaximumLignesAutorisees },
+      referentiel
+    );
   };
 
   const supprimeTeleversementModelesMesureSpecifique = async (idUtilisateur) =>
@@ -47,16 +56,7 @@ const creeDepot = (config = {}) => {
       await lisTeleversementModelesMesureSpecifique(idUtilisateur);
     if (!televersement) throw new ErreurTeleversementInexistant();
 
-    const nbActuel =
-      await depotModelesMesureSpecifique.nbModelesMesureSpecifiquePourUtilisateur(
-        idUtilisateur
-      );
-
-    if (
-      televersement.rapportDetaille({
-        nbActuelModelesMesureSpecifique: nbActuel,
-      }).statut === 'INVALIDE'
-    ) {
+    if (televersement.rapportDetaille().statut === 'INVALIDE') {
       throw new ErreurTeleversementInvalide();
     }
 

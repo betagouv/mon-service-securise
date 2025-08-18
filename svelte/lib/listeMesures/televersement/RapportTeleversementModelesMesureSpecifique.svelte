@@ -18,6 +18,9 @@
   import ModaleDeProgression from '../../rapportTeleversement/ModaleDeProgression.svelte';
   import { modelesMesureSpecifique } from '../../ui/stores/modelesMesureSpecifique.store';
   import { servicesAvecMesuresAssociees } from '../servicesAssocies/servicesAvecMesuresAssociees.store';
+  import type { CapaciteAjoutDeMesure } from '../listeMesures.d';
+
+  export let capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
 
   let rapport: RapportDetaille;
   let resume: ResumeRapportTeleversement;
@@ -63,7 +66,17 @@
         nbOK
       ),
       erreurGenerale: depassement
-        ? `Votre fichier dépasse la limite des ${depassement.nombreMaximum} mesures (${depassement.nombreSiAccepte} détectées)`
+        ? `Votre fichier qui contient
+          ${singulierPluriel(
+            '1 ligne',
+            `${rapport.modelesTeleverses.length} lignes`,
+            rapport.modelesTeleverses.length
+          )}
+           vous ferait dépasser la limite des ${
+             capaciteAjoutDeMesure.nombreMaximum
+           } mesures. Vous pouvez en ajouter ${
+             depassement.nombreMaximum
+           } au maximum.`
         : null,
     };
 

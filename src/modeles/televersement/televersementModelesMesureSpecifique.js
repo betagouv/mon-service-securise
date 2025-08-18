@@ -4,14 +4,17 @@ const chainesSontIdentiques = (a, b) =>
   a.localeCompare(b, 'fr', { sensitivity: 'base' }) === 0;
 
 class TeleversementModelesMesureSpecifique {
-  constructor(donnees, referentiel = Referentiel.creeReferentielVide()) {
+  constructor(
+    donnees,
+    configuration,
+    referentiel = Referentiel.creeReferentielVide()
+  ) {
     this.modelesTeleverses = donnees;
+    this.nbMaximumLignesAutorisees = configuration.nbMaximumLignesAutorisees;
     this.referentiel = referentiel;
   }
 
-  rapportDetaille(utilisateur) {
-    const { nbActuelModelesMesureSpecifique } = utilisateur;
-
+  rapportDetaille() {
     const modelesTeleverses = this.modelesTeleverses.map((m, idx) => ({
       modele: m,
       erreurs: this.#controleUnModele(
@@ -21,9 +24,7 @@ class TeleversementModelesMesureSpecifique {
       numeroLigne: idx + 1,
     }));
 
-    const depassementDuNombreMaximum = this.#controleDepassement(
-      nbActuelModelesMesureSpecifique
-    );
+    const depassementDuNombreMaximum = this.#controleDepassement();
 
     const statut =
       modelesTeleverses.some((m) => m.erreurs.length > 0) ||
@@ -39,13 +40,12 @@ class TeleversementModelesMesureSpecifique {
     };
   }
 
-  #controleDepassement(nbActuel) {
-    const nombreSiAccepte = nbActuel + this.modelesTeleverses.length;
-    const nombreMaximum =
-      this.referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur();
+  #controleDepassement() {
+    const nombreTeleverse = this.modelesTeleverses.length;
+    const nombreMaximum = this.nbMaximumLignesAutorisees;
 
-    return nombreSiAccepte > nombreMaximum
-      ? { nombreMaximum, nombreSiAccepte }
+    return nombreTeleverse > nombreMaximum
+      ? { nombreMaximum, nombreTeleverse }
       : null;
   }
 

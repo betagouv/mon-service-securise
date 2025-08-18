@@ -7,6 +7,7 @@ block append scripts
   +composantSvelte('listeMesures.js')
   +donneesPartagees('referentiel-statuts-mesures', referentiel.statutsMesures())
   +donneesPartagees('referentiel-categories-mesures', referentiel.categoriesMesures())
+  +donneesPartagees('referentiel-nombre-maximum-modeles-mesure-specifique', referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur())
   +donneesPartagees('referentiel-types-service', referentiel.typesService())
   +donneesPartagees('affiche-modeles-mesure-specifique', featureFlags.afficheModelesMesureSpecifique)
   script(type = 'module', src = '/statique/listeMesures.mjs')

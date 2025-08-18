@@ -14,6 +14,7 @@ const creeDepot = (config = {}) => {
     adaptateurUUID,
     depotAutorisations,
     depotServices,
+    referentiel,
   } = config;
 
   const verificationsModificationModele =
@@ -166,8 +167,16 @@ const creeDepot = (config = {}) => {
     );
   };
 
-  const nbModelesMesureSpecifiquePourUtilisateur = async (idUtilisateur) =>
-    persistance.nbModelesMesureSpecifiquePourUtilisateur(idUtilisateur);
+  const nbRestantModelesMesureSpecifiquePourUtilisateur = async (
+    idUtilisateur
+  ) => {
+    const max =
+      referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur();
+    const actuel =
+      await persistance.nbModelesMesureSpecifiquePourUtilisateur(idUtilisateur);
+
+    return max - actuel;
+  };
 
   const dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService = async (
     idUtilisateur,
@@ -297,7 +306,7 @@ const creeDepot = (config = {}) => {
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     lisModelesMesureSpecifiquePourUtilisateur,
     metsAJourModeleMesureSpecifique,
-    nbModelesMesureSpecifiquePourUtilisateur,
+    nbRestantModelesMesureSpecifiquePourUtilisateur,
     supprimeDesMesuresAssocieesAuModele,
     supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees,
     supprimeModeleMesureSpecifiqueEtMesuresAssociees,

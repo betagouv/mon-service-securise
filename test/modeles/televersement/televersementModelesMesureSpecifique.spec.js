@@ -14,15 +14,19 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
     });
   });
 
-  const unTeleversement = (donnees) =>
-    new TeleversementModelesMesureSpecifique(donnees, referentiel);
+  const unTeleversement = (donnees, configuration = {}) =>
+    new TeleversementModelesMesureSpecifique(
+      donnees,
+      configuration,
+      referentiel
+    );
 
   describe('sur demande de rapport détaillé', () => {
     it('met dans chaque ligne du rapport le modèle concerné', () => {
       const rapport = unTeleversement([
         { description: 'D1', categorie: 'Gouvernance' },
         { description: 'D2', categorie: 'Gouvernance' },
-      ]).rapportDetaille({});
+      ]).rapportDetaille();
 
       expect(rapport.modelesTeleverses.length).to.be(2);
       const [d1, d2] = rapport.modelesTeleverses;
@@ -39,7 +43,7 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
       const rapportAvecDuplicata = unTeleversement([
         structuredClone(dupliquee),
         structuredClone(dupliquee),
-      ]).rapportDetaille({});
+      ]).rapportDetaille();
 
       const [d1, d2] = rapportAvecDuplicata.modelesTeleverses;
       expect(d1.erreurs).to.eql(['MESURE_DUPLIQUEE']);
@@ -53,7 +57,7 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
         categorie: 'Gouvernance',
       };
 
-      const rapport = unTeleversement([sansDescription]).rapportDetaille({});
+      const rapport = unTeleversement([sansDescription]).rapportDetaille();
 
       expect(rapport.modelesTeleverses[0].erreurs).to.eql([
         'INTITULE_MANQUANT',
@@ -67,7 +71,7 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
         descriptionLongue: '',
       };
 
-      const rapport = unTeleversement([categorieZ]).rapportDetaille({});
+      const rapport = unTeleversement([categorieZ]).rapportDetaille();
 
       expect(rapport.modelesTeleverses[0].erreurs).to.eql([
         'CATEGORIE_INCONNUE',
@@ -81,7 +85,7 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
         descriptionLongue: '',
       };
 
-      const rapport = unTeleversement([sansCategorie]).rapportDetaille({});
+      const rapport = unTeleversement([sansCategorie]).rapportDetaille();
 
       expect(rapport.modelesTeleverses[0].erreurs).to.eql([
         'CATEGORIE_INCONNUE',
@@ -89,20 +93,18 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
     });
 
     it('sait détecter une erreur de dépassement du nombre maximum de modèles', () => {
-      referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur = () =>
-        5;
       const rajouteDeuxMesures = [
         { description: 'D1', categorie: 'Gouvernance' },
         { description: 'D2', categorie: 'Gouvernance' },
       ];
 
-      const rapport = unTeleversement(rajouteDeuxMesures).rapportDetaille({
-        nbActuelModelesMesureSpecifique: 4,
-      });
+      const rapport = unTeleversement(rajouteDeuxMesures, {
+        nbMaximumLignesAutorisees: 1,
+      }).rapportDetaille();
 
       expect(rapport.depassementDuNombreMaximum).to.eql({
-        nombreMaximum: 5,
-        nombreSiAccepte: 4 + 2,
+        nombreMaximum: 1,
+        nombreTeleverse: 2,
       });
       expect(rapport.statut).to.be('INVALIDE');
     });
@@ -111,7 +113,7 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
       const rapport = unTeleversement([
         { description: 'D1', categorie: 'Gouvernance' },
         { description: 'D2', categorie: 'Gouvernance' },
-      ]).rapportDetaille({});
+      ]).rapportDetaille();
 
       const [a, b] = rapport.modelesTeleverses;
       expect(a.numeroLigne).to.be(1);
@@ -128,13 +130,13 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
           categorie: 'Gouvernance',
         };
 
-        const rapport = unTeleversement([sansDescription]).rapportDetaille({});
+        const rapport = unTeleversement([sansDescription]).rapportDetaille();
 
         expect(rapport.statut).to.be('INVALIDE');
       });
 
       it("renvoie un statut INVALIDE si aucun modèle n'est présent", () => {
-        const rapportVide = unTeleversement([]).rapportDetaille({});
+        const rapportVide = unTeleversement([]).rapportDetaille();
 
         expect(rapportVide.statut).to.be('INVALIDE');
       });
@@ -142,7 +144,7 @@ describe('Un téléversement de modèles de mesure spécifique', () => {
       it("renvoie un statut VALIDE quand il n'y a aucune erreur", () => {
         const rapportValide = unTeleversement([
           { description: 'D1', categorie: 'Gouvernance' },
-        ]).rapportDetaille({});
+        ]).rapportDetaille();
 
         expect(rapportValide.statut).to.be('VALIDE');
       });
