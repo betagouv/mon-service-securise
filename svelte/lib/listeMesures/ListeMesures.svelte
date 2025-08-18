@@ -38,6 +38,7 @@
   import TiroirTeleversementModeleMesureSpecifique from './televersement/TiroirTeleversementModeleMesureSpecifique.svelte';
   import type { ConfigurationFiltrage } from '../ui/Tableau.svelte';
   import TableauVideMesuresSpecifiques from './mesureSpecifique/TableauVideMesuresSpecifiques.svelte';
+  import Infobulle from '../ui/Infobulle.svelte';
 
   export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
@@ -246,22 +247,29 @@
       icone="telecharger"
     />
     {#if afficheModelesMesureSpecifique}
-      <BoutonAvecListeDeroulante
-        titre="Ajouter une / des mesures"
-        options={[
-          {
-            label: 'Ajouter une mesure',
-            icone: 'plus',
-            action: afficheTiroirAjout,
-          },
-          {
-            label: 'Téléverser des mesures',
-            icone: 'televerser',
-            action: afficheTiroirTeleversement,
-          },
-        ]}
-        disabled={!capaciteAjoutDeMesure.peutAjouter}
-      />
+      <div class="action-ajout-modeles-mesure-specifique">
+        <BoutonAvecListeDeroulante
+          titre="Ajouter une / des mesures"
+          options={[
+            {
+              label: 'Ajouter une mesure',
+              icone: 'plus',
+              action: afficheTiroirAjout,
+            },
+            {
+              label: 'Téléverser des mesures',
+              icone: 'televerser',
+              action: afficheTiroirTeleversement,
+            },
+          ]}
+          disabled={!capaciteAjoutDeMesure.peutAjouter}
+        />
+        {#if !capaciteAjoutDeMesure.peutAjouter}
+          <Infobulle
+            contenu={"Vous avez atteint la limite maximale de 30 mesures. Pour ajouter des mesures, veuillez d'abord en supprimer."}
+          />
+        {/if}
+      </div>
     {/if}
   </div>
 
@@ -390,6 +398,12 @@
     margin-left: auto;
     display: flex;
     gap: 12px;
+
+    .action-ajout-modeles-mesure-specifique {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
   }
 
   @keyframes montre-ligne {
