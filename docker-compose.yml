@@ -30,6 +30,8 @@ services:
   web:
     <<: *configuration-base
     tty: true
+    logging:
+      driver: local
     command: bash -c "
       npx knex migrate:latest
       && npx concurrently -n \"SERVEUR,FRONT SVELTE\" -c \"blue.bold,magenta.underline\"
