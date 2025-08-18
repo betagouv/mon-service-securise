@@ -2,14 +2,14 @@
 
 ## TODO
 
-- [ ] Le bouton « ajouter une/des mesures » est grisé si l'utilisateur a déjà atteint le nombre limites
+- [x] Le bouton « ajouter une/des mesures » est grisé si l'utilisateur a déjà atteint le nombre limites
 - [ ] Le tiroir de téléversement montre, dans les limitations, combien de mesures sont encore ajoutables (idéalement on veut soustraire la varenv et le nombre actuel)
 - [ ] Il faut envoyer des data vers Metabase
 - [ ] Il faut que l'endpoint de création unitaire de modèle empêche de dépasser la limite du nombre max (qui serait une var env ?)
 - [ ] Une notification de nouveauté dans le centre de notifs
 - [ ] Pinger Hana pour recettage
 - [ ] Activer le feature flag en PROD + supprimer le FF
-- [ ] Le header de la liste des mesures a un texte à jour (cf Figma)
+- [x] Le header de la liste des mesures a un texte à jour (cf Figma)
 
 ## DONE
 

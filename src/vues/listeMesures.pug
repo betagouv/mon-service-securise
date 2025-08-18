@@ -24,7 +24,7 @@ block bandeau-titre
 
   lab-anssi-bandeau-titre(
     titre="Liste de mesures"
-    description="Retrouvez ici le référentiel de l'ANSSI et de la CNIL regroupant l'ensemble des mesures de sécurité."
+    description=`Retrouvez ici le référentiel de l'ANSSI et de la CNIL regroupant l’ensemble des mesures de sécurité. L’ajout de mesures spécifiques est limité à ${referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur()} pour favoriser une mise en œuvre efficace. `
     fil-ariane=JSON.stringify(filAriane)
   )
 
