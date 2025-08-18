@@ -38,7 +38,7 @@ const creeDepot = (config = {}) => {
     return idModele;
   };
 
-  const ajouteModelesMesureSpecifique = async (
+  const ajoutePlusieursModelesMesureSpecifique = async (
     idUtilisateur,
     donneesModeles
   ) => {
@@ -55,7 +55,7 @@ const creeDepot = (config = {}) => {
       })
     );
 
-    await persistance.ajouteModelesMesureSpecifique(
+    await persistance.ajoutePlusieursModelesMesureSpecifique(
       idUtilisateur,
       Object.fromEntries(donneesAPersister)
     );
@@ -291,7 +291,7 @@ const creeDepot = (config = {}) => {
 
   return {
     ajouteModeleMesureSpecifique,
-    ajouteModelesMesureSpecifique,
+    ajoutePlusieursModelesMesureSpecifique,
     associeModeleMesureSpecifiqueAuxServices,
     associeModelesMesureSpecifiqueAuService,
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,

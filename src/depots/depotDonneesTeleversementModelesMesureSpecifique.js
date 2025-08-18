@@ -60,7 +60,7 @@ const creeDepot = (config = {}) => {
       throw new ErreurTeleversementInvalide();
     }
 
-    await depotModelesMesureSpecifique.ajouteModelesMesureSpecifique(
+    await depotModelesMesureSpecifique.ajoutePlusieursModelesMesureSpecifique(
       idUtilisateur,
       televersement.donneesModelesMesureSpecifique()
     );

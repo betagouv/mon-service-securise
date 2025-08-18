@@ -169,7 +169,8 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
             [{ description: 'une description 1', categorie: 'Gouvernance' }],
             testeur.referentiel()
           );
-      testeur.depotDonnees().ajouteModelesMesureSpecifique = async () => {};
+      testeur.depotDonnees().ajoutePlusieursModelesMesureSpecifique =
+        async () => {};
     });
 
     it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
