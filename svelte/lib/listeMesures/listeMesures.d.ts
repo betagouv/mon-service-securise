@@ -1,7 +1,6 @@
 import type {
   IdNiveauDeSecurite,
   IdTypeService,
-  ModeleMesureGenerale,
   MesureSpecifique,
   ReferentielStatut,
 } from '../ui/types.d';
@@ -9,6 +8,7 @@ import type {
 declare global {
   interface HTMLElementEventMap {
     'svelte-recharge-liste-mesures': CustomEvent;
+    'svelte-recharge-rapport-televersement-modeles-mesure-specifique': CustomEvent;
   }
 }
 
@@ -17,6 +17,11 @@ export type ListeMesuresProps = {
   categories: { id: string; label: string }[];
   typesService: ReferentielTypesService;
   afficheModelesMesureSpecifique: boolean;
+  capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+};
+
+export type RapportTeleversementProps = {
+  capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
 };
 
 export type PersonnalisationMesure = {
@@ -56,4 +61,8 @@ export type ModeleDeMesure = {
   referentiel: Referentiel;
   idsServicesAssocies: string[];
   type: 'generale' | 'specifique';
+};
+
+export type CapaciteAjoutDeMesure = {
+  nombreMaximum: number;
 };

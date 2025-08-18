@@ -18,10 +18,12 @@ const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 const {
   uneAutorisation,
 } = require('../constructeurs/constructeurAutorisation');
+const { creeReferentiel } = require('../../src/referentiel');
 
 describe('Le dépôt de données des modèles de mesure spécifique', () => {
   let adaptateurChiffrement;
   let persistance;
+  let referentiel;
   let adaptateurUUID;
   let depotServices;
 
@@ -34,11 +36,15 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         adaptateurPersistance: persistance,
       }),
       depotServices,
+      referentiel,
     });
 
   beforeEach(() => {
     adaptateurChiffrement = fauxAdaptateurChiffrement();
     adaptateurUUID = { genereUUID: () => 'UUID-1' };
+    referentiel = creeReferentiel({
+      modelesMesureSpecifique: { nombreMaximumParUtilisateur: 5 },
+    });
   });
 
   describe("concernant l'ajout d'un modèle de mesure", () => {
@@ -647,7 +653,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
     });
   });
 
-  describe("concernant le nombre de modèles de mesure spécifique d'un utilisateur", () => {
+  describe('concernant le nombre restant de modèles de mesure spécifique pour un utilisateur', () => {
     it('renvoie le nombre', async () => {
       persistance = unePersistanceMemoire()
         .avecUnModeleDeMesureSpecifique({ id: 'MOD-1', idUtilisateur: 'U1' })
@@ -655,9 +661,9 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         .construis();
 
       const nombre =
-        await leDepot().nbModelesMesureSpecifiquePourUtilisateur('U1');
+        await leDepot().nbRestantModelesMesureSpecifiquePourUtilisateur('U1');
 
-      expect(nombre).to.be(2);
+      expect(nombre).to.be(5 - 2);
     });
   });
 

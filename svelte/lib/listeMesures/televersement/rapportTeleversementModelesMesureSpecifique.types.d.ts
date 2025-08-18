@@ -3,7 +3,7 @@ export type RapportDetaille = {
   modelesTeleverses: ModeleTeleverse[];
   depassementDuNombreMaximum: null | {
     nombreMaximum: number;
-    nombreSiAccepte: number;
+    nombreTeleverse: number;
   };
 };
 

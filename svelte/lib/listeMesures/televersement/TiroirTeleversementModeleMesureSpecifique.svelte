@@ -8,10 +8,12 @@
   } from '../../ui/televersement/KitDeTeleversement.types';
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import { ajouteParametreAUrl } from '../../outils/url';
+  import type { CapaciteAjoutDeMesure } from '../listeMesures.d';
 
   export const titre: string = 'Téléverser des mesures';
   export const sousTitre: string =
     'Importez votre liste de mesures, associez-les aux services de votre choix, puis ajustez leur statut ou leur précision simultanément.';
+  export let capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
 
   let etatTeleversement: EtatTeleversement = 'EnAttente';
 
@@ -20,7 +22,8 @@
 
     document.body.dispatchEvent(
       new CustomEvent(
-        'svelte-recharge-rapport-televersement-modeles-mesure-specifique'
+        'svelte-recharge-rapport-televersement-modeles-mesure-specifique',
+        { detail: { capaciteAjoutDeMesure } }
       )
     );
     ajouteParametreAUrl('rapportTeleversement', 'true');

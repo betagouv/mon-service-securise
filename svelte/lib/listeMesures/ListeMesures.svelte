@@ -26,7 +26,11 @@
   import Loader from '../ui/Loader.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import { modelesMesureSpecifique } from '../ui/stores/modelesMesureSpecifique.store';
-  import type { ListeMesuresProps, ModeleDeMesure } from './listeMesures.d';
+  import type {
+    CapaciteAjoutDeMesure,
+    ListeMesuresProps,
+    ModeleDeMesure,
+  } from './listeMesures.d';
   import Onglets from '../ui/Onglets.svelte';
   import TiroirAjoutModeleMesureSpecifique from './mesureSpecifique/ajout/TiroirAjoutModeleMesureSpecifique.svelte';
   import TiroirConfigurationModeleMesureSpecifique from './mesureSpecifique/configuration/TiroirConfigurationModeleMesureSpecifique.svelte';
@@ -39,6 +43,7 @@
   export let categories: ListeMesuresProps['categories'];
   export let typesService: ReferentielTypesService;
   export let afficheModelesMesureSpecifique: boolean;
+  export let capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
 
   onMount(async () => {
     await servicesAvecMesuresAssociees.rafraichis();
@@ -189,7 +194,9 @@
 
   const afficheTiroirTeleversement = () => {
     ongletActif = 'specifiques';
-    tiroirStore.afficheContenu(TiroirTeleversementModeleMesureSpecifique, {});
+    tiroirStore.afficheContenu(TiroirTeleversementModeleMesureSpecifique, {
+      capaciteAjoutDeMesure,
+    });
   };
 
   const afficheTiroirModificationModeleMesureSpecifique = (

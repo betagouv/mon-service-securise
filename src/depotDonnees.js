@@ -127,6 +127,7 @@ const creeDepot = (config = {}) => {
       adaptateurUUID,
       depotAutorisations,
       depotServices,
+      referentiel,
     });
 
   const depotTeleversementModelesMesureSpecifique =
@@ -268,7 +269,7 @@ const creeDepot = (config = {}) => {
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     lisModelesMesureSpecifiquePourUtilisateur,
     metsAJourModeleMesureSpecifique,
-    nbModelesMesureSpecifiquePourUtilisateur,
+    nbRestantModelesMesureSpecifiquePourUtilisateur,
     supprimeDesMesuresAssocieesAuModele,
     supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees,
     supprimeModeleMesureSpecifiqueEtMesuresAssociees,
@@ -329,7 +330,7 @@ const creeDepot = (config = {}) => {
     metsAJourRisqueSpecifiqueDuService,
     metsAJourUtilisateur,
     metsAJourService,
-    nbModelesMesureSpecifiquePourUtilisateur,
+    nbRestantModelesMesureSpecifiquePourUtilisateur,
     nombreServices,
     nouveauService,
     nouveauTeleversementServices,

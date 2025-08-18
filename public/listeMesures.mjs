@@ -7,6 +7,9 @@ $(() => {
   const afficheModelesMesureSpecifique = lisDonneesPartagees(
     'affiche-modeles-mesure-specifique'
   );
+  const nombreMaximumModelesMesureSpecifique = lisDonneesPartagees(
+    'referentiel-nombre-maximum-modeles-mesure-specifique'
+  );
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-liste-mesures', {
@@ -18,6 +21,9 @@ $(() => {
         })),
         typesService,
         afficheModelesMesureSpecifique,
+        capaciteAjoutDeMesure: {
+          nombreMaximum: nombreMaximumModelesMesureSpecifique,
+        },
       },
     })
   );
@@ -26,7 +32,14 @@ $(() => {
   if (url.has('rapportTeleversement')) {
     document.body.dispatchEvent(
       new CustomEvent(
-        'svelte-recharge-rapport-televersement-modeles-mesure-specifique'
+        'svelte-recharge-rapport-televersement-modeles-mesure-specifique',
+        {
+          detail: {
+            capaciteAjoutDeMesure: {
+              nombreMaximum: nombreMaximumModelesMesureSpecifique,
+            },
+          },
+        }
       )
     );
   }

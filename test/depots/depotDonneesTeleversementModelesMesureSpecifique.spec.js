@@ -18,6 +18,7 @@ const Referentiel = require('../../src/referentiel');
 describe('Le dépôt de données des téléversements de modèles de mesure spécifique', () => {
   let persistance;
   let chiffrement;
+  let referentiel;
   let depotModelesMesureSpecifique;
 
   beforeEach(() => {
@@ -28,6 +29,10 @@ describe('Le dépôt de données des téléversements de modèles de mesure spé
         donnees.map(({ chiffrees, ...autresDonnees }) => autresDonnees),
     };
     persistance = unePersistanceMemoire().construis();
+    referentiel = Referentiel.creeReferentiel({
+      categoriesMesures: { gouvernance: 'Gouvernance' },
+      modelesMesureSpecifique: { nombreMaximumParUtilisateur: 40 },
+    });
   });
 
   const leDepot = () => {
@@ -38,15 +43,14 @@ describe('Le dépôt de données des téléversements de modèles de mesure spé
           chiffre: (donnees) => ({ ...donnees, chiffrees: true }),
         },
         adaptateurUUID: fabriqueAdaptateurUUID(),
+        referentiel,
       });
+
     return DepotDonneesTeleversementModelesMesureSpecifique.creeDepot({
       adaptateurPersistance: persistance,
       adaptateurChiffrement: chiffrement,
       depotModelesMesureSpecifique,
-      referentiel: Referentiel.creeReferentiel({
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-        modelesMesureSpecifique: { nombreMaximumParUtilisateur: 40 },
-      }),
+      referentiel,
     });
   };
 
@@ -62,9 +66,7 @@ describe('Le dépôt de données des téléversements de modèles de mesure spé
 
       const depot = leDepot();
       await depot.nouveauTeleversementModelesMesureSpecifique('U1', [
-        {
-          description: 'la mesure téléversée',
-        },
+        { description: 'la mesure téléversée' },
       ]);
 
       expect(donneesPersistees).to.eql({
@@ -74,13 +76,45 @@ describe('Le dépôt de données des téléversements de modèles de mesure spé
     });
   });
 
+  describe("sur demande de lecture d'un téléversement", () => {
+    it('déchiffre les données persistées', async () => {
+      const depot = leDepot();
+      await depot.nouveauTeleversementModelesMesureSpecifique('U1', [
+        { description: 'la mesure téléversée' },
+      ]);
+
+      const televersement =
+        await depot.lisTeleversementModelesMesureSpecifique('U1');
+
+      expect(televersement.modelesTeleverses).to.eql([
+        { description: 'la mesure téléversée' },
+      ]);
+    });
+
+    it("récupère le nombre de modèles de mesure spécifique restant pour l'utilisateur", async () => {
+      referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur = () =>
+        10;
+      persistance = unePersistanceMemoire()
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-1', idUtilisateur: 'U1' })
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-2', idUtilisateur: 'U1' })
+        .construis();
+      const depot = leDepot();
+      await depot.nouveauTeleversementModelesMesureSpecifique('U1', [
+        { description: 'la mesure téléversée' },
+      ]);
+
+      const televersement =
+        await depot.lisTeleversementModelesMesureSpecifique('U1');
+
+      expect(televersement.nbMaximumLignesAutorisees).to.be(10 - 2);
+    });
+  });
+
   describe("sur demande de suppression du téléversement d'un utilisateur", () => {
     it('supprime le téléversement', async () => {
       const depot = leDepot();
       await depot.nouveauTeleversementModelesMesureSpecifique('U1', [
-        {
-          description: 'la mesure téléversée',
-        },
+        { description: 'la mesure téléversée' },
       ]);
 
       await depot.supprimeTeleversementModelesMesureSpecifique('U1');
