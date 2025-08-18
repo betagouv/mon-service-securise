@@ -186,9 +186,13 @@ const routesConnectePage = ({
     '/mesures',
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
-    async (_, reponse) => {
+    async (requete, reponse) => {
       reponse.render('listeMesures', {
         referentiel,
+        nombreRestantModelesMesureSpecifique:
+          await depotDonnees.nbRestantModelesMesureSpecifiquePourUtilisateur(
+            requete.idUtilisateurCourant
+          ),
       });
     }
   );
