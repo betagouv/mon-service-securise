@@ -65,6 +65,6 @@ export type ModeleDeMesure = {
 
 export type CapaciteAjoutDeMesure = {
   peutAjouter: boolean;
-  nombreActuel: number;
+  nombreRestant: number;
   nombreMaximum: number;
 };

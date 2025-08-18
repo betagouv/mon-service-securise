@@ -40,7 +40,10 @@
       titre: 'Template de mesures à télécharger',
       sousTitre: 'XLSX - 56 kB',
     }}
-    lesLimitations={['Taille maximale : 1 Mo. Format supporté : XLSX.']}
+    lesLimitations={[
+      'Taille maximale : 1 Mo. Format supporté : XLSX.',
+      `Vous pouvez ajouter jusqu'à ${capaciteAjoutDeMesure.nombreRestant} mesures supplémentaires.`,
+    ]}
     apiPostDuTeleversement="/api/televersement/modelesMesureSpecifique"
     formatAccepte={FormatAccepte.Excel}
     on:televersementChange={(e) => {
