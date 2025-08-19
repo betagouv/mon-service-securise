@@ -2,13 +2,13 @@
 
 ## TODO
 
-- [ ] Il faut que l'endpoint de création unitaire de modèle empêche de dépasser la limite du nombre max (qui serait une var env ?)
 - [ ] Une notification de nouveauté dans le centre de notifs
-- [ ] Pinger Hana pour recettage
 - [ ] Activer le feature flag en PROD + supprimer le FF
 
 ## DONE
 
+- [x] Il faut que l'endpoint de création unitaire de modèle empêche de dépasser la limite du nombre max (qui serait une var env ?)
+- [x] Pinger Hana pour recettage
 - [x] Il faut envoyer des data vers Metabase
 - [x] Le bouton « ajouter » se grise sans avoir à refresh quand on termine un upload qui atteint la limite max de modèles
 - [x] Le tiroir de téléversement montre, dans les limitations, combien de mesures sont encore ajoutables (idéalement on veut soustraire la varenv et le nombre actuel)

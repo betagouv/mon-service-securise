@@ -9,6 +9,7 @@ const {
   ErreurUtilisateurInexistant,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurAutorisationInexistante,
+  ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
 } = require('../../src/erreurs');
 const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
 const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
@@ -92,6 +93,27 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
         expect().fail("L'appel aurait dû lever une erreur.");
       } catch (e) {
         expect(e).to.be.an(ErreurUtilisateurInexistant);
+      }
+    });
+
+    it("jette une erreur si l'utilisateur a atteint la limite du nombre de modèles créés", async () => {
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-1', idUtilisateur: 'U1' })
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-2', idUtilisateur: 'U1' })
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-3', idUtilisateur: 'U1' })
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-4', idUtilisateur: 'U1' })
+        .avecUnModeleDeMesureSpecifique({ id: 'MOD-5', idUtilisateur: 'U1' })
+        .construis();
+
+      const depot = leDepot();
+      try {
+        await depot.ajouteModeleMesureSpecifique('U1', {
+          description: 'Qui dépasse 5',
+        });
+        expect().fail("L'appel aurait dû lever une erreur.");
+      } catch (e) {
+        expect(e).to.be.an(ErreurNombreLimiteModelesMesureSpecifiqueAtteint);
       }
     });
   });

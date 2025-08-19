@@ -2,6 +2,7 @@ const {
   ErreurUtilisateurInexistant,
   ErreurServiceInexistant,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
+  ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
 } = require('../erreurs');
 const {
   VerificationsUtilisateurPeutMuterModele,
@@ -23,9 +24,25 @@ const creeDepot = (config = {}) => {
       depotAutorisations,
     });
 
+  const nbRestantModelesMesureSpecifiquePourUtilisateur = async (
+    idUtilisateur
+  ) => {
+    const max =
+      referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur();
+    const actuel =
+      await persistance.nbModelesMesureSpecifiquePourUtilisateur(idUtilisateur);
+
+    return max - actuel;
+  };
+
   const ajouteModeleMesureSpecifique = async (idUtilisateur, donnees) => {
     const utilisateur = await persistance.utilisateur(idUtilisateur);
     if (!utilisateur) throw new ErreurUtilisateurInexistant();
+
+    const restant =
+      await nbRestantModelesMesureSpecifiquePourUtilisateur(idUtilisateur);
+    if (restant < 1)
+      throw new ErreurNombreLimiteModelesMesureSpecifiqueAtteint();
 
     const idModele = adaptateurUUID.genereUUID();
     const donneesChiffrees = await adaptateurChiffrement.chiffre(donnees);
@@ -165,17 +182,6 @@ const creeDepot = (config = {}) => {
         };
       })
     );
-  };
-
-  const nbRestantModelesMesureSpecifiquePourUtilisateur = async (
-    idUtilisateur
-  ) => {
-    const max =
-      referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur();
-    const actuel =
-      await persistance.nbModelesMesureSpecifiquePourUtilisateur(idUtilisateur);
-
-    return max - actuel;
   };
 
   const dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService = async (
