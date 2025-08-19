@@ -19,6 +19,7 @@ const {
   ErreurAutorisationInexistante,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurServiceInexistant,
+  ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
 } = require('../../erreurs');
 const routesConnecteApiService = require('./routesConnecteApiService');
 const Utilisateur = require('../../modeles/utilisateur');
@@ -697,12 +698,20 @@ const routesConnecteApi = ({
         return;
       }
 
-      const idModele = await depotDonnees.ajouteModeleMesureSpecifique(
-        requete.idUtilisateurCourant,
-        { description, descriptionLongue, categorie }
-      );
+      try {
+        const idModele = await depotDonnees.ajouteModeleMesureSpecifique(
+          requete.idUtilisateurCourant,
+          { description, descriptionLongue, categorie }
+        );
 
-      reponse.status(201).send({ id: idModele });
+        reponse.status(201).send({ id: idModele });
+      } catch (e) {
+        if (e instanceof ErreurNombreLimiteModelesMesureSpecifiqueAtteint) {
+          reponse.status(403).send('Limite de création atteinte');
+          return;
+        }
+        throw e;
+      }
     }
   );
 
