@@ -9,6 +9,7 @@
   import Infobulle from '../../ui/Infobulle.svelte';
   import { onMount } from 'svelte';
   import Toast from '../../ui/Toast.svelte';
+  import { infobulle } from '../../ui/directives/infobulle';
 
   export let categories: Record<string, string>;
   export let statuts: ReferentielStatut;
@@ -31,7 +32,11 @@
 
 <div class="conteneur-onglet-mesure-specifique">
   {#if estLectureSeule}
-    <span class="lecture-seule">Lecture seule</span>
+    <span
+      class="lecture-seule"
+      use:infobulle={"Vous n'avez pas les droits pour modifier cette mesure. Contactez son propriétaire pour en savoir plus."}
+      >Lecture seule</span
+    >
   {/if}
   {#if etapeCouranteModeleMesureSpecifique === 1}
     <div>
@@ -148,6 +153,7 @@
     display: flex;
     gap: 4px;
     align-items: center;
+    cursor: help;
   }
 
   .lecture-seule:before {
