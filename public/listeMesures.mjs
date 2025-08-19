@@ -10,9 +10,6 @@ $(() => {
   const nombreMaximumModelesMesureSpecifique = lisDonneesPartagees(
     'referentiel-nombre-maximum-modeles-mesure-specifique'
   );
-  const nombreRestantModelesMesureSpecifique = lisDonneesPartagees(
-    'nombre-restant-modeles-mesure-specifique'
-  );
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-liste-mesures', {
@@ -25,7 +22,6 @@ $(() => {
         typesService,
         afficheModelesMesureSpecifique,
         capaciteAjoutDeMesure: {
-          nombreRestant: nombreRestantModelesMesureSpecifique,
           nombreMaximum: nombreMaximumModelesMesureSpecifique,
         },
       },
