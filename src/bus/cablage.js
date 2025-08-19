@@ -116,6 +116,10 @@ const EvenementMesureModifieeEnMasse = require('./evenementMesureModifieeEnMasse
 const {
   consigneModificationMesureEnMasseDansJournal,
 } = require('./abonnements/consigneModificationMesureEnMasseDansJournal');
+const EvenementModelesMesureSpecifiqueImportes = require('./evenementModelesMesureSpecifiqueImportes');
+const {
+  consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal,
+} = require('./abonnements/consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -259,6 +263,13 @@ const cableTousLesAbonnes = (
   busEvenements.abonne(
     EvenementServicesImportes,
     consigneTeleversementServicesRealiseDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementModelesMesureSpecifiqueImportes,
+    consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal({
+      adaptateurJournal,
+    })
   );
 };
 
