@@ -10,6 +10,7 @@
   import { ajouteParametreAUrl } from '../../outils/url';
   import type { CapaciteAjoutDeMesure } from '../listeMesures.d';
   import { modelesMesureSpecifique } from '../../ui/stores/modelesMesureSpecifique.store';
+  import { singulierPluriel } from '../../outils/string';
 
   export const titre: string = 'Téléverser des mesures';
   export const sousTitre: string =
@@ -46,7 +47,11 @@
     }}
     lesLimitations={[
       'Taille maximale : 1 Mo. Format supporté : XLSX.',
-      `Vous pouvez ajouter jusqu'à ${nombreRestantModelesAjoutables} mesures supplémentaires.`,
+      `Vous pouvez ajouter jusqu'à ${singulierPluriel(
+        '1 mesure supplémentaire',
+        `${nombreRestantModelesAjoutables} mesures supplémentaires`,
+        nombreRestantModelesAjoutables
+      )}.`,
     ]}
     apiPostDuTeleversement="/api/televersement/modelesMesureSpecifique"
     formatAccepte={FormatAccepte.Excel}
