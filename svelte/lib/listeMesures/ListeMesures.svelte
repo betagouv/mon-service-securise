@@ -206,6 +206,14 @@
       ongletActif: 'info',
     });
   };
+
+  const ouvreTiroirEdition = (modeleMesure: ModeleDeMesure) => {
+    if (modeleMesure.type === 'specifique') {
+      afficheTiroirModificationModeleMesureSpecifique(modeleMesure);
+    } else {
+      afficheTiroirModificationMultipleMesuresGenerales(modeleMesure);
+    }
+  };
 </script>
 
 <Toaster />
@@ -306,7 +314,13 @@
     {@const aDesServicesAssocies = donnee.idsServicesAssocies?.length > 0}
     {@const typeMesure = donnee.type}
     {#if colonne.cle === 'description'}
-      <div class="description-mesure">
+      <div
+        class="description-mesure"
+        role="button"
+        tabindex="0"
+        on:keypress={() => ouvreTiroirEdition(donnee)}
+        on:click={() => ouvreTiroirEdition(donnee)}
+      >
         <span>{donnee.description}</span>
         <div>
           <CartoucheReferentiel referentiel={donnee.referentiel} />
@@ -368,6 +382,11 @@
     width: 100%;
     max-width: 1200px;
     margin: 32px 0;
+  }
+
+  :global(tr:has(.description-mesure:hover)) {
+    box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
+    cursor: pointer;
   }
 
   .description-mesure {
