@@ -25,7 +25,6 @@ $(() => {
         typesService,
         afficheModelesMesureSpecifique,
         capaciteAjoutDeMesure: {
-          peutAjouter: nombreRestantModelesMesureSpecifique > 0,
           nombreRestant: nombreRestantModelesMesureSpecifique,
           nombreMaximum: nombreMaximumModelesMesureSpecifique,
         },

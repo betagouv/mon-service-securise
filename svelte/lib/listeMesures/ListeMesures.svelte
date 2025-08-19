@@ -69,6 +69,9 @@
     }
   }
 
+  $: peutAjouterModelesMesureSpecifique =
+    $modelesMesureSpecifique.length < capaciteAjoutDeMesure.nombreMaximum;
+
   const afficheModaleDetailsMesure = async (modeleMesure: ModeleDeMesure) => {
     await modaleDetailsMesure.affiche(modeleMesure);
   };
@@ -262,9 +265,9 @@
               action: afficheTiroirTeleversement,
             },
           ]}
-          disabled={!capaciteAjoutDeMesure.peutAjouter}
+          disabled={!peutAjouterModelesMesureSpecifique}
         />
-        {#if !capaciteAjoutDeMesure.peutAjouter}
+        {#if !peutAjouterModelesMesureSpecifique}
           <Infobulle
             contenu={`Vous avez atteint la limite maximale de ${capaciteAjoutDeMesure.nombreMaximum} mesures. Pour ajouter des mesures, veuillez d'abord en supprimer.`}
           />
