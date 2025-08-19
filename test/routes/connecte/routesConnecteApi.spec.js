@@ -15,6 +15,7 @@ const {
   ErreurAutorisationInexistante,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurServiceInexistant,
+  ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
 } = require('../../../src/erreurs');
 
 const testeurMSS = require('../testeurMSS');
@@ -2104,6 +2105,23 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         descriptionLongue: 'une description longue',
         categorie: 'gouvernance',
       });
+    });
+
+    it('jette une erreur si la limite de création de modèles est atteinte', async () => {
+      testeur.depotDonnees().ajouteModeleMesureSpecifique = async () => {
+        throw new ErreurNombreLimiteModelesMesureSpecifiqueAtteint();
+      };
+
+      try {
+        await axios.post('http://localhost:1234/api/modeles/mesureSpecifique', {
+          description: 'une description',
+          categorie: 'gouvernance',
+        });
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
+        expect(e.response.status).to.be(403);
+        expect(e.response.data).to.be('Limite de création atteinte');
+      }
     });
 
     it("retourne 201 et l'identifiant du modèle créé", async () => {
