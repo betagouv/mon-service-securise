@@ -8,7 +8,7 @@
     supprimeTeleversement,
   } from './rapportTeleversementServices.api';
   import { singulierPluriel } from '../../outils/string';
-  import type { ResumeRapportTeleversement } from '../../rapportTeleversement/rapportTeleversementGenerique.types';
+  import type { ResumeRapportTeleversement } from '../../rapportTeleversement/rapportTeleversementGenerique.types.d';
   import LigneService from './LigneService.svelte';
   import type { RapportDetaille } from './rapportTeleversementServices.types';
   import ModaleDeProgression from '../../rapportTeleversement/ModaleDeProgression.svelte';
