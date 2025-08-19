@@ -193,7 +193,7 @@
   }
 
   .conteneur-rapport-detaille {
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 
   .pied-modale {
