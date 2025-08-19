@@ -4,7 +4,10 @@ class EvenementNouveauServiceCree extends Evenement {
   constructor(donnees, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
-    Evenement.valide(donnees, ['idService', 'idUtilisateur']);
+    Evenement.verifieProprietesRenseignees(donnees, [
+      'idService',
+      'idUtilisateur',
+    ]);
 
     super(
       'NOUVEAU_SERVICE_CREE',

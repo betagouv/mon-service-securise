@@ -4,7 +4,10 @@ class EvenementServicesImportes extends Evenement {
   constructor(donnees, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
-    Evenement.valide(donnees, ['idUtilisateur', 'nbServicesImportes']);
+    Evenement.verifieProprietesRenseignees(donnees, [
+      'idUtilisateur',
+      'nbServicesImportes',
+    ]);
 
     super(
       'SERVICES_IMPORTES',

@@ -12,7 +12,7 @@ class Evenement {
     };
   }
 
-  static valide(donnees, proprietesRequises) {
+  static verifieProprietesRenseignees(donnees, proprietesRequises) {
     const manque = (valeur) => typeof valeur === 'undefined' || valeur === null;
 
     proprietesRequises.forEach((requise) => {
