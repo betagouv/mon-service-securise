@@ -11,12 +11,20 @@ class ErreurIdentifiantRetourUtilisateurManquant extends ErreurJournal {}
 class ErreurNombreServicesImportes extends ErreurJournal {}
 class ErreurServiceManquant extends ErreurJournal {}
 class ErreurUtilisateurManquant extends ErreurJournal {}
+class ErreurDonneeManquante extends ErreurJournal {
+  constructor(nomDonneeManquante) {
+    super(
+      `Il manque la donnée ${nomDonneeManquante} pour instancier l'évènement`
+    );
+  }
+}
 
 module.exports = {
   ErreurAutorisationsServiceManquantes,
   ErreurDateDerniereConnexionManquante,
   ErreurDateDerniereConnexionInvalide,
   ErreurDateHomologationManquante,
+  ErreurDonneeManquante,
   ErreurDureeHomologationManquante,
   ErreurIdentifiantServiceManquant,
   ErreurIdentifiantUtilisateurManquant,
