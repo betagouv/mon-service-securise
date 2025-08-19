@@ -47,6 +47,8 @@
     );
 
     resume = {
+      erreurGenerale:
+        rapport.services.length === 0 ? 'Aucune ligne détectée' : null,
       elementsValide: nbOK ? { label: labelOK } : null,
       elementsErreur: erreurs ? { label: labelErreurs } : null,
       statut: rapport.statut,
