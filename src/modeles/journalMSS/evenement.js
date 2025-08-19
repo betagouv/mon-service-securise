@@ -13,7 +13,7 @@ class Evenement {
   }
 
   static valide(donnees, proprietesRequises) {
-    const manque = (valeur) => typeof valeur === 'undefined';
+    const manque = (valeur) => typeof valeur === 'undefined' || valeur === null;
 
     proprietesRequises.forEach((requise) => {
       if (manque(donnees[requise])) throw new ErreurDonneeManquante(requise);

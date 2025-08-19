@@ -1,9 +1,8 @@
 const expect = require('expect.js');
 const EvenementConnexionUtilisateur = require('../../../src/modeles/journalMSS/evenementConnexionUtilisateur');
 const {
-  ErreurIdentifiantUtilisateurManquant,
-  ErreurDateDerniereConnexionManquante,
   ErreurDateDerniereConnexionInvalide,
+  ErreurDonneeManquante,
 } = require('../../../src/modeles/journalMSS/erreurs');
 
 describe('Un événement de connexion utilisateur', () => {
@@ -45,7 +44,7 @@ describe('Un événement de connexion utilisateur', () => {
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
-      expect(e).to.be.an(ErreurIdentifiantUtilisateurManquant);
+      expect(e).to.be.an(ErreurDonneeManquante);
       done();
     }
   });
@@ -61,7 +60,7 @@ describe('Un événement de connexion utilisateur', () => {
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
-      expect(e).to.be.an(ErreurDateDerniereConnexionManquante);
+      expect(e).to.be.an(ErreurDonneeManquante);
       done();
     }
   });
