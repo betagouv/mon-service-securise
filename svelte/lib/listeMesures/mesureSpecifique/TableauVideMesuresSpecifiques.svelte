@@ -5,12 +5,16 @@
     ReferentielStatut,
     ReferentielTypesService,
   } from '../../ui/types';
-  import type { ListeMesuresProps } from '../listeMesures';
+  import type {
+    ListeMesuresProps,
+    CapaciteAjoutDeMesure,
+  } from '../listeMesures.d';
   import TiroirTeleversementModeleMesureSpecifique from '../televersement/TiroirTeleversementModeleMesureSpecifique.svelte';
 
   export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
   export let typesService: ReferentielTypesService;
+  export let capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
 
   const afficheTiroirAjout = () => {
     tiroirStore.afficheContenu(TiroirAjoutModeleMesureSpecifique, {
@@ -21,7 +25,9 @@
   };
 
   const afficheTiroirTeleversement = () => {
-    tiroirStore.afficheContenu(TiroirTeleversementModeleMesureSpecifique, {});
+    tiroirStore.afficheContenu(TiroirTeleversementModeleMesureSpecifique, {
+      capaciteAjoutDeMesure,
+    });
   };
 </script>
 

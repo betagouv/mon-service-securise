@@ -103,7 +103,9 @@
       enleveParametreDeUrl('rapportTeleversement');
       await supprimeTeleversementEnCours();
       etatReseau = 'IMPORT_FINI';
-      tiroirStore.afficheContenu(TiroirTeleversementModeleMesureSpecifique, {});
+      tiroirStore.afficheContenu(TiroirTeleversementModeleMesureSpecifique, {
+        capaciteAjoutDeMesure,
+      });
       enleveParametreDeUrl('rapportTeleversement');
     }}
     on:annule={async () => {

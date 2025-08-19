@@ -237,7 +237,7 @@
   configurationTableau.donnees.length === 0
     ? {
         composant: TableauVideMesuresSpecifiques,
-        props: { statuts, categories, typesService },
+        props: { statuts, categories, typesService, capaciteAjoutDeMesure },
       }
     : undefined}
 >
