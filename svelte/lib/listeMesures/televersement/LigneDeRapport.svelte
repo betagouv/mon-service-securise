@@ -8,6 +8,7 @@
   import CelluleDonnee from '../../rapportTeleversement/composants/CelluleDonnee.svelte';
   import { decode } from 'html-entities';
   import TooltipErreursMultiple from '../../rapportTeleversement/composants/TooltipErreursMultiple.svelte';
+  import CartoucheCategorieMesure from '../../ui/CartoucheCategorieMesure.svelte';
 
   export let ligne: ModeleTeleverse;
 
@@ -40,8 +41,18 @@
     gras
   />
   <CelluleDonnee contenu={decode(ligne.modele.descriptionLongue)} />
-  <CelluleDonnee
-    contenu={ligne.modele.categorie}
-    enErreur={contientErreur('CATEGORIE_INCONNUE')}
-  />
+  <CelluleDonnee enErreur={contientErreur('CATEGORIE_INCONNUE')}>
+    <lab-anssi-tag
+      class="tag-categorie"
+      couleurFond="#f1f5f9"
+      couleurTexte="#667892"
+      label={ligne.modele.categorie}
+    />
+  </CelluleDonnee>
 </tr>
+
+<style lang="scss">
+  .tag-categorie {
+    display: flex;
+  }
+</style>
