@@ -1,7 +1,7 @@
 const expect = require('expect.js');
 const ConstructeurEvenementCompletudeServiceModifiee = require('./constructeurEvenementCompletudeServiceModifiee');
 const {
-  ErreurServiceManquant,
+  ErreurDonneeManquante,
 } = require('../../../src/modeles/journalMSS/erreurs');
 const { unService } = require('../../constructeurs/constructeurService');
 const Mesures = require('../../../src/modeles/mesures');
@@ -181,7 +181,7 @@ describe('Un événement de complétude modifiée', () => {
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
-      expect(e).to.be.an(ErreurServiceManquant);
+      expect(e).to.be.an(ErreurDonneeManquante);
       done();
     }
   });
