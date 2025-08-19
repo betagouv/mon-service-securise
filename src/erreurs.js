@@ -92,6 +92,7 @@ class ErreurIntituleRisqueManquant extends ErreurModele {}
 class ErreurCategoriesRisqueManquantes extends ErreurModele {}
 class ErreurCategorieRisqueInconnue extends ErreurModele {}
 class ErreurFichierXlsInvalide extends ErreurModele {}
+class ErreurNombreLimiteModelesMesureSpecifiqueAtteint extends ErreurModele {}
 
 class ErreurUtilisateurExistant extends ErreurModele {
   constructor(message, idUtilisateur) {
@@ -145,6 +146,7 @@ module.exports = {
   ErreurModele,
   ErreurNiveauGraviteInconnu,
   ErreurNiveauVraisemblanceInconnu,
+  ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
   ErreurNomServiceDejaExistant,
   ErreurRisqueInconnu,
   ErreurSelManquant,
