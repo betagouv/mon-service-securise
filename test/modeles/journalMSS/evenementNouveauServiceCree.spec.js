@@ -1,8 +1,7 @@
 const expect = require('expect.js');
 const EvenementNouveauServiceCree = require('../../../src/modeles/journalMSS/evenementNouveauServiceCree');
 const {
-  ErreurIdentifiantServiceManquant,
-  ErreurIdentifiantUtilisateurManquant,
+  ErreurDonneeManquante,
 } = require('../../../src/modeles/journalMSS/erreurs');
 
 describe('Un événement de nouveau service créé', () => {
@@ -50,7 +49,7 @@ describe('Un événement de nouveau service créé', () => {
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
-      expect(e).to.be.an(ErreurIdentifiantUtilisateurManquant);
+      expect(e).to.be.an(ErreurDonneeManquante);
       done();
     }
   });
@@ -65,7 +64,7 @@ describe('Un événement de nouveau service créé', () => {
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
-      expect(e).to.be.an(ErreurIdentifiantServiceManquant);
+      expect(e).to.be.an(ErreurDonneeManquante);
       done();
     }
   });
