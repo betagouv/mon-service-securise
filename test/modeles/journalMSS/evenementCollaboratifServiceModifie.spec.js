@@ -1,7 +1,5 @@
 const expect = require('expect.js');
 const {
-  ErreurIdentifiantServiceManquant,
-  ErreurAutorisationsServiceManquantes,
   ErreurDonneeManquante,
 } = require('../../../src/modeles/journalMSS/erreurs');
 const {
