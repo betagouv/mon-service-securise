@@ -1,8 +1,7 @@
 const expect = require('expect.js');
 const EvenementServicesImportes = require('../../../src/modeles/journalMSS/evenementServicesImportes');
 const {
-  ErreurIdentifiantUtilisateurManquant,
-  ErreurNombreServicesImportes,
+  ErreurDonneeManquante,
 } = require('../../../src/modeles/journalMSS/erreurs');
 
 describe('Un événement de services importés', () => {
@@ -41,7 +40,7 @@ describe('Un événement de services importés', () => {
 
   it("exige que l'identifiant du service soit renseigné", () => {
     expect(() => new EvenementServicesImportes({})).to.throwError((e) => {
-      expect(e).to.be.an(ErreurIdentifiantUtilisateurManquant);
+      expect(e).to.be.an(ErreurDonneeManquante);
     });
   });
 
@@ -49,7 +48,7 @@ describe('Un événement de services importés', () => {
     expect(
       () => new EvenementServicesImportes({ idUtilisateur: 'abc' })
     ).to.throwError((e) => {
-      expect(e).to.be.an(ErreurNombreServicesImportes);
+      expect(e).to.be.an(ErreurDonneeManquante);
     });
   });
 });

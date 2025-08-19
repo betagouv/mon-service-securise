@@ -1,7 +1,7 @@
 const expect = require('expect.js');
 const EvenementNouvelUtilisateurInscrit = require('../../../src/modeles/journalMSS/evenementNouvelUtilisateurInscrit');
 const {
-  ErreurIdentifiantUtilisateurManquant,
+  ErreurDonneeManquante,
 } = require('../../../src/modeles/journalMSS/erreurs');
 
 describe('Un événement de nouvel utilisateur inscrit', () => {
@@ -40,7 +40,7 @@ describe('Un événement de nouvel utilisateur inscrit', () => {
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
-      expect(e).to.be.an(ErreurIdentifiantUtilisateurManquant);
+      expect(e).to.be.an(ErreurDonneeManquante);
       done();
     }
   });
