@@ -14,14 +14,18 @@ const {
 } = require('../../src/erreurs');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const Referentiel = require('../../src/referentiel');
+const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
+const EvenementModelesMesureSpecifiqueImportes = require('../../src/bus/evenementModelesMesureSpecifiqueImportes');
 
 describe('Le dépôt de données des téléversements de modèles de mesure spécifique', () => {
   let persistance;
   let chiffrement;
   let referentiel;
   let depotModelesMesureSpecifique;
+  let busEvenements;
 
   beforeEach(() => {
+    busEvenements = fabriqueBusPourLesTests();
     chiffrement = {
       chiffre: (donnees) =>
         donnees.map((donnee) => ({ ...donnee, chiffrees: true })),
@@ -51,6 +55,7 @@ describe('Le dépôt de données des téléversements de modèles de mesure spé
       adaptateurChiffrement: chiffrement,
       depotModelesMesureSpecifique,
       referentiel,
+      busEvenements,
     });
   };
 
@@ -188,6 +193,21 @@ describe('Le dépôt de données des téléversements de modèles de mesure spé
         expect(donneesRecues.donnees).to.eql([
           { description: 'une description 1', categorie: 'gouvernance' },
         ]);
+      });
+
+      it("publie sur le bus d'évènements le téléversement confirmé", async () => {
+        await depot.confirmeTeleversementModelesMesureSpecifique('U1');
+
+        expect(
+          busEvenements.aRecuUnEvenement(
+            EvenementModelesMesureSpecifiqueImportes
+          )
+        );
+        const recu = busEvenements.recupereEvenement(
+          EvenementModelesMesureSpecifiqueImportes
+        );
+        expect(recu.idUtilisateur).to.be('U1');
+        expect(recu.nbModelesMesureSpecifiqueImportes).to.be(1);
       });
 
       it('supprime le téléversement', async () => {

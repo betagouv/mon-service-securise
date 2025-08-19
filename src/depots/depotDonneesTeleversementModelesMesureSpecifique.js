@@ -4,6 +4,7 @@ const {
   ErreurTeleversementInexistant,
   ErreurTeleversementInvalide,
 } = require('../erreurs');
+const EvenementModelesMesureSpecifiqueImportes = require('../bus/evenementModelesMesureSpecifiqueImportes');
 
 const creeDepot = (config = {}) => {
   const {
@@ -11,6 +12,7 @@ const creeDepot = (config = {}) => {
     adaptateurChiffrement: chiffrement,
     referentiel,
     depotModelesMesureSpecifique,
+    busEvenements,
   } = config;
 
   const nouveauTeleversementModelesMesureSpecifique = async (
@@ -60,9 +62,19 @@ const creeDepot = (config = {}) => {
       throw new ErreurTeleversementInvalide();
     }
 
+    const donneesModelesImportes =
+      televersement.donneesModelesMesureSpecifique();
+
     await depotModelesMesureSpecifique.ajoutePlusieursModelesMesureSpecifique(
       idUtilisateur,
-      televersement.donneesModelesMesureSpecifique()
+      donneesModelesImportes
+    );
+
+    await busEvenements.publie(
+      new EvenementModelesMesureSpecifiqueImportes({
+        idUtilisateur,
+        nbModelesMesureSpecifiqueImportes: donneesModelesImportes.length,
+      })
     );
 
     await supprimeTeleversementModelesMesureSpecifique(idUtilisateur);

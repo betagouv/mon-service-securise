@@ -136,6 +136,7 @@ const creeDepot = (config = {}) => {
       adaptateurChiffrement,
       referentiel,
       depotModelesMesureSpecifique,
+      busEvenements,
     });
 
   const {
