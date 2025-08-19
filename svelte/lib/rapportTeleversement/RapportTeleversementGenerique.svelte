@@ -1,7 +1,7 @@
 <script lang="ts">
   import Toast from '../ui/Toast.svelte';
   import { onMount } from 'svelte';
-  import type { ResumeRapportTeleversement } from './rapportTeleversementGenerique.types';
+  import type { ResumeRapportTeleversement } from './rapportTeleversementGenerique.types.d';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher<{

@@ -7,7 +7,7 @@
   } from './rapportTeleversementModelesMesureSpecifique.api';
   import type { RapportDetaille } from './rapportTeleversementModelesMesureSpecifique.types';
   import { singulierPluriel } from '../../outils/string';
-  import type { ResumeRapportTeleversement } from '../../rapportTeleversement/rapportTeleversementGenerique.types';
+  import type { ResumeRapportTeleversement } from '../../rapportTeleversement/rapportTeleversementGenerique.types.d';
   import RapportTeleversementGenerique from '../../rapportTeleversement/RapportTeleversementGenerique.svelte';
   import { enleveParametreDeUrl } from '../../outils/url';
   import { triRapportDetaille } from '../../rapportTeleversement/tri';
