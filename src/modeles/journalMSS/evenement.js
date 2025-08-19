@@ -1,6 +1,7 @@
 const {
   fabriqueAdaptateurChiffrement,
 } = require('../../adaptateurs/fabriqueAdaptateurChiffrement');
+const { ErreurDonneeManquante } = require('./erreurs');
 
 class Evenement {
   static optionsParDefaut(options) {
@@ -9,6 +10,14 @@ class Evenement {
       adaptateurChiffrement:
         options.adaptateurChiffrement ?? fabriqueAdaptateurChiffrement(),
     };
+  }
+
+  static valide(donnees, proprietesRequises) {
+    const manque = (valeur) => typeof valeur === 'undefined';
+
+    proprietesRequises.forEach((requise) => {
+      if (manque(donnees[requise])) throw new ErreurDonneeManquante(requise);
+    });
   }
 
   constructor(type, donnees, date) {
