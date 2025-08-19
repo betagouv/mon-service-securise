@@ -2,6 +2,7 @@ const expect = require('expect.js');
 const {
   ErreurIdentifiantServiceManquant,
   ErreurAutorisationsServiceManquantes,
+  ErreurDonneeManquante,
 } = require('../../../src/modeles/journalMSS/erreurs');
 const {
   EvenementCollaboratifServiceModifie,
@@ -44,13 +45,10 @@ describe("Un événement de modification du collaboratif d'un service", () => {
   });
 
   const proprietesAVerifier = [
-    { propriete: 'idService', typeErreur: ErreurIdentifiantServiceManquant },
-    {
-      propriete: 'autorisations',
-      typeErreur: ErreurAutorisationsServiceManquantes,
-    },
+    { propriete: 'idService' },
+    { propriete: 'autorisations' },
   ];
-  proprietesAVerifier.forEach(({ propriete, typeErreur }) => {
+  proprietesAVerifier.forEach(({ propriete }) => {
     it(`exige que \`${propriete}\` soit renseigné`, (done) => {
       try {
         const donnees = { idService: 'abc' };
@@ -65,7 +63,7 @@ describe("Un événement de modification du collaboratif d'un service", () => {
           Error("L'instanciation de l'événement aurait dû lever une exception")
         );
       } catch (e) {
-        expect(e).to.be.an(typeErreur);
+        expect(e).to.be.an(ErreurDonneeManquante);
         done();
       }
     });
