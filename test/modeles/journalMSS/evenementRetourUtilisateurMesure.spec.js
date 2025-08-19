@@ -1,10 +1,7 @@
 const expect = require('expect.js');
 const EvenementRetourUtilisateurMesure = require('../../../src/modeles/journalMSS/evenementRetourUtilisateurMesure');
 const {
-  ErreurIdentifiantServiceManquant,
-  ErreurIdentifiantUtilisateurManquant,
-  ErreurIdentifiantMesureManquant,
-  ErreurIdentifiantRetourUtilisateurManquant,
+  ErreurDonneeManquante,
 } = require('../../../src/modeles/journalMSS/erreurs');
 
 describe('Un événement de retour utilisateur sur une mesure', () => {
@@ -47,18 +44,12 @@ describe('Un événement de retour utilisateur sur une mesure', () => {
   });
 
   const proprietesAVerifier = [
-    { propriete: 'idService', typeErreur: ErreurIdentifiantServiceManquant },
-    {
-      propriete: 'idUtilisateur',
-      typeErreur: ErreurIdentifiantUtilisateurManquant,
-    },
-    { propriete: 'idMesure', typeErreur: ErreurIdentifiantMesureManquant },
-    {
-      propriete: 'idRetour',
-      typeErreur: ErreurIdentifiantRetourUtilisateurManquant,
-    },
+    { propriete: 'idService' },
+    { propriete: 'idUtilisateur' },
+    { propriete: 'idMesure' },
+    { propriete: 'idRetour' },
   ];
-  proprietesAVerifier.forEach(({ propriete, typeErreur }) => {
+  proprietesAVerifier.forEach(({ propriete }) => {
     it(`exige que \`${propriete}\` soit renseigné`, (done) => {
       try {
         const donnees = {
@@ -78,7 +69,7 @@ describe('Un événement de retour utilisateur sur une mesure', () => {
           Error("L'instanciation de l'événement aurait dû lever une exception")
         );
       } catch (e) {
-        expect(e).to.be.an(typeErreur);
+        expect(e).to.be.an(ErreurDonneeManquante);
         done();
       }
     });

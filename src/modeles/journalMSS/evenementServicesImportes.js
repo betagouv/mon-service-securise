@@ -1,23 +1,10 @@
 const Evenement = require('./evenement');
-const {
-  ErreurIdentifiantUtilisateurManquant,
-  ErreurNombreServicesImportes,
-} = require('./erreurs');
 
 class EvenementServicesImportes extends Evenement {
   constructor(donnees, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
-    const valide = () => {
-      const manque = (donnee) => typeof donnee === 'undefined';
-
-      if (manque(donnees.idUtilisateur))
-        throw new ErreurIdentifiantUtilisateurManquant();
-      if (manque(donnees.nbServicesImportes))
-        throw new ErreurNombreServicesImportes();
-    };
-
-    valide();
+    Evenement.valide(donnees, ['idUtilisateur', 'nbServicesImportes']);
 
     super(
       'SERVICES_IMPORTES',

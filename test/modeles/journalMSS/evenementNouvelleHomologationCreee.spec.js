@@ -3,9 +3,7 @@ const EvenementNouvelleHomologationCreee = require('../../../src/modeles/journal
 require('./constructeurEvenementCompletudeServiceModifiee');
 require('../../../src/modeles/journalMSS/evenementCompletudeServiceModifiee');
 const {
-  ErreurIdentifiantServiceManquant,
-  ErreurDateHomologationManquante,
-  ErreurDureeHomologationManquante,
+  ErreurDonneeManquante,
 } = require('../../../src/modeles/journalMSS/erreurs');
 
 describe('Un événement de nouvelle homologation', () => {
@@ -48,7 +46,7 @@ describe('Un événement de nouvelle homologation', () => {
   it("exige que l'identifiant du service soit renseigné", () => {
     expect(() => new EvenementNouvelleHomologationCreee({})).to.throwError(
       (e) => {
-        expect(e).to.be.an(ErreurIdentifiantServiceManquant);
+        expect(e).to.be.an(ErreurDonneeManquante);
       }
     );
   });
@@ -57,7 +55,7 @@ describe('Un événement de nouvelle homologation', () => {
     expect(
       () => new EvenementNouvelleHomologationCreee({ idService: 'abc' })
     ).to.throwError((e) => {
-      expect(e).to.be.an(ErreurDateHomologationManquante);
+      expect(e).to.be.an(ErreurDonneeManquante);
     });
   });
 
@@ -69,7 +67,7 @@ describe('Un événement de nouvelle homologation', () => {
           dateHomologation: '2023-03-30',
         })
     ).to.throwError((e) => {
-      expect(e).to.be.an(ErreurDureeHomologationManquante);
+      expect(e).to.be.an(ErreurDonneeManquante);
     });
   });
 

@@ -1,28 +1,15 @@
 const Evenement = require('./evenement');
-const {
-  ErreurIdentifiantServiceManquant,
-  ErreurIdentifiantUtilisateurManquant,
-  ErreurIdentifiantMesureManquant,
-  ErreurIdentifiantRetourUtilisateurManquant,
-} = require('./erreurs');
 
 class EvenementRetourUtilisateurMesure extends Evenement {
   constructor(donnees, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
-    const valide = () => {
-      const manque = (donnee) => typeof donnee === 'undefined';
-
-      if (manque(donnees.idService))
-        throw new ErreurIdentifiantServiceManquant();
-      if (manque(donnees.idUtilisateur))
-        throw new ErreurIdentifiantUtilisateurManquant();
-      if (manque(donnees.idMesure)) throw new ErreurIdentifiantMesureManquant();
-      if (manque(donnees.idRetour))
-        throw new ErreurIdentifiantRetourUtilisateurManquant();
-    };
-
-    valide();
+    Evenement.valide(donnees, [
+      'idService',
+      'idUtilisateur',
+      'idMesure',
+      'idRetour',
+    ]);
 
     super(
       'RETOUR_UTILISATEUR_MESURE_RECU',
