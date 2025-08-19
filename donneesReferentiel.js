@@ -172,6 +172,17 @@ module.exports = {
       image: 'listeMesure.png',
       canalDiffusion: 'centreNotifications',
     },
+    {
+      id: 'televersementMesures',
+      dateDeDeploiement: '2025-08-21 07:00:00Z',
+      lien: 'https://aide.monservicesecurise.cyber.gouv.fr/fr/article/comment-televerser-ses-mesures-specifiques-et-les-appliquer-a-des-services-1ybcpcf/',
+      titre:
+        'Téléversez vos mesures spécifiques et utilisez-les sur les services de votre choix !',
+      sousTitre:
+        'Téléversez vos mesures spécifiques en une seule fois, appliquez-les aux services de votre choix et changez leur statut et précision sur plusieurs services à la fois !',
+      image: 'televersementMesures.png',
+      canalDiffusion: 'centreNotifications',
+    },
   ],
 
   tachesCompletudeProfil: [
