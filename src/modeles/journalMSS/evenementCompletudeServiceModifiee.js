@@ -5,7 +5,7 @@ class EvenementCompletudeServiceModifiee extends Evenement {
   constructor(donnees, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
-    Evenement.valide(donnees, ['service']);
+    Evenement.verifieProprietesRenseignees(donnees, ['service']);
 
     const enTableau = (donneesIndiceCyber) =>
       Object.entries(donneesIndiceCyber).reduce(

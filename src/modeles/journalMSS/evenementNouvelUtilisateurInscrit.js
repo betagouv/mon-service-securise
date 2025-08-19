@@ -4,7 +4,7 @@ class EvenementNouvelUtilisateurInscrit extends Evenement {
   constructor(donnees, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
-    Evenement.valide(donnees, ['idUtilisateur']);
+    Evenement.verifieProprietesRenseignees(donnees, ['idUtilisateur']);
 
     super(
       'NOUVEL_UTILISATEUR_INSCRIT',

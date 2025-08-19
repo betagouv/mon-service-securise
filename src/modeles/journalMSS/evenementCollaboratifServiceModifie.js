@@ -4,7 +4,10 @@ class EvenementCollaboratifServiceModifie extends Evenement {
   constructor(donnees, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
-    Evenement.valide(donnees, ['idService', 'autorisations']);
+    Evenement.verifieProprietesRenseignees(donnees, [
+      'idService',
+      'autorisations',
+    ]);
 
     super(
       'COLLABORATIF_SERVICE_MODIFIE',

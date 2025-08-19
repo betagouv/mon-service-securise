@@ -4,7 +4,7 @@ class EvenementRetourUtilisateurMesure extends Evenement {
   constructor(donnees, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
-    Evenement.valide(donnees, [
+    Evenement.verifieProprietesRenseignees(donnees, [
       'idService',
       'idUtilisateur',
       'idMesure',

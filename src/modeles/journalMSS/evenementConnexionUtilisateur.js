@@ -6,7 +6,10 @@ class EvenementConnexionUtilisateur extends Evenement {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
     const valide = () => {
-      Evenement.valide(donnees, ['idUtilisateur', 'dateDerniereConnexion']);
+      Evenement.verifieProprietesRenseignees(donnees, [
+        'idUtilisateur',
+        'dateDerniereConnexion',
+      ]);
 
       if (Number.isNaN(new Date(donnees.dateDerniereConnexion).valueOf()))
         throw new ErreurDateDerniereConnexionInvalide();
