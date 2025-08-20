@@ -15,7 +15,6 @@ export type MesureProps = {
   estLectureSeule: boolean;
   mesureAEditer?: MesureEditee;
   nonce: string;
-  afficheModelesMesureSpecifique: boolean;
 };
 
 type IdUtilisateur = string;

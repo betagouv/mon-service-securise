@@ -4,9 +4,6 @@ $(() => {
   const statuts = lisDonneesPartagees('referentiel-statuts-mesures');
   const categories = lisDonneesPartagees('referentiel-categories-mesures');
   const typesService = lisDonneesPartagees('referentiel-types-service');
-  const afficheModelesMesureSpecifique = lisDonneesPartagees(
-    'affiche-modeles-mesure-specifique'
-  );
   const nombreMaximumModelesMesureSpecifique = lisDonneesPartagees(
     'referentiel-nombre-maximum-modeles-mesure-specifique'
   );
@@ -20,7 +17,6 @@ $(() => {
           label,
         })),
         typesService,
-        afficheModelesMesureSpecifique,
         capaciteAjoutDeMesure: {
           nombreMaximum: nombreMaximumModelesMesureSpecifique,
         },

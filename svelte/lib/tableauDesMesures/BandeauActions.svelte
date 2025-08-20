@@ -14,7 +14,6 @@
   const { EnCours } = EtatEnregistrement;
 
   export let etatEnregistrement: EtatEnregistrement;
-  export let afficheModelesMesureSpecifique: boolean;
   export let categories: Record<IdCategorie, string>;
   export let idService: IdService;
 
@@ -29,16 +28,14 @@
 <tr>
   <th colspan="5">
     <div class="actions">
-      {#if afficheModelesMesureSpecifique}
-        <button
-          class="bouton-action-mesure association-modeles"
-          on:click={() => afficheTiroirAssociationModeles()}
-          disabled={etatEnregistrement === EnCours}
-        >
-          <img src="/statique/assets/images/icone_ajout_liste.svg" alt="" />
-          Ajouter des mesures depuis ma liste
-        </button>
-      {/if}
+      <button
+        class="bouton-action-mesure association-modeles"
+        on:click={() => afficheTiroirAssociationModeles()}
+        disabled={etatEnregistrement === EnCours}
+      >
+        <img src="/statique/assets/images/icone_ajout_liste.svg" alt="" />
+        Ajouter des mesures depuis ma liste
+      </button>
       <button
         class="bouton-action-mesure"
         on:click={() => afficheTiroirCreeMesure()}

@@ -60,7 +60,6 @@
   export let priorites: ReferentielPriorite;
   export let estLectureSeule: boolean;
   export let modeVisiteGuidee: boolean;
-  export let afficheModelesMesureSpecifique: boolean;
 
   $: {
     const requete = new URLSearchParams(window.location.search);
@@ -282,12 +281,7 @@
       </th>
     </tr>
     {#if !estLectureSeule}
-      <BandeauActions
-        {etatEnregistrement}
-        {afficheModelesMesureSpecifique}
-        {categories}
-        {idService}
-      />
+      <BandeauActions {etatEnregistrement} {categories} {idService} />
     {/if}
     {#if !$nombreResultats.aucunResultat}
       <tr class="titres">
