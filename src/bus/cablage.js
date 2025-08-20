@@ -120,6 +120,12 @@ const EvenementModelesMesureSpecifiqueImportes = require('./evenementModelesMesu
 const {
   consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal,
 } = require('./abonnements/consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal');
+const {
+  EvenementServiceRattacheAPrestataire,
+} = require('./evenementServiceRattacheAPrestataire');
+const {
+  consigneRattachementDeServiceAPrestataireDansJournal,
+} = require('./abonnements/consigneRattachementDeServiceAPrestataireDansJournal');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -270,6 +276,11 @@ const cableTousLesAbonnes = (
     consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal({
       adaptateurJournal,
     })
+  );
+
+  busEvenements.abonne(
+    EvenementServiceRattacheAPrestataire,
+    consigneRattachementDeServiceAPrestataireDansJournal({ adaptateurJournal })
   );
 };
 
