@@ -34,12 +34,12 @@
   </th>
   <CelluleDonnee contenu={ligne.numeroLigne.toString()} />
   <CelluleDonnee
-    contenu={decode(ligne.modele.description)}
+    contenu={ligne.modele.description}
     enErreur={contientErreur('INTITULE_MANQUANT') ||
       contientErreur('MESURE_DUPLIQUEE')}
     gras
   />
-  <CelluleDonnee contenu={decode(ligne.modele.descriptionLongue)} />
+  <CelluleDonnee contenu={ligne.modele.descriptionLongue} />
   <CelluleDonnee enErreur={contientErreur('CATEGORIE_INCONNUE')}>
     <lab-anssi-tag
       class="tag-categorie"
