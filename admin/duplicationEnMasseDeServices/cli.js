@@ -13,6 +13,10 @@ program
     '--idServiceSource <idService>',
     "L'identifiant du service source"
   )
+  .requiredOption(
+    '--codePrestataire <code>',
+    'Le code du prestataire qui sera rattaché, dans Metabase, aux services clonés'
+  )
   .option(
     '--dryRun <bool>',
     "Permet d'exécuter le script sans modifier les données",
@@ -22,8 +26,10 @@ program
     const dryRunActif = options.dryRun !== 'false';
     const serviceDuplication = new DuplicationEnMasseDeServices(
       'production',
-      dryRunActif
+      dryRunActif,
+      options.codePrestataire
     );
+
     await serviceDuplication.dupliqueSelonCsvInputDansConsole(
       options.emailProprietaire,
       options.idServiceSource
