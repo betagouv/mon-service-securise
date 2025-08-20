@@ -15,6 +15,7 @@ const decodeEntitesHtml = (mesures: Mesures) => {
     (m: MesureSpecifique) => ({
       ...m,
       description: decode(m.description),
+      descriptionLongue: decode(m.descriptionLongue),
       modalites: decode(m.modalites),
     })
   );
