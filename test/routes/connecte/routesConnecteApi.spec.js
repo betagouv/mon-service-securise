@@ -409,6 +409,69 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(reponse.data[1].id).to.be('S2');
       expect(reponse.data[1].peutEtreModifie).to.be(false);
     });
+
+    it('décode les entités HTML dans les données retournées', async () => {
+      const mesuresReferentiel = { A: { categorie: 'gouvernance' } };
+      testeur.referentiel().recharge({
+        mesures: mesuresReferentiel,
+        categoriesMesures: { gouvernance: 'Gouvernance' },
+      });
+      const mesures = new Mesures(
+        {
+          mesuresGenerales: [
+            { id: 'A', statut: 'fait', modalites: 'L&apos;application de A' },
+          ],
+          mesuresSpecifiques: [
+            {
+              id: 'MS1',
+              idModele: 'MOD-1',
+              statut: 'enCours',
+              modalites: 'L&apos;ampoule',
+            },
+          ],
+        },
+        testeur.referentiel(),
+        mesuresReferentiel,
+        {
+          'MOD-1': {
+            description: 'L&apos;arbitre',
+            descriptionLongue: 'L&apos;autre',
+          },
+        }
+      );
+      testeur.depotDonnees().autorisations = () => [
+        uneAutorisation().deProprietaire('U1', 'S1').construis(),
+      ];
+      testeur.depotDonnees().services = () => [
+        unService(testeur.referentiel())
+          .avecId('S1')
+          .avecDescription(
+            uneDescriptionValide(testeur.referentiel()).avecNomService(
+              'L&apos;abricot'
+            ).donnees
+          )
+          .avecMesures(mesures)
+          .construis(),
+      ];
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/services/mesures'
+      );
+
+      expect(reponse.data[0].nomService).to.be("L'abricot");
+      expect(reponse.data[0].mesuresAssociees.A.modalites).to.be(
+        "L'application de A"
+      );
+      expect(reponse.data[0].mesuresSpecifiques[0].modalites).to.be(
+        "L'ampoule"
+      );
+      expect(reponse.data[0].mesuresSpecifiques[0].descriptionLongue).to.be(
+        "L'autre"
+      );
+      expect(reponse.data[0].mesuresSpecifiques[0].description).to.be(
+        "L'arbitre"
+      );
+    });
   });
 
   describe('quand requête PUT sur `/api/services/mesuresGenerales/:id`', () => {
