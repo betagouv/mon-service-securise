@@ -125,6 +125,30 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
       expect(idDemande).to.be('U1');
     });
 
+    it('décode les entités HTML dans les données renvoyées', async () => {
+      testeur.depotDonnees().lisTeleversementModelesMesureSpecifique =
+        async () =>
+          new TeleversementModelesMesureSpecifique(
+            [
+              {
+                description: 'L&apos;abricot',
+                descriptionLongue: 'L&apos;autre',
+                categorie: 'Gouvernance',
+              },
+            ],
+            {}
+          );
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      );
+
+      const { descriptionLongue, description } =
+        reponse.data.modelesTeleverses[0].modele;
+      expect(description).to.be("L'abricot");
+      expect(descriptionLongue).to.be("L'autre");
+    });
+
     it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
       testeur.depotDonnees().lisTeleversementModelesMesureSpecifique =
         async () => undefined;
