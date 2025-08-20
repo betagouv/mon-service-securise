@@ -1,3 +1,4 @@
+const { decode } = require('html-entities');
 const express = require('express');
 
 const { valeurBooleenne } = require('../../utilitaires/aseptisation');
@@ -674,7 +675,13 @@ const routesConnecteApi = ({
           requete.idUtilisateurCourant
         );
 
-      reponse.json(modeles);
+      reponse.json(
+        modeles.map((m) => ({
+          ...m,
+          description: decode(m.description),
+          descriptionLongue: decode(m.descriptionLongue),
+        }))
+      );
     }
   );
 
