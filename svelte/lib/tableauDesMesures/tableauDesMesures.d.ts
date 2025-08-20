@@ -42,6 +42,7 @@ export type MesureSpecifique = {
   idModele?: string;
   categorie: string;
   description: string;
+  descriptionLongue?: string;
   statut: StatutMesure;
   modalites: string;
   identifiantNumerique: string;
