@@ -20,7 +20,6 @@ export type TableauDesMesuresProps = {
   statuts: Record<StatutMesure, string>;
   estLectureSeule: boolean;
   modeVisiteGuidee: boolean;
-  afficheModelesMesureSpecifique: boolean;
 };
 
 export type MesureGenerale = {

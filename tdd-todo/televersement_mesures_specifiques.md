@@ -2,8 +2,8 @@
 
 ## TODO
 
-- [ ] Une notification de nouveauté dans le centre de notifs
-- [ ] Activer le feature flag en PROD + supprimer le FF
+- [x] Une notification de nouveauté dans le centre de notifs
+- [x] Activer le feature flag en PROD + supprimer le FF
 
 ## DONE
 

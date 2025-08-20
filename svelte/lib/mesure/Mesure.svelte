@@ -29,7 +29,6 @@
   export let priorites: ReferentielPriorite;
   export let modeVisiteGuidee: boolean;
   export let nonce: string;
-  export let afficheModelesMesureSpecifique: boolean;
 
   const statutInitial = $store.mesureEditee.mesure.statut;
 
@@ -94,9 +93,7 @@
   };
 
   $: doitAfficherTiroirModeleMesureSpecifique =
-    afficheModelesMesureSpecifique &&
-    ongletActif === 'mesure' &&
-    !!$store.mesureEditee.mesure.idModele;
+    ongletActif === 'mesure' && !!$store.mesureEditee.mesure.idModele;
 
   let etapeCouranteModeleMesureSpecifique: 1 | 2 = 1;
 

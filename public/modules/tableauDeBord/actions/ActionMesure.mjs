@@ -19,9 +19,6 @@ class ActionMesure extends ActionAbstraite {
   }) {
     super.initialise();
     const nonce = lisDonneesPartagees('nonce-commentaires');
-    const afficheModelesMesureSpecifique = lisDonneesPartagees(
-      'affiche-modeles-mesure-specifique'
-    );
     document.body.dispatchEvent(
       new CustomEvent('svelte-recharge-mesure', {
         detail: {
@@ -34,7 +31,6 @@ class ActionMesure extends ActionAbstraite {
           mesureAEditer,
           modeVisiteGuidee,
           nonce,
-          afficheModelesMesureSpecifique,
         },
       })
     );

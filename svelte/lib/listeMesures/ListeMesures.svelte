@@ -43,7 +43,6 @@
   export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
   export let typesService: ReferentielTypesService;
-  export let afficheModelesMesureSpecifique: boolean;
   export let capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
 
   onMount(async () => {
@@ -60,13 +59,10 @@
   let ongletActif: OngletListeMesures;
 
   $: {
-    ongletActif = 'generales';
     const ongletDemande = requete.get('ongletActif') as OngletListeMesures;
-    if (afficheModelesMesureSpecifique) {
-      ongletActif = valeursOnglets.includes(ongletDemande)
-        ? ongletDemande
-        : 'toutes';
-    }
+    ongletActif = valeursOnglets.includes(ongletDemande)
+      ? ongletDemande
+      : 'toutes';
   }
 
   $: peutAjouterModelesMesureSpecifique =
@@ -257,58 +253,54 @@
       target="_blank"
       icone="telecharger"
     />
-    {#if afficheModelesMesureSpecifique}
-      <div class="action-ajout-modeles-mesure-specifique">
-        <BoutonAvecListeDeroulante
-          titre="Ajouter une / des mesures"
-          options={[
-            {
-              label: 'Ajouter une mesure',
-              icone: 'plus',
-              action: afficheTiroirAjout,
-            },
-            {
-              label: 'Téléverser des mesures',
-              icone: 'televerser',
-              action: afficheTiroirTeleversement,
-            },
-          ]}
-          disabled={!peutAjouterModelesMesureSpecifique}
+    <div class="action-ajout-modeles-mesure-specifique">
+      <BoutonAvecListeDeroulante
+        titre="Ajouter une / des mesures"
+        options={[
+          {
+            label: 'Ajouter une mesure',
+            icone: 'plus',
+            action: afficheTiroirAjout,
+          },
+          {
+            label: 'Téléverser des mesures',
+            icone: 'televerser',
+            action: afficheTiroirTeleversement,
+          },
+        ]}
+        disabled={!peutAjouterModelesMesureSpecifique}
+      />
+      {#if !peutAjouterModelesMesureSpecifique}
+        <Infobulle
+          contenu={`Vous avez atteint la limite maximale de ${capaciteAjoutDeMesure.nombreMaximum} mesures. Pour ajouter des mesures, veuillez d'abord en supprimer.`}
         />
-        {#if !peutAjouterModelesMesureSpecifique}
-          <Infobulle
-            contenu={`Vous avez atteint la limite maximale de ${capaciteAjoutDeMesure.nombreMaximum} mesures. Pour ajouter des mesures, veuillez d'abord en supprimer.`}
-          />
-        {/if}
-      </div>
-    {/if}
+      {/if}
+    </div>
   </div>
 
   <div slot="onglets">
-    {#if afficheModelesMesureSpecifique}
-      <Onglets
-        bind:ongletActif
-        onglets={[
-          {
-            id: 'toutes',
-            label: 'Toutes les mesures',
-            badge:
-              Object.keys($modelesMesureGenerale).length +
-              $modelesMesureSpecifique.length,
-          },
-          {
-            id: 'generales',
-            label: 'Les mesures ANSSI & CNIL',
-            badge: Object.keys($modelesMesureGenerale).length,
-          },
-          {
-            id: 'specifiques',
-            label: 'Mes mesures ajoutées',
-            badge: $modelesMesureSpecifique.length,
-          },
-        ]}
-      />
-    {/if}
+    <Onglets
+      bind:ongletActif
+      onglets={[
+        {
+          id: 'toutes',
+          label: 'Toutes les mesures',
+          badge:
+            Object.keys($modelesMesureGenerale).length +
+            $modelesMesureSpecifique.length,
+        },
+        {
+          id: 'generales',
+          label: 'Les mesures ANSSI & CNIL',
+          badge: Object.keys($modelesMesureGenerale).length,
+        },
+        {
+          id: 'specifiques',
+          label: 'Mes mesures ajoutées',
+          badge: $modelesMesureSpecifique.length,
+        },
+      ]}
+    />
   </div>
   <svelte:fragment slot="cellule" let:donnee let:colonne>
     {@const aDesServicesAssocies = donnee.idsServicesAssocies?.length > 0}
