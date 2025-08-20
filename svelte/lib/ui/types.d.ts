@@ -84,7 +84,7 @@ export type MesureSpecifique = {
   idModele?: string;
   responsables: string[];
   statut: StatutMesure;
-  modalite: string;
+  modalites: string;
 };
 
 export type ObjetDeDonnees = Record<string, any>;
