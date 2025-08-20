@@ -2021,6 +2021,27 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(reponse.data).to.eql([]);
       expect(idRecu).to.be('U1');
     });
+
+    it('décode les entités HTML dans le contenu renvoyé', async () => {
+      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur =
+        async () => [
+          {
+            id: 'MOD-1',
+            idsServicesAssocies: [],
+            description: 'L&#x27;abricot &lt;&gt;',
+            descriptionLongue: 'L&#x27;artiste',
+            categorie: 'gouvernance',
+          },
+        ];
+
+      const reponse = await axios.get(
+        'http://localhost:1234/api/modeles/mesureSpecifique'
+      );
+
+      expect(reponse.data[0].description).to.be("L'abricot <>");
+      expect(reponse.data[0].descriptionLongue).to.be("L'artiste");
+    });
   });
 
   describe('quand requête POST sur `/api/modeles/mesureSpecifique`', () => {
