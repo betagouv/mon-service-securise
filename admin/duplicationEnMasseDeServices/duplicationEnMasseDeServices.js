@@ -1,22 +1,26 @@
 const readline = require('readline');
 const { parse } = require('papaparse');
-const DepotDonnees = require('../src/depotDonnees');
+const DepotDonnees = require('../../src/depotDonnees');
 const {
   fabriqueAdaptateurChiffrement,
-} = require('../src/adaptateurs/fabriqueAdaptateurChiffrement');
-const { fabriqueAdaptateurJWT } = require('../src/adaptateurs/adaptateurJWT');
-const { fabriqueAdaptateurUUID } = require('../src/adaptateurs/adaptateurUUID');
-const adaptateurRechercheEntrepriseAPI = require('../src/adaptateurs/adaptateurRechercheEntrepriseAPI');
-const BusEvenements = require('../src/bus/busEvenements');
+} = require('../../src/adaptateurs/fabriqueAdaptateurChiffrement');
+const {
+  fabriqueAdaptateurJWT,
+} = require('../../src/adaptateurs/adaptateurJWT');
+const {
+  fabriqueAdaptateurUUID,
+} = require('../../src/adaptateurs/adaptateurUUID');
+const adaptateurRechercheEntrepriseAPI = require('../../src/adaptateurs/adaptateurRechercheEntrepriseAPI');
+const BusEvenements = require('../../src/bus/busEvenements');
 const {
   fabriqueAdaptateurGestionErreur,
-} = require('../src/adaptateurs/fabriqueAdaptateurGestionErreur');
-const Referentiel = require('../src/referentiel');
-const donneesReferentiel = require('../donneesReferentiel');
-const AdaptateurPostgres = require('../src/adaptateurs/adaptateurPostgres');
-const { fabriqueProcedures } = require('../src/routes/procedures');
-const adaptateurMail = require('../src/adaptateurs/adaptateurMailSendinblue');
-const fabriqueAdaptateurTracking = require('../src/adaptateurs/fabriqueAdaptateurTracking');
+} = require('../../src/adaptateurs/fabriqueAdaptateurGestionErreur');
+const Referentiel = require('../../src/referentiel');
+const donneesReferentiel = require('../../donneesReferentiel');
+const AdaptateurPostgres = require('../../src/adaptateurs/adaptateurPostgres');
+const { fabriqueProcedures } = require('../../src/routes/procedures');
+const adaptateurMail = require('../../src/adaptateurs/adaptateurMailSendinblue');
+const fabriqueAdaptateurTracking = require('../../src/adaptateurs/fabriqueAdaptateurTracking');
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -67,13 +71,17 @@ const transformeEntreeEnTableau = (donnees) => {
     PROPRIETAIRE: d.PROPRIETAIRE.split(',').map((p) => p.trim()),
   }));
 
-  log.vert('OK');
+  log.vert(' OK\n');
 
   return donneesFinales;
 };
 
 class DuplicationEnMasseDeServices {
-  constructor(environnementNode = process.env.NODE_ENV || 'development') {
+  constructor(
+    environnementNode = process.env.NODE_ENV || 'development',
+    modeDryRun = true
+  ) {
+    this.modeDryRun = modeDryRun;
     this.adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur({
       env: environnementNode,
     });
@@ -106,43 +114,74 @@ class DuplicationEnMasseDeServices {
     emailProprietaireDuModele,
     idServiceModele
   ) {
+    if (this.modeDryRun) {
+      log.cyan('🧪 Mode dryRun actif\n');
+    }
     const proprietaire = await this.depotDonnees.utilisateurAvecEmail(
       emailProprietaireDuModele
     );
 
     if (!proprietaire) {
       log.rouge(
-        `Impossible de trouver le propriétaire avec email ${emailProprietaireDuModele}\n`
+        `💥 Impossible de trouver le propriétaire avec email ${emailProprietaireDuModele}\n`
       );
       return;
     }
 
     const donnees = await lisEntreeTapeeDansLaConsole();
     const donneesFormatees = transformeEntreeEnTableau(donnees);
+    const total = donneesFormatees.length;
 
-    log.cyan('\nDémarrage de la duplication…');
+    log.cyan(`📑 ${total} lignes à traiter.\n`);
 
-    for (const serviceADupliquer of donneesFormatees) {
-      const idNouveauService = await this.depotDonnees.dupliqueService(
-        idServiceModele,
-        proprietaire.id,
-        {
-          nomService: serviceADupliquer.ENTITE,
-          siret: serviceADupliquer.SIRET,
-        }
-      );
-      for (const emailUtilisateurAInviter of serviceADupliquer.PROPRIETAIRE) {
-        await this.procedures.ajoutContributeurSurServices(
-          emailUtilisateurAInviter,
-          [{ id: idNouveauService }],
-          { estProprietaire: true },
-          proprietaire
+    if (this.modeDryRun) {
+      log.cyan("🧪 Mode dryRun actif: on s'arrête là.\n");
+      return;
+    }
+
+    log.cyan('\n🚚 Démarrage de la duplication…\n');
+
+    for (let i = 0; i < total; i += 1) {
+      const progression = `[${(i + 1).toString().padStart(4, ' ')}/${total}]`;
+      try {
+        const { ENTITE, PROPRIETAIRE, SIRET } = donneesFormatees[i];
+
+        log.cyan(
+          `${progression} Duplication du service. ${ENTITE} - ${SIRET}…`
         );
+
+        const idNouveauService = await this.depotDonnees.dupliqueService(
+          idServiceModele,
+          proprietaire.id,
+          { nomService: ENTITE, siret: SIRET }
+        );
+
+        log.vert(` OK\n`);
+        for (const emailUtilisateurAInviter of PROPRIETAIRE) {
+          log.cyan(`${progression} Invitation de ${emailUtilisateurAInviter}…`);
+
+          try {
+            await this.procedures.ajoutContributeurSurServices(
+              emailUtilisateurAInviter,
+              [{ id: idNouveauService }],
+              { estProprietaire: true },
+              proprietaire
+            );
+          } catch (e) {
+            log.rouge(
+              `\n${progression} 💥💥 Erreur pour ${emailUtilisateurAInviter}: ${e.message}\n`
+            );
+          }
+
+          log.vert(` OK\n`);
+        }
+      } catch (e) {
+        log.rouge(`\n${progression} 💥💥 Erreur: ${e.message}\n`);
       }
     }
 
-    log.vert('\nDuplication terminée avec succès !\n');
+    log.vert('\n🎉🎉🎉 Duplication terminée !\n');
   }
 }
 
-module.exports = DuplicationEnMasseDeServices;
+module.exports = { DuplicationEnMasseDeServices };
