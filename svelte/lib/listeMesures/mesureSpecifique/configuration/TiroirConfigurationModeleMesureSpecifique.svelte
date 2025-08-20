@@ -107,7 +107,7 @@
           ...s,
           mesure: {
             statut: mesureSpecifique?.statut,
-            modalites: mesureSpecifique?.modalite,
+            modalites: mesureSpecifique?.modalites,
           },
         };
       });
