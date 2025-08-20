@@ -41,12 +41,12 @@
           class="intitule-service intitule-service-cliquable"
           href={urlSecuriserService}
         >
-          <span class="nom">{decode(donnee.nomService)}</span>
+          <span class="nom">{donnee.nomService}</span>
           <span class="organisation">{donnee.organisationResponsable}</span>
         </a>
       {:else}
         <div class="intitule-service">
-          <span class="nom">{decode(donnee.nomService)}</span>
+          <span class="nom">{donnee.nomService}</span>
           <span class="organisation">{donnee.organisationResponsable}</span>
         </div>
       {/if}
@@ -67,7 +67,7 @@
         <TagStatutMesure {referentielStatuts} statut={donnee.mesure.statut} />
       </div>
     {:else if colonne.cle === 'modalites'}
-      {@const contenu = decode(donnee.mesure.modalites)}
+      {@const contenu = donnee.mesure.modalites ?? ''}
       {@const contenuTropLong = contenu.length > 90}
       <div class="precision">
         <span>{contenuTropLong ? contenu.slice(0, 90) + '...' : contenu}</span>

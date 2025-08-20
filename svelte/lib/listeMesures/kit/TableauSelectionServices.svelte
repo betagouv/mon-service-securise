@@ -66,7 +66,7 @@
     {#if colonne.cle === 'nom'}
       <div class="contenu-nom-service">
         <div class="intitule-service" class:desactive>
-          <span class="nom">{decode(donnee.nomService)}</span>
+          <span class="nom">{donnee.nomService}</span>
           <span class="organisation">{donnee.organisationResponsable}</span>
         </div>
         {#if !donnee.peutEtreModifie}
@@ -86,7 +86,7 @@
         <slot name="infoStatutMesure" {donnee} />
       </div>
     {:else if colonne.cle === 'modalites'}
-      {@const contenu = decode(donnee.mesure.modalites)}
+      {@const contenu = donnee.mesure.modalites ?? ''}
       {@const contenuTropLong = contenu.length > 90}
       <div class="precision">
         <span>{contenuTropLong ? contenu.slice(0, 90) + '...' : contenu}</span>
