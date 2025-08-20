@@ -21,6 +21,9 @@ const AdaptateurPostgres = require('../../src/adaptateurs/adaptateurPostgres');
 const { fabriqueProcedures } = require('../../src/routes/procedures');
 const adaptateurMail = require('../../src/adaptateurs/adaptateurMailSendinblue');
 const fabriqueAdaptateurTracking = require('../../src/adaptateurs/fabriqueAdaptateurTracking');
+const {
+  EvenementServiceRattacheAPrestataire,
+} = require('../../src/bus/evenementServiceRattacheAPrestataire');
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -79,16 +82,21 @@ const transformeEntreeEnTableau = (donnees) => {
 class DuplicationEnMasseDeServices {
   constructor(
     environnementNode = process.env.NODE_ENV || 'development',
-    modeDryRun = true
+    modeDryRun = true,
+    codePrestataire = ''
   ) {
     this.modeDryRun = modeDryRun;
+
+    if (!codePrestataire) throw new Error('Le code prestataire est requis');
+    this.codePrestataire = codePrestataire;
+
     this.adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur({
       env: environnementNode,
     });
 
     this.referentiel = Referentiel.creeReferentiel(donneesReferentiel);
 
-    const busEvenements = new BusEvenements({
+    this.busEvenements = new BusEvenements({
       adaptateurGestionErreur: fabriqueAdaptateurGestionErreur(),
     });
 
@@ -99,14 +107,14 @@ class DuplicationEnMasseDeServices {
       adaptateurUUID: fabriqueAdaptateurUUID(),
       referentiel: this.referentiel,
       adaptateurRechercheEntite: adaptateurRechercheEntrepriseAPI,
-      busEvenements,
+      busEvenements: this.busEvenements,
     });
 
     this.procedures = fabriqueProcedures({
       depotDonnees: this.depotDonnees,
       adaptateurMail,
       adaptateurTracking: fabriqueAdaptateurTracking(),
-      busEvenements,
+      busEvenements: this.busEvenements,
     });
   }
 
@@ -132,7 +140,9 @@ class DuplicationEnMasseDeServices {
     const donneesFormatees = transformeEntreeEnTableau(donnees);
     const total = donneesFormatees.length;
 
-    log.cyan(`📑 ${total} lignes à traiter.\n`);
+    log.cyan(
+      `📑 ${total} lignes à traiter pour le prestataire ${this.codePrestataire}.\n`
+    );
 
     if (this.modeDryRun) {
       log.cyan("🧪 Mode dryRun actif: on s'arrête là.\n");
@@ -157,6 +167,14 @@ class DuplicationEnMasseDeServices {
         );
 
         log.vert(` OK\n`);
+
+        await this.busEvenements.publie(
+          new EvenementServiceRattacheAPrestataire({
+            idService: idNouveauService,
+            codePrestataire: this.codePrestataire,
+          })
+        );
+
         for (const emailUtilisateurAInviter of PROPRIETAIRE) {
           log.cyan(`${progression} Invitation de ${emailUtilisateurAInviter}…`);
 
