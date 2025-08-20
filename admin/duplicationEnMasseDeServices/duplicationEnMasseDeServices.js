@@ -24,6 +24,10 @@ const fabriqueAdaptateurTracking = require('../../src/adaptateurs/fabriqueAdapta
 const {
   EvenementServiceRattacheAPrestataire,
 } = require('../../src/bus/evenementServiceRattacheAPrestataire');
+const { cableTousLesAbonnes } = require('../../src/bus/cablage');
+const adaptateurHorloge = require('../../src/adaptateurs/adaptateurHorloge');
+const fabriqueAdaptateurJournalMSS = require('../../src/adaptateurs/fabriqueAdaptateurJournalMSS');
+const fabriqueAdaptateurSupervision = require('../../src/adaptateurs/fabriqueAdaptateurSupervision');
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -110,11 +114,26 @@ class DuplicationEnMasseDeServices {
       busEvenements: this.busEvenements,
     });
 
+    const adaptateurTracking = fabriqueAdaptateurTracking();
+    const adaptateurJournal = fabriqueAdaptateurJournalMSS();
+    const adaptateurSupervision = fabriqueAdaptateurSupervision();
+
     this.procedures = fabriqueProcedures({
       depotDonnees: this.depotDonnees,
       adaptateurMail,
-      adaptateurTracking: fabriqueAdaptateurTracking(),
+      adaptateurTracking,
       busEvenements: this.busEvenements,
+    });
+
+    cableTousLesAbonnes(this.busEvenements, {
+      adaptateurHorloge,
+      adaptateurTracking,
+      adaptateurJournal,
+      adaptateurRechercheEntreprise: adaptateurRechercheEntrepriseAPI,
+      adaptateurMail,
+      adaptateurSupervision,
+      depotDonnees: this.depotDonnees,
+      referentiel: this.referentiel,
     });
   }
 
