@@ -134,7 +134,7 @@ const routesConnecteApi = ({
                   idMesure,
                   {
                     ...(statut && { statut }),
-                    ...(modalites && { modalites }),
+                    ...(modalites && { modalites: decode(modalites) }),
                   },
                 ];
               }
@@ -143,11 +143,18 @@ const routesConnecteApi = ({
 
           return {
             id: service.id,
-            nomService: service.nomService(),
+            nomService: decode(service.nomService()),
             organisationResponsable:
               service.descriptionService.organisationResponsable.nom,
             mesuresAssociees,
-            mesuresSpecifiques,
+            mesuresSpecifiques: mesuresSpecifiques.map((ms) => ({
+              ...ms,
+              ...(ms.description && { description: decode(ms.description) }),
+              ...(ms.descriptionLongue && {
+                descriptionLongue: decode(ms.descriptionLongue),
+              }),
+              ...(ms.modalites && { modalites: decode(ms.modalites) }),
+            })),
             peutEtreModifie: autorisations
               .find((a) => a.idService === service.id)
               .aLesPermissions({ [SECURISER]: ECRITURE }),
