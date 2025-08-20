@@ -1,4 +1,5 @@
 const express = require('express');
+const { decode } = require('html-entities');
 const {
   ErreurFichierXlsInvalide,
   ErreurTeleversementInexistant,
@@ -43,7 +44,18 @@ const routesConnecteApiTeleversementModelesMesureSpecifique = ({
 
     if (!televersement) return reponse.sendStatus(404);
 
-    return reponse.json(televersement.rapportDetaille());
+    const rapportDetaille = televersement.rapportDetaille();
+    rapportDetaille.modelesTeleverses = rapportDetaille.modelesTeleverses.map(
+      (m) => ({
+        ...m,
+        modele: {
+          ...m.modele,
+          description: decode(m.modele.description),
+          descriptionLongue: decode(m.modele.descriptionLongue),
+        },
+      })
+    );
+    return reponse.json(rapportDetaille);
   });
 
   routes.delete('/', async (requete, reponse) => {
