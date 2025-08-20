@@ -8,7 +8,6 @@
   import CelluleDonnee from '../../rapportTeleversement/composants/CelluleDonnee.svelte';
   import { decode } from 'html-entities';
   import TooltipErreursMultiple from '../../rapportTeleversement/composants/TooltipErreursMultiple.svelte';
-  import CartoucheCategorieMesure from '../../ui/CartoucheCategorieMesure.svelte';
 
   export let ligne: ModeleTeleverse;
 

@@ -384,9 +384,10 @@
     margin: 32px 0;
   }
 
-  :global(tr:has(.description-mesure:hover)) {
+  :global(#liste-mesures tr:has(.description-mesure:hover)) {
     box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
     cursor: pointer;
+    color: var(--bleu-mise-en-avant);
   }
 
   .description-mesure {
