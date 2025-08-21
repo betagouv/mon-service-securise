@@ -425,28 +425,39 @@ describe('Le dépôt de données des utilisateurs', () => {
     });
   });
 
-  it("retient qu'un utilisateur accepte les CGU", async () => {
-    const jeanDupont = {
-      prenom: 'Jean',
-      nom: 'Dupont',
-      email: 'jean.dupont@mail.fr',
-      motDePasse: 'XXX',
-    };
+  describe('concernant la mise à jour des CGU', () => {
+    let persistance;
 
-    const depot = DepotDonneesUtilisateurs.creeDepot({
-      adaptateurChiffrement,
-      serviceCgu: { versionActuelle: () => 'v1.0' },
-      adaptateurPersistance: AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        utilisateurs: [{ id: '123', donnees: jeanDupont }],
-      }),
+    beforeEach(() => {
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(
+          unUtilisateur().avecId('123').quiAEteInvite().donnees
+        )
+        .construis();
+      bus = fabriqueBusPourLesTests();
     });
 
-    const avant = await depot.utilisateur('123');
-    expect(avant.accepteCGU()).to.be(false);
+    const leDepot = () =>
+      DepotDonneesUtilisateurs.creeDepot({
+        adaptateurChiffrement,
+        serviceCgu: { versionActuelle: () => 'v1.0' },
+        adaptateurPersistance: persistance,
+      });
 
-    await depot.valideAcceptationCGUPourUtilisateur(avant);
-    const apres = await depot.utilisateur('123');
-    expect(apres.accepteCGU()).to.be(true);
+    it("retient qu'un utilisateur accepte les CGU", async () => {
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('123').donnees)
+        .construis();
+
+      const depot = leDepot();
+
+      const avant = await depot.utilisateur('123');
+      expect(avant.accepteCGU()).to.be(false);
+
+      await depot.valideAcceptationCGUPourUtilisateur(avant);
+      const apres = await depot.utilisateur('123');
+      expect(apres.accepteCGU()).to.be(true);
+    });
   });
 
   it('sait si un utilisateur existe', async () => {
