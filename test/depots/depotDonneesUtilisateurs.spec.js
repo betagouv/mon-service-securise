@@ -23,6 +23,9 @@ const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
 const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
 const EvenementUtilisateurModifie = require('../../src/bus/evenementUtilisateurModifie');
 const EvenementUtilisateurInscrit = require('../../src/bus/evenementUtilisateurInscrit');
+const {
+  EvenementCguAccepteesParUtilisateur,
+} = require('../../src/bus/evenementCguAccepteesParUtilisateur');
 const adaptateurProfilAnssiVide = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
 
 describe('Le dépôt de données des utilisateurs', () => {
@@ -442,13 +445,10 @@ describe('Le dépôt de données des utilisateurs', () => {
         adaptateurChiffrement,
         serviceCgu: { versionActuelle: () => 'v1.0' },
         adaptateurPersistance: persistance,
+        busEvenements: bus,
       });
 
     it("retient qu'un utilisateur accepte les CGU", async () => {
-      persistance = unePersistanceMemoire()
-        .ajouteUnUtilisateur(unUtilisateur().avecId('123').donnees)
-        .construis();
-
       const depot = leDepot();
 
       const avant = await depot.utilisateur('123');
@@ -457,6 +457,23 @@ describe('Le dépôt de données des utilisateurs', () => {
       await depot.valideAcceptationCGUPourUtilisateur(avant);
       const apres = await depot.utilisateur('123');
       expect(apres.accepteCGU()).to.be(true);
+    });
+
+    it('publie sur le bus un évènement de CGU acceptées', async () => {
+      const depot = leDepot();
+
+      const utilisateur = await depot.utilisateur('123');
+      await depot.valideAcceptationCGUPourUtilisateur(utilisateur);
+
+      expect(bus.aRecuUnEvenement(EvenementCguAccepteesParUtilisateur)).to.be(
+        true
+      );
+
+      const evenement = bus.recupereEvenement(
+        EvenementCguAccepteesParUtilisateur
+      );
+      expect(evenement.idUtilisateur).to.be('123');
+      expect(evenement.cguAcceptees).to.be('v1.0');
     });
   });
 
