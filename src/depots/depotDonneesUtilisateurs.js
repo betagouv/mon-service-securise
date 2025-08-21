@@ -12,8 +12,14 @@ const Utilisateur = require('../modeles/utilisateur');
 const Entite = require('../modeles/entite');
 const EvenementUtilisateurModifie = require('../bus/evenementUtilisateurModifie');
 const EvenementUtilisateurInscrit = require('../bus/evenementUtilisateurInscrit');
+const {
+  EvenementCguAccepteesParUtilisateur,
+} = require('../bus/evenementCguAccepteesParUtilisateur');
 const { creeReferentielVide } = require('../referentiel');
 const adaptateurMonProfilAnssiParDefaut = require('../adaptateurs/adaptateurProfilAnssiVide');
+const {
+  identifieUtilisateur,
+} = require('../adaptateurs/adaptateurGestionErreurSentry');
 
 const serviceCguParDefaut = fabriqueServiceCgu({
   referentiel: creeReferentielVide(),
@@ -332,6 +338,14 @@ const creeDepot = (config = {}) => {
   const valideAcceptationCGUPourUtilisateur = async (utilisateurAModifier) => {
     const cguActuelles = serviceCgu.versionActuelle();
     await p.sauvegarde(utilisateurAModifier.id, { cguAcceptees: cguActuelles });
+
+    await busEvenements.publie(
+      new EvenementCguAccepteesParUtilisateur({
+        idUtilisateur: utilisateurAModifier.id,
+        cguAcceptees: cguActuelles,
+      })
+    );
+
     return p.lis.un(utilisateurAModifier.id);
   };
 
