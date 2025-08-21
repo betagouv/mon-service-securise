@@ -42,6 +42,8 @@ export type InscriptionProps = {
 };
 
 export type FormulaireInscription = {
+  prenom: string;
+  nom: string;
   siretEntite: string;
   telephone: string;
   postes: string[];

@@ -16,6 +16,10 @@
   import ChampTexte from '../ui/ChampTexte.svelte';
   import SelectionNombreServices from './SelectionNombreServices.svelte';
   import ControleFormulaire from '../ui/ControleFormulaire.svelte';
+  import {
+    finaliseInscriptionSuiteInvitation,
+    inscrisNouvelUtilisateur,
+  } from './inscription.api';
 
   export let estimationNombreServices: EstimationNombreServices[];
   export let informationsProfessionnelles: InformationsProfessionnelles;
@@ -55,9 +59,9 @@
       try {
         enCoursEnvoi = true;
         if (invite) {
-          await axios.put('/api/utilisateur', formulaireInscription);
+          await finaliseInscriptionSuiteInvitation(formulaireInscription);
         } else {
-          await axios.post('/api/utilisateur', formulaireInscription);
+          await inscrisNouvelUtilisateur(formulaireInscription);
         }
       } finally {
         enCoursEnvoi = false;
@@ -67,6 +71,8 @@
   };
 
   let formulaireInscription: FormulaireInscription = {
+    prenom: informationsProfessionnelles.prenom,
+    nom: informationsProfessionnelles.nom,
     siretEntite: informationsProfessionnelles.organisation?.siret,
     telephone: informationsProfessionnelles.telephone,
     postes: informationsProfessionnelles.domainesSpecialite,
