@@ -206,14 +206,14 @@ class DuplicationEnMasseDeServices {
             );
           } catch (e) {
             log.rouge(
-              `\n${progression} 💥💥 Erreur pour ${emailUtilisateurAInviter}: ${e.message}\n`
+              `\n${progression} 💥💥 Erreur pour ${emailUtilisateurAInviter}: ${e.message}\n${e.stack}\n`
             );
           }
 
           log.vert(` OK\n`);
         }
       } catch (e) {
-        log.rouge(`\n${progression} 💥💥 Erreur: ${e.message}\n`);
+        log.rouge(`\n${progression} 💥💥 Erreur: ${e.message}\n${e.stack}\n`);
       }
     }
 
