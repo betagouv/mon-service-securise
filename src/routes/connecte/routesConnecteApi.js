@@ -15,7 +15,6 @@ const {
   ErreurModele,
   ErreurCategorieInconnue,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
-  ErreurJWTManquant,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurAutorisationInexistante,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
@@ -61,7 +60,6 @@ const routesConnecteApi = ({
   lecteurDeFormData,
   adaptateurTeleversementServices,
   adaptateurTeleversementModelesMesureSpecifique,
-  adaptateurJWT,
   procedures,
   serviceAnnuaire,
   serviceGestionnaireSession,
@@ -452,33 +450,15 @@ const routesConnecteApi = ({
   routes.put(
     '/utilisateur',
     middleware.aseptise(
-      ...Utilisateur.nomsProprietesBase().filter(
-        (propriete) => !['prenom', 'nom', 'email'].includes(propriete)
-      ),
+      ...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email'),
       'siretEntite'
     ),
-    async (requete, reponse, suite) => {
-      const { token } = requete.body;
-
-      let donneesToken;
-      try {
-        donneesToken = await adaptateurJWT.decode(token);
-      } catch (e) {
-        const message =
-          e instanceof ErreurJWTManquant
-            ? 'Le token est requis'
-            : 'Le token est invalide';
-        reponse.status(422).send(message);
-        return;
-      }
-
+    (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const donnees = obtentionDonneesDeBaseUtilisateur(
         requete.body,
         serviceCgu
       );
-      donnees.prenom = donneesToken.prenom;
-      donnees.nom = donneesToken.nom;
       const { donneesInvalides, messageErreur } =
         messageErreurDonneesUtilisateur(donnees, true);
 
