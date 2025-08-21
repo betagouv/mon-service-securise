@@ -305,13 +305,15 @@
   <svelte:fragment slot="cellule" let:donnee let:colonne>
     {@const aDesServicesAssocies = donnee.idsServicesAssocies?.length > 0}
     {@const typeMesure = donnee.type}
+    {@const cliquable = typeMesure === 'specifique' || aDesServicesAssocies}
     {#if colonne.cle === 'description'}
       <div
         class="description-mesure"
+        class:cliquable
         role="button"
         tabindex="0"
-        on:keypress={() => ouvreTiroirEdition(donnee)}
-        on:click={() => ouvreTiroirEdition(donnee)}
+        on:keypress={() => cliquable && ouvreTiroirEdition(donnee)}
+        on:click={() => cliquable && ouvreTiroirEdition(donnee)}
       >
         <span>{donnee.description}</span>
         <div>
@@ -376,7 +378,7 @@
     margin: 32px 0;
   }
 
-  :global(#liste-mesures tr:has(.description-mesure:hover)) {
+  :global(#liste-mesures tr:has(.description-mesure.cliquable:hover)) {
     box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
     cursor: pointer;
     color: var(--bleu-mise-en-avant);
