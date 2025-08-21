@@ -178,7 +178,6 @@ const creeServeur = ({
       lecteurDeFormData,
       adaptateurTeleversementServices,
       adaptateurTeleversementModelesMesureSpecifique,
-      adaptateurJWT,
       procedures,
       serviceAnnuaire,
       serviceGestionnaireSession,
