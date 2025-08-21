@@ -10,7 +10,7 @@ class ConstructeurUtilisateur {
       nom: '',
       email: 'jean.dujardin@beta.gouv.com',
       telephone: '',
-      cguAcceptees: '',
+      cguAcceptees: 'v1.0',
       postes: [],
       entite: { nom: '', departement: '', siret: '' },
       estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
