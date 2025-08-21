@@ -80,7 +80,7 @@ const routesConnectePage = ({
 
       reponse.render('profil', {
         utilisateur: {
-          ...utilisateur,
+          ...utilisateur.toJSON(),
           nom: decode(utilisateur.nom),
           prenom: decode(utilisateur.prenom),
           postes: utilisateur.postes.map(decode),
