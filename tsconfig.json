@@ -10,5 +10,8 @@
     "outDir": "dist",
     "allowJs": true
   },
-  "include": ["src/**/*", "server.ts", "*.js"]
+  "include": ["src/**/*", "*.ts", "*.js"],
+  "watchOptions": {
+    "excludeDirectories": ["**/node_modules"]
+  }
 }

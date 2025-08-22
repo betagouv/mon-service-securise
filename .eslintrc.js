@@ -60,6 +60,14 @@ module.exports = {
       },
     },
     {
+      // Lorsque l'on importe des modules générés depuis du `TypeScript`,
+      // `eslint` est confus et demande d'ajouter une extension `.ts` ce qui empêche l'import du code généré.
+      files: ['src/**/*.js'],
+      rules: {
+        'import/extensions': ['off'],
+      },
+    },
+    {
       files: ['src/erreurs.js', 'src/modeles/journalMSS/erreurs.js'],
       rules: { 'max-classes-per-file': ['off'] },
     },
