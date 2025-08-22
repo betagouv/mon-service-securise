@@ -1,4 +1,4 @@
 #! /bin/sh
 
-npx vite build --config svelte/vite.config.mts
+npm run build:front
 npx tsc

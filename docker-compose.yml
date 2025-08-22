@@ -34,7 +34,7 @@ services:
       npx knex migrate:latest
       && npx concurrently -n \"SERVEUR,FRONT SVELTE\" -c \"blue.bold,magenta.underline\"
       \"npx nodemon server.ts\"
-      \"npx vite build --watch --minify false --config svelte/vite.config.mts\"
+      \"npm run build:front -- --watch --minify false\"
       "
     environment:
       - NODE_ENV=development
