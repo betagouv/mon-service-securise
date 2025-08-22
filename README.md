@@ -1,6 +1,6 @@
 # MonServiceSécurisé
 
-![Version Node](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbetagouv%2Fmon-service-securise%2Frefs%2Fheads%2Fmaster%2Fpackage.json&query=%24.engines.node&label=Node&logo=nodedotjs&color=%23689f63)
+![Version Node](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/betagouv/mon-service-securise/refs/heads/master/.nvmrc&query=%24.&label=Node&logo=nodedotjs&color=%23689f63)
 ![Version Typescript](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbetagouv%2Fmon-service-securise%2Frefs%2Fheads%2Fmaster%2Fpackage.json&query=%24.devDependencies.typescript&logo=typescript&label=Typescript&color=%232d79c7)
 ![Version Svelte](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbetagouv%2Fmon-service-securise%2Frefs%2Fheads%2Fmaster%2Fpackage.json&query=%24.devDependencies.svelte&logo=svelte&label=Svelte&color=%23ff3e00)
 
