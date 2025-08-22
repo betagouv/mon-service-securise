@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "knex migrate:latest && npx vite build --config svelte/vite.config.mts  && npx tsc && npm run cree-utilisateur-demo",
+    "build": "knex migrate:latest && npm run build:front && npx tsc && npm run cree-utilisateur-demo",
+    "build:front": "npx vite build --config svelte/vite.config.mts",
     "cree-utilisateur-demo": "npx tsc && node dist/creeUtilisateurDemo.js",
     "test": "eslint . && mocha",
     "test:mocha": "mocha",
