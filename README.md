@@ -119,6 +119,19 @@ $ docker compose exec web npx knex migrate:latest
 
 ## 🏗️ Conception
 
+### ⚙️ `TypeScript` côté serveur
+
+On transpile le `TypeScript` vers du `JavaScript` qui peut être importé par le code `JavaScript` que l'on a écrit.
+
+```mermaid
+sequenceDiagram
+    server.ts ->> server.js : tsc
+    JavaScript écrit ->> server.js : require(...)
+    JavaScript écrit ->> JavaScript écrit : require (...)
+    JavaScript généré ->> JavaScript écrit : require(...)
+    TypeScript ->> JavaScript généré : tsc
+```
+
 ### 🧩 Composants Svelte
 
 Certaines parties du frontend sont suffisament compliquées pour ne pas être codées en jQuery.
