@@ -72,6 +72,8 @@ Le serveur est configuré et prêt à être redémarré.
 $ ./scripts/start.sh
 ```
 
+⚠ Le typescript mettant un peu de temps à faire son travail, il est possible que quelques erreurs d'import s'affichent au démarrage du script parce que le serveur ne connait pas encore les fichiers compilés.
+
 ⚠ La première fois: l'erreur suivante sur le sels doit s'afficher :
 
 ```
@@ -116,6 +118,19 @@ $ docker compose exec web npx knex migrate:latest
 ```
 
 ## 🏗️ Conception
+
+### ⚙️ `TypeScript` côté serveur
+
+On transpile le `TypeScript` vers du `JavaScript` qui peut être importé par le code `JavaScript` que l'on a écrit.
+
+```mermaid
+sequenceDiagram
+    server.ts ->> server.js : tsc
+    JavaScript écrit ->> server.js : require(...)
+    JavaScript écrit ->> JavaScript écrit : require (...)
+    JavaScript généré ->> JavaScript écrit : require(...)
+    TypeScript ->> JavaScript généré : tsc
+```
 
 ### 🧩 Composants Svelte
 

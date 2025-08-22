@@ -1,4 +1,4 @@
 #! /bin/sh
 
 npx knex migrate:latest
-npm run cree-utilisateur-demo
+npm run build:cree-utilisateur-demo
