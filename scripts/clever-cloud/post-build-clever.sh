@@ -1,4 +1,4 @@
 #! /bin/sh
 
 npm run build:front
-npx tsc
+npm run build:back

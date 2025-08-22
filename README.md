@@ -72,6 +72,8 @@ Le serveur est configuré et prêt à être redémarré.
 $ ./scripts/start.sh
 ```
 
+⚠ Le typescript mettant un peu de temps à faire son travail, il est possible que quelques erreurs d'import s'affichent au démarrage du script parce que le serveur ne connait pas encore les fichiers compilés.
+
 ⚠ La première fois: l'erreur suivante sur le sels doit s'afficher :
 
 ```

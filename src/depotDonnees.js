@@ -1,3 +1,4 @@
+const { bar } = require('./foo');
 const { fabriqueAdaptateurJWT } = require('./adaptateurs/adaptateurJWT');
 const { fabriqueAdaptateurUUID } = require('./adaptateurs/adaptateurUUID');
 const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurPersistance');
@@ -378,5 +379,7 @@ const creeDepot = (config = {}) => {
     verifieMotDePasse,
   };
 };
+
+console.log(bar);
 
 module.exports = { creeDepot };

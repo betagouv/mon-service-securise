@@ -32,7 +32,8 @@ services:
     tty: true
     command: bash -c "
       npx knex migrate:latest
-      && npx concurrently -n \"SERVEUR,FRONT SVELTE\" -c \"blue.bold,magenta.underline\"
+      && npx concurrently -n \"BACK TS,SERVEUR,FRONT SVELTE\" -c \"blueBright.bold,blue.bold,magenta.underline\"
+      \"npm run build:back -- --watch --preserveWatchOutput true\"
       \"npx nodemon server.ts\"
       \"npm run build:front -- --watch --minify false\"
       "
