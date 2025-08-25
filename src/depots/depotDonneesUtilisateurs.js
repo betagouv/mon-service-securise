@@ -17,9 +17,6 @@ const {
 } = require('../bus/evenementCguAccepteesParUtilisateur');
 const { creeReferentielVide } = require('../referentiel');
 const adaptateurMonProfilAnssiParDefaut = require('../adaptateurs/adaptateurProfilAnssiVide');
-const {
-  identifieUtilisateur,
-} = require('../adaptateurs/adaptateurGestionErreurSentry');
 
 const serviceCguParDefaut = fabriqueServiceCgu({
   referentiel: creeReferentielVide(),
