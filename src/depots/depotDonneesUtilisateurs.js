@@ -278,6 +278,10 @@ const creeDepot = (config = {}) => {
         adaptateurRechercheEntite
       );
 
+    const cguMisesAJour =
+      !!donnees.cguAcceptees &&
+      donnees.cguAcceptees !== (await p.lis.un(id)).cguAcceptees;
+
     await p.sauvegarde(id, donnees);
 
     const u = await p.lis.un(id);
@@ -288,6 +292,15 @@ const creeDepot = (config = {}) => {
     await busEvenements.publie(
       new EvenementUtilisateurModifie({ utilisateur: u })
     );
+
+    if (cguMisesAJour) {
+      await busEvenements.publie(
+        new EvenementCguAccepteesParUtilisateur({
+          idUtilisateur: u.id,
+          cguAcceptees: donnees.cguAcceptees,
+        })
+      );
+    }
 
     return u;
   };

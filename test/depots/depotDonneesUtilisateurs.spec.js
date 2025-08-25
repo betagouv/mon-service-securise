@@ -205,7 +205,8 @@ describe('Le dépôt de données des utilisateurs', () => {
             .avecId('123')
             .avecIdResetMotDePasse('unIdReset')
             .quiSAppelle('Jean Dupont')
-            .avecEmail('jean.dupont@mail.fr').donnees
+            .avecEmail('jean.dupont@mail.fr')
+            .quiAccepteCGU().donnees
         )
         .ajouteUnUtilisateur(
           unUtilisateur()
@@ -425,6 +426,45 @@ describe('Le dépôt de données des utilisateurs', () => {
       );
 
       expect(miseAJourFaite).to.be(false);
+    });
+
+    describe('si les CGU ont été acceptées', () => {
+      it('publie sur le bus un évènement de CGU acceptées', async () => {
+        await depot.metsAJourUtilisateur(
+          '124',
+          unUtilisateur().avecId('124').quiAccepteCGU().donnees
+        );
+
+        expect(bus.aRecuUnEvenement(EvenementCguAccepteesParUtilisateur)).to.be(
+          true
+        );
+        const evenement = bus.recupereEvenement(
+          EvenementCguAccepteesParUtilisateur
+        );
+        expect(evenement.idUtilisateur).to.be('124');
+        expect(evenement.cguAcceptees).to.be('v1.0');
+      });
+    });
+
+    describe("si la version des CGU acceptées n'a pas changé", () => {
+      it("ne publie pas d'évènement de CGU acceptées sur le bus", async () => {
+        await depot.metsAJourUtilisateur(
+          '123',
+          unUtilisateur().avecId('123').quiAccepteCGU().donnees
+        );
+
+        expect(
+          bus.nAPasRecuUnEvenement(EvenementCguAccepteesParUtilisateur)
+        ).to.be(true);
+      });
+
+      it('reste robuste si le delta des informations à modifier ne contient pas `cguAcceptees`', async () => {
+        await depot.metsAJourUtilisateur('123', { prenom: 'Louise' });
+
+        expect(
+          bus.nAPasRecuUnEvenement(EvenementCguAccepteesParUtilisateur)
+        ).to.be(true);
+      });
     });
   });
 
