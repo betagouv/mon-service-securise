@@ -48,6 +48,7 @@ const adaptateurEnvironnement = require('../src/adaptateurs/adaptateurEnvironnem
 const {
   adaptateurChiffrementChaCha20,
 } = require('../src/adaptateurs/adaptateurChiffrementChaCha20');
+const EvenementCguAcceptees = require('../src/modeles/journalMSS/evenementCguAcceptees');
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -867,6 +868,42 @@ class ConsoleAdministration {
       .whereNotIn('id_service', knex('services').select('id'))
       .del();
     console.log(`${nbSuppression} suggestions supprimées`);
+  }
+
+  async rattrapeEvenementsAcceptationCGU() {
+    const knex = Knex(configKnex.production);
+    const dateCreationParIdUtilisateur = Object.fromEntries(
+      await knex('utilisateurs').then((tous) =>
+        tous.map(({ id: idUtilisateur, date_creation: dateCreation }) => [
+          idUtilisateur,
+          new Date(dateCreation),
+        ])
+      )
+    );
+
+    const tousUtilisateurs = await this.depotDonnees.tousUtilisateurs();
+    const utilisateursConfirmes = tousUtilisateurs.filter(
+      (u) => !u.estUnInvite()
+    );
+
+    const afficheErreur = (utilisateur) => `Erreur pour ${utilisateur.email}`;
+
+    const rattrapeUtilisateur = async (utilisateur) =>
+      this.adaptateurJournalMSS.consigneEvenement(
+        new EvenementCguAcceptees(
+          {
+            idUtilisateur: utilisateur.id,
+            cguAcceptees: utilisateur.cguAcceptees,
+          },
+          { date: dateCreationParIdUtilisateur[utilisateur.id] }
+        )
+      );
+
+    return ConsoleAdministration.rattrapage(
+      utilisateursConfirmes,
+      afficheErreur,
+      rattrapeUtilisateur
+    );
   }
 }
 
