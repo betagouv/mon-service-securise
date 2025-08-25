@@ -11,6 +11,16 @@ const fabriqueBusPourLesTests = () => {
           .join(' ')}`
       );
     },
+    nAPasRecuUnEvenement: (typeNonAttendu) => {
+      if (!evenementsRecus.some((e) => e instanceof typeNonAttendu))
+        return true;
+
+      throw new Error(
+        `Événement non attendu reçu. Reçu : ${evenementsRecus
+          .map((e) => e.constructor.name)
+          .join(' ')}`
+      );
+    },
     recupereEvenement: (typeAttendu) =>
       evenementsRecus.find((e) => e instanceof typeAttendu),
     recupereEvenements: (typeAttendu) =>
