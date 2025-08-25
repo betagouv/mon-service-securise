@@ -230,6 +230,15 @@ const creeDepot = (config = {}) => {
       new EvenementUtilisateurInscrit({ utilisateur: u })
     );
 
+    if (donneesUtilisateur.cguAcceptees === serviceCgu.versionActuelle()) {
+      await busEvenements.publie(
+        new EvenementCguAccepteesParUtilisateur({
+          idUtilisateur: u.id,
+          cguAcceptees: u.cguAcceptees,
+        })
+      );
+    }
+
     return u;
   };
 

@@ -1,7 +1,7 @@
 - [x] Créer un évènement métier MSS
-- [ ] Publier sur le bus au moment où les CGU sont acceptées
+- [x] Publier sur le bus au moment où les CGU sont acceptées
   - [x] depotDonnees.metsAJourUtilisateur
-  - [ ] depotDonnees.nouvelUtilisateur, si CGU acceptées (pas invité)
+  - [x] depotDonnees.nouvelUtilisateur, si CGU acceptées (pas invité)
   - [x] depotDonnees.valideAcceptationCGUPourUtilisateur
 - [ ] Câbler un abonné qui relaye vers le journal
 - [ ] Mettre en production

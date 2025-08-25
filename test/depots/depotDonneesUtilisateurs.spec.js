@@ -764,6 +764,7 @@ describe('Le dépôt de données des utilisateurs', () => {
           adaptateurRechercheEntite,
           adaptateurProfilAnssi,
           busEvenements: bus,
+          serviceCgu: { versionActuelle: () => 'v1.0' },
         });
       });
 
@@ -903,6 +904,39 @@ describe('Le dépôt de données des utilisateurs', () => {
         expect(bus.aRecuUnEvenement(EvenementUtilisateurInscrit)).to.be(true);
         const recu = bus.recupereEvenement(EvenementUtilisateurInscrit);
         expect(recu.utilisateur.id).not.to.be(undefined);
+      });
+
+      describe("quand l'utilisateur a accepté les CGU", () => {
+        it("publie sur le bus d'évènements l'acceptation des CGU", async () => {
+          const u = await depot.nouvelUtilisateur(
+            unUtilisateur()
+              .quiSAppelle('Jean Dupont')
+              .avecEmail('jean.dupont@mail.fr')
+              .quiAccepteCGU().donnees
+          );
+
+          expect(
+            bus.aRecuUnEvenement(EvenementCguAccepteesParUtilisateur)
+          ).to.be(true);
+          const recu = bus.recupereEvenement(
+            EvenementCguAccepteesParUtilisateur
+          );
+          expect(recu.idUtilisateur).to.be(u.id);
+          expect(recu.cguAcceptees).to.be('v1.0');
+        });
+      });
+
+      describe("quand l'utilisateur est un invité (n'a donc pas accepté les CGU)", () => {
+        it("ne publie pas d'évènement d'acceptation des CGU", async () => {
+          await depot.nouvelUtilisateur(
+            unUtilisateur().avecEmail('jean.dupont@mail.fr').quiAEteInvite()
+              .donnees
+          );
+
+          expect(
+            bus.nAPasRecuUnEvenement(EvenementCguAccepteesParUtilisateur)
+          ).to.be(true);
+        });
       });
 
       it("ne crée pas de mot de passe pour l'utilisateur", async () => {
