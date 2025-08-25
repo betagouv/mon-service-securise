@@ -3,6 +3,6 @@
   - [x] depotDonnees.metsAJourUtilisateur
   - [x] depotDonnees.nouvelUtilisateur, si CGU acceptées (pas invité)
   - [x] depotDonnees.valideAcceptationCGUPourUtilisateur
-- [ ] Câbler un abonné qui relaye vers le journal
+- [x] Câbler un abonné qui relaye vers le journal
 - [ ] Mettre en production
 - [ ] Rattraper (génère les évènements des utilisateurs existants) les données avec une fonction console admin
