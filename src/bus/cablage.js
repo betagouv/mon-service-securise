@@ -126,6 +126,12 @@ const {
 const {
   consigneRattachementDeServiceAPrestataireDansJournal,
 } = require('./abonnements/consigneRattachementDeServiceAPrestataireDansJournal');
+const {
+  EvenementCguAccepteesParUtilisateur,
+} = require('./evenementCguAccepteesParUtilisateur');
+const {
+  consigneAcceptationCguDansJournal,
+} = require('./abonnements/consigneAcceptationCguDansJournal');
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -281,6 +287,11 @@ const cableTousLesAbonnes = (
   busEvenements.abonne(
     EvenementServiceRattacheAPrestataire,
     consigneRattachementDeServiceAPrestataireDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementCguAccepteesParUtilisateur,
+    consigneAcceptationCguDansJournal({ adaptateurJournal })
   );
 };
 
