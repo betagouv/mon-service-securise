@@ -1,4 +1,4 @@
-const TeleversementServices = require('../modeles/televersement/televersementServices');
+import TeleversementServices from '../modeles/televersement/televersementServices.js';
 
 const creeDepot = (config = {}) => {
   const { adaptateurPersistance, adaptateurChiffrement, referentiel } = config;
@@ -59,4 +59,5 @@ const creeDepot = (config = {}) => {
     supprimeTeleversementServices,
   };
 };
-module.exports = { creeDepot };
+
+export { creeDepot };

@@ -1,9 +1,9 @@
-const express = require('express');
-const { decode } = require('html-entities');
-const Utilisateur = require('../../modeles/utilisateur');
-const Service = require('../../modeles/service');
-const InformationsService = require('../../modeles/informationsService');
-const routesConnectePageService = require('./routesConnectePageService');
+import express from 'express';
+import { decode } from 'html-entities';
+import Utilisateur from '../../modeles/utilisateur.js';
+import Service from '../../modeles/service.js';
+import InformationsService from '../../modeles/informationsService.js';
+import routesConnectePageService from './routesConnectePageService.js';
 
 const routesConnectePage = ({
   middleware,
@@ -242,4 +242,4 @@ const routesConnectePage = ({
   return routes;
 };
 
-module.exports = routesConnectePage;
+export default routesConnectePage;

@@ -9,4 +9,4 @@ function modifieLienServiceEtSuperviseurs({ serviceSupervision }) {
   };
 }
 
-module.exports = { modifieLienServiceEtSuperviseurs };
+export { modifieLienServiceEtSuperviseurs };

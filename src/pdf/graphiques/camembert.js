@@ -123,4 +123,4 @@ const genereGradientConique = (statistiques) => {
   return { angles: anglesFinaux, unique };
 };
 
-module.exports = { genereGradientConique };
+export { genereGradientConique };

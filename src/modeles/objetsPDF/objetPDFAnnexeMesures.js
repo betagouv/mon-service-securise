@@ -1,5 +1,5 @@
-const Referentiel = require('../../referentiel');
-const Mesure = require('../mesure');
+import * as Referentiel from '../../referentiel.js';
+import Mesure from '../mesure.js';
 
 class ObjetPDFAnnexeMesures {
   constructor(service, referentiel = Referentiel.creeReferentielVide()) {
@@ -33,4 +33,4 @@ class ObjetPDFAnnexeMesures {
   }
 }
 
-module.exports = ObjetPDFAnnexeMesures;
+export default ObjetPDFAnnexeMesures;

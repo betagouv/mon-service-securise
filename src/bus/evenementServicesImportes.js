@@ -15,4 +15,4 @@ class EvenementServicesImportes {
     this.idUtilisateur = idUtilisateur;
   }
 }
-module.exports = EvenementServicesImportes;
+export default EvenementServicesImportes;

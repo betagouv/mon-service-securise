@@ -18,18 +18,9 @@ sur votre site internet.
 );
 
 const configurationsDispositifs = [
-  {
-    tailleDispositif: 'mobile',
-    largeur: 288,
-  },
-  {
-    tailleDispositif: 'tablette',
-    largeur: 656,
-  },
-  {
-    tailleDispositif: 'desktop',
-    largeur: 996,
-  },
+  { tailleDispositif: 'mobile', largeur: 288 },
+  { tailleDispositif: 'tablette', largeur: 656 },
+  { tailleDispositif: 'desktop', largeur: 996 },
 ];
 
-module.exports = { configurationsDispositifs, instructionsTamponHomologation };
+export { configurationsDispositifs, instructionsTamponHomologation };

@@ -7,4 +7,4 @@ class EvenementUtilisateurInscrit {
   }
 }
 
-module.exports = EvenementUtilisateurInscrit;
+export default EvenementUtilisateurInscrit;

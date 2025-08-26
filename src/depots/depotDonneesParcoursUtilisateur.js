@@ -1,5 +1,5 @@
-const ParcoursUtilisateur = require('../modeles/parcoursUtilisateur');
-const EvenementNouvelleConnexionUtilisateur = require('../bus/evenementNouvelleConnexionUtilisateur');
+import ParcoursUtilisateur from '../modeles/parcoursUtilisateur.js';
+import EvenementNouvelleConnexionUtilisateur from '../bus/evenementNouvelleConnexionUtilisateur.js';
 
 const creeDepot = (config = {}) => {
   const { adaptateurPersistance, referentiel, busEvenements } = config;
@@ -44,4 +44,4 @@ const creeDepot = (config = {}) => {
   };
 };
 
-module.exports = { creeDepot };
+export { creeDepot };

@@ -1,33 +1,23 @@
-const readline = require('readline');
-const { parse } = require('papaparse');
-const DepotDonnees = require('../../src/depotDonnees');
-const {
-  fabriqueAdaptateurChiffrement,
-} = require('../../src/adaptateurs/fabriqueAdaptateurChiffrement');
-const {
-  fabriqueAdaptateurJWT,
-} = require('../../src/adaptateurs/adaptateurJWT');
-const {
-  fabriqueAdaptateurUUID,
-} = require('../../src/adaptateurs/adaptateurUUID');
-const adaptateurRechercheEntrepriseAPI = require('../../src/adaptateurs/adaptateurRechercheEntrepriseAPI');
-const BusEvenements = require('../../src/bus/busEvenements');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('../../src/adaptateurs/fabriqueAdaptateurGestionErreur');
-const Referentiel = require('../../src/referentiel');
-const donneesReferentiel = require('../../donneesReferentiel');
-const AdaptateurPostgres = require('../../src/adaptateurs/adaptateurPostgres');
-const { fabriqueProcedures } = require('../../src/routes/procedures');
-const adaptateurMail = require('../../src/adaptateurs/adaptateurMailSendinblue');
-const fabriqueAdaptateurTracking = require('../../src/adaptateurs/fabriqueAdaptateurTracking');
-const {
-  EvenementServiceRattacheAPrestataire,
-} = require('../../src/bus/evenementServiceRattacheAPrestataire');
-const { cableTousLesAbonnes } = require('../../src/bus/cablage');
-const adaptateurHorloge = require('../../src/adaptateurs/adaptateurHorloge');
-const fabriqueAdaptateurJournalMSS = require('../../src/adaptateurs/fabriqueAdaptateurJournalMSS');
-const fabriqueAdaptateurSupervision = require('../../src/adaptateurs/fabriqueAdaptateurSupervision');
+import readline from 'readline';
+import papaparse from 'papaparse';
+import * as DepotDonnees from '../../src/depotDonnees.js';
+import { fabriqueAdaptateurChiffrement } from '../../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
+import { fabriqueAdaptateurJWT } from '../../src/adaptateurs/adaptateurJWT.js';
+import { fabriqueAdaptateurUUID } from '../../src/adaptateurs/adaptateurUUID.js';
+import * as adaptateurRechercheEntrepriseAPI from '../../src/adaptateurs/adaptateurRechercheEntrepriseAPI.js';
+import BusEvenements from '../../src/bus/busEvenements.js';
+import { fabriqueAdaptateurGestionErreur } from '../../src/adaptateurs/fabriqueAdaptateurGestionErreur.js';
+import * as Referentiel from '../../src/referentiel.js';
+import donneesReferentiel from '../../donneesReferentiel.js';
+import * as AdaptateurPostgres from '../../src/adaptateurs/adaptateurPostgres.js';
+import { fabriqueProcedures } from '../../src/routes/procedures.js';
+import * as adaptateurMail from '../../src/adaptateurs/adaptateurMailSendinblue.js';
+import fabriqueAdaptateurTracking from '../../src/adaptateurs/fabriqueAdaptateurTracking.js';
+import { EvenementServiceRattacheAPrestataire } from '../../src/bus/evenementServiceRattacheAPrestataire.js';
+import { cableTousLesAbonnes } from '../../src/bus/cablage.js';
+import * as adaptateurHorloge from '../../src/adaptateurs/adaptateurHorloge.js';
+import fabriqueAdaptateurJournalMSS from '../../src/adaptateurs/fabriqueAdaptateurJournalMSS.js';
+import fabriqueAdaptateurSupervision from '../../src/adaptateurs/fabriqueAdaptateurSupervision.js';
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -35,6 +25,8 @@ const log = {
   vert: (txt) => process.stdout.write(`\x1b[92m${txt}\x1b[0m`),
   rouge: (txt) => process.stdout.write(`\x1b[31m${txt}\x1b[0m`),
 };
+
+const { parse } = papaparse;
 
 /* eslint-disable no-console */
 /* eslint-disable no-restricted-syntax */
@@ -221,4 +213,4 @@ class DuplicationEnMasseDeServices {
   }
 }
 
-module.exports = { DuplicationEnMasseDeServices };
+export { DuplicationEnMasseDeServices };

@@ -1,18 +1,14 @@
-const fabriqueAdaptateurPersistance = require('./src/adaptateurs/fabriqueAdaptateurPersistance');
-const DepotDonnees = require('./src/depotDonnees');
-const DescriptionService = require('./src/modeles/descriptionService');
-const Referentiel = require('./src/referentiel');
-const BusEvenements = require('./src/bus/busEvenements');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
-const {
-  fabriqueAdaptateurChiffrement,
-} = require('./src/adaptateurs/fabriqueAdaptateurChiffrement');
-const adaptateurRechercheEntite = require('./src/adaptateurs/adaptateurRechercheEntrepriseAPI');
-const { fabriqueAdaptateurUUID } = require('./src/adaptateurs/adaptateurUUID');
+import fabriqueAdaptateurPersistance from './src/adaptateurs/fabriqueAdaptateurPersistance.js';
+import { creeDepot } from './src/depotDonnees.js';
+import DescriptionService from './src/modeles/descriptionService.js';
+import { creeReferentiel } from './src/referentiel.js';
+import BusEvenements from './src/bus/busEvenements.js';
+import { fabriqueAdaptateurGestionErreur } from './src/adaptateurs/fabriqueAdaptateurGestionErreur.js';
+import { fabriqueAdaptateurChiffrement } from './src/adaptateurs/fabriqueAdaptateurChiffrement.js';
+import * as adaptateurRechercheEntite from './src/adaptateurs/adaptateurRechercheEntrepriseAPI.js';
+import { fabriqueAdaptateurUUID } from './src/adaptateurs/adaptateurUUID.js';
 
-const referentiel = Referentiel.creeReferentiel();
+const referentiel = creeReferentiel();
 const descriptionService = new DescriptionService(
   {
     delaiAvantImpactCritique: 'plusUneJournee',
@@ -85,7 +81,7 @@ const main = async () => {
       adaptateurGestionErreur: fabriqueAdaptateurGestionErreur(),
     });
     const adaptateurChiffrement = fabriqueAdaptateurChiffrement();
-    const depotDonnees = DepotDonnees.creeDepot({
+    const depotDonnees = creeDepot({
       adaptateurPersistance,
       adaptateurRechercheEntite,
       adaptateurChiffrement,

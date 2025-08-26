@@ -15,4 +15,4 @@ class EvenementModelesMesureSpecifiqueImportes {
     this.idUtilisateur = idUtilisateur;
   }
 }
-module.exports = EvenementModelesMesureSpecifiqueImportes;
+export default EvenementModelesMesureSpecifiqueImportes;

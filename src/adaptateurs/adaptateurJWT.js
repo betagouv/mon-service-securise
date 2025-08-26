@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
-const { ErreurJWTInvalide, ErreurJWTManquant } = require('../erreurs');
-const environnement = require('./adaptateurEnvironnement');
+import jwt from 'jsonwebtoken';
+import { ErreurJWTInvalide, ErreurJWTManquant } from '../erreurs.js';
+import * as adaptateurEnvironnement from './adaptateurEnvironnement.js';
 
 const adaptateurJWT = ({ adaptateurEnvironnement }) => {
   const secret = adaptateurEnvironnement.JWT().secret();
@@ -23,14 +23,9 @@ const adaptateurJWT = ({ adaptateurEnvironnement }) => {
   const genereToken = (idUtilisateur, source, estInvite) =>
     signeDonnees({ idUtilisateur, source, estInvite });
 
-  return {
-    decode,
-    signeDonnees,
-    genereToken,
-  };
+  return { decode, signeDonnees, genereToken };
 };
 
-const fabriqueAdaptateurJWT = () =>
-  adaptateurJWT({ adaptateurEnvironnement: environnement });
+const fabriqueAdaptateurJWT = () => adaptateurJWT({ adaptateurEnvironnement });
 
-module.exports = { adaptateurJWT, fabriqueAdaptateurJWT };
+export { adaptateurJWT, fabriqueAdaptateurJWT };

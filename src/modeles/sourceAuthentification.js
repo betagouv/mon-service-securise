@@ -3,4 +3,4 @@ const SourceAuthentification = {
   MSS: 'MSS',
 };
 
-module.exports = SourceAuthentification;
+export default SourceAuthentification;

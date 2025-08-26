@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 
 const routesConnecteOidc = ({ adaptateurOidc, middleware }) => {
   const routes = express.Router();
@@ -28,4 +28,4 @@ const routesConnecteOidc = ({ adaptateurOidc, middleware }) => {
   return routes;
 };
 
-module.exports = routesConnecteOidc;
+export default routesConnecteOidc;

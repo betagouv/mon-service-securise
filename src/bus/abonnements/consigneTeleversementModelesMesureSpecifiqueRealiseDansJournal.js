@@ -1,4 +1,4 @@
-const EvenementModelesMesureSpecifiqueImportes = require('../../modeles/journalMSS/evenementModelesMesureSpecifiqueImportes');
+import EvenementModelesMesureSpecifiqueImportes from '../../modeles/journalMSS/evenementModelesMesureSpecifiqueImportes.js';
 
 function consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal({
   adaptateurJournal,
@@ -23,6 +23,4 @@ function consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal({
   };
 }
 
-module.exports = {
-  consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal,
-};
+export { consigneTeleversementModelesMesureSpecifiqueRealiseDansJournal };

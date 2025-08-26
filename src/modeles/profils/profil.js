@@ -1,5 +1,5 @@
-const Regles = require('./regles');
-const Mesures = require('./mesures');
+import Regles from './regles.js';
+import Mesures from './mesures.js';
 
 const estConforme = (cles, regle) =>
   regle.presence.every((cle) => cles.includes(cle)) &&
@@ -38,4 +38,4 @@ class Profil {
   }
 }
 
-module.exports = Profil;
+export default Profil;

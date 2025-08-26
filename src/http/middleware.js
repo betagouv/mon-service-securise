@@ -1,22 +1,22 @@
-const controlAcces = require('express-ip-access-control');
-const { check } = require('express-validator');
-const ipfilter = require('express-ipfilter').IpFilter;
-const adaptateurEnvironnementParDefaut = require('../adaptateurs/adaptateurEnvironnement');
-const {
-  CSP_BIBLIOTHEQUES,
-} = require('../routes/nonConnecte/routesNonConnecteApiBibliotheques');
-const {
+import controlAcces from 'express-ip-access-control';
+import { check } from 'express-validator';
+import { IpFilter as ipfilter } from 'express-ipfilter';
+import * as adaptateurEnvironnementParDefaut from '../adaptateurs/adaptateurEnvironnement.js';
+import { CSP_BIBLIOTHEQUES } from '../routes/nonConnecte/routesNonConnecteApiBibliotheques.js';
+import {
   verifieCoherenceDesDroits,
-  Permissions: { LECTURE, INVISIBLE },
-} = require('../modeles/autorisations/gestionDroits');
-const {
+  Permissions,
+} from '../modeles/autorisations/gestionDroits.js';
+import {
   ErreurDroitsIncoherents,
   ErreurChainageMiddleware,
-} = require('../erreurs');
-const { ajouteLaRedirectionPostConnexion } = require('./redirection');
-const { extraisIp } = require('./requeteHttp');
-const SourceAuthentification = require('../modeles/sourceAuthentification');
-const { TYPES_REQUETES } = require('./configurationServeur');
+} from '../erreurs.js';
+import { ajouteLaRedirectionPostConnexion } from './redirection.js';
+import { extraisIp } from './requeteHttp.js';
+import SourceAuthentification from '../modeles/sourceAuthentification.js';
+import { TYPES_REQUETES } from './configurationServeur.js';
+
+const { LECTURE, INVISIBLE } = Permissions;
 
 const middleware = (configuration = {}) => {
   const {
@@ -423,4 +423,4 @@ const middleware = (configuration = {}) => {
   };
 };
 
-module.exports = middleware;
+export default middleware;

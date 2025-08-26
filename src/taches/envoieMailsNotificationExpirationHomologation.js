@@ -1,7 +1,5 @@
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('../adaptateurs/fabriqueAdaptateurGestionErreur');
-const Autorisation = require('../modeles/autorisations/autorisation');
+import { fabriqueAdaptateurGestionErreur } from '../adaptateurs/fabriqueAdaptateurGestionErreur.js';
+import Autorisation from '../modeles/autorisations/autorisation.js';
 
 const { DROITS_VOIR_STATUT_HOMOLOGATION } = Autorisation;
 
@@ -73,4 +71,4 @@ const envoieMailsNotificationExpirationHomologation = async (config = {}) => {
   return rapportExecution(resultats);
 };
 
-module.exports = { envoieMailsNotificationExpirationHomologation };
+export { envoieMailsNotificationExpirationHomologation };

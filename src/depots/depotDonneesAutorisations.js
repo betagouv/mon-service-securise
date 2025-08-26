@@ -1,16 +1,15 @@
-const { fabriqueAdaptateurUUID } = require('../adaptateurs/adaptateurUUID');
-const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
-const {
+import { fabriqueAdaptateurUUID } from '../adaptateurs/adaptateurUUID.js';
+import fabriqueAdaptateurPersistance from '../adaptateurs/fabriqueAdaptateurPersistance.js';
+
+import {
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
   ErreurServiceInexistant,
   ErreurUtilisateurInexistant,
   ErreurSuppressionImpossible,
-} = require('../erreurs');
-const FabriqueAutorisation = require('../modeles/autorisations/fabriqueAutorisation');
-const {
-  EvenementAutorisationsServiceModifiees,
-} = require('../bus/evenementAutorisationsServiceModifiees');
+} from '../erreurs.js';
+import * as FabriqueAutorisation from '../modeles/autorisations/fabriqueAutorisation.js';
+import { EvenementAutorisationsServiceModifiees } from '../bus/evenementAutorisationsServiceModifiees.js';
 
 const creeDepot = (config = {}) => {
   const {
@@ -172,4 +171,4 @@ const creeDepot = (config = {}) => {
   };
 };
 
-module.exports = { creeDepot };
+export { creeDepot };

@@ -16,7 +16,7 @@ SEL="$(cat /dev/random | head -c 10 | xxd -p)"
 
 printf "\nCHIFFREMENT_SEL_DE_HASHAGE_1=$SEL" >> ../.env
 
-HASH_DU_SEL="$(node ./dev-init-sel.js "$SEL")"
+HASH_DU_SEL="$(node --import tsx  ./dev-init-sel.js "$SEL")"
 
 if [ "$HASH_DU_SEL" != "" ]; then
   psql -h localhost -U postgres mss -c "insert into sels_de_hachage (version, empreinte) values (1, '$HASH_DU_SEL');"

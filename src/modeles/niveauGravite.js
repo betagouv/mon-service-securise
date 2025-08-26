@@ -1,5 +1,5 @@
-const { ErreurNiveauGraviteInconnu } = require('../erreurs');
-const Referentiel = require('../referentiel');
+import { ErreurNiveauGraviteInconnu } from '../erreurs.js';
+import * as Referentiel from '../referentiel.js';
 
 const valide = (idNiveau, referentiel) => {
   const identifiantsNiveauxGravite = referentiel.identifiantsNiveauxGravite();
@@ -30,4 +30,4 @@ class NiveauGravite {
   }
 }
 
-module.exports = NiveauGravite;
+export default NiveauGravite;

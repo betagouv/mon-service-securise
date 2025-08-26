@@ -1,16 +1,18 @@
-const express = require('express');
-const Utilisateur = require('../../modeles/utilisateur');
-const {
+import express from 'express';
+import Utilisateur from '../../modeles/utilisateur.js';
+
+import {
   ErreurUtilisateurExistant,
   EchecEnvoiMessage,
   ErreurModele,
   ErreurJWTManquant,
-} = require('../../erreurs');
-const {
+} from '../../erreurs.js';
+
+import {
   messageErreurDonneesUtilisateur,
   obtentionDonneesDeBaseUtilisateur,
-} = require('../mappeur/utilisateur');
-const SourceAuthentification = require('../../modeles/sourceAuthentification');
+} from '../mappeur/utilisateur.js';
+import SourceAuthentification from '../../modeles/sourceAuthentification.js';
 
 const routesNonConnecteApi = ({
   middleware,
@@ -246,4 +248,4 @@ const routesNonConnecteApi = ({
   return routes;
 };
 
-module.exports = routesNonConnecteApi;
+export default routesNonConnecteApi;

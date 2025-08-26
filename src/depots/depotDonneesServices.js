@@ -1,27 +1,26 @@
-const {
+import {
   ErreurDonneesObligatoiresManquantes,
   ErreurServiceInexistant,
   ErreurNomServiceDejaExistant,
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurStatutMesureManquant,
-} = require('../erreurs');
-const DescriptionService = require('../modeles/descriptionService');
-const Dossier = require('../modeles/dossier');
-const Service = require('../modeles/service');
-const Autorisation = require('../modeles/autorisations/autorisation');
-const EvenementNouveauServiceCree = require('../bus/evenementNouveauServiceCree');
-const {
-  EvenementDescriptionServiceModifiee,
-} = require('../bus/evenementDescriptionServiceModifiee');
-const EvenementDossierHomologationFinalise = require('../bus/evenementDossierHomologationFinalise');
-const EvenementServiceSupprime = require('../bus/evenementServiceSupprime');
-const Entite = require('../modeles/entite');
-const EvenementMesureServiceModifiee = require('../bus/evenementMesureServiceModifiee');
-const EvenementMesureServiceSupprimee = require('../bus/evenementMesureServiceSupprimee');
-const EvenementRisqueServiceModifie = require('../bus/evenementRisqueServiceModifie');
-const MesureGenerale = require('../modeles/mesureGenerale');
-const EvenementMesureModifieeEnMasse = require('../bus/evenementMesureModifieeEnMasse');
-const MesureSpecifique = require('../modeles/mesureSpecifique');
+} from '../erreurs.js';
+
+import DescriptionService from '../modeles/descriptionService.js';
+import Dossier from '../modeles/dossier.js';
+import Service from '../modeles/service.js';
+import Autorisation from '../modeles/autorisations/autorisation.js';
+import EvenementNouveauServiceCree from '../bus/evenementNouveauServiceCree.js';
+import { EvenementDescriptionServiceModifiee } from '../bus/evenementDescriptionServiceModifiee.js';
+import EvenementDossierHomologationFinalise from '../bus/evenementDossierHomologationFinalise.js';
+import EvenementServiceSupprime from '../bus/evenementServiceSupprime.js';
+import Entite from '../modeles/entite.js';
+import EvenementMesureServiceModifiee from '../bus/evenementMesureServiceModifiee.js';
+import EvenementMesureServiceSupprimee from '../bus/evenementMesureServiceSupprimee.js';
+import EvenementRisqueServiceModifie from '../bus/evenementRisqueServiceModifie.js';
+import MesureGenerale from '../modeles/mesureGenerale.js';
+import EvenementMesureModifieeEnMasse from '../bus/evenementMesureModifieeEnMasse.js';
+import MesureSpecifique from '../modeles/mesureSpecifique.js';
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -751,4 +750,4 @@ const creeDepot = (config = {}) => {
   };
 };
 
-module.exports = { creeDepot };
+export { creeDepot };

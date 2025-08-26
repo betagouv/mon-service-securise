@@ -1,12 +1,12 @@
-const Dossier = require('./dossier');
-const ElementsConstructibles = require('./elementsConstructibles');
-const {
+import Dossier from './dossier.js';
+import ElementsConstructibles from './elementsConstructibles.js';
+import {
   ErreurDossiersInvalides,
   ErreurDossierNonFinalisable,
   ErreurDossierCourantInexistant,
-} = require('../erreurs');
-const Referentiel = require('../referentiel');
-const { dateEnFrancais } = require('../utilitaires/date');
+} from '../erreurs.js';
+import * as Referentiel from '../referentiel.js';
+import { dateEnFrancais } from '../utilitaires/date.js';
 
 const STATUTS_HOMOLOGATION = {
   NON_REALISEE: 'nonRealisee',
@@ -117,4 +117,5 @@ class Dossiers extends ElementsConstructibles {
 }
 
 Object.assign(Dossiers, STATUTS_HOMOLOGATION);
-module.exports = Dossiers;
+
+export default Dossiers;

@@ -1,24 +1,22 @@
-const cookieSession = require('cookie-session');
-const cookieParser = require('cookie-parser');
-const express = require('express');
-
-const {
+import express from 'express';
+import cookieSession from 'cookie-session';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+import {
   CACHE_CONTROL_FICHIERS_STATIQUES,
   ENDPOINTS_SANS_CSRF,
   TYPES_REQUETES,
-} = require('./http/configurationServeur');
-const routesConnecteApi = require('./routes/connecte/routesConnecteApi');
-const routesNonConnecteApi = require('./routes/nonConnecte/routesNonConnecteApi');
-const {
-  routesNonConnecteApiBibliotheques,
-} = require('./routes/nonConnecte/routesNonConnecteApiBibliotheques');
-const routesNonConnecteApiStyles = require('./routes/nonConnecte/routesNonConnecteApiStyles');
-const routesNonConnectePage = require('./routes/nonConnecte/routesNonConnectePage');
-const routesConnectePage = require('./routes/connecte/routesConnectePage');
-const routesNonConnecteOidc = require('./routes/nonConnecte/routesNonConnecteOidc');
-const routesConnecteOidc = require('./routes/connecte/routesConnecteOidc');
+} from './http/configurationServeur.js';
+import routesConnecteApi from './routes/connecte/routesConnecteApi.js';
+import routesNonConnecteApi from './routes/nonConnecte/routesNonConnecteApi.js';
+import { routesNonConnecteApiBibliotheques } from './routes/nonConnecte/routesNonConnecteApiBibliotheques.js';
+import routesNonConnecteApiStyles from './routes/nonConnecte/routesNonConnecteApiStyles.js';
+import routesNonConnectePage from './routes/nonConnecte/routesNonConnectePage.js';
+import routesConnectePage from './routes/connecte/routesConnectePage.js';
+import routesNonConnecteOidc from './routes/nonConnecte/routesNonConnecteOidc.js';
+import routesConnecteOidc from './routes/connecte/routesConnecteOidc.js';
 
-require('dotenv').config();
+dotenv.config();
 
 const creeServeur = ({
   depotDonnees,
@@ -99,9 +97,7 @@ const creeServeur = ({
       adaptateurEnvironnement,
       adaptateurStatistiques,
       adaptateurJWT,
-      adaptateurProfilAnssi,
       cmsCrisp,
-      serviceAnnuaire,
       depotDonnees,
       middleware,
       referentiel,
@@ -129,7 +125,6 @@ const creeServeur = ({
       referentiel,
       depotDonnees,
       serviceAnnuaire,
-      adaptateurTracking,
       adaptateurGestionErreur,
       adaptateurJWT,
       adaptateurMail,
@@ -200,7 +195,7 @@ const creeServeur = ({
     '/statique',
     express.static('public', {
       setHeaders: (reponse) =>
-        reponse.setHeader('cache-control', CACHE_CONTROL_FICHIERS_STATIQUES),
+        reponse.setHeader('cache-control', CACHE_CONTROL_FICHIERS_STATIQUES!),
     })
   );
 
@@ -231,4 +226,4 @@ const creeServeur = ({
   return { ecoute, arreteEcoute };
 };
 
-module.exports = { creeServeur };
+export { creeServeur };

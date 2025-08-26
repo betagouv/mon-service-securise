@@ -1,4 +1,4 @@
-const Referentiel = require('../../referentiel');
+import * as Referentiel from '../../referentiel.js';
 
 class ObjetPDFAnnexeRisques {
   constructor(homologation, referentiel = Referentiel.creeReferentielVide()) {
@@ -48,4 +48,4 @@ class ObjetPDFAnnexeRisques {
   }
 }
 
-module.exports = ObjetPDFAnnexeRisques;
+export default ObjetPDFAnnexeRisques;

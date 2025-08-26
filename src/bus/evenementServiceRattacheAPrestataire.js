@@ -10,4 +10,4 @@ class EvenementServiceRattacheAPrestataire {
   }
 }
 
-module.exports = { EvenementServiceRattacheAPrestataire };
+export { EvenementServiceRattacheAPrestataire };

@@ -1,5 +1,5 @@
-const ElementsConstructibles = require('./elementsConstructibles');
-const { ErreurRisqueInconnu } = require('../erreurs');
+import ElementsConstructibles from './elementsConstructibles.js';
+import { ErreurRisqueInconnu } from '../erreurs.js';
 
 class ListeRisques extends ElementsConstructibles {
   principaux() {
@@ -39,4 +39,4 @@ class ListeRisques extends ElementsConstructibles {
   }
 }
 
-module.exports = ListeRisques;
+export default ListeRisques;

@@ -1,8 +1,8 @@
-const express = require('express');
-const Autorisation = require('../../modeles/autorisations/autorisation');
-const { genereGradientConique } = require('../../pdf/graphiques/camembert');
-const { dateYYYYMMDD } = require('../../utilitaires/date');
-const DescriptionService = require('../../modeles/descriptionService');
+import express from 'express';
+import Autorisation from '../../modeles/autorisations/autorisation.js';
+import { genereGradientConique } from '../../pdf/graphiques/camembert.js';
+import { dateYYYYMMDD } from '../../utilitaires/date.js';
+import DescriptionService from '../../modeles/descriptionService.js';
 
 const routesConnecteApiServicePdf = ({
   adaptateurHorloge,
@@ -193,4 +193,4 @@ const routesConnecteApiServicePdf = ({
   return routes;
 };
 
-module.exports = routesConnecteApiServicePdf;
+export default routesConnecteApiServicePdf;

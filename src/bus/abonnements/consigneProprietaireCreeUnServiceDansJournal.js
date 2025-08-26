@@ -1,7 +1,5 @@
-const {
-  EvenementCollaboratifServiceModifie,
-} = require('../../modeles/journalMSS/evenementCollaboratifServiceModifie');
-const Autorisation = require('../../modeles/autorisations/autorisation');
+import { EvenementCollaboratifServiceModifie } from '../../modeles/journalMSS/evenementCollaboratifServiceModifie.js';
+import Autorisation from '../../modeles/autorisations/autorisation.js';
 
 const { PROPRIETAIRE } = Autorisation.RESUME_NIVEAU_DROIT;
 
@@ -27,4 +25,4 @@ function consigneProprietaireCreeUnServiceDansJournal({ adaptateurJournal }) {
   };
 }
 
-module.exports = { consigneProprietaireCreeUnServiceDansJournal };
+export { consigneProprietaireCreeUnServiceDansJournal };

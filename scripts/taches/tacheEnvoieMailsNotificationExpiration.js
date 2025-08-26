@@ -1,14 +1,13 @@
-const Sentry = require('@sentry/node');
-const DepotDonnees = require('../../src/depotDonnees');
-const adaptateurEnvironnement = require('../../src/adaptateurs/adaptateurEnvironnement');
-const adaptateurHorloge = require('../../src/adaptateurs/adaptateurHorloge');
-const adaptateurMail = require('../../src/adaptateurs/adaptateurMailSendinblue');
-const {
-  envoieMailsNotificationExpirationHomologation,
-} = require('../../src/taches/envoieMailsNotificationExpirationHomologation');
+import * as Sentry from '@sentry/node';
+import * as DepotDonnees from '../../src/depotDonnees.js';
+import * as adaptateurEnvironnement from '../../src/adaptateurs/adaptateurEnvironnement.js';
+import * as adaptateurHorloge from '../../src/adaptateurs/adaptateurHorloge.js';
+import * as adaptateurMail from '../../src/adaptateurs/adaptateurMailSendinblue.js';
+import { envoieMailsNotificationExpirationHomologation } from '../../src/taches/envoieMailsNotificationExpirationHomologation';
 
 const main = async () => {
   const depotDonnees = DepotDonnees.creeDepot();
+
   return envoieMailsNotificationExpirationHomologation({
     depotDonnees,
     adaptateurHorloge,
@@ -17,10 +16,7 @@ const main = async () => {
 };
 
 const config = adaptateurEnvironnement.sentry();
-Sentry.init({
-  dsn: config.dsn(),
-  environment: config.environnement(),
-});
+Sentry.init({ dsn: config.dsn(), environment: config.environnement() });
 
 const checkInId = Sentry.captureCheckIn({
   monitorSlug: 'envoie-mails-notification-expiration',

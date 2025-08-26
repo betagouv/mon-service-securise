@@ -10,4 +10,4 @@ class ActiviteMesure {
   }
 }
 
-module.exports = ActiviteMesure;
+export default ActiviteMesure;

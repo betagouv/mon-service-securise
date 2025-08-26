@@ -1,8 +1,6 @@
-const adaptateurEnvironnement = require('./adaptateurEnvironnement');
-const {
-  adaptateurChiffrementChaCha20,
-} = require('./adaptateurChiffrementChaCha20');
-const { adaptateurChiffrement } = require('./adaptateurChiffrement');
+import * as adaptateurEnvironnement from './adaptateurEnvironnement.js';
+import { adaptateurChiffrementChaCha20 } from './adaptateurChiffrementChaCha20.js';
+import { adaptateurChiffrement } from './adaptateurChiffrement.js';
 
 const fabriqueAdaptateurChiffrement = () => {
   if (adaptateurEnvironnement.chiffrement().utiliseChiffrementChaCha20())
@@ -10,4 +8,4 @@ const fabriqueAdaptateurChiffrement = () => {
 
   return adaptateurChiffrement({ adaptateurEnvironnement });
 };
-module.exports = { fabriqueAdaptateurChiffrement };
+export { fabriqueAdaptateurChiffrement };

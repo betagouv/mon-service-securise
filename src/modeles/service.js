@@ -1,20 +1,19 @@
-const MoteurRegles = require('../moteurRegles');
-const Referentiel = require('../referentiel');
-
-const DescriptionService = require('./descriptionService');
-const Dossiers = require('./dossiers');
-const Mesure = require('./mesure');
-const Mesures = require('./mesures');
-const ObjetPersistanceService = require('./objetsPersistance/objetPersistanceService');
-const Risques = require('./risques');
-const RolesResponsabilites = require('./rolesResponsabilites');
-const ObjetPDFAnnexeDescription = require('./objetsPDF/objetPDFAnnexeDescription');
-const ObjetPDFAnnexeMesures = require('./objetsPDF/objetPDFAnnexeMesures');
-const ObjetPDFAnnexeRisques = require('./objetsPDF/objetPDFAnnexeRisques');
-const Autorisation = require('./autorisations/autorisation');
-const SuggestionAction = require('./suggestionAction');
-const { dateEnIso } = require('../utilitaires/date');
-const { Contributeur } = require('./contributeur');
+import MoteurRegles from '../moteurRegles.js';
+import * as Referentiel from '../referentiel.js';
+import DescriptionService from './descriptionService.js';
+import Dossiers from './dossiers.js';
+import Mesure from './mesure.js';
+import Mesures from './mesures.js';
+import ObjetPersistanceService from './objetsPersistance/objetPersistanceService.js';
+import Risques from './risques.js';
+import RolesResponsabilites from './rolesResponsabilites.js';
+import ObjetPDFAnnexeDescription from './objetsPDF/objetPDFAnnexeDescription.js';
+import ObjetPDFAnnexeMesures from './objetsPDF/objetPDFAnnexeMesures.js';
+import ObjetPDFAnnexeRisques from './objetsPDF/objetPDFAnnexeRisques.js';
+import Autorisation from './autorisations/autorisation.js';
+import SuggestionAction from './suggestionAction.js';
+import { dateEnIso } from '../utilitaires/date.js';
+import { Contributeur } from './contributeur.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -466,4 +465,4 @@ class Service {
 
 Object.assign(Service, NIVEAUX);
 
-module.exports = Service;
+export default Service;

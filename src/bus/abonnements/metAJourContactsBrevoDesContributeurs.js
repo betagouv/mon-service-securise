@@ -1,6 +1,4 @@
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('../../adaptateurs/fabriqueAdaptateurGestionErreur');
+import { fabriqueAdaptateurGestionErreur } from '../../adaptateurs/fabriqueAdaptateurGestionErreur.js';
 
 function metAJourContactsBrevoDesContributeurs({ crmBrevo, depotDonnees }) {
   return async ({ autorisations }) => {
@@ -31,6 +29,4 @@ function metAJourContactsBrevoDesContributeurs({ crmBrevo, depotDonnees }) {
   };
 }
 
-module.exports = {
-  metAJourContactsBrevoDesContributeurs,
-};
+export { metAJourContactsBrevoDesContributeurs };

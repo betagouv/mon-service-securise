@@ -1,10 +1,10 @@
-const axios = require('axios');
-const express = require('express');
-const adaptateurEnvironnement = require('../../adaptateurs/adaptateurEnvironnement');
+import axios from 'axios';
+import express from 'express';
+import { matomo } from '../../adaptateurs/adaptateurEnvironnement';
 
 const CHEMINS_BIBLIOTHEQUES = {
   get: {
-    'matomo-tag-manager.js': adaptateurEnvironnement.matomo().urlTagManager(),
+    'matomo-tag-manager.js': matomo().urlTagManager(),
     'matomo.js': 'https://stats.beta.gouv.fr/matomo.js',
   },
   post: {
@@ -63,4 +63,4 @@ const routesNonConnecteApiBibliotheques = () => {
   return routes;
 };
 
-module.exports = { routesNonConnecteApiBibliotheques, CSP_BIBLIOTHEQUES };
+export { routesNonConnecteApiBibliotheques, CSP_BIBLIOTHEQUES };

@@ -1,6 +1,6 @@
-const { encode } = require('html-entities');
-const { LecteurExcel } = require('./excel/LecteurExcel');
-const { ErreurFichierXlsInvalide } = require('../erreurs');
+import { encode } from 'html-entities';
+import { LecteurExcel } from './excel/LecteurExcel.js';
+import { ErreurFichierXlsInvalide } from '../erreurs.js';
 
 const ENTETE_INTITULE = 'Intitulé de la mesure *';
 const ENTETE_DESCRIPTION = 'Description de la mesure';
@@ -30,4 +30,4 @@ async function extraisDonneesTeleversees(buffer) {
   }));
 }
 
-module.exports = { extraisDonneesTeleversees };
+export { extraisDonneesTeleversees };

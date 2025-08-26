@@ -1,4 +1,4 @@
-const { CmsCrisp } = require('@lab-anssi/lib');
+import { CmsCrisp } from '@lab-anssi/lib';
 
 class CmsCrispMss extends CmsCrisp {
   constructor({ adaptateurEnvironnement }) {
@@ -47,4 +47,4 @@ class CmsCrispMss extends CmsCrisp {
   }
 }
 
-module.exports = CmsCrispMss;
+export default CmsCrispMss;

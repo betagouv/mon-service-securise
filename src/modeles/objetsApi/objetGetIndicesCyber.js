@@ -1,4 +1,4 @@
-const Autorisation = require('../autorisations/autorisation');
+import Autorisation from '../autorisations/autorisation.js';
 
 const { DROITS_VOIR_INDICE_CYBER } = Autorisation;
 
@@ -34,4 +34,4 @@ const donnees = (services, autorisations) => {
   };
 };
 
-module.exports = { donnees };
+export { donnees };

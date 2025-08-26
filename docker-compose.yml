@@ -33,7 +33,7 @@ services:
     command: bash -c "
       npx knex migrate:latest
       && npx concurrently -n \"SERVEUR,FRONT SVELTE\" -c \"blue.bold,magenta.underline\"
-      \"npx nodemon server.ts\"
+      \"npx nodemon --ext ts,js --exec 'tsx' server.ts\"
       \"npx vite build --watch --minify false --config svelte/vite.config.mts\"
       "
     environment:

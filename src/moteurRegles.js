@@ -1,6 +1,6 @@
-const Referentiel = require('./referentiel');
-const Profil = require('./modeles/profils/profil');
-const adaptateurEnvironnement = require('./adaptateurs/adaptateurEnvironnement');
+import * as Referentiel from './referentiel.js';
+import Profil from './modeles/profils/profil.js';
+import * as adaptateurEnvironnement from './adaptateurs/adaptateurEnvironnement.js';
 
 class MoteurRegles {
   constructor(
@@ -75,4 +75,4 @@ class MoteurRegles {
   }
 }
 
-module.exports = MoteurRegles;
+export default MoteurRegles;

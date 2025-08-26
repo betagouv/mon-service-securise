@@ -5,4 +5,4 @@ const fabriqueAnnuaire = ({ adaptateurRechercheEntreprise, depotDonnees }) => ({
     depotDonnees.rechercheContributeurs(idUtilisateur, recherche),
 });
 
-module.exports = { fabriqueAnnuaire };
+export { fabriqueAnnuaire };

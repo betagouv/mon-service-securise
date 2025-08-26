@@ -1,5 +1,5 @@
-const multer = require('multer');
-const { ErreurFichierXlsInvalide } = require('../erreurs');
+import multer from 'multer';
+import { ErreurFichierXlsInvalide } from '../erreurs.js';
 
 const UN_MEGA = 1 * 1024 * 1024;
 
@@ -44,4 +44,4 @@ const extraisDonneesXLS = async (requete) => {
   });
 };
 
-module.exports = { extraisDonneesXLS };
+export { extraisDonneesXLS };

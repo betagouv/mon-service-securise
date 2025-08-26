@@ -1,13 +1,15 @@
-const ElementsConstructibles = require('./elementsConstructibles');
-const MesureSpecifique = require('./mesureSpecifique');
-const Referentiel = require('../referentiel');
-const {
+import ElementsConstructibles from './elementsConstructibles.js';
+import MesureSpecifique from './mesureSpecifique.js';
+import * as Referentiel from '../referentiel.js';
+
+import {
   ErreurMesureInconnue,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
   ErreurSuppressionImpossible,
-} = require('../erreurs');
-const Mesure = require('./mesure');
+} from '../erreurs.js';
+
+import Mesure from './mesure.js';
 
 class MesuresSpecifiques extends ElementsConstructibles {
   constructor(
@@ -158,4 +160,4 @@ class MesuresSpecifiques extends ElementsConstructibles {
   }
 }
 
-module.exports = MesuresSpecifiques;
+export default MesuresSpecifiques;

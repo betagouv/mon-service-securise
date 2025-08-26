@@ -1,4 +1,4 @@
-const Parrainage = require('../../modeles/parrainage');
+import Parrainage from '../../modeles/parrainage.js';
 
 function consigneNouveauParrainage({ depotDonnees }) {
   return async ({ idUtilisateurDestinataire, idUtilisateurEmetteur }) => {
@@ -11,4 +11,4 @@ function consigneNouveauParrainage({ depotDonnees }) {
   };
 }
 
-module.exports = { consigneNouveauParrainage };
+export { consigneNouveauParrainage };

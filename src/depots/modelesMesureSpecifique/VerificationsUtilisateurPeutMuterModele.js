@@ -1,13 +1,14 @@
-const {
+import {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurServiceInexistant,
   ErreurAutorisationInexistante,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
-} = require('../../erreurs');
-const {
+} from '../../erreurs.js';
+
+import {
   Permissions,
   Rubriques,
-} = require('../../modeles/autorisations/gestionDroits');
+} from '../../modeles/autorisations/gestionDroits.js';
 
 const { ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -78,4 +79,4 @@ class VerificationsUtilisateurPeutMuterModele {
   }
 }
 
-module.exports = { VerificationsUtilisateurPeutMuterModele };
+export { VerificationsUtilisateurPeutMuterModele };

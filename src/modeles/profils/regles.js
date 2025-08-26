@@ -1,4 +1,4 @@
-const Regle = require('./regle');
+import Regle from './regle.js';
 
 class Regles {
   constructor(regles = []) {
@@ -18,4 +18,4 @@ class Regles {
   }
 }
 
-module.exports = Regles;
+export default Regles;
