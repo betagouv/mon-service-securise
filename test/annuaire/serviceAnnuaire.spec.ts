@@ -11,9 +11,7 @@ describe("Le service d'annuaire", () => {
         ],
       };
 
-      const annuaire = fabriqueAnnuaire({
-        depotDonnees,
-      });
+      const annuaire = fabriqueAnnuaire({ depotDonnees });
 
       const contributeurs = await annuaire.rechercheContributeurs('X', 'Y');
 
