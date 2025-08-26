@@ -7,8 +7,8 @@
     "build:front": "npx vite build --config svelte/vite.config.mts",
     "build:back": "npx tsc",
     "build:cree-utilisateur-demo": "npm run build:back && node dist/creeUtilisateurDemo.js",
-    "test": "eslint . && mocha",
-    "test:mocha": "mocha",
+    "test": "eslint . && npm run test:mocha",
+    "test:mocha": "npm run build:back && mocha --require ts-node/register --extensions ts",
     "test:watch": "nodemon --exec mocha",
     "start": "node --require dotenv/config dist/server.js",
     "prepare": "husky install"
@@ -72,6 +72,7 @@
     "@sentry/vite-plugin": "^3.0.0",
     "@sveltejs/vite-plugin-svelte": "^2.4.1",
     "@tsconfig/svelte": "^3.0.0",
+    "@types/mocha": "^10.0.10",
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.0.0",
     "concurrently": "^8.2.1",

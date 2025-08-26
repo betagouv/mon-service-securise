@@ -3,5 +3,5 @@ module.exports = {
   'reporter-option': process.env.GITHUB_ACTIONS
     ? ['output=./backend-test-report.json']
     : null,
-  spec: './test*/**/*.spec.*js',
+  spec: './test*/**/*.spec.*(js|ts)',
 };
