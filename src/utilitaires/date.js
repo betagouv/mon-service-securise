@@ -33,7 +33,7 @@ const chaineDateFrEnChaineDateISO = (chaineDateFr) => {
   return `${annee}-${mois}-${jour}`;
 };
 
-module.exports = {
+export {
   ajouteMoisADate,
   dateEnFrancais,
   dateEnIso,

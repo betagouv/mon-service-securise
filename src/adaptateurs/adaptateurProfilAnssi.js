@@ -1,8 +1,6 @@
-const axios = require('axios');
-const { decode } = require('html-entities');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('./fabriqueAdaptateurGestionErreur');
+import axios from 'axios';
+import { decode } from 'html-entities';
+import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
 
 const CONFIGURATION_AUTHENTIFICATION = {
   headers: {
@@ -41,7 +39,4 @@ const recupere = async (email) => {
   }
 };
 
-module.exports = {
-  recupere,
-  metsAJour,
-};
+export { recupere, metsAJour };

@@ -1,6 +1,6 @@
-const express = require('express');
-const routesConnecteApiTeleversementServices = require('./routesConnecteApiTeleversement.services');
-const routesConnecteApiTeleversementModelesMesure = require('./routesConnecteApiTeleversement.modelesMesureSpecifique');
+import express from 'express';
+import routesConnecteApiTeleversementServices from './routesConnecteApiTeleversement.services.js';
+import routesConnecteApiTeleversementModelesMesure from './routesConnecteApiTeleversement.modelesMesureSpecifique.js';
 
 const routesConnecteApiTeleversement = ({
   lecteurDeFormData,
@@ -36,4 +36,4 @@ const routesConnecteApiTeleversement = ({
   return routes;
 };
 
-module.exports = routesConnecteApiTeleversement;
+export default routesConnecteApiTeleversement;

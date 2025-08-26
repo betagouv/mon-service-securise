@@ -78,4 +78,4 @@ class IndiceCyber {
   }
 }
 
-module.exports = { IndiceCyber };
+export default { IndiceCyber };

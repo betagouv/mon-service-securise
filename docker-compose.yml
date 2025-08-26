@@ -31,9 +31,10 @@ services:
     <<: *configuration-base
     tty: true
     command: bash -c "
-      npx knex migrate:latest
+      npm install &&
+      npm run migre-bdd
       && npx concurrently -n \"SERVEUR,FRONT SVELTE\" -c \"blue.bold,magenta.underline\"
-      \"npx nodemon server.ts\"
+      \"npx nodemon --exec tsx server.ts\"
       \"npx vite build --watch --minify false --config svelte/vite.config.mts\"
       "
     environment:

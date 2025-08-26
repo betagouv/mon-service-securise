@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 const enteteJSON = {
   headers: {
@@ -42,6 +42,6 @@ const recupereStatistiques = async () => {
   };
 };
 
-module.exports = {
+export default {
   recupereStatistiques,
 };

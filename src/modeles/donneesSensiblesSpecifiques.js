@@ -1,4 +1,4 @@
-const ItemsAvecDescription = require('./itemsAvecDescription');
+import ItemsAvecDescription from './itemsAvecDescription.js';
 
 class DonneesSensiblesSpecifiques extends ItemsAvecDescription {
   constructor(donnees) {
@@ -6,4 +6,4 @@ class DonneesSensiblesSpecifiques extends ItemsAvecDescription {
   }
 }
 
-module.exports = DonneesSensiblesSpecifiques;
+export default DonneesSensiblesSpecifiques;

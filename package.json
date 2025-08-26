@@ -1,9 +1,11 @@
 {
+  "type": "module",
   "name": "MonServiceSécurisé",
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "knex migrate:latest && npx vite build --config svelte/vite.config.mts  && npx tsc && npm run cree-utilisateur-demo",
+    "migre-bdd": "node --env-file=.env --import tsx ./node_modules/knex/bin/cli.js migrate:latest --knexfile ./knexfile.ts",
+    "build": "npm run migre-bdd && npx vite build --config svelte/vite.config.mts  && npx tsc && npm run cree-utilisateur-demo",
     "cree-utilisateur-demo": "npx tsc && node dist/creeUtilisateurDemo.js",
     "test": "eslint . && mocha",
     "test:mocha": "mocha",
@@ -95,6 +97,7 @@
     "svelte-eslint-parser": "^0.33.0",
     "ts-node": "^10.9.2",
     "tslib": "^2.5.0",
+    "tsx": "^4.20.5",
     "typescript": "~5.2.0",
     "vite": "^4.5.14",
     "vitest": "^3.0.5"

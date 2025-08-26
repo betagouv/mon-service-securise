@@ -1,4 +1,4 @@
-const { STATUT_FAIT, statutRenseigne } = require('./mesure');
+import { STATUT_FAIT, statutRenseigne } from './mesure.js';
 
 const statutsMesuresAZero = (referentiel, statutsComplementaires) =>
   Object.keys(referentiel.statutsMesures()).reduce(
@@ -142,4 +142,4 @@ class StatistiquesMesures {
   }
 }
 
-module.exports = { StatistiquesMesures };
+export default { StatistiquesMesures };

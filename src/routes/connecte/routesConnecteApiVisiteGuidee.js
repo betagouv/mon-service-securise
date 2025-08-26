@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 
 const routesConnecteApiVisiteGuidee = ({
   middleware,
@@ -80,4 +80,4 @@ const routesConnecteApiVisiteGuidee = ({
   return routes;
 };
 
-module.exports = routesConnecteApiVisiteGuidee;
+export default routesConnecteApiVisiteGuidee;

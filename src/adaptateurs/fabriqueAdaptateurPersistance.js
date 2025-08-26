@@ -1,7 +1,6 @@
-const AdaptateurPersistanceMemoire = require('./adaptateurPersistanceMemoire');
-const AdaptateurPostgres = require('./adaptateurPostgres');
-
-const configurationKnex = require('../../knexfile');
+import AdaptateurPersistanceMemoire from './adaptateurPersistanceMemoire.js';
+import AdaptateurPostgres from './adaptateurPostgres.js';
+import * as configurationKnex from '../../knexfile.ts.js';
 
 const fabriqueAdaptateurPersistance = (env) => {
   if (Object.keys(configurationKnex).includes(env))
@@ -10,4 +9,4 @@ const fabriqueAdaptateurPersistance = (env) => {
   return AdaptateurPersistanceMemoire.nouvelAdaptateur();
 };
 
-module.exports = fabriqueAdaptateurPersistance;
+export default fabriqueAdaptateurPersistance;

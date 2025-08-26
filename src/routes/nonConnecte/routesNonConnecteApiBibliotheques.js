@@ -1,6 +1,6 @@
-const axios = require('axios');
-const express = require('express');
-const adaptateurEnvironnement = require('../../adaptateurs/adaptateurEnvironnement');
+import axios from 'axios';
+import express from 'express';
+import * as adaptateurEnvironnement from '../../adaptateurs/adaptateurEnvironnement.js';
 
 const CHEMINS_BIBLIOTHEQUES = {
   get: {
@@ -12,7 +12,7 @@ const CHEMINS_BIBLIOTHEQUES = {
   },
 };
 
-const CSP_BIBLIOTHEQUES = {
+export const CSP_BIBLIOTHEQUES = {
   matomo: { connect: 'https://stats.beta.gouv.fr/matomo.php' },
   crisp: { image: 'https://storage.crisp.chat' },
   monservicesecurise: {
@@ -24,7 +24,7 @@ const CSP_BIBLIOTHEQUES = {
   },
 };
 
-const routesNonConnecteApiBibliotheques = () => {
+export const routesNonConnecteApiBibliotheques = () => {
   const routes = express.Router();
 
   const ajouteRoutes = (methode) =>
@@ -62,5 +62,3 @@ const routesNonConnecteApiBibliotheques = () => {
 
   return routes;
 };
-
-module.exports = { routesNonConnecteApiBibliotheques, CSP_BIBLIOTHEQUES };

@@ -1,4 +1,4 @@
-const InformationsService = require('./informationsService');
+import InformationsService from './informationsService.js';
 
 class EntiteExterne extends InformationsService {
   constructor(donneesEntite) {
@@ -10,4 +10,4 @@ class EntiteExterne extends InformationsService {
   }
 }
 
-module.exports = EntiteExterne;
+export default EntiteExterne;

@@ -146,7 +146,7 @@ const JWT = () => ({
   secret: () => process.env.SECRET_JWT,
 });
 
-module.exports = {
+export {
   baseDeDonnees,
   chiffrement,
   crisp,

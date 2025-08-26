@@ -1,22 +1,22 @@
-const controlAcces = require('express-ip-access-control');
-const { check } = require('express-validator');
-const ipfilter = require('express-ipfilter').IpFilter;
-const adaptateurEnvironnementParDefaut = require('../adaptateurs/adaptateurEnvironnement');
-const {
-  CSP_BIBLIOTHEQUES,
-} = require('../routes/nonConnecte/routesNonConnecteApiBibliotheques');
+import controlAcces from 'express-ip-access-control';
+import { check } from 'express-validator';
+import { IpFilter as ipfilter } from 'express-ipfilter';
+import * as adaptateurEnvironnementParDefaut from '../adaptateurs/adaptateurEnvironnement.js';
+import { CSP_BIBLIOTHEQUES } from '../routes/nonConnecte/routesNonConnecteApiBibliotheques.js';
+import gestionDroits from '../modeles/autorisations/gestionDroits.js';
+
+import {
+  ErreurDroitsIncoherents,
+  ErreurChainageMiddleware,
+} from '../erreurs.js';
+import { ajouteLaRedirectionPostConnexion } from './redirection.js';
+import { extraisIp } from './requeteHttp.js';
+import { TYPES_REQUETES } from './configurationServeur.js';
+
 const {
   verifieCoherenceDesDroits,
   Permissions: { LECTURE, INVISIBLE },
-} = require('../modeles/autorisations/gestionDroits');
-const {
-  ErreurDroitsIncoherents,
-  ErreurChainageMiddleware,
-} = require('../erreurs');
-const { ajouteLaRedirectionPostConnexion } = require('./redirection');
-const { extraisIp } = require('./requeteHttp');
-const SourceAuthentification = require('../modeles/sourceAuthentification');
-const { TYPES_REQUETES } = require('./configurationServeur');
+} = gestionDroits;
 
 const middleware = (configuration = {}) => {
   const {
@@ -110,7 +110,7 @@ const middleware = (configuration = {}) => {
     verificationJWT(requete, reponse, () => {
       if (requete.estInvite) {
         return reponse.redirect(
-          requete.sourceAuthentification === SourceAuthentification.MSS
+          requete.sourceAuthentification === MSS
             ? '/connexion'
             : '/oidc/connexion'
         );
@@ -423,4 +423,4 @@ const middleware = (configuration = {}) => {
   };
 };
 
-module.exports = middleware;
+export default middleware;

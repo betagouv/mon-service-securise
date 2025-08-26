@@ -3,7 +3,7 @@ const identifieUtilisateur = () => {};
 const controleurErreurs = (erreur, _requete, _reponse, suite) => suite(erreur);
 const logueErreur = (_erreur) => {};
 
-module.exports = {
+export default {
   initialise,
   controleurErreurs,
   logueErreur,

@@ -1,5 +1,5 @@
-const adaptateurJournalMSSMemoire = require('./adaptateurJournalMSSMemoire');
-const adaptateurJournalMSSPostgres = require('./adaptateurJournalMSSPostgres');
+import adaptateurJournalMSSMemoire from './adaptateurJournalMSSMemoire.js';
+import adaptateurJournalMSSPostgres from './adaptateurJournalMSSPostgres.js';
 
 const fabriqueAdaptateurJournal = () => {
   const adaptateur =
@@ -10,4 +10,4 @@ const fabriqueAdaptateurJournal = () => {
   return adaptateur.nouvelAdaptateur();
 };
 
-module.exports = fabriqueAdaptateurJournal;
+export default fabriqueAdaptateurJournal;

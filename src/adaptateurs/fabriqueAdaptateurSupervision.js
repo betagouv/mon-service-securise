@@ -1,8 +1,6 @@
-const adaptateurSupervisionMetabase = require('./adaptateurSupervisionMetabase');
-const adaptateurEnvironnement = require('./adaptateurEnvironnement');
-const {
-  fabriqueAdaptateurChiffrement,
-} = require('./fabriqueAdaptateurChiffrement');
+import adaptateurSupervisionMetabase from './adaptateurSupervisionMetabase.js';
+import * as adaptateurEnvironnement from './adaptateurEnvironnement.js';
+import { fabriqueAdaptateurChiffrement } from './fabriqueAdaptateurChiffrement.js';
 
 const fabriqueAdaptateurSupervision = () =>
   adaptateurSupervisionMetabase({
@@ -10,4 +8,4 @@ const fabriqueAdaptateurSupervision = () =>
     adaptateurEnvironnement,
   });
 
-module.exports = fabriqueAdaptateurSupervision;
+export default fabriqueAdaptateurSupervision;

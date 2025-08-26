@@ -26,4 +26,4 @@ class Parrainage {
   }
 }
 
-module.exports = Parrainage;
+export default Parrainage;

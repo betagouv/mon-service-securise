@@ -4,4 +4,4 @@ function relieEntrepriseEtContactBrevo({ crmBrevo }) {
   };
 }
 
-module.exports = { relieEntrepriseEtContactBrevo };
+export default { relieEntrepriseEtContactBrevo };

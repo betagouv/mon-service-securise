@@ -11,7 +11,7 @@ const ajouteLaRedirectionPostConnexion = (urlDemandee) => {
 
 const construisUrlAbsolueVersPage = (page) => process.env.URL_BASE_MSS + page;
 
-module.exports = {
+export {
   ajouteLaRedirectionPostConnexion,
   construisUrlAbsolueVersPage,
   estUrlLegalePourRedirection,

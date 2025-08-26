@@ -1,7 +1,5 @@
-const axios = require('axios');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('./fabriqueAdaptateurGestionErreur');
+import axios from 'axios';
+import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
 
 const extraisDepartement = (commune) => {
   if (!commune) {
@@ -131,7 +129,7 @@ const recupereDetailsOrganisation = async (siret, instanceAxios = axios) => {
   }
 };
 
-module.exports = {
+export default {
   rechercheOrganisations,
   recupereDetailsOrganisation,
 };

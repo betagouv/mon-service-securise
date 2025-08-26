@@ -1,6 +1,6 @@
-const Knex = require('knex');
-const { sign } = require('jsonwebtoken');
-const { journalMSS } = require('./adaptateurEnvironnement');
+import Knex from 'knex';
+import { sign } from 'jsonwebtoken';
+import { journalMSS } from './adaptateurEnvironnement.js';
 
 const adaptateurSupervisionMetabase = ({
   adaptateurChiffrement,
@@ -93,4 +93,4 @@ const adaptateurSupervisionMetabase = ({
   };
 };
 
-module.exports = adaptateurSupervisionMetabase;
+export default adaptateurSupervisionMetabase;

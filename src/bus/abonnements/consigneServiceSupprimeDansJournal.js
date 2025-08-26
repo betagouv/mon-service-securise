@@ -1,4 +1,4 @@
-const EvenementServiceSupprime = require('../../modeles/journalMSS/evenementServiceSupprime');
+import EvenementServiceSupprime from '../../modeles/journalMSS/evenementServiceSupprime.js';
 
 function consigneServiceSupprimeDansJournal({ adaptateurJournal }) {
   return async ({ idService }) => {
@@ -13,6 +13,6 @@ function consigneServiceSupprimeDansJournal({ adaptateurJournal }) {
   };
 }
 
-module.exports = {
+export default {
   consigneServiceSupprimeDansJournal,
 };

@@ -1,8 +1,8 @@
-const { decode } = require('html-entities');
-const {
+import { decode } from 'html-entities';
+import {
   ErreurIdentifiantNouveauteInconnu,
   ErreurIdentifiantTacheInconnu,
-} = require('../erreurs');
+} from '../erreurs.js';
 
 const avecStatutLecture = (notification, statutLecture) => ({
   ...notification,
@@ -155,4 +155,4 @@ class CentreNotifications {
   static NOTIFICATION_NON_LUE = 'nonLue';
 }
 
-module.exports = CentreNotifications;
+export default CentreNotifications;

@@ -1,4 +1,4 @@
-const Etape = require('./etape');
+import Etape from './etape.js';
 
 class Autorite extends Etape {
   constructor({ nom, fonction } = {}) {
@@ -16,4 +16,4 @@ class Autorite extends Etape {
   }
 }
 
-module.exports = Autorite;
+export default Autorite;

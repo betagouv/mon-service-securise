@@ -1,5 +1,5 @@
-const PartiePrenante = require('./partiePrenante');
+import PartiePrenante from './partiePrenante.js';
 
 class MaintenanceService extends PartiePrenante {}
 
-module.exports = MaintenanceService;
+export default MaintenanceService;

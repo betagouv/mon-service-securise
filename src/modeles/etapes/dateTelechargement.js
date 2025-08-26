@@ -1,4 +1,4 @@
-const Etape = require('./etape');
+import Etape from './etape.js';
 
 class DateTelechargement extends Etape {
   constructor(donnees = {}) {
@@ -19,4 +19,4 @@ class DateTelechargement extends Etape {
   }
 }
 
-module.exports = DateTelechargement;
+export default DateTelechargement;

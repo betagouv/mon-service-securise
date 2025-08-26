@@ -1,6 +1,6 @@
-const ActeursHomologation = require('./acteursHomologation');
-const InformationsService = require('./informationsService');
-const PartiesPrenantes = require('./partiesPrenantes/partiesPrenantes');
+import ActeursHomologation from './acteursHomologation.js';
+import InformationsService from './informationsService.js';
+import PartiesPrenantes from './partiesPrenantes/partiesPrenantes.js';
 
 const descriptionRole = (nomPrenom, fonction) => {
   const description = [];
@@ -54,4 +54,4 @@ class RolesResponsabilites extends InformationsService {
   }
 }
 
-module.exports = RolesResponsabilites;
+export default RolesResponsabilites;

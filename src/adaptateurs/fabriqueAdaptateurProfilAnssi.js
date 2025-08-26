@@ -1,10 +1,10 @@
-const adaptateurEnvironnement = require('./adaptateurEnvironnement');
-const adaptateurProfilAnssi = require('./adaptateurProfilAnssi');
-const adaptateurProfilAnssiVide = require('./adaptateurProfilAnssiVide');
+import * as adaptateurProfilAnssi from './adaptateurProfilAnssi.js';
+import adaptateurProfilAnssiVide from './adaptateurProfilAnssiVide.js';
+import { featureFlag } from './adaptateurEnvironnement.js';
 
 const fabriqueAdaptateurProfilAnssi = () =>
-  adaptateurEnvironnement.featureFlag().avecServiceMonProfilAnssi()
+  featureFlag().avecServiceMonProfilAnssi()
     ? adaptateurProfilAnssi
     : adaptateurProfilAnssiVide;
 
-module.exports = { fabriqueAdaptateurProfilAnssi };
+export default { fabriqueAdaptateurProfilAnssi };

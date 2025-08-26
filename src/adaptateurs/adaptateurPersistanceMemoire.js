@@ -1,4 +1,4 @@
-const adaptateurHorlogeParDefaut = require('./adaptateurHorloge');
+import adaptateurHorlogeParDefaut from './adaptateurHorloge.js';
 
 const nouvelAdaptateur = (
   donnees = {},
@@ -598,4 +598,4 @@ const nouvelAdaptateur = (
   };
 };
 
-module.exports = { nouvelAdaptateur };
+export default { nouvelAdaptateur };

@@ -10,4 +10,4 @@ class EvenementNouveauServiceCree {
   }
 }
 
-module.exports = EvenementNouveauServiceCree;
+export default EvenementNouveauServiceCree;

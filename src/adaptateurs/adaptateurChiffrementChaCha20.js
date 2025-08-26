@@ -1,5 +1,5 @@
-const { randomBytes, createCipheriv, createDecipheriv } = require('crypto');
-const { adaptateurChiffrement } = require('./adaptateurChiffrement');
+import { randomBytes, createCipheriv, createDecipheriv } from 'node:crypto';
+import { adaptateurChiffrement } from './adaptateurChiffrement.js';
 
 const adaptateurChiffrementChaCha20 = ({ adaptateurEnvironnement }) => {
   const adaptateurChiffrementDeBase = adaptateurChiffrement({
@@ -63,6 +63,6 @@ const adaptateurChiffrementChaCha20 = ({ adaptateurEnvironnement }) => {
   };
 };
 
-module.exports = {
+export default {
   adaptateurChiffrementChaCha20,
 };

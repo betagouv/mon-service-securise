@@ -1,5 +1,5 @@
 const Knex = require('knex');
-const config = require('../knexfile');
+const config = require('../knexfile.ts');
 const {
   adaptateurChiffrement,
 } = require('../src/adaptateurs/adaptateurChiffrement');

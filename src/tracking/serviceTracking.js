@@ -47,4 +47,4 @@ const fabriqueServiceTracking = () => {
   };
 };
 
-module.exports = { fabriqueServiceTracking };
+export default { fabriqueServiceTracking };

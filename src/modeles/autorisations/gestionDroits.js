@@ -45,7 +45,7 @@ const verifieCoherenceDesDroits = (droits) => {
   });
 };
 
-module.exports = {
+export default {
   Permissions,
   Rubriques,
   premiereRouteDisponible,

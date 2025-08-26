@@ -6,4 +6,4 @@ class Mesures {
   }
 }
 
-module.exports = Mesures;
+export default Mesures;

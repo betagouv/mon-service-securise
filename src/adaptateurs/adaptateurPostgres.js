@@ -1,6 +1,5 @@
-const Knex = require('knex');
-
-const config = require('../../knexfile');
+import Knex from 'knex';
+import * as config from '../../knexfile.ts.js';
 
 const CORRESPONDANCE_COLONNES_PROPRIETES = {
   date_creation: 'dateCreation',
@@ -940,4 +939,4 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
   };
 };
 
-module.exports = { nouvelAdaptateur };
+export default { nouvelAdaptateur };

@@ -1,5 +1,5 @@
-const Evenement = require('./evenement');
-const { estimeNiveauDeSecurite } = require('../descriptionService');
+import Evenement from './evenement.js';
+import { estimeNiveauDeSecurite } from '../descriptionService.js';
 
 class EvenementCompletudeServiceModifiee extends Evenement {
   constructor(donnees, options = {}) {
@@ -66,4 +66,4 @@ class EvenementCompletudeServiceModifiee extends Evenement {
   }
 }
 
-module.exports = EvenementCompletudeServiceModifiee;
+export default EvenementCompletudeServiceModifiee;

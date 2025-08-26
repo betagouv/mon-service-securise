@@ -1,14 +1,14 @@
-const { decode } = require('html-entities');
-const express = require('express');
-
-const { valeurBooleenne } = require('../../utilitaires/aseptisation');
-const { dateYYYYMMDD } = require('../../utilitaires/date');
-const { zipTableaux } = require('../../utilitaires/tableau');
-const {
+import { decode } from 'html-entities';
+import express from 'express';
+import { valeurBooleenne } from '../../utilitaires/aseptisation.js';
+import { dateYYYYMMDD } from '../../utilitaires/date.js';
+import { zipTableaux } from '../../utilitaires/tableau.js';
+import {
   resultatValidation,
   valideMotDePasse,
-} = require('../../http/validationMotDePasse');
-const {
+} from '../../http/validationMotDePasse.js';
+
+import {
   EchecAutorisation,
   EchecEnvoiMessage,
   ErreurAutorisationExisteDeja,
@@ -20,28 +20,27 @@ const {
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurServiceInexistant,
   ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
-} = require('../../erreurs');
-const routesConnecteApiService = require('./routesConnecteApiService');
-const Utilisateur = require('../../modeles/utilisateur');
-const objetGetServices = require('../../modeles/objetsApi/objetGetServices');
-const objetGetIndicesCyber = require('../../modeles/objetsApi/objetGetIndicesCyber');
-const objetGetMesures = require('../../modeles/objetsApi/objetGetMesures');
-const {
+} from '../../erreurs.js';
+
+import routesConnecteApiService from './routesConnecteApiService.js';
+import Utilisateur from '../../modeles/utilisateur.js';
+import objetGetServices from '../../modeles/objetsApi/objetGetServices.js';
+import objetGetIndicesCyber from '../../modeles/objetsApi/objetGetIndicesCyber.js';
+import objetGetMesures from '../../modeles/objetsApi/objetGetMesures.js';
+import {
   messageErreurDonneesUtilisateur,
   obtentionDonneesDeBaseUtilisateur,
-} = require('../mappeur/utilisateur');
-const {
+} from '../mappeur/utilisateur.js';
+import {
   verifieCoherenceDesDroits,
   Permissions,
   Rubriques,
-} = require('../../modeles/autorisations/gestionDroits');
-const routesConnecteApiVisiteGuidee = require('./routesConnecteApiVisiteGuidee');
-const routesConnecteApiNotifications = require('./routesConnecteApiNotifications');
-const SourceAuthentification = require('../../modeles/sourceAuthentification');
-const {
-  estNiveauDeSecuriteValide,
-} = require('../../modeles/descriptionService');
-const routesConnecteApiTeleversement = require('./routesConnecteApiTeleversement');
+} from '../../modeles/autorisations/gestionDroits.js';
+import routesConnecteApiVisiteGuidee from './routesConnecteApiVisiteGuidee.js';
+import routesConnecteApiNotifications from './routesConnecteApiNotifications.js';
+import SourceAuthentification from '../../modeles/sourceAuthentification.js';
+import { estNiveauDeSecuriteValide } from '../../modeles/descriptionService.js';
+import routesConnecteApiTeleversement from './routesConnecteApiTeleversement.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -873,4 +872,4 @@ const routesConnecteApi = ({
   return routes;
 };
 
-module.exports = routesConnecteApi;
+export default routesConnecteApi;
