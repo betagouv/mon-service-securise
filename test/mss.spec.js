@@ -1,4 +1,3 @@
-const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('./routes/testeurMSS');
 const { TYPES_REQUETES } = require('../src/http/configurationServeur');
@@ -9,33 +8,27 @@ describe('Le serveur MSS', () => {
 
   beforeEach(testeur.initialise);
 
-  afterEach(testeur.arrete);
-
-  it('utilise un filtrage IP pour ne servir que les IP autorisées', (done) => {
-    testeur.middleware().verifieFiltrageIp('http://localhost:1234', done);
+  it('utilise un filtrage IP pour ne servir que les IP autorisées', async () => {
+    await testeur.middleware().verifieFiltrageIp(testeur.app(), '/');
   });
 
-  it('charge la version de build des fichiers', (done) => {
-    testeur
+  it('charge la version de build des fichiers', async () => {
+    await testeur
       .middleware()
-      .verifieChargementDeLaVersionBuildee('http://localhost:1234', done);
+      .verifieChargementDeLaVersionBuildee(testeur.app(), '/');
   });
 
   describe('quand une page est servie', () => {
-    it('positionne les headers', (done) => {
-      testeur
+    it('positionne les headers', async () => {
+      await testeur
         .middleware()
-        .verifieRequetePositionneHeaders('http://localhost:1234/', done);
+        .verifieRequetePositionneHeaders(testeur.app(), '/');
     });
 
-    it("n'affiche pas d'information sur la nature du serveur", (done) => {
-      axios
-        .get('http://localhost:1234')
-        .then((reponse) => {
-          expect(reponse.headers).to.not.have.property('x-powered-by');
-          done();
-        })
-        .catch(done);
+    it("n'affiche pas d'information sur la nature du serveur", async () => {
+      const reponse = await testeur.get('/');
+
+      expect(reponse.headers).to.not.have.property('x-powered-by');
     });
   });
 
@@ -102,16 +95,14 @@ describe('Le serveur MSS', () => {
         routeur: 'de feuilles de styles',
       },
     ].forEach(({ url, typeAttendu, routeur, callbackInitialisation }) => {
-      it(`identifie la requête comme ${typeAttendu} sur les routes ${routeur}`, (done) => {
-        callbackInitialisation?.();
-        testeur.middleware().verifieTypeRequeteCharge(
-          typeAttendu,
-          {
+      it(`identifie la requête comme ${typeAttendu} sur les routes ${routeur}`, async () => {
+        await callbackInitialisation?.();
+        await testeur
+          .middleware()
+          .verifieTypeRequeteCharge(typeAttendu, testeur.app(), {
             method: 'GET',
-            url: `http://localhost:1234${url}`,
-          },
-          done
-        );
+            url: `${url}`,
+          });
       });
     });
   });
