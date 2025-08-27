@@ -1,4 +1,3 @@
-const axios = require('axios');
 const expect = require('expect.js');
 
 const testeurMSS = require('../testeurMSS');
@@ -25,11 +24,8 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   beforeEach(testeur.initialise);
 
-  afterEach(testeur.arrete);
-
   [
     '/creation',
-    '/ID-SERVICE',
     '/ID-SERVICE/descriptionService',
     '/ID-SERVICE/mesures',
     '/ID-SERVICE/indiceCyber',
@@ -49,33 +45,26 @@ describe('Le serveur MSS des routes /service/*', () => {
         });
       });
 
-      it("vérifie que l'utilisateur a accepté les CGU", (done) => {
-        testeur
+      it("vérifie que l'utilisateur a accepté les CGU", async () => {
+        await testeur
           .middleware()
-          .verifieRequeteExigeAcceptationCGU(
-            `http://localhost:1234/service${route}`,
-            done
-          );
+          .verifieRequeteExigeAcceptationCGU(testeur.app(), `/service${route}`);
       });
 
-      it("vérifie que l'état de la visite guidée est chargé sur la route", (done) => {
-        testeur
+      it("vérifie que l'état de la visite guidée est chargé sur la route", async () => {
+        await testeur
           .middleware()
           .verifieRequeteChargeEtatVisiteGuidee(
-            `http://localhost:1234/service${route}`,
-            done
+            testeur.app(),
+            `/service${route}`
           );
       });
 
-      it('sert le contenu HTML de la page', (done) => {
-        axios
-          .get(`http://localhost:1234/service${route}`)
-          .then((reponse) => {
-            expect(reponse.status).to.equal(200);
-            expect(reponse.headers['content-type']).to.contain('text/html');
-            done();
-          })
-          .catch(done);
+      it('sert le contenu HTML de la page', async () => {
+        const reponse = await testeur.get(`/service${route}`);
+
+        expect(reponse.status).to.equal(200);
+        expect(reponse.headers['content-type']).to.contain('text/html');
       });
     });
   });
@@ -102,17 +91,14 @@ describe('Le serveur MSS des routes /service/*', () => {
         return { id: idUtilisateur, entite: { nom: 'une entité' } };
       };
 
-      await axios('http://localhost:1234/service/creation');
+      await testeur.get('/service/creation');
       expect(idRecu).to.equal('123');
     });
 
-    it("charge les préférences de l'utilisateur", (done) => {
-      testeur
+    it("charge les préférences de l'utilisateur", async () => {
+      await testeur
         .middleware()
-        .verifieChargementDesPreferences(
-          'http://localhost:1234/service/creation',
-          done
-        );
+        .verifieChargementDesPreferences(testeur.app(), '/service/creation');
     });
   });
 
@@ -129,29 +115,34 @@ describe('Le serveur MSS des routes /service/*', () => {
       });
     });
 
-    it("aseptise l'identifiant reçu", (done) => {
-      testeur
+    it("vérifie que l'utilisateur a accepté les CGU", async () => {
+      await testeur
         .middleware()
-        .verifieAseptisationParametres(
-          ['id'],
-          'http://localhost:1234/service/456',
-          done
-        );
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), `/service/456`);
     });
 
-    it('recherche le service correspondant', (done) => {
-      testeur
+    it("vérifie que l'état de la visite guidée est chargé sur la route", async () => {
+      await testeur
         .middleware()
-        .verifieRechercheService([], 'http://localhost:1234/service/456', done);
+        .verifieRequeteChargeEtatVisiteGuidee(testeur.app(), `/service/456`);
     });
 
-    it("utilise le middleware de chargement de l'autorisation", (done) => {
-      testeur
+    it("aseptise l'identifiant reçu", async () => {
+      await testeur
         .middleware()
-        .verifieChargementDesAutorisations(
-          'http://localhost:1234/service/456',
-          done
-        );
+        .verifieAseptisationParametres(['id'], testeur.app(), '/service/456');
+    });
+
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService([], testeur.app(), '/service/456');
+    });
+
+    it("utilise le middleware de chargement de l'autorisation", async () => {
+      await testeur
+        .middleware()
+        .verifieChargementDesAutorisations(testeur.app(), '/service/456');
     });
 
     describe('sur redirection vers une rubrique du service', () => {
@@ -195,11 +186,9 @@ describe('Le serveur MSS des routes /service/*', () => {
             serviceARenvoyer: service,
           });
 
-          const reponse = await axios('http://localhost:1234/service/456');
+          const reponse = await testeur.get('/service/456');
 
-          expect(reponse.request.res.responseUrl).to.contain(
-            redirectionAttendue
-          );
+          expect(reponse.headers['location']).to.contain(redirectionAttendue);
         });
       });
 
@@ -224,9 +213,9 @@ describe('Le serveur MSS des routes /service/*', () => {
             .construis(),
         });
 
-        const reponse = await axios('http://localhost:1234/service/456');
+        const reponse = await testeur.get('/service/456');
 
-        expect(reponse.request.res.responseUrl).to.contain(
+        expect(reponse.headers['location']).to.contain(
           '/service/456/descriptionService?etape=3'
         );
       });
@@ -234,31 +223,31 @@ describe('Le serveur MSS des routes /service/*', () => {
   });
 
   describe('quand requête GET sur `/service/:id/descriptionService`', () => {
-    it('recherche le service correspondant', (done) => {
-      testeur
+    it('recherche le service correspondant', async () => {
+      await testeur
         .middleware()
         .verifieRechercheService(
           [{ niveau: LECTURE, rubrique: DECRIRE }],
-          'http://localhost:1234/service/456/descriptionService',
-          done
+          testeur.app(),
+          '/service/456/descriptionService'
         );
     });
 
-    it("charge les autorisations du service pour l'utilisateur", (done) => {
-      testeur
+    it("charge les autorisations du service pour l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesAutorisations(
-          'http://localhost:1234/service/456/descriptionService',
-          done
+          testeur.app(),
+          '/service/456/descriptionService'
         );
     });
 
-    it("charge les préférences de l'utilisateur", (done) => {
-      testeur
+    it("charge les préférences de l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesPreferences(
-          'http://localhost:1234/service/456/descriptionService',
-          done
+          testeur.app(),
+          '/service/456/descriptionService'
         );
     });
   });
@@ -273,41 +262,35 @@ describe('Le serveur MSS des routes /service/*', () => {
       });
     });
 
-    it('positionne un `nonce` dans les headers', (done) => {
-      testeur
+    it('positionne un `nonce` dans les headers', async () => {
+      await testeur
         .middleware()
-        .verifieRequetePositionneNonce(
-          'http://localhost:1234/service/456/mesures',
-          done
-        );
+        .verifieRequetePositionneNonce(testeur.app(), '/service/456/mesures');
     });
 
-    it('recherche le service correspondant', (done) => {
-      testeur
+    it('recherche le service correspondant', async () => {
+      await testeur
         .middleware()
         .verifieRechercheService(
           [{ niveau: LECTURE, rubrique: SECURISER }],
-          'http://localhost:1234/service/456/mesures',
-          done
+          testeur.app(),
+          '/service/456/mesures'
         );
     });
 
-    it("charge les autorisations du service pour l'utilisateur", (done) => {
-      testeur
+    it("charge les autorisations du service pour l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesAutorisations(
-          'http://localhost:1234/service/456/mesures',
-          done
+          testeur.app(),
+          '/service/456/mesures'
         );
     });
 
-    it("charge les préférences de l'utilisateur", (done) => {
-      testeur
+    it("charge les préférences de l'utilisateur", async () => {
+      await testeur
         .middleware()
-        .verifieChargementDesPreferences(
-          'http://localhost:1234/service/456/mesures',
-          done
-        );
+        .verifieChargementDesPreferences(testeur.app(), '/service/456/mesures');
     });
 
     it('interroge le moteur de règles pour obtenir les mesures personnalisées', async () => {
@@ -324,7 +307,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         return {};
       };
 
-      await axios('http://localhost:1234/service/456/mesures');
+      await testeur.get('/service/456/mesures');
 
       expect(descriptionRecue.nomService).to.equal('un service');
     });
@@ -335,26 +318,30 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur.adaptateurCsv().genereCsvMesures = async () => Buffer.from('');
     });
 
-    it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        [{ niveau: LECTURE, rubrique: SECURISER }],
-        {
-          method: 'GET',
-          url: 'http://localhost:1234/service/456/mesures/export.csv',
-        },
-        done
-      );
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: SECURISER }],
+          testeur.app(),
+          {
+            method: 'GET',
+            url: '/service/456/mesures/export.csv',
+          }
+        );
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['id', 'avecDonneesAdditionnelles'],
-        {
-          method: 'GET',
-          url: 'http://localhost:1234/service/456/mesures/export.csv',
-        },
-        done
-      );
+    it('aseptise les paramètres de la requête', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['id', 'avecDonneesAdditionnelles'],
+          testeur.app(),
+          {
+            method: 'GET',
+            url: '/service/456/mesures/export.csv',
+          }
+        );
     });
 
     it('utilise un adaptateur CSV pour la génération', async () => {
@@ -363,7 +350,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         mesuresExportees = mesures;
       };
 
-      await axios.get('http://localhost:1234/service/456/mesures/export.csv');
+      await testeur.get('/service/456/mesures/export.csv');
 
       expect(mesuresExportees).to.eql({
         mesuresGenerales: [],
@@ -395,7 +382,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         contributeursRenseignes = contributeurs;
       };
 
-      await axios.get('http://localhost:1234/service/456/mesures/export.csv');
+      await testeur.get('/service/456/mesures/export.csv');
 
       expect(contributeursRenseignes).to.eql({
         123: 'email.createur@mail.fr',
@@ -403,22 +390,22 @@ describe('Le serveur MSS des routes /service/*', () => {
       });
     });
 
-    it('sert un fichier de type CSV', (done) => {
-      verifieTypeFichierServiEstCSV(
-        'http://localhost:1234/service/456/mesures/export.csv',
-        done
+    it('sert un fichier de type CSV', async () => {
+      await verifieTypeFichierServiEstCSV(
+        testeur.app(),
+        '/service/456/mesures/export.csv'
       );
     });
 
-    it('nomme le fichier CSV avec le nom du service et un horodatage', (done) => {
+    it('nomme le fichier CSV avec le nom du service et un horodatage', async () => {
       testeur.middleware().reinitialise({
         serviceARenvoyer: unService().avecNomService('Mairie').construis(),
       });
       testeur.adaptateurHorloge().maintenant = () => new Date(2024, 0, 23);
-      verifieNomFichierServi(
-        'http://localhost:1234/service/456/mesures/export.csv',
-        'Mairie Liste mesures sans données additionnelles 20240123.csv',
-        done
+      await verifieNomFichierServi(
+        testeur.app(),
+        '/service/456/mesures/export.csv',
+        'Mairie Liste mesures sans données additionnelles 20240123.csv'
       );
     });
 
@@ -429,16 +416,14 @@ describe('Le serveur MSS des routes /service/*', () => {
       });
       testeur.adaptateurHorloge().maintenant = () => new Date(2024, 0, 23);
 
-      const reponse = await axios(
-        'http://localhost:1234/service/456/mesures/export.csv'
-      );
+      const reponse = await testeur.get('/service/456/mesures/export.csv');
 
       expect(reponse.headers['content-disposition']).to.contain(
         'filename="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA Liste'
       );
     });
 
-    it('décode correctement les caractères spéciaux dans le nom du service', (done) => {
+    it('décode correctement les caractères spéciaux dans le nom du service', async () => {
       testeur.middleware().reinitialise({
         serviceARenvoyer: unService()
           .avecNomService('Service d&#x27;apostrophe')
@@ -446,10 +431,10 @@ describe('Le serveur MSS des routes /service/*', () => {
       });
       testeur.adaptateurHorloge().maintenant = () => new Date(2024, 0, 23);
 
-      verifieNomFichierServi(
-        'http://localhost:1234/service/456/mesures/export.csv',
-        'Service dapostrophe Liste mesures sans données additionnelles 20240123.csv',
-        done
+      await verifieNomFichierServi(
+        testeur.app(),
+        '/service/456/mesures/export.csv',
+        'Service dapostrophe Liste mesures sans données additionnelles 20240123.csv'
       );
     });
 
@@ -458,15 +443,8 @@ describe('Le serveur MSS des routes /service/*', () => {
         throw Error('BOOM');
       };
 
-      let executionOK;
-      try {
-        await axios.get('http://localhost:1234/service/456/mesures/export.csv');
-        executionOK = true;
-      } catch (e) {
-        expect(e.response.status).to.be(424);
-      } finally {
-        if (executionOK) expect().fail('Une exception aurait dû être levée');
-      }
+      const reponse = await testeur.get('/service/456/mesures/export.csv');
+      expect(reponse.status).to.be(424);
     });
 
     it("logue l'erreur survenue le cas échéant", async () => {
@@ -479,11 +457,8 @@ describe('Le serveur MSS des routes /service/*', () => {
         erreurLoguee = erreur;
       };
 
-      try {
-        await axios.get('http://localhost:1234/service/456/mesures/export.csv');
-      } catch (e) {
-        expect(erreurLoguee).to.be.an(Error);
-      }
+      await testeur.get('/service/456/mesures/export.csv');
+      expect(erreurLoguee).to.be.an(Error);
     });
   });
 
@@ -494,92 +469,89 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur.middleware().reinitialise({ serviceARenvoyer: service });
     });
 
-    it('recherche le service correspondant', (done) => {
-      testeur
+    it('recherche le service correspondant', async () => {
+      await testeur
         .middleware()
         .verifieRechercheService(
           [{ niveau: LECTURE, rubrique: SECURISER }],
-          'http://localhost:1234/service/456/indiceCyber',
-          done
+          testeur.app(),
+          '/service/456/indiceCyber'
         );
     });
 
-    it("charge les autorisations du service pour l'utilisateur", (done) => {
-      testeur
+    it("charge les autorisations du service pour l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesAutorisations(
-          'http://localhost:1234/service/456/indiceCyber',
-          done
+          testeur.app(),
+          '/service/456/indiceCyber'
         );
     });
 
-    it("charge les préférences de l'utilisateur", (done) => {
-      testeur
+    it("charge les préférences de l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesPreferences(
-          'http://localhost:1234/service/456/indiceCyber',
-          done
+          testeur.app(),
+          '/service/456/indiceCyber'
         );
     });
   });
 
   describe('quand requete GET sur `/service/:id/rolesResponsabilites`', () => {
-    it('recherche le service correspondant', (done) => {
-      testeur
+    it('recherche le service correspondant', async () => {
+      await testeur
         .middleware()
         .verifieRechercheService(
           [{ niveau: LECTURE, rubrique: CONTACTS }],
-          'http://localhost:1234/service/456/rolesResponsabilites',
-          done
+          testeur.app(),
+          '/service/456/rolesResponsabilites'
         );
     });
 
-    it("charge les autorisations du service pour l'utilisateur", (done) => {
-      testeur
+    it("charge les autorisations du service pour l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesAutorisations(
-          'http://localhost:1234/service/456/rolesResponsabilites',
-          done
+          testeur.app(),
+          '/service/456/rolesResponsabilites'
         );
     });
 
-    it("charge les préférences de l'utilisateur", (done) => {
-      testeur
+    it("charge les préférences de l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesPreferences(
-          'http://localhost:1234/service/456/rolesResponsabilites',
-          done
+          testeur.app(),
+          '/service/456/rolesResponsabilites'
         );
     });
   });
 
   describe('quand requête GET sur `/service/:id/risques`', () => {
-    it('recherche le service correspondant', (done) => {
-      testeur
+    it('recherche le service correspondant', async () => {
+      await testeur
         .middleware()
         .verifieRechercheService(
           [{ niveau: LECTURE, rubrique: RISQUES }],
-          'http://localhost:1234/service/456/risques',
-          done
+          testeur.app(),
+          '/service/456/risques'
         );
     });
 
-    it("charge les autorisations du service pour l'utilisateur", (done) => {
-      testeur
+    it("charge les autorisations du service pour l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesAutorisations(
-          'http://localhost:1234/service/456/risques',
-          done
+          testeur.app(),
+          '/service/456/risques'
         );
     });
 
-    it("charge les préférences de l'utilisateur", (done) => {
-      testeur
+    it("charge les préférences de l'utilisateur", async () => {
+      await testeur
         .middleware()
-        .verifieChargementDesPreferences(
-          'http://localhost:1234/service/456/risques',
-          done
-        );
+        .verifieChargementDesPreferences(testeur.app(), '/service/456/risques');
     });
 
     it('merge les données du référentiel et du service pour les risques généraux', async () => {
@@ -601,12 +573,10 @@ describe('Le serveur MSS des routes /service/*', () => {
       });
       testeur.middleware().reinitialise({ serviceARenvoyer });
 
-      const reponse = await axios.get(
-        'http://localhost:1234/service/456/risques'
-      );
+      const reponse = await testeur.get('/service/456/risques');
 
       const { risquesGeneraux } = donneesPartagees(
-        reponse.data,
+        reponse.text,
         'donnees-risques'
       );
       expect(risquesGeneraux.length).to.be(1);
@@ -626,31 +596,31 @@ describe('Le serveur MSS des routes /service/*', () => {
         Promise.resolve({ id: 1 });
     });
 
-    it('recherche le service correspondant', (done) => {
-      testeur
+    it('recherche le service correspondant', async () => {
+      await testeur
         .middleware()
         .verifieRechercheService(
           [{ niveau: LECTURE, rubrique: HOMOLOGUER }],
-          'http://localhost:1234/service/456/dossiers',
-          done
+          testeur.app(),
+          '/service/456/dossiers'
         );
     });
 
-    it("charge les autorisations du service pour l'utilisateur", (done) => {
-      testeur
+    it("charge les autorisations du service pour l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesAutorisations(
-          'http://localhost:1234/service/456/dossiers',
-          done
+          testeur.app(),
+          '/service/456/dossiers'
         );
     });
 
-    it("charge les préférences de l'utilisateur", (done) => {
-      testeur
+    it("charge les préférences de l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesPreferences(
-          'http://localhost:1234/service/456/dossiers',
-          done
+          testeur.app(),
+          '/service/456/dossiers'
         );
     });
   });
@@ -677,38 +647,38 @@ describe('Le serveur MSS des routes /service/*', () => {
       testeur.depotDonnees().service = async () => serviceARenvoyer;
     });
 
-    it('recherche le service correspondant', (done) => {
-      testeur
+    it('recherche le service correspondant', async () => {
+      await testeur
         .middleware()
         .verifieRechercheService(
           [{ niveau: LECTURE, rubrique: HOMOLOGUER }],
-          'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement',
-          done
+          testeur.app(),
+          '/service/456/homologation/edition/etape/dateTelechargement'
         );
     });
 
-    it("charge les autorisations du service pour l'utilisateur", (done) => {
-      testeur
+    it("charge les autorisations du service pour l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesAutorisations(
-          'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement',
-          done
+          testeur.app(),
+          '/service/456/homologation/edition/etape/dateTelechargement'
         );
     });
 
-    it("charge les préférences de l'utilisateur", (done) => {
-      testeur
+    it("charge les préférences de l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesPreferences(
-          'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement',
-          done
+          testeur.app(),
+          '/service/456/homologation/edition/etape/dateTelechargement'
         );
     });
 
     it("répond avec une erreur HTTP 404 si l'identifiant d'étape n'est pas connu du référentiel", async () => {
       await testeur.verifieRequeteGenereErreurHTTP(404, 'Étape inconnue', {
         method: 'get',
-        url: 'http://localhost:1234/service/456/homologation/edition/etape/inconnue',
+        url: '/service/456/homologation/edition/etape/inconnue',
       });
     });
 
@@ -720,8 +690,8 @@ describe('Le serveur MSS des routes /service/*', () => {
         idRecu = idService;
       };
 
-      await axios(
-        'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement'
+      await testeur.get(
+        '/service/456/homologation/edition/etape/dateTelechargement'
       );
 
       expect(idRecu).to.be('456');
@@ -734,21 +704,19 @@ describe('Le serveur MSS des routes /service/*', () => {
         return serviceARenvoyer;
       };
 
-      await axios(
-        'http://localhost:1234/service/456/homologation/edition/etape/dateTelechargement'
+      await testeur.get(
+        '/service/456/homologation/edition/etape/dateTelechargement'
       );
 
       expect(chargementsService).to.equal(1);
     });
 
     it("redirige vers l'étape en cours si l'étape demandée est postérieure", async () => {
-      const reponse = await axios(
-        'http://localhost:1234/service/456/homologation/edition/etape/deuxieme'
+      const reponse = await testeur.get(
+        '/service/456/homologation/edition/etape/deuxieme'
       );
 
-      expect(reponse.request.res.responseUrl).to.contain(
-        'edition/etape/dateTelechargement'
-      );
+      expect(reponse.headers['location']).to.contain('dateTelechargement');
     });
 
     it("redirige vers la dernière étape disponible si l'étape demandée n'est pas accessible pour l'utilisateur", async () => {
@@ -762,13 +730,11 @@ describe('Le serveur MSS des routes /service/*', () => {
         .deContributeur()
         .construis();
 
-      const reponse = await axios(
-        'http://localhost:1234/service/456/homologation/edition/etape/deuxieme'
+      const reponse = await testeur.get(
+        '/service/456/homologation/edition/etape/deuxieme'
       );
 
-      expect(reponse.request.res.responseUrl).to.contain(
-        'edition/etape/dateTelechargement'
-      );
+      expect(reponse.headers['location']).to.contain('dateTelechargement');
     });
   });
 });

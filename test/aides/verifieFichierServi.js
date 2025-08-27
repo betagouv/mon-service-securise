@@ -1,4 +1,3 @@
-const axios = require('axios');
 const expect = require('expect.js');
 const supertest = require('supertest');
 
