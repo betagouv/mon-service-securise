@@ -220,6 +220,8 @@ const testeurMss = () => {
     supertest(app).put(url).send(donnees);
   const del = async (url, donnees = {}) =>
     supertest(app).delete(url).send(donnees);
+  const copy = async (url, donnees = {}) =>
+    supertest(app).copy(url).send(donnees);
 
   return {
     app: () => app,
@@ -253,6 +255,7 @@ const testeurMss = () => {
     initialise,
     verifieRequeteGenereErreurHTTP,
     verifieSessionDeposee,
+    copy,
     get,
     patch,
     put,
