@@ -10,7 +10,6 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
   const testeur = testeurMSS();
 
   beforeEach(testeur.initialise);
-  afterEach(testeur.arrete);
 
   beforeEach(() => {
     testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
@@ -29,22 +28,20 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
   });
 
   describe('quand requête GET sur `/api/notifications`', () => {
-    it("vérifie que l'utilisateur a accepté les CGU", (done) => {
-      testeur
+    it("vérifie que l'utilisateur a accepté les CGU", async () => {
+      await testeur
         .middleware()
-        .verifieRequeteExigeAcceptationCGU(
-          { method: 'post', url: 'http://localhost:1234/api/notifications' },
-          done
-        );
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
+          method: 'post',
+          url: '/api/notifications',
+        });
     });
 
     it('retourne les notifications', async () => {
-      const reponse = await axios.get(
-        'http://localhost:1234/api/notifications'
-      );
+      const reponse = await testeur.get('/api/notifications');
 
       expect(reponse.status).to.be(200);
-      expect(reponse.data.notifications.length).to.be(2);
+      expect(reponse.body.notifications.length).to.be(2);
     });
   });
 
@@ -58,24 +55,18 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
         donneesRecues = { idUtilisateur, idNouveaute };
       };
 
-      const reponse = await axios.put(
-        'http://localhost:1234/api/notifications/nouveautes/N1'
-      );
+      const reponse = await testeur.put('/api/notifications/nouveautes/N1');
 
       expect(reponse.status).to.be(200);
       expect(donneesRecues.idUtilisateur).to.be('U1');
     });
 
     it("reste robuste en cas d'erreur", async () => {
-      try {
-        await axios.put(
-          'http://localhost:1234/api/notifications/nouveautes/ID_INCONNU'
-        );
-        expect().fail("L'appel aurait dû lever une exception");
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-        expect(e.response.data).to.be('Identifiant de nouveauté inconnu');
-      }
+      const reponse = await testeur.put(
+        '/api/notifications/nouveautes/ID_INCONNU'
+      );
+      expect(reponse.status).to.be(400);
+      expect(reponse.text).to.be('Identifiant de nouveauté inconnu');
     });
   });
 
@@ -87,9 +78,7 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
         donneesRecues = { idTache };
       };
 
-      const reponse = await axios.put(
-        'http://localhost:1234/api/notifications/taches/T1'
-      );
+      const reponse = await testeur.put('/api/notifications/taches/T1');
 
       expect(reponse.status).to.be(200);
       expect(donneesRecues).to.be.an('object');
@@ -100,15 +89,9 @@ describe('Le serveur MSS des routes privées /api/notifications', () => {
       testeur.depotDonnees().marqueTacheDeServiceLue = async () => {
         throw new ErreurIdentifiantTacheInconnu();
       };
-      try {
-        await axios.put(
-          'http://localhost:1234/api/notifications/taches/ID_INCONNU'
-        );
-        expect().fail("L'appel aurait dû lever une exception");
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-        expect(e.response.data).to.be('Identifiant de tâche inconnu');
-      }
+      const reponse = await testeur.put('/api/notifications/taches/ID_INCONNU');
+      expect(reponse.status).to.be(400);
+      expect(reponse.text).to.be('Identifiant de tâche inconnu');
     });
   });
 });
