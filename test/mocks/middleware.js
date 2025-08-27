@@ -10,7 +10,7 @@ const {
 const { unService } = require('../constructeurs/constructeurService');
 const SourceAuthentification = require('../../src/modeles/sourceAuthentification');
 
-const verifieRequeteChangeEtat = async (donneesEtat, app, url) => {
+const verifieRequeteChangeEtat = async (donneesEtat, app, requete) => {
   const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) => {
     expect(
       `${[JSON.stringify(valeurConstatee), ...diagnostics].join(' ')}`
@@ -23,7 +23,15 @@ const verifieRequeteChangeEtat = async (donneesEtat, app, url) => {
   verifieEgalite(lectureEtat(), etatInitial, suffixeLectureEtat);
 
   try {
-    await supertest(app).get(url);
+    if (typeof requete === 'string') await supertest(app).get(requete);
+    else {
+      const methode = requete.method.toLowerCase();
+      if (!(methode in supertest(app)))
+        throw new Error(
+          `La méthode ${methode} n'est pas un verbe HTTP correct`
+        );
+      await supertest(app)[requete.method.toLowerCase()](requete.url);
+    }
     verifieEgalite(lectureEtat(), etatFinal, suffixeLectureEtat);
   } catch (e) {
     const erreurHTTP = e.response?.status;
@@ -327,11 +335,11 @@ const middlewareFantaisie = {
     );
   },
 
-  verifieRequeteExigeJWT: async (app, url) =>
+  verifieRequeteExigeJWT: async (app, requete) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => verificationJWTMenee },
       app,
-      url
+      requete
     ),
 
   verifieRequeteChargeEtatVisiteGuidee: (...params) => {

@@ -1234,14 +1234,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeJWT(
-        {
-          method: 'PUT',
-          url: 'http://localhost:1234/api/utilisateur/acceptationCGU',
-        },
-        done
-      );
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur.middleware().verifieRequeteExigeJWT(testeur.app(), {
+        method: 'PUT',
+        url: '/api/utilisateur/acceptationCGU',
+      });
     });
 
     it("demande au dépôt d'enregistrer que les CGU sont acceptées", async () => {
