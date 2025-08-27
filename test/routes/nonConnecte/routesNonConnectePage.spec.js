@@ -1,11 +1,7 @@
-const axios = require('axios');
 const expect = require('expect.js');
 const { ErreurArticleCrispIntrouvable } = require('@lab-anssi/lib');
 const testeurMSS = require('../testeurMSS');
-const {
-  donneesPartagees,
-  requeteSansRedirection,
-} = require('../../aides/http');
+const { donneesPartagees } = require('../../aides/http');
 const { expectContenuSessionValide } = require('../../aides/cookie');
 const {
   ErreurJWTInvalide,
@@ -14,8 +10,8 @@ const {
 
 describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
   const testeur = testeurMSS();
+
   beforeEach(testeur.initialise);
-  afterEach(testeur.arrete);
 
   [
     '/',
@@ -41,15 +37,11 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       testeur.adaptateurJWT().decode = () => ({});
     });
 
-    it(`sert le contenu HTML de la page ${route}`, (done) => {
-      axios
-        .get(`http://localhost:1234${route}`)
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.headers['content-type']).to.contain('text/html');
-          done();
-        })
-        .catch(done);
+    it(`sert le contenu HTML de la page ${route}`, async () => {
+      const reponse = await testeur.get(`${route}`);
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.headers['content-type']).to.contain('text/html');
     });
   });
 
@@ -70,7 +62,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         };
       };
 
-      await axios.get(`http://localhost:1234/articles/un-slug-generique`);
+      await testeur.get(`/articles/un-slug-generique`);
 
       expect(slugRecu).to.be('un-slug-generique');
     });
@@ -87,13 +79,11 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         },
       });
 
-      const reponse = await axios.get(
-        `http://localhost:1234/articles/un-slug-generique`
-      );
+      const reponse = await testeur.get(`/articles/un-slug-generique`);
 
       expect(reponse.status).to.be(200);
       expect(reponse.headers['content-type']).to.contain('text/html');
-      expect(reponse.data).to.contain('Un titre');
+      expect(reponse.text).to.contain('Un titre');
     });
 
     it("renvoie une erreur 404 si l'article n'existe pas", async () => {
@@ -103,18 +93,18 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       await testeur.verifieRequeteGenereErreurHTTP(
         404,
         `Article Crisp inconnu`,
-        `http://localhost:1234/articles/un-slug-inexistant`
+        `/articles/un-slug-inexistant`
       );
     });
   });
 
   describe('quand requête GET sur `/reinitialisationMotDePasse`', () => {
-    it("déconnecte l'utilisateur courant", (done) => {
-      testeur
+    it("déconnecte l'utilisateur courant", async () => {
+      await testeur
         .middleware()
         .verifieRequeteExigeSuppressionCookie(
-          'http://localhost:1234/reinitialisationMotDePasse',
-          done
+          testeur.app(),
+          '/reinitialisationMotDePasse'
         );
     });
   });
@@ -122,12 +112,12 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
   describe('quand requête GET sur `/initialisationMotDePasse/:idReset`', () => {
     const uuid = '109156be-c4fb-41ea-b1b4-efe1671c5836';
 
-    it("charge l'état d'activation d'AgentConnect", (done) => {
-      testeur
+    it("charge l'état d'activation d'AgentConnect", async () => {
+      await testeur
         .middleware()
         .verifieRequeteChargeActivationAgentConnect(
-          'http://localhost:1234/initialisationMotDePasse/unUUID',
-          done
+          testeur.app(),
+          '/initialisationMotDePasse/unUUID'
         );
     });
 
@@ -154,31 +144,23 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
           return utilisateur;
         };
 
-        const reponse = await axios.get(
-          `http://localhost:1234/initialisationMotDePasse/${uuid}`
-        );
+        const reponse = await testeur.get(`/initialisationMotDePasse/${uuid}`);
 
         expect(idRecu).to.be(uuid);
         await testeur.verifieSessionDeposee(reponse, () => {});
       });
 
       it('ajoute une session utilisateur', async () => {
-        const reponse = await axios.get(
-          `http://localhost:1234/initialisationMotDePasse/${uuid}`
-        );
+        const reponse = await testeur.get(`/initialisationMotDePasse/${uuid}`);
 
         expectContenuSessionValide(reponse, 'MSS', false, false);
       });
 
-      it('sert le contenu HTML de la page', (done) => {
-        axios
-          .get(`http://localhost:1234/initialisationMotDePasse/${uuid}`)
-          .then((reponse) => {
-            expect(reponse.status).to.equal(200);
-            expect(reponse.headers['content-type']).to.contain('text/html');
-            done();
-          })
-          .catch(done);
+      it('sert le contenu HTML de la page', async () => {
+        const reponse = await testeur.get(`/initialisationMotDePasse/${uuid}`);
+
+        expect(reponse.status).to.equal(200);
+        expect(reponse.headers['content-type']).to.contain('text/html');
       });
 
       it("pour un utilisateur invité, redirige vers la page d'inscription pour l'empêcher de créer un compte avec mot de passe MSS", async () => {
@@ -193,22 +175,20 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
           utilisateurInvite;
         testeur.depotDonnees().utilisateur = async () => utilisateurInvite;
 
-        const reponse = await requeteSansRedirection(
-          `http://localhost:1234/initialisationMotDePasse/${uuid}`
-        );
+        const reponse = await testeur.get(`/initialisationMotDePasse/${uuid}`);
 
         expect(reponse.status).to.be(302);
         expect(reponse.headers.location).to.be('/inscription');
       });
     });
 
-    it("aseptise l'identifiant reçu", (done) => {
-      testeur
+    it("aseptise l'identifiant reçu", async () => {
+      await testeur
         .middleware()
         .verifieAseptisationParametres(
           ['idReset'],
-          `http://localhost:1234/initialisationMotDePasse/${uuid}`,
-          done
+          testeur.app(),
+          `/initialisationMotDePasse/${uuid}`
         );
     });
 
@@ -216,7 +196,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       await testeur.verifieRequeteGenereErreurHTTP(
         400,
         'UUID requis',
-        'http://localhost:1234/initialisationMotDePasse/999'
+        '/initialisationMotDePasse/999'
       );
     });
 
@@ -226,14 +206,14 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       await testeur.verifieRequeteGenereErreurHTTP(
         404,
         `Identifiant d'initialisation de mot de passe inconnu`,
-        `http://localhost:1234/initialisationMotDePasse/${uuid}`
+        `/initialisationMotDePasse/${uuid}`
       );
     });
   });
 
   describe('quand requête GET sur `/sitemap.xml`', () => {
     it('sert le contenu XML du fichier', async () => {
-      const reponse = await axios.get('http://localhost:1234/sitemap.xml');
+      const reponse = await testeur.get('/sitemap.xml');
 
       expect(reponse.status).to.equal(200);
       expect(reponse.headers['content-type']).to.contain('application/xml');
@@ -250,14 +230,8 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         throw new ErreurJWTInvalide();
       };
 
-      try {
-        await axios.get(
-          `http://localhost:1234/creation-compte?token=unFauxToken`
-        );
-        expect().fail("L'appel aurait dû lever une exception");
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      const reponse = await testeur.get(`/creation-compte?token=unFauxToken`);
+      expect(reponse.status).to.be(400);
     });
 
     it('retourne une erreur 400 si le token est vide', async () => {
@@ -265,22 +239,16 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         throw new ErreurJWTManquant();
       };
 
-      try {
-        await axios.get('http://localhost:1234/creation-compte?token=');
-        expect().fail("L'appel aurait dû lever une exception");
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      const reponse = await testeur.get('/creation-compte?token=');
+      expect(reponse.status).to.be(400);
     });
 
     it('envoie les départements', async () => {
       testeur.referentiel().departements = () => [{ nom: 'Gironde' }];
 
-      const reponse = await axios.get(
-        `http://localhost:1234/creation-compte?token=unTokenValide`
-      );
+      const reponse = await testeur.get(`/creation-compte?token=unTokenValide`);
 
-      expect(donneesPartagees(reponse.data, 'departements')).to.eql({
+      expect(donneesPartagees(reponse.text, 'departements')).to.eql({
         departements: [{ nom: 'Gironde' }],
       });
     });
@@ -299,12 +267,10 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         domainesSpecialite: ['RSSI', 'DEV'],
       });
 
-      const reponse = await axios.get(
-        `http://localhost:1234/creation-compte?token=unTokenValide`
-      );
+      const reponse = await testeur.get(`/creation-compte?token=unTokenValide`);
 
       expect(
-        donneesPartagees(reponse.data, 'informations-professionnelles')
+        donneesPartagees(reponse.text, 'informations-professionnelles')
       ).to.eql({
         informationsProfessionnelles: {
           email: 'jeand@beta.fr',
@@ -322,51 +288,45 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     });
 
     it('envoie le token', async () => {
-      const reponse = await axios.get(
-        `http://localhost:1234/creation-compte?token=unTokenValide`
-      );
+      const reponse = await testeur.get(`/creation-compte?token=unTokenValide`);
 
-      expect(donneesPartagees(reponse.data, 'token')).to.eql({
+      expect(donneesPartagees(reponse.text, 'token')).to.eql({
         token: 'unTokenValide',
       });
     });
   });
 
   describe('quand requête GET sur `/inscription`', () => {
-    it("déconnecte l'utilisateur courant", (done) => {
-      testeur
+    it("déconnecte l'utilisateur courant", async () => {
+      await testeur
         .middleware()
-        .verifieRequeteExigeSuppressionCookie(
-          'http://localhost:1234/inscription',
-          done
-        );
+        .verifieRequeteExigeSuppressionCookie(testeur.app(), '/inscription');
     });
   });
 
   describe('quand requête GET sur `/connexion`', () => {
-    it("déconnecte l'utilisateur courant", (done) => {
-      testeur
+    it("déconnecte l'utilisateur courant", async () => {
+      await testeur
         .middleware()
-        .verifieRequeteExigeSuppressionCookie(
-          'http://localhost:1234/connexion',
-          done
-        );
+        .verifieRequeteExigeSuppressionCookie(testeur.app(), '/connexion');
     });
 
     it('ajoute la redirection', async () => {
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/connexion?urlRedirection=/redirige-vers'
+      const reponse = await testeur.get(
+        '/connexion?urlRedirection=/redirige-vers'
       );
-      expect(donneesPartagees(reponse.data, 'url-redirection')).to.eql({
+
+      expect(donneesPartagees(reponse.text, 'url-redirection')).to.eql({
         urlRedirection: 'http://localhost:1234/redirige-vers',
       });
     });
 
     it("n'ajoute pas la redirection si l'url n'est pas valide", async () => {
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/connexion?urlRedirection=uri-invalide'
+      const reponse = await testeur.get(
+        '/connexion?urlRedirection=uri-invalide'
       );
-      expect(donneesPartagees(reponse.data, 'url-redirection')).to.eql({});
+
+      expect(donneesPartagees(reponse.text, 'url-redirection')).to.eql({});
     });
   });
 
@@ -383,7 +343,8 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         };
       };
 
-      const reponse = await axios.get('http://localhost:1234/statistiques');
+      const reponse = await testeur.get('/statistiques');
+
       expect(reponse.status).to.be(200);
       expect(adaptateurAppele).to.be(true);
     });
@@ -393,17 +354,17 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     it("affiche la demande d'acceptation si l'utilisateur connecté n'a pas accepté les CGU", async () => {
       testeur.serviceGestionnaireSession().cguAcceptees = () => false;
 
-      const reponse = await axios.get('http://localhost:1234/cgu');
+      const reponse = await testeur.get('/cgu');
 
-      expect(reponse.data).to.contain('class="demande-acceptation"');
+      expect(reponse.text).to.contain('class="demande-acceptation"');
     });
 
     it("n'affiche pas la demande d'acceptation si l'utilisateur connecté a accepté les CGU", async () => {
       testeur.serviceGestionnaireSession().cguAcceptees = () => true;
 
-      const reponse = await axios.get('http://localhost:1234/cgu');
+      const reponse = await testeur.get('/cgu');
 
-      expect(reponse.data).not.to.contain('class="demande-acceptation"');
+      expect(reponse.text).not.to.contain('class="demande-acceptation"');
     });
   });
 });

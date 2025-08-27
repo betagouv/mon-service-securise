@@ -66,12 +66,18 @@ const testeurMss = () => {
     messageErreur,
     requete
   ) => {
-    const methode = requete.method.toLowerCase();
+    let url;
+    let methode;
+    if (typeof requete === 'string') {
+      url = requete;
+      methode = 'get';
+    } else {
+      url = requete.url;
+      methode = requete.method?.toLowerCase();
+    }
     if (!(methode in supertest(app)))
       throw new Error(`La méthode ${methode} n'est pas un verbe HTTP correct`);
-    const reponse = await supertest(app)
-      [requete.method.toLowerCase()](requete.url)
-      .send(requete.data);
+    const reponse = await supertest(app)[methode](url).send(requete.data);
     expect(reponse.status).to.equal(status);
     if (reponse.type === 'text/html' || reponse.type === 'text/plain')
       expect(reponse.text).to.eql(messageErreur);
