@@ -1,4 +1,3 @@
-const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const { ErreurFichierXlsInvalide } = require('../../../src/erreurs');
@@ -13,27 +12,21 @@ describe('Les routes connecté de téléversement de services', () => {
     testeur.depotDonnees().nouveauTeleversementServices = async () => {};
   });
 
-  afterEach(testeur.arrete);
-
-  it("vérifie que l'utilisateur est authentifié, 1 seul test suffit car le middleware est placé au niveau de l'instanciation du routeur", (done) => {
-    testeur.middleware().verifieRequeteExigeAcceptationCGU(
-      {
+  it("vérifie que l'utilisateur est authentifié, 1 seul test suffit car le middleware est placé au niveau de l'instanciation du routeur", async () => {
+    await testeur
+      .middleware()
+      .verifieRequeteExigeAcceptationCGU(testeur.app(), {
         method: 'post',
-        url: 'http://localhost:1234/api/televersement/services',
-      },
-      done
-    );
+        url: '/api/televersement/services',
+      });
   });
 
   describe('Quand requête POST sur `/api/televersement/services`', () => {
-    it('applique une protection de trafic', (done) => {
-      testeur.middleware().verifieProtectionTrafic(
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/televersement/services',
-        },
-        done
-      );
+    it('applique une protection de trafic', async () => {
+      await testeur.middleware().verifieProtectionTrafic(testeur.app(), {
+        method: 'post',
+        url: '/api/televersement/services',
+      });
     });
 
     it("délègue la vérification de surface à l'adaptateur de vérification de fichier", async () => {
@@ -44,7 +37,7 @@ describe('Les routes connecté de téléversement de services', () => {
         requeteRecue = requete;
       };
 
-      await axios.post('http://localhost:1234/api/televersement/services');
+      await testeur.post('/api/televersement/services');
 
       expect(adaptateurAppele).to.be(true);
       expect(requeteRecue).not.to.be(undefined);
@@ -59,7 +52,7 @@ describe('Les routes connecté de téléversement de services', () => {
           bufferRecu = buffer;
         };
 
-      await axios.post('http://localhost:1234/api/televersement/services');
+      await testeur.post('/api/televersement/services');
 
       expect(adaptateurAppele).to.be(true);
       expect(bufferRecu).not.to.be(undefined);
@@ -70,12 +63,9 @@ describe('Les routes connecté de téléversement de services', () => {
         throw new ErreurFichierXlsInvalide();
       };
 
-      try {
-        await axios.post('http://localhost:1234/api/televersement/services');
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      const reponse = await testeur.post('/api/televersement/services');
+
+      expect(reponse.status).to.be(400);
     });
 
     it('délègue au dépôt de données la sauvegarde du téléversement', async () => {
@@ -92,7 +82,7 @@ describe('Les routes connecté de téléversement de services', () => {
         donneesRecues = donnees;
       };
 
-      await axios.post('http://localhost:1234/api/televersement/services');
+      await testeur.post('/api/televersement/services');
 
       expect(idUtilisateurQuiTeleverse).to.equal('123');
       expect(donneesRecues).to.eql([{ nom: 'Un service' }]);
@@ -138,7 +128,7 @@ describe('Les routes connecté de téléversement de services', () => {
         return [];
       };
 
-      await axios.get('http://localhost:1234/api/televersement/services');
+      await testeur.get('/api/televersement/services');
 
       expect(idUtilisateurRecu).to.be('123');
     });
@@ -152,7 +142,7 @@ describe('Les routes connecté de téléversement de services', () => {
         return televersementService;
       };
 
-      await axios.get('http://localhost:1234/api/televersement/services');
+      await testeur.get('/api/televersement/services');
 
       expect(idUtilisateurRecu).to.be('123');
     });
@@ -160,22 +150,17 @@ describe('Les routes connecté de téléversement de services', () => {
     it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
       testeur.depotDonnees().lisTeleversementServices = async () => undefined;
 
-      try {
-        await axios.get('http://localhost:1234/api/televersement/services');
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(404);
-      }
+      const reponse = await testeur.get('/api/televersement/services');
+
+      expect(reponse.status).to.be(404);
     });
 
     it('retourne le rapport détaillé du téléversement de service', async () => {
-      const reponse = await axios.get(
-        'http://localhost:1234/api/televersement/services'
-      );
+      const reponse = await testeur.get('/api/televersement/services');
 
-      expect(reponse.data.statut).to.be('VALIDE');
-      expect(reponse.data.services[0].service).to.eql(donneesServiceValide);
-      expect(reponse.data.services[0].erreurs.length).to.be(0);
+      expect(reponse.body.statut).to.be('VALIDE');
+      expect(reponse.body.services[0].service).to.eql(donneesServiceValide);
+      expect(reponse.body.services[0].erreurs.length).to.be(0);
     });
   });
 
@@ -187,9 +172,7 @@ describe('Les routes connecté de téléversement de services', () => {
 
     it('renvoie une réponse 200 ', async () => {
       testeur.depotDonnees().supprimeTeleversementServices = async () => 1;
-      const reponse = await axios.delete(
-        'http://localhost:1234/api/televersement/services'
-      );
+      const reponse = await testeur.delete('/api/televersement/services');
 
       expect(reponse.status).to.be(200);
     });
@@ -229,8 +212,8 @@ describe('Les routes connecté de téléversement de services', () => {
     });
 
     it('répond 201', async () => {
-      const reponse = await axios.post(
-        'http://localhost:1234/api/televersement/services/confirme'
+      const reponse = await testeur.post(
+        '/api/televersement/services/confirme'
       );
 
       expect(reponse.status).to.be(201);
@@ -243,9 +226,7 @@ describe('Les routes connecté de téléversement de services', () => {
         return [];
       };
 
-      await axios.post(
-        'http://localhost:1234/api/televersement/services/confirme'
-      );
+      await testeur.post('/api/televersement/services/confirme');
 
       expect(idUtilisateurRecu).to.be('123');
     });
@@ -259,9 +240,7 @@ describe('Les routes connecté de téléversement de services', () => {
         return televersementService;
       };
 
-      await axios.post(
-        'http://localhost:1234/api/televersement/services/confirme'
-      );
+      await testeur.post('/api/televersement/services/confirme');
 
       expect(idUtilisateurRecu).to.be('123');
     });
@@ -269,14 +248,11 @@ describe('Les routes connecté de téléversement de services', () => {
     it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
       testeur.depotDonnees().lisTeleversementServices = async () => undefined;
 
-      try {
-        await axios.post(
-          'http://localhost:1234/api/televersement/services/confirme'
-        );
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(404);
-      }
+      const reponse = await testeur.post(
+        '/api/televersement/services/confirme'
+      );
+
+      expect(reponse.status).to.be(404);
     });
 
     it('créé les services via le modèle métier', async () => {
@@ -301,9 +277,7 @@ describe('Les routes connecté de téléversement de services', () => {
         return promesse;
       };
 
-      await axios.post(
-        'http://localhost:1234/api/televersement/services/confirme'
-      );
+      await testeur.post('/api/televersement/services/confirme');
 
       expect(resolutionPromesse.resolue).to.be(false);
       resolutionPromesse.resous();
@@ -320,14 +294,11 @@ describe('Les routes connecté de téléversement de services', () => {
         referentiel
       );
 
-      try {
-        await axios.post(
-          'http://localhost:1234/api/televersement/services/confirme'
-        );
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      const reponse = await testeur.post(
+        '/api/televersement/services/confirme'
+      );
+
+      expect(reponse.status).to.be(400);
     });
   });
 
@@ -344,27 +315,24 @@ describe('Les routes connecté de téléversement de services', () => {
           return 50;
         };
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/televersement/services/progression'
+      const reponse = await testeur.get(
+        '/api/televersement/services/progression'
       );
 
       expect(idUtilisateurRecu).to.be('123');
       expect(reponse.status).to.be(200);
-      expect(reponse.data.progression).to.be(50);
+      expect(reponse.body.progression).to.be(50);
     });
 
     it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
       testeur.depotDonnees().lisPourcentageProgressionTeleversementServices =
         async () => undefined;
 
-      try {
-        await axios.get(
-          'http://localhost:1234/api/televersement/services/progression'
-        );
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(404);
-      }
+      const reponse = await testeur.get(
+        '/api/televersement/services/progression'
+      );
+
+      expect(reponse.status).to.be(404);
     });
   });
 });
