@@ -73,7 +73,7 @@ const testeurMss = () => {
       [requete.method.toLowerCase()](requete.url)
       .send(requete.data);
     expect(reponse.status).to.equal(status);
-    if (reponse.type === 'text/html')
+    if (reponse.type === 'text/html' || reponse.type === 'text/plain')
       expect(reponse.text).to.eql(messageErreur);
     else expect(reponse.body).to.eql(messageErreur);
   };
