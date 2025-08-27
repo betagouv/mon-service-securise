@@ -66,13 +66,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
         .middleware()
-        .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/services',
-          done
-        );
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), '/api/services');
     });
 
     it("interroge le dépôt de données pour récupérer les services de l'utilisateur", async () => {
