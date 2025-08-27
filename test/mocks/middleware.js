@@ -328,12 +328,12 @@ const middlewareFantaisie = {
     );
   },
 
-  verifieRequeteExigeAcceptationCGU: (...params) => {
+  verifieRequeteExigeAcceptationCGU: async (app, requete) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => verificationCGUMenee },
-      ...params
-    );
-  },
+      app,
+      requete
+    ),
 
   verifieRequeteExigeJWT: async (app, requete) =>
     verifieRequeteChangeEtat(
