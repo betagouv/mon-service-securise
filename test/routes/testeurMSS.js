@@ -52,6 +52,7 @@ const testeurMss = () => {
   let busEvenements;
   let cmsCrisp;
   let serveur;
+  let app;
 
   const verifieSessionDeposee = (reponse, suite) => {
     const valeurHeader = reponse.headers['set-cookie'][0];
@@ -75,7 +76,7 @@ const testeurMss = () => {
     }
   };
 
-  const initialise = (done) => {
+  const initialise = async () => {
     serviceAnnuaire = {};
     serviceSupervision = {};
     adaptateurHorloge = {
@@ -154,55 +155,56 @@ const testeurMss = () => {
     busEvenements = fabriqueBusPourLesTests();
 
     moteurRegles = new MoteurRegles(referentiel);
-    depotVide()
-      .then((depot) => {
-        depotDonnees = depot;
-        inscriptionUtilisateur = fabriqueInscriptionUtilisateur({
-          adaptateurMail,
-          adaptateurTracking,
-          depotDonnees,
-        });
-        serveur = MSS.creeServeur({
-          depotDonnees,
-          middleware,
-          referentiel,
-          moteurRegles,
-          adaptateurMail,
-          adaptateurPdf,
-          adaptateurHorloge,
-          adaptateurGestionErreur,
-          serviceAnnuaire,
-          adaptateurCsv,
-          adaptateurZip,
-          adaptateurTracking,
-          adaptateurProtection,
-          adaptateurJournal,
-          adaptateurOidc,
-          adaptateurEnvironnement,
-          adaptateurStatistiques,
-          adaptateurJWT,
-          adaptateurProfilAnssi,
-          lecteurDeFormData,
-          adaptateurTeleversementServices,
-          adaptateurTeleversementModelesMesureSpecifique,
-          cmsCrisp,
-          serviceSupervision,
-          serviceGestionnaireSession,
-          serviceCgu,
-          procedures,
-          inscriptionUtilisateur,
-          busEvenements,
-          avecCookieSecurise: false,
-          avecPageErreur: false,
-        });
-        serveur.ecoute(1234, done);
-      })
-      .catch(done);
+    try {
+      depotDonnees = await depotVide();
+      inscriptionUtilisateur = fabriqueInscriptionUtilisateur({
+        adaptateurMail,
+        adaptateurTracking,
+        depotDonnees,
+      });
+      serveur = MSS.creeServeur({
+        depotDonnees,
+        middleware,
+        referentiel,
+        moteurRegles,
+        adaptateurMail,
+        adaptateurPdf,
+        adaptateurHorloge,
+        adaptateurGestionErreur,
+        serviceAnnuaire,
+        adaptateurCsv,
+        adaptateurZip,
+        adaptateurTracking,
+        adaptateurProtection,
+        adaptateurJournal,
+        adaptateurOidc,
+        adaptateurEnvironnement,
+        adaptateurStatistiques,
+        adaptateurJWT,
+        adaptateurProfilAnssi,
+        lecteurDeFormData,
+        adaptateurTeleversementServices,
+        adaptateurTeleversementModelesMesureSpecifique,
+        cmsCrisp,
+        serviceSupervision,
+        serviceGestionnaireSession,
+        serviceCgu,
+        procedures,
+        inscriptionUtilisateur,
+        busEvenements,
+        avecCookieSecurise: false,
+        avecPageErreur: false,
+      });
+      app = serveur.app;
+    } catch (e) {
+      expect().fail("Erreur à l'initialisation du testeur MSS.");
+    }
   };
 
   const arrete = () => serveur.arreteEcoute();
 
   return {
+    app: () => app,
     serviceAnnuaire: () => serviceAnnuaire,
     serviceGestionnaireSession: () => serviceGestionnaireSession,
     serviceSupervision: () => serviceSupervision,
