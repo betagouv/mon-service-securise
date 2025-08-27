@@ -1,6 +1,7 @@
 const axios = require('axios');
 const expect = require('expect.js');
 
+const supertest = require('supertest');
 const { depotVide } = require('../depots/depotVide');
 const adaptateurGestionErreurVide = require('../../src/adaptateurs/adaptateurGestionErreurVide');
 const adaptateurMailMemoire = require('../../src/adaptateurs/adaptateurMailMemoire');
@@ -203,6 +204,15 @@ const testeurMss = () => {
 
   const arrete = () => serveur.arreteEcoute();
 
+  const get = async (url) => supertest(app).get(url);
+  const patch = async (url, donnees = {}) =>
+    supertest(app).patch(url).send(donnees);
+  const post = async (url, donnees = {}) =>
+    supertest(app).post(url).send(donnees);
+  const put = async (url, donnees = {}) =>
+    supertest(app).put(url).send(donnees);
+  const del = async (url) => supertest(app).delete(url);
+
   return {
     app: () => app,
     serviceAnnuaire: () => serviceAnnuaire,
@@ -235,6 +245,11 @@ const testeurMss = () => {
     initialise,
     verifieRequeteGenereErreurHTTP,
     verifieSessionDeposee,
+    get,
+    patch,
+    put,
+    post,
+    delete: del,
   };
 };
 
