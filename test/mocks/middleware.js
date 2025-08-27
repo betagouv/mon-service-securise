@@ -276,59 +276,62 @@ const middlewareFantaisie = {
       requete
     ),
 
-  verifieAdresseIP: (listeAdressesIp, ...params) => {
+  verifieAdresseIP: async (listeAdressesIp, app, ...params) =>
     verifieRequeteChangeEtat(
       {
         lectureEtat: () => listeAdressesIPsAutorisee,
         etatInitial: [],
         etatFinal: listeAdressesIp,
       },
+      app,
       ...params
-    );
-  },
+    ),
 
-  verifieChargementDesAutorisations: (...params) => {
+  verifieChargementDesAutorisations: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => autorisationsChargees },
+      app,
       ...params
-    );
-  },
+    ),
 
-  verifieChargementDesPreferences: (...params) => {
+  verifieChargementDesPreferences: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => preferencesChargees },
+      app,
       ...params
-    );
-  },
+    ),
 
-  verifieFiltrageIp: (...params) => {
+  verifieFiltrageIp: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => filtrageIpEstActif },
+      app,
       ...params
-    );
-  },
+    ),
 
-  verifieProtectionTrafic: (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => traficProtege }, ...params);
-  },
+  verifieProtectionTrafic: async (app, ...params) =>
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => traficProtege },
+      app,
+      ...params
+    ),
 
-  verifieRechercheService: (droitsAttendus, ...params) => {
+  verifieRechercheService: async (droitsAttendus, app, ...params) =>
     verifieRequeteChangeEtat(
       {
         lectureEtat: () => droitVerifie,
         etatInitial: null,
         etatFinal: droitsAttendus,
       },
+      app,
       ...params
-    );
-  },
+    ),
 
-  verifieRechercheDossierCourant: (...params) => {
+  verifieRechercheDossierCourant: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => rechercheDossierCourantEffectuee },
+      app,
       ...params
-    );
-  },
+    ),
 
   verifieRequeteExigeAcceptationCGU: async (app, requete) =>
     verifieRequeteChangeEtat(
@@ -344,37 +347,40 @@ const middlewareFantaisie = {
       requete
     ),
 
-  verifieRequeteChargeEtatVisiteGuidee: (...params) => {
+  verifieRequeteChargeEtatVisiteGuidee: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => etatVisiteGuideeCharge },
+      app,
       ...params
-    );
-  },
+    ),
 
-  verifieRequeteChargeActivationAgentConnect: (...params) => {
+  verifieRequeteChargeActivationAgentConnect: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => activationAgentConnectCharge },
+      app,
       ...params
-    );
-  },
+    ),
 
-  verifieRequeteExigeSuppressionCookie: (...params) => {
+  verifieRequeteExigeSuppressionCookie: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => suppressionCookieEffectuee },
+      app,
       ...params
-    );
-  },
+    ),
 
-  verifieRequetePositionneHeaders: (...params) => {
+  verifieRequetePositionneHeaders: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => headersPositionnes },
+      app,
       ...params
-    );
-  },
+    ),
 
-  verifieRequetePositionneNonce: async (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => noncePositionne }, ...params);
-  },
+  verifieRequetePositionneNonce: async (app, ...params) =>
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => noncePositionne },
+      app,
+      ...params
+    ),
 
   verifieChallengeMotDePasse: async (app, requete) =>
     verifieRequeteChangeEtat(
@@ -383,23 +389,23 @@ const middlewareFantaisie = {
       requete
     ),
 
-  verifieChargementDeLaVersionBuildee: (...params) => {
+  verifieChargementDeLaVersionBuildee: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => versionBuildeeChargee },
+      app,
       ...params
-    );
-  },
+    ),
 
-  verifieTypeRequeteCharge: (typeRequeteAttendu, ...params) => {
+  verifieTypeRequeteCharge: async (typeRequeteAttendu, app, ...params) =>
     verifieRequeteChangeEtat(
       {
         lectureEtat: () => typeRequeteCharge,
         etatInitial: null,
         etatFinal: typeRequeteAttendu,
       },
+      app,
       ...params
-    );
-  },
+    ),
 
   interdisLaMiseEnCache: (_requete, _reponse, suite) => {
     suite();
