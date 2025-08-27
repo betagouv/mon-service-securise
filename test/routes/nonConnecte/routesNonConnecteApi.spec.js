@@ -1,4 +1,3 @@
-const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const {
@@ -19,8 +18,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
   const testeur = testeurMSS();
 
   beforeEach(testeur.initialise);
-
-  afterEach(testeur.arrete);
 
   describe('quand requête POST sur `/api/utilisateur`', () => {
     const utilisateur = { id: '123', genereToken: () => 'un token' };
@@ -64,37 +61,35 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         Promise.resolve(utilisateur);
     });
 
-    it('applique une protection de trafic', (done) => {
-      testeur.middleware().verifieProtectionTrafic(
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/utilisateur',
-        },
-        done
-      );
+    it('applique une protection de trafic', async () => {
+      testeur.middleware().verifieProtectionTrafic({
+        method: 'post',
+        url: '/api/utilisateur',
+      });
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        [
-          'telephone',
-          'cguAcceptees',
-          'infolettreAcceptee',
-          'transactionnelAccepte',
-          'postes.*',
-          'estimationNombreServices.*',
-          'siretEntite',
-        ],
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/utilisateur',
-          data: donneesRequete,
-        },
-        done
-      );
+    it('aseptise les paramètres de la requête', async () => {
+      testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          [
+            'telephone',
+            'cguAcceptees',
+            'infolettreAcceptee',
+            'transactionnelAccepte',
+            'postes.*',
+            'estimationNombreServices.*',
+            'siretEntite',
+          ],
+          {
+            method: 'post',
+            url: '/api/utilisateur',
+            data: donneesRequete,
+          }
+        );
     });
 
-    it("convertit l'email en minuscules", (done) => {
+    it("convertit l'email en minuscules", async () => {
       testeur.depotDonnees().nouvelUtilisateur = ({ email }) => {
         expect(email).to.equal('jean.dupont@mail.fr');
         return Promise.resolve(utilisateur);
@@ -106,10 +101,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         email: 'Jean.DUPONT@mail.fr',
       });
 
-      axios
-        .post('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then(() => done())
-        .catch(done);
+      await testeur.post('/api/utilisateur', donneesRequete);
     });
 
     it('si les CGU sont acceptées, passe la valeur de la version actuelle des CGU au dépôt', async () => {
@@ -122,12 +114,12 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       donneesRequete.cguAcceptees = 'true';
 
-      await axios.post('http://localhost:1234/api/utilisateur', donneesRequete);
+      await testeur.post('/api/utilisateur', donneesRequete);
 
       expect(cguRecues).to.be('v2.0');
     });
 
-    it("convertit l'infolettre acceptée en valeur booléenne", (done) => {
+    it("convertit l'infolettre acceptée en valeur booléenne", async () => {
       testeur.depotDonnees().nouvelUtilisateur = ({ infolettreAcceptee }) => {
         expect(infolettreAcceptee).to.equal(true);
         return Promise.resolve(utilisateur);
@@ -135,10 +127,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       donneesRequete.infolettreAcceptee = 'true';
 
-      axios
-        .post('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then(() => done())
-        .catch(done);
+      await testeur.post('/api/utilisateur', donneesRequete);
     });
 
     it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", async () => {
@@ -149,13 +138,13 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         'La création d\'un nouvel utilisateur a échoué car les paramètres sont invalides. La propriété "entite.siret" est requise',
         {
           method: 'post',
-          url: 'http://localhost:1234/api/utilisateur',
+          url: '/api/utilisateur',
           data: donneesRequete,
         }
       );
     });
 
-    it("demande au dépôt de créer l'utilisateur", (done) => {
+    it("demande au dépôt de créer l'utilisateur", async () => {
       testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
         const donneesAttendues = {
           prenom: 'Jean',
@@ -178,17 +167,13 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         return Promise.resolve(utilisateur);
       };
 
-      axios
-        .post('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({ idUtilisateur: '123' });
-          done();
-        })
-        .catch(done);
+      const reponse = await testeur.post('/api/utilisateur', donneesRequete);
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.body).to.eql({ idUtilisateur: '123' });
     });
 
-    it("utilise l'adaptateur de tracking pour envoyer un événement d'inscription", (done) => {
+    it("utilise l'adaptateur de tracking pour envoyer un événement d'inscription", async () => {
       testeur.depotDonnees().nouvelUtilisateur = () =>
         Promise.resolve({ email: 'jean.dupont@mail.fr' });
 
@@ -200,18 +185,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         return Promise.resolve();
       };
 
-      axios
-        .post('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then(() => {
-          expect(donneesPassees).to.eql({
-            destinataire: 'jean.dupont@mail.fr',
-          });
-          done();
-        })
-        .catch(done);
+      await testeur.post('/api/utilisateur', donneesRequete);
+
+      expect(donneesPassees).to.eql({
+        destinataire: 'jean.dupont@mail.fr',
+      });
     });
 
-    it('crée un contact email', (done) => {
+    it('crée un contact email', async () => {
       testeur.adaptateurMail().creeContact = (
         destinataire,
         prenom,
@@ -229,13 +210,10 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         return Promise.resolve();
       };
 
-      axios
-        .post('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
+      await testeur.post('/api/utilisateur', donneesRequete);
     });
 
-    it("envoie un message de notification à l'utilisateur créé", (done) => {
+    it("envoie un message de notification à l'utilisateur créé", async () => {
       utilisateur.email = 'jean.dupont@mail.fr';
       utilisateur.idResetMotDePasse = '999';
 
@@ -248,24 +226,18 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         return Promise.resolve();
       };
 
-      axios
-        .post('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then(() => done())
-        .catch(done);
+      await testeur.post('/api/utilisateur', donneesRequete);
     });
 
-    it("n'envoie pas de message de notification à l'utilisateur Agent Connect créé", (done) => {
+    it("n'envoie pas de message de notification à l'utilisateur Agent Connect créé", async () => {
       testeur.adaptateurMail().envoieMessageFinalisationInscription = () => {
         expect().fail("N'aurait pas dû envoyer de message");
       };
 
-      axios
-        .post('http://localhost:1234/api/utilisateur', {
-          ...donneesRequete,
-          agentConnect: true,
-        })
-        .then(() => done())
-        .catch(done);
+      await testeur.post('/api/utilisateur', {
+        ...donneesRequete,
+        agentConnect: true,
+      });
     });
 
     describe("si l'envoi de mail échoue", () => {
@@ -281,14 +253,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           "L'envoi de l'email de finalisation d'inscription a échoué",
           {
             method: 'post',
-            url: 'http://localhost:1234/api/utilisateur',
+            url: '/api/utilisateur',
             data: donneesRequete,
           }
         );
       });
     });
 
-    it('envoie un email de notification de tentative de réinscription', (done) => {
+    it('envoie un email de notification de tentative de réinscription', async () => {
       let notificationEnvoyee = false;
 
       testeur.depotDonnees().nouvelUtilisateur = () =>
@@ -302,13 +274,9 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         return Promise.resolve();
       };
 
-      axios
-        .post('http://localhost:1234/api/utilisateur', donneesRequete)
-        .then(() => {
-          expect(notificationEnvoyee).to.be(true);
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      await testeur.post('/api/utilisateur', donneesRequete);
+
+      expect(notificationEnvoyee).to.be(true);
     });
 
     it("génère une erreur HTTP 422 si l'email n'est pas renseigné", async () => {
@@ -318,7 +286,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       await testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
         method: 'post',
-        url: 'http://localhost:1234/api/utilisateur',
+        url: '/api/utilisateur',
         data: donneesRequete,
       });
     });
@@ -331,7 +299,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         'Le token est invalide',
         {
           method: 'post',
-          url: 'http://localhost:1234/api/utilisateur',
+          url: '/api/utilisateur',
           data: donneesRequete,
         }
       );
@@ -342,7 +310,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       await testeur.verifieRequeteGenereErreurHTTP(422, 'Le token est requis', {
         method: 'post',
-        url: 'http://localhost:1234/api/utilisateur',
+        url: '/api/utilisateur',
         data: donneesRequete,
       });
     });
@@ -361,59 +329,46 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         Promise.resolve(utilisateur);
     });
 
-    it('applique une protection de trafic', (done) => {
-      testeur.middleware().verifieProtectionTrafic(
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/reinitialisationMotDePasse',
-        },
-        done
-      );
+    it('applique une protection de trafic', async () => {
+      await testeur.middleware().verifieProtectionTrafic(testeur.app(), {
+        method: 'post',
+        url: '/api/reinitialisationMotDePasse',
+      });
     });
 
-    it("convertit l'email en minuscules", (done) => {
+    it("convertit l'email en minuscules", async () => {
       testeur.depotDonnees().reinitialiseMotDePasse = (email) => {
         expect(email).to.equal('jean.dupont@mail.fr');
         return Promise.resolve(utilisateur);
       };
 
-      axios
-        .post('http://localhost:1234/api/reinitialisationMotDePasse', {
-          email: 'Jean.DUPONT@mail.fr',
-        })
-        .then(() => done())
-        .catch(done);
+      await testeur.post('/api/reinitialisationMotDePasse', {
+        email: 'Jean.DUPONT@mail.fr',
+      });
     });
 
-    it("échoue silencieusement si l'email n'est pas renseigné", (done) => {
+    it("échoue silencieusement si l'email n'est pas renseigné", async () => {
       testeur.depotDonnees().nouvelUtilisateur = () => Promise.resolve();
 
-      axios
-        .post('http://localhost:1234/api/reinitialisationMotDePasse')
-        .then(() => done())
-        .catch(done);
+      await testeur.post('/api/reinitialisationMotDePasse');
     });
 
-    it('demande au dépôt de réinitialiser le mot de passe', (done) => {
+    it('demande au dépôt de réinitialiser le mot de passe', async () => {
       testeur.depotDonnees().reinitialiseMotDePasse = (email) =>
         new Promise((resolve) => {
           expect(email).to.equal('jean.dupont@mail.fr');
           resolve(utilisateur);
         });
 
-      axios
-        .post('http://localhost:1234/api/reinitialisationMotDePasse', {
-          email: 'jean.dupont@mail.fr',
-        })
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.data).to.eql({});
-          done();
-        })
-        .catch(done);
+      const reponse = await testeur.post('/api/reinitialisationMotDePasse', {
+        email: 'jean.dupont@mail.fr',
+      });
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.body).to.eql({});
     });
 
-    it("envoie un mail à l'utilisateur", (done) => {
+    it("envoie un mail à l'utilisateur", async () => {
       let messageEnvoye = false;
 
       expect(utilisateur.idResetMotDePasse).to.equal('999');
@@ -429,28 +384,23 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           resolve();
         });
 
-      axios
-        .post('http://localhost:1234/api/reinitialisationMotDePasse', {
-          email: 'jean.dupont@mail.fr',
-        })
-        .then(() => expect(messageEnvoye).to.be(true))
-        .then(() => done())
-        .catch(done);
+      await testeur.post('/api/reinitialisationMotDePasse', {
+        email: 'jean.dupont@mail.fr',
+      });
+
+      expect(messageEnvoye).to.be(true);
     });
   });
 
   describe('quand requête POST sur `/api/token`', () => {
-    it('applique une protection de trafic', (done) => {
-      testeur.middleware().verifieProtectionTrafic(
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/token',
-        },
-        done
-      );
+    it('applique une protection de trafic', async () => {
+      await testeur.middleware().verifieProtectionTrafic(testeur.app(), {
+        method: 'post',
+        url: '/api/token',
+      });
     });
 
-    it("authentifie l'utilisateur avec le login en minuscules", (done) => {
+    it("authentifie l'utilisateur avec le login en minuscules", async () => {
       testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur =
         async () => {};
 
@@ -473,13 +423,10 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async () => {};
       testeur.depotDonnees().utilisateur = async () => utilisateur;
 
-      axios
-        .post('http://localhost:1234/api/token', {
-          login: 'Jean.DUPONT@mail.fr',
-          motDePasse: 'mdp_12345',
-        })
-        .then(() => done())
-        .catch(done);
+      await testeur.post('/api/token', {
+        login: 'Jean.DUPONT@mail.fr',
+        motDePasse: 'mdp_12345',
+      });
     });
 
     describe("avec authentification réussie de l'utilisateur", () => {
@@ -505,18 +452,17 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           async () => {};
       });
 
-      it('pose un cookie', (done) => {
-        axios
-          .post('http://localhost:1234/api/token', {
-            login: 'jean.dupont@mail.fr',
-            motDePasse: 'mdp_12345',
-          })
-          .then((reponse) => testeur.verifieSessionDeposee(reponse, done))
-          .catch(done);
+      it('pose un cookie', async () => {
+        const reponse = await testeur.post('/api/token', {
+          login: 'jean.dupont@mail.fr',
+          motDePasse: 'mdp_12345',
+        });
+
+        await testeur.verifieSessionDeposee(reponse);
       });
 
       it('ajoute une session utilisateur', async () => {
-        const reponse = await axios.post('http://localhost:1234/api/token', {
+        const reponse = await testeur.post('/api/token', {
           login: 'jean.dupont@mail.fr',
           motDePasse: 'mdp_12345',
         });
@@ -535,7 +481,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           sourcePassee = source;
         };
 
-        await axios.post('http://localhost:1234/api/token', {
+        await testeur.post('/api/token', {
           login: 'jean.dupont@mail.fr',
           motDePasse: 'mdp_12345',
         });
@@ -552,7 +498,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           idUtilisateurPasse = idUtilisateur;
         };
 
-        await axios.post('http://localhost:1234/api/token', {
+        await testeur.post('/api/token', {
           login: 'jean.dupont@mail.fr',
           motDePasse: 'mdp_12345',
         });
@@ -567,7 +513,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           return utilisateur;
         };
 
-        await axios.post('http://localhost:1234/api/token', {
+        await testeur.post('/api/token', {
           login: 'jean.dupont@mail.fr',
           motDePasse: 'mdp_12345',
         });
@@ -578,7 +524,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       it('ajoute la source dans le jeton', async () => {
         utilisateur.genereToken = (source) => `un token de-${source}`;
 
-        const reponse = await axios.post('http://localhost:1234/api/token', {
+        const reponse = await testeur.post('/api/token', {
           login: 'jean.dupont@mail.fr',
           motDePasse: 'mdp_12345',
         });
@@ -595,7 +541,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         await testeur.verifieRequeteGenereErreurHTTP(
           401,
           "L'authentification a échoué",
-          { method: 'post', url: 'http://localhost:1234/api/token', data: {} }
+          { method: 'post', url: '/api/token', data: {} }
         );
       });
     });
@@ -606,15 +552,17 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       testeur.referentiel().estCodeDepartement = () => true;
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['recherche', 'departement'],
-        {
-          method: 'get',
-          url: 'http://localhost:1234/api/annuaire/organisations',
-        },
-        done
-      );
+    it('aseptise les paramètres de la requête', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['recherche', 'departement'],
+          testeur.app(),
+          {
+            method: 'get',
+            url: '/api/annuaire/organisations',
+          }
+        );
     });
 
     it('retourne une erreur HTTP 400 si le terme de recherche est vide', async () => {
@@ -623,7 +571,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         'Le terme de recherche ne peut pas être vide',
         {
           method: 'get',
-          url: 'http://localhost:1234/api/annuaire/organisations?departement=75',
+          url: '/api/annuaire/organisations?departement=75',
         }
       );
     });
@@ -635,12 +583,12 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         'Le département doit être valide (01 à 989)',
         {
           method: 'get',
-          url: 'http://localhost:1234/api/annuaire/organisations?recherche=mairie&departement=990',
+          url: '/api/annuaire/organisations?recherche=mairie&departement=990',
         }
       );
     });
 
-    it("recherche les organisations correspondantes grâce au service d'annuaire", (done) => {
+    it("recherche les organisations correspondantes grâce au service d'annuaire", async () => {
       let adaptateurAppele = false;
       testeur.serviceAnnuaire().rechercheOrganisations = (
         terme,
@@ -652,19 +600,15 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         return Promise.resolve([{ nom: 'un résultat', departement: '01' }]);
       };
 
-      axios
-        .get(
-          'http://localhost:1234/api/annuaire/organisations?recherche=mairie&departement=01'
-        )
-        .then((reponse) => {
-          expect(adaptateurAppele).to.be(true);
-          expect(reponse.status).to.be(200);
-          expect(reponse.data.suggestions).to.eql([
-            { nom: 'un résultat', departement: '01' },
-          ]);
-        })
-        .then(done)
-        .catch((e) => done(e.response?.data || e));
+      const reponse = await testeur.get(
+        '/api/annuaire/organisations?recherche=mairie&departement=01'
+      );
+
+      expect(adaptateurAppele).to.be(true);
+      expect(reponse.status).to.be(200);
+      expect(reponse.body.suggestions).to.eql([
+        { nom: 'un résultat', departement: '01' },
+      ]);
     });
   });
 
@@ -680,7 +624,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         { erreur: "L'événement doit être de type 'unsubscribe'" },
         {
           method: 'post',
-          url: 'http://localhost:1234/api/desinscriptionInfolettre',
+          url: '/api/desinscriptionInfolettre',
         }
       );
     });
@@ -691,7 +635,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         { erreur: "Le champ 'email' doit être présent" },
         {
           method: 'post',
-          url: 'http://localhost:1234/api/desinscriptionInfolettre',
+          url: '/api/desinscriptionInfolettre',
           data: { event: 'unsubscribe' },
         }
       );
@@ -706,25 +650,27 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         { erreur: "L'email 'jean.dujardin@mail.com' est introuvable" },
         {
           method: 'post',
-          url: 'http://localhost:1234/api/desinscriptionInfolettre',
+          url: '/api/desinscriptionInfolettre',
           data: donneesRequete,
         }
       );
     });
 
-    it("vérifie l'adresse IP de la requête", (done) => {
-      testeur.middleware().verifieAdresseIP(
-        ['185.107.232.1/24', '1.179.112.1/20'],
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/desinscriptionInfolettre',
-          data: donneesRequete,
-        },
-        done
-      );
+    it("vérifie l'adresse IP de la requête", async () => {
+      await testeur
+        .middleware()
+        .verifieAdresseIP(
+          ['185.107.232.1/24', '1.179.112.1/20'],
+          testeur.app(),
+          {
+            method: 'post',
+            url: '/api/desinscriptionInfolettre',
+            data: donneesRequete,
+          }
+        );
     });
 
-    it("désabonne l'utilisateur des mails marketing", (done) => {
+    it("désabonne l'utilisateur des mails marketing", async () => {
       const utilisateur = unUtilisateur()
         .avecId('123')
         .quiAccepteEmailsTransactionnels()
@@ -739,27 +685,18 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         return Promise.resolve();
       };
 
-      axios
-        .post(
-          'http://localhost:1234/api/desinscriptionInfolettre',
-          donneesRequete
-        )
-        .then(() => done())
-        .catch((e) => done(e.response?.data || e));
+      await testeur.post('/api/desinscriptionInfolettre', donneesRequete);
     });
   });
 
   describe('quand requête GET sur `/api/sante`', () => {
-    it('applique une protection de trafic', (done) => {
+    it('applique une protection de trafic', async () => {
       testeur.depotDonnees().santeDuDepot = async () => {};
 
-      testeur.middleware().verifieProtectionTrafic(
-        {
-          method: 'get',
-          url: 'http://localhost:1234/api/sante',
-        },
-        done
-      );
+      await testeur.middleware().verifieProtectionTrafic(testeur.app(), {
+        method: 'get',
+        url: '/api/sante',
+      });
     });
 
     it("utilise le dépôt de données pour vérifier l'état de santé de la base", async () => {
@@ -768,7 +705,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         depotAppele = true;
       };
 
-      const reponse = await axios.get('http://localhost:1234/api/sante');
+      const reponse = await testeur.get('/api/sante');
 
       expect(depotAppele).to.be(true);
       expect(reponse.status).to.be(200);
@@ -779,12 +716,9 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         throw new Error();
       };
 
-      try {
-        await axios.get('http://localhost:1234/api/sante');
-        expect().fail("L'appel aurait du échouer");
-      } catch (e) {
-        expect(e.response.status).to.be(503);
-      }
+      const reponse = await testeur.get('/api/sante');
+
+      expect(reponse.status).to.be(503);
     });
 
     it('loggue une erreur si le dépôt est défectueux', async () => {
@@ -797,7 +731,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       };
 
       try {
-        await axios.get('http://localhost:1234/api/sante');
+        await testeur.get('/api/sante');
         expect().fail("L'appel aurait du échouer");
       } catch (e) {
         expect(erreurLoguee.message).to.be(
@@ -809,7 +743,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     it('empêche le cache', async () => {
       testeur.depotDonnees().santeDuDepot = () => {};
 
-      const reponse = await axios.get('http://localhost:1234/api/sante');
+      const reponse = await testeur.get('/api/sante');
 
       expect(reponse.headers['surrogate-control']).to.be('no-store');
       expect(reponse.headers['cache-control']).to.be(

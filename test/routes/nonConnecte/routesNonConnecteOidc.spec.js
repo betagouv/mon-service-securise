@@ -8,10 +8,7 @@ const {
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
-const {
-  requeteSansRedirection,
-  donneesPartagees,
-} = require('../../aides/http');
+const { donneesPartagees } = require('../../aides/http');
 
 describe('Le serveur MSS des routes publiques /oidc/*', () => {
   const testeur = testeurMSS();
@@ -19,8 +16,6 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
   beforeEach(() => {
     testeur.initialise();
   });
-
-  afterEach(testeur.arrete);
 
   describe('quand requête GET sur `/oidc/connexion`', () => {
     beforeEach(() => {
@@ -31,28 +26,21 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       });
     });
 
-    it("déconnecte l'utilisateur courant", (done) => {
-      testeur
+    it("déconnecte l'utilisateur courant", async () => {
+      await testeur
         .middleware()
-        .verifieRequeteExigeSuppressionCookie(
-          'http://localhost:1234/oidc/connexion',
-          done
-        );
+        .verifieRequeteExigeSuppressionCookie(testeur.app(), '/oidc/connexion');
     });
 
     it('redirige vers la page d’autorisation', async () => {
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/connexion'
-      );
+      const reponse = await testeur.get('/oidc/connexion');
 
       expect(reponse.status).to.be(302);
       expect(reponse.headers.location).to.be('http');
     });
 
     it('dépose un cookie avec le nonce et le state', async () => {
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/connexion'
-      );
+      const reponse = await testeur.get('/oidc/connexion');
 
       const headerCookie = reponse.headers['set-cookie'];
       const cookie = enObjet(headerCookie[0]).AgentConnectInfo;
@@ -62,8 +50,8 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
     });
 
     it("ajoute l'url de redirection au cookie si elle est présente dans la query", async () => {
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/connexion?urlRedirection=%2FtableauDeBord'
+      const reponse = await testeur.get(
+        '/oidc/connexion?urlRedirection=%2FtableauDeBord'
       );
 
       const headerCookie = reponse.headers['set-cookie'];
@@ -73,8 +61,8 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
     });
 
     it("n'ajoute pas l'url de redirection au cookie si elle est présente dans la query mais illégale (dangereuse)", async () => {
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/connexion?urlRedirection=https%3A%2F%2Funautresite.com'
+      const reponse = await testeur.get(
+        '/oidc/connexion?urlRedirection=https%3A%2F%2Funautresite.com'
       );
 
       const headerCookie = reponse.headers['set-cookie'];
@@ -113,9 +101,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
     });
 
     it('sert une page HTML', async () => {
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-authentification'
-      );
+      const reponse = await testeur.get('/oidc/apres-authentification');
 
       expect(reponse.status).to.equal(200);
       expect(reponse.headers['content-type']).to.contain('text/html');
@@ -131,11 +117,9 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           }),
       });
 
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-authentification'
-      );
+      const reponse = await testeur.get('/oidc/apres-authentification');
 
-      expect(reponse.data).to.contain('http://localhost:1234//redirect.com');
+      expect(reponse.text).to.contain('//redirect.com');
     });
 
     it("ne fait aucune redirection en cas d'absence d'URL de redirection", async () => {
@@ -147,11 +131,9 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           }),
       });
 
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-authentification'
-      );
+      const reponse = await testeur.get('/oidc/apres-authentification');
 
-      expect(reponse.data).not.to.contain('http://localhost:1234');
+      expect(reponse.body).not.to.contain('');
     });
 
     it("reste robuste en cas d'erreur de récupération du jeton", async () => {
@@ -162,7 +144,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       await testeur.verifieRequeteGenereErreurHTTP(
         401,
         "Erreur d'authentification",
-        'http://localhost:1234/oidc/apres-authentification'
+        '/oidc/apres-authentification'
       );
     });
 
@@ -170,9 +152,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       testeur.adaptateurOidc().recupereJeton = async () => ({
         idToken: 'unIdToken',
       });
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-authentification'
-      );
+      const reponse = await testeur.get('/oidc/apres-authentification');
       const tokenDecode = decodeSessionDuCookie(reponse, 1);
       expect(tokenDecode.AgentConnectIdToken).to.be('unIdToken');
     });
@@ -202,9 +182,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           return 'unJetonSigne';
         };
 
-        const reponse = await requeteSansRedirection(
-          'http://localhost:1234/oidc/apres-authentification'
-        );
+        const reponse = await testeur.get('/oidc/apres-authentification');
 
         expect(reponse.status).to.be(302);
         expect(reponse.headers.location).to.be(
@@ -230,9 +208,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
             ? utilisateurAuthentifie
             : undefined;
 
-        const reponse = await requeteSansRedirection(
-          'http://localhost:1234/oidc/apres-authentification'
-        );
+        const reponse = await testeur.get('/oidc/apres-authentification');
 
         const tokenDecode = decodeSessionDuCookie(reponse, 1);
         expect(tokenDecode.token).to.be('unJetonJWT-AGENT_CONNECT');
@@ -250,9 +226,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
             ? utilisateurAuthentifie
             : undefined;
 
-        const reponse = await requeteSansRedirection(
-          'http://localhost:1234/oidc/apres-authentification'
-        );
+        const reponse = await testeur.get('/oidc/apres-authentification');
 
         expectContenuSessionValide(reponse, 'AGENT_CONNECT', true, false, 1);
       });
@@ -276,9 +250,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         testeur.depotDonnees().utilisateurAvecEmail = async () =>
           utilisateurAuthentifie;
 
-        await requeteSansRedirection(
-          'http://localhost:1234/oidc/apres-authentification'
-        );
+        await testeur.get('/oidc/apres-authentification');
 
         expect(idUtilisateurPasse).to.be('456');
         expect(sourcePassee).to.be('AGENT_CONNECT');
@@ -310,9 +282,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         testeur.depotDonnees().utilisateurAvecEmail = async () =>
           profilIncomplet;
 
-        await requeteSansRedirection(
-          'http://localhost:1234/oidc/apres-authentification'
-        );
+        await testeur.get('/oidc/apres-authentification');
 
         expect(donneesRecues.idUtilisateur).to.be('456');
         expect(donneesRecues.donnees.prenom).to.be('Jean');
@@ -333,9 +303,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         profilInvite.genereToken = () => 'unJetonJWT';
         testeur.depotDonnees().utilisateurAvecEmail = async () => profilInvite;
 
-        await requeteSansRedirection(
-          'http://localhost:1234/oidc/apres-authentification'
-        );
+        await testeur.get('/oidc/apres-authentification');
 
         expect(depotAppele).to.be(false);
       });
@@ -365,9 +333,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         profilComplet.genereToken = () => 'unJetonJWT';
         testeur.depotDonnees().utilisateurAvecEmail = async () => profilComplet;
 
-        await requeteSansRedirection(
-          'http://localhost:1234/oidc/apres-authentification'
-        );
+        await testeur.get('/oidc/apres-authentification');
 
         expect(idRafraichi).to.be('456');
       });
@@ -387,9 +353,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       });
 
       it("connecte l'utilisateur", async () => {
-        const reponse = await requeteSansRedirection(
-          'http://localhost:1234/oidc/apres-authentification'
-        );
+        const reponse = await testeur.get('/oidc/apres-authentification');
 
         const tokenDecode = decodeSessionDuCookie(reponse, 1);
         expect(tokenDecode.token).to.be('unJetonJWT-AGENT_CONNECT-INVITE');
@@ -421,9 +385,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
           async () => {};
 
-        const reponse = await requeteSansRedirection(
-          'http://localhost:1234/oidc/apres-authentification'
-        );
+        const reponse = await testeur.get('/oidc/apres-authentification');
 
         expect(reponse.status).to.be(200);
         expect(reponse.headers['content-type']).to.contain('text/html');
@@ -433,7 +395,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           prenom: 'Jean',
           invite: true,
         });
-        expect(donneesPartagees(reponse.data, 'tokenDonneesInvite')).to.eql({
+        expect(donneesPartagees(reponse.text, 'tokenDonneesInvite')).to.eql({
           tokenDonneesInvite: 'unJetonSigne',
         });
       });
@@ -465,9 +427,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
           async () => {};
 
-        const reponse = await requeteSansRedirection(
-          'http://localhost:1234/oidc/apres-authentification'
-        );
+        const reponse = await testeur.get('/oidc/apres-authentification');
 
         expect(reponse.status).to.be(200);
         expect(reponse.headers['content-type']).to.contain('text/html');
@@ -477,7 +437,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           prenom: 'Jean ProConnect',
           invite: true,
         });
-        expect(donneesPartagees(reponse.data, 'tokenDonneesInvite')).to.eql({
+        expect(donneesPartagees(reponse.text, 'tokenDonneesInvite')).to.eql({
           tokenDonneesInvite: 'unJetonSigne',
         });
       });
@@ -493,26 +453,25 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       });
     });
     it('redirige vers la page de connexion', async () => {
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-deconnexion?state=unState'
+      const reponse = await testeur.get(
+        '/oidc/apres-deconnexion?state=unState'
       );
 
       expect(reponse.status).to.be(302);
       expect(reponse.headers.location).to.be('/connexion');
     });
 
-    it("supprime la session de l'utilisateur via la page /connexion", (done) => {
+    it("supprime la session de l'utilisateur via la page /connexion", async () => {
       testeur
         .middleware()
         .verifieRequeteExigeSuppressionCookie(
-          'http://localhost:1234/oidc/apres-deconnexion?state=unState',
-          done
+          '/oidc/apres-deconnexion?state=unState'
         );
     });
 
     it("ne déconnecte pas l'utilisateur si le state ne correspond pas", async () => {
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-deconnexion?state=pasLeBonState'
+      const reponse = await testeur.get(
+        '/oidc/apres-deconnexion?state=pasLeBonState'
       );
 
       expect(reponse.status).to.be(401);
@@ -525,16 +484,16 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         },
       });
 
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-deconnexion?state=unState'
+      const reponse = await testeur.get(
+        '/oidc/apres-deconnexion?state=unState'
       );
 
       expect(reponse.status).to.be(401);
     });
 
     it('supprime le cookie contenant le state', async () => {
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/apres-deconnexion?state=unState'
+      const reponse = await testeur.get(
+        '/oidc/apres-deconnexion?state=unState'
       );
 
       const cookies = reponse.headers['set-cookie'];
