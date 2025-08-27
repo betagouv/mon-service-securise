@@ -1,4 +1,3 @@
-const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const { ErreurIdentifiantTacheInconnu } = require('../../../src/erreurs');
