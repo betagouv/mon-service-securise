@@ -1,5 +1,4 @@
 const expect = require('expect.js');
-const axios = require('axios');
 
 const testeurMSS = require('../testeurMSS');
 const {
@@ -24,25 +23,23 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
 
   beforeEach(testeur.initialise);
 
-  afterEach(testeur.arrete);
-
   describe('quand requête GET sur `/api/service/:id/pdf/annexes.pdf`', () => {
-    it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
+    it('recherche le service correspondant', async () => {
+      await testeur.middleware().verifieRechercheService(
         [
           { niveau: LECTURE, rubrique: DECRIRE },
           { niveau: LECTURE, rubrique: SECURISER },
           { niveau: LECTURE, rubrique: RISQUES },
         ],
-        'http://localhost:1234/api/service/456/pdf/annexes.pdf',
-        done
+        testeur.app(),
+        '/api/service/456/pdf/annexes.pdf'
       );
     });
 
-    it('sert un fichier de type pdf', (done) => {
-      verifieTypeFichierServiEstPDF(
-        'http://localhost:1234/api/service/456/pdf/annexes.pdf',
-        done
+    it('sert un fichier de type pdf', async () => {
+      await verifieTypeFichierServiEstPDF(
+        testeur.app(),
+        '/api/service/456/pdf/annexes.pdf'
       );
     });
 
@@ -53,7 +50,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         return 'Pdf annexes';
       };
 
-      await axios.get('http://localhost:1234/api/service/456/pdf/annexes.pdf');
+      await testeur.get('/api/service/456/pdf/annexes.pdf');
 
       expect(adaptateurPdfAppele).to.be(true);
     });
@@ -90,29 +87,29 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       testeur.middleware().reinitialise({ serviceARenvoyer });
     });
 
-    it('recherche le service correspondant', (done) => {
-      testeur
+    it('recherche le service correspondant', async () => {
+      await testeur
         .middleware()
         .verifieRechercheService(
           [{ niveau: LECTURE, rubrique: HOMOLOGUER }],
-          'http://localhost:1234/api/service/456/pdf/dossierDecision.pdf',
-          done
+          testeur.app(),
+          '/api/service/456/pdf/dossierDecision.pdf'
         );
     });
 
-    it('recherche le dossier courant correspondant', (done) => {
-      testeur
+    it('recherche le dossier courant correspondant', async () => {
+      await testeur
         .middleware()
         .verifieRechercheDossierCourant(
-          'http://localhost:1234/api/service/456/pdf/dossierDecision.pdf',
-          done
+          testeur.app(),
+          '/api/service/456/pdf/dossierDecision.pdf'
         );
     });
 
-    it('sert un fichier de type pdf', (done) => {
-      verifieTypeFichierServiEstPDF(
-        'http://localhost:1234/api/service/456/pdf/dossierDecision.pdf',
-        done
+    it('sert un fichier de type pdf', async () => {
+      await verifieTypeFichierServiEstPDF(
+        testeur.app(),
+        '/api/service/456/pdf/dossierDecision.pdf'
       );
     });
 
@@ -125,9 +122,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         return 'Pdf dossier décision';
       };
 
-      await axios.get(
-        'http://localhost:1234/api/service/456/pdf/dossierDecision.pdf'
-      );
+      await testeur.get('/api/service/456/pdf/dossierDecision.pdf');
 
       expect(donneesDossier.nomService).to.equal('un service');
       expect(donneesDossier.nomPrenomAutorite).to.equal('Jean Dupond');
@@ -161,21 +156,21 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       testeur.middleware().reinitialise({ serviceARenvoyer });
     });
 
-    it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
+    it('recherche le service correspondant', async () => {
+      await testeur.middleware().verifieRechercheService(
         [
           { niveau: LECTURE, rubrique: SECURISER },
           { niveau: LECTURE, rubrique: DECRIRE },
         ],
-        'http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf',
-        done
+        testeur.app(),
+        '/api/service/456/pdf/syntheseSecurite.pdf'
       );
     });
 
-    it('sert un fichier de type pdf', (done) => {
-      verifieTypeFichierServiEstPDF(
-        'http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf',
-        done
+    it('sert un fichier de type pdf', async () => {
+      await verifieTypeFichierServiEstPDF(
+        testeur.app(),
+        '/api/service/456/pdf/syntheseSecurite.pdf'
       );
     });
 
@@ -187,9 +182,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         return 'Pdf synthèse sécurité';
       };
 
-      await axios.get(
-        'http://localhost:1234/api/service/456/pdf/syntheseSecurite.pdf'
-      );
+      await testeur.get('/api/service/456/pdf/syntheseSecurite.pdf');
 
       expect(donneesSynthese.service).to.eql(serviceARenvoyer);
       expect(donneesSynthese.referentiel).to.eql(testeur.referentiel());
@@ -217,39 +210,39 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       testeur.middleware().reinitialise({ serviceARenvoyer });
     });
 
-    it('recherche le service correspondant', (done) => {
-      testeur
+    it('recherche le service correspondant', async () => {
+      await testeur
         .middleware()
         .verifieRechercheService(
           [],
-          'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip',
-          done
+          testeur.app(),
+          '/api/service/456/pdf/documentsHomologation.zip'
         );
     });
 
-    it('sert un fichier de type zip', (done) => {
-      verifieTypeFichierServiEstZIP(
-        'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip',
-        done
+    it('sert un fichier de type zip', async () => {
+      await verifieTypeFichierServiEstZIP(
+        testeur.app(),
+        '/api/service/456/pdf/documentsHomologation.zip'
       );
     });
 
-    it('sert un fichier dont le nom contient la date du jour en format court', (done) => {
+    it('sert un fichier dont le nom contient la date du jour en format court', async () => {
       testeur.adaptateurHorloge().maintenant = () => new Date(2023, 0, 28);
 
-      verifieNomFichierServi(
-        'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip',
-        'MSS_decision_20230128.zip',
-        done
+      await verifieNomFichierServi(
+        testeur.app(),
+        '/api/service/456/pdf/documentsHomologation.zip',
+        'MSS_decision_20230128.zip'
       );
     });
 
-    it("utilise le middleware de chargement de l'autorisation", (done) => {
-      testeur
+    it("utilise le middleware de chargement de l'autorisation", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesAutorisations(
-          'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip',
-          done
+          testeur.app(),
+          '/api/service/456/pdf/documentsHomologation.zip'
         );
     });
 
@@ -273,9 +266,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         fichiersZipes = fichiers;
       };
 
-      await axios.get(
-        'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip'
-      );
+      await testeur.get('/api/service/456/pdf/documentsHomologation.zip');
 
       expect(fichiersZipes.length).to.be(1);
       expect(fichiersZipes[0]).to.eql({ nom: 'Annexes.pdf', buffer: 'PDF A' });
@@ -288,9 +279,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         return new Date();
       };
 
-      await axios.get(
-        'http://localhost:1234/api/service/456/pdf/documentsHomologation.zip'
-      );
+      await testeur.get('/api/service/456/pdf/documentsHomologation.zip');
       expect(adaptateurHorlogeAppele).to.be(true);
     });
   });
@@ -312,31 +301,31 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       testeur.middleware().reinitialise({ serviceARenvoyer });
     });
 
-    it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
+    it('recherche le service correspondant', async () => {
+      await testeur.middleware().verifieRechercheService(
         [
           { niveau: LECTURE, rubrique: HOMOLOGUER },
           { niveau: LECTURE, rubrique: DECRIRE },
         ],
-        'http://localhost:1234/api/service/456/archive/tamponHomologation.zip',
-        done
+        testeur.app(),
+        '/api/service/456/archive/tamponHomologation.zip'
       );
     });
 
-    it('sert un fichier de type zip', (done) => {
-      verifieTypeFichierServiEstZIP(
-        'http://localhost:1234/api/service/456/archive/tamponHomologation.zip',
-        done
+    it('sert un fichier de type zip', async () => {
+      await verifieTypeFichierServiEstZIP(
+        testeur.app(),
+        '/api/service/456/archive/tamponHomologation.zip'
       );
     });
 
-    it("sert un fichier qui porte le nom de l'archive", (done) => {
+    it("sert un fichier qui porte le nom de l'archive", async () => {
       testeur.adaptateurHorloge().maintenant = () => new Date(2023, 0, 28);
 
-      verifieNomFichierServi(
-        'http://localhost:1234/api/service/456/archive/tamponHomologation.zip',
-        'MSS_tampon_homologation.zip',
-        done
+      await verifieNomFichierServi(
+        testeur.app(),
+        '/api/service/456/archive/tamponHomologation.zip',
+        'MSS_tampon_homologation.zip'
       );
     });
 
@@ -355,7 +344,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         "Le service n'a pas d'homologation active",
         {
           method: 'get',
-          url: 'http://localhost:1234/api/service/456/archive/tamponHomologation.zip',
+          url: '/api/service/456/archive/tamponHomologation.zip',
         }
       );
     });
@@ -367,9 +356,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         return [];
       };
 
-      await axios.get(
-        'http://localhost:1234/api/service/456/archive/tamponHomologation.zip'
-      );
+      await testeur.get('/api/service/456/archive/tamponHomologation.zip');
       expect(adaptateurPdfAppele).to.be(true);
     });
 
@@ -380,9 +367,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         return [];
       };
 
-      await axios.get(
-        'http://localhost:1234/api/service/456/archive/tamponHomologation.zip'
-      );
+      await testeur.get('/api/service/456/archive/tamponHomologation.zip');
       expect(adaptateurZipAppele).to.be(true);
     });
   });
