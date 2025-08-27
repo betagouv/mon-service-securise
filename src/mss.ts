@@ -228,7 +228,7 @@ const creeServeur = ({
     serveur.close();
   };
 
-  return { ecoute, arreteEcoute };
+  return { ecoute, arreteEcoute, app };
 };
 
 module.exports = { creeServeur };

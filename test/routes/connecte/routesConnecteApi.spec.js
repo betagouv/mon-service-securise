@@ -1,5 +1,6 @@
 const axios = require('axios');
 const expect = require('expect.js');
+const supertest = require('supertest');
 
 const {
   verifieNomFichierServi,
@@ -46,8 +47,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
   beforeEach(testeur.initialise);
 
-  afterEach(testeur.arrete);
-
   it("vérifie que l'utilisateur est authentifié sur toutes les routes", (done) => {
     // On vérifie une seule route privée.
     // Par construction, les autres seront protégées aussi puisque la protection est ajoutée comme middleware
@@ -76,7 +75,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         );
     });
 
-    it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
+    it("interroge le dépôt de données pour récupérer les services de l'utilisateur", async () => {
       let donneesPassees = {};
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
       testeur.referentiel().recharge({
@@ -97,18 +96,14 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return Promise.resolve([service]);
       };
 
-      axios
-        .get('http://localhost:1234/api/services')
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
+      const reponse = await supertest(testeur.app()).get('/api/services');
 
-          const { services } = reponse.data;
-          expect(services.length).to.equal(1);
-          expect(services[0].id).to.equal('456');
-          expect(donneesPassees.idUtilisateur).to.equal('123');
-          done();
-        })
-        .catch(done);
+      expect(reponse.statusCode).to.equal(200);
+
+      const { services } = reponse.body;
+      expect(services.length).to.equal(1);
+      expect(services[0].id).to.equal('456');
+      expect(donneesPassees.idUtilisateur).to.equal('123');
     });
 
     it("interroge le dépôt de données pour récupérer les autorisations de l'utilisateur", async () => {
