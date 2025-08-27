@@ -1,5 +1,4 @@
 const expect = require('expect.js');
-const { requeteSansRedirection } = require('../../aides/http');
 const testeurMSS = require('../testeurMSS');
 const { enObjet } = require('../../aides/cookie');
 
@@ -10,7 +9,6 @@ describe('Le serveur MSS des routes connectées /oidc/*', () => {
     testeur.initialise();
   });
 
-  afterEach(testeur.arrete);
   describe('quand requête GET sur /oidc/deconnexion', () => {
     let idTokenAgentConnect;
     beforeEach(() => {
@@ -27,9 +25,7 @@ describe('Le serveur MSS des routes connectées /oidc/*', () => {
     });
 
     it('redirige vers la page de déconnexion', async () => {
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/deconnexion'
-      );
+      const reponse = await testeur.get('/oidc/deconnexion');
 
       expect(reponse.status).to.be(302);
       expect(reponse.headers.location).to.be('http');
@@ -37,9 +33,7 @@ describe('Le serveur MSS des routes connectées /oidc/*', () => {
     });
 
     it('dépose un cookie avec le state', async () => {
-      const reponse = await requeteSansRedirection(
-        'http://localhost:1234/oidc/deconnexion'
-      );
+      const reponse = await testeur.get('/oidc/deconnexion');
 
       const headerCookie = reponse.headers['set-cookie'];
       const cookie = enObjet(headerCookie[0]).AgentConnectInfo;
