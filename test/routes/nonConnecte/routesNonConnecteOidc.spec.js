@@ -1,17 +1,12 @@
-const expect = require('expect.js');
-const testeurMSS = require('../testeurMSS');
-const {
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+import {
   enObjet,
   decodeSessionDuCookie,
   expectContenuSessionValide,
-} = require('../../aides/cookie');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const {
-  requeteSansRedirection,
-  donneesPartagees,
-} = require('../../aides/http');
+} from '../../aides/cookie.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { requeteSansRedirection, donneesPartagees } from '../../aides/http.js';
 
 describe('Le serveur MSS des routes publiques /oidc/*', () => {
   const testeur = testeurMSS();

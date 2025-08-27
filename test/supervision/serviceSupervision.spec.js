@@ -1,6 +1,6 @@
-const expect = require('expect.js');
-const ServiceSupervision = require('../../src/supervision/serviceSupervision');
-const { unService } = require('../constructeurs/constructeurService');
+import expect from 'expect.js';
+import ServiceSupervision from '../../src/supervision/serviceSupervision.js';
+import { unService } from '../constructeurs/constructeurService.js';
 
 describe('Le service de supervision', () => {
   let adaptateurSupervision;

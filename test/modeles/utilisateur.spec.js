@@ -1,14 +1,11 @@
-const expect = require('expect.js');
-
-const {
+import expect from 'expect.js';
+import {
   ErreurEmailManquant,
   ErreurDonneesObligatoiresManquantes,
-} = require('../../src/erreurs');
-const Utilisateur = require('../../src/modeles/utilisateur');
-const {
-  fabriqueAdaptateurMailMemoire,
-} = require('../../src/adaptateurs/adaptateurMailMemoire');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
+} from '../../src/erreurs.js';
+import Utilisateur from '../../src/modeles/utilisateur.js';
+import { fabriqueAdaptateurMailMemoire } from '../../src/adaptateurs/adaptateurMailMemoire.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
 
 describe('Un utilisateur', () => {
   describe("sur demande d'un profil complet ou non", () => {
@@ -175,15 +172,14 @@ describe('Un utilisateur', () => {
     expect(autreUtilisateur.accepteInfolettre()).to.be(false);
   });
 
-  it("exige que l'adresse électronique soit renseignée", (done) => {
+  it("exige que l'adresse électronique soit renseignée", () => {
     try {
       new Utilisateur({ prenom: 'Jean', nom: 'Dupont' });
-      done(
+      expect().fail(
         "La création de l'utilisateur aurait dû lever une ErreurEmailManquant"
       );
     } catch (e) {
       expect(e).to.be.a(ErreurEmailManquant);
-      done();
     }
   });
 
@@ -227,7 +223,7 @@ describe('Un utilisateur', () => {
   describe("sur une demande de validation des données d'un utilisateur", () => {
     let donnees;
 
-    const verifiePresencePropriete = (clef, nom, done) => {
+    const verifiePresencePropriete = (clef, nom) => {
       if (clef.includes('.')) {
         const clefs = clef.split('.');
         delete donnees[clefs[0]][clefs[1]];
@@ -236,13 +232,12 @@ describe('Un utilisateur', () => {
       }
       try {
         Utilisateur.valideDonnees(donnees);
-        done(
+        expect().fail(
           `La validation des données d'un utilisateur sans ${nom} aurait du lever une erreur de donnée manquante`
         );
       } catch (error) {
         expect(error).to.be.a(ErreurDonneesObligatoiresManquantes);
         expect(error.message).to.equal(`La propriété "${clef}" est requise`);
-        done();
       }
     };
 
@@ -252,67 +247,56 @@ describe('Un utilisateur', () => {
         nom: 'Ferrance',
         email: 'sandy.ferrance@domaine.co',
         postes: ['RSSI'],
-        entite: {
-          siret: '7524242424',
-        },
-        estimationNombreServices: {
-          borneBasse: 1,
-          borneHaute: 10,
-        },
+        entite: { siret: '7524242424' },
+        estimationNombreServices: { borneBasse: 1, borneHaute: 10 },
         infolettreAcceptee: true,
         transactionnelAccepte: true,
       };
     });
 
-    it('exige que le prénom soit renseigné', (done) => {
-      verifiePresencePropriete('prenom', 'prénom', done);
+    it('exige que le prénom soit renseigné', () => {
+      verifiePresencePropriete('prenom', 'prénom');
     });
 
-    it('exige que le nom soit renseigné', (done) => {
-      verifiePresencePropriete('nom', 'nom', done);
+    it('exige que le nom soit renseigné', () => {
+      verifiePresencePropriete('nom', 'nom');
     });
 
-    it("exige que l'e-mail soit renseigné quand l'utilisateur est inexistant", (done) => {
-      verifiePresencePropriete('email', 'e-mail', done);
+    it("exige que l'e-mail soit renseigné quand l'utilisateur est inexistant", () => {
+      verifiePresencePropriete('email', 'e-mail');
     });
 
-    it("n'exige pas que l'e-mail soit renseigné quand l'utilisateur existe déjà", (done) => {
+    it("n'exige pas que l'e-mail soit renseigné quand l'utilisateur existe déjà", () => {
       delete donnees.email;
       try {
         Utilisateur.valideDonnees(donnees, true);
-        done();
       } catch (erreur) {
         let messageEchec = `La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur : ${erreur.message}`;
         if (erreur instanceof ErreurDonneesObligatoiresManquantes) {
           messageEchec =
             "La validation des données d'un utilisateur existant sans email n'aurait pas du lever d'erreur de propriété manquante";
         }
-        done(messageEchec);
+        expect().fail(messageEchec);
       }
     });
 
-    it("exige que le SIRET de l'entité soit renseigné", (done) => {
-      verifiePresencePropriete('entite.siret', "SIRET de l'entité", done);
+    it("exige que le SIRET de l'entité soit renseigné", () => {
+      verifiePresencePropriete('entite.siret', "SIRET de l'entité");
     });
 
-    it("exige que l'estimation du nombre de services soit renseignée", (done) => {
+    it("exige que l'estimation du nombre de services soit renseignée", () => {
       verifiePresencePropriete(
         'estimationNombreServices',
-        'Estimation du nombre de services',
-        done
+        'Estimation du nombre de services'
       );
     });
 
-    it('exige que les postes soient renseignés', (done) => {
-      verifiePresencePropriete('postes', 'Postes', done);
+    it('exige que les postes soient renseignés', () => {
+      verifiePresencePropriete('postes', 'Postes');
     });
 
-    it("exige que l'information d'acceptation de l'infolettre soit renseignée", (done) => {
-      verifiePresencePropriete(
-        'infolettreAcceptee',
-        'infolettre acceptée',
-        done
-      );
+    it("exige que l'information d'acceptation de l'infolettre soit renseignée", () => {
+      verifiePresencePropriete('infolettreAcceptee', 'infolettre acceptée');
     });
   });
 

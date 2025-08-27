@@ -1,26 +1,19 @@
-const axios = require('axios');
-const expect = require('expect.js');
-
-const { depotVide } = require('../depots/depotVide');
-const adaptateurGestionErreurVide = require('../../src/adaptateurs/adaptateurGestionErreurVide');
-const adaptateurMailMemoire = require('../../src/adaptateurs/adaptateurMailMemoire');
-const MoteurRegles = require('../../src/moteurRegles');
-const MSS = require('../../src/mss.ts');
-const Referentiel = require('../../src/referentiel');
-const middleware = require('../mocks/middleware');
-const { fabriqueProcedures } = require('../../src/routes/procedures');
-const {
-  fabriqueInscriptionUtilisateur,
-} = require('../../src/modeles/inscriptionUtilisateur');
-const {
-  fabriqueAdaptateurJWT,
-} = require('../../src/adaptateurs/adaptateurJWT');
-const adaptateurProfilAnssiParDefaut = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
-const { fabriqueServiceCgu } = require('../../src/serviceCgu');
-const {
-  fabriqueServiceGestionnaireSession,
-} = require('../../src/session/serviceGestionnaireSession');
-const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
+import axios from 'axios';
+import expect from 'expect.js';
+import { depotVide } from '../depots/depotVide.js';
+import * as adaptateurGestionErreurVide from '../../src/adaptateurs/adaptateurGestionErreurVide.js';
+import * as adaptateurMailMemoire from '../../src/adaptateurs/adaptateurMailMemoire.js';
+import MoteurRegles from '../../src/moteurRegles.js';
+import * as MSS from '../../src/mss.js';
+import * as Referentiel from '../../src/referentiel.js';
+import middleware from '../mocks/middleware.js';
+import { fabriqueProcedures } from '../../src/routes/procedures.js';
+import { fabriqueInscriptionUtilisateur } from '../../src/modeles/inscriptionUtilisateur.js';
+import { fabriqueAdaptateurJWT } from '../../src/adaptateurs/adaptateurJWT.js';
+import * as adaptateurProfilAnssiParDefaut from '../../src/adaptateurs/adaptateurProfilAnssiVide.js';
+import { fabriqueServiceCgu } from '../../src/serviceCgu.js';
+import { fabriqueServiceGestionnaireSession } from '../../src/session/serviceGestionnaireSession.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
 
 const testeurMss = () => {
   let serviceAnnuaire;
@@ -52,6 +45,7 @@ const testeurMss = () => {
   let busEvenements;
   let cmsCrisp;
   let serveur;
+  let app;
 
   const verifieSessionDeposee = (reponse, suite) => {
     const valeurHeader = reponse.headers['set-cookie'][0];
@@ -75,134 +69,130 @@ const testeurMss = () => {
     }
   };
 
-  const initialise = (done) => {
-    serviceAnnuaire = {};
-    serviceSupervision = {};
-    adaptateurHorloge = {
-      maintenant: () => new Date(),
-    };
-    const contenuCrisp = {
-      contenuMarkdown: 'Un contenu',
-      titre: 'Un titre',
-      section: {},
-      tableDesMatieres: [],
-    };
-    cmsCrisp = {
-      recupereDevenirAmbassadeur: async () => contenuCrisp,
-      recupereFaireConnaitre: async () => contenuCrisp,
-      recupereSectionsBlog: async () => [],
-      recupereArticlesBlog: async () => [],
-      recupereArticleBlog: async () => contenuCrisp,
-      recupereRoadmap: async () => contenuCrisp,
-    };
-    adaptateurMail = adaptateurMailMemoire.fabriqueAdaptateurMailMemoire();
-    adaptateurPdf = {
-      genereAnnexes: async () => 'PDF Annexe',
-      genereDossierDecision: async () => 'PDF Dossier decision',
-      genereSyntheseSecurite: async () => 'PDF Synthese securite',
-      genereTamponHomologation: async () => 'PNG Tampon homologation',
-    };
-    adaptateurCsv = {};
-    adaptateurZip = { genereArchive: () => Promise.resolve('Archive ZIP') };
-    adaptateurGestionErreur = adaptateurGestionErreurVide;
-    adaptateurTracking = {
-      envoieTrackingConnexion: () => Promise.resolve(),
-      envoieTrackingInscription: () => Promise.resolve(),
-      envoieTrackingInvitationContributeur: () => Promise.resolve(),
-      envoieTrackingNouveauServiceCree: () => Promise.resolve(),
-    };
-    adaptateurEnvironnement = {
-      mss: () => ({
-        urlBase: () => 'http://localhost:1234',
-      }),
-      trustProxy: () => 0,
-    };
-    adaptateurProtection = {
-      protectionCsrf: () => (_requete, _reponse, suite) => suite(),
-      protectionLimiteTrafic: () => (_requete, _reponse, suite) => suite(),
-      protectionLimiteTraficEndpointSensible:
-        () => (_requete, _reponse, suite) =>
-          suite(),
-    };
-    adaptateurJournal = {
-      consigneEvenement: async () => {},
-    };
-    adaptateurOidc = {};
-    adaptateurStatistiques = {
-      recupereStatistiques: async () => {},
-    };
-    adaptateurJWT = fabriqueAdaptateurJWT();
-    adaptateurProfilAnssi = adaptateurProfilAnssiParDefaut;
-    middleware.reinitialise({});
-    referentiel = Referentiel.creeReferentielVide();
-    procedures = fabriqueProcedures({
-      depotDonnees,
-      adaptateurMail,
-      adaptateurTracking,
-    });
-    serviceCgu = fabriqueServiceCgu({ referentiel });
-    serviceGestionnaireSession = fabriqueServiceGestionnaireSession();
-    lecteurDeFormData = {
-      extraisDonneesXLS: async () => Buffer.from([]),
-    };
-    adaptateurTeleversementServices = {
-      extraisTeleversementServices: async () => {},
-    };
-    adaptateurTeleversementModelesMesureSpecifique = {
-      extraisDonneesTeleversees: async () => {},
-    };
-    busEvenements = fabriqueBusPourLesTests();
+  const initialise = async () => {
+    try {
+      serviceAnnuaire = {};
+      serviceSupervision = {};
+      adaptateurHorloge = { maintenant: () => new Date() };
+      const contenuCrisp = {
+        contenuMarkdown: 'Un contenu',
+        titre: 'Un titre',
+        section: {},
+        tableDesMatieres: [],
+      };
+      cmsCrisp = {
+        recupereDevenirAmbassadeur: async () => contenuCrisp,
+        recupereFaireConnaitre: async () => contenuCrisp,
+        recupereSectionsBlog: async () => [],
+        recupereArticlesBlog: async () => [],
+        recupereArticleBlog: async () => contenuCrisp,
+        recupereRoadmap: async () => contenuCrisp,
+      };
+      adaptateurMail = adaptateurMailMemoire.fabriqueAdaptateurMailMemoire();
+      adaptateurPdf = {
+        genereAnnexes: async () => 'PDF Annexe',
+        genereDossierDecision: async () => 'PDF Dossier decision',
+        genereSyntheseSecurite: async () => 'PDF Synthese securite',
+        genereTamponHomologation: async () => 'PNG Tampon homologation',
+      };
+      adaptateurCsv = {};
+      adaptateurZip = { genereArchive: () => Promise.resolve('Archive ZIP') };
+      adaptateurGestionErreur = adaptateurGestionErreurVide;
+      adaptateurTracking = {
+        envoieTrackingConnexion: () => Promise.resolve(),
+        envoieTrackingInscription: () => Promise.resolve(),
+        envoieTrackingInvitationContributeur: () => Promise.resolve(),
+        envoieTrackingNouveauServiceCree: () => Promise.resolve(),
+      };
+      adaptateurEnvironnement = {
+        mss: () => ({ urlBase: () => 'http://localhost:1234' }),
+        trustProxy: () => 0,
+      };
+      adaptateurProtection = {
+        protectionCsrf: () => (_requete, _reponse, suite) => suite(),
+        protectionLimiteTrafic: () => (_requete, _reponse, suite) => suite(),
+        protectionLimiteTraficEndpointSensible:
+          () => (_requete, _reponse, suite) =>
+            suite(),
+      };
+      adaptateurJournal = {
+        consigneEvenement: async () => {},
+      };
+      adaptateurOidc = {};
+      adaptateurStatistiques = { recupereStatistiques: async () => {} };
+      adaptateurJWT = fabriqueAdaptateurJWT();
+      adaptateurProfilAnssi = adaptateurProfilAnssiParDefaut;
+      middleware.reinitialise({});
+      referentiel = Referentiel.creeReferentielVide();
+      procedures = fabriqueProcedures({
+        depotDonnees,
+        adaptateurMail,
+        adaptateurTracking,
+      });
+      serviceCgu = fabriqueServiceCgu({ referentiel });
+      serviceGestionnaireSession = fabriqueServiceGestionnaireSession();
+      lecteurDeFormData = {
+        extraisDonneesXLS: async () => Buffer.from([]),
+      };
+      adaptateurTeleversementServices = {
+        extraisTeleversementServices: async () => {},
+      };
+      adaptateurTeleversementModelesMesureSpecifique = {
+        extraisDonneesTeleversees: async () => {},
+      };
+      busEvenements = fabriqueBusPourLesTests();
 
-    moteurRegles = new MoteurRegles(referentiel);
-    depotVide()
-      .then((depot) => {
-        depotDonnees = depot;
-        inscriptionUtilisateur = fabriqueInscriptionUtilisateur({
-          adaptateurMail,
-          adaptateurTracking,
-          depotDonnees,
-        });
-        serveur = MSS.creeServeur({
-          depotDonnees,
-          middleware,
-          referentiel,
-          moteurRegles,
-          adaptateurMail,
-          adaptateurPdf,
-          adaptateurHorloge,
-          adaptateurGestionErreur,
-          serviceAnnuaire,
-          adaptateurCsv,
-          adaptateurZip,
-          adaptateurTracking,
-          adaptateurProtection,
-          adaptateurJournal,
-          adaptateurOidc,
-          adaptateurEnvironnement,
-          adaptateurStatistiques,
-          adaptateurJWT,
-          adaptateurProfilAnssi,
-          lecteurDeFormData,
-          adaptateurTeleversementServices,
-          adaptateurTeleversementModelesMesureSpecifique,
-          cmsCrisp,
-          serviceSupervision,
-          serviceGestionnaireSession,
-          serviceCgu,
-          procedures,
-          inscriptionUtilisateur,
-          busEvenements,
-          avecCookieSecurise: false,
-          avecPageErreur: false,
-        });
-        serveur.ecoute(1234, done);
-      })
-      .catch(done);
+      moteurRegles = new MoteurRegles(referentiel);
+      depotDonnees = await depotVide();
+      inscriptionUtilisateur = fabriqueInscriptionUtilisateur({
+        adaptateurMail,
+        adaptateurTracking,
+        depotDonnees,
+      });
+      serveur = MSS.creeServeur({
+        depotDonnees,
+        middleware,
+        referentiel,
+        moteurRegles,
+        adaptateurMail,
+        adaptateurPdf,
+        adaptateurHorloge,
+        adaptateurGestionErreur,
+        serviceAnnuaire,
+        adaptateurCsv,
+        adaptateurZip,
+        adaptateurTracking,
+        adaptateurProtection,
+        adaptateurJournal,
+        adaptateurOidc,
+        adaptateurEnvironnement,
+        adaptateurStatistiques,
+        adaptateurJWT,
+        adaptateurProfilAnssi,
+        lecteurDeFormData,
+        adaptateurTeleversementServices,
+        adaptateurTeleversementModelesMesureSpecifique,
+        cmsCrisp,
+        serviceSupervision,
+        serviceGestionnaireSession,
+        serviceCgu,
+        procedures,
+        inscriptionUtilisateur,
+        busEvenements,
+        avecCookieSecurise: false,
+        avecPageErreur: false,
+      });
+      app = serveur.app;
+      // serveur.ecoute(1234, () => console.log('🦻'));
+    } catch (e) {
+      expect().fail("Erreur à l'initialisation du testeur MSS.");
+    }
   };
 
   const arrete = () => serveur.arreteEcoute();
 
   return {
+    app: () => app,
     serviceAnnuaire: () => serviceAnnuaire,
     serviceGestionnaireSession: () => serviceGestionnaireSession,
     serviceSupervision: () => serviceSupervision,
@@ -236,4 +226,4 @@ const testeurMss = () => {
   };
 };
 
-module.exports = testeurMss;
+export default testeurMss;

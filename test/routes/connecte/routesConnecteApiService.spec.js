@@ -1,12 +1,11 @@
-const axios = require('axios');
-const expect = require('expect.js');
+import axios from 'axios';
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
+import { unDossier } from '../../constructeurs/constructeurDossier.js';
+import { unService } from '../../constructeurs/constructeurService.js';
 
-const testeurMSS = require('../testeurMSS');
-
-const uneDescriptionValide = require('../../constructeurs/constructeurDescriptionService');
-const { unDossier } = require('../../constructeurs/constructeurDossier');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
+import {
   ErreurDonneesObligatoiresManquantes,
   ErreurNomServiceDejaExistant,
   ErreurMesureInconnue,
@@ -15,23 +14,20 @@ const {
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
   ErreurSuppressionImpossible,
-} = require('../../../src/erreurs');
-const Service = require('../../../src/modeles/service');
-const {
+} from '../../../src/erreurs.js';
+
+import Service from '../../../src/modeles/service.js';
+import {
   Permissions,
   Rubriques,
   tousDroitsEnEcriture,
-} = require('../../../src/modeles/autorisations/gestionDroits');
-const {
-  uneAutorisation,
-} = require('../../constructeurs/constructeurAutorisation');
-const Autorisation = require('../../../src/modeles/autorisations/autorisation');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const Mesures = require('../../../src/modeles/mesures');
-const Referentiel = require('../../../src/referentiel');
-const Risques = require('../../../src/modeles/risques');
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import Autorisation from '../../../src/modeles/autorisations/autorisation.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import Mesures from '../../../src/modeles/mesures.js';
+import * as Referentiel from '../../../src/referentiel.js';
+import Risques from '../../../src/modeles/risques.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { RISQUES, DECRIRE, SECURISER, CONTACTS, HOMOLOGUER } = Rubriques;

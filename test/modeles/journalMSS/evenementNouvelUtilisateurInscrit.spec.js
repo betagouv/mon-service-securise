@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const EvenementNouvelUtilisateurInscrit = require('../../../src/modeles/journalMSS/evenementNouvelUtilisateurInscrit');
-const {
-  ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
+import expect from 'expect.js';
+import EvenementNouvelUtilisateurInscrit from '../../../src/modeles/journalMSS/evenementNouvelUtilisateurInscrit.js';
+import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 
 describe('Un événement de nouvel utilisateur inscrit', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
@@ -29,19 +27,18 @@ describe('Un événement de nouvel utilisateur inscrit', () => {
     });
   });
 
-  it("exige que l'identifiant utilisateur soit renseigné", (done) => {
+  it("exige que l'identifiant utilisateur soit renseigné", () => {
     try {
       new EvenementNouvelUtilisateurInscrit(
         {},
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 });

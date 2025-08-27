@@ -1,12 +1,10 @@
-const expect = require('expect.js');
-const {
+import expect from 'expect.js';
+import {
   premiereRouteDisponible,
   Rubriques,
   Permissions,
-} = require('../../../src/modeles/autorisations/gestionDroits');
-const {
-  uneAutorisation,
-} = require('../../constructeurs/constructeurAutorisation');
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
 
 describe('Les fonctions de gestion des droits', () => {
   describe('concernant la première route disponible pour une autorisation', () => {

@@ -1,9 +1,7 @@
-const expect = require('expect.js');
-const {
-  executeurApresAuthentification,
-} = require('../../src/utilisateur/executeurApresAuthentification');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const SourceAuthentification = require('../../src/modeles/sourceAuthentification');
+import expect from 'expect.js';
+import { executeurApresAuthentification } from '../../src/utilisateur/executeurApresAuthentification.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import SourceAuthentification from '../../src/modeles/sourceAuthentification.js';
 
 class MockReponse {
   redirect(cible) {

@@ -1,9 +1,7 @@
-const expect = require('expect.js');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
-  modifieLienServiceEtSuperviseurs,
-} = require('../../../src/bus/abonnements/modifieLienServiceEtSuperviseurs');
-const uneDescriptionValide = require('../../constructeurs/constructeurDescriptionService');
+import expect from 'expect.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import { modifieLienServiceEtSuperviseurs } from '../../../src/bus/abonnements/modifieLienServiceEtSuperviseurs.js';
+import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 
 describe("L'abonné en charge de modifier le lien entre un service modifié et ses superviseurs", () => {
   let serviceSupervision;

@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const EntitesExternes = require('../../src/modeles/entitesExternes');
+import expect from 'expect.js';
+import EntitesExternes from '../../src/modeles/entitesExternes.js';
 
 const elles = it;
 

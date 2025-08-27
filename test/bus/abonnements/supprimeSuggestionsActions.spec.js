@@ -1,7 +1,5 @@
-const expect = require('expect.js');
-const {
-  supprimeSuggestionsActions,
-} = require('../../../src/bus/abonnements/supprimeSuggestionsActions');
+import expect from 'expect.js';
+import { supprimeSuggestionsActions } from '../../../src/bus/abonnements/supprimeSuggestionsActions.js';
 
 describe("L'abonnement qui supprime (en base de données) les suggestions d'actions d'un service", () => {
   let depotDonnees;

@@ -17,7 +17,11 @@
   - [x] Faire une recherche globale sur `require()` pour chasser les derniers
     - Il en reste seulement dans les tests, mais la migration n'a pas encore eu lieu
 - [ ] Remettre les tests avec vitest
-  - [ ] Avant il y avait `test`, `test:mocha` et `test:watch`
+  - ℹ️ Avant il y avait `test`, `test:mocha` et `test:watch`
+  - [ ] Faire la chasse à toutes les utilisations de `done()` pour que plus aucun test ne fail pour ça
+  - [ ] Enlever le `.skip` dans `adaptateurPostgres.spec.js`. Il faudra pour ça attaquer le souci des migrations qui sont encore en `CJS`.
+  - [ ] Mettre du `supertest` pour remettre en route les tests des routes, qui sont `skip()`
+  - [ ] Enlever le `.skip` dans `middleware.spec.js` : Il faudra supprimer toute utilisation de `done()`
   - [ ] Bien penser à continuer à produire le `test-report` sur la CI, pour afficher correctement les rapports
 - [ ] Faire les tests des éléments "périphériques"
   - [ ] Bien vérifier que `tacheEnvoieMailsNotificationExpiration.sh` (qui est lancé en cron sur clever) arrive bien à faire `node --import tsx`

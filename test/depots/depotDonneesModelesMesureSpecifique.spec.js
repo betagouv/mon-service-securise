@@ -1,25 +1,23 @@
-const expect = require('expect.js');
-const DepotDonneesModelesMesureSpecifique = require('../../src/depots/depotDonneesModelesMesureSpecifique');
-const {
-  unePersistanceMemoire,
-} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const {
+import expect from 'expect.js';
+import * as DepotDonneesModelesMesureSpecifique from '../../src/depots/depotDonneesModelesMesureSpecifique.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+
+import {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurServiceInexistant,
   ErreurUtilisateurInexistant,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurAutorisationInexistante,
   ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
-} = require('../../src/erreurs');
-const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
-const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
-const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
-const { creeReferentiel } = require('../../src/referentiel');
+} from '../../src/erreurs.js';
+
+import * as DepotDonneesAutorisations from '../../src/depots/depotDonneesAutorisations.js';
+import * as DepotDonneesServices from '../../src/depots/depotDonneesServices.js';
+import * as DepotDonneesUtilisateurs from '../../src/depots/depotDonneesUtilisateurs.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import { creeReferentiel } from '../../src/referentiel.js';
 
 describe('Le dépôt de données des modèles de mesure spécifique', () => {
   let adaptateurChiffrement;

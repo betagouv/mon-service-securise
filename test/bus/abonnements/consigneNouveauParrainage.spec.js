@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const {
-  consigneNouveauParrainage,
-} = require('../../../src/bus/abonnements/consigneNouveauParrainage');
-const EvenementInvitationUtilisateurEnvoyee = require('../../../src/bus/evenementInvitationUtilisateurEnvoyee');
+import expect from 'expect.js';
+import { consigneNouveauParrainage } from '../../../src/bus/abonnements/consigneNouveauParrainage.js';
+import EvenementInvitationUtilisateurEnvoyee from '../../../src/bus/evenementInvitationUtilisateurEnvoyee.js';
 
 describe('L’abonnement qui consigne les nouveaux parrainages', () => {
   it('utilise le dépôt sauvegarder le parrainage', async () => {

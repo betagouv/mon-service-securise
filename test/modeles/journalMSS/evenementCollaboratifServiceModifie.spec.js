@@ -1,15 +1,9 @@
-const expect = require('expect.js');
-const {
-  ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
-const {
-  EvenementCollaboratifServiceModifie,
-} = require('../../../src/modeles/journalMSS/evenementCollaboratifServiceModifie');
-const {
-  RESUME_NIVEAU_DROIT,
-} = require('../../../src/modeles/autorisations/autorisation');
+import expect from 'expect.js';
+import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { EvenementCollaboratifServiceModifie } from '../../../src/modeles/journalMSS/evenementCollaboratifServiceModifie.js';
+import Autorisation from '../../../src/modeles/autorisations/autorisation.js';
 
-const { PROPRIETAIRE } = RESUME_NIVEAU_DROIT;
+const { PROPRIETAIRE } = Autorisation.RESUME_NIVEAU_DROIT;
 
 describe("Un événement de modification du collaboratif d'un service", () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
@@ -47,7 +41,7 @@ describe("Un événement de modification du collaboratif d'un service", () => {
     { propriete: 'autorisations' },
   ];
   proprietesAVerifier.forEach(({ propriete }) => {
-    it(`exige que \`${propriete}\` soit renseigné`, (done) => {
+    it(`exige que \`${propriete}\` soit renseigné`, () => {
       try {
         const donnees = { idService: 'abc' };
         delete donnees[propriete];
@@ -57,12 +51,11 @@ describe("Un événement de modification du collaboratif d'un service", () => {
           adaptateurChiffrement: hacheEnMajuscules,
         });
 
-        done(
-          Error("L'instanciation de l'événement aurait dû lever une exception")
+        expect().fail(
+          "L'instanciation de l'événement aurait dû lever une exception"
         );
       } catch (e) {
         expect(e).to.be.an(ErreurDonneeManquante);
-        done();
       }
     });
   });

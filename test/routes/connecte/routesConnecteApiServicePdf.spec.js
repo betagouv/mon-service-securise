@@ -1,20 +1,21 @@
-const expect = require('expect.js');
-const axios = require('axios');
+import expect from 'expect.js';
+import axios from 'axios';
+import testeurMSS from '../testeurMSS.js';
 
-const testeurMSS = require('../testeurMSS');
-const {
+import {
   verifieNomFichierServi,
   verifieTypeFichierServiEstPDF,
   verifieTypeFichierServiEstZIP,
-} = require('../../aides/verifieFichierServi');
-const { unDossier } = require('../../constructeurs/constructeurDossier');
-const Service = require('../../../src/modeles/service');
-const Referentiel = require('../../../src/referentiel');
-const {
+} from '../../aides/verifieFichierServi.js';
+
+import { unDossier } from '../../constructeurs/constructeurDossier.js';
+import Service from '../../../src/modeles/service.js';
+import * as Referentiel from '../../../src/referentiel.js';
+import {
   Permissions,
   Rubriques,
-} = require('../../../src/modeles/autorisations/gestionDroits');
-const { unService } = require('../../constructeurs/constructeurService');
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+import { unService } from '../../constructeurs/constructeurService.js';
 
 const { LECTURE } = Permissions;
 const { SECURISER, RISQUES, DECRIRE, HOMOLOGUER } = Rubriques;

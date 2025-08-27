@@ -1,6 +1,6 @@
-const expect = require('expect.js');
-const SuggestionAction = require('../../src/modeles/suggestionAction');
-const { creeReferentiel } = require('../../src/referentiel');
+import expect from 'expect.js';
+import SuggestionAction from '../../src/modeles/suggestionAction.js';
+import { creeReferentiel } from '../../src/referentiel.js';
 
 describe("Une suggestion d'action", () => {
   it('possède un lien', () => {

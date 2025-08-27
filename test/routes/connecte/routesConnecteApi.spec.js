@@ -1,11 +1,11 @@
-const axios = require('axios');
-const expect = require('expect.js');
-
-const {
+import axios from 'axios';
+import expect from 'expect.js';
+import {
   verifieNomFichierServi,
   verifieTypeFichierServiEstCSV,
-} = require('../../aides/verifieFichierServi');
-const {
+} from '../../aides/verifieFichierServi.js';
+
+import {
   ErreurModele,
   EchecAutorisation,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
@@ -14,25 +14,21 @@ const {
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurServiceInexistant,
   ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
-} = require('../../../src/erreurs');
+} from '../../../src/erreurs.js';
 
-const testeurMSS = require('../testeurMSS');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
-  uneAutorisation,
-} = require('../../constructeurs/constructeurAutorisation');
-const {
-  Rubriques: { SECURISER },
-  Permissions: { LECTURE, INVISIBLE },
+import testeurMSS from '../testeurMSS.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import {
+  Rubriques,
+  Permissions,
   tousDroitsEnEcriture,
-} = require('../../../src/modeles/autorisations/gestionDroits');
-const { expectContenuSessionValide } = require('../../aides/cookie');
-const SourceAuthentification = require('../../../src/modeles/sourceAuthentification');
-const Mesures = require('../../../src/modeles/mesures');
-const uneDescriptionValide = require('../../constructeurs/constructeurDescriptionService');
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+import { expectContenuSessionValide } from '../../aides/cookie.js';
+import SourceAuthentification from '../../../src/modeles/sourceAuthentification.js';
+import Mesures from '../../../src/modeles/mesures.js';
+import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 
 describe('Le serveur MSS des routes privées /api/*', () => {
   const testeur = testeurMSS();

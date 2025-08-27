@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const Base = require('../../src/modeles/base');
+import expect from 'expect.js';
+import Base from '../../src/modeles/base.js';
 
 class ExtensionBase extends Base {
   static proprietesObligatoires() {

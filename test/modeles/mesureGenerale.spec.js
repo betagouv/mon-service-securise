@@ -1,14 +1,15 @@
-const expect = require('expect.js');
+import expect from 'expect.js';
 
-const {
+import {
   ErreurMesureInconnue,
   ErreurStatutMesureInvalide,
   ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
-} = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
-const MesureGenerale = require('../../src/modeles/mesureGenerale');
-const InformationsService = require('../../src/modeles/informationsService');
+} from '../../src/erreurs.js';
+
+import * as Referentiel from '../../src/referentiel.js';
+import MesureGenerale from '../../src/modeles/mesureGenerale.js';
+import InformationsService from '../../src/modeles/informationsService.js';
 
 describe('Une mesure de sécurité', () => {
   let referentiel;
@@ -59,33 +60,31 @@ describe('Une mesure de sécurité', () => {
     });
   });
 
-  it('vérifie que la mesure est bien répertoriée', (done) => {
+  it('vérifie que la mesure est bien répertoriée', () => {
     try {
       new MesureGenerale(
         { id: 'identifiantInconnu', statut: MesureGenerale.STATUT_FAIT },
         referentiel
       );
-      done('La création de la mesure aurait dû lever une exception');
+      expect().fail('La création de la mesure aurait dû lever une exception');
     } catch (e) {
       expect(e).to.be.a(ErreurMesureInconnue);
       expect(e.message).to.equal(
         'La mesure "identifiantInconnu" n\'est pas répertoriée'
       );
-      done();
     }
   });
 
-  it('vérifie la nature du statut', (done) => {
+  it('vérifie la nature du statut', () => {
     try {
       new MesureGenerale(
         { id: 'identifiantMesure', statut: 'statutInvalide' },
         referentiel
       );
-      done('La création de la mesure aurait dû lever une exception');
+      expect().fail('La création de la mesure aurait dû lever une exception');
     } catch (e) {
       expect(e).to.be.a(ErreurStatutMesureInvalide);
       expect(e.message).to.equal('Le statut "statutInvalide" est invalide');
-      done();
     }
   });
 

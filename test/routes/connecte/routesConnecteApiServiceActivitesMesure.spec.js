@@ -1,13 +1,13 @@
-const axios = require('axios');
-const expect = require('expect.js');
-const testeurMSS = require('../testeurMSS');
-const {
+import axios from 'axios';
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+import {
   Permissions,
   Rubriques,
-} = require('../../../src/modeles/autorisations/gestionDroits');
-const ActiviteMesure = require('../../../src/modeles/activiteMesure');
-const { unService } = require('../../constructeurs/constructeurService');
-const Mesures = require('../../../src/modeles/mesures');
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+import ActiviteMesure from '../../../src/modeles/activiteMesure.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import Mesures from '../../../src/modeles/mesures.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;

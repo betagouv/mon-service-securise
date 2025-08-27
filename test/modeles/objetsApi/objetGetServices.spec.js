@@ -1,19 +1,14 @@
-const expect = require('expect.js');
-
-const objetGetServices = require('../../../src/modeles/objetsApi/objetGetServices');
-const Referentiel = require('../../../src/referentiel');
-const Dossiers = require('../../../src/modeles/dossiers');
-const {
-  uneAutorisation,
-} = require('../../constructeurs/constructeurAutorisation');
-const {
+import expect from 'expect.js';
+import * as objetGetServices from '../../../src/modeles/objetsApi/objetGetServices.js';
+import * as Referentiel from '../../../src/referentiel.js';
+import Dossiers from '../../../src/modeles/dossiers.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import {
   Rubriques,
   Permissions,
-} = require('../../../src/modeles/autorisations/gestionDroits');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 
 const { HOMOLOGUER } = Rubriques;
 const { LECTURE } = Permissions;

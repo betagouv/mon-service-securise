@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const CmsCrisp = require('../../src/cms/cmsCrisp');
+import expect from 'expect.js';
+import CmsCrisp from '../../src/cms/cmsCrisp.js';
 
 describe('Le CMS Crisp', () => {
   let adaptateurEnvironnement;

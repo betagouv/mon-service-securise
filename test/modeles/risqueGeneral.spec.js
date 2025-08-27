@@ -1,9 +1,8 @@
-const expect = require('expect.js');
-
-const { ErreurRisqueInconnu } = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
-const RisqueGeneral = require('../../src/modeles/risqueGeneral');
-const Risque = require('../../src/modeles/risque');
+import expect from 'expect.js';
+import { ErreurRisqueInconnu } from '../../src/erreurs.js';
+import * as Referentiel from '../../src/referentiel.js';
+import RisqueGeneral from '../../src/modeles/risqueGeneral.js';
+import Risque from '../../src/modeles/risque.js';
 
 describe('Un risque général', () => {
   let referentiel;
@@ -85,16 +84,15 @@ describe('Un risque général', () => {
     });
   });
 
-  it('vérifie que le risque est bien répertorié', (done) => {
+  it('vérifie que le risque est bien répertorié', () => {
     try {
       new RisqueGeneral({ id: 'identifiantInconnu' }, referentiel);
-      done('La création du risque aurait dû lever une exception.');
+      expect().fail('La création du risque aurait dû lever une exception.');
     } catch (e) {
       expect(e).to.be.a(ErreurRisqueInconnu);
       expect(e.message).to.equal(
         'Le risque "identifiantInconnu" n\'est pas répertorié'
       );
-      done();
     }
   });
 

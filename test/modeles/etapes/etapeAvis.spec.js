@@ -1,7 +1,6 @@
-const expect = require('expect.js');
-
-const EtapeAvis = require('../../../src/modeles/etapes/etapeAvis');
-const Referentiel = require('../../../src/referentiel');
+import expect from 'expect.js';
+import EtapeAvis from '../../../src/modeles/etapes/etapeAvis.js';
+import * as Referentiel from '../../../src/referentiel.js';
 
 describe('Une étape « Avis »', () => {
   const referentiel = Referentiel.creeReferentiel({

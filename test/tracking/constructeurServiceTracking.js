@@ -33,4 +33,4 @@ class ConstructeurServiceTracking {
 
 const unServiceTracking = () => new ConstructeurServiceTracking();
 
-module.exports = { unServiceTracking };
+export default { unServiceTracking };

@@ -1,12 +1,10 @@
-const expect = require('expect.js');
-const ConstructeurEvenementCompletudeServiceModifiee = require('./constructeurEvenementCompletudeServiceModifiee');
-const {
-  ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
-const { unService } = require('../../constructeurs/constructeurService');
-const Mesures = require('../../../src/modeles/mesures');
-const Referentiel = require('../../../src/referentiel');
-const uneDescriptionValide = require('../../constructeurs/constructeurDescriptionService');
+import expect from 'expect.js';
+import ConstructeurEvenementCompletudeServiceModifiee from './constructeurEvenementCompletudeServiceModifiee.js';
+import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import Mesures from '../../../src/modeles/mesures.js';
+import * as Referentiel from '../../../src/referentiel.js';
+import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 
 describe('Un événement de complétude modifiée', () => {
   const unEvenement = () =>
@@ -173,16 +171,15 @@ describe('Un événement de complétude modifiée', () => {
     });
   });
 
-  it('exige que le service soit renseigné', (done) => {
+  it('exige que le service soit renseigné', () => {
     try {
       unEvenement().sans('service').construis();
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 });

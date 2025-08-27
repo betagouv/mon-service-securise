@@ -1,12 +1,11 @@
-const expect = require('expect.js');
-
-const {
+import expect from 'expect.js';
+import {
   ErreurStatutDeploiementInvalide,
   ErreurLocalisationDonneesInvalide,
-} = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
-const DescriptionService = require('../../src/modeles/descriptionService');
-const InformationsService = require('../../src/modeles/informationsService');
+} from '../../src/erreurs.js';
+import * as Referentiel from '../../src/referentiel.js';
+import DescriptionService from '../../src/modeles/descriptionService.js';
+import InformationsService from '../../src/modeles/informationsService.js';
 
 const elle = it;
 
@@ -163,7 +162,7 @@ describe('La description du service', () => {
     });
   });
 
-  elle('valide la localisation des données si elle est présente', (done) => {
+  elle('valide la localisation des données si elle est présente', () => {
     const referentiel = Referentiel.creeReferentiel({
       localisationsDonnees: {
         france: { description: 'Quelque part en France' },
@@ -174,7 +173,7 @@ describe('La description du service', () => {
         { localisationDonnees: 'localisationInvalide' },
         referentiel
       );
-      done(
+      expect().fail(
         'La création de la description du service aurait dû lever une ErreurLocalisationDonneesInvalide'
       );
     } catch (e) {
@@ -182,7 +181,6 @@ describe('La description du service', () => {
       expect(e.message).to.equal(
         'La localisation des données "localisationInvalide" est invalide'
       );
-      done();
     }
   });
 

@@ -1,30 +1,15 @@
-const expect = require('expect.js');
-const {
-  ajoutContributeurSurServices,
-} = require('../../../src/modeles/autorisations/ajoutContributeurSurServices');
-const { depotVide } = require('../../depots/depotVide');
-const {
-  fabriqueAdaptateurMailMemoire,
-} = require('../../../src/adaptateurs/adaptateurMailMemoire');
-const {
-  fabriqueAdaptateurTrackingMemoire,
-} = require('../../../src/adaptateurs/adaptateurTrackingMemoire');
-const {
-  EchecAutorisation,
-  EchecEnvoiMessage,
-} = require('../../../src/erreurs');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
-  tousDroitsEnEcriture,
-} = require('../../../src/modeles/autorisations/gestionDroits');
-const {
-  uneAutorisation,
-} = require('../../constructeurs/constructeurAutorisation');
-const { fabriqueBusPourLesTests } = require('../../bus/aides/busPourLesTests');
-const EvenementInvitationUtilisateurEnvoyee = require('../../../src/bus/evenementInvitationUtilisateurEnvoyee');
+import expect from 'expect.js';
+import { ajoutContributeurSurServices } from '../../../src/modeles/autorisations/ajoutContributeurSurServices.js';
+import { depotVide } from '../../depots/depotVide.js';
+import { fabriqueAdaptateurMailMemoire } from '../../../src/adaptateurs/adaptateurMailMemoire.js';
+import { fabriqueAdaptateurTrackingMemoire } from '../../../src/adaptateurs/adaptateurTrackingMemoire.js';
+import { EchecAutorisation, EchecEnvoiMessage } from '../../../src/erreurs.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import { tousDroitsEnEcriture } from '../../../src/modeles/autorisations/gestionDroits.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import { fabriqueBusPourLesTests } from '../../bus/aides/busPourLesTests.js';
+import EvenementInvitationUtilisateurEnvoyee from '../../../src/bus/evenementInvitationUtilisateurEnvoyee.js';
 
 describe("L'ajout d'un contributeur sur des services", () => {
   const unEmetteur = (idUtilisateur) =>

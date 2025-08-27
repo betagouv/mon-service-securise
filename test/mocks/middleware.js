@@ -1,20 +1,17 @@
-const axios = require('axios');
-const expect = require('expect.js');
+import axios from 'axios';
+import expect from 'expect.js';
+import { Rubriques } from '../../src/modeles/autorisations/gestionDroits';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import { unService } from '../constructeurs/constructeurService.js';
+import SourceAuthentification from '../../src/modeles/sourceAuthentification.js';
 
-const {
-  Rubriques: { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS },
-} = require('../../src/modeles/autorisations/gestionDroits');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
-const { unService } = require('../constructeurs/constructeurService');
-const SourceAuthentification = require('../../src/modeles/sourceAuthentification');
+const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS } = Rubriques;
 
-const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
+const verifieRequeteChangeEtat = async (donneesEtat, requeteSupertest) => {
   const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) => {
-    expect(
-      `${[JSON.stringify(valeurConstatee), ...diagnostics].join(' ')}`
-    ).to.eql(`${[JSON.stringify(valeurReference), ...diagnostics].join(' ')}`);
+    const reelle = [JSON.stringify(valeurConstatee), ...diagnostics];
+    const attendue = [JSON.stringify(valeurReference), ...diagnostics];
+    expect(`${reelle.join(' ')}`).to.eql(`${attendue.join(' ')}`);
   };
 
   const { lectureEtat, etatInitial = false, etatFinal = true } = donneesEtat;
@@ -22,12 +19,13 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
 
   verifieEgalite(lectureEtat(), etatInitial, suffixeLectureEtat);
 
-  axios(requete)
-    .then(() => verifieEgalite(lectureEtat(), etatFinal, suffixeLectureEtat))
-    .then(() => done())
-    .catch((e) => {
+  try {
+    await requeteSupertest();
+    verifieEgalite(lectureEtat(), etatFinal, suffixeLectureEtat);
+  } catch (e) {
+    try {
       const erreurHTTP = e.response?.status;
-      if (!erreurHTTP || erreurHTTP >= 500) throw e;
+      if (!erreurHTTP || erreurHTTP >= 500) expect().fail(e);
 
       const suffixeErreurHTTP = `(sur erreur HTTP ${erreurHTTP})`;
       verifieEgalite(
@@ -36,9 +34,10 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
         suffixeLectureEtat,
         suffixeErreurHTTP
       );
-      done();
-    })
-    .catch((e) => done(e.response?.data || e));
+    } catch (e) {
+      expect().fail(e.response?.data || e);
+    }
+  }
 };
 
 let autorisationChargee;
@@ -255,8 +254,8 @@ const middlewareFantaisie = {
     expect(listeRecherche?.proprietes).to.eql(proprietesParametre);
   },
 
-  verifieAseptisationParametres: (nomsParametres, ...params) => {
-    verifieRequeteChangeEtat(
+  verifieAseptisationParametres: async (nomsParametres, ...params) => {
+    await verifieRequeteChangeEtat(
       {
         lectureEtat: () => parametresAseptises,
         etatInitial: [],
@@ -266,8 +265,8 @@ const middlewareFantaisie = {
     );
   },
 
-  verifieAdresseIP: (listeAdressesIp, ...params) => {
-    verifieRequeteChangeEtat(
+  verifieAdresseIP: async (listeAdressesIp, ...params) => {
+    await verifieRequeteChangeEtat(
       {
         lectureEtat: () => listeAdressesIPsAutorisee,
         etatInitial: [],
@@ -277,33 +276,36 @@ const middlewareFantaisie = {
     );
   },
 
-  verifieChargementDesAutorisations: (...params) => {
-    verifieRequeteChangeEtat(
+  verifieChargementDesAutorisations: async (...params) => {
+    await verifieRequeteChangeEtat(
       { lectureEtat: () => autorisationsChargees },
       ...params
     );
   },
 
-  verifieChargementDesPreferences: (...params) => {
-    verifieRequeteChangeEtat(
+  verifieChargementDesPreferences: async (...params) => {
+    await verifieRequeteChangeEtat(
       { lectureEtat: () => preferencesChargees },
       ...params
     );
   },
 
-  verifieFiltrageIp: (...params) => {
-    verifieRequeteChangeEtat(
+  verifieFiltrageIp: async (...params) => {
+    await verifieRequeteChangeEtat(
       { lectureEtat: () => filtrageIpEstActif },
       ...params
     );
   },
 
-  verifieProtectionTrafic: (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => traficProtege }, ...params);
+  verifieProtectionTrafic: async (...params) => {
+    await verifieRequeteChangeEtat(
+      { lectureEtat: () => traficProtege },
+      ...params
+    );
   },
 
-  verifieRechercheService: (droitsAttendus, ...params) => {
-    verifieRequeteChangeEtat(
+  verifieRechercheService: async (droitsAttendus, ...params) => {
+    await verifieRequeteChangeEtat(
       {
         lectureEtat: () => droitVerifie,
         etatInitial: null,
@@ -313,75 +315,78 @@ const middlewareFantaisie = {
     );
   },
 
-  verifieRechercheDossierCourant: (...params) => {
-    verifieRequeteChangeEtat(
+  verifieRechercheDossierCourant: async (...params) => {
+    await verifieRequeteChangeEtat(
       { lectureEtat: () => rechercheDossierCourantEffectuee },
       ...params
     );
   },
 
-  verifieRequeteExigeAcceptationCGU: (...params) => {
-    verifieRequeteChangeEtat(
+  verifieRequeteExigeAcceptationCGU: async (requete) => {
+    await verifieRequeteChangeEtat(
       { lectureEtat: () => verificationCGUMenee },
-      ...params
+      requete
     );
   },
 
-  verifieRequeteExigeJWT: (...params) => {
-    verifieRequeteChangeEtat(
+  verifieRequeteExigeJWT: async (...params) => {
+    await verifieRequeteChangeEtat(
       { lectureEtat: () => verificationJWTMenee },
       ...params
     );
   },
 
-  verifieRequeteChargeEtatVisiteGuidee: (...params) => {
-    verifieRequeteChangeEtat(
+  verifieRequeteChargeEtatVisiteGuidee: async (...params) => {
+    await verifieRequeteChangeEtat(
       { lectureEtat: () => etatVisiteGuideeCharge },
       ...params
     );
   },
 
-  verifieRequeteChargeActivationAgentConnect: (...params) => {
-    verifieRequeteChangeEtat(
+  verifieRequeteChargeActivationAgentConnect: async (...params) => {
+    await verifieRequeteChangeEtat(
       { lectureEtat: () => activationAgentConnectCharge },
       ...params
     );
   },
 
-  verifieRequeteExigeSuppressionCookie: (...params) => {
-    verifieRequeteChangeEtat(
+  verifieRequeteExigeSuppressionCookie: async (...params) => {
+    await verifieRequeteChangeEtat(
       { lectureEtat: () => suppressionCookieEffectuee },
       ...params
     );
   },
 
-  verifieRequetePositionneHeaders: (...params) => {
-    verifieRequeteChangeEtat(
+  verifieRequetePositionneHeaders: async (...params) => {
+    await verifieRequeteChangeEtat(
       { lectureEtat: () => headersPositionnes },
       ...params
     );
   },
 
   verifieRequetePositionneNonce: async (...params) => {
-    verifieRequeteChangeEtat({ lectureEtat: () => noncePositionne }, ...params);
+    await verifieRequeteChangeEtat(
+      { lectureEtat: () => noncePositionne },
+      ...params
+    );
   },
 
-  verifieChallengeMotDePasse: (...params) => {
-    verifieRequeteChangeEtat(
+  verifieChallengeMotDePasse: async (...params) => {
+    await verifieRequeteChangeEtat(
       { lectureEtat: () => challengeMotDePasseEffectue },
       ...params
     );
   },
 
-  verifieChargementDeLaVersionBuildee: (...params) => {
-    verifieRequeteChangeEtat(
+  verifieChargementDeLaVersionBuildee: async (...params) => {
+    await verifieRequeteChangeEtat(
       { lectureEtat: () => versionBuildeeChargee },
       ...params
     );
   },
 
-  verifieTypeRequeteCharge: (typeRequeteAttendu, ...params) => {
-    verifieRequeteChangeEtat(
+  verifieTypeRequeteCharge: async (typeRequeteAttendu, ...params) => {
+    await verifieRequeteChangeEtat(
       {
         lectureEtat: () => typeRequeteCharge,
         etatInitial: null,
@@ -403,4 +408,4 @@ const middlewareFantaisie = {
   },
 };
 
-module.exports = middlewareFantaisie;
+export default middlewareFantaisie;

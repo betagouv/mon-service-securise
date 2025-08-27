@@ -1,18 +1,13 @@
-const axios = require('axios');
-const expect = require('expect.js');
-const testeurMSS = require('../testeurMSS');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const {
-  requeteSansRedirection,
-  donneesPartagees,
-} = require('../../aides/http');
-const Superviseur = require('../../../src/modeles/superviseur');
-const {
+import axios from 'axios';
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { requeteSansRedirection, donneesPartagees } from '../../aides/http.js';
+import Superviseur from '../../../src/modeles/superviseur.js';
+import {
   verifieTypeFichierServiEstCSV,
   verifieNomFichierServi,
-} = require('../../aides/verifieFichierServi');
+} from '../../aides/verifieFichierServi.js';
 
 describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   const testeur = testeurMSS();

@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const { execSync } = require('child_process');
+import expect from 'expect.js';
+import { execSync } from 'child_process';
 
 describe("Le script de création d'un utilisateur de Démo", () => {
   it('se lance correctement', function lanceCommande() {

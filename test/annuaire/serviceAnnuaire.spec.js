@@ -1,6 +1,6 @@
-const expect = require('expect.js');
-const Utilisateur = require('../../src/modeles/utilisateur');
-const { fabriqueAnnuaire } = require('../../src/annuaire/serviceAnnuaire');
+import expect from 'expect.js';
+import Utilisateur from '../../src/modeles/utilisateur.js';
+import { fabriqueAnnuaire } from '../../src/annuaire/serviceAnnuaire.js';
 
 describe("Le service d'annuaire", () => {
   describe('sur demande de contributeurs', () => {

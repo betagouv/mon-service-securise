@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const { Identite } = require('../../src/modeles/identite');
+import expect from 'expect.js';
+import { Identite } from '../../src/modeles/identite.js';
 
 describe('Une identité', () => {
   describe('sur demande de ses initiales', () => {

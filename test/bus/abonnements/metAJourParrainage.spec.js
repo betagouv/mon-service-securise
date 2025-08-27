@@ -1,12 +1,7 @@
-const expect = require('expect.js');
-
-const {
-  metAJourParrainage,
-} = require('../../../src/bus/abonnements/metAJourParrainage');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const Parrainage = require('../../../src/modeles/parrainage');
+import expect from 'expect.js';
+import { metAJourParrainage } from '../../../src/bus/abonnements/metAJourParrainage.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import Parrainage from '../../../src/modeles/parrainage.js';
 
 describe('L’abonnement qui met à jour les parrainages', () => {
   it('utilise le dépôt pour trouver le parrainage existant', async () => {

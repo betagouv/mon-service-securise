@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const EvenementNouveauServiceCree = require('../../../src/modeles/journalMSS/evenementNouveauServiceCree');
-const {
-  ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
+import expect from 'expect.js';
+import EvenementNouveauServiceCree from '../../../src/modeles/journalMSS/evenementNouveauServiceCree.js';
+import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 
 describe('Un événement de nouveau service créé', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
@@ -38,34 +36,32 @@ describe('Un événement de nouveau service créé', () => {
     });
   });
 
-  it("exige que l'identifiant utilisateur associé au service soit renseigné", (done) => {
+  it("exige que l'identifiant utilisateur associé au service soit renseigné", () => {
     try {
       new EvenementNouveauServiceCree(
         { idService: 'ABC' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 
-  it("exige que l'identifiant du service créé soit renseigné", (done) => {
+  it("exige que l'identifiant du service créé soit renseigné", () => {
     try {
       new EvenementNouveauServiceCree(
         { idUtilisateur: 'DEF' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 });

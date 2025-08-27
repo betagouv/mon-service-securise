@@ -1,6 +1,6 @@
-const adaptateurHorlogeParDefaut = require('../../src/adaptateurs/adaptateurHorloge');
-const Dossier = require('../../src/modeles/dossier');
-const Referentiel = require('../../src/referentiel');
+import adaptateurHorlogeParDefaut from '../../src/adaptateurs/adaptateurHorloge.js';
+import Dossier from '../../src/modeles/dossier.js';
+import * as Referentiel from '../../src/referentiel.js';
 
 class ConstructeurDossierFantaisie {
   constructor(
@@ -148,4 +148,4 @@ class ConstructeurDossierFantaisie {
 const unDossier = (referentiel, adaptateurHorloge) =>
   new ConstructeurDossierFantaisie('1', referentiel, adaptateurHorloge);
 
-module.exports = { ConstructeurDossierFantaisie, unDossier };
+export { ConstructeurDossierFantaisie, unDossier };

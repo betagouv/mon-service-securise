@@ -1,70 +1,53 @@
-const expect = require('expect.js');
-
-const uneDescriptionValide = require('../constructeurs/constructeurDescriptionService');
-
-const {
+import expect from 'expect.js';
+import uneDescriptionValide from '../constructeurs/constructeurDescriptionService.js';
+import {
   ErreurDonneesObligatoiresManquantes,
   ErreurServiceInexistant,
   ErreurNomServiceDejaExistant,
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurRisqueInconnu,
   ErreurStatutMesureManquant,
-} = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
-
-const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
-const {
-  fabriqueAdaptateurUUID,
-} = require('../../src/adaptateurs/adaptateurUUID');
-const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
-
-const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
-const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
-
-const Dossier = require('../../src/modeles/dossier');
-const Service = require('../../src/modeles/service');
-const MesureGenerale = require('../../src/modeles/mesureGenerale');
-const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
-const RisqueGeneral = require('../../src/modeles/risqueGeneral');
-const RisqueSpecifique = require('../../src/modeles/risqueSpecifique');
-const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
-
-const copie = require('../../src/utilitaires/copie');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
-const { unService } = require('../constructeurs/constructeurService');
-const {
-  unePersistanceMemoire,
-} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const {
-  unDepotDeDonneesServices,
-} = require('../constructeurs/constructeurDepotDonneesServices');
-const { unDossier } = require('../constructeurs/constructeurDossier');
-
-const {
+} from '../../src/erreurs.js';
+import * as Referentiel from '../../src/referentiel.js';
+import * as AdaptateurPersistanceMemoire from '../../src/adaptateurs/adaptateurPersistanceMemoire.js';
+import { fabriqueAdaptateurUUID } from '../../src/adaptateurs/adaptateurUUID.js';
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import * as DepotDonneesAutorisations from '../../src/depots/depotDonneesAutorisations.js';
+import * as DepotDonneesServices from '../../src/depots/depotDonneesServices.js';
+import Dossier from '../../src/modeles/dossier.js';
+import Service from '../../src/modeles/service.js';
+import MesureGenerale from '../../src/modeles/mesureGenerale.js';
+import MesureSpecifique from '../../src/modeles/mesureSpecifique.js';
+import RisqueGeneral from '../../src/modeles/risqueGeneral.js';
+import RisqueSpecifique from '../../src/modeles/risqueSpecifique.js';
+import RolesResponsabilites from '../../src/modeles/rolesResponsabilites.js';
+import copie from '../../src/utilitaires/copie.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import { unService } from '../constructeurs/constructeurService.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import { unDepotDeDonneesServices } from '../constructeurs/constructeurDepotDonneesServices.js';
+import { unDossier } from '../constructeurs/constructeurDossier.js';
+import {
   Rubriques,
   Permissions,
-} = require('../../src/modeles/autorisations/gestionDroits');
-const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
-const EvenementNouveauServiceCree = require('../../src/bus/evenementNouveauServiceCree');
-const EvenementMesureModifieeEnMasse = require('../../src/bus/evenementMesureModifieeEnMasse');
-const {
-  EvenementDescriptionServiceModifiee,
-} = require('../../src/bus/evenementDescriptionServiceModifiee');
-const Mesures = require('../../src/modeles/mesures');
-const EvenementDossierHomologationFinalise = require('../../src/bus/evenementDossierHomologationFinalise');
-const EvenementServiceSupprime = require('../../src/bus/evenementServiceSupprime');
-const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
-const Entite = require('../../src/modeles/entite');
-const Utilisateur = require('../../src/modeles/utilisateur');
-const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
-const { creeReferentielVide } = require('../../src/referentiel');
-const EvenementMesureServiceModifiee = require('../../src/bus/evenementMesureServiceModifiee');
-const EvenementMesureServiceSupprimee = require('../../src/bus/evenementMesureServiceSupprimee');
-const Risques = require('../../src/modeles/risques');
-const EvenementRisqueServiceModifie = require('../../src/bus/evenementRisqueServiceModifie');
+} from '../../src/modeles/autorisations/gestionDroits.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import EvenementNouveauServiceCree from '../../src/bus/evenementNouveauServiceCree.js';
+import EvenementMesureModifieeEnMasse from '../../src/bus/evenementMesureModifieeEnMasse.js';
+import { EvenementDescriptionServiceModifiee } from '../../src/bus/evenementDescriptionServiceModifiee.js';
+import Mesures from '../../src/modeles/mesures.js';
+import EvenementDossierHomologationFinalise from '../../src/bus/evenementDossierHomologationFinalise.js';
+import EvenementServiceSupprime from '../../src/bus/evenementServiceSupprime.js';
+import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
+import Entite from '../../src/modeles/entite.js';
+import Utilisateur from '../../src/modeles/utilisateur.js';
+import * as DepotDonneesUtilisateurs from '../../src/depots/depotDonneesUtilisateurs.js';
+import { creeReferentielVide } from '../../src/referentiel.js';
+import EvenementMesureServiceModifiee from '../../src/bus/evenementMesureServiceModifiee.js';
+import EvenementMesureServiceSupprimee from '../../src/bus/evenementMesureServiceSupprimee.js';
+import Risques from '../../src/modeles/risques.js';
+import EvenementRisqueServiceModifie from '../../src/bus/evenementRisqueServiceModifie.js';
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -588,7 +571,7 @@ describe('Le dépôt de données des services', () => {
     let depot;
     let referentiel;
 
-    before(() => {
+    beforeAll(() => {
       valideRisque = RisqueSpecifique.valide;
       RisqueSpecifique.valide = () => {};
     });
@@ -608,7 +591,7 @@ describe('Le dépôt de données des services', () => {
         .construis();
     });
 
-    after(() => (RisqueSpecifique.valide = valideRisque));
+    afterAll(() => (RisqueSpecifique.valide = valideRisque));
 
     describe("sur demande d'ajout d'un risque specifique", () => {
       it('sait associer un risque spécifique à un service', async () => {
@@ -967,7 +950,7 @@ describe('Le dépôt de données des services', () => {
       }
     });
 
-    it('lève une exception si une propriété obligatoire de la description du service est manquante', (done) => {
+    it('lève une exception si une propriété obligatoire de la description du service est manquante', async () => {
       const donneesDescriptionServiceIncompletes = uneDescriptionValide(
         referentiel
       )
@@ -975,16 +958,14 @@ describe('Le dépôt de données des services', () => {
         .construis()
         .toJSON();
 
-      depot
-        .nouveauService('123', {
+      try {
+        await depot.nouveauService('123', {
           descriptionService: donneesDescriptionServiceIncompletes,
-        })
-        .then(() =>
-          done('La création du service aurait dû lever une exception')
-        )
-        .catch((e) => expect(e).to.be.an(ErreurDonneesObligatoiresManquantes))
-        .then(() => done())
-        .catch(done);
+        });
+        expect().fail('La création du service aurait dû lever une exception');
+      } catch (e) {
+        expect(e).to.be.an(ErreurDonneesObligatoiresManquantes);
+      }
     });
 
     it("lève une exception si le siret de l'organisation responsable n'est pas renseigné", async () => {
@@ -1007,26 +988,21 @@ describe('Le dépôt de données des services', () => {
       }
     });
 
-    it('lève une exception si le nom du service est déjà pris par un autre service', (done) => {
+    it('lève une exception si le nom du service est déjà pris par un autre service', async () => {
       const descriptionService = uneDescriptionValide(referentiel)
         .avecNomService('Nom service')
         .construis()
         .toJSON();
-
-      depot
-        .nouveauService('123', { descriptionService })
-        .then(() => depot.nouveauService('123', { descriptionService }))
-        .then(() =>
-          done('La création du service aurait dû lever une exception')
-        )
-        .catch((e) => {
-          expect(e).to.be.an(ErreurNomServiceDejaExistant);
-          expect(e.message).to.equal(
-            'Le nom du service "Nom service" existe déjà pour un autre service'
-          );
-          done();
-        })
-        .catch(done);
+      try {
+        await depot.nouveauService('123', { descriptionService });
+        await depot.nouveauService('123', { descriptionService });
+        expect().fail('La création du service aurait dû lever une exception');
+      } catch (e) {
+        expect(e).to.be.an(ErreurNomServiceDejaExistant);
+        expect(e.message).to.equal(
+          'Le nom du service "Nom service" existe déjà pour un autre service'
+        );
+      }
     });
   });
 
@@ -1150,7 +1126,7 @@ describe('Le dépôt de données des services', () => {
       expect(apres).to.eql([]);
     });
 
-    it('supprime les autorisations associées', (done) => {
+    it('supprime les autorisations associées', async () => {
       adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [
           { id: '999', donnees: { email: 'jean.dupont@mail.fr' } },
@@ -1180,16 +1156,16 @@ describe('Le dépôt de données des services', () => {
         adaptateurPersistance,
       });
 
-      depot
-        .supprimeService('111')
-        .then(() => depotAutorisations.autorisations('999'))
-        .then((as) => expect(as.length).to.equal(0))
-        .then(() => depotAutorisations.autorisations('000'))
-        .then((as) => expect(as.length).to.equal(1))
-        .then(() => depotAutorisations.autorisation('789'))
-        .then((a) => expect(a).to.be.ok())
-        .then(() => done())
-        .catch(done);
+      await depot.supprimeService('111');
+
+      const du999 = await depotAutorisations.autorisations('999');
+      expect(du999.length).to.equal(0);
+
+      const du000 = await depotAutorisations.autorisations('000');
+      expect(du000.length).to.equal(1);
+
+      const du789 = await depotAutorisations.autorisation('789');
+      expect(du789).to.be.ok();
     });
 
     it('supprime les liens avec des modèles de mesure spécifique', async () => {
@@ -1246,7 +1222,7 @@ describe('Le dépôt de données des services', () => {
 
     beforeEach(() => (adaptateurUUID = { genereUUID: () => 'un UUID' }));
 
-    it('ne fait rien si un dossier courant existe déjà', (done) => {
+    it('ne fait rien si un dossier courant existe déjà', async () => {
       const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
@@ -1262,15 +1238,13 @@ describe('Le dépôt de données des services', () => {
         adaptateurUUID,
       });
 
-      depot
-        .ajouteDossierCourantSiNecessaire('123')
-        .then(() => depot.service('123'))
-        .then((s) => expect(s.nombreDossiers()).to.equal(1))
-        .then(() => done())
-        .catch(done);
+      await depot.ajouteDossierCourantSiNecessaire('123');
+
+      const s = await depot.service('123');
+      expect(s.nombreDossiers()).to.equal(1);
     });
 
-    it("ajoute le dossier s'il n'existe pas déjà", (done) => {
+    it("ajoute le dossier s'il n'existe pas déjà", async () => {
       const donneesHomologations = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
@@ -1285,15 +1259,13 @@ describe('Le dépôt de données des services', () => {
         adaptateurUUID,
       });
 
-      depot
-        .ajouteDossierCourantSiNecessaire('123')
-        .then(() => depot.service('123'))
-        .then((s) => expect(s.nombreDossiers()).to.equal(1))
-        .then(() => done())
-        .catch(done);
+      await depot.ajouteDossierCourantSiNecessaire('123');
+
+      const s = await depot.service('123');
+      expect(s.nombreDossiers()).to.equal(1);
     });
 
-    it('associe un UUID au dossier créé', (done) => {
+    it('associe un UUID au dossier créé', async () => {
       const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
@@ -1309,15 +1281,13 @@ describe('Le dépôt de données des services', () => {
         adaptateurUUID,
       });
 
-      depot
-        .ajouteDossierCourantSiNecessaire('123')
-        .then(() => depot.service('123'))
-        .then((s) => expect(s.dossiers.item(0).id).to.equal('999'))
-        .then(() => done())
-        .catch(done);
+      await depot.ajouteDossierCourantSiNecessaire('123');
+
+      const s = await depot.service('123');
+      expect(s.dossiers.item(0).id).to.equal('999');
     });
 
-    it("lève une exception si le service n'existe pas", (done) => {
+    it("lève une exception si le service n'existe pas", async () => {
       const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
@@ -1326,21 +1296,17 @@ describe('Le dépôt de données des services', () => {
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           services: [donneesService],
         });
-      const depot = DepotDonneesServices.creeDepot({
-        adaptateurPersistance,
-      });
+      const depot = DepotDonneesServices.creeDepot({ adaptateurPersistance });
 
-      depot
-        .ajouteDossierCourantSiNecessaire('999')
-        .then(() =>
-          done("La tentative d'ajout de dossier aurait dû lever une exception")
-        )
-        .catch((e) => {
-          expect(e).to.be.an(ErreurServiceInexistant);
-          expect(e.message).to.equal('Service "999" non trouvé');
-          done();
-        })
-        .catch(done);
+      try {
+        await depot.ajouteDossierCourantSiNecessaire('999');
+        expect().fail(
+          "La tentative d'ajout de dossier aurait dû lever une exception"
+        );
+      } catch (e) {
+        expect(e).to.be.an(ErreurServiceInexistant);
+        expect(e.message).to.equal('Service "999" non trouvé');
+      }
     });
   });
 

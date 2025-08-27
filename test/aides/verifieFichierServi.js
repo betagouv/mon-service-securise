@@ -1,5 +1,5 @@
-const axios = require('axios');
-const expect = require('expect.js');
+import axios from 'axios';
+import expect from 'expect.js';
 
 const verifieNomFichierServi = (url, nom, done) =>
   axios
@@ -30,7 +30,7 @@ const verifieTypeFichierServiEstPDF = (url, done) =>
 const verifieTypeFichierServiEstZIP = (url, done) =>
   verifieTypeFichierServi(url, done, 'application/zip');
 
-module.exports = {
+export default {
   verifieNomFichierServi,
   verifieTypeFichierServiEstCSV,
   verifieTypeFichierServiEstPDF,

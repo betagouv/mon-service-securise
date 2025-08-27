@@ -1,20 +1,18 @@
-const expect = require('expect.js');
-
-const { ErreurNiveauGraviteInconnu } = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
-const Risque = require('../../src/modeles/risque');
+import expect from 'expect.js';
+import { ErreurNiveauGraviteInconnu } from '../../src/erreurs.js';
+import * as Referentiel from '../../src/referentiel.js';
+import Risque from '../../src/modeles/risque.js';
 
 describe('Un risque', () => {
-  it('vérifie que le niveau de gravité est bien répertorié', (done) => {
+  it('vérifie que le niveau de gravité est bien répertorié', () => {
     try {
       new Risque({ niveauGravite: 'niveauInconnu' });
-      done('La création du risque aurait dû lever une exception.');
+      expect().fail('La création du risque aurait dû lever une exception.');
     } catch (e) {
       expect(e).to.be.a(ErreurNiveauGraviteInconnu);
       expect(e.message).to.equal(
         'Le niveau de gravité "niveauInconnu" n\'est pas répertorié'
       );
-      done();
     }
   });
 

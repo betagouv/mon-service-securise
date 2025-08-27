@@ -1,16 +1,10 @@
-const axios = require('axios');
-const expect = require('expect.js');
-const { ErreurArticleCrispIntrouvable } = require('@lab-anssi/lib');
-const testeurMSS = require('../testeurMSS');
-const {
-  donneesPartagees,
-  requeteSansRedirection,
-} = require('../../aides/http');
-const { expectContenuSessionValide } = require('../../aides/cookie');
-const {
-  ErreurJWTInvalide,
-  ErreurJWTManquant,
-} = require('../../../src/erreurs');
+import axios from 'axios';
+import expect from 'expect.js';
+import { ErreurArticleCrispIntrouvable } from '@lab-anssi/lib';
+import testeurMSS from '../testeurMSS.js';
+import { donneesPartagees, requeteSansRedirection } from '../../aides/http.js';
+import { expectContenuSessionValide } from '../../aides/cookie.js';
+import { ErreurJWTInvalide, ErreurJWTManquant } from '../../../src/erreurs.js';
 
 describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
   const testeur = testeurMSS();

@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const AdaptateurJournalMSSMemoire = require('../../../src/adaptateurs/adaptateurJournalMSSMemoire');
-const {
-  consigneServiceSupprimeDansJournal,
-} = require('../../../src/bus/abonnements/consigneServiceSupprimeDansJournal');
+import expect from 'expect.js';
+import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
+import { consigneServiceSupprimeDansJournal } from '../../../src/bus/abonnements/consigneServiceSupprimeDansJournal.js';
 
 describe("L'abonnement qui consigne (dans le journal MSS) la suppression d'un service", () => {
   let adaptateurJournal;

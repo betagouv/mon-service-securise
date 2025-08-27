@@ -1,12 +1,11 @@
-const expect = require('expect.js');
-
-const {
+import expect from 'expect.js';
+import {
   ErreurDureeValiditeInvalide,
   ErreurAvisInvalide,
-} = require('../../src/erreurs');
-const Avis = require('../../src/modeles/avis');
-const InformationsService = require('../../src/modeles/informationsService');
-const Referentiel = require('../../src/referentiel');
+} from '../../src/erreurs.js';
+import Avis from '../../src/modeles/avis.js';
+import InformationsService from '../../src/modeles/informationsService.js';
+import * as Referentiel from '../../src/referentiel.js';
 
 describe("Un avis sur un dossier d'homologation", () => {
   const referentiel = Referentiel.creeReferentiel({

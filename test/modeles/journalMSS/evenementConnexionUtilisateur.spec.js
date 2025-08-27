@@ -1,9 +1,9 @@
-const expect = require('expect.js');
-const EvenementConnexionUtilisateur = require('../../../src/modeles/journalMSS/evenementConnexionUtilisateur');
-const {
+import expect from 'expect.js';
+import EvenementConnexionUtilisateur from '../../../src/modeles/journalMSS/evenementConnexionUtilisateur.js';
+import {
   ErreurDateDerniereConnexionInvalide,
   ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
+} from '../../../src/modeles/journalMSS/erreurs.js';
 
 describe('Un événement de connexion utilisateur', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
@@ -33,51 +33,48 @@ describe('Un événement de connexion utilisateur', () => {
     });
   });
 
-  it("exige que l'identifiant utilisateur soit renseigné", (done) => {
+  it("exige que l'identifiant utilisateur soit renseigné", () => {
     try {
       new EvenementConnexionUtilisateur(
         { idUtilisateur: null, dateDerniereConnexion: '2022-05-06' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 
-  it('exige que la date de dernière connexion soit renseignée', (done) => {
+  it('exige que la date de dernière connexion soit renseignée', () => {
     try {
       new EvenementConnexionUtilisateur(
         { idUtilisateur: '123', dateDerniereConnexion: null },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 
-  it('exige que la date de dernière connexion soit valide', (done) => {
+  it('exige que la date de dernière connexion soit valide', () => {
     try {
       new EvenementConnexionUtilisateur(
         { idUtilisateur: '123', dateDerniereConnexion: 'pasValide' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDateDerniereConnexionInvalide);
-      done();
     }
   });
 });

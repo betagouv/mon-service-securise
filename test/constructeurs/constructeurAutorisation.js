@@ -1,7 +1,5 @@
-const {
-  tousDroitsEnEcriture,
-} = require('../../src/modeles/autorisations/gestionDroits');
-const Autorisation = require('../../src/modeles/autorisations/autorisation');
+import { tousDroitsEnEcriture } from '../../src/modeles/autorisations/gestionDroits.js';
+import Autorisation from '../../src/modeles/autorisations/autorisation.js';
 
 class ConstructeurAutorisation {
   constructor() {
@@ -52,4 +50,4 @@ class ConstructeurAutorisation {
 
 const uneAutorisation = () => new ConstructeurAutorisation();
 
-module.exports = { uneAutorisation };
+export { uneAutorisation };

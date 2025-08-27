@@ -1,8 +1,7 @@
-const axios = require('axios');
-const expect = require('expect.js');
-
-const testeurMSS = require('../testeurMSS');
-const ParcoursUtilisateur = require('../../../src/modeles/parcoursUtilisateur');
+import axios from 'axios';
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+import ParcoursUtilisateur from '../../../src/modeles/parcoursUtilisateur.js';
 
 describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
   const testeur = testeurMSS();

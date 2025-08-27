@@ -1,39 +1,33 @@
-const expect = require('expect.js');
-
-const { depotVide } = require('./depots/depotVide');
+import expect from 'expect.js';
+import { depotVide } from './depots/depotVide.js';
 
 describe('Le dépôt de données vide', () => {
-  it('ne retourne aucun service pour un utilisateur donné', (done) => {
-    depotVide()
-      .then((depot) => depot.services('456'))
-      .then((services) => expect(services).to.eql([]))
-      .then(() => done())
-      .catch(done);
+  it('ne retourne aucun service pour un utilisateur donné', async () => {
+    const depot = await depotVide();
+    const services = await depot.services('456');
+    expect(services).to.eql([]);
   });
 
-  it('ne retourne rien si on cherche un service à partir de son identifiant', (done) => {
-    depotVide()
-      .then((depot) => depot.service('123'))
-      .then((s) => expect(s).to.be(undefined))
-      .then(() => done())
-      .catch(done);
+  it('ne retourne rien si on cherche un service à partir de son identifiant', async () => {
+    const depot = await depotVide();
+    const s = await depot.service('123');
+    expect(s).to.be(undefined);
   });
 
-  it('ne retourne rien si on cherche un utilisateur à partir de son identifiant', (done) => {
-    depotVide()
-      .then((depot) => depot.utilisateur('456'))
-      .then((u) => expect(u).to.be(undefined))
-      .then(() => done())
-      .catch(done);
+  it('ne retourne rien si on cherche un utilisateur à partir de son identifiant', async () => {
+    const depot = await depotVide();
+    const u = await depot.utilisateur('456');
+    expect(u).to.be(undefined);
   });
 
-  it("n'authentifie pas l'utilisateur", (done) => {
-    depotVide()
-      .then((depot) =>
-        depot.utilisateurAuthentifie('jean.dupont@mail.fr', 'mdp_12345')
-      )
-      .then((utilisateur) => expect(utilisateur).to.be(undefined))
-      .then(() => done())
-      .catch(done);
+  it("n'authentifie pas l'utilisateur", async () => {
+    const depot = await depotVide();
+
+    const utilisateur = await depot.utilisateurAuthentifie(
+      'jean.dupont@mail.fr',
+      'mdp_12345'
+    );
+
+    expect(utilisateur).to.be(undefined);
   });
 });

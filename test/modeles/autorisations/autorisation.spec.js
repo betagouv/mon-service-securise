@@ -1,12 +1,11 @@
-const expect = require('expect.js');
-
-const Autorisation = require('../../../src/modeles/autorisations/autorisation');
-const {
+import expect from 'expect.js';
+import Autorisation from '../../../src/modeles/autorisations/autorisation.js';
+import {
   Permissions,
   Rubriques,
   tousDroitsEnEcriture,
-} = require('../../../src/modeles/autorisations/gestionDroits');
-const Service = require('../../../src/modeles/service');
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+import Service from '../../../src/modeles/service.js';
 
 const { ECRITURE, LECTURE, INVISIBLE } = Permissions;
 const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS } = Rubriques;

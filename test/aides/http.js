@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 const requeteSansRedirection = async (url) =>
   axios.get(url, {
@@ -18,4 +18,4 @@ const donneesPartagees = (contenuHtml, idScript) => {
   }
 };
 
-module.exports = { requeteSansRedirection, donneesPartagees };
+export default { requeteSansRedirection, donneesPartagees };

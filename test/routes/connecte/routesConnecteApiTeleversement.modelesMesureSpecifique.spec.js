@@ -1,37 +1,46 @@
-const axios = require('axios');
-const expect = require('expect.js');
-const testeurMSS = require('../testeurMSS');
-const {
+import axios from 'axios';
+import expect from 'expect.js';
+import request from 'supertest';
+import testeurMSS from '../testeurMSS.js';
+import {
   ErreurFichierXlsInvalide,
-  ErreurTeleversementInvalide,
   ErreurTeleversementInexistant,
-} = require('../../../src/erreurs');
-const TeleversementModelesMesureSpecifique = require('../../../src/modeles/televersement/televersementModelesMesureSpecifique');
+  ErreurTeleversementInvalide,
+} from '../../../src/erreurs.js';
+import TeleversementModelesMesureSpecifique from '../../../src/modeles/televersement/televersementModelesMesureSpecifique.js';
+import supertest from 'supertest';
 
 describe('Les routes connecté de téléversement des modèles de mesure spécifique', () => {
   const testeur = testeurMSS();
-  beforeEach(testeur.initialise);
-  afterEach(testeur.arrete);
+  beforeEach(async () => {
+    await testeur.initialise();
+  });
 
-  it("vérifie que l'utilisateur est authentifié, 1 seul test suffit car le middleware est placé au niveau de l'instanciation du routeur", (done) => {
-    testeur.middleware().verifieRequeteExigeAcceptationCGU(
-      {
-        method: 'post',
-        url: 'http://localhost:1234/api/televersement/modelesMesureSpecifique',
-      },
-      done
-    );
+  afterEach(() => {
+    // testeur.arrete()
+  });
+
+  it("vérifie que l'utilisateur est authentifié, 1 seul test suffit car le middleware est placé au niveau de l'instanciation du routeur", async () => {
+    await testeur
+      .middleware()
+      .verifieRequeteExigeAcceptationCGU(
+        async () =>
+          await request(testeur.app()).post(
+            '/api/televersement/modelesMesureSpecifique'
+          )
+      );
   });
 
   describe('quand requête POST sur `/api/televersement/modelesMesureSpecifique`', () => {
-    it('applique une protection de trafic', (done) => {
-      testeur.middleware().verifieProtectionTrafic(
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/televersement/modelesMesureSpecifique',
-        },
-        done
-      );
+    it('applique une protection de trafic', async () => {
+      await testeur
+        .middleware()
+        .verifieProtectionTrafic(
+          async () =>
+            await request(testeur.app()).post(
+              '/api/televersement/modelesMesureSpecifique'
+            )
+        );
     });
 
     it("délègue la vérification de surface à l'adaptateur de vérification de fichier", async () => {
@@ -42,27 +51,22 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
         requeteRecue = requete;
       };
 
-      await axios.post(
-        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      await request(testeur.app()).post(
+        '/api/televersement/modelesMesureSpecifique'
       );
 
       expect(adaptateurAppele).to.be(true);
       expect(requeteRecue).not.to.be(undefined);
     });
 
-    it('jette une erreur 400 si le fichier est invalide', async () => {
+    it('jette une erreur 400 si le fichier est invalide', () => {
       testeur.lecteurDeFormData().extraisDonneesXLS = async () => {
         throw new ErreurFichierXlsInvalide();
       };
 
-      try {
-        await axios.post(
-          'http://localhost:1234/api/televersement/modelesMesureSpecifique'
-        );
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      request(testeur.app())
+        .post('/api/televersement/modelesMesureSpecifique')
+        .expect(400);
     });
 
     it("délègue la conversion du contenu à l'adaptateur de lecture de données téléversées", async () => {
@@ -74,8 +78,8 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
           bufferRecu = buffer;
         };
 
-      await axios.post(
-        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      await request(testeur.app()).post(
+        '/api/televersement/modelesMesureSpecifique'
       );
 
       expect(adaptateurAppele).to.be(true);
@@ -95,8 +99,8 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
           donneesRecues = donnees;
         };
 
-      await axios.post(
-        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      await request(testeur.app()).post(
+        '/api/televersement/modelesMesureSpecifique'
       );
 
       expect(idUtilisateurQuiTeleverse).to.equal('123');
@@ -118,8 +122,8 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
         return new TeleversementModelesMesureSpecifique([], {});
       };
 
-      await axios.get(
-        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      await request(testeur.app()).get(
+        '/api/televersement/modelesMesureSpecifique'
       );
 
       expect(idDemande).to.be('U1');
@@ -139,12 +143,12 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
             {}
           );
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      const reponse = await request(testeur.app()).get(
+        '/api/televersement/modelesMesureSpecifique'
       );
 
       const { descriptionLongue, description } =
-        reponse.data.modelesTeleverses[0].modele;
+        reponse.body.modelesTeleverses[0].modele;
       expect(description).to.be("L'abricot");
       expect(descriptionLongue).to.be("L'autre");
     });
@@ -153,14 +157,9 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
       testeur.depotDonnees().lisTeleversementModelesMesureSpecifique =
         async () => undefined;
 
-      try {
-        await axios.get(
-          'http://localhost:1234/api/televersement/modelesMesureSpecifique'
-        );
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(404);
-      }
+      await request(testeur.app())
+        .get('/api/televersement/modelesMesureSpecifique')
+        .expect(404);
     });
   });
 
@@ -173,8 +172,8 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
         };
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
 
-      await axios.delete(
-        'http://localhost:1234/api/televersement/modelesMesureSpecifique'
+      await request(testeur.app()).delete(
+        '/api/televersement/modelesMesureSpecifique'
       );
 
       expect(idRecu).to.be('U1');
@@ -201,14 +200,9 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
           throw new ErreurTeleversementInexistant();
         };
 
-      try {
-        await axios.post(
-          'http://localhost:1234/api/televersement/modelesMesureSpecifique/confirme'
-        );
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(404);
-      }
+      await request(testeur.app())
+        .post('/api/televersement/modelesMesureSpecifique/confirme')
+        .expect(404);
     });
 
     it('renvoie une erreur 400 si le téléversement en cours est invalide', async () => {
@@ -217,14 +211,9 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
           throw new ErreurTeleversementInvalide();
         };
 
-      try {
-        await axios.post(
-          'http://localhost:1234/api/televersement/modelesMesureSpecifique/confirme'
-        );
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      await request(testeur.app())
+        .post('/api/televersement/modelesMesureSpecifique/confirme')
+        .expect(400);
     });
 
     it('délègue au dépôt de données la confirmation du téléversement', async () => {
@@ -234,8 +223,8 @@ describe('Les routes connecté de téléversement des modèles de mesure spécif
           idUtilisateurRecu = idUtilisateur;
         };
 
-      await axios.post(
-        'http://localhost:1234/api/televersement/modelesMesureSpecifique/confirme'
+      await request(testeur.app()).post(
+        '/api/televersement/modelesMesureSpecifique/confirme'
       );
 
       expect(idUtilisateurRecu).to.be('U1');

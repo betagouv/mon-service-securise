@@ -1,11 +1,10 @@
-const expect = require('expect.js');
-
-const Mesure = require('../../src/modeles/mesure');
-const {
+import expect from 'expect.js';
+import Mesure from '../../src/modeles/mesure.js';
+import {
   ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
-} = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
+} from '../../src/erreurs.js';
+import * as Referentiel from '../../src/referentiel.js';
 
 const elle = it;
 
@@ -34,12 +33,11 @@ describe('Une mesure', () => {
     );
   });
 
-  elle("ne tient pas compte du statut s'il n'est pas renseigné", (done) => {
+  elle("ne tient pas compte du statut s'il n'est pas renseigné", () => {
     try {
       Mesure.valide({ statut: undefined });
-      done();
     } catch {
-      done(
+      expect().fail(
         "La validation de la mesure sans statut n'aurait pas dû lever d'exception."
       );
     }

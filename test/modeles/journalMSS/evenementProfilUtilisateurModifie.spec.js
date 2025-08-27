@@ -1,11 +1,7 @@
-const expect = require('expect.js');
-const EvenementProfilUtilisateurModifie = require('../../../src/modeles/journalMSS/evenementProfilUtilisateurModifie');
-const {
-  ErreurUtilisateurManquant,
-} = require('../../../src/modeles/journalMSS/erreurs');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
+import expect from 'expect.js';
+import EvenementProfilUtilisateurModifie from '../../../src/modeles/journalMSS/evenementProfilUtilisateurModifie.js';
+import { ErreurUtilisateurManquant } from '../../../src/modeles/journalMSS/erreurs.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 
 describe('Un événement de profil utilisateur modifié', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
@@ -60,18 +56,17 @@ describe('Un événement de profil utilisateur modifié', () => {
     expect(evenement.toJSON().donnees.roles).to.eql(['RSSI', 'DPO', 'Maire']);
   });
 
-  it("exige que l'utilisateur soit renseigné", (done) => {
+  it("exige que l'utilisateur soit renseigné", () => {
     try {
       new EvenementProfilUtilisateurModifie(null, {
         adaptateurChiffrement: hacheEnMajuscules,
       });
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurUtilisateurManquant);
-      done();
     }
   });
 });

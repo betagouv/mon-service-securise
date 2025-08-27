@@ -1,10 +1,7 @@
-const expect = require('expect.js');
-
-const Referentiel = require('../../src/referentiel');
-const {
-  desStatistiques,
-} = require('../constructeurs/constructeurStatistiquesMesures');
-const { IndiceCyber } = require('../../src/modeles/indiceCyber');
+import expect from 'expect.js';
+import * as Referentiel from '../../src/referentiel.js';
+import { desStatistiques } from '../constructeurs/constructeurStatistiquesMesures.js';
+import { IndiceCyber } from '../../src/modeles/indiceCyber.js';
 
 describe("L'indice cyber", () => {
   const coefficientIndispensables = 0.8;

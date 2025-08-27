@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const {
-  ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
-const EvenementServiceSupprime = require('../../../src/modeles/journalMSS/evenementServiceSupprime');
+import expect from 'expect.js';
+import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import EvenementServiceSupprime from '../../../src/modeles/journalMSS/evenementServiceSupprime.js';
 
 describe('Un événement de service supprimé', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
@@ -31,16 +29,17 @@ describe('Un événement de service supprimé', () => {
     });
   });
 
-  it("exige que l'identifiant du service soit renseigné", (done) => {
+  it("exige que l'identifiant du service soit renseigné", () => {
     try {
       new EvenementServiceSupprime(
         {},
         { adaptateurChiffrement: hacheEnMajuscules }
       );
-      done("L'instanciation de l'événement aurait dû lever une exception");
+      expect().fail(
+        "L'instanciation de l'événement aurait dû lever une exception"
+      );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 });

@@ -1,21 +1,19 @@
-const expect = require('expect.js');
-const DepotDonneesTeleversementModelesMesureSpecifique = require('../../src/depots/depotDonneesTeleversementModelesMesureSpecifique');
-const {
-  unePersistanceMemoire,
-} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const DepotDonneesModelesMesureSpecifique = require('../../src/depotDonnees');
-const {
-  fabriqueAdaptateurUUID,
-} = require('../../src/adaptateurs/adaptateurUUID');
-const {
+import expect from 'expect.js';
+import * as DepotDonneesTeleversementModelesMesureSpecifique from '../../src/depots/depotDonneesTeleversementModelesMesureSpecifique.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import * as DepotDonneesModelesMesureSpecifique from '../../src/depotDonnees.js';
+import { fabriqueAdaptateurUUID } from '../../src/adaptateurs/adaptateurUUID.js';
+
+import {
   ErreurUtilisateurInexistant,
   ErreurTeleversementInexistant,
   ErreurTeleversementInvalide,
-} = require('../../src/erreurs');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const Referentiel = require('../../src/referentiel');
-const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
-const EvenementModelesMesureSpecifiqueImportes = require('../../src/bus/evenementModelesMesureSpecifiqueImportes');
+} from '../../src/erreurs.js';
+
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import * as Referentiel from '../../src/referentiel.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import EvenementModelesMesureSpecifiqueImportes from '../../src/bus/evenementModelesMesureSpecifiqueImportes.js';
 
 describe('Le dépôt de données des téléversements de modèles de mesure spécifique', () => {
   let persistance;

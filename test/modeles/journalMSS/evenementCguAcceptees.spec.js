@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const {
-  ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
-const EvenementCguAcceptees = require('../../../src/modeles/journalMSS/evenementCguAcceptees');
+import expect from 'expect.js';
+import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import EvenementCguAcceptees from '../../../src/modeles/journalMSS/evenementCguAcceptees.js';
 
 describe('Un événement de CGU acceptées', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
@@ -32,35 +30,33 @@ describe('Un événement de CGU acceptées', () => {
     });
   });
 
-  it("exige que l'identifiant utilisateur soit renseigné", (done) => {
+  it("exige que l'identifiant utilisateur soit renseigné", () => {
     try {
       new EvenementCguAcceptees(
         { cguAcceptees: '1.0' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 
-  it('exige que la version des CGU acceptées soit renseignée', (done) => {
+  it('exige que la version des CGU acceptées soit renseignée', () => {
     try {
       new EvenementCguAcceptees(
         { idUtilisateur: 'U1' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 });

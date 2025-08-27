@@ -1,19 +1,19 @@
-const axios = require('axios');
-const expect = require('expect.js');
-const testeurMSS = require('../testeurMSS');
-const {
+import axios from 'axios';
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+
+import {
   ErreurUtilisateurExistant,
   ErreurEmailManquant,
   ErreurJWTInvalide,
   ErreurJWTManquant,
-} = require('../../../src/erreurs');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const {
+} from '../../../src/erreurs.js';
+
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import {
   decodeSessionDuCookie,
   expectContenuSessionValide,
-} = require('../../aides/cookie');
+} from '../../aides/cookie.js';
 
 describe('Le serveur MSS des routes publiques /api/*', () => {
   const testeur = testeurMSS();
