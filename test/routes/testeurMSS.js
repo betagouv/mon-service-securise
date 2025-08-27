@@ -1,7 +1,6 @@
-const axios = require('axios');
 const expect = require('expect.js');
-
 const supertest = require('supertest');
+
 const { depotVide } = require('../depots/depotVide');
 const adaptateurGestionErreurVide = require('../../src/adaptateurs/adaptateurGestionErreurVide');
 const adaptateurMailMemoire = require('../../src/adaptateurs/adaptateurMailMemoire');
@@ -55,12 +54,11 @@ const testeurMss = () => {
   let serveur;
   let app;
 
-  const verifieSessionDeposee = (reponse, suite) => {
+  const verifieSessionDeposee = (reponse) => {
     const valeurHeader = reponse.headers['set-cookie'][0];
     expect(valeurHeader).to.match(
       /^session=.+; path=\/; samesite=strict; httponly$/
     );
-    suite();
   };
 
   const verifieRequeteGenereErreurHTTP = async (
@@ -68,13 +66,16 @@ const testeurMss = () => {
     messageErreur,
     requete
   ) => {
-    try {
-      await axios(requete);
-      expect().fail('Réponse OK inattendue');
-    } catch (erreur) {
-      expect(erreur.response?.status).to.equal(status);
-      expect(erreur.response?.data).to.eql(messageErreur);
-    }
+    const methode = requete.method.toLowerCase();
+    if (!(methode in supertest(app)))
+      throw new Error(`La méthode ${methode} n'est pas un verbe HTTP correct`);
+    const reponse = await supertest(app)
+      [requete.method.toLowerCase()](requete.url)
+      .send(requete.data);
+    expect(reponse.status).to.equal(status);
+    if (reponse.type === 'text/html')
+      expect(reponse.text).to.eql(messageErreur);
+    else expect(reponse.body).to.eql(messageErreur);
   };
 
   const initialise = async () => {
@@ -211,7 +212,8 @@ const testeurMss = () => {
     supertest(app).post(url).send(donnees);
   const put = async (url, donnees = {}) =>
     supertest(app).put(url).send(donnees);
-  const del = async (url) => supertest(app).delete(url);
+  const del = async (url, donnees = {}) =>
+    supertest(app).delete(url).send(donnees);
 
   return {
     app: () => app,

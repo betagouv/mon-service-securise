@@ -1,28 +1,21 @@
 const axios = require('axios');
 const expect = require('expect.js');
+const supertest = require('supertest');
 
-const verifieNomFichierServi = (url, nom, done) =>
-  axios
-    .get(url)
-    .then((reponse) =>
-      expect(reponse.headers['content-disposition']).to.contain(
-        `filename="${nom}"`
-      )
-    )
-    .then(() => done())
-    .catch(done);
+const verifieNomFichierServi = async (app, url, nom) => {
+  const reponse = await supertest(app).get(url);
+  expect(reponse.headers['content-disposition']).to.contain(
+    `filename="${nom}"`
+  );
+};
 
-const verifieTypeFichierServi = (url, done, typeFichier) =>
-  axios
-    .get(url)
-    .then((reponse) =>
-      expect(reponse.headers['content-type']).to.contain(typeFichier)
-    )
-    .then(() => done())
-    .catch(done);
+const verifieTypeFichierServi = async (app, url, typeFichier) => {
+  const reponse = await supertest(app).get(url);
+  expect(reponse.headers['content-type']).to.contain(typeFichier);
+};
 
-const verifieTypeFichierServiEstCSV = (url, done) =>
-  verifieTypeFichierServi(url, done, 'text/csv');
+const verifieTypeFichierServiEstCSV = async (app, url) =>
+  verifieTypeFichierServi(app, url, 'text/csv');
 
 const verifieTypeFichierServiEstPDF = (url, done) =>
   verifieTypeFichierServi(url, done, 'application/pdf');

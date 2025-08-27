@@ -30,7 +30,9 @@ const verifieRequeteChangeEtat = async (donneesEtat, app, requete) => {
         throw new Error(
           `La méthode ${methode} n'est pas un verbe HTTP correct`
         );
-      await supertest(app)[requete.method.toLowerCase()](requete.url);
+      await supertest(app)
+        [requete.method.toLowerCase()](requete.url)
+        .send(requete.data);
     }
     verifieEgalite(lectureEtat(), etatFinal, suffixeLectureEtat);
   } catch (e) {
@@ -263,16 +265,16 @@ const middlewareFantaisie = {
     expect(listeRecherche?.proprietes).to.eql(proprietesParametre);
   },
 
-  verifieAseptisationParametres: (nomsParametres, ...params) => {
+  verifieAseptisationParametres: async (nomsParametres, app, requete) =>
     verifieRequeteChangeEtat(
       {
         lectureEtat: () => parametresAseptises,
         etatInitial: [],
         etatFinal: nomsParametres,
       },
-      ...params
-    );
-  },
+      app,
+      requete
+    ),
 
   verifieAdresseIP: (listeAdressesIp, ...params) => {
     verifieRequeteChangeEtat(
@@ -374,12 +376,12 @@ const middlewareFantaisie = {
     verifieRequeteChangeEtat({ lectureEtat: () => noncePositionne }, ...params);
   },
 
-  verifieChallengeMotDePasse: (...params) => {
+  verifieChallengeMotDePasse: async (app, requete) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => challengeMotDePasseEffectue },
-      ...params
-    );
-  },
+      app,
+      requete
+    ),
 
   verifieChargementDeLaVersionBuildee: (...params) => {
     verifieRequeteChangeEtat(
