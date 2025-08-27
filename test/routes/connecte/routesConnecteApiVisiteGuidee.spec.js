@@ -1,4 +1,3 @@
-const axios = require('axios');
 const expect = require('expect.js');
 
 const testeurMSS = require('../testeurMSS');
@@ -9,19 +8,16 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
 
   beforeEach(testeur.initialise);
 
-  afterEach(testeur.arrete);
-
-  it("vérifie que l'utilisateur est authentifié sur toutes les routes", (done) => {
+  it("vérifie que l'utilisateur est authentifié sur toutes les routes", async () => {
     // On vérifie une seule route privée.
     // Par construction, les autres seront protégées aussi puisque la protection est ajoutée comme middleware
     // devant le routeur dédié aux routes de la visite guidée.
-    testeur.middleware().verifieRequeteExigeAcceptationCGU(
-      {
+    await testeur
+      .middleware()
+      .verifieRequeteExigeAcceptationCGU(testeur.app(), {
         method: 'post',
-        url: 'http://localhost:1234/api/visiteGuidee/termine',
-      },
-      done
-    );
+        url: '/api/visiteGuidee/termine',
+      });
   });
 
   describe('quand requête POST sur /visiteGuidee/:idEtape/termine', () => {
@@ -34,15 +30,13 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
       });
     });
 
-    it("aseptise l'identifiant d'étape", (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['idEtape'],
-        {
+    it("aseptise l'identifiant d'étape", async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(['idEtape'], testeur.app(), {
           method: 'post',
-          url: 'http://localhost:1234/api/visiteGuidee/DECRIRE/termine',
-        },
-        done
-      );
+          url: '/api/visiteGuidee/DECRIRE/termine',
+        });
     });
 
     it("retourne une erreur HTTP 400 si l'ID d'étape n'existe pas", async () => {
@@ -51,7 +45,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
         "Identifiant d'étape inconnu",
         {
           method: 'POST',
-          url: 'http://localhost:1234/api/visiteGuidee/MAUVAIS_ID/termine',
+          url: '/api/visiteGuidee/MAUVAIS_ID/termine',
         }
       );
     });
@@ -71,9 +65,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
         parcoursUtilisateurPasse = parcoursUtilisateur;
       };
 
-      await axios.post(
-        'http://localhost:1234/api/visiteGuidee/DECRIRE/termine'
-      );
+      await testeur.post('/api/visiteGuidee/DECRIRE/termine');
 
       expect(parcoursUtilisateurPasse.etatVisiteGuidee.etapesVues).to.eql([
         'DECRIRE',
@@ -81,19 +73,15 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
     });
 
     it("renvoi l'URL de l'étape suivante", async () => {
-      const reponse = await axios.post(
-        'http://localhost:1234/api/visiteGuidee/DECRIRE/termine'
-      );
+      const reponse = await testeur.post('/api/visiteGuidee/DECRIRE/termine');
 
-      expect(reponse.data.urlEtapeSuivante).to.be('/visiteGuidee/securiser');
+      expect(reponse.body.urlEtapeSuivante).to.be('/visiteGuidee/securiser');
     });
 
     it("renvoi une URL `null` s'il n'y a pas d'étape suivante", async () => {
-      const reponse = await axios.post(
-        'http://localhost:1234/api/visiteGuidee/SECURISER/termine'
-      );
+      const reponse = await testeur.post('/api/visiteGuidee/SECURISER/termine');
 
-      expect(reponse.data.urlEtapeSuivante).to.be(null);
+      expect(reponse.body.urlEtapeSuivante).to.be(null);
     });
   });
 
@@ -121,7 +109,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
         parcoursUtilisateurPasse = parcoursUtilisateur;
       };
 
-      await axios.post('http://localhost:1234/api/visiteGuidee/termine');
+      await testeur.post('/api/visiteGuidee/termine');
 
       expect(parcoursUtilisateurPasse.etatVisiteGuidee.toJSON()).to.eql({
         dejaTerminee: true,
@@ -145,7 +133,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
         parcoursUtilisateurPasse = parcoursUtilisateur;
       };
 
-      await axios.post('http://localhost:1234/api/visiteGuidee/metsEnPause');
+      await testeur.post('/api/visiteGuidee/metsEnPause');
 
       expect(parcoursUtilisateurPasse.etatVisiteGuidee.enPause).to.be(true);
     });
@@ -167,7 +155,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
         parcoursUtilisateurPasse = parcoursUtilisateur;
       };
 
-      await axios.post('http://localhost:1234/api/visiteGuidee/reprends');
+      await testeur.post('/api/visiteGuidee/reprends');
 
       expect(parcoursUtilisateurPasse.etatVisiteGuidee.enPause).to.be(false);
     });
@@ -188,7 +176,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
       parcoursUtilisateurPasse = parcoursUtilisateur;
     };
 
-    await axios.post('http://localhost:1234/api/visiteGuidee/reinitialise');
+    await testeur.post('/api/visiteGuidee/reinitialise');
 
     expect(parcoursUtilisateurPasse.etatVisiteGuidee.dejaTerminee).to.be(false);
   });
