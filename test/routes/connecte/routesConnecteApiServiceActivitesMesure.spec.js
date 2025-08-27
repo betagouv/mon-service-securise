@@ -1,4 +1,3 @@
-const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const {
@@ -17,22 +16,22 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
 
   beforeEach(testeur.initialise);
 
-  afterEach(testeur.arrete);
-
   describe('quand requête GET sur `/api/service/:id/mesures/:id/activites`', () => {
     beforeEach(() => {
       testeur.depotDonnees().lisActivitesMesure = () => [];
     });
 
-    it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        [{ niveau: LECTURE, rubrique: SECURISER }],
-        {
-          method: 'get',
-          url: 'http://localhost:1234/api/service/456/mesures/audit/activites',
-        },
-        done
-      );
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: SECURISER }],
+          testeur.app(),
+          {
+            method: 'get',
+            url: '/api/service/456/mesures/audit/activites',
+          }
+        );
     });
 
     it('renvoie la liste des activités de la mesure', async () => {
@@ -50,12 +49,12 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         }),
       ];
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/service/456/mesures/audit/activites'
+      const reponse = await testeur.get(
+        '/api/service/456/mesures/audit/activites'
       );
 
       expect(reponse.status).to.be(200);
-      expect(reponse.data).to.eql([
+      expect(reponse.body).to.eql([
         {
           date: '2024-09-29T09:15:02.817Z',
           idActeur: '9724853e-037c-4bca-9350-0a4b14a85a29',
@@ -75,9 +74,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         return [];
       };
 
-      await axios.get(
-        'http://localhost:1234/api/service/456/mesures/audit/activites'
-      );
+      await testeur.get('/api/service/456/mesures/audit/activites');
 
       expect(idServiceUtilise).to.be('456');
       expect(idMesureUtilise).to.be('audit');
@@ -95,11 +92,11 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         }),
       ];
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/service/456/mesures/audit/activites'
+      const reponse = await testeur.get(
+        '/api/service/456/mesures/audit/activites'
       );
 
-      expect(reponse.data[0].identifiantNumeriqueMesure).to.be(undefined);
+      expect(reponse.body[0].identifiantNumeriqueMesure).to.be(undefined);
     });
   });
 
@@ -110,26 +107,26 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
       });
     });
 
-    it('recherche le service correspondant', (done) => {
-      testeur.middleware().verifieRechercheService(
-        [{ niveau: ECRITURE, rubrique: SECURISER }],
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/service/456/mesures/audit/activites/commentaires',
-        },
-        done
-      );
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: SECURISER }],
+          testeur.app(),
+          {
+            method: 'post',
+            url: '/api/service/456/mesures/audit/activites/commentaires',
+          }
+        );
     });
 
-    it('aseptise les paramètres', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['contenu'],
-        {
+    it('aseptise les paramètres', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(['contenu'], testeur.app(), {
           method: 'post',
-          url: 'http://localhost:1234/api/service/456/mesures/audit/activites/commentaires',
-        },
-        done
-      );
+          url: '/api/service/456/mesures/audit/activites/commentaires',
+        });
     });
 
     describe("délègue au dépôt de données l'enregistrement du commentaire", () => {
@@ -145,8 +142,8 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
           activiteRecue = activite;
         };
 
-        await axios.post(
-          'http://localhost:1234/api/service/456/mesures/audit/activites/commentaires',
+        await testeur.post(
+          '/api/service/456/mesures/audit/activites/commentaires',
           {
             contenu: 'mon commentaire',
           }
@@ -184,8 +181,8 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
           activiteRecue = activite;
         };
 
-        await axios.post(
-          'http://localhost:1234/api/service/456/mesures/MS1/activites/commentaires',
+        await testeur.post(
+          '/api/service/456/mesures/MS1/activites/commentaires',
           {
             contenu: 'mon commentaire',
           }
@@ -206,14 +203,11 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
     });
 
     it('jette une erreur 404 si la mesure est introuvable', async () => {
-      try {
-        await axios.post(
-          'http://localhost:1234/api/service/456/mesures/idMesureInconnu/activites/commentaires'
-        );
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(404);
-      }
+      const reponse = await testeur.post(
+        '/api/service/456/mesures/idMesureInconnu/activites/commentaires'
+      );
+
+      expect(reponse.status).to.be(404);
     });
   });
 });

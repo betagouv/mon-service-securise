@@ -17,11 +17,11 @@ const verifieTypeFichierServi = async (app, url, typeFichier) => {
 const verifieTypeFichierServiEstCSV = async (app, url) =>
   verifieTypeFichierServi(app, url, 'text/csv');
 
-const verifieTypeFichierServiEstPDF = (url, done) =>
-  verifieTypeFichierServi(url, done, 'application/pdf');
+const verifieTypeFichierServiEstPDF = (app, url) =>
+  verifieTypeFichierServi(app, url, 'application/pdf');
 
-const verifieTypeFichierServiEstZIP = (url, done) =>
-  verifieTypeFichierServi(url, done, 'application/zip');
+const verifieTypeFichierServiEstZIP = (app, url) =>
+  verifieTypeFichierServi(app, url, 'application/zip');
 
 module.exports = {
   verifieNomFichierServi,
