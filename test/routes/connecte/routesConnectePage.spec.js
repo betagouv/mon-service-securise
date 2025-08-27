@@ -1,13 +1,9 @@
-const axios = require('axios');
 const expect = require('expect.js');
 const testeurMSS = require('../testeurMSS');
 const {
   unUtilisateur,
 } = require('../../constructeurs/constructeurUtilisateur');
-const {
-  requeteSansRedirection,
-  donneesPartagees,
-} = require('../../aides/http');
+const { donneesPartagees } = require('../../aides/http');
 const Superviseur = require('../../../src/modeles/superviseur');
 const {
   verifieTypeFichierServiEstCSV,
@@ -16,8 +12,8 @@ const {
 
 describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   const testeur = testeurMSS();
+
   beforeEach(testeur.initialise);
-  afterEach(testeur.arrete);
 
   describe(`quand GET sur /motDePasse/initialisation`, () => {
     beforeEach(() => {
@@ -25,24 +21,17 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       testeur.depotDonnees().utilisateur = async () => utilisateur;
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
         .middleware()
-        .verifieRequeteExigeJWT(
-          'http://localhost:1234/motDePasse/initialisation',
-          done
-        );
+        .verifieRequeteExigeJWT(testeur.app(), '/motDePasse/initialisation');
     });
 
-    it('sert le contenu HTML de la page ', (done) => {
-      axios
-        .get('http://localhost:1234/motDePasse/initialisation')
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(reponse.headers['content-type']).to.contain('text/html');
-          done();
-        })
-        .catch(done);
+    it('sert le contenu HTML de la page ', async () => {
+      const reponse = await testeur.get('/motDePasse/initialisation');
+
+      expect(reponse.status).to.equal(200);
+      expect(reponse.headers['content-type']).to.contain('text/html');
     });
   });
 
@@ -67,44 +56,34 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         });
       });
 
-      it("vérifie que l'utilisateur a accepté les CGU", (done) => {
-        testeur
+      it("vérifie que l'utilisateur a accepté les CGU", async () => {
+        await testeur
           .middleware()
-          .verifieRequeteExigeAcceptationCGU(
-            `http://localhost:1234${route}`,
-            done
-          );
+          .verifieRequeteExigeAcceptationCGU(testeur.app(), `${route}`);
       });
 
-      it("vérifie que l'état de la visite guidée est chargé sur la route", (done) => {
-        testeur
+      it("vérifie que l'état de la visite guidée est chargé sur la route", async () => {
+        await testeur
           .middleware()
-          .verifieRequeteChargeEtatVisiteGuidee(
-            `http://localhost:1234${route}`,
-            done
-          );
+          .verifieRequeteChargeEtatVisiteGuidee(testeur.app(), `${route}`);
       });
 
-      it('sert le contenu HTML de la page', (done) => {
-        axios
-          .get(`http://localhost:1234${route}`)
-          .then((reponse) => {
-            expect(reponse.status).to.equal(200);
-            expect(reponse.headers['content-type']).to.contain('text/html');
-            done();
-          })
-          .catch(done);
+      it('sert le contenu HTML de la page', async () => {
+        const reponse = await testeur.get(`${route}`);
+
+        expect(reponse.status).to.equal(200);
+        expect(reponse.headers['content-type']).to.contain('text/html');
       });
     });
   });
 
   describe('quand requête GET sur `/visiteGuidee/:idEtape`', () => {
-    it("charge les préférences de l'utilisateur", (done) => {
-      testeur
+    it("charge les préférences de l'utilisateur", async () => {
+      await testeur
         .middleware()
         .verifieChargementDesPreferences(
-          'http://localhost:1234/visiteGuidee/decrire',
-          done
+          testeur.app(),
+          '/visiteGuidee/decrire'
         );
     });
   });
@@ -114,9 +93,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       it('redirige vers /connexion', async () => {
         testeur.middleware().reinitialise({ authentificationAUtiliser: 'MSS' });
 
-        const reponse = await requeteSansRedirection(
-          'http://localhost:1234/deconnexion'
-        );
+        const reponse = await testeur.get('/deconnexion');
 
         expect(reponse.status).to.be(302);
         expect(reponse.headers.location).to.be('/connexion');
@@ -128,9 +105,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
           .middleware()
           .reinitialise({ authentificationAUtiliser: 'AGENT_CONNECT' });
 
-        const reponse = await requeteSansRedirection(
-          'http://localhost:1234/deconnexion'
-        );
+        const reponse = await testeur.get('/deconnexion');
 
         expect(reponse.status).to.be(302);
         expect(reponse.headers.location).to.be('/oidc/deconnexion');
@@ -154,7 +129,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         return unUtilisateur().construis();
       };
 
-      await axios.get(`http://localhost:1234/profil`);
+      await testeur.get(`/profil`);
       expect(idRecu).to.be('456');
     });
 
@@ -163,9 +138,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       testeur.depotDonnees().utilisateur = () =>
         unUtilisateur().quiTravaillePourUneEntiteAvecSiret('1234').construis();
 
-      const reponse = await axios.get(`http://localhost:1234/profil`);
+      const reponse = await testeur.get(`/profil`);
 
-      expect(donneesPartagees(reponse.data, 'donnees-profil').entite).to.eql({
+      expect(donneesPartagees(reponse.text, 'donnees-profil').entite).to.eql({
         siret: '1234',
         nom: '',
         departement: '',
@@ -177,9 +152,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       testeur.depotDonnees().utilisateur = () =>
         unUtilisateur().sansEntite().construis();
 
-      const reponse = await axios.get(`http://localhost:1234/profil`);
+      const reponse = await testeur.get(`/profil`);
 
-      expect(donneesPartagees(reponse.data, 'donnees-profil').entite).to.be(
+      expect(donneesPartagees(reponse.text, 'donnees-profil').entite).to.be(
         undefined
       );
     });
@@ -193,10 +168,10 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
           .avecPostes([`Apo${apostrophe}strophe`])
           .construis();
 
-      const reponse = await axios.get(`http://localhost:1234/profil`);
+      const reponse = await testeur.get(`/profil`);
 
       const donneesUtilisateur = donneesPartagees(
-        reponse.data,
+        reponse.text,
         'donnees-profil'
       ).utilisateur;
       expect(donneesUtilisateur.prenom).to.be("un'e");
@@ -209,10 +184,10 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       testeur.depotDonnees().utilisateur = () =>
         unUtilisateur().avecPostes(null).construis();
 
-      const reponse = await axios.get(`http://localhost:1234/profil`);
+      const reponse = await testeur.get(`/profil`);
 
       const donneesUtilisateur = donneesPartagees(
-        reponse.data,
+        reponse.text,
         'donnees-profil'
       ).utilisateur;
       expect(donneesUtilisateur.postes).to.eql([]);
@@ -224,7 +199,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         depotAppele = true;
       };
 
-      await axios.get(`http://localhost:1234/profil`);
+      await testeur.get(`/profil`);
       expect(depotAppele).to.be(true);
     });
   });
@@ -233,9 +208,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     it("ajoute la donnée partagée indiquant si l'utilisateur est superviseur", async () => {
       testeur.depotDonnees().estSuperviseur = async () => true;
 
-      const reponse = await axios.get(`http://localhost:1234/tableauDeBord`);
+      const reponse = await testeur.get(`/tableauDeBord`);
 
-      const donnees = donneesPartagees(reponse.data, 'utilisateur-superviseur');
+      const donnees = donneesPartagees(reponse.text, 'utilisateur-superviseur');
       expect(donnees).to.eql({ estSuperviseur: true });
     });
   });
@@ -245,23 +220,18 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       testeur.depotDonnees().superviseur = async () => {};
     });
 
-    it("vérifie que l'utilisateur a accepté les CGU", (done) => {
-      testeur
+    it("vérifie que l'utilisateur a accepté les CGU", async () => {
+      await testeur
         .middleware()
-        .verifieRequeteExigeAcceptationCGU(
-          `http://localhost:1234/supervision`,
-          done
-        );
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), `/supervision`);
     });
 
     it("renvoie une erreur 401 si l'utilisateur n'est pas un superviseur", async () => {
       testeur.depotDonnees().superviseur = async () => undefined;
-      try {
-        await axios.get(`http://localhost:1234/supervision`);
-        expect().fail('La requête aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(401);
-      }
+
+      const reponse = await testeur.get(`/supervision`);
+
+      expect(reponse.status).to.be(401);
     });
 
     it("insère les entités supervisées dans la page si l'utilisateur est superviseur", async () => {
@@ -271,9 +241,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
           entitesSupervisees: [{ nom: 'MonEntite' }],
         });
 
-      const reponse = await axios.get(`http://localhost:1234/supervision`);
+      const reponse = await testeur.get(`/supervision`);
 
-      const donnees = donneesPartagees(reponse.data, 'entites-supervisees');
+      const donnees = donneesPartagees(reponse.text, 'entites-supervisees');
       expect(donnees.length).to.be(1);
       expect(donnees[0].nom).to.be('MonEntite');
     });
@@ -285,12 +255,12 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
     });
 
-    it("vérifie que l'utilisateur a accepté les CGU", (done) => {
-      testeur
+    it("vérifie que l'utilisateur a accepté les CGU", async () => {
+      await testeur
         .middleware()
         .verifieRequeteExigeAcceptationCGU(
-          `http://localhost:1234/mesures/export.csv`,
-          done
+          testeur.app(),
+          `/mesures/export.csv`
         );
     });
 
@@ -316,7 +286,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         };
       };
 
-      await axios.get('http://localhost:1234/mesures/export.csv');
+      await testeur.get('/mesures/export.csv');
 
       expect(donneesRecues.avecDonneesAdditionnnelles).to.be(false);
       expect(donneesRecues.avecTypeMesure).to.be(false);
@@ -327,18 +297,15 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       });
     });
 
-    it('sert un fichier de type CSV', (done) => {
-      verifieTypeFichierServiEstCSV(
-        'http://localhost:1234/mesures/export.csv',
-        done
-      );
+    it('sert un fichier de type CSV', async () => {
+      await verifieTypeFichierServiEstCSV(testeur.app(), '/mesures/export.csv');
     });
 
-    it('nomme le fichier CSV referentiel-mesures-MSS.csv', (done) => {
-      verifieNomFichierServi(
-        'http://localhost:1234/mesures/export.csv',
-        'referentiel-mesures-MSS.csv',
-        done
+    it('nomme le fichier CSV referentiel-mesures-MSS.csv', async () => {
+      await verifieNomFichierServi(
+        testeur.app(),
+        '/mesures/export.csv',
+        'referentiel-mesures-MSS.csv'
       );
     });
 
@@ -347,15 +314,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         throw Error('BOOM');
       };
 
-      let executionOK;
-      try {
-        await axios.get('http://localhost:1234/mesures/export.csv');
-        executionOK = true;
-      } catch (e) {
-        expect(e.response.status).to.be(424);
-      } finally {
-        if (executionOK) expect().fail('Une exception aurait dû être levée');
-      }
+      const reponse = await testeur.get('/mesures/export.csv');
+
+      expect(reponse.status).to.be(424);
     });
 
     it("logue l'erreur survenue le cas échéant", async () => {
@@ -368,11 +329,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         erreurLoguee = erreur;
       };
 
-      try {
-        await axios.get('http://localhost:1234/mesures/export.csv');
-      } catch (e) {
-        expect(erreurLoguee).to.be.an(Error);
-      }
+      await testeur.get('/mesures/export.csv');
+
+      expect(erreurLoguee).to.be.an(Error);
     });
 
     it("lis les modèles de mesure spécifique pour l'utilisateur", async () => {
@@ -389,7 +348,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         donneesModelesMesureSpecifique = donneesMesures.mesuresSpecifiques;
       };
 
-      await axios.get('http://localhost:1234/mesures/export.csv');
+      await testeur.get('/mesures/export.csv');
 
       expect(idRecu).to.be('U1');
       expect(donneesModelesMesureSpecifique.length).to.be(1);
