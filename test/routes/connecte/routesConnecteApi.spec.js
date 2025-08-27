@@ -47,13 +47,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
   beforeEach(testeur.initialise);
 
-  it("vérifie que l'utilisateur est authentifié sur toutes les routes", (done) => {
+  it("vérifie que l'utilisateur est authentifié sur toutes les routes", async () => {
     // On vérifie une seule route privée.
     // Par construction, les autres seront protégées aussi puisque la protection est ajoutée comme middleware
     // devant le routeur dédié aux routes privées.
-    testeur
+    await testeur
       .middleware()
-      .verifieRequeteExigeJWT('http://localhost:1234/api/services', done);
+      .verifieRequeteExigeJWT(testeur.app(), '/api/services');
   });
 
   describe('quand requête GET sur `/api/services`', () => {

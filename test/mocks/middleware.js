@@ -1,5 +1,5 @@
-const axios = require('axios');
 const expect = require('expect.js');
+const supertest = require('supertest');
 
 const {
   Rubriques: { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS },
@@ -10,7 +10,7 @@ const {
 const { unService } = require('../constructeurs/constructeurService');
 const SourceAuthentification = require('../../src/modeles/sourceAuthentification');
 
-const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
+const verifieRequeteChangeEtat = async (donneesEtat, app, url) => {
   const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) => {
     expect(
       `${[JSON.stringify(valeurConstatee), ...diagnostics].join(' ')}`
@@ -22,23 +22,23 @@ const verifieRequeteChangeEtat = (donneesEtat, requete, done) => {
 
   verifieEgalite(lectureEtat(), etatInitial, suffixeLectureEtat);
 
-  axios(requete)
-    .then(() => verifieEgalite(lectureEtat(), etatFinal, suffixeLectureEtat))
-    .then(() => done())
-    .catch((e) => {
-      const erreurHTTP = e.response?.status;
-      if (!erreurHTTP || erreurHTTP >= 500) throw e;
+  try {
+    await supertest(app).get(url);
+    verifieEgalite(lectureEtat(), etatFinal, suffixeLectureEtat);
+  } catch (e) {
+    const erreurHTTP = e.response?.status;
+    if (!erreurHTTP || erreurHTTP >= 500) {
+      throw e;
+    }
 
-      const suffixeErreurHTTP = `(sur erreur HTTP ${erreurHTTP})`;
-      verifieEgalite(
-        lectureEtat(),
-        etatFinal,
-        suffixeLectureEtat,
-        suffixeErreurHTTP
-      );
-      done();
-    })
-    .catch((e) => done(e.response?.data || e));
+    const suffixeErreurHTTP = `(sur erreur HTTP ${erreurHTTP})`;
+    verifieEgalite(
+      lectureEtat(),
+      etatFinal,
+      suffixeLectureEtat,
+      suffixeErreurHTTP
+    );
+  }
 };
 
 let autorisationChargee;
@@ -327,12 +327,12 @@ const middlewareFantaisie = {
     );
   },
 
-  verifieRequeteExigeJWT: (...params) => {
+  verifieRequeteExigeJWT: async (app, url) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => verificationJWTMenee },
-      ...params
-    );
-  },
+      app,
+      url
+    ),
 
   verifieRequeteChargeEtatVisiteGuidee: (...params) => {
     verifieRequeteChangeEtat(
