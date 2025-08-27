@@ -188,7 +188,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
           const reponse = await testeur.get('/service/456');
 
-          expect(reponse.headers['location']).to.contain(redirectionAttendue);
+          expect(reponse.headers.location).to.contain(redirectionAttendue);
         });
       });
 
@@ -215,7 +215,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
         const reponse = await testeur.get('/service/456');
 
-        expect(reponse.headers['location']).to.contain(
+        expect(reponse.headers.location).to.contain(
           '/service/456/descriptionService?etape=3'
         );
       });
@@ -716,7 +716,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         '/service/456/homologation/edition/etape/deuxieme'
       );
 
-      expect(reponse.headers['location']).to.contain('dateTelechargement');
+      expect(reponse.headers.location).to.contain('dateTelechargement');
     });
 
     it("redirige vers la dernière étape disponible si l'étape demandée n'est pas accessible pour l'utilisateur", async () => {
@@ -734,7 +734,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         '/service/456/homologation/edition/etape/deuxieme'
       );
 
-      expect(reponse.headers['location']).to.contain('dateTelechargement');
+      expect(reponse.headers.location).to.contain('dateTelechargement');
     });
   });
 });
