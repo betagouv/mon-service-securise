@@ -1,4 +1,3 @@
-const axios = require('axios');
 const expect = require('expect.js');
 
 const {
@@ -1087,14 +1086,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
             motDePasseMisAJour = true;
           };
 
-          try {
-            await testeur.put('/api/motDePasse', {
-              motDePasse: 'mdp_12345',
-            });
-          } catch (e) {
-            expect(reponse.status).to.be(422);
-            expect(motDePasseMisAJour).to.be(false);
-          }
+          const reponse = await testeur.put('/api/motDePasse', {
+            motDePasse: 'mdp_12345',
+          });
+          expect(reponse.status).to.be(422);
+          expect(motDePasseMisAJour).to.be(false);
         });
       });
 
@@ -1424,15 +1420,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it("répond avec un code 401 quand il n'y a pas d'identifiant", async () => {
       await testeur.middleware().reinitialise({ idUtilisateur: '' });
 
-      axios
-        .get('/api/utilisateurCourant')
-        .then(() => {
-          done(new Error('La requête aurait du être en erreur'));
-        })
-        .catch((erreur) => {
-          expect(erreur.response.status).to.equal(401);
-          done();
-        });
+      const reponse = await testeur.get('/api/utilisateurCourant');
+      expect(reponse.status).to.equal(401);
     });
   });
 

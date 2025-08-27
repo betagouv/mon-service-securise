@@ -1,4 +1,3 @@
-const axios = require('axios');
 const expect = require('expect.js');
 
 const testeurMSS = require('../testeurMSS');
@@ -63,7 +62,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('aseptise les paramètres', async () => {
-      await await testeur
+      await testeur
         .middleware()
         .verifieAseptisationParametres(
           [
@@ -179,12 +178,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: DECRIRE }], {
-          method: 'put',
-          url: '/api/service/456',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: DECRIRE }],
+          testeur.app(),
+          {
+            method: 'put',
+            url: '/api/service/456',
+          }
+        );
     });
 
     it('aseptise les paramètres', async () => {
@@ -281,12 +284,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête GET sur `/api/service/:id/mesures', () => {
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: LECTURE, rubrique: SECURISER }], {
-          method: 'get',
-          url: '/api/service/456/mesures',
-        });
+        .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: SECURISER }],
+          testeur.app(),
+          {
+            method: 'get',
+            url: '/api/service/456/mesures',
+          }
+        );
     });
 
     it('retourne la représentation enrichie des mesures', async () => {
@@ -346,21 +353,27 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("vérifie que l'utilisateur est authentifié", async () => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(testeur.app(), {
-        method: 'post',
-        url: '/api/service/456/mesuresSpecifiques',
-        data: [],
-      });
-    });
-
-    it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: SECURISER }], {
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'post',
           url: '/api/service/456/mesuresSpecifiques',
           data: [],
         });
+    });
+
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: SECURISER }],
+          testeur.app(),
+          {
+            method: 'post',
+            url: '/api/service/456/mesuresSpecifiques',
+            data: [],
+          }
+        );
     });
 
     it('aseptise tous les paramètres de la requête', async () => {
@@ -522,21 +535,27 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("vérifie que l'utilisateur est authentifié", async () => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(testeur.app(), {
-        method: 'delete',
-        url: '/api/service/456/mesuresSpecifiques/789',
-        data: [],
-      });
-    });
-
-    it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: SECURISER }], {
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'delete',
           url: '/api/service/456/mesuresSpecifiques/789',
           data: [],
         });
+    });
+
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: SECURISER }],
+          testeur.app(),
+          {
+            method: 'delete',
+            url: '/api/service/456/mesuresSpecifiques/789',
+            data: [],
+          }
+        );
     });
 
     it('délègue au dépôt de données la suppression de la mesure spécifique', async () => {
@@ -599,21 +618,27 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("vérifie que l'utilisateur est authentifié", async () => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(testeur.app(), {
-        method: 'put',
-        url: '/api/service/456/mesuresSpecifiques/789',
-        data: [],
-      });
-    });
-
-    it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: SECURISER }], {
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'put',
           url: '/api/service/456/mesuresSpecifiques/789',
           data: [],
         });
+    });
+
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: SECURISER }],
+          testeur.app(),
+          {
+            method: 'put',
+            url: '/api/service/456/mesuresSpecifiques/789',
+            data: [],
+          }
+        );
     });
 
     it('aseptise tous les paramètres de la requête', async () => {
@@ -734,19 +759,25 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("vérifie que l'utilisateur a accepté les CGU", async () => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(testeur.app(), {
-        method: 'put',
-        url: '/api/service/456/mesures/audit',
-      });
-    });
-
-    it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: SECURISER }], {
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'put',
           url: '/api/service/456/mesures/audit',
         });
+    });
+
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: SECURISER }],
+          testeur.app(),
+          {
+            method: 'put',
+            url: '/api/service/456/mesures/audit',
+          }
+        );
     });
 
     it('aseptise les paramètres de la requête', async () => {
@@ -880,19 +911,25 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("vérifie que l'utilisateur a accepté les CGU", async () => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(testeur.app(), {
-        method: 'put',
-        url: '/api/service/S1/modeles/mesureSpecifique',
-      });
-    });
-
-    it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: SECURISER }], {
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'put',
           url: '/api/service/S1/modeles/mesureSpecifique',
         });
+    });
+
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: SECURISER }],
+          testeur.app(),
+          {
+            method: 'put',
+            url: '/api/service/S1/modeles/mesureSpecifique',
+          }
+        );
     });
 
     it('aseptise les paramètres de la requête', async () => {
@@ -972,12 +1009,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: CONTACTS }], {
-          method: 'post',
-          url: '/api/service/456/rolesResponsabilites',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: CONTACTS }],
+          testeur.app(),
+          {
+            method: 'post',
+            url: '/api/service/456/rolesResponsabilites',
+          }
+        );
     });
 
     it("demande au dépôt d'associer les rôles et responsabilités au service", async () => {
@@ -1038,12 +1079,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: RISQUES }], {
-          method: 'post',
-          url: '/api/service/456/risquesSpecifiques',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: RISQUES }],
+          testeur.app(),
+          {
+            method: 'post',
+            url: '/api/service/456/risquesSpecifiques',
+          }
+        );
     });
 
     it('aseptise les paramètres de la requête', async () => {
@@ -1215,12 +1260,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: RISQUES }], {
-          method: 'put',
-          url: '/api/service/456/risquesSpecifiques/RS1',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: RISQUES }],
+          testeur.app(),
+          {
+            method: 'put',
+            url: '/api/service/456/risquesSpecifiques/RS1',
+          }
+        );
     });
 
     it('aseptise les paramètres de la requête', async () => {
@@ -1403,12 +1452,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: RISQUES }], {
-          method: 'delete',
-          url: '/api/service/456/risquesSpecifiques/RS1',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: RISQUES }],
+          testeur.app(),
+          {
+            method: 'delete',
+            url: '/api/service/456/risquesSpecifiques/RS1',
+          }
+        );
     });
 
     it('délègue au dépôt de donnée la suppression du risque', async () => {
@@ -1440,12 +1493,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: RISQUES }], {
-          method: 'put',
-          url: '/api/service/456/risques/unRisqueExistant',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: RISQUES }],
+          testeur.app(),
+          {
+            method: 'put',
+            url: '/api/service/456/risques/unRisqueExistant',
+          }
+        );
     });
 
     it('aseptise les paramètres de la requête', async () => {
@@ -1553,16 +1610,20 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: HOMOLOGUER }], {
-          url: '/api/service/456/homologation/autorite',
-          method: 'put',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
+          testeur.app(),
+          {
+            url: '/api/service/456/homologation/autorite',
+            method: 'put',
+          }
+        );
     });
 
     it('recherche le dossier courant correspondant', async () => {
-      testeur.middleware().verifieRechercheDossierCourant({
+      await testeur.middleware().verifieRechercheDossierCourant(testeur.app(), {
         url: '/api/service/456/homologation/autorite',
         method: 'put',
       });
@@ -1614,16 +1675,20 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: HOMOLOGUER }], {
-          url: '/api/service/456/homologation/decision',
-          method: 'put',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
+          testeur.app(),
+          {
+            url: '/api/service/456/homologation/decision',
+            method: 'put',
+          }
+        );
     });
 
     it('recherche le dossier courant correspondant', async () => {
-      testeur.middleware().verifieRechercheDossierCourant({
+      await testeur.middleware().verifieRechercheDossierCourant(testeur.app(), {
         url: '/api/service/456/homologation/decision',
         method: 'put',
       });
@@ -1643,33 +1708,27 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("renvoie une erreur 422 si la date d'homologation est invalide", async () => {
-      axios
-        .put('/api/service/456/homologation/decision', {
+      const reponse = await testeur.put(
+        '/api/service/456/homologation/decision',
+        {
           dateHomologation: 'dateInvalide',
           dureeValidite: 'unAn',
-        })
-        .then(() => done('Une erreur aurait dû être levée'))
-        .catch((e) => {
-          expect(reponse.status).to.be(422);
-          expect(reponse.data).to.be("Date d'homologation invalide");
-          done();
-        })
-        .catch((e) => done(reponse?.data || e));
+        }
+      );
+      expect(reponse.status).to.be(422);
+      expect(reponse.text).to.be("Date d'homologation invalide");
     });
 
     it('renvoie une erreur 422 si la durée de validité est inconnue du référentiel', async () => {
-      axios
-        .put('/api/service/456/homologation/decision', {
+      const reponse = await testeur.put(
+        '/api/service/456/homologation/decision',
+        {
           dateHomologation: new Date(),
           dureeValidite: 'dureeInconnue',
-        })
-        .then(() => done('Une erreur aurait dû être levée'))
-        .catch((e) => {
-          expect(reponse.status).to.be(422);
-          expect(reponse.data).to.be('Durée de validité invalide');
-          done();
-        })
-        .catch((e) => done(reponse?.data || e));
+        }
+      );
+      expect(reponse.status).to.be(422);
+      expect(reponse.text).to.be('Durée de validité invalide');
     });
 
     it("utilise le dépôt pour enregistrer la décision d'homologation", async () => {
@@ -1683,14 +1742,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         return Promise.resolve();
       };
 
-      axios
-        .put('/api/service/456/homologation/decision', {
-          dateHomologation: '2023-01-01',
-          dureeValidite: 'unAn',
-        })
-        .then(() => expect(depotAppele).to.be(true))
-        .then(() => done())
-        .catch((e) => done(reponse?.data || e));
+      await testeur.put('/api/service/456/homologation/decision', {
+        dateHomologation: '2023-01-01',
+        dureeValidite: 'unAn',
+      });
+      expect(depotAppele).to.be(true);
     });
   });
 
@@ -1711,16 +1767,20 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: HOMOLOGUER }], {
-          url: '/api/service/456/homologation/telechargement',
-          method: 'put',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
+          testeur.app(),
+          {
+            url: '/api/service/456/homologation/telechargement',
+            method: 'put',
+          }
+        );
     });
 
     it('recherche le dossier courant correspondant', async () => {
-      testeur.middleware().verifieRechercheDossierCourant({
+      await testeur.middleware().verifieRechercheDossierCourant(testeur.app(), {
         url: '/api/service/456/homologation/telechargement',
         method: 'put',
       });
@@ -1739,11 +1799,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         return Promise.resolve();
       };
 
-      axios
-        .put('/api/service/456/homologation/telechargement')
-        .then(() => expect(depotAppele).to.be(true))
-        .then(() => done())
-        .catch((e) => done(reponse?.data || e));
+      await testeur.put('/api/service/456/homologation/telechargement');
+      expect(depotAppele).to.be(true);
     });
   });
 
@@ -1768,16 +1825,20 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: HOMOLOGUER }], {
-          url: '/api/service/456/homologation/avis',
-          method: 'put',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
+          testeur.app(),
+          {
+            url: '/api/service/456/homologation/avis',
+            method: 'put',
+          }
+        );
     });
 
     it('recherche le dossier courant correspondant', async () => {
-      testeur.middleware().verifieRechercheDossierCourant({
+      await testeur.middleware().verifieRechercheDossierCourant(testeur.app(), {
         url: '/api/service/456/homologation/avis',
         method: 'put',
       });
@@ -1837,21 +1898,18 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           return Promise.resolve();
         };
 
-        axios
-          .put('/api/service/456/homologation/avis', {
-            avis: [
-              {
-                collaborateurs: ['Jean Dupond'],
-                statut: 'favorable',
-                dureeValidite: 'unAn',
-                commentaires: 'Ok',
-              },
-            ],
-            avecAvis: 'true',
-          })
-          .then(() => expect(depotAppele).to.be(true))
-          .then(() => done())
-          .catch((e) => done(reponse?.data || e));
+        await testeur.put('/api/service/456/homologation/avis', {
+          avis: [
+            {
+              collaborateurs: ['Jean Dupond'],
+              statut: 'favorable',
+              dureeValidite: 'unAn',
+              commentaires: 'Ok',
+            },
+          ],
+          avecAvis: 'true',
+        });
+        expect(depotAppele).to.be(true);
       });
 
       it("quand il n'y a pas d'avis", async () => {
@@ -1867,14 +1925,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           return Promise.resolve();
         };
 
-        axios
-          .put('/api/service/456/homologation/avis', {
-            avis: [],
-            avecAvis: 'false',
-          })
-          .then(() => expect(depotAppele).to.be(true))
-          .then(() => done())
-          .catch((e) => done(reponse?.data || e));
+        await testeur.put('/api/service/456/homologation/avis', {
+          avis: [],
+          avecAvis: 'false',
+        });
+        expect(depotAppele).to.be(true);
       });
     });
   });
@@ -1896,16 +1951,20 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: HOMOLOGUER }], {
-          url: '/api/service/456/homologation/documents',
-          method: 'put',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
+          testeur.app(),
+          {
+            url: '/api/service/456/homologation/documents',
+            method: 'put',
+          }
+        );
     });
 
     it('recherche le dossier courant correspondant', async () => {
-      testeur.middleware().verifieRechercheDossierCourant({
+      await testeur.middleware().verifieRechercheDossierCourant(testeur.app(), {
         url: '/api/service/456/homologation/documents',
         method: 'put',
       });
@@ -1947,14 +2006,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           return Promise.resolve();
         };
 
-        axios
-          .put('/api/service/456/homologation/documents', {
-            documents: ['unDocument'],
-            avecDocuments: 'true',
-          })
-          .then(() => expect(depotAppele).to.be(true))
-          .then(() => done())
-          .catch((e) => done(reponse?.data || e));
+        await testeur.put('/api/service/456/homologation/documents', {
+          documents: ['unDocument'],
+          avecDocuments: 'true',
+        });
+        expect(depotAppele).to.be(true);
       });
 
       it("quand il n'y a pas de document", async () => {
@@ -1970,14 +2026,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           return Promise.resolve();
         };
 
-        axios
-          .put('/api/service/456/homologation/documents', {
-            documents: [],
-            avecDocuments: 'false',
-          })
-          .then(() => expect(depotAppele).to.be(true))
-          .then(() => done())
-          .catch((e) => done(reponse?.data || e));
+        await testeur.put('/api/service/456/homologation/documents', {
+          documents: [],
+          avecDocuments: 'false',
+        });
+        expect(depotAppele).to.be(true);
       });
     });
   });
@@ -2003,12 +2056,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: HOMOLOGUER }], {
-          url: '/api/service/456/homologation/finalise',
-          method: 'post',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
+          testeur.app(),
+          {
+            url: '/api/service/456/homologation/finalise',
+            method: 'post',
+          }
+        );
     });
 
     it("utilise le dépôt pour finaliser l'homologation", async () => {
@@ -2032,17 +2089,19 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('utilise le middleware de recherche du service', async () => {
-      testeur.middleware().verifieRechercheService([], {
+      await testeur.middleware().verifieRechercheService([], testeur.app(), {
         method: 'delete',
         url: '/api/service/123',
       });
     });
 
     it("utilise le middleware de chargement de l'autorisation", async () => {
-      testeur.middleware().verifieChargementDesAutorisations({
-        method: 'delete',
-        url: '/api/service/456',
-      });
+      await testeur
+        .middleware()
+        .verifieChargementDesAutorisations(testeur.app(), {
+          method: 'delete',
+          url: '/api/service/456',
+        });
     });
 
     it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", async () => {
@@ -2084,17 +2143,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         }
       };
 
-      axios({
-        method: 'delete',
-        url: '/api/service/123',
-      })
-        .then((reponse) => {
-          expect(serviceSupprime).to.be(true);
-          expect(reponse.status).to.equal(200);
-          expect(reponse.body).to.equal('Service supprimé');
-          done();
-        })
-        .catch((e) => done(reponse?.data || e));
+      const reponse = await testeur.delete('/api/service/123');
+      expect(serviceSupprime).to.be(true);
+      expect(reponse.status).to.equal(200);
+      expect(reponse.text).to.equal('Service supprimé');
     });
   });
 
@@ -2107,24 +2159,26 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('applique une protection de trafic', async () => {
-      testeur.middleware().verifieProtectionTrafic(testeur.app(), {
+      await testeur.middleware().verifieProtectionTrafic(testeur.app(), {
         method: 'copy',
         url: '/api/service/123',
       });
     });
 
     it('utilise le middleware de chargement du service', async () => {
-      testeur.middleware().verifieRechercheService([], {
+      await testeur.middleware().verifieRechercheService([], testeur.app(), {
         method: 'copy',
         url: '/api/service/123',
       });
     });
 
     it("utilise le middleware de chargement de l'autorisation", async () => {
-      testeur.middleware().verifieChargementDesAutorisations({
-        method: 'copy',
-        url: '/api/service/123',
-      });
+      await testeur
+        .middleware()
+        .verifieChargementDesAutorisations(testeur.app(), {
+          method: 'copy',
+          url: '/api/service/123',
+        });
     });
 
     it("retourne une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", async () => {
@@ -2190,17 +2244,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         }
       };
 
-      axios({
-        method: 'copy',
-        url: '/api/service/123',
-      })
-        .then((reponse) => {
-          expect(serviceDuplique).to.be(true);
-          expect(reponse.status).to.equal(200);
-          expect(reponse.body).to.equal('Service dupliqué');
-          done();
-        })
-        .catch((e) => done(reponse?.data || e));
+      const reponse = await testeur.copy('/api/service/123');
+      expect(serviceDuplique).to.be(true);
+      expect(reponse.status).to.equal(200);
+      expect(reponse.text).to.equal('Service dupliqué');
     });
   });
 
@@ -2242,7 +2289,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur.middleware().verifieRechercheService([], {
+      await testeur.middleware().verifieRechercheService([], testeur.app(), {
         method: 'get',
         url: '/api/service/456',
       });
@@ -2317,7 +2364,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur.middleware().verifieRechercheService([], {
+      await testeur.middleware().verifieRechercheService([], testeur.app(), {
         method: 'PATCH',
         url: '/api/service/456/autorisations/uuid-1',
         data: { droits: tousDroitsEnEcriture() },
@@ -2339,11 +2386,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("utilise le middleware de chargement de l'autorisation", async () => {
-      testeur.middleware().verifieChargementDesAutorisations({
-        method: 'PATCH',
-        url: '/api/service/456/autorisations/uuid-1',
-        data: { droits: tousDroitsEnEcriture() },
-      });
+      await testeur
+        .middleware()
+        .verifieChargementDesAutorisations(testeur.app(), {
+          method: 'PATCH',
+          url: '/api/service/456/autorisations/uuid-1',
+          data: { droits: tousDroitsEnEcriture() },
+        });
     });
 
     it("renvoie une erreur 422 si l'utilisateur courant tente de modifier ses propres droits", async () => {
@@ -2608,7 +2657,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('recherche le service correspondant', async () => {
-      testeur.middleware().verifieRechercheService([], {
+      await testeur.middleware().verifieRechercheService([], testeur.app(), {
         method: 'get',
         url: '/api/service/456/autorisations',
       });
@@ -2711,12 +2760,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête GET sur `/api/service/:id/indiceCyber', () => {
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: LECTURE, rubrique: SECURISER }], {
-          method: 'get',
-          url: '/api/service/456/indiceCyber',
-        });
+        .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: SECURISER }],
+          testeur.app(),
+          {
+            method: 'get',
+            url: '/api/service/456/indiceCyber',
+          }
+        );
     });
 
     it("aseptise l'id du service", async () => {
@@ -2743,12 +2796,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête GET sur `/api/service/:id/indiceCyberPersonnalise', () => {
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: LECTURE, rubrique: SECURISER }], {
-          method: 'get',
-          url: '/api/service/456/indiceCyberPersonnalise',
-        });
+        .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: SECURISER }],
+          testeur.app(),
+          {
+            method: 'get',
+            url: '/api/service/456/indiceCyberPersonnalise',
+          }
+        );
     });
 
     it("aseptise l'id du service", async () => {
@@ -2777,12 +2834,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête POST sur `/api/service/:id/retourUtilisateurMesure', () => {
     it('recherche le service correspondant', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: SECURISER }], {
-          method: 'post',
-          url: '/api/service/456/retourUtilisateurMesure',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: SECURISER }],
+          testeur.app(),
+          {
+            method: 'post',
+            url: '/api/service/456/retourUtilisateurMesure',
+          }
+        );
     });
 
     it('aseptise les données de la requête', async () => {
@@ -2860,12 +2921,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('utilise le middleware de recherche du service', async () => {
-      testeur
+      await testeur
         .middleware()
-        .verifieRechercheService([{ niveau: ECRITURE, rubrique: HOMOLOGUER }], {
-          method: 'delete',
-          url: '/api/service/123/homologation/dossierCourant',
-        });
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: HOMOLOGUER }],
+          testeur.app(),
+          {
+            method: 'delete',
+            url: '/api/service/123/homologation/dossierCourant',
+          }
+        );
     });
 
     it("retourne une erreur HTTP 422 si le service n'a pas de dossier courant", async () => {
@@ -2908,10 +2973,12 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête POST sur `/api/service/estimationNiveauSecurite`', () => {
     it("vérifie que l'utilisateur est authentifié", async () => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(testeur.app(), {
-        method: 'post',
-        url: '/api/service/estimationNiveauSecurite',
-      });
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
+          method: 'post',
+          url: '/api/service/estimationNiveauSecurite',
+        });
     });
 
     it('aseptise les paramètres', async () => {
@@ -2976,7 +3043,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   describe('quand requête PUT sur `/api/service/:id/suggestionAction/:nature`', () => {
     it('recherche le service correspondant', async () => {
-      testeur.middleware().verifieRechercheService([], {
+      await testeur.middleware().verifieRechercheService([], testeur.app(), {
         method: 'put',
         url: '/api/service/123/suggestionAction/peuimporte',
       });
