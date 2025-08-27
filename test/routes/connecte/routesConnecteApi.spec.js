@@ -1,6 +1,5 @@
 const axios = require('axios');
 const expect = require('expect.js');
-const supertest = require('supertest');
 
 const {
   verifieNomFichierServi,
@@ -93,9 +92,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return Promise.resolve([service]);
       };
 
-      const reponse = await supertest(testeur.app()).get('/api/services');
+      const reponse = await testeur.get('/api/services');
 
-      expect(reponse.statusCode).to.equal(200);
+      expect(reponse.status).to.equal(200);
 
       const { services } = reponse.body;
       expect(services.length).to.equal(1);
@@ -115,18 +114,18 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         ];
       };
 
-      await axios.get('http://localhost:1234/api/services');
+      await testeur.get('/api/services');
       expect(donneesPassees.idUtilisateur).to.equal('123');
     });
   });
 
   describe('quand requête GET sur `/api/services/indices-cyber`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
         .middleware()
         .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/services/indices-cyber',
-          done
+          testeur.app(),
+          '/api/services/indices-cyber'
         );
     });
 
@@ -144,11 +143,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         ];
       };
 
-      await axios.get('http://localhost:1234/api/services/indices-cyber');
+      await testeur.get('/api/services/indices-cyber');
       expect(donneesPassees.idUtilisateur).to.equal('123');
     });
 
-    it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
+    it("interroge le dépôt de données pour récupérer les services de l'utilisateur", async () => {
       let donneesPassees = {};
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
@@ -164,28 +163,24 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return Promise.resolve([service]);
       };
 
-      axios
-        .get('http://localhost:1234/api/services/indices-cyber')
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
+      const reponse = await testeur.get('/api/services/indices-cyber');
 
-          const { services } = reponse.data;
-          expect(services.length).to.equal(1);
-          expect(services[0].id).to.equal('456');
-          expect(donneesPassees.idUtilisateur).to.equal('123');
-          done();
-        })
-        .catch(done);
+      expect(reponse.status).to.equal(200);
+
+      const { services } = reponse.body;
+      expect(services.length).to.equal(1);
+      expect(services[0].id).to.equal('456');
+      expect(donneesPassees.idUtilisateur).to.equal('123');
     });
   });
 
   describe('quand requête GET sur `/api/services/mesures`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
         .middleware()
         .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/services/mesures',
-          done
+          testeur.app(),
+          '/api/services/mesures'
         );
     });
 
@@ -197,7 +192,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return [];
       };
 
-      await axios.get('http://localhost:1234/api/services/mesures');
+      await testeur.get('/api/services/mesures');
 
       expect(idRecu).to.be('U1');
     });
@@ -237,12 +232,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           .construis(),
       ];
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/services/mesures'
-      );
+      const reponse = await testeur.get('/api/services/mesures');
 
       expect(reponse.status).to.be(200);
-      expect(reponse.data).to.eql([
+      expect(reponse.body).to.eql([
         {
           id: 'S1',
           nomService: 'Mon service',
@@ -284,12 +277,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           .construis(),
       ];
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/services/mesures'
-      );
+      const reponse = await testeur.get('/api/services/mesures');
 
       expect(reponse.status).to.be(200);
-      expect(reponse.data[0].mesuresSpecifiques).to.eql([
+      expect(reponse.body[0].mesuresSpecifiques).to.eql([
         {
           id: 'MS1',
           idModele: 'MOD-1',
@@ -339,13 +330,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           .construis(),
       ];
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/services/mesures'
-      );
+      const reponse = await testeur.get('/api/services/mesures');
 
       expect(reponse.status).to.be(200);
-      expect(reponse.data.length).to.be(1);
-      expect(reponse.data[0].id).to.be('S1');
+      expect(reponse.body.length).to.be(1);
+      expect(reponse.body[0].id).to.be('S1');
     });
 
     it("indique pour chaque service s'il peut être modifié par l'utilisateur", async () => {
@@ -389,15 +378,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           .construis(),
       ];
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/services/mesures'
-      );
+      const reponse = await testeur.get('/api/services/mesures');
 
       expect(reponse.status).to.be(200);
-      expect(reponse.data[0].id).to.be('S1');
-      expect(reponse.data[0].peutEtreModifie).to.be(true);
-      expect(reponse.data[1].id).to.be('S2');
-      expect(reponse.data[1].peutEtreModifie).to.be(false);
+      expect(reponse.body[0].id).to.be('S1');
+      expect(reponse.body[0].peutEtreModifie).to.be(true);
+      expect(reponse.body[1].id).to.be('S2');
+      expect(reponse.body[1].peutEtreModifie).to.be(false);
     });
 
     it('décode les entités HTML dans les données retournées', async () => {
@@ -444,21 +431,19 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           .construis(),
       ];
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/services/mesures'
-      );
+      const reponse = await testeur.get('/api/services/mesures');
 
-      expect(reponse.data[0].nomService).to.be("L'abricot");
-      expect(reponse.data[0].mesuresAssociees.A.modalites).to.be(
+      expect(reponse.body[0].nomService).to.be("L'abricot");
+      expect(reponse.body[0].mesuresAssociees.A.modalites).to.be(
         "L'application de A"
       );
-      expect(reponse.data[0].mesuresSpecifiques[0].modalites).to.be(
+      expect(reponse.body[0].mesuresSpecifiques[0].modalites).to.be(
         "L'ampoule"
       );
-      expect(reponse.data[0].mesuresSpecifiques[0].descriptionLongue).to.be(
+      expect(reponse.body[0].mesuresSpecifiques[0].descriptionLongue).to.be(
         "L'autre"
       );
-      expect(reponse.data[0].mesuresSpecifiques[0].description).to.be(
+      expect(reponse.body[0].mesuresSpecifiques[0].description).to.be(
         "L'arbitre"
       );
     });
@@ -469,40 +454,34 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.depotDonnees().accesAutoriseAUneListeDeService = async () => true;
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        {
-          method: 'put',
-          url: 'http://localhost:1234/api/services/mesuresGenerales/unIdDeMesure',
-        },
-        done
-      );
-    });
+    it("vérifie que l'utilisateur est authentifié", async () =>
+      testeur.middleware().verifieRequeteExigeAcceptationCGU(testeur.app(), {
+        method: 'put',
+        url: '/api/services/mesuresGenerales/unIdDeMesure',
+      }));
 
-    it('aseptise les données', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['idsServices.*', 'id', 'statut', 'modalites'],
-        {
-          method: 'put',
-          url: 'http://localhost:1234/api/services/mesuresGenerales/unIdDeMesure',
-        },
-        done
-      );
+    it('aseptise les données', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['idsServices.*', 'id', 'statut', 'modalites'],
+          testeur.app(),
+          {
+            method: 'put',
+            url: '/api/services/mesuresGenerales/unIdDeMesure',
+          }
+        );
     });
 
     it('jette une erreur si le statut ET les modalités ne sont pas précisés', async () => {
-      try {
-        await axios.put(
-          'http://localhost:1234/api/services/mesuresGenerales/unIdDeMesure',
-          {
-            statut: undefined,
-            modalites: undefined,
-          }
-        );
-        expect().fail("L'appel aurait dû lever une erreur.");
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      const reponse = await testeur.put(
+        '/api/services/mesuresGenerales/unIdDeMesure',
+        {
+          statut: undefined,
+          modalites: undefined,
+        }
+      );
+      expect(reponse.status).to.be(400);
     });
 
     it("jette une erreur si l'identifiant de la mesure est inconnu", async () => {
@@ -511,17 +490,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           uneMesureConnue: {},
         },
       });
-      try {
-        await axios.put(
-          'http://localhost:1234/api/services/mesuresGenerales/uneMesureInconnue',
-          {
-            statut: 'fait',
-          }
-        );
-        expect().fail("L'appel aurait dû lever une erreur.");
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      const reponse = await testeur.put(
+        '/api/services/mesuresGenerales/uneMesureInconnue',
+        {
+          statut: 'fait',
+        }
+      );
+      expect(reponse.status).to.be(400);
     });
 
     it('jette une erreur si le statut est inconnu', async () => {
@@ -529,17 +504,14 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         mesures: { uneMesureConnue: {} },
         statutsMesures: { unStatut: {} },
       });
-      try {
-        await axios.put(
-          'http://localhost:1234/api/services/mesuresGenerales/uneMesureConnue',
-          {
-            statut: 'unStatutInconnu',
-          }
-        );
-        expect().fail("L'appel aurait dû lever une erreur.");
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      const reponse = await testeur.put(
+        '/api/services/mesuresGenerales/uneMesureConnue',
+        {
+          statut: 'unStatutInconnu',
+        }
+      );
+
+      expect(reponse.status).to.be(400);
     });
 
     it("ne jette pas d'erreur si le statut est vide", async () => {
@@ -549,8 +521,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.depotDonnees().metsAJourMesureGeneraleDesServices =
         async () => {};
 
-      const reponse = await axios.put(
-        'http://localhost:1234/api/services/mesuresGenerales/uneMesureConnue',
+      const reponse = await testeur.put(
+        '/api/services/mesuresGenerales/uneMesureConnue',
         {
           statut: '',
           modalites: 'une modalité',
@@ -570,18 +542,14 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         statutsMesures: { unStatut: {} },
       });
 
-      try {
-        await axios.put(
-          'http://localhost:1234/api/services/mesuresGenerales/uneMesureConnue',
-          {
-            statut: 'unStatut',
-            idsServices: ['S1'],
-          }
-        );
-        expect().fail("L'appel aurait dû lever une erreur.");
-      } catch (e) {
-        expect(e.response.status).to.be(403);
-      }
+      const reponse = await testeur.put(
+        '/api/services/mesuresGenerales/uneMesureConnue',
+        {
+          statut: 'unStatut',
+          idsServices: ['S1'],
+        }
+      );
+      expect(reponse.status).to.be(403);
     });
 
     it('délègue au dépôt de données la mise à jour de la mesure pour les services concernés', async () => {
@@ -603,14 +571,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         statutsMesures: { fait: {} },
       });
 
-      await axios.put(
-        'http://localhost:1234/api/services/mesuresGenerales/uneMesureConnue',
-        {
-          statut: 'fait',
-          modalites: 'une modalité',
-          idsServices: ['S1', 'S2'],
-        }
-      );
+      await testeur.put('/api/services/mesuresGenerales/uneMesureConnue', {
+        statut: 'fait',
+        modalites: 'une modalité',
+        idsServices: ['S1', 'S2'],
+      });
 
       expect(donneesRecues).to.eql({
         idUtilisateur: 'U1',
@@ -627,57 +592,50 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.depotDonnees().accesAutoriseAUneListeDeService = async () => true;
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        {
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'put',
-          url: 'http://localhost:1234/api/services/mesuresSpecifiques/unIdDeModele',
-        },
-        done
-      );
+          url: '/api/services/mesuresSpecifiques/unIdDeModele',
+        });
     });
 
-    it('aseptise les données', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['idsServices.*', 'idModele', 'statut', 'modalites'],
-        {
-          method: 'put',
-          url: 'http://localhost:1234/api/services/mesuresSpecifiques/unIdDeModele',
-        },
-        done
-      );
+    it('aseptise les données', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['idsServices.*', 'idModele', 'statut', 'modalites'],
+          testeur.app(),
+          {
+            method: 'put',
+            url: '/api/services/mesuresSpecifiques/unIdDeModele',
+          }
+        );
     });
 
     it('jette une erreur si le statut ET les modalités ne sont pas précisés', async () => {
-      try {
-        await axios.put(
-          'http://localhost:1234/api/services/mesuresSpecifiques/unIdDeModele',
-          {
-            statut: undefined,
-            modalites: undefined,
-          }
-        );
-        expect().fail("L'appel aurait dû lever une erreur.");
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      const reponse = await testeur.put(
+        '/api/services/mesuresSpecifiques/unIdDeModele',
+        {
+          statut: undefined,
+          modalites: undefined,
+        }
+      );
+      expect(reponse.status).to.be(400);
     });
 
     it("jette une erreur si l'identifiant du modèle de mesure est inconnu", async () => {
       testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur =
         async () => [];
 
-      try {
-        await axios.put(
-          'http://localhost:1234/api/services/mesuresSpecifiques/unModeleInconnu',
-          {
-            statut: 'fait',
-          }
-        );
-        expect().fail("L'appel aurait dû lever une erreur.");
-      } catch (e) {
-        expect(e.response.status).to.be(404);
-      }
+      const reponse = await testeur.put(
+        '/api/services/mesuresSpecifiques/unModeleInconnu',
+        {
+          statut: 'fait',
+        }
+      );
+      expect(reponse.status).to.be(404);
     });
 
     describe('lorsque le modèle de mesure est connu', () => {
@@ -699,22 +657,19 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         testeur.referentiel().recharge({
           statutsMesures: { unStatut: {} },
         });
-        try {
-          await axios.put(
-            'http://localhost:1234/api/services/mesuresSpecifiques/unModeleConnu',
-            {
-              statut: 'unStatutInconnu',
-            }
-          );
-          expect().fail("L'appel aurait dû lever une erreur.");
-        } catch (e) {
-          expect(e.response.status).to.be(400);
-        }
+        const reponse = await testeur.put(
+          '/api/services/mesuresSpecifiques/unModeleConnu',
+          {
+            statut: 'unStatutInconnu',
+          }
+        );
+
+        expect(reponse.status).to.be(400);
       });
 
       it("ne jette pas d'erreur si le statut est vide", async () => {
-        const reponse = await axios.put(
-          'http://localhost:1234/api/services/mesuresSpecifiques/unModeleConnu',
+        const reponse = await testeur.put(
+          '/api/services/mesuresSpecifiques/unModeleConnu',
           {
             statut: '',
             modalites: 'une modalité',
@@ -731,18 +686,15 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           statutsMesures: { unStatut: {} },
         });
 
-        try {
-          await axios.put(
-            'http://localhost:1234/api/services/mesuresSpecifiques/unModeleConnu',
-            {
-              statut: 'unStatut',
-              idsServices: ['S1'],
-            }
-          );
-          expect().fail("L'appel aurait dû lever une erreur.");
-        } catch (e) {
-          expect(e.response.status).to.be(403);
-        }
+        const reponse = await testeur.put(
+          '/api/services/mesuresSpecifiques/unModeleConnu',
+          {
+            statut: 'unStatut',
+            idsServices: ['S1'],
+          }
+        );
+
+        expect(reponse.status).to.be(403);
       });
 
       it('délègue au dépôt de données la mise à jour de chaque mesure pour les services concernés', async () => {
@@ -767,14 +719,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           statutsMesures: { fait: {} },
         });
 
-        await axios.put(
-          'http://localhost:1234/api/services/mesuresSpecifiques/unModeleConnu',
-          {
-            statut: 'fait',
-            modalites: 'une modalité',
-            idsServices: ['S1', 'S2'],
-          }
-        );
+        await testeur.put('/api/services/mesuresSpecifiques/unModeleConnu', {
+          statut: 'fait',
+          modalites: 'une modalité',
+          idsServices: ['S1', 'S2'],
+        });
 
         expect(donneesRecues).to.eql({
           idUtilisateur: 'U1',
@@ -803,36 +752,30 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       ];
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
         .middleware()
         .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/services/export.csv',
-          done
+          testeur.app(),
+          '/api/services/export.csv'
         );
     });
 
-    it('aseptise les identifiants des services à exporter', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['idsServices.*'],
-        {
+    it('aseptise les identifiants des services à exporter', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(['idsServices.*'], testeur.app(), {
           method: 'get',
-          url: 'http://localhost:1234/api/services/export.csv',
-        },
-        done
-      );
+          url: '/api/services/export.csv',
+        });
     });
 
     describe('concernant le paramètre en query string `idsServices`', () => {
       it("retourne une erreur 400 si le paramètre n'est pas un tableau", async () => {
-        try {
-          await axios.get(
-            'http://localhost:1234/api/services/export.csv?idsServices[a]=1' // Sera interprété par express comme {a: 1}
-          );
-          expect().fail("L'appel aurait dû jeter une erreur");
-        } catch (e) {
-          expect(e.response.status).to.be(400);
-        }
+        const reponse = await testeur.get(
+          '/api/services/export.csv?idsServices[a]=1' // Sera interprété par express comme {a: 1}
+        );
+        expect(reponse.status).to.be(400);
       });
 
       it("fonctionne dans le cas où le tableau ne comporte qu'un seul élément", async () => {
@@ -841,8 +784,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         const queryString = new URLSearchParams();
         queryString.append('idsServices', '123');
 
-        const reponse = await axios.get(
-          `http://localhost:1234/api/services/export.csv?${queryString}`
+        const reponse = await testeur.get(
+          `/api/services/export.csv?${queryString}`
         );
 
         expect(reponse.status).to.be(200);
@@ -863,11 +806,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         ];
       };
 
-      await axios.get('http://localhost:1234/api/services/export.csv');
+      await testeur.get('/api/services/export.csv');
       expect(donneesPassees).to.eql({ idUtilisateur: '123' });
     });
 
-    it("interroge le dépôt de données pour récupérer les services de l'utilisateur", (done) => {
+    it("interroge le dépôt de données pour récupérer les services de l'utilisateur", async () => {
       let donneesPassees = {};
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
@@ -876,43 +819,37 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return Promise.resolve([service]);
       };
 
-      axios
-        .get('http://localhost:1234/api/services/export.csv')
-        .then((reponse) => {
-          expect(reponse.status).to.equal(200);
-          expect(donneesPassees.idUtilisateur).to.equal('123');
-          done();
-        })
-        .catch(done);
+      const reponse = await testeur.get('/api/services/export.csv');
+
+      expect(reponse.status).to.equal(200);
+      expect(donneesPassees.idUtilisateur).to.equal('123');
     });
 
-    it('filtre les services en fonction de la requête', (done) => {
-      testeur.depotDonnees().services = () =>
-        Promise.resolve([
-          service,
-          unService()
-            .avecId('789')
-            .avecNomService('Un deuxième service')
-            .ajouteUnContributeur(
-              unUtilisateur().avecEmail('email.proprietaire@mail.fr').donnees
-            )
-            .construis(),
-        ]);
+    it('filtre les services en fonction de la requête', async () => {
+      testeur.depotDonnees().services = async () => [
+        service,
+        unService()
+          .avecId('789')
+          .avecNomService('Un deuxième service')
+          .ajouteUnContributeur(
+            unUtilisateur().avecEmail('email.proprietaire@mail.fr').donnees
+          )
+          .construis(),
+      ];
 
-      testeur.adaptateurCsv().genereCsvServices = (donneesServices) => {
-        expect(donneesServices.length).to.be(1);
-        expect(donneesServices[0].id).to.equal('456');
-        done();
-        return Promise.resolve('Fichier CSV');
+      let donneesRecues;
+      testeur.adaptateurCsv().genereCsvServices = async (donneesServices) => {
+        donneesRecues = donneesServices;
+        return 'Fichier CSV';
       };
 
-      axios
-        .get('http://localhost:1234/api/services/export.csv?idsServices=456')
-        .catch((e) => done(e.response?.data || e));
+      await testeur.get('/api/services/export.csv?idsServices=456');
+      expect(donneesRecues.length).to.be(1);
+      expect(donneesRecues[0].id).to.equal('456');
     });
 
-    it('utilise un adaptateur de CSV pour la génération', (done) => {
-      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+    it('utilise un adaptateur de CSV pour la génération', async () => {
+      await testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
       testeur.depotDonnees().autorisations = async () => [
         uneAutorisation()
@@ -947,43 +884,32 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return Promise.resolve('Fichier CSV');
       };
 
-      axios
-        .get('http://localhost:1234/api/services/export.csv?idsServices=456')
-        .then(() => {
-          expect(adaptateurCsvAppele).to.be(true);
-          done();
-        })
-        .catch((e) => done(e.response?.data || e));
+      await testeur.get('/api/services/export.csv?idsServices=456');
+      expect(adaptateurCsvAppele).to.be(true);
     });
 
-    it('sert un fichier de type CSV', (done) => {
-      verifieTypeFichierServiEstCSV(
-        'http://localhost:1234/api/services/export.csv',
-        done
+    it('sert un fichier de type CSV', async () => {
+      await verifieTypeFichierServiEstCSV(
+        testeur.app(),
+        '/api/services/export.csv'
       );
     });
 
-    it('sert un fichier dont le nom contient la date du jour en format court', (done) => {
+    it('sert un fichier dont le nom contient la date du jour en format court', async () => {
       testeur.adaptateurHorloge().maintenant = () => new Date(2023, 0, 28);
 
-      verifieNomFichierServi(
-        'http://localhost:1234/api/services/export.csv',
-        'MSS_services_20230128.csv',
-        done
+      await verifieNomFichierServi(
+        testeur.app(),
+        '/api/services/export.csv',
+        'MSS_services_20230128.csv'
       );
     });
 
-    it("reste robuste en cas d'échec de génération de CSV", (done) => {
+    it("reste robuste en cas d'échec de génération de CSV", async () => {
       testeur.adaptateurCsv().genereCsvServices = () => Promise.reject();
 
-      axios
-        .get('http://localhost:1234/api/services/export.csv')
-        .then(() => done('La génération aurait dû lever une erreur'))
-        .catch((e) => {
-          expect(e.response.status).to.equal(424);
-          done();
-        })
-        .catch(done);
+      const reponse = await testeur.get('/api/services/export.csv');
+      expect(reponse.status).to.be(424);
     });
   });
 
@@ -1007,16 +933,18 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         utilisateur;
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['cguAcceptees', 'infolettreAcceptee'],
-        {
-          method: 'put',
-          url: 'http://localhost:1234/api/motDePasse',
-          data: { motDePasse: 'mdp', cguAcceptees: true },
-        },
-        done
-      );
+    it('aseptise les paramètres de la requête', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['cguAcceptees', 'infolettreAcceptee'],
+          testeur.app(),
+          {
+            method: 'put',
+            url: '/api/motDePasse',
+            data: { motDePasse: 'mdp', cguAcceptees: true },
+          }
+        );
     });
 
     it('met à jour le mot de passe', async () => {
@@ -1032,7 +960,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         majMotDePasse = { idUtilisateur, motDePasse };
       };
 
-      const reponse = await axios.put('http://localhost:1234/api/motDePasse', {
+      const reponse = await testeur.put('/api/motDePasse', {
         motDePasse: 'mdp_ABC12345',
       });
 
@@ -1041,7 +969,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         motDePasse: 'mdp_ABC12345',
       });
       expect(reponse.status).to.equal(200);
-      expect(reponse.data).to.eql({ idUtilisateur: '123' });
+      expect(reponse.body).to.eql({ idUtilisateur: '123' });
     });
 
     it("retourne une erreur HTTP 422 si le mot de passe n'est pas assez robuste", async () => {
@@ -1050,23 +978,21 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         'Mot de passe trop simple',
         {
           method: 'put',
-          url: 'http://localhost:1234/api/motDePasse',
+          url: '/api/motDePasse',
           data: { motDePasse: '1234' },
         }
       );
     });
 
-    it('pose un nouveau cookie', (done) => {
-      axios
-        .put('http://localhost:1234/api/motDePasse', {
-          motDePasse: 'mdp_ABC12345',
-        })
-        .then((reponse) => testeur.verifieSessionDeposee(reponse, done))
-        .catch((e) => done(e.response?.data || e));
+    it('pose un nouveau cookie', async () => {
+      const reponse = await testeur.put('/api/motDePasse', {
+        motDePasse: 'mdp_ABC12345',
+      });
+      await testeur.verifieSessionDeposee(reponse);
     });
 
     it('ajoute une session utilisateur', async () => {
-      const reponse = await axios.put('http://localhost:1234/api/motDePasse', {
+      const reponse = await testeur.put('/api/motDePasse', {
         motDePasse: 'mdp_ABC12345',
       });
 
@@ -1082,7 +1008,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         inscriptionEffectuee = emailUtilisateur;
       };
 
-      await axios.put('http://localhost:1234/api/motDePasse', {
+      await testeur.put('/api/motDePasse', {
         motDePasse: 'mdp_ABC12345',
       });
 
@@ -1104,7 +1030,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         utilisateurPersiste = { idUtilisateur, donnees };
       };
 
-      await axios.put('http://localhost:1234/api/motDePasse', {
+      await testeur.put('/api/motDePasse', {
         motDePasse: 'mdp_ABC12345',
         infolettreAcceptee: 'true',
       });
@@ -1126,7 +1052,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         utilisateurQuiEstReset = u;
       };
 
-      await axios.put('http://localhost:1234/api/motDePasse', {
+      await testeur.put('/api/motDePasse', {
         motDePasse: 'mdp_ABC12345',
       });
 
@@ -1149,7 +1075,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
             'CGU non acceptées',
             {
               method: 'put',
-              url: 'http://localhost:1234/api/motDePasse',
+              url: '/api/motDePasse',
               data: { motDePasse: 'mdp_12345' },
             }
           );
@@ -1162,11 +1088,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           };
 
           try {
-            await axios.put('http://localhost:1234/api/motDePasse', {
+            await testeur.put('/api/motDePasse', {
               motDePasse: 'mdp_12345',
             });
           } catch (e) {
-            expect(e.response.status).to.be(422);
+            expect(reponse.status).to.be(422);
             expect(motDePasseMisAJour).to.be(false);
           }
         });
@@ -1184,7 +1110,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
             return u;
           };
 
-          await axios.put('http://localhost:1234/api/motDePasse', {
+          await testeur.put('/api/motDePasse', {
             motDePasse: 'mdp_ABC12345',
             cguAcceptees: 'true',
           });
@@ -1198,7 +1124,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
             motDePasseMisAJour = true;
           };
 
-          await axios.put('http://localhost:1234/api/motDePasse', {
+          await testeur.put('/api/motDePasse', {
             motDePasse: 'mdp_ABC12345',
             cguAcceptees: 'true',
           });
@@ -1247,7 +1173,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return u;
       };
 
-      await axios.put('http://localhost:1234/api/utilisateur/acceptationCGU', {
+      await testeur.put('/api/utilisateur/acceptationCGU', {
         cguAcceptees: 'true',
       });
 
@@ -1255,10 +1181,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it('ajoute une session utilisateur', async () => {
-      const reponse = await axios.put(
-        'http://localhost:1234/api/utilisateur/acceptationCGU',
-        { cguAcceptees: 'true' }
-      );
+      const reponse = await testeur.put('/api/utilisateur/acceptationCGU', {
+        cguAcceptees: 'true',
+      });
 
       expectContenuSessionValide(reponse, 'AGENT_CONNECT', true, false);
     });
@@ -1271,14 +1196,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.depotDonnees().metsAJourMotDePasse = async () => utilisateur;
     });
 
-    it('utilise le middleware de challenge du mot de passe', (done) => {
-      testeurMSS().middleware().verifieChallengeMotDePasse(
-        {
+    it('utilise le middleware de challenge du mot de passe', async () => {
+      await testeurMSS()
+        .middleware()
+        .verifieChallengeMotDePasse(testeur.app(), {
           method: 'patch',
-          url: 'http://localhost:1234/api/motDePasse',
-        },
-        done
-      );
+          url: '/api/motDePasse',
+        });
     });
 
     it('met à jour le mot de passe', async () => {
@@ -1294,14 +1218,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return utilisateur;
       };
 
-      const reponse = await axios.patch(
-        'http://localhost:1234/api/motDePasse',
-        { motDePasse: 'mdp_ABC12345' }
-      );
+      const reponse = await testeur.patch('/api/motDePasse', {
+        motDePasse: 'mdp_ABC12345',
+      });
 
       expect(motDePasseMisAJour).to.be(true);
       expect(reponse.status).to.equal(200);
-      expect(reponse.data).to.eql({ idUtilisateur: '123' });
+      expect(reponse.body).to.eql({ idUtilisateur: '123' });
     });
 
     it("retourne une erreur HTTP 422 si le mot de passe n'est pas assez robuste", async () => {
@@ -1310,7 +1233,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         'Mot de passe trop simple',
         {
           method: 'patch',
-          url: 'http://localhost:1234/api/motDePasse',
+          url: '/api/motDePasse',
           data: { motDePasse: '1234' },
         }
       );
@@ -1345,26 +1268,28 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       depotDonnees.utilisateur = () => Promise.resolve(utilisateur);
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        [
-          'prenom',
-          'nom',
-          'telephone',
-          'cguAcceptees',
-          'infolettreAcceptee',
-          'transactionnelAccepte',
-          'postes.*',
-          'estimationNombreServices.*',
-          'siretEntite',
-        ],
-        {
-          method: 'put',
-          url: 'http://localhost:1234/api/utilisateur',
-          data: donneesRequete,
-        },
-        done
-      );
+    it('aseptise les paramètres de la requête', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          [
+            'prenom',
+            'nom',
+            'telephone',
+            'cguAcceptees',
+            'infolettreAcceptee',
+            'transactionnelAccepte',
+            'postes.*',
+            'estimationNombreServices.*',
+            'siretEntite',
+          ],
+          testeur.app(),
+          {
+            method: 'put',
+            url: '/api/utilisateur',
+            data: donneesRequete,
+          }
+        );
     });
 
     it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", async () => {
@@ -1375,7 +1300,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         'La mise à jour de l\'utilisateur a échoué car les paramètres sont invalides. La propriété "prenom" est requise',
         {
           method: 'put',
-          url: 'http://localhost:1234/api/utilisateur',
+          url: '/api/utilisateur',
           data: donneesRequete,
         }
       );
@@ -1392,13 +1317,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return utilisateur;
       };
 
-      const reponse = await axios.put(
-        'http://localhost:1234/api/utilisateur',
-        donneesRequete
-      );
+      const reponse = await testeur.put('/api/utilisateur', donneesRequete);
 
       expect(reponse.status).to.equal(200);
-      expect(reponse.data).to.eql({ idUtilisateur: '123' });
+      expect(reponse.body).to.eql({ idUtilisateur: '123' });
       expect(idRecu).to.equal('123');
       expect(donneesRecues.prenom).to.equal('Jean');
       expect(donneesRecues.nom).to.equal('Dupont');
@@ -1421,10 +1343,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           return utilisateur;
         };
 
-        await axios.put(
-          'http://localhost:1234/api/utilisateur',
-          donneesRequete
-        );
+        await testeur.put('/api/utilisateur', donneesRequete);
 
         expect(versionCGURecue).to.be('v2.0');
       });
@@ -1437,10 +1356,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         };
         delete donneesRequete.cguAcceptees;
 
-        await axios.put(
-          'http://localhost:1234/api/utilisateur',
-          donneesRequete
-        );
+        await testeur.put('/api/utilisateur', donneesRequete);
 
         expect(versionCGURecue).to.be(undefined);
       });
@@ -1462,7 +1378,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       donneesRequete.infolettreAcceptee = 'true';
       donneesRequete.transactionnelAccepte = 'true';
-      await axios.put('http://localhost:1234/api/utilisateur', donneesRequete);
+      await testeur.put('/api/utilisateur', donneesRequete);
 
       expect(preferencesChangees).to.eql({
         infolettreAcceptee: true,
@@ -1484,13 +1400,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           .construis();
       };
 
-      const response = await axios.get(
-        'http://localhost:1234/api/utilisateurCourant'
-      );
+      const reponse = await testeur.get('/api/utilisateurCourant');
 
-      expect(response.status).to.equal(200);
+      expect(reponse.status).to.equal(200);
       expect(idUtilisateurRecu).to.equal('123');
-      const { utilisateur } = response.data;
+      const { utilisateur } = reponse.body;
       expect(utilisateur.prenomNom).to.equal('Marie Jeanne');
     });
 
@@ -1501,19 +1415,17 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       const depotDonnees = testeur.depotDonnees();
       depotDonnees.utilisateur = async () => unUtilisateur().construis();
 
-      const response = await axios.get(
-        'http://localhost:1234/api/utilisateurCourant'
-      );
+      const reponse = await testeur.get('/api/utilisateurCourant');
 
-      const { sourceAuthentification } = response.data;
+      const { sourceAuthentification } = reponse.body;
       expect(sourceAuthentification).to.equal('MSS');
     });
 
-    it("répond avec un code 401 quand il n'y a pas d'identifiant", (done) => {
-      testeur.middleware().reinitialise({ idUtilisateur: '' });
+    it("répond avec un code 401 quand il n'y a pas d'identifiant", async () => {
+      await testeur.middleware().reinitialise({ idUtilisateur: '' });
 
       axios
-        .get('http://localhost:1234/api/utilisateurCourant')
+        .get('/api/utilisateurCourant')
         .then(() => {
           done(new Error('La requête aurait du être en erreur'));
         })
@@ -1533,27 +1445,28 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.procedures().ajoutContributeurSurServices = async () => {};
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['idServices.*', 'emailContributeur'],
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/autorisation',
-          data: { droits: tousDroitsEnEcriture() },
-        },
-        done
-      );
+    it('aseptise les paramètres de la requête', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['idServices.*', 'emailContributeur'],
+          testeur.app(),
+          {
+            method: 'post',
+            url: '/api/autorisation',
+            data: { droits: tousDroitsEnEcriture() },
+          }
+        );
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        {
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'post',
-          url: 'http://localhost:1234/api/autorisation',
+          url: '/api/autorisation',
           data: { droits: tousDroitsEnEcriture() },
-        },
-        done
-      );
+        });
     });
 
     it("appelle la procédure d'ajout de contributeur avec les droits envoyés", async () => {
@@ -1581,7 +1494,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         CONTACTS: 2,
       };
 
-      await axios.post('http://localhost:1234/api/autorisation', {
+      await testeur.post('/api/autorisation', {
         emailContributeur: 'jean.dupont@mail.fr',
         idServices: ['123'],
         droits: droitsEnvoyes,
@@ -1607,7 +1520,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         cibles = services;
       };
 
-      await axios.post('http://localhost:1234/api/autorisation', {
+      await testeur.post('/api/autorisation', {
         emailContributeur: 'jean.dupont@mail.fr',
         idServices: ['123', '456'],
         droits: tousDroitsEnEcriture(),
@@ -1627,7 +1540,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         ajout = { emailContributeur };
       };
 
-      await axios.post('http://localhost:1234/api/autorisation', {
+      await testeur.post('/api/autorisation', {
         emailContributeur: 'JEAN.DUPONT@MAIL.FR',
         idServices: ['123'],
         droits: tousDroitsEnEcriture(),
@@ -1642,20 +1555,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         throw new EchecAutorisation();
       };
 
-      try {
-        await axios.post('http://localhost:1234/api/autorisation', {
-          emailContributeur: 'jean.dupont@mail.fr',
-          idServices: ['123'],
-          droits: tousDroitsEnEcriture(),
-        });
-
-        expect().to.fail('La requête aurait dû lever une erreur HTTP 403');
-      } catch (e) {
-        expect(e.response.status).to.equal(403);
-        expect(e.response.data).to.equal(
-          "Ajout non autorisé d'un contributeur"
-        );
-      }
+      const reponse = await testeur.post('/api/autorisation', {
+        emailContributeur: 'jean.dupont@mail.fr',
+        idServices: ['123'],
+        droits: tousDroitsEnEcriture(),
+      });
+      expect(reponse.status).to.equal(403);
+      expect(reponse.text).to.equal("Ajout non autorisé d'un contributeur");
     });
 
     it('retourne une erreur HTTP 422 si la procédure a levé une `ErreurModele`', async () => {
@@ -1665,7 +1571,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       await testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
         method: 'post',
-        url: 'http://localhost:1234/api/autorisation',
+        url: '/api/autorisation',
         data: { droits: tousDroitsEnEcriture() },
       });
     });
@@ -1676,23 +1582,20 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         { erreur: { code: 'DROITS_INCOHERENTS' } },
         {
           method: 'post',
-          url: 'http://localhost:1234/api/autorisation',
+          url: '/api/autorisation',
           data: { droits: { RUBRIQUE_INCONNUE: 2 } },
         }
       );
     });
 
     it('ne retourne pas une erreur HTTP 422 si les droits contiennent estProprietaire=false', async () => {
-      const reponse = await axios.post(
-        'http://localhost:1234/api/autorisation',
-        {
-          emailContributeur: 'jean.dupont@mail.fr',
-          idServices: ['123'],
-          droits: {
-            estProprietaire: false,
-          },
-        }
-      );
+      const reponse = await testeur.post('/api/autorisation', {
+        emailContributeur: 'jean.dupont@mail.fr',
+        idServices: ['123'],
+        droits: {
+          estProprietaire: false,
+        },
+      });
 
       expect(reponse.status).to.be(200);
     });
@@ -1706,24 +1609,23 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.depotDonnees().supprimeContributeur = async () => {};
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur
+    it('aseptise les paramètres de la requête', async () => {
+      await testeur
         .middleware()
         .verifieAseptisationParametres(
           ['idService', 'idContributeur'],
-          { method: 'delete', url: 'http://localhost:1234/api/autorisation' },
-          done
+          testeur.app(),
+          { method: 'delete', url: '/api/autorisation' }
         );
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        {
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'delete',
-          url: 'http://localhost:1234/api/autorisation',
-        },
-        done
-      );
+          url: '/api/autorisation',
+        });
     });
 
     it("vérifie que l'utilisateur a le droit de supprimer un contributeur", async () => {
@@ -1736,9 +1638,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return uneAutorisation().deProprietaire().construis();
       };
 
-      await axios.delete('http://localhost:1234/api/autorisation', {
-        params: { idService: '123' },
-      });
+      await testeur.delete('/api/autorisation?idService=123');
 
       expect(autorisationCherchee.idUtilisateur).to.be('456');
       expect(autorisationCherchee.idService).to.be('123');
@@ -1748,17 +1648,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       const contributeurSimple = uneAutorisation().deContributeur().construis();
       testeur.depotDonnees().autorisationPour = async () => contributeurSimple;
 
-      try {
-        await axios.delete('http://localhost:1234/api/autorisation', {
-          params: { idService: '123' },
-        });
-        expect().fail('La requête aurait dû lever une erreur HTTP 403');
-      } catch (e) {
-        expect(e.response.status).to.equal(403);
-        expect(e.response.data).to.equal(
-          'Suppression non autorisé pour un contributeur'
-        );
-      }
+      const reponse = await testeur.delete('/api/autorisation?idService=123');
+      expect(reponse.status).to.equal(403);
+      expect(reponse.text).to.equal(
+        'Suppression non autorisé pour un contributeur'
+      );
     });
 
     it("utilise le dépôt de données pour supprimer l'autorisation du contributeur", async () => {
@@ -1776,12 +1670,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return {};
       };
 
-      await axios.delete('http://localhost:1234/api/autorisation', {
-        params: {
-          idService: 'ABC',
-          idContributeur: '999',
-        },
-      });
+      await testeur.delete(
+        '/api/autorisation?idService=ABC&idContributeur=999'
+      );
 
       expect(suppressionDemandee.idContributeur).to.be('999');
       expect(suppressionDemandee.idService).to.be('ABC');
@@ -1798,12 +1689,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           };
         };
 
-      await axios.delete('http://localhost:1234/api/autorisation', {
-        params: {
-          idService: 'ABC',
-          idContributeur: '999',
-        },
-      });
+      await testeur.delete(
+        '/api/autorisation?idService=ABC&idContributeur=999'
+      );
 
       expect(suppressionDemandee.idContributeur).to.be('999');
       expect(suppressionDemandee.idService).to.be('ABC');
@@ -1814,40 +1702,31 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         throw new Error("Un message d'erreur");
       };
 
-      try {
-        await axios.delete('http://localhost:1234/api/autorisation', {
-          params: {
-            idService: '123',
-            emailContributeur: 'jean.dupont@mail.fr',
-          },
-        });
-        expect().fail('La requête aurait dû lever une erreur HTTP 424');
-      } catch (e) {
-        expect(e.response.status).to.equal(424);
-        expect(e.response.data).to.equal("Un message d'erreur");
-      }
+      const reponse = await testeur.delete(
+        '/api/autorisation?idService=123&emailContributeur=jean.dupont@mail.fr'
+      );
+      expect(reponse.status).to.equal(424);
+      expect(reponse.text).to.equal("Un message d'erreur");
     });
   });
 
   describe('quand requête GET sur `/api/annuaire/contributeurs`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
         .middleware()
         .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/annuaire/contributeurs',
-          done
+          testeur.app(),
+          '/api/annuaire/contributeurs'
         );
     });
 
-    it('aseptise la chaine de recherche', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['recherche'],
-        {
+    it('aseptise la chaine de recherche', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(['recherche'], testeur.app(), {
           method: 'get',
-          url: 'http://localhost:1234/api/annuaire/contributeurs',
-        },
-        done
-      );
+          url: '/api/annuaire/contributeurs',
+        });
     });
 
     it('retourne une erreur HTTP 400 si le terme de recherche est vide', async () => {
@@ -1856,7 +1735,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         'Le terme de recherche ne peut pas être vide',
         {
           method: 'get',
-          url: 'http://localhost:1234/api/annuaire/contributeurs',
+          url: '/api/annuaire/contributeurs',
         }
       );
     });
@@ -1879,13 +1758,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         ];
       };
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/annuaire/contributeurs?recherche=jean'
+      const reponse = await testeur.get(
+        '/api/annuaire/contributeurs?recherche=jean'
       );
 
       expect(appelDepot).to.eql({ idUtilisateur: '123', recherche: 'jean' });
       expect(reponse.status).to.be(200);
-      expect(reponse.data.suggestions).to.eql([
+      expect(reponse.body.suggestions).to.eql([
         {
           prenomNom: 'Jean Dujardin',
           email: 'jean.dujardin@beta.gouv.fr',
@@ -1901,45 +1780,44 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.depotDonnees().estSuperviseur = async () => true;
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
         .middleware()
-        .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/supervision',
-          done
-        );
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), '/api/supervision');
     });
 
     it("retourne une erreur HTTP 401 si l'utilisateur n'est pas superviseur", async () => {
       testeur.depotDonnees().estSuperviseur = async () => false;
       await testeur.verifieRequeteGenereErreurHTTP(401, 'Unauthorized', {
         method: 'get',
-        url: 'http://localhost:1234/api/supervision',
+        url: '/api/supervision',
       });
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['filtreDate', 'filtreBesoinsSecurite', 'filtreEntite'],
-        {
-          method: 'get',
-          url: 'http://localhost:1234/api/supervision',
-        },
-        done
-      );
+    it('aseptise les paramètres de la requête', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['filtreDate', 'filtreBesoinsSecurite', 'filtreEntite'],
+          testeur.app(),
+          {
+            method: 'get',
+            url: '/api/supervision',
+          }
+        );
     });
 
     it("retourne une erreur HTTP 400 si le filtre de date n'existe pas dans le référentiel", async () => {
       await testeur.verifieRequeteGenereErreurHTTP(400, 'Bad Request', {
         method: 'get',
-        url: 'http://localhost:1234/api/supervision?filtreDate=nexistePas',
+        url: '/api/supervision?filtreDate=nexistePas',
       });
     });
 
     it('retourne une erreur HTTP 400 si le filtre de besoinsDeSecurite a une valeur inconnue', async () => {
       await testeur.verifieRequeteGenereErreurHTTP(400, 'Bad Request', {
         method: 'get',
-        url: 'http://localhost:1234/api/supervision?filtreBesoinsSecurite=nexistePas',
+        url: '/api/supervision?filtreBesoinsSecurite=nexistePas',
       });
     });
 
@@ -1951,10 +1829,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return 'https://uneURLSupervision.fr';
       };
 
-      const reponse = await axios.get('http://localhost:1234/api/supervision');
+      const reponse = await testeur.get('/api/supervision');
 
       expect(idRecu).to.be('U1');
-      expect(reponse.data.urlSupervision).to.be('https://uneURLSupervision.fr');
+      expect(reponse.body.urlSupervision).to.be('https://uneURLSupervision.fr');
     });
 
     it('transmet les filtres de date, entité et besoins de sécurité au service de supervision', async () => {
@@ -1970,8 +1848,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return 'https://uneURLSupervision.fr';
       };
 
-      await axios.get(
-        'http://localhost:1234/api/supervision?filtreDate=unFiltreDate&filtreBesoinsSecurite=niveau1&filtreEntite=unSiret'
+      await testeur.get(
+        '/api/supervision?filtreDate=unFiltreDate&filtreBesoinsSecurite=niveau1&filtreEntite=unSiret'
       );
 
       expect(filtrageRecu.filtreDate).to.be('unFiltreDate');
@@ -1981,12 +1859,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête GET sur `/api/referentiel/mesures`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
         .middleware()
         .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/referentiel/mesures',
-          done
+          testeur.app(),
+          '/api/referentiel/mesures'
         );
     });
 
@@ -1998,12 +1876,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         },
       });
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/referentiel/mesures'
-      );
+      const reponse = await testeur.get('/api/referentiel/mesures');
 
       expect(reponse.status).to.be(200);
-      expect(reponse.data).to.eql({
+      expect(reponse.body).to.eql({
         mesureA: 'une mesure A',
         mesureB: 'une mesure B',
       });
@@ -2011,12 +1887,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête GET sur `/api/modeles/mesureSpecifique`', () => {
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
         .middleware()
         .verifieRequeteExigeAcceptationCGU(
-          'http://localhost:1234/api/modeles/mesureSpecifique',
-          done
+          testeur.app(),
+          '/api/modeles/mesureSpecifique'
         );
     });
 
@@ -2030,12 +1906,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return [];
       };
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/modeles/mesureSpecifique'
-      );
+      const reponse = await testeur.get('/api/modeles/mesureSpecifique');
 
       expect(reponse.status).to.be(200);
-      expect(reponse.data).to.eql([]);
+      expect(reponse.body).to.eql([]);
       expect(idRecu).to.be('U1');
     });
 
@@ -2052,12 +1926,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           },
         ];
 
-      const reponse = await axios.get(
-        'http://localhost:1234/api/modeles/mesureSpecifique'
-      );
+      const reponse = await testeur.get('/api/modeles/mesureSpecifique');
 
-      expect(reponse.data[0].description).to.be("L'abricot <>");
-      expect(reponse.data[0].descriptionLongue).to.be("L'artiste");
+      expect(reponse.body[0].description).to.be("L'abricot <>");
+      expect(reponse.body[0].descriptionLongue).to.be("L'artiste");
     });
   });
 
@@ -2071,55 +1943,47 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        {
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'post',
-          url: 'http://localhost:1234/api/modeles/mesureSpecifique',
-        },
-        done
-      );
+          url: '/api/modeles/mesureSpecifique',
+        });
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['description', 'descriptionLongue', 'categorie'],
-        {
-          method: 'post',
-          url: 'http://localhost:1234/api/modeles/mesureSpecifique',
-        },
-        done
-      );
+    it('aseptise les paramètres de la requête', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['description', 'descriptionLongue', 'categorie'],
+          testeur.app(),
+          {
+            method: 'post',
+            url: '/api/modeles/mesureSpecifique',
+          }
+        );
     });
 
     it('jette une erreur si la catégorie est invalide', async () => {
-      try {
-        await axios.post('http://localhost:1234/api/modeles/mesureSpecifique', {
-          description: 'une description',
-          descriptionLongue: 'une description longue',
-          categorie: 'une categorie invalide',
-        });
+      const reponse = await testeur.post('/api/modeles/mesureSpecifique', {
+        description: 'une description',
+        descriptionLongue: 'une description longue',
+        categorie: 'une categorie invalide',
+      });
 
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-        expect(e.response.data).to.be('La catégorie est invalide');
-      }
+      expect(reponse.status).to.be(400);
+      expect(reponse.text).to.be('La catégorie est invalide');
     });
 
     it("jette une erreur si la description n'est pas renseignée", async () => {
-      try {
-        await axios.post('http://localhost:1234/api/modeles/mesureSpecifique', {
-          description: '',
-          descriptionLongue: 'une description longue',
-          categorie: 'gouvernance',
-        });
-
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-        expect(e.response.data).to.be('La description est obligatoire');
-      }
+      const reponse = await testeur.post('/api/modeles/mesureSpecifique', {
+        description: '',
+        descriptionLongue: 'une description longue',
+        categorie: 'gouvernance',
+      });
+      expect(reponse.status).to.be(400);
+      expect(reponse.text).to.be('La description est obligatoire');
     });
 
     it("délègue au dépôt de données l'ajout du modèle de mesure spécifique", async () => {
@@ -2131,7 +1995,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         donneesRecues = { idUtilisateur, donnees };
       };
 
-      await axios.post('http://localhost:1234/api/modeles/mesureSpecifique', {
+      await testeur.post('/api/modeles/mesureSpecifique', {
         description: 'une description',
         descriptionLongue: 'une description longue',
         categorie: 'gouvernance',
@@ -2150,31 +2014,24 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         throw new ErreurNombreLimiteModelesMesureSpecifiqueAtteint();
       };
 
-      try {
-        await axios.post('http://localhost:1234/api/modeles/mesureSpecifique', {
-          description: 'une description',
-          categorie: 'gouvernance',
-        });
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(403);
-        expect(e.response.data).to.be('Limite de création atteinte');
-      }
+      const reponse = await testeur.post('/api/modeles/mesureSpecifique', {
+        description: 'une description',
+        categorie: 'gouvernance',
+      });
+      expect(reponse.status).to.be(403);
+      expect(reponse.text).to.be('Limite de création atteinte');
     });
 
     it("retourne 201 et l'identifiant du modèle créé", async () => {
       testeur.depotDonnees().ajouteModeleMesureSpecifique = async () => 'MOD-1';
 
-      const reponse = await axios.post(
-        'http://localhost:1234/api/modeles/mesureSpecifique',
-        {
-          description: 'une description',
-          categorie: 'gouvernance',
-        }
-      );
+      const reponse = await testeur.post('/api/modeles/mesureSpecifique', {
+        description: 'une description',
+        categorie: 'gouvernance',
+      });
 
       expect(reponse.status).to.be(201);
-      expect(reponse.data).to.eql({
+      expect(reponse.body).to.eql({
         id: 'MOD-1',
       });
     });
@@ -2190,45 +2047,42 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        {
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'put',
-          url: 'http://localhost:1234/api/modeles/mesureSpecifique/unIdDeModele',
-        },
-        done
-      );
+          url: '/api/modeles/mesureSpecifique/unIdDeModele',
+        });
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['description', 'descriptionLongue', 'categorie'],
-        {
-          method: 'put',
-          url: 'http://localhost:1234/api/modeles/mesureSpecifique/unIdDeModele',
-        },
-        done
-      );
+    it('aseptise les paramètres de la requête', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['description', 'descriptionLongue', 'categorie'],
+          testeur.app(),
+          {
+            method: 'put',
+            url: '/api/modeles/mesureSpecifique/unIdDeModele',
+          }
+        );
     });
 
     it("jette une erreur si le modele de mesure spécifique n'existe pas", async () => {
       testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur =
         async () => [];
 
-      try {
-        await axios.put(
-          'http://localhost:1234/api/modeles/mesureSpecifique/unIdInexistant',
-          {
-            description: 'une description',
-            descriptionLongue: 'une description longue',
-            categorie: 'gouvernance',
-          }
-        );
+      const reponse = await testeur.put(
+        '/api/modeles/mesureSpecifique/unIdInexistant',
+        {
+          description: 'une description',
+          descriptionLongue: 'une description longue',
+          categorie: 'gouvernance',
+        }
+      );
 
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(404);
-      }
+      expect(reponse.status).to.be(404);
     });
 
     describe('quand le modèle de mesure spécifique existe', () => {
@@ -2245,39 +2099,31 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
 
       it('jette une erreur si la catégorie est invalide', async () => {
-        try {
-          await axios.put(
-            'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1',
-            {
-              description: 'une description',
-              descriptionLongue: 'une description longue',
-              categorie: 'une categorie invalide',
-            }
-          );
+        const reponse = await testeur.put(
+          '/api/modeles/mesureSpecifique/MOD-1',
+          {
+            description: 'une description',
+            descriptionLongue: 'une description longue',
+            categorie: 'une categorie invalide',
+          }
+        );
 
-          expect().fail('Aurait dû lever une erreur');
-        } catch (e) {
-          expect(e.response.status).to.be(400);
-          expect(e.response.data).to.be('La catégorie est invalide');
-        }
+        expect(reponse.status).to.be(400);
+        expect(reponse.text).to.be('La catégorie est invalide');
       });
 
       it("jette une erreur si la description n'est pas renseignée", async () => {
-        try {
-          await axios.put(
-            'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1',
-            {
-              description: '',
-              descriptionLongue: 'une description longue',
-              categorie: 'gouvernance',
-            }
-          );
+        const reponse = await testeur.put(
+          '/api/modeles/mesureSpecifique/MOD-1',
+          {
+            description: '',
+            descriptionLongue: 'une description longue',
+            categorie: 'gouvernance',
+          }
+        );
 
-          expect().fail('Aurait dû lever une erreur');
-        } catch (e) {
-          expect(e.response.status).to.be(400);
-          expect(e.response.data).to.be('La description est obligatoire');
-        }
+        expect(reponse.status).to.be(400);
+        expect(reponse.text).to.be('La description est obligatoire');
       });
 
       it('délègue au dépôt de données la mise à jour du modèle de mesure spécifique', async () => {
@@ -2290,8 +2136,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           donneesRecues = { idUtilisateur, idModele, donnees };
         };
 
-        const reponse = await axios.put(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1',
+        const reponse = await testeur.put(
+          '/api/modeles/mesureSpecifique/MOD-1',
           {
             description: 'une description',
             descriptionLongue: 'une description longue',
@@ -2327,37 +2173,34 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         ];
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        {
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'put',
-          url: 'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services',
-        },
-        done
-      );
+          url: '/api/modeles/mesureSpecifique/MOD-1/services',
+        });
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['idsServicesAAssocier.*'],
-        {
-          method: 'put',
-          url: 'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services',
-        },
-        done
-      );
+    it('aseptise les paramètres de la requête', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(
+          ['idsServicesAAssocier.*'],
+          testeur.app(),
+          {
+            method: 'put',
+            url: '/api/modeles/mesureSpecifique/MOD-1/services',
+          }
+        );
     });
 
     it("jette une erreur si le modele de mesure spécifique n'existe pas", async () => {
-      try {
-        await axios.put(
-          'http://localhost:1234/api/modeles/mesureSpecifique/unIdInexistant/services'
-        );
+      const reponse = await testeur.put(
+        '/api/modeles/mesureSpecifique/unIdInexistant/services'
+      );
 
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(404);
-      }
+      expect(reponse.status).to.be(404);
     });
 
     it("délègue au dépôt de données l'association des services au modèle de mesure spécifique", async () => {
@@ -2370,8 +2213,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         donneesRecues = { idModele, idsServices, idUtilisateurAssociant };
       };
 
-      const reponse = await axios.put(
-        'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services',
+      const reponse = await testeur.put(
+        '/api/modeles/mesureSpecifique/MOD-1/services',
         {
           idsServicesAAssocier: ['S1', 'S2'],
         }
@@ -2388,15 +2231,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         async () => {
           throw new ErreurModeleDeMesureSpecifiqueDejaAssociee();
         };
-      try {
-        await axios.put(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
-        );
-
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      const reponse = await testeur.put(
+        '/api/modeles/mesureSpecifique/MOD-1/services'
+      );
+      expect(reponse.status).to.be(400);
     });
 
     it('jette une erreur si les droits de modification de services sont insuffisants', async () => {
@@ -2404,15 +2242,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         async () => {
           throw new ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique();
         };
-      try {
-        await axios.put(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
-        );
-
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(403);
-      }
+      const reponse = await testeur.put(
+        '/api/modeles/mesureSpecifique/MOD-1/services'
+      );
+      expect(reponse.status).to.be(403);
     });
 
     it("jette une erreur si l'utilisateur ne possède pas le modèle", async () => {
@@ -2420,15 +2253,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         async () => {
           throw new ErreurAutorisationInexistante();
         };
-      try {
-        await axios.put(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
-        );
-
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(404);
-      }
+      const reponse = await testeur.put(
+        '/api/modeles/mesureSpecifique/MOD-1/services'
+      );
+      expect(reponse.status).to.be(404);
     });
 
     it("jette une erreur si l'un des services n'existe pas", async () => {
@@ -2436,15 +2264,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         async () => {
           throw new ErreurServiceInexistant();
         };
-      try {
-        await axios.put(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
-        );
-
-        expect().fail('Aurait dû lever une erreur');
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      const reponse = await testeur.put(
+        '/api/modeles/mesureSpecifique/MOD-1/services'
+      );
+      expect(reponse.status).to.be(400);
     });
   });
 
@@ -2457,25 +2280,22 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         () => {};
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        {
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'delete',
-          url: 'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1',
-        },
-        done
-      );
+          url: '/api/modeles/mesureSpecifique/MOD-1',
+        });
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['detacheMesures'],
-        {
+    it('aseptise les paramètres de la requête', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(['detacheMesures'], testeur.app(), {
           method: 'delete',
-          url: 'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1',
-        },
-        done
-      );
+          url: '/api/modeles/mesureSpecifique/MOD-1',
+        });
     });
 
     describe('sans paramètre pour conserver les mesures associées', () => {
@@ -2486,9 +2306,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
             donneesRecues = { idUtilisateur, idModele };
           };
 
-        await axios.delete(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1'
-        );
+        await testeur.delete('/api/modeles/mesureSpecifique/MOD-1');
 
         expect(donneesRecues.idUtilisateur).to.be('U1');
         expect(donneesRecues.idModele).to.be('MOD-1');
@@ -2501,14 +2319,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
               'MOD-INEXISTANT'
             );
           };
-        try {
-          await axios.delete(
-            'http://localhost:1234/api/modeles/mesureSpecifique/MOD-INEXISTANT'
-          );
-          expect().fail("L'appel aurait dû lever une erreur");
-        } catch (e) {
-          expect(e.response.status).to.be(404);
-        }
+        const reponse = await testeur.delete(
+          '/api/modeles/mesureSpecifique/MOD-INEXISTANT'
+        );
+        expect(reponse.status).to.be(404);
       });
 
       it("jette une 403 si l'utilisateur ne possède pas le modèle", async () => {
@@ -2516,14 +2330,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           async () => {
             throw new ErreurAutorisationInexistante();
           };
-        try {
-          await axios.delete(
-            'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1'
-          );
-          expect().fail("L'appel aurait dû lever une erreur");
-        } catch (e) {
-          expect(e.response.status).to.be(403);
-        }
+        const reponse = await testeur.delete(
+          '/api/modeles/mesureSpecifique/MOD-1'
+        );
+        expect(reponse.status).to.be(403);
       });
 
       it("jette une 403 si l'utilisateur ne peut pas modifier tous les services associés", async () => {
@@ -2535,14 +2345,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
               {}
             );
           };
-        try {
-          await axios.delete(
-            'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1'
-          );
-          expect().fail("L'appel aurait dû lever une erreur");
-        } catch (e) {
-          expect(e.response.status).to.be(403);
-        }
+        const reponse = await testeur.delete(
+          '/api/modeles/mesureSpecifique/MOD-1'
+        );
+        expect(reponse.status).to.be(403);
       });
     });
     describe('avec paramètre pour détacher les mesures associées', () => {
@@ -2553,8 +2359,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
             donneesRecues = { idUtilisateur, idModele };
           };
 
-        await axios.delete(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1?detacheMesures=true'
+        await testeur.delete(
+          '/api/modeles/mesureSpecifique/MOD-1?detacheMesures=true'
         );
 
         expect(donneesRecues.idUtilisateur).to.be('U1');
@@ -2567,14 +2373,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         async () => {
           throw new ErreurModeleDeMesureSpecifiqueIntrouvable('MOD-INEXISTANT');
         };
-      try {
-        await axios.delete(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-INEXISTANT?detacheMesures=true'
-        );
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(404);
-      }
+      const reponse = await testeur.delete(
+        '/api/modeles/mesureSpecifique/MOD-INEXISTANT?detacheMesures=true'
+      );
+      expect(reponse.status).to.be(404);
     });
 
     it("jette une 403 si l'utilisateur ne possède pas le modèle", async () => {
@@ -2582,14 +2384,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         async () => {
           throw new ErreurAutorisationInexistante();
         };
-      try {
-        await axios.delete(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1?detacheMesures=true'
-        );
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(403);
-      }
+      const reponse = await testeur.delete(
+        '/api/modeles/mesureSpecifique/MOD-1?detacheMesures=true'
+      );
+      expect(reponse.status).to.be(403);
     });
 
     it("jette une 403 si l'utilisateur ne peut pas modifier tous les services associés", async () => {
@@ -2601,14 +2399,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
             {}
           );
         };
-      try {
-        await axios.delete(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1?detacheMesures=true'
-        );
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(403);
-      }
+      const reponse = await testeur.delete(
+        '/api/modeles/mesureSpecifique/MOD-1?detacheMesures=true'
+      );
+      expect(reponse.status).to.be(403);
     });
   });
 
@@ -2619,25 +2413,22 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         async () => {};
     });
 
-    it("vérifie que l'utilisateur est authentifié", (done) => {
-      testeur.middleware().verifieRequeteExigeAcceptationCGU(
-        {
+    it("vérifie que l'utilisateur est authentifié", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'delete',
-          url: 'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services',
-        },
-        done
-      );
+          url: '/api/modeles/mesureSpecifique/MOD-1/services',
+        });
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
-      testeur.middleware().verifieAseptisationParametres(
-        ['idsServices.*'],
-        {
+    it('aseptise les paramètres de la requête', async () => {
+      await testeur
+        .middleware()
+        .verifieAseptisationParametres(['idsServices.*'], testeur.app(), {
           method: 'delete',
-          url: 'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services',
-        },
-        done
-      );
+          url: '/api/modeles/mesureSpecifique/MOD-1/services',
+        });
     });
 
     it('délègue au dépôt de données la suppression des mesures associées au modèle', async () => {
@@ -2650,10 +2441,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         donneesRecues = { idUtilisateur, idModele, idsServices };
       };
 
-      await axios.delete(
-        'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services',
-        { data: { idsServices: ['S1'] } }
-      );
+      await testeur.delete('/api/modeles/mesureSpecifique/MOD-1/services', {
+        idsServices: ['S1'],
+      });
 
       expect(donneesRecues.idUtilisateur).to.be('U1');
       expect(donneesRecues.idModele).to.be('MOD-1');
@@ -2664,28 +2454,20 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.depotDonnees().supprimeDesMesuresAssocieesAuModele = async () => {
         throw new ErreurModeleDeMesureSpecifiqueIntrouvable('MOD-INEXISTANT');
       };
-      try {
-        await axios.delete(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-INEXISTANT/services'
-        );
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(404);
-      }
+      const reponse = await testeur.delete(
+        '/api/modeles/mesureSpecifique/MOD-INEXISTANT/services'
+      );
+      expect(reponse.status).to.be(404);
     });
 
     it("jette une 403 si l'utilisateur ne possède pas le modèle", async () => {
       testeur.depotDonnees().supprimeDesMesuresAssocieesAuModele = async () => {
         throw new ErreurAutorisationInexistante();
       };
-      try {
-        await axios.delete(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
-        );
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(403);
-      }
+      const reponse = await testeur.delete(
+        '/api/modeles/mesureSpecifique/MOD-1/services'
+      );
+      expect(reponse.status).to.be(403);
     });
 
     it("jette une 403 si l'utilisateur ne peut pas modifier tous les services passés en paramètres", async () => {
@@ -2696,28 +2478,20 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           {}
         );
       };
-      try {
-        await axios.delete(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
-        );
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(403);
-      }
+      const reponse = await testeur.delete(
+        '/api/modeles/mesureSpecifique/MOD-1/services'
+      );
+      expect(reponse.status).to.be(403);
     });
 
     it("jette une 400 si l'un des services passés en paramètres n'existe pas", async () => {
       testeur.depotDonnees().supprimeDesMesuresAssocieesAuModele = async () => {
         throw new ErreurServiceInexistant();
       };
-      try {
-        await axios.delete(
-          'http://localhost:1234/api/modeles/mesureSpecifique/MOD-1/services'
-        );
-        expect().fail("L'appel aurait dû lever une erreur");
-      } catch (e) {
-        expect(e.response.status).to.be(400);
-      }
+      const reponse = await testeur.delete(
+        '/api/modeles/mesureSpecifique/MOD-1/services'
+      );
+      expect(reponse.status).to.be(400);
     });
   });
 });
