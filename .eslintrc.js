@@ -1,15 +1,12 @@
 module.exports = {
   env: {
     browser: true,
-    commonjs: true,
-    es2021: true,
     jquery: true,
     mocha: true,
   },
   extends: ['airbnb-base', 'prettier'],
   globals: {
     axios: 'readonly',
-    moment: 'readonly',
   },
   parserOptions: {
     ecmaVersion: 2022,
@@ -78,7 +75,7 @@ module.exports = {
           },
         },
       },
-      plugins: ['mocha', '@typescript-eslint'],
+      plugins: ['@typescript-eslint'],
       rules: {
         '@typescript-eslint/no-require-imports': 'off',
         '@typescript-eslint/no-var-requires': 'off',
