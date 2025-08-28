@@ -1,21 +1,13 @@
 const vitest = require('@vitest/eslint-plugin');
 
 module.exports = {
-  env: {
-    browser: true,
-    commonjs: true,
-    es2021: true,
-    jquery: true,
-  },
+  env: { browser: true, jquery: true },
   extends: ['airbnb-base', 'prettier', 'plugin:@vitest/legacy-recommended'],
   globals: {
     axios: 'readonly',
-    moment: 'readonly',
     ...vitest.environments.env.globals,
   },
-  parserOptions: {
-    ecmaVersion: 2022,
-  },
+  parserOptions: { ecmaVersion: 2022 },
   plugins: ['@vitest'],
   ignorePatterns: [
     'public/bibliotheques/*.js',
