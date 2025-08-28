@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "knex migrate:latest && npm run build:front && npx tsc && npm run cree-utilisateur-demo",
+    "build": "knex migrate:latest && npm run build:front && npm run build:cree-utilisateur-demo",
     "build:front": "npx vite build --config svelte/vite.config.mts",
-    "cree-utilisateur-demo": "npx tsc && node dist/creeUtilisateurDemo.js",
+    "build:back": "npx tsc",
+    "build:cree-utilisateur-demo": "npm run build:back && node dist/creeUtilisateurDemo.js",
     "test": "eslint . && vitest",
     "test:watch": "vitest",
     "start": "node --require dotenv/config dist/server.js",
