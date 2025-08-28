@@ -34,12 +34,11 @@ describe('Une mesure', () => {
     );
   });
 
-  elle("ne tient pas compte du statut s'il n'est pas renseigné", (done) => {
+  elle("ne tient pas compte du statut s'il n'est pas renseigné", () => {
     try {
       Mesure.valide({ statut: undefined });
-      done();
     } catch {
-      done(
+      expect.fail(
         "La validation de la mesure sans statut n'aurait pas dû lever d'exception."
       );
     }

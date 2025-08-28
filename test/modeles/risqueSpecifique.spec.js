@@ -59,16 +59,15 @@ describe('Un risque spécifique', () => {
     expect(risque.categoriesRisque()).to.eql(['C1', 'C2']);
   });
 
-  it('vérifie que le niveau de gravité est bien répertorié', (done) => {
+  it('vérifie que le niveau de gravité est bien répertorié', () => {
     try {
       new RisqueSpecifique({ niveauGravite: 'niveauInconnu' }, referentiel);
-      done('La création du risque aurait dû lever une exception.');
+      expect().fail('La création du risque aurait dû lever une exception.');
     } catch (e) {
       expect(e).to.be.a(ErreurNiveauGraviteInconnu);
       expect(e.message).to.equal(
         'Le niveau de gravité "niveauInconnu" n\'est pas répertorié'
       );
-      done();
     }
   });
 });

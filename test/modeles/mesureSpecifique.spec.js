@@ -73,14 +73,13 @@ describe('Une mesure spécifique', () => {
     expect(mesure.statutSaisie()).to.equal(InformationsService.COMPLETES);
   });
 
-  it('vérifie que le statut est bien valide', (done) => {
+  it('vérifie que le statut est bien valide', () => {
     try {
       new MesureSpecifique({ statut: 'statutInconnu' });
-      done('La création de la mesure aurait dû lever une exception.');
+      expect.fail('La création de la mesure aurait dû lever une exception.');
     } catch (e) {
       expect(e).to.be.an(ErreurStatutMesureInvalide);
       expect(e.message).to.equal('Le statut "statutInconnu" est invalide');
-      done();
     }
   });
 
@@ -105,25 +104,23 @@ describe('Une mesure spécifique', () => {
     }
   });
 
-  it('vérifie que la catégorie est bien répertoriée', (done) => {
+  it('vérifie que la catégorie est bien répertoriée', () => {
     try {
       new MesureSpecifique({ categorie: 'categorieInconnue' });
-      done('La création de la mesure aurait dû lever une exception.');
+      expect().fail('La création de la mesure aurait dû lever une exception.');
     } catch (e) {
       expect(e).to.be.an(ErreurCategorieInconnue);
       expect(e.message).to.equal(
         'La catégorie "categorieInconnue" n\'est pas répertoriée'
       );
-      done();
     }
   });
 
-  it("ne tient pas compte de la catégorie si elle n'est pas renseignée", (done) => {
+  it("ne tient pas compte de la catégorie si elle n'est pas renseignée", () => {
     try {
       new MesureSpecifique();
-      done();
     } catch {
-      done(
+      expect().fail(
         "La création de la mesure sans catégorie n'aurait pas dû lever d'exception."
       );
     }

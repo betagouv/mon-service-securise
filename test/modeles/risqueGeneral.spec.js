@@ -85,16 +85,15 @@ describe('Un risque général', () => {
     });
   });
 
-  it('vérifie que le risque est bien répertorié', (done) => {
+  it('vérifie que le risque est bien répertorié', () => {
     try {
       new RisqueGeneral({ id: 'identifiantInconnu' }, referentiel);
-      done('La création du risque aurait dû lever une exception.');
+      expect().fail('La création du risque aurait dû lever une exception.');
     } catch (e) {
       expect(e).to.be.a(ErreurRisqueInconnu);
       expect(e.message).to.equal(
         'Le risque "identifiantInconnu" n\'est pas répertorié'
       );
-      done();
     }
   });
 
