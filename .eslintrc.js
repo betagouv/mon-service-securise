@@ -1,28 +1,29 @@
+const vitest = require('@vitest/eslint-plugin');
+
 module.exports = {
   env: {
     browser: true,
     commonjs: true,
     es2021: true,
     jquery: true,
-    mocha: true,
   },
-  extends: ['airbnb-base', 'prettier'],
+  extends: ['airbnb-base', 'prettier', 'plugin:@vitest/legacy-recommended'],
   globals: {
     axios: 'readonly',
     moment: 'readonly',
+    ...vitest.environments.env.globals,
   },
   parserOptions: {
     ecmaVersion: 2022,
   },
+  plugins: ['@vitest'],
   ignorePatterns: [
     'public/bibliotheques/*.js',
     'public/composants-svelte/*.js',
     'public/composants-svelte/*.mjs',
     'dist/',
   ],
-  plugins: ['mocha'],
   rules: {
-    'mocha/no-exclusive-tests': 'error',
     'no-param-reassign': ['error', { props: false }],
     'no-return-assign': ['error', 'except-parens'],
     'no-underscore-dangle': ['error', { allow: ['_paq', '_mtm'] }],
@@ -34,6 +35,7 @@ module.exports = {
         ignoreRestSiblings: true,
       },
     ],
+    '@vitest/expect-expect': 'off',
   },
   settings: {
     'import/resolver': {
@@ -78,7 +80,7 @@ module.exports = {
           },
         },
       },
-      plugins: ['mocha', '@typescript-eslint'],
+      plugins: ['@typescript-eslint'],
       rules: {
         '@typescript-eslint/no-require-imports': 'off',
         '@typescript-eslint/no-var-requires': 'off',
