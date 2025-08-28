@@ -23,9 +23,7 @@ function patchKnexFirst(knexInstance) {
 }
 
 // eslint-disable-next-line func-names
-describe("L'adaptateur persistance Postgres", function () {
-  this.timeout(5000);
-
+describe("L'adaptateur persistance Postgres", () => {
   let knex;
   let persistance;
   const ID_UTILISATEUR_1 = genereUUID();
