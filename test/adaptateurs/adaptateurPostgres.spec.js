@@ -30,7 +30,7 @@ describe("L'adaptateur persistance Postgres", () => {
   const ID_UTILISATEUR_2 = genereUUID();
   const ID_SERVICE_1 = genereUUID();
 
-  before(async () => {
+  beforeAll(async () => {
     knex = Knex({
       client: ClientPgLite,
       dialect: 'postgres',
@@ -54,7 +54,7 @@ describe("L'adaptateur persistance Postgres", () => {
     );
   });
 
-  after(async () => {
+  afterAll(async () => {
     await knex.destroy();
   });
 
