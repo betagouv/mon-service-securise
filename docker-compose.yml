@@ -33,7 +33,7 @@ services:
     command: bash -c "
       npx knex migrate:latest
       && npx concurrently -n \"SERVEUR,FRONT SVELTE\" -c \"blue.bold,magenta.underline\"
-      \"npx nodemon server.ts\"
+      \"node --watch --import tsx server.ts\"
       \"npm run build:front -- --watch --minify false\"
       "
     environment:
