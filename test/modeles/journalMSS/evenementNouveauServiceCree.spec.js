@@ -38,34 +38,32 @@ describe('Un événement de nouveau service créé', () => {
     });
   });
 
-  it("exige que l'identifiant utilisateur associé au service soit renseigné", (done) => {
+  it("exige que l'identifiant utilisateur associé au service soit renseigné", () => {
     try {
       new EvenementNouveauServiceCree(
         { idService: 'ABC' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 
-  it("exige que l'identifiant du service créé soit renseigné", (done) => {
+  it("exige que l'identifiant du service créé soit renseigné", () => {
     try {
       new EvenementNouveauServiceCree(
         { idUtilisateur: 'DEF' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 });

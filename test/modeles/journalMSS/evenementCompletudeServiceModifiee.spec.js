@@ -173,16 +173,15 @@ describe('Un événement de complétude modifiée', () => {
     });
   });
 
-  it('exige que le service soit renseigné', (done) => {
+  it('exige que le service soit renseigné', () => {
     try {
       unEvenement().sans('service').construis();
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 });

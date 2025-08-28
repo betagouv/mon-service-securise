@@ -29,29 +29,31 @@ describe('Un événement de service rattaché à un prestataire', () => {
     });
   });
 
-  it("exige que l'identifiant du service soit renseigné", (done) => {
+  it("exige que l'identifiant du service soit renseigné", () => {
     try {
       new EvenementServiceRattacheAPrestataire(
         { codePrestataire: 'PRESTA-1' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
-      done("L'instanciation de l'événement aurait dû lever une exception");
+      expect().fail(
+        "L'instanciation de l'événement aurait dû lever une exception"
+      );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 
-  it('exige que le code prestataire soit renseigné', (done) => {
+  it('exige que le code prestataire soit renseigné', () => {
     try {
       new EvenementServiceRattacheAPrestataire(
         { idService: 'abc' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
-      done("L'instanciation de l'événement aurait dû lever une exception");
+      expect().fail(
+        "L'instanciation de l'événement aurait dû lever une exception"
+      );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 });

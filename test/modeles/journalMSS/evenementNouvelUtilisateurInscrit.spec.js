@@ -29,19 +29,18 @@ describe('Un événement de nouvel utilisateur inscrit', () => {
     });
   });
 
-  it("exige que l'identifiant utilisateur soit renseigné", (done) => {
+  it("exige que l'identifiant utilisateur soit renseigné", () => {
     try {
       new EvenementNouvelUtilisateurInscrit(
         {},
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 });

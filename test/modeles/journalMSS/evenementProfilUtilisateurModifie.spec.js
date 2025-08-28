@@ -60,18 +60,17 @@ describe('Un événement de profil utilisateur modifié', () => {
     expect(evenement.toJSON().donnees.roles).to.eql(['RSSI', 'DPO', 'Maire']);
   });
 
-  it("exige que l'utilisateur soit renseigné", (done) => {
+  it("exige que l'utilisateur soit renseigné", () => {
     try {
       new EvenementProfilUtilisateurModifie(null, {
         adaptateurChiffrement: hacheEnMajuscules,
       });
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurUtilisateurManquant);
-      done();
     }
   });
 });
