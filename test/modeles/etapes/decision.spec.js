@@ -26,36 +26,39 @@ describe('Une étape « Décision »', () => {
     });
   });
 
-  it('valide la valeur passée pour la durée de validité', (done) => {
+  it('valide la valeur passée pour la durée de validité', () => {
     try {
       new Decision({ dureeValidite: 'dureeInvalide' });
-      done("la création d'une étape date aurait dû lever une exception");
+      expect().fail(
+        "la création d'une étape date aurait dû lever une exception"
+      );
     } catch (e) {
       expect(e).to.be.a(ErreurDureeValiditeInvalide);
       expect(e.message).to.equal(
         'La durée de validité "dureeInvalide" est invalide'
       );
-      done();
     }
   });
 
-  it("valide la valeur passée pour la date d'homologation", (done) => {
+  it("valide la valeur passée pour la date d'homologation", () => {
     try {
       new Decision({ dateHomologation: '2022-13-01' });
-      done("la création d'une étape date aurait dû lever une exception");
+      expect().fail(
+        "la création d'une étape date aurait dû lever une exception"
+      );
     } catch (e) {
       expect(e).to.be.a(ErreurDateHomologationInvalide);
       expect(e.message).to.equal('La date "2022-13-01" est invalide');
-      done();
     }
   });
 
-  it("ne lève pas d'exception si la durée de validité ou la date d'homologation ne sont pas renseignées", (done) => {
+  it("ne lève pas d'exception si la durée de validité ou la date d'homologation ne sont pas renseignées", () => {
     try {
       new Decision();
-      done();
     } catch (e) {
-      done("la création d'une étape date n'aurait pas dû lever une exception");
+      expect().fail(
+        "la création d'une étape date n'aurait pas dû lever une exception"
+      );
     }
   });
 
