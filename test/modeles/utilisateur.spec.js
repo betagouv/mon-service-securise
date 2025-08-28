@@ -335,7 +335,7 @@ describe('Un utilisateur', () => {
       expect(inscriptionEffectuee).to.be('jean.dupont@mail.fr');
     });
 
-    it("se désinscrit de l'infolettre s'il passe de « oui » à « non » sur ce canal de communication ", async () => {
+    it("se désinscrit de l'infolettre s'il passe de « oui » à « non » sur ce canal de communication", async () => {
       let desinscriptionEffectuee;
       adaptateurEmail.desinscrisInfolettre = async (email) => {
         desinscriptionEffectuee = email;

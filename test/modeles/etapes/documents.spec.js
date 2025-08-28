@@ -3,7 +3,7 @@ const expect = require('expect.js');
 const Documents = require('../../../src/modeles/etapes/documents');
 
 describe('Une étape « Documents »', () => {
-  it('sait se convertir en JSON ', () => {
+  it('sait se convertir en JSON', () => {
     const etape = new Documents({
       documents: ['unDocument'],
       avecDocuments: true,
