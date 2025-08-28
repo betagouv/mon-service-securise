@@ -59,33 +59,31 @@ describe('Une mesure de sécurité', () => {
     });
   });
 
-  it('vérifie que la mesure est bien répertoriée', (done) => {
+  it('vérifie que la mesure est bien répertoriée', () => {
     try {
       new MesureGenerale(
         { id: 'identifiantInconnu', statut: MesureGenerale.STATUT_FAIT },
         referentiel
       );
-      done('La création de la mesure aurait dû lever une exception');
+      expect.fail('La création de la mesure aurait dû lever une exception');
     } catch (e) {
       expect(e).to.be.a(ErreurMesureInconnue);
       expect(e.message).to.equal(
         'La mesure "identifiantInconnu" n\'est pas répertoriée'
       );
-      done();
     }
   });
 
-  it('vérifie la nature du statut', (done) => {
+  it('vérifie la nature du statut', () => {
     try {
       new MesureGenerale(
         { id: 'identifiantMesure', statut: 'statutInvalide' },
         referentiel
       );
-      done('La création de la mesure aurait dû lever une exception');
+      expect.fail('La création de la mesure aurait dû lever une exception');
     } catch (e) {
       expect(e).to.be.a(ErreurStatutMesureInvalide);
       expect(e.message).to.equal('Le statut "statutInvalide" est invalide');
-      done();
     }
   });
 

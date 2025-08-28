@@ -163,7 +163,7 @@ describe('La description du service', () => {
     });
   });
 
-  elle('valide la localisation des données si elle est présente', (done) => {
+  elle('valide la localisation des données si elle est présente', () => {
     const referentiel = Referentiel.creeReferentiel({
       localisationsDonnees: {
         france: { description: 'Quelque part en France' },
@@ -174,7 +174,7 @@ describe('La description du service', () => {
         { localisationDonnees: 'localisationInvalide' },
         referentiel
       );
-      done(
+      expect().fail(
         'La création de la description du service aurait dû lever une ErreurLocalisationDonneesInvalide'
       );
     } catch (e) {
@@ -182,7 +182,6 @@ describe('La description du service', () => {
       expect(e.message).to.equal(
         'La localisation des données "localisationInvalide" est invalide'
       );
-      done();
     }
   });
 
