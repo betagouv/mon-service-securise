@@ -27,7 +27,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         .verifieRequeteExigeJWT(testeur.app(), '/motDePasse/initialisation');
     });
 
-    it('sert le contenu HTML de la page ', async () => {
+    it('sert le contenu HTML de la page', async () => {
       const reponse = await testeur.get('/motDePasse/initialisation');
 
       expect(reponse.status).to.equal(200);

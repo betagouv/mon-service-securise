@@ -9,7 +9,7 @@ describe('Une étape « Avis »', () => {
     statutsAvisDossierHomologation: { favorable: {} },
   });
 
-  it('sait se convertir en JSON ', () => {
+  it('sait se convertir en JSON', () => {
     const etape = new EtapeAvis(
       {
         avis: [

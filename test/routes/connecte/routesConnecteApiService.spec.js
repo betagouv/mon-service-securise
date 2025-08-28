@@ -432,7 +432,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(mesureRecue.statut).to.be('fait');
     });
 
-    it("décode les 'slash' de la date d'échéance ", async () => {
+    it("décode les 'slash' de la date d'échéance", async () => {
       const slash = '&#x2F;';
       let mesureRecue;
       testeur.depotDonnees().ajouteMesureSpecifiqueAuService = (
@@ -873,7 +873,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(reponse.text).to.be('La mesure est invalide.');
     });
 
-    it("décode les 'slash' de la date d'échéance ", async () => {
+    it("décode les 'slash' de la date d'échéance", async () => {
       const slash = '&#x2F;';
       let donneesRecues;
       testeur.depotDonnees().metsAJourMesureGeneraleDuService = (

@@ -170,7 +170,7 @@ describe('Les routes connecté de téléversement de services', () => {
       testeur.depotDonnees().supprimeTeleversementServices = async () => true;
     });
 
-    it('renvoie une réponse 200 ', async () => {
+    it('renvoie une réponse 200', async () => {
       testeur.depotDonnees().supprimeTeleversementServices = async () => 1;
       const reponse = await testeur.delete('/api/televersement/services');
 
