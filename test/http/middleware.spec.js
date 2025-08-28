@@ -20,20 +20,14 @@ const {
   fabriqueAdaptateurChiffrement,
 } = require('../../src/adaptateurs/fabriqueAdaptateurChiffrement');
 
-const prepareVerificationReponse = (reponse, status, ...params) => {
-  let message;
-  let suite;
-
-  if (params.length === 1) [suite] = params;
-  if (params.length === 2) [message, suite] = params;
-
-  reponse.render = () => suite();
+const prepareVerificationReponse = (reponse, status, message) => {
+  reponse.render = () => {};
   reponse.status = (s) => {
     try {
       expect(s).to.equal(status);
       return reponse;
     } catch (e) {
-      suite(e);
+      expect().fail(e);
       return undefined;
     }
   };
