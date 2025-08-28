@@ -54,7 +54,7 @@ describe('Le service gestionnaire de session', () => {
     });
   });
 
-  it('sur demande de lecture de `cguAcceptees`', () => {
+  describe('sur demande de lecture de `cguAcceptees`', () => {
     it('peut lire depuis la session', () => {
       const requete = { session: { cguAcceptees: true } };
       const cguAcceptees = gestionnaireSession.cguAcceptees(requete);
