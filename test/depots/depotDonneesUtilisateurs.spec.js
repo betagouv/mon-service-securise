@@ -1,5 +1,4 @@
 const expect = require('expect.js');
-
 const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
 const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
 const {
@@ -679,7 +678,7 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(tous[1]).to.be.an(Utilisateur);
   });
 
-  it("retourne l'utilisateur avec sa date de création", (done) => {
+  it("retourne l'utilisateur avec sa date de création", async () => {
     const date = new Date(2000, 1, 1, 12, 0);
     const adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur(
       {
@@ -703,15 +702,11 @@ describe('Le dépôt de données des utilisateurs', () => {
       adaptateurPersistance,
     });
 
-    depot
-      .utilisateur('123')
-      .then((utilisateur) => {
-        expect(utilisateur).to.be.an(Utilisateur);
-        expect(utilisateur.id).to.equal('123');
-        expect(utilisateur.dateCreation).to.eql(date);
-        done();
-      })
-      .catch(done);
+    const utilisateur = await depot.utilisateur('123');
+
+    expect(utilisateur).to.be.an(Utilisateur);
+    expect(utilisateur.id).to.equal('123');
+    expect(utilisateur.dateCreation).to.eql(date);
   });
 
   it("retourne l'utilisateur associé à un identifiant reset de mot de passe", async () => {
@@ -978,15 +973,13 @@ describe('Le dépôt de données des utilisateurs', () => {
     });
 
     describe("quand l'utilisateur existe déjà", () => {
-      it('lève une `ErreurUtilisateurExistant`', (done) => {
+      it('lève une `ErreurUtilisateurExistant`', async () => {
         const adaptateurPersistance =
           AdaptateurPersistanceMemoire.nouvelAdaptateur({
             utilisateurs: [
               {
                 id: '123',
-                donnees: {
-                  email: 'jean.dupont@mail.fr',
-                },
+                donnees: { email: 'jean.dupont@mail.fr' },
                 emailHash: 'jean.dupont@mail.fr-haché256',
               },
             ],
@@ -996,17 +989,15 @@ describe('Le dépôt de données des utilisateurs', () => {
           adaptateurPersistance,
         });
 
-        depot
-          .nouvelUtilisateur(
+        try {
+          await depot.nouvelUtilisateur(
             unUtilisateur().avecEmail('jean.dupont@mail.fr').donnees
-          )
-          .then(() => done('Une exception aurait dû être levée.'))
-          .catch((e) => {
-            expect(e).to.be.a(ErreurUtilisateurExistant);
-            expect(e.idUtilisateur).to.equal('123');
-          })
-          .then(() => done())
-          .catch(done);
+          );
+          expect().fail('Une exception aurait dû être levée.');
+        } catch (e) {
+          expect(e).to.be.a(ErreurUtilisateurExistant);
+          expect(e.idUtilisateur).to.equal('123');
+        }
       });
     });
 
@@ -1094,7 +1085,7 @@ describe('Le dépôt de données des utilisateurs', () => {
   });
 
   describe("sur demande de suppression d'un utilisateur", () => {
-    it("lève une exception si l'utilisateur a créé des services", (done) => {
+    it("lève une exception si l'utilisateur a créé des services", async () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [
@@ -1112,42 +1103,38 @@ describe('Le dépôt de données des utilisateurs', () => {
         adaptateurChiffrement,
       });
 
-      depot
-        .supprimeUtilisateur('999')
-        .then(() =>
-          done('La tentative de suppression aurait dû lever une exception')
-        )
-        .catch((erreur) => {
-          expect(erreur).to.be.an(ErreurSuppressionImpossible);
-          expect(erreur.message).to.equal(
-            'Suppression impossible : l\'utilisateur "999" a créé des services'
-          );
-          done();
-        })
-        .catch(done);
+      try {
+        await depot.supprimeUtilisateur('999');
+        expect().fail(
+          'La tentative de suppression aurait dû lever une exception'
+        );
+      } catch (erreur) {
+        expect(erreur).to.be.an(ErreurSuppressionImpossible);
+        expect(erreur.message).to.equal(
+          'Suppression impossible : l\'utilisateur "999" a créé des services'
+        );
+      }
     });
 
-    it("lève une exception si l'utilisateur n'existe pas", (done) => {
+    it("lève une exception si l'utilisateur n'existe pas", async () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur();
       const depot = DepotDonneesUtilisateurs.creeDepot({
         adaptateurPersistance,
       });
 
-      depot
-        .supprimeUtilisateur('999')
-        .then(() =>
-          done('La tentative de suppression aurait dû lever une exception')
-        )
-        .catch((erreur) => {
-          expect(erreur).to.be.an(ErreurUtilisateurInexistant);
-          expect(erreur.message).to.equal('L\'utilisateur "999" n\'existe pas');
-          done();
-        })
-        .catch(done);
+      try {
+        await depot.supprimeUtilisateur('999');
+        expect().fail(
+          'La tentative de suppression aurait dû lever une exception'
+        );
+      } catch (erreur) {
+        expect(erreur).to.be.an(ErreurUtilisateurInexistant);
+        expect(erreur.message).to.equal('L\'utilisateur "999" n\'existe pas');
+      }
     });
 
-    it('supprime les autorisations de contribution pour cet utilisateur (mais pas les autres)', (done) => {
+    it('supprime les autorisations de contribution pour cet utilisateur (mais pas les autres)', async () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [
@@ -1170,17 +1157,15 @@ describe('Le dépôt de données des utilisateurs', () => {
         adaptateurPersistance,
       });
 
-      depot
-        .supprimeUtilisateur('999')
-        .then(() => depotAutorisations.autorisations('999'))
-        .then((autorisations) => expect(autorisations.length).to.equal(0))
-        .then(() => depotAutorisations.autorisations('000'))
-        .then((autorisations) => expect(autorisations.length).to.equal(1))
-        .then(() => done())
-        .catch(done);
+      await depot.supprimeUtilisateur('999');
+
+      const deUtilisateur999 = await depotAutorisations.autorisations('999');
+      expect(deUtilisateur999.length).to.equal(0);
+      const deUtilisateur000 = await depotAutorisations.autorisations('000');
+      expect(deUtilisateur000.length).to.equal(1);
     });
 
-    it("supprime l'utilisateur", (done) => {
+    it("supprime l'utilisateur", async () => {
       const adaptateurPersistance =
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           utilisateurs: [
@@ -1192,12 +1177,10 @@ describe('Le dépôt de données des utilisateurs', () => {
         adaptateurChiffrement,
       });
 
-      depot
-        .supprimeUtilisateur('999')
-        .then(() => depot.utilisateur('999'))
-        .then((u) => expect(u).to.be(undefined))
-        .then(() => done())
-        .catch(done);
+      await depot.supprimeUtilisateur('999');
+
+      const u = await depot.utilisateur('999');
+      expect(u).to.be(undefined);
     });
   });
 
