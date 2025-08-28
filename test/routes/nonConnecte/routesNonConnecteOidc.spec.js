@@ -13,9 +13,7 @@ const { donneesPartagees } = require('../../aides/http');
 describe('Le serveur MSS des routes publiques /oidc/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(() => {
-    testeur.initialise();
-  });
+  beforeEach(testeur.initialise);
 
   describe('quand requête GET sur `/oidc/connexion`', () => {
     beforeEach(() => {
@@ -452,6 +450,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         },
       });
     });
+
     it('redirige vers la page de connexion', async () => {
       const reponse = await testeur.get(
         '/oidc/apres-deconnexion?state=unState'
@@ -462,9 +461,10 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
     });
 
     it("supprime la session de l'utilisateur via la page /connexion", async () => {
-      testeur
+      await testeur
         .middleware()
         .verifieRequeteExigeSuppressionCookie(
+          testeur.app(),
           '/oidc/apres-deconnexion?state=unState'
         );
     });

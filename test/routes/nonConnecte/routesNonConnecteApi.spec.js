@@ -62,14 +62,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it('applique une protection de trafic', async () => {
-      testeur.middleware().verifieProtectionTrafic({
+      await testeur.middleware().verifieProtectionTrafic(testeur.app(), {
         method: 'post',
         url: '/api/utilisateur',
       });
     });
 
     it('aseptise les paramètres de la requête', async () => {
-      testeur
+      await testeur
         .middleware()
         .verifieAseptisationParametres(
           [
@@ -81,6 +81,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             'estimationNombreServices.*',
             'siretEntite',
           ],
+          testeur.app(),
           {
             method: 'post',
             url: '/api/utilisateur',

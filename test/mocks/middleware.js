@@ -10,6 +10,8 @@ const {
 const { unService } = require('../constructeurs/constructeurService');
 const SourceAuthentification = require('../../src/modeles/sourceAuthentification');
 
+const NOMBRE_MAX_REDIRECTION_PAR_DEFAUT = 5;
+
 const verifieRequeteChangeEtat = async (donneesEtat, app, requete) => {
   const verifieEgalite = (valeurConstatee, valeurReference, ...diagnostics) => {
     expect(
@@ -23,7 +25,10 @@ const verifieRequeteChangeEtat = async (donneesEtat, app, requete) => {
   verifieEgalite(lectureEtat(), etatInitial, suffixeLectureEtat);
 
   try {
-    if (typeof requete === 'string') await supertest(app).get(requete);
+    if (typeof requete === 'string')
+      await supertest(app)
+        .get(requete)
+        .redirects(NOMBRE_MAX_REDIRECTION_PAR_DEFAUT);
     else {
       const methode = requete.method.toLowerCase();
       if (!(methode in supertest(app)))
@@ -32,7 +37,8 @@ const verifieRequeteChangeEtat = async (donneesEtat, app, requete) => {
         );
       await supertest(app)
         [requete.method.toLowerCase()](requete.url)
-        .send(requete.data);
+        .send(requete.data)
+        .redirects(NOMBRE_MAX_REDIRECTION_PAR_DEFAUT);
     }
     verifieEgalite(lectureEtat(), etatFinal, suffixeLectureEtat);
   } catch (e) {
