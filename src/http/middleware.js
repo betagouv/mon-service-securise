@@ -106,8 +106,8 @@ const middleware = (configuration = {}) => {
     return suite();
   };
 
-  const verificationAcceptationCGU = (requete, reponse, suite) => {
-    verificationJWT(requete, reponse, () => {
+  const verificationAcceptationCGU = async (requete, reponse, suite) => {
+    await verificationJWT(requete, reponse, () => {
       if (requete.estInvite) {
         return reponse.redirect(
           requete.sourceAuthentification === SourceAuthentification.MSS
@@ -123,7 +123,7 @@ const middleware = (configuration = {}) => {
     });
   };
 
-  const trouveService = (droitsRequis) => (requete, reponse, suite) => {
+  const trouveService = (droitsRequis) => async (requete, reponse, suite) => {
     const idService = requete.params.id;
 
     const droitsCoherents = verifieCoherenceDesDroits(droitsRequis);
@@ -133,7 +133,7 @@ const middleware = (configuration = {}) => {
         "L'objet de droits doit être de la forme `{ [Rubrique]: niveau }`"
       );
 
-    verificationAcceptationCGU(requete, reponse, () =>
+    await verificationAcceptationCGU(requete, reponse, () =>
       depotDonnees
         .service(idService)
         .then((service) => {
