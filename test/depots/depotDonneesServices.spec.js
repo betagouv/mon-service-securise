@@ -967,7 +967,7 @@ describe('Le dépôt de données des services', () => {
       }
     });
 
-    it('lève une exception si une propriété obligatoire de la description du service est manquante', (done) => {
+    it('lève une exception si une propriété obligatoire de la description du service est manquante', async () => {
       const donneesDescriptionServiceIncompletes = uneDescriptionValide(
         referentiel
       )
@@ -975,16 +975,15 @@ describe('Le dépôt de données des services', () => {
         .construis()
         .toJSON();
 
-      depot
-        .nouveauService('123', {
+      try {
+        await depot.nouveauService('123', {
           descriptionService: donneesDescriptionServiceIncompletes,
-        })
-        .then(() =>
-          done('La création du service aurait dû lever une exception')
-        )
-        .catch((e) => expect(e).to.be.an(ErreurDonneesObligatoiresManquantes))
-        .then(() => done())
-        .catch(done);
+        });
+
+        expect().fail('La création du service aurait dû lever une exception');
+      } catch (e) {
+        expect(e).to.be.an(ErreurDonneesObligatoiresManquantes);
+      }
     });
 
     it("lève une exception si le siret de l'organisation responsable n'est pas renseigné", async () => {
@@ -1007,26 +1006,22 @@ describe('Le dépôt de données des services', () => {
       }
     });
 
-    it('lève une exception si le nom du service est déjà pris par un autre service', (done) => {
+    it('lève une exception si le nom du service est déjà pris par un autre service', async () => {
       const descriptionService = uneDescriptionValide(referentiel)
         .avecNomService('Nom service')
         .construis()
         .toJSON();
 
-      depot
-        .nouveauService('123', { descriptionService })
-        .then(() => depot.nouveauService('123', { descriptionService }))
-        .then(() =>
-          done('La création du service aurait dû lever une exception')
-        )
-        .catch((e) => {
-          expect(e).to.be.an(ErreurNomServiceDejaExistant);
-          expect(e.message).to.equal(
-            'Le nom du service "Nom service" existe déjà pour un autre service'
-          );
-          done();
-        })
-        .catch(done);
+      try {
+        await depot.nouveauService('123', { descriptionService });
+        await depot.nouveauService('123', { descriptionService });
+        expect().fail('La création du service aurait dû lever une exception');
+      } catch (e) {
+        expect(e).to.be.an(ErreurNomServiceDejaExistant);
+        expect(e.message).to.equal(
+          'Le nom du service "Nom service" existe déjà pour un autre service'
+        );
+      }
     });
   });
 
@@ -1150,7 +1145,7 @@ describe('Le dépôt de données des services', () => {
       expect(apres).to.eql([]);
     });
 
-    it('supprime les autorisations associées', (done) => {
+    it('supprime les autorisations associées', async () => {
       adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
         utilisateurs: [
           { id: '999', donnees: { email: 'jean.dupont@mail.fr' } },
@@ -1180,16 +1175,14 @@ describe('Le dépôt de données des services', () => {
         adaptateurPersistance,
       });
 
-      depot
-        .supprimeService('111')
-        .then(() => depotAutorisations.autorisations('999'))
-        .then((as) => expect(as.length).to.equal(0))
-        .then(() => depotAutorisations.autorisations('000'))
-        .then((as) => expect(as.length).to.equal(1))
-        .then(() => depotAutorisations.autorisation('789'))
-        .then((a) => expect(a).to.be.ok())
-        .then(() => done())
-        .catch(done);
+      await depot.supprimeService('111');
+
+      const deUtilisateur999 = await depotAutorisations.autorisations('999');
+      expect(deUtilisateur999.length).to.equal(0);
+      const deUtilisateur000 = await depotAutorisations.autorisations('000');
+      expect(deUtilisateur000.length).to.equal(1);
+      const autorisation789 = await depotAutorisations.autorisation('789');
+      expect(autorisation789).not.to.be(undefined);
     });
 
     it('supprime les liens avec des modèles de mesure spécifique', async () => {
@@ -1246,7 +1239,7 @@ describe('Le dépôt de données des services', () => {
 
     beforeEach(() => (adaptateurUUID = { genereUUID: () => 'un UUID' }));
 
-    it('ne fait rien si un dossier courant existe déjà', (done) => {
+    it('ne fait rien si un dossier courant existe déjà', async () => {
       const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
@@ -1262,15 +1255,13 @@ describe('Le dépôt de données des services', () => {
         adaptateurUUID,
       });
 
-      depot
-        .ajouteDossierCourantSiNecessaire('123')
-        .then(() => depot.service('123'))
-        .then((s) => expect(s.nombreDossiers()).to.equal(1))
-        .then(() => done())
-        .catch(done);
+      await depot.ajouteDossierCourantSiNecessaire('123');
+
+      const s = await depot.service('123');
+      expect(s.nombreDossiers()).to.equal(1);
     });
 
-    it("ajoute le dossier s'il n'existe pas déjà", (done) => {
+    it("ajoute le dossier s'il n'existe pas déjà", async () => {
       const donneesHomologations = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
@@ -1285,15 +1276,13 @@ describe('Le dépôt de données des services', () => {
         adaptateurUUID,
       });
 
-      depot
-        .ajouteDossierCourantSiNecessaire('123')
-        .then(() => depot.service('123'))
-        .then((s) => expect(s.nombreDossiers()).to.equal(1))
-        .then(() => done())
-        .catch(done);
+      await depot.ajouteDossierCourantSiNecessaire('123');
+
+      const s = await depot.service('123');
+      expect(s.nombreDossiers()).to.equal(1);
     });
 
-    it('associe un UUID au dossier créé', (done) => {
+    it('associe un UUID au dossier créé', async () => {
       const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
@@ -1309,15 +1298,13 @@ describe('Le dépôt de données des services', () => {
         adaptateurUUID,
       });
 
-      depot
-        .ajouteDossierCourantSiNecessaire('123')
-        .then(() => depot.service('123'))
-        .then((s) => expect(s.dossiers.item(0).id).to.equal('999'))
-        .then(() => done())
-        .catch(done);
+      await depot.ajouteDossierCourantSiNecessaire('123');
+
+      const s = await depot.service('123');
+      expect(s.dossiers.item(0).id).to.equal('999');
     });
 
-    it("lève une exception si le service n'existe pas", (done) => {
+    it("lève une exception si le service n'existe pas", async () => {
       const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
@@ -1326,21 +1313,17 @@ describe('Le dépôt de données des services', () => {
         AdaptateurPersistanceMemoire.nouvelAdaptateur({
           services: [donneesService],
         });
-      const depot = DepotDonneesServices.creeDepot({
-        adaptateurPersistance,
-      });
+      const depot = DepotDonneesServices.creeDepot({ adaptateurPersistance });
 
-      depot
-        .ajouteDossierCourantSiNecessaire('999')
-        .then(() =>
-          done("La tentative d'ajout de dossier aurait dû lever une exception")
-        )
-        .catch((e) => {
-          expect(e).to.be.an(ErreurServiceInexistant);
-          expect(e.message).to.equal('Service "999" non trouvé');
-          done();
-        })
-        .catch(done);
+      try {
+        await depot.ajouteDossierCourantSiNecessaire('999');
+        expect().fail(
+          "La tentative d'ajout de dossier aurait dû lever une exception"
+        );
+      } catch (e) {
+        expect(e).to.be.an(ErreurServiceInexistant);
+        expect(e.message).to.equal('Service "999" non trouvé');
+      }
     });
   });
 
@@ -1352,7 +1335,7 @@ describe('Le dépôt de données des services', () => {
 
     beforeEach(() => (adaptateurUUID = { genereUUID: () => 'un UUID' }));
 
-    it('enregistre le dossier courant', (done) => {
+    it('enregistre le dossier courant', async () => {
       const donneesService = {
         id: '123',
         descriptionService: { nomService: 'Un service' },
@@ -1378,22 +1361,16 @@ describe('Le dépôt de données des services', () => {
         referentiel
       );
 
-      depot
-        .enregistreDossier('123', dossier)
-        .then(() => depot.service('123'))
-        .then((s) => {
-          expect(s.nombreDossiers()).to.equal(1);
-          const dossierCourant = s.dossierCourant();
-          expect(dossierCourant.decision.dateHomologation).to.equal(
-            '2022-11-30'
-          );
-          expect(dossierCourant.decision.dureeValidite).to.equal('sixMois');
-          done();
-        })
-        .catch(done);
+      await depot.enregistreDossier('123', dossier);
+
+      const s = await depot.service('123');
+      expect(s.nombreDossiers()).to.equal(1);
+      const dossierCourant = s.dossierCourant();
+      expect(dossierCourant.decision.dateHomologation).to.equal('2022-11-30');
+      expect(dossierCourant.decision.dureeValidite).to.equal('sixMois');
     });
 
-    it("n'écrase pas les autres dossiers si l'ID est différent", (done) => {
+    it("n'écrase pas les autres dossiers si l'ID est différent", async () => {
       const donneesHomologations = {
         id: '123',
         donnees: {
@@ -1411,21 +1388,17 @@ describe('Le dépôt de données des services', () => {
         adaptateurUUID,
         referentiel,
       });
-      const dossier = new Dossier({ id: '999' }, referentiel);
 
-      depot
-        .enregistreDossier('123', dossier)
-        .then(() => depot.service('123'))
-        .then((s) => {
-          expect(s.nombreDossiers()).to.equal(2);
-          expect(s.dossiers.item(0).id).to.equal('888');
-          expect(s.dossiers.item(1).id).to.equal('999');
-          done();
-        })
-        .catch(done);
+      const dossier = new Dossier({ id: '999' }, referentiel);
+      await depot.enregistreDossier('123', dossier);
+
+      const s = await depot.service('123');
+      expect(s.nombreDossiers()).to.equal(2);
+      expect(s.dossiers.item(0).id).to.equal('888');
+      expect(s.dossiers.item(1).id).to.equal('999');
     });
 
-    it('écrase les données déjà stockées avec les nouvelles données', (done) => {
+    it('écrase les données déjà stockées avec les nouvelles données', async () => {
       const decision = {
         dateHomologation: '2022-12-01',
         dureeValidite: 'unAn',
@@ -1455,16 +1428,13 @@ describe('Le dépôt de données des services', () => {
         { autorite, id: '999' },
         referentiel
       );
-      depot
-        .enregistreDossier('123', seulementAutorite)
-        .then(() => depot.service('123'))
-        .then((s) => {
-          const donneesDossierCourant = s.dossierCourant().toJSON();
-          expect(donneesDossierCourant.autorite).to.eql(autorite);
-          expect(donneesDossierCourant.decision).to.eql({});
-          done();
-        })
-        .catch(done);
+
+      await depot.enregistreDossier('123', seulementAutorite);
+
+      const s = await depot.service('123');
+      const donneesDossierCourant = s.dossierCourant().toJSON();
+      expect(donneesDossierCourant.autorite).to.eql(autorite);
+      expect(donneesDossierCourant.decision).to.eql({});
     });
   });
 
@@ -1738,11 +1708,10 @@ describe('Le dépôt de données des services', () => {
     let adaptateurChiffrement;
 
     beforeEach(() => {
-      adaptateurChiffrement = {
-        dechiffre: async (objetDonnee) => objetDonnee,
-      };
+      adaptateurChiffrement = { dechiffre: async (objetDonnee) => objetDonnee };
     });
-    it("utilise l'index 1 si disponible", (done) => {
+
+    it("utilise l'index 1 si disponible", async () => {
       const referentiel = Referentiel.creeReferentielVide();
       const descriptionService = uneDescriptionValide(referentiel)
         .avecNomService('A')
@@ -1769,14 +1738,12 @@ describe('Le dépôt de données des services', () => {
         }),
       });
 
-      depot
-        .trouveIndexDisponible('999', 'A - UnSuffixe')
-        .then((index) => expect(index).to.equal(1))
-        .then(() => done())
-        .catch(done);
+      const index = await depot.trouveIndexDisponible('999', 'A - UnSuffixe');
+
+      expect(index).to.equal(1);
     });
 
-    it("incrémente l'index si nécessaire", (done) => {
+    it("incrémente l'index si nécessaire", async () => {
       const referentiel = Referentiel.creeReferentielVide();
       const copie1 = uneDescriptionValide(referentiel)
         .avecNomService('A - UnSuffixe 1')
@@ -1803,14 +1770,12 @@ describe('Le dépôt de données des services', () => {
         }),
       });
 
-      depot
-        .trouveIndexDisponible('999', 'A - UnSuffixe')
-        .then((index) => expect(index).to.equal(2))
-        .then(() => done())
-        .catch(done);
+      const index = await depot.trouveIndexDisponible('999', 'A - UnSuffixe');
+
+      expect(index).to.equal(2);
     });
 
-    it("incrémente l'index le plus élevé", (done) => {
+    it("incrémente l'index le plus élevé", async () => {
       const referentiel = Referentiel.creeReferentielVide();
       const original = uneDescriptionValide(referentiel)
         .avecNomService('A')
@@ -1845,14 +1810,12 @@ describe('Le dépôt de données des services', () => {
         }),
       });
 
-      depot
-        .trouveIndexDisponible('999', 'A - UnSuffixe')
-        .then((index) => expect(index).to.equal(3))
-        .then(() => done())
-        .catch(done);
+      const index = await depot.trouveIndexDisponible('999', 'A - UnSuffixe');
+
+      expect(index).to.equal(3);
     });
 
-    it("sait extraire l'index disponible même dans des noms contenant des parenthèses", (done) => {
+    it("sait extraire l'index disponible même dans des noms contenant des parenthèses", async () => {
       const referentiel = Referentiel.creeReferentielVide();
       const original = uneDescriptionValide(referentiel)
         .avecNomService('Service A (mairie) - Copie 1')
@@ -1879,11 +1842,12 @@ describe('Le dépôt de données des services', () => {
         }),
       });
 
-      depot
-        .trouveIndexDisponible('999', 'Service A (mairie) - Copie')
-        .then((index) => expect(index).to.equal(2))
-        .then(() => done())
-        .catch(done);
+      const index = await depot.trouveIndexDisponible(
+        '999',
+        'Service A (mairie) - Copie'
+      );
+
+      expect(index).to.equal(2);
     });
   });
 
