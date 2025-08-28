@@ -5,9 +5,7 @@ const { enObjet } = require('../../aides/cookie');
 describe('Le serveur MSS des routes connectées /oidc/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(() => {
-    testeur.initialise();
-  });
+  beforeEach(testeur.initialise);
 
   describe('quand requête GET sur /oidc/deconnexion', () => {
     let idTokenAgentConnect;
@@ -17,10 +15,7 @@ describe('Le serveur MSS des routes connectées /oidc/*', () => {
         .reinitialise({ idTokenAgentConnectAUtiliser: 'idTokenAgentConnect' });
       testeur.adaptateurOidc().genereDemandeDeconnexion = async (idToken) => {
         idTokenAgentConnect = idToken;
-        return {
-          state: 'unState',
-          url: 'http',
-        };
+        return { state: 'unState', url: 'http' };
       };
     });
 
