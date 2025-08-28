@@ -50,10 +50,9 @@ const prepareVerificationReponse = (reponse, status, ...params) => {
   };
 };
 
-const prepareVerificationRedirection = (reponse, urlRedirection, done) => {
+const prepareVerificationRedirection = (reponse, urlRedirection) => {
   reponse.redirect = (url) => {
     expect(url).to.equal(urlRedirection);
-    done();
   };
 };
 
@@ -104,7 +103,7 @@ describe('Le middleware MSS', () => {
       unUtilisateur().avecId('123').construis();
   });
 
-  it("redirige l'utilisateur vers l'url de base s'il vient d'un sous domaine", (done) => {
+  it("redirige l'utilisateur vers l'url de base s'il vient d'un sous domaine", async () => {
     requete.headers = { host: 'sousdomaine.domaine:1234' };
     requete.originalUrl = '/monUrlDemandee';
     const adaptateurEnvironnement = {
@@ -113,15 +112,14 @@ describe('Le middleware MSS', () => {
 
     prepareVerificationRedirection(
       reponse,
-      'http://domaine:1234/monUrlDemandee',
-      done
+      'http://domaine:1234/monUrlDemandee'
     );
 
     const middleware = leMiddleware({ adaptateurEnvironnement });
     middleware.redirigeVersUrlBase(requete, reponse);
   });
 
-  it("ne redirige pas l'utilisateur vers l'url de base s'il en provient déjà", (done) => {
+  it("ne redirige pas l'utilisateur vers l'url de base s'il en provient déjà", async () => {
     requete.headers = { host: 'domaine:1234' };
     requete.originalUrl = '/monUrlDemandee';
     const adaptateurEnvironnement = {
@@ -130,47 +128,50 @@ describe('Le middleware MSS', () => {
 
     const middleware = leMiddleware({ adaptateurEnvironnement });
 
-    middleware.redirigeVersUrlBase(requete, reponse, done);
+    let aFini = false;
+    await middleware.redirigeVersUrlBase(requete, reponse, () => {
+      aFini = true;
+    });
+
+    expect(aFini).to.be(true);
   });
 
   describe('sur vérification du token JWT', () => {
-    it("redirige l'utilisateur vers la mire de login quand échec vérification JWT", (done) => {
+    it("redirige l'utilisateur vers la mire de login quand échec vérification JWT", async () => {
       const adaptateurJWT = {
         decode: (token) => {
           expect(token).to.equal('XXX');
         },
       };
-      expect(adaptateurJWT.decode('XXX')).to.be(undefined);
 
-      prepareVerificationRedirection(reponse, '/connexion', done);
+      prepareVerificationRedirection(reponse, '/connexion');
 
       const middleware = leMiddleware({ adaptateurJWT });
-      middleware.verificationJWT(requete, reponse);
+      await middleware.verificationJWT(requete, reponse);
     });
 
-    it("ajoute l'URL originale à la redirection si elle commence par un '/'", (done) => {
+    it("ajoute l'URL originale à la redirection si elle commence par un '/'", async () => {
       const adaptateurJWT = { decode: () => null };
       requete.originalUrl = '/tableauDeBord';
       prepareVerificationRedirection(
         reponse,
-        '/connexion?urlRedirection=%2FtableauDeBord',
-        done
+        '/connexion?urlRedirection=%2FtableauDeBord'
       );
 
       const middleware = leMiddleware({ adaptateurJWT });
-      middleware.verificationJWT(requete, reponse);
+      await middleware.verificationJWT(requete, reponse);
     });
 
-    it("n'ajoute pas l'URL originale à la redirection si elle commence par '/api'", (done) => {
+    it("n'ajoute pas l'URL originale à la redirection si elle commence par '/api'", async () => {
       const adaptateurJWT = { decode: () => null };
       requete.originalUrl = '/api/service';
-      prepareVerificationRedirection(reponse, '/connexion', done);
+      prepareVerificationRedirection(reponse, '/connexion');
 
       const middleware = leMiddleware({ adaptateurJWT });
-      middleware.verificationJWT(requete, reponse);
+      await middleware.verificationJWT(requete, reponse);
     });
 
-    it('redirige vers mire login si identifiant dans token ne correspond à aucun utilisateur', (done) => {
+    it('redirige vers mire login si identifiant dans token ne correspond à aucun utilisateur', async () => {
       const adaptateurJWT = { decode: () => ({ idUtilisateur: '123' }) };
 
       depotDonnees.utilisateur = (id) => {
@@ -178,12 +179,12 @@ describe('Le middleware MSS', () => {
         return Promise.resolve(undefined);
       };
 
-      prepareVerificationRedirection(reponse, '/connexion', done);
+      prepareVerificationRedirection(reponse, '/connexion');
 
       const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
       const suite = () =>
-        done("Le middleware suivant n'aurait pas dû être appelé");
-      middleware.verificationJWT(requete, reponse, suite);
+        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
+      await middleware.verificationJWT(requete, reponse, suite);
     });
 
     describe("identifie l'utilisateur pour la gestion d'erreur", () => {
@@ -311,7 +312,7 @@ describe('Le middleware MSS', () => {
     });
 
     describe('pour un utilisateur invité', () => {
-      it("redirige l'utilisateur connecté via MSS", (done) => {
+      it("redirige l'utilisateur connecté via MSS", async () => {
         requete.session = { ...requete.session, estInvite: true };
         const adaptateurJWT = {
           decode: () => ({ source: 'MSS' }),
@@ -320,13 +321,16 @@ describe('Le middleware MSS', () => {
 
         reponse.redirect = (url) => {
           expect(url).to.equal('/connexion');
-          done();
         };
 
-        middleware.verificationAcceptationCGU(requete, reponse);
+        let suiteAppelee = false;
+        await middleware.verificationAcceptationCGU(requete, reponse, () => {
+          suiteAppelee = true;
+        });
+        expect(suiteAppelee).to.be(false);
       });
 
-      it("redirige l'utilisateur connecté via Agent Connect", (done) => {
+      it("redirige l'utilisateur connecté via Agent Connect", async () => {
         requete.session = { ...requete.session, estInvite: true };
         const adaptateurJWT = {
           decode: () => ({ source: 'AGENT_CONNECT' }),
@@ -335,10 +339,13 @@ describe('Le middleware MSS', () => {
 
         reponse.redirect = (url) => {
           expect(url).to.equal('/oidc/connexion');
-          done();
         };
 
-        middleware.verificationAcceptationCGU(requete, reponse);
+        let suiteAppelee = false;
+        await middleware.verificationAcceptationCGU(requete, reponse, () => {
+          suiteAppelee = true;
+        });
+        expect(suiteAppelee).to.be(false);
       });
     });
 
@@ -347,33 +354,39 @@ describe('Le middleware MSS', () => {
         decode: () => ({}),
       };
 
-      it('si la dernière version des CGU est acceptée, appelle le middleware suivant', (done) => {
+      it('si la dernière version des CGU est acceptée, appelle le middleware suivant', async () => {
         const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
-        middleware.verificationAcceptationCGU(requete, reponse, done);
+        let suiteAppelee = false;
+        await middleware.verificationAcceptationCGU(requete, reponse, () => {
+          suiteAppelee = true;
+        });
+        expect(suiteAppelee).to.be(true);
       });
 
-      it("si la dernière version des CGU n'est pas acceptée, redirige vers la page des cgu", (done) => {
+      it("si la dernière version des CGU n'est pas acceptée, redirige vers la page des cgu", async () => {
         requete.session = { ...requete.session, cguAcceptees: false };
         const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
         reponse.redirect = (url) => {
           expect(url).to.equal('/cgu');
-          done();
         };
 
-        middleware.verificationAcceptationCGU(requete, reponse);
+        let suiteAppelee = false;
+        await middleware.verificationAcceptationCGU(requete, reponse, () => {
+          suiteAppelee = true;
+        });
+        expect(suiteAppelee).to.be(false);
       });
     });
   });
 
-  it('efface les cookies sur demande', (done) => {
+  it('efface les cookies sur demande', async () => {
     expect(requete.session).to.not.be(null);
 
     const middleware = leMiddleware();
     middleware.suppressionCookie(requete, reponse, () => {
       expect(requete.session).to.be(null);
-      done();
     });
   });
 
@@ -386,57 +399,56 @@ describe('Le middleware MSS', () => {
       depotDonnees.utilisateur = () => ({ genereToken: () => 'NOUVEAU_TOKEN' });
     });
 
-    it('requête le dépôt de données', (done) => {
+    it('requête le dépôt de données', async () => {
       depotDonnees.service = async (id) => {
         expect(id).to.equal('123');
-        done();
       };
       const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
       requete.params = { id: '123' };
-      middleware.trouveService({})(requete, reponse);
+      await middleware.trouveService({})(requete, reponse);
     });
 
-    it('renvoie une erreur HTTP 404 si service non trouvée', (done) => {
+    it('renvoie une erreur HTTP 404 si service non trouvée', async () => {
       const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
-      prepareVerificationReponse(reponse, 404, 'Service non trouvé', done);
+      prepareVerificationReponse(reponse, 404, 'Service non trouvé');
 
       const suite = () =>
-        done("Le middleware suivant n'aurait pas dû être appelé");
-      middleware.trouveService({})(requete, reponse, suite);
+        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
+      await middleware.trouveService({})(requete, reponse, suite);
     });
 
-    it("jette une erreur technique si l'objet de droits est incohérent", (done) => {
+    it("jette une erreur technique si l'objet de droits est incohérent", async () => {
       const middleware = leMiddleware();
 
-      expect(() =>
-        middleware.trouveService({ mauvaiseCle: 'mauvaiseValeur' })(
+      try {
+        await middleware.trouveService({ mauvaiseCle: 'mauvaiseValeur' })(
           requete,
           reponse
-        )
-      ).to.throwError((e) => {
+        );
+        expect().fail('Aurait dû lever une erreur');
+      } catch (e) {
         expect(e).to.be.an(ErreurDroitsIncoherents);
         expect(e.message).to.equal(
           "L'objet de droits doit être de la forme `{ [Rubrique]: niveau }`"
         );
-        done();
-      });
+      }
     });
 
-    it("renvoie une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", (done) => {
+    it("renvoie une erreur HTTP 403 si l'utilisateur courant n'a pas accès au service", async () => {
       depotDonnees.service = async () => ({});
       depotDonnees.accesAutorise = async () => false;
       const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
-      prepareVerificationReponse(reponse, 403, 'Accès au service refusé', done);
+      prepareVerificationReponse(reponse, 403, 'Accès au service refusé');
 
       const suite = () =>
-        done("Le middleware suivant n'aurait pas dû être appelé");
-      middleware.trouveService({})(requete, reponse, suite);
+        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
+      await middleware.trouveService({})(requete, reponse, suite);
     });
 
-    it("retourne une erreur HTTP 422 si le service n'a pas pu être instanciée", (done) => {
+    it("retourne une erreur HTTP 422 si le service n'a pas pu être instanciée", async () => {
       depotDonnees.service = async () => {
         throw new Error('oups');
       };
@@ -445,51 +457,43 @@ describe('Le middleware MSS', () => {
       prepareVerificationReponse(
         reponse,
         422,
-        "Le service n'a pas pu être récupéré",
-        done
+        "Le service n'a pas pu être récupéré"
       );
 
       const suite = () =>
-        done("Le middleware suivant n'aurait pas dû être appelé");
-      middleware.trouveService({})(requete, reponse, suite);
+        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
+      await middleware.trouveService({})(requete, reponse, suite);
     });
 
-    it('retourne le service trouvé et appelle le middleware suivant', (done) => {
+    it('retourne le service trouvé et appelle le middleware suivant', async () => {
       const service = {};
       depotDonnees.service = async () => service;
       depotDonnees.accesAutorise = async () => true;
       const middleware = leMiddleware({ adaptateurJWT });
 
-      middleware.trouveService({})(requete, reponse, () => {
-        try {
-          expect(requete.service).to.equal(service);
-          done();
-        } catch (e) {
-          done(e);
-        }
+      let appele = false;
+      await middleware.trouveService({})(requete, reponse, () => {
+        appele = true;
+        expect(requete.service).to.equal(service);
       });
+      expect(appele).to.be(true);
     });
   });
 
   describe("sur recherche du dossier courant d'une homologation existante", () => {
-    it("renvoie une erreur HTTP 404 si le service n'a pas de dossier courant'", (done) => {
+    it("renvoie une erreur HTTP 404 si le service n'a pas de dossier courant'", async () => {
       const service = { dossierCourant: () => null };
       requete.service = service;
       const middleware = leMiddleware();
 
-      prepareVerificationReponse(
-        reponse,
-        404,
-        'Service sans dossier courant',
-        done
-      );
+      prepareVerificationReponse(reponse, 404, 'Service sans dossier courant');
 
       const suite = () =>
-        done("Le middleware suivant n'aurait pas dû être appelé");
+        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
       middleware.trouveDossierCourant(requete, reponse, suite);
     });
 
-    it("jette une erreur technique si le service n'est pas présent dans la requête", (done) => {
+    it("jette une erreur technique si le service n'est pas présent dans la requête", async () => {
       requete.service = null;
       const middleware = leMiddleware();
 
@@ -500,147 +504,136 @@ describe('Le middleware MSS', () => {
         expect(e.message).to.equal(
           'Un service doit être présent dans la requête. Manque-t-il un appel à `trouveService` ?'
         );
-        done();
       });
     });
 
-    it('retourne le dossier courant trouvé et appelle le middleware suivant', (done) => {
+    it('retourne le dossier courant trouvé et appelle le middleware suivant', async () => {
       const dossierCourant = {};
       const service = { dossierCourant: () => dossierCourant };
 
       requete.service = service;
       const middleware = leMiddleware();
 
+      let appele = false;
       middleware.trouveDossierCourant(requete, reponse, () => {
-        try {
-          expect(requete.dossierCourant).to.eql(dossierCourant);
-          done();
-        } catch (e) {
-          done(e);
-        }
+        appele = true;
+        expect(requete.dossierCourant).to.eql(dossierCourant);
       });
+      expect(appele).to.be(true);
     });
   });
 
   describe("sur demande d'aseptisation", () => {
-    it('supprime les espaces au début et à la fin du paramètre', (done) => {
+    it('supprime les espaces au début et à la fin du paramètre', async () => {
       const middleware = leMiddleware();
       requete.body.param = '  une valeur ';
-      middleware
-        .aseptise('param')(requete, reponse, () => {
-          expect(requete.body.param).to.equal('une valeur');
-          done();
-        })
-        .catch(done);
+
+      await middleware.aseptise('param')(requete, reponse, () => {
+        expect(requete.body.param).to.equal('une valeur');
+      });
     });
 
-    it('prend en compte plusieurs paramètres', (done) => {
+    it('prend en compte plusieurs paramètres', async () => {
       const middleware = leMiddleware();
       requete.body.paramRenseigne = '  une valeur ';
-      middleware
-        .aseptise('paramAbsent', 'paramRenseigne')(requete, reponse, () => {
+
+      await middleware.aseptise('paramAbsent', 'paramRenseigne')(
+        requete,
+        reponse,
+        () => {
           expect(requete.body.paramRenseigne).to.equal('une valeur');
-          done();
-        })
-        .catch(done);
+        }
+      );
     });
 
-    it('ne cherche pas à aseptiser les tableaux vides', (done) => {
+    it('ne cherche pas à aseptiser les tableaux vides', async () => {
       const middleware = leMiddleware();
       requete.body.param = [];
-      middleware
-        .aseptise('*')(requete, reponse, () => {
-          expect(Array.isArray(requete.body.param)).to.be(true);
-          expect(requete.body.param).to.eql([]);
-          done();
-        })
-        .catch(done);
+
+      await middleware.aseptise('*')(requete, reponse, () => {
+        expect(Array.isArray(requete.body.param)).to.be(true);
+        expect(requete.body.param).to.eql([]);
+      });
     });
 
-    it('neutralise le code HTML', (done) => {
+    it('neutralise le code HTML', async () => {
       const middleware = leMiddleware();
       requete.body.paramRenseigne = '<script>alert("hacked!");</script>';
-      middleware
-        .aseptise('paramAbsent', 'paramRenseigne')(requete, reponse, () => {
+
+      await middleware.aseptise('paramAbsent', 'paramRenseigne')(
+        requete,
+        reponse,
+        () => {
           expect(requete.body.paramRenseigne).to.equal(
             '&lt;script&gt;alert(&quot;hacked!&quot;);&lt;&#x2F;script&gt;'
           );
-          done();
-        })
-        .catch(done);
+        }
+      );
     });
 
-    it('aseptise les paramètres de la requête', (done) => {
+    it('aseptise les paramètres de la requête', async () => {
       const middleware = leMiddleware();
       requete.params.paramRenseigne = '<script>alert("hacked!");</script>';
-      middleware
-        .aseptise('paramAbsent', 'paramRenseigne')(requete, reponse, () => {
+
+      await middleware.aseptise('paramAbsent', 'paramRenseigne')(
+        requete,
+        reponse,
+        () => {
           expect(requete.params.paramRenseigne).to.equal(
             '&lt;script&gt;alert(&quot;hacked!&quot;);&lt;&#x2F;script&gt;'
           );
-          done();
-        })
-        .catch(done);
+        }
+      );
     });
   });
 
   describe('sur demande positionnement des headers', () => {
     beforeEach(() => (requete.nonce = undefined));
 
-    const verifiePositionnementHeader = (
-      nomHeader,
-      regExpValeurAttendue,
-      suite
-    ) => {
+    const verifiePositionnementHeader = (nomHeader, regExpValeurAttendue) => {
       const middleware = leMiddleware();
       middleware.positionneHeaders(requete, reponse, () => {
         verifieValeurHeader(nomHeader, regExpValeurAttendue, reponse);
-        suite();
       });
     };
 
     describe('concernant les CSP', () => {
-      it('autorise le chargement de toutes les ressources du domaine', (done) => {
+      it('autorise le chargement de toutes les ressources du domaine', async () => {
         verifiePositionnementHeader(
           'content-security-policy',
-          "default-src 'self'",
-          done
+          "default-src 'self'"
         );
       });
 
-      it("autorise le chargement des images venant de CRISP et du S3 de l'UI Kit", (done) => {
+      it("autorise le chargement des images venant de CRISP et du S3 de l'UI Kit", async () => {
         verifiePositionnementHeader(
           'content-security-policy',
-          "img-src 'self' https://storage.crisp.chat https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com;",
-          done
+          "img-src 'self' https://storage.crisp.chat https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com;"
         );
       });
 
-      it("autorise le chargement des vidéos provenant du 'CellarStorage' de MSS", (done) => {
+      it("autorise le chargement des vidéos provenant du 'CellarStorage' de MSS", async () => {
         verifiePositionnementHeader(
           'content-security-policy',
-          "media-src 'self' https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com;",
-          done
+          "media-src 'self' https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com;"
         );
       });
 
-      it('autorise le chargement de tous les scripts du domaine et de sentry côté client', (done) => {
+      it('autorise le chargement de tous les scripts du domaine et de sentry côté client', async () => {
         verifiePositionnementHeader(
           'content-security-policy',
-          "script-src 'self' https://browser.sentry-cdn.com",
-          done
+          "script-src 'self' https://browser.sentry-cdn.com"
         );
       });
 
-      it('autorise la connexion vers MSS, Sentry et stats.beta.gouv (pour Matomo)', (done) => {
+      it('autorise la connexion vers MSS, Sentry et stats.beta.gouv (pour Matomo)', async () => {
         verifiePositionnementHeader(
           'content-security-policy',
-          "connect-src 'self' https://sentry.incubateur.net https://stats.beta.gouv.fr/matomo.php",
-          done
+          "connect-src 'self' https://sentry.incubateur.net https://stats.beta.gouv.fr/matomo.php"
         );
       });
 
-      it('autorise le chargements des iframes venant du domaine du « journal Metabase MSS »', (done) => {
+      it('autorise le chargements des iframes venant du domaine du « journal Metabase MSS »', async () => {
         const adaptateurEnvironnement = {
           supervision: () => ({
             domaineMetabaseMSS: () => 'https://journal-mss.fr/',
@@ -655,36 +648,33 @@ describe('Le middleware MSS', () => {
             'frame-src https://journal-mss.fr/',
             reponse
           );
-          done();
         });
       });
     });
 
-    it('interdit le chargement de la page dans une iFrame', (done) => {
-      verifiePositionnementHeader('x-frame-options', /^deny$/, done);
+    it('interdit le chargement de la page dans une iFrame', async () => {
+      verifiePositionnementHeader('x-frame-options', /^deny$/);
     });
 
-    it("n'affiche pas l'URL de provenance quand l'utilisateur change de page", (done) => {
-      verifiePositionnementHeader('referrer-policy', /^no-referrer$/, done);
+    it("n'affiche pas l'URL de provenance quand l'utilisateur change de page", async () => {
+      verifiePositionnementHeader('referrer-policy', /^no-referrer$/);
     });
 
-    it("applique une politique 'same-origin' sur les 'cross-origin-opener'", (done) => {
+    it("applique une politique 'same-origin' sur les 'cross-origin-opener'", async () => {
       verifiePositionnementHeader(
         'cross-origin-opener-policy',
-        /^same-origin$/,
-        done
+        /^same-origin$/
       );
     });
 
-    it("applique une politique 'same-origin' sur les 'cross-origin-resource'", (done) => {
+    it("applique une politique 'same-origin' sur les 'cross-origin-resource'", async () => {
       verifiePositionnementHeader(
         'cross-origin-resource-policy',
-        /^same-origin$/,
-        done
+        /^same-origin$/
       );
     });
 
-    it('positionne un nonce dans le reponse.locals', (done) => {
+    it('positionne un nonce dans le reponse.locals', async () => {
       const middleware = leMiddleware({
         adaptateurChiffrement: {
           nonce: () => 'UN-NONCE',
@@ -692,13 +682,12 @@ describe('Le middleware MSS', () => {
       });
       middleware.positionneHeaders(requete, reponse, () => {
         expect(reponse.locals.nonce).to.eql('UN-NONCE');
-        done();
       });
     });
   });
 
   describe("sur une demande d'aseptisation d'une liste", () => {
-    it('supprime les éléments dont toutes les propriétés sont vides', (done) => {
+    it('supprime les éléments dont toutes les propriétés sont vides', async () => {
       const middleware = leMiddleware();
       requete.body.listeAvecProprieteVide = [
         { description: 'une description' },
@@ -709,12 +698,11 @@ describe('Le middleware MSS', () => {
         reponse,
         () => {
           expect(requete.body.listeAvecProprieteVide).to.have.length(1);
-          done();
         }
       );
     });
 
-    it('conserve les éléments dont au moins une propriété est renseignée', (done) => {
+    it('conserve les éléments dont au moins une propriété est renseignée', async () => {
       const middleware = leMiddleware();
       requete.body.listeAvecProprietesPartiellementVides = [
         { description: 'une description', nom: null },
@@ -726,32 +714,29 @@ describe('Le middleware MSS', () => {
         expect(
           requete.body.listeAvecProprietesPartiellementVides
         ).to.have.length(1);
-        done();
       });
     });
 
-    it('ne supprime pas les éléments dont les propriétés sont des tableaux vides', (done) => {
+    it('ne supprime pas les éléments dont les propriétés sont des tableaux vides', async () => {
       const middleware = leMiddleware();
       requete.body.listeAvecProprieteTableauVide = [{ description: [] }];
       middleware.aseptiseListe('listeAvecProprieteTableauVide', [
         'description',
       ])(requete, reponse, () => {
         expect(requete.body.listeAvecProprieteTableauVide).to.have.length(1);
-        done();
       });
     });
 
-    it("renvoie une 400 si l'élément aseptisé n'est pas un tableau", (done) => {
+    it("renvoie une 400 si l'élément aseptisé n'est pas un tableau", async () => {
       const middleware = leMiddleware();
 
       prepareVerificationReponse(
         reponse,
         400,
-        '[proprieteNonTableau] devrait être un tableau',
-        done
+        '[proprieteNonTableau] devrait être un tableau'
       );
       const suite = () =>
-        done("Le middleware suivant n'aurait pas dû être appelé");
+        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
 
       requete.body.proprieteNonTableau = {};
       middleware.aseptiseListe('proprieteNonTableau', [])(
@@ -763,7 +748,7 @@ describe('Le middleware MSS', () => {
   });
 
   describe("sur une demande d'aseptisation de plusieurs listes", () => {
-    it('supprime dans chaque liste les éléments dont toutes les propriétés sont vides', (done) => {
+    it('supprime dans chaque liste les éléments dont toutes les propriétés sont vides', async () => {
       const middleware = leMiddleware();
       requete.body.listeUn = [
         { description: 'une description' },
@@ -779,30 +764,28 @@ describe('Le middleware MSS', () => {
       ])(requete, reponse, () => {
         expect(requete.body.listeUn).to.have.length(1);
         expect(requete.body.listeDeux).to.have.length(1);
-        done();
       });
     });
 
-    it('aseptise les paramètres en correspondants aux propriétés', (done) => {
+    it('aseptise les paramètres en correspondants aux propriétés', async () => {
       const middleware = leMiddleware();
       requete.body.listeUn = [{ description: '  une description  ' }];
       middleware.aseptiseListes([
         { nom: 'listeUn', proprietes: ['description'] },
       ])(requete, reponse, () => {
         expect(requete.body.listeUn[0].description).to.equal('une description');
-        done();
       });
     });
   });
 
   describe("sur demande de filtrage d'adresse IP", () => {
-    it("jette une erreur 401 si l'adresse IP n'est pas valide", (done) => {
+    it("jette une erreur 401 si l'adresse IP n'est pas valide", async () => {
       const middleware = leMiddleware();
       requete.ip = '192.168.1.1';
 
       const suite = () =>
-        done("Le middleware suivant n'aurait pas dû être appelé");
-      prepareVerificationReponse(reponse, 401, 'Non autorisé', done);
+        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
+      prepareVerificationReponse(reponse, 401, 'Non autorisé');
 
       middleware.verificationAddresseIP(['192.168.0.1/24'])(
         requete,
@@ -811,20 +794,25 @@ describe('Le middleware MSS', () => {
       );
     });
 
-    it("passe au middleware suivant si l'adresse est valide", (done) => {
+    it("passe au middleware suivant si l'adresse est valide", async () => {
       const middleware = leMiddleware();
       requete.ip = '192.168.0.1';
+      let appele = false;
 
       middleware.verificationAddresseIP(['192.168.0.1/24'])(
         requete,
         reponse,
-        () => done()
+        () => {
+          appele = true;
+        }
       );
+
+      expect(appele).to.be(true);
     });
   });
 
   describe('sur challenge du mot de passe', () => {
-    it("jette une erreur technique si l'ID de l'utilisateur courant n'est pas présent dans la requête", (done) => {
+    it("jette une erreur technique si l'ID de l'utilisateur courant n'est pas présent dans la requête", async () => {
       requete.idUtilisateurCourant = null;
 
       const middleware = leMiddleware();
@@ -836,35 +824,33 @@ describe('Le middleware MSS', () => {
         expect(e.message).to.equal(
           'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
         );
-        done();
       });
     });
 
-    it("renvoie une erreur HTTP 422 si le mot de passe n'est pas présent dans la requête", (done) => {
+    it("renvoie une erreur HTTP 422 si le mot de passe n'est pas présent dans la requête", async () => {
       requete.idUtilisateurCourant = '123';
       requete.body = {};
 
       prepareVerificationReponse(
         reponse,
         422,
-        'Le champ `motDePasseChallenge` est obligatoire',
-        done
+        'Le champ `motDePasseChallenge` est obligatoire'
       );
       const suite = () =>
-        done("Le middleware suivant n'aurait pas dû être appelé");
+        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
 
       const middleware = leMiddleware();
       middleware.challengeMotDePasse(requete, reponse, suite);
     });
 
-    it('renvoie une erreur HTTP 401 si le mot de passe est incorrect', (done) => {
+    it('renvoie une erreur HTTP 401 si le mot de passe est incorrect', async () => {
       requete.idUtilisateurCourant = '123';
       requete.body = { motDePasseChallenge: 'MAUVAIS_MDP' };
       depotDonnees.verifieMotDePasse = () => Promise.reject();
 
-      prepareVerificationReponse(reponse, 401, 'Mot de passe incorrect', done);
+      prepareVerificationReponse(reponse, 401, 'Mot de passe incorrect');
       const suite = () =>
-        done("Le middleware suivant n'aurait pas dû être appelé");
+        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
 
       const middleware = leMiddleware({ depotDonnees });
       middleware.challengeMotDePasse(requete, reponse, suite);
@@ -911,23 +897,21 @@ describe('Le middleware MSS', () => {
   });
 
   describe('sur demande de chargement des préférences utilisateurs', () => {
-    it('ajoute un objet de préférences à `reponse.locals`, le rendant ainsi accessible aux `.pug`', (done) => {
+    it('ajoute un objet de préférences à `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
       const middleware = leMiddleware();
 
       middleware.chargePreferencesUtilisateur(requete, reponse, () => {
         expect(reponse.locals.preferencesUtilisateur).not.to.be(undefined);
-        done();
       });
     });
 
-    it("lit l'état d'ouverture/fermeture du menu de navigation", (done) => {
+    it("lit l'état d'ouverture/fermeture du menu de navigation", async () => {
       const middleware = leMiddleware();
 
       requete.cookies['etat-menu-navigation'] = 'ferme';
       middleware.chargePreferencesUtilisateur(requete, reponse, () => {
         const { preferencesUtilisateur } = reponse.locals;
         expect(preferencesUtilisateur.etatMenuNavigation).to.be('ferme');
-        done();
       });
     });
   });
@@ -940,7 +924,7 @@ describe('Le middleware MSS', () => {
         uneAutorisation().avecDroits({}).construis();
     });
 
-    it("jette une erreur technique si le service ou l'utilisateur ne sont pas présents dans la requête", (done) => {
+    it("jette une erreur technique si le service ou l'utilisateur ne sont pas présents dans la requête", async () => {
       requete.service = null;
       const middleware = leMiddleware({ depotDonnees });
 
@@ -951,11 +935,10 @@ describe('Le middleware MSS', () => {
         expect(e.message).to.equal(
           'Un utilisateur courant et un service doivent être présent dans la requête. Manque-t-il un appel à `verificationJWT` et `trouveService` ?'
         );
-        done();
       });
     });
 
-    it("utilise le dépôt de données pour lire l'autorisation", (done) => {
+    it("utilise le dépôt de données pour lire l'autorisation", async () => {
       let donneesPassees = {};
       depotDonnees.autorisationPour = async (idUtilisateur, idService) => {
         donneesPassees = { idUtilisateur, idService };
@@ -969,11 +952,10 @@ describe('Le middleware MSS', () => {
           idUtilisateur: '999',
           idService: '123',
         });
-        done();
       });
     });
 
-    it("ajoute l'autorisation à la *`requete`* pour qu'elle soit accessibles aux routes utilisant le middleware", (done) => {
+    it("ajoute l'autorisation à la *`requete`* pour qu'elle soit accessibles aux routes utilisant le middleware", async () => {
       const middleware = leMiddleware({ depotDonnees });
       const autorisationChargee = uneAutorisation()
         .avecDroits({
@@ -985,16 +967,11 @@ describe('Le middleware MSS', () => {
       depotDonnees.autorisationPour = async () => autorisationChargee;
 
       middleware.chargeAutorisationsService(requete, reponse, () => {
-        try {
-          expect(requete.autorisationService).to.be(autorisationChargee);
-          done();
-        } catch (e) {
-          done(e);
-        }
+        expect(requete.autorisationService).to.be(autorisationChargee);
       });
     });
 
-    it("remanie l'objet d'autorisation à la *`reponse`* pour qu'il soit utilisable par le `.pug`", (done) => {
+    it("remanie l'objet d'autorisation à la *`reponse`* pour qu'il soit utilisable par le `.pug`", async () => {
       const middleware = leMiddleware({ depotDonnees });
       depotDonnees.autorisationPour = async () =>
         uneAutorisation()
@@ -1006,17 +983,12 @@ describe('Le middleware MSS', () => {
           .construis();
 
       middleware.chargeAutorisationsService(requete, reponse, () => {
-        try {
-          expect(reponse.locals.autorisationsService).to.eql({
-            DECRIRE: { estLectureSeule: false, estMasque: false },
-            SECURISER: { estLectureSeule: true, estMasque: false },
-            HOMOLOGUER: { estLectureSeule: false, estMasque: true },
-            peutHomologuer: false,
-          });
-          done();
-        } catch (e) {
-          done(e);
-        }
+        expect(reponse.locals.autorisationsService).to.eql({
+          DECRIRE: { estLectureSeule: false, estMasque: false },
+          SECURISER: { estLectureSeule: true, estMasque: false },
+          HOMOLOGUER: { estLectureSeule: false, estMasque: true },
+          peutHomologuer: false,
+        });
       });
     });
   });
@@ -1046,27 +1018,23 @@ describe('Le middleware MSS', () => {
         middleware = leMiddleware({ depotDonnees });
       });
 
-      it("jette une une erreur technique si l'utilisateur n'est pas présent dans la requête", (done) => {
+      it("jette une une erreur technique si l'utilisateur n'est pas présent dans la requête", async () => {
         requete.idUtilisateurCourant = undefined;
 
-        middleware
-          .chargeEtatVisiteGuidee(requete, reponse, () => {})
-          .then(() =>
-            done(
-              "Le chargement de l'état de la visite guidée aurait dû lever une exception"
-            )
-          )
-          .catch((e) => {
-            expect(e).to.be.an(ErreurChainageMiddleware);
-            expect(e.message).to.equal(
-              'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
-            );
-          })
-          .then(() => done())
-          .catch(done);
+        try {
+          await middleware.chargeEtatVisiteGuidee(requete, reponse, () => {});
+          expect().fail(
+            "Le chargement de l'état de la visite guidée aurait dû lever une exception"
+          );
+        } catch (e) {
+          expect(e).to.be.an(ErreurChainageMiddleware);
+          expect(e.message).to.equal(
+            'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
+          );
+        }
       });
 
-      it("ajoute l'état de la visite guidée de l'utilisateur à `reponse.locals`", (done) => {
+      it("ajoute l'état de la visite guidée de l'utilisateur à `reponse.locals`", async () => {
         requete.idUtilisateurCourant = '1234';
 
         middleware.chargeEtatVisiteGuidee(requete, reponse, () => {
@@ -1081,14 +1049,12 @@ describe('Le middleware MSS', () => {
             profilComplet: false,
             dateInscription: '2025-01-01',
           });
-
-          done();
         });
       });
     });
   });
 
-  it('ajoute la version de build dans `reponse.locals`, le rendant ainsi accessible aux `.pug`', (done) => {
+  it('ajoute la version de build dans `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
     const adaptateurEnvironnement = {
       versionDeBuild: () => '1.1',
     };
@@ -1097,7 +1063,6 @@ describe('Le middleware MSS', () => {
 
     middleware.ajouteVersionFichierCompiles(requete, reponse, () => {
       expect(reponse.locals.version).to.be('1.1');
-      done();
     });
   });
 
@@ -1114,7 +1079,7 @@ describe('Le middleware MSS', () => {
       };
     });
 
-    it('ajoute le contenu de la préparation de maintenance dans `reponse.locals`, le rendant ainsi accessible aux `.pug`', (done) => {
+    it('ajoute le contenu de la préparation de maintenance dans `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
       adaptateurEnvironnement = {
         modeMaintenance: () => ({
           actif: () => false,
@@ -1130,7 +1095,6 @@ describe('Le middleware MSS', () => {
           jour: 'JOUR',
           heure: 'HEURE',
         });
-        done();
       });
     });
 
@@ -1206,32 +1170,30 @@ describe('Le middleware MSS', () => {
     });
   });
 
-  it("ajoute le feature flag 'agentConnectActif' si les variables d'environnement sont présentes", (done) => {
+  it("ajoute le feature flag 'agentConnectActif' si les variables d'environnement sont présentes", async () => {
     const adaptateurEnvironnement = {
       featureFlag: () => ({ avecAgentConnect: () => true }),
     };
 
     const middleware = leMiddleware({ adaptateurEnvironnement });
 
-    middleware.chargeEtatAgentConnect(requete, reponse, () => {
+    await middleware.chargeEtatAgentConnect(requete, reponse, () => {
       expect(reponse.locals.agentConnectActif).to.be(true);
-      done();
     });
   });
 
   describe('concernant le type de requête', () => {
-    it('sait charger le type de requête', (done) => {
+    it('sait charger le type de requête', async () => {
       const middleware = leMiddleware({});
 
       middleware.chargeTypeRequete('API')(requete, reponse, () => {
         expect(requete.typeRequete).to.be('API');
-        done();
       });
     });
   });
 
   describe("sur demande d'interdiction de mise en cache", () => {
-    it('interdit la mise en cache', (done) => {
+    it('interdit la mise en cache', async () => {
       const middleware = leMiddleware({});
 
       middleware.interdisLaMiseEnCache(requete, reponse, () => {
@@ -1241,7 +1203,6 @@ describe('Le middleware MSS', () => {
         expect(reponse.headers.pragma).to.be('no-cache');
         expect(reponse.headers.expires).to.be('0');
         expect(reponse.headers['surrogate-control']).to.be('no-store');
-        done();
       });
     });
   });
@@ -1267,22 +1228,20 @@ describe('Le middleware MSS', () => {
       });
     });
 
-    it('ajoute un objet de feature flags à `reponse.locals`, le rendant ainsi accessible aux `.pug`', (done) => {
+    it('ajoute un objet de feature flags à `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
       middleware.chargeFeatureFlags(requete, reponse, () => {
         expect(reponse.locals.featureFlags).not.to.be(undefined);
-        done();
       });
     });
 
     describe("concernant l'affichage du bandeau de promotion MesServicesCyber", () => {
-      it("n'affiche pas le bandeau si la date du jour est antérieure à la date d'affichage", (done) => {
+      it("n'affiche pas le bandeau si la date du jour est antérieure à la date d'affichage", async () => {
         middleware.chargeFeatureFlags(requete, reponse, () => {
           expect(reponse.locals.featureFlags.avecBandeauMSC).to.be(false);
-          done();
         });
       });
 
-      it("affiche le bandeau si la date d'affichage est passée", (done) => {
+      it("affiche le bandeau si la date d'affichage est passée", async () => {
         adaptateurHorloge.maintenant = () => new Date('2026-01-01 00:00:00Z');
         middleware = Middleware({
           adaptateurEnvironnement,
@@ -1291,7 +1250,6 @@ describe('Le middleware MSS', () => {
 
         middleware.chargeFeatureFlags(requete, reponse, () => {
           expect(reponse.locals.featureFlags.avecBandeauMSC).to.be(true);
-          done();
         });
       });
     });
