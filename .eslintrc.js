@@ -95,5 +95,10 @@ module.exports = {
         'import/extensions': ['error', { ts: 'never' }],
       },
     },
+    {
+      // Nous voulons que nos tests en TS référencent directement leur PROD en TS.
+      files: ['*.spec.ts'],
+      rules: { 'import/extensions': ['off'] },
+    },
   ],
 };
