@@ -1,4 +1,0 @@
-{
-  "ext": "js,json,mjs",
-  "watch": ["src/", "server.ts"]
-}
