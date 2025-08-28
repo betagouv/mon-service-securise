@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-const Utilisateur = require('../../src/modeles/utilisateur');
-const { fabriqueAnnuaire } = require('../../src/annuaire/serviceAnnuaire');
+const Utilisateur = require('../../src/modeles/utilisateur.js');
+const { fabriqueAnnuaire } = require('../../src/annuaire/serviceAnnuaire.ts');
 
 describe("Le service d'annuaire", () => {
   describe('sur demande de contributeurs', () => {
@@ -11,14 +10,12 @@ describe("Le service d'annuaire", () => {
         ],
       };
 
-      const annuaire = fabriqueAnnuaire({
-        depotDonnees,
-      });
+      const annuaire = fabriqueAnnuaire({ depotDonnees });
 
       const contributeurs = await annuaire.rechercheContributeurs('X', 'Y');
 
-      expect(contributeurs.length).to.be(1);
-      expect(contributeurs[0]).to.be.an(Utilisateur);
+      expect(contributeurs.length).toBe(1);
+      expect(contributeurs[0]).toBeInstanceOf(Utilisateur);
     });
   });
 });
