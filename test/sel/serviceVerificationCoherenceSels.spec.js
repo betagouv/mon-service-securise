@@ -76,7 +76,6 @@ describe('Le service de vérification de cohérence des sels de hashage', () => 
       });
 
       it("écrit l'erreur sur la console", async () => {
-        const sortieStandardActuelle = process.stdout;
         let erreurRecue;
         process.exit = () => undefined;
         process.stdout.write = (e) => (erreurRecue = e);
@@ -92,8 +91,6 @@ describe('Le service de vérification de cohérence des sels de hashage', () => 
         expect(erreurRecue).to.be(
           '💥 Erreur de vérification des sels: La version 1 du sel est invalide.\n'
         );
-
-        process.stdout = sortieStandardActuelle;
       });
     });
   });

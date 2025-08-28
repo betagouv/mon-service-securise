@@ -588,7 +588,7 @@ describe('Le dépôt de données des services', () => {
     let depot;
     let referentiel;
 
-    before(() => {
+    beforeAll(() => {
       valideRisque = RisqueSpecifique.valide;
       RisqueSpecifique.valide = () => {};
     });
@@ -608,7 +608,7 @@ describe('Le dépôt de données des services', () => {
         .construis();
     });
 
-    after(() => (RisqueSpecifique.valide = valideRisque));
+    afterAll(() => (RisqueSpecifique.valide = valideRisque));
 
     describe("sur demande d'ajout d'un risque specifique", () => {
       it('sait associer un risque spécifique à un service', async () => {

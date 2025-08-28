@@ -4,7 +4,7 @@ import jquery from 'jquery';
 import parametres from '../../public/modules/parametres.mjs';
 
 describe('Les paramètres', () => {
-  before(() => {
+  beforeAll(() => {
     const sourcePage =
       '<form class="formulaire"><input name="champ-1" value="valeur 1"></form>';
     const dom = new JSDOM(sourcePage);

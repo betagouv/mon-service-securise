@@ -2,8 +2,7 @@ const expect = require('expect.js');
 const { execSync } = require('child_process');
 
 describe("Le script de création d'un utilisateur de Démo", () => {
-  it('se lance correctement', function lanceCommande() {
-    this.timeout(10000);
+  it('se lance correctement', () => {
     const variablesEnvironnement = [
       'CREATION_UTILISATEUR_DEMO=true',
       'EMAIL_UTILISATEUR_DEMO=jean.dujardin@beta.gouv.fr',

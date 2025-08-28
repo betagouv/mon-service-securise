@@ -4,7 +4,7 @@ import jquery from 'jquery';
 import afficheModaleDeconnexion from '../../../public/modules/interactions/afficheModaleDeconnexion.mjs';
 
 describe("Lors d'une demande d'affichage de la modale de déconnexion", () => {
-  before(() => {
+  beforeAll(() => {
     const sourcePage = `
     <header>
       <div class="rideau" id="deconnexion" style="display: none;"></div>
