@@ -32,35 +32,33 @@ describe('Un événement de CGU acceptées', () => {
     });
   });
 
-  it("exige que l'identifiant utilisateur soit renseigné", (done) => {
+  it("exige que l'identifiant utilisateur soit renseigné", () => {
     try {
       new EvenementCguAcceptees(
         { cguAcceptees: '1.0' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 
-  it('exige que la version des CGU acceptées soit renseignée', (done) => {
+  it('exige que la version des CGU acceptées soit renseignée', () => {
     try {
       new EvenementCguAcceptees(
         { idUtilisateur: 'U1' },
         { adaptateurChiffrement: hacheEnMajuscules }
       );
 
-      done(
+      expect().fail(
         Error("L'instanciation de l'événement aurait dû lever une exception")
       );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 });

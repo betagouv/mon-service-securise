@@ -31,16 +31,17 @@ describe('Un événement de service supprimé', () => {
     });
   });
 
-  it("exige que l'identifiant du service soit renseigné", (done) => {
+  it("exige que l'identifiant du service soit renseigné", () => {
     try {
       new EvenementServiceSupprime(
         {},
         { adaptateurChiffrement: hacheEnMajuscules }
       );
-      done("L'instanciation de l'événement aurait dû lever une exception");
+      expect().fail(
+        "L'instanciation de l'événement aurait dû lever une exception"
+      );
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
-      done();
     }
   });
 });

@@ -47,7 +47,7 @@ describe("Un événement de modification du collaboratif d'un service", () => {
     { propriete: 'autorisations' },
   ];
   proprietesAVerifier.forEach(({ propriete }) => {
-    it(`exige que \`${propriete}\` soit renseigné`, (done) => {
+    it(`exige que \`${propriete}\` soit renseigné`, () => {
       try {
         const donnees = { idService: 'abc' };
         delete donnees[propriete];
@@ -57,12 +57,11 @@ describe("Un événement de modification du collaboratif d'un service", () => {
           adaptateurChiffrement: hacheEnMajuscules,
         });
 
-        done(
+        expect().fail(
           Error("L'instanciation de l'événement aurait dû lever une exception")
         );
       } catch (e) {
         expect(e).to.be.an(ErreurDonneeManquante);
-        done();
       }
     });
   });

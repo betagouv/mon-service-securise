@@ -50,7 +50,7 @@ describe('Un événement de retour utilisateur sur une mesure', () => {
     { propriete: 'idRetour' },
   ];
   proprietesAVerifier.forEach(({ propriete }) => {
-    it(`exige que \`${propriete}\` soit renseigné`, (done) => {
+    it(`exige que \`${propriete}\` soit renseigné`, () => {
       try {
         const donnees = {
           idService: 'abc',
@@ -65,12 +65,11 @@ describe('Un événement de retour utilisateur sur une mesure', () => {
           adaptateurChiffrement: hacheEnMajuscules,
         });
 
-        done(
+        expect().fail(
           Error("L'instanciation de l'événement aurait dû lever une exception")
         );
       } catch (e) {
         expect(e).to.be.an(ErreurDonneeManquante);
-        done();
       }
     });
   });
