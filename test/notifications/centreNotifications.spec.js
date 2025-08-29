@@ -7,7 +7,9 @@ const {
   ErreurIdentifiantTacheInconnu,
 } = require('../../src/erreurs');
 const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const adaptateurHorloge = require('../../src/adaptateurs/adaptateurHorloge');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('../../src/adaptateurs/adaptateurHorloge');
 const {
   uneTacheDeService,
 } = require('../constructeurs/constructeurTacheDeService');
@@ -35,7 +37,11 @@ describe('Le centre de notifications', () => {
   });
 
   const centreDeNotification = () =>
-    new CentreNotifications({ referentiel, depotDonnees, adaptateurHorloge });
+    new CentreNotifications({
+      referentiel,
+      depotDonnees,
+      adaptateurHorloge: fabriqueAdaptateurHorloge(),
+    });
 
   it("jette une erreur s'il n'est pas instancié avec les bonnes dépendances", () => {
     expect(() => new CentreNotifications({})).to.throwError((e) => {
@@ -127,7 +133,7 @@ describe('Le centre de notifications', () => {
       const centreNotifications = new CentreNotifications({
         referentiel,
         depotDonnees,
-        adaptateurHorloge,
+        adaptateurHorloge: fabriqueAdaptateurHorloge(),
       });
 
       const notifications = await centreNotifications.toutesNotifications('U1');

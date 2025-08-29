@@ -1,7 +1,9 @@
 const Sentry = require('@sentry/node');
 const DepotDonnees = require('../../src/depotDonnees');
 const adaptateurEnvironnement = require('../../src/adaptateurs/adaptateurEnvironnement');
-const adaptateurHorloge = require('../../src/adaptateurs/adaptateurHorloge');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('../../src/adaptateurs/adaptateurHorloge');
 const adaptateurMail = require('../../src/adaptateurs/adaptateurMailSendinblue');
 const {
   envoieMailsNotificationExpirationHomologation,
@@ -9,6 +11,7 @@ const {
 
 const main = async () => {
   const depotDonnees = DepotDonnees.creeDepot();
+  const adaptateurHorloge = fabriqueAdaptateurHorloge();
   return envoieMailsNotificationExpirationHomologation({
     depotDonnees,
     adaptateurHorloge,

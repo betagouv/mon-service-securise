@@ -2,7 +2,9 @@ const {
   ErreurDateHomologationInvalide,
   ErreurDureeValiditeInvalide,
 } = require('../../erreurs');
-const adaptateurHorlogeParDefaut = require('../../adaptateurs/adaptateurHorloge');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('../../adaptateurs/adaptateurHorloge');
 const Etape = require('./etape');
 const {
   ajouteMoisADate,
@@ -15,7 +17,7 @@ class Decision extends Etape {
   constructor(
     { dateHomologation, dureeValidite } = {},
     referentiel = Referentiel.creeReferentielVide(),
-    adaptateurHorloge = adaptateurHorlogeParDefaut
+    adaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     super(
       {

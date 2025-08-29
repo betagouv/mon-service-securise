@@ -1,4 +1,6 @@
-const adaptateurHorlogeParDefaut = require('../../src/adaptateurs/adaptateurHorloge');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('../../src/adaptateurs/adaptateurHorloge');
 const Dossier = require('../../src/modeles/dossier');
 const Referentiel = require('../../src/referentiel');
 
@@ -6,7 +8,7 @@ class ConstructeurDossierFantaisie {
   constructor(
     id = '1',
     referentiel = Referentiel.creeReferentielVide(),
-    adaptateurHorloge = adaptateurHorlogeParDefaut
+    adaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     this.donnees = { id };
     this.referentiel = referentiel;
