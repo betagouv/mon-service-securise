@@ -5,7 +5,7 @@
   "description": "",
   "scripts": {
     "build": "knex migrate:latest && npm run build:front && npm run build:cree-utilisateur-demo",
-    "build:front": "npx vite build --config svelte/vite.config.mts",
+    "build:front": "npx vite build --config svelte/vite.config.ts",
     "build:back": "npx tsc",
     "build:cree-utilisateur-demo": "npm run build:back && node dist/creeUtilisateurDemo.js",
     "test": "eslint . && vitest",
@@ -98,7 +98,7 @@
     "tslib": "^2.5.0",
     "tsx": "^4.20.5",
     "typescript": "~5.2.0",
-    "vite": "^4.5.14",
+    "vite": "^5",
     "vitest": "^3.0.5"
   }
 }

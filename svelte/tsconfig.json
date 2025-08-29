@@ -13,7 +13,7 @@
     "ignoreDeprecations": "5.0"
   },
   "include": [
-    "vite.config.mts",
+    "vite.config.ts",
     "lib/**/*.d.ts",
     "lib/**/*.ts",
     "lib/**/*.js",
