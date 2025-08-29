@@ -1,36 +1,26 @@
-const expect = require('expect.js');
-const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
-const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
-const {
-  unePersistanceMemoire,
-} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
-const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
-const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
-const {
+import expect from 'expect.js';
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import * as AdaptateurPersistanceMemoire from '../../src/adaptateurs/adaptateurPersistanceMemoire.js';
+import * as DepotDonneesAutorisations from '../../src/depots/depotDonneesAutorisations.js';
+import * as DepotDonneesUtilisateurs from '../../src/depots/depotDonneesUtilisateurs.js';
+import {
   ErreurEmailManquant,
   ErreurSuppressionImpossible,
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
   ErreurMotDePasseIncorrect,
-} = require('../../src/erreurs');
-const Utilisateur = require('../../src/modeles/utilisateur');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
-const EvenementUtilisateurModifie = require('../../src/bus/evenementUtilisateurModifie');
-const EvenementUtilisateurInscrit = require('../../src/bus/evenementUtilisateurInscrit');
-const {
-  EvenementCguAccepteesParUtilisateur,
-} = require('../../src/bus/evenementCguAccepteesParUtilisateur');
-const {
-  fabriqueAdaptateurProfilAnssiVide,
-} = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
-const {
-  fabriqueAdaptateurHorloge,
-} = require('../../src/adaptateurs/adaptateurHorloge');
+} from '../../src/erreurs.js';
+import Utilisateur from '../../src/modeles/utilisateur.js';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import EvenementUtilisateurModifie from '../../src/bus/evenementUtilisateurModifie.js';
+import EvenementUtilisateurInscrit from '../../src/bus/evenementUtilisateurInscrit.js';
+import { EvenementCguAccepteesParUtilisateur } from '../../src/bus/evenementCguAccepteesParUtilisateur.js';
+import { fabriqueAdaptateurProfilAnssiVide } from '../../src/adaptateurs/adaptateurProfilAnssiVide.js';
+import { fabriqueAdaptateurHorloge } from '../../src/adaptateurs/adaptateurHorloge.js';
 
 describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurJWT;

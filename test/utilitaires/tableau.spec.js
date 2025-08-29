@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const { zipTableaux } = require('../../src/utilitaires/tableau');
+import expect from 'expect.js';
+import { zipTableaux } from '../../src/utilitaires/tableau.js';
 
 describe('Utilitaires sur les tableaux', () => {
   describe('La fonction `zip` entre 2 tableaux', () => {

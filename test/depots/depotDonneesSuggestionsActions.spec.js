@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const depotDonneesSuggestionsActions = require('../../src/depots/depotDonneesSuggestionsActions');
-const {
-  unePersistanceMemoire,
-} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
+import expect from 'expect.js';
+import * as depotDonneesSuggestionsActions from '../../src/depots/depotDonneesSuggestionsActions.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 
 describe("Le dépôt de données des suggestions d'actions", () => {
   let depot;

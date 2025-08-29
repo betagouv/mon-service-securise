@@ -1,15 +1,11 @@
-const expect = require('expect.js');
-const supertest = require('supertest');
+import expect from 'expect.js';
+import supertest from 'supertest';
+import { Rubriques } from '../../src/modeles/autorisations/gestionDroits';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation';
+import { unService } from '../constructeurs/constructeurService';
+import { SourceAuthentification } from '../../src/modeles/sourceAuthentification';
 
-const {
-  Rubriques: { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS },
-} = require('../../src/modeles/autorisations/gestionDroits');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
-const { unService } = require('../constructeurs/constructeurService');
-const SourceAuthentification = require('../../src/modeles/sourceAuthentification');
-
+const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS } = Rubriques;
 const NOMBRE_MAX_REDIRECTION_PAR_DEFAUT = 5;
 
 const verifieRequeteChangeEtat = async (donneesEtat, app, requete) => {
@@ -425,4 +421,4 @@ const middlewareFantaisie = {
   },
 };
 
-module.exports = middlewareFantaisie;
+export default middlewareFantaisie;

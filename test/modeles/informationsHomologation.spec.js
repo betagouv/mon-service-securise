@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
-const expect = require('expect.js');
+import expect from 'expect.js';
 
-const InformationsService = require('../../src/modeles/informationsService');
-const ElementsConstructibles = require('../../src/modeles/elementsConstructibles');
+import InformationsService from '../../src/modeles/informationsService.js';
+import ElementsConstructibles from '../../src/modeles/elementsConstructibles.js';
 
 const elles = it;
 

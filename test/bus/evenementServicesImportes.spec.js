@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const EvenementServicesImportes = require('../../src/bus/evenementServicesImportes');
+import expect from 'expect.js';
+import EvenementServicesImportes from '../../src/bus/evenementServicesImportes.js';
 
 describe("L'événement `ServicesImportes`", () => {
   it("lève une exception s'il est instancié sans nombre de services importés", () => {

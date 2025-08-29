@@ -1,7 +1,6 @@
 import { fabriqueAdaptateurUUID } from '../adaptateurs/adaptateurUUID.js';
 import fabriqueAdaptateurPersistance from '../adaptateurs/fabriqueAdaptateurPersistance.js';
 import { fabriqueServiceCgu } from '../serviceCgu.js';
-
 import {
   ErreurEmailManquant,
   ErreurSuppressionImpossible,
@@ -9,7 +8,6 @@ import {
   ErreurUtilisateurInexistant,
   ErreurMotDePasseIncorrect,
 } from '../erreurs.js';
-
 import Utilisateur from '../modeles/utilisateur.js';
 import Entite from '../modeles/entite.js';
 import EvenementUtilisateurModifie from '../bus/evenementUtilisateurModifie.js';

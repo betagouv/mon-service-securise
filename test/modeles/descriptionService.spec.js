@@ -1,12 +1,11 @@
-const expect = require('expect.js');
-
-const {
+import expect from 'expect.js';
+import {
   ErreurStatutDeploiementInvalide,
   ErreurLocalisationDonneesInvalide,
-} = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
-const DescriptionService = require('../../src/modeles/descriptionService');
-const InformationsService = require('../../src/modeles/informationsService');
+} from '../../src/erreurs.js';
+import * as Referentiel from '../../src/referentiel.js';
+import DescriptionService from '../../src/modeles/descriptionService.js';
+import InformationsService from '../../src/modeles/informationsService.js';
 
 const elle = it;
 

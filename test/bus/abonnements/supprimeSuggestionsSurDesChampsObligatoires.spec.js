@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const {
-  supprimeSuggestionsSurDesChampsObligatoires,
-} = require('../../../src/bus/abonnements/supprimeSuggestionsSurDesChampsObligatoires');
-const { unService } = require('../../constructeurs/constructeurService');
+import expect from 'expect.js';
+import { supprimeSuggestionsSurDesChampsObligatoires } from '../../../src/bus/abonnements/supprimeSuggestionsSurDesChampsObligatoires.js';
+import { unService } from '../../constructeurs/constructeurService.js';
 
 describe('L’abonnement qui supprime les suggestions portant sur des données obligatoires', () => {
   it('utilise le dépôt pour supprimer la suggestion de mise à jour du SIRET', async () => {

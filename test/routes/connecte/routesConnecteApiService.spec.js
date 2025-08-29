@@ -1,36 +1,32 @@
-const expect = require('expect.js');
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
+import { unDossier } from '../../constructeurs/constructeurDossier.js';
+import { unService } from '../../constructeurs/constructeurService.js';
 
-const testeurMSS = require('../testeurMSS');
-
-const uneDescriptionValide = require('../../constructeurs/constructeurDescriptionService');
-const { unDossier } = require('../../constructeurs/constructeurDossier');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
+import {
   ErreurDonneesObligatoiresManquantes,
-  ErreurNomServiceDejaExistant,
-  ErreurMesureInconnue,
-  ErreurRisqueInconnu,
-  ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
+  ErreurMesureInconnue,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
+  ErreurModeleDeMesureSpecifiqueIntrouvable,
+  ErreurNomServiceDejaExistant,
+  ErreurRisqueInconnu,
   ErreurSuppressionImpossible,
-} = require('../../../src/erreurs');
-const Service = require('../../../src/modeles/service');
-const {
+} from '../../../src/erreurs.js';
+
+import Service from '../../../src/modeles/service.js';
+import {
   Permissions,
   Rubriques,
   tousDroitsEnEcriture,
-} = require('../../../src/modeles/autorisations/gestionDroits');
-const {
-  uneAutorisation,
-} = require('../../constructeurs/constructeurAutorisation');
-const Autorisation = require('../../../src/modeles/autorisations/autorisation');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const Mesures = require('../../../src/modeles/mesures');
-const Referentiel = require('../../../src/referentiel');
-const Risques = require('../../../src/modeles/risques');
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import { Autorisation } from '../../../src/modeles/autorisations/autorisation.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import Mesures from '../../../src/modeles/mesures.js';
+import * as Referentiel from '../../../src/referentiel.js';
+import Risques from '../../../src/modeles/risques.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { RISQUES, DECRIRE, SECURISER, CONTACTS, HOMOLOGUER } = Rubriques;
@@ -1792,11 +1788,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
       testeur.adaptateurHorloge().maintenant = () => maintenant;
 
-      testeur.depotDonnees().enregistreDossier = (idHomologation, dossier) => {
+      testeur.depotDonnees().enregistreDossier = async (
+        idHomologation,
+        dossier
+      ) => {
         depotAppele = true;
         expect(idHomologation).to.equal('456');
         expect(dossier.dateTelechargement.date).to.equal(maintenant);
-        return Promise.resolve();
       };
 
       await testeur.put('/api/service/456/homologation/telechargement');

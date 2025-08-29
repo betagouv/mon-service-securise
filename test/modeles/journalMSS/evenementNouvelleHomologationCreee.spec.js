@@ -1,10 +1,8 @@
-const expect = require('expect.js');
-const EvenementNouvelleHomologationCreee = require('../../../src/modeles/journalMSS/evenementNouvelleHomologationCreee');
-require('./constructeurEvenementCompletudeServiceModifiee');
-require('../../../src/modeles/journalMSS/evenementCompletudeServiceModifiee');
-const {
-  ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
+import expect from 'expect.js';
+import EvenementNouvelleHomologationCreee from '../../../src/modeles/journalMSS/evenementNouvelleHomologationCreee.js';
+import './constructeurEvenementCompletudeServiceModifiee.js';
+import '../../../src/modeles/journalMSS/evenementCompletudeServiceModifiee.js';
+import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 
 describe('Un événement de nouvelle homologation', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };

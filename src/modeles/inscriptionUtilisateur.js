@@ -1,5 +1,5 @@
 import { EchecEnvoiMessage } from '../erreurs.js';
-import SourceAuthentification from './sourceAuthentification.js';
+import { SourceAuthentification } from './sourceAuthentification.js';
 
 function fabriqueInscriptionUtilisateur(config = {}) {
   const { adaptateurMail, adaptateurTracking, depotDonnees } = config;

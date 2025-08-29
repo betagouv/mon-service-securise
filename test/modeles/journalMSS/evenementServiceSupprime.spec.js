@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const {
-  ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
-const EvenementServiceSupprime = require('../../../src/modeles/journalMSS/evenementServiceSupprime');
+import expect from 'expect.js';
+import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import EvenementServiceSupprime from '../../../src/modeles/journalMSS/evenementServiceSupprime.js';
 
 describe('Un événement de service supprimé', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };

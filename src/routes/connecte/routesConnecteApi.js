@@ -36,7 +36,7 @@ import {
 } from '../../modeles/autorisations/gestionDroits.js';
 import routesConnecteApiVisiteGuidee from './routesConnecteApiVisiteGuidee.js';
 import routesConnecteApiNotifications from './routesConnecteApiNotifications.js';
-import SourceAuthentification from '../../modeles/sourceAuthentification.js';
+import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 import DescriptionService from '../../modeles/descriptionService.js';
 import routesConnecteApiTeleversement from './routesConnecteApiTeleversement.js';
 

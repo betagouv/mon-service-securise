@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const MaintenanceService = require('../../../src/modeles/partiesPrenantes/maintenanceService');
+import expect from 'expect.js';
+import MaintenanceService from '../../../src/modeles/partiesPrenantes/maintenanceService.js';
 
 describe('Une maintenance du service', () => {
   it('sait se décrire en JSON', () => {

@@ -1,21 +1,13 @@
-const expect = require('expect.js');
-const {
-  envoieMailsNotificationExpirationHomologation,
-} = require('../../src/taches/envoieMailsNotificationExpirationHomologation');
-const { depotVide } = require('../depots/depotVide');
-const {
-  fabriqueAdaptateurHorloge,
-} = require('../../src/adaptateurs/adaptateurHorloge');
-const { creeDepot } = require('../../src/depotDonnees');
-const {
-  unePersistanceMemoire,
-} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
-const Autorisation = require('../../src/modeles/autorisations/autorisation');
+import expect from 'expect.js';
+import { envoieMailsNotificationExpirationHomologation } from '../../src/taches/envoieMailsNotificationExpirationHomologation.js';
+import { depotVide } from '../depots/depotVide.js';
+import { creeDepot } from '../../src/depotDonnees.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import { Autorisation } from '../../src/modeles/autorisations/autorisation.js';
+import { fabriqueAdaptateurHorloge } from '../../src/adaptateurs/adaptateurHorloge.js';
 
 const { DROITS_VOIR_STATUT_HOMOLOGATION } = Autorisation;
 

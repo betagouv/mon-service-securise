@@ -1,16 +1,8 @@
-const expect = require('expect.js');
-const {
-  unAdaptateurTracking,
-} = require('../../constructeurs/constructeurAdaptateurTracking');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const {
-  unDepotDeDonneesServices,
-} = require('../../constructeurs/constructeurDepotDonneesServices');
-const {
-  envoieTrackingDeConnexionUtilisateur,
-} = require('../../../src/bus/abonnements/envoieTrackingDeConnexionUtilisateur');
+import expect from 'expect.js';
+import { unAdaptateurTracking } from '../../constructeurs/constructeurAdaptateurTracking.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { unDepotDeDonneesServices } from '../../constructeurs/constructeurDepotDonneesServices.js';
+import { envoieTrackingDeConnexionUtilisateur } from '../../../src/bus/abonnements/envoieTrackingDeConnexionUtilisateur.js';
 
 describe("L'abonnement qui envoie au tracking la connexion de l'utilisateur", () => {
   let adaptateurTracking;

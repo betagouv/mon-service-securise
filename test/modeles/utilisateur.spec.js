@@ -1,14 +1,11 @@
-const expect = require('expect.js');
-
-const {
+import expect from 'expect.js';
+import {
   ErreurEmailManquant,
   ErreurDonneesObligatoiresManquantes,
-} = require('../../src/erreurs');
-const Utilisateur = require('../../src/modeles/utilisateur');
-const {
-  fabriqueAdaptateurMailMemoire,
-} = require('../../src/adaptateurs/adaptateurMailMemoire');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
+} from '../../src/erreurs.js';
+import Utilisateur from '../../src/modeles/utilisateur.js';
+import { fabriqueAdaptateurMailMemoire } from '../../src/adaptateurs/adaptateurMailMemoire.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
 
 describe('Un utilisateur', () => {
   describe("sur demande d'un profil complet ou non", () => {

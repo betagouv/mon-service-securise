@@ -1,23 +1,21 @@
-const expect = require('expect.js');
-
-const testeurMSS = require('../testeurMSS');
-const {
-  Permissions: { LECTURE, ECRITURE },
-  Rubriques: { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES },
-} = require('../../../src/modeles/autorisations/gestionDroits');
-const {
-  uneAutorisation,
-} = require('../../constructeurs/constructeurAutorisation');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
-  verifieTypeFichierServiEstCSV,
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+import {
+  Permissions,
+  Rubriques,
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import {
   verifieNomFichierServi,
-} = require('../../aides/verifieFichierServi');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const { donneesPartagees } = require('../../aides/http');
-const Risque = require('../../../src/modeles/risque');
+  verifieTypeFichierServiEstCSV,
+} from '../../aides/verifieFichierServi.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { donneesPartagees } from '../../aides/http.js';
+import Risque from '../../../src/modeles/risque.js';
+
+const { LECTURE, ECRITURE } = Permissions;
+const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
@@ -592,8 +590,7 @@ describe('Le serveur MSS des routes /service/*', () => {
 
   describe('quand requête GET sur `/service/:id/dossiers`', () => {
     beforeEach(() => {
-      testeur.referentiel().premiereEtapeParcours = () =>
-        Promise.resolve({ id: 1 });
+      testeur.referentiel().premiereEtapeParcours = async () => ({ id: 1 });
     });
 
     it('recherche le service correspondant', async () => {

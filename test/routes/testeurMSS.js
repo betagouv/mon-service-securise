@@ -1,33 +1,20 @@
-const expect = require('expect.js');
-const supertest = require('supertest');
-
-const { depotVide } = require('../depots/depotVide');
-const {
-  fabriqueAdaptateurGestionErreurVide,
-} = require('../../src/adaptateurs/adaptateurGestionErreurVide');
-const adaptateurMailMemoire = require('../../src/adaptateurs/adaptateurMailMemoire');
-const MoteurRegles = require('../../src/moteurRegles');
-const MSS = require('../../src/mss.ts');
-const Referentiel = require('../../src/referentiel');
-const middleware = require('../mocks/middleware');
-const { fabriqueProcedures } = require('../../src/routes/procedures');
-const {
-  fabriqueInscriptionUtilisateur,
-} = require('../../src/modeles/inscriptionUtilisateur');
-const {
-  fabriqueAdaptateurJWT,
-} = require('../../src/adaptateurs/adaptateurJWT');
-const {
-  fabriqueAdaptateurProfilAnssiVide,
-} = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
-const { fabriqueServiceCgu } = require('../../src/serviceCgu');
-const {
-  fabriqueServiceGestionnaireSession,
-} = require('../../src/session/serviceGestionnaireSession');
-const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
-const {
-  fabriqueAdaptateurHorloge,
-} = require('../../src/adaptateurs/adaptateurHorloge');
+import expect from 'expect.js';
+import supertest from 'supertest';
+import { depotVide } from '../depots/depotVide.js';
+import * as adaptateurMailMemoire from '../../src/adaptateurs/adaptateurMailMemoire.js';
+import MoteurRegles from '../../src/moteurRegles.js';
+import * as MSS from '../../src/mss.ts';
+import * as Referentiel from '../../src/referentiel.js';
+import middleware from '../mocks/middleware.js';
+import { fabriqueProcedures } from '../../src/routes/procedures.js';
+import { fabriqueInscriptionUtilisateur } from '../../src/modeles/inscriptionUtilisateur.js';
+import { fabriqueAdaptateurJWT } from '../../src/adaptateurs/adaptateurJWT.js';
+import { fabriqueServiceCgu } from '../../src/serviceCgu.js';
+import { fabriqueServiceGestionnaireSession } from '../../src/session/serviceGestionnaireSession.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import { fabriqueAdaptateurProfilAnssiVide } from '../../src/adaptateurs/adaptateurProfilAnssiVide.js';
+import { fabriqueAdaptateurGestionErreurVide } from '../../src/adaptateurs/adaptateurGestionErreurVide.js';
+import { fabriqueAdaptateurHorloge } from '../../src/adaptateurs/adaptateurHorloge.js';
 
 const testeurMss = () => {
   let serviceAnnuaire;
@@ -265,4 +252,4 @@ const testeurMss = () => {
   };
 };
 
-module.exports = testeurMss;
+export default testeurMss;

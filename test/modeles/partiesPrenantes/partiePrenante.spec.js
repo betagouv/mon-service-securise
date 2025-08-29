@@ -1,7 +1,6 @@
-const expect = require('expect.js');
-
-const PartiePrenante = require('../../../src/modeles/partiesPrenantes/partiePrenante');
-const InformationsService = require('../../../src/modeles/informationsService');
+import expect from 'expect.js';
+import PartiePrenante from '../../../src/modeles/partiesPrenantes/partiePrenante.js';
+import InformationsService from '../../../src/modeles/informationsService.js';
 
 const elle = it;
 

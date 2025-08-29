@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const DepotDonneesTeleversementServices = require('../../src/depots/depotDonneesTeleversementServices');
+import expect from 'expect.js';
+import * as DepotDonneesTeleversementServices from '../../src/depots/depotDonneesTeleversementServices.js';
 
 const donneesServiceValide = {};
 

@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const Profil = require('../../../src/modeles/profils/profil');
+import expect from 'expect.js';
+import Profil from '../../../src/modeles/profils/profil.js';
 
 describe('Un profil', () => {
   describe('lorsque les règles ne sont pas définies', () => {

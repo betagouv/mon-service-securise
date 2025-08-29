@@ -1,7 +1,7 @@
-const expect = require('expect.js');
-const ServiceTeleverse = require('../../../src/modeles/televersement/serviceTeleverse');
-const Referentiel = require('../../../src/referentiel');
-const donneesReferentiel = require('../../../donneesReferentiel');
+import expect from 'expect.js';
+import ServiceTeleverse from '../../../src/modeles/televersement/serviceTeleverse.js';
+import * as Referentiel from '../../../src/referentiel.js';
+import donneesReferentiel from '../../../donneesReferentiel.js';
 
 const donneesServiceValide = {
   nom: 'Nom du service',

@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const PartiesPrenantes = require('../../../src/modeles/partiesPrenantes/partiesPrenantes');
+import expect from 'expect.js';
+import PartiesPrenantes from '../../../src/modeles/partiesPrenantes/partiesPrenantes.js';
 
 const elles = it;
 

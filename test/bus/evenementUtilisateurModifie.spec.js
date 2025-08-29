@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const EvenementUtilisateurModifie = require('../../src/bus/evenementUtilisateurModifie');
+import expect from 'expect.js';
+import EvenementUtilisateurModifie from '../../src/bus/evenementUtilisateurModifie.js';
 
 describe("L'événement `utilisateurModifie", () => {
   it("lève une exception s'il est instancié sans utilisateur", () => {

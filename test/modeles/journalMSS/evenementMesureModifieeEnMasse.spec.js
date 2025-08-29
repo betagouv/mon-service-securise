@@ -1,7 +1,5 @@
-const expect = require('expect.js');
-const {
-  EvenementMesureModifieeEnMasse,
-} = require('../../../src/modeles/journalMSS/evenementMesureModifieeEnMasse');
+import expect from 'expect.js';
+import { EvenementMesureModifieeEnMasse } from '../../../src/modeles/journalMSS/evenementMesureModifieeEnMasse.js';
 
 describe('Un événement de mesure modifiée en masse', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };

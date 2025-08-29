@@ -3,6 +3,4 @@ const SourceAuthentification = {
   MSS: 'MSS',
 };
 
-export default SourceAuthentification;
-
-export const { AGENT_CONNECT, MSS } = SourceAuthentification;
+export { SourceAuthentification };

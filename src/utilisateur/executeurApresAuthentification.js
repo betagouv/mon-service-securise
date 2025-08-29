@@ -1,4 +1,4 @@
-import SourceAuthentification from '../modeles/sourceAuthentification.js';
+import { SourceAuthentification } from '../modeles/sourceAuthentification.js';
 
 const executeurApresAuthentification = async (
   ordre,

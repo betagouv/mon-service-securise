@@ -1,7 +1,7 @@
-import { fabriqueAdaptateurHorloge } from '../adaptateurs/adaptateurHorloge.js';
 import Base from './base.js';
 import * as Referentiel from '../referentiel.js';
 import EtatVisiteGuidee from './etatVisiteGuidee.js';
+import { fabriqueAdaptateurHorloge } from '../adaptateurs/adaptateurHorloge.js';
 
 class ParcoursUtilisateur extends Base {
   constructor(
