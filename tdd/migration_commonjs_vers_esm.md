@@ -6,7 +6,7 @@
   - [x] Aller voir tous les fichiers dans `/test`
   - [x] Aller voir tous les fichiers dans `/migrations` et `/test_migrations`
   - [x] Aller voir tous les fichiers dans `/public` et `/test_public`
-  - [-] Aller voir tous les fichiers dans `/admin`
+  - [x] Aller voir tous les fichiers dans `/admin`
   - [ ] Aller voir tous les fichiers dans `/scripts`
   - [ ] Faire une recherche globale sur `require()` pour chasser les derniers
 - [ ] Faire les tests des éléments "périphériques"

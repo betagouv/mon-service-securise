@@ -1,7 +1,5 @@
-const { program } = require('commander');
-const {
-  DuplicationEnMasseDeServices,
-} = require('./duplicationEnMasseDeServices');
+import { program } from 'commander';
+import { DuplicationEnMasseDeServices } from './duplicationEnMasseDeServices.js';
 
 program
   .description('Duplication en masse de services')
