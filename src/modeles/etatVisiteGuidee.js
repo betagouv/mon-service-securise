@@ -1,5 +1,5 @@
-const Base = require('./base');
-const Referentiel = require('../referentiel');
+import Base from './base.js';
+import * as Referentiel from '../referentiel.js';
 
 class EtatVisiteGuidee extends Base {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
@@ -45,4 +45,4 @@ class EtatVisiteGuidee extends Base {
   }
 }
 
-module.exports = EtatVisiteGuidee;
+export default EtatVisiteGuidee;

@@ -1,4 +1,4 @@
-const NotificationExpirationHomologation = require('../modeles/notificationExpirationHomologation');
+import NotificationExpirationHomologation from '../modeles/notificationExpirationHomologation.js';
 
 const creeDepot = (config = {}) => {
   const { adaptateurPersistance, adaptateurUUID } = config;
@@ -53,4 +53,4 @@ const creeDepot = (config = {}) => {
   };
 };
 
-module.exports = { creeDepot };
+export { creeDepot };

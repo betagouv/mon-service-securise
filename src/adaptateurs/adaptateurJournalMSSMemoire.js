@@ -1,11 +1,9 @@
-const adaptateurEnvironnement = require('./adaptateurEnvironnement');
+import { journalMSS } from './adaptateurEnvironnement.js';
 
 const nouvelAdaptateur = () => {
   const consigneEvenement = (donneesEvenements) => {
     /* eslint-disable no-console */
-    const logDansConsole = adaptateurEnvironnement
-      .journalMSS()
-      .logEvenementDansConsole();
+    const logDansConsole = journalMSS().logEvenementDansConsole();
     if (logDansConsole)
       console.log(
         `[JOURNAL MSS] Nouvel événement\n${JSON.stringify(donneesEvenements)}`
@@ -20,4 +18,4 @@ const nouvelAdaptateur = () => {
   };
 };
 
-module.exports = { nouvelAdaptateur };
+export { nouvelAdaptateur };

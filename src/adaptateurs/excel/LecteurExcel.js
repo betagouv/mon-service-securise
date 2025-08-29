@@ -1,5 +1,5 @@
-const xlsx = require('xlsx');
-const { ErreurFichierXlsInvalide } = require('../../erreurs');
+import xlsx from 'xlsx';
+import { ErreurFichierXlsInvalide } from '../../erreurs.js';
 
 class LecteurExcel {
   constructor(buffer) {
@@ -34,4 +34,4 @@ class LecteurExcel {
   }
 }
 
-module.exports = { LecteurExcel };
+export { LecteurExcel };

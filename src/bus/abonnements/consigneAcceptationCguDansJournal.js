@@ -1,4 +1,4 @@
-const EvenementCGUAcceptees = require('../../modeles/journalMSS/evenementCguAcceptees');
+import EvenementCGUAcceptees from '../../modeles/journalMSS/evenementCguAcceptees.js';
 
 function consigneAcceptationCguDansJournal({ adaptateurJournal }) {
   return async ({ idUtilisateur, cguAcceptees }) => {
@@ -13,4 +13,4 @@ function consigneAcceptationCguDansJournal({ adaptateurJournal }) {
   };
 }
 
-module.exports = { consigneAcceptationCguDansJournal };
+export { consigneAcceptationCguDansJournal };

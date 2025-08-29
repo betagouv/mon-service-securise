@@ -1,17 +1,17 @@
-const { baseDeDonnees } = require('./src/adaptateurs/adaptateurEnvironnement');
+import { baseDeDonnees } from './src/adaptateurs/adaptateurEnvironnement.js';
 
-module.exports = {
-  development: {
-    client: 'pg',
-    connection: process.env.URL_SERVEUR_BASE_DONNEES,
-    pool: { min: 0, max: baseDeDonnees().poolMaximumConnexion() },
-    migrations: { tableName: 'knex_migrations' },
-  },
-
-  production: {
-    client: 'pg',
-    connection: process.env.URL_SERVEUR_BASE_DONNEES,
-    pool: { min: 0, max: baseDeDonnees().poolMaximumConnexion() },
-    migrations: { tableName: 'knex_migrations' },
-  },
+const development = {
+  client: 'pg',
+  connection: process.env.URL_SERVEUR_BASE_DONNEES,
+  pool: { min: 0, max: baseDeDonnees().poolMaximumConnexion() },
+  migrations: { tableName: 'knex_migrations' },
 };
+
+const production = {
+  client: 'pg',
+  connection: process.env.URL_SERVEUR_BASE_DONNEES,
+  pool: { min: 0, max: baseDeDonnees().poolMaximumConnexion() },
+  migrations: { tableName: 'knex_migrations' },
+};
+
+export default { development, production };

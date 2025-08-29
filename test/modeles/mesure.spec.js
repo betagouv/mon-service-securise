@@ -1,11 +1,10 @@
-const expect = require('expect.js');
-
-const Mesure = require('../../src/modeles/mesure');
-const {
+import expect from 'expect.js';
+import Mesure from '../../src/modeles/mesure.js';
+import {
   ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
-} = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
+} from '../../src/erreurs.js';
+import * as Referentiel from '../../src/referentiel.js';
 
 const elle = it;
 

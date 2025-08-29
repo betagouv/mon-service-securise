@@ -1,3 +1,3 @@
-const PartiePrenante = require('./partiePrenante');
+import PartiePrenante from './partiePrenante.js';
 
-module.exports = class DeveloppementFourniture extends PartiePrenante {};
+export default class DeveloppementFourniture extends PartiePrenante {}

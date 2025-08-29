@@ -19,4 +19,4 @@ const fauxAdaptateurRechercheEntreprise = () => ({
   }),
 });
 
-module.exports = fauxAdaptateurRechercheEntreprise;
+export default fauxAdaptateurRechercheEntreprise;

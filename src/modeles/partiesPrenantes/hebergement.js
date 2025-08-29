@@ -1,5 +1,5 @@
-const PartiePrenante = require('./partiePrenante');
+import PartiePrenante from './partiePrenante.js';
 
 class Hebergement extends PartiePrenante {}
 
-module.exports = Hebergement;
+export default Hebergement;

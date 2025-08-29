@@ -20,6 +20,7 @@ const fabriqueServiceVerificationCoherenceSels = ({
     }
   },
 });
+
 /* eslint-enable no-console */
 
-module.exports = { fabriqueServiceVerificationCoherenceSels };
+export { fabriqueServiceVerificationCoherenceSels };

@@ -1,4 +1,4 @@
-exports.up = (knex) =>
+export const up = (knex) =>
   knex('homologations').then((lignes) => {
     const misesAJour = lignes
       .filter(({ donnees }) => donnees.caracteristiquesComplementaires)
@@ -14,4 +14,4 @@ exports.up = (knex) =>
     return Promise.all(misesAJour);
   });
 
-exports.down = () => {};
+export const down = () => {};

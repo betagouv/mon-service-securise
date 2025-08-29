@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const {
-  fabriqueServiceVerificationCoherenceSels,
-} = require('../../src/sel/serviceVerificationCoherenceSels');
-const { ErreurHashDeSelInvalide } = require('../../src/erreurs');
+import expect from 'expect.js';
+import { fabriqueServiceVerificationCoherenceSels } from '../../src/sel/serviceVerificationCoherenceSels.js';
+import { ErreurHashDeSelInvalide } from '../../src/erreurs.js';
 
 describe('Le service de vérification de cohérence des sels de hashage', () => {
   describe('sur demande de vérification des sels', () => {

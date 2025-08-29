@@ -1,7 +1,7 @@
-const { EchecAutorisation, EchecEnvoiMessage } = require('../../erreurs');
-const { fabriqueServiceTracking } = require('../../tracking/serviceTracking');
-const Autorisation = require('./autorisation');
-const EvenementInvitationUtilisateurEnvoyee = require('../../bus/evenementInvitationUtilisateurEnvoyee');
+import { EchecAutorisation, EchecEnvoiMessage } from '../../erreurs.js';
+import { fabriqueServiceTracking } from '../../tracking/serviceTracking.js';
+import { Autorisation } from './autorisation.js';
+import EvenementInvitationUtilisateurEnvoyee from '../../bus/evenementInvitationUtilisateurEnvoyee.js';
 
 const ajoutContributeurSurServices = ({
   depotDonnees,
@@ -186,4 +186,4 @@ const ajoutContributeurSurServices = ({
   };
 };
 
-module.exports = { ajoutContributeurSurServices };
+export { ajoutContributeurSurServices };

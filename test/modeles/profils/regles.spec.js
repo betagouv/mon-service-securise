@@ -1,7 +1,6 @@
-const expect = require('expect.js');
-
-const Regle = require('../../../src/modeles/profils/regle');
-const Regles = require('../../../src/modeles/profils/regles');
+import expect from 'expect.js';
+import Regle from '../../../src/modeles/profils/regle.js';
+import Regles from '../../../src/modeles/profils/regles.js';
 
 describe('Les règles', () => {
   it('savent si elles sont vides', () => {

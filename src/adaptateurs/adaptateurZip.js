@@ -1,7 +1,5 @@
-const JSZip = require('jszip');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('./fabriqueAdaptateurGestionErreur');
+import JSZip from 'jszip';
+import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
 
 const genereArchive = (tableauDeFichiers) => {
   try {
@@ -20,4 +18,4 @@ const genereArchive = (tableauDeFichiers) => {
   }
 };
 
-module.exports = { genereArchive };
+export { genereArchive };

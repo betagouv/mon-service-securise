@@ -1,4 +1,4 @@
-exports.up = (knex) =>
+export const up = (knex) =>
   knex('services').then((lignes) => {
     const suppressions = lignes.map(
       ({ id, donnees: { id: _, ...autresDonnees } }) =>
@@ -7,4 +7,4 @@ exports.up = (knex) =>
     return Promise.all(suppressions);
   });
 
-exports.down = () => {};
+export const down = () => {};

@@ -16,4 +16,4 @@ class EvenementMesureModifieeEnMasse {
   }
 }
 
-module.exports = EvenementMesureModifieeEnMasse;
+export default EvenementMesureModifieeEnMasse;

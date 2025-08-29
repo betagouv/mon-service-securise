@@ -19,4 +19,4 @@ function envoieTrackingDeConnexionUtilisateur({
   };
 }
 
-module.exports = { envoieTrackingDeConnexionUtilisateur };
+export { envoieTrackingDeConnexionUtilisateur };

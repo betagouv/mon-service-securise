@@ -35,11 +35,10 @@ const supprimeStatut = (knex, table) =>
     return Promise.all(misesAJour);
   });
 
-exports.up = (knex) =>
+export const up = (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) => supprimeStatut(knex, table))
   );
 
-exports.down = () => Promise.resolve();
-
-exports.nouveauStatut = nouveauStatut;
+export const down = () => Promise.resolve();
+export { nouveauStatut };

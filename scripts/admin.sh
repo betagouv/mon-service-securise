@@ -1,3 +1,7 @@
 #!/bin/bash
 
-node -e 'const admin = new (require("./admin/consoleAdministration"))()' -i
+node -e "
+  (async () => {
+    admin = new (await import('./admin/consoleAdministration.js')).default();
+  })();
+" -i

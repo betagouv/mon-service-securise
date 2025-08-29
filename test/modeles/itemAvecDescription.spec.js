@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const ItemAvecDescription = require('../../src/modeles/itemAvecDescription');
+import expect from 'expect.js';
+import ItemAvecDescription from '../../src/modeles/itemAvecDescription.js';
 
 describe('Un item avec description', () => {
   it('connaît sa description', () => {

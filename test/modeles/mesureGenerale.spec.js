@@ -1,14 +1,15 @@
-const expect = require('expect.js');
+import expect from 'expect.js';
 
-const {
+import {
   ErreurMesureInconnue,
   ErreurStatutMesureInvalide,
   ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
-} = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
-const MesureGenerale = require('../../src/modeles/mesureGenerale');
-const InformationsService = require('../../src/modeles/informationsService');
+} from '../../src/erreurs.js';
+
+import * as Referentiel from '../../src/referentiel.js';
+import MesureGenerale from '../../src/modeles/mesureGenerale.js';
+import InformationsService from '../../src/modeles/informationsService.js';
 
 describe('Une mesure de sécurité', () => {
   let referentiel;

@@ -1,12 +1,8 @@
-const expect = require('expect.js');
-const AdaptateurJournalMSSMemoire = require('../../../src/adaptateurs/adaptateurJournalMSSMemoire');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const {
-  consigneProprietaireCreeUnServiceDansJournal,
-} = require('../../../src/bus/abonnements/consigneProprietaireCreeUnServiceDansJournal');
+import expect from 'expect.js';
+import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { consigneProprietaireCreeUnServiceDansJournal } from '../../../src/bus/abonnements/consigneProprietaireCreeUnServiceDansJournal.js';
 
 describe("L'abonnement qui consigne (dans le journal MSS) le lien entre un propriétaire et son nouveau service", () => {
   let adaptateurJournal;

@@ -1,5 +1,5 @@
-const ElementsConstructibles = require('./elementsConstructibles');
-const MesureGenerale = require('./mesureGenerale');
+import ElementsConstructibles from './elementsConstructibles.js';
+import MesureGenerale from './mesureGenerale.js';
 
 class MesuresGenerales extends ElementsConstructibles {
   constructor(donnees, referentiel) {
@@ -64,4 +64,4 @@ class MesuresGenerales extends ElementsConstructibles {
   }
 }
 
-module.exports = MesuresGenerales;
+export default MesuresGenerales;

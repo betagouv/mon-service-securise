@@ -1,13 +1,13 @@
-const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
-const Base = require('./base');
-const Referentiel = require('../referentiel');
-const EtatVisiteGuidee = require('./etatVisiteGuidee');
+import Base from './base.js';
+import * as Referentiel from '../referentiel.js';
+import EtatVisiteGuidee from './etatVisiteGuidee.js';
+import { fabriqueAdaptateurHorloge } from '../adaptateurs/adaptateurHorloge.js';
 
 class ParcoursUtilisateur extends Base {
   constructor(
     donnees = {},
     referentiel = Referentiel.creeReferentielVide(),
-    adaptateurHorloge = adaptateurHorlogeParDefaut
+    adaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     super({
       proprietesAtomiquesRequises: ['idUtilisateur', 'dateDerniereConnexion'],
@@ -45,4 +45,4 @@ class ParcoursUtilisateur extends Base {
   }
 }
 
-module.exports = ParcoursUtilisateur;
+export default ParcoursUtilisateur;

@@ -1,4 +1,4 @@
-const EvenementProfilUtilisateurModifie = require('../../modeles/journalMSS/evenementProfilUtilisateurModifie');
+import EvenementProfilUtilisateurModifie from '../../modeles/journalMSS/evenementProfilUtilisateurModifie.js';
 
 function consigneProfilUtilisateurModifieDansJournal({ adaptateurJournal }) {
   return async ({ utilisateur }) => {
@@ -17,4 +17,4 @@ function consigneProfilUtilisateurModifieDansJournal({ adaptateurJournal }) {
   };
 }
 
-module.exports = { consigneProfilUtilisateurModifieDansJournal };
+export { consigneProfilUtilisateurModifieDansJournal };

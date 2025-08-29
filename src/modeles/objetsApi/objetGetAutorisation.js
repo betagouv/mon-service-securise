@@ -5,4 +5,4 @@ const donnees = (autorisation) => ({
   droits: autorisation.droits,
 });
 
-module.exports = { donnees };
+export { donnees };

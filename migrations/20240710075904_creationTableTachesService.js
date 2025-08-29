@@ -1,4 +1,4 @@
-exports.up = async (knex) =>
+export const up = async (knex) =>
   knex.schema.createTable('taches_service', (table) => {
     table.uuid('id');
     table.primary('id');
@@ -8,4 +8,4 @@ exports.up = async (knex) =>
     table.datetime('date_faite');
   });
 
-exports.down = async (knex) => knex.schema.dropTable('taches_service');
+export const down = async (knex) => knex.schema.dropTable('taches_service');

@@ -1,9 +1,9 @@
-const express = require('express');
-const CentreNotifications = require('../../notifications/centreNotifications');
-const {
+import express from 'express';
+import CentreNotifications from '../../notifications/centreNotifications.js';
+import {
   ErreurIdentifiantNouveauteInconnu,
   ErreurIdentifiantTacheInconnu,
-} = require('../../erreurs');
+} from '../../erreurs.js';
 
 const routesConnecteApiNotifications = ({
   adaptateurHorloge,
@@ -70,4 +70,4 @@ const routesConnecteApiNotifications = ({
   return routes;
 };
 
-module.exports = routesConnecteApiNotifications;
+export default routesConnecteApiNotifications;

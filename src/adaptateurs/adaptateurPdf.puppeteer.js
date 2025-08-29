@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
 
 const generationPdfExterne = () => {
   const { GENERATION_PDF_URL_DU_SERVICE, GENERATION_PDF_TOKEN_DU_SERVICE } =
@@ -26,4 +26,4 @@ const lanceNavigateur = async () => {
   });
 };
 
-module.exports = { lanceNavigateur };
+export { lanceNavigateur };

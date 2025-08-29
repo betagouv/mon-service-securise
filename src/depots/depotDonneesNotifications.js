@@ -1,4 +1,4 @@
-const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
+import fabriqueAdaptateurPersistance from '../adaptateurs/fabriqueAdaptateurPersistance.js';
 
 const creeDepot = (config = {}) => {
   const {
@@ -36,4 +36,4 @@ const creeDepot = (config = {}) => {
   };
 };
 
-module.exports = { creeDepot };
+export { creeDepot };

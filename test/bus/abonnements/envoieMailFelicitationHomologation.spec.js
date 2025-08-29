@@ -1,19 +1,11 @@
-const expect = require('expect.js');
-const {
-  envoieMailFelicitationHomologation,
-} = require('../../../src/bus/abonnements/envoieMailFelicitationHomologation');
-const {
-  unePersistanceMemoire,
-} = require('../../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const {
-  uneAutorisation,
-} = require('../../constructeurs/constructeurAutorisation');
-const { creeDepot } = require('../../../src/depotDonnees');
-const fauxAdaptateurChiffrement = require('../../mocks/adaptateurChiffrement');
+import expect from 'expect.js';
+import { envoieMailFelicitationHomologation } from '../../../src/bus/abonnements/envoieMailFelicitationHomologation.js';
+import { unePersistanceMemoire } from '../../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import { creeDepot } from '../../../src/depotDonnees.js';
+import fauxAdaptateurChiffrement from '../../mocks/adaptateurChiffrement.js';
 
 describe("L'abonnement qui envoie un mail de félicitation d'homologation", () => {
   let depotDonnees;

@@ -1,4 +1,4 @@
-const { formatteListeFr } = require('../utilitaires/liste');
+import { formatteListeFr } from '../utilitaires/liste.js';
 
 class Identite {
   constructor(donnees) {
@@ -29,4 +29,4 @@ class Identite {
   }
 }
 
-module.exports = { Identite };
+export { Identite };

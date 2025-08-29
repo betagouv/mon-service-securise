@@ -1,9 +1,9 @@
-const Mesure = require('./mesure');
-const {
+import Mesure from './mesure.js';
+import {
   ErreurCategorieInconnue,
   ErreurDetachementModeleMesureSpecifiqueImpossible,
-} = require('../erreurs');
-const Referentiel = require('../referentiel');
+} from '../erreurs.js';
+import * as Referentiel from '../referentiel.js';
 
 class MesureSpecifique extends Mesure {
   constructor(
@@ -83,4 +83,4 @@ class MesureSpecifique extends Mesure {
   }
 }
 
-module.exports = MesureSpecifique;
+export default MesureSpecifique;

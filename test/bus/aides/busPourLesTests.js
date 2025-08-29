@@ -28,4 +28,4 @@ const fabriqueBusPourLesTests = () => {
   };
 };
 
-module.exports = { fabriqueBusPourLesTests };
+export { fabriqueBusPourLesTests };

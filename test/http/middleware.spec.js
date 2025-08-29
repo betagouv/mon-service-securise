@@ -1,24 +1,23 @@
-const expect = require('expect.js');
-const Middleware = require('../../src/http/middleware');
-const {
+import expect from 'expect.js';
+import Middleware from '../../src/http/middleware.js';
+import {
   ErreurDroitsIncoherents,
   ErreurChainageMiddleware,
-} = require('../../src/erreurs');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
-const {
-  Rubriques: { DECRIRE, SECURISER, HOMOLOGUER },
-  Permissions: { LECTURE, ECRITURE, INVISIBLE },
-} = require('../../src/modeles/autorisations/gestionDroits');
-const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
-const { creeReferentiel } = require('../../src/referentiel');
-const Utilisateur = require('../../src/modeles/utilisateur');
-const { TYPES_REQUETES } = require('../../src/http/configurationServeur');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const {
-  fabriqueAdaptateurChiffrement,
-} = require('../../src/adaptateurs/fabriqueAdaptateurChiffrement');
+} from '../../src/erreurs.js';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import ParcoursUtilisateur from '../../src/modeles/parcoursUtilisateur.js';
+import { creeReferentiel } from '../../src/referentiel.js';
+import Utilisateur from '../../src/modeles/utilisateur.js';
+import { TYPES_REQUETES } from '../../src/http/configurationServeur.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import { fabriqueAdaptateurChiffrement } from '../../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
+import {
+  Permissions,
+  Rubriques,
+} from '../../src/modeles/autorisations/gestionDroits.js';
+
+const { DECRIRE, SECURISER, HOMOLOGUER } = Rubriques;
+const { LECTURE, ECRITURE, INVISIBLE } = Permissions;
 
 const prepareVerificationReponse = (reponse, status, message) => {
   reponse.render = () => {};
@@ -1210,16 +1209,11 @@ describe('Le middleware MSS', () => {
     };
 
     beforeEach(() => {
-      adaptateurEnvironnement = {
-        featureFlag: () => featureFlag,
-      };
+      adaptateurEnvironnement = { featureFlag: () => featureFlag };
       adaptateurHorloge = {
         maintenant: () => new Date('2024-01-01 00:00:00Z'),
       };
-      middleware = Middleware({
-        adaptateurEnvironnement,
-        adaptateurHorloge,
-      });
+      middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
     });
 
     it('ajoute un objet de feature flags à `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
@@ -1237,10 +1231,7 @@ describe('Le middleware MSS', () => {
 
       it("affiche le bandeau si la date d'affichage est passée", async () => {
         adaptateurHorloge.maintenant = () => new Date('2026-01-01 00:00:00Z');
-        middleware = Middleware({
-          adaptateurEnvironnement,
-          adaptateurHorloge,
-        });
+        middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
 
         middleware.chargeFeatureFlags(requete, reponse, () => {
           expect(reponse.locals.featureFlags.avecBandeauMSC).to.be(true);

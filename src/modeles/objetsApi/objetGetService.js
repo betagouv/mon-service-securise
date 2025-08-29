@@ -1,5 +1,5 @@
-const Dossiers = require('../dossiers');
-const Autorisation = require('../autorisations/autorisation');
+import Dossiers from '../dossiers.js';
+import { Autorisation } from '../autorisations/autorisation.js';
 
 const {
   DROITS_VOIR_STATUT_HOMOLOGATION,
@@ -63,4 +63,4 @@ const donnees = (service, autorisation, referentiel) => {
   };
 };
 
-module.exports = { donnees };
+export { donnees };

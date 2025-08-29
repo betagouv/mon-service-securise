@@ -1,4 +1,4 @@
-const { fabriqueServiceTracking } = require('../../tracking/serviceTracking');
+import { fabriqueServiceTracking } from '../../tracking/serviceTracking.js';
 
 const leveException = (raison) => {
   throw new Error(
@@ -26,4 +26,4 @@ function envoieTrackingCompletude({ adaptateurTracking, depotDonnees }) {
   };
 }
 
-module.exports = { envoieTrackingCompletude };
+export { envoieTrackingCompletude };

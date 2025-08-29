@@ -32,10 +32,10 @@ const changementMesures = (changeStatut) => (knex) =>
     return Promise.all(misesAJour);
   });
 
-exports.up = changementMesures((statut) =>
+export const up = changementMesures((statut) =>
   statut === 'planifie' ? 'nonFait' : statut
 );
 
-exports.down = changementMesures((statut) =>
+export const down = changementMesures((statut) =>
   statut === 'enCours' ? 'planifie' : statut
 );

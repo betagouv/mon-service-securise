@@ -16,4 +16,4 @@ function zipTableaux(tableauGauche, tableauDroite, proprieteCommune) {
   });
 }
 
-module.exports = { zipTableaux };
+export { zipTableaux };

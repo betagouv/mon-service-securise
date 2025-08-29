@@ -1,5 +1,5 @@
-const Mesure = require('./mesure');
-const { ErreurMesureInconnue } = require('../erreurs');
+import Mesure from './mesure.js';
+import { ErreurMesureInconnue } from '../erreurs.js';
 
 class MesureGenerale extends Mesure {
   constructor(donneesMesure, referentiel) {
@@ -60,4 +60,4 @@ class MesureGenerale extends Mesure {
   }
 }
 
-module.exports = MesureGenerale;
+export default MesureGenerale;

@@ -1,8 +1,7 @@
-const expect = require('expect.js');
-
-const DescriptionService = require('../src/modeles/descriptionService');
-const MoteurRegles = require('../src/moteurRegles');
-const Referentiel = require('../src/referentiel');
+import expect from 'expect.js';
+import DescriptionService from '../src/modeles/descriptionService.js';
+import MoteurRegles from '../src/moteurRegles.js';
+import * as Referentiel from '../src/referentiel.js';
 
 describe('Le moteur de règles', () => {
   it('détermine quelles mesures ajouter en fonction de la description du service', () => {

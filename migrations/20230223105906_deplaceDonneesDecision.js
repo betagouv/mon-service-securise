@@ -1,4 +1,4 @@
-const pourChaqueLigne = require('./utilitaires/pourChaqueLigne');
+import pourChaqueLigne from './utilitaires/pourChaqueLigne.js';
 
 function rangeDonneesDansDecision(knex, table) {
   const traiteDossiers = (dossiers) =>
@@ -50,14 +50,14 @@ function remetDonneesARacine(knex, table) {
   );
 }
 
-exports.up = (knex) =>
+export const up = (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       rangeDonneesDansDecision(knex, table)
     )
   );
 
-exports.down = (knex) =>
+export const down = (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       remetDonneesARacine(knex, table)

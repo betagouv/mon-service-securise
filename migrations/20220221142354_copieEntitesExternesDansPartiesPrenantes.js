@@ -48,9 +48,9 @@ const supprimeDansPartiesPrenantes = (donnees) => {
   return donnees;
 };
 
-exports.up = miseAJour(contientEntitesExternes, copieDansPartiesPrenantes);
+export const up = miseAJour(contientEntitesExternes, copieDansPartiesPrenantes);
 
-exports.down = miseAJour(
+export const down = miseAJour(
   contientPartiesPrenantes,
   supprimeDansPartiesPrenantes
 );

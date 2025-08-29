@@ -1,4 +1,4 @@
-exports.up = (knex) =>
+export const up = (knex) =>
   knex.schema.createTable('evolutions_indice_cyber', (table) => {
     table.uuid('id_service');
     table.json('indice_cyber');
@@ -7,4 +7,4 @@ exports.up = (knex) =>
     table.datetime('date').defaultTo(knex.fn.now());
   });
 
-exports.down = (knex) => knex.schema.dropTable('evolutions_indice_cyber');
+export const down = (knex) => knex.schema.dropTable('evolutions_indice_cyber');

@@ -1,14 +1,12 @@
-const expect = require('expect.js');
-const testeurMSS = require('../testeurMSS');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const { donneesPartagees } = require('../../aides/http');
-const Superviseur = require('../../../src/modeles/superviseur');
-const {
-  verifieTypeFichierServiEstCSV,
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { donneesPartagees } from '../../aides/http.js';
+import Superviseur from '../../../src/modeles/superviseur.js';
+import {
   verifieNomFichierServi,
-} = require('../../aides/verifieFichierServi');
+  verifieTypeFichierServiEstCSV,
+} from '../../aides/verifieFichierServi.js';
 
 describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   const testeur = testeurMSS();
@@ -253,6 +251,10 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     beforeEach(() => {
       testeur.adaptateurCsv().genereCsvMesures = async () => Buffer.from('');
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
     });
 
     it("vérifie que l'utilisateur a accepté les CGU", async () => {

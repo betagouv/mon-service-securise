@@ -1,8 +1,0 @@
-- [x] Créer un évènement métier MSS
-- [x] Publier sur le bus au moment où les CGU sont acceptées
-  - [x] depotDonnees.metsAJourUtilisateur
-  - [x] depotDonnees.nouvelUtilisateur, si CGU acceptées (pas invité)
-  - [x] depotDonnees.valideAcceptationCGUPourUtilisateur
-- [x] Câbler un abonné qui relaye vers le journal
-- [ ] Mettre en production
-- [ ] Rattraper (génère les évènements des utilisateurs existants) les données avec une fonction console admin

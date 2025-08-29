@@ -1,29 +1,24 @@
-const { fabriqueAdaptateurJWT } = require('./adaptateurs/adaptateurJWT');
-const { fabriqueAdaptateurUUID } = require('./adaptateurs/adaptateurUUID');
-const fabriqueAdaptateurPersistance = require('./adaptateurs/fabriqueAdaptateurPersistance');
-const Referentiel = require('./referentiel');
-const depotDonneesAutorisations = require('./depots/depotDonneesAutorisations');
-const depotDonneesServices = require('./depots/depotDonneesServices');
-const depotDonneesNotificationsExpirationHomologation = require('./depots/depotDonneesNotificationsExpirationHomologation');
-const depotDonneesParcoursUtilisateurs = require('./depots/depotDonneesParcoursUtilisateur');
-const depotDonneesUtilisateurs = require('./depots/depotDonneesUtilisateurs');
-const depotDonneesNotifications = require('./depots/depotDonneesNotifications');
-const depotDonneesSuggestionsActions = require('./depots/depotDonneesSuggestionsActions');
-const depotDonneesActivitesMesure = require('./depots/depotDonneesActivitesMesure');
-const depotDonneesEvolutionsIndiceCyber = require('./depots/depotDonneesEvolutionsIndiceCyber');
-const depotDonneesSuperviseurs = require('./depots/depotDonneesSuperviseurs');
-const depotDonneesParrainages = require('./depots/depotDonneesParrainages');
-const depotDonneesSelsDeHachage = require('./depots/depotDonneesSelsDeHachage');
-const depotDonneesTeleversementServices = require('./depots/depotDonneesTeleversementServices');
-const depotDonneesTeleversementModelesMesureSpecifique = require('./depots/depotDonneesTeleversementModelesMesureSpecifique');
-const depotDonneesModelesMesureSpecifique = require('./depots/depotDonneesModelesMesureSpecifique');
-
-const {
-  fabriqueAdaptateurChiffrement,
-} = require('./adaptateurs/fabriqueAdaptateurChiffrement');
-const {
-  fabriqueAdaptateurProfilAnssi,
-} = require('./adaptateurs/fabriqueAdaptateurProfilAnssi');
+import { fabriqueAdaptateurJWT } from './adaptateurs/adaptateurJWT.js';
+import { fabriqueAdaptateurUUID } from './adaptateurs/adaptateurUUID.js';
+import fabriqueAdaptateurPersistance from './adaptateurs/fabriqueAdaptateurPersistance.js';
+import * as Referentiel from './referentiel.js';
+import * as depotDonneesAutorisations from './depots/depotDonneesAutorisations.js';
+import * as depotDonneesServices from './depots/depotDonneesServices.js';
+import * as depotDonneesNotificationsExpirationHomologation from './depots/depotDonneesNotificationsExpirationHomologation.js';
+import * as depotDonneesParcoursUtilisateurs from './depots/depotDonneesParcoursUtilisateur.js';
+import * as depotDonneesUtilisateurs from './depots/depotDonneesUtilisateurs.js';
+import * as depotDonneesNotifications from './depots/depotDonneesNotifications.js';
+import * as depotDonneesSuggestionsActions from './depots/depotDonneesSuggestionsActions.js';
+import * as depotDonneesActivitesMesure from './depots/depotDonneesActivitesMesure.js';
+import * as depotDonneesEvolutionsIndiceCyber from './depots/depotDonneesEvolutionsIndiceCyber.js';
+import * as depotDonneesSuperviseurs from './depots/depotDonneesSuperviseurs.js';
+import * as depotDonneesParrainages from './depots/depotDonneesParrainages.js';
+import * as depotDonneesSelsDeHachage from './depots/depotDonneesSelsDeHachage.js';
+import * as depotDonneesTeleversementServices from './depots/depotDonneesTeleversementServices.js';
+import * as depotDonneesTeleversementModelesMesureSpecifique from './depots/depotDonneesTeleversementModelesMesureSpecifique.js';
+import * as depotDonneesModelesMesureSpecifique from './depots/depotDonneesModelesMesureSpecifique.js';
+import { fabriqueAdaptateurChiffrement } from './adaptateurs/fabriqueAdaptateurChiffrement.js';
+import { fabriqueAdaptateurProfilAnssi } from './adaptateurs/fabriqueAdaptateurProfilAnssi.js';
 
 const creeDepot = (config = {}) => {
   const {
@@ -379,4 +374,4 @@ const creeDepot = (config = {}) => {
   };
 };
 
-module.exports = { creeDepot };
+export { creeDepot };

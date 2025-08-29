@@ -1,4 +1,4 @@
-const adaptateurEnvironnement = require('./adaptateurEnvironnement');
+import { sendinblue } from './adaptateurEnvironnement.js';
 
 const fabriqueAdaptateurTrackingMemoire = () => {
   const envoieTracking = (
@@ -6,9 +6,7 @@ const fabriqueAdaptateurTrackingMemoire = () => {
     typeEvenement,
     donneesEvenement = {}
   ) => {
-    const doitLoguer = adaptateurEnvironnement
-      .sendinblue()
-      .logEvenementsTrackingEnConsole();
+    const doitLoguer = sendinblue().logEvenementsTrackingEnConsole();
 
     if (doitLoguer) {
       const donnees = JSON.stringify(donneesEvenement);
@@ -35,6 +33,4 @@ const fabriqueAdaptateurTrackingMemoire = () => {
   };
 };
 
-module.exports = {
-  fabriqueAdaptateurTrackingMemoire,
-};
+export { fabriqueAdaptateurTrackingMemoire };

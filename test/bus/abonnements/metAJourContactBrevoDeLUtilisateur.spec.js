@@ -1,10 +1,6 @@
-const expect = require('expect.js');
-const {
-  metAJourContactBrevoDeLUtilisateur,
-} = require('../../../src/bus/abonnements/metAJourContactBrevoDeLUtilisateur');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
+import expect from 'expect.js';
+import { metAJourContactBrevoDeLUtilisateur } from '../../../src/bus/abonnements/metAJourContactBrevoDeLUtilisateur.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 
 describe("L'abonnement qui met à jour le contact Brevo de l'utilisateur", () => {
   let crmBrevo;

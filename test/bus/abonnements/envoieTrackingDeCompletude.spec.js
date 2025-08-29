@@ -1,18 +1,10 @@
-const expect = require('expect.js');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
-  unAdaptateurTracking,
-} = require('../../constructeurs/constructeurAdaptateurTracking');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const {
-  unDepotDeDonneesServices,
-} = require('../../constructeurs/constructeurDepotDonneesServices');
-const { bouchonneMesures } = require('../../constructeurs/constructeurMesures');
-const {
-  envoieTrackingCompletude,
-} = require('../../../src/bus/abonnements/envoieTrackingDeCompletude');
+import expect from 'expect.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import { unAdaptateurTracking } from '../../constructeurs/constructeurAdaptateurTracking.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { unDepotDeDonneesServices } from '../../constructeurs/constructeurDepotDonneesServices.js';
+import { bouchonneMesures } from '../../constructeurs/constructeurMesures.js';
+import { envoieTrackingCompletude } from '../../../src/bus/abonnements/envoieTrackingDeCompletude.js';
 
 describe("L'abonnement qui envoie au tracking les informations de complétude", () => {
   let adaptateurTracking;

@@ -1,13 +1,13 @@
-const adaptateurUUID = require('../src/adaptateurs/adaptateurUUID');
+import { genereUUID } from '../src/adaptateurs/adaptateurUUID.js';
 
-exports.up = (knex) =>
+export const up = (knex) =>
   knex('services').then((lignes) => {
     const misesAJour = lignes.map(({ id, donnees }) => {
       const donneesModifiees = {
         ...donnees,
         mesuresSpecifiques: donnees.mesuresSpecifiques?.map((m) => ({
           ...m,
-          ...(!m.id && { id: adaptateurUUID.genereUUID() }),
+          ...(!m.id && { id: genereUUID() }),
         })),
       };
       return knex('services').where({ id }).update({
@@ -17,7 +17,7 @@ exports.up = (knex) =>
     return Promise.all(misesAJour);
   });
 
-exports.down = (knex) =>
+export const down = (knex) =>
   knex('services').then((lignes) => {
     const misesAJour = lignes.map(({ id, donnees }) => {
       donnees.mesuresSpecifiques = donnees.mesuresSpecifiques?.map((m) => {

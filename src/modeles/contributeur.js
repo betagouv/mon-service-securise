@@ -1,4 +1,4 @@
-const { Identite } = require('./identite');
+import { Identite } from './identite.js';
 
 class Contributeur {
   constructor(donneesUtilisateur) {
@@ -20,4 +20,4 @@ class Contributeur {
   }
 }
 
-module.exports = { Contributeur };
+export { Contributeur };

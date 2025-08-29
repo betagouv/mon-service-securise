@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const DonneesSensiblesSpecifiques = require('../../src/modeles/donneesSensiblesSpecifiques');
+import expect from 'expect.js';
+import DonneesSensiblesSpecifiques from '../../src/modeles/donneesSensiblesSpecifiques.js';
 
 const elles = it;
 

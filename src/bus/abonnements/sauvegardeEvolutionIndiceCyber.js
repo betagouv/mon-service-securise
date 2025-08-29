@@ -39,4 +39,4 @@ function sauvegardeEvolutionIndiceCyber({ depotDonnees }) {
   };
 }
 
-module.exports = { sauvegardeEvolutionIndiceCyber };
+export { sauvegardeEvolutionIndiceCyber };

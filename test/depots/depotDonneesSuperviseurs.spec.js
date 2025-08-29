@@ -1,11 +1,9 @@
-const expect = require('expect.js');
-const depotDonneesSuperviseurs = require('../../src/depots/depotDonneesSuperviseurs');
-const {
-  unePersistanceMemoire,
-} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
-const Superviseur = require('../../src/modeles/superviseur');
-const Entite = require('../../src/modeles/entite');
+import expect from 'expect.js';
+import * as depotDonneesSuperviseurs from '../../src/depots/depotDonneesSuperviseurs.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
+import Superviseur from '../../src/modeles/superviseur.js';
+import Entite from '../../src/modeles/entite.js';
 
 describe('Le dépôt de données des superviseurs', () => {
   let depot;

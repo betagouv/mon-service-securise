@@ -1,4 +1,4 @@
-const Evenement = require('./evenement');
+import Evenement from './evenement.js';
 
 class EvenementServicesImportes extends Evenement {
   constructor(donnees, options = {}) {
@@ -20,4 +20,4 @@ class EvenementServicesImportes extends Evenement {
   }
 }
 
-module.exports = EvenementServicesImportes;
+export default EvenementServicesImportes;

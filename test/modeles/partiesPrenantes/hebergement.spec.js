@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const Hebergement = require('../../../src/modeles/partiesPrenantes/hebergement');
+import expect from 'expect.js';
+import Hebergement from '../../../src/modeles/partiesPrenantes/hebergement.js';
 
 describe('Un hébergement', () => {
   it('sait se décrire en JSON', () => {

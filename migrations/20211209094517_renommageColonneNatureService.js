@@ -23,6 +23,9 @@ function changeTypeServiceEnNatureService(informationsGenerales) {
   delete informationsGenerales.typeService;
 }
 
-exports.up = miseAJourInformationsGenerales(changeNatureServiceEnTypeService);
-
-exports.down = miseAJourInformationsGenerales(changeTypeServiceEnNatureService);
+export const up = miseAJourInformationsGenerales(
+  changeNatureServiceEnTypeService
+);
+export const down = miseAJourInformationsGenerales(
+  changeTypeServiceEnNatureService
+);

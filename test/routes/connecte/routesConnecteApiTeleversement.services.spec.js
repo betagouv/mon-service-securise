@@ -1,9 +1,9 @@
-const expect = require('expect.js');
-const testeurMSS = require('../testeurMSS');
-const { ErreurFichierXlsInvalide } = require('../../../src/erreurs');
-const TeleversementServices = require('../../../src/modeles/televersement/televersementServices');
-const Referentiel = require('../../../src/referentiel');
-const donneesReferentiel = require('../../../donneesReferentiel');
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+import { ErreurFichierXlsInvalide } from '../../../src/erreurs.js';
+import TeleversementServices from '../../../src/modeles/televersement/televersementServices.js';
+import * as Referentiel from '../../../src/referentiel.js';
+import donneesReferentiel from '../../../donneesReferentiel.js';
 
 describe('Les routes connecté de téléversement de services', () => {
   const testeur = testeurMSS();

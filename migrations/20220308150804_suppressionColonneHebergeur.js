@@ -32,9 +32,9 @@ const copieNomHebergement = (donnees) => {
   return donnees;
 };
 
-exports.up = miseAJour(
+export const up = miseAJour(
   contientCaracteristiquesComplementaires,
   supprimeHebergeur
 );
 
-exports.down = miseAJour(contientPartiesPrenantes, copieNomHebergement);
+export const down = miseAJour(contientPartiesPrenantes, copieNomHebergement);

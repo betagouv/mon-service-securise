@@ -56,12 +56,12 @@ const versFonctionnalitesGeneriques = (informationsGenerales) => {
   return informationsGenerales;
 };
 
-exports.up = deplace(
+export const up = deplace(
   autresFonctionnalitesGeneriques,
   versFonctionnalitesSpecifiques
 );
 
-exports.down = deplace(
+export const down = deplace(
   autresFonctionnalitesSpecifiques,
   versFonctionnalitesGeneriques
 );

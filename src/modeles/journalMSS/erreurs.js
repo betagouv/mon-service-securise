@@ -10,7 +10,7 @@ class ErreurDonneeManquante extends ErreurJournal {
   }
 }
 
-module.exports = {
+export {
   ErreurDateDerniereConnexionInvalide,
   ErreurDonneeManquante,
   ErreurServiceManquant,

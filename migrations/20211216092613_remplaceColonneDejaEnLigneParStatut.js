@@ -52,6 +52,5 @@ const migreVersDejaMisEnLigne = (donnees) => {
   return donnees;
 };
 
-exports.up = metsAJourDonnees(migreVersStatus);
-
-exports.down = metsAJourDonnees(migreVersDejaMisEnLigne);
+export const up = metsAJourDonnees(migreVersStatus);
+export const down = metsAJourDonnees(migreVersDejaMisEnLigne);

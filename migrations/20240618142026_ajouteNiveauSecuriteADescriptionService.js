@@ -1,6 +1,6 @@
-const DescriptionService = require('../src/modeles/descriptionService');
+import DescriptionService from '../src/modeles/descriptionService.js';
 
-exports.up = (knex) =>
+export const up = (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       knex(table).then((lignes) => {
@@ -24,7 +24,7 @@ exports.up = (knex) =>
     )
   );
 
-exports.down = (knex) =>
+export const down = (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       knex(table).then((lignes) => {

@@ -1,6 +1,6 @@
-const expect = require('expect.js');
-const objetGetMesures = require('../../../src/modeles/objetsApi/objetGetMesures');
-const { unService } = require('../../constructeurs/constructeurService');
+import expect from 'expect.js';
+import * as objetGetMesures from '../../../src/modeles/objetsApi/objetGetMesures.js';
+import { unService } from '../../constructeurs/constructeurService.js';
 
 describe("L'objet d'API de `GET /mesures`", () => {
   it('fait passe-plat avec les mesures enrichies du service', async () => {

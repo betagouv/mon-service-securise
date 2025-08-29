@@ -1,5 +1,5 @@
-const { ErreurServiceManquant } = require('./erreurs');
-const Evenement = require('./evenement');
+import { ErreurServiceManquant } from './erreurs.js';
+import Evenement from './evenement.js';
 
 class EvenementRisquesServiceModifies extends Evenement {
   constructor(donnees, options = {}) {
@@ -35,4 +35,4 @@ class EvenementRisquesServiceModifies extends Evenement {
   }
 }
 
-module.exports = EvenementRisquesServiceModifies;
+export default EvenementRisquesServiceModifies;

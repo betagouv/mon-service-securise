@@ -1,6 +1,6 @@
-const expect = require('expect.js');
-const { creeReferentiel } = require('../../src/referentiel');
-const EtatVisiteGuidee = require('../../src/modeles/etatVisiteGuidee');
+import expect from 'expect.js';
+import { creeReferentiel } from '../../src/referentiel.js';
+import EtatVisiteGuidee from '../../src/modeles/etatVisiteGuidee.js';
 
 describe('Le modèle état visite guidée', () => {
   describe("sur demande de finalisation d'une étape", () => {

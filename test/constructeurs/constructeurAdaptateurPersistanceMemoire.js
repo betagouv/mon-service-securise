@@ -1,6 +1,6 @@
-const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
-const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
-const { uneAutorisation } = require('./constructeurAutorisation');
+import * as AdaptateurPersistanceMemoire from '../../src/adaptateurs/adaptateurPersistanceMemoire.js';
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import { uneAutorisation } from './constructeurAutorisation.js';
 
 class ConstructeurAdaptateurPersistanceMemoire {
   constructor(adaptateurChiffrement) {
@@ -108,4 +108,4 @@ const unePersistanceMemoire = (
   adaptateurChiffrement = fauxAdaptateurChiffrement()
 ) => new ConstructeurAdaptateurPersistanceMemoire(adaptateurChiffrement);
 
-module.exports = { unePersistanceMemoire };
+export { unePersistanceMemoire };

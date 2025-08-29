@@ -1,32 +1,28 @@
-const expect = require('expect.js');
-const { depotVide } = require('./depotVide');
-const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
-const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
-const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
-const {
+import expect from 'expect.js';
+import { depotVide } from './depotVide.js';
+import * as DepotDonneesAutorisations from '../../src/depots/depotDonneesAutorisations.js';
+import * as DepotDonneesServices from '../../src/depots/depotDonneesServices.js';
+import * as DepotDonneesUtilisateurs from '../../src/depots/depotDonneesUtilisateurs.js';
+
+import {
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
   ErreurServiceInexistant,
   ErreurUtilisateurInexistant,
   ErreurSuppressionImpossible,
-} = require('../../src/erreurs');
-const {
-  unePersistanceMemoire,
-} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const {
+} from '../../src/erreurs.js';
+
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import {
   Rubriques,
   Permissions,
-} = require('../../src/modeles/autorisations/gestionDroits');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
-const {
-  EvenementAutorisationsServiceModifiees,
-} = require('../../src/bus/evenementAutorisationsServiceModifiees');
-const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
-const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
-const { unService } = require('../constructeurs/constructeurService');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
+} from '../../src/modeles/autorisations/gestionDroits.js';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import { EvenementAutorisationsServiceModifiees } from '../../src/bus/evenementAutorisationsServiceModifiees.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import { unService } from '../constructeurs/constructeurService.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE, LECTURE } = Permissions;

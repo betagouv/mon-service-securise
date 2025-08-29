@@ -32,4 +32,4 @@ const configurationsDispositifs = [
   },
 ];
 
-module.exports = { configurationsDispositifs, instructionsTamponHomologation };
+export { configurationsDispositifs, instructionsTamponHomologation };

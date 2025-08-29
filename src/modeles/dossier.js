@@ -1,23 +1,23 @@
-const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
-const Autorite = require('./etapes/autorite');
-const DateTelechargement = require('./etapes/dateTelechargement');
-const Decision = require('./etapes/decision');
-const Documents = require('./etapes/documents');
-const EtapeAvis = require('./etapes/etapeAvis');
-const InformationsService = require('./informationsService');
-const Referentiel = require('../referentiel');
-const {
+import { fabriqueAdaptateurHorloge } from '../adaptateurs/adaptateurHorloge.js';
+import Autorite from './etapes/autorite.js';
+import DateTelechargement from './etapes/dateTelechargement.js';
+import Decision from './etapes/decision.js';
+import Documents from './etapes/documents.js';
+import EtapeAvis from './etapes/etapeAvis.js';
+import InformationsService from './informationsService.js';
+import * as Referentiel from '../referentiel.js';
+import {
   ErreurDossierDejaFinalise,
-  ErreurDossierNonFinalisable,
   ErreurDossierEtapeInconnue,
+  ErreurDossierNonFinalisable,
   ErreurDossierNonFinalise,
-} = require('../erreurs');
+} from '../erreurs.js';
 
 class Dossier extends InformationsService {
   constructor(
     donneesDossier = {},
     referentiel = Referentiel.creeReferentielVide(),
-    adaptateurHorloge = adaptateurHorlogeParDefaut
+    adaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     donneesDossier.finalise = !!donneesDossier.finalise;
 
@@ -225,4 +225,4 @@ class Dossier extends InformationsService {
   }
 }
 
-module.exports = Dossier;
+export default Dossier;

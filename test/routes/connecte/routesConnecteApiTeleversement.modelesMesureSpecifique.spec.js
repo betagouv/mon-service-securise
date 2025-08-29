@@ -1,11 +1,13 @@
-const expect = require('expect.js');
-const testeurMSS = require('../testeurMSS');
-const {
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+
+import {
   ErreurFichierXlsInvalide,
   ErreurTeleversementInvalide,
   ErreurTeleversementInexistant,
-} = require('../../../src/erreurs');
-const TeleversementModelesMesureSpecifique = require('../../../src/modeles/televersement/televersementModelesMesureSpecifique');
+} from '../../../src/erreurs.js';
+
+import TeleversementModelesMesureSpecifique from '../../../src/modeles/televersement/televersementModelesMesureSpecifique.js';
 
 describe('Les routes connecté de téléversement des modèles de mesure spécifique', () => {
   const testeur = testeurMSS();

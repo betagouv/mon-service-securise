@@ -13,4 +13,4 @@ function metAJourParrainage({ depotDonnees }) {
   };
 }
 
-module.exports = { metAJourParrainage };
+export { metAJourParrainage };

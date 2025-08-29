@@ -14,4 +14,4 @@ class EvenementInvitationUtilisateurEnvoyee {
   }
 }
 
-module.exports = EvenementInvitationUtilisateurEnvoyee;
+export default EvenementInvitationUtilisateurEnvoyee;

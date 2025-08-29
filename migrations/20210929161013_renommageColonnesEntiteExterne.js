@@ -13,7 +13,7 @@ const renommeColonnesEntitesExternes = (knex, lignes, renommage) => {
   return Promise.all(misesAJour);
 };
 
-exports.up = (knex) =>
+export const up = (knex) =>
   knex('homologations').then((lignes) =>
     renommeColonnesEntitesExternes(knex, lignes, ({ nom, role }) => ({
       nom,
@@ -21,7 +21,7 @@ exports.up = (knex) =>
     }))
   );
 
-exports.down = (knex) =>
+export const down = (knex) =>
   knex('homologations').then((lignes) =>
     renommeColonnesEntitesExternes(knex, lignes, ({ nom, acces }) => ({
       nom,

@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const EvenementServiceSupprime = require('../../src/bus/evenementServiceSupprime');
+import expect from 'expect.js';
+import EvenementServiceSupprime from '../../src/bus/evenementServiceSupprime.js';
 
 describe("L'événement 'ServiceSupprimé'", () => {
   it("lève une exception s'il est instancié sans ID de service", () => {

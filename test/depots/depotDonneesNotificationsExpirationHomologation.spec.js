@@ -1,14 +1,8 @@
-const expect = require('expect.js');
-const {
-  creeDepot,
-} = require('../../src/depots/depotDonneesNotificationsExpirationHomologation');
-const {
-  unePersistanceMemoire,
-} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const NotificationExpirationHomologation = require('../../src/modeles/notificationExpirationHomologation');
-const {
-  fabriqueAdaptateurUUID,
-} = require('../../src/adaptateurs/adaptateurUUID');
+import expect from 'expect.js';
+import { creeDepot } from '../../src/depots/depotDonneesNotificationsExpirationHomologation.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import NotificationExpirationHomologation from '../../src/modeles/notificationExpirationHomologation.js';
+import { fabriqueAdaptateurUUID } from '../../src/adaptateurs/adaptateurUUID.js';
 
 describe("Le dépôt de données des notifications d'expiration d'homologation", () => {
   let adaptateurPersistance;

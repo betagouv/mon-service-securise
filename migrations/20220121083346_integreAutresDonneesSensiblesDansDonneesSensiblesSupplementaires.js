@@ -57,12 +57,12 @@ const versDonneesSensiblesGeneriques = (descriptionService) => {
   return descriptionService;
 };
 
-exports.up = deplace(
+export const up = deplace(
   autresDonneesSensiblesGeneriques,
   versDonneesSensiblesSpecifiques
 );
 
-exports.down = deplace(
+export const down = deplace(
   autresDonneesSensiblesSpecifiques,
   versDonneesSensiblesGeneriques
 );

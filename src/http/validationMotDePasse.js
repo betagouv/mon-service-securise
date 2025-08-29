@@ -29,4 +29,4 @@ const valideMotDePasse = (motDePasse) => {
   return resultatValidation.MOT_DE_PASSE_VALIDE;
 };
 
-module.exports = { valideMotDePasse, resultatValidation };
+export { valideMotDePasse, resultatValidation };

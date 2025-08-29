@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const SecuriteService = require('../../../src/modeles/partiesPrenantes/securiteService');
+import expect from 'expect.js';
+import SecuriteService from '../../../src/modeles/partiesPrenantes/securiteService.js';
 
 describe('Une sécurité du service', () => {
   it('sait se décrire en JSON', () => {

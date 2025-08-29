@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const ElementsConstructibles = require('../../src/modeles/elementsConstructibles');
+import expect from 'expect.js';
+import ElementsConstructibles from '../../src/modeles/elementsConstructibles.js';
 
 describe("Une liste d'éléments constructibles", () => {
   it('retourne tous les items sous forme de tableau', () => {

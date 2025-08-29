@@ -1,11 +1,10 @@
-const expect = require('expect.js');
-
-const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
-const DepotDonneesParcoursUtilisateur = require('../../src/depots/depotDonneesParcoursUtilisateur');
-const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
-const EtatVisiteGuidee = require('../../src/modeles/etatVisiteGuidee');
-const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
-const EvenementNouvelleConnexionUtilisateur = require('../../src/bus/evenementNouvelleConnexionUtilisateur');
+import expect from 'expect.js';
+import * as AdaptateurPersistanceMemoire from '../../src/adaptateurs/adaptateurPersistanceMemoire.js';
+import * as DepotDonneesParcoursUtilisateur from '../../src/depots/depotDonneesParcoursUtilisateur.js';
+import ParcoursUtilisateur from '../../src/modeles/parcoursUtilisateur.js';
+import EtatVisiteGuidee from '../../src/modeles/etatVisiteGuidee.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import EvenementNouvelleConnexionUtilisateur from '../../src/bus/evenementNouvelleConnexionUtilisateur.js';
 
 describe('Le dépôt de données Parcours utilisateur', () => {
   let adaptateurPersistance;

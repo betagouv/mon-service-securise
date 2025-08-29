@@ -1,4 +1,4 @@
-const EvenementServicesImportes = require('../../modeles/journalMSS/evenementServicesImportes');
+import EvenementServicesImportes from '../../modeles/journalMSS/evenementServicesImportes.js';
 
 function consigneTeleversementServicesRealiseDansJournal({
   adaptateurJournal,
@@ -23,4 +23,4 @@ function consigneTeleversementServicesRealiseDansJournal({
   };
 }
 
-module.exports = { consigneTeleversementServicesRealiseDansJournal };
+export { consigneTeleversementServicesRealiseDansJournal };

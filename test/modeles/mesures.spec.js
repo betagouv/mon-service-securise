@@ -1,14 +1,11 @@
-const expect = require('expect.js');
-
-const {
-  A_COMPLETER,
-  COMPLETES,
-} = require('../../src/modeles/informationsService');
-const Mesures = require('../../src/modeles/mesures');
-const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
-const Referentiel = require('../../src/referentiel');
+import expect from 'expect.js';
+import InformationsService from '../../src/modeles/informationsService.js';
+import Mesures from '../../src/modeles/mesures.js';
+import MesuresSpecifiques from '../../src/modeles/mesuresSpecifiques.js';
+import * as Referentiel from '../../src/referentiel.js';
 
 const elles = it;
+const { A_COMPLETER, COMPLETES } = InformationsService;
 
 describe('Les mesures liées à un service', () => {
   elles('comptent les mesures personnalisees', () => {

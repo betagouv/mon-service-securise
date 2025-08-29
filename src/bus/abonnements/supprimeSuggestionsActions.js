@@ -9,4 +9,4 @@ function supprimeSuggestionsActions({ depotDonnees }) {
   };
 }
 
-module.exports = { supprimeSuggestionsActions };
+export { supprimeSuggestionsActions };

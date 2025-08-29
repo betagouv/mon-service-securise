@@ -1,9 +1,10 @@
-const Risque = require('./risque');
-const {
+import Risque from './risque.js';
+
+import {
   ErreurIntituleRisqueManquant,
   ErreurCategoriesRisqueManquantes,
   ErreurCategorieRisqueInconnue,
-} = require('../erreurs');
+} from '../erreurs.js';
 
 class RisqueSpecifique extends Risque {
   constructor(donneesRisque, referentiel) {
@@ -63,4 +64,4 @@ class RisqueSpecifique extends Risque {
   }
 }
 
-module.exports = RisqueSpecifique;
+export default RisqueSpecifique;

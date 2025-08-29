@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const DateTelechargement = require('../../../src/modeles/etapes/dateTelechargement');
+import expect from 'expect.js';
+import DateTelechargement from '../../../src/modeles/etapes/dateTelechargement.js';
 
 describe("La date de téléchargement des documents d'homologation", () => {
   it('sait se convertir en JSON', () => {

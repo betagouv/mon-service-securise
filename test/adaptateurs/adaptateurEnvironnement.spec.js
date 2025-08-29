@@ -1,7 +1,5 @@
-const expect = require('expect.js');
-const {
-  chiffrement,
-} = require('../../src/adaptateurs/adaptateurEnvironnement');
+import expect from 'expect.js';
+import { chiffrement } from '../../src/adaptateurs/adaptateurEnvironnement.js';
 
 describe("L'adaptateur environnement", () => {
   let envActuel;

@@ -1,7 +1,7 @@
-const Base = require('../base');
-const Referentiel = require('../../referentiel');
-const { dateInvalide } = require('../../utilitaires/date');
-const DescriptionService = require('../descriptionService');
+import Base from '../base.js';
+import * as Referentiel from '../../referentiel.js';
+import { dateInvalide } from '../../utilitaires/date.js';
+import DescriptionService from '../descriptionService.js';
 
 const ERREURS_VALIDATION = {
   NOM_INVALIDE: 'NOM_INVALIDE',
@@ -191,4 +191,4 @@ class ServiceTeleverse extends Base {
   }
 }
 
-module.exports = ServiceTeleverse;
+export default ServiceTeleverse;

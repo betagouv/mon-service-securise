@@ -1,8 +1,7 @@
-const expect = require('expect.js');
-
-const Referentiel = require('../../src/referentiel');
-const Risque = require('../../src/modeles/risque');
-const ListeRisques = require('../../src/modeles/listeRisques');
+import expect from 'expect.js';
+import * as Referentiel from '../../src/referentiel.js';
+import Risque from '../../src/modeles/risque.js';
+import ListeRisques from '../../src/modeles/listeRisques.js';
 
 describe('La liste des risques', () => {
   describe('sur demande de risques par niveau de gravité', () => {

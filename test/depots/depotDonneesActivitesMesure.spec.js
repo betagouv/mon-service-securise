@@ -1,9 +1,7 @@
-const expect = require('expect.js');
-const {
-  unePersistanceMemoire,
-} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const DepotDonneesActivitesMesure = require('../../src/depots/depotDonneesActivitesMesure');
-const ActiviteMesure = require('../../src/modeles/activiteMesure');
+import expect from 'expect.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import * as DepotDonneesActivitesMesure from '../../src/depots/depotDonneesActivitesMesure.js';
+import ActiviteMesure from '../../src/modeles/activiteMesure.js';
 
 describe('Le dépôt de données des activités de mesure', () => {
   let adaptateurPersistance;

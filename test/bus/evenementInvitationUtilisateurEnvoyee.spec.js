@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const EvenementNouvelleConnexionUtilisateur = require('../../src/bus/evenementNouvelleConnexionUtilisateur');
+import expect from 'expect.js';
+import EvenementNouvelleConnexionUtilisateur from '../../src/bus/evenementNouvelleConnexionUtilisateur.js';
 
 describe("L'événement `EvenementInvitationUtilisateurEnvoyee", () => {
   it("lève une exception s'il est instancié sans id utilisateur destinataire", () => {

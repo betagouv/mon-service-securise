@@ -13,12 +13,12 @@
     "ignoreDeprecations": "5.0"
   },
   "include": [
-    "vite.config.mts",
+    "vite.config.ts",
     "lib/**/*.d.ts",
     "lib/**/*.ts",
     "lib/**/*.js",
     "lib/**/*.svelte",
     "test/**/*.ts",
-    ".eslintrc.js"
+    ".eslintrc.cjs"
   ]
 }

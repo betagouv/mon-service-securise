@@ -1,10 +1,10 @@
-const InformationsService = require('./informationsService');
-const MesuresGenerales = require('./mesuresGenerales');
-const MesuresSpecifiques = require('./mesuresSpecifiques');
-const Referentiel = require('../referentiel');
-const { StatistiquesMesures } = require('./statistiquesMesures');
-const { IndiceCyber } = require('./indiceCyber');
-const { CompletudeMesures } = require('./completudeMesures');
+import InformationsService from './informationsService.js';
+import MesuresGenerales from './mesuresGenerales.js';
+import MesuresSpecifiques from './mesuresSpecifiques.js';
+import * as Referentiel from '../referentiel.js';
+import { StatistiquesMesures } from './statistiquesMesures.js';
+import { IndiceCyber } from './indiceCyber.js';
+import { CompletudeMesures } from './completudeMesures.js';
 
 function mesuresGeneralesApplicables(
   mesuresPersonnalisees,
@@ -181,4 +181,4 @@ class Mesures extends InformationsService {
   }
 }
 
-module.exports = Mesures;
+export default Mesures;

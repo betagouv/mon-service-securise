@@ -6,4 +6,4 @@ class EvenementRisqueServiceModifie {
     this.service = service;
   }
 }
-module.exports = EvenementRisqueServiceModifie;
+export default EvenementRisqueServiceModifie;

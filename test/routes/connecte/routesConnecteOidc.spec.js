@@ -1,6 +1,6 @@
-const expect = require('expect.js');
-const testeurMSS = require('../testeurMSS');
-const { enObjet } = require('../../aides/cookie');
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+import { enObjet } from '../../aides/cookie.js';
 
 describe('Le serveur MSS des routes connectées /oidc/*', () => {
   const testeur = testeurMSS();

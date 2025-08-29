@@ -1,13 +1,9 @@
-const expect = require('expect.js');
-const CrmBrevo = require('../../src/crm/crmBrevo');
-const {
-  fabriqueAdaptateurMailMemoire,
-} = require('../../src/adaptateurs/adaptateurMailMemoire');
-const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
+import expect from 'expect.js';
+import CrmBrevo from '../../src/crm/crmBrevo.js';
+import { fabriqueAdaptateurMailMemoire } from '../../src/adaptateurs/adaptateurMailMemoire.js';
+import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
 
 describe('Le CRM Brevo', () => {
   let adaptateurMail;

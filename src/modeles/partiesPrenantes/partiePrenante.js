@@ -1,4 +1,4 @@
-const InformationsService = require('../informationsService');
+import InformationsService from '../informationsService.js';
 
 class PartiePrenante extends InformationsService {
   constructor(donnees = {}) {
@@ -26,4 +26,4 @@ class PartiePrenante extends InformationsService {
   }
 }
 
-module.exports = PartiePrenante;
+export default PartiePrenante;

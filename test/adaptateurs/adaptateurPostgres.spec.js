@@ -1,12 +1,9 @@
-const expect = require('expect.js');
-const Knex = require('knex');
-const ClientPgLite = require('knex-pglite');
-
-const {
-  nouvelAdaptateur,
-} = require('../../src/adaptateurs/adaptateurPostgres');
-const { genereUUID } = require('../../src/adaptateurs/adaptateurUUID');
-const Autorisation = require('../../src/modeles/autorisations/autorisation');
+import expect from 'expect.js';
+import Knex from 'knex';
+import ClientPgLite from 'knex-pglite';
+import { nouvelAdaptateur } from '../../src/adaptateurs/adaptateurPostgres.js';
+import { genereUUID } from '../../src/adaptateurs/adaptateurUUID.js';
+import { Autorisation } from '../../src/modeles/autorisations/autorisation.js';
 
 function patchKnexFirst(knexInstance) {
   const prototypeQueryBuilder = Object.getPrototypeOf(
@@ -22,7 +19,6 @@ function patchKnexFirst(knexInstance) {
   };
 }
 
-// eslint-disable-next-line func-names
 describe("L'adaptateur persistance Postgres", () => {
   let knex;
   let persistance;
@@ -31,11 +27,7 @@ describe("L'adaptateur persistance Postgres", () => {
   const ID_SERVICE_1 = genereUUID();
 
   beforeAll(async () => {
-    knex = Knex({
-      client: ClientPgLite,
-      dialect: 'postgres',
-      connection: {},
-    });
+    knex = Knex({ client: ClientPgLite, dialect: 'postgres', connection: {} });
     patchKnexFirst(knex);
     await knex.migrate.latest();
     persistance = nouvelAdaptateur({ knexSurcharge: knex });

@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const { depotVide } = require('./depots/depotVide');
+import expect from 'expect.js';
+import { depotVide } from './depots/depotVide.js';
 
 describe('Le dépôt de données vide', () => {
   it('ne retourne aucun service pour un utilisateur donné', async () => {

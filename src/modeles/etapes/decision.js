@@ -1,21 +1,21 @@
-const {
+import {
   ErreurDateHomologationInvalide,
   ErreurDureeValiditeInvalide,
-} = require('../../erreurs');
-const adaptateurHorlogeParDefaut = require('../../adaptateurs/adaptateurHorloge');
-const Etape = require('./etape');
-const {
+} from '../../erreurs.js';
+import { fabriqueAdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
+import Etape from './etape.js';
+import {
   ajouteMoisADate,
   dateEnFrancais,
   dateInvalide,
-} = require('../../utilitaires/date');
-const Referentiel = require('../../referentiel');
+} from '../../utilitaires/date.js';
+import * as Referentiel from '../../referentiel.js';
 
 class Decision extends Etape {
   constructor(
     { dateHomologation, dureeValidite } = {},
     referentiel = Referentiel.creeReferentielVide(),
-    adaptateurHorloge = adaptateurHorlogeParDefaut
+    adaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     super(
       {
@@ -98,4 +98,4 @@ class Decision extends Etape {
   }
 }
 
-module.exports = Decision;
+export default Decision;

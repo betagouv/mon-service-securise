@@ -4,4 +4,4 @@ function relieServiceEtSuperviseurs({ serviceSupervision }) {
   };
 }
 
-module.exports = { relieServiceEtSuperviseurs };
+export { relieServiceEtSuperviseurs };

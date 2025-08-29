@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const Entite = require('../../src/modeles/entite');
+import expect from 'expect.js';
+import Entite from '../../src/modeles/entite.js';
 
 describe('Une entité', () => {
   describe('sur demande de complétion des donnees', () => {

@@ -1,18 +1,16 @@
-const express = require('express');
-const { decode } = require('html-entities');
-
-const InformationsService = require('../../modeles/informationsService');
-
-const {
+import express from 'express';
+import { decode } from 'html-entities';
+import InformationsService from '../../modeles/informationsService.js';
+import {
   Permissions,
   Rubriques,
   premiereRouteDisponible,
-} = require('../../modeles/autorisations/gestionDroits');
-const Autorisation = require('../../modeles/autorisations/autorisation');
-const Service = require('../../modeles/service');
-const { dateYYYYMMDD } = require('../../utilitaires/date');
-const DescriptionService = require('../../modeles/descriptionService');
-const RisqueGeneral = require('../../modeles/risqueGeneral');
+} from '../../modeles/autorisations/gestionDroits.js';
+import { Autorisation } from '../../modeles/autorisations/autorisation.js';
+import Service from '../../modeles/service.js';
+import { dateYYYYMMDD } from '../../utilitaires/date.js';
+import DescriptionService from '../../modeles/descriptionService.js';
+import RisqueGeneral from '../../modeles/risqueGeneral.js';
 
 const { LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -294,4 +292,4 @@ const routesConnectePageService = ({
   return routes;
 };
 
-module.exports = routesConnectePageService;
+export default routesConnectePageService;

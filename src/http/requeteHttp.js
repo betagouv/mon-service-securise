@@ -6,4 +6,4 @@ function extraisIp(headersExpress) {
   return { client: ips[0], waf: ips[ips.length - 1] };
 }
 
-module.exports = { extraisIp };
+export { extraisIp };

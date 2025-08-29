@@ -1,7 +1,5 @@
-const expect = require('expect.js');
-const {
-  genereGradientConique,
-} = require('../../../src/pdf/graphiques/camembert');
+import expect from 'expect.js';
+import { genereGradientConique } from '../../../src/pdf/graphiques/camembert.js';
 
 describe('Les graphiques camembert', () => {
   describe('quand ils sont générés via un gradient conique', () => {

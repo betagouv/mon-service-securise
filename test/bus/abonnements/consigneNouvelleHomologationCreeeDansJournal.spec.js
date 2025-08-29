@@ -1,10 +1,8 @@
-const expect = require('expect.js');
-const AdaptateurJournalMSSMemoire = require('../../../src/adaptateurs/adaptateurJournalMSSMemoire');
-const {
-  consigneNouvelleHomologationCreeeDansJournal,
-} = require('../../../src/bus/abonnements/consigneNouvelleHomologationCreeeDansJournal');
-const { unDossier } = require('../../constructeurs/constructeurDossier');
-const Referentiel = require('../../../src/referentiel');
+import expect from 'expect.js';
+import * as AdaptateurJournalMSSMemoire from '../../../src/adaptateurs/adaptateurJournalMSSMemoire.js';
+import { consigneNouvelleHomologationCreeeDansJournal } from '../../../src/bus/abonnements/consigneNouvelleHomologationCreeeDansJournal.js';
+import { unDossier } from '../../constructeurs/constructeurDossier.js';
+import * as Referentiel from '../../../src/referentiel.js';
 
 describe("L'abonnement qui consigne (dans le journal MSS) la finalisation d'un dossier d'homologation", () => {
   let adaptateurJournal;

@@ -1,4 +1,4 @@
-const Referentiel = require('../../referentiel');
+import * as Referentiel from '../../referentiel.js';
 
 class ObjetPDFAnnexeDescription {
   constructor(service, referentiel = Referentiel.creeReferentielVide()) {
@@ -34,4 +34,4 @@ class ObjetPDFAnnexeDescription {
   }
 }
 
-module.exports = ObjetPDFAnnexeDescription;
+export default ObjetPDFAnnexeDescription;

@@ -1,4 +1,4 @@
-const Base = require('./base');
+import Base from './base.js';
 
 const STATUTS_SAISIE = {
   A_SAISIR: 'aSaisir',
@@ -57,4 +57,4 @@ class InformationsService extends Base {
 }
 
 Object.assign(InformationsService, STATUTS_SAISIE);
-module.exports = InformationsService;
+export default InformationsService;
