@@ -55,9 +55,6 @@ const changementDescriptionService = (changeProvenance) => (knex) =>
     )
   );
 
-exports.up = changementDescriptionService(reduitProvenance);
-
-exports.down = changementDescriptionService(developpeProvenance);
-
-exports.reduitProvenance = reduitProvenance;
-exports.developpeProvenance = developpeProvenance;
+export const up = changementDescriptionService(reduitProvenance);
+export const down = changementDescriptionService(developpeProvenance);
+export { reduitProvenance, developpeProvenance };

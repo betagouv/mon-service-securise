@@ -1,17 +1,15 @@
-const {
+import {
   chaineDateFrEnChaineDateISO,
   dateEnFrancais,
-} = require('../src/utilitaires/date');
-const {
-  fabriqueAdaptateurChiffrement,
-} = require('../src/adaptateurs/fabriqueAdaptateurChiffrement');
+} from '../src/utilitaires/date.js';
+import { fabriqueAdaptateurChiffrement } from '../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
 
 const { chiffre, dechiffre } = fabriqueAdaptateurChiffrement();
 
 const estDateEnFrancais = (chaineDate) =>
   /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/.test(chaineDate);
 
-exports.up = async (knex) => {
+export const up = async (knex) => {
   await knex.transaction(async (trx) => {
     const televersementServices = await trx('televersement_services');
 
@@ -50,7 +48,7 @@ exports.up = async (knex) => {
   });
 };
 
-exports.down = async (knex) => {
+export const down = async (knex) => {
   await knex.transaction(async (trx) => {
     const televersementServices = await trx('televersement_services');
 

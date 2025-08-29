@@ -1,4 +1,4 @@
-exports.up = (knex) =>
+export const up = (knex) =>
   knex.schema.createTable('activites_mesure', (table) => {
     table.uuid('id_acteur');
     table.uuid('id_service');
@@ -7,4 +7,4 @@ exports.up = (knex) =>
     table.json('details');
   });
 
-exports.down = (knex) => knex.schema.dropTable('activites_mesure');
+export const down = (knex) => knex.schema.dropTable('activites_mesure');

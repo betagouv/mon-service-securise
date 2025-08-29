@@ -1,4 +1,4 @@
-const pourChaqueLigne = require('./utilitaires/pourChaqueLigne');
+import pourChaqueLigne from './utilitaires/pourChaqueLigne.js';
 
 const modifieVersDateUnique = (knex, table) =>
   pourChaqueLigne(knex(table), ({ id, donnees }) => {
@@ -39,14 +39,14 @@ const supprimeDateUnique = (knex, table) =>
     return knex(table).where({ id }).update({ donnees });
   });
 
-exports.up = (knex) =>
+export const up = (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       modifieVersDateUnique(knex, table)
     )
   );
 
-exports.down = (knex) =>
+export const down = (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       supprimeDateUnique(knex, table)

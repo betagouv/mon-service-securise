@@ -1,4 +1,4 @@
-const uuid = require('uuid');
+import * as uuid from 'uuid';
 
 const ajouteAutorisationCreateurSiInexistante = (
   knex,
@@ -20,7 +20,7 @@ const ajouteAutorisationCreateurSiInexistante = (
     });
   });
 
-exports.up = (knex) =>
+export const up = (knex) =>
   knex('homologations').then((lignes) =>
     Promise.all(
       lignes.map(({ id, donnees: { idUtilisateur } }) =>
@@ -29,4 +29,4 @@ exports.up = (knex) =>
     )
   );
 
-exports.down = (knex) => knex('autorisations').del();
+export const down = (knex) => knex('autorisations').del();

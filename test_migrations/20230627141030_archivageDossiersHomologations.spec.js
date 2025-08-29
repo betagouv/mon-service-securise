@@ -1,8 +1,5 @@
-const expect = require('expect.js');
-
-const {
-  archiveDossiers,
-} = require('../migrations/20230627141030_archivageDossiersHomologations');
+import expect from 'expect.js';
+import { archiveDossiers } from '../migrations/20230627141030_archivageDossiersHomologations.js';
 
 describe("La migration de l'archivage des dossiers d'homologation", () => {
   it("n'archive pas les dossiers non finalisés", () => {

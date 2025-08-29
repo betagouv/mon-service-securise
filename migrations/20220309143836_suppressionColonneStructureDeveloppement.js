@@ -32,12 +32,12 @@ const copieNomDeveloppementFourniture = (donnees) => {
   return donnees;
 };
 
-exports.up = miseAJour(
+export const up = miseAJour(
   contientCaracteristiquesComplementaires,
   supprimeStructureDeveloppement
 );
 
-exports.down = miseAJour(
+export const down = miseAJour(
   contientPartiesPrenantes,
   copieNomDeveloppementFourniture
 );

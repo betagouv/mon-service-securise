@@ -1,11 +1,9 @@
-const Knex = require('knex');
-const config = require('../knexfile');
-const {
-  adaptateurChiffrement,
-} = require('../src/adaptateurs/adaptateurChiffrement');
-const adaptateurEnvironnement = require('../src/adaptateurs/adaptateurEnvironnement');
-const { creeDepot } = require('../src/depots/depotDonneesSelsDeHachage');
-const AdaptateurPostgres = require('../src/adaptateurs/adaptateurPostgres');
+import Knex from 'knex';
+import config from '../knexfile.js';
+import { adaptateurChiffrement } from '../src/adaptateurs/adaptateurChiffrement.js';
+import * as adaptateurEnvironnement from '../src/adaptateurs/adaptateurEnvironnement.js';
+import { creeDepot } from '../src/depots/depotDonneesSelsDeHachage.js';
+import * as AdaptateurPostgres from '../src/adaptateurs/adaptateurPostgres.js';
 
 const tenteDeHacherAvecUnNouveauSel = (
   chaine,
@@ -275,4 +273,4 @@ class MigrationHash {
 
 /* eslint-enable no-console */
 
-module.exports = { MigrationHash, tenteDeHacherAvecUnNouveauSel };
+export { MigrationHash, tenteDeHacherAvecUnNouveauSel };
