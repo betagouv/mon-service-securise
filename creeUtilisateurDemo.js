@@ -69,6 +69,7 @@ const creeDonnees = async (depotDonnees, adaptateurPersistance) => {
     },
   };
   await adaptateurPersistance.ajouteTacheDeService(tacheService);
+
   const suggestionAction = {
     idService,
     nature: 'controleBesoinsDeSecuriteRetrogrades',

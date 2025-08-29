@@ -15,7 +15,9 @@ const {
 const {
   fabriqueAdaptateurJWT,
 } = require('../../src/adaptateurs/adaptateurJWT');
-const adaptateurProfilAnssiParDefaut = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
+const {
+  fabriqueAdaptateurProfilAnssiVide,
+} = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
 const { fabriqueServiceCgu } = require('../../src/serviceCgu');
 const {
   fabriqueServiceGestionnaireSession,
@@ -142,7 +144,7 @@ const testeurMss = () => {
       recupereStatistiques: async () => {},
     };
     adaptateurJWT = fabriqueAdaptateurJWT();
-    adaptateurProfilAnssi = adaptateurProfilAnssiParDefaut;
+    adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssiVide();
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
     procedures = fabriqueProcedures({
