@@ -1,18 +1,16 @@
 import express from 'express';
 import Utilisateur from '../../modeles/utilisateur.js';
-
 import {
   ErreurUtilisateurExistant,
   EchecEnvoiMessage,
   ErreurModele,
   ErreurJWTManquant,
 } from '../../erreurs.js';
-
 import {
   messageErreurDonneesUtilisateur,
   obtentionDonneesDeBaseUtilisateur,
 } from '../mappeur/utilisateur.js';
-import SourceAuthentification from '../../modeles/sourceAuthentification.js';
+import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 
 const routesNonConnecteApi = ({
   middleware,

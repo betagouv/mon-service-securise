@@ -1,15 +1,16 @@
-const expect = require('expect.js');
+import expect from 'expect.js';
 
-const {
+import {
   ErreurCategorieInconnue,
   ErreurStatutMesureInvalide,
   ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
   ErreurDetachementModeleMesureSpecifiqueImpossible,
-} = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
-const InformationsService = require('../../src/modeles/informationsService');
-const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
+} from '../../src/erreurs.js';
+
+import * as Referentiel from '../../src/referentiel.js';
+import InformationsService from '../../src/modeles/informationsService.js';
+import MesureSpecifique from '../../src/modeles/mesureSpecifique.js';
 
 describe('Une mesure spécifique', () => {
   const referentiel = Referentiel.creeReferentiel({

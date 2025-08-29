@@ -1,7 +1,7 @@
-const uneDescriptionValide = require('./constructeurDescriptionService');
-const Referentiel = require('../../src/referentiel');
-const Service = require('../../src/modeles/service');
-const { unUtilisateur } = require('./constructeurUtilisateur');
+import uneDescriptionValide from './constructeurDescriptionService.js';
+import * as Referentiel from '../../src/referentiel.js';
+import Service from '../../src/modeles/service.js';
+import { unUtilisateur } from './constructeurUtilisateur.js';
 
 class ConstructeurService {
   constructor(referentiel) {
@@ -84,4 +84,4 @@ class ConstructeurService {
 const unService = (referentiel = Referentiel.creeReferentielVide()) =>
   new ConstructeurService(referentiel);
 
-module.exports = { unService };
+export { unService };

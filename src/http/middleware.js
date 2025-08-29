@@ -13,8 +13,10 @@ import {
 } from '../erreurs.js';
 import { ajouteLaRedirectionPostConnexion } from './redirection.js';
 import { extraisIp } from './requeteHttp.js';
-import SourceAuthentification from '../modeles/sourceAuthentification.js';
+import { SourceAuthentification } from '../modeles/sourceAuthentification.js';
 import { TYPES_REQUETES } from './configurationServeur.js';
+
+const { LECTURE, INVISIBLE } = Permissions;
 
 const middleware = (configuration = {}) => {
   const {

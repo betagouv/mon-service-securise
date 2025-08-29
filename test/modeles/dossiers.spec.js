@@ -1,17 +1,18 @@
-const expect = require('expect.js');
-
-const {
+import expect from 'expect.js';
+import {
   ConstructeurDossierFantaisie,
   unDossier,
-} = require('../constructeurs/constructeurDossier');
-const {
+} from '../constructeurs/constructeurDossier.js';
+
+import {
   ErreurDossiersInvalides,
   ErreurDossierNonFinalisable,
   ErreurDossierCourantInexistant,
-} = require('../../src/erreurs');
-const Dossier = require('../../src/modeles/dossier');
-const Dossiers = require('../../src/modeles/dossiers');
-const Referentiel = require('../../src/referentiel');
+} from '../../src/erreurs.js';
+
+import Dossier from '../../src/modeles/dossier.js';
+import Dossiers from '../../src/modeles/dossiers.js';
+import * as Referentiel from '../../src/referentiel.js';
 
 describe('Les dossiers liés à un service', () => {
   const referentiel = Referentiel.creeReferentielVide();

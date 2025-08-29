@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
-  relieServiceEtSuperviseurs,
-} = require('../../../src/bus/abonnements/relieServiceEtSuperviseurs');
+import expect from 'expect.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import { relieServiceEtSuperviseurs } from '../../../src/bus/abonnements/relieServiceEtSuperviseurs.js';
 
 describe("L'abonné en charge de relier un nouveau service à ses superviseurs", () => {
   it('délègue la création du lien au service de supervision', async () => {

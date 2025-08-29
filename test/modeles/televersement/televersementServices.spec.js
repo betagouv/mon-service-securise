@@ -1,11 +1,11 @@
-const expect = require('expect.js');
-const TeleversementServices = require('../../../src/modeles/televersement/televersementServices');
-const Referentiel = require('../../../src/referentiel');
-const donneesReferentiel = require('../../../donneesReferentiel');
-const Dossier = require('../../../src/modeles/dossier');
-const { fabriqueBusPourLesTests } = require('../../bus/aides/busPourLesTests');
-const EvenementServicesImportes = require('../../../src/bus/evenementServicesImportes');
-const EvenementDossierHomologationImporte = require('../../../src/bus/evenementDossierHomologationImporte');
+import expect from 'expect.js';
+import TeleversementServices from '../../../src/modeles/televersement/televersementServices.js';
+import * as Referentiel from '../../../src/referentiel.js';
+import donneesReferentiel from '../../../donneesReferentiel.js';
+import Dossier from '../../../src/modeles/dossier.js';
+import { fabriqueBusPourLesTests } from '../../bus/aides/busPourLesTests.js';
+import EvenementServicesImportes from '../../../src/bus/evenementServicesImportes.js';
+import EvenementDossierHomologationImporte from '../../../src/bus/evenementDossierHomologationImporte.js';
 
 describe('Un téléversement de services', () => {
   let referentiel;

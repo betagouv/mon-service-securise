@@ -1,9 +1,8 @@
-const expect = require('expect.js');
-
-const { ErreurRisqueInconnu } = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
-const RisqueGeneral = require('../../src/modeles/risqueGeneral');
-const Risque = require('../../src/modeles/risque');
+import expect from 'expect.js';
+import { ErreurRisqueInconnu } from '../../src/erreurs.js';
+import * as Referentiel from '../../src/referentiel.js';
+import RisqueGeneral from '../../src/modeles/risqueGeneral.js';
+import Risque from '../../src/modeles/risque.js';
 
 describe('Un risque général', () => {
   let referentiel;

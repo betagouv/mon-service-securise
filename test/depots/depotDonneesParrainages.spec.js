@@ -1,6 +1,6 @@
-const expect = require('expect.js');
-const DepotDonneesParrainages = require('../../src/depots/depotDonneesParrainages');
-const Parrainage = require('../../src/modeles/parrainage');
+import expect from 'expect.js';
+import * as DepotDonneesParrainages from '../../src/depots/depotDonneesParrainages.js';
+import Parrainage from '../../src/modeles/parrainage.js';
 
 describe('Le dépôt de données des parrainages', () => {
   let adaptateurPersistance;

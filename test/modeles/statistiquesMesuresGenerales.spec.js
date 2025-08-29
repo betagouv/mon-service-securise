@@ -1,10 +1,7 @@
-const expect = require('expect.js');
-
-const Referentiel = require('../../src/referentiel');
-const { ErreurCategorieInconnue } = require('../../src/erreurs');
-const {
-  desStatistiques,
-} = require('../constructeurs/constructeurStatistiquesMesures');
+import expect from 'expect.js';
+import * as Referentiel from '../../src/referentiel.js';
+import { ErreurCategorieInconnue } from '../../src/erreurs.js';
+import { desStatistiques } from '../constructeurs/constructeurStatistiquesMesures.js';
 
 describe('Les statistiques des mesures générales', () => {
   it('vérifient que les catégories sont présentes dans le référentiel', () => {

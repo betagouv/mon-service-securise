@@ -1,5 +1,5 @@
-const Utilisateur = require('../../src/modeles/utilisateur.js');
-const { fabriqueAnnuaire } = require('../../src/annuaire/serviceAnnuaire.ts');
+import Utilisateur from '../../src/modeles/utilisateur.js';
+import { fabriqueAnnuaire } from '../../src/annuaire/serviceAnnuaire';
 
 describe("Le service d'annuaire", () => {
   describe('sur demande de contributeurs', () => {
@@ -10,9 +10,17 @@ describe("Le service d'annuaire", () => {
         ],
       };
 
-      const annuaire = fabriqueAnnuaire({ depotDonnees });
+      const annuaire = fabriqueAnnuaire({
+        depotDonnees,
+        adaptateurRechercheEntreprise: {
+          rechercheOrganisations: async () => [],
+        },
+      });
 
-      const contributeurs = await annuaire.rechercheContributeurs('X', 'Y');
+      const contributeurs = await annuaire.rechercheContributeurs(
+        crypto.randomUUID(),
+        'Y'
+      );
 
       expect(contributeurs.length).toBe(1);
       expect(contributeurs[0]).toBeInstanceOf(Utilisateur);

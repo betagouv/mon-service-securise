@@ -1,10 +1,8 @@
-const expect = require('expect.js');
-const {
-  sauvegardeEvolutionIndiceCyber,
-} = require('../../../src/bus/abonnements/sauvegardeEvolutionIndiceCyber');
-const { unService } = require('../../constructeurs/constructeurService');
-const Mesures = require('../../../src/modeles/mesures');
-const Referentiel = require('../../../src/referentiel');
+import expect from 'expect.js';
+import { sauvegardeEvolutionIndiceCyber } from '../../../src/bus/abonnements/sauvegardeEvolutionIndiceCyber.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import Mesures from '../../../src/modeles/mesures.js';
+import * as Referentiel from '../../../src/referentiel.js';
 
 describe("L'abonnement qui sauvegarde (en base de données) l'indice cyber d'un service", () => {
   let depotDonnees;

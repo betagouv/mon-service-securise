@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const { Contributeur } = require('../../src/modeles/contributeur');
+import expect from 'expect.js';
+import { Contributeur } from '../../src/modeles/contributeur.js';
 
 describe('Un contributeur', () => {
   it("connaît l'identifiant de l'utilisateur qu'il représente", () => {

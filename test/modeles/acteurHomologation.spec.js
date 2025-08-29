@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const ActeurHomologation = require('../../src/modeles/acteurHomologation');
+import expect from 'expect.js';
+import ActeurHomologation from '../../src/modeles/acteurHomologation.js';
 
 describe("Un acteur de l'homologation", () => {
   const acteurHomologation = new ActeurHomologation({

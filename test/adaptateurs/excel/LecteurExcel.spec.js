@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const { LecteurExcel } = require('../../../src/adaptateurs/excel/LecteurExcel');
+import expect from 'expect.js';
+import { LecteurExcel } from '../../../src/adaptateurs/excel/LecteurExcel.js';
 
 describe('Le lecteur de fichier Excel', () => {
   describe('concernant le contrôle de lignes complètes', () => {

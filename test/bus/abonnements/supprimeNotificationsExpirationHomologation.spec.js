@@ -1,7 +1,5 @@
-const expect = require('expect.js');
-const {
-  supprimeNotificationsExpirationHomologation,
-} = require('../../../src/bus/abonnements/supprimeNotificationsExpirationHomologation');
+import expect from 'expect.js';
+import { supprimeNotificationsExpirationHomologation } from '../../../src/bus/abonnements/supprimeNotificationsExpirationHomologation.js';
 
 describe("L'abonnement qui supprime (en base de données) les notifications d'expiration d'une homologation", () => {
   let depotDonnees;

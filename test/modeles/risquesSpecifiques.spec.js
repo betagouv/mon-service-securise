@@ -1,7 +1,6 @@
-const expect = require('expect.js');
-
-const RisqueSpecifique = require('../../src/modeles/risqueSpecifique');
-const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
+import expect from 'expect.js';
+import RisqueSpecifique from '../../src/modeles/risqueSpecifique.js';
+import RisquesSpecifiques from '../../src/modeles/risquesSpecifiques.js';
 
 describe('La liste des risques spécifiques', () => {
   it('sait se dénombrer', () => {

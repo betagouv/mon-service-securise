@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const ObjetPersistanceService = require('../../../src/modeles/objetsPersistance/objetPersistanceService');
+import expect from 'expect.js';
+import ObjetPersistanceService from '../../../src/modeles/objetsPersistance/objetPersistanceService.js';
 
 describe("Les données de persistance d'un service", () => {
   it('peuvent exclure une propriété', () => {

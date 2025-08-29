@@ -9,4 +9,4 @@ const fauxAdaptateurChiffrement = () => ({
       .then((chaineChiffree) => chaineChiffree === chiffreeReference),
 });
 
-module.exports = fauxAdaptateurChiffrement;
+export default fauxAdaptateurChiffrement;

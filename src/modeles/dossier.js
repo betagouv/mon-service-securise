@@ -6,11 +6,10 @@ import Documents from './etapes/documents.js';
 import EtapeAvis from './etapes/etapeAvis.js';
 import InformationsService from './informationsService.js';
 import * as Referentiel from '../referentiel.js';
-
 import {
   ErreurDossierDejaFinalise,
-  ErreurDossierNonFinalisable,
   ErreurDossierEtapeInconnue,
+  ErreurDossierNonFinalisable,
   ErreurDossierNonFinalise,
 } from '../erreurs.js';
 

@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const supertest = require('supertest');
+import expect from 'expect.js';
+import supertest from 'supertest';
 
 const verifieNomFichierServi = async (app, url, nom) => {
   const reponse = await supertest(app).get(url);
@@ -22,7 +22,7 @@ const verifieTypeFichierServiEstPDF = (app, url) =>
 const verifieTypeFichierServiEstZIP = (app, url) =>
   verifieTypeFichierServi(app, url, 'application/zip');
 
-module.exports = {
+export {
   verifieNomFichierServi,
   verifieTypeFichierServiEstCSV,
   verifieTypeFichierServiEstPDF,

@@ -1,12 +1,11 @@
-const expect = require('expect.js');
-
-const { ErreurTypeInconnu } = require('../../../src/erreurs');
-const fabriquePartiePrenante = require('../../../src/modeles/partiesPrenantes/fabriquePartiePrenante');
-const DeveloppementFourniture = require('../../../src/modeles/partiesPrenantes/developpementFourniture');
-const Hebergement = require('../../../src/modeles/partiesPrenantes/hebergement');
-const MaintenanceService = require('../../../src/modeles/partiesPrenantes/maintenanceService');
-const PartiePrenanteSpecifique = require('../../../src/modeles/partiesPrenantes/partiePrenanteSpecifique');
-const SecuriteService = require('../../../src/modeles/partiesPrenantes/securiteService');
+import expect from 'expect.js';
+import { ErreurTypeInconnu } from '../../../src/erreurs.js';
+import { fabriquePartiePrenante } from '../../../src/modeles/partiesPrenantes/fabriquePartiePrenante.js';
+import DeveloppementFourniture from '../../../src/modeles/partiesPrenantes/developpementFourniture.js';
+import Hebergement from '../../../src/modeles/partiesPrenantes/hebergement.js';
+import MaintenanceService from '../../../src/modeles/partiesPrenantes/maintenanceService.js';
+import PartiePrenanteSpecifique from '../../../src/modeles/partiesPrenantes/partiePrenanteSpecifique.js';
+import SecuriteService from '../../../src/modeles/partiesPrenantes/securiteService.js';
 
 describe('La fabrique de partie prenante', () => {
   it('fabrique des hébergements', () => {

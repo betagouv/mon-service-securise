@@ -1,11 +1,9 @@
-const {
-  unePersistanceMemoire,
-} = require('./constructeurAdaptateurPersistanceMemoire');
-const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
-const Referentiel = require('../../src/referentiel');
-const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
-const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
-const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
+import { unePersistanceMemoire } from './constructeurAdaptateurPersistanceMemoire.js';
+import * as DepotDonneesServices from '../../src/depots/depotDonneesServices.js';
+import * as Referentiel from '../../src/referentiel.js';
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
+import * as DepotDonneesUtilisateurs from '../../src/depots/depotDonneesUtilisateurs.js';
 
 class ConstructeurDepotDonneesServices {
   constructor() {
@@ -81,4 +79,4 @@ class ConstructeurDepotDonneesServices {
 
 const unDepotDeDonneesServices = () => new ConstructeurDepotDonneesServices();
 
-module.exports = { unDepotDeDonneesServices };
+export { unDepotDeDonneesServices };

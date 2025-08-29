@@ -1,5 +1,5 @@
-const Referentiel = require('../../src/referentiel');
-const MesureGenerale = require('../../src/modeles/mesureGenerale');
+import * as Referentiel from '../../src/referentiel.js';
+import MesureGenerale from '../../src/modeles/mesureGenerale.js';
 
 class ConstructeurMesureGenerale {
   constructor(referentiel) {
@@ -60,4 +60,4 @@ const uneMesureGenerale = (
   })
 ) => new ConstructeurMesureGenerale(referentiel);
 
-module.exports = { uneMesureGenerale };
+export { uneMesureGenerale };

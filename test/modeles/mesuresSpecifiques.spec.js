@@ -1,14 +1,14 @@
-const expect = require('expect.js');
+import expect from 'expect.js';
+import MesureSpecifique from '../../src/modeles/mesureSpecifique.js';
+import MesuresSpecifiques from '../../src/modeles/mesuresSpecifiques.js';
+import * as Referentiel from '../../src/referentiel.js';
 
-const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
-const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
-const Referentiel = require('../../src/referentiel');
-const {
+import {
   ErreurMesureInconnue,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
   ErreurSuppressionImpossible,
-} = require('../../src/erreurs');
+} from '../../src/erreurs.js';
 
 describe('La liste des mesures spécifiques', () => {
   let referentiel;

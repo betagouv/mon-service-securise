@@ -1,4 +1,4 @@
-const testeurMSS = require('../testeurMSS');
+import testeurMSS from '../testeurMSS.js';
 
 describe('Le serveur MSS des routes /styles/*', () => {
   const testeur = testeurMSS();
