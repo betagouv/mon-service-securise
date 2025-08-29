@@ -1,10 +1,8 @@
-const { decode } = require('html-entities');
-const { createObjectCsvStringifier } = require('csv-writer');
-const { stripHtml } = require('string-strip-html');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('./fabriqueAdaptateurGestionErreur');
-const { dateEnFrancais } = require('../utilitaires/date');
+import { decode } from 'html-entities';
+import { createObjectCsvStringifier } from 'csv-writer';
+import { stripHtml } from 'string-strip-html';
+import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
+import { dateEnFrancais } from '../utilitaires/date.js';
 
 const remplaceBooleen = (booleen) => (booleen ? 'Oui' : 'Non');
 const avecBOM = (...contenus) => `\uFEFF${contenus.join('')}`;
@@ -119,4 +117,4 @@ const genereCsvMesures = async (
   return Buffer.from(csv, 'utf-8');
 };
 
-module.exports = { genereCsvMesures, genereCsvServices };
+export { genereCsvMesures, genereCsvServices };

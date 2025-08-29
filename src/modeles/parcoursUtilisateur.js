@@ -1,9 +1,7 @@
-const {
-  fabriqueAdaptateurHorloge,
-} = require('../adaptateurs/adaptateurHorloge');
-const Base = require('./base');
-const Referentiel = require('../referentiel');
-const EtatVisiteGuidee = require('./etatVisiteGuidee');
+import { fabriqueAdaptateurHorloge } from '../adaptateurs/adaptateurHorloge.js';
+import Base from './base.js';
+import * as Referentiel from '../referentiel.js';
+import EtatVisiteGuidee from './etatVisiteGuidee.js';
 
 class ParcoursUtilisateur extends Base {
   constructor(
@@ -47,4 +45,4 @@ class ParcoursUtilisateur extends Base {
   }
 }
 
-module.exports = ParcoursUtilisateur;
+export default ParcoursUtilisateur;

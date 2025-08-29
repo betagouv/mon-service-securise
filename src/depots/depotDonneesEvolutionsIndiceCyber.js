@@ -1,4 +1,4 @@
-const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
+import fabriqueAdaptateurPersistance from '../adaptateurs/fabriqueAdaptateurPersistance.js';
 
 const creeDepot = (config = {}) => {
   const {
@@ -24,4 +24,4 @@ const creeDepot = (config = {}) => {
   return { sauvegardeNouvelIndiceCyber, lisDernierIndiceCyber };
 };
 
-module.exports = { creeDepot };
+export { creeDepot };

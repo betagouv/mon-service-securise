@@ -1,8 +1,7 @@
-const InformationsService = require('./informationsService');
-const RisquesGeneraux = require('./risquesGeneraux');
-const RisquesSpecifiques = require('./risquesSpecifiques');
-
-const Referentiel = require('../referentiel');
+import InformationsService from './informationsService.js';
+import RisquesGeneraux from './risquesGeneraux.js';
+import RisquesSpecifiques from './risquesSpecifiques.js';
+import * as Referentiel from '../referentiel.js';
 
 class Risques extends InformationsService {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
@@ -31,4 +30,4 @@ class Risques extends InformationsService {
   }
 }
 
-module.exports = Risques;
+export default Risques;

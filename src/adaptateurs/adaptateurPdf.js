@@ -1,16 +1,14 @@
-const { PDFDocument } = require('pdf-lib');
-const pug = require('pug');
-const { readFile } = require('fs/promises');
-const { decode } = require('html-entities');
-const { join } = require('path');
-const { lanceNavigateur } = require('./adaptateurPdf.puppeteer');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('./fabriqueAdaptateurGestionErreur');
-const {
+import { PDFDocument } from 'pdf-lib';
+import pug from 'pug';
+import { readFile } from 'fs/promises';
+import { decode } from 'html-entities';
+import { join } from 'path';
+import { lanceNavigateur } from './adaptateurPdf.puppeteer.js';
+import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
+import {
   instructionsTamponHomologation,
   configurationsDispositifs,
-} = require('./adaptateurPdf.configurationTamponHomologation');
+} from './adaptateurPdf.configurationTamponHomologation.js';
 
 const formatPdfA4 = (enteteHtml, piedPageHtml) => ({
   format: 'A4',
@@ -223,7 +221,7 @@ const genereTamponHomologation = async (donnees) => {
   }
 };
 
-module.exports = {
+export {
   genereAnnexes,
   genereDossierDecision,
   genereSyntheseSecurite,

@@ -117,4 +117,4 @@ class CrmBrevo {
   }
 }
 
-module.exports = CrmBrevo;
+export default CrmBrevo;

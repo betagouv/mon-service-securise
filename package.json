@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "MonServiceSécurisé",
   "version": "1.0.0",
   "description": "",

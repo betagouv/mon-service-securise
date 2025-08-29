@@ -3,12 +3,12 @@
      ["error", { "exceptMethods": ["estIndispensable", "estRecommandee"] }]
 */
 
-const InformationsService = require('./informationsService');
-const {
+import InformationsService from './informationsService.js';
+import {
   ErreurStatutMesureInvalide,
   ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
-} = require('../erreurs');
+} from '../erreurs.js';
 
 const STATUTS = {
   STATUT_FAIT: 'fait',
@@ -75,4 +75,4 @@ class Mesure extends InformationsService {
 
 Object.assign(Mesure, STATUTS);
 
-module.exports = Mesure;
+export default Mesure;

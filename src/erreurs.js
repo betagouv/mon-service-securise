@@ -104,7 +104,7 @@ class ErreurUtilisateurExistant extends ErreurModele {
 class ErreurTeleversementInexistant extends ErreurModele {}
 class ErreurTeleversementInvalide extends ErreurModele {}
 
-module.exports = {
+export {
   EchecAutorisation,
   EchecEnvoiMessage,
   ErreurApiBrevo,

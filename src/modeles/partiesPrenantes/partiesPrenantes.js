@@ -1,11 +1,11 @@
-const DeveloppementFourniture = require('./developpementFourniture');
-const ElementsFabricables = require('../elementsFabricables');
-const Hebergement = require('./hebergement');
-const MaintenanceService = require('./maintenanceService');
-const PartiePrenante = require('./partiePrenante');
-const PartiePrenanteSpecifique = require('./partiePrenanteSpecifique');
-const SecuriteService = require('./securiteService');
-const fabriquePartiePrenante = require('./fabriquePartiePrenante');
+import DeveloppementFourniture from './developpementFourniture.js';
+import ElementsFabricables from '../elementsFabricables.js';
+import Hebergement from './hebergement.js';
+import MaintenanceService from './maintenanceService.js';
+import PartiePrenante from './partiePrenante.js';
+import PartiePrenanteSpecifique from './partiePrenanteSpecifique.js';
+import SecuriteService from './securiteService.js';
+import fabriquePartiePrenante from './fabriquePartiePrenante.js';
 
 class PartiesPrenantes extends ElementsFabricables {
   constructor(donnees = {}) {
@@ -48,4 +48,4 @@ class PartiesPrenantes extends ElementsFabricables {
   }
 }
 
-module.exports = PartiesPrenantes;
+export default PartiesPrenantes;

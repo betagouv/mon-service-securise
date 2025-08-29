@@ -1,4 +1,4 @@
-const Etape = require('./etape');
+import Etape from './etape.js';
 
 class Documents extends Etape {
   constructor({ documents = [], avecDocuments = null } = {}) {
@@ -26,4 +26,4 @@ class Documents extends Etape {
   }
 }
 
-module.exports = Documents;
+export default Documents;

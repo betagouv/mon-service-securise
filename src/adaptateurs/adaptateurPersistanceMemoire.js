@@ -1,4 +1,4 @@
-const { fabriqueAdaptateurHorloge } = require('./adaptateurHorloge');
+import { fabriqueAdaptateurHorloge } from './adaptateurHorloge.js';
 
 const nouvelAdaptateur = (
   donnees = {},
@@ -598,4 +598,4 @@ const nouvelAdaptateur = (
   };
 };
 
-module.exports = { nouvelAdaptateur };
+export { nouvelAdaptateur };

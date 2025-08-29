@@ -1,8 +1,8 @@
-const express = require('express');
-const uuid = require('uuid');
-const { ErreurArticleCrispIntrouvable } = require('@lab-anssi/lib');
-const { estUrlLegalePourRedirection } = require('../../http/redirection');
-const SourceAuthentification = require('../../modeles/sourceAuthentification');
+import express from 'express';
+import * as uuid from 'uuid';
+import { ErreurArticleCrispIntrouvable } from '@lab-anssi/lib';
+import { estUrlLegalePourRedirection } from '../../http/redirection.js';
+import SourceAuthentification from '../../modeles/sourceAuthentification.js';
 
 const routesNonConnectePage = ({
   adaptateurEnvironnement,
@@ -230,4 +230,4 @@ const routesNonConnectePage = ({
   return routes;
 };
 
-module.exports = routesNonConnectePage;
+export default routesNonConnectePage;

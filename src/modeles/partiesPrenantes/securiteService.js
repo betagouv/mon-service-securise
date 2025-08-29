@@ -1,5 +1,5 @@
-const PartiePrenante = require('./partiePrenante');
+import PartiePrenante from './partiePrenante.js';
 
 class SecuriteService extends PartiePrenante {}
 
-module.exports = SecuriteService;
+export default SecuriteService;

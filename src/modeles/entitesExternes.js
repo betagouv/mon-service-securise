@@ -1,5 +1,5 @@
-const EntiteExterne = require('./entiteExterne');
-const ElementsConstructibles = require('./elementsConstructibles');
+import EntiteExterne from './entiteExterne.js';
+import ElementsConstructibles from './elementsConstructibles.js';
 
 class EntitesExternes extends ElementsConstructibles {
   constructor(donnees) {
@@ -7,4 +7,4 @@ class EntitesExternes extends ElementsConstructibles {
   }
 }
 
-module.exports = EntitesExternes;
+export default EntitesExternes;

@@ -1,4 +1,4 @@
-const pThrottle = require('p-throttle');
+import pThrottle from 'p-throttle';
 
 // Import dynamique car `p-throttle` ne support que `import from` que nous ne supportons pas.
 const enCadence = (intervalleEnMs, fonctionEncapsulee) => {
@@ -6,4 +6,4 @@ const enCadence = (intervalleEnMs, fonctionEncapsulee) => {
   return cadence(fonctionEncapsulee);
 };
 
-module.exports = { enCadence };
+export { enCadence };

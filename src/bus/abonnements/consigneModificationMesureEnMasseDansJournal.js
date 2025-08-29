@@ -1,6 +1,4 @@
-const {
-  EvenementMesureModifieeEnMasse,
-} = require('../../modeles/journalMSS/evenementMesureModifieeEnMasse');
+import { EvenementMesureModifieeEnMasse } from '../../modeles/journalMSS/evenementMesureModifieeEnMasse.js';
 
 function consigneModificationMesureEnMasseDansJournal({ adaptateurJournal }) {
   return async ({
@@ -29,4 +27,4 @@ function consigneModificationMesureEnMasseDansJournal({ adaptateurJournal }) {
   };
 }
 
-module.exports = { consigneModificationMesureEnMasseDansJournal };
+export { consigneModificationMesureEnMasseDansJournal };

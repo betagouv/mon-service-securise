@@ -7,4 +7,4 @@ const fabriqueServiceGestionnaireSession = () => ({
   cguAcceptees: (requete) => requete.session?.cguAcceptees,
 });
 
-module.exports = { fabriqueServiceGestionnaireSession };
+export { fabriqueServiceGestionnaireSession };

@@ -1,4 +1,4 @@
-const copie = require('../../utilitaires/copie');
+import copie from '../../utilitaires/copie.js';
 
 class ObjetPersistanceService {
   constructor(donneesService) {
@@ -18,4 +18,4 @@ class ObjetPersistanceService {
   }
 }
 
-module.exports = ObjetPersistanceService;
+export default ObjetPersistanceService;

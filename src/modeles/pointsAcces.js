@@ -1,4 +1,4 @@
-const ItemsAvecDescription = require('./itemsAvecDescription');
+import ItemsAvecDescription from './itemsAvecDescription.js';
 
 class PointsAcces extends ItemsAvecDescription {
   constructor(donnees) {
@@ -6,4 +6,4 @@ class PointsAcces extends ItemsAvecDescription {
   }
 }
 
-module.exports = PointsAcces;
+export default PointsAcces;

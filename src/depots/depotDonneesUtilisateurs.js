@@ -1,24 +1,22 @@
-const { fabriqueAdaptateurUUID } = require('../adaptateurs/adaptateurUUID');
-const fabriqueAdaptateurPersistance = require('../adaptateurs/fabriqueAdaptateurPersistance');
-const { fabriqueServiceCgu } = require('../serviceCgu');
-const {
+import { fabriqueAdaptateurUUID } from '../adaptateurs/adaptateurUUID.js';
+import fabriqueAdaptateurPersistance from '../adaptateurs/fabriqueAdaptateurPersistance.js';
+import { fabriqueServiceCgu } from '../serviceCgu.js';
+
+import {
   ErreurEmailManquant,
   ErreurSuppressionImpossible,
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
   ErreurMotDePasseIncorrect,
-} = require('../erreurs');
-const Utilisateur = require('../modeles/utilisateur');
-const Entite = require('../modeles/entite');
-const EvenementUtilisateurModifie = require('../bus/evenementUtilisateurModifie');
-const EvenementUtilisateurInscrit = require('../bus/evenementUtilisateurInscrit');
-const {
-  EvenementCguAccepteesParUtilisateur,
-} = require('../bus/evenementCguAccepteesParUtilisateur');
-const { creeReferentielVide } = require('../referentiel');
-const {
-  fabriqueAdaptateurProfilAnssiVide,
-} = require('../adaptateurs/adaptateurProfilAnssiVide');
+} from '../erreurs.js';
+
+import Utilisateur from '../modeles/utilisateur.js';
+import Entite from '../modeles/entite.js';
+import EvenementUtilisateurModifie from '../bus/evenementUtilisateurModifie.js';
+import EvenementUtilisateurInscrit from '../bus/evenementUtilisateurInscrit.js';
+import { EvenementCguAccepteesParUtilisateur } from '../bus/evenementCguAccepteesParUtilisateur.js';
+import { creeReferentielVide } from '../referentiel.js';
+import { fabriqueAdaptateurProfilAnssiVide } from '../adaptateurs/adaptateurProfilAnssiVide.js';
 
 const serviceCguParDefaut = fabriqueServiceCgu({
   referentiel: creeReferentielVide(),
@@ -431,4 +429,4 @@ const creeDepot = (config = {}) => {
   };
 };
 
-module.exports = { creeDepot };
+export { creeDepot };

@@ -5,4 +5,4 @@ function modifieLienEntrepriseEtContactBrevo({ crmBrevo }) {
   };
 }
 
-module.exports = { modifieLienEntrepriseEtContactBrevo };
+export { modifieLienEntrepriseEtContactBrevo };
