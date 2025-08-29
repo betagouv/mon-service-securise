@@ -1,4 +1,6 @@
-const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('../adaptateurs/adaptateurHorloge');
 const Autorite = require('./etapes/autorite');
 const DateTelechargement = require('./etapes/dateTelechargement');
 const Decision = require('./etapes/decision');
@@ -17,7 +19,7 @@ class Dossier extends InformationsService {
   constructor(
     donneesDossier = {},
     referentiel = Referentiel.creeReferentielVide(),
-    adaptateurHorloge = adaptateurHorlogeParDefaut
+    adaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     donneesDossier.finalise = !!donneesDossier.finalise;
 

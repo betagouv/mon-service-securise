@@ -1210,16 +1210,11 @@ describe('Le middleware MSS', () => {
     };
 
     beforeEach(() => {
-      adaptateurEnvironnement = {
-        featureFlag: () => featureFlag,
-      };
+      adaptateurEnvironnement = { featureFlag: () => featureFlag };
       adaptateurHorloge = {
         maintenant: () => new Date('2024-01-01 00:00:00Z'),
       };
-      middleware = Middleware({
-        adaptateurEnvironnement,
-        adaptateurHorloge,
-      });
+      middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
     });
 
     it('ajoute un objet de feature flags à `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
@@ -1237,10 +1232,7 @@ describe('Le middleware MSS', () => {
 
       it("affiche le bandeau si la date d'affichage est passée", async () => {
         adaptateurHorloge.maintenant = () => new Date('2026-01-01 00:00:00Z');
-        middleware = Middleware({
-          adaptateurEnvironnement,
-          adaptateurHorloge,
-        });
+        middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
 
         middleware.chargeFeatureFlags(requete, reponse, () => {
           expect(reponse.locals.featureFlags.avecBandeauMSC).to.be(true);

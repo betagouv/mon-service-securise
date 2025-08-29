@@ -1,8 +1,8 @@
-const adaptateurHorlogeParDefaut = require('./adaptateurHorloge');
+const { fabriqueAdaptateurHorloge } = require('./adaptateurHorloge');
 
 const nouvelAdaptateur = (
   donnees = {},
-  adaptateurHorloge = adaptateurHorlogeParDefaut
+  adaptateurHorloge = fabriqueAdaptateurHorloge()
 ) => {
   donnees.utilisateurs ||= [];
   donnees.services ||= [];

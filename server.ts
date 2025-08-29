@@ -13,7 +13,9 @@ const {
   fabriqueAdaptateurGestionErreur,
 } = require('./src/adaptateurs/fabriqueAdaptateurGestionErreur');
 const fabriqueAdaptateurTracking = require('./src/adaptateurs/fabriqueAdaptateurTracking');
-const adaptateurHorloge = require('./src/adaptateurs/adaptateurHorloge');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('./src/adaptateurs/adaptateurHorloge');
 const { fabriqueAdaptateurJWT } = require('./src/adaptateurs/adaptateurJWT');
 const adaptateurMail = adaptateurEnvironnement.sendinblue().clefAPIEmail()
   ? require('./src/adaptateurs/adaptateurMailSendinblue')
@@ -52,6 +54,7 @@ const {
   fabriqueServiceVerificationCoherenceSels,
 } = require('./src/sel/serviceVerificationCoherenceSels');
 
+const adaptateurHorloge = fabriqueAdaptateurHorloge();
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
 const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
 const adaptateurJWT = fabriqueAdaptateurJWT();

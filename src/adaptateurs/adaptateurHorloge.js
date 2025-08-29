@@ -1,3 +1,5 @@
-const maintenant = () => new Date();
+const fabriqueAdaptateurHorloge = () => ({
+  maintenant: () => new Date(),
+});
 
-module.exports = { maintenant };
+module.exports = { fabriqueAdaptateurHorloge };

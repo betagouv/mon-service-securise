@@ -33,7 +33,9 @@ const {
   fabriqueAdaptateurGestionErreur,
 } = require('../src/adaptateurs/fabriqueAdaptateurGestionErreur');
 const { cableTousLesAbonnes } = require('../src/bus/cablage');
-const adaptateurHorloge = require('../src/adaptateurs/adaptateurHorloge');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('../src/adaptateurs/adaptateurHorloge');
 const fabriqueAdaptateurTracking = require('../src/adaptateurs/fabriqueAdaptateurTracking');
 const {
   consigneCompletudeDansJournal,
@@ -84,6 +86,7 @@ class ConsoleAdministration {
     });
 
     const adaptateurTracking = fabriqueAdaptateurTracking();
+    const adaptateurHorloge = fabriqueAdaptateurHorloge();
     this.adaptateurSupervision = fabriqueAdaptateurSupervision();
     cableTousLesAbonnes(busEvenements, {
       adaptateurHorloge,

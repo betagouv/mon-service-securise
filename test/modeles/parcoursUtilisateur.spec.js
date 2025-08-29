@@ -31,9 +31,7 @@ describe('Un parcours utilisateur', () => {
 
   it("sait enregistrer une date de dernière connexion en utilisant l'adaptateur horloge", () => {
     const dateDeConnexion = new Date();
-    const adaptateurHorloge = {
-      maintenant: () => dateDeConnexion,
-    };
+    const adaptateurHorloge = { maintenant: () => dateDeConnexion };
     const unParcours = new ParcoursUtilisateur(
       {
         idUtilisateur: '456',

@@ -21,6 +21,9 @@ const {
   fabriqueServiceGestionnaireSession,
 } = require('../../src/session/serviceGestionnaireSession');
 const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('../../src/adaptateurs/adaptateurHorloge');
 
 const testeurMss = () => {
   let serviceAnnuaire;
@@ -87,9 +90,7 @@ const testeurMss = () => {
   const initialise = async () => {
     serviceAnnuaire = {};
     serviceSupervision = {};
-    adaptateurHorloge = {
-      maintenant: () => new Date(),
-    };
+    adaptateurHorloge = fabriqueAdaptateurHorloge();
     const contenuCrisp = {
       contenuMarkdown: 'Un contenu',
       titre: 'Un titre',
