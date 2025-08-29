@@ -213,8 +213,6 @@ const testeurMss = () => {
     }
   };
 
-  const arrete = () => serveur.arreteEcoute();
-
   const get = async (url) => supertest(app).get(url);
   const patch = async (url, donnees = {}) =>
     supertest(app).patch(url).send(donnees);
@@ -255,7 +253,6 @@ const testeurMss = () => {
     moteurRegles: () => moteurRegles,
     referentiel: () => referentiel,
     procedures: () => procedures,
-    arrete,
     initialise,
     verifieRequeteGenereErreurHTTP,
     verifieSessionDeposee,
