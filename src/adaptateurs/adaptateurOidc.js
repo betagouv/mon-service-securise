@@ -1,8 +1,8 @@
-const { Issuer } = require('openid-client');
-const { generators } = require('openid-client');
-const adaptateurEnvironnement = require('./adaptateurEnvironnement');
+import { Issuer } from 'openid-client';
+import { generators } from 'openid-client';
+import { oidc } from './adaptateurEnvironnement.js';
 
-const configurationOidc = adaptateurEnvironnement.oidc();
+const configurationOidc = oidc();
 
 async function recupereClient() {
   const agentConnect = await Issuer.discover(configurationOidc.urlBase());
@@ -77,7 +77,7 @@ const recupereInformationsUtilisateur = async (accessToken) => {
   return { prenom, nom, email, siret };
 };
 
-module.exports = {
+export {
   genereDemandeAutorisation,
   genereDemandeDeconnexion,
   recupereInformationsUtilisateur,

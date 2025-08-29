@@ -1,9 +1,9 @@
-const {
+import {
   ErreurHashDeSelInvalide,
   ErreurSelManquant,
   ErreurVersionSelInvalide,
   ErreurValeurSelIncoherente,
-} = require('../erreurs');
+} from '../erreurs.js';
 
 const verifieQueChaqueSelEstCoherent = async (
   tousLesSelsDeLaConfig,
@@ -122,4 +122,4 @@ const creeDepot = (config = {}) => {
     verifieLaCoherenceDesSelsAvantMigration,
   };
 };
-module.exports = { creeDepot };
+export { creeDepot };

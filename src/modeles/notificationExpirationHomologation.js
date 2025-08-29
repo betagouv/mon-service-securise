@@ -1,4 +1,4 @@
-const { ajouteMoisADate } = require('../utilitaires/date');
+import { ajouteMoisADate } from '../utilitaires/date.js';
 
 class NotificationExpirationHomologation {
   constructor({ id, idService, dateProchainEnvoi, delaiAvantExpirationMois }) {
@@ -44,4 +44,4 @@ class NotificationExpirationHomologation {
   }
 }
 
-module.exports = NotificationExpirationHomologation;
+export default NotificationExpirationHomologation;

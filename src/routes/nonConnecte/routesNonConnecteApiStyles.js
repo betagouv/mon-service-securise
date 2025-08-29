@@ -1,5 +1,5 @@
-const axios = require('axios');
-const express = require('express');
+import axios from 'axios';
+import express from 'express';
 
 const CHEMINS_FEUILLES_DE_STYLE = {
   'selectize.default.min.css':
@@ -34,4 +34,4 @@ const routesNonConnecteApiStyles = () => {
   return routes;
 };
 
-module.exports = routesNonConnecteApiStyles;
+export default routesNonConnecteApiStyles;

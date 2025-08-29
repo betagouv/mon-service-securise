@@ -1,9 +1,6 @@
-const InformationsService = require('./informationsService');
-const {
-  ErreurDureeValiditeInvalide,
-  ErreurAvisInvalide,
-} = require('../erreurs');
-const Referentiel = require('../referentiel');
+import InformationsService from './informationsService.js';
+import { ErreurDureeValiditeInvalide, ErreurAvisInvalide } from '../erreurs.js';
+import * as Referentiel from '../referentiel.js';
 
 class Avis extends InformationsService {
   constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
@@ -59,4 +56,4 @@ class Avis extends InformationsService {
   }
 }
 
-module.exports = Avis;
+export default Avis;

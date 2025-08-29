@@ -1,10 +1,10 @@
-const Base = require('./base');
-const {
+import Base from './base.js';
+import {
   ErreurEmailManquant,
   ErreurDonneesObligatoiresManquantes,
-} = require('../erreurs');
-const Entite = require('./entite');
-const { Identite } = require('./identite');
+} from '../erreurs.js';
+import Entite from './entite.js';
+import { Identite } from './identite.js';
 
 const valide = (donnees) => {
   const { email } = donnees;
@@ -191,4 +191,4 @@ class Utilisateur extends Base {
   }
 }
 
-module.exports = Utilisateur;
+export default Utilisateur;

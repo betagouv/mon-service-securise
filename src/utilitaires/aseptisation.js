@@ -9,4 +9,4 @@ const valeurBooleenne = (valeur) => {
   }
 };
 
-module.exports = { valeurBooleenne };
+export { valeurBooleenne };

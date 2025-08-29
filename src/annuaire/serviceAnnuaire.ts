@@ -29,4 +29,4 @@ const fabriqueAnnuaire = ({
     depotDonnees.rechercheContributeurs(idUtilisateur, recherche),
 });
 
-module.exports = { fabriqueAnnuaire };
+export { fabriqueAnnuaire };

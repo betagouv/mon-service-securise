@@ -1,0 +1,15 @@
+## Pour passer de CJS à ESM
+
+- [ ] Passer de CJS à ESM :
+  - J'ai utilisé https://www.npmjs.com/package/cjs2esm
+  - [x] Aller voir tous les fichiers dans `/src`
+  - [ ] Aller voir tous les fichiers dans `/test`
+  - [ ] Aller voir tous les fichiers dans `/admin`
+  - [ ] Aller voir tous les fichiers dans `/scripts`
+  - [ ] Aller voir tous les fichiers dans `/public`
+  - [ ] Aller voir tous les fichiers dans `/migrations`
+  - [ ] Faire une recherche globale sur `require()` pour chasser les derniers
+- [ ] Faire les tests des éléments "périphériques"
+  - [ ] Bien vérifier que `tacheEnvoieMailsNotificationExpiration.sh` (qui est lancé en cron sur clever) arrive bien à faire `node --import tsx`
+  - [ ] Bien vérifier que `dev_init_sel.sh` arrive bien à faire `node --import tsx` et fonctionne bien
+  - [ ] Bien vérifier les migrations : essayer d'en jouer un et down sur env de PR clever

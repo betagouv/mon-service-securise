@@ -1,5 +1,5 @@
-const ElementsConstructibles = require('./elementsConstructibles');
-const ActeurHomologation = require('./acteurHomologation');
+import ElementsConstructibles from './elementsConstructibles.js';
+import ActeurHomologation from './acteurHomologation.js';
 
 class ActeursHomologation extends ElementsConstructibles {
   constructor(donnees) {
@@ -11,4 +11,4 @@ class ActeursHomologation extends ElementsConstructibles {
   }
 }
 
-module.exports = ActeursHomologation;
+export default ActeursHomologation;

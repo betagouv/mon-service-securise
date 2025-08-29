@@ -1,11 +1,12 @@
-const Base = require('../base');
-const {
-  Rubriques: { DECRIRE, SECURISER, RISQUES, HOMOLOGUER },
-  Permissions: { LECTURE, ECRITURE },
+import Base from '../base.js';
+import {
   Rubriques,
   Permissions,
   tousDroitsEnEcriture,
-} = require('./gestionDroits');
+} from './gestionDroits.js';
+
+const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER } = Rubriques;
+const { LECTURE, ECRITURE } = Permissions;
 
 class Autorisation extends Base {
   constructor(donnees = {}) {
@@ -176,4 +177,4 @@ class Autorisation extends Base {
   }
 }
 
-module.exports = Autorisation;
+export { Autorisation };

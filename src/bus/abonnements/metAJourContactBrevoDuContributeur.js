@@ -17,4 +17,4 @@ function metAJourContactBrevoDuContributeur({ crmBrevo, depotDonnees }) {
   };
 }
 
-module.exports = { metAJourContactBrevoDuContributeur };
+export { metAJourContactBrevoDuContributeur };

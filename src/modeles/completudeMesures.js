@@ -19,4 +19,4 @@ class CompletudeMesures {
   }
 }
 
-module.exports = { CompletudeMesures };
+export { CompletudeMesures };

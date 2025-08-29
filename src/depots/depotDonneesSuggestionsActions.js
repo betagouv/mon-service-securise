@@ -23,4 +23,4 @@ const creeDepot = ({ adaptateurPersistance }) => {
   };
 };
 
-module.exports = { creeDepot };
+export { creeDepot };

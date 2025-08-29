@@ -11,4 +11,4 @@ function supprimeNotificationsExpirationHomologation({ depotDonnees }) {
   };
 }
 
-module.exports = { supprimeNotificationsExpirationHomologation };
+export { supprimeNotificationsExpirationHomologation };

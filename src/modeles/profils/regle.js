@@ -5,4 +5,4 @@ class Regle {
   }
 }
 
-module.exports = Regle;
+export default Regle;

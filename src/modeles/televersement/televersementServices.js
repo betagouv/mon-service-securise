@@ -1,8 +1,8 @@
-const ElementsConstructibles = require('../elementsConstructibles');
-const ServiceTeleverse = require('./serviceTeleverse');
-const Referentiel = require('../../referentiel');
-const EvenementServicesImportes = require('../../bus/evenementServicesImportes');
-const EvenementDossierHomologationImporte = require('../../bus/evenementDossierHomologationImporte');
+import ElementsConstructibles from '../elementsConstructibles.js';
+import ServiceTeleverse from './serviceTeleverse.js';
+import * as Referentiel from '../../referentiel.js';
+import EvenementServicesImportes from '../../bus/evenementServicesImportes.js';
+import EvenementDossierHomologationImporte from '../../bus/evenementDossierHomologationImporte.js';
 
 const STATUT = {
   INVALIDE: 'INVALIDE',
@@ -103,4 +103,4 @@ class TeleversementServices extends ElementsConstructibles {
   }
 }
 
-module.exports = TeleversementServices;
+export default TeleversementServices;

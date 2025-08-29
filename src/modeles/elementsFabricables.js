@@ -1,4 +1,4 @@
-const ListeItems = require('./listeItems');
+import ListeItems from './listeItems.js';
 
 class ElementsFabricables extends ListeItems {
   constructor(Fabrique, donnees) {
@@ -6,4 +6,4 @@ class ElementsFabricables extends ListeItems {
   }
 }
 
-module.exports = ElementsFabricables;
+export default ElementsFabricables;

@@ -1,7 +1,7 @@
-const Etape = require('./etape');
-const Avis = require('../avis');
-const InformationsService = require('../informationsService');
-const { creeReferentielVide } = require('../../referentiel');
+import Etape from './etape.js';
+import Avis from '../avis.js';
+import InformationsService from '../informationsService.js';
+import { creeReferentielVide } from '../../referentiel.js';
 
 class EtapeAvis extends Etape {
   constructor(
@@ -41,4 +41,4 @@ class EtapeAvis extends Etape {
   }
 }
 
-module.exports = EtapeAvis;
+export default EtapeAvis;

@@ -8,4 +8,4 @@ class EvenementCguAccepteesParUtilisateur {
   }
 }
 
-module.exports = { EvenementCguAccepteesParUtilisateur };
+export { EvenementCguAccepteesParUtilisateur };

@@ -1,7 +1,7 @@
-const { encode } = require('html-entities');
-const { ErreurFichierXlsInvalide } = require('../erreurs');
-const { chaineDateFrEnChaineDateISO } = require('../utilitaires/date');
-const { LecteurExcel } = require('./excel/LecteurExcel');
+import { encode } from 'html-entities';
+import { ErreurFichierXlsInvalide } from '../erreurs.js';
+import { chaineDateFrEnChaineDateISO } from '../utilitaires/date.js';
+import { LecteurExcel } from './excel/LecteurExcel.js';
 
 const ENTETE_NOM = 'Nom du service numérique *';
 const ENTETE_SIRET = "Siret de l'organisation *";
@@ -65,4 +65,4 @@ const extraisTeleversementServices = async (buffer) => {
   }));
 };
 
-module.exports = { extraisTeleversementServices };
+export { extraisTeleversementServices };

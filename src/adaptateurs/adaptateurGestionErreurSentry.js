@@ -1,7 +1,7 @@
-const { isAxiosError } = require('axios');
-const Sentry = require('@sentry/node');
-const { IpDeniedError } = require('express-ipfilter');
-const adaptateurEnvironnement = require('./adaptateurEnvironnement');
+import axios from 'axios';
+import * as Sentry from '@sentry/node';
+import ipFilter from 'express-ipfilter';
+import { sentry } from './adaptateurEnvironnement.js';
 
 const logueErreur = (erreur, infosDeContexte = {}) => {
   Sentry.withScope(() => {
@@ -9,7 +9,7 @@ const logueErreur = (erreur, infosDeContexte = {}) => {
       Sentry.setExtra(cle, valeur)
     );
 
-    if (isAxiosError(erreur)) {
+    if (axios.isAxiosError(erreur)) {
       Sentry.captureException(erreur, {
         extra: {
           message: erreur.message,
@@ -36,7 +36,7 @@ const logueErreur = (erreur, infosDeContexte = {}) => {
 };
 
 const initialise = (applicationExpress) => {
-  const config = adaptateurEnvironnement.sentry();
+  const config = sentry();
 
   Sentry.init({
     dsn: config.dsn(),
@@ -56,7 +56,7 @@ const initialise = (applicationExpress) => {
 };
 
 const controleurErreurs = (erreur, requete, reponse, suite) => {
-  const estErreurDeFiltrageIp = erreur instanceof IpDeniedError;
+  const estErreurDeFiltrageIp = erreur instanceof ipFilter.IpDeniedError;
   if (estErreurDeFiltrageIp) {
     // On termine la connexion directement si qqun nous appelle sans passer par Baleen.
     reponse.status(401);
@@ -86,9 +86,4 @@ const identifieUtilisateur = (idUtilisateur, timestampTokenJwt) => {
   });
 };
 
-module.exports = {
-  initialise,
-  identifieUtilisateur,
-  controleurErreurs,
-  logueErreur,
-};
+export { initialise, identifieUtilisateur, controleurErreurs, logueErreur };

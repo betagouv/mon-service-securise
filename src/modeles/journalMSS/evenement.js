@@ -1,7 +1,5 @@
-const {
-  fabriqueAdaptateurChiffrement,
-} = require('../../adaptateurs/fabriqueAdaptateurChiffrement');
-const { ErreurDonneeManquante } = require('./erreurs');
+import { fabriqueAdaptateurChiffrement } from '../../adaptateurs/fabriqueAdaptateurChiffrement.js';
+import { ErreurDonneeManquante } from './erreurs.js';
 
 class Evenement {
   static optionsParDefaut(options) {
@@ -35,4 +33,4 @@ class Evenement {
   }
 }
 
-module.exports = Evenement;
+export default Evenement;

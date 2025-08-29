@@ -1,4 +1,4 @@
-const EvenementRisquesServiceModifies = require('../../modeles/journalMSS/evenementRisquesServiceModifies');
+import EvenementRisquesServiceModifies from '../../modeles/journalMSS/evenementRisquesServiceModifies.js';
 
 function consigneRisquesDansJournal({ adaptateurJournal }) {
   return async (evenement) => {
@@ -13,4 +13,4 @@ function consigneRisquesDansJournal({ adaptateurJournal }) {
   };
 }
 
-module.exports = { consigneRisquesDansJournal };
+export { consigneRisquesDansJournal };

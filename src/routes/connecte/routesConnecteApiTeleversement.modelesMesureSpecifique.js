@@ -1,10 +1,11 @@
-const express = require('express');
-const { decode } = require('html-entities');
-const {
+import express from 'express';
+import { decode } from 'html-entities';
+
+import {
   ErreurFichierXlsInvalide,
   ErreurTeleversementInexistant,
   ErreurTeleversementInvalide,
-} = require('../../erreurs');
+} from '../../erreurs.js';
 
 const routesConnecteApiTeleversementModelesMesureSpecifique = ({
   middleware,
@@ -88,4 +89,4 @@ const routesConnecteApiTeleversementModelesMesureSpecifique = ({
   return routes;
 };
 
-module.exports = routesConnecteApiTeleversementModelesMesureSpecifique;
+export default routesConnecteApiTeleversementModelesMesureSpecifique;

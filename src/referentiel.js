@@ -1,8 +1,8 @@
-const {
+import {
   ErreurDonneesReferentielIncorrectes,
   ErreurCategorieInconnue,
-} = require('./erreurs');
-const donneesParDefaut = require('../donneesReferentiel');
+} from './erreurs.js';
+import donneesParDefaut from '../donneesReferentiel.js';
 
 const donneesReferentielVide = {
   articlesDefinisReferentielsMesure: {},
@@ -564,4 +564,4 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 };
 const creeReferentielVide = () => creeReferentiel(donneesReferentielVide);
 
-module.exports = { creeReferentiel, creeReferentielVide };
+export { creeReferentiel, creeReferentielVide };
