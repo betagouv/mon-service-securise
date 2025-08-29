@@ -1,6 +1,6 @@
 const nomTable = 'modeles_mesure_specifique';
 
-exports.up = (knex) =>
+export const up = (knex) =>
   knex.schema.createTable(nomTable, (table) => {
     table.uuid('id');
     table.primary(['id']);
@@ -8,4 +8,4 @@ exports.up = (knex) =>
     table.json('donnees');
   });
 
-exports.down = (knex) => knex.schema.dropTable(nomTable);
+export const down = (knex) => knex.schema.dropTable(nomTable);

@@ -1,7 +1,7 @@
-const InformationsService = require('./informationsService');
-const NiveauGravite = require('./niveauGravite');
-const Referentiel = require('../referentiel');
-const { ErreurNiveauVraisemblanceInconnu } = require('../erreurs');
+import InformationsService from './informationsService.js';
+import NiveauGravite from './niveauGravite.js';
+import * as Referentiel from '../referentiel.js';
+import { ErreurNiveauVraisemblanceInconnu } from '../erreurs.js';
 
 const NiveauRisque = { NIVEAU_RISQUE_INDETERMINABLE: 'indeterminable' };
 
@@ -64,4 +64,4 @@ class Risque extends InformationsService {
 }
 
 Object.assign(Risque, NiveauRisque);
-module.exports = Risque;
+export default Risque;

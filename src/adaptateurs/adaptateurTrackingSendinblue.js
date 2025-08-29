@@ -1,7 +1,5 @@
-const axios = require('axios');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('./fabriqueAdaptateurGestionErreur');
+import axios from 'axios';
+import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
 
 const enteteJSON = {
   headers: {
@@ -60,7 +58,7 @@ const envoieTrackingCompletudeService = (
     taux_completude_moyen_tous_services: tauxCompletudeMoyenTousServices,
   });
 
-module.exports = {
+export {
   envoieTrackingConnexion,
   envoieTrackingInscription,
   envoieTrackingInvitationContributeur,

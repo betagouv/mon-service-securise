@@ -1,14 +1,11 @@
-const expect = require('expect.js');
-
-const Service = require('../../../src/modeles/service');
-const objetGetIndicesCyber = require('../../../src/modeles/objetsApi/objetGetIndicesCyber');
-const {
-  uneAutorisation,
-} = require('../../constructeurs/constructeurAutorisation');
-const {
+import expect from 'expect.js';
+import Service from '../../../src/modeles/service.js';
+import * as objetGetIndicesCyber from '../../../src/modeles/objetsApi/objetGetIndicesCyber.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import {
   Rubriques,
   Permissions,
-} = require('../../../src/modeles/autorisations/gestionDroits');
+} from '../../../src/modeles/autorisations/gestionDroits.js';
 
 const { SECURISER } = Rubriques;
 const { LECTURE } = Permissions;

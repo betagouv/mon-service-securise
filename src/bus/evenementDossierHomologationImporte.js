@@ -12,4 +12,4 @@ class EvenementDossierHomologationImporte {
   }
 }
 
-module.exports = EvenementDossierHomologationImporte;
+export default EvenementDossierHomologationImporte;

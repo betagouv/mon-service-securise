@@ -35,6 +35,5 @@ const modifieStatutDeploiement = (changementStatut) => (knex) =>
     return Promise.all(misesAJour);
   });
 
-exports.up = modifieStatutDeploiement(nouveauStatut);
-
-exports.down = modifieStatutDeploiement(ancienStatut);
+export const up = modifieStatutDeploiement(nouveauStatut);
+export const down = modifieStatutDeploiement(ancienStatut);

@@ -1,5 +1,5 @@
-const Entite = require('../modeles/entite');
-const Superviseur = require('../modeles/superviseur');
+import Entite from '../modeles/entite.js';
+import Superviseur from '../modeles/superviseur.js';
 
 const creeDepot = ({ adaptateurPersistance, adaptateurRechercheEntite }) => {
   const ajouteSiretAuSuperviseur = async (idSuperviseur, siret) => {
@@ -37,4 +37,4 @@ const creeDepot = ({ adaptateurPersistance, adaptateurRechercheEntite }) => {
   };
 };
 
-module.exports = { creeDepot };
+export { creeDepot };

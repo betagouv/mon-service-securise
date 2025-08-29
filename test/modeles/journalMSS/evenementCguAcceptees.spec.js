@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const {
-  ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
-const EvenementCguAcceptees = require('../../../src/modeles/journalMSS/evenementCguAcceptees');
+import expect from 'expect.js';
+import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import EvenementCguAcceptees from '../../../src/modeles/journalMSS/evenementCguAcceptees.js';
 
 describe('Un événement de CGU acceptées', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };

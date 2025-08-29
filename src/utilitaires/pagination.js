@@ -11,4 +11,4 @@ const pagination = (nbRisquesParPage, items) => {
   );
 };
 
-module.exports = { pagination };
+export { pagination };

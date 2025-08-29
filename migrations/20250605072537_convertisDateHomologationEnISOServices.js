@@ -1,14 +1,12 @@
-const { chaineDateFrEnChaineDateISO } = require('../src/utilitaires/date');
-const {
-  fabriqueAdaptateurChiffrement,
-} = require('../src/adaptateurs/fabriqueAdaptateurChiffrement');
+import { chaineDateFrEnChaineDateISO } from '../src/utilitaires/date.js';
+import { fabriqueAdaptateurChiffrement } from '../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
 
 const { chiffre, dechiffre } = fabriqueAdaptateurChiffrement();
 
 const estDateEnFrancais = (chaineDate) =>
   /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/.test(chaineDate);
 
-exports.up = async (knex) => {
+export const up = async (knex) => {
   await knex.transaction(async (trx) => {
     const services = await trx('services');
 
@@ -61,4 +59,4 @@ exports.up = async (knex) => {
 };
 
 // On ne sait pas dire quels dossiers avaient une date en "Français" erronée
-exports.down = async () => {};
+export const down = async () => {};

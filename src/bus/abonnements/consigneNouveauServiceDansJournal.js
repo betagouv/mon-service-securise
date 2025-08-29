@@ -1,4 +1,4 @@
-const EvenementNouveauServiceCree = require('../../modeles/journalMSS/evenementNouveauServiceCree');
+import EvenementNouveauServiceCree from '../../modeles/journalMSS/evenementNouveauServiceCree.js';
 
 const leveException = (raison) => {
   throw new Error(
@@ -22,4 +22,4 @@ function consigneNouveauServiceDansJournal({ adaptateurJournal }) {
   };
 }
 
-module.exports = { consigneNouveauServiceDansJournal };
+export { consigneNouveauServiceDansJournal };

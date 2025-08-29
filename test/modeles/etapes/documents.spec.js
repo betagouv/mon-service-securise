@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const Documents = require('../../../src/modeles/etapes/documents');
+import expect from 'expect.js';
+import Documents from '../../../src/modeles/etapes/documents.js';
 
 describe('Une étape « Documents »', () => {
   it('sait se convertir en JSON', () => {

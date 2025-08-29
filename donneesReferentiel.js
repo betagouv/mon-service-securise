@@ -1,4 +1,4 @@
-const { departements } = require('./donneesReferentielDepartements');
+import { departements } from './donneesReferentielDepartements.js';
 
 const recommandationPoursuiteRenforcement =
   "L'ANSSI recommande la poursuite du renforcement de la sécurité du service numérique.";
@@ -8,7 +8,7 @@ const expiration = (duree) =>
     1
   )} après signature de la présente homologation`;
 
-module.exports = {
+export default {
   indiceCyber: {
     coefficientIndispensables: 0.6,
     coefficientRecommandees: 0.4,

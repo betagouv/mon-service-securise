@@ -1,6 +1,6 @@
-const Knex = require('knex');
-const { sign } = require('jsonwebtoken');
-const { journalMSS } = require('./adaptateurEnvironnement');
+import Knex from 'knex';
+import jwt from 'jsonwebtoken';
+import { journalMSS } from './adaptateurEnvironnement.js';
 
 const adaptateurSupervisionMetabase = ({
   adaptateurChiffrement,
@@ -64,7 +64,7 @@ const adaptateurSupervisionMetabase = ({
         exp: Math.round(Date.now() / 1000) + 10 * 60,
       };
 
-      const jeton = sign(donnees, cleSecreteIntegration);
+      const jeton = jwt.sign(donnees, cleSecreteIntegration);
       return `${urlDeBase}embed/dashboard/${jeton}#bordered=false&titled=false`;
     },
     relieSuperviseursAService: async (service, idSuperviseurs) => {
@@ -93,4 +93,4 @@ const adaptateurSupervisionMetabase = ({
   };
 };
 
-module.exports = adaptateurSupervisionMetabase;
+export default adaptateurSupervisionMetabase;

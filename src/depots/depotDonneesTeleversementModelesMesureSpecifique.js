@@ -1,10 +1,12 @@
-const TeleversementModelesMesureSpecifique = require('../modeles/televersement/televersementModelesMesureSpecifique');
-const {
+import TeleversementModelesMesureSpecifique from '../modeles/televersement/televersementModelesMesureSpecifique.js';
+
+import {
   ErreurUtilisateurInexistant,
   ErreurTeleversementInexistant,
   ErreurTeleversementInvalide,
-} = require('../erreurs');
-const EvenementModelesMesureSpecifiqueImportes = require('../bus/evenementModelesMesureSpecifiqueImportes');
+} from '../erreurs.js';
+
+import EvenementModelesMesureSpecifiqueImportes from '../bus/evenementModelesMesureSpecifiqueImportes.js';
 
 const creeDepot = (config = {}) => {
   const {
@@ -87,4 +89,4 @@ const creeDepot = (config = {}) => {
     supprimeTeleversementModelesMesureSpecifique,
   };
 };
-module.exports = { creeDepot };
+export { creeDepot };

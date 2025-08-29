@@ -1,12 +1,10 @@
-const adaptateurEnvironnement = require('./adaptateurEnvironnement');
-const adaptateurTrackingSendinblue = require('./adaptateurTrackingSendinblue');
-const {
-  fabriqueAdaptateurTrackingMemoire,
-} = require('./adaptateurTrackingMemoire');
+import { sendinblue } from './adaptateurEnvironnement.js';
+import * as adaptateurTrackingSendinblue from './adaptateurTrackingSendinblue.js';
+import { fabriqueAdaptateurTrackingMemoire } from './adaptateurTrackingMemoire.js';
 
 const fabriqueAdaptateurTracking = () =>
-  adaptateurEnvironnement.sendinblue().clefAPITracking()
+  sendinblue().clefAPITracking()
     ? adaptateurTrackingSendinblue
     : fabriqueAdaptateurTrackingMemoire();
 
-module.exports = fabriqueAdaptateurTracking;
+export default fabriqueAdaptateurTracking;

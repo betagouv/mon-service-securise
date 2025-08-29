@@ -1,21 +1,19 @@
-const expect = require('expect.js');
+import expect from 'expect.js';
+import * as objetGetService from '../../../src/modeles/objetsApi/objetGetService.js';
+import * as Referentiel from '../../../src/referentiel.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import {
+  Rubriques,
+  Permissions,
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { unDossier } from '../../constructeurs/constructeurDossier.js';
+import { dateEnFrancais } from '../../../src/utilitaires/date.js';
+import Mesures from '../../../src/modeles/mesures.js';
 
-const objetGetService = require('../../../src/modeles/objetsApi/objetGetService');
-const Referentiel = require('../../../src/referentiel');
-const {
-  uneAutorisation,
-} = require('../../constructeurs/constructeurAutorisation');
-const {
-  Rubriques: { HOMOLOGUER, DECRIRE, SECURISER },
-  Permissions: { LECTURE, ECRITURE },
-} = require('../../../src/modeles/autorisations/gestionDroits');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const { unDossier } = require('../../constructeurs/constructeurDossier');
-const { dateEnFrancais } = require('../../../src/utilitaires/date');
-const Mesures = require('../../../src/modeles/mesures');
+const { HOMOLOGUER, DECRIRE, SECURISER } = Rubriques;
+const { LECTURE, ECRITURE } = Permissions;
 
 describe("L'objet d'API de `GET /service`", () => {
   const referentiel = Referentiel.creeReferentiel({

@@ -1,7 +1,7 @@
-const expect = require('expect.js');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const { unService } = require('../constructeurs/constructeurService');
-const EvenementNouveauServiceCree = require('../../src/bus/evenementNouveauServiceCree');
+import expect from 'expect.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import { unService } from '../constructeurs/constructeurService.js';
+import EvenementNouveauServiceCree from '../../src/bus/evenementNouveauServiceCree.js';
 
 describe("L'événement `nouveauServiceCréé", () => {
   it("lève une exception s'il est instancié sans service", () => {

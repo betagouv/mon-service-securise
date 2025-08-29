@@ -88,4 +88,4 @@ const serviceApresAuthentification = async ({
   };
 };
 
-module.exports = { serviceApresAuthentification };
+export { serviceApresAuthentification };

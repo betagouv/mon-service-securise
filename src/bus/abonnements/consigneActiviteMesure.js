@@ -1,7 +1,5 @@
-const ActiviteMesure = require('../../modeles/activiteMesure');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('../../adaptateurs/fabriqueAdaptateurGestionErreur');
+import ActiviteMesure from '../../modeles/activiteMesure.js';
+import { fabriqueAdaptateurGestionErreur } from '../../adaptateurs/fabriqueAdaptateurGestionErreur.js';
 
 class ComparateurMesures {
   constructor(ancienneMesure, nouvelleMesure) {
@@ -113,4 +111,4 @@ const consigneActiviteMesure =
       );
   };
 
-module.exports = { consigneActiviteMesure };
+export { consigneActiviteMesure };

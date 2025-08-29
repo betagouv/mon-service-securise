@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const EvenementDossierHomologationFinalise = require('../../src/bus/evenementDossierHomologationFinalise');
+import expect from 'expect.js';
+import EvenementDossierHomologationFinalise from '../../src/bus/evenementDossierHomologationFinalise.js';
 
 describe("L'événement 'DossierHomologationFinalise'", () => {
   it("lève une exception s'il est instancié sans ID de service", () => {

@@ -1,5 +1,5 @@
-const Utilisateur = require('../../modeles/utilisateur');
-const { valeurBooleenne } = require('../../utilitaires/aseptisation');
+import Utilisateur from '../../modeles/utilisateur.js';
+import { valeurBooleenne } from '../../utilitaires/aseptisation.js';
 
 const obtentionDonneesDeBaseUtilisateur = (corps, serviceCGU) => {
   const donnees = {
@@ -29,7 +29,4 @@ const messageErreurDonneesUtilisateur = (donneesRequete, utilisateurExiste) => {
   }
 };
 
-module.exports = {
-  obtentionDonneesDeBaseUtilisateur,
-  messageErreurDonneesUtilisateur,
-};
+export { obtentionDonneesDeBaseUtilisateur, messageErreurDonneesUtilisateur };

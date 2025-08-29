@@ -1,4 +1,4 @@
-const NotificationExpirationHomologation = require('../../modeles/notificationExpirationHomologation');
+import NotificationExpirationHomologation from '../../modeles/notificationExpirationHomologation.js';
 
 function sauvegardeNotificationsExpirationHomologation({
   adaptateurHorloge,
@@ -29,4 +29,4 @@ function sauvegardeNotificationsExpirationHomologation({
   };
 }
 
-module.exports = { sauvegardeNotificationsExpirationHomologation };
+export { sauvegardeNotificationsExpirationHomologation };

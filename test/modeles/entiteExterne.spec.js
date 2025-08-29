@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const EntiteExterne = require('../../src/modeles/entiteExterne');
+import expect from 'expect.js';
+import EntiteExterne from '../../src/modeles/entiteExterne.js';
 
 describe('Une entité externe', () => {
   it('connaît ses constituants', () => {

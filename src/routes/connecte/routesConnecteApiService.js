@@ -1,8 +1,7 @@
-const express = require('express');
-const { encode } = require('html-entities');
-
-const routesConnecteApiServicePdf = require('./routesConnecteApiServicePdf');
-const {
+import express from 'express';
+import { encode } from 'html-entities';
+import routesConnecteApiServicePdf from './routesConnecteApiServicePdf.js';
+import {
   EchecAutorisation,
   ErreurModele,
   ErreurDonneesObligatoiresManquantes,
@@ -23,33 +22,32 @@ const {
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
   ErreurSuppressionImpossible,
-} = require('../../erreurs');
-const ActeursHomologation = require('../../modeles/acteursHomologation');
-const Avis = require('../../modeles/avis');
-const DescriptionService = require('../../modeles/descriptionService');
-const FonctionnalitesSpecifiques = require('../../modeles/fonctionnalitesSpecifiques');
-const DonneesSensiblesSpecifiques = require('../../modeles/donneesSensiblesSpecifiques');
-const MesureGenerale = require('../../modeles/mesureGenerale');
-const PartiesPrenantes = require('../../modeles/partiesPrenantes/partiesPrenantes');
-const PointsAcces = require('../../modeles/pointsAcces');
-const RisqueGeneral = require('../../modeles/risqueGeneral');
-const RolesResponsabilites = require('../../modeles/rolesResponsabilites');
-const { dateInvalide } = require('../../utilitaires/date');
-const { valeurBooleenne } = require('../../utilitaires/aseptisation');
-const objetGetService = require('../../modeles/objetsApi/objetGetService');
-const objetGetAutorisation = require('../../modeles/objetsApi/objetGetAutorisation');
-
-const {
+} from '../../erreurs.js';
+import ActeursHomologation from '../../modeles/acteursHomologation.js';
+import Avis from '../../modeles/avis.js';
+import DescriptionService from '../../modeles/descriptionService.js';
+import FonctionnalitesSpecifiques from '../../modeles/fonctionnalitesSpecifiques.js';
+import DonneesSensiblesSpecifiques from '../../modeles/donneesSensiblesSpecifiques.js';
+import MesureGenerale from '../../modeles/mesureGenerale.js';
+import PartiesPrenantes from '../../modeles/partiesPrenantes/partiesPrenantes.js';
+import PointsAcces from '../../modeles/pointsAcces.js';
+import RisqueGeneral from '../../modeles/risqueGeneral.js';
+import RolesResponsabilites from '../../modeles/rolesResponsabilites.js';
+import { dateInvalide } from '../../utilitaires/date.js';
+import { valeurBooleenne } from '../../utilitaires/aseptisation.js';
+import * as objetGetService from '../../modeles/objetsApi/objetGetService.js';
+import * as objetGetAutorisation from '../../modeles/objetsApi/objetGetAutorisation.js';
+import {
   Permissions,
   Rubriques,
   verifieCoherenceDesDroits,
-} = require('../../modeles/autorisations/gestionDroits');
-const objetGetMesures = require('../../modeles/objetsApi/objetGetMesures');
-const EvenementRetourUtilisateurMesure = require('../../modeles/journalMSS/evenementRetourUtilisateurMesure');
-const routesConnecteApiServiceActivitesMesure = require('./routesConnecteApiServiceActivitesMesure');
-const MesureSpecifique = require('../../modeles/mesureSpecifique');
-const RisqueSpecifique = require('../../modeles/risqueSpecifique');
-const Autorisation = require('../../modeles/autorisations/autorisation');
+} from '../../modeles/autorisations/gestionDroits.js';
+import * as objetGetMesures from '../../modeles/objetsApi/objetGetMesures.js';
+import EvenementRetourUtilisateurMesure from '../../modeles/journalMSS/evenementRetourUtilisateurMesure.js';
+import routesConnecteApiServiceActivitesMesure from './routesConnecteApiServiceActivitesMesure.js';
+import MesureSpecifique from '../../modeles/mesureSpecifique.js';
+import RisqueSpecifique from '../../modeles/risqueSpecifique.js';
+import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -1028,4 +1026,4 @@ const routesConnecteApiService = ({
   return routes;
 };
 
-module.exports = routesConnecteApiService;
+export default routesConnecteApiService;

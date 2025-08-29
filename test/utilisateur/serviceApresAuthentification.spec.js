@@ -1,9 +1,7 @@
-const expect = require('expect.js');
-const {
-  serviceApresAuthentification,
-} = require('../../src/utilisateur/serviceApresAuthentification');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const Utilisateur = require('../../src/modeles/utilisateur');
+import expect from 'expect.js';
+import { serviceApresAuthentification } from '../../src/utilisateur/serviceApresAuthentification.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import Utilisateur from '../../src/modeles/utilisateur.js';
 
 describe("Le service d'après authentification", () => {
   let adaptateurProfilAnssi;

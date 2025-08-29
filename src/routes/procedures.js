@@ -1,6 +1,4 @@
-const {
-  ajoutContributeurSurServices,
-} = require('../modeles/autorisations/ajoutContributeurSurServices');
+import { ajoutContributeurSurServices } from '../modeles/autorisations/ajoutContributeurSurServices.js';
 
 const fabriqueProcedures = ({
   depotDonnees,
@@ -22,4 +20,4 @@ const fabriqueProcedures = ({
     }).executer(emailContributeur, service, droits, emetteur),
 });
 
-module.exports = { fabriqueProcedures };
+export { fabriqueProcedures };

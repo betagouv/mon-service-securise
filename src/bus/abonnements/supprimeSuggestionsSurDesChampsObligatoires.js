@@ -20,4 +20,4 @@ function supprimeSuggestionsSurDesChampsObligatoires({ depotDonnees }) {
   };
 }
 
-module.exports = { supprimeSuggestionsSurDesChampsObligatoires };
+export { supprimeSuggestionsSurDesChampsObligatoires };

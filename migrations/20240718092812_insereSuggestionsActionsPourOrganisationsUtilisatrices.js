@@ -1,6 +1,6 @@
 const nature = 'miseAJourNombreOrganisationsUtilisatrices';
 
-exports.up = (knex) =>
+export const up = (knex) =>
   knex.raw(
     `
         INSERT INTO suggestions_actions (id_service, nature)
@@ -10,5 +10,5 @@ exports.up = (knex) =>
     `
   );
 
-exports.down = (knex) =>
+export const down = (knex) =>
   knex.raw(`DELETE FROM suggestions_actions WHERE nature = '${nature}';`);

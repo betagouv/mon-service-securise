@@ -27,6 +27,8 @@ module.exports = {
         ignoreRestSiblings: true,
       },
     ],
+    // Les exports par défaut empêchent les LSP de nos IDE de suivre les définitions & références dans le code
+    'import/prefer-default-export': 'off',
     '@vitest/expect-expect': 'off',
   },
   settings: {
@@ -56,9 +58,9 @@ module.exports = {
     {
       // Lorsque l'on importe des fichiers '.ts' depuis du '.js',
       // `eslint` est confus et demande d'ajouter une extension `.ts` ce qui empêche l'import du code généré.
-      // On enlève cette règle car on build en `commonjs`, donc au runtime, les fichiers sont présents en `.js`
+      // On enlève cette règle, car on build en `commonjs`, donc au runtime, les fichiers sont présents en `.js`
       // https://www.typescriptlang.org/docs/handbook/modules/theory.html
-      files: ['src/**/*.js'],
+      files: ['src/**/*.js', '*.js'],
       rules: { 'import/extensions': ['off'] },
     },
     {
@@ -84,7 +86,9 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-require-imports': 'off',
         '@typescript-eslint/no-var-requires': 'off',
-        'import/extensions': ['error', { ts: 'never' }],
+        'import/extensions': ['off'],
+        // Les exports par défaut empêchent les LSP de nos IDE de suivre les définitions & références dans le code
+        'import/prefer-default-export': 'off',
       },
     },
     {

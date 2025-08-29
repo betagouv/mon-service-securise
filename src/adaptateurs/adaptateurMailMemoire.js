@@ -1,9 +1,7 @@
-const adaptateurEnvironnement = require('./adaptateurEnvironnement');
+import { emailMemoire } from './adaptateurEnvironnement.js';
 
 const fabriqueAdaptateurMailMemoire = () => {
-  const doitLoguer = adaptateurEnvironnement
-    .emailMemoire()
-    .logEmailDansConsole();
+  const doitLoguer = emailMemoire().logEmailDansConsole();
 
   const envoyer = (texte, args) => {
     // eslint-disable-next-line no-console
@@ -155,4 +153,4 @@ const fabriqueAdaptateurMailMemoire = () => {
   };
 };
 
-module.exports = { fabriqueAdaptateurMailMemoire };
+export { fabriqueAdaptateurMailMemoire };

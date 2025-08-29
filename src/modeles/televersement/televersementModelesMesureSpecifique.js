@@ -1,4 +1,4 @@
-const Referentiel = require('../../referentiel');
+import * as Referentiel from '../../referentiel.js';
 
 const chainesSontIdentiques = (a, b) =>
   a.localeCompare(b, 'fr', { sensitivity: 'base' }) === 0;
@@ -83,4 +83,4 @@ class TeleversementModelesMesureSpecifique {
   }
 }
 
-module.exports = TeleversementModelesMesureSpecifique;
+export default TeleversementModelesMesureSpecifique;

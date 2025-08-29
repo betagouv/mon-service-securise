@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const ActeursHomologation = require('../../src/modeles/acteursHomologation');
+import expect from 'expect.js';
+import ActeursHomologation from '../../src/modeles/acteursHomologation.js';
 
 const ils = it;
 

@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const { ajouteMoisADate } = require('../../src/utilitaires/date');
+import expect from 'expect.js';
+import { ajouteMoisADate } from '../../src/utilitaires/date.js';
 
 const ils = it;
 

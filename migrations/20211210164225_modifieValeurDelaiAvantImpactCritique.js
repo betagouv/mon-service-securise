@@ -37,6 +37,5 @@ const miseAJourDelaiAvantImpactCritique = (fonctionMiseAJour) => (knex) =>
     return Promise.all(misesAJour);
   });
 
-exports.up = miseAJourDelaiAvantImpactCritique(allerAvant);
-
-exports.down = miseAJourDelaiAvantImpactCritique(retourArriere);
+export const up = miseAJourDelaiAvantImpactCritique(allerAvant);
+export const down = miseAJourDelaiAvantImpactCritique(retourArriere);

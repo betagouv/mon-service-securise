@@ -1,10 +1,8 @@
-const expect = require('expect.js');
-const { unService } = require('../constructeurs/constructeurService');
-const { bouchonneMesures } = require('../constructeurs/constructeurMesures');
-const Referentiel = require('../../src/referentiel');
-const {
-  fabriqueServiceTracking,
-} = require('../../src/tracking/serviceTracking');
+import expect from 'expect.js';
+import { unService } from '../constructeurs/constructeurService.js';
+import { bouchonneMesures } from '../constructeurs/constructeurMesures.js';
+import * as Referentiel from '../../src/referentiel.js';
+import { fabriqueServiceTracking } from '../../src/tracking/serviceTracking.js';
 
 describe('Le service de tracking des services', () => {
   describe('sur une demande de complétude', () => {

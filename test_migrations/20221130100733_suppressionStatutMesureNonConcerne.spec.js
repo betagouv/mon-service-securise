@@ -1,7 +1,5 @@
-const expect = require('expect.js');
-const {
-  nouveauStatut,
-} = require('../migrations/20221130100733_suppressionStatutMesureNonConcerne');
+import expect from 'expect.js';
+import { nouveauStatut } from '../migrations/20221130100733_suppressionStatutMesureNonConcerne.js';
 
 const Statuts = {
   FAIT: 'fait',

@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const ItemsAvecDescription = require('../../src/modeles/itemsAvecDescription');
+import expect from 'expect.js';
+import ItemsAvecDescription from '../../src/modeles/itemsAvecDescription.js';
 
 const ils = it;
 

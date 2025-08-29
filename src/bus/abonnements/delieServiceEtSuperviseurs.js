@@ -4,4 +4,4 @@ function delieServiceEtSuperviseurs({ serviceSupervision }) {
   };
 }
 
-module.exports = { delieServiceEtSuperviseurs };
+export { delieServiceEtSuperviseurs };

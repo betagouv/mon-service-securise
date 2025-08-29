@@ -1,8 +1,7 @@
-const expect = require('expect.js');
-
-const ParcoursUtilisateur = require('../../src/modeles/parcoursUtilisateur');
-const Referentiel = require('../../src/referentiel');
-const EtatVisiteGuidee = require('../../src/modeles/etatVisiteGuidee');
+import expect from 'expect.js';
+import ParcoursUtilisateur from '../../src/modeles/parcoursUtilisateur.js';
+import * as Referentiel from '../../src/referentiel.js';
+import EtatVisiteGuidee from '../../src/modeles/etatVisiteGuidee.js';
 
 describe('Un parcours utilisateur', () => {
   it('sait se convertir en JSON', () => {
@@ -31,9 +30,7 @@ describe('Un parcours utilisateur', () => {
 
   it("sait enregistrer une date de dernière connexion en utilisant l'adaptateur horloge", () => {
     const dateDeConnexion = new Date();
-    const adaptateurHorloge = {
-      maintenant: () => dateDeConnexion,
-    };
+    const adaptateurHorloge = { maintenant: () => dateDeConnexion };
     const unParcours = new ParcoursUtilisateur(
       {
         idUtilisateur: '456',

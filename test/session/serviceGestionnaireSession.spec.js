@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const {
-  fabriqueServiceGestionnaireSession,
-} = require('../../src/session/serviceGestionnaireSession');
-const SourceAuthentification = require('../../src/modeles/sourceAuthentification');
+import expect from 'expect.js';
+import { fabriqueServiceGestionnaireSession } from '../../src/session/serviceGestionnaireSession.js';
+import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.js';
 
 describe('Le service gestionnaire de session', () => {
   let gestionnaireSession;

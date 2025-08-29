@@ -1,10 +1,8 @@
-const axios = require('axios');
-const { decode } = require('html-entities');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('./fabriqueAdaptateurGestionErreur');
-const { ErreurApiBrevo } = require('../erreurs');
-const { enCadence } = require('../utilitaires/pThrottle');
+import axios from 'axios';
+import { decode } from 'html-entities';
+import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
+import { ErreurApiBrevo } from '../erreurs.js';
+import { enCadence } from '../utilitaires/pThrottle.js';
 
 const enteteJSON = {
   headers: {
@@ -377,10 +375,10 @@ const envoieNotificationExpirationHomologationCadencee = async (
   await cadenceEnvoieNotification(destinataire, ...donnees);
 };
 
-module.exports = {
+export {
   creeContact,
   metAJourContact,
-  metAJourDonneesContact: metAJourDonneesContactCadencee,
+  metAJourDonneesContactCadencee as metAJourDonneesContact,
   creeEntreprise,
   desinscrisEmailsTransactionnels,
   desinscrisInfolettre,
@@ -391,8 +389,7 @@ module.exports = {
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,
   envoieMessageReinitialisationMotDePasse,
-  envoieNotificationExpirationHomologation:
-    envoieNotificationExpirationHomologationCadencee,
+  envoieNotificationExpirationHomologationCadencee as envoieNotificationExpirationHomologation,
   envoieNotificationTentativeReinscription,
   recupereEntreprise,
   recupereEntrepriseDuContact,

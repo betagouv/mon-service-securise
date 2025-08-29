@@ -10,4 +10,4 @@ function metAJourEstimationNombreServicesContactBrevo({ crmBrevo }) {
   };
 }
 
-module.exports = { metAJourEstimationNombreServicesContactBrevo };
+export { metAJourEstimationNombreServicesContactBrevo };

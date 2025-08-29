@@ -1,4 +1,4 @@
-const EvenementNouvelleHomologationCreee = require('../../modeles/journalMSS/evenementNouvelleHomologationCreee');
+import EvenementNouvelleHomologationCreee from '../../modeles/journalMSS/evenementNouvelleHomologationCreee.js';
 
 function consigneNouvelleHomologationCreeeDansJournal({
   adaptateurJournal,
@@ -30,4 +30,4 @@ function consigneNouvelleHomologationCreeeDansJournal({
   };
 }
 
-module.exports = { consigneNouvelleHomologationCreeeDansJournal };
+export { consigneNouvelleHomologationCreeeDansJournal };

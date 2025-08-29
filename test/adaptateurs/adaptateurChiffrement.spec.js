@@ -1,7 +1,5 @@
-const expect = require('expect.js');
-const {
-  adaptateurChiffrement,
-} = require('../../src/adaptateurs/adaptateurChiffrement');
+import expect from 'expect.js';
+import { adaptateurChiffrement } from '../../src/adaptateurs/adaptateurChiffrement.js';
 
 describe("L'adaptateur chiffrement", () => {
   describe('sur demande de hachage SHA256', () => {

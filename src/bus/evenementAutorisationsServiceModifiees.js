@@ -10,4 +10,4 @@ class EvenementAutorisationsServiceModifiees {
   }
 }
 
-module.exports = { EvenementAutorisationsServiceModifiees };
+export { EvenementAutorisationsServiceModifiees };

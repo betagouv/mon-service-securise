@@ -24,4 +24,4 @@ class ConstructeurAdaptateurTracking {
 
 const unAdaptateurTracking = () => new ConstructeurAdaptateurTracking();
 
-module.exports = { unAdaptateurTracking };
+export { unAdaptateurTracking };

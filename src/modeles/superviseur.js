@@ -1,4 +1,4 @@
-const Entite = require('./entite');
+import Entite from './entite.js';
 
 class Superviseur {
   constructor(donnees) {
@@ -10,4 +10,4 @@ class Superviseur {
   }
 }
 
-module.exports = Superviseur;
+export default Superviseur;

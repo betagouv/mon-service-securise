@@ -1,9 +1,9 @@
-const express = require('express');
-const {
+import express from 'express';
+import {
   Permissions,
   Rubriques,
-} = require('../../modeles/autorisations/gestionDroits');
-const ActiviteMesure = require('../../modeles/activiteMesure');
+} from '../../modeles/autorisations/gestionDroits.js';
+import ActiviteMesure from '../../modeles/activiteMesure.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -76,4 +76,4 @@ const routesConnecteApiServiceActivitesMesure = ({
   return routes;
 };
 
-module.exports = routesConnecteApiServiceActivitesMesure;
+export default routesConnecteApiServiceActivitesMesure;

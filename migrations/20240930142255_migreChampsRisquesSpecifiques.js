@@ -1,4 +1,4 @@
-exports.up = (knex) =>
+export const up = (knex) =>
   knex('services').then((lignes) => {
     const misesAJour = lignes.map(({ id: idService, donnees }) => {
       const donneesModifiees = {
@@ -20,7 +20,7 @@ exports.up = (knex) =>
     return Promise.all(misesAJour);
   });
 
-exports.down = (knex) =>
+export const down = (knex) =>
   knex('services').then((lignes) => {
     const misesAJour = lignes.map(({ id: idService, donnees }) => {
       const donneesModifiees = {

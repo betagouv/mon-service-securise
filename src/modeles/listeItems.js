@@ -1,4 +1,4 @@
-const InformationsService = require('./informationsService');
+import InformationsService from './informationsService.js';
 
 class ListeItems extends InformationsService {
   constructor(fonctionCreation, donnees, referentiel) {
@@ -43,4 +43,4 @@ class ListeItems extends InformationsService {
   }
 }
 
-module.exports = ListeItems;
+export default ListeItems;

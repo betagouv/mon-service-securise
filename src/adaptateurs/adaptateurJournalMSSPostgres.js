@@ -1,6 +1,6 @@
-const Knex = require('knex');
-const uuid = require('uuid');
-const { journalMSS } = require('./adaptateurEnvironnement');
+import Knex from 'knex';
+import * as uuid from 'uuid';
+import { journalMSS } from './adaptateurEnvironnement.js';
 
 const config = {
   client: 'pg',
@@ -27,4 +27,4 @@ const nouvelAdaptateur = () => {
   };
 };
 
-module.exports = { nouvelAdaptateur };
+export { nouvelAdaptateur };

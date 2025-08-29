@@ -1,15 +1,9 @@
-const expect = require('expect.js');
-const {
-  consigneActiviteMesure,
-} = require('../../../src/bus/abonnements/consigneActiviteMesure');
-const ActiviteMesure = require('../../../src/modeles/activiteMesure');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const {
-  uneMesureGenerale,
-} = require('../../constructeurs/constructeurMesureGenerale');
+import expect from 'expect.js';
+import { consigneActiviteMesure } from '../../../src/bus/abonnements/consigneActiviteMesure.js';
+import ActiviteMesure from '../../../src/modeles/activiteMesure.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { uneMesureGenerale } from '../../constructeurs/constructeurMesureGenerale.js';
 
 describe("L'abonnement qui consigne l'activité pour une mesure", () => {
   let activiteAjoutee;

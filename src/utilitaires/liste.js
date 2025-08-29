@@ -4,4 +4,4 @@ const formatteListeFr = (liste) =>
     type: 'conjunction',
   }).format(liste);
 
-module.exports = { formatteListeFr };
+export { formatteListeFr };

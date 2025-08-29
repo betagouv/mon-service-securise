@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const { tenteDeHacherAvecUnNouveauSel } = require('./migrationHash');
+import expect from 'expect.js';
+import { tenteDeHacherAvecUnNouveauSel } from './migrationHash.js';
 
 describe("L'outil de migration de sels de hachage", () => {
   it('hache avec un nouveau sel et augmente la version', () => {

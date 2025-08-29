@@ -1,4 +1,4 @@
-exports.up = async (knex) => {
+export const up = async (knex) => {
   await knex.transaction(async (trx) => {
     const activites = await trx('activites_mesure');
     const idMesures = [
@@ -16,7 +16,7 @@ exports.up = async (knex) => {
   });
 };
 
-exports.down = async (knex) => {
+export const down = async (knex) => {
   await knex.transaction(async (trx) =>
     trx('activites_mesure').update({ type_mesure: null })
   );

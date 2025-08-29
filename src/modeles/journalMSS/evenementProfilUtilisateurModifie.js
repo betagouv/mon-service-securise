@@ -1,6 +1,6 @@
-const Evenement = require('./evenement');
-const { ErreurUtilisateurManquant } = require('./erreurs');
-const Utilisateur = require('../utilisateur');
+import Evenement from './evenement.js';
+import { ErreurUtilisateurManquant } from './erreurs.js';
+import Utilisateur from '../utilisateur.js';
 
 class EvenementProfilUtilisateurModifie extends Evenement {
   constructor(utilisateur, options = {}) {
@@ -26,4 +26,4 @@ class EvenementProfilUtilisateurModifie extends Evenement {
   }
 }
 
-module.exports = EvenementProfilUtilisateurModifie;
+export default EvenementProfilUtilisateurModifie;

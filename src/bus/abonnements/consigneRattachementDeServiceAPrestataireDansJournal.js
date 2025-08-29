@@ -1,4 +1,4 @@
-const EvenementServiceRattacheAPrestataire = require('../../modeles/journalMSS/evenementServiceRattacheAPrestataire');
+import EvenementServiceRattacheAPrestataire from '../../modeles/journalMSS/evenementServiceRattacheAPrestataire.js';
 
 function consigneRattachementDeServiceAPrestataireDansJournal({
   adaptateurJournal,
@@ -13,4 +13,4 @@ function consigneRattachementDeServiceAPrestataireDansJournal({
   };
 }
 
-module.exports = { consigneRattachementDeServiceAPrestataireDansJournal };
+export { consigneRattachementDeServiceAPrestataireDansJournal };

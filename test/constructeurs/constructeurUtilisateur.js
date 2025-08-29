@@ -1,4 +1,4 @@
-const Utilisateur = require('../../src/modeles/utilisateur');
+import Utilisateur from '../../src/modeles/utilisateur.js';
 
 class ConstructeurUtilisateur {
   constructor() {
@@ -148,4 +148,4 @@ class ConstructeurUtilisateur {
 
 const unUtilisateur = () => new ConstructeurUtilisateur();
 
-module.exports = { ConstructeurUtilisateur, unUtilisateur };
+export { ConstructeurUtilisateur, unUtilisateur };

@@ -19,4 +19,4 @@ class EvenementMesureServiceModifiee {
   }
 }
 
-module.exports = EvenementMesureServiceModifiee;
+export default EvenementMesureServiceModifiee;

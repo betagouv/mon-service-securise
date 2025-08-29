@@ -1,7 +1,8 @@
 // eslint-disable-next-line max-classes-per-file
-const expect = require('expect.js');
-const BusEvenements = require('../../src/bus/busEvenements');
-const { ErreurBusEvenements } = require('../../src/erreurs');
+import expect from 'expect.js';
+
+import BusEvenements from '../../src/bus/busEvenements.js';
+import { ErreurBusEvenements } from '../../src/erreurs.js';
 
 class EvenementTestA {
   constructor(increment) {

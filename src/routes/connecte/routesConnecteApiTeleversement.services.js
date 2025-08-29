@@ -1,5 +1,5 @@
-const express = require('express');
-const { ErreurFichierXlsInvalide } = require('../../erreurs');
+import express from 'express';
+import { ErreurFichierXlsInvalide } from '../../erreurs.js';
 
 const routesConnecteApiTeleversementServices = ({
   lecteurDeFormData,
@@ -94,4 +94,4 @@ const routesConnecteApiTeleversementServices = ({
   return routes;
 };
 
-module.exports = routesConnecteApiTeleversementServices;
+export default routesConnecteApiTeleversementServices;

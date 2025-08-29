@@ -1,9 +1,9 @@
-const expect = require('expect.js');
-const EvenementConnexionUtilisateur = require('../../../src/modeles/journalMSS/evenementConnexionUtilisateur');
-const {
+import expect from 'expect.js';
+import EvenementConnexionUtilisateur from '../../../src/modeles/journalMSS/evenementConnexionUtilisateur.js';
+import {
   ErreurDateDerniereConnexionInvalide,
   ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
+} from '../../../src/modeles/journalMSS/erreurs.js';
 
 describe('Un événement de connexion utilisateur', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };

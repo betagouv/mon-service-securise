@@ -20,4 +20,4 @@ class SuggestionAction {
   }
 }
 
-module.exports = SuggestionAction;
+export default SuggestionAction;

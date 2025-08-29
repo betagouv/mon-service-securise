@@ -1,5 +1,5 @@
-const expect = require('expect.js');
-const { extraisIp } = require('../../src/http/requeteHttp');
+import expect from 'expect.js';
+import { extraisIp } from '../../src/http/requeteHttp.js';
 
 describe('Les fonctions sur les requêtes HTTP', () => {
   describe("concernant l'extraction des IP", () => {

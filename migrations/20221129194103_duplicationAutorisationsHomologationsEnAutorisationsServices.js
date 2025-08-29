@@ -1,12 +1,12 @@
-const pourChaqueLigne = require('./utilitaires/pourChaqueLigne');
+import pourChaqueLigne from './utilitaires/pourChaqueLigne.js';
 
-exports.up = (knex) =>
+export const up = (knex) =>
   pourChaqueLigne(knex('autorisations'), ({ id, donnees }) => {
     donnees.idService = donnees.idHomologation;
     return knex('autorisations').where({ id }).update({ donnees });
   });
 
-exports.down = (knex) =>
+export const down = (knex) =>
   pourChaqueLigne(
     knex('autorisations'),
     ({ id, donnees: { idService, ...autresDonnees } }) =>

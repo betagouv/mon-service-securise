@@ -1,7 +1,5 @@
-const {
-  StatistiquesMesures,
-} = require('../../src/modeles/statistiquesMesures');
-const MesuresGenerales = require('../../src/modeles/mesuresGenerales');
+import { StatistiquesMesures } from '../../src/modeles/statistiquesMesures.js';
+import MesuresGenerales from '../../src/modeles/mesuresGenerales.js';
 
 class ConstructeurStatistiquesMesures {
   constructor(referentiel) {
@@ -53,4 +51,4 @@ class ConstructeurStatistiquesMesures {
 const desStatistiques = (referentiel) =>
   new ConstructeurStatistiquesMesures(referentiel);
 
-module.exports = { desStatistiques };
+export { desStatistiques };

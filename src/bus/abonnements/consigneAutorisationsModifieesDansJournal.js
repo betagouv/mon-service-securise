@@ -1,6 +1,4 @@
-const {
-  EvenementCollaboratifServiceModifie,
-} = require('../../modeles/journalMSS/evenementCollaboratifServiceModifie');
+import { EvenementCollaboratifServiceModifie } from '../../modeles/journalMSS/evenementCollaboratifServiceModifie.js';
 
 const leveException = (raison) => {
   throw new Error(
@@ -24,4 +22,4 @@ function consigneAutorisationsModifieesDansJournal({ adaptateurJournal }) {
   };
 }
 
-module.exports = { consigneAutorisationsModifieesDansJournal };
+export { consigneAutorisationsModifieesDansJournal };

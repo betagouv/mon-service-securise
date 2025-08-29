@@ -1,7 +1,4 @@
-const recupere = async (_) => undefined;
-const metsAJour = async (_) => {};
-
-module.exports = {
-  metsAJour,
-  recupere,
-};
+export const fabriqueAdaptateurProfilAnssiVide = () => ({
+  recupere: async (_) => undefined,
+  metsAJour: async (_) => {},
+});

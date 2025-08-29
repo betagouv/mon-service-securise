@@ -25,4 +25,4 @@ class ConstructeurMesures {
 
 const bouchonneMesures = () => new ConstructeurMesures();
 
-module.exports = { bouchonneMesures };
+export { bouchonneMesures };

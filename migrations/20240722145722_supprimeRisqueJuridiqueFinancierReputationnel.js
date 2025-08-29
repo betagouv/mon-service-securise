@@ -1,4 +1,4 @@
-exports.up = (knex) =>
+export const up = (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       knex(table).then((lignes) => {
@@ -15,4 +15,4 @@ exports.up = (knex) =>
   );
 
 // Impossible de remettre le champ, car la valeur a été supprimée
-exports.down = async () => {};
+export const down = async () => {};

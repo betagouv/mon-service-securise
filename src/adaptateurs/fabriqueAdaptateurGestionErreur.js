@@ -1,8 +1,6 @@
-const adaptateurEnvironnement = require('./adaptateurEnvironnement');
-const adaptateurSentry = require('./adaptateurGestionErreurSentry');
-const adaptateurVide = require('./adaptateurGestionErreurVide');
+import { sentry } from './adaptateurEnvironnement.js';
+import * as adaptateurSentry from './adaptateurGestionErreurSentry.js';
+import { fabriqueAdaptateurGestionErreurVide } from './adaptateurGestionErreurVide.js';
 
-const fabriqueAdaptateurGestionErreur = () =>
-  adaptateurEnvironnement.sentry().dsn() ? adaptateurSentry : adaptateurVide;
-
-module.exports = { fabriqueAdaptateurGestionErreur };
+export const fabriqueAdaptateurGestionErreur = () =>
+  sentry().dsn() ? adaptateurSentry : fabriqueAdaptateurGestionErreurVide();

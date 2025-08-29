@@ -1,15 +1,15 @@
-const expect = require('expect.js');
+import expect from 'expect.js';
+import { unDossier } from '../constructeurs/constructeurDossier.js';
+import donneesReferentiel from '../../donneesReferentiel.js';
+import Dossier from '../../src/modeles/dossier.js';
+import * as Referentiel from '../../src/referentiel.js';
 
-const { unDossier } = require('../constructeurs/constructeurDossier');
-const donneesReferentiel = require('../../donneesReferentiel');
-const Dossier = require('../../src/modeles/dossier');
-const Referentiel = require('../../src/referentiel');
-const {
+import {
   ErreurDossierDejaFinalise,
   ErreurDossierNonFinalisable,
   ErreurDossierNonFinalise,
   ErreurDossierEtapeInconnue,
-} = require('../../src/erreurs');
+} from '../../src/erreurs.js';
 
 describe("Un dossier d'homologation", () => {
   const referentiel = Referentiel.creeReferentielVide();

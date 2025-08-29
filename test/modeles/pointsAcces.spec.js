@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const PointsAcces = require('../../src/modeles/pointsAcces');
+import expect from 'expect.js';
+import PointsAcces from '../../src/modeles/pointsAcces.js';
 
 const ils = it;
 

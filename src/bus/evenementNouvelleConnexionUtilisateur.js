@@ -17,4 +17,4 @@ class EvenementNouvelleConnexionUtilisateur {
   }
 }
 
-module.exports = EvenementNouvelleConnexionUtilisateur;
+export default EvenementNouvelleConnexionUtilisateur;

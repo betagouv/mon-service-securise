@@ -1,8 +1,8 @@
-const expect = require('expect.js');
-const {
+import expect from 'expect.js';
+import {
   developpeProvenance,
   reduitProvenance,
-} = require('../migrations/20221102134033_changeProvenanceService');
+} from '../migrations/20221102134033_changeProvenanceService.js';
 
 describe('La migration de la provenance du service depuis valeurs multiple en valeur simple', () => {
   describe("vers l'avant", () => {

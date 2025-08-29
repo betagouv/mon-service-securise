@@ -1,5 +1,5 @@
-const ElementsConstructibles = require('./elementsConstructibles');
-const ItemAvecDescription = require('./itemAvecDescription');
+import ElementsConstructibles from './elementsConstructibles.js';
+import ItemAvecDescription from './itemAvecDescription.js';
 
 class ItemsAvecDescription extends ElementsConstructibles {
   constructor(items) {
@@ -15,4 +15,4 @@ class ItemsAvecDescription extends ElementsConstructibles {
   }
 }
 
-module.exports = ItemsAvecDescription;
+export default ItemsAvecDescription;

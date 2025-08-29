@@ -1,8 +1,6 @@
-const { ErreurDonneesObligatoiresManquantes } = require('../erreurs');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('../adaptateurs/fabriqueAdaptateurGestionErreur');
-const InformationsService = require('./informationsService');
+import { ErreurDonneesObligatoiresManquantes } from '../erreurs.js';
+import { fabriqueAdaptateurGestionErreur } from '../adaptateurs/fabriqueAdaptateurGestionErreur.js';
+import InformationsService from './informationsService.js';
 
 class Entite extends InformationsService {
   constructor(donnees = {}) {
@@ -40,4 +38,4 @@ class Entite extends InformationsService {
   }
 }
 
-module.exports = Entite;
+export default Entite;

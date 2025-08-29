@@ -1,4 +1,4 @@
-const pmap = require('p-map');
+import pmap from 'p-map';
 
 const avecPMap = (items, fonctionAAppliquer) =>
   pmap(items, fonctionAAppliquer, { concurrency: 2 });
@@ -9,7 +9,4 @@ const avecPMapPourChaqueElement = (itemsDansPromesse, fonctionAAppliquer) =>
 const avecPMapPourChaqueElementSansPromesse = (items, fonctionAAppliquer) =>
   avecPMap(items, fonctionAAppliquer);
 
-module.exports = {
-  avecPMapPourChaqueElement,
-  avecPMapPourChaqueElementSansPromesse,
-};
+export { avecPMapPourChaqueElement, avecPMapPourChaqueElementSansPromesse };

@@ -25,4 +25,4 @@ function envoieMailFelicitationHomologation({ depotDonnees, adaptateurMail }) {
   };
 }
 
-module.exports = { envoieMailFelicitationHomologation };
+export { envoieMailFelicitationHomologation };

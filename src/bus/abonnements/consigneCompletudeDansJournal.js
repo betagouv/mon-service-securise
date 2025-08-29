@@ -1,4 +1,4 @@
-const EvenementCompletudeServiceModifiee = require('../../modeles/journalMSS/evenementCompletudeServiceModifiee');
+import EvenementCompletudeServiceModifiee from '../../modeles/journalMSS/evenementCompletudeServiceModifiee.js';
 
 const leveException = (raison) => {
   throw new Error(
@@ -20,4 +20,4 @@ function consigneCompletudeDansJournal({ adaptateurJournal }) {
   };
 }
 
-module.exports = { consigneCompletudeDansJournal };
+export { consigneCompletudeDansJournal };

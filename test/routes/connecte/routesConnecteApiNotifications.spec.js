@@ -1,9 +1,7 @@
-const expect = require('expect.js');
-const testeurMSS = require('../testeurMSS');
-const { ErreurIdentifiantTacheInconnu } = require('../../../src/erreurs');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
+import expect from 'expect.js';
+import testeurMSS from '../testeurMSS.js';
+import { ErreurIdentifiantTacheInconnu } from '../../../src/erreurs.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 
 describe('Le serveur MSS des routes privées /api/notifications', () => {
   const testeur = testeurMSS();

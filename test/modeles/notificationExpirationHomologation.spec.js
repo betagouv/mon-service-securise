@@ -1,8 +1,7 @@
-const expect = require('expect.js');
-
-const NotificationExpirationHomologation = require('../../src/modeles/notificationExpirationHomologation');
-const Referentiel = require('../../src/referentiel');
-const { unDossier } = require('../constructeurs/constructeurDossier');
+import expect from 'expect.js';
+import NotificationExpirationHomologation from '../../src/modeles/notificationExpirationHomologation.js';
+import * as Referentiel from '../../src/referentiel.js';
+import { unDossier } from '../constructeurs/constructeurDossier.js';
 
 describe("Une notification d'expiration d'homologation", () => {
   it("peut s'instancier avec un ID de service, une date de prochain envoi et un délai d'expiration", () => {

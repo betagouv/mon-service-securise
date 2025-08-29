@@ -28,12 +28,12 @@ const supprimeDansInformationsGenerales = (donnees) => {
   return donnees;
 };
 
-exports.up = miseAJour(
+export const up = miseAJour(
   contientCaracteristiquesComplementaires,
   copieDansInformationsGenerales
 );
 
-exports.down = miseAJour(
+export const down = miseAJour(
   contientInformationsGenerales,
   supprimeDansInformationsGenerales
 );

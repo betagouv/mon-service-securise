@@ -1,5 +1,5 @@
-const EvenementCompletudeServiceModifiee = require('../../../src/modeles/journalMSS/evenementCompletudeServiceModifiee');
-const { unService } = require('../../constructeurs/constructeurService');
+import EvenementCompletudeServiceModifiee from '../../../src/modeles/journalMSS/evenementCompletudeServiceModifiee.js';
+import { unService } from '../../constructeurs/constructeurService.js';
 
 class ConstructeurEvenementCompletudeServiceModifiee {
   constructor() {
@@ -55,4 +55,4 @@ class ConstructeurEvenementCompletudeServiceModifiee {
   }
 }
 
-module.exports = ConstructeurEvenementCompletudeServiceModifiee;
+export default ConstructeurEvenementCompletudeServiceModifiee;

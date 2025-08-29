@@ -1,5 +1,5 @@
-const Evenement = require('./evenement');
-const { ErreurDateDerniereConnexionInvalide } = require('./erreurs');
+import Evenement from './evenement.js';
+import { ErreurDateDerniereConnexionInvalide } from './erreurs.js';
 
 class EvenementConnexionUtilisateur extends Evenement {
   constructor(donnees, options = {}) {
@@ -28,4 +28,4 @@ class EvenementConnexionUtilisateur extends Evenement {
   }
 }
 
-module.exports = EvenementConnexionUtilisateur;
+export default EvenementConnexionUtilisateur;

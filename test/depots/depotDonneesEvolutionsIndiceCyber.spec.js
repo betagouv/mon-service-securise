@@ -1,7 +1,5 @@
-const expect = require('expect.js');
-const {
-  creeDepot,
-} = require('../../src/depots/depotDonneesEvolutionsIndiceCyber');
+import expect from 'expect.js';
+import { creeDepot } from '../../src/depots/depotDonneesEvolutionsIndiceCyber.js';
 
 describe("Le dépôt de données des évolutions d'indice cyber", () => {
   let depotActivitesIndiceCyber;

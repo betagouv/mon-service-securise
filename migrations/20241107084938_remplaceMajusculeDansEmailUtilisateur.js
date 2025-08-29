@@ -1,9 +1,9 @@
-const { createHash } = require('crypto');
+import { createHash } from 'crypto';
 
 const hache = (chaine) =>
   `v1:${createHash('sha256').update(chaine).digest('hex')}`;
 
-exports.up = async (knex) => {
+export const up = async (knex) => {
   await knex.transaction(async (trx) => {
     const utilisateurs = await trx('utilisateurs');
 
@@ -22,4 +22,4 @@ exports.up = async (knex) => {
   });
 };
 
-exports.down = async () => {};
+export const down = async () => {};

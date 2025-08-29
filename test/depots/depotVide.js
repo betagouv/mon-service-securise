@@ -1,7 +1,6 @@
-const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
-
-const fabriqueAdaptateurPersistance = require('../../src/adaptateurs/fabriqueAdaptateurPersistance');
-const DepotDonnees = require('../../src/depotDonnees');
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import fabriqueAdaptateurPersistance from '../../src/adaptateurs/fabriqueAdaptateurPersistance.js';
+import * as DepotDonnees from '../../src/depotDonnees.js';
 
 const depotVide = (
   config = {
@@ -19,4 +18,4 @@ const depotVide = (
     .then(() => DepotDonnees.creeDepot(config));
 };
 
-module.exports = { depotVide };
+export { depotVide };

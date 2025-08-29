@@ -1,8 +1,7 @@
-const expect = require('expect.js');
-
-const InformationsService = require('../../src/modeles/informationsService');
-const Hebergement = require('../../src/modeles/partiesPrenantes/hebergement');
-const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
+import expect from 'expect.js';
+import InformationsService from '../../src/modeles/informationsService.js';
+import Hebergement from '../../src/modeles/partiesPrenantes/hebergement.js';
+import RolesResponsabilites from '../../src/modeles/rolesResponsabilites.js';
 
 describe("L'ensemble des rôles et responsabilités", () => {
   it('connaît ses constituants', () => {

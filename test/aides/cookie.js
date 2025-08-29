@@ -1,4 +1,4 @@
-const expect = require('expect.js');
+import expect from 'expect.js';
 
 const enObjet = (cookie) =>
   cookie.split('; ').reduce((acc, v) => {
@@ -35,4 +35,4 @@ const expectContenuSessionValide = (
   );
 };
 
-module.exports = { enObjet, decodeSessionDuCookie, expectContenuSessionValide };
+export { enObjet, decodeSessionDuCookie, expectContenuSessionValide };

@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const {
-  ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
-const EvenementServiceRattacheAPrestataire = require('../../../src/modeles/journalMSS/evenementServiceRattacheAPrestataire');
+import expect from 'expect.js';
+import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import EvenementServiceRattacheAPrestataire from '../../../src/modeles/journalMSS/evenementServiceRattacheAPrestataire.js';
 
 describe('Un événement de service rattaché à un prestataire', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };

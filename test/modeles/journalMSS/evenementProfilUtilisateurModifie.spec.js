@@ -1,11 +1,7 @@
-const expect = require('expect.js');
-const EvenementProfilUtilisateurModifie = require('../../../src/modeles/journalMSS/evenementProfilUtilisateurModifie');
-const {
-  ErreurUtilisateurManquant,
-} = require('../../../src/modeles/journalMSS/erreurs');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
+import expect from 'expect.js';
+import EvenementProfilUtilisateurModifie from '../../../src/modeles/journalMSS/evenementProfilUtilisateurModifie.js';
+import { ErreurUtilisateurManquant } from '../../../src/modeles/journalMSS/erreurs.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 
 describe('Un événement de profil utilisateur modifié', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };

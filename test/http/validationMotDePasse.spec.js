@@ -1,8 +1,8 @@
-const expect = require('expect.js');
-const {
+import expect from 'expect.js';
+import {
   resultatValidation,
   valideMotDePasse,
-} = require('../../src/http/validationMotDePasse');
+} from '../../src/http/validationMotDePasse.js';
 
 describe('Le validateur de mot de passe', () => {
   it('vérifie que le mot de passe est une chaîne de caractères', () => {

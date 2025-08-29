@@ -26,4 +26,4 @@ const creeDepot = (config = {}) => {
     lisActivitesMesure,
   };
 };
-module.exports = { creeDepot };
+export { creeDepot };

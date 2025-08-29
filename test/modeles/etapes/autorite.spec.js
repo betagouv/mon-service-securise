@@ -1,6 +1,5 @@
-const expect = require('expect.js');
-
-const Autorite = require('../../../src/modeles/etapes/autorite');
+import expect from 'expect.js';
+import Autorite from '../../../src/modeles/etapes/autorite.js';
 
 describe("L'étape « Autorité » du parcours homologuer", () => {
   it('est complète quand les propriétés nom et fonction sont présentes', () => {
