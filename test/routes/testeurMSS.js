@@ -187,7 +187,6 @@ const testeurMss = () => {
         serviceAnnuaire,
         adaptateurCsv,
         adaptateurZip,
-        adaptateurTracking,
         adaptateurProtection,
         adaptateurJournal,
         adaptateurOidc,

@@ -146,7 +146,6 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     serviceAnnuaire,
     adaptateurCsv,
     adaptateurZip,
-    adaptateurTracking,
     adaptateurProtection,
     adaptateurJournal,
     adaptateurOidc,
