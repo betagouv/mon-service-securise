@@ -2,7 +2,9 @@ const expect = require('expect.js');
 const supertest = require('supertest');
 
 const { depotVide } = require('../depots/depotVide');
-const adaptateurGestionErreurVide = require('../../src/adaptateurs/adaptateurGestionErreurVide');
+const {
+  fabriqueAdaptateurGestionErreurVide,
+} = require('../../src/adaptateurs/adaptateurGestionErreurVide');
 const adaptateurMailMemoire = require('../../src/adaptateurs/adaptateurMailMemoire');
 const MoteurRegles = require('../../src/moteurRegles');
 const MSS = require('../../src/mss.ts');
@@ -116,7 +118,7 @@ const testeurMss = () => {
     };
     adaptateurCsv = {};
     adaptateurZip = { genereArchive: () => Promise.resolve('Archive ZIP') };
-    adaptateurGestionErreur = adaptateurGestionErreurVide;
+    adaptateurGestionErreur = fabriqueAdaptateurGestionErreurVide();
     adaptateurTracking = {
       envoieTrackingConnexion: () => Promise.resolve(),
       envoieTrackingInscription: () => Promise.resolve(),
