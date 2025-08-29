@@ -10,16 +10,16 @@ const loggerWarnOnce = loggerPersonnalise.warnOnce;
 const loggerInfo = loggerPersonnalise.info;
 
 loggerPersonnalise.warnOnce = (msg, options) => {
-  const regexp =
+  const assetDistant =
     /assets\/.* referenced in .* didn't resolve at build time, it will remain unchanged to be resolved at runtime/;
-  if (msg.match(regexp)) return;
+  if (msg.match(assetDistant)) return;
 
   loggerWarnOnce(msg, options);
 };
 
 loggerPersonnalise.info = (msg, options) => {
-  const regexp = /\/public\/composants-svelte\/.*[.js .css .mjs]/;
-  if (msg.match(regexp)) return;
+  const composantBuilde = /\/public\/composants-svelte\/.*.js/;
+  if (msg.match(composantBuilde)) return;
 
   loggerInfo(msg, options);
 };
