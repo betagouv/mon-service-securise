@@ -7,11 +7,11 @@ const supprimeAvisExpertCyber = async (knex, table) => {
   );
 };
 
-exports.up = async (knex) =>
+export const up = async (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       supprimeAvisExpertCyber(knex, table)
     )
   );
 
-exports.down = async () => {};
+export const down = async () => {};

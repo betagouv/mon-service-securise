@@ -24,11 +24,11 @@ const supprimeMesuresObsoletesDansTable = (knex, table) =>
     return Promise.all(misesAJour);
   });
 
-exports.up = (knex) =>
+export const up = (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       supprimeMesuresObsoletesDansTable(knex, table)
     )
   );
 
-exports.down = () => Promise.resolve();
+export const down = () => Promise.resolve();

@@ -1,4 +1,4 @@
-exports.up = async (knex) => {
+export const up = async (knex) => {
   const autorisations = await knex('autorisations');
 
   const misesAJour = autorisations.map(({ id, donnees }) =>
@@ -21,7 +21,7 @@ exports.up = async (knex) => {
   await Promise.all(misesAJour);
 };
 
-exports.down = async (knex) => {
+export const down = async (knex) => {
   const autorisations = await knex('autorisations');
 
   const misesAJour = autorisations.map(

@@ -1,4 +1,4 @@
-const { avecPMapPourChaqueElement } = require('../src/utilitaires/pMap');
+import { avecPMapPourChaqueElement } from '../src/utilitaires/pMap.js';
 
 const archiveDossiers = (dossiers) => {
   const candidats = dossiers
@@ -45,18 +45,18 @@ const supprimeArchivageDansTable = async (knex, table) => {
   );
 };
 
-exports.up = async (knex) =>
+export const up = async (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       archiveDossiersDansTable(knex, table)
     )
   );
 
-exports.down = async (knex) =>
+export const down = async (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       supprimeArchivageDansTable(knex, table)
     )
   );
 
-exports.archiveDossiers = archiveDossiers;
+export { archiveDossiers };

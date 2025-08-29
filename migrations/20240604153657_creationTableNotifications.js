@@ -1,4 +1,4 @@
-exports.up = async (knex) =>
+export const up = async (knex) =>
   knex.schema.createTable('notifications_nouveaute', (table) => {
     table.uuid('id_utilisateur');
     table.string('id_nouveaute');
@@ -6,4 +6,5 @@ exports.up = async (knex) =>
     table.datetime('date_lecture').defaultTo(knex.fn.now());
   });
 
-exports.down = async (knex) => knex.schema.dropTable('notifications_nouveaute');
+export const down = async (knex) =>
+  knex.schema.dropTable('notifications_nouveaute');

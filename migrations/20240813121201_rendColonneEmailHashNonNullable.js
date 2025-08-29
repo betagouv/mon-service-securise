@@ -1,11 +1,11 @@
 const tableUtilisateurs = 'utilisateurs';
 
-exports.up = (knex) =>
+export const up = (knex) =>
   knex.schema.alterTable(tableUtilisateurs, (table) =>
     table.string('email_hash', 64).notNullable().alter()
   );
 
-exports.down = (knex) =>
+export const down = (knex) =>
   knex.schema.alterTable(tableUtilisateurs, (table) =>
     table.string('email_hash', 64).nullable().alter()
   );

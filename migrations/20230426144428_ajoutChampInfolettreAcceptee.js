@@ -1,4 +1,4 @@
-exports.up = (knex) =>
+export const up = (knex) =>
   knex('utilisateurs').then((lignes) => {
     const misesAJour = lignes.map(({ id, donnees }) =>
       knex('utilisateurs')
@@ -9,7 +9,7 @@ exports.up = (knex) =>
     return Promise.all(misesAJour);
   });
 
-exports.down = (knex) =>
+export const down = (knex) =>
   knex('utilisateurs').then((lignes) => {
     const misesAJour = lignes.map(
       ({ id, donnees: { infolettreAcceptee: _, ...autresDonnees } }) =>
