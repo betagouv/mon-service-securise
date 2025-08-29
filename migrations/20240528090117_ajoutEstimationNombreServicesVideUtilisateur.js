@@ -1,4 +1,4 @@
-exports.up = async (knex) => {
+export const up = async (knex) => {
   const utilisateurs = await knex('utilisateurs');
   const misesAJour = utilisateurs.map(({ id, donnees }) => {
     donnees.estimationNombreServices = { borneBasse: '0', borneHaute: '0' };
@@ -7,7 +7,7 @@ exports.up = async (knex) => {
   await Promise.all(misesAJour);
 };
 
-exports.down = async (knex) => {
+export const down = async (knex) => {
   const utilisateurs = await knex('utilisateurs');
   const misesAJour = utilisateurs.map(({ id, donnees }) => {
     delete donnees.estimationNombreServices;

@@ -1,4 +1,4 @@
-const pourChaqueLigne = require('./utilitaires/pourChaqueLigne');
+import pourChaqueLigne from './utilitaires/pourChaqueLigne.js';
 
 const supprimeIdUtilisateur = (knex, table) =>
   pourChaqueLigne(
@@ -7,11 +7,11 @@ const supprimeIdUtilisateur = (knex, table) =>
       knex(table).where({ id }).update({ donnees: autresDonnees })
   );
 
-exports.up = (knex) =>
+export const up = (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       supprimeIdUtilisateur(knex, table)
     )
   );
 
-exports.down = () => Promise.resolve();
+export const down = () => Promise.resolve();

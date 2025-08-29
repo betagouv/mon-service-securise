@@ -1,4 +1,4 @@
-const pourChaqueLigne = require('./utilitaires/pourChaqueLigne');
+import pourChaqueLigne from './utilitaires/pourChaqueLigne.js';
 
 const ajouteOrganisationsResponsables = (knex, table) =>
   pourChaqueLigne(
@@ -36,14 +36,14 @@ const retireOrganisationsResponsables = (knex, table) =>
     return knex(table).where({ id }).update({ donnees });
   });
 
-exports.up = (knex) =>
+export const up = (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       ajouteOrganisationsResponsables(knex, table)
     )
   );
 
-exports.down = (knex) =>
+export const down = (knex) =>
   Promise.all(
     ['homologations', 'services'].map((table) =>
       retireOrganisationsResponsables(knex, table)

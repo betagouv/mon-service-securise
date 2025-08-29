@@ -42,12 +42,12 @@ const supprimeDansPartiesPrenantes = (donnees) => {
   return donnees;
 };
 
-exports.up = miseAJour(
+export const up = miseAJour(
   contientStructureDeveloppement,
   copieDansPartiesPrenantes
 );
 
-exports.down = miseAJour(
+export const down = miseAJour(
   contientPartiesPrenantes,
   supprimeDansPartiesPrenantes
 );

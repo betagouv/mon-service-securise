@@ -1,4 +1,4 @@
-exports.up = async (knex) =>
+export const up = async (knex) =>
   knex.schema.createTable('notifications_expiration_homologation', (table) => {
     table.uuid('id');
     table.primary('id');
@@ -7,5 +7,5 @@ exports.up = async (knex) =>
     table.integer('delai_avant_expiration_mois');
   });
 
-exports.down = async (knex) =>
+export const down = async (knex) =>
   knex.schema.dropTable('notifications_expiration_homologation');

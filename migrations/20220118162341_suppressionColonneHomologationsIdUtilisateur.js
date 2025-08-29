@@ -1,4 +1,4 @@
-exports.up = (knex) =>
+export const up = (knex) =>
   knex('homologations').then((lignes) => {
     const suppressions = lignes.map(
       ({ id, donnees: { idUtilisateur: _, ...autresDonnees } }) =>
@@ -10,7 +10,7 @@ exports.up = (knex) =>
     return Promise.all(suppressions);
   });
 
-exports.down = (knex) =>
+export const down = (knex) =>
   knex('autorisations').then((lignes) => {
     const misesAJour = lignes
       .filter(({ donnees: { type } }) => type === 'createur')

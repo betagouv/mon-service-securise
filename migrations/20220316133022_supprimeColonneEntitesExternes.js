@@ -39,9 +39,12 @@ const copieEntitesExternes = (donnees) => {
   return donnees;
 };
 
-exports.up = miseAJour(
+export const up = miseAJour(
   contientCaracteristiquesComplementaires,
   supprimeEntitesExternes
 );
 
-exports.down = miseAJour(contientRolesResponsabilites, copieEntitesExternes);
+export const down = miseAJour(
+  contientRolesResponsabilites,
+  copieEntitesExternes
+);

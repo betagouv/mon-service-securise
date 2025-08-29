@@ -1,4 +1,4 @@
-exports.up = (knex) =>
+export const up = (knex) =>
   knex.schema.createTable('sels_de_hachage', (table) => {
     table.integer('version');
     table.primary(['version']);
@@ -6,4 +6,4 @@ exports.up = (knex) =>
     table.datetime('date_migration').defaultTo(knex.fn.now());
   });
 
-exports.down = (knex) => knex.schema.dropTable('sels_de_hachage');
+export const down = (knex) => knex.schema.dropTable('sels_de_hachage');

@@ -1,4 +1,4 @@
-exports.up = (knex) =>
+export const up = (knex) =>
   knex('autorisations').then((lignes) => {
     const suppressions = lignes.map(
       ({ id, donnees: { idHomologation: _, ...autresDonnees } }) =>
@@ -7,7 +7,7 @@ exports.up = (knex) =>
     return Promise.all(suppressions);
   });
 
-exports.down = (knex) =>
+export const down = (knex) =>
   knex('autorisations').then((lignes) => {
     const ajouts = lignes.map(
       ({ id, donnees: { idService, ...autresDonnees } }) =>
