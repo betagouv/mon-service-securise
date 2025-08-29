@@ -1,7 +1,6 @@
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const express = require('express');
-
 const {
   CACHE_CONTROL_FICHIERS_STATIQUES,
   ENDPOINTS_SANS_CSRF,
@@ -32,7 +31,6 @@ const creeServeur = ({
   serviceAnnuaire,
   adaptateurCsv,
   adaptateurZip,
-  adaptateurTracking,
   adaptateurProtection,
   adaptateurJournal,
   adaptateurOidc,
@@ -99,9 +97,7 @@ const creeServeur = ({
       adaptateurEnvironnement,
       adaptateurStatistiques,
       adaptateurJWT,
-      adaptateurProfilAnssi,
       cmsCrisp,
-      serviceAnnuaire,
       depotDonnees,
       middleware,
       referentiel,
@@ -129,7 +125,6 @@ const creeServeur = ({
       referentiel,
       depotDonnees,
       serviceAnnuaire,
-      adaptateurTracking,
       adaptateurGestionErreur,
       adaptateurJWT,
       adaptateurMail,

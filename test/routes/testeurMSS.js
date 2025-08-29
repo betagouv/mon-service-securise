@@ -2,7 +2,9 @@ const expect = require('expect.js');
 const supertest = require('supertest');
 
 const { depotVide } = require('../depots/depotVide');
-const adaptateurGestionErreurVide = require('../../src/adaptateurs/adaptateurGestionErreurVide');
+const {
+  fabriqueAdaptateurGestionErreurVide,
+} = require('../../src/adaptateurs/adaptateurGestionErreurVide');
 const adaptateurMailMemoire = require('../../src/adaptateurs/adaptateurMailMemoire');
 const MoteurRegles = require('../../src/moteurRegles');
 const MSS = require('../../src/mss.ts');
@@ -15,12 +17,17 @@ const {
 const {
   fabriqueAdaptateurJWT,
 } = require('../../src/adaptateurs/adaptateurJWT');
-const adaptateurProfilAnssiParDefaut = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
+const {
+  fabriqueAdaptateurProfilAnssiVide,
+} = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
 const { fabriqueServiceCgu } = require('../../src/serviceCgu');
 const {
   fabriqueServiceGestionnaireSession,
 } = require('../../src/session/serviceGestionnaireSession');
 const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('../../src/adaptateurs/adaptateurHorloge');
 
 const testeurMss = () => {
   let serviceAnnuaire;
@@ -87,9 +94,7 @@ const testeurMss = () => {
   const initialise = async () => {
     serviceAnnuaire = {};
     serviceSupervision = {};
-    adaptateurHorloge = {
-      maintenant: () => new Date(),
-    };
+    adaptateurHorloge = fabriqueAdaptateurHorloge();
     const contenuCrisp = {
       contenuMarkdown: 'Un contenu',
       titre: 'Un titre',
@@ -113,7 +118,7 @@ const testeurMss = () => {
     };
     adaptateurCsv = {};
     adaptateurZip = { genereArchive: () => Promise.resolve('Archive ZIP') };
-    adaptateurGestionErreur = adaptateurGestionErreurVide;
+    adaptateurGestionErreur = fabriqueAdaptateurGestionErreurVide();
     adaptateurTracking = {
       envoieTrackingConnexion: () => Promise.resolve(),
       envoieTrackingInscription: () => Promise.resolve(),
@@ -141,7 +146,7 @@ const testeurMss = () => {
       recupereStatistiques: async () => {},
     };
     adaptateurJWT = fabriqueAdaptateurJWT();
-    adaptateurProfilAnssi = adaptateurProfilAnssiParDefaut;
+    adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssiVide();
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
     procedures = fabriqueProcedures({
@@ -182,7 +187,6 @@ const testeurMss = () => {
         serviceAnnuaire,
         adaptateurCsv,
         adaptateurZip,
-        adaptateurTracking,
         adaptateurProtection,
         adaptateurJournal,
         adaptateurOidc,
@@ -208,8 +212,6 @@ const testeurMss = () => {
       expect().fail("Erreur à l'initialisation du testeur MSS.");
     }
   };
-
-  const arrete = () => serveur.arreteEcoute();
 
   const get = async (url) => supertest(app).get(url);
   const patch = async (url, donnees = {}) =>
@@ -251,7 +253,6 @@ const testeurMss = () => {
     moteurRegles: () => moteurRegles,
     referentiel: () => referentiel,
     procedures: () => procedures,
-    arrete,
     initialise,
     verifieRequeteGenereErreurHTTP,
     verifieSessionDeposee,

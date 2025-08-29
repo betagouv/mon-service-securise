@@ -3,7 +3,9 @@ const {
   envoieMailsNotificationExpirationHomologation,
 } = require('../../src/taches/envoieMailsNotificationExpirationHomologation');
 const { depotVide } = require('../depots/depotVide');
-const AdaptateurHorloge = require('../../src/adaptateurs/adaptateurHorloge');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('../../src/adaptateurs/adaptateurHorloge');
 const { creeDepot } = require('../../src/depotDonnees');
 const {
   unePersistanceMemoire,
@@ -23,7 +25,7 @@ describe("La tâche d'envoie des emails de notifications d'expiration d'homologa
   let adaptateurMail;
 
   beforeEach(async () => {
-    adaptateurHorloge = AdaptateurHorloge;
+    adaptateurHorloge = fabriqueAdaptateurHorloge();
     adaptateurMail = {
       envoieNotificationExpirationHomologation: () => {},
     };
@@ -77,9 +79,7 @@ describe("La tâche d'envoie des emails de notifications d'expiration d'homologa
       adaptateurPersistance,
       adaptateurChiffrement: fauxAdaptateurChiffrement(),
     });
-    adaptateurHorloge = {
-      maintenant: () => new Date('2024-01-01'),
-    };
+    adaptateurHorloge = { maintenant: () => new Date('2024-01-01') };
 
     await envoieMailsNotificationExpirationHomologation({
       depotDonnees,
@@ -137,9 +137,7 @@ describe("La tâche d'envoie des emails de notifications d'expiration d'homologa
       adaptateurPersistance,
       adaptateurChiffrement: fauxAdaptateurChiffrement(),
     });
-    adaptateurHorloge = {
-      maintenant: () => new Date('2024-01-01'),
-    };
+    adaptateurHorloge = { maintenant: () => new Date('2024-01-01') };
 
     await envoieMailsNotificationExpirationHomologation({
       depotDonnees,
@@ -183,9 +181,7 @@ describe("La tâche d'envoie des emails de notifications d'expiration d'homologa
       adaptateurPersistance,
       adaptateurChiffrement: fauxAdaptateurChiffrement(),
     });
-    adaptateurHorloge = {
-      maintenant: () => new Date('2024-01-01'),
-    };
+    adaptateurHorloge = { maintenant: () => new Date('2024-01-01') };
 
     await envoieMailsNotificationExpirationHomologation({
       depotDonnees,

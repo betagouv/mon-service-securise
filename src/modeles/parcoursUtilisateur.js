@@ -1,4 +1,6 @@
-const adaptateurHorlogeParDefaut = require('../adaptateurs/adaptateurHorloge');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('../adaptateurs/adaptateurHorloge');
 const Base = require('./base');
 const Referentiel = require('../referentiel');
 const EtatVisiteGuidee = require('./etatVisiteGuidee');
@@ -7,7 +9,7 @@ class ParcoursUtilisateur extends Base {
   constructor(
     donnees = {},
     referentiel = Referentiel.creeReferentielVide(),
-    adaptateurHorloge = adaptateurHorlogeParDefaut
+    adaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     super({
       proprietesAtomiquesRequises: ['idUtilisateur', 'dateDerniereConnexion'],

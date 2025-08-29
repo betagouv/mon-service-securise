@@ -16,7 +16,9 @@ const {
   EvenementCguAccepteesParUtilisateur,
 } = require('../bus/evenementCguAccepteesParUtilisateur');
 const { creeReferentielVide } = require('../referentiel');
-const adaptateurMonProfilAnssiParDefaut = require('../adaptateurs/adaptateurProfilAnssiVide');
+const {
+  fabriqueAdaptateurProfilAnssiVide,
+} = require('../adaptateurs/adaptateurProfilAnssiVide');
 
 const serviceCguParDefaut = fabriqueServiceCgu({
   referentiel: creeReferentielVide(),
@@ -175,7 +177,7 @@ const creeDepot = (config = {}) => {
     adaptateurJWT,
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = fabriqueAdaptateurUUID(),
-    adaptateurProfilAnssi = adaptateurMonProfilAnssiParDefaut,
+    adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssiVide(),
     adaptateurRechercheEntite,
     busEvenements,
     serviceCgu = serviceCguParDefaut,

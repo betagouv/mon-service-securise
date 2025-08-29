@@ -25,7 +25,9 @@ const {
   EvenementServiceRattacheAPrestataire,
 } = require('../../src/bus/evenementServiceRattacheAPrestataire');
 const { cableTousLesAbonnes } = require('../../src/bus/cablage');
-const adaptateurHorloge = require('../../src/adaptateurs/adaptateurHorloge');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('../../src/adaptateurs/adaptateurHorloge');
 const fabriqueAdaptateurJournalMSS = require('../../src/adaptateurs/fabriqueAdaptateurJournalMSS');
 const fabriqueAdaptateurSupervision = require('../../src/adaptateurs/fabriqueAdaptateurSupervision');
 
@@ -117,6 +119,7 @@ class DuplicationEnMasseDeServices {
     const adaptateurTracking = fabriqueAdaptateurTracking();
     const adaptateurJournal = fabriqueAdaptateurJournalMSS();
     const adaptateurSupervision = fabriqueAdaptateurSupervision();
+    const adaptateurHorloge = fabriqueAdaptateurHorloge();
 
     this.procedures = fabriqueProcedures({
       depotDonnees: this.depotDonnees,

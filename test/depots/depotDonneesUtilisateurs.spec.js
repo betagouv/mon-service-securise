@@ -25,7 +25,12 @@ const EvenementUtilisateurInscrit = require('../../src/bus/evenementUtilisateurI
 const {
   EvenementCguAccepteesParUtilisateur,
 } = require('../../src/bus/evenementCguAccepteesParUtilisateur');
-const adaptateurProfilAnssiVide = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
+const {
+  fabriqueAdaptateurProfilAnssiVide,
+} = require('../../src/adaptateurs/adaptateurProfilAnssiVide');
+const {
+  fabriqueAdaptateurHorloge,
+} = require('../../src/adaptateurs/adaptateurHorloge');
 
 describe('Le dépôt de données des utilisateurs', () => {
   let adaptateurJWT;
@@ -39,7 +44,7 @@ describe('Le dépôt de données des utilisateurs', () => {
     adaptateurChiffrement = fauxAdaptateurChiffrement();
     adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
     bus = fabriqueBusPourLesTests();
-    adaptateurProfilAnssi = { ...adaptateurProfilAnssiVide };
+    adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssiVide();
   });
 
   it("retourne l'utilisateur authentifié en cherchant par hash d'email", async () => {
@@ -735,7 +740,7 @@ describe('Le dépôt de données des utilisateurs', () => {
     let depot;
 
     describe("quand l'utilisateur n'existe pas déjà", () => {
-      const adaptateurHorloge = {};
+      const adaptateurHorloge = fabriqueAdaptateurHorloge();
       let adaptateurPersistance;
 
       beforeEach(() => {
