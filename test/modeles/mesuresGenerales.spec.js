@@ -1,9 +1,8 @@
-const expect = require('expect.js');
-
-const MesuresGenerales = require('../../src/modeles/mesuresGenerales');
-const Referentiel = require('../../src/referentiel');
-const { creeReferentiel } = require('../../src/referentiel');
-const MesureGenerale = require('../../src/modeles/mesureGenerale');
+import expect from 'expect.js';
+import MesuresGenerales from '../../src/modeles/mesuresGenerales.js';
+import * as Referentiel from '../../src/referentiel.js';
+import { creeReferentiel } from '../../src/referentiel.js';
+import MesureGenerale from '../../src/modeles/mesureGenerale.js';
 
 const { A_SAISIR, COMPLETES, A_COMPLETER } = MesuresGenerales;
 

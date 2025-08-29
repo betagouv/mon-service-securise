@@ -1,7 +1,5 @@
-const expect = require('expect.js');
-const {
-  adaptateurChiffrementChaCha20,
-} = require('../../src/adaptateurs/adaptateurChiffrementChaCha20');
+import expect from 'expect.js';
+import { adaptateurChiffrementChaCha20 } from '../../src/adaptateurs/adaptateurChiffrementChaCha20.js';
 
 describe("L'adaptateur qui chiffre et déchiffre avec l'algorithme ChaCha20", () => {
   it("retrouve la données d'origine", async () => {

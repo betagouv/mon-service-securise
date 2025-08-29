@@ -1,11 +1,9 @@
-const expect = require('expect.js');
-const { unService } = require('../../constructeurs/constructeurService');
-const EvenementRisquesServiceModifies = require('../../../src/modeles/journalMSS/evenementRisquesServiceModifies');
-const {
-  ErreurServiceManquant,
-} = require('../../../src/modeles/journalMSS/erreurs');
-const Risques = require('../../../src/modeles/risques');
-const Referentiel = require('../../../src/referentiel');
+import expect from 'expect.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import EvenementRisquesServiceModifies from '../../../src/modeles/journalMSS/evenementRisquesServiceModifies.js';
+import { ErreurServiceManquant } from '../../../src/modeles/journalMSS/erreurs.js';
+import Risques from '../../../src/modeles/risques.js';
+import * as Referentiel from '../../../src/referentiel.js';
 
 describe('Un événement de risques modifiés', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };

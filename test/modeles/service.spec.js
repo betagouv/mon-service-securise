@@ -1,29 +1,26 @@
-const expect = require('expect.js');
-
-const uneDescriptionValide = require('../constructeurs/constructeurDescriptionService');
-const { unDossier } = require('../constructeurs/constructeurDossier');
-
-const Referentiel = require('../../src/referentiel');
-const InformationsService = require('../../src/modeles/informationsService');
-const Service = require('../../src/modeles/service');
-const MesureGenerale = require('../../src/modeles/mesureGenerale');
-const VueAnnexePDFDescription = require('../../src/modeles/objetsPDF/objetPDFAnnexeDescription');
-const VueAnnexePDFMesures = require('../../src/modeles/objetsPDF/objetPDFAnnexeMesures');
-const VueAnnexePDFRisques = require('../../src/modeles/objetsPDF/objetPDFAnnexeRisques');
-const { unService } = require('../constructeurs/constructeurService');
-const {
-  Rubriques: { DECRIRE, SECURISER, RISQUES, HOMOLOGUER },
-  Permissions: { LECTURE },
+import expect from 'expect.js';
+import uneDescriptionValide from '../constructeurs/constructeurDescriptionService';
+import { unDossier } from '../constructeurs/constructeurDossier';
+import * as Referentiel from '../../src/referentiel';
+import InformationsService from '../../src/modeles/informationsService';
+import Service from '../../src/modeles/service';
+import MesureGenerale from '../../src/modeles/mesureGenerale';
+import VueAnnexePDFDescription from '../../src/modeles/objetsPDF/objetPDFAnnexeDescription';
+import VueAnnexePDFMesures from '../../src/modeles/objetsPDF/objetPDFAnnexeMesures';
+import VueAnnexePDFRisques from '../../src/modeles/objetsPDF/objetPDFAnnexeRisques';
+import { unService } from '../constructeurs/constructeurService';
+import {
   Rubriques,
   Permissions,
-} = require('../../src/modeles/autorisations/gestionDroits');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const Mesures = require('../../src/modeles/mesures');
-const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
-const { Contributeur } = require('../../src/modeles/contributeur');
+} from '../../src/modeles/autorisations/gestionDroits';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur';
+import Mesures from '../../src/modeles/mesures';
+import MesureSpecifique from '../../src/modeles/mesureSpecifique';
+import { Contributeur } from '../../src/modeles/contributeur';
+
+const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER } = Rubriques;
+const { LECTURE } = Permissions;
 
 describe('Un service', () => {
   it('connaît son nom', () => {

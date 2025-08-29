@@ -1,7 +1,5 @@
-const expect = require('expect.js');
-const {
-  EvenementAutorisationsServiceModifiees,
-} = require('../../src/bus/evenementAutorisationsServiceModifiees');
+import expect from 'expect.js';
+import { EvenementAutorisationsServiceModifiees } from '../../src/bus/evenementAutorisationsServiceModifiees.js';
 
 describe("L'événement `autorisationsServicesModifiees", () => {
   it("lève une exception s'il est instancié sans ID de service", () => {

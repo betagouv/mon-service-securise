@@ -1,37 +1,34 @@
-const expect = require('expect.js');
-
-const {
+import expect from 'expect.js';
+import {
   verifieNomFichierServi,
   verifieTypeFichierServiEstCSV,
-} = require('../../aides/verifieFichierServi');
-const {
-  ErreurModele,
+} from '../../aides/verifieFichierServi.js';
+import {
   EchecAutorisation,
-  ErreurModeleDeMesureSpecifiqueDejaAssociee,
-  ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurAutorisationInexistante,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
-  ErreurServiceInexistant,
+  ErreurModele,
+  ErreurModeleDeMesureSpecifiqueDejaAssociee,
+  ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
-} = require('../../../src/erreurs');
-
-const testeurMSS = require('../testeurMSS');
-const {
-  unUtilisateur,
-} = require('../../constructeurs/constructeurUtilisateur');
-const { unService } = require('../../constructeurs/constructeurService');
-const {
-  uneAutorisation,
-} = require('../../constructeurs/constructeurAutorisation');
-const {
-  Rubriques: { SECURISER },
-  Permissions: { LECTURE, INVISIBLE },
+  ErreurServiceInexistant,
+} from '../../../src/erreurs.js';
+import testeurMSS from '../testeurMSS.js';
+import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
+import {
+  Permissions,
+  Rubriques,
   tousDroitsEnEcriture,
-} = require('../../../src/modeles/autorisations/gestionDroits');
-const { expectContenuSessionValide } = require('../../aides/cookie');
-const SourceAuthentification = require('../../../src/modeles/sourceAuthentification');
-const Mesures = require('../../../src/modeles/mesures');
-const uneDescriptionValide = require('../../constructeurs/constructeurDescriptionService');
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+import { expectContenuSessionValide } from '../../aides/cookie.js';
+import { SourceAuthentification } from '../../../src/modeles/sourceAuthentification.js';
+import Mesures from '../../../src/modeles/mesures.js';
+import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
+
+const { SECURISER } = Rubriques;
+const { LECTURE, INVISIBLE } = Permissions;
 
 describe('Le serveur MSS des routes privées /api/*', () => {
   const testeur = testeurMSS();
@@ -86,9 +83,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           .construis(),
       ];
 
-      testeur.depotDonnees().services = (idUtilisateur) => {
+      testeur.depotDonnees().services = async (idUtilisateur) => {
         donneesPassees = { idUtilisateur };
-        return Promise.resolve([service]);
+        return [service];
       };
 
       const reponse = await testeur.get('/api/services');
@@ -905,7 +902,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     it("reste robuste en cas d'échec de génération de CSV", async () => {
-      testeur.adaptateurCsv().genereCsvServices = () => Promise.reject();
+      testeur.adaptateurCsv().genereCsvServices = async () => {
+        throw new Error();
+      };
 
       const reponse = await testeur.get('/api/services/export.csv');
       expect(reponse.status).to.be(424);
@@ -1260,8 +1259,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       testeur.referentiel().departement = () => 'Paris';
       const depotDonnees = testeur.depotDonnees();
-      depotDonnees.metsAJourUtilisateur = () => Promise.resolve(utilisateur);
-      depotDonnees.utilisateur = () => Promise.resolve(utilisateur);
+      depotDonnees.metsAJourUtilisateur = async () => utilisateur;
+      depotDonnees.utilisateur = async () => utilisateur;
     });
 
     it('aseptise les paramètres de la requête', async () => {

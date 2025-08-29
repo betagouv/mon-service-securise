@@ -1,9 +1,7 @@
-const expect = require('expect.js');
-const {
-  sauvegardeNotificationsExpirationHomologation,
-} = require('../../../src/bus/abonnements/sauvegardeNotificationsExpirationHomologation');
-const Referentiel = require('../../../src/referentiel');
-const { unDossier } = require('../../constructeurs/constructeurDossier');
+import expect from 'expect.js';
+import { sauvegardeNotificationsExpirationHomologation } from '../../../src/bus/abonnements/sauvegardeNotificationsExpirationHomologation.js';
+import * as Referentiel from '../../../src/referentiel.js';
+import { unDossier } from '../../constructeurs/constructeurDossier.js';
 
 describe("L'abonnement qui sauvegarde (en base de données) les notifications d'expiration d'une homologation", () => {
   let depotDonnees;

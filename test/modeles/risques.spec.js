@@ -1,10 +1,9 @@
-const expect = require('expect.js');
-
-const Referentiel = require('../../src/referentiel');
-const RisqueGeneral = require('../../src/modeles/risqueGeneral');
-const RisqueSpecifique = require('../../src/modeles/risqueSpecifique');
-const Risques = require('../../src/modeles/risques');
-const RisquesSpecifiques = require('../../src/modeles/risquesSpecifiques');
+import expect from 'expect.js';
+import * as Referentiel from '../../src/referentiel.js';
+import RisqueGeneral from '../../src/modeles/risqueGeneral.js';
+import RisqueSpecifique from '../../src/modeles/risqueSpecifique.js';
+import Risques from '../../src/modeles/risques.js';
+import RisquesSpecifiques from '../../src/modeles/risquesSpecifiques.js';
 
 const ils = it;
 

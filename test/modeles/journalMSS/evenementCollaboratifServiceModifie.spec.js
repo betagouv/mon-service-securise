@@ -1,15 +1,9 @@
-const expect = require('expect.js');
-const {
-  ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
-const {
-  EvenementCollaboratifServiceModifie,
-} = require('../../../src/modeles/journalMSS/evenementCollaboratifServiceModifie');
-const {
-  RESUME_NIVEAU_DROIT,
-} = require('../../../src/modeles/autorisations/autorisation');
+import expect from 'expect.js';
+import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
+import { EvenementCollaboratifServiceModifie } from '../../../src/modeles/journalMSS/evenementCollaboratifServiceModifie.js';
+import { Autorisation } from '../../../src/modeles/autorisations/autorisation.js';
 
-const { PROPRIETAIRE } = RESUME_NIVEAU_DROIT;
+const { PROPRIETAIRE } = Autorisation.RESUME_NIVEAU_DROIT;
 
 describe("Un événement de modification du collaboratif d'un service", () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };

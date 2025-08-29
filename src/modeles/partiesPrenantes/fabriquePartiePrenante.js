@@ -13,7 +13,7 @@ const partiesPrenantesAutorises = [
   SecuriteService,
 ];
 
-const fabriquePartiePrenante = {
+export const fabriquePartiePrenante = {
   cree: (donnees) => {
     const { type } = donnees;
 
@@ -27,7 +27,3 @@ const fabriquePartiePrenante = {
     return new ClassePartiePrenante(donnees);
   },
 };
-
-export default fabriquePartiePrenante;
-
-export const { cree } = fabriquePartiePrenante;

@@ -2,7 +2,9 @@ import express from 'express';
 import * as uuid from 'uuid';
 import { ErreurArticleCrispIntrouvable } from '@lab-anssi/lib';
 import { estUrlLegalePourRedirection } from '../../http/redirection.js';
-import SourceAuthentification from '../../modeles/sourceAuthentification.js';
+import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
+
+const { MSS } = SourceAuthentification;
 
 const routesNonConnectePage = ({
   adaptateurEnvironnement,
@@ -151,11 +153,7 @@ const routesNonConnectePage = ({
         return;
       }
 
-      serviceGestionnaireSession.enregistreSession(
-        requete,
-        utilisateur,
-        SourceAuthentification.MSS
-      );
+      serviceGestionnaireSession.enregistreSession(requete, utilisateur, MSS);
 
       reponse.render('motDePasse/edition', {
         utilisateur,

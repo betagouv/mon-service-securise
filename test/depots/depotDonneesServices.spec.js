@@ -1,70 +1,55 @@
-const expect = require('expect.js');
+import expect from 'expect.js';
+import uneDescriptionValide from '../constructeurs/constructeurDescriptionService.js';
 
-const uneDescriptionValide = require('../constructeurs/constructeurDescriptionService');
-
-const {
+import {
   ErreurDonneesObligatoiresManquantes,
   ErreurServiceInexistant,
   ErreurNomServiceDejaExistant,
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurRisqueInconnu,
   ErreurStatutMesureManquant,
-} = require('../../src/erreurs');
-const Referentiel = require('../../src/referentiel');
+} from '../../src/erreurs.js';
 
-const AdaptateurPersistanceMemoire = require('../../src/adaptateurs/adaptateurPersistanceMemoire');
-const {
-  fabriqueAdaptateurUUID,
-} = require('../../src/adaptateurs/adaptateurUUID');
-const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
-
-const DepotDonneesAutorisations = require('../../src/depots/depotDonneesAutorisations');
-const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
-
-const Dossier = require('../../src/modeles/dossier');
-const Service = require('../../src/modeles/service');
-const MesureGenerale = require('../../src/modeles/mesureGenerale');
-const MesureSpecifique = require('../../src/modeles/mesureSpecifique');
-const RisqueGeneral = require('../../src/modeles/risqueGeneral');
-const RisqueSpecifique = require('../../src/modeles/risqueSpecifique');
-const RolesResponsabilites = require('../../src/modeles/rolesResponsabilites');
-
-const copie = require('../../src/utilitaires/copie');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
-const { unService } = require('../constructeurs/constructeurService');
-const {
-  unePersistanceMemoire,
-} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const {
-  unDepotDeDonneesServices,
-} = require('../constructeurs/constructeurDepotDonneesServices');
-const { unDossier } = require('../constructeurs/constructeurDossier');
-
-const {
+import * as Referentiel from '../../src/referentiel.js';
+import * as AdaptateurPersistanceMemoire from '../../src/adaptateurs/adaptateurPersistanceMemoire.js';
+import { fabriqueAdaptateurUUID } from '../../src/adaptateurs/adaptateurUUID.js';
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import * as DepotDonneesAutorisations from '../../src/depots/depotDonneesAutorisations.js';
+import * as DepotDonneesServices from '../../src/depots/depotDonneesServices.js';
+import Dossier from '../../src/modeles/dossier.js';
+import Service from '../../src/modeles/service.js';
+import MesureGenerale from '../../src/modeles/mesureGenerale.js';
+import MesureSpecifique from '../../src/modeles/mesureSpecifique.js';
+import RisqueGeneral from '../../src/modeles/risqueGeneral.js';
+import RisqueSpecifique from '../../src/modeles/risqueSpecifique.js';
+import RolesResponsabilites from '../../src/modeles/rolesResponsabilites.js';
+import copie from '../../src/utilitaires/copie.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import { unService } from '../constructeurs/constructeurService.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import { unDepotDeDonneesServices } from '../constructeurs/constructeurDepotDonneesServices.js';
+import { unDossier } from '../constructeurs/constructeurDossier.js';
+import {
   Rubriques,
   Permissions,
-} = require('../../src/modeles/autorisations/gestionDroits');
-const { fabriqueBusPourLesTests } = require('../bus/aides/busPourLesTests');
-const EvenementNouveauServiceCree = require('../../src/bus/evenementNouveauServiceCree');
-const EvenementMesureModifieeEnMasse = require('../../src/bus/evenementMesureModifieeEnMasse');
-const {
-  EvenementDescriptionServiceModifiee,
-} = require('../../src/bus/evenementDescriptionServiceModifiee');
-const Mesures = require('../../src/modeles/mesures');
-const EvenementDossierHomologationFinalise = require('../../src/bus/evenementDossierHomologationFinalise');
-const EvenementServiceSupprime = require('../../src/bus/evenementServiceSupprime');
-const fauxAdaptateurRechercheEntreprise = require('../mocks/adaptateurRechercheEntreprise');
-const Entite = require('../../src/modeles/entite');
-const Utilisateur = require('../../src/modeles/utilisateur');
-const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
-const { creeReferentielVide } = require('../../src/referentiel');
-const EvenementMesureServiceModifiee = require('../../src/bus/evenementMesureServiceModifiee');
-const EvenementMesureServiceSupprimee = require('../../src/bus/evenementMesureServiceSupprimee');
-const Risques = require('../../src/modeles/risques');
-const EvenementRisqueServiceModifie = require('../../src/bus/evenementRisqueServiceModifie');
+} from '../../src/modeles/autorisations/gestionDroits.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import EvenementNouveauServiceCree from '../../src/bus/evenementNouveauServiceCree.js';
+import EvenementMesureModifieeEnMasse from '../../src/bus/evenementMesureModifieeEnMasse.js';
+import { EvenementDescriptionServiceModifiee } from '../../src/bus/evenementDescriptionServiceModifiee.js';
+import Mesures from '../../src/modeles/mesures.js';
+import EvenementDossierHomologationFinalise from '../../src/bus/evenementDossierHomologationFinalise.js';
+import EvenementServiceSupprime from '../../src/bus/evenementServiceSupprime.js';
+import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
+import Entite from '../../src/modeles/entite.js';
+import Utilisateur from '../../src/modeles/utilisateur.js';
+import * as DepotDonneesUtilisateurs from '../../src/depots/depotDonneesUtilisateurs.js';
+import { creeReferentielVide } from '../../src/referentiel.js';
+import EvenementMesureServiceModifiee from '../../src/bus/evenementMesureServiceModifiee.js';
+import EvenementMesureServiceSupprimee from '../../src/bus/evenementMesureServiceSupprimee.js';
+import Risques from '../../src/modeles/risques.js';
+import EvenementRisqueServiceModifie from '../../src/bus/evenementRisqueServiceModifie.js';
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;

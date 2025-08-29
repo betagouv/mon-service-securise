@@ -1,8 +1,8 @@
-const expect = require('expect.js');
-const {
+import expect from 'expect.js';
+import {
   rechercheOrganisations,
   recupereDetailsOrganisation,
-} = require('../../src/adaptateurs/adaptateurRechercheEntrepriseAPI');
+} from '../../src/adaptateurs/adaptateurRechercheEntrepriseAPI.js';
 
 describe("L'adaptateur recherche entreprise qui utilise l'API Recherche Entreprise", () => {
   describe("sur demande du nom de l'établissement ou de l'entreprise", () => {

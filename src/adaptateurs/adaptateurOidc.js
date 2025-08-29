@@ -1,5 +1,4 @@
-import { Issuer } from 'openid-client';
-import { generators } from 'openid-client';
+import { Issuer, generators } from 'openid-client';
 import { oidc } from './adaptateurEnvironnement.js';
 
 const configurationOidc = oidc();
@@ -26,11 +25,7 @@ const genereDemandeAutorisation = async () => {
     state,
   });
 
-  return {
-    url,
-    nonce,
-    state,
-  };
+  return { url, nonce, state };
 };
 
 const genereDemandeDeconnexion = async (idToken) => {

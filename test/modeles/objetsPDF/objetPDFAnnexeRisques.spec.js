@@ -1,8 +1,7 @@
-const expect = require('expect.js');
-
-const Service = require('../../../src/modeles/service');
-const Referentiel = require('../../../src/referentiel');
-const VueAnnexePDFRisques = require('../../../src/modeles/objetsPDF/objetPDFAnnexeRisques');
+import expect from 'expect.js';
+import Service from '../../../src/modeles/service.js';
+import * as Referentiel from '../../../src/referentiel.js';
+import VueAnnexePDFRisques from '../../../src/modeles/objetsPDF/objetPDFAnnexeRisques.js';
 
 describe("L'objet PDF des descriptions des risques", () => {
   const referentiel = Referentiel.creeReferentiel({

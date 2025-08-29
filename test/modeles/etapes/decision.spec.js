@@ -1,11 +1,10 @@
-const expect = require('expect.js');
-
-const Decision = require('../../../src/modeles/etapes/decision');
-const {
+import expect from 'expect.js';
+import Decision from '../../../src/modeles/etapes/decision.js';
+import {
   ErreurDateHomologationInvalide,
   ErreurDureeValiditeInvalide,
-} = require('../../../src/erreurs');
-const Referentiel = require('../../../src/referentiel');
+} from '../../../src/erreurs.js';
+import * as Referentiel from '../../../src/referentiel.js';
 
 describe('Une étape « Décision »', () => {
   const referentiel = Referentiel.creeReferentielVide();

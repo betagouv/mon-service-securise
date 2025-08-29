@@ -1,18 +1,14 @@
-const expect = require('expect.js');
-const {
-  unePersistanceMemoire,
-} = require('../constructeurs/constructeurAdaptateurPersistanceMemoire');
-const { creeDepot } = require('../../src/depots/depotDonneesNotifications');
-const DepotDonneesServices = require('../../src/depots/depotDonneesServices');
-const fauxAdaptateurChiffrement = require('../mocks/adaptateurChiffrement');
-const { unService } = require('../constructeurs/constructeurService');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const {
-  uneAutorisation,
-} = require('../constructeurs/constructeurAutorisation');
-const { creeReferentielVide } = require('../../src/referentiel');
-const Service = require('../../src/modeles/service');
-const DepotDonneesUtilisateurs = require('../../src/depots/depotDonneesUtilisateurs');
+import expect from 'expect.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import { creeDepot } from '../../src/depots/depotDonneesNotifications.js';
+import * as DepotDonneesServices from '../../src/depots/depotDonneesServices.js';
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
+import { unService } from '../constructeurs/constructeurService.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import { creeReferentielVide } from '../../src/referentiel.js';
+import Service from '../../src/modeles/service.js';
+import * as DepotDonneesUtilisateurs from '../../src/depots/depotDonneesUtilisateurs.js';
 
 describe('Le dépôt de données des notifications', () => {
   let depotNotifications;

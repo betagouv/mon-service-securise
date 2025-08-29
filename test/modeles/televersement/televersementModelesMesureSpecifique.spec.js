@@ -1,6 +1,6 @@
-const expect = require('expect.js');
-const TeleversementModelesMesureSpecifique = require('../../../src/modeles/televersement/televersementModelesMesureSpecifique');
-const Referentiel = require('../../../src/referentiel');
+import expect from 'expect.js';
+import TeleversementModelesMesureSpecifique from '../../../src/modeles/televersement/televersementModelesMesureSpecifique.js';
+import * as Referentiel from '../../../src/referentiel.js';
 
 describe('Un téléversement de modèles de mesure spécifique', () => {
   let referentiel;

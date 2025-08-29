@@ -1,6 +1,6 @@
-const expect = require('expect.js');
-const { adaptateurJWT } = require('../../src/adaptateurs/adaptateurJWT');
-const { ErreurJWTManquant, ErreurJWTInvalide } = require('../../src/erreurs');
+import expect from 'expect.js';
+import { adaptateurJWT } from '../../src/adaptateurs/adaptateurJWT.js';
+import { ErreurJWTManquant, ErreurJWTInvalide } from '../../src/erreurs.js';
 
 describe("L'adaptateur JWT", () => {
   describe('sur demande de décodage des données', () => {

@@ -1,8 +1,6 @@
-const expect = require('expect.js');
-const EvenementRetourUtilisateurMesure = require('../../../src/modeles/journalMSS/evenementRetourUtilisateurMesure');
-const {
-  ErreurDonneeManquante,
-} = require('../../../src/modeles/journalMSS/erreurs');
+import expect from 'expect.js';
+import EvenementRetourUtilisateurMesure from '../../../src/modeles/journalMSS/evenementRetourUtilisateurMesure.js';
+import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 
 describe('Un événement de retour utilisateur sur une mesure', () => {
   const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };

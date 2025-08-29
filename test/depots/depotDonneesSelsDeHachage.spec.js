@@ -1,11 +1,12 @@
-const expect = require('expect.js');
-const { creeDepot } = require('../../src/depots/depotDonneesSelsDeHachage');
-const {
+import expect from 'expect.js';
+import { creeDepot } from '../../src/depots/depotDonneesSelsDeHachage.js';
+
+import {
   ErreurHashDeSelInvalide,
   ErreurSelManquant,
   ErreurVersionSelInvalide,
   ErreurValeurSelIncoherente,
-} = require('../../src/erreurs');
+} from '../../src/erreurs.js';
 
 describe('Le dépôt de sels de hachage', () => {
   describe('sur vérification de cohérence des sels', () => {

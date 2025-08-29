@@ -1,4 +1,4 @@
-const { unService } = require('./constructeurService');
+import { unService } from './constructeurService.js';
 
 class ConstructeurTacheDeService {
   constructor() {
@@ -56,4 +56,4 @@ class ConstructeurTacheDeService {
 
 const uneTacheDeService = () => new ConstructeurTacheDeService();
 
-module.exports = { uneTacheDeService };
+export { uneTacheDeService };

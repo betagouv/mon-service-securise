@@ -1,18 +1,14 @@
-const expect = require('expect.js');
-const CentreNotifications = require('../../src/notifications/centreNotifications');
-const Referentiel = require('../../src/referentiel');
-const { creeDepot } = require('../../src/depotDonnees');
-const {
+import expect from 'expect.js';
+import CentreNotifications from '../../src/notifications/centreNotifications.js';
+import * as Referentiel from '../../src/referentiel.js';
+import { creeDepot } from '../../src/depotDonnees.js';
+import {
   ErreurIdentifiantNouveauteInconnu,
   ErreurIdentifiantTacheInconnu,
-} = require('../../src/erreurs');
-const { unUtilisateur } = require('../constructeurs/constructeurUtilisateur');
-const {
-  fabriqueAdaptateurHorloge,
-} = require('../../src/adaptateurs/adaptateurHorloge');
-const {
-  uneTacheDeService,
-} = require('../constructeurs/constructeurTacheDeService');
+} from '../../src/erreurs.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import { uneTacheDeService } from '../constructeurs/constructeurTacheDeService.js';
+import { fabriqueAdaptateurHorloge } from '../../src/adaptateurs/adaptateurHorloge.js';
 
 describe('Le centre de notifications', () => {
   let referentiel;

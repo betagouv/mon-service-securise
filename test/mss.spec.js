@@ -1,7 +1,7 @@
-const expect = require('expect.js');
-const testeurMSS = require('./routes/testeurMSS');
-const { TYPES_REQUETES } = require('../src/http/configurationServeur');
-const { unUtilisateur } = require('./constructeurs/constructeurUtilisateur');
+import expect from 'expect.js';
+import testeurMSS from './routes/testeurMSS.js';
+import { TYPES_REQUETES } from '../src/http/configurationServeur.js';
+import { unUtilisateur } from './constructeurs/constructeurUtilisateur.js';
 
 describe('Le serveur MSS', () => {
   const testeur = testeurMSS();

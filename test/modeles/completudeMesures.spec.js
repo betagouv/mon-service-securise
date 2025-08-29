@@ -1,10 +1,8 @@
-const expect = require('expect.js');
-const { CompletudeMesures } = require('../../src/modeles/completudeMesures');
-const {
-  desStatistiques,
-} = require('../constructeurs/constructeurStatistiquesMesures');
-const Referentiel = require('../../src/referentiel');
-const MesuresSpecifiques = require('../../src/modeles/mesuresSpecifiques');
+import expect from 'expect.js';
+import { CompletudeMesures } from '../../src/modeles/completudeMesures.js';
+import { desStatistiques } from '../constructeurs/constructeurStatistiquesMesures.js';
+import * as Referentiel from '../../src/referentiel.js';
+import MesuresSpecifiques from '../../src/modeles/mesuresSpecifiques.js';
 
 describe('La complétude des mesures', () => {
   it('calcule le nombre total de mesures en additionnant générales et spécifiques', () => {

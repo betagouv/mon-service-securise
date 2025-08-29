@@ -1,7 +1,5 @@
-const expect = require('expect.js');
-const {
-  relieEntrepriseEtContactBrevo,
-} = require('../../../src/bus/abonnements/relieEntrepriseEtContactBrevo');
+import expect from 'expect.js';
+import { relieEntrepriseEtContactBrevo } from '../../../src/bus/abonnements/relieEntrepriseEtContactBrevo.js';
 
 describe("L'abonnement relie une entreprise et un contact dans Brevo", () => {
   it('délègue au CRM Brevo la création du lien entre utilisateur et entreprise', async () => {
