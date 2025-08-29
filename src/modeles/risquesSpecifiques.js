@@ -1,5 +1,5 @@
-const ListeRisques = require('./listeRisques');
-const RisqueSpecifique = require('./risqueSpecifique');
+import ListeRisques from './listeRisques.js';
+import RisqueSpecifique from './risqueSpecifique.js';
 
 class RisquesSpecifiques extends ListeRisques {
   constructor(donnees, referentiel) {
@@ -14,4 +14,4 @@ class RisquesSpecifiques extends ListeRisques {
   }
 }
 
-module.exports = RisquesSpecifiques;
+export default RisquesSpecifiques;

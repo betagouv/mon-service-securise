@@ -1,5 +1,5 @@
-const { EchecEnvoiMessage } = require('../erreurs');
-const SourceAuthentification = require('./sourceAuthentification');
+import { EchecEnvoiMessage } from '../erreurs.js';
+import SourceAuthentification from './sourceAuthentification.js';
 
 function fabriqueInscriptionUtilisateur(config = {}) {
   const { adaptateurMail, adaptateurTracking, depotDonnees } = config;
@@ -51,4 +51,4 @@ function fabriqueInscriptionUtilisateur(config = {}) {
   };
 }
 
-module.exports = { fabriqueInscriptionUtilisateur };
+export { fabriqueInscriptionUtilisateur };

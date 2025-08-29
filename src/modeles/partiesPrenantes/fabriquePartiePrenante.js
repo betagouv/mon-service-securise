@@ -1,9 +1,9 @@
-const DeveloppementFourniture = require('./developpementFourniture');
-const Hebergement = require('./hebergement');
-const MaintenanceService = require('./maintenanceService');
-const PartiePrenanteSpecifique = require('./partiePrenanteSpecifique');
-const SecuriteService = require('./securiteService');
-const { ErreurTypeInconnu } = require('../../erreurs');
+import DeveloppementFourniture from './developpementFourniture.js';
+import Hebergement from './hebergement.js';
+import MaintenanceService from './maintenanceService.js';
+import PartiePrenanteSpecifique from './partiePrenanteSpecifique.js';
+import SecuriteService from './securiteService.js';
+import { ErreurTypeInconnu } from '../../erreurs.js';
 
 const partiesPrenantesAutorises = [
   DeveloppementFourniture,
@@ -28,4 +28,6 @@ const fabriquePartiePrenante = {
   },
 };
 
-module.exports = fabriquePartiePrenante;
+export default fabriquePartiePrenante;
+
+export const { cree } = fabriquePartiePrenante;

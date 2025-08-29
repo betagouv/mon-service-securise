@@ -8,4 +8,4 @@ class EvenementServiceSupprime {
   }
 }
 
-module.exports = EvenementServiceSupprime;
+export default EvenementServiceSupprime;

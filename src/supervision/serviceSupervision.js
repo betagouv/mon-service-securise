@@ -44,4 +44,4 @@ class ServiceSupervision {
   }
 }
 
-module.exports = ServiceSupervision;
+export default ServiceSupervision;

@@ -1,8 +1,6 @@
-const { csrf } = require('lusca');
-const rateLimit = require('express-rate-limit');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('./fabriqueAdaptateurGestionErreur');
+import lusca from 'lusca';
+import rateLimit from 'express-rate-limit';
+import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
 
 const uneMinute = 60 * 1000;
 const parametresCommuns = (typeRequete) => ({
@@ -27,7 +25,7 @@ const parametresCommuns = (typeRequete) => ({
 
 const adaptateurProtection = {
   protectionCsrf: (pointsEntreesSansProtection) =>
-    csrf({ blocklist: pointsEntreesSansProtection }),
+    lusca.csrf({ blocklist: pointsEntreesSansProtection }),
 
   protectionLimiteTrafic: () => {
     const maxParFenetreParIp = process.env.NB_REQUETES_MAX_PAR_MINUTE ?? 0;
@@ -52,4 +50,4 @@ const adaptateurProtection = {
   },
 };
 
-module.exports = { adaptateurProtection };
+export { adaptateurProtection };

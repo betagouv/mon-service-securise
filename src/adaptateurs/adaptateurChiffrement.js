@@ -1,5 +1,5 @@
-const { createHash, randomBytes } = require('crypto');
-const bcrypt = require('bcrypt');
+import { createHash, randomBytes } from 'crypto';
+import bcrypt from 'bcrypt';
 
 const adaptateurChiffrement = ({ adaptateurEnvironnement }) => {
   const NOMBRE_DE_PASSES = 10;
@@ -44,6 +44,4 @@ const adaptateurChiffrement = ({ adaptateurEnvironnement }) => {
   };
 };
 
-module.exports = {
-  adaptateurChiffrement,
-};
+export { adaptateurChiffrement };

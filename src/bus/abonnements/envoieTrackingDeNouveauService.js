@@ -19,4 +19,4 @@ function envoieTrackingDeNouveauService({ adaptateurTracking, depotDonnees }) {
   };
 }
 
-module.exports = { envoieTrackingDeNouveauService };
+export { envoieTrackingDeNouveauService };

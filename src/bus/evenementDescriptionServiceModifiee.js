@@ -15,4 +15,4 @@ class EvenementDescriptionServiceModifiee {
   }
 }
 
-module.exports = { EvenementDescriptionServiceModifiee };
+export { EvenementDescriptionServiceModifiee };

@@ -1,12 +1,11 @@
-const {
+import {
   ErreurUtilisateurInexistant,
   ErreurServiceInexistant,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
-} = require('../erreurs');
-const {
-  VerificationsUtilisateurPeutMuterModele,
-} = require('./modelesMesureSpecifique/VerificationsUtilisateurPeutMuterModele');
+} from '../erreurs.js';
+
+import { VerificationsUtilisateurPeutMuterModele } from './modelesMesureSpecifique/VerificationsUtilisateurPeutMuterModele.js';
 
 const creeDepot = (config = {}) => {
   const {
@@ -319,4 +318,4 @@ const creeDepot = (config = {}) => {
   };
 };
 
-module.exports = { creeDepot };
+export { creeDepot };

@@ -1,14 +1,8 @@
-const express = require('express');
-const { estUrlLegalePourRedirection } = require('../../http/redirection');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('../../adaptateurs/fabriqueAdaptateurGestionErreur');
-const {
-  serviceApresAuthentification,
-} = require('../../utilisateur/serviceApresAuthentification');
-const {
-  executeurApresAuthentification,
-} = require('../../utilisateur/executeurApresAuthentification');
+import express from 'express';
+import { estUrlLegalePourRedirection } from '../../http/redirection.js';
+import { fabriqueAdaptateurGestionErreur } from '../../adaptateurs/fabriqueAdaptateurGestionErreur.js';
+import { serviceApresAuthentification } from '../../utilisateur/serviceApresAuthentification.js';
+import { executeurApresAuthentification } from '../../utilisateur/executeurApresAuthentification.js';
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
@@ -103,4 +97,4 @@ const routesNonConnecteOidc = ({
   return routes;
 };
 
-module.exports = routesNonConnecteOidc;
+export default routesNonConnecteOidc;

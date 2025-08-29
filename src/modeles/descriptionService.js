@@ -1,13 +1,13 @@
-const {
+import {
   ErreurStatutDeploiementInvalide,
   ErreurLocalisationDonneesInvalide,
-} = require('../erreurs');
-const DonneesSensiblesSpecifiques = require('./donneesSensiblesSpecifiques');
-const FonctionnalitesSpecifiques = require('./fonctionnalitesSpecifiques');
-const InformationsService = require('./informationsService');
-const PointsAcces = require('./pointsAcces');
-const Referentiel = require('../referentiel');
-const Entite = require('./entite');
+} from '../erreurs.js';
+import DonneesSensiblesSpecifiques from './donneesSensiblesSpecifiques.js';
+import FonctionnalitesSpecifiques from './fonctionnalitesSpecifiques.js';
+import InformationsService from './informationsService.js';
+import PointsAcces from './pointsAcces.js';
+import * as Referentiel from '../referentiel.js';
+import Entite from './entite.js';
 
 const tousNiveauxSecurite = ['niveau1', 'niveau2', 'niveau3'];
 
@@ -174,4 +174,4 @@ class DescriptionService extends InformationsService {
   }
 }
 
-module.exports = DescriptionService;
+export default DescriptionService;

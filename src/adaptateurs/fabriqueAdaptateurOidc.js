@@ -1,5 +1,5 @@
-const adaptateurOidc = require('./adaptateurOidc');
+import * as adaptateurOidc from './adaptateurOidc.js';
 
 const fabriqueAdaptateurOidc = () => adaptateurOidc;
 
-module.exports = { fabriqueAdaptateurOidc };
+export { fabriqueAdaptateurOidc };

@@ -1,4 +1,4 @@
-const { ErreurBusEvenements } = require('../erreurs');
+import { ErreurBusEvenements } from '../erreurs.js';
 
 class BusEvenements {
   constructor({ adaptateurGestionErreur }) {
@@ -28,4 +28,4 @@ class BusEvenements {
   }
 }
 
-module.exports = BusEvenements;
+export default BusEvenements;

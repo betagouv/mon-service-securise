@@ -11,4 +11,4 @@ class EvenementDossierHomologationFinalise {
   }
 }
 
-module.exports = EvenementDossierHomologationFinalise;
+export default EvenementDossierHomologationFinalise;

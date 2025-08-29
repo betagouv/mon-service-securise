@@ -1,4 +1,4 @@
-const SourceAuthentification = require('../modeles/sourceAuthentification');
+import SourceAuthentification from '../modeles/sourceAuthentification.js';
 
 const executeurApresAuthentification = async (
   ordre,
@@ -51,4 +51,4 @@ const executeurApresAuthentification = async (
       break;
   }
 };
-module.exports = { executeurApresAuthentification };
+export { executeurApresAuthentification };

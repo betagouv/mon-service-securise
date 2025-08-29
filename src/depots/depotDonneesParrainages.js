@@ -1,4 +1,4 @@
-const Parrainage = require('../modeles/parrainage');
+import Parrainage from '../modeles/parrainage.js';
 
 const creeDepot = (config = {}) => {
   const { adaptateurPersistance } = config;
@@ -28,4 +28,4 @@ const creeDepot = (config = {}) => {
     metsAJourParrainage,
   };
 };
-module.exports = { creeDepot };
+export { creeDepot };

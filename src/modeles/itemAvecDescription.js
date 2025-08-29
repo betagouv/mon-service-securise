@@ -1,4 +1,4 @@
-const InformationsService = require('./informationsService');
+import InformationsService from './informationsService.js';
 
 class ItemAvecDescription extends InformationsService {
   constructor(donneesItemAvecDescription) {
@@ -11,4 +11,4 @@ class ItemAvecDescription extends InformationsService {
   }
 }
 
-module.exports = ItemAvecDescription;
+export default ItemAvecDescription;
