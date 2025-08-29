@@ -1,56 +1,39 @@
 /* eslint-disable no-console */
-const axios = require('axios');
-const { AxiosError } = require('axios');
-const { inspect } = require('util');
-const Knex = require('knex');
-const { AdaptateurProfilAnssi } = require('@lab-anssi/lib');
-const configKnex = require('../knexfile');
-const donneesReferentiel = require('../donneesReferentiel');
-const DepotDonnees = require('../src/depotDonnees');
-const Referentiel = require('../src/referentiel');
-const { fabriqueAdaptateurJWT } = require('../src/adaptateurs/adaptateurJWT');
-const AdaptateurPostgres = require('../src/adaptateurs/adaptateurPostgres');
-const { fabriqueAdaptateurUUID } = require('../src/adaptateurs/adaptateurUUID');
-const fabriqueAdaptateurJournalMSS = require('../src/adaptateurs/fabriqueAdaptateurJournalMSS');
-const EvenementNouvelleHomologationCreee = require('../src/modeles/journalMSS/evenementNouvelleHomologationCreee');
-const EvenementNouvelUtilisateurInscrit = require('../src/modeles/journalMSS/evenementNouvelUtilisateurInscrit');
-const { avecPMapPourChaqueElement } = require('../src/utilitaires/pMap');
-const FabriqueAutorisation = require('../src/modeles/autorisations/fabriqueAutorisation');
-const {
-  EvenementCollaboratifServiceModifie,
-} = require('../src/modeles/journalMSS/evenementCollaboratifServiceModifie');
-const {
-  fabriqueAdaptateurChiffrement,
-} = require('../src/adaptateurs/fabriqueAdaptateurChiffrement');
-const adaptateurRechercheEntrepriseAPI = require('../src/adaptateurs/adaptateurRechercheEntrepriseAPI');
-const adaptateurMail = require('../src/adaptateurs/adaptateurMailSendinblue');
-const CrmBrevo = require('../src/crm/crmBrevo');
-const {
-  verifieCoherenceDesDroits,
-} = require('../src/modeles/autorisations/gestionDroits');
-const BusEvenements = require('../src/bus/busEvenements');
-const {
-  fabriqueAdaptateurGestionErreur,
-} = require('../src/adaptateurs/fabriqueAdaptateurGestionErreur');
-const { cableTousLesAbonnes } = require('../src/bus/cablage');
-const {
-  fabriqueAdaptateurHorloge,
-} = require('../src/adaptateurs/adaptateurHorloge');
-const fabriqueAdaptateurTracking = require('../src/adaptateurs/fabriqueAdaptateurTracking');
-const {
-  consigneCompletudeDansJournal,
-} = require('../src/bus/abonnements/consigneCompletudeDansJournal');
-const Autorisation = require('../src/modeles/autorisations/autorisation');
-const {
-  consigneRisquesDansJournal,
-} = require('../src/bus/abonnements/consigneRisquesDansJournal');
-const fabriqueAdaptateurSupervision = require('../src/adaptateurs/fabriqueAdaptateurSupervision');
-const ServiceSupervision = require('../src/supervision/serviceSupervision');
-const adaptateurEnvironnement = require('../src/adaptateurs/adaptateurEnvironnement');
-const {
-  adaptateurChiffrementChaCha20,
-} = require('../src/adaptateurs/adaptateurChiffrementChaCha20');
-const EvenementCguAcceptees = require('../src/modeles/journalMSS/evenementCguAcceptees');
+import axios from 'axios';
+import { inspect } from 'util';
+import Knex from 'knex';
+import { AdaptateurProfilAnssi } from '@lab-anssi/lib';
+import configKnex from '../knexfile.js';
+import donneesReferentiel from '../donneesReferentiel.js';
+import * as DepotDonnees from '../src/depotDonnees.js';
+import * as Referentiel from '../src/referentiel.js';
+import { fabriqueAdaptateurJWT } from '../src/adaptateurs/adaptateurJWT.js';
+import * as AdaptateurPostgres from '../src/adaptateurs/adaptateurPostgres.js';
+import { fabriqueAdaptateurUUID } from '../src/adaptateurs/adaptateurUUID.js';
+import fabriqueAdaptateurJournalMSS from '../src/adaptateurs/fabriqueAdaptateurJournalMSS.js';
+import EvenementNouvelleHomologationCreee from '../src/modeles/journalMSS/evenementNouvelleHomologationCreee.js';
+import EvenementNouvelUtilisateurInscrit from '../src/modeles/journalMSS/evenementNouvelUtilisateurInscrit.js';
+import { avecPMapPourChaqueElement } from '../src/utilitaires/pMap.js';
+import * as FabriqueAutorisation from '../src/modeles/autorisations/fabriqueAutorisation.js';
+import { EvenementCollaboratifServiceModifie } from '../src/modeles/journalMSS/evenementCollaboratifServiceModifie.js';
+import { fabriqueAdaptateurChiffrement } from '../src/adaptateurs/fabriqueAdaptateurChiffrement.js';
+import * as adaptateurRechercheEntrepriseAPI from '../src/adaptateurs/adaptateurRechercheEntrepriseAPI.js';
+import * as adaptateurMail from '../src/adaptateurs/adaptateurMailSendinblue.js';
+import CrmBrevo from '../src/crm/crmBrevo.js';
+import { verifieCoherenceDesDroits } from '../src/modeles/autorisations/gestionDroits.js';
+import BusEvenements from '../src/bus/busEvenements.js';
+import { fabriqueAdaptateurGestionErreur } from '../src/adaptateurs/fabriqueAdaptateurGestionErreur.js';
+import { cableTousLesAbonnes } from '../src/bus/cablage.js';
+import { fabriqueAdaptateurHorloge } from '../src/adaptateurs/adaptateurHorloge.js';
+import fabriqueAdaptateurTracking from '../src/adaptateurs/fabriqueAdaptateurTracking.js';
+import { consigneCompletudeDansJournal } from '../src/bus/abonnements/consigneCompletudeDansJournal.js';
+import { Autorisation } from '../src/modeles/autorisations/autorisation.js';
+import { consigneRisquesDansJournal } from '../src/bus/abonnements/consigneRisquesDansJournal.js';
+import fabriqueAdaptateurSupervision from '../src/adaptateurs/fabriqueAdaptateurSupervision.js';
+import ServiceSupervision from '../src/supervision/serviceSupervision.js';
+import * as adaptateurEnvironnement from '../src/adaptateurs/adaptateurEnvironnement.js';
+import { adaptateurChiffrementChaCha20 } from '../src/adaptateurs/adaptateurChiffrementChaCha20.js';
+import EvenementCguAcceptees from '../src/modeles/journalMSS/evenementCguAcceptees.js';
 
 const log = {
   jaune: (txt) => process.stdout.write(`\x1b[33m${txt}\x1b[0m`),
@@ -64,6 +47,7 @@ class ConsoleAdministration {
     this.adaptateurPersistance = AdaptateurPostgres.nouvelAdaptateur({
       env: environnementNode,
     });
+
     this.referentiel = Referentiel.creeReferentiel(donneesReferentiel);
 
     const adaptateurGestionErreur = fabriqueAdaptateurGestionErreur();
@@ -88,6 +72,7 @@ class ConsoleAdministration {
     const adaptateurTracking = fabriqueAdaptateurTracking();
     const adaptateurHorloge = fabriqueAdaptateurHorloge();
     this.adaptateurSupervision = fabriqueAdaptateurSupervision();
+
     cableTousLesAbonnes(busEvenements, {
       adaptateurHorloge,
       adaptateurTracking,
@@ -367,7 +352,7 @@ class ConsoleAdministration {
         await fonctionRattrapage(item);
       } catch (e) {
         let raisonErreur;
-        if (e instanceof AxiosError) {
+        if (e instanceof axios.AxiosError) {
           raisonErreur = `[${e?.response?.status}]: ${e?.response?.data?.message}`;
         } else {
           raisonErreur = e.toString();
@@ -910,5 +895,5 @@ class ConsoleAdministration {
   }
 }
 
-module.exports = ConsoleAdministration;
+export default ConsoleAdministration;
 /* eslint-enable no-console */
