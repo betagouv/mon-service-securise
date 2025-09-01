@@ -5,9 +5,8 @@
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": false,
+    "strict": true,
     "skipLibCheck": true,
-    "noImplicitAny": false,
     "outDir": "dist",
     "allowJs": true,
     "types": ["vitest/globals"]

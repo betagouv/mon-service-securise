@@ -1,5 +1,5 @@
 import Utilisateur from '../../src/modeles/utilisateur.js';
-import { fabriqueAnnuaire } from '../../src/annuaire/serviceAnnuaire';
+import { fabriqueAnnuaire } from '../../src/annuaire/serviceAnnuaire.js';
 
 describe("Le service d'annuaire", () => {
   describe('sur demande de contributeurs', () => {
