@@ -54,4 +54,7 @@ export default defineConfig({
     'process.env.NODE_ENV': "'production'",
   },
   customLogger: loggerPersonnalise,
+  css: {
+    preprocessorOptions: { scss: { silenceDeprecations: ['legacy-js-api'] } },
+  },
 });
