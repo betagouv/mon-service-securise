@@ -253,10 +253,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
     });
 
-    afterEach(() => {
-      vi.restoreAllMocks();
-    });
-
     it("vérifie que l'utilisateur a accepté les CGU", async () => {
       await testeur
         .middleware()
