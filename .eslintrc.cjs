@@ -58,7 +58,7 @@ module.exports = {
     {
       // Lorsque l'on importe des fichiers '.ts' depuis du '.js',
       // `eslint` est confus et demande d'ajouter une extension `.ts` ce qui empêche l'import du code généré.
-      // On enlève cette règle, car on build en `commonjs`, donc au runtime, les fichiers sont présents en `.js`
+      // On enlève cette règle, car on build donc au runtime, les fichiers sont présents en `.js`
       // https://www.typescriptlang.org/docs/handbook/modules/theory.html
       files: ['src/**/*.js', '*.js'],
       rules: { 'import/extensions': ['off'] },
