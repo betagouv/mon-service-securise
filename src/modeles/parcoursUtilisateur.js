@@ -1,4 +1,4 @@
-import Base from './base.js';
+import Base from './base.ts';
 import * as Referentiel from '../referentiel.js';
 import EtatVisiteGuidee from './etatVisiteGuidee.js';
 import { fabriqueAdaptateurHorloge } from '../adaptateurs/adaptateurHorloge.js';
