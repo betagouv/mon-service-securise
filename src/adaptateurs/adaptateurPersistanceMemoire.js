@@ -97,6 +97,7 @@ const nouvelAdaptateur = (
       );
       return {
         ...unService,
+        version: 'v1',
         utilisateurs: autorisationsDuService.map((a) =>
           donnees.utilisateurs.find((u) => u.id === a.idUtilisateur)
         ),
