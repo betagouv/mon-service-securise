@@ -6,8 +6,9 @@
   - [ ] Un bouton permet d'ouvrir cette page, il est derrière un feature flag
     - /service/v2/creation
 - [-] La route de création de brouillon peut créer un brouillon de service
-  - [ ] Créer en RAM un brouillon avec un nom de service + id
+  - [-] Créer en RAM un brouillon avec un nom de service + id
   - [ ] Persister le brouillon
+  - [ ] Le dépot de Brouillon est une classe TS ?
   - [ ] faire des ajouts/modifications sur les champs du brouillon
   - [ ] le brouillon se transforme en une descriptionV2 à la création du service
 

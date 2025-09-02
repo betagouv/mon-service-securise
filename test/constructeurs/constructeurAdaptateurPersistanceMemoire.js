@@ -12,6 +12,7 @@ class ConstructeurAdaptateurPersistanceMemoire {
     this.activitesMesure = [];
     this.modelesMesureSpecifique = [];
     this.associationModelesMesureSpecifiqueServices = [];
+    this.brouillonsServices = [];
     this.adaptateurChiffrement = adaptateurChiffrement;
   }
 
@@ -100,6 +101,7 @@ class ConstructeurAdaptateurPersistanceMemoire {
       modelesMesureSpecifique: this.modelesMesureSpecifique,
       associationModelesMesureSpecifiqueServices:
         this.associationModelesMesureSpecifiqueServices,
+      brouillonServices: this.brouillonsServices,
     });
   }
 }

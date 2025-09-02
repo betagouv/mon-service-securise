@@ -19,6 +19,7 @@ import * as depotDonneesTeleversementModelesMesureSpecifique from './depots/depo
 import * as depotDonneesModelesMesureSpecifique from './depots/depotDonneesModelesMesureSpecifique.js';
 import { fabriqueAdaptateurChiffrement } from './adaptateurs/fabriqueAdaptateurChiffrement.js';
 import { fabriqueAdaptateurProfilAnssi } from './adaptateurs/fabriqueAdaptateurProfilAnssi.js';
+import * as depotDonneesBrouillonService from './depots/depotDonneesBrouillonService.js';
 
 const creeDepot = (config = {}) => {
   const {
@@ -133,6 +134,12 @@ const creeDepot = (config = {}) => {
       depotModelesMesureSpecifique,
       busEvenements,
     });
+
+  const depotBrouillonsService = depotDonneesBrouillonService.creeDepot({
+    adaptateurChiffrement,
+    adaptateurPersistance,
+    adaptateurUUID,
+  });
 
   const {
     ajouteDescriptionService,
@@ -271,6 +278,8 @@ const creeDepot = (config = {}) => {
     supprimeModeleMesureSpecifiqueEtMesuresAssociees,
   } = depotModelesMesureSpecifique;
 
+  const { nouveauBrouillonService } = depotBrouillonsService;
+
   return {
     accesAutorise,
     accesAutoriseAUneListeDeService,
@@ -328,6 +337,7 @@ const creeDepot = (config = {}) => {
     metsAJourService,
     nbRestantModelesMesureSpecifiquePourUtilisateur,
     nombreServices,
+    nouveauBrouillonService,
     nouveauService,
     nouveauTeleversementServices,
     nouveauTeleversementModelesMesureSpecifique,

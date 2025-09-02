@@ -3,13 +3,11 @@ import * as DepotDonneesTeleversementModelesMesureSpecifique from '../../src/dep
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import * as DepotDonneesModelesMesureSpecifique from '../../src/depotDonnees.js';
 import { fabriqueAdaptateurUUID } from '../../src/adaptateurs/adaptateurUUID.js';
-
 import {
   ErreurUtilisateurInexistant,
   ErreurTeleversementInexistant,
   ErreurTeleversementInvalide,
 } from '../../src/erreurs.js';
-
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
 import * as Referentiel from '../../src/referentiel.js';
 import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
