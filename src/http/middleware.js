@@ -34,7 +34,7 @@ const middleware = (configuration = {}) => {
     reponse.locals.nonce = nonce;
 
     const defaultCsp = "default-src 'self'";
-    const connectCsp = `connect-src 'self' https://sentry.incubateur.net ${CSP_BIBLIOTHEQUES.matomo.connect}`;
+    const connectCsp = `connect-src 'self' https://sentry.incubateur.net ${CSP_BIBLIOTHEQUES.matomo.connect} ${CSP_BIBLIOTHEQUES.viteHotReload}`;
     const imgCsp = `img-src 'self' ${CSP_BIBLIOTHEQUES.crisp.image} ${CSP_BIBLIOTHEQUES['lab-anssi-ui-kit'].img}`;
     const mediaCsp = `media-src 'self' ${CSP_BIBLIOTHEQUES.monservicesecurise.media}`;
 

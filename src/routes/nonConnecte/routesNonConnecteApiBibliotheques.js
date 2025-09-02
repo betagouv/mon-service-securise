@@ -22,6 +22,9 @@ const CSP_BIBLIOTHEQUES = {
   'lab-anssi-ui-kit': {
     img: 'https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com',
   },
+  viteHotReload: process.env.SVELTE_DEV_LOCAL_AVEC_HOT_RELOAD
+    ? 'ws://localhost:3001'
+    : '',
 };
 
 const routesNonConnecteApiBibliotheques = () => {
