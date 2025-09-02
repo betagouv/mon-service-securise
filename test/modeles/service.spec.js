@@ -34,9 +34,7 @@ describe('Un service', () => {
   });
 
   it('connaît sa version', () => {
-    const serviceV1 = new Service({
-      version: 'v1',
-    });
+    const serviceV1 = new Service({ versionService: 'v1' });
 
     expect(serviceV1.version()).to.be('v1');
   });

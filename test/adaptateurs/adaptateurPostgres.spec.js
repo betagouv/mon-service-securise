@@ -143,7 +143,7 @@ describe("L'adaptateur persistance Postgres", () => {
 
       const services = await persistance.servicesComplets({ idService });
 
-      expect(services[0].version).to.be('v1');
+      expect(services[0].versionService).to.be('v1');
     });
   });
 
