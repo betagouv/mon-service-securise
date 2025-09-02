@@ -203,7 +203,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
 
     return requete.rows.map((s) => ({
       ...s,
-      version: s.version_service,
+      versionService: s.version_service,
       modelesDisponiblesDeMesureSpecifique:
         s.modelesDisponiblesDeMesureSpecifique.map(
           // eslint-disable-next-line camelcase

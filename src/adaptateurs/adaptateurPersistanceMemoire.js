@@ -35,7 +35,7 @@ const nouvelAdaptateur = (
       donnees: donneesService,
       nomServiceHash,
       siretHash,
-      version: versionService,
+      versionService,
     });
   };
 

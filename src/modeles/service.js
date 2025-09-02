@@ -30,7 +30,7 @@ class Service {
   ) {
     const {
       id = '',
-      version,
+      versionService,
       contributeurs = [],
       descriptionService = {},
       dossiers = [],
@@ -44,7 +44,7 @@ class Service {
     } = donnees;
 
     this.id = id;
-    this.versionService = version;
+    this.versionService = versionService;
     this.prochainIdNumeriqueDeRisqueSpecifique =
       prochainIdNumeriqueDeRisqueSpecifique;
     this.contributeurs = contributeurs.map((c) => new Contributeur(c));
