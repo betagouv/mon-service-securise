@@ -2,13 +2,18 @@
 
 ## TODO
 
-- [-] Une page permet de créer un service avec description v2
-  - /service/v2/creation
-- [ ] La route de création de service peut créer un service avec une description v2
-- [ ] Un bouton permet d'ouvrir cette page, il est derrière un feature flag
+- [-] Une page permet de créer un brouillon de service v2
+  - [ ] Un bouton permet d'ouvrir cette page, il est derrière un feature flag
+    - /service/v2/creation
+- [-] La route de création de brouillon peut créer un brouillon de service
+  - [ ] Créer en RAM un brouillon avec un nom de service + id
+  - [ ] Persister le brouillon
+  - [ ] faire des ajouts/modifications sur les champs du brouillon
+  - [ ] le brouillon se transforme en une descriptionV2 à la création du service
 
 ## TODO plus tard
 
+- Lister les brouillons avec les services sur le TDB
 - Metabase : au moment du switch, on imagine un nouvel event `SERVICE_A_ETE_MIGRE` qui dit `versionCible: "v2"`
 - Description service et description service v2 doivent implémenter une interface commune
   - technique : pour sérialiser

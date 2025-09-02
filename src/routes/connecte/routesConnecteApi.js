@@ -39,6 +39,7 @@ import routesConnecteApiNotifications from './routesConnecteApiNotifications.js'
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 import DescriptionService from '../../modeles/descriptionService.js';
 import routesConnecteApiTeleversement from './routesConnecteApiTeleversement.js';
+import routesConnecteApiBrouillonService from './routesConnecteApiBrouillonService.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -327,6 +328,8 @@ const routesConnecteApi = ({
       adaptateurJournal,
     })
   );
+
+  routes.use('/brouillon-service', routesConnecteApiBrouillonService({}));
 
   routes.use(
     '/visiteGuidee',
