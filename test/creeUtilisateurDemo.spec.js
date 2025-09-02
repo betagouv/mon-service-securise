@@ -16,7 +16,7 @@ describe("Le script de création d'un utilisateur de Démo", () => {
 
     try {
       const sortie = execSync(
-        `${variablesEnvironnement} node creeUtilisateurDemo.js`
+        `${variablesEnvironnement} node --import tsx creeUtilisateurDemo.js`
       );
 
       expect(sortie.toString()).to.be('Utilisateur de démonstration créé !\n');

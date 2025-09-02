@@ -7,7 +7,7 @@ class ConstructeurService {
   constructor(referentiel) {
     this.donnees = {
       id: '',
-      versionService: 'versionParDefaut',
+      versionService: 'v1',
       descriptionService: uneDescriptionValide(referentiel).donnees,
       contributeurs: [],
       suggestionsActions: [],

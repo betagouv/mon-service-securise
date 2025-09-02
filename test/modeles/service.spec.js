@@ -18,6 +18,7 @@ import { unUtilisateur } from '../constructeurs/constructeurUtilisateur';
 import Mesures from '../../src/modeles/mesures';
 import MesureSpecifique from '../../src/modeles/mesureSpecifique';
 import { Contributeur } from '../../src/modeles/contributeur';
+import { DescriptionServiceV2 } from '../../src/modeles/descriptionServiceV2.js';
 
 const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER } = Rubriques;
 const { LECTURE } = Permissions;
@@ -1238,5 +1239,13 @@ describe('Un service', () => {
     const mesureSpecifique = service.mesuresSpecifiques().item(0);
     expect(mesureSpecifique.idModele).to.be('MOD-1');
     expect(mesureSpecifique.description).to.be('Mon modèle de mesure');
+  });
+
+  describe('concernant un service v2', () => {
+    it('a une description v2', () => {
+      const service = new Service({ id: '123', versionService: 'v2' });
+
+      expect(service.descriptionService).to.be.an(DescriptionServiceV2);
+    });
   });
 });
