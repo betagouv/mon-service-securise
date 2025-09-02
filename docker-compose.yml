@@ -31,10 +31,10 @@ services:
     <<: *configuration-base
     tty: true
     command: bash -c "
-      npx knex migrate:latest
-      && npx concurrently -n \"SERVEUR,FRONT SVELTE\" -c \"blue.bold,magenta.underline\"
-      \"npm run dev:back\"
-      \"npm run dev:front\"
+      npx knex migrate:latest &&
+      npx concurrently -n 'SERVEUR,FRONT SVELTE' -c 'blue.bold,magenta.underline'
+      'npm run dev:back'
+      'npm run dev:front'
       "
     environment:
       - NODE_ENV=development
