@@ -30,6 +30,7 @@ class Service {
   ) {
     const {
       id = '',
+      version,
       contributeurs = [],
       descriptionService = {},
       dossiers = [],
@@ -43,6 +44,7 @@ class Service {
     } = donnees;
 
     this.id = id;
+    this.versionService = version;
     this.prochainIdNumeriqueDeRisqueSpecifique =
       prochainIdNumeriqueDeRisqueSpecifique;
     this.contributeurs = contributeurs.map((c) => new Contributeur(c));
@@ -75,6 +77,10 @@ class Service {
     );
 
     this.referentiel = referentiel;
+  }
+
+  version() {
+    return this.versionService;
   }
 
   autoriteHomologation() {
