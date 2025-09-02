@@ -33,6 +33,14 @@ describe('Un service', () => {
     expect(service.nomService()).to.equal('Super Service');
   });
 
+  it('connaît sa version', () => {
+    const serviceV1 = new Service({
+      version: 'v1',
+    });
+
+    expect(serviceV1.version()).to.be('v1');
+  });
+
   it('connaît ses contributrices et contributeurs', () => {
     const service = unService()
       .avecId('123')
