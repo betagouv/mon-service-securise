@@ -14,6 +14,7 @@ import { Autorisation } from './autorisations/autorisation.js';
 import SuggestionAction from './suggestionAction.js';
 import { dateEnIso } from '../utilitaires/date.js';
 import { Contributeur } from './contributeur.js';
+import { DescriptionServiceV2 } from './descriptionServiceV2.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -48,10 +49,10 @@ class Service {
     this.prochainIdNumeriqueDeRisqueSpecifique =
       prochainIdNumeriqueDeRisqueSpecifique;
     this.contributeurs = contributeurs.map((c) => new Contributeur(c));
-    this.descriptionService = new DescriptionService(
-      descriptionService,
-      referentiel
-    );
+    this.descriptionService =
+      versionService === 'v2'
+        ? new DescriptionServiceV2(descriptionService)
+        : new DescriptionService(descriptionService, referentiel);
     this.dossiers = new Dossiers({ dossiers }, referentiel);
 
     let { mesuresGenerales = [] } = donnees;
