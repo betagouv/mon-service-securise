@@ -2,7 +2,8 @@
 
 ## TODO
 
-- [ ] Un nouveau service est persité en `v1`
+- [ ] C'est MSS qui met explicitement v1, pas Postgres
+- [ ] L'attribut s'appelle `versionService` et pas `version`
 - [ ] Côté Metabase : un LÉGO des versions de service.
   - Ce légo n'existe pas encore
   - L'absence de version veut dire `v1`
@@ -11,6 +12,7 @@
 
 ## DONE
 
+- [x] Un nouveau service est persité en `v1`
 - [x] La version d'un service est lue depuis la persistance
 - [x] Un service connaît sa version
 - [x] Une colonne dédiée `version_service` dans la table `services`

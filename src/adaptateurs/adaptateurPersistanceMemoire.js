@@ -27,13 +27,15 @@ const nouvelAdaptateur = (
     id,
     donneesService,
     nomServiceHash,
-    siretHash
+    siretHash,
+    versionService
   ) => {
     donnees.services.push({
       id,
       donnees: donneesService,
       nomServiceHash,
       siretHash,
+      version: versionService,
     });
   };
 
@@ -97,7 +99,6 @@ const nouvelAdaptateur = (
       );
       return {
         ...unService,
-        version: 'v1',
         utilisateurs: autorisationsDuService.map((a) =>
           donnees.utilisateurs.find((u) => u.id === a.idUtilisateur)
         ),
@@ -148,11 +149,23 @@ const nouvelAdaptateur = (
     else Object.assign(dejaConnue, { ...donneesAutorisation });
   };
 
-  const sauvegardeService = (id, donneesService, nomServiceHash, siretHash) => {
+  const sauvegardeService = (
+    id,
+    donneesService,
+    nomServiceHash,
+    siretHash,
+    versionService
+  ) => {
     const dejaConnu = donnees.services.find((s) => s.id === id) !== undefined;
     return dejaConnu
       ? metsAJourService(id, donneesService, nomServiceHash, siretHash)
-      : ajouteService(id, donneesService, nomServiceHash, siretHash);
+      : ajouteService(
+          id,
+          donneesService,
+          nomServiceHash,
+          siretHash,
+          versionService
+        );
   };
 
   const supprimeService = (...params) =>

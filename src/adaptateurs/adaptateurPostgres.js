@@ -74,12 +74,19 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
   const supprimeEnregistrement = (nomTable, id) =>
     knex(nomTable).where({ id }).del();
 
-  const ajouteService = async (id, donnees, nomServiceHash, siretHash) =>
+  const ajouteService = async (
+    id,
+    donnees,
+    nomServiceHash,
+    siretHash,
+    versionService
+  ) =>
     knex('services').insert({
       id,
       donnees,
       nom_service_hash: nomServiceHash,
       siret_hash: siretHash,
+      version_service: versionService,
     });
 
   const ajouteUtilisateur = (id, donnees, emailHash) =>
@@ -318,7 +325,13 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       .whereRaw("(donnees->>'estProprietaire')::boolean=true")
       .then(([{ count }]) => parseInt(count, 10));
 
-  const sauvegardeService = (id, donneesService, nomServiceHash, siretHash) => {
+  const sauvegardeService = (
+    id,
+    donneesService,
+    nomServiceHash,
+    siretHash,
+    versionService
+  ) => {
     const testExistence = knex('services')
       .where('id', id)
       .select({ id: 'id' })
@@ -328,7 +341,13 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     return testExistence.then((dejaConnu) =>
       dejaConnu
         ? metsAJourService(id, donneesService, nomServiceHash, siretHash)
-        : ajouteService(id, donneesService, nomServiceHash, siretHash)
+        : ajouteService(
+            id,
+            donneesService,
+            nomServiceHash,
+            siretHash,
+            versionService
+          )
     );
   };
 

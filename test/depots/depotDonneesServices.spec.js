@@ -896,6 +896,28 @@ describe('Le dépôt de données des services', () => {
       });
       expect(donnees.siretHash).to.be('unSIRET-haché256');
     });
+    /**/
+    it('stocke la version du service sans la chiffrer', async () => {
+      let chiffrementFait;
+      adaptateurChiffrement.chiffre = async (donneesAChiffrer) => {
+        expect(donneesAChiffrer.version).to.be(undefined);
+        chiffrementFait = true;
+        return { ...donneesAChiffrer, chiffre: true };
+      };
+
+      const idNouveau = await depot.nouveauService('123', {
+        version: 'v4',
+        descriptionService: uneDescriptionValide(referentiel)
+          .construis()
+          .donneesSerialisees(),
+      });
+
+      const [donnees] = await adaptateurPersistance.servicesComplets({
+        idService: idNouveau,
+      });
+      expect(donnees.version).to.be('v4');
+      expect(chiffrementFait).to.be(true);
+    });
 
     it("déclare un accès en écriture entre l'utilisateur et le service", async () => {
       const depotAutorisations = DepotDonneesAutorisations.creeDepot({
