@@ -1,4 +1,12 @@
 extends ../mssConnecte
 
+block title
+  title Ajouter un service | MonServiceSécurisé
+
+block append scripts
+  +composantSvelte('creationV2.js')
+  script(type = 'module', src = '/statique/creationV2.mjs')
+
+
 block main
-  h1 Création service v2
+  #creation-v2
