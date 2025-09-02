@@ -57,4 +57,10 @@ export default defineConfig({
   css: {
     preprocessorOptions: { scss: { silenceDeprecations: ['legacy-js-api'] } },
   },
+  server: {
+    port: 3001,
+    cors: {
+      origin: `http://localhost:${process.env.PORT_MSS}`,
+    },
+  },
 });
