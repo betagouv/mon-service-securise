@@ -6,6 +6,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "outDir": "dist",
     "allowJs": true,

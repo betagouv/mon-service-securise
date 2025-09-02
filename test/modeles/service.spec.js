@@ -1242,10 +1242,15 @@ describe('Un service', () => {
   });
 
   describe('concernant un service v2', () => {
-    it('a une description v2', () => {
-      const service = new Service({ id: '123', versionService: 'v2' });
+    it('a une description v2 avec un nom', () => {
+      const service = new Service({
+        id: '123',
+        versionService: 'v2',
+        descriptionService: { nomService: 'Bibliothèque' },
+      });
 
       expect(service.descriptionService).to.be.an(DescriptionServiceV2);
+      expect(service.nomService()).to.be('Bibliothèque');
     });
   });
 });
