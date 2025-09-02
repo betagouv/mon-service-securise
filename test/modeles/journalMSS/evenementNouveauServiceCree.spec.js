@@ -7,7 +7,7 @@ describe('Un événement de nouveau service créé', () => {
 
   it("chiffre l'identifiant du service qui lui est donné", () => {
     const evenement = new EvenementNouveauServiceCree(
-      { idService: 'abc', idUtilisateur: 'def' },
+      { idService: 'abc', idUtilisateur: 'def', versionService: 'v1' },
       { adaptateurChiffrement: hacheEnMajuscules }
     );
 
@@ -16,7 +16,7 @@ describe('Un événement de nouveau service créé', () => {
 
   it("chiffre l'identifiant utilisateur qui lui est donné", () => {
     const evenement = new EvenementNouveauServiceCree(
-      { idService: 'abc', idUtilisateur: 'def' },
+      { idService: 'abc', idUtilisateur: 'def', versionService: 'v1' },
       { adaptateurChiffrement: hacheEnMajuscules }
     );
 
@@ -25,43 +25,37 @@ describe('Un événement de nouveau service créé', () => {
 
   it('sait se convertir en JSON', () => {
     const evenement = new EvenementNouveauServiceCree(
-      { idService: 'abc', idUtilisateur: 'def' },
+      { idService: 'abc', idUtilisateur: 'def', versionService: 'v1' },
       { date: '17/11/2022', adaptateurChiffrement: hacheEnMajuscules }
     );
 
     expect(evenement.toJSON()).to.eql({
       type: 'NOUVEAU_SERVICE_CREE',
-      donnees: { idService: 'ABC', idUtilisateur: 'DEF' },
+      donnees: { idService: 'ABC', idUtilisateur: 'DEF', versionService: 'v1' },
       date: '17/11/2022',
     });
   });
 
-  it("exige que l'identifiant utilisateur associé au service soit renseigné", () => {
-    try {
-      new EvenementNouveauServiceCree(
-        { idService: 'ABC' },
-        { adaptateurChiffrement: hacheEnMajuscules }
-      );
+  it.each(['idUtilisateur', 'idService', 'versionService'])(
+    'exige que %s soit renseigné',
+    (proprieteRequise) => {
+      const donneesTest = {
+        idService: 'S1',
+        idUtilisateur: 'U1',
+        versionService: 'v1',
+      };
+      delete donneesTest[proprieteRequise];
+      try {
+        new EvenementNouveauServiceCree(donneesTest, {
+          adaptateurChiffrement: hacheEnMajuscules,
+        });
 
-      expect().fail(
-        Error("L'instanciation de l'événement aurait dû lever une exception")
-      );
-    } catch (e) {
-      expect(e).to.be.an(ErreurDonneeManquante);
+        expect().fail(
+          Error("L'instanciation de l'événement aurait dû lever une exception")
+        );
+      } catch (e) {
+        expect(e).to.be.an(ErreurDonneeManquante);
+      }
     }
-  });
-
-  it("exige que l'identifiant du service créé soit renseigné", () => {
-    try {
-      new EvenementNouveauServiceCree(
-        { idUtilisateur: 'DEF' },
-        { adaptateurChiffrement: hacheEnMajuscules }
-      );
-      expect().fail(
-        Error("L'instanciation de l'événement aurait dû lever une exception")
-      );
-    } catch (e) {
-      expect(e).to.be.an(ErreurDonneeManquante);
-    }
-  });
+  );
 });

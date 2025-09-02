@@ -5,7 +5,7 @@
 - [ ] Côté Metabase : un LÉGO des versions de service.
   - Ce légo n'existe pas encore
   - L'absence de version veut dire `v1`
-  - On imagine que dans `NOUVEAU_SERVICE_CREE` on aura un champ `versionService: "v2"` sur lequel il pourra se baser
+  - [x] On imagine que dans `NOUVEAU_SERVICE_CREE` on aura un champ `versionService: "v2"` sur lequel il pourra se baser
   - Au moment du switch, on imagine un nouvel event `SERVICE_A_ETE_MIGRE` qui dit `versionCible: "v2"`
 
 ## DONE

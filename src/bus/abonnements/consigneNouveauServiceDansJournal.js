@@ -16,6 +16,7 @@ function consigneNouveauServiceDansJournal({ adaptateurJournal }) {
     const creation = new EvenementNouveauServiceCree({
       idService: service.id,
       idUtilisateur: utilisateur.id,
+      versionService: service.version(),
     });
 
     await adaptateurJournal.consigneEvenement(creation.toJSON());

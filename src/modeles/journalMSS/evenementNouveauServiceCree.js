@@ -7,6 +7,7 @@ class EvenementNouveauServiceCree extends Evenement {
     Evenement.verifieProprietesRenseignees(donnees, [
       'idService',
       'idUtilisateur',
+      'versionService',
     ]);
 
     super(
@@ -14,6 +15,7 @@ class EvenementNouveauServiceCree extends Evenement {
       {
         idService: adaptateurChiffrement.hacheSha256(donnees.idService),
         idUtilisateur: adaptateurChiffrement.hacheSha256(donnees.idUtilisateur),
+        versionService: donnees.versionService,
       },
       date
     );
