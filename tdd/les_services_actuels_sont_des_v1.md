@@ -2,8 +2,6 @@
 
 ## TODO
 
-- [ ] Une colonne dédiée `version_service` dans la table `services`
-  - Avec valeur par défaut à `v1`, comme ça pas de migration.
 - [ ] Un nouveau service est persité en `v1`
 - [ ] Côté Metabase : un LÉGO des versions de service.
   - Ce légo n'existe pas encore
@@ -14,3 +12,5 @@
 ## DONE
 
 - [x] Un service connaît sa version
+- [x] Une colonne dédiée `version_service` dans la table `services`
+  - Avec valeur par défaut à `v1`, comme ça pas de migration.
