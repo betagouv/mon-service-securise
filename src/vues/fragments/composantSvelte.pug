@@ -1,6 +1,12 @@
 mixin composantSvelte(nomDuComposant)
     //- `version` est pris dans `reponse.locals`
-    script(type = 'module', src = `/statique/composants-svelte/${nomDuComposant}?v=${version}`)
+    if(!process.env.SVELTE_DEV_LOCAL_AVEC_HOT_RELOAD)
+        script(type = 'module', src = `/statique/composants-svelte/${nomDuComposant}?v=${version}`)
+    else
+        - const titreComposant = nomDuComposant.replace('.js', '')
+        - const fichierTs = nomDuComposant.replace('.js', '.ts')
+        script(type='module', src=`http://localhost:3001/${titreComposant}/${fichierTs}`, nonce=nonce)
 
 mixin feuilleDeStyleSvelte()
-    link(href = `/statique/composants-svelte/style.css?v=${version}`, rel = 'stylesheet')
+    if(!process.env.SVELTE_DEV_LOCAL_AVEC_HOT_RELOAD)
+        link(href = `/statique/composants-svelte/style.css?v=${version}`, rel = 'stylesheet')
