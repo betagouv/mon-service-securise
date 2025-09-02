@@ -2,8 +2,9 @@
 
 ## TODO
 
+- [-] Une page permet de créer un service avec description v2
+  - /service/v2/creation
 - [ ] La route de création de service peut créer un service avec une description v2
-- [ ] Une page permet de créer un service avec description v2
 - [ ] Un bouton permet d'ouvrir cette page, il est derrière un feature flag
 
 ## TODO plus tard
@@ -12,6 +13,7 @@
 - Description service et description service v2 doivent implémenter une interface commune
   - technique : pour sérialiser
   - métier : pour dupliquer, pour exploiter les données métier du service (les passe plat `descriptionService.*`)
+- Regarder toutes les routes connectées de page Service et vérifier s'il faut du v2
 
 ## DONE
 

@@ -734,4 +734,12 @@ describe('Le serveur MSS des routes /service/*', () => {
       expect(reponse.headers.location).to.contain('dateTelechargement');
     });
   });
+
+  describe('sur demande de la page de création v2', () => {
+    it('répond 200', async () => {
+      const reponse = await testeur.get('/service/v2/creation');
+
+      expect(reponse.status).to.be(200);
+    });
+  });
 });

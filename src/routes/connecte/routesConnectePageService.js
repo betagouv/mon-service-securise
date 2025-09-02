@@ -289,6 +289,10 @@ const routesConnectePageService = ({
     }
   );
 
+  routes.get('/v2/creation', (_, reponse) =>
+    reponse.render('service/creation-v2')
+  );
+
   return routes;
 };
 
