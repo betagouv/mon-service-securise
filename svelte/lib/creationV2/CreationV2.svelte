@@ -1,5 +1,7 @@
 <script lang="ts">
   import ChampTexte from '../ui/ChampTexte.svelte';
+
+  let nomService = '';
 </script>
 
 <div class="conteneur-creation">
@@ -9,7 +11,8 @@
 
       <label for="nom-service">
         Quel est le nom de votre service ?
-        <ChampTexte id="nom-service" nom="nom-service"></ChampTexte>
+        <ChampTexte id="nom-service" nom="nom-service" bind:valeur={nomService}
+        ></ChampTexte>
       </label>
 
       <div class="barre-boutons">
@@ -21,12 +24,15 @@
           positionIcone="sans"
           href="/tableauDeBord"
         />
+        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
         <lab-anssi-bouton
           titre="Suivant"
           variante="primaire"
           taille="md"
           icone="arrow-right-line"
           positionIcone="droite"
+          actif={nomService.length > 0}
+          on:click={() => console.log(nomService)}
         />
       </div>
     </div>
