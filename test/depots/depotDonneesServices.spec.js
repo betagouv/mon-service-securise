@@ -770,7 +770,9 @@ describe('Le dépôt de données des services', () => {
         )
         .construis();
       adaptateurUUID = { genereUUID: () => 'unUUID' };
-      referentiel = Referentiel.creeReferentielVide();
+      referentiel = Referentiel.creeReferentiel({
+        versionServiceParDefaut: 'vTest',
+      });
       adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
 
       depot = unDepotDeDonneesServices()
@@ -896,7 +898,7 @@ describe('Le dépôt de données des services', () => {
       });
       expect(donnees.siretHash).to.be('unSIRET-haché256');
     });
-    /**/
+
     it('stocke la version du service sans la chiffrer', async () => {
       let chiffrementFait;
       adaptateurChiffrement.chiffre = async (donneesAChiffrer) => {
@@ -917,6 +919,20 @@ describe('Le dépôt de données des services', () => {
       });
       expect(donnees.versionService).to.be('v4');
       expect(chiffrementFait).to.be(true);
+    });
+
+    it("utilise la version par défaut du référentiel ('v1' en Production) si aucune version n'est indiquée", async () => {
+      const donneesSansVersion = {
+        descriptionService: uneDescriptionValide(referentiel)
+          .construis()
+          .donneesSerialisees(),
+      };
+      const idNouveau = await depot.nouveauService('123', donneesSansVersion);
+
+      const [donnees] = await adaptateurPersistance.servicesComplets({
+        idService: idNouveau,
+      });
+      expect(donnees.versionService).to.be('vTest');
     });
 
     it("déclare un accès en écriture entre l'utilisateur et le service", async () => {

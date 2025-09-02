@@ -442,6 +442,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const nombreMaximumDeModelesMesureSpecifiqueParUtilisateur = () =>
     donnees.modelesMesureSpecifique.nombreMaximumParUtilisateur;
 
+  const versionServiceParDefaut = () => donnees.versionServiceParDefaut;
+
   valideDonnees();
 
   return {
@@ -546,6 +548,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     typeServiceParDescription,
     typesService,
     verifieCategoriesMesuresSontRepertoriees,
+    versionServiceParDefaut,
     etapePrecedenteVisiteGuidee,
     etapeSuivanteVisiteGuidee,
     etapeVisiteGuidee,

@@ -356,6 +356,9 @@ const creeDepot = (config = {}) => {
 
     await completeDescriptionService(donneesService.descriptionService);
 
+    if (!donneesService.versionService)
+      donneesService.versionService = referentiel.versionServiceParDefaut();
+
     await p.sauvegarde(idService, donneesService);
 
     const proprietaire = Autorisation.NouvelleAutorisationProprietaire({

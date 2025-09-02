@@ -1709,4 +1709,5 @@ export default {
   modelesMesureSpecifique: {
     nombreMaximumParUtilisateur: 40,
   },
+  versionServiceParDefaut: 'v1',
 };
