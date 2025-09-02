@@ -9,6 +9,7 @@
     "build:back": "npx tsc",
     "build:cree-utilisateur-demo": "npm run build:back && node dist/creeUtilisateurDemo.js",
     "dev:back": "node --watch --import tsx server.ts",
+    "dev:front": "npm run build:front -- --watch --minify false",
     "test": "eslint . && vitest",
     "test:watch": "vitest",
     "start": "node --require dotenv/config dist/server.js",
