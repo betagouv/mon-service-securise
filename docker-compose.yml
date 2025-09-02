@@ -34,7 +34,7 @@ services:
       npx knex migrate:latest
       && npx concurrently -n \"SERVEUR,FRONT SVELTE\" -c \"blue.bold,magenta.underline\"
       \"npm run dev:back\"
-      \"npm run build:front -- --watch --minify false\"
+      \"npm run dev:front\"
       "
     environment:
       - NODE_ENV=development
