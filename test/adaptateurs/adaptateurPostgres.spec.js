@@ -1,6 +1,7 @@
 import expect from 'expect.js';
 import Knex from 'knex';
 import ClientPgLite from 'knex-pglite';
+import 'tsx/esm'; // Pour que `knex.migrate.latest()` s'exécute dans un écosytème où il comprend typescript. Car dans les tests, `tsc` ne s'exécute jamais.
 import { nouvelAdaptateur } from '../../src/adaptateurs/adaptateurPostgres.js';
 import { genereUUID } from '../../src/adaptateurs/adaptateurUUID.js';
 import { Autorisation } from '../../src/modeles/autorisations/autorisation.js';

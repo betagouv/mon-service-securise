@@ -15,9 +15,8 @@ const nouvelAdaptateur = (
   donnees.superviseurs ||= [];
   donnees.modelesMesureSpecifique ||= [];
   donnees.associationModelesMesureSpecifiqueServices ||= [];
-  donnees.televersements = {
-    modelesMesureSpecifique: [],
-  };
+  donnees.televersements = { modelesMesureSpecifique: [] };
+  donnees.brouillonsServices ||= [];
 
   const supprimeEnregistrement = async (nomTable, id) => {
     donnees[nomTable] = donnees[nomTable].filter((e) => e.id !== id);
@@ -543,10 +542,15 @@ const nouvelAdaptateur = (
       );
   };
 
+  const ajouteBrouillonService = async (idUtilisateur, brouillon) => {
+    donnees.brouillonsServices.push({ idUtilisateur, brouillon });
+  };
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
     ajouteAutorisation,
+    ajouteBrouillonService,
     ajouteEntiteAuSuperviseur,
     ajouteModeleMesureSpecifique,
     ajoutePlusieursModelesMesureSpecifique,
