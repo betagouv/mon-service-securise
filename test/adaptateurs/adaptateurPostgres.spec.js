@@ -135,6 +135,16 @@ describe("L'adaptateur persistance Postgres", () => {
         },
       ]);
     });
+
+    it('sait lire la version du service', async () => {
+      const idService = await insereService();
+      const idUtilisateur = await insereUtilisateur();
+      await insereAutorisation(idUtilisateur, idService);
+
+      const services = await persistance.servicesComplets({ idService });
+
+      expect(services[0].version).to.be('v1');
+    });
   });
 
   describe('concernant la lecture des modèles de mesure spécifique', () => {

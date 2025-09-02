@@ -11,6 +11,7 @@
 
 ## DONE
 
+- [x] La version d'un service est lue depuis la persistance
 - [x] Un service connaît sa version
 - [x] Une colonne dédiée `version_service` dans la table `services`
   - Avec valeur par défaut à `v1`, comme ça pas de migration.
