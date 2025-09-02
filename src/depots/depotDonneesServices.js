@@ -133,7 +133,8 @@ const fabriquePersistance = (
       },
     },
     sauvegarde: async (id, donneesService) => {
-      const donneesChiffrees = await chiffre.donneesService(donneesService);
+      const { version, ...donneesMetier } = donneesService;
+      const donneesChiffrees = await chiffre.donneesService(donneesMetier);
 
       const nomServiceHash = adaptateurChiffrement.hacheSha256(
         donneesService.descriptionService.nomService
@@ -147,7 +148,8 @@ const fabriquePersistance = (
         id,
         donneesChiffrees,
         nomServiceHash,
-        siretHash
+        siretHash,
+        version
       );
     },
     supprime: async (idService) => {
