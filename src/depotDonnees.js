@@ -137,7 +137,7 @@ const creeDepot = (config = {}) => {
 
   const depotBrouillonsService = depotDonneesBrouillonService.creeDepot({
     adaptateurChiffrement,
-    adaptateurPersistance,
+    persistance: adaptateurPersistance,
     adaptateurUUID,
   });
 
