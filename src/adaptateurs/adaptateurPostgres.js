@@ -875,9 +875,17 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       .del();
   };
 
+  const ajouteBrouillonService = async (id, idUtilisateur, donnees) =>
+    knex('brouillons_service').insert({
+      id,
+      id_utilisateur: idUtilisateur,
+      donnees,
+    });
+
   return {
     activitesMesure,
     ajouteAutorisation,
+    ajouteBrouillonService,
     ajouteParrainage,
     ajouteEntiteAuSuperviseur,
     ajouteSuggestionAction,
