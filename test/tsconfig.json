@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+
+  "include": ["**/*.spec.ts"],
+
+  "compilerOptions": {
+    "types": ["vitest/globals"],
+
+    // Dans nos tests, on VEUT référencer directement les .ts testés,
+    // car on est dans le monde vitest qui sait exécuter ce code.
+    "allowImportingTsExtensions": true
+  }
+}
