@@ -1,23 +1,23 @@
 import expect from 'expect.js';
-import uneDescriptionValide from '../constructeurs/constructeurDescriptionService';
-import { unDossier } from '../constructeurs/constructeurDossier';
-import * as Referentiel from '../../src/referentiel';
-import InformationsService from '../../src/modeles/informationsService';
-import Service from '../../src/modeles/service';
-import MesureGenerale from '../../src/modeles/mesureGenerale';
-import VueAnnexePDFDescription from '../../src/modeles/objetsPDF/objetPDFAnnexeDescription';
-import VueAnnexePDFMesures from '../../src/modeles/objetsPDF/objetPDFAnnexeMesures';
-import VueAnnexePDFRisques from '../../src/modeles/objetsPDF/objetPDFAnnexeRisques';
-import { unService } from '../constructeurs/constructeurService';
+import uneDescriptionValide from '../constructeurs/constructeurDescriptionService.js';
+import { unDossier } from '../constructeurs/constructeurDossier.js';
+import * as Referentiel from '../../src/referentiel.js';
+import InformationsService from '../../src/modeles/informationsService.js';
+import Service from '../../src/modeles/service.js';
+import MesureGenerale from '../../src/modeles/mesureGenerale.js';
+import VueAnnexePDFDescription from '../../src/modeles/objetsPDF/objetPDFAnnexeDescription.js';
+import VueAnnexePDFMesures from '../../src/modeles/objetsPDF/objetPDFAnnexeMesures.js';
+import VueAnnexePDFRisques from '../../src/modeles/objetsPDF/objetPDFAnnexeRisques.js';
+import { unService } from '../constructeurs/constructeurService.js';
 import {
   Rubriques,
   Permissions,
-} from '../../src/modeles/autorisations/gestionDroits';
-import { uneAutorisation } from '../constructeurs/constructeurAutorisation';
-import { unUtilisateur } from '../constructeurs/constructeurUtilisateur';
-import Mesures from '../../src/modeles/mesures';
-import MesureSpecifique from '../../src/modeles/mesureSpecifique';
-import { Contributeur } from '../../src/modeles/contributeur';
+} from '../../src/modeles/autorisations/gestionDroits.js';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
+import Mesures from '../../src/modeles/mesures.js';
+import MesureSpecifique from '../../src/modeles/mesureSpecifique.js';
+import { Contributeur } from '../../src/modeles/contributeur.js';
 import { DescriptionServiceV2 } from '../../src/modeles/descriptionServiceV2.js';
 
 const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER } = Rubriques;

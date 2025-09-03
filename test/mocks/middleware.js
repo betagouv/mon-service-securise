@@ -1,9 +1,9 @@
 import expect from 'expect.js';
 import supertest from 'supertest';
-import { Rubriques } from '../../src/modeles/autorisations/gestionDroits';
-import { uneAutorisation } from '../constructeurs/constructeurAutorisation';
-import { unService } from '../constructeurs/constructeurService';
-import { SourceAuthentification } from '../../src/modeles/sourceAuthentification';
+import { Rubriques } from '../../src/modeles/autorisations/gestionDroits.js';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import { unService } from '../constructeurs/constructeurService.js';
+import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.js';
 
 const { DECRIRE, SECURISER, HOMOLOGUER, RISQUES, CONTACTS } = Rubriques;
 const NOMBRE_MAX_REDIRECTION_PAR_DEFAUT = 5;
