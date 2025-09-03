@@ -6,7 +6,7 @@ export type DepotDonneesBrouillonService = {
   nouveauBrouillonService: (
     idUtilisateur: UUID,
     nomService: string
-  ) => Promise<void>;
+  ) => Promise<UUID>;
 };
 
 type PersistanceBrouillonService = {
@@ -41,6 +41,8 @@ const creeDepot = ({
       idUtilisateur,
       donneesChiffrees
     );
+
+    return idBrouillon;
   };
 
   return { nouveauBrouillonService };

@@ -25,7 +25,7 @@ describe('Le dépôt de données des brouillons de Service', () => {
         adaptateurChiffrement,
       });
 
-      await depotDonnees.nouveauBrouillonService(
+      const idCree = await depotDonnees.nouveauBrouillonService(
         unUUID('2'),
         'Nom du brouillon'
       );
@@ -35,6 +35,7 @@ describe('Le dépôt de données des brouillons de Service', () => {
         id: unUUID('b'),
         brouillon: { nomService: 'Nom du brouillon' },
       });
+      expect(idCree).toBe(unUUID('b'));
     });
 
     it('chiffre les données du brouillon', async () => {
