@@ -542,8 +542,16 @@ const nouvelAdaptateur = (
       );
   };
 
-  const ajouteBrouillonService = async (idUtilisateur, brouillon) => {
-    donnees.brouillonsServices.push({ idUtilisateur, brouillon });
+  const ajouteBrouillonService = async (
+    id,
+    idUtilisateur,
+    donneesBrouillon
+  ) => {
+    donnees.brouillonsServices.push({
+      id,
+      idUtilisateur,
+      donnees: donneesBrouillon,
+    });
   };
 
   return {

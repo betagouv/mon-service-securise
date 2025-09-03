@@ -1,21 +1,37 @@
 import { createHash, randomBytes } from 'crypto';
 import bcrypt from 'bcrypt';
+import {
+  AdaptateurChiffrement,
+  ChaineOuObjet,
+} from './adaptateurChiffrement.interface.js';
+import { DonneesChiffrees } from '../typesBasiques.js';
 
-const adaptateurChiffrement = ({ adaptateurEnvironnement }) => {
+type ConfigurationChiffrement = {
+  chiffrement: () => {
+    tousLesSelsDeHachage: () => { sel: string; version: number }[];
+  };
+};
+
+const adaptateurChiffrement = ({
+  adaptateurEnvironnement,
+}: {
+  adaptateurEnvironnement: ConfigurationChiffrement;
+}): AdaptateurChiffrement => {
   const NOMBRE_DE_PASSES = 10;
 
-  const hacheBCrypt = (chaineEnClair) =>
+  const hacheBCrypt = (chaineEnClair: string) =>
     bcrypt.hash(chaineEnClair, NOMBRE_DE_PASSES);
 
-  const hacheSha256AvecUnSeulSel = (chaine, sel) =>
+  const hacheSha256AvecUnSeulSel = (chaine: string, sel: string) =>
     createHash('sha256')
       .update(chaine + sel)
       .digest('hex');
 
   return {
-    chiffre: async (chaineOuObjet) => chaineOuObjet,
+    chiffre: async (chaineOuObjet: ChaineOuObjet) =>
+      chaineOuObjet as DonneesChiffrees,
 
-    dechiffre: async (chaineChiffree) => chaineChiffree,
+    dechiffre: async (chaineChiffree: DonneesChiffrees) => chaineChiffree,
 
     hacheBCrypt,
 
@@ -23,7 +39,7 @@ const adaptateurChiffrement = ({ adaptateurEnvironnement }) => {
 
     hacheSha256AvecUnSeulSel,
 
-    hacheSha256: (chaineEnClair) => {
+    hacheSha256: (chaineEnClair: string) => {
       const tousLesSelsDeHachage = adaptateurEnvironnement
         .chiffrement()
         .tousLesSelsDeHachage();
