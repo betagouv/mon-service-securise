@@ -9,8 +9,8 @@
 - [-] La route de création de brouillon peut créer un brouillon de service
   - [x] Persister le brouillon
   - [x] Retourner l'ID réel du brouillon
+  - [x] La validation de la payload sur le POST se fait avec ZOD
   - [ ] Le dépot de Brouillon est une classe TS ?
-  - [ ] La validation de la payload sur le POST se fait avec ZOD
   - [ ] faire des ajouts/modifications sur les champs du brouillon
   - [ ] le brouillon se transforme en une descriptionV2 à la création du service
 
