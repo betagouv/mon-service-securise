@@ -31,19 +31,8 @@ module.exports = {
     'import/prefer-default-export': 'off',
     '@vitest/expect-expect': 'off',
   },
-  settings: {
-    'import/resolver': {
-      typescript: {},
-    },
-  },
+  settings: { 'import/resolver': { typescript: {} } },
   overrides: [
-    {
-      files: ['public/**/*.*js'],
-      rules: { 'import/extensions': ['error', 'always'] },
-    },
-    {
-      files: ['admin/**/*.*js'],
-    },
     {
       files: ['test*/**/*.*js'],
       rules: {
@@ -56,12 +45,21 @@ module.exports = {
       },
     },
     {
-      // Lorsque l'on importe des fichiers '.ts' depuis du '.js',
-      // `eslint` est confus et demande d'ajouter une extension `.ts` ce qui empêche l'import du code généré.
-      // On enlève cette règle, car on build donc au runtime, les fichiers sont présents en `.js`
-      // https://www.typescriptlang.org/docs/handbook/modules/theory.html
+      // Dans le code du backend on est dans le monde "nodejs qui exécute de l'ESM".
+      // Donc :
+      //  - l'extention est OBLIGATOIRE quand on importe un fichier
+      //  - les .ts N'EXISTENT PAS au runtime
+      // Donc on veut interdire l'import de .ts dans nos fichiers .js.
+      // Cf. https://www.typescriptlang.org/docs/handbook/modules/theory.html pour comprendre qu'il faut toujours importer le fichier .js
       files: ['src/**/*.js', '*.js'],
-      rules: { 'import/extensions': ['off'] },
+      rules: { 'import/extensions': ['error', { js: 'always' }] },
+    },
+    {
+      // Ici on est dans le code envoyé au navigateur, pas dans le backend, donc on autorise .js et .mjs
+      files: ['public/**/*.*js'],
+      rules: {
+        'import/extensions': ['error', { js: 'always', mjs: 'always' }],
+      },
     },
     {
       files: ['src/erreurs.js', 'src/modeles/journalMSS/erreurs.js'],
@@ -92,7 +90,7 @@ module.exports = {
       },
     },
     {
-      // Nous voulons que nos tests en TS référencent directement leur PROD en TS.
+      // Nous voulons que nos tests en TS référencent directement leur PROD en TS : nous ne sommes PAS dans le monde nodejs.
       files: ['*.spec.ts'],
       rules: { 'import/extensions': ['off'] },
     },
