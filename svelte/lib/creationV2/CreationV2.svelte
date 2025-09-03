@@ -32,7 +32,8 @@
           icone="arrow-right-line"
           positionIcone="droite"
           actif={nomService.length > 0}
-          on:click={() => console.log(nomService)}
+          on:click={async () =>
+            await axios.post('/api/brouillon-service', { nomService })}
         />
       </div>
     </div>

@@ -2,7 +2,7 @@ import { DonneesChiffrees, UUID } from '../typesBasiques.js';
 import { AdaptateurUUID } from '../adaptateurs/adaptateurUUID.js';
 import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
 
-type DepotDonneesBrouillonService = {
+export type DepotDonneesBrouillonService = {
   nouveauBrouillonService: (
     idUtilisateur: UUID,
     nomService: string

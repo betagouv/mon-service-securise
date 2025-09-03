@@ -329,7 +329,11 @@ const routesConnecteApi = ({
     })
   );
 
-  routes.use('/brouillon-service', routesConnecteApiBrouillonService({}));
+  routes.use(
+    '/brouillon-service',
+    middleware.verificationAcceptationCGU,
+    routesConnecteApiBrouillonService({ depotDonnees })
+  );
 
   routes.use(
     '/visiteGuidee',
