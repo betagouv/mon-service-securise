@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import { fabriqueAdaptateurUUID } from '../../adaptateurs/adaptateurUUID.js';
 import { DepotDonneesBrouillonService } from '../../depots/depotDonneesBrouillonService.js';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 
@@ -13,12 +12,12 @@ const routesConnecteApiBrouillonService = ({
   routes.post('/', async (requete: Request, reponse: Response) => {
     const { idUtilisateurCourant } = requete as RequestRouteConnecte;
 
-    await depotDonnees.nouveauBrouillonService(
+    const id = await depotDonnees.nouveauBrouillonService(
       idUtilisateurCourant,
       requete.body.nomService
     );
 
-    reponse.send({ id: fabriqueAdaptateurUUID().genereUUID() });
+    return reponse.json({ id });
   });
 
   return routes;

@@ -8,7 +8,7 @@
   - [ ] Le composant Svelte utilise un fichier `.api` et non un `axios.post()` dans `CreationV2.svelte`
 - [-] La route de création de brouillon peut créer un brouillon de service
   - [x] Persister le brouillon
-  - [ ] Retourner l'ID réel du brouillon
+  - [x] Retourner l'ID réel du brouillon
   - [ ] Le dépot de Brouillon est une classe TS ?
   - [ ] La validation de la payload sur le POST se fait avec ZOD
   - [ ] faire des ajouts/modifications sur les champs du brouillon
