@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
+import * as z from 'zod';
 import { DepotDonneesBrouillonService } from '../../depots/depotDonneesBrouillonService.js';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
+import { valideBody } from '../../http/valideBody.js';
 
 const routesConnecteApiBrouillonService = ({
   depotDonnees,
@@ -9,16 +11,24 @@ const routesConnecteApiBrouillonService = ({
 }) => {
   const routes = express.Router();
 
-  routes.post('/', async (requete: Request, reponse: Response) => {
-    const { idUtilisateurCourant } = requete as RequestRouteConnecte;
-
-    const id = await depotDonnees.nouveauBrouillonService(
-      idUtilisateurCourant,
-      requete.body.nomService
-    );
-
-    return reponse.json({ id });
+  const BrouillonHttp = z.strictObject({
+    nomService: z.string().trim().nonempty(),
   });
+  routes.post(
+    '/',
+    valideBody(BrouillonHttp),
+    async (requete: Request, reponse: Response) => {
+      const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+      const { nomService } = BrouillonHttp.parse(requete.body);
+
+      const id = await depotDonnees.nouveauBrouillonService(
+        idUtilisateurCourant,
+        nomService
+      );
+
+      return reponse.json({ id });
+    }
+  );
 
   return routes;
 };

@@ -17,5 +17,13 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
 
       expect(resultat.body.id).toBe(unUUID('3'));
     });
+
+    it('retourne une erreur 400 si le nom de service est vide', async () => {
+      const resultat = await testeur.post('/api/brouillon-service', {
+        nomService: ' ',
+      });
+
+      expect(resultat.status).toBe(400);
+    });
   });
 });
