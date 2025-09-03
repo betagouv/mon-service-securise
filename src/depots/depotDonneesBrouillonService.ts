@@ -1,5 +1,6 @@
-import { UUID } from '../typesBasiques.js';
+import { DonneesChiffrees, UUID } from '../typesBasiques.js';
 import { AdaptateurUUID } from '../adaptateurs/adaptateurUUID.js';
+import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
 
 type DepotDonneesBrouillonService = {
   nouveauBrouillonService: (
@@ -10,17 +11,20 @@ type DepotDonneesBrouillonService = {
 
 type PersistanceBrouillonService = {
   ajouteBrouillonService: (
+    id: UUID,
     idUtilisateur: UUID,
-    brouillon: { id: UUID; nomService: string }
+    donnees: DonneesChiffrees
   ) => Promise<void>;
 };
 
 const creeDepot = ({
   persistance,
   adaptateurUUID,
+  adaptateurChiffrement,
 }: {
   persistance: PersistanceBrouillonService;
   adaptateurUUID: AdaptateurUUID;
+  adaptateurChiffrement: AdaptateurChiffrement;
 }): DepotDonneesBrouillonService => {
   const nouveauBrouillonService = async (
     idUtilisateur: UUID,
@@ -28,10 +32,15 @@ const creeDepot = ({
   ) => {
     const idBrouillon = adaptateurUUID.genereUUID();
 
-    await persistance.ajouteBrouillonService(idUtilisateur, {
-      id: idBrouillon,
+    const donneesChiffrees = await adaptateurChiffrement.chiffre({
       nomService,
     });
+
+    await persistance.ajouteBrouillonService(
+      idBrouillon,
+      idUtilisateur,
+      donneesChiffrees
+    );
   };
 
   return { nouveauBrouillonService };
