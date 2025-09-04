@@ -6,19 +6,12 @@
   - [ ] Un bouton permet d'ouvrir cette page, il est derrière un feature flag
     - /service/v2/creation
   - [ ] Le composant Svelte utilise un fichier `.api` et non un `axios.post()` dans `CreationV2.svelte`
-- [-] La route de création de brouillon peut créer un brouillon de service
-  - [x] Persister le brouillon
-  - [x] Retourner l'ID réel du brouillon
-  - [x] La validation de la payload sur le POST se fait avec ZOD
-  - [ ] Le brouillon peut être affiché dans le tableau de bord
-    - [x] Il est affiché au dessus des services
-    - [x] On peut rechercher sur le nom du brouillon
-    - [ ] On s'assure que l'affichage "tableau vide" fonctionne correctement
+  - [ ] Un brouillon existant peut être complété (reprendre la création)
 - [ ] le brouillon se transforme en une descriptionV2 à la création du service
   - [ ] la description v2 est persistée dans le service
-  - [ ] faire des ajouts/modifications sur les champs du brouillon
   - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
   - [ ] ce moteur de règles génère une liste de mesures v2
+- [ ] chaque étape de décrire permet de mettre à jour une propriété du brouillon
 
 ## TODO plus tard
 
@@ -33,6 +26,14 @@
 
 ## DONE
 
+- [x] La route de création de brouillon peut créer un brouillon de service
+  - [x] Persister le brouillon
+  - [x] Retourner l'ID réel du brouillon
+  - [x] La validation de la payload sur le POST se fait avec ZOD
+  - [x] Le brouillon peut être affiché dans le tableau de bord
+    - [x] Il est affiché au dessus des services
+    - [x] On peut rechercher sur le nom du brouillon
+    - [x] On s'assure que l'affichage "tableau vide" fonctionne correctement
 - [x] Un service v2 instancie une description V2
   - [x] avec le nom du service
 - [x] Côté Metabase : un LÉGO des versions de service.

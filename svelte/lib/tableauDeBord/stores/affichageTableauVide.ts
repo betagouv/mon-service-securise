@@ -2,6 +2,8 @@ import { derived } from 'svelte/store';
 import { services } from './services.store';
 import { resultatsDeRecherche } from './resultatDeRecherche.store';
 import { affichageParStatutHomologationSelectionne } from './affichageParStatutHomologation';
+import { brouillonsService } from './brouillonsService.store';
+import { resultatsDeRechercheBrouillons } from './resultatDeRechercheBrouillons.store';
 
 type Etat =
   | 'aucunService'
@@ -20,21 +22,34 @@ export const affichageTableauVide = derived<
     typeof services,
     typeof resultatsDeRecherche,
     typeof affichageParStatutHomologationSelectionne,
+    typeof brouillonsService,
+    typeof resultatsDeRechercheBrouillons,
   ],
   EtatAffichage
 >(
-  [services, resultatsDeRecherche, affichageParStatutHomologationSelectionne],
+  [
+    services,
+    resultatsDeRecherche,
+    affichageParStatutHomologationSelectionne,
+    brouillonsService,
+    resultatsDeRechercheBrouillons,
+  ],
   ([
     $services,
     $resultatsDeRecherche,
     $affichageParStatutHomologationSelectionne,
+    $brouillonsService,
+    $resultatsDeRechercheBrouillons,
   ]) => {
     let doitAfficher = true;
     let etat = null;
 
-    if ($services.length === 0) {
+    if ($services.length === 0 && $brouillonsService.length === 0) {
       etat = 'aucunService' as Etat;
-    } else if ($resultatsDeRecherche.length === 0) {
+    } else if (
+      $resultatsDeRecherche.length === 0 &&
+      $resultatsDeRechercheBrouillons.length === 0
+    ) {
       etat = 'aucunResultatDeRecherche' as Etat;
     } else if (
       $affichageParStatutHomologationSelectionne === 'enCoursEdition' &&

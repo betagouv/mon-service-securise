@@ -520,7 +520,7 @@
     color: #3a3a3a;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: end;
   }
 
   .indicateur-brouillon:before {
