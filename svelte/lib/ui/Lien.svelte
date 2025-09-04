@@ -12,6 +12,7 @@
       | 'telecharger-blanc'
       | 'medaille'
       | 'ajout-liste'
+      | 'brouillon'
       | undefined;
     type?:
       | 'bouton-primaire'
@@ -34,6 +35,7 @@
     | 'telecharger'
     | 'telecharger-blanc'
     | 'medaille'
+    | 'brouillon'
     | 'ajout-liste'
     | undefined = undefined;
   export let type:
@@ -118,6 +120,10 @@
 
   .ajout-liste:before {
     background-image: url('/statique/assets/images/icone_ajout_liste.svg');
+  }
+
+  .brouillon:before {
+    background-image: url('/statique/assets/images/icone_continuer_brouillon.svg');
   }
 
   .avecIcone:before {
