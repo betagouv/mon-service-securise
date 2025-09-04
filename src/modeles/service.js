@@ -470,9 +470,11 @@ class Service {
     },
   };
 
-  static valideDonneesCreation(donnees) {
-    DescriptionService.valideDonneesCreation(donnees);
-    Entite.valideDonnees(donnees.organisationResponsable);
+  static valideDonneesCreation(donneesDescription, versionService) {
+    if (versionService === 'v2')
+      DescriptionServiceV2.valideDonneesCreation(donneesDescription);
+    else DescriptionService.valideDonneesCreation(donneesDescription);
+    Entite.valideDonnees(donneesDescription.organisationResponsable);
   }
 }
 

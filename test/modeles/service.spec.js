@@ -1254,4 +1254,20 @@ describe('Un service', () => {
       expect(service.nomService()).toBe('Bibliothèque');
     });
   });
+
+  describe('concernant la validation des données de création', () => {
+    it('utilise la validation de la description v2 si le service est v2', () => {
+      const espionValidationV2 = vi
+        .spyOn(DescriptionServiceV2, 'valideDonneesCreation')
+        .mockImplementation(() => {});
+
+      Service.valideDonneesCreation(
+        { organisationResponsable: { siret: 'unSiret' } },
+        'v2'
+      );
+
+      expect(espionValidationV2).toHaveBeenCalledTimes(1);
+      espionValidationV2.mockRestore();
+    });
+  });
 });

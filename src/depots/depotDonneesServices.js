@@ -254,14 +254,15 @@ const creeDepot = (config = {}) => {
   const serviceExiste = async (idUtilisateur, nomService, idServiceMisAJour) =>
     p.lis.existeAvecNom(idUtilisateur, nomService, idServiceMisAJour);
 
-  const valideDescriptionService = async (
+  const valideDescriptionService = async ({
     idUtilisateur,
-    donnees,
-    idServiceMisAJour
-  ) => {
-    const { nomService } = donnees;
+    donneesDescriptionService,
+    idServiceMisAJour,
+    versionService,
+  }) => {
+    const { nomService } = donneesDescriptionService;
 
-    Service.valideDonneesCreation(donnees);
+    Service.valideDonneesCreation(donneesDescriptionService, versionService);
 
     const existeDeja = await serviceExiste(
       idUtilisateur,
@@ -295,7 +296,12 @@ const creeDepot = (config = {}) => {
 
   const ajouteDescriptionService = async (idUtilisateur, idService, infos) => {
     const existant = await p.lis.un(idService);
-    await valideDescriptionService(idUtilisateur, infos, existant.id);
+    await valideDescriptionService({
+      idUtilisateur,
+      donneesDescriptionService: infos,
+      idServiceMisAJour: existant.id,
+      versionService: existant.versionService,
+    });
     await completeDescriptionService(infos);
     await metsAJourDescriptionService(
       existant.donneesAPersister().toutes(),
@@ -340,15 +346,16 @@ const creeDepot = (config = {}) => {
     const idService = adaptateurUUID.genereUUID();
     const idAutorisation = adaptateurUUID.genereUUID();
 
-    await valideDescriptionService(
-      idUtilisateur,
-      donneesService.descriptionService
-    );
-
-    await completeDescriptionService(donneesService.descriptionService);
-
     if (!donneesService.versionService)
       donneesService.versionService = referentiel.versionServiceParDefaut();
+
+    await valideDescriptionService({
+      idUtilisateur,
+      donneesDescriptionService: donneesService.descriptionService,
+      versionService: donneesService.versionService,
+    });
+
+    await completeDescriptionService(donneesService.descriptionService);
 
     await p.sauvegarde(idService, donneesService);
 

@@ -8,4 +8,6 @@ export class DescriptionServiceV2 {
   constructor(donnees: DonneesDescriptionServiceV2) {
     this.nomService = donnees.nomService;
   }
+
+  static valideDonneesCreation() {}
 }
