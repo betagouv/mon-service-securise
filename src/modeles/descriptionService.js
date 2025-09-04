@@ -1,6 +1,8 @@
 import {
   ErreurStatutDeploiementInvalide,
   ErreurLocalisationDonneesInvalide,
+  ErreurDonneesObligatoiresManquantes,
+  ErreurDonneesNiveauSecuriteInsuffisant,
 } from '../erreurs.js';
 import DonneesSensiblesSpecifiques from './donneesSensiblesSpecifiques.js';
 import FonctionnalitesSpecifiques from './fonctionnalitesSpecifiques.js';
@@ -171,6 +173,18 @@ class DescriptionService extends InformationsService {
       tousNiveauxSecurite.indexOf(donnees.niveauSecurite) >
       tousNiveauxSecurite.indexOf(niveauRecommande)
     );
+  }
+
+  static valideDonneesCreation(donnees) {
+    if (!DescriptionService.proprietesObligatoiresRenseignees(donnees)) {
+      throw new ErreurDonneesObligatoiresManquantes(
+        'Certaines données obligatoires ne sont pas renseignées'
+      );
+    }
+
+    if (!DescriptionService.niveauSecuriteChoisiSuffisant(donnees)) {
+      throw new ErreurDonneesNiveauSecuriteInsuffisant();
+    }
   }
 }
 
