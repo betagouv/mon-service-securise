@@ -25,6 +25,11 @@
 
 ## Dans Svelte
 
+### TODO
+
+- [ ] Enlever les `@html` qui sont sur des données saisies
+- [ ] Enlever des `decode()` qui sont sur des données saisies
+
 ### Les migrations BDD
 
 - [ ] table `utilisateurs`

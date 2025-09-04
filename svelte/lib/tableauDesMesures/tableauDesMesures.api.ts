@@ -29,14 +29,6 @@ const decodeEntitesHtml = (mesures: Mesures) => {
   }
 };
 
-const decodeContributeursHtml = (contributeurs: Contributeur[]) => {
-  contributeurs = contributeurs.map((c) => ({
-    ...c,
-    poste: decode(c.poste),
-    prenomNom: decode(c.prenomNom),
-  }));
-};
-
 export const recupereMesures = async (idService: IdService) => {
   const reponse = await axios.get(`/api/service/${idService}/mesures`);
   decodeEntitesHtml(reponse.data);
@@ -45,7 +37,6 @@ export const recupereMesures = async (idService: IdService) => {
 
 export const recupereContributeurs = async (idService: IdService) => {
   const reponse = await axios.get(`/api/service/${idService}`);
-  decodeContributeursHtml(reponse.data.contributeurs);
   return reponse.data.contributeurs as Contributeur[];
 };
 
