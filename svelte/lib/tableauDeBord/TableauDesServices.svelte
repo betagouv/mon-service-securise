@@ -151,16 +151,13 @@
           <td>-</td>
           <td>-</td>
           <td>
-            <lab-anssi-lien
+            <Lien
               titre="Continuer la création"
-              cible=""
-              apparence="bouton"
-              variante="secondaire"
-              taille="sm"
-              icone="draft-line"
-              positionIcone="gauche"
-              actif
+              type="bouton-secondaire"
               href="/service/v2/creation?id={brouillon.id}"
+              taille="petit"
+              icone="brouillon"
+              classe="continuerCreationV2"
             />
           </td>
         </tr>
