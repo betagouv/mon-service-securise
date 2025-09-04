@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import uneDescriptionValide from '../constructeurs/constructeurDescriptionService.js';
 import { unDossier } from '../constructeurs/constructeurDossier.js';
 import * as Referentiel from '../../src/referentiel.js';
@@ -31,13 +30,13 @@ describe('Un service', () => {
       descriptionService: { nomService: 'Super Service' },
     });
 
-    expect(service.nomService()).to.equal('Super Service');
+    expect(service.nomService()).toEqual('Super Service');
   });
 
   it('connaît sa version', () => {
     const serviceV1 = new Service({ versionService: 'v1' });
 
-    expect(serviceV1.version()).to.be('v1');
+    expect(serviceV1.version()).toBe('v1');
   });
 
   it('connaît ses contributrices et contributeurs', () => {
@@ -52,11 +51,11 @@ describe('Un service', () => {
       .construis();
 
     const { contributeurs } = service;
-    expect(contributeurs.length).to.equal(1);
+    expect(contributeurs.length).toEqual(1);
 
     const contributeur = contributeurs[0];
-    expect(contributeur).to.be.a(Contributeur);
-    expect(contributeur.idUtilisateur).to.equal('456');
+    expect(contributeur).toBeInstanceOf(Contributeur);
+    expect(contributeur.idUtilisateur).toEqual('456');
   });
 
   describe("concernant les suggestions d'actions", () => {
@@ -69,7 +68,7 @@ describe('Un service', () => {
         .avecSuggestionAction({ nature: 'siret-a-renseigner' })
         .construis();
 
-      expect(service.aUneSuggestionDAction()).to.be(true);
+      expect(service.aUneSuggestionDAction()).toBe(true);
     });
 
     it("sait quand il n'a pas de suggestion d'action", () => {
@@ -79,7 +78,7 @@ describe('Un service', () => {
 
       const service = unService(referentiel).construis();
 
-      expect(service.aUneSuggestionDAction()).to.be(false);
+      expect(service.aUneSuggestionDAction()).toBe(false);
     });
 
     it("sait obtenir les routes MSS des suggestions d'actions", () => {
@@ -132,7 +131,7 @@ describe('Un service', () => {
 
       const pourrait = service.pourraitFaire('miseAJourSiret');
 
-      expect(pourrait).to.be(false);
+      expect(pourrait).toBe(false);
     });
 
     it('sait si une action fait partie des suggestions', () => {
@@ -145,7 +144,7 @@ describe('Un service', () => {
 
       const pourrait = service.pourraitFaire('miseAJourSiret');
 
-      expect(pourrait).to.be(true);
+      expect(pourrait).toBe(true);
     });
   });
 
@@ -200,8 +199,8 @@ describe('Un service', () => {
 
       const completudeMesures = s.completudeMesures();
 
-      expect(completudeMesures.nombreMesuresCompletes).to.be(1);
-      expect(completudeMesures.nombreTotalMesures).to.be(4);
+      expect(completudeMesures.nombreMesuresCompletes).toBe(1);
+      expect(completudeMesures.nombreTotalMesures).toBe(4);
     });
 
     describe('inclue le détail des mesures', () => {
@@ -256,8 +255,8 @@ describe('Un service', () => {
 
         const completudeMesures = s.completudeMesures();
 
-        expect(completudeMesures.detailMesures.length).to.be(1);
-        expect(completudeMesures.detailMesures[0].idMesure).to.be('mesureA');
+        expect(completudeMesures.detailMesures.length).toBe(1);
+        expect(completudeMesures.detailMesures[0].idMesure).toBe('mesureA');
       });
     });
 
@@ -271,7 +270,7 @@ describe('Un service', () => {
 
       const completudeMesures = s.completudeMesures();
 
-      expect(completudeMesures.detailMesures).to.be.empty();
+      expect(completudeMesures.detailMesures.length).toBe(0);
     });
 
     it('en ignorant complètement les mesures spécifiques, car elles ne sont pas considérées quand on parle de complétude', () => {
@@ -287,7 +286,7 @@ describe('Un service', () => {
 
       const completudeMesures = s.completudeMesures();
 
-      expect(completudeMesures.detailMesures).to.be.empty();
+      expect(completudeMesures.detailMesures.length).toBe(0);
     });
   });
 
@@ -310,12 +309,12 @@ describe('Un service', () => {
       referentiel
     );
 
-    expect(service.descriptionTypeService()).to.equal('Un type, Un autre');
+    expect(service.descriptionTypeService()).toEqual('Un type, Un autre');
   });
 
   it("se comporte correctement si le type service n'est pas présente", () => {
     const service = new Service({ id: '123' });
-    expect(service.descriptionTypeService()).to.equal(
+    expect(service.descriptionTypeService()).toEqual(
       'Type de service non renseignée'
     );
   });
@@ -336,13 +335,13 @@ describe('Un service', () => {
       },
     });
 
-    expect(service.autoriteHomologation()).to.equal('Jean Dupont');
-    expect(service.fonctionAutoriteHomologation()).to.equal('Maire');
-    expect(service.delegueProtectionDonnees()).to.equal('Rémi Fassol');
-    expect(service.piloteProjet()).to.equal('Sylvie Martin');
-    expect(service.expertCybersecurite()).to.equal('Anna Dubreuil');
-    expect(service.hebergeur()).to.equal('Hébergeur');
-    expect(service.structureDeveloppement()).to.equal('Une structure');
+    expect(service.autoriteHomologation()).toEqual('Jean Dupont');
+    expect(service.fonctionAutoriteHomologation()).toEqual('Maire');
+    expect(service.delegueProtectionDonnees()).toEqual('Rémi Fassol');
+    expect(service.piloteProjet()).toEqual('Sylvie Martin');
+    expect(service.expertCybersecurite()).toEqual('Anna Dubreuil');
+    expect(service.hebergeur()).toEqual('Hébergeur');
+    expect(service.structureDeveloppement()).toEqual('Une structure');
   });
 
   it('connaît ses dossiers', () => {
@@ -354,7 +353,7 @@ describe('Un service', () => {
       referentiel
     );
 
-    expect(service.nombreDossiers()).to.equal(1);
+    expect(service.nombreDossiers()).toEqual(1);
   });
 
   it('connaît le dossier courant', () => {
@@ -377,7 +376,7 @@ describe('Un service', () => {
       referentiel
     );
 
-    expect(service.dossierCourant().id).to.equal('999');
+    expect(service.dossierCourant().id).toEqual('999');
   });
 
   describe('sur demande des documents PDF disponibles', () => {
@@ -495,7 +494,7 @@ describe('Un service', () => {
       risquesSpecifiques: [{ description: 'Un risque' }],
     });
 
-    expect(service.risquesSpecifiques().nombre()).to.equal(1);
+    expect(service.risquesSpecifiques().nombre()).toEqual(1);
   });
 
   describe('sur ajout de risque spécifique', () => {
@@ -507,10 +506,10 @@ describe('Un service', () => {
 
       service.ajouteRisqueSpecifique({});
 
-      expect(service.risquesSpecifiques().item(0).identifiantNumerique).to.be(
+      expect(service.risquesSpecifiques().item(0).identifiantNumerique).toBe(
         'RS1'
       );
-      expect(service.prochainIdNumeriqueDeRisqueSpecifique).to.be(2);
+      expect(service.prochainIdNumeriqueDeRisqueSpecifique).toBe(2);
     });
 
     it('assigne le prochain identifiant numérique de risque spécifique', () => {
@@ -522,10 +521,10 @@ describe('Un service', () => {
 
       service.ajouteRisqueSpecifique({});
 
-      expect(service.risquesSpecifiques().item(0).identifiantNumerique).to.be(
+      expect(service.risquesSpecifiques().item(0).identifiantNumerique).toBe(
         'RS42'
       );
-      expect(service.prochainIdNumeriqueDeRisqueSpecifique).to.be(43);
+      expect(service.prochainIdNumeriqueDeRisqueSpecifique).toBe(43);
     });
   });
 
@@ -546,7 +545,7 @@ describe('Un service', () => {
       service.mesures.mesuresGenerales
         .toutes()
         .find((mesure) => mesure.id === 'm1').rendueIndispensable
-    ).to.be(true);
+    ).toBe(true);
   });
 
   it('connaît ses mesures spécifiques', () => {
@@ -555,7 +554,7 @@ describe('Un service', () => {
       mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
     });
 
-    expect(service.mesuresSpecifiques().nombre()).to.equal(1);
+    expect(service.mesuresSpecifiques().nombre()).toEqual(1);
   });
 
   describe('sur évaluation du statut de saisie des mesures', () => {
@@ -573,7 +572,7 @@ describe('Un service', () => {
         moteur
       );
 
-      expect(service.statutSaisie('mesures')).to.equal(
+      expect(service.statutSaisie('mesures')).toEqual(
         InformationsService.A_COMPLETER
       );
     });
@@ -590,7 +589,7 @@ describe('Un service', () => {
         moteur
       );
 
-      expect(service.statutSaisie('mesures')).to.equal(
+      expect(service.statutSaisie('mesures')).toEqual(
         InformationsService.COMPLETES
       );
     });
@@ -599,7 +598,7 @@ describe('Un service', () => {
   describe('sur évaluation du statut de saisie des risques', () => {
     it('détecte que la liste des risques reste à vérifier', () => {
       const service = new Service({ id: '123' });
-      expect(service.statutSaisie('risques')).to.equal(
+      expect(service.statutSaisie('risques')).toEqual(
         InformationsService.A_SAISIR
       );
     });
@@ -609,28 +608,28 @@ describe('Un service', () => {
     const service = unService().construis();
     service.mesures.indiceCyber = () => 3.7;
 
-    expect(service.indiceCyber()).to.equal(3.7);
+    expect(service.indiceCyber()).toEqual(3.7);
   });
 
   it('connaît son indice cyber personnalisé', () => {
     const service = unService().construis();
     service.mesures.indiceCyberPersonnalise = () => 4.8;
 
-    expect(service.indiceCyberPersonnalise()).to.equal(4.8);
+    expect(service.indiceCyberPersonnalise()).toEqual(4.8);
   });
 
   it('délègue aux mesures le calcul du nombre total de mesures générales', () => {
     const service = new Service({ mesuresGenerales: [] });
     service.mesures.nombreTotalMesuresGenerales = () => 42;
 
-    expect(service.nombreTotalMesuresGenerales()).to.equal(42);
+    expect(service.nombreTotalMesuresGenerales()).toEqual(42);
   });
 
   it('délègue aux mesures le calcul du nombre de mesures spécifiques', () => {
     const service = new Service({ mesuresGenerales: [] });
     service.mesures.nombreMesuresSpecifiques = () => 42;
 
-    expect(service.nombreMesuresSpecifiques()).to.equal(42);
+    expect(service.nombreMesuresSpecifiques()).toEqual(42);
   });
 
   it('délègue aux mesures la récupération des mesures par statut et par catégorie', () => {
@@ -666,7 +665,7 @@ describe('Un service', () => {
       referentiel
     );
 
-    expect(service.descriptionStatutDeploiement()).to.equal('En ligne');
+    expect(service.descriptionStatutDeploiement()).toEqual('En ligne');
   });
 
   it('connaît la localisation des données', () => {
@@ -690,7 +689,7 @@ describe('Un service', () => {
       referentiel
     );
 
-    expect(service.localisationDonnees()).to.equal('france');
+    expect(service.localisationDonnees()).toEqual('france');
   });
 
   it('sait décrire la localisation des données', () => {
@@ -714,7 +713,7 @@ describe('Un service', () => {
       referentiel
     );
 
-    expect(service.descriptionLocalisationDonnees()).to.equal('France');
+    expect(service.descriptionLocalisationDonnees()).toEqual('France');
   });
 
   it("récupère un objet de vue pour le pdf de l'annexe de la description", () => {
@@ -724,7 +723,9 @@ describe('Un service', () => {
       descriptionService: { nomService: 'nom' },
     });
 
-    expect(service.vueAnnexePDFDescription()).to.be.a(VueAnnexePDFDescription);
+    expect(service.vueAnnexePDFDescription()).toBeInstanceOf(
+      VueAnnexePDFDescription
+    );
   });
 
   it("récupère un objet de vue pour le pdf de l'annexe des risques", () => {
@@ -734,7 +735,7 @@ describe('Un service', () => {
       descriptionService: { nomService: 'nom' },
     });
 
-    expect(service.vueAnnexePDFRisques()).to.be.a(VueAnnexePDFRisques);
+    expect(service.vueAnnexePDFRisques()).toBeInstanceOf(VueAnnexePDFRisques);
   });
 
   it("récupère un objet de vue pour le pdf de l'annexe des mesures", () => {
@@ -744,7 +745,7 @@ describe('Un service', () => {
       descriptionService: { nomService: 'nom' },
     });
 
-    expect(service.vueAnnexePDFMesures()).to.be.a(VueAnnexePDFMesures);
+    expect(service.vueAnnexePDFMesures()).toBeInstanceOf(VueAnnexePDFMesures);
   });
 
   describe('sur requête des données à persister', () => {
@@ -884,7 +885,7 @@ describe('Un service', () => {
 
       const duplicata = service.donneesADupliquer();
 
-      expect(duplicata.id).to.be(undefined);
+      expect(duplicata.id).toBe(undefined);
     });
 
     it('utilise le nom de service passé en paramètre', () => {
@@ -895,7 +896,7 @@ describe('Un service', () => {
 
       const duplicata = service.donneesADupliquer('Nouveau service');
 
-      expect(duplicata.descriptionService.nomService).to.equal(
+      expect(duplicata.descriptionService.nomService).toEqual(
         'Nouveau service'
       );
     });
@@ -913,7 +914,7 @@ describe('Un service', () => {
 
       expect(
         duplicata.descriptionService.organisationResponsable.siret
-      ).to.equal('NOUVEAU_SIRET');
+      ).toEqual('NOUVEAU_SIRET');
     });
 
     it("ne duplique pas les dossiers de l'homologation", () => {
@@ -928,7 +929,7 @@ describe('Un service', () => {
 
       const duplicata = service.donneesADupliquer();
 
-      expect(duplicata.dossiers).to.be(undefined);
+      expect(duplicata.dossiers).toBe(undefined);
     });
   });
 
@@ -961,7 +962,7 @@ describe('Un service', () => {
     };
 
     service.supprimeDossierCourant();
-    expect(appelDelegue).to.be(true);
+    expect(appelDelegue).toBe(true);
   });
 
   describe("sur demande de mise à jour d'une mesure générale", () => {
@@ -1010,7 +1011,7 @@ describe('Un service', () => {
 
       await service.metsAJourMesureGenerale(mesure);
 
-      expect(service.mesuresGenerales().toutes().length).to.be(1);
+      expect(service.mesuresGenerales().toutes().length).toBe(1);
       expect(service.mesuresGenerales().toutes()[0].toJSON()).to.eql({
         id: 'identifiantMesure',
         statut: 'fait',
@@ -1067,7 +1068,7 @@ describe('Un service', () => {
 
       await service.metsAJourMesureSpecifique(mesure);
 
-      expect(donneesRecues.id).to.be('M1');
+      expect(donneesRecues.id).toBe('M1');
     });
 
     it('peut ajouter un responsable', async () => {
@@ -1134,7 +1135,7 @@ describe('Un service', () => {
         .avecSuggestionAction({ nature: 'siret-a-renseigner' })
         .construis();
 
-      expect(service.actionRecommandee().id).to.be('mettreAJour');
+      expect(service.actionRecommandee().id).toBe('mettreAJour');
     });
 
     it("retourne 'continuerHomologation' si le service a un un dossier d'homologation en cours et un indice cyber supérieur à 4", () => {
@@ -1145,7 +1146,7 @@ describe('Un service', () => {
         .avecMesures(mesuresToutesFaites)
         .construis();
 
-      expect(service.actionRecommandee().id).to.be('continuerHomologation');
+      expect(service.actionRecommandee().id).toBe('continuerHomologation');
     });
 
     it("retourne 'augmenterIndiceCyber' si le service a un un dossier d'homologation en cours et un indice cyber inférieur à 4", () => {
@@ -1156,7 +1157,7 @@ describe('Un service', () => {
         .avecMesures(mesuresNonFaites)
         .construis();
 
-      expect(service.actionRecommandee().id).to.be('augmenterIndiceCyber');
+      expect(service.actionRecommandee().id).toBe('augmenterIndiceCyber');
     });
 
     it("retourne 'telechargerEncartHomologation' si le service a un un dossier d'homologation actif et en cours de validité", () => {
@@ -1166,7 +1167,7 @@ describe('Un service', () => {
         ])
         .construis();
 
-      expect(service.actionRecommandee().id).to.be(
+      expect(service.actionRecommandee().id).toBe(
         'telechargerEncartHomologation'
       );
     });
@@ -1179,7 +1180,7 @@ describe('Un service', () => {
         ])
         .construis();
 
-      expect(service.actionRecommandee()?.id).not.to.be(
+      expect(service.actionRecommandee()?.id).not.toBe(
         'telechargerEncartHomologation'
       );
     });
@@ -1191,7 +1192,7 @@ describe('Un service', () => {
         ])
         .construis();
 
-      expect(service.actionRecommandee().id).to.be('homologuerANouveau');
+      expect(service.actionRecommandee().id).toBe('homologuerANouveau');
     });
 
     it("retourne 'inviterContributeur' si le service n'a qu'un contributeur, un taux de complétion inférieur à 80% et indice cyber inférieur à 4", () => {
@@ -1200,7 +1201,7 @@ describe('Un service', () => {
         .avecMesures(mesuresNonRemplies)
         .construis();
 
-      expect(service.actionRecommandee().id).to.be('inviterContributeur');
+      expect(service.actionRecommandee().id).toBe('inviterContributeur');
     });
 
     it("retourne 'augmenterIndiceCyber' si le service a plus d'un contributeur, un taux de complétion inférieur à 80% et indice cyber inférieur à 4", () => {
@@ -1209,7 +1210,7 @@ describe('Un service', () => {
         .avecMesures(mesuresNonRemplies)
         .construis();
 
-      expect(service.actionRecommandee().id).to.be('augmenterIndiceCyber');
+      expect(service.actionRecommandee().id).toBe('augmenterIndiceCyber');
     });
 
     it("retourne 'homologuerService' si le service a un taux de complétion supérieur à 80% et indice cyber supérieur à 4", () => {
@@ -1217,13 +1218,13 @@ describe('Un service', () => {
         .avecMesures(mesuresToutesFaites)
         .construis();
 
-      expect(service.actionRecommandee().id).to.be('homologuerService');
+      expect(service.actionRecommandee().id).toBe('homologuerService');
     });
 
     it("retourne 'undefined' si aucune action recommandée", () => {
       const service = unService().construis();
 
-      expect(service.actionRecommandee()).to.be(undefined);
+      expect(service.actionRecommandee()).toBe(undefined);
     });
   });
 
@@ -1237,8 +1238,8 @@ describe('Un service', () => {
     });
 
     const mesureSpecifique = service.mesuresSpecifiques().item(0);
-    expect(mesureSpecifique.idModele).to.be('MOD-1');
-    expect(mesureSpecifique.description).to.be('Mon modèle de mesure');
+    expect(mesureSpecifique.idModele).toBe('MOD-1');
+    expect(mesureSpecifique.description).toBe('Mon modèle de mesure');
   });
 
   describe('concernant un service v2', () => {
@@ -1249,8 +1250,8 @@ describe('Un service', () => {
         descriptionService: { nomService: 'Bibliothèque' },
       });
 
-      expect(service.descriptionService).to.be.an(DescriptionServiceV2);
-      expect(service.nomService()).to.be('Bibliothèque');
+      expect(service.descriptionService).toBeInstanceOf(DescriptionServiceV2);
+      expect(service.nomService()).toBe('Bibliothèque');
     });
   });
 });
