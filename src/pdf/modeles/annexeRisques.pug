@@ -30,9 +30,9 @@ block page
           - const y = Math.floor(index / 4)
           - const classe = donneesRisques.matriceNiveauxRisque[x + 1][4 - y]
           - const risquesPresent = donneesRisques.grilleRisques[y][x]
-          - const jointsAvecEllispe = (liste) => liste.length > 7 ? liste.splice(0,6).join(', ')+"&hellip;" : liste.join(', ')
+          - const jointsAvecEllispe = (liste) => liste.length > 7 ? liste.splice(0,6).join(', ')+"…" : liste.join(', ')
           - const libelleCellule = !risquesPresent ? "" : jointsAvecEllispe(risquesPresent)
-          .cellule-matrice(class=`${classe} ${index}`)!= libelleCellule
+          .cellule-matrice(class=`${classe} ${index}`)= libelleCellule
     .legende-matrice
       ul
         - const niveaux = Object.entries(referentiel.niveauxRisque()).filter(([_, n]) => n.position >= 0).sort(([_, a], [__, b]) => a.position - b.position);
