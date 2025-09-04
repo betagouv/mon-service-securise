@@ -22,3 +22,12 @@
 
 - Les avis sur une homologation
 - Les nom prénom de contributeur de service
+
+## Dans Svelte
+
+- en BDD : table `utilisateurs` > champs `nom` `prenom`
+  - svelte/lib/gestionContributeurs/kit/ChampAvecSuggestions.svelte:97
+    - `prenomNom` qui fini sur Utilisateur
+  - svelte/lib/gestionContributeurs/invitation/ListeInvitations.svelte:15
+    - des `invitations` qui contiennent un `utilisateur` avec `prenomNom`
+  - svelte/lib/gestionContributeurs/kit/LigneContributeur.svelte:38 qui fait `prenomNom`

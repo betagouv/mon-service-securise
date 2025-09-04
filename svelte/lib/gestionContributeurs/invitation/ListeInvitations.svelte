@@ -37,7 +37,7 @@
           valeur={utilisateur.initiales}
           resumeNiveauDroit={resumeLesDroits(droits)}
         />
-        <span class="prenom-nom">{@html utilisateur.prenomNom}</span>
+        <span class="prenom-nom">{utilisateur.prenomNom}</span>
       </div>
       <div class="conteneur-actions">
         <TagNiveauDroit
