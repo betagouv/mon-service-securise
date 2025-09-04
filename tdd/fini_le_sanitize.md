@@ -31,6 +31,8 @@
 - [ ] ActiviteAjoutCommentaire.svelte il faut conserver la possibilité de mentionner qqun
 - [ ] LigneMesure.svelte il faut conserver le surlignage quand on recherche un texte
 - [ ] Enlever des `decode()` qui sont sur des données saisies
+- [ ] Enlever les !{ en pug
+- [ ] Enlever les != en pug
 - [ ] Migration des données
 
 ### Les migrations BDD
