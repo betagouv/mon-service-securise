@@ -2,11 +2,20 @@ import { DonneesChiffrees, UUID } from '../typesBasiques.js';
 import { AdaptateurUUID } from '../adaptateurs/adaptateurUUID.js';
 import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
 
+export type DonneesBrouillonService = {
+  nomService: string;
+};
+
+export type BrouillonService = DonneesBrouillonService & {
+  id: UUID;
+};
+
 export type DepotDonneesBrouillonService = {
   nouveauBrouillonService: (
     idUtilisateur: UUID,
     nomService: string
   ) => Promise<UUID>;
+  lisBrouillonsService: (idUtilisateur: UUID) => Promise<BrouillonService[]>;
 };
 
 type PersistanceBrouillonService = {
@@ -15,6 +24,9 @@ type PersistanceBrouillonService = {
     idUtilisateur: UUID,
     donnees: DonneesChiffrees
   ) => Promise<void>;
+  lisBrouillonsService: (
+    idUtilisateur: UUID
+  ) => Promise<{ id: UUID; idUtilisateur: UUID; donnees: DonneesChiffrees }[]>;
 };
 
 const creeDepot = ({
@@ -45,7 +57,21 @@ const creeDepot = ({
     return idBrouillon;
   };
 
-  return { nouveauBrouillonService };
+  const lisBrouillonsService = async (idUtilisateur: UUID) => {
+    const donneesBrouillons =
+      await persistance.lisBrouillonsService(idUtilisateur);
+
+    return Promise.all(
+      donneesBrouillons.map(async ({ donnees, id }) => ({
+        id,
+        ...(await adaptateurChiffrement.dechiffre<DonneesBrouillonService>(
+          donnees
+        )),
+      }))
+    );
+  };
+
+  return { nouveauBrouillonService, lisBrouillonsService };
 };
 
 export { creeDepot };

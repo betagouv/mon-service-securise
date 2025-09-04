@@ -278,7 +278,8 @@ const creeDepot = (config = {}) => {
     supprimeModeleMesureSpecifiqueEtMesuresAssociees,
   } = depotModelesMesureSpecifique;
 
-  const { nouveauBrouillonService } = depotBrouillonsService;
+  const { nouveauBrouillonService, lisBrouillonsService } =
+    depotBrouillonsService;
 
   return {
     accesAutorise,
@@ -314,6 +315,7 @@ const creeDepot = (config = {}) => {
     enregistreDossier,
     finaliseDossierCourant,
     lisActivitesMesure,
+    lisBrouillonsService,
     lisDernierIndiceCyber,
     lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationEnDate,
