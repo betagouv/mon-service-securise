@@ -29,9 +29,9 @@ mixin dossier({ statut, dossier, service, indiceCyber, indiceCyberPersonnalise, 
         if afficheStatutHomologation
           - const statutHomologation = dossier.statutHomologation()
           .statut-homologation(class=statutHomologation)
-            span!= referentiel.statutHomologation(statutHomologation).libelle
+            span= referentiel.statutHomologation(statutHomologation).libelle
               if dateExpiration && statutHomologation === 'bientotExpiree'
-                span!= dateExpiration
+                span= dateExpiration
       .contenu-gauche
         .contenu-statut
           .conteneur-statut-indice-cyber
@@ -47,22 +47,22 @@ mixin dossier({ statut, dossier, service, indiceCyber, indiceCyberPersonnalise, 
                     .indice-cyber
                       b Indice cyber ANSSI&nbsp;&nbsp;&nbsp;
                       span.conteneur-indice-cyber
-                        span.note-indice-cyber!= `${indiceCyber.toFixed(1)}/${referentiel.indiceCyberNoteMax()}`
+                        span.note-indice-cyber= `${indiceCyber.toFixed(1)}/${referentiel.indiceCyberNoteMax()}`
                   if indiceCyberPersonnalise !== undefined
                     .indice-cyber.personnalise
                       b Indice personnalisé&nbsp;&nbsp;&nbsp;
                       span.conteneur-indice-cyber
-                        span.note-indice-cyber!= `${indiceCyberPersonnalise.toFixed(1)}/${referentiel.indiceCyberNoteMax()}`
+                        span.note-indice-cyber= `${indiceCyberPersonnalise.toFixed(1)}/${referentiel.indiceCyberNoteMax()}`
         .contenu-details
           .details
             if dossier.finalise
-              div!= `Autorité d'homologation : ${texteTronque(dossier.autorite.nom, 37)} | ${texteTronque(dossier.autorite.fonction, 37)}`
+              div= `Autorité d'homologation : ${texteTronque(dossier.autorite.nom, 37)} | ${texteTronque(dossier.autorite.fonction, 37)}`
               div= `Date d'échéance : ${dossier.descriptionProchaineDateHomologation()}`
             else
               - const titreEtape = referentiel.etapesParcoursHomologation().find((e) => e.id === etapeCourante)
               .contenu-etape-courante
-                .numero-etape!= `Étape ${numeroDerniereEtapeCompletee} sur ${nombreTotalEtapes}`
-                .titre-etape!= titreEtape.libelle
+                .numero-etape= `Étape ${numeroDerniereEtapeCompletee} sur ${nombreTotalEtapes}`
+                .titre-etape= titreEtape.libelle
     if afficheActions
       .conteneur-actions
         button.bouton.bouton-avec-icone.bouton-tertiaire#affiche-documents(type='button', disabled=estImporte) Accéder aux documents
