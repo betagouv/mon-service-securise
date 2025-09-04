@@ -5,7 +5,7 @@ mixin bloc-description(liste, legende)
     +boite-grise(legende)
       ul.liste-puce
         each item in liste
-          li!= item 
+          li= item
 
 block page
   if donneesDescription.versionService === 'v1'
