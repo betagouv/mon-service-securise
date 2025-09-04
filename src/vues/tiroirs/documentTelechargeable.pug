@@ -5,5 +5,5 @@ mixin documentTelechargeable(nom, description, type, idLien)
       img.icone-type-document(src=sourceImage alt='')
       .contenu-texte
         p.titre-document= nom
-        p.description-document!= description
+        p.description-document= description
     a.lien-telechargement.bouton(href='', target='_blank', rel='noopener', id=idLien) Télécharger

@@ -1,9 +1,9 @@
 mixin temoignage(citation, auteur, source)
   .temoignage.alignement-gauche
     img(src='/statique/assets/images/home/icone_temoignage.svg' alt='')
-    h4!= `« ${citation} »`
-    h5!= auteur
-    h6.alignement-gauche!= source
+    h4= `« ${citation} »`
+    h5= auteur
+    h6.alignement-gauche= source
 
 +temoignage("Nous avons commencé à utiliser MSS qui correspond bien à nos objectifs en termes de sécurité et de protection des données personnelles : la complémentarité entre DSI, RSSI et DPO. L'utilisation du service est simple. Nous y intégrons désormais les nouveaux projets au fur et à mesure que nous en sommes informés. Cela contribue au respect des principes de privacy et security by design.", 'Robert Malek', 'IMT')
 +temoignage("L'idée d'une gestion pilotée par la direction générale s'est révélée être un point de départ essentiel, permettant de dépasser l'image de \"gadget technique\" souvent associée à une direction opérationnelle. Bien au contraire, chez nous, cet outil est devenu un moyen commun au service de tous. Merci donc pour cette initiative ! ", 'Lionel Pérès', 'Ville de Vaison-la-Romaine · Directeur général des services')
