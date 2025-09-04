@@ -15,7 +15,7 @@ block header-titre-page
 
 block titre
   if idEtape
-    h1!= referentiel.libelleEtape(idEtape)
+    h1= referentiel.libelleEtape(idEtape)
   else
     h1 Homologuer
 
