@@ -260,16 +260,14 @@ const creeDepot = (config = {}) => {
     idServiceMisAJour,
     versionService,
   }) => {
-    const { nomService } = donneesDescriptionService;
-
     Service.valideDonneesCreation(donneesDescriptionService, versionService);
 
+    const { nomService } = donneesDescriptionService;
     const existeDeja = await serviceExiste(
       idUtilisateur,
       nomService,
       idServiceMisAJour
     );
-
     if (existeDeja)
       throw new ErreurNomServiceDejaExistant(
         `Le nom du service "${nomService}" existe déjà pour un autre service`

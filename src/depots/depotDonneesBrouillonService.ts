@@ -1,6 +1,8 @@
 import { DonneesChiffrees, UUID } from '../typesBasiques.js';
 import { AdaptateurUUID } from '../adaptateurs/adaptateurUUID.js';
 import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
+import { ErreurBrouillonInexistant } from '../erreurs.js';
+import { DepotDonneesService } from './depotDonneesService.interface.js';
 
 export type DonneesBrouillonService = {
   nomService: string;
@@ -16,6 +18,10 @@ export type DepotDonneesBrouillonService = {
     nomService: string
   ) => Promise<UUID>;
   lisBrouillonsService: (idUtilisateur: UUID) => Promise<BrouillonService[]>;
+  finaliseBrouillonService: (
+    idUtilisateur: UUID,
+    idBrouillon: UUID
+  ) => Promise<UUID>;
 };
 
 type PersistanceBrouillonService = {
@@ -33,10 +39,12 @@ const creeDepot = ({
   persistance,
   adaptateurUUID,
   adaptateurChiffrement,
+  depotDonneesService,
 }: {
   persistance: PersistanceBrouillonService;
   adaptateurUUID: AdaptateurUUID;
   adaptateurChiffrement: AdaptateurChiffrement;
+  depotDonneesService: DepotDonneesService;
 }): DepotDonneesBrouillonService => {
   const nouveauBrouillonService = async (
     idUtilisateur: UUID,
@@ -71,7 +79,28 @@ const creeDepot = ({
     );
   };
 
-  return { nouveauBrouillonService, lisBrouillonsService };
+  const finaliseBrouillonService = async (
+    idUtilisateur: UUID,
+    idBrouillon: UUID
+  ) => {
+    const tousLesBrouillons =
+      await persistance.lisBrouillonsService(idUtilisateur);
+    const leBrouillon = tousLesBrouillons.find((b) => b.id === idBrouillon);
+
+    if (!leBrouillon) throw new ErreurBrouillonInexistant();
+
+    const idService = await depotDonneesService.nouveauService(
+      idUtilisateur,
+      leBrouillon.donnees
+    );
+    return idService;
+  };
+
+  return {
+    finaliseBrouillonService,
+    nouveauBrouillonService,
+    lisBrouillonsService,
+  };
 };
 
 export { creeDepot };
