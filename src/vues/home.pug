@@ -5,29 +5,29 @@ block variables
 
 mixin contenuAvantage(titre, description)
   .contenu-avantage
-    h4!= titre
-    p!= description
+    h4= titre
+    p= description
 
 mixin etape(numero, titre, description, afficheChemin = true)
   .etape
     img.taille-maximale.tres-petite-marge-basse(loading="lazy" src=`/statique/assets/images/home/illustration_etape_${numero}.svg` alt='')
     .numero-etape.tres-petite-marge-basse(class=`numero-${numero}`)
-      span!= numero
+      span= numero
     .contenu-texte-etape
-      h4.alignement-gauche!= titre
-      p.alignement-gauche!= description
+      h4.alignement-gauche= titre
+      p.alignement-gauche= description
     if afficheChemin
       img.visible-uniquement-desktop.chemin(src='/statique/assets/images/home/chemin_etape_gauche.svg' alt='')
 
 mixin chiffreCle(chiffre, description)
   .chiffre-cle
-    h4.alignement-gauche.centre-tablette.couleur-principale-foncee!= chiffre
-    p.alignement-gauche.centre-tablette!=description
+    h4.alignement-gauche.centre-tablette.couleur-principale-foncee= chiffre
+    p.alignement-gauche.centre-tablette= description
 
 mixin carteCarrousel(numero, description)
   .carte-carrousel(id=`slide-${numero}`)
     img.petite-marge-basse(loading="lazy" src=`/statique/assets/images/home/illustration_carrousel_${numero}.svg` alt='')
-    h3!= description
+    h3= description
 
 mixin carrousel(id, texteBoutonSuivant)
   div(id=id)
@@ -37,7 +37,7 @@ mixin carrousel(id, texteBoutonSuivant)
       button.precedent(title="Précédent")
         img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
       button.suivant(title="Suivant")
-        span!= texteBoutonSuivant
+        span= texteBoutonSuivant
         img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
 
 block append styles
@@ -136,7 +136,7 @@ block main
       .chiffres-cle.petite-marge-basse
         +chiffreCle('+55%', "L'augmentation moyenne de l'indice cyber d'un service en seulement 1 mois.")
         +chiffreCle('5 min', "Le temps nécessaire pour démarrer un projet d'homologation et obtenir une 1ère version de son dossier.")
-        +chiffreCle('+8&nbsp;000', "Plus de 8&nbsp;000 personnes utilisent déjà MonServiceSécurisé.")
+        +chiffreCle('+8 000', "Plus de 8 000 personnes utilisent déjà MonServiceSécurisé.")
     .bloc-contenu.fond-couleur-principale-attenuee
       h3.alignement-gauche.couleur-principale-foncee.moyenne-marge-basse Ces entités qui nous font confiance
       .conteneur-entites.grande-marge-basse
