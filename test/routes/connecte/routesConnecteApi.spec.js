@@ -113,6 +113,22 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       await testeur.get('/api/services');
       expect(donneesPassees.idUtilisateur).to.equal('123');
     });
+
+    it('interroge le dépôt de données pour récupérer les brouillons de service', async () => {
+      let idUtilisateurRecu;
+      testeur.depotDonnees().lisBrouillonsService = async (idUtilisateur) => {
+        idUtilisateurRecu = idUtilisateur;
+        return [{ nomService: 'nom du service', id: 'B1' }];
+      };
+
+      const reponse = await testeur.get('/api/services');
+
+      expect(idUtilisateurRecu).to.equal('123');
+      expect(reponse.body.brouillonsService.length).to.equal(1);
+      expect(reponse.body.brouillonsService[0].nomService).to.equal(
+        'nom du service'
+      );
+    });
   });
 
   describe('quand requête GET sur `/api/services/indices-cyber`', () => {
