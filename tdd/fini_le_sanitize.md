@@ -31,3 +31,5 @@
   - svelte/lib/gestionContributeurs/invitation/ListeInvitations.svelte:15
     - des `invitations` qui contiennent un `utilisateur` avec `prenomNom`
   - svelte/lib/gestionContributeurs/kit/LigneContributeur.svelte:38 qui fait `prenomNom`
+  - SuppressionContributeur.svelte
+  - ListeSuggestionsMention.svelte

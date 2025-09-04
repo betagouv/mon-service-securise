@@ -54,7 +54,7 @@
           resumeNiveauDroit={$storeAutorisations.autorisations[contributeur.id]
             ?.resumeNiveauDroit}
         />
-        <span class="prenom-nom">{@html contributeur.prenomNom}</span>
+        <span class="prenom-nom">{contributeur.prenomNom}</span>
       </div>
     </li>
   {/each}
