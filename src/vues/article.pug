@@ -4,15 +4,6 @@ include ./fragments/navigationSiteVitrine
 block variables
   - const meta_description = description
 
-mixin tableDesMatieres(donnees)
-  .table-des-matieres
-    if avecTitreTableDesMatieres
-      p Dans cet article
-    .contenu-tdm(class=`${avecTitreTableDesMatieres ? '' : 'decalage-sans-titre'}`)
-      each entree in donnees
-        a(href=`#${entree.id}` class=`niveau-${entree.profondeur}`)!= entree.texte
-
-
 block title
   title= `${titre} | MonServiceSécurisé`
 
