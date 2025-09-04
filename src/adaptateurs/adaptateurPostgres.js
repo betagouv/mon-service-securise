@@ -882,6 +882,11 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       donnees,
     });
 
+  const lisBrouillonsService = async (idUtilisateur) =>
+    knex('brouillons_service')
+      .where({ id_utilisateur: idUtilisateur })
+      .select('id', 'donnees');
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -905,6 +910,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     autorisationsDuService,
     estSuperviseur,
     serviceExisteAvecHashNom,
+    lisBrouillonsService,
     lisDernierIndiceCyber,
     lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationDansIntervalle,
