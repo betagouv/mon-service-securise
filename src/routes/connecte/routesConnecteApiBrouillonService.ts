@@ -3,6 +3,7 @@ import * as z from 'zod';
 import { DepotDonneesBrouillonService } from '../../depots/depotDonneesBrouillonService.js';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { valideBody } from '../../http/valideBody.js';
+import { UUID } from '../../typesBasiques.js';
 
 const routesConnecteApiBrouillonService = ({
   depotDonnees,
@@ -35,7 +36,7 @@ const routesConnecteApiBrouillonService = ({
     const { id } = requete.params;
     const idService = await depotDonnees.finaliseBrouillonService(
       idUtilisateurCourant,
-      id
+      id as UUID
     );
     return reponse.json({ idService });
   });

@@ -11,11 +11,11 @@
 - [ ] le brouillon se transforme en une descriptionV2 à la création du service
   - [x] la validation de description dans `nouveauService` est faite par une méthode statique de `Service.valideDonneesCreation`
     - [x] c'est cette méthode statique qui fait le switch entre v1 et v2
-  - [ ] la description v2 est persistée dans le service
-  - [ ] une route qui finalise un brouillon complet, et crée un nouveau service
-    - le brouillon est transformé en description v2
-    - la description v2 est persistée dans le service
-    - le brouillon est supprimé
+- [x] une route qui finalise un brouillon complet, et crée un nouveau service
+- [-] le dépôt de données sait finaliser un brouillon de service
+  - le brouillon est transformé en description v2
+  - la description v2 est persistée dans le service (actuellement descriptionServiceV2.donneesSerialisees() n'existe pas)
+  - le brouillon est supprimé
 - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
   - ce moteur de règles génère une liste de mesures v2
 
