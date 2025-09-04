@@ -31,6 +31,9 @@
   - champ `nom`
   - champ `prenom`
   - champ `postes` qui est un `[]`
+- [ ] table `services`
+  - champ `risquesSpecifiques[].intitule`, `commentaire`, `description`
+  - champ `risquesGeneraux[].commentaire`
 
 ### Les tests pour vérifier :
 
@@ -40,5 +43,13 @@
   - gestionContributeurs/kit/LigneContributeur.svelte:38
   - SuppressionContributeur.svelte
   - ListeSuggestionsMention.svelte
-- Pour `utiliasteurs.postes`
+- Pour `utilisateurs.postes`
   - LigneContributeur.svelte
+- Pour les `risquesSpecifiques` et `risquesGeneraux` :
+  - la liste des risques sur la page `/risques`,
+  - le tiroir de risque général
+  - le tiroir de risque spécifique
+
+### Pas besoin de changer :
+
+- NiveauxDeSecurite.svelte : on affiche des données statiques qui viennent du code source
