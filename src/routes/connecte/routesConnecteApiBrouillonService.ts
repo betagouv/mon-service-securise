@@ -30,6 +30,16 @@ const routesConnecteApiBrouillonService = ({
     }
   );
 
+  routes.post('/:id/finalise', async (requete: Request, reponse: Response) => {
+    const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+    const { id } = requete.params;
+    const idService = await depotDonnees.finaliseBrouillonService(
+      idUtilisateurCourant,
+      id
+    );
+    return reponse.json({ idService });
+  });
+
   return routes;
 };
 
