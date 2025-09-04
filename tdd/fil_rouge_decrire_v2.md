@@ -11,11 +11,15 @@
   - [x] Retourner l'ID réel du brouillon
   - [x] La validation de la payload sur le POST se fait avec ZOD
   - [ ] Le brouillon peut être affiché dans le tableau de bord
-  - [ ] le brouillon se transforme en une descriptionV2 à la création du service
-    - [ ] la description v2 est persistée dans le service
+    - [x] Il est affiché au dessus des services
+    - [ ] On peut sélectionner un brouillon pour le supprimer
+    - [ ] On peut rechercher sur le nom du brouillon
+    - [ ] On s'assure que l'affichage "tableau vide" fonctionne correctement
+- [ ] le brouillon se transforme en une descriptionV2 à la création du service
+  - [ ] la description v2 est persistée dans le service
   - [ ] faire des ajouts/modifications sur les champs du brouillon
   - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
-    - [ ] ce moteur de règles génère une liste de mesures v2
+  - [ ] ce moteur de règles génère une liste de mesures v2
 
 ## TODO plus tard
 

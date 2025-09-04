@@ -47,6 +47,11 @@ export type Service = {
   pourcentageCompletude?: number;
 };
 
+export type BrouillonService = {
+  id: string;
+  nomService: string;
+};
+
 export type ReponseApiServices = {
   services: Service[];
   resume: {
@@ -54,6 +59,7 @@ export type ReponseApiServices = {
     nombreServicesHomologues: number;
     nombreHomologationsExpirees: number;
   };
+  brouillonsService: BrouillonService[];
 };
 
 export type IndiceCyber = {
