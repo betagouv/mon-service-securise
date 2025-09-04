@@ -261,16 +261,7 @@ const creeDepot = (config = {}) => {
   ) => {
     const { nomService } = donnees;
 
-    if (!DescriptionService.proprietesObligatoiresRenseignees(donnees)) {
-      throw new ErreurDonneesObligatoiresManquantes(
-        'Certaines données obligatoires ne sont pas renseignées'
-      );
-    }
-    Entite.valideDonnees(donnees.organisationResponsable);
-
-    if (!DescriptionService.niveauSecuriteChoisiSuffisant(donnees)) {
-      throw new ErreurDonneesNiveauSecuriteInsuffisant();
-    }
+    Service.valideDonneesCreation(donnees);
 
     const existeDeja = await serviceExiste(
       idUtilisateur,
