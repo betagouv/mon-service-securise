@@ -47,14 +47,17 @@
     - `donneesSensiblesSpecifiques[].description`
     - `fonctionnalitesSpecifiques[].description`
   - champ `risquesGeneraux[].commentaire`
-  - champ `risquesSpecifiques[].intitule`, `commentaire`, `description`
+  - champ `risquesSpecifiques[]`
+    - `intitule`, `commentaire`, `description`
   - champ `mesuresGenerales[].modalites`
+  - champ `mesuresSpecifiques[]`
+    - `description`, `modalites`
   - champ `dossiers[]`
     - `autorite.nom` et `autorite.fonction`
     - `avis[].commentaires` et `avis[].collaborateurs`
     - `documents[]`
   - champ `rolesResponsabilites`
-    - `acteursHomologation[].role`
+    - `acteursHomologation[].role`, `nom`, `fonction`
     - `partiesPrenantes[].nom`, `natureAcces`, `pointContact`
 
 - [ ] table `activites_mesure`
