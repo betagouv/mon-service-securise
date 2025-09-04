@@ -32,7 +32,11 @@
   - champ `prenom`
   - champ `postes` qui est un `[]`
 - [ ] table `services`
-  - champ `descriptionService.nomService`
+  - champ `descriptionService`
+    - `nomService`
+    - `pointsAcces[].description`
+    - `donneesSensiblesSpecifiques[].description`
+    - `fonctionnalitesSpecifiques[].description`
   - champ `risquesSpecifiques[].intitule`, `commentaire`, `description`
   - champ `risquesGeneraux[].commentaire`
 
