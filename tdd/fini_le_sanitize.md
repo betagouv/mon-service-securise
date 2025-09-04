@@ -32,6 +32,7 @@
   - champ `prenom`
   - champ `postes` qui est un `[]`
 - [ ] table `services`
+  - champ `descriptionService.nomService`
   - champ `risquesSpecifiques[].intitule`, `commentaire`, `description`
   - champ `risquesGeneraux[].commentaire`
 
@@ -49,6 +50,8 @@
   - la liste des risques sur la page `/risques`,
   - le tiroir de risque général
   - le tiroir de risque spécifique
+- Pour `services`
+  - `descriptionService.nom` : partout
 
 ### Pas besoin de changer :
 
