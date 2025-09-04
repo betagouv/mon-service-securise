@@ -12,8 +12,7 @@
   - [x] La validation de la payload sur le POST se fait avec ZOD
   - [ ] Le brouillon peut être affiché dans le tableau de bord
     - [x] Il est affiché au dessus des services
-    - [ ] On peut sélectionner un brouillon pour le supprimer
-    - [ ] On peut rechercher sur le nom du brouillon
+    - [x] On peut rechercher sur le nom du brouillon
     - [ ] On s'assure que l'affichage "tableau vide" fonctionne correctement
 - [ ] le brouillon se transforme en une descriptionV2 à la création du service
   - [ ] la description v2 est persistée dans le service
@@ -30,6 +29,7 @@
   - technique : pour sérialiser
   - métier : pour dupliquer, pour exploiter les données métier du service (les passe plat `descriptionService.*`)
 - Regarder toutes les routes connectées de page Service et vérifier s'il faut du v2
+- [ ] On peut sélectionner un brouillon pour le supprimer
 
 ## DONE
 

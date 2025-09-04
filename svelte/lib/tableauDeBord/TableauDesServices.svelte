@@ -23,7 +23,7 @@
   import EtiquetteCompletude from './elementsDeService/EtiquetteCompletude.svelte';
   import Lien from '../ui/Lien.svelte';
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
-  import { brouillonsService } from './stores/brouillonsService.store';
+  import { resultatsDeRechercheBrouillons } from './stores/resultatDeRechercheBrouillons.store';
 
   $: selection = $resultatsDeRecherche.filter((service) =>
     $selectionIdsServices.includes(service.id)
@@ -123,7 +123,7 @@
     <TableauVide />
   {:else}
     <tbody class="contenu-tableau-services">
-      {#each $brouillonsService as brouillon (brouillon.id)}
+      {#each $resultatsDeRechercheBrouillons as brouillon (brouillon.id)}
         <tr class="ligne-service brouillon" data-id-brouillon={brouillon.id}>
           <th class="cellule-selection" scope="row"></th>
           <td class="cellule-noms">
