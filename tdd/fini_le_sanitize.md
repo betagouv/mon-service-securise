@@ -1,37 +1,20 @@
-## Occurrences of '!{' in Project
-
-`src/vues/fragments/donneesPartagees.pug  (1 usage found)`
-`3 !{JSON.stringify(donnees)}`
-
-- ????
-
-`src/pdf/modeles/annexeRisques.pug  (1 usage found)`
-`57 p.commentaire #[strong Commentaire :] !{risque.commentaire}`
-
-- Commentaire dans un risque
-
-`src/vues/fragments/elementsAjoutables/elementsAjoutablesAvis.pug  (2 usages found)`
-`18 each collaborateur in donneesUnAvis.collaborateurs`
-`option(value!= collaborateur, selected) !{collaborateur}
-20 option(value!= contributeur.prenomNom()) !{contributeur.prenomNom()}`
-
-- Les avis sur une homologation
-- Les nom prénom de contributeur de service
-
-## Dans Svelte
-
-### TODO
+## TODO
 
 - [ ] Enlever les `@html` qui sont sur des données saisies
 - [ ] ActiviteAjoutCommentaire.svelte il faut conserver la possibilité de mentionner qqun
 - [ ] LigneMesure.svelte il faut conserver le surlignage quand on recherche un texte
 - [ ] Enlever des `decode()` qui sont sur des données saisies
-- [ ] Enlever les !{ en pug
-- [x] Enlever les != en pug
-- [x] Voir le problème de Ce fichier .ZIP contient les <span id="nbPdfDisponibles"></span> PDF.
+- [ ] Enlever les `!{` en pug
+- [ ] Voir les concaténations de chaînes faites en jQuery…
+  - par exemple public/entete.js:10 qui met dans le DOM `prenomNom`. Si `prenomNom` a du `<h1>` ça pose problème.
 - [ ] Migration des données
 
-### Les migrations BDD
+## DONE
+
+- [x] Enlever les != en pug
+- [x] Voir le problème de Ce fichier .ZIP contient les <span id="nbPdfDisponibles"></span> PDF.
+
+## Les migrations BDD
 
 - [ ] table `utilisateurs`
   - champ `nom`
@@ -61,7 +44,7 @@
 - [ ] table `activites_mesure`
   - `WHERE type = 'ajoutCommentaire'` colonne `detail` est un JSON : on veut update `contenu`
 
-### Les tests pour vérifier :
+## Les tests pour vérifier :
 
 - Pour `utilisateurs.[nom|prenom]`:
   - gestionContributeurs/kit/ChampAvecSuggestions.svelte:97
@@ -80,6 +63,6 @@
   - l'onglet Activité de la mesure "Limiter et connaître…" sur http://localhost:3000/service/76b6025d-212c-4978-9662-cf0e5287538c/mesures commentaire du 04/09/2025
   - `descriptionService.nom` : partout
 
-### Pas besoin de changer :
+## Pas besoin de changer :
 
 - NiveauxDeSecurite.svelte : on affiche des données statiques qui viennent du code source
