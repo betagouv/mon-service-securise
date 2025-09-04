@@ -15,6 +15,11 @@ import SuggestionAction from './suggestionAction.js';
 import { dateEnIso } from '../utilitaires/date.js';
 import { Contributeur } from './contributeur.js';
 import { DescriptionServiceV2 } from './descriptionServiceV2.js';
+import {
+  ErreurDonneesNiveauSecuriteInsuffisant,
+  ErreurDonneesObligatoiresManquantes,
+} from '../erreurs.js';
+import Entite from './entite.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -468,6 +473,20 @@ class Service {
       droitsNecessaires: Autorisation.DROIT_INVITER_CONTRIBUTEUR,
     },
   };
+
+  static valideDonneesCreation(donnees) {
+    if (!DescriptionService.proprietesObligatoiresRenseignees(donnees)) {
+      throw new ErreurDonneesObligatoiresManquantes(
+        'Certaines données obligatoires ne sont pas renseignées'
+      );
+    }
+
+    if (!DescriptionService.niveauSecuriteChoisiSuffisant(donnees)) {
+      throw new ErreurDonneesNiveauSecuriteInsuffisant();
+    }
+
+    Entite.valideDonnees(donnees.organisationResponsable);
+  }
 }
 
 Object.assign(Service, NIVEAUX);
