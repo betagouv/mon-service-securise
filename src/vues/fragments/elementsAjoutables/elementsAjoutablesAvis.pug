@@ -15,9 +15,9 @@ mixin zoneSaisieUnAvis({donneesUnAvis = {}, index = 0, indexAvis = index + 1, le
             disabled = lectureSeule
           )
             each collaborateur in donneesUnAvis.collaborateurs || []
-              option(value!= collaborateur, selected) !{collaborateur}
+              option(value= collaborateur, selected) #{collaborateur}
             each contributeur in service.contributeurs
-              option(value!= contributeur.prenomNom()) !{contributeur.prenomNom()}
+              option(value= contributeur.prenomNom()) #{contributeur.prenomNom()}
           .message-erreur Au moins un prénom nom de collaborateur est obligatoire. Veuillez renseigner des lettres. Les chiffres ne sont pas autorisés.
 
       - donneesUnAvis[`statut-un-avis-${index}`] = donneesUnAvis.statut
@@ -53,7 +53,7 @@ mixin zoneSaisieUnAvis({donneesUnAvis = {}, index = 0, indexAvis = index + 1, le
           name = `commentaires-un-avis-${index}`,
           placeholder = 'ex : favorable pour la mise en ligne sous réserve que certaines mesures soient réalisées dans 1 mois.',
           readonly = lectureSeule
-        )!= donneesUnAvis.commentaires
+        )= donneesUnAvis.commentaires
 
 mixin unAvis(donneesUnAvis = {}, index = 0, lectureSeule = false)
   .item-ajoute
