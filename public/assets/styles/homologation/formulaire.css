@@ -46,8 +46,7 @@ form.homologation a.informations-additionnelles {
   font-size: 0.9em;
 }
 
-form.homologation label p,
-form .decoration {
+form.homologation label p {
   margin: 0 0 1em;
   font-weight: 200;
   color: var(--texte-clair);
