@@ -43,6 +43,9 @@
     - `donneesSensiblesSpecifiques[].description`
     - `fonctionnalitesSpecifiques[].description`
   - champ `risquesSpecifiques[].intitule`, `commentaire`, `description`
+  - champ `mesuresGenerales[].modalites`
+- [ ] table `activites_mesure`
+  - `WHERE type = 'ajoutCommentaire'` colonne `detail` est un JSON : on veut update `contenu`
   - champ `risquesGeneraux[].commentaire`
 
 ### Les tests pour vérifier :
@@ -60,6 +63,8 @@
   - le tiroir de risque général
   - le tiroir de risque spécifique
 - Pour `services`
+- table `activites_mesure`
+  - l'onglet Activité de la mesure "Limiter et connaître…" sur http://localhost:3000/service/76b6025d-212c-4978-9662-cf0e5287538c/mesures commentaire du 04/09/2025
   - `descriptionService.nom` : partout
 
 ### Pas besoin de changer :
