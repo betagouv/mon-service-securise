@@ -14,6 +14,7 @@
   import BandeauBlog from './BandeauBlog.svelte';
   import { selectionIdsServices } from './stores/selectionService.store';
   import Toaster from '../ui/Toaster.svelte';
+  import { brouillonsService } from './stores/brouillonsService.store';
 
   export let estSuperviseur: boolean;
   export let modeVisiteGuidee: boolean;
@@ -47,6 +48,7 @@
   const recupereServices = async () => {
     const reponse: ReponseApiServices = (await axios.get('/api/services')).data;
     services.reinitialise(reponse.services);
+    brouillonsService.reinitialise(reponse.brouillonsService);
     selectionIdsServices.vide();
     nombreServices = reponse.resume.nombreServices;
     nombreServicesHomologues = reponse.resume.nombreServicesHomologues;

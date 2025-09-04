@@ -23,6 +23,7 @@
   import EtiquetteCompletude from './elementsDeService/EtiquetteCompletude.svelte';
   import Lien from '../ui/Lien.svelte';
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
+  import { brouillonsService } from './stores/brouillonsService.store';
 
   $: selection = $resultatsDeRecherche.filter((service) =>
     $selectionIdsServices.includes(service.id)
@@ -122,6 +123,48 @@
     <TableauVide />
   {:else}
     <tbody class="contenu-tableau-services">
+      {#each $brouillonsService as brouillon (brouillon.id)}
+        <tr class="ligne-service brouillon" data-id-brouillon={brouillon.id}>
+          <th class="cellule-selection" scope="row"></th>
+          <td class="cellule-noms">
+            <a
+              class="lien-service"
+              href="/service/v2/creation?id={brouillon.id}"
+              title="Ouvrir le brouillon"
+            >
+              <span class="denomination-service">
+                <span class="indicateur-brouillon">Brouillon en cours</span>
+                <span class="nom-service">{brouillon.nomService}</span>
+              </span>
+              <div class="icone-voir-service">
+                <img
+                  src="/statique/assets/images/tableauDeBord/icone_ouvrir_agrandir.svg"
+                  alt="Ouvrir la page du service"
+                />
+                <span>Ouvrir</span>
+              </div>
+            </a>
+          </td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>
+            <lab-anssi-lien
+              titre="Continuer la création"
+              cible=""
+              apparence="bouton"
+              variante="secondaire"
+              taille="sm"
+              icone="draft-line"
+              positionIcone="gauche"
+              actif
+              href="/service/v2/creation?id={brouillon.id}"
+            />
+          </td>
+        </tr>
+      {/each}
       {#each $resultatsDeRechercheDuStatutHomologationSelectionne as service (service.id)}
         {@const idService = service.id}
         {@const indiceCyberDuService = service.indiceCyber}
@@ -467,6 +510,25 @@
     font-weight: 700;
     line-height: 24px;
     color: var(--texte-fonce);
+  }
+
+  .indicateur-brouillon {
+    font-style: italic;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+    color: #3a3a3a;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .indicateur-brouillon:before {
+    content: url('/statique/assets/images/icone_brouillon.svg');
+    display: flex;
+    width: 12px;
+    height: 12px;
+    padding: 6px;
   }
 
   .nom-service,
