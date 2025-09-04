@@ -554,6 +554,9 @@ const nouvelAdaptateur = (
     });
   };
 
+  const lisBrouillonsService = async (idUtilisateur) =>
+    donnees.brouillonsServices.filter((b) => b.idUtilisateur === idUtilisateur);
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -575,6 +578,7 @@ const nouvelAdaptateur = (
     estSuperviseur,
     serviceExisteAvecHashNom,
     servicesComplets,
+    lisBrouillonsService,
     lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,

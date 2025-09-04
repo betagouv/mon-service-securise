@@ -31,7 +31,8 @@ const adaptateurChiffrement = ({
     chiffre: async (chaineOuObjet: ChaineOuObjet) =>
       chaineOuObjet as DonneesChiffrees,
 
-    dechiffre: async (chaineChiffree: DonneesChiffrees) => chaineChiffree,
+    dechiffre: async <T>(chaineChiffree: DonneesChiffrees) =>
+      chaineChiffree as T,
 
     hacheBCrypt,
 

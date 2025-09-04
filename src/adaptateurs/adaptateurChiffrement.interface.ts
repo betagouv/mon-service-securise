@@ -4,7 +4,7 @@ export type ChaineOuObjet = string | Record<string, unknown>;
 
 export type AdaptateurChiffrement = {
   chiffre: (chaineOuObjet: ChaineOuObjet) => Promise<DonneesChiffrees>;
-  dechiffre: (chaineChiffree: DonneesChiffrees) => Promise<ChaineOuObjet>;
+  dechiffre: <T>(chaineChiffree: DonneesChiffrees) => Promise<T>;
   hacheBCrypt: (chaineEnClair: string) => Promise<string>;
   compareBCrypt: (
     chaineEnClair: string,
