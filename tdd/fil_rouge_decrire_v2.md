@@ -10,12 +10,16 @@
   - [x] Persister le brouillon
   - [x] Retourner l'ID réel du brouillon
   - [x] La validation de la payload sur le POST se fait avec ZOD
-  - [ ] Le dépot de Brouillon est une classe TS ?
-  - [ ] faire des ajouts/modifications sur les champs du brouillon
+  - [ ] Le brouillon peut être affiché dans le tableau de bord
   - [ ] le brouillon se transforme en une descriptionV2 à la création du service
+    - [ ] la description v2 est persistée dans le service
+  - [ ] faire des ajouts/modifications sur les champs du brouillon
+  - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
+    - [ ] ce moteur de règles génère une liste de mesures v2
 
 ## TODO plus tard
 
+- Le dépot de Brouillon est une classe TS ?
 - Lister les brouillons avec les services sur le TDB
 - Metabase : au moment du switch, on imagine un nouvel event `SERVICE_A_ETE_MIGRE` qui dit `versionCible: "v2"`
 - Description service et description service v2 doivent implémenter une interface commune

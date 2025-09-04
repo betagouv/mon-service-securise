@@ -70,18 +70,22 @@ const routesConnecteApi = ({
     '/services',
     middleware.verificationAcceptationCGU,
     async (requete, reponse) => {
-      const services = await depotDonnees.services(
-        requete.idUtilisateurCourant
-      );
-      const autorisations = await depotDonnees.autorisations(
-        requete.idUtilisateurCourant
-      );
-      const donnees = objetGetServices.donnees(
+      const { idUtilisateurCourant } = requete;
+
+      const services = await depotDonnees.services(idUtilisateurCourant);
+      const autorisations =
+        await depotDonnees.autorisations(idUtilisateurCourant);
+
+      const donneesServices = objetGetServices.donnees(
         services,
         autorisations,
         referentiel
       );
-      reponse.json(donnees);
+
+      const brouillonsService =
+        await depotDonnees.lisBrouillonsService(idUtilisateurCourant);
+
+      reponse.json({ ...donneesServices, brouillonsService });
     }
   );
 
