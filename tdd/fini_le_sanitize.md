@@ -10,11 +10,6 @@
 
 - Commentaire dans un risque
 
-`src/vues/fragments/inputChoix.pug`
-`11 .decoration !{decoration}`
-
-- Je ne vois personne qui utilise ce paramètre de mixin
-
 `src/vues/fragments/elementsAjoutables/elementsAjoutablesAvis.pug  (2 usages found)`
 `18 each collaborateur in donneesUnAvis.collaborateurs`
 `option(value!= collaborateur, selected) !{collaborateur}
