@@ -49,9 +49,6 @@ class ActionTelechargement extends ActionAbstraite {
     $conteneurArchive.toggle(
       donneesService.documentsPdfDisponibles.length !== 0
     );
-    $conteneurArchive
-      .find('#nbPdfDisponibles')
-      .text(donneesService.documentsPdfDisponibles.length);
   }
 
   // eslint-disable-next-line class-methods-use-this

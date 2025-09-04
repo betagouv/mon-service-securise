@@ -33,7 +33,7 @@
 - [ ] Enlever des `decode()` qui sont sur des données saisies
 - [ ] Enlever les !{ en pug
 - [x] Enlever les != en pug
-- [ ] Voir le problème de Ce fichier .ZIP contient les <span id="nbPdfDisponibles"></span> PDF.
+- [x] Voir le problème de Ce fichier .ZIP contient les <span id="nbPdfDisponibles"></span> PDF.
 - [ ] Migration des données
 
 ### Les migrations BDD
