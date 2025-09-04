@@ -48,10 +48,10 @@ block page
         li.bloc-risque.bloc-indivisible
           div(class=`identifiant-numerique ${risque.niveauRisque}`)= risque.identifiantNumerique
           .contenu-risque
-            p.description!= risque.intitule
+            p.description= risque.intitule
             if referentiel.definitionRisque(risque.id)
               p.definition= referentiel.definitionRisque(risque.id)
             else
               p.definition= risque.description
             if risque.commentaire
-              p.commentaire #[strong Commentaire :] !{risque.commentaire}
+              p.commentaire #[strong Commentaire :] #{risque.commentaire}
