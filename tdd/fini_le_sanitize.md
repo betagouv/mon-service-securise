@@ -25,11 +25,20 @@
 
 ## Dans Svelte
 
-- en BDD : table `utilisateurs` > champs `nom` `prenom`
-  - svelte/lib/gestionContributeurs/kit/ChampAvecSuggestions.svelte:97
-    - `prenomNom` qui fini sur Utilisateur
-  - svelte/lib/gestionContributeurs/invitation/ListeInvitations.svelte:15
-    - des `invitations` qui contiennent un `utilisateur` avec `prenomNom`
-  - svelte/lib/gestionContributeurs/kit/LigneContributeur.svelte:38 qui fait `prenomNom`
+### Les migrations BDD
+
+- [ ] table `utilisateurs`
+  - champ `nom`
+  - champ `prenom`
+  - champ `postes` qui est un `[]`
+
+### Les tests pour vérifier :
+
+- Pour `utilisateurs.[nom|prenom]`:
+  - gestionContributeurs/kit/ChampAvecSuggestions.svelte:97
+  - gestionContributeurs/invitation/ListeInvitations.svelte:15
+  - gestionContributeurs/kit/LigneContributeur.svelte:38
   - SuppressionContributeur.svelte
   - ListeSuggestionsMention.svelte
+- Pour `utiliasteurs.postes`
+  - LigneContributeur.svelte
