@@ -37,16 +37,25 @@
   - champ `prenom`
   - champ `postes` qui est un `[]`
 - [ ] table `services`
+
   - champ `descriptionService`
     - `nomService`
     - `pointsAcces[].description`
     - `donneesSensiblesSpecifiques[].description`
     - `fonctionnalitesSpecifiques[].description`
+  - champ `risquesGeneraux[].commentaire`
   - champ `risquesSpecifiques[].intitule`, `commentaire`, `description`
   - champ `mesuresGenerales[].modalites`
+  - champ `dossiers[]`
+    - `autorite.nom` et `autorite.fonction`
+    - `avis[].commentaires` et `avis[].collaborateurs`
+    - `documents[]`
+  - champ `rolesResponsabilites`
+    - `acteursHomologation[].role`
+    - `partiesPrenantes[].nom`, `natureAcces`, `pointContact`
+
 - [ ] table `activites_mesure`
   - `WHERE type = 'ajoutCommentaire'` colonne `detail` est un JSON : on veut update `contenu`
-  - champ `risquesGeneraux[].commentaire`
 
 ### Les tests pour vérifier :
 
