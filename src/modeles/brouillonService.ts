@@ -16,6 +16,13 @@ export class BrouillonService {
   }
 
   enDonneesDescriptionServiceV2() {
-    return { nomService: this.nomService, versionService: VersionService.v2 };
+    const siretFacticePourLeMoment = '11111111111111';
+    return {
+      versionService: VersionService.v2,
+      descriptionService: {
+        nomService: this.nomService,
+        organisationResponsable: { siret: siretFacticePourLeMoment },
+      },
+    };
   }
 }
