@@ -139,6 +139,7 @@ const creeDepot = (config = {}) => {
     adaptateurChiffrement,
     persistance: adaptateurPersistance,
     adaptateurUUID,
+    depotDonneesService: depotServices,
   });
 
   const {
@@ -278,8 +279,11 @@ const creeDepot = (config = {}) => {
     supprimeModeleMesureSpecifiqueEtMesuresAssociees,
   } = depotModelesMesureSpecifique;
 
-  const { nouveauBrouillonService, lisBrouillonsService } =
-    depotBrouillonsService;
+  const {
+    nouveauBrouillonService,
+    lisBrouillonsService,
+    finaliseBrouillonService,
+  } = depotBrouillonsService;
 
   return {
     accesAutorise,
@@ -309,6 +313,7 @@ const creeDepot = (config = {}) => {
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     dupliqueService,
     estSuperviseur,
+    finaliseBrouillonService,
     service,
     serviceExiste,
     services,
