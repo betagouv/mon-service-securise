@@ -1,2 +1,6 @@
-const lisDonneesPartagees = (id) => JSON.parse($(`#${id}`).text());
+const lisDonneesPartagees = (id) => {
+  const txt = document.createElement('textarea');
+  txt.innerHTML = $(`#${id}`).text();
+  return JSON.parse(txt.value);
+};
 export default lisDonneesPartagees;
