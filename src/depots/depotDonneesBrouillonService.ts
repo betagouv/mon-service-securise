@@ -1,14 +1,12 @@
 import { DonneesChiffrees, UUID } from '../typesBasiques.js';
 import { AdaptateurUUID } from '../adaptateurs/adaptateurUUID.js';
 import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
-
-export type DonneesBrouillonService = {
-  nomService: string;
-};
-
-export type BrouillonService = DonneesBrouillonService & {
-  id: UUID;
-};
+import { ErreurBrouillonInexistant } from '../erreurs.js';
+import { DepotDonneesService } from './depotDonneesService.interface.js';
+import {
+  BrouillonService,
+  DonneesBrouillonService,
+} from '../modeles/brouillonService.js';
 
 export type DepotDonneesBrouillonService = {
   nouveauBrouillonService: (
@@ -16,6 +14,10 @@ export type DepotDonneesBrouillonService = {
     nomService: string
   ) => Promise<UUID>;
   lisBrouillonsService: (idUtilisateur: UUID) => Promise<BrouillonService[]>;
+  finaliseBrouillonService: (
+    idUtilisateur: UUID,
+    idBrouillon: UUID
+  ) => Promise<UUID>;
 };
 
 type PersistanceBrouillonService = {
@@ -27,16 +29,19 @@ type PersistanceBrouillonService = {
   lisBrouillonsService: (
     idUtilisateur: UUID
   ) => Promise<{ id: UUID; idUtilisateur: UUID; donnees: DonneesChiffrees }[]>;
+  supprimeBrouillonService: (idBrouillon: UUID) => Promise<void>;
 };
 
 const creeDepot = ({
   persistance,
   adaptateurUUID,
   adaptateurChiffrement,
+  depotDonneesService,
 }: {
   persistance: PersistanceBrouillonService;
   adaptateurUUID: AdaptateurUUID;
   adaptateurChiffrement: AdaptateurChiffrement;
+  depotDonneesService: DepotDonneesService;
 }): DepotDonneesBrouillonService => {
   const nouveauBrouillonService = async (
     idUtilisateur: UUID,
@@ -62,16 +67,47 @@ const creeDepot = ({
       await persistance.lisBrouillonsService(idUtilisateur);
 
     return Promise.all(
-      donneesBrouillons.map(async ({ donnees, id }) => ({
-        id,
-        ...(await adaptateurChiffrement.dechiffre<DonneesBrouillonService>(
-          donnees
-        )),
-      }))
+      donneesBrouillons.map(async ({ id, donnees }) => {
+        const donneesEnClair =
+          await adaptateurChiffrement.dechiffre<DonneesBrouillonService>(
+            donnees
+          );
+        return new BrouillonService(id, donneesEnClair);
+      })
     );
   };
 
-  return { nouveauBrouillonService, lisBrouillonsService };
+  const finaliseBrouillonService = async (
+    idUtilisateur: UUID,
+    idBrouillon: UUID
+  ) => {
+    const tousLesBrouillons =
+      await persistance.lisBrouillonsService(idUtilisateur);
+
+    const persiste = tousLesBrouillons.find((b) => b.id === idBrouillon);
+    if (!persiste) throw new ErreurBrouillonInexistant();
+
+    const donneesEnClair =
+      await adaptateurChiffrement.dechiffre<DonneesBrouillonService>(
+        persiste.donnees
+      );
+    const b = new BrouillonService(idBrouillon, donneesEnClair);
+
+    const idService = await depotDonneesService.nouveauService(
+      idUtilisateur,
+      b.enDonneesDescriptionServiceV2()
+    );
+
+    await persistance.supprimeBrouillonService(idBrouillon);
+
+    return idService;
+  };
+
+  return {
+    finaliseBrouillonService,
+    nouveauBrouillonService,
+    lisBrouillonsService,
+  };
 };
 
 export { creeDepot };

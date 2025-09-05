@@ -104,6 +104,8 @@ class ErreurUtilisateurExistant extends ErreurModele {
 class ErreurTeleversementInexistant extends ErreurModele {}
 class ErreurTeleversementInvalide extends ErreurModele {}
 
+class ErreurBrouillonInexistant extends ErreurModele {}
+
 export {
   EchecAutorisation,
   EchecEnvoiMessage,
@@ -111,6 +113,7 @@ export {
   ErreurAutorisationExisteDeja,
   ErreurAutorisationInexistante,
   ErreurAvisInvalide,
+  ErreurBrouillonInexistant,
   ErreurBusEvenements,
   ErreurCategoriesRisqueManquantes,
   ErreurCategorieRisqueInconnue,

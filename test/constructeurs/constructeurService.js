@@ -2,12 +2,13 @@ import uneDescriptionValide from './constructeurDescriptionService.js';
 import * as Referentiel from '../../src/referentiel.js';
 import Service from '../../src/modeles/service.js';
 import { unUtilisateur } from './constructeurUtilisateur.js';
+import { VersionService } from '../../src/modeles/versionService.js';
 
 class ConstructeurService {
   constructor(referentiel) {
     this.donnees = {
       id: '',
-      versionService: 'v1',
+      versionService: VersionService.v1,
       descriptionService: uneDescriptionValide(referentiel).donnees,
       contributeurs: [],
       suggestionsActions: [],

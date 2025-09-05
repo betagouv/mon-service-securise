@@ -16,6 +16,7 @@ import { dateEnIso } from '../utilitaires/date.js';
 import { Contributeur } from './contributeur.js';
 import { DescriptionServiceV2 } from './descriptionServiceV2.js';
 import Entite from './entite.js';
+import { VersionService } from './versionService.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -51,7 +52,7 @@ class Service {
       prochainIdNumeriqueDeRisqueSpecifique;
     this.contributeurs = contributeurs.map((c) => new Contributeur(c));
     this.descriptionService =
-      versionService === 'v2'
+      versionService === VersionService.v2
         ? new DescriptionServiceV2(descriptionService)
         : new DescriptionService(descriptionService, referentiel);
     this.dossiers = new Dossiers({ dossiers }, referentiel);
@@ -472,7 +473,9 @@ class Service {
 
   static valideDonneesCreation(donneesDescription, versionService) {
     const description =
-      versionService === 'v2' ? DescriptionServiceV2 : DescriptionService;
+      versionService === VersionService.v2
+        ? DescriptionServiceV2
+        : DescriptionService;
 
     description.valideDonneesCreation(donneesDescription);
 

@@ -1,23 +1,31 @@
-import { DonneesChiffrees, UUID } from '../../src/typesBasiques.ts';
+import * as crypto from 'node:crypto';
+import { UUID } from '../../src/typesBasiques.ts';
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import * as DepotDonneesBrouillonService from '../../src/depots/depotDonneesBrouillonService.ts';
-import { BrouillonService } from '../../src/depots/depotDonneesBrouillonService.ts';
+import * as DepotDonneesServices from '../../src/depots/depotDonneesServices.js';
 import { unUUID } from '../constructeurs/UUID.ts';
-import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 import * as AdaptateurPersistanceMemoire from '../../src/adaptateurs/adaptateurPersistanceMemoire.js';
 import { AdaptateurUUID } from '../../src/adaptateurs/adaptateurUUID.js';
+import { ErreurBrouillonInexistant } from '../../src/erreurs.js';
+import { DepotDonneesService } from '../../src/depots/depotDonneesService.interface.js';
+import { AdaptateurChiffrement } from '../../src/adaptateurs/adaptateurChiffrement.interface.js';
+import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.js';
 
 describe('Le dépôt de données des brouillons de Service', () => {
   let persistance: ReturnType<
     typeof AdaptateurPersistanceMemoire.nouvelAdaptateur
   >;
   let adaptateurUUID: AdaptateurUUID;
-  let adaptateurChiffrement: ReturnType<typeof fauxAdaptateurChiffrement>;
+  let adaptateurChiffrement: AdaptateurChiffrement;
+  let depotDonneesService: DepotDonneesService;
 
   beforeEach(() => {
     persistance = unePersistanceMemoire().construis();
-    adaptateurUUID = { genereUUID: () => unUUID('b') };
-    adaptateurChiffrement = fauxAdaptateurChiffrement();
+    adaptateurUUID = { genereUUID: () => crypto.randomUUID() as UUID };
+    adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
+    depotDonneesService = DepotDonneesServices.creeDepot({
+      adaptateurPersistance: persistance,
+    });
   });
 
   const leDepot = () =>
@@ -25,15 +33,17 @@ describe('Le dépôt de données des brouillons de Service', () => {
       persistance,
       adaptateurUUID,
       adaptateurChiffrement,
+      depotDonneesService,
     });
 
   describe('sur demande de création de nouveau brouillon de service', () => {
-    it('délègue à la persistance la sauvegarde du brouillon', async () => {
+    it("délègue à la persistance la sauvegarde du brouillon qu'il aura chiffré", async () => {
+      adaptateurUUID.genereUUID = () => unUUID('b');
       let donneesPersistees;
       persistance.ajouteBrouillonService = async (
-        id: UUID,
-        idUtilisateur: UUID,
-        brouillon: { nomService: string }
+        id,
+        idUtilisateur,
+        brouillon
       ) => {
         donneesPersistees = { id, idUtilisateur, brouillon };
       };
@@ -46,60 +56,77 @@ describe('Le dépôt de données des brouillons de Service', () => {
       expect(donneesPersistees).toEqual({
         idUtilisateur: unUUID('2'),
         id: unUUID('b'),
-        brouillon: { nomService: 'Nom du brouillon' },
+        brouillon: {
+          chiffre: true,
+          coffreFort: { nomService: 'Nom du brouillon' },
+        },
       });
       expect(idCree).toBe(unUUID('b'));
-    });
-
-    it('chiffre les données du brouillon', async () => {
-      adaptateurChiffrement.chiffre = async (donnees) => ({
-        ...donnees,
-        chiffre: true,
-      });
-
-      let donneesPersistees;
-      persistance.ajouteBrouillonService = async (
-        id: UUID,
-        idUtilisateur: UUID,
-        brouillon: DonneesChiffrees
-      ) => {
-        donneesPersistees = { id, idUtilisateur, brouillon };
-      };
-
-      await leDepot().nouveauBrouillonService(unUUID('2'), 'Nom du brouillon');
-
-      expect(donneesPersistees!.brouillon.chiffre).toBe(true);
     });
   });
 
   describe("sur demande de récupération des brouillons d'un utilisateur", () => {
-    it('délègue à la persistance la lecture des brouillons', async () => {
-      let idRecu: UUID | null = null;
-      persistance.lisBrouillonsService = async (idUtilisateur: UUID) => {
-        idRecu = idUtilisateur;
-        return [{ donnees: { nomService: 'nom du service' }, id: unUUID('b') }];
+    it('récupère des données depuis la persistance puis les déchiffre', async () => {
+      const d = leDepot();
+      await d.nouveauBrouillonService(unUUID('u'), 'Service #1');
+      await d.nouveauBrouillonService(unUUID('u'), 'Service #2');
+
+      const brouillons = await d.lisBrouillonsService(unUUID('u'));
+
+      expect(brouillons).toHaveLength(2);
+      const [a, b] = brouillons;
+      expect(a.nomService).toBe('Service #1');
+      expect(b.nomService).toBe('Service #2');
+    });
+  });
+
+  describe("sur demande de finalisation d'un brouillon", () => {
+    it("jette une exception si le brouillon n'existe pas", async () => {
+      await expect(
+        leDepot().finaliseBrouillonService(unUUID('1'), unUUID('2'))
+      ).rejects.toThrowError(ErreurBrouillonInexistant);
+    });
+
+    it("délègue au dépot de service la création d'un service V2 et renvoie l'ID du nouveau service", async () => {
+      const depot = leDepot();
+      const idBrouillon = await depot.nouveauBrouillonService(
+        unUUID('U'),
+        'Mairie A'
+      );
+      depotDonneesService.nouveauService = async (
+        idUtilisateur: UUID,
+        donneesService
+      ) => {
+        expect(idUtilisateur).toBe(unUUID('U'));
+        expect(donneesService).toMatchObject({
+          versionService: 'v2',
+          descriptionService: { nomService: 'Mairie A' },
+        });
+        return unUUID('S');
       };
-      const brouillons = await leDepot().lisBrouillonsService(unUUID('2'));
 
-      expect(idRecu).toBe(unUUID('2'));
-      expect(brouillons.length).toBe(1);
+      const idNouveauService = await depot.finaliseBrouillonService(
+        unUUID('U'),
+        idBrouillon
+      );
+
+      expect(idNouveauService).toBe(unUUID('S'));
     });
 
-    it('déchiffre les données du brouillon', async () => {
-      adaptateurChiffrement.dechiffre = async (
-        donneesBrouillon: BrouillonService
-      ) => ({ nomService: `${donneesBrouillon.nomService}-dechiffre` });
-      persistance.lisBrouillonsService = async () => [
-        {
-          donnees: {
-            nomService: 'nom du service',
-          },
-          id: unUUID('b'),
-        },
-      ];
-      const brouillons = await leDepot().lisBrouillonsService(unUUID('2'));
+    it("supprime le brouillon qui vient d'être finalisé", async () => {
+      depotDonneesService.nouveauService = async () => unUUID('S');
+      const depot = leDepot();
+      const idAFinaliser = await depot.nouveauBrouillonService(
+        unUUID('U'),
+        'Mairie A'
+      );
 
-      expect(brouillons[0].nomService).toBe('nom du service-dechiffre');
+      await depot.finaliseBrouillonService(unUUID('U'), idAFinaliser);
+
+      const restants = await depot.lisBrouillonsService(unUUID('U'));
+      expect(restants).toHaveLength(0);
     });
+
+    it.todo("jette une exception si le brouillon n'est pas complet");
   });
 });

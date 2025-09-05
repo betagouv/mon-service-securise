@@ -887,6 +887,9 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       .where({ id_utilisateur: idUtilisateur })
       .select('id', 'donnees');
 
+  const supprimeBrouillonService = async (idBrouillon) =>
+    knex('brouillons_service').where({ id: idBrouillon }).delete();
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -947,6 +950,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     supprimeAutorisations,
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
+    supprimeBrouillonService,
     supprimeModeleMesureSpecifique,
     supprimeNotificationsExpirationHomologation,
     supprimeNotificationsExpirationHomologationPourService,
