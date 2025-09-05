@@ -3,26 +3,10 @@ import { AdaptateurUUID } from '../adaptateurs/adaptateurUUID.js';
 import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
 import { ErreurBrouillonInexistant } from '../erreurs.js';
 import { DepotDonneesService } from './depotDonneesService.interface.js';
-import { VersionService } from '../modeles/versionService.js';
-
-export type DonneesBrouillonService = {
-  nomService: string;
-};
-
-class BrouillonService {
-  readonly nomService: string;
-
-  constructor(
-    readonly id: UUID,
-    donnees: DonneesBrouillonService
-  ) {
-    this.nomService = donnees.nomService;
-  }
-
-  enDonneesDescriptionServiceV2() {
-    return { nomService: this.nomService, versionService: VersionService.v2 };
-  }
-}
+import {
+  BrouillonService,
+  DonneesBrouillonService,
+} from '../modeles/brouillonService.js';
 
 export type DepotDonneesBrouillonService = {
   nouveauBrouillonService: (
