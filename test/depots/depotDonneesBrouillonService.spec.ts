@@ -1,3 +1,4 @@
+import * as crypto from 'node:crypto';
 import { UUID } from '../../src/typesBasiques.ts';
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import * as DepotDonneesBrouillonService from '../../src/depots/depotDonneesBrouillonService.ts';
@@ -20,7 +21,7 @@ describe('Le dépôt de données des brouillons de Service', () => {
 
   beforeEach(() => {
     persistance = unePersistanceMemoire().construis();
-    adaptateurUUID = { genereUUID: () => unUUID('b') };
+    adaptateurUUID = { genereUUID: () => crypto.randomUUID() as UUID };
     adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
     depotDonneesService = DepotDonneesServices.creeDepot({
       adaptateurPersistance: persistance,
@@ -37,6 +38,7 @@ describe('Le dépôt de données des brouillons de Service', () => {
 
   describe('sur demande de création de nouveau brouillon de service', () => {
     it("délègue à la persistance la sauvegarde du brouillon qu'il aura chiffré", async () => {
+      adaptateurUUID.genereUUID = () => unUUID('b');
       let donneesPersistees;
       persistance.ajouteBrouillonService = async (
         id,
@@ -106,6 +108,20 @@ describe('Le dépôt de données des brouillons de Service', () => {
       );
 
       expect(idNouveauService).toBe(unUUID('S'));
+    });
+
+    it("supprime le brouillon qui vient d'être finalisé", async () => {
+      depotDonneesService.nouveauService = async () => unUUID('S');
+      const depot = leDepot();
+      const idAFinaliser = await depot.nouveauBrouillonService(
+        unUUID('U'),
+        'Mairie A'
+      );
+
+      await depot.finaliseBrouillonService(unUUID('U'), idAFinaliser);
+
+      const restants = await depot.lisBrouillonsService(unUUID('U'));
+      expect(restants).toHaveLength(0);
     });
 
     it.todo("jette une exception si le brouillon n'est pas complet");

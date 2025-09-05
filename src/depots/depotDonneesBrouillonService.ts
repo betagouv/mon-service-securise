@@ -33,6 +33,7 @@ type PersistanceBrouillonService = {
   lisBrouillonsService: (
     idUtilisateur: UUID
   ) => Promise<{ id: UUID; idUtilisateur: UUID; donnees: DonneesChiffrees }[]>;
+  supprimeBrouillonService: (idBrouillon: UUID) => Promise<void>;
 };
 
 const creeDepot = ({
@@ -95,6 +96,8 @@ const creeDepot = ({
       idUtilisateur,
       enClair
     );
+
+    await persistance.supprimeBrouillonService(idBrouillon);
 
     return idService;
   };

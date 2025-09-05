@@ -557,6 +557,12 @@ const nouvelAdaptateur = (
   const lisBrouillonsService = async (idUtilisateur) =>
     donnees.brouillonsServices.filter((b) => b.idUtilisateur === idUtilisateur);
 
+  const supprimeBrouillonService = async (idBrouillon) => {
+    donnees.brouillonsServices = donnees.brouillonsServices.filter(
+      (b) => b.id !== idBrouillon
+    );
+  };
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -606,6 +612,7 @@ const nouvelAdaptateur = (
     supprimeAutorisations,
     supprimeAutorisationsContribution,
     supprimeAutorisationsHomologation,
+    supprimeBrouillonService,
     supprimeLeLienEntreLeModeleEtLesServices,
     supprimeModeleMesureSpecifique,
     supprimeNotificationsExpirationHomologation,
