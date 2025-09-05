@@ -471,9 +471,11 @@ class Service {
   };
 
   static valideDonneesCreation(donneesDescription, versionService) {
-    if (versionService === 'v2')
-      DescriptionServiceV2.valideDonneesCreation(donneesDescription);
-    else DescriptionService.valideDonneesCreation(donneesDescription);
+    const description =
+      versionService === 'v2' ? DescriptionServiceV2 : DescriptionService;
+
+    description.valideDonneesCreation(donneesDescription);
+
     Entite.valideDonnees(donneesDescription.organisationResponsable);
   }
 }
