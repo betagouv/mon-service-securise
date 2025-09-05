@@ -3,14 +3,26 @@ import { AdaptateurUUID } from '../adaptateurs/adaptateurUUID.js';
 import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
 import { ErreurBrouillonInexistant } from '../erreurs.js';
 import { DepotDonneesService } from './depotDonneesService.interface.js';
+import { VersionService } from '../modeles/versionService.js';
 
 export type DonneesBrouillonService = {
   nomService: string;
 };
 
-export type BrouillonService = DonneesBrouillonService & {
-  id: UUID;
-};
+class BrouillonService {
+  readonly nomService: string;
+
+  constructor(
+    readonly id: UUID,
+    donnees: DonneesBrouillonService
+  ) {
+    this.nomService = donnees.nomService;
+  }
+
+  enDonneesDescriptionServiceV2() {
+    return { nomService: this.nomService, versionService: VersionService.v2 };
+  }
+}
 
 export type DepotDonneesBrouillonService = {
   nouveauBrouillonService: (
@@ -71,12 +83,13 @@ const creeDepot = ({
       await persistance.lisBrouillonsService(idUtilisateur);
 
     return Promise.all(
-      donneesBrouillons.map(async ({ donnees, id }) => ({
-        id,
-        ...(await adaptateurChiffrement.dechiffre<DonneesBrouillonService>(
-          donnees
-        )),
-      }))
+      donneesBrouillons.map(async ({ id, donnees }) => {
+        const donneesEnClair =
+          await adaptateurChiffrement.dechiffre<DonneesBrouillonService>(
+            donnees
+          );
+        return new BrouillonService(id, donneesEnClair);
+      })
     );
   };
 
@@ -86,15 +99,19 @@ const creeDepot = ({
   ) => {
     const tousLesBrouillons =
       await persistance.lisBrouillonsService(idUtilisateur);
-    const leBrouillon = tousLesBrouillons.find((b) => b.id === idBrouillon);
 
-    if (!leBrouillon) throw new ErreurBrouillonInexistant();
+    const persiste = tousLesBrouillons.find((b) => b.id === idBrouillon);
+    if (!persiste) throw new ErreurBrouillonInexistant();
 
-    const { donnees } = leBrouillon;
-    const enClair = await adaptateurChiffrement.dechiffre(donnees);
+    const donneesEnClair =
+      await adaptateurChiffrement.dechiffre<DonneesBrouillonService>(
+        persiste.donnees
+      );
+    const b = new BrouillonService(idBrouillon, donneesEnClair);
+
     const idService = await depotDonneesService.nouveauService(
       idUtilisateur,
-      enClair
+      b.enDonneesDescriptionServiceV2()
     );
 
     await persistance.supprimeBrouillonService(idBrouillon);

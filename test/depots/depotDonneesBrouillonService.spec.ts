@@ -98,7 +98,10 @@ describe('Le dépôt de données des brouillons de Service', () => {
         donneesService
       ) => {
         expect(idUtilisateur).toBe(unUUID('U'));
-        expect(donneesService).toEqual({ nomService: 'Mairie A' });
+        expect(donneesService).toEqual({
+          nomService: 'Mairie A',
+          versionService: 'v2',
+        });
         return unUUID('S');
       };
 
