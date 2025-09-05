@@ -11,11 +11,11 @@
 - [ ] le brouillon se transforme en une descriptionV2 à la création du service
   - [x] la validation de description dans `nouveauService` est faite par une méthode statique de `Service.valideDonneesCreation`
     - [x] c'est cette méthode statique qui fait le switch entre v1 et v2
-- [x] une route qui finalise un brouillon complet, et crée un nouveau service
-- [-] le dépôt de données sait finaliser un brouillon de service
-  - le brouillon est transformé en description v2
-  - la description v2 est persistée dans le service (actuellement descriptionServiceV2.donneesSerialisees() n'existe pas)
-  - le brouillon est supprimé
+- [ ] le service v2 créé d'après un brouillon est affichable sur le tableau de bord
+  - actuellement, il provoque une erreur
+    [SERVEUR] TypeError: Cannot read properties of undefined (reading 'nom')
+    [SERVEUR] at Module.donnees (file:///usr/src/app/src/modeles/objetsApi/objetGetService.js:24:58)
+    [SERVEUR] at file:///usr/src/app/src/modeles/objetsApi/objetGetServices.js:9:21
 - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
   - ce moteur de règles génère une liste de mesures v2
 
@@ -31,6 +31,11 @@
 
 ## DONE
 
+- [x] une route qui finalise un brouillon complet, et crée un nouveau service
+- [x] le dépôt de données sait finaliser un brouillon de service
+  - le brouillon est transformé en description v2
+  - la description v2 est persistée dans le service (actuellement descriptionServiceV2.donneesSerialisees() n'existe pas)
+  - le brouillon est supprimé
 - [x] Lister les brouillons avec les services sur le TDB
 - [x] La route de création de brouillon peut créer un brouillon de service
   - [x] Persister le brouillon
