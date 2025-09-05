@@ -89,10 +89,13 @@ const creeDepot = ({
 
     if (!leBrouillon) throw new ErreurBrouillonInexistant();
 
+    const { donnees } = leBrouillon;
+    const enClair = await adaptateurChiffrement.dechiffre(donnees);
     const idService = await depotDonneesService.nouveauService(
       idUtilisateur,
-      leBrouillon.donnees
+      enClair
     );
+
     return idService;
   };
 
