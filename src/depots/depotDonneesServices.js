@@ -1,12 +1,8 @@
 import {
-  ErreurDonneesObligatoiresManquantes,
-  ErreurServiceInexistant,
   ErreurNomServiceDejaExistant,
-  ErreurDonneesNiveauSecuriteInsuffisant,
+  ErreurServiceInexistant,
   ErreurStatutMesureManquant,
 } from '../erreurs.js';
-
-import DescriptionService from '../modeles/descriptionService.js';
 import Dossier from '../modeles/dossier.js';
 import Service from '../modeles/service.js';
 import { Autorisation } from '../modeles/autorisations/autorisation.js';
