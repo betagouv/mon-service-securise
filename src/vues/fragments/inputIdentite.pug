@@ -4,7 +4,7 @@ mixin inputIdentite({ role, nomParametre, lectureSeule = false })
       label(for = nomParametre) Prénom / Nom
       input(
         id = nomParametre, name = nomParametre, type = 'text',
-        value != service.rolesResponsabilites[nomParametre], readonly=lectureSeule
+        value = service.rolesResponsabilites[nomParametre], readonly=lectureSeule
       )
 
       - const nomParamFonction = `fonction${nomParametre.charAt(0).toUpperCase()}${nomParametre.slice(1)}`
