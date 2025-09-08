@@ -1,6 +1,6 @@
 #!/bin/bash
 
-node -e "
+node --import tsx -e "
   (async () => {
     admin = new (await import('./admin/consoleAdministration.js')).default();
   })();
