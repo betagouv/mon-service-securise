@@ -87,6 +87,7 @@ module.exports = {
         'import/extensions': ['off'],
         // Les exports par défaut empêchent les LSP de nos IDE de suivre les définitions & références dans le code
         'import/prefer-default-export': 'off',
+        'lines-between-class-members': 'off',
       },
     },
     {
