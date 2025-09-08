@@ -58,10 +58,6 @@ class DescriptionService extends InformationsService {
     return this.referentiel.typeService(this.typeService);
   }
 
-  nombreDonneesSensiblesSpecifiques() {
-    return this.donneesSensiblesSpecifiques.nombre();
-  }
-
   nombreFonctionnalitesSpecifiques() {
     return this.fonctionnalitesSpecifiques.nombre();
   }
