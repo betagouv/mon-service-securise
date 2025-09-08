@@ -95,7 +95,7 @@ const creeDepot = ({
 
     const idService = await depotDonneesService.nouveauService(
       idUtilisateur,
-      b.enDonneesDescriptionServiceV2()
+      b.enDonneesCreationServiceV2()
     );
 
     await persistance.supprimeBrouillonService(idBrouillon);

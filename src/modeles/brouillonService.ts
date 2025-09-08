@@ -15,7 +15,7 @@ export class BrouillonService {
     this.nomService = donnees.nomService;
   }
 
-  enDonneesDescriptionServiceV2() {
+  enDonneesCreationServiceV2() {
     const siretFacticePourLeMoment = '11111111111111';
     return {
       versionService: VersionService.v2,

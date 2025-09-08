@@ -8,7 +8,7 @@ describe('Un brouillon de Service v2', () => {
     it('fournit des données que le Service accepte', () => {
       const b = new BrouillonService(unUUID('b'), { nomService: 'Mairie A' });
 
-      const pourCreationService = b.enDonneesDescriptionServiceV2();
+      const pourCreationService = b.enDonneesCreationServiceV2();
 
       Service.valideDonneesCreation(
         pourCreationService.descriptionService,
