@@ -3,7 +3,7 @@ import { UUID } from '../../src/typesBasiques.ts';
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import * as DepotDonneesBrouillonService from '../../src/depots/depotDonneesBrouillonService.ts';
 import * as DepotDonneesServices from '../../src/depots/depotDonneesServices.js';
-import { unUUID } from '../constructeurs/UUID.ts';
+import { unUUID, unUUIDRandom } from '../constructeurs/UUID.ts';
 import * as AdaptateurPersistanceMemoire from '../../src/adaptateurs/adaptateurPersistanceMemoire.js';
 import { AdaptateurUUID } from '../../src/adaptateurs/adaptateurUUID.js';
 import { ErreurBrouillonInexistant } from '../../src/erreurs.js';
@@ -67,11 +67,18 @@ describe('Le dépôt de données des brouillons de Service', () => {
 
   describe("sur demande de récupération des brouillons d'un utilisateur", () => {
     it('récupère des données depuis la persistance puis les déchiffre', async () => {
-      const d = leDepot();
-      await d.nouveauBrouillonService(unUUID('u'), 'Service #1');
-      await d.nouveauBrouillonService(unUUID('u'), 'Service #2');
+      await persistance.ajouteBrouillonService(
+        unUUIDRandom(),
+        unUUID('u'),
+        await adaptateurChiffrement.chiffre({ nomService: 'Service #1' })
+      );
+      await persistance.ajouteBrouillonService(
+        unUUIDRandom(),
+        unUUID('u'),
+        await adaptateurChiffrement.chiffre({ nomService: 'Service #2' })
+      );
 
-      const brouillons = await d.lisBrouillonsService(unUUID('u'));
+      const brouillons = await leDepot().lisBrouillonsService(unUUID('u'));
 
       expect(brouillons).toHaveLength(2);
       const [a, b] = brouillons;
@@ -88,10 +95,11 @@ describe('Le dépôt de données des brouillons de Service', () => {
     });
 
     it("délègue au dépot de service la création d'un service V2 et renvoie l'ID du nouveau service", async () => {
-      const depot = leDepot();
-      const idBrouillon = await depot.nouveauBrouillonService(
+      const idBrouillon = unUUID('B');
+      await persistance.ajouteBrouillonService(
+        idBrouillon,
         unUUID('U'),
-        'Mairie A'
+        await adaptateurChiffrement.chiffre({ nomService: 'Mairie A' })
       );
       depotDonneesService.nouveauService = async (
         idUtilisateur: UUID,
@@ -105,7 +113,7 @@ describe('Le dépôt de données des brouillons de Service', () => {
         return unUUID('S');
       };
 
-      const idNouveauService = await depot.finaliseBrouillonService(
+      const idNouveauService = await leDepot().finaliseBrouillonService(
         unUUID('U'),
         idBrouillon
       );
@@ -115,15 +123,16 @@ describe('Le dépôt de données des brouillons de Service', () => {
 
     it("supprime le brouillon qui vient d'être finalisé", async () => {
       depotDonneesService.nouveauService = async () => unUUID('S');
-      const depot = leDepot();
-      const idAFinaliser = await depot.nouveauBrouillonService(
+      const idAFinaliser = unUUID('B');
+      await persistance.ajouteBrouillonService(
+        idAFinaliser,
         unUUID('U'),
-        'Mairie A'
+        await adaptateurChiffrement.chiffre({ nomService: 'Mairie A' })
       );
 
-      await depot.finaliseBrouillonService(unUUID('U'), idAFinaliser);
+      await leDepot().finaliseBrouillonService(unUUID('U'), idAFinaliser);
 
-      const restants = await depot.lisBrouillonsService(unUUID('U'));
+      const restants = await persistance.lisBrouillonsService(unUUID('U'));
       expect(restants).toHaveLength(0);
     });
 
