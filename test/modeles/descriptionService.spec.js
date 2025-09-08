@@ -57,7 +57,6 @@ describe('La description du service', () => {
       borneHaute: 5,
     });
 
-    expect(descriptionService.nombrePointsAcces()).to.equal(1);
     expect(descriptionService.niveauSecurite).to.equal('niveau1');
   });
 

@@ -58,10 +58,6 @@ class DescriptionService extends InformationsService {
     return this.referentiel.typeService(this.typeService);
   }
 
-  nombrePointsAcces() {
-    return this.pointsAcces.nombre();
-  }
-
   statutSaisie() {
     const statutSaisieDeBase = super.statutSaisie();
     if (statutSaisieDeBase !== DescriptionService.COMPLETES) {
