@@ -10,10 +10,12 @@ describe('Un brouillon de Service v2', () => {
 
       const pourCreationService = b.enDonneesCreationServiceV2();
 
-      Service.valideDonneesCreation(
-        pourCreationService.descriptionService,
-        VersionService.v2
-      );
+      expect(() =>
+        Service.valideDonneesCreation(
+          pourCreationService.descriptionService,
+          VersionService.v2
+        )
+      ).not.toThrowError();
     });
   });
 });
