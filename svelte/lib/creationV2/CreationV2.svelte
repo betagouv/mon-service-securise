@@ -1,5 +1,6 @@
 <script lang="ts">
   import ChampTexte from '../ui/ChampTexte.svelte';
+  import { creeBrouillonService } from './creationV2.api';
 
   let nomService = '';
 </script>
@@ -32,8 +33,7 @@
           icone="arrow-right-line"
           positionIcone="droite"
           actif={nomService.length > 0}
-          on:click={async () =>
-            await axios.post('/api/brouillon-service', { nomService })}
+          on:click={async () => creeBrouillonService(nomService)}
         />
       </div>
     </div>
