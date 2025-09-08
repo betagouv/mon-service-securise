@@ -1,8 +1,19 @@
 <script lang="ts">
   import ChampTexte from '../ui/ChampTexte.svelte';
-  import { creeBrouillonService } from './creationV2.api';
+  import {
+    creeBrouillonService,
+    finaliseBrouillonService,
+  } from './creationV2.api';
 
   let nomService = '';
+  let chargementEnCours = false;
+
+  const creeBrouillon = async () => {
+    chargementEnCours = true;
+    const idBrouillon = await creeBrouillonService(nomService);
+    await finaliseBrouillonService(idBrouillon);
+    window.location.href = '/tableauDeBord';
+  };
 </script>
 
 <div class="conteneur-creation">
@@ -32,8 +43,8 @@
           taille="md"
           icone="arrow-right-line"
           positionIcone="droite"
-          actif={nomService.length > 0}
-          on:click={async () => creeBrouillonService(nomService)}
+          actif={nomService.length > 0 && !chargementEnCours}
+          on:click={async () => creeBrouillon()}
         />
       </div>
     </div>
