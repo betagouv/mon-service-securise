@@ -1,6 +1,6 @@
 import Base from './base.js';
 
-const STATUTS_SAISIE = {
+export const STATUTS_SAISIE = {
   A_SAISIR: 'aSaisir',
   A_COMPLETER: 'aCompleter',
   COMPLETES: 'completes',
