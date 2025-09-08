@@ -18,6 +18,7 @@ import Mesures from '../../src/modeles/mesures.js';
 import MesureSpecifique from '../../src/modeles/mesureSpecifique.js';
 import { Contributeur } from '../../src/modeles/contributeur.js';
 import { DescriptionServiceV2 } from '../../src/modeles/descriptionServiceV2.js';
+import { VersionService } from '../../src/modeles/versionService.js';
 
 const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER } = Rubriques;
 const { LECTURE } = Permissions;
@@ -1246,7 +1247,7 @@ describe('Un service', () => {
     it('a une description v2 avec un nom', () => {
       const service = new Service({
         id: '123',
-        versionService: 'v2',
+        versionService: VersionService.v2,
         descriptionService: { nomService: 'Bibliothèque' },
       });
 
