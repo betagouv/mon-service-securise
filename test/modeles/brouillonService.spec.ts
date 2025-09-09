@@ -6,7 +6,10 @@ import Service from '../../src/modeles/service.js';
 describe('Un brouillon de Service v2', () => {
   describe('quand il se transforme en données de DescriptionServiceV2', () => {
     it('fournit des données que le Service accepte', () => {
-      const b = new BrouillonService(unUUID('b'), { nomService: 'Mairie A' });
+      const b = new BrouillonService(unUUID('b'), {
+        nomService: 'Mairie A',
+        siret: 'un siret',
+      });
 
       const pourCreationService = b.enDonneesCreationServiceV2();
 
