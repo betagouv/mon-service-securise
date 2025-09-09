@@ -13,6 +13,7 @@ $(() => {
   );
 
   const avecPromotionDeMsc = lisDonneesPartagees('avec-promotion-de-msc');
+  const avecDecrireV2 = lisDonneesPartagees('avec-decrire-v2');
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-tableau-de-bord', {
@@ -22,6 +23,7 @@ $(() => {
         profilUtilisateurComplet,
         dateInscriptionUtilisateur,
         avecPromotionDeMsc,
+        avecDecrireV2,
       },
     })
   );
