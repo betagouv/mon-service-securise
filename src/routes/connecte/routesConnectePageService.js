@@ -90,10 +90,7 @@ const routesConnectePageService = ({
         etapeActive: 'descriptionService',
         departements,
         ...(estLectureSeule && {
-          niveauRecommandeLectureSeule:
-            DescriptionService.estimeNiveauDeSecurite(
-              service.descriptionService
-            ),
+          niveauRecommandeLectureSeule: service.estimeNiveauDeSecurite(),
         }),
       });
     }
