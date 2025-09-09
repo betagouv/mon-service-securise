@@ -9,15 +9,18 @@ export type DonneesEntite = {
 export type DonneesDescriptionServiceV2 = {
   nomService: string;
   organisationResponsable: DonneesEntite;
+  niveauDeSecurite: string;
 };
 
 export class DescriptionServiceV2 {
   readonly nomService: string;
   readonly organisationResponsable: Entite;
+  readonly niveauDeSecurite: string;
 
   constructor(donnees: DonneesDescriptionServiceV2) {
     this.nomService = donnees.nomService;
     this.organisationResponsable = new Entite(donnees.organisationResponsable);
+    this.niveauDeSecurite = donnees.niveauDeSecurite;
   }
 
   static valideDonneesCreation() {}
