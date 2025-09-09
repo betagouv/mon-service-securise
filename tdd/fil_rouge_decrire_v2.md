@@ -7,7 +7,7 @@
 - [-] Le calcul du niveau de sécurité en V2 est disponible
   - [ ] Tous ceux qui appellent `DescriptionService.estimeNiveauSecurite` alors qu'ils ont un `service` sous la main doivent appeler une méthode d'instance
   - [ ] Ceux qui appellent `DescriptionService.estimeNiveauSecurite` AVANT d'avoir un service… normalement c'est bon car on codera des cousins hard-codés sur `DescriptionServiceV2.estimeNiveauSecurite`
-  - [ ] Déplacer `estNiveauDeSecuriteValide` dans une fonction du `referentiel`
+  - [x] Déplacer `estNiveauDeSecuriteValide` dans une fonction du `referentiel`
 - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
   - ce moteur de règles génère une liste de mesures v2
 

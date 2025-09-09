@@ -638,7 +638,7 @@ const routesConnecteApi = ({
       }
       if (
         filtreBesoinsSecurite &&
-        !DescriptionService.estNiveauDeSecuriteValide(filtreBesoinsSecurite)
+        !referentiel.estNiveauDeSecuriteValide(filtreBesoinsSecurite)
       ) {
         reponse.sendStatus(400);
         return;
