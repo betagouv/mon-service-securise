@@ -124,6 +124,14 @@ class DescriptionService extends InformationsService {
     });
   }
 
+  niveauSecuriteDepasseRecommandation() {
+    const niveauRecommande = this.estimeNiveauDeSecurite();
+    return this.referentiel.niveauDeSecuriteDepasseRecommandation(
+      this.niveauSecurite,
+      niveauRecommande
+    );
+  }
+
   static estimeNiveauDeSecurite(donnees) {
     const estDeNiveau3 =
       donnees.fonctionnalites?.includes('signatureElectronique') ||
@@ -156,14 +164,6 @@ class DescriptionService extends InformationsService {
     return (
       tousNiveauxSecurite.indexOf(donnees.niveauSecurite) >=
       tousNiveauxSecurite.indexOf(niveauMinimal)
-    );
-  }
-
-  static niveauSecuriteSuperieurRecommandation(donnees) {
-    const niveauRecommande = DescriptionService.estimeNiveauDeSecurite(donnees);
-    return (
-      tousNiveauxSecurite.indexOf(donnees.niveauSecurite) >
-      tousNiveauxSecurite.indexOf(niveauRecommande)
     );
   }
 

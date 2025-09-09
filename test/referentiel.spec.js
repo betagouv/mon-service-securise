@@ -1175,5 +1175,18 @@ describe('Le référentiel', () => {
 
       expect(valide).to.be(false);
     });
+
+    it('sait comparer deux niveaux entre eux', () => {
+      const niveauRecommande = 'niveau1';
+      const niveauReel = 'niveau2';
+
+      const estSuperieur =
+        referentielProd.niveauDeSecuriteDepasseRecommandation(
+          niveauReel,
+          niveauRecommande
+        );
+
+      expect(estSuperieur).to.be(true);
+    });
   });
 });

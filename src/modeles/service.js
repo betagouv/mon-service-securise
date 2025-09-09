@@ -430,6 +430,10 @@ class Service {
     return this.descriptionService.estimeNiveauDeSecurite();
   }
 
+  niveauSecuriteDepasseRecommandation() {
+    return this.descriptionService.niveauSecuriteDepasseRecommandation();
+  }
+
   static creePourUnUtilisateur(utilisateur) {
     const donneesService = {
       descriptionService: {

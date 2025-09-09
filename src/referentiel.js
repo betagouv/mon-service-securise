@@ -448,6 +448,13 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const estNiveauDeSecuriteValide = (niveau) =>
     donnees.niveauxDeSecurite.indexOf(niveau) >= 0;
 
+  const niveauDeSecuriteDepasseRecommandation = (
+    niveauCandidat,
+    niveauRecommandation
+  ) =>
+    donnees.niveauxDeSecurite.indexOf(niveauCandidat) >
+    donnees.niveauxDeSecurite.indexOf(niveauRecommandation);
+
   valideDonnees();
 
   return {
@@ -519,6 +526,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     nbMoisDecalage,
     nbMoisBientotExpire,
     nbMoisRappelsExpiration,
+    niveauDeSecuriteDepasseRecommandation,
     niveauGravite,
     niveauxGravite,
     niveauRisque,
