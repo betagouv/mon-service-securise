@@ -106,7 +106,7 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       expect(resultat.status).toBe(400);
     });
 
-    it("renvoie une erreur 400 si le brouillon n'existe pas", async () => {
+    it("renvoie une erreur 404 si le brouillon n'existe pas", async () => {
       testeur.depotDonnees().lisBrouillonService = async () => {
         throw new ErreurBrouillonInexistant();
       };
@@ -150,6 +150,18 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       );
 
       expect(resultat.status).toBe(400);
+    });
+
+    it("renvoie une erreur 404 si le brouillon n'existe pas", async () => {
+      testeur.depotDonnees().finaliseBrouillonService = async () => {
+        throw new ErreurBrouillonInexistant();
+      };
+
+      const reponse = await testeur.post(
+        `/api/brouillon-service/${unUUIDRandom()}/finalise`
+      );
+
+      expect(reponse.status).toBe(404);
     });
   });
 });

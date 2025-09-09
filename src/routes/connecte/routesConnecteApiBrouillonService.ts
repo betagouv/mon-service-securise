@@ -73,17 +73,24 @@ const routesConnecteApiBrouillonService = ({
   routes.post(
     '/:id/finalise',
     valideParams(z.strictObject({ id: z.uuidv4() })),
-    async (requete, reponse) => {
+    async (requete, reponse, suite) => {
       const { idUtilisateurCourant } =
         requete as unknown as RequestRouteConnecte;
       const { id } = requete.params;
 
-      const idService = await depotDonnees.finaliseBrouillonService(
-        idUtilisateurCourant,
-        id as UUID
-      );
+      try {
+        const idService = await depotDonnees.finaliseBrouillonService(
+          idUtilisateurCourant,
+          id as UUID
+        );
 
-      return reponse.json({ idService });
+        return reponse.json({ idService });
+      } catch (e) {
+        if (e instanceof ErreurBrouillonInexistant)
+          return reponse.sendStatus(404);
+
+        return suite(e);
+      }
     }
   );
 
