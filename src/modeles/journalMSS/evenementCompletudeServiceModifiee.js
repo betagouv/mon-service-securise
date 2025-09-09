@@ -14,11 +14,10 @@ class EvenementCompletudeServiceModifiee extends Evenement {
       );
 
     const { service } = donnees;
-    const niveauSecuriteMinimal = DescriptionService.estimeNiveauDeSecurite(
-      service.descriptionService
-    );
+    const niveauSecuriteMinimal = service.estimeNiveauDeSecurite();
     const { indiceCyber, ...autreDonneesCompletude } =
       service.completudeMesures();
+
     const {
       typeService,
       nombreOrganisationsUtilisatrices,

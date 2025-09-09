@@ -116,6 +116,14 @@ class DescriptionService extends InformationsService {
     }
   }
 
+  estimeNiveauDeSecurite() {
+    return DescriptionService.estimeNiveauDeSecurite({
+      fonctionnalites: this.fonctionnalites,
+      donneesCaracterePersonnel: this.donneesCaracterePersonnel,
+      delaiAvantImpactCritique: this.delaiAvantImpactCritique,
+    });
+  }
+
   static estimeNiveauDeSecurite(donnees) {
     const estDeNiveau3 =
       donnees.fonctionnalites?.includes('signatureElectronique') ||
