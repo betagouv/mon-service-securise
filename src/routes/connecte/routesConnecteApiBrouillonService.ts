@@ -35,13 +35,16 @@ const routesConnecteApiBrouillonService = ({
   routes.post(
     '/:id/finalise',
     valideParams(z.strictObject({ id: z.uuidv4() })),
-    async (requete: Request, reponse: Response) => {
-      const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+    async (requete, reponse) => {
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
       const { id } = requete.params;
+
       const idService = await depotDonnees.finaliseBrouillonService(
         idUtilisateurCourant,
         id as UUID
       );
+
       return reponse.json({ idService });
     }
   );
