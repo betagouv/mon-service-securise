@@ -5,6 +5,7 @@ type IdMesureV2 = string;
 export enum Modificateur {
   RendreIndispensable,
   RendreRecommandee,
+  Ajouter,
 }
 type LigneDeMenu = {
   reference: IdMesureV2;
@@ -28,27 +29,30 @@ export class MoteurReglesV2 {
 
     // eslint-disable-next-line no-restricted-syntax
     for (const ligne of this.menu) {
-      if (ligne.dansSocleInitial) {
-        const modifiee: { indispensable?: boolean } = {};
+      let aRajouter = false;
+      const modifiee: { indispensable: boolean } = { indispensable: false };
 
-        if (
-          ligne.modificateurs.niveauDeSecurite &&
-          descriptionService.niveauDeSecurite ===
-            ligne.modificateurs.niveauDeSecurite[0]
-        )
-          switch (ligne.modificateurs.niveauDeSecurite[1]) {
-            case Modificateur.RendreIndispensable:
-              modifiee.indispensable = true;
-              break;
-            case Modificateur.RendreRecommandee:
-              modifiee.indispensable = false;
-              break;
-            default:
-              break;
-          }
+      if (ligne.dansSocleInitial) aRajouter = true;
 
-        mesures.push([ligne.reference, modifiee]);
-      }
+      if (
+        ligne.modificateurs.niveauDeSecurite &&
+        descriptionService.niveauDeSecurite ===
+          ligne.modificateurs.niveauDeSecurite[0]
+      )
+        switch (ligne.modificateurs.niveauDeSecurite[1]) {
+          case Modificateur.RendreIndispensable:
+            modifiee.indispensable = true;
+            break;
+          case Modificateur.RendreRecommandee:
+            modifiee.indispensable = false;
+            break;
+          case Modificateur.Ajouter:
+            aRajouter = true;
+            break;
+          default:
+            break;
+        }
+      if (aRajouter) mesures.push([ligne.reference, modifiee]);
     }
 
     return Object.fromEntries(mesures);
