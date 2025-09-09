@@ -34,24 +34,32 @@ export class MoteurReglesV2 {
 
       if (ligne.dansSocleInitial) aRajouter = true;
 
-      if (
-        ligne.modificateurs.niveauDeSecurite &&
-        descriptionService.niveauDeSecurite ===
-          ligne.modificateurs.niveauDeSecurite[0]
-      )
-        switch (ligne.modificateurs.niveauDeSecurite[1]) {
-          case Modificateur.RendreIndispensable:
-            modifiee.indispensable = true;
-            break;
-          case Modificateur.RendreRecommandee:
-            modifiee.indispensable = false;
-            break;
-          case Modificateur.Ajouter:
-            aRajouter = true;
-            break;
-          default:
-            break;
-        }
+      const champ = Object.keys(ligne.modificateurs)[0];
+
+      if (champ) {
+        const [valeurMenu, modificateur] = ligne.modificateurs[champ];
+        const enRecord = descriptionService as unknown as Record<
+          string,
+          string
+        >;
+        const valeurReelle = enRecord[champ] as string;
+
+        if (valeurReelle === valeurMenu)
+          switch (modificateur) {
+            case Modificateur.RendreIndispensable:
+              modifiee.indispensable = true;
+              break;
+            case Modificateur.RendreRecommandee:
+              modifiee.indispensable = false;
+              break;
+            case Modificateur.Ajouter:
+              aRajouter = true;
+              break;
+            default:
+              break;
+          }
+      }
+
       if (aRajouter) mesures.push([ligne.reference, modifiee]);
     }
 
