@@ -29,10 +29,11 @@ export class MoteurReglesV2 {
 
     // eslint-disable-next-line no-restricted-syntax
     for (const ligne of this.menu) {
-      let aRajouter = false;
-      const modifiee: { indispensable: boolean } = { indispensable: false };
+      const modifiee: { aRajouter?: boolean; indispensable: boolean } = {
+        indispensable: false,
+      };
 
-      if (ligne.dansSocleInitial) aRajouter = true;
+      modifiee.aRajouter = ligne.dansSocleInitial;
 
       const champ = Object.keys(ligne.modificateurs)[0];
 
@@ -53,14 +54,18 @@ export class MoteurReglesV2 {
               modifiee.indispensable = false;
               break;
             case Modificateur.Ajouter:
-              aRajouter = true;
+              modifiee.aRajouter = true;
               break;
             default:
               break;
           }
       }
 
-      if (aRajouter) mesures.push([ligne.reference, modifiee]);
+      if (modifiee.aRajouter)
+        mesures.push([
+          ligne.reference,
+          { indispensable: modifiee.indispensable },
+        ]);
     }
 
     return Object.fromEntries(mesures);
