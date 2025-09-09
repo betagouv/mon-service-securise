@@ -10,6 +10,7 @@ import { ErreurBrouillonInexistant } from '../../src/erreurs.js';
 import { DepotDonneesService } from '../../src/depots/depotDonneesService.interface.js';
 import { AdaptateurChiffrement } from '../../src/adaptateurs/adaptateurChiffrement.interface.js';
 import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.js';
+import { BrouillonService } from '../../src/modeles/brouillonService.js';
 
 describe('Le dépôt de données des brouillons de Service', () => {
   let persistance: ReturnType<
@@ -87,6 +88,34 @@ describe('Le dépôt de données des brouillons de Service', () => {
     });
   });
 
+  describe("sur demande de récupération d'un brouillon d'un utilisateur", () => {
+    it('récupère des données depuis la persistance puis les déchiffre', async () => {
+      const idUtilisateur = unUUID('1');
+      const idBrouillon = unUUID('2');
+      await persistance.ajouteBrouillonService(
+        idBrouillon,
+        idUtilisateur,
+        await adaptateurChiffrement.chiffre({ nomService: 'Service #1' })
+      );
+
+      const brouillon = await leDepot().lisBrouillonService(
+        idUtilisateur,
+        idBrouillon
+      );
+
+      expect(brouillon.nomService).toBe('Service #1');
+    });
+
+    it("jette une erreur si le brouillon n'existe pas", async () => {
+      const idUtilisateur = unUUID('1');
+      const idBrouillon = unUUID('2');
+
+      await expect(
+        leDepot().lisBrouillonService(idUtilisateur, idBrouillon)
+      ).rejects.toThrowError(ErreurBrouillonInexistant);
+    });
+  });
+
   describe("sur demande de finalisation d'un brouillon", () => {
     it("jette une exception si le brouillon n'existe pas", async () => {
       await expect(
@@ -137,5 +166,39 @@ describe('Le dépôt de données des brouillons de Service', () => {
     });
 
     it.todo("jette une exception si le brouillon n'est pas complet");
+  });
+
+  describe("sur demande de sauvegarde d'un brouillon", () => {
+    it("délègue à la persistance la sauvegarde du brouillon qu'il aura chiffré", async () => {
+      const idBrouillonExistant = unUUID('1');
+      const idUtilisateur = unUUID('2');
+      await persistance.ajouteBrouillonService(
+        idBrouillonExistant,
+        idUtilisateur,
+        await adaptateurChiffrement.chiffre({ nomService: 'Mairie A' })
+      );
+
+      await leDepot().sauvegardeBrouillonService(
+        idUtilisateur,
+        new BrouillonService(idBrouillonExistant, {
+          nomService: 'Mairie A',
+          siret: 'un nouveau siret',
+        })
+      );
+
+      const tousLesBrouillons =
+        await persistance.lisBrouillonsService(idUtilisateur);
+      expect(tousLesBrouillons[0]).toEqual({
+        idUtilisateur,
+        id: idBrouillonExistant,
+        donnees: {
+          chiffre: true,
+          coffreFort: {
+            nomService: 'Mairie A',
+            siret: 'un nouveau siret',
+          },
+        },
+      });
+    });
   });
 });

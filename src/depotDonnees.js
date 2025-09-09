@@ -281,8 +281,10 @@ const creeDepot = (config = {}) => {
 
   const {
     nouveauBrouillonService,
+    lisBrouillonService,
     lisBrouillonsService,
     finaliseBrouillonService,
+    sauvegardeBrouillonService,
   } = depotBrouillonsService;
 
   return {
@@ -320,6 +322,7 @@ const creeDepot = (config = {}) => {
     enregistreDossier,
     finaliseDossierCourant,
     lisActivitesMesure,
+    lisBrouillonService,
     lisBrouillonsService,
     lisDernierIndiceCyber,
     lisModelesMesureSpecifiquePourUtilisateur,
@@ -357,6 +360,7 @@ const creeDepot = (config = {}) => {
     revoqueSuperviseur,
     santeDuDepot,
     sauvegardeAutorisation,
+    sauvegardeBrouillonService,
     sauvegardeParcoursUtilisateur,
     sauvegardeNouvelIndiceCyber,
     enregistreNouvelleConnexionUtilisateur,

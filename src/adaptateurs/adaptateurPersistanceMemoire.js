@@ -554,6 +554,17 @@ const nouvelAdaptateur = (
     });
   };
 
+  const sauvegardeBrouillonService = async (
+    id,
+    idUtilisateur,
+    donneesBrouillon
+  ) => {
+    const leBrouillon = donnees.brouillonsServices.find(
+      (b) => b.id === id && b.idUtilisateur === idUtilisateur
+    );
+    leBrouillon.donnees = donneesBrouillon;
+  };
+
   const lisBrouillonsService = async (idUtilisateur) =>
     donnees.brouillonsServices.filter((b) => b.idUtilisateur === idUtilisateur);
 
@@ -603,6 +614,7 @@ const nouvelAdaptateur = (
     nouveautesPourUtilisateur,
     contributeursDesServicesDe,
     sauvegardeAutorisation,
+    sauvegardeBrouillonService,
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
     sauvegardeService,

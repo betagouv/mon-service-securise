@@ -14,10 +14,18 @@ export type DepotDonneesBrouillonService = {
     nomService: string
   ) => Promise<UUID>;
   lisBrouillonsService: (idUtilisateur: UUID) => Promise<BrouillonService[]>;
+  lisBrouillonService: (
+    idUtilisateur: UUID,
+    idBrouillon: UUID
+  ) => Promise<BrouillonService>;
   finaliseBrouillonService: (
     idUtilisateur: UUID,
     idBrouillon: UUID
   ) => Promise<UUID>;
+  sauvegardeBrouillonService: (
+    idUtilisateur: UUID,
+    brouillon: BrouillonService
+  ) => Promise<void>;
 };
 
 type PersistanceBrouillonService = {
@@ -30,6 +38,11 @@ type PersistanceBrouillonService = {
     idUtilisateur: UUID
   ) => Promise<{ id: UUID; idUtilisateur: UUID; donnees: DonneesChiffrees }[]>;
   supprimeBrouillonService: (idBrouillon: UUID) => Promise<void>;
+  sauvegardeBrouillonService: (
+    idBrouillon: UUID,
+    idUtilisateur: UUID,
+    donneesChiffrees: DonneesChiffrees
+  ) => Promise<void>;
 };
 
 const creeDepot = ({
@@ -77,6 +90,23 @@ const creeDepot = ({
     );
   };
 
+  const lisBrouillonService = async (
+    idUtilisateur: UUID,
+    idBrouillon: UUID
+  ) => {
+    const tousLesBrouillons =
+      await persistance.lisBrouillonsService(idUtilisateur);
+
+    const persiste = tousLesBrouillons.find((b) => b.id === idBrouillon);
+    if (!persiste) throw new ErreurBrouillonInexistant();
+
+    const donneesEnClair =
+      await adaptateurChiffrement.dechiffre<DonneesBrouillonService>(
+        persiste.donnees
+      );
+    return new BrouillonService(idBrouillon, donneesEnClair);
+  };
+
   const finaliseBrouillonService = async (
     idUtilisateur: UUID,
     idBrouillon: UUID
@@ -103,10 +133,27 @@ const creeDepot = ({
     return idService;
   };
 
+  const sauvegardeBrouillonService = async (
+    idUtilisateur: UUID,
+    brouillon: BrouillonService
+  ) => {
+    const donneesChiffrees = await adaptateurChiffrement.chiffre(
+      brouillon.donneesAPersister()
+    );
+
+    await persistance.sauvegardeBrouillonService(
+      brouillon.id,
+      idUtilisateur,
+      donneesChiffrees
+    );
+  };
+
   return {
     finaliseBrouillonService,
     nouveauBrouillonService,
+    lisBrouillonService,
     lisBrouillonsService,
+    sauvegardeBrouillonService,
   };
 };
 

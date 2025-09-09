@@ -882,6 +882,13 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       donnees,
     });
 
+  const sauvegardeBrouillonService = async (id, idUtilisateur, donnees) =>
+    knex('brouillons_service')
+      .where({ id, id_utilisateur: idUtilisateur })
+      .update({
+        donnees,
+      });
+
   const lisBrouillonsService = async (idUtilisateur) =>
     knex('brouillons_service')
       .where({ id_utilisateur: idUtilisateur })
@@ -941,6 +948,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     sante,
     sauvegardeService,
     sauvegardeAutorisation,
+    sauvegardeBrouillonService,
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeNouvelIndiceCyber,
     sauvegardeParcoursUtilisateur,
