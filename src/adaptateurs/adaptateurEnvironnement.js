@@ -85,6 +85,7 @@ const featureFlag = () => ({
     process.env.OIDC_CLIENT_ID &&
     process.env.OIDC_CLIENT_SECRET,
   dateDebutBandeauMSC: () => process.env.FEATURE_FLAG_MSC_BANDEAU_DATE_DEBUT,
+  avecDecrireV2: () => process.env.FEATURE_FLAG_AVEC_DECRIRE_V2 === 'true',
 });
 
 const versionDeBuild = () => {

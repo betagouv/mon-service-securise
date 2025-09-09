@@ -1205,6 +1205,7 @@ describe('Le middleware MSS', () => {
     let adaptateurHorloge;
     let adaptateurEnvironnement;
     const featureFlag = {
+      avecDecrireV2: () => true,
       dateDebutBandeauMSC: () => '2025-01-01 00:00:00Z',
     };
 
@@ -1236,6 +1237,12 @@ describe('Le middleware MSS', () => {
         middleware.chargeFeatureFlags(requete, reponse, () => {
           expect(reponse.locals.featureFlags.avecBandeauMSC).to.be(true);
         });
+      });
+    });
+
+    it('active décrire V2 si le feature flag est défini', () => {
+      middleware.chargeFeatureFlags(requete, reponse, () => {
+        expect(reponse.locals.featureFlags.avecDecrireV2).to.be(true);
       });
     });
   });
