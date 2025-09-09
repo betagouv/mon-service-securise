@@ -69,3 +69,22 @@
 - [x] Un service connaît sa version
 - [x] Une colonne dédiée `version_service` dans la table `services`
   - Avec valeur par défaut à `v1`, comme ça pas de migration.
+
+## Exemple de mesure personnalisée renvoyée par le moteur de règles V1 (`.mesures()`)
+
+[SERVEUR] "hebergementUE": {
+[SERVEUR] "description": "Héberger le service numérique et les données au sein de l'Union européenne",
+[SERVEUR] "categorie": "gouvernance",
+[SERVEUR] "descriptionLongue": "<p>Privilégier le recours à un hébergeur proposant la localisation au sein de l'Union européenne du service numérique et des données.</p><p>Cette mesure vise à renforcer la protection des données grâce aux garanties offertes par la réglementation européenne et à faciliter les actions de remédiation et d'investigation en cas d'incident de sécurité.</p>",
+[SERVEUR] "referentiel": "ANSSI",
+[SERVEUR] "identifiantNumerique": "0007",
+[SERVEUR] "indispensable": false
+[SERVEUR] },
+[SERVEUR] "testIntrusion": {
+[SERVEUR] "description": "Réaliser un test d'intrusion ou une campagne de recherche de bug",
+[SERVEUR] "categorie": "gouvernance",
+[SERVEUR] "descriptionLongue": "<p>Faire réaliser un test d'intrusion et/ou une campagne de recherche de bug (bug bounty) du service, par un prestataire ou par un service compétent.</p><p>Cette mesure permet d'identifier des vulnérabilités du service en vue de les corriger et ainsi renforcer sa sécurité.</p>",
+[SERVEUR] "referentiel": "ANSSI",
+[SERVEUR] "identifiantNumerique": "0013",
+[SERVEUR] "indispensable": true
+[SERVEUR] },
