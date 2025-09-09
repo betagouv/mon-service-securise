@@ -21,4 +21,26 @@ describe('Un brouillon de Service v2', () => {
       ).not.toThrowError();
     });
   });
+
+  describe('sur demande des données à persister', () => {
+    it('retourne le nom du service', () => {
+      const b = new BrouillonService(unUUID('b'), {
+        nomService: 'Mairie A',
+      });
+
+      expect(b.donneesAPersister()).toEqual({ nomService: 'Mairie A' });
+    });
+
+    it("retourne le siret s'il est présent", () => {
+      const b = new BrouillonService(unUUID('b'), {
+        nomService: 'Mairie A',
+        siret: 'un siret',
+      });
+
+      expect(b.donneesAPersister()).toEqual({
+        nomService: 'Mairie A',
+        siret: 'un siret',
+      });
+    });
+  });
 });
