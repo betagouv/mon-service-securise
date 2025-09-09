@@ -1709,5 +1709,6 @@ export default {
   modelesMesureSpecifique: {
     nombreMaximumParUtilisateur: 40,
   },
+  niveauxDeSecurite: ['niveau1', 'niveau2', 'niveau3'],
   versionServiceParDefaut: 'v1',
 };

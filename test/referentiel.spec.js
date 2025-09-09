@@ -1,6 +1,7 @@
 import expect from 'expect.js';
 import { ErreurDonneesReferentielIncorrectes } from '../src/erreurs.js';
 import * as Referentiel from '../src/referentiel.js';
+import donneesDeProd from '../donneesReferentiel.js';
 import Risque from '../src/modeles/risque.js';
 
 describe('Le référentiel', () => {
@@ -1155,6 +1156,24 @@ describe('Le référentiel', () => {
       const niveau = referentiel.niveauRisque('probable', 'grave');
 
       expect(niveau).to.be(Risque.NIVEAU_RISQUE_INDETERMINABLE);
+    });
+  });
+
+  describe("sur demande des niveaux de sécurité d'un service", () => {
+    const referentielProd = Referentiel.creeReferentiel(donneesDeProd);
+
+    ['niveau1', 'niveau2', 'niveau3'].forEach((cle) => {
+      it(`valide le niveau de sécurité ${cle}`, () => {
+        const estValide = referentielProd.estNiveauDeSecuriteValide(cle);
+
+        expect(estValide).to.be(true);
+      });
+    });
+
+    it('ne valide pas un niveau de sécurité inexistant', () => {
+      const valide = referentielProd.estNiveauDeSecuriteValide('inexistant');
+
+      expect(valide).to.be(false);
     });
   });
 });
