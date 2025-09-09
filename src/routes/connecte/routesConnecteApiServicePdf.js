@@ -50,9 +50,7 @@ const routesConnecteApiServicePdf = ({
       referentiel.formatteListeDeReferentiels(referentiels);
 
     const niveauSuperieurAuxRecommandations =
-      DescriptionService.niveauSecuriteSuperieurRecommandation(
-        service.descriptionService
-      );
+      service.niveauSecuriteDepasseRecommandation();
     const donnees = {
       service,
       camembertIndispensables: genereGradientConique(

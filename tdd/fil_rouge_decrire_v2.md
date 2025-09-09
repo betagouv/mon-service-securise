@@ -4,10 +4,6 @@
 
 - [ ] Un brouillon existant peut être complété (reprendre la création)
 - [ ] chaque étape de décrire permet de mettre à jour une propriété du brouillon
-- [-] Le calcul du niveau de sécurité en V2 est disponible
-  - [ ] Tous ceux qui appellent `DescriptionService.estimeNiveauSecurite` alors qu'ils ont un `service` sous la main doivent appeler une méthode d'instance
-  - [ ] Ceux qui appellent `DescriptionService.estimeNiveauSecurite` AVANT d'avoir un service… normalement c'est bon car on codera des cousins hard-codés sur `DescriptionServiceV2.estimeNiveauSecurite`
-  - [x] Déplacer `estNiveauDeSecuriteValide` dans une fonction du `referentiel`
 - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
   - ce moteur de règles génère une liste de mesures v2
 
@@ -32,6 +28,10 @@
   - [x] Un bouton permet d'ouvrir cette page, il est derrière un feature flag
     - /service/v2/creation
   - [x] Le composant Svelte utilise un fichier `.api` et non un `axios.post()` dans `CreationV2.svelte`
+- [x] Manipuler du V1 ou du V2 est transparent pour les appelants du calcul du niveau de sécurité
+  - [x] Tous ceux qui appellent `DescriptionService.estimeNiveauSecurite` alors qu'ils ont un `service` sous la main doivent appeler une méthode d'instance
+  - [x] Ceux qui appellent `DescriptionService.estimeNiveauSecurite` AVANT d'avoir un service… normalement c'est bon car on codera des cousins hard-codés sur `DescriptionServiceV2.estimeNiveauSecurite`
+  - [x] Déplacer `estNiveauDeSecuriteValide` dans une fonction du `referentiel`
 - [x] le brouillon se transforme en une descriptionV2 à la création du service
   - [x] la validation de description dans `nouveauService` est faite par une méthode statique de `Service.valideDonneesCreation`
     - [x] c'est cette méthode statique qui fait le switch entre v1 et v2

@@ -148,6 +148,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       statutsMesures: { fait: 'Fait' },
       mesures: { uneMesure: { categorie: 'uneCategorie' } },
       reglesPersonnalisation: { mesuresBase: ['uneMesure'] },
+      niveauxDeSecurite: ['niveau1', 'niveau2', 'niveau3'],
     });
     const serviceARenvoyer = unService(referentiel).avecId('456').construis();
 
