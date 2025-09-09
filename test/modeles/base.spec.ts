@@ -1,5 +1,6 @@
-import expect from 'expect.js';
 import Base from '../../src/modeles/base.js';
+import type { Referentiel } from '../../src/referentiel.interface.js';
+import { creeReferentielVide } from '../../src/referentiel.js';
 
 class ExtensionBase extends Base {
   static proprietesObligatoires() {
@@ -8,38 +9,44 @@ class ExtensionBase extends Base {
 }
 
 describe('Un objet métier', () => {
+  let referentiel: Referentiel;
+
+  beforeEach(() => {
+    referentiel = creeReferentielVide();
+  });
+
   it('sait si une de ses propriétés a été saisie', () => {
-    const objetMetier = new Base({
+    const objetMetier = new ExtensionBase({
       proprietesAtomiquesRequises: ['propriete'],
     });
-    objetMetier.renseigneProprietes({});
-    expect(objetMetier.proprieteSaisie('propriete')).to.be(false);
+    objetMetier.renseigneProprietes({}, referentiel);
+    expect(objetMetier.proprieteSaisie('propriete')).toBe(false);
 
-    objetMetier.renseigneProprietes({ propriete: 'valeur' });
-    expect(objetMetier.proprieteSaisie('propriete')).to.be(true);
+    objetMetier.renseigneProprietes({ propriete: 'valeur' }, referentiel);
+    expect(objetMetier.proprieteSaisie('propriete')).toBe(true);
   });
 
   it("considère qu'une propriété renseignée à chaîne vide n'est pas saisie", () => {
-    const objetMetier = new Base({
+    const objetMetier = new ExtensionBase({
       proprietesAtomiquesRequises: ['propriete'],
     });
-    objetMetier.renseigneProprietes({ propriete: '' });
-    expect(objetMetier.proprieteSaisie('propriete')).to.be(false);
+    objetMetier.renseigneProprietes({ propriete: '' }, referentiel);
+    expect(objetMetier.proprieteSaisie('propriete')).toBe(false);
   });
 
   it('renseigne les propriétés facultatives', () => {
-    const objetMetier = new Base({
+    const objetMetier = new ExtensionBase({
       proprietesAtomiquesFacultatives: ['propriete'],
     });
-    objetMetier.renseigneProprietes({ propriete: 'valeur' });
+    objetMetier.renseigneProprietes({ propriete: 'valeur' }, referentiel);
     expect(objetMetier.propriete).to.equal('valeur');
   });
 
   it('convertit les proprietes facultatives en JSON', () => {
-    const objetMetier = new Base({
+    const objetMetier = new ExtensionBase({
       proprietesAtomiquesFacultatives: ['propriete'],
     });
-    objetMetier.renseigneProprietes({ propriete: 'valeur' });
+    objetMetier.renseigneProprietes({ propriete: 'valeur' }, referentiel);
     expect(objetMetier.toJSON()).to.eql({ propriete: 'valeur' });
   });
 
@@ -52,17 +59,17 @@ describe('Un objet métier', () => {
       const donnees = { propriete1: 'texte', propriete2: 'texte' };
       const donneesSansPropriete2 = { propriete1: 'texte' };
 
-      expect(ExtensionBase.proprietesObligatoiresRenseignees(donnees)).to.be(
+      expect(ExtensionBase.proprietesObligatoiresRenseignees(donnees)).toBe(
         true
       );
       expect(
         ExtensionBase.proprietesObligatoiresRenseignees(donneesSansPropriete2)
-      ).to.be(false);
+      ).toBe(false);
     });
 
     it('sait répondre quand les propriétés sont de type booléen', () => {
       const donnees = { propriete1: true, propriete2: false };
-      expect(ExtensionBase.proprietesObligatoiresRenseignees(donnees)).to.be(
+      expect(ExtensionBase.proprietesObligatoiresRenseignees(donnees)).toBe(
         true
       );
     });
@@ -70,7 +77,7 @@ describe('Un objet métier', () => {
     it('sait répondre quand les propriétés sont de type numérique', () => {
       const donnees = { propriete1: 1, propriete2: 0 };
 
-      expect(ExtensionBase.proprietesObligatoiresRenseignees(donnees)).to.be(
+      expect(ExtensionBase.proprietesObligatoiresRenseignees(donnees)).toBe(
         true
       );
     });
@@ -78,7 +85,7 @@ describe('Un objet métier', () => {
     it('refuse la valeur `NaN`', () => {
       const donnees = { propriete1: 1, propriete2: NaN };
 
-      expect(ExtensionBase.proprietesObligatoiresRenseignees(donnees)).to.be(
+      expect(ExtensionBase.proprietesObligatoiresRenseignees(donnees)).toBe(
         false
       );
     });
@@ -87,15 +94,15 @@ describe('Un objet métier', () => {
       const donnees = { propriete1: ['valeur1'], propriete2: ['valeur2'] };
       const donneesAvecListeVide = { propriete1: ['valeur1'], propriete2: [] };
       const avecListeTexteVide = { propriete1: ['valeur1'], propriete2: [''] };
-      expect(ExtensionBase.proprietesObligatoiresRenseignees(donnees)).to.be(
+      expect(ExtensionBase.proprietesObligatoiresRenseignees(donnees)).toBe(
         true
       );
       expect(
         ExtensionBase.proprietesObligatoiresRenseignees(donneesAvecListeVide)
-      ).to.be(false);
+      ).toBe(false);
       expect(
         ExtensionBase.proprietesObligatoiresRenseignees(avecListeTexteVide)
-      ).to.be(false);
+      ).toBe(false);
     });
 
     it("sait répondre quand les propriétés sont des listes d'agrégats", () => {
@@ -103,13 +110,13 @@ describe('Un objet métier', () => {
         propriete1: [{ description: 'texte' }],
         propriete2: [{ description: 'texte' }],
       };
-      expect(ExtensionBase.proprietesObligatoiresRenseignees(donnees)).to.be(
+      expect(ExtensionBase.proprietesObligatoiresRenseignees(donnees)).toBe(
         true
       );
     });
 
     it("reste robuste quand il n'y a pas de propriétés obligatoires", () => {
-      expect(Base.proprietesObligatoiresRenseignees({})).to.be(true);
+      expect(Base.proprietesObligatoiresRenseignees({})).toBe(true);
     });
   });
 });
