@@ -1,6 +1,8 @@
-const proprietePresente = (valeur) => {
+import type { Referentiel } from '../referentiel.interface.js';
+
+const proprietePresente = (valeur: unknown): boolean => {
   if (Array.isArray(valeur)) {
-    return valeur.length && valeur.every((item) => proprietePresente(item));
+    return valeur.length > 0 && valeur.every((item) => proprietePresente(item));
   }
 
   switch (typeof valeur) {
@@ -19,14 +21,32 @@ const proprietePresente = (valeur) => {
   }
 };
 
-class Base {
-  constructor(proprietes = {}) {
-    const {
-      proprietesAtomiquesRequises = [],
-      proprietesAtomiquesFacultatives = [],
-      proprietesListes = [],
-      listesAgregats = {},
-    } = proprietes;
+type ConstructeurAgregat = new (
+  donnees: Record<string, unknown>,
+  referentiel: Referentiel
+  // eslint-disable-next-line no-use-before-define
+) => Base;
+
+type ProprietesBase = {
+  proprietesAtomiquesRequises?: string[];
+  proprietesAtomiquesFacultatives?: string[];
+  proprietesListes?: string[];
+  listesAgregats?: Record<string, ConstructeurAgregat>;
+};
+
+abstract class Base {
+  protected readonly proprietesAtomiquesRequises: string[];
+  protected readonly proprietesAtomiquesFacultatives: string[];
+  protected readonly proprietesListes: string[];
+  protected readonly listesAgregats: Record<string, ConstructeurAgregat>;
+  [key: string]: unknown;
+
+  constructor({
+    proprietesAtomiquesRequises = [],
+    proprietesAtomiquesFacultatives = [],
+    proprietesListes = [],
+    listesAgregats = {},
+  }: ProprietesBase = {}) {
     this.proprietesAtomiquesRequises = proprietesAtomiquesRequises;
     this.proprietesAtomiquesFacultatives = proprietesAtomiquesFacultatives;
     this.proprietesListes = proprietesListes;
@@ -41,12 +61,21 @@ class Base {
     return this.toJSON();
   }
 
-  renseigneProprietes(donnees, referentiel) {
+  renseigneProprietes(
+    donnees: Record<string, unknown>,
+    referentiel: Referentiel
+  ) {
     [
       ...this.proprietesAtomiquesRequises,
       ...this.proprietesAtomiquesFacultatives,
-    ].forEach((p) => (this[p] = donnees[p]));
-    this.proprietesListes.forEach((p) => (this[p] = donnees[p] || []));
+    ].forEach((p) => {
+      this[p] = donnees[p];
+    });
+
+    this.proprietesListes.forEach((p) => {
+      this[p] = donnees[p] || [];
+    });
+
     Object.keys(this.listesAgregats).forEach((l) => {
       const ClasseListeAgregats = this.listesAgregats[l];
       const donneesListeAgregat = { [l]: donnees[l] || [] };
@@ -54,14 +83,14 @@ class Base {
     });
   }
 
-  proprieteSaisie(nomPropriete) {
+  proprieteSaisie(nomPropriete: string) {
     const valeur = this[nomPropriete];
     if (typeof valeur === 'string') return valeur !== '';
     return typeof valeur !== 'undefined';
   }
 
   toJSON() {
-    const resultat = {};
+    const resultat: Record<string, unknown> = {};
 
     [
       ...this.proprietesAtomiquesRequises,
@@ -69,20 +98,22 @@ class Base {
       ...this.proprietesListes,
     ]
       .filter((k) => typeof this[k] !== 'undefined')
-      .forEach((k) => (resultat[k] = this[k]));
+      .forEach((k) => {
+        resultat[k] = this[k];
+      });
 
     Object.keys(this.listesAgregats).forEach((l) => {
-      Object.assign(resultat, { [l]: this[l].toJSON() });
+      Object.assign(resultat, { [l]: (this[l] as Base).toJSON() });
     });
 
     return resultat;
   }
 
-  static proprietesObligatoires() {
+  static proprietesObligatoires(): string[] {
     return [];
   }
 
-  static proprietesObligatoiresRenseignees(donnees) {
+  static proprietesObligatoiresRenseignees(donnees: Record<string, unknown>) {
     return this.proprietesObligatoires().every((propriete) =>
       proprietePresente(donnees?.[propriete])
     );
