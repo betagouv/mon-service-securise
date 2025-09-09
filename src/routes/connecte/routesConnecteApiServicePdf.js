@@ -48,9 +48,7 @@ const routesConnecteApiServicePdf = ({
     ).map(([_, mesure]) => mesure.referentiel);
     const referentielConcernes =
       referentiel.formatteListeDeReferentiels(referentiels);
-    const niveauRecommande = DescriptionService.estimeNiveauDeSecurite(
-      service.descriptionService
-    );
+
     const niveauSuperieurAuxRecommandations =
       DescriptionService.niveauSecuriteSuperieurRecommandation(
         service.descriptionService
@@ -65,7 +63,7 @@ const routesConnecteApiServicePdf = ({
       ),
       referentielConcernes,
       referentiel,
-      niveauRecommande,
+      niveauRecommande: service.estimeNiveauDeSecurite(),
       niveauSuperieurAuxRecommandations,
     };
 

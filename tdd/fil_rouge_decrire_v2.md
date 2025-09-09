@@ -17,6 +17,8 @@
   - supprimer le téléversement v1
 - [ ] On peut sélectionner un brouillon pour le supprimer
 - Penser à afficher l'erreur si le nom de service est déjà utilisé (erreur dans le POST /finalise)
+- Estimation du niveau de sécurité v2, sur le front : on a `POST /api/service/estimationNiveauSecurite` pour les dragons v1,
+  - on imagine cloner pour `POST /api/service/v2/estimationNiveauSecurite` qui appellera en static `DescriptionServiceV2.estimeNiveauDeSecurite`
 - Le dépot de Brouillon est une classe TS ?
 - Metabase : au moment du switch, on imagine un nouvel event `SERVICE_A_ETE_MIGRE` qui dit `versionCible: "v2"`
 - Description service et description service v2 doivent implémenter une interface commune
