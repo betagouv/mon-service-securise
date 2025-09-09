@@ -19,7 +19,7 @@ describe('Le moteur de règles V2', () => {
     expect(mesures).toEqual({ 'PSSI.1': {} });
   });
 
-  it('sait rendre une mesure indispensable en fonction du niveau de sécurité', () => {
+  it('sait rendre une mesure « Indispensable » en fonction du niveau de sécurité', () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
       {
@@ -39,5 +39,27 @@ describe('Le moteur de règles V2', () => {
     const mesures = v2.mesures(serviceNiveau1);
 
     expect(mesures).toEqual({ 'PSSI.1': { indispensable: true } });
+  });
+
+  it('sait rendre une mesure « Recommandée » en fonction du niveau de sécurité', () => {
+    const referentiel = creeReferentiel();
+    const v2 = new MoteurReglesV2(referentiel, [
+      {
+        reference: 'PSSI.1',
+        dansSocleInitial: true,
+        modificateurs: {
+          niveauDeSecurite: ['niveau1', Modificateur.RendreRecommandee],
+        },
+      },
+    ]);
+
+    const serviceNiveau1 = new DescriptionServiceV2({
+      niveauDeSecurite: 'niveau1',
+      nomService: '',
+      organisationResponsable: { siret: 'X' },
+    });
+    const mesures = v2.mesures(serviceNiveau1);
+
+    expect(mesures).toEqual({ 'PSSI.1': { indispensable: false } });
   });
 });

@@ -4,6 +4,7 @@ import { DescriptionServiceV2 } from './modeles/descriptionServiceV2.js';
 type IdMesureV2 = string;
 export enum Modificateur {
   RendreIndispensable,
+  RendreRecommandee,
 }
 type LigneDeMenu = {
   reference: IdMesureV2;
@@ -35,7 +36,16 @@ export class MoteurReglesV2 {
           descriptionService.niveauDeSecurite ===
             ligne.modificateurs.niveauDeSecurite[0]
         )
-          modifiee.indispensable = true;
+          switch (ligne.modificateurs.niveauDeSecurite[1]) {
+            case Modificateur.RendreIndispensable:
+              modifiee.indispensable = true;
+              break;
+            case Modificateur.RendreRecommandee:
+              modifiee.indispensable = false;
+              break;
+            default:
+              break;
+          }
 
         mesures.push([ligne.reference, modifiee]);
       }
