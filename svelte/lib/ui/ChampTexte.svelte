@@ -27,6 +27,7 @@
   pattern={modele}
   on:input
   on:focus
+  on:blur
   {autocomplete}
 />
 

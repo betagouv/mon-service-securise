@@ -2,8 +2,12 @@
 
 ## TODO
 
-- [ ] Un brouillon existant peut être complété (reprendre la création)
+- [-] Un brouillon existant peut être complété (reprendre la création)
+  - [x] Un front permettant de passer d'étape en étape
+  - [ ] Une route permettant de rajouter (`PUT`) d'autres données
+  - [ ] Un front permettant de charger un brouillon existant
 - [ ] chaque étape de décrire permet de mettre à jour une propriété du brouillon
+  - [ ] la route permettant de rajouter des données vérifie la cohérence de ces données (via `referentiel` ?)
 - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
   - ce moteur de règles génère une liste de mesures v2
 

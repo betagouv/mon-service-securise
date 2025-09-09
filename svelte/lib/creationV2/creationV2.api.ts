@@ -7,6 +7,14 @@ export const creeBrouillonService = async (
   return reponse.data.id as UUID;
 };
 
-export const finaliseBrouillonService = async (idBrouillon: UUID) => {
+export const finaliseBrouillonService = async (idBrouillon: UUID) =>
   await axios.post(`/api/brouillon-service/${idBrouillon}/finalise`);
-};
+
+export const metsAJourBrouillonService = async (
+  idBrouillon: UUID,
+  clePropriete: string,
+  valeur: string
+) =>
+  await axios.put(`/api/brouillon-service/${idBrouillon}/${clePropriete}`, {
+    [clePropriete]: valeur,
+  });

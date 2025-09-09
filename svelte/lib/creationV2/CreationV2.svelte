@@ -3,16 +3,42 @@
   import {
     creeBrouillonService,
     finaliseBrouillonService,
+    metsAJourBrouillonService,
   } from './creationV2.api';
+  import type { UUID } from '../typesBasiquesSvelte';
 
-  let nomService = '';
+  let donneesService: { nomService: string; siret: string } = {
+    nomService: '',
+    siret: '',
+  };
   let chargementEnCours = false;
+  let etapeCourante = 1;
+  const ETAPE_FINALE = 2;
+  $: estEtapeFinale = etapeCourante === ETAPE_FINALE;
 
+  let idBrouillon: UUID | null = null;
   const creeBrouillon = async () => {
     chargementEnCours = true;
-    const idBrouillon = await creeBrouillonService(nomService);
+    idBrouillon = await creeBrouillonService(donneesService.nomService);
+    etapeCourante = 2;
+    chargementEnCours = false;
+  };
+
+  const finaliseBrouillon = async () => {
+    if (idBrouillon === null) return;
+    chargementEnCours = true;
     await finaliseBrouillonService(idBrouillon);
     window.location.href = '/tableauDeBord';
+  };
+
+  const metsAJourPropriete = async (clePropriete: string, valeur: string) => {
+    if (idBrouillon === null) return;
+    chargementEnCours = true;
+    try {
+      await metsAJourBrouillonService(idBrouillon, clePropriete, valeur);
+    } finally {
+      chargementEnCours = false;
+    }
   };
 </script>
 
@@ -21,11 +47,26 @@
     <div class="contenu-formulaire">
       <h1>Ajouter un service</h1>
 
-      <label for="nom-service">
-        Quel est le nom de votre service ?
-        <ChampTexte id="nom-service" nom="nom-service" bind:valeur={nomService}
-        ></ChampTexte>
-      </label>
+      {#if etapeCourante === 1}
+        <label for="nom-service">
+          Quel est le nom de votre service ?
+          <ChampTexte
+            id="nom-service"
+            nom="nom-service"
+            bind:valeur={donneesService.nomService}
+          />
+        </label>
+      {:else}
+        <label for="nom-service">
+          Quel est le nom ou siret de l’organisation ?
+          <ChampTexte
+            id="siret"
+            nom="siret"
+            bind:valeur={donneesService.siret}
+            on:blur={() => metsAJourPropriete('siret', donneesService.siret)}
+          />
+        </label>
+      {/if}
 
       <div class="barre-boutons">
         <lab-anssi-lien
@@ -38,13 +79,14 @@
         />
         <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
         <lab-anssi-bouton
-          titre="Suivant"
+          titre={estEtapeFinale ? 'Finaliser' : 'Suivant'}
           variante="primaire"
           taille="md"
-          icone="arrow-right-line"
+          icone={estEtapeFinale ? 'check-line' : 'arrow-right-line'}
           positionIcone="droite"
-          actif={nomService.length > 0 && !chargementEnCours}
-          on:click={async () => creeBrouillon()}
+          actif={donneesService.nomService.length > 0 && !chargementEnCours}
+          on:click={async () =>
+            estEtapeFinale ? finaliseBrouillon() : creeBrouillon()}
         />
       </div>
     </div>
