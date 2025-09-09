@@ -31,6 +31,7 @@ const donneesReferentielVide = {
   estimationNombreServices: [],
   etapesVisiteGuidee: [],
   naturesSuggestionsActions: {},
+  niveauxDeSecurite: [],
 };
 
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
@@ -444,6 +445,9 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   const versionServiceParDefaut = () => donnees.versionServiceParDefaut;
 
+  const estNiveauDeSecuriteValide = (niveau) =>
+    donnees.niveauxDeSecurite.indexOf(niveau) >= 0;
+
   valideDonnees();
 
   return {
@@ -482,6 +486,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     estIdentifiantMesureConnu,
     estIdentifiantStatutAvisDossierHomologationConnu,
     estimationNombreServices,
+    estNiveauDeSecuriteValide,
     estOptionFiltrageDateConnue,
     estStatutMesureConnu,
     etapeDossierAutorisee,
