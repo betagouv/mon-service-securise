@@ -426,6 +426,10 @@ class Service {
     this.mesures.mesuresSpecifiques.metsAJourMesure(mesure);
   }
 
+  estimeNiveauDeSecurite() {
+    return this.descriptionService.estimeNiveauDeSecurite();
+  }
+
   static creePourUnUtilisateur(utilisateur) {
     const donneesService = {
       descriptionService: {
