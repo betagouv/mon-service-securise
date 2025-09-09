@@ -9,6 +9,8 @@
   import TiroirTeleversementServices from './televersementServices/TiroirTeleversementServices.svelte';
   import Lien from '../ui/Lien.svelte';
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
+
+  export let avecDecrireV2: boolean;
 </script>
 
 <div class="conteneur-filtres">
@@ -105,6 +107,15 @@
             action: () =>
               tiroirStore.afficheContenu(TiroirTeleversementServices, {}),
           },
+          ...(avecDecrireV2
+            ? [
+                {
+                  label: 'Ajouter un service V2',
+                  icone: 'plus',
+                  href: '/service/v2/creation',
+                },
+              ]
+            : []),
         ]}
       />
     {/if}

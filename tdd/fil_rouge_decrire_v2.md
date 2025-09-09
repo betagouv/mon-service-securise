@@ -2,10 +2,6 @@
 
 ## TODO
 
-- [-] Une page permet de créer un brouillon de service v2
-  - [ ] Un bouton permet d'ouvrir cette page, il est derrière un feature flag
-    - /service/v2/creation
-  - [ ] Le composant Svelte utilise un fichier `.api` et non un `axios.post()` dans `CreationV2.svelte`
 - [ ] Un brouillon existant peut être complété (reprendre la création)
 - [ ] chaque étape de décrire permet de mettre à jour une propriété du brouillon
 - [ ] le brouillon se transforme en une descriptionV2 à la création du service
@@ -27,6 +23,10 @@
 
 ## DONE
 
+- [x] Une page permet de créer un brouillon de service v2
+  - [x] Un bouton permet d'ouvrir cette page, il est derrière un feature flag
+    - /service/v2/creation
+  - [x] Le composant Svelte utilise un fichier `.api` et non un `axios.post()` dans `CreationV2.svelte`
 - [x] le service v2 créé d'après un brouillon est affichable sur le tableau de bord
 - [x] une route qui finalise un brouillon complet, et crée un nouveau service
 - [x] le dépôt de données sait finaliser un brouillon de service
