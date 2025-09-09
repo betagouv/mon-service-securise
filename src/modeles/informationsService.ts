@@ -1,21 +1,19 @@
 import Base from './base.js';
 
-export const STATUTS_SAISIE = {
-  A_SAISIR: 'aSaisir',
-  A_COMPLETER: 'aCompleter',
-  COMPLETES: 'completes',
-};
-
 class InformationsService extends Base {
   aucunAgregatSaisi() {
     return Object.keys(this.listesAgregats).every(
-      (l) => this[l].statutSaisie() === InformationsService.A_SAISIR
+      (l) =>
+        (this[l] as InformationsService).statutSaisie() ===
+        InformationsService.A_SAISIR
     );
   }
 
   auMoinsUnAgregatACompleter() {
     return Object.keys(this.listesAgregats).some(
-      (l) => this[l].statutSaisie() === InformationsService.A_COMPLETER
+      (l) =>
+        (this[l] as InformationsService).statutSaisie() ===
+        InformationsService.A_COMPLETER
     );
   }
 
@@ -54,7 +52,10 @@ class InformationsService extends Base {
       return InformationsService.A_COMPLETER;
     return InformationsService.COMPLETES;
   }
+
+  static A_SAISIR = 'aSaisir';
+  static A_COMPLETER = 'aCompleter';
+  static COMPLETES = 'completes';
 }
 
-Object.assign(InformationsService, STATUTS_SAISIE);
 export default InformationsService;

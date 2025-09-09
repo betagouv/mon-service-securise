@@ -1,5 +1,5 @@
 import Entite from './entite.js';
-import { STATUTS_SAISIE } from './informationsService.js';
+import InformationsService from './informationsService.js';
 
 export type DonneesEntite = {
   siret: string;
@@ -24,6 +24,6 @@ export class DescriptionServiceV2 {
 
   // eslint-disable-next-line class-methods-use-this
   statutSaisie() {
-    return STATUTS_SAISIE.COMPLETES;
+    return InformationsService.COMPLETES;
   }
 }
