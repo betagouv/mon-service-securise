@@ -1842,9 +1842,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it('transmet les filtres de date, entité et besoins de sécurité au service de supervision', async () => {
       let filtrageRecu;
       testeur.referentiel().recharge({
-        optionsFiltrageDate: {
-          unFiltreDate: '',
-        },
+        optionsFiltrageDate: { unFiltreDate: '' },
+        niveauxDeSecurite: ['niveau1'],
       });
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
       testeur.serviceSupervision().genereURLSupervision = (_, filtrage) => {
