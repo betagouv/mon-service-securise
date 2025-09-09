@@ -31,4 +31,11 @@ export class BrouillonService {
       },
     };
   }
+
+  donneesAPersister() {
+    return {
+      nomService: this.nomService,
+      ...(this.siret && { siret: this.siret }),
+    };
+  }
 }
