@@ -2,9 +2,9 @@ extends base
 
 mixin cartouche(titre, description)
   .cartouche
-    span.titre!= titre
+    span.titre= titre
     .conteneur-description
-      span!= description
+      span= description
 
 block page
   .tampon-homologation(class=tailleDispositif)
@@ -19,7 +19,7 @@ block page
           return resultat
         }
         const insereEspaceInvisible = (texte) => texte.replace(/(\p{Ll})(\p{Lu})/gu, '$1\u200B$2');
-      h1!= texteTronque(insereEspaceInvisible(service.nomService()), 60)
+      h1= texteTronque(insereEspaceInvisible(service.nomService()), 60)
       .conteneur-cartouches
         +cartouche('Organisation responsable', texteTronque(service.descriptionService.organisationResponsable.nom, 67))
         +cartouche("Date d’homologation", formatteDateFrancaise(new Date(dossier.decision.dateHomologation)))

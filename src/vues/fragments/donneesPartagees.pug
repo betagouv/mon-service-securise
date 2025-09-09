@@ -1,3 +1,2 @@
 mixin donneesPartagees(id, donnees)
-    script(id=id, type='application/json').
-        !{JSON.stringify(donnees)}
+    script(id=id, type='application/json') #{JSON.stringify(donnees)}
