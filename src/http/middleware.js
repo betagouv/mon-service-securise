@@ -392,6 +392,7 @@ const middleware = (configuration = {}) => {
       avecBandeauMSC:
         adaptateurHorloge.maintenant() >
         new Date(adaptateurEnvironnement.featureFlag().dateDebutBandeauMSC()),
+      avecDecrireV2: adaptateurEnvironnement.featureFlag().avecDecrireV2(),
     };
     suite();
   };
