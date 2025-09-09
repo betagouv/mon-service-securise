@@ -48,13 +48,12 @@ class MoteurRegles {
     return this.mesuresAModifier(descriptionService, 'mesuresARetirer');
   }
 
-  mesures(...params) {
+  mesures(descriptionService) {
     const { mesuresBase = [] } = this.reglesPersonnalisation;
-    const mesuresAAjouter = this.mesuresAAjouter(...params);
-    const mesuresARetirer = this.mesuresARetirer(...params);
-    const mesuresARendreIndispensables = this.mesuresARendreIndispensables(
-      ...params
-    );
+    const mesuresAAjouter = this.mesuresAAjouter(descriptionService);
+    const mesuresARetirer = this.mesuresARetirer(descriptionService);
+    const mesuresARendreIndispensables =
+      this.mesuresARendreIndispensables(descriptionService);
 
     const idsMesures = mesuresBase
       .concat(mesuresAAjouter)
