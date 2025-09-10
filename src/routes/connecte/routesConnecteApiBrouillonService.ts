@@ -6,6 +6,11 @@ import { valideBody, valideParams } from '../../http/validePayloads.js';
 import { UUID } from '../../typesBasiques.js';
 import { ErreurBrouillonInexistant } from '../../erreurs.js';
 
+const reglesValidationProprietes = {
+  siret: z.string().regex(/^\d{14}$/),
+  nomService: z.string().trim().nonempty(),
+};
+
 const routesConnecteApiBrouillonService = ({
   depotDonnees,
 }: {
@@ -17,7 +22,7 @@ const routesConnecteApiBrouillonService = ({
     '/',
     valideBody(
       z.strictObject({
-        nomService: z.string().trim().nonempty(),
+        nomService: reglesValidationProprietes.nomService,
       })
     ),
     async (requete, reponse) => {
@@ -33,13 +38,13 @@ const routesConnecteApiBrouillonService = ({
     }
   );
 
-  const reglesValidationProprietes = {
-    siret: z.string().regex(/^\d{14}$/),
-  };
   routes.put(
     '/:id/:nomPropriete',
     valideParams(
-      z.strictObject({ id: z.uuidv4(), nomPropriete: z.enum(['siret']) })
+      z.strictObject({
+        id: z.uuidv4(),
+        nomPropriete: z.enum(['siret', 'nomService']),
+      })
     ),
     async (requete, reponse, suite) => {
       const { idUtilisateurCourant } =
