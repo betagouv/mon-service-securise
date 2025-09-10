@@ -1,0 +1,4 @@
+export type Brouillon = {
+  nomService: string;
+  siret?: string;
+};

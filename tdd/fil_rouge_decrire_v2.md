@@ -7,7 +7,7 @@
   - [x] Une route permettant de rajouter (`PUT`) d'autres données
   - [x] Un formulaire plus flexible pour ajouter facilement des questions
   - [x] Une route de mise à jour flexible (multi propriété)
-  - [ ] Un front permettant de charger un brouillon existant
+  - [x] Un front permettant de charger un brouillon existant
 - [ ] chaque étape de décrire permet de mettre à jour une propriété du brouillon
   - [ ] la route permettant de rajouter des données vérifie la cohérence de ces données (via `referentiel` ou via `zod` ?)
 - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
