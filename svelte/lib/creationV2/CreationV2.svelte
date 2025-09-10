@@ -5,12 +5,27 @@
     etapeStore,
     toutesClesPropriete,
   } from './etapes/etapes.store';
-  import { metsAJourBrouillonService } from './creationV2.api';
+  import {
+    lisBrouillonService,
+    metsAJourBrouillonService,
+  } from './creationV2.api';
+  import { onMount } from 'svelte';
+  import type { UUID } from '../typesBasiquesSvelte';
+  import type { Brouillon } from './creationV2.d';
 
-  let donneesService: { [key: string]: string | number } = Object.fromEntries(
+  let donneesBrouillon: Brouillon = Object.fromEntries(
     toutesClesPropriete.map((cle) => [cle, ''])
-  );
+  ) as Brouillon;
   let questionCouranteEstComplete = false;
+
+  onMount(async () => {
+    const requete = new URLSearchParams(window.location.search);
+    if (requete.has('id')) {
+      const id = requete.get('id') as UUID;
+      donneesBrouillon = await lisBrouillonService(id);
+      etapeStore.assigneIdBrouillonExistant(id);
+    }
+  });
 
   const metsAJourPropriete = async (e: CustomEvent<string>) => {
     if (!questionCouranteEstComplete) return;
@@ -25,7 +40,7 @@
 
   const suivant = async () => {
     const cle = $etapeCourante.questionCourante.clePropriete;
-    await etapeStore.suivant(donneesService[cle]);
+    await etapeStore.suivant(donneesBrouillon[cle]!);
   };
 
   const finalise = async () => {
@@ -50,7 +65,7 @@
       <svelte:component
         this={$etapeCourante.questionCourante.composant}
         bind:estComplete={questionCouranteEstComplete}
-        bind:valeur={donneesService[
+        bind:valeur={donneesBrouillon[
           $etapeCourante.questionCourante.clePropriete
         ]}
         on:champModifie={metsAJourPropriete}

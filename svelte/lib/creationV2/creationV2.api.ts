@@ -1,4 +1,5 @@
 import type { UUID } from '../typesBasiquesSvelte';
+import type { Brouillon } from './creationV2.d';
 
 export const creeBrouillonService = async (
   nomService: string
@@ -18,3 +19,6 @@ export const metsAJourBrouillonService = async (
   await axios.put(`/api/brouillon-service/${idBrouillon}/${clePropriete}`, {
     [clePropriete]: valeur,
   });
+
+export const lisBrouillonService = async (id: UUID): Promise<Brouillon> =>
+  (await axios.get<Brouillon>(`/api/brouillon-service/${id}`)).data;

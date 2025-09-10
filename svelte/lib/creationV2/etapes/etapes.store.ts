@@ -7,6 +7,7 @@ import {
   creeBrouillonService,
   finaliseBrouillonService,
 } from '../creationV2.api';
+import type { Brouillon } from '../creationV2.d';
 
 type QuestionProps = {
   estComplete: boolean;
@@ -16,7 +17,7 @@ type QuestionProps = {
 type ComposantQuestion = typeof SvelteComponent<QuestionProps>;
 
 type QuestionAvecIdentifiantPropriete = {
-  clePropriete: string;
+  clePropriete: keyof Brouillon;
   composant: ComposantQuestion;
 };
 
@@ -55,6 +56,9 @@ const { subscribe, update } = writable<EtatFormulaireCreation>({
 export const enCoursDeChargement = writable(false);
 
 export const etapeStore = {
+  assigneIdBrouillonExistant: (id: UUID) => {
+    update((etatCourant) => ({ ...etatCourant, idBrouillonExistant: id }));
+  },
   finalise: async () => {
     enCoursDeChargement.set(true);
     await finaliseBrouillonService(get(etapeStore).idBrouillonExistant!);
