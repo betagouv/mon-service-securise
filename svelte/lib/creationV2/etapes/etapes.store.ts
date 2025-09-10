@@ -56,8 +56,29 @@ const { subscribe, update } = writable<EtatFormulaireCreation>({
 export const enCoursDeChargement = writable(false);
 
 export const etapeStore = {
-  assigneIdBrouillonExistant: (id: UUID) => {
-    update((etatCourant) => ({ ...etatCourant, idBrouillonExistant: id }));
+  rechargeBrouillon: (id: UUID, donneesBrouillon: Brouillon) => {
+    let questionPrecedente: { etape: number; question: number } = {
+      etape: 0,
+      question: 0,
+    };
+    let cibleTrouvee = false;
+    for (let e = 0; e < toutesEtapes.length; e++) {
+      const etape = toutesEtapes[e];
+      for (let q = 0; q < etape.questions.length; q++) {
+        const question = etape.questions[q];
+        if (donneesBrouillon[question.clePropriete] === undefined) {
+          cibleTrouvee = true;
+          break;
+        }
+        questionPrecedente = { etape: e, question: q };
+      }
+      if (cibleTrouvee) break;
+    }
+    update(() => ({
+      idBrouillonExistant: id,
+      etapeEnCours: questionPrecedente.etape,
+      questionEnCours: questionPrecedente.question,
+    }));
   },
   finalise: async () => {
     enCoursDeChargement.set(true);
