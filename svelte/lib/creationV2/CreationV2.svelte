@@ -23,7 +23,7 @@
     if (requete.has('id')) {
       const id = requete.get('id') as UUID;
       donneesBrouillon = await lisBrouillonService(id);
-      etapeStore.assigneIdBrouillonExistant(id);
+      etapeStore.rechargeBrouillon(id, donneesBrouillon);
     }
   });
 
