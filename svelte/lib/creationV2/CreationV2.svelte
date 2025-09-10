@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    enCoursDeChargement,
     etapeCourante,
     etapeStore,
     toutesClesPropriete,
@@ -86,7 +87,7 @@
             ? 'check-line'
             : 'arrow-right-line'}
           positionIcone="droite"
-          actif={questionCouranteEstComplete}
+          actif={questionCouranteEstComplete && !$enCoursDeChargement}
           on:click={async () =>
             $etapeCourante.estDerniereQuestion
               ? await finalise()

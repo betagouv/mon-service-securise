@@ -52,8 +52,11 @@ const { subscribe, update } = writable<EtatFormulaireCreation>({
   questionEnCours: 0,
 });
 
+export const enCoursDeChargement = writable(false);
+
 export const etapeStore = {
   finalise: async () => {
+    enCoursDeChargement.set(true);
     await finaliseBrouillonService(get(etapeStore).idBrouillonExistant!);
     window.location.href = '/tableauDeBord';
   },
