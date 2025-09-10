@@ -26,20 +26,23 @@ describe('Un brouillon de Service v2', () => {
   });
 
   describe('sur demande de mise à jour de propriété', () => {
-    it.each(['siret'])('mets à jour la propriété %s', (nomPropriete) => {
-      const b = new BrouillonService(unUUID('b'), {
-        nomService: 'Mairie A',
-      });
+    it.each(['siret', 'nomService', 'statutDeploiement'])(
+      'mets à jour la propriété %s',
+      (nomPropriete) => {
+        const b = new BrouillonService(unUUID('b'), {
+          nomService: 'Mairie A',
+        });
 
-      b.metsAJourPropriete(
-        nomPropriete as ProprietesBrouillonService,
-        'une valeur'
-      );
+        b.metsAJourPropriete(
+          nomPropriete as ProprietesBrouillonService,
+          'une valeur'
+        );
 
-      expect(
-        b.donneesAPersister()[nomPropriete as ProprietesBrouillonService]
-      ).toBe('une valeur');
-    });
+        expect(
+          b.donneesAPersister()[nomPropriete as ProprietesBrouillonService]
+        ).toBe('une valeur');
+      }
+    );
   });
 
   describe('sur demande des données à persister', () => {
@@ -51,15 +54,17 @@ describe('Un brouillon de Service v2', () => {
       expect(b.donneesAPersister()).toEqual({ nomService: 'Mairie A' });
     });
 
-    it("retourne le siret s'il est présent", () => {
+    it('retourne toutes les données si elles sont présentes', () => {
       const b = new BrouillonService(unUUID('b'), {
         nomService: 'Mairie A',
         siret: 'un siret',
+        statutDeploiement: 'enProjet',
       });
 
       expect(b.donneesAPersister()).toEqual({
         nomService: 'Mairie A',
         siret: 'un siret',
+        statutDeploiement: 'enProjet',
       });
     });
   });

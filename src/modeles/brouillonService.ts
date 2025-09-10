@@ -4,6 +4,7 @@ import { VersionService } from './versionService.js';
 export type DonneesBrouillonService = {
   nomService: string;
   siret?: string;
+  statutDeploiement?: string;
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
@@ -11,6 +12,7 @@ export type ProprietesBrouillonService = keyof DonneesBrouillonService;
 export class BrouillonService {
   protected nomService: string;
   protected siret?: string;
+  protected statutDeploiement?: string;
 
   constructor(
     readonly id: UUID,
@@ -18,6 +20,7 @@ export class BrouillonService {
   ) {
     this.nomService = donnees.nomService;
     this.siret = donnees.siret;
+    this.statutDeploiement = donnees.statutDeploiement;
   }
 
   metsAJourPropriete<T extends ProprietesBrouillonService>(
@@ -41,6 +44,9 @@ export class BrouillonService {
     return {
       nomService: this.nomService,
       ...(this.siret && { siret: this.siret }),
+      ...(this.statutDeploiement && {
+        statutDeploiement: this.statutDeploiement,
+      }),
     };
   }
 }
