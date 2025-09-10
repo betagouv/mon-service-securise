@@ -2,7 +2,10 @@ import { beforeEach } from 'vitest';
 import testeurMSS from '../testeurMSS.js';
 import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.js';
 import { UUID } from '../../../src/typesBasiques.js';
-import { BrouillonService } from '../../../src/modeles/brouillonService.js';
+import {
+  BrouillonService,
+  ProprietesBrouillonService,
+} from '../../../src/modeles/brouillonService.js';
 import { ErreurBrouillonInexistant } from '../../../src/erreurs.js';
 
 describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
@@ -31,96 +34,112 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
     });
   });
 
-  describe('quand requête PUT sur `/api/brouillon-service/:id/siret`', () => {
-    let idBrouillonTest: UUID;
+  describe.each([
+    {
+      nomPropriete: 'siret',
+      valeurCorrecte: '12312312312312',
+      valeurIncorrecte: '123',
+    },
+  ])(
+    'quand requête PUT sur `/api/brouillon-service/:id/:$nomPropriete`',
+    ({ nomPropriete, valeurCorrecte, valeurIncorrecte }) => {
+      let idBrouillonTest: UUID;
 
-    beforeEach(() => {
-      idBrouillonTest = unUUIDRandom();
-      testeur.middleware().reinitialise({ idUtilisateur: unUUID('1') });
-      testeur.depotDonnees().lisBrouillonService = async () =>
-        new BrouillonService(idBrouillonTest, { nomService: 'Un service' });
-      testeur.depotDonnees().sauvegardeBrouillonService = async () => {};
-    });
-
-    it('lis le brouillon via le dépôt de données', async () => {
-      let donneesRecues: {
-        idUtilisateur: UUID;
-        idBrouillon: UUID;
-      } | null = null;
-      testeur.depotDonnees().lisBrouillonService = async (
-        idUtilisateur: UUID,
-        idBrouillon: UUID
-      ) => {
-        donneesRecues = { idUtilisateur, idBrouillon };
-        return new BrouillonService(idBrouillonTest, {
-          nomService: 'Un service',
-        });
-      };
-
-      await testeur.put(`/api/brouillon-service/${idBrouillonTest}/siret`, {
-        siret: '12312312312312',
+      beforeEach(() => {
+        idBrouillonTest = unUUIDRandom();
+        testeur.middleware().reinitialise({ idUtilisateur: unUUID('1') });
+        testeur.depotDonnees().lisBrouillonService = async () =>
+          new BrouillonService(idBrouillonTest, { nomService: 'Un service' });
+        testeur.depotDonnees().sauvegardeBrouillonService = async () => {};
       });
 
-      expect(donneesRecues!.idUtilisateur).toBe(unUUID('1'));
-      expect(donneesRecues!.idBrouillon).toBe(idBrouillonTest);
-    });
+      it('lis le brouillon via le dépôt de données', async () => {
+        let donneesRecues: {
+          idUtilisateur: UUID;
+          idBrouillon: UUID;
+        } | null = null;
+        testeur.depotDonnees().lisBrouillonService = async (
+          idUtilisateur: UUID,
+          idBrouillon: UUID
+        ) => {
+          donneesRecues = { idUtilisateur, idBrouillon };
+          return new BrouillonService(idBrouillonTest, {
+            nomService: 'Un service',
+          });
+        };
 
-    it('mets à jour le siret via le dépôt de données', async () => {
-      let donneesRecues: {
-        idUtilisateur: UUID;
-        brouillon: BrouillonService;
-      } | null = null;
-      testeur.depotDonnees().sauvegardeBrouillonService = async (
-        idUtilisateur: UUID,
-        brouillon: BrouillonService
-      ) => {
-        donneesRecues = { idUtilisateur, brouillon };
-      };
+        await testeur.put(
+          `/api/brouillon-service/${idBrouillonTest}/${nomPropriete}`,
+          {
+            [nomPropriete]: valeurCorrecte,
+          }
+        );
 
-      await testeur.put(`/api/brouillon-service/${idBrouillonTest}/siret`, {
-        siret: '12312312312312',
+        expect(donneesRecues!.idUtilisateur).toBe(unUUID('1'));
+        expect(donneesRecues!.idBrouillon).toBe(idBrouillonTest);
       });
 
-      expect(donneesRecues!.idUtilisateur).toBe(unUUID('1'));
-      expect(donneesRecues!.brouillon.id).toBe(idBrouillonTest);
-      expect(
-        donneesRecues!.brouillon.enDonneesCreationServiceV2().descriptionService
-          .organisationResponsable.siret
-      ).toBe('12312312312312');
-    });
+      it(`mets à jour la propriete ${nomPropriete} via le dépôt de données`, async () => {
+        let donneesRecues: {
+          idUtilisateur: UUID;
+          brouillon: BrouillonService;
+        } | null = null;
+        testeur.depotDonnees().sauvegardeBrouillonService = async (
+          idUtilisateur: UUID,
+          brouillon: BrouillonService
+        ) => {
+          donneesRecues = { idUtilisateur, brouillon };
+        };
 
-    it("renvoie une erreur 400 si l'ID passé n'est pas un UUID", async () => {
-      const resultat = await testeur.put(
-        '/api/brouillon-service/pas-un-uuid/siret'
-      );
+        await testeur.put(
+          `/api/brouillon-service/${idBrouillonTest}/${nomPropriete}`,
+          {
+            [nomPropriete]: valeurCorrecte,
+          }
+        );
 
-      expect(resultat.status).toBe(400);
-    });
+        expect(donneesRecues!.idUtilisateur).toBe(unUUID('1'));
+        expect(donneesRecues!.brouillon.id).toBe(idBrouillonTest);
+        expect(
+          donneesRecues!.brouillon.donneesAPersister()[
+            nomPropriete as ProprietesBrouillonService
+          ]
+        ).toBe(valeurCorrecte);
+      });
 
-    it("renvoie une erreur 400 si le siret passé n'est pas au bon format", async () => {
-      const resultat = await testeur.put(
-        `/api/brouillon-service/${idBrouillonTest}/siret`,
-        { siret: 'pasUnSiret' }
-      );
+      it("renvoie une erreur 400 si l'ID passé n'est pas un UUID", async () => {
+        const resultat = await testeur.put(
+          `/api/brouillon-service/pas-un-uuid/${nomPropriete}`
+        );
 
-      expect(resultat.status).toBe(400);
-    });
+        expect(resultat.status).toBe(400);
+      });
 
-    it("renvoie une erreur 404 si le brouillon n'existe pas", async () => {
-      testeur.depotDonnees().lisBrouillonService = async () => {
-        throw new ErreurBrouillonInexistant();
-      };
+      it(`renvoie une erreur 400 si la propriété ${nomPropriete} passée n'est pas au bon format`, async () => {
+        const resultat = await testeur.put(
+          `/api/brouillon-service/${idBrouillonTest}/${nomPropriete}`,
+          { [nomPropriete]: valeurIncorrecte }
+        );
 
-      const resultat = await testeur.put(
-        `/api/brouillon-service/${idBrouillonTest}/siret`,
-        {
-          siret: '12312312312312',
-        }
-      );
+        expect(resultat.status).toBe(400);
+      });
 
-      expect(resultat.status).toBe(404);
-    });
-  });
+      it("renvoie une erreur 404 si le brouillon n'existe pas", async () => {
+        testeur.depotDonnees().lisBrouillonService = async () => {
+          throw new ErreurBrouillonInexistant();
+        };
+
+        const resultat = await testeur.put(
+          `/api/brouillon-service/${idBrouillonTest}/${nomPropriete}`,
+          {
+            [nomPropriete]: valeurCorrecte,
+          }
+        );
+
+        expect(resultat.status).toBe(404);
+      });
+    }
+  );
 
   describe('quand requête POST sur `/api/brouillon-service/:id/finalise`', () => {
     it('délègue la finalisation du brouillon au dépôt de données', async () => {
