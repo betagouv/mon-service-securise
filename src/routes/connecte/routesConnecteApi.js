@@ -336,7 +336,7 @@ const routesConnecteApi = ({
   routes.use(
     '/brouillon-service',
     middleware.verificationAcceptationCGU,
-    routesConnecteApiBrouillonService({ depotDonnees })
+    routesConnecteApiBrouillonService({ depotDonnees, referentiel })
   );
 
   routes.use(

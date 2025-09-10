@@ -5,24 +5,28 @@ import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
 import { UUID } from '../../typesBasiques.js';
 import { ErreurBrouillonInexistant } from '../../erreurs.js';
-
-const reglesValidationProprietes = {
-  siret: z.string().regex(/^\d{14}$/),
-  nomService: z.string().trim().nonempty(),
-};
+import { Referentiel } from '../../referentiel.interface.js';
 
 const routesConnecteApiBrouillonService = ({
   depotDonnees,
+  referentiel,
 }: {
   depotDonnees: DepotDonneesBrouillonService;
+  referentiel: Referentiel;
 }) => {
   const routes = express.Router();
+
+  const reglesValidationProprietes = () => ({
+    siret: z.string().regex(/^\d{14}$/),
+    nomService: z.string().trim().nonempty(),
+    statutDeploiement: z.enum(Object.keys(referentiel.statutsDeploiement())),
+  });
 
   routes.post(
     '/',
     valideBody(
       z.strictObject({
-        nomService: reglesValidationProprietes.nomService,
+        nomService: reglesValidationProprietes().nomService,
       })
     ),
     async (requete, reponse) => {
@@ -43,7 +47,7 @@ const routesConnecteApiBrouillonService = ({
     valideParams(
       z.strictObject({
         id: z.uuidv4(),
-        nomPropriete: z.enum(['siret', 'nomService']),
+        nomPropriete: z.enum(['siret', 'nomService', 'statutDeploiement']),
       })
     ),
     async (requete, reponse, suite) => {
@@ -52,7 +56,7 @@ const routesConnecteApiBrouillonService = ({
       const { id, nomPropriete } = requete.params;
 
       const objetValidation = z.strictObject({
-        [nomPropriete]: reglesValidationProprietes[nomPropriete],
+        [nomPropriete]: reglesValidationProprietes()[nomPropriete],
       });
       const resultatParsingBody = objetValidation.safeParse(requete.body);
       if (!resultatParsingBody.success) return reponse.sendStatus(400);

@@ -45,6 +45,11 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       valeurCorrecte: 'Un service',
       valeurIncorrecte: '',
     },
+    {
+      nomPropriete: 'statutDeploiement',
+      valeurCorrecte: 'enCours',
+      valeurIncorrecte: 'unMauvaisStatut',
+    },
   ])(
     'quand requête PUT sur `/api/brouillon-service/:id/:$nomPropriete`',
     ({ nomPropriete, valeurCorrecte, valeurIncorrecte }) => {
@@ -53,6 +58,7 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       beforeEach(() => {
         idBrouillonTest = unUUIDRandom();
         testeur.middleware().reinitialise({ idUtilisateur: unUUID('1') });
+        testeur.referentiel().recharge({ statutsDeploiement: { enCours: {} } });
         testeur.depotDonnees().lisBrouillonService = async () =>
           new BrouillonService(idBrouillonTest, { nomService: 'Un service' });
         testeur.depotDonnees().sauvegardeBrouillonService = async () => {};
