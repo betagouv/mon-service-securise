@@ -2,12 +2,6 @@
 
 ## TODO
 
-- [-] Un brouillon existant peut être complété (reprendre la création)
-  - [x] Un front permettant de passer d'étape en étape
-  - [x] Une route permettant de rajouter (`PUT`) d'autres données
-  - [x] Un formulaire plus flexible pour ajouter facilement des questions
-  - [x] Une route de mise à jour flexible (multi propriété)
-  - [x] Un front permettant de charger un brouillon existant
 - [ ] chaque étape de décrire permet de mettre à jour une propriété du brouillon
   - [ ] la route permettant de rajouter des données vérifie la cohérence de ces données (via `referentiel` ou via `zod` ?)
 - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
@@ -30,6 +24,12 @@
 
 ## DONE
 
+- [x] Un brouillon existant peut être complété (reprendre la création)
+  - [x] Un front permettant de passer d'étape en étape
+  - [x] Une route permettant de rajouter (`PUT`) d'autres données
+  - [x] Un formulaire plus flexible pour ajouter facilement des questions
+  - [x] Une route de mise à jour flexible (multi propriété)
+  - [x] Un front permettant de charger un brouillon existant
 - [x] Une page permet de créer un brouillon de service v2
   - [x] Un bouton permet d'ouvrir cette page, il est derrière un feature flag
     - /service/v2/creation
