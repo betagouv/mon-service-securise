@@ -1,7 +1,5 @@
 import { derived, get, writable } from 'svelte/store';
 import type { SvelteComponent } from 'svelte';
-import QuestionNomService from './etape1/QuestionNomService.svelte';
-import QuestionSiret from './etape1/QuestionSiret.svelte';
 import type { UUID } from '../../typesBasiquesSvelte';
 import {
   creeBrouillonService,
@@ -9,6 +7,9 @@ import {
 } from '../creationV2.api';
 import type { Brouillon } from '../creationV2.d';
 import { ajouteParametreAUrl } from '../../outils/url';
+import QuestionNomService from './etape1/QuestionNomService.svelte';
+import QuestionSiret from './etape1/QuestionSiret.svelte';
+import QuestionStatutDeploiement from './etape1/QuestionStatutDeploiement.svelte';
 
 type QuestionProps = {
   estComplete: boolean;
@@ -41,6 +42,10 @@ const toutesEtapes: PropsEtape[] = [
     questions: [
       { clePropriete: 'nomService', composant: QuestionNomService },
       { clePropriete: 'siret', composant: QuestionSiret },
+      {
+        clePropriete: 'statutDeploiement',
+        composant: QuestionStatutDeploiement,
+      },
     ],
   },
 ];
