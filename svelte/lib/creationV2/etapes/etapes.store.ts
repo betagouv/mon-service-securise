@@ -8,6 +8,7 @@ import {
   finaliseBrouillonService,
 } from '../creationV2.api';
 import type { Brouillon } from '../creationV2.d';
+import { ajouteParametreAUrl } from '../../outils/url';
 
 type QuestionProps = {
   estComplete: boolean;
@@ -111,6 +112,7 @@ export const etapeStore = {
       etatActuel.questionEnCours === 0
     ) {
       const idBrouillon = await creeBrouillonService(valeur as string);
+      ajouteParametreAUrl('id', idBrouillon);
       update((etatCourant) => ({
         ...etatCourant,
         idBrouillonExistant: idBrouillon,
