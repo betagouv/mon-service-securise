@@ -106,6 +106,29 @@ const routesConnecteApiBrouillonService = ({
     }
   );
 
+  routes.get(
+    '/:id',
+    valideParams(z.strictObject({ id: z.uuidv4() })),
+    async (requete, reponse, suite) => {
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
+      const { id } = requete.params;
+
+      try {
+        const brouillon = await depotDonnees.lisBrouillonService(
+          idUtilisateurCourant,
+          id as UUID
+        );
+
+        return reponse.json(brouillon);
+      } catch (e) {
+        if (e instanceof ErreurBrouillonInexistant)
+          return reponse.sendStatus(404);
+        return suite(e);
+      }
+    }
+  );
+
   return routes;
 };
 

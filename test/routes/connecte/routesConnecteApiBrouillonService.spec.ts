@@ -188,4 +188,47 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       expect(reponse.status).toBe(404);
     });
   });
+
+  describe('quand requête GET sur `/api/brouillon-service/:id`', () => {
+    it('retourne le brouillon', async () => {
+      const idBrouillon = unUUIDRandom();
+
+      testeur.depotDonnees().lisBrouillonService = async (
+        _: UUID,
+        idBrouillonDemande: UUID
+      ) =>
+        new BrouillonService(idBrouillonDemande, { nomService: 'Un service' });
+
+      const reponse = await testeur.get(
+        `/api/brouillon-service/${idBrouillon}`
+      );
+
+      expect(reponse.status).toBe(200);
+      expect(reponse.body).toEqual({
+        id: idBrouillon,
+        nomService: 'Un service',
+      });
+    });
+
+    it("renvoie une erreur 400 si l'ID passé n'est pas un UUID", async () => {
+      const reponse = await testeur.get('/api/brouillon-service/pas-un-uuid');
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it("renvoie une erreur 404 si le brouillon n'existe pas", async () => {
+      testeur.depotDonnees().lisBrouillonService = async (
+        _: UUID,
+        __: UUID
+      ) => {
+        throw new ErreurBrouillonInexistant();
+      };
+
+      const reponse = await testeur.get(
+        `/api/brouillon-service/${unUUIDRandom()}`
+      );
+
+      expect(reponse.status).toBe(404);
+    });
+  });
 });
