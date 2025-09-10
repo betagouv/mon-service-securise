@@ -6,8 +6,10 @@ export type DonneesBrouillonService = {
   siret?: string;
 };
 
+export type ProprietesBrouillonService = keyof DonneesBrouillonService;
+
 export class BrouillonService {
-  readonly nomService: string;
+  protected nomService: string;
   protected siret?: string;
 
   constructor(
@@ -18,8 +20,11 @@ export class BrouillonService {
     this.siret = donnees.siret;
   }
 
-  metsAJourSiret(nouveauSiret: string) {
-    this.siret = nouveauSiret;
+  metsAJourPropriete<T extends ProprietesBrouillonService>(
+    nomPropriete: T,
+    valeur: Required<DonneesBrouillonService>[T]
+  ) {
+    this[nomPropriete as ProprietesBrouillonService] = valeur;
   }
 
   enDonneesCreationServiceV2() {

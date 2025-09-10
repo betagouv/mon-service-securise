@@ -33,19 +33,26 @@ const routesConnecteApiBrouillonService = ({
     }
   );
 
+  const reglesValidationProprietes = {
+    siret: z.string().regex(/^\d{14}$/),
+  };
   routes.put(
-    '/:id/siret',
-    valideParams(z.strictObject({ id: z.uuidv4() })),
-    valideBody(
-      z.strictObject({
-        siret: z.string().regex(/^\d{14}$/),
-      })
+    '/:id/:nomPropriete',
+    valideParams(
+      z.strictObject({ id: z.uuidv4(), nomPropriete: z.enum(['siret']) })
     ),
     async (requete, reponse, suite) => {
       const { idUtilisateurCourant } =
         requete as unknown as RequestRouteConnecte;
-      const { id } = requete.params;
-      const { siret } = requete.body;
+      const { id, nomPropriete } = requete.params;
+
+      const objetValidation = z.strictObject({
+        [nomPropriete]: reglesValidationProprietes[nomPropriete],
+      });
+      const resultatParsingBody = objetValidation.safeParse(requete.body);
+      if (!resultatParsingBody.success) return reponse.sendStatus(400);
+
+      const valeurPropriete = resultatParsingBody.data[nomPropriete];
 
       try {
         const brouillon = await depotDonnees.lisBrouillonService(
@@ -53,7 +60,7 @@ const routesConnecteApiBrouillonService = ({
           id as UUID
         );
 
-        brouillon.metsAJourSiret(siret);
+        brouillon.metsAJourPropriete(nomPropriete, valeurPropriete);
 
         await depotDonnees.sauvegardeBrouillonService(
           idUtilisateurCourant,

@@ -99,7 +99,7 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
 
     it("renvoie une erreur 400 si le siret passé n'est pas au bon format", async () => {
       const resultat = await testeur.put(
-        `/api/brouillon-service/${unUUID('1')}/siret`,
+        `/api/brouillon-service/${idBrouillonTest}/siret`,
         { siret: 'pasUnSiret' }
       );
 
