@@ -1,92 +1,96 @@
 <script lang="ts">
-  import ChampTexte from '../ui/ChampTexte.svelte';
   import {
-    creeBrouillonService,
-    finaliseBrouillonService,
-    metsAJourBrouillonService,
-  } from './creationV2.api';
-  import type { UUID } from '../typesBasiquesSvelte';
+    etapeCourante,
+    etapeStore,
+    toutesClesPropriete,
+  } from './etapes/etapes.store';
+  import { metsAJourBrouillonService } from './creationV2.api';
 
-  let donneesService: { nomService: string; siret: string } = {
-    nomService: '',
-    siret: '',
-  };
-  let chargementEnCours = false;
-  let etapeCourante = 1;
-  const ETAPE_FINALE = 2;
-  $: estEtapeFinale = etapeCourante === ETAPE_FINALE;
+  let donneesService: { [key: string]: string | number } = Object.fromEntries(
+    toutesClesPropriete.map((cle) => [cle, ''])
+  );
+  let questionCouranteEstComplete = false;
 
-  let idBrouillon: UUID | null = null;
-  const creeBrouillon = async () => {
-    chargementEnCours = true;
-    idBrouillon = await creeBrouillonService(donneesService.nomService);
-    etapeCourante = 2;
-    chargementEnCours = false;
-  };
+  const metsAJourPropriete = async (e: CustomEvent<string>) => {
+    if (!questionCouranteEstComplete) return;
+    const idBrouillon = $etapeStore.idBrouillonExistant;
+    if (!idBrouillon) return;
 
-  const finaliseBrouillon = async () => {
-    if (idBrouillon === null) return;
-    chargementEnCours = true;
-    await finaliseBrouillonService(idBrouillon);
-    window.location.href = '/tableauDeBord';
+    const valeur = e.detail;
+    const cle = $etapeCourante.questionCourante.clePropriete;
+
+    await metsAJourBrouillonService(idBrouillon, cle, valeur);
   };
 
-  const metsAJourPropriete = async (clePropriete: string, valeur: string) => {
-    if (idBrouillon === null) return;
-    chargementEnCours = true;
-    try {
-      await metsAJourBrouillonService(idBrouillon, clePropriete, valeur);
-    } finally {
-      chargementEnCours = false;
-    }
+  const suivant = async () => {
+    const cle = $etapeCourante.questionCourante.clePropriete;
+    await etapeStore.suivant(donneesService[cle]);
+  };
+
+  const finalise = async () => {
+    await etapeStore.finalise();
   };
 </script>
 
 <div class="conteneur-creation">
   <div class="formulaire-creation">
     <div class="contenu-formulaire">
-      <h1>Ajouter un service</h1>
-
-      {#if etapeCourante === 1}
-        <label for="nom-service">
-          Quel est le nom de votre service ?
-          <ChampTexte
-            id="nom-service"
-            nom="nom-service"
-            bind:valeur={donneesService.nomService}
-          />
-        </label>
-      {:else}
-        <label for="nom-service">
-          Quel est le nom ou siret de l’organisation ?
-          <ChampTexte
-            id="siret"
-            nom="siret"
-            bind:valeur={donneesService.siret}
-            on:blur={() => metsAJourPropriete('siret', donneesService.siret)}
-          />
-        </label>
+      <span>Étape {$etapeCourante.numero} sur {$etapeCourante.numeroMax}</span>
+      <h2>{$etapeCourante.titre}</h2>
+      {#if $etapeCourante.titreEtapeSuivante}
+        <span><b>Étape suivante :</b> {$etapeCourante.titreEtapeSuivante}</span>
       {/if}
+      <hr />
+      <span
+        ><b
+          >Question {$etapeCourante.numeroQuestionCourante} sur {$etapeCourante.nombreQuestions}</b
+        ></span
+      >
+      <svelte:component
+        this={$etapeCourante.questionCourante.composant}
+        bind:estComplete={questionCouranteEstComplete}
+        bind:valeur={donneesService[
+          $etapeCourante.questionCourante.clePropriete
+        ]}
+        on:champModifie={metsAJourPropriete}
+      />
 
       <div class="barre-boutons">
-        <lab-anssi-lien
-          titre="Retour au tableau de bord"
-          apparence="bouton"
-          variante="tertiaire"
-          taille="md"
-          positionIcone="sans"
-          href="/tableauDeBord"
-        />
+        {#if $etapeCourante.estPremiereQuestion}
+          <lab-anssi-lien
+            titre="Retour au tableau de bord"
+            apparence="bouton"
+            variante="tertiaire"
+            taille="md"
+            positionIcone="sans"
+            href="/tableauDeBord"
+          />
+        {:else}
+          <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+          <lab-anssi-bouton
+            titre="Précédent"
+            variante="tertiaire-sans-bordure"
+            taille="md"
+            icone="arrow-left-line"
+            positionIcone="gauche"
+            on:click={etapeStore.precedent}
+          />
+        {/if}
+
         <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
         <lab-anssi-bouton
-          titre={estEtapeFinale ? 'Finaliser' : 'Suivant'}
+          titre={$etapeCourante.estDerniereQuestion ? 'Finaliser' : 'Suivant'}
           variante="primaire"
           taille="md"
-          icone={estEtapeFinale ? 'check-line' : 'arrow-right-line'}
+          icone={$etapeCourante.estDerniereQuestion
+            ? 'check-line'
+            : 'arrow-right-line'}
           positionIcone="droite"
-          actif={donneesService.nomService.length > 0 && !chargementEnCours}
+          actif={questionCouranteEstComplete}
           on:click={async () =>
-            estEtapeFinale ? finaliseBrouillon() : creeBrouillon()}
+            $etapeCourante.estDerniereQuestion
+              ? await finalise()
+              : await suivant()}
         />
       </div>
     </div>
@@ -122,7 +126,11 @@
         max-width: 684px;
         margin: auto;
 
-        label {
+        hr {
+          width: 100%;
+        }
+
+        :global(label) {
           display: flex;
           flex-direction: column;
           gap: 24px;

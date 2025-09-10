@@ -5,6 +5,8 @@
 - [-] Un brouillon existant peut être complété (reprendre la création)
   - [x] Un front permettant de passer d'étape en étape
   - [x] Une route permettant de rajouter (`PUT`) d'autres données
+  - [x] Un formulaire plus flexible pour ajouter facilement des questions
+  - [ ] Une route de mise à jour flexible (multi propriété)
   - [ ] Un front permettant de charger un brouillon existant
 - [ ] chaque étape de décrire permet de mettre à jour une propriété du brouillon
   - [ ] la route permettant de rajouter des données vérifie la cohérence de ces données (via `referentiel` ou via `zod` ?)
