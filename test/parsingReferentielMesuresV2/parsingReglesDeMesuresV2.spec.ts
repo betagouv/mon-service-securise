@@ -16,9 +16,22 @@ describe('Le parsing des règles des mesures v2', () => {
   });
 
   it('produit une règle par ligne donnée en entrée', () => {
-    const ligne: RegleBrut = { ref: 'RECENSEMENT.1' };
+    const ligne: RegleBrut = {
+      ref: 'RECENSEMENT.1',
+      'Statut Initial': 'Absente',
+    };
     const parsing = new ParsingReglesDeMesuresV2([ligne]);
 
     expect(parsing.regles()).toHaveLength(1);
+  });
+
+  it('sait valoriser la présence dans le socle initial', () => {
+    const ligne: RegleBrut = {
+      ref: 'RECENSEMENT.1',
+      'Statut Initial': 'Présente',
+    };
+    const parsing = new ParsingReglesDeMesuresV2([ligne]);
+
+    expect(parsing.regles()[0].dansSocleInitial).toBe(true);
   });
 });
