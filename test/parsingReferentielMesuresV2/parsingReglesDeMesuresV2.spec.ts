@@ -2,6 +2,7 @@ import {
   ParsingReglesDeMesuresV2,
   RegleBrut,
 } from '../../src/parsingReferentielMesuresV2/parsingReglesDeMesuresV2.js';
+import { Modificateur } from '../../src/moteurReglesV2.js';
 
 describe('Le parsing des règles des mesures v2', () => {
   it('existe', () => {
@@ -19,6 +20,7 @@ describe('Le parsing des règles des mesures v2', () => {
     const ligne: RegleBrut = {
       ref: 'RECENSEMENT.1',
       'Statut Initial': 'Absente',
+      modificateurs: [],
     };
     const parsing = new ParsingReglesDeMesuresV2([ligne]);
 
@@ -29,9 +31,25 @@ describe('Le parsing des règles des mesures v2', () => {
     const ligne: RegleBrut = {
       ref: 'RECENSEMENT.1',
       'Statut Initial': 'Présente',
+      modificateurs: [],
     };
     const parsing = new ParsingReglesDeMesuresV2([ligne]);
 
     expect(parsing.regles()[0].dansSocleInitial).toBe(true);
+  });
+
+  it('sait ajouter un modificateur indispensable sur un champ', () => {
+    const ligne: RegleBrut = {
+      ref: 'RECENSEMENT.1',
+      'Statut Initial': 'Présente',
+      modificateurs: [['Niveau de Sécurité', ['Basique', 'Indispensable']]],
+    };
+    const parsing = new ParsingReglesDeMesuresV2([ligne]);
+
+    const regleUnique = parsing.regles()[0];
+    expect(regleUnique.modificateurs.niveauSecurite).toEqual([
+      'niveau1',
+      Modificateur.RendreIndispensable,
+    ]);
   });
 });

@@ -2,6 +2,17 @@
 
 ## TODO
 
+- [ ] Le moteur de règles v2 peut retirer une mesure
+- [ ] Le moteur de règles v2 gère plusieurs valeurs+modificateurs pour un même champ
+  - exemple : on veut 3 valeurs+modificateurs possibles pour "Niveau de sécurite"
+- [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.
+- [-] Le parsing des règles brut produit un jeu de règles compris par le moteur v2
+  - [x] socle initial
+  - [x] un modificateur par champ
+  - [ ] jeter une erreur si un champ brut est inconnu : ['NIMPORTEQUOI', ['Basique', 'Indispensable']], 💥
+  - [ ] jeter une erreur si un modificateur est inconnu : ['Niveau de Sécurité', ['NIMPORTEQUOI', 'Indispensable']] 💥
+  - [ ] plusieurs modificateurs par champ
+- [ ] Un CSV peut être converti en règles brut
 - [ ] chaque étape de décrire permet de mettre à jour une propriété du brouillon
   - [ ] la route permettant de rajouter des données vérifie la cohérence de ces données (via `referentiel` ou via `zod` ?)
 - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
@@ -24,51 +35,9 @@
 
 ## DONE
 
-- [x] Un brouillon existant peut être complété (reprendre la création)
-  - [x] Un front permettant de passer d'étape en étape
-  - [x] Une route permettant de rajouter (`PUT`) d'autres données
-  - [x] Un formulaire plus flexible pour ajouter facilement des questions
-  - [x] Une route de mise à jour flexible (multi propriété)
-  - [x] Un front permettant de charger un brouillon existant
-- [x] Une page permet de créer un brouillon de service v2
-  - [x] Un bouton permet d'ouvrir cette page, il est derrière un feature flag
-    - /service/v2/creation
-  - [x] Le composant Svelte utilise un fichier `.api` et non un `axios.post()` dans `CreationV2.svelte`
-- [x] Manipuler du V1 ou du V2 est transparent pour les appelants du calcul du niveau de sécurité
-  - [x] Tous ceux qui appellent `DescriptionService.estimeNiveauSecurite` alors qu'ils ont un `service` sous la main doivent appeler une méthode d'instance
-  - [x] Ceux qui appellent `DescriptionService.estimeNiveauSecurite` AVANT d'avoir un service… normalement c'est bon car on codera des cousins hard-codés sur `DescriptionServiceV2.estimeNiveauSecurite`
-  - [x] Déplacer `estNiveauDeSecuriteValide` dans une fonction du `referentiel`
-- [x] le brouillon se transforme en une descriptionV2 à la création du service
-  - [x] la validation de description dans `nouveauService` est faite par une méthode statique de `Service.valideDonneesCreation`
-    - [x] c'est cette méthode statique qui fait le switch entre v1 et v2
-- [x] le service v2 créé d'après un brouillon est affichable sur le tableau de bord
-- [x] une route qui finalise un brouillon complet, et crée un nouveau service
-- [x] le dépôt de données sait finaliser un brouillon de service
-  - le brouillon est transformé en description v2
-  - la description v2 est persistée dans le service (actuellement descriptionServiceV2.donneesSerialisees() n'existe pas)
-  - le brouillon est supprimé
-- [x] Lister les brouillons avec les services sur le TDB
-- [x] La route de création de brouillon peut créer un brouillon de service
-  - [x] Persister le brouillon
-  - [x] Retourner l'ID réel du brouillon
-  - [x] La validation de la payload sur le POST se fait avec ZOD
-  - [x] Le brouillon peut être affiché dans le tableau de bord
-    - [x] Il est affiché au dessus des services
-    - [x] On peut rechercher sur le nom du brouillon
-    - [x] On s'assure que l'affichage "tableau vide" fonctionne correctement
-- [x] Un service v2 instancie une description V2
-  - [x] avec le nom du service
-- [x] Côté Metabase : un LÉGO des versions de service.
-  - Ce légo n'existe pas encore
-  - L'absence de version veut dire `v1`
-  - [x] On imagine que dans `NOUVEAU_SERVICE_CREE` on aura un champ `versionService: "v2"` sur lequel il pourra se baser
-- [x] C'est MSS qui met explicitement v1, pas Postgres
-- [x] L'attribut s'appelle `versionService` et pas `version`
-- [x] Un nouveau service est persité en `v1`
-- [x] La version d'un service est lue depuis la persistance
-- [x] Un service connaît sa version
-- [x] Une colonne dédiée `version_service` dans la table `services`
-  - Avec valeur par défaut à `v1`, comme ça pas de migration.
+- [x] Le moteur de règles v2 peut rendre une mesure indispensable
+- [x] Le moteur de règles v2 peut rendre une mesure recommandée
+- [x] Le moteur de règles v2 peut rajouter une mesure
 
 ## Exemple de mesure personnalisée renvoyée par le moteur de règles V1 (`.mesures()`)
 
