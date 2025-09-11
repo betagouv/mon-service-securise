@@ -10,19 +10,19 @@ export enum Modificateur {
   Ajouter,
 }
 
-type LigneDeMenu = {
+export type RegleDuReferentielV2 = {
   reference: IdMesureV2;
   dansSocleInitial: boolean;
   modificateurs: Record<string, [string, Modificateur]>;
 };
 
-export type MenuMoteurDeReglesV2 = LigneDeMenu[];
+export type ReglesDuReferentielMesuresV2 = RegleDuReferentielV2[];
 
 export class MoteurReglesV2 {
   private readonly referentiel: Referentiel;
-  private readonly menu: MenuMoteurDeReglesV2;
+  private readonly menu: ReglesDuReferentielMesuresV2;
 
-  constructor(referentiel: Referentiel, menu: MenuMoteurDeReglesV2) {
+  constructor(referentiel: Referentiel, menu: ReglesDuReferentielMesuresV2) {
     this.referentiel = referentiel;
     this.menu = menu;
   }
@@ -46,7 +46,7 @@ export class MoteurReglesV2 {
 
   // eslint-disable-next-line class-methods-use-this
   private evalueLigne(
-    ligne: LigneDeMenu,
+    ligne: RegleDuReferentielV2,
     descriptionService: DescriptionServiceV2
   ) {
     type ModificationMesure = { aRajouter?: boolean; indispensable: boolean };
