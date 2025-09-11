@@ -3,6 +3,7 @@ import { mesuresV2 } from '../../donneesReferentielMesuresV2.js';
 
 export type RegleBrut = {
   ref: keyof typeof mesuresV2;
+  'Statut Initial': 'Présente' | 'Absente';
 };
 
 export class ParsingReglesDeMesuresV2 {
@@ -12,7 +13,7 @@ export class ParsingReglesDeMesuresV2 {
   regles(): ReglesDuReferentielMesuresV2 {
     return this.reglesBrutes.map((r) => ({
       reference: r.ref,
-      dansSocleInitial: false,
+      dansSocleInitial: r['Statut Initial'] === 'Présente',
       modificateurs: {},
     }));
   }
