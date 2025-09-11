@@ -1,7 +1,8 @@
 import { Referentiel } from './referentiel.interface.js';
 import { DescriptionServiceV2 } from './modeles/descriptionServiceV2.js';
+import { mesuresV2 } from '../donneesReferentielMesuresV2.js';
 
-type IdMesureV2 = string;
+type IdMesureV2 = keyof typeof mesuresV2;
 
 export enum Modificateur {
   RendreIndispensable,
