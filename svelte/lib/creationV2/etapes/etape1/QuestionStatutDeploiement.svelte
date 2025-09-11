@@ -8,13 +8,10 @@
   const metsAJourValeur = () => {
     if (valeur) {
       dispatch('champModifie', valeur);
-      estComplete = true;
     }
   };
 
-  $: {
-    if (valeur) estComplete = true;
-  }
+  $: estComplete = !!valeur;
 </script>
 
 <label for="statut-deploiement">
