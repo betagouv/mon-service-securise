@@ -31,9 +31,14 @@ export class MoteurReglesV2 {
   mesures(descriptionService: DescriptionServiceV2) {
     const mesures = [];
 
+    const descriptionEnRecord = descriptionService as unknown as Record<
+      string,
+      string
+    >;
+
     // eslint-disable-next-line no-restricted-syntax
     for (const ligne of this.menu) {
-      const modification = this.evalueLigne(ligne, descriptionService);
+      const modification = this.evalueLigne(ligne, descriptionEnRecord);
 
       if (modification.aRajouter)
         mesures.push([
@@ -48,7 +53,7 @@ export class MoteurReglesV2 {
   // eslint-disable-next-line class-methods-use-this
   private evalueLigne(
     ligne: RegleDuReferentielV2,
-    descriptionService: DescriptionServiceV2
+    descriptionService: Record<string, string>
   ) {
     type ModificationMesure = { aRajouter?: boolean; indispensable: boolean };
 
@@ -61,11 +66,7 @@ export class MoteurReglesV2 {
       const modifications = ligne.modificateurs[champ];
       for (let i = 0; i < modifications.length; i += 1) {
         const [valeurRegle, modificateur] = modifications[i];
-        const enRecord = descriptionService as unknown as Record<
-          string,
-          string
-        >;
-        const valeurReelle = enRecord[champ] as string;
+        const valeurReelle = descriptionService[champ] as string;
         if (valeurReelle === valeurRegle)
           switch (modificateur) {
             case Modificateur.RendreIndispensable:

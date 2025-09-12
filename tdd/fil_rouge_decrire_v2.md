@@ -4,7 +4,6 @@
 
 - [>] Le moteur de règles v2 gère plusieurs valeurs+modificateurs pour un même champ
   - exemple : on veut 3 valeurs+modificateurs possibles pour "Niveau de sécurite"
-- [ ] passer un record<string,string> directement à `evalueLigne()`
 - [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.
 - [ ] Le moteur v2 travaille pas sur la description complète mais sur un `Profil` issu de la description
   - Pour par exemple encapsuler le calcul
