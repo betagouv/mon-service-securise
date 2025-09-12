@@ -12,13 +12,15 @@ import {
 
 type LigneDeCSVTransformee = {
   REF: IdMesureV2;
-  'Statut initial': 'Présente' | 'Absente';
+  'Statut initial': boolean;
   Basique?: Modificateur;
   Modéré?: Modificateur;
   Avancé?: Modificateur;
 };
 
 export class LecteurDeCSVDeReglesV2 {
+  private statutsInitiaux = { Présente: true, Absente: false };
+
   // eslint-disable-next-line no-empty-function
   constructor(private readonly referentielMesures: typeof mesuresV2) {}
 
@@ -34,6 +36,8 @@ export class LecteurDeCSVDeReglesV2 {
           throw new ErreurMoteurDeReglesV2(
             `La mesure '${value}' n'existe pas dans le référentiel MSS`
           );
+
+        if (field === 'Statut initial') return this.traduisStatutInitial(value);
 
         if (field === 'Basique') return this.traduisModificateur(value);
         if (field === 'Modéré') return this.traduisModificateur(value);
@@ -58,7 +62,7 @@ export class LecteurDeCSVDeReglesV2 {
 
         resultat.push({
           reference: REF,
-          dansSocleInitial: data['Statut initial'] === 'Présente',
+          dansSocleInitial: data['Statut initial'],
           modificateurs,
         });
       },
@@ -84,5 +88,15 @@ export class LecteurDeCSVDeReglesV2 {
     throw new ErreurMoteurDeReglesV2(
       `Le modificateur '${valeurCSV}' est inconnu`
     );
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private traduisStatutInitial(valeurCSV: string) {
+    if (!(valeurCSV in this.statutsInitiaux))
+      throw new ErreurMoteurDeReglesV2(
+        `Le statut initial '${valeurCSV}' est inconnu`
+      );
+
+    return this.statutsInitiaux[valeurCSV as keyof typeof this.statutsInitiaux];
   }
 }

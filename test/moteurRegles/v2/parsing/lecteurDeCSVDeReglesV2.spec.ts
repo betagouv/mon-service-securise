@@ -79,6 +79,15 @@ describe('Le lecteur de CSV de règles V2', () => {
     });
   });
 
+  it('jette une erreur si un statut initial de mesure est inconnue', async () => {
+    await expect(
+      lisLeFichier(`MESURES_V2_MAUVAIS_STATUT_INITIAL.csv`)
+    ).rejects.toThrowError(
+      new ErreurMoteurDeReglesV2(
+        "Le statut initial 'MAUVAIS_STATUT' est inconnu"
+      )
+    );
+  });
   it('jette une erreur si une référence de mesure est inconnue', async () => {
     await expect(
       lisLeFichier(`MESURES_V2_MAUVAIS_ID.csv`)
