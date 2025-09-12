@@ -107,6 +107,31 @@ describe('Le moteur de règles V2', () => {
     expect(mesures).toEqual({});
   });
 
+  it('sait combiner « Rajouter » et « Rendre indispensable » sur une même mesure', () => {
+    const referentiel = creeReferentiel();
+    const v2 = new MoteurReglesV2(referentiel, [
+      {
+        reference: 'RECENSEMENT.1',
+        dansSocleInitial: false,
+        modificateurs: {
+          niveauDeSecurite: [['niveau1', Modificateur.Ajouter]],
+          nomService: [['un-nom-exemple', Modificateur.RendreIndispensable]],
+        },
+      },
+    ]);
+
+    const serviceNiveau1AvecNomExemple = new DescriptionServiceV2({
+      niveauDeSecurite: 'niveau1',
+      nomService: 'un-nom-exemple',
+      organisationResponsable: { siret: 'X' },
+    });
+    const mesures = v2.mesures(serviceNiveau1AvecNomExemple);
+
+    expect(mesures).toEqual({
+      'RECENSEMENT.1': { indispensable: true },
+    });
+  });
+
   it("sait rendre une mesure « Indispensable » en fonction du nom du service (pour l'exemple)", () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [

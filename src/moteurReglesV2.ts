@@ -19,6 +19,29 @@ export type RegleDuReferentielV2 = {
 
 export type ReglesDuReferentielMesuresV2 = RegleDuReferentielV2[];
 
+class Modifications {
+  private modificateurs: Modificateur[];
+
+  constructor(private readonly dansSocleInitial: boolean) {
+    this.modificateurs = [];
+  }
+
+  ajoute(modificateur: Modificateur) {
+    this.modificateurs.push(modificateur);
+  }
+
+  doitAjouter() {
+    const nonExclue =
+      this.dansSocleInitial &&
+      !this.modificateurs.includes(Modificateur.Retirer);
+    return nonExclue || this.modificateurs.includes(Modificateur.Ajouter);
+  }
+
+  rendreIndispensable() {
+    return this.modificateurs.includes(Modificateur.RendreIndispensable);
+  }
+}
+
 export class MoteurReglesV2 {
   private readonly referentiel: Referentiel;
   private readonly menu: ReglesDuReferentielMesuresV2;
@@ -38,12 +61,12 @@ export class MoteurReglesV2 {
 
     // eslint-disable-next-line no-restricted-syntax
     for (const ligne of this.menu) {
-      const modification = this.evalueLigne(ligne, descriptionEnRecord);
+      const modifications = this.evalueLigne(ligne, descriptionEnRecord);
 
-      if (modification.aRajouter)
+      if (modifications.doitAjouter())
         mesures.push([
           ligne.reference,
-          { indispensable: modification.indispensable },
+          { indispensable: modifications.rendreIndispensable() },
         ]);
     }
 
@@ -54,39 +77,18 @@ export class MoteurReglesV2 {
   private evalueLigne(
     ligne: RegleDuReferentielV2,
     descriptionService: Record<string, string>
-  ) {
-    type ModificationMesure = { aRajouter?: boolean; indispensable: boolean };
+  ): Modifications {
+    const collecte = new Modifications(ligne.dansSocleInitial);
 
-    const modification: ModificationMesure = { indispensable: false };
-
-    modification.aRajouter = ligne.dansSocleInitial;
-
-    const champ = Object.keys(ligne.modificateurs)[0];
-    if (champ) {
-      const modifications = ligne.modificateurs[champ];
+    Object.keys(ligne.modificateurs).forEach((champDeDecrire) => {
+      const modifications = ligne.modificateurs[champDeDecrire];
       for (let i = 0; i < modifications.length; i += 1) {
         const [valeurRegle, modificateur] = modifications[i];
-        const valeurReelle = descriptionService[champ] as string;
-        if (valeurReelle === valeurRegle)
-          switch (modificateur) {
-            case Modificateur.RendreIndispensable:
-              modification.indispensable = true;
-              break;
-            case Modificateur.RendreRecommandee:
-              modification.indispensable = false;
-              break;
-            case Modificateur.Ajouter:
-              modification.aRajouter = true;
-              break;
-            case Modificateur.Retirer:
-              modification.aRajouter = false;
-              break;
-            default:
-              break;
-          }
+        const valeurReelle = descriptionService[champDeDecrire] as string;
+        if (valeurReelle === valeurRegle) collecte.ajoute(modificateur);
       }
-    }
+    });
 
-    return modification;
+    return collecte;
   }
 }
