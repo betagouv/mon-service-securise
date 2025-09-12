@@ -5,7 +5,6 @@
 - [ ] moteur v2 : optimisation pour `break` la boucle d'évaluation d'un champ dès qu'on a un match ?
   - ça veut dire dès que `if (valeurReelle === valeurRegle)` est vrai, on `break;`
 - [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.
-- [ ] Parsing du CSV jette des erreurs en cas de statut initial inconnu
 - [ ] Parsing du CSV jette des erreurs en cas de "il manque des colonnes attendues"
 - [ ] Parsing du CSV : vers du code générique qui boucle sur une collection de tous les champs attendus
 - [ ] chaque étape de décrire permet de mettre à jour une propriété du brouillon
@@ -30,6 +29,7 @@
 
 ## DONE
 
+- [x] Parsing du CSV jette des erreurs en cas de statut initial inconnu
 - [x] Parsing du CSV jette des erreurs en cas de modificateur inconnu du référentiel
 - [x] Le moteur de règles v2 jette des erreurs en cas de mesure inconnue du référentiel
 - [x] Un CSV peut être converti en règles MSS
