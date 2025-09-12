@@ -1,0 +1,79 @@
+import * as fs from 'node:fs';
+import Papa from 'papaparse';
+import { PathLike } from 'fs';
+import { mesuresV2 } from '../../../../donneesReferentielMesuresV2.js';
+import { ErreurMoteurDeReglesV2 } from '../../../erreurs.js';
+import { ReglesDuReferentielMesuresV2 } from '../moteurReglesV2.js';
+
+type LigneDeCSV = {
+  REF: string;
+  'Statut initial': 'Présente' | 'Absente';
+};
+
+export class LecteurDeCSVDeReglesV2 {
+  // eslint-disable-next-line no-empty-function
+  constructor(private readonly referentielMesures: typeof mesuresV2) {}
+
+  lis(cheminCSV: PathLike): ReglesDuReferentielMesuresV2 {
+    const resultat: ReglesDuReferentielMesuresV2 = [];
+    const contenuCSV = fs.readFileSync(cheminCSV).toString();
+
+    Papa.parse(contenuCSV, {
+      header: true,
+      skipEmptyLines: true,
+      transform: (value: string, field: string) => {
+        if (field === 'REF' && !this.estMesureConnueDeMSS(value))
+          throw new ErreurMoteurDeReglesV2(
+            `La mesure ${value} n'existe pas dans le référentiel MSS`
+          );
+
+        if (field === 'Basique') {
+          if (value === 'Indispensable') return 'RendreIndispensable';
+          if (value === 'Recommandation') return 'RendreRecommandee';
+        }
+
+        if (field === 'Modéré') {
+          if (value === 'Indispensable') return 'RendreIndispensable';
+          if (value === 'Recommandation') return 'RendreRecommandee';
+        }
+
+        if (field === 'Avancé') {
+          if (value === 'Indispensable') return 'RendreIndispensable';
+          if (value === 'Recommandation') return 'RendreRecommandee';
+        }
+
+        return value;
+      },
+      step: ({ data }) => {
+        const { REF } = data as LigneDeCSV;
+
+        let modificateurs = {};
+        if (data.Basique || data['Modéré'] || data['Avancé']) {
+          modificateurs = { niveauxDeSecurite: [] };
+          if (data.Basique)
+            modificateurs.niveauxDeSecurite.push(['niveau1', data.Basique]);
+          if (data['Modéré'])
+            modificateurs.niveauxDeSecurite.push(['niveau2', data['Modéré']]);
+          if (data['Avancé'])
+            modificateurs.niveauxDeSecurite.push(['niveau3', data['Avancé']]);
+        }
+
+        resultat.push({
+          reference: REF,
+          dansSocleInitial: data['Statut initial'] === 'Présente',
+          modificateurs,
+        });
+      },
+    });
+
+    return resultat;
+  }
+
+  private estMesureConnueDeMSS(
+    reference: string
+  ): reference is keyof typeof mesuresV2 {
+    return (
+      this.referentielMesures[reference as keyof typeof mesuresV2] !== undefined
+    );
+  }
+}
