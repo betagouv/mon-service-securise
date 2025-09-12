@@ -36,7 +36,7 @@ describe('Le lecteur de CSV de règles V2', () => {
       reference: 'RECENSEMENT.1',
       dansSocleInitial: true,
       modificateurs: {
-        niveauxDeSecurite: [['niveau1', 'RendreIndispensable']],
+        niveauDeSecurite: [['niveau1', 'RendreIndispensable']],
       },
     });
 
@@ -44,7 +44,7 @@ describe('Le lecteur de CSV de règles V2', () => {
       reference: 'RECENSEMENT.2',
       dansSocleInitial: false,
       modificateurs: {
-        niveauxDeSecurite: [['niveau1', 'RendreRecommandee']],
+        niveauDeSecurite: [['niveau1', 'RendreRecommandee']],
       },
     });
   });
@@ -58,7 +58,7 @@ describe('Le lecteur de CSV de règles V2', () => {
       reference: 'RECENSEMENT.1',
       dansSocleInitial: true,
       modificateurs: {
-        niveauxDeSecurite: [
+        niveauDeSecurite: [
           ['niveau1', 'RendreIndispensable'],
           ['niveau2', 'RendreIndispensable'],
           ['niveau3', 'RendreIndispensable'],
@@ -70,7 +70,7 @@ describe('Le lecteur de CSV de règles V2', () => {
       reference: 'RECENSEMENT.2',
       dansSocleInitial: false,
       modificateurs: {
-        niveauxDeSecurite: [
+        niveauDeSecurite: [
           ['niveau1', 'RendreRecommandee'],
           ['niveau2', 'RendreRecommandee'],
           ['niveau3', 'RendreIndispensable'],

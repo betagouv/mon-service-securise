@@ -2,17 +2,10 @@
 
 ## TODO
 
-- [>] Le moteur v2 travaille sur certaines clés bien définies de la DescriptionServiceV2
 - [ ] moteur v2 : optimisation pour `break` la boucle d'évaluation d'un champ dès qu'on a un match ?
   - ça veut dire dès que `if (valeurReelle === valeurRegle)` est vrai, on `break;`
 - [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.
-- [-] Le parsing des règles brut produit un jeu de règles compris par le moteur v2
-  - [x] socle initial
-  - [x] un modificateur par champ
-  - [ ] jeter une erreur si un champ brut est inconnu : ['NIMPORTEQUOI', ['Basique', 'Indispensable']], 💥
-  - [ ] jeter une erreur si un modificateur est inconnu : ['Niveau de Sécurité', ['NIMPORTEQUOI', 'Indispensable']] 💥
-  - [ ] plusieurs modificateurs par champ
-- [ ] Un CSV peut être converti en règles brut
+- [ ] Parsing complet du CSV : jeter une erreur si une valeur de modificateur est inconnue
 - [ ] chaque étape de décrire permet de mettre à jour une propriété du brouillon
   - [ ] la route permettant de rajouter des données vérifie la cohérence de ces données (via `referentiel` ou via `zod` ?)
 - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
@@ -35,6 +28,8 @@
 
 ## DONE
 
+- [x] Un CSV peut être converti en règles MSS
+- [x] Le moteur v2 travaille sur certaines clés bien définies de la DescriptionServiceV2
 - [x] Le moteur de règles v2 gère plusieurs valeurs+modificateurs pour un même champ
   - exemple : on veut 3 valeurs+modificateurs possibles pour "Niveau de sécurite"
 - [x] Remplacer enum par constante string pour les modificateur : 'RETIRER' | 'AJOUTER' …
