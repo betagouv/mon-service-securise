@@ -4,8 +4,10 @@
 
 - [>] Le moteur de règles v2 gère plusieurs valeurs+modificateurs pour un même champ
   - exemple : on veut 3 valeurs+modificateurs possibles pour "Niveau de sécurite"
+- [ ] moteur v2 : optimisation pour `break` la boucle d'évaluation d'un champ dès qu'on a un match ?
+  - ça veut dire dès que `if (valeurReelle === valeurRegle)` est vrai, on `break;`
 - [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.
-- [ ] Le moteur v2 travaille pas sur la description complète mais sur un `Profil` issu de la description
+- [ ] Le moteur v2 ne travaille pas sur la description complète, mais sur un `Profil` issu de la description
   - Pour par exemple encapsuler le calcul du champ « Données » pour savoir si le service est +,++,+++ ou ++++
 - [-] Le parsing des règles brut produit un jeu de règles compris par le moteur v2
   - [x] socle initial
