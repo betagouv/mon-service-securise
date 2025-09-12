@@ -11,10 +11,16 @@ export type Modificateur =
   | 'Ajouter'
   | 'Retirer';
 
+type CaracteristiquesDuService =
+  | 'niveauDeSecurite'
+  | 'categorieDonneesTraitees';
+
 export type RegleDuReferentielV2 = {
   reference: IdMesureV2;
   dansSocleInitial: boolean;
-  modificateurs: Record<string, [string, Modificateur][]>;
+  modificateurs: Partial<
+    Record<CaracteristiquesDuService, [string, Modificateur][]>
+  >;
 };
 
 export type ReglesDuReferentielMesuresV2 = RegleDuReferentielV2[];
@@ -58,9 +64,10 @@ export class MoteurReglesV2 {
     const collecte = new Modifications(ligne.dansSocleInitial);
 
     Object.keys(ligne.modificateurs).forEach((champDeDecrire) => {
-      const modifications = ligne.modificateurs[champDeDecrire];
-      for (let i = 0; i < modifications.length; i += 1) {
-        const [valeurRegle, modificateur] = modifications[i];
+      const modifications =
+        ligne.modificateurs[champDeDecrire as CaracteristiquesDuService];
+      for (let i = 0; i < modifications!.length; i += 1) {
+        const [valeurRegle, modificateur] = modifications![i];
         const valeurReelle = descriptionService[champDeDecrire] as string;
         if (valeurReelle === valeurRegle) collecte.ajoute(modificateur);
       }
