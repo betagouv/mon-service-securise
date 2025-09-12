@@ -1,4 +1,5 @@
 import {
+  CaracteristiquesDuService,
   Modificateur,
   ReglesDuReferentielMesuresV2,
 } from '../moteurReglesV2.js';
@@ -15,10 +16,13 @@ export type RegleBrut = {
 export class ParsingReglesDeMesuresV2 {
   private mappingVersMSS: Record<
     string,
-    { champMSS: string; mappingValeursDuChamp: Record<string, string> }
+    {
+      champMSS: CaracteristiquesDuService;
+      mappingValeursDuChamp: Record<string, string>;
+    }
   > = {
     'Niveau de Sécurité': {
-      champMSS: 'niveauSecurite',
+      champMSS: 'niveauDeSecurite',
       mappingValeursDuChamp: { Basique: 'niveau1' },
     },
   };
