@@ -47,7 +47,7 @@ describe('Le parsing des règles des mesures v2', () => {
 
     const regleUnique = parsing.regles()[0];
     expect(regleUnique.modificateurs).toEqual({
-      niveauSecurite: [['niveau1', 'RendreIndispensable']],
+      niveauDeSecurite: [['niveau1', 'RendreIndispensable']],
     });
   });
 });
