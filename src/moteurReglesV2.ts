@@ -14,7 +14,7 @@ export enum Modificateur {
 export type RegleDuReferentielV2 = {
   reference: IdMesureV2;
   dansSocleInitial: boolean;
-  modificateurs: Record<string, [string, Modificateur]>;
+  modificateurs: Record<string, [string, Modificateur][]>;
 };
 
 export type ReglesDuReferentielMesuresV2 = RegleDuReferentielV2[];
@@ -58,27 +58,32 @@ export class MoteurReglesV2 {
 
     const champ = Object.keys(ligne.modificateurs)[0];
     if (champ) {
-      const [valeurMenu, modificateur] = ligne.modificateurs[champ];
-      const enRecord = descriptionService as unknown as Record<string, string>;
-      const valeurReelle = enRecord[champ] as string;
-
-      if (valeurReelle === valeurMenu)
-        switch (modificateur) {
-          case Modificateur.RendreIndispensable:
-            modification.indispensable = true;
-            break;
-          case Modificateur.RendreRecommandee:
-            modification.indispensable = false;
-            break;
-          case Modificateur.Ajouter:
-            modification.aRajouter = true;
-            break;
-          case Modificateur.Retirer:
-            modification.aRajouter = false;
-            break;
-          default:
-            break;
-        }
+      const modifications = ligne.modificateurs[champ];
+      for (let i = 0; i < modifications.length; i += 1) {
+        const [valeurRegle, modificateur] = modifications[i];
+        const enRecord = descriptionService as unknown as Record<
+          string,
+          string
+        >;
+        const valeurReelle = enRecord[champ] as string;
+        if (valeurReelle === valeurRegle)
+          switch (modificateur) {
+            case Modificateur.RendreIndispensable:
+              modification.indispensable = true;
+              break;
+            case Modificateur.RendreRecommandee:
+              modification.indispensable = false;
+              break;
+            case Modificateur.Ajouter:
+              modification.aRajouter = true;
+              break;
+            case Modificateur.Retirer:
+              modification.aRajouter = false;
+              break;
+            default:
+              break;
+          }
+      }
     }
 
     return modification;

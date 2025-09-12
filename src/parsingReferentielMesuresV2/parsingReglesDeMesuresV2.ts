@@ -38,8 +38,10 @@ export class ParsingReglesDeMesuresV2 {
           return [
             cible.champMSS,
             [
-              cible.mappingValeursDuChamp[valeurBrute],
-              this.traduisModificateur(modificateurBrut),
+              [
+                cible.mappingValeursDuChamp[valeurBrute],
+                this.traduisModificateur(modificateurBrut),
+              ],
             ],
           ];
         })

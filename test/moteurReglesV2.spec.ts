@@ -26,7 +26,7 @@ describe('Le moteur de règles V2', () => {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: true,
         modificateurs: {
-          niveauDeSecurite: ['niveau1', Modificateur.RendreIndispensable],
+          niveauDeSecurite: [['niveau1', Modificateur.RendreIndispensable]],
         },
       },
     ]);
@@ -48,7 +48,7 @@ describe('Le moteur de règles V2', () => {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: true,
         modificateurs: {
-          niveauDeSecurite: ['niveau1', Modificateur.RendreRecommandee],
+          niveauDeSecurite: [['niveau1', Modificateur.RendreRecommandee]],
         },
       },
     ]);
@@ -69,7 +69,9 @@ describe('Le moteur de règles V2', () => {
       {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: false, // Pas dans le socle initial
-        modificateurs: { niveauDeSecurite: ['niveau1', Modificateur.Ajouter] },
+        modificateurs: {
+          niveauDeSecurite: [['niveau1', Modificateur.Ajouter]],
+        },
       },
     ]);
 
@@ -89,7 +91,9 @@ describe('Le moteur de règles V2', () => {
       {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: true,
-        modificateurs: { niveauDeSecurite: ['niveau1', Modificateur.Retirer] },
+        modificateurs: {
+          niveauDeSecurite: [['niveau1', Modificateur.Retirer]],
+        },
       },
     ]);
 
@@ -111,7 +115,7 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: true,
         modificateurs: {
           // Ici le modificateur est sur le `nomService`
-          nomService: ['un-nom-exemple', Modificateur.RendreIndispensable],
+          nomService: [['un-nom-exemple', Modificateur.RendreIndispensable]],
         },
       },
     ]);
