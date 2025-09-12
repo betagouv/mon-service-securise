@@ -1,4 +1,4 @@
-import MoteurRegles from '../moteurRegles.js';
+import MoteurRegles from '../moteurRegles/v1/moteurRegles.js';
 import * as Referentiel from '../referentiel.js';
 import DescriptionService from './descriptionService.js';
 import Dossiers from './dossiers.js';
@@ -17,7 +17,7 @@ import { Contributeur } from './contributeur.js';
 import { DescriptionServiceV2 } from './descriptionServiceV2.js';
 import Entite from './entite.js';
 import { VersionService } from './versionService.js';
-import { MoteurReglesV2 } from '../moteurReglesV2.js';
+import { MoteurReglesV2 } from '../moteurRegles/v2/moteurReglesV2.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',

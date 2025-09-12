@@ -2,7 +2,7 @@ import expect from 'expect.js';
 import supertest from 'supertest';
 import { depotVide } from '../depots/depotVide.js';
 import * as adaptateurMailMemoire from '../../src/adaptateurs/adaptateurMailMemoire.js';
-import MoteurRegles from '../../src/moteurRegles.js';
+import MoteurRegles from '../../src/moteurRegles/v1/moteurRegles.js';
 import * as MSS from '../../src/mss.js';
 import * as Referentiel from '../../src/referentiel.js';
 import middleware from '../mocks/middleware.js';
