@@ -2,7 +2,6 @@
 
 ## TODO
 
-- [ ] Le moteur de règles v2 peut retirer une mesure
 - [ ] Le moteur de règles v2 gère plusieurs valeurs+modificateurs pour un même champ
   - exemple : on veut 3 valeurs+modificateurs possibles pour "Niveau de sécurite"
 - [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.
@@ -35,6 +34,7 @@
 
 ## DONE
 
+- [x] Le moteur de règles v2 peut retirer une mesure
 - [x] Le moteur de règles v2 peut rendre une mesure indispensable
 - [x] Le moteur de règles v2 peut rendre une mesure recommandée
 - [x] Le moteur de règles v2 peut rajouter une mesure

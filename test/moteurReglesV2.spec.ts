@@ -69,9 +69,7 @@ describe('Le moteur de règles V2', () => {
       {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: false, // Pas dans le socle initial
-        modificateurs: {
-          niveauDeSecurite: ['niveau1', Modificateur.Ajouter],
-        },
+        modificateurs: { niveauDeSecurite: ['niveau1', Modificateur.Ajouter] },
       },
     ]);
 
@@ -83,6 +81,26 @@ describe('Le moteur de règles V2', () => {
     const mesures = v2.mesures(serviceNiveau1);
 
     expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: false } });
+  });
+
+  it('sait retirer une mesure en fonction du niveau de sécurité', () => {
+    const referentiel = creeReferentiel();
+    const v2 = new MoteurReglesV2(referentiel, [
+      {
+        reference: 'RECENSEMENT.1',
+        dansSocleInitial: true,
+        modificateurs: { niveauDeSecurite: ['niveau1', Modificateur.Retirer] },
+      },
+    ]);
+
+    const serviceNiveau1 = new DescriptionServiceV2({
+      niveauDeSecurite: 'niveau1',
+      nomService: '',
+      organisationResponsable: { siret: 'X' },
+    });
+    const mesures = v2.mesures(serviceNiveau1);
+
+    expect(mesures).toEqual({});
   });
 
   it("sait rendre une mesure « Indispensable » en fonction du nom du service (pour l'exemple)", () => {
