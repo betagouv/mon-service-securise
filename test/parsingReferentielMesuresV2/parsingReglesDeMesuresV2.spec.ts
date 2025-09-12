@@ -2,7 +2,6 @@ import {
   ParsingReglesDeMesuresV2,
   RegleBrut,
 } from '../../src/parsingReferentielMesuresV2/parsingReglesDeMesuresV2.js';
-import { Modificateur } from '../../src/moteurReglesV2.js';
 
 describe('Le parsing des règles des mesures v2', () => {
   it('existe', () => {
@@ -48,7 +47,7 @@ describe('Le parsing des règles des mesures v2', () => {
 
     const regleUnique = parsing.regles()[0];
     expect(regleUnique.modificateurs).toEqual({
-      niveauSecurite: [['niveau1', Modificateur.RendreIndispensable]],
+      niveauSecurite: [['niveau1', 'RendreIndispensable']],
     });
   });
 });

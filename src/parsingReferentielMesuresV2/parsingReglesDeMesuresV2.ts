@@ -52,7 +52,7 @@ export class ParsingReglesDeMesuresV2 {
   // eslint-disable-next-line class-methods-use-this
   private traduisModificateur(modificateurBrut: ModificateurBrut) {
     const mappingDesModificateurs: Record<ModificateurBrut, Modificateur> = {
-      Indispensable: Modificateur.RendreIndispensable,
+      Indispensable: 'RendreIndispensable',
     };
 
     return mappingDesModificateurs[modificateurBrut];

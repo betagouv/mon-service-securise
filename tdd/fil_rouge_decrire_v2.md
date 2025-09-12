@@ -5,7 +5,6 @@
 - [>] Le moteur de règles v2 gère plusieurs valeurs+modificateurs pour un même champ
   - exemple : on veut 3 valeurs+modificateurs possibles pour "Niveau de sécurite"
 - [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.
-- [ ] Remplacer enum par constante string pour les modificateur : 'RETIRER' | 'AJOUTER' …
 - [ ] Le moteur v2 travaille pas sur la description complète mais sur un `Profil` issu de la description
   - Pour par exemple encapsuler le calcul du champ « Données » pour savoir si le service est +,++,+++ ou ++++
 - [-] Le parsing des règles brut produit un jeu de règles compris par le moteur v2
@@ -37,6 +36,7 @@
 
 ## DONE
 
+- [x] Remplacer enum par constante string pour les modificateur : 'RETIRER' | 'AJOUTER' …
 - [x] Le moteur de règles v2 peut retirer une mesure
 - [x] Le moteur de règles v2 peut rendre une mesure indispensable
 - [x] Le moteur de règles v2 peut rendre une mesure recommandée
