@@ -8,6 +8,7 @@ export enum Modificateur {
   RendreIndispensable,
   RendreRecommandee,
   Ajouter,
+  Retirer,
 }
 
 export type RegleDuReferentielV2 = {
@@ -71,6 +72,9 @@ export class MoteurReglesV2 {
             break;
           case Modificateur.Ajouter:
             modification.aRajouter = true;
+            break;
+          case Modificateur.Retirer:
+            modification.aRajouter = false;
             break;
           default:
             break;
