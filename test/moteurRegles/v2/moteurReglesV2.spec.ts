@@ -2,6 +2,16 @@ import { MoteurReglesV2 } from '../../../src/moteurRegles/v2/moteurReglesV2.js';
 import { creeReferentiel } from '../../../src/referentiel.js';
 import { DescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.js';
 
+function uneDescriptionAuNiveau(niveauDeSecurite: string) {
+  return new DescriptionServiceV2({
+    niveauDeSecurite,
+    nomService: '',
+    organisationResponsable: { siret: 'X' },
+    volumetrieDonneesTraitees: 'faible',
+    categorieDonneesTraitees: 'donneesSensibles',
+  });
+}
+
 describe('Le moteur de règles V2', () => {
   it('renvoie les mesures qui sont dans le socle initial si elles ne sont pas exclues ensuite', () => {
     const referentiel = creeReferentiel();
@@ -9,11 +19,7 @@ describe('Le moteur de règles V2', () => {
       { reference: 'RECENSEMENT.1', dansSocleInitial: true, modificateurs: {} },
     ]);
 
-    const peuImporte = new DescriptionServiceV2({
-      niveauDeSecurite: '',
-      nomService: '',
-      organisationResponsable: { siret: 'X' },
-    });
+    const peuImporte = uneDescriptionAuNiveau('');
     const mesures = v2.mesures(peuImporte);
 
     expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: false } });
@@ -31,11 +37,7 @@ describe('Le moteur de règles V2', () => {
       },
     ]);
 
-    const serviceNiveau1 = new DescriptionServiceV2({
-      niveauDeSecurite: 'niveau1',
-      nomService: '',
-      organisationResponsable: { siret: 'X' },
-    });
+    const serviceNiveau1 = uneDescriptionAuNiveau('niveau1');
     const mesures = v2.mesures(serviceNiveau1);
 
     expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: true } });
@@ -53,11 +55,7 @@ describe('Le moteur de règles V2', () => {
       },
     ]);
 
-    const serviceNiveau1 = new DescriptionServiceV2({
-      niveauDeSecurite: 'niveau1',
-      nomService: '',
-      organisationResponsable: { siret: 'X' },
-    });
+    const serviceNiveau1 = uneDescriptionAuNiveau('niveau1');
     const mesures = v2.mesures(serviceNiveau1);
 
     expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: false } });
@@ -75,11 +73,7 @@ describe('Le moteur de règles V2', () => {
       },
     ]);
 
-    const serviceNiveau1 = new DescriptionServiceV2({
-      niveauDeSecurite: 'niveau1',
-      nomService: '',
-      organisationResponsable: { siret: 'X' },
-    });
+    const serviceNiveau1 = uneDescriptionAuNiveau('niveau1');
     const mesures = v2.mesures(serviceNiveau1);
 
     expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: false } });
@@ -97,11 +91,7 @@ describe('Le moteur de règles V2', () => {
       },
     ]);
 
-    const serviceNiveau1 = new DescriptionServiceV2({
-      niveauDeSecurite: 'niveau1',
-      nomService: '',
-      organisationResponsable: { siret: 'X' },
-    });
+    const serviceNiveau1 = uneDescriptionAuNiveau('niveau1');
     const mesures = v2.mesures(serviceNiveau1);
 
     expect(mesures).toEqual({});
@@ -115,16 +105,14 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: false,
         modificateurs: {
           niveauDeSecurite: [['niveau1', 'Ajouter']],
-          nomService: [['un-nom-exemple', 'RendreIndispensable']],
+          categorieDonneesTraitees: [
+            ['donneesSensibles', 'RendreIndispensable'],
+          ],
         },
       },
     ]);
 
-    const serviceNiveau1AvecNomExemple = new DescriptionServiceV2({
-      niveauDeSecurite: 'niveau1',
-      nomService: 'un-nom-exemple',
-      organisationResponsable: { siret: 'X' },
-    });
+    const serviceNiveau1AvecNomExemple = uneDescriptionAuNiveau('niveau1');
     const mesures = v2.mesures(serviceNiveau1AvecNomExemple);
 
     expect(mesures).toEqual({
