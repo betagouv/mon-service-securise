@@ -19,7 +19,7 @@ describe('Le moteur de règles V2', () => {
     expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: false } });
   });
 
-  it('sait rendre une mesure « Indispensable » en fonction du niveau de sécurité', () => {
+  it('sait rendre une mesure « Indispensable »', () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
       {
@@ -41,7 +41,7 @@ describe('Le moteur de règles V2', () => {
     expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: true } });
   });
 
-  it('sait rendre une mesure « Recommandée » en fonction du niveau de sécurité', () => {
+  it('sait rendre une mesure « Recommandée »', () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
       {
@@ -63,7 +63,7 @@ describe('Le moteur de règles V2', () => {
     expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: false } });
   });
 
-  it('sait rajouter une mesure en fonction du niveau de sécurité', () => {
+  it('sait rajouter une mesure', () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
       {
@@ -85,7 +85,7 @@ describe('Le moteur de règles V2', () => {
     expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: false } });
   });
 
-  it('sait retirer une mesure en fonction du niveau de sécurité', () => {
+  it('sait retirer une mesure', () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
       {
@@ -130,28 +130,5 @@ describe('Le moteur de règles V2', () => {
     expect(mesures).toEqual({
       'RECENSEMENT.1': { indispensable: true },
     });
-  });
-
-  it("sait rendre une mesure « Indispensable » en fonction du nom du service (pour l'exemple)", () => {
-    const referentiel = creeReferentiel();
-    const v2 = new MoteurReglesV2(referentiel, [
-      {
-        reference: 'RECENSEMENT.1',
-        dansSocleInitial: true,
-        modificateurs: {
-          // Ici le modificateur est sur le `nomService`
-          nomService: [['un-nom-exemple', 'RendreIndispensable']],
-        },
-      },
-    ]);
-
-    const serviceNiveau1 = new DescriptionServiceV2({
-      nomService: 'un-nom-exemple',
-      niveauDeSecurite: '',
-      organisationResponsable: { siret: 'X' },
-    });
-    const mesures = v2.mesures(serviceNiveau1);
-
-    expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: true } });
   });
 });
