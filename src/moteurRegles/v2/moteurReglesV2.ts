@@ -3,7 +3,7 @@ import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
 import { Modifications } from './modifications.js';
 
-type IdMesureV2 = keyof typeof mesuresV2;
+export type IdMesureV2 = keyof typeof mesuresV2;
 
 export type Modificateur =
   | 'RendreIndispensable'
@@ -15,12 +15,14 @@ export type CaracteristiquesDuService =
   | 'niveauDeSecurite'
   | 'categorieDonneesTraitees';
 
+export type ModificateursDeRegles = Partial<
+  Record<CaracteristiquesDuService, [string, Modificateur][]>
+>;
+
 export type RegleDuReferentielV2 = {
   reference: IdMesureV2;
   dansSocleInitial: boolean;
-  modificateurs: Partial<
-    Record<CaracteristiquesDuService, [string, Modificateur][]>
-  >;
+  modificateurs: ModificateursDeRegles;
 };
 
 export type ReglesDuReferentielMesuresV2 = RegleDuReferentielV2[];

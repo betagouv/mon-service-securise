@@ -3,11 +3,19 @@ import Papa from 'papaparse';
 import { PathLike } from 'fs';
 import { mesuresV2 } from '../../../../donneesReferentielMesuresV2.js';
 import { ErreurMoteurDeReglesV2 } from '../../../erreurs.js';
-import { ReglesDuReferentielMesuresV2 } from '../moteurReglesV2.js';
+import {
+  IdMesureV2,
+  Modificateur,
+  ModificateursDeRegles,
+  ReglesDuReferentielMesuresV2,
+} from '../moteurReglesV2.js';
 
-type LigneDeCSV = {
-  REF: string;
+type LigneDeCSVTransformee = {
+  REF: IdMesureV2;
   'Statut initial': 'Présente' | 'Absente';
+  Basique?: Modificateur;
+  Modéré?: Modificateur;
+  Avancé?: Modificateur;
 };
 
 export class LecteurDeCSVDeReglesV2 {
@@ -44,18 +52,19 @@ export class LecteurDeCSVDeReglesV2 {
 
         return value;
       },
-      step: ({ data }) => {
-        const { REF } = data as LigneDeCSV;
+      step: ({ data }: { data: LigneDeCSVTransformee }) => {
+        const { REF } = data;
 
-        let modificateurs = {};
+        const modificateurs: ModificateursDeRegles = {};
+
         if (data.Basique || data['Modéré'] || data['Avancé']) {
-          modificateurs = { niveauxDeSecurite: [] };
+          modificateurs.niveauDeSecurite = [];
           if (data.Basique)
-            modificateurs.niveauxDeSecurite.push(['niveau1', data.Basique]);
+            modificateurs.niveauDeSecurite.push(['niveau1', data.Basique]);
           if (data['Modéré'])
-            modificateurs.niveauxDeSecurite.push(['niveau2', data['Modéré']]);
+            modificateurs.niveauDeSecurite.push(['niveau2', data['Modéré']]);
           if (data['Avancé'])
-            modificateurs.niveauxDeSecurite.push(['niveau3', data['Avancé']]);
+            modificateurs.niveauDeSecurite.push(['niveau3', data['Avancé']]);
         }
 
         resultat.push({
