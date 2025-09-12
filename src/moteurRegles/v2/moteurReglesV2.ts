@@ -11,7 +11,7 @@ export type Modificateur =
   | 'Ajouter'
   | 'Retirer';
 
-type CaracteristiquesDuService =
+export type CaracteristiquesDuService =
   | 'niveauDeSecurite'
   | 'categorieDonneesTraitees';
 
@@ -27,11 +27,11 @@ export type ReglesDuReferentielMesuresV2 = RegleDuReferentielV2[];
 
 export class MoteurReglesV2 {
   private readonly referentiel: Referentiel;
-  private readonly menu: ReglesDuReferentielMesuresV2;
+  private readonly regles: ReglesDuReferentielMesuresV2;
 
-  constructor(referentiel: Referentiel, menu: ReglesDuReferentielMesuresV2) {
+  constructor(referentiel: Referentiel, regles: ReglesDuReferentielMesuresV2) {
     this.referentiel = referentiel;
-    this.menu = menu;
+    this.regles = regles;
   }
 
   mesures(descriptionService: DescriptionServiceV2) {
@@ -43,7 +43,7 @@ export class MoteurReglesV2 {
     >;
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const ligne of this.menu) {
+    for (const ligne of this.regles) {
       const modifications = this.evalueLigne(ligne, descriptionEnRecord);
 
       if (modifications.doitAjouter())
