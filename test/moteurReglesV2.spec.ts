@@ -26,7 +26,7 @@ describe('Le moteur de règles V2', () => {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: true,
         modificateurs: {
-          niveauDeSecurite: [['niveau1', Modificateur.RendreIndispensable]],
+          niveauDeSecurite: [['niveau1', 'RendreIndispensable']],
         },
       },
     ]);
@@ -48,7 +48,7 @@ describe('Le moteur de règles V2', () => {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: true,
         modificateurs: {
-          niveauDeSecurite: [['niveau1', Modificateur.RendreRecommandee]],
+          niveauDeSecurite: [['niveau1', 'RendreRecommandee']],
         },
       },
     ]);
@@ -70,7 +70,7 @@ describe('Le moteur de règles V2', () => {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: false, // Pas dans le socle initial
         modificateurs: {
-          niveauDeSecurite: [['niveau1', Modificateur.Ajouter]],
+          niveauDeSecurite: [['niveau1', 'Ajouter']],
         },
       },
     ]);
@@ -92,7 +92,7 @@ describe('Le moteur de règles V2', () => {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: true,
         modificateurs: {
-          niveauDeSecurite: [['niveau1', Modificateur.Retirer]],
+          niveauDeSecurite: [['niveau1', 'Retirer']],
         },
       },
     ]);
@@ -114,8 +114,8 @@ describe('Le moteur de règles V2', () => {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: false,
         modificateurs: {
-          niveauDeSecurite: [['niveau1', Modificateur.Ajouter]],
-          nomService: [['un-nom-exemple', Modificateur.RendreIndispensable]],
+          niveauDeSecurite: [['niveau1', 'Ajouter']],
+          nomService: [['un-nom-exemple', 'RendreIndispensable']],
         },
       },
     ]);
@@ -140,7 +140,7 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: true,
         modificateurs: {
           // Ici le modificateur est sur le `nomService`
-          nomService: [['un-nom-exemple', Modificateur.RendreIndispensable]],
+          nomService: [['un-nom-exemple', 'RendreIndispensable']],
         },
       },
     ]);

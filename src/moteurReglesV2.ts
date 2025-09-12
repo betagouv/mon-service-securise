@@ -4,12 +4,11 @@ import { mesuresV2 } from '../donneesReferentielMesuresV2.js';
 
 type IdMesureV2 = keyof typeof mesuresV2;
 
-export enum Modificateur {
-  RendreIndispensable,
-  RendreRecommandee,
-  Ajouter,
-  Retirer,
-}
+export type Modificateur =
+  | 'RendreIndispensable'
+  | 'RendreRecommandee'
+  | 'Ajouter'
+  | 'Retirer';
 
 export type RegleDuReferentielV2 = {
   reference: IdMesureV2;
@@ -32,13 +31,12 @@ class Modifications {
 
   doitAjouter() {
     const nonExclue =
-      this.dansSocleInitial &&
-      !this.modificateurs.includes(Modificateur.Retirer);
-    return nonExclue || this.modificateurs.includes(Modificateur.Ajouter);
+      this.dansSocleInitial && !this.modificateurs.includes('Retirer');
+    return nonExclue || this.modificateurs.includes('Ajouter');
   }
 
   rendreIndispensable() {
-    return this.modificateurs.includes(Modificateur.RendreIndispensable);
+    return this.modificateurs.includes('RendreIndispensable');
   }
 }
 
