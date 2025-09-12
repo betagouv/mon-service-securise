@@ -5,7 +5,9 @@
 - [ ] moteur v2 : optimisation pour `break` la boucle d'évaluation d'un champ dès qu'on a un match ?
   - ça veut dire dès que `if (valeurReelle === valeurRegle)` est vrai, on `break;`
 - [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.
-- [ ] Parsing complet du CSV : jeter une erreur si une valeur de modificateur est inconnue
+- [ ] Parsing du CSV jette des erreurs en cas de statut initial inconnu
+- [ ] Parsing du CSV jette des erreurs en cas de "il manque des colonnes attendues"
+- [ ] Parsing du CSV : vers du code générique qui boucle sur une collection de tous les champs attendus
 - [ ] chaque étape de décrire permet de mettre à jour une propriété du brouillon
   - [ ] la route permettant de rajouter des données vérifie la cohérence de ces données (via `referentiel` ou via `zod` ?)
 - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
@@ -28,6 +30,8 @@
 
 ## DONE
 
+- [x] Parsing du CSV jette des erreurs en cas de modificateur inconnu du référentiel
+- [x] Le moteur de règles v2 jette des erreurs en cas de mesure inconnue du référentiel
 - [x] Un CSV peut être converti en règles MSS
 - [x] Le moteur v2 travaille sur certaines clés bien définies de la DescriptionServiceV2
 - [x] Le moteur de règles v2 gère plusieurs valeurs+modificateurs pour un même champ
