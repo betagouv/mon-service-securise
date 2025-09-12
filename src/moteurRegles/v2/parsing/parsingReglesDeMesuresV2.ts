@@ -2,7 +2,7 @@ import {
   Modificateur,
   ReglesDuReferentielMesuresV2,
 } from '../moteurReglesV2.js';
-import { mesuresV2 } from '../../donneesReferentielMesuresV2.js';
+import { mesuresV2 } from '../../../../donneesReferentielMesuresV2.js';
 
 type ModificateurBrut = 'Indispensable';
 

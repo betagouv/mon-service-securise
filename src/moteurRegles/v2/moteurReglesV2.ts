@@ -1,6 +1,7 @@
-import { Referentiel } from './referentiel.interface.js';
-import { DescriptionServiceV2 } from './modeles/descriptionServiceV2.js';
-import { mesuresV2 } from '../donneesReferentielMesuresV2.js';
+import { Referentiel } from '../../referentiel.interface.js';
+import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
+import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
+import { Modifications } from './modifications.js';
 
 type IdMesureV2 = keyof typeof mesuresV2;
 
@@ -17,28 +18,6 @@ export type RegleDuReferentielV2 = {
 };
 
 export type ReglesDuReferentielMesuresV2 = RegleDuReferentielV2[];
-
-class Modifications {
-  private modificateurs: Modificateur[];
-
-  constructor(private readonly dansSocleInitial: boolean) {
-    this.modificateurs = [];
-  }
-
-  ajoute(modificateur: Modificateur) {
-    this.modificateurs.push(modificateur);
-  }
-
-  doitAjouter() {
-    const nonExclue =
-      this.dansSocleInitial && !this.modificateurs.includes('Retirer');
-    return nonExclue || this.modificateurs.includes('Ajouter');
-  }
-
-  rendreIndispensable() {
-    return this.modificateurs.includes('RendreIndispensable');
-  }
-}
 
 export class MoteurReglesV2 {
   private readonly referentiel: Referentiel;

@@ -1,6 +1,6 @@
-import * as Referentiel from './referentiel.js';
-import Profil from './modeles/profils/profil.js';
-import * as adaptateurEnvironnement from './adaptateurs/adaptateurEnvironnement.js';
+import * as Referentiel from '../../referentiel.js';
+import Profil from '../../modeles/profils/profil.js';
+import * as adaptateurEnvironnement from '../../adaptateurs/adaptateurEnvironnement.js';
 
 class MoteurRegles {
   constructor(

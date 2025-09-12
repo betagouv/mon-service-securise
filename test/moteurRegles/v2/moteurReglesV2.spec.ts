@@ -1,6 +1,6 @@
-import { Modificateur, MoteurReglesV2 } from '../src/moteurReglesV2.js';
-import { creeReferentiel } from '../src/referentiel.js';
-import { DescriptionServiceV2 } from '../src/modeles/descriptionServiceV2.js';
+import { MoteurReglesV2 } from '../../../src/moteurRegles/v2/moteurReglesV2.js';
+import { creeReferentiel } from '../../../src/referentiel.js';
+import { DescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.js';
 
 describe('Le moteur de règles V2', () => {
   it('renvoie les mesures qui sont dans le socle initial si elles ne sont pas exclues ensuite', () => {

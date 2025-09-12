@@ -1,7 +1,7 @@
 import {
   ParsingReglesDeMesuresV2,
   RegleBrut,
-} from '../../src/parsingReferentielMesuresV2/parsingReglesDeMesuresV2.js';
+} from '../../../../src/moteurRegles/v2/parsing/parsingReglesDeMesuresV2.js';
 
 describe('Le parsing des règles des mesures v2', () => {
   it('existe', () => {
