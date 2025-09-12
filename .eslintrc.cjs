@@ -88,6 +88,8 @@ module.exports = {
         // Les exports par défaut empêchent les LSP de nos IDE de suivre les définitions & références dans le code
         'import/prefer-default-export': 'off',
         'lines-between-class-members': 'off',
+        // On veut pouvoir utiliser les constructeurs avec
+        'no-useless-constructor': 'off',
       },
     },
     {

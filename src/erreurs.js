@@ -106,6 +106,8 @@ class ErreurTeleversementInvalide extends ErreurModele {}
 
 class ErreurBrouillonInexistant extends ErreurModele {}
 
+class ErreurMoteurDeReglesV2 extends ErreurModele {}
+
 export {
   EchecAutorisation,
   EchecEnvoiMessage,
@@ -147,6 +149,7 @@ export {
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurMotDePasseIncorrect,
   ErreurModele,
+  ErreurMoteurDeReglesV2,
   ErreurNiveauGraviteInconnu,
   ErreurNiveauVraisemblanceInconnu,
   ErreurNombreLimiteModelesMesureSpecifiqueAtteint,

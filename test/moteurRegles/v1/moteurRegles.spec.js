@@ -1,7 +1,7 @@
 import expect from 'expect.js';
-import DescriptionService from '../src/modeles/descriptionService.js';
-import MoteurRegles from '../src/moteurRegles.js';
-import * as Referentiel from '../src/referentiel.js';
+import DescriptionService from '../../../src/modeles/descriptionService.js';
+import MoteurRegles from '../../../src/moteurRegles/v1/moteurRegles.js';
+import * as Referentiel from '../../../src/referentiel.js';
 
 describe('Le moteur de règles', () => {
   it('détermine quelles mesures ajouter en fonction de la description du service', () => {

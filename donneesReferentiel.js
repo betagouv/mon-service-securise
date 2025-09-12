@@ -1,4 +1,5 @@
 import { departements } from './donneesReferentielDepartements.js';
+import { mesuresV2, questionsV2 } from './donneesReferentielMesuresV2.js';
 
 const recommandationPoursuiteRenforcement =
   "L'ANSSI recommande la poursuite du renforcement de la sécurité du service numérique.";
@@ -1428,6 +1429,9 @@ export default {
       identifiantNumerique: '0062',
     },
   },
+
+  mesuresV2,
+  questionsV2,
 
   localisationsDonnees: {
     france: { description: 'France' },

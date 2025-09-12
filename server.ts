@@ -2,7 +2,7 @@ import { fabriqueAdaptateurProfilAnssi } from './src/adaptateurs/fabriqueAdaptat
 import CmsCrisp from './src/cms/cmsCrisp.js';
 import Middleware from './src/http/middleware.js';
 import * as DepotDonnees from './src/depotDonnees.js';
-import MoteurRegles from './src/moteurRegles.js';
+import MoteurRegles from './src/moteurRegles/v1/moteurRegles.js';
 import * as MSS from './src/mss.js';
 import * as Referentiel from './src/referentiel.js';
 import { fabriqueAnnuaire } from './src/annuaire/serviceAnnuaire.js';

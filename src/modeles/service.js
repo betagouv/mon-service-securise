@@ -1,4 +1,4 @@
-import MoteurRegles from '../moteurRegles.js';
+import MoteurRegles from '../moteurRegles/v1/moteurRegles.js';
 import * as Referentiel from '../referentiel.js';
 import DescriptionService from './descriptionService.js';
 import Dossiers from './dossiers.js';
@@ -17,6 +17,7 @@ import { Contributeur } from './contributeur.js';
 import { DescriptionServiceV2 } from './descriptionServiceV2.js';
 import Entite from './entite.js';
 import { VersionService } from './versionService.js';
+import { MoteurReglesV2 } from '../moteurRegles/v2/moteurReglesV2.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -25,11 +26,19 @@ const NIVEAUX = {
   NIVEAU_SECURITE_INSUFFISANT: 'insuffisant',
 };
 
+function fabriqueMoteurDeRegles(donnees, referentiel) {
+  if (donnees.versionService === VersionService.v2) {
+    const menuVidePourLeMoment = [];
+    return new MoteurReglesV2(referentiel, menuVidePourLeMoment);
+  }
+  return new MoteurRegles(referentiel);
+}
+
 class Service {
   constructor(
     donnees,
     referentiel = Referentiel.creeReferentielVide(),
-    moteurRegles = new MoteurRegles(referentiel)
+    moteurRegles = fabriqueMoteurDeRegles(donnees, referentiel)
   ) {
     const {
       id = '',
