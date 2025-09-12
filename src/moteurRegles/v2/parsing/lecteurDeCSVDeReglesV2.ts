@@ -32,23 +32,12 @@ export class LecteurDeCSVDeReglesV2 {
       transform: (value: string, field: string) => {
         if (field === 'REF' && !this.estMesureConnueDeMSS(value))
           throw new ErreurMoteurDeReglesV2(
-            `La mesure ${value} n'existe pas dans le référentiel MSS`
+            `La mesure '${value}' n'existe pas dans le référentiel MSS`
           );
 
-        if (field === 'Basique') {
-          if (value === 'Indispensable') return 'RendreIndispensable';
-          if (value === 'Recommandation') return 'RendreRecommandee';
-        }
-
-        if (field === 'Modéré') {
-          if (value === 'Indispensable') return 'RendreIndispensable';
-          if (value === 'Recommandation') return 'RendreRecommandee';
-        }
-
-        if (field === 'Avancé') {
-          if (value === 'Indispensable') return 'RendreIndispensable';
-          if (value === 'Recommandation') return 'RendreRecommandee';
-        }
+        if (field === 'Basique') return this.traduisModificateur(value);
+        if (field === 'Modéré') return this.traduisModificateur(value);
+        if (field === 'Avancé') return this.traduisModificateur(value);
 
         return value;
       },
@@ -83,6 +72,17 @@ export class LecteurDeCSVDeReglesV2 {
   ): reference is keyof typeof mesuresV2 {
     return (
       this.referentielMesures[reference as keyof typeof mesuresV2] !== undefined
+    );
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private traduisModificateur(valeurCSV: string): Modificateur | null {
+    if (!valeurCSV) return null;
+    if (valeurCSV === 'Indispensable') return 'RendreIndispensable';
+    if (valeurCSV === 'Recommandation') return 'RendreRecommandee';
+
+    throw new ErreurMoteurDeReglesV2(
+      `Le modificateur '${valeurCSV}' est inconnu`
     );
   }
 }

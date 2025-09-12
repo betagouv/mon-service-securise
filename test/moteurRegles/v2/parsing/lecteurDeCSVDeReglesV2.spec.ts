@@ -84,8 +84,16 @@ describe('Le lecteur de CSV de règles V2', () => {
       lisLeFichier(`MESURES_V2_MAUVAIS_ID.csv`)
     ).rejects.toThrowError(
       new ErreurMoteurDeReglesV2(
-        "La mesure MAUVAIS_ID n'existe pas dans le référentiel MSS"
+        "La mesure 'MAUVAIS_ID' n'existe pas dans le référentiel MSS"
       )
+    );
+  });
+
+  it('jette une erreur si un modificateur est inconnu', async () => {
+    await expect(
+      lisLeFichier(`MESURES_V2_MAUVAIS_MODIFICATEUR.csv`)
+    ).rejects.toThrowError(
+      new ErreurMoteurDeReglesV2("Le modificateur 'PasQuoiFaire' est inconnu")
     );
   });
 });
