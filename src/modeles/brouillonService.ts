@@ -1,5 +1,9 @@
 import { UUID } from '../typesBasiques.js';
 import { VersionService } from './versionService.js';
+import {
+  DonneesDescriptionServiceV2,
+  StatutDeploiement,
+} from './descriptionServiceV2.js';
 
 export type DonneesBrouillonService = {
   nomService: string;
@@ -30,12 +34,19 @@ export class BrouillonService {
     this[nomPropriete as ProprietesBrouillonService] = valeur;
   }
 
-  enDonneesCreationServiceV2() {
+  enDonneesCreationServiceV2(): {
+    versionService: VersionService;
+    descriptionService: DonneesDescriptionServiceV2;
+  } {
     return {
       versionService: VersionService.v2,
       descriptionService: {
         nomService: this.nomService,
-        organisationResponsable: { siret: this.siret },
+        organisationResponsable: { siret: this.siret! },
+        statutDeploiement: this.statutDeploiement as StatutDeploiement,
+        niveauDeSecurite: '', // TODO : Étape 5
+        categorieDonneesTraitees: 'donneesSensibles', // TODO : Étape 3 > Question 4
+        volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
       },
     };
   }
