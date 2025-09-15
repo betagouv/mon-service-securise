@@ -3,6 +3,7 @@ import { ErreurDonneesReferentielIncorrectes } from '../src/erreurs.js';
 import * as Referentiel from '../src/referentiel.js';
 import donneesDeProd from '../donneesReferentiel.js';
 import Risque from '../src/modeles/risque.js';
+import { creeReferentielVide } from '../src/referentiel.js';
 
 describe('Le référentiel', () => {
   describe('à sa création', () => {
@@ -1187,6 +1188,19 @@ describe('Le référentiel', () => {
         );
 
       expect(estSuperieur).to.be(true);
+    });
+  });
+
+  describe('concernant les règles du moteur de règles v2', () => {
+    it("peut restituer les règles qu'on lui donne", () => {
+      const referentiel = creeReferentielVide();
+
+      referentiel.enregistreReglesMoteurV2([
+        { reference: 'RECENSEMENT.1', socleInitial: true, modificateurs: [] },
+      ]);
+
+      expect(referentiel.reglesMoteurV2().length).to.be(1);
+      expect(referentiel.reglesMoteurV2()[0].reference).to.be('RECENSEMENT.1');
     });
   });
 });

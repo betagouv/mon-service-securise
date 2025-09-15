@@ -4,7 +4,6 @@ import Middleware from './src/http/middleware.js';
 import * as DepotDonnees from './src/depotDonnees.js';
 import MoteurRegles from './src/moteurRegles/v1/moteurRegles.js';
 import * as MSS from './src/mss.js';
-import * as Referentiel from './src/referentiel.js';
 import { fabriqueAnnuaire } from './src/annuaire/serviceAnnuaire.js';
 import * as adaptateurCsv from './src/adaptateurs/adaptateurCsv.js';
 import * as adaptateurEnvironnement from './src/adaptateurs/adaptateurEnvironnement.js';
@@ -35,6 +34,7 @@ import { fabriqueServiceGestionnaireSession } from './src/session/serviceGestion
 import { fabriqueServiceVerificationCoherenceSels } from './src/sel/serviceVerificationCoherenceSels.js';
 import { sendinblue } from './src/adaptateurs/adaptateurEnvironnement.js';
 import { fabriqueAdaptateurMailMemoire } from './src/adaptateurs/adaptateurMailMemoire.js';
+import { fabriqueReferentiel } from './src/fabriqueReferentiel.js';
 
 const adaptateurHorloge = fabriqueAdaptateurHorloge();
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
@@ -52,7 +52,7 @@ const adaptateurMail = sendinblue().clefAPIEmail()
 const busEvenements = new BusEvenements({ adaptateurGestionErreur });
 const port = process.env.PORT || 3000;
 
-const referentiel = Referentiel.creeReferentiel();
+const referentiel = fabriqueReferentiel();
 const moteurRegles = new MoteurRegles(referentiel);
 const serviceCgu = fabriqueServiceCgu({ referentiel });
 const depotDonnees = DepotDonnees.creeDepot({
@@ -62,6 +62,7 @@ const depotDonnees = DepotDonnees.creeDepot({
   adaptateurJWT,
   serviceCgu,
   busEvenements,
+  referentiel,
 });
 
 const serviceAnnuaire = fabriqueAnnuaire({

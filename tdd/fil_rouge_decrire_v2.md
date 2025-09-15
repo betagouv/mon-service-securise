@@ -13,8 +13,7 @@
   - [ ] la route permettant de rajouter des données vérifie la cohérence de ces données (via `referentiel` ou via `zod` ?)
 - [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
   - ce moteur de règles génère une liste de mesures v2
-- une fois le code compilé, où est le CSV de prod ? à copier dans dist ?
-- ne passer que les mesures v2 au constructeur du moteur de règle v2 ? pas besoin du référentiel ?
+- [ ] ne passer que les mesures v2 au constructeur du moteur de règle v2 ? pas besoin du référentiel ?
 
 ## TODO plus tard
 
@@ -33,6 +32,7 @@
 
 ## DONE
 
+- [x] une fois le code compilé, où est le CSV de prod ? à copier dans dist ?
 - [x] récupérer la description/catégorie/etc. depuis le référentiel dans le moteur de règles
 - [x] Parsing du CSV jette des erreurs en cas de statut initial inconnu
 - [x] Parsing du CSV jette des erreurs en cas de modificateur inconnu du référentiel

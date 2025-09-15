@@ -28,8 +28,7 @@ const NIVEAUX = {
 
 function fabriqueMoteurDeRegles(donnees, referentiel) {
   if (donnees.versionService === VersionService.v2) {
-    const menuVidePourLeMoment = [];
-    return new MoteurReglesV2(referentiel, menuVidePourLeMoment);
+    return new MoteurReglesV2(referentiel, referentiel.reglesMoteurV2());
   }
   return new MoteurRegles(referentiel);
 }
