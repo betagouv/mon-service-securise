@@ -4,30 +4,38 @@ import {
   CategorieDonneesTraitees,
   VolumetrieDonneesTraitees,
 } from '../../donneesReferentielMesuresV2.js';
+import donneesReferentiel from '../../donneesReferentiel.js';
 
 export type DonneesEntite = {
   siret: string;
   nom?: string;
   departement?: string;
 };
+
+export type StatutDeploiement =
+  keyof typeof donneesReferentiel.statutsDeploiement;
+
 export type DonneesDescriptionServiceV2 = {
   nomService: string;
   organisationResponsable: DonneesEntite;
   niveauDeSecurite: string;
   categorieDonneesTraitees: CategorieDonneesTraitees;
   volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
+  statutDeploiement: StatutDeploiement;
 };
 
 export class DescriptionServiceV2 {
   readonly nomService: string;
   readonly organisationResponsable: Entite;
   readonly niveauDeSecurite: string;
+  readonly statutDeploiement: StatutDeploiement;
   readonly categorieDonneesTraitees: CategorieDonneesTraitees;
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
 
   constructor(donnees: DonneesDescriptionServiceV2) {
     this.nomService = donnees.nomService;
     this.organisationResponsable = new Entite(donnees.organisationResponsable);
+    this.statutDeploiement = donnees.statutDeploiement;
     this.niveauDeSecurite = donnees.niveauDeSecurite;
     this.categorieDonneesTraitees = donnees.categorieDonneesTraitees;
     this.volumetrieDonneesTraitees = donnees.volumetrieDonneesTraitees;
@@ -46,6 +54,7 @@ export class DescriptionServiceV2 {
       niveauDeSecurite: this.niveauDeSecurite,
       organisationResponsable:
         this.organisationResponsable.toJSON() as DonneesEntite,
+      statutDeploiement: this.statutDeploiement,
       volumetrieDonneesTraitees: this.volumetrieDonneesTraitees,
       nomService: this.nomService,
     };

@@ -13,6 +13,7 @@ class ConstructeurDescriptionServiceV2 {
       organisationResponsable: { siret: '11112222333344' },
       categorieDonneesTraitees: 'donneesSensibles',
       volumetrieDonneesTraitees: 'moyen',
+      statutDeploiement: 'enCours',
     };
   }
 
