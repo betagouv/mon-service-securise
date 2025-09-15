@@ -105,4 +105,12 @@ describe('Le lecteur de CSV de règles V2', () => {
       new ErreurMoteurDeReglesV2("Le modificateur 'PasQuoiFaire' est inconnu")
     );
   });
+
+  it('peut lire le CSV de production', async () => {
+    const reglesDeProd = await lisLeFichier(
+      '../../../../src/moteurRegles/v2/mesures_V2_prod.csv'
+    );
+
+    expect(reglesDeProd).toHaveLength(1);
+  });
 });

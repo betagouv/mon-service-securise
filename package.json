@@ -6,7 +6,7 @@
   "scripts": {
     "build": "knex migrate:latest && npm run build:front && npm run build:cree-utilisateur-demo",
     "build:front": "npx vite build --config svelte/vite.config.mts",
-    "build:back": "npx tsc",
+    "build:back": "npx tsc && cp ./src/moteurRegles/v2/mesures_V2_prod.csv ./dist/src/moteurRegles/v2/",
     "build:cree-utilisateur-demo": "npm run build:back && node dist/creeUtilisateurDemo.js",
     "dev:back": "node --watch --import tsx server.ts",
     "dev:front": "cd svelte && npx vite dev --host 0.0.0.0",
@@ -79,6 +79,7 @@
     "@types/express": "^5.0.3",
     "@types/papaparse": "^5.3.16",
     "@types/uuid": "^10.0.0",
+    "@types/node": "^22",
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.0.0",
     "@vitest/eslint-plugin": "^1.3.4",
