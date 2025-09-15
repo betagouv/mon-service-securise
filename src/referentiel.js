@@ -105,7 +105,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const mesureIndispensable = (idMesure) =>
     !!donnees.mesures[idMesure].indispensable;
   const mesures = () => structuredClone(donnees.mesures);
-  const identifiantsMesures = () => Object.keys(donnees.mesures);
+  const identifiantsMesures = () =>
+    Object.keys(donnees.mesures).concat(Object.keys(donnees.mesuresV2 || {}));
   const estIdentifiantMesureConnu = (id) => identifiantsMesures().includes(id);
   const mesure = (id) => structuredClone(donnees.mesures[id]);
   const typesService = () => donnees.typesService;
