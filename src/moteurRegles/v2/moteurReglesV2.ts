@@ -47,11 +47,13 @@ export class MoteurReglesV2 {
     // eslint-disable-next-line no-restricted-syntax
     for (const ligne of this.regles) {
       const modifications = this.evalueLigne(ligne, descriptionEnRecord);
-
       if (modifications.doitAjouter())
         mesures.push([
           ligne.reference,
-          { indispensable: modifications.rendreIndispensable() },
+          {
+            indispensable: modifications.rendreIndispensable(),
+            ...this.referentiel.mesureV2AvecID(ligne.reference),
+          },
         ]);
     }
 

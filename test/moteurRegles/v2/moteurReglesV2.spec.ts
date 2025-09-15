@@ -1,5 +1,8 @@
 import { MoteurReglesV2 } from '../../../src/moteurRegles/v2/moteurReglesV2.js';
-import { creeReferentiel } from '../../../src/referentiel.js';
+import {
+  creeReferentiel,
+  creeReferentielVide,
+} from '../../../src/referentiel.js';
 import { DescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.js';
 
 function uneDescriptionAuNiveau(niveauDeSecurite: string) {
@@ -22,7 +25,7 @@ describe('Le moteur de règles V2', () => {
     const peuImporte = uneDescriptionAuNiveau('');
     const mesures = v2.mesures(peuImporte);
 
-    expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: false } });
+    expect(Object.keys(mesures)).toEqual(['RECENSEMENT.1']);
   });
 
   it('sait rendre une mesure « Indispensable »', () => {
@@ -40,7 +43,7 @@ describe('Le moteur de règles V2', () => {
     const serviceNiveau1 = uneDescriptionAuNiveau('niveau1');
     const mesures = v2.mesures(serviceNiveau1);
 
-    expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: true } });
+    expect(mesures['RECENSEMENT.1'].indispensable).toBe(true);
   });
 
   it('sait rendre une mesure « Recommandée »', () => {
@@ -58,7 +61,7 @@ describe('Le moteur de règles V2', () => {
     const serviceNiveau1 = uneDescriptionAuNiveau('niveau1');
     const mesures = v2.mesures(serviceNiveau1);
 
-    expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: false } });
+    expect(mesures['RECENSEMENT.1'].indispensable).toBe(false);
   });
 
   it('sait rajouter une mesure', () => {
@@ -76,7 +79,7 @@ describe('Le moteur de règles V2', () => {
     const serviceNiveau1 = uneDescriptionAuNiveau('niveau1');
     const mesures = v2.mesures(serviceNiveau1);
 
-    expect(mesures).toEqual({ 'RECENSEMENT.1': { indispensable: false } });
+    expect(mesures['RECENSEMENT.1']).toBeDefined();
   });
 
   it('sait retirer une mesure', () => {
@@ -115,8 +118,28 @@ describe('Le moteur de règles V2', () => {
     const serviceNiveau1AvecNomExemple = uneDescriptionAuNiveau('niveau1');
     const mesures = v2.mesures(serviceNiveau1AvecNomExemple);
 
-    expect(mesures).toEqual({
-      'RECENSEMENT.1': { indispensable: true },
+    expect(mesures['RECENSEMENT.1'].indispensable).toBe(true);
+  });
+
+  it('renvoie les mesures complétées avec leurs données référentielles', () => {
+    const referentiel = creeReferentielVide();
+    referentiel.recharge({
+      mesuresV2: {
+        'RECENSEMENT.1': {
+          description: 'Recenser…',
+          referentiel: 'ANSSI',
+          categorie: 'resilience',
+        },
+      },
     });
+    const v2 = new MoteurReglesV2(referentiel, [
+      { reference: 'RECENSEMENT.1', dansSocleInitial: true, modificateurs: {} },
+    ]);
+
+    const mesures = v2.mesures(uneDescriptionAuNiveau('niveau1'));
+
+    expect(mesures['RECENSEMENT.1'].categorie).toBe('resilience');
+    expect(mesures['RECENSEMENT.1'].referentiel).toBe('ANSSI');
+    expect(mesures['RECENSEMENT.1'].description).toBe('Recenser…');
   });
 });

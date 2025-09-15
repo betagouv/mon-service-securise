@@ -37,6 +37,14 @@ const donneesReferentielVide = {
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   let donnees = donneesReferentiel;
 
+  let reglesMoteurV2Enregistrees = [];
+  const enregistreReglesMoteurV2 = (regles) =>
+    (reglesMoteurV2Enregistrees = regles);
+
+  const reglesMoteurV2 = () => reglesMoteurV2Enregistrees;
+
+  const mesureV2AvecID = (idMesure) => donnees.mesuresV2[idMesure];
+
   const versionActuelleCgu = () => donnees.versionActuelleCgu || true;
   const statutsAvisDossierHomologation = () =>
     donnees.statutsAvisDossierHomologation || {};
@@ -523,6 +531,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     mesure,
     mesureIndispensable,
     mesures,
+    mesureV2AvecID,
     nbMoisDecalage,
     nbMoisBientotExpire,
     nbMoisRappelsExpiration,
