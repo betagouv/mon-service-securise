@@ -112,11 +112,11 @@
     </div>
   </div>
   <aside>
-    <img
-      alt=""
-      src="/statique/assets/images/illustration_accueil_connexion.svg"
-    />
-    <p>Pourquoi demander ces informations ?</p>
+    <img alt="" src={$etapeCourante.illustration} />
+    <h3>Pourquoi demander ces informations ?</h3>
+    {#each $etapeCourante.questionCourante.explications as explication}
+      <p>{explication}</p>
+    {/each}
   </aside>
 </div>
 
@@ -171,6 +171,20 @@
       img {
         width: 100%;
         max-width: 400px;
+      }
+
+      h3 {
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        font-weight: bold;
+        margin: 24px 0 8px;
+        color: #0d0c21;
+      }
+
+      p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+        color: #161616;
       }
     }
   }

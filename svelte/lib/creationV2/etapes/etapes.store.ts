@@ -21,12 +21,14 @@ type ComposantQuestion = typeof SvelteComponent<QuestionProps>;
 type QuestionAvecIdentifiantPropriete = {
   clePropriete: keyof Brouillon;
   composant: ComposantQuestion;
+  explications: string[];
 };
 
 type PropsEtape = {
   numero: number;
   titre: string;
   questions: QuestionAvecIdentifiantPropriete[];
+  illustration: string;
 };
 
 type EtatFormulaireCreation = {
@@ -39,12 +41,32 @@ const toutesEtapes: PropsEtape[] = [
   {
     numero: 1,
     titre: 'Informations génériques sur le projet',
+    illustration: '/statique/assets/images/illustration_accueil_connexion.svg',
     questions: [
-      { clePropriete: 'nomService', composant: QuestionNomService },
-      { clePropriete: 'siret', composant: QuestionSiret },
+      {
+        clePropriete: 'nomService',
+        composant: QuestionNomService,
+        explications: [
+          'Dans tout projet d’homologation, il est primordial d’identifier le périmètre sur lequel les travaux vont être menés.',
+          'Le choix du périmètre dépend de la nature des données traitées et de sa complexité.',
+          'Le périmètre du système d’information à homologuer est l’ensemble des composants du système d’information dans lequel l’information est traitée et pour lequel une autorité a été identifiée',
+        ],
+      },
+      {
+        clePropriete: 'siret',
+        composant: QuestionSiret,
+        explications: [
+          "Ces informations permettent de donner de la visibilité sur l'homologation au top-management de votre entité.",
+        ],
+      },
       {
         clePropriete: 'statutDeploiement',
         composant: QuestionStatutDeploiement,
+        explications: [
+          "Ces informations permettent de juger de l'adhérence du processus d'homologation au sein de votre entité. ",
+          'En effet, ce processus doit normalement démarrer lorsque le service est encore en conception, et non pas en production.',
+          "Cela permet notamment d'éviter des coûts importants de correction.",
+        ],
       },
     ],
   },
@@ -153,16 +175,19 @@ type EtapeCourante = {
   questionCourante: QuestionAvecIdentifiantPropriete;
   estDerniereQuestion: boolean;
   estPremiereQuestion: boolean;
+  illustration: string;
 };
 
 export const etapeCourante = derived<[typeof etapeStore], EtapeCourante>(
   [etapeStore],
   ([$etapeStore]) => {
-    const { numero, titre, questions } = toutesEtapes[$etapeStore.etapeEnCours];
+    const { numero, titre, questions, illustration } =
+      toutesEtapes[$etapeStore.etapeEnCours];
     return {
       numero,
       numeroMax: toutesEtapes.length,
       titre,
+      illustration,
       titreEtapeSuivante: toutesEtapes[$etapeStore.etapeEnCours + 1]?.titre,
       numeroQuestionCourante: $etapeStore.questionEnCours + 1,
       nombreQuestions: questions.length,
