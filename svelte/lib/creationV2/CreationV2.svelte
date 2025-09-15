@@ -51,13 +51,18 @@
 <div class="conteneur-creation">
   <div class="formulaire-creation">
     <div class="contenu-formulaire">
-      <span>Étape {$etapeCourante.numero} sur {$etapeCourante.numeroMax}</span>
-      <h2>{$etapeCourante.titre}</h2>
-      {#if $etapeCourante.titreEtapeSuivante}
-        <span><b>Étape suivante :</b> {$etapeCourante.titreEtapeSuivante}</span>
-      {/if}
+      <div class="etapier">
+        <span>Étape {$etapeCourante.numero} sur {$etapeCourante.numeroMax}</span
+        >
+        <h2>{$etapeCourante.titre}</h2>
+        {#if $etapeCourante.titreEtapeSuivante}
+          <span class="suivante"
+            ><b>Étape suivante :</b> {$etapeCourante.titreEtapeSuivante}</span
+          >
+        {/if}
+      </div>
       <hr />
-      <span
+      <span class="courante"
         ><b
           >Question {$etapeCourante.numeroQuestionCourante} sur {$etapeCourante.nombreQuestions}</b
         ></span
@@ -141,9 +146,34 @@
         gap: 24px;
         max-width: 684px;
         margin: auto;
+        padding-top: 44px;
+
+        .etapier {
+          h2 {
+            margin: 4px 0 0;
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+          }
+          .suivante {
+            font-size: 0.75rem;
+            line-height: 1.25rem;
+            color: #666;
+          }
+        }
 
         hr {
           width: 100%;
+          color: #ddd;
+          background: #ddd;
+          border-color: transparent;
+          border-bottom: none;
+          margin: 8px 0;
+        }
+
+        .courante {
+          font-size: 0.75rem;
+          line-height: 1.25rem;
+          color: #666;
         }
 
         :global(label) {
@@ -157,7 +187,7 @@
 
         .barre-boutons {
           display: flex;
-          gap: 12px;
+          gap: 16px;
           margin-top: 8px;
         }
       }

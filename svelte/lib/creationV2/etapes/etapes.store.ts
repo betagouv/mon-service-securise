@@ -70,6 +70,12 @@ const toutesEtapes: PropsEtape[] = [
       },
     ],
   },
+  {
+    numero: 2,
+    titre: 'Caractéristiques du service',
+    illustration: '/statique/assets/images/home/illustration_etape_2.svg',
+    questions: [],
+  },
 ];
 
 export const toutesClesPropriete = toutesEtapes.flatMap((e) =>
