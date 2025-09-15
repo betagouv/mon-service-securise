@@ -22,6 +22,7 @@ export type DonneesDescriptionServiceV2 = {
   categorieDonneesTraitees: CategorieDonneesTraitees;
   volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   statutDeploiement: StatutDeploiement;
+  presentation: string;
 };
 
 export class DescriptionServiceV2 {
@@ -31,6 +32,7 @@ export class DescriptionServiceV2 {
   readonly statutDeploiement: StatutDeploiement;
   readonly categorieDonneesTraitees: CategorieDonneesTraitees;
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
+  private readonly presentation: string;
 
   constructor(donnees: DonneesDescriptionServiceV2) {
     this.nomService = donnees.nomService;
@@ -39,6 +41,7 @@ export class DescriptionServiceV2 {
     this.niveauDeSecurite = donnees.niveauDeSecurite;
     this.categorieDonneesTraitees = donnees.categorieDonneesTraitees;
     this.volumetrieDonneesTraitees = donnees.volumetrieDonneesTraitees;
+    this.presentation = donnees.presentation;
   }
 
   static valideDonneesCreation() {}
@@ -57,6 +60,7 @@ export class DescriptionServiceV2 {
       statutDeploiement: this.statutDeploiement,
       volumetrieDonneesTraitees: this.volumetrieDonneesTraitees,
       nomService: this.nomService,
+      presentation: this.presentation,
     };
   }
 }

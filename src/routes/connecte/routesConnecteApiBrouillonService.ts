@@ -20,6 +20,7 @@ const routesConnecteApiBrouillonService = ({
     siret: z.string().regex(/^\d{14}$/),
     nomService: z.string().trim().nonempty(),
     statutDeploiement: z.enum(Object.keys(referentiel.statutsDeploiement())),
+    presentation: z.string().trim().nonempty(),
   });
 
   routes.post(
@@ -47,7 +48,12 @@ const routesConnecteApiBrouillonService = ({
     valideParams(
       z.strictObject({
         id: z.uuidv4(),
-        nomPropriete: z.enum(['siret', 'nomService', 'statutDeploiement']),
+        nomPropriete: z.enum([
+          'siret',
+          'nomService',
+          'statutDeploiement',
+          'presentation',
+        ]),
       })
     ),
     async (requete, reponse, suite) => {

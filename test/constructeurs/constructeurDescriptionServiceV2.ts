@@ -14,6 +14,7 @@ class ConstructeurDescriptionServiceV2 {
       categorieDonneesTraitees: 'donneesSensibles',
       volumetrieDonneesTraitees: 'moyen',
       statutDeploiement: 'enCours',
+      presentation: 'Le service A …',
     };
   }
 
