@@ -179,7 +179,7 @@
         :global(label) {
           display: flex;
           flex-direction: column;
-          gap: 24px;
+          gap: 16px;
           font-size: 1.25rem;
           line-height: 1.75rem;
           font-weight: bold;

@@ -15,7 +15,9 @@
 </script>
 
 <label for="statut-deploiement">
-  Quel est le statut de votre service ?
+  Quel est le statut de votre service ? *
+
+  <span class="indication">Sélectionnez une réponse</span>
   <div>
     <input
       type="radio"
@@ -55,6 +57,14 @@
 
 <style lang="scss">
   label {
+    .indication {
+      font-size: 0.75rem;
+      line-height: 1.15rem;
+      color: #666;
+      font-weight: normal;
+      margin-top: 8px;
+    }
+
     div {
       display: flex;
       gap: 8px;
