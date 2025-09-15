@@ -3,7 +3,6 @@
 ## TODO
 
 - [ ] donneesSerialisees dans DescriptionV2
-- [ ] est-ce qu'on veut faire la diff entre v1 et v2 dans `referentiel.identifiantsMesures()` ?
 - [ ] moteur v2 : optimisation pour `break` la boucle d'évaluation d'un champ dès qu'on a un match ?
   - ça veut dire dès que `if (valeurReelle === valeurRegle)` est vrai, on `break;`
 - [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.
@@ -32,6 +31,7 @@
 
 ## DONE
 
+- [x] est-ce qu'on veut faire la diff entre v1 et v2 dans `referentiel.identifiantsMesures()` ?
 - [x] une fois le code compilé, où est le CSV de prod ? à copier dans dist ?
 - [x] récupérer la description/catégorie/etc. depuis le référentiel dans le moteur de règles
 - [x] Parsing du CSV jette des erreurs en cas de statut initial inconnu
