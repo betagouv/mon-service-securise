@@ -1254,6 +1254,16 @@ describe('Un service', () => {
       expect(service.descriptionService).toBeInstanceOf(DescriptionServiceV2);
       expect(service.nomService()).toBe('Bibliothèque');
     });
+
+    it('supporte la transformation en données à persister', () => {
+      const service = new Service({
+        id: '123',
+        versionService: VersionService.v2,
+        descriptionService: { nomService: 'Bibliothèque' },
+      });
+
+      expect(() => service.donneesAPersister()).not.toThrowError();
+    });
   });
 
   describe('concernant la validation des données de création', () => {

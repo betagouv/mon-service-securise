@@ -39,4 +39,15 @@ export class DescriptionServiceV2 {
   statutSaisie() {
     return InformationsService.COMPLETES;
   }
+
+  donneesSerialisees(): DonneesDescriptionServiceV2 {
+    return {
+      categorieDonneesTraitees: this.categorieDonneesTraitees,
+      niveauDeSecurite: this.niveauDeSecurite,
+      organisationResponsable:
+        this.organisationResponsable.toJSON() as DonneesEntite,
+      volumetrieDonneesTraitees: this.volumetrieDonneesTraitees,
+      nomService: this.nomService,
+    };
+  }
 }
