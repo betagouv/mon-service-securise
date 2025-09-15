@@ -17,6 +17,7 @@ describe('Une description service V2', () => {
       niveauDeSecurite: 'niveau1',
       categorieDonneesTraitees: 'documentsRHSensibles',
       volumetrieDonneesTraitees: 'faible',
+      presentation: 'Le premier de …',
     });
 
     const aPersister = descriptionV2.donneesSerialisees();
@@ -32,6 +33,7 @@ describe('Une description service V2', () => {
       niveauDeSecurite: 'niveau1',
       categorieDonneesTraitees: 'documentsRHSensibles',
       volumetrieDonneesTraitees: 'faible',
+      presentation: 'Le premier de …',
     });
   });
 

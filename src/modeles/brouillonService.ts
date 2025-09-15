@@ -9,6 +9,7 @@ export type DonneesBrouillonService = {
   nomService: string;
   siret?: string;
   statutDeploiement?: string;
+  presentation?: string;
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
@@ -17,6 +18,7 @@ export class BrouillonService {
   protected nomService: string;
   protected siret?: string;
   protected statutDeploiement?: string;
+  private presentation?: string;
 
   constructor(
     readonly id: UUID,
@@ -25,6 +27,7 @@ export class BrouillonService {
     this.nomService = donnees.nomService;
     this.siret = donnees.siret;
     this.statutDeploiement = donnees.statutDeploiement;
+    this.presentation = donnees.presentation;
   }
 
   metsAJourPropriete<T extends ProprietesBrouillonService>(
@@ -44,6 +47,7 @@ export class BrouillonService {
         nomService: this.nomService,
         organisationResponsable: { siret: this.siret! },
         statutDeploiement: this.statutDeploiement as StatutDeploiement,
+        presentation: this.presentation!,
         niveauDeSecurite: '', // TODO : Étape 5
         categorieDonneesTraitees: 'donneesSensibles', // TODO : Étape 3 > Question 4
         volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
@@ -51,13 +55,14 @@ export class BrouillonService {
     };
   }
 
-  donneesAPersister() {
+  donneesAPersister(): DonneesBrouillonService {
     return {
       nomService: this.nomService,
       ...(this.siret && { siret: this.siret }),
       ...(this.statutDeploiement && {
         statutDeploiement: this.statutDeploiement,
       }),
+      ...(this.presentation && { presentation: this.presentation }),
     };
   }
 }
