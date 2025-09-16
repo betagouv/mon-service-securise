@@ -15,7 +15,7 @@
 </script>
 
 <label for="statut-deploiement">
-  Quel est le statut de votre service ? *
+  Quel est le statut de votre service ?*
 
   <span class="indication">Sélectionnez une réponse</span>
   <div>
