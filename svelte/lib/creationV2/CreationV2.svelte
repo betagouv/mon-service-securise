@@ -12,6 +12,7 @@
   import { onMount } from 'svelte';
   import type { UUID } from '../typesBasiquesSvelte';
   import type { Brouillon } from './creationV2.d';
+  import JaugeDeProgression from './JaugeDeProgression.svelte';
 
   let donneesBrouillon: Brouillon = unBrouillonVierge();
   let questionCouranteEstComplete = false;
@@ -60,11 +61,7 @@
         {/if}
       </div>
       <hr />
-      <span class="courante"
-        ><b
-          >Question {$etapeCourante.numeroQuestionCourante} sur {$etapeCourante.nombreQuestions}</b
-        ></span
-      >
+      <JaugeDeProgression />
       <svelte:component
         this={$etapeCourante.questionCourante.composant}
         bind:estComplete={questionCouranteEstComplete}
@@ -166,12 +163,6 @@
           border-color: transparent;
           border-bottom: none;
           margin: 8px 0;
-        }
-
-        .courante {
-          font-size: 0.75rem;
-          line-height: 1.25rem;
-          color: #666;
         }
 
         :global(label) {
