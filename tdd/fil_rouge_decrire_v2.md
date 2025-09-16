@@ -33,6 +33,8 @@
 
 ## DONE
 
+- [x] refacto vers this.donnees = donnees
+- [x] le GET /brouillon/:id devrait renvoyer ce que brouillon.toJSON() renvoie
 - [x] donneesSerialisees dans DescriptionV2
 - [x] est-ce qu'on veut faire la diff entre v1 et v2 dans `referentiel.identifiantsMesures()` ?
 - [x] une fois le code compilé, où est le CSV de prod ? à copier dans dist ?
