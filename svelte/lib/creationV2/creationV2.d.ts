@@ -4,4 +4,5 @@ export type Brouillon = {
   statutDeploiement?: string;
   presentation: string;
   pointsAcces: string[];
+  typeService: string[];
 };

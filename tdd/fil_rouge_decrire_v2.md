@@ -2,6 +2,8 @@
 
 ## TODO
 
+- [ ] Il faudrait probablement extraire un composant pour les checkbox avec image, car il sera réutilisé dans les étapes suivantes
+- [ ] Il faudrait enlever le style global sur label et mettre un style global sur une classe, pour pouvoir enlever les !important
 - [ ] input type : utiliser l'input DSFR de l'UI Kit sur toutes les étapes où c'est nécessaire
 - [ ] choix unique => passage à l'étape suivante
 - [ ] choix unique => masquer les boutons radios (étape 1 > question 3)

@@ -12,6 +12,7 @@ import QuestionSiret from './etape1/QuestionSiret.svelte';
 import QuestionStatutDeploiement from './etape1/QuestionStatutDeploiement.svelte';
 import QuestionPresentation from './etape1/QuestionPresentation.svelte';
 import QuestionPointsAcces from './etape1/QuestionPointsAcces.svelte';
+import QuestionTypesService from './etape2/QuestionTypeService.svelte';
 
 type QuestionProps = {
   estComplete: boolean;
@@ -87,12 +88,21 @@ const toutesEtapes: PropsEtape[] = [
       },
     ],
   },
-  // {
-  //   numero: 2,
-  //   titre: 'Caractéristiques du service',
-  //   illustration: '/statique/assets/images/home/illustration_etape_2.svg',
-  //   questions: [],
-  // },
+  {
+    numero: 2,
+    titre: 'Caractéristiques du service',
+    illustration: '/statique/assets/images/home/illustration_etape_2.svg',
+    questions: [
+      {
+        clePropriete: 'typeService',
+        composant: QuestionTypesService,
+        explications: [
+          "Cette information permet d'évaluer le type de système d'information et ainsi de commencer à sélectionner les exigences nécessaires pour son homologation.",
+          'Par exemple, si "Une application mobile" n\'est pas sélectionnée, il ne serait pas intéressant de recommander d\'utiliser des magasins officiels d’applications mobiles pour leur téléchargement.',
+        ],
+      },
+    ],
+  },
 ];
 
 const { subscribe, update } = writable<EtatFormulaireCreation>({
