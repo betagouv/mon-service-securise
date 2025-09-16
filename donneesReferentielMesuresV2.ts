@@ -14,6 +14,29 @@ export const mesuresV2 = {
 };
 
 export const questionsV2 = {
+  typeDeService: {
+    portailInformation: {
+      nom: "Portail d'information",
+      exemple: 'ex. site web vitrine sans création de compte',
+    },
+    serviceEnLigne: {
+      nom: 'Service en ligne',
+      exemple: 'ex. démarche en ligne, téléservice avec création de compte',
+    },
+    api: {
+      nom: 'Une API',
+      exemple: 'ex. mise à disposition de données sur Internet',
+    },
+    applicationMobile: {
+      nom: 'Une application mobile',
+      exemple:
+        'ex. une application permettant de visualiser des vidéos en ligne',
+    },
+    autreSystemeInformation: {
+      nom: "Autre Système d'information",
+      exemple: '',
+    },
+  },
   categorieDonneesTraitees: {
     donneesSensibles: {
       nom: 'Données sensibles',
