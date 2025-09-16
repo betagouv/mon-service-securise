@@ -2,6 +2,9 @@
 
 ## TODO
 
+- [ ] input type : utiliser l'input DSFR de l'UI Kit sur toutes les étapes où c'est nécessaire
+- [ ] choix unique => passage à l'étape suivante
+- [ ] choix unique => masquer les boutons radios (étape 1 > question 3)
 - [ ] moteur v2 : optimisation pour `break` la boucle d'évaluation d'un champ dès qu'on a un match ?
   - ça veut dire dès que `if (valeurReelle === valeurRegle)` est vrai, on `break;`
 - [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.

@@ -10,6 +10,7 @@ import { ajouteParametreAUrl } from '../../outils/url';
 import QuestionNomService from './etape1/QuestionNomService.svelte';
 import QuestionSiret from './etape1/QuestionSiret.svelte';
 import QuestionStatutDeploiement from './etape1/QuestionStatutDeploiement.svelte';
+import QuestionPresentation from './etape1/QuestionPresentation.svelte';
 
 type QuestionProps = {
   estComplete: boolean;
@@ -66,6 +67,14 @@ const toutesEtapes: PropsEtape[] = [
           "Ces informations permettent de juger de l'adhérence du processus d'homologation au sein de votre entité. ",
           'En effet, ce processus doit normalement démarrer lorsque le service est encore en conception, et non pas en production.',
           "Cela permet notamment d'éviter des coûts importants de correction.",
+        ],
+      },
+      {
+        clePropriete: 'presentation',
+        composant: QuestionPresentation,
+        explications: [
+          "Cette présentation permettra à l'autorité d'homologation de comprendre le périmètre d'homologation et le système d'information.",
+          "Ainsi, il est recommandé d'utiliser des termes non-techniques afin de présenter votre service.",
         ],
       },
     ],
