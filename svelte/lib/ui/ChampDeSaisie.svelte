@@ -18,6 +18,7 @@
     rows={tailleMinimale}
     placeholder={aideSaisie}
     required={requis}
+    on:blur
   />
 </label>
 
