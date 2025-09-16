@@ -15,26 +15,20 @@ export type DonneesBrouillonService = {
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
 
 export class BrouillonService {
-  protected nomService: string;
-  protected siret?: string;
-  protected statutDeploiement?: string;
-  private presentation?: string;
+  private donnees: DonneesBrouillonService;
 
   constructor(
     readonly id: UUID,
     donnees: DonneesBrouillonService
   ) {
-    this.nomService = donnees.nomService;
-    this.siret = donnees.siret;
-    this.statutDeploiement = donnees.statutDeploiement;
-    this.presentation = donnees.presentation;
+    this.donnees = donnees;
   }
 
   metsAJourPropriete<T extends ProprietesBrouillonService>(
     nomPropriete: T,
     valeur: Required<DonneesBrouillonService>[T]
   ) {
-    this[nomPropriete as ProprietesBrouillonService] = valeur;
+    this.donnees[nomPropriete] = valeur;
   }
 
   enDonneesCreationServiceV2(): {
@@ -44,10 +38,10 @@ export class BrouillonService {
     return {
       versionService: VersionService.v2,
       descriptionService: {
-        nomService: this.nomService,
-        organisationResponsable: { siret: this.siret! },
-        statutDeploiement: this.statutDeploiement as StatutDeploiement,
-        presentation: this.presentation!,
+        nomService: this.donnees.nomService,
+        organisationResponsable: { siret: this.donnees.siret! },
+        statutDeploiement: this.donnees.statutDeploiement as StatutDeploiement,
+        presentation: this.donnees.presentation!,
         niveauDeSecurite: '', // TODO : Étape 5
         categorieDonneesTraitees: 'donneesSensibles', // TODO : Étape 3 > Question 4
         volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
@@ -55,14 +49,20 @@ export class BrouillonService {
     };
   }
 
+  toJSON() {
+    return { id: this.id, ...this.donneesAPersister() };
+  }
+
   donneesAPersister(): DonneesBrouillonService {
     return {
-      nomService: this.nomService,
-      ...(this.siret && { siret: this.siret }),
-      ...(this.statutDeploiement && {
-        statutDeploiement: this.statutDeploiement,
+      nomService: this.donnees.nomService,
+      ...(this.donnees.siret && { siret: this.donnees.siret }),
+      ...(this.donnees.statutDeploiement && {
+        statutDeploiement: this.donnees.statutDeploiement,
       }),
-      ...(this.presentation && { presentation: this.presentation }),
+      ...(this.donnees.presentation && {
+        presentation: this.donnees.presentation,
+      }),
     };
   }
 }

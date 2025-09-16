@@ -130,7 +130,7 @@ const routesConnecteApiBrouillonService = ({
           id as UUID
         );
 
-        return reponse.json(brouillon);
+        return reponse.json(brouillon.toJSON());
       } catch (e) {
         if (e instanceof ErreurBrouillonInexistant)
           return reponse.sendStatus(404);

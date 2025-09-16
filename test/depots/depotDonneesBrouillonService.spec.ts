@@ -83,8 +83,8 @@ describe('Le dépôt de données des brouillons de Service', () => {
 
       expect(brouillons).toHaveLength(2);
       const [a, b] = brouillons;
-      expect(a.nomService).toBe('Service #1');
-      expect(b.nomService).toBe('Service #2');
+      expect(a.donneesAPersister().nomService).toBe('Service #1');
+      expect(b.donneesAPersister().nomService).toBe('Service #2');
     });
   });
 
@@ -103,7 +103,7 @@ describe('Le dépôt de données des brouillons de Service', () => {
         idBrouillon
       );
 
-      expect(brouillon.nomService).toBe('Service #1');
+      expect(brouillon.donneesAPersister().nomService).toBe('Service #1');
     });
 
     it("jette une erreur si le brouillon n'existe pas", async () => {
