@@ -8,7 +8,7 @@
     champModifie: string | number;
   }>();
 
-  $: estComplete = valeur.length > 0;
+  $: estComplete = valeur ? valeur.trim().length > 0 : false;
 </script>
 
 <label for="nom-service">
