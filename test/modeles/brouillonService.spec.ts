@@ -8,20 +8,30 @@ import Service from '../../src/modeles/service.js';
 
 describe('Un brouillon de Service v2', () => {
   describe('quand il se transforme en données de DescriptionServiceV2', () => {
-    it('fournit des données que le Service accepte', () => {
+    it('fournit des données complètes', () => {
       const b = new BrouillonService(unUUID('b'), {
         nomService: 'Mairie A',
         siret: 'un siret',
+        presentation: 'Mon service qui…',
+        statutDeploiement: 'enCours',
+        pointsAcces: ['a.fr', 'b.fr'],
       });
 
       const pourCreationService = b.enDonneesCreationServiceV2();
 
-      expect(() =>
-        Service.valideDonneesCreation(
-          pourCreationService.descriptionService,
-          VersionService.v2
-        )
-      ).not.toThrowError();
+      expect(pourCreationService).toEqual({
+        versionService: 'v2',
+        descriptionService: {
+          nomService: 'Mairie A',
+          organisationResponsable: { siret: 'un siret' },
+          presentation: 'Mon service qui…',
+          statutDeploiement: 'enCours',
+          pointsAcces: [{ description: 'a.fr' }, { description: 'b.fr' }],
+          niveauDeSecurite: '',
+          volumetrieDonneesTraitees: 'faible',
+          categorieDonneesTraitees: 'donneesSensibles',
+        },
+      });
     });
   });
 
@@ -29,9 +39,7 @@ describe('Un brouillon de Service v2', () => {
     it.each(['siret', 'nomService', 'statutDeploiement'])(
       'mets à jour la propriété %s',
       (nomPropriete) => {
-        const b = new BrouillonService(unUUID('b'), {
-          nomService: 'Mairie A',
-        });
+        const b = new BrouillonService(unUUID('b'), { nomService: 'Mairie A' });
 
         b.metsAJourPropriete(
           nomPropriete as ProprietesBrouillonService,
@@ -47,9 +55,7 @@ describe('Un brouillon de Service v2', () => {
 
   describe('sur demande des données à persister', () => {
     it('retourne le nom du service', () => {
-      const b = new BrouillonService(unUUID('b'), {
-        nomService: 'Mairie A',
-      });
+      const b = new BrouillonService(unUUID('b'), { nomService: 'Mairie A' });
 
       expect(b.donneesAPersister()).toEqual({ nomService: 'Mairie A' });
     });

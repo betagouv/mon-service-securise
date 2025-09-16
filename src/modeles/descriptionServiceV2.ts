@@ -5,6 +5,7 @@ import {
   VolumetrieDonneesTraitees,
 } from '../../donneesReferentielMesuresV2.js';
 import donneesReferentiel from '../../donneesReferentiel.js';
+import PointsAcces from './pointsAcces.js';
 
 export type DonneesEntite = {
   siret: string;
@@ -23,6 +24,7 @@ export type DonneesDescriptionServiceV2 = {
   volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   statutDeploiement: StatutDeploiement;
   presentation: string;
+  pointsAcces?: { description: string }[];
 };
 
 export class DescriptionServiceV2 {
@@ -33,6 +35,7 @@ export class DescriptionServiceV2 {
   readonly categorieDonneesTraitees: CategorieDonneesTraitees;
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   private readonly presentation: string;
+  private readonly pointsAcces: PointsAcces;
 
   constructor(donnees: DonneesDescriptionServiceV2) {
     this.nomService = donnees.nomService;
@@ -42,6 +45,9 @@ export class DescriptionServiceV2 {
     this.categorieDonneesTraitees = donnees.categorieDonneesTraitees;
     this.volumetrieDonneesTraitees = donnees.volumetrieDonneesTraitees;
     this.presentation = donnees.presentation;
+    this.pointsAcces = new PointsAcces({
+      pointsAcces: donnees.pointsAcces || [],
+    });
   }
 
   static valideDonneesCreation() {}
@@ -61,6 +67,7 @@ export class DescriptionServiceV2 {
       volumetrieDonneesTraitees: this.volumetrieDonneesTraitees,
       nomService: this.nomService,
       presentation: this.presentation,
+      pointsAcces: this.pointsAcces.donneesSerialisees(),
     };
   }
 }

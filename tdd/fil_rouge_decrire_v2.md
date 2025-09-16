@@ -2,7 +2,6 @@
 
 ## TODO
 
-- [ ] étape 1 > question 5 : pouvoir ajouter/supprimer les URLs dynamiquement dans le formulaire
 - [ ] input type : utiliser l'input DSFR de l'UI Kit sur toutes les étapes où c'est nécessaire
 - [ ] choix unique => passage à l'étape suivante
 - [ ] choix unique => masquer les boutons radios (étape 1 > question 3)
@@ -34,6 +33,7 @@
 
 ## DONE
 
+- [x] étape 1 > question 5 : pouvoir ajouter/supprimer les URLs dynamiquement dans le formulaire
 - [x] refacto vers this.donnees = donnees
 - [x] le GET /brouillon/:id devrait renvoyer ce que brouillon.toJSON() renvoie
 - [x] donneesSerialisees dans DescriptionV2
