@@ -1,6 +1,14 @@
 import type { UUID } from '../typesBasiquesSvelte';
 import type { Brouillon } from './creationV2.d';
 
+export const unBrouillonVierge = (): Brouillon => ({
+  nomService: '',
+  siret: '',
+  statutDeploiement: '',
+  presentation: '',
+  pointsAcces: [],
+});
+
 export const creeBrouillonService = async (
   nomService: string
 ): Promise<UUID> => {

@@ -3,19 +3,17 @@
     enCoursDeChargement,
     etapeCourante,
     etapeStore,
-    toutesClesPropriete,
   } from './etapes/etapes.store';
   import {
     lisBrouillonService,
     metsAJourBrouillonService,
+    unBrouillonVierge,
   } from './creationV2.api';
   import { onMount } from 'svelte';
   import type { UUID } from '../typesBasiquesSvelte';
   import type { Brouillon } from './creationV2.d';
 
-  let donneesBrouillon: Brouillon = Object.fromEntries(
-    toutesClesPropriete.map((cle) => [cle, ''])
-  ) as Brouillon;
+  let donneesBrouillon: Brouillon = unBrouillonVierge();
   let questionCouranteEstComplete = false;
 
   onMount(async () => {

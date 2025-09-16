@@ -11,10 +11,11 @@ import QuestionNomService from './etape1/QuestionNomService.svelte';
 import QuestionSiret from './etape1/QuestionSiret.svelte';
 import QuestionStatutDeploiement from './etape1/QuestionStatutDeploiement.svelte';
 import QuestionPresentation from './etape1/QuestionPresentation.svelte';
+import QuestionPointsAcces from './etape1/QuestionPointsAcces.svelte';
 
 type QuestionProps = {
   estComplete: boolean;
-  valeur: string | number;
+  valeur: string | number | string[];
 };
 
 type ComposantQuestion = typeof SvelteComponent<QuestionProps>;
@@ -77,6 +78,13 @@ const toutesEtapes: PropsEtape[] = [
           "Ainsi, il est recommandé d'utiliser des termes non-techniques afin de présenter votre service.",
         ],
       },
+      {
+        clePropriete: 'pointsAcces',
+        composant: QuestionPointsAcces,
+        explications: [
+          "Cette information permet à l'autorité d'homologation d'accéder au système d'information pour mieux le comprendre.",
+        ],
+      },
     ],
   },
   // {
@@ -86,10 +94,6 @@ const toutesEtapes: PropsEtape[] = [
   //   questions: [],
   // },
 ];
-
-export const toutesClesPropriete = toutesEtapes.flatMap((e) =>
-  e.questions.flatMap((q) => q.clePropriete)
-);
 
 const { subscribe, update } = writable<EtatFormulaireCreation>({
   etapeEnCours: 0,
@@ -146,7 +150,7 @@ export const etapeStore = {
     });
   },
   subscribe,
-  suivant: async (valeur: string | number) => {
+  suivant: async (valeur: string | number | string[]) => {
     const etatActuel = get(etapeStore);
     if (
       !etatActuel.idBrouillonExistant &&
