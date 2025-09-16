@@ -18,6 +18,7 @@ describe('Une description service V2', () => {
       categorieDonneesTraitees: 'documentsRHSensibles',
       volumetrieDonneesTraitees: 'faible',
       presentation: 'Le premier de …',
+      pointsAcces: [{ description: 'http://url.com' }],
     });
 
     const aPersister = descriptionV2.donneesSerialisees();
@@ -34,6 +35,7 @@ describe('Une description service V2', () => {
       categorieDonneesTraitees: 'documentsRHSensibles',
       volumetrieDonneesTraitees: 'faible',
       presentation: 'Le premier de …',
+      pointsAcces: [{ description: 'http://url.com' }],
     });
   });
 

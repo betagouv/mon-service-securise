@@ -4,11 +4,12 @@ import {
   DonneesDescriptionServiceV2,
   StatutDeploiement,
 } from './descriptionServiceV2.js';
+import donneesReferentiel from '../../donneesReferentiel.js';
 
 export type DonneesBrouillonService = {
   nomService: string;
   siret?: string;
-  statutDeploiement?: string;
+  statutDeploiement?: keyof typeof donneesReferentiel.statutsDeploiement;
   presentation?: string;
   pointsAcces?: string[];
 };
@@ -43,6 +44,8 @@ export class BrouillonService {
         organisationResponsable: { siret: this.donnees.siret! },
         statutDeploiement: this.donnees.statutDeploiement as StatutDeploiement,
         presentation: this.donnees.presentation!,
+        pointsAcces:
+          this.donnees.pointsAcces?.map((p) => ({ description: p })) || [],
         niveauDeSecurite: '', // TODO : Étape 5
         categorieDonneesTraitees: 'donneesSensibles', // TODO : Étape 3 > Question 4
         volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
