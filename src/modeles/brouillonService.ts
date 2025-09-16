@@ -10,6 +10,7 @@ export type DonneesBrouillonService = {
   siret?: string;
   statutDeploiement?: string;
   presentation?: string;
+  pointsAcces?: string[];
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
@@ -62,6 +63,9 @@ export class BrouillonService {
       }),
       ...(this.donnees.presentation && {
         presentation: this.donnees.presentation,
+      }),
+      ...(this.donnees.pointsAcces && {
+        pointsAcces: this.donnees.pointsAcces,
       }),
     };
   }

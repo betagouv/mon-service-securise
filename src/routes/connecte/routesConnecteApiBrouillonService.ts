@@ -21,6 +21,7 @@ const routesConnecteApiBrouillonService = ({
     nomService: z.string().trim().nonempty(),
     statutDeploiement: z.enum(Object.keys(referentiel.statutsDeploiement())),
     presentation: z.string().trim().nonempty(),
+    pointsAcces: z.array(z.url()),
   });
 
   routes.post(
@@ -53,6 +54,7 @@ const routesConnecteApiBrouillonService = ({
           'nomService',
           'statutDeploiement',
           'presentation',
+          'pointsAcces',
         ]),
       })
     ),

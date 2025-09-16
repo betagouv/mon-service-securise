@@ -55,6 +55,11 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       valeurCorrecte: 'Mon service qui …',
       valeurIncorrecte: '',
     },
+    {
+      nomPropriete: 'pointsAcces',
+      valeurCorrecte: ['https://monservicesecurise.fr'],
+      valeurIncorrecte: ['abc'], // Passer autre chose qu'un array donne aussi une 400.
+    },
   ])(
     'quand requête PUT sur `/api/brouillon-service/:id/:$nomPropriete`',
     ({ nomPropriete, valeurCorrecte, valeurIncorrecte }) => {
@@ -70,10 +75,8 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       });
 
       it('lis le brouillon via le dépôt de données', async () => {
-        let donneesRecues: {
-          idUtilisateur: UUID;
-          idBrouillon: UUID;
-        } | null = null;
+        let donneesRecues: { idUtilisateur: UUID; idBrouillon: UUID } | null =
+          null;
         testeur.depotDonnees().lisBrouillonService = async (
           idUtilisateur: UUID,
           idBrouillon: UUID
@@ -86,9 +89,7 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
 
         await testeur.put(
           `/api/brouillon-service/${idBrouillonTest}/${nomPropriete}`,
-          {
-            [nomPropriete]: valeurCorrecte,
-          }
+          { [nomPropriete]: valeurCorrecte }
         );
 
         expect(donneesRecues!.idUtilisateur).toBe(unUUID('1'));
@@ -109,9 +110,7 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
 
         await testeur.put(
           `/api/brouillon-service/${idBrouillonTest}/${nomPropriete}`,
-          {
-            [nomPropriete]: valeurCorrecte,
-          }
+          { [nomPropriete]: valeurCorrecte }
         );
 
         expect(donneesRecues!.idUtilisateur).toBe(unUUID('1'));
@@ -120,7 +119,7 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
           donneesRecues!.brouillon.donneesAPersister()[
             nomPropriete as ProprietesBrouillonService
           ]
-        ).toBe(valeurCorrecte);
+        ).toStrictEqual(valeurCorrecte);
       });
 
       it("renvoie une erreur 400 si l'ID passé n'est pas un UUID", async () => {
@@ -147,9 +146,7 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
 
         const resultat = await testeur.put(
           `/api/brouillon-service/${idBrouillonTest}/${nomPropriete}`,
-          {
-            [nomPropriete]: valeurCorrecte,
-          }
+          { [nomPropriete]: valeurCorrecte }
         );
 
         expect(resultat.status).toBe(404);
