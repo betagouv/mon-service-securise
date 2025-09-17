@@ -57,6 +57,16 @@ export const questionsV2 = {
       exemple: '',
     },
   },
+  typeHebergement: {
+    onPremise: { nom: 'Hébergement interne (On-premise)' },
+    cloud: {
+      nom: 'Le système d’information repose sur une infrastructure ou une plateforme Cloud (IaaS/PaaS)',
+    },
+    saas: {
+      nom: "Le système est entièrement fourni et vous l'utilisez directement via une interface (SaaS)",
+    },
+    autre: { nom: 'Autre' },
+  },
   categorieDonneesTraitees: {
     donneesSensibles: {
       nom: 'Données sensibles',

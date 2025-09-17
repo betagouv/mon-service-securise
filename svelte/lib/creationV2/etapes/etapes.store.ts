@@ -14,6 +14,7 @@ import QuestionPresentation from './etape1/QuestionPresentation.svelte';
 import QuestionPointsAcces from './etape1/QuestionPointsAcces.svelte';
 import QuestionTypesService from './etape2/QuestionTypeService.svelte';
 import QuestionSpecificitesProjet from './etape2/QuestionSpecificitesProjet.svelte';
+import QuestionTypeHebergement from './etape2/QuestionTypeHebergement.svelte';
 
 type QuestionProps = {
   estComplete: boolean;
@@ -108,6 +109,13 @@ const toutesEtapes: PropsEtape[] = [
         explications: [
           "Ces informations vont permettre de sélectionner les mesures de sécurité nécessaires à l'homologation du périmètre identifié.",
           "Par exemple, si votre projet doit aussi couvrir la sécurité physique de votre système d'information, sélectionner \"L'accès physique des locaux et salles techniques\" va permettre d'ajouter des mesures liées à la sécurité physique.",
+        ],
+      },
+      {
+        clePropriete: 'typeHebergement',
+        composant: QuestionTypeHebergement,
+        explications: [
+          "Ces informations permettent d'identifier ce qui est directement sous votre contrôle ou au contraire sous le contrôle d'un prestataire (et donc devant être cadré via les clauses contractuelles).",
         ],
       },
     ],

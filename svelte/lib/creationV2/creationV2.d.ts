@@ -6,4 +6,5 @@ export type Brouillon = {
   pointsAcces: string[];
   typeService: string[];
   specificitesProjet: string[];
+  typeHebergement: string;
 };
