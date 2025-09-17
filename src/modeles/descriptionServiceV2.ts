@@ -27,6 +27,7 @@ export type DonneesDescriptionServiceV2 = {
   presentation: string;
   pointsAcces?: { description: string }[];
   typeService?: [keyof typeof questionsV2.typeDeService];
+  specificitesProjet?: [keyof typeof questionsV2.specificiteProjet];
 };
 
 export class DescriptionServiceV2 {

@@ -26,6 +26,9 @@ const routesConnecteApiBrouillonService = ({
     typeService: z
       .array(z.enum(Object.keys(questionsV2.typeDeService)))
       .nonempty(),
+    specificitesProjet: z.array(
+      z.enum(Object.keys(questionsV2.specificiteProjet))
+    ),
   });
 
   routes.post(
@@ -60,6 +63,7 @@ const routesConnecteApiBrouillonService = ({
           'presentation',
           'pointsAcces',
           'typeService',
+          'specificitesProjet',
         ]),
       })
     ),

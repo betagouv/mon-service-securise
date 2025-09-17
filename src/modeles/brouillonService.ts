@@ -14,12 +14,13 @@ export type DonneesBrouillonService = {
   presentation?: string;
   pointsAcces?: string[];
   typeService?: [keyof typeof questionsV2.typeDeService];
+  specificitesProjet?: [keyof typeof questionsV2.specificiteProjet];
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
 
 export class BrouillonService {
-  private donnees: DonneesBrouillonService;
+  private readonly donnees: DonneesBrouillonService;
 
   constructor(
     readonly id: UUID,
@@ -49,6 +50,7 @@ export class BrouillonService {
         pointsAcces:
           this.donnees.pointsAcces?.map((p) => ({ description: p })) || [],
         typeService: this.donnees.typeService,
+        specificitesProjet: this.donnees.specificitesProjet,
         niveauDeSecurite: '', // TODO : Étape 5
         categorieDonneesTraitees: 'donneesSensibles', // TODO : Étape 3 > Question 4
         volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
@@ -75,6 +77,9 @@ export class BrouillonService {
       }),
       ...(this.donnees.typeService && {
         typeService: this.donnees.typeService,
+      }),
+      ...(this.donnees.specificitesProjet && {
+        specificitesProjet: this.donnees.specificitesProjet,
       }),
     };
   }
