@@ -80,6 +80,11 @@
         background: #f1f5f9;
       }
 
+      &:has(input:focus-visible) {
+        outline: 2px solid var(--bleu-mise-en-avant);
+        outline-offset: 4px;
+      }
+
       img {
         width: 56px;
         height: 56px;
@@ -121,7 +126,10 @@
     }
 
     input[type='checkbox'] {
-      display: none;
+      height: 0;
+      width: 0;
+      margin: 0;
+      padding: 0;
     }
   }
 </style>
