@@ -75,7 +75,8 @@
       }
 
       &:has(input:checked) {
-        border: 2px solid var(--bleu-mise-en-avant);
+        box-shadow: 0 0 0 2px var(--bleu-mise-en-avant);
+        border-color: transparent;
         background: #f1f5f9;
       }
 
