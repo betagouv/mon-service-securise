@@ -16,6 +16,9 @@ export type DonneesEntite = {
 
 export type StatutDeploiement =
   keyof typeof donneesReferentiel.statutsDeploiement;
+export type TypeService = keyof typeof questionsV2.typeDeService;
+export type SpecificiteProjet = keyof typeof questionsV2.specificiteProjet;
+export type TypeHebergement = keyof typeof questionsV2.typeHebergement;
 
 export type DonneesDescriptionServiceV2 = {
   nomService: string;
@@ -26,8 +29,9 @@ export type DonneesDescriptionServiceV2 = {
   statutDeploiement: StatutDeploiement;
   presentation: string;
   pointsAcces?: { description: string }[];
-  typeService?: [keyof typeof questionsV2.typeDeService];
-  specificitesProjet?: [keyof typeof questionsV2.specificiteProjet];
+  typeService?: TypeService[];
+  specificitesProjet?: SpecificiteProjet[];
+  typeHebergement: TypeHebergement;
 };
 
 export class DescriptionServiceV2 {
@@ -39,6 +43,9 @@ export class DescriptionServiceV2 {
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   private readonly presentation: string;
   private readonly pointsAcces: PointsAcces;
+  private readonly typeService?: TypeService[];
+  private readonly specificitesProjet?: SpecificiteProjet[];
+  private readonly typeHebergement: TypeHebergement;
 
   constructor(donnees: DonneesDescriptionServiceV2) {
     this.nomService = donnees.nomService;
@@ -51,6 +58,9 @@ export class DescriptionServiceV2 {
     this.pointsAcces = new PointsAcces({
       pointsAcces: donnees.pointsAcces || [],
     });
+    this.typeService = donnees.typeService;
+    this.specificitesProjet = donnees.specificitesProjet;
+    this.typeHebergement = donnees.typeHebergement;
   }
 
   static valideDonneesCreation() {}
@@ -71,6 +81,9 @@ export class DescriptionServiceV2 {
       nomService: this.nomService,
       presentation: this.presentation,
       pointsAcces: this.pointsAcces.donneesSerialisees(),
+      typeService: this.typeService,
+      specificitesProjet: this.specificitesProjet,
+      typeHebergement: this.typeHebergement,
     };
   }
 }
