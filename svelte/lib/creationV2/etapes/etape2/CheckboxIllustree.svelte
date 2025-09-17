@@ -44,7 +44,7 @@
     display: flex;
     gap: 8px;
     border: 1px solid #dddddd;
-    padding: 4px 24px 4px 0;
+    padding: 4px 4px 4px 0;
     border-radius: 8px;
     cursor: pointer !important;
 
@@ -78,6 +78,7 @@
     }
 
     label {
+      width: 100%;
       font-size: 1rem !important;
       line-height: 1.5rem !important;
       font-weight: normal !important;
