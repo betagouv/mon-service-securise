@@ -11,7 +11,7 @@
   $: estComplete = /^\d{14}$/.test(valeur);
 </script>
 
-<label for="siret">
+<label for="siret" class="titre-question">
   Quel est le nom ou siret de l’organisation ?
   <ChampTexte
     id="siret"

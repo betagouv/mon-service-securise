@@ -30,7 +30,7 @@
   ][];
 </script>
 
-<label for="specificite-projet">
+<label for="specificite-projet" class="titre-question">
   L'une ou plusieurs des spécificités suivantes sont-elles à sécuriser au sein
   du périmètre d'homologation ?
 

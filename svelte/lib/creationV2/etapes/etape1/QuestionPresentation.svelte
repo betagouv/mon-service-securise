@@ -9,7 +9,7 @@
   $: estComplete = valeur ? valeur.trim().length > 0 : false;
 </script>
 
-<label for="presentation">
+<label for="presentation" class="titre-question">
   Présentez votre service en quelques lignes*
   <ChampDeSaisie
     label=""
