@@ -5,6 +5,7 @@ import {
   StatutDeploiement,
 } from './descriptionServiceV2.js';
 import donneesReferentiel from '../../donneesReferentiel.js';
+import { questionsV2 } from '../../donneesReferentielMesuresV2.js';
 
 export type DonneesBrouillonService = {
   nomService: string;
@@ -12,6 +13,7 @@ export type DonneesBrouillonService = {
   statutDeploiement?: keyof typeof donneesReferentiel.statutsDeploiement;
   presentation?: string;
   pointsAcces?: string[];
+  typeService?: [keyof typeof questionsV2.typeDeService];
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
@@ -46,6 +48,7 @@ export class BrouillonService {
         presentation: this.donnees.presentation!,
         pointsAcces:
           this.donnees.pointsAcces?.map((p) => ({ description: p })) || [],
+        typeService: this.donnees.typeService,
         niveauDeSecurite: '', // TODO : Étape 5
         categorieDonneesTraitees: 'donneesSensibles', // TODO : Étape 3 > Question 4
         volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
@@ -69,6 +72,9 @@ export class BrouillonService {
       }),
       ...(this.donnees.pointsAcces && {
         pointsAcces: this.donnees.pointsAcces,
+      }),
+      ...(this.donnees.typeService && {
+        typeService: this.donnees.typeService,
       }),
     };
   }
