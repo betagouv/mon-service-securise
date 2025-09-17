@@ -23,6 +23,28 @@
   {/each}
 </label>
 
+<label
+  for="activites-externalisees"
+  class="titre-question activites-externalisees"
+>
+  Quelles activités du projet sont entièrement externalisées ?
+
+  <label
+    ><input type="checkbox" />
+    <span>
+      <span class="libelle">L'administration technique</span>
+      <span class="indication-libelle">Administration logique des serveurs</span
+      >
+    </span>
+  </label>
+  <label
+    ><input type="checkbox" />
+    <span>
+      <span class="libelle">Le développement</span>
+    </span>
+  </label>
+</label>
+
 <style lang="scss">
   label {
     .indication {
@@ -31,6 +53,31 @@
       color: #666;
       font-weight: normal;
       margin-top: 8px;
+    }
+  }
+
+  .activites-externalisees {
+    label {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+
+      span {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    .libelle {
+      font-size: 1rem;
+      line-height: 1.5rem;
+      color: #161616;
+      font-weight: normal;
+    }
+    .indication-libelle {
+      font-size: 0.75rem;
+      line-height: 1.25rem;
+      color: #666;
+      font-weight: normal;
     }
   }
 </style>
