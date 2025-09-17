@@ -1,0 +1,59 @@
+<script lang="ts">
+  export let id: string;
+  export let nom: string;
+  export let valeur: string;
+</script>
+
+<div class="conteneur-radio">
+  <input type="radio" {id} value={id} bind:group={valeur} />
+  <label for={id}>{nom}</label>
+</div>
+
+<style lang="scss">
+  .conteneur-radio {
+    display: flex;
+    gap: 8px;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    cursor: pointer !important;
+
+    * {
+      cursor: pointer !important;
+    }
+
+    &:has(input:hover) {
+      border-color: var(--bleu-mise-en-avant);
+      background: #f6f6f6;
+    }
+
+    &:has(input:checked) {
+      box-shadow: 0 0 0 1px var(--bleu-mise-en-avant);
+      border-color: var(--bleu-mise-en-avant);
+      background: #f1f5f9;
+
+      &:has(input:hover) {
+        background: #d0e5fb;
+      }
+    }
+
+    &:has(input:focus-visible) {
+      outline: 2px solid var(--bleu-mise-en-avant);
+      outline-offset: 2px;
+    }
+
+    label {
+      width: 100%;
+      margin: 12px 24px;
+      font-size: 1rem !important;
+      line-height: 1.5rem !important;
+      font-weight: normal !important;
+    }
+
+    input[type='radio'] {
+      height: 0;
+      width: 0;
+      margin: 0;
+      padding: 0;
+    }
+  }
+</style>
