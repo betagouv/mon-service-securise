@@ -22,7 +22,7 @@
   };
 </script>
 
-<label for="presentation">
+<label for="presentation" class="titre-question">
   Quelle est l'URL de votre service?
 
   <span class="sous-titre"> exemple : https://www.exemple.com </span>

@@ -12,7 +12,7 @@
   $: if (valeur) dispatch('champModifie', valeur);
 </script>
 
-<label for="statut-deploiement">
+<label for="statut-deploiement" class="titre-question">
   Quel est le statut de votre service ?*
 
   <span class="indication">Sélectionnez une réponse</span>

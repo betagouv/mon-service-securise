@@ -46,10 +46,10 @@
     border: 1px solid #dddddd;
     padding: 4px 4px 4px 0;
     border-radius: 8px;
-    cursor: pointer !important;
+    cursor: pointer;
 
     * {
-      cursor: pointer !important;
+      cursor: pointer;
     }
 
     input[type='checkbox'] {
@@ -88,20 +88,18 @@
 
     label {
       width: 100%;
-      font-size: 1rem !important;
-      line-height: 1.5rem !important;
-      font-weight: normal !important;
-      display: flex !important;
-      flex-direction: row !important;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      display: flex;
+      flex-direction: row;
+      color: #161616;
+      font-weight: 400;
 
       .details {
         display: flex;
         flex-direction: column;
-        font-size: 1.5rem;
-        line-height: 1.5rem;
-        font-weight: 400;
         justify-content: center;
-        color: #161616;
+        margin-left: 24px;
 
         span {
           font-size: 0.75rem;

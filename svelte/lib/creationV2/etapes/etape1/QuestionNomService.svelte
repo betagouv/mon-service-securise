@@ -11,7 +11,7 @@
   $: estComplete = valeur ? valeur.trim().length > 0 : false;
 </script>
 
-<label for="nom-service">
+<label for="nom-service" class="titre-question">
   Quel est le nom de votre service ?
   <ChampTexte
     id="nom-service"

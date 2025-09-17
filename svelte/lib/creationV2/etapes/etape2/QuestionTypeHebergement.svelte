@@ -13,7 +13,7 @@
   $: if (valeur) dispatch('champModifie', valeur);
 </script>
 
-<label for="type-hebergement">
+<label for="type-hebergement" class="titre-question">
   Quel type de cloud utilisez-vous ?*
 
   <span class="indication">Sélectionnez une réponse</span>

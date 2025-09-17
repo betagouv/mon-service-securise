@@ -27,7 +27,7 @@
   ][];
 </script>
 
-<label for="type-service">
+<label for="type-service" class="titre-question">
   Quel est le type de service à sécuriser ?*
 
   <span class="indication">Sélectionnez une ou plusieurs réponses</span>

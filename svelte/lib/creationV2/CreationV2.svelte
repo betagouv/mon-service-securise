@@ -165,7 +165,7 @@
           margin: 8px 0;
         }
 
-        :global(label) {
+        :global(.titre-question) {
           display: flex;
           flex-direction: column;
           gap: 16px;

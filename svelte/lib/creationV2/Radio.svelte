@@ -15,10 +15,10 @@
     gap: 8px;
     border: 1px solid #dddddd;
     border-radius: 8px;
-    cursor: pointer !important;
+    cursor: pointer;
 
     * {
-      cursor: pointer !important;
+      cursor: pointer;
     }
 
     &:has(input:hover) {
@@ -44,9 +44,9 @@
     label {
       width: 100%;
       margin: 12px 24px;
-      font-size: 1rem !important;
-      line-height: 1.5rem !important;
-      font-weight: normal !important;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      font-weight: normal;
     }
 
     input[type='radio'] {
