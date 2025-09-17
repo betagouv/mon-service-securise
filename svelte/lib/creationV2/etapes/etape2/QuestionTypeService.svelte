@@ -17,9 +17,9 @@
 
   const dispatch = createEventDispatcher<{ champModifie: string[] }>();
 
-  $: if (valeur) dispatch('champModifie', valeur);
-
   $: estComplete = valeur.length > 0;
+
+  $: if (valeur) dispatch('champModifie', valeur);
 
   const typesDeService = Object.entries(questionsV2.typeDeService) as [
     keyof typeof questionsV2.typeDeService,
