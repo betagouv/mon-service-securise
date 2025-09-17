@@ -37,6 +37,26 @@ export const questionsV2 = {
       exemple: '',
     },
   },
+  specificiteProjet: {
+    postesDeTravail: { nom: 'Des postes de travail', exemple: '' },
+    accesPhysiqueAuxBureaux: {
+      nom: "L'accès physique des bureaux",
+      exemple: '',
+    },
+    accesPhysiqueAuxSallesTechniques: {
+      nom: "L'accès physique des salles techniques",
+      exemple: '',
+    },
+    annuaire: { nom: 'Un annuaire', exemple: '' },
+    dispositifDeSignatureElectronique: {
+      nom: 'Un dispositif de signature électronique',
+      exemple: '',
+    },
+    echangeOuReceptionEmails: {
+      nom: "L'échange et/ou la réception d'emails",
+      exemple: '',
+    },
+  },
   categorieDonneesTraitees: {
     donneesSensibles: {
       nom: 'Données sensibles',

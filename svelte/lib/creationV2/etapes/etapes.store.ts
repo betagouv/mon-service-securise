@@ -13,6 +13,7 @@ import QuestionStatutDeploiement from './etape1/QuestionStatutDeploiement.svelte
 import QuestionPresentation from './etape1/QuestionPresentation.svelte';
 import QuestionPointsAcces from './etape1/QuestionPointsAcces.svelte';
 import QuestionTypesService from './etape2/QuestionTypeService.svelte';
+import QuestionSpecificitesProjet from './etape2/QuestionSpecificitesProjet.svelte';
 
 type QuestionProps = {
   estComplete: boolean;
@@ -99,6 +100,14 @@ const toutesEtapes: PropsEtape[] = [
         explications: [
           "Cette information permet d'évaluer le type de système d'information et ainsi de commencer à sélectionner les exigences nécessaires pour son homologation.",
           'Par exemple, si "Une application mobile" n\'est pas sélectionnée, il ne serait pas intéressant de recommander d\'utiliser des magasins officiels d’applications mobiles pour leur téléchargement.',
+        ],
+      },
+      {
+        clePropriete: 'specificitesProjet',
+        composant: QuestionSpecificitesProjet,
+        explications: [
+          "Ces informations vont permettre de sélectionner les mesures de sécurité nécessaires à l'homologation du périmètre identifié.",
+          "Par exemple, si votre projet doit aussi couvrir la sécurité physique de votre système d'information, sélectionner \"L'accès physique des locaux et salles techniques\" va permettre d'ajouter des mesures liées à la sécurité physique.",
         ],
       },
     ],

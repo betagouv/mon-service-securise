@@ -5,4 +5,5 @@ export type Brouillon = {
   presentation: string;
   pointsAcces: string[];
   typeService: string[];
+  specificitesProjet: string[];
 };
