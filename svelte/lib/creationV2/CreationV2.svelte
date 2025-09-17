@@ -109,6 +109,10 @@
               : await suivant()}
         />
       </div>
+
+      <div class="info-enregistrement-automatique">
+        Votre brouillon est enregistré automatiquement.
+      </div>
     </div>
   </div>
   <aside>
@@ -126,6 +130,13 @@
     width: 100%;
     height: 100%;
     text-align: left;
+  }
+
+  .info-enregistrement-automatique {
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    color: #666;
+    margin-bottom: 32px;
   }
 
   .conteneur-creation {
@@ -178,6 +189,7 @@
           display: flex;
           gap: 16px;
           margin-top: 8px;
+          margin-bottom: 16px;
         }
       }
     }
