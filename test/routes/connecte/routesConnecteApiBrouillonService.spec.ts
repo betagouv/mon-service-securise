@@ -60,6 +60,16 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       valeurCorrecte: ['https://monservicesecurise.fr', 'www.sansHttps.fr'],
       valeurIncorrecte: [''], // On accepte les chaînes au sens large, pour ne pas gêner les utilisateurs. Mais vide est interdit.
     },
+    {
+      nomPropriete: 'typeService',
+      valeurCorrecte: ['api', 'serviceEnLigne'],
+      valeurIncorrecte: ['uneValeurImaginaire'],
+    },
+    {
+      nomPropriete: 'typeService',
+      valeurCorrecte: ['api'],
+      valeurIncorrecte: [],
+    },
   ])(
     'quand requête PUT sur `/api/brouillon-service/:id/:$nomPropriete`',
     ({ nomPropriete, valeurCorrecte, valeurIncorrecte }) => {

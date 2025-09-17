@@ -2,6 +2,7 @@ import Entite from './entite.js';
 import InformationsService from './informationsService.js';
 import {
   CategorieDonneesTraitees,
+  questionsV2,
   VolumetrieDonneesTraitees,
 } from '../../donneesReferentielMesuresV2.js';
 import donneesReferentiel from '../../donneesReferentiel.js';
@@ -25,6 +26,7 @@ export type DonneesDescriptionServiceV2 = {
   statutDeploiement: StatutDeploiement;
   presentation: string;
   pointsAcces?: { description: string }[];
+  typeService?: [keyof typeof questionsV2.typeDeService];
 };
 
 export class DescriptionServiceV2 {
