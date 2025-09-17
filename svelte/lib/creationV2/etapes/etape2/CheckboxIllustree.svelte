@@ -59,15 +59,24 @@
       padding: 0;
     }
 
+    &:has(input:hover) {
+      border-color: var(--bleu-mise-en-avant);
+      background: #f6f6f6;
+    }
+
     &:has(input:checked) {
-      box-shadow: 0 0 0 2px var(--bleu-mise-en-avant);
-      border-color: transparent;
+      box-shadow: 0 0 0 1px var(--bleu-mise-en-avant);
+      border-color: var(--bleu-mise-en-avant);
       background: #f1f5f9;
+
+      &:has(input:hover) {
+        background: #d0e5fb;
+      }
     }
 
     &:has(input:focus-visible) {
       outline: 2px solid var(--bleu-mise-en-avant);
-      outline-offset: 4px;
+      outline-offset: 2px;
     }
 
     img {
