@@ -8,6 +8,7 @@ export const unBrouillonVierge = (): Brouillon => ({
   presentation: '',
   pointsAcces: [],
   typeService: [],
+  specificitesProjet: [],
 });
 
 export const creeBrouillonService = async (
