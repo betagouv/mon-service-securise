@@ -177,21 +177,15 @@ export const etapeStore = {
     });
   },
   subscribe,
-  suivant: async (valeur: string | number | string[]) => {
-    const etatActuel = get(etapeStore);
-    if (
-      !etatActuel.idBrouillonExistant &&
-      etatActuel.etapeEnCours === 0 &&
-      etatActuel.questionEnCours === 0
-    ) {
-      const idBrouillon = await creeBrouillonService(valeur as string);
-      ajouteParametreAUrl('id', idBrouillon);
-      update((etatCourant) => ({
-        ...etatCourant,
-        idBrouillonExistant: idBrouillon,
-      }));
-    }
-
+  creeBrouillon: async (valeur: string) => {
+    const idBrouillon = await creeBrouillonService(valeur as string);
+    ajouteParametreAUrl('id', idBrouillon);
+    update((etatCourant) => ({
+      ...etatCourant,
+      idBrouillonExistant: idBrouillon,
+    }));
+  },
+  suivant: async () => {
     update((etatCourant) => {
       let prochaineEtape = etatCourant.etapeEnCours;
       let prochaineQuestion = etatCourant.questionEnCours + 1;

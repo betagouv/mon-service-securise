@@ -27,19 +27,26 @@
   });
 
   const metsAJourPropriete = async (e: CustomEvent<string>) => {
+    const valeur = e.detail;
     if (!questionCouranteEstComplete) return;
     const idBrouillon = $etapeStore.idBrouillonExistant;
-    if (!idBrouillon) return;
+    if (
+      !idBrouillon &&
+      $etapeCourante.questionCourante.clePropriete === 'nomService'
+    ) {
+      await etapeStore.creeBrouillon(valeur);
+      return;
+    } else if (!idBrouillon) {
+      return;
+    }
 
-    const valeur = e.detail;
     const cle = $etapeCourante.questionCourante.clePropriete;
 
     await metsAJourBrouillonService(idBrouillon, cle, valeur);
   };
 
   const suivant = async () => {
-    const cle = $etapeCourante.questionCourante.clePropriete;
-    await etapeStore.suivant(donneesBrouillon[cle]!);
+    await etapeStore.suivant();
   };
 
   const finalise = async () => {
