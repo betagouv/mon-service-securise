@@ -2,15 +2,16 @@
   import { createEventDispatcher } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import Radio from '../../Radio.svelte';
+  import type { MiseAJour } from '../../creationV2.api';
 
   export let estComplete: boolean;
   export let valeur: string = '';
 
-  const dispatch = createEventDispatcher<{ champModifie: string }>();
+  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
   $: estComplete = !!valeur;
 
-  $: if (valeur) dispatch('champModifie', valeur);
+  $: if (valeur) emetEvenement('champModifie', { typeHebergement: valeur });
 </script>
 
 <label for="type-hebergement" class="titre-question">

@@ -22,9 +22,11 @@ export const creeBrouillonService = async (
 export const finaliseBrouillonService = async (idBrouillon: UUID) =>
   await axios.post(`/api/brouillon-service/${idBrouillon}/finalise`);
 
+export type MiseAJour = Partial<Record<keyof Brouillon, string | string[]>>;
+
 export const metsAJourBrouillonService = async (
   idBrouillon: UUID,
-  donnees: Partial<Record<keyof Brouillon, string | string[]>>
+  donnees: MiseAJour
 ) => {
   await Promise.all(
     Object.entries(donnees).map(([clePropriete, valeur]) =>
