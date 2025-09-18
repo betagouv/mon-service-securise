@@ -24,12 +24,16 @@ export const finaliseBrouillonService = async (idBrouillon: UUID) =>
 
 export const metsAJourBrouillonService = async (
   idBrouillon: UUID,
-  clePropriete: string,
-  valeur: string
-) =>
-  await axios.put(`/api/brouillon-service/${idBrouillon}/${clePropriete}`, {
-    [clePropriete]: valeur,
-  });
+  donnees: Partial<Record<keyof Brouillon, string | string[]>>
+) => {
+  await Promise.all(
+    Object.entries(donnees).map(([clePropriete, valeur]) =>
+      axios.put(`/api/brouillon-service/${idBrouillon}/${clePropriete}`, {
+        [clePropriete]: valeur,
+      })
+    )
+  );
+};
 
 export const lisBrouillonService = async (id: UUID): Promise<Brouillon> =>
   (await axios.get<Brouillon>(`/api/brouillon-service/${id}`)).data;
