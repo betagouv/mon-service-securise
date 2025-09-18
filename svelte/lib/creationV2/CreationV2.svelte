@@ -38,7 +38,7 @@
     }
 
     const cle = $etapeCourante.questionCourante.clesPropriete[0];
-    await metsAJourBrouillonService(idBrouillon, cle, valeur);
+    await metsAJourBrouillonService(idBrouillon, { [cle]: valeur });
   };
 
   const suivant = async () => {
