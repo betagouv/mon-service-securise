@@ -2,31 +2,37 @@
   import { createEventDispatcher } from 'svelte';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
+  import { leBrouillon } from '../brouillon.store';
 
   export let estComplete: boolean;
-  export let valeur: string;
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: estComplete = !!valeur;
+  $: estComplete = !!$leBrouillon.statutDeploiement;
 
-  $: if (valeur) emetEvenement('champModifie', { statutDeploiement: valeur });
+  $: emetEvenement('champModifie', {
+    statutDeploiement: $leBrouillon.statutDeploiement,
+  });
 </script>
 
 <label for="statut-deploiement" class="titre-question">
   Quel est le statut de votre service ?*
 
   <span class="indication">Sélectionnez une réponse</span>
-  <Radio id="enProjet" nom="En conception" bind:valeur />
+  <Radio
+    id="enProjet"
+    nom="En conception"
+    bind:valeur={$leBrouillon.statutDeploiement}
+  />
   <Radio
     id="enCours"
     nom="En cours de développement ou de déploiement"
-    bind:valeur
+    bind:valeur={$leBrouillon.statutDeploiement}
   />
   <Radio
     id="enLigne"
     nom="En ligne et accessible aux usagers et/ou agents"
-    bind:valeur
+    bind:valeur={$leBrouillon.statutDeploiement}
   />
 </label>
 

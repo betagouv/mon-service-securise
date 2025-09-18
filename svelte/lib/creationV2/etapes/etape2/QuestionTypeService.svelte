@@ -1,29 +1,28 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import CheckboxIllustree from './CheckboxIllustree.svelte';
   import type { MiseAJour } from '../../creationV2.api';
+  import { leBrouillon } from '../brouillon.store';
 
   export let estComplete: boolean;
-  export let valeur: string[] = [];
 
-  const illustrations: Record<keyof typeof questionsV2.typeDeService, string> =
-    {
-      api: 'api.svg',
-      portailInformation: 'portailInformation.svg',
-      serviceEnLigne: 'serviceEnLigne.svg',
-      applicationMobile: 'applicationMobile.svg',
-      autreSystemeInformation: 'autreSystemeInformation.svg',
-    };
+  const illustrations: Record<TypeService, string> = {
+    api: 'api.svg',
+    portailInformation: 'portailInformation.svg',
+    serviceEnLigne: 'serviceEnLigne.svg',
+    applicationMobile: 'applicationMobile.svg',
+    autreSystemeInformation: 'autreSystemeInformation.svg',
+  };
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: estComplete = valeur.length > 0;
+  $: estComplete = $leBrouillon.typeService.length > 0;
 
-  $: if (valeur) emetEvenement('champModifie', { typeService: valeur });
+  $: emetEvenement('champModifie', { typeService: $leBrouillon.typeService });
 
   const typesDeService = Object.entries(questionsV2.typeDeService) as [
-    keyof typeof questionsV2.typeDeService,
+    TypeService,
     { nom: string; exemple: string },
   ][];
 </script>
@@ -36,7 +35,7 @@
     {@const nomImage = illustrations[idType]}
     <CheckboxIllustree
       id={idType}
-      bind:valeurs={valeur}
+      bind:valeurs={$leBrouillon.typeService}
       {details}
       illustration="/statique/assets/images/typesService/{nomImage}"
     />

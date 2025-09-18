@@ -3,14 +3,14 @@
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import CheckboxIllustree from './CheckboxIllustree.svelte';
   import type { MiseAJour } from '../../creationV2.api';
+  import type { SpecificiteProjet } from '../../creationV2.types';
+  import { leBrouillon } from '../brouillon.store';
 
   export let estComplete: boolean;
-  export let valeur: string[] = [];
 
-  const illustrations: Record<
-    keyof typeof questionsV2.specificiteProjet,
-    string
-  > = {
+  estComplete = true;
+
+  const illustrations: Record<SpecificiteProjet, string> = {
     postesDeTravail: 'postesDeTravail.svg',
     accesPhysiqueAuxBureaux: 'accesPhysiqueAuxBureaux.svg',
     accesPhysiqueAuxSallesTechniques: 'accesPhysiqueAuxSallesTechniques.svg',
@@ -21,12 +21,12 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: if (valeur) emetEvenement('champModifie', { specificitesProjet: valeur });
-
-  $: estComplete = true;
+  $: emetEvenement('champModifie', {
+    specificitesProjet: $leBrouillon.specificitesProjet,
+  });
 
   const specificiteProjet = Object.entries(questionsV2.specificiteProjet) as [
-    keyof typeof questionsV2.specificiteProjet,
+    SpecificiteProjet,
     { nom: string; exemple: string },
   ][];
 </script>
@@ -40,7 +40,7 @@
     {@const nomImage = illustrations[idType]}
     <CheckboxIllustree
       id={idType}
-      bind:valeurs={valeur}
+      bind:valeurs={$leBrouillon.specificitesProjet}
       {details}
       illustration="/statique/assets/images/specificiteProjet/{nomImage}"
     />

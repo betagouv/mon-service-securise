@@ -3,15 +3,17 @@
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
+  import { leBrouillon } from '../brouillon.store';
 
   export let estComplete: boolean;
-  export let valeur: string = '';
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: estComplete = !!valeur;
+  $: estComplete = !!$leBrouillon.typeHebergement;
 
-  $: if (valeur) emetEvenement('champModifie', { typeHebergement: valeur });
+  $: emetEvenement('champModifie', {
+    typeHebergement: $leBrouillon.typeHebergement,
+  });
 </script>
 
 <label for="type-hebergement" class="titre-question">
@@ -20,7 +22,7 @@
   <span class="indication">Sélectionnez une réponse</span>
 
   {#each Object.entries(questionsV2.typeHebergement) as [idType, { nom }]}
-    <Radio id={idType} {nom} bind:valeur />
+    <Radio id={idType} {nom} bind:valeur={$leBrouillon.typeHebergement} />
   {/each}
 </label>
 
