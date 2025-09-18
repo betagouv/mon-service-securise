@@ -50,7 +50,7 @@ export class BrouillonService {
         presentation: this.donnees.presentation!,
         pointsAcces:
           this.donnees.pointsAcces?.map((p) => ({ description: p })) || [],
-        typeService: this.donnees.typeService,
+        typeService: this.donnees.typeService!,
         specificitesProjet: this.donnees.specificitesProjet,
         typeHebergement: this.donnees.typeHebergement!,
         niveauDeSecurite: '', // TODO : Étape 5
