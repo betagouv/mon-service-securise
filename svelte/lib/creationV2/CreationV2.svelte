@@ -44,8 +44,8 @@
     await metsAJourBrouillonService(idBrouillon, e.detail);
   };
 
-  const suivant = async () => {
-    await etapeStore.suivant();
+  const suivant = () => {
+    etapeStore.suivant();
   };
 
   const finalise = async () => {
