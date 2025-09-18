@@ -30,18 +30,14 @@
     const valeur = e.detail;
     if (!questionCouranteEstComplete) return;
     const idBrouillon = $etapeStore.idBrouillonExistant;
-    if (
-      !idBrouillon &&
-      $etapeCourante.questionCourante.clePropriete === 'nomService'
-    ) {
+    if (!idBrouillon && $etapeCourante.estPremiereQuestion) {
       await etapeStore.creeBrouillon(valeur);
       return;
     } else if (!idBrouillon) {
       return;
     }
 
-    const cle = $etapeCourante.questionCourante.clePropriete;
-
+    const cle = $etapeCourante.questionCourante.clesPropriete[0];
     await metsAJourBrouillonService(idBrouillon, cle, valeur);
   };
 
@@ -73,7 +69,7 @@
         this={$etapeCourante.questionCourante.composant}
         bind:estComplete={questionCouranteEstComplete}
         bind:valeur={donneesBrouillon[
-          $etapeCourante.questionCourante.clePropriete
+          $etapeCourante.questionCourante.clesPropriete[0]
         ]}
         on:champModifie={metsAJourPropriete}
       />

@@ -18,13 +18,13 @@ import QuestionTypeHebergement from './etape2/QuestionTypeHebergement.svelte';
 
 type QuestionProps = {
   estComplete: boolean;
-  valeur: string | number | string[];
+  valeur?: string | number | string[];
 };
 
 type ComposantQuestion = typeof SvelteComponent<QuestionProps>;
 
 type QuestionAvecIdentifiantPropriete = {
-  clePropriete: keyof Brouillon;
+  clesPropriete: [keyof Brouillon];
   composant: ComposantQuestion;
   explications: string[];
 };
@@ -49,7 +49,7 @@ const toutesEtapes: PropsEtape[] = [
     illustration: '/statique/assets/images/illustration_accueil_connexion.svg',
     questions: [
       {
-        clePropriete: 'nomService',
+        clesPropriete: ['nomService'],
         composant: QuestionNomService,
         explications: [
           'Dans tout projet d’homologation, il est primordial d’identifier le périmètre sur lequel les travaux vont être menés.',
@@ -58,14 +58,14 @@ const toutesEtapes: PropsEtape[] = [
         ],
       },
       {
-        clePropriete: 'siret',
+        clesPropriete: ['siret'],
         composant: QuestionSiret,
         explications: [
           "Ces informations permettent de donner de la visibilité sur l'homologation au top-management de votre entité.",
         ],
       },
       {
-        clePropriete: 'statutDeploiement',
+        clesPropriete: ['statutDeploiement'],
         composant: QuestionStatutDeploiement,
         explications: [
           "Ces informations permettent de juger de l'adhérence du processus d'homologation au sein de votre entité. ",
@@ -74,7 +74,7 @@ const toutesEtapes: PropsEtape[] = [
         ],
       },
       {
-        clePropriete: 'presentation',
+        clesPropriete: ['presentation'],
         composant: QuestionPresentation,
         explications: [
           "Cette présentation permettra à l'autorité d'homologation de comprendre le périmètre d'homologation et le système d'information.",
@@ -82,7 +82,7 @@ const toutesEtapes: PropsEtape[] = [
         ],
       },
       {
-        clePropriete: 'pointsAcces',
+        clesPropriete: ['pointsAcces'],
         composant: QuestionPointsAcces,
         explications: [
           "Cette information permet à l'autorité d'homologation d'accéder au système d'information pour mieux le comprendre.",
@@ -96,7 +96,7 @@ const toutesEtapes: PropsEtape[] = [
     illustration: '/statique/assets/images/home/illustration_etape_2.svg',
     questions: [
       {
-        clePropriete: 'typeService',
+        clesPropriete: ['typeService'],
         composant: QuestionTypesService,
         explications: [
           "Cette information permet d'évaluer le type de système d'information et ainsi de commencer à sélectionner les exigences nécessaires pour son homologation.",
@@ -104,7 +104,7 @@ const toutesEtapes: PropsEtape[] = [
         ],
       },
       {
-        clePropriete: 'specificitesProjet',
+        clesPropriete: ['specificitesProjet'],
         composant: QuestionSpecificitesProjet,
         explications: [
           "Ces informations vont permettre de sélectionner les mesures de sécurité nécessaires à l'homologation du périmètre identifié.",
@@ -112,7 +112,7 @@ const toutesEtapes: PropsEtape[] = [
         ],
       },
       {
-        clePropriete: 'typeHebergement',
+        clesPropriete: ['typeHebergement'],
         composant: QuestionTypeHebergement,
         explications: [
           "Ces informations permettent d'identifier ce qui est directement sous votre contrôle ou au contraire sous le contrôle d'un prestataire (et donc devant être cadré via les clauses contractuelles).",
@@ -140,7 +140,10 @@ export const etapeStore = {
       const etape = toutesEtapes[e];
       for (let q = 0; q < etape.questions.length; q++) {
         const question = etape.questions[q];
-        if (donneesBrouillon[question.clePropriete] === undefined) {
+        const questionEstSansReponse = question.clesPropriete.every(
+          (clePropriete) => donneesBrouillon[clePropriete] === undefined
+        );
+        if (questionEstSansReponse) {
           cibleTrouvee = true;
           break;
         }
