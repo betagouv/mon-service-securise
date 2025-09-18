@@ -188,7 +188,7 @@ export const etapeStore = {
       idBrouillonExistant: idBrouillon,
     }));
   },
-  suivant: async () => {
+  suivant: () => {
     update((etatCourant) => {
       let prochaineEtape = etatCourant.etapeEnCours;
       let prochaineQuestion = etatCourant.questionEnCours + 1;
