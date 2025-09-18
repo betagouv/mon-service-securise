@@ -2,6 +2,7 @@
 
 ## TODO
 
+- [ ] Svelte : que `npm run build:front` déclecnche un `tsc` dans `svelte/` pour vérifier qu'il n'y a pas d'erreur TS
 - [ ] input type : utiliser l'input DSFR de l'UI Kit sur toutes les étapes où c'est nécessaire
 - [ ] choix unique => passage à l'étape suivante
 - [ ] moteur v2 : optimisation pour `break` la boucle d'évaluation d'un champ dès qu'on a un match ?

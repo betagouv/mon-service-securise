@@ -1,16 +1,5 @@
 import type { UUID } from '../typesBasiquesSvelte';
-import type { Brouillon } from './creationV2.d';
-
-export const unBrouillonVierge = (): Brouillon => ({
-  nomService: '',
-  siret: '',
-  statutDeploiement: '',
-  presentation: '',
-  pointsAcces: [],
-  typeService: [],
-  specificitesProjet: [],
-  typeHebergement: '',
-});
+import type { BrouillonIncomplet } from './creationV2.types';
 
 export const creeBrouillonService = async (
   nomService: string
@@ -22,7 +11,9 @@ export const creeBrouillonService = async (
 export const finaliseBrouillonService = async (idBrouillon: UUID) =>
   await axios.post(`/api/brouillon-service/${idBrouillon}/finalise`);
 
-export type MiseAJour = Partial<Record<keyof Brouillon, string | string[]>>;
+export type MiseAJour = Partial<
+  Record<keyof BrouillonIncomplet, string | string[]>
+>;
 
 export const metsAJourBrouillonService = async (
   idBrouillon: UUID,
@@ -37,5 +28,7 @@ export const metsAJourBrouillonService = async (
   );
 };
 
-export const lisBrouillonService = async (id: UUID): Promise<Brouillon> =>
-  (await axios.get<Brouillon>(`/api/brouillon-service/${id}`)).data;
+export const lisBrouillonService = async (
+  id: UUID
+): Promise<BrouillonIncomplet> =>
+  (await axios.get<BrouillonIncomplet>(`/api/brouillon-service/${id}`)).data;

@@ -2,12 +2,13 @@
   import { createEventDispatcher } from 'svelte';
   import ChampDeSaisie from '../../../ui/ChampDeSaisie.svelte';
   import type { MiseAJour } from '../../creationV2.api';
+  import { leBrouillon } from '../brouillon.store';
 
   export let estComplete: boolean;
-  export let valeur: string;
+
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: estComplete = valeur ? valeur.trim().length > 0 : false;
+  $: estComplete = $leBrouillon.presentation.trim().length > 0;
 </script>
 
 <label for="presentation" class="titre-question">
@@ -15,7 +16,10 @@
   <ChampDeSaisie
     label=""
     tailleMinimale={5}
-    bind:contenu={valeur}
-    on:blur={() => emetEvenement('champModifie', { presentation: valeur })}
+    bind:contenu={$leBrouillon.presentation}
+    on:blur={() =>
+      emetEvenement('champModifie', {
+        presentation: $leBrouillon.presentation,
+      })}
   />
 </label>

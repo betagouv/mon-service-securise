@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { etapeCourante } from './etapes/etapes.store';
+  import { etapeCourante } from './etapes/etapeCourante.store';
 
   $: avancement =
     ($etapeCourante.numeroQuestionCourante / $etapeCourante.nombreQuestions) *
