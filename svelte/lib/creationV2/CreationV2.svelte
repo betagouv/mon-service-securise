@@ -7,6 +7,7 @@
   import {
     lisBrouillonService,
     metsAJourBrouillonService,
+    type MiseAJour,
     unBrouillonVierge,
   } from './creationV2.api';
   import { onMount } from 'svelte';
@@ -26,19 +27,21 @@
     }
   });
 
-  const metsAJourPropriete = async (e: CustomEvent<string>) => {
-    const valeur = e.detail;
+  const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {
     if (!questionCouranteEstComplete) return;
     const idBrouillon = $etapeStore.idBrouillonExistant;
-    if (!idBrouillon && $etapeCourante.estPremiereQuestion) {
-      await etapeStore.creeBrouillon(valeur);
+    if (
+      !idBrouillon &&
+      $etapeCourante.estPremiereQuestion &&
+      e.detail.nomService
+    ) {
+      await etapeStore.creeBrouillon(e.detail.nomService as string);
       return;
     } else if (!idBrouillon) {
       return;
     }
 
-    const cle = $etapeCourante.questionCourante.clesPropriete[0];
-    await metsAJourBrouillonService(idBrouillon, { [cle]: valeur });
+    await metsAJourBrouillonService(idBrouillon, e.detail);
   };
 
   const suivant = async () => {

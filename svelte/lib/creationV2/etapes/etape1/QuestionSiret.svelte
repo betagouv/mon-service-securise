@@ -1,12 +1,12 @@
 <script lang="ts">
   import ChampTexte from '../../../ui/ChampTexte.svelte';
   import { createEventDispatcher } from 'svelte';
+  import type { MiseAJour } from '../../creationV2.api';
 
   export let estComplete: boolean;
   export let valeur: string;
-  const emetEvenement = createEventDispatcher<{
-    champModifie: string | number;
-  }>();
+
+  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
   $: estComplete = /^\d{14}$/.test(valeur);
 </script>
@@ -17,6 +17,6 @@
     id="siret"
     nom="siret"
     bind:valeur
-    on:blur={() => emetEvenement('champModifie', valeur)}
+    on:blur={() => emetEvenement('champModifie', { siret: valeur })}
   />
 </label>

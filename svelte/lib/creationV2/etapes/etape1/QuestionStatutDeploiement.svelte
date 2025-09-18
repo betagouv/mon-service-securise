@@ -1,15 +1,16 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import Radio from '../../Radio.svelte';
+  import type { MiseAJour } from '../../creationV2.api';
 
   export let estComplete: boolean;
   export let valeur: string;
 
-  const dispatch = createEventDispatcher<{ champModifie: string }>();
+  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
   $: estComplete = !!valeur;
 
-  $: if (valeur) dispatch('champModifie', valeur);
+  $: if (valeur) emetEvenement('champModifie', { statutDeploiement: valeur });
 </script>
 
 <label for="statut-deploiement" class="titre-question">

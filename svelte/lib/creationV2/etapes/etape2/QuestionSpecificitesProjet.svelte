@@ -2,6 +2,7 @@
   import { createEventDispatcher } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import CheckboxIllustree from './CheckboxIllustree.svelte';
+  import type { MiseAJour } from '../../creationV2.api';
 
   export let estComplete: boolean;
   export let valeur: string[] = [];
@@ -18,9 +19,9 @@
     echangeOuReceptionEmails: 'echangeOuReceptionEmails.svg',
   };
 
-  const dispatch = createEventDispatcher<{ champModifie: string[] }>();
+  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: if (valeur) dispatch('champModifie', valeur);
+  $: if (valeur) emetEvenement('champModifie', { specificitesProjet: valeur });
 
   $: estComplete = true;
 

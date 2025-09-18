@@ -1,10 +1,11 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import ChampTexte from '../../../ui/ChampTexte.svelte';
+  import type { MiseAJour } from '../../creationV2.api';
 
   export let estComplete: boolean;
   export let valeur: string[] = [''];
-  const emetEvenement = createEventDispatcher<{ champModifie: string[] }>();
+  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
   $: estComplete = valeur.every((v) => (v ? v.trim().length > 0 : false));
 
@@ -18,7 +19,7 @@
   };
 
   const enregistre = () => {
-    emetEvenement('champModifie', valeur);
+    emetEvenement('champModifie', { pointsAcces: valeur });
   };
 </script>
 
