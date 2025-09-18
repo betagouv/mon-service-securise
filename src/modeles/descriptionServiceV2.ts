@@ -29,7 +29,7 @@ export type DonneesDescriptionServiceV2 = {
   statutDeploiement: StatutDeploiement;
   presentation: string;
   pointsAcces?: { description: string }[];
-  typeService?: TypeService[];
+  typeService: TypeService[];
   specificitesProjet?: SpecificiteProjet[];
   typeHebergement: TypeHebergement;
 };
@@ -43,7 +43,7 @@ export class DescriptionServiceV2 {
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   private readonly presentation: string;
   private readonly pointsAcces: PointsAcces;
-  private readonly typeService?: TypeService[];
+  private readonly typeService: TypeService[];
   private readonly specificitesProjet?: SpecificiteProjet[];
   private readonly typeHebergement: TypeHebergement;
 
