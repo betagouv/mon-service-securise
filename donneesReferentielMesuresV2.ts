@@ -67,6 +67,16 @@ export const questionsV2 = {
     },
     autre: { nom: 'Autre' },
   },
+  activiteExternalisee: {
+    administrationTechnique: {
+      nom: "L'administration technique",
+      exemple: 'Administration logique des serveurs',
+    },
+    developpementLogiciel: {
+      nom: 'Le développement',
+      exemple: '',
+    },
+  },
   categorieDonneesTraitees: {
     donneesSensibles: {
       nom: 'Données sensibles',

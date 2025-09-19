@@ -3,6 +3,7 @@ import type { questionsV2 } from '../../../donneesReferentielMesuresV2';
 export type TypeService = keyof typeof questionsV2.typeDeService;
 export type SpecificiteProjet = keyof typeof questionsV2.specificiteProjet;
 export type TypeHebergement = keyof typeof questionsV2.typeHebergement;
+export type ActiviteeExternalisee = keyof typeof questionsV2.typeHebergement;
 
 // Côté HTTP, on n'est pas sûr d'avoir les propriétés,
 // puisque le brouillon est enregistré au fil de l'eau
