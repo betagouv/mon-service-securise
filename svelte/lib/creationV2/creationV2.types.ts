@@ -16,6 +16,7 @@ export type BrouillonIncomplet = {
   typeService?: TypeService[];
   specificitesProjet?: SpecificiteProjet[];
   typeHebergement?: TypeHebergement;
+  activitesExternalisees?: ActiviteeExternalisee[];
 };
 
 // Côté Svelte, on VEUT toujours toutes les propriétés,
@@ -29,4 +30,5 @@ export type BrouillonSvelte = {
   typeService: TypeService[];
   specificitesProjet: SpecificiteProjet[];
   typeHebergement: TypeHebergement | '';
+  activitesExternalisees: ActiviteeExternalisee[];
 };
