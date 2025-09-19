@@ -4,6 +4,7 @@
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
+  import type { ActiviteeExternalisee } from '../../creationV2.types';
 
   export let estComplete: boolean;
 
@@ -14,6 +15,10 @@
   $: emetEvenement('champModifie', {
     typeHebergement: $leBrouillon.typeHebergement,
   });
+
+  let activites: ActiviteeExternalisee[] = [];
+
+  $: console.log('JE COCHE LES ACTIVITÉS', activites);
 </script>
 
 <label for="type-hebergement" class="titre-question">
@@ -31,21 +36,15 @@
   class="titre-question activites-externalisees"
 >
   Quelles activités du projet sont entièrement externalisées ?
-
-  <label>
-    <input type="checkbox" />
-    <span>
-      <span class="libelle">L'administration technique</span>
-      <span class="indication-libelle">Administration logique des serveurs</span
-      >
-    </span>
-  </label>
-  <label>
-    <input type="checkbox" />
-    <span>
-      <span class="libelle">Le développement</span>
-    </span>
-  </label>
+  {#each Object.entries(questionsV2.activiteExternalisee) as [idActivite, { nom, exemple }]}
+    <label>
+      <input type="checkbox" value={idActivite} bind:group={activites} />
+      <span>
+        <span class="libelle">{nom}</span>
+        {#if exemple}<span class="indication-libelle">{exemple}</span>{/if}
+      </span>
+    </label>
+  {/each}
 </label>
 
 <style lang="scss">
