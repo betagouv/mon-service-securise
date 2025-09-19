@@ -14,6 +14,69 @@ export const mesuresV2 = {
 };
 
 export const questionsV2 = {
+  typeDeService: {
+    portailInformation: {
+      nom: "Portail d'information",
+      exemple: 'ex. site web vitrine sans création de compte',
+    },
+    serviceEnLigne: {
+      nom: 'Service en ligne',
+      exemple: 'ex. démarche en ligne, téléservice avec création de compte',
+    },
+    api: {
+      nom: 'Une API',
+      exemple: 'ex. mise à disposition de données sur Internet',
+    },
+    applicationMobile: {
+      nom: 'Une application mobile',
+      exemple:
+        'ex. une application permettant de visualiser des vidéos en ligne',
+    },
+    autreSystemeInformation: {
+      nom: "Autre Système d'information",
+      exemple: '',
+    },
+  },
+  specificiteProjet: {
+    postesDeTravail: { nom: 'Des postes de travail', exemple: '' },
+    accesPhysiqueAuxBureaux: {
+      nom: "L'accès physique des bureaux",
+      exemple: '',
+    },
+    accesPhysiqueAuxSallesTechniques: {
+      nom: "L'accès physique des salles techniques",
+      exemple: '',
+    },
+    annuaire: { nom: 'Un annuaire', exemple: '' },
+    dispositifDeSignatureElectronique: {
+      nom: 'Un dispositif de signature électronique',
+      exemple: '',
+    },
+    echangeOuReceptionEmails: {
+      nom: "L'échange et/ou la réception d'emails",
+      exemple: '',
+    },
+  },
+  typeHebergement: {
+    onPremise: { nom: 'Hébergement interne (On-premise)' },
+    cloud: {
+      nom: 'Le système d’information repose sur une infrastructure ou une plateforme Cloud (IaaS/PaaS)',
+    },
+    saas: {
+      nom: "Le système est entièrement fourni et vous l'utilisez directement via une interface (SaaS)",
+    },
+    autre: { nom: 'Autre' },
+  },
+  activiteExternalisee: {
+    administrationTechnique: {
+      nom: "L'administration technique",
+      exemple: 'Administration logique des serveurs',
+    },
+    developpementLogiciel: {
+      nom: 'Le développement',
+      exemple: '',
+    },
+  },
   categorieDonneesTraitees: {
     donneesSensibles: {
       nom: 'Données sensibles',

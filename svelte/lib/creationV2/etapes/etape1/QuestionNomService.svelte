@@ -1,22 +1,25 @@
 <script lang="ts">
   import ChampTexte from '../../../ui/ChampTexte.svelte';
   import { createEventDispatcher } from 'svelte';
+  import type { MiseAJour } from '../../creationV2.api';
+  import { leBrouillon } from '../brouillon.store';
 
   export let estComplete: boolean;
-  export let valeur: string;
+
   const emetEvenement = createEventDispatcher<{
-    champModifie: string | number;
+    champModifie: MiseAJour;
   }>();
 
-  $: estComplete = valeur ? valeur.trim().length > 0 : false;
+  $: estComplete = $leBrouillon.nomService.trim().length > 0;
 </script>
 
-<label for="nom-service">
+<label for="nom-service" class="titre-question">
   Quel est le nom de votre service ?
   <ChampTexte
     id="nom-service"
     nom="nom-service"
-    bind:valeur
-    on:blur={() => emetEvenement('champModifie', valeur)}
+    bind:valeur={$leBrouillon.nomService}
+    on:blur={() =>
+      emetEvenement('champModifie', { nomService: $leBrouillon.nomService })}
   />
 </label>

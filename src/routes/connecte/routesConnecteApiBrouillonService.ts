@@ -6,6 +6,7 @@ import { valideBody, valideParams } from '../../http/validePayloads.js';
 import { UUID } from '../../typesBasiques.js';
 import { ErreurBrouillonInexistant } from '../../erreurs.js';
 import { Referentiel } from '../../referentiel.interface.js';
+import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 
 const routesConnecteApiBrouillonService = ({
   depotDonnees,
@@ -22,6 +23,13 @@ const routesConnecteApiBrouillonService = ({
     statutDeploiement: z.enum(Object.keys(referentiel.statutsDeploiement())),
     presentation: z.string().trim().nonempty(),
     pointsAcces: z.array(z.string().trim().nonempty()),
+    typeService: z
+      .array(z.enum(Object.keys(questionsV2.typeDeService)))
+      .nonempty(),
+    specificitesProjet: z.array(
+      z.enum(Object.keys(questionsV2.specificiteProjet))
+    ),
+    typeHebergement: z.enum(Object.keys(questionsV2.typeHebergement)),
   });
 
   routes.post(
@@ -55,6 +63,9 @@ const routesConnecteApiBrouillonService = ({
           'statutDeploiement',
           'presentation',
           'pointsAcces',
+          'typeService',
+          'specificitesProjet',
+          'typeHebergement',
         ]),
       })
     ),

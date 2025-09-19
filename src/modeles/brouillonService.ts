@@ -5,6 +5,7 @@ import {
   StatutDeploiement,
 } from './descriptionServiceV2.js';
 import donneesReferentiel from '../../donneesReferentiel.js';
+import { questionsV2 } from '../../donneesReferentielMesuresV2.js';
 
 export type DonneesBrouillonService = {
   nomService: string;
@@ -12,12 +13,15 @@ export type DonneesBrouillonService = {
   statutDeploiement?: keyof typeof donneesReferentiel.statutsDeploiement;
   presentation?: string;
   pointsAcces?: string[];
+  typeService?: [keyof typeof questionsV2.typeDeService];
+  specificitesProjet?: [keyof typeof questionsV2.specificiteProjet];
+  typeHebergement?: keyof typeof questionsV2.typeHebergement;
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
 
 export class BrouillonService {
-  private donnees: DonneesBrouillonService;
+  private readonly donnees: DonneesBrouillonService;
 
   constructor(
     readonly id: UUID,
@@ -46,6 +50,9 @@ export class BrouillonService {
         presentation: this.donnees.presentation!,
         pointsAcces:
           this.donnees.pointsAcces?.map((p) => ({ description: p })) || [],
+        typeService: this.donnees.typeService!,
+        specificitesProjet: this.donnees.specificitesProjet,
+        typeHebergement: this.donnees.typeHebergement!,
         niveauDeSecurite: '', // TODO : Étape 5
         categorieDonneesTraitees: 'donneesSensibles', // TODO : Étape 3 > Question 4
         volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
@@ -69,6 +76,15 @@ export class BrouillonService {
       }),
       ...(this.donnees.pointsAcces && {
         pointsAcces: this.donnees.pointsAcces,
+      }),
+      ...(this.donnees.typeService && {
+        typeService: this.donnees.typeService,
+      }),
+      ...(this.donnees.specificitesProjet && {
+        specificitesProjet: this.donnees.specificitesProjet,
+      }),
+      ...(this.donnees.typeHebergement && {
+        typeHebergement: this.donnees.typeHebergement,
       }),
     };
   }

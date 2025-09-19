@@ -1,49 +1,54 @@
 <script lang="ts">
   import {
-    enCoursDeChargement,
-    etapeCourante,
-    etapeStore,
-  } from './etapes/etapes.store';
-  import {
+    creeBrouillonService,
+    finaliseBrouillonService,
     lisBrouillonService,
     metsAJourBrouillonService,
-    unBrouillonVierge,
+    type MiseAJour,
   } from './creationV2.api';
   import { onMount } from 'svelte';
   import type { UUID } from '../typesBasiquesSvelte';
-  import type { Brouillon } from './creationV2.d';
   import JaugeDeProgression from './JaugeDeProgression.svelte';
+  import { navigationStore } from './etapes/navigation.store';
+  import { etapeCourante } from './etapes/etapeCourante.store';
+  import { leBrouillon } from './etapes/brouillon.store';
+  import { ajouteParametreAUrl } from '../outils/url';
 
-  let donneesBrouillon: Brouillon = unBrouillonVierge();
   let questionCouranteEstComplete = false;
+  let enCoursDeChargement = false;
+  let idBrouillon: UUID;
 
   onMount(async () => {
     const requete = new URLSearchParams(window.location.search);
     if (requete.has('id')) {
-      const id = requete.get('id') as UUID;
-      donneesBrouillon = await lisBrouillonService(id);
-      etapeStore.rechargeBrouillon(id, donneesBrouillon);
+      idBrouillon = requete.get('id') as UUID;
+      const donneesBrouillon = await lisBrouillonService(idBrouillon);
+      leBrouillon.chargeDonnees(donneesBrouillon);
+      navigationStore.reprendreEditionDe(donneesBrouillon);
     }
   });
 
-  const metsAJourPropriete = async (e: CustomEvent<string>) => {
+  const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {
     if (!questionCouranteEstComplete) return;
-    const idBrouillon = $etapeStore.idBrouillonExistant;
-    if (!idBrouillon) return;
 
-    const valeur = e.detail;
-    const cle = $etapeCourante.questionCourante.clePropriete;
+    const doitCreerBrouillon =
+      !idBrouillon && $etapeCourante.estPremiereQuestion;
+    if (doitCreerBrouillon) {
+      idBrouillon = await creeBrouillonService(e.detail.nomService as string);
+      ajouteParametreAUrl('id', idBrouillon);
+      return;
+    }
 
-    await metsAJourBrouillonService(idBrouillon, cle, valeur);
+    await metsAJourBrouillonService(idBrouillon, e.detail);
   };
 
-  const suivant = async () => {
-    const cle = $etapeCourante.questionCourante.clePropriete;
-    await etapeStore.suivant(donneesBrouillon[cle]!);
-  };
+  const suivant = () => navigationStore.suivant();
 
   const finalise = async () => {
-    await etapeStore.finalise();
+    enCoursDeChargement = true;
+    await finaliseBrouillonService(idBrouillon);
+    enCoursDeChargement = false;
+    window.location.href = '/tableauDeBord';
   };
 </script>
 
@@ -65,9 +70,6 @@
       <svelte:component
         this={$etapeCourante.questionCourante.composant}
         bind:estComplete={questionCouranteEstComplete}
-        bind:valeur={donneesBrouillon[
-          $etapeCourante.questionCourante.clePropriete
-        ]}
         on:champModifie={metsAJourPropriete}
       />
 
@@ -89,7 +91,7 @@
             taille="md"
             icone="arrow-left-line"
             positionIcone="gauche"
-            on:click={etapeStore.precedent}
+            on:click={navigationStore.precedent}
           />
         {/if}
 
@@ -102,12 +104,14 @@
             ? 'check-line'
             : 'arrow-right-line'}
           positionIcone="droite"
-          actif={questionCouranteEstComplete && !$enCoursDeChargement}
+          actif={questionCouranteEstComplete && !enCoursDeChargement}
           on:click={async () =>
-            $etapeCourante.estDerniereQuestion
-              ? await finalise()
-              : await suivant()}
+            $etapeCourante.estDerniereQuestion ? await finalise() : suivant()}
         />
+      </div>
+
+      <div class="info-enregistrement-automatique">
+        Votre brouillon est enregistré automatiquement.
       </div>
     </div>
   </div>
@@ -126,6 +130,13 @@
     width: 100%;
     height: 100%;
     text-align: left;
+  }
+
+  .info-enregistrement-automatique {
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    color: #666;
+    margin-bottom: 32px;
   }
 
   .conteneur-creation {
@@ -165,7 +176,7 @@
           margin: 8px 0;
         }
 
-        :global(label) {
+        :global(.titre-question) {
           display: flex;
           flex-direction: column;
           gap: 16px;
@@ -178,6 +189,7 @@
           display: flex;
           gap: 16px;
           margin-top: 8px;
+          margin-bottom: 16px;
         }
       }
     }

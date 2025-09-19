@@ -1,32 +1,43 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount, tick } from 'svelte';
   import ChampTexte from '../../../ui/ChampTexte.svelte';
+  import type { MiseAJour } from '../../creationV2.api';
+  import { leBrouillon } from '../brouillon.store';
 
   export let estComplete: boolean;
-  export let valeur: string[] = [''];
-  const emetEvenement = createEventDispatcher<{ champModifie: string[] }>();
 
-  $: estComplete = valeur.every((v) => (v ? v.trim().length > 0 : false));
+  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+
+  onMount(() => {
+    // Force la présence d'au moins un point, pour avoir une UI agréable qui montre un champ
+    if ($leBrouillon.pointsAcces.length === 0) ajouteValeur();
+  });
+
+  // N'avoir aucun point d'accès est valide, donc on peut utiliser `every` qui renvoie `true` sur tableau vide.
+  $: estComplete = $leBrouillon.pointsAcces.every((v) =>
+    v ? v.trim().length > 0 : false
+  );
 
   const supprimeValeur = (index: number) => {
-    valeur = valeur.filter((_, i) => i !== index);
-    enregistre();
+    $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
+      (_, i) => i !== index
+    );
   };
 
   const ajouteValeur = () => {
-    valeur = [...valeur, ''];
+    $leBrouillon.pointsAcces = [...$leBrouillon.pointsAcces, ''];
   };
 
   const enregistre = () => {
-    emetEvenement('champModifie', valeur);
+    emetEvenement('champModifie', { pointsAcces: $leBrouillon.pointsAcces });
   };
 </script>
 
-<label for="presentation">
+<label for="presentation" class="titre-question">
   Quelle est l'URL de votre service?
 
   <span class="sous-titre"> exemple : https://www.exemple.com </span>
-  {#each valeur as url, index}
+  {#each $leBrouillon.pointsAcces as url, index}
     <div class="conteneur-url">
       <ChampTexte
         id={`pointsAcces-${index}`}
@@ -41,7 +52,11 @@
         taille="lg"
         icone="delete-line"
         positionIcone="seule"
-        on:click={() => supprimeValeur(index)}
+        on:click={async () => {
+          supprimeValeur(index);
+          await tick();
+          if (estComplete) enregistre();
+        }}
       />
     </div>
   {/each}
