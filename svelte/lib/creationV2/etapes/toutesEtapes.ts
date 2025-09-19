@@ -12,7 +12,7 @@ import type { BrouillonSvelte } from '../creationV2.types';
 type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
 
 export type QuestionBindeeSurBrouillon = {
-  clesPropriete: [keyof BrouillonSvelte];
+  clesPropriete: Array<keyof BrouillonSvelte>;
   composant: ComposantQuestion;
   explications: string[];
 };
@@ -93,7 +93,7 @@ export const toutesEtapes: EtapeDuWizard[] = [
         ],
       },
       {
-        clesPropriete: ['typeHebergement'],
+        clesPropriete: ['typeHebergement', 'activitesExternalisees'],
         composant: QuestionTypeHebergement,
         explications: [
           "Ces informations permettent d'identifier ce qui est directement sous votre contrôle ou au contraire sous le contrôle d'un prestataire (et donc devant être cadré via les clauses contractuelles).",

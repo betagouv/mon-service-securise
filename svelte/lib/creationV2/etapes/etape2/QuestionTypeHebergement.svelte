@@ -7,18 +7,23 @@
   import type { ActiviteeExternalisee } from '../../creationV2.types';
 
   export let estComplete: boolean;
-
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
-
   $: estComplete = !!$leBrouillon.typeHebergement;
 
+  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
   $: emetEvenement('champModifie', {
     typeHebergement: $leBrouillon.typeHebergement,
   });
 
-  let activites: ActiviteeExternalisee[] = [];
+  const externaliseSiNecessaire = (e: Event) => {
+    const aucune = [] as ActiviteeExternalisee[];
+    const toutes = Object.keys(
+      questionsV2.activiteExternalisee
+    ) as ActiviteeExternalisee[];
 
-  $: console.log('JE COCHE LES ACTIVITÉS', activites);
+    const { value: typeHebergement } = e.target as HTMLInputElement;
+    $leBrouillon.activitesExternalisees =
+      typeHebergement === 'saas' ? toutes : aucune;
+  };
 </script>
 
 <label for="type-hebergement" class="titre-question">
@@ -27,7 +32,12 @@
   <span class="indication">Sélectionnez une réponse</span>
 
   {#each Object.entries(questionsV2.typeHebergement) as [idType, { nom }]}
-    <Radio id={idType} {nom} bind:valeur={$leBrouillon.typeHebergement} />
+    <Radio
+      id={idType}
+      {nom}
+      bind:valeur={$leBrouillon.typeHebergement}
+      on:change={externaliseSiNecessaire}
+    />
   {/each}
 </label>
 
@@ -38,7 +48,11 @@
   Quelles activités du projet sont entièrement externalisées ?
   {#each Object.entries(questionsV2.activiteExternalisee) as [idActivite, { nom, exemple }]}
     <label>
-      <input type="checkbox" value={idActivite} bind:group={activites} />
+      <input
+        type="checkbox"
+        value={idActivite}
+        bind:group={$leBrouillon.activitesExternalisees}
+      />
       <span>
         <span class="libelle">{nom}</span>
         {#if exemple}<span class="indication-libelle">{exemple}</span>{/if}

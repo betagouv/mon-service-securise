@@ -5,7 +5,7 @@
 </script>
 
 <div class="conteneur-radio">
-  <input type="radio" {id} value={id} bind:group={valeur} />
+  <input type="radio" {id} value={id} bind:group={valeur} on:change />
   <label for={id}>{nom}</label>
 </div>
 
