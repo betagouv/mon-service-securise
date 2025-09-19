@@ -32,16 +32,16 @@
 >
   Quelles activités du projet sont entièrement externalisées ?
 
-  <label
-    ><input type="checkbox" />
+  <label>
+    <input type="checkbox" />
     <span>
       <span class="libelle">L'administration technique</span>
       <span class="indication-libelle">Administration logique des serveurs</span
       >
     </span>
   </label>
-  <label
-    ><input type="checkbox" />
+  <label>
+    <input type="checkbox" />
     <span>
       <span class="libelle">Le développement</span>
     </span>
@@ -63,8 +63,12 @@
     label {
       display: flex;
       flex-direction: row;
+      align-items: flex-start;
       gap: 8px;
-
+      input[type='checkbox'] {
+        position: relative;
+        top: 3px;
+      }
       span {
         display: flex;
         flex-direction: column;
