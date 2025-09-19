@@ -58,7 +58,9 @@ class IndiceCyber {
       0
     );
     const indiceCyberNoteMax = referentiel.indiceCyberNoteMax();
-    const indiceTotal = indiceCyberNoteMax * (totalPondere / nbTotalMesures);
+    const indiceTotal = nbTotalMesures
+      ? indiceCyberNoteMax * (totalPondere / nbTotalMesures)
+      : 0;
 
     this.scoreToutesCategories = toutesCategories.reduce(
       (acc, categorie) => ({

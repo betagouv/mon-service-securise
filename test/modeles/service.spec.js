@@ -9,8 +9,8 @@ import VueAnnexePDFMesures from '../../src/modeles/objetsPDF/objetPDFAnnexeMesur
 import VueAnnexePDFRisques from '../../src/modeles/objetsPDF/objetPDFAnnexeRisques.js';
 import { unService } from '../constructeurs/constructeurService.js';
 import {
-  Rubriques,
   Permissions,
+  Rubriques,
 } from '../../src/modeles/autorisations/gestionDroits.js';
 import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
@@ -617,6 +617,29 @@ describe('Un service', () => {
     service.mesures.indiceCyberPersonnalise = () => 4.8;
 
     expect(service.indiceCyberPersonnalise()).toEqual(4.8);
+  });
+
+  it('peut calculer son indice cyber personnalisé même quand toutes les mesures sont « Non faites »', () => {
+    // Le cas couvert ici est que le calcul de l'IC personnalisé EXCLUT les mesures non faites.
+    // Donc, s'il n'y a QUE du « non faite », on pourrait avoir des divisions par 0.
+    // C'est un bug qui est arrivé en PROD en septembre 2025.
+    // On le teste au niveau du service, car c'est le plus "réel" pour reproduire.
+    const r = Referentiel.creeReferentiel({
+      mesures: { consignesSecurite: { categorie: 'gouvernance' } },
+      categoriesMesures: { gouvernance: {} },
+      statutsMesures: { fait: '', enCours: '', nonFait: '', aLancer: '' },
+    });
+
+    const queDuNonFait = new Mesures(
+      { mesuresGenerales: [{ id: 'consignesSecurite', statut: 'nonFait' }] },
+      r
+    );
+    const indicePersonnalise = unService(r)
+      .avecMesures(queDuNonFait)
+      .construis()
+      .indiceCyberPersonnalise();
+
+    expect(indicePersonnalise).to.eql({ total: 0, gouvernance: 0 });
   });
 
   it('délègue aux mesures le calcul du nombre total de mesures générales', () => {

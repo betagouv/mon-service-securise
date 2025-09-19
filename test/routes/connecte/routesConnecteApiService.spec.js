@@ -2341,6 +2341,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         documentsPdfDisponibles: ['syntheseSecurite'],
         permissions: { gestionContributeurs: false },
         aUneSuggestionAction: false,
+        actionRecommandee: {
+          autorisee: false,
+          id: 'augmenterIndiceCyber',
+        },
         niveauSecurite: 'niveau1',
         pourcentageCompletude: 0,
       });
