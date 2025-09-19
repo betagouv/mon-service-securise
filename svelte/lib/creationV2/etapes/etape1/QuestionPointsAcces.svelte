@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { createEventDispatcher, onMount, tick } from 'svelte';
   import ChampTexte from '../../../ui/ChampTexte.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
@@ -52,8 +52,9 @@
         taille="lg"
         icone="delete-line"
         positionIcone="seule"
-        on:click={() => {
+        on:click={async () => {
           supprimeValeur(index);
+          await tick();
           if (estComplete) enregistre();
         }}
       />
