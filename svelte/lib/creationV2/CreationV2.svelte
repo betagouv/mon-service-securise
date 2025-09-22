@@ -201,7 +201,9 @@
 
       img {
         width: 100%;
-        max-width: 400px;
+        max-width: 350px;
+        display: flex;
+        margin: auto;
       }
 
       h3 {
