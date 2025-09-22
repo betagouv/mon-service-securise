@@ -18,6 +18,7 @@ export type QuestionBindeeSurBrouillon = {
   clesPropriete: Array<keyof BrouillonSvelte>;
   composant: ComposantQuestion;
   explications: string[];
+  avecAvanceRapide?: boolean;
 };
 
 type EtapeDuWizard = {
@@ -55,6 +56,7 @@ export const toutesEtapes: EtapeDuWizard[] = [
           'Cette information est importante afin de permettre à l’autorité d’homologation d’identifier à quel moment est initié le projet d’homologation.',
           'Il est recommandé d’amorcer l’homologation dès la conception du service afin d’éviter de s’exposer à des coûts importants de renforcement de la sécurité une fois un service déjà en production, moindres lorsque la sécurité est intégrée dès le départ.',
         ],
+        avecAvanceRapide: true,
       },
       {
         clesPropriete: ['presentation'],
@@ -115,6 +117,7 @@ export const toutesEtapes: EtapeDuWizard[] = [
           'Ces informations permettent d’évaluer l’exposition du système d’information aux sources de risque.',
           "En effet, en fonction de l'ouverture du système et de l'état de la menace, il est possible d’évaluer l'exposition et de la coupler avec la criticité pour évaluer le besoin de sécurité.",
         ],
+        avecAvanceRapide: true,
       },
       {
         clesPropriete: ['audienceCible'],
@@ -123,6 +126,7 @@ export const toutesEtapes: EtapeDuWizard[] = [
           "Ces informations permettent de comprendre les impacts sur l'image que peut avoir un incident de sécurité, notamment en proportionnalisant ces impacts par rapport à l'audience du système d'information de l'entité.",
           "En effet, en fonction de la quantité de personnes impactées, l'impact réputationnel peut être plus ou moins important. C'est par exemple le cas lors des attaques aboutissant à un défacement.",
         ],
+        avecAvanceRapide: true,
       },
       {
         clesPropriete: ['dureeDysfonctionnementAcceptable'],
@@ -132,6 +136,7 @@ export const toutesEtapes: EtapeDuWizard[] = [
           'Par exemple, l’utilisation d’un dispositif anti-DDOS est moins indispensable en cas de durée maximale de dysfonctionnement tolérable de plus de 24h.',
           "Lors de la sélection de ces informations, il est important d'identifier le besoin, et non pas ce qui est actuellement réalisable.",
         ],
+        avecAvanceRapide: true,
       },
     ],
   },
