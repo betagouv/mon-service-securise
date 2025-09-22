@@ -37,7 +37,7 @@
 </script>
 
 <label for="type-hebergement" class="titre-question">
-  Quel type de cloud utilisez-vous ?*
+  Quel type de cloud/hébergement utilisez-vous ?*
 
   <span class="indication">Sélectionnez une réponse</span>
 
