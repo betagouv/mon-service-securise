@@ -24,11 +24,11 @@ export const questionsV2 = {
       exemple: 'ex. démarche en ligne, téléservice avec création de compte',
     },
     api: {
-      nom: 'Une API',
+      nom: 'API',
       exemple: 'ex. mise à disposition de données sur Internet',
     },
     applicationMobile: {
-      nom: 'Une application mobile',
+      nom: 'Application mobile',
       exemple:
         'ex. une application permettant de visualiser des vidéos en ligne',
     },
