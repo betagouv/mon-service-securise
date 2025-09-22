@@ -13,12 +13,19 @@ describe('Une description service V2', () => {
         siret: '1111111111111',
         departement: '33',
       },
+      typeService: ['api'],
       statutDeploiement: 'enCours',
       niveauDeSecurite: 'niveau1',
       categorieDonneesTraitees: 'documentsRHSensibles',
       volumetrieDonneesTraitees: 'faible',
       presentation: 'Le premier de …',
       pointsAcces: [{ description: 'http://url.com' }],
+      audienceCible: 'large',
+      typeHebergement: 'autre',
+      ouvertureSysteme: 'accessibleSurInternet',
+      specificitesProjet: ['accesPhysiqueAuxBureaux'],
+      activitesExternalisees: ['developpementLogiciel'],
+      dureeDysfonctionnementAcceptable: 'moinsDe24h',
     });
 
     const aPersister = descriptionV2.donneesSerialisees();
@@ -30,12 +37,19 @@ describe('Une description service V2', () => {
         nom: 'Ville V',
         siret: '1111111111111',
       },
+      typeService: ['api'],
       statutDeploiement: 'enCours',
       niveauDeSecurite: 'niveau1',
       categorieDonneesTraitees: 'documentsRHSensibles',
       volumetrieDonneesTraitees: 'faible',
       presentation: 'Le premier de …',
       pointsAcces: [{ description: 'http://url.com' }],
+      activitesExternalisees: ['developpementLogiciel'],
+      audienceCible: 'large',
+      typeHebergement: 'autre',
+      ouvertureSysteme: 'accessibleSurInternet',
+      specificitesProjet: ['accesPhysiqueAuxBureaux'],
+      dureeDysfonctionnementAcceptable: 'moinsDe24h',
     });
   });
 

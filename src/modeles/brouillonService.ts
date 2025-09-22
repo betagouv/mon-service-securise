@@ -19,6 +19,7 @@ export type DonneesBrouillonService = {
   activitesExternalisees?: Array<keyof typeof questionsV2.activiteExternalisee>;
   ouvertureSysteme?: keyof typeof questionsV2.ouvertureSysteme;
   audienceCible?: keyof typeof questionsV2.audienceCible;
+  dureeDysfonctionnementAcceptable?: keyof typeof questionsV2.dureeDysfonctionnementAcceptable;
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
@@ -59,6 +60,8 @@ export class BrouillonService {
         activitesExternalisees: this.donnees.activitesExternalisees || [],
         ouvertureSysteme: this.donnees.ouvertureSysteme!,
         audienceCible: this.donnees.audienceCible!,
+        dureeDysfonctionnementAcceptable:
+          this.donnees.dureeDysfonctionnementAcceptable!,
         niveauDeSecurite: '', // TODO : Étape 5
         categorieDonneesTraitees: 'donneesSensibles', // TODO : Étape 3 > Question 4
         volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
@@ -86,6 +89,7 @@ export class BrouillonService {
       ...siPresente('activitesExternalisees'),
       ...siPresente('ouvertureSysteme'),
       ...siPresente('audienceCible'),
+      ...siPresente('dureeDysfonctionnementAcceptable'),
     };
   }
 }

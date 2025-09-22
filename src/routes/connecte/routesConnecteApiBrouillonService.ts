@@ -35,6 +35,9 @@ const routesConnecteApiBrouillonService = ({
     ),
     ouvertureSysteme: z.enum(Object.keys(questionsV2.ouvertureSysteme)),
     audienceCible: z.enum(Object.keys(questionsV2.audienceCible)),
+    dureeDysfonctionnementAcceptable: z.enum(
+      Object.keys(questionsV2.dureeDysfonctionnementAcceptable)
+    ),
   });
 
   routes.post(
@@ -74,6 +77,7 @@ const routesConnecteApiBrouillonService = ({
           'activitesExternalisees',
           'ouvertureSysteme',
           'audienceCible',
+          'dureeDysfonctionnementAcceptable',
         ]),
       })
     ),
