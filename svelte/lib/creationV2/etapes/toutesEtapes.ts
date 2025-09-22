@@ -49,9 +49,8 @@ export const toutesEtapes: EtapeDuWizard[] = [
         clesPropriete: ['statutDeploiement'],
         composant: QuestionStatutDeploiement,
         explications: [
-          "Ces informations permettent de juger de l'adhérence du processus d'homologation au sein de votre entité. ",
-          'En effet, ce processus doit normalement démarrer lorsque le service est encore en conception, et non pas en production.',
-          "Cela permet notamment d'éviter des coûts importants de correction.",
+          'Cette information est importante afin de permettre à l’autorité d’homologation d’identifier à quel moment est initié le projet d’homologation.',
+          'Il est recommandé d’amorcer l’homologation dès la conception du service afin d’éviter de s’exposer à des coûts importants de renforcement de la sécurité une fois un service déjà en production, moindres lorsque la sécurité est intégrée dès le départ.',
         ],
       },
       {
