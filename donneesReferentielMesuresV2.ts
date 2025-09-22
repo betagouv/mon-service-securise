@@ -130,6 +130,28 @@ export const questionsV2 = {
         "ex. service public dont un portail avec une mire d'authentification accessible à tous sur internet",
     },
   },
+  audienceCible: {
+    limitee: {
+      nom: 'Limitée',
+      description:
+        'Utilisé par un petit nombre de personnes, souvent en interne.',
+    },
+    moyenne: {
+      nom: 'Moyenne',
+      description:
+        'Utilisé par un périmètre restreint à l’échelle locale ou régionale.',
+    },
+    large: {
+      nom: 'Large',
+      description:
+        'Utilisé à l’échelle nationale par plusieurs entités d’un même domaine.',
+    },
+    tresLarge: {
+      nom: 'Très large',
+      description:
+        'Ouvert ou accessible à un public national voire international.',
+    },
+  },
 };
 
 export type CategorieDonneesTraitees =

@@ -9,6 +9,7 @@ import QuestionTypeHebergement from './etape2/QuestionTypeHebergement.svelte';
 import type { SvelteComponent } from 'svelte';
 import type { BrouillonSvelte } from '../creationV2.types';
 import QuestionOuvertureSysteme from './etape3/QuestionOuvertureSysteme.svelte';
+import QuestionAudienceCible from './etape3/QuestionAudienceCible.svelte';
 
 type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
 
@@ -112,6 +113,14 @@ export const toutesEtapes: EtapeDuWizard[] = [
         explications: [
           'Ces informations permettent d’évaluer l’exposition du système d’information aux sources de risque.',
           "En effet, en fonction de l'ouverture du système et de l'état de la menace, il est possible d’évaluer l'exposition et de la coupler avec la criticité pour évaluer le besoin de sécurité.",
+        ],
+      },
+      {
+        clesPropriete: ['audienceCible'],
+        composant: QuestionAudienceCible,
+        explications: [
+          "Ces informations permettent de comprendre les impacts sur l'image que peut avoir un incident de sécurité, notamment en proportionnalisant ces impacts par rapport à l'audience du système d'information de l'entité.",
+          "En effet, en fonction de la quantité de personnes impactées, l'impact réputationnel peut être plus ou moins important. C'est par exemple le cas lors des attaques aboutissant à un défacement.",
         ],
       },
     ],
