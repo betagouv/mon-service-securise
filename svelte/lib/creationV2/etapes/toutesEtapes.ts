@@ -10,6 +10,7 @@ import type { SvelteComponent } from 'svelte';
 import type { BrouillonSvelte } from '../creationV2.types';
 import QuestionOuvertureSysteme from './etape3/QuestionOuvertureSysteme.svelte';
 import QuestionAudienceCible from './etape3/QuestionAudienceCible.svelte';
+import QuestionDureeDysfonctionnement from './etape3/QuestionDureeDysfonctionnement.svelte';
 
 type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
 
@@ -121,6 +122,15 @@ export const toutesEtapes: EtapeDuWizard[] = [
         explications: [
           "Ces informations permettent de comprendre les impacts sur l'image que peut avoir un incident de sécurité, notamment en proportionnalisant ces impacts par rapport à l'audience du système d'information de l'entité.",
           "En effet, en fonction de la quantité de personnes impactées, l'impact réputationnel peut être plus ou moins important. C'est par exemple le cas lors des attaques aboutissant à un défacement.",
+        ],
+      },
+      {
+        clesPropriete: ['dureeDysfonctionnementAcceptable'],
+        composant: QuestionDureeDysfonctionnement,
+        explications: [
+          "Ces informations permettent d'évaluer la durée maximale tolérable d'indisponibilité du système d'information pour identifier le besoin de disponibilité afin d'en déduire des mesures de sécurité proportionnelles.",
+          'Par exemple, l’utilisation d’un dispositif anti-DDOS est moins indispensable en cas de durée maximale de dysfonctionnement tolérable de plus de 24h.',
+          "Lors de la sélection de ces informations, il est important d'identifier le besoin, et non pas ce qui est actuellement réalisable.",
         ],
       },
     ],

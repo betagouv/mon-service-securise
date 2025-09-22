@@ -152,6 +152,12 @@ export const questionsV2 = {
         'Ouvert ou accessible à un public national voire international.',
     },
   },
+  dureeDysfonctionnementAcceptable: {
+    moinsDe4h: { nom: 'Moins de 4h' },
+    moinsDe12h: { nom: 'Moins de 12h' },
+    moinsDe24h: { nom: 'Moins de 24h' },
+    plusDe24h: { nom: 'Plus de 24h' },
+  },
 };
 
 export type CategorieDonneesTraitees =
