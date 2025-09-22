@@ -18,6 +18,7 @@ describe('Un brouillon de Service v2', () => {
         typeService: ['api'],
         typeHebergement: 'cloud',
         ouvertureSysteme: 'accessibleSurInternet',
+        audienceCible: 'large',
       });
 
       const pourCreationService = b.enDonneesCreationServiceV2();
@@ -38,6 +39,7 @@ describe('Un brouillon de Service v2', () => {
           typeService: ['api'],
           typeHebergement: 'cloud',
           ouvertureSysteme: 'accessibleSurInternet',
+          audienceCible: 'large',
         },
       });
     });

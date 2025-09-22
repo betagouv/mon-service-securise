@@ -18,6 +18,7 @@ export type DonneesBrouillonService = {
   typeHebergement?: keyof typeof questionsV2.typeHebergement;
   activitesExternalisees?: Array<keyof typeof questionsV2.activiteExternalisee>;
   ouvertureSysteme?: keyof typeof questionsV2.ouvertureSysteme;
+  audienceCible?: keyof typeof questionsV2.audienceCible;
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
@@ -57,6 +58,7 @@ export class BrouillonService {
         typeHebergement: this.donnees.typeHebergement!,
         activitesExternalisees: this.donnees.activitesExternalisees || [],
         ouvertureSysteme: this.donnees.ouvertureSysteme!,
+        audienceCible: this.donnees.audienceCible!,
         niveauDeSecurite: '', // TODO : Étape 5
         categorieDonneesTraitees: 'donneesSensibles', // TODO : Étape 3 > Question 4
         volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
@@ -95,6 +97,9 @@ export class BrouillonService {
       }),
       ...(this.donnees.ouvertureSysteme && {
         ouvertureSysteme: this.donnees.ouvertureSysteme,
+      }),
+      ...(this.donnees.audienceCible && {
+        audienceCible: this.donnees.audienceCible,
       }),
     };
   }
