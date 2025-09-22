@@ -71,36 +71,21 @@ export class BrouillonService {
   }
 
   donneesAPersister(): DonneesBrouillonService {
+    const siPresente = (champ: keyof DonneesBrouillonService) =>
+      this.donnees[champ] && { [champ]: this.donnees[champ] };
+
     return {
       nomService: this.donnees.nomService,
-      ...(this.donnees.siret && { siret: this.donnees.siret }),
-      ...(this.donnees.statutDeploiement && {
-        statutDeploiement: this.donnees.statutDeploiement,
-      }),
-      ...(this.donnees.presentation && {
-        presentation: this.donnees.presentation,
-      }),
-      ...(this.donnees.pointsAcces && {
-        pointsAcces: this.donnees.pointsAcces,
-      }),
-      ...(this.donnees.typeService && {
-        typeService: this.donnees.typeService,
-      }),
-      ...(this.donnees.specificitesProjet && {
-        specificitesProjet: this.donnees.specificitesProjet,
-      }),
-      ...(this.donnees.typeHebergement && {
-        typeHebergement: this.donnees.typeHebergement,
-      }),
-      ...(this.donnees.activitesExternalisees && {
-        activitesExternalisees: this.donnees.activitesExternalisees,
-      }),
-      ...(this.donnees.ouvertureSysteme && {
-        ouvertureSysteme: this.donnees.ouvertureSysteme,
-      }),
-      ...(this.donnees.audienceCible && {
-        audienceCible: this.donnees.audienceCible,
-      }),
+      ...siPresente('siret'),
+      ...siPresente('statutDeploiement'),
+      ...siPresente('presentation'),
+      ...siPresente('pointsAcces'),
+      ...siPresente('typeService'),
+      ...siPresente('specificitesProjet'),
+      ...siPresente('typeHebergement'),
+      ...siPresente('activitesExternalisees'),
+      ...siPresente('ouvertureSysteme'),
+      ...siPresente('audienceCible'),
     };
   }
 }
