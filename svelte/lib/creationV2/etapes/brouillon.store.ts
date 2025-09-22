@@ -13,6 +13,7 @@ export const unBrouillonVierge = (): BrouillonSvelte => ({
   activitesExternalisees: [],
   ouvertureSysteme: '',
   audienceCible: '',
+  dureeDysfonctionnementAcceptable: '',
 });
 
 const { set, subscribe } = writable<BrouillonSvelte>(unBrouillonVierge());

@@ -18,6 +18,7 @@
 
 ## TODO plus tard
 
+- Svelte : les questions ont des `<label>` haut-niveau qui ont des `@for`… mais aucun contrôle n'a de `@name` qui correspond. On pourrait aller vers https://stackoverflow.com/a/13273841
 - On va devoir décommissioner le code qui permet de créer des services v1
   - supprimer le téléversement v1
 - [ ] On peut sélectionner un brouillon pour le supprimer
