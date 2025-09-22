@@ -4,6 +4,7 @@ export type TypeService = keyof typeof questionsV2.typeDeService;
 export type SpecificiteProjet = keyof typeof questionsV2.specificiteProjet;
 export type TypeHebergement = keyof typeof questionsV2.typeHebergement;
 export type ActiviteeExternalisee = keyof typeof questionsV2.typeHebergement;
+export type OuvertureSysteme = keyof typeof questionsV2.ouvertureSysteme;
 
 // Côté HTTP, on n'est pas sûr d'avoir les propriétés,
 // puisque le brouillon est enregistré au fil de l'eau
@@ -17,6 +18,7 @@ export type BrouillonIncomplet = {
   specificitesProjet?: SpecificiteProjet[];
   typeHebergement?: TypeHebergement;
   activitesExternalisees?: ActiviteeExternalisee[];
+  ouvertureSysteme?: OuvertureSysteme;
 };
 
 // Côté Svelte, on VEUT toujours toutes les propriétés,
@@ -31,4 +33,5 @@ export type BrouillonSvelte = {
   specificitesProjet: SpecificiteProjet[];
   typeHebergement: TypeHebergement | '';
   activitesExternalisees: ActiviteeExternalisee[];
+  ouvertureSysteme: OuvertureSysteme | '';
 };

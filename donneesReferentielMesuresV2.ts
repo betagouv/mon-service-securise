@@ -109,6 +109,27 @@ export const questionsV2 = {
         'Le système stocke une très grande quantité d’informations, en croissance constante, nécessitant des capacités de stockage importantes.',
     },
   },
+  ouvertureSysteme: {
+    interneRestreint: {
+      nom: "Accessible à très peu de personnes en interne de l'organisation",
+      exemple:
+        'ex. baie de stockage accessible uniquement depuis des postes physiques dédiés',
+    },
+    interne: {
+      nom: "Interne à l'organisation",
+      exemple: "ex. outil RH accessible depuis le réseau de l'organisation",
+    },
+    internePlusTiers: {
+      nom: 'Interne et ouvert à certains tiers',
+      exemple:
+        "ex. plateforme de suivi accessible depuis le réseau de l'organisation  et pour certains tiers via un VPN",
+    },
+    accessibleSurInternet: {
+      nom: 'Accessible depuis internet',
+      exemple:
+        "ex. service public dont un portail avec une mire d'authentification accessible à tous sur internet",
+    },
+  },
 };
 
 export type CategorieDonneesTraitees =

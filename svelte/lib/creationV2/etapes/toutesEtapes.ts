@@ -8,6 +8,7 @@ import QuestionSpecificitesProjet from './etape2/QuestionSpecificitesProjet.svel
 import QuestionTypeHebergement from './etape2/QuestionTypeHebergement.svelte';
 import type { SvelteComponent } from 'svelte';
 import type { BrouillonSvelte } from '../creationV2.types';
+import QuestionOuvertureSysteme from './etape3/QuestionOuvertureSysteme.svelte';
 
 type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
 
@@ -96,6 +97,21 @@ export const toutesEtapes: EtapeDuWizard[] = [
         composant: QuestionTypeHebergement,
         explications: [
           "Ces informations permettent d'identifier ce qui est directement sous votre contrôle ou au contraire sous le contrôle d'un prestataire (et donc devant être cadré via les clauses contractuelles).",
+        ],
+      },
+    ],
+  },
+  {
+    numero: 3,
+    titre: "Évaluation de la criticité et de l'exposition du service",
+    illustration: '/statique/assets/images/illustration_acces_securise.svg',
+    questions: [
+      {
+        clesPropriete: ['ouvertureSysteme'],
+        composant: QuestionOuvertureSysteme,
+        explications: [
+          'Ces informations permettent d’évaluer l’exposition du système d’information aux sources de risque.',
+          "En effet, en fonction de l'ouverture du système et de l'état de la menace, il est possible d’évaluer l'exposition et de la coupler avec la criticité pour évaluer le besoin de sécurité.",
         ],
       },
     ],
