@@ -19,13 +19,16 @@ export const metsAJourBrouillonService = async (
   idBrouillon: UUID,
   donnees: MiseAJour
 ) => {
-  await Promise.all(
-    Object.entries(donnees).map(([clePropriete, valeur]) =>
-      axios.put(`/api/brouillon-service/${idBrouillon}/${clePropriete}`, {
-        [clePropriete]: valeur,
-      })
-    )
-  );
+  const misesAJour = Object.entries(donnees);
+  for (let i = 0; i < misesAJour.length; i++) {
+    const [proprieteMiseAJour, valeurMiseAJour] = misesAJour[i];
+    await axios.put(
+      `/api/brouillon-service/${idBrouillon}/${proprieteMiseAJour}`,
+      {
+        [proprieteMiseAJour]: valeurMiseAJour,
+      }
+    );
+  }
 };
 
 export const lisBrouillonService = async (

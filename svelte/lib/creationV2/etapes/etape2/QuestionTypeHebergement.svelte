@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, tick } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
@@ -10,9 +10,6 @@
   $: estComplete = !!$leBrouillon.typeHebergement;
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
-  $: emetEvenement('champModifie', {
-    typeHebergement: $leBrouillon.typeHebergement,
-  });
 
   const externaliseSiNecessaire = (e: Event) => {
     const aucune = [] as ActiviteeExternalisee[];
@@ -21,8 +18,21 @@
     ) as ActiviteeExternalisee[];
 
     const { value: typeHebergement } = e.target as HTMLInputElement;
+
     $leBrouillon.activitesExternalisees =
       typeHebergement === 'saas' ? toutes : aucune;
+
+    emetEvenement('champModifie', {
+      typeHebergement: $leBrouillon.typeHebergement,
+      activitesExternalisees: $leBrouillon.activitesExternalisees,
+    });
+  };
+
+  const metsAJourActivitesExternalisees = async () => {
+    await tick();
+    emetEvenement('champModifie', {
+      activitesExternalisees: $leBrouillon.activitesExternalisees,
+    });
   };
 </script>
 
@@ -53,6 +63,7 @@
         type="checkbox"
         value={idActivite}
         bind:group={$leBrouillon.activitesExternalisees}
+        on:change={async () => await metsAJourActivitesExternalisees()}
       />
       <span>
         <span class="libelle">{nom}</span>
