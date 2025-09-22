@@ -21,6 +21,7 @@ export type SpecificiteProjet = keyof typeof questionsV2.specificiteProjet;
 export type TypeHebergement = keyof typeof questionsV2.typeHebergement;
 export type ActiviteExternalisee =
   keyof typeof questionsV2.activiteExternalisee;
+export type OuvertureSysteme = keyof typeof questionsV2.ouvertureSysteme;
 
 export type DonneesDescriptionServiceV2 = {
   nomService: string;
@@ -35,6 +36,7 @@ export type DonneesDescriptionServiceV2 = {
   specificitesProjet: SpecificiteProjet[];
   typeHebergement: TypeHebergement;
   activitesExternalisees: ActiviteExternalisee[];
+  ouvertureSysteme: OuvertureSysteme;
 };
 
 export class DescriptionServiceV2 {
@@ -50,6 +52,7 @@ export class DescriptionServiceV2 {
   private readonly specificitesProjet: SpecificiteProjet[];
   private readonly typeHebergement: TypeHebergement;
   private readonly activitesExternalisees: ActiviteExternalisee[];
+  private readonly ouvertureSysteme: OuvertureSysteme;
 
   constructor(donnees: DonneesDescriptionServiceV2) {
     this.nomService = donnees.nomService;
@@ -66,6 +69,7 @@ export class DescriptionServiceV2 {
     this.specificitesProjet = donnees.specificitesProjet;
     this.typeHebergement = donnees.typeHebergement;
     this.activitesExternalisees = donnees.activitesExternalisees;
+    this.ouvertureSysteme = donnees.ouvertureSysteme;
   }
 
   static valideDonneesCreation() {}
@@ -90,6 +94,7 @@ export class DescriptionServiceV2 {
       specificitesProjet: this.specificitesProjet,
       typeHebergement: this.typeHebergement,
       activitesExternalisees: this.activitesExternalisees,
+      ouvertureSysteme: this.ouvertureSysteme,
     };
   }
 }

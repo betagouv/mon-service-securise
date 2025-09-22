@@ -17,6 +17,7 @@ export type DonneesBrouillonService = {
   specificitesProjet?: Array<keyof typeof questionsV2.specificiteProjet>;
   typeHebergement?: keyof typeof questionsV2.typeHebergement;
   activitesExternalisees?: Array<keyof typeof questionsV2.activiteExternalisee>;
+  ouvertureSysteme?: keyof typeof questionsV2.ouvertureSysteme;
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
@@ -55,6 +56,7 @@ export class BrouillonService {
         specificitesProjet: this.donnees.specificitesProjet || [],
         typeHebergement: this.donnees.typeHebergement!,
         activitesExternalisees: this.donnees.activitesExternalisees || [],
+        ouvertureSysteme: this.donnees.ouvertureSysteme!,
         niveauDeSecurite: '', // TODO : Étape 5
         categorieDonneesTraitees: 'donneesSensibles', // TODO : Étape 3 > Question 4
         volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
@@ -90,6 +92,9 @@ export class BrouillonService {
       }),
       ...(this.donnees.activitesExternalisees && {
         activitesExternalisees: this.donnees.activitesExternalisees,
+      }),
+      ...(this.donnees.ouvertureSysteme && {
+        ouvertureSysteme: this.donnees.ouvertureSysteme,
       }),
     };
   }

@@ -100,6 +100,16 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       valeurCorrecte: [],
       valeurIncorrecte: ['uneCleInexistante'],
     },
+    {
+      nomPropriete: 'ouvertureSysteme',
+      valeurCorrecte: 'interne',
+      valeurIncorrecte: 'uneCleInexistante',
+    },
+    {
+      nomPropriete: 'ouvertureSysteme',
+      valeurCorrecte: 'accessibleSurInternet',
+      valeurIncorrecte: '',
+    },
   ])(
     'quand requête PUT sur `/api/brouillon-service/:id/:$nomPropriete`',
     ({ nomPropriete, valeurCorrecte, valeurIncorrecte }) => {
