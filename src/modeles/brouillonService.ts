@@ -13,9 +13,10 @@ export type DonneesBrouillonService = {
   statutDeploiement?: keyof typeof donneesReferentiel.statutsDeploiement;
   presentation?: string;
   pointsAcces?: string[];
-  typeService?: [keyof typeof questionsV2.typeDeService];
-  specificitesProjet?: [keyof typeof questionsV2.specificiteProjet];
+  typeService?: Array<keyof typeof questionsV2.typeDeService>;
+  specificitesProjet?: Array<keyof typeof questionsV2.specificiteProjet>;
   typeHebergement?: keyof typeof questionsV2.typeHebergement;
+  activitesExternalisees?: Array<keyof typeof questionsV2.activiteExternalisee>;
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
@@ -51,8 +52,9 @@ export class BrouillonService {
         pointsAcces:
           this.donnees.pointsAcces?.map((p) => ({ description: p })) || [],
         typeService: this.donnees.typeService!,
-        specificitesProjet: this.donnees.specificitesProjet,
+        specificitesProjet: this.donnees.specificitesProjet || [],
         typeHebergement: this.donnees.typeHebergement!,
+        activitesExternalisees: this.donnees.activitesExternalisees || [],
         niveauDeSecurite: '', // TODO : Étape 5
         categorieDonneesTraitees: 'donneesSensibles', // TODO : Étape 3 > Question 4
         volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
@@ -85,6 +87,9 @@ export class BrouillonService {
       }),
       ...(this.donnees.typeHebergement && {
         typeHebergement: this.donnees.typeHebergement,
+      }),
+      ...(this.donnees.activitesExternalisees && {
+        activitesExternalisees: this.donnees.activitesExternalisees,
       }),
     };
   }

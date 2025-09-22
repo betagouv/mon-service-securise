@@ -19,6 +19,8 @@ export type StatutDeploiement =
 export type TypeService = keyof typeof questionsV2.typeDeService;
 export type SpecificiteProjet = keyof typeof questionsV2.specificiteProjet;
 export type TypeHebergement = keyof typeof questionsV2.typeHebergement;
+export type ActiviteExternalisee =
+  keyof typeof questionsV2.activiteExternalisee;
 
 export type DonneesDescriptionServiceV2 = {
   nomService: string;
@@ -28,10 +30,11 @@ export type DonneesDescriptionServiceV2 = {
   volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   statutDeploiement: StatutDeploiement;
   presentation: string;
-  pointsAcces?: { description: string }[];
+  pointsAcces: { description: string }[];
   typeService: TypeService[];
-  specificitesProjet?: SpecificiteProjet[];
+  specificitesProjet: SpecificiteProjet[];
   typeHebergement: TypeHebergement;
+  activitesExternalisees: ActiviteExternalisee[];
 };
 
 export class DescriptionServiceV2 {
@@ -44,8 +47,9 @@ export class DescriptionServiceV2 {
   private readonly presentation: string;
   private readonly pointsAcces: PointsAcces;
   private readonly typeService: TypeService[];
-  private readonly specificitesProjet?: SpecificiteProjet[];
+  private readonly specificitesProjet: SpecificiteProjet[];
   private readonly typeHebergement: TypeHebergement;
+  private readonly activitesExternalisees: ActiviteExternalisee[];
 
   constructor(donnees: DonneesDescriptionServiceV2) {
     this.nomService = donnees.nomService;
@@ -61,6 +65,7 @@ export class DescriptionServiceV2 {
     this.typeService = donnees.typeService;
     this.specificitesProjet = donnees.specificitesProjet;
     this.typeHebergement = donnees.typeHebergement;
+    this.activitesExternalisees = donnees.activitesExternalisees;
   }
 
   static valideDonneesCreation() {}
@@ -84,6 +89,7 @@ export class DescriptionServiceV2 {
       typeService: this.typeService,
       specificitesProjet: this.specificitesProjet,
       typeHebergement: this.typeHebergement,
+      activitesExternalisees: this.activitesExternalisees,
     };
   }
 }

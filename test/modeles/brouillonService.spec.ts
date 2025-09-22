@@ -3,8 +3,6 @@ import {
   ProprietesBrouillonService,
 } from '../../src/modeles/brouillonService.js';
 import { unUUID } from '../constructeurs/UUID.js';
-import { VersionService } from '../../src/modeles/versionService.js';
-import Service from '../../src/modeles/service.js';
 
 describe('Un brouillon de Service v2', () => {
   describe('quand il se transforme en données de DescriptionServiceV2', () => {
@@ -15,6 +13,10 @@ describe('Un brouillon de Service v2', () => {
         presentation: 'Mon service qui…',
         statutDeploiement: 'enCours',
         pointsAcces: ['a.fr', 'b.fr'],
+        activitesExternalisees: ['administrationTechnique'],
+        specificitesProjet: [],
+        typeService: ['api'],
+        typeHebergement: 'cloud',
       });
 
       const pourCreationService = b.enDonneesCreationServiceV2();
@@ -30,6 +32,10 @@ describe('Un brouillon de Service v2', () => {
           niveauDeSecurite: '',
           volumetrieDonneesTraitees: 'faible',
           categorieDonneesTraitees: 'donneesSensibles',
+          activitesExternalisees: ['administrationTechnique'],
+          specificitesProjet: [],
+          typeService: ['api'],
+          typeHebergement: 'cloud',
         },
       });
     });
