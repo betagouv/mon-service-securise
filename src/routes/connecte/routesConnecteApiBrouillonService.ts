@@ -33,6 +33,7 @@ const routesConnecteApiBrouillonService = ({
     activitesExternalisees: z.array(
       z.enum(Object.keys(questionsV2.activiteExternalisee))
     ),
+    ouvertureSysteme: z.enum(Object.keys(questionsV2.ouvertureSysteme)),
   });
 
   routes.post(
@@ -70,6 +71,7 @@ const routesConnecteApiBrouillonService = ({
           'specificitesProjet',
           'typeHebergement',
           'activitesExternalisees',
+          'ouvertureSysteme',
         ]),
       })
     ),
