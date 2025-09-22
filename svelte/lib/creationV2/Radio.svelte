@@ -2,11 +2,17 @@
   export let id: string;
   export let nom: string;
   export let valeur: string;
+  export let exemple: string | undefined = undefined;
 </script>
 
 <div class="conteneur-radio">
   <input type="radio" {id} value={id} bind:group={valeur} on:change />
-  <label for={id}>{nom}</label>
+  <label for={id}>
+    {nom}
+    {#if exemple}
+      <span>{exemple}</span>
+    {/if}
+  </label>
 </div>
 
 <style lang="scss">
@@ -47,6 +53,16 @@
       font-size: 1rem;
       line-height: 1.5rem;
       font-weight: normal;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      span {
+        font-size: 0.75rem;
+        line-height: 1.25rem;
+        color: #666;
+      }
     }
 
     input[type='radio'] {
