@@ -54,11 +54,14 @@
 <label
   for="activites-externalisees"
   class="titre-question activites-externalisees"
-  class:indisponible={$leBrouillon.typeHebergement === 'saas'}
+  class:indisponible={!$leBrouillon.typeHebergement}
 >
   Quelles activités du projet sont entièrement externalisées ?
   {#each Object.entries(questionsV2.activiteExternalisee) as [idActivite, { nom, exemple }]}
-    <label>
+    <label
+      class:indisponible={!$leBrouillon.typeHebergement ||
+        $leBrouillon.typeHebergement === 'saas'}
+    >
       <input
         type="checkbox"
         value={idActivite}
@@ -85,7 +88,8 @@
   }
 
   .activites-externalisees {
-    &.indisponible {
+    &.indisponible,
+    .indisponible {
       opacity: 0.55;
       pointer-events: none;
 
