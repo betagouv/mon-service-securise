@@ -14,7 +14,7 @@
 </script>
 
 <label for="nom-service" class="titre-question">
-  Quel est le nom de votre service ?
+  Quel est le nom du service à sécuriser ?
   <ChampTexte
     id="nom-service"
     nom="nom-service"

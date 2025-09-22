@@ -32,8 +32,8 @@
 </script>
 
 <label for="specificite-projet" class="titre-question">
-  L'une ou plusieurs des spécificités suivantes sont-elles à sécuriser au sein
-  du périmètre d'homologation ?
+  L'une ou plusieurs des spécificités suivantes sont-elles incluses dans le
+  périmètre de l'homologation ?
 
   <span class="indication">Sélectionnez une ou plusieurs réponses</span>
   {#each specificiteProjet as [idType, details]}
