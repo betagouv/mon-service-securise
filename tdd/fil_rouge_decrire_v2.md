@@ -4,7 +4,6 @@
 
 - [ ] Svelte : que `npm run build:front` déclecnche un `tsc` dans `svelte/` pour vérifier qu'il n'y a pas d'erreur TS
 - [ ] input type : utiliser l'input DSFR de l'UI Kit sur toutes les étapes où c'est nécessaire
-- [ ] choix unique => passage à l'étape suivante
 - [ ] moteur v2 : optimisation pour `break` la boucle d'évaluation d'un champ dès qu'on a un match ?
   - ça veut dire dès que `if (valeurReelle === valeurRegle)` est vrai, on `break;`
 - [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.
@@ -34,6 +33,7 @@
 
 ## DONE
 
+- [x] choix unique => passage à l'étape suivante
 - [x] Il faudrait probablement extraire un composant pour les checkbox avec image, car il sera réutilisé dans les étapes suivantes
 - [x] Il faudrait enlever le style global sur label et mettre un style global sur une classe, pour pouvoir enlever les !important
 - [x] choix unique => masquer les boutons radios (étape 1 > question 3)

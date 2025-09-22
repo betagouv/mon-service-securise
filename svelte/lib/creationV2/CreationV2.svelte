@@ -40,6 +40,8 @@
     }
 
     await metsAJourBrouillonService(idBrouillon, e.detail);
+    if ($etapeCourante.questionCourante.avecAvanceRapide)
+      navigationStore.suivant();
   };
 
   const suivant = () => navigationStore.suivant();
