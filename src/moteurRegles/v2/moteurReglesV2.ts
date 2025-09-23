@@ -13,7 +13,7 @@ export type Modificateur =
 
 export type CaracteristiquesDuService =
   | 'niveauDeSecurite'
-  | 'categorieDonneesTraitees';
+  | 'categoriesDonneesTraitees';
 
 export type ModificateursDeRegles = Partial<
   Record<CaracteristiquesDuService, [string, Modificateur][]>
@@ -72,8 +72,11 @@ export class MoteurReglesV2 {
         ligne.modificateurs[champDeDecrire as CaracteristiquesDuService];
       for (let i = 0; i < modifications!.length; i += 1) {
         const [valeurRegle, modificateur] = modifications![i];
-        const valeurReelle = descriptionService[champDeDecrire] as string;
-        if (valeurReelle === valeurRegle) collecte.ajoute(modificateur);
+
+        const valeurReelle = descriptionService[champDeDecrire];
+        if (Array.isArray(valeurReelle) && valeurReelle.includes(valeurRegle))
+          collecte.ajoute(modificateur);
+        else if (valeurReelle === valeurRegle) collecte.ajoute(modificateur);
       }
     });
 

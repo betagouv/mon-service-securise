@@ -19,6 +19,7 @@ describe('Un brouillon de Service v2', () => {
         typeHebergement: 'cloud',
         ouvertureSysteme: 'accessibleSurInternet',
         audienceCible: 'large',
+        categoriesDonneesTraitees: ['secretsDEntreprise'],
       });
 
       const pourCreationService = b.enDonneesCreationServiceV2();
@@ -33,13 +34,13 @@ describe('Un brouillon de Service v2', () => {
           pointsAcces: [{ description: 'a.fr' }, { description: 'b.fr' }],
           niveauDeSecurite: '',
           volumetrieDonneesTraitees: 'faible',
-          categorieDonneesTraitees: 'donneesSensibles',
           activitesExternalisees: ['administrationTechnique'],
           specificitesProjet: [],
           typeService: ['api'],
           typeHebergement: 'cloud',
           ouvertureSysteme: 'accessibleSurInternet',
           audienceCible: 'large',
+          categoriesDonneesTraitees: ['secretsDEntreprise'],
         },
       });
     });

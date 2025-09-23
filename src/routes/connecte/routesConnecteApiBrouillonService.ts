@@ -38,6 +38,9 @@ const routesConnecteApiBrouillonService = ({
     dureeDysfonctionnementAcceptable: z.enum(
       Object.keys(questionsV2.dureeDysfonctionnementAcceptable)
     ),
+    categoriesDonneesTraitees: z.array(
+      z.enum(Object.keys(questionsV2.categorieDonneesTraitees))
+    ),
   });
 
   routes.post(
@@ -78,6 +81,7 @@ const routesConnecteApiBrouillonService = ({
           'ouvertureSysteme',
           'audienceCible',
           'dureeDysfonctionnementAcceptable',
+          'categoriesDonneesTraitees',
         ]),
       })
     ),
