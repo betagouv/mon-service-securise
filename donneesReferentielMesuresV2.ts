@@ -80,11 +80,40 @@ export const questionsV2 = {
   categorieDonneesTraitees: {
     donneesSensibles: {
       nom: 'Données sensibles',
-      exemple: 'Santé, appartenance syndicale, etc.',
+      exemple: 'ex. santé, appartenance syndicale, etc.',
     },
     documentsRHSensibles: {
       nom: 'Documents RH sensibles',
-      exemple: 'évaluations, sanctions, fiches de paye, RIB, IBAN, etc.',
+      exemple: 'ex. évaluations, sanctions, fiches de paye, RIB, IBAN, etc.',
+    },
+    secretsDEntreprise: {
+      nom: "Données liées au secret d'entreprise",
+      exemple:
+        'ex. Processus de fabrication spécifique, données de recherche & développement',
+    },
+    donneesCaracterePersonnelPersonneARisque: {
+      nom: 'Données à caractère personnel de personnes à risque',
+      exemple: 'ex. mineurs',
+    },
+    donneesSituationFamilialeEconomiqueFinanciere: {
+      nom: 'Données relatives à la situation familiale, économique et financière',
+      exemple: 'ex. revenus, état civil.',
+    },
+    documentsIdentifiants: {
+      nom: 'Documents identifiants',
+      exemple: 'ex. CNI, Passeport, etc.',
+    },
+    donneesTechniques: {
+      nom: 'Données techniques',
+      exemple: 'ex. DAT, logs, etc.',
+    },
+    donneesDIdentite: {
+      nom: "Données d'identité",
+      exemple: 'ex. noms, prénoms, adresse mail, etc.',
+    },
+    donneesAdministrativesEtFinancieres: {
+      nom: 'Données administratives et financières',
+      exemple: 'ex. organigramme, budgets, bilans, dépenses etc.',
     },
   },
   volumetrieDonneesTraitees: {
