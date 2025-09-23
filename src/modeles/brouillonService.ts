@@ -24,6 +24,7 @@ export type DonneesBrouillonService = {
     keyof typeof questionsV2.categorieDonneesTraitees
   >;
   categoriesDonneesTraiteesSupplementaires?: string[];
+  volumetrieDonneesTraitees?: keyof typeof questionsV2.volumetrieDonneesTraitees;
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
@@ -69,7 +70,7 @@ export class BrouillonService {
         categoriesDonneesTraitees: this.donnees.categoriesDonneesTraitees || [],
         categoriesDonneesTraiteesSupplementaires:
           this.donnees.categoriesDonneesTraiteesSupplementaires || [],
-        volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
+        volumetrieDonneesTraitees: this.donnees.volumetrieDonneesTraitees!,
         niveauDeSecurite: '', // TODO : Étape 5
       },
     };
@@ -98,6 +99,7 @@ export class BrouillonService {
       ...siPresente('dureeDysfonctionnementAcceptable'),
       ...siPresente('categoriesDonneesTraitees'),
       ...siPresente('categoriesDonneesTraiteesSupplementaires'),
+      ...siPresente('volumetrieDonneesTraitees'),
     };
   }
 }

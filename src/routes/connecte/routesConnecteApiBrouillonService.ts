@@ -44,6 +44,9 @@ const routesConnecteApiBrouillonService = ({
     categoriesDonneesTraiteesSupplementaires: z.array(
       z.string().trim().nonempty()
     ),
+    volumetrieDonneesTraitees: z.enum(
+      Object.keys(questionsV2.volumetrieDonneesTraitees)
+    ),
   });
 
   routes.post(
@@ -86,6 +89,7 @@ const routesConnecteApiBrouillonService = ({
           'dureeDysfonctionnementAcceptable',
           'categoriesDonneesTraitees',
           'categoriesDonneesTraiteesSupplementaires',
+          'volumetrieDonneesTraitees',
         ]),
       })
     ),

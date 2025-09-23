@@ -30,7 +30,6 @@ export type DonneesDescriptionServiceV2 = {
   nomService: string;
   organisationResponsable: DonneesEntite;
   niveauDeSecurite: string;
-  volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   statutDeploiement: StatutDeploiement;
   presentation: string;
   pointsAcces: { description: string }[];
@@ -43,6 +42,7 @@ export type DonneesDescriptionServiceV2 = {
   dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
   categoriesDonneesTraitees: CategorieDonneesTraitees[];
   categoriesDonneesTraiteesSupplementaires: string[];
+  volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
 };
 
 export class DescriptionServiceV2 {
