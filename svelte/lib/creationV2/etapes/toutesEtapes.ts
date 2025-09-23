@@ -11,6 +11,7 @@ import type { BrouillonSvelte } from '../creationV2.types';
 import QuestionOuvertureSysteme from './etape3/QuestionOuvertureSysteme.svelte';
 import QuestionAudienceCible from './etape3/QuestionAudienceCible.svelte';
 import QuestionDureeDysfonctionnement from './etape3/QuestionDureeDysfonctionnement.svelte';
+import QuestionCategoriesDonneesTraitees from './etape3/QuestionCategoriesDonneesTraitees.svelte';
 
 type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
 
@@ -137,6 +138,14 @@ export const toutesEtapes: EtapeDuWizard[] = [
           "Lors de la sélection de ces informations, il est important d'identifier le besoin, et non pas ce qui est actuellement réalisable.",
         ],
         avecAvanceRapide: true,
+      },
+      {
+        clesPropriete: ['categoriesDonneesTraitees'],
+        composant: QuestionCategoriesDonneesTraitees,
+        explications: [
+          "Ces informations permettent d'identifier la sensibilité des données traitées au sein du système d'information et ainsi de sélectionner des mesures de sécurité proportionnelles à cette sensibilité tout en évaluant la criticité du périmètre d'homologation.",
+          "En effet, la criticité couplée avec l'exposition du périmètre permet d'en identifier son besoin de sécurité.",
+        ],
       },
     ],
   },
