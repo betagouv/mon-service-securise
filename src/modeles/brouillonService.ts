@@ -23,6 +23,7 @@ export type DonneesBrouillonService = {
   categoriesDonneesTraitees?: Array<
     keyof typeof questionsV2.categorieDonneesTraitees
   >;
+  categoriesDonneesTraiteesSupplementaires?: string[];
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
@@ -66,6 +67,8 @@ export class BrouillonService {
         dureeDysfonctionnementAcceptable:
           this.donnees.dureeDysfonctionnementAcceptable!,
         categoriesDonneesTraitees: this.donnees.categoriesDonneesTraitees || [],
+        categoriesDonneesTraiteesSupplementaires:
+          this.donnees.categoriesDonneesTraiteesSupplementaires || [],
         volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
         niveauDeSecurite: '', // TODO : Étape 5
       },
@@ -94,6 +97,7 @@ export class BrouillonService {
       ...siPresente('audienceCible'),
       ...siPresente('dureeDysfonctionnementAcceptable'),
       ...siPresente('categoriesDonneesTraitees'),
+      ...siPresente('categoriesDonneesTraiteesSupplementaires'),
     };
   }
 }
