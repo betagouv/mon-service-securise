@@ -27,6 +27,7 @@ export type BrouillonIncomplet = {
   audienceCible?: AudienceCible;
   dureeDysfonctionnementAcceptable?: DureeDysfonctionnementAcceptable;
   categoriesDonneesTraitees: CategorieDonneesTraitees[];
+  categoriesDonneesTraiteesSupplementaires: string[];
 };
 
 // Côté Svelte, on VEUT toujours toutes les propriétés,
@@ -45,4 +46,5 @@ export type BrouillonSvelte = {
   audienceCible: AudienceCible | '';
   dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable | '';
   categoriesDonneesTraitees: CategorieDonneesTraitees[];
+  categoriesDonneesTraiteesSupplementaires: string[];
 };
