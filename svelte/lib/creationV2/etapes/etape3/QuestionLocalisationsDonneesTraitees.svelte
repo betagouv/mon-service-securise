@@ -30,7 +30,7 @@
   ) as [LocalisationDonneesTraitees, { nom: string }][];
 </script>
 
-<label for="volumetrie-donnees" class="titre-question">
+<label for="localisations-donnees-traitees" class="titre-question">
   Où sont localisées les données traitées ?*
 
   <span class="indication">Selectionnez une ou plusieurs réponses</span>
@@ -38,6 +38,7 @@
     {@const illustration = `/statique/assets/images/localisationDonneesTraitees/${illustrations[idType]}`}
     <CheckboxIllustree
       id={idType}
+      nomGroupe="localisations-donnees-traitees"
       {illustration}
       {details}
       bind:valeurs={$leBrouillon.localisationsDonneesTraitees}
