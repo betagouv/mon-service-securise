@@ -140,7 +140,10 @@ export const toutesEtapes: EtapeDuWizard[] = [
         avecAvanceRapide: true,
       },
       {
-        clesPropriete: ['categoriesDonneesTraitees'],
+        clesPropriete: [
+          'categoriesDonneesTraitees',
+          'categoriesDonneesTraiteesSupplementaires',
+        ],
         composant: QuestionCategoriesDonneesTraitees,
         explications: [
           "Ces informations permettent d'identifier la sensibilité des données traitées au sein du système d'information et ainsi de sélectionner des mesures de sécurité proportionnelles à cette sensibilité tout en évaluant la criticité du périmètre d'homologation.",

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, tick } from 'svelte';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
@@ -9,6 +9,7 @@
     CategorieDonneesTraitees,
     SpecificiteProjet,
   } from '../../creationV2.types';
+  import ListeChampTexte from '../ListeChampTexte.svelte';
 
   export let estComplete: boolean;
 
@@ -29,11 +30,46 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  estComplete = true;
+  // Pas de condition sur categoriesDonneesTraitees car ce n'est pas obligatoire d'en sélectionner.
+  // N'avoir aucun categoriesDonneesTraiteesSupplémentaires est valide, donc on peut utiliser `every` qui renvoie `true` sur tableau vide.
+  $: estComplete = $leBrouillon.categoriesDonneesTraiteesSupplementaires.every(
+    (v) => (v ? v.trim().length > 0 : false)
+  );
 
-  $: emetEvenement('champModifie', {
-    categoriesDonneesTraitees: $leBrouillon.categoriesDonneesTraitees,
-  });
+  const supprimeValeur = (index: number) => {
+    $leBrouillon.categoriesDonneesTraiteesSupplementaires =
+      $leBrouillon.categoriesDonneesTraiteesSupplementaires.filter(
+        (_, i) => i !== index
+      );
+  };
+
+  const ajouteValeur = () => {
+    $leBrouillon.categoriesDonneesTraiteesSupplementaires = [
+      ...$leBrouillon.categoriesDonneesTraiteesSupplementaires,
+      '',
+    ];
+  };
+
+  const enregistre = () => {
+    emetEvenement('champModifie', {
+      categoriesDonneesTraiteesSupplementaires:
+        $leBrouillon.categoriesDonneesTraiteesSupplementaires,
+    });
+  };
+
+  let valeurCategoriesDonneesTraitees: CategorieDonneesTraitees[] =
+    $leBrouillon.categoriesDonneesTraitees;
+
+  $: {
+    if (
+      valeurCategoriesDonneesTraitees !== $leBrouillon.categoriesDonneesTraitees
+    ) {
+      $leBrouillon.categoriesDonneesTraitees = valeurCategoriesDonneesTraitees;
+      emetEvenement('champModifie', {
+        categoriesDonneesTraitees: $leBrouillon.categoriesDonneesTraitees,
+      });
+    }
+  }
 
   const categorieDonneesTraitees = Object.entries(
     questionsV2.categorieDonneesTraitees
@@ -51,12 +87,44 @@
       illustration="/statique/assets/images/categorieDonneesTraitees/{nomImage}"
       id={idType}
       {details}
-      bind:valeurs={$leBrouillon.categoriesDonneesTraitees}
+      bind:valeurs={valeurCategoriesDonneesTraitees}
     />
   {/each}
+  <label
+    for="categoriesDonneesTraiteesSupplementaires"
+    class="titre-liste-donnees-supplementaires"
+  >
+    <span>Nom de la donnée</span>
+
+    <ListeChampTexte
+      nomGroupe="categoriesDonneesTraiteesSupplementaires"
+      bind:valeurs={$leBrouillon.categoriesDonneesTraiteesSupplementaires}
+      on:ajout={ajouteValeur}
+      titreSuppression="Supprimer la donnée"
+      titreAjout="Ajouter des données"
+      on:blur={() => enregistre()}
+      on:suppression={async (e) => {
+        supprimeValeur(e.detail);
+        await tick();
+        if (estComplete) enregistre();
+      }}
+    />
+  </label>
 </label>
 
 <style lang="scss">
+  .titre-liste-donnees-supplementaires {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5rem;
+
+    span {
+      margin-bottom: -8px;
+    }
+  }
   label {
     .indication {
       font-size: 0.75rem;
