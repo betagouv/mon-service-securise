@@ -10,6 +10,8 @@ export type DureeDysfonctionnementAcceptable =
   keyof typeof questionsV2.dureeDysfonctionnementAcceptable;
 export type CategorieDonneesTraitees =
   keyof typeof questionsV2.categorieDonneesTraitees;
+export type VolumetrieDonneesTraitees =
+  keyof typeof questionsV2.volumetrieDonneesTraitees;
 
 // Côté HTTP, on n'est pas sûr d'avoir les propriétés,
 // puisque le brouillon est enregistré au fil de l'eau
@@ -26,8 +28,9 @@ export type BrouillonIncomplet = {
   ouvertureSysteme?: OuvertureSysteme;
   audienceCible?: AudienceCible;
   dureeDysfonctionnementAcceptable?: DureeDysfonctionnementAcceptable;
-  categoriesDonneesTraitees: CategorieDonneesTraitees[];
-  categoriesDonneesTraiteesSupplementaires: string[];
+  categoriesDonneesTraitees?: CategorieDonneesTraitees[];
+  categoriesDonneesTraiteesSupplementaires?: string[];
+  volumetrieDonneesTraitees?: VolumetrieDonneesTraitees;
 };
 
 // Côté Svelte, on VEUT toujours toutes les propriétés,
@@ -47,4 +50,5 @@ export type BrouillonSvelte = {
   dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable | '';
   categoriesDonneesTraitees: CategorieDonneesTraitees[];
   categoriesDonneesTraiteesSupplementaires: string[];
+  volumetrieDonneesTraitees: VolumetrieDonneesTraitees | '';
 };

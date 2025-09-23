@@ -12,6 +12,7 @@ import QuestionOuvertureSysteme from './etape3/QuestionOuvertureSysteme.svelte';
 import QuestionAudienceCible from './etape3/QuestionAudienceCible.svelte';
 import QuestionDureeDysfonctionnement from './etape3/QuestionDureeDysfonctionnement.svelte';
 import QuestionCategoriesDonneesTraitees from './etape3/QuestionCategoriesDonneesTraitees.svelte';
+import QuestionVolumetrieDonneesTraitees from './etape3/QuestionVolumetrieDonneesTraitees.svelte';
 
 type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
 
@@ -149,6 +150,15 @@ export const toutesEtapes: EtapeDuWizard[] = [
           "Ces informations permettent d'identifier la sensibilité des données traitées au sein du système d'information et ainsi de sélectionner des mesures de sécurité proportionnelles à cette sensibilité tout en évaluant la criticité du périmètre d'homologation.",
           "En effet, la criticité couplée avec l'exposition du périmètre permet d'en identifier son besoin de sécurité.",
         ],
+      },
+      {
+        clesPropriete: ['volumetrieDonneesTraitees'],
+        composant: QuestionVolumetrieDonneesTraitees,
+        explications: [
+          "Ces informations permettent d'identifier la volumétrie des données stockées dans le système d’information, afin notamment d'évaluer la gravité d'une fuite des informations.",
+          "Par exemple, il est moins grave de subir une fuite d'information sur un système d'information contenant une faible quantité de données à caractère personnel que sur un système contenant un grand volume de ces données.",
+        ],
+        avecAvanceRapide: true,
       },
     ],
   },
