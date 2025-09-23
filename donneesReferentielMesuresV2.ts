@@ -201,3 +201,5 @@ export type CategorieDonneesTraitees =
   keyof typeof questionsV2.categorieDonneesTraitees;
 export type VolumetrieDonneesTraitees =
   keyof typeof questionsV2.volumetrieDonneesTraitees;
+export type LocalisationDonneesTraitees =
+  keyof typeof questionsV2.localisationDonneesTraitees;

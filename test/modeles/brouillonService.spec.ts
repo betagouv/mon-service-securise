@@ -22,6 +22,7 @@ describe('Un brouillon de Service v2', () => {
         categoriesDonneesTraitees: ['secretsDEntreprise'],
         categoriesDonneesTraiteesSupplementaires: ['une catégorie'],
         volumetrieDonneesTraitees: 'eleve',
+        localisationsDonneesTraitees: ['UE'],
       });
 
       const pourCreationService = b.enDonneesCreationServiceV2();
@@ -44,6 +45,7 @@ describe('Un brouillon de Service v2', () => {
           categoriesDonneesTraitees: ['secretsDEntreprise'],
           categoriesDonneesTraiteesSupplementaires: ['une catégorie'],
           volumetrieDonneesTraitees: 'eleve',
+          localisationsDonneesTraitees: ['UE'],
         },
       });
     });

@@ -18,7 +18,7 @@ describe('Une description service V2', () => {
       niveauDeSecurite: 'niveau1',
       volumetrieDonneesTraitees: 'faible',
       presentation: 'Le premier de …',
-      pointsAcces: [{ description: 'http://url.com' }],
+      pointsAcces: [{ description: 'https://url.com' }],
       audienceCible: 'large',
       typeHebergement: 'autre',
       ouvertureSysteme: 'accessibleSurInternet',
@@ -26,6 +26,8 @@ describe('Une description service V2', () => {
       activitesExternalisees: ['developpementLogiciel'],
       dureeDysfonctionnementAcceptable: 'moinsDe24h',
       categoriesDonneesTraitees: ['documentsRHSensibles'],
+      categoriesDonneesTraiteesSupplementaires: ['numéros de téléphones'],
+      localisationsDonneesTraitees: ['horsUE'],
     });
 
     const aPersister = descriptionV2.donneesSerialisees();
@@ -42,7 +44,7 @@ describe('Une description service V2', () => {
       niveauDeSecurite: 'niveau1',
       volumetrieDonneesTraitees: 'faible',
       presentation: 'Le premier de …',
-      pointsAcces: [{ description: 'http://url.com' }],
+      pointsAcces: [{ description: 'https://url.com' }],
       activitesExternalisees: ['developpementLogiciel'],
       audienceCible: 'large',
       typeHebergement: 'autre',
@@ -50,6 +52,8 @@ describe('Une description service V2', () => {
       specificitesProjet: ['accesPhysiqueAuxBureaux'],
       dureeDysfonctionnementAcceptable: 'moinsDe24h',
       categoriesDonneesTraitees: ['documentsRHSensibles'],
+      categoriesDonneesTraiteesSupplementaires: ['numéros de téléphones'],
+      localisationsDonneesTraitees: ['horsUE'],
     });
   });
 
