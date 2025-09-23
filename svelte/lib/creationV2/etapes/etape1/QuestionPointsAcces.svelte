@@ -1,8 +1,8 @@
 <script lang="ts">
   import { createEventDispatcher, onMount, tick } from 'svelte';
-  import ChampTexte from '../../../ui/ChampTexte.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
+  import ListeChampTexte from '../ListeChampTexte.svelte';
 
   export let estComplete: boolean;
 
@@ -33,62 +33,26 @@
   };
 </script>
 
-<label for="presentation" class="titre-question">
+<label for="pointsAcces" class="titre-question">
   Quelle est l'URL de votre service?
 
   <span class="sous-titre"> exemple : https://www.exemple.com </span>
-  {#each $leBrouillon.pointsAcces as url, index}
-    <div class="conteneur-url">
-      <ChampTexte
-        id={`pointsAcces-${index}`}
-        nom="pointsAcces"
-        bind:valeur={url}
-        on:blur={() => enregistre()}
-      />
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-      <lab-anssi-bouton
-        titre="Supprimer l'URL"
-        variante="tertiaire"
-        taille="lg"
-        icone="delete-line"
-        positionIcone="seule"
-        on:click={async () => {
-          supprimeValeur(index);
-          await tick();
-          if (estComplete) enregistre();
-        }}
-      />
-    </div>
-  {/each}
-  <div class="conteneur-actions">
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-    <lab-anssi-bouton
-      titre="Ajouter une URL"
-      variante="tertiaire"
-      taille="md"
-      icone="add-line"
-      positionIcone="gauche"
-      on:click={() => ajouteValeur()}
-    />
-  </div>
+  <ListeChampTexte
+    nomGroupe="pointsAcces"
+    bind:valeurs={$leBrouillon.pointsAcces}
+    on:ajout={ajouteValeur}
+    titreSuppression="Supprimer l'URL"
+    titreAjout="Ajouter une URL"
+    on:blur={() => enregistre()}
+    on:suppression={async (e) => {
+      supprimeValeur(e.detail);
+      await tick();
+      if (estComplete) enregistre();
+    }}
+  />
 </label>
 
 <style lang="scss">
-  .conteneur-url {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 8px;
-
-    :global(input) {
-      width: 100%;
-    }
-  }
-
-  .conteneur-actions {
-    width: fit-content;
-  }
-
   .sous-titre {
     font-size: 0.75rem;
     line-height: 1.25rem;
