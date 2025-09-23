@@ -187,6 +187,14 @@ export const questionsV2 = {
     moinsDe24h: { nom: 'Moins de 24h' },
     plusDe24h: { nom: 'Plus de 24h' },
   },
+  localisationDonneesTraitees: {
+    UE: {
+      nom: "Au sein de l'Union européenne",
+    },
+    horsUE: {
+      nom: 'Hors Union européenne',
+    },
+  },
 };
 
 export type CategorieDonneesTraitees =

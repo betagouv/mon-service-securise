@@ -12,6 +12,8 @@ export type CategorieDonneesTraitees =
   keyof typeof questionsV2.categorieDonneesTraitees;
 export type VolumetrieDonneesTraitees =
   keyof typeof questionsV2.volumetrieDonneesTraitees;
+export type LocalisationDonneesTraitees =
+  keyof typeof questionsV2.localisationDonneesTraitees;
 
 // Côté HTTP, on n'est pas sûr d'avoir les propriétés,
 // puisque le brouillon est enregistré au fil de l'eau
@@ -31,6 +33,7 @@ export type BrouillonIncomplet = {
   categoriesDonneesTraitees?: CategorieDonneesTraitees[];
   categoriesDonneesTraiteesSupplementaires?: string[];
   volumetrieDonneesTraitees?: VolumetrieDonneesTraitees;
+  localisationsDonneesTraitees?: LocalisationDonneesTraitees[];
 };
 
 // Côté Svelte, on VEUT toujours toutes les propriétés,
@@ -51,4 +54,5 @@ export type BrouillonSvelte = {
   categoriesDonneesTraitees: CategorieDonneesTraitees[];
   categoriesDonneesTraiteesSupplementaires: string[];
   volumetrieDonneesTraitees: VolumetrieDonneesTraitees | '';
+  localisationsDonneesTraitees: LocalisationDonneesTraitees[];
 };
