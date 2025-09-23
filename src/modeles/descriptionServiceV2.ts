@@ -2,6 +2,7 @@ import Entite from './entite.js';
 import InformationsService from './informationsService.js';
 import {
   CategorieDonneesTraitees,
+  LocalisationDonneesTraitees,
   questionsV2,
   VolumetrieDonneesTraitees,
 } from '../../donneesReferentielMesuresV2.js';
@@ -43,6 +44,7 @@ export type DonneesDescriptionServiceV2 = {
   categoriesDonneesTraitees: CategorieDonneesTraitees[];
   categoriesDonneesTraiteesSupplementaires: string[];
   volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
+  localisationsDonneesTraitees: LocalisationDonneesTraitees[];
 };
 
 export class DescriptionServiceV2 {
@@ -62,6 +64,7 @@ export class DescriptionServiceV2 {
   private readonly dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
   private readonly categoriesDonneesTraitees: CategorieDonneesTraitees[];
   private readonly categoriesDonneesTraiteesSupplementaires: string[];
+  private readonly localisationsDonneesTraitees: LocalisationDonneesTraitees[];
 
   constructor(donnees: DonneesDescriptionServiceV2) {
     this.nomService = donnees.nomService;
@@ -84,6 +87,7 @@ export class DescriptionServiceV2 {
     this.categoriesDonneesTraitees = donnees.categoriesDonneesTraitees;
     this.categoriesDonneesTraiteesSupplementaires =
       donnees.categoriesDonneesTraiteesSupplementaires;
+    this.localisationsDonneesTraitees = donnees.localisationsDonneesTraitees;
   }
 
   static valideDonneesCreation() {}
@@ -113,6 +117,7 @@ export class DescriptionServiceV2 {
       categoriesDonneesTraitees: this.categoriesDonneesTraitees,
       categoriesDonneesTraiteesSupplementaires:
         this.categoriesDonneesTraiteesSupplementaires,
+      localisationsDonneesTraitees: this.localisationsDonneesTraitees,
     };
   }
 }

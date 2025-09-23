@@ -5,7 +5,10 @@ import {
   StatutDeploiement,
 } from './descriptionServiceV2.js';
 import donneesReferentiel from '../../donneesReferentiel.js';
-import { questionsV2 } from '../../donneesReferentielMesuresV2.js';
+import {
+  LocalisationDonneesTraitees,
+  questionsV2,
+} from '../../donneesReferentielMesuresV2.js';
 
 export type DonneesBrouillonService = {
   nomService: string;
@@ -25,6 +28,7 @@ export type DonneesBrouillonService = {
   >;
   categoriesDonneesTraiteesSupplementaires?: string[];
   volumetrieDonneesTraitees?: keyof typeof questionsV2.volumetrieDonneesTraitees;
+  localisationsDonneesTraitees?: LocalisationDonneesTraitees[];
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
@@ -71,6 +75,8 @@ export class BrouillonService {
         categoriesDonneesTraiteesSupplementaires:
           this.donnees.categoriesDonneesTraiteesSupplementaires || [],
         volumetrieDonneesTraitees: this.donnees.volumetrieDonneesTraitees!,
+        localisationsDonneesTraitees:
+          this.donnees.localisationsDonneesTraitees!,
         niveauDeSecurite: '', // TODO : Étape 5
       },
     };
@@ -100,6 +106,7 @@ export class BrouillonService {
       ...siPresente('categoriesDonneesTraitees'),
       ...siPresente('categoriesDonneesTraiteesSupplementaires'),
       ...siPresente('volumetrieDonneesTraitees'),
+      ...siPresente('localisationsDonneesTraitees'),
     };
   }
 }
