@@ -17,6 +17,7 @@ export const unBrouillonVierge = (): BrouillonSvelte => ({
   categoriesDonneesTraitees: [],
   categoriesDonneesTraiteesSupplementaires: [],
   volumetrieDonneesTraitees: '',
+  localisationsDonneesTraitees: [],
 });
 
 const { set, subscribe } = writable<BrouillonSvelte>(unBrouillonVierge());

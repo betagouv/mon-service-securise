@@ -1,6 +1,6 @@
 <script lang="ts">
   import ChampTexte from '../../ui/ChampTexte.svelte';
-  import { createEventDispatcher, tick } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
 
   export let valeurs: string[];
   export let nomGroupe: string;
