@@ -185,6 +185,7 @@
           font-size: 1.25rem;
           line-height: 1.75rem;
           font-weight: bold;
+          max-width: 586px;
         }
 
         .barre-boutons {
