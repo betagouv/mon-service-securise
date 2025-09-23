@@ -76,7 +76,7 @@
   ) as [CategorieDonneesTraitees, { nom: string; exemple: string }][];
 </script>
 
-<label for="duree-dysfonctionnement-acceptable" class="titre-question">
+<label for="categories-donnees-traitees" class="titre-question">
   Quelles données sont traitées ?
 
   <span class="indication">Sélectionnez une ou plusieurs réponses</span>
@@ -84,8 +84,9 @@
   {#each categorieDonneesTraitees as [idType, details]}
     {@const nomImage = illustrations[idType]}
     <CheckboxIllustree
-      illustration="/statique/assets/images/categorieDonneesTraitees/{nomImage}"
       id={idType}
+      nomGroupe="categories-donnees-traitees"
+      illustration="/statique/assets/images/categorieDonneesTraitees/{nomImage}"
       {details}
       bind:valeurs={valeurCategoriesDonneesTraitees}
     />

@@ -1,5 +1,6 @@
 <script lang="ts">
   export let id: string;
+  export let nomGroupe: string;
   export let details: { nom: string; exemple?: string };
   export let valeurs: string[];
   export let illustration: string;
@@ -22,7 +23,7 @@
   <input
     type="checkbox"
     {id}
-    name="type-service"
+    name={nomGroupe}
     value={id}
     checked={cochee}
     on:change={metsAJourLesValeursCochees}

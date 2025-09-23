@@ -40,6 +40,7 @@
     {@const nomImage = illustrations[idType]}
     <CheckboxIllustree
       id={idType}
+      nomGroupe="specificite-projet"
       bind:valeurs={$leBrouillon.specificitesProjet}
       {details}
       illustration="/statique/assets/images/specificiteProjet/{nomImage}"
