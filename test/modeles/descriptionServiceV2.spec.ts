@@ -16,7 +16,6 @@ describe('Une description service V2', () => {
       typeService: ['api'],
       statutDeploiement: 'enCours',
       niveauDeSecurite: 'niveau1',
-      categorieDonneesTraitees: 'documentsRHSensibles',
       volumetrieDonneesTraitees: 'faible',
       presentation: 'Le premier de …',
       pointsAcces: [{ description: 'http://url.com' }],
@@ -26,6 +25,7 @@ describe('Une description service V2', () => {
       specificitesProjet: ['accesPhysiqueAuxBureaux'],
       activitesExternalisees: ['developpementLogiciel'],
       dureeDysfonctionnementAcceptable: 'moinsDe24h',
+      categoriesDonneesTraitees: ['documentsRHSensibles'],
     });
 
     const aPersister = descriptionV2.donneesSerialisees();
@@ -40,7 +40,6 @@ describe('Une description service V2', () => {
       typeService: ['api'],
       statutDeploiement: 'enCours',
       niveauDeSecurite: 'niveau1',
-      categorieDonneesTraitees: 'documentsRHSensibles',
       volumetrieDonneesTraitees: 'faible',
       presentation: 'Le premier de …',
       pointsAcces: [{ description: 'http://url.com' }],
@@ -50,6 +49,7 @@ describe('Une description service V2', () => {
       ouvertureSysteme: 'accessibleSurInternet',
       specificitesProjet: ['accesPhysiqueAuxBureaux'],
       dureeDysfonctionnementAcceptable: 'moinsDe24h',
+      categoriesDonneesTraitees: ['documentsRHSensibles'],
     });
   });
 

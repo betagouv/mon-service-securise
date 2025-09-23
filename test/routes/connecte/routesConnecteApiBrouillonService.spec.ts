@@ -130,6 +130,16 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       valeurCorrecte: 'moinsDe12h',
       valeurIncorrecte: '',
     },
+    {
+      nomPropriete: 'categoriesDonneesTraitees',
+      valeurCorrecte: ['documentsRHSensibles'],
+      valeurIncorrecte: ['mauvaiseCategorie'],
+    },
+    {
+      nomPropriete: 'categoriesDonneesTraitees',
+      valeurCorrecte: [],
+      valeurIncorrecte: 'uneChaine',
+    },
   ])(
     'quand requête PUT sur `/api/brouillon-service/:id/:$nomPropriete`',
     ({ nomPropriete, valeurCorrecte, valeurIncorrecte }) => {

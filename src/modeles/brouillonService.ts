@@ -20,6 +20,9 @@ export type DonneesBrouillonService = {
   ouvertureSysteme?: keyof typeof questionsV2.ouvertureSysteme;
   audienceCible?: keyof typeof questionsV2.audienceCible;
   dureeDysfonctionnementAcceptable?: keyof typeof questionsV2.dureeDysfonctionnementAcceptable;
+  categoriesDonneesTraitees?: Array<
+    keyof typeof questionsV2.categorieDonneesTraitees
+  >;
 };
 
 export type ProprietesBrouillonService = keyof DonneesBrouillonService;
@@ -62,9 +65,9 @@ export class BrouillonService {
         audienceCible: this.donnees.audienceCible!,
         dureeDysfonctionnementAcceptable:
           this.donnees.dureeDysfonctionnementAcceptable!,
-        niveauDeSecurite: '', // TODO : Étape 5
-        categorieDonneesTraitees: 'donneesSensibles', // TODO : Étape 3 > Question 4
+        categoriesDonneesTraitees: this.donnees.categoriesDonneesTraitees || [],
         volumetrieDonneesTraitees: 'faible', // TODO : Étape 3 > Question 5
+        niveauDeSecurite: '', // TODO : Étape 5
       },
     };
   }
@@ -90,6 +93,7 @@ export class BrouillonService {
       ...siPresente('ouvertureSysteme'),
       ...siPresente('audienceCible'),
       ...siPresente('dureeDysfonctionnementAcceptable'),
+      ...siPresente('categoriesDonneesTraitees'),
     };
   }
 }

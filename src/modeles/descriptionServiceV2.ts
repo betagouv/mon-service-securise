@@ -30,7 +30,6 @@ export type DonneesDescriptionServiceV2 = {
   nomService: string;
   organisationResponsable: DonneesEntite;
   niveauDeSecurite: string;
-  categorieDonneesTraitees: CategorieDonneesTraitees;
   volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   statutDeploiement: StatutDeploiement;
   presentation: string;
@@ -42,6 +41,7 @@ export type DonneesDescriptionServiceV2 = {
   ouvertureSysteme: OuvertureSysteme;
   audienceCible: AudienceCible;
   dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
+  categoriesDonneesTraitees: CategorieDonneesTraitees[];
 };
 
 export class DescriptionServiceV2 {
@@ -49,7 +49,6 @@ export class DescriptionServiceV2 {
   readonly organisationResponsable: Entite;
   readonly niveauDeSecurite: string;
   readonly statutDeploiement: StatutDeploiement;
-  readonly categorieDonneesTraitees: CategorieDonneesTraitees;
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   private readonly presentation: string;
   private readonly pointsAcces: PointsAcces;
@@ -60,13 +59,13 @@ export class DescriptionServiceV2 {
   private readonly ouvertureSysteme: OuvertureSysteme;
   private readonly audienceCible: AudienceCible;
   private readonly dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
+  private readonly categoriesDonneesTraitees: CategorieDonneesTraitees[];
 
   constructor(donnees: DonneesDescriptionServiceV2) {
     this.nomService = donnees.nomService;
     this.organisationResponsable = new Entite(donnees.organisationResponsable);
     this.statutDeploiement = donnees.statutDeploiement;
     this.niveauDeSecurite = donnees.niveauDeSecurite;
-    this.categorieDonneesTraitees = donnees.categorieDonneesTraitees;
     this.volumetrieDonneesTraitees = donnees.volumetrieDonneesTraitees;
     this.presentation = donnees.presentation;
     this.pointsAcces = new PointsAcces({
@@ -80,6 +79,7 @@ export class DescriptionServiceV2 {
     this.audienceCible = donnees.audienceCible;
     this.dureeDysfonctionnementAcceptable =
       donnees.dureeDysfonctionnementAcceptable;
+    this.categoriesDonneesTraitees = donnees.categoriesDonneesTraitees;
   }
 
   static valideDonneesCreation() {}
@@ -91,7 +91,6 @@ export class DescriptionServiceV2 {
 
   donneesSerialisees(): DonneesDescriptionServiceV2 {
     return {
-      categorieDonneesTraitees: this.categorieDonneesTraitees,
       niveauDeSecurite: this.niveauDeSecurite,
       organisationResponsable:
         this.organisationResponsable.toJSON() as DonneesEntite,
@@ -107,6 +106,7 @@ export class DescriptionServiceV2 {
       ouvertureSysteme: this.ouvertureSysteme,
       audienceCible: this.audienceCible,
       dureeDysfonctionnementAcceptable: this.dureeDysfonctionnementAcceptable,
+      categoriesDonneesTraitees: this.categoriesDonneesTraitees,
     };
   }
 }

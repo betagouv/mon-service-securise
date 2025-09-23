@@ -11,7 +11,7 @@ function uneDescriptionAuNiveau(niveauDeSecurite: string) {
     nomService: '',
     organisationResponsable: { siret: 'X' },
     volumetrieDonneesTraitees: 'faible',
-    categorieDonneesTraitees: 'donneesSensibles',
+    categoriesDonneesTraitees: ['donneesSensibles'],
   });
 }
 
@@ -108,7 +108,7 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: false,
         modificateurs: {
           niveauDeSecurite: [['niveau1', 'Ajouter']],
-          categorieDonneesTraitees: [
+          categoriesDonneesTraitees: [
             ['donneesSensibles', 'RendreIndispensable'],
           ],
         },
