@@ -42,6 +42,7 @@ export type DonneesDescriptionServiceV2 = {
   audienceCible: AudienceCible;
   dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
   categoriesDonneesTraitees: CategorieDonneesTraitees[];
+  categoriesDonneesTraiteesSupplementaires: string[];
 };
 
 export class DescriptionServiceV2 {
@@ -60,6 +61,7 @@ export class DescriptionServiceV2 {
   private readonly audienceCible: AudienceCible;
   private readonly dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
   private readonly categoriesDonneesTraitees: CategorieDonneesTraitees[];
+  private readonly categoriesDonneesTraiteesSupplementaires: string[];
 
   constructor(donnees: DonneesDescriptionServiceV2) {
     this.nomService = donnees.nomService;
@@ -80,6 +82,8 @@ export class DescriptionServiceV2 {
     this.dureeDysfonctionnementAcceptable =
       donnees.dureeDysfonctionnementAcceptable;
     this.categoriesDonneesTraitees = donnees.categoriesDonneesTraitees;
+    this.categoriesDonneesTraiteesSupplementaires =
+      donnees.categoriesDonneesTraiteesSupplementaires;
   }
 
   static valideDonneesCreation() {}
@@ -107,6 +111,8 @@ export class DescriptionServiceV2 {
       audienceCible: this.audienceCible,
       dureeDysfonctionnementAcceptable: this.dureeDysfonctionnementAcceptable,
       categoriesDonneesTraitees: this.categoriesDonneesTraitees,
+      categoriesDonneesTraiteesSupplementaires:
+        this.categoriesDonneesTraiteesSupplementaires,
     };
   }
 }
