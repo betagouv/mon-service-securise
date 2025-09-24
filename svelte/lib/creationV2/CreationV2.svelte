@@ -56,19 +56,27 @@
 
 <div class="conteneur-creation">
   <div class="formulaire-creation">
-    <div class="contenu-formulaire">
+    <div
+      class="contenu-formulaire"
+      class:fafa={true}
+      class:sans-explications={$etapeCourante.questionCourante.explications
+        .length === 0}
+    >
       <div class="etapier">
         <span>Étape {$etapeCourante.numero} sur {$etapeCourante.numeroMax}</span
         >
         <h2>{$etapeCourante.titre}</h2>
         {#if $etapeCourante.titreEtapeSuivante}
-          <span class="suivante"
-            ><b>Étape suivante :</b> {$etapeCourante.titreEtapeSuivante}</span
-          >
+          <span class="suivante">
+            <b>Étape suivante :</b>
+            {$etapeCourante.titreEtapeSuivante}
+          </span>
         {/if}
       </div>
-      <hr />
-      <JaugeDeProgression />
+      {#if $etapeCourante.nombreQuestions > 1}
+        <hr />
+        <JaugeDeProgression />
+      {/if}
       <svelte:component
         this={$etapeCourante.questionCourante.composant}
         bind:estComplete={questionCouranteEstComplete}
@@ -117,13 +125,15 @@
       </div>
     </div>
   </div>
-  <aside>
-    <img alt="" src={$etapeCourante.illustration} />
-    <h3>Pourquoi demander ces informations ?</h3>
-    {#each $etapeCourante.questionCourante.explications as explication}
-      <p>{explication}</p>
-    {/each}
-  </aside>
+  {#if $etapeCourante.illustration}
+    <aside>
+      <img alt="" src={$etapeCourante.illustration} />
+      <h3>Pourquoi demander ces informations ?</h3>
+      {#each $etapeCourante.questionCourante.explications as explication}
+        <p>{explication}</p>
+      {/each}
+    </aside>
+  {/if}
 </div>
 
 <style lang="scss">
@@ -155,6 +165,10 @@
         max-width: 684px;
         margin: auto;
         padding-top: 44px;
+
+        &.sans-explications {
+          max-width: 924px;
+        }
 
         .etapier {
           h2 {

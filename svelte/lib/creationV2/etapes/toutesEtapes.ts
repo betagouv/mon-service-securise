@@ -14,6 +14,7 @@ import QuestionDureeDysfonctionnement from './etape3/QuestionDureeDysfonctionnem
 import QuestionCategoriesDonneesTraitees from './etape3/QuestionCategoriesDonneesTraitees.svelte';
 import QuestionVolumetrieDonneesTraitees from './etape3/QuestionVolumetrieDonneesTraitees.svelte';
 import QuestionLocalisationsDonneesTraitees from './etape3/QuestionLocalisationsDonneesTraitees.svelte';
+import EtapeResumeDuService from './resume/EtapeResumeDuService.svelte';
 
 type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
 
@@ -24,13 +25,21 @@ export type QuestionBindeeSurBrouillon = {
   avecAvanceRapide?: boolean;
 };
 
+export type EtapeGlobale = {
+  composant: typeof SvelteComponent<{}>;
+  clesPropriete: [];
+  explications: [];
+  avecAvanceRapide: false;
+};
+
 type EtapeDuWizard = {
   numero: number;
   titre: string;
-  questions: QuestionBindeeSurBrouillon[];
-  illustration: string;
+  questions: Array<QuestionBindeeSurBrouillon | EtapeGlobale>;
+  illustration?: string;
 };
-export const toutesEtapes: EtapeDuWizard[] = [
+
+export const toutesEtapes: Array<EtapeDuWizard> = [
   {
     numero: 1,
     titre: 'Informations génériques sur le projet',
@@ -167,6 +176,18 @@ export const toutesEtapes: EtapeDuWizard[] = [
         explications: [
           "Cette information permet de savoir si des mesures liées à la localisation des données sont nécessaires à l'homologation.",
         ],
+      },
+    ],
+  },
+  {
+    numero: 4,
+    titre: 'Résumé du service',
+    questions: [
+      {
+        composant: EtapeResumeDuService,
+        explications: [],
+        avecAvanceRapide: false,
+        clesPropriete: [],
       },
     ],
   },
