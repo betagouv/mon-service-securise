@@ -11,14 +11,14 @@ import {
   EchecAutorisation,
   EchecEnvoiMessage,
   ErreurAutorisationExisteDeja,
-  ErreurModele,
+  ErreurAutorisationInexistante,
   ErreurCategorieInconnue,
+  ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
+  ErreurModele,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
-  ErreurAutorisationInexistante,
-  ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
-  ErreurServiceInexistant,
   ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
+  ErreurServiceInexistant,
 } from '../../erreurs.js';
 import routesConnecteApiService from './routesConnecteApiService.js';
 import Utilisateur from '../../modeles/utilisateur.js';
@@ -30,14 +30,13 @@ import {
   obtentionDonneesDeBaseUtilisateur,
 } from '../mappeur/utilisateur.js';
 import {
-  verifieCoherenceDesDroits,
   Permissions,
   Rubriques,
+  verifieCoherenceDesDroits,
 } from '../../modeles/autorisations/gestionDroits.js';
 import routesConnecteApiVisiteGuidee from './routesConnecteApiVisiteGuidee.js';
 import routesConnecteApiNotifications from './routesConnecteApiNotifications.js';
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
-import DescriptionService from '../../modeles/descriptionService.js';
 import routesConnecteApiTeleversement from './routesConnecteApiTeleversement.js';
 import routesConnecteApiBrouillonService from './routesConnecteApiBrouillonService.js';
 

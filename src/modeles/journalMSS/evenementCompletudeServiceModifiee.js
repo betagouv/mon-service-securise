@@ -1,5 +1,4 @@
 import Evenement from './evenement.js';
-import DescriptionService from '../descriptionService.js';
 
 class EvenementCompletudeServiceModifiee extends Evenement {
   constructor(donnees, options = {}) {
