@@ -2,7 +2,6 @@ import express from 'express';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import { genereGradientConique } from '../../pdf/graphiques/camembert.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
-import DescriptionService from '../../modeles/descriptionService.js';
 
 const routesConnecteApiServicePdf = ({
   adaptateurHorloge,

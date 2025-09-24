@@ -3,13 +3,12 @@ import { decode } from 'html-entities';
 import InformationsService from '../../modeles/informationsService.js';
 import {
   Permissions,
-  Rubriques,
   premiereRouteDisponible,
+  Rubriques,
 } from '../../modeles/autorisations/gestionDroits.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import Service from '../../modeles/service.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
-import DescriptionService from '../../modeles/descriptionService.js';
 import RisqueGeneral from '../../modeles/risqueGeneral.js';
 
 const { LECTURE } = Permissions;
