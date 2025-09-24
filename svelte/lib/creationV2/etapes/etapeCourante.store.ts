@@ -1,6 +1,10 @@
 import { derived } from 'svelte/store';
 import { navigationStore } from './navigation.store';
-import { type QuestionBindeeSurBrouillon, toutesEtapes } from './toutesEtapes';
+import {
+  type EtapeGlobale,
+  type QuestionBindeeSurBrouillon,
+  toutesEtapes,
+} from './toutesEtapes';
 
 type EtapeCourante = {
   numero: number;
@@ -9,10 +13,10 @@ type EtapeCourante = {
   titreEtapeSuivante?: string;
   nombreQuestions: number;
   numeroQuestionCourante: number;
-  questionCourante: QuestionBindeeSurBrouillon;
+  questionCourante: QuestionBindeeSurBrouillon | EtapeGlobale;
   estDerniereQuestion: boolean;
   estPremiereQuestion: boolean;
-  illustration: string;
+  illustration?: string;
 };
 
 export const etapeCourante = derived<[typeof navigationStore], EtapeCourante>(
