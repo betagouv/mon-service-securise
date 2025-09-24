@@ -335,10 +335,7 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
     });
 
     it("renvoie une erreur 404 si le brouillon n'existe pas", async () => {
-      testeur.depotDonnees().lisBrouillonService = async (
-        _: UUID,
-        __: UUID
-      ) => {
+      testeur.depotDonnees().lisBrouillonService = async () => {
         throw new ErreurBrouillonInexistant();
       };
 
