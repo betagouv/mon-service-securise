@@ -13,10 +13,7 @@
     if ($leBrouillon.pointsAcces.length === 0) ajouteValeur();
   });
 
-  // N'avoir aucun point d'accès est valide, donc on peut utiliser `every` qui renvoie `true` sur tableau vide.
-  $: estComplete = $leBrouillon.pointsAcces.every((v) =>
-    v ? v.trim().length > 0 : false
-  );
+  $: estComplete = true;
 
   const supprimeValeur = (index: number) => {
     $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
@@ -29,7 +26,11 @@
   };
 
   const enregistre = () => {
-    emetEvenement('champModifie', { pointsAcces: $leBrouillon.pointsAcces });
+    emetEvenement('champModifie', {
+      pointsAcces: $leBrouillon.pointsAcces.filter(
+        (pointAcces) => pointAcces.trim().length > 0
+      ),
+    });
   };
 </script>
 

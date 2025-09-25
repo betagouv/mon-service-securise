@@ -30,11 +30,7 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  // Pas de condition sur categoriesDonneesTraitees car ce n'est pas obligatoire d'en sélectionner.
-  // N'avoir aucun categoriesDonneesTraiteesSupplémentaires est valide, donc on peut utiliser `every` qui renvoie `true` sur tableau vide.
-  $: estComplete = $leBrouillon.categoriesDonneesTraiteesSupplementaires.every(
-    (v) => (v ? v.trim().length > 0 : false)
-  );
+  $: estComplete = true;
 
   const supprimeValeur = (index: number) => {
     $leBrouillon.categoriesDonneesTraiteesSupplementaires =
@@ -53,7 +49,9 @@
   const enregistre = () => {
     emetEvenement('champModifie', {
       categoriesDonneesTraiteesSupplementaires:
-        $leBrouillon.categoriesDonneesTraiteesSupplementaires,
+        $leBrouillon.categoriesDonneesTraiteesSupplementaires.filter(
+          (c) => c.trim().length > 0
+        ),
     });
   };
 
