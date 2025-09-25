@@ -14,6 +14,17 @@ export const mesuresV2 = {
 };
 
 export const questionsV2 = {
+  statutDeploiement: {
+    enProjet: {
+      description: 'En conception',
+    },
+    enCours: {
+      description: 'En cours de développement ou de déploiement',
+    },
+    enLigne: {
+      description: 'En ligne et accessible aux usagers et/ou agents',
+    },
+  },
   typeDeService: {
     portailInformation: {
       nom: "Portail d'information",

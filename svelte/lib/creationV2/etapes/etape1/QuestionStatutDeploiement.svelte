@@ -3,6 +3,7 @@
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
+  import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
 
   export let estComplete: boolean;
 
@@ -19,21 +20,13 @@
   Quel est le statut de votre service ?*
 
   <span class="indication">Sélectionnez une réponse</span>
-  <Radio
-    id="enProjet"
-    nom="En conception"
-    bind:valeur={$leBrouillon.statutDeploiement}
-  />
-  <Radio
-    id="enCours"
-    nom="En cours de développement ou de déploiement"
-    bind:valeur={$leBrouillon.statutDeploiement}
-  />
-  <Radio
-    id="enLigne"
-    nom="En ligne et accessible aux usagers et/ou agents"
-    bind:valeur={$leBrouillon.statutDeploiement}
-  />
+  {#each Object.entries(questionsV2.statutDeploiement) as [id, { description }]}
+    <Radio
+      {id}
+      nom={description}
+      bind:valeur={$leBrouillon.statutDeploiement}
+    />
+  {/each}
 </label>
 
 <style lang="scss">
