@@ -1,26 +1,24 @@
 <script lang="ts">
-  import { leBrouillon } from '../brouillon.store';
-  import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
+  import { resume } from './resume.store';
 </script>
 
 <div class="conteneur-avec-cadre">
   <h5>Informations génériques sur le projet</h5>
   <dl>
     <dt>Nom du service :</dt>
-    <dd>{$leBrouillon.nomService}</dd>
+    <dd>{$resume.nomService}</dd>
     <dt>Organisation :</dt>
-    <dd>{$leBrouillon.siret}</dd>
+    <dd>{$resume.siret}</dd>
     <dt>Statut :</dt>
     <dd>
-      {questionsV2.statutDeploiement[$leBrouillon.statutDeploiement]
-        .description}
+      {$resume.statutDeploiement}
     </dd>
     <dt>Présentation :</dt>
-    <dd>{$leBrouillon.presentation}</dd>
+    <dd>{$resume.presentation}</dd>
     <dt>URL du service :</dt>
     <dd>
-      {#if $leBrouillon.pointsAcces?.length > 0}
-        {#each $leBrouillon.pointsAcces as pointAcces}
+      {#if $resume.pointsAcces.length > 0}
+        {#each $resume.pointsAcces as pointAcces}
           <span>{pointAcces}</span>
         {/each}
       {:else}
@@ -34,44 +32,40 @@
   <dl>
     <dt>Type de service à sécuriser :</dt>
     <dd>
-      {#each $leBrouillon.typeService as typeDeService}
-        <span>{questionsV2.typeDeService[typeDeService].nom}</span>
+      {#each $resume.typeService as typeDeService}
+        <span>{typeDeService}</span>
       {/each}
     </dd>
     <dt>Sécurisations prévues :</dt>
     <dd>
-      {#if $leBrouillon.specificitesProjet?.length > 0}
-        {#each $leBrouillon.specificitesProjet as sp}
-          <span>{questionsV2.specificiteProjet[sp].nom}</span>
+      {#if $resume.specificitesProjet.length > 0}
+        {#each $resume.specificitesProjet as sp}
+          <span>{sp}</span>
         {/each}
       {:else}
         -
       {/if}
     </dd>
     <dt>Hébergement du système :</dt>
-    <dd>{questionsV2.typeHebergement[$leBrouillon.typeHebergement].nom}</dd>
+    <dd>{$resume.typeHebergement}</dd>
   </dl>
 </div>
 <div class="conteneur-avec-cadre">
   <h5>Évaluation de la criticité et de l'exposition du service</h5>
   <dl>
     <dt>Ouverture du système :</dt>
-    <dd>{questionsV2.ouvertureSysteme[$leBrouillon.ouvertureSysteme].nom}</dd>
+    <dd>{$resume.ouvertureSysteme}</dd>
     <dt>Audience cible du service :</dt>
-    <dd>{questionsV2.audienceCible[$leBrouillon.audienceCible].nom}</dd>
+    <dd>{$resume.audienceCible}</dd>
     <dt>Durée maximale acceptable de dysfonctionnement du système :</dt>
-    <dd>
-      {questionsV2.dureeDysfonctionnementAcceptable[
-        $leBrouillon.dureeDysfonctionnementAcceptable
-      ].nom}
-    </dd>
+    <dd>{$resume.dureeDysfonctionnementAcceptable}</dd>
     <dt>Données traitées :</dt>
     <dd>
-      {#if $leBrouillon.categoriesDonneesTraitees?.length > 0 || $leBrouillon.categoriesDonneesTraiteesSupplementaires?.length > 0}
-        {#each $leBrouillon.categoriesDonneesTraitees as c}
-          <span>{questionsV2.categorieDonneesTraitees[c].nom}</span>
+      {#if $resume.categoriesDonneesTraitees.length > 0 || $resume.categoriesDonneesTraiteesSupplementaires.length > 0}
+        {#each $resume.categoriesDonneesTraitees as c}
+          <span>{c}</span>
         {/each}
-        {#each $leBrouillon.categoriesDonneesTraiteesSupplementaires as cs}
+        {#each $resume.categoriesDonneesTraiteesSupplementaires as cs}
           <span>{cs}</span>
         {/each}
       {:else}
