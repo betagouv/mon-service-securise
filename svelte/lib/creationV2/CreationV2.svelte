@@ -13,6 +13,7 @@
   import { etapeCourante } from './etapes/etapeCourante.store';
   import { leBrouillon } from './etapes/brouillon.store';
   import { ajouteParametreAUrl } from '../outils/url';
+  import type { BrouillonSvelte } from './creationV2.types';
 
   let questionCouranteEstComplete = false;
   let enCoursDeChargement = false;
@@ -40,7 +41,15 @@
     }
 
     await metsAJourBrouillonService(idBrouillon, e.detail);
-    if ($etapeCourante.questionCourante.avecAvanceRapide)
+
+    const nomChampModifie = Object.keys(e.detail)[0] as keyof BrouillonSvelte;
+    const onEstToujoursSurLaQuestionQuiAEnvoyeLaMaj =
+      $etapeCourante.questionCourante.clesPropriete.includes(nomChampModifie);
+    // si on n'est plus sur la question mise à jour, c'est que "suivant()" a déjà été appelé
+    if (
+      onEstToujoursSurLaQuestionQuiAEnvoyeLaMaj &&
+      $etapeCourante.questionCourante.avecAvanceRapide
+    )
       navigationStore.suivant();
   };
 
