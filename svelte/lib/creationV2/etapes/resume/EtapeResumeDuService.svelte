@@ -72,6 +72,14 @@
         -
       {/if}
     </dd>
+    <dt>Volume des données traitées :</dt>
+    <dd>{$resume.volumetrieDonneesTraitees}</dd>
+    <dt>Localisation des données traitées</dt>
+    <dd>
+      {#each $resume.localisationsDonneesTraitees as l}
+        <span>{l}</span>
+      {/each}
+    </dd>
   </dl>
 </div>
 
