@@ -1,5 +1,6 @@
 import type { questionsV2 } from '../../../donneesReferentielMesuresV2';
 
+export type StatutDeploiement = keyof typeof questionsV2.statutDeploiement;
 export type TypeService = keyof typeof questionsV2.typeDeService;
 export type SpecificiteProjet = keyof typeof questionsV2.specificiteProjet;
 export type TypeHebergement = keyof typeof questionsV2.typeHebergement;
@@ -21,7 +22,7 @@ export type LocalisationDonneesTraitees =
 export type BrouillonIncomplet = {
   nomService?: string;
   siret?: string;
-  statutDeploiement?: string;
+  statutDeploiement?: StatutDeploiement;
   presentation?: string;
   pointsAcces?: string[];
   typeService?: TypeService[];
@@ -42,7 +43,7 @@ export type BrouillonIncomplet = {
 export type BrouillonSvelte = {
   nomService: string;
   siret: string;
-  statutDeploiement: string;
+  statutDeploiement: StatutDeploiement | '';
   presentation: string;
   pointsAcces: string[];
   typeService: TypeService[];
