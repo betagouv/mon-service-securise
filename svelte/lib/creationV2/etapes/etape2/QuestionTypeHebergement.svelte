@@ -4,7 +4,7 @@
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
-  import type { ActiviteeExternalisee } from '../../creationV2.types';
+  import type { ActiviteExternalisee } from '../../creationV2.types';
 
   export let estComplete: boolean;
   $: estComplete = !!$leBrouillon.typeHebergement;
@@ -12,10 +12,10 @@
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
   const externaliseSiNecessaire = (e: Event) => {
-    const aucune = [] as ActiviteeExternalisee[];
+    const aucune = [] as ActiviteExternalisee[];
     const toutes = Object.keys(
       questionsV2.activiteExternalisee
-    ) as ActiviteeExternalisee[];
+    ) as ActiviteExternalisee[];
 
     const { value: typeHebergement } = e.target as HTMLInputElement;
 

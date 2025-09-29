@@ -3,7 +3,8 @@ import type { questionsV2 } from '../../../donneesReferentielMesuresV2';
 export type TypeService = keyof typeof questionsV2.typeDeService;
 export type SpecificiteProjet = keyof typeof questionsV2.specificiteProjet;
 export type TypeHebergement = keyof typeof questionsV2.typeHebergement;
-export type ActiviteeExternalisee = keyof typeof questionsV2.typeHebergement;
+export type ActiviteExternalisee =
+  keyof typeof questionsV2.activiteExternalisee;
 export type OuvertureSysteme = keyof typeof questionsV2.ouvertureSysteme;
 export type AudienceCible = keyof typeof questionsV2.audienceCible;
 export type DureeDysfonctionnementAcceptable =
@@ -26,7 +27,7 @@ export type BrouillonIncomplet = {
   typeService?: TypeService[];
   specificitesProjet?: SpecificiteProjet[];
   typeHebergement?: TypeHebergement;
-  activitesExternalisees?: ActiviteeExternalisee[];
+  activitesExternalisees?: ActiviteExternalisee[];
   ouvertureSysteme?: OuvertureSysteme;
   audienceCible?: AudienceCible;
   dureeDysfonctionnementAcceptable?: DureeDysfonctionnementAcceptable;
@@ -47,7 +48,7 @@ export type BrouillonSvelte = {
   typeService: TypeService[];
   specificitesProjet: SpecificiteProjet[];
   typeHebergement: TypeHebergement | '';
-  activitesExternalisees: ActiviteeExternalisee[];
+  activitesExternalisees: ActiviteExternalisee[];
   ouvertureSysteme: OuvertureSysteme | '';
   audienceCible: AudienceCible | '';
   dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable | '';
