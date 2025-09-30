@@ -171,6 +171,10 @@
     scroll-snap-align: start;
   }
 
+  #home #presentation-anssi {
+    padding: 80px 22vw;
+  }
+
   #home #rejoignez-communaute .conteneur-communaute {
     display: flex;
     flex-direction: row-reverse;
