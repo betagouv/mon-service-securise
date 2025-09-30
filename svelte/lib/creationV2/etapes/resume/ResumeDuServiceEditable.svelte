@@ -113,29 +113,103 @@
   />
 </div>
 
-<!--div class="conteneur-avec-cadre">
+<div class="conteneur-avec-cadre">
   <h5>Caractéristiques du service</h5>
-  <dl>
-    <dt>Type de service à sécuriser :</dt>
-    <dd>
-      {#each $leBrouillon.typeService as typeDeService}
-        <span>{questionsV2.typeDeService[typeDeService].nom}</span>
-      {/each}
-    </dd>
-    <dt>Sécurisations prévues :</dt>
-    <dd>
-      {#if $leBrouillon.specificitesProjet?.length > 0}
-        {#each $leBrouillon.specificitesProjet as sp}
-          <span>{questionsV2.specificiteProjet[sp].nom}</span>
-        {/each}
-      {:else}
-        -
-      {/if}
-    </dd>
-    <dt>Hébergement du système :</dt>
-    <dd>{questionsV2.typeHebergement[$leBrouillon.typeHebergement].nom}</dd>
-  </dl>
+
+  <lab-anssi-multi-select
+    label="Type de service*"
+    placeholder="Sélectionnez un ou plusieurs types de service"
+    options={Object.entries(questionsV2.typeDeService).map(
+      ([typeService, { nom }]) => ({
+        id: typeService,
+        value: typeService,
+        label: nom,
+      })
+    )}
+    values={$leBrouillon.typeService}
+    id="typeService"
+    on:valuechanged={(e) => {
+      $leBrouillon.typeService = e.detail;
+      if ($leBrouillon.typeService.length >= 1) {
+        return enregistre('typeService', $leBrouillon.typeService);
+      }
+    }}
+    status={$leBrouillon.typeService.length >= 1 ? 'default' : 'error'}
+    errorMessage="Le type de service est obligatoire."
+  />
+
+  <lab-anssi-multi-select
+    label="Spécificités à sécuriser"
+    placeholder="Sélectionnez une ou plusieurs spécificités"
+    options={Object.entries(questionsV2.specificiteProjet).map(
+      ([specificiteProjet, { nom }]) => ({
+        id: specificiteProjet,
+        value: specificiteProjet,
+        label: nom,
+      })
+    )}
+    values={$leBrouillon.specificitesProjet}
+    id="specificitesProjet"
+    on:valuechanged={(e) => {
+      $leBrouillon.specificitesProjet = e.detail;
+      if ($leBrouillon.specificitesProjet.length >= 1) {
+        return enregistre(
+          'specificitesProjet',
+          $leBrouillon.specificitesProjet
+        );
+      }
+    }}
+  />
+
+  <dsfr-select
+    label="Type de cloud / hébergement utilisé*"
+    placeholder="Sélectionnez un type d'hébergement"
+    options={Object.entries(questionsV2.typeHebergement).map(
+      ([typeHebergement, { nom }]) => ({ value: typeHebergement, label: nom })
+    )}
+    value={$leBrouillon.typeHebergement}
+    id="typeHebergement"
+    on:valuechanged={(e) => {
+      $leBrouillon.typeHebergement = e.detail;
+      if ($leBrouillon.typeHebergement === 'saas') {
+        $leBrouillon.activitesExternalisees = [
+          'administrationTechnique',
+          'developpementLogiciel',
+        ];
+      } else {
+        $leBrouillon.activitesExternalisees = [];
+      }
+
+      enregistre('activitesExternalisees', $leBrouillon.activitesExternalisees);
+      return enregistre('typeHebergement', $leBrouillon.typeHebergement);
+    }}
+    placeholderDisabled
+  />
+
+  <lab-anssi-multi-select
+    label="Activités du projet entièrement externalisées"
+    placeholder="Sélectionnez une ou plusieurs activités"
+    disabled={$leBrouillon.typeHebergement === 'saas'}
+    options={Object.entries(questionsV2.activiteExternalisee).map(
+      ([activiteExternalisee, { nom }]) => ({
+        id: activiteExternalisee,
+        value: activiteExternalisee,
+        label: nom,
+      })
+    )}
+    values={$leBrouillon.activitesExternalisees}
+    id="activitesExternalisees"
+    on:valuechanged={(e) => {
+      $leBrouillon.activitesExternalisees = e.detail;
+      return enregistre(
+        'activitesExternalisees',
+        $leBrouillon.activitesExternalisees
+      );
+    }}
+  />
 </div>
+
+<!--
 <div class="conteneur-avec-cadre">
   <h5>Évaluation de la criticité et de l'exposition du service</h5>
   <dl>
