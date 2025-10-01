@@ -48,6 +48,16 @@
     </dd>
     <dt>Hébergement du système :</dt>
     <dd>{$resume.typeHebergement}</dd>
+    <dt>Activités du projet entièrement externalisées :</dt>
+    <dd>
+      {#if $resume.activitesExternalisees.length > 0}
+        {#each $resume.activitesExternalisees as ae}
+          <span>{ae}</span>
+        {/each}
+      {:else}
+        -
+      {/if}
+    </dd>
   </dl>
 </div>
 <div class="conteneur-avec-cadre">
