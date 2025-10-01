@@ -15,6 +15,7 @@ import QuestionCategoriesDonneesTraitees from './etape3/QuestionCategoriesDonnee
 import QuestionVolumetrieDonneesTraitees from './etape3/QuestionVolumetrieDonneesTraitees.svelte';
 import QuestionLocalisationsDonneesTraitees from './etape3/QuestionLocalisationsDonneesTraitees.svelte';
 import EtapeResumeDuService from './resume/EtapeResumeDuService.svelte';
+import EtapeCreationEnModeRapide from './modeRapide/EtapeCreationEnModeRapide.svelte';
 
 type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
 
@@ -32,12 +33,28 @@ export type EtapeGlobale = {
   avecAvanceRapide: false;
 };
 
-type EtapeDuWizard = {
+export type EtapeDuWizard = {
   numero: number;
   titre: string;
   questions: Array<QuestionBindeeSurBrouillon | EtapeGlobale>;
   illustration?: string;
 };
+
+export const toutesEtapesModeRapide: Array<EtapeDuWizard> = [
+  {
+    numero: 1,
+    titre: 'Informations sur le projet',
+    illustration: '/statique/assets/images/illustration_accueil_connexion.svg',
+    questions: [
+      {
+        composant: EtapeCreationEnModeRapide,
+        explications: [],
+        avecAvanceRapide: false,
+        clesPropriete: [],
+      },
+    ],
+  },
+];
 
 export const toutesEtapes: Array<EtapeDuWizard> = [
   {
