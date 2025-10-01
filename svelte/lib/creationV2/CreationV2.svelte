@@ -67,21 +67,15 @@
   <div class="formulaire-creation">
     <div
       class="contenu-formulaire"
-      class:fafa={true}
       class:sans-explications={$etapeCourante.questionCourante.explications
         .length === 0}
     >
-      <div class="etapier">
-        <span>Étape {$etapeCourante.numero} sur {$etapeCourante.numeroMax}</span
-        >
-        <h2>{$etapeCourante.titre}</h2>
-        {#if $etapeCourante.titreEtapeSuivante}
-          <span class="suivante">
-            <b>Étape suivante :</b>
-            {$etapeCourante.titreEtapeSuivante}
-          </span>
-        {/if}
-      </div>
+      <dsfr-stepper
+        title={$etapeCourante.titre}
+        nextStep={$etapeCourante.titreEtapeSuivante}
+        currentStep={$etapeCourante.numero}
+        stepCount={$etapeCourante.numeroMax}
+      />
       {#if $etapeCourante.nombreQuestions > 1}
         <hr />
         <JaugeDeProgression />
@@ -179,26 +173,13 @@
           max-width: 924px;
         }
 
-        .etapier {
-          h2 {
-            margin: 4px 0 0;
-            font-size: 1.25rem;
-            line-height: 1.75rem;
-          }
-          .suivante {
-            font-size: 0.75rem;
-            line-height: 1.25rem;
-            color: #666;
-          }
-        }
-
         hr {
           width: 100%;
           color: #ddd;
           background: #ddd;
           border-color: transparent;
           border-bottom: none;
-          margin: 8px 0;
+          margin: -24px 0 40px 0;
         }
 
         :global(.titre-question) {
