@@ -1,8 +1,12 @@
 <script lang="ts">
   import ResumeDuServiceLectureSeule from './ResumeDuServiceLectureSeule.svelte';
   import BrouillonDeServiceEditable from '../BrouillonDeServiceEditable.svelte';
+  import { brouillonEstCompletStore } from '../brouillonEstComplet.store';
 
   let lectureSeule = true;
+
+  export let estComplete: boolean;
+  $: estComplete = $brouillonEstCompletStore;
 </script>
 
 {#if lectureSeule}
