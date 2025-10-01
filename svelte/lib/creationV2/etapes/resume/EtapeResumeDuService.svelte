@@ -1,6 +1,6 @@
 <script lang="ts">
   import ResumeDuServiceLectureSeule from './ResumeDuServiceLectureSeule.svelte';
-  import ResumeDuServiceEditable from './ResumeDuServiceEditable.svelte';
+  import BrouillonDeServiceEditable from '../BrouillonDeServiceEditable.svelte';
 
   let lectureSeule = true;
 </script>
@@ -19,7 +19,7 @@
   </div>
   <ResumeDuServiceLectureSeule />
 {:else}
-  <ResumeDuServiceEditable />
+  <BrouillonDeServiceEditable />
 {/if}
 
 <style>

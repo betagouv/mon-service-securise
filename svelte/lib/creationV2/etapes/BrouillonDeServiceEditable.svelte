@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { leBrouillon } from '../brouillon.store';
-  import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
+  import { leBrouillon } from './brouillon.store';
+  import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import { tick } from 'svelte';
-  import { metsAJourBrouillonService } from '../../creationV2.api';
-  import ListeChampTexte from '../ListeChampTexte.svelte';
+  import { metsAJourBrouillonService } from '../creationV2.api';
+  import ListeChampTexte from './ListeChampTexte.svelte';
 
   const supprimeValeurPointAcces = (index: number) => {
     $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
