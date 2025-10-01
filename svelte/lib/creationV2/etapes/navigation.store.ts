@@ -1,19 +1,30 @@
 import { writable } from 'svelte/store';
-import { toutesEtapes } from './toutesEtapes';
-import type { BrouillonIncomplet } from '../creationV2.types';
+import {
+  type EtapeDuWizard,
+  toutesEtapes,
+  toutesEtapesModeRapide,
+} from './toutesEtapes';
+import type { BrouillonSvelte } from '../creationV2.types';
 
-type EtatNavigation = { etapeEnCours: number; questionEnCours: number };
+type EtatNavigation = {
+  etapeEnCours: number;
+  questionEnCours: number;
+  modeRapide: boolean;
+  toutesEtapes: Array<EtapeDuWizard>;
+};
 
 const etatNavigation = writable<EtatNavigation>({
   etapeEnCours: 0,
   questionEnCours: 0,
+  modeRapide: false,
+  toutesEtapes: toutesEtapes,
 });
 
 type NavigationStore = {
   subscribe: typeof etatNavigation.subscribe;
   precedent: () => void;
   suivant: () => void;
-  reprendreEditionDe: (brouillon: BrouillonIncomplet) => void;
+  reprendreEditionDe: (brouillon: BrouillonSvelte, modeRapide: boolean) => void;
 };
 
 export const navigationStore: NavigationStore = {
@@ -24,7 +35,8 @@ export const navigationStore: NavigationStore = {
       let questionPrecedente: number;
       if (etat.questionEnCours === 0) {
         etapePrecedente -= 1;
-        questionPrecedente = toutesEtapes[etapePrecedente].questions.length - 1;
+        questionPrecedente =
+          etat.toutesEtapes[etapePrecedente].questions.length - 1;
       } else {
         questionPrecedente = etat.questionEnCours - 1;
       }
@@ -41,7 +53,7 @@ export const navigationStore: NavigationStore = {
       let prochaineQuestion = etat.questionEnCours + 1;
       if (
         etat.questionEnCours ===
-        toutesEtapes[etat.etapeEnCours].questions.length - 1
+        etat.toutesEtapes[etat.etapeEnCours].questions.length - 1
       ) {
         prochaineQuestion = 0;
         prochaineEtape += 1;
@@ -53,16 +65,21 @@ export const navigationStore: NavigationStore = {
       };
     });
   },
-  reprendreEditionDe: (donneesBrouillon: BrouillonIncomplet) => {
+  reprendreEditionDe: (
+    donneesBrouillon: BrouillonSvelte,
+    modeRapide: boolean
+  ) => {
     let questionPrecedente = { etape: 0, question: 0 };
     let cibleTrouvee = false;
 
-    for (let e = 0; e < toutesEtapes.length; e++) {
-      const etape = toutesEtapes[e];
+    const etapesDuWizard = modeRapide ? toutesEtapesModeRapide : toutesEtapes;
+
+    for (let e = 0; e < etapesDuWizard.length; e++) {
+      const etape = etapesDuWizard[e];
       for (let q = 0; q < etape.questions.length; q++) {
         const question = etape.questions[q];
         const questionEstSansReponse = question.clesPropriete.every(
-          (clePropriete) => donneesBrouillon[clePropriete] === undefined
+          (clePropriete) => donneesBrouillon[clePropriete].length === 0
         );
         if (questionEstSansReponse) {
           cibleTrouvee = true;
@@ -76,6 +93,8 @@ export const navigationStore: NavigationStore = {
     etatNavigation.update(() => ({
       etapeEnCours: questionPrecedente.etape,
       questionEnCours: questionPrecedente.question,
+      modeRapide,
+      toutesEtapes: etapesDuWizard,
     }));
   },
 };

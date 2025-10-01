@@ -14,10 +14,12 @@
   import { leBrouillon } from './etapes/brouillon.store';
   import { ajouteParametreAUrl } from '../outils/url';
   import type { BrouillonSvelte } from './creationV2.types';
+  import Switch from '../ui/Switch.svelte';
 
   let questionCouranteEstComplete = false;
   let enCoursDeChargement = false;
   let idBrouillon: UUID;
+  let modeRapide = true;
 
   onMount(async () => {
     const requete = new URLSearchParams(window.location.search);
@@ -25,7 +27,7 @@
       idBrouillon = requete.get('id') as UUID;
       const donneesBrouillon = await lisBrouillonService(idBrouillon);
       leBrouillon.chargeDonnees(donneesBrouillon);
-      navigationStore.reprendreEditionDe(donneesBrouillon);
+      navigationStore.reprendreEditionDe($leBrouillon, modeRapide);
     }
   });
 
@@ -67,8 +69,8 @@
   <div class="formulaire-creation">
     <div
       class="contenu-formulaire"
-      class:sans-explications={$etapeCourante.questionCourante.explications
-        .length === 0}
+      class:sans-explications={!$navigationStore.modeRapide &&
+        $etapeCourante.questionCourante.explications.length === 0}
     >
       <dsfr-stepper
         title={$etapeCourante.titre}
@@ -130,21 +132,56 @@
   </div>
   {#if $etapeCourante.illustration}
     <aside>
+      <div class="selection-mode-rapide">
+        <Switch
+          id="modeRapide"
+          bind:actif={modeRapide}
+          labelActif="⚡ Mode rapide"
+          labelInactif="⚡ Mode rapide"
+          on:change={() => {
+            navigationStore.reprendreEditionDe($leBrouillon, modeRapide);
+          }}
+        />
+        <div class="explications-mode-rapide">
+          Accélérez votre saisie avec un formulaire plus direct, sans contenu
+          pédagogique.
+        </div>
+        <hr />
+      </div>
       <img alt="" src={$etapeCourante.illustration} />
-      <h3>Pourquoi demander ces informations ?</h3>
-      {#each $etapeCourante.questionCourante.explications as explication}
-        <p>{explication}</p>
-      {/each}
+      {#if !modeRapide}
+        <h3>Pourquoi demander ces informations ?</h3>
+        {#each $etapeCourante.questionCourante.explications as explication}
+          <p>{explication}</p>
+        {/each}
+      {/if}
     </aside>
   {/if}
 </div>
 
 <style lang="scss">
+  hr {
+    width: 100%;
+    color: #ddd;
+    background: #ddd;
+    border-color: transparent;
+    border-bottom: none;
+    padding: 0;
+    margin: 0;
+  }
+
   :global(#creation-v2) {
     background: white;
     width: 100%;
     height: 100%;
     text-align: left;
+  }
+
+  .selection-mode-rapide {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 16px 0 24px;
   }
 
   .info-enregistrement-automatique {
@@ -174,11 +211,6 @@
         }
 
         hr {
-          width: 100%;
-          color: #ddd;
-          background: #ddd;
-          border-color: transparent;
-          border-bottom: none;
           margin: -24px 0 40px 0;
         }
 
