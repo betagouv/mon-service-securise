@@ -24,6 +24,30 @@
     );
   };
 
+  const supprimeCategoriesDonneesTraiteesSupplementaires = (index: number) => {
+    $leBrouillon.categoriesDonneesTraiteesSupplementaires =
+      $leBrouillon.categoriesDonneesTraiteesSupplementaires.filter(
+        (_, i) => i !== index
+      );
+  };
+
+  const ajouteCategoriesDonneesTraiteesSupplementaires = () => {
+    $leBrouillon.categoriesDonneesTraiteesSupplementaires = [
+      ...$leBrouillon.categoriesDonneesTraiteesSupplementaires,
+      '',
+    ];
+  };
+
+  const enregistreCategoriesDonneesTraiteesSupplementaires = async () => {
+    await enregistre(
+      'categoriesDonneesTraiteesSupplementaires',
+      $leBrouillon.categoriesDonneesTraiteesSupplementaires.filter(
+        (categoriesDonneesTraiteesSupplementaires) =>
+          categoriesDonneesTraiteesSupplementaires.trim().length > 0
+      )
+    );
+  };
+
   const enregistre = async (propriete: string, valeur: string | string[]) => {
     await metsAJourBrouillonService($leBrouillon.id, {
       [propriete]: valeur,
@@ -68,7 +92,7 @@
 
   <dsfr-select
     label="Statut*"
-    placeholder="Sélectionnez un statut"
+    placeholder="Sélectionnez une valeur"
     options={Object.entries(questionsV2.statutDeploiement).map(
       ([statut, { description }]) => ({ value: statut, label: description })
     )}
@@ -118,7 +142,7 @@
 
   <lab-anssi-multi-select
     label="Type de service*"
-    placeholder="Sélectionnez un ou plusieurs types de service"
+    placeholder="Sélectionnez un ou plusieurs valeurs"
     options={Object.entries(questionsV2.typeDeService).map(
       ([typeService, { nom }]) => ({
         id: typeService,
@@ -140,7 +164,7 @@
 
   <lab-anssi-multi-select
     label="Spécificités à sécuriser"
-    placeholder="Sélectionnez une ou plusieurs spécificités"
+    placeholder="Sélectionnez une ou plusieurs valeurs"
     options={Object.entries(questionsV2.specificiteProjet).map(
       ([specificiteProjet, { nom }]) => ({
         id: specificiteProjet,
@@ -163,7 +187,7 @@
 
   <dsfr-select
     label="Type de cloud / hébergement utilisé*"
-    placeholder="Sélectionnez un type d'hébergement"
+    placeholder="Sélectionnez une valeur"
     options={Object.entries(questionsV2.typeHebergement).map(
       ([typeHebergement, { nom }]) => ({ value: typeHebergement, label: nom })
     )}
@@ -188,7 +212,7 @@
 
   <lab-anssi-multi-select
     label="Activités du projet entièrement externalisées"
-    placeholder="Sélectionnez une ou plusieurs activités"
+    placeholder="Sélectionnez une ou plusieurs valeurs"
     disabled={$leBrouillon.typeHebergement === 'saas'}
     options={Object.entries(questionsV2.activiteExternalisee).map(
       ([activiteExternalisee, { nom }]) => ({
@@ -209,35 +233,138 @@
   />
 </div>
 
-<!--
 <div class="conteneur-avec-cadre">
   <h5>Évaluation de la criticité et de l'exposition du service</h5>
-  <dl>
-    <dt>Ouverture du système :</dt>
-    <dd>{questionsV2.ouvertureSysteme[$leBrouillon.ouvertureSysteme].nom}</dd>
-    <dt>Audience cible du service :</dt>
-    <dd>{questionsV2.audienceCible[$leBrouillon.audienceCible].nom}</dd>
-    <dt>Durée maximale acceptable de dysfonctionnement du système :</dt>
-    <dd>
-      {questionsV2.dureeDysfonctionnementAcceptable[
+
+  <dsfr-select
+    label="Ouverture du système*"
+    placeholder="Sélectionnez une valeur"
+    options={Object.entries(questionsV2.ouvertureSysteme).map(
+      ([ouvertureSysteme, { nom }]) => ({ value: ouvertureSysteme, label: nom })
+    )}
+    value={$leBrouillon.ouvertureSysteme}
+    id="ouvertureSysteme"
+    on:valuechanged={(e) => {
+      $leBrouillon.ouvertureSysteme = e.detail;
+      return enregistre('ouvertureSysteme', $leBrouillon.ouvertureSysteme);
+    }}
+    placeholderDisabled
+  />
+
+  <dsfr-select
+    label="Audience cible du service*"
+    placeholder="Sélectionnez une valeur"
+    options={Object.entries(questionsV2.audienceCible).map(
+      ([audienceCible, { nom }]) => ({ value: audienceCible, label: nom })
+    )}
+    value={$leBrouillon.audienceCible}
+    id="audienceCible"
+    on:valuechanged={(e) => {
+      $leBrouillon.audienceCible = e.detail;
+      return enregistre('audienceCible', $leBrouillon.audienceCible);
+    }}
+    placeholderDisabled
+  />
+
+  <dsfr-select
+    label="Durée maximale acceptable de dysfonctionnement du système*"
+    placeholder="Sélectionnez une valeur"
+    options={Object.entries(questionsV2.dureeDysfonctionnementAcceptable).map(
+      ([duree, { nom }]) => ({ value: duree, label: nom })
+    )}
+    value={$leBrouillon.dureeDysfonctionnementAcceptable}
+    id="dureeDysfonctionnementAcceptable"
+    on:valuechanged={(e) => {
+      $leBrouillon.dureeDysfonctionnementAcceptable = e.detail;
+      return enregistre(
+        'dureeDysfonctionnementAcceptable',
         $leBrouillon.dureeDysfonctionnementAcceptable
-      ].nom}
-    </dd>
-    <dt>Données traitées :</dt>
-    <dd>
-      {#if $leBrouillon.categoriesDonneesTraitees?.length > 0 || $leBrouillon.categoriesDonneesTraiteesSupplementaires?.length > 0}
-        {#each $leBrouillon.categoriesDonneesTraitees as c}
-          <span>{questionsV2.categorieDonneesTraitees[c].nom}</span>
-        {/each}
-        {#each $leBrouillon.categoriesDonneesTraiteesSupplementaires as cs}
-          <span>{cs}</span>
-        {/each}
-      {:else}
-        -
-      {/if}
-    </dd>
-  </dl>
-</div-->
+      );
+    }}
+    placeholderDisabled
+  />
+
+  <lab-anssi-multi-select
+    label="Données traitées"
+    placeholder="Sélectionnez une ou plusieurs valeurs"
+    options={Object.entries(questionsV2.categorieDonneesTraitees).map(
+      ([categorieDonneesTraitees, { nom }]) => ({
+        id: categorieDonneesTraitees,
+        value: categorieDonneesTraitees,
+        label: nom,
+      })
+    )}
+    values={$leBrouillon.categoriesDonneesTraitees}
+    id="categoriesDonneesTraitees"
+    on:valuechanged={(e) => {
+      $leBrouillon.categoriesDonneesTraitees = e.detail;
+      return enregistre(
+        'categoriesDonneesTraitees',
+        $leBrouillon.categoriesDonneesTraitees
+      );
+    }}
+  />
+
+  <label for="url-service">Données traitées supplémentaires</label>
+  <ListeChampTexte
+    nomGroupe="categoriesDonneesTraiteesSupplementaires"
+    bind:valeurs={$leBrouillon.categoriesDonneesTraiteesSupplementaires}
+    on:ajout={ajouteCategoriesDonneesTraiteesSupplementaires}
+    titreSuppression="Supprimer les données"
+    titreAjout="Ajouter des données"
+    on:blur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
+    on:suppression={async (e) => {
+      supprimeCategoriesDonneesTraiteesSupplementaires(e.detail);
+      await tick();
+      await enregistreCategoriesDonneesTraiteesSupplementaires();
+    }}
+  />
+
+  <dsfr-select
+    label="Volume des données traitées*"
+    placeholder="Sélectionnez une valeur"
+    options={Object.entries(questionsV2.volumetrieDonneesTraitees).map(
+      ([volumetrie, { nom }]) => ({ value: volumetrie, label: nom })
+    )}
+    value={$leBrouillon.volumetrieDonneesTraitees}
+    id="volumetrieDonneesTraitees"
+    on:valuechanged={(e) => {
+      $leBrouillon.volumetrieDonneesTraitees = e.detail;
+      return enregistre(
+        'volumetrieDonneesTraitees',
+        $leBrouillon.volumetrieDonneesTraitees
+      );
+    }}
+    placeholderDisabled
+  />
+
+  <lab-anssi-multi-select
+    label="Localisation des données traitées*"
+    placeholder="Sélectionnez une ou plusieurs valeurs"
+    options={Object.entries(questionsV2.localisationDonneesTraitees).map(
+      ([localisation, { nom }]) => ({
+        id: localisation,
+        value: localisation,
+        label: nom,
+      })
+    )}
+    values={$leBrouillon.localisationsDonneesTraitees}
+    status={$leBrouillon.localisationsDonneesTraitees.length >= 1
+      ? 'default'
+      : 'error'}
+    errorMessage="La localisation des données est obligatoire."
+    id="localisationsDonneesTraitees"
+    on:valuechanged={(e) => {
+      $leBrouillon.localisationsDonneesTraitees = e.detail;
+      if ($leBrouillon.localisationsDonneesTraitees.length >= 1) {
+        return enregistre(
+          'localisationsDonneesTraitees',
+          $leBrouillon.localisationsDonneesTraitees
+        );
+      }
+    }}
+  />
+</div>
 
 <style lang="scss">
   .conteneur-avec-cadre {
@@ -245,7 +372,7 @@
     border: 1px solid #ddd;
     display: flex;
     flex-direction: column;
-    padding: 24px;
+    padding: 24px 322px 24px 24px;
   }
   h5 {
     margin: 0;
