@@ -25,6 +25,7 @@ type NavigationStore = {
   precedent: () => void;
   suivant: () => void;
   reprendreEditionDe: (brouillon: BrouillonSvelte, modeRapide: boolean) => void;
+  changeModeEdition: (modeRapide: boolean) => void;
 };
 
 export const navigationStore: NavigationStore = {
@@ -65,6 +66,14 @@ export const navigationStore: NavigationStore = {
       };
     });
   },
+  changeModeEdition: (modeRapide: boolean) => {
+    etatNavigation.update((etat) => {
+      return {
+        ...etat,
+        modeRapide,
+      };
+    });
+  },
   reprendreEditionDe: (
     donneesBrouillon: BrouillonSvelte,
     modeRapide: boolean
@@ -79,7 +88,7 @@ export const navigationStore: NavigationStore = {
       for (let q = 0; q < etape.questions.length; q++) {
         const question = etape.questions[q];
         const questionEstSansReponse = question.clesPropriete.every(
-          (clePropriete) => donneesBrouillon[clePropriete].length === 0
+          (clePropriete) => donneesBrouillon[clePropriete]?.length === 0
         );
         if (questionEstSansReponse) {
           cibleTrouvee = true;

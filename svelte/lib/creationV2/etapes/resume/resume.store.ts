@@ -22,6 +22,7 @@ export const resume = derived<
   Record<keyof BrouillonSvelte, string | string[]>
 >([leBrouillon], ([$b]) => {
   return {
+    id: $b.id!,
     nomService: $b.nomService,
     siret: $b.siret,
     statutDeploiement:

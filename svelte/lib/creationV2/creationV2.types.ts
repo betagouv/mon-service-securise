@@ -42,6 +42,7 @@ export type BrouillonIncomplet = {
 // Côté Svelte, on VEUT toujours toutes les propriétés,
 // pour faire fonctionner correctement l'UI
 export type BrouillonSvelte = {
+  id?: string;
   nomService: string;
   siret: string;
   statutDeploiement: StatutDeploiement | '';
