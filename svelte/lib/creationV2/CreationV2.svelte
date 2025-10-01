@@ -19,7 +19,7 @@
   let questionCouranteEstComplete = false;
   let enCoursDeChargement = false;
   let idBrouillon: UUID;
-  let modeRapide = true;
+  let modeRapide = false;
 
   onMount(async () => {
     const requete = new URLSearchParams(window.location.search);
@@ -28,6 +28,8 @@
       const donneesBrouillon = await lisBrouillonService(idBrouillon);
       leBrouillon.chargeDonnees(donneesBrouillon);
       navigationStore.reprendreEditionDe($leBrouillon, modeRapide);
+    } else {
+      navigationStore.changeModeEdition(modeRapide);
     }
   });
 

@@ -2,8 +2,12 @@
   import { leBrouillon } from './brouillon.store';
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import { tick } from 'svelte';
-  import { metsAJourBrouillonService } from '../creationV2.api';
+  import {
+    creeBrouillonService,
+    metsAJourBrouillonService,
+  } from '../creationV2.api';
   import ListeChampTexte from './ListeChampTexte.svelte';
+  import { ajouteParametreAUrl } from '../../outils/url';
 
   const supprimeValeurPointAcces = (index: number) => {
     $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
@@ -66,10 +70,16 @@
     value={$leBrouillon.nomService}
     status={$leBrouillon.nomService.length >= 1 ? 'default' : 'error'}
     errorMessage="Le nom du service est obligatoire."
-    on:blur={(e) => {
-      $leBrouillon.nomService = e.target.value;
-      if ($leBrouillon.nomService.length >= 1) {
+    on:blur={async (e) => {
+      const nomService = e.target.value;
+      $leBrouillon.nomService = nomService;
+      if ($leBrouillon.id && $leBrouillon.nomService.length >= 1) {
         return enregistre('nomService', $leBrouillon.nomService);
+      }
+      if (!$leBrouillon.id && nomService.length > 1) {
+        const idBrouillon = await creeBrouillonService(nomService);
+        ajouteParametreAUrl('id', idBrouillon);
+        leBrouillon.chargeDonnees({ id: idBrouillon, nomService });
       }
     }}
   />
@@ -79,6 +89,7 @@
     type="text"
     id="siret"
     nom="siret"
+    disabled={!$leBrouillon.id}
     status={/^\d{14}$/.test($leBrouillon.siret) ? 'default' : 'error'}
     errorMessage="Le SIRET est invalide."
     value={$leBrouillon.siret}
@@ -97,6 +108,7 @@
       ([statut, { description }]) => ({ value: statut, label: description })
     )}
     value={$leBrouillon.statutDeploiement}
+    disabled={!$leBrouillon.id}
     id="statutDeploiement"
     on:valuechanged={(e) => {
       $leBrouillon.statutDeploiement = e.detail;
@@ -110,6 +122,7 @@
     type="text"
     id="presentation"
     rows={3}
+    disabled={!$leBrouillon.id}
     value={$leBrouillon.presentation}
     status={$leBrouillon.presentation.length >= 1 ? 'default' : 'error'}
     errorMessage="La présentation du service est obligatoire."
@@ -129,14 +142,14 @@
       on:ajout={ajouteValeurPointAcces}
       titreSuppression="Supprimer l'URL"
       titreAjout="Ajouter une URL"
-      on:blur={() => enregistrePointsAcces()}
-      on:suppression={async (e) => {
-        supprimeValeurPointAcces(e.detail);
-        await tick();
-        await enregistrePointsAcces();
-      }}
-    />
-  </div>
+      inactif={!leBrouillon.id}
+    on:blur={() => enregistrePointsAcces()}
+    on:suppression={async (e) => {
+      supprimeValeurPointAcces(e.detail);
+      await tick();
+      await enregistrePointsAcces();
+    }}
+  /></div>
 </div>
 
 <div class="conteneur-avec-cadre">
@@ -153,6 +166,7 @@
       })
     )}
     values={$leBrouillon.typeService}
+    disabled={!$leBrouillon.id}
     id="typeService"
     on:valuechanged={(e) => {
       $leBrouillon.typeService = e.detail;
@@ -175,6 +189,7 @@
       })
     )}
     values={$leBrouillon.specificitesProjet}
+    disabled={!$leBrouillon.id}
     id="specificitesProjet"
     on:valuechanged={(e) => {
       $leBrouillon.specificitesProjet = e.detail;
@@ -194,6 +209,7 @@
       ([typeHebergement, { nom }]) => ({ value: typeHebergement, label: nom })
     )}
     value={$leBrouillon.typeHebergement}
+    disabled={!$leBrouillon.id}
     id="typeHebergement"
     on:valuechanged={(e) => {
       $leBrouillon.typeHebergement = e.detail;
@@ -215,7 +231,7 @@
   <lab-anssi-multi-select
     label="Activités du projet entièrement externalisées"
     placeholder="Sélectionnez une ou plusieurs valeurs"
-    disabled={$leBrouillon.typeHebergement === 'saas'}
+    disabled={!$leBrouillon.id || $leBrouillon.typeHebergement === 'saas'}
     options={Object.entries(questionsV2.activiteExternalisee).map(
       ([activiteExternalisee, { nom }]) => ({
         id: activiteExternalisee,
@@ -245,6 +261,7 @@
       ([ouvertureSysteme, { nom }]) => ({ value: ouvertureSysteme, label: nom })
     )}
     value={$leBrouillon.ouvertureSysteme}
+    disabled={!$leBrouillon.id}
     id="ouvertureSysteme"
     on:valuechanged={(e) => {
       $leBrouillon.ouvertureSysteme = e.detail;
@@ -260,6 +277,7 @@
       ([audienceCible, { nom }]) => ({ value: audienceCible, label: nom })
     )}
     value={$leBrouillon.audienceCible}
+    disabled={!$leBrouillon.id}
     id="audienceCible"
     on:valuechanged={(e) => {
       $leBrouillon.audienceCible = e.detail;
@@ -275,6 +293,7 @@
       ([duree, { nom }]) => ({ value: duree, label: nom })
     )}
     value={$leBrouillon.dureeDysfonctionnementAcceptable}
+    disabled={!$leBrouillon.id}
     id="dureeDysfonctionnementAcceptable"
     on:valuechanged={(e) => {
       $leBrouillon.dureeDysfonctionnementAcceptable = e.detail;
@@ -297,6 +316,7 @@
       })
     )}
     values={$leBrouillon.categoriesDonneesTraitees}
+    disabled={!$leBrouillon.id}
     id="categoriesDonneesTraitees"
     on:valuechanged={(e) => {
       $leBrouillon.categoriesDonneesTraitees = e.detail;
@@ -315,14 +335,14 @@
       on:ajout={ajouteCategoriesDonneesTraiteesSupplementaires}
       titreSuppression="Supprimer les données"
       titreAjout="Ajouter des données"
-      on:blur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
-      on:suppression={async (e) => {
-        supprimeCategoriesDonneesTraiteesSupplementaires(e.detail);
-        await tick();
-        await enregistreCategoriesDonneesTraiteesSupplementaires();
-      }}
-    />
-  </div>
+      inactif={!$leBrouillon.id}
+    on:blur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
+    on:suppression={async (e) => {
+      supprimeCategoriesDonneesTraiteesSupplementaires(e.detail);
+      await tick();
+      await enregistreCategoriesDonneesTraiteesSupplementaires();
+    }}
+  /></div>
 
   <dsfr-select
     label="Volume des données traitées*"
@@ -331,6 +351,7 @@
       ([volumetrie, { nom }]) => ({ value: volumetrie, label: nom })
     )}
     value={$leBrouillon.volumetrieDonneesTraitees}
+    disabled={!$leBrouillon.id}
     id="volumetrieDonneesTraitees"
     on:valuechanged={(e) => {
       $leBrouillon.volumetrieDonneesTraitees = e.detail;
@@ -353,6 +374,7 @@
       })
     )}
     values={$leBrouillon.localisationsDonneesTraitees}
+    disabled={!$leBrouillon.id}
     status={$leBrouillon.localisationsDonneesTraitees.length >= 1
       ? 'default'
       : 'error'}

@@ -2,6 +2,7 @@ import { writable } from 'svelte/store';
 import type { BrouillonSvelte, BrouillonIncomplet } from '../creationV2.types';
 
 export const unBrouillonVierge = (): BrouillonSvelte => ({
+  id: undefined,
   nomService: '',
   siret: '',
   statutDeploiement: '',
