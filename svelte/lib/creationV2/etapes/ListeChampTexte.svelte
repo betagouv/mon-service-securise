@@ -1,11 +1,11 @@
 <script lang="ts">
-  import ChampTexte from '../../ui/ChampTexte.svelte';
   import { createEventDispatcher } from 'svelte';
 
   export let valeurs: string[];
   export let nomGroupe: string;
   export let titreSuppression: string;
   export let titreAjout: string;
+  export let inactif = false;
 
   const dispatche = createEventDispatcher<{
     suppression: number;
@@ -20,6 +20,7 @@
       id={`${nomGroupe}-${index}`}
       nom={nomGroupe}
       value={valeur}
+      disabled={inactif}
       on:valuechanged={(e) => {
         valeur = e.detail;
       }}
@@ -30,6 +31,7 @@
       titre={titreSuppression}
       variante="tertiaire"
       taille="lg"
+      actif={!inactif}
       icone="delete-line"
       positionIcone="seule"
       on:click={() => dispatche('suppression', index)}
@@ -44,6 +46,7 @@
     taille="md"
     icone="add-line"
     positionIcone="gauche"
+    actif={!inactif}
     on:click={() => dispatche('ajout')}
   />
 </div>
