@@ -13,6 +13,7 @@ type EtapeCourante = {
   estDerniereQuestion: boolean;
   estPremiereQuestion: boolean;
   illustration?: string;
+  pleinePage: boolean;
 };
 
 export const etapeCourante = derived<[typeof navigationStore], EtapeCourante>(
@@ -24,6 +25,7 @@ export const etapeCourante = derived<[typeof navigationStore], EtapeCourante>(
     return {
       numero,
       numeroMax: $navigation.toutesEtapes.length,
+      pleinePage: $navigation.toutesEtapes[$navigation.etapeEnCours].pleinePage,
       titre,
       illustration,
       titreEtapeSuivante:
