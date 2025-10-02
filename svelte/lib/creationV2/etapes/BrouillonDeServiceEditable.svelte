@@ -2,8 +2,14 @@
   import { leBrouillon } from './brouillon.store';
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import { tick } from 'svelte';
-  import { metsAJourBrouillonService } from '../creationV2.api';
+  import {
+    creeBrouillonService,
+    metsAJourBrouillonService,
+  } from '../creationV2.api';
   import ListeChampTexte from './ListeChampTexte.svelte';
+  import { ajouteParametreAUrl } from '../../outils/url';
+
+  let touche = false;
 
   const supprimeValeurPointAcces = (index: number) => {
     $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
@@ -64,12 +70,22 @@
     id="nom-service"
     nom="nom-service"
     value={$leBrouillon.nomService}
-    status={$leBrouillon.nomService.length >= 1 ? 'default' : 'error'}
+    status={touche && $leBrouillon.nomService.length < 1 ? 'error' : 'default'}
     errorMessage="Le nom du service est obligatoire."
-    on:blur={(e) => {
-      $leBrouillon.nomService = e.target.value;
-      if ($leBrouillon.nomService.length >= 1) {
+    on:valuechanged={(e) => {
+      $leBrouillon.nomService = e.detail;
+      touche = true;
+    }}
+    on:blur={async (e) => {
+      const nomService = e.target.value;
+      $leBrouillon.nomService = nomService;
+      if ($leBrouillon.id && $leBrouillon.nomService.length >= 1) {
         return enregistre('nomService', $leBrouillon.nomService);
+      }
+      if (!$leBrouillon.id && nomService.length > 1) {
+        const idBrouillon = await creeBrouillonService(nomService);
+        ajouteParametreAUrl('id', idBrouillon);
+        leBrouillon.chargeDonnees({ id: idBrouillon, nomService });
       }
     }}
   />
@@ -79,7 +95,10 @@
     type="text"
     id="siret"
     nom="siret"
-    status={/^\d{14}$/.test($leBrouillon.siret) ? 'default' : 'error'}
+    disabled={!$leBrouillon.id}
+    status={$leBrouillon.id && !/^\d{14}$/.test($leBrouillon.siret)
+      ? 'error'
+      : 'default'}
     errorMessage="Le SIRET est invalide."
     value={$leBrouillon.siret}
     on:blur={(e) => {
@@ -97,6 +116,7 @@
       ([statut, { description }]) => ({ value: statut, label: description })
     )}
     value={$leBrouillon.statutDeploiement}
+    disabled={!$leBrouillon.id}
     id="statutDeploiement"
     on:valuechanged={(e) => {
       $leBrouillon.statutDeploiement = e.detail;
@@ -110,8 +130,11 @@
     type="text"
     id="presentation"
     rows={3}
+    disabled={!$leBrouillon.id}
     value={$leBrouillon.presentation}
-    status={$leBrouillon.presentation.length >= 1 ? 'default' : 'error'}
+    status={$leBrouillon.id && $leBrouillon.presentation.length < 1
+      ? 'error'
+      : 'default'}
     errorMessage="La présentation du service est obligatoire."
     on:blur={(e) => {
       $leBrouillon.presentation = e.target.value;
@@ -121,7 +144,7 @@
     }}
   />
 
-  <div class="conteneur-liste-champs">
+  <div class="conteneur-liste-champs" class:inactif={!$leBrouillon.id}>
     <label for="url-service">URL du service</label>
     <ListeChampTexte
       nomGroupe="pointsAcces"
@@ -129,6 +152,7 @@
       on:ajout={ajouteValeurPointAcces}
       titreSuppression="Supprimer l'URL"
       titreAjout="Ajouter une URL"
+      inactif={!$leBrouillon?.id}
       on:blur={() => enregistrePointsAcces()}
       on:suppression={async (e) => {
         supprimeValeurPointAcces(e.detail);
@@ -153,6 +177,7 @@
       })
     )}
     values={$leBrouillon.typeService}
+    disabled={!$leBrouillon.id}
     id="typeService"
     on:valuechanged={(e) => {
       $leBrouillon.typeService = e.detail;
@@ -160,7 +185,9 @@
         return enregistre('typeService', $leBrouillon.typeService);
       }
     }}
-    status={$leBrouillon.typeService.length >= 1 ? 'default' : 'error'}
+    status={$leBrouillon.id && $leBrouillon.typeService.length < 1
+      ? 'error'
+      : 'default'}
     errorMessage="Le type de service est obligatoire."
   />
 
@@ -175,6 +202,7 @@
       })
     )}
     values={$leBrouillon.specificitesProjet}
+    disabled={!$leBrouillon.id}
     id="specificitesProjet"
     on:valuechanged={(e) => {
       $leBrouillon.specificitesProjet = e.detail;
@@ -194,6 +222,7 @@
       ([typeHebergement, { nom }]) => ({ value: typeHebergement, label: nom })
     )}
     value={$leBrouillon.typeHebergement}
+    disabled={!$leBrouillon.id}
     id="typeHebergement"
     on:valuechanged={(e) => {
       $leBrouillon.typeHebergement = e.detail;
@@ -215,7 +244,7 @@
   <lab-anssi-multi-select
     label="Activités du projet entièrement externalisées"
     placeholder="Sélectionnez une ou plusieurs valeurs"
-    disabled={$leBrouillon.typeHebergement === 'saas'}
+    disabled={!$leBrouillon.id || $leBrouillon.typeHebergement === 'saas'}
     options={Object.entries(questionsV2.activiteExternalisee).map(
       ([activiteExternalisee, { nom }]) => ({
         id: activiteExternalisee,
@@ -245,6 +274,7 @@
       ([ouvertureSysteme, { nom }]) => ({ value: ouvertureSysteme, label: nom })
     )}
     value={$leBrouillon.ouvertureSysteme}
+    disabled={!$leBrouillon.id}
     id="ouvertureSysteme"
     on:valuechanged={(e) => {
       $leBrouillon.ouvertureSysteme = e.detail;
@@ -260,6 +290,7 @@
       ([audienceCible, { nom }]) => ({ value: audienceCible, label: nom })
     )}
     value={$leBrouillon.audienceCible}
+    disabled={!$leBrouillon.id}
     id="audienceCible"
     on:valuechanged={(e) => {
       $leBrouillon.audienceCible = e.detail;
@@ -275,6 +306,7 @@
       ([duree, { nom }]) => ({ value: duree, label: nom })
     )}
     value={$leBrouillon.dureeDysfonctionnementAcceptable}
+    disabled={!$leBrouillon.id}
     id="dureeDysfonctionnementAcceptable"
     on:valuechanged={(e) => {
       $leBrouillon.dureeDysfonctionnementAcceptable = e.detail;
@@ -297,6 +329,7 @@
       })
     )}
     values={$leBrouillon.categoriesDonneesTraitees}
+    disabled={!$leBrouillon.id}
     id="categoriesDonneesTraitees"
     on:valuechanged={(e) => {
       $leBrouillon.categoriesDonneesTraitees = e.detail;
@@ -306,8 +339,7 @@
       );
     }}
   />
-
-  <div class="conteneur-liste-champs">
+  <div class="conteneur-liste-champs" class:inactif={!$leBrouillon.id}>
     <label for="url-service">Données traitées supplémentaires</label>
     <ListeChampTexte
       nomGroupe="categoriesDonneesTraiteesSupplementaires"
@@ -315,6 +347,7 @@
       on:ajout={ajouteCategoriesDonneesTraiteesSupplementaires}
       titreSuppression="Supprimer les données"
       titreAjout="Ajouter des données"
+      inactif={!$leBrouillon?.id}
       on:blur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
       on:suppression={async (e) => {
         supprimeCategoriesDonneesTraiteesSupplementaires(e.detail);
@@ -331,6 +364,7 @@
       ([volumetrie, { nom }]) => ({ value: volumetrie, label: nom })
     )}
     value={$leBrouillon.volumetrieDonneesTraitees}
+    disabled={!$leBrouillon.id}
     id="volumetrieDonneesTraitees"
     on:valuechanged={(e) => {
       $leBrouillon.volumetrieDonneesTraitees = e.detail;
@@ -353,9 +387,11 @@
       })
     )}
     values={$leBrouillon.localisationsDonneesTraitees}
-    status={$leBrouillon.localisationsDonneesTraitees.length >= 1
-      ? 'default'
-      : 'error'}
+    disabled={!$leBrouillon.id}
+    status={$leBrouillon.id &&
+    $leBrouillon.localisationsDonneesTraitees.length < 1
+      ? 'error'
+      : 'default'}
     errorMessage="La localisation des données est obligatoire."
     id="localisationsDonneesTraitees"
     on:valuechanged={(e) => {
@@ -376,7 +412,7 @@
     border: 1px solid #ddd;
     display: flex;
     flex-direction: column;
-    padding: 24px 322px 24px 24px;
+    padding: 24px;
     gap: 16px;
   }
   h5 {
@@ -395,5 +431,9 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
+    &.inactif label {
+      color: #929292;
+    }
   }
 </style>

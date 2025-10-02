@@ -3,6 +3,8 @@
 
   export let actif: boolean;
   export let id: string;
+  export let labelActif = 'Activé';
+  export let labelInactif = 'Désactivé';
 
   const emetEvenement = createEventDispatcher<{
     change: boolean;
@@ -23,7 +25,7 @@
     on:click={gereChangementEtat}
   >
   </button>
-  <label for={id}>{actif ? 'Activé' : 'Désactivé'}</label>
+  <label for={id}>{actif ? labelActif : labelInactif}</label>
 </div>
 
 <style lang="scss">
