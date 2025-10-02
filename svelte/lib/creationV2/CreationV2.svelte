@@ -72,8 +72,7 @@
   <div class="formulaire-creation">
     <div
       class="contenu-formulaire"
-      class:sans-explications={!$navigationStore.modeRapide &&
-        $etapeCourante.questionCourante.explications.length === 0}
+      class:sans-explications={$etapeCourante.pleinePage}
     >
       <dsfr-stepper
         title={$etapeCourante.titre}
@@ -115,7 +114,9 @@
 
         <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
         <lab-anssi-bouton
-          titre={$etapeCourante.estDerniereQuestion ? 'Finaliser' : 'Suivant'}
+          titre={$etapeCourante.estDerniereQuestion
+            ? 'Commencer à sécuriser le service'
+            : 'Suivant'}
           variante="primaire"
           taille="md"
           icone={$etapeCourante.estDerniereQuestion
@@ -171,6 +172,10 @@
     border-bottom: none;
     padding: 0;
     margin: 0;
+  }
+
+  dsfr-stepper {
+    max-width: 590px;
   }
 
   :global(#creation-v2) {
