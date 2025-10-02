@@ -35,7 +35,7 @@ mixin contenuIndiceCyber(idCible, titre, donneesIndiceCyber, noteMax, donneesTra
     .disque-indice
       div(id=idCible)
     .contenu-descriptif
-      h4!= titre
+      h4= titre
       if block
         block
   .conteneur-plus-details
@@ -85,10 +85,10 @@ block formulaire
     .onglets
       button.onglet.actif(type="button" data-cible='indice-cyber-ANSSI')
         span Indice cyber ANSSI
-        span.note-onglet!= `${indiceCyber.total.toFixed(1)}/${noteMax}`
+        span.note-onglet= `${indiceCyber.total.toFixed(1)}/${noteMax}`
       button.onglet(type="button" data-cible='indice-cyber-personnalise')
         span Indice cyber personnalisé
-        span.note-onglet!= `${indiceCyberPersonnalise.total.toFixed(1)}/${noteMax}`
+        span.note-onglet= `${indiceCyberPersonnalise.total.toFixed(1)}/${noteMax}`
     #indice-cyber-ANSSI.contenu-global
       +contenuIndiceCyber('conteneur-indice-cyber', 'Indice cyber ANSSI', indiceCyber, noteMax, trancheIndiceCyber, referentiel, true)
         p

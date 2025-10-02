@@ -48,7 +48,7 @@ dialog#modale-parcours-homologation
         .entete-parcours-homologation
           div
             h5 Les besoins de sécurité : #{donnees.nomBesoin}
-            p!= donnees.resume
+            p= donnees.resume
           img(src=`/statique/assets/images/niveauxSecurite/${niveauSecurite}.svg` alt="Illustration du besoin de sécurité")
         .detail-parcours-homologation
           h5 Démarche d’homologation indicative adaptée : #{donnees.demarcheIndicative}
@@ -56,16 +56,16 @@ dialog#modale-parcours-homologation
             tbody
               tr
                 th(scope="row") Dossier d'homologation
-                td!= donnees.details.dossier
+                td= donnees.details.dossier
               tr
                 th(scope="row") Contrôle
-                td!= donnees.details.controle
+                td= donnees.details.controle
               tr
                 th(scope="row") Commission d’homologation
-                td!= donnees.details.commission
+                td= donnees.details.commission
               tr
                 th(scope="row") Décision d'homologation
-                td!= donnees.details.decision
+                td= donnees.details.decision
         a(href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/LAB_Homologation_Simplifiee.pdf" target="_blank") Télécharger le document "l'homologation simplifiée"
     .conteneur-actions
       form(method="dialog")
