@@ -20,6 +20,7 @@ export type LocalisationDonneesTraitees =
 // Côté HTTP, on n'est pas sûr d'avoir les propriétés,
 // puisque le brouillon est enregistré au fil de l'eau
 export type BrouillonIncomplet = {
+  id?: string;
   nomService?: string;
   siret?: string;
   statutDeploiement?: StatutDeploiement;

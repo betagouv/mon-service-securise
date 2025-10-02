@@ -15,10 +15,14 @@
 
 {#each valeurs as valeur, index}
   <div class={`conteneur-champs-texte`}>
-    <ChampTexte
+    <dsfr-input
+      type="text"
       id={`${nomGroupe}-${index}`}
       nom={nomGroupe}
-      bind:valeur
+      value={valeur}
+      on:valuechanged={(e) => {
+        valeur = e.detail;
+      }}
       on:blur
     />
     <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
@@ -50,10 +54,15 @@
     flex-direction: row;
     justify-content: space-between;
     gap: 8px;
+    align-items: baseline;
 
     :global(input) {
       width: 100%;
     }
+  }
+
+  dsfr-input {
+    flex: 1;
   }
 
   .conteneur-actions {
