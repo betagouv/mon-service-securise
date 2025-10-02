@@ -114,7 +114,9 @@
 
         <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
         <lab-anssi-bouton
-          titre={$etapeCourante.estDerniereQuestion ? 'Finaliser' : 'Suivant'}
+          titre={$etapeCourante.estDerniereQuestion
+            ? 'Commencer à sécuriser le service'
+            : 'Suivant'}
           variante="primaire"
           taille="md"
           icone={$etapeCourante.estDerniereQuestion
