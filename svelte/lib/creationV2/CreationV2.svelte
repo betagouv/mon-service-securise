@@ -173,6 +173,10 @@
     margin: 0;
   }
 
+  dsfr-stepper {
+    max-width: 590px;
+  }
+
   :global(#creation-v2) {
     background: white;
     width: 100%;

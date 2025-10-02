@@ -16,6 +16,7 @@ import QuestionVolumetrieDonneesTraitees from './etape3/QuestionVolumetrieDonnee
 import QuestionLocalisationsDonneesTraitees from './etape3/QuestionLocalisationsDonneesTraitees.svelte';
 import EtapeResumeDuService from './resume/EtapeResumeDuService.svelte';
 import EtapeCreationEnModeRapide from './modeRapide/EtapeCreationEnModeRapide.svelte';
+import EtapeNiveauSecurite from './EtapeNiveauSecurite.svelte';
 
 type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
 
@@ -48,6 +49,18 @@ export const toutesEtapesModeRapide: Array<EtapeDuWizard> = [
     questions: [
       {
         composant: EtapeCreationEnModeRapide,
+        explications: [],
+        avecAvanceRapide: false,
+        clesPropriete: [],
+      },
+    ],
+  },
+  {
+    numero: 2,
+    titre: 'Besoins de sécurité',
+    questions: [
+      {
+        composant: EtapeNiveauSecurite,
         explications: [],
         avecAvanceRapide: false,
         clesPropriete: [],
@@ -202,6 +215,18 @@ export const toutesEtapes: Array<EtapeDuWizard> = [
     questions: [
       {
         composant: EtapeResumeDuService,
+        explications: [],
+        avecAvanceRapide: false,
+        clesPropriete: [],
+      },
+    ],
+  },
+  {
+    numero: 5,
+    titre: 'Besoins de sécurité',
+    questions: [
+      {
+        composant: EtapeNiveauSecurite,
         explications: [],
         avecAvanceRapide: false,
         clesPropriete: [],
