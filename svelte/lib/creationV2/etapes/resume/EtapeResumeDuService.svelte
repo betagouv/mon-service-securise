@@ -23,10 +23,17 @@
   </div>
   <ResumeDuServiceLectureSeule />
 {:else}
-  <BrouillonDeServiceEditable />
+  <div class="resume-editable">
+    <BrouillonDeServiceEditable />
+  </div>
 {/if}
 
-<style>
+<style lang="scss">
+  .resume-editable {
+    :global(.conteneur-avec-cadre) {
+      padding-right: 248px !important;
+    }
+  }
   .conteneur-bouton-modifier {
     margin-left: auto;
   }
