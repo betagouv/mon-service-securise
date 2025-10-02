@@ -72,8 +72,7 @@
   <div class="formulaire-creation">
     <div
       class="contenu-formulaire"
-      class:sans-explications={!$navigationStore.modeRapide &&
-        $etapeCourante.questionCourante.explications.length === 0}
+      class:sans-explications={$etapeCourante.pleinePage}
     >
       <dsfr-stepper
         title={$etapeCourante.titre}
