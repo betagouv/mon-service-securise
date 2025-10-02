@@ -1,8 +1,21 @@
 <script lang="ts">
   import donneesNiveauxDeSecurite from '../../niveauxDeSecurite/donneesNiveauxDeSecurite';
+  import { ordreDesNiveaux } from '../../niveauxDeSecurite/niveauxDeSecurite.d';
+  import type { IdNiveauDeSecurite } from '../../ui/types';
+  import Toast from '../../ui/Toast.svelte';
 
-  let niveauSelectionne = '';
-  let niveauDeplie = '';
+  let niveauSelectionne: IdNiveauDeSecurite | undefined;
+  let niveauDeSecuriteMinimal: IdNiveauDeSecurite = 'niveau2';
+  let niveauDeplie: IdNiveauDeSecurite | undefined = niveauDeSecuriteMinimal;
+
+  export let estComplete: boolean;
+  $: estComplete = niveauSelectionne !== undefined;
+
+  const estNiveauTropBas = (candidat: IdNiveauDeSecurite) =>
+    ordreDesNiveaux[candidat] < ordreDesNiveaux[niveauDeSecuriteMinimal];
+
+  const estNiveauSuperieur = (candidat: IdNiveauDeSecurite) =>
+    ordreDesNiveaux[candidat] > ordreDesNiveaux[niveauDeSecuriteMinimal];
 </script>
 
 <div>
@@ -26,38 +39,40 @@
       class="conteneur-niveau-securite"
       class:selectionne={niveauSelectionne === niveauSecurite.id}
       class:deplie={niveauDeplie === niveauSecurite.id}
+      on:click={() => (niveauDeplie = niveauSecurite.id)}
+      on:keydown={() => (niveauDeplie = niveauSecurite.id)}
+      tabindex="0"
+      role="button"
+      aria-roledescription="Déplie ou replie le contenu explicatif du niveau {niveauSecurite.nom}"
     >
-      <div
-        class="entete-niveau-securite"
-        on:click={() => (niveauDeplie = niveauSecurite.id)}
-        on:keydown={() => (niveauDeplie = niveauSecurite.id)}
-        tabindex="0"
-        role="button"
-        aria-roledescription="Déplie ou replie le contenu explicatif du niveau {niveauSecurite.nom}"
-      >
+      <div class="entete-niveau-securite">
         <h5>{niveauSecurite.nom}</h5>
-        <dsfr-tag
-          label="Besoins identifiés par l'ANSSI"
-          size="md"
-          hasIcon
-          icon="star-s-fill"
-        />
+        {#if niveauSecurite.id === niveauDeSecuriteMinimal}
+          <dsfr-tag
+            label="Besoins identifiés par l'ANSSI"
+            size="md"
+            hasIcon
+            icon="star-s-fill"
+          />
+        {/if}
         <p>{niveauSecurite.resume}</p>
-        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-        <lab-anssi-bouton
-          titre={niveauSelectionne === niveauSecurite.id
-            ? 'Sélectionné'
-            : 'Sélectionner'}
-          variante={niveauSelectionne === niveauSecurite.id
-            ? 'primaire'
-            : 'secondaire'}
-          taille="sm"
-          icone={niveauSelectionne === niveauSecurite.id ? 'check-line' : ''}
-          positionIcone={niveauSelectionne === niveauSecurite.id
-            ? 'gauche'
-            : 'sans'}
-          on:click={() => (niveauSelectionne = niveauSecurite.id)}
-        />
+        {#if !estNiveauTropBas(niveauSecurite.id)}
+          <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+          <lab-anssi-bouton
+            titre={niveauSelectionne === niveauSecurite.id
+              ? 'Sélectionné'
+              : 'Sélectionner'}
+            variante={niveauSelectionne === niveauSecurite.id
+              ? 'primaire'
+              : 'secondaire'}
+            taille="sm"
+            icone={niveauSelectionne === niveauSecurite.id ? 'check-line' : ''}
+            positionIcone={niveauSelectionne === niveauSecurite.id
+              ? 'gauche'
+              : 'sans'}
+            on:click={() => (niveauSelectionne = niveauSecurite.id)}
+          />
+        {/if}
       </div>
       <div class="corps-niveau-securite">
         <hr />
@@ -69,6 +84,35 @@
             />
           </div>
           <div class="conteneur-texte">
+            <div class="conteneur-mises-en-garde">
+              {#if estNiveauSuperieur(niveauSecurite.id)}
+                <Toast
+                  niveau="alerte"
+                  avecOmbre={false}
+                  titre="Ce niveau est supérieur à celui identifié à titre indicatif par l'ANSSI."
+                  contenu="Cela signifie que la liste des mesures de sécurité sera plus complète et la démarche d'homologation plus exigeante."
+                />
+              {/if}
+              <dsfr-badge
+                label="Démarche indicative adaptée : {niveauSecurite.description
+                  .demarcheIndicative}"
+                type="accent"
+                accent="blue-cumulus"
+                size="md"
+                hasIcon
+                icon="info-fill"
+                ellipsis={false}
+              />
+              {#if niveauSecurite.id !== 'niveau3'}
+                <p class="info-attaque-etatique">
+                  Si vous considérez que le système d'information peut faire
+                  l'objet d'une cyberattaque ciblée par un acteur étatique, il
+                  est recommandé de sélectionner manuellement le besoin de
+                  niveau avancé
+                </p>
+              {/if}
+            </div>
+
             <h6>Exemples de services numériques</h6>
             <ul class="liste-exemples-services">
               {#each niveauSecurite.description.exemplesServicesNumeriques as exemple}
@@ -103,6 +147,7 @@
     padding: 24px;
     border-radius: 8px;
     border: 1px solid #ddd;
+    cursor: pointer;
 
     &.selectionne {
       border-color: var(--bleu-mise-en-avant);
@@ -116,7 +161,6 @@
     grid-template-areas:
       'titre badge bouton switch'
       'resume resume bouton switch';
-    cursor: pointer;
   }
 
   .entete-niveau-securite::after {
@@ -137,6 +181,7 @@
 
   .corps-niveau-securite {
     display: none;
+    cursor: default;
   }
 
   .conteneur-niveau-securite.deplie .corps-niveau-securite {
@@ -210,7 +255,7 @@
     display: flex;
     flex-direction: row;
     gap: 32px;
-    align-items: center;
+    align-items: start;
     justify-content: space-between;
 
     h6 {
@@ -226,7 +271,7 @@
     }
 
     img {
-      padding: 24px;
+      padding: 75px 24px;
     }
 
     p,
@@ -236,8 +281,33 @@
       line-height: 1.5rem;
     }
 
+    p.info-attaque-etatique {
+      color: #b34000;
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1.25rem;
+      display: flex;
+      gap: 6px;
+
+      &::before {
+        content: '';
+        width: 29px;
+        height: 18px;
+        background: url('/statique/assets/images/icone_erreur_dsfr.svg')
+          no-repeat center;
+        display: inline-block;
+      }
+    }
+
     ul {
       padding-inline-start: 24px;
     }
+  }
+
+  .conteneur-mises-en-garde {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 16px;
   }
 </style>
