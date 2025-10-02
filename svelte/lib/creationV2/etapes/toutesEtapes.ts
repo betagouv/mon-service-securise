@@ -39,12 +39,14 @@ export type EtapeDuWizard = {
   titre: string;
   questions: Array<QuestionBindeeSurBrouillon | EtapeGlobale>;
   illustration?: string;
+  pleinePage: boolean;
 };
 
 export const toutesEtapesModeRapide: Array<EtapeDuWizard> = [
   {
     numero: 1,
     titre: 'Informations sur le projet',
+    pleinePage: false,
     illustration: '/statique/assets/images/illustration_accueil_connexion.svg',
     questions: [
       {
@@ -58,6 +60,7 @@ export const toutesEtapesModeRapide: Array<EtapeDuWizard> = [
   {
     numero: 2,
     titre: 'Besoins de sécurité',
+    pleinePage: true,
     questions: [
       {
         composant: EtapeNiveauSecurite,
@@ -74,6 +77,7 @@ export const toutesEtapes: Array<EtapeDuWizard> = [
     numero: 1,
     titre: 'Informations génériques sur le projet',
     illustration: '/statique/assets/images/illustration_accueil_connexion.svg',
+    pleinePage: false,
     questions: [
       {
         clesPropriete: ['nomService'],
@@ -121,6 +125,7 @@ export const toutesEtapes: Array<EtapeDuWizard> = [
     numero: 2,
     titre: 'Caractéristiques du service',
     illustration: '/statique/assets/images/home/illustration_etape_2.svg',
+    pleinePage: false,
     questions: [
       {
         clesPropriete: ['typeService'],
@@ -151,6 +156,7 @@ export const toutesEtapes: Array<EtapeDuWizard> = [
     numero: 3,
     titre: "Évaluation de la criticité et de l'exposition du service",
     illustration: '/statique/assets/images/illustration_acces_securise.svg',
+    pleinePage: false,
     questions: [
       {
         clesPropriete: ['ouvertureSysteme'],
@@ -212,6 +218,7 @@ export const toutesEtapes: Array<EtapeDuWizard> = [
   {
     numero: 4,
     titre: 'Résumé du service',
+    pleinePage: true,
     questions: [
       {
         composant: EtapeResumeDuService,
@@ -224,6 +231,7 @@ export const toutesEtapes: Array<EtapeDuWizard> = [
   {
     numero: 5,
     titre: 'Besoins de sécurité',
+    pleinePage: true,
     questions: [
       {
         composant: EtapeNiveauSecurite,
