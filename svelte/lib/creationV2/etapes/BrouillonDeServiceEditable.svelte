@@ -134,7 +134,7 @@
     }}
   />
 
-  <div class="conteneur-liste-champs">
+  <div class="conteneur-liste-champs" class:inactif={!$leBrouillon.id}>
     <label for="url-service">URL du service</label>
     <ListeChampTexte
       nomGroupe="pointsAcces"
@@ -142,14 +142,15 @@
       on:ajout={ajouteValeurPointAcces}
       titreSuppression="Supprimer l'URL"
       titreAjout="Ajouter une URL"
-      inactif={!leBrouillon.id}
-    on:blur={() => enregistrePointsAcces()}
-    on:suppression={async (e) => {
-      supprimeValeurPointAcces(e.detail);
-      await tick();
-      await enregistrePointsAcces();
-    }}
-  /></div>
+      inactif={!$leBrouillon?.id}
+      on:blur={() => enregistrePointsAcces()}
+      on:suppression={async (e) => {
+        supprimeValeurPointAcces(e.detail);
+        await tick();
+        await enregistrePointsAcces();
+      }}
+    />
+  </div>
 </div>
 
 <div class="conteneur-avec-cadre">
@@ -326,8 +327,7 @@
       );
     }}
   />
-
-  <div class="conteneur-liste-champs">
+  <div class="conteneur-liste-champs" class:inactif={!$leBrouillon.id}>
     <label for="url-service">Données traitées supplémentaires</label>
     <ListeChampTexte
       nomGroupe="categoriesDonneesTraiteesSupplementaires"
@@ -335,14 +335,15 @@
       on:ajout={ajouteCategoriesDonneesTraiteesSupplementaires}
       titreSuppression="Supprimer les données"
       titreAjout="Ajouter des données"
-      inactif={!$leBrouillon.id}
-    on:blur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
-    on:suppression={async (e) => {
-      supprimeCategoriesDonneesTraiteesSupplementaires(e.detail);
-      await tick();
-      await enregistreCategoriesDonneesTraiteesSupplementaires();
-    }}
-  /></div>
+      inactif={!$leBrouillon?.id}
+      on:blur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
+      on:suppression={async (e) => {
+        supprimeCategoriesDonneesTraiteesSupplementaires(e.detail);
+        await tick();
+        await enregistreCategoriesDonneesTraiteesSupplementaires();
+      }}
+    />
+  </div>
 
   <dsfr-select
     label="Volume des données traitées*"
@@ -398,7 +399,7 @@
     border: 1px solid #ddd;
     display: flex;
     flex-direction: column;
-    padding: 24px 322px 24px 24px;
+    padding: 24px;
     gap: 16px;
   }
   h5 {
@@ -417,5 +418,9 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
+    &.inactif label {
+      color: #929292;
+    }
   }
 </style>
