@@ -9,6 +9,8 @@
   import ListeChampTexte from './ListeChampTexte.svelte';
   import { ajouteParametreAUrl } from '../../outils/url';
 
+  let touche = false;
+
   const supprimeValeurPointAcces = (index: number) => {
     $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
       (_, i) => i !== index
@@ -68,8 +70,12 @@
     id="nom-service"
     nom="nom-service"
     value={$leBrouillon.nomService}
-    status={$leBrouillon.nomService.length >= 1 ? 'default' : 'error'}
+    status={touche && $leBrouillon.nomService.length < 1 ? 'error' : 'default'}
     errorMessage="Le nom du service est obligatoire."
+    on:valuechanged={(e) => {
+      $leBrouillon.nomService = e.detail;
+      touche = true;
+    }}
     on:blur={async (e) => {
       const nomService = e.target.value;
       $leBrouillon.nomService = nomService;
@@ -90,7 +96,9 @@
     id="siret"
     nom="siret"
     disabled={!$leBrouillon.id}
-    status={/^\d{14}$/.test($leBrouillon.siret) ? 'default' : 'error'}
+    status={$leBrouillon.id && !/^\d{14}$/.test($leBrouillon.siret)
+      ? 'error'
+      : 'default'}
     errorMessage="Le SIRET est invalide."
     value={$leBrouillon.siret}
     on:blur={(e) => {
@@ -124,7 +132,9 @@
     rows={3}
     disabled={!$leBrouillon.id}
     value={$leBrouillon.presentation}
-    status={$leBrouillon.presentation.length >= 1 ? 'default' : 'error'}
+    status={$leBrouillon.id && $leBrouillon.presentation.length < 1
+      ? 'error'
+      : 'default'}
     errorMessage="La présentation du service est obligatoire."
     on:blur={(e) => {
       $leBrouillon.presentation = e.target.value;
@@ -175,7 +185,9 @@
         return enregistre('typeService', $leBrouillon.typeService);
       }
     }}
-    status={$leBrouillon.typeService.length >= 1 ? 'default' : 'error'}
+    status={$leBrouillon.id && $leBrouillon.typeService.length < 1
+      ? 'error'
+      : 'default'}
     errorMessage="Le type de service est obligatoire."
   />
 
@@ -376,9 +388,10 @@
     )}
     values={$leBrouillon.localisationsDonneesTraitees}
     disabled={!$leBrouillon.id}
-    status={$leBrouillon.localisationsDonneesTraitees.length >= 1
-      ? 'default'
-      : 'error'}
+    status={$leBrouillon.id &&
+    $leBrouillon.localisationsDonneesTraitees.length < 1
+      ? 'error'
+      : 'default'}
     errorMessage="La localisation des données est obligatoire."
     id="localisationsDonneesTraitees"
     on:valuechanged={(e) => {
