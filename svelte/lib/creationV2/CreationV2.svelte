@@ -18,13 +18,12 @@
 
   let questionCouranteEstComplete = false;
   let enCoursDeChargement = false;
-  let idBrouillon: UUID;
   let modeRapide = false;
 
   onMount(async () => {
     const requete = new URLSearchParams(window.location.search);
     if (requete.has('id')) {
-      idBrouillon = requete.get('id') as UUID;
+      const idBrouillon = requete.get('id') as UUID;
       const donneesBrouillon = await lisBrouillonService(idBrouillon);
       leBrouillon.chargeDonnees(donneesBrouillon);
       navigationStore.reprendreEditionDe($leBrouillon, modeRapide);
@@ -37,14 +36,16 @@
     if (!questionCouranteEstComplete) return;
 
     const doitCreerBrouillon =
-      !idBrouillon && $etapeCourante.estPremiereQuestion;
+      !$leBrouillon.id && $etapeCourante.estPremiereQuestion;
     if (doitCreerBrouillon) {
-      idBrouillon = await creeBrouillonService(e.detail.nomService as string);
+      const nomService = e.detail.nomService as string;
+      const idBrouillon = await creeBrouillonService(nomService);
       ajouteParametreAUrl('id', idBrouillon);
+      leBrouillon.chargeDonnees({ id: idBrouillon, nomService });
       return;
     }
 
-    await metsAJourBrouillonService(idBrouillon, e.detail);
+    await metsAJourBrouillonService($leBrouillon.id!, e.detail);
 
     const nomChampModifie = Object.keys(e.detail)[0] as keyof BrouillonSvelte;
     const onEstToujoursSurLaQuestionQuiAEnvoyeLaMaj =
@@ -61,7 +62,7 @@
 
   const finalise = async () => {
     enCoursDeChargement = true;
-    await finaliseBrouillonService(idBrouillon);
+    await finaliseBrouillonService($leBrouillon.id!);
     enCoursDeChargement = false;
     window.location.href = '/tableauDeBord';
   };

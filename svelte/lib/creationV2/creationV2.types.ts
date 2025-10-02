@@ -1,4 +1,5 @@
 import type { questionsV2 } from '../../../donneesReferentielMesuresV2';
+import type { UUID } from '../typesBasiquesSvelte';
 
 export type StatutDeploiement = keyof typeof questionsV2.statutDeploiement;
 export type TypeService = keyof typeof questionsV2.typeDeService;
@@ -20,7 +21,7 @@ export type LocalisationDonneesTraitees =
 // Côté HTTP, on n'est pas sûr d'avoir les propriétés,
 // puisque le brouillon est enregistré au fil de l'eau
 export type BrouillonIncomplet = {
-  id?: string;
+  id?: UUID;
   nomService?: string;
   siret?: string;
   statutDeploiement?: StatutDeploiement;
@@ -42,7 +43,7 @@ export type BrouillonIncomplet = {
 // Côté Svelte, on VEUT toujours toutes les propriétés,
 // pour faire fonctionner correctement l'UI
 export type BrouillonSvelte = {
-  id?: string;
+  id?: UUID;
   nomService: string;
   siret: string;
   statutDeploiement: StatutDeploiement | '';
