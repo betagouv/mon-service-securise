@@ -92,39 +92,48 @@ export const questionsV2 = {
     donneesSensibles: {
       nom: 'Données sensibles',
       exemple: 'ex. santé, appartenance syndicale, etc.',
+      criticite: 4,
     },
     documentsRHSensibles: {
       nom: 'Documents RH sensibles',
       exemple: 'ex. évaluations, sanctions, fiches de paye, RIB, IBAN, etc.',
+      criticite: 4,
     },
     secretsDEntreprise: {
       nom: "Données liées au secret d'entreprise",
       exemple:
         'ex. Processus de fabrication spécifique, données de recherche & développement',
+      criticite: 4,
     },
     donneesCaracterePersonnelPersonneARisque: {
       nom: 'Données à caractère personnel de personnes à risque',
       exemple: 'ex. mineurs',
+      criticite: 3,
     },
     donneesSituationFamilialeEconomiqueFinanciere: {
       nom: 'Données relatives à la situation familiale, économique et financière',
       exemple: 'ex. revenus, état civil.',
+      criticite: 3,
     },
     documentsIdentifiants: {
       nom: 'Documents identifiants',
       exemple: 'ex. CNI, Passeport, etc.',
+      criticite: 3,
     },
     donneesTechniques: {
       nom: 'Données techniques',
       exemple: 'ex. DAT, logs, etc.',
+      criticite: 3,
     },
     donneesDIdentite: {
       nom: "Données d'identité",
       exemple: 'ex. noms, prénoms, adresse mail, etc.',
+      criticite: 2,
     },
     donneesAdministrativesEtFinancieres: {
       nom: 'Données administratives et financières',
       exemple: 'ex. organigramme, budgets, bilans, dépenses etc.',
+      criticite: 2,
     },
   },
   volumetrieDonneesTraitees: {
@@ -132,21 +141,25 @@ export const questionsV2 = {
       nom: 'Faible',
       description:
         "Le système stocke une quantité limitée et stable d'informations, facile à gérer et rapidement consultable.",
+      criticite: 1,
     },
     moyen: {
       nom: 'Moyen',
       description:
         "Le système stocke un volume conséquent et stable d'informations, qui commence à nécessiter une organisation ou des outils spécifiques.",
+      criticite: 2,
     },
     eleve: {
       nom: 'Elevé',
       description:
         "Le système stocke un grand et stable nombre d'informations, avec un impact notable sur la gestion, la sauvegarde ou l'accessibilité.",
+      criticite: 3,
     },
     tresEleve: {
       nom: 'Très élevé',
       description:
         'Le système stocke une très grande quantité d’informations, en croissance constante, nécessitant des capacités de stockage importantes.',
+      criticite: 4,
     },
   },
   ouvertureSysteme: {
@@ -214,3 +227,35 @@ export type VolumetrieDonneesTraitees =
   keyof typeof questionsV2.volumetrieDonneesTraitees;
 export type LocalisationDonneesTraitees =
   keyof typeof questionsV2.localisationDonneesTraitees;
+export type NiveauCriticite = 1 | 2 | 3 | 4;
+
+export const matriceCriticiteVolumetrieDonneesTraitees: NiveauCriticite[][] = [
+  [1, 1, 2, 2],
+  [1, 1, 2, 3],
+  [1, 2, 3, 4],
+  [1, 2, 4, 4],
+];
+
+export const criticiteVolumetrieDonneesTraitees = (
+  volumetrie: VolumetrieDonneesTraitees,
+  categories: CategorieDonneesTraitees[],
+  autresDonneesTraitees: string[]
+): NiveauCriticite => {
+  const criticiteVolumetrie =
+    questionsV2.volumetrieDonneesTraitees[volumetrie].criticite;
+
+  const criticiteDonnees = categories.map(
+    (c) => questionsV2.categorieDonneesTraitees[c].criticite
+  );
+  if (autresDonneesTraitees.length > 0) {
+    criticiteDonnees.push(1);
+  }
+  return criticiteDonnees
+    .map(
+      (criticite) =>
+        matriceCriticiteVolumetrieDonneesTraitees[criticiteVolumetrie - 1][
+          criticite - 1
+        ]
+    )
+    .reduce((c1, c2) => Math.max(c1, c2) as NiveauCriticite, 1);
+};
