@@ -21,9 +21,8 @@
 
 <div class="conteneur-confirmation">
   <p class="entete">
-    Souhaitez-vous vraiment retirer les accès de {@html utilisateur.prenomNom} au
-    service
-    <strong>{@html service.nomService}</strong> ?
+    Souhaitez-vous vraiment retirer les accès de {utilisateur.prenomNom} au service
+    <strong>{service.nomService}</strong> ?
   </p>
   <div class="conteneur-actions">
     <button

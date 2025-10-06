@@ -69,7 +69,7 @@
           }
         }}
       >
-        <div>{@html suggestion.nom} ({suggestion.code})</div>
+        <div>{suggestion.nom} ({suggestion.code})</div>
       </div>
     {/each}
   </div>
