@@ -167,20 +167,24 @@ export const questionsV2 = {
       nom: "Accessible à très peu de personnes en interne de l'organisation",
       exemple:
         'ex. baie de stockage accessible uniquement depuis des postes physiques dédiés',
+      criticite: 1,
     },
     interne: {
       nom: "Interne à l'organisation",
       exemple: "ex. outil RH accessible depuis le réseau de l'organisation",
+      criticite: 2,
     },
     internePlusTiers: {
       nom: 'Interne et ouvert à certains tiers',
       exemple:
         "ex. plateforme de suivi accessible depuis le réseau de l'organisation  et pour certains tiers via un VPN",
+      criticite: 3,
     },
     accessibleSurInternet: {
       nom: 'Accessible depuis internet',
       exemple:
         "ex. service public dont un portail avec une mire d'authentification accessible à tous sur internet",
+      criticite: 4,
     },
   },
   audienceCible: {
@@ -293,3 +297,12 @@ export const criticiteDisponibiliteEtAudienceCible = (
     criticiteDisponibilite - 1
   ];
 };
+
+export const matriceExposition: NiveauCriticite[][] = [[1, 2, 2, 3]];
+
+export const niveauExposition = (
+  ouvertureSysteme: OuvertureSysteme
+): NiveauCriticite =>
+  matriceExposition[0][
+    questionsV2.ouvertureSysteme[ouvertureSysteme].criticite - 1
+  ];

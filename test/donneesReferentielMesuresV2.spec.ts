@@ -1,6 +1,7 @@
 import {
   criticiteDisponibiliteEtAudienceCible,
   criticiteVolumetrieDonneesTraitees,
+  niveauExposition,
 } from '../donneesReferentielMesuresV2.js';
 
 describe('Le référentiel V2', () => {
@@ -60,6 +61,14 @@ describe('Le référentiel V2', () => {
       );
 
       expect(criticite).toBe(4);
+    });
+  });
+
+  describe("sur demande de l'exposition à la menace", () => {
+    it("retourne le niveau d'exposition à la menace systèmique", () => {
+      const niveau = niveauExposition('accessibleSurInternet');
+
+      expect(niveau).toBe(3);
     });
   });
 });
