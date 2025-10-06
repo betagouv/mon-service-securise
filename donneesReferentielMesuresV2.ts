@@ -188,28 +188,32 @@ export const questionsV2 = {
       nom: 'Limitée',
       description:
         'Utilisé par un petit nombre de personnes, souvent en interne.',
+      criticite: 1,
     },
     moyenne: {
       nom: 'Moyenne',
       description:
         'Utilisé par un périmètre restreint à l’échelle locale ou régionale.',
+      criticite: 2,
     },
     large: {
       nom: 'Large',
       description:
         'Utilisé à l’échelle nationale par plusieurs entités d’un même domaine.',
+      criticite: 3,
     },
     tresLarge: {
       nom: 'Très large',
       description:
         'Ouvert ou accessible à un public national voire international.',
+      criticite: 4,
     },
   },
   dureeDysfonctionnementAcceptable: {
-    moinsDe4h: { nom: 'Moins de 4h' },
-    moinsDe12h: { nom: 'Moins de 12h' },
-    moinsDe24h: { nom: 'Moins de 24h' },
-    plusDe24h: { nom: 'Plus de 24h' },
+    moinsDe4h: { nom: 'Moins de 4h', criticite: 4 },
+    moinsDe12h: { nom: 'Moins de 12h', criticite: 3 },
+    moinsDe24h: { nom: 'Moins de 24h', criticite: 2 },
+    plusDe24h: { nom: 'Plus de 24h', criticite: 1 },
   },
   localisationDonneesTraitees: {
     UE: {
@@ -227,6 +231,16 @@ export type VolumetrieDonneesTraitees =
   keyof typeof questionsV2.volumetrieDonneesTraitees;
 export type LocalisationDonneesTraitees =
   keyof typeof questionsV2.localisationDonneesTraitees;
+export type AudienceCible = keyof typeof questionsV2.audienceCible;
+export type DureeDysfonctionnementAcceptable =
+  keyof typeof questionsV2.dureeDysfonctionnementAcceptable;
+export type OuvertureSysteme = keyof typeof questionsV2.ouvertureSysteme;
+export type TypeHebergement = keyof typeof questionsV2.typeHebergement;
+export type TypeDeService = keyof typeof questionsV2.typeDeService;
+export type SpecificiteProjet = keyof typeof questionsV2.specificiteProjet;
+export type ActiviteExternalisee =
+  keyof typeof questionsV2.activiteExternalisee;
+export type StatutDeploiement = keyof typeof questionsV2.statutDeploiement;
 export type NiveauCriticite = 1 | 2 | 3 | 4;
 
 export const matriceCriticiteVolumetrieDonneesTraitees: NiveauCriticite[][] = [
@@ -234,6 +248,13 @@ export const matriceCriticiteVolumetrieDonneesTraitees: NiveauCriticite[][] = [
   [1, 1, 2, 3],
   [1, 2, 3, 4],
   [1, 2, 4, 4],
+];
+
+export const matriceCriticiteAudienceCibleDisponibilite: NiveauCriticite[][] = [
+  [1, 1, 2, 3],
+  [1, 1, 2, 3],
+  [1, 1, 3, 4],
+  [1, 1, 3, 4],
 ];
 
 export const criticiteVolumetrieDonneesTraitees = (
@@ -258,4 +279,17 @@ export const criticiteVolumetrieDonneesTraitees = (
         ]
     )
     .reduce((c1, c2) => Math.max(c1, c2) as NiveauCriticite, 1);
+};
+
+export const criticiteDisponibiliteEtAudienceCible = (
+  disponibilite: DureeDysfonctionnementAcceptable,
+  audienceCible: AudienceCible
+): NiveauCriticite => {
+  const criticiteAudienceCible =
+    questionsV2.audienceCible[audienceCible].criticite;
+  const criticiteDisponibilite =
+    questionsV2.dureeDysfonctionnementAcceptable[disponibilite].criticite;
+  return matriceCriticiteAudienceCibleDisponibilite[criticiteAudienceCible - 1][
+    criticiteDisponibilite - 1
+  ];
 };

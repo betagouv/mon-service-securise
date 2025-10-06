@@ -1,4 +1,7 @@
-import { criticiteVolumetrieDonneesTraitees } from '../donneesReferentielMesuresV2.js';
+import {
+  criticiteDisponibiliteEtAudienceCible,
+  criticiteVolumetrieDonneesTraitees,
+} from '../donneesReferentielMesuresV2.js';
 
 describe('Le référentiel V2', () => {
   describe('sur demande de la criticité induite par des données traitées et leur volumétrie', () => {
@@ -46,6 +49,17 @@ describe('Le référentiel V2', () => {
       const criticite = criticiteVolumetrieDonneesTraitees('eleve', [], []);
 
       expect(criticite).toBe(1);
+    });
+  });
+
+  describe("sur demande de la criticité induite par l'audience cible du service et la disponibilité du service", () => {
+    it('retourne le niveau calculé', () => {
+      const criticite = criticiteDisponibiliteEtAudienceCible(
+        'moinsDe4h',
+        'large'
+      );
+
+      expect(criticite).toBe(4);
     });
   });
 });
