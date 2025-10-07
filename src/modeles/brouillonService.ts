@@ -1,13 +1,11 @@
 import { UUID } from '../typesBasiques.js';
 import { VersionService } from './versionService.js';
-import {
-  DonneesDescriptionServiceV2,
-  StatutDeploiement,
-} from './descriptionServiceV2.js';
+import { DonneesDescriptionServiceV2 } from './descriptionServiceV2.js';
 import donneesReferentiel from '../../donneesReferentiel.js';
 import {
   LocalisationDonneesTraitees,
   questionsV2,
+  StatutDeploiement,
 } from '../../donneesReferentielMesuresV2.js';
 
 export type DonneesBrouillonService = {

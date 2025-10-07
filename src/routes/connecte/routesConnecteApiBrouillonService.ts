@@ -7,6 +7,7 @@ import { UUID } from '../../typesBasiques.js';
 import { ErreurBrouillonInexistant } from '../../erreurs.js';
 import { Referentiel } from '../../referentiel.interface.js';
 import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
+import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 
 const routesConnecteApiBrouillonService = ({
   depotDonnees,
@@ -132,6 +133,27 @@ const routesConnecteApiBrouillonService = ({
       return reponse.sendStatus(200);
     }
   );
+
+  routes.get('/:id/niveauSecuriteRequis', async (requete, reponse, suite) => {
+    const { idUtilisateurCourant } = requete as unknown as RequestRouteConnecte;
+    const { id } = requete.params;
+    try {
+      const brouillon = await depotDonnees.lisBrouillonService(
+        idUtilisateurCourant,
+        id as UUID
+      );
+      const niveauRequis = DescriptionServiceV2.niveauSecuriteMinimalRequis(
+        brouillon.enDonneesCreationServiceV2().descriptionService
+      );
+      return reponse.json({
+        niveauDeSecuriteMinimal: niveauRequis,
+      });
+    } catch (e) {
+      if (e instanceof ErreurBrouillonInexistant)
+        return reponse.sendStatus(404);
+      return suite(e);
+    }
+  });
 
   routes.post(
     '/:id/finalise',
