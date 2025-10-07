@@ -62,4 +62,25 @@ describe('Une description service V2', () => {
 
     expect(descriptionV2.statutSaisie()).toBe('completes');
   });
+
+  describe("sur demande d'estimation du niveau de sécurité", () => {
+    it('évalue le niveau de criticité des données traitées', () => {
+      const donnees = uneDescriptionV2Valide()
+        .avecVolumetrieDonneesTraitees('eleve')
+        .avecCategoriesDonneesTraitees([
+          'documentsIdentifiants',
+          'secretsDEntreprise',
+        ])
+        .avecAutresDonneesTraitees(['donneeAjoutee', 'autreDonneeAjoutee'])
+        .avecDureeDysfonctionnementAcceptable('moinsDe4h')
+        .avecAudienceCible('large')
+        .avecOuvertureSysteme('accessibleSurInternet')
+        .donneesDescription();
+
+      const niveauSecuriteMinimalRequis =
+        DescriptionServiceV2.niveauSecuriteMinimalRequis(donnees);
+
+      expect(niveauSecuriteMinimalRequis).toBe('niveau3');
+    });
+  });
 });
