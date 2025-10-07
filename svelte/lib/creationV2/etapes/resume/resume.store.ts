@@ -23,6 +23,7 @@ export const resume = derived<
 >([leBrouillon], ([$b]) => {
   return {
     id: $b.id!,
+    niveauSecurite: $b.niveauSecurite,
     nomService: $b.nomService,
     siret: $b.siret,
     statutDeploiement:

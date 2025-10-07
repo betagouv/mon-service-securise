@@ -22,6 +22,7 @@
         $leBrouillon.id
       );
       niveauDeplie = niveauDeSecuriteMinimal;
+      niveauSelectionne = $leBrouillon.niveauSecurite;
     }
   });
   $: estComplete = niveauSelectionne !== undefined;

@@ -64,4 +64,5 @@ export type BrouillonSvelte = {
   categoriesDonneesTraiteesSupplementaires: string[];
   volumetrieDonneesTraitees: VolumetrieDonneesTraitees | '';
   localisationsDonneesTraitees: LocalisationDonneesTraitees[];
+  niveauSecurite: NiveauSecurite | '';
 };
