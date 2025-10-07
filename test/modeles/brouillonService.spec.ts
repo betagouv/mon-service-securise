@@ -23,6 +23,7 @@ describe('Un brouillon de Service v2', () => {
         categoriesDonneesTraiteesSupplementaires: ['une catégorie'],
         volumetrieDonneesTraitees: 'eleve',
         localisationsDonneesTraitees: ['UE'],
+        niveauSecurite: 'niveau1',
       });
 
       const pourCreationService = b.enDonneesCreationServiceV2();
@@ -35,7 +36,7 @@ describe('Un brouillon de Service v2', () => {
           presentation: 'Mon service qui…',
           statutDeploiement: 'enCours',
           pointsAcces: [{ description: 'a.fr' }, { description: 'b.fr' }],
-          niveauDeSecurite: '',
+          niveauDeSecurite: 'niveau1',
           activitesExternalisees: ['administrationTechnique'],
           specificitesProjet: [],
           typeService: ['api'],

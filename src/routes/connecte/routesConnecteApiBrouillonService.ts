@@ -51,6 +51,7 @@ const routesConnecteApiBrouillonService = ({
     localisationsDonneesTraitees: z
       .array(z.enum(Object.keys(questionsV2.localisationDonneesTraitees)))
       .nonempty(),
+    niveauSecurite: z.enum(Object.keys(questionsV2.niveauSecurite)),
   });
 
   routes.post(
@@ -95,6 +96,7 @@ const routesConnecteApiBrouillonService = ({
           'categoriesDonneesTraiteesSupplementaires',
           'volumetrieDonneesTraitees',
           'localisationsDonneesTraitees',
+          'niveauSecurite',
         ]),
       })
     ),
