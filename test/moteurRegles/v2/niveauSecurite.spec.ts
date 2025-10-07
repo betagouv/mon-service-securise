@@ -91,22 +91,16 @@ describe('Le moteur de règles de choix de niveau de sécurité V2', () => {
 
   describe.each([
     {
-      nomCasTest: 'Test équipe dev',
+      nomCasTest: 'S.I. 1',
+      niveauRequis: 'niveau2',
       descriptionService: {
         volumetrieDonneesTraitees: 'eleve',
-        categoriesDonneesTraitees: [
-          'documentsIdentifiants',
-          'secretsDEntreprise',
-        ],
-        categoriesDonneesTraiteesSupplementaires: [
-          'donneeAjoutee',
-          'autreDonneeAjoutee',
-        ],
-        dureeDysfonctionnementAcceptable: 'moinsDe4h',
+        categoriesDonneesTraitees: ['donneesDIdentite'],
+        categoriesDonneesTraiteesSupplementaires: [],
+        dureeDysfonctionnementAcceptable: 'plusDe24h',
         audienceCible: 'large',
         ouvertureSysteme: 'accessibleSurInternet',
       } as Partial<DonneesDescriptionServiceV2>,
-      niveauRequis: 'niveau3',
     },
   ])(
     `évalue le niveau de sécurité requis pour les besoins de $nomCasTest`,
