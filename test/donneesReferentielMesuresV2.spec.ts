@@ -1,4 +1,5 @@
 import {
+  niveauSecuriteRequis,
   criticiteDisponibiliteEtAudienceCible,
   criticiteVolumetrieDonneesTraitees,
   niveauExposition,
@@ -69,6 +70,21 @@ describe('Le référentiel V2', () => {
       const niveau = niveauExposition('accessibleSurInternet');
 
       expect(niveau).toBe(3);
+    });
+  });
+
+  describe('sur demande du niveau de sécurité requis', () => {
+    it('retourne le niveau calculé', () => {
+      const besoinsSecurite = niveauSecuriteRequis(
+        'eleve',
+        ['documentsIdentifiants', 'secretsDEntreprise'],
+        ['donneeAjoutee', 'autreDonneeAjoutee'],
+        'moinsDe4h',
+        'large',
+        'accessibleSurInternet'
+      );
+
+      expect(besoinsSecurite).toBe('niveau3');
     });
   });
 });
