@@ -14,6 +14,11 @@ export const mesuresV2 = {
 };
 
 export const questionsV2 = {
+  niveauSecurite: {
+    niveau1: {},
+    niveau2: {},
+    niveau3: {},
+  },
   statutDeploiement: {
     enProjet: {
       description: 'En conception',
@@ -245,7 +250,9 @@ export type SpecificiteProjet = keyof typeof questionsV2.specificiteProjet;
 export type ActiviteExternalisee =
   keyof typeof questionsV2.activiteExternalisee;
 export type StatutDeploiement = keyof typeof questionsV2.statutDeploiement;
+export type NiveauSecurite = keyof typeof questionsV2.niveauSecurite;
 export type NiveauCriticite = 1 | 2 | 3 | 4;
+export type NiveauExposition = 1 | 2 | 3 | 4;
 
 export const matriceCriticiteVolumetrieDonneesTraitees: NiveauCriticite[][] = [
   [1, 1, 2, 2],
@@ -298,11 +305,42 @@ export const criticiteDisponibiliteEtAudienceCible = (
   ];
 };
 
-export const matriceExposition: NiveauCriticite[][] = [[1, 2, 2, 3]];
+export const matriceExposition: NiveauExposition[][] = [[1, 2, 2, 3]];
 
 export const niveauExposition = (
   ouvertureSysteme: OuvertureSysteme
-): NiveauCriticite =>
+): NiveauExposition =>
   matriceExposition[0][
     questionsV2.ouvertureSysteme[ouvertureSysteme].criticite - 1
   ];
+
+export const matriceBesoinsSecuriteCriticiteExposition: NiveauSecurite[][] = [
+  ['niveau1', 'niveau1', 'niveau1', 'niveau2'],
+  ['niveau1', 'niveau1', 'niveau2', 'niveau2'],
+  ['niveau2', 'niveau2', 'niveau3', 'niveau3'],
+  ['niveau2', 'niveau3', 'niveau3', 'niveau3'],
+];
+
+export const niveauSecuriteRequis = (
+  volumetrie: VolumetrieDonneesTraitees,
+  categories: CategorieDonneesTraitees[],
+  autresDonneesTraitees: string[],
+  disponibilite: DureeDysfonctionnementAcceptable,
+  audienceCible: AudienceCible,
+  ouvertureSysteme: OuvertureSysteme
+): NiveauSecurite => {
+  const criticiteDonnees = criticiteVolumetrieDonneesTraitees(
+    volumetrie,
+    categories,
+    autresDonneesTraitees
+  );
+  const criticiteDisponibilite = criticiteDisponibiliteEtAudienceCible(
+    disponibilite,
+    audienceCible
+  );
+  const criticiteGenerale = Math.max(criticiteDonnees, criticiteDisponibilite);
+  const exposition = niveauExposition(ouvertureSysteme);
+  return matriceBesoinsSecuriteCriticiteExposition[criticiteGenerale - 1][
+    exposition - 1
+  ];
+};
