@@ -1,31 +1,27 @@
 import Entite from './entite.js';
 import InformationsService from './informationsService.js';
 import {
+  ActiviteExternalisee,
+  AudienceCible,
+  niveauSecuriteRequis,
   CategorieDonneesTraitees,
+  DureeDysfonctionnementAcceptable,
   LocalisationDonneesTraitees,
-  questionsV2,
+  NiveauSecurite,
+  OuvertureSysteme,
+  SpecificiteProjet,
+  StatutDeploiement,
+  TypeHebergement,
   VolumetrieDonneesTraitees,
 } from '../../donneesReferentielMesuresV2.js';
-import donneesReferentiel from '../../donneesReferentiel.js';
 import PointsAcces from './pointsAcces.js';
+import { TypeService } from '../../svelte/lib/creationV2/creationV2.types.js';
 
 export type DonneesEntite = {
   siret: string;
   nom?: string;
   departement?: string;
 };
-
-export type StatutDeploiement =
-  keyof typeof donneesReferentiel.statutsDeploiement;
-export type TypeService = keyof typeof questionsV2.typeDeService;
-export type SpecificiteProjet = keyof typeof questionsV2.specificiteProjet;
-export type TypeHebergement = keyof typeof questionsV2.typeHebergement;
-export type ActiviteExternalisee =
-  keyof typeof questionsV2.activiteExternalisee;
-export type OuvertureSysteme = keyof typeof questionsV2.ouvertureSysteme;
-export type AudienceCible = keyof typeof questionsV2.audienceCible;
-export type DureeDysfonctionnementAcceptable =
-  keyof typeof questionsV2.dureeDysfonctionnementAcceptable;
 
 export type DonneesDescriptionServiceV2 = {
   nomService: string;
@@ -119,5 +115,18 @@ export class DescriptionServiceV2 {
         this.categoriesDonneesTraiteesSupplementaires,
       localisationsDonneesTraitees: this.localisationsDonneesTraitees,
     };
+  }
+
+  static niveauSecuriteMinimalRequis(
+    donnees: DonneesDescriptionServiceV2
+  ): NiveauSecurite {
+    return niveauSecuriteRequis(
+      donnees.volumetrieDonneesTraitees,
+      donnees.categoriesDonneesTraitees,
+      donnees.categoriesDonneesTraiteesSupplementaires,
+      donnees.dureeDysfonctionnementAcceptable,
+      donnees.audienceCible,
+      donnees.ouvertureSysteme
+    );
   }
 }
