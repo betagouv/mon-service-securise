@@ -7,6 +7,7 @@ import {
   ProprietesBrouillonService,
 } from '../../../src/modeles/brouillonService.js';
 import { ErreurBrouillonInexistant } from '../../../src/erreurs.js';
+import { unBrouillonComplet } from '../../constructeurs/constructeurBrouillonService.js';
 
 describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
   const testeur = testeurMSS();
@@ -341,6 +342,36 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
 
       const reponse = await testeur.get(
         `/api/brouillon-service/${unUUIDRandom()}`
+      );
+
+      expect(reponse.status).toBe(404);
+    });
+  });
+
+  describe('quand requête GET sur `/api/brouillon-service/:id/niveauSecuriteRequis`', () => {
+    it('retourne le niveau de securite requis', async () => {
+      const idBrouillon = unUUIDRandom();
+
+      testeur.depotDonnees().lisBrouillonService = async (_: UUID, __: UUID) =>
+        unBrouillonComplet().construis();
+
+      const reponse = await testeur.get(
+        `/api/brouillon-service/${idBrouillon}/niveauSecuriteRequis`
+      );
+
+      expect(reponse.status).toBe(200);
+      expect(reponse.body).toEqual({
+        niveauDeSecuriteMinimal: 'niveau3',
+      });
+    });
+
+    it("renvoie une erreur 404 si le brouillon n'existe pas", async () => {
+      testeur.depotDonnees().lisBrouillonService = async () => {
+        throw new ErreurBrouillonInexistant();
+      };
+
+      const reponse = await testeur.get(
+        `/api/brouillon-service/${unUUIDRandom()}/niveauSecuriteRequis`
       );
 
       expect(reponse.status).toBe(404);
