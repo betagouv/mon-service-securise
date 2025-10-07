@@ -4,6 +4,7 @@ import {
   niveauExposition,
   niveauSecuriteRequis,
 } from '../../../src/moteurRegles/v2/niveauSecurite.js';
+import { DonneesDescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.js';
 
 describe('Le moteur de règles de choix de niveau de sécurité V2', () => {
   describe('sur demande de la criticité induite par des données traitées et leur volumétrie', () => {
@@ -87,4 +88,39 @@ describe('Le moteur de règles de choix de niveau de sécurité V2', () => {
       expect(besoinsSecurite).toBe('niveau3');
     });
   });
+
+  describe.each([
+    {
+      nomCasTest: 'Test équipe dev',
+      descriptionService: {
+        volumetrieDonneesTraitees: 'eleve',
+        categoriesDonneesTraitees: [
+          'documentsIdentifiants',
+          'secretsDEntreprise',
+        ],
+        categoriesDonneesTraiteesSupplementaires: [
+          'donneeAjoutee',
+          'autreDonneeAjoutee',
+        ],
+        dureeDysfonctionnementAcceptable: 'moinsDe4h',
+        audienceCible: 'large',
+        ouvertureSysteme: 'accessibleSurInternet',
+      } as Partial<DonneesDescriptionServiceV2>,
+      niveauRequis: 'niveau3',
+    },
+  ])(
+    `évalue le niveau de sécurité requis pour les besoins de $nomCasTest`,
+    ({ descriptionService: d, niveauRequis }) => {
+      const niveauRecommande = niveauSecuriteRequis(
+        d.volumetrieDonneesTraitees!,
+        d.categoriesDonneesTraitees!,
+        d.categoriesDonneesTraiteesSupplementaires!,
+        d.dureeDysfonctionnementAcceptable!,
+        d.audienceCible!,
+        d.ouvertureSysteme!
+      );
+
+      expect(niveauRecommande).toBe(niveauRequis);
+    }
+  );
 });
