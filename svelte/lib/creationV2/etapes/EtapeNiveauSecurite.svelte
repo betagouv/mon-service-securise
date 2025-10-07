@@ -3,18 +3,30 @@
   import { ordreDesNiveaux } from '../../niveauxDeSecurite/niveauxDeSecurite.d';
   import type { IdNiveauDeSecurite } from '../../ui/types';
   import Toast from '../../ui/Toast.svelte';
-
-  let niveauSelectionne: IdNiveauDeSecurite | undefined;
-  let niveauDeSecuriteMinimal: IdNiveauDeSecurite = 'niveau2';
-  let niveauDeplie: IdNiveauDeSecurite | undefined = niveauDeSecuriteMinimal;
+  import { niveauSecuriteMinimalRequis } from '../creationV2.api';
+  import { onMount } from 'svelte';
+  import { leBrouillon } from './brouillon.store';
 
   export let estComplete: boolean;
+
+  let niveauSelectionne: IdNiveauDeSecurite | undefined;
+  let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+  let niveauDeplie: IdNiveauDeSecurite | undefined;
+
+  onMount(async () => {
+    if ($leBrouillon.id) {
+      niveauDeSecuriteMinimal = await niveauSecuriteMinimalRequis(
+        $leBrouillon.id
+      );
+      niveauDeplie = niveauDeSecuriteMinimal;
+    }
+  });
   $: estComplete = niveauSelectionne !== undefined;
 
-  const estNiveauTropBas = (candidat: IdNiveauDeSecurite) =>
+  $: estNiveauTropBas = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] < ordreDesNiveaux[niveauDeSecuriteMinimal];
 
-  const estNiveauSuperieur = (candidat: IdNiveauDeSecurite) =>
+  $: estNiveauSuperieur = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] > ordreDesNiveaux[niveauDeSecuriteMinimal];
 </script>
 
