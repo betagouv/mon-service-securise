@@ -3,7 +3,10 @@
   import { ordreDesNiveaux } from '../../niveauxDeSecurite/niveauxDeSecurite.d';
   import type { IdNiveauDeSecurite } from '../../ui/types';
   import Toast from '../../ui/Toast.svelte';
-  import { niveauSecuriteMinimalRequis } from '../creationV2.api';
+  import {
+    metsAJourBrouillonService,
+    niveauSecuriteMinimalRequis,
+  } from '../creationV2.api';
   import { onMount } from 'svelte';
   import { leBrouillon } from './brouillon.store';
 
@@ -28,6 +31,13 @@
 
   $: estNiveauSuperieur = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] > ordreDesNiveaux[niveauDeSecuriteMinimal];
+
+  const selectionneNiveau = async (niveau: IdNiveauDeSecurite) => {
+    niveauSelectionne = niveau;
+    await metsAJourBrouillonService($leBrouillon.id!, {
+      niveauSecurite: niveauSelectionne,
+    });
+  };
 </script>
 
 <div>
@@ -82,7 +92,7 @@
             positionIcone={niveauSelectionne === niveauSecurite.id
               ? 'gauche'
               : 'sans'}
-            on:click={() => (niveauSelectionne = niveauSecurite.id)}
+            on:click={async () => await selectionneNiveau(niveauSecurite.id)}
           />
         {/if}
       </div>
