@@ -1,5 +1,5 @@
-import type { questionsV2 } from '../../../donneesReferentielMesuresV2';
-import type { UUID } from '../typesBasiquesSvelte';
+import type { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
+import type { UUID } from '../typesBasiquesSvelte.js';
 
 export type StatutDeploiement = keyof typeof questionsV2.statutDeploiement;
 export type TypeService = keyof typeof questionsV2.typeDeService;
