@@ -1,4 +1,7 @@
-import type { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
+import type {
+  NiveauSecurite,
+  questionsV2,
+} from '../../../donneesReferentielMesuresV2.js';
 import type { UUID } from '../typesBasiquesSvelte.js';
 
 export type StatutDeploiement = keyof typeof questionsV2.statutDeploiement;
@@ -38,6 +41,7 @@ export type BrouillonIncomplet = {
   categoriesDonneesTraiteesSupplementaires?: string[];
   volumetrieDonneesTraitees?: VolumetrieDonneesTraitees;
   localisationsDonneesTraitees?: LocalisationDonneesTraitees[];
+  niveauSecurite?: NiveauSecurite;
 };
 
 // Côté Svelte, on VEUT toujours toutes les propriétés,
