@@ -1,11 +1,11 @@
 import {
-  niveauSecuriteRequis,
   criticiteDisponibiliteEtAudienceCible,
   criticiteVolumetrieDonneesTraitees,
   niveauExposition,
-} from '../donneesReferentielMesuresV2.js';
+  niveauSecuriteRequis,
+} from '../../../src/moteurRegles/v2/niveauSecurite.js';
 
-describe('Le référentiel V2', () => {
+describe('Le moteur de règles de choix de niveau de sécurité V2', () => {
   describe('sur demande de la criticité induite par des données traitées et leur volumétrie', () => {
     it('donne la criticité pour une catégorie unique', () => {
       const criticite = criticiteVolumetrieDonneesTraitees(

@@ -3,7 +3,6 @@ import InformationsService from './informationsService.js';
 import {
   ActiviteExternalisee,
   AudienceCible,
-  niveauSecuriteRequis,
   CategorieDonneesTraitees,
   DureeDysfonctionnementAcceptable,
   LocalisationDonneesTraitees,
@@ -16,6 +15,7 @@ import {
 } from '../../donneesReferentielMesuresV2.js';
 import PointsAcces from './pointsAcces.js';
 import { TypeService } from '../../svelte/lib/creationV2/creationV2.types.js';
+import { niveauSecuriteRequis } from '../moteurRegles/v2/niveauSecurite.js';
 
 export type DonneesEntite = {
   siret: string;
