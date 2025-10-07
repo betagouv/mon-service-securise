@@ -15,9 +15,15 @@ export const mesuresV2 = {
 
 export const questionsV2 = {
   niveauSecurite: {
-    niveau1: {},
-    niveau2: {},
-    niveau3: {},
+    niveau1: {
+      position: 1,
+    },
+    niveau2: {
+      position: 2,
+    },
+    niveau3: {
+      position: 3,
+    },
   },
   statutDeploiement: {
     enProjet: {

@@ -9,12 +9,13 @@
   } from '../creationV2.api';
   import { onMount } from 'svelte';
   import { leBrouillon } from './brouillon.store';
+  import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
 
   export let estComplete: boolean;
 
-  let niveauSelectionne: IdNiveauDeSecurite | undefined;
+  let niveauSelectionne: IdNiveauDeSecurite | '';
   let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
-  let niveauDeplie: IdNiveauDeSecurite | undefined;
+  let niveauDeplie: IdNiveauDeSecurite | '';
 
   onMount(async () => {
     if ($leBrouillon.id) {
@@ -25,7 +26,20 @@
       niveauSelectionne = $leBrouillon.niveauSecurite;
     }
   });
-  $: estComplete = niveauSelectionne !== undefined;
+
+  const niveauEstConformeAuMinimumRequis = (
+    niveau: IdNiveauDeSecurite,
+    niveauDeSecuriteMinimal: IdNiveauDeSecurite
+  ) =>
+    questionsV2.niveauSecurite[niveau]?.position >=
+    questionsV2.niveauSecurite[niveauDeSecuriteMinimal]?.position;
+
+  $: estComplete =
+    niveauSelectionne !== '' &&
+    niveauEstConformeAuMinimumRequis(
+      niveauSelectionne,
+      niveauDeSecuriteMinimal
+    );
 
   $: estNiveauTropBas = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] < ordreDesNiveaux[niveauDeSecuriteMinimal];
