@@ -1,5 +1,7 @@
 import type { UUID } from '../typesBasiquesSvelte';
 import type { BrouillonIncomplet } from './creationV2.types';
+import type { NiveauSecurite } from '../../../donneesReferentielMesuresV2';
+import type { IdNiveauDeSecurite } from '../ui/types';
 
 export const creeBrouillonService = async (
   nomService: string
@@ -35,3 +37,12 @@ export const lisBrouillonService = async (
   id: UUID
 ): Promise<BrouillonIncomplet> =>
   (await axios.get<BrouillonIncomplet>(`/api/brouillon-service/${id}`)).data;
+
+export const niveauSecuriteMinimalRequis = async (
+  id: UUID
+): Promise<IdNiveauDeSecurite> =>
+  (
+    await axios.get<{ niveauDeSecuriteMinimal: NiveauSecurite }>(
+      `/api/brouillon-service/${id}/niveauSecuriteRequis`
+    )
+  ).data.niveauDeSecuriteMinimal as IdNiveauDeSecurite;
