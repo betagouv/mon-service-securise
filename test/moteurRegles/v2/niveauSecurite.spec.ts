@@ -346,6 +346,18 @@ describe('Le moteur de règles de choix de niveau de sécurité V2', () => {
         ouvertureSysteme: 'interne',
       } as Partial<DonneesDescriptionServiceV2>,
     },
+    {
+      nomCasTest: 'S.I. 22',
+      niveauRequis: 'niveau1',
+      descriptionService: {
+        volumetrieDonneesTraitees: 'tresEleve',
+        categoriesDonneesTraitees: [],
+        categoriesDonneesTraiteesSupplementaires: ['autresDonnees'],
+        dureeDysfonctionnementAcceptable: 'plusDe24h',
+        audienceCible: 'limitee',
+        ouvertureSysteme: 'interne',
+      } as Partial<DonneesDescriptionServiceV2>,
+    },
   ])(
     `évalue le niveau de sécurité requis pour les besoins de $nomCasTest`,
     ({ descriptionService: d, niveauRequis }) => {
