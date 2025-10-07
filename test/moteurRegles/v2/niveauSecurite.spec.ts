@@ -200,6 +200,18 @@ describe('Le moteur de règles de choix de niveau de sécurité V2', () => {
         ouvertureSysteme: 'accessibleSurInternet',
       } as Partial<DonneesDescriptionServiceV2>,
     },
+    {
+      nomCasTest: 'S.I. 10',
+      niveauRequis: 'niveau1',
+      descriptionService: {
+        volumetrieDonneesTraitees: 'moyen',
+        categoriesDonneesTraitees: [],
+        categoriesDonneesTraiteesSupplementaires: ['autre'],
+        dureeDysfonctionnementAcceptable: 'plusDe24h',
+        audienceCible: 'moyenne',
+        ouvertureSysteme: 'accessibleSurInternet',
+      } as Partial<DonneesDescriptionServiceV2>,
+    },
   ])(
     `évalue le niveau de sécurité requis pour les besoins de $nomCasTest`,
     ({ descriptionService: d, niveauRequis }) => {
