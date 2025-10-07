@@ -370,6 +370,18 @@ describe('Le moteur de règles de choix de niveau de sécurité V2', () => {
         ouvertureSysteme: 'interneRestreint',
       } as Partial<DonneesDescriptionServiceV2>,
     },
+    {
+      nomCasTest: 'S.I. 24',
+      niveauRequis: 'niveau2',
+      descriptionService: {
+        volumetrieDonneesTraitees: 'eleve',
+        categoriesDonneesTraitees: ['donneesAdministrativesEtFinancieres'],
+        categoriesDonneesTraiteesSupplementaires: [],
+        dureeDysfonctionnementAcceptable: 'moinsDe12h',
+        audienceCible: 'tresLarge',
+        ouvertureSysteme: 'internePlusTiers',
+      } as Partial<DonneesDescriptionServiceV2>,
+    },
   ])(
     `évalue le niveau de sécurité requis pour les besoins de $nomCasTest`,
     ({ descriptionService: d, niveauRequis }) => {
