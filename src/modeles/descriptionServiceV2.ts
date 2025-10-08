@@ -8,6 +8,7 @@ import {
   LocalisationDonneesTraitees,
   NiveauSecurite,
   OuvertureSysteme,
+  questionsV2,
   SpecificiteProjet,
   StatutDeploiement,
   TypeHebergement,
@@ -16,6 +17,10 @@ import {
 import PointsAcces from './pointsAcces.js';
 import { TypeService } from '../../svelte/lib/creationV2/creationV2.types.js';
 import { niveauSecuriteRequis } from '../moteurRegles/v2/niveauSecurite.js';
+import {
+  ErreurDonneesNiveauSecuriteInsuffisant,
+  ErreurDonneesObligatoiresManquantes,
+} from '../erreurs.js';
 
 export type DonneesEntite = {
   siret: string;
@@ -26,7 +31,7 @@ export type DonneesEntite = {
 export type DonneesDescriptionServiceV2 = {
   nomService: string;
   organisationResponsable: DonneesEntite;
-  niveauDeSecurite: string;
+  niveauDeSecurite: NiveauSecurite;
   statutDeploiement: StatutDeploiement;
   presentation: string;
   pointsAcces: { description: string }[];
@@ -46,7 +51,7 @@ export type DonneesDescriptionServiceV2 = {
 export class DescriptionServiceV2 {
   readonly nomService: string;
   readonly organisationResponsable: Entite;
-  readonly niveauDeSecurite: string;
+  readonly niveauDeSecurite: NiveauSecurite;
   readonly statutDeploiement: StatutDeploiement;
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   private readonly presentation: string;
@@ -86,7 +91,44 @@ export class DescriptionServiceV2 {
     this.localisationsDonneesTraitees = donnees.localisationsDonneesTraitees;
   }
 
-  static valideDonneesCreation() {}
+  static donneesObligatoiresRenseignees(
+    donnees: DonneesDescriptionServiceV2
+  ): boolean {
+    return (
+      !!donnees.nomService &&
+      !!donnees.niveauDeSecurite &&
+      !!donnees.organisationResponsable &&
+      !!donnees.organisationResponsable.siret &&
+      !!donnees.statutDeploiement &&
+      !!donnees.presentation &&
+      !!donnees.typeService &&
+      donnees.typeService.length > 0 &&
+      !!donnees.typeHebergement &&
+      !!donnees.ouvertureSysteme &&
+      !!donnees.audienceCible &&
+      !!donnees.dureeDysfonctionnementAcceptable &&
+      !!donnees.volumetrieDonneesTraitees &&
+      !!donnees.localisationsDonneesTraitees &&
+      donnees.localisationsDonneesTraitees?.length > 0
+    );
+  }
+
+  static niveauSecuriteChoisiSuffisant(
+    donnees: DonneesDescriptionServiceV2
+  ): boolean {
+    const niveauSecuriteMinimal = this.niveauSecuriteMinimalRequis(donnees);
+    return (
+      questionsV2.niveauSecurite[donnees.niveauDeSecurite].position >=
+      questionsV2.niveauSecurite[niveauSecuriteMinimal].position
+    );
+  }
+
+  static valideDonneesCreation(donnees: DonneesDescriptionServiceV2) {
+    if (!this.donneesObligatoiresRenseignees(donnees))
+      throw new ErreurDonneesObligatoiresManquantes();
+    if (!this.niveauSecuriteChoisiSuffisant(donnees))
+      throw new ErreurDonneesNiveauSecuriteInsuffisant();
+  }
 
   // eslint-disable-next-line class-methods-use-this
   statutSaisie() {

@@ -3,6 +3,10 @@ import {
   DonneesDescriptionServiceV2,
 } from '../../src/modeles/descriptionServiceV2.ts';
 import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.js';
+import {
+  ErreurDonneesNiveauSecuriteInsuffisant,
+  ErreurDonneesObligatoiresManquantes,
+} from '../../src/erreurs.js';
 
 describe('Une description service V2', () => {
   it('connaît ses données à persister', () => {
@@ -81,6 +85,166 @@ describe('Une description service V2', () => {
         DescriptionServiceV2.niveauSecuriteMinimalRequis(donnees);
 
       expect(niveauSecuriteMinimalRequis).toBe('niveau3');
+    });
+  });
+
+  describe('sur demande de si les données de création sont valides', () => {
+    it('répond true si tous les champs obligatoires sont remplis', () => {
+      const d = uneDescriptionV2Valide().donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(true);
+    });
+
+    it("répond false s'il manque le nom du service", () => {
+      const d = uneDescriptionV2Valide()
+        .avecNomService('')
+        .donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it("répond false s'il manque le niveau de sécurité", () => {
+      const d = uneDescriptionV2Valide()
+        .avecNiveauSecurite(undefined)
+        .donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it("répond false s'il manque le siret", () => {
+      const d = uneDescriptionV2Valide().avecSiret('').donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it("répond false s'il manque le statut", () => {
+      const d = uneDescriptionV2Valide()
+        .avecStatutDeploiement(undefined)
+        .donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it("répond false s'il manque la présentation", () => {
+      const d = uneDescriptionV2Valide()
+        .avecPresentation('')
+        .donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it("répond false s'il manque le type de service", () => {
+      const d = uneDescriptionV2Valide()
+        .avecTypesService([])
+        .donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it("répond false s'il manque le type d'hébergement", () => {
+      const d = uneDescriptionV2Valide()
+        .avecTypeHebergement(undefined)
+        .donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it("répond false s'il manque l'ouverture du système", () => {
+      const d = uneDescriptionV2Valide()
+        .avecOuvertureSysteme(undefined)
+        .donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it("répond false s'il manque l'audience cible", () => {
+      const d = uneDescriptionV2Valide()
+        .avecAudienceCible(undefined)
+        .donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it("répond false s'il manque la durée maximale de dyfonctionnement", () => {
+      const d = uneDescriptionV2Valide()
+        .avecDureeDysfonctionnementAcceptable(undefined)
+        .donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it("répond false s'il manque le volume de données traitées", () => {
+      const d = uneDescriptionV2Valide()
+        .avecVolumeDonneesTraitees(undefined)
+        .donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it("répond false s'il manque la localisation des données traitées", () => {
+      const d = uneDescriptionV2Valide()
+        .avecLocalisationDonneesTraitees([])
+        .donneesDescription();
+
+      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it('répond false si le niveau de sécurité choisi est insuffisant', () => {
+      const d = uneDescriptionV2Valide()
+        .avecVolumeDonneesTraitees('tresEleve')
+        .avecDonneesTraitees(['secretsDEntreprise', 'documentsRHSensibles'], [])
+        .avecNiveauSecurite('niveau1')
+        .donneesDescription();
+
+      const estValide = DescriptionServiceV2.niveauSecuriteChoisiSuffisant(d);
+
+      expect(estValide).toBe(false);
+    });
+
+    it('jette une erreur si les données sont incomplètes', () => {
+      const d = uneDescriptionV2Valide()
+        .avecLocalisationDonneesTraitees([])
+        .donneesDescription();
+
+      const estValide = () => DescriptionServiceV2.valideDonneesCreation(d);
+
+      expect(estValide).toThrowError(ErreurDonneesObligatoiresManquantes);
+    });
+
+    it('jette une erreur si le niveau de sécurité choisi est insuffisant', () => {
+      const d = uneDescriptionV2Valide()
+        .avecNiveauSecurite('niveau1')
+        .donneesDescription();
+
+      const estValide = () => DescriptionServiceV2.valideDonneesCreation(d);
+
+      expect(estValide).toThrowError(ErreurDonneesNiveauSecuriteInsuffisant);
     });
   });
 });
