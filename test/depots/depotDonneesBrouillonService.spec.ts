@@ -164,8 +164,6 @@ describe('Le dépôt de données des brouillons de Service', () => {
       const restants = await persistance.lisBrouillonsService(unUUID('U'));
       expect(restants).toHaveLength(0);
     });
-
-    it.todo("jette une exception si le brouillon n'est pas complet");
   });
 
   describe("sur demande de sauvegarde d'un brouillon", () => {
