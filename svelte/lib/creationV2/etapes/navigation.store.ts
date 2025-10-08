@@ -24,6 +24,7 @@ type NavigationStore = {
   subscribe: typeof etatNavigation.subscribe;
   precedent: () => void;
   suivant: () => void;
+  retourneEtapeNomService: () => void;
   reprendreEditionDe: (brouillon: BrouillonSvelte, modeRapide: boolean) => void;
   changeModeEdition: (modeRapide: boolean) => void;
 };
@@ -71,6 +72,15 @@ export const navigationStore: NavigationStore = {
       return {
         ...etat,
         modeRapide,
+      };
+    });
+  },
+  retourneEtapeNomService: () => {
+    etatNavigation.update((etat) => {
+      return {
+        ...etat,
+        etapeEnCours: 0,
+        questionEnCours: 0,
       };
     });
   },

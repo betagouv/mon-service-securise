@@ -6,7 +6,7 @@
     metsAJourBrouillonService,
     type MiseAJour,
   } from './creationV2.api';
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import type { UUID } from '../typesBasiquesSvelte';
   import JaugeDeProgression from './JaugeDeProgression.svelte';
   import { navigationStore } from './etapes/navigation.store';
@@ -15,6 +15,8 @@
   import { ajouteParametreAUrl } from '../outils/url';
   import type { BrouillonSvelte } from './creationV2.types';
   import Switch from '../ui/Switch.svelte';
+  import { toasterStore } from '../ui/stores/toaster.store';
+  import Toaster from '../ui/Toaster.svelte';
 
   let questionCouranteEstComplete = false;
   let enCoursDeChargement = false;
@@ -62,12 +64,39 @@
 
   const finalise = async () => {
     enCoursDeChargement = true;
-    await finaliseBrouillonService($leBrouillon.id!);
-    enCoursDeChargement = false;
-    window.location.href = '/tableauDeBord';
+    try {
+      await finaliseBrouillonService($leBrouillon.id!);
+      window.location.href = '/tableauDeBord';
+    } catch (e) {
+      if (
+        e.response?.status === 422 &&
+        e.response?.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT'
+      ) {
+        navigationStore.retourneEtapeNomService();
+        toasterStore.erreur(
+          'Erreur lors de la création du service',
+          `Le nom de service ${$leBrouillon.nomService} est déjà utilisé. Veuillez choisir un autre nom de service.`
+        );
+        await tick();
+        setTimeout(() => {
+          const elementRacine: HTMLElement & {
+            status: string;
+            errorMessage: string;
+          } = document.querySelector("dsfr-input[nom='nom-service']")!;
+          elementRacine.status = 'error';
+          elementRacine.errorMessage = 'Ce nom de service est déjà utilisé.';
+          const element: HTMLInputElement =
+            elementRacine.shadowRoot?.getElementById('nom-service');
+          element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+      }
+    } finally {
+      enCoursDeChargement = false;
+    }
   };
 </script>
 
+<Toaster />
 <div class="conteneur-creation">
   <div class="formulaire-creation">
     <div
