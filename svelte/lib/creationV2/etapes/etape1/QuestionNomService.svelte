@@ -5,26 +5,28 @@
 
   export let estComplete: boolean;
 
-  let touche = false;
-
   const emetEvenement = createEventDispatcher<{
     champModifie: MiseAJour;
   }>();
+
+  let elementHtml: HTMLElement & { errorMessage: string; status: string };
 
   $: estComplete = $leBrouillon.nomService.trim().length > 0;
 </script>
 
 <dsfr-input
   label="Nom du service à sécuriser*"
+  bind:this={elementHtml}
   type="text"
   id="nom-service"
   nom="nom-service"
   value={$leBrouillon.nomService}
-  status={touche && $leBrouillon.nomService.length < 1 ? 'error' : 'default'}
   errorMessage="Le nom du service est obligatoire."
   on:valuechanged={(e) => {
     $leBrouillon.nomService = e.detail;
-    touche = true;
+    elementHtml.errorMessage = 'Le nom du service est obligatoire.';
+    elementHtml.status =
+      $leBrouillon.nomService.length < 1 ? 'error' : 'default';
   }}
   on:blur={async () => {
     emetEvenement('champModifie', { nomService: $leBrouillon.nomService });

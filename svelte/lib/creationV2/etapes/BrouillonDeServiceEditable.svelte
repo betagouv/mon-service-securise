@@ -9,8 +9,6 @@
   import ListeChampTexte from './ListeChampTexte.svelte';
   import { ajouteParametreAUrl } from '../../outils/url';
 
-  let touche = false;
-
   const supprimeValeurPointAcces = (index: number) => {
     $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
       (_, i) => i !== index
@@ -59,33 +57,37 @@
       [propriete]: valeur,
     });
   };
+  let elementHtml: HTMLElement & { errorMessage: string; status: string };
 </script>
 
 <div class="conteneur-avec-cadre">
   <h5>Informations génériques sur le projet</h5>
 
   <dsfr-input
+    bind:this={elementHtml}
     label="Nom du service à sécuriser*"
     type="text"
     id="nom-service"
     nom="nom-service"
     value={$leBrouillon.nomService}
-    status={touche && $leBrouillon.nomService.length < 1 ? 'error' : 'default'}
     errorMessage="Le nom du service est obligatoire."
     on:valuechanged={(e) => {
       $leBrouillon.nomService = e.detail;
-      touche = true;
+      elementHtml.errorMessage = 'Le nom du service est obligatoire.';
+      elementHtml.status =
+        $leBrouillon.nomService.length < 1 ? 'error' : 'default';
     }}
     on:blur={async (e) => {
-      const nomService = e.target.value;
-      $leBrouillon.nomService = nomService;
       if ($leBrouillon.id && $leBrouillon.nomService.length >= 1) {
         return enregistre('nomService', $leBrouillon.nomService);
       }
-      if (!$leBrouillon.id && nomService.length > 1) {
-        const idBrouillon = await creeBrouillonService(nomService);
+      if (!$leBrouillon.id && $leBrouillon.nomService.length > 1) {
+        const idBrouillon = await creeBrouillonService($leBrouillon.nomService);
         ajouteParametreAUrl('id', idBrouillon);
-        leBrouillon.chargeDonnees({ id: idBrouillon, nomService });
+        leBrouillon.chargeDonnees({
+          id: idBrouillon,
+          nomService: $leBrouillon.nomService,
+        });
       }
     }}
   />
