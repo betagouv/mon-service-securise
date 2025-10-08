@@ -6,7 +6,11 @@ import {
   BrouillonService,
   ProprietesBrouillonService,
 } from '../../../src/modeles/brouillonService.js';
-import { ErreurBrouillonInexistant } from '../../../src/erreurs.js';
+import {
+  ErreurBrouillonInexistant,
+  ErreurDonneesObligatoiresManquantes,
+  ErreurNomServiceDejaExistant,
+} from '../../../src/erreurs.js';
 import { unBrouillonComplet } from '../../constructeurs/constructeurBrouillonService.js';
 
 describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
@@ -315,6 +319,31 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       );
 
       expect(reponse.status).toBe(404);
+    });
+
+    it('renvoie une erreur 422 si la création de service a échoué car le nom de service est déjà pris', async () => {
+      testeur.depotDonnees().finaliseBrouillonService = async () => {
+        throw new ErreurNomServiceDejaExistant();
+      };
+
+      const reponse = await testeur.post(
+        `/api/brouillon-service/${unUUIDRandom()}/finalise`
+      );
+
+      expect(reponse.status).toBe(422);
+      expect(reponse.body.erreur.code).toBe('NOM_SERVICE_DEJA_EXISTANT');
+    });
+
+    it('renvoie une erreur 422 si la création de service a échoué pour une autre raison', async () => {
+      testeur.depotDonnees().finaliseBrouillonService = async () => {
+        throw new ErreurDonneesObligatoiresManquantes();
+      };
+
+      const reponse = await testeur.post(
+        `/api/brouillon-service/${unUUIDRandom()}/finalise`
+      );
+
+      expect(reponse.status).toBe(422);
     });
   });
 

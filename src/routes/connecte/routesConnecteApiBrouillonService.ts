@@ -4,7 +4,11 @@ import { DepotDonneesBrouillonService } from '../../depots/depotDonneesBrouillon
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
 import { UUID } from '../../typesBasiques.js';
-import { ErreurBrouillonInexistant } from '../../erreurs.js';
+import {
+  ErreurBrouillonInexistant,
+  ErreurModele,
+  ErreurNomServiceDejaExistant,
+} from '../../erreurs.js';
 import { Referentiel } from '../../referentiel.interface.js';
 import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
@@ -175,6 +179,13 @@ const routesConnecteApiBrouillonService = ({
       } catch (e) {
         if (e instanceof ErreurBrouillonInexistant)
           return reponse.sendStatus(404);
+
+        if (e instanceof ErreurNomServiceDejaExistant)
+          return reponse
+            .status(422)
+            .json({ erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } });
+
+        if (e instanceof ErreurModele) return reponse.sendStatus(422);
 
         return suite(e);
       }
