@@ -13,6 +13,7 @@
 
   export let siret: string | undefined = undefined;
   export let label: string = '';
+  export let disabled: boolean = false;
 
   let saisie: string;
   let minuteur: NodeJS.Timeout;
@@ -93,7 +94,7 @@
   };
 </script>
 
-<div class="conteneur">
+<div class="conteneur" class:avec-label={label !== ''}>
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <dsfr-input
     bind:this={elementInput}
@@ -103,7 +104,8 @@
     nom="siret"
     value={saisie}
     errorMessage="Le SIRET est obligatoire."
-    status={siret ? 'default' : 'error'}
+    status={disabled ? 'default' : siret ? 'default' : 'error'}
+    {disabled}
     on:valuechanged={(e) => {
       siret = undefined;
       saisie = e.detail;
@@ -134,9 +136,15 @@
   <input type="text" bind:value={siret} class="valeur-cache" />
 </div>
 
-<style>
+<style lang="scss">
   .conteneur {
     position: relative;
+
+    &.avec-label {
+      .liste-suggestions {
+        top: 77px;
+      }
+    }
   }
 
   .liste-suggestions {
