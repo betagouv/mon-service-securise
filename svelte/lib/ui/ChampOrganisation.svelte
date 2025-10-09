@@ -154,7 +154,7 @@
     width: 100%;
     z-index: 1;
     transform: translateY(-5px);
-    padding: 8px 16px;
+    padding: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     top: 45px;
@@ -167,8 +167,12 @@
   }
 
   .option {
-    padding: 4px 0;
+    padding: 4px 8px;
     cursor: pointer;
+
+    &:hover {
+      background: #eee;
+    }
   }
 
   .valeur-cache {
