@@ -2,13 +2,42 @@
 
 ## TODO
 
+#### Moteur v2
+
+- [ ] Les niveaux de sécurité ne sont PLUS des modificateurs, mais ils sont encodés dans chaque règle
+  ```typescript
+  export type RegleDuReferentielV2 = {
+    reference: IdMesureV2;
+    besoinsDeSecurite: {
+      // On les met ici
+      niveau1: 'Indispensable' | 'Recommandée' | 'Absente';
+      niveau2: 'Indispensable' | 'Recommandée' | 'Absente';
+      niveau3: 'Indispensable' | 'Recommandée' | 'Absente';
+    };
+    dansSocleInitial: boolean;
+    modificateurs: ModificateursDeRegles;
+  };
+  ```
+- [ ] Le moteur évalue les règles sur une `ProjectionDescriptionPourMoteur` dont chaque groupe de colonnes du CSV est une propriété
+  - Le moteur ne travaille donc pas directement sur `DescriptionServiceV2`, mais sur cette projection.
+- [ ] Jette des erreurs "en cas de problème" : mais "problème" reste à définir.
+- [ ] Optimisation pour `break` la boucle d'évaluation d'un champ dès qu'on a un match ?
+  - ça veut dire dès que `if (valeurReelle === valeurRegle)` est vrai, on `break;`
+
+#### Parsing CSV
+
+- [ ] Tester que "statut initial" vide fonctionne bien
+- [ ] Tester comment ça se comporte si on a plusieurs "Ajouter" sur une mesure d'un service
+  - Exemple : "Données : +" dit "Ajouter" **ET** "Dispo : +" dit "Ajouter" également
+- [ ] Vérifier qu'on peut bien traduire chaque colonne contenant potentiellement un modificateur
+  - Exemple : on doit savoir traduire "Données: +", "Données: ++", etc.
+- [ ] Jette des erreurs en cas de "il manque des colonnes attendues"
+- [ ] Vers du code générique qui boucle sur une collection de tous les champs attendus ? Ça sera peut-être le cas une fois `Projection…` mise en place
+
+#### Autre
+
 - [ ] Tableau de bord : afficher le bouton « Ajouter service » dans le cas où on a 0 service mais un/des brouillon.
 - [ ] Svelte : que `npm run build:front` déclecnche un `tsc` dans `svelte/` pour vérifier qu'il n'y a pas d'erreur TS
-- [ ] moteur v2 : optimisation pour `break` la boucle d'évaluation d'un champ dès qu'on a un match ?
-  - ça veut dire dès que `if (valeurReelle === valeurRegle)` est vrai, on `break;`
-- [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.
-- [ ] Parsing du CSV jette des erreurs en cas de "il manque des colonnes attendues"
-- [ ] Parsing du CSV : vers du code générique qui boucle sur une collection de tous les champs attendus
 
 ## TODO plus tard
 
