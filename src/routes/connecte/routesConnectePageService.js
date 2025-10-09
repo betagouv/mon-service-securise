@@ -285,9 +285,13 @@ const routesConnectePageService = ({
     }
   );
 
-  routes.get('/v2/creation', (_, reponse) =>
-    reponse.render('service/creation-v2')
-  );
+  routes.get('/v2/creation', async (requete, reponse) => {
+    const utilisateur = await depotDonnees.utilisateur(
+      requete.idUtilisateurCourant
+    );
+    const entite = utilisateur.entite.siret ? utilisateur.entite : undefined;
+    reponse.render('service/creation-v2', { entite });
+  });
 
   return routes;
 };
