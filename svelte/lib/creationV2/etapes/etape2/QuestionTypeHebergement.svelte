@@ -5,6 +5,7 @@
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import type { ActiviteExternalisee } from '../../creationV2.types';
+  import CaseACocher from '../../../ui/CaseACocher.svelte';
 
   export let estComplete: boolean;
   $: estComplete = !!$leBrouillon.typeHebergement;
@@ -51,32 +52,51 @@
   {/each}
 </label>
 
-<label
-  for="activites-externalisees"
+<div
   class="titre-question activites-externalisees"
   class:indisponible={!$leBrouillon.typeHebergement}
 >
-  Quelles activités du projet sont entièrement externalisées ?
+  <span class="titre-question-activites"
+    >Quelles activités du projet sont entièrement externalisées ?</span
+  >
   {#each Object.entries(questionsV2.activiteExternalisee) as [idActivite, { nom, exemple }]}
-    <label
-      class:indisponible={!$leBrouillon.typeHebergement ||
-        $leBrouillon.typeHebergement === 'saas'}
-    >
-      <input
-        type="checkbox"
-        value={idActivite}
-        bind:group={$leBrouillon.activitesExternalisees}
+    {@const actif =
+      !!$leBrouillon.typeHebergement && $leBrouillon.typeHebergement !== 'saas'}
+    <div class="conteneur-case-avec-exemple">
+      <CaseACocher
+        id={idActivite}
+        {actif}
+        bind:valeurs={$leBrouillon.activitesExternalisees}
+        label={nom}
         on:change={async () => await metsAJourActivitesExternalisees()}
       />
-      <span>
-        <span class="libelle">{nom}</span>
-        {#if exemple}<span class="indication-libelle">{exemple}</span>{/if}
-      </span>
-    </label>
+      {#if exemple}
+        <span class="indication-libelle" class:inactif={!actif}>{exemple}</span>
+      {/if}
+    </div>
   {/each}
-</label>
+</div>
 
 <style lang="scss">
+  .titre-question-activites {
+    margin-bottom: 8px;
+  }
+  .conteneur-case-avec-exemple {
+    display: flex;
+    flex-direction: column;
+  }
+  .indication-libelle {
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    color: #666;
+    font-weight: normal;
+    margin-left: 33px;
+
+    &.inactif {
+      opacity: 0.5;
+    }
+  }
+
   label {
     .indication {
       font-size: 0.75rem;
@@ -84,45 +104,6 @@
       color: #666;
       font-weight: normal;
       margin-top: 8px;
-    }
-  }
-
-  .activites-externalisees {
-    &.indisponible,
-    .indisponible {
-      opacity: 0.55;
-      pointer-events: none;
-
-      input[type='checkbox'] {
-        accent-color: grey;
-      }
-    }
-
-    label {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 8px;
-      input[type='checkbox'] {
-        position: relative;
-        top: 3px;
-      }
-      span {
-        display: flex;
-        flex-direction: column;
-      }
-    }
-    .libelle {
-      font-size: 1rem;
-      line-height: 1.5rem;
-      color: #161616;
-      font-weight: normal;
-    }
-    .indication-libelle {
-      font-size: 0.75rem;
-      line-height: 1.25rem;
-      color: #666;
-      font-weight: normal;
     }
   }
 </style>
