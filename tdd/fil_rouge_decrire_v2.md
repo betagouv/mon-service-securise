@@ -4,17 +4,11 @@
 
 - [ ] Tableau de bord : afficher le bouton « Ajouter service » dans le cas où on a 0 service mais un/des brouillon.
 - [ ] Svelte : que `npm run build:front` déclecnche un `tsc` dans `svelte/` pour vérifier qu'il n'y a pas d'erreur TS
-- [ ] input type : utiliser l'input DSFR de l'UI Kit sur toutes les étapes où c'est nécessaire
 - [ ] moteur v2 : optimisation pour `break` la boucle d'évaluation d'un champ dès qu'on a un match ?
   - ça veut dire dès que `if (valeurReelle === valeurRegle)` est vrai, on `break;`
 - [ ] Le moteur de règles v2 jette des erreurs "en cas de problème" : mais "problème" reste à définir.
 - [ ] Parsing du CSV jette des erreurs en cas de "il manque des colonnes attendues"
 - [ ] Parsing du CSV : vers du code générique qui boucle sur une collection de tous les champs attendus
-- [ ] chaque étape de décrire permet de mettre à jour une propriété du brouillon
-  - [ ] la route permettant de rajouter des données vérifie la cohérence de ces données (via `referentiel` ou via `zod` ?)
-- [ ] un service v2 utilise un moteur de règles v2 (ou des reglesPersonnalisation v2 ?)
-  - ce moteur de règles génère une liste de mesures v2
-- [ ] ne passer que les mesures v2 au constructeur du moteur de règle v2 ? pas besoin du référentiel ?
 
 ## TODO plus tard
 
@@ -33,30 +27,6 @@
 - Regarder toutes les routes connectées de page Service et vérifier s'il faut du v2
 
 ## DONE
-
-- [x] choix unique => passage à l'étape suivante
-- [x] Il faudrait probablement extraire un composant pour les checkbox avec image, car il sera réutilisé dans les étapes suivantes
-- [x] Il faudrait enlever le style global sur label et mettre un style global sur une classe, pour pouvoir enlever les !important
-- [x] choix unique => masquer les boutons radios (étape 1 > question 3)
-- [x] étape 1 > question 5 : pouvoir ajouter/supprimer les URLs dynamiquement dans le formulaire
-- [x] refacto vers this.donnees = donnees
-- [x] le GET /brouillon/:id devrait renvoyer ce que brouillon.toJSON() renvoie
-- [x] donneesSerialisees dans DescriptionV2
-- [x] est-ce qu'on veut faire la diff entre v1 et v2 dans `referentiel.identifiantsMesures()` ?
-- [x] une fois le code compilé, où est le CSV de prod ? à copier dans dist ?
-- [x] récupérer la description/catégorie/etc. depuis le référentiel dans le moteur de règles
-- [x] Parsing du CSV jette des erreurs en cas de statut initial inconnu
-- [x] Parsing du CSV jette des erreurs en cas de modificateur inconnu du référentiel
-- [x] Le moteur de règles v2 jette des erreurs en cas de mesure inconnue du référentiel
-- [x] Un CSV peut être converti en règles MSS
-- [x] Le moteur v2 travaille sur certaines clés bien définies de la DescriptionServiceV2
-- [x] Le moteur de règles v2 gère plusieurs valeurs+modificateurs pour un même champ
-  - exemple : on veut 3 valeurs+modificateurs possibles pour "Niveau de sécurite"
-- [x] Remplacer enum par constante string pour les modificateur : 'RETIRER' | 'AJOUTER' …
-- [x] Le moteur de règles v2 peut retirer une mesure
-- [x] Le moteur de règles v2 peut rendre une mesure indispensable
-- [x] Le moteur de règles v2 peut rendre une mesure recommandée
-- [x] Le moteur de règles v2 peut rajouter une mesure
 
 ## Exemple de mesure personnalisée renvoyée par le moteur de règles V1 (`.mesures()`)
 
