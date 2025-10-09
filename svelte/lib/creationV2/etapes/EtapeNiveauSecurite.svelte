@@ -221,6 +221,11 @@
 
     justify-self: end;
     align-self: center;
+    transition: transform 0.2s ease-out;
+  }
+
+  .conteneur-niveau-securite.deplie .entete-niveau-securite::after {
+    transform: rotate(180deg);
   }
 
   .corps-niveau-securite {
