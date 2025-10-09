@@ -6,12 +6,20 @@ import type { IdNiveauDeSecurite } from '../ui/types';
 export const creeBrouillonService = async (
   nomService: string
 ): Promise<UUID> => {
-  const reponse = await axios.post('/api/brouillon-service', { nomService });
-  return reponse.data.id as UUID;
+  const reponse = await axios.post<{ id: UUID }>('/api/brouillon-service', {
+    nomService,
+  });
+  return reponse.data.id;
 };
 
-export const finaliseBrouillonService = async (idBrouillon: UUID) =>
-  await axios.post(`/api/brouillon-service/${idBrouillon}/finalise`);
+export const finaliseBrouillonService = async (
+  idBrouillon: UUID
+): Promise<UUID> => {
+  const reponse = await axios.post<{ idService: UUID }>(
+    `/api/brouillon-service/${idBrouillon}/finalise`
+  );
+  return reponse.data.idService;
+};
 
 export type MiseAJour = Partial<
   Record<keyof BrouillonIncomplet, string | string[]>

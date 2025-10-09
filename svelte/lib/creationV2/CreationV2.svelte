@@ -69,8 +69,8 @@
   const finalise = async () => {
     enCoursDeChargement = true;
     try {
-      await finaliseBrouillonService($leBrouillon.id!);
-      window.location.href = '/tableauDeBord';
+      const idService = await finaliseBrouillonService($leBrouillon.id!);
+      window.location.href = `/service/${idService}/mesures`;
     } catch (e) {
       if (
         e.response?.status === 422 &&
