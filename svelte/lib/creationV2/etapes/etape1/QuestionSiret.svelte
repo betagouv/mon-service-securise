@@ -28,7 +28,7 @@
   }
 </script>
 
-<ChampOrganisation
-  label="Quel est le nom ou siret de l’organisation ?*"
-  bind:siret={$leBrouillon.siret}
-/>
+<label for="siret" class="titre-question">
+  Quel est le nom ou siret de l’organisation ?*
+</label>
+<ChampOrganisation bind:siret={$leBrouillon.siret} />

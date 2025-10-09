@@ -12,7 +12,7 @@
   };
 
   export let siret: string | undefined = undefined;
-  export let label: string;
+  export let label: string = '';
 
   let saisie: string;
   let minuteur: NodeJS.Timeout;
@@ -149,7 +149,7 @@
     padding: 8px 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    top: 78px;
+    top: 45px;
   }
 
   .visible {

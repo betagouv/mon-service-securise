@@ -14,8 +14,10 @@
   $: estComplete = $leBrouillon.nomService.trim().length > 0;
 </script>
 
+<label for="nom-service" class="titre-question">
+  Nom du service à sécuriser*
+</label>
 <dsfr-input
-  label="Nom du service à sécuriser*"
   bind:this={elementHtml}
   type="text"
   id="nom-service"
