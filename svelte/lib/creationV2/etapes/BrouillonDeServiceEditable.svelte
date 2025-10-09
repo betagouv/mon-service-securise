@@ -61,6 +61,10 @@
   let elementHtml: HTMLElement & { errorMessage: string; status: string };
 
   let siret: string;
+  if ($leBrouillon.siret) {
+    siret = $leBrouillon.siret;
+  }
+
   $: {
     if (siret) {
       $leBrouillon.siret = siret;
