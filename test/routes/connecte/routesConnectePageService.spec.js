@@ -736,10 +736,30 @@ describe('Le serveur MSS des routes /service/*', () => {
   });
 
   describe('sur demande de la page de création v2', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().utilisateur = async () =>
+        unUtilisateur()
+          .quiTravaillePour({
+            nom: 'Mon organisation',
+            departement: '33',
+            siret: '12345',
+          })
+          .construis();
+    });
     it('répond 200', async () => {
       const reponse = await testeur.get('/service/v2/creation');
 
       expect(reponse.status).to.be(200);
+    });
+
+    it("ajoute l'entite de l'utilisateur aux données partagées", async () => {
+      const reponse = await testeur.get('/service/v2/creation');
+
+      expect(donneesPartagees(reponse.text, 'donnees-profil').entite).to.eql({
+        siret: '12345',
+        nom: 'Mon organisation',
+        departement: '33',
+      });
     });
   });
 });

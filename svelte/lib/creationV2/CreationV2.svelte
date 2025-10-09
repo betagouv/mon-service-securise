@@ -17,6 +17,9 @@
   import Switch from '../ui/Switch.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
   import Toaster from '../ui/Toaster.svelte';
+  import type { Entite } from '../ui/types.d';
+
+  export let entite: Entite | undefined;
 
   let questionCouranteEstComplete = false;
   let enCoursDeChargement = false;

@@ -97,3 +97,9 @@ export type ReferentielTypesService = Record<
   IdTypeService,
   { description: string }
 >;
+
+export type Entite = {
+  nom: string;
+  departement: string;
+  siret: string;
+};
