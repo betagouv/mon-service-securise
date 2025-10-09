@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { tick } from 'svelte';
+  import { onMount, tick } from 'svelte';
 
   type Organisation = {
     nom: string;
@@ -20,6 +20,19 @@
   let suggestions: OrganisationAvecLabel[] = [];
   let suggestionsVisibles = false;
   let elementInput: HTMLInputElement | undefined = undefined;
+
+  onMount(async () => {
+    if (!siret) return;
+    const reponse = await axios.get('/api/annuaire/organisations', {
+      params: {
+        recherche: siret,
+      },
+    });
+
+    if (reponse.data.suggestions.length === 1) {
+      saisie = construisLabel(reponse.data.suggestions[0]);
+    }
+  });
 
   const avecTemporisation = (fonction: () => Promise<any>) => {
     clearTimeout(minuteur);
@@ -80,7 +93,7 @@
     type="text"
     id="siret"
     nom="siret"
-    value={siret}
+    value={saisie}
     errorMessage="Le SIRET est obligatoire."
     on:valuechanged={(e) => {
       siret = undefined;
