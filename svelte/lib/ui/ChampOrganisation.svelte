@@ -84,9 +84,17 @@
     if (elementInput) elementInput.value = saisie;
     suggestionsVisibles = false;
   };
+
+  const gereTouchePressee = (e: KeyboardEvent) => {
+    if (e.code === 'Backspace' && siret) {
+      saisie = '';
+      siret = undefined;
+    }
+  };
 </script>
 
 <div class="conteneur">
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <dsfr-input
     bind:this={elementInput}
     {label}
@@ -95,11 +103,13 @@
     nom="siret"
     value={saisie}
     errorMessage="Le SIRET est obligatoire."
+    status={siret ? 'default' : 'error'}
     on:valuechanged={(e) => {
       siret = undefined;
       saisie = e.detail;
       avecTemporisation(rechercheSuggestions);
     }}
+    on:keydown={gereTouchePressee}
   >
   </dsfr-input>
   <div class="liste-suggestions" class:visible={suggestionsVisibles}>
