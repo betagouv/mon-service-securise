@@ -10,6 +10,7 @@
   import { onMount } from 'svelte';
   import { leBrouillon } from './brouillon.store';
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
+  import Infobulle from '../../ui/Infobulle.svelte';
 
   export let estComplete: boolean;
 
@@ -93,7 +94,7 @@
           />
         {/if}
         <p>{niveauSecurite.resume}</p>
-        {#if !estNiveauTropBas(niveauSecurite.id)}
+        <span class="bouton-selection">
           <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
           <lab-anssi-bouton
             titre={niveauSelectionne === niveauSecurite.id
@@ -103,13 +104,19 @@
               ? 'primaire'
               : 'secondaire'}
             taille="sm"
+            actif={!estNiveauTropBas(niveauSecurite.id)}
             icone={niveauSelectionne === niveauSecurite.id ? 'check-line' : ''}
             positionIcone={niveauSelectionne === niveauSecurite.id
               ? 'gauche'
               : 'sans'}
             on:click={async () => await selectionneNiveau(niveauSecurite.id)}
           />
-        {/if}
+          {#if estNiveauTropBas(niveauSecurite.id)}
+            <Infobulle
+              contenu="Il est impossible de sélectionner des besoins de sécurité moins élevés que ceux identifiés par l'ANSSI."
+            />
+          {/if}
+        </span>
       </div>
       <div class="corps-niveau-securite">
         <hr />
@@ -230,10 +237,12 @@
     align-self: baseline;
   }
 
-  lab-anssi-bouton {
+  .bouton-selection {
     grid-area: bouton;
     justify-self: end;
     align-self: center;
+    display: flex;
+    gap: 8px;
   }
 
   h5 {
