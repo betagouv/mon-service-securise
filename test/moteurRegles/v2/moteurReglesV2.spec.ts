@@ -112,8 +112,11 @@ describe('Le moteur de règles V2', () => {
       },
     ]);
 
-    const serviceNiveau1AvecNomExemple = uneDescriptionAuNiveau('niveau1');
-    const mesures = v2.mesures(serviceNiveau1AvecNomExemple);
+    const serviceQuiCombineDeuxModificateurs = uneDescriptionV2Valide()
+      .avecNiveauSecurite('niveau1')
+      .avecDonneesTraitees(['donneesSensibles'], [])
+      .construis();
+    const mesures = v2.mesures(serviceQuiCombineDeuxModificateurs);
 
     expect(mesures['RECENSEMENT.1'].indispensable).toBe(true);
   });
