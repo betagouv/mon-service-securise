@@ -48,6 +48,7 @@ const initialise = (applicationExpress) => {
     ],
     ignoreTransactions: config.cheminsIgnoresParTracing(),
     tracesSampleRate: config.sampleRateDuTracing(),
+    maxValueLength: 50_000,
   });
   Sentry.setTag('mss-source', 'backend');
 
