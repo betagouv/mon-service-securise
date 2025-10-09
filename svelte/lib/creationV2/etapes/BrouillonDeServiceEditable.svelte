@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { leBrouillon } from './brouillon.store';
+  import { entiteDeUtilisateur, leBrouillon } from './brouillon.store';
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import { tick } from 'svelte';
   import {
@@ -8,6 +8,7 @@
   } from '../creationV2.api';
   import ListeChampTexte from './ListeChampTexte.svelte';
   import { ajouteParametreAUrl } from '../../outils/url';
+  import ChampOrganisation from '../../ui/ChampOrganisation.svelte';
 
   const supprimeValeurPointAcces = (index: number) => {
     $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
@@ -58,6 +59,16 @@
     });
   };
   let elementHtml: HTMLElement & { errorMessage: string; status: string };
+
+  let siret: string;
+  $: {
+    if (siret) {
+      $leBrouillon.siret = siret;
+      if (/^\d{14}$/.test(siret)) {
+        enregistre('siret', siret);
+      }
+    }
+  }
 </script>
 
 <div class="conteneur-avec-cadre">
@@ -88,28 +99,20 @@
           id: idBrouillon,
           nomService: $leBrouillon.nomService,
         });
+        if ($entiteDeUtilisateur) {
+          siret = $entiteDeUtilisateur.siret;
+        }
       }
     }}
   />
 
-  <dsfr-input
-    label="Organisation responsable du projet*"
-    type="text"
-    id="siret"
-    nom="siret"
-    disabled={!$leBrouillon.id}
-    status={$leBrouillon.id && !/^\d{14}$/.test($leBrouillon.siret)
-      ? 'error'
-      : 'default'}
-    errorMessage="Le SIRET est invalide."
-    value={$leBrouillon.siret}
-    on:blur={(e) => {
-      $leBrouillon.siret = e.target.value;
-      if (/^\d{14}$/.test($leBrouillon.siret)) {
-        return enregistre('siret', $leBrouillon.siret);
-      }
-    }}
-  />
+  {#key siret}
+    <ChampOrganisation
+      bind:siret
+      label="Organisation responsable du projet*"
+      disabled={!$leBrouillon.id}
+    />
+  {/key}
 
   <dsfr-select
     label="Statut*"
