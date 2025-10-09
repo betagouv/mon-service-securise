@@ -121,6 +121,28 @@ describe('Le moteur de règles V2', () => {
     expect(mesures['RECENSEMENT.1'].indispensable).toBe(true);
   });
 
+  it("sait combiner « Retirer » et « Rajouter » sur une même mesure : c'est « Rajouter » qui l'emporte", () => {
+    const referentiel = creeReferentiel();
+    const v2 = new MoteurReglesV2(referentiel, [
+      {
+        reference: 'RECENSEMENT.1',
+        dansSocleInitial: false,
+        modificateurs: {
+          niveauDeSecurite: [['niveau1', 'Ajouter']],
+          categoriesDonneesTraitees: [['donneesSensibles', 'Retirer']],
+        },
+      },
+    ]);
+
+    const serviceCombineAjouterEtRetirer = uneDescriptionV2Valide()
+      .avecNiveauSecurite('niveau1')
+      .avecDonneesTraitees(['donneesSensibles'], [])
+      .construis();
+    const mesures = v2.mesures(serviceCombineAjouterEtRetirer);
+
+    expect(mesures['RECENSEMENT.1']).toBeDefined();
+  });
+
   it('renvoie les mesures complétées avec leurs données référentielles', () => {
     const referentiel = creeReferentielVide();
     referentiel.recharge({
