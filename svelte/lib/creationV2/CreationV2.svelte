@@ -11,7 +11,7 @@
   import JaugeDeProgression from './JaugeDeProgression.svelte';
   import { navigationStore } from './etapes/navigation.store';
   import { etapeCourante } from './etapes/etapeCourante.store';
-  import { leBrouillon } from './etapes/brouillon.store';
+  import { entiteDeUtilisateur, leBrouillon } from './etapes/brouillon.store';
   import { ajouteParametreAUrl } from '../outils/url';
   import type { BrouillonSvelte } from './creationV2.types';
   import Switch from '../ui/Switch.svelte';
@@ -35,6 +35,7 @@
     } else {
       navigationStore.changeModeEdition(modeRapide);
     }
+    if (entite) $entiteDeUtilisateur = entite;
   });
 
   const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {

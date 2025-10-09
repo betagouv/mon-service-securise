@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import type { BrouillonSvelte, BrouillonIncomplet } from '../creationV2.types';
+import type { Entite } from '../../ui/types.d';
 
 export const unBrouillonVierge = (): BrouillonSvelte => ({
   id: undefined,
@@ -30,3 +31,5 @@ export const leBrouillon = {
   chargeDonnees: (donnees: BrouillonIncomplet) =>
     set({ ...unBrouillonVierge(), ...donnees }),
 };
+
+export const entiteDeUtilisateur = writable<Entite | undefined>();
