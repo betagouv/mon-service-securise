@@ -3,16 +3,13 @@ import {
   creeReferentiel,
   creeReferentielVide,
 } from '../../../src/referentiel.js';
-import { DescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.js';
+import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.js';
+import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.js';
 
-function uneDescriptionAuNiveau(niveauDeSecurite: string) {
-  return new DescriptionServiceV2({
-    niveauDeSecurite,
-    nomService: '',
-    organisationResponsable: { siret: 'X' },
-    volumetrieDonneesTraitees: 'faible',
-    categoriesDonneesTraitees: ['donneesSensibles'],
-  });
+function uneDescriptionAuNiveau(niveauDeSecurite: NiveauSecurite) {
+  return uneDescriptionV2Valide()
+    .avecNiveauSecurite(niveauDeSecurite)
+    .construis();
 }
 
 describe('Le moteur de règles V2', () => {
@@ -22,7 +19,7 @@ describe('Le moteur de règles V2', () => {
       { reference: 'RECENSEMENT.1', dansSocleInitial: true, modificateurs: {} },
     ]);
 
-    const peuImporte = uneDescriptionAuNiveau('');
+    const peuImporte = uneDescriptionAuNiveau('niveau1');
     const mesures = v2.mesures(peuImporte);
 
     expect(Object.keys(mesures)).toEqual(['RECENSEMENT.1']);
