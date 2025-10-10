@@ -5,7 +5,7 @@ import { mesuresV2 } from '../../../../donneesReferentielMesuresV2.js';
 import { ErreurMoteurDeReglesV2 } from '../../../erreurs.js';
 import {
   IdMesureV2,
-  Modificateur,
+  ModificateurPourBesoin,
   ModificateursDeRegles,
   ReglesDuReferentielMesuresV2,
 } from '../moteurReglesV2.js';
@@ -13,9 +13,9 @@ import {
 type LigneDeCSVTransformee = {
   REF: IdMesureV2;
   'Statut initial': boolean;
-  Basique?: Modificateur;
-  Modéré?: Modificateur;
-  Avancé?: Modificateur;
+  Basique?: ModificateurPourBesoin;
+  Modéré?: ModificateurPourBesoin;
+  Avancé?: ModificateurPourBesoin;
 };
 
 export class LecteurDeCSVDeReglesV2 {
@@ -39,30 +39,23 @@ export class LecteurDeCSVDeReglesV2 {
 
         if (field === 'Statut initial') return this.traduisStatutInitial(value);
 
-        if (field === 'Basique') return this.traduisModificateur(value);
-        if (field === 'Modéré') return this.traduisModificateur(value);
-        if (field === 'Avancé') return this.traduisModificateur(value);
+        if (field === 'Basique') return this.traduisBesoinDeSecurite(value);
+        if (field === 'Modéré') return this.traduisBesoinDeSecurite(value);
+        if (field === 'Avancé') return this.traduisBesoinDeSecurite(value);
 
         return value;
       },
       step: ({ data }: { data: LigneDeCSVTransformee }) => {
-        const { REF } = data;
-
         const modificateurs: ModificateursDeRegles = {};
 
-        if (data.Basique || data['Modéré'] || data['Avancé']) {
-          modificateurs.niveauDeSecurite = [];
-          if (data.Basique)
-            modificateurs.niveauDeSecurite.push(['niveau1', data.Basique]);
-          if (data['Modéré'])
-            modificateurs.niveauDeSecurite.push(['niveau2', data['Modéré']]);
-          if (data['Avancé'])
-            modificateurs.niveauDeSecurite.push(['niveau3', data['Avancé']]);
-        }
-
         resultat.push({
-          reference: REF,
+          reference: data.REF,
           dansSocleInitial: data['Statut initial'],
+          besoinsDeSecurite: {
+            niveau1: data.Basique!,
+            niveau2: data['Modéré']!,
+            niveau3: data['Avancé']!,
+          },
           modificateurs,
         });
       },
@@ -80,10 +73,10 @@ export class LecteurDeCSVDeReglesV2 {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  private traduisModificateur(valeurCSV: string): Modificateur | null {
-    if (!valeurCSV) return null;
-    if (valeurCSV === 'Indispensable') return 'RendreIndispensable';
-    if (valeurCSV === 'Recommandation') return 'RendreRecommandee';
+  private traduisBesoinDeSecurite(valeurCSV: string): ModificateurPourBesoin {
+    if (!valeurCSV) return 'Absente';
+    if (valeurCSV === 'Indispensable') return 'Indispensable';
+    if (valeurCSV === 'Recommandation') return 'Recommandée';
 
     throw new ErreurMoteurDeReglesV2(
       `Le modificateur '${valeurCSV}' est inconnu`

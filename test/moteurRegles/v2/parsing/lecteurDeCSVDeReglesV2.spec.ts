@@ -27,55 +27,21 @@ describe('Le lecteur de CSV de règles V2', () => {
     expect(r2.dansSocleInitial).toBe(false);
   });
 
-  it('renvoie un modificateur pour le niveau de sécurité', async () => {
-    const regles = await lisLeFichier(
-      `MESURES_V2_OK_UN_SEUL_NIVEAU_SECURITE.csv`
-    );
-
-    expect<RegleDuReferentielV2>(regles[0]).toEqual({
-      reference: 'RECENSEMENT.1',
-      dansSocleInitial: true,
-      modificateurs: {
-        niveauDeSecurite: [['niveau1', 'RendreIndispensable']],
-      },
-    });
-
-    expect<RegleDuReferentielV2>(regles[1]).toEqual({
-      reference: 'RECENSEMENT.2',
-      dansSocleInitial: false,
-      modificateurs: {
-        niveauDeSecurite: [['niveau1', 'RendreRecommandee']],
-      },
-    });
-  });
-
-  it('renvoie plusieurs modificateur pour le niveau de sécurité', async () => {
+  it('renvoie les besoins de sécurité de chaque mesure', async () => {
     const regles = await lisLeFichier(
       `MESURES_V2_OK_TROIS_NIVEAUX_SECURITE.csv`
     );
 
-    expect<RegleDuReferentielV2>(regles[0]).toEqual({
-      reference: 'RECENSEMENT.1',
-      dansSocleInitial: true,
-      modificateurs: {
-        niveauDeSecurite: [
-          ['niveau1', 'RendreIndispensable'],
-          ['niveau2', 'RendreIndispensable'],
-          ['niveau3', 'RendreIndispensable'],
-        ],
-      },
+    expect(regles[0].besoinsDeSecurite).toEqual({
+      niveau1: 'Absente',
+      niveau2: 'Recommandée',
+      niveau3: 'Indispensable',
     });
 
-    expect<RegleDuReferentielV2>(regles[1]).toEqual({
-      reference: 'RECENSEMENT.2',
-      dansSocleInitial: false,
-      modificateurs: {
-        niveauDeSecurite: [
-          ['niveau1', 'RendreRecommandee'],
-          ['niveau2', 'RendreRecommandee'],
-          ['niveau3', 'RendreIndispensable'],
-        ],
-      },
+    expect(regles[1].besoinsDeSecurite).toEqual({
+      niveau1: 'Indispensable',
+      niveau2: 'Recommandée',
+      niveau3: 'Absente',
     });
   });
 
@@ -88,6 +54,7 @@ describe('Le lecteur de CSV de règles V2', () => {
       )
     );
   });
+
   it('jette une erreur si une référence de mesure est inconnue', async () => {
     await expect(
       lisLeFichier(`MESURES_V2_MAUVAIS_ID.csv`)
