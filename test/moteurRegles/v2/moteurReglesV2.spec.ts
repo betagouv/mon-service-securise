@@ -5,6 +5,7 @@ import {
 } from '../../../src/referentiel.js';
 import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.js';
 import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.js';
+import { besoins } from './besoinsDeSecurite.js';
 
 function uneDescriptionAuNiveau(niveauDeSecurite: NiveauSecurite) {
   return uneDescriptionV2Valide()
@@ -13,86 +14,119 @@ function uneDescriptionAuNiveau(niveauDeSecurite: NiveauSecurite) {
 }
 
 describe('Le moteur de règles V2', () => {
-  it('renvoie les mesures qui sont dans le socle initial si elles ne sont pas exclues ensuite', () => {
+  it('se base sur les mesures qui correspondent au niveau de sécurité du service', () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
-      { reference: 'RECENSEMENT.1', dansSocleInitial: true, modificateurs: {} },
+      {
+        reference: 'RECENSEMENT.1',
+        besoinsDeSecurite: {
+          niveau1: 'Absente',
+          niveau2: 'Recommandée',
+          niveau3: 'Indispensable',
+        },
+        dansSocleInitial: true,
+        modificateurs: {},
+      },
     ]);
 
-    const peuImporte = uneDescriptionAuNiveau('niveau1');
-    const mesures = v2.mesures(peuImporte);
+    const serviceNiveau1 = uneDescriptionAuNiveau('niveau1');
+    const mesuresNiveau1 = v2.mesures(serviceNiveau1);
+    expect(mesuresNiveau1['RECENSEMENT.1']).not.toBeDefined();
 
-    expect(Object.keys(mesures)).toEqual(['RECENSEMENT.1']);
+    const serviceNiveau2 = uneDescriptionAuNiveau('niveau2');
+    const mesuresNiveau2 = v2.mesures(serviceNiveau2);
+    expect(mesuresNiveau2['RECENSEMENT.1']).toBeDefined();
+    expect(mesuresNiveau2['RECENSEMENT.1'].indispensable).toBe(false);
+
+    const serviceNiveau3 = uneDescriptionAuNiveau('niveau3');
+    const mesuresNiveau3 = v2.mesures(serviceNiveau3);
+    expect(mesuresNiveau3['RECENSEMENT.1']).toBeDefined();
+    expect(mesuresNiveau3['RECENSEMENT.1'].indispensable).toBe(true);
   });
 
-  it('sait rendre une mesure « Indispensable »', () => {
+  it('sait rendre une mesure « Indispensable » par un modificateur', () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: true,
+        besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          niveauDeSecurite: [['niveau1', 'RendreIndispensable']],
+          categoriesDonneesTraitees: [
+            ['donneesSensibles', 'RendreIndispensable'],
+          ],
         },
       },
     ]);
 
-    const serviceNiveau1 = uneDescriptionAuNiveau('niveau1');
-    const mesures = v2.mesures(serviceNiveau1);
+    const avecDonneesSensibles = uneDescriptionV2Valide()
+      .avecDonneesTraitees(['donneesSensibles'], [])
+      .construis();
+    const mesures = v2.mesures(avecDonneesSensibles);
 
     expect(mesures['RECENSEMENT.1'].indispensable).toBe(true);
   });
 
-  it('sait rendre une mesure « Recommandée »', () => {
+  it("sait rendre une mesure « Recommandée » par modificateur alors qu'elle était « Indispensable » par le niveau de sécurité", () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: true,
+        besoinsDeSecurite: besoins('I-I-I'),
         modificateurs: {
-          niveauDeSecurite: [['niveau1', 'RendreRecommandee']],
+          categoriesDonneesTraitees: [
+            ['donneesSensibles', 'RendreRecommandee'],
+          ],
         },
       },
     ]);
 
-    const serviceNiveau1 = uneDescriptionAuNiveau('niveau1');
-    const mesures = v2.mesures(serviceNiveau1);
+    const avecDonneesSensibles = uneDescriptionV2Valide()
+      .avecDonneesTraitees(['donneesSensibles'], [])
+      .construis();
+    const mesures = v2.mesures(avecDonneesSensibles);
 
     expect(mesures['RECENSEMENT.1'].indispensable).toBe(false);
   });
 
-  it('sait rajouter une mesure', () => {
+  it("sait rajouter une mesure par modificateur alors qu'elle était « Absente » en statut initial", () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: false, // Pas dans le socle initial
+        besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          niveauDeSecurite: [['niveau1', 'Ajouter']],
+          categoriesDonneesTraitees: [['donneesSensibles', 'Ajouter']],
         },
       },
     ]);
-
-    const serviceNiveau1 = uneDescriptionAuNiveau('niveau1');
-    const mesures = v2.mesures(serviceNiveau1);
+    const avecDonneesSensibles = uneDescriptionV2Valide()
+      .avecDonneesTraitees(['donneesSensibles'], [])
+      .construis();
+    const mesures = v2.mesures(avecDonneesSensibles);
 
     expect(mesures['RECENSEMENT.1']).toBeDefined();
   });
 
-  it('sait retirer une mesure', () => {
+  it("sait retirer une mesure par modificateur alors qu'elle était « Présente » en statut initial", () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: true,
+        besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          niveauDeSecurite: [['niveau1', 'Retirer']],
+          categoriesDonneesTraitees: [['donneesSensibles', 'Retirer']],
         },
       },
     ]);
 
-    const serviceNiveau1 = uneDescriptionAuNiveau('niveau1');
-    const mesures = v2.mesures(serviceNiveau1);
+    const avecDonneesSensibles = uneDescriptionV2Valide()
+      .avecDonneesTraitees(['donneesSensibles'], [])
+      .construis();
+    const mesures = v2.mesures(avecDonneesSensibles);
 
     expect(mesures).toEqual({});
   });
@@ -103,6 +137,7 @@ describe('Le moteur de règles V2', () => {
       {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: false,
+        besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
           niveauDeSecurite: [['niveau1', 'Ajouter']],
           categoriesDonneesTraitees: [
@@ -127,6 +162,7 @@ describe('Le moteur de règles V2', () => {
       {
         reference: 'RECENSEMENT.1',
         dansSocleInitial: false,
+        besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
           niveauDeSecurite: [['niveau1', 'Ajouter']],
           categoriesDonneesTraitees: [['donneesSensibles', 'Retirer']],
@@ -155,7 +191,12 @@ describe('Le moteur de règles V2', () => {
       },
     });
     const v2 = new MoteurReglesV2(referentiel, [
-      { reference: 'RECENSEMENT.1', dansSocleInitial: true, modificateurs: {} },
+      {
+        reference: 'RECENSEMENT.1',
+        dansSocleInitial: true,
+        besoinsDeSecurite: besoins('R-R-R'),
+        modificateurs: {},
+      },
     ]);
 
     const mesures = v2.mesures(uneDescriptionAuNiveau('niveau1'));

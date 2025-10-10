@@ -1,9 +1,14 @@
-import { Modificateur } from './moteurReglesV2.js';
+import { BesoinsDeSecurite, Modificateur } from './moteurReglesV2.js';
+import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.js';
 
 export class Modifications {
   private modificateurs: Modificateur[];
 
-  constructor(private readonly dansSocleInitial: boolean) {
+  constructor(
+    private readonly dansSocleInitial: boolean,
+    private readonly besoinsDeSecurite: BesoinsDeSecurite,
+    private readonly niveauDeSecuriteDuService: NiveauSecurite
+  ) {
     this.modificateurs = [];
   }
 
@@ -18,6 +23,18 @@ export class Modifications {
   }
 
   rendreIndispensable() {
-    return this.modificateurs.includes('RendreIndispensable');
+    const besoinDuNiveauDuService =
+      this.besoinsDeSecurite[this.niveauDeSecuriteDuService];
+
+    if (
+      besoinDuNiveauDuService === 'Indispensable' &&
+      this.modificateurs.includes('RendreRecommandee')
+    )
+      return false;
+
+    return (
+      besoinDuNiveauDuService === 'Indispensable' ||
+      this.modificateurs.includes('RendreIndispensable')
+    );
   }
 }
