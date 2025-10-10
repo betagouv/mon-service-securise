@@ -19,8 +19,20 @@ export type ModificateursDeRegles = Partial<
   Record<CaracteristiquesDuService, [string, Modificateur][]>
 >;
 
+export type ModificateurPourBesoin =
+  | 'Indispensable'
+  | 'Recommandée'
+  | 'Absente';
+
+export type BesoinsDeSecurite = {
+  niveau1: ModificateurPourBesoin;
+  niveau2: ModificateurPourBesoin;
+  niveau3: ModificateurPourBesoin;
+};
+
 export type RegleDuReferentielV2 = {
   reference: IdMesureV2;
+  besoinsDeSecurite: BesoinsDeSecurite;
   dansSocleInitial: boolean;
   modificateurs: ModificateursDeRegles;
 };
@@ -34,7 +46,13 @@ export class MoteurReglesV2 {
   constructor(referentiel: Referentiel, regles: ReglesDuReferentielMesuresV2) {
     this.referentiel = referentiel;
     this.regles = regles.map(
-      (r) => new RegleV2(r.reference, r.dansSocleInitial, r.modificateurs)
+      (r) =>
+        new RegleV2(
+          r.reference,
+          r.besoinsDeSecurite,
+          r.dansSocleInitial,
+          r.modificateurs
+        )
     );
   }
 
@@ -46,8 +64,13 @@ export class MoteurReglesV2 {
       string
     >;
 
+    const niveauDuService = descriptionService.niveauDeSecurite;
+    const reglesDeBase = this.regles.filter((r) =>
+      r.estPourNiveau(niveauDuService)
+    );
+
     // eslint-disable-next-line no-restricted-syntax
-    for (const regle of this.regles) {
+    for (const regle of reglesDeBase) {
       const modifications = regle.evalue(descriptionEnRecord);
       if (modifications.doitAjouter())
         mesures.push([

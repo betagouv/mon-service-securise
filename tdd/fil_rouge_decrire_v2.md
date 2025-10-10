@@ -4,20 +4,6 @@
 
 #### Moteur v2
 
-- [ ] Les niveaux de sécurité ne sont PLUS des modificateurs, mais ils sont encodés dans chaque règle
-  ```typescript
-  export type RegleDuReferentielV2 = {
-    reference: IdMesureV2;
-    besoinsDeSecurite: {
-      // On les met ici
-      niveau1: 'Indispensable' | 'Recommandée' | 'Absente';
-      niveau2: 'Indispensable' | 'Recommandée' | 'Absente';
-      niveau3: 'Indispensable' | 'Recommandée' | 'Absente';
-    };
-    dansSocleInitial: boolean;
-    modificateurs: ModificateursDeRegles;
-  };
-  ```
 - [ ] Le moteur évalue les règles sur une `ProjectionDescriptionPourMoteur` dont chaque groupe de colonnes du CSV est une propriété
   - Le moteur ne travaille donc pas directement sur `DescriptionServiceV2`, mais sur cette projection.
 - [ ] Jette des erreurs "en cas de problème" : mais "problème" reste à définir.
@@ -56,6 +42,21 @@
 - Regarder toutes les routes connectées de page Service et vérifier s'il faut du v2
 
 ## DONE
+
+- [x] Les niveaux de sécurité ne sont PLUS des modificateurs, mais ils sont encodés dans chaque règle
+  ```typescript
+  export type RegleDuReferentielV2 = {
+    reference: IdMesureV2;
+    besoinsDeSecurite: {
+      // On les met ici
+      niveau1: 'Indispensable' | 'Recommandée' | 'Absente';
+      niveau2: 'Indispensable' | 'Recommandée' | 'Absente';
+      niveau3: 'Indispensable' | 'Recommandée' | 'Absente';
+    };
+    dansSocleInitial: boolean;
+    modificateurs: ModificateursDeRegles;
+  };
+  ```
 
 ## Exemple de mesure personnalisée renvoyée par le moteur de règles V1 (`.mesures()`)
 
