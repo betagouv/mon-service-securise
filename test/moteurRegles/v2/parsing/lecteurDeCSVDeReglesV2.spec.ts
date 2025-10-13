@@ -2,7 +2,6 @@ import { PathLike } from 'fs';
 import { LecteurDeCSVDeReglesV2 } from '../../../../src/moteurRegles/v2/parsing/lecteurDeCSVDeReglesV2.js';
 import { mesuresV2 } from '../../../../donneesReferentielMesuresV2.js';
 import { ErreurMoteurDeReglesV2 } from '../../../../src/erreurs.js';
-import { RegleDuReferentielV2 } from '../../../../src/moteurRegles/v2/moteurReglesV2.js';
 
 async function lisLeFichier(cheminRelatif: PathLike) {
   const lecteur = new LecteurDeCSVDeReglesV2(mesuresV2);
