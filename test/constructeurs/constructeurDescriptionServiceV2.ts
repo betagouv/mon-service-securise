@@ -3,12 +3,14 @@ import {
   DonneesDescriptionServiceV2,
 } from '../../src/modeles/descriptionServiceV2.js';
 import {
+  ActiviteExternalisee,
   AudienceCible,
   CategorieDonneesTraitees,
   DureeDysfonctionnementAcceptable,
   LocalisationDonneesTraitees,
   NiveauSecurite,
   OuvertureSysteme,
+  SpecificiteProjet,
   StatutDeploiement,
   TypeHebergement,
   VolumetrieDonneesTraitees,
@@ -16,7 +18,7 @@ import {
 import { TypeService } from '../../svelte/lib/creationV2/creationV2.types.js';
 
 class ConstructeurDescriptionServiceV2 {
-  private donnees: Partial<DonneesDescriptionServiceV2>;
+  private readonly donnees: Partial<DonneesDescriptionServiceV2>;
 
   constructor() {
     this.donnees = {
@@ -149,6 +151,18 @@ class ConstructeurDescriptionServiceV2 {
   ): ConstructeurDescriptionServiceV2 {
     this.donnees.categoriesDonneesTraitees = categories;
     this.donnees.categoriesDonneesTraiteesSupplementaires = autresDonnees;
+    return this;
+  }
+
+  avecSpecificitesProjet(
+    specificites: SpecificiteProjet[]
+  ): ConstructeurDescriptionServiceV2 {
+    this.donnees.specificitesProjet = specificites;
+    return this;
+  }
+
+  quiExternalise(activites: ActiviteExternalisee[]) {
+    this.donnees.activitesExternalisees = activites;
     return this;
   }
 }
