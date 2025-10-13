@@ -1,7 +1,14 @@
 import { Referentiel } from '../../referentiel.interface.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
-import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
+import {
+  ActiviteExternalisee,
+  mesuresV2,
+  SpecificiteProjet,
+  TypeDeService,
+  TypeHebergement,
+} from '../../../donneesReferentielMesuresV2.js';
 import { RegleV2 } from './regleV2.js';
+import { NiveauCriticite } from './niveauSecurite.js';
 
 export type IdMesureV2 = keyof typeof mesuresV2;
 
@@ -14,6 +21,17 @@ export type Modificateur =
 export type CaracteristiquesDuService =
   | 'niveauDeSecurite'
   | 'categoriesDonneesTraitees';
+
+export type ProjectionDescriptionPourMoteur = {
+  criticiteDonneesTraitees: NiveauCriticite;
+  donneesHorsUE: boolean;
+  criticiteDisponibilite: NiveauCriticite;
+  criticiteOuverture: NiveauCriticite;
+  specificitesProjet: SpecificiteProjet[];
+  typeService: TypeDeService[];
+  activitesExternalisees: ActiviteExternalisee | 'LesDeux';
+  typeHebergement: TypeHebergement;
+};
 
 export type ModificateursDeRegles = Partial<
   Record<CaracteristiquesDuService, [string, Modificateur][]>

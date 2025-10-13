@@ -11,16 +11,22 @@ import {
   questionsV2,
   SpecificiteProjet,
   StatutDeploiement,
+  TypeDeService,
   TypeHebergement,
   VolumetrieDonneesTraitees,
 } from '../../donneesReferentielMesuresV2.js';
 import PointsAcces from './pointsAcces.js';
-import { TypeService } from '../../svelte/lib/creationV2/creationV2.types.js';
-import { niveauSecuriteRequis } from '../moteurRegles/v2/niveauSecurite.js';
+import {
+  criticiteDeDisponibilite,
+  criticiteMaxDeDonneesTraitees,
+  criticiteOuverture,
+  niveauSecuriteRequis,
+} from '../moteurRegles/v2/niveauSecurite.js';
 import {
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurDonneesObligatoiresManquantes,
 } from '../erreurs.js';
+import { ProjectionDescriptionPourMoteur } from '../moteurRegles/v2/moteurReglesV2.js';
 
 export type DonneesEntite = {
   siret: string;
@@ -35,7 +41,7 @@ export type DonneesDescriptionServiceV2 = {
   statutDeploiement: StatutDeploiement;
   presentation: string;
   pointsAcces: { description: string }[];
-  typeService: TypeService[];
+  typeService: TypeDeService[];
   specificitesProjet: SpecificiteProjet[];
   typeHebergement: TypeHebergement;
   activitesExternalisees: ActiviteExternalisee[];
@@ -56,7 +62,7 @@ export class DescriptionServiceV2 {
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   private readonly presentation: string;
   private readonly pointsAcces: PointsAcces;
-  private readonly typeService: TypeService[];
+  private readonly typeService: TypeDeService[];
   private readonly specificitesProjet: SpecificiteProjet[];
   private readonly typeHebergement: TypeHebergement;
   private readonly activitesExternalisees: ActiviteExternalisee[];
@@ -170,5 +176,26 @@ export class DescriptionServiceV2 {
       donnees.audienceCible,
       donnees.ouvertureSysteme
     );
+  }
+
+  projectionPourMoteurV2(): ProjectionDescriptionPourMoteur {
+    return {
+      criticiteDonneesTraitees:
+        this.categoriesDonneesTraitees.length > 0
+          ? criticiteMaxDeDonneesTraitees(this.categoriesDonneesTraitees)
+          : 1,
+      criticiteDisponibilite: criticiteDeDisponibilite(
+        this.dureeDysfonctionnementAcceptable
+      ),
+      donneesHorsUE: this.localisationsDonneesTraitees.includes('horsUE'),
+      criticiteOuverture: criticiteOuverture(this.ouvertureSysteme),
+      specificitesProjet: this.specificitesProjet,
+      typeService: this.typeService,
+      typeHebergement: this.typeHebergement,
+      activitesExternalisees:
+        this.activitesExternalisees.length === 1
+          ? this.activitesExternalisees[0]
+          : 'LesDeux',
+    };
   }
 }

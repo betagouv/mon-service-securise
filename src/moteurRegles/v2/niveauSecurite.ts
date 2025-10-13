@@ -11,6 +11,26 @@ import {
 export type NiveauCriticite = 1 | 2 | 3 | 4;
 export type NiveauExposition = 1 | 2 | 3 | 4;
 
+export function criticiteMaxDeDonneesTraitees(
+  categories: CategorieDonneesTraitees[]
+) {
+  return Math.max(
+    ...categories.map((c) => questionsV2.categorieDonneesTraitees[c].criticite)
+  ) as NiveauCriticite;
+}
+
+export function criticiteDeDisponibilite(
+  disponibilite: DureeDysfonctionnementAcceptable
+) {
+  return questionsV2.dureeDysfonctionnementAcceptable[disponibilite]
+    .criticite as NiveauCriticite;
+}
+
+export function criticiteOuverture(ouvertureSysteme: OuvertureSysteme) {
+  return questionsV2.ouvertureSysteme[ouvertureSysteme]
+    .criticite as NiveauCriticite;
+}
+
 export const matriceCriticiteVolumetrieDonneesTraitees: NiveauCriticite[][] = [
   [1, 1, 2, 2],
   [1, 1, 2, 3],
@@ -55,8 +75,7 @@ export const criticiteDisponibiliteEtAudienceCible = (
 ): NiveauCriticite => {
   const criticiteAudienceCible =
     questionsV2.audienceCible[audienceCible].criticite;
-  const criticiteDisponibilite =
-    questionsV2.dureeDysfonctionnementAcceptable[disponibilite].criticite;
+  const criticiteDisponibilite = criticiteDeDisponibilite(disponibilite);
   return matriceCriticiteAudienceCibleDisponibilite[criticiteAudienceCible - 1][
     criticiteDisponibilite - 1
   ];
@@ -67,9 +86,7 @@ export const matriceExposition: NiveauExposition[][] = [[1, 2, 2, 3]];
 export const niveauExposition = (
   ouvertureSysteme: OuvertureSysteme
 ): NiveauExposition =>
-  matriceExposition[0][
-    questionsV2.ouvertureSysteme[ouvertureSysteme].criticite - 1
-  ];
+  matriceExposition[0][criticiteOuverture(ouvertureSysteme) - 1];
 
 export const matriceBesoinsSecuriteCriticiteExposition: NiveauSecurite[][] = [
   ['niveau1', 'niveau1', 'niveau1', 'niveau2'],
