@@ -5,10 +5,21 @@ import { mesuresV2 } from '../../../../donneesReferentielMesuresV2.js';
 import { ErreurMoteurDeReglesV2 } from '../../../erreurs.js';
 import {
   IdMesureV2,
+  Modificateur,
   ModificateurPourBesoin,
   ModificateursDeRegles,
   ReglesDuReferentielMesuresV2,
 } from '../moteurReglesV2.js';
+import { NiveauCriticite } from '../niveauSecurite.js';
+
+const CHAMPS_CONCERNES_MODIFICATEURS = [
+  'Données : +',
+  'Données : ++',
+  'Données : +++',
+  'Données : ++++',
+  'Données : Hors UE',
+] as const;
+type ChampsModificateurs = (typeof CHAMPS_CONCERNES_MODIFICATEURS)[number];
 
 type LigneDeCSVTransformee = {
   REF: IdMesureV2;
@@ -16,6 +27,8 @@ type LigneDeCSVTransformee = {
   Basique?: ModificateurPourBesoin;
   Modéré?: ModificateurPourBesoin;
   Avancé?: ModificateurPourBesoin;
+} & {
+  [K in ChampsModificateurs]?: Modificateur;
 };
 
 export class LecteurDeCSVDeReglesV2 {
@@ -43,10 +56,30 @@ export class LecteurDeCSVDeReglesV2 {
         if (field === 'Modéré') return this.traduisBesoinDeSecurite(value);
         if (field === 'Avancé') return this.traduisBesoinDeSecurite(value);
 
+        if (
+          CHAMPS_CONCERNES_MODIFICATEURS.includes(field as ChampsModificateurs)
+        )
+          return this.traduisModificateur(value);
+
         return value;
       },
       step: ({ data }: { data: LigneDeCSVTransformee }) => {
-        const modificateurs: ModificateursDeRegles = {};
+        const modificateurSiPresent = <T>(
+          cle: ChampsModificateurs,
+          valeur: T
+        ) => (data[cle] ? [[valeur, data[cle]] as [T, Modificateur]] : []);
+
+        const criticiteDonneesTraitees = [
+          ...modificateurSiPresent<NiveauCriticite>('Données : +', 1),
+          ...modificateurSiPresent<NiveauCriticite>('Données : ++', 2),
+          ...modificateurSiPresent<NiveauCriticite>('Données : +++', 3),
+          ...modificateurSiPresent<NiveauCriticite>('Données : ++++', 4),
+        ];
+        const modificateurs: ModificateursDeRegles = {
+          ...(criticiteDonneesTraitees.length > 0 && {
+            criticiteDonneesTraitees,
+          }),
+        };
 
         resultat.push({
           reference: data.REF,
@@ -91,5 +124,18 @@ export class LecteurDeCSVDeReglesV2 {
       );
 
     return this.statutsInitiaux[valeurCSV as keyof typeof this.statutsInitiaux];
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private traduisModificateur(valeurCSV: string): Modificateur | undefined {
+    if (!valeurCSV) return undefined;
+    if (valeurCSV === 'Indispensable') return 'RendreIndispensable';
+    if (valeurCSV === 'Recommandation') return 'RendreRecommandee';
+    if (valeurCSV === 'Ajoutée') return 'Ajouter';
+    if (valeurCSV === 'Retirée') return 'Retirer';
+
+    throw new ErreurMoteurDeReglesV2(
+      `Le modificateur '${valeurCSV}' est inconnu`
+    );
   }
 }

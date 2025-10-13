@@ -44,6 +44,28 @@ describe('Le lecteur de CSV de règles V2', () => {
     });
   });
 
+  it('renvoie les modificateurs associés aux règles', async () => {
+    const regles = await lisLeFichier(`MESURES_V2_OK_TOUS_MODIFICATEURS.csv`);
+
+    const [avecModificateurCriticteDonnees] = regles;
+    expect(
+      avecModificateurCriticteDonnees.modificateurs.criticiteDonneesTraitees
+    ).toEqual([
+      [1, 'Ajouter'],
+      [2, 'Retirer'],
+      [3, 'RendreRecommandee'],
+      [4, 'RendreIndispensable'],
+    ]);
+  });
+
+  it('ne renvoie pas de modificateurs "vide"', async () => {
+    const regles = await lisLeFichier(`MESURES_V2_OK_TOUS_MODIFICATEURS.csv`);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_, sansModificateur] = regles;
+    expect(sansModificateur.modificateurs).toEqual({});
+  });
+
   it('jette une erreur si un statut initial de mesure est inconnue', async () => {
     await expect(
       lisLeFichier(`MESURES_V2_MAUVAIS_STATUT_INITIAL.csv`)
