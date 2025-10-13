@@ -75,10 +75,14 @@ export class LecteurDeCSVDeReglesV2 {
           ...modificateurSiPresent<NiveauCriticite>('Données : +++', 3),
           ...modificateurSiPresent<NiveauCriticite>('Données : ++++', 4),
         ];
+        const donneesHorsUE = [
+          ...modificateurSiPresent('Données : Hors UE', true),
+        ];
         const modificateurs: ModificateursDeRegles = {
           ...(criticiteDonneesTraitees.length > 0 && {
             criticiteDonneesTraitees,
           }),
+          ...(donneesHorsUE.length > 0 && { donneesHorsUE }),
         };
 
         resultat.push({

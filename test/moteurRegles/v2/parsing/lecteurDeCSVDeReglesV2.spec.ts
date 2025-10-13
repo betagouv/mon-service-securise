@@ -2,6 +2,7 @@ import { PathLike } from 'fs';
 import { LecteurDeCSVDeReglesV2 } from '../../../../src/moteurRegles/v2/parsing/lecteurDeCSVDeReglesV2.js';
 import { mesuresV2 } from '../../../../donneesReferentielMesuresV2.js';
 import { ErreurMoteurDeReglesV2 } from '../../../../src/erreurs.js';
+import { RegleDuReferentielV2 } from '../../../../src/moteurRegles/v2/moteurReglesV2.js';
 
 async function lisLeFichier(cheminRelatif: PathLike) {
   const lecteur = new LecteurDeCSVDeReglesV2(mesuresV2);
@@ -47,14 +48,17 @@ describe('Le lecteur de CSV de règles V2', () => {
   it('renvoie les modificateurs associés aux règles', async () => {
     const regles = await lisLeFichier(`MESURES_V2_OK_TOUS_MODIFICATEURS.csv`);
 
-    const [avecModificateurCriticteDonnees] = regles;
+    const [modificateurCriticteDonnees, modificateurDonneesHorsUE] = regles;
     expect(
-      avecModificateurCriticteDonnees.modificateurs.criticiteDonneesTraitees
+      modificateurCriticteDonnees.modificateurs.criticiteDonneesTraitees
     ).toEqual([
       [1, 'Ajouter'],
       [2, 'Retirer'],
       [3, 'RendreRecommandee'],
       [4, 'RendreIndispensable'],
+    ]);
+    expect(modificateurDonneesHorsUE.modificateurs.donneesHorsUE).toEqual([
+      [true, 'Ajouter'],
     ]);
   });
 
@@ -62,7 +66,7 @@ describe('Le lecteur de CSV de règles V2', () => {
     const regles = await lisLeFichier(`MESURES_V2_OK_TOUS_MODIFICATEURS.csv`);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, sansModificateur] = regles;
+    const sansModificateur: RegleDuReferentielV2 = regles.at(-1)!;
     expect(sansModificateur.modificateurs).toEqual({});
   });
 
