@@ -48,7 +48,11 @@ describe('Le lecteur de CSV de règles V2', () => {
   it('renvoie les modificateurs associés aux règles', async () => {
     const regles = await lisLeFichier(`MESURES_V2_OK_TOUS_MODIFICATEURS.csv`);
 
-    const [modificateurCriticteDonnees, modificateurDonneesHorsUE] = regles;
+    const [
+      modificateurCriticteDonnees,
+      modificateurDonneesHorsUE,
+      modificateurCriticiteDisponibilite,
+    ] = regles;
     expect(
       modificateurCriticteDonnees.modificateurs.criticiteDonneesTraitees
     ).toEqual([
@@ -59,6 +63,14 @@ describe('Le lecteur de CSV de règles V2', () => {
     ]);
     expect(modificateurDonneesHorsUE.modificateurs.donneesHorsUE).toEqual([
       [true, 'Ajouter'],
+    ]);
+    expect(
+      modificateurCriticiteDisponibilite.modificateurs.criticiteDisponibilite
+    ).toEqual([
+      [1, 'Ajouter'],
+      [2, 'Retirer'],
+      [3, 'RendreRecommandee'],
+      [4, 'RendreIndispensable'],
     ]);
   });
 
