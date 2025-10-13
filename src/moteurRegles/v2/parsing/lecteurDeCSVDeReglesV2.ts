@@ -18,6 +18,10 @@ const CHAMPS_CONCERNES_MODIFICATEURS = [
   'Données : +++',
   'Données : ++++',
   'Données : Hors UE',
+  'Dispo : +',
+  'Dispo : ++',
+  'Dispo : +++',
+  'Dispo : ++++',
 ] as const;
 type ChampsModificateurs = (typeof CHAMPS_CONCERNES_MODIFICATEURS)[number];
 
@@ -78,11 +82,18 @@ export class LecteurDeCSVDeReglesV2 {
         const donneesHorsUE = [
           ...modificateurSiPresent('Données : Hors UE', true),
         ];
+        const criticiteDisponibilite = [
+          ...modificateurSiPresent<NiveauCriticite>('Dispo : +', 1),
+          ...modificateurSiPresent<NiveauCriticite>('Dispo : ++', 2),
+          ...modificateurSiPresent<NiveauCriticite>('Dispo : +++', 3),
+          ...modificateurSiPresent<NiveauCriticite>('Dispo : ++++', 4),
+        ];
         const modificateurs: ModificateursDeRegles = {
           ...(criticiteDonneesTraitees.length > 0 && {
             criticiteDonneesTraitees,
           }),
           ...(donneesHorsUE.length > 0 && { donneesHorsUE }),
+          ...(criticiteDisponibilite.length > 0 && { criticiteDisponibilite }),
         };
 
         resultat.push({
