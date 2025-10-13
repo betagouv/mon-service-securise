@@ -90,7 +90,7 @@ describe('Le moteur de règles V2', () => {
     expect(mesures['RECENSEMENT.1'].indispensable).toBe(false);
   });
 
-  it("sait rajouter une mesure par modificateur alors qu'elle était « Absente » en statut initial", () => {
+  it("sait rajouter une mesure « Recommandée » par modificateur alors qu'elle était « Absente » en statut initial", () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
       {
@@ -108,6 +108,28 @@ describe('Le moteur de règles V2', () => {
     const mesures = v2.mesures(avecDonneesSensibles);
 
     expect(mesures['RECENSEMENT.1']).toBeDefined();
+    expect(mesures['RECENSEMENT.1'].indispensable).toBe(false);
+  });
+
+  it("sait rajouter une mesure « Indispensable » par modificateur alors qu'elle était « Absente » en statut initial", () => {
+    const referentiel = creeReferentiel();
+    const v2 = new MoteurReglesV2(referentiel, [
+      {
+        reference: 'RECENSEMENT.1',
+        dansSocleInitial: false, // Pas dans le socle initial
+        besoinsDeSecurite: besoins('I-I-I'),
+        modificateurs: {
+          categoriesDonneesTraitees: [['donneesSensibles', 'Ajouter']],
+        },
+      },
+    ]);
+    const avecDonneesSensibles = uneDescriptionV2Valide()
+      .avecDonneesTraitees(['donneesSensibles'], [])
+      .construis();
+    const mesures = v2.mesures(avecDonneesSensibles);
+
+    expect(mesures['RECENSEMENT.1']).toBeDefined();
+    expect(mesures['RECENSEMENT.1'].indispensable).toBe(true);
   });
 
   it("sait retirer une mesure par modificateur alors qu'elle était « Présente » en statut initial", () => {
