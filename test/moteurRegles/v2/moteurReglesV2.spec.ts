@@ -52,22 +52,20 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: true,
         besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          categoriesDonneesTraitees: [
-            ['donneesSensibles', 'RendreIndispensable'],
-          ],
+          donneesHorsUE: [[true, 'RendreIndispensable']],
         },
       },
     ]);
 
-    const avecDonneesSensibles = uneDescriptionV2Valide()
-      .avecDonneesTraitees(['donneesSensibles'], [])
+    const avecDonneesHorsUE = uneDescriptionV2Valide()
+      .avecLocalisationDonneesTraitees(['horsUE'])
       .construis();
-    const mesures = v2.mesures(avecDonneesSensibles);
+    const mesures = v2.mesures(avecDonneesHorsUE);
 
     expect(mesures['RECENSEMENT.1'].indispensable).toBe(true);
   });
 
-  it("sait rendre une mesure « Recommandée » par modificateur alors qu'elle était « Indispensable » par le niveau de sécurité", () => {
+  it("sait redescendre une mesure en « Recommandée » par modificateur alors qu'elle était « Indispensable » par le niveau de sécurité", () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
       {
@@ -75,17 +73,15 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: true,
         besoinsDeSecurite: besoins('I-I-I'),
         modificateurs: {
-          categoriesDonneesTraitees: [
-            ['donneesSensibles', 'RendreRecommandee'],
-          ],
+          typeService: [['api', 'RendreRecommandee']],
         },
       },
     ]);
 
-    const avecDonneesSensibles = uneDescriptionV2Valide()
-      .avecDonneesTraitees(['donneesSensibles'], [])
+    const uneAPI = uneDescriptionV2Valide()
+      .avecTypesService(['api'])
       .construis();
-    const mesures = v2.mesures(avecDonneesSensibles);
+    const mesures = v2.mesures(uneAPI);
 
     expect(mesures['RECENSEMENT.1'].indispensable).toBe(false);
   });
@@ -98,14 +94,14 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: false, // Pas dans le socle initial
         besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          categoriesDonneesTraitees: [['donneesSensibles', 'Ajouter']],
+          typeHebergement: [['onPremise', 'Ajouter']],
         },
       },
     ]);
-    const avecDonneesSensibles = uneDescriptionV2Valide()
-      .avecDonneesTraitees(['donneesSensibles'], [])
+    const duOnPremise = uneDescriptionV2Valide()
+      .avecTypeHebergement('onPremise')
       .construis();
-    const mesures = v2.mesures(avecDonneesSensibles);
+    const mesures = v2.mesures(duOnPremise);
 
     expect(mesures['RECENSEMENT.1']).toBeDefined();
     expect(mesures['RECENSEMENT.1'].indispensable).toBe(false);
@@ -119,14 +115,14 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: false, // Pas dans le socle initial
         besoinsDeSecurite: besoins('I-I-I'),
         modificateurs: {
-          categoriesDonneesTraitees: [['donneesSensibles', 'Ajouter']],
+          typeHebergement: [['onPremise', 'Ajouter']],
         },
       },
     ]);
-    const avecDonneesSensibles = uneDescriptionV2Valide()
-      .avecDonneesTraitees(['donneesSensibles'], [])
+    const duOnPremise = uneDescriptionV2Valide()
+      .avecTypeHebergement('onPremise')
       .construis();
-    const mesures = v2.mesures(avecDonneesSensibles);
+    const mesures = v2.mesures(duOnPremise);
 
     expect(mesures['RECENSEMENT.1']).toBeDefined();
     expect(mesures['RECENSEMENT.1'].indispensable).toBe(true);
@@ -140,15 +136,15 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: true,
         besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          categoriesDonneesTraitees: [['donneesSensibles', 'Retirer']],
+          criticiteDisponibilite: [[1, 'Retirer']],
         },
       },
     ]);
 
-    const avecDonneesSensibles = uneDescriptionV2Valide()
-      .avecDonneesTraitees(['donneesSensibles'], [])
+    const pasDuToutCritique = uneDescriptionV2Valide()
+      .avecDureeDysfonctionnementAcceptable('plusDe24h')
       .construis();
-    const mesures = v2.mesures(avecDonneesSensibles);
+    const mesures = v2.mesures(pasDuToutCritique);
 
     expect(mesures).toEqual({});
   });
@@ -161,24 +157,22 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: false,
         besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          niveauDeSecurite: [['niveau1', 'Ajouter']],
-          categoriesDonneesTraitees: [
-            ['donneesSensibles', 'RendreIndispensable'],
-          ],
+          criticiteOuverture: [[1, 'RendreIndispensable']],
+          specificitesProjet: [['annuaire', 'Ajouter']],
         },
       },
     ]);
 
     const serviceQuiCombineDeuxModificateurs = uneDescriptionV2Valide()
-      .avecNiveauSecurite('niveau1')
-      .avecDonneesTraitees(['donneesSensibles'], [])
+      .avecOuvertureSysteme('interneRestreint')
+      .avecSpecificitesProjet(['annuaire'])
       .construis();
     const mesures = v2.mesures(serviceQuiCombineDeuxModificateurs);
 
     expect(mesures['RECENSEMENT.1'].indispensable).toBe(true);
   });
 
-  it("sait combiner « Retirer » et « Rajouter » sur une même mesure : c'est « Rajouter » qui l'emporte", () => {
+  it("sait combiner « Rajouter » et « Retirer » sur une même mesure : c'est « Rajouter » qui l'emporte", () => {
     const referentiel = creeReferentiel();
     const v2 = new MoteurReglesV2(referentiel, [
       {
@@ -186,15 +180,15 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: false,
         besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          niveauDeSecurite: [['niveau1', 'Ajouter']],
-          categoriesDonneesTraitees: [['donneesSensibles', 'Retirer']],
+          specificitesProjet: [['annuaire', 'Ajouter']],
+          typeService: [['portailInformation', 'Retirer']],
         },
       },
     ]);
 
     const serviceCombineAjouterEtRetirer = uneDescriptionV2Valide()
-      .avecNiveauSecurite('niveau1')
-      .avecDonneesTraitees(['donneesSensibles'], [])
+      .avecSpecificitesProjet(['annuaire'])
+      .avecTypesService(['portailInformation'])
       .construis();
     const mesures = v2.mesures(serviceCombineAjouterEtRetirer);
 

@@ -4,8 +4,6 @@
 
 #### Moteur v2
 
-- [ ] Le moteur évalue les règles sur une `ProjectionDescriptionPourMoteur` dont chaque groupe de colonnes du CSV est une propriété
-  - Le moteur ne travaille donc pas directement sur `DescriptionServiceV2`, mais sur cette projection.
 - [ ] Jette des erreurs "en cas de problème" : mais "problème" reste à définir.
 - [ ] Optimisation pour `break` la boucle d'évaluation d'un champ dès qu'on a un match ?
   - ça veut dire dès que `if (valeurReelle === valeurRegle)` est vrai, on `break;`
@@ -13,8 +11,6 @@
 #### Parsing CSV
 
 - [ ] Tester que "statut initial" vide fonctionne bien
-- [ ] Tester comment ça se comporte si on a plusieurs "Ajouter" sur une mesure d'un service
-  - Exemple : "Données : +" dit "Ajouter" **ET** "Dispo : +" dit "Ajouter" également
 - [ ] Vérifier qu'on peut bien traduire chaque colonne contenant potentiellement un modificateur
   - Exemple : on doit savoir traduire "Données: +", "Données: ++", etc.
 - [ ] Jette des erreurs en cas de "il manque des colonnes attendues"
@@ -43,6 +39,8 @@
 
 ## DONE
 
+- [x] Le moteur évalue les règles sur une `ProjectionDescriptionPourMoteur` dont chaque groupe de colonnes du CSV est une propriété
+  - Le moteur ne travaille donc pas directement sur `DescriptionServiceV2`, mais sur cette projection.
 - [x] Les niveaux de sécurité ne sont PLUS des modificateurs, mais ils sont encodés dans chaque règle
   ```typescript
   export type RegleDuReferentielV2 = {

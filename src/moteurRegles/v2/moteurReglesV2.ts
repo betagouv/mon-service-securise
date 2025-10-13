@@ -18,10 +18,6 @@ export type Modificateur =
   | 'Ajouter'
   | 'Retirer';
 
-export type CaracteristiquesDuService =
-  | 'niveauDeSecurite'
-  | 'categoriesDonneesTraitees';
-
 export type ProjectionDescriptionPourMoteur = {
   criticiteDonneesTraitees: NiveauCriticite;
   donneesHorsUE: boolean;
@@ -33,9 +29,13 @@ export type ProjectionDescriptionPourMoteur = {
   typeHebergement: TypeHebergement;
 };
 
-export type ModificateursDeRegles = Partial<
-  Record<CaracteristiquesDuService, [string, Modificateur][]>
->;
+type UnSeul<T> = T extends (infer U)[] ? U : T;
+export type ModificateursDeRegles = {
+  [K in keyof ProjectionDescriptionPourMoteur]?: [
+    UnSeul<ProjectionDescriptionPourMoteur[K]>,
+    Modificateur,
+  ][];
+};
 
 export type ModificateurPourBesoin =
   | 'Indispensable'
@@ -77,19 +77,16 @@ export class MoteurReglesV2 {
   mesures(descriptionService: DescriptionServiceV2) {
     const mesures = [];
 
-    const descriptionEnRecord = descriptionService as unknown as Record<
-      string,
-      string
-    >;
-
     const niveauDuService = descriptionService.niveauDeSecurite;
+    const projection = descriptionService.projectionPourMoteurV2();
+
     const reglesDeBase = this.regles.filter((r) =>
       r.estPourNiveau(niveauDuService)
     );
 
     // eslint-disable-next-line no-restricted-syntax
     for (const regle of reglesDeBase) {
-      const modifications = regle.evalue(descriptionEnRecord);
+      const modifications = regle.evalue(projection, niveauDuService);
       if (modifications.doitAjouter())
         mesures.push([
           regle.reference,
