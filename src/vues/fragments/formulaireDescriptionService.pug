@@ -35,7 +35,7 @@ mixin formulaireDescriptionService(idService)
               name = 'nomService',
               type = 'text',
               data-form-type="other",
-              value != service.nomService(),
+              value = service.nomService(),
               required
               readonly = estLectureSeule
             )
@@ -50,7 +50,7 @@ mixin formulaireDescriptionService(idService)
                 id = 'entite-readonly',
                 name = 'entite-readonly',
                 type = 'text',
-                value != entite.nom,
+                value = entite.nom,
                 required
                 readonly = true
               )
@@ -66,7 +66,7 @@ mixin formulaireDescriptionService(idService)
                 readonly = estLectureSeule
               )
               .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
-              input(type='hidden' name='departementEntite' id='departementEntite' value != entite.departement)
+              input(type='hidden' name='departementEntite' id='departementEntite' value = entite.departement)
 
           .requis
             label(for = 'siretEntite-selectize') Nom ou SIRET de l'organisation responsable du service numérique
@@ -79,8 +79,8 @@ mixin formulaireDescriptionService(idService)
               )
               .icone-chargement
               .message-erreur Ce champ est obligatoire. Veuillez sélectionner une entrée.
-              input(type='hidden' name='nomEntite' id='nomEntite' value != entite.nom)
-              input(type='hidden' name='siretEntite' id='siretEntite' value != entite.siret)
+              input(type='hidden' name='nomEntite' id='nomEntite' value = entite.nom)
+              input(type='hidden' name='siretEntite' id='siretEntite' value = entite.siret)
 
             if service.pourraitFaire('miseAJourSiret')
               .banniere.banniere-avertissement.miseAJourSiret

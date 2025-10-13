@@ -6,7 +6,7 @@ include ./indiceCyberPersonnalise/scoreIndiceCyberPersonnalise
 mixin chiffre(texte, angle, classe, estUnique)
   - const rayon = estUnique ? '0' : '2.5em';
   if(texte !== 0)
-    .chiffre(class=classe, style=`top: calc(${rayon} * cos(180deg - ${angle}deg)); left: calc(${rayon} * sin(180deg - ${angle}deg));`)!= texte
+    .chiffre(class=classe, style=`top: calc(${rayon} * cos(180deg - ${angle}deg)); left: calc(${rayon} * sin(180deg - ${angle}deg));`)= texte
 
 mixin statistiquesMesures({ id, statistiques = {},  camembert = {}, unique = null})
   - const { total = 0, enCours = 0, nonFait = 0, aLancer = 0, fait = 0, restant = 0, aRemplir = 0 } = statistiques
@@ -54,8 +54,8 @@ block page
   .synthese-securite
     h1 Synthèse de la sécurité du service
     .separateur
-    h2!=(service.descriptionService.organisationResponsable.nom)
-    h3!=(service.nomService())
+    h2=(service.descriptionService.organisationResponsable.nom)
+    h3=(service.nomService())
     .conteneur-premiere-ligne
       fieldset(class='resume')
         legend
@@ -80,7 +80,7 @@ block page
           const niveauService = service.descriptionService.niveauSecurite
           const labelNiveaux = {niveau1: 'Basiques', niveau2: 'Modérés', niveau3: 'Avancés'}
         p.titre-besoins Besoins de sécurité
-        p.niveau-besoins!= labelNiveaux[niveauService]
+        p.niveau-besoins= labelNiveaux[niveauService]
         img.illustration-niveau(class=niveauService)
         if niveauSuperieurAuxRecommandations
           .cartouche-avertissement-besoins-superieurs
@@ -88,7 +88,7 @@ block page
             p Les besoins sélectionnés sont&nbsp;
               b supérieurs à ceux identifiés&nbsp;
               | à titre indicatif par l'ANSSI&nbsp;
-              span!= `(${labelNiveaux[niveauRecommande]})`
+              span= `(${labelNiveaux[niveauRecommande]})`
         else
           .cartouche-besoins-identifies
             span Besoins identifiés
