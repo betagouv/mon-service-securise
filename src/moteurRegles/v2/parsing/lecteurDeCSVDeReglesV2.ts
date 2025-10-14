@@ -1,7 +1,10 @@
 import * as fs from 'node:fs';
 import Papa from 'papaparse';
 import { PathLike } from 'fs';
-import { mesuresV2 } from '../../../../donneesReferentielMesuresV2.js';
+import {
+  mesuresV2,
+  SpecificiteProjet,
+} from '../../../../donneesReferentielMesuresV2.js';
 import { ErreurMoteurDeReglesV2 } from '../../../erreurs.js';
 import {
   IdMesureV2,
@@ -26,6 +29,12 @@ const CHAMPS_CONCERNES_MODIFICATEURS = [
   'Ouv : ++',
   'Ouv : +++',
   'Ouv : ++++',
+  'Accès physique : Salles techniques',
+  'Accès physique : Bureaux',
+  'Annuaire',
+  'Signature électronique',
+  "Echange et/ou réception d'emails",
+  'Poste de travail ou téléphone',
 ] as const;
 type ChampsModificateurs = (typeof CHAMPS_CONCERNES_MODIFICATEURS)[number];
 
@@ -98,6 +107,29 @@ export class LecteurDeCSVDeReglesV2 {
           ...modificateurSiPresent<NiveauCriticite>('Ouv : +++', 3),
           ...modificateurSiPresent<NiveauCriticite>('Ouv : ++++', 4),
         ];
+        const specificitesProjet = [
+          ...modificateurSiPresent<SpecificiteProjet>(
+            'Accès physique : Salles techniques',
+            'accesPhysiqueAuxSallesTechniques'
+          ),
+          ...modificateurSiPresent<SpecificiteProjet>(
+            'Accès physique : Bureaux',
+            'accesPhysiqueAuxBureaux'
+          ),
+          ...modificateurSiPresent<SpecificiteProjet>('Annuaire', 'annuaire'),
+          ...modificateurSiPresent<SpecificiteProjet>(
+            'Signature électronique',
+            'dispositifDeSignatureElectronique'
+          ),
+          ...modificateurSiPresent<SpecificiteProjet>(
+            "Echange et/ou réception d'emails",
+            'echangeOuReceptionEmails'
+          ),
+          ...modificateurSiPresent<SpecificiteProjet>(
+            'Poste de travail ou téléphone',
+            'postesDeTravail'
+          ),
+        ];
         const modificateurs: ModificateursDeRegles = {
           ...(criticiteDonneesTraitees.length > 0 && {
             criticiteDonneesTraitees,
@@ -105,6 +137,7 @@ export class LecteurDeCSVDeReglesV2 {
           ...(donneesHorsUE.length > 0 && { donneesHorsUE }),
           ...(criticiteDisponibilite.length > 0 && { criticiteDisponibilite }),
           ...(criticiteOuverture.length > 0 && { criticiteOuverture }),
+          ...(specificitesProjet.length > 0 && { specificitesProjet }),
         };
 
         resultat.push({
