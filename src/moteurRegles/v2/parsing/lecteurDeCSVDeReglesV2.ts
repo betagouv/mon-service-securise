@@ -2,6 +2,7 @@ import * as fs from 'node:fs';
 import Papa from 'papaparse';
 import { PathLike } from 'fs';
 import {
+  ActiviteExternalisee,
   mesuresV2,
   SpecificiteProjet,
   TypeDeService,
@@ -41,6 +42,9 @@ const CHAMPS_CONCERNES_MODIFICATEURS = [
   'Service en ligne',
   "Autre Système d'information",
   'Poste de travail ou téléphone',
+  'EXT : Admin tech',
+  'EXT : Dév',
+  'EXT : MCO/MCS',
 ] as const;
 type ChampsModificateurs = (typeof CHAMPS_CONCERNES_MODIFICATEURS)[number];
 
@@ -155,6 +159,20 @@ export class LecteurDeCSVDeReglesV2 {
             'autreSystemeInformation'
           ),
         ];
+        const activitesExternalisees = [
+          ...modificateurSiPresent<ActiviteExternalisee | 'LesDeux'>(
+            'EXT : Admin tech',
+            'administrationTechnique'
+          ),
+          ...modificateurSiPresent<ActiviteExternalisee | 'LesDeux'>(
+            'EXT : Dév',
+            'developpementLogiciel'
+          ),
+          ...modificateurSiPresent<ActiviteExternalisee | 'LesDeux'>(
+            'EXT : MCO/MCS',
+            'LesDeux'
+          ),
+        ];
         const modificateurs: ModificateursDeRegles = {
           ...(criticiteDonneesTraitees.length > 0 && {
             criticiteDonneesTraitees,
@@ -164,6 +182,7 @@ export class LecteurDeCSVDeReglesV2 {
           ...(criticiteOuverture.length > 0 && { criticiteOuverture }),
           ...(specificitesProjet.length > 0 && { specificitesProjet }),
           ...(typeService.length > 0 && { typeService }),
+          ...(activitesExternalisees.length > 0 && { activitesExternalisees }),
         };
 
         resultat.push({
