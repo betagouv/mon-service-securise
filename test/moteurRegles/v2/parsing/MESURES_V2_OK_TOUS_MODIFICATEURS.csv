@@ -2,4 +2,5 @@ REF,MSS,MSS : Basique,MSS : Modéré,MSS : Avancé,Action changement,Libellé me
 RECENSEMENT.1,identificationDonneesSensibles,Basique,Basique,Basique,Modifier en mesure socle,Modificateurs sur criticité de données,"ORGA, SI",Absente,Recommandation,Recommandation,Indispensable,Ajoutée,Retirée,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,
 RECENSEMENT.2,identificationDonneesSensibles,Basique,Basique,Basique,Modifier en mesure socle,Modificateurs sur données hors UE,"ORGA, SI",Absente,Recommandation,Recommandation,Indispensable,,,,,Ajoutée,,,,,,,,,,,,,,,,,,,,,,,,,
 RECENSEMENT.3,identificationDonneesSensibles,Basique,Basique,Basique,Modifier en mesure socle,Modificateurs sur données hors UE,"ORGA, SI",Absente,Recommandation,Recommandation,Indispensable,,,,,,Ajoutée,Retirée,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,,,
+RGPD.1,,,,,,,,Absente,Recommandation,Recommandation,Indispensable,,,,,,,,,,Ajoutée,Indispensable,Retirée,Recommandation
 MCO_MCS.1,sansRegles,Basique,Basique,Basique,Modifier en mesure socle,Sans modificateur,"ORGA, SI",Absente,Recommandation,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

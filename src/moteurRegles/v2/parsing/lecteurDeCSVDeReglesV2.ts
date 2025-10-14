@@ -22,6 +22,10 @@ const CHAMPS_CONCERNES_MODIFICATEURS = [
   'Dispo : ++',
   'Dispo : +++',
   'Dispo : ++++',
+  'Ouv : +',
+  'Ouv : ++',
+  'Ouv : +++',
+  'Ouv : ++++',
 ] as const;
 type ChampsModificateurs = (typeof CHAMPS_CONCERNES_MODIFICATEURS)[number];
 
@@ -88,12 +92,19 @@ export class LecteurDeCSVDeReglesV2 {
           ...modificateurSiPresent<NiveauCriticite>('Dispo : +++', 3),
           ...modificateurSiPresent<NiveauCriticite>('Dispo : ++++', 4),
         ];
+        const criticiteOuverture = [
+          ...modificateurSiPresent<NiveauCriticite>('Ouv : +', 1),
+          ...modificateurSiPresent<NiveauCriticite>('Ouv : ++', 2),
+          ...modificateurSiPresent<NiveauCriticite>('Ouv : +++', 3),
+          ...modificateurSiPresent<NiveauCriticite>('Ouv : ++++', 4),
+        ];
         const modificateurs: ModificateursDeRegles = {
           ...(criticiteDonneesTraitees.length > 0 && {
             criticiteDonneesTraitees,
           }),
           ...(donneesHorsUE.length > 0 && { donneesHorsUE }),
           ...(criticiteDisponibilite.length > 0 && { criticiteDisponibilite }),
+          ...(criticiteOuverture.length > 0 && { criticiteOuverture }),
         };
 
         resultat.push({
