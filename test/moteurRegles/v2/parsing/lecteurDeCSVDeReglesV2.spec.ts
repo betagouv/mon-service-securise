@@ -58,51 +58,64 @@ describe('Le lecteur de CSV de règles V2', () => {
       filtre2,
       filtre3,
     ] = regles;
+
     expect(recensement1.modificateurs.criticiteDonneesTraitees).toEqual([
-      [1, 'Ajouter'],
-      [2, 'Retirer'],
-      [3, 'RendreRecommandee'],
-      [4, 'RendreIndispensable'],
+      [1, ['Ajouter']],
+      [2, ['Retirer']],
+      [3, ['RendreRecommandee']],
+      [4, ['RendreIndispensable']],
     ]);
     expect(recensement2.modificateurs.donneesHorsUE).toEqual([
-      [true, 'Ajouter'],
+      [true, ['Ajouter']],
     ]);
     expect(recensement3.modificateurs.criticiteDisponibilite).toEqual([
-      [1, 'Ajouter'],
-      [2, 'Retirer'],
-      [3, 'RendreRecommandee'],
-      [4, 'RendreIndispensable'],
+      [1, ['Ajouter']],
+      [2, ['Retirer']],
+      [3, ['RendreRecommandee']],
+      [4, ['RendreIndispensable']],
     ]);
     expect(rgpd1.modificateurs.criticiteOuverture).toEqual([
-      [1, 'Ajouter'],
-      [2, 'RendreIndispensable'],
-      [3, 'Retirer'],
-      [4, 'RendreRecommandee'],
+      [1, ['Ajouter']],
+      [2, ['RendreIndispensable']],
+      [3, ['Retirer']],
+      [4, ['RendreRecommandee']],
     ]);
     expect(rgpd2.modificateurs.specificitesProjet).toEqual([
-      ['accesPhysiqueAuxSallesTechniques', 'Ajouter'],
-      ['accesPhysiqueAuxBureaux', 'Retirer'],
-      ['annuaire', 'RendreRecommandee'],
-      ['dispositifDeSignatureElectronique', 'RendreIndispensable'],
-      ['echangeOuReceptionEmails', 'Retirer'],
-      ['postesDeTravail', 'RendreIndispensable'],
+      ['accesPhysiqueAuxSallesTechniques', ['Ajouter']],
+      ['accesPhysiqueAuxBureaux', ['Retirer']],
+      ['annuaire', ['RendreRecommandee']],
+      ['dispositifDeSignatureElectronique', ['RendreIndispensable']],
+      ['echangeOuReceptionEmails', ['Retirer']],
+      ['postesDeTravail', ['RendreIndispensable']],
     ]);
     expect(filtre1.modificateurs.typeService).toEqual([
-      ['applicationMobile', 'Ajouter'],
-      ['api', 'Retirer'],
-      ['portailInformation', 'RendreIndispensable'],
-      ['serviceEnLigne', 'RendreRecommandee'],
-      ['autreSystemeInformation', 'Retirer'],
+      ['applicationMobile', ['Ajouter']],
+      ['api', ['Retirer']],
+      ['portailInformation', ['RendreIndispensable']],
+      ['serviceEnLigne', ['RendreRecommandee']],
+      ['autreSystemeInformation', ['Retirer']],
     ]);
     expect(filtre2.modificateurs.activitesExternalisees).toEqual([
-      ['administrationTechnique', 'Ajouter'],
-      ['developpementLogiciel', 'Retirer'],
-      ['LesDeux', 'RendreIndispensable'],
+      ['administrationTechnique', ['Ajouter']],
+      ['developpementLogiciel', ['Retirer']],
+      ['LesDeux', ['RendreIndispensable']],
     ]);
     expect(filtre3.modificateurs.typeHebergement).toEqual([
-      ['onPremise', 'Ajouter'],
-      ['cloud', 'Retirer'],
-      ['saas', 'RendreIndispensable'],
+      ['onPremise', ['Ajouter']],
+      ['cloud', ['Retirer']],
+      ['saas', ['RendreIndispensable']],
+    ]);
+  });
+
+  it('peut lire des modificateurs multiples dans une seule « cellule »', async () => {
+    const regles = await lisLeFichier(
+      `MESURES_V2_OK_MODIFICATEURS_MULTIPLES.csv`
+    );
+
+    const [recensement1] = regles;
+
+    expect(recensement1.modificateurs.criticiteDonneesTraitees).toEqual([
+      [1, ['Ajouter', 'RendreIndispensable']],
     ]);
   });
 

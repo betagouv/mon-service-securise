@@ -12,8 +12,8 @@ export class Modifications {
     this.modificateurs = [];
   }
 
-  ajoute(modificateur: Modificateur) {
-    this.modificateurs.push(modificateur);
+  ajoute(modificateurs: Modificateur[]) {
+    this.modificateurs.push(...modificateurs);
   }
 
   doitAjouter() {

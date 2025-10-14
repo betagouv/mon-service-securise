@@ -33,7 +33,7 @@ type UnSeul<T> = T extends (infer U)[] ? U : T;
 export type ModificateursDeRegles = {
   [K in keyof ProjectionDescriptionPourMoteur]?: [
     UnSeul<ProjectionDescriptionPourMoteur[K]>,
-    Modificateur,
+    Modificateur[],
   ][];
 };
 

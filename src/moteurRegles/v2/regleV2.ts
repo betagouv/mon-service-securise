@@ -33,7 +33,7 @@ export class RegleV2 {
       const modifications = this.modificateurs[c];
 
       for (let i = 0; i < modifications!.length; i += 1) {
-        const [valeurRegle, modificateur] = modifications![i];
+        const [valeurRegle, modificateurs] = modifications![i];
 
         const valeurReelle = descriptionService[c];
 
@@ -41,8 +41,8 @@ export class RegleV2 {
           Array.isArray(valeurReelle) &&
           valeurReelle.includes(valeurRegle as never)
         )
-          collecte.ajoute(modificateur);
-        else if (valeurReelle === valeurRegle) collecte.ajoute(modificateur);
+          collecte.ajoute(modificateurs);
+        else if (valeurReelle === valeurRegle) collecte.ajoute(modificateurs);
       }
     });
 
