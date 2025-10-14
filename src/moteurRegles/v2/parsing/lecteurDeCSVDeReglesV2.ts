@@ -6,6 +6,7 @@ import {
   mesuresV2,
   SpecificiteProjet,
   TypeDeService,
+  TypeHebergement,
 } from '../../../../donneesReferentielMesuresV2.js';
 import { ErreurMoteurDeReglesV2 } from '../../../erreurs.js';
 import {
@@ -45,6 +46,9 @@ const CHAMPS_CONCERNES_MODIFICATEURS = [
   'EXT : Admin tech',
   'EXT : Dév',
   'EXT : MCO/MCS',
+  'EXT : On-premise',
+  'EXT : PaaS / IaaS',
+  'EXT : SaaS',
 ] as const;
 type ChampsModificateurs = (typeof CHAMPS_CONCERNES_MODIFICATEURS)[number];
 
@@ -173,6 +177,17 @@ export class LecteurDeCSVDeReglesV2 {
             'LesDeux'
           ),
         ];
+        const typeHebergement = [
+          ...modificateurSiPresent<TypeHebergement>(
+            'EXT : On-premise',
+            'onPremise'
+          ),
+          ...modificateurSiPresent<TypeHebergement>(
+            'EXT : PaaS / IaaS',
+            'cloud'
+          ),
+          ...modificateurSiPresent<TypeHebergement>('EXT : SaaS', 'saas'),
+        ];
         const modificateurs: ModificateursDeRegles = {
           ...(criticiteDonneesTraitees.length > 0 && {
             criticiteDonneesTraitees,
@@ -183,6 +198,7 @@ export class LecteurDeCSVDeReglesV2 {
           ...(specificitesProjet.length > 0 && { specificitesProjet }),
           ...(typeService.length > 0 && { typeService }),
           ...(activitesExternalisees.length > 0 && { activitesExternalisees }),
+          ...(typeHebergement.length > 0 && { typeHebergement }),
         };
 
         resultat.push({

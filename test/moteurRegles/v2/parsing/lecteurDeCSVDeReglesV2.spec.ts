@@ -56,6 +56,7 @@ describe('Le lecteur de CSV de règles V2', () => {
       rgpd2,
       filtre1,
       filtre2,
+      filtre3,
     ] = regles;
     expect(recensement1.modificateurs.criticiteDonneesTraitees).toEqual([
       [1, 'Ajouter'],
@@ -97,6 +98,11 @@ describe('Le lecteur de CSV de règles V2', () => {
       ['administrationTechnique', 'Ajouter'],
       ['developpementLogiciel', 'Retirer'],
       ['LesDeux', 'RendreIndispensable'],
+    ]);
+    expect(filtre3.modificateurs.typeHebergement).toEqual([
+      ['onPremise', 'Ajouter'],
+      ['cloud', 'Retirer'],
+      ['saas', 'RendreIndispensable'],
     ]);
   });
 
