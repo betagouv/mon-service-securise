@@ -134,6 +134,12 @@ describe('Le lecteur de CSV de règles V2', () => {
     );
   });
 
+  it('ignore les modificateurs "grisée" et "dégrisée" : ils ne causent pas d\'erreur', async () => {
+    const regles = await lisLeFichier(`MESURES_V2_GRISEE_DEGRISEE.csv`);
+
+    expect(regles[0].modificateurs).toEqual({});
+  });
+
   it('jette une erreur si un modificateur est inconnu', async () => {
     await expect(
       lisLeFichier(`MESURES_V2_MAUVAIS_MODIFICATEUR.csv`)
