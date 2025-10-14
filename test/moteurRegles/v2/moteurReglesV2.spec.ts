@@ -52,7 +52,7 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: true,
         besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          donneesHorsUE: [[true, 'RendreIndispensable']],
+          donneesHorsUE: [[true, ['RendreIndispensable']]],
         },
       },
     ]);
@@ -73,7 +73,7 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: true,
         besoinsDeSecurite: besoins('I-I-I'),
         modificateurs: {
-          typeService: [['api', 'RendreRecommandee']],
+          typeService: [['api', ['RendreRecommandee']]],
         },
       },
     ]);
@@ -94,7 +94,7 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: false, // Pas dans le socle initial
         besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          typeHebergement: [['onPremise', 'Ajouter']],
+          typeHebergement: [['onPremise', ['Ajouter']]],
         },
       },
     ]);
@@ -115,7 +115,7 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: false, // Pas dans le socle initial
         besoinsDeSecurite: besoins('I-I-I'),
         modificateurs: {
-          typeHebergement: [['onPremise', 'Ajouter']],
+          typeHebergement: [['onPremise', ['Ajouter']]],
         },
       },
     ]);
@@ -136,7 +136,7 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: true,
         besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          criticiteDisponibilite: [[1, 'Retirer']],
+          criticiteDisponibilite: [[1, ['Retirer']]],
         },
       },
     ]);
@@ -157,8 +157,8 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: false,
         besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          criticiteOuverture: [[1, 'RendreIndispensable']],
-          specificitesProjet: [['annuaire', 'Ajouter']],
+          criticiteOuverture: [[1, ['RendreIndispensable']]],
+          specificitesProjet: [['annuaire', ['Ajouter']]],
         },
       },
     ]);
@@ -180,8 +180,8 @@ describe('Le moteur de règles V2', () => {
         dansSocleInitial: false,
         besoinsDeSecurite: besoins('R-R-R'),
         modificateurs: {
-          specificitesProjet: [['annuaire', 'Ajouter']],
-          typeService: [['portailInformation', 'Retirer']],
+          specificitesProjet: [['annuaire', ['Ajouter']]],
+          typeService: [['portailInformation', ['Retirer']]],
         },
       },
     ]);
@@ -193,6 +193,28 @@ describe('Le moteur de règles V2', () => {
     const mesures = v2.mesures(serviceCombineAjouterEtRetirer);
 
     expect(mesures['RECENSEMENT.1']).toBeDefined();
+  });
+
+  it('sait combiner des modificateurs multiples pour « Rajouter » et « Rendre indispensable » sur un même champ', () => {
+    const referentiel = creeReferentiel();
+    const v2 = new MoteurReglesV2(referentiel, [
+      {
+        reference: 'RECENSEMENT.1',
+        dansSocleInitial: false,
+        besoinsDeSecurite: besoins('R-R-R'),
+        modificateurs: {
+          criticiteOuverture: [[4, ['Ajouter', 'RendreIndispensable']]],
+        },
+      },
+    ]);
+
+    const tresOuvert = uneDescriptionV2Valide()
+      .avecOuvertureSysteme('accessibleSurInternet')
+      .construis();
+
+    const mesures = v2.mesures(tresOuvert);
+
+    expect(mesures['RECENSEMENT.1'].indispensable).toBe(true);
   });
 
   it('renvoie les mesures complétées avec leurs données référentielles', () => {

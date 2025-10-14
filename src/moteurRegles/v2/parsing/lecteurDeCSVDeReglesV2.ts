@@ -59,7 +59,7 @@ type LigneDeCSVTransformee = {
   Modéré?: ModificateurPourBesoin;
   Avancé?: ModificateurPourBesoin;
 } & {
-  [K in ChampsModificateurs]?: Modificateur;
+  [K in ChampsModificateurs]?: Modificateur[];
 };
 
 export class LecteurDeCSVDeReglesV2 {
@@ -90,7 +90,7 @@ export class LecteurDeCSVDeReglesV2 {
         if (
           CHAMPS_CONCERNES_MODIFICATEURS.includes(field as ChampsModificateurs)
         )
-          return this.traduisModificateur(value);
+          return this.traduisTousModificateurs(value);
 
         return value;
       },
@@ -98,7 +98,12 @@ export class LecteurDeCSVDeReglesV2 {
         const modificateurSiPresent = <T>(
           cle: ChampsModificateurs,
           valeur: T
-        ) => (data[cle] ? [[valeur, data[cle]] as [T, Modificateur]] : []);
+        ) => {
+          const modificateurs = data[cle] as Modificateur[];
+          return modificateurs.length > 0
+            ? [[valeur, modificateurs] as [T, Modificateur[]]]
+            : [];
+        };
 
         const criticiteDonneesTraitees = [
           ...modificateurSiPresent<NiveauCriticite>('Données : +', 1),
@@ -247,9 +252,17 @@ export class LecteurDeCSVDeReglesV2 {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  private traduisModificateur(valeurCSV: string): Modificateur | undefined {
-    if (!valeurCSV || valeurCSV === 'Grisée' || valeurCSV === 'Dégrisée')
-      return undefined;
+  private traduisTousModificateurs(valeurCSV: string): Modificateur[] {
+    if (!valeurCSV) return [];
+
+    return valeurCSV
+      .split(', ')
+      .filter((v) => v !== 'Grisée' && v !== 'Dégrisée')
+      .map((v) => this.traduisModificateur(v));
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private traduisModificateur(valeurCSV: string): Modificateur {
     if (valeurCSV === 'Indispensable') return 'RendreIndispensable';
     if (valeurCSV === 'Recommandation') return 'RendreRecommandee';
     if (valeurCSV === 'Ajoutée') return 'Ajouter';
