@@ -4,4 +4,5 @@ RECENSEMENT.2,identificationDonneesSensibles,Basique,Basique,Basique,Modifier en
 RECENSEMENT.3,identificationDonneesSensibles,Basique,Basique,Basique,Modifier en mesure socle,Modificateurs sur données hors UE,"ORGA, SI",Absente,Recommandation,Recommandation,Indispensable,,,,,,Ajoutée,Retirée,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,,,
 RGPD.1,,,,,,,,Absente,Recommandation,Recommandation,Indispensable,,,,,,,,,,Ajoutée,Indispensable,Retirée,Recommandation
 RGPD.2,,,,,,,,Absente,Recommandation,Recommandation,Indispensable,,,,,,,,,,,,,,Ajoutée,Retirée,Recommandation,Indispensable,,Retirée,,,,,Indispensable,,,
+FILTRE.1,,,,,,,,Absente,Recommandation,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,Ajoutée,,Retirée,Indispensable,Recommandation,Retirée
 MCO_MCS.1,sansRegles,Basique,Basique,Basique,Modifier en mesure socle,Sans modificateur,"ORGA, SI",Absente,Recommandation,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

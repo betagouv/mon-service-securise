@@ -4,6 +4,7 @@ import { PathLike } from 'fs';
 import {
   mesuresV2,
   SpecificiteProjet,
+  TypeDeService,
 } from '../../../../donneesReferentielMesuresV2.js';
 import { ErreurMoteurDeReglesV2 } from '../../../erreurs.js';
 import {
@@ -33,7 +34,12 @@ const CHAMPS_CONCERNES_MODIFICATEURS = [
   'Accès physique : Bureaux',
   'Annuaire',
   'Signature électronique',
+  'Application mobile',
   "Echange et/ou réception d'emails",
+  'API',
+  "Portail d'information",
+  'Service en ligne',
+  "Autre Système d'information",
   'Poste de travail ou téléphone',
 ] as const;
 type ChampsModificateurs = (typeof CHAMPS_CONCERNES_MODIFICATEURS)[number];
@@ -130,6 +136,25 @@ export class LecteurDeCSVDeReglesV2 {
             'postesDeTravail'
           ),
         ];
+        const typeService = [
+          ...modificateurSiPresent<TypeDeService>(
+            'Application mobile',
+            'applicationMobile'
+          ),
+          ...modificateurSiPresent<TypeDeService>('API', 'api'),
+          ...modificateurSiPresent<TypeDeService>(
+            "Portail d'information",
+            'portailInformation'
+          ),
+          ...modificateurSiPresent<TypeDeService>(
+            'Service en ligne',
+            'serviceEnLigne'
+          ),
+          ...modificateurSiPresent<TypeDeService>(
+            "Autre Système d'information",
+            'autreSystemeInformation'
+          ),
+        ];
         const modificateurs: ModificateursDeRegles = {
           ...(criticiteDonneesTraitees.length > 0 && {
             criticiteDonneesTraitees,
@@ -138,6 +163,7 @@ export class LecteurDeCSVDeReglesV2 {
           ...(criticiteDisponibilite.length > 0 && { criticiteDisponibilite }),
           ...(criticiteOuverture.length > 0 && { criticiteOuverture }),
           ...(specificitesProjet.length > 0 && { specificitesProjet }),
+          ...(typeService.length > 0 && { typeService }),
         };
 
         resultat.push({
