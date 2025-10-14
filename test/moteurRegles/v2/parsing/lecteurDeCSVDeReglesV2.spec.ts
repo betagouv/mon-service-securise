@@ -48,29 +48,27 @@ describe('Le lecteur de CSV de règles V2', () => {
   it('renvoie les modificateurs associés aux règles', async () => {
     const regles = await lisLeFichier(`MESURES_V2_OK_TOUS_MODIFICATEURS.csv`);
 
-    const [
-      modificateurCriticteDonnees,
-      modificateurDonneesHorsUE,
-      modificateurCriticiteDisponibilite,
-    ] = regles;
-    expect(
-      modificateurCriticteDonnees.modificateurs.criticiteDonneesTraitees
-    ).toEqual([
+    const [recensement1, recensement2, recensement3, rgpd1] = regles;
+    expect(recensement1.modificateurs.criticiteDonneesTraitees).toEqual([
       [1, 'Ajouter'],
       [2, 'Retirer'],
       [3, 'RendreRecommandee'],
       [4, 'RendreIndispensable'],
     ]);
-    expect(modificateurDonneesHorsUE.modificateurs.donneesHorsUE).toEqual([
+    expect(recensement2.modificateurs.donneesHorsUE).toEqual([
       [true, 'Ajouter'],
     ]);
-    expect(
-      modificateurCriticiteDisponibilite.modificateurs.criticiteDisponibilite
-    ).toEqual([
+    expect(recensement3.modificateurs.criticiteDisponibilite).toEqual([
       [1, 'Ajouter'],
       [2, 'Retirer'],
       [3, 'RendreRecommandee'],
       [4, 'RendreIndispensable'],
+    ]);
+    expect(rgpd1.modificateurs.criticiteOuverture).toEqual([
+      [1, 'Ajouter'],
+      [2, 'RendreIndispensable'],
+      [3, 'Retirer'],
+      [4, 'RendreRecommandee'],
     ]);
   });
 
