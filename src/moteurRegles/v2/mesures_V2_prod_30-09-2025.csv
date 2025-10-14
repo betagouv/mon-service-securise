@@ -1,2 +1,135 @@
-REF,MSS,MSS : Basique,MSS : Modéré,MSS : Avancé,Action changement,ORGA/SI,Statut initial,Basique,Modéré,Avancé,Données : +,Données : ++,Données : +++,Données : ++++,Données : Hors UE,Dispo : +,Dispo : ++,Dispo : +++,Dispo : ++++,Ouv : +,Ouv : ++,Ouv : +++,Ouv : ++++,Accès physique : Salles techniques,Accès physique : Bureaux,Annuaire,Signature électronique,Application mobile,Echange et/ou réception d'emails,API,Portail d'information,Service en ligne,Autre Système d'information,Poste de travail ou téléphone,EXT : Admin tech,EXT : Dév,EXT : MCO/MCS,EXT : On-premise,EXT : PaaS / IaaS,EXT : SaaS
-RECENSEMENT.1,identificationDonneesSensibles,Basique,Basique,Basique,Modifier en mesure socle,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+REF,ORGA/SI,Statut initial,Basique,Modéré,Avancé,Données : +,Données : ++,Données : +++,Données : ++++,Données : Hors UE,Dispo : +,Dispo : ++,Dispo : +++,Dispo : ++++,Ouv : +,Ouv : ++,Ouv : +++,Ouv : ++++,Accès physique : Salles techniques,Accès physique : Bureaux,Annuaire,Signature électronique,Application mobile,Echange et/ou réception d'emails,API,Portail d'information,Service en ligne,Autre Système d'information,Poste de travail ou téléphone,EXT : Admin tech,EXT : Dév,EXT : MCO/MCS,EXT : On-premise,EXT : PaaS / IaaS,EXT : SaaS
+RECENSEMENT.1,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RECENSEMENT.2,SI,Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+RECENSEMENT.3,SI,Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+CONFORMITE.1,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+CONFORMITE.3,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+PSSI.5,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+CONTRAT.1,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+CONTRAT.2,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+DEV.1,SI,Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,Grisée
+ECOSYSTEME.1,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ECOSYSTEME.2,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+ECOSYSTEME.3,SI,Absente,Recommandation,Recommandation,Recommandation,,,,,Ajoutée,,,,,,,,,,,,,,,,,,,,,,,,,
+ECOSYSTEME.4,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+ECOSYSTEME.5,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+ECOSYSTEME.6,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,Retirée,Retirée,Retirée,,,,,,,,,,,,,,,,,,Grisée
+RH.2,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RH.4,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+CARTO.2,SI,Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+DONNEES.1,SI,Présente,,Indispensable,Indispensable,Recommandation,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+DONNEES.2,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+MCO_MCS.1,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,Grisée,,,Grisée
+MCO_MCS.10,SI,Absente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,Ajoutée,,,,,,,,,,,,Grisée
+MCO_MCS.11,SI,Présente,,Indispensable,Indispensable,Recommandation,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,Dégrisée,,,,,Grisée,Grisée
+MCO_MCS.12,SI,Absente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,Ajoutée,,,,,,
+MCO_MCS.13,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,,,,Grisée
+MCO_MCS.14,SI,Absente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,Ajoutée,,,,,,
+MCO_MCS.15,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,Grisée
+MCO_MCS.16,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+MCO_MCS.17,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,Grisée,,,Grisée
+MCO_MCS.2,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,Grisée,,,,,Grisée
+MCO_MCS.3,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,,,,Grisée
+MCO_MCS.4,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,Grisée,,,Grisée
+MCO_MCS.5,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,Grisée,,,Grisée
+MCO_MCS.6,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,Grisée,,,Grisée
+MCO_MCS.7,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,Grisée,,,Grisée
+MCO_MCS.8,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,,,,Grisée
+MCO_MCS.9,SI,Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+RGPD.1,SI,Présente,Indispensable,Indispensable,Indispensable,Retirée,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RGPD.2,SI,Présente,Indispensable,Indispensable,Indispensable,Retirée,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RGPD.3,SI,Présente,Indispensable,Indispensable,Indispensable,Retirée,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RGPD.4,SI,Présente,Indispensable,Indispensable,Indispensable,Retirée,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RGPD.5,SI,Présente,Indispensable,Indispensable,Indispensable,Retirée,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RGPD.6,SI,Présente,Indispensable,Indispensable,Indispensable,Retirée,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+PHYS.1,"ORGA, SI",Absente,,Indispensable,Indispensable,,,,,,,,,,,,,,Ajoutée,"Ajoutée, Dégrisée",,,,,,,,,,,,,,"Ajoutée, Grisée","Ajoutée, Grisée"
+PHYS.2,"ORGA, SI",Absente,,,Indispensable,,,,,,,,,,,,,,Ajoutée,"Ajoutée, Dégrisée",,,,,,,,,,,,,,"Ajoutée, Grisée","Ajoutée, Grisée"
+CLOISON.1,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+CLOISON.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+CLOISON.3,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+CLOISON.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+CLOISON.5,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+CLOISON.6,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+FILTRE.1,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+FILTRE.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+FILTRE.3,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+FILTRE.4,SI,Absente,,Indispensable,Indispensable,,,,,,,,Ajoutée,Ajoutée,,,,,,,,,,,,,,,,,,,,,Grisée
+FILTRE.5,SI,Présente,,Indispensable,Indispensable,,,,,,,,,,Retirée,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,Grisée
+FILTRE.6,SI,Absente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Ajoutée,,,,,,
+FILTRE.7,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,Recommandation,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,
+MAIL.1,SI,Absente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,Ajoutée,,,,,,,,,,,
+DISTANCE.1,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+DISTANCE.2,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+DISTANCE.3,"ORGA, SI",Absente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Ajoutée,,,,,,
+DISTANCE.4,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+MALWARE.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,Retirée,,,,,,,,,,,,,,,,,Grisée
+MALWARE.3,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,Dégrisée,,,,,Dégrisée,,,,,,Grisée
+AUTH.1,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,,,,Grisée
+AUTH.10,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,Ajoutée,,Ajoutée,,Ajoutée,Retirée,Ajoutée,Ajoutée,Ajoutée,,,,,,
+AUTH.11,SI,Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+AUTH.2,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+AUTH.3,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AUTH.4,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+AUTH.5,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+AUTH.6,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+AUTH.7,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+AUTH.8,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,Ajoutée,,Ajoutée,,Ajoutée,Retirée,Ajoutée,Ajoutée,Ajoutée,,,,,,Grisée
+AUTH.9,SI,Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,Recommandation,Indispensable,Indispensable,Indispensable,,,Ajoutée,,Ajoutée,,Ajoutée,Retirée,Ajoutée,Ajoutée,Ajoutée,,,,,,Grisée
+DROITS.1,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,Ajoutée,,Ajoutée,,Ajoutée,Retirée,Ajoutée,Ajoutée,Ajoutée,,,,,,
+DROITS.2,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+DROITS.3,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ID.1,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,Ajoutée,,Ajoutée,,Ajoutée,Retirée,Ajoutée,Ajoutée,Ajoutée,,,,,,
+ID.2,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ID.3,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+ANNUAIRE.1,"ORGA, SI",Absente,,,Indispensable,,,,,,,,,,,,,,,,Ajoutée,,,,,,,,,,,,,,
+ANNUAIRE.2,"ORGA, SI",Absente,,,Indispensable,,,,,,,,,,,,,,,,Ajoutée,,,,,,,,,,,,,,
+ANNUAIRE.3,"ORGA, SI",Absente,,,Indispensable,,,,,,,,,,,,,,,,Ajoutée,,,,,,,,,,,,,,
+ANNUAIRE.5,"ORGA, SI",Absente,,,Indispensable,,,,,,,,,,,,,,,,Ajoutée,,,,,,,,,,,,,,
+COMPADMIN.1,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+COMPADMIN.2,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+COMPADMIN.3,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+COMPADMIN.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+COMPADMIN.5,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+COMPADMIN.6,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+COMPADMIN.7,"SI, ORGA",Absente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Ajoutée,,,,,,
+COMPADMIN.8,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+COMPADMIN.9,"SI, ORGA",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+INCIDENT.1,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INCIDENT.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INCIDENT.3,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INCIDENT.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INCIDENT.6,SI,Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INCIDENT.7,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+INCIDENT.8,"ORGA, SI",Présente,,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+CONTINU.1,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,,,,Grisée
+CONTINU.2,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,,,,Grisée
+CONTINU.3,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+CONTINU.5,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+CONTINU.6,SI,Absente,,Recommandation,Recommandation,,,,,,,,Ajoutée,Ajoutée,,,,,,,,,,,,,,,,,,,,,Grisée
+RISQUE.1,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RISQUE.2,SI,Présente,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AUDIT.1,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AUDIT.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AUDIT.3,"ORGA, SI",Présente,,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AUDIT.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AUDIT.5,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AUDIT.6,SI,Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,Grisée,,,Grisée
+CONFIG.1,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,,,Grisée,,,Grisée
+CONFIG.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,Grisée,,,,,Grisée
+CONFIG.3,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Dégrisée,Grisée,,,,,Grisée
+CONFIG.4,SI,Absente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,"Recommandation, Ajoutée","Indispensable, Ajoutée",,,,,,,,,,,,,,,,,Grisée
+CONFIG.5,SI,Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+CONFIG.6,SI,Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+CONFIG.7,SI,Absente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,Ajoutée,,,,,,,,,,Grisée,,,Grisée
+CONFIG.8,SI,Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,Dégrisée,,,,,,,,,,,Grisée,,,Grisée
+ADMIN.1,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+ADMIN.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+ADMIN.3,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+ADMIN.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+ADMIN.5,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+ADMIN.6,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+ADMIN.7,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Grisée,,,,,Grisée
+SUPERVISION.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+SUPERVISION.5,"ORGA, SI",Présente,Recommandation,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+SUPERVISION.6,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
+SUPERVISION.7,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Grisée
