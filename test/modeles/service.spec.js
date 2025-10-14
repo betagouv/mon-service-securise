@@ -19,6 +19,7 @@ import MesureSpecifique from '../../src/modeles/mesureSpecifique.js';
 import { Contributeur } from '../../src/modeles/contributeur.js';
 import { DescriptionServiceV2 } from '../../src/modeles/descriptionServiceV2.js';
 import { VersionService } from '../../src/modeles/versionService.js';
+import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.js';
 
 const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER } = Rubriques;
 const { LECTURE } = Permissions;
@@ -1271,7 +1272,9 @@ describe('Un service', () => {
       const service = new Service({
         id: '123',
         versionService: VersionService.v2,
-        descriptionService: { nomService: 'Bibliothèque' },
+        descriptionService: uneDescriptionV2Valide()
+          .avecNomService('Bibliothèque')
+          .donneesDescription(),
       });
 
       expect(service.descriptionService).toBeInstanceOf(DescriptionServiceV2);
@@ -1282,7 +1285,9 @@ describe('Un service', () => {
       const service = new Service({
         id: '123',
         versionService: VersionService.v2,
-        descriptionService: { nomService: 'Bibliothèque' },
+        descriptionService: uneDescriptionV2Valide()
+          .avecNomService('Bibliothèque')
+          .donneesDescription(),
       });
 
       expect(() => service.donneesAPersister()).not.toThrowError();
