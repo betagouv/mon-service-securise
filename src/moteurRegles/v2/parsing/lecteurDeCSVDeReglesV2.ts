@@ -248,7 +248,8 @@ export class LecteurDeCSVDeReglesV2 {
 
   // eslint-disable-next-line class-methods-use-this
   private traduisModificateur(valeurCSV: string): Modificateur | undefined {
-    if (!valeurCSV) return undefined;
+    if (!valeurCSV || valeurCSV === 'Grisée' || valeurCSV === 'Dégrisée')
+      return undefined;
     if (valeurCSV === 'Indispensable') return 'RendreIndispensable';
     if (valeurCSV === 'Recommandation') return 'RendreRecommandee';
     if (valeurCSV === 'Ajoutée') return 'Ajouter';
