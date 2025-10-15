@@ -8,10 +8,22 @@ block header-titre-page
     +texteTronque({texte: service.nomService() || ''})
 
 block sous-titre
-  h2
-    | Complétez les informations permettant d'évaluer les besoins de sécurité du service et de proposer&nbsp;
-    b des mesures de sécurité adaptées
-    | .
+  if service.version() === 'v2'
+    h2 Cette page présente les informations clés du service. Toute modification de certaines données peut entraîner une réévaluation automatique des besoins de sécurité et modifier les mesures de protection nécessaires.
+  else
+    h2
+      | Complétez les informations permettant d'évaluer les besoins de sécurité du service et de proposer&nbsp;
+      b des mesures de sécurité adaptées
+      | .
+
+block append scripts
+  if service.version() === 'v2'
+    +composantSvelte('decrireV2.js')
+    +donneesPartagees('donnees-service', service)
+    script(type = 'module', src = '/statique/service/decrireV2.mjs')
 
 block formulaire
-  +formulaireDescriptionService(service.id)
+  if service.version() === 'v2'
+    #decrire-v2
+  else
+    +formulaireDescriptionService(service.id)
