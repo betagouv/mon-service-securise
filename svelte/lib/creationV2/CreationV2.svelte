@@ -64,7 +64,12 @@
       navigationStore.suivant();
   };
 
-  const suivant = () => navigationStore.suivant();
+  const suivant = () => {
+    navigationStore.suivant();
+    document
+      .querySelector('dsfr-stepper')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   const finalise = async () => {
     enCoursDeChargement = true;
@@ -249,6 +254,7 @@
 
   dsfr-stepper {
     max-width: 590px;
+    scroll-margin-top: 16px;
   }
 
   .mention-obligatoire {
