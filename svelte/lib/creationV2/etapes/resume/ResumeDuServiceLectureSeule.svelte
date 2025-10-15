@@ -1,7 +1,10 @@
 <script lang="ts">
   import type { DescriptionServiceV2 } from '../../creationV2.types';
+  import type { Entite } from '../../../ui/types.d';
+  import { metEnFormeEntite } from '../../../ui/rechercheOrganisation';
 
   export let donnees: Record<keyof DescriptionServiceV2, string | string[]>;
+  export let entite: Entite | null;
 </script>
 
 <div class="conteneur-avec-cadre">
@@ -10,7 +13,7 @@
     <dt>Nom du service :</dt>
     <dd>{donnees.nomService}</dd>
     <dt>Organisation :</dt>
-    <dd>{donnees.siret}</dd>
+    <dd>{entite ? metEnFormeEntite(entite) : ''}</dd>
     <dt>Statut :</dt>
     <dd>
       {donnees.statutDeploiement}

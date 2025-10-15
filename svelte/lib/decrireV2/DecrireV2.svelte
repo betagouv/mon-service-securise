@@ -21,9 +21,9 @@
       />
     </div>
     <ResumeDuServiceLectureSeule
+      entite={service.descriptionService.organisationResponsable}
       donnees={convertisDonneesDescriptionEnLibelles({
         ...service.descriptionService,
-        siret: service.descriptionService.organisationResponsable.siret,
         pointsAcces: service.descriptionService.pointsAcces.map(
           (p) => p.description
         ),
