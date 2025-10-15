@@ -348,8 +348,7 @@
       }
 
       img {
-        width: 100%;
-        max-width: 350px;
+        max-width: 100%;
         display: flex;
         margin: auto;
       }
