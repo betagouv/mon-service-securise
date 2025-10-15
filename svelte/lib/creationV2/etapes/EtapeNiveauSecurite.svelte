@@ -95,6 +95,11 @@
         {/if}
         <p>{niveauSecurite.resume}</p>
         <span class="bouton-selection">
+          {#if estNiveauTropBas(niveauSecurite.id)}
+            <Infobulle
+              contenu="Il est impossible de sélectionner des besoins de sécurité moins élevés que ceux identifiés par l'ANSSI."
+            />
+          {/if}
           <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
           <lab-anssi-bouton
             titre={niveauSelectionne === niveauSecurite.id
@@ -111,11 +116,6 @@
               : 'sans'}
             on:click={async () => await selectionneNiveau(niveauSecurite.id)}
           />
-          {#if estNiveauTropBas(niveauSecurite.id)}
-            <Infobulle
-              contenu="Il est impossible de sélectionner des besoins de sécurité moins élevés que ceux identifiés par l'ANSSI."
-            />
-          {/if}
         </span>
       </div>
       <div class="corps-niveau-securite">
