@@ -124,6 +124,11 @@
       />
       {#if $etapeCourante.nombreQuestions > 1}
         <hr />
+        {#if $etapeCourante.estPremiereQuestion && !$navigationStore.modeRapide}
+          <span class="mention-obligatoire"
+            >Les champs suivis d’un astérisque (*) sont obligatoires.</span
+          >
+        {/if}
         <JaugeDeProgression />
       {/if}
       <svelte:component
@@ -241,6 +246,13 @@
     max-width: 590px;
   }
 
+  .mention-obligatoire {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: #3a3a3a;
+    margin-bottom: 8px;
+  }
+
   :global(#creation-v2) {
     background: white;
     width: 100%;
@@ -282,7 +294,7 @@
         }
 
         hr {
-          margin: -24px 0 40px 0;
+          margin: -24px 0 8px 0;
         }
 
         :global(.titre-question) {
