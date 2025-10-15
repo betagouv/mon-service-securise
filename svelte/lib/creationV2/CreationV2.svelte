@@ -136,8 +136,12 @@
         bind:estComplete={questionCouranteEstComplete}
         on:champModifie={metsAJourPropriete}
       />
-
-      <div class="barre-boutons">
+    </div>
+    <div
+      class="barre-boutons"
+      class:sans-explications={$etapeCourante.pleinePage}
+    >
+      <div>
         {#if $etapeCourante.estPremiereQuestion}
           <lab-anssi-lien
             titre="Retour au tableau de bord"
@@ -174,10 +178,9 @@
           on:click={async () =>
             $etapeCourante.estDerniereQuestion ? await finalise() : suivant()}
         />
-      </div>
-
-      <div class="info-enregistrement-automatique">
-        Votre brouillon est enregistré automatiquement.
+        <div class="info-enregistrement-automatique">
+          <span>Votre brouillon est enregistré automatiquement.</span>
+        </div>
       </div>
     </div>
   </div>
@@ -271,7 +274,7 @@
     font-size: 0.75rem;
     line-height: 1.25rem;
     color: #666;
-    margin-bottom: 32px;
+    margin-left: 4px;
   }
 
   .conteneur-creation {
@@ -288,6 +291,7 @@
         max-width: 684px;
         margin: auto;
         padding-top: 44px;
+        height: calc(100% - 44px - 91px - 24px);
 
         &.sans-explications {
           max-width: 924px;
@@ -306,12 +310,26 @@
           font-weight: bold;
           max-width: 586px;
         }
+      }
 
-        .barre-boutons {
+      .barre-boutons {
+        position: sticky;
+        bottom: 0;
+        background: white;
+        padding: 24px;
+        border-top: 1px solid #ddd;
+        margin-top: 24px;
+
+        & > div {
           display: flex;
-          gap: 16px;
-          margin-top: 8px;
-          margin-bottom: 16px;
+          gap: 12px;
+          align-items: center;
+          max-width: 684px;
+          margin: auto;
+        }
+
+        &.sans-explications > div {
+          max-width: 924px;
         }
       }
     }
