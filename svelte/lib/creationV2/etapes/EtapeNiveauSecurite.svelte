@@ -16,14 +16,18 @@
 
   let niveauSelectionne: IdNiveauDeSecurite | '';
   let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
-  let niveauDeplie: IdNiveauDeSecurite | '';
 
   onMount(async () => {
     if ($leBrouillon.id) {
       niveauDeSecuriteMinimal = await niveauSecuriteMinimalRequis(
         $leBrouillon.id
       );
-      niveauDeplie = niveauDeSecuriteMinimal;
+      const element: HTMLDetailsElement | null = document.querySelector(
+        `#${niveauDeSecuriteMinimal}`
+      );
+      if (element) {
+        element.open = true;
+      }
       niveauSelectionne = $leBrouillon.niveauSecurite;
     }
   });
@@ -73,17 +77,12 @@
   </p>
 
   {#each donneesNiveauxDeSecurite as niveauSecurite, index}
-    <div
+    <details
+      id={niveauSecurite.id}
       class="conteneur-niveau-securite"
       class:selectionne={niveauSelectionne === niveauSecurite.id}
-      class:deplie={niveauDeplie === niveauSecurite.id}
-      on:click={() => (niveauDeplie = niveauSecurite.id)}
-      on:keydown={() => (niveauDeplie = niveauSecurite.id)}
-      tabindex="0"
-      role="button"
-      aria-roledescription="Déplie ou replie le contenu explicatif du niveau {niveauSecurite.nom}"
     >
-      <div class="entete-niveau-securite">
+      <summary class="entete-niveau-securite">
         <h5>{niveauSecurite.nom}</h5>
         {#if niveauSecurite.id === niveauDeSecuriteMinimal}
           <dsfr-tag
@@ -117,7 +116,7 @@
             on:click={async () => await selectionneNiveau(niveauSecurite.id)}
           />
         </span>
-      </div>
+      </summary>
       <div class="corps-niveau-securite">
         <hr />
         <div class="description-niveau-securite">
@@ -182,7 +181,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </details>
   {/each}
 </div>
 
@@ -191,7 +190,6 @@
     padding: 24px;
     border-radius: 8px;
     border: 1px solid #ddd;
-    cursor: pointer;
 
     &.selectionne {
       border-color: var(--bleu-mise-en-avant);
@@ -205,6 +203,15 @@
     grid-template-areas:
       'titre badge bouton switch'
       'resume resume bouton switch';
+    cursor: pointer;
+
+    &::marker {
+      content: '';
+    }
+
+    &::-webkit-details-marker {
+      display: none;
+    }
   }
 
   .entete-niveau-securite::after {
@@ -224,17 +231,8 @@
     transition: transform 0.2s ease-out;
   }
 
-  .conteneur-niveau-securite.deplie .entete-niveau-securite::after {
+  .conteneur-niveau-securite[open] .entete-niveau-securite::after {
     transform: rotate(180deg);
-  }
-
-  .corps-niveau-securite {
-    display: none;
-    cursor: default;
-  }
-
-  .conteneur-niveau-securite.deplie .corps-niveau-securite {
-    display: block;
   }
 
   dsfr-tag {
