@@ -1,24 +1,26 @@
 <script lang="ts">
-  import { resume } from './resume.store';
+  import type { DescriptionServiceV2 } from '../../creationV2.types';
+
+  export let donnees: Record<keyof DescriptionServiceV2, string | string[]>;
 </script>
 
 <div class="conteneur-avec-cadre">
   <h5>Informations génériques sur le projet</h5>
   <dl>
     <dt>Nom du service :</dt>
-    <dd>{$resume.nomService}</dd>
+    <dd>{donnees.nomService}</dd>
     <dt>Organisation :</dt>
-    <dd>{$resume.siret}</dd>
+    <dd>{donnees.siret}</dd>
     <dt>Statut :</dt>
     <dd>
-      {$resume.statutDeploiement}
+      {donnees.statutDeploiement}
     </dd>
     <dt>Présentation :</dt>
-    <dd>{$resume.presentation}</dd>
+    <dd>{donnees.presentation}</dd>
     <dt>URL du service :</dt>
     <dd>
-      {#if $resume.pointsAcces.length > 0}
-        {#each $resume.pointsAcces as pointAcces}
+      {#if donnees.pointsAcces.length > 0}
+        {#each donnees.pointsAcces as pointAcces}
           <span>{pointAcces}</span>
         {/each}
       {:else}
@@ -32,14 +34,14 @@
   <dl>
     <dt>Type de service à sécuriser :</dt>
     <dd>
-      {#each $resume.typeService as typeDeService}
+      {#each donnees.typeService as typeDeService}
         <span>{typeDeService}</span>
       {/each}
     </dd>
     <dt>Sécurisations prévues :</dt>
     <dd>
-      {#if $resume.specificitesProjet.length > 0}
-        {#each $resume.specificitesProjet as sp}
+      {#if donnees.specificitesProjet.length > 0}
+        {#each donnees.specificitesProjet as sp}
           <span>{sp}</span>
         {/each}
       {:else}
@@ -47,11 +49,11 @@
       {/if}
     </dd>
     <dt>Hébergement du système :</dt>
-    <dd>{$resume.typeHebergement}</dd>
+    <dd>{donnees.typeHebergement}</dd>
     <dt>Activités du projet entièrement externalisées :</dt>
     <dd>
-      {#if $resume.activitesExternalisees.length > 0}
-        {#each $resume.activitesExternalisees as ae}
+      {#if donnees.activitesExternalisees.length > 0}
+        {#each donnees.activitesExternalisees as ae}
           <span>{ae}</span>
         {/each}
       {:else}
@@ -64,18 +66,18 @@
   <h5>Évaluation de la criticité et de l'exposition du service</h5>
   <dl>
     <dt>Ouverture du système :</dt>
-    <dd>{$resume.ouvertureSysteme}</dd>
+    <dd>{donnees.ouvertureSysteme}</dd>
     <dt>Audience cible du service :</dt>
-    <dd>{$resume.audienceCible}</dd>
+    <dd>{donnees.audienceCible}</dd>
     <dt>Durée maximale acceptable de dysfonctionnement du système :</dt>
-    <dd>{$resume.dureeDysfonctionnementAcceptable}</dd>
+    <dd>{donnees.dureeDysfonctionnementAcceptable}</dd>
     <dt>Données traitées :</dt>
     <dd>
-      {#if $resume.categoriesDonneesTraitees.length > 0 || $resume.categoriesDonneesTraiteesSupplementaires.length > 0}
-        {#each $resume.categoriesDonneesTraitees as c}
+      {#if donnees.categoriesDonneesTraitees.length > 0 || donnees.categoriesDonneesTraiteesSupplementaires.length > 0}
+        {#each donnees.categoriesDonneesTraitees as c}
           <span>{c}</span>
         {/each}
-        {#each $resume.categoriesDonneesTraiteesSupplementaires as cs}
+        {#each donnees.categoriesDonneesTraiteesSupplementaires as cs}
           <span>{cs}</span>
         {/each}
       {:else}
@@ -83,10 +85,10 @@
       {/if}
     </dd>
     <dt>Volume des données traitées :</dt>
-    <dd>{$resume.volumetrieDonneesTraitees}</dd>
+    <dd>{donnees.volumetrieDonneesTraitees}</dd>
     <dt>Localisation des données traitées</dt>
     <dd>
-      {#each $resume.localisationsDonneesTraitees as l}
+      {#each donnees.localisationsDonneesTraitees as l}
         <span>{l}</span>
       {/each}
     </dd>
@@ -95,7 +97,6 @@
 
 <style lang="scss">
   .conteneur-avec-cadre {
-    max-width: 924px;
     border: 1px solid #ddd;
     display: flex;
     flex-direction: column;
