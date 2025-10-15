@@ -93,7 +93,9 @@
     for="categoriesDonneesTraiteesSupplementaires"
     class="titre-liste-donnees-supplementaires"
   >
-    <span>Nom de la donnée</span>
+    {#if $leBrouillon.categoriesDonneesTraiteesSupplementaires?.length > 0}
+      <span>Nom de la donnée</span>
+    {/if}
 
     <ListeChampTexte
       nomGroupe="categoriesDonneesTraiteesSupplementaires"
