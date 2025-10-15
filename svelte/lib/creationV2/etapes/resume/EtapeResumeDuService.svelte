@@ -3,11 +3,19 @@
   import BrouillonDeServiceEditable from '../BrouillonDeServiceEditable.svelte';
   import { brouillonEstCompletStore } from '../brouillonEstComplet.store';
   import { resume } from './resume.store';
+  import { onMount } from 'svelte';
+  import { rechercheOrganisation } from '../../../ui/rechercheOrganisation';
+  import type { Entite } from '../../../ui/types';
 
   let lectureSeule = true;
 
   export let estComplete: boolean;
   $: estComplete = $brouillonEstCompletStore;
+
+  let entite: Entite | null = null;
+  onMount(async () => {
+    entite = (await rechercheOrganisation($resume.siret as string))[0];
+  });
 </script>
 
 {#if lectureSeule}
@@ -22,7 +30,7 @@
       on:click={() => (lectureSeule = false)}
     />
   </div>
-  <ResumeDuServiceLectureSeule donnees={$resume} />
+  <ResumeDuServiceLectureSeule donnees={$resume} {entite} />
 {:else}
   <div class="resume-editable">
     <BrouillonDeServiceEditable />

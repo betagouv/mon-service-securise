@@ -1,4 +1,4 @@
-import type { DescriptionServiceV2 } from '../ui/types';
+import type { DescriptionServiceV2, Entite } from '../ui/types';
 
 declare global {
   interface HTMLElementEventMap {
@@ -8,9 +8,7 @@ declare global {
 
 export type ServiceV2 = {
   descriptionService: {
-    organisationResponsable: {
-      siret: string;
-    };
+    organisationResponsable: Entite;
     pointsAcces: { description: string }[];
   } & DescriptionServiceV2;
 };
