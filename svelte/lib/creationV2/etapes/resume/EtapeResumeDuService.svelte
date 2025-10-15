@@ -2,6 +2,7 @@
   import ResumeDuServiceLectureSeule from './ResumeDuServiceLectureSeule.svelte';
   import BrouillonDeServiceEditable from '../BrouillonDeServiceEditable.svelte';
   import { brouillonEstCompletStore } from '../brouillonEstComplet.store';
+  import { resume } from './resume.store';
 
   let lectureSeule = true;
 
@@ -21,7 +22,7 @@
       on:click={() => (lectureSeule = false)}
     />
   </div>
-  <ResumeDuServiceLectureSeule />
+  <ResumeDuServiceLectureSeule donnees={$resume} />
 {:else}
   <div class="resume-editable">
     <BrouillonDeServiceEditable />
@@ -34,6 +35,11 @@
       padding-right: 248px !important;
     }
   }
+
+  :global(.conteneur-avec-cadre) {
+    max-width: 924px;
+  }
+
   .conteneur-bouton-modifier {
     margin-left: auto;
   }
