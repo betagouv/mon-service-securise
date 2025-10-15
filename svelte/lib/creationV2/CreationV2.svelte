@@ -107,6 +107,15 @@
       class="contenu-formulaire"
       class:sans-explications={$etapeCourante.pleinePage}
     >
+      {#if $etapeCourante.estPremiereQuestion && !$navigationStore.modeRapide}
+        <div class="conteneur-titre-premiere-question">
+          <h2>Ajouter un service</h2>
+          <span
+            >Complétez les informations permettant d'évaluer les besoins de
+            sécurité du service et de proposer des mesures de sécurité adaptées.</span
+          >
+        </div>
+      {/if}
       <dsfr-stepper
         title={$etapeCourante.titre}
         nextStep={$etapeCourante.titreEtapeSuivante}
@@ -205,6 +214,27 @@
     border-bottom: none;
     padding: 0;
     margin: 0;
+  }
+
+  .conteneur-titre-premiere-question {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 8px;
+
+    h2 {
+      margin: 0;
+      font-size: 2rem;
+      line-height: 2.5rem;
+      font-weight: bold;
+      color: #161616;
+    }
+
+    span {
+      font-size: 1.25rem;
+      line-height: 2rem;
+      color: #3a3a3a;
+    }
   }
 
   dsfr-stepper {
