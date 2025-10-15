@@ -47,7 +47,8 @@ export const toutesEtapesModeRapide: Array<EtapeDuWizard> = [
     numero: 1,
     titre: 'Informations sur le projet',
     pleinePage: false,
-    illustration: '/statique/assets/images/illustration_accueil_connexion.svg',
+    illustration:
+      '/statique/assets/images/illustration_collaboration_securite.svg',
     questions: [
       {
         composant: EtapeCreationEnModeRapide,
@@ -76,7 +77,8 @@ export const toutesEtapes: Array<EtapeDuWizard> = [
   {
     numero: 1,
     titre: 'Informations génériques sur le projet',
-    illustration: '/statique/assets/images/illustration_accueil_connexion.svg',
+    illustration:
+      '/statique/assets/images/illustration_collaboration_securite.svg',
     pleinePage: false,
     questions: [
       {
@@ -124,7 +126,8 @@ export const toutesEtapes: Array<EtapeDuWizard> = [
   {
     numero: 2,
     titre: 'Caractéristiques du service',
-    illustration: '/statique/assets/images/home/illustration_etape_2.svg',
+    illustration:
+      '/statique/assets/images/illustration_ordi_chateaux_forts.svg',
     pleinePage: false,
     questions: [
       {
