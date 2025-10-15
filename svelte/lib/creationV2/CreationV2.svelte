@@ -186,29 +186,31 @@
   </div>
   {#if $etapeCourante.illustration}
     <aside>
-      <div class="selection-mode-rapide">
-        <Switch
-          id="modeRapide"
-          bind:actif={modeRapide}
-          labelActif="⚡ Mode rapide"
-          labelInactif="⚡ Mode rapide"
-          on:change={() => {
-            navigationStore.reprendreEditionDe($leBrouillon, modeRapide);
-          }}
-        />
-        <div class="explications-mode-rapide">
-          Accélérez votre saisie avec un formulaire plus direct, sans contenu
-          pédagogique.
+      <div class="contenu-informatif">
+        <div class="selection-mode-rapide">
+          <Switch
+            id="modeRapide"
+            bind:actif={modeRapide}
+            labelActif="⚡ Mode rapide"
+            labelInactif="⚡ Mode rapide"
+            on:change={() => {
+              navigationStore.reprendreEditionDe($leBrouillon, modeRapide);
+            }}
+          />
+          <div class="explications-mode-rapide">
+            Accélérez votre saisie avec un formulaire plus direct, sans contenu
+            pédagogique.
+          </div>
+          <hr />
         </div>
-        <hr />
+        <img alt="" src={$etapeCourante.illustration} />
+        {#if !modeRapide}
+          <h3>Pourquoi demander ces informations ?</h3>
+          {#each $etapeCourante.questionCourante.explications as explication}
+            <p>{explication}</p>
+          {/each}
+        {/if}
       </div>
-      <img alt="" src={$etapeCourante.illustration} />
-      {#if !modeRapide}
-        <h3>Pourquoi demander ces informations ?</h3>
-        {#each $etapeCourante.questionCourante.explications as explication}
-          <p>{explication}</p>
-        {/each}
-      {/if}
     </aside>
   {/if}
 </div>
@@ -338,6 +340,12 @@
       max-width: 448px;
       padding: 32px 24px;
       background: #f4f6fe;
+      position: relative;
+
+      .contenu-informatif {
+        position: sticky;
+        top: 32px;
+      }
 
       img {
         width: 100%;
