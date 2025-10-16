@@ -1,28 +1,4 @@
-/*
-Cette liste de mesures a été générée d'après le Grist Dév MSS / Dév : Catalogue de Mesures exporté en CSV
-et cette commande :
-
-mlr --icsv --ojson cat Référentiels\ de\ mesures\ MSS-Dev_Catalogue_de_mesures.csv | jq '
-
-def lpad(n):
-  tostring
-  | if (n > length) then ((n - length) * "0") + . else . end;
-
-map(
-.["description"] = (.["Libellé singulier"] | gsub("\n";"<br>"))
-| del(.["Libellé singulier"])
-| .["descriptionLongue"] = (.["Description singulier"] | gsub("\n";"<br>"))
-| del(.["Description singulier"])
-| .["categorie"] = (.["Tag : Catégorie"] | ascii_downcase | gsub("é";"e"))
-| del(.["Tag : Catégorie"])
-| .["identifiantNumerique"] = (.["ID"] | tostring | lpad(4))
-| del(.["ID"])
-| .["referentiel"] = .["Tag : Acteur"]
-| del(.["Tag : Acteur"])
-| {(."Réf Catalogue"): (del(."Réf Catalogue"))})
-| add'
-
- */
+// Voir scripts/moteurRegles/transformeCSVGristEnJSON.sh pour générer ce JSON à partir du CSV Grist.
 
 export const mesuresV2 = {
   'RECENSEMENT.1': {
