@@ -182,6 +182,17 @@ export class DescriptionServiceV2 {
     );
   }
 
+  estimeNiveauDeSecurite() {
+    return niveauSecuriteRequis(
+      this.volumetrieDonneesTraitees,
+      this.categoriesDonneesTraitees,
+      this.categoriesDonneesTraiteesSupplementaires,
+      this.dureeDysfonctionnementAcceptable,
+      this.audienceCible,
+      this.ouvertureSysteme
+    );
+  }
+
   projectionPourMoteurV2(): ProjectionDescriptionPourMoteur {
     return {
       criticiteDonneesTraitees:
