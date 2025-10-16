@@ -37,13 +37,6 @@ export const mesuresV2 = {
     identifiantNumerique: '0014',
     referentiel: 'ANSSI',
   },
-  'CONFORMITE.2': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0015',
-    referentiel: 'ANSSI',
-  },
   'CONFORMITE.3': {
     description:
       "Définir et mettre en oeuvre en continu un plan d'action de renforcement de la cybersécurité",
@@ -53,34 +46,6 @@ export const mesuresV2 = {
     identifiantNumerique: '0163',
     referentiel: 'ANSSI',
   },
-  'PSSI.1': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0009',
-    referentiel: 'ANSSI',
-  },
-  'PSSI.2': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0010',
-    referentiel: 'ANSSI',
-  },
-  'PSSI.3': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0011',
-    referentiel: 'ANSSI',
-  },
-  'PSSI.4': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0012',
-    referentiel: 'ANSSI',
-  },
   'PSSI.5': {
     description:
       'Vérifier a minima annuellement les politiques et procédures de sécurité et les mettre à jour si nécessaire',
@@ -88,27 +53,6 @@ export const mesuresV2 = {
       "Vérifier tous les ans ou en cas d'évolutions majeures du contexte métier, technique ou organisationnel que les politiques et procédures liées au système d'information sont à jour et pertinentes.<br><br>Cette mesure permet de s'assurer que les règles de sécurité stratégiques et opérationnelles sont toujours applicables au système d'information et aux activités liées.",
     categorie: 'gouvernance',
     identifiantNumerique: '0013',
-    referentiel: 'ANSSI',
-  },
-  'ROLE.1': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0004',
-    referentiel: 'ANSSI',
-  },
-  'ROLE.3': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0006',
-    referentiel: 'ANSSI',
-  },
-  'ROLE.5': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0008',
     referentiel: 'ANSSI',
   },
   'CONTRAT.1': {
@@ -192,13 +136,6 @@ export const mesuresV2 = {
     identifiantNumerique: '0021',
     referentiel: 'ANSSI',
   },
-  'RH.1': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0025',
-    referentiel: 'ANSSI',
-  },
   'RH.2': {
     description:
       "Mettre en oeuvre un programme de sensibilisation à la sécurité pour l'ensemble des acteurs intervenant sur le système d'information",
@@ -208,13 +145,6 @@ export const mesuresV2 = {
     identifiantNumerique: '0026',
     referentiel: 'ANSSI',
   },
-  'RH.3': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0027',
-    referentiel: 'ANSSI',
-  },
   'RH.4': {
     description:
       'Formaliser et mettre en oeuvre un processus de gestion des arrivées, départs et changements de fonction',
@@ -222,20 +152,6 @@ export const mesuresV2 = {
       "Définir et mettre en oeuvre un processus de gestion des arrivées, des départs et des changements de fonction des personnels et des tiers accédant au système d'information.<br><br>Cette mesure permet de réduire la vraisemblance d'utilisation d'un compte obsolète par un attaquant externe ou l'utilisation des accès obsolètes par un attaquant interne.",
     categorie: 'gouvernance',
     identifiantNumerique: '0028',
-    referentiel: 'ANSSI',
-  },
-  'RH.5': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0029',
-    referentiel: 'ANSSI',
-  },
-  'CARTO.1': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0031',
     referentiel: 'ANSSI',
   },
   'CARTO.2': {
@@ -643,13 +559,6 @@ export const mesuresV2 = {
     identifiantNumerique: '0167',
     referentiel: 'ANSSI',
   },
-  'MALWARE.1': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'protection',
-    identifiantNumerique: '0077',
-    referentiel: 'ANSSI',
-  },
   'MALWARE.2': {
     description:
       "Autoriser uniquement la connexion au système d'information aux équipements gérés par l'entité ou ses prestataires",
@@ -847,13 +756,6 @@ export const mesuresV2 = {
     identifiantNumerique: '0107',
     referentiel: 'ANSSI',
   },
-  'ANNUAIRE.4': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'protection',
-    identifiantNumerique: '0108',
-    referentiel: 'ANSSI',
-  },
   'ANNUAIRE.5': {
     description:
       "Dédier les ressources et comptes d'administration du coeur de confiance à cet usage",
@@ -980,13 +882,6 @@ export const mesuresV2 = {
     identifiantNumerique: '0112',
     referentiel: 'ANSSI',
   },
-  'INCIDENT.5': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'defense',
-    identifiantNumerique: '0113',
-    referentiel: 'ANSSI',
-  },
   'INCIDENT.6': {
     description:
       'Rendre publics un point de contact et des modalités de communication de tout problème de sécurité',
@@ -1041,13 +936,6 @@ export const mesuresV2 = {
     identifiantNumerique: '0118',
     referentiel: 'ANSSI',
   },
-  'CONTINU.4': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'resilience',
-    identifiantNumerique: '0119',
-    referentiel: 'ANSSI',
-  },
   'CONTINU.5': {
     description:
       "Formaliser et mettre en oeuvre le plan de reprise de l'activité",
@@ -1066,69 +954,6 @@ export const mesuresV2 = {
     identifiantNumerique: '0121',
     referentiel: 'ANSSI',
   },
-  'CRISE.1': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'defense',
-    identifiantNumerique: '0122',
-    referentiel: 'ANSSI',
-  },
-  'CRISE.2': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'defense',
-    identifiantNumerique: '0123',
-    referentiel: 'ANSSI',
-  },
-  'CRISE.3': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'defense',
-    identifiantNumerique: '0124',
-    referentiel: 'ANSSI',
-  },
-  'CRISE.4': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'defense',
-    identifiantNumerique: '0125',
-    referentiel: 'ANSSI',
-  },
-  'CRISE.5': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'defense',
-    identifiantNumerique: '0126',
-    referentiel: 'ANSSI',
-  },
-  'CRISE.6': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'defense',
-    identifiantNumerique: '0127',
-    referentiel: 'ANSSI',
-  },
-  'CRISE.7': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'resilience',
-    identifiantNumerique: '0164',
-    referentiel: 'ANSSI',
-  },
-  'EXO.1': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'defense',
-    identifiantNumerique: '0128',
-    referentiel: 'ANSSI',
-  },
-  'EXO.2': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'defense',
-    identifiantNumerique: '0129',
-    referentiel: 'ANSSI',
-  },
   'RISQUE.1': {
     description:
       "Réaliser une analyse de risque approfondie de la sécurité du système d'information et la mettre à jour au minimum tous les trois ans",
@@ -1145,13 +970,6 @@ export const mesuresV2 = {
       "Réaliser une analyse de risque rapide du système d'information et la mettre à jour tous les trois ans et en cas d'incident de sécurité ou d'évolution majeure (métier, technique ou organisationnel. <br>Cette analyse doit être validée par l'entité, les risques résiduels acceptés et un plan d'action présentant des échéances raisonnables et les responsables pour chaque action doit être mis en oeuvre.<br><br>Cette mesure permet d'identifier et de maîtrises les risques liés au système d'information.",
     categorie: 'gouvernance',
     identifiantNumerique: '0132',
-    referentiel: 'ANSSI',
-  },
-  'RISQUE.3': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'gouvernance',
-    identifiantNumerique: '0133',
     referentiel: 'ANSSI',
   },
   'AUDIT.1': {
@@ -1334,27 +1152,6 @@ export const mesuresV2 = {
       "Mettre en oeuvre des mécanismes de chiffrement et d'authentification à l'état de l'art pour les communications associées à des actions d'administration (ex. protocoles sécurisés garantissant authentification, intégrité et confidentialité).<br>Si ces communications transitent sur des réseaux non dédiés à ces communications, les cloisonner au moyen de mécanismes de chiffrement et d'authentification conformes à l'état de l'art (ex. tunnel VPN).<br>Lorsque des raisons techniques ou opérationnelles ne permettent pas de chiffrer ou d'authentifier ces communications, mettre en oeuvre des mesures permettant de protéger la confidentialité et l'intégrité de ces flux et de renforce le contrôle et la traçabilité des actions d'administration.<br><br>Cette mesure permet de protéger les communications associées à des actions d'administration de perte de confidentialité ou d'intégrité.",
     categorie: 'protection',
     identifiantNumerique: '0153',
-    referentiel: 'ANSSI',
-  },
-  'SUPERVISION.1': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'defense',
-    identifiantNumerique: '0154',
-    referentiel: 'ANSSI',
-  },
-  'SUPERVISION.2': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'defense',
-    identifiantNumerique: '0155',
-    referentiel: 'ANSSI',
-  },
-  'SUPERVISION.3': {
-    description: 'N/A',
-    descriptionLongue: 'N/A',
-    categorie: 'defense',
-    identifiantNumerique: '0156',
     referentiel: 'ANSSI',
   },
   'SUPERVISION.4': {
