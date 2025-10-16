@@ -36,6 +36,11 @@
 </div>
 
 <style lang="scss">
+  /* Annule la couleur `fond-pale` positionnée par le pug */
+  :global(.zone-principale) {
+    background: unset;
+  }
+
   .conteneur-decrire-v2 {
     text-align: left;
     display: flex;
