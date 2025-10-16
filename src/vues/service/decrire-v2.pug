@@ -1,0 +1,24 @@
+extends ../parcoursService
+include ../fragments/texteTronque
+
+block title
+  title Décrire | MonServiceSécurisé
+
+block titre
+  h1 Décrire
+
+block header-titre-page
+  h3
+    +texteTronque({texte: service.nomService() || ''})
+
+block sous-titre
+  h2 Cette page présente les informations clés du service. Toute modification de certaines données peut entraîner une réévaluation automatique des besoins de sécurité et modifier les mesures de protection nécessaires.
+
+block append scripts
+  +composantSvelte('decrireV2.js')
+  +donneesPartagees('donnees-description-service', service.descriptionService.toJSON())
+  +donneesPartagees('donnees-lecture-seule', autorisationsService.DECRIRE.estLectureSeule)
+  script(type = 'module', src = '/statique/service/decrireV2.mjs')
+
+block formulaire
+  #decrire-v2
