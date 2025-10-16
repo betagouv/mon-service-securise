@@ -92,9 +92,9 @@
       elementHtml.status =
         $leBrouillon.nomService.length < 1 ? 'error' : 'default';
     }}
-    on:blur={async (e) => {
+    on:blur={async () => {
       if ($leBrouillon.id && $leBrouillon.nomService.length >= 1) {
-        return enregistre('nomService', $leBrouillon.nomService);
+        await enregistre('nomService', $leBrouillon.nomService);
       }
       if (!$leBrouillon.id && $leBrouillon.nomService.length > 1) {
         const idBrouillon = await creeBrouillonService($leBrouillon.nomService);
@@ -127,9 +127,9 @@
     value={$leBrouillon.statutDeploiement}
     disabled={!$leBrouillon.id}
     id="statutDeploiement"
-    on:valuechanged={(e) => {
+    on:valuechanged={async (e) => {
       $leBrouillon.statutDeploiement = e.detail;
-      return enregistre('statutDeploiement', $leBrouillon.statutDeploiement);
+      await enregistre('statutDeploiement', $leBrouillon.statutDeploiement);
     }}
     placeholderDisabled
   />
@@ -145,10 +145,10 @@
       ? 'error'
       : 'default'}
     errorMessage="La présentation du service est obligatoire."
-    on:blur={(e) => {
+    on:blur={async (e) => {
       $leBrouillon.presentation = e.target.value;
       if ($leBrouillon.presentation.length >= 1) {
-        return enregistre('presentation', $leBrouillon.presentation);
+        await enregistre('presentation', $leBrouillon.presentation);
       }
     }}
   />
@@ -188,10 +188,10 @@
     values={$leBrouillon.typeService}
     disabled={!$leBrouillon.id}
     id="typeService"
-    on:valuechanged={(e) => {
+    on:valuechanged={async (e) => {
       $leBrouillon.typeService = e.detail;
       if ($leBrouillon.typeService.length >= 1) {
-        return enregistre('typeService', $leBrouillon.typeService);
+        await enregistre('typeService', $leBrouillon.typeService);
       }
     }}
     status={$leBrouillon.id && $leBrouillon.typeService.length < 1
@@ -213,13 +213,10 @@
     values={$leBrouillon.specificitesProjet}
     disabled={!$leBrouillon.id}
     id="specificitesProjet"
-    on:valuechanged={(e) => {
+    on:valuechanged={async (e) => {
       $leBrouillon.specificitesProjet = e.detail;
       if ($leBrouillon.specificitesProjet.length >= 1) {
-        return enregistre(
-          'specificitesProjet',
-          $leBrouillon.specificitesProjet
-        );
+        await enregistre('specificitesProjet', $leBrouillon.specificitesProjet);
       }
     }}
   />
@@ -263,9 +260,9 @@
     )}
     values={$leBrouillon.activitesExternalisees}
     id="activitesExternalisees"
-    on:valuechanged={(e) => {
+    on:valuechanged={async (e) => {
       $leBrouillon.activitesExternalisees = e.detail;
-      return enregistre(
+      await enregistre(
         'activitesExternalisees',
         $leBrouillon.activitesExternalisees
       );
@@ -285,9 +282,9 @@
     value={$leBrouillon.ouvertureSysteme}
     disabled={!$leBrouillon.id}
     id="ouvertureSysteme"
-    on:valuechanged={(e) => {
+    on:valuechanged={async (e) => {
       $leBrouillon.ouvertureSysteme = e.detail;
-      return enregistre('ouvertureSysteme', $leBrouillon.ouvertureSysteme);
+      await enregistre('ouvertureSysteme', $leBrouillon.ouvertureSysteme);
     }}
     placeholderDisabled
   />
@@ -301,9 +298,9 @@
     value={$leBrouillon.audienceCible}
     disabled={!$leBrouillon.id}
     id="audienceCible"
-    on:valuechanged={(e) => {
+    on:valuechanged={async (e) => {
       $leBrouillon.audienceCible = e.detail;
-      return enregistre('audienceCible', $leBrouillon.audienceCible);
+      await enregistre('audienceCible', $leBrouillon.audienceCible);
     }}
     placeholderDisabled
   />
@@ -317,9 +314,9 @@
     value={$leBrouillon.dureeDysfonctionnementAcceptable}
     disabled={!$leBrouillon.id}
     id="dureeDysfonctionnementAcceptable"
-    on:valuechanged={(e) => {
+    on:valuechanged={async (e) => {
       $leBrouillon.dureeDysfonctionnementAcceptable = e.detail;
-      return enregistre(
+      await enregistre(
         'dureeDysfonctionnementAcceptable',
         $leBrouillon.dureeDysfonctionnementAcceptable
       );
@@ -340,9 +337,9 @@
     values={$leBrouillon.categoriesDonneesTraitees}
     disabled={!$leBrouillon.id}
     id="categoriesDonneesTraitees"
-    on:valuechanged={(e) => {
+    on:valuechanged={async (e) => {
       $leBrouillon.categoriesDonneesTraitees = e.detail;
-      return enregistre(
+      await enregistre(
         'categoriesDonneesTraitees',
         $leBrouillon.categoriesDonneesTraitees
       );
@@ -375,9 +372,9 @@
     value={$leBrouillon.volumetrieDonneesTraitees}
     disabled={!$leBrouillon.id}
     id="volumetrieDonneesTraitees"
-    on:valuechanged={(e) => {
+    on:valuechanged={async (e) => {
       $leBrouillon.volumetrieDonneesTraitees = e.detail;
-      return enregistre(
+      await enregistre(
         'volumetrieDonneesTraitees',
         $leBrouillon.volumetrieDonneesTraitees
       );
@@ -403,10 +400,10 @@
       : 'default'}
     errorMessage="La localisation des données est obligatoire."
     id="localisationsDonneesTraitees"
-    on:valuechanged={(e) => {
+    on:valuechanged={async (e) => {
       $leBrouillon.localisationsDonneesTraitees = e.detail;
       if ($leBrouillon.localisationsDonneesTraitees.length >= 1) {
-        return enregistre(
+        await enregistre(
           'localisationsDonneesTraitees',
           $leBrouillon.localisationsDonneesTraitees
         );
