@@ -1,8 +1,10 @@
 import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 
 $(() => {
-  const service = lisDonneesPartagees('donnees-service');
+  const descriptionService = lisDonneesPartagees('donnees-description-service');
   document.body.dispatchEvent(
-    new CustomEvent('svelte-recharge-decrire-v2', { detail: { service } })
+    new CustomEvent('svelte-recharge-decrire-v2', {
+      detail: { descriptionService },
+    })
   );
 });
