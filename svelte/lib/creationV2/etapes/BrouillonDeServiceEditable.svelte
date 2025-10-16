@@ -1,14 +1,13 @@
 <script lang="ts">
   import { entiteDeUtilisateur, leBrouillon } from './brouillon.store';
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
-  import { tick } from 'svelte';
-  import {
-    creeBrouillonService,
-    metsAJourBrouillonService,
-  } from '../creationV2.api';
+  import { tick, createEventDispatcher } from 'svelte';
+  import { creeBrouillonService, type MiseAJour } from '../creationV2.api';
   import ListeChampTexte from './ListeChampTexte.svelte';
   import { ajouteParametreAUrl } from '../../outils/url';
   import ChampOrganisation from '../../ui/ChampOrganisation.svelte';
+
+  const dispatch = createEventDispatcher<{ champModifie: MiseAJour }>();
 
   const supprimeValeurPointAcces = (index: number) => {
     $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
@@ -54,10 +53,9 @@
   };
 
   const enregistre = async (propriete: string, valeur: string | string[]) => {
-    await metsAJourBrouillonService($leBrouillon.id, {
-      [propriete]: valeur,
-    });
+    dispatch('champModifie', { [propriete]: valeur });
   };
+
   let elementHtml: HTMLElement & { errorMessage: string; status: string };
 
   let siret: string;
