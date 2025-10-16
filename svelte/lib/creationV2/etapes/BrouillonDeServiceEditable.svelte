@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { entiteDeUtilisateur, leBrouillon } from './brouillon.store';
+  import { leBrouillon } from './brouillon.store';
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import { tick, createEventDispatcher } from 'svelte';
-  import { creeBrouillonService, type MiseAJour } from '../creationV2.api';
+  import { type MiseAJour } from '../creationV2.api';
   import ListeChampTexte from './ListeChampTexte.svelte';
-  import { ajouteParametreAUrl } from '../../outils/url';
   import ChampOrganisation from '../../ui/ChampOrganisation.svelte';
 
   const dispatch = createEventDispatcher<{ champModifie: MiseAJour }>();
@@ -57,20 +56,6 @@
   };
 
   let elementHtml: HTMLElement & { errorMessage: string; status: string };
-
-  let siret: string;
-  if ($leBrouillon.siret) {
-    siret = $leBrouillon.siret;
-  }
-
-  $: {
-    if (siret) {
-      $leBrouillon.siret = siret;
-      if (/^\d{14}$/.test(siret)) {
-        enregistre('siret', siret);
-      }
-    }
-  }
 </script>
 
 <div class="conteneur-avec-cadre">
@@ -91,26 +76,14 @@
         $leBrouillon.nomService.length < 1 ? 'error' : 'default';
     }}
     on:blur={async () => {
-      if ($leBrouillon.id && $leBrouillon.nomService.length >= 1) {
+      if ($leBrouillon.nomService.length >= 1)
         await enregistre('nomService', $leBrouillon.nomService);
-      }
-      if (!$leBrouillon.id && $leBrouillon.nomService.length > 1) {
-        const idBrouillon = await creeBrouillonService($leBrouillon.nomService);
-        ajouteParametreAUrl('id', idBrouillon);
-        leBrouillon.chargeDonnees({
-          id: idBrouillon,
-          nomService: $leBrouillon.nomService,
-        });
-        if ($entiteDeUtilisateur) {
-          siret = $entiteDeUtilisateur.siret;
-        }
-      }
     }}
   />
 
-  {#key siret}
+  {#key $leBrouillon.siret}
     <ChampOrganisation
-      bind:siret
+      bind:siret={$leBrouillon.siret}
       label="Organisation responsable du projet*"
       disabled={!$leBrouillon.id}
     />
