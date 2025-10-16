@@ -82,7 +82,12 @@ const routesConnectePageService = ({
       const estLectureSeule =
         reponse.locals.autorisationsService?.DECRIRE?.estLectureSeule;
 
-      reponse.render('service/descriptionService', {
+      const template =
+        service.version() === 'v2'
+          ? 'service/decrire-v2'
+          : 'service/descriptionService';
+
+      reponse.render(template, {
         InformationsService,
         referentiel,
         service,

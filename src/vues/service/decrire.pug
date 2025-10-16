@@ -10,18 +10,13 @@ block append styles
   link(href = '/statique/assets/styles/modules/validation.css', rel = 'stylesheet')
 
 block titre
-  if service.version() === 'v2'
-    h1 Décrire
-  else
-    h1 Présentation du service
+  h1 Présentation du service
 
 block avancement-etape
-  if service.version() !== 'v2'
-    +avancementEtape(1, 3)
+  +avancementEtape(1, 3)
 
 block etapier
-  if service.version() !== 'v2'
-    .conteneur-etapier
-      .etape.active(data-numero-etape="1")
-      .etape(data-numero-etape="2")
-      .etape(data-numero-etape="3")
+  .conteneur-etapier
+    .etape.active(data-numero-etape="1")
+    .etape(data-numero-etape="2")
+    .etape(data-numero-etape="3")
