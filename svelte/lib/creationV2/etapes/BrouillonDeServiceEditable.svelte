@@ -233,7 +233,7 @@
     value={$leBrouillon.typeHebergement}
     disabled={!$leBrouillon.id}
     id="typeHebergement"
-    on:valuechanged={(e) => {
+    on:valuechanged={async (e) => {
       $leBrouillon.typeHebergement = e.detail;
       if ($leBrouillon.typeHebergement === 'saas') {
         $leBrouillon.activitesExternalisees = [
@@ -244,8 +244,11 @@
         $leBrouillon.activitesExternalisees = [];
       }
 
-      enregistre('activitesExternalisees', $leBrouillon.activitesExternalisees);
-      return enregistre('typeHebergement', $leBrouillon.typeHebergement);
+      await enregistre(
+        'activitesExternalisees',
+        $leBrouillon.activitesExternalisees
+      );
+      await enregistre('typeHebergement', $leBrouillon.typeHebergement);
     }}
     placeholderDisabled
   />
