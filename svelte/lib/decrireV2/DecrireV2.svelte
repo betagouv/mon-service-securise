@@ -4,14 +4,17 @@
   import type { DescriptionServiceV2API } from './decrireV2.d';
   import BarreActions from './BarreActions.svelte';
 
+  type ModeAffichage = 'Resume' | 'Édition';
+
   export let descriptionService: DescriptionServiceV2API;
   export let lectureSeule: boolean;
-  let modeRecapitulatif: boolean = true;
+
+  let mode: ModeAffichage = 'Resume';
 </script>
 
 <div class="conteneur-decrire-v2">
   <div class="conteneur-resume">
-    {#if modeRecapitulatif}
+    {#if mode === 'Resume'}
       <ResumeDuServiceLectureSeule
         entite={descriptionService.organisationResponsable}
         donnees={convertisDonneesDescriptionEnLibelles({
@@ -24,8 +27,8 @@
     {/if}
   </div>
 
-  {#if !lectureSeule && modeRecapitulatif}
-    <BarreActions on:modifier={() => (modeRecapitulatif = false)} />
+  {#if !lectureSeule && mode === 'Resume'}
+    <BarreActions on:modifier={() => (mode = 'Édition')} />
   {/if}
 </div>
 
