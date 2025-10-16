@@ -235,14 +235,11 @@
     id="typeHebergement"
     on:valuechanged={async (e) => {
       $leBrouillon.typeHebergement = e.detail;
-      if ($leBrouillon.typeHebergement === 'saas') {
-        $leBrouillon.activitesExternalisees = [
-          'administrationTechnique',
-          'developpementLogiciel',
-        ];
-      } else {
-        $leBrouillon.activitesExternalisees = [];
-      }
+
+      $leBrouillon.activitesExternalisees =
+        $leBrouillon.typeHebergement === 'saas'
+          ? ['administrationTechnique', 'developpementLogiciel']
+          : [];
 
       await enregistre(
         'activitesExternalisees',
