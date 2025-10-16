@@ -18,7 +18,7 @@ def lpad(n):
 map(
 .["description"] = (.["Libellé singulier"] | gsub("\n";"<br>"))
 | del(.["Libellé singulier"])
-| .["descriptionLongue"] = (.["Description singulier"] | gsub("\n";"<br>"))
+| .["descriptionLongue"] = (.["Description singulier"] | gsub("\n";"<br>") | gsub("\\[(?<label>[^]]+)\\]\\((?<url>[^)]+)\\)"; "<a href=\"" + .url + "\" target=\"_blank\" rel=\"noopener\">" + .label + "</a>"))
 | del(.["Description singulier"])
 | .["categorie"] = (.["Tag : Catégorie"] | ascii_downcase | gsub("é";"e"))
 | del(.["Tag : Catégorie"])
