@@ -14,4 +14,5 @@ export type DescriptionServiceV2API = {
 
 export type DecrireV2Props = {
   descriptionService: DescriptionServiceV2API;
+  lectureSeule: boolean;
 };
