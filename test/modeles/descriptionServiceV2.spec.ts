@@ -61,6 +61,34 @@ describe('Une description service V2', () => {
     });
   });
 
+  it('connaît sa réprensation JSON de données : les mêmes que les données sérialisées', () => {
+    const descriptionV2 = new DescriptionServiceV2({
+      nomService: 'Mairie',
+      organisationResponsable: {
+        nom: 'Ville V',
+        siret: '1111111111111',
+        departement: '33',
+      },
+      typeService: ['api'],
+      statutDeploiement: 'enCours',
+      niveauDeSecurite: 'niveau1',
+      volumetrieDonneesTraitees: 'faible',
+      presentation: 'Le premier de …',
+      pointsAcces: [{ description: 'https://url.com' }],
+      audienceCible: 'large',
+      typeHebergement: 'autre',
+      ouvertureSysteme: 'accessibleSurInternet',
+      specificitesProjet: ['accesPhysiqueAuxBureaux'],
+      activitesExternalisees: ['developpementLogiciel'],
+      dureeDysfonctionnementAcceptable: 'moinsDe24h',
+      categoriesDonneesTraitees: ['documentsRHSensibles'],
+      categoriesDonneesTraiteesSupplementaires: ['numéros de téléphones'],
+      localisationsDonneesTraitees: ['horsUE'],
+    });
+
+    expect(descriptionV2.toJSON()).toEqual(descriptionV2.donneesSerialisees());
+  });
+
   it('renvoie toujours un statut de saisie à « COMPLETES » car MSS ne permet pas de créer une Description V2 incomplète', async () => {
     const descriptionV2 = uneDescriptionV2Valide().construis();
 

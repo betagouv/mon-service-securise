@@ -141,6 +141,10 @@ export class DescriptionServiceV2 {
     return InformationsService.COMPLETES;
   }
 
+  toJSON() {
+    return this.donneesSerialisees();
+  }
+
   donneesSerialisees(): DonneesDescriptionServiceV2 {
     return {
       niveauDeSecurite: this.niveauDeSecurite,

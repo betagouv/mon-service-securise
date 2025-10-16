@@ -1,9 +1,9 @@
 <script lang="ts">
   import ResumeDuServiceLectureSeule from '../creationV2/etapes/resume/ResumeDuServiceLectureSeule.svelte';
   import { convertisDonneesDescriptionEnLibelles } from '../creationV2/etapes/resume/resume.store';
-  import type { ServiceV2 } from './decrireV2.d';
+  import type { DescriptionServiceV2API } from './decrireV2.d';
 
-  export let service: ServiceV2;
+  export let descriptionService: DescriptionServiceV2API;
   let lectureSeule: boolean = true;
 </script>
 
@@ -21,12 +21,10 @@
       />
     </div>
     <ResumeDuServiceLectureSeule
-      entite={service.descriptionService.organisationResponsable}
+      entite={descriptionService.organisationResponsable}
       donnees={convertisDonneesDescriptionEnLibelles({
-        ...service.descriptionService,
-        pointsAcces: service.descriptionService.pointsAcces.map(
-          (p) => p.description
-        ),
+        ...descriptionService,
+        pointsAcces: descriptionService.pointsAcces.map((p) => p.description),
       })}
     />
   {:else}

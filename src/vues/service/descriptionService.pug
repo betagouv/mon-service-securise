@@ -19,7 +19,7 @@ block sous-titre
 block append scripts
   if service.version() === 'v2'
     +composantSvelte('decrireV2.js')
-    +donneesPartagees('donnees-service', service)
+    +donneesPartagees('donnees-description-service', service.descriptionService.toJSON())
     script(type = 'module', src = '/statique/service/decrireV2.mjs')
 
 block formulaire
