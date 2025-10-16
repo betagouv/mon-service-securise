@@ -6,6 +6,8 @@
   import { onMount } from 'svelte';
   import { rechercheOrganisation } from '../../../ui/rechercheOrganisation';
   import type { Entite } from '../../../ui/types';
+  import { metsAJourBrouillonService } from '../../creationV2.api';
+  import { leBrouillon } from '../brouillon.store';
 
   let lectureSeule = true;
 
@@ -33,7 +35,11 @@
   <ResumeDuServiceLectureSeule donnees={$resume} {entite} />
 {:else}
   <div class="resume-editable">
-    <BrouillonDeServiceEditable />
+    <BrouillonDeServiceEditable
+      on:champModifie={async (e) => {
+        await metsAJourBrouillonService($leBrouillon.id, e.detail);
+      }}
+    />
   </div>
 {/if}
 
