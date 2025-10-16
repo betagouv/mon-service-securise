@@ -2,6 +2,7 @@
   import ResumeDuServiceLectureSeule from '../creationV2/etapes/resume/ResumeDuServiceLectureSeule.svelte';
   import { convertisDonneesDescriptionEnLibelles } from '../creationV2/etapes/resume/resume.store';
   import type { DescriptionServiceV2API } from './decrireV2.d';
+  import BarreActions from './BarreActions.svelte';
 
   export let descriptionService: DescriptionServiceV2API;
   export let lectureSeule: boolean;
@@ -9,29 +10,22 @@
 </script>
 
 <div class="conteneur-decrire-v2">
-  {#if modeRecapitulatif}
-    {#if !lectureSeule}
-      <div class="conteneur-bouton-modifier">
-        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-        <lab-anssi-bouton
-          titre="Modifier le service"
-          variante="tertiaire"
-          taille="md"
-          icone="edit-line"
-          positionIcone="droite"
-          on:click={() => (modeRecapitulatif = false)}
-        />
-      </div>
+  <div class="conteneur-resume">
+    {#if modeRecapitulatif}
+      <ResumeDuServiceLectureSeule
+        entite={descriptionService.organisationResponsable}
+        donnees={convertisDonneesDescriptionEnLibelles({
+          ...descriptionService,
+          pointsAcces: descriptionService.pointsAcces.map((p) => p.description),
+        })}
+      />
+    {:else}
+      <p>Formulaire éditable</p>
     {/if}
-    <ResumeDuServiceLectureSeule
-      entite={descriptionService.organisationResponsable}
-      donnees={convertisDonneesDescriptionEnLibelles({
-        ...descriptionService,
-        pointsAcces: descriptionService.pointsAcces.map((p) => p.description),
-      })}
-    />
-  {:else}
-    <p>Formulaire éditable</p>
+  </div>
+
+  {#if !lectureSeule && modeRecapitulatif}
+    <BarreActions on:modifier={() => (modeRecapitulatif = false)} />
   {/if}
 </div>
 
@@ -41,14 +35,21 @@
     background: unset;
   }
 
-  .conteneur-decrire-v2 {
+  /* On refait passer le conteneur en "plein écran" pour pouvoir mettre une barre d'action sticky qui s'étend */
+  :global(.conteneur-page-formulaire) {
+    padding: 0;
+    margin: 0;
+    max-width: unset;
+  }
+
+  .conteneur-resume {
     text-align: left;
     display: flex;
     flex-direction: column;
     gap: 24px;
 
-    .conteneur-bouton-modifier {
-      margin-left: auto;
-    }
+    max-width: 1000px;
+    padding: 0 54px;
+    margin: 24px auto;
   }
 </style>
