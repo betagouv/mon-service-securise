@@ -20,7 +20,9 @@
   let dureeDebounceEnMs = 300;
   let suggestions: OrganisationAvecLabel[] = [];
   let suggestionsVisibles = false;
-  let elementInput: HTMLInputElement | undefined = undefined;
+  let elementInput:
+    | (HTMLInputElement & { status: 'default' | 'error' })
+    | undefined = undefined;
 
   onMount(async () => {
     if (!siret) return;
@@ -32,6 +34,7 @@
 
     if (reponse.data.suggestions.length === 1) {
       saisie = construisLabel(reponse.data.suggestions[0]);
+      if (elementInput) elementInput.status = 'default';
     }
   });
 
