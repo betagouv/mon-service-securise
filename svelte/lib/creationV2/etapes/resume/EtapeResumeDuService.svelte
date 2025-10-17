@@ -36,6 +36,7 @@
 {:else}
   <div class="resume-editable">
     <BrouillonDeServiceEditable
+      donnees={$leBrouillon}
       on:champModifie={async (e) => {
         await metsAJourBrouillonService($leBrouillon.id, e.detail);
       }}
