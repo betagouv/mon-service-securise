@@ -1,78 +1,59 @@
 <script lang="ts">
-  import { entiteDeUtilisateur, leBrouillon } from './brouillon.store';
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
-  import { tick } from 'svelte';
-  import {
-    creeBrouillonService,
-    metsAJourBrouillonService,
-  } from '../creationV2.api';
+  import { tick, createEventDispatcher } from 'svelte';
+  import { type MiseAJour } from '../creationV2.api';
   import ListeChampTexte from './ListeChampTexte.svelte';
-  import { ajouteParametreAUrl } from '../../outils/url';
   import ChampOrganisation from '../../ui/ChampOrganisation.svelte';
+  import type { BrouillonSvelte } from '../creationV2.types';
+
+  export let donnees: BrouillonSvelte;
+
+  const dispatch = createEventDispatcher<{ champModifie: MiseAJour }>();
 
   const supprimeValeurPointAcces = (index: number) => {
-    $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
-      (_, i) => i !== index
-    );
+    donnees.pointsAcces = donnees.pointsAcces.filter((_, i) => i !== index);
   };
 
   const ajouteValeurPointAcces = () => {
-    $leBrouillon.pointsAcces = [...$leBrouillon.pointsAcces, ''];
+    donnees.pointsAcces = [...donnees.pointsAcces, ''];
   };
 
   const enregistrePointsAcces = async () => {
-    await enregistre(
+    await champModifie(
       'pointsAcces',
-      $leBrouillon.pointsAcces.filter(
-        (pointAcces) => pointAcces.trim().length > 0
-      )
+      donnees.pointsAcces.filter((pointAcces) => pointAcces.trim().length > 0)
     );
   };
 
   const supprimeCategoriesDonneesTraiteesSupplementaires = (index: number) => {
-    $leBrouillon.categoriesDonneesTraiteesSupplementaires =
-      $leBrouillon.categoriesDonneesTraiteesSupplementaires.filter(
+    donnees.categoriesDonneesTraiteesSupplementaires =
+      donnees.categoriesDonneesTraiteesSupplementaires.filter(
         (_, i) => i !== index
       );
   };
 
   const ajouteCategoriesDonneesTraiteesSupplementaires = () => {
-    $leBrouillon.categoriesDonneesTraiteesSupplementaires = [
-      ...$leBrouillon.categoriesDonneesTraiteesSupplementaires,
+    donnees.categoriesDonneesTraiteesSupplementaires = [
+      ...donnees.categoriesDonneesTraiteesSupplementaires,
       '',
     ];
   };
 
   const enregistreCategoriesDonneesTraiteesSupplementaires = async () => {
-    await enregistre(
+    await champModifie(
       'categoriesDonneesTraiteesSupplementaires',
-      $leBrouillon.categoriesDonneesTraiteesSupplementaires.filter(
+      donnees.categoriesDonneesTraiteesSupplementaires.filter(
         (categoriesDonneesTraiteesSupplementaires) =>
           categoriesDonneesTraiteesSupplementaires.trim().length > 0
       )
     );
   };
 
-  const enregistre = async (propriete: string, valeur: string | string[]) => {
-    await metsAJourBrouillonService($leBrouillon.id, {
-      [propriete]: valeur,
-    });
+  const champModifie = async (propriete: string, valeur: string | string[]) => {
+    dispatch('champModifie', { [propriete]: valeur });
   };
+
   let elementHtml: HTMLElement & { errorMessage: string; status: string };
-
-  let siret: string;
-  if ($leBrouillon.siret) {
-    siret = $leBrouillon.siret;
-  }
-
-  $: {
-    if (siret) {
-      $leBrouillon.siret = siret;
-      if (/^\d{14}$/.test(siret)) {
-        enregistre('siret', siret);
-      }
-    }
-  }
 </script>
 
 <div class="conteneur-avec-cadre">
@@ -84,37 +65,25 @@
     type="text"
     id="nom-service"
     nom="nom-service"
-    value={$leBrouillon.nomService}
+    value={donnees.nomService}
     errorMessage="Le nom du service est obligatoire."
     on:valuechanged={(e) => {
-      $leBrouillon.nomService = e.detail;
+      donnees.nomService = e.detail;
       elementHtml.errorMessage = 'Le nom du service est obligatoire.';
-      elementHtml.status =
-        $leBrouillon.nomService.length < 1 ? 'error' : 'default';
+      elementHtml.status = donnees.nomService.length < 1 ? 'error' : 'default';
     }}
     on:blur={async () => {
-      if ($leBrouillon.id && $leBrouillon.nomService.length >= 1) {
-        await enregistre('nomService', $leBrouillon.nomService);
-      }
-      if (!$leBrouillon.id && $leBrouillon.nomService.length > 1) {
-        const idBrouillon = await creeBrouillonService($leBrouillon.nomService);
-        ajouteParametreAUrl('id', idBrouillon);
-        leBrouillon.chargeDonnees({
-          id: idBrouillon,
-          nomService: $leBrouillon.nomService,
-        });
-        if ($entiteDeUtilisateur) {
-          siret = $entiteDeUtilisateur.siret;
-        }
-      }
+      if (donnees.nomService.length >= 1)
+        await champModifie('nomService', donnees.nomService);
     }}
   />
 
-  {#key siret}
+  {#key donnees.siret}
     <ChampOrganisation
-      bind:siret
+      siret={donnees.siret}
+      on:siretChoisi={async (e) => await champModifie('siret', e.detail)}
       label="Organisation responsable du projet*"
-      disabled={!$leBrouillon.id}
+      disabled={!donnees.id}
     />
   {/key}
 
@@ -124,12 +93,12 @@
     options={Object.entries(questionsV2.statutDeploiement).map(
       ([statut, { description }]) => ({ value: statut, label: description })
     )}
-    value={$leBrouillon.statutDeploiement}
-    disabled={!$leBrouillon.id}
+    value={donnees.statutDeploiement}
+    disabled={!donnees.id}
     id="statutDeploiement"
     on:valuechanged={async (e) => {
-      $leBrouillon.statutDeploiement = e.detail;
-      await enregistre('statutDeploiement', $leBrouillon.statutDeploiement);
+      donnees.statutDeploiement = e.detail;
+      await champModifie('statutDeploiement', donnees.statutDeploiement);
     }}
     placeholderDisabled
   />
@@ -139,29 +108,26 @@
     type="text"
     id="presentation"
     rows={3}
-    disabled={!$leBrouillon.id}
-    value={$leBrouillon.presentation}
-    status={$leBrouillon.id && $leBrouillon.presentation.length < 1
-      ? 'error'
-      : 'default'}
+    disabled={!donnees.id}
+    value={donnees.presentation}
+    status={donnees.id && donnees.presentation.length < 1 ? 'error' : 'default'}
     errorMessage="La présentation du service est obligatoire."
     on:blur={async (e) => {
-      $leBrouillon.presentation = e.target.value;
-      if ($leBrouillon.presentation.length >= 1) {
-        await enregistre('presentation', $leBrouillon.presentation);
-      }
+      donnees.presentation = e.target.value;
+      if (donnees.presentation.length >= 1)
+        await champModifie('presentation', donnees.presentation);
     }}
   />
 
-  <div class="conteneur-liste-champs" class:inactif={!$leBrouillon.id}>
+  <div class="conteneur-liste-champs" class:inactif={!donnees.id}>
     <label for="url-service">URL du service</label>
     <ListeChampTexte
       nomGroupe="pointsAcces"
-      bind:valeurs={$leBrouillon.pointsAcces}
+      bind:valeurs={donnees.pointsAcces}
       on:ajout={ajouteValeurPointAcces}
       titreSuppression="Supprimer l'URL"
       titreAjout="Ajouter une URL"
-      inactif={!$leBrouillon?.id}
+      inactif={!donnees.id}
       on:blur={() => enregistrePointsAcces()}
       on:suppression={async (e) => {
         supprimeValeurPointAcces(e.detail);
@@ -185,18 +151,16 @@
         label: nom,
       })
     )}
-    values={$leBrouillon.typeService}
-    disabled={!$leBrouillon.id}
+    values={donnees.typeService}
+    disabled={!donnees.id}
     id="typeService"
     on:valuechanged={async (e) => {
-      $leBrouillon.typeService = e.detail;
-      if ($leBrouillon.typeService.length >= 1) {
-        await enregistre('typeService', $leBrouillon.typeService);
+      donnees.typeService = e.detail;
+      if (donnees.typeService.length >= 1) {
+        await champModifie('typeService', donnees.typeService);
       }
     }}
-    status={$leBrouillon.id && $leBrouillon.typeService.length < 1
-      ? 'error'
-      : 'default'}
+    status={donnees.id && donnees.typeService.length < 1 ? 'error' : 'default'}
     errorMessage="Le type de service est obligatoire."
   />
 
@@ -210,14 +174,13 @@
         label: nom,
       })
     )}
-    values={$leBrouillon.specificitesProjet}
-    disabled={!$leBrouillon.id}
+    values={donnees.specificitesProjet}
+    disabled={!donnees.id}
     id="specificitesProjet"
     on:valuechanged={async (e) => {
-      $leBrouillon.specificitesProjet = e.detail;
-      if ($leBrouillon.specificitesProjet.length >= 1) {
-        await enregistre('specificitesProjet', $leBrouillon.specificitesProjet);
-      }
+      donnees.specificitesProjet = e.detail;
+      if (donnees.specificitesProjet.length >= 1)
+        await champModifie('specificitesProjet', donnees.specificitesProjet);
     }}
   />
 
@@ -227,22 +190,22 @@
     options={Object.entries(questionsV2.typeHebergement).map(
       ([typeHebergement, { nom }]) => ({ value: typeHebergement, label: nom })
     )}
-    value={$leBrouillon.typeHebergement}
-    disabled={!$leBrouillon.id}
+    value={donnees.typeHebergement}
+    disabled={!donnees.id}
     id="typeHebergement"
     on:valuechanged={async (e) => {
-      $leBrouillon.typeHebergement = e.detail;
+      donnees.typeHebergement = e.detail;
 
-      $leBrouillon.activitesExternalisees =
-        $leBrouillon.typeHebergement === 'saas'
+      donnees.activitesExternalisees =
+        donnees.typeHebergement === 'saas'
           ? ['administrationTechnique', 'developpementLogiciel']
           : [];
 
-      await enregistre(
+      await champModifie(
         'activitesExternalisees',
-        $leBrouillon.activitesExternalisees
+        donnees.activitesExternalisees
       );
-      await enregistre('typeHebergement', $leBrouillon.typeHebergement);
+      await champModifie('typeHebergement', donnees.typeHebergement);
     }}
     placeholderDisabled
   />
@@ -250,7 +213,7 @@
   <lab-anssi-multi-select
     label="Activités du projet entièrement externalisées"
     placeholder="Sélectionnez une ou plusieurs valeurs"
-    disabled={!$leBrouillon.id || $leBrouillon.typeHebergement === 'saas'}
+    disabled={!donnees.id || donnees.typeHebergement === 'saas'}
     options={Object.entries(questionsV2.activiteExternalisee).map(
       ([activiteExternalisee, { nom }]) => ({
         id: activiteExternalisee,
@@ -258,13 +221,13 @@
         label: nom,
       })
     )}
-    values={$leBrouillon.activitesExternalisees}
+    values={donnees.activitesExternalisees}
     id="activitesExternalisees"
     on:valuechanged={async (e) => {
-      $leBrouillon.activitesExternalisees = e.detail;
-      await enregistre(
+      donnees.activitesExternalisees = e.detail;
+      await champModifie(
         'activitesExternalisees',
-        $leBrouillon.activitesExternalisees
+        donnees.activitesExternalisees
       );
     }}
   />
@@ -279,12 +242,12 @@
     options={Object.entries(questionsV2.ouvertureSysteme).map(
       ([ouvertureSysteme, { nom }]) => ({ value: ouvertureSysteme, label: nom })
     )}
-    value={$leBrouillon.ouvertureSysteme}
-    disabled={!$leBrouillon.id}
+    value={donnees.ouvertureSysteme}
+    disabled={!donnees.id}
     id="ouvertureSysteme"
     on:valuechanged={async (e) => {
-      $leBrouillon.ouvertureSysteme = e.detail;
-      await enregistre('ouvertureSysteme', $leBrouillon.ouvertureSysteme);
+      donnees.ouvertureSysteme = e.detail;
+      await champModifie('ouvertureSysteme', donnees.ouvertureSysteme);
     }}
     placeholderDisabled
   />
@@ -295,12 +258,12 @@
     options={Object.entries(questionsV2.audienceCible).map(
       ([audienceCible, { nom }]) => ({ value: audienceCible, label: nom })
     )}
-    value={$leBrouillon.audienceCible}
-    disabled={!$leBrouillon.id}
+    value={donnees.audienceCible}
+    disabled={!donnees.id}
     id="audienceCible"
     on:valuechanged={async (e) => {
-      $leBrouillon.audienceCible = e.detail;
-      await enregistre('audienceCible', $leBrouillon.audienceCible);
+      donnees.audienceCible = e.detail;
+      await champModifie('audienceCible', donnees.audienceCible);
     }}
     placeholderDisabled
   />
@@ -311,14 +274,14 @@
     options={Object.entries(questionsV2.dureeDysfonctionnementAcceptable).map(
       ([duree, { nom }]) => ({ value: duree, label: nom })
     )}
-    value={$leBrouillon.dureeDysfonctionnementAcceptable}
-    disabled={!$leBrouillon.id}
+    value={donnees.dureeDysfonctionnementAcceptable}
+    disabled={!donnees.id}
     id="dureeDysfonctionnementAcceptable"
     on:valuechanged={async (e) => {
-      $leBrouillon.dureeDysfonctionnementAcceptable = e.detail;
-      await enregistre(
+      donnees.dureeDysfonctionnementAcceptable = e.detail;
+      await champModifie(
         'dureeDysfonctionnementAcceptable',
-        $leBrouillon.dureeDysfonctionnementAcceptable
+        donnees.dureeDysfonctionnementAcceptable
       );
     }}
     placeholderDisabled
@@ -334,26 +297,27 @@
         label: nom,
       })
     )}
-    values={$leBrouillon.categoriesDonneesTraitees}
-    disabled={!$leBrouillon.id}
+    values={donnees.categoriesDonneesTraitees}
+    disabled={!donnees.id}
     id="categoriesDonneesTraitees"
     on:valuechanged={async (e) => {
-      $leBrouillon.categoriesDonneesTraitees = e.detail;
-      await enregistre(
+      donnees.categoriesDonneesTraitees = e.detail;
+      await champModifie(
         'categoriesDonneesTraitees',
-        $leBrouillon.categoriesDonneesTraitees
+        donnees.categoriesDonneesTraitees
       );
     }}
   />
-  <div class="conteneur-liste-champs" class:inactif={!$leBrouillon.id}>
+
+  <div class="conteneur-liste-champs" class:inactif={!donnees.id}>
     <label for="url-service">Données traitées supplémentaires</label>
     <ListeChampTexte
       nomGroupe="categoriesDonneesTraiteesSupplementaires"
-      bind:valeurs={$leBrouillon.categoriesDonneesTraiteesSupplementaires}
+      bind:valeurs={donnees.categoriesDonneesTraiteesSupplementaires}
       on:ajout={ajouteCategoriesDonneesTraiteesSupplementaires}
       titreSuppression="Supprimer les données"
       titreAjout="Ajouter des données"
-      inactif={!$leBrouillon?.id}
+      inactif={!donnees.id}
       on:blur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
       on:suppression={async (e) => {
         supprimeCategoriesDonneesTraiteesSupplementaires(e.detail);
@@ -369,14 +333,14 @@
     options={Object.entries(questionsV2.volumetrieDonneesTraitees).map(
       ([volumetrie, { nom }]) => ({ value: volumetrie, label: nom })
     )}
-    value={$leBrouillon.volumetrieDonneesTraitees}
-    disabled={!$leBrouillon.id}
+    value={donnees.volumetrieDonneesTraitees}
+    disabled={!donnees.id}
     id="volumetrieDonneesTraitees"
     on:valuechanged={async (e) => {
-      $leBrouillon.volumetrieDonneesTraitees = e.detail;
-      await enregistre(
+      donnees.volumetrieDonneesTraitees = e.detail;
+      await champModifie(
         'volumetrieDonneesTraitees',
-        $leBrouillon.volumetrieDonneesTraitees
+        donnees.volumetrieDonneesTraitees
       );
     }}
     placeholderDisabled
@@ -392,22 +356,20 @@
         label: nom,
       })
     )}
-    values={$leBrouillon.localisationsDonneesTraitees}
-    disabled={!$leBrouillon.id}
-    status={$leBrouillon.id &&
-    $leBrouillon.localisationsDonneesTraitees.length < 1
+    values={donnees.localisationsDonneesTraitees}
+    disabled={!donnees.id}
+    status={donnees.id && donnees.localisationsDonneesTraitees.length < 1
       ? 'error'
       : 'default'}
     errorMessage="La localisation des données est obligatoire."
     id="localisationsDonneesTraitees"
     on:valuechanged={async (e) => {
-      $leBrouillon.localisationsDonneesTraitees = e.detail;
-      if ($leBrouillon.localisationsDonneesTraitees.length >= 1) {
-        await enregistre(
+      donnees.localisationsDonneesTraitees = e.detail;
+      if (donnees.localisationsDonneesTraitees.length >= 1)
+        await champModifie(
           'localisationsDonneesTraitees',
-          $leBrouillon.localisationsDonneesTraitees
+          donnees.localisationsDonneesTraitees
         );
-      }
     }}
   />
 </div>

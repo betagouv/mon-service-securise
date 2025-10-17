@@ -21,9 +21,9 @@ export const finaliseBrouillonService = async (
   return reponse.data.idService;
 };
 
-export type MiseAJour = Partial<
-  Record<keyof BrouillonIncomplet, string | string[]>
->;
+export type MiseAJour = {
+  [K in keyof BrouillonIncomplet]?: BrouillonIncomplet[K];
+};
 
 export const metsAJourBrouillonService = async (
   idBrouillon: UUID,
@@ -34,9 +34,7 @@ export const metsAJourBrouillonService = async (
     const [proprieteMiseAJour, valeurMiseAJour] = misesAJour[i];
     await axios.put(
       `/api/brouillon-service/${idBrouillon}/${proprieteMiseAJour}`,
-      {
-        [proprieteMiseAJour]: valeurMiseAJour,
-      }
+      { [proprieteMiseAJour]: valeurMiseAJour }
     );
   }
 };

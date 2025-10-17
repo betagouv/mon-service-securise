@@ -5,11 +5,7 @@ export const rechercheOrganisation = async (
 ): Promise<Entite[]> => {
   const reponse = await axios.get<{ suggestions: Entite[] }>(
     '/api/annuaire/organisations',
-    {
-      params: {
-        recherche: siret,
-      },
-    }
+    { params: { recherche: siret } }
   );
 
   return reponse.data.suggestions;

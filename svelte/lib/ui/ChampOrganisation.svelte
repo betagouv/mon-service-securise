@@ -1,15 +1,11 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
 
-  type Organisation = {
-    nom: string;
-    siret: string;
-    departement: string;
-  };
+  const dispatch = createEventDispatcher<{ siretChoisi: string }>();
 
-  type OrganisationAvecLabel = Organisation & {
-    label: string;
-  };
+  type Organisation = { nom: string; siret: string; departement: string };
+  type OrganisationAvecLabel = Organisation & { label: string };
 
   export let siret: string | undefined = undefined;
   export let label: string = '';
@@ -80,6 +76,7 @@
 
   const choisisOrganisation = async (item: OrganisationAvecLabel) => {
     siret = item.siret;
+    dispatch('siretChoisi', siret);
     saisie = construisLabel(item);
     await tick();
     if (elementInput) elementInput.value = saisie;
