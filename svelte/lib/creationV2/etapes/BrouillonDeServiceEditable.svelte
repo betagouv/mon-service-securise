@@ -19,7 +19,7 @@
   };
 
   const enregistrePointsAcces = async () => {
-    await enregistre(
+    await champModifie(
       'pointsAcces',
       $leBrouillon.pointsAcces.filter(
         (pointAcces) => pointAcces.trim().length > 0
@@ -42,7 +42,7 @@
   };
 
   const enregistreCategoriesDonneesTraiteesSupplementaires = async () => {
-    await enregistre(
+    await champModifie(
       'categoriesDonneesTraiteesSupplementaires',
       $leBrouillon.categoriesDonneesTraiteesSupplementaires.filter(
         (categoriesDonneesTraiteesSupplementaires) =>
@@ -51,7 +51,7 @@
     );
   };
 
-  const enregistre = async (propriete: string, valeur: string | string[]) => {
+  const champModifie = async (propriete: string, valeur: string | string[]) => {
     dispatch('champModifie', { [propriete]: valeur });
   };
 
@@ -77,14 +77,14 @@
     }}
     on:blur={async () => {
       if ($leBrouillon.nomService.length >= 1)
-        await enregistre('nomService', $leBrouillon.nomService);
+        await champModifie('nomService', $leBrouillon.nomService);
     }}
   />
 
   {#key $leBrouillon.siret}
     <ChampOrganisation
       siret={$leBrouillon.siret}
-      on:siretChoisi={async (e) => await enregistre('siret', e.detail)}
+      on:siretChoisi={async (e) => await champModifie('siret', e.detail)}
       label="Organisation responsable du projet*"
       disabled={!$leBrouillon.id}
     />
@@ -101,7 +101,7 @@
     id="statutDeploiement"
     on:valuechanged={async (e) => {
       $leBrouillon.statutDeploiement = e.detail;
-      await enregistre('statutDeploiement', $leBrouillon.statutDeploiement);
+      await champModifie('statutDeploiement', $leBrouillon.statutDeploiement);
     }}
     placeholderDisabled
   />
@@ -120,7 +120,7 @@
     on:blur={async (e) => {
       $leBrouillon.presentation = e.target.value;
       if ($leBrouillon.presentation.length >= 1) {
-        await enregistre('presentation', $leBrouillon.presentation);
+        await champModifie('presentation', $leBrouillon.presentation);
       }
     }}
   />
@@ -163,7 +163,7 @@
     on:valuechanged={async (e) => {
       $leBrouillon.typeService = e.detail;
       if ($leBrouillon.typeService.length >= 1) {
-        await enregistre('typeService', $leBrouillon.typeService);
+        await champModifie('typeService', $leBrouillon.typeService);
       }
     }}
     status={$leBrouillon.id && $leBrouillon.typeService.length < 1
@@ -188,7 +188,10 @@
     on:valuechanged={async (e) => {
       $leBrouillon.specificitesProjet = e.detail;
       if ($leBrouillon.specificitesProjet.length >= 1) {
-        await enregistre('specificitesProjet', $leBrouillon.specificitesProjet);
+        await champModifie(
+          'specificitesProjet',
+          $leBrouillon.specificitesProjet
+        );
       }
     }}
   />
@@ -210,11 +213,11 @@
           ? ['administrationTechnique', 'developpementLogiciel']
           : [];
 
-      await enregistre(
+      await champModifie(
         'activitesExternalisees',
         $leBrouillon.activitesExternalisees
       );
-      await enregistre('typeHebergement', $leBrouillon.typeHebergement);
+      await champModifie('typeHebergement', $leBrouillon.typeHebergement);
     }}
     placeholderDisabled
   />
@@ -234,7 +237,7 @@
     id="activitesExternalisees"
     on:valuechanged={async (e) => {
       $leBrouillon.activitesExternalisees = e.detail;
-      await enregistre(
+      await champModifie(
         'activitesExternalisees',
         $leBrouillon.activitesExternalisees
       );
@@ -256,7 +259,7 @@
     id="ouvertureSysteme"
     on:valuechanged={async (e) => {
       $leBrouillon.ouvertureSysteme = e.detail;
-      await enregistre('ouvertureSysteme', $leBrouillon.ouvertureSysteme);
+      await champModifie('ouvertureSysteme', $leBrouillon.ouvertureSysteme);
     }}
     placeholderDisabled
   />
@@ -272,7 +275,7 @@
     id="audienceCible"
     on:valuechanged={async (e) => {
       $leBrouillon.audienceCible = e.detail;
-      await enregistre('audienceCible', $leBrouillon.audienceCible);
+      await champModifie('audienceCible', $leBrouillon.audienceCible);
     }}
     placeholderDisabled
   />
@@ -288,7 +291,7 @@
     id="dureeDysfonctionnementAcceptable"
     on:valuechanged={async (e) => {
       $leBrouillon.dureeDysfonctionnementAcceptable = e.detail;
-      await enregistre(
+      await champModifie(
         'dureeDysfonctionnementAcceptable',
         $leBrouillon.dureeDysfonctionnementAcceptable
       );
@@ -311,7 +314,7 @@
     id="categoriesDonneesTraitees"
     on:valuechanged={async (e) => {
       $leBrouillon.categoriesDonneesTraitees = e.detail;
-      await enregistre(
+      await champModifie(
         'categoriesDonneesTraitees',
         $leBrouillon.categoriesDonneesTraitees
       );
@@ -346,7 +349,7 @@
     id="volumetrieDonneesTraitees"
     on:valuechanged={async (e) => {
       $leBrouillon.volumetrieDonneesTraitees = e.detail;
-      await enregistre(
+      await champModifie(
         'volumetrieDonneesTraitees',
         $leBrouillon.volumetrieDonneesTraitees
       );
@@ -375,7 +378,7 @@
     on:valuechanged={async (e) => {
       $leBrouillon.localisationsDonneesTraitees = e.detail;
       if ($leBrouillon.localisationsDonneesTraitees.length >= 1) {
-        await enregistre(
+        await champModifie(
           'localisationsDonneesTraitees',
           $leBrouillon.localisationsDonneesTraitees
         );
