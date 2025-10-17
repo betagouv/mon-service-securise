@@ -9,17 +9,21 @@
 
   type ModeAffichage = 'Résumé' | 'Édition';
 
+  function enEditable(description: DescriptionServiceV2API): BrouillonSvelte {
+    return {
+      ...description,
+      siret: description.organisationResponsable.siret,
+      pointsAcces: description.pointsAcces.map((p) => p.description),
+    };
+  }
+
   export let descriptionService: DescriptionServiceV2API;
   export let lectureSeule: boolean;
 
   let mode: ModeAffichage = 'Résumé';
 
-  let descriptionEditable: BrouillonSvelte = {
-    ...descriptionService,
-    siret: descriptionService.organisationResponsable.siret,
-    pointsAcces: descriptionService.pointsAcces.map((p) => p.description),
-  };
-
+  const copiePourRestauration = structuredClone(descriptionService);
+  let descriptionEditable: BrouillonSvelte = enEditable(descriptionService);
   $: descriptionAffichable =
     convertisDonneesDescriptionEnLibelles(descriptionEditable);
 
@@ -60,6 +64,11 @@
     <BarreActions
       mode="Édition"
       on:enregistrer={() => {
+        mode = 'Résumé';
+      }}
+      on:annuler={() => {
+        descriptionEditable = enEditable(copiePourRestauration);
+        window.scrollTo(0, 0);
         mode = 'Résumé';
       }}
     />

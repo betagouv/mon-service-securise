@@ -4,6 +4,7 @@
   const dispatch = createEventDispatcher<{
     modifier: null;
     enregistrer: null;
+    annuler: null;
   }>();
 
   type ModeAffichage = 'Résumé' | 'Édition';
@@ -32,6 +33,14 @@
         positionIcone="gauche"
         on:click={() => dispatch('enregistrer')}
       />
+      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <lab-anssi-bouton
+        titre="Annuler"
+        variante="tertiaire"
+        taille="md"
+        positionIcone="sans"
+        on:click={() => dispatch('annuler')}
+      />
     {/if}
   </div>
 </div>
@@ -48,6 +57,9 @@
       max-width: 1000px;
       padding: 0 54px;
       margin: 0 auto;
+
+      display: flex;
+      gap: 16px;
     }
   }
 </style>
