@@ -66,17 +66,16 @@
     type="text"
     id="nom-service"
     nom="nom-service"
-    value={$leBrouillon.nomService}
+    value={donnees.nomService}
     errorMessage="Le nom du service est obligatoire."
     on:valuechanged={(e) => {
-      $leBrouillon.nomService = e.detail;
+      donnees.nomService = e.detail;
       elementHtml.errorMessage = 'Le nom du service est obligatoire.';
-      elementHtml.status =
-        $leBrouillon.nomService.length < 1 ? 'error' : 'default';
+      elementHtml.status = donnees.nomService.length < 1 ? 'error' : 'default';
     }}
     on:blur={async () => {
-      if ($leBrouillon.nomService.length >= 1)
-        await champModifie('nomService', $leBrouillon.nomService);
+      if (donnees.nomService.length >= 1)
+        await champModifie('nomService', donnees.nomService);
     }}
   />
 
