@@ -94,12 +94,12 @@
     options={Object.entries(questionsV2.statutDeploiement).map(
       ([statut, { description }]) => ({ value: statut, label: description })
     )}
-    value={$leBrouillon.statutDeploiement}
-    disabled={!$leBrouillon.id}
+    value={donnees.statutDeploiement}
+    disabled={!donnees.id}
     id="statutDeploiement"
     on:valuechanged={async (e) => {
-      $leBrouillon.statutDeploiement = e.detail;
-      await champModifie('statutDeploiement', $leBrouillon.statutDeploiement);
+      donnees.statutDeploiement = e.detail;
+      await champModifie('statutDeploiement', donnees.statutDeploiement);
     }}
     placeholderDisabled
   />
@@ -109,21 +109,18 @@
     type="text"
     id="presentation"
     rows={3}
-    disabled={!$leBrouillon.id}
-    value={$leBrouillon.presentation}
-    status={$leBrouillon.id && $leBrouillon.presentation.length < 1
-      ? 'error'
-      : 'default'}
+    disabled={!donnees.id}
+    value={donnees.presentation}
+    status={donnees.id && donnees.presentation.length < 1 ? 'error' : 'default'}
     errorMessage="La présentation du service est obligatoire."
     on:blur={async (e) => {
-      $leBrouillon.presentation = e.target.value;
-      if ($leBrouillon.presentation.length >= 1) {
-        await champModifie('presentation', $leBrouillon.presentation);
-      }
+      donnees.presentation = e.target.value;
+      if (donnees.presentation.length >= 1)
+        await champModifie('presentation', donnees.presentation);
     }}
   />
 
-  <div class="conteneur-liste-champs" class:inactif={!$leBrouillon.id}>
+  <div class="conteneur-liste-champs" class:inactif={!donnees.id}>
     <label for="url-service">URL du service</label>
     <ListeChampTexte
       nomGroupe="pointsAcces"
@@ -131,7 +128,7 @@
       on:ajout={ajouteValeurPointAcces}
       titreSuppression="Supprimer l'URL"
       titreAjout="Ajouter une URL"
-      inactif={!$leBrouillon?.id}
+      inactif={!donnees.id}
       on:blur={() => enregistrePointsAcces()}
       on:suppression={async (e) => {
         supprimeValeurPointAcces(e.detail);
@@ -155,18 +152,16 @@
         label: nom,
       })
     )}
-    values={$leBrouillon.typeService}
-    disabled={!$leBrouillon.id}
+    values={donnees.typeService}
+    disabled={!donnees.id}
     id="typeService"
     on:valuechanged={async (e) => {
-      $leBrouillon.typeService = e.detail;
-      if ($leBrouillon.typeService.length >= 1) {
-        await champModifie('typeService', $leBrouillon.typeService);
+      donnees.typeService = e.detail;
+      if (donnees.typeService.length >= 1) {
+        await champModifie('typeService', donnees.typeService);
       }
     }}
-    status={$leBrouillon.id && $leBrouillon.typeService.length < 1
-      ? 'error'
-      : 'default'}
+    status={donnees.id && donnees.typeService.length < 1 ? 'error' : 'default'}
     errorMessage="Le type de service est obligatoire."
   />
 
