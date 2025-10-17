@@ -79,12 +79,12 @@
     }}
   />
 
-  {#key $leBrouillon.siret}
+  {#key donnees.siret}
     <ChampOrganisation
-      siret={$leBrouillon.siret}
+      siret={donnees.siret}
       on:siretChoisi={async (e) => await champModifie('siret', e.detail)}
       label="Organisation responsable du projet*"
-      disabled={!$leBrouillon.id}
+      disabled={!donnees.id}
     />
   {/key}
 
