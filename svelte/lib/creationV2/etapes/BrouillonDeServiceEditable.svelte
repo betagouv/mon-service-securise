@@ -83,7 +83,8 @@
 
   {#key $leBrouillon.siret}
     <ChampOrganisation
-      bind:siret={$leBrouillon.siret}
+      siret={$leBrouillon.siret}
+      on:siretChoisi={async (e) => await enregistre('siret', e.detail)}
       label="Organisation responsable du projet*"
       disabled={!$leBrouillon.id}
     />
