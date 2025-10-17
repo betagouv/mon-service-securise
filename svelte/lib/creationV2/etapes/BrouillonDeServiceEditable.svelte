@@ -27,15 +27,15 @@
   };
 
   const supprimeCategoriesDonneesTraiteesSupplementaires = (index: number) => {
-    $leBrouillon.categoriesDonneesTraiteesSupplementaires =
-      $leBrouillon.categoriesDonneesTraiteesSupplementaires.filter(
+    donnees.categoriesDonneesTraiteesSupplementaires =
+      donnees.categoriesDonneesTraiteesSupplementaires.filter(
         (_, i) => i !== index
       );
   };
 
   const ajouteCategoriesDonneesTraiteesSupplementaires = () => {
-    $leBrouillon.categoriesDonneesTraiteesSupplementaires = [
-      ...$leBrouillon.categoriesDonneesTraiteesSupplementaires,
+    donnees.categoriesDonneesTraiteesSupplementaires = [
+      ...donnees.categoriesDonneesTraiteesSupplementaires,
       '',
     ];
   };
@@ -43,7 +43,7 @@
   const enregistreCategoriesDonneesTraiteesSupplementaires = async () => {
     await champModifie(
       'categoriesDonneesTraiteesSupplementaires',
-      $leBrouillon.categoriesDonneesTraiteesSupplementaires.filter(
+      donnees.categoriesDonneesTraiteesSupplementaires.filter(
         (categoriesDonneesTraiteesSupplementaires) =>
           categoriesDonneesTraiteesSupplementaires.trim().length > 0
       )
@@ -323,11 +323,11 @@
     <label for="url-service">Données traitées supplémentaires</label>
     <ListeChampTexte
       nomGroupe="categoriesDonneesTraiteesSupplementaires"
-      bind:valeurs={$leBrouillon.categoriesDonneesTraiteesSupplementaires}
+      bind:valeurs={donnees.categoriesDonneesTraiteesSupplementaires}
       on:ajout={ajouteCategoriesDonneesTraiteesSupplementaires}
       titreSuppression="Supprimer les données"
       titreAjout="Ajouter des données"
-      inactif={!$leBrouillon?.id}
+      inactif={!donnees.id}
       on:blur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
       on:suppression={async (e) => {
         supprimeCategoriesDonneesTraiteesSupplementaires(e.detail);
