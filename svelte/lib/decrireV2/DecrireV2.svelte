@@ -5,6 +5,7 @@
   import BarreActions from './BarreActions.svelte';
   import BrouillonDeServiceEditable from '../creationV2/etapes/BrouillonDeServiceEditable.svelte';
   import type { BrouillonSvelte } from '../creationV2/creationV2.types';
+  import { rechercheOrganisation } from '../ui/rechercheOrganisation';
 
   type ModeAffichage = 'Résumé' | 'Édition';
 
@@ -21,13 +22,20 @@
 
   $: descriptionAffichable =
     convertisDonneesDescriptionEnLibelles(descriptionEditable);
+
+  let organisationResponsable = descriptionService.organisationResponsable;
+  async function rechargeOrganisationResponsabe(siret: string) {
+    const entite = (await rechercheOrganisation(siret))[0];
+    organisationResponsable = entite;
+  }
+  $: rechargeOrganisationResponsabe(descriptionEditable.siret);
 </script>
 
 <div class="conteneur-decrire-v2">
   <div class="conteneur-resume">
     {#if mode === 'Résumé'}
       <ResumeDuServiceLectureSeule
-        entite={descriptionService.organisationResponsable}
+        entite={organisationResponsable}
         donnees={descriptionAffichable}
       />
     {:else}
