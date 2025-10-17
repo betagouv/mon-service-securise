@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { leBrouillon } from './brouillon.store';
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import { tick, createEventDispatcher } from 'svelte';
   import { type MiseAJour } from '../creationV2.api';
@@ -175,17 +174,13 @@
         label: nom,
       })
     )}
-    values={$leBrouillon.specificitesProjet}
-    disabled={!$leBrouillon.id}
+    values={donnees.specificitesProjet}
+    disabled={!donnees.id}
     id="specificitesProjet"
     on:valuechanged={async (e) => {
-      $leBrouillon.specificitesProjet = e.detail;
-      if ($leBrouillon.specificitesProjet.length >= 1) {
-        await champModifie(
-          'specificitesProjet',
-          $leBrouillon.specificitesProjet
-        );
-      }
+      donnees.specificitesProjet = e.detail;
+      if (donnees.specificitesProjet.length >= 1)
+        await champModifie('specificitesProjet', donnees.specificitesProjet);
     }}
   />
 
@@ -195,22 +190,22 @@
     options={Object.entries(questionsV2.typeHebergement).map(
       ([typeHebergement, { nom }]) => ({ value: typeHebergement, label: nom })
     )}
-    value={$leBrouillon.typeHebergement}
-    disabled={!$leBrouillon.id}
+    value={donnees.typeHebergement}
+    disabled={!donnees.id}
     id="typeHebergement"
     on:valuechanged={async (e) => {
-      $leBrouillon.typeHebergement = e.detail;
+      donnees.typeHebergement = e.detail;
 
-      $leBrouillon.activitesExternalisees =
-        $leBrouillon.typeHebergement === 'saas'
+      donnees.activitesExternalisees =
+        donnees.typeHebergement === 'saas'
           ? ['administrationTechnique', 'developpementLogiciel']
           : [];
 
       await champModifie(
         'activitesExternalisees',
-        $leBrouillon.activitesExternalisees
+        donnees.activitesExternalisees
       );
-      await champModifie('typeHebergement', $leBrouillon.typeHebergement);
+      await champModifie('typeHebergement', donnees.typeHebergement);
     }}
     placeholderDisabled
   />
@@ -218,7 +213,7 @@
   <lab-anssi-multi-select
     label="Activités du projet entièrement externalisées"
     placeholder="Sélectionnez une ou plusieurs valeurs"
-    disabled={!$leBrouillon.id || $leBrouillon.typeHebergement === 'saas'}
+    disabled={!donnees.id || donnees.typeHebergement === 'saas'}
     options={Object.entries(questionsV2.activiteExternalisee).map(
       ([activiteExternalisee, { nom }]) => ({
         id: activiteExternalisee,
@@ -226,13 +221,13 @@
         label: nom,
       })
     )}
-    values={$leBrouillon.activitesExternalisees}
+    values={donnees.activitesExternalisees}
     id="activitesExternalisees"
     on:valuechanged={async (e) => {
-      $leBrouillon.activitesExternalisees = e.detail;
+      donnees.activitesExternalisees = e.detail;
       await champModifie(
         'activitesExternalisees',
-        $leBrouillon.activitesExternalisees
+        donnees.activitesExternalisees
       );
     }}
   />
@@ -247,12 +242,12 @@
     options={Object.entries(questionsV2.ouvertureSysteme).map(
       ([ouvertureSysteme, { nom }]) => ({ value: ouvertureSysteme, label: nom })
     )}
-    value={$leBrouillon.ouvertureSysteme}
-    disabled={!$leBrouillon.id}
+    value={donnees.ouvertureSysteme}
+    disabled={!donnees.id}
     id="ouvertureSysteme"
     on:valuechanged={async (e) => {
-      $leBrouillon.ouvertureSysteme = e.detail;
-      await champModifie('ouvertureSysteme', $leBrouillon.ouvertureSysteme);
+      donnees.ouvertureSysteme = e.detail;
+      await champModifie('ouvertureSysteme', donnees.ouvertureSysteme);
     }}
     placeholderDisabled
   />
@@ -263,12 +258,12 @@
     options={Object.entries(questionsV2.audienceCible).map(
       ([audienceCible, { nom }]) => ({ value: audienceCible, label: nom })
     )}
-    value={$leBrouillon.audienceCible}
-    disabled={!$leBrouillon.id}
+    value={donnees.audienceCible}
+    disabled={!donnees.id}
     id="audienceCible"
     on:valuechanged={async (e) => {
-      $leBrouillon.audienceCible = e.detail;
-      await champModifie('audienceCible', $leBrouillon.audienceCible);
+      donnees.audienceCible = e.detail;
+      await champModifie('audienceCible', donnees.audienceCible);
     }}
     placeholderDisabled
   />
@@ -279,14 +274,14 @@
     options={Object.entries(questionsV2.dureeDysfonctionnementAcceptable).map(
       ([duree, { nom }]) => ({ value: duree, label: nom })
     )}
-    value={$leBrouillon.dureeDysfonctionnementAcceptable}
-    disabled={!$leBrouillon.id}
+    value={donnees.dureeDysfonctionnementAcceptable}
+    disabled={!donnees.id}
     id="dureeDysfonctionnementAcceptable"
     on:valuechanged={async (e) => {
-      $leBrouillon.dureeDysfonctionnementAcceptable = e.detail;
+      donnees.dureeDysfonctionnementAcceptable = e.detail;
       await champModifie(
         'dureeDysfonctionnementAcceptable',
-        $leBrouillon.dureeDysfonctionnementAcceptable
+        donnees.dureeDysfonctionnementAcceptable
       );
     }}
     placeholderDisabled
@@ -302,18 +297,19 @@
         label: nom,
       })
     )}
-    values={$leBrouillon.categoriesDonneesTraitees}
-    disabled={!$leBrouillon.id}
+    values={donnees.categoriesDonneesTraitees}
+    disabled={!donnees.id}
     id="categoriesDonneesTraitees"
     on:valuechanged={async (e) => {
-      $leBrouillon.categoriesDonneesTraitees = e.detail;
+      donnees.categoriesDonneesTraitees = e.detail;
       await champModifie(
         'categoriesDonneesTraitees',
-        $leBrouillon.categoriesDonneesTraitees
+        donnees.categoriesDonneesTraitees
       );
     }}
   />
-  <div class="conteneur-liste-champs" class:inactif={!$leBrouillon.id}>
+
+  <div class="conteneur-liste-champs" class:inactif={!donnees.id}>
     <label for="url-service">Données traitées supplémentaires</label>
     <ListeChampTexte
       nomGroupe="categoriesDonneesTraiteesSupplementaires"
@@ -337,14 +333,14 @@
     options={Object.entries(questionsV2.volumetrieDonneesTraitees).map(
       ([volumetrie, { nom }]) => ({ value: volumetrie, label: nom })
     )}
-    value={$leBrouillon.volumetrieDonneesTraitees}
-    disabled={!$leBrouillon.id}
+    value={donnees.volumetrieDonneesTraitees}
+    disabled={!donnees.id}
     id="volumetrieDonneesTraitees"
     on:valuechanged={async (e) => {
-      $leBrouillon.volumetrieDonneesTraitees = e.detail;
+      donnees.volumetrieDonneesTraitees = e.detail;
       await champModifie(
         'volumetrieDonneesTraitees',
-        $leBrouillon.volumetrieDonneesTraitees
+        donnees.volumetrieDonneesTraitees
       );
     }}
     placeholderDisabled
@@ -360,22 +356,20 @@
         label: nom,
       })
     )}
-    values={$leBrouillon.localisationsDonneesTraitees}
-    disabled={!$leBrouillon.id}
-    status={$leBrouillon.id &&
-    $leBrouillon.localisationsDonneesTraitees.length < 1
+    values={donnees.localisationsDonneesTraitees}
+    disabled={!donnees.id}
+    status={donnees.id && donnees.localisationsDonneesTraitees.length < 1
       ? 'error'
       : 'default'}
     errorMessage="La localisation des données est obligatoire."
     id="localisationsDonneesTraitees"
     on:valuechanged={async (e) => {
-      $leBrouillon.localisationsDonneesTraitees = e.detail;
-      if ($leBrouillon.localisationsDonneesTraitees.length >= 1) {
+      donnees.localisationsDonneesTraitees = e.detail;
+      if (donnees.localisationsDonneesTraitees.length >= 1)
         await champModifie(
           'localisationsDonneesTraitees',
-          $leBrouillon.localisationsDonneesTraitees
+          donnees.localisationsDonneesTraitees
         );
-      }
     }}
   />
 </div>
