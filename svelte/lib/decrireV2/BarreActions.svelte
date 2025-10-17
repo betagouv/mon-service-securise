@@ -41,6 +41,10 @@
         positionIcone="sans"
         on:click={() => dispatch('annuler')}
       />
+      <span class="attention-aux-besoins">
+        <img src="/statique/assets/images/icone_attention_rose.svg" alt="" />
+        En modifiant ce service, ses besoins en sécurité pourront être réévalués.
+      </span>
     {/if}
   </div>
 </div>
@@ -59,7 +63,24 @@
       margin: 0 auto;
 
       display: flex;
+      align-items: center;
       gap: 16px;
+
+      lab-anssi-bouton {
+        flex-shrink: 0;
+      }
+
+      .attention-aux-besoins {
+        color: #666;
+        text-align: left;
+        display: flex;
+        img {
+          width: 16px;
+          filter: invert(41%) sepia(0%) saturate(0%) hue-rotate(16deg)
+            brightness(94%) contrast(87%);
+          margin-right: 4px;
+        }
+      }
     }
   }
 </style>
