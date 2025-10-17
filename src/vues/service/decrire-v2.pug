@@ -16,7 +16,7 @@ block sous-titre
 
 block append scripts
   +composantSvelte('decrireV2.js')
-  +donneesPartagees('donnees-description-service', service.descriptionService.toJSON())
+  +donneesPartagees('donnees-description-service', { id: service.id, ...service.descriptionService.toJSON() })
   +donneesPartagees('donnees-lecture-seule', autorisationsService.DECRIRE.estLectureSeule)
   script(type = 'module', src = '/statique/service/decrireV2.mjs')
 
