@@ -32,6 +32,7 @@
 </script>
 
 <BrouillonDeServiceEditable
+  donnees={$leBrouillon}
   on:champModifie={async (e) => {
     await enregistre(e.detail);
   }}

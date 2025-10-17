@@ -5,25 +5,24 @@
   import { type MiseAJour } from '../creationV2.api';
   import ListeChampTexte from './ListeChampTexte.svelte';
   import ChampOrganisation from '../../ui/ChampOrganisation.svelte';
+  import type { BrouillonSvelte } from '../creationV2.types';
+
+  export let donnees: BrouillonSvelte;
 
   const dispatch = createEventDispatcher<{ champModifie: MiseAJour }>();
 
   const supprimeValeurPointAcces = (index: number) => {
-    $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
-      (_, i) => i !== index
-    );
+    donnees.pointsAcces = donnees.pointsAcces.filter((_, i) => i !== index);
   };
 
   const ajouteValeurPointAcces = () => {
-    $leBrouillon.pointsAcces = [...$leBrouillon.pointsAcces, ''];
+    donnees.pointsAcces = [...donnees.pointsAcces, ''];
   };
 
   const enregistrePointsAcces = async () => {
     await champModifie(
       'pointsAcces',
-      $leBrouillon.pointsAcces.filter(
-        (pointAcces) => pointAcces.trim().length > 0
-      )
+      donnees.pointsAcces.filter((pointAcces) => pointAcces.trim().length > 0)
     );
   };
 
@@ -129,7 +128,7 @@
     <label for="url-service">URL du service</label>
     <ListeChampTexte
       nomGroupe="pointsAcces"
-      bind:valeurs={$leBrouillon.pointsAcces}
+      bind:valeurs={donnees.pointsAcces}
       on:ajout={ajouteValeurPointAcces}
       titreSuppression="Supprimer l'URL"
       titreAjout="Ajouter une URL"
