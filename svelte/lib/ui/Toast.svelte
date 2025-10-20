@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { glisse } from './animations/transitions';
+  import DOMPurify from 'isomorphic-dompurify';
   import { createEventDispatcher } from 'svelte';
+  import { glisse } from './animations/transitions';
 
   export let niveau: 'info' | 'succes' | 'erreur' | 'alerte';
   export let titre: string;
@@ -55,7 +56,9 @@
   </div>
   <div class="conteneur-texte">
     <p class="titre">{titre}</p>
-    <p class="texte">{@html contenu}</p>
+    <p class="texte">
+      {@html DOMPurify.sanitize(contenu, { ALLOWED_TAGS: ['b'] })}
+    </p>
   </div>
 </article>
 
