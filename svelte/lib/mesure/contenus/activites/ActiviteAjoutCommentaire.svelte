@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ActiviteMesure, DetailsAjoutCommentaire } from '../../mesure.d';
   import { decode } from 'html-entities';
+  import DOMPurify from 'isomorphic-dompurify';
   import { contributeurs } from '../../../tableauDesMesures/stores/contributeurs.store';
 
   export let activite: ActiviteMesure;
@@ -13,17 +14,19 @@
     .replaceAll(regexUUID, (_s, idUtilisateur) => {
       const contributeur = $contributeurs.find((c) => c.id === idUtilisateur);
       const texte = contributeur ? contributeur.prenomNom : 'Utilisateur·rice';
-      return `<span class="mention">@${texte}</span>`;
+      return `<mss-mention>@${texte}</mss-mention>`;
     })
     .replaceAll(/\n/gm, '<br>');
 </script>
 
 <div>
-  <span>{@html contenu}</span>
+  <span>
+    {@html DOMPurify.sanitize(contenu, { ALLOWED_TAGS: ['mss-mention'] })}
+  </span>
 </div>
 
 <style>
-  :global(.mention) {
+  :global(mss-mention) {
     color: var(--bleu-mise-en-avant);
     font-weight: 700;
   }
