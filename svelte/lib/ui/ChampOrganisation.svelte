@@ -129,7 +129,7 @@
           }
         }}
       >
-        <div>{@html suggestion.label}</div>
+        <div>{suggestion.label}</div>
       </div>
     {/each}
   </div>
