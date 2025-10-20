@@ -565,9 +565,7 @@ describe('Le serveur MSS des routes /service/*', () => {
             description: "Détournement de l'usage du service numérique",
           },
         },
-        categoriesRisques: {
-          integrite: 'Intégrité',
-        },
+        categoriesRisques: { integrite: 'Intégrité' },
       });
       testeur.middleware().reinitialise({ serviceARenvoyer });
 
@@ -582,7 +580,7 @@ describe('Le serveur MSS des routes /service/*', () => {
         id: 'logicielsMalveillants',
         categories: ['integrite'],
         identifiantNumerique: 'R6',
-        intitule: "Détournement de l'usage du service numérique",
+        intitule: 'Détournement de l&apos;usage du service numérique',
         niveauRisque: Risque.NIVEAU_RISQUE_INDETERMINABLE,
       });
     });
