@@ -39,6 +39,7 @@ import routesConnecteApiNotifications from './routesConnecteApiNotifications.js'
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 import routesConnecteApiTeleversement from './routesConnecteApiTeleversement.js';
 import routesConnecteApiBrouillonService from './routesConnecteApiBrouillonService.js';
+import routesConnecteApiServiceV2 from './routesConnecteApiServiceV2.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -335,7 +336,13 @@ const routesConnecteApi = ({
   routes.use(
     '/brouillon-service',
     middleware.verificationAcceptationCGU,
-    routesConnecteApiBrouillonService({ depotDonnees, referentiel })
+    routesConnecteApiBrouillonService({ depotDonnees })
+  );
+
+  routes.use(
+    '/service-v2',
+    middleware.verificationAcceptationCGU,
+    routesConnecteApiServiceV2()
   );
 
   routes.use(
