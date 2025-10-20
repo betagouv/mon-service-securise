@@ -1,16 +1,16 @@
 ## TODO
 
-- [ ] Enlever les `@html` qui sont sur des données saisies
-  - [ ] ActiviteAjoutCommentaire.svelte il faut conserver la possibilité de mentionner qqun
-  - [x] LigneMesure.svelte il faut conserver le surlignage quand on recherche un texte
 - [ ] Enlever des `decode()` qui sont sur des données saisies
-- [ ] Enlever les `!{` en pug
 - [ ] Voir les concaténations de chaînes faites en jQuery…
   - par exemple public/entete.js:10 qui met dans le DOM `prenomNom`. Si `prenomNom` a du `<h1>` ça pose problème.
 - [ ] Migration des données
 
 ## DONE
 
+- [x] Enlever les `!{` en pug
+- [x] Enlever les `@html` qui sont sur des données saisies
+  - [x] ActiviteAjoutCommentaire.svelte il faut conserver la possibilité de mentionner qqun
+  - [x] LigneMesure.svelte il faut conserver le surlignage quand on recherche un texte
 - [x] Enlever les != en pug
 - [x] Voir le problème de Ce fichier .ZIP contient les <span id="nbPdfDisponibles"></span> PDF.
 
