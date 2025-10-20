@@ -342,7 +342,7 @@ const routesConnecteApi = ({
   routes.use(
     '/service-v2',
     middleware.verificationAcceptationCGU,
-    routesConnecteApiServiceV2()
+    routesConnecteApiServiceV2({ middleware, depotDonnees })
   );
 
   routes.use(
