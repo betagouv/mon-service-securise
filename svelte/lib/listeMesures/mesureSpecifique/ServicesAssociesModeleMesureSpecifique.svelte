@@ -3,11 +3,9 @@
   import Infobulle from '../../ui/Infobulle.svelte';
   import type { ServiceAvecMesuresAssociees } from '../listeMesures.d';
   import type {
-    IdNiveauDeSecurite,
     ModeleMesureSpecifique,
     ReferentielTypesService,
   } from '../../ui/types';
-  import { decode } from 'html-entities';
   import { servicesAvecMesuresAssociees } from '../servicesAssocies/servicesAvecMesuresAssociees.store';
   import Toast from '../../ui/Toast.svelte';
   import { referentielNiveauxSecurite } from '../../ui/referentielNiveauxSecurite';

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { decode } from 'html-entities';
   import Infobulle from '../../ui/Infobulle.svelte';
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import Tableau from '../../ui/Tableau.svelte';
