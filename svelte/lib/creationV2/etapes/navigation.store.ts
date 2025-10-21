@@ -4,7 +4,7 @@ import {
   toutesEtapes,
   toutesEtapesModeRapide,
 } from './toutesEtapes';
-import type { BrouillonSvelte } from '../creationV2.types';
+import type { BrouillonServiceV2 } from '../creationV2.types';
 
 type EtatNavigation = {
   etapeEnCours: number;
@@ -25,7 +25,10 @@ type NavigationStore = {
   precedent: () => void;
   suivant: () => void;
   retourneEtapeNomService: () => void;
-  reprendreEditionDe: (brouillon: BrouillonSvelte, modeRapide: boolean) => void;
+  reprendreEditionDe: (
+    brouillon: BrouillonServiceV2,
+    modeRapide: boolean
+  ) => void;
   changeModeEdition: (modeRapide: boolean) => void;
 };
 
@@ -85,7 +88,7 @@ export const navigationStore: NavigationStore = {
     });
   },
   reprendreEditionDe: (
-    donneesBrouillon: BrouillonSvelte,
+    donneesBrouillon: BrouillonServiceV2,
     modeRapide: boolean
   ) => {
     let questionPrecedente = { etape: 0, question: 0 };

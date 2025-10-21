@@ -7,7 +7,7 @@ import QuestionTypesService from './etape2/QuestionTypeService.svelte';
 import QuestionSpecificitesProjet from './etape2/QuestionSpecificitesProjet.svelte';
 import QuestionTypeHebergement from './etape2/QuestionTypeHebergement.svelte';
 import type { SvelteComponent } from 'svelte';
-import type { BrouillonSvelte } from '../creationV2.types';
+import type { BrouillonServiceV2 } from '../creationV2.types';
 import QuestionOuvertureSysteme from './etape3/QuestionOuvertureSysteme.svelte';
 import QuestionAudienceCible from './etape3/QuestionAudienceCible.svelte';
 import QuestionDureeDysfonctionnement from './etape3/QuestionDureeDysfonctionnement.svelte';
@@ -21,7 +21,7 @@ import EtapeNiveauSecurite from './EtapeNiveauSecurite.svelte';
 type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
 
 export type QuestionBindeeSurBrouillon = {
-  clesPropriete: Array<keyof BrouillonSvelte>;
+  clesPropriete: Array<keyof BrouillonServiceV2>;
   composant: ComposantQuestion;
   explications: string[];
   avecAvanceRapide?: boolean;

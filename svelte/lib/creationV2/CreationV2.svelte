@@ -13,7 +13,7 @@
   import { etapeCourante } from './etapes/etapeCourante.store';
   import { entiteDeUtilisateur, leBrouillon } from './etapes/brouillon.store';
   import { ajouteParametreAUrl } from '../outils/url';
-  import type { BrouillonSvelte } from './creationV2.types';
+  import type { BrouillonServiceV2 } from './creationV2.types';
   import Switch from '../ui/Switch.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
   import Toaster from '../ui/Toaster.svelte';
@@ -53,7 +53,9 @@
 
     await metsAJourBrouillonService($leBrouillon.id!, e.detail);
 
-    const nomChampModifie = Object.keys(e.detail)[0] as keyof BrouillonSvelte;
+    const nomChampModifie = Object.keys(
+      e.detail
+    )[0] as keyof BrouillonServiceV2;
     const onEstToujoursSurLaQuestionQuiAEnvoyeLaMaj =
       $etapeCourante.questionCourante.clesPropriete.includes(nomChampModifie);
     // si on n'est plus sur la question mise à jour, c'est que "suivant()" a déjà été appelé

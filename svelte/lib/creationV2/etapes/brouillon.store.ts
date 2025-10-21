@@ -1,8 +1,11 @@
 import { writable } from 'svelte/store';
-import type { BrouillonSvelte, BrouillonIncomplet } from '../creationV2.types';
+import type {
+  BrouillonServiceV2,
+  BrouillonIncomplet,
+} from '../creationV2.types';
 import type { Entite } from '../../ui/types.d';
 
-export const unBrouillonVierge = (): BrouillonSvelte => ({
+export const unBrouillonVierge = (): BrouillonServiceV2 => ({
   id: undefined,
   nomService: '',
   siret: '',
@@ -23,7 +26,7 @@ export const unBrouillonVierge = (): BrouillonSvelte => ({
   niveauSecurite: '',
 });
 
-const { set, subscribe } = writable<BrouillonSvelte>(unBrouillonVierge());
+const { set, subscribe } = writable<BrouillonServiceV2>(unBrouillonVierge());
 
 export const leBrouillon = {
   subscribe,
