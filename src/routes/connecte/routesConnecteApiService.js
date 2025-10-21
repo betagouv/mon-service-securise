@@ -1,5 +1,4 @@
 import express from 'express';
-import { encode } from 'html-entities';
 import routesConnecteApiServicePdf from './routesConnecteApiServicePdf.js';
 import {
   EchecAutorisation,
@@ -478,7 +477,7 @@ const routesConnecteApiService = ({
           e instanceof ErreurRisqueInconnu ||
           e instanceof ErreurNiveauVraisemblanceInconnu
         ) {
-          reponse.status(400).send(encode(e.message));
+          reponse.status(400).send(e.message);
         } else {
           suite(e);
         }
@@ -542,7 +541,7 @@ const routesConnecteApiService = ({
           e instanceof ErreurCategoriesRisqueManquantes ||
           e instanceof ErreurCategorieRisqueInconnue
         ) {
-          reponse.status(400).send(encode(e.message));
+          reponse.status(400).send(e.message);
           return;
         }
         suite(e);
@@ -602,7 +601,7 @@ const routesConnecteApiService = ({
         reponse.status(200).send(risque.toJSON());
       } catch (e) {
         if (e instanceof ErreurRisqueInconnu) {
-          reponse.status(404).send(encode(e.message));
+          reponse.status(404).send(e.message);
           return;
         }
         if (
@@ -612,7 +611,7 @@ const routesConnecteApiService = ({
           e instanceof ErreurCategoriesRisqueManquantes ||
           e instanceof ErreurCategorieRisqueInconnue
         ) {
-          reponse.status(400).send(encode(e.message));
+          reponse.status(400).send(e.message);
           return;
         }
         suite(e);
