@@ -6,7 +6,6 @@
   } from './rapportTeleversementModelesMesureSpecifique.types.d';
   import TagEtat from '../../rapportTeleversement/composants/TagEtat.svelte';
   import CelluleDonnee from '../../rapportTeleversement/composants/CelluleDonnee.svelte';
-  import { decode } from 'html-entities';
   import TooltipErreursMultiple from '../../rapportTeleversement/composants/TooltipErreursMultiple.svelte';
 
   export let ligne: ModeleTeleverse;
