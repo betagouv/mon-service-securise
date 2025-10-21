@@ -10,7 +10,7 @@ import {
   ErreurNomServiceDejaExistant,
 } from '../../erreurs.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
-import { reglesValidationDonneesServiceSansNiveauSecurite } from './routesConnecte.schema.js';
+import { reglesValidationBrouillonServiceV2 } from './routesConnecte.schema.js';
 
 const routesConnecteApiBrouillonService = ({
   depotDonnees,
@@ -23,7 +23,7 @@ const routesConnecteApiBrouillonService = ({
     '/',
     valideBody(
       z.strictObject({
-        nomService: reglesValidationDonneesServiceSansNiveauSecurite.nomService,
+        nomService: reglesValidationBrouillonServiceV2.nomService,
       })
     ),
     async (requete, reponse) => {
@@ -71,8 +71,7 @@ const routesConnecteApiBrouillonService = ({
       const { id, nomPropriete } = requete.params;
 
       const objetValidation = z.strictObject({
-        [nomPropriete]:
-          reglesValidationDonneesServiceSansNiveauSecurite[nomPropriete],
+        [nomPropriete]: reglesValidationBrouillonServiceV2[nomPropriete],
       });
       const resultatParsingBody = objetValidation.safeParse(requete.body);
       if (!resultatParsingBody.success) return reponse.sendStatus(400);

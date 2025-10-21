@@ -1,12 +1,10 @@
 import * as z from 'zod';
 import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 
-export const reglesValidationDonneesServiceSansNiveauSecurite = {
-  siret: z.string().regex(/^\d{14}$/),
+const reglesValidationsCommunesABrouillonEtDescription = {
   nomService: z.string().trim().nonempty(),
   statutDeploiement: z.enum(Object.keys(questionsV2.statutDeploiement)),
   presentation: z.string().trim().nonempty(),
-  pointsAcces: z.array(z.string().trim().nonempty()),
   typeService: z
     .array(z.enum(Object.keys(questionsV2.typeDeService)))
     .nonempty(),
@@ -35,4 +33,18 @@ export const reglesValidationDonneesServiceSansNiveauSecurite = {
     .array(z.enum(Object.keys(questionsV2.localisationDonneesTraitees)))
     .nonempty(),
   niveauSecurite: z.enum(Object.keys(questionsV2.niveauSecurite)),
+};
+
+export const reglesValidationBrouillonServiceV2 = {
+  ...reglesValidationsCommunesABrouillonEtDescription,
+  siret: z.string().regex(/^\d{14}$/),
+  pointsAcces: z.array(z.string().trim().nonempty()),
+};
+
+export const reglesValidationDescriptionServiceV2 = {
+  ...reglesValidationsCommunesABrouillonEtDescription,
+  organisationResponsable: z.object({
+    siret: z.string().regex(/^\d{14}$/),
+  }),
+  pointsAcces: z.array(z.object({ description: z.string().trim().nonempty() })),
 };

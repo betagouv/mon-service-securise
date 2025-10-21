@@ -28,15 +28,9 @@ describe('Le serveur MSS des routes /api/service-v2/*', () => {
     });
 
     it('retourne le niveau de securite requis', async () => {
-      const { organisationResponsable, ...donnees } = {
-        ...uneDescriptionV2Valide().donneesDescription(),
-        siret: '',
-      };
-      donnees.siret = organisationResponsable.siret;
-
       const reponse = await testeur.post(
         '/api/service-v2/niveauSecuriteRequis',
-        donnees
+        uneDescriptionV2Valide().donneesDescription()
       );
 
       expect(reponse.status).toBe(200);
@@ -47,26 +41,16 @@ describe('Le serveur MSS des routes /api/service-v2/*', () => {
   });
 
   describe('quand requête PUT sur `/api/service-v2/:id`', () => {
-    type DonneesDescriptionServiceV2API = Omit<
-      DonneesDescriptionServiceV2,
-      'organisationResponsable'
-    > & {
-      siret: string;
-    };
-    let donneesDescriptionValide: DonneesDescriptionServiceV2API;
+    let donneesDescriptionValide: DonneesDescriptionServiceV2;
     const idUtilisateur = unUUIDRandom();
     const idService = unUUIDRandom();
     beforeEach(() => {
       testeur.middleware().reinitialise({ idUtilisateur });
       testeur.depotDonnees().ajouteDescriptionService = async () => {};
 
-      const { organisationResponsable, ...donnees } = uneDescriptionV2Valide()
+      donneesDescriptionValide = uneDescriptionV2Valide()
         .avecNomService('Nouveau Nom')
         .donneesDescription();
-      donneesDescriptionValide = {
-        ...donnees,
-        siret: organisationResponsable.siret,
-      };
       testeur.depotDonnees().service = async () =>
         new Service(donneesDescriptionValide, testeur.referentiel());
     });
@@ -87,7 +71,7 @@ describe('Le serveur MSS des routes /api/service-v2/*', () => {
     it('jette une erreur 400 si les données sont invalides', async () => {
       const reponse = await testeur.put(`/api/service-v2/${idService}`, {
         ...donneesDescriptionValide,
-        niveauDeSecurite: 'niveau42',
+        niveauSecurite: 'niveau42',
       });
 
       expect(reponse.status).toBe(400);
