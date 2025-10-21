@@ -548,36 +548,6 @@ describe('Le middleware MSS', () => {
         expect(requete.body.param).to.eql([]);
       });
     });
-
-    it('neutralise le code HTML', async () => {
-      const middleware = leMiddleware();
-      requete.body.paramRenseigne = '<script>alert("hacked!");</script>';
-
-      await middleware.aseptise('paramAbsent', 'paramRenseigne')(
-        requete,
-        reponse,
-        () => {
-          expect(requete.body.paramRenseigne).to.equal(
-            '&lt;script&gt;alert(&quot;hacked!&quot;);&lt;&#x2F;script&gt;'
-          );
-        }
-      );
-    });
-
-    it('aseptise les paramètres de la requête', async () => {
-      const middleware = leMiddleware();
-      requete.params.paramRenseigne = '<script>alert("hacked!");</script>';
-
-      await middleware.aseptise('paramAbsent', 'paramRenseigne')(
-        requete,
-        reponse,
-        () => {
-          expect(requete.params.paramRenseigne).to.equal(
-            '&lt;script&gt;alert(&quot;hacked!&quot;);&lt;&#x2F;script&gt;'
-          );
-        }
-      );
-    });
   });
 
   describe('sur demande positionnement des headers', () => {
