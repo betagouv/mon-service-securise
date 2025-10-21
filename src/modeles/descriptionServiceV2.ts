@@ -37,7 +37,7 @@ export type DonneesEntite = {
 export type DonneesDescriptionServiceV2 = {
   nomService: string;
   organisationResponsable: DonneesEntite;
-  niveauDeSecurite: NiveauSecurite;
+  niveauSecurite: NiveauSecurite;
   statutDeploiement: StatutDeploiement;
   presentation: string;
   pointsAcces: { description: string }[];
@@ -57,7 +57,7 @@ export type DonneesDescriptionServiceV2 = {
 export class DescriptionServiceV2 {
   readonly nomService: string;
   readonly organisationResponsable: Entite;
-  readonly niveauDeSecurite: NiveauSecurite;
+  readonly niveauSecurite: NiveauSecurite;
   readonly statutDeploiement: StatutDeploiement;
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   private readonly presentation: string;
@@ -77,7 +77,7 @@ export class DescriptionServiceV2 {
     this.nomService = donnees.nomService;
     this.organisationResponsable = new Entite(donnees.organisationResponsable);
     this.statutDeploiement = donnees.statutDeploiement;
-    this.niveauDeSecurite = donnees.niveauDeSecurite;
+    this.niveauSecurite = donnees.niveauSecurite;
     this.volumetrieDonneesTraitees = donnees.volumetrieDonneesTraitees;
     this.presentation = donnees.presentation;
     this.pointsAcces = new PointsAcces({
@@ -102,7 +102,7 @@ export class DescriptionServiceV2 {
   ): boolean {
     return (
       !!donnees.nomService &&
-      !!donnees.niveauDeSecurite &&
+      !!donnees.niveauSecurite &&
       !!donnees.organisationResponsable &&
       !!donnees.organisationResponsable.siret &&
       !!donnees.statutDeploiement &&
@@ -124,7 +124,7 @@ export class DescriptionServiceV2 {
   ): boolean {
     const niveauSecuriteMinimal = this.niveauSecuriteMinimalRequis(donnees);
     return (
-      questionsV2.niveauSecurite[donnees.niveauDeSecurite].position >=
+      questionsV2.niveauSecurite[donnees.niveauSecurite].position >=
       questionsV2.niveauSecurite[niveauSecuriteMinimal].position
     );
   }
@@ -147,7 +147,7 @@ export class DescriptionServiceV2 {
 
   donneesSerialisees(): DonneesDescriptionServiceV2 {
     return {
-      niveauDeSecurite: this.niveauDeSecurite,
+      niveauSecurite: this.niveauSecurite,
       organisationResponsable:
         this.organisationResponsable.toJSON() as DonneesEntite,
       statutDeploiement: this.statutDeploiement,

@@ -391,7 +391,7 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
     it('retourne le niveau de securite requis', async () => {
       const idBrouillon = unUUIDRandom();
 
-      testeur.depotDonnees().lisBrouillonService = async (_: UUID, __: UUID) =>
+      testeur.depotDonnees().lisBrouillonService = async () =>
         unBrouillonComplet().construis();
 
       const reponse = await testeur.get(

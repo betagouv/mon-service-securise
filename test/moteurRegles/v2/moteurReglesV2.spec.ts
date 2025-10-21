@@ -7,9 +7,9 @@ import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.js';
 import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.js';
 import { besoins } from './besoinsDeSecurite.js';
 
-function uneDescriptionAuNiveau(niveauDeSecurite: NiveauSecurite) {
+function uneDescriptionAuNiveau(niveauSecurite: NiveauSecurite) {
   return uneDescriptionV2Valide()
-    .avecNiveauSecurite(niveauDeSecurite)
+    .avecNiveauSecurite(niveauSecurite)
     .construis();
 }
 

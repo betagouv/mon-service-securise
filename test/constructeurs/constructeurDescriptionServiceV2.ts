@@ -33,7 +33,7 @@ class ConstructeurDescriptionServiceV2 {
       typeHebergement: 'cloud',
       typeService: ['api'],
       nomService: 'Service A',
-      niveauDeSecurite: 'niveau3',
+      niveauSecurite: 'niveau3',
       organisationResponsable: { siret: '11112222333344' },
       categoriesDonneesTraitees: ['donneesSensibles'],
       volumetrieDonneesTraitees: 'moyen',
@@ -75,7 +75,7 @@ class ConstructeurDescriptionServiceV2 {
   avecNiveauSecurite(
     niveauSecurite: NiveauSecurite | undefined
   ): ConstructeurDescriptionServiceV2 {
-    this.donnees.niveauDeSecurite = niveauSecurite;
+    this.donnees.niveauSecurite = niveauSecurite;
     return this;
   }
 

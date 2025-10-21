@@ -77,7 +77,7 @@ export class BrouillonService {
         volumetrieDonneesTraitees: this.donnees.volumetrieDonneesTraitees!,
         localisationsDonneesTraitees:
           this.donnees.localisationsDonneesTraitees!,
-        niveauDeSecurite: this.donnees.niveauSecurite!,
+        niveauSecurite: this.donnees.niveauSecurite!,
       },
     };
   }
