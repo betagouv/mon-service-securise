@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { decode } from 'html-entities';
 import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
 
 const CONFIGURATION_AUTHENTIFICATION = {
@@ -13,8 +12,8 @@ const metsAJour = async ({ nom, prenom, email, entite, telephone, postes }) => {
   await axios.put(
     urlProfil,
     {
-      nom: decode(nom),
-      prenom: decode(prenom),
+      nom,
+      prenom,
       organisation: entite,
       telephone,
       domainesSpecialite: postes,
