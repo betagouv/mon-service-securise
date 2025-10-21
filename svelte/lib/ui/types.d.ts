@@ -99,7 +99,7 @@ export type ReferentielTypesService = Record<
 >;
 
 export type Entite = {
-  nom: string;
-  departement: string;
+  nom?: string;
+  departement?: string;
   siret: string;
 };

@@ -6,6 +6,13 @@
   import BrouillonDeServiceEditable from '../creationV2/etapes/BrouillonDeServiceEditable.svelte';
   import type { DescriptionServiceV2 } from '../creationV2/creationV2.types';
   import { rechercheOrganisation } from '../ui/rechercheOrganisation';
+  import {
+    metsAJourDescriptionService,
+    niveauSecuriteMinimalRequis,
+  } from './decrireV2.api';
+  import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
+  import { toasterStore } from '../ui/stores/toaster.store';
+  import type { UUID } from '../typesBasiquesSvelte';
 
   type ModeAffichage = 'Résumé' | 'Édition';
 
@@ -68,8 +75,23 @@
   {#if mode === 'Édition'}
     <BarreActions
       mode="Édition"
-      on:enregistrer={() => {
-        mode = 'Résumé';
+      on:enregistrer={async () => {
+        const niveauMinimal =
+          await niveauSecuriteMinimalRequis(descriptionEditable);
+        const niveauActuelToujoursSuffisant =
+          questionsV2.niveauSecurite[niveauMinimal].position <=
+          questionsV2.niveauSecurite[copiePourRestauration.niveauSecurite]
+            .position;
+        if (niveauActuelToujoursSuffisant) {
+          await metsAJourDescriptionService(idService, descriptionEditable);
+          toasterStore.succes(
+            'Succès',
+            'Les informations du service ont été mises à jour.'
+          );
+          mode = 'Résumé';
+        } else {
+          //TODO mode = 'MiseAJourNiveauSecurite';
+        }
       }}
       on:annuler={() => {
         descriptionEditable = enEditable(copiePourRestauration);
