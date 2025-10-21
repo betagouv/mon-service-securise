@@ -7,9 +7,8 @@ mixin dossier({ statut, dossier, service, indiceCyber, indiceCyberPersonnalise, 
     const nombreTotalEtapes = referentiel.derniereEtapeParcours(autorisationsService.peutHomologuer).numero
     const estLectureSeule = autorisationsService.HOMOLOGUER.estLectureSeule
     const texteTronque = (texte, tailleLimite) => {
-      const texteDecode = decode(texte);
-      const longueurInitiale = texteDecode.length;
-      let resultat = texteDecode.substring(0, tailleLimite);
+      const longueurInitiale = texte.length;
+      let resultat = texte.substring(0, tailleLimite);
       if (resultat.length < longueurInitiale) resultat += '…';
       return resultat
     }

@@ -157,26 +157,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       );
     });
 
-    it("décode le nom, le prénom et les postes de l'utilisateur", async () => {
-      const apostrophe = '&#x27;';
-      testeur.middleware().reinitialise({ idUtilisateur: '456' });
-      testeur.depotDonnees().utilisateur = () =>
-        unUtilisateur()
-          .quiSAppelle(`un${apostrophe}e apo${apostrophe}strophe`)
-          .avecPostes([`Apo${apostrophe}strophe`])
-          .construis();
-
-      const reponse = await testeur.get(`/profil`);
-
-      const donneesUtilisateur = donneesPartagees(
-        reponse.text,
-        'donnees-profil'
-      ).utilisateur;
-      expect(donneesUtilisateur.prenom).to.be("un'e");
-      expect(donneesUtilisateur.nom).to.be("apo'strophe");
-      expect(donneesUtilisateur.postes).to.eql(["Apo'strophe"]);
-    });
-
     it("reste robuste si l'utilisateur n'a pas de postes, qui est possible si l'utilisateur n'a jamais fini de remplir son profil", async () => {
       testeur.middleware().reinitialise({ idUtilisateur: '456' });
       testeur.depotDonnees().utilisateur = () =>
