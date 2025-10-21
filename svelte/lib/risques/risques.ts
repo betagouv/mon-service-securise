@@ -1,4 +1,3 @@
-import { decode } from 'html-entities';
 import Risques from './Risques.svelte';
 import type {
   DonneesRisque,

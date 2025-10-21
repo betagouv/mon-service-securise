@@ -1,6 +1,4 @@
 import express from 'express';
-import { decode } from 'html-entities';
-
 import {
   ErreurFichierXlsInvalide,
   ErreurTeleversementInexistant,
