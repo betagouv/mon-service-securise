@@ -11,6 +11,7 @@
   import { leBrouillon } from './brouillon.store';
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import Infobulle from '../../ui/Infobulle.svelte';
+  import ResumeNiveauSecurite from '../../ui/ResumeNiveauSecurite.svelte';
 
   export let estComplete: boolean;
 
@@ -117,70 +118,13 @@
           />
         </span>
       </summary>
-      <div class="corps-niveau-securite">
-        <hr />
-        <div class="description-niveau-securite">
-          <div class="conteneur-illustration">
-            <img
-              src="/statique/assets/images/niveauxSecurite/{niveauSecurite.id}.svg"
-              alt="Illustration du niveau {index + 1} de sécurité"
-            />
-          </div>
-          <div class="conteneur-texte">
-            <div class="conteneur-mises-en-garde">
-              {#if estNiveauSuperieur(niveauSecurite.id)}
-                <Toast
-                  niveau="alerte"
-                  avecOmbre={false}
-                  titre="Ce niveau est supérieur à celui identifié à titre indicatif par l'ANSSI."
-                  contenu="Cela signifie que la liste des mesures de sécurité sera plus complète et la démarche d'homologation plus exigeante."
-                />
-              {/if}
-              <dsfr-badge
-                label="Démarche indicative adaptée : {niveauSecurite.description
-                  .demarcheIndicative}"
-                type="accent"
-                accent="blue-cumulus"
-                size="md"
-                hasIcon
-                icon="info-fill"
-                ellipsis={false}
-              />
-              {#if niveauSecurite.id !== 'niveau3'}
-                <p class="info-attaque-etatique">
-                  Si vous considérez que le système d'information peut faire
-                  l'objet d'une cyberattaque ciblée par un acteur étatique, il
-                  est recommandé de sélectionner manuellement le besoin de
-                  niveau avancé
-                </p>
-              {/if}
-            </div>
-
-            <h6>Exemples de services numériques</h6>
-            <ul class="liste-exemples-services">
-              {#each niveauSecurite.description.exemplesServicesNumeriques as exemple}
-                <li>{exemple}</li>
-              {/each}
-            </ul>
-            <h6>Sécurisation et évaluation de la sécurité</h6>
-            {#if niveauSecurite.description.securisation.length === 1}
-              <p>{@html niveauSecurite.description.securisation[0]}</p>
-            {:else}
-              <ul>
-                {#each niveauSecurite.description.securisation as securisation}
-                  <li>{@html securisation}</li>
-                {/each}
-              </ul>
-            {/if}
-            <h6>Homologation</h6>
-            <ul>
-              {#each niveauSecurite.description.homologation as homologation}
-                <li>{@html homologation}</li>
-              {/each}
-            </ul>
-          </div>
-        </div>
-      </div>
+      <ResumeNiveauSecurite
+        niveau={niveauSecurite.id}
+        afficheAvertissementAttaqueEtatique
+        afficheToastNiveauSuperieurSelectionne={estNiveauSuperieur(
+          niveauSecurite.id
+        )}
+      />
     </details>
   {/each}
 </div>
@@ -292,71 +236,7 @@
     width: 690px;
   }
 
-  .corps-niveau-securite hr {
-    margin: 32px 0;
-  }
-
   .conteneur-niveau-securite:not(:last-of-type) {
-    margin-bottom: 16px;
-  }
-
-  .description-niveau-securite {
-    display: flex;
-    flex-direction: row;
-    gap: 32px;
-    align-items: start;
-    justify-content: space-between;
-
-    h6 {
-      font-size: 1rem;
-      font-weight: 700;
-      line-height: 1.5rem;
-      margin: 0 0 8px;
-      padding: 0;
-    }
-
-    h6:not(:first-of-type) {
-      margin-top: 24px;
-    }
-
-    img {
-      padding: 75px 24px;
-    }
-
-    p,
-    li {
-      font-size: 0.875rem;
-      font-weight: 400;
-      line-height: 1.5rem;
-    }
-
-    p.info-attaque-etatique {
-      color: #b34000;
-      font-size: 0.75rem;
-      font-weight: 400;
-      line-height: 1.25rem;
-      display: flex;
-      gap: 6px;
-
-      &::before {
-        content: '';
-        width: 29px;
-        height: 18px;
-        background: url('/statique/assets/images/icone_erreur_dsfr.svg')
-          no-repeat center;
-        display: inline-block;
-      }
-    }
-
-    ul {
-      padding-inline-start: 24px;
-    }
-  }
-
-  .conteneur-mises-en-garde {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
     margin-bottom: 16px;
   }
 </style>
