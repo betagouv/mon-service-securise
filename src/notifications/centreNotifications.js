@@ -1,4 +1,3 @@
-import { decode } from 'html-entities';
 import {
   ErreurIdentifiantNouveauteInconnu,
   ErreurIdentifiantTacheInconnu,
@@ -84,7 +83,7 @@ class CentreNotifications {
     };
 
     return ['NOM_SERVICE', ...champsDonnees].reduce(
-      (acc, cle) => acc.replace(`%${cle}%`, decode(valeurReelle(cle))),
+      (acc, cle) => acc.replace(`%${cle}%`, valeurReelle(cle)),
       notification.titre
     );
   }
