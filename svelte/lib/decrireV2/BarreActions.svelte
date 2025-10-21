@@ -7,8 +7,9 @@
     annuler: null;
   }>();
 
-  type ModeAffichage = 'Résumé' | 'Édition';
+  type ModeAffichage = 'Résumé' | 'Édition' | 'MiseÀJourForcéeBesoinsSécurité';
   export let mode: ModeAffichage;
+  export let afficheInfoBesoinsSecurite = false;
 </script>
 
 <div class="barre-actions">
@@ -23,7 +24,7 @@
         positionIcone="droite"
         on:click={() => dispatch('modifier')}
       />
-    {:else if mode === 'Édition'}
+    {:else if mode === 'Édition' || mode === 'MiseÀJourForcéeBesoinsSécurité'}
       <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
       <lab-anssi-bouton
         titre="Enregistrer les modifications"
@@ -35,16 +36,18 @@
       />
       <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
       <lab-anssi-bouton
-        titre="Annuler"
+        titre={mode === 'Édition' ? 'Annuler' : 'Annuler les modifications'}
         variante="tertiaire"
         taille="md"
         positionIcone="sans"
         on:click={() => dispatch('annuler')}
       />
-      <span class="attention-aux-besoins">
-        <img src="/statique/assets/images/icone_attention_rose.svg" alt="" />
-        En modifiant ce service, ses besoins en sécurité pourront être réévalués.
-      </span>
+      {#if afficheInfoBesoinsSecurite}
+        <span class="attention-aux-besoins">
+          <img src="/statique/assets/images/icone_attention_rose.svg" alt="" />
+          En modifiant ce service, ses besoins en sécurité pourront être réévalués.
+        </span>
+      {/if}
     {/if}
   </div>
 </div>
