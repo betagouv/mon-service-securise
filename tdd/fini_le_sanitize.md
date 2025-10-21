@@ -1,13 +1,14 @@
 ## TODO
 
-- [ ] Enlever le code qui encode les entités HTML : `escape()` dans `middleware.aseptise()`.
-  - D'autres ? Chercher "html-entities" qui sert à importer des `encode()`
 - [ ] Voir les concaténations de chaînes faites en jQuery…
   - par exemple public/entete.js:10 qui met dans le DOM `prenomNom`. Si `prenomNom` a du `<h1>` ça pose problème.
-- [ ] Migration des données
+- [ ] Migration des données.
+  - JSON.stringify avec un `formatter` custom qui `decode` ?
 
 ## DONE
 
+- [x] Enlever le code qui encode les entités HTML : `escape()` dans `middleware.aseptise()`.
+  - [x] D'autres ? Chercher "html-entities" qui sert à importer des `encode()`
 - [x] Enlever des `decode()` qui sont sur des données saisies
 - [x] Enlever les `!{` en pug
 - [x] Enlever les `@html` qui sont sur des données saisies
