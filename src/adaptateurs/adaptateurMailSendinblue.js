@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { decode } from 'html-entities';
 import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
 import { ErreurApiBrevo } from '../erreurs.js';
 import { enCadence } from '../utilitaires/pThrottle.js';
@@ -79,8 +78,8 @@ const creeContact = (
         email: destinataire,
         emailBlacklisted: bloqueMarketing,
         attributes: {
-          PRENOM: decode(prenom),
-          NOM: decode(nom),
+          PRENOM: prenom,
+          NOM: nom,
           sync_mss_numero_telephone: numeroTelephoneAvecIndicatif(telephone),
         },
         ...(!bloqueNewsletter && { listIds: [idListeInfolettre] }),
@@ -114,8 +113,8 @@ const metAJourDonneesContact = async (destinataire, donnees) => {
 
 const metAJourContact = (destinataire, prenom, nom, telephone) =>
   metAJourDonneesContact(destinataire, {
-    PRENOM: decode(prenom),
-    NOM: decode(nom),
+    PRENOM: prenom,
+    NOM: nom,
     sync_mss_numero_telephone: numeroTelephoneAvecIndicatif(telephone),
   });
 
@@ -166,7 +165,7 @@ const envoieMessageFinalisationInscription = (
     destinataire,
     parseInt(process.env.SENDINBLUE_TEMPLATE_FINALISATION_INSCRIPTION, 10),
     {
-      PRENOM: decode(prenom),
+      PRENOM: prenom,
       URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
     }
   );
@@ -180,7 +179,7 @@ const envoieMessageInvitationContribution = (
     destinataire,
     parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_CONTRIBUTION, 10),
     {
-      emetteur: decode(prenomNomEmetteur),
+      emetteur: prenomNomEmetteur,
       nb_services_invitation: Number(nbServices),
       url: `${process.env.URL_BASE_MSS}/tableauDeBord`,
     }
@@ -195,7 +194,7 @@ const envoieMessageInvitationInscription = (
     destinataire,
     parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_INSCRIPTION, 10),
     {
-      emetteur: decode(prenomNomEmetteur),
+      emetteur: prenomNomEmetteur,
       nb_services_invitation: Number(nbServices),
       url: `${process.env.URL_BASE_MSS}/inscription?invite=true`,
     }
