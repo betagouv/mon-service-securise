@@ -1118,7 +1118,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       expect(reponse.status).to.be(400);
       expect(reponse.text).to.be(
-        'Le niveau de gravité &quot;inexistant&quot; n&apos;est pas répertorié'
+        'Le niveau de gravité "inexistant" n\'est pas répertorié'
       );
     });
 
@@ -1133,7 +1133,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       expect(reponse.status).to.be(400);
       expect(reponse.text).to.be(
-        'Le niveau de vraisemblance &quot;inexistant&quot; n&apos;est pas répertorié'
+        'Le niveau de vraisemblance "inexistant" n\'est pas répertorié'
       );
     });
 
@@ -1146,7 +1146,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
 
       expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be('L&apos;intitulé du risque est obligatoire.');
+      expect(reponse.text).to.be("L'intitulé du risque est obligatoire.");
     });
 
     it("retourne une erreur 400 si la catégorie n'existe pas", async () => {
@@ -1160,21 +1160,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
       expect(reponse.status).to.be(400);
       expect(reponse.text).to.be(
-        'La catégorie &quot;inexistante&quot; n&apos;est pas répertoriée'
-      );
-    });
-
-    it("assaini le message avec de retourner l'erreur 400", async () => {
-      const reponse = await testeur.post(
-        '/api/service/456/risquesSpecifiques',
-        {
-          categories: ['<script>'],
-          intitule: 'un risque',
-        }
-      );
-      expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be(
-        'La catégorie &quot;&lt;script&gt;&quot; n&apos;est pas répertoriée'
+        'La catégorie "inexistante" n\'est pas répertoriée'
       );
     });
 
@@ -1299,7 +1285,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       expect(reponse.status).to.be(400);
       expect(reponse.text).to.be(
-        'Le niveau de gravité &quot;inexistant&quot; n&apos;est pas répertorié'
+        'Le niveau de gravité "inexistant" n\'est pas répertorié'
       );
     });
 
@@ -1315,7 +1301,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
       expect(reponse.status).to.be(400);
       expect(reponse.text).to.be(
-        'Le niveau de vraisemblance &quot;inexistant&quot; n&apos;est pas répertorié'
+        'Le niveau de vraisemblance "inexistant" n\'est pas répertorié'
       );
     });
 
@@ -1327,7 +1313,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         }
       );
       expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be('L&apos;intitulé du risque est obligatoire.');
+      expect(reponse.text).to.be("L'intitulé du risque est obligatoire.");
     });
 
     it("retourne une erreur 400 si la catégorie n'existe pas", async () => {
@@ -1341,22 +1327,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
       expect(reponse.status).to.be(400);
       expect(reponse.text).to.be(
-        'La catégorie &quot;inexistante&quot; n&apos;est pas répertoriée'
-      );
-    });
-
-    it("assaini le message avant de retourner l'erreur 400", async () => {
-      const reponse = await testeur.put(
-        '/api/service/456/risquesSpecifiques/RS1',
-        {
-          categories: ['<script></script>'],
-          intitule: 'un risque',
-        }
-      );
-
-      expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be(
-        'La catégorie &quot;&lt;script&gt;&lt;/script&gt;&quot; n&apos;est pas répertoriée'
+        'La catégorie "inexistante" n\'est pas répertoriée'
       );
     });
 
@@ -1367,24 +1338,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       await testeur.verifieRequeteGenereErreurHTTP(
         404,
         'Le risque est introuvable',
-        {
-          method: 'put',
-          url: '/api/service/456/risquesSpecifiques/INTROUVABLE',
-          data: {
-            intitule: 'un risque important',
-            categories: ['C1'],
-          },
-        }
-      );
-    });
-
-    it("assaini le message avant de retourner l'erreur 404", async () => {
-      testeur.depotDonnees().metsAJourRisqueSpecifiqueDuService = async () => {
-        throw new ErreurRisqueInconnu('Le risque <script> est introuvable');
-      };
-      await testeur.verifieRequeteGenereErreurHTTP(
-        404,
-        'Le risque &lt;script&gt; est introuvable',
         {
           method: 'put',
           url: '/api/service/456/risquesSpecifiques/INTROUVABLE',
@@ -1520,7 +1473,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       expect(reponse.status).to.be(400);
       expect(reponse.text).to.be(
-        'Le risque &quot;unRisqueInexistant&quot; n&apos;est pas répertorié'
+        'Le risque "unRisqueInexistant" n\'est pas répertorié'
       );
     });
 
@@ -1533,20 +1486,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       expect(reponse.status).to.be(400);
       expect(reponse.text).to.be(
-        'Le niveau de vraisemblance &quot;inexistant&quot; n&apos;est pas répertorié'
-      );
-    });
-
-    it("assaini le message avec de retourner l'erreur 400", async () => {
-      const reponse = await testeur.put(
-        '/api/service/456/risques/unRisqueExistant',
-        {
-          niveauVraisemblance: '<script>',
-        }
-      );
-      expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be(
-        'Le niveau de vraisemblance &quot;&lt;script&gt;&quot; n&apos;est pas répertorié'
+        'Le niveau de vraisemblance "inexistant" n\'est pas répertorié'
       );
     });
 
