@@ -1,4 +1,3 @@
-import { decode } from 'html-entities';
 import { createObjectCsvStringifier } from 'csv-writer';
 import { stripHtml } from 'string-strip-html';
 import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
@@ -6,7 +5,8 @@ import { dateEnFrancais } from '../utilitaires/date.js';
 
 const remplaceBooleen = (booleen) => (booleen ? 'Oui' : 'Non');
 const avecBOM = (...contenus) => `\uFEFF${contenus.join('')}`;
-const sansRetoursChariots = (texte) => texte.replaceAll('\n', ' ');
+const sansRetoursChariots = (texte) =>
+  texte ? texte.replaceAll('\n', ' ') : '';
 const separesParVirgule = (liste) => liste.join(', ');
 
 const creeWriterDeCsv = (headerDuCsv) =>
@@ -25,8 +25,8 @@ const genereCsvServices = (tableauServices) => {
     ]);
 
     const donnnesCsv = tableauServices.map((s) => ({
-      service: decode(s.nomService),
-      organisations: decode(s.organisationResponsable?.nom),
+      service: s.nomService,
+      organisations: s.organisationResponsable?.nom,
       nombreContributeurs: s.nombreContributeurs,
       estProprietaire: remplaceBooleen(s.estProprietaire),
       indiceCyber: Number(s.indiceCyber) ? s.indiceCyber : '-',
@@ -85,7 +85,7 @@ const genereCsvMesures = async (
       categorie: referentiel.descriptionCategorie(m.categorie),
       descriptionLongue: stripHtml(m.descriptionLongue).result,
       statut: referentiel.descriptionStatutMesure(m.statut),
-      commentaires: sansRetoursChariots(decode(m.modalites)),
+      commentaires: sansRetoursChariots(m.modalites),
       priorite: referentiel.prioritesMesures()[m.priorite]?.libelleCourt,
       echeance: m.echeance ? dateEnFrancais(m.echeance) : null,
       responsables: m.responsables
@@ -95,15 +95,13 @@ const genereCsvMesures = async (
     .concat(
       mesuresSpecifiques.map((m) => ({
         identifiant: 'N/A',
-        description: decode(m.description),
+        description: m.description,
         referentiel: 'Mesures ajoutées',
         type: '',
         categorie: referentiel.descriptionCategorie(m.categorie),
-        descriptionLongue: m.descriptionLongue
-          ? decode(m.descriptionLongue)
-          : '',
+        descriptionLongue: m.descriptionLongue ? m.descriptionLongue : '',
         statut: referentiel.descriptionStatutMesure(m.statut),
-        commentaires: sansRetoursChariots(decode(m.modalites)),
+        commentaires: sansRetoursChariots(m.modalites),
         priorite: referentiel.prioritesMesures()[m.priorite]?.libelleCourt,
         echeance: m.echeance ? dateEnFrancais(m.echeance) : null,
       }))
