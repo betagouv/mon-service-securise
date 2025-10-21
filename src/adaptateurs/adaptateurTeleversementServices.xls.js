@@ -1,4 +1,3 @@
-import { encode } from 'html-entities';
 import { ErreurFichierXlsInvalide } from '../erreurs.js';
 import { chaineDateFrEnChaineDateISO } from '../utilitaires/date.js';
 import { LecteurExcel } from './excel/LecteurExcel.js';
@@ -47,7 +46,7 @@ const extraisTeleversementServices = async (buffer) => {
   }
 
   return donneesBrutes.map((service) => ({
-    nom: encode(service[ENTETE_NOM]),
+    nom: service[ENTETE_NOM],
     siret: service[ENTETE_SIRET],
     nombreOrganisationsUtilisatrices:
       service[ENTETE_NB_ORGANISATIONS_UTILISATRICES],
@@ -60,8 +59,8 @@ const extraisTeleversementServices = async (buffer) => {
       ? chaineDateFrEnChaineDateISO(service[ENTETE_DATE_HOMOLOGATION])
       : undefined,
     dureeHomologation: service[ENTETE_DUREE_HOMOLOGATION],
-    nomAutoriteHomologation: encode(service[ENTETE_NOM_AUTORITE]),
-    fonctionAutoriteHomologation: encode(service[ENTETE_FONCTION_AUTORITE]),
+    nomAutoriteHomologation: service[ENTETE_NOM_AUTORITE],
+    fonctionAutoriteHomologation: service[ENTETE_FONCTION_AUTORITE],
   }));
 };
 
