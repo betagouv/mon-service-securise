@@ -20,6 +20,7 @@
   }
 
   export let descriptionService: DescriptionServiceV2API;
+  export let idService: UUID;
   export let lectureSeule: boolean;
 
   let mode: ModeAffichage = 'Résumé';
