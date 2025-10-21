@@ -1,0 +1,13 @@
+export type ProfilUtilisateur = {
+  utilisateur: { prenomNom: string };
+};
+
+export const getUtilisateurCourant =
+  async (): Promise<ProfilUtilisateur | null> => {
+    try {
+      const { data } = await axios.get('/api/utilisateurCourant');
+      return data;
+    } catch (e) {
+      return null;
+    }
+  };
