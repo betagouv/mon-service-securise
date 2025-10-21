@@ -1,6 +1,5 @@
 ## TODO
 
-- [ ] Enlever des `decode()` qui sont sur des données saisies
 - [ ] Voir les concaténations de chaînes faites en jQuery…
   - par exemple public/entete.js:10 qui met dans le DOM `prenomNom`. Si `prenomNom` a du `<h1>` ça pose problème.
 - [ ] Enlever le code qui encode les entités HTML : `escape()` dans `middleware.aseptise()`. D'autres ?
@@ -8,6 +7,7 @@
 
 ## DONE
 
+- [x] Enlever des `decode()` qui sont sur des données saisies
 - [x] Enlever les `!{` en pug
 - [x] Enlever les `@html` qui sont sur des données saisies
   - [x] ActiviteAjoutCommentaire.svelte il faut conserver la possibilité de mentionner qqun

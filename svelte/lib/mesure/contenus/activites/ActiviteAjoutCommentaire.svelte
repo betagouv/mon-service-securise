@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { ActiviteMesure, DetailsAjoutCommentaire } from '../../mesure.d';
-  import { decode } from 'html-entities';
   import DOMPurify from 'isomorphic-dompurify';
   import { contributeurs } from '../../../tableauDesMesures/stores/contributeurs.store';
 
@@ -10,7 +9,7 @@
   const regexUUID =
     /@\[([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\]/gm;
 
-  const contenu = decode(details.contenu)
+  const contenu = details.contenu
     .replaceAll(regexUUID, (_s, idUtilisateur) => {
       const contributeur = $contributeurs.find((c) => c.id === idUtilisateur);
       const texte = contributeur ? contributeur.prenomNom : 'Utilisateur·rice';
