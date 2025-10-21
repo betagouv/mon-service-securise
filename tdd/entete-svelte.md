@@ -1,6 +1,5 @@
 #### TODO
 
-- [ ] Rempacer la partie « Connecté »
 - [ ] Vérifier le responsive
 - [ ] Bien déplacer le style dans le composant Svelte
 - [ ] Exclure le svelte de la page « Connexion »
@@ -9,3 +8,4 @@
 #### DONE
 
 - [x] Remplacer la partie « Déconnecté »
+- [x] Rempacer la partie « Connecté »
