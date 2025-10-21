@@ -1,10 +1,18 @@
 <script lang="ts">
   import type { DescriptionServiceV2 } from '../../creationV2.types';
   import type { Entite } from '../../../ui/types.d';
-  import { metEnFormeEntite } from '../../../ui/rechercheOrganisation';
+  import {
+    metEnFormeEntite,
+    rechercheOrganisation,
+  } from '../../../ui/rechercheOrganisation';
+  import { onMount } from 'svelte';
 
   export let donnees: Record<keyof DescriptionServiceV2, string | string[]>;
-  export let entite: Entite | null;
+  let entite: Entite | undefined;
+
+  onMount(async () => {
+    entite = (await rechercheOrganisation(donnees.siret as string))[0];
+  });
 </script>
 
 <div class="conteneur-avec-cadre">

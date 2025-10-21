@@ -35,24 +35,15 @@
   const copiePourRestauration = structuredClone(descriptionService);
   let descriptionEditable: DescriptionServiceV2 =
     enEditable(descriptionService);
+
   $: descriptionAffichable =
     convertisDonneesDescriptionEnLibelles(descriptionEditable);
-
-  let organisationResponsable = descriptionService.organisationResponsable;
-  async function rechargeOrganisationResponsabe(siret: string) {
-    const entite = (await rechercheOrganisation(siret))[0];
-    organisationResponsable = entite;
-  }
-  $: rechargeOrganisationResponsabe(descriptionEditable.siret);
 </script>
 
 <div class="conteneur-decrire-v2">
   <div class="conteneur-resume">
     {#if mode === 'Résumé'}
-      <ResumeDuServiceLectureSeule
-        entite={organisationResponsable}
-        donnees={descriptionAffichable}
-      />
+      <ResumeDuServiceLectureSeule donnees={descriptionAffichable} />
     {:else}
       <BrouillonDeServiceEditable
         bind:donnees={descriptionEditable}

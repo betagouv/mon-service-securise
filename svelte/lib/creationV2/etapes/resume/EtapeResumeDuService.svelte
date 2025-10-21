@@ -13,11 +13,6 @@
 
   export let estComplete: boolean;
   $: estComplete = $brouillonEstCompletStore;
-
-  let entite: Entite | null = null;
-  onMount(async () => {
-    entite = (await rechercheOrganisation($resume.siret as string))[0];
-  });
 </script>
 
 {#if lectureSeule}
@@ -32,7 +27,7 @@
       on:click={() => (lectureSeule = false)}
     />
   </div>
-  <ResumeDuServiceLectureSeule donnees={$resume} {entite} />
+  <ResumeDuServiceLectureSeule donnees={$resume} />
 {:else}
   <div class="resume-editable">
     <BrouillonDeServiceEditable
