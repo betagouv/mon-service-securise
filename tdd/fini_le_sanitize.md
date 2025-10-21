@@ -17,9 +17,11 @@
 ## Les migrations BDD
 
 - [ ] table `utilisateurs`
+
   - champ `nom`
   - champ `prenom`
   - champ `postes` qui est un `[]`
+
 - [ ] table `services`
 
   - champ `descriptionService`
@@ -43,7 +45,10 @@
     - `partiesPrenantes[].nom`, `natureAcces`, `pointContact`
 
 - [ ] table `activites_mesure`
+
   - `WHERE type = 'ajoutCommentaire'` colonne `detail` est un JSON : on veut update `contenu`
+
+- [ ] table `modeles_mesure_specifique`, colonne 'donnees'
 
 ## Les tests pour vérifier :
 

@@ -1915,25 +1915,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(reponse.body).to.eql([]);
       expect(idRecu).to.be('U1');
     });
-
-    it('décode les entités HTML dans le contenu renvoyé', async () => {
-      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
-      testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur =
-        async () => [
-          {
-            id: 'MOD-1',
-            idsServicesAssocies: [],
-            description: 'L&#x27;abricot &lt;&gt;',
-            descriptionLongue: 'L&#x27;artiste',
-            categorie: 'gouvernance',
-          },
-        ];
-
-      const reponse = await testeur.get('/api/modeles/mesureSpecifique');
-
-      expect(reponse.body[0].description).to.be("L'abricot <>");
-      expect(reponse.body[0].descriptionLongue).to.be("L'artiste");
-    });
   });
 
   describe('quand requête POST sur `/api/modeles/mesureSpecifique`', () => {
