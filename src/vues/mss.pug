@@ -10,6 +10,7 @@ block page
     script(src='/statique/bibliotheques/jquery-3.6.0.min.js')
     include csrf.pug
     script(src='https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/1.29.4/lab-anssi-ui-kit.iife.js' nonce=nonce)
+    +composantSvelte('entete.js')
 
   block styles
     link(href='/statique/assets/styles/palette.css', rel='stylesheet')

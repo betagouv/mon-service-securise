@@ -1,12 +1,6 @@
 import brancheMenuSandwich from './modules/interactions/brancheMenuSandwich.js';
 
 $(() => {
-  const creeBoutonConnexion = () =>
-    $(`
-<a href="/inscription" class="inscription">Inscription</a>
-<a href="/connexion" class="connexion">Connexion</a>
-  `);
-
   const creeConteneurUtilisateurCourant = (donneesUtilisateur) =>
     $(`
 <div class='nom-utilisateur-courant'>${donneesUtilisateur.prenomNom}</div>
@@ -45,18 +39,13 @@ $(() => {
     $(deconnexion()).insertAfter($conteneur);
   };
 
-  const ajouteBoutonConnexionDans = (selecteur) => {
-    const $conteneur = $(selecteur);
-    const $bouton = creeBoutonConnexion();
-    $conteneur.append($bouton);
-  };
-
   brancheMenuSandwich();
+
+  document.body.dispatchEvent(new CustomEvent('svelte-recharge-entete'));
 
   axios
     .get('/api/utilisateurCourant')
     .then((reponse) =>
       ajouteUtilisateurCourantDans('.utilisateur-courant', reponse.data)
-    )
-    .catch(() => ajouteBoutonConnexionDans('.utilisateur-courant'));
+    );
 });
