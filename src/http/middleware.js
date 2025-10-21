@@ -182,7 +182,7 @@ const middleware = (configuration = {}) => {
       );
 
       const aseptisations = nomsParametres.map((p) =>
-        check(p).trim().escape().run(requete)
+        check(p).trim().run(requete)
       );
 
       return Promise.all(aseptisations)
