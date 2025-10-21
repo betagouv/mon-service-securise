@@ -7,6 +7,7 @@
   import type { BrouillonSvelte } from '../creationV2.types';
 
   export let donnees: BrouillonSvelte;
+  export let seulementNomServiceEditable: boolean;
 
   const dispatch = createEventDispatcher<{ champModifie: MiseAJour }>();
 
@@ -83,7 +84,7 @@
       siret={donnees.siret}
       on:siretChoisi={async (e) => await champModifie('siret', e.detail)}
       label="Organisation responsable du projet*"
-      disabled={!donnees.id}
+      disabled={seulementNomServiceEditable}
     />
   {/key}
 
@@ -94,7 +95,7 @@
       ([statut, { description }]) => ({ value: statut, label: description })
     )}
     value={donnees.statutDeploiement}
-    disabled={!donnees.id}
+    disabled={seulementNomServiceEditable}
     id="statutDeploiement"
     on:valuechanged={async (e) => {
       donnees.statutDeploiement = e.detail;
@@ -108,9 +109,11 @@
     type="text"
     id="presentation"
     rows={3}
-    disabled={!donnees.id}
+    disabled={seulementNomServiceEditable}
     value={donnees.presentation}
-    status={donnees.id && donnees.presentation.length < 1 ? 'error' : 'default'}
+    status={!seulementNomServiceEditable && donnees.presentation.length < 1
+      ? 'error'
+      : 'default'}
     errorMessage="La présentation du service est obligatoire."
     on:blur={async (e) => {
       donnees.presentation = e.target.value;
@@ -119,7 +122,10 @@
     }}
   />
 
-  <div class="conteneur-liste-champs" class:inactif={!donnees.id}>
+  <div
+    class="conteneur-liste-champs"
+    class:inactif={seulementNomServiceEditable}
+  >
     <label for="url-service">URL du service</label>
     <ListeChampTexte
       nomGroupe="pointsAcces"
@@ -127,7 +133,7 @@
       on:ajout={ajouteValeurPointAcces}
       titreSuppression="Supprimer l'URL"
       titreAjout="Ajouter une URL"
-      inactif={!donnees.id}
+      inactif={seulementNomServiceEditable}
       on:blur={() => enregistrePointsAcces()}
       on:suppression={async (e) => {
         supprimeValeurPointAcces(e.detail);
@@ -152,7 +158,7 @@
       })
     )}
     values={donnees.typeService}
-    disabled={!donnees.id}
+    disabled={seulementNomServiceEditable}
     id="typeService"
     on:valuechanged={async (e) => {
       donnees.typeService = e.detail;
@@ -160,7 +166,9 @@
         await champModifie('typeService', donnees.typeService);
       }
     }}
-    status={donnees.id && donnees.typeService.length < 1 ? 'error' : 'default'}
+    status={!seulementNomServiceEditable && donnees.typeService.length < 1
+      ? 'error'
+      : 'default'}
     errorMessage="Le type de service est obligatoire."
   />
 
@@ -175,7 +183,7 @@
       })
     )}
     values={donnees.specificitesProjet}
-    disabled={!donnees.id}
+    disabled={seulementNomServiceEditable}
     id="specificitesProjet"
     on:valuechanged={async (e) => {
       donnees.specificitesProjet = e.detail;
@@ -191,7 +199,7 @@
       ([typeHebergement, { nom }]) => ({ value: typeHebergement, label: nom })
     )}
     value={donnees.typeHebergement}
-    disabled={!donnees.id}
+    disabled={seulementNomServiceEditable}
     id="typeHebergement"
     on:valuechanged={async (e) => {
       donnees.typeHebergement = e.detail;
@@ -213,7 +221,7 @@
   <lab-anssi-multi-select
     label="Activités du projet entièrement externalisées"
     placeholder="Sélectionnez une ou plusieurs valeurs"
-    disabled={!donnees.id || donnees.typeHebergement === 'saas'}
+    disabled={seulementNomServiceEditable || donnees.typeHebergement === 'saas'}
     options={Object.entries(questionsV2.activiteExternalisee).map(
       ([activiteExternalisee, { nom }]) => ({
         id: activiteExternalisee,
@@ -243,7 +251,7 @@
       ([ouvertureSysteme, { nom }]) => ({ value: ouvertureSysteme, label: nom })
     )}
     value={donnees.ouvertureSysteme}
-    disabled={!donnees.id}
+    disabled={seulementNomServiceEditable}
     id="ouvertureSysteme"
     on:valuechanged={async (e) => {
       donnees.ouvertureSysteme = e.detail;
@@ -259,7 +267,7 @@
       ([audienceCible, { nom }]) => ({ value: audienceCible, label: nom })
     )}
     value={donnees.audienceCible}
-    disabled={!donnees.id}
+    disabled={seulementNomServiceEditable}
     id="audienceCible"
     on:valuechanged={async (e) => {
       donnees.audienceCible = e.detail;
@@ -275,7 +283,7 @@
       ([duree, { nom }]) => ({ value: duree, label: nom })
     )}
     value={donnees.dureeDysfonctionnementAcceptable}
-    disabled={!donnees.id}
+    disabled={seulementNomServiceEditable}
     id="dureeDysfonctionnementAcceptable"
     on:valuechanged={async (e) => {
       donnees.dureeDysfonctionnementAcceptable = e.detail;
@@ -298,7 +306,7 @@
       })
     )}
     values={donnees.categoriesDonneesTraitees}
-    disabled={!donnees.id}
+    disabled={seulementNomServiceEditable}
     id="categoriesDonneesTraitees"
     on:valuechanged={async (e) => {
       donnees.categoriesDonneesTraitees = e.detail;
@@ -309,7 +317,10 @@
     }}
   />
 
-  <div class="conteneur-liste-champs" class:inactif={!donnees.id}>
+  <div
+    class="conteneur-liste-champs"
+    class:inactif={seulementNomServiceEditable}
+  >
     <label for="url-service">Données traitées supplémentaires</label>
     <ListeChampTexte
       nomGroupe="categoriesDonneesTraiteesSupplementaires"
@@ -317,7 +328,7 @@
       on:ajout={ajouteCategoriesDonneesTraiteesSupplementaires}
       titreSuppression="Supprimer les données"
       titreAjout="Ajouter des données"
-      inactif={!donnees.id}
+      inactif={seulementNomServiceEditable}
       on:blur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
       on:suppression={async (e) => {
         supprimeCategoriesDonneesTraiteesSupplementaires(e.detail);
@@ -334,7 +345,7 @@
       ([volumetrie, { nom }]) => ({ value: volumetrie, label: nom })
     )}
     value={donnees.volumetrieDonneesTraitees}
-    disabled={!donnees.id}
+    disabled={seulementNomServiceEditable}
     id="volumetrieDonneesTraitees"
     on:valuechanged={async (e) => {
       donnees.volumetrieDonneesTraitees = e.detail;
@@ -357,8 +368,9 @@
       })
     )}
     values={donnees.localisationsDonneesTraitees}
-    disabled={!donnees.id}
-    status={donnees.id && donnees.localisationsDonneesTraitees.length < 1
+    disabled={seulementNomServiceEditable}
+    status={!seulementNomServiceEditable &&
+    donnees.localisationsDonneesTraitees.length < 1
       ? 'error'
       : 'default'}
     errorMessage="La localisation des données est obligatoire."

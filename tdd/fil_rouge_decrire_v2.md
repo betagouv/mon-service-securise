@@ -5,7 +5,8 @@
 #### Nettoyage de l'actuel Brouillon / Décrire
 
 - [x] NiveauDeSecurite -> NiveauSecurite
-- [ ] Ne plus utiliser "Brouillon.id" comme déclencheur de l'édition du formulaire
+- [x] Ne plus utiliser "Brouillon.id" comme déclencheur de l'édition du formulaire
+- [ ] Bug de réactivité du formulaire
 - [ ] Séparation des types "Brouillon" et "DonneesDescriptionService"
 - [ ] Mapper nos données dans les fichiers .api avant de les soumettre
 

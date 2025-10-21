@@ -33,6 +33,7 @@
 
 <BrouillonDeServiceEditable
   donnees={$leBrouillon}
+  seulementNomServiceEditable={!$leBrouillon.id}
   on:champModifie={async (e) => {
     await enregistre(e.detail);
   }}
