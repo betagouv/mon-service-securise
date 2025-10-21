@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { decode } from 'html-entities';
   import EtiquetteIndiceCyber from './elementsDeService/EtiquetteIndiceCyber.svelte';
   import EtiquetteHomologation from './elementsDeService/EtiquetteHomologation.svelte';
   import EtiquetteContributeurs from './elementsDeService/EtiquetteContributeurs.svelte';
@@ -191,10 +190,10 @@
                 {#if service.estProprietaire}
                   <EtiquetteProprietaire />
                 {/if}
-                <span class="nom-service">{decode(service.nomService)}</span>
-                <span class="nom-organisation"
-                  >{decode(service.organisationResponsable)}</span
-                >
+                <span class="nom-service">{service.nomService}</span>
+                <span class="nom-organisation">
+                  {service.organisationResponsable}
+                </span>
               </span>
               <div class="icone-voir-service">
                 <img
