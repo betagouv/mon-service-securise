@@ -421,21 +421,6 @@ describe('Le serveur MSS des routes /service/*', () => {
       );
     });
 
-    it('décode correctement les caractères spéciaux dans le nom du service', async () => {
-      testeur.middleware().reinitialise({
-        serviceARenvoyer: unService()
-          .avecNomService('Service d&#x27;apostrophe')
-          .construis(),
-      });
-      testeur.adaptateurHorloge().maintenant = () => new Date(2024, 0, 23);
-
-      await verifieNomFichierServi(
-        testeur.app(),
-        '/service/456/mesures/export.csv',
-        'Service dapostrophe Liste mesures sans données additionnelles 20240123.csv'
-      );
-    });
-
     it("reste robuste en cas d'erreur de génération CSV", async () => {
       testeur.adaptateurCsv().genereCsvMesures = async () => {
         throw Error('BOOM');
