@@ -27,12 +27,13 @@
     - `pointsAcces[].description`
     - `donneesSensiblesSpecifiques[].description`
     - `fonctionnalitesSpecifiques[].description`
+    - `organisationResponsable.nom`
   - champ `risquesGeneraux[].commentaire`
   - champ `risquesSpecifiques[]`
     - `intitule`, `commentaire`, `description`
   - champ `mesuresGenerales[].modalites`
   - champ `mesuresSpecifiques[]`
-    - `description`, `modalites`
+    - `description`, `descriptionLongue`, `modalites`
   - champ `dossiers[]`
     - `autorite.nom` et `autorite.fonction`
     - `avis[].commentaires` et `avis[].collaborateurs`
