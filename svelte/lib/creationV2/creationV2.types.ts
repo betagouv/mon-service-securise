@@ -21,34 +21,15 @@ export type VolumetrieDonneesTraitees =
 export type LocalisationDonneesTraitees =
   keyof typeof questionsV2.localisationDonneesTraitees;
 
-// Côté HTTP, on n'est pas sûr d'avoir les propriétés,
-// puisque le brouillon est enregistré au fil de l'eau
-export type BrouillonIncomplet = {
-  id?: UUID;
-  nomService?: string;
-  siret?: string;
-  statutDeploiement?: StatutDeploiement;
-  presentation?: string;
-  pointsAcces?: string[];
-  typeService?: TypeService[];
-  specificitesProjet?: SpecificiteProjet[];
-  typeHebergement?: TypeHebergement;
-  activitesExternalisees?: ActiviteExternalisee[];
-  ouvertureSysteme?: OuvertureSysteme;
-  audienceCible?: AudienceCible;
-  dureeDysfonctionnementAcceptable?: DureeDysfonctionnementAcceptable;
-  categoriesDonneesTraitees?: CategorieDonneesTraitees[];
-  categoriesDonneesTraiteesSupplementaires?: string[];
-  volumetrieDonneesTraitees?: VolumetrieDonneesTraitees;
-  localisationsDonneesTraitees?: LocalisationDonneesTraitees[];
-  niveauSecurite?: NiveauSecurite;
-};
-
 // Côté Svelte, on VEUT toujours toutes les propriétés,
 // pour faire fonctionner correctement l'UI
 export type BrouillonServiceV2 = DescriptionServiceV2 & {
   id?: UUID;
 };
+
+// Côté HTTP, on n'est pas sûr d'avoir les propriétés,
+// puisque le brouillon est enregistré au fil de l'eau
+export type BrouillonIncomplet = Partial<BrouillonServiceV2>;
 
 export type DescriptionServiceV2 = {
   nomService: string;
