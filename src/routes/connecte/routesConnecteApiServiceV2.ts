@@ -1,7 +1,7 @@
 import express from 'express';
 import { z } from 'zod';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
-import { reglesValidationDonneesServiceSansNiveauSecurite } from './routesConnecte.schema.js';
+import { reglesValidationDescriptionServiceV2 } from './routesConnecte.schema.js';
 import {
   DescriptionServiceV2,
   DonneesDescriptionServiceV2,
@@ -30,22 +30,14 @@ const routesConnecteApiServiceV2 = ({
     '/:id',
     middleware.trouveService({ [DECRIRE]: ECRITURE }),
     valideParams(z.strictObject({ id: z.uuidv4() })),
-    valideBody(
-      z.strictObject(reglesValidationDonneesServiceSansNiveauSecurite)
-    ),
+    valideBody(z.strictObject(reglesValidationDescriptionServiceV2)),
     async (requete, reponse) => {
       const { idUtilisateurCourant } =
         requete as unknown as RequestRouteConnecte;
-      const donneesDescription: DonneesDescriptionServiceV2 = {
-        ...requete.body,
-        organisationResponsable: { siret: requete.body.siret },
-        pointsAcces: requete.body.pointsAcces.map((p) => ({ description: p })),
-      } as DonneesDescriptionServiceV2;
-
       await depotDonnees.ajouteDescriptionService(
         idUtilisateurCourant,
         requete.params.id,
-        new DescriptionServiceV2(donneesDescription)
+        new DescriptionServiceV2(requete.body as DonneesDescriptionServiceV2)
       );
       reponse.sendStatus(200);
     }
@@ -53,19 +45,12 @@ const routesConnecteApiServiceV2 = ({
 
   routes.post(
     '/niveauSecuriteRequis',
-    valideBody(
-      z.strictObject(reglesValidationDonneesServiceSansNiveauSecurite)
-    ),
+    valideBody(z.strictObject(reglesValidationDescriptionServiceV2)),
     async (requete, reponse) => {
-      const donnees = requete.body;
-      const donneesDescription: DonneesDescriptionServiceV2 = {
-        ...donnees,
-        organisationResponsable: { siret: donnees.siret },
-        pointsAcces: donnees.pointsAcces.map((p) => ({ description: p })),
-      } as DonneesDescriptionServiceV2;
-
       const niveauDeSecuriteMinimal =
-        DescriptionServiceV2.niveauSecuriteMinimalRequis(donneesDescription);
+        DescriptionServiceV2.niveauSecuriteMinimalRequis(
+          requete.body as DonneesDescriptionServiceV2
+        );
 
       return reponse.status(200).json({ niveauDeSecuriteMinimal });
     }
