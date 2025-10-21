@@ -1,5 +1,4 @@
 import express from 'express';
-import { decode } from 'html-entities';
 import Utilisateur from '../../modeles/utilisateur.js';
 import Service from '../../modeles/service.js';
 import InformationsService from '../../modeles/informationsService.js';
@@ -79,12 +78,7 @@ const routesConnectePage = ({
       const entite = utilisateur.entite.siret ? utilisateur.entite : undefined;
 
       reponse.render('profil', {
-        utilisateur: {
-          ...utilisateur.toJSON(),
-          nom: decode(utilisateur.nom),
-          prenom: decode(utilisateur.prenom),
-          postes: utilisateur.postes.map(decode),
-        },
+        utilisateur: utilisateur.toJSON(),
         departements,
         estimationNombreServices,
         entite,
@@ -170,7 +164,6 @@ const routesConnectePage = ({
       } else if (idEtape === 'homologuer') {
         reponse.render('service/dossiers', {
           InformationsService,
-          decode,
           service,
           etapeActive: 'dossiers',
           premiereEtapeParcours: referentiel.premiereEtapeParcours(),
