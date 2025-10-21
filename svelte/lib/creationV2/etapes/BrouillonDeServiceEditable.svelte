@@ -82,7 +82,10 @@
   {#key donnees.siret}
     <ChampOrganisation
       siret={donnees.siret}
-      on:siretChoisi={async (e) => await champModifie('siret', e.detail)}
+      on:siretChoisi={async (e) => {
+        donnees.siret = e.detail;
+        await champModifie('siret', e.detail);
+      }}
       label="Organisation responsable du projet*"
       disabled={seulementNomServiceEditable}
     />
