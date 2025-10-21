@@ -6,7 +6,6 @@
   } from '../../../ui/types.d';
   import { servicesAvecMesuresAssociees } from '../../servicesAssocies/servicesAvecMesuresAssociees.store';
   import Tableau from '../../../ui/Tableau.svelte';
-  import { decode } from 'html-entities';
   import { referentielNiveauxSecurite } from '../../../ui/referentielNiveauxSecurite';
   import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
 
