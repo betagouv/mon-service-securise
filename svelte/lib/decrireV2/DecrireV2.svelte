@@ -44,7 +44,7 @@
       />
     {:else}
       <BrouillonDeServiceEditable
-        donnees={descriptionEditable}
+        bind:donnees={descriptionEditable}
         seulementNomServiceEditable={false}
         on:champModifie={(e) => {
           descriptionEditable = { ...descriptionEditable, ...e.detail };
