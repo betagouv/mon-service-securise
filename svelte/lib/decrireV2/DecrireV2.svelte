@@ -4,12 +4,14 @@
   import type { DescriptionServiceV2API } from './decrireV2.d';
   import BarreActions from './BarreActions.svelte';
   import BrouillonDeServiceEditable from '../creationV2/etapes/BrouillonDeServiceEditable.svelte';
-  import type { BrouillonSvelte } from '../creationV2/creationV2.types';
+  import type { DescriptionServiceV2 } from '../creationV2/creationV2.types';
   import { rechercheOrganisation } from '../ui/rechercheOrganisation';
 
   type ModeAffichage = 'Résumé' | 'Édition';
 
-  function enEditable(description: DescriptionServiceV2API): BrouillonSvelte {
+  function enEditable(
+    description: DescriptionServiceV2API
+  ): DescriptionServiceV2 {
     return {
       ...description,
       siret: description.organisationResponsable.siret,
@@ -23,7 +25,8 @@
   let mode: ModeAffichage = 'Résumé';
 
   const copiePourRestauration = structuredClone(descriptionService);
-  let descriptionEditable: BrouillonSvelte = enEditable(descriptionService);
+  let descriptionEditable: DescriptionServiceV2 =
+    enEditable(descriptionService);
   $: descriptionAffichable =
     convertisDonneesDescriptionEnLibelles(descriptionEditable);
 

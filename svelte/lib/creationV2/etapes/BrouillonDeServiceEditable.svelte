@@ -4,9 +4,9 @@
   import { type MiseAJour } from '../creationV2.api';
   import ListeChampTexte from './ListeChampTexte.svelte';
   import ChampOrganisation from '../../ui/ChampOrganisation.svelte';
-  import type { BrouillonSvelte } from '../creationV2.types';
+  import type { DescriptionServiceV2 } from '../creationV2.types';
 
-  export let donnees: BrouillonSvelte;
+  export let donnees: DescriptionServiceV2;
   export let seulementNomServiceEditable: boolean;
 
   const dispatch = createEventDispatcher<{ champModifie: MiseAJour }>();
