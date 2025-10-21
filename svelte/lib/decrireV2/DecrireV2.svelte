@@ -5,7 +5,6 @@
   import BarreActions from './BarreActions.svelte';
   import BrouillonDeServiceEditable from '../creationV2/etapes/BrouillonDeServiceEditable.svelte';
   import type { DescriptionServiceV2 } from '../creationV2/creationV2.types';
-  import { rechercheOrganisation } from '../ui/rechercheOrganisation';
   import {
     metsAJourDescriptionService,
     niveauSecuriteMinimalRequis,
@@ -15,6 +14,10 @@
   import type { UUID } from '../typesBasiquesSvelte';
   import donneesNiveauxDeSecurite from '../niveauxDeSecurite/donneesNiveauxDeSecurite';
   import ResumeNiveauSecurite from '../ui/ResumeNiveauSecurite.svelte';
+  import Toaster from '../ui/Toaster.svelte';
+  import type { IdNiveauDeSecurite } from '../ui/types';
+  import NiveauDeSecuriteEditable from '../creationV2/NiveauDeSecuriteEditable.svelte';
+  import Toast from '../ui/Toast.svelte';
 
   type ModeAffichage = 'Résumé' | 'Édition';
 
@@ -34,6 +37,8 @@
 
   let mode: ModeAffichage = 'Résumé';
   let ongletActif: 'informations' | 'besoinsSecurite' = 'informations';
+  let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+  let majForceeBesoinsSecurite: boolean = false;
 
   const copiePourRestauration = structuredClone(descriptionService);
   let descriptionEditable: DescriptionServiceV2 =
@@ -41,8 +46,18 @@
 
   $: descriptionAffichable =
     convertisDonneesDescriptionEnLibelles(descriptionEditable);
+
+  const rafraichisNiveauSecuriteMinimal = async (d: DescriptionServiceV2) => {
+    niveauDeSecuriteMinimal = await niveauSecuriteMinimalRequis(d);
+  };
+
+  const nomNiveauDeSecurite = (niveau: IdNiveauDeSecurite) =>
+    donneesNiveauxDeSecurite.find((d) => d.id === niveau)?.nom;
+
+  $: rafraichisNiveauSecuriteMinimal(descriptionEditable);
 </script>
 
+<Toaster />
 <div class="conteneur-decrire-v2">
   <div class="conteneur-onglets">
     <button
@@ -72,14 +87,39 @@
         />
       {/if}
     </div>
-  {:else}
-    {@const niveau = descriptionService.niveauSecurite}
-    {@const donneesNiveau = donneesNiveauxDeSecurite.find(
-      (d) => d.id === niveau
-    )}
+  {:else if mode === 'Résumé'}
+    {@const niveau = descriptionEditable.niveauSecurite}
     <div class="conteneur-besoins-securite">
-      <h5>{donneesNiveau.nom}</h5>
+      <h5>{nomNiveauDeSecurite(niveau)}</h5>
       <ResumeNiveauSecurite {niveau} />
+    </div>
+  {:else}
+    <div class="conteneur-resume">
+      <NiveauDeSecuriteEditable
+        bind:niveauSelectionne={descriptionEditable.niveauSecurite}
+        {niveauDeSecuriteMinimal}
+        on:champModifie={async (e) => {
+          descriptionEditable.niveauSecurite = e.detail.niveauSecurite;
+        }}
+      >
+        <svelte:fragment slot="infoMajNecessaire">
+          {#if majForceeBesoinsSecurite}
+            <div class="conteneur-info-maj-necessaire">
+              <Toast
+                niveau="alerte"
+                avecAnimation={false}
+                avecOmbre={false}
+                titre="Mise à jour des besoins en sécurité"
+                contenu="Les modifications apportées aux caractéristiques du service entraînent une évolution du niveau de sécurité requis. Votre service passera ainsi des besoins <b>{nomNiveauDeSecurite(
+                  copiePourRestauration.niveauSecurite
+                )}</b> aux besoins <b>{nomNiveauDeSecurite(
+                  niveauDeSecuriteMinimal
+                )}</b>. Pour valider ces changements, veuillez confirmer ce nouveau niveau de sécurité."
+              />
+            </div>
+          {/if}
+        </svelte:fragment>
+      </NiveauDeSecuriteEditable>
     </div>
   {/if}
 
@@ -93,29 +133,41 @@
   {/if}
   {#if mode === 'Édition'}
     <BarreActions
-      mode="Édition"
+      mode={majForceeBesoinsSecurite
+        ? 'MiseÀJourForcéeBesoinsSécurité'
+        : 'Édition'}
+      afficheInfoBesoinsSecurite={mode === 'Édition' &&
+        ongletActif === 'informations' &&
+        !majForceeBesoinsSecurite}
       on:enregistrer={async () => {
-        const niveauMinimal =
-          await niveauSecuriteMinimalRequis(descriptionEditable);
         const niveauActuelToujoursSuffisant =
-          questionsV2.niveauSecurite[niveauMinimal].position <=
-          questionsV2.niveauSecurite[copiePourRestauration.niveauSecurite]
+          questionsV2.niveauSecurite[niveauDeSecuriteMinimal].position <=
+          questionsV2.niveauSecurite[descriptionEditable.niveauSecurite]
             .position;
         if (niveauActuelToujoursSuffisant) {
           await metsAJourDescriptionService(idService, descriptionEditable);
-          toasterStore.succes(
-            'Succès',
-            'Les informations du service ont été mises à jour.'
-          );
           mode = 'Résumé';
+          let messageSucces =
+            'Les informations de votre service ont été mises à jour avec succès.';
+          if (majForceeBesoinsSecurite) {
+            messageSucces = `Les informations et les besoins de sécurité de votre service ont été mis à jour avec succès. <br/> Les besoins de sécurité sont passés de <b>${nomNiveauDeSecurite(
+              copiePourRestauration.niveauSecurite
+            )}</b> à <b>${nomNiveauDeSecurite(
+              descriptionEditable.niveauSecurite
+            )}.</b>`;
+          }
+          toasterStore.succes('Mise à jour réussie', messageSucces);
         } else {
-          //TODO mode = 'MiseAJourNiveauSecurite';
+          ongletActif = 'besoinsSecurite';
+          majForceeBesoinsSecurite = true;
+          descriptionEditable.niveauSecurite = niveauDeSecuriteMinimal;
         }
       }}
       on:annuler={() => {
         descriptionEditable = enEditable(copiePourRestauration);
         window.scrollTo(0, 0);
         mode = 'Résumé';
+        majForceeBesoinsSecurite = false;
       }}
     />
   {/if}
@@ -168,6 +220,10 @@
     max-width: 1000px;
     padding: 0 54px;
     margin: 24px auto;
+
+    :global(hr) {
+      display: none;
+    }
   }
 
   .conteneur-besoins-securite {
@@ -175,10 +231,6 @@
     border-radius: 8px;
     padding: 24px;
     box-sizing: border-box;
-
-    :global(hr) {
-      display: none;
-    }
   }
 
   h5 {
@@ -189,5 +241,9 @@
     font-size: 1.375rem;
     line-height: 1.75rem;
     margin: 0 8px 0 0;
+  }
+
+  .conteneur-info-maj-necessaire {
+    margin-bottom: 24px;
   }
 </style>

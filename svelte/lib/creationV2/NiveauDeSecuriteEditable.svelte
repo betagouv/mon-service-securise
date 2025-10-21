@@ -40,6 +40,8 @@
     />
   </p>
 
+  <slot name="infoMajNecessaire" />
+
   {#each donneesNiveauxDeSecurite as niveauSecurite, index}
     <details
       id={niveauSecurite.id}
