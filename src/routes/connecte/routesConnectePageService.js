@@ -1,5 +1,4 @@
 import express from 'express';
-import { decode } from 'html-entities';
 import InformationsService from '../../modeles/informationsService.js';
 import {
   Permissions,
@@ -139,7 +138,8 @@ const routesConnectePageService = ({
           referentiel
         );
 
-        const s = decode(service.nomService())
+        const s = service
+          .nomService()
           .substring(0, 30)
           .replace(/[^a-zA-Z ]/g, '');
         const date = dateYYYYMMDD(adaptateurHorloge.maintenant());
@@ -238,7 +238,6 @@ const routesConnectePageService = ({
 
       reponse.render('service/dossiers', {
         InformationsService,
-        decode,
         service,
         etapeActive: 'dossiers',
         premiereEtapeParcours: referentiel.premiereEtapeParcours(),
