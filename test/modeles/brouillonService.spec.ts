@@ -36,7 +36,7 @@ describe('Un brouillon de Service v2', () => {
           presentation: 'Mon service qui…',
           statutDeploiement: 'enCours',
           pointsAcces: [{ description: 'a.fr' }, { description: 'b.fr' }],
-          niveauDeSecurite: 'niveau1',
+          niveauSecurite: 'niveau1',
           activitesExternalisees: ['administrationTechnique'],
           specificitesProjet: [],
           typeService: ['api'],

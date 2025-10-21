@@ -77,7 +77,7 @@ export class MoteurReglesV2 {
   mesures(descriptionService: DescriptionServiceV2) {
     const mesures = [];
 
-    const niveauDuService = descriptionService.niveauDeSecurite;
+    const niveauDuService = descriptionService.niveauSecurite;
     const projection = descriptionService.projectionPourMoteurV2();
 
     const reglesDeBase = this.regles.filter((r) =>
