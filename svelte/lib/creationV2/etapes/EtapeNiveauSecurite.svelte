@@ -44,6 +44,8 @@
     );
 </script>
 
+<hr class="separateur-etapier" />
+
 <NiveauDeSecuriteEditable
   bind:niveauSelectionne
   {niveauDeSecuriteMinimal}
@@ -52,3 +54,15 @@
     await metsAJourBrouillonService($leBrouillon.id, e.detail);
   }}
 />
+
+<style>
+  hr {
+    color: #ddd;
+    background: #ddd;
+    border-color: transparent;
+    border-bottom: none;
+    padding: 0;
+    margin: -24px 0 8px;
+    width: 690px;
+  }
+</style>
