@@ -128,12 +128,12 @@
         ongletActif === 'informations' &&
         !majForceeBesoinsSecurite}
       on:enregistrer={async () => {
-        const niveauActuelToujoursSuffisant =
-          questionsV2.niveauSecurite[niveauDeSecuriteMinimal].position <=
+        const niveauActuelInsuffisant =
           questionsV2.niveauSecurite[descriptionEditable.niveauSecurite]
-            .position;
+            .position <
+          questionsV2.niveauSecurite[niveauDeSecuriteMinimal].position;
 
-        if (!niveauActuelToujoursSuffisant) {
+        if (niveauActuelInsuffisant) {
           ongletActif = 'besoinsSecurite';
           majForceeBesoinsSecurite = true;
           descriptionEditable.niveauSecurite = niveauDeSecuriteMinimal;
