@@ -49,7 +49,9 @@
   let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
   let majForceeBesoinsSecurite: boolean = false;
 
-  const copiePourRestauration = structuredClone(descriptionService);
+  let copiePourRestauration: DescriptionServiceV2 = structuredClone(
+    enEditable(descriptionService)
+  );
   let descriptionEditable: DescriptionServiceV2 =
     enEditable(descriptionService);
 
@@ -145,18 +147,19 @@
         }
 
         await metsAJourDescriptionService(idService, descriptionEditable);
-        retourAuModeResume();
         const messageSucces = majForceeBesoinsSecurite
           ? miseAJourForceeReussie(
               copiePourRestauration.niveauSecurite,
               descriptionEditable.niveauSecurite
             )
           : 'Les informations de votre service ont été mises à jour avec succès.';
-
         toasterStore.succes('Mise à jour réussie', messageSucces);
+
+        copiePourRestauration = structuredClone(descriptionEditable);
+        retourAuModeResume();
       }}
       on:annuler={() => {
-        descriptionEditable = enEditable(copiePourRestauration);
+        descriptionEditable = structuredClone(copiePourRestauration);
         retourAuModeResume();
       }}
     />
