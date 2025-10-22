@@ -26,15 +26,19 @@
 
   type ModeAffichage = 'Résumé' | 'Édition';
 
-  function enEditable(
+  const enEditable = (
     description: DescriptionServiceV2API
-  ): DescriptionServiceV2 {
-    return {
-      ...description,
-      siret: description.organisationResponsable.siret,
-      pointsAcces: description.pointsAcces.map((p) => p.description),
-    };
-  }
+  ): DescriptionServiceV2 => ({
+    ...description,
+    siret: description.organisationResponsable.siret,
+    pointsAcces: description.pointsAcces.map((p) => p.description),
+  });
+
+  const retourAuModeResume = () => {
+    mode = 'Résumé';
+    majForceeBesoinsSecurite = false;
+    window.scrollTo(0, 0);
+  };
 
   export let descriptionService: DescriptionServiceV2API;
   export let idService: UUID;
@@ -141,8 +145,7 @@
         }
 
         await metsAJourDescriptionService(idService, descriptionEditable);
-        mode = 'Résumé';
-        majForceeBesoinsSecurite = false;
+        retourAuModeResume();
         const messageSucces = majForceeBesoinsSecurite
           ? miseAJourForceeReussie(
               copiePourRestauration.niveauSecurite,
@@ -154,9 +157,7 @@
       }}
       on:annuler={() => {
         descriptionEditable = enEditable(copiePourRestauration);
-        window.scrollTo(0, 0);
-        mode = 'Résumé';
-        majForceeBesoinsSecurite = false;
+        retourAuModeResume();
       }}
     />
   {/if}
