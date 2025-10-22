@@ -132,24 +132,26 @@
           questionsV2.niveauSecurite[niveauDeSecuriteMinimal].position <=
           questionsV2.niveauSecurite[descriptionEditable.niveauSecurite]
             .position;
-        if (niveauActuelToujoursSuffisant) {
-          await metsAJourDescriptionService(idService, descriptionEditable);
-          mode = 'Résumé';
-          let messageSucces =
-            'Les informations de votre service ont été mises à jour avec succès.';
-          if (majForceeBesoinsSecurite) {
-            messageSucces = `Les informations et les besoins de sécurité de votre service ont été mis à jour avec succès. <br/> Les besoins de sécurité sont passés de <b>${nomNiveauDeSecurite(
-              copiePourRestauration.niveauSecurite
-            )}</b> à <b>${nomNiveauDeSecurite(
-              descriptionEditable.niveauSecurite
-            )}.</b>`;
-          }
-          toasterStore.succes('Mise à jour réussie', messageSucces);
-        } else {
+
+        if (!niveauActuelToujoursSuffisant) {
           ongletActif = 'besoinsSecurite';
           majForceeBesoinsSecurite = true;
           descriptionEditable.niveauSecurite = niveauDeSecuriteMinimal;
+          return;
         }
+
+        await metsAJourDescriptionService(idService, descriptionEditable);
+        mode = 'Résumé';
+        let messageSucces =
+          'Les informations de votre service ont été mises à jour avec succès.';
+        if (majForceeBesoinsSecurite) {
+          messageSucces = `Les informations et les besoins de sécurité de votre service ont été mis à jour avec succès. <br/> Les besoins de sécurité sont passés de <b>${nomNiveauDeSecurite(
+            copiePourRestauration.niveauSecurite
+          )}</b> à <b>${nomNiveauDeSecurite(
+            descriptionEditable.niveauSecurite
+          )}.</b>`;
+        }
+        toasterStore.succes('Mise à jour réussie', messageSucces);
       }}
       on:annuler={() => {
         descriptionEditable = enEditable(copiePourRestauration);
