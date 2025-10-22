@@ -23,6 +23,10 @@
     margin: 8px;
   }
 
+  body:has(header nav.visible) {
+    overflow: hidden;
+  }
+
   header nav.visible {
     position: absolute;
     left: 0;

@@ -8,7 +8,10 @@ const brancheMenuSandwich = () => {
     $('body').toggleClass('sans-ascenseur', visible);
   };
 
-  $sandwich.on('click', () => interrupteurVisible(true));
+  $sandwich.on('click', () => {
+    interrupteurVisible(true);
+    window.scrollTo(0, 0);
+  });
 
   $boutonFermer.on('click', () => interrupteurVisible(false));
 };
