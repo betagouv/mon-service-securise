@@ -53,7 +53,7 @@
   };
 
   const nomNiveauDeSecurite = (niveau: IdNiveauDeSecurite) =>
-    donneesNiveauxDeSecurite.find((d) => d.id === niveau)?.nom;
+    donneesNiveauxDeSecurite.find((d) => d.id === niveau)!.nom;
 
   $: rafraichisNiveauSecuriteMinimal(descriptionEditable);
 </script>
