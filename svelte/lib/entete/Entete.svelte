@@ -81,6 +81,22 @@
 
   .menu {
     width: 200px;
+    position: absolute;
+    z-index: 3;
+    top: 2em;
+    left: 0;
+    padding: 1em;
+    border: solid 1px var(--liseres);
+    border-radius: 2px;
+    background: var(--fond-pale);
+    text-decoration: none;
+
+    a {
+      display: block;
+      color: var(--systeme-design-etat-bleu);
+      font-size: 0.9em;
+      text-align: left;
+    }
   }
 
   .deconnexion {
