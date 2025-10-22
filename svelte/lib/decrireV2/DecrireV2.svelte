@@ -18,6 +18,7 @@
   import type { IdNiveauDeSecurite } from '../ui/types';
   import NiveauDeSecuriteEditable from '../creationV2/NiveauDeSecuriteEditable.svelte';
   import Toast from '../ui/Toast.svelte';
+  import OngletsDecrireV2 from './OngletsDecrireV2.svelte';
 
   type ModeAffichage = 'Résumé' | 'Édition';
 
@@ -59,20 +60,7 @@
 
 <Toaster />
 <div class="conteneur-decrire-v2">
-  <div class="conteneur-onglets">
-    <button
-      on:click={() => (ongletActif = 'informations')}
-      class:actif={ongletActif === 'informations'}
-    >
-      Informations sur le service
-    </button>
-    <button
-      on:click={() => (ongletActif = 'besoinsSecurite')}
-      class:actif={ongletActif === 'besoinsSecurite'}
-    >
-      Besoins de sécurité
-    </button>
-  </div>
+  <OngletsDecrireV2 bind:ongletActif />
   {#if ongletActif === 'informations'}
     <div class="conteneur-resume">
       {#if mode === 'Résumé'}
@@ -184,30 +172,6 @@
     padding: 0;
     margin: 0;
     max-width: unset;
-  }
-
-  .conteneur-onglets {
-    display: flex;
-    flex-direction: row;
-    max-width: 1000px;
-    margin: 24px auto 0;
-    border-bottom: 2px solid #ddd;
-
-    button {
-      background: none;
-      border: none;
-      font-size: 0.875rem;
-      line-height: 1.5rem;
-      cursor: pointer;
-      padding: 12px 12px 10px 12px;
-      transform: translateY(2px);
-      border-bottom: 2px solid transparent;
-
-      &.actif {
-        color: #000091;
-        border-bottom: 2px solid #000091;
-      }
-    }
   }
 
   .conteneur-resume,
