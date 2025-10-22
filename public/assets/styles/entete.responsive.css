@@ -79,19 +79,6 @@
     flex-direction: column;
     row-gap: 16px;
   }
-
-  header nav.visible .utilisateur-courant .connexion {
-    border-top: 0;
-    border-right: 0;
-    border-left: 0;
-    border-radius: 0;
-    width: 100%;
-    margin: 1em 0;
-  }
-
-  header nav.visible .utilisateur-courant .inscription {
-    width: 100%;
-  }
 }
 
 @media screen and (max-width: 1247px) and (min-width: 768px) {
