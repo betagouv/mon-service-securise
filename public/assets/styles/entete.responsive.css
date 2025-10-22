@@ -65,7 +65,7 @@
     order: 4;
   }
 
-  header nav.visible :is(a, .nom-utilisateur-courant) {
+  header nav.visible a {
     padding: 0.3em 0 8px;
     border-bottom: 1px var(--liseres) solid;
   }
@@ -76,7 +76,7 @@
 
   header nav.visible .utilisateur-courant {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
 
   header nav.visible .utilisateur-courant .connexion {
@@ -90,24 +90,6 @@
 
   header nav.visible .utilisateur-courant .inscription {
     width: 100%;
-  }
-
-  header nav.visible .nom-utilisateur-courant {
-    align-self: flex-start;
-    width: 100%;
-  }
-
-  header nav.visible .nom-utilisateur-courant + .menu {
-    box-sizing: border-box;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  header nav.visible .nom-utilisateur-courant + .menu a {
-    font-size: 1em;
-    line-height: 2em;
-    border: 0;
   }
 }
 
