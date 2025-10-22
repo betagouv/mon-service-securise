@@ -41,16 +41,6 @@
 {/if}
 
 <style lang="scss">
-  .resume-editable {
-    :global(.conteneur-avec-cadre) {
-      padding-right: 248px !important;
-    }
-  }
-
-  :global(.conteneur-avec-cadre) {
-    max-width: 924px;
-  }
-
   .conteneur-bouton-modifier {
     margin-left: auto;
   }
