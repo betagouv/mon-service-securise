@@ -47,6 +47,9 @@
 
   .deconnexion {
     flex-shrink: 0;
+    @media screen and (max-width: 1247px) {
+      width: 100%;
+    }
   }
 
   .nom-utilisateur-courant {
