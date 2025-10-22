@@ -41,6 +41,44 @@
     cursor: pointer;
   }
 
+  .inscription {
+    @media screen and (max-width: 1247px) {
+      width: 100%;
+    }
+  }
+
+  .connexion {
+    display: flex;
+    align-items: center;
+    padding-left: 0.5em;
+    border: 1px solid var(--systeme-design-etat-bleu);
+    border-radius: 0.35em;
+
+    &:before {
+      width: 1.3em;
+      height: 1.1em;
+      margin-right: 8px;
+      content: '';
+      background-color: var(--systeme-design-etat-bleu);
+      -webkit-mask: url('/statique/assets/images/icone_utilisateur.svg')
+        no-repeat center;
+      mask: url('/statique/assets/images/icone_utilisateur.svg') no-repeat
+        center;
+      -webkit-mask-size: contain;
+      mask-size: contain;
+    }
+
+    @media screen and (max-width: 1247px) {
+      border-top: 0;
+      border-right: 0;
+      border-left: 0;
+      border-radius: 0;
+      border-bottom: 1px var(--liseres) solid;
+      width: 100%;
+      margin-top: 0;
+    }
+  }
+
   .menu {
     width: 200px;
   }

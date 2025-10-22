@@ -112,36 +112,17 @@ header nav a {
   background: transparent;
 }
 
-.connexion {
-  display: flex;
-  align-items: center;
-  padding-left: 0.5em;
-  border: 1px solid var(--systeme-design-etat-bleu);
-  border-radius: 0.35em;
-}
-
 .deconnexion {
   display: flex;
   align-items: center;
   color: var(--systeme-design-etat-bleu);
 }
 
-:is(.connexion, .deconnexion):before {
+:is(.deconnexion):before {
   display: inline-block;
 
   content: '';
   background-color: var(--systeme-design-etat-bleu);
-}
-
-:is(.connexion)::before {
-  width: 1.3em;
-  height: 1.1em;
-  margin-right: 8px;
-
-  -webkit-mask: url(../images/icone_utilisateur.svg) no-repeat center;
-  mask: url(../images/icone_utilisateur.svg) no-repeat center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
 }
 
 header nav .deconnexion::before {
