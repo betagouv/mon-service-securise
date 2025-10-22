@@ -193,10 +193,6 @@
     max-width: 1000px;
     padding: 0 54px;
     margin: 24px auto;
-
-    :global(hr) {
-      display: none;
-    }
   }
 
   .conteneur-besoins-securite {

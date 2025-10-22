@@ -25,7 +25,6 @@
 </script>
 
 <div>
-  <hr class="separateur-etapier" />
   <p class="explication-etape">
     Sur la base des informations renseignées, l'ANSSI a évalué à titre indicatif
     les besoins de sécurité de votre service et la démarche adaptée.
@@ -83,6 +82,7 @@
           />
         </span>
       </summary>
+      <hr />
       <ResumeNiveauSecurite
         niveau={niveauSecurite.id}
         afficheAvertissementAttaqueEtatique
@@ -194,11 +194,7 @@
     border-color: transparent;
     border-bottom: none;
     padding: 0;
-  }
-
-  hr.separateur-etapier {
-    margin: -24px 0 64px;
-    width: 690px;
+    margin: 32px 0;
   }
 
   .conteneur-niveau-securite:not(:last-of-type) {

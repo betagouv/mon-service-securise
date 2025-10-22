@@ -14,7 +14,6 @@
 </script>
 
 <div class="corps-niveau-securite">
-  <hr />
   <div class="description-niveau-securite">
     <div class="conteneur-illustration">
       <img
@@ -78,14 +77,6 @@
 </div>
 
 <style lang="scss">
-  hr {
-    color: #ddd;
-    background: #ddd;
-    border-color: transparent;
-    border-bottom: none;
-    padding: 0;
-  }
-
   p {
     grid-area: resume;
     font-weight: 400;
@@ -93,10 +84,6 @@
     line-height: 1.5rem;
     margin: 0;
     padding: 0;
-  }
-
-  .corps-niveau-securite hr {
-    margin: 32px 0;
   }
 
   .description-niveau-securite {
