@@ -100,7 +100,25 @@
   }
 
   .deconnexion {
+    display: flex;
     flex-shrink: 0;
+    align-items: center;
+    color: var(--systeme-design-etat-bleu);
+
+    &:before {
+      content: '';
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+      -webkit-mask: url('/statique/assets/images/icone_deconnecter.svg')
+        no-repeat center;
+      mask: url('/statique/assets/images/icone_deconnecter.svg') no-repeat
+        center;
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      background-color: var(--systeme-design-etat-bleu);
+    }
+
     @media screen and (max-width: 1247px) {
       width: 100%;
     }

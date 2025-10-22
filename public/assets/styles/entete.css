@@ -116,27 +116,3 @@ header nav a {
   border: none;
   background: transparent;
 }
-
-.deconnexion {
-  display: flex;
-  align-items: center;
-  color: var(--systeme-design-etat-bleu);
-}
-
-:is(.deconnexion):before {
-  display: inline-block;
-
-  content: '';
-  background-color: var(--systeme-design-etat-bleu);
-}
-
-header nav .deconnexion::before {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
-
-  -webkit-mask: url(../images/icone_deconnecter.svg) no-repeat center;
-  mask: url(../images/icone_deconnecter.svg) no-repeat center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-}
