@@ -179,6 +179,10 @@
     max-width: unset;
   }
 
+  :global(.conteneur-avec-cadre) {
+    max-width: 950px !important;
+  }
+
   .conteneur-resume,
   .conteneur-besoins-securite {
     text-align: left;
