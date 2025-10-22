@@ -142,6 +142,7 @@
 
         await metsAJourDescriptionService(idService, descriptionEditable);
         mode = 'Résumé';
+        majForceeBesoinsSecurite = false;
         const messageSucces = majForceeBesoinsSecurite
           ? miseAJourForceeReussie(
               copiePourRestauration.niveauSecurite,
