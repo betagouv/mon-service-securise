@@ -37,19 +37,12 @@ header nav .bouton-fermer {
   display: none;
 }
 
-header nav a,
-.nom-utilisateur-courant {
+header nav a {
   padding: 0.3em 0.85em;
-
   color: var(--systeme-design-etat-bleu);
 }
 
-:is(
-    header nav a:not(.bouton),
-    .nom-utilisateur-courant,
-    .logo-anssi,
-    .logo-mss
-  ):hover {
+:is(header nav a:not(.bouton), .logo-anssi, .logo-mss):hover {
   background-color: var(--systeme-design-etat-gris-survol);
 }
 
@@ -123,32 +116,24 @@ header nav a,
   display: flex;
   align-items: center;
   padding-left: 0.5em;
-
   border: 1px solid var(--systeme-design-etat-bleu);
   border-radius: 0.35em;
 }
 
-.nom-utilisateur-courant,
 .deconnexion {
   display: flex;
   align-items: center;
-
   color: var(--systeme-design-etat-bleu);
 }
 
-.nom-utilisateur-courant {
-  width: 100%;
-}
-
-:is(.connexion, .nom-utilisateur-courant, .deconnexion):before,
-.nom-utilisateur-courant::after {
+:is(.connexion, .deconnexion):before {
   display: inline-block;
 
   content: '';
   background-color: var(--systeme-design-etat-bleu);
 }
 
-:is(.connexion, .nom-utilisateur-courant)::before {
+:is(.connexion)::before {
   width: 1.3em;
   height: 1.1em;
   margin-right: 8px;
@@ -168,19 +153,6 @@ header nav .deconnexion::before {
   mask: url(../images/icone_deconnecter.svg) no-repeat center;
   -webkit-mask-size: contain;
   mask-size: contain;
-}
-
-.nom-utilisateur-courant::after {
-  width: 0.7em;
-  height: 0.7em;
-  margin-left: 8px;
-
-  -webkit-mask: url(../images/icone_fleche_bas.svg) no-repeat center;
-  mask: url(../images/icone_fleche_bas.svg) no-repeat center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-position-y: 0.2em;
-  mask-position-y: 0.2em;
 }
 
 .menu {
