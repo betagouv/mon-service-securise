@@ -12,13 +12,17 @@
   import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
   import { toasterStore } from '../ui/stores/toaster.store';
   import type { UUID } from '../typesBasiquesSvelte';
-  import donneesNiveauxDeSecurite from '../niveauxDeSecurite/donneesNiveauxDeSecurite';
   import ResumeNiveauSecurite from '../ui/ResumeNiveauSecurite.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import type { IdNiveauDeSecurite } from '../ui/types';
   import NiveauDeSecuriteEditable from '../creationV2/NiveauDeSecuriteEditable.svelte';
   import Toast from '../ui/Toast.svelte';
   import OngletsDecrireV2 from './OngletsDecrireV2.svelte';
+  import {
+    avertissementChangementObligatoire,
+    miseAJourForceeReussie,
+    nomNiveauDeSecurite,
+  } from './niveauDeSecurite.messages';
 
   type ModeAffichage = 'Résumé' | 'Édition';
 
@@ -51,9 +55,6 @@
   const rafraichisNiveauSecuriteMinimal = async (d: DescriptionServiceV2) => {
     niveauDeSecuriteMinimal = await niveauSecuriteMinimalRequis(d);
   };
-
-  const nomNiveauDeSecurite = (niveau: IdNiveauDeSecurite) =>
-    donneesNiveauxDeSecurite.find((d) => d.id === niveau)!.nom;
 
   $: rafraichisNiveauSecuriteMinimal(descriptionEditable);
 </script>
@@ -98,11 +99,10 @@
                 avecAnimation={false}
                 avecOmbre={false}
                 titre="Mise à jour des besoins en sécurité"
-                contenu="Les modifications apportées aux caractéristiques du service entraînent une évolution du niveau de sécurité requis. Votre service passera ainsi des besoins <b>{nomNiveauDeSecurite(
-                  copiePourRestauration.niveauSecurite
-                )}</b> aux besoins <b>{nomNiveauDeSecurite(
+                contenu={avertissementChangementObligatoire(
+                  copiePourRestauration.niveauSecurite,
                   niveauDeSecuriteMinimal
-                )}</b>. Pour valider ces changements, veuillez confirmer ce nouveau niveau de sécurité."
+                )}
               />
             </div>
           {/if}
@@ -142,15 +142,13 @@
 
         await metsAJourDescriptionService(idService, descriptionEditable);
         mode = 'Résumé';
-        let messageSucces =
-          'Les informations de votre service ont été mises à jour avec succès.';
-        if (majForceeBesoinsSecurite) {
-          messageSucces = `Les informations et les besoins de sécurité de votre service ont été mis à jour avec succès. <br/> Les besoins de sécurité sont passés de <b>${nomNiveauDeSecurite(
-            copiePourRestauration.niveauSecurite
-          )}</b> à <b>${nomNiveauDeSecurite(
-            descriptionEditable.niveauSecurite
-          )}.</b>`;
-        }
+        const messageSucces = majForceeBesoinsSecurite
+          ? miseAJourForceeReussie(
+              copiePourRestauration.niveauSecurite,
+              descriptionEditable.niveauSecurite
+            )
+          : 'Les informations de votre service ont été mises à jour avec succès.';
+
         toasterStore.succes('Mise à jour réussie', messageSucces);
       }}
       on:annuler={() => {
