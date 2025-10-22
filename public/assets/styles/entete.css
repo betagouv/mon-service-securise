@@ -16,7 +16,6 @@ header :is(.header-gauche, .header-droit) {
 
 header a {
   display: inline-block;
-
   text-decoration: none;
   color: var(--bleu-anssi);
 }
@@ -58,26 +57,22 @@ header nav a {
 .marianne,
 .devise {
   width: 45%;
-
   background-repeat: no-repeat;
   background-size: contain;
 }
 
 .marianne {
   height: 0.75em;
-
   background-image: url(../images/marianne.svg);
 }
 
 .devise {
   height: 1.38em;
-
   background-image: url(../images/devise.svg);
 }
 
 .republique-francaise {
   padding: 0.36em 0;
-
   line-height: 1.075em;
   color: #000;
   font-size: 0.7em;
@@ -89,7 +84,6 @@ header nav a {
   height: 4.05em;
   margin: 0 0.4em;
   padding: 0.3em 0.85em;
-
   background-image: url(../images/logo_anssi.png);
   background-origin: content-box;
   background-repeat: no-repeat;
@@ -102,7 +96,6 @@ header nav a {
   height: 3.7em;
   margin-right: auto;
   padding: 0.3em 0.85em;
-
   background-image: url(../images/logo_mss.svg);
   background-origin: content-box;
   background-repeat: no-repeat;
