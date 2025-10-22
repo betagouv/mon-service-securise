@@ -32,6 +32,11 @@ header nav {
   font-size: 0.9em;
 }
 
+header nav .utilisateur-courant {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
 header .sandwich,
 header nav .bouton-fermer {
   display: none;
@@ -134,31 +139,4 @@ header nav .deconnexion::before {
   mask: url(../images/icone_deconnecter.svg) no-repeat center;
   -webkit-mask-size: contain;
   mask-size: contain;
-}
-
-.menu {
-  position: absolute;
-  z-index: 3;
-
-  top: 2em;
-  left: 0;
-  width: calc(100% - 2.6em);
-
-  margin: 0 0.3em;
-  padding: 1em;
-
-  border: solid 1px var(--liseres);
-  border-radius: 2px;
-  background: var(--fond-pale);
-
-  text-decoration: none;
-  min-width: 200px;
-}
-
-.menu a {
-  display: block;
-
-  color: var(--systeme-design-etat-bleu);
-  font-size: 0.9em;
-  text-align: left;
 }
