@@ -11,6 +11,7 @@ $(() => {
     'referentiel-retours-utilisateur'
   );
   const estLectureSeule = lisDonneesPartagees('securiser-lecture-seule');
+  const versionService = lisDonneesPartagees('version-service');
   const idService = $('.page-service').data('id-service');
   const { indiceCyber, noteMax } = lisDonneesPartagees('indice-cyber');
   const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
@@ -30,6 +31,7 @@ $(() => {
         idService,
         estLectureSeule,
         modeVisiteGuidee: enVisiteGuidee(),
+        versionService,
       },
     })
   );
