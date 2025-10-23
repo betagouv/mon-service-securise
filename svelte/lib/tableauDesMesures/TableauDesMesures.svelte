@@ -51,6 +51,7 @@
   import { rechercheParPriorite } from './stores/rechercheParPriorite.store';
   import { rechercheMesMesures } from './stores/rechercheMesMesures.store';
   import { enleveParametreDeUrl } from '../outils/url';
+  import type { VersionService } from '../../../src/modeles/versionService';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -60,6 +61,7 @@
   export let priorites: ReferentielPriorite;
   export let estLectureSeule: boolean;
   export let modeVisiteGuidee: boolean;
+  export let versionService: VersionService;
 
   $: {
     const requete = new URLSearchParams(window.location.search);
