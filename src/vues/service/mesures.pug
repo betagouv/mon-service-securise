@@ -21,6 +21,7 @@ block append scripts
   +donneesPartagees('securiser-lecture-seule', autorisationsService.SECURISER.estLectureSeule)
   +donneesPartagees('indice-cyber', { indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax()})
   +donneesPartagees('indice-cyber-personnalise', { indiceCyberPersonnalise: service.indiceCyberPersonnalise().total })
+  +donneesPartagees('version-service', service.version())
   +donneesPartagees('nonce-commentaires', nonce)
 
 block header-titre-page
