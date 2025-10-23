@@ -52,7 +52,7 @@
       ? `${risques
           .slice(0, 6)
           .map((r) => r.identifiantNumerique)
-          .join(', ')}&hellip;`
+          .join(', ')}…`
       : risques.map((r) => r.identifiantNumerique).join(', ');
 </script>
 
@@ -84,7 +84,7 @@
         ? avecEllipse(risquesPresent)
         : ''}
       <div class="cellule-matrice {classe} {index}" title={titreCellule}>
-        {@html titreCelluleAvecEllipse}
+        {titreCelluleAvecEllipse}
       </div>
     {/each}
   </div>

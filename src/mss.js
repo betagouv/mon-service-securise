@@ -15,6 +15,7 @@ import routesNonConnectePage from './routes/nonConnecte/routesNonConnectePage.js
 import routesConnectePage from './routes/connecte/routesConnectePage.js';
 import routesNonConnecteOidc from './routes/nonConnecte/routesNonConnecteOidc.js';
 import routesConnecteOidc from './routes/connecte/routesConnecteOidc.js';
+import { ajouteDOMPurify } from './http/DOMPurify.js';
 
 dotenv.config();
 
@@ -80,6 +81,7 @@ const creeServeur = ({
   app.use(middleware.positionneHeaders);
   app.use(middleware.ajouteVersionFichierCompiles);
   app.use(middleware.chargeFeatureFlags);
+  ajouteDOMPurify(app);
 
   app.disable('x-powered-by');
 

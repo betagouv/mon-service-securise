@@ -1,4 +1,3 @@
-import { decode } from 'html-entities';
 import express from 'express';
 import { valeurBooleenne } from '../../utilitaires/aseptisation.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
@@ -134,7 +133,7 @@ const routesConnecteApi = ({
                   idMesure,
                   {
                     ...(statut && { statut }),
-                    ...(modalites && { modalites: decode(modalites) }),
+                    ...(modalites && { modalites }),
                   },
                 ];
               }
@@ -143,18 +142,11 @@ const routesConnecteApi = ({
 
           return {
             id: service.id,
-            nomService: decode(service.nomService()),
+            nomService: service.nomService(),
             organisationResponsable:
               service.descriptionService.organisationResponsable.nom,
             mesuresAssociees,
-            mesuresSpecifiques: mesuresSpecifiques.map((ms) => ({
-              ...ms,
-              ...(ms.description && { description: decode(ms.description) }),
-              ...(ms.descriptionLongue && {
-                descriptionLongue: decode(ms.descriptionLongue),
-              }),
-              ...(ms.modalites && { modalites: decode(ms.modalites) }),
-            })),
+            mesuresSpecifiques,
             peutEtreModifie: autorisations
               .find((a) => a.idService === service.id)
               .aLesPermissions({ [SECURISER]: ECRITURE }),
@@ -676,13 +668,7 @@ const routesConnecteApi = ({
           requete.idUtilisateurCourant
         );
 
-      reponse.json(
-        modeles.map((m) => ({
-          ...m,
-          description: decode(m.description),
-          descriptionLongue: decode(m.descriptionLongue),
-        }))
-      );
+      reponse.json(modeles);
     }
   );
 

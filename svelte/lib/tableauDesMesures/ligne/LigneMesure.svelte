@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
+  import DOMPurify from 'isomorphic-dompurify';
   import type {
     MesureGenerale,
     MesureSpecifique,
@@ -50,7 +51,7 @@
 <tr class="ligne-de-mesure">
   <td class="titre-mesure" on:click on:keypress>
     <p class="titre">
-      {@html texteSurligne}
+      {@html DOMPurify.sanitize(texteSurligne, { ALLOWED_TAGS: ['mark'] })}
     </p>
     <div class="conteneur-cartouches">
       <CartoucheReferentiel {referentiel} />

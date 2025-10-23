@@ -1,4 +1,4 @@
-mixin inputChoix({ type, nom, titre, description, items, objetDonnees = service, messageErreur, decoration, requis = false, lectureSeule = false })
+mixin inputChoix({ type, nom, titre, description, items, objetDonnees = service, messageErreur, requis = false, lectureSeule = false })
   - let valeursSelectionnees = objetDonnees[nom]
   - if (typeof valeursSelectionnees === 'boolean') valeursSelectionnees = (valeursSelectionnees ? 'oui' : 'non')
   - const requisGroupe = requis && type === 'checkbox' && Object.keys(items).length > 1
@@ -7,8 +7,7 @@ mixin inputChoix({ type, nom, titre, description, items, objetDonnees = service,
 
   fieldset(id = nom, class = classeGroupe, required = requisGroupe)
     legend.titre(id = `${nom}-label`)= titre
-      if decoration
-        .decoration !{decoration}
+
     if description
       .description= description
     each donnees, identifiant in items

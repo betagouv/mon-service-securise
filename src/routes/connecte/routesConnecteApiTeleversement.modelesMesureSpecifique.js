@@ -1,6 +1,4 @@
 import express from 'express';
-import { decode } from 'html-entities';
-
 import {
   ErreurFichierXlsInvalide,
   ErreurTeleversementInexistant,
@@ -45,18 +43,7 @@ const routesConnecteApiTeleversementModelesMesureSpecifique = ({
 
     if (!televersement) return reponse.sendStatus(404);
 
-    const rapportDetaille = televersement.rapportDetaille();
-    rapportDetaille.modelesTeleverses = rapportDetaille.modelesTeleverses.map(
-      (m) => ({
-        ...m,
-        modele: {
-          ...m.modele,
-          description: decode(m.modele.description),
-          descriptionLongue: decode(m.modele.descriptionLongue),
-        },
-      })
-    );
-    return reponse.json(rapportDetaille);
+    return reponse.json(televersement.rapportDetaille());
   });
 
   routes.delete('/', async (requete, reponse) => {

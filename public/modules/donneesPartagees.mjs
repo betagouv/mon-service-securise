@@ -1,2 +1,4 @@
-const lisDonneesPartagees = (id) => JSON.parse($(`#${id}`).text());
+const lisDonneesPartagees = (id) =>
+  JSON.parse(document.getElementById(id).textContent);
+
 export default lisDonneesPartagees;

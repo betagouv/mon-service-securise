@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { decode } from 'html-entities';
-
   import ActionsTiroir from './ActionsTiroir.svelte';
   import Bouton from '../Bouton.svelte';
   import ContenuTiroir from './ContenuTiroir.svelte';
@@ -20,11 +18,11 @@
   const confirmationSuppression =
     services.length > 1
       ? `${services.length} services`
-      : decode(services[0].nomService);
+      : services[0].nomService;
   const intituleSuppression =
     services.length > 1
       ? `les ${services.length} services séléctionnés`
-      : `le service ${decode(services[0].nomService)}`;
+      : `le service ${services[0].nomService}`;
 
   let confirmation = '';
 

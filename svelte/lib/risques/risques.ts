@@ -1,4 +1,3 @@
-import { decode } from 'html-entities';
 import Risques from './Risques.svelte';
 import type {
   DonneesRisque,
@@ -18,7 +17,7 @@ export const convertisDonneesRisqueGeneral = (
   donneesRisque: DonneesRisque
 ) => ({
   ...donneesRisque,
-  commentaire: decode(donneesRisque.commentaire),
+  commentaire: donneesRisque.commentaire,
   niveauGravite: donneesRisque.niveauGravite ?? '',
   niveauVraisemblance: donneesRisque.niveauVraisemblance ?? '',
   type: 'GENERAL' as TypeRisque,
@@ -28,9 +27,9 @@ export const convertisDonneesRisqueSpecifique = (
   donneesRisque: DonneesRisque
 ) => ({
   ...donneesRisque,
-  intitule: decode(donneesRisque.intitule),
-  commentaire: decode(donneesRisque.commentaire),
-  description: decode(donneesRisque.description),
+  intitule: donneesRisque.intitule,
+  commentaire: donneesRisque.commentaire,
+  description: donneesRisque.description,
   niveauGravite: donneesRisque.niveauGravite ?? '',
   niveauVraisemblance: donneesRisque.niveauVraisemblance ?? '',
   type: 'SPECIFIQUE' as TypeRisque,
