@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { decode } from 'html-entities';
   import { getUtilisateurCourant, type ProfilUtilisateur } from './entete.api';
 
   let connecte: ProfilUtilisateur | null;
@@ -18,7 +19,7 @@
     class="nom-utilisateur-courant"
     on:click={() => (menuVisible = !menuVisible)}
   >
-    {connecte.utilisateur.prenomNom}
+    {decode(connecte.utilisateur.prenomNom)}
   </button>
 
   {#if menuVisible}
