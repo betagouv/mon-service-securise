@@ -20,5 +20,9 @@ block append scripts
   +donneesPartagees('donnees-lecture-seule', autorisationsService.DECRIRE.estLectureSeule)
   script(type = 'module', src = '/statique/service/decrireV2.mjs')
 
+
+block append styles
+  +feuilleDeStyleSvelte()
+
 block formulaire
   #decrire-v2
