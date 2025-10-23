@@ -51,6 +51,7 @@
   import { rechercheParPriorite } from './stores/rechercheParPriorite.store';
   import { rechercheMesMesures } from './stores/rechercheMesMesures.store';
   import { enleveParametreDeUrl } from '../outils/url';
+  import type { VersionService } from '../../../src/modeles/versionService';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -60,6 +61,7 @@
   export let priorites: ReferentielPriorite;
   export let estLectureSeule: boolean;
   export let modeVisiteGuidee: boolean;
+  export let versionService: VersionService;
 
   $: {
     const requete = new URLSearchParams(window.location.search);
@@ -246,6 +248,21 @@
     </div>
   </Avertissement>
 {/if}
+
+{#if versionService === 'v1'}
+  <div class="info-ancien-référentiel">
+    <dsfr-badge
+      label="Ancien référentiel"
+      type="accent"
+      accent="pink-macaron"
+      size="md"
+      hasIcon
+      icon="alert-fill"
+      ellipsis={false}
+    />
+  </div>
+{/if}
+
 <table class="tableau-des-mesures">
   <thead>
     <tr class="ligne-onglet">
@@ -445,5 +462,10 @@
 
   :global(#nouveaute-onglet-statuts-mesures p) {
     margin: 8px 0;
+  }
+
+  .info-ancien-référentiel {
+    order: 30;
+    margin-bottom: 24px;
   }
 </style>
