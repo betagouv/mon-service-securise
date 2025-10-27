@@ -1,7 +1,9 @@
 import {
   CategorieDonneesTraitees,
   DureeDysfonctionnementAcceptable,
+  IdMesure,
   LocalisationDonneesTraitees,
+  mesuresV2,
   questionsV2,
   SpecificiteProjet,
   StatutDeploiement,
@@ -16,8 +18,12 @@ type MethodesSpecifiquesReferentielV2 = {
   ) => string;
 };
 
+type DonneesReferentielV2 = typeof questionsV2 & {
+  mesures: typeof mesuresV2;
+};
+
 export const creeReferentielV2 = (
-  donnees = questionsV2
+  donnees: DonneesReferentielV2 = { ...questionsV2, mesures: mesuresV2 }
 ): Referentiel & MethodesSpecifiquesReferentielV2 => {
   const localisationDonnees = (localisation: LocalisationDonneesTraitees) =>
     donnees.localisationDonneesTraitees[localisation];
@@ -38,6 +44,8 @@ export const creeReferentielV2 = (
     donneesCaracterePersonnel: CategorieDonneesTraitees
   ) => donnees.categorieDonneesTraitees[donneesCaracterePersonnel].nom;
 
+  const mesure = (idMesure: IdMesure) => donnees.mesures[idMesure];
+
   return {
     ...creeReferentiel(),
     descriptionDelaiAvantImpactCritique,
@@ -45,6 +53,7 @@ export const creeReferentielV2 = (
     descriptionSpecificiteProjet,
     descriptionStatutDeploiement,
     localisationDonnees,
+    mesure,
     typeService,
   };
 };

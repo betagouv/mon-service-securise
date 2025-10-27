@@ -26,6 +26,7 @@ class MesureGenerale extends Mesure {
   }
 
   estIndispensable() {
+    console.log(this.donneesReferentiel());
     return (
       !!this.donneesReferentiel().indispensable || this.rendueIndispensable
     );

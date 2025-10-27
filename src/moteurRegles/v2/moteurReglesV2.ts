@@ -1,4 +1,4 @@
-import { Referentiel } from '../../referentiel.interface.js';
+import { ReferentielV2 } from '../../referentiel.interface.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import {
   ActiviteExternalisee,
@@ -58,10 +58,13 @@ export type RegleDuReferentielV2 = {
 export type ReglesDuReferentielMesuresV2 = RegleDuReferentielV2[];
 
 export class MoteurReglesV2 {
-  private readonly referentiel: Referentiel;
+  private readonly referentiel: ReferentielV2;
   private readonly regles: RegleV2[];
 
-  constructor(referentiel: Referentiel, regles: ReglesDuReferentielMesuresV2) {
+  constructor(
+    referentiel: ReferentielV2,
+    regles: ReglesDuReferentielMesuresV2
+  ) {
     this.referentiel = referentiel;
     this.regles = regles.map(
       (r) =>
@@ -92,7 +95,7 @@ export class MoteurReglesV2 {
           regle.reference,
           {
             indispensable: modifications.rendreIndispensable(),
-            ...this.referentiel.mesureV2AvecID(regle.reference),
+            ...this.referentiel.mesure(regle.reference),
           },
         ]);
     }

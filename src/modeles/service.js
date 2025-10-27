@@ -38,7 +38,12 @@ class Service {
   constructor(
     donnees,
     referentiel = Referentiel.creeReferentielVide(),
-    moteurRegles = fabriqueMoteurDeRegles(donnees, referentiel)
+    moteurRegles = fabriqueMoteurDeRegles(
+      donnees,
+      donnees.versionService === VersionService.v2
+        ? creeReferentielV2()
+        : referentiel
+    )
   ) {
     const {
       id = '',
