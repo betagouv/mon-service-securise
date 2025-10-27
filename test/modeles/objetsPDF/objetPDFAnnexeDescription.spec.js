@@ -119,6 +119,7 @@ describe("L'objet PDF de l'annexe de description", () => {
         versionService: 'v2',
         descriptionService: uneDescriptionV2Valide()
           .avecSpecificitesProjet(['annuaire', 'postesDeTravail'])
+          .avecDonneesTraitees(['documentsIdentifiants', 'donneesSensibles'])
           .donneesDescription(),
       },
       referentiel
@@ -137,6 +138,21 @@ describe("L'objet PDF de l'annexe de description", () => {
       expect(donnees.fonctionnalites).toEqual([
         'Un annuaire',
         'Des postes de travail',
+      ]);
+    });
+
+    it('utilise les données catégories de données traitées', () => {
+      const vueAnnexePDFDescription = new VueAnnexePDFDescription(
+        serviceV2,
+        referentielV2
+      );
+
+      const donnees = vueAnnexePDFDescription.donnees();
+
+      expect(Object.keys(donnees)).toContain('donneesStockees');
+      expect(donnees.donneesStockees).toEqual([
+        'Documents identifiants',
+        'Données sensibles',
       ]);
     });
   });

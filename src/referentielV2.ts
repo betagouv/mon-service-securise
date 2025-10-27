@@ -1,4 +1,5 @@
 import {
+  CategorieDonneesTraitees,
   DureeDysfonctionnementAcceptable,
   LocalisationDonneesTraitees,
   questionsV2,
@@ -34,5 +35,11 @@ export class ReferentielV2 {
     return this.donnees.dureeDysfonctionnementAcceptable[
       delaiAvantImpactCritique
     ].nom;
+  }
+
+  descriptionsDonneesCaracterePersonnel(
+    donneesCaracterePersonnel: CategorieDonneesTraitees
+  ) {
+    return this.donnees.categorieDonneesTraitees[donneesCaracterePersonnel].nom;
   }
 }

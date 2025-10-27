@@ -27,6 +27,12 @@ class ObjetPDFAnnexeDescription {
         this.referentiel.descriptionSpecificiteProjet(s)
       );
 
+    const donneesV2 = () => [
+      ...this.service.descriptionService.categoriesDonneesTraitees.map((c) =>
+        this.referentiel.descriptionsDonneesCaracterePersonnel(c)
+      ),
+    ];
+
     const estServiceV2 = this.service.version() === VersionService.v2;
 
     const dureeDysfonctionnementMaximumAcceptable =
@@ -39,7 +45,7 @@ class ObjetPDFAnnexeDescription {
     return {
       nomService: this.service.nomService(),
       fonctionnalites: estServiceV2 ? fonctionnalitesV2() : fonctionnalitesV1(),
-      donneesStockees: estServiceV2 ? [] : donneesV1(),
+      donneesStockees: estServiceV2 ? donneesV2() : donneesV1(),
       dureeDysfonctionnementMaximumAcceptable,
     };
   }
