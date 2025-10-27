@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import Service from '../../../src/modeles/service.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import VueAnnexePDFDescription from '../../../src/modeles/objetsPDF/objetPDFAnnexeDescription.js';
@@ -45,8 +44,8 @@ describe("L'objet PDF de l'annexe de description", () => {
 
     const donnees = vueAnnexePDFDescription.donnees();
 
-    expect(donnees).to.have.key('nomService');
-    expect(donnees.nomService).to.equal('Nom Service');
+    expect(Object.keys(donnees)).toContain('nomService');
+    expect(donnees.nomService).toEqual('Nom Service');
   });
 
   it('fournit la liste des fonctionnalités', () => {
@@ -57,8 +56,8 @@ describe("L'objet PDF de l'annexe de description", () => {
 
     const donnees = vueAnnexePDFDescription.donnees();
 
-    expect(donnees).to.have.key('fonctionnalites');
-    expect(donnees.fonctionnalites[0]).to.equal('Une fonctionnalité');
+    expect(Object.keys(donnees)).toContain('fonctionnalites');
+    expect(donnees.fonctionnalites[0]).toEqual('Une fonctionnalité');
   });
 
   it('ajoute à la liste des fonctionnalités les spécifiques', () => {
@@ -69,8 +68,8 @@ describe("L'objet PDF de l'annexe de description", () => {
 
     const donnees = vueAnnexePDFDescription.donnees();
 
-    expect(donnees).to.have.key('fonctionnalites');
-    expect(donnees.fonctionnalites).to.contain('Une fonctionnalité spécifique');
+    expect(Object.keys(donnees)).toContain('fonctionnalites');
+    expect(donnees.fonctionnalites).toContain('Une fonctionnalité spécifique');
   });
 
   it('fournit la liste des données stockées', () => {
@@ -81,8 +80,8 @@ describe("L'objet PDF de l'annexe de description", () => {
 
     const donnees = vueAnnexePDFDescription.donnees();
 
-    expect(donnees).to.have.key('donneesStockees');
-    expect(donnees.donneesStockees[0]).to.equal('Des données');
+    expect(Object.keys(donnees)).toContain('donneesStockees');
+    expect(donnees.donneesStockees[0]).toEqual('Des données');
   });
 
   it('ajoute les données spécifiques à la liste des données stockées', () => {
@@ -93,8 +92,8 @@ describe("L'objet PDF de l'annexe de description", () => {
 
     const donnees = vueAnnexePDFDescription.donnees();
 
-    expect(donnees).to.have.key('donneesStockees');
-    expect(donnees.donneesStockees).to.contain('Des données spécifiques');
+    expect(Object.keys(donnees)).toContain('donneesStockees');
+    expect(donnees.donneesStockees).toContain('Des données spécifiques');
   });
 
   it('fournit la durée maximale acceptable de dysfonctionnement grave', () => {
@@ -105,7 +104,9 @@ describe("L'objet PDF de l'annexe de description", () => {
 
     const donnees = vueAnnexePDFDescription.donnees();
 
-    expect(donnees).to.have.key('dureeDysfonctionnementMaximumAcceptable');
-    expect(donnees.dureeDysfonctionnementMaximumAcceptable).to.equal('Un jour');
+    expect(Object.keys(donnees)).toContain(
+      'dureeDysfonctionnementMaximumAcceptable'
+    );
+    expect(donnees.dureeDysfonctionnementMaximumAcceptable).toEqual('Un jour');
   });
 });
