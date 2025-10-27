@@ -344,7 +344,12 @@ class Service {
   }
 
   vueAnnexePDFDescription() {
-    return new ObjetPDFAnnexeDescription(this, this.referentiel);
+    return new ObjetPDFAnnexeDescription(
+      this,
+      this.version() === VersionService.v2
+        ? new ReferentielV2()
+        : this.referentiel
+    );
   }
 
   vueAnnexePDFMesures() {

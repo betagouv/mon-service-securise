@@ -1,6 +1,8 @@
 import {
+  DureeDysfonctionnementAcceptable,
   LocalisationDonneesTraitees,
   questionsV2,
+  SpecificiteProjet,
   StatutDeploiement,
   TypeDeService,
 } from '../donneesReferentielMesuresV2.js';
@@ -20,5 +22,17 @@ export class ReferentielV2 {
 
   descriptionStatutDeploiement(statutDeploiement: StatutDeploiement) {
     return this.donnees.statutDeploiement[statutDeploiement].description;
+  }
+
+  descriptionSpecificiteProjet(specificiteProjet: SpecificiteProjet) {
+    return this.donnees.specificiteProjet[specificiteProjet].nom;
+  }
+
+  descriptionDelaiAvantImpactCritique(
+    delaiAvantImpactCritique: DureeDysfonctionnementAcceptable
+  ) {
+    return this.donnees.dureeDysfonctionnementAcceptable[
+      delaiAvantImpactCritique
+    ].nom;
   }
 }

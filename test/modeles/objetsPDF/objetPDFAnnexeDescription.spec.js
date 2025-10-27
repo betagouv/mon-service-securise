@@ -1,6 +1,8 @@
 import Service from '../../../src/modeles/service.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import VueAnnexePDFDescription from '../../../src/modeles/objetsPDF/objetPDFAnnexeDescription.js';
+import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.js';
+import { ReferentielV2 } from '../../../src/referentielV2.js';
 
 describe("L'objet PDF de l'annexe de description", () => {
   const donneesReferentiel = {
@@ -108,5 +110,34 @@ describe("L'objet PDF de l'annexe de description", () => {
       'dureeDysfonctionnementMaximumAcceptable'
     );
     expect(donnees.dureeDysfonctionnementMaximumAcceptable).toEqual('Un jour');
+  });
+
+  describe('pour un service V2', () => {
+    const serviceV2 = new Service(
+      {
+        id: '123',
+        versionService: 'v2',
+        descriptionService: uneDescriptionV2Valide()
+          .avecSpecificitesProjet(['annuaire', 'postesDeTravail'])
+          .donneesDescription(),
+      },
+      referentiel
+    );
+    const referentielV2 = new ReferentielV2();
+
+    it('utilise les spécificités du projet à la place des fonctionnalités', () => {
+      const vueAnnexePDFDescription = new VueAnnexePDFDescription(
+        serviceV2,
+        referentielV2
+      );
+
+      const donnees = vueAnnexePDFDescription.donnees();
+
+      expect(Object.keys(donnees)).toContain('fonctionnalites');
+      expect(donnees.fonctionnalites).toEqual([
+        'Un annuaire',
+        'Des postes de travail',
+      ]);
+    });
   });
 });
