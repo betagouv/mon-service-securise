@@ -18,6 +18,7 @@ import { DescriptionServiceV2 } from './descriptionServiceV2.js';
 import Entite from './entite.js';
 import { VersionService } from './versionService.js';
 import { MoteurReglesV2 } from '../moteurRegles/v2/moteurReglesV2.js';
+import { ReferentielV2 } from '../referentielV2.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -61,7 +62,7 @@ class Service {
     this.contributeurs = contributeurs.map((c) => new Contributeur(c));
     this.descriptionService =
       versionService === VersionService.v2
-        ? new DescriptionServiceV2(descriptionService)
+        ? new DescriptionServiceV2(descriptionService, new ReferentielV2())
         : new DescriptionService(descriptionService, referentiel);
     this.dossiers = new Dossiers({ dossiers }, referentiel);
 

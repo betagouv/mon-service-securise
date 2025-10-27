@@ -384,4 +384,15 @@ describe('Une description service V2', () => {
       });
     });
   });
+
+  describe('sur demande de description de ses données via le référentiel', () => {
+    it('sait décrire ses localisations de données', () => {
+      const description = uneDescriptionV2Valide()
+        .avecLocalisationDonneesTraitees(['horsUE', 'UE'])
+        .construis();
+      expect(description.descriptionLocalisationDonnees()).toBe(
+        "Hors Union européenne, Au sein de l'Union européenne"
+      );
+    });
+  });
 });

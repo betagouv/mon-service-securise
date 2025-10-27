@@ -27,6 +27,7 @@ import {
   ErreurDonneesObligatoiresManquantes,
 } from '../erreurs.js';
 import { ProjectionDescriptionPourMoteur } from '../moteurRegles/v2/moteurReglesV2.js';
+import { ReferentielV2 } from '../referentielV2.js';
 
 export type DonneesEntite = {
   siret: string;
@@ -72,8 +73,12 @@ export class DescriptionServiceV2 {
   private readonly categoriesDonneesTraitees: CategorieDonneesTraitees[];
   private readonly categoriesDonneesTraiteesSupplementaires: string[];
   private readonly localisationsDonneesTraitees: LocalisationDonneesTraitees[];
+  private readonly referentiel: ReferentielV2;
 
-  constructor(donnees: DonneesDescriptionServiceV2) {
+  constructor(
+    donnees: DonneesDescriptionServiceV2,
+    referentiel: ReferentielV2 = new ReferentielV2()
+  ) {
     this.nomService = donnees.nomService;
     this.organisationResponsable = new Entite(donnees.organisationResponsable);
     this.statutDeploiement = donnees.statutDeploiement;
@@ -95,6 +100,7 @@ export class DescriptionServiceV2 {
     this.categoriesDonneesTraiteesSupplementaires =
       donnees.categoriesDonneesTraiteesSupplementaires;
     this.localisationsDonneesTraitees = donnees.localisationsDonneesTraitees;
+    this.referentiel = referentiel;
   }
 
   static donneesObligatoiresRenseignees(
@@ -220,5 +226,11 @@ export class DescriptionServiceV2 {
           ? this.activitesExternalisees[0]
           : 'LesDeux',
     };
+  }
+
+  descriptionLocalisationDonnees(): string {
+    return this.localisationsDonneesTraitees
+      .map((l) => this.referentiel.localisationDonnees(l).nom)
+      .join(', ');
   }
 }
