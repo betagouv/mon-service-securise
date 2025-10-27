@@ -1,6 +1,7 @@
 import {
   LocalisationDonneesTraitees,
   questionsV2,
+  TypeDeService,
 } from '../donneesReferentielMesuresV2.js';
 
 export class ReferentielV2 {
@@ -10,5 +11,9 @@ export class ReferentielV2 {
 
   localisationDonnees(localisation: LocalisationDonneesTraitees) {
     return this.donnees.localisationDonneesTraitees[localisation];
+  }
+
+  typeService(typeService: TypeDeService) {
+    return this.donnees.typeDeService[typeService];
   }
 }

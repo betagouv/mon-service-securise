@@ -394,5 +394,14 @@ describe('Une description service V2', () => {
         "Hors Union européenne, Au sein de l'Union européenne"
       );
     });
+
+    it('sait décrire ses types de service', () => {
+      const description = uneDescriptionV2Valide()
+        .avecTypesService(['portailInformation', 'api'])
+        .construis();
+      expect(description.descriptionTypeService()).toBe(
+        "Portail d'information, API"
+      );
+    });
   });
 });

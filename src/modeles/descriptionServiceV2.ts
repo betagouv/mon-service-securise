@@ -233,4 +233,10 @@ export class DescriptionServiceV2 {
       .map((l) => this.referentiel.localisationDonnees(l).nom)
       .join(', ');
   }
+
+  descriptionTypeService() {
+    return this.typeService
+      .map((t) => this.referentiel.typeService(t).nom)
+      .join(', ');
+  }
 }
