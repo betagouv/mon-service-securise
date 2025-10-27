@@ -7,39 +7,44 @@ import {
   StatutDeploiement,
   TypeDeService,
 } from '../donneesReferentielMesuresV2.js';
+import { Referentiel } from './referentiel.interface.js';
+import { creeReferentiel } from './referentiel.js';
 
-export class ReferentielV2 {
-  constructor(private readonly donnees: typeof questionsV2 = questionsV2) {
-    this.donnees = donnees;
-  }
+type MethodesSpecifiquesReferentielV2 = {
+  descriptionSpecificiteProjet: (
+    specificiteProjet: SpecificiteProjet
+  ) => string;
+};
 
-  localisationDonnees(localisation: LocalisationDonneesTraitees) {
-    return this.donnees.localisationDonneesTraitees[localisation];
-  }
+export const creeReferentielV2 = (
+  donnees = questionsV2
+): Referentiel & MethodesSpecifiquesReferentielV2 => {
+  const localisationDonnees = (localisation: LocalisationDonneesTraitees) =>
+    donnees.localisationDonneesTraitees[localisation];
 
-  typeService(typeService: TypeDeService) {
-    return this.donnees.typeDeService[typeService];
-  }
+  const typeService = (type: TypeDeService) => donnees.typeDeService[type];
 
-  descriptionStatutDeploiement(statutDeploiement: StatutDeploiement) {
-    return this.donnees.statutDeploiement[statutDeploiement].description;
-  }
+  const descriptionStatutDeploiement = (statutDeploiement: StatutDeploiement) =>
+    donnees.statutDeploiement[statutDeploiement].description;
 
-  descriptionSpecificiteProjet(specificiteProjet: SpecificiteProjet) {
-    return this.donnees.specificiteProjet[specificiteProjet].nom;
-  }
+  const descriptionSpecificiteProjet = (specificiteProjet: SpecificiteProjet) =>
+    donnees.specificiteProjet[specificiteProjet].nom;
 
-  descriptionDelaiAvantImpactCritique(
+  const descriptionDelaiAvantImpactCritique = (
     delaiAvantImpactCritique: DureeDysfonctionnementAcceptable
-  ) {
-    return this.donnees.dureeDysfonctionnementAcceptable[
-      delaiAvantImpactCritique
-    ].nom;
-  }
+  ) => donnees.dureeDysfonctionnementAcceptable[delaiAvantImpactCritique].nom;
 
-  descriptionsDonneesCaracterePersonnel(
+  const descriptionsDonneesCaracterePersonnel = (
     donneesCaracterePersonnel: CategorieDonneesTraitees
-  ) {
-    return this.donnees.categorieDonneesTraitees[donneesCaracterePersonnel].nom;
-  }
-}
+  ) => donnees.categorieDonneesTraitees[donneesCaracterePersonnel].nom;
+
+  return {
+    ...creeReferentiel(),
+    descriptionDelaiAvantImpactCritique,
+    descriptionsDonneesCaracterePersonnel,
+    descriptionSpecificiteProjet,
+    descriptionStatutDeploiement,
+    localisationDonnees,
+    typeService,
+  };
+};

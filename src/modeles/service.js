@@ -18,7 +18,7 @@ import { DescriptionServiceV2 } from './descriptionServiceV2.js';
 import Entite from './entite.js';
 import { VersionService } from './versionService.js';
 import { MoteurReglesV2 } from '../moteurRegles/v2/moteurReglesV2.js';
-import { ReferentielV2 } from '../referentielV2.js';
+import { creeReferentielV2 } from '../referentielV2.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -60,11 +60,13 @@ class Service {
     this.prochainIdNumeriqueDeRisqueSpecifique =
       prochainIdNumeriqueDeRisqueSpecifique;
     this.contributeurs = contributeurs.map((c) => new Contributeur(c));
+    this.referentiel =
+      versionService === VersionService.v2 ? creeReferentielV2() : referentiel;
     this.descriptionService =
       versionService === VersionService.v2
-        ? new DescriptionServiceV2(descriptionService, new ReferentielV2())
-        : new DescriptionService(descriptionService, referentiel);
-    this.dossiers = new Dossiers({ dossiers }, referentiel);
+        ? new DescriptionServiceV2(descriptionService, this.referentiel)
+        : new DescriptionService(descriptionService, this.referentiel);
+    this.dossiers = new Dossiers({ dossiers }, this.referentiel);
 
     let { mesuresGenerales = [] } = donnees;
     const mesuresPersonnalisees = moteurRegles.mesures(this.descriptionService);
@@ -74,7 +76,7 @@ class Service {
     }));
     this.mesures = new Mesures(
       { mesuresGenerales, mesuresSpecifiques },
-      referentiel,
+      this.referentiel,
       mesuresPersonnalisees,
       modelesDisponiblesDeMesureSpecifique
     );
@@ -82,13 +84,11 @@ class Service {
     this.rolesResponsabilites = new RolesResponsabilites(rolesResponsabilites);
     this.risques = new Risques(
       { risquesGeneraux, risquesSpecifiques },
-      referentiel
+      this.referentiel
     );
     this.suggestionsActions = suggestionsActions.map(
-      (s) => new SuggestionAction(s, referentiel)
+      (s) => new SuggestionAction(s, this.referentiel)
     );
-
-    this.referentiel = referentiel;
   }
 
   version() {
@@ -344,12 +344,7 @@ class Service {
   }
 
   vueAnnexePDFDescription() {
-    return new ObjetPDFAnnexeDescription(
-      this,
-      this.version() === VersionService.v2
-        ? new ReferentielV2()
-        : this.referentiel
-    );
+    return new ObjetPDFAnnexeDescription(this, this.referentiel);
   }
 
   vueAnnexePDFMesures() {

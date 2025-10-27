@@ -27,7 +27,8 @@ import {
   ErreurDonneesObligatoiresManquantes,
 } from '../erreurs.js';
 import { ProjectionDescriptionPourMoteur } from '../moteurRegles/v2/moteurReglesV2.js';
-import { ReferentielV2 } from '../referentielV2.js';
+import { ReferentielV2 } from '../referentiel.interface.js';
+import { creeReferentielV2 } from '../referentielV2.js';
 
 export type DonneesEntite = {
   siret: string;
@@ -77,7 +78,7 @@ export class DescriptionServiceV2 {
 
   constructor(
     donnees: DonneesDescriptionServiceV2,
-    referentiel: ReferentielV2 = new ReferentielV2()
+    referentiel: ReferentielV2 = creeReferentielV2()
   ) {
     this.nomService = donnees.nomService;
     this.organisationResponsable = new Entite(donnees.organisationResponsable);
