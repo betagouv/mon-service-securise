@@ -403,5 +403,12 @@ describe('Une description service V2', () => {
         "Portail d'information, API"
       );
     });
+
+    it('sait décrire son statut de déploiement', () => {
+      const description = uneDescriptionV2Valide()
+        .avecStatutDeploiement('enProjet')
+        .construis();
+      expect(description.descriptionStatutDeploiement()).toBe('En conception');
+    });
   });
 });

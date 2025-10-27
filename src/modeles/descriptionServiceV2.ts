@@ -239,4 +239,10 @@ export class DescriptionServiceV2 {
       .map((t) => this.referentiel.typeService(t).nom)
       .join(', ');
   }
+
+  descriptionStatutDeploiement() {
+    return this.referentiel.descriptionStatutDeploiement(
+      this.statutDeploiement
+    );
+  }
 }
