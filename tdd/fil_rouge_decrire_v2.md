@@ -27,6 +27,10 @@
 - [ ] Jette des erreurs en cas de "il manque des colonnes attendues"
 - [ ] Vers du code générique qui boucle sur une collection de tous les champs attendus ? Ça sera peut-être le cas une fois `Projection…` mise en place
 
+#### Liste de mesures (modèles)
+
+- [ ] /services/mesuresGenerales/:id (assigner une mesure générale à des services) il faut discerner les mesures v1/V2 et vérifier qu'on n'associe pas une mesure v1 à un service v2 et inversement
+
 #### Autre
 
 - [ ] Tableau de bord : afficher le bouton « Ajouter service » dans le cas où on a 0 service mais un/des brouillon.

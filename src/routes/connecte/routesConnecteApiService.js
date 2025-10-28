@@ -968,7 +968,7 @@ const routesConnecteApiService = ({
       const { service, idUtilisateurCourant } = requete;
       const { idRetour, idMesure, commentaire } = requete.body;
       const retourUtilisateur =
-        referentiel.retourUtilisateurMesureAvecId(idRetour);
+        service.referentiel.retourUtilisateurMesureAvecId(idRetour);
 
       if (!retourUtilisateur) {
         reponse.status(424).send({
@@ -978,7 +978,7 @@ const routesConnecteApiService = ({
         return;
       }
 
-      if (!referentiel.estIdentifiantMesureConnu(idMesure)) {
+      if (!service.referentiel.estIdentifiantMesureConnu(idMesure)) {
         reponse.status(424).send({
           type: 'DONNEES_INCORRECTES',
           message: "L'identifiant de mesure est incorrect.",
