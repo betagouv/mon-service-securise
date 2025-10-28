@@ -516,12 +516,12 @@ const creeDepot = (config = {}) => {
             statut,
             modalites,
           },
-          referentiel
+          s.referentiel
         );
       } else {
         nouvelleMesure = new MesureGenerale(
           { ...s.mesuresGenerales().avecId(idMesure) },
-          referentiel
+          s.referentiel
         );
         if (statut) nouvelleMesure.statut = statut;
         if (modalites) nouvelleMesure.modalites = modalites;
