@@ -373,7 +373,7 @@ const routesConnecteApiService = ({
         id: params.idMesure,
       };
       try {
-        const mesure = new MesureGenerale(mesureGenerale, referentiel);
+        const mesure = new MesureGenerale(mesureGenerale, service.referentiel);
         await depotDonnees.metsAJourMesureGeneraleDuService(
           service.id,
           idUtilisateurCourant,
