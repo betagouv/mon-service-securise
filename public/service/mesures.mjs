@@ -15,6 +15,7 @@ $(() => {
   const idService = $('.page-service').data('id-service');
   const { indiceCyber, noteMax } = lisDonneesPartagees('indice-cyber');
   const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
+  const avecDecrireV2 = lisDonneesPartagees('avec-decrire-v2');
   const { indiceCyberPersonnalise } = lisDonneesPartagees(
     'indice-cyber-personnalise'
   );
@@ -32,6 +33,7 @@ $(() => {
         estLectureSeule,
         modeVisiteGuidee: enVisiteGuidee(),
         versionService,
+        avecDecrireV2,
       },
     })
   );

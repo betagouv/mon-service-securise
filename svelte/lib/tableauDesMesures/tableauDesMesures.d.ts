@@ -22,6 +22,7 @@ export type TableauDesMesuresProps = {
   estLectureSeule: boolean;
   modeVisiteGuidee: boolean;
   versionService: VersionService;
+  avecDecrireV2: boolean;
 };
 
 export type MesureGenerale = {
