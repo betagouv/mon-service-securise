@@ -10,7 +10,7 @@
   - [x] Remplacer les utilisations des méthodes xxxV2 existantes
   - [x] Remplacer l'utilisation de `identifiantsMesures` par `estIdentifiantMesureConnu` car les appelants font la même chose
     - [x] Puis implémenter la méthode dans le refv2 et voir si on peut contextualiser partout
-- [ ] Les données V2 ne doivent pas être dans le referentiel v1
+- [x] Les données V2 ne doivent pas être dans le referentiel v1
 - [ ] Chasser chaque utilisation de `referentiel.xxx()` pour le remplacer par `service.referentiel.xxx()`
 
 #### Moteur v2
