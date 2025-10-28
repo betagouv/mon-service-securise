@@ -6,10 +6,10 @@
 
 - [x] Créer un ref v2 qui implémente la même interface que reférentiel v1 avec un spread
 - [x] Créer un objet serveur refV2 qui sera passé au dépôt de données pour être utilisé par la création de service
-- [ ] Déplacer les méthodes xxxV2 du réfv1 en surchargeant plutôt une méthode du refV1
+- [x] Déplacer les méthodes xxxV2 du réfv1 en surchargeant plutôt une méthode du refV1
   - [x] Remplacer les utilisations des méthodes xxxV2 existantes
   - [x] Remplacer l'utilisation de `identifiantsMesures` par `estIdentifiantMesureConnu` car les appelants font la même chose
-    - [ ] Puis implémenter la méthode dans le refv2 et voir si on peut contextualiser partout
+    - [x] Puis implémenter la méthode dans le refv2 et voir si on peut contextualiser partout
 - [ ] Les données V2 ne doivent pas être dans le referentiel v1
 - [ ] Chasser chaque utilisation de `referentiel.xxx()` pour le remplacer par `service.referentiel.xxx()`
 

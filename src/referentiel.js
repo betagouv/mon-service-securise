@@ -98,9 +98,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     !!donnees.mesures[idMesure].indispensable;
   const mesures = () => structuredClone(donnees.mesures);
   const estIdentifiantMesureConnu = (id) =>
-    Object.keys(donnees.mesures)
-      .concat(Object.keys(donnees.mesuresV2 || {}))
-      .includes(id);
+    Object.keys(donnees.mesures).includes(id);
   const mesure = (id) => structuredClone(donnees.mesures[id]);
   const typesService = () => donnees.typesService;
   const nbMoisDecalage = (idEcheance) =>

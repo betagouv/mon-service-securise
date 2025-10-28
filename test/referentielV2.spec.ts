@@ -26,6 +26,17 @@ describe('Le référentiel V2', () => {
 
       expect(mesure.identifiantNumerique).toEqual('0001');
     });
+
+    it('sait dire si un identifiant de mesure est valide pour le référentiel v2', () => {
+      const referentielV2 = creeReferentielV2();
+
+      expect(referentielV2.estIdentifiantMesureConnu('RECENSEMENT.1')).toBe(
+        true
+      );
+      expect(referentielV2.estIdentifiantMesureConnu('pasunidconnu')).toBe(
+        false
+      );
+    });
   });
 
   describe('concernant les méthodes spécifiques du référentielV2', () => {
