@@ -2,6 +2,14 @@
 
 ## TODO
 
+#### Référentiel v2
+
+- [ ] Créer un ref v2 qui implémente la même interface que reférentiel v1 avec un spread
+- [ ] Créer un objet serveur refV2 qui sera passé au dépôt de données pour être utilisé par la création de service
+- [ ] Déplacer les méthodes xxxV2 du réfv1 en surchargeant plutôt une méthode du refV1
+  - [ ] Remplacer les utilisations des méthodes xxxV2 existantes
+- [ ] Chasser chaque utilisation de `referentiel.xxx()` pour le remplacer par `service.referentiel.xxx()`
+
 #### Moteur v2
 
 - [ ] Jette des erreurs "en cas de problème" : mais "problème" reste à définir.

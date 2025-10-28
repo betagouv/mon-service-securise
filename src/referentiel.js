@@ -588,6 +588,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionLocalisationDonnees,
     descriptionsDelaiAvantImpactCritique,
     descriptionsEcheanceRenouvellement,
+    version: () => 'v1',
   };
 };
 const creeReferentielVide = () => creeReferentiel(donneesReferentielVide);
