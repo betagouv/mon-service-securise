@@ -1,19 +1,38 @@
 import { creeReferentiel } from './referentiel.js';
 import { Referentiel } from './referentiel.interface.js';
 import { mesuresV2 } from '../donneesReferentielMesuresV2.js';
-import { IdMesureV2 } from './moteurRegles/v2/moteurReglesV2.js';
+import {
+  IdMesureV2,
+  ReglesDuReferentielMesuresV2,
+} from './moteurRegles/v2/moteurReglesV2.js';
 
 export type DonneesReferentielV2 = {
   mesures: typeof mesuresV2;
 };
 
+type MethodesSpecifiquesReferentielV2 = {
+  enregistreReglesMoteurV2: (regles: ReglesDuReferentielMesuresV2) => void;
+  reglesMoteurV2: () => ReglesDuReferentielMesuresV2;
+};
+
 export const creeReferentielV2 = (
   donnees: DonneesReferentielV2 = { mesures: mesuresV2 }
-): Referentiel => {
+): Referentiel & MethodesSpecifiquesReferentielV2 => {
+  let reglesMoteurV2Enregistrees: ReglesDuReferentielMesuresV2 = [];
+
+  const enregistreReglesMoteurV2 = (regles: ReglesDuReferentielMesuresV2) => {
+    reglesMoteurV2Enregistrees = regles;
+  };
+
   const mesure = (idMesure: IdMesureV2) => donnees.mesures[idMesure];
+
+  const reglesMoteurV2 = () => reglesMoteurV2Enregistrees;
+
   return {
     ...creeReferentiel(),
+    enregistreReglesMoteurV2,
     mesure,
+    reglesMoteurV2,
     version: () => 'v2',
   };
 };

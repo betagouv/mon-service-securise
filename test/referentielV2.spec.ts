@@ -1,5 +1,6 @@
 import { creeReferentielV2 } from '../src/referentielV2.js';
 import { creeReferentiel } from '../src/referentiel.js';
+import { besoins } from './moteurRegles/v2/besoinsDeSecurite.js';
 
 describe('Le référentiel V2', () => {
   it('utilise les méthodes du référentiel v1 dans le cas général', () => {
@@ -24,6 +25,26 @@ describe('Le référentiel V2', () => {
       const mesure = referentielV2.mesure('RECENSEMENT.1');
 
       expect(mesure.identifiantNumerique).toEqual('0001');
+    });
+  });
+
+  describe('concernant les méthodes spécifiques du référentielV2', () => {
+    describe('concernant les règles du moteur de règles v2', () => {
+      it("peut restituer les règles qu'on lui donne", () => {
+        const referentiel = creeReferentielV2();
+
+        referentiel.enregistreReglesMoteurV2([
+          {
+            reference: 'RECENSEMENT.1',
+            dansSocleInitial: true,
+            modificateurs: {},
+            besoinsDeSecurite: besoins('R-R-R'),
+          },
+        ]);
+
+        expect(referentiel.reglesMoteurV2()).toHaveLength(1);
+        expect(referentiel.reglesMoteurV2()[0].reference).toBe('RECENSEMENT.1');
+      });
     });
   });
 });

@@ -18,6 +18,7 @@ import { DescriptionServiceV2 } from './descriptionServiceV2.js';
 import Entite from './entite.js';
 import { VersionService } from './versionService.js';
 import { MoteurReglesV2 } from '../moteurRegles/v2/moteurReglesV2.js';
+import { creeReferentielV2 } from '../referentielV2.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -36,7 +37,9 @@ function fabriqueMoteurDeRegles(donnees, referentiel) {
 class Service {
   constructor(
     donnees,
-    referentiel = Referentiel.creeReferentielVide(),
+    referentiel = donnees.versionService === VersionService.v2
+      ? creeReferentielV2()
+      : Referentiel.creeReferentielVide(),
     moteurRegles = fabriqueMoteurDeRegles(donnees, referentiel)
   ) {
     const {

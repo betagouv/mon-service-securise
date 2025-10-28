@@ -37,12 +37,6 @@ const donneesReferentielVide = {
 const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   let donnees = donneesReferentiel;
 
-  let reglesMoteurV2Enregistrees = [];
-  const enregistreReglesMoteurV2 = (regles) =>
-    (reglesMoteurV2Enregistrees = regles);
-
-  const reglesMoteurV2 = () => reglesMoteurV2Enregistrees;
-
   const versionActuelleCgu = () => donnees.versionActuelleCgu || true;
   const statutsAvisDossierHomologation = () =>
     donnees.statutsAvisDossierHomologation || {};
@@ -493,7 +487,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     donneesCaracterePersonnel,
     echeanceRenouvellementParDescription,
     echeancesRenouvellement,
-    enregistreReglesMoteurV2,
     enrichis,
     estCodeDepartement,
     estDocumentHomologation,
@@ -552,7 +545,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     provenancesService,
     provenanceServiceParDescription,
     recharge,
-    reglesMoteurV2,
     reglesPersonnalisation,
     retoursUtilisateurMesure,
     retourUtilisateurMesureAvecId,
