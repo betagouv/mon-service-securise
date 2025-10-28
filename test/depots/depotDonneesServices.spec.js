@@ -50,6 +50,9 @@ import EvenementMesureServiceModifiee from '../../src/bus/evenementMesureService
 import EvenementMesureServiceSupprimee from '../../src/bus/evenementMesureServiceSupprimee.js';
 import Risques from '../../src/modeles/risques.js';
 import EvenementRisqueServiceModifie from '../../src/bus/evenementRisqueServiceModifie.js';
+import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.js';
+import { VersionService } from '../../src/modeles/versionService.js';
+import { creeReferentielV2 } from '../../src/referentielV2.js';
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -184,6 +187,30 @@ describe('Le dépôt de données des services', () => {
       expect(service.id).to.equal('789');
       expect(service.referentiel).to.equal(referentiel);
       expect(service.nomService()).to.be('nom-dechiffre');
+    });
+
+    it('instancie un service v2 avec un referentiel v2', async () => {
+      const adaptateurPersistance = unePersistanceMemoire()
+        .ajouteUnService({
+          id: 'S1',
+          descriptionService: uneDescriptionV2Valide().donneesDescription(),
+          versionService: VersionService.v2,
+        })
+        .construis();
+      const referentiel = Referentiel.creeReferentielVide();
+      const referentielV2 = creeReferentielV2();
+      const depot = DepotDonneesServices.creeDepot({
+        adaptateurChiffrement: fauxAdaptateurChiffrement(),
+        adaptateurPersistance,
+        referentiel,
+        referentielV2,
+      });
+
+      const service = await depot.service('S1');
+
+      expect(service).to.be.a(Service);
+      expect(service.id).to.equal('S1');
+      expect(service.referentiel.version()).to.equal('v2');
     });
 
     it('associe ses contributeurs au service', async () => {

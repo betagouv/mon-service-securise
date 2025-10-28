@@ -17,6 +17,7 @@ import EvenementRisqueServiceModifie from '../bus/evenementRisqueServiceModifie.
 import MesureGenerale from '../modeles/mesureGenerale.js';
 import EvenementMesureModifieeEnMasse from '../bus/evenementMesureModifieeEnMasse.js';
 import MesureSpecifique from '../modeles/mesureSpecifique.js';
+import { VersionService } from '../modeles/versionService.js';
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -36,6 +37,7 @@ const fabriquePersistance = (
   adaptateurPersistance,
   adaptateurChiffrement,
   referentiel,
+  referentielV2,
   depotDonneesUtilisateurs
 ) => {
   const { chiffre, dechiffre } = fabriqueChiffrement(adaptateurChiffrement);
@@ -73,7 +75,12 @@ const fabriquePersistance = (
       )
     );
 
-    return new Service(serviceEnClair, referentiel);
+    const referentielAUtiliser =
+      serviceEnClair.versionService === VersionService.v2
+        ? referentielV2
+        : referentiel;
+
+    return new Service(serviceEnClair, referentielAUtiliser);
   };
 
   const persistance = {
@@ -173,12 +180,14 @@ const creeDepot = (config = {}) => {
     busEvenements,
     depotDonneesUtilisateurs,
     referentiel,
+    referentielV2,
   } = config;
 
   const p = fabriquePersistance(
     adaptateurPersistance,
     adaptateurChiffrement,
     referentiel,
+    referentielV2,
     depotDonneesUtilisateurs
   );
 
