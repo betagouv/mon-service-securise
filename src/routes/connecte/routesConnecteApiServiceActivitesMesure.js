@@ -45,12 +45,11 @@ const routesConnecteApiServiceActivitesMesure = ({
     middleware.aseptise('contenu'),
     middleware.trouveService({ [SECURISER]: ECRITURE }),
     async (requete, reponse) => {
-      const identifiantsMesuresRepertoriees = referentiel.identifiantsMesures();
       const { idMesure } = requete.params;
       const { service, idUtilisateurCourant } = requete;
 
       const estUneMesureGenerale =
-        identifiantsMesuresRepertoriees.includes(idMesure);
+        referentiel.estIdentifiantMesureConnu(idMesure);
       const estUneMesureSpecifique = service
         .mesuresSpecifiques()
         .avecId(idMesure);

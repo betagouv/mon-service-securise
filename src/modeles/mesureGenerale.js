@@ -53,8 +53,7 @@ class MesureGenerale extends Mesure {
   static valide({ id, statut, priorite, echeance }, referentiel) {
     super.valide({ statut, priorite, echeance }, referentiel);
 
-    const identifiantsMesuresRepertoriees = referentiel.identifiantsMesures();
-    if (!identifiantsMesuresRepertoriees.includes(id)) {
+    if (!referentiel.estIdentifiantMesureConnu(id)) {
       throw new ErreurMesureInconnue(`La mesure "${id}" n'est pas répertoriée`);
     }
   }

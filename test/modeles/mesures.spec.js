@@ -36,8 +36,9 @@ describe('Les mesures liées à un service', () => {
   });
 
   it('ont comme statut `COMPLETES` lorsque toutes les mesures personnalisées sont renseignées et sans mesures spécifiques', () => {
-    const referentiel = Referentiel.creeReferentielVide();
-    referentiel.identifiantsMesures = () => ['mesure1'];
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { mesure1: {} },
+    });
     const mesures = new Mesures(
       {
         mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
@@ -51,9 +52,10 @@ describe('Les mesures liées à un service', () => {
   });
 
   it('ont comme statut `COMPLETES` lorsque toutes les mesures personnalisées sont renseignées et avec mesures spécifiques', () => {
-    const referentiel = Referentiel.creeReferentielVide();
-    referentiel.identifiantsMesures = () => ['mesure1'];
-    referentiel.identifiantsCategoriesMesures = () => ['gouvernance'];
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { mesure1: {} },
+      categoriesMesures: { gouvernance: {} },
+    });
     const mesures = new Mesures(
       {
         mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
@@ -74,8 +76,9 @@ describe('Les mesures liées à un service', () => {
   });
 
   it('ont comme statut `A_COMPLETER` lorsque certaines mesures sont renseignées, mais pas toutes', () => {
-    const referentiel = Referentiel.creeReferentielVide();
-    referentiel.identifiantsMesures = () => ['mesure1', 'mesure2'];
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { mesure1: {}, mesure2: {} },
+    });
     const sansMesure2 = new Mesures(
       {
         mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
@@ -89,8 +92,9 @@ describe('Les mesures liées à un service', () => {
   });
 
   it('ont comme statut `COMPLETES` même s’il y a des mesures qui ne sont plus d’actualité', () => {
-    const referentiel = Referentiel.creeReferentielVide();
-    referentiel.identifiantsMesures = () => ['mesure1', 'mesure2'];
+    const referentiel = Referentiel.creeReferentiel({
+      mesures: { mesure1: {}, mesure2: {} },
+    });
     const avecMesure2EnTrop = new Mesures(
       {
         mesuresGenerales: [

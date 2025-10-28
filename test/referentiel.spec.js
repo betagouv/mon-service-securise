@@ -327,17 +327,6 @@ describe('Le référentiel', () => {
     expect(referentiel.definitionRisque('unRisque')).to.equal('Une définition');
   });
 
-  it('connaît la liste des identifiants de mesures répertoriées', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      mesures: { uneMesure: {}, uneAutreMesure: {} },
-    });
-
-    expect(referentiel.identifiantsMesures()).to.eql([
-      'uneMesure',
-      'uneAutreMesure',
-    ]);
-  });
-
   it('sait dire si un identifiant de mesure fait partie du référentiel', () => {
     const referentiel = Referentiel.creeReferentiel({
       mesures: { uneMesure: {} },

@@ -9,15 +9,9 @@ const { A_SAISIR, COMPLETES, A_COMPLETER } = MesuresGenerales;
 describe('La liste des mesures générales', () => {
   let referentiel;
 
-  beforeEach(
-    () =>
-      (referentiel = {
-        identifiantsCategoriesMesures: () => [],
-        identifiantsMesures: () => [],
-        mesures: () => ({}),
-        mesure: () => ({}),
-      })
-  );
+  beforeEach(() => {
+    referentiel = Referentiel.creeReferentielVide();
+  });
 
   describe("sur demande de mise à jour d'une mesure", () => {
     beforeEach(() => {
@@ -63,7 +57,7 @@ describe('La liste des mesures générales', () => {
   });
 
   it('est complète quand les mesures sont complètes', () => {
-    referentiel.identifiantsMesures = () => ['mesure'];
+    referentiel = creeReferentiel({ mesures: { mesure: {} } });
 
     const donnees = { mesuresGenerales: [{ id: 'mesure', statut: 'fait' }] };
     const mesuresGenerales = new MesuresGenerales(donnees, referentiel);
@@ -72,7 +66,7 @@ describe('La liste des mesures générales', () => {
   });
 
   it('est à compléter quand toutes les mesures ne sont pas complètes', () => {
-    referentiel.identifiantsMesures = () => ['mesure'];
+    referentiel = creeReferentiel({ mesures: { mesure: {} } });
 
     const donnees = { mesuresGenerales: [{ id: 'mesure' }] };
     const mesuresGenerales = new MesuresGenerales(donnees, referentiel);
