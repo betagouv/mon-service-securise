@@ -1,11 +1,8 @@
 import { MoteurReglesV2 } from '../../../src/moteurRegles/v2/moteurReglesV2.js';
-import {
-  creeReferentiel,
-  creeReferentielVide,
-} from '../../../src/referentiel.js';
 import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.js';
 import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.js';
 import { besoins } from './besoinsDeSecurite.js';
+import { creeReferentielV2 } from '../../../src/referentielV2.js';
 
 function uneDescriptionAuNiveau(niveauSecurite: NiveauSecurite) {
   return uneDescriptionV2Valide()
@@ -15,7 +12,7 @@ function uneDescriptionAuNiveau(niveauSecurite: NiveauSecurite) {
 
 describe('Le moteur de règles V2', () => {
   it('se base sur les mesures qui correspondent au niveau de sécurité du service', () => {
-    const referentiel = creeReferentiel();
+    const referentiel = creeReferentielV2();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
@@ -45,7 +42,7 @@ describe('Le moteur de règles V2', () => {
   });
 
   it('sait rendre une mesure « Indispensable » par un modificateur', () => {
-    const referentiel = creeReferentiel();
+    const referentiel = creeReferentielV2();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
@@ -66,7 +63,7 @@ describe('Le moteur de règles V2', () => {
   });
 
   it("sait redescendre une mesure en « Recommandée » par modificateur alors qu'elle était « Indispensable » par le niveau de sécurité", () => {
-    const referentiel = creeReferentiel();
+    const referentiel = creeReferentielV2();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
@@ -87,7 +84,7 @@ describe('Le moteur de règles V2', () => {
   });
 
   it("sait rajouter une mesure « Recommandée » par modificateur alors qu'elle était « Absente » en statut initial", () => {
-    const referentiel = creeReferentiel();
+    const referentiel = creeReferentielV2();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
@@ -108,7 +105,7 @@ describe('Le moteur de règles V2', () => {
   });
 
   it("sait rajouter une mesure « Indispensable » par modificateur alors qu'elle était « Absente » en statut initial", () => {
-    const referentiel = creeReferentiel();
+    const referentiel = creeReferentielV2();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
@@ -129,7 +126,7 @@ describe('Le moteur de règles V2', () => {
   });
 
   it("sait retirer une mesure par modificateur alors qu'elle était « Présente » en statut initial", () => {
-    const referentiel = creeReferentiel();
+    const referentiel = creeReferentielV2();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
@@ -150,7 +147,7 @@ describe('Le moteur de règles V2', () => {
   });
 
   it('sait combiner « Rajouter » et « Rendre indispensable » sur une même mesure', () => {
-    const referentiel = creeReferentiel();
+    const referentiel = creeReferentielV2();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
@@ -173,7 +170,7 @@ describe('Le moteur de règles V2', () => {
   });
 
   it("sait combiner « Rajouter » et « Retirer » sur une même mesure : c'est « Rajouter » qui l'emporte", () => {
-    const referentiel = creeReferentiel();
+    const referentiel = creeReferentielV2();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
@@ -196,7 +193,7 @@ describe('Le moteur de règles V2', () => {
   });
 
   it('sait combiner des modificateurs multiples pour « Rajouter » et « Rendre indispensable » sur un même champ', () => {
-    const referentiel = creeReferentiel();
+    const referentiel = creeReferentielV2();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
@@ -218,16 +215,7 @@ describe('Le moteur de règles V2', () => {
   });
 
   it('renvoie les mesures complétées avec leurs données référentielles', () => {
-    const referentiel = creeReferentielVide();
-    referentiel.recharge({
-      mesuresV2: {
-        'RECENSEMENT.1': {
-          description: 'Recenser…',
-          referentiel: 'ANSSI',
-          categorie: 'resilience',
-        },
-      },
-    });
+    const referentiel = creeReferentielV2();
     const v2 = new MoteurReglesV2(referentiel, [
       {
         reference: 'RECENSEMENT.1',
@@ -239,8 +227,10 @@ describe('Le moteur de règles V2', () => {
 
     const mesures = v2.mesures(uneDescriptionAuNiveau('niveau1'));
 
-    expect(mesures['RECENSEMENT.1'].categorie).toBe('resilience');
+    expect(mesures['RECENSEMENT.1'].categorie).toBe('gouvernance');
     expect(mesures['RECENSEMENT.1'].referentiel).toBe('ANSSI');
-    expect(mesures['RECENSEMENT.1'].description).toBe('Recenser…');
+    expect(mesures['RECENSEMENT.1'].description).toBe(
+      "Etablir la liste de l'ensemble des services et données à protéger"
+    );
   });
 });
