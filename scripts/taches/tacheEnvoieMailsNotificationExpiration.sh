@@ -12,4 +12,4 @@ if [[ "$INSTANCE_NUMBER" != "0" ]]; then
 fi
 
 cd "${APP_HOME}" || exit
-node scripts/taches/tacheEnvoieMailsNotificationExpiration.js
+node --import tsx scripts/taches/tacheEnvoieMailsNotificationExpiration.js
