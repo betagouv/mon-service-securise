@@ -92,7 +92,7 @@ export class MoteurReglesV2 {
           regle.reference,
           {
             indispensable: modifications.rendreIndispensable(),
-            ...this.referentiel.mesureV2AvecID(regle.reference),
+            ...this.referentiel.mesure(regle.reference),
           },
         ]);
     }
