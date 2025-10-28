@@ -2880,6 +2880,11 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.referentiel().recharge({
         retoursUtilisateurMesure: { idRetour: 'un retour utilisateur' },
       });
+      testeur.middleware().reinitialise({
+        serviceARenvoyer: unService(testeur.referentiel())
+          .avecId('456')
+          .construis(),
+      });
       await testeur.verifieRequeteGenereErreurHTTP(
         424,
         {
@@ -2895,10 +2900,15 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it('consigne un événement de retour utilisateur sur une mesure', async () => {
-      testeur.middleware().reinitialise({ idUtilisateur: '123' });
       testeur.referentiel().recharge({
         retoursUtilisateurMesure: { bonneMesure: 'mesure satisfaisante' },
         mesures: { implementerMfa: {} },
+      });
+      testeur.middleware().reinitialise({
+        idUtilisateur: '123',
+        serviceARenvoyer: unService(testeur.referentiel())
+          .avecId('456')
+          .construis(),
       });
       let evenementRecu = {};
       testeur.adaptateurJournalMSS().consigneEvenement = async (donnees) => {
