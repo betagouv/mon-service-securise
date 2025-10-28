@@ -1,10 +1,8 @@
 ## TODO
 
-- [ ] Migration des données.
-  - JSON.stringify avec un `formatter` custom qui `decode` ?
-
 ## DONE
 
+- [x] Migration des données.
 - [x] Voir les concaténations de chaînes faites en jQuery…
   - par exemple public/entete.js:10 qui met dans le DOM `prenomNom`. Si `prenomNom` a du `<h1>` ça pose problème.
 - [x] Enlever le code qui encode les entités HTML : `escape()` dans `middleware.aseptise()`.
@@ -19,39 +17,41 @@
 
 ## Les migrations BDD
 
-- [ ] table `utilisateurs`
+- [x] table `utilisateurs` : chiffré
 
-  - champ `nom`
-  - champ `prenom`
-  - champ `postes` qui est un `[]`
+  - colonne `donnees`
+    - champ `nom`
+    - champ `prenom`
+    - champ `postes` qui est un `[]`
 
-- [ ] table `services`
+- [x] table `services` : chiffré
 
-  - champ `descriptionService`
-    - `nomService`
-    - `pointsAcces[].description`
-    - `donneesSensiblesSpecifiques[].description`
-    - `fonctionnalitesSpecifiques[].description`
-    - `organisationResponsable.nom`
-  - champ `risquesGeneraux[].commentaire`
-  - champ `risquesSpecifiques[]`
-    - `intitule`, `commentaire`, `description`
-  - champ `mesuresGenerales[].modalites`
-  - champ `mesuresSpecifiques[]`
-    - `description`, `descriptionLongue`, `modalites`
-  - champ `dossiers[]`
-    - `autorite.nom` et `autorite.fonction`
-    - `avis[].commentaires` et `avis[].collaborateurs`
-    - `documents[]`
-  - champ `rolesResponsabilites`
-    - `acteursHomologation[].role`, `nom`, `fonction`
-    - `partiesPrenantes[].nom`, `natureAcces`, `pointContact`
+  - colonne `donnees`
+    - champ `descriptionService`
+      - `nomService`
+      - `pointsAcces[].description`
+      - `donneesSensiblesSpecifiques[].description`
+      - `fonctionnalitesSpecifiques[].description`
+      - `organisationResponsable.nom`
+    - champ `risquesGeneraux[].commentaire`
+    - champ `risquesSpecifiques[]`
+      - `intitule`, `commentaire`, `description`
+    - champ `mesuresGenerales[].modalites`
+    - champ `mesuresSpecifiques[]`
+      - `description`, `descriptionLongue`, `modalites`
+    - champ `dossiers[]`
+      - `autorite.nom` et `autorite.fonction`
+      - `avis[].commentaires` et `avis[].collaborateurs`
+      - `documents[]`
+    - champ `rolesResponsabilites`
+      - `acteursHomologation[].role`, `nom`, `fonction`
+      - `partiesPrenantes[].nom`, `natureAcces`, `pointContact`
 
-- [ ] table `activites_mesure`
+- [x] table `activites_mesure` : non chiffré
 
-  - `WHERE type = 'ajoutCommentaire'` colonne `detail` est un JSON : on veut update `contenu`
+  - `WHERE type = 'ajoutCommentaire'` colonne `details` est un JSON : on veut update `contenu`
 
-- [ ] table `modeles_mesure_specifique`, colonne 'donnees'
+- [x] table `modeles_mesure_specifique`, colonne `donnees` : chiffré
 
 ## Les tests pour vérifier :
 
