@@ -24,13 +24,16 @@ export const creeReferentielV2 = (
     reglesMoteurV2Enregistrees = regles;
   };
 
+  const estIdentifiantMesureConnu = (id: IdMesureV2) =>
+    Object.keys(donnees.mesures).includes(id);
+
   const mesure = (idMesure: IdMesureV2) => donnees.mesures[idMesure];
 
   const reglesMoteurV2 = () => reglesMoteurV2Enregistrees;
-
   return {
     ...creeReferentiel(),
     enregistreReglesMoteurV2,
+    estIdentifiantMesureConnu,
     mesure,
     reglesMoteurV2,
     version: () => 'v2',
