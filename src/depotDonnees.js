@@ -29,6 +29,7 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
     adaptateurUUID = fabriqueAdaptateurUUID(),
     referentiel = Referentiel.creeReferentiel(),
+    referentielV2,
     adaptateurRechercheEntite,
     busEvenements,
     serviceCgu,
@@ -54,6 +55,7 @@ const creeDepot = (config = {}) => {
     depotDonneesUtilisateurs: depotUtilisateurs,
     busEvenements,
     referentiel,
+    referentielV2,
   });
 
   const depotAutorisations = depotDonneesAutorisations.creeDepot({
