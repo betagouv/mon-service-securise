@@ -7,6 +7,7 @@ import {
 import ActiviteMesure from '../../../src/modeles/activiteMesure.js';
 import { unService } from '../../constructeurs/constructeurService.js';
 import Mesures from '../../../src/modeles/mesures.js';
+import Service from '../../../src/modeles/service.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -136,6 +137,9 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         });
         testeur.middleware().reinitialise({
           idUtilisateur: 'U1',
+          serviceARenvoyer: unService(testeur.referentiel())
+            .avecId('456')
+            .construis(),
         });
         let activiteRecue;
         testeur.depotDonnees().ajouteActiviteMesure = (activite) => {

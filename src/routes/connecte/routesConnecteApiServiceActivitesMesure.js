@@ -49,7 +49,7 @@ const routesConnecteApiServiceActivitesMesure = ({
       const { service, idUtilisateurCourant } = requete;
 
       const estUneMesureGenerale =
-        referentiel.estIdentifiantMesureConnu(idMesure);
+        service.referentiel.estIdentifiantMesureConnu(idMesure);
       const estUneMesureSpecifique = service
         .mesuresSpecifiques()
         .avecId(idMesure);
