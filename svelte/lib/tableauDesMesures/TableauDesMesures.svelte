@@ -61,6 +61,7 @@
   export let priorites: ReferentielPriorite;
   export let estLectureSeule: boolean;
   export let modeVisiteGuidee: boolean;
+  export let avecDecrireV2: boolean;
   export let versionService: VersionService;
 
   $: {
@@ -249,7 +250,7 @@
   </Avertissement>
 {/if}
 
-{#if versionService === 'v1'}
+{#if versionService === 'v1' && avecDecrireV2}
   <div class="info-ancien-référentiel">
     <dsfr-badge
       label="Ancien référentiel"
