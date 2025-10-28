@@ -4,11 +4,10 @@ import Mesures from '../../src/modeles/mesures.js';
 import MesuresSpecifiques from '../../src/modeles/mesuresSpecifiques.js';
 import * as Referentiel from '../../src/referentiel.js';
 
-const elles = it;
 const { A_COMPLETER, COMPLETES } = InformationsService;
 
 describe('Les mesures liées à un service', () => {
-  elles('comptent les mesures personnalisees', () => {
+  it('comptent les mesures personnalisees', () => {
     const mesuresPersonnalisees = { uneMesure: {} };
     const mesures = new Mesures(
       {},
@@ -19,7 +18,7 @@ describe('Les mesures liées à un service', () => {
     expect(mesures.nombreMesuresPersonnalisees()).to.equal(1);
   });
 
-  elles('agrègent des mesures spécifiques', () => {
+  it('agrègent des mesures spécifiques', () => {
     const mesures = new Mesures({
       mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
     });
@@ -27,102 +26,87 @@ describe('Les mesures liées à un service', () => {
     expect(mesures.mesuresSpecifiques).to.be.a(MesuresSpecifiques);
   });
 
-  elles(
-    'ont comme statut `A_COMPLETER` si les mesures spécifiques ont ce statut',
-    () => {
-      const mesures = new Mesures({
-        mesuresGenerales: [],
-        mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
-      });
+  it('ont comme statut `A_COMPLETER` si les mesures spécifiques ont ce statut', () => {
+    const mesures = new Mesures({
+      mesuresGenerales: [],
+      mesuresSpecifiques: [{ description: 'Une mesure spécifique' }],
+    });
 
-      expect(mesures.statutSaisie()).to.equal(A_COMPLETER);
-    }
-  );
+    expect(mesures.statutSaisie()).to.equal(A_COMPLETER);
+  });
 
-  elles(
-    'ont comme statut `COMPLETES` lorsque toutes les mesures personnalisées sont renseignées et sans mesures spécifiques ',
-    () => {
-      const referentiel = Referentiel.creeReferentielVide();
-      referentiel.identifiantsMesures = () => ['mesure1'];
-      const mesures = new Mesures(
-        {
-          mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
-          mesuresSpecifiques: [],
-        },
-        referentiel,
-        { mesure1: {} }
-      );
+  it('ont comme statut `COMPLETES` lorsque toutes les mesures personnalisées sont renseignées et sans mesures spécifiques', () => {
+    const referentiel = Referentiel.creeReferentielVide();
+    referentiel.identifiantsMesures = () => ['mesure1'];
+    const mesures = new Mesures(
+      {
+        mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
+        mesuresSpecifiques: [],
+      },
+      referentiel,
+      { mesure1: {} }
+    );
 
-      expect(mesures.statutSaisie()).to.equal(COMPLETES);
-    }
-  );
+    expect(mesures.statutSaisie()).to.equal(COMPLETES);
+  });
 
-  elles(
-    'ont comme statut `COMPLETES` lorsque toutes les mesures personnalisées sont renseignées et avec mesures spécifiques ',
-    () => {
-      const referentiel = Referentiel.creeReferentielVide();
-      referentiel.identifiantsMesures = () => ['mesure1'];
-      referentiel.identifiantsCategoriesMesures = () => ['gouvernance'];
-      const mesures = new Mesures(
-        {
-          mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
-          mesuresSpecifiques: [
-            {
-              id: '1',
-              description: 'Faire une étude',
-              categorie: 'gouvernance',
-              statut: 'fait',
-            },
-          ],
-        },
-        referentiel,
-        { mesure1: {} }
-      );
+  it('ont comme statut `COMPLETES` lorsque toutes les mesures personnalisées sont renseignées et avec mesures spécifiques', () => {
+    const referentiel = Referentiel.creeReferentielVide();
+    referentiel.identifiantsMesures = () => ['mesure1'];
+    referentiel.identifiantsCategoriesMesures = () => ['gouvernance'];
+    const mesures = new Mesures(
+      {
+        mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
+        mesuresSpecifiques: [
+          {
+            id: '1',
+            description: 'Faire une étude',
+            categorie: 'gouvernance',
+            statut: 'fait',
+          },
+        ],
+      },
+      referentiel,
+      { mesure1: {} }
+    );
 
-      expect(mesures.statutSaisie()).to.equal(COMPLETES);
-    }
-  );
+    expect(mesures.statutSaisie()).to.equal(COMPLETES);
+  });
 
-  elles(
-    'ont comme statut `A_COMPLETER` lorsque certaines mesures sont renseignées, mais pas toutes',
-    () => {
-      const referentiel = Referentiel.creeReferentielVide();
-      referentiel.identifiantsMesures = () => ['mesure1', 'mesure2'];
-      const sansMesure2 = new Mesures(
-        {
-          mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
-          mesuresSpecifiques: [],
-        },
-        referentiel,
-        { mesure1: {}, mesure2: {} }
-      );
+  it('ont comme statut `A_COMPLETER` lorsque certaines mesures sont renseignées, mais pas toutes', () => {
+    const referentiel = Referentiel.creeReferentielVide();
+    referentiel.identifiantsMesures = () => ['mesure1', 'mesure2'];
+    const sansMesure2 = new Mesures(
+      {
+        mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
+        mesuresSpecifiques: [],
+      },
+      referentiel,
+      { mesure1: {}, mesure2: {} }
+    );
 
-      expect(sansMesure2.statutSaisie()).to.equal(A_COMPLETER);
-    }
-  );
+    expect(sansMesure2.statutSaisie()).to.equal(A_COMPLETER);
+  });
 
-  elles(
-    'ont comme statut `COMPLETES` même s’il y a des mesures qui ne sont plus d’actualité',
-    () => {
-      const referentiel = Referentiel.creeReferentielVide();
-      referentiel.identifiantsMesures = () => ['mesure1', 'mesure2'];
-      const avecMesure2EnTrop = new Mesures(
-        {
-          mesuresGenerales: [
-            { id: 'mesure1', statut: 'fait' },
-            { id: 'mesure2', statut: 'fait' },
-          ],
-          mesuresSpecifiques: [],
-        },
-        referentiel,
-        { mesure1: {} }
-      );
+  it('ont comme statut `COMPLETES` même s’il y a des mesures qui ne sont plus d’actualité', () => {
+    const referentiel = Referentiel.creeReferentielVide();
+    referentiel.identifiantsMesures = () => ['mesure1', 'mesure2'];
+    const avecMesure2EnTrop = new Mesures(
+      {
+        mesuresGenerales: [
+          { id: 'mesure1', statut: 'fait' },
+          { id: 'mesure2', statut: 'fait' },
+        ],
+        mesuresSpecifiques: [],
+      },
+      referentiel,
+      { mesure1: {} }
+    );
 
-      expect(avecMesure2EnTrop.statutSaisie()).to.equal(COMPLETES);
-    }
-  );
+    expect(avecMesure2EnTrop.statutSaisie()).to.equal(COMPLETES);
+  });
 
-  elles('connaissent le nombre total de mesures générales', () => {
+  it('connaissent le nombre total de mesures générales', () => {
     const referentiel = Referentiel.creeReferentielVide();
 
     const mesures = new Mesures(
@@ -134,7 +118,7 @@ describe('Les mesures liées à un service', () => {
     expect(mesures.nombreTotalMesuresGenerales()).to.equal(2);
   });
 
-  elles('connaissent le nombre de mesures spécifiques', () => {
+  it('connaissent le nombre de mesures spécifiques', () => {
     const mesures = new Mesures({
       mesuresSpecifiques: [
         { description: 'Une mesure spécifique', modalites: 'Des modalités' },
@@ -162,7 +146,7 @@ describe('Les mesures liées à un service', () => {
       statutVide = { enCours: {}, nonFait: {}, aLancer: {} };
     });
 
-    elles('récupère les mesures générales groupées', () => {
+    it('récupère les mesures générales groupées', () => {
       const mesures = new Mesures(
         { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
         referentiel,
@@ -183,23 +167,20 @@ describe('Les mesures liées à un service', () => {
       });
     });
 
-    elles(
-      'filtrent les mesures générales en fonction du moteur de règle',
-      () => {
-        const mesures = new Mesures(
-          { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
-          referentiel,
-          {}
-        );
+    it('filtrent les mesures générales en fonction du moteur de règle', () => {
+      const mesures = new Mesures(
+        { mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }] },
+        referentiel,
+        {}
+      );
 
-        expect(mesures.parStatutEtCategorie()).to.eql({
-          ...statutVide,
-          fait: {},
-        });
-      }
-    );
+      expect(mesures.parStatutEtCategorie()).to.eql({
+        ...statutVide,
+        fait: {},
+      });
+    });
 
-    elles('ajoutent les mesures spécifiques', () => {
+    it('ajoutent les mesures spécifiques', () => {
       const mesures = new Mesures(
         {
           mesuresSpecifiques: [
@@ -222,7 +203,7 @@ describe('Les mesures liées à un service', () => {
       });
     });
 
-    elles('fusionnent les mesures générales et spécifiques', () => {
+    it('fusionnent les mesures générales et spécifiques', () => {
       const mesures = new Mesures(
         {
           mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
@@ -279,57 +260,51 @@ describe('Les mesures liées à un service', () => {
       });
     });
 
-    elles(
-      'savent fournir les mesures générales enrichies avec les données des mesures personnalisées (catégorie, description, …)',
-      () => {
-        const mesure1Personnalisee = {
-          description: 'Mesure une',
-          categorie: 'categorie1',
-          indispensable: true,
-        };
+    it('savent fournir les mesures générales enrichies avec les données des mesures personnalisées (catégorie, description, …)', () => {
+      const mesure1Personnalisee = {
+        description: 'Mesure une',
+        categorie: 'categorie1',
+        indispensable: true,
+      };
 
-        const mesures = new Mesures(
-          {
-            mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
-            mesuresSpecifiques: [],
-          },
-          referentiel,
-          { mesure1: mesure1Personnalisee }
-        );
-
-        expect(mesures.enrichiesAvecDonneesPersonnalisees()).to.eql({
-          mesuresGenerales: {
-            mesure1: {
-              statut: 'fait',
-              description: 'Mesure une',
-              categorie: 'categorie1',
-              indispensable: true,
-              responsables: [],
-            },
-          },
+      const mesures = new Mesures(
+        {
+          mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
           mesuresSpecifiques: [],
-        });
-      }
-    );
+        },
+        referentiel,
+        { mesure1: mesure1Personnalisee }
+      );
 
-    elles(
-      "ne suppriment pas l'ID des mesures générales dans les objets `MesureGenerale`",
-      () => {
-        const mesures = new Mesures(
-          {
-            mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
-            mesuresSpecifiques: [],
+      expect(mesures.enrichiesAvecDonneesPersonnalisees()).to.eql({
+        mesuresGenerales: {
+          mesure1: {
+            statut: 'fait',
+            description: 'Mesure une',
+            categorie: 'categorie1',
+            indispensable: true,
+            responsables: [],
           },
-          referentiel,
-          { mesure1: { description: 'Mesure une' } }
-        );
+        },
+        mesuresSpecifiques: [],
+      });
+    });
 
-        mesures.enrichiesAvecDonneesPersonnalisees(); // Appel pour déclencher le code
-        expect(mesures.mesuresGenerales.toutes()[0].id).to.be('mesure1'); // Vérifie l'absence d'effet de bord
-      }
-    );
+    it("ne suppriment pas l'ID des mesures générales dans les objets `MesureGenerale`", () => {
+      const mesures = new Mesures(
+        {
+          mesuresGenerales: [{ id: 'mesure1', statut: 'fait' }],
+          mesuresSpecifiques: [],
+        },
+        referentiel,
+        { mesure1: { description: 'Mesure une' } }
+      );
 
-    elles('incluent les mesures spécifiques', () => {
+      mesures.enrichiesAvecDonneesPersonnalisees(); // Appel pour déclencher le code
+      expect(mesures.mesuresGenerales.toutes()[0].id).to.be('mesure1'); // Vérifie l'absence d'effet de bord
+    });
+
+    it('incluent les mesures spécifiques', () => {
       const mesures = new Mesures(
         {
           mesuresGenerales: [],
