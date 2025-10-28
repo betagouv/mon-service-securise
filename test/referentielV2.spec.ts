@@ -16,4 +16,14 @@ describe('Le référentiel V2', () => {
 
     expect(referentielV2.version()).toEqual('v2');
   });
+
+  describe('concernant les méthodes surchargées du référentielV2', () => {
+    it('retourne une mesure par id v2', () => {
+      const referentielV2 = creeReferentielV2();
+
+      const mesure = referentielV2.mesure('RECENSEMENT.1');
+
+      expect(mesure.identifiantNumerique).toEqual('0001');
+    });
+  });
 });
