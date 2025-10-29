@@ -19,6 +19,7 @@ import Entite from './entite.js';
 import { VersionService } from './versionService.js';
 import { MoteurReglesV2 } from '../moteurRegles/v2/moteurReglesV2.js';
 import { creeReferentielV2 } from '../referentielV2.js';
+import { ObjetPDFAnnexeDescriptionV2 } from './objetsPDF/objetPDFAnnexeDescriptionV2.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -346,7 +347,9 @@ class Service {
   }
 
   vueAnnexePDFDescription() {
-    return new ObjetPDFAnnexeDescription(this, this.referentiel);
+    return this.version() === VersionService.v1
+      ? new ObjetPDFAnnexeDescription(this, this.referentiel)
+      : new ObjetPDFAnnexeDescriptionV2(this);
   }
 
   vueAnnexePDFMesures() {

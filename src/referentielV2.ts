@@ -4,6 +4,7 @@ import {
   LocalisationDonneesTraitees,
   mesuresV2,
   questionsV2,
+  SpecificiteProjet,
   StatutDeploiement,
   TypeDeService,
 } from '../donneesReferentielMesuresV2.js';
@@ -17,6 +18,9 @@ export type DonneesReferentielV2 = typeof questionsV2 & {
 };
 
 type MethodesSpecifiquesReferentielV2 = {
+  descriptionSpecificiteProjet: (
+    specificiteProjet: SpecificiteProjet
+  ) => string;
   enregistreReglesMoteurV2: (regles: ReglesDuReferentielMesuresV2) => void;
   reglesMoteurV2: () => ReglesDuReferentielMesuresV2;
 };
@@ -26,6 +30,9 @@ export const creeReferentielV2 = (
 ): Referentiel & MethodesSpecifiquesReferentielV2 => {
   let reglesMoteurV2Enregistrees: ReglesDuReferentielMesuresV2 = [];
   const identifiantsMesure = new Set<string>(Object.keys(donnees.mesures));
+
+  const descriptionSpecificiteProjet = (specificiteProjet: SpecificiteProjet) =>
+    donnees.specificiteProjet[specificiteProjet].nom;
 
   const descriptionStatutDeploiement = (statutDeploiement: StatutDeploiement) =>
     donnees.statutDeploiement[statutDeploiement].description;
@@ -48,6 +55,7 @@ export const creeReferentielV2 = (
 
   return {
     ...creeReferentiel(),
+    descriptionSpecificiteProjet,
     descriptionStatutDeploiement,
     enregistreReglesMoteurV2,
     estIdentifiantMesureConnu,
