@@ -19,13 +19,14 @@ export const creeReferentielV2 = (
   donnees: DonneesReferentielV2 = { mesures: mesuresV2 }
 ): Referentiel & MethodesSpecifiquesReferentielV2 => {
   let reglesMoteurV2Enregistrees: ReglesDuReferentielMesuresV2 = [];
+  const identifiantsMesure = new Set<string>(Object.keys(donnees.mesures));
 
   const enregistreReglesMoteurV2 = (regles: ReglesDuReferentielMesuresV2) => {
     reglesMoteurV2Enregistrees = regles;
   };
 
   const estIdentifiantMesureConnu = (id: IdMesureV2) =>
-    Object.keys(donnees.mesures).includes(id);
+    identifiantsMesure.has(id);
 
   const mesure = (idMesure: IdMesureV2) => donnees.mesures[idMesure];
 
