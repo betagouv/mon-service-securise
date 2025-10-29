@@ -23,6 +23,7 @@ describe("L'objet PDF de l'annexe de description", () => {
   const service = new Service(
     {
       id: '123',
+      versionService: 'v1',
       idUtilisateur: '456',
       descriptionService: {
         nomService: 'Nom Service',
@@ -41,6 +42,14 @@ describe("L'objet PDF de l'annexe de description", () => {
   );
 
   it('fournit le nom du service', () => {
+    const vueAnnexePDFDescription = new VueAnnexePDFDescription(service);
+
+    const donnees = vueAnnexePDFDescription.donnees();
+
+    expect(donnees.versionService).to.equal('v1');
+  });
+
+  it('fournit la version du service', () => {
     const vueAnnexePDFDescription = new VueAnnexePDFDescription(service);
 
     const donnees = vueAnnexePDFDescription.donnees();
