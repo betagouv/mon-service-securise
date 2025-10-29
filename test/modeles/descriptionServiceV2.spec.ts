@@ -415,4 +415,31 @@ describe('Une description service V2', () => {
       });
     });
   });
+
+  describe('sur demande de description de ses données via le référentiel', () => {
+    it('sait décrire ses localisations de données', () => {
+      const description = uneDescriptionV2Valide()
+        .avecLocalisationDonneesTraitees(['horsUE', 'UE'])
+        .construis();
+      expect(description.descriptionLocalisationDonnees()).toBe(
+        "Hors Union européenne, Au sein de l'Union européenne"
+      );
+    });
+
+    it('sait décrire ses types de service', () => {
+      const description = uneDescriptionV2Valide()
+        .avecTypesService(['portailInformation', 'api'])
+        .construis();
+      expect(description.descriptionTypeService()).toBe(
+        "Portail d'information, API"
+      );
+    });
+
+    it('sait décrire son statut de déploiement', () => {
+      const description = uneDescriptionV2Valide()
+        .avecStatutDeploiement('enProjet')
+        .construis();
+      expect(description.descriptionStatutDeploiement()).toBe('En conception');
+    });
+  });
 });
