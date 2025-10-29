@@ -9,6 +9,7 @@
     "build:cree-utilisateur-demo": "npm run build:back && node dist/creeUtilisateurDemo.js",
     "dev:back": "node --watch --import tsx server.ts",
     "dev:front": "cd svelte && npx vite dev --host 0.0.0.0",
+    "migration-bdd": "npx tsx node_modules/knex/bin/cli.js migrate:latest",
     "test": "eslint . && vitest",
     "test:watch": "vitest",
     "start": "node --require dotenv/config dist/server.js",
