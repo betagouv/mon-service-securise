@@ -62,6 +62,9 @@ export class DescriptionServiceV2 {
   readonly statutDeploiement: StatutDeploiement;
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
   readonly specificitesProjet: SpecificiteProjet[];
+  readonly categoriesDonneesTraitees: CategorieDonneesTraitees[];
+  readonly categoriesDonneesTraiteesSupplementaires: string[];
+  readonly dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
   private readonly presentation: string;
   private readonly pointsAcces: PointsAcces;
   private readonly typeService: TypeDeService[];
@@ -69,9 +72,6 @@ export class DescriptionServiceV2 {
   private readonly activitesExternalisees: ActiviteExternalisee[];
   private readonly ouvertureSysteme: OuvertureSysteme;
   private readonly audienceCible: AudienceCible;
-  private readonly dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
-  private readonly categoriesDonneesTraitees: CategorieDonneesTraitees[];
-  private readonly categoriesDonneesTraiteesSupplementaires: string[];
   private readonly localisationsDonneesTraitees: LocalisationDonneesTraitees[];
   private readonly referentiel: Referentiel;
 

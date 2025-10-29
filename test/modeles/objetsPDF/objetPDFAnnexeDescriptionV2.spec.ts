@@ -16,6 +16,11 @@ describe("L'objet PDF de l'annexe de description V2", () => {
       descriptionService: uneDescriptionV2Valide()
         .avecNomService('Nom Service')
         .avecSpecificitesProjet(['annuaire', 'postesDeTravail'])
+        .avecDonneesTraitees(
+          ['documentsIdentifiants', 'donneesSensibles'],
+          ['Mes données ajoutées']
+        )
+        .avecDureeDysfonctionnementAcceptable('moinsDe4h')
         .donneesDescription(),
     },
     referentiel
@@ -46,5 +51,27 @@ describe("L'objet PDF de l'annexe de description V2", () => {
       'Un annuaire',
       'Des postes de travail',
     ]);
+  });
+
+  it('fournit la liste des données traitées', () => {
+    const vueAnnexePDFDescription = new ObjetPDFAnnexeDescriptionV2(service);
+
+    const donnees = vueAnnexePDFDescription.donnees();
+
+    expect(donnees.donneesStockees).toEqual([
+      'Documents identifiants',
+      'Données sensibles',
+      'Mes données ajoutées',
+    ]);
+  });
+
+  it('fournit la durée de dysfonctionnement maximum acceptable', () => {
+    const vueAnnexePDFDescription = new ObjetPDFAnnexeDescriptionV2(service);
+
+    const donnees = vueAnnexePDFDescription.donnees();
+
+    expect(donnees.dureeDysfonctionnementMaximumAcceptable).toEqual(
+      'Moins de 4h'
+    );
   });
 });
