@@ -11,32 +11,38 @@ import {
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurDonneesObligatoiresManquantes,
 } from '../../src/erreurs.js';
+import { creeReferentielV2 } from '../../src/referentielV2.js';
 
 describe('Une description service V2', () => {
+  const referentiel = creeReferentielV2();
+
   it('connaît ses données à persister', () => {
-    const descriptionV2 = new DescriptionServiceV2({
-      nomService: 'Mairie',
-      organisationResponsable: {
-        nom: 'Ville V',
-        siret: '1111111111111',
-        departement: '33',
+    const descriptionV2 = new DescriptionServiceV2(
+      {
+        nomService: 'Mairie',
+        organisationResponsable: {
+          nom: 'Ville V',
+          siret: '1111111111111',
+          departement: '33',
+        },
+        typeService: ['api'],
+        statutDeploiement: 'enCours',
+        niveauSecurite: 'niveau1',
+        volumetrieDonneesTraitees: 'faible',
+        presentation: 'Le premier de …',
+        pointsAcces: [{ description: 'https://url.com' }],
+        audienceCible: 'large',
+        typeHebergement: 'autre',
+        ouvertureSysteme: 'accessibleSurInternet',
+        specificitesProjet: ['accesPhysiqueAuxBureaux'],
+        activitesExternalisees: ['developpementLogiciel'],
+        dureeDysfonctionnementAcceptable: 'moinsDe24h',
+        categoriesDonneesTraitees: ['documentsRHSensibles'],
+        categoriesDonneesTraiteesSupplementaires: ['numéros de téléphones'],
+        localisationsDonneesTraitees: ['horsUE'],
       },
-      typeService: ['api'],
-      statutDeploiement: 'enCours',
-      niveauSecurite: 'niveau1',
-      volumetrieDonneesTraitees: 'faible',
-      presentation: 'Le premier de …',
-      pointsAcces: [{ description: 'https://url.com' }],
-      audienceCible: 'large',
-      typeHebergement: 'autre',
-      ouvertureSysteme: 'accessibleSurInternet',
-      specificitesProjet: ['accesPhysiqueAuxBureaux'],
-      activitesExternalisees: ['developpementLogiciel'],
-      dureeDysfonctionnementAcceptable: 'moinsDe24h',
-      categoriesDonneesTraitees: ['documentsRHSensibles'],
-      categoriesDonneesTraiteesSupplementaires: ['numéros de téléphones'],
-      localisationsDonneesTraitees: ['horsUE'],
-    });
+      referentiel
+    );
 
     const aPersister = descriptionV2.donneesSerialisees();
 
@@ -66,29 +72,32 @@ describe('Une description service V2', () => {
   });
 
   it('connaît sa réprensation JSON de données : les mêmes que les données sérialisées', () => {
-    const descriptionV2 = new DescriptionServiceV2({
-      nomService: 'Mairie',
-      organisationResponsable: {
-        nom: 'Ville V',
-        siret: '1111111111111',
-        departement: '33',
+    const descriptionV2 = new DescriptionServiceV2(
+      {
+        nomService: 'Mairie',
+        organisationResponsable: {
+          nom: 'Ville V',
+          siret: '1111111111111',
+          departement: '33',
+        },
+        typeService: ['api'],
+        statutDeploiement: 'enCours',
+        niveauSecurite: 'niveau1',
+        volumetrieDonneesTraitees: 'faible',
+        presentation: 'Le premier de …',
+        pointsAcces: [{ description: 'https://url.com' }],
+        audienceCible: 'large',
+        typeHebergement: 'autre',
+        ouvertureSysteme: 'accessibleSurInternet',
+        specificitesProjet: ['accesPhysiqueAuxBureaux'],
+        activitesExternalisees: ['developpementLogiciel'],
+        dureeDysfonctionnementAcceptable: 'moinsDe24h',
+        categoriesDonneesTraitees: ['documentsRHSensibles'],
+        categoriesDonneesTraiteesSupplementaires: ['numéros de téléphones'],
+        localisationsDonneesTraitees: ['horsUE'],
       },
-      typeService: ['api'],
-      statutDeploiement: 'enCours',
-      niveauSecurite: 'niveau1',
-      volumetrieDonneesTraitees: 'faible',
-      presentation: 'Le premier de …',
-      pointsAcces: [{ description: 'https://url.com' }],
-      audienceCible: 'large',
-      typeHebergement: 'autre',
-      ouvertureSysteme: 'accessibleSurInternet',
-      specificitesProjet: ['accesPhysiqueAuxBureaux'],
-      activitesExternalisees: ['developpementLogiciel'],
-      dureeDysfonctionnementAcceptable: 'moinsDe24h',
-      categoriesDonneesTraitees: ['documentsRHSensibles'],
-      categoriesDonneesTraiteesSupplementaires: ['numéros de téléphones'],
-      localisationsDonneesTraitees: ['horsUE'],
-    });
+      referentiel
+    );
 
     expect(descriptionV2.toJSON()).toEqual(descriptionV2.donneesSerialisees());
   });
