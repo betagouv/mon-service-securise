@@ -744,6 +744,7 @@ describe('Un service', () => {
   it("récupère un objet de vue pour le pdf de l'annexe de la description", () => {
     const service = new Service({
       id: '123',
+      versionService: VersionService.v1,
       idUtilisateur: '456',
       descriptionService: { nomService: 'nom' },
     });

@@ -61,10 +61,10 @@ export class DescriptionServiceV2 {
   readonly niveauSecurite: NiveauSecurite;
   readonly statutDeploiement: StatutDeploiement;
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
+  readonly specificitesProjet: SpecificiteProjet[];
   private readonly presentation: string;
   private readonly pointsAcces: PointsAcces;
   private readonly typeService: TypeDeService[];
-  private readonly specificitesProjet: SpecificiteProjet[];
   private readonly typeHebergement: TypeHebergement;
   private readonly activitesExternalisees: ActiviteExternalisee[];
   private readonly ouvertureSysteme: OuvertureSysteme;
