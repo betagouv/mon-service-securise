@@ -27,6 +27,7 @@ class ObjetPDFAnnexeDescription {
 
     return {
       nomService: this.service.nomService(),
+      versionService: this.service.version(),
       fonctionnalites: [...fonctionnalites, ...fonctionnalitesSpecifiques],
       donneesStockees: [...donneesStockees, ...donneesStockeesSpecifiques],
       dureeDysfonctionnementMaximumAcceptable,

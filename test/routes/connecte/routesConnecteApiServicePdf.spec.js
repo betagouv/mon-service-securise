@@ -13,6 +13,7 @@ import {
   Rubriques,
 } from '../../../src/modeles/autorisations/gestionDroits.js';
 import { unService } from '../../constructeurs/constructeurService.js';
+import { VersionService } from '../../../src/modeles/versionService.js';
 
 const { LECTURE } = Permissions;
 const { SECURISER, RISQUES, DECRIRE, HOMOLOGUER } = Rubriques;
@@ -194,6 +195,7 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
     const serviceARenvoyer = new Service(
       {
         id: '456',
+        versionService: VersionService.v1,
         descriptionService: { nomService: 'un service' },
         dossiers: [unDossier(referentiel).donnees],
       },
