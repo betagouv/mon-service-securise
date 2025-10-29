@@ -193,6 +193,14 @@ export class DescriptionServiceV2 {
     );
   }
 
+  niveauSecuriteDepasseRecommandation() {
+    const niveauRecommande = this.estimeNiveauDeSecurite();
+    return (
+      questionsV2.niveauSecurite[this.niveauSecurite].position >
+      questionsV2.niveauSecurite[niveauRecommande].position
+    );
+  }
+
   projectionPourMoteurV2(): ProjectionDescriptionPourMoteur {
     return {
       criticiteDonneesTraitees:

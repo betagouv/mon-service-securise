@@ -2,7 +2,11 @@ import {
   DescriptionServiceV2,
   DonneesDescriptionServiceV2,
 } from '../../src/modeles/descriptionServiceV2.ts';
-import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.js';
+import {
+  uneDescriptionDeNiveauDeSecuriteEstime1,
+  uneDescriptionDeNiveauDeSecuriteEstime3,
+  uneDescriptionV2Valide,
+} from '../constructeurs/constructeurDescriptionServiceV2.js';
 import {
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurDonneesObligatoiresManquantes,
@@ -113,6 +117,24 @@ describe('Une description service V2', () => {
         DescriptionServiceV2.niveauSecuriteMinimalRequis(donnees);
 
       expect(niveauSecuriteMinimalRequis).toBe('niveau3');
+    });
+  });
+
+  describe('sur demande de dépassement de la recommandation du niveau de sécurité', () => {
+    it('indique quand le niveau de sécurité est plus élevé que la recommandation', () => {
+      const descriptionV2 = uneDescriptionDeNiveauDeSecuriteEstime1()
+        .avecNiveauSecurite('niveau3')
+        .construis();
+
+      expect(descriptionV2.niveauSecuriteDepasseRecommandation()).toBe(true);
+    });
+
+    it("indique quand le niveau de sécurité n'est pas plus élevé que la recommandation", () => {
+      const descriptionV2 = uneDescriptionDeNiveauDeSecuriteEstime3()
+        .avecNiveauSecurite('niveau3')
+        .construis();
+
+      expect(descriptionV2.niveauSecuriteDepasseRecommandation()).toBe(false);
     });
   });
 
