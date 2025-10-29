@@ -6,7 +6,7 @@
   "scripts": {
     "build:front": "npx vite build --config svelte/vite.config.mts",
     "build:back": "npx tsc && cp src/moteurRegles/v2/mesures_V2_prod_30-09-2025.csv ./dist/src/moteurRegles/v2/",
-    "build:cree-utilisateur-demo": "npm run build:back && node dist/creeUtilisateurDemo.js",
+    "cree-utilisateur-demo": "node --import tsx creeUtilisateurDemo.js",
     "dev:back": "node --watch --import tsx server.ts",
     "dev:front": "cd svelte && npx vite dev --host 0.0.0.0",
     "migration-bdd": "npx tsx node_modules/knex/bin/cli.js migrate:latest",
