@@ -224,4 +224,22 @@ export class DescriptionServiceV2 {
           : 'LesDeux',
     };
   }
+
+  descriptionLocalisationDonnees(): string {
+    return this.localisationsDonneesTraitees
+      .map((l) => this.referentiel.localisationDonnees(l).nom)
+      .join(', ');
+  }
+
+  descriptionTypeService() {
+    return this.typeService
+      .map((t) => this.referentiel.typeService(t).nom)
+      .join(', ');
+  }
+
+  descriptionStatutDeploiement() {
+    return this.referentiel.descriptionStatutDeploiement(
+      this.statutDeploiement
+    );
+  }
 }

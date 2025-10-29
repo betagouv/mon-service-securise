@@ -1,12 +1,18 @@
 import { creeReferentiel } from './referentiel.js';
 import { Referentiel } from './referentiel.interface.js';
-import { mesuresV2 } from '../donneesReferentielMesuresV2.js';
+import {
+  LocalisationDonneesTraitees,
+  mesuresV2,
+  questionsV2,
+  StatutDeploiement,
+  TypeDeService,
+} from '../donneesReferentielMesuresV2.js';
 import {
   IdMesureV2,
   ReglesDuReferentielMesuresV2,
 } from './moteurRegles/v2/moteurReglesV2.js';
 
-export type DonneesReferentielV2 = {
+export type DonneesReferentielV2 = typeof questionsV2 & {
   mesures: typeof mesuresV2;
 };
 
@@ -16,10 +22,13 @@ type MethodesSpecifiquesReferentielV2 = {
 };
 
 export const creeReferentielV2 = (
-  donnees: DonneesReferentielV2 = { mesures: mesuresV2 }
+  donnees: DonneesReferentielV2 = { ...questionsV2, mesures: mesuresV2 }
 ): Referentiel & MethodesSpecifiquesReferentielV2 => {
   let reglesMoteurV2Enregistrees: ReglesDuReferentielMesuresV2 = [];
   const identifiantsMesure = new Set<string>(Object.keys(donnees.mesures));
+
+  const descriptionStatutDeploiement = (statutDeploiement: StatutDeploiement) =>
+    donnees.statutDeploiement[statutDeploiement].description;
 
   const enregistreReglesMoteurV2 = (regles: ReglesDuReferentielMesuresV2) => {
     reglesMoteurV2Enregistrees = regles;
@@ -28,14 +37,23 @@ export const creeReferentielV2 = (
   const estIdentifiantMesureConnu = (id: IdMesureV2) =>
     identifiantsMesure.has(id);
 
+  const localisationDonnees = (localisation: LocalisationDonneesTraitees) =>
+    donnees.localisationDonneesTraitees[localisation];
+
   const mesure = (idMesure: IdMesureV2) => donnees.mesures[idMesure];
 
+  const typeService = (type: TypeDeService) => donnees.typeDeService[type];
+
   const reglesMoteurV2 = () => reglesMoteurV2Enregistrees;
+
   return {
     ...creeReferentiel(),
+    descriptionStatutDeploiement,
     enregistreReglesMoteurV2,
     estIdentifiantMesureConnu,
+    localisationDonnees,
     mesure,
+    typeService,
     reglesMoteurV2,
     version: () => 'v2',
   };
