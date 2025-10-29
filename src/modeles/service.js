@@ -64,7 +64,7 @@ class Service {
     this.contributeurs = contributeurs.map((c) => new Contributeur(c));
     this.descriptionService =
       versionService === VersionService.v2
-        ? new DescriptionServiceV2(descriptionService)
+        ? new DescriptionServiceV2(descriptionService, referentiel)
         : new DescriptionService(descriptionService, referentiel);
     this.dossiers = new Dossiers({ dossiers }, referentiel);
 

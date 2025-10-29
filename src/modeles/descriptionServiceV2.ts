@@ -27,6 +27,7 @@ import {
   ErreurDonneesObligatoiresManquantes,
 } from '../erreurs.js';
 import { ProjectionDescriptionPourMoteur } from '../moteurRegles/v2/moteurReglesV2.js';
+import { Referentiel } from '../referentiel.interface.js';
 
 export type DonneesEntite = {
   siret: string;
@@ -72,8 +73,9 @@ export class DescriptionServiceV2 {
   private readonly categoriesDonneesTraitees: CategorieDonneesTraitees[];
   private readonly categoriesDonneesTraiteesSupplementaires: string[];
   private readonly localisationsDonneesTraitees: LocalisationDonneesTraitees[];
+  private readonly referentiel: Referentiel;
 
-  constructor(donnees: DonneesDescriptionServiceV2) {
+  constructor(donnees: DonneesDescriptionServiceV2, referentiel: Referentiel) {
     this.nomService = donnees.nomService;
     this.organisationResponsable = new Entite(donnees.organisationResponsable);
     this.statutDeploiement = donnees.statutDeploiement;
@@ -95,6 +97,7 @@ export class DescriptionServiceV2 {
     this.categoriesDonneesTraiteesSupplementaires =
       donnees.categoriesDonneesTraiteesSupplementaires;
     this.localisationsDonneesTraitees = donnees.localisationsDonneesTraitees;
+    this.referentiel = referentiel;
   }
 
   static donneesObligatoiresRenseignees(

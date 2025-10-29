@@ -16,6 +16,7 @@ import {
   VolumetrieDonneesTraitees,
 } from '../../donneesReferentielMesuresV2.js';
 import { TypeService } from '../../svelte/lib/creationV2/creationV2.types.js';
+import { creeReferentielV2 } from '../../src/referentielV2.js';
 
 class ConstructeurDescriptionServiceV2 {
   private readonly donnees: Partial<DonneesDescriptionServiceV2>;
@@ -44,7 +45,8 @@ class ConstructeurDescriptionServiceV2 {
 
   construis(): DescriptionServiceV2 {
     return new DescriptionServiceV2(
-      this.donnees as DonneesDescriptionServiceV2
+      this.donnees as DonneesDescriptionServiceV2,
+      creeReferentielV2()
     );
   }
 

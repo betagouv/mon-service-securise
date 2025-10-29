@@ -10,7 +10,7 @@ import {
   Permissions,
   Rubriques,
 } from '../../modeles/autorisations/gestionDroits.js';
-import { RequestRouteConnecte } from './routesConnecte.types.js';
+import { RequestRouteConnecteService } from './routesConnecte.types.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 
@@ -32,12 +32,15 @@ const routesConnecteApiServiceV2 = ({
     valideParams(z.strictObject({ id: z.uuidv4() })),
     valideBody(z.strictObject(reglesValidationDescriptionServiceV2)),
     async (requete, reponse) => {
-      const { idUtilisateurCourant } =
-        requete as unknown as RequestRouteConnecte;
+      const { idUtilisateurCourant, service } =
+        requete as unknown as RequestRouteConnecteService;
       await depotDonnees.ajouteDescriptionService(
         idUtilisateurCourant,
         requete.params.id,
-        new DescriptionServiceV2(requete.body as DonneesDescriptionServiceV2)
+        new DescriptionServiceV2(
+          requete.body as DonneesDescriptionServiceV2,
+          service.referentiel
+        )
       );
       reponse.sendStatus(200);
     }
