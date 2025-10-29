@@ -169,3 +169,15 @@ class ConstructeurDescriptionServiceV2 {
 
 export const uneDescriptionV2Valide = () =>
   new ConstructeurDescriptionServiceV2();
+
+export const uneDescriptionDeNiveauDeSecuriteEstime1 = () =>
+  uneDescriptionV2Valide()
+    .avecDureeDysfonctionnementAcceptable('plusDe24h')
+    .avecCategoriesDonneesTraitees([])
+    .avecNiveauSecurite('niveau1');
+
+export const uneDescriptionDeNiveauDeSecuriteEstime3 = () =>
+  uneDescriptionV2Valide()
+    .avecDureeDysfonctionnementAcceptable('moinsDe4h')
+    .avecCategoriesDonneesTraitees(['donneesSensibles'])
+    .avecNiveauSecurite('niveau3');
