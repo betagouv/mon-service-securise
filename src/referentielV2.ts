@@ -1,6 +1,8 @@
 import { creeReferentiel } from './referentiel.js';
 import { Referentiel } from './referentiel.interface.js';
 import {
+  CategorieDonneesTraitees,
+  DureeDysfonctionnementAcceptable,
   LocalisationDonneesTraitees,
   mesuresV2,
   questionsV2,
@@ -31,6 +33,16 @@ export const creeReferentielV2 = (
   let reglesMoteurV2Enregistrees: ReglesDuReferentielMesuresV2 = [];
   const identifiantsMesure = new Set<string>(Object.keys(donnees.mesures));
 
+  const descriptionDelaiAvantImpactCritique = (
+    dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable
+  ) =>
+    donnees.dureeDysfonctionnementAcceptable[dureeDysfonctionnementAcceptable]
+      .nom;
+
+  const descriptionsDonneesCaracterePersonnel = (
+    donneesCaracterePersonnel: CategorieDonneesTraitees
+  ) => donnees.categorieDonneesTraitees[donneesCaracterePersonnel].nom;
+
   const descriptionSpecificiteProjet = (specificiteProjet: SpecificiteProjet) =>
     donnees.specificiteProjet[specificiteProjet].nom;
 
@@ -55,6 +67,8 @@ export const creeReferentielV2 = (
 
   return {
     ...creeReferentiel(),
+    descriptionDelaiAvantImpactCritique,
+    descriptionsDonneesCaracterePersonnel,
     descriptionSpecificiteProjet,
     descriptionStatutDeploiement,
     enregistreReglesMoteurV2,

@@ -10,7 +10,7 @@ mixin bloc-description(liste, legende)
 block page
   if donneesDescription.versionService === 'v1'
     +bloc-description(donneesDescription.fonctionnalites, 'Fonctionnalités offertes')
-    +bloc-description(donneesDescription.donneesStockees, 'Données stockées')
-    +bloc-description([donneesDescription.dureeDysfonctionnementMaximumAcceptable], 'Durée maximale acceptable de dysfonctionnement grave du service')
   else
     +bloc-description(donneesDescription.specificitesProjet, 'Spécificités du projet')
+  +bloc-description(donneesDescription.donneesStockees, 'Données stockées')
+  +bloc-description([donneesDescription.dureeDysfonctionnementMaximumAcceptable], 'Durée maximale acceptable de dysfonctionnement grave du service')

@@ -16,6 +16,17 @@ export class ObjetPDFAnnexeDescriptionV2 {
 
   donnees() {
     return {
+      donneesStockees: [
+        ...this.service.descriptionService.categoriesDonneesTraitees.map((c) =>
+          this.referentiel.descriptionsDonneesCaracterePersonnel(c)
+        ),
+        ...this.service.descriptionService
+          .categoriesDonneesTraiteesSupplementaires,
+      ],
+      dureeDysfonctionnementMaximumAcceptable:
+        this.referentiel.descriptionDelaiAvantImpactCritique(
+          this.service.descriptionService.dureeDysfonctionnementAcceptable
+        ),
       nomService: this.service.nomService(),
       versionService: this.service.version(),
       specificitesProjet:
