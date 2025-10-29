@@ -35,7 +35,6 @@ import { fabriqueServiceVerificationCoherenceSels } from './src/sel/serviceVerif
 import { sendinblue } from './src/adaptateurs/adaptateurEnvironnement.js';
 import { fabriqueAdaptateurMailMemoire } from './src/adaptateurs/adaptateurMailMemoire.js';
 import { fabriqueReferentiel } from './src/fabriqueReferentiel.js';
-import { fabriqueReferentielV2 } from './src/fabriqueReferentielV2.js';
 
 const adaptateurHorloge = fabriqueAdaptateurHorloge();
 const adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi();
@@ -53,8 +52,8 @@ const adaptateurMail = sendinblue().clefAPIEmail()
 const busEvenements = new BusEvenements({ adaptateurGestionErreur });
 const port = process.env.PORT || 3000;
 
-const referentiel = fabriqueReferentiel();
-const referentielV2 = fabriqueReferentielV2();
+const referentiel = fabriqueReferentiel().v1();
+const referentielV2 = fabriqueReferentiel().v2();
 const moteurRegles = new MoteurRegles(referentiel);
 const serviceCgu = fabriqueServiceCgu({ referentiel });
 const depotDonnees = DepotDonnees.creeDepot({
