@@ -42,11 +42,18 @@
     modificationPriorite: { priorite: PrioriteMesure | undefined };
   }>();
 
-  $: texteSurligne = nom.replace(
-    new RegExp($rechercheTextuelle, 'ig'),
-    (texte: string) =>
-      $rechercheTextuelle ? `<mark>${encode(texte)}</mark>` : encode(texte)
-  );
+  let texteSurligne = '';
+  $: {
+    const rechercheEncapsuleAvecMarqueur = nom.replace(
+      new RegExp($rechercheTextuelle, 'ig'),
+      (texte: string) => ($rechercheTextuelle ? `_%%${texte}%%_` : texte)
+    );
+    const nomCompletEncodeAvecMarqueur = encode(rechercheEncapsuleAvecMarqueur);
+    texteSurligne = nomCompletEncodeAvecMarqueur.replace(
+      new RegExp(/_%%(.*?)%%_/, 'ig'),
+      (_, texte: string) => `<mark>${texte}</mark>`
+    );
+  }
 </script>
 
 <tr class="ligne-de-mesure">
