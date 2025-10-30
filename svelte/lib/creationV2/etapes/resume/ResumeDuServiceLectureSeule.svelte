@@ -97,12 +97,8 @@
     </dd>
     <dt>Volume des données traitées :</dt>
     <dd>{donnees.volumetrieDonneesTraitees}</dd>
-    <dt>Localisation des données traitées</dt>
-    <dd>
-      {#each donnees.localisationsDonneesTraitees as l}
-        <span>{l}</span>
-      {/each}
-    </dd>
+    <dt>Localisation des données traitées :</dt>
+    <dd>{donnees.localisationDonneesTraitees}</dd>
   </dl>
 </div>
 

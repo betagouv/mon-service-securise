@@ -22,7 +22,7 @@ export const unBrouillonVierge = (): BrouillonServiceV2 => ({
   categoriesDonneesTraitees: [],
   categoriesDonneesTraiteesSupplementaires: [],
   volumetrieDonneesTraitees: '',
-  localisationsDonneesTraitees: [],
+  localisationDonneesTraitees: '',
   niveauSecurite: '',
 });
 
