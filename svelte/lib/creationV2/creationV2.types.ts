@@ -47,6 +47,6 @@ export type DescriptionServiceV2 = {
   categoriesDonneesTraitees: CategorieDonneesTraitees[];
   categoriesDonneesTraiteesSupplementaires: string[];
   volumetrieDonneesTraitees: VolumetrieDonneesTraitees | '';
-  localisationsDonneesTraitees: LocalisationDonneesTraitees[];
+  localisationDonneesTraitees: LocalisationDonneesTraitees | '';
   niveauSecurite: NiveauSecurite | '';
 };

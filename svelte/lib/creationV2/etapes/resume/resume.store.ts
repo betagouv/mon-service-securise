@@ -62,11 +62,10 @@ export const convertisDonneesDescriptionEnLibelles = (
     questionsV2.volumetrieDonneesTraitees[
       donnees.volumetrieDonneesTraitees as VolumetrieDonneesTraitees
     ].nom,
-  localisationsDonneesTraitees: donnees.localisationsDonneesTraitees.map(
-    (l) =>
-      questionsV2.localisationDonneesTraitees[l as LocalisationDonneesTraitees]
-        .nom
-  ),
+  localisationDonneesTraitees:
+    questionsV2.localisationDonneesTraitees[
+      donnees.localisationDonneesTraitees as LocalisationDonneesTraitees
+    ].nom,
 });
 
 export const resume = derived<
