@@ -13,7 +13,7 @@ class ConstructeurBrouillonService {
       audienceCible: 'moyenne',
       categoriesDonneesTraiteesSupplementaires: [],
       dureeDysfonctionnementAcceptable: 'moinsDe4h',
-      localisationsDonneesTraitees: ['UE'],
+      localisationDonneesTraitees: 'UE',
       ouvertureSysteme: 'accessibleSurInternet',
       pointsAcces: [],
       specificitesProjet: ['accesPhysiqueAuxBureaux'],
