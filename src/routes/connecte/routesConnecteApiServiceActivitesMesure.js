@@ -11,7 +11,6 @@ const { SECURISER } = Rubriques;
 const routesConnecteApiServiceActivitesMesure = ({
   middleware,
   depotDonnees,
-  referentiel,
 }) => {
   const routes = express.Router();
 
@@ -19,9 +18,9 @@ const routesConnecteApiServiceActivitesMesure = ({
     '/:id/mesures/:idMesure/activites',
     middleware.trouveService({ [SECURISER]: LECTURE }),
     async (requete, reponse) => {
-      reponse.status(200);
+      const { service } = requete;
       const activites = await depotDonnees.lisActivitesMesure(
-        requete.service.id,
+        service.id,
         requete.params.idMesure
       );
 
@@ -30,7 +29,7 @@ const routesConnecteApiServiceActivitesMesure = ({
         idActeur: a.idActeur,
         identifiantNumeriqueMesure:
           a.typeMesure === 'generale'
-            ? referentiel.mesure(a.idMesure).identifiantNumerique
+            ? service.referentiel.mesure(a.idMesure).identifiantNumerique
             : undefined,
         type: a.type,
         details: a.details,
