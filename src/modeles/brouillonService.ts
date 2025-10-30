@@ -45,7 +45,7 @@ export class BrouillonService {
 
   metsAJourPropriete<T extends ProprietesBrouillonService>(
     nomPropriete: T,
-    valeur: Required<DonneesBrouillonService>[T]
+    valeur: DonneesBrouillonService[T]
   ) {
     this.donnees[nomPropriete] = valeur;
   }
