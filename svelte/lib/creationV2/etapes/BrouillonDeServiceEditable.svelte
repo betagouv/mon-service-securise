@@ -110,19 +110,15 @@
     />
 
     <dsfr-textarea
-      label="Présentation du service*"
+      label="Présentation du service"
       type="text"
       id="presentation"
       rows={3}
       disabled={seulementNomServiceEditable}
       value={donnees.presentation}
-      status={!seulementNomServiceEditable && donnees.presentation.length < 1
-        ? 'error'
-        : 'default'}
-      errorMessage="La présentation du service est obligatoire."
       on:blur={async (e) => {
         donnees.presentation = e.target.value;
-        if (donnees.presentation.length >= 1)
+        if (donnees.presentation && donnees.presentation.length >= 1)
           await champModifie('presentation', donnees.presentation);
       }}
     />

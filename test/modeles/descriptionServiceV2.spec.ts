@@ -194,16 +194,6 @@ describe('Une description service V2', () => {
       expect(estValide).toBe(false);
     });
 
-    it("répond false s'il manque la présentation", () => {
-      const d = uneDescriptionV2Valide()
-        .avecPresentation('')
-        .donneesDescription();
-
-      const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
-
-      expect(estValide).toBe(false);
-    });
-
     it("répond false s'il manque le type de service", () => {
       const d = uneDescriptionV2Valide()
         .avecTypesService([])
