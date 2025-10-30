@@ -27,7 +27,7 @@ export type DonneesBrouillonService = {
   >;
   categoriesDonneesTraiteesSupplementaires?: string[];
   volumetrieDonneesTraitees?: keyof typeof questionsV2.volumetrieDonneesTraitees;
-  localisationsDonneesTraitees?: LocalisationDonneesTraitees[];
+  localisationDonneesTraitees?: LocalisationDonneesTraitees;
   niveauSecurite?: NiveauSecurite;
 };
 
@@ -75,8 +75,7 @@ export class BrouillonService {
         categoriesDonneesTraiteesSupplementaires:
           this.donnees.categoriesDonneesTraiteesSupplementaires || [],
         volumetrieDonneesTraitees: this.donnees.volumetrieDonneesTraitees!,
-        localisationsDonneesTraitees:
-          this.donnees.localisationsDonneesTraitees!,
+        localisationDonneesTraitees: this.donnees.localisationDonneesTraitees!,
         niveauSecurite: this.donnees.niveauSecurite!,
       },
     };
@@ -106,7 +105,7 @@ export class BrouillonService {
       ...siPresente('categoriesDonneesTraitees'),
       ...siPresente('categoriesDonneesTraiteesSupplementaires'),
       ...siPresente('volumetrieDonneesTraitees'),
-      ...siPresente('localisationsDonneesTraitees'),
+      ...siPresente('localisationDonneesTraitees'),
       ...siPresente('niveauSecurite'),
     };
   }

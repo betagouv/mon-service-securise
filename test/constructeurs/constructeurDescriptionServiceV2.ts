@@ -27,7 +27,7 @@ class ConstructeurDescriptionServiceV2 {
       audienceCible: 'moyenne',
       categoriesDonneesTraiteesSupplementaires: [],
       dureeDysfonctionnementAcceptable: 'moinsDe4h',
-      localisationsDonneesTraitees: ['UE'],
+      localisationDonneesTraitees: 'UE',
       ouvertureSysteme: 'accessibleSurInternet',
       pointsAcces: [],
       specificitesProjet: [],
@@ -141,9 +141,9 @@ class ConstructeurDescriptionServiceV2 {
   }
 
   avecLocalisationDonneesTraitees(
-    localisations: LocalisationDonneesTraitees[]
+    localisations: LocalisationDonneesTraitees | undefined
   ): ConstructeurDescriptionServiceV2 {
-    this.donnees.localisationsDonneesTraitees = localisations;
+    this.donnees.localisationDonneesTraitees = localisations;
     return this;
   }
 

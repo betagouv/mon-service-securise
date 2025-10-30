@@ -39,7 +39,7 @@ describe('Une description service V2', () => {
         dureeDysfonctionnementAcceptable: 'moinsDe24h',
         categoriesDonneesTraitees: ['documentsRHSensibles'],
         categoriesDonneesTraiteesSupplementaires: ['numéros de téléphones'],
-        localisationsDonneesTraitees: ['horsUE'],
+        localisationDonneesTraitees: 'horsUE',
       },
       referentiel
     );
@@ -67,7 +67,7 @@ describe('Une description service V2', () => {
       dureeDysfonctionnementAcceptable: 'moinsDe24h',
       categoriesDonneesTraitees: ['documentsRHSensibles'],
       categoriesDonneesTraiteesSupplementaires: ['numéros de téléphones'],
-      localisationsDonneesTraitees: ['horsUE'],
+      localisationDonneesTraitees: 'horsUE',
     });
   });
 
@@ -94,7 +94,7 @@ describe('Une description service V2', () => {
         dureeDysfonctionnementAcceptable: 'moinsDe24h',
         categoriesDonneesTraitees: ['documentsRHSensibles'],
         categoriesDonneesTraiteesSupplementaires: ['numéros de téléphones'],
-        localisationsDonneesTraitees: ['horsUE'],
+        localisationDonneesTraitees: 'horsUE',
       },
       referentiel
     );
@@ -266,7 +266,7 @@ describe('Une description service V2', () => {
 
     it("répond false s'il manque la localisation des données traitées", () => {
       const d = uneDescriptionV2Valide()
-        .avecLocalisationDonneesTraitees([])
+        .avecLocalisationDonneesTraitees(undefined)
         .donneesDescription();
 
       const estValide = DescriptionServiceV2.donneesObligatoiresRenseignees(d);
@@ -288,7 +288,7 @@ describe('Une description service V2', () => {
 
     it('jette une erreur si les données sont incomplètes', () => {
       const d = uneDescriptionV2Valide()
-        .avecLocalisationDonneesTraitees([])
+        .avecLocalisationDonneesTraitees(undefined)
         .donneesDescription();
 
       const estValide = () => DescriptionServiceV2.valideDonneesCreation(d);
@@ -345,7 +345,7 @@ describe('Une description service V2', () => {
 
     it('indique si les données sont hébergées hors UE', () => {
       const horsUE = uneDescriptionV2Valide()
-        .avecLocalisationDonneesTraitees(['horsUE'])
+        .avecLocalisationDonneesTraitees('horsUE')
         .construis();
 
       const p = horsUE.projectionPourMoteurV2();
@@ -417,12 +417,12 @@ describe('Une description service V2', () => {
   });
 
   describe('sur demande de description de ses données via le référentiel', () => {
-    it('sait décrire ses localisations de données', () => {
+    it('sait décrire sa localisation de données', () => {
       const description = uneDescriptionV2Valide()
-        .avecLocalisationDonneesTraitees(['horsUE', 'UE'])
+        .avecLocalisationDonneesTraitees('horsUE')
         .construis();
       expect(description.descriptionLocalisationDonnees()).toBe(
-        "Hors Union européenne, Au sein de l'Union européenne"
+        'Hors Union européenne'
       );
     });
 

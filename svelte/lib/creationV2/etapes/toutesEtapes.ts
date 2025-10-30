@@ -13,7 +13,7 @@ import QuestionAudienceCible from './etape3/QuestionAudienceCible.svelte';
 import QuestionDureeDysfonctionnement from './etape3/QuestionDureeDysfonctionnement.svelte';
 import QuestionCategoriesDonneesTraitees from './etape3/QuestionCategoriesDonneesTraitees.svelte';
 import QuestionVolumetrieDonneesTraitees from './etape3/QuestionVolumetrieDonneesTraitees.svelte';
-import QuestionLocalisationsDonneesTraitees from './etape3/QuestionLocalisationsDonneesTraitees.svelte';
+import QuestionLocalisationDonneesTraitees from './etape3/QuestionLocalisationDonneesTraitees.svelte';
 import EtapeResumeDuService from './resume/EtapeResumeDuService.svelte';
 import EtapeCreationEnModeRapide from './modeRapide/EtapeCreationEnModeRapide.svelte';
 import EtapeNiveauSecurite from './EtapeNiveauSecurite.svelte';
@@ -210,11 +210,12 @@ export const toutesEtapes: Array<EtapeDuWizard> = [
         avecAvanceRapide: true,
       },
       {
-        clesPropriete: ['localisationsDonneesTraitees'],
-        composant: QuestionLocalisationsDonneesTraitees,
+        clesPropriete: ['localisationDonneesTraitees'],
+        composant: QuestionLocalisationDonneesTraitees,
         explications: [
           "Cette information permet de savoir si des mesures liées à la localisation des données sont nécessaires à l'homologation.",
         ],
+        avecAvanceRapide: true,
       },
     ],
   },

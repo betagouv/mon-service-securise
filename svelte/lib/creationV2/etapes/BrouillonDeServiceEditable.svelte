@@ -370,7 +370,7 @@
       placeholderDisabled
     />
 
-    <lab-anssi-multi-select
+    <dsfr-select
       label="Localisation des données traitées*"
       placeholder="Sélectionnez une ou plusieurs valeurs"
       options={Object.entries(questionsV2.localisationDonneesTraitees).map(
@@ -380,21 +380,15 @@
           label: nom,
         })
       )}
-      values={donnees.localisationsDonneesTraitees}
+      values={donnees.localisationDonneesTraitees}
       disabled={seulementNomServiceEditable}
-      status={!seulementNomServiceEditable &&
-      donnees.localisationsDonneesTraitees.length < 1
-        ? 'error'
-        : 'default'}
-      errorMessage="La localisation des données est obligatoire."
-      id="localisationsDonneesTraitees"
+      id="localisationDonneesTraitees"
       on:valuechanged={async (e) => {
-        donnees.localisationsDonneesTraitees = e.detail;
-        if (donnees.localisationsDonneesTraitees.length >= 1)
-          await champModifie(
-            'localisationsDonneesTraitees',
-            donnees.localisationsDonneesTraitees
-          );
+        donnees.localisationDonneesTraitees = e.detail;
+        await champModifie(
+          'localisationDonneesTraitees',
+          donnees.localisationDonneesTraitees
+        );
       }}
     />
   </div>

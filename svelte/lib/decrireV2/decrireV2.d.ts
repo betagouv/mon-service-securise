@@ -43,6 +43,6 @@ export type DescriptionServiceV2API = {
   categoriesDonneesTraitees: CategorieDonneesTraitees[];
   categoriesDonneesTraiteesSupplementaires: string[];
   volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
-  localisationsDonneesTraitees: LocalisationDonneesTraitees[];
+  localisationDonneesTraitees: LocalisationDonneesTraitees;
   niveauSecurite: NiveauSecurite;
 };

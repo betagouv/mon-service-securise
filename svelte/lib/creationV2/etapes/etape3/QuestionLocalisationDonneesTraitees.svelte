@@ -14,34 +14,28 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: estComplete = $leBrouillon.localisationsDonneesTraitees.length > 0;
+  $: estComplete = !!$leBrouillon.localisationDonneesTraitees;
 
   $: emetEvenement('champModifie', {
-    localisationsDonneesTraitees: $leBrouillon.localisationsDonneesTraitees,
+    localisationDonneesTraitees: $leBrouillon.localisationDonneesTraitees,
   });
 
   const illustrations: Record<LocalisationDonneesTraitees, string> = {
     UE: 'UE.svg',
     horsUE: 'horsUE.svg',
   };
-
-  const localisationsDonneesTraitees = Object.entries(
-    questionsV2.localisationDonneesTraitees
-  ) as [LocalisationDonneesTraitees, { nom: string }][];
 </script>
 
 <label for="localisations-donnees-traitees" class="titre-question">
   Où sont localisées les données traitées ?*
-
-  <span class="indication">Selectionnez une ou plusieurs réponses</span>
-  {#each localisationsDonneesTraitees as [idType, details]}
+  <span class="indication">Sélectionnez une réponse</span>
+  {#each Object.entries(questionsV2.localisationDonneesTraitees) as [idType, { nom }]}
     {@const illustration = `/statique/assets/images/localisationDonneesTraitees/${illustrations[idType]}`}
-    <CheckboxIllustree
+    <Radio
       id={idType}
-      nomGroupe="localisations-donnees-traitees"
+      {nom}
       {illustration}
-      {details}
-      bind:valeurs={$leBrouillon.localisationsDonneesTraitees}
+      bind:valeur={$leBrouillon.localisationDonneesTraitees}
     />
   {/each}
 </label>
