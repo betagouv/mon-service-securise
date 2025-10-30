@@ -52,7 +52,7 @@ export type DonneesDescriptionServiceV2 = {
   categoriesDonneesTraitees: CategorieDonneesTraitees[];
   categoriesDonneesTraiteesSupplementaires: string[];
   volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
-  localisationsDonneesTraitees: LocalisationDonneesTraitees[];
+  localisationDonneesTraitees: LocalisationDonneesTraitees;
 };
 
 export class DescriptionServiceV2 {
@@ -72,7 +72,7 @@ export class DescriptionServiceV2 {
   private readonly activitesExternalisees: ActiviteExternalisee[];
   private readonly ouvertureSysteme: OuvertureSysteme;
   private readonly audienceCible: AudienceCible;
-  private readonly localisationsDonneesTraitees: LocalisationDonneesTraitees[];
+  private readonly localisationDonneesTraitees: LocalisationDonneesTraitees;
   private readonly referentiel: Referentiel;
 
   constructor(donnees: DonneesDescriptionServiceV2, referentiel: Referentiel) {
@@ -96,7 +96,7 @@ export class DescriptionServiceV2 {
     this.categoriesDonneesTraitees = donnees.categoriesDonneesTraitees;
     this.categoriesDonneesTraiteesSupplementaires =
       donnees.categoriesDonneesTraiteesSupplementaires;
-    this.localisationsDonneesTraitees = donnees.localisationsDonneesTraitees;
+    this.localisationDonneesTraitees = donnees.localisationDonneesTraitees;
     this.referentiel = referentiel;
   }
 
@@ -117,8 +117,7 @@ export class DescriptionServiceV2 {
       !!donnees.audienceCible &&
       !!donnees.dureeDysfonctionnementAcceptable &&
       !!donnees.volumetrieDonneesTraitees &&
-      !!donnees.localisationsDonneesTraitees &&
-      donnees.localisationsDonneesTraitees?.length > 0
+      !!donnees.localisationDonneesTraitees
     );
   }
 
@@ -168,7 +167,7 @@ export class DescriptionServiceV2 {
       categoriesDonneesTraitees: this.categoriesDonneesTraitees,
       categoriesDonneesTraiteesSupplementaires:
         this.categoriesDonneesTraiteesSupplementaires,
-      localisationsDonneesTraitees: this.localisationsDonneesTraitees,
+      localisationDonneesTraitees: this.localisationDonneesTraitees,
     };
   }
 
@@ -213,7 +212,7 @@ export class DescriptionServiceV2 {
       criticiteDisponibilite: criticiteDeDisponibilite(
         this.dureeDysfonctionnementAcceptable
       ),
-      donneesHorsUE: this.localisationsDonneesTraitees.includes('horsUE'),
+      donneesHorsUE: this.localisationDonneesTraitees === 'horsUE',
       criticiteOuverture: criticiteOuverture(this.ouvertureSysteme),
       specificitesProjet: this.specificitesProjet,
       typeService: this.typeService,
@@ -226,9 +225,9 @@ export class DescriptionServiceV2 {
   }
 
   descriptionLocalisationDonnees(): string {
-    return this.localisationsDonneesTraitees
-      .map((l) => this.referentiel.localisationDonnees(l).nom)
-      .join(', ');
+    return this.referentiel.localisationDonnees(
+      this.localisationDonneesTraitees
+    ).nom;
   }
 
   descriptionTypeService() {

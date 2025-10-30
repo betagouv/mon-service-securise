@@ -29,9 +29,9 @@ const reglesValidationsCommunesABrouillonEtDescription = {
   volumetrieDonneesTraitees: z.enum(
     Object.keys(questionsV2.volumetrieDonneesTraitees)
   ),
-  localisationsDonneesTraitees: z
-    .array(z.enum(Object.keys(questionsV2.localisationDonneesTraitees)))
-    .nonempty(),
+  localisationDonneesTraitees: z.enum(
+    Object.keys(questionsV2.localisationDonneesTraitees)
+  ),
   niveauSecurite: z.enum(Object.keys(questionsV2.niveauSecurite)),
 };
 
