@@ -49,6 +49,9 @@ export const creeReferentielV2 = (
   const descriptionStatutDeploiement = (statutDeploiement: StatutDeploiement) =>
     donnees.statutDeploiement[statutDeploiement].description;
 
+  const descriptionsStatutDeploiement = () =>
+    Object.values(donnees.statutDeploiement).map((v) => v.description);
+
   const enregistreReglesMoteurV2 = (regles: ReglesDuReferentielMesuresV2) => {
     reglesMoteurV2Enregistrees = regles;
   };
@@ -71,6 +74,7 @@ export const creeReferentielV2 = (
     descriptionsDonneesCaracterePersonnel,
     descriptionSpecificiteProjet,
     descriptionStatutDeploiement,
+    descriptionsStatutDeploiement,
     enregistreReglesMoteurV2,
     estIdentifiantMesureConnu,
     localisationDonnees,

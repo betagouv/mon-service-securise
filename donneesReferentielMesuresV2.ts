@@ -1417,7 +1417,7 @@ export const questionsV2 = {
       nom: 'Hors Union européenne',
     },
   },
-};
+} as const;
 
 export type CategorieDonneesTraitees =
   keyof typeof questionsV2.categorieDonneesTraitees;
@@ -1436,3 +1436,6 @@ export type ActiviteExternalisee =
   keyof typeof questionsV2.activiteExternalisee;
 export type StatutDeploiement = keyof typeof questionsV2.statutDeploiement;
 export type NiveauSecurite = keyof typeof questionsV2.niveauSecurite;
+
+export type DescriptionStatutDeploiement =
+  (typeof questionsV2.statutDeploiement)[StatutDeploiement]['description'];
