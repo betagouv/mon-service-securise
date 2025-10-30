@@ -3,15 +3,21 @@
   export let nom: string;
   export let valeur: string;
   export let exemple: string | undefined = undefined;
+  export let illustration: string | undefined = undefined;
 </script>
 
-<div class="conteneur-radio">
+<div class="conteneur-radio" class:avec-illustration={!!illustration}>
   <input type="radio" {id} value={id} bind:group={valeur} on:change />
   <label for={id}>
-    {nom}
-    {#if exemple}
-      <span>{exemple}</span>
+    {#if illustration}
+      <img src={illustration} alt="" />
     {/if}
+    <span class="details">
+      {nom}
+      {#if exemple}
+        <span>{exemple}</span>
+      {/if}
+    </span>
   </label>
 </div>
 
@@ -49,16 +55,21 @@
 
     label {
       width: 100%;
-      margin: 12px 24px;
       font-size: 1rem;
       line-height: 1.5rem;
       font-weight: normal;
+      margin: 12px 24px;
 
       display: flex;
-      flex-direction: column;
-      justify-content: center;
+      flex-direction: row;
 
-      span {
+      .details {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      span:not(.details) {
         font-size: 0.75rem;
         line-height: 1.25rem;
         color: #666;
@@ -70,6 +81,25 @@
       width: 0;
       margin: 0;
       padding: 0;
+    }
+
+    &.avec-illustration {
+      padding: 4px 4px 4px 0;
+
+      label {
+        margin: 0;
+
+        .details {
+          margin-left: 24px;
+        }
+      }
+
+      img {
+        width: 56px;
+        height: 56px;
+        padding: 12px 16px;
+        border-right: 1px solid #dddddd;
+      }
     }
   }
 </style>
