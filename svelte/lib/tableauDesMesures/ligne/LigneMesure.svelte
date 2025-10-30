@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import DOMPurify from 'isomorphic-dompurify';
+  import { encode } from 'html-entities';
   import type {
     MesureGenerale,
     MesureSpecifique,
@@ -44,14 +44,15 @@
 
   $: texteSurligne = nom.replace(
     new RegExp($rechercheTextuelle, 'ig'),
-    (texte: string) => ($rechercheTextuelle ? `<mark>${texte}</mark>` : texte)
+    (texte: string) =>
+      $rechercheTextuelle ? `<mark>${encode(texte)}</mark>` : encode(texte)
   );
 </script>
 
 <tr class="ligne-de-mesure">
   <td class="titre-mesure" on:click on:keypress>
     <p class="titre">
-      {@html DOMPurify.sanitize(texteSurligne, { ALLOWED_TAGS: ['mark'] })}
+      {@html texteSurligne}
     </p>
     <div class="conteneur-cartouches">
       <CartoucheReferentiel {referentiel} />
