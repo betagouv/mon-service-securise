@@ -40,7 +40,7 @@ export type DonneesDescriptionServiceV2 = {
   organisationResponsable: DonneesEntite;
   niveauSecurite: NiveauSecurite;
   statutDeploiement: StatutDeploiement;
-  presentation: string;
+  presentation?: string;
   pointsAcces: { description: string }[];
   typeService: TypeDeService[];
   specificitesProjet: SpecificiteProjet[];
@@ -65,7 +65,7 @@ export class DescriptionServiceV2 {
   readonly categoriesDonneesTraitees: CategorieDonneesTraitees[];
   readonly categoriesDonneesTraiteesSupplementaires: string[];
   readonly dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
-  private readonly presentation: string;
+  private readonly presentation: string | undefined;
   private readonly pointsAcces: PointsAcces;
   private readonly typeService: TypeDeService[];
   private readonly typeHebergement: TypeHebergement;
@@ -109,7 +109,6 @@ export class DescriptionServiceV2 {
       !!donnees.organisationResponsable &&
       !!donnees.organisationResponsable.siret &&
       !!donnees.statutDeploiement &&
-      !!donnees.presentation &&
       !!donnees.typeService &&
       donnees.typeService.length > 0 &&
       !!donnees.typeHebergement &&
