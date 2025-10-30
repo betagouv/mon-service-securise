@@ -22,7 +22,7 @@ describe('Un brouillon de Service v2', () => {
         categoriesDonneesTraitees: ['secretsDEntreprise'],
         categoriesDonneesTraiteesSupplementaires: ['une catégorie'],
         volumetrieDonneesTraitees: 'eleve',
-        localisationsDonneesTraitees: ['UE'],
+        localisationDonneesTraitees: 'UE',
         niveauSecurite: 'niveau1',
       });
 
@@ -46,7 +46,7 @@ describe('Un brouillon de Service v2', () => {
           categoriesDonneesTraitees: ['secretsDEntreprise'],
           categoriesDonneesTraiteesSupplementaires: ['une catégorie'],
           volumetrieDonneesTraitees: 'eleve',
-          localisationsDonneesTraitees: ['UE'],
+          localisationDonneesTraitees: 'UE',
         },
       });
     });

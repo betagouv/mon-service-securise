@@ -55,7 +55,7 @@ describe('Le moteur de règles V2', () => {
     ]);
 
     const avecDonneesHorsUE = uneDescriptionV2Valide()
-      .avecLocalisationDonneesTraitees(['horsUE'])
+      .avecLocalisationDonneesTraitees('horsUE')
       .construis();
     const mesures = v2.mesures(avecDonneesHorsUE);
 

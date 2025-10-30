@@ -60,7 +60,7 @@ const routesConnecteApiBrouillonService = ({
           'categoriesDonneesTraitees',
           'categoriesDonneesTraiteesSupplementaires',
           'volumetrieDonneesTraitees',
-          'localisationsDonneesTraitees',
+          'localisationDonneesTraitees',
           'niveauSecurite',
         ]),
       })
