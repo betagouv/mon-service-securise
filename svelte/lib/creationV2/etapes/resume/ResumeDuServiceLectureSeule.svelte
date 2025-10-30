@@ -27,7 +27,7 @@
       {donnees.statutDeploiement}
     </dd>
     <dt>Présentation :</dt>
-    <dd>{donnees.presentation}</dd>
+    <dd>{donnees.presentation || '-'}</dd>
     <dt>URL du service :</dt>
     <dd>
       {#if donnees.pointsAcces.length > 0}

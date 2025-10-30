@@ -18,7 +18,7 @@ import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
 
 export const convertisDonneesDescriptionEnLibelles = (
   donnees: DescriptionServiceV2
-): Record<keyof DescriptionServiceV2, string | string[]> => ({
+): Record<keyof DescriptionServiceV2, string | string[] | undefined> => ({
   niveauSecurite: donnees.niveauSecurite,
   nomService: donnees.nomService,
   siret: donnees.siret,
@@ -70,5 +70,5 @@ export const convertisDonneesDescriptionEnLibelles = (
 
 export const resume = derived<
   [typeof leBrouillon],
-  Record<keyof DescriptionServiceV2, string | string[]>
+  Record<keyof DescriptionServiceV2, string | string[] | undefined>
 >([leBrouillon], ([$b]) => convertisDonneesDescriptionEnLibelles($b));
