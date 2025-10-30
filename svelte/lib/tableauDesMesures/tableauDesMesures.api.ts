@@ -1,4 +1,3 @@
-import { decode } from 'html-entities';
 import type {
   IdMesureGenerale,
   IdService,
@@ -10,42 +9,13 @@ import type {
 
 const formatteurDate = new Intl.DateTimeFormat('en-EN');
 
-const decodeEntitesHtml = (mesures: Mesures) => {
-  mesures.mesuresSpecifiques = mesures.mesuresSpecifiques.map(
-    (m: MesureSpecifique) => ({
-      ...m,
-      description: decode(m.description),
-      descriptionLongue: decode(m.descriptionLongue),
-      modalites: decode(m.modalites),
-    })
-  );
-
-  for (const idMesure in mesures.mesuresGenerales) {
-    const laMesure = mesures.mesuresGenerales[idMesure];
-
-    if (!laMesure.modalites) continue;
-
-    laMesure.modalites = decode(laMesure.modalites);
-  }
-};
-
-const decodeContributeursHtml = (contributeurs: Contributeur[]) => {
-  contributeurs = contributeurs.map((c) => ({
-    ...c,
-    poste: decode(c.poste),
-    prenomNom: decode(c.prenomNom),
-  }));
-};
-
 export const recupereMesures = async (idService: IdService) => {
   const reponse = await axios.get(`/api/service/${idService}/mesures`);
-  decodeEntitesHtml(reponse.data);
   return reponse.data as Mesures;
 };
 
 export const recupereContributeurs = async (idService: IdService) => {
   const reponse = await axios.get(`/api/service/${idService}`);
-  decodeContributeursHtml(reponse.data.contributeurs);
   return reponse.data.contributeurs as Contributeur[];
 };
 
@@ -55,10 +25,7 @@ export const recupereAutorisations = async (idService: IdService) => {
 };
 
 export const metEnFormeMesures = (mesures: Mesures) => {
-  type MesureGeneraleApi = {
-    statut: string;
-    modalites?: string;
-  };
+  type MesureGeneraleApi = { statut: string; modalites?: string };
 
   const mesuresGenerales: Record<IdMesureGenerale, MesureGeneraleApi> =
     Object.entries(mesures.mesuresGenerales)

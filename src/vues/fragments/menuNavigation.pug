@@ -18,8 +18,8 @@ mixin etapeParcours({ id, url, nom, sousTitre, estVisible, statut })
         .pastille
           span.action-saisie(id = id)
         .none-si-ferme
-          span.nom-action!= nom
-          span.sous-titre!= sousTitre
+          span.nom-action= nom
+          span.sous-titre= sousTitre
         .statut-saisie.none-si-ferme(class = statutSaisie(statut))
       if(block)
         block

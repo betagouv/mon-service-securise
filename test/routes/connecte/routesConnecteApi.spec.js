@@ -398,67 +398,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(reponse.body[1].id).to.be('S2');
       expect(reponse.body[1].peutEtreModifie).to.be(false);
     });
-
-    it('décode les entités HTML dans les données retournées', async () => {
-      const mesuresReferentiel = { A: { categorie: 'gouvernance' } };
-      testeur.referentiel().recharge({
-        mesures: mesuresReferentiel,
-        categoriesMesures: { gouvernance: 'Gouvernance' },
-      });
-      const mesures = new Mesures(
-        {
-          mesuresGenerales: [
-            { id: 'A', statut: 'fait', modalites: 'L&apos;application de A' },
-          ],
-          mesuresSpecifiques: [
-            {
-              id: 'MS1',
-              idModele: 'MOD-1',
-              statut: 'enCours',
-              modalites: 'L&apos;ampoule',
-            },
-          ],
-        },
-        testeur.referentiel(),
-        mesuresReferentiel,
-        {
-          'MOD-1': {
-            description: 'L&apos;arbitre',
-            descriptionLongue: 'L&apos;autre',
-          },
-        }
-      );
-      testeur.depotDonnees().autorisations = () => [
-        uneAutorisation().deProprietaire('U1', 'S1').construis(),
-      ];
-      testeur.depotDonnees().services = () => [
-        unService(testeur.referentiel())
-          .avecId('S1')
-          .avecDescription(
-            uneDescriptionValide(testeur.referentiel()).avecNomService(
-              'L&apos;abricot'
-            ).donnees
-          )
-          .avecMesures(mesures)
-          .construis(),
-      ];
-
-      const reponse = await testeur.get('/api/services/mesures');
-
-      expect(reponse.body[0].nomService).to.be("L'abricot");
-      expect(reponse.body[0].mesuresAssociees.A.modalites).to.be(
-        "L'application de A"
-      );
-      expect(reponse.body[0].mesuresSpecifiques[0].modalites).to.be(
-        "L'ampoule"
-      );
-      expect(reponse.body[0].mesuresSpecifiques[0].descriptionLongue).to.be(
-        "L'autre"
-      );
-      expect(reponse.body[0].mesuresSpecifiques[0].description).to.be(
-        "L'arbitre"
-      );
-    });
   });
 
   describe('quand requête PUT sur `/api/services/mesuresGenerales/:id`', () => {
@@ -1914,25 +1853,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(reponse.status).to.be(200);
       expect(reponse.body).to.eql([]);
       expect(idRecu).to.be('U1');
-    });
-
-    it('décode les entités HTML dans le contenu renvoyé', async () => {
-      testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
-      testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur =
-        async () => [
-          {
-            id: 'MOD-1',
-            idsServicesAssocies: [],
-            description: 'L&#x27;abricot &lt;&gt;',
-            descriptionLongue: 'L&#x27;artiste',
-            categorie: 'gouvernance',
-          },
-        ];
-
-      const reponse = await testeur.get('/api/modeles/mesureSpecifique');
-
-      expect(reponse.body[0].description).to.be("L'abricot <>");
-      expect(reponse.body[0].descriptionLongue).to.be("L'artiste");
     });
   });
 

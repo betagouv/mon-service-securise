@@ -94,7 +94,7 @@
         }}
       >
         <Initiales valeur={suggestion.initiales} resumeNiveauDroit="ECRITURE" />
-        <div>{@html suggestion.prenomNom}</div>
+        <div>{suggestion.prenomNom}</div>
       </div>
     {/each}
   </div>

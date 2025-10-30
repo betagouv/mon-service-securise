@@ -1,7 +1,6 @@
 import { PDFDocument } from 'pdf-lib';
 import pug from 'pug';
 import { readFile } from 'fs/promises';
-import { decode } from 'html-entities';
 import { join } from 'path';
 import { lanceNavigateur } from './adaptateurPdf.puppeteer.js';
 import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
@@ -165,7 +164,6 @@ const genereTamponHomologation = async (donnees) => {
       const corps = pug.compileFile('src/pdf/modeles/tamponHomologation.pug')({
         ...donnees,
         tailleDispositif,
-        decode,
       });
 
       const page = await navigateur.newPage();

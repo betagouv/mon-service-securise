@@ -41,8 +41,8 @@ block contenu-etape
       .message-erreur Ce champ est obligatoire. Veuillez le renseigner. 
     ul#liste-documents
       each document in documents.documents
-        li.element-document(data-document!=document)
-          .contenu!= document
+        li.element-document(data-document=document)
+          .contenu= document
           if(!estLectureSeule)
             .bouton-supprimer
 

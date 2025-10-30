@@ -4,8 +4,8 @@ block page
   .dossier-decision
     h1 Décision d'homologation de sécurité
     .separateur
-    h2!=(donnees.organisationResponsable)
-    h3!=(donnees.nomService)
+    h2=(donnees.organisationResponsable)
+    h3=(donnees.nomService)
     .bloc-bordure
       h4 Considérant
       ol
@@ -14,7 +14,7 @@ block page
         li Le ou les avis émis par l'équipe ayant participé à préparer la présente décision.
       h4
         span L'autorité d'homologation, 
-        span.autorite!= `${donnees.nomPrenomAutorite}, ${donnees.fonctionAutorite}, `
+        span.autorite= `${donnees.nomPrenomAutorite}, ${donnees.fonctionAutorite}, `
         span approuve l'homologation de la sécurité du service :
       .duree-validite
           .label
