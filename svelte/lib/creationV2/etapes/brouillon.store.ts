@@ -10,7 +10,7 @@ export const unBrouillonVierge = (): BrouillonServiceV2 => ({
   nomService: '',
   siret: '',
   statutDeploiement: '',
-  presentation: '',
+  presentation: undefined,
   pointsAcces: [],
   typeService: [],
   specificitesProjet: [],

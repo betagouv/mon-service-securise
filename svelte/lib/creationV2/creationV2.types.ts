@@ -35,7 +35,7 @@ export type DescriptionServiceV2 = {
   nomService: string;
   siret: string;
   statutDeploiement: StatutDeploiement | '';
-  presentation: string;
+  presentation?: string;
   pointsAcces: string[];
   typeService: TypeService[];
   specificitesProjet: SpecificiteProjet[];

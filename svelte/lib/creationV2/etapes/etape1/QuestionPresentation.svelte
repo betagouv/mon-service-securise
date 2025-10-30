@@ -8,11 +8,11 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: estComplete = $leBrouillon.presentation.trim().length > 0;
+  $: estComplete = true;
 </script>
 
 <label for="presentation" class="titre-question">
-  Présentez votre service en quelques lignes*
+  Présentez votre service en quelques lignes
   <ChampDeSaisie
     label=""
     tailleMinimale={5}
