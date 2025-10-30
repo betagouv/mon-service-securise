@@ -30,9 +30,11 @@
   Où sont localisées les données traitées ?*
   <span class="indication">Sélectionnez une réponse</span>
   {#each Object.entries(questionsV2.localisationDonneesTraitees) as [idType, { nom }]}
+    {@const illustration = `/statique/assets/images/localisationDonneesTraitees/${illustrations[idType]}`}
     <Radio
       id={idType}
       {nom}
+      {illustration}
       bind:valeur={$leBrouillon.localisationDonneesTraitees}
     />
   {/each}
