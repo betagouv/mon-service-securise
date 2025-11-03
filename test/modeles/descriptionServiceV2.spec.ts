@@ -422,7 +422,7 @@ describe('Une description service V2', () => {
         .avecLocalisationDonneesTraitees('horsUE')
         .construis();
       expect(description.descriptionLocalisationDonnees()).toBe(
-        'Hors Union européenne'
+        "En partie ou totalement hors de l'Union européenne"
       );
     });
 
