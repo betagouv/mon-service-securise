@@ -13,7 +13,9 @@
     if ($leBrouillon.pointsAcces.length === 0) ajouteValeur();
   });
 
-  $: estComplete = true;
+  $: estComplete =
+    $leBrouillon.pointsAcces.length === 0 ||
+    $leBrouillon.pointsAcces.every((p) => p.length <= 200);
 
   const supprimeValeur = (index: number) => {
     $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
@@ -44,6 +46,7 @@
     on:ajout={ajouteValeur}
     titreSuppression="Supprimer l'URL"
     titreAjout="Ajouter une URL"
+    limiteTaille={200}
     on:blur={() => enregistre()}
     on:suppression={async (e) => {
       supprimeValeur(e.detail);
