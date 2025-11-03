@@ -8,7 +8,9 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: estComplete = true;
+  $: estComplete = ($leBrouillon.presentation?.length || 0) <= 2000;
+  $: estInvalide =
+    $leBrouillon.presentation && $leBrouillon.presentation.length > 2000;
 </script>
 
 <label for="presentation" class="titre-question">
@@ -16,6 +18,11 @@
   <dsfr-textarea
     rows={5}
     value={$leBrouillon.presentation}
+    status={estInvalide ? 'error' : 'info'}
+    infoMessage={estInvalide ? '' : '2000 caractères maximum'}
+    errorMessage={estInvalide
+      ? 'La présentation ne doit pas dépasser 2000 caractères'
+      : ''}
     on:valuechanged={(e) => {
       $leBrouillon.presentation = e.detail;
     }}
