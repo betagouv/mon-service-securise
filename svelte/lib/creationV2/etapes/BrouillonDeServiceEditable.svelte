@@ -402,6 +402,7 @@
     max-width: 924px;
     border: 1px solid #ddd;
     padding: 24px;
+    border-radius: 8px;
   }
   h5 {
     margin: 0;
