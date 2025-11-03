@@ -126,6 +126,7 @@
     <div
       class="conteneur-liste-champs"
       class:inactif={seulementNomServiceEditable}
+      id="url-du-service"
     >
       <label for="url-service">URL du service</label>
       <ListeChampTexte
@@ -424,5 +425,9 @@
     &.inactif label {
       color: #929292;
     }
+  }
+
+  #url-du-service {
+    margin-top: -1.5rem;
   }
 </style>
