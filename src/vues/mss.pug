@@ -51,7 +51,11 @@ block page
       .banniere-maintenance
         img(src="/statique/assets/images/icone_danger.svg" alt="")
         p
-          span Une maintenance est prévue aujourd'hui (#{avertissementMaintenance.jour}) sur MonServiceSécurisé, de #{avertissementMaintenance.heure}.
+          - const diffDate = new Date(avertissementMaintenance.jour) - new Date()
+          - const diffJour = Math.round(diffDate   / (1000 * 60 * 60 * 24));
+          - const diffFormatee = new Intl.RelativeTimeFormat('fr', { numeric: 'auto' }).format(diffJour, 'day');
+          span= date
+          span Une maintenance est prévue #{diffFormatee} (#{avertissementMaintenance.jour}) sur MonServiceSécurisé, de #{avertissementMaintenance.heure}.
           br
           span La plateforme sera inaccessible. Nous nous excusons pour la gêne occasionée.
 
