@@ -9,6 +9,7 @@
   import TiroirTeleversementServices from './televersementServices/TiroirTeleversementServices.svelte';
   import Lien from '../ui/Lien.svelte';
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
+  import { brouillonsService } from './stores/brouillonsService.store';
 
   export let avecDecrireV2: boolean;
 </script>
@@ -92,7 +93,7 @@
       taille="moyen"
       icone="ajout-liste"
     />
-    {#if $services.length > 0}
+    {#if $services.length > 0 || $brouillonsService.length > 0}
       <BoutonAvecListeDeroulante
         titre="Ajouter un / des services"
         options={[

@@ -10,6 +10,8 @@
   import TiroirTeleversementServices from './televersementServices/TiroirTeleversementServices.svelte';
   import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
 
+  export let avecDecrireV2: boolean;
+
   const supprimeRechercheEtFiltres = () => {
     $rechercheTextuelle = '';
     $filtrageServices = { ...filtrageServicesVide };
@@ -38,6 +40,15 @@
             action: () =>
               tiroirStore.afficheContenu(TiroirTeleversementServices, {}),
           },
+          ...(avecDecrireV2
+            ? [
+                {
+                  label: 'Ajouter un service V2',
+                  icone: 'plus',
+                  href: '/service/v2/creation',
+                },
+              ]
+            : []),
         ]}
       />
     </div>
