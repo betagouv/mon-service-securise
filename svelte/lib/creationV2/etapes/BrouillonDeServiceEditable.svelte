@@ -80,15 +80,24 @@
       id="nom-service"
       nom="nom-service"
       value={donnees.nomService}
-      errorMessage="Le nom du service est obligatoire."
+      status="info"
+      infoMessage="200 caractères maximum"
       on:valuechanged={(e) => {
         donnees.nomService = e.detail;
-        elementHtml.errorMessage = 'Le nom du service est obligatoire.';
-        elementHtml.status =
-          donnees.nomService.length < 1 ? 'error' : 'default';
+        if (
+          donnees.nomService.length === 0 ||
+          donnees.nomService.length > 200
+        ) {
+          elementHtml.errorMessage =
+            'Le nom du service est obligatoire et ne doit pas dépasser 200 caractères';
+          elementHtml.status = 'error';
+        } else {
+          elementHtml.errorMessage = '';
+          elementHtml.status = 'info';
+        }
       }}
       on:blur={async () => {
-        if (donnees.nomService.length >= 1)
+        if (donnees.nomService.length >= 1 && donnees.nomService.length <= 200)
           await champModifie('nomService', donnees.nomService);
       }}
     />
