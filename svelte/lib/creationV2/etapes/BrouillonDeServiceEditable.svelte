@@ -116,9 +116,22 @@
       rows={3}
       disabled={seulementNomServiceEditable}
       value={donnees.presentation}
+      status={donnees.presentation && donnees.presentation.length > 2000
+        ? 'error'
+        : 'info'}
+      infoMessage={donnees.presentation && donnees.presentation.length > 2000
+        ? ''
+        : '2000 caractères maximum'}
+      errorMessage={donnees.presentation && donnees.presentation.length > 2000
+        ? 'La présentation ne doit pas dépasser 2000 caractères'
+        : ''}
       on:blur={async (e) => {
         donnees.presentation = e.target.value;
-        if (donnees.presentation && donnees.presentation.length >= 1)
+        if (
+          donnees.presentation &&
+          donnees.presentation.length >= 1 &&
+          donnees.presentation.length <= 2000
+        )
           await champModifie('presentation', donnees.presentation);
       }}
     />
