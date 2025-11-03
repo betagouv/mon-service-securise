@@ -1414,7 +1414,7 @@ export const questionsV2 = {
       nom: "Au sein de l'Union européenne",
     },
     horsUE: {
-      nom: 'Hors Union européenne',
+      nom: "En partie ou totalement hors de l'Union européenne",
     },
   },
 };
