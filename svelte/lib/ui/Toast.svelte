@@ -1,5 +1,4 @@
 <script lang="ts">
-  import DOMPurify from 'isomorphic-dompurify';
   import { createEventDispatcher } from 'svelte';
   import { glisse } from './animations/transitions';
 
@@ -10,6 +9,7 @@
   export let avecOmbre: boolean = true;
   export let avecAnimation: boolean = true;
   export let avecFermeture: boolean = false;
+  export let avecInterpolationHTMLDangereuse: boolean = false;
 
   const icones = {
     info: 'icone_info',
@@ -57,7 +57,11 @@
   <div class="conteneur-texte">
     <p class="titre">{titre}</p>
     <p class="texte">
-      {@html DOMPurify.sanitize(contenu, { ALLOWED_TAGS: ['b'] })}
+      {#if avecInterpolationHTMLDangereuse}
+        {@html contenu}
+      {:else}
+        {contenu}
+      {/if}
     </p>
   </div>
 </article>

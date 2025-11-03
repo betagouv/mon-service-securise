@@ -128,7 +128,8 @@
           'votre service importé',
           'vos services importés',
           nb
-        )} afin d’accéder à une évaluation personnalisée de leur sécurité et bénéficier de recommandations adaptées.`
+        )} afin d’accéder à une évaluation personnalisée de leur sécurité et bénéficier de recommandations adaptées.`,
+        true
       );
 
       document.body.dispatchEvent(new CustomEvent('rafraichis-services'));

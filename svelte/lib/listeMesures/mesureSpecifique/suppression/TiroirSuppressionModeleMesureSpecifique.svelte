@@ -20,6 +20,7 @@
   import { modelesMesureSpecifique } from '../../../ui/stores/modelesMesureSpecifique.store';
   import TableauSelectionServices from '../../kit/TableauSelectionServices.svelte';
   import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
+  import { encode } from 'html-entities';
 
   export const titre: string = 'Supprimer la mesure';
   export const sousTitre: string =
@@ -68,7 +69,9 @@
         ? `Mesure supprimée avec succès sur ${idsServicesSelectionnes.length} ${
             idsServicesSelectionnes.length === 1 ? 'service' : 'services'
           }.`
-        : `Vous avez supprimé la mesure «&nbsp;${modeleMesure.description}&nbsp;».`;
+        : `Vous avez supprimé la mesure «&nbsp;${encode(
+            modeleMesure.description
+          )}&nbsp;».`;
 
     try {
       if (modeSuppressionSelectionne === ModeDeSuppression.COMPLET) {
@@ -88,7 +91,7 @@
           idsServicesSelectionnes
         );
       }
-      toasterStore.succes(titreToaster, soustitreToaster);
+      toasterStore.succes(titreToaster, soustitreToaster, true);
       tiroirStore.ferme();
       await servicesAvecMesuresAssociees.rafraichis();
       await modelesMesureSpecifique.rafraichis();

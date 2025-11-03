@@ -19,7 +19,7 @@
   import ContenuOngletActivite from './contenus/ContenuOngletActivite.svelte';
   import CommentaireMesure from './commentaire/CommentaireMesure.svelte';
   import ContenuOngletMesureSpecifiqueLieeAModele from './contenus/ContenuOngletMesureSpecifiqueLieeAModele.svelte';
-  import { tiroirStore } from '../ui/stores/tiroir.store';
+  import { encode } from 'html-entities';
 
   export let idService: IdService;
   export let categories: Record<string, string>;
@@ -108,7 +108,8 @@
       rafraichisListeMesure();
       toasterStore.succes(
         'Mesure supprimée avec succès !',
-        `Vous avez supprimé la mesure <b>${nomMesure}</b>.`
+        `Vous avez supprimé la mesure <b>${encode(nomMesure)}</b>.`,
+        true
       );
     } catch (e) {
       toasterStore.erreur(
