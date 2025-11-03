@@ -13,10 +13,12 @@
 
 <label for="presentation" class="titre-question">
   Présentez votre service en quelques lignes
-  <ChampDeSaisie
-    label=""
-    tailleMinimale={5}
-    bind:contenu={$leBrouillon.presentation}
+  <dsfr-textarea
+    rows={5}
+    value={$leBrouillon.presentation}
+    on:valuechanged={(e) => {
+      $leBrouillon.presentation = e.detail;
+    }}
     on:blur={() =>
       emetEvenement('champModifie', {
         presentation: $leBrouillon.presentation,
