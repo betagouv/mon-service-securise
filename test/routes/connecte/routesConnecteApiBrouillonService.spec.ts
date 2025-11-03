@@ -176,6 +176,11 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
     },
     {
       nomPropriete: 'categoriesDonneesTraiteesSupplementaires',
+      valeurCorrecte: ['uneChaine'],
+      valeurIncorrecte: [uneChaineDeCaracteres(201, 'a')],
+    },
+    {
+      nomPropriete: 'categoriesDonneesTraiteesSupplementaires',
       valeurCorrecte: [],
       valeurIncorrecte: [' '],
     },

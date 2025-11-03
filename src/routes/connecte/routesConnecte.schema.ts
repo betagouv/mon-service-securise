@@ -24,7 +24,7 @@ const reglesValidationsCommunesABrouillonEtDescription = {
     z.enum(Object.keys(questionsV2.categorieDonneesTraitees))
   ),
   categoriesDonneesTraiteesSupplementaires: z.array(
-    z.string().trim().nonempty()
+    z.string().trim().max(200).nonempty()
   ),
   volumetrieDonneesTraitees: z.enum(
     Object.keys(questionsV2.volumetrieDonneesTraitees)
