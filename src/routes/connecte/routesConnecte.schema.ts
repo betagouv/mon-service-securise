@@ -38,7 +38,7 @@ const reglesValidationsCommunesABrouillonEtDescription = {
 export const reglesValidationBrouillonServiceV2 = {
   ...reglesValidationsCommunesABrouillonEtDescription,
   siret: z.string().regex(/^\d{14}$/),
-  pointsAcces: z.array(z.string().trim().nonempty()),
+  pointsAcces: z.array(z.string().trim().max(200).nonempty()),
 };
 
 export const reglesValidationDescriptionServiceV2 = {

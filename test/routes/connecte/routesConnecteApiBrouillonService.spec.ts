@@ -85,6 +85,11 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       valeurIncorrecte: [''], // On accepte les chaînes au sens large, pour ne pas gêner les utilisateurs. Mais vide est interdit.
     },
     {
+      nomPropriete: 'pointsAcces',
+      valeurCorrecte: ['https://monservicesecurise.fr'],
+      valeurIncorrecte: [uneChaineDeCaracteres(201, 'a')],
+    },
+    {
       nomPropriete: 'typeService',
       valeurCorrecte: ['api', 'serviceEnLigne'],
       valeurIncorrecte: ['uneValeurImaginaire'],
