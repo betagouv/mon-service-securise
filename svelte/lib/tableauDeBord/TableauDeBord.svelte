@@ -97,7 +97,10 @@
       {estSuperviseur}
     />
     <BandeauFiltres {avecDecrireV2} />
-    <TableauDesServices indicesCyberCharges={indiceCyberMoyen !== undefined} />
+    <TableauDesServices
+      indicesCyberCharges={indiceCyberMoyen !== undefined}
+      {avecDecrireV2}
+    />
     <BandeauBlog {dateInscriptionUtilisateur} {avecPromotionDeMsc} />
   {/if}
 </div>

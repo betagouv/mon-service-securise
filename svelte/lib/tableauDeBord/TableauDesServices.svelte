@@ -25,6 +25,8 @@
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
   import { resultatsDeRechercheBrouillons } from './stores/resultatDeRechercheBrouillons.store';
 
+  export let avecDecrireV2: boolean;
+
   $: selection = $resultatsDeRecherche.filter((service) =>
     $selectionIdsServices.includes(service.id)
   );
@@ -120,7 +122,7 @@
     {/if}
   </thead>
   {#if $affichageTableauVide.doitAfficher}
-    <TableauVide />
+    <TableauVide {avecDecrireV2} />
   {:else}
     <tbody class="contenu-tableau-services">
       {#each $resultatsDeRechercheBrouillons as brouillon (brouillon.id)}
