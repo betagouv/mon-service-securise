@@ -8,6 +8,8 @@ export const brouillonEstCompletStore = derived<[typeof leBrouillon], boolean>(
     $b.nomService.length > 0 &&
     /^\d{14}$/.test($b.siret) &&
     (!$b.presentation || $b.presentation.length <= 2000) &&
+    ($b.pointsAcces.length === 0 ||
+      $b.pointsAcces.every((p) => p.length <= 200)) &&
     $b.statutDeploiement.length > 0 &&
     $b.typeService.length > 0 &&
     $b.typeHebergement.length > 0 &&

@@ -6,6 +6,7 @@
   export let titreSuppression: string;
   export let titreAjout: string;
   export let inactif = false;
+  export let limiteTaille: number | undefined = undefined;
 
   const dispatche = createEventDispatcher<{
     suppression: number;
@@ -14,13 +15,24 @@
 </script>
 
 {#each valeurs as valeur, index}
-  <div class={`conteneur-champs-texte`}>
+  {@const afficheInfo = limiteTaille && index === valeurs.length - 1}
+  {@const estInvalide = limiteTaille && valeur.length > limiteTaille}
+  <div class="conteneur-champs-texte">
     <dsfr-input
       type="text"
       id={`${nomGroupe}-${index}`}
       nom={nomGroupe}
       value={valeur}
       disabled={inactif}
+      status={estInvalide ? 'error' : afficheInfo ? 'info' : 'default'}
+      infoMessage={estInvalide
+        ? ''
+        : afficheInfo
+        ? `${limiteTaille} caractères maximum`
+        : ''}
+      errorMessage={estInvalide
+        ? `Le champ ne doit pas dépasser ${limiteTaille} caractères`
+        : ''}
       on:valuechanged={(e) => {
         valeur = e.detail;
       }}
@@ -57,7 +69,7 @@
     flex-direction: row;
     justify-content: space-between;
     gap: 8px;
-    align-items: baseline;
+    align-items: flex-start;
 
     :global(input) {
       width: 100%;

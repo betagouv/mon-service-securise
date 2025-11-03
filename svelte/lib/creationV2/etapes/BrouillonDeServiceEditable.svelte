@@ -20,6 +20,11 @@
   };
 
   const enregistrePointsAcces = async () => {
+    if (
+      donnees.pointsAcces.length > 0 &&
+      donnees.pointsAcces.some((p) => p.length > 200)
+    )
+      return;
     await champModifie(
       'pointsAcces',
       donnees.pointsAcces.filter((pointAcces) => pointAcces.trim().length > 0)
@@ -149,6 +154,7 @@
         titreSuppression="Supprimer l'URL"
         titreAjout="Ajouter une URL"
         inactif={seulementNomServiceEditable}
+        limiteTaille={200}
         on:blur={() => enregistrePointsAcces()}
         on:suppression={async (e) => {
           supprimeValeurPointAcces(e.detail);
