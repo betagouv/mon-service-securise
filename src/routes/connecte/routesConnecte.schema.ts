@@ -2,7 +2,7 @@ import * as z from 'zod';
 import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 
 const reglesValidationsCommunesABrouillonEtDescription = {
-  nomService: z.string().trim().nonempty(),
+  nomService: z.string().trim().nonempty().max(200),
   statutDeploiement: z.enum(Object.keys(questionsV2.statutDeploiement)),
   presentation: z.string().trim().optional(),
   typeService: z

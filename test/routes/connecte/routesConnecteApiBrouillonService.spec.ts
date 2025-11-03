@@ -12,6 +12,7 @@ import {
   ErreurNomServiceDejaExistant,
 } from '../../../src/erreurs.js';
 import { unBrouillonComplet } from '../../constructeurs/constructeurBrouillonService.js';
+import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 
 describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
   const testeur = testeurMSS();
@@ -37,6 +38,14 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
 
       expect(resultat.status).toBe(400);
     });
+
+    it('retourne une erreur 400 si le nom de service est trop long', async () => {
+      const resultat = await testeur.post('/api/brouillon-service', {
+        nomService: uneChaineDeCaracteres(201, 'a'),
+      });
+
+      expect(resultat.status).toBe(400);
+    });
   });
 
   describe.each([
@@ -49,6 +58,11 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       nomPropriete: 'nomService',
       valeurCorrecte: 'Un service',
       valeurIncorrecte: '',
+    },
+    {
+      nomPropriete: 'nomService',
+      valeurCorrecte: 'Un service',
+      valeurIncorrecte: uneChaineDeCaracteres(201, 'a'),
     },
     {
       nomPropriete: 'statutDeploiement',
