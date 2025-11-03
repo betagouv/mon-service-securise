@@ -85,7 +85,17 @@
   {:else if mode === 'Résumé'}
     {@const niveau = descriptionEditable.niveauSecurite}
     <div class="conteneur-besoins-securite">
-      <h5>{nomNiveauDeSecurite(niveau)}</h5>
+      <div class="conteneur-titre">
+        <h5>{nomNiveauDeSecurite(niveau)}</h5>
+        {#if niveau === niveauDeSecuriteMinimal}
+          <dsfr-tag
+            label="Besoins identifiés par l'ANSSI"
+            size="md"
+            hasIcon
+            icon="star-s-fill"
+          />
+        {/if}
+      </div>
       <ResumeNiveauSecurite {niveau} />
     </div>
   {:else}
@@ -200,6 +210,10 @@
     border-radius: 8px;
     padding: 24px;
     box-sizing: border-box;
+
+    .conteneur-titre {
+      display: flex;
+    }
   }
 
   h5 {
