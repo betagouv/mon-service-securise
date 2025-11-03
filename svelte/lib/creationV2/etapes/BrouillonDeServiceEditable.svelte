@@ -46,6 +46,13 @@
   };
 
   const enregistreCategoriesDonneesTraiteesSupplementaires = async () => {
+    if (
+      donnees.categoriesDonneesTraiteesSupplementaires.length > 0 &&
+      donnees.categoriesDonneesTraiteesSupplementaires.some(
+        (c) => c.length > 200
+      )
+    )
+      return;
     await champModifie(
       'categoriesDonneesTraiteesSupplementaires',
       donnees.categoriesDonneesTraiteesSupplementaires.filter(
@@ -370,6 +377,7 @@
         titreSuppression="Supprimer les données"
         titreAjout="Ajouter des données"
         inactif={seulementNomServiceEditable}
+        limiteTaille={200}
         on:blur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
         on:suppression={async (e) => {
           supprimeCategoriesDonneesTraiteesSupplementaires(e.detail);

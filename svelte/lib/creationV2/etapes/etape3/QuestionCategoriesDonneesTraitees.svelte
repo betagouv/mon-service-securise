@@ -30,7 +30,11 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: estComplete = true;
+  $: estComplete =
+    $leBrouillon.categoriesDonneesTraiteesSupplementaires.length === 0 ||
+    $leBrouillon.categoriesDonneesTraiteesSupplementaires.every(
+      (c) => c.length <= 200
+    );
 
   const supprimeValeur = (index: number) => {
     $leBrouillon.categoriesDonneesTraiteesSupplementaires =
@@ -103,6 +107,7 @@
       on:ajout={ajouteValeur}
       titreSuppression="Supprimer la donnée"
       titreAjout="Ajouter des données"
+      limiteTaille={200}
       on:blur={() => enregistre()}
       on:suppression={async (e) => {
         supprimeValeur(e.detail);

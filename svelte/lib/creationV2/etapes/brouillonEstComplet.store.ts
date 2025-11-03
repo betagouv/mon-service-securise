@@ -17,5 +17,9 @@ export const brouillonEstCompletStore = derived<[typeof leBrouillon], boolean>(
     $b.audienceCible.length > 0 &&
     $b.dureeDysfonctionnementAcceptable.length > 0 &&
     $b.volumetrieDonneesTraitees.length > 0 &&
+    ($b.categoriesDonneesTraiteesSupplementaires.length === 0 ||
+      $b.categoriesDonneesTraiteesSupplementaires.every(
+        (p) => p.length <= 200
+      )) &&
     $b.localisationDonneesTraitees.length > 0
 );
