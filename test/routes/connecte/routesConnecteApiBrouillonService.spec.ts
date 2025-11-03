@@ -77,7 +77,7 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
     {
       nomPropriete: 'presentation',
       valeurCorrecte: undefined,
-      valeurIncorrecte: 10,
+      valeurIncorrecte: uneChaineDeCaracteres(2001, 'a'),
     },
     {
       nomPropriete: 'pointsAcces',

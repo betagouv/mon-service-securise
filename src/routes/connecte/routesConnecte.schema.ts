@@ -4,7 +4,7 @@ import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 const reglesValidationsCommunesABrouillonEtDescription = {
   nomService: z.string().trim().nonempty().max(200),
   statutDeploiement: z.enum(Object.keys(questionsV2.statutDeploiement)),
-  presentation: z.string().trim().optional(),
+  presentation: z.string().trim().max(2000).optional(),
   typeService: z
     .array(z.enum(Object.keys(questionsV2.typeDeService)))
     .nonempty(),
