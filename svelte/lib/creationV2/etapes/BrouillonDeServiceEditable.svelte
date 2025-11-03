@@ -176,74 +176,86 @@
       errorMessage="Le type de service est obligatoire."
     />
 
-    <lab-anssi-multi-select
-      label="Spécificités à sécuriser"
-      placeholder="Sélectionnez une ou plusieurs valeurs"
-      options={Object.entries(questionsV2.specificiteProjet).map(
-        ([specificiteProjet, { nom }]) => ({
-          id: specificiteProjet,
-          value: specificiteProjet,
-          label: nom,
-        })
-      )}
-      values={donnees.specificitesProjet}
-      disabled={seulementNomServiceEditable}
-      id="specificitesProjet"
-      on:valuechanged={async (e) => {
-        donnees.specificitesProjet = e.detail;
-        if (donnees.specificitesProjet.length >= 1)
-          await champModifie('specificitesProjet', donnees.specificitesProjet);
-      }}
-    />
+    <div class="conteneur-marge-haute-negative">
+      <lab-anssi-multi-select
+        label="Spécificités à sécuriser"
+        placeholder="Sélectionnez une ou plusieurs valeurs"
+        options={Object.entries(questionsV2.specificiteProjet).map(
+          ([specificiteProjet, { nom }]) => ({
+            id: specificiteProjet,
+            value: specificiteProjet,
+            label: nom,
+          })
+        )}
+        values={donnees.specificitesProjet}
+        disabled={seulementNomServiceEditable}
+        id="specificitesProjet"
+        on:valuechanged={async (e) => {
+          donnees.specificitesProjet = e.detail;
+          if (donnees.specificitesProjet.length >= 1)
+            await champModifie(
+              'specificitesProjet',
+              donnees.specificitesProjet
+            );
+        }}
+      />
+    </div>
 
-    <dsfr-select
-      label="Type de cloud / hébergement utilisé*"
-      placeholder="Sélectionnez une valeur"
-      options={Object.entries(questionsV2.typeHebergement).map(
-        ([typeHebergement, { nom }]) => ({ value: typeHebergement, label: nom })
-      )}
-      value={donnees.typeHebergement}
-      disabled={seulementNomServiceEditable}
-      id="typeHebergement"
-      on:valuechanged={async (e) => {
-        donnees.typeHebergement = e.detail;
+    <div class="conteneur-marge-haute-negative">
+      <dsfr-select
+        label="Type de cloud / hébergement utilisé*"
+        placeholder="Sélectionnez une valeur"
+        options={Object.entries(questionsV2.typeHebergement).map(
+          ([typeHebergement, { nom }]) => ({
+            value: typeHebergement,
+            label: nom,
+          })
+        )}
+        value={donnees.typeHebergement}
+        disabled={seulementNomServiceEditable}
+        id="typeHebergement"
+        on:valuechanged={async (e) => {
+          donnees.typeHebergement = e.detail;
 
-        donnees.activitesExternalisees =
-          donnees.typeHebergement === 'saas'
-            ? ['administrationTechnique', 'developpementLogiciel']
-            : [];
+          donnees.activitesExternalisees =
+            donnees.typeHebergement === 'saas'
+              ? ['administrationTechnique', 'developpementLogiciel']
+              : [];
 
-        await champModifie(
-          'activitesExternalisees',
-          donnees.activitesExternalisees
-        );
-        await champModifie('typeHebergement', donnees.typeHebergement);
-      }}
-      placeholderDisabled
-    />
+          await champModifie(
+            'activitesExternalisees',
+            donnees.activitesExternalisees
+          );
+          await champModifie('typeHebergement', donnees.typeHebergement);
+        }}
+        placeholderDisabled
+      />
+    </div>
 
-    <lab-anssi-multi-select
-      label="Activités du projet entièrement externalisées"
-      placeholder="Sélectionnez une ou plusieurs valeurs"
-      disabled={seulementNomServiceEditable ||
-        donnees.typeHebergement === 'saas'}
-      options={Object.entries(questionsV2.activiteExternalisee).map(
-        ([activiteExternalisee, { nom }]) => ({
-          id: activiteExternalisee,
-          value: activiteExternalisee,
-          label: nom,
-        })
-      )}
-      values={donnees.activitesExternalisees}
-      id="activitesExternalisees"
-      on:valuechanged={async (e) => {
-        donnees.activitesExternalisees = e.detail;
-        await champModifie(
-          'activitesExternalisees',
-          donnees.activitesExternalisees
-        );
-      }}
-    />
+    <div class="conteneur-marge-basse-negative">
+      <lab-anssi-multi-select
+        label="Activités du projet entièrement externalisées"
+        placeholder="Sélectionnez une ou plusieurs valeurs"
+        disabled={seulementNomServiceEditable ||
+          donnees.typeHebergement === 'saas'}
+        options={Object.entries(questionsV2.activiteExternalisee).map(
+          ([activiteExternalisee, { nom }]) => ({
+            id: activiteExternalisee,
+            value: activiteExternalisee,
+            label: nom,
+          })
+        )}
+        values={donnees.activitesExternalisees}
+        id="activitesExternalisees"
+        on:valuechanged={async (e) => {
+          donnees.activitesExternalisees = e.detail;
+          await champModifie(
+            'activitesExternalisees',
+            donnees.activitesExternalisees
+          );
+        }}
+      />
+    </div>
   </div>
 </div>
 
@@ -328,7 +340,7 @@
     />
 
     <div
-      class="conteneur-liste-champs"
+      class="conteneur-liste-champs conteneur-marge-haute-negative"
       class:inactif={seulementNomServiceEditable}
     >
       <label for="url-service">Données traitées supplémentaires</label>
@@ -427,7 +439,12 @@
     }
   }
 
-  #url-du-service {
+  #url-du-service,
+  .conteneur-marge-haute-negative {
     margin-top: -1.5rem;
+  }
+
+  .conteneur-marge-basse-negative {
+    margin-bottom: -1.5rem;
   }
 </style>
