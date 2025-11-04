@@ -10,6 +10,7 @@
   type ModeAffichage = 'Résumé' | 'Édition' | 'MiseÀJourForcéeBesoinsSécurité';
   export let mode: ModeAffichage;
   export let afficheInfoBesoinsSecurite = false;
+  export let activeBoutonEnregistrer = true;
 </script>
 
 <div class="barre-actions">
@@ -32,6 +33,7 @@
         taille="md"
         icone="save-line"
         positionIcone="gauche"
+        actif={activeBoutonEnregistrer}
         on:click={() => dispatch('enregistrer')}
       />
       <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
