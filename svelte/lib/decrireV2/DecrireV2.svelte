@@ -23,6 +23,19 @@
     miseAJourForceeReussie,
     nomNiveauDeSecurite,
   } from './niveauDeSecurite.messages';
+  import { onMount } from 'svelte';
+  import type { DonneesDescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2';
+  import type { MiseAJour } from '../creationV2/creationV2.api';
+
+  const ChampsImpactantsLeNiveauDeSecurite: (keyof DonneesDescriptionServiceV2)[] =
+    [
+      'volumetrieDonneesTraitees',
+      'categoriesDonneesTraitees',
+      'categoriesDonneesTraiteesSupplementaires',
+      'dureeDysfonctionnementAcceptable',
+      'audienceCible',
+      'ouvertureSysteme',
+    ];
 
   type ModeAffichage = 'Résumé' | 'Édition';
 
@@ -58,11 +71,25 @@
   $: descriptionAffichable =
     convertisDonneesDescriptionEnLibelles(descriptionEditable);
 
-  const rafraichisNiveauSecuriteMinimal = async (d: DescriptionServiceV2) => {
-    niveauDeSecuriteMinimal = await niveauSecuriteMinimalRequis(d);
+  const rafraichisNiveauSecuriteMinimal = async () => {
+    niveauDeSecuriteMinimal =
+      await niveauSecuriteMinimalRequis(descriptionEditable);
   };
 
-  $: rafraichisNiveauSecuriteMinimal(descriptionEditable);
+  onMount(async () => {
+    await rafraichisNiveauSecuriteMinimal();
+  });
+
+  const metsAJourDescriptionEditable = async (e: CustomEvent<MiseAJour>) => {
+    descriptionEditable = { ...descriptionEditable, ...e.detail };
+
+    const recalculEstNecessaire = Object.keys(e.detail).some((cle) =>
+      ChampsImpactantsLeNiveauDeSecurite.includes(
+        cle as keyof DonneesDescriptionServiceV2
+      )
+    );
+    if (recalculEstNecessaire) await rafraichisNiveauSecuriteMinimal();
+  };
 </script>
 
 <Toaster />
@@ -76,9 +103,7 @@
         <BrouillonDeServiceEditable
           bind:donnees={descriptionEditable}
           seulementNomServiceEditable={false}
-          on:champModifie={(e) => {
-            descriptionEditable = { ...descriptionEditable, ...e.detail };
-          }}
+          on:champModifie={metsAJourDescriptionEditable}
         />
       {/if}
     </div>
