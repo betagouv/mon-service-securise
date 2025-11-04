@@ -26,6 +26,7 @@
   import { onMount } from 'svelte';
   import type { DonneesDescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2';
   import type { MiseAJour } from '../creationV2/creationV2.api';
+  import { donneesDeServiceSontCompletes } from '../creationV2/etapes/brouillonEstComplet.store';
 
   const ChampsImpactantsLeNiveauDeSecurite: (keyof DonneesDescriptionServiceV2)[] =
     [
@@ -70,6 +71,8 @@
 
   $: descriptionAffichable =
     convertisDonneesDescriptionEnLibelles(descriptionEditable);
+  $: descriptionEstComplete =
+    donneesDeServiceSontCompletes(descriptionEditable);
 
   const rafraichisNiveauSecuriteMinimal = async () => {
     niveauDeSecuriteMinimal =
@@ -162,6 +165,7 @@
   {/if}
   {#if mode === 'Édition'}
     <BarreActions
+      activeBoutonEnregistrer={descriptionEstComplete}
       mode={majForceeBesoinsSecurite
         ? 'MiseÀJourForcéeBesoinsSécurité'
         : 'Édition'}
