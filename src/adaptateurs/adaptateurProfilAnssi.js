@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { decode } from 'html-entities';
 import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
 
 const CONFIGURATION_AUTHENTIFICATION = {
@@ -26,7 +27,11 @@ const recupere = async (email) => {
   const urlProfil = `${process.env.PROFIL_ANSSI_URL_BASE}/profil/${email}`;
   try {
     const reponse = await axios.get(urlProfil, CONFIGURATION_AUTHENTIFICATION);
-    return reponse.data;
+    return JSON.parse(
+      JSON.stringify(reponse, (_cle, valeur) =>
+        typeof valeur === 'string' ? decode(valeur) : valeur
+      )
+    );
   } catch (e) {
     if (e.response?.status !== 404) {
       fabriqueAdaptateurGestionErreur().logueErreur(e, {
