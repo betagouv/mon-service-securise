@@ -15,20 +15,26 @@
 
 <label for="presentation" class="titre-question">
   Présentez votre service en quelques lignes
-  <dsfr-textarea
-    rows={5}
-    value={$leBrouillon.presentation}
-    status={estInvalide ? 'error' : 'info'}
-    infoMessage={estInvalide ? '' : '2000 caractères maximum'}
-    errorMessage={estInvalide
-      ? 'La présentation ne doit pas dépasser 2000 caractères'
-      : ''}
-    on:valuechanged={(e) => {
-      $leBrouillon.presentation = e.detail;
-    }}
-    on:blur={() =>
-      emetEvenement('champModifie', {
-        presentation: $leBrouillon.presentation,
-      })}
-  />
 </label>
+<dsfr-textarea
+  rows={5}
+  value={$leBrouillon.presentation}
+  status={estInvalide ? 'error' : 'info'}
+  infoMessage={estInvalide ? '' : '2000 caractères maximum'}
+  errorMessage={estInvalide
+    ? 'La présentation ne doit pas dépasser 2000 caractères'
+    : ''}
+  on:valuechanged={(e) => {
+    $leBrouillon.presentation = e.detail;
+  }}
+  on:blur={() =>
+    emetEvenement('champModifie', {
+      presentation: $leBrouillon.presentation,
+    })}
+/>
+
+<style lang="scss">
+  dsfr-textarea {
+    max-width: 586px;
+  }
+</style>

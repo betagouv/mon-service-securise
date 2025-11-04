@@ -40,6 +40,8 @@
   Quelle est l'URL de votre service?
 
   <span class="sous-titre"> exemple : https://www.exemple.com </span>
+</label>
+<div class="liste">
   <ListeChampTexte
     nomGroupe="pointsAcces"
     bind:valeurs={$leBrouillon.pointsAcces}
@@ -54,7 +56,7 @@
       if (estComplete) enregistre();
     }}
   />
-</label>
+</div>
 
 <style lang="scss">
   .sous-titre {
@@ -64,5 +66,12 @@
     font-weight: 400;
     margin-bottom: -8px;
     margin-top: 8px;
+  }
+
+  .liste {
+    max-width: 586px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 </style>
