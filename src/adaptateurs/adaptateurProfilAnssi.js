@@ -28,7 +28,7 @@ const recupere = async (email) => {
   try {
     const reponse = await axios.get(urlProfil, CONFIGURATION_AUTHENTIFICATION);
     return JSON.parse(
-      JSON.stringify(reponse, (_cle, valeur) =>
+      JSON.stringify(reponse.data, (_cle, valeur) =>
         typeof valeur === 'string' ? decode(valeur) : valeur
       )
     );
