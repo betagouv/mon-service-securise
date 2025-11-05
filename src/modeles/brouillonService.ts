@@ -101,7 +101,11 @@ export class BrouillonService {
 
   donneesAPersister(): DonneesBrouillonService {
     const siPresente = (champ: keyof DonneesBrouillonService) =>
-      this.donnees[champ] && { [champ]: this.donnees[champ] };
+      this.donnees[champ] && {
+        [champ]: Array.isArray(this.donnees[champ])
+          ? [...new Set(this.donnees[champ])]
+          : this.donnees[champ],
+      };
 
     return {
       nomService: this.donnees.nomService,
