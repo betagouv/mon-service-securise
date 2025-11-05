@@ -61,15 +61,15 @@ export class DescriptionServiceV2 {
   readonly niveauSecurite: NiveauSecurite;
   readonly statutDeploiement: StatutDeploiement;
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
-  readonly specificitesProjet: SpecificiteProjet[];
-  readonly categoriesDonneesTraitees: CategorieDonneesTraitees[];
-  readonly categoriesDonneesTraiteesSupplementaires: string[];
+  readonly specificitesProjet: Set<SpecificiteProjet>;
+  readonly categoriesDonneesTraitees: Set<CategorieDonneesTraitees>;
+  readonly categoriesDonneesTraiteesSupplementaires: Set<string>;
   readonly dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
   private readonly presentation: string | undefined;
   private readonly pointsAcces: PointsAcces;
-  private readonly typeService: TypeDeService[];
+  private readonly typeService: Set<TypeDeService>;
   private readonly typeHebergement: TypeHebergement;
-  private readonly activitesExternalisees: ActiviteExternalisee[];
+  private readonly activitesExternalisees: Set<ActiviteExternalisee>;
   private readonly ouvertureSysteme: OuvertureSysteme;
   private readonly audienceCible: AudienceCible;
   private readonly localisationDonneesTraitees: LocalisationDonneesTraitees;
@@ -85,17 +85,18 @@ export class DescriptionServiceV2 {
     this.pointsAcces = new PointsAcces({
       pointsAcces: donnees.pointsAcces || [],
     });
-    this.typeService = donnees.typeService;
-    this.specificitesProjet = donnees.specificitesProjet;
+    this.typeService = new Set(donnees.typeService);
+    this.specificitesProjet = new Set(donnees.specificitesProjet);
     this.typeHebergement = donnees.typeHebergement;
-    this.activitesExternalisees = donnees.activitesExternalisees;
+    this.activitesExternalisees = new Set(donnees.activitesExternalisees);
     this.ouvertureSysteme = donnees.ouvertureSysteme;
     this.audienceCible = donnees.audienceCible;
     this.dureeDysfonctionnementAcceptable =
       donnees.dureeDysfonctionnementAcceptable;
-    this.categoriesDonneesTraitees = donnees.categoriesDonneesTraitees;
-    this.categoriesDonneesTraiteesSupplementaires =
-      donnees.categoriesDonneesTraiteesSupplementaires;
+    this.categoriesDonneesTraitees = new Set(donnees.categoriesDonneesTraitees);
+    this.categoriesDonneesTraiteesSupplementaires = new Set(
+      donnees.categoriesDonneesTraiteesSupplementaires
+    );
     this.localisationDonneesTraitees = donnees.localisationDonneesTraitees;
     this.referentiel = referentiel;
   }
@@ -156,16 +157,17 @@ export class DescriptionServiceV2 {
       nomService: this.nomService,
       presentation: this.presentation,
       pointsAcces: this.pointsAcces.donneesSerialisees(),
-      typeService: this.typeService,
-      specificitesProjet: this.specificitesProjet,
+      typeService: [...this.typeService],
+      specificitesProjet: [...this.specificitesProjet],
       typeHebergement: this.typeHebergement,
-      activitesExternalisees: this.activitesExternalisees,
+      activitesExternalisees: [...this.activitesExternalisees],
       ouvertureSysteme: this.ouvertureSysteme,
       audienceCible: this.audienceCible,
       dureeDysfonctionnementAcceptable: this.dureeDysfonctionnementAcceptable,
-      categoriesDonneesTraitees: this.categoriesDonneesTraitees,
-      categoriesDonneesTraiteesSupplementaires:
-        this.categoriesDonneesTraiteesSupplementaires,
+      categoriesDonneesTraitees: [...this.categoriesDonneesTraitees],
+      categoriesDonneesTraiteesSupplementaires: [
+        ...this.categoriesDonneesTraiteesSupplementaires,
+      ],
       localisationDonneesTraitees: this.localisationDonneesTraitees,
     };
   }
@@ -186,8 +188,8 @@ export class DescriptionServiceV2 {
   estimeNiveauDeSecurite() {
     return niveauSecuriteRequis(
       this.volumetrieDonneesTraitees,
-      this.categoriesDonneesTraitees,
-      this.categoriesDonneesTraiteesSupplementaires,
+      [...this.categoriesDonneesTraitees],
+      [...this.categoriesDonneesTraiteesSupplementaires],
       this.dureeDysfonctionnementAcceptable,
       this.audienceCible,
       this.ouvertureSysteme
@@ -205,20 +207,20 @@ export class DescriptionServiceV2 {
   projectionPourMoteurV2(): ProjectionDescriptionPourMoteur {
     return {
       criticiteDonneesTraitees:
-        this.categoriesDonneesTraitees.length > 0
-          ? criticiteMaxDeDonneesTraitees(this.categoriesDonneesTraitees)
+        this.categoriesDonneesTraitees.size > 0
+          ? criticiteMaxDeDonneesTraitees([...this.categoriesDonneesTraitees])
           : 1,
       criticiteDisponibilite: criticiteDeDisponibilite(
         this.dureeDysfonctionnementAcceptable
       ),
       donneesHorsUE: this.localisationDonneesTraitees === 'horsUE',
       criticiteOuverture: criticiteOuverture(this.ouvertureSysteme),
-      specificitesProjet: this.specificitesProjet,
-      typeService: this.typeService,
+      specificitesProjet: [...this.specificitesProjet],
+      typeService: [...this.typeService],
       typeHebergement: this.typeHebergement,
       activitesExternalisees:
-        this.activitesExternalisees.length === 1
-          ? this.activitesExternalisees[0]
+        this.activitesExternalisees.size === 1
+          ? [...this.activitesExternalisees][0]
           : 'LesDeux',
     };
   }
@@ -230,7 +232,7 @@ export class DescriptionServiceV2 {
   }
 
   descriptionTypeService() {
-    return this.typeService
+    return [...this.typeService]
       .map((t) => this.referentiel.typeService(t).nom)
       .join(', ');
   }

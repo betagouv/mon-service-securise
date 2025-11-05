@@ -17,8 +17,8 @@ export class ObjetPDFAnnexeDescriptionV2 {
   donnees() {
     return {
       donneesStockees: [
-        ...this.service.descriptionService.categoriesDonneesTraitees.map((c) =>
-          this.referentiel.descriptionsDonneesCaracterePersonnel(c)
+        ...[...this.service.descriptionService.categoriesDonneesTraitees].map(
+          (c) => this.referentiel.descriptionsDonneesCaracterePersonnel(c)
         ),
         ...this.service.descriptionService
           .categoriesDonneesTraiteesSupplementaires,
@@ -29,10 +29,9 @@ export class ObjetPDFAnnexeDescriptionV2 {
         ),
       nomService: this.service.nomService(),
       versionService: this.service.version(),
-      specificitesProjet:
-        this.service.descriptionService.specificitesProjet.map((s) =>
-          this.referentiel.descriptionSpecificiteProjet(s)
-        ),
+      specificitesProjet: [
+        ...this.service.descriptionService.specificitesProjet,
+      ].map((s) => this.referentiel.descriptionSpecificiteProjet(s)),
     };
   }
 }

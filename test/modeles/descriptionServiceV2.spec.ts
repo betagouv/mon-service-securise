@@ -432,4 +432,32 @@ describe('Une description service V2', () => {
       expect(description.descriptionStatutDeploiement()).toBe('En conception');
     });
   });
+
+  it('dédoublonne toutes les propriétés "Tableau"', () => {
+    const description = uneDescriptionV2Valide()
+      .avecSpecificitesProjet([
+        'accesPhysiqueAuxBureaux',
+        'accesPhysiqueAuxBureaux',
+      ])
+      .avecCategoriesDonneesTraitees([
+        'donneesAdministrativesEtFinancieres',
+        'donneesAdministrativesEtFinancieres',
+      ])
+      .avecAutresDonneesTraitees(['mes données', 'mes données'])
+      .avecTypesService(['api', 'api'])
+      .quiExternalise(['administrationTechnique', 'administrationTechnique'])
+      .construis();
+
+    const donnees = description.donneesSerialisees();
+
+    expect(donnees.specificitesProjet).toEqual(['accesPhysiqueAuxBureaux']);
+    expect(donnees.categoriesDonneesTraitees).toEqual([
+      'donneesAdministrativesEtFinancieres',
+    ]);
+    expect(donnees.categoriesDonneesTraiteesSupplementaires).toEqual([
+      'mes données',
+    ]);
+    expect(donnees.typeService).toEqual(['api']);
+    expect(donnees.activitesExternalisees).toEqual(['administrationTechnique']);
+  });
 });
