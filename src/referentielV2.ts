@@ -2,9 +2,17 @@ import { creeReferentiel } from './referentiel.js';
 import { Referentiel } from './referentiel.interface.js';
 import {
   CategorieDonneesTraitees,
+  DescriptionStatutDeploiement,
   DureeDysfonctionnementAcceptable,
   LocalisationDonneesTraitees,
   mesuresV2,
+  NomAudienceCible,
+  NomDureeDysfonctionnementAcceptable,
+  NomLocalisationDonneesTraitees,
+  NomOuvertureSysteme,
+  NomTypeDeService,
+  NomTypeHebergement,
+  NomVolumetrieDonneesTraitees,
   questionsV2,
   SpecificiteProjet,
   StatutDeploiement,
@@ -23,6 +31,10 @@ type MethodesSpecifiquesReferentielV2 = {
   descriptionSpecificiteProjet: (
     specificiteProjet: SpecificiteProjet
   ) => string;
+  descriptionsAudienceCible: () => NomAudienceCible[];
+  descriptionsOuvertureSysteme: () => NomOuvertureSysteme[];
+  descriptionsTypeHebergement: () => NomTypeHebergement[];
+  descriptionsVolumetrieDonneesTraitees: () => NomVolumetrieDonneesTraitees[];
   enregistreReglesMoteurV2: (regles: ReglesDuReferentielMesuresV2) => void;
   reglesMoteurV2: () => ReglesDuReferentielMesuresV2;
 };
@@ -32,6 +44,12 @@ export const creeReferentielV2 = (
 ): Referentiel & MethodesSpecifiquesReferentielV2 => {
   let reglesMoteurV2Enregistrees: ReglesDuReferentielMesuresV2 = [];
   const identifiantsMesure = new Set<string>(Object.keys(donnees.mesures));
+
+  const nomsDonnees = <T>(d: Record<string, { nom: string }>): T =>
+    Object.values(d).map((v) => v.nom) as T;
+  const descriptionsDonnees = <T>(
+    d: Record<string, { description: string }>
+  ): T => Object.values(d).map((v) => v.description) as T;
 
   const descriptionDelaiAvantImpactCritique = (
     dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable
@@ -48,6 +66,32 @@ export const creeReferentielV2 = (
 
   const descriptionStatutDeploiement = (statutDeploiement: StatutDeploiement) =>
     donnees.statutDeploiement[statutDeploiement].description;
+
+  const descriptionsAudienceCible = (): NomAudienceCible[] =>
+    nomsDonnees(donnees.audienceCible) as NomAudienceCible[];
+
+  const descriptionsDelaiAvantImpactCritique =
+    (): NomDureeDysfonctionnementAcceptable[] =>
+      nomsDonnees(donnees.dureeDysfonctionnementAcceptable);
+
+  const descriptionLocalisationDonnees = (): NomLocalisationDonneesTraitees[] =>
+    nomsDonnees(donnees.localisationDonneesTraitees);
+
+  const descriptionsOuvertureSysteme = (): NomOuvertureSysteme[] =>
+    nomsDonnees(donnees.ouvertureSysteme);
+
+  const descriptionsStatutDeploiement = (): DescriptionStatutDeploiement[] =>
+    descriptionsDonnees(donnees.statutDeploiement);
+
+  const descriptionsTypeHebergement = (): NomTypeHebergement[] =>
+    nomsDonnees(donnees.typeHebergement);
+
+  const descriptionsTypeService = (): NomTypeDeService[] =>
+    nomsDonnees(donnees.typeDeService);
+
+  const descriptionsVolumetrieDonneesTraitees =
+    (): NomVolumetrieDonneesTraitees[] =>
+      nomsDonnees(donnees.volumetrieDonneesTraitees);
 
   const enregistreReglesMoteurV2 = (regles: ReglesDuReferentielMesuresV2) => {
     reglesMoteurV2Enregistrees = regles;
@@ -71,6 +115,14 @@ export const creeReferentielV2 = (
     descriptionsDonneesCaracterePersonnel,
     descriptionSpecificiteProjet,
     descriptionStatutDeploiement,
+    descriptionsAudienceCible,
+    descriptionsDelaiAvantImpactCritique,
+    descriptionLocalisationDonnees,
+    descriptionsOuvertureSysteme,
+    descriptionsStatutDeploiement,
+    descriptionsTypeHebergement,
+    descriptionsTypeService,
+    descriptionsVolumetrieDonneesTraitees,
     enregistreReglesMoteurV2,
     estIdentifiantMesureConnu,
     localisationDonnees,

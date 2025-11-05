@@ -1417,7 +1417,7 @@ export const questionsV2 = {
       nom: "En partie ou totalement hors de l'Union européenne",
     },
   },
-};
+} as const;
 
 export type CategorieDonneesTraitees =
   keyof typeof questionsV2.categorieDonneesTraitees;
@@ -1436,3 +1436,20 @@ export type ActiviteExternalisee =
   keyof typeof questionsV2.activiteExternalisee;
 export type StatutDeploiement = keyof typeof questionsV2.statutDeploiement;
 export type NiveauSecurite = keyof typeof questionsV2.niveauSecurite;
+
+export type DescriptionStatutDeploiement =
+  (typeof questionsV2.statutDeploiement)[StatutDeploiement]['description'];
+export type NomTypeDeService =
+  (typeof questionsV2.typeDeService)[TypeDeService]['nom'];
+export type NomTypeHebergement =
+  (typeof questionsV2.typeHebergement)[TypeHebergement]['nom'];
+export type NomOuvertureSysteme =
+  (typeof questionsV2.ouvertureSysteme)[OuvertureSysteme]['nom'];
+export type NomAudienceCible =
+  (typeof questionsV2.audienceCible)[AudienceCible]['nom'];
+export type NomDureeDysfonctionnementAcceptable =
+  (typeof questionsV2.dureeDysfonctionnementAcceptable)[DureeDysfonctionnementAcceptable]['nom'];
+export type NomVolumetrieDonneesTraitees =
+  (typeof questionsV2.volumetrieDonneesTraitees)[VolumetrieDonneesTraitees]['nom'];
+export type NomLocalisationDonneesTraitees =
+  (typeof questionsV2.localisationDonneesTraitees)[LocalisationDonneesTraitees]['nom'];
