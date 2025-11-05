@@ -1,32 +1,37 @@
 import { UUID } from '../typesBasiques.js';
 import { VersionService } from './versionService.js';
 import { DonneesDescriptionServiceV2 } from './descriptionServiceV2.js';
-import donneesReferentiel from '../../donneesReferentiel.js';
 import {
+  ActiviteExternalisee,
+  AudienceCible,
+  CategorieDonneesTraitees,
+  DureeDysfonctionnementAcceptable,
   LocalisationDonneesTraitees,
   NiveauSecurite,
-  questionsV2,
+  OuvertureSysteme,
+  SpecificiteProjet,
   StatutDeploiement,
+  TypeDeService,
+  TypeHebergement,
+  VolumetrieDonneesTraitees,
 } from '../../donneesReferentielMesuresV2.js';
 
 export type DonneesBrouillonService = {
   nomService: string;
   siret?: string;
-  statutDeploiement?: keyof typeof donneesReferentiel.statutsDeploiement;
+  statutDeploiement?: StatutDeploiement;
   presentation?: string;
   pointsAcces?: string[];
-  typeService?: Array<keyof typeof questionsV2.typeDeService>;
-  specificitesProjet?: Array<keyof typeof questionsV2.specificiteProjet>;
-  typeHebergement?: keyof typeof questionsV2.typeHebergement;
-  activitesExternalisees?: Array<keyof typeof questionsV2.activiteExternalisee>;
-  ouvertureSysteme?: keyof typeof questionsV2.ouvertureSysteme;
-  audienceCible?: keyof typeof questionsV2.audienceCible;
-  dureeDysfonctionnementAcceptable?: keyof typeof questionsV2.dureeDysfonctionnementAcceptable;
-  categoriesDonneesTraitees?: Array<
-    keyof typeof questionsV2.categorieDonneesTraitees
-  >;
-  categoriesDonneesTraiteesSupplementaires?: string[];
-  volumetrieDonneesTraitees?: keyof typeof questionsV2.volumetrieDonneesTraitees;
+  typeService?: Array<TypeDeService>;
+  specificitesProjet?: Array<SpecificiteProjet>;
+  typeHebergement?: TypeHebergement;
+  activitesExternalisees?: Array<ActiviteExternalisee>;
+  ouvertureSysteme?: OuvertureSysteme;
+  audienceCible?: AudienceCible;
+  dureeDysfonctionnementAcceptable?: DureeDysfonctionnementAcceptable;
+  categoriesDonneesTraitees?: Array<CategorieDonneesTraitees>;
+  categoriesDonneesTraiteesSupplementaires?: Array<string>;
+  volumetrieDonneesTraitees?: VolumetrieDonneesTraitees;
   localisationDonneesTraitees?: LocalisationDonneesTraitees;
   niveauSecurite?: NiveauSecurite;
 };
@@ -54,6 +59,8 @@ export class BrouillonService {
     versionService: VersionService;
     descriptionService: DonneesDescriptionServiceV2;
   } {
+    const sansDoublonsOuTableauVide = <T>(tableau: Array<T> | undefined) =>
+      tableau ? [...new Set(tableau)] : [];
     return {
       versionService: VersionService.v2,
       descriptionService: {
@@ -63,17 +70,24 @@ export class BrouillonService {
         presentation: this.donnees.presentation!,
         pointsAcces:
           this.donnees.pointsAcces?.map((p) => ({ description: p })) || [],
-        typeService: this.donnees.typeService!,
-        specificitesProjet: this.donnees.specificitesProjet || [],
+        typeService: sansDoublonsOuTableauVide(this.donnees.typeService),
+        specificitesProjet: sansDoublonsOuTableauVide(
+          this.donnees.specificitesProjet
+        ),
         typeHebergement: this.donnees.typeHebergement!,
-        activitesExternalisees: this.donnees.activitesExternalisees || [],
+        activitesExternalisees: sansDoublonsOuTableauVide(
+          this.donnees.activitesExternalisees
+        ),
         ouvertureSysteme: this.donnees.ouvertureSysteme!,
         audienceCible: this.donnees.audienceCible!,
         dureeDysfonctionnementAcceptable:
           this.donnees.dureeDysfonctionnementAcceptable!,
-        categoriesDonneesTraitees: this.donnees.categoriesDonneesTraitees || [],
-        categoriesDonneesTraiteesSupplementaires:
-          this.donnees.categoriesDonneesTraiteesSupplementaires || [],
+        categoriesDonneesTraitees: sansDoublonsOuTableauVide(
+          this.donnees.categoriesDonneesTraitees
+        ),
+        categoriesDonneesTraiteesSupplementaires: sansDoublonsOuTableauVide(
+          this.donnees.categoriesDonneesTraiteesSupplementaires
+        ),
         volumetrieDonneesTraitees: this.donnees.volumetrieDonneesTraitees!,
         localisationDonneesTraitees: this.donnees.localisationDonneesTraitees!,
         niveauSecurite: this.donnees.niveauSecurite!,

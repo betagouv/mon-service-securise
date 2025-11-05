@@ -50,6 +50,49 @@ describe('Un brouillon de Service v2', () => {
         },
       });
     });
+
+    it('dédoublonne toutes les propriétés "Tableau"', () => {
+      const b = new BrouillonService(unUUID('b'), {
+        nomService: 'Mairie A',
+        siret: 'un siret',
+        presentation: 'Mon service qui…',
+        statutDeploiement: 'enCours',
+        pointsAcces: ['a.fr', 'b.fr'],
+        activitesExternalisees: [
+          'administrationTechnique',
+          'administrationTechnique',
+        ],
+        specificitesProjet: ['annuaire', 'annuaire'],
+        typeService: ['api', 'api'],
+        typeHebergement: 'cloud',
+        ouvertureSysteme: 'accessibleSurInternet',
+        audienceCible: 'large',
+        categoriesDonneesTraitees: ['secretsDEntreprise', 'secretsDEntreprise'],
+        categoriesDonneesTraiteesSupplementaires: [
+          'une catégorie',
+          'une catégorie',
+        ],
+        volumetrieDonneesTraitees: 'eleve',
+        localisationDonneesTraitees: 'UE',
+        niveauSecurite: 'niveau1',
+      });
+
+      const sansDoublons = b.enDonneesCreationServiceV2();
+
+      expect(sansDoublons.descriptionService.activitesExternalisees).toEqual([
+        'administrationTechnique',
+      ]);
+      expect(sansDoublons.descriptionService.specificitesProjet).toEqual([
+        'annuaire',
+      ]);
+      expect(sansDoublons.descriptionService.categoriesDonneesTraitees).toEqual(
+        ['secretsDEntreprise']
+      );
+      expect(
+        sansDoublons.descriptionService.categoriesDonneesTraiteesSupplementaires
+      ).toEqual(['une catégorie']);
+      expect(sansDoublons.descriptionService.typeService).toEqual(['api']);
+    });
   });
 
   describe('sur demande de mise à jour de propriété', () => {
