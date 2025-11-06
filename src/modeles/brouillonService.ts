@@ -8,6 +8,7 @@ import {
   questionsV2,
   StatutDeploiement,
 } from '../../donneesReferentielMesuresV2.js';
+import { PourCalculNiveauSecurite } from '../moteurRegles/v2/niveauSecurite.js';
 
 export type DonneesBrouillonService = {
   nomService: string;
@@ -48,6 +49,18 @@ export class BrouillonService {
     valeur: DonneesBrouillonService[T]
   ) {
     this.donnees[nomPropriete] = valeur;
+  }
+
+  pourCalculNiveauDeSecurite(): PourCalculNiveauSecurite {
+    return {
+      audienceCible: this.donnees.audienceCible!,
+      autresDonneesTraitees:
+        this.donnees.categoriesDonneesTraiteesSupplementaires || [],
+      categories: this.donnees.categoriesDonneesTraitees || [],
+      disponibilite: this.donnees.dureeDysfonctionnementAcceptable!,
+      ouvertureSysteme: this.donnees.ouvertureSysteme!,
+      volumetrie: this.donnees.volumetrieDonneesTraitees!,
+    };
   }
 
   enDonneesCreationServiceV2(): {

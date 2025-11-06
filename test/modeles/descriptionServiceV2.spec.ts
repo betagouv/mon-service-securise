@@ -137,20 +137,15 @@ describe('Une description service V2', () => {
 
   describe("sur demande d'estimation du niveau de sécurité", () => {
     it('évalue le niveau de criticité des données traitées', () => {
-      const donnees = uneDescriptionV2Valide()
-        .avecVolumetrieDonneesTraitees('eleve')
-        .avecCategoriesDonneesTraitees([
-          'documentsIdentifiants',
-          'secretsDEntreprise',
-        ])
-        .avecAutresDonneesTraitees(['donneeAjoutee', 'autreDonneeAjoutee'])
-        .avecDureeDysfonctionnementAcceptable('moinsDe4h')
-        .avecAudienceCible('large')
-        .avecOuvertureSysteme('accessibleSurInternet')
-        .donneesDescription();
-
       const niveauSecuriteMinimalRequis =
-        DescriptionServiceV2.niveauSecuriteMinimalRequis(donnees);
+        DescriptionServiceV2.niveauSecuriteMinimalRequis({
+          volumetrie: 'eleve',
+          categories: ['documentsIdentifiants', 'secretsDEntreprise'],
+          autresDonneesTraitees: ['donneeAjoutee', 'autreDonneeAjoutee'],
+          disponibilite: 'moinsDe4h',
+          audienceCible: 'large',
+          ouvertureSysteme: 'accessibleSurInternet',
+        });
 
       expect(niveauSecuriteMinimalRequis).toBe('niveau3');
     });
@@ -292,13 +287,17 @@ describe('Une description service V2', () => {
     });
 
     it('répond false si le niveau de sécurité choisi est insuffisant', () => {
-      const d = uneDescriptionV2Valide()
-        .avecVolumeDonneesTraitees('tresEleve')
-        .avecDonneesTraitees(['secretsDEntreprise', 'documentsRHSensibles'], [])
-        .avecNiveauSecurite('niveau1')
-        .donneesDescription();
-
-      const estValide = DescriptionServiceV2.niveauSecuriteChoisiSuffisant(d);
+      const estValide = DescriptionServiceV2.niveauSecuriteChoisiSuffisant(
+        {
+          volumetrie: 'tresEleve',
+          categories: ['secretsDEntreprise', 'documentsRHSensibles'],
+          audienceCible: 'moyenne',
+          ouvertureSysteme: 'accessibleSurInternet',
+          autresDonneesTraitees: [],
+          disponibilite: 'moinsDe4h',
+        },
+        'niveau1'
+      );
 
       expect(estValide).toBe(false);
     });

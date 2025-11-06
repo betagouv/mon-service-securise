@@ -50,10 +50,23 @@ const routesConnecteApiServiceV2 = ({
     '/niveauSecuriteRequis',
     valideBody(z.strictObject(reglesValidationDescriptionServiceV2)),
     async (requete, reponse) => {
+      const {
+        ouvertureSysteme,
+        categoriesDonneesTraiteesSupplementaires,
+        volumetrieDonneesTraitees,
+        dureeDysfonctionnementAcceptable,
+        categoriesDonneesTraitees,
+        audienceCible,
+      } = requete.body;
       const niveauDeSecuriteMinimal =
-        DescriptionServiceV2.niveauSecuriteMinimalRequis(
-          requete.body as DonneesDescriptionServiceV2
-        );
+        DescriptionServiceV2.niveauSecuriteMinimalRequis({
+          ouvertureSysteme,
+          audienceCible,
+          disponibilite: dureeDysfonctionnementAcceptable,
+          volumetrie: volumetrieDonneesTraitees,
+          categories: categoriesDonneesTraitees,
+          autresDonneesTraitees: categoriesDonneesTraiteesSupplementaires,
+        });
 
       return reponse.status(200).json({ niveauDeSecuriteMinimal });
     }

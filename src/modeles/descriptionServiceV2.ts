@@ -21,6 +21,7 @@ import {
   criticiteMaxDeDonneesTraitees,
   criticiteOuverture,
   niveauSecuriteRequis,
+  PourCalculNiveauSecurite,
 } from '../moteurRegles/v2/niveauSecurite.js';
 import {
   ErreurDonneesNiveauSecuriteInsuffisant,
@@ -121,11 +122,12 @@ export class DescriptionServiceV2 {
   }
 
   static niveauSecuriteChoisiSuffisant(
-    donnees: DonneesDescriptionServiceV2
+    donnees: PourCalculNiveauSecurite,
+    niveauChoisi: NiveauSecurite
   ): boolean {
     const niveauSecuriteMinimal = this.niveauSecuriteMinimalRequis(donnees);
     return (
-      questionsV2.niveauSecurite[donnees.niveauSecurite].position >=
+      questionsV2.niveauSecurite[niveauChoisi].position >=
       questionsV2.niveauSecurite[niveauSecuriteMinimal].position
     );
   }
@@ -133,7 +135,20 @@ export class DescriptionServiceV2 {
   static valideDonneesCreation(donnees: DonneesDescriptionServiceV2) {
     if (!this.donneesObligatoiresRenseignees(donnees))
       throw new ErreurDonneesObligatoiresManquantes();
-    if (!this.niveauSecuriteChoisiSuffisant(donnees))
+    if (
+      !this.niveauSecuriteChoisiSuffisant(
+        {
+          disponibilite: donnees.dureeDysfonctionnementAcceptable,
+          autresDonneesTraitees:
+            donnees.categoriesDonneesTraiteesSupplementaires,
+          categories: donnees.categoriesDonneesTraitees,
+          volumetrie: donnees.volumetrieDonneesTraitees,
+          audienceCible: donnees.audienceCible,
+          ouvertureSysteme: donnees.ouvertureSysteme,
+        },
+        donnees.niveauSecurite
+      )
+    )
       throw new ErreurDonneesNiveauSecuriteInsuffisant();
   }
 
@@ -178,27 +193,20 @@ export class DescriptionServiceV2 {
   }
 
   static niveauSecuriteMinimalRequis(
-    donnees: DonneesDescriptionServiceV2
+    donnees: PourCalculNiveauSecurite
   ): NiveauSecurite {
-    return niveauSecuriteRequis(
-      donnees.volumetrieDonneesTraitees,
-      donnees.categoriesDonneesTraitees,
-      donnees.categoriesDonneesTraiteesSupplementaires,
-      donnees.dureeDysfonctionnementAcceptable,
-      donnees.audienceCible,
-      donnees.ouvertureSysteme
-    );
+    return niveauSecuriteRequis(donnees);
   }
 
   estimeNiveauDeSecurite() {
-    return niveauSecuriteRequis(
-      this.volumetrieDonneesTraitees,
-      this.categoriesDonneesTraitees,
-      this.categoriesDonneesTraiteesSupplementaires,
-      this.dureeDysfonctionnementAcceptable,
-      this.audienceCible,
-      this.ouvertureSysteme
-    );
+    return niveauSecuriteRequis({
+      volumetrie: this.volumetrieDonneesTraitees,
+      categories: this.categoriesDonneesTraitees,
+      autresDonneesTraitees: this.categoriesDonneesTraiteesSupplementaires,
+      disponibilite: this.dureeDysfonctionnementAcceptable,
+      audienceCible: this.audienceCible,
+      ouvertureSysteme: this.ouvertureSysteme,
+    });
   }
 
   niveauSecuriteDepasseRecommandation() {
