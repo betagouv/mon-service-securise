@@ -37,23 +37,23 @@ export type DonneesEntite = {
 };
 
 export type DonneesDescriptionServiceV2 = {
-  nomService: string;
-  organisationResponsable: DonneesEntite;
-  niveauSecurite: NiveauSecurite;
-  statutDeploiement: StatutDeploiement;
-  presentation?: string;
-  pointsAcces: { description: string }[];
-  typeService: TypeDeService[];
-  specificitesProjet: SpecificiteProjet[];
-  typeHebergement: TypeHebergement;
   activitesExternalisees: ActiviteExternalisee[];
-  ouvertureSysteme: OuvertureSysteme;
   audienceCible: AudienceCible;
-  dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
   categoriesDonneesTraitees: CategorieDonneesTraitees[];
   categoriesDonneesTraiteesSupplementaires: string[];
-  volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
+  dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
   localisationDonneesTraitees: LocalisationDonneesTraitees;
+  niveauSecurite: NiveauSecurite;
+  nomService: string;
+  organisationResponsable: DonneesEntite;
+  ouvertureSysteme: OuvertureSysteme;
+  pointsAcces: { description: string }[];
+  presentation?: string;
+  specificitesProjet: SpecificiteProjet[];
+  statutDeploiement: StatutDeploiement;
+  typeHebergement: TypeHebergement;
+  typeService: TypeDeService[];
+  volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
 };
 
 export class DescriptionServiceV2 {
