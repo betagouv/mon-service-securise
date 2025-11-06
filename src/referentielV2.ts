@@ -27,9 +27,11 @@ type MethodesSpecifiquesReferentielV2 = {
   reglesMoteurV2: () => ReglesDuReferentielMesuresV2;
 };
 
+type Surcharge<A, B> = Omit<A, keyof B> & B;
+
 export const creeReferentielV2 = (
   donnees: DonneesReferentielV2 = { ...questionsV2, mesures: mesuresV2 }
-): Referentiel & MethodesSpecifiquesReferentielV2 => {
+): Surcharge<Referentiel, MethodesSpecifiquesReferentielV2> => {
   let reglesMoteurV2Enregistrees: ReglesDuReferentielMesuresV2 = [];
   const identifiantsMesure = new Set<string>(Object.keys(donnees.mesures));
 
