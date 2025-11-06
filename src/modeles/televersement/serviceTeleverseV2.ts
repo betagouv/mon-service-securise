@@ -35,15 +35,6 @@ export type LigneServiceTeleverseV2 = {
   fonctionAutoriteHomologation?: string;
 };
 
-type DonneesMinimalesRequisesDescriptionServiceV2 = Omit<
-  DonneesDescriptionServiceV2,
-  | 'pointsAcces'
-  | 'specificitesProjet'
-  | 'activitesExternalisees'
-  | 'categoriesDonneesTraitees'
-  | 'categoriesDonneesTraiteesSupplementaires'
->;
-
 type DonneesMinimalesRequisesDossierHomologation = {
   decision: { dateHomologation: string; dureeValidite: string };
   autorite: { nom: string; fonction: string };
@@ -98,13 +89,10 @@ export class ServiceTeleverseV2 {
   }
 
   enDonneesService(): {
-    descriptionService: DonneesMinimalesRequisesDescriptionServiceV2;
+    descriptionService: DonneesDescriptionServiceV2;
     dossier?: DonneesMinimalesRequisesDossierHomologation;
   } {
-    const donneesDescriptionService: Omit<
-      DonneesMinimalesRequisesDescriptionServiceV2,
-      'niveauSecurite'
-    > = {
+    const donneesDescriptionService = {
       nomService: this.donnees.nom,
       organisationResponsable: { siret: this.donnees.siret },
       statutDeploiement: trouveIdentifiantDonneeParDescription(
@@ -150,7 +138,15 @@ export class ServiceTeleverseV2 {
     });
 
     return {
-      descriptionService: { ...donneesDescriptionService, niveauSecurite },
+      descriptionService: {
+        ...donneesDescriptionService,
+        niveauSecurite,
+        pointsAcces: [],
+        activitesExternalisees: [],
+        categoriesDonneesTraitees: [],
+        categoriesDonneesTraiteesSupplementaires: [],
+        specificitesProjet: [],
+      },
       ...(this.donnees.dossierHomologation && {
         dossier: {
           decision: {

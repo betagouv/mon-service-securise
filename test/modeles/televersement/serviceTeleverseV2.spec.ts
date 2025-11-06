@@ -213,9 +213,7 @@ describe('Un service téléversé V2', () => {
 
       expect(donneesService.descriptionService).toEqual({
         nomService: 'Mon service',
-        organisationResponsable: {
-          siret: '13000000000000',
-        },
+        organisationResponsable: { siret: '13000000000000' },
         statutDeploiement: 'enProjet',
         typeService: ['serviceEnLigne', 'api'],
         typeHebergement: 'onPremise',
@@ -225,16 +223,15 @@ describe('Un service téléversé V2', () => {
         volumetrieDonneesTraitees: 'faible',
         localisationDonneesTraitees: 'UE',
         niveauSecurite: 'niveau3',
+        pointsAcces: [],
+        activitesExternalisees: [],
+        categoriesDonneesTraitees: [],
+        categoriesDonneesTraiteesSupplementaires: [],
+        specificitesProjet: [],
       });
       expect(donneesService.dossier).toEqual({
-        decision: {
-          dateHomologation: '31/01/2025',
-          dureeValidite: 'sixMois',
-        },
-        autorite: {
-          nom: 'Nom Prénom',
-          fonction: 'Fonction',
-        },
+        decision: { dateHomologation: '31/01/2025', dureeValidite: 'sixMois' },
+        autorite: { nom: 'Nom Prénom', fonction: 'Fonction' },
       });
     });
 
