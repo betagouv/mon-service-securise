@@ -167,6 +167,11 @@ class ConstructeurDescriptionServiceV2 {
     this.donnees.activitesExternalisees = activites;
     return this;
   }
+
+  avecPointsAcces(url: string[]) {
+    this.donnees.pointsAcces = url.map((u) => ({ description: u }));
+    return this;
+  }
 }
 
 export const uneDescriptionV2Valide = () =>
