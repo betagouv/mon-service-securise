@@ -1417,7 +1417,7 @@ export const questionsV2 = {
       nom: "En partie ou totalement hors de l'Union européenne",
     },
   },
-};
+} as const;
 
 export type CategorieDonneesTraitees =
   keyof typeof questionsV2.categorieDonneesTraitees;

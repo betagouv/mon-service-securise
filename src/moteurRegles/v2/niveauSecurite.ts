@@ -50,10 +50,10 @@ export const criticiteVolumetrieDonneesTraitees = (
   categories: CategorieDonneesTraitees[],
   autresDonneesTraitees: string[]
 ): NiveauCriticite => {
-  const criticiteVolumetrie =
+  const criticiteVolumetrie: NiveauCriticite =
     questionsV2.volumetrieDonneesTraitees[volumetrie].criticite;
 
-  const criticiteDonnees = categories.map(
+  const criticiteDonnees: NiveauCriticite[] = categories.map(
     (c) => questionsV2.categorieDonneesTraitees[c].criticite
   );
   if (autresDonneesTraitees.length > 0) {
