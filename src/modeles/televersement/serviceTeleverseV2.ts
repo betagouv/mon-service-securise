@@ -1,37 +1,22 @@
 import { ReferentielV2 } from '../../referentiel.interface.js';
-import {
-  AudienceCible,
-  DureeDysfonctionnementAcceptable,
-  LocalisationDonneesTraitees,
-  OuvertureSysteme,
-  questionsV2,
-  StatutDeploiement,
-  TypeDeService,
-  TypeHebergement,
-  VolumetrieDonneesTraitees,
-} from '../../../donneesReferentielMesuresV2.js';
+import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 import {
   DescriptionServiceV2,
   DonneesDescriptionServiceV2,
 } from '../descriptionServiceV2.js';
 import { ValidationServiceTeleverseV2 } from './validationV2.js';
-
-type DescriptionStatutDeploiement =
-  (typeof questionsV2.statutDeploiement)[StatutDeploiement]['description'];
-type NomTypeDeService =
-  (typeof questionsV2.typeDeService)[TypeDeService]['nom'];
-type NomTypeHebergement =
-  (typeof questionsV2.typeHebergement)[TypeHebergement]['nom'];
-type NomOuvertureSysteme =
-  (typeof questionsV2.ouvertureSysteme)[OuvertureSysteme]['nom'];
-type NomAudienceCible =
-  (typeof questionsV2.audienceCible)[AudienceCible]['nom'];
-type NomDureeDysfonctionnementAcceptable =
-  (typeof questionsV2.dureeDysfonctionnementAcceptable)[DureeDysfonctionnementAcceptable]['nom'];
-type NomVolumetrieDonneesTraitees =
-  (typeof questionsV2.volumetrieDonneesTraitees)[VolumetrieDonneesTraitees]['nom'];
-type NomLocalisationDonneesTraitees =
-  (typeof questionsV2.localisationDonneesTraitees)[LocalisationDonneesTraitees]['nom'];
+import {
+  DescriptionStatutDeploiement,
+  NomAudienceCible,
+  NomDureeDysfonctionnementAcceptable,
+  NomLocalisationDonneesTraitees,
+  NomOuvertureSysteme,
+  NomTypeDeService,
+  NomTypeHebergement,
+  NomVolumetrieDonneesTraitees,
+  trouveIdentifiantDonneeParDescription,
+  trouveIdentifiantDonneeParNom,
+} from './correspondanceReferentielV2.js';
 
 export type LigneServiceTeleverseV2 = {
   nom: string;
@@ -116,62 +101,40 @@ export class ServiceTeleverseV2 {
     descriptionService: DonneesMinimalesRequisesDescriptionServiceV2;
     dossier?: DonneesMinimalesRequisesDossierHomologation;
   } {
-    const trouveIdentifiantDonneePourDescription = <
-      T extends Record<string, { description: string }>,
-    >(
-      d: T,
-      description: string
-    ): keyof T =>
-      Object.entries(d).find(
-        ([, valeur]) => valeur.description === description
-      )?.[0] as keyof T;
-
-    const trouveIdentifiantDonneePourNom = <
-      T extends Record<string, { nom: string }>,
-    >(
-      d: T,
-      nom: string
-    ): keyof T =>
-      Object.entries(d).find(
-        ([, valeur]) => valeur.nom === nom
-      )?.[0] as keyof T;
-
     const donneesDescriptionService: Omit<
       DonneesMinimalesRequisesDescriptionServiceV2,
       'niveauSecurite'
     > = {
       nomService: this.donnees.nom,
-      organisationResponsable: {
-        siret: this.donnees.siret,
-      },
-      statutDeploiement: trouveIdentifiantDonneePourDescription(
+      organisationResponsable: { siret: this.donnees.siret },
+      statutDeploiement: trouveIdentifiantDonneeParDescription(
         questionsV2.statutDeploiement,
         this.donnees.statutDeploiement
       ),
       typeService: this.donnees.typeService.map((type) =>
-        trouveIdentifiantDonneePourNom(questionsV2.typeDeService, type)
+        trouveIdentifiantDonneeParNom(questionsV2.typeDeService, type)
       ),
-      typeHebergement: trouveIdentifiantDonneePourNom(
+      typeHebergement: trouveIdentifiantDonneeParNom(
         questionsV2.typeHebergement,
         this.donnees.typeHebergement
       ),
-      ouvertureSysteme: trouveIdentifiantDonneePourNom(
+      ouvertureSysteme: trouveIdentifiantDonneeParNom(
         questionsV2.ouvertureSysteme,
         this.donnees.ouvertureSysteme
       ),
-      audienceCible: trouveIdentifiantDonneePourNom(
+      audienceCible: trouveIdentifiantDonneeParNom(
         questionsV2.audienceCible,
         this.donnees.audienceCible
       ),
-      dureeDysfonctionnementAcceptable: trouveIdentifiantDonneePourNom(
+      dureeDysfonctionnementAcceptable: trouveIdentifiantDonneeParNom(
         questionsV2.dureeDysfonctionnementAcceptable,
         this.donnees.dureeDysfonctionnementAcceptable
       ),
-      volumetrieDonneesTraitees: trouveIdentifiantDonneePourNom(
+      volumetrieDonneesTraitees: trouveIdentifiantDonneeParNom(
         questionsV2.volumetrieDonneesTraitees,
         this.donnees.volumetrieDonneesTraitees
       ),
-      localisationDonneesTraitees: trouveIdentifiantDonneePourNom(
+      localisationDonneesTraitees: trouveIdentifiantDonneeParNom(
         questionsV2.localisationDonneesTraitees,
         this.donnees.localisationDonneesTraitees
       ),
