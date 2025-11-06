@@ -54,29 +54,38 @@ export class BrouillonService {
     versionService: VersionService;
     descriptionService: DonneesDescriptionServiceV2;
   } {
+    const dedoublonne = <T>(tableau: Array<T> | undefined) =>
+      tableau ? [...new Set(tableau)] : [];
+
     return {
       versionService: VersionService.v2,
       descriptionService: {
-        nomService: this.donnees.nomService,
-        organisationResponsable: { siret: this.donnees.siret! },
-        statutDeploiement: this.donnees.statutDeploiement as StatutDeploiement,
-        presentation: this.donnees.presentation!,
-        pointsAcces:
-          this.donnees.pointsAcces?.map((p) => ({ description: p })) || [],
-        typeService: this.donnees.typeService!,
-        specificitesProjet: this.donnees.specificitesProjet || [],
-        typeHebergement: this.donnees.typeHebergement!,
-        activitesExternalisees: this.donnees.activitesExternalisees || [],
-        ouvertureSysteme: this.donnees.ouvertureSysteme!,
+        activitesExternalisees: dedoublonne(
+          this.donnees.activitesExternalisees
+        ),
         audienceCible: this.donnees.audienceCible!,
+        categoriesDonneesTraitees: dedoublonne(
+          this.donnees.categoriesDonneesTraitees
+        ),
+        categoriesDonneesTraiteesSupplementaires: dedoublonne(
+          this.donnees.categoriesDonneesTraiteesSupplementaires
+        ),
         dureeDysfonctionnementAcceptable:
           this.donnees.dureeDysfonctionnementAcceptable!,
-        categoriesDonneesTraitees: this.donnees.categoriesDonneesTraitees || [],
-        categoriesDonneesTraiteesSupplementaires:
-          this.donnees.categoriesDonneesTraiteesSupplementaires || [],
-        volumetrieDonneesTraitees: this.donnees.volumetrieDonneesTraitees!,
         localisationDonneesTraitees: this.donnees.localisationDonneesTraitees!,
         niveauSecurite: this.donnees.niveauSecurite!,
+        nomService: this.donnees.nomService,
+        organisationResponsable: { siret: this.donnees.siret! },
+        ouvertureSysteme: this.donnees.ouvertureSysteme!,
+        pointsAcces: dedoublonne(this.donnees.pointsAcces).map((p) => ({
+          description: p,
+        })),
+        presentation: this.donnees.presentation!,
+        specificitesProjet: dedoublonne(this.donnees.specificitesProjet),
+        statutDeploiement: this.donnees.statutDeploiement as StatutDeploiement,
+        typeHebergement: this.donnees.typeHebergement!,
+        typeService: dedoublonne(this.donnees.typeService),
+        volumetrieDonneesTraitees: this.donnees.volumetrieDonneesTraitees!,
       },
     };
   }
@@ -87,7 +96,11 @@ export class BrouillonService {
 
   donneesAPersister(): DonneesBrouillonService {
     const siPresente = (champ: keyof DonneesBrouillonService) =>
-      this.donnees[champ] && { [champ]: this.donnees[champ] };
+      this.donnees[champ] && {
+        [champ]: Array.isArray(this.donnees[champ])
+          ? [...new Set(this.donnees[champ])]
+          : this.donnees[champ],
+      };
 
     return {
       nomService: this.donnees.nomService,
