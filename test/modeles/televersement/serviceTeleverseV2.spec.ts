@@ -7,15 +7,7 @@ import { ReferentielV2 } from '../../../src/referentiel.interface.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.js';
 import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 
-type DonneesDossierHomologation = {
-  dateHomologation: Date;
-  dureeHomologation: string;
-  nomAutoriteHomologation: string;
-  fonctionAutoriteHomologation: string;
-};
-
-const donneesServiceValide: LigneServiceTeleverseV2 &
-  DonneesDossierHomologation = {
+const donneesServiceValide: LigneServiceTeleverseV2 = {
   nom: 'Mon service',
   siret: '13000000000000',
   statutDeploiement: 'En conception',
