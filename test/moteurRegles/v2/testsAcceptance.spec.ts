@@ -1,6 +1,9 @@
 import { beforeEach } from 'vitest';
 import { LecteurDeCSVDeReglesV2 } from '../../../src/moteurRegles/v2/parsing/lecteurDeCSVDeReglesV2.js';
-import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
+import {
+  CategorieDonneesTraitees,
+  mesuresV2,
+} from '../../../donneesReferentielMesuresV2.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import donneesReferentiel from '../../../donneesReferentiel.js';
 import { MoteurReglesV2 } from '../../../src/moteurRegles/v2/moteurReglesV2.js';
@@ -41,13 +44,30 @@ describe("Les tests d'acceptance du nouveau moteur de règles et de niveau de s�
   });
 
   it('vérifie le cas numéro 1', async () => {
-    const constructeurDescriptionServiceV2 = uneDescriptionV2Valide()
-      .avecCategoriesDonneesTraitees(['documentsRHSensibles'])
-      .avecVolumeDonneesTraitees('eleve')
+    const audienceCible = 'limitee';
+    const categories: CategorieDonneesTraitees[] = ['documentsRHSensibles'];
+    const duree = 'moinsDe12h';
+    const ouvertureSysteme = 'accessibleSurInternet';
+    const volume = 'eleve';
+
+    expect(
+      DescriptionServiceV2.niveauSecuriteMinimalRequis({
+        audienceCible,
+        autresDonneesTraitees: [],
+        categories,
+        disponibilite: duree,
+        ouvertureSysteme,
+        volumetrie: volume,
+      })
+    ).toBe('niveau3');
+
+    const cas1 = uneDescriptionV2Valide()
+      .avecCategoriesDonneesTraitees(categories)
+      .avecVolumeDonneesTraitees(volume)
       .avecLocalisationDonneesTraitees('horsUE')
-      .avecDureeDysfonctionnementAcceptable('moinsDe12h')
-      .avecAudienceCible('limitee')
-      .avecOuvertureSysteme('accessibleSurInternet')
+      .avecDureeDysfonctionnementAcceptable(duree)
+      .avecAudienceCible(audienceCible)
+      .avecOuvertureSysteme(ouvertureSysteme)
       .avecSpecificitesProjet([
         'accesPhysiqueAuxSallesTechniques',
         'annuaire',
@@ -57,27 +77,40 @@ describe("Les tests d'acceptance du nouveau moteur de règles et de niveau de s�
       .avecTypeHebergement('onPremise')
       .quiExternalise(['administrationTechnique']);
 
-    expect(
-      DescriptionServiceV2.niveauSecuriteMinimalRequis(
-        constructeurDescriptionServiceV2.donneesDescription()
-      )
-    ).toBe('niveau3');
-
     const mesures = moteur.mesures(
-      constructeurDescriptionServiceV2.avecNiveauSecurite('niveau3').construis()
+      cas1.avecNiveauSecurite('niveau3').construis()
     );
 
     expect(justeLaMesureEtSonChampIndispensable(mesures)).toEqual(mesuresCas1);
   });
 
   it('vérifie le cas numéro 2', async () => {
-    const constructeurDescriptionServiceV2 = uneDescriptionV2Valide()
-      .avecCategoriesDonneesTraitees(['donneesAdministrativesEtFinancieres'])
-      .avecVolumeDonneesTraitees('moyen')
+    const audienceCible = 'moyenne';
+    const categories: CategorieDonneesTraitees[] = [
+      'donneesAdministrativesEtFinancieres',
+    ];
+    const duree = 'moinsDe12h';
+    const ouvertureSysteme = 'accessibleSurInternet';
+    const volume = 'moyen';
+
+    expect(
+      DescriptionServiceV2.niveauSecuriteMinimalRequis({
+        audienceCible,
+        autresDonneesTraitees: [],
+        categories,
+        disponibilite: duree,
+        ouvertureSysteme,
+        volumetrie: volume,
+      })
+    ).toBe('niveau2');
+
+    const cas2 = uneDescriptionV2Valide()
+      .avecCategoriesDonneesTraitees(categories)
+      .avecVolumeDonneesTraitees(volume)
       .avecLocalisationDonneesTraitees('UE')
-      .avecDureeDysfonctionnementAcceptable('moinsDe12h')
-      .avecAudienceCible('moyenne')
-      .avecOuvertureSysteme('accessibleSurInternet')
+      .avecDureeDysfonctionnementAcceptable(duree)
+      .avecAudienceCible(audienceCible)
+      .avecOuvertureSysteme(ouvertureSysteme)
       .avecSpecificitesProjet([])
       .avecTypesService([
         'applicationMobile',
@@ -87,41 +120,46 @@ describe("Les tests d'acceptance du nouveau moteur de règles et de niveau de s�
       .avecTypeHebergement('saas')
       .quiExternalise(['administrationTechnique', 'developpementLogiciel']);
 
-    expect(
-      DescriptionServiceV2.niveauSecuriteMinimalRequis(
-        constructeurDescriptionServiceV2.donneesDescription()
-      )
-    ).toBe('niveau2');
-
     const mesures = moteur.mesures(
-      constructeurDescriptionServiceV2.avecNiveauSecurite('niveau2').construis()
+      cas2.avecNiveauSecurite('niveau2').construis()
     );
 
     expect(justeLaMesureEtSonChampIndispensable(mesures)).toEqual(mesuresCas2);
   });
 
   it('vérifie le cas numéro 3', async () => {
-    const constructeurDescriptionServiceV2 = uneDescriptionV2Valide()
-      .avecCategoriesDonneesTraitees([])
-      .avecAutresDonneesTraitees(['une autre'])
-      .avecVolumeDonneesTraitees('moyen')
+    const audienceCible = 'moyenne';
+    const donneesTraitees: CategorieDonneesTraitees[] = [];
+    const autresDonneesTraitees = ['une autre'];
+    const duree = 'plusDe24h';
+    const ouvertureSysteme = 'internePlusTiers';
+    const volume = 'moyen';
+    expect(
+      DescriptionServiceV2.niveauSecuriteMinimalRequis({
+        audienceCible,
+        autresDonneesTraitees,
+        categories: donneesTraitees,
+        disponibilite: duree,
+        ouvertureSysteme,
+        volumetrie: volume,
+      })
+    ).toBe('niveau1');
+
+    const cas3 = uneDescriptionV2Valide()
+      .avecCategoriesDonneesTraitees(donneesTraitees)
+      .avecAutresDonneesTraitees(autresDonneesTraitees)
+      .avecVolumeDonneesTraitees(volume)
       .avecLocalisationDonneesTraitees('UE')
-      .avecDureeDysfonctionnementAcceptable('plusDe24h')
-      .avecAudienceCible('moyenne')
-      .avecOuvertureSysteme('internePlusTiers')
+      .avecDureeDysfonctionnementAcceptable(duree)
+      .avecAudienceCible(audienceCible)
+      .avecOuvertureSysteme(ouvertureSysteme)
       .avecSpecificitesProjet([])
       .avecTypesService(['portailInformation'])
       .avecTypeHebergement('onPremise')
       .quiExternalise(['developpementLogiciel']);
 
-    expect(
-      DescriptionServiceV2.niveauSecuriteMinimalRequis(
-        constructeurDescriptionServiceV2.donneesDescription()
-      )
-    ).toBe('niveau1');
-
     const mesures = moteur.mesures(
-      constructeurDescriptionServiceV2.avecNiveauSecurite('niveau1').construis()
+      cas3.avecNiveauSecurite('niveau1').construis()
     );
 
     expect(justeLaMesureEtSonChampIndispensable(mesures)).toEqual(mesuresCas3);

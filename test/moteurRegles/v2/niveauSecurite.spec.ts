@@ -76,14 +76,14 @@ describe('Le moteur de règles de choix de niveau de sécurité V2', () => {
 
   describe('sur demande du niveau de sécurité requis', () => {
     it('retourne le niveau calculé', () => {
-      const besoinsSecurite = niveauSecuriteRequis(
-        'eleve',
-        ['documentsIdentifiants', 'secretsDEntreprise'],
-        ['donneeAjoutee', 'autreDonneeAjoutee'],
-        'moinsDe4h',
-        'large',
-        'accessibleSurInternet'
-      );
+      const besoinsSecurite = niveauSecuriteRequis({
+        volumetrie: 'eleve',
+        categories: ['documentsIdentifiants', 'secretsDEntreprise'],
+        autresDonneesTraitees: ['donneeAjoutee', 'autreDonneeAjoutee'],
+        disponibilite: 'moinsDe4h',
+        audienceCible: 'large',
+        ouvertureSysteme: 'accessibleSurInternet',
+      });
 
       expect(besoinsSecurite).toBe('niveau3');
     });
@@ -384,14 +384,14 @@ describe('Le moteur de règles de choix de niveau de sécurité V2', () => {
     ])(
       `évalue le niveau de sécurité requis pour les besoins de $nomCasTest`,
       ({ descriptionService: d, niveauRequis }) => {
-        const niveauRecommande = niveauSecuriteRequis(
-          d.volumetrieDonneesTraitees!,
-          d.categoriesDonneesTraitees!,
-          d.categoriesDonneesTraiteesSupplementaires!,
-          d.dureeDysfonctionnementAcceptable!,
-          d.audienceCible!,
-          d.ouvertureSysteme!
-        );
+        const niveauRecommande = niveauSecuriteRequis({
+          volumetrie: d.volumetrieDonneesTraitees!,
+          categories: d.categoriesDonneesTraitees!,
+          autresDonneesTraitees: d.categoriesDonneesTraiteesSupplementaires!,
+          disponibilite: d.dureeDysfonctionnementAcceptable!,
+          audienceCible: d.audienceCible!,
+          ouvertureSysteme: d.ouvertureSysteme!,
+        });
 
         expect(niveauRecommande).toBe(niveauRequis);
       }

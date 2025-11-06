@@ -1,5 +1,12 @@
 import * as z from 'zod';
-import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
+import {
+  AudienceCible,
+  CategorieDonneesTraitees,
+  DureeDysfonctionnementAcceptable,
+  OuvertureSysteme,
+  questionsV2,
+  VolumetrieDonneesTraitees,
+} from '../../../donneesReferentielMesuresV2.js';
 
 const reglesValidationsCommunesABrouillonEtDescription = {
   nomService: z.string().trim().nonempty().max(200),
@@ -15,19 +22,31 @@ const reglesValidationsCommunesABrouillonEtDescription = {
   activitesExternalisees: z.array(
     z.enum(Object.keys(questionsV2.activiteExternalisee))
   ),
-  ouvertureSysteme: z.enum(Object.keys(questionsV2.ouvertureSysteme)),
-  audienceCible: z.enum(Object.keys(questionsV2.audienceCible)),
+  ouvertureSysteme: z.enum(
+    Object.keys(questionsV2.ouvertureSysteme) as OuvertureSysteme[]
+  ),
+  audienceCible: z.enum(
+    Object.keys(questionsV2.audienceCible) as AudienceCible[]
+  ),
   dureeDysfonctionnementAcceptable: z.enum(
-    Object.keys(questionsV2.dureeDysfonctionnementAcceptable)
+    Object.keys(
+      questionsV2.dureeDysfonctionnementAcceptable
+    ) as DureeDysfonctionnementAcceptable[]
   ),
   categoriesDonneesTraitees: z.array(
-    z.enum(Object.keys(questionsV2.categorieDonneesTraitees))
+    z.enum(
+      Object.keys(
+        questionsV2.categorieDonneesTraitees
+      ) as CategorieDonneesTraitees[]
+    )
   ),
   categoriesDonneesTraiteesSupplementaires: z.array(
     z.string().trim().max(200).nonempty()
   ),
   volumetrieDonneesTraitees: z.enum(
-    Object.keys(questionsV2.volumetrieDonneesTraitees)
+    Object.keys(
+      questionsV2.volumetrieDonneesTraitees
+    ) as VolumetrieDonneesTraitees[]
   ),
   localisationDonneesTraitees: z.enum(
     Object.keys(questionsV2.localisationDonneesTraitees)

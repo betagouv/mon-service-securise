@@ -95,14 +95,23 @@ export const matriceBesoinsSecuriteCriticiteExposition: NiveauSecurite[][] = [
   ['niveau2', 'niveau3', 'niveau3', 'niveau3'],
 ];
 
-export const niveauSecuriteRequis = (
-  volumetrie: VolumetrieDonneesTraitees,
-  categories: CategorieDonneesTraitees[],
-  autresDonneesTraitees: string[],
-  disponibilite: DureeDysfonctionnementAcceptable,
-  audienceCible: AudienceCible,
-  ouvertureSysteme: OuvertureSysteme
-): NiveauSecurite => {
+export type PourCalculNiveauSecurite = {
+  volumetrie: VolumetrieDonneesTraitees;
+  categories: CategorieDonneesTraitees[];
+  autresDonneesTraitees: string[];
+  disponibilite: DureeDysfonctionnementAcceptable;
+  audienceCible: AudienceCible;
+  ouvertureSysteme: OuvertureSysteme;
+};
+
+export const niveauSecuriteRequis = ({
+  volumetrie,
+  categories,
+  autresDonneesTraitees,
+  ouvertureSysteme,
+  audienceCible,
+  disponibilite,
+}: PourCalculNiveauSecurite): NiveauSecurite => {
   const criticiteDonnees = criticiteVolumetrieDonneesTraitees(
     volumetrie,
     categories,

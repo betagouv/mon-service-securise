@@ -109,12 +109,12 @@ const routesConnecteApiBrouillonService = ({
         idUtilisateurCourant,
         id as UUID
       );
+
       const niveauRequis = DescriptionServiceV2.niveauSecuriteMinimalRequis(
-        brouillon.enDonneesCreationServiceV2().descriptionService
+        brouillon.pourCalculNiveauDeSecurite()
       );
-      return reponse.json({
-        niveauDeSecuriteMinimal: niveauRequis,
-      });
+
+      return reponse.json({ niveauDeSecuriteMinimal: niveauRequis });
     } catch (e) {
       if (e instanceof ErreurBrouillonInexistant)
         return reponse.sendStatus(404);
