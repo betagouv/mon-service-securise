@@ -12,7 +12,7 @@ const donneesServiceValide = {
   statut: 'En projet',
   localisation: 'France',
   delaiAvantImpactCritique: "Plus d'une journée",
-  dateHomologation: '01/01/2025',
+  dateHomologation: '2025-01-31',
   dureeHomologation: '6 mois',
   nomAutoriteHomologation: 'Nom Prénom',
   fonctionAutoriteHomologation: 'Fonction',
@@ -210,7 +210,7 @@ describe('Un service téléversé', () => {
 
         expect(service.dossier).to.eql({
           decision: {
-            dateHomologation: '01/01/2025',
+            dateHomologation: '2025-01-31',
             dureeValidite: 'sixMois',
           },
           autorite: {
