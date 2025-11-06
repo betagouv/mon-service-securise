@@ -1,6 +1,6 @@
 import { beforeEach } from 'vitest';
 import {
-  DonneesServiceTeleverseV2,
+  LigneServiceTeleverseV2,
   ServiceTeleverseV2,
 } from '../../../src/modeles/televersement/serviceTeleverseV2.js';
 import { ReferentielV2 } from '../../../src/referentiel.interface.js';
@@ -14,7 +14,7 @@ type DonneesDossierHomologation = {
   fonctionAutoriteHomologation: string;
 };
 
-const donneesServiceValide: DonneesServiceTeleverseV2 &
+const donneesServiceValide: LigneServiceTeleverseV2 &
   DonneesDossierHomologation = {
   nom: 'Mon service',
   siret: '13000000000000',

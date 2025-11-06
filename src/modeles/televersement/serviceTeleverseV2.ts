@@ -1,4 +1,3 @@
-import * as z from 'zod';
 import { ReferentielV2 } from '../../referentiel.interface.js';
 import {
   AudienceCible,
@@ -15,7 +14,7 @@ import {
   DescriptionServiceV2,
   DonneesDescriptionServiceV2,
 } from '../descriptionServiceV2.js';
-import donneesReferentiel from '../../../donneesReferentiel.js';
+import { ValidationServiceTeleverseV2 } from './validationV2.js';
 
 type DescriptionStatutDeploiement =
   (typeof questionsV2.statutDeploiement)[StatutDeploiement]['description'];
@@ -34,24 +33,7 @@ type NomVolumetrieDonneesTraitees =
 type NomLocalisationDonneesTraitees =
   (typeof questionsV2.localisationDonneesTraitees)[LocalisationDonneesTraitees]['nom'];
 
-enum ERREURS_VALIDATION {
-  NOM_INVALIDE = 'NOM_INVALIDE',
-  NOM_EXISTANT = 'NOM_EXISTANT',
-  SIRET_INVALIDE = 'SIRET_INVALIDE',
-  STATUT_DEPLOIEMENT_INVALIDE = 'STATUT_DEPLOIEMENT_INVALIDE',
-  TYPE_INVALIDE = 'TYPE_INVALIDE',
-  TYPE_HEBERGEMENT_INVALIDE = 'TYPE_HEBERGEMENT_INVALIDE',
-  OUVERTURE_SYSTEME_INVALIDE = 'OUVERTURE_SYSTEME_INVALIDE',
-  AUDIENCE_CIBLE_INVALIDE = 'AUDIENCE_CIBLE_INVALIDE',
-  VOLUMETRIE_DONNEES_TRAITEES_INVALIDE = 'VOLUMETRIE_DONNEES_TRAITEES_INVALIDE',
-  LOCALISATION_INVALIDE = 'LOCALISATION_INVALIDE',
-  DELAI_AVANT_IMPACT_CRITIQUE_INVALIDE = 'DELAI_AVANT_IMPACT_CRITIQUE_INVALIDE',
-  DOSSIER_HOMOLOGATION_INCOMPLET = 'DOSSIER_HOMOLOGATION_INCOMPLET',
-  DATE_HOMOLOGATION_INVALIDE = 'DATE_HOMOLOGATION_INVALIDE',
-  DUREE_HOMOLOGATION_INVALIDE = 'DUREE_HOMOLOGATION_INVALIDE',
-}
-
-export type DonneesServiceTeleverseV2 = {
+export type LigneServiceTeleverseV2 = {
   nom: string;
   siret: string;
   statutDeploiement: DescriptionStatutDeploiement;
@@ -82,24 +64,26 @@ type DonneesMinimalesRequisesDossierHomologation = {
   autorite: { nom: string; fonction: string };
 };
 
-export class ServiceTeleverseV2 {
-  readonly donnees: Omit<
-    DonneesServiceTeleverseV2,
-    | 'dateHomologation'
-    | 'dureeHomologation'
-    | 'nomAutoriteHomologation'
-    | 'fonctionAutoriteHomologation'
-  > & {
-    dossierHomologation?: {
-      dateHomologation: Date;
-      dureeHomologation: string;
-      nomAutoriteHomologation: string;
-      fonctionAutoriteHomologation: string;
-    };
+export type DonneesServiceTeleverseV2 = Omit<
+  LigneServiceTeleverseV2,
+  | 'dateHomologation'
+  | 'dureeHomologation'
+  | 'nomAutoriteHomologation'
+  | 'fonctionAutoriteHomologation'
+> & {
+  dossierHomologation?: {
+    dateHomologation: Date;
+    dureeHomologation: string;
+    nomAutoriteHomologation: string;
+    fonctionAutoriteHomologation: string;
   };
+};
+
+export class ServiceTeleverseV2 {
+  readonly donnees: DonneesServiceTeleverseV2;
   readonly referentiel: ReferentielV2;
 
-  constructor(donnees: DonneesServiceTeleverseV2, referentiel: ReferentielV2) {
+  constructor(donnees: LigneServiceTeleverseV2, referentiel: ReferentielV2) {
     const aAuMoinsUneInfoDuDossier = () =>
       [
         donnees.dateHomologation,
@@ -124,90 +108,8 @@ export class ServiceTeleverseV2 {
   }
 
   valide(nomServicesExistants: string[] = []) {
-    const validation = z.object({
-      nom: z
-        .string(ERREURS_VALIDATION.NOM_INVALIDE)
-        .trim()
-        .nonempty(ERREURS_VALIDATION.NOM_INVALIDE)
-        .max(200, ERREURS_VALIDATION.NOM_INVALIDE)
-        .refine(
-          (n) => !nomServicesExistants.includes(n),
-          ERREURS_VALIDATION.NOM_EXISTANT
-        ),
-      siret: z
-        .string(ERREURS_VALIDATION.SIRET_INVALIDE)
-        .regex(/^\d{14}$/, ERREURS_VALIDATION.SIRET_INVALIDE),
-      statutDeploiement: z.enum(
-        Object.values(questionsV2.statutDeploiement).map((s) => s.description),
-        ERREURS_VALIDATION.STATUT_DEPLOIEMENT_INVALIDE
-      ),
-      typeService: z
-        .array(
-          z.enum(
-            Object.values(questionsV2.typeDeService).map((t) => t.nom),
-            ERREURS_VALIDATION.TYPE_INVALIDE
-          ),
-          ERREURS_VALIDATION.TYPE_INVALIDE
-        )
-        .nonempty(ERREURS_VALIDATION.TYPE_INVALIDE),
-      typeHebergement: z.enum(
-        Object.values(questionsV2.typeHebergement).map((t) => t.nom),
-        ERREURS_VALIDATION.TYPE_HEBERGEMENT_INVALIDE
-      ),
-      ouvertureSysteme: z.enum(
-        Object.values(questionsV2.ouvertureSysteme).map((o) => o.nom),
-        ERREURS_VALIDATION.OUVERTURE_SYSTEME_INVALIDE
-      ),
-      audienceCible: z.enum(
-        Object.values(questionsV2.audienceCible).map((a) => a.nom),
-        ERREURS_VALIDATION.AUDIENCE_CIBLE_INVALIDE
-      ),
-      dureeDysfonctionnementAcceptable: z.enum(
-        Object.values(questionsV2.dureeDysfonctionnementAcceptable).map(
-          (d) => d.nom
-        ),
-        ERREURS_VALIDATION.DELAI_AVANT_IMPACT_CRITIQUE_INVALIDE
-      ),
-      volumetrieDonneesTraitees: z.enum(
-        Object.values(questionsV2.volumetrieDonneesTraitees).map((v) => v.nom),
-        ERREURS_VALIDATION.VOLUMETRIE_DONNEES_TRAITEES_INVALIDE
-      ),
-      localisationDonneesTraitees: z.enum(
-        Object.values(questionsV2.localisationDonneesTraitees).map(
-          (l) => l.nom
-        ),
-        ERREURS_VALIDATION.LOCALISATION_INVALIDE
-      ),
-      dossierHomologation: z
-        .strictObject({
-          dateHomologation: z.date(
-            ERREURS_VALIDATION.DATE_HOMOLOGATION_INVALIDE
-          ),
-          dureeHomologation: z.enum(
-            Object.values(donneesReferentiel.echeancesRenouvellement).map(
-              (l) => l.description
-            ),
-            ERREURS_VALIDATION.DUREE_HOMOLOGATION_INVALIDE
-          ),
-          nomAutoriteHomologation: z
-            .string(ERREURS_VALIDATION.DOSSIER_HOMOLOGATION_INCOMPLET)
-            .trim()
-            .nonempty(ERREURS_VALIDATION.DOSSIER_HOMOLOGATION_INCOMPLET),
-          fonctionAutoriteHomologation: z
-            .string(ERREURS_VALIDATION.DOSSIER_HOMOLOGATION_INCOMPLET)
-            .trim()
-            .nonempty(ERREURS_VALIDATION.DOSSIER_HOMOLOGATION_INCOMPLET),
-        })
-        .optional(),
-    });
-    const resultat = validation.safeParse(this.donnees);
-    if (resultat.success) return [];
-
-    return [
-      ...new Set(
-        resultat.error.issues.map((i) => i.message as ERREURS_VALIDATION)
-      ),
-    ];
+    const validation = new ValidationServiceTeleverseV2(nomServicesExistants);
+    return validation.valide(this.donnees);
   }
 
   enDonneesService(): {
