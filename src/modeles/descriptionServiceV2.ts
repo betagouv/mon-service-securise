@@ -147,26 +147,33 @@ export class DescriptionServiceV2 {
   }
 
   donneesSerialisees(): DonneesDescriptionServiceV2 {
+    const dedoublonne = <T>(tableau: Array<T>) => [...new Set(tableau)];
+
     return {
+      activitesExternalisees: dedoublonne(this.activitesExternalisees),
+      audienceCible: this.audienceCible,
+      categoriesDonneesTraitees: dedoublonne(this.categoriesDonneesTraitees),
+      categoriesDonneesTraiteesSupplementaires: dedoublonne(
+        this.categoriesDonneesTraiteesSupplementaires
+      ),
+      dureeDysfonctionnementAcceptable: this.dureeDysfonctionnementAcceptable,
+      localisationDonneesTraitees: this.localisationDonneesTraitees,
       niveauSecurite: this.niveauSecurite,
+      nomService: this.nomService,
       organisationResponsable:
         this.organisationResponsable.toJSON() as DonneesEntite,
-      statutDeploiement: this.statutDeploiement,
-      volumetrieDonneesTraitees: this.volumetrieDonneesTraitees,
-      nomService: this.nomService,
-      presentation: this.presentation,
-      pointsAcces: this.pointsAcces.donneesSerialisees(),
-      typeService: this.typeService,
-      specificitesProjet: this.specificitesProjet,
-      typeHebergement: this.typeHebergement,
-      activitesExternalisees: this.activitesExternalisees,
       ouvertureSysteme: this.ouvertureSysteme,
-      audienceCible: this.audienceCible,
-      dureeDysfonctionnementAcceptable: this.dureeDysfonctionnementAcceptable,
-      categoriesDonneesTraitees: this.categoriesDonneesTraitees,
-      categoriesDonneesTraiteesSupplementaires:
-        this.categoriesDonneesTraiteesSupplementaires,
-      localisationDonneesTraitees: this.localisationDonneesTraitees,
+      pointsAcces: dedoublonne(
+        (
+          this.pointsAcces.donneesSerialisees() as { description: string }[]
+        ).map((p) => p.description)
+      ).map((p) => ({ description: p })),
+      presentation: this.presentation,
+      specificitesProjet: dedoublonne(this.specificitesProjet),
+      statutDeploiement: this.statutDeploiement,
+      typeHebergement: this.typeHebergement,
+      typeService: dedoublonne(this.typeService),
+      volumetrieDonneesTraitees: this.volumetrieDonneesTraitees,
     };
   }
 

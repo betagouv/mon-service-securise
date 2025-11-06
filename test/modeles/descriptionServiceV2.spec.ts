@@ -12,6 +12,7 @@ import {
   ErreurDonneesObligatoiresManquantes,
 } from '../../src/erreurs.js';
 import { creeReferentielV2 } from '../../src/referentielV2.js';
+import { deuxFois } from '../aides/tableaux.ts';
 
 describe('Une description service V2', () => {
   const referentiel = creeReferentielV2();
@@ -69,6 +70,32 @@ describe('Une description service V2', () => {
       categoriesDonneesTraiteesSupplementaires: ['numéros de téléphones'],
       localisationDonneesTraitees: 'horsUE',
     });
+  });
+
+  it('dédoublonne toutes les propriétés "Tableau"', () => {
+    const description = uneDescriptionV2Valide()
+      .avecSpecificitesProjet(deuxFois('accesPhysiqueAuxBureaux'))
+      .avecCategoriesDonneesTraitees(
+        deuxFois('donneesAdministrativesEtFinancieres')
+      )
+      .avecAutresDonneesTraitees(deuxFois('mes données'))
+      .avecTypesService(deuxFois('api'))
+      .quiExternalise(deuxFois('administrationTechnique'))
+      .avecPointsAcces(deuxFois('a.fr'))
+      .construis();
+
+    const donnees = description.donneesSerialisees();
+
+    expect(donnees.specificitesProjet).toEqual(['accesPhysiqueAuxBureaux']);
+    expect(donnees.categoriesDonneesTraitees).toEqual([
+      'donneesAdministrativesEtFinancieres',
+    ]);
+    expect(donnees.categoriesDonneesTraiteesSupplementaires).toEqual([
+      'mes données',
+    ]);
+    expect(donnees.typeService).toEqual(['api']);
+    expect(donnees.activitesExternalisees).toEqual(['administrationTechnique']);
+    expect(donnees.pointsAcces).toEqual([{ description: 'a.fr' }]);
   });
 
   it('connaît sa réprensation JSON de données : les mêmes que les données sérialisées', () => {

@@ -3,10 +3,9 @@ import {
   ProprietesBrouillonService,
 } from '../../src/modeles/brouillonService.js';
 import { unUUID } from '../constructeurs/UUID.js';
+import { deuxFois } from '../aides/tableaux.ts';
 
 describe('Un brouillon de Service v2', () => {
-  const deuxFois = <T>(chaine: T) => [chaine, chaine];
-
   const unBrouillonAvecDoublons = () =>
     new BrouillonService(unUUID('b'), {
       nomService: 'Mairie A',
