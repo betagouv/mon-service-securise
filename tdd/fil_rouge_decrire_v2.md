@@ -2,6 +2,10 @@
 
 ## TODO
 
+#### Téléversement Excel
+
+- [ ] Bien penser que « type Hébergement : SaaS » = cocher les 2 activités externalisées
+
 #### Référentiel v2
 
 - [x] Créer un ref v2 qui implémente la même interface que reférentiel v1 avec un spread
