@@ -8,6 +8,7 @@ import { ReferentielV2 } from '../../referentiel.interface.js';
 import { UUID } from '../../typesBasiques.js';
 import Dossier from '../dossier.js';
 import BusEvenements from '../../bus/busEvenements.js';
+import { VersionService } from '../versionService.js';
 
 const STATUT = {
   INVALIDE: 'INVALIDE',
@@ -130,6 +131,7 @@ class TeleversementServicesV2 {
       new EvenementServicesImportes({
         idUtilisateur,
         nbServicesImportes: this.services.length,
+        versionServicesImportes: VersionService.v2,
       })
     );
   }
