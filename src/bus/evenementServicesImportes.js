@@ -1,5 +1,5 @@
 class EvenementServicesImportes {
-  constructor({ idUtilisateur, nbServicesImportes }) {
+  constructor({ idUtilisateur, nbServicesImportes, versionServicesImportes }) {
     if (!nbServicesImportes) {
       throw new Error(
         "Impossible d'instancier l'événement sans nombre de service importés"
@@ -13,6 +13,7 @@ class EvenementServicesImportes {
     }
     this.nbServicesImportes = nbServicesImportes;
     this.idUtilisateur = idUtilisateur;
+    this.versionServicesImportes = versionServicesImportes;
   }
 }
 export default EvenementServicesImportes;
