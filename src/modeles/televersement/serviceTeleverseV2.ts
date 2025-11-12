@@ -57,9 +57,12 @@ export type DonneesServiceTeleverseV2 = Omit<
 
 export class ServiceTeleverseV2 {
   readonly donnees: DonneesServiceTeleverseV2;
+  readonly donneesOrigine: LigneServiceTeleverseV2;
   readonly referentiel: ReferentielV2;
 
   constructor(donnees: LigneServiceTeleverseV2, referentiel: ReferentielV2) {
+    this.donneesOrigine = donnees;
+
     const aAuMoinsUneInfoDuDossier = () =>
       [
         donnees.dateHomologation,
@@ -167,5 +170,13 @@ export class ServiceTeleverseV2 {
         },
       }),
     };
+  }
+
+  nom() {
+    return this.donnees.nom;
+  }
+
+  toJSON() {
+    return this.donneesOrigine;
   }
 }
