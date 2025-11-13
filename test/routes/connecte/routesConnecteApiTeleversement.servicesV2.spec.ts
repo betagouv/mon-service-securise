@@ -175,4 +175,18 @@ describe('Les routes connecté de téléversement de services V2', () => {
       expect(reponse.body.services[0].erreurs.length).toBe(0);
     });
   });
+
+  describe('Quand requête DELETE sur `/api/televersement/services-v2`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      testeur.depotDonnees().supprimeTeleversementServices = async () => true;
+    });
+
+    it('renvoie une réponse 200', async () => {
+      testeur.depotDonnees().supprimeTeleversementServices = async () => 1;
+      const reponse = await testeur.delete('/api/televersement/services-v2');
+
+      expect(reponse.status).toBe(200);
+    });
+  });
 });
