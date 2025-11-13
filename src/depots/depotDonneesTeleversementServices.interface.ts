@@ -7,10 +7,10 @@ import { VersionService } from '../modeles/versionService.js';
 export interface DepotDonneesTeleversementServices {
   lisPourcentageProgressionTeleversementServices: (
     idUtilisateur: UUID
-  ) => Promise<number>;
+  ) => Promise<number | undefined>;
   lisTeleversementServices: (
     idUtilisateur: UUID
-  ) => Promise<TeleversementServices | TeleversementServicesV2>;
+  ) => Promise<TeleversementServices | TeleversementServicesV2 | undefined>;
   metsAJourProgressionTeleversement: (
     idUtilisateur: UUID,
     progression: number

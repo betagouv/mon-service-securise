@@ -2,7 +2,7 @@ import { createHash, randomBytes } from 'crypto';
 import bcrypt from 'bcrypt';
 import {
   AdaptateurChiffrement,
-  ChaineOuObjet,
+  Stringifiable,
 } from './adaptateurChiffrement.interface.js';
 import { DonneesChiffrees } from '../typesBasiques.js';
 
@@ -28,7 +28,7 @@ const adaptateurChiffrement = ({
       .digest('hex');
 
   return {
-    chiffre: async (chaineOuObjet: ChaineOuObjet) =>
+    chiffre: async (chaineOuObjet: Stringifiable) =>
       chaineOuObjet as DonneesChiffrees,
 
     dechiffre: async <T>(chaineChiffree: DonneesChiffrees) =>
