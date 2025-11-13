@@ -6,6 +6,15 @@
 
 - [ ] Bien penser que « type Hébergement : SaaS » = cocher les 2 activités externalisées
 
+##### Nettoyage post MEP
+
+- TiroirTeleversementServices.svelte
+- évènement : svelte-recharge-rapport-televersement-services
+- paramètre url : rapportTeleversement
+- serviceTeleverse.js
+- televersementServices.js
+-
+
 #### Référentiel v2
 
 - [x] Créer un ref v2 qui implémente la même interface que reférentiel v1 avec un spread
