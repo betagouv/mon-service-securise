@@ -78,7 +78,7 @@ const creeDepot = (
         ...s,
         dateHomologation: s.dateHomologation
           ? new Date(s.dateHomologation)
-          : null,
+          : undefined,
       }));
       return new TeleversementServicesV2({ services: lignes }, referentielV2);
     }
