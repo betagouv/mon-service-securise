@@ -13,7 +13,8 @@
 - paramètre url : rapportTeleversement
 - serviceTeleverse.js
 - televersementServices.js
--
+- table televersement_services colonne version_service + adaptateur Postgres
+- adaptateurTeleversementServices.xls la méthode v1 et les constantes associées
 
 #### Référentiel v2
 

@@ -148,6 +148,7 @@ const testeurMss = () => {
     };
     adaptateurTeleversementServices = {
       extraisTeleversementServices: async () => {},
+      extraisTeleversementServicesV2: async () => {},
     };
     adaptateurTeleversementModelesMesureSpecifique = {
       extraisDonneesTeleversees: async () => {},

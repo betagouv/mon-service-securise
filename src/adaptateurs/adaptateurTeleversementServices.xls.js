@@ -64,4 +64,8 @@ const extraisTeleversementServices = async (buffer) => {
   }));
 };
 
-export { extraisTeleversementServices };
+const extraisTeleversementServicesV2 = async () => [
+  { nom: 'Un super service' },
+];
+
+export { extraisTeleversementServices, extraisTeleversementServicesV2 };
