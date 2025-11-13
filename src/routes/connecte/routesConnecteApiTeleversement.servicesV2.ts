@@ -6,6 +6,8 @@ import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonneesTeleversementServices } from '../../depots/depotDonneesTeleversementServices.interface.js';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { VersionService } from '../../modeles/versionService.js';
+import { UUID } from '../../typesBasiques.js';
+import Service from '../../modeles/service.js';
 
 type ConfigurationRoutes = {
   lecteurDeFormData: {
@@ -17,7 +19,9 @@ type ConfigurationRoutes = {
     ) => Promise<LigneServiceTeleverseV2[]>;
   };
   busEvenements: BusEvenements;
-  depotDonnees: DepotDonneesTeleversementServices;
+  depotDonnees: DepotDonneesTeleversementServices & {
+    services: (idUtilisateur: UUID) => Promise<Service[]>;
+  };
   middleware: Middleware;
 };
 
@@ -50,6 +54,25 @@ const routesConnecteApiTeleversementServicesV2 = ({
       throw e;
     }
     reponse.sendStatus(201);
+  });
+
+  routes.get('/', async (requete, reponse) => {
+    const { idUtilisateurCourant } = requete as RequestRouteConnecte;
+
+    const services = await depotDonnees.services(idUtilisateurCourant);
+    const nomsServicesExistants = services.map(
+      (service) => service.nomService() as string
+    );
+    const televersementServices =
+      await depotDonnees.lisTeleversementServices(idUtilisateurCourant);
+
+    if (!televersementServices) return reponse.sendStatus(404);
+
+    const rapportDetaille = televersementServices.rapportDetaille(
+      nomsServicesExistants
+    );
+
+    return reponse.json(rapportDetaille);
   });
 
   return routes;

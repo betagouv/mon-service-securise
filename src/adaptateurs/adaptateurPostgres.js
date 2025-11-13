@@ -657,7 +657,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
   const lisTeleversementServices = async (idUtilisateur) =>
     knex('televersement_services')
       .where({ id_utilisateur: idUtilisateur })
-      .select('donnees')
+      .select({ donnees: 'donnees', versionService: 'version_service' })
       .first();
 
   const lisProgressionTeleversementServices = async (idUtilisateur) =>
