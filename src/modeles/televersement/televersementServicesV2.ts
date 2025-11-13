@@ -135,6 +135,10 @@ class TeleversementServicesV2 {
       })
     );
   }
+
+  nombre() {
+    return this.services.length;
+  }
 }
 
 export default TeleversementServicesV2;

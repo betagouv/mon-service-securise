@@ -3,8 +3,9 @@ import { DonneesChiffrees, UUID } from '../typesBasiques.js';
 import { VersionService } from '../modeles/versionService.js';
 import { LigneServiceTeleverseV2 } from '../modeles/televersement/serviceTeleverseV2.js';
 import { DepotDonneesTeleversementServices } from './depotDonneesTeleversementServices.interface.js';
-import { Referentiel } from '../referentiel.interface.js';
+import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
 import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
+import TeleversementServicesV2 from '../modeles/televersement/televersementServicesV2.js';
 
 export type PersistanceTeleversementServices = {
   ajouteTeleversementServices: (
@@ -12,9 +13,13 @@ export type PersistanceTeleversementServices = {
     donneesChiffrees: DonneesChiffrees,
     versionService: VersionService
   ) => Promise<UUID>;
-  lisTeleversementServices: (
-    idUtilisateur: UUID
-  ) => Promise<undefined | { donnees: { services: DonneesChiffrees } }>;
+  lisTeleversementServices: (idUtilisateur: UUID) => Promise<
+    | undefined
+    | {
+        donnees: { services: DonneesChiffrees };
+        versionService: VersionService;
+      }
+  >;
   lisProgressionTeleversementServices: (
     idUtilisateur: UUID
   ) => Promise<{ progression: number }>;
@@ -29,22 +34,28 @@ type Configuration = {
   adaptateurChiffrement: AdaptateurChiffrement;
   adaptateurPersistance: PersistanceTeleversementServices;
   referentiel: Referentiel;
+  referentielV2: ReferentielV2;
 };
 
 const creeDepot = (
   config: Configuration
 ): DepotDonneesTeleversementServices => {
-  const { adaptateurPersistance, adaptateurChiffrement, referentiel } = config;
+  const {
+    adaptateurPersistance: persistance,
+    adaptateurChiffrement: chiffrement,
+    referentiel,
+    referentielV2,
+  } = config;
 
   const nouveauTeleversementServices = async (
     idUtilisateur: UUID,
     donneesTeleversementServices: LigneServiceTeleverseV2[],
     versionService: VersionService
   ) => {
-    const donneesChiffrees = await adaptateurChiffrement.chiffre(
+    const donneesChiffrees = await chiffrement.chiffre(
       donneesTeleversementServices
     );
-    return adaptateurPersistance.ajouteTeleversementServices(
+    return persistance.ajouteTeleversementServices(
       idUtilisateur,
       donneesChiffrees,
       versionService
@@ -52,14 +63,29 @@ const creeDepot = (
   };
 
   const lisTeleversementServices = async (idUtilisateur: UUID) => {
-    const donneesChiffrees =
-      await adaptateurPersistance.lisTeleversementServices(idUtilisateur);
-    if (!donneesChiffrees) return undefined;
+    const persistees =
+      await persistance.lisTeleversementServices(idUtilisateur);
+    if (!persistees) return undefined;
 
-    const services = await adaptateurChiffrement.dechiffre(
-      donneesChiffrees.donnees.services
+    const { donnees, versionService } = persistees;
+    const services = await chiffrement.dechiffre(donnees.services);
+
+    if (versionService === VersionService.v1)
+      return new TeleversementServices({ services }, referentiel);
+
+    if (versionService === VersionService.v2) {
+      const lignes = (services as LigneServiceTeleverseV2[]).map((s) => ({
+        ...s,
+        dateHomologation: s.dateHomologation
+          ? new Date(s.dateHomologation)
+          : null,
+      }));
+      return new TeleversementServicesV2({ services: lignes }, referentielV2);
+    }
+
+    throw new Error(
+      `Impossible de lire la version du téléversement de ${idUtilisateur}`
     );
-    return new TeleversementServices({ services }, referentiel);
   };
 
   const lisPourcentageProgressionTeleversementServices = async (
@@ -69,23 +95,19 @@ const creeDepot = (
     if (!televersement) return undefined;
 
     const { progression } =
-      await adaptateurPersistance.lisProgressionTeleversementServices(
-        idUtilisateur
-      );
+      await persistance.lisProgressionTeleversementServices(idUtilisateur);
+
     return Math.floor(((progression + 1) / televersement.nombre()) * 100);
   };
 
   const supprimeTeleversementServices = async (idUtilisateur: UUID) =>
-    adaptateurPersistance.supprimeTeleversementServices(idUtilisateur);
+    persistance.supprimeTeleversementServices(idUtilisateur);
 
   const metsAJourProgressionTeleversement = async (
     idUtilisateur: UUID,
     progression: number
   ) =>
-    adaptateurPersistance.metsAJourProgressionTeleversement(
-      idUtilisateur,
-      progression
-    );
+    persistance.metsAJourProgressionTeleversement(idUtilisateur, progression);
 
   return {
     lisPourcentageProgressionTeleversementServices,

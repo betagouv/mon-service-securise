@@ -1,4 +1,5 @@
 import { fabriqueAdaptateurHorloge } from './adaptateurHorloge.js';
+import { unUUIDRandom } from '../../test/constructeurs/UUID.js';
 
 const nouvelAdaptateur = (
   donnees = {},
@@ -15,8 +16,52 @@ const nouvelAdaptateur = (
   donnees.superviseurs ||= [];
   donnees.modelesMesureSpecifique ||= [];
   donnees.associationModelesMesureSpecifiqueServices ||= [];
-  donnees.televersements = { modelesMesureSpecifique: [] };
+  donnees.televersements = { modelesMesureSpecifique: [], services: [] };
   donnees.brouillonsServices ||= [];
+
+  const ajouteTeleversementServices = async (
+    idUtilisateur,
+    donneesChiffrees,
+    versionService
+  ) => {
+    const id = unUUIDRandom();
+    donnees.televersements.services.push({
+      id,
+      idUtilisateur,
+      donnees: { services: donneesChiffrees },
+      versionService,
+      progression: 0,
+    });
+    return id;
+  };
+
+  const lisTeleversementServices = async (idUtilisateur) =>
+    donnees.televersements.services.find(
+      (s) => s.idUtilisateur === idUtilisateur
+    );
+
+  const supprimeTeleversementServices = async (idUtilisateur) => {
+    donnees.televersements.services = donnees.televersements.services.filter(
+      (s) => s.idUtilisateur === idUtilisateur
+    );
+  };
+
+  const lisProgressionTeleversementServices = async (idUtilisateur) => {
+    const cible = donnees.televersements.services.find(
+      (s) => s.idUtilisateur === idUtilisateur
+    );
+    return { progression: cible.progression };
+  };
+
+  const metsAJourProgressionTeleversement = async (
+    idUtilisateur,
+    progression
+  ) => {
+    const cible = donnees.televersements.services.find(
+      (s) => s.idUtilisateur === idUtilisateur
+    );
+    cible.progression = progression;
+  };
 
   const supprimeEnregistrement = async (nomTable, id) => {
     donnees[nomTable] = donnees[nomTable].filter((e) => e.id !== id);
@@ -585,6 +630,7 @@ const nouvelAdaptateur = (
     ajouteSuggestionAction,
     ajouteTacheDeService,
     ajouteTeleversementModelesMesureSpecifique,
+    ajouteTeleversementServices,
     ajouteUtilisateur,
     associeModeleMesureSpecifiqueAuxServices,
     associeModelesMesureSpecifiqueAuService,
@@ -592,32 +638,35 @@ const nouvelAdaptateur = (
     autorisationPour,
     autorisations,
     autorisationsDuService,
+    contributeursDesServicesDe,
     estSuperviseur,
-    serviceExisteAvecHashNom,
-    servicesComplets,
     lisBrouillonsService,
     lisModelesMesureSpecifiquePourUtilisateur,
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
+    lisProgressionTeleversementServices,
     lisSuperviseursConcernes,
     lisTeleversementModelesMesureSpecifique,
+    lisTeleversementServices,
     marqueNouveauteLue,
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
     metsAJourIdResetMdpUtilisateur,
     metsAJourModeleMesureSpecifique,
+    metsAJourProgressionTeleversement,
     metsAJourUtilisateur,
     modeleMesureSpecifiqueAppartientA,
     nbAutorisationsProprietaire,
     nbModelesMesureSpecifiquePourUtilisateur,
     nombreServices,
     nouveautesPourUtilisateur,
-    contributeursDesServicesDe,
     sauvegardeAutorisation,
     sauvegardeBrouillonService,
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
     sauvegardeService,
+    serviceExisteAvecHashNom,
+    servicesComplets,
     superviseur,
     supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService,
     supprimeAutorisation,
@@ -632,6 +681,7 @@ const nouvelAdaptateur = (
     supprimeService,
     supprimeServices,
     supprimeTeleversementModelesMesureSpecifique,
+    supprimeTeleversementServices,
     supprimeTousLiensEntreUnServiceEtModelesMesureSpecifique,
     supprimeUtilisateur,
     supprimeUtilisateurs,
