@@ -1,9 +1,9 @@
 import { DonneesChiffrees } from '../typesBasiques.js';
 
-export type ChaineOuObjet = string | Record<string, unknown>;
+export type Stringifiable = string | Record<string, unknown> | Array<unknown>;
 
 export type AdaptateurChiffrement = {
-  chiffre: (chaineOuObjet: ChaineOuObjet) => Promise<DonneesChiffrees>;
+  chiffre: (chose: Stringifiable) => Promise<DonneesChiffrees>;
   dechiffre: <T>(chaineChiffree: DonneesChiffrees) => Promise<T>;
   hacheBCrypt: (chaineEnClair: string) => Promise<string>;
   compareBCrypt: (
