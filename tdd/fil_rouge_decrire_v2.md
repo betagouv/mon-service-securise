@@ -11,6 +11,8 @@
 - TiroirTeleversementServices.svelte
 - évènement : svelte-recharge-rapport-televersement-services
 - paramètre url : rapportTeleversement
+- RapportTeleversementServices.svelte
+- les fonctions v1 dans rapportTeleversementServices.api.ts
 - serviceTeleverse.js
 - televersementServices.js
 - table televersement_services colonne version_service + adaptateur Postgres
