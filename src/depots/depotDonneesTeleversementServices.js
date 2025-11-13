@@ -5,14 +5,16 @@ const creeDepot = (config = {}) => {
 
   const nouveauTeleversementServices = async (
     idUtilisateur,
-    donneesTeleversementServices
+    donneesTeleversementServices,
+    versionService
   ) => {
     const donneesChiffrees = await adaptateurChiffrement.chiffre(
       donneesTeleversementServices
     );
     return adaptateurPersistance.ajouteTeleversementServices(
       idUtilisateur,
-      donneesChiffrees
+      donneesChiffrees,
+      versionService
     );
   };
 

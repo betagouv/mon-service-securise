@@ -639,11 +639,16 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       empreinte: 'empreinte',
     });
 
-  const ajouteTeleversementServices = async (idUtilisateur, donnees) =>
+  const ajouteTeleversementServices = async (
+    idUtilisateur,
+    donnees,
+    versionService
+  ) =>
     knex('televersement_services')
       .insert({
         id_utilisateur: idUtilisateur,
         donnees: { services: donnees },
+        version_service: versionService,
         progression: -1,
       })
       .onConflict('id_utilisateur')
