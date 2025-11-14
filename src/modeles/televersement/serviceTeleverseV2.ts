@@ -36,7 +36,7 @@ export type LigneServiceTeleverseV2 = {
 };
 
 type DonneesMinimalesRequisesDossierHomologation = {
-  decision: { dateHomologation: string; dureeValidite: string };
+  decision: { dateHomologation: Date; dureeValidite: string };
   autorite: { nom: string; fonction: string };
 };
 
@@ -153,10 +153,7 @@ export class ServiceTeleverseV2 {
       ...(this.donnees.dossierHomologation && {
         dossier: {
           decision: {
-            dateHomologation:
-              this.donnees.dossierHomologation.dateHomologation.toLocaleDateString(
-                'fr-FR'
-              ),
+            dateHomologation: this.donnees.dossierHomologation.dateHomologation,
             dureeValidite:
               this.referentiel.echeanceRenouvellementParDescription(
                 this.donnees.dossierHomologation.dureeHomologation
