@@ -57,10 +57,10 @@ export const mesuresCas2 = {
     indispensable: true,
   },
   'MCO_MCS.11': {
-    indispensable: true,
+    indispensable: false,
   },
-  'MCO_MCS.2': {
-    indispensable: true,
+  'MCO_MCS.12': {
+    indispensable: false,
   },
   'MCO_MCS.3': {
     indispensable: true,
@@ -75,12 +75,6 @@ export const mesuresCas2 = {
     indispensable: true,
   },
   'MCO_MCS.7': {
-    indispensable: true,
-  },
-  'MCO_MCS.8': {
-    indispensable: true,
-  },
-  'MCO_MCS.9': {
     indispensable: true,
   },
   'RGPD.1': {
@@ -122,6 +116,9 @@ export const mesuresCas2 = {
   'FILTRE.5': {
     indispensable: true,
   },
+  'FILTRE.6': {
+    indispensable: true,
+  },
   'FILTRE.7': {
     indispensable: true,
   },
@@ -137,6 +134,9 @@ export const mesuresCas2 = {
   'MALWARE.3': {
     indispensable: true,
   },
+  'MALWARE.4': {
+    indispensable: true,
+  },
   'AUTH.1': {
     indispensable: true,
   },
@@ -145,6 +145,9 @@ export const mesuresCas2 = {
   },
   'AUTH.11': {
     indispensable: true,
+  },
+  'AUTH.12': {
+    indispensable: false,
   },
   'AUTH.2': {
     indispensable: true,
@@ -176,6 +179,9 @@ export const mesuresCas2 = {
   'ID.2': {
     indispensable: true,
   },
+  'ID.4': {
+    indispensable: true,
+  },
   'COMPADMIN.1': {
     indispensable: true,
   },
@@ -185,8 +191,8 @@ export const mesuresCas2 = {
   'COMPADMIN.6': {
     indispensable: true,
   },
-  'COMPADMIN.8': {
-    indispensable: false,
+  'COMPADMIN.7': {
+    indispensable: true,
   },
   'COMPADMIN.9': {
     indispensable: true,
@@ -231,7 +237,7 @@ export const mesuresCas2 = {
     indispensable: true,
   },
   'CONFIG.8': {
-    indispensable: true,
+    indispensable: false,
   },
   'SUPERVISION.5': {
     indispensable: false,

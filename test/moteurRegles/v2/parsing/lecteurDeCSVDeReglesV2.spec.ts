@@ -163,9 +163,9 @@ describe('Le lecteur de CSV de règles V2', () => {
 
   it('peut lire le CSV de production', async () => {
     const reglesDeProd = await lisLeFichier(
-      '../../../../src/moteurRegles/v2/mesures_V2_prod_30-09-2025.csv'
+      '../../../../src/moteurRegles/v2/mesures_V2_prod_07-11-2025.csv'
     );
 
-    expect(reglesDeProd).toHaveLength(134);
+    expect(reglesDeProd).toHaveLength(135);
   });
 });

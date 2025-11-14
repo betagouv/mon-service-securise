@@ -5,7 +5,7 @@ export const mesuresV2 = {
     description:
       "Etablir la liste de l'ensemble des services et données à protéger",
     descriptionLongue:
-      "Lister l'ensemble des activités, services et données du système d'information à protéger, et mettre à jour cette liste a minima annuellement.<br><br>Cette mesure permet d'identifier les éléments métier à protéger au sein du système d'information.",
+      "Lister l'ensemble des activités, services et données du système d'information à protéger, et mettre à jour cette liste a minima annuellement ou en cas de changement.<br><br>Cette mesure permet d'identifier les éléments métier à protéger au sein du système d'information.",
     categorie: 'gouvernance',
     identifiantNumerique: '0001',
     referentiel: 'ANSSI',
@@ -32,16 +32,16 @@ export const mesuresV2 = {
     description:
       'Réaliser une analyse de la conformité aux exigences réglementaires et normatives applicables',
     descriptionLongue:
-      "Réaliser et maintenir à jour une analyse de la conformité du système d'information vis-à-vis des exigences réglementaires et normatives applicables.<br><br>Pour les entités concernées par la directive NIS2, en cas de recours à une ou plusieurs alternatives prévues au sein des exigences NIS2, l'entité les renseigne dans l'analyse de conformité avec les justifications associées.<br><br>Cette mesure permet de s'assurer de la conformité du système d'information aux réglementations et normes devant être appliquées.",
+      "Réaliser et maintenir à jour une analyse de la conformité du système d'information vis-à-vis des exigences réglementaires et normatives applicables afin d'identifier les écarts avec les mesures mises en œuvre au sein du système d'information.<br><br>Cette mesure permet de s'assurer de la conformité du système d'information aux réglementations et normes devant être appliquées.",
     categorie: 'gouvernance',
     identifiantNumerique: '0014',
     referentiel: 'ANSSI',
   },
   'CONFORMITE.3': {
     description:
-      "Définir et mettre en oeuvre en continu un plan d'action de renforcement de la cybersécurité",
+      "Définir et mettre en œuvre en continu un plan d'action de renforcement de la cybersécurité",
     descriptionLongue:
-      "Formaliser et mettre en oeuvre un plan d'action de renforcement de la cybersécurité se basant sur les analyses de la conformité du système d'information vis-à-vis des exigences réglementaires et normatives applicables, les audits et autres analyses réalisés sur le système. Les actions doivent être caractérisés par un porteur et une échéance réalisable.<br><br>Cette mesure permet une amélioration continue de la sécurité du système d'information.",
+      "Formaliser et mettre en œuvre un plan d'action de renforcement de la cybersécurité se basant sur les analyses de la conformité du système d'information vis-à-vis des exigences réglementaires et normatives applicables, les audits et autres analyses réalisés sur le système. Les actions doivent être caractérisés par un porteur et une échéance réalisable.<br><br>Cette mesure permet une amélioration continue de la sécurité du système d'information.",
     categorie: 'gouvernance',
     identifiantNumerique: '0163',
     referentiel: 'ANSSI',
@@ -50,7 +50,7 @@ export const mesuresV2 = {
     description:
       'Vérifier a minima annuellement les politiques et procédures de sécurité et les mettre à jour si nécessaire',
     descriptionLongue:
-      "Vérifier tous les ans ou en cas d'évolutions majeures du contexte métier, technique ou organisationnel que les politiques et procédures liées au système d'information sont à jour et pertinentes.<br><br>Cette mesure permet de s'assurer que les règles de sécurité stratégiques et opérationnelles sont toujours applicables au système d'information et aux activités liées.",
+      "Vérifier tous les ans ou en cas d'évolutions majeures de la menace, du contexte métier, technique ou organisationnel que les politiques et procédures liées au système d'information sont à jour et pertinentes.<br><br>Cette mesure permet de s'assurer que les règles de sécurité stratégiques et opérationnelles sont toujours applicables au système d'information et aux activités liées.",
     categorie: 'gouvernance',
     identifiantNumerique: '0013',
     referentiel: 'ANSSI',
@@ -59,7 +59,7 @@ export const mesuresV2 = {
     description:
       'Identifier ou fixer les engagements des prestataires en matière de sécurité',
     descriptionLongue:
-      "En cas de recours à des prestataires, fixer, si possible dès les clauses contractuelles, les exigences de sécurité à respecter. Dans le cas où ces exigences ne peuvent pas être fixées a priori, identifier l'ensemble des exigences de sécurité que s'engagent à respecter les prestataires.<br><br>Pour les entités concernées par NIS2, l'entité doit notamment s'assurer de la conformité de la prestation aux exigences de la directive NIS2 ainsi qu'aux autres réglementations pour lesquelles la conformité est attendue.<br><br>Cette mesure permet d'éclairer la sélection des prestataires en fonction des garanties de sécurité que ces derniers s'engagent à respecte, et, dans la mesure du possible, de contrôler ces garanties.",
+      "En cas de recours à des prestataires, fixer, si possible dès les clauses contractuelles, les exigences de sécurité à respecter. Dans le cas où ces exigences ne peuvent pas être fixées a priori, identifier l'ensemble des exigences de sécurité que s'engagent à respecter les prestataires.<br><br>Cette mesure permet d'éclairer la sélection des prestataires en fonction des garanties de sécurité que ces derniers s'engagent à respecter, et, dans la mesure du possible, de contrôler ces garanties.",
     categorie: 'gouvernance',
     identifiantNumerique: '0022',
     referentiel: 'ANSSI',
@@ -68,14 +68,14 @@ export const mesuresV2 = {
     description:
       'Contrôler la conformité des prestataires aux exigences de sécurité',
     descriptionLongue:
-      "Auditer périodiquement les prestataires afin de s'assurer du respect des exigences de sécurité identifiées ou fixées au sein des clauses contractuelles, et sanctionner les prestataires de façon adaptée lorsque cela est possible.<br>Ces audits doivent présenter, une synthèse des conformités, les constats et les recommandations en cas de non conformité ainsi que permettre la construction d'un plan d'action.<br><br>Pour les entités concernées par NIS2, ces audits doivent vérifier la conformité de la prestation aux exigences NIS2.<br><br>Cette mesure permet de s'assurer du niveau de sécurité des prestations réalisées, afin de réduire la vraisemblance d'une attaque par rebond via les prestataires.",
+      "Auditer périodiquement les prestataires afin de s'assurer du respect des exigences de sécurité identifiées ou fixées au sein des clauses contractuelles, et sanctionner les prestataires de façon adaptée lorsque cela est possible.<br>Ces audits doivent présenter, une synthèse des conformités, les constats et les recommandations en cas de non conformité ainsi que permettre la construction d'un plan d'action.<br><br>Cette mesure permet de s'assurer du niveau de sécurité des prestations réalisées, afin de réduire la vraisemblance d'une attaque par rebond via les prestataires.",
     categorie: 'protection',
     identifiantNumerique: '0023',
     referentiel: 'ANSSI',
   },
   'DEV.1': {
     description:
-      'Mettre en oeuvre des bonnes pratiques de développement sécurisé',
+      'Mettre en œuvre des bonnes pratiques de développement sécurisé',
     descriptionLongue:
       'Imposer aux développeurs des bonnes pratiques de développement sécurisé.<br><br>Cette mesure permet de réduire les risques de compromission du code due à la compromission des accès des développeurs ou à une altération du code (intentionnelle ou non).',
     categorie: 'gouvernance',
@@ -138,7 +138,7 @@ export const mesuresV2 = {
   },
   'RH.2': {
     description:
-      "Mettre en oeuvre un programme de sensibilisation à la sécurité pour l'ensemble des acteurs intervenant sur le système d'information",
+      "Mettre en œuvre un programme de sensibilisation à la sécurité pour l'ensemble des acteurs intervenant sur le système d'information",
     descriptionLongue:
       "Sensibiliser à la sécurité numérique les utilisateurs, administrateurs et prestataires ayant accès aux équipements et/ou applicatifs du système d'information.<br><br>Cette mesure permet de réduire la vraisemblance de compromission des utilisateurs, administration et prestataires ou de leurs ressources par un attaquant externe et permet d'accélérer le signalement d'incident.",
     categorie: 'gouvernance',
@@ -147,9 +147,9 @@ export const mesuresV2 = {
   },
   'RH.4': {
     description:
-      'Formaliser et mettre en oeuvre un processus de gestion des arrivées, départs et changements de fonction',
+      'Formaliser et mettre en œuvre un processus de gestion des arrivées, départs et changements de fonction',
     descriptionLongue:
-      "Définir et mettre en oeuvre un processus de gestion des arrivées, des départs et des changements de fonction des personnels et des tiers accédant au système d'information.<br><br>Cette mesure permet de réduire la vraisemblance d'utilisation d'un compte obsolète par un attaquant externe ou l'utilisation des accès obsolètes par un attaquant interne.",
+      "Définir et mettre en œuvre un processus de gestion des arrivées, des départs et des changements de fonction des personnels et des tiers accédant au système d'information.<br>Ce processus prévoit : <br>- La prise connaissance des règles de sécurité lors de l'arrivée,<br>- L'attribution des accès appropriés lors de l'arrivée, <br>- La mise à jour des accès lors d'un changement de fonction, <br>- La désactivation de l'ensemble des accès logiques et physiques lors du départ.<br><br>Cette mesure permet de réduire la vraisemblance d'utilisation d'un compte obsolète par un attaquant externe ou l'utilisation des accès obsolètes par un attaquant interne.",
     categorie: 'gouvernance',
     identifiantNumerique: '0028',
     referentiel: 'ANSSI',
@@ -182,46 +182,38 @@ export const mesuresV2 = {
   },
   'MCO_MCS.1': {
     description:
-      'Formaliser et mettre en oeuvre une procédure de maintien en conditions opérationnelle et de sécurité des équipements et applicatifs',
+      'Formaliser et mettre en œuvre une procédure de maintien en conditions opérationnelle et de sécurité des équipements et applicatifs',
     descriptionLongue:
-      "Formaliser et mettre en oeuvre une procédure de maintien en condition opérationnelle et de sécurité des ressources matérielles et logicielles du système d'information.<br><br>Cette mesure permet de minimiser les temps d'arrêt des systèmes d'information, de garantir que celui-ci fonctionne à un niveau de performance voulu et adapté, et corriger les vulnérabilités du système d’information avant qu’elles ne soient exploitées.",
+      "Formaliser et mettre en œuvre une procédure de maintien en condition opérationnelle et de sécurité des ressources matérielles et logicielles du système d'information.<br><br>Cette mesure permet de minimiser les temps d'arrêt des systèmes d'information, de garantir que celui-ci fonctionne à un niveau de performance voulu et adapté, et corriger les vulnérabilités du système d’information avant qu’elles ne soient exploitées.",
     categorie: 'protection',
     identifiantNumerique: '0033',
     referentiel: 'ANSSI',
   },
   'MCO_MCS.10': {
     description:
-      'Utiliser uniquement des magasins officiels d’applications mobiles pour leur téléchargement',
+      'Informer l’utilisateur du canal officiel à utiliser pour le téléchargement de l’application mobile',
     descriptionLongue:
-      "Publier l'application mobile permettant l'accès au service sur une ou plusieurs bibliothèques officielles (ex. AppStore, Google Play, etc.) et informer les utilisateurs que le service n'est téléchargeable que par ce moyen.<br><br>Cette mesure permet de faciliter les mises à jour de l'application par les utilisateurs et réduit le risque que des acteurs malveillants proposent au téléchargement une version de l'application susceptible de contenir un applicatif malveillant.",
+      "Informer l’utilisateur du canal officiel à utiliser pour le téléchargement de l’application mobile (par exemple, via le store de l'entreprise configuré via la solution de management de la flotte).<br><br>Cette mesure permet de faciliter les mises à jour de l'application par les utilisateurs et réduit le risque que des acteurs malveillants proposent au téléchargement une version de l'application susceptible de contenir un applicatif malveillant.",
     categorie: 'gouvernance',
     identifiantNumerique: '0042',
     referentiel: 'ANSSI',
   },
   'MCO_MCS.11': {
     description:
-      'Effacer les données des équipements avant toute réattribution ou mise au rebut',
+      'Effacer les données des équipements avant toute réattribution',
     descriptionLongue:
-      "Lors de la réutilisation d'un équipement (serveur, poste de travail, équipement mobile) ou de la mise au rebut de l'équipement, s'assurer d'effacer de façon sécurisée les données des équipements.<br><br>Cette mesure permet d'éviter la fuite des informations suite à la réutilisation ou à la mise au rebut d'un équipement.",
+      "Avant toute réutilisation d’un équipement (serveur, poste de travail, terminal mobile ou périphérique de stockage), toutes les données qu’il contient doivent être intégralement effacées.<br>Par exemple, cela peut être réalisé via un effacement comprenant plusieurs passes de réécriture, puis via un chiffrement du support avant la réinitialisation aux paramètres d'usine.<br><br>Cette mesure permet de réduire la vraisemblance de fuite des informations suite à la réutilisation d'un équipement.",
     categorie: 'protection',
     identifiantNumerique: '0043',
     referentiel: 'ANSSI',
   },
   'MCO_MCS.12': {
     description:
-      'Installer et tenir à jour un antivirus et/ou un EDR sur tous les postes de travail',
+      'Effacer les données des équipements avant toute mise au rebut',
     descriptionLongue:
-      "Installer sur les postes de travail maîtrisés traitant des données provenant de sources externes des mécanismes de protection contre les risques d'exécution de codes malveillants (ex. antivirus ou EDR), maintenir à jour les bases de connaissances de ces outils (base antivirale, signatures, etc.).<br><br>Cette mesure permet de réduire la vraisemblance de compromission par des malware (ex. ransomware) des postes de travail aux sources de risque externes. ",
+      "Avant toute mise au rebut d’un équipement informatique (serveur, poste de travail, terminal mobile ou périphérique de stockage), toutes les données qu’il contient doivent être intégralement effacées.<br>Par exemple, cela peut être réalisé : <br>- Pour un équipement n’ayant pas hébergé d’informations sensibles selon la classification interne : via un effacement sécurisé comprenant plusieurs passes de réécriture puis via le chiffrement du disque,<br>- Pour un équipement ayant hébergé des informations sensibles selon la classification interne : via un effacement sécurisé comprenant plusieurs passes de réécriture, un chiffrement du disque puis une destruction physique irréversible.<br><br>Cette mesure permet réduire la vraisemblance de fuite des informations suite à la mise au rebut d'un équipement.",
     categorie: 'protection',
-    identifiantNumerique: '0044',
-    referentiel: 'ANSSI',
-  },
-  'MCO_MCS.13': {
-    description: 'Traiter les alertes générées par les antivirus et/ou les EDR',
-    descriptionLongue:
-      "S'assurer du traitement et réaction dans le cas échéant des alertes des moyens de protection contre les risques d'exécution de codes malveillants (antivirus ou malware).<br><br>Cette mesure permet de réduire la vraisemblance de compromission par des malware (ex. ransomware) des postes de travail aux sources de risque externes. ",
-    categorie: 'defense',
-    identifiantNumerique: '0045',
+    identifiantNumerique: '0174',
     referentiel: 'ANSSI',
   },
   'MCO_MCS.14': {
@@ -253,25 +245,16 @@ export const mesuresV2 = {
     description:
       "Garantir l'installation sans délai injustifié des correctifs de sécurité sur l'ensemble des équipements et applicatifs",
     descriptionLongue:
-      "Planifier et installer sans retard injustifié au regarde de la nature de la vulnérabilité les correctifs de sécurité sur l'ensemble des équipements et applicatifs du système d'information.<br>Si des raisons techniques ou opérationnelles ne permettent pas l’installation des correctifs de sécurité, mettre en oeuvre des mesures d’atténuation pour réduire les risques liés.<br><br>Cette mesure permet de réduire la vraisemblance d'exploitation d'une vulnérabilité connue sur le système d'information.",
+      "Planifier et installer sans retard injustifié au regarde de la nature de la vulnérabilité les correctifs de sécurité sur l'ensemble des équipements et applicatifs du système d'information.<br>Si des raisons techniques ou opérationnelles ne permettent pas l’installation des correctifs de sécurité, mettre en œuvre des mesures d’atténuation pour réduire les risques liés.<br><br>Cette mesure permet de réduire la vraisemblance d'exploitation d'une vulnérabilité connue sur le système d'information.",
     categorie: 'protection',
     identifiantNumerique: '0166',
-    referentiel: 'ANSSI',
-  },
-  'MCO_MCS.2': {
-    description:
-      'Déployer, mettre en oeuvre et tenir à jour des moyens de protection des équipements contre les codes malveillants',
-    descriptionLongue:
-      "Installer sur les postes de travail, serveurs et équipements mobiles maîtrisés traitant des données provenant de sources externes des mécanismes de protection contre les risques d'exécution de codes malveillants (ex. antivirus ou Endpoint Detection and Response), maintenir à jour les bases de connaissances de ces outils (base antivirale, signatures, etc.), et traiter les alertes issues de ces mécanismes.<br><br>Cette mesure permet de réduire la vraisemblance de compromission par des malware (ex. ransomware) des équipements exposés aux sources de risque externes. ",
-    categorie: 'protection',
-    identifiantNumerique: '0034',
     referentiel: 'ANSSI',
   },
   'MCO_MCS.3': {
     description:
       "Réaliser une veille régulière des vulnérabilités, des campagnes de compromission, des correctifs et des mesures d'atténuation",
     descriptionLongue:
-      "Mettre en oeuvre une veille sur les vulnérabilités, les correctifs de sécurité et les mesures d'atténuation préconisées susceptibles de concerner les applicatifs et équipements du système d'information.<br>Ces alertes peuvent notamment être diffusées par les fournisseurs ou fabricants des applicatifs et équipements, par des prestataires contractualisés pour réaliser cette veille ou par des centres de prévention et d'alerte en matière de cyber sécurité.<br><br>Cette mesure permet d'identifier de potentielles vulnérabilités sur les applicatifs et équipements du système d'information pour les corriger avant exploitation par un attaquant.",
+      "Mettre en œuvre une veille sur les vulnérabilités, les correctifs de sécurité et les mesures d'atténuation préconisées susceptibles de concerner les applicatifs et équipements du système d'information.<br>Ces alertes peuvent notamment être diffusées par les fournisseurs ou fabricants des applicatifs et équipements, par des prestataires contractualisés pour réaliser cette veille ou par des centres de prévention et d'alerte en matière de cyber sécurité.<br><br>Cette mesure permet d'identifier de potentielles vulnérabilités sur les applicatifs et équipements du système d'information pour les corriger avant exploitation par un attaquant.",
     categorie: 'protection',
     identifiantNumerique: '0035',
     referentiel: 'ANSSI',
@@ -280,7 +263,7 @@ export const mesuresV2 = {
     description:
       "Garantir l'installation sans délai injustifié des correctifs de sécurité sur les ressources exposées, les annuaires et les postes de travail",
     descriptionLongue:
-      "Mettre en oeuvre sans retard injustifié au regarde de la nature de la vulnérabilité les actions visant à l'installation des correctifs de sécurité sur les équipements et applicatifs exposés à des systèmes d'information tiers, les annuaires gérant les utilisateurs ou les ressources et les postes de travail des utilisateurs.<br>Si des raisons techniques ou opérationnelles ne permettent pas l’installation des correctifs de sécurité, mettre en oeuvre des mesures d’atténuation pour réduire les risques liés.<br><br>Cette mesure permet de réduire la vraisemblance d’exploitation d’une vulnérabilité en s’assurant que les vulnérabilités connues sont corrigés de façon adaptée et efficace.",
+      "Mettre en œuvre sans retard injustifié au regarde de la nature de la vulnérabilité les actions visant à l'installation des correctifs de sécurité sur les équipements et applicatifs exposés à des systèmes d'information tiers, les annuaires gérant les utilisateurs ou les ressources et les postes de travail des utilisateurs.<br>Si des raisons techniques ou opérationnelles ne permettent pas l’installation des correctifs de sécurité, mettre en œuvre des mesures d’atténuation pour réduire les risques liés.<br><br>Cette mesure permet de réduire la vraisemblance d’exploitation d’une vulnérabilité en s’assurant que les vulnérabilités connues sont corrigés de façon adaptée et efficace.",
     categorie: 'protection',
     identifiantNumerique: '0036',
     referentiel: 'ANSSI',
@@ -289,7 +272,7 @@ export const mesuresV2 = {
     description:
       'Installer uniquement des applicatifs récents et maintenus à jour par les éditeurs',
     descriptionLongue:
-      "Installer et maintenir à jour les ressources logicielles du système d'information (dont les systèmes embarqués) dans des versions supportées par les fournisseurs ou fabricants et comportant les mises à jour de sécurité.<br>Si des raisons techniques ou opérationnelles ne permettent pas l'installation d'une version supportée par les fournisseurs ou fabricants, mettre en oeuvre des mesures pour réduire les risques liés à l'utilisation d'une version obsolète (cloisonnement, gestion des accès, traçabilité).<br><br>Cette mesure permet de s'assurer que les applicatifs installés sont maintenus par les fournisseurs ou fabriquants et qu'ils continuent à bénéficier de correctifs de sécurité.",
+      "Installer et maintenir à jour les ressources logicielles du système d'information (dont les systèmes embarqués) dans des versions supportées par les fournisseurs ou fabricants et comportant les mises à jour de sécurité.<br>Si des raisons techniques ou opérationnelles ne permettent pas l'installation d'une version supportée par les fournisseurs ou fabricants, mettre en œuvre des mesures pour réduire les risques liés à l'utilisation d'une version obsolète (cloisonnement, gestion des accès, traçabilité).<br><br>Cette mesure permet de s'assurer que les applicatifs installés sont maintenus par les fournisseurs ou fabriquants et qu'ils continuent à bénéficier de correctifs de sécurité.",
     categorie: 'protection',
     identifiantNumerique: '0037',
     referentiel: 'ANSSI',
@@ -298,7 +281,7 @@ export const mesuresV2 = {
     description:
       "Garantir l'installation régulière des mises à jour fonctionnelles et de sécurité",
     descriptionLongue:
-      "S'assurer de l'installation régulière des mises à jour fonctionnelles et de sécurité.<br>Si des raisons techniques ou opérationnelles ne permettent pas l'installation des nouvelles versions, mettre en oeuvre des mesures pour réduire les risques liés à l'utilisation d'une version obsolète (cloisonnement, gestion des accès, traçabilité).<br><br>Cette mesure permet de s'assurer que les mises à jour fournies par les fournisseurs ou fabricants sont installées afin de réduire la vraisemblance d'exploitation d'une vulnérabilité sur une version obsolète d'un applicatif.",
+      "S'assurer de l'installation régulière des mises à jour fonctionnelles et de sécurité.<br>Si des raisons techniques ou opérationnelles ne permettent pas l'installation des nouvelles versions, mettre en œuvre des mesures pour réduire les risques liés à l'utilisation d'une version obsolète (cloisonnement, gestion des accès, traçabilité).<br><br>Cette mesure permet de s'assurer que les mises à jour fournies par les fournisseurs ou fabricants sont installées afin de réduire la vraisemblance d'exploitation d'une vulnérabilité sur une version obsolète d'un applicatif.",
     categorie: 'protection',
     identifiantNumerique: '0038',
     referentiel: 'ANSSI',
@@ -310,24 +293,6 @@ export const mesuresV2 = {
       "S'assurer que toute nouvelle version est téléchargée depuis les ressources officielles mises à disposition par les éditeurs ou les fournisseurs.<br><br>Cette mesure permet de s'assurer de l'installation de versions officielles, et donc de réduire la vraisemblance d'installation d'une version compromise.  ",
     categorie: 'protection',
     identifiantNumerique: '0039',
-    referentiel: 'ANSSI',
-  },
-  'MCO_MCS.8': {
-    description:
-      'Formaliser et mettre en oeuvre une procédure de prise en compte des alertes de sécurité',
-    descriptionLongue:
-      "Formaliser et mettre en oeuvre une procédure et des mécanismes permettant la prise en compte permettant de prendre connaissance, sans retard injustifié, les alertes émises par l'ANSSI, les éditeurs de produits utilisés par l'identité et/ou les prestataires. Traiter ces alertes et le cas échéant appliquer les mesures préconisées.<br><br>Cette mesure permet de s'assurer de la réalisation d'une veille de sécurité et de la mise en place d'actions permettant de réagir si les alertes peuvent concerner le système d'information.",
-    categorie: 'defense',
-    identifiantNumerique: '0040',
-    referentiel: 'ANSSI',
-  },
-  'MCO_MCS.9': {
-    description:
-      "Héberger le système d'information dans une ou plusieurs machines virtuelles",
-    descriptionLongue:
-      "Lors du choix de la solution d'hébergement du service et de ses données, optez pour son hébergement dans une ou plusieurs machines virtuelles.<br><br>Cette mesure permet de renforcer la sécurité du service et des données. Elle permet de filtrer plus facilement les accès, de limiter le risque d'attaques par déni de service et les chemins d'attaques par parallélisation.<br>",
-    categorie: 'protection',
-    identifiantNumerique: '0041',
     referentiel: 'ANSSI',
   },
   'RGPD.1': {
@@ -387,7 +352,7 @@ export const mesuresV2 = {
     description:
       "Restreindre l'accès aux locaux aux seules personnes autorisées.",
     descriptionLongue:
-      "Restreindre l'accès aux locaux (bureaux, salles serveurs, locaux techniques, etc.) via des mesures de sécurité (ex. tenue d'un registre des visiteurs) et s'assurer que les personnes externes accédant aux locaux techniques et salles serveurs sont accompagnées ou dûment autorisées.<br><br>Cette mesure permet de réduire la vraisemblance de l'intrusion physique d'un attaquant pouvant porter atteinte au système d'information.",
+      "Restreindre l'accès aux locaux (bureaux, salles serveurs, locaux techniques, etc.) via des mesures de sécurité (ex. tenue d'un registre des visiteurs, badge d'accès) et s'assurer que les personnes externes accédant aux locaux techniques et salles serveurs sont accompagnées ou dûment autorisées.<br><br>Cette mesure permet de réduire la vraisemblance de l'intrusion physique d'un attaquant pouvant porter atteinte au système d'information.",
     categorie: 'protection',
     identifiantNumerique: '0057',
     referentiel: 'ANSSI',
@@ -422,7 +387,7 @@ export const mesuresV2 = {
     description:
       "Identifier les éventuels sous-systèmes du système d'information et les cloisonner entre eux",
     descriptionLongue:
-      'Définir, lorsque cela est pertinent, des sous-systèmes au sein du système d\'information et cloisonner physiquement ou logiquement ces sous-systèmes entre eux.<br>Un sous-système regroupe des ressources assurant des fonctionnalités similaires et ayant des niveaux de sensibilité, d\'exposition et de sécurité homogènes.<br>Si aucun sous-système n\'est identifié, en apporter la justification dans le dossier d\'homologation.<br><br>Cette mesure permet de réduire la vraisemblance de compromission des sous-systèmes les plus sensibles par rebond sur un autre sous-système. Par exemple, cette mesure permet de cloisonner les sous-systèmes "Présentation", "Application" et "Données".',
+      'Définir, lorsque cela est pertinent, des sous-systèmes au sein du système d\'information et cloisonner physiquement ou logiquement ces sous-systèmes entre eux.<br>Un sous-système regroupe des ressources assurant des fonctionnalités similaires et ayant des niveaux de sensibilité, d\'exposition et de sécurité homogènes.<br>Si aucun sous-système n\'est identifié, en apporter la justification dans le dossier d\'homologation.<br><br>Cette mesure permet de réduire la vraisemblance de compromission des sous-systèmes les plus sensibles par rebond depuis un autre sous-système et de réduire le périmètre impacté en cas de compromission. Par exemple, cette mesure permet de cloisonner les sous-systèmes "Présentation", "Application" et "Données".',
     categorie: 'protection',
     identifiantNumerique: '0061',
     referentiel: 'ANSSI',
@@ -431,7 +396,7 @@ export const mesuresV2 = {
     description:
       "Mettre en œuvre des passerelles entrante et sortante entre le système d'information et les systèmes tiers",
     descriptionLongue:
-      "Mettre en oeuvre au moins deux sous-systèmes passerelles :<br>- Sortante: permettant aux ressources du système d'information d'accéder aux systèmes tiers tout en authentifiant, filtrant et traçant ces communications,<br>- Entrante : permettant d'exposer les ressources du système d'information aux systèmes tiers tout en filtrant et traçant ces communications.<br><br>Cette mesure permet de réduire la vraisemblance de compromission du système d'information par rebond sur un système d'information non maîtrisé.",
+      "Mettre en œuvre au moins deux sous-systèmes passerelles :<br>- Sortante: permettant aux ressources du système d'information d'accéder aux systèmes tiers tout en authentifiant, filtrant et traçant ces communications (ex. pour permettre la navigation web), <br>- Entrante : permettant d'exposer les ressources du système d'information aux systèmes tiers tout en filtrant et traçant ces communications (ex. serveur de réception SMTP, serveur web).<br><br>Ces passerelles sont constituées d’une ou plusieurs « DMZ » qui doivent être des zones neutres, perdables, protégées par des pare-feux périmétriques et servant, en leur sein et autant que possible, à la rupture protocolaire et à l’analyse du trafic échangé entre un réseau public et le système d'information.<br><br>Cette mesure permet de réduire la vraisemblance de compromission du système d'information par rebond sur un système d'information non maîtrisé.",
     categorie: 'protection',
     identifiantNumerique: '0062',
     referentiel: 'ANSSI',
@@ -440,7 +405,7 @@ export const mesuresV2 = {
     description:
       "Ouvrir uniquement les interconnexions nécessaires entre le système d'information et les systèmes non maîtrisés",
     descriptionLongue:
-      "Définir et mettre en oeuvre uniquement les interconnexions nécessaires à la réalisation des activités et services (ou au maintien en condition opérationnelle ou de sécurité) du système d'information avec les systèmes d'informations non maîtrisés, c'est-à-dire des systèmes d'information tiers ou des systèmes d'information sur lesquels les travaux de sécurisation selon le besoin de sécurité n'ont pas été réalisés.<br><br>Cette mesure permet de réduire la vraisemblance de compromission du système d'information par rebond sur un système d'information non maîtrisé.",
+      "Définir et mettre en œuvre uniquement les interconnexions nécessaires à la réalisation des activités et services (ou au maintien en condition opérationnelle ou de sécurité) du système d'information avec les systèmes d'informations non maîtrisés, c'est-à-dire des systèmes d'information tiers ou des systèmes d'information sur lesquels les travaux de sécurisation selon le besoin de sécurité n'ont pas été réalisés.<br><br>Cette mesure permet de réduire la surface d'exposition du système d'information et ainsi de réduire sa vraisemblance de compromission par rebond depuis un système d'information non maîtrisé.",
     categorie: 'protection',
     identifiantNumerique: '0063',
     referentiel: 'ANSSI',
@@ -449,7 +414,7 @@ export const mesuresV2 = {
     description:
       "Ouvrir uniquement les interconnexions nécessaires entre le système d'information et les autres systèmes",
     descriptionLongue:
-      "Définir et mettre en oeuvre uniquement les interconnexions nécessaires à la réalisation des activités et services (ou au maintien en condition opérationnelle ou de sécurité) du système d'information avec l'ensemble des autres systèmes d'information, et mettre en oeuvre un filtrage des communications entre ces systèmes.<br><br>Cette mesure permet de réduire la vraisemblance de compromission du système d'information par rebond sur un autre système d'information.",
+      "Définir et mettre en œuvre uniquement les interconnexions nécessaires à la réalisation des activités et services (ou au maintien en condition opérationnelle ou de sécurité) du système d'information avec l'ensemble des autres systèmes d'information, et mettre en œuvre un filtrage des communications entre ces systèmes.<br><br>Cette mesure permet de réduire la surface d'exposition du système d'information et ainsi de réduire sa vraisemblance de compromission par rebond depuis un autre système d'information.",
     categorie: 'protection',
     identifiantNumerique: '0064',
     referentiel: 'ANSSI',
@@ -458,7 +423,7 @@ export const mesuresV2 = {
     description:
       "Documenter et autoriser uniquement les communications nécessaires via des règles de filtrage entre le système d'information et les systèmes non maîtrisés",
     descriptionLongue:
-      "Définir les communications nécessaires à la réalisation des activités et services (ou au maintien en condition opérationnelle de sécurité) du système d'information avec des systèmes d'information non maîtrisés, c'est-à-dire des systèmes d'information tiers ou des systèmes d'information sur lesquels les travaux de sécurisation selon le besoin de sécurité n'ont pas été réalisés.<br>Mettre en oeuvre, au niveau de ces interconnexions, des règles de filtrage pour n'autoriser que les communications identifiées avec les systèmes d'information non maîtrisés via un ou des pares-feux dédiés.<br><br>Cette mesure permet de réduire la vraisemblance de compromission du système d'information par rebond sur un système d'information non maîtrisé.",
+      "Définir les communications nécessaires à la réalisation des activités et services (ou au maintien en condition opérationnelle de sécurité) du système d'information avec des systèmes d'information non maîtrisés, c'est-à-dire des systèmes d'information tiers ou des systèmes d'information sur lesquels les travaux de sécurisation selon le besoin de sécurité n'ont pas été réalisés.<br>Mettre en œuvre, au niveau de ces interconnexions, des règles de filtrage pour n'autoriser que les communications identifiées avec les systèmes d'information non maîtrisés via un ou des pares-feux dédiés.<br><br>Cette mesure permet de réduire la vraisemblance de compromission du système d'information par rebond sur un système d'information non maîtrisé.",
     categorie: 'protection',
     identifiantNumerique: '0066',
     referentiel: 'ANSSI',
@@ -467,16 +432,16 @@ export const mesuresV2 = {
     description:
       "Documenter et autoriser uniquement les communications nécessaires via des règles de filtrage entre le système d'information et les autres systèmes",
     descriptionLongue:
-      "Définir les communications nécessaires à la réalisation des activités et services (ou au maintien en condition opérationnelle de sécurité) du système d'information avec l'ensemble des autres systèmes d'information.<br>Mettre en oeuvre, au niveau de ces interconnexions, des règles de filtrage pour n'autoriser que les communications identifiés avec l'ensemble des systèmes d'information via un ou des pares-feux dédiés.<br><br><br>Cette mesure permet de réduire la vraisemblance de compromission du système d'information par rebond sur un autre système d'information.",
+      "Définir les communications nécessaires à la réalisation des activités et services (ou au maintien en condition opérationnelle de sécurité) du système d'information avec l'ensemble des autres systèmes d'information.<br>Mettre en œuvre, au niveau de ces interconnexions, des règles de filtrage pour n'autoriser que les communications identifiés avec l'ensemble des systèmes d'information via un ou des pares-feux dédiés.<br><br>Cette mesure permet de réduire la vraisemblance de compromission du système d'information par rebond sur un autre système d'information.",
     categorie: 'protection',
     identifiantNumerique: '0067',
     referentiel: 'ANSSI',
   },
   'FILTRE.3': {
     description:
-      'Effectuer a minima annuellement une revue de la mise en oeuvre technique des règles de filtrage',
+      'Effectuer a minima annuellement une revue de la mise en œuvre technique des règles de filtrage',
     descriptionLongue:
-      "Réaliser a minima annuellement une revue de la mise en oeuvre technique des règles de filtrage en place pour les communications entrantes et sortantes sur le système d'information.<br><br>Cette mesure permet de s'assurer de l'efficacité des règles de filtrages mises en oeuvre et ainsi de réduire la vraisemblance de compromission du système d'information par rebond sur un autre système d'information.",
+      "Réaliser a minima annuellement une revue de la mise en œuvre technique des règles de filtrage en place pour les communications entrantes et sortantes sur le système d'information.<br><br>Cette mesure permet de s'assurer de l'efficacité des règles de filtrages mises en œuvre et ainsi de réduire la vraisemblance de compromission du système d'information par rebond sur un autre système d'information.",
     categorie: 'protection',
     identifiantNumerique: '0068',
     referentiel: 'ANSSI',
@@ -493,7 +458,7 @@ export const mesuresV2 = {
   'FILTRE.5': {
     description: 'Installer un parefeu applicatif web (WAF)',
     descriptionLongue:
-      "S'assurer d'installer un pare-feu applicatif (\"WAF\") pour filtrer les flux applicatifs entrant et sortant du système d'information.<br><br>Cette mesure permet de filtrer les communications entre les utilisateurs et le système afin de protéger le système des attaques courantes (ex. Injection SQL, cross-site scripting).",
+      "S'assurer d'installer un pare-feu applicatif (\"WAF\") pour filtrer les flux applicatifs entrant du système d'information.<br><br>Cette mesure permet de filtrer les communications entre les utilisateurs et le système afin de protéger le système des attaques courantes (ex. Injection SQL, cross-site scripting).",
     categorie: 'protection',
     identifiantNumerique: '0070',
     referentiel: 'ANSSI',
@@ -501,7 +466,7 @@ export const mesuresV2 = {
   'FILTRE.6': {
     description: 'Filtrer les flux sur les postes de travail',
     descriptionLongue:
-      "Mettre en oeuvre un filtrage des flux sur le poste de travail, par exemple via un pare-feu local.<br><br>Cette mesure permet de réduire l'exposition aux sources de risque et de contrôler les communications autorisées afin de réduire la vraisemblance de compromission des postes de travail par un attaquant .",
+      "Mettre en œuvre un filtrage des flux sur le poste de travail, par exemple via un pare-feu local.<br><br>Cette mesure permet de réduire l'exposition aux sources de risque et de contrôler les communications autorisées afin de réduire la vraisemblance de compromission des postes de travail par un attaquant .",
     categorie: 'protection',
     identifiantNumerique: '0071',
     referentiel: 'ANSSI',
@@ -509,25 +474,34 @@ export const mesuresV2 = {
   'FILTRE.7': {
     description: 'Mettre en place un mécanisme de rate-limit',
     descriptionLongue:
-      "Mettre en oeuvre un mécanisme de rate-limit sur les services exposés.<br><br>Cette mesure permet de réduire la vraisemblance de diverses attaques telles que les déni de service, les attaques par force brute et la sur-utilisation d'API.",
+      "Mettre en œuvre un mécanisme de rate-limit sur les services exposés.<br><br>Cette mesure permet de réduire la vraisemblance de diverses attaques telles que les déni de service, les attaques par force brute et la sur-utilisation d'API.",
     categorie: 'protection',
     identifiantNumerique: '0072',
     referentiel: 'ANSSI',
   },
   'MAIL.1': {
     description:
-      "Mettre en oeuvre une solution d'anti-spam et d'anti-hameçonnage",
+      "Mettre en œuvre une solution d'anti-spam et d'anti-hameçonnage",
     descriptionLongue:
-      "Mettre en oeuvre une solution d'anti-spam et d'anti-hameçonnage.<br>Les systèmes de messagerie sont un des principaux vecteurs d’attaques puisque très largement utilisés et exposés sur internet. Qu’il s’agisse de la compromission d’un poste au travers de l’ouverture de pièces jointes contenant un code malveillant, d’un clic malencontreux sur un lien redirigeant vers un site lui-même malveillant (phishing ou hameçonnage) ou de l’exploitation d’une vulnérabilité et d’un défaut de paramétrage du service de messagerie.<br><br>Cette mesure permet donc de réduire le risque qu’un utilisateur se fasse piéger par un message malveillant.",
+      "Mettre en œuvre une solution d'anti-spam et d'anti-hameçonnage.<br>Les systèmes de messagerie sont un des principaux vecteurs d’attaques puisque très largement utilisés et exposés sur internet. Qu’il s’agisse de la compromission d’un poste au travers de l’ouverture de pièces jointes contenant un code malveillant, d’un clic malencontreux sur un lien redirigeant vers un site lui-même malveillant (phishing ou hameçonnage) ou de l’exploitation d’une vulnérabilité et d’un défaut de paramétrage du service de messagerie.<br><br>Cette mesure permet donc de réduire le risque qu’un utilisateur se fasse piéger par un message malveillant.",
     categorie: 'protection',
     identifiantNumerique: '0073',
     referentiel: 'ANSSI',
   },
+  'MAIL.2': {
+    description:
+      "Mettre en œuvre des mécanismes permettant de contrôler l'authenticité des messages électroniques envoyés au nom du domaine du système d'information",
+    descriptionLongue:
+      "Mettre en œuvre des mécanismes permettant de contrôler l'authenticité des messages électroniques envoyés au nom du domaine du système d'information, via la mise en œuvre conjointe de politiques d’identification des serveurs d’envoi (SPF), de signature des messages (DKIM) et de validation des résultats d’authentification (DMARC).<br><br>Cette mesure permet de vérifier que les messages envoyés au nom du domaine du système d'information proviennent effectivement de serveurs autorisés et ainsi de réduire les risques d’usurpation d’adresse.",
+    categorie: 'protection',
+    identifiantNumerique: '0172',
+    referentiel: 'ANSSI',
+  },
   'DISTANCE.1': {
     description:
-      "Mettre en oeuvre un mécanisme de chiffrement pour les accès à distance aux systèmes d'information",
+      "Mettre en œuvre un mécanisme de chiffrement pour les accès à distance au système d'information",
     descriptionLongue:
-      "Protéger les accès distants aux systèmes d’information à l’aide de protocoles de chiffrement éprouvés (VPN utilisant TLS ou IPSec, ou protocoles applicatifs sécurisés comme TLS/SSL ou SSH), en s’appuyant sur les standards de sécurité actuels.<br><br>Cette mesure permet de réduire la vraisemblance de perte de confidentialité des échanges entre les utilisateurs et le système d'information lors des accès à distance.",
+      "Protéger les accès distants au système d’information à l’aide de protocoles de chiffrement éprouvés (VPN utilisant TLS ou IPSec, ou protocoles applicatifs sécurisés comme TLS/SSL ou SSH), s’appuyant sur les recommandations de l'ANSSI.<br><br>Cette mesure permet de réduire la vraisemblance de perte de confidentialité des échanges entre les utilisateurs et le système d'information lors des accès à distance.",
     categorie: 'protection',
     identifiantNumerique: '0074',
     referentiel: 'ANSSI',
@@ -536,7 +510,7 @@ export const mesuresV2 = {
     description:
       'Mettre en place une authentification multifacteur reposant sur au moins un facteur de connaissance pour les accès à distance',
     descriptionLongue:
-      "Mettre en oeuvre un mécanisme d'authentification mutlifacteur pour les accès à distance.<br>Ce mécanisme doit reposer sur au moins un facteur de connaissance (\"ce que je sais\", comme par exemple l'authentification via une carte à puce associé un code PIN).<br>Lorsque des raisons techniques ou opérationnelles ne permettent pas la mise en oeuvre d'un tel mécanisme, mettre en oeuvre des mesures permettant de réduire le risque associé.<br><br>Cette mesure permet de réduire la vraisemblance de compromission des comptes utilisés pour les accès à distance.",
+      "Mettre en œuvre un mécanisme d'authentification mutlifacteur pour les accès à distance.<br>Ce mécanisme doit reposer sur au moins un facteur de connaissance (\"ce que je sais\", comme par exemple l'authentification via une carte à puce associé un code PIN).<br>Lorsque des raisons techniques ou opérationnelles ne permettent pas la mise en œuvre d'un tel mécanisme, mettre en œuvre des mesures permettant de réduire le risque associé.<br><br>Cette mesure permet de réduire la vraisemblance de compromission des comptes utilisés pour les accès à distance.",
     categorie: 'protection',
     identifiantNumerique: '0075',
     referentiel: 'ANSSI',
@@ -552,20 +526,11 @@ export const mesuresV2 = {
   },
   'DISTANCE.4': {
     description:
-      "Mettre en oeuvre une authentification pour les accès à distance aux systèmes d'informations par l'entité ou ses prestataires.",
+      "Mettre en œuvre une authentification pour les accès à distance au système d'information par l'entité ou ses prestataires.",
     descriptionLongue:
-      "Mettre en oeuvre une authentification pour les accès à distance aux systèmes d'informations par l'entité ou ses prestataires.<br><br>Pour les entités concernées par NIS2, cette authentification doit être conforme aux exigences NIS2.<br><br>Cette mesure permet de réduire la vraisemblance d'utilisation illégitime des droits suite à une absence d'authentification.",
+      "S'assurer que les accès à distance au système d'information par l'entité ou ses prestataires sont protégés par un mécanisme d'authentification.<br><br>Cette mesure permet de s'assurer de l'identité de l'utilisateur se connectant à distance au système d'information, permettant ainsi de réduire la vraisemblance d'un accès non autorisé aux ressources du système d'information.",
     categorie: 'protection',
     identifiantNumerique: '0167',
-    referentiel: 'ANSSI',
-  },
-  'MALWARE.2': {
-    description:
-      "Autoriser uniquement la connexion au système d'information aux équipements gérés par l'entité ou ses prestataires",
-    descriptionLongue:
-      "S'assurer que seuls les équipements nécessaires et directement gérés par l'entité ou les prestataires mandatés se connectent au système d'information via la mise en place de mesures organisationnelles ou techniques.<br><br>Cette mesure permet de réduire la vraisemblance d'intrusion dans le système d'information via la connexion d'un équipement non autorisé au système.",
-    categorie: 'protection',
-    identifiantNumerique: '0078',
     referentiel: 'ANSSI',
   },
   'MALWARE.3': {
@@ -577,11 +542,37 @@ export const mesuresV2 = {
     identifiantNumerique: '0079',
     referentiel: 'ANSSI',
   },
+  'MALWARE.4': {
+    description:
+      'Déployer, mettre en œuvre et tenir à jour des moyens de protection des équipements contre les codes malveillants',
+    descriptionLongue:
+      "Installer sur les postes de travail, serveurs et équipements mobiles maîtrisés traitant des données provenant de sources externes des mécanismes de protection contre les risques d'exécution de codes malveillants (ex. antivirus ou Endpoint Detection and Response), maintenir à jour les bases de connaissances de ces outils (base antivirale, signatures, etc.), et traiter les alertes issues de ces mécanismes.<br><br>Cette mesure permet de réduire la vraisemblance de compromission par des malware (ex. ransomware) des équipements exposés aux sources de risque externes. ",
+    categorie: 'protection',
+    identifiantNumerique: '0034',
+    referentiel: 'ANSSI',
+  },
+  'MALWARE.5': {
+    description:
+      'Installer et tenir à jour un antivirus et/ou un EDR sur tous les postes de travail',
+    descriptionLongue:
+      "Installer sur les postes de travail maîtrisés traitant des données provenant de sources externes des mécanismes de protection contre les risques d'exécution de codes malveillants (ex. antivirus ou EDR), maintenir à jour les bases de connaissances de ces outils (base antivirale, signatures, etc.).<br><br>Cette mesure permet de réduire la vraisemblance de compromission par des malware (ex. ransomware) des postes de travail aux sources de risque externes. ",
+    categorie: 'protection',
+    identifiantNumerique: '0044',
+    referentiel: 'ANSSI',
+  },
+  'MALWARE.6': {
+    description: 'Traiter les alertes générées par les antivirus et/ou les EDR',
+    descriptionLongue:
+      "S'assurer du traitement et réaction dans le cas échéant des alertes des moyens de protection contre les risques d'exécution de codes malveillants (antivirus ou malware).<br><br>Cette mesure permet de réduire la vraisemblance de compromission par des malware (ex. ransomware) des postes de travail aux sources de risque externes. ",
+    categorie: 'defense',
+    identifiantNumerique: '0045',
+    referentiel: 'ANSSI',
+  },
   'AUTH.1': {
     description:
       'Modifier les mots de passe ou autres éléments secrets configurés par défaut dans les équipements et applicatifs',
     descriptionLongue:
-      "Modifier les éléments secrets configurés par défaut, avant la mise en service d'un équipement.<br>Cela demande notamment de s'assurer, avant sélection de l'équipement ou applicatif concerné, qu'il est possible de disposer des moyens et des droits permettant d'effectuer ce changement.<br>Lorsque des raisons techniques ou opérationnelles ne permettent pas de modifier l'élément secret, mettre en oeuvre un contrôle d'accès approprié à l'équipement ou au à l'applicatif, la traçabilité de ces accès ainsi que des mesures de réduction du risque lié.<br><br>Cette mesure permet de réduire la vraisemblance d'utilisation malveillante d'utilisation de compte utilisant le secret par défaut.",
+      "Modifier les éléments secrets configurés par défaut, avant la mise en service d'un équipement.<br>Cela demande notamment de s'assurer, avant sélection de l'équipement ou applicatif concerné, qu'il est possible de disposer des moyens et des droits permettant d'effectuer ce changement.<br>Lorsque des raisons techniques ou opérationnelles ne permettent pas de modifier l'élément secret, mettre en œuvre un contrôle d'accès approprié à l'équipement ou au à l'applicatif, la traçabilité de ces accès ainsi que des mesures de réduction du risque lié.<br><br>Cette mesure permet de réduire la vraisemblance d'utilisation malveillante d'utilisation de compte utilisant le secret par défaut.",
     categorie: 'protection',
     identifiantNumerique: '0083',
     referentiel: 'ANSSI',
@@ -603,11 +594,20 @@ export const mesuresV2 = {
     identifiantNumerique: '0162',
     referentiel: 'ANSSI',
   },
+  'AUTH.12': {
+    description:
+      "Sauvegarder les mots de passe des acteurs internes travaillant sur le système d'information dans un gestionnaire de mots de passe",
+    descriptionLongue:
+      "Fournir aux acteurs internes travaillant sur le système d'information un gestionnaire de mot de passe et les former à son utilisation.<br><br>Cette mesure permet de réduire la vraisemblance de stockage non sécurisé des mots de passe par les acteurs internes (ex. sur un bloc note) et ainsi de réduire la vraisemblance de compromission d'un compte.",
+    categorie: 'protection',
+    identifiantNumerique: '0173',
+    referentiel: 'ANSSI',
+  },
   'AUTH.2': {
     description:
       'Renouveler les secrets des comptes partagés au départ ou mobilité interne de chaque utilisateur ayant un accès au compte',
     descriptionLongue:
-      "En cas de compte partagé, renouveler les secrets de ces comptes à chaque retrait d'un utilisateur de ce compte.<br>Lorsque des raisons techniques ou opérationnelles ne permettent pas de modifier l'élément secret, mettre en oeuvre un contrôle d'accès approprié à l'équipement ou au à l'applicatif ainsi que des mesures de réduction du risque lié.<br><br>Pour les entités concernées par NIS2 et classées essentielles, si des raisons techniques ou opérationnelles ne permettent pas de modifier l'élément secret, mettre en oeuvre la traçabilité de accès liés à cet élément.<br><br>Cette mesure permet de réduire la vraisemblance d'utilisation d'un compte générique par un attaquant externe suite au retrait d'un utilisateur et à la divulgation des secrets liés.",
+      "En cas de compte partagé, renouveler les secrets de ces comptes à chaque retrait d'un utilisateur de ce compte.<br>Lorsque des raisons techniques ou opérationnelles ne permettent pas de modifier l'élément secret, mettre en œuvre un contrôle d'accès approprié à l'équipement ou à l'applicatif ainsi que des mesures de réduction du risque lié.<br><br>Cette mesure permet de réduire la vraisemblance d'utilisation d'un compte générique par un attaquant externe suite au retrait d'un utilisateur et à la divulgation des secrets liés.",
     categorie: 'protection',
     identifiantNumerique: '0084',
     referentiel: 'ANSSI',
@@ -625,7 +625,7 @@ export const mesuresV2 = {
     description:
       "S'assurer que les facteurs d'authentification utilisés sont conformes aux recommandations de l'ANSSI",
     descriptionLongue:
-      "S'assurer que les facteurs d'authentification (ex. mot de passe) sont conformes aux recommandations de l'ANSSI en matière de complexité, en tenant compte du niveau de complexité maximal permis par la ressource concernée, et en matière de fréquence de renouvellement.<br><br>Cette mesure permet de diminuer le risque de découverte et l'usurpation de mots de passe par des acteurs malveillants, par exemple en testant plusieurs mots de passe sur la base de mots du dictionnaire.",
+      "S'assurer que les facteurs d'authentification (ex. mot de passe) sont conformes aux recommandations de l'ANSSI en matière de complexité, en tenant compte du niveau de complexité maximal permis par la ressource concernée, et en matière de fréquence de renouvellement.<br><br>Cette mesure permet de diminuer la vraisemblance de compromission d'un compte par des acteurs malveillants, par exemple en testant plusieurs mots de passe sur la base de mots du dictionnaire.",
     categorie: 'protection',
     identifiantNumerique: '0086',
     referentiel: 'ANSSI',
@@ -634,7 +634,7 @@ export const mesuresV2 = {
     description:
       'Fixer des contraintes de complexité des mots de passe ou autres secrets aux comptes administrateurs techniques',
     descriptionLongue:
-      "Fixer des règles de longueur et de complexité des mots de passe lors de la création d'un mot de passe ou de son renouvellement par un administrateurs technique. Lorsque cela est possible, configurer le mécanisme de création de mots de passe pour interdire les mots de passe faibles.<br><br>Cette mesure permet de diminuer le risque de découverte et l'usurpation de mots de passe par des acteurs malveillants, par exemple en testant plusieurs mots de passe sur la base de mots du dictionnaire.",
+      "Fixer des règles de longueur et de complexité des mots de passe lors de la création d'un mot de passe ou de son renouvellement par un administrateurs technique. Lorsque cela est possible, configurer le mécanisme de création de mots de passe pour interdire les mots de passe faibles.<br><br>Cette mesure permet de diminuer la vraisemblance de compromission d'un compte d'administrateur technique par des acteurs malveillants, par exemple en testant plusieurs mots de passe sur la base de mots du dictionnaire.",
     categorie: 'protection',
     identifiantNumerique: '0087',
     referentiel: 'ANSSI',
@@ -643,7 +643,7 @@ export const mesuresV2 = {
     description:
       'Fixer des contraintes de complexité des mots de passe ou autres secrets aux comptes des processus',
     descriptionLongue:
-      "Fixer des règles de longueur et de complexité des mots de passe lors de la création d'un mot de passe de processus automatisé (compte de service) ou de son renouvellement. Lorsque cela est possible, configurer le système d'information pour interdire les mots de passe faibles.<br><br>Cette mesure permet de diminuer le risque de découverte et l'usurpation de mots de passe par des acteurs malveillants, par exemple en testant plusieurs mots de passe sur la base de mots du dictionnaire.",
+      "Fixer des règles de longueur et de complexité des mots de passe lors de la création d'un mot de passe de processus automatisé (compte de service) ou de son renouvellement. Lorsque cela est possible, configurer le système d'information pour interdire les mots de passe faibles.<br><br>Cette mesure permet de diminuer la vraisemblance de compromission d'un compte de processus automatisé par des acteurs malveillants, par exemple en testant plusieurs mots de passe sur la base de mots du dictionnaire.",
     categorie: 'protection',
     identifiantNumerique: '0088',
     referentiel: 'ANSSI',
@@ -652,7 +652,7 @@ export const mesuresV2 = {
     description:
       'Fixer des contraintes de complexité des mots de passe ou autres secrets aux comptes utilisateurs',
     descriptionLongue:
-      "Fixer des règles de longueur et de complexité des mots de passe lors de la création d'un mot de passe ou de son renouvellement par un utilisateur. Lorsque cela est possible, configurer le système d'information pour interdire les mots de passe faibles.<br><br>Cette mesure permet de diminuer le risque de découverte et l'usurpation de mots de passe par des acteurs malveillants, par exemple en testant plusieurs mots de passe sur la base de mots du dictionnaire.",
+      "Fixer des règles de longueur et de complexité des mots de passe lors de la création d'un mot de passe ou de son renouvellement par un utilisateur. Lorsque cela est possible, configurer le système d'information pour interdire les mots de passe faibles.<br><br>Cette mesure permet de diminuer la vraisemblance de compromission d'un compte utilisateur par des acteurs malveillants, par exemple en testant plusieurs mots de passe sur la base de mots du dictionnaire.",
     categorie: 'protection',
     identifiantNumerique: '0089',
     referentiel: 'ANSSI',
@@ -668,9 +668,9 @@ export const mesuresV2 = {
   },
   'AUTH.9': {
     description:
-      'Mettre en oeuvre des protections contre les tentatives de connexion répétées',
+      'Mettre en œuvre des protections contre les tentatives de connexion répétées',
     descriptionLongue:
-      'Mettre en oeuvre des protections contre les tentatives de connexion répétées. <br>Ces protections doivent être mises en oeuvre sur le serveur.<br><br>Cette mesure permet de réduire la vraisemblance de récupération de compte via une attaque de type brute force.',
+      'Mettre en œuvre des protections contre les tentatives de connexion répétées. <br>Ces protections doivent être mises en œuvre sur le serveur.<br><br>Cette mesure permet de réduire la vraisemblance de récupération de compte via une attaque de type brute force.',
     categorie: 'protection',
     identifiantNumerique: '0091',
     referentiel: 'ANSSI',
@@ -715,7 +715,7 @@ export const mesuresV2 = {
     description:
       'Désactiver les comptes non nécessaires dans un délai formalisé',
     descriptionLongue:
-      "Formaliser et mettre en oeuvre une procédure de suppression des comptes inactifs ou non nécessaires, prenant notamment en compte les délais de désactivation des comptes prévus dans la politique de gestion des comptes (ex. sous 7 jours).<br><br>Cette mesure permet de réduire la vraisemblance d'utilisation d'un compte inactif ou non nécessaire par un attaquant.",
+      "Formaliser et mettre en œuvre une procédure de suppression des comptes inactifs ou non nécessaires, prenant notamment en compte les délais de désactivation des comptes prévus dans la politique de gestion des comptes (ex. sous 7 jours).<br><br>Cette mesure permet de réduire la vraisemblance d'utilisation d'un compte inactif ou non nécessaire par un attaquant.",
     categorie: 'protection',
     identifiantNumerique: '0081',
     referentiel: 'ANSSI',
@@ -729,20 +729,28 @@ export const mesuresV2 = {
     identifiantNumerique: '0082',
     referentiel: 'ANSSI',
   },
+  'ID.4': {
+    description: 'Effectuer une revue des comptes a minima annuellement ',
+    descriptionLongue:
+      "Effectuer une revue des comptes a minima annuellement permettant de vérifier les éléments suivants :<br>- Les utilisateurs et processus accédant aux ressources des systèmes d'information de l'entité disposent de comptes individuels,<br>- L'emploi d'un compte individuel est réservé à l'utilisateur ou processus auquel ce compte est attribué, <br>- Les comptes qui ne sont plus nécessaires sont désactivés.<br><br>Cette mesure permet de réduire la vraisemblance d'utilisation d'un compte inactif ou non nécessaire par un attaquant.",
+    categorie: 'protection',
+    identifiantNumerique: '0169',
+    referentiel: 'ANSSI',
+  },
   'ANNUAIRE.1': {
     description:
-      'Identifier et formaliser la liste des ressources du coeur de confiance',
+      'Identifier et formaliser la liste des ressources du cœur de confiance',
     descriptionLongue:
-      "Lister et tenir à jour l'ensemble des ressources composant le coeur de confiance du système d'information, c'est-à-dire les annuaires gérant les comptes et ressources, les équipements et applicatifs hébergeant ces annuaires, et les équipements ou comptes permettant de prendre le contrôle de ces annuaires (ex. comptes, hyperviseurs, postes de travail d'administration).<br><br>Cette mesure permet d'identifier le coeur de confiance afin de pouvoir le protéger.",
+      "Lister et tenir à jour l'ensemble des ressources composant le cœur de confiance du système d'information, c'est-à-dire les annuaires gérant les comptes et ressources, les équipements et applicatifs hébergeant ces annuaires, et les équipements ou comptes permettant de prendre le contrôle de ces annuaires (ex. comptes, hyperviseurs, postes de travail d'administration).<br><br>Cette mesure permet d'identifier le cœur de confiance afin de pouvoir le protéger.",
     categorie: 'gouvernance',
     identifiantNumerique: '0105',
     referentiel: 'ANSSI',
   },
   'ANNUAIRE.2': {
     description:
-      "Proscrire les connexions à distance aux ressources d'administration du coeur de confiance via un mécanisme de filtrage sur ces ressources",
+      "Proscrire les connexions à distance aux ressources d'administration du cœur de confiance via un mécanisme de filtrage sur ces ressources",
     descriptionLongue:
-      "Interdire via du filtrage les connexions externes à destination des ressources d'administration du coeur de confiance, c'est-à-dire les annuaires gérant les comptes et ressources, les équipements et applicatifs hébergeant ces annuaires, et les équipements ou comptes permettant de prendre le contrôle de ces annuaires (ex. comptes, hyperviseurs, postes de travail d'administration).<br><br>Cette mesure permet de filtrer les connexions au coeur de confiance, réduisant ainsi la vraisemblance de compromission.",
+      "Interdire via du filtrage les connexions externes à destination des ressources d'administration du cœur de confiance, c'est-à-dire les annuaires gérant les comptes et ressources, les équipements et applicatifs hébergeant ces annuaires, et les équipements ou comptes permettant de prendre le contrôle de ces annuaires (ex. comptes, hyperviseurs, postes de travail d'administration).<br><br>Cette mesure permet de filtrer les connexions au cœur de confiance, réduisant ainsi la vraisemblance de compromission.",
     categorie: 'protection',
     identifiantNumerique: '0106',
     referentiel: 'ANSSI',
@@ -758,18 +766,18 @@ export const mesuresV2 = {
   },
   'ANNUAIRE.5': {
     description:
-      "Dédier les ressources et comptes d'administration du coeur de confiance à cet usage",
+      "Dédier les ressources et comptes d'administration du cœur de confiance à cet usage",
     descriptionLongue:
-      "Réaliser les actions d'administration du coeur de confiance via des ressources (équipements et applicatifs) et des comptes d'administrations dédiés à cet usage.<br><br>Cette mesure permet de restreindre les accès avec privilèges au coeur de confiance.",
+      "Réaliser les actions d'administration du cœur de confiance via des ressources (équipements et applicatifs) et des comptes d'administrations dédiés à cet usage.<br><br>Cette mesure permet de restreindre les accès avec privilèges au cœur de confiance.",
     categorie: 'protection',
     identifiantNumerique: '0161',
     referentiel: 'ANSSI',
   },
   'COMPADMIN.1': {
     description:
-      "N'autoriser les actions d'administration technique qu'avec des comptes d'administration technique et limiter ces comptes à ces seules actions",
+      "N'autoriser les actions d'administration qu'avec des comptes d'administration",
     descriptionLongue:
-      "N'autoriser les actions d'administration qu'avec des comptes d'administration technique, et limiter ces comptes à ces seules actions.<br><br>Pour les entités concernées par NIS2 et étant classées essentielles, si des raisons techniques ne permettent pas d'effectuer les actions d'administration à partir d'un compte dédié, mettre en oeuvre des mesures permettant d'assurer le contrôle des actions d'administration et des mesures de réduction du risque lié à l'utilisation d'un compte non dédié à cet usage.<br><br>Cette mesure permet de réduire la vraisemblance de compromission et d'utilisation d'un compte non dédié à l'administration technique pour réaliser une action nécessitant de hauts privilèges.",
+      "N'autoriser les actions d'administration qu'avec des comptes d'administration, et limiter ces comptes à ces seules actions.<br><br>Cette mesure permet de réduire la vraisemblance de compromission et d'utilisation d'un compte non dédié à l'administration pour réaliser une action nécessitant de hauts privilèges.",
     categorie: 'protection',
     identifiantNumerique: '0096',
     referentiel: 'ANSSI',
@@ -784,10 +792,9 @@ export const mesuresV2 = {
     referentiel: 'ANSSI',
   },
   'COMPADMIN.3': {
-    description:
-      "Restreindre le périmètre des comptes d'administration selon les périmètres",
+    description: "Restreindre le périmètre des comptes d'administration",
     descriptionLongue:
-      "Créer des comptes d'accès d'administration différents dotés de privilèges distincts selon les périmètres. Par exemple, le compte administrateur d'un routeur est utilisé depuis un poste d'administration ou sur le routeur uniquement pour administrer ce routeur.<br><br>Cette mesure permet de limiter la capacité d'action d'acteurs malveillants qui parviendraient à usurper un compte d'administration.",
+      "Créer des comptes d'accès d'administration différents dotés de privilèges distincts selon les périmètres. Par exemple, le compte permettant l'administration des postes utilisateurs n'est pas le même que le compte permettant l'administration des serveurs applicatif.<br>La granularité de cette distinction des privilèges dépend de l'entité et de ses pratiques d'administration.<br><br>Cette mesure permet de limiter la capacité d'action d'acteurs malveillants qui parviendraient à usurper un compte d'administration.",
     categorie: 'protection',
     identifiantNumerique: '0098',
     referentiel: 'ANSSI',
@@ -814,7 +821,7 @@ export const mesuresV2 = {
     description:
       "Limiter les droits de chaque administrateur du système d'information au strict nécessaire",
     descriptionLongue:
-      "Attribuer les droits individuels à chaque compte d'administration en les restreignant autant que possible au périmètre fonctionnel et technique. <br>Pour cela, il est recommandé d'octroyer les droits d'administration au travers de groupes dont les comptes d'administration sont membres.<br><br>Cette mesure permet de vérifier les droits attribués aux comptes des administrateurs techniques afin de réduire l'impact potentiel d'une compromission d'un tel compte.",
+      "Attribuer les droits individuels à chaque compte d'administration en les restreignant autant que possible au périmètre fonctionnel et technique. <br>Pour cela, il est recommandé d'octroyer les droits d'administration au travers de groupes dont les comptes d'administration sont membres.<br><br>Cette mesure permet de vérifier les droits attribués aux comptes des administrateurs afin de réduire l'impact potentiel d'une compromission d'un tel compte.",
     categorie: 'protection',
     identifiantNumerique: '0101',
     referentiel: 'ANSSI',
@@ -828,15 +835,6 @@ export const mesuresV2 = {
     identifiantNumerique: '0102',
     referentiel: 'ANSSI',
   },
-  'COMPADMIN.8': {
-    description:
-      'Sauvegarder les mots de passe des administrateurs techniques dans un gestionnaire de mots de passe',
-    descriptionLongue:
-      "Fournir aux administrateurs techniques un gestionnaire de mot de passe et les former à son utilisation.<br><br>Cette mesure permet de réduire la vraisemblance de stockage non sécurisé des mots de passe par les administrateurs techniques (ex. sur un bloc note) et ainsi de réduire la vraisemblance de compromission d'un compte d'administrateur technique.",
-    categorie: 'protection',
-    identifiantNumerique: '0103',
-    referentiel: 'ANSSI',
-  },
   'COMPADMIN.9': {
     description:
       'Limiter au strict nécessaire le nombre de personnes disposant d’un accès administrateur',
@@ -848,9 +846,9 @@ export const mesuresV2 = {
   },
   'INCIDENT.1': {
     description:
-      'Formaliser et mettre en oeuvre une procédure de traitement des incidents de sécurité',
+      'Formaliser et mettre en œuvre une procédure de traitement des incidents de sécurité',
     descriptionLongue:
-      "Formaliser et mettre en oeuvre une procédure de traitement des incidents de sécurité affectant les systèmes d'information.<br><br>Cette mesure permet de s'assurer du traitement efficace des incidents de sécurité afin d'en limiter les impacts.",
+      "Formaliser et mettre en œuvre une procédure de traitement des incidents de sécurité affectant les systèmes d'information.<br><br>Cette mesure permet de s'assurer du traitement efficace des incidents de sécurité afin d'en limiter les impacts.",
     categorie: 'defense',
     identifiantNumerique: '0109',
     referentiel: 'ANSSI',
@@ -859,7 +857,7 @@ export const mesuresV2 = {
     description:
       "Mettre en œuvre des outils permettant la collecte de signalements d'évènements de sécurité, notamment par les utilisateurs et les prestataires ou fournisseurs",
     descriptionLongue:
-      "S'assurer de la mise en oeuvre des outils permettant de collecter les signalements d'évènements de sécurité par les utilisateurs, prestataires ou fournisseurs.<br><br>Cette mesure permet de renforcer l'activité de collecte des événements de sécurité",
+      "S'assurer de la mise en œuvre des outils permettant de collecter les signalements d'évènements de sécurité par les utilisateurs, prestataires ou fournisseurs.<br><br>Cette mesure permet de renforcer l'activité de collecte des événements de sécurité",
     categorie: 'defense',
     identifiantNumerique: '0110',
     referentiel: 'ANSSI',
@@ -868,7 +866,7 @@ export const mesuresV2 = {
     description:
       "Mettre en œuvre des mécanismes permettant d’analyser et de qualifier les événements de sécurité ainsi que d'identifier d'éventuels incidents",
     descriptionLongue:
-      "Définir et mettre en oeuvre des mécanismes permettant d'analyser et de qualifier les évènements de sécurité remontés et d'identifier les incidents potentiels ou avérés.<br><br>Cette mesure permet de s'assurer de la mise en place des mécanismes permettant l'identification d'incidents de sécurité.",
+      "Définir et mettre en œuvre des mécanismes permettant d'analyser et de qualifier les évènements de sécurité remontés et d'identifier les incidents potentiels ou avérés.<br><br>Cette mesure permet de s'assurer de la mise en place des mécanismes permettant l'identification d'incidents de sécurité.",
     categorie: 'defense',
     identifiantNumerique: '0111',
     referentiel: 'ANSSI',
@@ -877,7 +875,7 @@ export const mesuresV2 = {
     description:
       "Garantir que les causes de chaque incident majeur sont analysées et donnent lieu à un plan d'action",
     descriptionLongue:
-      "S'assurer qu'après chaque incident majeur, une analyse des causes de l'incident a été réalisée. <br>Cette analyse de cause vise à définir et mettre en oeuvre les mesures de sécurité permettant de limiter la vraisemblance d'un nouvel incident ou d'en réduire l'impact. Les preuves de l'analyse doivent être conservées.<br><br>Cette mesure permet de limiter le risque de récurrence du même incident.",
+      "S'assurer qu'après chaque incident majeur, une analyse des causes de l'incident a été réalisée. <br>Cette analyse de cause vise à définir et mettre en œuvre les mesures de sécurité permettant de limiter la vraisemblance d'un nouvel incident ou d'en réduire l'impact. Les preuves de l'analyse doivent être conservées.<br><br>Cette mesure permet de limiter le risque de récurrence du même incident.",
     categorie: 'defense',
     identifiantNumerique: '0112',
     referentiel: 'ANSSI',
@@ -902,18 +900,18 @@ export const mesuresV2 = {
   },
   'INCIDENT.8': {
     description:
-      "Mettre en oeuvre des mécanismes permettant de réagir aux incidents et d'en limiter les conséquences",
+      "Mettre en œuvre des mécanismes permettant de réagir aux incidents et d'en limiter les conséquences",
     descriptionLongue:
-      "Définir et mettre en oeuvre des mécanismes organisationnels et techniques permettant de réagir en cas d'incident et d'en limiter les conséquences sur les services et activités.<br><br>Cette mesure permet d'améliorer la maîtrise des conséquences d'un incident de sécurité sur le système d'information.",
+      "Définir et mettre en œuvre des mécanismes organisationnels et techniques permettant de réagir en cas d'incident et d'en limiter les conséquences sur les services et activités.<br><br>Cette mesure permet d'améliorer la maîtrise des conséquences d'un incident de sécurité sur le système d'information.",
     categorie: 'resilience',
     identifiantNumerique: '0165',
     referentiel: 'ANSSI',
   },
   'CONTINU.1': {
     description:
-      'Formaliser et mettre en oeuvre des procédures de sauvegarde et de restauration, et les tester a minima annuellement.',
+      'Formaliser et mettre en œuvre des procédures de sauvegarde et de restauration, et les tester a minima annuellement.',
     descriptionLongue:
-      "Formaliser et mettre en oeuvre des procédures de sauvegarde et de restauration du système d'information et de ses données dont les dimensionnements sont adaptés pour répondre au besoin de disponibilité du système.<br>Tester ces procédures afin de vérifier notamment la bonne réalisation des sauvegardes et leur bonne restauration.<br><br>Cette mesure permet de s'assurer que le processus de sauvegarde et de restauration est en place et qu'il correspond aux besoins du système.",
+      "Formaliser et mettre en œuvre des procédures de sauvegarde et de restauration du système d'information et de ses données dont les dimensionnements sont adaptés pour répondre au besoin de disponibilité du système.<br>Tester ces procédures afin de vérifier notamment la bonne réalisation des sauvegardes et leur bonne restauration.<br><br>Cette mesure permet de s'assurer que le processus de sauvegarde et de restauration est en place et qu'il correspond aux besoins du système.",
     categorie: 'resilience',
     identifiantNumerique: '0116',
     referentiel: 'ANSSI',
@@ -922,7 +920,7 @@ export const mesuresV2 = {
     description:
       "Protéger les sauvegardes d'un évènement les rendant inexploitables",
     descriptionLongue:
-      "Protéger les sauvegardes d'un incident les rendant inexploitables (ex. stockage hors-ligne pour répondre à un incident de type rançongiciel).<br>Cela peut notamment être réalisé via la mise en oeuvre d'une politique de sauvegarde \"3-2-1\", c'est-à-dire 3 sauvegardes, sur 2 supports différents, dont 1 hors ligne.<br><br>Cette mesure permet de protéger les sauvegardes d'un incident les rendant inexploitables (par exemple pour répondre à un incident de type rançongiciel).",
+      "Protéger les sauvegardes d'un incident les rendant inexploitables (ex. stockage hors-ligne pour répondre à un incident de type rançongiciel).<br>Cela peut notamment être réalisé via la mise en œuvre d'une politique de sauvegarde \"3-2-1\", c'est-à-dire 3 sauvegardes, sur 2 supports différents, dont 1 hors ligne.<br><br>Cette mesure permet de protéger les sauvegardes d'un incident les rendant inexploitables (par exemple pour répondre à un incident de type rançongiciel).",
     categorie: 'resilience',
     identifiantNumerique: '0117',
     referentiel: 'ANSSI',
@@ -938,9 +936,9 @@ export const mesuresV2 = {
   },
   'CONTINU.5': {
     description:
-      "Formaliser et mettre en oeuvre le plan de reprise de l'activité",
+      "Formaliser et mettre en œuvre le plan de reprise de l'activité",
     descriptionLongue:
-      "Définir et mettre en oeuvre un plan de reprise d'activité (PRA) cohérent avec la durée maximale d'interruption admissible et la perte de données maximale admissible.<br>La définition de ce plan doit notamment s'appuyer sur la cartographie de l'écosystème, la procédure de gestion des incidents et la procédure de gestion des crises d'origine cyber.<br><br>Cette mesure permet de préparer la reprise des activités du système selon ses besoins de résilience.",
+      "Définir et mettre en œuvre un plan de reprise d'activité (PRA) cohérent avec la durée maximale d'interruption admissible et la perte de données maximale admissible.<br>La définition de ce plan doit notamment s'appuyer sur la cartographie de l'écosystème, la procédure de gestion des incidents et la procédure de gestion des crises d'origine cyber.<br><br>Cette mesure permet de préparer la reprise des activités du système selon ses besoins de résilience.",
     categorie: 'resilience',
     identifiantNumerique: '0120',
     referentiel: 'ANSSI',
@@ -958,7 +956,7 @@ export const mesuresV2 = {
     description:
       "Réaliser une analyse de risque approfondie de la sécurité du système d'information et la mettre à jour au minimum tous les trois ans",
     descriptionLongue:
-      "Réaliser une analyse de risque approfondie du système d'information et la mettre à jour tous les trois ans et en cas d'incident de sécurité ou d'évolution majeure (métier, technique ou organisationnelle). Cette analyse de risque doit s'appuyer sur les éléments issus du socle normatif et/ou réglementaire applicable (ex. PSSI et réglementation applicable), des spécificités sectorielles, de la maîtrise de l'écosystème, de la maîtrise du système et des audits.<br>Cette analyse doit être validée par l'entité, les risques résiduels acceptés et un plan d'action présentant des échéances raisonnables et les responsables pour chaque action doit être mis en oeuvre.<br><br>La méthode EBIOS RM peut être utilisée pour cette analyse de risque.<br><br>Cette mesure permet d'identifier et de maîtrises les risques liés au système d'information.",
+      "Réaliser une analyse de risque approfondie du système d'information et la mettre à jour tous les trois ans et en cas d'incident de sécurité ou d'évolution majeure (métier, technique ou organisationnelle). Cette analyse de risque doit s'appuyer sur les éléments issus du socle normatif et/ou réglementaire applicable (ex. PSSI et réglementation applicable), des spécificités sectorielles, de la maîtrise de l'écosystème, de la maîtrise du système et des audits.<br>Cette analyse doit être validée par l'entité, les risques résiduels acceptés et un plan d'action présentant des échéances raisonnables et les responsables pour chaque action doit être mis en œuvre.<br><br>La méthode EBIOS RM peut être utilisée pour cette analyse de risque.<br><br>Cette mesure permet d'identifier et de maîtrises les risques liés au système d'information.",
     categorie: 'gouvernance',
     identifiantNumerique: '0131',
     referentiel: 'ANSSI',
@@ -967,16 +965,16 @@ export const mesuresV2 = {
     description:
       "Réaliser une analyse de risque rapide de la sécurité du système d'information",
     descriptionLongue:
-      "Réaliser une analyse de risque rapide du système d'information et la mettre à jour tous les trois ans et en cas d'incident de sécurité ou d'évolution majeure (métier, technique ou organisationnel. <br>Cette analyse doit être validée par l'entité, les risques résiduels acceptés et un plan d'action présentant des échéances raisonnables et les responsables pour chaque action doit être mis en oeuvre.<br><br>Cette mesure permet d'identifier et de maîtrises les risques liés au système d'information.",
+      "Réaliser une analyse de risque rapide du système d'information et la mettre à jour tous les trois ans et en cas d'incident de sécurité ou d'évolution majeure (métier, technique ou organisationnel. <br>Cette analyse doit être validée par l'entité, les risques résiduels acceptés et un plan d'action présentant des échéances raisonnables et les responsables pour chaque action doit être mis en œuvre.<br><br>Cette mesure permet d'identifier et de maîtrises les risques liés au système d'information.",
     categorie: 'gouvernance',
     identifiantNumerique: '0132',
     referentiel: 'ANSSI',
   },
   'AUDIT.1': {
     description:
-      "Formaliser et mettre en oeuvre un programme d'audit du système d'information",
+      "Formaliser et mettre en œuvre un programme d'audit du système d'information",
     descriptionLongue:
-      "Définir et mettre en oeuvre un programme d'audit permettant l'audit du système d'information au moins tous les trois ans ou en cas d'évolution technique majeure du système.<br>Un audit doit permettre de vérifier la conformité aux mesures issues du socle normatif et/ou réglementaire (ex. PSSI et réglementations applicables) et d'évaluer le niveau de sécurité du système au regard des menaces et des vulnérabilités connues.<br>Chaque audit doit donner lieu à la formalisation d'un rapport présentant les résultats (synthèse de la conformité, constats et recommandations) et à la mise en oeuvre d'un plan d'action visant à corriger les non-conformités et les vulnérabilités identifiées. Ce plan d'action doit présenter des échéances raisonnables et responsables pour chaque action.<br><br>Cette mesure permet de s'assurer de l'efficacité des mesures de sécurité mises en place ainsi que d'identifier et de maîtriser les vulnérabilités liés au système d'information.",
+      "Définir et mettre en œuvre un programme d'audit permettant l'audit du système d'information.<br>Les audits associés à ce programme ainsi que leur profondeur et leur fréquence doivent tenir compte de tout ou partie de l'analyse de risque réalisée, de la criticité du système d'information au regard de l'entité et de l'exposition du système aux risques numériques.<br><br>Un audit doit permettre de vérifier la conformité aux mesures issues du socle normatif et/ou réglementaire (ex. PSSI et réglementations applicables) et d'évaluer le niveau de sécurité du système au regard des menaces et des vulnérabilités connues. Chaque audit doit donner lieu à la formalisation d'un rapport présentant les résultats (synthèse de la conformité, constats et recommandations) et à la mise en œuvre d'un plan d'action visant à corriger les non-conformités et les vulnérabilités identifiées. Ce plan d'action doit présenter des échéances raisonnables et responsables pour chaque action.<br><br>Cette mesure permet de s'assurer de l'efficacité des mesures de sécurité mises en place ainsi que d'identifier et de maîtriser les vulnérabilités liés au système d'information.",
     categorie: 'gouvernance',
     identifiantNumerique: '0134',
     referentiel: 'ANSSI',
@@ -1015,18 +1013,26 @@ export const mesuresV2 = {
     referentiel: 'ANSSI',
   },
   'AUDIT.6': {
-    description: "Mettre en oeuvre des mécanismes d'audit automatique du code",
+    description: "Mettre en œuvre des mécanismes d'audit automatique du code",
     descriptionLongue:
       "Mettre en place des mécanismes d’audit automatique du code (analyse statique, détection de vulnérabilités, vérification de conformité aux standards de développement, etc.), afin de contrôler sa qualité et sa sécurité avant toute intégration en production.<br><br>Cette mesure permet de réduire la vraisemblance d'exploitation d'une vulnérabilité liée au code.",
     categorie: 'protection',
     identifiantNumerique: '0168',
     referentiel: 'ANSSI',
   },
+  'AUDIT.7': {
+    description: "Réaliser un audit de sécurité sur le système d'information",
+    descriptionLongue:
+      "Réaliser, sans préjudice d’autres obligations légales et réglementaires, un audit de sécurité sur le système d'information en prenant en compte pour la sélection de l'audit, sa profondeur et sa fréquence tout ou partie de l'analyse de risque réalisée, de la criticité du système d'information au regard de l'entité et de l'exposition du système aux risques numériques.<br><br>L'audit de sécurité doit comprendre a minima une des activités suivants : <br>- un test d’intrusion (couvrant au minimum les interfaces exposées à des systèmes sous la responsabilité de l’entité pour lesquels elle a décidé de ne pas appliquer les objectifs de sécurité ainsi qu’à des systèmes d’information tiers), <br>- un audit de configuration, <br>- un audit d’architecture, <br>- un audit organisationnel et physique,<br>- un audit de code (si pertinent).<br><br>Cette mesure permet de réduire la vraisemblance d'exploitation d'une vulnérabilité.",
+    categorie: 'protection',
+    identifiantNumerique: '0171',
+    referentiel: 'ANSSI',
+  },
   'CONFIG.1': {
     description:
       'Installer et conserver uniquement les applicatifs et fonctionnalités nécessaires',
     descriptionLongue:
-      "Installer sur les équipements uniquement les applicatifs et fonctionnalités strictement nécessaires à la réalisation des activités et services ou au maintien en condition opérationnelles ou de sécurité du système d'information.<br>Lorsque des raison techniques ou opérationnelles ne permettent pas de désactiver ou de désinstaller les applicatifs et fonctionnalités, mettre en oeuvre des mesures permettant de réduire le risque associé (ex. compartimentalisation, gestion des accès, traçabilité).<br><br>Cette mesure permet de réduire la vraisemblance d'exploitation de vulnérabilité sur un applicatif ou un fonctionnalité non nécessaire.",
+      "Installer sur les équipements uniquement les applicatifs et fonctionnalités strictement nécessaires à la réalisation des activités et services ou au maintien en condition opérationnelles ou de sécurité du système d'information.<br>Lorsque des raison techniques ou opérationnelles ne permettent pas de désactiver ou de désinstaller les applicatifs et fonctionnalités, mettre en œuvre des mesures permettant de réduire le risque associé (ex. compartimentalisation, gestion des accès, traçabilité).<br><br>Cette mesure permet de réduire la vraisemblance d'exploitation de vulnérabilité sur un applicatif ou un fonctionnalité non nécessaire.",
     categorie: 'protection',
     identifiantNumerique: '0139',
     referentiel: 'ANSSI',
@@ -1044,16 +1050,16 @@ export const mesuresV2 = {
     description:
       'Procéder a minima annuellement à une revue de configuration des équipements et applicatifs',
     descriptionLongue:
-      "Mettre en oeuvre des vérifications techniques de la configuration des équipements et des applicatifs.<br>Il est recommandé que cette revue s'appuie sur un ou des outils automatisés (ex. scan de port et de vulnérabilité, revue des configurations des pares-feux par rapport aux matrices de flux).<br><br>Cette mesure permet de s'assurer du durcissement du système d'information.",
+      "Mettre en œuvre des vérifications techniques de la configuration des équipements et des applicatifs.<br>Il est recommandé que cette revue s'appuie sur un ou des outils automatisés (ex. scan de port et de vulnérabilité, revue des configurations des pares-feux par rapport aux matrices de flux).<br><br>Cette mesure permet de s'assurer du durcissement du système d'information.",
     categorie: 'protection',
     identifiantNumerique: '0141',
     referentiel: 'ANSSI',
   },
   'CONFIG.4': {
     description:
-      'Chiffrer le trafic des données avec un certificat de sécurité conforme au référentiel général de sécurité',
+      'Installer un certificat de sécurité conforme au référentiel général de sécurité',
     descriptionLongue:
-      "Dans le cadre de la configuration du service, installer un certificat de sécurité serveur conforme au référentiel général de sécurité (RGS) défini par l'ANSSI, délivré par un prestataire de service de confiance qualifié.<br><br>Cette mesure permet de chiffrer les flux de données transitant par le service numérique avec des mécanismes de chiffrement robustes ainsi que de prouver l'identité de l'organisation détentrice du certificat.",
+      "Dans le cadre de la configuration du système d'information, installer un certificat de sécurité serveur conforme au référentiel général de sécurité (RGS) défini par l'ANSSI, délivré par un prestataire de service de confiance qualifié.<br><br>Cette mesure permet d’authentifier le serveur et de prouver l’identité de l'entité détentrice du certificat, garantissant ainsi la confiance dans les échanges chiffrés.",
     categorie: 'protection',
     identifiantNumerique: '0142',
     referentiel: 'ANSSI',
@@ -1114,16 +1120,16 @@ export const mesuresV2 = {
     description:
       "Dédier les ressources matérielles des réseaux d'administration technique aux actions d'administration ",
     descriptionLongue:
-      "Dédier les ressources matérielles des réseaux d'administration aux actions d'administration technique.<br><br>Cette mesure permet de réduire la vraisemblance de compromission d'une ressource des réseaux d'administration.",
+      "Dédier les ressources matérielles des réseaux d'administration exclusivement aux actions d'administration technique.<br><br>Cette mesure permet de réduire la vraisemblance de compromission d'une ressource des réseaux d'administration.",
     categorie: 'protection',
     identifiantNumerique: '0149',
     referentiel: 'ANSSI',
   },
   'ADMIN.4': {
     description:
-      "Utiliser des postes physiques dédiés pour la connexion et actions d'administration technique",
+      "Utiliser des postes physiques dédiés pour la connexion et actions d'administration",
     descriptionLongue:
-      "Utiliser pour l'administration technique des postes de travail physique dédiés uniquement à cet usage.<br>Lorsque des raisons techniques ou opérationnelles ne le permettent pas, mettre en oeuvre des mesures de durcissement du système d'exploitation utilisé pour réaliser les actions d'administration, et cloisonné ce système d'exploitation du système d'exploitation utilisé pour les autres actions.<br><br>Cette mesure permet de réduire la vraisemblance d'attaque par rebond sur un poste de travail utilisé pour l'administration technique.",
+      "Utiliser pour l'administration des postes de travail physique dédiés uniquement à cet usage.<br>Lorsque des raisons techniques ou opérationnelles ne le permettent pas, mettre en œuvre des mesures de durcissement du système d'exploitation utilisé pour réaliser les actions d'administration, et cloisonner ce système d'exploitation du système d'exploitation utilisé pour les autres actions.<br><br>Cette mesure permet de réduire la vraisemblance d'attaque par rebond sur un poste de travail utilisé pour l'administration.",
     categorie: 'protection',
     identifiantNumerique: '0150',
     referentiel: 'ANSSI',
@@ -1132,7 +1138,7 @@ export const mesuresV2 = {
     description:
       "Administrer les ressources du système d'information au travers d'une liaison réseau et d'une interface physiques dédiées ",
     descriptionLongue:
-      "Utiliser une liaison réseau physique dédiées pour la connexion des réseaux d'administration aux équipements du système d'information.<br>Administrer ces équipements au travers de leur interface d'administration physique.<br>Lorsque des raisons techniques ou opérationnelles ne le permettent pas, mettre en oeuvre des mesures de réduction du risque telles que des mesures de sécurité logique.<br><br>Cette mesure permet de cloisonner les accès aux ressources pour les actions d'administration technique.",
+      "Utiliser une liaison réseau physique dédiées pour la connexion des réseaux d'administration aux équipements du système d'information.<br>Administrer ces équipements au travers de leur interface d'administration physique.<br>Lorsque des raisons techniques ou opérationnelles ne le permettent pas, mettre en œuvre des mesures de réduction du risque telles que des mesures de sécurité logique.<br><br>Cette mesure permet de cloisonner les accès aux ressources pour les actions d'administration technique.",
     categorie: 'protection',
     identifiantNumerique: '0151',
     referentiel: 'ANSSI',
@@ -1140,7 +1146,7 @@ export const mesuresV2 = {
   'ADMIN.6': {
     description: "Cloisonner et filtrer les accès d'administration technique",
     descriptionLongue:
-      "Cloisonner et filtrer le réseau d'administration et les accès d'administration technique afin de respecter les modalités de cloisonnement et de filtrage mises en oeuvre au sein des systèmes d'information. <br>Par exemple, deux machines ne pouvant pas communiquer au travers des systèmes d'information ne peuvent pas communiquer au travers du réseau d'administration.<br><br>Cette mesure permet de cloisonner et de filtrer les flux d'administration technique pour réduire les risques d'attaque via ces flux.",
+      "Cloisonner et filtrer le réseau d'administration et les accès d'administration technique afin de respecter les modalités de cloisonnement et de filtrage mises en œuvre au sein des systèmes d'information. <br>Par exemple, deux machines ne pouvant pas communiquer au travers des systèmes d'information ne peuvent pas communiquer au travers du réseau d'administration.<br><br>Cette mesure permet de cloisonner et de filtrer les flux d'administration technique pour réduire les risques d'attaque via ces flux.",
     categorie: 'protection',
     identifiantNumerique: '0152',
     referentiel: 'ANSSI',
@@ -1149,7 +1155,7 @@ export const mesuresV2 = {
     description:
       "Chiffrer et authentifier les communications associées aux actions d'administration technique",
     descriptionLongue:
-      "Mettre en oeuvre des mécanismes de chiffrement et d'authentification à l'état de l'art pour les communications associées à des actions d'administration (ex. protocoles sécurisés garantissant authentification, intégrité et confidentialité).<br>Si ces communications transitent sur des réseaux non dédiés à ces communications, les cloisonner au moyen de mécanismes de chiffrement et d'authentification conformes à l'état de l'art (ex. tunnel VPN).<br>Lorsque des raisons techniques ou opérationnelles ne permettent pas de chiffrer ou d'authentifier ces communications, mettre en oeuvre des mesures permettant de protéger la confidentialité et l'intégrité de ces flux et de renforce le contrôle et la traçabilité des actions d'administration.<br><br>Cette mesure permet de protéger les communications associées à des actions d'administration de perte de confidentialité ou d'intégrité.",
+      "Mettre en œuvre des mécanismes de chiffrement et d'authentification à l'état de l'art pour les communications associées à des actions d'administration (ex. protocoles sécurisés garantissant authentification, intégrité et confidentialité).<br>Si ces communications transitent sur des réseaux non dédiés à ces communications, les cloisonner au moyen de mécanismes de chiffrement et d'authentification conformes à l'état de l'art (ex. tunnel VPN).<br>Lorsque des raisons techniques ou opérationnelles ne permettent pas de chiffrer ou d'authentifier ces communications, mettre en œuvre des mesures permettant de protéger la confidentialité et l'intégrité de ces flux et de renforce le contrôle et la traçabilité des actions d'administration.<br><br>Cette mesure permet de protéger les communications associées à des actions d'administration de perte de confidentialité ou d'intégrité.",
     categorie: 'protection',
     identifiantNumerique: '0153',
     referentiel: 'ANSSI',
