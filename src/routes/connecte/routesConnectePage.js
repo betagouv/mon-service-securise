@@ -181,7 +181,13 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
     async (_, reponse) => {
-      reponse.render('listeMesures', { referentiel });
+      reponse.render('listeMesures', {
+        statutsMesures: referentiel.statutsMesures(),
+        categoriesMesures: referentiel.categoriesMesures(),
+        typesService: referentiel.typesService(),
+        nombreMaximumDeModelesMesureSpecifiqueParUtilisateur:
+          referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur(),
+      });
     }
   );
 
