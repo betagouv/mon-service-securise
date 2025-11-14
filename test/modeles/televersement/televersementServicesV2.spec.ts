@@ -241,20 +241,15 @@ describe('Un téléversement de services V2', () => {
               finalise: true,
               importe: true,
               decision: {
-                dateHomologation: '22/01/2025',
+                dateHomologation: '2025-01-22T00:00:00.000Z',
                 dureeValidite: 'sixMois',
               },
-              autorite: {
-                nom: 'Nom Prénom',
-                fonction: 'Fonction',
-              },
+              autorite: { nom: 'Nom Prénom', fonction: 'Fonction' },
               avecAvis: false,
               avis: [],
               avecDocuments: false,
               documents: [],
-              dateTelechargement: {
-                date: '22/01/2025',
-              },
+              dateTelechargement: { date: '2025-01-22T00:00:00.000Z' },
             });
           });
 
