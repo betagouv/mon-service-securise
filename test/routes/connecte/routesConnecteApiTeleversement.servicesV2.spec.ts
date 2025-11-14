@@ -298,4 +298,38 @@ describe('Les routes connecté de téléversement de services V2', () => {
       expect(reponse.status).toBe(400);
     });
   });
+
+  describe('Quand requête GET sur `/api/televersement/services-v2/progression`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+    });
+
+    it('retourne le pourcentage de progression', async () => {
+      let idUtilisateurRecu;
+      testeur.depotDonnees().lisPourcentageProgressionTeleversementServices =
+        async (idUtilisateur: UUID) => {
+          idUtilisateurRecu = idUtilisateur;
+          return 50;
+        };
+
+      const reponse = await testeur.get(
+        '/api/televersement/services-v2/progression'
+      );
+
+      expect(idUtilisateurRecu).toBe('123');
+      expect(reponse.status).toBe(200);
+      expect(reponse.body.progression).toBe(50);
+    });
+
+    it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
+      testeur.depotDonnees().lisPourcentageProgressionTeleversementServices =
+        async () => undefined;
+
+      const reponse = await testeur.get(
+        '/api/televersement/services-v2/progression'
+      );
+
+      expect(reponse.status).toBe(404);
+    });
+  });
 });
