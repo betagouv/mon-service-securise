@@ -26,6 +26,7 @@ import { expectContenuSessionValide } from '../../aides/cookie.js';
 import { SourceAuthentification } from '../../../src/modeles/sourceAuthentification.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
+import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
 
 const { SECURISER } = Rubriques;
 const { LECTURE, INVISIBLE } = Permissions;
@@ -1801,6 +1802,17 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête GET sur `/api/referentiel/mesures`', () => {
+    beforeEach(() => {
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+
+      testeur.referentiel().recharge({
+        mesures: { mesureA: 'une mesure du référentiel v1' },
+      });
+
+      testeur.depotDonnees().versionsServiceUtiliseesParUtilisateur =
+        async () => ['v1'];
+    });
+
     it("vérifie que l'utilisateur est authentifié", async () => {
       await testeur
         .middleware()
@@ -1810,20 +1822,54 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         );
     });
 
-    it('retourne la liste des mesures du référentiel', async () => {
-      testeur.referentiel().recharge({
-        mesures: {
-          mesureA: 'une mesure A',
-          mesureB: 'une mesure B',
-        },
-      });
+    it("retourne uniquement les mesures v1 quand l'utilisateur n'a que des services v1", async () => {
+      const queDuV1 = ['v1'];
+      let utilisateurRecu;
+      testeur.depotDonnees().versionsServiceUtiliseesParUtilisateur = async (
+        idUtilisateur
+      ) => {
+        utilisateurRecu = idUtilisateur;
+        return queDuV1;
+      };
 
       const reponse = await testeur.get('/api/referentiel/mesures');
 
-      expect(reponse.status).to.be(200);
+      expect(utilisateurRecu).to.be('123');
+      expect(reponse.body).to.eql({ mesureA: 'une mesure du référentiel v1' });
+    });
+
+    it("retourne uniquement les mesures v2 quand l'utilisateur n'a que des services v2", async () => {
+      const queDuV2 = ['v2'];
+      let utilisateurRecu;
+      testeur.depotDonnees().versionsServiceUtiliseesParUtilisateur = async (
+        idUtilisateur
+      ) => {
+        utilisateurRecu = idUtilisateur;
+        return queDuV2;
+      };
+
+      const reponse = await testeur.get('/api/referentiel/mesures');
+
+      expect(utilisateurRecu).to.be('123');
+      expect(reponse.body).to.eql(mesuresV2);
+    });
+
+    it("retourne les mesures v1 *et* v2 quand l'utilisateur a les deux versions de services", async () => {
+      const deuxVersions = ['v1', 'v2'];
+      let utilisateurRecu;
+      testeur.depotDonnees().versionsServiceUtiliseesParUtilisateur = async (
+        idUtilisateur
+      ) => {
+        utilisateurRecu = idUtilisateur;
+        return deuxVersions;
+      };
+
+      const reponse = await testeur.get('/api/referentiel/mesures');
+
+      expect(utilisateurRecu).to.be('123');
       expect(reponse.body).to.eql({
-        mesureA: 'une mesure A',
-        mesureB: 'une mesure B',
+        mesureA: 'une mesure du référentiel v1',
+        ...mesuresV2,
       });
     });
   });
