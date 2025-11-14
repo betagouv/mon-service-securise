@@ -18,7 +18,10 @@ const STATUT = {
 export interface DepotPourTeleversementServices {
   nouveauService: (
     idUtilisateur: UUID,
-    donnees: { descriptionService: Record<string, unknown> }
+    donnees: {
+      descriptionService: Record<string, unknown>;
+      versionService: VersionService.v2;
+    }
   ) => Promise<UUID>;
   ajouteSuggestionAction: (
     idService: UUID,
@@ -80,6 +83,7 @@ class TeleversementServicesV2 {
         serviceTeleverse.enDonneesService();
       const idService = await depotDonnees.nouveauService(idUtilisateur, {
         descriptionService,
+        versionService: VersionService.v2,
       });
 
       if (dossier) {

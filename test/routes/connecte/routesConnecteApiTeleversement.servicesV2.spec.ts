@@ -6,6 +6,7 @@ import { VersionService } from '../../../src/modeles/versionService.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 import TeleversementServicesV2 from '../../../src/modeles/televersement/televersementServicesV2.ts';
 import { unUUID } from '../../constructeurs/UUID.ts';
+import { ReferentielV2 } from '../../../src/referentiel.interface.ts';
 
 describe('Les routes connecté de téléversement de services V2', () => {
   const testeur = testeurMSS();
@@ -187,6 +188,114 @@ describe('Les routes connecté de téléversement de services V2', () => {
       const reponse = await testeur.delete('/api/televersement/services-v2');
 
       expect(reponse.status).toBe(200);
+    });
+  });
+
+  describe('Quand requête POST sur `/api/televersement/services-v2/confirme`', () => {
+    const donneesServiceValide: LigneServiceTeleverseV2 = {
+      nom: 'Mon service',
+      siret: '13000000000000',
+      statutDeploiement: 'En conception',
+      typeService: ['Service en ligne', 'API'],
+      typeHebergement: 'Hébergement interne (On-premise)',
+      ouvertureSysteme: 'Accessible depuis internet',
+      audienceCible: 'Large',
+      dureeDysfonctionnementAcceptable: 'Moins de 4h',
+      volumetrieDonneesTraitees: 'Faible',
+      localisationDonneesTraitees: "Au sein de l'Union européenne",
+      dateHomologation: new Date('2025-01-31'),
+      dureeHomologation: '6 mois',
+      nomAutoriteHomologation: 'Nom Prénom',
+      fonctionAutoriteHomologation: 'Fonction',
+    };
+    let referentiel: ReferentielV2;
+    let televersementService: TeleversementServicesV2;
+
+    beforeEach(() => {
+      referentiel = creeReferentielV2();
+      televersementService = new TeleversementServicesV2(
+        { services: [structuredClone(donneesServiceValide)] },
+        referentiel
+      );
+      televersementService.creeLesServices = async () => {};
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      testeur.depotDonnees().services = async () => [];
+      testeur.depotDonnees().lisTeleversementServices = async () =>
+        televersementService;
+    });
+
+    it('répond 201', async () => {
+      const reponse = await testeur.post(
+        '/api/televersement/services-v2/confirme'
+      );
+
+      expect(reponse.status).toBe(201);
+    });
+
+    it('délègue la récupération des noms de services existants au dépôt de données', async () => {
+      let idUtilisateurRecu;
+      testeur.depotDonnees().services = async (idUtilisateur: UUID) => {
+        idUtilisateurRecu = idUtilisateur;
+        return [];
+      };
+
+      await testeur.post('/api/televersement/services-v2/confirme');
+
+      expect(idUtilisateurRecu).toBe('123');
+    });
+
+    it('délègue la récupération du téléversement de service au dépôt de données', async () => {
+      let idUtilisateurRecu;
+      testeur.depotDonnees().lisTeleversementServices = async (
+        idUtilisateur: UUID
+      ) => {
+        idUtilisateurRecu = idUtilisateur;
+        return televersementService;
+      };
+
+      await testeur.post('/api/televersement/services-v2/confirme');
+
+      expect(idUtilisateurRecu).toBe('123');
+    });
+
+    it("renvoie une erreur 404 si l'utilisateur n'a pas de téléversement en cours", async () => {
+      testeur.depotDonnees().lisTeleversementServices = async () => undefined;
+
+      const reponse = await testeur.post(
+        '/api/televersement/services-v2/confirme'
+      );
+
+      expect(reponse.status).toBe(404);
+    });
+
+    it('créé les services via le modèle métier', async () => {
+      let donneesRecues;
+      televersementService.creeLesServices = async (
+        idUtilisateur,
+        depotDonnees,
+        busEvenements
+      ) => {
+        donneesRecues = { idUtilisateur, depotDonnees, busEvenements };
+      };
+
+      await testeur.post('/api/televersement/services-v2/confirme');
+
+      expect(donneesRecues!.idUtilisateur).toBe('123');
+      expect(donneesRecues!.depotDonnees).not.toBe(undefined);
+      expect(donneesRecues!.busEvenements).not.toBe(undefined);
+    });
+
+    it('renvoie une erreur 400 si le téléversement est invalide', async () => {
+      televersementService = new TeleversementServicesV2(
+        { services: [{ ...donneesServiceValide, siret: 'pasUnSiret' }] },
+        referentiel
+      );
+
+      const reponse = await testeur.post(
+        '/api/televersement/services-v2/confirme'
+      );
+
+      expect(reponse.status).toBe(400);
     });
   });
 });
