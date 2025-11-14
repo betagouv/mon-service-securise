@@ -724,6 +724,9 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const versionsServiceUtiliseesParUtilisateur = async (idUtilisateur) =>
+    adaptateurPersistance.versionsServiceUtiliseesParUtilisateur(idUtilisateur);
+
   return {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
@@ -732,9 +735,8 @@ const creeDepot = (config = {}) => {
     ajouteRisqueSpecifiqueAService,
     ajouteRolesResponsabilitesAService,
     dupliqueService,
-    finaliseDossierCourant,
-    serviceExiste,
     enregistreDossier,
+    finaliseDossierCourant,
     metsAJourMesureGeneraleDesServices,
     metsAJourMesureGeneraleDuService,
     metsAJourMesureSpecifiqueDuService,
@@ -743,9 +745,10 @@ const creeDepot = (config = {}) => {
     metsAJourService,
     nombreServices,
     nouveauService,
-    service,
-    services,
     rechercheContributeurs,
+    service,
+    serviceExiste,
+    services,
     supprimeContributeur,
     supprimeMesureSpecifiqueDuService,
     supprimeRisqueSpecifiqueDuService,
@@ -753,6 +756,7 @@ const creeDepot = (config = {}) => {
     tousLesServices,
     tousLesServicesAvecSiret,
     trouveIndexDisponible,
+    versionsServiceUtiliseesParUtilisateur,
   };
 };
 

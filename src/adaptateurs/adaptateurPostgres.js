@@ -897,6 +897,20 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
   const supprimeBrouillonService = async (idBrouillon) =>
     knex('brouillons_service').where({ id: idBrouillon }).delete();
 
+  const versionsServiceUtiliseesParUtilisateur = async (idUtilisateur) => {
+    const { rows } = await knex.raw(
+      `
+        SELECT DISTINCT version_service
+        FROM services s
+        JOIN autorisations a ON s.id = (a.donnees ->> 'idService')::uuid
+        WHERE a.donnees ->> 'idUtilisateur' = ?;
+      `,
+      [idUtilisateur]
+    );
+
+    return rows.map((r) => r.version_service);
+  };
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -982,6 +996,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
     verifieTousLesServicesExistent,
+    versionsServiceUtiliseesParUtilisateur,
   };
 };
 
