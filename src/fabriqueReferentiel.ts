@@ -9,7 +9,7 @@ const fabriqueReferentielV1 = () => creeReferentiel();
 const fabriqueReferentielV2 = () => {
   const fichierMesuresProd = `${
     import.meta.dirname
-  }/moteurRegles/v2/mesures_V2_prod_30-09-2025.csv`;
+  }/moteurRegles/v2/mesures_V2_prod_07-11-2025.csv`;
   if (!fs.existsSync(fichierMesuresProd))
     throw new Error(
       `Le fichier ${fichierMesuresProd} n'existe pas, impossible d'initialiser le moteur de règles V2.`

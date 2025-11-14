@@ -63,12 +63,12 @@ export const mesuresCas1 = {
     indispensable: true,
   },
   'MCO_MCS.11': {
-    indispensable: true,
+    indispensable: false,
+  },
+  'MCO_MCS.12': {
+    indispensable: false,
   },
   'MCO_MCS.17': {
-    indispensable: true,
-  },
-  'MCO_MCS.2': {
     indispensable: true,
   },
   'MCO_MCS.3': {
@@ -84,12 +84,6 @@ export const mesuresCas1 = {
     indispensable: true,
   },
   'MCO_MCS.7': {
-    indispensable: true,
-  },
-  'MCO_MCS.8': {
-    indispensable: true,
-  },
-  'MCO_MCS.9': {
     indispensable: true,
   },
   'RGPD.1': {
@@ -155,6 +149,9 @@ export const mesuresCas1 = {
   'MAIL.1': {
     indispensable: true,
   },
+  'MAIL.2': {
+    indispensable: true,
+  },
   'DISTANCE.1': {
     indispensable: true,
   },
@@ -167,6 +164,9 @@ export const mesuresCas1 = {
   'MALWARE.3': {
     indispensable: true,
   },
+  'MALWARE.4': {
+    indispensable: true,
+  },
   'AUTH.1': {
     indispensable: true,
   },
@@ -175,6 +175,9 @@ export const mesuresCas1 = {
   },
   'AUTH.11': {
     indispensable: true,
+  },
+  'AUTH.12': {
+    indispensable: false,
   },
   'AUTH.2': {
     indispensable: true,
@@ -206,6 +209,9 @@ export const mesuresCas1 = {
   'ID.2': {
     indispensable: true,
   },
+  'ID.4': {
+    indispensable: true,
+  },
   'ANNUAIRE.1': {
     indispensable: true,
   },
@@ -235,9 +241,6 @@ export const mesuresCas1 = {
   },
   'COMPADMIN.6': {
     indispensable: true,
-  },
-  'COMPADMIN.8': {
-    indispensable: false,
   },
   'COMPADMIN.9': {
     indispensable: true,
@@ -282,18 +285,21 @@ export const mesuresCas1 = {
     indispensable: true,
   },
   'AUDIT.2': {
-    indispensable: true,
+    indispensable: false,
   },
   'AUDIT.3': {
-    indispensable: true,
+    indispensable: false,
   },
   'AUDIT.4': {
-    indispensable: true,
+    indispensable: false,
   },
   'AUDIT.5': {
-    indispensable: true,
+    indispensable: false,
   },
   'AUDIT.6': {
+    indispensable: true,
+  },
+  'AUDIT.7': {
     indispensable: true,
   },
   'CONFIG.1': {
@@ -315,7 +321,7 @@ export const mesuresCas1 = {
     indispensable: true,
   },
   'CONFIG.8': {
-    indispensable: true,
+    indispensable: false,
   },
   'ADMIN.1': {
     indispensable: true,

@@ -26,9 +26,6 @@ export const mesuresCas3 = {
   'DONNEES.2': {
     indispensable: false,
   },
-  'MCO_MCS.13': {
-    indispensable: true,
-  },
   'MCO_MCS.15': {
     indispensable: true,
   },
@@ -44,13 +41,13 @@ export const mesuresCas3 = {
   'MCO_MCS.6': {
     indispensable: true,
   },
-  'MCO_MCS.9': {
-    indispensable: false,
-  },
   'CLOISON.5': {
     indispensable: false,
   },
   'FILTRE.1': {
+    indispensable: false,
+  },
+  'DISTANCE.1': {
     indispensable: false,
   },
   'DISTANCE.2': {
@@ -58,6 +55,9 @@ export const mesuresCas3 = {
   },
   'DISTANCE.4': {
     indispensable: false,
+  },
+  'AUTH.10': {
+    indispensable: true,
   },
   'AUTH.11': {
     indispensable: false,
@@ -71,9 +71,6 @@ export const mesuresCas3 = {
   'AUTH.7': {
     indispensable: true,
   },
-  'DROITS.2': {
-    indispensable: false,
-  },
   'DROITS.3': {
     indispensable: true,
   },
@@ -81,6 +78,9 @@ export const mesuresCas3 = {
     indispensable: false,
   },
   'ID.3': {
+    indispensable: true,
+  },
+  'ID.4': {
     indispensable: true,
   },
   'COMPADMIN.1': {
@@ -108,7 +108,7 @@ export const mesuresCas3 = {
     indispensable: true,
   },
   'CONFIG.4': {
-    indispensable: false,
+    indispensable: true,
   },
   'CONFIG.6': {
     indispensable: false,
