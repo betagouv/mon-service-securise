@@ -189,7 +189,7 @@ describe('Un téléversement de services V2', () => {
           );
         });
 
-        it('délègue au dépôt de données la création du service', async () => {
+        it('délègue au dépôt de données la création du service, en V2', async () => {
           let donneesRecues;
           depotDonnees.nouveauService = async (idUtilisateur, donnees) => {
             donneesRecues = { idUtilisateur, donnees };
@@ -201,8 +201,10 @@ describe('Un téléversement de services V2', () => {
             depotDonnees,
             busEvenement
           );
+
           expect(donneesRecues!.idUtilisateur).toBe(unUUID('2'));
           expect(donneesRecues!.donnees).not.toBe(undefined);
+          expect(donneesRecues!.donnees.versionService).toBe('v2');
         });
 
         describe("si le service a un dossier d'homologation", () => {
