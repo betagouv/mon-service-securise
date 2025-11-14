@@ -18,7 +18,10 @@ const STATUT = {
 export interface DepotPourTeleversementServices {
   nouveauService: (
     idUtilisateur: UUID,
-    donnees: { descriptionService: Record<string, unknown> }
+    donnees: {
+      descriptionService: Record<string, unknown>;
+      versionService: VersionService.v2;
+    }
   ) => Promise<UUID>;
   ajouteSuggestionAction: (
     idService: UUID,
@@ -80,6 +83,7 @@ class TeleversementServicesV2 {
         serviceTeleverse.enDonneesService();
       const idService = await depotDonnees.nouveauService(idUtilisateur, {
         descriptionService,
+        versionService: VersionService.v2,
       });
 
       if (dossier) {
@@ -92,11 +96,9 @@ class TeleversementServicesV2 {
         );
         dossierMetier.declareSansAvis();
         dossierMetier.declareSansDocument();
-        dossierMetier.enregistreDateTelechargement(decision.dateHomologation);
-        dossierMetier.enregistreDecision(
-          decision.dateHomologation,
-          decision.dureeValidite
-        );
+        const dateIso = decision.dateHomologation.toISOString();
+        dossierMetier.enregistreDateTelechargement(dateIso);
+        dossierMetier.enregistreDecision(dateIso, decision.dureeValidite);
         dossierMetier.declareImporte();
         await busEvenements.publie(
           new EvenementDossierHomologationImporte({
@@ -134,6 +136,10 @@ class TeleversementServicesV2 {
         versionServicesImportes: VersionService.v2,
       })
     );
+  }
+
+  nombre() {
+    return this.services.length;
   }
 }
 

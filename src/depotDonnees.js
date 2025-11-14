@@ -116,6 +116,7 @@ const creeDepot = (config = {}) => {
       adaptateurChiffrement,
       adaptateurPersistance,
       referentiel,
+      referentielV2,
     });
 
   const depotModelesMesureSpecifique =

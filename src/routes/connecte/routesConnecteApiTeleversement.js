@@ -1,6 +1,7 @@
 import express from 'express';
 import routesConnecteApiTeleversementServices from './routesConnecteApiTeleversement.services.js';
 import routesConnecteApiTeleversementModelesMesure from './routesConnecteApiTeleversement.modelesMesureSpecifique.js';
+import { routesConnecteApiTeleversementServicesV2 } from './routesConnecteApiTeleversement.servicesV2.js';
 
 const routesConnecteApiTeleversement = ({
   lecteurDeFormData,
@@ -15,6 +16,17 @@ const routesConnecteApiTeleversement = ({
   routes.use(
     '/services',
     routesConnecteApiTeleversementServices({
+      lecteurDeFormData,
+      adaptateurTeleversementServices,
+      busEvenements,
+      depotDonnees,
+      middleware,
+    })
+  );
+
+  routes.use(
+    '/services-v2',
+    routesConnecteApiTeleversementServicesV2({
       lecteurDeFormData,
       adaptateurTeleversementServices,
       busEvenements,

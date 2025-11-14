@@ -18,7 +18,7 @@ const donneesServiceValide: LigneServiceTeleverseV2 = {
   dureeDysfonctionnementAcceptable: 'Moins de 4h',
   volumetrieDonneesTraitees: 'Faible',
   localisationDonneesTraitees: "Au sein de l'Union européenne",
-  dateHomologation: new Date(2025, 0, 31),
+  dateHomologation: new Date('2025-01-31'),
   dureeHomologation: '6 mois',
   nomAutoriteHomologation: 'Nom Prénom',
   fonctionAutoriteHomologation: 'Fonction',
@@ -230,7 +230,10 @@ describe('Un service téléversé V2', () => {
         specificitesProjet: [],
       });
       expect(donneesService.dossier).toEqual({
-        decision: { dateHomologation: '31/01/2025', dureeValidite: 'sixMois' },
+        decision: {
+          dateHomologation: new Date('2025-01-31'),
+          dureeValidite: 'sixMois',
+        },
         autorite: { nom: 'Nom Prénom', fonction: 'Fonction' },
       });
     });
@@ -246,13 +249,10 @@ describe('Un service téléversé V2', () => {
 
         expect(service.dossier).toEqual({
           decision: {
-            dateHomologation: '31/01/2025',
+            dateHomologation: new Date('2025-01-31'),
             dureeValidite: 'sixMois',
           },
-          autorite: {
-            nom: 'Nom Prénom',
-            fonction: 'Fonction',
-          },
+          autorite: { nom: 'Nom Prénom', fonction: 'Fonction' },
         });
       });
 

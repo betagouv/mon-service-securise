@@ -189,7 +189,7 @@ describe('Un téléversement de services V2', () => {
           );
         });
 
-        it('délègue au dépôt de données la création du service', async () => {
+        it('délègue au dépôt de données la création du service, en V2', async () => {
           let donneesRecues;
           depotDonnees.nouveauService = async (idUtilisateur, donnees) => {
             donneesRecues = { idUtilisateur, donnees };
@@ -201,8 +201,10 @@ describe('Un téléversement de services V2', () => {
             depotDonnees,
             busEvenement
           );
+
           expect(donneesRecues!.idUtilisateur).toBe(unUUID('2'));
           expect(donneesRecues!.donnees).not.toBe(undefined);
+          expect(donneesRecues!.donnees.versionService).toBe('v2');
         });
 
         describe("si le service a un dossier d'homologation", () => {
@@ -239,20 +241,15 @@ describe('Un téléversement de services V2', () => {
               finalise: true,
               importe: true,
               decision: {
-                dateHomologation: '22/01/2025',
+                dateHomologation: '2025-01-22T00:00:00.000Z',
                 dureeValidite: 'sixMois',
               },
-              autorite: {
-                nom: 'Nom Prénom',
-                fonction: 'Fonction',
-              },
+              autorite: { nom: 'Nom Prénom', fonction: 'Fonction' },
               avecAvis: false,
               avis: [],
               avecDocuments: false,
               documents: [],
-              dateTelechargement: {
-                date: '22/01/2025',
-              },
+              dateTelechargement: { date: '2025-01-22T00:00:00.000Z' },
             });
           });
 

@@ -1,6 +1,6 @@
 import {
   AdaptateurChiffrement,
-  ChaineOuObjet,
+  Stringifiable,
 } from '../../src/adaptateurs/adaptateurChiffrement.interface.js';
 import fauxAdaptateurChiffrement from './adaptateurChiffrement.js';
 import { DonneesChiffrees } from '../../src/typesBasiques.js';
@@ -10,7 +10,7 @@ function unAdaptateurChiffrementQuiWrap(): AdaptateurChiffrement {
 
   return {
     ...faux,
-    chiffre: async (donnees: ChaineOuObjet) => ({
+    chiffre: async (donnees: Stringifiable) => ({
       coffreFort: donnees,
       chiffre: true,
     }),

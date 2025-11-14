@@ -10,6 +10,7 @@
   import Lien from '../ui/Lien.svelte';
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
   import { brouillonsService } from './stores/brouillonsService.store';
+  import TiroirTeleversementServicesV2 from './televersementServices/TiroirTeleversementServicesV2.svelte';
 
   export let avecDecrireV2: boolean;
 </script>
@@ -114,6 +115,15 @@
                   label: 'Ajouter un service V2',
                   icone: 'plus',
                   href: '/service/v2/creation',
+                },
+                {
+                  label: 'Téléverser des services V2',
+                  icone: 'televerser',
+                  action: () =>
+                    tiroirStore.afficheContenu(
+                      TiroirTeleversementServicesV2,
+                      {}
+                    ),
                 },
               ]
             : []),

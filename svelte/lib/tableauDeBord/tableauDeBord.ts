@@ -4,6 +4,7 @@ import type {
   NiveauSecuriteService,
 } from './tableauDeBord.d';
 import RapportTeleversementServices from './televersementServices/RapportTeleversementServices.svelte';
+import RapportTeleversementServicesV2 from './televersementServices/RapportTeleversementServicesV2.svelte';
 
 document.body.addEventListener(
   'svelte-recharge-tableau-de-bord',
@@ -12,7 +13,12 @@ document.body.addEventListener(
 
 document.body.addEventListener(
   'svelte-recharge-rapport-televersement-services',
-  (e: CustomEvent) => rechargeRapportTeleversement()
+  () => rechargeRapportTeleversement()
+);
+
+document.body.addEventListener(
+  'svelte-recharge-rapport-televersement-services-v2',
+  () => rechargeRapportTeleversementV2()
 );
 
 let tdb: TableauDeBord;
@@ -24,10 +30,18 @@ const rechargeTableauDeBord = (props: TableauDeBordProps) => {
   });
 };
 
-let rapport: RapportTeleversementServices;
+let rapportV1: RapportTeleversementServices;
 const rechargeRapportTeleversement = () => {
-  rapport?.$destroy();
-  rapport = new RapportTeleversementServices({
+  rapportV1?.$destroy();
+  rapportV1 = new RapportTeleversementServices({
+    target: document.getElementById('rapport-televersement')!,
+  });
+};
+
+let rapportV2: RapportTeleversementServicesV2;
+const rechargeRapportTeleversementV2 = () => {
+  rapportV2?.$destroy();
+  rapportV2 = new RapportTeleversementServicesV2({
     target: document.getElementById('rapport-televersement')!,
   });
 };
