@@ -5,10 +5,10 @@ block variables
 
 block append scripts
   +composantSvelte('listeMesures.js')
-  +donneesPartagees('referentiel-statuts-mesures', referentiel.statutsMesures())
-  +donneesPartagees('referentiel-categories-mesures', referentiel.categoriesMesures())
-  +donneesPartagees('referentiel-types-service', referentiel.typesService())
-  +donneesPartagees('referentiel-nombre-maximum-modeles-mesure-specifique', referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur())
+  +donneesPartagees('referentiel-statuts-mesures', statutsMesures)
+  +donneesPartagees('referentiel-categories-mesures', categoriesMesures)
+  +donneesPartagees('referentiel-types-service', typesService)
+  +donneesPartagees('referentiel-nombre-maximum-modeles-mesure-specifique', nombreMaximumDeModelesMesureSpecifiqueParUtilisateur)
   script(type = 'module', src = '/statique/listeMesures.mjs')
 
 block append styles
@@ -23,7 +23,7 @@ block bandeau-titre
 
   lab-anssi-bandeau-titre(
     titre="Liste de mesures"
-    description=`Retrouvez ici le référentiel de l'ANSSI et de la CNIL regroupant l’ensemble des mesures de sécurité. L’ajout de mesures spécifiques est limité à ${referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur()} pour favoriser une mise en œuvre efficace. `
+    description=`Retrouvez ici le référentiel de l'ANSSI et de la CNIL regroupant l’ensemble des mesures de sécurité. L’ajout de mesures spécifiques est limité à ${nombreMaximumDeModelesMesureSpecifiqueParUtilisateur} pour favoriser une mise en œuvre efficace. `
     fil-ariane=JSON.stringify(filAriane)
   )
 
