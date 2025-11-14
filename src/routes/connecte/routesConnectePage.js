@@ -3,6 +3,7 @@ import Utilisateur from '../../modeles/utilisateur.js';
 import Service from '../../modeles/service.js';
 import InformationsService from '../../modeles/informationsService.js';
 import routesConnectePageService from './routesConnectePageService.js';
+import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 
 const routesConnectePage = ({
   middleware,
@@ -181,10 +182,17 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
     async (_, reponse) => {
+      const typesV1 = referentiel.typesService();
+      const typesV2 = Object.fromEntries(
+        Object.entries(questionsV2.typeDeService).map(([cle, { nom }]) => [
+          cle,
+          { description: nom },
+        ])
+      );
       reponse.render('listeMesures', {
         statutsMesures: referentiel.statutsMesures(),
         categoriesMesures: referentiel.categoriesMesures(),
-        typesService: referentiel.typesService(),
+        typesService: { ...typesV1, ...typesV2 },
         nombreMaximumDeModelesMesureSpecifiqueParUtilisateur:
           referentiel.nombreMaximumDeModelesMesureSpecifiqueParUtilisateur(),
       });
