@@ -38,8 +38,8 @@ describe("Les tests d'acceptance du nouveau moteur de rÃ¨gles et de niveau de sÃ
   beforeEach(async () => {
     const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
     const lecteur = new LecteurDeCSVDeReglesV2(mesuresV2);
-    const reglesDeProd = await lecteur.lis(
-      `${__dirname}/../../../src/moteurRegles/v2/mesures_V2_prod_30-09-2025.csv`
+    const reglesDeProd = lecteur.lis(
+      `${__dirname}/../../../src/moteurRegles/v2/mesures_V2_prod_07-11-2025.csv`
     );
 
     moteur = new MoteurReglesV2(referentiel, reglesDeProd);
