@@ -39,6 +39,8 @@ import { SourceAuthentification } from '../../modeles/sourceAuthentification.js'
 import routesConnecteApiTeleversement from './routesConnecteApiTeleversement.js';
 import routesConnecteApiBrouillonService from './routesConnecteApiBrouillonService.js';
 import routesConnecteApiServiceV2 from './routesConnecteApiServiceV2.js';
+import { VersionService } from '../../modeles/versionService.js';
+import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -654,8 +656,23 @@ const routesConnecteApi = ({
   routes.get(
     '/referentiel/mesures',
     middleware.verificationAcceptationCGU,
-    async (_requete, reponse) => {
-      reponse.json(referentiel.mesures());
+    async (requete, reponse) => {
+      const { idUtilisateurCourant } = requete;
+
+      const versions =
+        await depotDonnees.versionsServiceUtiliseesParUtilisateur(
+          idUtilisateurCourant
+        );
+
+      let mesuresInteressantes = {};
+
+      if (versions.includes(VersionService.v1))
+        mesuresInteressantes = referentiel.mesures();
+
+      if (versions.includes(VersionService.v2))
+        mesuresInteressantes = { ...mesuresInteressantes, ...mesuresV2 };
+
+      reponse.json(mesuresInteressantes);
     }
   );
 

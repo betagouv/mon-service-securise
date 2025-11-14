@@ -172,6 +172,7 @@ const creeDepot = (config = {}) => {
     supprimeRisqueSpecifiqueDuService,
     tousLesServices,
     tousLesServicesAvecSiret,
+    versionsServiceUtiliseesParUtilisateur,
   } = depotServices;
 
   const {
@@ -395,6 +396,7 @@ const creeDepot = (config = {}) => {
     valideAcceptationCGUPourUtilisateur,
     verifieLaCoherenceDesSels,
     verifieMotDePasse,
+    versionsServiceUtiliseesParUtilisateur,
   };
 };
 
