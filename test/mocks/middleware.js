@@ -68,6 +68,7 @@ let listeAdressesIPsAutorisee = [];
 let parametresAseptises = [];
 let preferencesChargees = false;
 let etatVisiteGuideeCharge = false;
+let etatExplicationNouveauReferentielCharge = false;
 let activationAgentConnectCharge = false;
 let filtrageIpEstActif = false;
 let rechercheDossierCourantEffectuee = false;
@@ -106,6 +107,7 @@ const middlewareFantaisie = {
     parametresAseptises = [];
     preferencesChargees = false;
     etatVisiteGuideeCharge = false;
+    etatExplicationNouveauReferentielCharge = false;
     activationAgentConnectCharge = false;
     filtrageIpEstActif = false;
     rechercheDossierCourantEffectuee = false;
@@ -165,6 +167,12 @@ const middlewareFantaisie = {
       nombreEtapesRestantes: () => 2,
     };
     etatVisiteGuideeCharge = true;
+    suite();
+  },
+
+  chargeExplicationNouveauReferentiel: (_requete, reponse, suite) => {
+    reponse.locals.explicationNouveauReferentiel = {};
+    etatExplicationNouveauReferentielCharge = true;
     suite();
   },
 
@@ -352,6 +360,13 @@ const middlewareFantaisie = {
   verifieRequeteChargeEtatVisiteGuidee: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => etatVisiteGuideeCharge },
+      app,
+      ...params
+    ),
+
+  verifieRequeteChargeExplicationNouveauReferentiel: async (app, ...params) =>
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => etatExplicationNouveauReferentielCharge },
       app,
       ...params
     ),

@@ -191,6 +191,15 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       const donnees = donneesPartagees(reponse.text, 'utilisateur-superviseur');
       expect(donnees).to.eql({ estSuperviseur: true });
     });
+
+    it("vérifie que l'état de l'explication du nouveau référentiel est chargé", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteChargeExplicationNouveauReferentiel(
+          testeur.app(),
+          '/tableauDeBord'
+        );
+    });
   });
 
   describe('quand GET sur /supervision', () => {
