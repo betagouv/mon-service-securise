@@ -1,5 +1,8 @@
 import { ReferentielV2 } from '../../referentiel.interface.js';
-import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
+import {
+  ActiviteExternalisee,
+  questionsV2,
+} from '../../../donneesReferentielMesuresV2.js';
 import {
   DescriptionServiceV2,
   DonneesDescriptionServiceV2,
@@ -140,12 +143,17 @@ export class ServiceTeleverseV2 {
       ouvertureSysteme: donneesDescriptionService.ouvertureSysteme,
     });
 
+    const activitesExternalisees: ActiviteExternalisee[] =
+      donneesDescriptionService.typeHebergement === 'saas'
+        ? ['administrationTechnique', 'developpementLogiciel']
+        : [];
+
     return {
       descriptionService: {
         ...donneesDescriptionService,
         niveauSecurite,
         pointsAcces: [],
-        activitesExternalisees: [],
+        activitesExternalisees,
         categoriesDonneesTraitees: [],
         categoriesDonneesTraiteesSupplementaires: [],
         specificitesProjet: [],

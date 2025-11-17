@@ -238,6 +238,25 @@ describe('Un service téléversé V2', () => {
       });
     });
 
+    it("sélectionne toutes les activités externalisées si le type d'hébergement est SaaS", () => {
+      const serviceTeleverse = new ServiceTeleverseV2(
+        {
+          ...donneesServiceValide,
+          typeHebergement:
+            "Le système est entièrement fourni et vous l'utilisez directement via une interface (SaaS)",
+        },
+        referentiel
+      );
+
+      const { descriptionService } = serviceTeleverse.enDonneesService();
+
+      expect(descriptionService.typeHebergement).toEqual('saas');
+      expect(descriptionService.activitesExternalisees).toEqual([
+        'administrationTechnique',
+        'developpementLogiciel',
+      ]);
+    });
+
     describe("concernant le dossier d'homologation", () => {
       it("retourne les données du dossier s'il y'en a un", () => {
         const serviceTeleverse = new ServiceTeleverseV2(
