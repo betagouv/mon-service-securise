@@ -19,7 +19,10 @@
   import Bouton from '../ui/Bouton.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirModificationMultipleMesuresGenerales from './mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
-  import { modelesMesureGenerale } from './mesureGenerale/modelesMesureGenerale.store';
+  import {
+    modelesMesureGenerale,
+    seulementCellesDeLaVersion,
+  } from './mesureGenerale/modelesMesureGenerale.store';
   import ModaleRapportModification from './modificationStatutPrecision/rapport/ModaleRapportModification.svelte';
   import { modaleRapportStore } from './modificationStatutPrecision/rapport/modaleRapport.store';
   import Lien from '../ui/Lien.svelte';
@@ -160,8 +163,9 @@
     }
 
     if (versionReferentielChoisie)
-      configurationTableau.donnees = configurationTableau.donnees.filter(
-        (m) => m.versionReferentiel === versionReferentielChoisie
+      configurationTableau.donnees = seulementCellesDeLaVersion(
+        configurationTableau.donnees,
+        versionReferentielChoisie
       );
   }
 
