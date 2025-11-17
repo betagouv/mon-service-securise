@@ -1,5 +1,7 @@
 import { writable } from 'svelte/store';
 import type { ModeleMesureGenerale } from '../../ui/types';
+import type { VersionService } from '../../../../src/modeles/versionService';
+import type { ModeleDeMesure } from '../listeMesures.d';
 
 type IdModeleMesureGenerale = string;
 
@@ -8,9 +10,12 @@ type ModelesMesureGeneraleAPI = Record<
   Omit<ModeleMesureGenerale, 'id'>
 >;
 
-const { subscribe, set } = writable<
-  Record<IdModeleMesureGenerale, ModeleMesureGenerale>
->({});
+type DictionnaireDesMesures = Record<
+  IdModeleMesureGenerale,
+  ModeleMesureGenerale
+>;
+
+const { subscribe, set } = writable<DictionnaireDesMesures>({});
 
 axios
   .get<ModelesMesureGeneraleAPI>('/api/referentiel/mesures')
@@ -25,6 +30,15 @@ axios
     );
   });
 
-export const modelesMesureGenerale = {
-  subscribe,
-};
+export const seulementCellesDeLaVersion = (
+  mesures: ModeleDeMesure[],
+  version: VersionService
+) =>
+  mesures.filter(
+    (m) =>
+      // Une mesure spécifique n'a pas de version : on la garde
+      m.type === 'specifique' ||
+      (m.type === 'generale' && m.versionReferentiel === version)
+  );
+
+export const modelesMesureGenerale = { subscribe };
