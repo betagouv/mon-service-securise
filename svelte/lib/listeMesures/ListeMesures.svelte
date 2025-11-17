@@ -20,9 +20,9 @@
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirModificationMultipleMesuresGenerales from './mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
   import {
-    lesVersionsDeService,
     modelesMesureGenerale,
     seulementCellesDeLaVersion,
+    storeVersionsDeService,
   } from './mesureGenerale/modelesMesureGenerale.store';
   import ModaleRapportModification from './modificationStatutPrecision/rapport/ModaleRapportModification.svelte';
   import { modaleRapportStore } from './modificationStatutPrecision/rapport/modaleRapport.store';
@@ -44,7 +44,6 @@
   import TableauVideMesuresSpecifiques from './mesureSpecifique/TableauVideMesuresSpecifiques.svelte';
   import Infobulle from '../ui/Infobulle.svelte';
   import FiltreSurV1V2 from './FiltreSurV1V2.svelte';
-  import type { VersionService } from '../../../src/modeles/versionService';
 
   export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
@@ -109,7 +108,6 @@
     configurationRecherche: { champsRecherche: [] },
     configurationFiltrage: { options: { categories: [], items: [] } },
   };
-  let versionReferentielChoisie: VersionService;
 
   $: {
     const listeModeleMesuresGenerales: ModeleDeMesure[] = Object.values(
@@ -163,11 +161,10 @@
       };
     }
 
-    if (versionReferentielChoisie)
-      configurationTableau.donnees = seulementCellesDeLaVersion(
-        configurationTableau.donnees,
-        versionReferentielChoisie
-      );
+    configurationTableau.donnees = seulementCellesDeLaVersion(
+      configurationTableau.donnees,
+      $storeVersionsDeService.versionSelectionnee
+    );
   }
 
   const estModeleMesureGenerale = (
@@ -259,8 +256,8 @@
     : undefined}
 >
   <svelte:fragment slot="barre-action-dans-thead">
-    {#if $lesVersionsDeService.plusieursVersionsDeService}
-      <FiltreSurV1V2 bind:value={versionReferentielChoisie} />
+    {#if $storeVersionsDeService.plusieursVersionsDeService}
+      <FiltreSurV1V2 bind:value={$storeVersionsDeService.versionSelectionnee} />
     {/if}
   </svelte:fragment>
   <div slot="actionsComplementaires" class="conteneur-actions-complementaires">

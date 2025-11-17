@@ -1,4 +1,4 @@
-import { derived, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 import type { ModeleMesureGenerale } from '../../ui/types';
 import type { VersionService } from '../../../../src/modeles/versionService';
 import type { ModeleDeMesure } from '../listeMesures.d';
@@ -14,13 +14,29 @@ type DictionnaireDesMesures = Record<
   IdModeleMesureGenerale,
   ModeleMesureGenerale
 >;
+const { subscribe: subscribeMesures, set: setMesures } =
+  writable<DictionnaireDesMesures>({});
 
-const { subscribe, set } = writable<DictionnaireDesMesures>({});
+type StoreVersionsDeService = {
+  plusieursVersionsDeService: boolean;
+  versionSelectionnee: VersionService;
+};
+const { subscribe: subscribeVersions, set: setVersions } =
+  writable<StoreVersionsDeService>({
+    plusieursVersionsDeService: false,
+    versionSelectionnee: 'v1' as VersionService,
+  });
+
+export const modelesMesureGenerale = { subscribe: subscribeMesures };
+export const storeVersionsDeService = {
+  subscribe: subscribeVersions,
+  set: setVersions,
+};
 
 axios
   .get<ModelesMesureGeneraleAPI>('/api/referentiel/mesures')
   .then(({ data: mesures }) => {
-    set(
+    setMesures(
       Object.fromEntries(
         Object.entries(mesures).map(([idMesure, donneesMesure]) => [
           idMesure,
@@ -28,6 +44,14 @@ axios
         ])
       )
     );
+
+    const versions = Object.values(mesures).map((m) => m.versionReferentiel);
+    setVersions({
+      plusieursVersionsDeService: new Set(versions).size > 1,
+      versionSelectionnee: versions.includes('v1' as VersionService)
+        ? ('v1' as VersionService)
+        : ('v2' as VersionService),
+    });
   });
 
 export const seulementCellesDeLaVersion = (
@@ -40,18 +64,3 @@ export const seulementCellesDeLaVersion = (
       m.type === 'specifique' ||
       (m.type === 'generale' && m.versionReferentiel === version)
   );
-
-export const modelesMesureGenerale = { subscribe };
-
-type StoreVersionsDeService = { plusieursVersionsDeService: boolean };
-
-export const lesVersionsDeService = derived<
-  [typeof modelesMesureGenerale],
-  StoreVersionsDeService
->([modelesMesureGenerale], ([store]) => {
-  const toutes = Object.values(store).map((m) => m.versionReferentiel);
-
-  return {
-    plusieursVersionsDeService: new Set(toutes).size > 1,
-  };
-});
