@@ -1,4 +1,5 @@
 import type { StatutMesure } from '../modeles/modeleMesure';
+import type { VersionService } from '../../../src/modeles/versionService';
 
 export enum Referentiel {
   ANSSI = 'ANSSI',
@@ -70,6 +71,7 @@ export type ModeleMesure = {
 export type ModeleMesureGenerale = ModeleMesure & {
   identifiantNumerique: string;
   referentiel: Referentiel;
+  versionReferentiel: VersionService;
 };
 
 export type ModeleMesureSpecifique = ModeleMesure & {
