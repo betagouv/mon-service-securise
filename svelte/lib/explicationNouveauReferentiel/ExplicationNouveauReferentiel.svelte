@@ -6,6 +6,11 @@
   onMount(() => {
     elementModale?.affiche();
   });
+
+  const termineExplications = async () => {
+    await axios.post('/api/explicationNouveauReferentiel/termine');
+    elementModale?.ferme();
+  };
 </script>
 
 <Modale bind:this={elementModale} id="modale-explication-nouveau-referentiel">
@@ -55,6 +60,16 @@
         </p>
       </div>
     </div>
+  </svelte:fragment>
+  <svelte:fragment slot="actions">
+    <lab-anssi-bouton
+      titre="J’ai compris 👍"
+      variante="primaire"
+      taille="md"
+      icone=""
+      positionIcone="sans"
+      on:click={termineExplications}
+    />
   </svelte:fragment>
 </Modale>
 
