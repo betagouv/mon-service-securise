@@ -4,6 +4,10 @@
 
 #### Téléversement Excel
 
+- [x] `valide()` devient privé
+- [ ] dépôt de données passé au constructeur
+- [ ] `creeLesServices` throw si téléversement invalide
+- [ ] route API catch pour return le 400
 - [ ] Bien penser que « type Hébergement : SaaS » = cocher les 2 activités externalisées
 
 ##### Nettoyage post MEP

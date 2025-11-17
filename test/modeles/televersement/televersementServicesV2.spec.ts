@@ -36,37 +36,40 @@ describe('Un téléversement de services V2', () => {
     fonctionAutoriteHomologation: 'Fonction',
   };
 
-  describe('sur demande de validation', () => {
-    it('aggrège les erreurs de chaque service téléversé', () => {
+  describe('sur demande de rapport détaillé', () => {
+    it("renvoie les services avec leur rapport d'erreur", () => {
+      const serviceA = { ...ligneTeleverseeValide, nom: 'Service A' };
+      const serviceB = {
+        ...ligneTeleverseeValide,
+        nom: 'Service B',
+        siret: 'pasUnSiret',
+      };
+      const serviceC = {
+        ...ligneTeleverseeValide,
+        typeService: [],
+        fonctionAutoriteHomologation: undefined,
+        nom: 'Un service v2 bis',
+      };
       const t = new TeleversementServicesV2(
-        {
-          services: [
-            { ...ligneTeleverseeValide, siret: 'pasUnSiret' },
-            {
-              ...ligneTeleverseeValide,
-              typeService: [],
-              nom: 'Un service v2 bis',
-            },
-            {
-              ...ligneTeleverseeValide,
-              nom: 'Un service v2 trois',
-              fonctionAutoriteHomologation: undefined,
-            },
-          ],
-        },
+        { services: [serviceA, serviceB, serviceC] },
         referentiel
       );
 
-      const erreurs = t.valide();
+      const rapport = t.rapportDetaille();
 
-      expect(erreurs).toEqual([
-        ['SIRET_INVALIDE'],
-        ['TYPE_INVALIDE'],
-        ['DOSSIER_HOMOLOGATION_INCOMPLET'],
+      const [a, b, c] = rapport.services;
+      expect(a.service).toEqual(serviceA);
+      expect(a.erreurs).toEqual([]);
+      expect(b.service).toEqual(serviceB);
+      expect(b.erreurs).toEqual(['SIRET_INVALIDE']);
+      expect(c.service).toEqual(serviceC);
+      expect(c.erreurs).toEqual([
+        'TYPE_INVALIDE',
+        'DOSSIER_HOMOLOGATION_INCOMPLET',
       ]);
     });
 
-    it('ajoute le nom de chaque service téléversé à la liste de noms existants', () => {
+    it('prends en compte les noms pré-existants et les doublons dans les lignes téléversées', () => {
       const t = new TeleversementServicesV2(
         {
           services: [
@@ -79,35 +82,13 @@ describe('Un téléversement de services V2', () => {
       );
 
       const nomServicesExistants = ['Service A'];
-      const erreurs = t.valide(nomServicesExistants);
+      const rapportDetaille = t.rapportDetaille(nomServicesExistants);
 
-      expect(erreurs.length).toBe(3);
-      expect(erreurs[0][0]).toBe('NOM_EXISTANT');
-      expect(erreurs[1].length).toBe(0);
-      expect(erreurs[2][0]).toBe('NOM_EXISTANT');
-    });
-  });
-
-  describe('sur demande de rapport détaillé', () => {
-    it("renvoie les services avec leur rapport d'erreur", () => {
-      const serviceA = { ...ligneTeleverseeValide, nom: 'Service A' };
-      const serviceB = {
-        ...ligneTeleverseeValide,
-        nom: 'Service B',
-        siret: 'pasUnSiret',
-      };
-      const t = new TeleversementServicesV2(
-        { services: [serviceA, serviceB] },
-        referentiel
-      );
-
-      const rapport = t.rapportDetaille();
-
-      const [a, b] = rapport.services;
-      expect(a.service).toEqual(serviceA);
-      expect(a.erreurs).toEqual([]);
-      expect(b.service).toEqual(serviceB);
-      expect(b.erreurs).toEqual(['SIRET_INVALIDE']);
+      expect(rapportDetaille.statut).toBe('INVALIDE');
+      const [a, b, c] = rapportDetaille.services;
+      expect(a.erreurs[0]).toBe('NOM_EXISTANT');
+      expect(b.erreurs.length).toBe(0);
+      expect(c.erreurs[0]).toBe('NOM_EXISTANT');
     });
 
     it('ajoute un numéro de ligne à chaque élément, en démarrant à 1', () => {
