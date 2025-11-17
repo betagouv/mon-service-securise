@@ -48,7 +48,7 @@ class TeleversementServicesV2 {
     );
   }
 
-  valide(nomServicesExistants: string[] = []): Array<string[]> {
+  private valide(nomServicesExistants: string[] = []): Array<string[]> {
     const nomsAggreges = [...nomServicesExistants];
     return this.services.map((serviceTeleverse) => {
       const resultat = serviceTeleverse.valide(nomsAggreges);
