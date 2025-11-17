@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onDestroy, createEventDispatcher } from 'svelte';
 
+  export let id: string | undefined = undefined;
+
   let elementModale: HTMLDialogElement;
 
   export const ferme = () => {
@@ -26,6 +28,7 @@
 </script>
 
 <dialog
+  {id}
   bind:this={elementModale}
   on:close={() => {
     debloqueScroll();
