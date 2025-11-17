@@ -5,10 +5,15 @@
 #### Téléversement Excel
 
 - [x] `valide()` devient privé
-- [ ] dépôt de données passé au constructeur
+- [x] dépôt de données passé à la méthode `rapportDetaille`
 - [ ] `creeLesServices` throw si téléversement invalide
 - [ ] route API catch pour return le 400
 - [ ] Bien penser que « type Hébergement : SaaS » = cocher les 2 activités externalisées
+
+#### MEP V2
+
+- retirer le bouton de téléversement V1
+- supprimer les téléversements V1 en base
 
 ##### Nettoyage post MEP
 
@@ -19,6 +24,7 @@
 - les fonctions v1 dans rapportTeleversementServices.api.ts
 - serviceTeleverse.js
 - televersementServices.js
+- ` || !(televersementServices instanceof TeleversementServicesV2)` dans la route
 - table televersement_services colonne version_service + adaptateur Postgres
 - adaptateurTeleversementServices.xls la méthode v1 et les constantes associées
 

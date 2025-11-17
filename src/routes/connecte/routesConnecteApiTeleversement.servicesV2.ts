@@ -8,7 +8,9 @@ import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { UUID } from '../../typesBasiques.js';
 import Service from '../../modeles/service.js';
-import { DepotPourTeleversementServices } from '../../modeles/televersement/televersementServicesV2.js';
+import TeleversementServicesV2, {
+  DepotPourTeleversementServices,
+} from '../../modeles/televersement/televersementServicesV2.js';
 
 type ConfigurationRoutes = {
   lecteurDeFormData: {
@@ -62,17 +64,18 @@ const routesConnecteApiTeleversementServicesV2 = ({
   routes.get('/', async (requete, reponse) => {
     const { idUtilisateurCourant } = requete as RequestRouteConnecte;
 
-    const services = await depotDonnees.services(idUtilisateurCourant);
-    const nomsServicesExistants = services.map(
-      (service) => service.nomService() as string
-    );
     const televersementServices =
       await depotDonnees.lisTeleversementServices(idUtilisateurCourant);
 
-    if (!televersementServices) return reponse.sendStatus(404);
+    if (
+      !televersementServices ||
+      !(televersementServices instanceof TeleversementServicesV2)
+    )
+      return reponse.sendStatus(404);
 
-    const rapportDetaille = televersementServices.rapportDetaille(
-      nomsServicesExistants
+    const rapportDetaille = await televersementServices.rapportDetaille(
+      idUtilisateurCourant,
+      depotDonnees
     );
 
     return reponse.json(rapportDetaille);
@@ -84,17 +87,18 @@ const routesConnecteApiTeleversementServicesV2 = ({
     const televersementServices =
       await depotDonnees.lisTeleversementServices(idUtilisateurCourant);
 
-    if (!televersementServices) return reponse.sendStatus(404);
+    if (
+      !televersementServices ||
+      !(televersementServices instanceof TeleversementServicesV2)
+    )
+      return reponse.sendStatus(404);
 
-    const services = await depotDonnees.services(idUtilisateurCourant);
-    const nomsServicesExistants = services.map(
-      (service) => service.nomService() as string
-    );
-    const rapport = televersementServices.rapportDetaille(
-      nomsServicesExistants
+    const rapportDetaille = await televersementServices.rapportDetaille(
+      idUtilisateurCourant,
+      depotDonnees
     );
 
-    if (rapport.statut === 'INVALIDE') return reponse.sendStatus(400);
+    if (rapportDetaille.statut === 'INVALIDE') return reponse.sendStatus(400);
 
     // En mode "fire & forget" pour ne pas ralentir la route.
     // La progression sera pollée via `GET /progression` par le front.

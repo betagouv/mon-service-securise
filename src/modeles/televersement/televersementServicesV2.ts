@@ -9,6 +9,7 @@ import { UUID } from '../../typesBasiques.js';
 import Dossier from '../dossier.js';
 import BusEvenements from '../../bus/busEvenements.js';
 import { VersionService } from '../versionService.js';
+import Service from '../service.js';
 
 const STATUT = {
   INVALIDE: 'INVALIDE',
@@ -16,6 +17,7 @@ const STATUT = {
 };
 
 export interface DepotPourTeleversementServices {
+  services: (idUtilisateur: UUID) => Promise<Service[]>;
   nouveauService: (
     idUtilisateur: UUID,
     donnees: {
@@ -57,7 +59,12 @@ class TeleversementServicesV2 {
     });
   }
 
-  rapportDetaille(nomServicesExistants: string[] = []) {
+  async rapportDetaille(
+    idUtilisateur: UUID,
+    depotDonnees: DepotPourTeleversementServices
+  ) {
+    const services = await depotDonnees.services(idUtilisateur);
+    const nomServicesExistants = services.map((s) => s.nomService() as string);
     const erreurs = this.valide(nomServicesExistants);
     const statut =
       erreurs.some((e) => e.length) || this.services.length === 0
