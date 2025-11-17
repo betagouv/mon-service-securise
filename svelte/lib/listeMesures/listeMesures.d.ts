@@ -4,6 +4,7 @@ import type {
   MesureSpecifique,
   ReferentielStatut,
 } from '../ui/types.d';
+import type { VersionService } from '../../../src/modeles/versionService';
 
 declare global {
   interface HTMLElementEventMap {
@@ -60,6 +61,7 @@ export type ModeleDeMesure = {
   referentiel: Referentiel;
   idsServicesAssocies: string[];
   type: 'generale' | 'specifique';
+  versionReferentiel?: VersionService;
 };
 
 export type CapaciteAjoutDeMesure = {
