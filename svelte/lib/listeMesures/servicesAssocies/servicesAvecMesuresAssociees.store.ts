@@ -10,13 +10,15 @@ export const servicesAvecMesuresAssociees = {
   subscribe,
   set,
   rafraichis: async () => {
-    setEnCoursDeChargement(true);
-    return axios
-      .get<ServiceAvecMesuresAssociees[]>('/api/services/mesures')
-      .then(({ data: services }) => {
-        set(services);
-      })
-      .finally(() => setEnCoursDeChargement(false));
+    try {
+      setEnCoursDeChargement(true);
+      const { data: services } = await axios.get<ServiceAvecMesuresAssociees[]>(
+        '/api/services/mesures'
+      );
+      set(services);
+    } finally {
+      setEnCoursDeChargement(false);
+    }
   },
 };
 
