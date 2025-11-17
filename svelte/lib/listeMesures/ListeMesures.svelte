@@ -39,6 +39,8 @@
   import type { ConfigurationFiltrage } from '../ui/Tableau.svelte';
   import TableauVideMesuresSpecifiques from './mesureSpecifique/TableauVideMesuresSpecifiques.svelte';
   import Infobulle from '../ui/Infobulle.svelte';
+  import FiltreSurV1V2 from './FiltreSurV1V2.svelte';
+  import type { VersionService } from '../../../src/modeles/versionService';
 
   export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
@@ -103,6 +105,7 @@
     configurationRecherche: { champsRecherche: [] },
     configurationFiltrage: { options: { categories: [], items: [] } },
   };
+  let versionReferentielChoisie: VersionService;
 
   $: {
     const listeModeleMesuresGenerales: ModeleDeMesure[] = Object.values(
@@ -155,6 +158,11 @@
         ],
       };
     }
+
+    if (versionReferentielChoisie)
+      configurationTableau.donnees = configurationTableau.donnees.filter(
+        (m) => m.versionReferentiel === versionReferentielChoisie
+      );
   }
 
   const estModeleMesureGenerale = (
@@ -245,6 +253,10 @@
       }
     : undefined}
 >
+  <FiltreSurV1V2
+    bind:value={versionReferentielChoisie}
+    slot="barre-action-dans-thead"
+  />
   <div slot="actionsComplementaires" class="conteneur-actions-complementaires">
     <Lien
       type="bouton-tertiaire"

@@ -131,6 +131,7 @@
         />
       {:else}
         <thead>
+          <slot name="barre-action-dans-thead" />
           {#if configurationSelection}
             {@const { vide, unique, multiple } =
               configurationSelection.texteIndicatif}
