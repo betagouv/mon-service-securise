@@ -28,6 +28,19 @@ $(() => {
     })
   );
 
+  const explicationNouveauReferentiel = lisDonneesPartagees(
+    'donnees-explication-nouveau-referentiel'
+  );
+  if (
+    explicationNouveauReferentiel &&
+    !explicationNouveauReferentiel.dejaTermine &&
+    avecDecrireV2
+  ) {
+    document.body.dispatchEvent(
+      new CustomEvent('svelte-recharge-explication-nouveau-referentiel')
+    );
+  }
+
   const requete = new URLSearchParams(window.location.search);
 
   if (requete.has('rapportTeleversement'))
