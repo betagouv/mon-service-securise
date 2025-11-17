@@ -17,6 +17,7 @@ class ParcoursUtilisateur extends Base {
       donnees.etatVisiteGuidee,
       referentiel
     );
+    this.explicationNouveauReferentiel = donnees.explicationNouveauReferentiel;
     this.adaptateurHorloge = adaptateurHorloge;
     this.referentiel = referentiel;
   }
@@ -27,11 +28,16 @@ class ParcoursUtilisateur extends Base {
       .toISOString();
   }
 
+  finaliseExplicationNouveauReferentiel() {
+    this.explicationNouveauReferentiel.dejaTermine = true;
+  }
+
   static pourUtilisateur(idUtilisateur, referentiel) {
     return new ParcoursUtilisateur(
       {
         idUtilisateur,
         etatVisiteGuidee: { dejaTerminee: false, enPause: false },
+        explicationNouveauReferentiel: { dejaTermine: false },
       },
       referentiel
     );
@@ -41,6 +47,7 @@ class ParcoursUtilisateur extends Base {
     return {
       ...super.toJSON(),
       etatVisiteGuidee: this.etatVisiteGuidee.toJSON(),
+      explicationNouveauReferentiel: this.explicationNouveauReferentiel,
     };
   }
 }

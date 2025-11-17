@@ -39,6 +39,7 @@ import { SourceAuthentification } from '../../modeles/sourceAuthentification.js'
 import routesConnecteApiTeleversement from './routesConnecteApiTeleversement.js';
 import routesConnecteApiBrouillonService from './routesConnecteApiBrouillonService.js';
 import routesConnecteApiServiceV2 from './routesConnecteApiServiceV2.js';
+import { routesConnecteApiExplicationNouveauReferentiel } from './routesConnecteApiExplicationNouveauReferentiel.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
 
@@ -365,6 +366,14 @@ const routesConnecteApi = ({
       middleware,
       depotDonnees,
       referentiel,
+    })
+  );
+
+  routes.use(
+    '/explicationNouveauReferentiel',
+    middleware.verificationAcceptationCGU,
+    routesConnecteApiExplicationNouveauReferentiel({
+      depotDonnees,
     })
   );
 
