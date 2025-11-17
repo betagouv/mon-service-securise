@@ -91,6 +91,7 @@ const routesConnectePage = ({
     '/tableauDeBord',
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
+    middleware.chargeExplicationNouveauReferentiel,
     async (requete, reponse) => {
       const estSuperviseur = await depotDonnees.estSuperviseur(
         requete.idUtilisateurCourant

@@ -244,6 +244,23 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
+  const chargeExplicationNouveauReferentiel = async (
+    requete,
+    reponse,
+    suite
+  ) => {
+    if (!requete.idUtilisateurCourant)
+      throw new ErreurChainageMiddleware(
+        'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
+      );
+
+    reponse.locals.explicationNouveauReferentiel = {
+      dejaTermine: false,
+    };
+
+    suite();
+  };
+
   const chargeEtatAgentConnect = async (_requete, reponse, suite) => {
     reponse.locals.agentConnectActif = adaptateurEnvironnement
       .featureFlag()
@@ -405,6 +422,7 @@ const middleware = (configuration = {}) => {
     chargeAutorisationsService,
     chargeEtatAgentConnect,
     chargeEtatVisiteGuidee,
+    chargeExplicationNouveauReferentiel,
     chargeFeatureFlags,
     chargePreferencesUtilisateur,
     chargeTypeRequete,

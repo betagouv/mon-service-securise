@@ -2,6 +2,13 @@
 
 ## TODO
 
+#### Modale Nouveau référentiel
+
+- [ ] On affiche la modale si l'utilisateur ne l'a pas validée et que le feature flag est activé
+- [ ] On affiche la modale UNE FOIS par connexion, sur le tableau de bord
+- [ ] On stocke le "dejaTermine" pour un utilisateur
+- [ ] Tout le contenu de la modale
+
 #### MEP V2
 
 - retirer le bouton de téléversement V1
