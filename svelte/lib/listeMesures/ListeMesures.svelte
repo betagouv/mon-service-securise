@@ -20,6 +20,7 @@
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirModificationMultipleMesuresGenerales from './mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
   import {
+    lesVersionsDeService,
     modelesMesureGenerale,
     seulementCellesDeLaVersion,
   } from './mesureGenerale/modelesMesureGenerale.store';
@@ -257,10 +258,11 @@
       }
     : undefined}
 >
-  <FiltreSurV1V2
-    bind:value={versionReferentielChoisie}
-    slot="barre-action-dans-thead"
-  />
+  <svelte:fragment slot="barre-action-dans-thead">
+    {#if $lesVersionsDeService.plusieursVersionsDeService}
+      <FiltreSurV1V2 bind:value={versionReferentielChoisie} />
+    {/if}
+  </svelte:fragment>
   <div slot="actionsComplementaires" class="conteneur-actions-complementaires">
     <Lien
       type="bouton-tertiaire"

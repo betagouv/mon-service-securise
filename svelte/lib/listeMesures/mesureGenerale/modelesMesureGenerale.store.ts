@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { derived, writable } from 'svelte/store';
 import type { ModeleMesureGenerale } from '../../ui/types';
 import type { VersionService } from '../../../../src/modeles/versionService';
 import type { ModeleDeMesure } from '../listeMesures.d';
@@ -42,3 +42,16 @@ export const seulementCellesDeLaVersion = (
   );
 
 export const modelesMesureGenerale = { subscribe };
+
+type StoreVersionsDeService = { plusieursVersionsDeService: boolean };
+
+export const lesVersionsDeService = derived<
+  [typeof modelesMesureGenerale],
+  StoreVersionsDeService
+>([modelesMesureGenerale], ([store]) => {
+  const toutes = Object.values(store).map((m) => m.versionReferentiel);
+
+  return {
+    plusieursVersionsDeService: new Set(toutes).size > 1,
+  };
+});
