@@ -664,13 +664,27 @@ const routesConnecteApi = ({
           idUtilisateurCourant
         );
 
+      const ajouteVersion = (versionReferentiel, mesuresParId) =>
+        Object.fromEntries(
+          Object.entries(mesuresParId).map(([id, mesure]) => [
+            id,
+            { ...mesure, versionReferentiel },
+          ])
+        );
+
       let mesuresInteressantes = {};
 
       if (versions.includes(VersionService.v1))
-        mesuresInteressantes = referentiel.mesures();
+        mesuresInteressantes = ajouteVersion(
+          VersionService.v1,
+          referentiel.mesures()
+        );
 
       if (versions.includes(VersionService.v2))
-        mesuresInteressantes = { ...mesuresInteressantes, ...mesuresV2 };
+        mesuresInteressantes = {
+          ...mesuresInteressantes,
+          ...ajouteVersion(VersionService.v2, mesuresV2),
+        };
 
       reponse.json(mesuresInteressantes);
     }

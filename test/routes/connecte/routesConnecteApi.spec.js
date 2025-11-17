@@ -1806,7 +1806,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
       testeur.referentiel().recharge({
-        mesures: { mesureA: 'une mesure du référentiel v1' },
+        mesures: { mesureA: { description: 'une mesure du référentiel v1' } },
       });
 
       testeur.depotDonnees().versionsServiceUtiliseesParUtilisateur =
@@ -1835,7 +1835,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       const reponse = await testeur.get('/api/referentiel/mesures');
 
       expect(utilisateurRecu).to.be('123');
-      expect(reponse.body).to.eql({ mesureA: 'une mesure du référentiel v1' });
+      expect(reponse.body).to.eql({
+        mesureA: {
+          description: 'une mesure du référentiel v1',
+          versionReferentiel: 'v1',
+        },
+      });
     });
 
     it("retourne uniquement les mesures v2 quand l'utilisateur n'a que des services v2", async () => {
@@ -1851,7 +1856,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       const reponse = await testeur.get('/api/referentiel/mesures');
 
       expect(utilisateurRecu).to.be('123');
-      expect(reponse.body).to.eql(mesuresV2);
+      const [, premiereMesure] = Object.entries(reponse.body)[0];
+      expect(premiereMesure).to.eql({
+        ...mesuresV2['RECENSEMENT.1'],
+        versionReferentiel: 'v2',
+      });
     });
 
     it("retourne les mesures v1 *et* v2 quand l'utilisateur a les deux versions de services", async () => {
@@ -1867,9 +1876,19 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       const reponse = await testeur.get('/api/referentiel/mesures');
 
       expect(utilisateurRecu).to.be('123');
-      expect(reponse.body).to.eql({
-        mesureA: 'une mesure du référentiel v1',
-        ...mesuresV2,
+      const [id1, premiereMesure] = Object.entries(reponse.body)[0];
+
+      expect(id1).to.be('mesureA');
+      expect(premiereMesure).to.eql({
+        description: 'une mesure du référentiel v1',
+        versionReferentiel: 'v1',
+      });
+
+      const [id2, deuxiemeMesure] = Object.entries(reponse.body)[1];
+      expect(id2).to.be('RECENSEMENT.1');
+      expect(deuxiemeMesure).to.eql({
+        ...mesuresV2['RECENSEMENT.1'],
+        versionReferentiel: 'v2',
       });
     });
   });
