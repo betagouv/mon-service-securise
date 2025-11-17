@@ -2,14 +2,6 @@
 
 ## TODO
 
-#### Téléversement Excel
-
-- [x] `valide()` devient privé
-- [x] dépôt de données passé à la méthode `rapportDetaille`
-- [ ] `creeLesServices` throw si téléversement invalide
-- [ ] route API catch pour return le 400
-- [ ] Bien penser que « type Hébergement : SaaS » = cocher les 2 activités externalisées
-
 #### MEP V2
 
 - retirer le bouton de téléversement V1
@@ -80,22 +72,11 @@
 
 ## DONE
 
-- [x] Le moteur évalue les règles sur une `ProjectionDescriptionPourMoteur` dont chaque groupe de colonnes du CSV est une propriété
-  - Le moteur ne travaille donc pas directement sur `DescriptionServiceV2`, mais sur cette projection.
-- [x] Les niveaux de sécurité ne sont PLUS des modificateurs, mais ils sont encodés dans chaque règle
-  ```typescript
-  export type RegleDuReferentielV2 = {
-    reference: IdMesureV2;
-    besoinsDeSecurite: {
-      // On les met ici
-      niveau1: 'Indispensable' | 'Recommandée' | 'Absente';
-      niveau2: 'Indispensable' | 'Recommandée' | 'Absente';
-      niveau3: 'Indispensable' | 'Recommandée' | 'Absente';
-    };
-    dansSocleInitial: boolean;
-    modificateurs: ModificateursDeRegles;
-  };
-  ```
+#### Téléversement Excel
+
+- [x] `valide()` devient privé
+- [x] dépôt de données passé à la méthode `rapportDetaille`
+- [x] Bien penser que « type Hébergement : SaaS » = cocher les 2 activités externalisées
 
 ## Exemple de mesure personnalisée renvoyée par le moteur de règles V1 (`.mesures()`)
 
