@@ -11,12 +11,22 @@ import BusEvenements from '../../../src/bus/busEvenements.js';
 import { unUUID } from '../../constructeurs/UUID.js';
 import EvenementDossierHomologationImporte from '../../../src/bus/evenementDossierHomologationImporte.js';
 import EvenementServicesImportes from '../../../src/bus/evenementServicesImportes.js';
+import { unService } from '../../constructeurs/constructeurService.js';
 
 describe('Un téléversement de services V2', () => {
   let referentiel: ReferentielV2;
+  let depotDonnees: DepotPourTeleversementServices;
 
   beforeEach(() => {
     referentiel = creeReferentielV2();
+    depotDonnees = {
+      services: async () => [],
+      nouveauService: async () => unUUID('1'),
+      ajouteSuggestionAction: async () => {},
+      ajouteDossierCourantSiNecessaire: async () => new Dossier({ id: 'D1' }),
+      enregistreDossier: async () => {},
+      metsAJourProgressionTeleversement: async () => {},
+    };
   });
 
   const ligneTeleverseeValide: LigneServiceTeleverseV2 = {
@@ -37,7 +47,7 @@ describe('Un téléversement de services V2', () => {
   };
 
   describe('sur demande de rapport détaillé', () => {
-    it("renvoie les services avec leur rapport d'erreur", () => {
+    it("renvoie les services avec leur rapport d'erreur", async () => {
       const serviceA = { ...ligneTeleverseeValide, nom: 'Service A' };
       const serviceB = {
         ...ligneTeleverseeValide,
@@ -55,7 +65,7 @@ describe('Un téléversement de services V2', () => {
         referentiel
       );
 
-      const rapport = t.rapportDetaille();
+      const rapport = await t.rapportDetaille(unUUID('2'), depotDonnees);
 
       const [a, b, c] = rapport.services;
       expect(a.service).toEqual(serviceA);
@@ -69,7 +79,10 @@ describe('Un téléversement de services V2', () => {
       ]);
     });
 
-    it('prends en compte les noms pré-existants et les doublons dans les lignes téléversées', () => {
+    it('prends en compte les noms pré-existants et les doublons dans les lignes téléversées', async () => {
+      depotDonnees.services = async () => [
+        unService().avecNomService('Service A').construis(),
+      ];
       const t = new TeleversementServicesV2(
         {
           services: [
@@ -81,8 +94,10 @@ describe('Un téléversement de services V2', () => {
         referentiel
       );
 
-      const nomServicesExistants = ['Service A'];
-      const rapportDetaille = t.rapportDetaille(nomServicesExistants);
+      const rapportDetaille = await t.rapportDetaille(
+        unUUID('2'),
+        depotDonnees
+      );
 
       expect(rapportDetaille.statut).toBe('INVALIDE');
       const [a, b, c] = rapportDetaille.services;
@@ -91,7 +106,7 @@ describe('Un téléversement de services V2', () => {
       expect(c.erreurs[0]).toBe('NOM_EXISTANT');
     });
 
-    it('ajoute un numéro de ligne à chaque élément, en démarrant à 1', () => {
+    it('ajoute un numéro de ligne à chaque élément, en démarrant à 1', async () => {
       const serviceA = { ...ligneTeleverseeValide, nom: 'A' };
       const serviceB = { ...ligneTeleverseeValide, nom: 'B' };
       const t = new TeleversementServicesV2(
@@ -99,7 +114,7 @@ describe('Un téléversement de services V2', () => {
         referentiel
       );
 
-      const rapport = t.rapportDetaille();
+      const rapport = await t.rapportDetaille(unUUID('2'), depotDonnees);
 
       const [a, b] = rapport.services;
       expect(a.numeroLigne).toBe(1);
@@ -109,26 +124,26 @@ describe('Un téléversement de services V2', () => {
     });
 
     describe('concernant le statut renvoyé', () => {
-      it('renvoie un statut "Invalide" si des erreurs sont présentes', () => {
+      it('renvoie un statut "Invalide" si des erreurs sont présentes', async () => {
         const t = new TeleversementServicesV2(
           { services: [{ ...ligneTeleverseeValide, siret: 'pasUnSiret' }] },
           referentiel
         );
 
-        const rapport = t.rapportDetaille();
+        const rapport = await t.rapportDetaille(unUUID('2'), depotDonnees);
 
         expect(rapport.statut).toBe('INVALIDE');
       });
 
-      it("renvoie un statut 'Invalide' si aucun service n'est présent", () => {
+      it("renvoie un statut 'Invalide' si aucun service n'est présent", async () => {
         const t = new TeleversementServicesV2({ services: [] }, referentiel);
 
-        const rapport = t.rapportDetaille();
+        const rapport = await t.rapportDetaille(unUUID('2'), depotDonnees);
 
         expect(rapport.statut).toBe('INVALIDE');
       });
 
-      it('renvoie un statut "Valide" si aucune erreur n\'est présente', () => {
+      it('renvoie un statut "Valide" si aucune erreur n\'est présente', async () => {
         const t = new TeleversementServicesV2(
           {
             services: [structuredClone(ligneTeleverseeValide)],
@@ -136,26 +151,17 @@ describe('Un téléversement de services V2', () => {
           referentiel
         );
 
-        const rapport = t.rapportDetaille();
+        const rapport = await t.rapportDetaille(unUUID('2'), depotDonnees);
 
         expect(rapport.statut).toBe('VALIDE');
       });
     });
 
     describe('sur demande de création des services', () => {
-      let depotDonnees: DepotPourTeleversementServices;
       let busEvenement: BusEvenements &
         ReturnType<typeof fabriqueBusPourLesTests>;
 
       beforeEach(() => {
-        depotDonnees = {
-          nouveauService: async () => unUUID('1'),
-          ajouteSuggestionAction: async () => {},
-          ajouteDossierCourantSiNecessaire: async () =>
-            new Dossier({ id: 'D1' }),
-          enregistreDossier: async () => {},
-          metsAJourProgressionTeleversement: async () => {},
-        };
         busEvenement = fabriqueBusPourLesTests() as BusEvenements &
           ReturnType<typeof fabriqueBusPourLesTests>;
       });
