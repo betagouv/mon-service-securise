@@ -254,9 +254,12 @@ const middleware = (configuration = {}) => {
         'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
       );
 
-    reponse.locals.explicationNouveauReferentiel = {
-      dejaTermine: false,
-    };
+    const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
+      requete.idUtilisateurCourant
+    );
+
+    reponse.locals.explicationNouveauReferentiel =
+      parcoursUtilisateur.explicationNouveauReferentiel;
 
     suite();
   };

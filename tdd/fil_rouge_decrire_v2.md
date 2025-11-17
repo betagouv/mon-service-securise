@@ -6,7 +6,7 @@
 
 - [x] On affiche la modale si l'utilisateur ne l'a pas validée et que le feature flag est activé
 - [x] On stocke le "dejaTermine" pour un utilisateur
-- [ ] On lis le "dejaTermine" dans le middleware
+- [x] On lis le "dejaTermine" dans le middleware
 - [ ] On affiche la modale UNE FOIS par connexion, sur le tableau de bord
 - [ ] On affiche la modale QUE SI l'utilisateur a encore des services V1
 - [ ] Tout le contenu de la modale
