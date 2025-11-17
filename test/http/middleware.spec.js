@@ -1017,6 +1017,56 @@ describe('Le middleware MSS', () => {
     });
   });
 
+  describe("sur demande de chargement de l'état de l'explication du nouveau référentiel", () => {
+    let middleware;
+
+    beforeEach(() => {
+      const referentiel = creeReferentiel();
+
+      depotDonnees.lisParcoursUtilisateur = async () =>
+        new ParcoursUtilisateur(
+          {
+            idUtilisateur: '1234',
+            etatVisiteGuidee: { dejaTerminee: true },
+            explicationNouveauReferentiel: { dejaTermine: false },
+          },
+          referentiel
+        );
+
+      middleware = leMiddleware({ depotDonnees });
+    });
+
+    it("jette une une erreur technique si l'utilisateur n'est pas présent dans la requête", async () => {
+      requete.idUtilisateurCourant = undefined;
+
+      try {
+        await middleware.chargeExplicationNouveauReferentiel(
+          requete,
+          reponse,
+          () => {}
+        );
+        expect().fail(
+          "Le chargement de l'état d'explication du nouveau référentiel aurait dû lever une exception"
+        );
+      } catch (e) {
+        expect(e).to.be.an(ErreurChainageMiddleware);
+        expect(e.message).to.equal(
+          'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
+        );
+      }
+    });
+
+    it("ajoute l'état de l'explication du nouveau référentiel à `reponse.locals`", async () => {
+      requete.idUtilisateurCourant = '1234';
+
+      middleware.chargeExplicationNouveauReferentiel(requete, reponse, () => {
+        expect(
+          reponse.locals.explicationNouveauReferentiel.dejaTermine
+        ).to.equal(false);
+      });
+    });
+  });
+
   it('ajoute la version de build dans `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
     const adaptateurEnvironnement = {
       versionDeBuild: () => '1.1',
