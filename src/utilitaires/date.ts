@@ -1,4 +1,4 @@
-const ajouteMoisADate = (nbMois, chaineDate) => {
+const ajouteMoisADate = (nbMois: number, chaineDate: string | Date) => {
   const date = new Date(chaineDate);
   const jour = date.getDate();
 
@@ -12,23 +12,23 @@ const ajouteMoisADate = (nbMois, chaineDate) => {
   return date;
 };
 
-const dateEnFrancais = (chaineDate) => {
+const dateEnFrancais = (chaineDate: string) => {
   const date = new Date(chaineDate);
   return date.toLocaleString('fr-FR', { dateStyle: 'short' });
 };
 
-const dateEnIso = (chaineDate) => {
+const dateEnIso = (chaineDate: string) => {
   const date = new Date(chaineDate);
   // On utilise le standard canadien pour obtenir le format YYYY-MM-DD
   return date.toLocaleString('fr-CA', { dateStyle: 'short' });
 };
 
-const dateYYYYMMDD = (date) => dateEnIso(date).replaceAll('-', '');
+const dateYYYYMMDD = (date: string) => dateEnIso(date).replaceAll('-', '');
 
-const dateInvalide = (chaineDate) =>
+const dateInvalide = (chaineDate: string) =>
   Number.isNaN(new Date(chaineDate).valueOf());
 
-const chaineDateFrEnChaineDateISO = (chaineDateFr) => {
+const chaineDateFrEnChaineDateISO = (chaineDateFr: string) => {
   const [jour, mois, annee] = chaineDateFr.split('/');
   return `${annee}-${mois}-${jour}`;
 };
