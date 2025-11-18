@@ -97,6 +97,7 @@
           ? 'son'
           : 'leur'}
         indice cyber personnalisé."
+        avecInterpolationHTMLDangereuse
       />
     </span>
     <div class="conteneur-separateur">

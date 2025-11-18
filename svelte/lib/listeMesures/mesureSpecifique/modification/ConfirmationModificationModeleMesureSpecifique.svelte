@@ -31,6 +31,7 @@
       niveau="info"
       contenu="Vous vous apprêtez à modifier cette mesure sur <b>{servicesAssocies.length}
       {servicesAssocies.length === 1 ? 'service' : 'services'}</b>."
+      avecInterpolationHTMLDangereuse
     />
   </div>
   <div class="conteneur-separateur">

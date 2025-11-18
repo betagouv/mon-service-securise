@@ -180,6 +180,7 @@
         titre="Cette action peut avoir un impact significatif."
         niveau="info"
         contenu="Vous vous apprêtez à associer <b>{idsModelesSelectionnes.length} mesure{pluralise}</b> à ce service. Cela aura un impact sur son indice cyber personnalisé."
+        avecInterpolationHTMLDangereuse
       />
     </div>
     <SeparateurHorizontal />
