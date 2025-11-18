@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import {
   premiereRouteDisponible,
   Rubriques,
@@ -13,14 +12,14 @@ describe('Les fonctions de gestion des droits', () => {
         .avecDroits({ [Rubriques.RISQUES]: Permissions.LECTURE })
         .construis();
 
-      const aucuneRouteEnPlus = [];
+      const aucuneRouteEnPlus = undefined;
 
       const route = premiereRouteDisponible(
         lectureSurRisques,
         aucuneRouteEnPlus
       );
 
-      expect(route).to.be('/risques');
+      expect(route).toBe('/risques');
     });
 
     it('considère en priorité les routes personnalisées', () => {
@@ -41,7 +40,7 @@ describe('Les fonctions de gestion des droits', () => {
         routePersonnalisee
       );
 
-      expect(route).to.be('/route-en-parametre');
+      expect(route).toBe('/route-en-parametre');
     });
   });
 });
