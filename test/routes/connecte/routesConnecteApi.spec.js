@@ -1891,6 +1891,27 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         versionReferentiel: 'v2',
       });
     });
+
+    it("retourne les mesures v1 quand l'utilisateur n'a aucun service, afin de ne pas casser la liste actuelle, en attendant la mise en production de la V2 complète", async () => {
+      const sansService = [];
+      let utilisateurRecu;
+      testeur.depotDonnees().versionsServiceUtiliseesParUtilisateur = async (
+        idUtilisateur
+      ) => {
+        utilisateurRecu = idUtilisateur;
+        return sansService;
+      };
+
+      const reponse = await testeur.get('/api/referentiel/mesures');
+
+      expect(utilisateurRecu).to.be('123');
+      expect(reponse.body).to.eql({
+        mesureA: {
+          description: 'une mesure du référentiel v1',
+          versionReferentiel: 'v1',
+        },
+      });
+    });
   });
 
   describe('quand requête GET sur `/api/modeles/mesureSpecifique`', () => {
