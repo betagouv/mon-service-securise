@@ -5,6 +5,7 @@ describe('Le modèle explicationNouveauReferentiel', () => {
   const donneesValides = {
     dejaTermine: false,
     versionsService: [VersionService.v1, VersionService.v2],
+    aVuTableauDeBordDepuisConnexion: false,
   };
 
   it('peut être finalisé', () => {
@@ -24,7 +25,10 @@ describe('Le modèle explicationNouveauReferentiel', () => {
 
     const json = explicationNouveauReferentiel.toJSON();
 
-    expect(json).toEqual({ dejaTermine: false });
+    expect(json).toEqual({
+      dejaTermine: false,
+      aVuTableauDeBordDepuisConnexion: false,
+    });
   });
 
   describe("concernant la nécessité d'afficher l'explication à l'utilisateur", () => {
@@ -40,6 +44,17 @@ describe('Le modèle explicationNouveauReferentiel', () => {
       const explicationNouveauReferentiel = new ExplicationNouveauReferentiel({
         dejaTermine: false,
         versionsService: [VersionService.v2],
+        aVuTableauDeBordDepuisConnexion: false,
+      });
+
+      expect(explicationNouveauReferentiel.doitEtreAffichee()).toBe(false);
+    });
+
+    it("ne l'affiche pas si l'utilisateur a déjà vu le tableau de bord depuis sa connexion", () => {
+      const explicationNouveauReferentiel = new ExplicationNouveauReferentiel({
+        dejaTermine: false,
+        versionsService: [VersionService.v1],
+        aVuTableauDeBordDepuisConnexion: true,
       });
 
       expect(explicationNouveauReferentiel.doitEtreAffichee()).toBe(false);
