@@ -1,2 +1,7 @@
 export type UUID = `${string}-${string}-${string}-${string}-${string}`;
-export type DonneesChiffrees = string | Record<string, unknown>;
+export type DonneesChiffrees = {
+  iv: string;
+  aad: string;
+  donnees: string;
+  tag: string;
+};

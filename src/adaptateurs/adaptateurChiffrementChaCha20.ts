@@ -1,7 +1,15 @@
 import { randomBytes, createCipheriv, createDecipheriv } from 'crypto';
 import { adaptateurChiffrement } from './adaptateurChiffrement.js';
+import {
+  AdaptateurChiffrement,
+  AdaptateurEnvironnementPourChiffrementChaCha20,
+} from './adaptateurChiffrement.interface.js';
 
-const adaptateurChiffrementChaCha20 = ({ adaptateurEnvironnement }) => {
+export const adaptateurChiffrementChaCha20 = ({
+  adaptateurEnvironnement,
+}: {
+  adaptateurEnvironnement: AdaptateurEnvironnementPourChiffrementChaCha20;
+}): AdaptateurChiffrement => {
   const adaptateurChiffrementDeBase = adaptateurChiffrement({
     adaptateurEnvironnement,
   });
@@ -10,6 +18,7 @@ const adaptateurChiffrementChaCha20 = ({ adaptateurEnvironnement }) => {
     adaptateurEnvironnement.chiffrement().cleChaCha20Hex(),
     'hex'
   );
+
   return {
     chiffre: async (chaineOuObjet) => {
       const iv = randomBytes(12);
@@ -54,7 +63,7 @@ const adaptateurChiffrementChaCha20 = ({ adaptateurEnvironnement }) => {
         dechiffreur.update(Buffer.from(donnees, 'hex')),
         dechiffreur.final(),
       ]);
-      return JSON.parse(chaineDechiffree);
+      return JSON.parse(chaineDechiffree.toString());
     },
     compareBCrypt: adaptateurChiffrementDeBase.compareBCrypt,
     hacheBCrypt: adaptateurChiffrementDeBase.hacheBCrypt,
@@ -62,5 +71,3 @@ const adaptateurChiffrementChaCha20 = ({ adaptateurEnvironnement }) => {
     nonce: adaptateurChiffrementDeBase.nonce,
   };
 };
-
-export { adaptateurChiffrementChaCha20 };

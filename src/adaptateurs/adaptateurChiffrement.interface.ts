@@ -10,7 +10,19 @@ export type AdaptateurChiffrement = {
     chaineEnClair: string,
     chaineChiffree: string
   ) => Promise<boolean>;
-  hacheSha256AvecUnSeulSel: (chaineEnClair: string, sel: string) => string;
   hacheSha256: (chaineEnClair: string) => string;
   nonce: () => string;
+};
+
+export type AdaptateurEnvironnementPourChiffrement = {
+  chiffrement: () => {
+    tousLesSelsDeHachage: () => { sel: string; version: number }[];
+  };
+};
+
+export type AdaptateurEnvironnementPourChiffrementChaCha20 = {
+  chiffrement: () => {
+    tousLesSelsDeHachage: () => { sel: string; version: number }[];
+    cleChaCha20Hex: () => string;
+  };
 };

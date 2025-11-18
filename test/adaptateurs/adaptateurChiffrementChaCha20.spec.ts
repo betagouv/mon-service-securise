@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import { adaptateurChiffrementChaCha20 } from '../../src/adaptateurs/adaptateurChiffrementChaCha20.js';
 
 describe("L'adaptateur qui chiffre et déchiffre avec l'algorithme ChaCha20", () => {
@@ -6,6 +5,7 @@ describe("L'adaptateur qui chiffre et déchiffre avec l'algorithme ChaCha20", ()
     const adaptateur = adaptateurChiffrementChaCha20({
       adaptateurEnvironnement: {
         chiffrement: () => ({
+          tousLesSelsDeHachage: () => [],
           cleChaCha20Hex: () =>
             'f1e2d3c4b5a6978877665544332211ffeeddccbbaa9988776655443322110000',
         }),
@@ -21,13 +21,14 @@ describe("L'adaptateur qui chiffre et déchiffre avec l'algorithme ChaCha20", ()
     const utilisateurChiffre = await adaptateur.chiffre(utilisateur);
     const utilisateurDechiffre = await adaptateur.dechiffre(utilisateurChiffre);
 
-    expect(utilisateurDechiffre).to.eql(utilisateur);
+    expect(utilisateurDechiffre).toEqual(utilisateur);
   });
 
   it('retourne un objet contenant les metadonnées', async () => {
     const adaptateur = adaptateurChiffrementChaCha20({
       adaptateurEnvironnement: {
         chiffrement: () => ({
+          tousLesSelsDeHachage: () => [],
           cleChaCha20Hex: () =>
             'f1e2d3c4b5a6978877665544332211ffeeddccbbaa9988776655443322110000',
         }),
@@ -39,9 +40,9 @@ describe("L'adaptateur qui chiffre et déchiffre avec l'algorithme ChaCha20", ()
     const chaineHexaDeDouzeOctets = /^[0-9a-fA-F]{24}$/;
     const chaineHexaDeSeizeOctets = /^[0-9a-fA-F]{32}$/;
 
-    expect(utilisateurChiffre.iv).to.match(chaineHexaDeDouzeOctets);
-    expect(utilisateurChiffre.aad).to.match(chaineHexaDeSeizeOctets);
-    expect(utilisateurChiffre.donnees).to.be.an('string');
-    expect(utilisateurChiffre.tag).to.match(chaineHexaDeSeizeOctets);
+    expect(utilisateurChiffre.iv).toMatch(chaineHexaDeDouzeOctets);
+    expect(utilisateurChiffre.aad).toMatch(chaineHexaDeSeizeOctets);
+    expect(utilisateurChiffre.donnees).toBeTypeOf('string');
+    expect(utilisateurChiffre.tag).toMatch(chaineHexaDeSeizeOctets);
   });
 });
