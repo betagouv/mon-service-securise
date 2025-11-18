@@ -5,6 +5,9 @@ import ParcoursUtilisateur from '../../src/modeles/parcoursUtilisateur.js';
 import EtatVisiteGuidee from '../../src/modeles/etatVisiteGuidee.js';
 import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
 import EvenementNouvelleConnexionUtilisateur from '../../src/bus/evenementNouvelleConnexionUtilisateur.js';
+import { unService } from '../constructeurs/constructeurService.js';
+import { VersionService } from '../../src/modeles/versionService.js';
+import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
 
 describe('Le dépôt de données Parcours utilisateur', () => {
   let adaptateurPersistance;
@@ -81,12 +84,56 @@ describe('Le dépôt de données Parcours utilisateur', () => {
     });
   });
 
-  it("sait fournir une instance par défaut lorsqu'aucun parcours n'est stocké pour un utilisateur", async () => {
-    const parcours = await depot.lisParcoursUtilisateur('nouvel utilisateur');
+  describe('sur demande de lecture', () => {
+    it("sait fournir une instance par défaut lorsqu'aucun parcours n'est stocké pour un utilisateur", async () => {
+      const parcours = await depot.lisParcoursUtilisateur('nouvel utilisateur');
 
-    expect(parcours).to.be.a(ParcoursUtilisateur);
-    expect(parcours.idUtilisateur).to.equal('nouvel utilisateur');
-    expect(parcours.etatVisiteGuidee).to.be.an(EtatVisiteGuidee);
-    expect(parcours.etatVisiteGuidee.dejaTerminee).to.be(false);
+      expect(parcours).to.be.a(ParcoursUtilisateur);
+      expect(parcours.idUtilisateur).to.equal('nouvel utilisateur');
+      expect(parcours.etatVisiteGuidee).to.be.an(EtatVisiteGuidee);
+      expect(parcours.etatVisiteGuidee.dejaTerminee).to.be(false);
+    });
+
+    it('sait lire les versions de service pour un utilisateur ayant un parcours', async () => {
+      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        parcoursUtilisateurs: [{ id: 'U1' }],
+        services: [
+          unService().avecVersion(VersionService.v1).avecId('S1').construis(),
+        ],
+        autorisations: [
+          uneAutorisation().deProprietaire('U1', 'S1').construis(),
+        ],
+      });
+      depot = DepotDonneesParcoursUtilisateur.creeDepot({
+        adaptateurPersistance,
+      });
+
+      const parcours = await depot.lisParcoursUtilisateur('U1');
+
+      expect(parcours.explicationNouveauReferentiel.versionsService).to.eql([
+        VersionService.v1,
+      ]);
+    });
+
+    it("sait lire les versions de service pour un utilisateur n'ayant pas de parcours (ex: invité mais jamais connecté)", async () => {
+      adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
+        parcoursUtilisateurs: [],
+        services: [
+          unService().avecVersion(VersionService.v1).avecId('S1').construis(),
+        ],
+        autorisations: [
+          uneAutorisation().deProprietaire('U1', 'S1').construis(),
+        ],
+      });
+      depot = DepotDonneesParcoursUtilisateur.creeDepot({
+        adaptateurPersistance,
+      });
+
+      const parcours = await depot.lisParcoursUtilisateur('U1');
+
+      expect(parcours.explicationNouveauReferentiel.versionsService).to.eql([
+        VersionService.v1,
+      ]);
+    });
   });
 });

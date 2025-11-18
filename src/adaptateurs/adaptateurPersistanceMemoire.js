@@ -619,6 +619,11 @@ const nouvelAdaptateur = (
     );
   };
 
+  const versionsServiceUtiliseesParUtilisateur = async (idUtilisateur) => {
+    const lesServices = await services(idUtilisateur);
+    return [...new Set(lesServices.map((s) => s.versionService))];
+  };
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -694,6 +699,7 @@ const nouvelAdaptateur = (
     verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
     verifieTousLesServicesExistent,
+    versionsServiceUtiliseesParUtilisateur,
   };
 };
 
