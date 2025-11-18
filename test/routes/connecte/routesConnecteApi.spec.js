@@ -416,7 +416,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       await testeur
         .middleware()
         .verifieAseptisationParametres(
-          ['idsServices.*', 'id', 'statut', 'modalites'],
+          ['idsServices.*', 'id', 'statut', 'modalites', 'version'],
           testeur.app(),
           {
             method: 'put',
@@ -431,6 +431,20 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         {
           statut: undefined,
           modalites: undefined,
+        }
+      );
+      expect(reponse.status).to.be(400);
+    });
+
+    it("jette une erreur si la version n'est pas précisée", async () => {
+      testeur.referentiel().recharge({
+        mesures: { uneMesureConnue: {} },
+      });
+      const reponse = await testeur.put(
+        '/api/services/mesuresGenerales/uneMesureConnue',
+        {
+          statut: '',
+          modalites: 'une modalité',
         }
       );
       expect(reponse.status).to.be(400);
@@ -478,6 +492,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         {
           statut: '',
           modalites: 'une modalité',
+          version: 'v1',
         }
       );
 
@@ -499,6 +514,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         {
           statut: 'unStatut',
           idsServices: ['S1'],
+          version: 'v1',
         }
       );
       expect(reponse.status).to.be(403);
@@ -512,9 +528,17 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         idsServices,
         id,
         statut,
-        modalites
+        modalites,
+        version
       ) => {
-        donneesRecues = { idUtilisateur, idsServices, id, statut, modalites };
+        donneesRecues = {
+          idUtilisateur,
+          idsServices,
+          id,
+          statut,
+          modalites,
+          version,
+        };
       };
       testeur.referentiel().recharge({
         mesures: {
@@ -527,6 +551,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         statut: 'fait',
         modalites: 'une modalité',
         idsServices: ['S1', 'S2'],
+        version: 'v1',
       });
 
       expect(donneesRecues).to.eql({
@@ -535,7 +560,38 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         id: 'uneMesureConnue',
         statut: 'fait',
         modalites: 'une modalité',
+        version: 'v1',
       });
+    });
+
+    it("permet la mise à jour d'une mesure V2", async () => {
+      let versionRecue;
+      let idMesureRecu;
+      testeur.depotDonnees().metsAJourMesureGeneraleDesServices = async (
+        _idUtilisateur,
+        _idsServices,
+        id,
+        _statut,
+        _modalites,
+        version
+      ) => {
+        versionRecue = version;
+        idMesureRecu = id;
+      };
+
+      const reponse = await testeur.put(
+        '/api/services/mesuresGenerales/RECENSEMENT.1',
+        {
+          statut: 'fait',
+          modalites: 'une modalité',
+          idsServices: ['S1'],
+          version: 'v2',
+        }
+      );
+
+      expect(reponse.status).to.be(200);
+      expect(versionRecue).to.be('v2');
+      expect(idMesureRecu).to.be('RECENSEMENT.1');
     });
   });
 

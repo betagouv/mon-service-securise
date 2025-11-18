@@ -51,6 +51,7 @@ const routesConnecteApi = ({
   busEvenements,
   depotDonnees,
   referentiel,
+  referentielV2,
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurCsv,
@@ -164,20 +165,37 @@ const routesConnecteApi = ({
   routes.put(
     '/services/mesuresGenerales/:id',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('idsServices.*', 'id', 'statut', 'modalites'),
+    middleware.aseptise(
+      'idsServices.*',
+      'id',
+      'statut',
+      'modalites',
+      'version'
+    ),
     async (requete, reponse) => {
-      const { statut, modalites, idsServices } = requete.body;
+      const { statut, modalites, idsServices, version } = requete.body;
       const { id } = requete.params;
 
       if (
-        (!statut && !modalites) ||
-        !referentiel.estIdentifiantMesureConnu(id)
+        !version ||
+        ![VersionService.v1, VersionService.v2].includes(version)
       ) {
         reponse.sendStatus(400);
         return;
       }
 
-      if (statut && !referentiel.estStatutMesureConnu(statut)) {
+      const referentielAUtiliser =
+        version === VersionService.v1 ? referentiel : referentielV2;
+
+      if (
+        (!statut && !modalites) ||
+        !referentielAUtiliser.estIdentifiantMesureConnu(id)
+      ) {
+        reponse.sendStatus(400);
+        return;
+      }
+
+      if (statut && !referentielAUtiliser.estStatutMesureConnu(statut)) {
         reponse.sendStatus(400);
         return;
       }
@@ -198,7 +216,8 @@ const routesConnecteApi = ({
         idsServices,
         id,
         statut,
-        modalites
+        modalites,
+        version
       );
 
       reponse.sendStatus(200);

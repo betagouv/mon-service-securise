@@ -127,6 +127,7 @@ serviceVerificationCoherenceSels.verifieLaCoherenceDesSels().then(() => {
     busEvenements,
     middleware,
     referentiel,
+    referentielV2,
     moteurRegles,
     adaptateurMail,
     adaptateurPdf,

@@ -15,6 +15,7 @@ import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
 import { fabriqueAdaptateurProfilAnssiVide } from '../../src/adaptateurs/adaptateurProfilAnssiVide.js';
 import { fabriqueAdaptateurGestionErreurVide } from '../../src/adaptateurs/adaptateurGestionErreurVide.js';
 import { fabriqueAdaptateurHorloge } from '../../src/adaptateurs/adaptateurHorloge.js';
+import { creeReferentielV2 } from '../../src/referentielV2.js';
 
 const testeurMss = () => {
   let serviceAnnuaire;
@@ -41,6 +42,7 @@ const testeurMss = () => {
   let depotDonnees;
   let moteurRegles;
   let referentiel;
+  let referentielV2;
   let procedures;
   let inscriptionUtilisateur;
   let busEvenements;
@@ -136,6 +138,7 @@ const testeurMss = () => {
     adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssiVide();
     middleware.reinitialise({});
     referentiel = Referentiel.creeReferentielVide();
+    referentielV2 = creeReferentielV2();
     procedures = fabriqueProcedures({
       depotDonnees,
       adaptateurMail,
@@ -167,6 +170,7 @@ const testeurMss = () => {
         depotDonnees,
         middleware,
         referentiel,
+        referentielV2,
         moteurRegles,
         adaptateurMail,
         adaptateurPdf,
