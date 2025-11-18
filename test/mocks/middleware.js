@@ -171,7 +171,7 @@ const middlewareFantaisie = {
   },
 
   chargeExplicationNouveauReferentiel: (_requete, reponse, suite) => {
-    reponse.locals.explicationNouveauReferentiel = {};
+    reponse.locals.afficheExplicationNouveauReferentiel = true;
     etatExplicationNouveauReferentielCharge = true;
     suite();
   },

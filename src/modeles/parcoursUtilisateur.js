@@ -2,6 +2,7 @@ import Base from './base.js';
 import * as Referentiel from '../referentiel.js';
 import EtatVisiteGuidee from './etatVisiteGuidee.js';
 import { fabriqueAdaptateurHorloge } from '../adaptateurs/adaptateurHorloge.js';
+import { ExplicationNouveauReferentiel } from './explicationNouveauReferentiel.js';
 
 class ParcoursUtilisateur extends Base {
   constructor(
@@ -17,7 +18,9 @@ class ParcoursUtilisateur extends Base {
       donnees.etatVisiteGuidee,
       referentiel
     );
-    this.explicationNouveauReferentiel = donnees.explicationNouveauReferentiel;
+    this.explicationNouveauReferentiel = new ExplicationNouveauReferentiel(
+      donnees.explicationNouveauReferentiel
+    );
     this.adaptateurHorloge = adaptateurHorloge;
     this.referentiel = referentiel;
   }
@@ -29,7 +32,11 @@ class ParcoursUtilisateur extends Base {
   }
 
   finaliseExplicationNouveauReferentiel() {
-    this.explicationNouveauReferentiel.dejaTermine = true;
+    this.explicationNouveauReferentiel.finalise();
+  }
+
+  doitAfficherExplicationNouveauReferentiel() {
+    return this.explicationNouveauReferentiel.doitEtreAffichee();
   }
 
   static pourUtilisateur(idUtilisateur, referentiel) {
@@ -47,7 +54,8 @@ class ParcoursUtilisateur extends Base {
     return {
       ...super.toJSON(),
       etatVisiteGuidee: this.etatVisiteGuidee.toJSON(),
-      explicationNouveauReferentiel: this.explicationNouveauReferentiel,
+      explicationNouveauReferentiel:
+        this.explicationNouveauReferentiel.toJSON(),
     };
   }
 }
