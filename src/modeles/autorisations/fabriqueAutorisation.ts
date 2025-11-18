@@ -1,8 +1,6 @@
-import { Autorisation } from './autorisation.js';
+import { Autorisation, type DonneesAutorisation } from './autorisation.js';
 
-const fabrique = (donnees) =>
+export const fabrique = (donnees: DonneesAutorisation) =>
   donnees.estProprietaire
     ? Autorisation.NouvelleAutorisationProprietaire(donnees)
     : Autorisation.NouvelleAutorisationContributeur(donnees);
-
-export { fabrique };
