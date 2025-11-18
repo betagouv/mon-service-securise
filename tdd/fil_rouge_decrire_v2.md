@@ -8,7 +8,7 @@
 - [x] On stocke le "dejaTermine" pour un utilisateur
 - [x] On lis le "dejaTermine" dans le middleware
 - [ ] On affiche la modale UNE FOIS par connexion, sur le tableau de bord
-- [ ] On affiche la modale QUE SI l'utilisateur a encore des services V1
+- [x] On affiche la modale QUE SI l'utilisateur a encore des services V1
 - [ ] Tout le contenu de la modale
 
 #### MEP V2

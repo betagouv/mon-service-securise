@@ -81,6 +81,11 @@ class ConstructeurService {
     this.donnees.suggestionsActions.push(suggestion);
     return this;
   }
+
+  avecVersion(version) {
+    this.donnees.versionService = version;
+    return this;
+  }
 }
 
 const unService = (referentiel = Referentiel.creeReferentielVide()) =>

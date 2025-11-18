@@ -7,9 +7,20 @@ const creeDepot = (config = {}) => {
   const lisParcoursUtilisateur = async (idUtilisateur) => {
     const parcoursConnu =
       await adaptateurPersistance.lisParcoursUtilisateur(idUtilisateur);
+    const versionsService =
+      await adaptateurPersistance.versionsServiceUtiliseesParUtilisateur(
+        idUtilisateur
+      );
     return parcoursConnu
-      ? new ParcoursUtilisateur(parcoursConnu, referentiel)
-      : ParcoursUtilisateur.pourUtilisateur(idUtilisateur, referentiel);
+      ? new ParcoursUtilisateur(
+          { ...parcoursConnu, versionsService },
+          referentiel
+        )
+      : ParcoursUtilisateur.pourUtilisateur(
+          idUtilisateur,
+          referentiel,
+          versionsService
+        );
   };
 
   const sauvegardeParcoursUtilisateur = async (parcoursUtilisateur) => {
