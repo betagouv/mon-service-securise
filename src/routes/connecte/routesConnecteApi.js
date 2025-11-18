@@ -674,7 +674,7 @@ const routesConnecteApi = ({
 
       let mesuresInteressantes = {};
 
-      if (versions.includes(VersionService.v1))
+      if (versions.includes(VersionService.v1) || versions.length === 0)
         mesuresInteressantes = ajouteVersion(
           VersionService.v1,
           referentiel.mesures()
