@@ -3,13 +3,31 @@ import {
   Rubriques,
   Permissions,
   tousDroitsEnEcriture,
+  Droits,
+  NiveauPermission,
+  Rubrique,
+  DroitsAvecEstProprietaire,
 } from './gestionDroits.js';
+import { type UUID } from '../../typesBasiques.js';
+import { ActionRecommandee } from '../actionsRecommandees.js';
 
 const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER } = Rubriques;
 const { LECTURE, ECRITURE } = Permissions;
 
-class Autorisation extends Base {
-  constructor(donnees = {}) {
+export type DonneesAutorisation = {
+  estProprietaire: boolean;
+  id: UUID;
+  idUtilisateur: UUID;
+  idService: UUID;
+  droits: Partial<Droits>;
+  type: string;
+};
+
+export class Autorisation extends Base {
+  // @ts-expect-error La propriétés est définie dans `this.renseigneProprietes`
+  droits: Partial<Droits>;
+
+  constructor(donnees: DonneesAutorisation) {
     super({
       proprietesAtomiquesRequises: [
         'estProprietaire',
@@ -20,26 +38,31 @@ class Autorisation extends Base {
         'type',
       ],
     });
+    // @ts-expect-error On omet le référentiel car aucun `listesAgregats` présent
     this.renseigneProprietes(donnees);
   }
 
-  static NouvelleAutorisationContributeur = (donnees = {}) =>
-    new Autorisation({ ...donnees, estProprietaire: false });
+  static NouvelleAutorisationContributeur = (
+    donnees: Omit<DonneesAutorisation, 'estProprietaire'>
+  ) => new Autorisation({ ...donnees, estProprietaire: false });
 
-  static NouvelleAutorisationProprietaire = (donnees = {}) =>
+  static NouvelleAutorisationProprietaire = (
+    donnees: Omit<DonneesAutorisation, 'droits' | 'estProprietaire'>
+  ) =>
     new Autorisation({
       ...donnees,
       droits: tousDroitsEnEcriture(),
       estProprietaire: true,
     });
 
-  aLaPermission(niveau, rubrique) {
+  aLaPermission(niveau: NiveauPermission, rubrique: Rubrique) {
+    // @ts-expect-error Ici, la propriété a été renseignée via `this.renseigneProprietes(donnees);`
     return this.droits[rubrique] >= niveau;
   }
 
-  aLesPermissions(droits) {
+  aLesPermissions(droits: Droits) {
     return Object.entries(droits).every(([rubrique, niveau]) =>
-      this.aLaPermission(niveau, rubrique)
+      this.aLaPermission(niveau, rubrique as Rubrique)
     );
   }
 
@@ -66,14 +89,14 @@ class Autorisation extends Base {
 
     const tousNiveaux = Object.values(Permissions).reduce(
       (acc, niveau) => ({ ...acc, [niveau]: 0 }),
-      {}
+      {} as Record<NiveauPermission, number>
     );
-    const toutesRubriques = Object.keys(Rubriques);
+    const toutesRubriques = Object.values(Rubriques);
     const totalRubriques = toutesRubriques.length;
 
     toutesRubriques.forEach((rubrique) => {
       const droitPourRubrique = this.droits[rubrique];
-      tousNiveaux[droitPourRubrique] += 1;
+      if (droitPourRubrique) tousNiveaux[droitPourRubrique] += 1;
     });
 
     if (tousNiveaux[ECRITURE] === totalRubriques)
@@ -84,7 +107,7 @@ class Autorisation extends Base {
     return RESUME_NIVEAU_DROIT.PERSONNALISE;
   }
 
-  designeUtilisateur(idUtilisateur) {
+  designeUtilisateur(idUtilisateur: UUID) {
     return this.idUtilisateur === idUtilisateur;
   }
 
@@ -105,57 +128,57 @@ class Autorisation extends Base {
     PERSONNALISE: 'PERSONNALISE',
   };
 
-  static DROITS_VOIR_INDICE_CYBER = {
+  static DROITS_VOIR_INDICE_CYBER: Partial<Droits> = {
     [SECURISER]: LECTURE,
   };
 
-  static DROITS_VOIR_MESURES = {
+  static DROITS_VOIR_MESURES: Partial<Droits> = {
     [SECURISER]: LECTURE,
   };
 
-  static DROITS_EDITER_MESURES = {
+  static DROITS_EDITER_MESURES: Partial<Droits> = {
     [SECURISER]: ECRITURE,
   };
 
-  static DROITS_VOIR_STATUT_HOMOLOGATION = {
+  static DROITS_VOIR_STATUT_HOMOLOGATION: Partial<Droits> = {
     [HOMOLOGUER]: LECTURE,
   };
 
-  static DROITS_EDITER_HOMOLOGATION = {
+  static DROITS_EDITER_HOMOLOGATION: Partial<Droits> = {
     [HOMOLOGUER]: ECRITURE,
   };
 
-  static DROITS_ANNEXES_PDF = {
+  static DROITS_ANNEXES_PDF: Partial<Droits> = {
     [DECRIRE]: LECTURE,
     [SECURISER]: LECTURE,
     [RISQUES]: LECTURE,
   };
 
-  static DROITS_DOSSIER_DECISION_PDF = {
+  static DROITS_DOSSIER_DECISION_PDF: Partial<Droits> = {
     [HOMOLOGUER]: LECTURE,
   };
 
-  static DROIT_SYNTHESE_SECURITE_PDF = {
+  static DROIT_SYNTHESE_SECURITE_PDF: Partial<Droits> = {
     [SECURISER]: LECTURE,
     [DECRIRE]: LECTURE,
   };
 
-  static DROIT_TAMPON_HOMOLOGATION_ZIP = {
+  static DROIT_TAMPON_HOMOLOGATION_ZIP: Partial<Droits> = {
     [HOMOLOGUER]: LECTURE,
     [DECRIRE]: LECTURE,
   };
 
   static DROIT_INVITER_CONTRIBUTEUR = 'peutInviterContributeur';
 
-  static DROITS_EDITER_DESCRIPTION = {
+  static DROITS_EDITER_DESCRIPTION: Partial<Droits> = {
     [DECRIRE]: ECRITURE,
   };
 
-  static DROITS_VOIR_DESCRIPTION = {
+  static DROITS_VOIR_DESCRIPTION: Partial<Droits> = {
     [DECRIRE]: LECTURE,
   };
 
-  appliqueDroits(nouveauxDroits) {
+  appliqueDroits(nouveauxDroits: Partial<DroitsAvecEstProprietaire>) {
     if (nouveauxDroits.estProprietaire) {
       this.estProprietaire = true;
       this.droits = tousDroitsEnEcriture();
@@ -166,15 +189,13 @@ class Autorisation extends Base {
     this.droits = { ...this.droits, ...nouveauxDroits };
   }
 
-  peutFaireActionRecommandee(actionRecommandee) {
+  peutFaireActionRecommandee(actionRecommandee: ActionRecommandee) {
     if (
       actionRecommandee.droitsNecessaires ===
       Autorisation.DROIT_INVITER_CONTRIBUTEUR
     )
       return this.peutGererContributeurs();
 
-    return this.aLesPermissions(actionRecommandee.droitsNecessaires);
+    return this.aLesPermissions(actionRecommandee.droitsNecessaires as Droits);
   }
 }
-
-export { Autorisation };
