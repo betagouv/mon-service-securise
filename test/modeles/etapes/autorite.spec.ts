@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import Autorite from '../../../src/modeles/etapes/autorite.js';
 
 describe("L'étape « Autorité » du parcours homologuer", () => {
@@ -8,20 +7,18 @@ describe("L'étape « Autorité » du parcours homologuer", () => {
         nom: 'Jean Courage',
         fonction: 'Responsable',
       }).estComplete()
-    ).to.be(true);
+    ).toBe(true);
   });
 
   it("n'est pas complète quand toutes les propriétés sont absentes", () => {
-    expect(new Autorite().estComplete()).to.be(false);
+    expect(new Autorite().estComplete()).toBe(false);
   });
 
   it("n'est pas complète quand le nom est absent", () => {
-    expect(new Autorite({ fonction: 'Responsable' }).estComplete()).to.be(
-      false
-    );
+    expect(new Autorite({ fonction: 'Responsable' }).estComplete()).toBe(false);
   });
 
   it("n'est pas complète quand la fonction est absente", () => {
-    expect(new Autorite({ nom: 'Jean Courage' }).estComplete()).to.be(false);
+    expect(new Autorite({ nom: 'Jean Courage' }).estComplete()).toBe(false);
   });
 });

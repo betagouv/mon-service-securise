@@ -27,7 +27,7 @@ type ConstructeurAgregat = new (
   // eslint-disable-next-line no-use-before-define
 ) => Base;
 
-type ProprietesBase = {
+export type ProprietesBase = {
   proprietesAtomiquesRequises?: string[];
   proprietesAtomiquesFacultatives?: string[];
   proprietesListes?: string[];
