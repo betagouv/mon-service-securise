@@ -20,7 +20,6 @@ class ErreurChainageMiddleware extends Error {}
 class ErreurBusEvenements extends Error {
   constructor(typeEvenement: string, erreurDeAbonne: Error) {
     const details = { cause: erreurDeAbonne };
-    // @ts-expect-error On suit la documentation MDN qui indique la manière d'instancié une erreur : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#differentiate_between_similar_errors
     super(`Erreur dans un abonné à [${typeEvenement}]`, details);
   }
 }
