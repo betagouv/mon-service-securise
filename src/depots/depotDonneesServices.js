@@ -2,6 +2,7 @@ import {
   ErreurNomServiceDejaExistant,
   ErreurServiceInexistant,
   ErreurStatutMesureManquant,
+  ErreurVersionServiceIncompatible,
 } from '../erreurs.js';
 import Dossier from '../modeles/dossier.js';
 import Service from '../modeles/service.js';
@@ -495,7 +496,8 @@ const creeDepot = (config = {}) => {
     idsServices,
     idMesure,
     statut,
-    modalites
+    modalites,
+    version
   ) => {
     const utilisateur =
       await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
@@ -503,6 +505,9 @@ const creeDepot = (config = {}) => {
     const servicesConcernes = servicesDeUtilisateur.filter((s) =>
       idsServices.includes(s.id)
     );
+
+    if (servicesConcernes.some((s) => s.version() !== version))
+      throw new ErreurVersionServiceIncompatible();
 
     const pourUnService = async (s) => {
       const ancienneMesure = s.mesuresGenerales().avecId(idMesure);

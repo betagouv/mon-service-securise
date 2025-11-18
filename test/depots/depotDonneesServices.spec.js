@@ -8,6 +8,7 @@ import {
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurRisqueInconnu,
   ErreurStatutMesureManquant,
+  ErreurVersionServiceIncompatible,
 } from '../../src/erreurs.js';
 
 import * as Referentiel from '../../src/referentiel.js';
@@ -2569,11 +2570,28 @@ describe('Le dépôt de données des services', () => {
           ['S1'],
           'uneMesure',
           '',
-          'une modalité'
+          'une modalité',
+          'v1'
         );
         expect().fail("L'appel aurait dû lever une erreur");
       } catch (e) {
         expect(e).to.be.an(ErreurStatutMesureManquant);
+      }
+    });
+
+    it('jette une erreur si une modification de mesure est tentée sur des services de version différente', async () => {
+      try {
+        await depot.metsAJourMesureGeneraleDesServices(
+          'U1',
+          ['S1'],
+          'uneMesure',
+          '',
+          'une modalité',
+          'v2'
+        );
+        expect().fail("L'appel aurait dû lever une erreur");
+      } catch (e) {
+        expect(e).to.be.an(ErreurVersionServiceIncompatible);
       }
     });
 
@@ -2583,7 +2601,8 @@ describe('Le dépôt de données des services', () => {
         ['S2'],
         'uneMesure',
         'fait',
-        'une nouvelle modalité'
+        'une nouvelle modalité',
+        'v1'
       );
 
       const serviceAJour = await depot.service('S2');
@@ -2599,7 +2618,8 @@ describe('Le dépôt de données des services', () => {
         ['S1'],
         'uneMesure',
         'fait',
-        'une nouvelle modalité'
+        'une nouvelle modalité',
+        'v1'
       );
 
       const serviceAJour = await depot.service('S1');
@@ -2615,7 +2635,8 @@ describe('Le dépôt de données des services', () => {
         ['S2'],
         'uneMesure',
         'fait',
-        'une nouvelle modalité'
+        'une nouvelle modalité',
+        'v1'
       );
 
       const serviceAJour = await depot.service('S2');
@@ -2630,7 +2651,8 @@ describe('Le dépôt de données des services', () => {
         ['S2'],
         'uneMesure',
         '',
-        'une nouvelle modalité'
+        'une nouvelle modalité',
+        'v1'
       );
 
       const serviceAJour = await depot.service('S2');
@@ -2646,7 +2668,8 @@ describe('Le dépôt de données des services', () => {
         ['S2'],
         'uneMesure',
         'fait',
-        ''
+        '',
+        'v1'
       );
 
       const serviceAJour = await depot.service('S2');
@@ -2662,7 +2685,8 @@ describe('Le dépôt de données des services', () => {
         ['S1', 'S2'],
         'uneMesure',
         'fait',
-        ''
+        '',
+        'v1'
       );
 
       expect(
@@ -2686,7 +2710,8 @@ describe('Le dépôt de données des services', () => {
         ['S1', 'S2'],
         'uneMesure',
         'fait',
-        ''
+        '',
+        'v1'
       );
 
       expect(
