@@ -1,4 +1,13 @@
-function zipTableaux(tableauGauche, tableauDroite, proprieteCommune) {
+type TableauDObjet = Record<string, unknown>;
+
+export const zipTableaux = <
+  TGauche extends TableauDObjet,
+  TDroite extends TableauDObjet,
+>(
+  tableauGauche: Array<TGauche>,
+  tableauDroite: Array<TDroite>,
+  proprieteCommune: string
+) => {
   const erreurTailleDifferente = () =>
     new Error(
       `Impossible de ziper des tableaux de tailles différentes. Ici [${tableauGauche.length}] et [${tableauDroite.length}].`
@@ -14,6 +23,4 @@ function zipTableaux(tableauGauche, tableauDroite, proprieteCommune) {
 
     return { ...gauche, ...droite };
   });
-}
-
-export { zipTableaux };
+};
