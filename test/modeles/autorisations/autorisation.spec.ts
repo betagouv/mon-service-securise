@@ -22,7 +22,6 @@ describe('Une autorisation', () => {
     idUtilisateur: unUUID('u'),
     estProprietaire: false,
     droits: {},
-    type: 'unType',
   };
   describe('sur demande de permission de suppression de service', () => {
     it('interdit la suppression pour un contributeur', () => {
@@ -262,7 +261,6 @@ describe('Une autorisation', () => {
           idService: unUUID('s'),
           idUtilisateur: unUUID('u'),
           droits: tousDroitsEnEcriture(),
-          type: 'unType',
         });
 
       expect(autorisationContributeur.donneesAPersister()).to.eql({

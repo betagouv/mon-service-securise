@@ -20,7 +20,6 @@ export type DonneesAutorisation = {
   idUtilisateur: UUID;
   idService: UUID;
   droits: Partial<Droits>;
-  type: string;
 };
 
 export class Autorisation extends Base {
@@ -35,7 +34,6 @@ export class Autorisation extends Base {
         'idUtilisateur',
         'idService',
         'droits',
-        'type',
       ],
     });
     // @ts-expect-error On omet le référentiel car aucun `listesAgregats` présent
