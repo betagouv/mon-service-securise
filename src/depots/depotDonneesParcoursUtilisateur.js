@@ -48,8 +48,22 @@ const creeDepot = (config = {}) => {
     );
   };
 
+  const marqueTableauDeBordVuDansParcoursUtilisateur = async (
+    idUtilisateur
+  ) => {
+    const parcoursUtilisateur = await lisParcoursUtilisateur(idUtilisateur);
+
+    if (parcoursUtilisateur.aVuTableauDeBord()) {
+      return;
+    }
+
+    parcoursUtilisateur.marqueTableauDeBordVu();
+    await sauvegardeParcoursUtilisateur(parcoursUtilisateur);
+  };
+
   return {
     lisParcoursUtilisateur,
+    marqueTableauDeBordVuDansParcoursUtilisateur,
     sauvegardeParcoursUtilisateur,
     enregistreNouvelleConnexionUtilisateur,
   };

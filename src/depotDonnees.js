@@ -208,6 +208,7 @@ const creeDepot = (config = {}) => {
 
   const {
     lisParcoursUtilisateur,
+    marqueTableauDeBordVuDansParcoursUtilisateur,
     sauvegardeParcoursUtilisateur,
     enregistreNouvelleConnexionUtilisateur,
   } = depotParcoursUtilisateurs;
@@ -337,6 +338,7 @@ const creeDepot = (config = {}) => {
     lisTeleversementModelesMesureSpecifique,
     lisTeleversementServices,
     marqueNouveauteLue,
+    marqueTableauDeBordVuDansParcoursUtilisateur,
     marqueTacheDeServiceLue,
     metsAJourModeleMesureSpecifique,
     metsAJourMotDePasse,

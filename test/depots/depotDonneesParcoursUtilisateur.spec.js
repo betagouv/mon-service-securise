@@ -156,4 +156,35 @@ describe('Le dépôt de données Parcours utilisateur', () => {
       ]);
     });
   });
+
+  describe('sur demande de marquer vu le tableau de bord', () => {
+    it('marque le tableau de bord comme vu', async () => {
+      await depot.marqueTableauDeBordVuDansParcoursUtilisateur('123');
+
+      const parcoursAJour = await depot.lisParcoursUtilisateur('123');
+      expect(
+        parcoursAJour.explicationNouveauReferentiel
+          .aVuTableauDeBordDepuisConnexion
+      ).to.be(true);
+    });
+
+    it('ne persiste pas le parcours si le tableau de bord était déjà vu', async () => {
+      await depot.sauvegardeParcoursUtilisateur(
+        new ParcoursUtilisateur({
+          idUtilisateur: '123',
+          explicationNouveauReferentiel: {
+            aVuTableauDeBordDepuisConnexion: true,
+          },
+        })
+      );
+      let persistanceAppelee = false;
+      adaptateurPersistance.sauvegardeParcoursUtilisateur = async () => {
+        persistanceAppelee = true;
+      };
+
+      await depot.marqueTableauDeBordVuDansParcoursUtilisateur('123');
+
+      expect(persistanceAppelee).to.be(false);
+    });
+  });
 });
