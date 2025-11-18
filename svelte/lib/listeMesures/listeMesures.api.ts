@@ -1,20 +1,24 @@
 import type { StatutMesure } from '../modeles/modeleMesure';
+import type { VersionService } from '../../../src/modeles/versionService';
 
 export const enregistreModificationMesureGeneraleSurServicesMultiples = async ({
   idMesure,
   idsServices,
   statut,
   modalites,
+  version,
 }: {
   idMesure: string;
   idsServices: string[];
   statut: StatutMesure | '';
   modalites: string | null;
+  version: VersionService;
 }) => {
   await axios.put(`/api/services/mesuresGenerales/${idMesure}`, {
     idsServices,
     statut,
     modalites,
+    version,
   });
 };
 

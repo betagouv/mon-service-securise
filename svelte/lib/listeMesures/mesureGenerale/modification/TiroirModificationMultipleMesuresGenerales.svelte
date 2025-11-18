@@ -70,6 +70,7 @@
         statut,
         modalites,
         idsServices,
+        version: modeleMesureGenerale.versionReferentiel,
       });
       tiroirStore.ferme();
       await servicesAvecMesuresAssociees.rafraichis();
