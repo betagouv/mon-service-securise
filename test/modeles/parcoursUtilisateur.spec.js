@@ -9,14 +9,20 @@ describe('Un parcours utilisateur', () => {
       idUtilisateur: '456',
       dateDerniereConnexion: '2023-01-01',
       etatVisiteGuidee: { dejaTerminee: false, enPause: true },
-      explicationNouveauReferentiel: { dejaTermine: false },
+      explicationNouveauReferentiel: {
+        dejaTermine: false,
+        aVuTableauDeBordDepuisConnexion: false,
+      },
     });
 
     expect(unParcours.toJSON()).to.eql({
       idUtilisateur: '456',
       dateDerniereConnexion: '2023-01-01',
       etatVisiteGuidee: { dejaTerminee: false, enPause: true },
-      explicationNouveauReferentiel: { dejaTermine: false },
+      explicationNouveauReferentiel: {
+        dejaTermine: false,
+        aVuTableauDeBordDepuisConnexion: false,
+      },
     });
   });
 
@@ -29,6 +35,9 @@ describe('Un parcours utilisateur', () => {
     expect(etatInitial.etatVisiteGuidee.dejaTerminee).to.be(false);
     expect(etatInitial.etatVisiteGuidee.enPause).to.be(false);
     expect(etatInitial.explicationNouveauReferentiel.estTermine()).to.be(false);
+    expect(
+      etatInitial.explicationNouveauReferentiel.aVuTableauDeBordDepuisConnexion
+    ).to.be(false);
   });
 
   it("sait enregistrer une date de dernière connexion en utilisant l'adaptateur horloge", () => {

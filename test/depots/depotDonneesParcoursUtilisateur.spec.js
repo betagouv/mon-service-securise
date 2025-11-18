@@ -54,6 +54,26 @@ describe('Le dépôt de données Parcours utilisateur', () => {
       expect(evenement.dateDerniereConnexion).not.to.be(undefined);
       expect(evenement.source).to.be('MSS');
     });
+
+    it("indique que l'utilisateur n'a pas encore vu le tableau de bord depuis sa connexion", async () => {
+      await depot.sauvegardeParcoursUtilisateur(
+        new ParcoursUtilisateur({
+          idUtilisateur: '123',
+          explicationNouveauReferentiel: {
+            dejaTermine: false,
+            aVuTableauDeBordDepuisConnexion: true,
+          },
+        })
+      );
+      await depot.enregistreNouvelleConnexionUtilisateur('123');
+
+      const parcoursPersiste = await depot.lisParcoursUtilisateur('123');
+
+      expect(
+        parcoursPersiste.explicationNouveauReferentiel
+          .aVuTableauDeBordDepuisConnexion
+      ).to.be(false);
+    });
   });
 
   describe('sur demande de sauvegarde', () => {

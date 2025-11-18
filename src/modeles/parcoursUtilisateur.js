@@ -30,6 +30,7 @@ class ParcoursUtilisateur extends Base {
     this.dateDerniereConnexion = this.adaptateurHorloge
       .maintenant()
       .toISOString();
+    this.explicationNouveauReferentiel.aVuTableauDeBordDepuisConnexion = false;
   }
 
   finaliseExplicationNouveauReferentiel() {
@@ -45,7 +46,10 @@ class ParcoursUtilisateur extends Base {
       {
         idUtilisateur,
         etatVisiteGuidee: { dejaTerminee: false, enPause: false },
-        explicationNouveauReferentiel: { dejaTermine: false },
+        explicationNouveauReferentiel: {
+          dejaTermine: false,
+          aVuTableauDeBordDepuisConnexion: false,
+        },
         versionsService,
       },
       referentiel
