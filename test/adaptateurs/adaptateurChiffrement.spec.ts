@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import { adaptateurChiffrement } from '../../src/adaptateurs/adaptateurChiffrement.js';
 
 describe("L'adaptateur chiffrement", () => {
@@ -14,7 +13,7 @@ describe("L'adaptateur chiffrement", () => {
         adaptateurEnvironnement,
       }).hacheSha256('7276abd6-98bb-4bc9-bd17-d50a56aba7e4');
 
-      expect(hache).to.be(
+      expect(hache).toBe(
         'v1:335ceb3ca583427ae371a2069ceb54708d93f0befbd55ac10daec0f7c7bdeee4'
       );
     });
@@ -33,7 +32,7 @@ describe("L'adaptateur chiffrement", () => {
         adaptateurEnvironnement,
       }).hacheSha256('7276abd6-98bb-4bc9-bd17-d50a56aba7e4');
 
-      expect(hache).to.be(
+      expect(hache).toBe(
         'v1-v2:cb932aca72319407a746bc174d548cdacb68985c5afa2a3405110cc7696663df'
       );
     });

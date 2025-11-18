@@ -2,20 +2,15 @@ import { createHash, randomBytes } from 'crypto';
 import bcrypt from 'bcrypt';
 import {
   AdaptateurChiffrement,
+  AdaptateurEnvironnementPourChiffrement,
   Stringifiable,
 } from './adaptateurChiffrement.interface.js';
 import { DonneesChiffrees } from '../typesBasiques.js';
 
-type ConfigurationChiffrement = {
-  chiffrement: () => {
-    tousLesSelsDeHachage: () => { sel: string; version: number }[];
-  };
-};
-
 const adaptateurChiffrement = ({
   adaptateurEnvironnement,
 }: {
-  adaptateurEnvironnement: ConfigurationChiffrement;
+  adaptateurEnvironnement: AdaptateurEnvironnementPourChiffrement;
 }): AdaptateurChiffrement => {
   const NOMBRE_DE_PASSES = 10;
 
@@ -37,8 +32,6 @@ const adaptateurChiffrement = ({
     hacheBCrypt,
 
     compareBCrypt: bcrypt.compare,
-
-    hacheSha256AvecUnSeulSel,
 
     hacheSha256: (chaineEnClair: string) => {
       const tousLesSelsDeHachage = adaptateurEnvironnement
