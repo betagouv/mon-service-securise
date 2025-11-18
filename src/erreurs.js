@@ -107,6 +107,7 @@ class ErreurTeleversementInvalide extends ErreurModele {}
 class ErreurBrouillonInexistant extends ErreurModele {}
 
 class ErreurMoteurDeReglesV2 extends ErreurModele {}
+class ErreurVersionServiceIncompatible extends ErreurModele {}
 
 export {
   EchecAutorisation,
@@ -169,6 +170,7 @@ export {
   ErreurUtilisateurInexistant,
   ErreurValeurSelIncoherente,
   ErreurVersionSelInvalide,
+  ErreurVersionServiceIncompatible,
   ErreurDonneesNiveauSecuriteInsuffisant,
   ErreurIdentifiantTacheInconnu,
   ErreurFichierXlsInvalide,

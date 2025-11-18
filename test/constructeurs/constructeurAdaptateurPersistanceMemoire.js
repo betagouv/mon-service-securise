@@ -1,6 +1,7 @@
 import * as AdaptateurPersistanceMemoire from '../../src/adaptateurs/adaptateurPersistanceMemoire.js';
 import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 import { uneAutorisation } from './constructeurAutorisation.js';
+import { VersionService } from '../../src/modeles/versionService.js';
 
 class ConstructeurAdaptateurPersistanceMemoire {
   constructor(adaptateurChiffrement) {
@@ -31,7 +32,7 @@ class ConstructeurAdaptateurPersistanceMemoire {
     return this;
   }
 
-  ajouteUnService(service) {
+  ajouteUnService(service, versionService = VersionService.v1) {
     const { id, ...donnees } = service;
     this.services.push({
       id,
@@ -42,6 +43,7 @@ class ConstructeurAdaptateurPersistanceMemoire {
       siretHash: this.adaptateurChiffrement.hacheSha256(
         service.descriptionService?.organisationResponsable?.siret
       ),
+      versionService,
     });
     return this;
   }
