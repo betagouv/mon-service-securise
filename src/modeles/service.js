@@ -20,6 +20,7 @@ import { VersionService } from './versionService.js';
 import { MoteurReglesV2 } from '../moteurRegles/v2/moteurReglesV2.js';
 import { creeReferentielV2 } from '../referentielV2.js';
 import { ObjetPDFAnnexeDescriptionV2 } from './objetsPDF/objetPDFAnnexeDescriptionV2.js';
+import { ToutesActionsRecommandees } from './actionsRecommandees.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -462,36 +463,7 @@ class Service {
     return new Service(donneesService);
   }
 
-  static ACTIONS_RECOMMANDEES = {
-    METTRE_A_JOUR: {
-      id: 'mettreAJour',
-      droitsNecessaires: Autorisation.DROITS_EDITER_DESCRIPTION,
-    },
-    CONTINUER_HOMOLOGATION: {
-      id: 'continuerHomologation',
-      droitsNecessaires: Autorisation.DROITS_EDITER_HOMOLOGATION,
-    },
-    AUGMENTER_INDICE_CYBER: {
-      id: 'augmenterIndiceCyber',
-      droitsNecessaires: Autorisation.DROITS_EDITER_MESURES,
-    },
-    TELECHARGER_ENCART_HOMOLOGATION: {
-      id: 'telechargerEncartHomologation',
-      droitsNecessaires: Autorisation.DROITS_VOIR_STATUT_HOMOLOGATION,
-    },
-    HOMOLOGUER_A_NOUVEAU: {
-      id: 'homologuerANouveau',
-      droitsNecessaires: Autorisation.DROITS_EDITER_HOMOLOGATION,
-    },
-    HOMOLOGUER_SERVICE: {
-      id: 'homologuerService',
-      droitsNecessaires: Autorisation.DROITS_EDITER_HOMOLOGATION,
-    },
-    INVITER_CONTRIBUTEUR: {
-      id: 'inviterContributeur',
-      droitsNecessaires: Autorisation.DROIT_INVITER_CONTRIBUTEUR,
-    },
-  };
+  static ACTIONS_RECOMMANDEES = ToutesActionsRecommandees;
 
   static valideDonneesCreation(donneesDescription, versionService) {
     const description =
