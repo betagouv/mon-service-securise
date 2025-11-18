@@ -1,8 +1,13 @@
 import Etape from './etape.js';
 
+export type DonneeEtapeDateTelechargement = {
+  date?: string;
+};
+
 class DateTelechargement extends Etape {
-  constructor(donnees = {}) {
+  constructor(donnees: DonneeEtapeDateTelechargement = {}) {
     super({ proprietesAtomiquesRequises: ['date'] });
+    // @ts-expect-error On omet le référentiel car aucun `listesAgregats` présent
     this.renseigneProprietes(donnees);
   }
 
@@ -10,7 +15,7 @@ class DateTelechargement extends Etape {
     return this.date !== undefined;
   }
 
-  enregistreDateTelechargement(date) {
+  enregistreDateTelechargement(date: string) {
     this.date = date;
   }
 
