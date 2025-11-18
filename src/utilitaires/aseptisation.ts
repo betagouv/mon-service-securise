@@ -1,4 +1,4 @@
-const valeurBooleenne = (valeur) => {
+export const valeurBooleenne = (valeur: string) => {
   switch (valeur) {
     case 'true':
       return true;
@@ -8,5 +8,3 @@ const valeurBooleenne = (valeur) => {
       return undefined;
   }
 };
-
-export { valeurBooleenne };

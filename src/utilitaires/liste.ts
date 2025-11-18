@@ -1,7 +1,5 @@
-const formatteListeFr = (liste) =>
+export const formatteListeFr = (liste: Iterable<string>) =>
   new Intl.ListFormat('fr', {
     style: 'long',
     type: 'conjunction',
   }).format(liste);
-
-export { formatteListeFr };
