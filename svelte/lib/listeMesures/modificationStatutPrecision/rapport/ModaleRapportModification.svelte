@@ -9,6 +9,7 @@
     ReferentielStatut,
     ReferentielTypesService,
   } from '../../../ui/types.d';
+  import { encode } from 'html-entities';
 
   export let referentielStatuts: ReferentielStatut;
   export let referentielTypesService: ReferentielTypesService;
@@ -59,9 +60,9 @@
         titre = 'Précision mise à jour avec succès';
       }
 
-      contenu = `${sujetChaine} de la mesure <b>${
+      contenu = `${sujetChaine} de la mesure <b>${encode(
         modeleMesureGenerale!.description
-      }</b> ${verbe} à ${idServicesModifies.length} service${
+      )}</b> ${verbe} à ${idServicesModifies.length} service${
         servicesMultiples ? 's' : ''
       }.`;
     }
@@ -76,6 +77,7 @@
       avecAnimation={false}
       niveau="succes"
       {contenu}
+      avecInterpolationHTMLDangereuse
     />
     <h4>
       {servicesAvecMesure.length}
