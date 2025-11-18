@@ -32,11 +32,9 @@ class ErreurAutorisationInexistante extends ErreurModele {}
 class ErreurAvisInvalide extends ErreurModele {}
 class ErreurCategorieInconnue extends ErreurModele {}
 class ErreurDateHomologationInvalide extends ErreurModele {}
-class ErreurDateRenouvellementInvalide extends ErreurModele {}
 class ErreurDonneesObligatoiresManquantes extends ErreurModele {}
 class ErreurDonneesNiveauSecuriteInsuffisant extends ErreurModele {}
 class ErreurDonneesReferentielIncorrectes extends Error {}
-class ErreurDonneesStatistiques extends ErreurModele {}
 class ErreurDossierCourantInexistant extends ErreurModele {}
 class ErreurDossierDejaFinalise extends ErreurModele {}
 class ErreurDossierEtapeInconnue extends ErreurModele {
@@ -123,11 +121,9 @@ export {
   ErreurCategorieInconnue,
   ErreurChainageMiddleware,
   ErreurDateHomologationInvalide,
-  ErreurDateRenouvellementInvalide,
   ErreurDetachementModeleMesureSpecifiqueImpossible,
   ErreurDonneesObligatoiresManquantes,
   ErreurDonneesReferentielIncorrectes,
-  ErreurDonneesStatistiques,
   ErreurDossierCourantInexistant,
   ErreurDossierDejaFinalise,
   ErreurDossierEtapeInconnue,
