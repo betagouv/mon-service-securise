@@ -258,8 +258,9 @@ const middleware = (configuration = {}) => {
       requete.idUtilisateurCourant
     );
 
-    reponse.locals.explicationNouveauReferentiel =
-      parcoursUtilisateur.explicationNouveauReferentiel;
+    reponse.locals.afficheExplicationNouveauReferentiel =
+      adaptateurEnvironnement.featureFlag().avecDecrireV2() &&
+      parcoursUtilisateur.doitAfficherExplicationNouveauReferentiel();
 
     suite();
   };

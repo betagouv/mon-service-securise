@@ -28,7 +28,7 @@ describe('Un parcours utilisateur', () => {
     expect(etatInitial.etatVisiteGuidee).to.be.an(EtatVisiteGuidee);
     expect(etatInitial.etatVisiteGuidee.dejaTerminee).to.be(false);
     expect(etatInitial.etatVisiteGuidee.enPause).to.be(false);
-    expect(etatInitial.explicationNouveauReferentiel.dejaTermine).to.be(false);
+    expect(etatInitial.explicationNouveauReferentiel.estTermine()).to.be(false);
   });
 
   it("sait enregistrer une date de dernière connexion en utilisant l'adaptateur horloge", () => {

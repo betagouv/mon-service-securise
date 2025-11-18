@@ -28,14 +28,10 @@ $(() => {
     })
   );
 
-  const explicationNouveauReferentiel = lisDonneesPartagees(
-    'donnees-explication-nouveau-referentiel'
+  const afficheExplicationNouveauReferentiel = lisDonneesPartagees(
+    'affiche-explication-nouveau-referentiel'
   );
-  if (
-    explicationNouveauReferentiel &&
-    !explicationNouveauReferentiel.dejaTermine &&
-    avecDecrireV2
-  ) {
+  if (afficheExplicationNouveauReferentiel) {
     document.body.dispatchEvent(
       new CustomEvent('svelte-recharge-explication-nouveau-referentiel')
     );
