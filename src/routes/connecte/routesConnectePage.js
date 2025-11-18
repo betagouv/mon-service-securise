@@ -93,8 +93,11 @@ const routesConnectePage = ({
     middleware.chargeEtatVisiteGuidee,
     middleware.chargeExplicationNouveauReferentiel,
     async (requete, reponse) => {
-      const estSuperviseur = await depotDonnees.estSuperviseur(
-        requete.idUtilisateurCourant
+      const { idUtilisateurCourant } = requete;
+      const estSuperviseur =
+        await depotDonnees.estSuperviseur(idUtilisateurCourant);
+      await depotDonnees.marqueTableauDeBordVuDansParcoursUtilisateur(
+        idUtilisateurCourant
       );
       reponse.render('tableauDeBord', { estSuperviseur });
     }

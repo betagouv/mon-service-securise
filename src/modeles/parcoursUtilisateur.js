@@ -37,6 +37,14 @@ class ParcoursUtilisateur extends Base {
     this.explicationNouveauReferentiel.finalise();
   }
 
+  marqueTableauDeBordVu() {
+    this.explicationNouveauReferentiel.aVuTableauDeBordDepuisConnexion = true;
+  }
+
+  aVuTableauDeBord() {
+    return this.explicationNouveauReferentiel.aVuTableauDeBordDepuisConnexion;
+  }
+
   doitAfficherExplicationNouveauReferentiel() {
     return this.explicationNouveauReferentiel.doitEtreAffichee();
   }

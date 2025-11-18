@@ -200,6 +200,19 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
           '/tableauDeBord'
         );
     });
+
+    it("délègue au dépôt de données la mise à jour du fait que l'utilisateur a vu le tableau de bord depuis sa connexion", async () => {
+      let idRecu;
+      testeur.middleware().reinitialise({ idUtilisateur: '123' });
+      testeur.depotDonnees().marqueTableauDeBordVuDansParcoursUtilisateur =
+        async (idUtilisateur) => {
+          idRecu = idUtilisateur;
+        };
+
+      await testeur.get(`/tableauDeBord`);
+
+      expect(idRecu).to.be('123');
+    });
   });
 
   describe('quand GET sur /supervision', () => {
