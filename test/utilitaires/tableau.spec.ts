@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import { zipTableaux } from '../../src/utilitaires/tableau.js';
 
 describe('Utilitaires sur les tableaux', () => {
@@ -9,18 +8,16 @@ describe('Utilitaires sur les tableaux', () => {
 
       const zip = zipTableaux(a, b, 'id');
 
-      expect(zip).to.eql([{ id: '1', provientDeA: true, provientDeB: true }]);
+      expect(zip).toEqual([{ id: '1', provientDeA: true, provientDeB: true }]);
     });
 
     it('ne permet pas le zip de tableaux de longueurs différentes', () => {
-      const a = [];
+      const a: Array<Record<string, unknown>> = [];
       const b = [{ id: '1', provientDeB: true }];
 
-      expect(() => zipTableaux(a, b, 'id')).to.throwError((e) => {
-        expect(e.message).to.be(
-          'Impossible de ziper des tableaux de tailles différentes. Ici [0] et [1].'
-        );
-      });
+      expect(() => zipTableaux(a, b, 'id')).toThrowError(
+        'Impossible de ziper des tableaux de tailles différentes. Ici [0] et [1].'
+      );
     });
   });
 });
