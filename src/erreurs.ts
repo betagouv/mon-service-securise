@@ -1,9 +1,13 @@
+/* eslint-disable max-classes-per-file */
+import { UUID } from './typesBasiques.js';
+import { type Droits } from './modeles/autorisations/gestionDroits.js';
+
 class EchecAutorisation extends Error {}
 class EchecEnvoiMessage extends Error {}
 class ErreurApiBrevo extends Error {}
 class ErreurDroitsIncoherents extends Error {}
 class ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique extends Error {
-  constructor(idUtilisateur, idServices, droitsRequis) {
+  constructor(idUtilisateur: UUID, idServices: UUID[], droitsRequis: Droits) {
     const u = idUtilisateur;
     const s = idServices?.join(',');
     const d = JSON.stringify(droitsRequis);
@@ -14,8 +18,9 @@ class ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique extends Error {
 }
 class ErreurChainageMiddleware extends Error {}
 class ErreurBusEvenements extends Error {
-  constructor(typeEvenement, erreurDeAbonne) {
+  constructor(typeEvenement: string, erreurDeAbonne: Error) {
     const details = { cause: erreurDeAbonne };
+    // @ts-expect-error On suit la documentation MDN qui indique la manière d'instancié une erreur : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#differentiate_between_similar_errors
     super(`Erreur dans un abonné à [${typeEvenement}]`, details);
   }
 }
@@ -38,15 +43,16 @@ class ErreurDonneesReferentielIncorrectes extends Error {}
 class ErreurDossierCourantInexistant extends ErreurModele {}
 class ErreurDossierDejaFinalise extends ErreurModele {}
 class ErreurDossierEtapeInconnue extends ErreurModele {
-  constructor(etapeInconnue) {
+  constructor(private readonly etapeInconnue: string) {
     super(`L'étape ${etapeInconnue} n'est pas une propriété du dossier.`);
-    this.etapeInconnue = etapeInconnue;
   }
 }
 class ErreurDossierNonFinalisable extends ErreurModele {
-  constructor(message, etapesIncompletes) {
+  constructor(
+    message: string,
+    private readonly etapesIncompletes: string
+  ) {
     super(message);
-    this.etapesIncompletes = etapesIncompletes;
   }
 }
 class ErreurDossierNonFinalise extends ErreurModele {}
@@ -57,14 +63,14 @@ class ErreurServiceInexistant extends ErreurModele {}
 class ErreurLocalisationDonneesInvalide extends ErreurModele {}
 class ErreurMesureInconnue extends ErreurModele {}
 class ErreurModeleDeMesureSpecifiqueIntrouvable extends ErreurModele {
-  constructor(identifiantInconnu) {
+  constructor(identifiantInconnu: string) {
     super(
       `Le modèle de mesure spécifique '${identifiantInconnu}' est introuvable.`
     );
   }
 }
 class ErreurModeleDeMesureSpecifiqueDejaAssociee extends ErreurModele {
-  constructor(idModele, idMesureDejaAssociee) {
+  constructor(idModele: UUID, idMesureDejaAssociee: UUID) {
     super(
       `Le modèle de mesure spécifique ${idModele} est déjà associé à la mesure ${idMesureDejaAssociee}`
     );
@@ -93,9 +99,11 @@ class ErreurFichierXlsInvalide extends ErreurModele {}
 class ErreurNombreLimiteModelesMesureSpecifiqueAtteint extends ErreurModele {}
 
 class ErreurUtilisateurExistant extends ErreurModele {
-  constructor(message, idUtilisateur) {
+  constructor(
+    message: string,
+    private readonly idUtilisateur: UUID
+  ) {
     super(message);
-    this.idUtilisateur = idUtilisateur;
   }
 }
 
@@ -106,6 +114,7 @@ class ErreurBrouillonInexistant extends ErreurModele {}
 
 class ErreurMoteurDeReglesV2 extends ErreurModele {}
 class ErreurVersionServiceIncompatible extends ErreurModele {}
+/* eslint-enable max-classes-per-file */
 
 export {
   EchecAutorisation,
