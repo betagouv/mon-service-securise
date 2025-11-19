@@ -5,7 +5,7 @@
 #### Simulation de switch vers V2
 
 - [x] Jeter une 400 si le service n'est pas v1
-- [ ] Chiffrer les données en base de la simulation, comme le brouillon
+- [x] Chiffrer les données en base de la simulation, comme le brouillon
 
 #### MEP V2
 

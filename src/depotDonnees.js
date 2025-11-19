@@ -149,6 +149,7 @@ const creeDepot = (config = {}) => {
   const depotSimulationMigration =
     depotSimulationMigrationReferentiel.creeDepot({
       persistance: adaptateurPersistance,
+      adaptateurChiffrement,
     });
 
   const {

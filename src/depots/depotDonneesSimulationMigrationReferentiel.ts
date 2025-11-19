@@ -1,11 +1,9 @@
 import Service from '../modeles/service.js';
-import { UUID } from '../typesBasiques.js';
-import {
-  BrouillonService,
-  DonneesBrouillonService,
-} from '../modeles/brouillonService.js';
+import { DonneesChiffrees, UUID } from '../typesBasiques.js';
+import { BrouillonService } from '../modeles/brouillonService.js';
 import { convertisDescriptionV1BrouillonV2 } from '../modeles/convertisseurDescriptionV1BrouillonV2.js';
 import DescriptionService from '../modeles/descriptionService.js';
+import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
 
 export type DepotDonneesSimulationMigrationReferentiel = {
   ajouteSimulationMigrationReferentielSiNecessaire: (
@@ -16,7 +14,7 @@ export type DepotDonneesSimulationMigrationReferentiel = {
 type PersistanceSimulationMigrationReferentiel = {
   sauvegardeSimulationMigrationReferentiel: (
     idService: UUID,
-    donnees: DonneesBrouillonService
+    donnees: DonneesChiffrees
   ) => Promise<void>;
   lisSimulationMigrationReferentiel: (
     idService: UUID
@@ -25,8 +23,10 @@ type PersistanceSimulationMigrationReferentiel = {
 
 const creeDepot = ({
   persistance,
+  adaptateurChiffrement,
 }: {
   persistance: PersistanceSimulationMigrationReferentiel;
+  adaptateurChiffrement: AdaptateurChiffrement;
 }): DepotDonneesSimulationMigrationReferentiel => {
   const ajouteSimulationMigrationReferentielSiNecessaire = async (
     service: Service
@@ -40,9 +40,12 @@ const creeDepot = ({
       service.descriptionService as DescriptionService
     );
 
+    const donneesEnClair = projection.donneesAPersister();
+    const donneesChiffrees =
+      await adaptateurChiffrement.chiffre(donneesEnClair);
     await persistance.sauvegardeSimulationMigrationReferentiel(
       service.id,
-      projection.donneesAPersister()
+      donneesChiffrees
     );
   };
 
