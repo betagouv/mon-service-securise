@@ -59,6 +59,7 @@ const routesConnecteApi = ({
   adaptateurZip,
   adaptateurJournal,
   lecteurDeFormData,
+  adaptateurEnvironnement,
   adaptateurTeleversementServices,
   adaptateurTeleversementModelesMesureSpecifique,
   procedures,
@@ -337,6 +338,7 @@ const routesConnecteApi = ({
   routes.use(
     '/service',
     routesConnecteApiService({
+      adaptateurEnvironnement,
       middleware,
       depotDonnees,
       referentiel,

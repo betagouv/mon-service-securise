@@ -55,6 +55,7 @@ const routesConnecteApiService = ({
   middleware,
   depotDonnees,
   referentiel,
+  adaptateurEnvironnement,
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurZip,
@@ -64,6 +65,7 @@ const routesConnecteApiService = ({
 
   routes.use(
     routesConnecteApiServicePdf({
+      adaptateurEnvironnement,
       adaptateurHorloge,
       adaptateurPdf,
       adaptateurZip,
