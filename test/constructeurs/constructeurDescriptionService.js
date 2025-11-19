@@ -51,6 +51,11 @@ class ConstructeurDescriptionService {
     return this;
   }
 
+  avecDonneesCaracterePersonnel(donnees) {
+    this.donnees.donneesCaracterePersonnel = donnees;
+    return this;
+  }
+
   avecProvenance(provenance) {
     this.donnees.provenanceService = provenance;
     return this;

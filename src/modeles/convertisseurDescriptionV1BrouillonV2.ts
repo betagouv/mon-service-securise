@@ -7,6 +7,7 @@ import {
 import { UUID } from '../typesBasiques.js';
 import { TypeService } from '../../svelte/lib/creationV2/creationV2.types.js';
 import {
+  CategorieDonneesTraitees,
   SpecificiteProjet,
   StatutDeploiement,
 } from '../../donneesReferentielMesuresV2.js';
@@ -52,6 +53,35 @@ const convertisFonctionnalites = (
     : [];
 };
 
+const convertisDonneesCaracterePersonnel = (
+  description: DescriptionService
+) => {
+  const categoriesDonneesTraitees: CategorieDonneesTraitees[] = [];
+  const donneesCaracterePersonnel = description.donneesCaracterePersonnel as
+    | string[]
+    | undefined;
+  const correspondancesDonneesCaracterePersonnel: Record<
+    string,
+    CategorieDonneesTraitees
+  > = {
+    contact: 'donneesDIdentite',
+    identite: 'donneesDIdentite',
+    document: 'documentsIdentifiants',
+    situation: 'donneesSituationFamilialeEconomiqueFinanciere',
+    banque: 'documentsRHSensibles',
+    mineurs: 'donneesCaracterePersonnelPersonneARisque',
+    sensibiliteParticuliere: 'donneesSensibles',
+  };
+  Object.entries(correspondancesDonneesCaracterePersonnel).forEach(
+    ([donneeV1, equivalenceV2]) => {
+      if (donneesCaracterePersonnel?.includes(donneeV1)) {
+        categoriesDonneesTraitees.push(equivalenceV2);
+      }
+    }
+  );
+  return categoriesDonneesTraitees;
+};
+
 export const convertisDescriptionV1BrouillonV2 = (
   description: DescriptionService
 ): BrouillonService => {
@@ -63,7 +93,9 @@ export const convertisDescriptionV1BrouillonV2 = (
     presentation: description.presentation as string,
     pointsAcces: (description.pointsAcces as PointsAcces).descriptions(),
     specificitesProjet: convertisFonctionnalites(description),
+    categoriesDonneesTraitees: convertisDonneesCaracterePersonnel(description),
   };
+
   if (description.provenanceService === 'achat') {
     donnees.typeHebergement = 'saas';
     donnees.activitesExternalisees = [
