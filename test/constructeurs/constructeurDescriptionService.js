@@ -47,6 +47,11 @@ class ConstructeurDescriptionService {
     return this;
   }
 
+  avecProvenance(provenance) {
+    this.donnees.provenanceService = provenance;
+    return this;
+  }
+
   deLOrganisation(organisationResponsable) {
     this.donnees.organisationResponsable = organisationResponsable;
     return this;

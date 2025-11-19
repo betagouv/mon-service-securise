@@ -56,4 +56,18 @@ describe('Le convertisseur de description v1 en brouillon v2', () => {
       expect(brouillonV2.toJSON().typeService).toEqual(['portailInformation']);
     });
   });
+
+  it("convertis en SaaS une description avec provenance 'proposé en ligne par un fournisseur'", () => {
+    const descriptionV1 = uneDescriptionValide()
+      .avecProvenance('achat')
+      .construis();
+
+    const brouillonV2 = convertisDescriptionV1BrouillonV2(descriptionV1);
+
+    expect(brouillonV2.toJSON().typeHebergement).toBe('saas');
+    expect(brouillonV2.toJSON().activitesExternalisees).toEqual([
+      'administrationTechnique',
+      'developpementLogiciel',
+    ]);
+  });
 });
