@@ -7,6 +7,7 @@ import {
 import { UUID } from '../typesBasiques.js';
 import { TypeService } from '../../svelte/lib/creationV2/creationV2.types.js';
 import { StatutDeploiement } from '../../donneesReferentielMesuresV2.js';
+import PointsAcces from './pointsAcces.js';
 
 const convertisTypesService = (description: DescriptionService) => {
   const typeService: TypeService[] = [];
@@ -48,6 +49,7 @@ export const convertisDescriptionV1BrouillonV2 = (
     typeService: convertisTypesService(description),
     statutDeploiement: convertisStatutDeploiement(description),
     presentation: description.presentation as string,
+    pointsAcces: (description.pointsAcces as PointsAcces).descriptions(),
   };
   if (description.provenanceService === 'achat') {
     donnees.typeHebergement = 'saas';
