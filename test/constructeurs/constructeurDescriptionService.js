@@ -2,12 +2,16 @@ import DescriptionService from '../../src/modeles/descriptionService.js';
 import * as Referentiel from '../../src/referentiel.js';
 
 class ConstructeurDescriptionService {
-  constructor(referentiel = Referentiel.creeReferentiel()) {
+  constructor(
+    referentiel = Referentiel.creeReferentiel(),
+    avecEnrichissementReferentiel = true
+  ) {
     this.referentiel = referentiel;
-    this.referentiel.enrichis({
-      statutsDeploiement: { unStatutDeploiement: {} },
-      localisationsDonnees: { uneLocalisation: {} },
-    });
+    if (avecEnrichissementReferentiel)
+      this.referentiel.enrichis({
+        statutsDeploiement: { unStatutDeploiement: {} },
+        localisationsDonnees: { uneLocalisation: {} },
+      });
 
     this.donnees = {
       delaiAvantImpactCritique: 'unDelai',
@@ -52,6 +56,16 @@ class ConstructeurDescriptionService {
     return this;
   }
 
+  avecLocalisation(localisation) {
+    this.donnees.localisationDonnees = localisation;
+    return this;
+  }
+
+  avecStatut(statut) {
+    this.donnees.statutDeploiement = statut;
+    return this;
+  }
+
   deLOrganisation(organisationResponsable) {
     this.donnees.organisationResponsable = organisationResponsable;
     return this;
@@ -79,7 +93,13 @@ class ConstructeurDescriptionService {
   }
 }
 
-const uneDescriptionValide = (referentiel) =>
-  new ConstructeurDescriptionService(referentiel);
+const uneDescriptionValide = (
+  referentiel,
+  avecEnrichissementReferentiel = true
+) =>
+  new ConstructeurDescriptionService(
+    referentiel,
+    avecEnrichissementReferentiel
+  );
 
 export default uneDescriptionValide;
