@@ -14,6 +14,7 @@ class ConstructeurAdaptateurPersistanceMemoire {
     this.modelesMesureSpecifique = [];
     this.associationModelesMesureSpecifiqueServices = [];
     this.brouillonsServices = [];
+    this.simulationsMigrationReferentiel = [];
     this.adaptateurChiffrement = adaptateurChiffrement;
   }
 
@@ -91,6 +92,11 @@ class ConstructeurAdaptateurPersistanceMemoire {
     return this;
   }
 
+  ajouteUneSimulationMigrationReferentiel(idService, simulation) {
+    this.simulationsMigrationReferentiel.push({ ...simulation, idService });
+    return this;
+  }
+
   construis() {
     return AdaptateurPersistanceMemoire.nouvelAdaptateur({
       autorisations: this.autorisations,
@@ -104,6 +110,7 @@ class ConstructeurAdaptateurPersistanceMemoire {
       associationModelesMesureSpecifiqueServices:
         this.associationModelesMesureSpecifiqueServices,
       brouillonServices: this.brouillonsServices,
+      simulationsMigrationReferentiel: this.simulationsMigrationReferentiel,
     });
   }
 }
