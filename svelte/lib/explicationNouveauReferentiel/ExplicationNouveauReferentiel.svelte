@@ -8,6 +8,7 @@
   let indexEtapeCourante = 0;
   let elementModale: Modale;
   let elementModaleConfirmationFermeture: Modale;
+  let aTermine = false;
 
   onMount(() => {
     elementModale?.affiche();
@@ -15,6 +16,7 @@
 
   const termineExplications = async () => {
     await axios.post('/api/explicationNouveauReferentiel/termine');
+    aTermine = true;
     elementModale?.ferme();
   };
 
@@ -44,7 +46,7 @@
   };
 
   const gereFermetureModale = () => {
-    elementModaleConfirmationFermeture.affiche();
+    if (!aTermine) elementModaleConfirmationFermeture.affiche();
   };
 </script>
 
