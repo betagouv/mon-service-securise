@@ -127,5 +127,10 @@ export const convertisDescriptionV1BrouillonV2 = (
       'developpementLogiciel',
     ];
   }
+
+  if (description.delaiAvantImpactCritique === 'uneJournee') {
+    donnees.dureeDysfonctionnementAcceptable = 'moinsDe24h';
+  }
+
   return new BrouillonService(uuid.v4() as UUID, donnees);
 };
