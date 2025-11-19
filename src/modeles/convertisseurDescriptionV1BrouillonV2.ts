@@ -47,6 +47,7 @@ export const convertisDescriptionV1BrouillonV2 = (
     siret: description.organisationResponsable?.siret as string,
     typeService: convertisTypesService(description),
     statutDeploiement: convertisStatutDeploiement(description),
+    presentation: description.presentation as string,
   };
   if (description.provenanceService === 'achat') {
     donnees.typeHebergement = 'saas';
