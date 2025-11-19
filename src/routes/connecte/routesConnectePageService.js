@@ -9,8 +9,9 @@ import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import Service from '../../modeles/service.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
 import RisqueGeneral from '../../modeles/risqueGeneral.js';
+import { VersionService } from '../../modeles/versionService.js';
 
-const { LECTURE } = Permissions;
+const { LECTURE, ECRITURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
 
 const routesConnectePageService = ({
@@ -296,6 +297,25 @@ const routesConnectePageService = ({
     const entite = utilisateur.entite.siret ? utilisateur.entite : undefined;
     reponse.render('service/creation-v2', { entite });
   });
+
+  routes.get(
+    '/:id/simulation-referentiel-v2',
+    middleware.trouveService({ [DECRIRE]: ECRITURE, [SECURISER]: ECRITURE }),
+    async (requete, reponse) => {
+      const { service } = requete;
+
+      if (service.version() === VersionService.v2) {
+        reponse.sendStatus(400);
+        return;
+      }
+
+      await depotDonnees.ajouteSimulationMigrationReferentielSiNecessaire(
+        service
+      );
+
+      reponse.render('service/simulation-referentiel-v2');
+    }
+  );
 
   return routes;
 };

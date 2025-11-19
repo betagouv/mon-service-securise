@@ -5,7 +5,10 @@ import {
   Rubriques,
 } from '../../../src/modeles/autorisations/gestionDroits.js';
 import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
-import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
 import {
   verifieNomFichierServi,
   verifieTypeFichierServiEstCSV,
@@ -30,6 +33,7 @@ describe('Le serveur MSS des routes /service/*', () => {
     '/ID-SERVICE/rolesResponsabilites',
     '/ID-SERVICE/risques',
     '/ID-SERVICE/dossiers',
+    '/ID-SERVICE/simulation-referentiel-v2',
   ].forEach((route) => {
     describe(`quand GET sur /service${route}`, () => {
       beforeEach(() => {
@@ -743,6 +747,46 @@ describe('Le serveur MSS des routes /service/*', () => {
         nom: 'Mon organisation',
         departement: '33',
       });
+    });
+  });
+
+  describe('quand requête GET sur `/service/:id/simulation-referentiel-v2`', () => {
+    beforeEach(() => {
+      testeur.depotDonnees().ajouteSimulationMigrationReferentielSiNecessaire =
+        async () => {};
+    });
+
+    it('recherche le service correspondant', async () => {
+      await testeur.middleware().verifieRechercheService(
+        [
+          { niveau: ECRITURE, rubrique: DECRIRE },
+          { niveau: ECRITURE, rubrique: SECURISER },
+        ],
+        testeur.app(),
+        '/service/456/simulation-referentiel-v2'
+      );
+    });
+
+    it("créé une simulation si elle n'existe pas", async () => {
+      let serviceRecu;
+      testeur.depotDonnees().ajouteSimulationMigrationReferentielSiNecessaire =
+        async (service) => {
+          serviceRecu = service;
+        };
+
+      await testeur.get('/service/456/simulation-referentiel-v2');
+      expect(serviceRecu.id).to.be('456');
+    });
+
+    it("jette une erreur si le service n'est pas en V1", async () => {
+      testeur.middleware().reinitialise({
+        serviceARenvoyer: unServiceV2().construis(),
+      });
+
+      const reponse = await testeur.get(
+        '/service/456/simulation-referentiel-v2'
+      );
+      expect(reponse.status).to.be(400);
     });
   });
 });
