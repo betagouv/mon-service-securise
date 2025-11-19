@@ -1,6 +1,9 @@
 import * as uuid from 'uuid';
 import DescriptionService from './descriptionService.js';
-import { BrouillonService } from './brouillonService.js';
+import {
+  BrouillonService,
+  DonneesBrouillonService,
+} from './brouillonService.js';
 import { UUID } from '../typesBasiques.js';
 import { TypeService } from '../../svelte/lib/creationV2/creationV2.types.js';
 
@@ -26,9 +29,18 @@ function convertisTypesService(description: DescriptionService) {
 
 export const convertisDescriptionV1BrouillonV2 = (
   description: DescriptionService
-): BrouillonService =>
-  new BrouillonService(uuid.v4() as UUID, {
+): BrouillonService => {
+  const donnees: DonneesBrouillonService = {
     nomService: description.nomService as string,
     siret: description.organisationResponsable?.siret as string,
     typeService: convertisTypesService(description),
-  });
+  };
+  if (description.provenanceService === 'achat') {
+    donnees.typeHebergement = 'saas';
+    donnees.activitesExternalisees = [
+      'administrationTechnique',
+      'developpementLogiciel',
+    ];
+  }
+  return new BrouillonService(uuid.v4() as UUID, donnees);
+};
