@@ -2,15 +2,6 @@
 
 ## TODO
 
-#### Modale Nouveau référentiel
-
-- [x] On affiche la modale si l'utilisateur ne l'a pas validée et que le feature flag est activé
-- [x] On stocke le "dejaTermine" pour un utilisateur
-- [x] On lis le "dejaTermine" dans le middleware
-- [x] On affiche la modale UNE FOIS par connexion, sur le tableau de bord
-- [x] On affiche la modale QUE SI l'utilisateur a encore des services V1
-- [ ] Tout le contenu de la modale
-
 #### MEP V2
 
 - retirer le bouton de téléversement V1
@@ -82,6 +73,15 @@
 - Regarder toutes les routes connectées de page Service et vérifier s'il faut du v2
 
 ## DONE
+
+#### Modale Nouveau référentiel
+
+- [x] On affiche la modale si l'utilisateur ne l'a pas validée et que le feature flag est activé
+- [x] On stocke le "dejaTermine" pour un utilisateur
+- [x] On lis le "dejaTermine" dans le middleware
+- [x] On affiche la modale UNE FOIS par connexion, sur le tableau de bord
+- [x] On affiche la modale QUE SI l'utilisateur a encore des services V1
+- [x] Tout le contenu de la modale
 
 #### Téléversement Excel
 
