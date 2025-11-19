@@ -7,6 +7,7 @@
 
   let indexEtapeCourante = 0;
   let elementModale: Modale;
+  let elementModaleConfirmationFermeture: Modale;
 
   onMount(() => {
     elementModale?.affiche();
@@ -41,9 +42,17 @@
       difference: 'de +45 à +62 mesures',
     },
   };
+
+  const gereFermetureModale = () => {
+    elementModaleConfirmationFermeture.affiche();
+  };
 </script>
 
-<Modale bind:this={elementModale} id="modale-explication-nouveau-referentiel">
+<Modale
+  id="modale-explication-nouveau-referentiel"
+  bind:this={elementModale}
+  on:close={gereFermetureModale}
+>
   <svelte:fragment slot="contenu">
     <dsfr-badge
       label="Nouveau"
@@ -250,6 +259,48 @@
     </div>
   </svelte:fragment>
 </Modale>
+<Modale
+  id="modale-confirmation-fermeture"
+  bind:this={elementModaleConfirmationFermeture}
+>
+  <svelte:fragment slot="contenu">
+    <div class="contenu-modale">
+      <h4>⚠️ Rappel important</h4>
+      <p>
+        Vous avez choisi de fermer la fenêtre sans cliquer sur <b
+          >«J’ai compris»</b
+        >
+        à <b>la dernière étape.</b>
+        <br />
+        Cette information est essentielle : elle vous sera donc reproposée lors de
+        votre prochaine visite tant que vous ne l’aurez pas validée.
+      </p>
+    </div>
+  </svelte:fragment>
+  <svelte:fragment slot="actions">
+    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <lab-anssi-bouton
+      titre="Me le reproposer plus tard"
+      variante="secondaire"
+      taille="md"
+      icone=""
+      positionIcone="sans"
+      on:click={() => elementModaleConfirmationFermeture.ferme()}
+    />
+    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <lab-anssi-bouton
+      titre="Valider maintenant"
+      variante="primaire"
+      taille="md"
+      icone=""
+      positionIcone="sans"
+      on:click={() => {
+        elementModaleConfirmationFermeture.ferme();
+        elementModale.affiche();
+      }}
+    />
+  </svelte:fragment>
+</Modale>
 
 <style lang="scss">
   :global(#modale-explication-nouveau-referentiel) {
@@ -258,6 +309,23 @@
 
     :global(.contenu-modale) {
       margin-top: 0;
+    }
+  }
+
+  :global(#modale-confirmation-fermeture) {
+    max-width: calc(556px + 64px);
+    max-height: calc(336px + 32px);
+
+    :global(.contenu-modale) {
+      margin-top: 0;
+    }
+
+    :global(.conteneur-actions) {
+      border: none;
+    }
+
+    h4 {
+      margin: 0;
     }
   }
 
