@@ -3,8 +3,9 @@
   import { onMount } from 'svelte';
   import donneesNiveauxDeSecurite from '../niveauxDeSecurite/donneesNiveauxDeSecurite';
   import type { IdNiveauDeSecurite } from '../ui/types';
+  import { donneesEvolutionQuestions } from './donneesEvolutionQuestions';
 
-  let indexEtapeCourante = 1;
+  let indexEtapeCourante = 0;
   let elementModale: Modale;
 
   onMount(() => {
@@ -166,6 +167,39 @@
           <p>Vous pourrez effectuer un autre choix pour vos autres services.</p>
         </div>
       </div>
+    {:else if indexEtapeCourante === 2}
+      <h4>📝 De nouvelles questions pour mieux qualifier vos services</h4>
+      <div class="contenu-modale">
+        <p>
+          <b
+            >De nouvelles questions permettent une meilleure qualification de
+            vos services et une adaptation plus fine des besoins de sécurité. En
+            fonction des réponses, cela peut impacter votre niveau de besoin de
+            sécurité actuel.</b
+          >
+        </p>
+        <h5>Évolution des questions</h5>
+        <table>
+          <colgroup>
+            <col class="questions" />
+            <col class="statut" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Nouvelles questions</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            {#each donneesEvolutionQuestions as { label, statut }, index (index)}
+              <tr>
+                <td>{label}</td>
+                <td>{statut}</td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
     {/if}
   </svelte:fragment>
   <svelte:fragment slot="actions">
@@ -181,6 +215,7 @@
       </div>
       <div class="conteneur-boutons-actions">
         {#if indexEtapeCourante > 0}
+          <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
           <lab-anssi-bouton
             titre="Précédent"
             variante="secondaire"
@@ -191,6 +226,7 @@
           />
         {/if}
         {#if indexEtapeCourante === 2}
+          <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
           <lab-anssi-bouton
             titre="J’ai compris 👍"
             variante="primaire"
@@ -200,6 +236,7 @@
             on:click={termineExplications}
           />
         {:else}
+          <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
           <lab-anssi-bouton
             titre="Suivant"
             variante="primaire"
@@ -351,6 +388,26 @@
         img {
           max-width: 146px;
         }
+      }
+    }
+
+    table {
+      border-collapse: collapse;
+      border: 1px solid var(--systeme-design-etat-contour-champs);
+
+      .statut {
+        width: 218px;
+      }
+
+      td,
+      th {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+        line-height: 1.5rem;
+        color: #3a3a3a;
+      }
+      tr {
+        border: 1px solid var(--systeme-design-etat-contour-champs);
       }
     }
   }
