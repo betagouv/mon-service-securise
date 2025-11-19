@@ -3,6 +3,8 @@ import * as Referentiel from '../../src/referentiel.js';
 import Service from '../../src/modeles/service.js';
 import { unUtilisateur } from './constructeurUtilisateur.js';
 import { VersionService } from '../../src/modeles/versionService.js';
+import { creeReferentielV2 } from '../../src/referentielV2.js';
+import { uneDescriptionV2Valide } from './constructeurDescriptionServiceV2.js';
 
 class ConstructeurService {
   constructor(referentiel) {
@@ -91,4 +93,9 @@ class ConstructeurService {
 const unService = (referentiel = Referentiel.creeReferentielVide()) =>
   new ConstructeurService(referentiel);
 
-export { unService };
+const unServiceV2 = (referentiel = creeReferentielV2()) =>
+  new ConstructeurService(referentiel)
+    .avecVersion(VersionService.v2)
+    .avecDescription(uneDescriptionV2Valide().donneesDescription());
+
+export { unService, unServiceV2 };
