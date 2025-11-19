@@ -916,6 +916,18 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     return rows.map((r) => r.version_service);
   };
 
+  const lisSimulationMigrationReferentiel = async (idService) =>
+    knex('simulation_migration_referentiel')
+      .where({ id_service: idService })
+      .select('donnees')
+      .first();
+
+  const sauvegardeSimulationMigrationReferentiel = async (idService, donnees) =>
+    knex('simulation_migration_referentiel').insert({
+      id_service: idService,
+      donnees,
+    });
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -945,6 +957,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     lisProgressionTeleversementServices,
+    lisSimulationMigrationReferentiel,
     lisSuperviseursConcernes,
     lisTeleversementModelesMesureSpecifique,
     lisTeleversementServices,
@@ -971,6 +984,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeNouvelIndiceCyber,
     sauvegardeParcoursUtilisateur,
+    sauvegardeSimulationMigrationReferentiel,
     superviseur,
     supprimeAssociationModelesMesureSpecifiquePourUtilisateurSurService,
     supprimeAutorisation,
