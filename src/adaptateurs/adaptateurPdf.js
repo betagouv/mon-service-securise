@@ -58,13 +58,18 @@ const fusionnePdfs = async (pdfs) => {
   /* eslint-enable no-restricted-syntax */
 };
 
-const genereHtml = async (pugCorps, paramsCorps, nomService) => {
+const genereHtml = async (
+  pugCorps,
+  paramsCorps,
+  nomService,
+  paramsEntete = {}
+) => {
   const piedPage = pug.compileFile('src/pdf/modeles/annexe.piedpage.pug')({
     nomService,
   });
   return Promise.all([
     pug.compileFile(`src/pdf/modeles/${pugCorps}.pug`)(paramsCorps),
-    pug.compileFile(`src/pdf/modeles/${pugCorps}.entete.pug`)(),
+    pug.compileFile(`src/pdf/modeles/${pugCorps}.entete.pug`)(paramsEntete),
   ]).then(([corps, entete]) => ({ corps, entete, piedPage }));
 };
 
@@ -73,6 +78,7 @@ const genereAnnexes = async ({
   donneesMesures,
   donneesRisques,
   referentiel,
+  donneesEntete,
 }) => {
   try {
     const risquesPresents = Object.keys(donneesRisques.risques).length > 0;
@@ -86,7 +92,8 @@ const genereAnnexes = async ({
       genereHtml(
         'annexeMesures',
         { donneesMesures, referentiel },
-        donneesDescription.nomService
+        donneesDescription.nomService,
+        donneesEntete
       ),
       risquesPresents
         ? genereHtml(
