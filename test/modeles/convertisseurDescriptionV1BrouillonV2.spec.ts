@@ -98,4 +98,14 @@ describe('Le convertisseur de description v1 en brouillon v2', () => {
 
     expect(brouillonV2.toJSON().presentation).toBe('Une présentation');
   });
+
+  it("conserve les points d'accès", () => {
+    const descriptionV1 = uneDescriptionValide()
+      .accessiblePar('url A', 'url B')
+      .construis();
+
+    const brouillonV2 = convertisDescriptionV1BrouillonV2(descriptionV1);
+
+    expect(brouillonV2.toJSON().pointsAcces).toEqual(['url A', 'url B']);
+  });
 });
