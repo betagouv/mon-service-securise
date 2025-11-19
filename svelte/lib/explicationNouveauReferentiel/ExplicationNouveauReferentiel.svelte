@@ -80,7 +80,6 @@
             <li>
               • Des ajouts de mesures "simples" basées sur les bonnes pratiques
             </li>
-            <li>• Un alignement avec la directive NIS2</li>
             <li>
               • Une meilleure adaptation au périmètre d’homologation, selon les
               contextes
