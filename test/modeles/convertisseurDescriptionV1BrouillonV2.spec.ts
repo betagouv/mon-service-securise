@@ -109,16 +109,30 @@ describe('Le convertisseur de description v1 en brouillon v2', () => {
     expect(brouillonV2.toJSON().pointsAcces).toEqual(['url A', 'url B']);
   });
 
-  it("convertis la fonctionnalité d'envoi d'email en spécifité du projet", () => {
-    const descriptionV1 = uneDescriptionValide()
-      .avecFonctionnalites('emails')
-      .construis();
+  describe('concernant les fonctionnalites', () => {
+    it("convertis la fonctionnalité d'envoi d'email en spécifité du projet", () => {
+      const descriptionV1 = uneDescriptionValide()
+        .avecFonctionnalites('emails')
+        .construis();
 
-    const brouillonV2 = convertisDescriptionV1BrouillonV2(descriptionV1);
+      const brouillonV2 = convertisDescriptionV1BrouillonV2(descriptionV1);
 
-    expect(brouillonV2.toJSON().specificitesProjet).toEqual([
-      'echangeOuReceptionEmails',
-    ]);
+      expect(brouillonV2.toJSON().specificitesProjet).toEqual([
+        'echangeOuReceptionEmails',
+      ]);
+    });
+
+    it('convertis la fonctionnalité de signature électronique en spécifité du projet', () => {
+      const descriptionV1 = uneDescriptionValide()
+        .avecFonctionnalites('signatureElectronique')
+        .construis();
+
+      const brouillonV2 = convertisDescriptionV1BrouillonV2(descriptionV1);
+
+      expect(brouillonV2.toJSON().specificitesProjet).toEqual([
+        'dispositifDeSignatureElectronique',
+      ]);
+    });
   });
 
   describe('concernant les données à caractère personnel', () => {
