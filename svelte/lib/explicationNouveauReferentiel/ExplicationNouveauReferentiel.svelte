@@ -3,6 +3,8 @@
   import { onMount } from 'svelte';
   import donneesNiveauxDeSecurite from '../niveauxDeSecurite/donneesNiveauxDeSecurite';
   import type { IdNiveauDeSecurite } from '../ui/types';
+
+  let indexEtapeCourante = 0;
   let elementModale: Modale;
 
   onMount(() => {
@@ -107,14 +109,48 @@
     </div>
   </svelte:fragment>
   <svelte:fragment slot="actions">
-    <lab-anssi-bouton
-      titre="J’ai compris 👍"
-      variante="primaire"
-      taille="md"
-      icone=""
-      positionIcone="sans"
-      on:click={termineExplications}
-    />
+    <div class="actions-modale">
+      <div class="conteneur-pagination">
+        {#each new Array(3) as _, idx (idx)}
+          <button
+            class="pagination-etape"
+            class:etape-courante={idx === indexEtapeCourante}
+            on:click={() => (indexEtapeCourante = idx)}
+          ></button>
+        {/each}
+      </div>
+      <div class="conteneur-boutons-actions">
+        {#if indexEtapeCourante > 0}
+          <lab-anssi-bouton
+            titre="Précédent"
+            variante="secondaire"
+            taille="md"
+            icone=""
+            positionIcone="sans"
+            on:click={() => indexEtapeCourante--}
+          />
+        {/if}
+        {#if indexEtapeCourante === 2}
+          <lab-anssi-bouton
+            titre="J’ai compris 👍"
+            variante="primaire"
+            taille="md"
+            icone=""
+            positionIcone="sans"
+            on:click={termineExplications}
+          />
+        {:else}
+          <lab-anssi-bouton
+            titre="Suivant"
+            variante="primaire"
+            taille="md"
+            icone=""
+            positionIcone="sans"
+            on:click={() => indexEtapeCourante++}
+          />
+        {/if}
+      </div>
+    </div>
   </svelte:fragment>
 </Modale>
 
@@ -125,6 +161,45 @@
 
     :global(.contenu-modale) {
       margin-top: 0;
+    }
+  }
+
+  .conteneur-boutons-actions {
+    display: flex;
+    gap: 16px;
+  }
+
+  .actions-modale {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .conteneur-pagination {
+    display: flex;
+    align-items: center;
+
+    .pagination-etape {
+      --taille: 8px;
+      margin: 6px;
+      padding: 0;
+      width: var(--taille);
+      height: var(--taille);
+      max-width: var(--taille);
+      max-height: var(--taille);
+      border-radius: 50%;
+      display: flex;
+      background: var(--argent-brillant-indice-cyber);
+      outline: none;
+      border: none;
+      cursor: pointer;
+
+      &.etape-courante {
+        --taille: 12px;
+        margin: 4px;
+        background: var(--bleu-mise-en-avant);
+      }
     }
   }
 
