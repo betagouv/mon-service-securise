@@ -152,4 +152,24 @@ describe('Le convertisseur de description v1 en brouillon v2', () => {
       }
     );
   });
+
+  it.each([
+    { localisationV1: 'france', localisationV2: 'UE' },
+    { localisationV1: 'unionEuropeenne', localisationV2: 'UE' },
+    { localisationV1: 'autre', localisationV2: 'horsUE' },
+  ])(
+    'convertis la localisation des données',
+    ({ localisationV1, localisationV2 }) => {
+      const descriptionV1 = uneDescriptionValide(creeReferentiel(), false)
+        .avecStatut('enCours')
+        .avecLocalisation(localisationV1)
+        .construis();
+
+      const brouillonV2 = convertisDescriptionV1BrouillonV2(descriptionV1);
+
+      expect(brouillonV2.toJSON().localisationDonneesTraitees).toBe(
+        localisationV2
+      );
+    }
+  );
 });

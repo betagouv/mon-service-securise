@@ -8,6 +8,7 @@ import { UUID } from '../typesBasiques.js';
 import { TypeService } from '../../svelte/lib/creationV2/creationV2.types.js';
 import {
   CategorieDonneesTraitees,
+  LocalisationDonneesTraitees,
   SpecificiteProjet,
   StatutDeploiement,
 } from '../../donneesReferentielMesuresV2.js';
@@ -42,6 +43,18 @@ const convertisStatutDeploiement = (description: DescriptionService) => {
   return correspondanceStatutDeploiement[
     description.statutDeploiement as string
   ];
+};
+
+const convertisLocalisation = (description: DescriptionService) => {
+  const correspondanceLocalisation: Record<
+    string,
+    LocalisationDonneesTraitees
+  > = {
+    france: 'UE',
+    unionEuropeenne: 'UE',
+    autre: 'horsUE',
+  };
+  return correspondanceLocalisation[description.localisationDonnees as string];
 };
 
 const convertisFonctionnalites = (
@@ -94,6 +107,7 @@ export const convertisDescriptionV1BrouillonV2 = (
     pointsAcces: (description.pointsAcces as PointsAcces).descriptions(),
     specificitesProjet: convertisFonctionnalites(description),
     categoriesDonneesTraitees: convertisDonneesCaracterePersonnel(description),
+    localisationDonneesTraitees: convertisLocalisation(description),
   };
 
   if (description.provenanceService === 'achat') {
