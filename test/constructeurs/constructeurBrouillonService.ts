@@ -30,6 +30,10 @@ class ConstructeurBrouillonService {
   construis(): BrouillonService {
     return new BrouillonService(unUUIDRandom(), this.donnees);
   }
+
+  donneesBrouillon() {
+    return this.donnees;
+  }
 }
 
 export const unBrouillonComplet = () => new ConstructeurBrouillonService();

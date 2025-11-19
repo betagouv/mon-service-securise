@@ -20,6 +20,7 @@ import * as depotDonneesModelesMesureSpecifique from './depots/depotDonneesModel
 import { fabriqueAdaptateurChiffrement } from './adaptateurs/fabriqueAdaptateurChiffrement.js';
 import { fabriqueAdaptateurProfilAnssi } from './adaptateurs/fabriqueAdaptateurProfilAnssi.js';
 import * as depotDonneesBrouillonService from './depots/depotDonneesBrouillonService.js';
+import * as depotSimulationMigrationReferentiel from './depots/depotDonneesSimulationMigrationReferentiel.js';
 
 const creeDepot = (config = {}) => {
   const {
@@ -144,6 +145,11 @@ const creeDepot = (config = {}) => {
     adaptateurUUID,
     depotDonneesService: depotServices,
   });
+
+  const depotSimulationMigration =
+    depotSimulationMigrationReferentiel.creeDepot({
+      persistance: adaptateurPersistance,
+    });
 
   const {
     ajouteDescriptionService,
@@ -292,6 +298,9 @@ const creeDepot = (config = {}) => {
     sauvegardeBrouillonService,
   } = depotBrouillonsService;
 
+  const { ajouteSimulationMigrationReferentielSiNecessaire } =
+    depotSimulationMigration;
+
   return {
     accesAutorise,
     accesAutoriseAUneListeDeService,
@@ -307,6 +316,7 @@ const creeDepot = (config = {}) => {
     ajouteRisqueGeneralAService,
     ajouteRisqueSpecifiqueAService,
     ajouteRolesResponsabilitesAService,
+    ajouteSimulationMigrationReferentielSiNecessaire,
     ajouteSiretAuSuperviseur,
     ajouteSuggestionAction,
     associeModeleMesureSpecifiqueAuxServices,

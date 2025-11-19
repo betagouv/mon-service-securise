@@ -18,6 +18,7 @@ const nouvelAdaptateur = (
   donnees.associationModelesMesureSpecifiqueServices ||= [];
   donnees.televersements = { modelesMesureSpecifique: [], services: [] };
   donnees.brouillonsServices ||= [];
+  donnees.simulationsMigrationReferentiel ||= [];
 
   const ajouteTeleversementServices = async (
     idUtilisateur,
@@ -624,6 +625,21 @@ const nouvelAdaptateur = (
     return [...new Set(lesServices.map((s) => s.versionService))];
   };
 
+  const lisSimulationMigrationReferentiel = async (idService) =>
+    donnees.simulationsMigrationReferentiel.find(
+      (s) => s.idService === idService
+    );
+
+  const sauvegardeSimulationMigrationReferentiel = async (
+    idService,
+    donneesSimulation
+  ) => {
+    donnees.simulationsMigrationReferentiel.push({
+      idService,
+      ...donneesSimulation,
+    });
+  };
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -650,6 +666,7 @@ const nouvelAdaptateur = (
     lisNotificationsExpirationHomologationDansIntervalle,
     lisParcoursUtilisateur,
     lisProgressionTeleversementServices,
+    lisSimulationMigrationReferentiel,
     lisSuperviseursConcernes,
     lisTeleversementModelesMesureSpecifique,
     lisTeleversementServices,
@@ -670,6 +687,7 @@ const nouvelAdaptateur = (
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeParcoursUtilisateur,
     sauvegardeService,
+    sauvegardeSimulationMigrationReferentiel,
     serviceExisteAvecHashNom,
     servicesComplets,
     superviseur,
