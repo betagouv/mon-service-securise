@@ -90,7 +90,7 @@
     "eslint-import-resolver-typescript": "^4.3.4",
     "eslint-plugin-svelte": "^2.33.0",
     "expect.js": "^0.3.1",
-    "glob": "^10.3.4",
+    "glob": "^10.5.0",
     "husky": "^8.0.3",
     "jquery": "^3.6.3",
     "jsdom": "^21.1.0",
