@@ -119,6 +119,9 @@ const testeurMss = () => {
         urlBase: () => 'http://localhost:1234',
       }),
       trustProxy: () => 0,
+      featureFlag: () => ({
+        avecDecrireV2: () => false,
+      }),
     };
     adaptateurProtection = {
       protectionCsrf: () => (_requete, _reponse, suite) => suite(),
@@ -234,6 +237,7 @@ const testeurMss = () => {
     adaptateurStatistiques: () => adaptateurStatistiques,
     adaptateurJWT: () => adaptateurJWT,
     adaptateurProfilAnssi: () => adaptateurProfilAnssi,
+    adaptateurEnvironnement: () => adaptateurEnvironnement,
     lecteurDeFormData: () => lecteurDeFormData,
     adaptateurTeleversementServices: () => adaptateurTeleversementServices,
     adaptateurTeleversementModelesMesureSpecifique: () =>

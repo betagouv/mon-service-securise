@@ -2,8 +2,10 @@ import express from 'express';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import { genereGradientConique } from '../../pdf/graphiques/camembert.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
+import { VersionService } from '../../modeles/versionService.js';
 
 const routesConnecteApiServicePdf = ({
+  adaptateurEnvironnement,
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurZip,
@@ -17,11 +19,18 @@ const routesConnecteApiServicePdf = ({
     const donneesMesures = service.vueAnnexePDFMesures().donnees();
     const donneesRisques = service.vueAnnexePDFRisques().donnees();
 
+    const donneesEntete =
+      service.version() === VersionService.v1 &&
+      adaptateurEnvironnement.featureFlag().avecDecrireV2()
+        ? { afficheBadgeAncienReferentiel: true }
+        : {};
+
     return adaptateurPdf.genereAnnexes({
       donneesDescription,
       donneesMesures,
       donneesRisques,
       referentiel,
+      donneesEntete,
     });
   };
 
