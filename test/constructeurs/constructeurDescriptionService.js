@@ -66,6 +66,11 @@ class ConstructeurDescriptionService {
     return this;
   }
 
+  avecDelaiAvantImpactCritique(delai) {
+    this.donnees.delaiAvantImpactCritique = delai;
+    return this;
+  }
+
   avecStatut(statut) {
     this.donnees.statutDeploiement = statut;
     return this;

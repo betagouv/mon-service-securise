@@ -186,4 +186,16 @@ describe('Le convertisseur de description v1 en brouillon v2', () => {
       );
     }
   );
+
+  it('convertis le délai avant impact critique en durée maximale de dysfonctionnement', () => {
+    const descriptionV1 = uneDescriptionValide()
+      .avecDelaiAvantImpactCritique('uneJournee')
+      .construis();
+
+    const brouillonV2 = convertisDescriptionV1BrouillonV2(descriptionV1);
+
+    expect(brouillonV2.toJSON().dureeDysfonctionnementAcceptable).toBe(
+      'moinsDe24h'
+    );
+  });
 });
