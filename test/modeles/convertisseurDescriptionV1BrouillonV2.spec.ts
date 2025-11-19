@@ -88,4 +88,14 @@ describe('Le convertisseur de description v1 en brouillon v2', () => {
 
     expect(brouillonV2.toJSON().statutDeploiement).toBe(statutV2);
   });
+
+  it('conserve la présentation', () => {
+    const descriptionV1 = uneDescriptionValide()
+      .avecPresentation('Une présentation')
+      .construis();
+
+    const brouillonV2 = convertisDescriptionV1BrouillonV2(descriptionV1);
+
+    expect(brouillonV2.toJSON().presentation).toBe('Une présentation');
+  });
 });
