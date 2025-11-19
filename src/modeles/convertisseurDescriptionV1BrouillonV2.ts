@@ -6,7 +6,10 @@ import {
 } from './brouillonService.js';
 import { UUID } from '../typesBasiques.js';
 import { TypeService } from '../../svelte/lib/creationV2/creationV2.types.js';
-import { StatutDeploiement } from '../../donneesReferentielMesuresV2.js';
+import {
+  SpecificiteProjet,
+  StatutDeploiement,
+} from '../../donneesReferentielMesuresV2.js';
 import PointsAcces from './pointsAcces.js';
 
 const convertisTypesService = (description: DescriptionService) => {
@@ -40,6 +43,15 @@ const convertisStatutDeploiement = (description: DescriptionService) => {
   ];
 };
 
+const convertisFonctionnalites = (
+  description: DescriptionService
+): SpecificiteProjet[] => {
+  const fonctionnalitesV1 = description.fonctionnalites as string[] | undefined;
+  return fonctionnalitesV1?.includes('emails')
+    ? ['echangeOuReceptionEmails']
+    : [];
+};
+
 export const convertisDescriptionV1BrouillonV2 = (
   description: DescriptionService
 ): BrouillonService => {
@@ -50,6 +62,7 @@ export const convertisDescriptionV1BrouillonV2 = (
     statutDeploiement: convertisStatutDeploiement(description),
     presentation: description.presentation as string,
     pointsAcces: (description.pointsAcces as PointsAcces).descriptions(),
+    specificitesProjet: convertisFonctionnalites(description),
   };
   if (description.provenanceService === 'achat') {
     donnees.typeHebergement = 'saas';
