@@ -61,9 +61,19 @@ const convertisFonctionnalites = (
   description: DescriptionService
 ): SpecificiteProjet[] => {
   const fonctionnalitesV1 = description.fonctionnalites as string[] | undefined;
-  return fonctionnalitesV1?.includes('emails')
-    ? ['echangeOuReceptionEmails']
-    : [];
+  const correspondanceFonctionnalites: Record<string, SpecificiteProjet> = {
+    emails: 'echangeOuReceptionEmails',
+    signatureElectronique: 'dispositifDeSignatureElectronique',
+  };
+  const specificitesProjet: SpecificiteProjet[] = [];
+  Object.entries(correspondanceFonctionnalites).forEach(
+    ([donneeV1, equivalenceV2]) => {
+      if (fonctionnalitesV1?.includes(donneeV1)) {
+        specificitesProjet.push(equivalenceV2);
+      }
+    }
+  );
+  return specificitesProjet;
 };
 
 const convertisDonneesCaracterePersonnel = (
