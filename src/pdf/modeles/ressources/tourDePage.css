@@ -25,6 +25,20 @@ html {
   padding: 0;
 }
 
+.entete .conteneur-titre-entete-annexe {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.entete .conteneur-titre-entete-annexe .badge-ancien-referentiel {
+  width: fit-content;
+  height: 12px;
+  transform: translateY(2px);
+  content: var(--badge-ancien-referentiel);
+}
+
 .entete .sous-titre {
   font-size: 9px;
   color: #5e5e5e;
