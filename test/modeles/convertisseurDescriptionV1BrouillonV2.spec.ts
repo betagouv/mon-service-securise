@@ -1,5 +1,6 @@
 import uneDescriptionValide from '../constructeurs/constructeurDescriptionService.js';
 import { convertisDescriptionV1BrouillonV2 } from '../../src/modeles/convertisseurDescriptionV1BrouillonV2.js';
+import { creeReferentiel } from '../../src/referentiel.js';
 
 describe('Le convertisseur de description v1 en brouillon v2', () => {
   it('recopie tel quel le nom de service', () => {
@@ -35,6 +36,7 @@ describe('Le convertisseur de description v1 en brouillon v2', () => {
         'applicationMobile',
       ]);
     });
+
     it('devient serviceEnLigne pour le type siteInternet avec une gestion de compte', () => {
       const descriptionV1 = uneDescriptionValide()
         .avecTypes(['siteInternet'])
@@ -45,6 +47,7 @@ describe('Le convertisseur de description v1 en brouillon v2', () => {
 
       expect(brouillonV2.toJSON().typeService).toEqual(['serviceEnLigne']);
     });
+
     it('devient portailInformation pour le type siteInternet sans gestion de compte', () => {
       const descriptionV1 = uneDescriptionValide()
         .avecTypes(['siteInternet'])
@@ -69,5 +72,20 @@ describe('Le convertisseur de description v1 en brouillon v2', () => {
       'administrationTechnique',
       'developpementLogiciel',
     ]);
+  });
+
+  it.each([
+    { statutV1: 'enProjet', statutV2: 'enProjet' },
+    { statutV1: 'enCours', statutV2: 'enCours' },
+    { statutV1: 'enLigne', statutV2: 'enLigne' },
+  ])('conserve le statut $statutV1 du service V1', ({ statutV1, statutV2 }) => {
+    const descriptionV1 = uneDescriptionValide(creeReferentiel(), false)
+      .avecStatut(statutV1)
+      .avecLocalisation('france')
+      .construis();
+
+    const brouillonV2 = convertisDescriptionV1BrouillonV2(descriptionV1);
+
+    expect(brouillonV2.toJSON().statutDeploiement).toBe(statutV2);
   });
 });
