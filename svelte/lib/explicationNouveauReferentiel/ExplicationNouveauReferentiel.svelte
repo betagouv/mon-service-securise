@@ -4,7 +4,7 @@
   import donneesNiveauxDeSecurite from '../niveauxDeSecurite/donneesNiveauxDeSecurite';
   import type { IdNiveauDeSecurite } from '../ui/types';
 
-  let indexEtapeCourante = 0;
+  let indexEtapeCourante = 1;
   let elementModale: Modale;
 
   onMount(() => {
@@ -52,61 +52,121 @@
       hasIcon
       icon="flashlight-fill"
     />
-    <h4>Mise en place d’un nouveau référentiel de mesures</h4>
-    <div class="contenu-modale">
-      <p>
-        <b
-          >Le formulaire d’ajout de service a été mis à jour avec de nouvelles
-          questions. Les mesures associées à chaque besoin de sécurité ont
-          également été évoluées : certaines ont été ajoutées, d'autres
-          modifiées ou supprimées.</b
-        >
-      </p>
-      <div>
-        <p><b>Les principaux axes de cette mise à jour :</b></p>
-        <ul>
-          <li>• Des mesures séparées pour une analyse plus fine</li>
-          <li>
-            • Des ajouts de mesures "simples" basées sur les bonnes pratiques
-          </li>
-          <li>• Un alignement avec la directive NIS2</li>
-          <li>
-            • Une meilleure adaptation au périmètre d’homologation, selon les
-            contextes
-          </li>
-          <li>
-            • Un renforcement du principe de proportionnalité, pour cibler les
-            mesures là où les risques sont les plus élevés.
-          </li>
-        </ul>
-      </div>
-      <div>
-        <h5>Évolution du nombre de mesures</h5>
-        <p class="petit">
-          Le nombre affiché pour chaque besoin de sécurité est le maximum
-          possible (par exemple si votre service présente un grand nombre de
-          caractéristiques)
+    {#if indexEtapeCourante === 0}
+      <h4>Mise en place d’un nouveau référentiel de mesures</h4>
+      <div class="contenu-modale">
+        <p>
+          <b
+            >Le formulaire d’ajout de service a été mis à jour avec de nouvelles
+            questions. Les mesures associées à chaque besoin de sécurité ont
+            également été évoluées : certaines ont été ajoutées, d'autres
+            modifiées ou supprimées.</b
+          >
         </p>
-      </div>
-      <div class="conteneur-niveaux-securite">
-        {#each Object.values(donneesNiveauxDeSecurite) as niveau (niveau.id)}
-          {@const id = niveau.id}
-          {@const donnees = comparaisonNombresMesures[id]}
-          <div class="carte-niveau-securite">
-            <h6>{niveau.nom}</h6>
-            <div>
-              <p>Ancien référentiel: {donnees.ancienReferentiel}</p>
-              <p>Nouveau référentiel: {donnees.nouveauReferentiel}</p>
-              <p class="mis-en-avant">{donnees.difference}</p>
+        <div>
+          <p><b>Les principaux axes de cette mise à jour :</b></p>
+          <ul>
+            <li>• Des mesures séparées pour une analyse plus fine</li>
+            <li>
+              • Des ajouts de mesures "simples" basées sur les bonnes pratiques
+            </li>
+            <li>• Un alignement avec la directive NIS2</li>
+            <li>
+              • Une meilleure adaptation au périmètre d’homologation, selon les
+              contextes
+            </li>
+            <li>
+              • Un renforcement du principe de proportionnalité, pour cibler les
+              mesures là où les risques sont les plus élevés.
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h5>Évolution du nombre de mesures</h5>
+          <p class="petit">
+            Le nombre affiché pour chaque besoin de sécurité est le maximum
+            possible (par exemple si votre service présente un grand nombre de
+            caractéristiques)
+          </p>
+        </div>
+        <div class="conteneur-niveaux-securite">
+          {#each Object.values(donneesNiveauxDeSecurite) as niveau (niveau.id)}
+            {@const id = niveau.id}
+            {@const donnees = comparaisonNombresMesures[id]}
+            <div class="carte-niveau-securite">
+              <h6>{niveau.nom}</h6>
+              <div>
+                <p>Ancien référentiel: {donnees.ancienReferentiel}</p>
+                <p>Nouveau référentiel: {donnees.nouveauReferentiel}</p>
+                <p class="mis-en-avant">{donnees.difference}</p>
+              </div>
+              <img
+                src="/statique/assets/images/niveauxSecurite/{id}.svg"
+                alt="Illustration du niveau de sécurité {niveau.nom}"
+              />
             </div>
-            <img
-              src="/statique/assets/images/niveauxSecurite/{id}.svg"
-              alt="Illustration du niveau de sécurité {niveau.nom}"
-            />
-          </div>
-        {/each}
+          {/each}
+        </div>
       </div>
-    </div>
+    {:else if indexEtapeCourante === 1}
+      <h4>🎯 Choisissez le référentiel à utiliser</h4>
+      <div class="contenu-modale">
+        <p>
+          <b
+            >Suite à l’évolution du formulaire d'ajout de service et des mesures
+            de sécurité proposées, vous avez désormais la possibilité de :</b
+          >
+        </p>
+        <div>
+          <p>
+            <b
+              >🆕 Tester le nouveau référentiel pour identifier les changements
+              qu’il implique</b
+            ><br />
+
+            Vous pouvez simuler le passage au nouveau référentiel :
+          </p>
+          <ul>
+            <li>
+              • depuis votre tableau de bord, via le bouton “Simuler le
+              référentiel 2025”,
+            </li>
+            <li>
+              • ou directement depuis votre service, en utilisant le bandeau
+              “Passer au nouveau référentiel”.
+            </li>
+          </ul>
+        </div>
+        <p>
+          👉 Cette simulation vous permet de visualiser les changements et les
+          impacts avant de faire le choix d’utiliser le nouveau référentiel.<br
+          />
+          Les données déjà renseignées seront automatiquement reprises (questions
+          inchangées dans l’ajout d’un service, mesures de sécurité, statuts, commentaires,
+          plans d'action, etc.).
+        </p>
+
+        <p>
+          <b>🕒 Continuer avec l’ancien référentiel</b><br />Vous pouvez
+          également choisir de conserver l’ancien référentiel.<br />Le passage
+          au nouveau référentiel reste possible à tout moment, via le même
+          bouton, depuis votre tableau de bord ou l’un de vos services.
+        </p>
+
+        <img
+          src="/statique/assets/images/explicationNouveauReferentiel/tableauDeBord.png"
+          alt="Illustration de l'action recommandée dans le tableau de bord"
+        />
+        <img
+          src="/statique/assets/images/explicationNouveauReferentiel/simulation.png"
+          alt="Illustration de la simulation de passage au nouveau référentiel au sein d'un service"
+        />
+        <div class="citation">
+          <p>Ce choix s’applique uniquement à ce service.</p>
+          <p>Vous pourrez effectuer un autre choix pour vos autres services.</p>
+        </div>
+      </div>
+    {/if}
   </svelte:fragment>
   <svelte:fragment slot="actions">
     <div class="actions-modale">
@@ -215,6 +275,18 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+    padding-bottom: 24px;
+
+    .citation {
+      padding-left: 36px;
+      margin-left: 32px;
+      border-left: 4px solid #6a6af4;
+    }
+
+    img {
+      max-width: 700px;
+      align-self: center;
+    }
 
     p {
       font-size: 1rem;
@@ -234,6 +306,7 @@
       font-size: 1rem;
       line-height: 1.5rem;
       list-style-type: none;
+      color: #3a3a3a;
     }
 
     h5 {
@@ -246,7 +319,6 @@
       display: flex;
       flex-direction: row;
       gap: 20px;
-      margin-bottom: 24px;
 
       .carte-niveau-securite {
         display: flex;
