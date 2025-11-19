@@ -120,4 +120,36 @@ describe('Le convertisseur de description v1 en brouillon v2', () => {
       'echangeOuReceptionEmails',
     ]);
   });
+
+  describe('concernant les données à caractère personnel', () => {
+    it.each([
+      { donneeV1: 'contact', categorieV2: 'donneesDIdentite' },
+      { donneeV1: 'identite', categorieV2: 'donneesDIdentite' },
+      { donneeV1: 'document', categorieV2: 'documentsIdentifiants' },
+      {
+        donneeV1: 'situation',
+        categorieV2: 'donneesSituationFamilialeEconomiqueFinanciere',
+      },
+      { donneeV1: 'banque', categorieV2: 'documentsRHSensibles' },
+      {
+        donneeV1: 'mineurs',
+        categorieV2: 'donneesCaracterePersonnelPersonneARisque',
+      },
+      { donneeV1: 'sensibiliteParticuliere', categorieV2: 'donneesSensibles' },
+      { donneeV1: 'sensibiliteParticuliere', categorieV2: 'donneesSensibles' },
+    ])(
+      'convertis les données $donneeV1 en $categorieV2',
+      ({ donneeV1, categorieV2 }) => {
+        const descriptionV1 = uneDescriptionValide()
+          .avecDonneesCaracterePersonnel([donneeV1])
+          .construis();
+
+        const brouillonV2 = convertisDescriptionV1BrouillonV2(descriptionV1);
+
+        expect(brouillonV2.toJSON().categoriesDonneesTraitees).toEqual([
+          categorieV2,
+        ]);
+      }
+    );
+  });
 });
