@@ -54,6 +54,40 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
 
       expect(adaptateurPdfAppele).to.be(true);
     });
+
+    describe("concernant l'affichage du badge 'ancien référentiel'", () => {
+      it("ne l'affiche pas par défaut", async () => {
+        let donneesEnteteRecu;
+        testeur.adaptateurPdf().genereAnnexes = async ({ donneesEntete }) => {
+          donneesEnteteRecu = donneesEntete;
+          return 'Pdf annexes';
+        };
+
+        await testeur.get('/api/service/456/pdf/annexes.pdf');
+
+        expect(donneesEnteteRecu).to.eql({});
+      });
+
+      it('affiche le badge si le service est V1 est que le feature flag est activé', async () => {
+        const serviceARenvoyer = unService().construis();
+        testeur.middleware().reinitialise({ serviceARenvoyer });
+        testeur.adaptateurEnvironnement().featureFlag = () => ({
+          avecDecrireV2: () => true,
+        });
+
+        let donneesEnteteRecu;
+        testeur.adaptateurPdf().genereAnnexes = async ({ donneesEntete }) => {
+          donneesEnteteRecu = donneesEntete;
+          return 'Pdf annexes';
+        };
+
+        await testeur.get('/api/service/456/pdf/annexes.pdf');
+
+        expect(donneesEnteteRecu).to.eql({
+          afficheBadgeAncienReferentiel: true,
+        });
+      });
+    });
   });
 
   describe('quand requête GET sur `/api/service/:id/pdf/dossierDecision.pdf`', () => {
