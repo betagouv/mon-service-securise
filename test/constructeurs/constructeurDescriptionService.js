@@ -42,6 +42,11 @@ class ConstructeurDescriptionService {
     return this;
   }
 
+  avecFonctionnalites(fonctionnalites) {
+    this.donnees.fonctionnalites = fonctionnalites;
+    return this;
+  }
+
   deLOrganisation(organisationResponsable) {
     this.donnees.organisationResponsable = organisationResponsable;
     return this;
