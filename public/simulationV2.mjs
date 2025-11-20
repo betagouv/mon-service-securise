@@ -1,3 +1,8 @@
+import lisDonneesPartagees from './modules/donneesPartagees.mjs';
+
 $(() => {
-  document.body.dispatchEvent(new CustomEvent('svelte-recharge-simulation-v2'));
+  const { idService } = lisDonneesPartagees('donnees-id-service');
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-simulation-v2', { detail: { idService } })
+  );
 });

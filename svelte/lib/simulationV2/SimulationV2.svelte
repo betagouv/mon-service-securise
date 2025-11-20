@@ -7,6 +7,9 @@
     toutesEtapesSimulation,
     toutesEtapesSimulationModeRapide,
   } from '../creationV2/etapes/toutesEtapes';
+  import type { UUID } from '../typesBasiquesSvelte';
+
+  export let idService: UUID;
 
   let enCoursDeChargement = false;
 
