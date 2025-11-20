@@ -2,3 +2,11 @@ extends ../mssConnecte
 
 block title
   title Actualiser votre service | MonServiceSécurisé
+
+block append scripts
+  +composantSvelte('simulationV2.js')
+  script(type = 'module', src = '/statique/simulationV2.mjs')
+
+
+block main
+  #simulation-v2
