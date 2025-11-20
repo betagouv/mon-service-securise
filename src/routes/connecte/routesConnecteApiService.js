@@ -47,6 +47,7 @@ import routesConnecteApiServiceActivitesMesure from './routesConnecteApiServiceA
 import MesureSpecifique from '../../modeles/mesureSpecifique.js';
 import RisqueSpecifique from '../../modeles/risqueSpecifique.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
+import routesConnecteApiSimulationMigrationReferentiel from './routesConnecteApiSimulationMigrationReferentiel.ts';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -1021,6 +1022,12 @@ const routesConnecteApiService = ({
         }
       }
     }
+  );
+
+  routes.use(
+    routesConnecteApiSimulationMigrationReferentiel({
+      depotDonnees,
+    })
   );
 
   return routes;
