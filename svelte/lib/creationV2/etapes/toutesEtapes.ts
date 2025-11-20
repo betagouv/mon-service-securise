@@ -20,6 +20,7 @@ import EtapeNiveauSecurite from './EtapeNiveauSecurite.svelte';
 import EtapeSimulationChangementsAVenir from '../../simulationV2/etapes/EtapeSimulationChangementsAVenir.svelte';
 import EtapeSimulationEnModeRapide from '../../simulationV2/etapes/EtapeSimulationEnModeRapide.svelte';
 import EtapeResumeDuServiceEnSimulation from '../../simulationV2/etapes/EtapeResumeDuServiceEnSimulation.svelte';
+import EtapeSimulationNiveauSecurite from '../../simulationV2/etapes/EtapeSimulationNiveauSecurite.svelte';
 
 type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
 
@@ -276,7 +277,7 @@ export const toutesEtapesSimulationModeRapide: Array<EtapeDuWizard> = [
     pleinePage: true,
     questions: [
       {
-        composant: EtapeNiveauSecurite,
+        composant: EtapeSimulationNiveauSecurite,
         explications: [],
         avecAvanceRapide: false,
         clesPropriete: [],
@@ -319,7 +320,7 @@ export const toutesEtapesSimulation: Array<EtapeDuWizard> = [
     pleinePage: true,
     questions: [
       {
-        composant: EtapeNiveauSecurite,
+        composant: EtapeSimulationNiveauSecurite,
         explications: [],
         avecAvanceRapide: false,
         clesPropriete: [],
