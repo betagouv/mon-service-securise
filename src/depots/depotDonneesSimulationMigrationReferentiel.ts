@@ -10,6 +10,10 @@ import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.inte
 import { ErreurSimulationInexistante } from '../erreurs.js';
 
 export type DepotDonneesSimulationMigrationReferentiel = {
+  sauvegardeSimulationMigrationReferentiel: (
+    idService: UUID,
+    donnees: BrouillonService
+  ) => Promise<void>;
   ajouteSimulationMigrationReferentielSiNecessaire: (
     service: Service
   ) => Promise<void>;
@@ -35,6 +39,19 @@ const creeDepot = ({
   persistance: PersistanceSimulationMigrationReferentiel;
   adaptateurChiffrement: AdaptateurChiffrement;
 }): DepotDonneesSimulationMigrationReferentiel => {
+  const sauvegardeSimulationMigrationReferentiel = async (
+    idService: UUID,
+    simulation: BrouillonService
+  ) => {
+    const donneesEnClair = simulation.donneesAPersister();
+    const donneesChiffrees =
+      await adaptateurChiffrement.chiffre(donneesEnClair);
+    await persistance.sauvegardeSimulationMigrationReferentiel(
+      idService,
+      donneesChiffrees
+    );
+  };
+
   const ajouteSimulationMigrationReferentielSiNecessaire = async (
     service: Service
   ) => {
@@ -43,17 +60,11 @@ const creeDepot = ({
     );
     if (existante) return;
 
-    const projection = convertisDescriptionV1BrouillonV2(
+    const simulation = convertisDescriptionV1BrouillonV2(
       service.descriptionService as DescriptionService
     );
 
-    const donneesEnClair = projection.donneesAPersister();
-    const donneesChiffrees =
-      await adaptateurChiffrement.chiffre(donneesEnClair);
-    await persistance.sauvegardeSimulationMigrationReferentiel(
-      service.id,
-      donneesChiffrees
-    );
+    await sauvegardeSimulationMigrationReferentiel(service.id, simulation);
   };
 
   const lisSimulationMigrationReferentiel = async (idService: UUID) => {
@@ -70,6 +81,7 @@ const creeDepot = ({
   };
 
   return {
+    sauvegardeSimulationMigrationReferentiel,
     ajouteSimulationMigrationReferentielSiNecessaire,
     lisSimulationMigrationReferentiel,
   };

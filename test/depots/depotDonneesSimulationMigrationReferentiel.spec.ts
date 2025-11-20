@@ -111,4 +111,36 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       ).rejects.toThrowError(ErreurSimulationInexistante);
     });
   });
+
+  describe("sur demande de sauvegarde d'une simulation", () => {
+    it('sauvegarde la simulation en chiffrant les données', async () => {
+      const idDuService = unUUID('s');
+      const leDepot = () =>
+        DepotDonneesSimulationMigrationReferentiel.creeDepot({
+          adaptateurChiffrement,
+          persistance,
+        });
+
+      let idRecu: UUID;
+      let donneesRecues;
+      persistance.sauvegardeSimulationMigrationReferentiel = async (
+        idService: UUID,
+        donnees
+      ) => {
+        idRecu = idService;
+        donneesRecues = donnees;
+      };
+
+      const simulation = unBrouillonComplet().construis();
+
+      await leDepot().sauvegardeSimulationMigrationReferentiel(
+        idDuService,
+        simulation
+      );
+
+      expect(idRecu!).toBe(unUUID('s'));
+      expect(donneesRecues!.chiffre).toBe(true);
+      expect(donneesRecues!.coffreFort.nomService).toBe('Service A');
+    });
+  });
 });
