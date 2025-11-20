@@ -9,7 +9,9 @@
   } from '../creationV2/etapes/toutesEtapes';
   import type { UUID } from '../typesBasiquesSvelte';
   import { leBrouillon } from '../creationV2/etapes/brouillon.store';
-  import { lisSimulation } from './simulationv2.api';
+  import { lisSimulation, metsAJourSimulation } from './simulationv2.api';
+  import type { BrouillonServiceV2 } from '../creationV2/creationV2.types';
+  import { etapeCourante } from '../creationV2/etapes/etapeCourante.store';
 
   export let idService: UUID;
 
@@ -26,7 +28,21 @@
     navigationStore.reprendreEditionDe($leBrouillon, false);
   });
 
-  const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {};
+  const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {
+    await metsAJourSimulation(idService, e.detail);
+
+    const nomChampModifie = Object.keys(
+      e.detail
+    )[0] as keyof BrouillonServiceV2;
+    const onEstToujoursSurLaQuestionQuiAEnvoyeLaMaj =
+      $etapeCourante.questionCourante.clesPropriete.includes(nomChampModifie);
+    // si on n'est plus sur la question mise à jour, c'est que "suivant()" a déjà été appelé
+    if (
+      onEstToujoursSurLaQuestionQuiAEnvoyeLaMaj &&
+      $etapeCourante.questionCourante.avecAvanceRapide
+    )
+      navigationStore.suivant();
+  };
 
   const finalise = async () => {};
 </script>
