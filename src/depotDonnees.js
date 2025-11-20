@@ -299,8 +299,10 @@ const creeDepot = (config = {}) => {
     sauvegardeBrouillonService,
   } = depotBrouillonsService;
 
-  const { ajouteSimulationMigrationReferentielSiNecessaire } =
-    depotSimulationMigration;
+  const {
+    ajouteSimulationMigrationReferentielSiNecessaire,
+    lisSimulationMigrationReferentiel,
+  } = depotSimulationMigration;
 
   return {
     accesAutorise,
@@ -345,6 +347,7 @@ const creeDepot = (config = {}) => {
     lisNotificationsExpirationHomologationEnDate,
     lisParcoursUtilisateur,
     lisPourcentageProgressionTeleversementServices,
+    lisSimulationMigrationReferentiel,
     lisSuperviseurs,
     lisTeleversementModelesMesureSpecifique,
     lisTeleversementServices,
