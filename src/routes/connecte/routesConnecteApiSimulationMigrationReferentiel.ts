@@ -10,6 +10,7 @@ import {
 } from '../../modeles/autorisations/gestionDroits.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import { reglesValidationBrouillonServiceV2 } from './routesConnecte.schema.js';
+import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;
@@ -97,6 +98,30 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
       }
 
       reponse.sendStatus(200);
+    }
+  );
+
+  routes.get(
+    '/:id/simulation-migration-referentiel/niveauSecuriteRequis',
+    valideParams(z.strictObject({ id: z.uuidv4() })),
+    middleware.trouveService({ [DECRIRE]: LECTURE }),
+    async (requete, reponse, suite) => {
+      const { id } = requete.params;
+      try {
+        const simulation = await depotDonnees.lisSimulationMigrationReferentiel(
+          id as UUID
+        );
+
+        const niveauRequis = DescriptionServiceV2.niveauSecuriteMinimalRequis(
+          simulation.pourCalculNiveauDeSecurite()
+        );
+
+        return reponse.json({ niveauDeSecuriteMinimal: niveauRequis });
+      } catch (e) {
+        if (e instanceof ErreurSimulationInexistante)
+          return reponse.sendStatus(404);
+        return suite(e);
+      }
     }
   );
 
