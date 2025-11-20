@@ -4,11 +4,17 @@
   import { resume } from '../../creationV2/etapes/resume/resume.store';
   import BrouillonDeServiceEditable from '../../creationV2/etapes/BrouillonDeServiceEditable.svelte';
   import { leBrouillon } from '../../creationV2/etapes/brouillon.store';
+  import type { MiseAJour } from '../../creationV2/creationV2.api';
+  import { metsAJourSimulation } from '../simulationv2.api';
 
   let lectureSeule = true;
 
   export let estComplete: boolean;
   $: estComplete = $brouillonEstCompletStore;
+
+  const metsAJour = async (e: CustomEvent<MiseAJour>) => {
+    await metsAJourSimulation($leBrouillon.id!, e.detail);
+  };
 </script>
 
 {#if lectureSeule}
@@ -29,7 +35,7 @@
     <BrouillonDeServiceEditable
       bind:donnees={$leBrouillon}
       seulementNomServiceEditable={false}
-      on:champModifie={async (e) => {}}
+      on:champModifie={metsAJour}
     />
   </div>
 {/if}
