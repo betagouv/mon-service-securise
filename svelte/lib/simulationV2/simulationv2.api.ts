@@ -1,6 +1,8 @@
 import type { UUID } from '../typesBasiquesSvelte';
 import type { BrouillonIncomplet } from '../creationV2/creationV2.types';
 import type { MiseAJour } from '../creationV2/creationV2.api';
+import type { IdNiveauDeSecurite } from '../ui/types';
+import type { NiveauSecurite } from '../../../donneesReferentielMesuresV2';
 
 type Simulation = BrouillonIncomplet;
 
@@ -24,3 +26,12 @@ export const metsAJourSimulation = async (
     );
   }
 };
+
+export const niveauSecuriteMinimalRequis = async (
+  idService: UUID
+): Promise<IdNiveauDeSecurite> =>
+  (
+    await axios.get<{ niveauDeSecuriteMinimal: NiveauSecurite }>(
+      `/api/service/${idService}/simulation-migration-referentiel/niveauSecuriteRequis`
+    )
+  ).data.niveauDeSecuriteMinimal as IdNiveauDeSecurite;
