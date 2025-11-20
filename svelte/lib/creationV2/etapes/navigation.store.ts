@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 import {
   type EtapeDuWizard,
   toutesEtapes,
@@ -11,6 +11,10 @@ type EtatNavigation = {
   questionEnCours: number;
   modeRapide: boolean;
   toutesEtapes: Array<EtapeDuWizard>;
+  configuration: {
+    toutesEtapesModeRapide: Array<EtapeDuWizard>;
+    toutesEtapesModeNormal: Array<EtapeDuWizard>;
+  };
 };
 
 const etatNavigation = writable<EtatNavigation>({
@@ -18,6 +22,10 @@ const etatNavigation = writable<EtatNavigation>({
   questionEnCours: 0,
   modeRapide: false,
   toutesEtapes: toutesEtapes,
+  configuration: {
+    toutesEtapesModeRapide: toutesEtapesModeRapide,
+    toutesEtapesModeNormal: toutesEtapes,
+  },
 });
 
 type NavigationStore = {
@@ -30,6 +38,10 @@ type NavigationStore = {
     modeRapide: boolean
   ) => void;
   changeModeEdition: (modeRapide: boolean) => void;
+  chargeConfigurationEtapes: (
+    etapesModeNormal: Array<EtapeDuWizard>,
+    etapesModeRapide: Array<EtapeDuWizard>
+  ) => void;
 };
 
 export const navigationStore: NavigationStore = {
@@ -87,6 +99,21 @@ export const navigationStore: NavigationStore = {
       };
     });
   },
+  chargeConfigurationEtapes: (
+    etapesModeNormal: Array<EtapeDuWizard>,
+    etapesModeRapide: Array<EtapeDuWizard>
+  ) => {
+    etatNavigation.update((etat) => {
+      return {
+        ...etat,
+        toutesEtapes: etat.modeRapide ? etapesModeRapide : etapesModeNormal,
+        configuration: {
+          toutesEtapesModeNormal: etapesModeNormal,
+          toutesEtapesModeRapide: etapesModeRapide,
+        },
+      };
+    });
+  },
   reprendreEditionDe: (
     donneesBrouillon: BrouillonServiceV2,
     modeRapide: boolean
@@ -94,7 +121,10 @@ export const navigationStore: NavigationStore = {
     let questionPrecedente = { etape: 0, question: 0 };
     let cibleTrouvee = false;
 
-    const etapesDuWizard = modeRapide ? toutesEtapesModeRapide : toutesEtapes;
+    const configuration = get(etatNavigation).configuration;
+    const etapesDuWizard = modeRapide
+      ? configuration.toutesEtapesModeRapide
+      : configuration.toutesEtapesModeNormal;
 
     for (let e = 0; e < etapesDuWizard.length; e++) {
       const etape = etapesDuWizard[e];
@@ -112,7 +142,8 @@ export const navigationStore: NavigationStore = {
       if (cibleTrouvee) break;
     }
 
-    etatNavigation.update(() => ({
+    etatNavigation.update((etat) => ({
+      ...etat,
       etapeEnCours: questionPrecedente.etape,
       questionEnCours: questionPrecedente.question,
       modeRapide,
