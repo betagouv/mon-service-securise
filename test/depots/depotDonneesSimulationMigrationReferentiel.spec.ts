@@ -2,11 +2,12 @@ import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPe
 import * as DepotDonneesSimulationMigrationReferentiel from '../../src/depots/depotDonneesSimulationMigrationReferentiel.js';
 import * as AdaptateurPersistanceMemoire from '../../src/adaptateurs/adaptateurPersistanceMemoire.js';
 import { unBrouillonComplet } from '../constructeurs/constructeurBrouillonService.js';
-import { unUUID } from '../constructeurs/UUID.js';
+import { unUUID, unUUIDRandom } from '../constructeurs/UUID.js';
 import { unService } from '../constructeurs/constructeurService.js';
 import { UUID } from '../../src/typesBasiques.js';
 import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.js';
 import { AdaptateurChiffrement } from '../../src/adaptateurs/adaptateurChiffrement.interface.js';
+import { ErreurSimulationInexistante } from '../../src/erreurs.js';
 
 describe('Le dépôt de données des simulations de migration du référentiel v2', () => {
   let persistance: ReturnType<
@@ -72,6 +73,42 @@ describe('Le dépôt de données des simulations de migration du référentiel v
 
       await leDepot().ajouteSimulationMigrationReferentielSiNecessaire(service);
       expect(peristanceAppelee).toBe(false);
+    });
+  });
+
+  describe("sur demande de lecture d'une simulation", () => {
+    it('retourne un brouillon en déchiffrant les données', async () => {
+      const idService = unUUID('1');
+
+      persistance = unePersistanceMemoire()
+        .ajouteUneSimulationMigrationReferentiel(idService, {
+          chiffre: true,
+          coffreFort: unBrouillonComplet().donneesBrouillon(),
+        })
+        .construis();
+
+      const leDepot = () =>
+        DepotDonneesSimulationMigrationReferentiel.creeDepot({
+          adaptateurChiffrement,
+          persistance,
+        });
+
+      const simulation =
+        await leDepot().lisSimulationMigrationReferentiel(idService);
+
+      expect(simulation!.toJSON().nomService).toBe('Service A');
+    });
+
+    it("jette une erreur si la simulation n'existe pas", async () => {
+      const leDepot = () =>
+        DepotDonneesSimulationMigrationReferentiel.creeDepot({
+          adaptateurChiffrement,
+          persistance,
+        });
+
+      await expect(
+        leDepot().lisSimulationMigrationReferentiel(unUUIDRandom())
+      ).rejects.toThrowError(ErreurSimulationInexistante);
     });
   });
 });

@@ -636,7 +636,7 @@ const nouvelAdaptateur = (
   ) => {
     donnees.simulationsMigrationReferentiel.push({
       idService,
-      ...donneesSimulation,
+      donnees: donneesSimulation,
     });
   };
 

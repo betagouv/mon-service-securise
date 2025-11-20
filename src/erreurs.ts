@@ -113,6 +113,7 @@ class ErreurBrouillonInexistant extends ErreurModele {}
 
 class ErreurMoteurDeReglesV2 extends ErreurModele {}
 class ErreurVersionServiceIncompatible extends ErreurModele {}
+class ErreurSimulationInexistante extends ErreurModele {}
 /* eslint-enable max-classes-per-file */
 
 export {
@@ -162,6 +163,7 @@ export {
   ErreurRisqueInconnu,
   ErreurSelManquant,
   ErreurServiceInexistant,
+  ErreurSimulationInexistante,
   ErreurStatutDeploiementInvalide,
   ErreurStatutMesureInvalide,
   ErreurStatutMesureManquant,

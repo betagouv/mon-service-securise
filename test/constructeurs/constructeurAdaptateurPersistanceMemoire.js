@@ -93,7 +93,10 @@ class ConstructeurAdaptateurPersistanceMemoire {
   }
 
   ajouteUneSimulationMigrationReferentiel(idService, simulation) {
-    this.simulationsMigrationReferentiel.push({ ...simulation, idService });
+    this.simulationsMigrationReferentiel.push({
+      donnees: simulation,
+      idService,
+    });
     return this;
   }
 
