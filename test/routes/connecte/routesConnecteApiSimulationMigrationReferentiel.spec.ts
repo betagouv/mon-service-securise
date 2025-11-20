@@ -12,6 +12,7 @@ import {
 } from '../../../src/modeles/autorisations/gestionDroits.js';
 import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 import { UUID } from '../../../src/typesBasiques.js';
+import { unBrouillonComplet } from '../../constructeurs/constructeurBrouillonService.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;
@@ -341,4 +342,55 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
       });
     }
   );
+
+  describe('quand requête GET sur `/api/service/:id/simulation-migration-referentiel/niveauSecuriteRequis`', () => {
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: DECRIRE }],
+          testeur.app(),
+          {
+            method: 'get',
+            url: `/api/service/${unUUIDRandom()}/simulation-migration-referentiel/niveauSecuriteRequis`,
+          }
+        );
+    });
+
+    it('retourne le niveau de securite requis', async () => {
+      const idService = unUUIDRandom();
+
+      testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
+        unBrouillonComplet().construis();
+
+      const reponse = await testeur.get(
+        `/api/service/${idService}/simulation-migration-referentiel/niveauSecuriteRequis`
+      );
+
+      expect(reponse.status).toBe(200);
+      expect(reponse.body).toEqual({
+        niveauDeSecuriteMinimal: 'niveau3',
+      });
+    });
+
+    it("renvoie une erreur 404 si la simulation n'existe pas", async () => {
+      testeur.depotDonnees().lisSimulationMigrationReferentiel = async () => {
+        throw new ErreurSimulationInexistante();
+      };
+
+      const reponse = await testeur.get(
+        `/api/service/${unUUIDRandom()}/simulation-migration-referentiel/niveauSecuriteRequis`
+      );
+
+      expect(reponse.status).toBe(404);
+    });
+
+    it("renvoie une erreur 400 si l'ID passé n'est pas un UUID", async () => {
+      const resultat = await testeur.get(
+        `/api/service/pas-un-uuid/simulation-migration-referentiel/niveauSecuriteRequis`
+      );
+
+      expect(resultat.status).toBe(400);
+    });
+  });
 });
