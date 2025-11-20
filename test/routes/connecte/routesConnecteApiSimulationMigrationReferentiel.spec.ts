@@ -1,14 +1,19 @@
 import { beforeEach } from 'vitest';
 import testeurMSS from '../testeurMSS.js';
-import { unUUIDRandom } from '../../constructeurs/UUID.js';
-import { BrouillonService } from '../../../src/modeles/brouillonService.js';
+import { unUUID, unUUIDRandom } from '../../constructeurs/UUID.js';
+import {
+  BrouillonService,
+  ProprietesBrouillonService,
+} from '../../../src/modeles/brouillonService.js';
 import { ErreurSimulationInexistante } from '../../../src/erreurs.js';
 import {
   Permissions,
   Rubriques,
 } from '../../../src/modeles/autorisations/gestionDroits.js';
+import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
+import { UUID } from '../../../src/typesBasiques.js';
 
-const { LECTURE } = Permissions;
+const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;
 
 describe('Le serveur MSS des routes /api/service/:id/simulation-migration-referentiel/*', () => {
@@ -68,4 +73,272 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
       expect(reponse.status).toBe(404);
     });
   });
+
+  describe.each([
+    {
+      nomPropriete: 'siret',
+      valeurCorrecte: '12312312312312',
+      valeurIncorrecte: '123',
+    },
+    {
+      nomPropriete: 'nomService',
+      valeurCorrecte: 'Un service',
+      valeurIncorrecte: '',
+    },
+    {
+      nomPropriete: 'nomService',
+      valeurCorrecte: 'Un service',
+      valeurIncorrecte: uneChaineDeCaracteres(201, 'a'),
+    },
+    {
+      nomPropriete: 'statutDeploiement',
+      valeurCorrecte: 'enCours',
+      valeurIncorrecte: 'unMauvaisStatut',
+    },
+    {
+      nomPropriete: 'presentation',
+      valeurCorrecte: 'Mon service qui …',
+      valeurIncorrecte: 10,
+    },
+    {
+      nomPropriete: 'presentation',
+      valeurCorrecte: undefined,
+      valeurIncorrecte: uneChaineDeCaracteres(2001, 'a'),
+    },
+    {
+      nomPropriete: 'pointsAcces',
+      valeurCorrecte: ['https://monservicesecurise.fr', 'www.sansHttps.fr'],
+      valeurIncorrecte: [''], // On accepte les chaînes au sens large, pour ne pas gêner les utilisateurs. Mais vide est interdit.
+    },
+    {
+      nomPropriete: 'pointsAcces',
+      valeurCorrecte: ['https://monservicesecurise.fr'],
+      valeurIncorrecte: [uneChaineDeCaracteres(201, 'a')],
+    },
+    {
+      nomPropriete: 'typeService',
+      valeurCorrecte: ['api', 'serviceEnLigne'],
+      valeurIncorrecte: ['uneValeurImaginaire'],
+    },
+    {
+      nomPropriete: 'typeService',
+      valeurCorrecte: ['api'],
+      valeurIncorrecte: [],
+    },
+    {
+      nomPropriete: 'specificitesProjet',
+      valeurCorrecte: ['postesDeTravail'],
+      valeurIncorrecte: ['uneValeurImaginaire'],
+    },
+    {
+      nomPropriete: 'specificitesProjet',
+      valeurCorrecte: [],
+      valeurIncorrecte: 'uneValeurImaginaire',
+    },
+    {
+      nomPropriete: 'typeHebergement',
+      valeurCorrecte: 'cloud',
+      valeurIncorrecte: 'unMauvaisType',
+    },
+    {
+      nomPropriete: 'typeHebergement',
+      valeurCorrecte: 'cloud',
+      valeurIncorrecte: '',
+    },
+    {
+      nomPropriete: 'activitesExternalisees',
+      valeurCorrecte: ['developpementLogiciel'],
+      valeurIncorrecte: 'uneCleSeule',
+    },
+    {
+      nomPropriete: 'activitesExternalisees',
+      valeurCorrecte: [],
+      valeurIncorrecte: ['uneCleInexistante'],
+    },
+    {
+      nomPropriete: 'ouvertureSysteme',
+      valeurCorrecte: 'interne',
+      valeurIncorrecte: 'uneCleInexistante',
+    },
+    {
+      nomPropriete: 'ouvertureSysteme',
+      valeurCorrecte: 'accessibleSurInternet',
+      valeurIncorrecte: '',
+    },
+    {
+      nomPropriete: 'audienceCible',
+      valeurCorrecte: 'large',
+      valeurIncorrecte: 'uneInconnue',
+    },
+    {
+      nomPropriete: 'audienceCible',
+      valeurCorrecte: 'large',
+      valeurIncorrecte: '',
+    },
+    {
+      nomPropriete: 'dureeDysfonctionnementAcceptable',
+      valeurCorrecte: 'moinsDe12h',
+      valeurIncorrecte: 'dureeInconnue',
+    },
+    {
+      nomPropriete: 'dureeDysfonctionnementAcceptable',
+      valeurCorrecte: 'moinsDe12h',
+      valeurIncorrecte: '',
+    },
+    {
+      nomPropriete: 'categoriesDonneesTraitees',
+      valeurCorrecte: ['documentsRHSensibles'],
+      valeurIncorrecte: ['mauvaiseCategorie'],
+    },
+    {
+      nomPropriete: 'categoriesDonneesTraitees',
+      valeurCorrecte: [],
+      valeurIncorrecte: 'uneChaine',
+    },
+    {
+      nomPropriete: 'categoriesDonneesTraiteesSupplementaires',
+      valeurCorrecte: ['uneChaine'],
+      valeurIncorrecte: 'uneChaine',
+    },
+    {
+      nomPropriete: 'categoriesDonneesTraiteesSupplementaires',
+      valeurCorrecte: ['uneChaine'],
+      valeurIncorrecte: [uneChaineDeCaracteres(201, 'a')],
+    },
+    {
+      nomPropriete: 'categoriesDonneesTraiteesSupplementaires',
+      valeurCorrecte: [],
+      valeurIncorrecte: [' '],
+    },
+    {
+      nomPropriete: 'volumetrieDonneesTraitees',
+      valeurCorrecte: 'eleve',
+      valeurIncorrecte: 'uneChaine',
+    },
+    {
+      nomPropriete: 'volumetrieDonneesTraitees',
+      valeurCorrecte: 'faible',
+      valeurIncorrecte: '',
+    },
+    {
+      nomPropriete: 'localisationDonneesTraitees',
+      valeurCorrecte: 'UE',
+      valeurIncorrecte: 'uneChaine',
+    },
+    {
+      nomPropriete: 'localisationDonneesTraitees',
+      valeurCorrecte: 'UE',
+      valeurIncorrecte: '',
+    },
+    {
+      nomPropriete: 'niveauSecurite',
+      valeurCorrecte: 'niveau1',
+      valeurIncorrecte: '',
+    },
+    {
+      nomPropriete: 'niveauSecurite',
+      valeurCorrecte: 'niveau3',
+      valeurIncorrecte: 'unNiveauInconnu',
+    },
+  ])(
+    'quand requête PUT sur `/api/service/:id/simulation-migration-referentiel/:$nomPropriete`',
+    ({ nomPropriete, valeurCorrecte, valeurIncorrecte }) => {
+      let idService: UUID;
+
+      beforeEach(() => {
+        idService = unUUIDRandom();
+        testeur.middleware().reinitialise({ idUtilisateur: unUUID('1') });
+        testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
+          new BrouillonService(idService, { nomService: 'Un service' });
+        testeur.depotDonnees().sauvegardeSimulationMigrationReferentiel =
+          async () => {};
+      });
+
+      it('recherche le service correspondant', async () => {
+        await testeur.middleware().verifieRechercheService(
+          [
+            { niveau: ECRITURE, rubrique: DECRIRE },
+            { niveau: ECRITURE, rubrique: SECURISER },
+          ],
+          testeur.app(),
+          {
+            method: 'put',
+            url: `/api/service/${idService}/simulation-migration-referentiel/${nomPropriete}`,
+          }
+        );
+      });
+
+      it('lis la simulation via le dépôt de données', async () => {
+        let idRecu: UUID;
+        testeur.depotDonnees().lisSimulationMigrationReferentiel = async (
+          id: UUID
+        ) => {
+          idRecu = id;
+          return new BrouillonService(idService, {
+            nomService: 'Un service',
+          });
+        };
+
+        await testeur.put(
+          `/api/service/${idService}/simulation-migration-referentiel/${nomPropriete}`,
+          { [nomPropriete]: valeurCorrecte }
+        );
+
+        expect(idRecu!).toBe(idService);
+      });
+
+      it(`mets à jour la propriete ${nomPropriete} via le dépôt de données`, async () => {
+        let donneesRecues: {
+          id: UUID;
+          simulation: BrouillonService;
+        };
+        testeur.depotDonnees().sauvegardeSimulationMigrationReferentiel =
+          async (id: UUID, simulation: BrouillonService) => {
+            donneesRecues = { id, simulation };
+          };
+
+        await testeur.put(
+          `/api/service/${idService}/simulation-migration-referentiel/${nomPropriete}`,
+          { [nomPropriete]: valeurCorrecte }
+        );
+
+        expect(donneesRecues!.id).toBe(idService);
+        expect(
+          donneesRecues!.simulation.donneesAPersister()[
+            nomPropriete as ProprietesBrouillonService
+          ]
+        ).toStrictEqual(valeurCorrecte);
+      });
+
+      it("renvoie une erreur 400 si l'ID passé n'est pas un UUID", async () => {
+        const resultat = await testeur.put(
+          `/api/service/pas-un-uuid/simulation-migration-referentiel/${nomPropriete}`
+        );
+
+        expect(resultat.status).toBe(400);
+      });
+
+      it(`renvoie une erreur 400 si la propriété ${nomPropriete} passée n'est pas au bon format`, async () => {
+        const resultat = await testeur.put(
+          `/api/service/${idService}/simulation-migration-referentiel/${nomPropriete}`,
+          { [nomPropriete]: valeurIncorrecte }
+        );
+
+        expect(resultat.status).toBe(400);
+      });
+
+      it("renvoie une erreur 404 si la simulation n'existe pas", async () => {
+        testeur.depotDonnees().lisSimulationMigrationReferentiel = async () => {
+          throw new ErreurSimulationInexistante();
+        };
+
+        const resultat = await testeur.put(
+          `/api/service/${idService}/simulation-migration-referentiel/${nomPropriete}`,
+          { [nomPropriete]: valeurCorrecte }
+        );
+
+        expect(resultat.status).toBe(404);
+      });
+    }
+  );
 });
