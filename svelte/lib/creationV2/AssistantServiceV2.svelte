@@ -1,19 +1,21 @@
 <script lang="ts">
-  import { finaliseBrouillonService, type MiseAJour } from './creationV2.api';
-  import { createEventDispatcher, tick } from 'svelte';
+  import { type MiseAJour } from './creationV2.api';
+  import { createEventDispatcher } from 'svelte';
   import JaugeDeProgression from './JaugeDeProgression.svelte';
   import { navigationStore } from './etapes/navigation.store';
   import { etapeCourante } from './etapes/etapeCourante.store';
   import { leBrouillon } from './etapes/brouillon.store';
   import Switch from '../ui/Switch.svelte';
-  import { toasterStore } from '../ui/stores/toaster.store';
   import Toaster from '../ui/Toaster.svelte';
 
+  export let enCoursDeChargement;
   let questionCouranteEstComplete = false;
-  let enCoursDeChargement = false;
   let modeRapide = false;
 
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+  const emetEvenement = createEventDispatcher<{
+    champModifie: MiseAJour;
+    finalise: void;
+  }>();
 
   const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {
     if (!questionCouranteEstComplete) return;
@@ -29,36 +31,7 @@
   };
 
   const finalise = async () => {
-    enCoursDeChargement = true;
-    try {
-      const idService = await finaliseBrouillonService($leBrouillon.id!);
-      window.location.href = `/service/${idService}/mesures`;
-    } catch (e) {
-      if (
-        e.response?.status === 422 &&
-        e.response?.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT'
-      ) {
-        navigationStore.retourneEtapeNomService();
-        toasterStore.erreur(
-          'Erreur lors de la création du service',
-          `Le nom de service ${$leBrouillon.nomService} est déjà utilisé. Veuillez choisir un autre nom de service.`
-        );
-        await tick();
-        setTimeout(() => {
-          const elementRacine: HTMLElement & {
-            status: string;
-            errorMessage: string;
-          } = document.querySelector("dsfr-input[nom='nom-service']")!;
-          elementRacine.status = 'error';
-          elementRacine.errorMessage = 'Ce nom de service est déjà utilisé.';
-          const element: HTMLInputElement =
-            elementRacine.shadowRoot?.getElementById('nom-service');
-          element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 100);
-      }
-    } finally {
-      enCoursDeChargement = false;
-    }
+    emetEvenement('finalise');
   };
 </script>
 
