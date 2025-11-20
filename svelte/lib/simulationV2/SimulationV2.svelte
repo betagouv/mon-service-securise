@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { MiseAJour } from '../creationV2/creationV2.api';
+  import { type MiseAJour } from '../creationV2/creationV2.api';
   import AssistantServiceV2 from '../creationV2/AssistantServiceV2.svelte';
   import { navigationStore } from '../creationV2/etapes/navigation.store';
   import {
@@ -8,6 +8,8 @@
     toutesEtapesSimulationModeRapide,
   } from '../creationV2/etapes/toutesEtapes';
   import type { UUID } from '../typesBasiquesSvelte';
+  import { leBrouillon } from '../creationV2/etapes/brouillon.store';
+  import { lisSimulation } from './simulationv2.api';
 
   export let idService: UUID;
 
@@ -18,7 +20,11 @@
     toutesEtapesSimulationModeRapide
   );
 
-  onMount(async () => {});
+  onMount(async () => {
+    const donneesSimulation = await lisSimulation(idService);
+    leBrouillon.chargeDonnees(donneesSimulation);
+    navigationStore.reprendreEditionDe($leBrouillon, false);
+  });
 
   const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {};
 
