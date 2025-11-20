@@ -313,7 +313,9 @@ const routesConnectePageService = ({
         service
       );
 
-      reponse.render('service/simulation-referentiel-v2');
+      reponse.render('service/simulation-referentiel-v2', {
+        idService: service.id,
+      });
     }
   );
 
