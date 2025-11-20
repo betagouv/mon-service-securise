@@ -1,17 +1,10 @@
 <script lang="ts">
-  import {
-    creeBrouillonService,
-    finaliseBrouillonService,
-    metsAJourBrouillonService,
-    type MiseAJour,
-  } from './creationV2.api';
-  import { tick } from 'svelte';
+  import { finaliseBrouillonService, type MiseAJour } from './creationV2.api';
+  import { createEventDispatcher, tick } from 'svelte';
   import JaugeDeProgression from './JaugeDeProgression.svelte';
   import { navigationStore } from './etapes/navigation.store';
   import { etapeCourante } from './etapes/etapeCourante.store';
   import { leBrouillon } from './etapes/brouillon.store';
-  import { ajouteParametreAUrl } from '../outils/url';
-  import type { BrouillonServiceV2 } from './creationV2.types';
   import Switch from '../ui/Switch.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
   import Toaster from '../ui/Toaster.svelte';
@@ -20,32 +13,12 @@
   let enCoursDeChargement = false;
   let modeRapide = false;
 
+  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+
   const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {
     if (!questionCouranteEstComplete) return;
 
-    const doitCreerBrouillon =
-      !$leBrouillon.id && $etapeCourante.estPremiereQuestion;
-    if (doitCreerBrouillon) {
-      const nomService = e.detail.nomService as string;
-      const idBrouillon = await creeBrouillonService(nomService);
-      ajouteParametreAUrl('id', idBrouillon);
-      leBrouillon.chargeDonnees({ id: idBrouillon, nomService });
-      return;
-    }
-
-    await metsAJourBrouillonService($leBrouillon.id!, e.detail);
-
-    const nomChampModifie = Object.keys(
-      e.detail
-    )[0] as keyof BrouillonServiceV2;
-    const onEstToujoursSurLaQuestionQuiAEnvoyeLaMaj =
-      $etapeCourante.questionCourante.clesPropriete.includes(nomChampModifie);
-    // si on n'est plus sur la question mise à jour, c'est que "suivant()" a déjà été appelé
-    if (
-      onEstToujoursSurLaQuestionQuiAEnvoyeLaMaj &&
-      $etapeCourante.questionCourante.avecAvanceRapide
-    )
-      navigationStore.suivant();
+    emetEvenement('champModifie', e.detail);
   };
 
   const suivant = () => {
