@@ -9,8 +9,9 @@ import {
   Rubriques,
 } from '../../modeles/autorisations/gestionDroits.js';
 import { Middleware } from '../../http/middleware.interface.js';
+import { reglesValidationBrouillonServiceV2 } from './routesConnecte.schema.js';
 
-const { LECTURE } = Permissions;
+const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;
 
 const routesConnecteApiSimulationMigrationReferentiel = ({
@@ -27,7 +28,6 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
     valideParams(z.strictObject({ id: z.uuidv4() })),
     middleware.trouveService({ [DECRIRE]: LECTURE, [SECURISER]: LECTURE }),
     async (requete, reponse, suite) => {
-      // Le validateur étant instancié dans le routeur au-dessus, Typescript ne voit pas les `params` ici
       const { id: idService } = requete.params;
 
       try {
@@ -41,6 +41,62 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
           return reponse.sendStatus(404);
         return suite(e);
       }
+    }
+  );
+
+  routes.put(
+    '/:id/simulation-migration-referentiel/:nomPropriete',
+    valideParams(
+      z.strictObject({
+        id: z.uuidv4(),
+        nomPropriete: z.enum([
+          'siret',
+          'nomService',
+          'statutDeploiement',
+          'presentation',
+          'pointsAcces',
+          'typeService',
+          'specificitesProjet',
+          'typeHebergement',
+          'activitesExternalisees',
+          'ouvertureSysteme',
+          'audienceCible',
+          'dureeDysfonctionnementAcceptable',
+          'categoriesDonneesTraitees',
+          'categoriesDonneesTraiteesSupplementaires',
+          'volumetrieDonneesTraitees',
+          'localisationDonneesTraitees',
+          'niveauSecurite',
+        ]),
+      })
+    ),
+    middleware.trouveService({ [DECRIRE]: ECRITURE, [SECURISER]: ECRITURE }),
+    async (requete, reponse, suite) => {
+      const { nomPropriete, id: idService } = requete.params;
+
+      const objetValidation = z.strictObject({
+        [nomPropriete]: reglesValidationBrouillonServiceV2[nomPropriete],
+      });
+      const resultatParsingBody = objetValidation.safeParse(requete.body);
+      if (!resultatParsingBody.success) return reponse.sendStatus(400);
+      const valeurPropriete = resultatParsingBody.data[nomPropriete];
+
+      try {
+        const simulation = await depotDonnees.lisSimulationMigrationReferentiel(
+          idService as UUID
+        );
+        simulation.metsAJourPropriete(nomPropriete, valeurPropriete);
+        await depotDonnees.sauvegardeSimulationMigrationReferentiel(
+          idService as UUID,
+          simulation
+        );
+      } catch (e) {
+        if (e instanceof ErreurSimulationInexistante)
+          return reponse.sendStatus(404);
+        return suite(e);
+      }
+
+      reponse.sendStatus(200);
     }
   );
 
