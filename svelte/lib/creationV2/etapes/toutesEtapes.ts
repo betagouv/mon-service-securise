@@ -17,6 +17,9 @@ import QuestionLocalisationDonneesTraitees from './etape3/QuestionLocalisationDo
 import EtapeResumeDuService from './resume/EtapeResumeDuService.svelte';
 import EtapeCreationEnModeRapide from './modeRapide/EtapeCreationEnModeRapide.svelte';
 import EtapeNiveauSecurite from './EtapeNiveauSecurite.svelte';
+import EtapeSimulationChangementsAVenir from '../../simulationV2/etapes/EtapeSimulationChangementsAVenir.svelte';
+import EtapeSimulationEnModeRapide from '../../simulationV2/etapes/EtapeSimulationEnModeRapide.svelte';
+import EtapeResumeDuServiceEnSimulation from '../../simulationV2/etapes/EtapeResumeDuServiceEnSimulation.svelte';
 
 type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
 
@@ -42,38 +45,7 @@ export type EtapeDuWizard = {
   pleinePage: boolean;
 };
 
-export const toutesEtapesModeRapide: Array<EtapeDuWizard> = [
-  {
-    numero: 1,
-    titre: 'Informations sur le projet',
-    pleinePage: false,
-    illustration:
-      '/statique/assets/images/illustration_collaboration_securite.svg',
-    questions: [
-      {
-        composant: EtapeCreationEnModeRapide,
-        explications: [],
-        avecAvanceRapide: false,
-        clesPropriete: [],
-      },
-    ],
-  },
-  {
-    numero: 2,
-    titre: 'Besoins de sécurité',
-    pleinePage: true,
-    questions: [
-      {
-        composant: EtapeNiveauSecurite,
-        explications: [],
-        avecAvanceRapide: false,
-        clesPropriete: [],
-      },
-    ],
-  },
-];
-
-export const toutesEtapes: Array<EtapeDuWizard> = [
+const etapesQuestionsFormulaire: Array<EtapeDuWizard> = [
   {
     numero: 1,
     titre: 'Informations génériques sur le projet',
@@ -219,6 +191,41 @@ export const toutesEtapes: Array<EtapeDuWizard> = [
       },
     ],
   },
+];
+
+export const toutesEtapesModeRapide: Array<EtapeDuWizard> = [
+  {
+    numero: 1,
+    titre: 'Informations sur le projet',
+    pleinePage: false,
+    illustration:
+      '/statique/assets/images/illustration_collaboration_securite.svg',
+    questions: [
+      {
+        composant: EtapeCreationEnModeRapide,
+        explications: [],
+        avecAvanceRapide: false,
+        clesPropriete: [],
+      },
+    ],
+  },
+  {
+    numero: 2,
+    titre: 'Besoins de sécurité',
+    pleinePage: true,
+    questions: [
+      {
+        composant: EtapeNiveauSecurite,
+        explications: [],
+        avecAvanceRapide: false,
+        clesPropriete: [],
+      },
+    ],
+  },
+];
+
+export const toutesEtapes: Array<EtapeDuWizard> = [
+  ...etapesQuestionsFormulaire,
   {
     numero: 4,
     titre: 'Résumé du service',
@@ -239,6 +246,93 @@ export const toutesEtapes: Array<EtapeDuWizard> = [
     questions: [
       {
         composant: EtapeNiveauSecurite,
+        explications: [],
+        avecAvanceRapide: false,
+        clesPropriete: [],
+      },
+    ],
+  },
+];
+
+export const toutesEtapesSimulationModeRapide: Array<EtapeDuWizard> = [
+  {
+    numero: 1,
+    titre: 'Informations sur le projet',
+    pleinePage: false,
+    illustration:
+      '/statique/assets/images/illustration_collaboration_securite.svg',
+    questions: [
+      {
+        composant: EtapeSimulationEnModeRapide,
+        explications: [],
+        avecAvanceRapide: false,
+        clesPropriete: [],
+      },
+    ],
+  },
+  {
+    numero: 2,
+    titre: 'Besoins de sécurité',
+    pleinePage: true,
+    questions: [
+      {
+        composant: EtapeNiveauSecurite,
+        explications: [],
+        avecAvanceRapide: false,
+        clesPropriete: [],
+      },
+    ],
+  },
+  {
+    numero: 3,
+    titre: 'Simulation des changements',
+    pleinePage: true,
+    questions: [
+      {
+        composant: EtapeSimulationChangementsAVenir,
+        explications: [],
+        avecAvanceRapide: false,
+        clesPropriete: [],
+      },
+    ],
+  },
+];
+
+export const toutesEtapesSimulation: Array<EtapeDuWizard> = [
+  ...etapesQuestionsFormulaire,
+  {
+    numero: 4,
+    titre: 'Résumé du service',
+    pleinePage: true,
+    questions: [
+      {
+        composant: EtapeResumeDuServiceEnSimulation,
+        explications: [],
+        avecAvanceRapide: false,
+        clesPropriete: [],
+      },
+    ],
+  },
+  {
+    numero: 5,
+    titre: 'Besoins de sécurité',
+    pleinePage: true,
+    questions: [
+      {
+        composant: EtapeNiveauSecurite,
+        explications: [],
+        avecAvanceRapide: false,
+        clesPropriete: [],
+      },
+    ],
+  },
+  {
+    numero: 6,
+    titre: 'Simulation des changements',
+    pleinePage: true,
+    questions: [
+      {
+        composant: EtapeSimulationChangementsAVenir,
         explications: [],
         avecAvanceRapide: false,
         clesPropriete: [],
