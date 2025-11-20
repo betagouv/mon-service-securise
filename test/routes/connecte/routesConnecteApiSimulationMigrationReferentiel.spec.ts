@@ -3,6 +3,13 @@ import testeurMSS from '../testeurMSS.js';
 import { unUUIDRandom } from '../../constructeurs/UUID.js';
 import { BrouillonService } from '../../../src/modeles/brouillonService.js';
 import { ErreurSimulationInexistante } from '../../../src/erreurs.js';
+import {
+  Permissions,
+  Rubriques,
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+
+const { LECTURE } = Permissions;
+const { DECRIRE, SECURISER } = Rubriques;
 
 describe('Le serveur MSS des routes /api/service/:id/simulation-migration-referentiel/*', () => {
   const testeur = testeurMSS();
@@ -10,7 +17,21 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
   beforeEach(testeur.initialise);
 
   describe('quand requête GET sur `/api/service/:id/simulation-migration-referentiel`', () => {
-    it("renvoie une erreur 400 si l'ID passé n'est pas un UUID, pour toutes les routes", async () => {
+    it('recherche le service correspondant', async () => {
+      await testeur.middleware().verifieRechercheService(
+        [
+          { niveau: LECTURE, rubrique: DECRIRE },
+          { niveau: LECTURE, rubrique: SECURISER },
+        ],
+        testeur.app(),
+        {
+          method: 'get',
+          url: `/api/service/${unUUIDRandom()}/simulation-migration-referentiel`,
+        }
+      );
+    });
+
+    it("renvoie une erreur 400 si l'ID passé n'est pas un UUID", async () => {
       const reponse = await testeur.get(
         '/api/service/PAS_UN_UUID/simulation-migration-referentiel'
       );

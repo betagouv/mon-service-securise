@@ -1027,6 +1027,7 @@ const routesConnecteApiService = ({
   routes.use(
     routesConnecteApiSimulationMigrationReferentiel({
       depotDonnees,
+      middleware,
     })
   );
 
