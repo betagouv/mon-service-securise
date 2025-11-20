@@ -9,6 +9,7 @@
   import Toaster from '../ui/Toaster.svelte';
 
   export let enCoursDeChargement;
+  export let titreAssistant: string;
   let questionCouranteEstComplete = false;
   let modeRapide = false;
 
@@ -44,7 +45,7 @@
     >
       {#if $etapeCourante.estPremiereQuestion && !$navigationStore.modeRapide}
         <div class="conteneur-titre-premiere-question">
-          <h2>Ajouter un service</h2>
+          <h2>{titreAssistant}</h2>
           <span
             >Complétez les informations permettant d'évaluer les besoins de
             sécurité du service et de proposer des mesures de sécurité adaptées.</span

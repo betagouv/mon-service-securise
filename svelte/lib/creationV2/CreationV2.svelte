@@ -99,4 +99,5 @@
   on:champModifie={metsAJourPropriete}
   on:finalise={finalise}
   bind:enCoursDeChargement
+  titreAssistant="Ajouter un service"
 />
