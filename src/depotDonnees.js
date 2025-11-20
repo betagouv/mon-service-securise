@@ -302,6 +302,7 @@ const creeDepot = (config = {}) => {
   const {
     ajouteSimulationMigrationReferentielSiNecessaire,
     lisSimulationMigrationReferentiel,
+    sauvegardeSimulationMigrationReferentiel,
   } = depotSimulationMigration;
 
   return {
@@ -385,6 +386,7 @@ const creeDepot = (config = {}) => {
     sauvegardeNouvelIndiceCyber,
     enregistreNouvelleConnexionUtilisateur,
     sauvegardeNotificationsExpirationHomologation,
+    sauvegardeSimulationMigrationReferentiel,
     superviseur,
     supprimeContributeur,
     supprimeDesMesuresAssocieesAuModele,

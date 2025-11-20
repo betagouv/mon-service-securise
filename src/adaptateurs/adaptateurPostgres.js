@@ -923,10 +923,13 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       .first();
 
   const sauvegardeSimulationMigrationReferentiel = async (idService, donnees) =>
-    knex('simulation_migration_referentiel').insert({
-      id_service: idService,
-      donnees,
-    });
+    knex('simulation_migration_referentiel')
+      .insert({
+        id_service: idService,
+        donnees,
+      })
+      .onConflict('id_service')
+      .merge();
 
   return {
     activitesMesure,
