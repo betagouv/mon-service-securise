@@ -4,7 +4,7 @@
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import { leBrouillon } from '../../creationV2/etapes/brouillon.store';
   import NiveauDeSecuriteEditable from '../../creationV2/NiveauDeSecuriteEditable.svelte';
-  import type { MiseAJour } from '../../creationV2/creationV2.api';
+  import { type MiseAJour } from '../../creationV2/creationV2.api';
   import {
     metsAJourSimulation,
     niveauSecuriteMinimalRequis,
@@ -24,6 +24,12 @@
     );
     if (element) {
       element.open = true;
+    }
+    if (!$leBrouillon.niveauSecurite && niveauDeSecuriteMinimal) {
+      $leBrouillon.niveauSecurite = niveauDeSecuriteMinimal;
+      await metsAJourSimulation($leBrouillon.id!, {
+        niveauSecurite: niveauDeSecuriteMinimal,
+      });
     }
     niveauSelectionne = $leBrouillon.niveauSecurite;
   });
