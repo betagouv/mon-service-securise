@@ -25,6 +25,12 @@
       if (element) {
         element.open = true;
       }
+      if (!$leBrouillon.niveauSecurite && niveauDeSecuriteMinimal) {
+        $leBrouillon.niveauSecurite = niveauDeSecuriteMinimal;
+        await metsAJourBrouillonService($leBrouillon.id, {
+          niveauSecurite: niveauDeSecuriteMinimal,
+        });
+      }
       niveauSelectionne = $leBrouillon.niveauSecurite;
     }
   });
