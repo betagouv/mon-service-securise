@@ -37,6 +37,9 @@ jobs:
       - name: Contrôler la mise en forme avec Prettier
         run: npx prettier --check .
 
+      - name: Contrôler la cohérence avec Eslint
+        run: npx eslint .
+
       - name: Contrôler le Typescript du Backend
         run: npx tsc --noEmit
 
