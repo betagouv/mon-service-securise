@@ -25,7 +25,6 @@
   onMount(async () => {
     const donneesSimulation = await lisSimulation(idService);
     leBrouillon.chargeDonnees(donneesSimulation);
-    navigationStore.reprendreEditionDe($leBrouillon, false);
   });
 
   const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {
