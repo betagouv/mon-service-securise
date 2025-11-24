@@ -455,7 +455,7 @@
         }
 
         img {
-          max-width: 146px;
+          max-width: 100%;
         }
       }
     }
