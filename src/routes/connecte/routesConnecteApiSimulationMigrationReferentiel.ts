@@ -97,7 +97,7 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
         return suite(e);
       }
 
-      reponse.sendStatus(200);
+      return reponse.sendStatus(200);
     }
   );
 
