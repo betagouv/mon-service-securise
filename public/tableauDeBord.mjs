@@ -31,7 +31,7 @@ $(() => {
   const afficheExplicationNouveauReferentiel = lisDonneesPartagees(
     'affiche-explication-nouveau-referentiel'
   );
-  if (afficheExplicationNouveauReferentiel) {
+  if (afficheExplicationNouveauReferentiel && !visiteGuideeActive) {
     document.body.dispatchEvent(
       new CustomEvent('svelte-recharge-explication-nouveau-referentiel')
     );
