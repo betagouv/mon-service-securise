@@ -41,12 +41,16 @@
           href={urlSecuriserService}
         >
           <span class="nom">{donnee.nomService}</span>
-          <span class="organisation">{donnee.organisationResponsable}</span>
+          <span class="organisation"
+            >{donnee.organisationResponsable ?? '-'}</span
+          >
         </a>
       {:else}
         <div class="intitule-service">
           <span class="nom">{donnee.nomService}</span>
-          <span class="organisation">{donnee.organisationResponsable}</span>
+          <span class="organisation"
+            >{donnee.organisationResponsable ?? '-'}</span
+          >
         </div>
       {/if}
     {:else if colonne.cle === 'typeService' && referentielTypesService}

@@ -136,7 +136,9 @@
       <div class="contenu-nom-service">
         <div class="intitule-service" class:desactive>
           <span class="nom">{donnee.nomService}</span>
-          <span class="organisation">{donnee.organisationResponsable}</span>
+          <span class="organisation"
+            >{donnee.organisationResponsable ?? '-'}</span
+          >
         </div>
         {#if desactive}
           <Infobulle
