@@ -1,6 +1,6 @@
 <script lang="ts">
   import {
-    type EvolutionMesures,
+    type ResumeEvolutions,
     lisEvolutionMesures,
   } from '../simulationv2.api';
   import { onMount } from 'svelte';
@@ -8,10 +8,10 @@
   import IndiceCyber from '../../indiceCyber/IndiceCyber.svelte';
   import donneesNiveauxDeSecurite from '../../niveauxDeSecurite/donneesNiveauxDeSecurite';
 
-  let evolutionMesures: EvolutionMesures;
+  let resumeEvolutions: ResumeEvolutions;
 
   onMount(async () => {
-    evolutionMesures = await lisEvolutionMesures($leBrouillon.id!);
+    resumeEvolutions = await lisEvolutionMesures($leBrouillon.id!);
   });
 </script>
 
@@ -26,7 +26,7 @@
   </p>
 </div>
 
-{#if evolutionMesures}
+{#if resumeEvolutions}
   <div class="conteneur-resume">
     <div class="resume-evolutions-mesures">
       <h6>
@@ -34,6 +34,23 @@
           (d) => d.id === $leBrouillon.niveauSecurite
         )?.nom}
       </h6>
+      <div class="conteneur-resume-evolution">
+        <span
+          >{resumeEvolutions.evolutionMesures.nbMesures} mesures au total</span
+        >
+        <span
+          >🆕 {resumeEvolutions.evolutionMesures.nbMesuresAjoutees} mesures ajoutées</span
+        >
+        <span
+          >✅ {resumeEvolutions.evolutionMesures.nbMesuresInchangees} mesures inchangées</span
+        >
+        <span
+          >✏️ {resumeEvolutions.evolutionMesures.nbMesuresModifiees} mesures modifiées</span
+        >
+        <span
+          >❌ {resumeEvolutions.evolutionMesures.nbMesuresSupprimees} mesures supprimées</span
+        >
+      </div>
     </div>
     <div class="separateur-vertical" />
     <div class="resume-evolution-indice-cyber">
@@ -43,8 +60,8 @@
         <div>
           <div class="contenu-indice-cyber">
             <IndiceCyber
-              indiceCyber={evolutionMesures.indiceCyberV1.total}
-              noteMax={evolutionMesures.indiceCyberV1.max}
+              indiceCyber={resumeEvolutions.indiceCyberV1.total}
+              noteMax={resumeEvolutions.indiceCyberV1.max}
             />
           </div>
           <span>Avec le référentiel actuel</span>
@@ -63,6 +80,18 @@
     padding: 0;
     margin: -24px 0 40px;
     width: 690px;
+  }
+
+  .conteneur-resume-evolution {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    span {
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
   }
 
   .conteneur-titre {
