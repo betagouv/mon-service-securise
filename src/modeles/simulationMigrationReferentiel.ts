@@ -5,6 +5,7 @@ import {
   conversionMesuresV1versV2,
   IdMesureV1,
 } from '../../donneesConversionReferentielMesures.js';
+import { MoteurReglesV2 } from '../moteurRegles/v2/moteurReglesV2.js';
 
 export class SimulationMigrationReferentiel {
   private readonly serviceV1: Service;
@@ -30,9 +31,14 @@ export class SimulationMigrationReferentiel {
   }
 
   evolutionMesures() {
+    const moteurRegleV2 = new MoteurReglesV2(
+      this.referentielV2,
+      this.referentielV2.reglesMoteurV2()
+    );
     const mesuresDuServiceV1 = this.serviceV1.mesures.mesuresPersonnalisees;
+    const mesuresDuServiceV2 = moteurRegleV2.mesures(this.descriptionServiceV2);
 
-    return Object.keys(mesuresDuServiceV1).reduce(
+    const totaux = Object.keys(mesuresDuServiceV1).reduce(
       (acc, idMesureV1) => {
         const { statut } = conversionMesuresV1versV2[idMesureV1 as IdMesureV1];
         if (statut === 'inchangee') {
@@ -44,7 +50,14 @@ export class SimulationMigrationReferentiel {
         }
         return acc;
       },
-      { nbMesuresInchangees: 0, nbMesuresModifiees: 0, nbMesuresSupprimees: 0 }
+      {
+        nbMesuresInchangees: 0,
+        nbMesuresModifiees: 0,
+        nbMesuresSupprimees: 0,
+        nbMesures: 0,
+      }
     );
+    totaux.nbMesures = Object.keys(mesuresDuServiceV2).length;
+    return totaux;
   }
 }
