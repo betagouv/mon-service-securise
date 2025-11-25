@@ -428,6 +428,21 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
         expect(reponse.body.indiceCyberV1.total).toBe(2.5);
         expect(reponse.body.indiceCyberV1.max).toBe(5);
       });
+
+      it('retourne les évolutions de mesures', async () => {
+        const idService = unUUIDRandom();
+        const serviceV1 = unService().avecId(idService).construis();
+        testeur.depotDonnees().service = async () => serviceV1;
+        testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
+          unBrouillonComplet().construis();
+
+        const reponse = await testeur.get(
+          `/api/service/${idService}/simulation-migration-referentiel/evolution-mesures`
+        );
+
+        expect(reponse.status).toBe(200);
+        expect(reponse.body.evolutionMesures.nbMesures).not.toBe(undefined);
+      });
     });
 
     it("renvoie une erreur 404 si la simulation n'existe pas", async () => {

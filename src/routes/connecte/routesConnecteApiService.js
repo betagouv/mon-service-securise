@@ -56,6 +56,7 @@ const routesConnecteApiService = ({
   middleware,
   depotDonnees,
   referentiel,
+  referentielV2,
   adaptateurEnvironnement,
   adaptateurHorloge,
   adaptateurPdf,
@@ -1029,6 +1030,7 @@ const routesConnecteApiService = ({
       depotDonnees,
       middleware,
       referentiel,
+      referentielV2,
     })
   );
 
