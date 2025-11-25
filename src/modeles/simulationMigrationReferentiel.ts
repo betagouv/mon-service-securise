@@ -32,14 +32,17 @@ export class SimulationMigrationReferentiel {
   evolutionMesures() {
     const mesuresDuServiceV1 = this.serviceV1.mesures.mesuresPersonnalisees;
 
-    const nbMesuresModifiees = Object.keys(mesuresDuServiceV1).filter(
-      (idMesureV1) =>
-        conversionMesuresV1versV2[idMesureV1 as IdMesureV1].statut ===
-        'modifiee'
-    ).length;
-
-    return {
-      nbMesuresModifiees,
-    };
+    return Object.keys(mesuresDuServiceV1).reduce(
+      (acc, idMesureV1) => {
+        const { statut } = conversionMesuresV1versV2[idMesureV1 as IdMesureV1];
+        if (statut === 'inchangee') {
+          acc.nbMesuresInchangees += 1;
+        } else if (statut === 'modifiee') {
+          acc.nbMesuresModifiees += 1;
+        }
+        return acc;
+      },
+      { nbMesuresInchangees: 0, nbMesuresModifiees: 0 }
+    );
   }
 }
