@@ -1028,6 +1028,7 @@ const routesConnecteApiService = ({
     routesConnecteApiSimulationMigrationReferentiel({
       depotDonnees,
       middleware,
+      referentiel,
     })
   );
 

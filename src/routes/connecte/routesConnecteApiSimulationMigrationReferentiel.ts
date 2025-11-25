@@ -11,6 +11,8 @@ import {
 import { Middleware } from '../../http/middleware.interface.js';
 import { reglesValidationBrouillonServiceV2 } from './routesConnecte.schema.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
+import { Referentiel } from '../../referentiel.interface.js';
+import { DepotDonneesService } from '../../depots/depotDonneesService.interface.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;
@@ -18,9 +20,12 @@ const { DECRIRE, SECURISER } = Rubriques;
 const routesConnecteApiSimulationMigrationReferentiel = ({
   depotDonnees,
   middleware,
+  referentiel,
 }: {
-  depotDonnees: DepotDonneesSimulationMigrationReferentiel;
+  depotDonnees: DepotDonneesSimulationMigrationReferentiel &
+    DepotDonneesService;
   middleware: Middleware;
+  referentiel: Referentiel;
 }) => {
   const routes = express.Router();
 
@@ -120,6 +125,34 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
       } catch (e) {
         if (e instanceof ErreurSimulationInexistante)
           return reponse.sendStatus(404);
+        return suite(e);
+      }
+    }
+  );
+
+  routes.get(
+    '/:id/simulation-migration-referentiel/evolution-mesures',
+    valideParams(z.strictObject({ id: z.uuidv4() })),
+    middleware.trouveService({ [DECRIRE]: LECTURE, [SECURISER]: LECTURE }),
+    async (requete, reponse, suite) => {
+      const { id } = requete.params;
+      const idService = id as UUID;
+
+      try {
+        await depotDonnees.lisSimulationMigrationReferentiel(idService);
+
+        const service = await depotDonnees.service(idService);
+        if (!service) return reponse.sendStatus(404);
+
+        const { total } = service.indiceCyber();
+
+        return reponse.json({
+          indiceCyberV1: { total, max: referentiel.indiceCyberNoteMax() },
+        });
+      } catch (e) {
+        if (e instanceof ErreurSimulationInexistante)
+          return reponse.sendStatus(404);
+
         return suite(e);
       }
     }

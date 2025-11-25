@@ -1,5 +1,6 @@
 import { UUID } from '../typesBasiques.js';
 import { DonneesDescriptionServiceV2 } from '../modeles/descriptionServiceV2.js';
+import Service from '../modeles/service.js';
 
 export type DonneesCreationService = {
   versionService: string;
@@ -11,4 +12,5 @@ export interface DepotDonneesService {
     idUtilisateur: UUID,
     donneesService: DonneesCreationService
   ) => Promise<UUID>;
+  service: (idService: UUID) => Promise<Service | undefined>;
 }
