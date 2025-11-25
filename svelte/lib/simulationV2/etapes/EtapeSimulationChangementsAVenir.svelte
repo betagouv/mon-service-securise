@@ -6,6 +6,7 @@
   import { onMount } from 'svelte';
   import { leBrouillon } from '../../creationV2/etapes/brouillon.store';
   import IndiceCyber from '../../indiceCyber/IndiceCyber.svelte';
+  import donneesNiveauxDeSecurite from '../../niveauxDeSecurite/donneesNiveauxDeSecurite';
 
   let evolutionMesures: EvolutionMesures;
 
@@ -27,7 +28,14 @@
 
 {#if evolutionMesures}
   <div class="conteneur-resume">
-    <div class="resume-evolutions-mesures"></div>
+    <div class="resume-evolutions-mesures">
+      <h6>
+        Besoins de sécurité {donneesNiveauxDeSecurite.find(
+          (d) => d.id === $leBrouillon.niveauSecurite
+        )?.nom}
+      </h6>
+    </div>
+    <div class="separateur-vertical" />
     <div class="resume-evolution-indice-cyber">
       <h6>Évolution de l’indice cyber ANSSI</h6>
       <span>En attente de la complétion des mesures.</span>
@@ -56,6 +64,7 @@
     margin: -24px 0 40px;
     width: 690px;
   }
+
   .conteneur-titre {
     display: flex;
     flex-direction: column;
@@ -79,6 +88,13 @@
     border: 1px solid #dddddd;
     border-radius: 8px;
     padding: 48px;
+    display: flex;
+    gap: 64px;
+
+    .separateur-vertical {
+      height: 100%;
+      border-left: 1px solid #dddddd;
+    }
 
     h6 {
       font-size: 1.125rem;
