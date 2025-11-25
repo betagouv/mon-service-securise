@@ -6,6 +6,13 @@ import type { NiveauSecurite } from '../../../donneesReferentielMesuresV2';
 
 type Simulation = BrouillonIncomplet;
 
+export type EvolutionMesures = {
+  indiceCyberV1: {
+    total: number;
+    max: number;
+  };
+};
+
 export const lisSimulation = async (idService: UUID): Promise<Simulation> =>
   (
     await axios.get<Simulation>(
@@ -35,3 +42,12 @@ export const niveauSecuriteMinimalRequis = async (
       `/api/service/${idService}/simulation-migration-referentiel/niveauSecuriteRequis`
     )
   ).data.niveauDeSecuriteMinimal as IdNiveauDeSecurite;
+
+export const lisEvolutionMesures = async (
+  idService: UUID
+): Promise<EvolutionMesures> =>
+  (
+    await axios.get<EvolutionMesures>(
+      `/api/service/${idService}/simulation-migration-referentiel/evolution-mesures`
+    )
+  ).data as EvolutionMesures;
