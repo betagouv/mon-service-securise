@@ -85,5 +85,18 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
 
       expect(evolution.nbMesures).toBe(45);
     });
+
+    it('sait dire combien de mesures sont ajoutées en V2', () => {
+      const simulation = new SimulationMigrationReferentiel({
+        serviceV1,
+        descriptionServiceV2,
+        referentielV1,
+        referentielV2,
+      });
+
+      const evolution = simulation.evolutionMesures();
+
+      expect(evolution.nbMesuresAjoutees).toBe(19);
+    });
   });
 });
