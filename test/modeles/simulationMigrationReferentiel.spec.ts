@@ -55,5 +55,19 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
       // Ce résultat peut être visualisé dans le Grist, en sélectionnant les filtres "Niveau = Basique" & "Évaluation = Conforme || Modification mineure"
       expect(evolution.nbMesuresInchangees).toBe(33);
     });
+
+    it('sait dire combien de mesures restent supprimées', () => {
+      const simulation = new SimulationMigrationReferentiel({
+        serviceV1,
+        descriptionServiceV2,
+        referentielV1,
+        referentielV2,
+      });
+
+      const evolution = simulation.evolutionMesures();
+
+      // Ce résultat peut être visualisé dans le Grist, en sélectionnant les filtres "Niveau = Basique" & "Évaluation = Split || Réunification || Absente"
+      expect(evolution.nbMesuresSupprimees).toBe(9);
+    });
   });
 });

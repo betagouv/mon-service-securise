@@ -39,10 +39,12 @@ export class SimulationMigrationReferentiel {
           acc.nbMesuresInchangees += 1;
         } else if (statut === 'modifiee') {
           acc.nbMesuresModifiees += 1;
+        } else if (statut === 'supprimee') {
+          acc.nbMesuresSupprimees += 1;
         }
         return acc;
       },
-      { nbMesuresInchangees: 0, nbMesuresModifiees: 0 }
+      { nbMesuresInchangees: 0, nbMesuresModifiees: 0, nbMesuresSupprimees: 0 }
     );
   }
 }
