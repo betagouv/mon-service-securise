@@ -1,7 +1,7 @@
 import donneesReferentielV1 from './donneesReferentiel.js';
 import { IdMesureV2 } from './donneesReferentielMesuresV2.js';
 
-type IdMesureV1 = keyof (typeof donneesReferentielV1)['mesures'];
+export type IdMesureV1 = keyof (typeof donneesReferentielV1)['mesures'];
 
 type EquivalenceMesureV2 = {
   idsMesureV2: IdMesureV2[];
