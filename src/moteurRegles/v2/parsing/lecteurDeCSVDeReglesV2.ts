@@ -3,6 +3,7 @@ import Papa from 'papaparse';
 import { PathLike } from 'fs';
 import {
   ActiviteExternalisee,
+  IdMesureV2,
   mesuresV2,
   SpecificiteProjet,
   TypeDeService,
@@ -10,7 +11,6 @@ import {
 } from '../../../../donneesReferentielMesuresV2.js';
 import { ErreurMoteurDeReglesV2 } from '../../../erreurs.js';
 import {
-  IdMesureV2,
   Modificateur,
   ModificateurPourBesoin,
   ModificateursDeRegles,
