@@ -6,7 +6,7 @@
   export let indiceCyber: number;
 
   export let noteMax: number;
-  export let idService: string;
+  export let idService: string = '';
 
   $: indiceCyberFormatte = Intl.NumberFormat('fr', {
     minimumFractionDigits: 1,
@@ -48,6 +48,8 @@
   let animationFleche: SVGAnimateTransformElement;
 
   const metAJourIndiceCyber = async () => {
+    if (!idService) return;
+
     indiceCyber = await recupereIndiceCyber(idService);
     animationJauge?.beginElement();
     animationFleche?.beginElement();
