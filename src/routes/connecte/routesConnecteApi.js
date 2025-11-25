@@ -342,6 +342,7 @@ const routesConnecteApi = ({
       middleware,
       depotDonnees,
       referentiel,
+      referentielV2,
       adaptateurHorloge,
       adaptateurPdf,
       adaptateurZip,

@@ -1,6 +1,9 @@
 import { UUID } from '../typesBasiques.js';
 import { VersionService } from './versionService.js';
-import { DonneesDescriptionServiceV2 } from './descriptionServiceV2.js';
+import {
+  DescriptionServiceV2,
+  DonneesDescriptionServiceV2,
+} from './descriptionServiceV2.js';
 import donneesReferentiel from '../../donneesReferentiel.js';
 import {
   LocalisationDonneesTraitees,
@@ -9,6 +12,7 @@ import {
   StatutDeploiement,
 } from '../../donneesReferentielMesuresV2.js';
 import { PourCalculNiveauSecurite } from '../moteurRegles/v2/niveauSecurite.js';
+import { ReferentielV2 } from '../referentiel.interface.js';
 
 export type DonneesBrouillonService = {
   nomService: string;
@@ -61,6 +65,13 @@ export class BrouillonService {
       ouvertureSysteme: this.donnees.ouvertureSysteme!,
       volumetrie: this.donnees.volumetrieDonneesTraitees!,
     };
+  }
+
+  enDescriptionV2(referentiel: ReferentielV2) {
+    return new DescriptionServiceV2(
+      this.enDonneesCreationServiceV2().descriptionService,
+      referentiel
+    );
   }
 
   enDonneesCreationServiceV2(): {
