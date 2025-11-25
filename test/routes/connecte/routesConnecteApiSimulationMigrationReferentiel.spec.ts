@@ -13,6 +13,7 @@ import {
 import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 import { UUID } from '../../../src/typesBasiques.js';
 import { unBrouillonComplet } from '../../constructeurs/constructeurBrouillonService.js';
+import { unService } from '../../constructeurs/constructeurService.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;
@@ -388,6 +389,74 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
     it("renvoie une erreur 400 si l'ID passé n'est pas un UUID", async () => {
       const resultat = await testeur.get(
         `/api/service/pas-un-uuid/simulation-migration-referentiel/niveauSecuriteRequis`
+      );
+
+      expect(resultat.status).toBe(400);
+    });
+  });
+
+  describe('quand requête GET sur `/api/service/:id/simulation-migration-referentiel/evolution-mesures`', () => {
+    it('recherche le service correspondant', async () => {
+      await testeur.middleware().verifieRechercheService(
+        [
+          { niveau: LECTURE, rubrique: DECRIRE },
+          { niveau: LECTURE, rubrique: SECURISER },
+        ],
+        testeur.app(),
+        {
+          method: 'get',
+          url: `/api/service/${unUUIDRandom()}/simulation-migration-referentiel/evolution-mesures`,
+        }
+      );
+    });
+
+    describe('concernant les données retournées', () => {
+      it("retourne l'indice cyber du service v1 original", async () => {
+        const idService = unUUIDRandom();
+        const serviceV1 = unService().avecId(idService).construis();
+        serviceV1.mesures.indiceCyber = () => ({ total: 2.5 });
+        testeur.referentiel().recharge({ indiceCyber: { noteMax: 5 } });
+        testeur.depotDonnees().service = async () => serviceV1;
+        testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
+          unBrouillonComplet().construis();
+
+        const reponse = await testeur.get(
+          `/api/service/${idService}/simulation-migration-referentiel/evolution-mesures`
+        );
+
+        expect(reponse.status).toBe(200);
+        expect(reponse.body.indiceCyberV1.total).toBe(2.5);
+        expect(reponse.body.indiceCyberV1.max).toBe(5);
+      });
+    });
+
+    it("renvoie une erreur 404 si la simulation n'existe pas", async () => {
+      testeur.depotDonnees().lisSimulationMigrationReferentiel = async () => {
+        throw new ErreurSimulationInexistante();
+      };
+
+      const reponse = await testeur.get(
+        `/api/service/${unUUIDRandom()}/simulation-migration-referentiel/evolution-mesures`
+      );
+
+      expect(reponse.status).toBe(404);
+    });
+
+    it("renvoie une erreur 404 si le service n'existe pas", async () => {
+      testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
+        unBrouillonComplet().construis();
+      testeur.depotDonnees().service = async () => undefined;
+
+      const reponse = await testeur.get(
+        `/api/service/${unUUIDRandom()}/simulation-migration-referentiel/evolution-mesures`
+      );
+
+      expect(reponse.status).toBe(404);
+    });
+
+    it("renvoie une erreur 400 si l'ID passé n'est pas un UUID", async () => {
+      const resultat = await testeur.get(
+        `/api/service/pas-un-uuid/simulation-migration-referentiel/evolution-mesures`
       );
 
       expect(resultat.status).toBe(400);
