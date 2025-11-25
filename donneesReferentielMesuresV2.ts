@@ -1442,3 +1442,5 @@ export type ActiviteExternalisee =
   keyof typeof questionsV2.activiteExternalisee;
 export type StatutDeploiement = keyof typeof questionsV2.statutDeploiement;
 export type NiveauSecurite = keyof typeof questionsV2.niveauSecurite;
+
+export type IdMesureV2 = keyof typeof mesuresV2;

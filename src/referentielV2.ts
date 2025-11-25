@@ -3,6 +3,7 @@ import { Referentiel } from './referentiel.interface.js';
 import {
   CategorieDonneesTraitees,
   DureeDysfonctionnementAcceptable,
+  IdMesureV2,
   LocalisationDonneesTraitees,
   mesuresV2,
   questionsV2,
@@ -10,10 +11,7 @@ import {
   StatutDeploiement,
   TypeDeService,
 } from '../donneesReferentielMesuresV2.js';
-import {
-  IdMesureV2,
-  ReglesDuReferentielMesuresV2,
-} from './moteurRegles/v2/moteurReglesV2.js';
+import { ReglesDuReferentielMesuresV2 } from './moteurRegles/v2/moteurReglesV2.js';
 
 export type DonneesReferentielV2 = typeof questionsV2 & {
   mesures: typeof mesuresV2;

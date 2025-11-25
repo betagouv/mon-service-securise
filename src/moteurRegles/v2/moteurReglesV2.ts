@@ -2,15 +2,13 @@ import { Referentiel } from '../../referentiel.interface.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import {
   ActiviteExternalisee,
-  mesuresV2,
+  IdMesureV2,
   SpecificiteProjet,
   TypeDeService,
   TypeHebergement,
 } from '../../../donneesReferentielMesuresV2.js';
 import { RegleV2 } from './regleV2.js';
 import { NiveauCriticite } from './niveauSecurite.js';
-
-export type IdMesureV2 = keyof typeof mesuresV2;
 
 export type Modificateur =
   | 'RendreIndispensable'
