@@ -8,6 +8,8 @@
   export let noteMax: number;
   export let idService: string = '';
 
+  const idAleatoire = Math.random().toString(36).slice(2, 8);
+
   $: indiceCyberFormatte = Intl.NumberFormat('fr', {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
@@ -58,7 +60,7 @@
 
 <svelte:body on:mesure-modifiee={metAJourIndiceCyber} />
 <svg
-  id="score-indice-cyber"
+  id="score-indice-cyber-{idAleatoire}"
   viewBox="0 0 160 160"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +75,7 @@
       stroke="#CECECE"
       stroke-width="2"
     />
-    <circle cx="80" cy="80" r="52.5" fill="url(#gradient_fond)" />
+    <circle cx="80" cy="80" r="52.5" fill="url(#gradient_fond-{idAleatoire})" />
     <text
       class="note-max"
       x="105"
@@ -95,25 +97,31 @@
     >
       {indiceCyberFormatte}
     </text>
-    <path id="courbe-texte-indice-cyber" d={cheminCirculaire(80, 80, 72)} />
+    <path
+      id="courbe-texte-indice-cyber-{idAleatoire}"
+      d={cheminCirculaire(80, 80, 72)}
+    />
     <text
       fill="#2f3a43"
       font-size="1em"
       letter-spacing="3px"
       font-weight="bold"
     >
-      <textPath href="#courbe-texte-indice-cyber" startOffset="28">
+      <textPath
+        href="#courbe-texte-indice-cyber-{idAleatoire}"
+        startOffset="28"
+      >
         INDICE CYBER
       </textPath>
     </text>
     <MasqueJauge />
-    <mask id="masque_progression" maskUnits="userSpaceOnUse">
+    <mask id="masque_progression-{idAleatoire}" maskUnits="userSpaceOnUse">
       <MasqueJauge />
     </mask>
-    <g mask="url(#masque_progression)">
+    <g mask="url(#masque_progression-{idAleatoire})">
       <path
         d={cheminDemiCercle(80, 80, 67)}
-        stroke="url(#gradient_progression)"
+        stroke="url(#gradient_progression-{idAleatoire})"
         stroke-width="18"
         transform-origin="80 80"
       >
@@ -143,7 +151,7 @@
   </g>
   <defs>
     <linearGradient
-      id="gradient_fond"
+      id="gradient_fond-{idAleatoire}"
       x1="80.0222"
       y1="29"
       x2="80.0222"
@@ -154,7 +162,7 @@
       <stop offset="1" stop-color={gradientFin} />
     </linearGradient>
     <linearGradient
-      id="gradient_progression"
+      id="gradient_progression-{idAleatoire}"
       x1="60.1532"
       y1="152.01"
       x2="98.9761"
