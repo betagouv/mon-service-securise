@@ -12,6 +12,8 @@ import { fabriqueReferentiel } from '../../../src/fabriqueReferentiel.js';
 import { EquivalencesMesuresV1V2 } from '../../../donneesConversionReferentielMesures.ts';
 import { toutesEquivalencesAvecStatut } from './equivalencesMesuresV1V2.aide.ts';
 import MesureGenerale from '../../../src/modeles/mesureGenerale.js';
+import MesureSpecifique from '../../../src/modeles/mesureSpecifique.js';
+import { unUUID } from '../../constructeurs/UUID.ts';
 
 describe('La simulation de migration du référentiel V1 vers V2', () => {
   let referentielV1: Referentiel;
@@ -255,7 +257,30 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
       expect(a.responsables).toEqual(['Jean Dupond']);
     });
 
-    it.skip('conserve les mesures spécifiques');
+    it('conserve les mesures spécifiques', () => {
+      serviceV1.mesures.mesuresSpecifiques.ajouteMesure(
+        new MesureSpecifique(
+          {
+            id: unUUID('a'),
+            description: 'Ma description',
+            categorie: 'gouvernance',
+            statut: 'fait',
+          },
+          referentielV1
+        )
+      );
+
+      const serviceV2 = uneSimulation(equivalences).enServiceV2();
+      const toutes = serviceV2.mesures.mesuresSpecifiques.toutes();
+
+      expect(toutes).toHaveLength(1);
+      const [a] = toutes;
+      expect(a.statut).toBe('fait');
+      expect(a.id).toBe(unUUID('a'));
+      expect(a.description).toBe('Ma description');
+      expect(a.categorie).toBe('gouvernance');
+    });
+
     it.skip('peut instancier plusieurs mesures v2 pour une seule mesure v1');
   });
 });
