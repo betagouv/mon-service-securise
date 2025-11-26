@@ -11,42 +11,43 @@ import Service from '../../../src/modeles/service.js';
 import { fabriqueReferentiel } from '../../../src/fabriqueReferentiel.js';
 import { EquivalencesMesuresV1V2 } from '../../../donneesConversionReferentielMesures.ts';
 import { toutesEquivalencesAvecStatut } from './equivalencesMesuresV1V2.aide.ts';
+import MesureGenerale from '../../../src/modeles/mesureGenerale.js';
 
 describe('La simulation de migration du référentiel V1 vers V2', () => {
+  let referentielV1: Referentiel;
+  let referentielV2: ReferentielV2;
+  let descriptionServiceV2: DescriptionServiceV2;
+  let serviceV1: Service;
+
+  beforeEach(() => {
+    referentielV1 = fabriqueReferentiel().v1();
+    referentielV2 = fabriqueReferentiel().v2();
+    descriptionServiceV2 = uneDescriptionV2Valide()
+      .avecDureeDysfonctionnementAcceptable('plusDe24h')
+      .avecCategoriesDonneesTraitees([])
+      .avecNiveauSecurite('niveau1')
+      .construis();
+    serviceV1 = unService(referentielV1)
+      .avecDescription(
+        uneDescriptionValide(referentielV1, false).avecTypes([
+          'applicationMobile',
+        ]).donnees
+      )
+      .construis();
+  });
+
+  const uneSimulation = (equivalences?: EquivalencesMesuresV1V2) =>
+    new SimulationMigrationReferentiel(
+      {
+        serviceV1,
+        descriptionServiceV2,
+        referentielV1,
+        referentielV2,
+      },
+      equivalences
+    );
+
   describe("sur demande de l'évolution des mesures", () => {
-    let referentielV1: Referentiel;
-    let referentielV2: ReferentielV2;
-    let descriptionServiceV2: DescriptionServiceV2;
-    let serviceV1: Service;
-
-    beforeEach(() => {
-      referentielV1 = fabriqueReferentiel().v1();
-      referentielV2 = fabriqueReferentiel().v2();
-      descriptionServiceV2 = uneDescriptionV2Valide()
-        .avecDureeDysfonctionnementAcceptable('plusDe24h')
-        .avecCategoriesDonneesTraitees([])
-        .avecNiveauSecurite('niveau1')
-        .construis();
-      serviceV1 = unService(referentielV1)
-        .avecDescription(
-          uneDescriptionValide(referentielV1, false).avecTypes([
-            'applicationMobile',
-          ]).donnees
-        )
-        .construis();
-    });
-
-    const uneSimulation = (equivalences?: EquivalencesMesuresV1V2) =>
-      new SimulationMigrationReferentiel(
-        {
-          serviceV1,
-          descriptionServiceV2,
-          referentielV1,
-          referentielV2,
-        },
-        equivalences
-      );
-
     it('sait dire combien de mesures sont modifiées', () => {
       const deuxModifiees: EquivalencesMesuresV1V2 = {
         ...toutesEquivalencesAvecStatut('inchangee'),
@@ -178,5 +179,83 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
 
       expect(detailsMesures.length).toBe(71);
     });
+  });
+
+  describe("sur demande de l'instanciation du service v2", () => {
+    const equivalences: EquivalencesMesuresV1V2 = {
+      ...toutesEquivalencesAvecStatut('supprimee'),
+      exigencesSecurite: {
+        statut: 'inchangee',
+        // On prend une mesure v2 qui sera présente sur notre service de test
+        idsMesureV2: ['RECENSEMENT.2'],
+        conservationDonnees: true,
+      },
+      identificationDonneesSensibles: {
+        statut: 'inchangee',
+        // On prend une mesure v2 qui sera présente sur notre service de test
+        idsMesureV2: ['DEV.1'],
+        conservationDonnees: true,
+      },
+    };
+
+    it('conserve le statut des équivalences « inchangées » : donc les mesures faites en v1 sont faites en v2', () => {
+      serviceV1.mesures.mesuresGenerales.metsAJourMesure(
+        new MesureGenerale(
+          { id: 'exigencesSecurite', statut: 'fait' },
+          referentielV1
+        )
+      );
+
+      serviceV1.mesures.mesuresGenerales.metsAJourMesure(
+        new MesureGenerale(
+          { id: 'identificationDonneesSensibles', statut: 'fait' },
+          referentielV1
+        )
+      );
+
+      const serviceV2 = uneSimulation(equivalences).enServiceV2();
+
+      expect(serviceV2.version()).toBe('v2');
+      // Les *générales* sont celles où l'utilisateur a saisi des données
+      // Ce ne sont PAS toutes les mesures retournées par le moteur v2, qui sont
+      // les *mesures personnalisées*.
+      const toutes = serviceV2.mesures.mesuresGenerales.toutes();
+      expect(toutes).toHaveLength(2);
+      const [a, b] = toutes;
+      expect(a.id).toBe('RECENSEMENT.2');
+      expect(a.statut).toBe('fait');
+      expect(b.id).toBe('DEV.1');
+      expect(b.statut).toBe('fait');
+    });
+
+    it('conserve toutes les métadonnées des mesures générales', () => {
+      serviceV1.mesures.mesuresGenerales.metsAJourMesure(
+        new MesureGenerale(
+          {
+            id: 'exigencesSecurite',
+            statut: 'fait',
+            modalites: 'une modalite',
+            priorite: 'p1',
+            echeance: '01/01/2025',
+            responsables: ['Jean Dupond'],
+          },
+          referentielV1
+        )
+      );
+
+      const serviceV2 = uneSimulation(equivalences).enServiceV2();
+
+      const toutes = serviceV2.mesures.mesuresGenerales.toutes();
+      expect(toutes).toHaveLength(1);
+      const [a] = toutes;
+      expect(a.id).toBe('RECENSEMENT.2');
+      expect(a.statut).toBe('fait');
+      expect(a.modalites).toBe('une modalite');
+      expect(a.priorite).toBe('p1');
+      expect(a.responsables).toEqual(['Jean Dupond']);
+    });
+
+    it.skip('conserve les mesures spécifiques');
+    it.skip('peut instancier plusieurs mesures v2 pour une seule mesure v1');
   });
 });
