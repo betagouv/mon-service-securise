@@ -127,6 +127,8 @@ export class SimulationMigrationReferentiel {
       {
         descriptionService: this.descriptionServiceV2.donneesSerialisees(),
         mesuresGenerales: mesuresGeneralesV2,
+        mesuresSpecifiques:
+          this.serviceV1.mesures.mesuresSpecifiques.donneesSerialisees(),
         versionService: VersionService.v2,
       },
       this.referentielV2
