@@ -7,12 +7,7 @@ import {
 } from '../../../donneesConversionReferentielMesures.js';
 import { MoteurReglesV2 } from '../v2/moteurReglesV2.js';
 import { type IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
-
-export type DetailMesure = {
-  ancienneDescription?: string;
-  nouvelleDescription?: string;
-  statut: 'inchangee' | 'modifiee' | 'supprimee' | 'ajoutee';
-};
+import { DetailMesure } from './simulationMigrationReferentiel.types.js';
 
 export class SimulationMigrationReferentiel {
   private readonly serviceV1: Service;
