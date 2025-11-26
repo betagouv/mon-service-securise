@@ -9,6 +9,7 @@ import {
 import { MoteurReglesV2 } from '../v2/moteurReglesV2.js';
 import { type IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 import { DetailMesure } from './simulationMigrationReferentiel.types.js';
+import { DescriptionEquivalenceMesure } from './descriptionEquivalenceMesure.js';
 
 export class SimulationMigrationReferentiel {
   private readonly serviceV1: Service;
@@ -57,42 +58,29 @@ export class SimulationMigrationReferentiel {
     const mesuresAjouteesEnV2 = Object.keys(mesuresDuServiceV2).filter(
       (idMesuresV2) =>
         !idMesuresV2ConvertiesDepuisV1.includes(idMesuresV2 as IdMesureV2)
-    );
+    ) as IdMesureV2[];
 
     const tousLesIdMesureV1 = Object.keys(mesuresDuServiceV1) as IdMesureV1[];
 
-    const detailsMesuresAjoutees: DetailMesure[] = mesuresAjouteesEnV2.map(
-      (idMesure) => ({
-        nouvelleDescription: this.referentielV2.mesure(idMesure).description,
-        statut: 'ajoutee',
-      })
+    const equivalence = new DescriptionEquivalenceMesure(
+      this.referentielV1,
+      this.referentielV2
     );
 
-    const detailsAutresMesures: DetailMesure[] =
-      tousLesIdMesureV1.flatMap<DetailMesure>((idMesureV1) => {
+    const detailsMesuresAjoutees = mesuresAjouteesEnV2.map((idMesure) =>
+      equivalence.ajoutee(idMesure)
+    );
+
+    const detailsAutresMesures = tousLesIdMesureV1.flatMap<DetailMesure>(
+      (idMesureV1) => {
         const { idsMesureV2, statut } = this.equivalences[idMesureV1];
         if (statut === 'inchangee')
-          return idsMesureV2.map((idMesureV2) => ({
-            ancienneDescription:
-              this.referentielV1.mesure(idMesureV1).description,
-            nouvelleDescription:
-              this.referentielV2.mesure(idMesureV2).description,
-            statut: 'inchangee',
-          }));
+          return equivalence.inchangees(idMesureV1, idsMesureV2);
         if (statut === 'modifiee')
-          return idsMesureV2.map((idMesureV2) => ({
-            ancienneDescription:
-              this.referentielV1.mesure(idMesureV1).description,
-            nouvelleDescription:
-              this.referentielV2.mesure(idMesureV2).description,
-            statut: 'modifiee',
-          }));
-        return {
-          ancienneDescription:
-            this.referentielV1.mesure(idMesureV1).description,
-          statut: 'supprimee',
-        };
-      });
+          return equivalence.modifiees(idMesureV1, idsMesureV2);
+        return equivalence.supprimee(idMesureV1);
+      }
+    );
 
     const detailsMesures: DetailMesure[] = [
       ...detailsMesuresAjoutees,
