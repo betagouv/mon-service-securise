@@ -36,6 +36,17 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         .construis();
     });
 
+    const uneSimulation = (equivalences?: EquivalencesMesuresV1V2) =>
+      new SimulationMigrationReferentiel(
+        {
+          serviceV1,
+          descriptionServiceV2,
+          referentielV1,
+          referentielV2,
+        },
+        equivalences
+      );
+
     it('sait dire combien de mesures sont modifiées', () => {
       const deuxModifiees: EquivalencesMesuresV1V2 = {
         ...toutesEquivalencesAvecStatut('inchangee'),
@@ -50,16 +61,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
           conservationDonnees: true,
         },
       };
-
-      const simulation = new SimulationMigrationReferentiel(
-        {
-          serviceV1,
-          descriptionServiceV2,
-          referentielV1,
-          referentielV2,
-        },
-        deuxModifiees
-      );
+      const simulation = uneSimulation(deuxModifiees);
 
       const evolution = simulation.evolutionMesures();
 
@@ -80,16 +82,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
           conservationDonnees: true,
         },
       };
-
-      const simulation = new SimulationMigrationReferentiel(
-        {
-          serviceV1,
-          descriptionServiceV2,
-          referentielV1,
-          referentielV2,
-        },
-        deuxInchangees
-      );
+      const simulation = uneSimulation(deuxInchangees);
 
       const evolution = simulation.evolutionMesures();
 
@@ -110,15 +103,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
           conservationDonnees: false,
         },
       };
-      const simulation = new SimulationMigrationReferentiel(
-        {
-          serviceV1,
-          descriptionServiceV2,
-          referentielV1,
-          referentielV2,
-        },
-        deuxSupprimees
-      );
+      const simulation = uneSimulation(deuxSupprimees);
 
       const evolution = simulation.evolutionMesures();
 
@@ -126,12 +111,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
     });
 
     it('sait dire combien de mesures sont présentes au total dans le service v2', () => {
-      const simulation = new SimulationMigrationReferentiel({
-        serviceV1,
-        descriptionServiceV2,
-        referentielV1,
-        referentielV2,
-      });
+      const simulation = uneSimulation();
 
       const evolution = simulation.evolutionMesures();
 
@@ -152,12 +132,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
     });
 
     it('sait donner le details de toutes les mesures', () => {
-      const simulation = new SimulationMigrationReferentiel({
-        serviceV1,
-        descriptionServiceV2,
-        referentielV1,
-        referentielV2,
-      });
+      const simulation = uneSimulation();
 
       const { detailsMesures } = simulation.evolutionMesures();
 
