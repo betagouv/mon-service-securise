@@ -150,15 +150,21 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
 
         const { total } = service.indiceCyber();
 
-        const evolutionMesures = new SimulationMigrationReferentiel({
+        const simulation = new SimulationMigrationReferentiel({
           serviceV1: service,
           descriptionServiceV2: brouillonService.enDescriptionV2(referentielV2),
           referentielV1: referentiel,
           referentielV2,
-        }).evolutionMesures();
+        });
+        const evolutionMesures = simulation.evolutionMesures();
+        const { total: totalV2 } = simulation.enServiceV2().indiceCyber();
 
         return reponse.json({
           indiceCyberV1: { total, max: referentiel.indiceCyberNoteMax() },
+          indiceCyberV2: {
+            total: totalV2,
+            max: referentiel.indiceCyberNoteMax(),
+          },
           evolutionMesures,
         });
       } catch (e) {
