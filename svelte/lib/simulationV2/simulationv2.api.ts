@@ -3,6 +3,7 @@ import type { BrouillonIncomplet } from '../creationV2/creationV2.types';
 import type { MiseAJour } from '../creationV2/creationV2.api';
 import type { IdNiveauDeSecurite } from '../ui/types';
 import type { NiveauSecurite } from '../../../donneesReferentielMesuresV2';
+import type { DetailMesure } from '../../../src/modeles/simulationMigrationReferentiel';
 
 type Simulation = BrouillonIncomplet;
 
@@ -17,8 +18,11 @@ export type ResumeEvolutions = {
     nbMesuresSupprimees: number;
     nbMesures: number;
     nbMesuresAjoutees: number;
+    detailsMesures: DetailMesure[];
   };
 };
+
+export type StatutEvolutionMesure = DetailMesure['statut'];
 
 export const lisSimulation = async (idService: UUID): Promise<Simulation> =>
   (
