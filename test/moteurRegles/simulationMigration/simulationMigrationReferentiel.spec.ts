@@ -9,6 +9,8 @@ import {
 import { DescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.js';
 import Service from '../../../src/modeles/service.js';
 import { fabriqueReferentiel } from '../../../src/fabriqueReferentiel.js';
+import { EquivalencesMesuresV1V2 } from '../../../donneesConversionReferentielMesures.ts';
+import { toutesEquivalencesAvecStatut } from './equivalencesMesuresV1V2.aide.ts';
 
 describe('La simulation de migration du référentiel V1 vers V2', () => {
   describe("sur demande de l'évolution des mesures", () => {
@@ -35,45 +37,92 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
     });
 
     it('sait dire combien de mesures sont modifiées', () => {
-      const simulation = new SimulationMigrationReferentiel({
-        serviceV1,
-        descriptionServiceV2,
-        referentielV1,
-        referentielV2,
-      });
+      const deuxModifiees: EquivalencesMesuresV1V2 = {
+        ...toutesEquivalencesAvecStatut('inchangee'),
+        exigencesSecurite: {
+          statut: 'modifiee',
+          idsMesureV2: ['ADMIN.2'],
+          conservationDonnees: true,
+        },
+        identificationDonneesSensibles: {
+          statut: 'modifiee',
+          idsMesureV2: ['ADMIN.1'],
+          conservationDonnees: true,
+        },
+      };
+
+      const simulation = new SimulationMigrationReferentiel(
+        {
+          serviceV1,
+          descriptionServiceV2,
+          referentielV1,
+          referentielV2,
+        },
+        deuxModifiees
+      );
 
       const evolution = simulation.evolutionMesures();
 
-      // Ce résultat peut être visualisé dans le Grist, en sélectionnant les filtres "Niveau = Basique" & "Évaluation = Modification majeure || Conforme + Split"
-      expect(evolution.nbMesuresModifiees).toBe(10);
+      expect(evolution.nbMesuresModifiees).toBe(2);
     });
 
     it('sait dire combien de mesures restent inchangées', () => {
-      const simulation = new SimulationMigrationReferentiel({
-        serviceV1,
-        descriptionServiceV2,
-        referentielV1,
-        referentielV2,
-      });
+      const deuxInchangees: EquivalencesMesuresV1V2 = {
+        ...toutesEquivalencesAvecStatut('modifiee'),
+        exigencesSecurite: {
+          statut: 'inchangee',
+          idsMesureV2: ['ADMIN.2'],
+          conservationDonnees: true,
+        },
+        identificationDonneesSensibles: {
+          statut: 'inchangee',
+          idsMesureV2: ['ADMIN.1'],
+          conservationDonnees: true,
+        },
+      };
+
+      const simulation = new SimulationMigrationReferentiel(
+        {
+          serviceV1,
+          descriptionServiceV2,
+          referentielV1,
+          referentielV2,
+        },
+        deuxInchangees
+      );
 
       const evolution = simulation.evolutionMesures();
 
-      // Ce résultat peut être visualisé dans le Grist, en sélectionnant les filtres "Niveau = Basique" & "Évaluation = Conforme || Modification mineure"
-      expect(evolution.nbMesuresInchangees).toBe(33);
+      expect(evolution.nbMesuresInchangees).toBe(2);
     });
 
     it('sait dire combien de mesures sont supprimées', () => {
-      const simulation = new SimulationMigrationReferentiel({
-        serviceV1,
-        descriptionServiceV2,
-        referentielV1,
-        referentielV2,
-      });
+      const deuxSupprimees: EquivalencesMesuresV1V2 = {
+        ...toutesEquivalencesAvecStatut('inchangee'),
+        exigencesSecurite: {
+          statut: 'supprimee',
+          idsMesureV2: [],
+          conservationDonnees: false,
+        },
+        identificationDonneesSensibles: {
+          statut: 'supprimee',
+          idsMesureV2: [],
+          conservationDonnees: false,
+        },
+      };
+      const simulation = new SimulationMigrationReferentiel(
+        {
+          serviceV1,
+          descriptionServiceV2,
+          referentielV1,
+          referentielV2,
+        },
+        deuxSupprimees
+      );
 
       const evolution = simulation.evolutionMesures();
 
-      // Ce résultat peut être visualisé dans le Grist, en sélectionnant les filtres "Niveau = Basique" & "Évaluation = Split || Réunification || Absente"
-      expect(evolution.nbMesuresSupprimees).toBe(9);
+      expect(evolution.nbMesuresSupprimees).toBe(2);
     });
 
     it('sait dire combien de mesures sont présentes au total dans le service v2', () => {
