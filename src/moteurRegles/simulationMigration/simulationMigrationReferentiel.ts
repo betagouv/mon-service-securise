@@ -1,12 +1,12 @@
-import type Service from './service.js';
-import { DescriptionServiceV2 } from './descriptionServiceV2.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import type Service from '../../modeles/service.js';
+import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
+import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import {
   conversionMesuresV1versV2,
   IdMesureV1,
-} from '../../donneesConversionReferentielMesures.js';
-import { MoteurReglesV2 } from '../moteurRegles/v2/moteurReglesV2.js';
-import { type IdMesureV2 } from '../../donneesReferentielMesuresV2.js';
+} from '../../../donneesConversionReferentielMesures.js';
+import { MoteurReglesV2 } from '../v2/moteurReglesV2.js';
+import { type IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 
 export type DetailMesure = {
   ancienneDescription?: string;
