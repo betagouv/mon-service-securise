@@ -13,7 +13,7 @@ import {
   conversionMesuresV1versV2,
   EquivalencesMesuresV1V2,
 } from '../../../donneesConversionReferentielMesures.ts';
-import { queDesInchangees } from './equivalencesMesuresV1V2.aide.ts';
+import { toutesEquivalencesAvecStatut } from './equivalencesMesuresV1V2.aide.ts';
 
 describe('La simulation de migration du référentiel V1 vers V2', () => {
   describe("sur demande de l'évolution des mesures", () => {
@@ -44,7 +44,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
 
     it('sait dire combien de mesures sont modifiées', () => {
       const deuxModifiees: EquivalencesMesuresV1V2 = {
-        ...queDesInchangees(),
+        ...toutesEquivalencesAvecStatut('inchangee'),
         exigencesSecurite: {
           statut: 'modifiee',
           idsMesureV2: ['ADMIN.2'],
@@ -73,6 +73,20 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
     });
 
     it('sait dire combien de mesures restent inchangées', () => {
+      const deuxInchangees: EquivalencesMesuresV1V2 = {
+        ...toutesEquivalencesAvecStatut('modifiee'),
+        exigencesSecurite: {
+          statut: 'inchangee',
+          idsMesureV2: ['ADMIN.2'],
+          conservationDonnees: true,
+        },
+        identificationDonneesSensibles: {
+          statut: 'inchangee',
+          idsMesureV2: ['ADMIN.1'],
+          conservationDonnees: true,
+        },
+      };
+
       const simulation = new SimulationMigrationReferentiel(
         {
           serviceV1,
@@ -80,13 +94,12 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
           referentielV1,
           referentielV2,
         },
-        equivalence
+        deuxInchangees
       );
 
       const evolution = simulation.evolutionMesures();
 
-      // Ce résultat peut être visualisé dans le Grist, en sélectionnant les filtres "Niveau = Basique" & "Évaluation = Conforme || Modification mineure"
-      expect(evolution.nbMesuresInchangees).toBe(33);
+      expect(evolution.nbMesuresInchangees).toBe(2);
     });
 
     it('sait dire combien de mesures sont supprimées', () => {
