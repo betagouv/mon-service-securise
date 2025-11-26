@@ -13,7 +13,7 @@ import { reglesValidationBrouillonServiceV2 } from './routesConnecte.schema.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import { DepotDonneesService } from '../../depots/depotDonneesService.interface.js';
-import { SimulationMigrationReferentiel } from '../../modeles/simulationMigrationReferentiel.js';
+import { SimulationMigrationReferentiel } from '../../moteurRegles/simulationMigration/simulationMigrationReferentiel.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;

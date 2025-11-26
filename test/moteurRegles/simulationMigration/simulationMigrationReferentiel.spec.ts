@@ -1,11 +1,14 @@
-import { SimulationMigrationReferentiel } from '../../src/modeles/simulationMigrationReferentiel.js';
-import { unService } from '../constructeurs/constructeurService.js';
-import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.ts';
-import uneDescriptionValide from '../constructeurs/constructeurDescriptionService.js';
-import { Referentiel, ReferentielV2 } from '../../src/referentiel.interface.js';
-import { DescriptionServiceV2 } from '../../src/modeles/descriptionServiceV2.js';
-import Service from '../../src/modeles/service.js';
-import { fabriqueReferentiel } from '../../src/fabriqueReferentiel.js';
+import { SimulationMigrationReferentiel } from '../../../src/moteurRegles/simulationMigration/simulationMigrationReferentiel.js';
+import { unService } from '../../constructeurs/constructeurService.js';
+import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.ts';
+import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
+import {
+  Referentiel,
+  ReferentielV2,
+} from '../../../src/referentiel.interface.js';
+import { DescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.js';
+import Service from '../../../src/modeles/service.js';
+import { fabriqueReferentiel } from '../../../src/fabriqueReferentiel.js';
 
 describe('La simulation de migration du référentiel V1 vers V2', () => {
   describe("sur demande de l'évolution des mesures", () => {
