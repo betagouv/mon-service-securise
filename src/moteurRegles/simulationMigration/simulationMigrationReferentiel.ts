@@ -3,6 +3,7 @@ import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import {
   conversionMesuresV1versV2,
+  EquivalencesMesuresV1V2,
   IdMesureV1,
 } from '../../../donneesConversionReferentielMesures.js';
 import { MoteurReglesV2 } from '../v2/moteurReglesV2.js';
@@ -14,22 +15,27 @@ export class SimulationMigrationReferentiel {
   private readonly descriptionServiceV2: DescriptionServiceV2;
   private readonly referentielV1: Referentiel;
   private readonly referentielV2: ReferentielV2;
+  private readonly equivalences: EquivalencesMesuresV1V2;
 
-  constructor({
-    serviceV1,
-    descriptionServiceV2,
-    referentielV1,
-    referentielV2,
-  }: {
-    serviceV1: Service;
-    descriptionServiceV2: DescriptionServiceV2;
-    referentielV1: Referentiel;
-    referentielV2: ReferentielV2;
-  }) {
+  constructor(
+    {
+      serviceV1,
+      descriptionServiceV2,
+      referentielV1,
+      referentielV2,
+    }: {
+      serviceV1: Service;
+      descriptionServiceV2: DescriptionServiceV2;
+      referentielV1: Referentiel;
+      referentielV2: ReferentielV2;
+    },
+    equivalences: EquivalencesMesuresV1V2 = conversionMesuresV1versV2
+  ) {
     this.serviceV1 = serviceV1;
     this.descriptionServiceV2 = descriptionServiceV2;
     this.referentielV1 = referentielV1;
     this.referentielV2 = referentielV2;
+    this.equivalences = equivalences;
   }
 
   evolutionMesures() {
@@ -41,7 +47,7 @@ export class SimulationMigrationReferentiel {
     const mesuresDuServiceV2 = moteurRegleV2.mesures(this.descriptionServiceV2);
 
     const idMesuresV2ConvertiesDepuisV1: Array<IdMesureV2> = Object.entries(
-      conversionMesuresV1versV2
+      this.equivalences
     )
       .filter(([idMesureV1]) =>
         Object.keys(mesuresDuServiceV1).includes(idMesureV1)
@@ -64,7 +70,7 @@ export class SimulationMigrationReferentiel {
 
     const detailsAutresMesures: DetailMesure[] =
       tousLesIdMesureV1.flatMap<DetailMesure>((idMesureV1) => {
-        const { idsMesureV2, statut } = conversionMesuresV1versV2[idMesureV1];
+        const { idsMesureV2, statut } = this.equivalences[idMesureV1];
         if (statut === 'inchangee')
           return idsMesureV2.map((idMesureV2) => ({
             ancienneDescription:
