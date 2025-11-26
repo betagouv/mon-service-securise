@@ -3,17 +3,17 @@ import { IdMesureV2 } from './donneesReferentielMesuresV2.js';
 
 export type IdMesureV1 = keyof (typeof donneesReferentielV1)['mesures'];
 
-type EquivalenceMesureV2 = {
-  idsMesureV2: IdMesureV2[];
-  statut: 'inchangee' | 'modifiee' | 'supprimee';
-  conservationDonnees: boolean;
-};
+export type EquivalencesMesuresV1V2 = Record<
+  IdMesureV1,
+  {
+    idsMesureV2: IdMesureV2[];
+    statut: 'inchangee' | 'modifiee' | 'supprimee';
+    conservationDonnees: boolean;
+  }
+>;
 
 // Voir scripts/moteurRegles/transformeLienV1V2EnJSON.sh pour générer ce JSON à partir du CSV Grist.
-export const conversionMesuresV1versV2: Record<
-  IdMesureV1,
-  EquivalenceMesureV2
-> = {
+export const conversionMesuresV1versV2: EquivalencesMesuresV1V2 = {
   exigencesSecurite: {
     idsMesureV2: ['CONTRAT.1'],
     statut: 'inchangee',
