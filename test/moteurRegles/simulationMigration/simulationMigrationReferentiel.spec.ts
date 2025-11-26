@@ -103,6 +103,19 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
     });
 
     it('sait dire combien de mesures sont supprimées', () => {
+      const deuxSupprimees: EquivalencesMesuresV1V2 = {
+        ...toutesEquivalencesAvecStatut('inchangee'),
+        exigencesSecurite: {
+          statut: 'supprimee',
+          idsMesureV2: [],
+          conservationDonnees: false,
+        },
+        identificationDonneesSensibles: {
+          statut: 'supprimee',
+          idsMesureV2: [],
+          conservationDonnees: false,
+        },
+      };
       const simulation = new SimulationMigrationReferentiel(
         {
           serviceV1,
@@ -110,13 +123,12 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
           referentielV1,
           referentielV2,
         },
-        equivalence
+        deuxSupprimees
       );
 
       const evolution = simulation.evolutionMesures();
 
-      // Ce résultat peut être visualisé dans le Grist, en sélectionnant les filtres "Niveau = Basique" & "Évaluation = Split || Réunification || Absente"
-      expect(evolution.nbMesuresSupprimees).toBe(9);
+      expect(evolution.nbMesuresSupprimees).toBe(2);
     });
 
     it('sait dire combien de mesures sont présentes au total dans le service v2', () => {
