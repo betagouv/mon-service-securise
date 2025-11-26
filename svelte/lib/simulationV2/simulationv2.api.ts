@@ -3,7 +3,7 @@ import type { BrouillonIncomplet } from '../creationV2/creationV2.types';
 import type { MiseAJour } from '../creationV2/creationV2.api';
 import type { IdNiveauDeSecurite } from '../ui/types';
 import type { NiveauSecurite } from '../../../donneesReferentielMesuresV2';
-import type { DetailMesure } from '../../../src/modeles/simulationMigrationReferentiel';
+import type { DetailMesure } from '../../../src/moteurRegles/simulationMigration/simulationMigrationReferentiel.types';
 
 type Simulation = BrouillonIncomplet;
 
