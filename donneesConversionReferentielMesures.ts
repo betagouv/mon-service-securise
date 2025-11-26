@@ -5,11 +5,21 @@ export type IdMesureV1 = keyof (typeof donneesReferentielV1)['mesures'];
 
 export type EquivalencesMesuresV1V2 = Record<
   IdMesureV1,
-  {
-    idsMesureV2: IdMesureV2[];
-    statut: 'inchangee' | 'modifiee' | 'supprimee';
-    conservationDonnees: boolean;
-  }
+  | {
+      idsMesureV2: IdMesureV2[];
+      statut: 'modifiee';
+      conservationDonnees: boolean;
+    }
+  | {
+      idsMesureV2: IdMesureV2[];
+      statut: 'inchangee';
+      conservationDonnees: true;
+    }
+  | {
+      idsMesureV2: IdMesureV2[];
+      statut: 'supprimee';
+      conservationDonnees: false;
+    }
 >;
 
 // Voir scripts/moteurRegles/transformeLienV1V2EnJSON.sh pour générer ce JSON à partir du CSV Grist.
