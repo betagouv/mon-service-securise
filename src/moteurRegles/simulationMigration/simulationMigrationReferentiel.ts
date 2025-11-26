@@ -118,10 +118,12 @@ export class SimulationMigrationReferentiel {
 
     const mesuresGeneralesV2 = donneesMesuresV1
       .filter((generaleV1) => idMesuresV1AConserver.includes(generaleV1.id))
-      .map((generaleV1) => ({
-        ...generaleV1,
-        id: this.equivalences[generaleV1.id].idsMesureV2[0],
-      }));
+      .flatMap((generaleV1) =>
+        this.equivalences[generaleV1.id].idsMesureV2.map((idV2) => ({
+          ...generaleV1,
+          id: idV2,
+        }))
+      );
 
     return new Service(
       {

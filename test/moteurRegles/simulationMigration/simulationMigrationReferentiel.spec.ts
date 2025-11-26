@@ -281,6 +281,40 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
       expect(a.categorie).toBe('gouvernance');
     });
 
-    it.skip('peut instancier plusieurs mesures v2 pour une seule mesure v1');
+    it('peut instancier plusieurs mesures v2 pour une seule mesure v1', () => {
+      const equivalencesAvecDeuxMesuresV2PourUneV1: EquivalencesMesuresV1V2 = {
+        ...toutesEquivalencesAvecStatut('supprimee'),
+        exigencesSecurite: {
+          statut: 'inchangee',
+          idsMesureV2: ['RECENSEMENT.2', 'DEV.1'],
+          conservationDonnees: true,
+        },
+      };
+
+      serviceV1.mesures.mesuresGenerales.metsAJourMesure(
+        new MesureGenerale(
+          {
+            id: 'exigencesSecurite',
+            statut: 'fait',
+            modalites: 'une modalite',
+            priorite: 'p1',
+            echeance: '01/01/2025',
+            responsables: ['Jean Dupond'],
+          },
+          referentielV1
+        )
+      );
+
+      const serviceV2 = uneSimulation(
+        equivalencesAvecDeuxMesuresV2PourUneV1
+      ).enServiceV2();
+
+      const toutes = serviceV2.mesures.mesuresGenerales.toutes();
+
+      expect(toutes).toHaveLength(2);
+      const [a, b] = toutes;
+      expect(a.id).toBe('RECENSEMENT.2');
+      expect(b.id).toBe('DEV.1');
+    });
   });
 });
