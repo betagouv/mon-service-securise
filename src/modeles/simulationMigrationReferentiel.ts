@@ -6,7 +6,13 @@ import {
   IdMesureV1,
 } from '../../donneesConversionReferentielMesures.js';
 import { MoteurReglesV2 } from '../moteurRegles/v2/moteurReglesV2.js';
-import { IdMesureV2 } from '../../donneesReferentielMesuresV2.js';
+import { type IdMesureV2 } from '../../donneesReferentielMesuresV2.js';
+
+export type DetailMesure = {
+  ancienneDescription?: string;
+  nouvelleDescription?: string;
+  statut: 'inchangee' | 'modifiee' | 'supprimee' | 'ajoutee';
+};
 
 export class SimulationMigrationReferentiel {
   private readonly serviceV1: Service;
@@ -52,25 +58,59 @@ export class SimulationMigrationReferentiel {
         !idMesuresV2ConvertiesDepuisV1.includes(idMesuresV2 as IdMesureV2)
     );
 
-    return Object.keys(mesuresDuServiceV1).reduce(
-      (acc, idMesureV1) => {
-        const { statut } = conversionMesuresV1versV2[idMesureV1 as IdMesureV1];
-        if (statut === 'inchangee') {
-          acc.nbMesuresInchangees += 1;
-        } else if (statut === 'modifiee') {
-          acc.nbMesuresModifiees += 1;
-        } else if (statut === 'supprimee') {
-          acc.nbMesuresSupprimees += 1;
-        }
-        return acc;
-      },
-      {
-        nbMesuresInchangees: 0,
-        nbMesuresModifiees: 0,
-        nbMesuresSupprimees: 0,
-        nbMesures: Object.keys(mesuresDuServiceV2).length,
-        nbMesuresAjoutees: mesuresAjouteesEnV2.length,
-      }
+    const tousLesIdMesureV1 = Object.keys(mesuresDuServiceV1) as IdMesureV1[];
+
+    const detailsMesuresAjoutees: DetailMesure[] = mesuresAjouteesEnV2.map(
+      (idMesure) => ({
+        nouvelleDescription: this.referentielV2.mesure(idMesure).description,
+        statut: 'ajoutee',
+      })
     );
+
+    const detailsAutresMesures: DetailMesure[] =
+      tousLesIdMesureV1.flatMap<DetailMesure>((idMesureV1) => {
+        const { idsMesureV2, statut } = conversionMesuresV1versV2[idMesureV1];
+        if (statut === 'inchangee')
+          return idsMesureV2.map((idMesureV2) => ({
+            ancienneDescription:
+              this.referentielV1.mesure(idMesureV1).description,
+            nouvelleDescription:
+              this.referentielV2.mesure(idMesureV2).description,
+            statut: 'inchangee',
+          }));
+        if (statut === 'modifiee')
+          return idsMesureV2.map((idMesureV2) => ({
+            ancienneDescription:
+              this.referentielV1.mesure(idMesureV1).description,
+            nouvelleDescription:
+              this.referentielV2.mesure(idMesureV2).description,
+            statut: 'modifiee',
+          }));
+        return {
+          ancienneDescription:
+            this.referentielV1.mesure(idMesureV1).description,
+          statut: 'supprimee',
+        };
+      });
+
+    const detailsMesures: DetailMesure[] = [
+      ...detailsMesuresAjoutees,
+      ...detailsAutresMesures,
+    ];
+
+    return {
+      detailsMesures,
+      nbMesuresInchangees: detailsAutresMesures.filter(
+        (m) => m.statut === 'inchangee'
+      ).length,
+      nbMesuresModifiees: detailsAutresMesures.filter(
+        (m) => m.statut === 'modifiee'
+      ).length,
+      nbMesuresSupprimees: detailsAutresMesures.filter(
+        (m) => m.statut === 'supprimee'
+      ).length,
+      nbMesures: Object.keys(mesuresDuServiceV2).length,
+      nbMesuresAjoutees: detailsMesuresAjoutees.length,
+    };
   }
 }
