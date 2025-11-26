@@ -13,6 +13,7 @@ import {
   conversionMesuresV1versV2,
   EquivalencesMesuresV1V2,
 } from '../../../donneesConversionReferentielMesures.ts';
+import { queDesInchangees } from './equivalencesMesuresV1V2.aide.ts';
 
 describe('La simulation de migration du référentiel V1 vers V2', () => {
   describe("sur demande de l'évolution des mesures", () => {
@@ -42,6 +43,20 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
     });
 
     it('sait dire combien de mesures sont modifiées', () => {
+      const deuxModifiees: EquivalencesMesuresV1V2 = {
+        ...queDesInchangees(),
+        exigencesSecurite: {
+          statut: 'modifiee',
+          idsMesureV2: ['ADMIN.2'],
+          conservationDonnees: true,
+        },
+        identificationDonneesSensibles: {
+          statut: 'modifiee',
+          idsMesureV2: ['ADMIN.1'],
+          conservationDonnees: true,
+        },
+      };
+
       const simulation = new SimulationMigrationReferentiel(
         {
           serviceV1,
@@ -49,13 +64,12 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
           referentielV1,
           referentielV2,
         },
-        equivalence
+        deuxModifiees
       );
 
       const evolution = simulation.evolutionMesures();
 
-      // Ce résultat peut être visualisé dans le Grist, en sélectionnant les filtres "Niveau = Basique" & "Évaluation = Modification majeure || Conforme + Split"
-      expect(evolution.nbMesuresModifiees).toBe(10);
+      expect(evolution.nbMesuresModifiees).toBe(2);
     });
 
     it('sait dire combien de mesures restent inchangées', () => {
