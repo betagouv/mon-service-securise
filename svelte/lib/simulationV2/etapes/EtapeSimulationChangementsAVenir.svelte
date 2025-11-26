@@ -1,14 +1,15 @@
 <script lang="ts">
-    import {
-        type ResumeEvolutions,
-        lisEvolutionMesures, type StatutEvolutionMesure,
-    } from '../simulationv2.api';
+  import {
+    type ResumeEvolutions,
+    lisEvolutionMesures,
+    type StatutEvolutionMesure,
+  } from '../simulationv2.api';
   import { onMount } from 'svelte';
   import { leBrouillon } from '../../creationV2/etapes/brouillon.store';
   import IndiceCyber from '../../indiceCyber/IndiceCyber.svelte';
   import donneesNiveauxDeSecurite from '../../niveauxDeSecurite/donneesNiveauxDeSecurite';
-  import Tableau from "../../ui/Tableau.svelte";
-  import Onglets from "../../ui/Onglets.svelte";
+  import Tableau from '../../ui/Tableau.svelte';
+  import Onglets from '../../ui/Onglets.svelte';
 
   let resumeEvolutions: ResumeEvolutions;
   let ongletActif: StatutEvolutionMesure = 'ajoutee';
@@ -17,14 +18,20 @@
     resumeEvolutions = await lisEvolutionMesures($leBrouillon.id!);
   });
 
-  $: donneesAAfficher = resumeEvolutions?.evolutionMesures.detailsMesures.filter(m => m.statut === ongletActif) || [];
+  $: donneesAAfficher =
+    resumeEvolutions?.evolutionMesures.detailsMesures.filter(
+      (m) => m.statut === ongletActif
+    ) || [];
 
-  const configurationStatut: Record<StatutEvolutionMesure, {label: string, icone: string}> = {
-      ajoutee: { label: 'Ajoutée', icone: 'icone_tableau_ajout' },
-      inchangee: { label: 'Inchangée', icone: 'icone_tableau_succes' },
-      modifiee: { label: 'Modifiée', icone: 'icone_tableau_modifie' },
-      supprimee: { label: 'Supprimée', icone: 'icone_tableau_supprime' },
-  }
+  const configurationStatut: Record<
+    StatutEvolutionMesure,
+    { label: string; icone: string }
+  > = {
+    ajoutee: { label: 'Ajoutée', icone: 'icone_tableau_ajout' },
+    inchangee: { label: 'Inchangée', icone: 'icone_tableau_succes' },
+    modifiee: { label: 'Modifiée', icone: 'icone_tableau_modifie' },
+    supprimee: { label: 'Supprimée', icone: 'icone_tableau_supprime' },
+  };
 </script>
 
 <hr />
@@ -78,6 +85,19 @@
           </div>
           <span>Avec le référentiel actuel</span>
         </div>
+        <img
+          src="/statique/assets/images/home/icone_fleche_gauche.svg"
+          alt=""
+        />
+        <div>
+          <div class="contenu-indice-cyber">
+            <IndiceCyber
+              indiceCyber={resumeEvolutions.indiceCyberV2.total}
+              noteMax={resumeEvolutions.indiceCyberV2.max}
+            />
+          </div>
+          <span>Avec le nouveau référentiel</span>
+        </div>
       </div>
     </div>
   </div>
@@ -85,33 +105,33 @@
     <h6>Évolution du référentiel de mesures</h6>
     <Tableau
       colonnes={[
-          { cle: 'ancienneDescription', libelle: 'Mesure actuelle' },
-          { cle: 'nouvelleDescription', libelle: 'Nouvelle version proprosée' },
-          { cle: 'statut', libelle: 'Type de changement' },
-        ]}
+        { cle: 'ancienneDescription', libelle: 'Mesure actuelle' },
+        { cle: 'nouvelleDescription', libelle: 'Nouvelle version proprosée' },
+        { cle: 'statut', libelle: 'Type de changement' },
+      ]}
       donnees={donneesAAfficher}
     >
       <div slot="onglets">
         <Onglets
           bind:ongletActif
           onglets={[
-              {
-                id: 'ajoutee',
-                label: 'Ajoutées',
-              },
-              {
-                id: 'inchangee',
-                label: 'Inchangées',
-              },
-              {
-                id: 'modifiee',
-                label: 'Modifiées',
-              },
-              {
-                id: 'supprimee',
-                label: 'Supprimées',
-              },
-            ]}
+            {
+              id: 'ajoutee',
+              label: 'Ajoutées',
+            },
+            {
+              id: 'inchangee',
+              label: 'Inchangées',
+            },
+            {
+              id: 'modifiee',
+              label: 'Modifiées',
+            },
+            {
+              id: 'supprimee',
+              label: 'Supprimées',
+            },
+          ]}
         />
       </div>
       <svelte:fragment slot="cellule" let:donnee let:colonne>
@@ -120,9 +140,12 @@
         {:else if colonne.cle === 'nouvelleDescription'}
           <span>{donnee.nouvelleDescription ?? '-'}</span>
         {:else if colonne.cle === 'statut'}
-          {@const {label, icone} = configurationStatut[donnee.statut]}
+          {@const { label, icone } = configurationStatut[donnee.statut]}
           <div class="conteneur-statut">
-            <img src="/statique/assets/images/{icone}.svg" alt="Icône du statut {label}"/>
+            <img
+              src="/statique/assets/images/{icone}.svg"
+              alt="Icône du statut {label}"
+            />
             <span>{label}</span>
           </div>
         {/if}
@@ -199,6 +222,12 @@
     .conteneur-indice-cyber {
       margin-top: 32px;
       max-width: 400px;
+      display: flex;
+      gap: 32px;
+
+      img {
+        transform: rotate(180deg);
+      }
 
       & > div {
         display: flex;
@@ -218,7 +247,10 @@
     }
   }
 
-  :global(.tableau-evolutions-mesures td:nth-child(1), .tableau-evolutions-mesures td:nth-child(2)) {
+  :global(
+      .tableau-evolutions-mesures td:nth-child(1),
+      .tableau-evolutions-mesures td:nth-child(2)
+    ) {
     width: 40%;
   }
 
