@@ -443,6 +443,23 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
         expect(reponse.status).toBe(200);
         expect(reponse.body.evolutionMesures.nbMesures).not.toBe(undefined);
       });
+
+      it("retourne l'indice cyber du futur service V2", async () => {
+        const idService = unUUIDRandom();
+        const serviceV1 = unService().avecId(idService).construis();
+        testeur.referentiel().recharge({ indiceCyber: { noteMax: 5 } });
+        testeur.depotDonnees().service = async () => serviceV1;
+        testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
+          unBrouillonComplet().construis();
+
+        const reponse = await testeur.get(
+          `/api/service/${idService}/simulation-migration-referentiel/evolution-mesures`
+        );
+
+        expect(reponse.status).toBe(200);
+        expect(reponse.body.indiceCyberV2.total).not.toBe(undefined);
+        expect(reponse.body.indiceCyberV2.max).toBe(5);
+      });
     });
 
     it("renvoie une erreur 404 si la simulation n'existe pas", async () => {
