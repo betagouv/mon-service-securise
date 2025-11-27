@@ -81,7 +81,7 @@
       x="105"
       y="98"
       fill="white"
-      font-size="1.5em"
+      font-size="1.4rem"
       opacity="0.8"
     >
       {noteMax}
@@ -89,11 +89,12 @@
     <line opacity="0.8" x1="97" y1="100" x2="105" y2="70" stroke="white" />
     <text
       class="indice-cyber"
-      x="40"
+      x="70"
       y="90"
       fill="white"
-      font-size="2.2em"
+      font-size="2.2rem"
       font-weight="bold"
+      text-anchor="middle"
     >
       {indiceCyberFormatte}
     </text>
@@ -103,13 +104,13 @@
     />
     <text
       fill="#2f3a43"
-      font-size="1em"
+      font-size="1rem"
       letter-spacing="3px"
       font-weight="bold"
     >
       <textPath
         href="#courbe-texte-indice-cyber-{idAleatoire}"
-        startOffset="28"
+        startOffset="40"
       >
         INDICE CYBER
       </textPath>
