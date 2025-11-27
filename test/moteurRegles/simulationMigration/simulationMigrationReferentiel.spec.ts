@@ -286,4 +286,29 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
       expect(b.id).toBe('DEV.1');
     });
   });
+
+  describe("sur demande de l'évolution de l'indice cyber", () => {
+    it('retourne les indices cyber v1 et v2 ainsi que leur maximum', () => {
+      serviceV1.mesures.mesuresGenerales.metsAJourMesure(
+        new MesureGenerale(
+          { id: 'exigencesSecurite', statut: 'fait' },
+          referentielV1
+        )
+      );
+      serviceV1.mesures.mesuresGenerales.metsAJourMesure(
+        new MesureGenerale(
+          { id: 'identificationDonneesSensibles', statut: 'fait' },
+          referentielV1
+        )
+      );
+
+      const { v1, v2, max } = uneSimulation().evolutionIndiceCyber();
+
+      expect(v1).toBeGreaterThan(0);
+      expect(v1).toBeLessThan(5);
+      expect(v2).toBeGreaterThan(0);
+      expect(v2).toBeLessThan(5);
+      expect(max).toBe(5);
+    });
+  });
 });
