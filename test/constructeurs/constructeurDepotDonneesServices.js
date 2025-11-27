@@ -4,6 +4,7 @@ import * as Referentiel from '../../src/referentiel.js';
 import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
 import * as DepotDonneesUtilisateurs from '../../src/depots/depotDonneesUtilisateurs.js';
+import { creeReferentielV2 } from '../../src/referentielV2.js';
 
 class ConstructeurDepotDonneesServices {
   constructor() {
@@ -12,6 +13,7 @@ class ConstructeurDepotDonneesServices {
     this.adaptateurUUID = { genereUUID: () => 'unUUID' };
     this.busEvenements = { publie: () => {}, abonne: () => {} };
     this.referentiel = Referentiel.creeReferentielVide();
+    this.referentielV2 = creeReferentielV2();
     this.adaptateurRechercheEntite = fauxAdaptateurRechercheEntreprise();
   }
 
@@ -37,6 +39,11 @@ class ConstructeurDepotDonneesServices {
 
   avecReferentiel(referentiel) {
     this.referentiel = referentiel;
+    return this;
+  }
+
+  avecReferentielV2(referentielV2) {
+    this.referentielV2 = referentielV2;
     return this;
   }
 
@@ -73,6 +80,7 @@ class ConstructeurDepotDonneesServices {
           adaptateurChiffrement: this.adaptateurChiffrement,
         }),
       referentiel: this.referentiel,
+      referentielV2: this.referentielV2,
     });
   }
 }

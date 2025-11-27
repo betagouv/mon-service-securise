@@ -2922,4 +2922,51 @@ describe('Le dépôt de données des services', () => {
       expect(evenement.type).to.be('specifique');
     });
   });
+
+  describe("sur demande de migration d'un service en V2", () => {
+    let depot;
+    let persistance;
+    let referentiel;
+    const referentielV2 = creeReferentielV2();
+
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        statutsMesures: { fait: {}, nonFait: {} },
+      });
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnService(
+          unService(referentiel).avecId('S1').construis().donneesAPersister()
+            .donnees
+        )
+        .nommeCommeProprietaire('U1', ['S1'])
+        .construis();
+
+      depot = unDepotDeDonneesServices()
+        .avecAdaptateurPersistance(persistance)
+        .avecReferentiel(referentiel)
+        .avecReferentielV2(referentielV2)
+        .construis();
+    });
+
+    it('mets à jour la version du service', async () => {
+      expect((await depot.service('S1')).version()).to.be('v1');
+
+      await depot.migreServiceVersV2('U1', 'S1');
+
+      const [service] = await persistance.servicesComplets({ idService: 'S1' });
+      expect(service.versionService).to.be('v2');
+    });
+
+    it('mets à jour la description du service', async () => {
+      await depot.migreServiceVersV2(
+        'U1',
+        'S1',
+        uneDescriptionV2Valide().avecNomService('Un nouveau nom').construis()
+      );
+
+      const [service] = await persistance.servicesComplets({ idService: 'S1' });
+      expect(service.descriptionService.nomService).to.be('Un nouveau nom');
+    });
+  });
 });

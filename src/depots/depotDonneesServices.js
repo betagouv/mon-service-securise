@@ -213,10 +213,12 @@ const creeDepot = (config = {}) => {
 
   const metsAJourProprieteService = (nomPropriete, idService, propriete) => {
     const metsAJour = (s) => {
-      s[nomPropriete] ||= {};
-
-      const donneesPropriete = propriete.toJSON();
-      Object.assign(s[nomPropriete], donneesPropriete);
+      if (Object.hasOwn(propriete, 'toJSON')) {
+        s[nomPropriete] ||= {};
+        Object.assign(s[nomPropriete], propriete.toJSON());
+      } else {
+        s[nomPropriete] = propriete;
+      }
 
       const { id, ...donnees } = s;
       return p.sauvegarde(id, donnees);
@@ -732,6 +734,20 @@ const creeDepot = (config = {}) => {
   const versionsServiceUtiliseesParUtilisateur = async (idUtilisateur) =>
     adaptateurPersistance.versionsServiceUtiliseesParUtilisateur(idUtilisateur);
 
+  const migreServiceVersV2 = async (
+    idUtilisateur,
+    idService,
+    descriptionV2,
+    donneesMesuresV2
+  ) => {
+    await metsAJourProprieteService(
+      'versionService',
+      idService,
+      VersionService.v2
+    );
+    await ajouteDescriptionService(idUtilisateur, idService, descriptionV2);
+  };
+
   return {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
@@ -748,6 +764,7 @@ const creeDepot = (config = {}) => {
     metsAJourMesuresSpecifiquesDesServices,
     metsAJourRisqueSpecifiqueDuService,
     metsAJourService,
+    migreServiceVersV2,
     nombreServices,
     nouveauService,
     rechercheContributeurs,
