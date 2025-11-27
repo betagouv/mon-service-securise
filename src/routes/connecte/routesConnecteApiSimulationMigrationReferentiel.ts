@@ -148,8 +148,6 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
         const service = await depotDonnees.service(idService);
         if (!service) return reponse.sendStatus(404);
 
-        const { total } = service.indiceCyber();
-
         const simulation = new SimulationMigrationReferentiel({
           serviceV1: service,
           descriptionServiceV2: brouillonService.enDescriptionV2(referentielV2),
@@ -157,14 +155,10 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
           referentielV2,
         });
         const evolutionMesures = simulation.evolutionMesures();
-        const { total: totalV2 } = simulation.enServiceV2().indiceCyber();
+        const evolutionIndiceCyber = simulation.evolutionIndiceCyber();
 
         return reponse.json({
-          indiceCyberV1: { total, max: referentiel.indiceCyberNoteMax() },
-          indiceCyberV2: {
-            total: totalV2,
-            max: referentiel.indiceCyberNoteMax(),
-          },
+          evolutionIndiceCyber,
           evolutionMesures,
         });
       } catch (e) {

@@ -411,7 +411,7 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
     });
 
     describe('concernant les données retournées', () => {
-      it("retourne l'indice cyber du service v1 original", async () => {
+      it("retourne l'évolution de l'indice cyber du service", async () => {
         const idService = unUUIDRandom();
         const serviceV1 = unService().avecId(idService).construis();
         serviceV1.mesures.indiceCyber = () => ({ total: 2.5 });
@@ -425,8 +425,9 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
         );
 
         expect(reponse.status).toBe(200);
-        expect(reponse.body.indiceCyberV1.total).toBe(2.5);
-        expect(reponse.body.indiceCyberV1.max).toBe(5);
+        expect(reponse.body.evolutionIndiceCyber.v1).toBe(2.5);
+        expect(reponse.body.evolutionIndiceCyber.max).toBe(5);
+        expect(reponse.body.evolutionIndiceCyber.v2).not.toBe(undefined);
       });
 
       it('retourne les évolutions de mesures', async () => {
@@ -442,23 +443,6 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
 
         expect(reponse.status).toBe(200);
         expect(reponse.body.evolutionMesures.nbMesures).not.toBe(undefined);
-      });
-
-      it("retourne l'indice cyber du futur service V2", async () => {
-        const idService = unUUIDRandom();
-        const serviceV1 = unService().avecId(idService).construis();
-        testeur.referentiel().recharge({ indiceCyber: { noteMax: 5 } });
-        testeur.depotDonnees().service = async () => serviceV1;
-        testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
-          unBrouillonComplet().construis();
-
-        const reponse = await testeur.get(
-          `/api/service/${idService}/simulation-migration-referentiel/evolution-mesures`
-        );
-
-        expect(reponse.status).toBe(200);
-        expect(reponse.body.indiceCyberV2.total).not.toBe(undefined);
-        expect(reponse.body.indiceCyberV2.max).toBe(5);
       });
     });
 
