@@ -51,4 +51,18 @@
   on:finalise={finalise}
   bind:enCoursDeChargement
   titreAssistant="Actualiser votre service"
-/>
+  titreBoutonFinalise="Passer au nouveau référentiel"
+>
+  <svelte:fragment slot="action-supplementaire">
+    {#if $etapeCourante.estDerniereQuestion}
+      <lab-anssi-lien
+        titre="Je reviendrai plus tard"
+        apparence="bouton"
+        variante="secondaire"
+        taille="md"
+        positionIcone="sans"
+        href="/tableauDeBord"
+      />
+    {/if}
+  </svelte:fragment>
+</AssistantServiceV2>

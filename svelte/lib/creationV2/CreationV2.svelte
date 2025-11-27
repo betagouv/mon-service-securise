@@ -100,4 +100,5 @@
   on:finalise={finalise}
   bind:enCoursDeChargement
   titreAssistant="Ajouter un service"
+  titreBoutonFinalise="Commencer à sécuriser le service"
 />
