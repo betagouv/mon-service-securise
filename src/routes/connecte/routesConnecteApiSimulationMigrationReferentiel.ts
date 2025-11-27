@@ -14,6 +14,7 @@ import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import { DepotDonneesService } from '../../depots/depotDonneesService.interface.js';
 import { SimulationMigrationReferentiel } from '../../moteurRegles/simulationMigration/simulationMigrationReferentiel.js';
+import { RequestRouteConnecteService } from './routesConnecte.types.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;
@@ -145,11 +146,9 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
         const brouillonService =
           await depotDonnees.lisSimulationMigrationReferentiel(idService);
 
-        const service = await depotDonnees.service(idService);
-        if (!service) return reponse.sendStatus(404);
-
         const simulation = new SimulationMigrationReferentiel({
-          serviceV1: service,
+          serviceV1: (requete as unknown as RequestRouteConnecteService)
+            .service,
           descriptionServiceV2: brouillonService.enDescriptionV2(referentielV2),
           referentielV1: referentiel,
           referentielV2,

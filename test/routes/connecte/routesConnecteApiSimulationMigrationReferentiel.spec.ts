@@ -416,7 +416,8 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
         const serviceV1 = unService().avecId(idService).construis();
         serviceV1.mesures.indiceCyber = () => ({ total: 2.5 });
         testeur.referentiel().recharge({ indiceCyber: { noteMax: 5 } });
-        testeur.depotDonnees().service = async () => serviceV1;
+        // @ts-expect-error on ne veut réinitialiser que le service
+        testeur.middleware().reinitialise({ serviceARenvoyer: serviceV1 });
         testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
           unBrouillonComplet().construis();
 
@@ -433,7 +434,8 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
       it('retourne les évolutions de mesures', async () => {
         const idService = unUUIDRandom();
         const serviceV1 = unService().avecId(idService).construis();
-        testeur.depotDonnees().service = async () => serviceV1;
+        // @ts-expect-error on ne veut réinitialiser que le service
+        testeur.middleware().reinitialise({ serviceARenvoyer: serviceV1 });
         testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
           unBrouillonComplet().construis();
 
@@ -450,18 +452,6 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
       testeur.depotDonnees().lisSimulationMigrationReferentiel = async () => {
         throw new ErreurSimulationInexistante();
       };
-
-      const reponse = await testeur.get(
-        `/api/service/${unUUIDRandom()}/simulation-migration-referentiel/evolution-mesures`
-      );
-
-      expect(reponse.status).toBe(404);
-    });
-
-    it("renvoie une erreur 404 si le service n'existe pas", async () => {
-      testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
-        unBrouillonComplet().construis();
-      testeur.depotDonnees().service = async () => undefined;
 
       const reponse = await testeur.get(
         `/api/service/${unUUIDRandom()}/simulation-migration-referentiel/evolution-mesures`
