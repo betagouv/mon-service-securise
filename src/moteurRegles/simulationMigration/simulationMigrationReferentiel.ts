@@ -11,6 +11,7 @@ import { type IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 import { DetailMesure } from './simulationMigrationReferentiel.types.js';
 import { DescriptionEquivalenceMesure } from './descriptionEquivalenceMesure.js';
 import { DonneesMesureGenerale } from '../../modeles/mesureGenerale.type.js';
+import { VersionService } from '../../modeles/versionService.js';
 
 export class SimulationMigrationReferentiel {
   private readonly serviceV1: Service;
@@ -120,5 +121,21 @@ export class SimulationMigrationReferentiel {
           id: idV2,
         }))
       );
+  }
+
+  evolutionIndiceCyber(): { v1: number; v2: number; max: number } {
+    const v1 = this.serviceV1.indiceCyber().total;
+
+    const serviceV2Equivalent = new Service(
+      {
+        descriptionService: this.descriptionServiceV2.donneesSerialisees(),
+        mesuresGenerales: this.donneesMesuresGeneralesV2(),
+        versionService: VersionService.v2,
+      },
+      this.referentielV2
+    );
+
+    const v2 = serviceV2Equivalent.indiceCyber().total;
+    return { v1, v2, max: this.referentielV1.indiceCyberNoteMax() };
   }
 }
