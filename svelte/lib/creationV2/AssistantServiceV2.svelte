@@ -10,6 +10,7 @@
 
   export let enCoursDeChargement;
   export let titreAssistant: string;
+  export let titreBoutonFinalise: string;
   let questionCouranteEstComplete = false;
   let modeRapide = false;
 
@@ -99,10 +100,12 @@
           />
         {/if}
 
+        <slot name="action-supplementaire" />
+
         <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
         <lab-anssi-bouton
           titre={$etapeCourante.estDerniereQuestion
-            ? 'Commencer à sécuriser le service'
+            ? titreBoutonFinalise
             : 'Suivant'}
           variante="primaire"
           taille="md"
