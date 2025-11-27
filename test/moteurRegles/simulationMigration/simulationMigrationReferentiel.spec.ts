@@ -205,7 +205,6 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
           referentielV1
         )
       );
-
       serviceV1.mesures.mesuresGenerales.metsAJourMesure(
         new MesureGenerale(
           { id: 'identificationDonneesSensibles', statut: 'fait' },
@@ -261,7 +260,6 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
           conservationDonnees: true,
         },
       };
-
       serviceV1.mesures.mesuresGenerales.metsAJourMesure(
         new MesureGenerale(
           {
