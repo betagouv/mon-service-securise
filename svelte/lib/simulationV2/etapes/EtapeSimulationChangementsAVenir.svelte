@@ -79,8 +79,8 @@
         <div>
           <div class="contenu-indice-cyber">
             <IndiceCyber
-              indiceCyber={resumeEvolutions.indiceCyberV1.total}
-              noteMax={resumeEvolutions.indiceCyberV1.max}
+              indiceCyber={resumeEvolutions.evolutionIndiceCyber.v1}
+              noteMax={resumeEvolutions.evolutionIndiceCyber.max}
             />
           </div>
           <span>Avec le référentiel actuel</span>
@@ -92,8 +92,8 @@
         <div>
           <div class="contenu-indice-cyber">
             <IndiceCyber
-              indiceCyber={resumeEvolutions.indiceCyberV2.total}
-              noteMax={resumeEvolutions.indiceCyberV2.max}
+              indiceCyber={resumeEvolutions.evolutionIndiceCyber.v2}
+              noteMax={resumeEvolutions.evolutionIndiceCyber.max}
             />
           </div>
           <span>Avec le nouveau référentiel</span>
