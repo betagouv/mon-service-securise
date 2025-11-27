@@ -1,10 +1,11 @@
 import { IdMesureV1 } from '../../donneesConversionReferentielMesures.js';
+import { IdMesureV2 } from '../../donneesReferentielMesuresV2.js';
 
-export type DonneesMesureGenerale = {
-  id: IdMesureV1;
+export type DonneesMesureGenerale<TVersion extends IdMesureV1 | IdMesureV2> = {
+  id: TVersion;
   statut: string;
   modalites?: string;
   priorite?: string;
   echeance?: string;
-  reponsables: string[];
+  responsables: string[];
 };
