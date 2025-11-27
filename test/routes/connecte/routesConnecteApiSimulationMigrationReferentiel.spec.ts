@@ -411,7 +411,7 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
     });
 
     describe('concernant les données retournées', () => {
-      it("retourne l'indice cyber du service v1 original", async () => {
+      it("retourne l'évolution de l'indice cyber du service", async () => {
         const idService = unUUIDRandom();
         const serviceV1 = unService().avecId(idService).construis();
         serviceV1.mesures.indiceCyber = () => ({ total: 2.5 });
@@ -425,8 +425,9 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
         );
 
         expect(reponse.status).toBe(200);
-        expect(reponse.body.indiceCyberV1.total).toBe(2.5);
-        expect(reponse.body.indiceCyberV1.max).toBe(5);
+        expect(reponse.body.evolutionIndiceCyber.v1).toBe(2.5);
+        expect(reponse.body.evolutionIndiceCyber.max).toBe(5);
+        expect(reponse.body.evolutionIndiceCyber.v2).not.toBe(undefined);
       });
 
       it('retourne les évolutions de mesures', async () => {

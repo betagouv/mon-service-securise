@@ -1,4 +1,4 @@
-import type Service from '../../modeles/service.js';
+import Service from '../../modeles/service.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import {
@@ -10,6 +10,8 @@ import { MoteurReglesV2 } from '../v2/moteurReglesV2.js';
 import { type IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 import { DetailMesure } from './simulationMigrationReferentiel.types.js';
 import { DescriptionEquivalenceMesure } from './descriptionEquivalenceMesure.js';
+import { DonneesMesureGenerale } from '../../modeles/mesureGenerale.type.js';
+import { VersionService } from '../../modeles/versionService.js';
 
 export class SimulationMigrationReferentiel {
   private readonly serviceV1: Service;
@@ -101,5 +103,39 @@ export class SimulationMigrationReferentiel {
       nbMesures: Object.keys(mesuresDuServiceV2).length,
       nbMesuresAjoutees: detailsMesuresAjoutees.length,
     };
+  }
+
+  donneesMesuresGeneralesV2(): DonneesMesureGenerale<IdMesureV2>[] {
+    const idMesuresV1AConserver = Object.entries(this.equivalences)
+      .filter(([, valeur]) => valeur.conservationDonnees)
+      .map(([idMesure]) => idMesure);
+
+    const donneesMesuresV1 =
+      this.serviceV1.mesures.mesuresGenerales.donneesSerialisees() as DonneesMesureGenerale<IdMesureV1>[];
+
+    return donneesMesuresV1
+      .filter((generaleV1) => idMesuresV1AConserver.includes(generaleV1.id))
+      .flatMap<DonneesMesureGenerale<IdMesureV2>>((generaleV1) =>
+        this.equivalences[generaleV1.id].idsMesureV2.map((idV2) => ({
+          ...generaleV1,
+          id: idV2,
+        }))
+      );
+  }
+
+  evolutionIndiceCyber(): { v1: number; v2: number; max: number } {
+    const v1 = this.serviceV1.indiceCyber().total;
+
+    const serviceV2Equivalent = new Service(
+      {
+        descriptionService: this.descriptionServiceV2.donneesSerialisees(),
+        mesuresGenerales: this.donneesMesuresGeneralesV2(),
+        versionService: VersionService.v2,
+      },
+      this.referentielV2
+    );
+
+    const v2 = serviceV2Equivalent.indiceCyber().total;
+    return { v1, v2, max: this.referentielV1.indiceCyberNoteMax() };
   }
 }
