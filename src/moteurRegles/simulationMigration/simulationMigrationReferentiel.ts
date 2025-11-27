@@ -10,7 +10,6 @@ import { MoteurReglesV2 } from '../v2/moteurReglesV2.js';
 import { type IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 import { DetailMesure } from './simulationMigrationReferentiel.types.js';
 import { DescriptionEquivalenceMesure } from './descriptionEquivalenceMesure.js';
-import { VersionService } from '../../modeles/versionService.js';
 import { DonneesMesureGenerale } from '../../modeles/mesureGenerale.type.js';
 
 export class SimulationMigrationReferentiel {
@@ -105,35 +104,21 @@ export class SimulationMigrationReferentiel {
     };
   }
 
-  enServiceV2(): Service {
+  donneesMesuresGeneralesV2(): DonneesMesureGenerale<IdMesureV2>[] {
     const idMesuresV1AConserver = Object.entries(this.equivalences)
-      .filter(([idMesure, valeur]) =>
-        valeur.conservationDonnees ? idMesure : undefined
-      )
-      .filter(Boolean)
+      .filter(([, valeur]) => valeur.conservationDonnees)
       .map(([idMesure]) => idMesure);
 
     const donneesMesuresV1 =
-      this.serviceV1.mesures.mesuresGenerales.donneesSerialisees() as DonneesMesureGenerale[];
+      this.serviceV1.mesures.mesuresGenerales.donneesSerialisees() as DonneesMesureGenerale<IdMesureV1>[];
 
-    const mesuresGeneralesV2 = donneesMesuresV1
+    return donneesMesuresV1
       .filter((generaleV1) => idMesuresV1AConserver.includes(generaleV1.id))
-      .flatMap((generaleV1) =>
+      .flatMap<DonneesMesureGenerale<IdMesureV2>>((generaleV1) =>
         this.equivalences[generaleV1.id].idsMesureV2.map((idV2) => ({
           ...generaleV1,
           id: idV2,
         }))
       );
-
-    return new Service(
-      {
-        descriptionService: this.descriptionServiceV2.donneesSerialisees(),
-        mesuresGenerales: mesuresGeneralesV2,
-        mesuresSpecifiques:
-          this.serviceV1.mesures.mesuresSpecifiques.donneesSerialisees(),
-        versionService: VersionService.v2,
-      },
-      this.referentielV2
-    );
   }
 }
