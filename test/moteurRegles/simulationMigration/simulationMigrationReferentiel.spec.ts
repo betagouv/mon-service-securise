@@ -12,8 +12,6 @@ import { fabriqueReferentiel } from '../../../src/fabriqueReferentiel.js';
 import { EquivalencesMesuresV1V2 } from '../../../donneesConversionReferentielMesures.ts';
 import { toutesEquivalencesAvecStatut } from './equivalencesMesuresV1V2.aide.ts';
 import MesureGenerale from '../../../src/modeles/mesureGenerale.js';
-import MesureSpecifique from '../../../src/modeles/mesureSpecifique.js';
-import { unUUID } from '../../constructeurs/UUID.ts';
 
 describe('La simulation de migration du référentiel V1 vers V2', () => {
   let referentielV1: Referentiel;
@@ -183,7 +181,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
     });
   });
 
-  describe("sur demande de l'instanciation du service v2", () => {
+  describe('sur demande des données de mesures générales v2', () => {
     const equivalences: EquivalencesMesuresV1V2 = {
       ...toutesEquivalencesAvecStatut('supprimee'),
       exigencesSecurite: {
@@ -215,15 +213,13 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         )
       );
 
-      const serviceV2 = uneSimulation(equivalences).enServiceV2();
+      const mesuresV2 = uneSimulation(equivalences).donneesMesuresGeneralesV2();
 
-      expect(serviceV2.version()).toBe('v2');
       // Les *générales* sont celles où l'utilisateur a saisi des données
       // Ce ne sont PAS toutes les mesures retournées par le moteur v2, qui sont
       // les *mesures personnalisées*.
-      const toutes = serviceV2.mesures.mesuresGenerales.toutes();
-      expect(toutes).toHaveLength(2);
-      const [a, b] = toutes;
+      expect(mesuresV2).toHaveLength(2);
+      const [a, b] = mesuresV2;
       expect(a.id).toBe('RECENSEMENT.2');
       expect(a.statut).toBe('fait');
       expect(b.id).toBe('DEV.1');
@@ -245,40 +241,15 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         )
       );
 
-      const serviceV2 = uneSimulation(equivalences).enServiceV2();
+      const mesuresV2 = uneSimulation(equivalences).donneesMesuresGeneralesV2();
 
-      const toutes = serviceV2.mesures.mesuresGenerales.toutes();
-      expect(toutes).toHaveLength(1);
-      const [a] = toutes;
+      expect(mesuresV2).toHaveLength(1);
+      const [a] = mesuresV2;
       expect(a.id).toBe('RECENSEMENT.2');
       expect(a.statut).toBe('fait');
       expect(a.modalites).toBe('une modalite');
       expect(a.priorite).toBe('p1');
       expect(a.responsables).toEqual(['Jean Dupond']);
-    });
-
-    it('conserve les mesures spécifiques', () => {
-      serviceV1.mesures.mesuresSpecifiques.ajouteMesure(
-        new MesureSpecifique(
-          {
-            id: unUUID('a'),
-            description: 'Ma description',
-            categorie: 'gouvernance',
-            statut: 'fait',
-          },
-          referentielV1
-        )
-      );
-
-      const serviceV2 = uneSimulation(equivalences).enServiceV2();
-      const toutes = serviceV2.mesures.mesuresSpecifiques.toutes();
-
-      expect(toutes).toHaveLength(1);
-      const [a] = toutes;
-      expect(a.statut).toBe('fait');
-      expect(a.id).toBe(unUUID('a'));
-      expect(a.description).toBe('Ma description');
-      expect(a.categorie).toBe('gouvernance');
     });
 
     it('peut instancier plusieurs mesures v2 pour une seule mesure v1', () => {
@@ -305,14 +276,12 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         )
       );
 
-      const serviceV2 = uneSimulation(
+      const mesuresV2 = uneSimulation(
         equivalencesAvecDeuxMesuresV2PourUneV1
-      ).enServiceV2();
+      ).donneesMesuresGeneralesV2();
 
-      const toutes = serviceV2.mesures.mesuresGenerales.toutes();
-
-      expect(toutes).toHaveLength(2);
-      const [a, b] = toutes;
+      expect(mesuresV2).toHaveLength(2);
+      const [a, b] = mesuresV2;
       expect(a.id).toBe('RECENSEMENT.2');
       expect(b.id).toBe('DEV.1');
     });
