@@ -118,7 +118,7 @@
             $etapeCourante.estDerniereQuestion ? await finalise() : suivant()}
         />
         <div class="info-enregistrement-automatique">
-          <span>Votre brouillon est enregistré automatiquement.</span>
+          <em>Brouillon enregistré automatiquement</em>
         </div>
       </div>
     </div>
