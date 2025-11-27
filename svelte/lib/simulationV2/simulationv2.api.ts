@@ -7,14 +7,12 @@ import type { DetailMesure } from '../../../src/moteurRegles/simulationMigration
 
 type Simulation = BrouillonIncomplet;
 
-type IndiceCyber = {
-  total: number;
-  max: number;
-};
-
 export type ResumeEvolutions = {
-  indiceCyberV1: IndiceCyber;
-  indiceCyberV2: IndiceCyber;
+  evolutionIndiceCyber: {
+    v1: number;
+    v2: number;
+    max: number;
+  };
   evolutionMesures: {
     nbMesuresInchangees: number;
     nbMesuresModifiees: number;
