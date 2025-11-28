@@ -1,7 +1,10 @@
 import expect from 'expect.js';
 import ConstructeurEvenementCompletudeServiceModifiee from './constructeurEvenementCompletudeServiceModifiee.js';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
-import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
@@ -181,5 +184,12 @@ describe('Un événement de complétude modifiée', () => {
     } catch (e) {
       expect(e).to.be.an(ErreurDonneeManquante);
     }
+  });
+
+  it('lève une exception sur la conversion en JSON quand on lui passe un service v2', () => {
+    const serviceV2 = unServiceV2().construis();
+    expect(() =>
+      unEvenement().avecService(serviceV2).construis().toJSON()
+    ).to.throwError();
   });
 });
