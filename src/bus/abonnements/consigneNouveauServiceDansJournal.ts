@@ -1,6 +1,5 @@
 import EvenementNouveauServiceCree from '../../modeles/journalMSS/evenementNouveauServiceCree.js';
-import Service from '../../modeles/service.js';
-import Utilisateur from '../../modeles/utilisateur.js';
+import { EvenementNouveauServiceCree as MssNouveauServiceCree } from '../evenementNouveauServiceCree.js';
 import { UUID } from '../../typesBasiques.js';
 import { AdaptateurJournal } from '../../adaptateurs/adaptateurJournal.interface.js';
 
@@ -15,7 +14,7 @@ function consigneNouveauServiceDansJournal({
 }: {
   adaptateurJournal: AdaptateurJournal;
 }) {
-  return async (evenement: { service: Service; utilisateur: Utilisateur }) => {
+  return async (evenement: MssNouveauServiceCree) => {
     const { service, utilisateur } = evenement;
 
     if (!service) leveException('service');

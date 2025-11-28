@@ -7,7 +7,7 @@ import {
 import Dossier from '../modeles/dossier.js';
 import Service from '../modeles/service.js';
 import { Autorisation } from '../modeles/autorisations/autorisation.js';
-import EvenementNouveauServiceCree from '../bus/evenementNouveauServiceCree.js';
+import { EvenementNouveauServiceCree } from '../bus/evenementNouveauServiceCree.js';
 import { EvenementDescriptionServiceModifiee } from '../bus/evenementDescriptionServiceModifiee.js';
 import EvenementDossierHomologationFinalise from '../bus/evenementDossierHomologationFinalise.js';
 import EvenementServiceSupprime from '../bus/evenementServiceSupprime.js';
