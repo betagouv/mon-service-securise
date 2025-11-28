@@ -36,7 +36,7 @@ import {
   Permissions,
 } from '../../src/modeles/autorisations/gestionDroits.js';
 import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
-import EvenementNouveauServiceCree from '../../src/bus/evenementNouveauServiceCree.js';
+import { EvenementNouveauServiceCree } from '../../src/bus/evenementNouveauServiceCree.js';
 import EvenementMesureModifieeEnMasse from '../../src/bus/evenementMesureModifieeEnMasse.js';
 import { EvenementDescriptionServiceModifiee } from '../../src/bus/evenementDescriptionServiceModifiee.js';
 import Mesures from '../../src/modeles/mesures.js';
