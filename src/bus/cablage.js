@@ -1,7 +1,7 @@
 import { EvenementAutorisationsServiceModifiees } from './evenementAutorisationsServiceModifiees.js';
 import { consigneCompletudeDansJournal } from './abonnements/consigneCompletudeDansJournal.js';
 import { envoieTrackingCompletude } from './abonnements/envoieTrackingDeCompletude.js';
-import EvenementNouveauServiceCree from './evenementNouveauServiceCree.js';
+import { EvenementNouveauServiceCree } from './evenementNouveauServiceCree.js';
 import { consigneNouveauServiceDansJournal } from './abonnements/consigneNouveauServiceDansJournal.js';
 import { envoieTrackingDeConnexionUtilisateur } from './abonnements/envoieTrackingDeConnexionUtilisateur.js';
 import { envoieTrackingDeNouveauService } from './abonnements/envoieTrackingDeNouveauService.js';
