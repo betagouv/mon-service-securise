@@ -169,6 +169,39 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
     }
   );
 
+  routes.post(
+    '/:id/simulation-migration-referentiel/finalise',
+    middleware.trouveService({ [DECRIRE]: ECRITURE, [SECURISER]: ECRITURE }),
+    valideParams(z.strictObject({ id: z.uuidv4() })),
+    async (requete, reponse, suite) => {
+      const { id } = requete.params;
+      try {
+        const brouillonService =
+          await depotDonnees.lisSimulationMigrationReferentiel(id as UUID);
+
+        const simulation = new SimulationMigrationReferentiel({
+          serviceV1: (requete as unknown as RequestRouteConnecteService)
+            .service,
+          descriptionServiceV2: brouillonService.enDescriptionV2(referentielV2),
+          referentielV1: referentiel,
+          referentielV2,
+        });
+
+        await depotDonnees.migreServiceVersV2(
+          id as UUID,
+          brouillonService.enDescriptionV2(referentielV2),
+          simulation.donneesMesuresGeneralesV2()
+        );
+
+        return reponse.sendStatus(201);
+      } catch (e) {
+        if (e instanceof ErreurSimulationInexistante)
+          return reponse.sendStatus(404);
+        return suite(e);
+      }
+    }
+  );
+
   return routes;
 };
 
