@@ -14,6 +14,12 @@ import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 import { UUID } from '../../../src/typesBasiques.js';
 import { unBrouillonComplet } from '../../constructeurs/constructeurBrouillonService.js';
 import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  DescriptionServiceV2,
+  DonneesDescriptionServiceV2,
+} from '../../../src/modeles/descriptionServiceV2.js';
+import { DonneesMesureGenerale } from '../../../src/modeles/mesureGenerale.type.js';
+import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;
@@ -466,6 +472,68 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
       );
 
       expect(resultat.status).toBe(400);
+    });
+  });
+
+  describe('quand requête POST sur `/api/service/:id/simulation-migration-referentiel/finalise`', () => {
+    it('recherche le service correspondant', async () => {
+      await testeur.middleware().verifieRechercheService(
+        [
+          { niveau: ECRITURE, rubrique: DECRIRE },
+          { niveau: ECRITURE, rubrique: SECURISER },
+        ],
+        testeur.app(),
+        {
+          method: 'post',
+          url: `/api/service/${unUUIDRandom()}/simulation-migration-referentiel/finalise`,
+        }
+      );
+    });
+
+    it("renvoie une erreur 400 si l'ID passé n'est pas un UUID", async () => {
+      const resultat = await testeur.post(
+        `/api/service/pas-un-uuid/simulation-migration-referentiel/finalise`
+      );
+
+      expect(resultat.status).toBe(400);
+    });
+
+    it("renvoie une erreur 404 si la simulation n'existe pas", async () => {
+      testeur.depotDonnees().lisSimulationMigrationReferentiel = async () => {
+        throw new ErreurSimulationInexistante();
+      };
+
+      const reponse = await testeur.post(
+        `/api/service/${unUUIDRandom()}/simulation-migration-referentiel/finalise`
+      );
+
+      expect(reponse.status).toBe(404);
+    });
+
+    it('délègue au dépôt de données la migration du service en V2', async () => {
+      let donneesRecues;
+      testeur.depotDonnees().migreServiceVersV2 = async (
+        idService: UUID,
+        descriptionServiceV2: DescriptionServiceV2,
+        donneesMesuresV2: DonneesMesureGenerale<IdMesureV2>[]
+      ) => {
+        donneesRecues = { idService, descriptionServiceV2, donneesMesuresV2 };
+      };
+      const idService = unUUIDRandom();
+      const serviceV1 = unService().avecId(idService).construis();
+      // @ts-expect-error on ne veut réinitialiser que le service
+      testeur.middleware().reinitialise({ serviceARenvoyer: serviceV1 });
+      testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
+        unBrouillonComplet().construis();
+
+      const reponse = await testeur.post(
+        `/api/service/${idService}/simulation-migration-referentiel/finalise`
+      );
+
+      expect(reponse.status).toBe(201);
+      expect(donneesRecues!.idService).toBe(idService);
+      expect(donneesRecues!.descriptionServiceV2.nomService).toBe('Service A');
+      expect(donneesRecues!.donneesMesuresV2).not.toBe(undefined);
     });
   });
 });
