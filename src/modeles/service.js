@@ -21,6 +21,7 @@ import { MoteurReglesV2 } from '../moteurRegles/v2/moteurReglesV2.js';
 import { creeReferentielV2 } from '../referentielV2.js';
 import { ObjetPDFAnnexeDescriptionV2 } from './objetsPDF/objetPDFAnnexeDescriptionV2.js';
 import { ToutesActionsRecommandees } from './actionsRecommandees.js';
+import MesuresGenerales from './mesuresGenerales.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -184,6 +185,19 @@ class Service {
     ];
   }
 
+  migreVersV2(descriptionServiceV2, donneesMesuresGenerales, referentiel) {
+    this.referentiel = referentiel;
+    DescriptionServiceV2.valideDonneesCreation(
+      descriptionServiceV2.donneesSerialisees()
+    );
+    this.versionService = VersionService.v2;
+    this.descriptionService = descriptionServiceV2;
+    this.mesures.mesuresGenerales = new MesuresGenerales(
+      { mesuresGenerales: donneesMesuresGenerales },
+      referentiel
+    );
+  }
+
   donneesAPersister() {
     return new ObjetPersistanceService({
       id: this.id,
@@ -196,6 +210,7 @@ class Service {
       rolesResponsabilites: this.rolesResponsabilites.donneesSerialisees(),
       prochainIdNumeriqueDeRisqueSpecifique:
         this.prochainIdNumeriqueDeRisqueSpecifique,
+      versionService: this.versionService,
     });
   }
 

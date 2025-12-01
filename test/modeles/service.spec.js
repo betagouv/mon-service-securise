@@ -20,6 +20,7 @@ import { Contributeur } from '../../src/modeles/contributeur.js';
 import { DescriptionServiceV2 } from '../../src/modeles/descriptionServiceV2.js';
 import { VersionService } from '../../src/modeles/versionService.js';
 import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.js';
+import { creeReferentielV2 } from '../../src/referentielV2.js';
 
 const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER } = Rubriques;
 const { LECTURE } = Permissions;
@@ -792,6 +793,7 @@ describe('Un service', () => {
       const service = new Service(
         {
           id: 'id-service',
+          versionService: VersionService.v1,
           prochainIdNumeriqueDeRisqueSpecifique: 42,
           descriptionService: uneDescriptionValide(
             Referentiel.creeReferentielVide()
@@ -827,6 +829,7 @@ describe('Un service', () => {
 
       expect(service.donneesAPersister().toutes()).to.eql({
         id: 'id-service',
+        versionService: VersionService.v1,
         prochainIdNumeriqueDeRisqueSpecifique: 42,
         descriptionService: {
           delaiAvantImpactCritique: 'unDelai',
@@ -1308,6 +1311,83 @@ describe('Un service', () => {
 
       expect(espionValidationV2).toHaveBeenCalledTimes(1);
       espionValidationV2.mockRestore();
+    });
+  });
+
+  describe('sur demande de migration du service en v2', () => {
+    let service;
+    let referentiel;
+    let referentielV2;
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        categoriesMesures: { gouvernance: {} },
+        mesures: { mesureA: {} },
+        statutsMesures: { fait: {} },
+      });
+      referentielV2 = creeReferentielV2();
+      const uneGouvernanceFaite = new Mesures(
+        { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
+        referentiel,
+        {
+          mesureA: { categorie: 'gouvernance' },
+        }
+      );
+      service = unService(referentiel)
+        .avecNomService('Un service v1')
+        .avecMesures(uneGouvernanceFaite)
+        .construis();
+    });
+
+    it('valide la description v2', () => {
+      const espionValidationV2 = vi
+        .spyOn(DescriptionServiceV2, 'valideDonneesCreation')
+        .mockImplementation(() => {});
+
+      service.migreVersV2(uneDescriptionV2Valide().construis(), []);
+
+      expect(espionValidationV2).toHaveBeenCalledTimes(1);
+      espionValidationV2.mockRestore();
+    });
+
+    it('change la version du service', () => {
+      expect(service.versionService).toBe(VersionService.v1);
+
+      service.migreVersV2(uneDescriptionV2Valide().construis(), []);
+
+      expect(service.versionService).toBe(VersionService.v2);
+    });
+
+    it('change le référentiel du service', () => {
+      expect(service.referentiel).toBe(referentiel);
+
+      service.migreVersV2(
+        uneDescriptionV2Valide().construis(),
+        [],
+        referentielV2
+      );
+
+      expect(service.referentiel).toBe(referentielV2);
+    });
+
+    it('sauvegarde la nouvelle description', () => {
+      service.migreVersV2(
+        uneDescriptionV2Valide().avecNomService('Un service v2').construis(),
+        []
+      );
+
+      expect(service.nomService()).toBe('Un service v2');
+    });
+
+    it('sauvegarde les données de mesure générale', () => {
+      service.migreVersV2(
+        uneDescriptionV2Valide().construis(),
+        [{ id: 'RECENSEMENT.1', statut: 'fait' }],
+        referentielV2
+      );
+
+      expect(service.mesuresGenerales().toutes().length).toBe(1);
+      expect(service.mesuresGenerales().toutes()[0].id).toBe('RECENSEMENT.1');
+      expect(service.mesuresGenerales().toutes()[0].statut).toBe('fait');
     });
   });
 });

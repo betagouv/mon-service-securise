@@ -181,10 +181,16 @@ const nouvelAdaptateur = (
     id,
     donneesService,
     nomServiceHash,
-    siretHash
+    siretHash,
+    versionService
   ) => {
     const s = await serviceParId(id);
-    Object.assign(s, { nomServiceHash, siretHash, donnees: donneesService });
+    Object.assign(s, {
+      nomServiceHash,
+      siretHash,
+      donnees: donneesService,
+      versionService,
+    });
   };
 
   const sauvegardeAutorisation = async (id, donneesAutorisation) => {
@@ -203,7 +209,13 @@ const nouvelAdaptateur = (
   ) => {
     const dejaConnu = donnees.services.find((s) => s.id === id) !== undefined;
     return dejaConnu
-      ? metsAJourService(id, donneesService, nomServiceHash, siretHash)
+      ? metsAJourService(
+          id,
+          donneesService,
+          nomServiceHash,
+          siretHash,
+          versionService
+        )
       : ajouteService(
           id,
           donneesService,

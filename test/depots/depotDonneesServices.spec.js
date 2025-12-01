@@ -1566,8 +1566,9 @@ describe('Le dépôt de données des services', () => {
 
       await depot.finaliseDossierCourant(service);
 
-      service.donneesAPersister().toutes();
-      const { id, ...donnees } = service.donneesAPersister().toutes();
+      const { id, versionService, ...donnees } = service
+        .donneesAPersister()
+        .toutes();
       expect(donneesPassees.id).to.equal('123');
       expect(donneesPassees.donnees).to.eql(donnees);
     });
@@ -2920,6 +2921,47 @@ describe('Le dépôt de données des services', () => {
       expect(evenement.modalitesModifiees).to.be(false);
       expect(evenement.nombreServicesConcernes).to.be(2);
       expect(evenement.type).to.be('specifique');
+    });
+  });
+
+  describe("sur demande de migration d'un service en V2", () => {
+    let depot;
+    let persistance;
+    let referentiel;
+    const referentielV2 = creeReferentielV2();
+
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
+        statutsMesures: { fait: {}, nonFait: {} },
+      });
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnService(
+          unService(referentiel).avecId('S1').construis().donneesAPersister()
+            .donnees
+        )
+        .nommeCommeProprietaire('U1', ['S1'])
+        .construis();
+
+      depot = unDepotDeDonneesServices()
+        .avecAdaptateurPersistance(persistance)
+        .avecReferentiel(referentiel)
+        .avecReferentielV2(referentielV2)
+        .construis();
+    });
+
+    it('mets à jour le service et le sauvegarde', async () => {
+      await depot.migreServiceVersV2(
+        'S1',
+        uneDescriptionV2Valide().avecNomService('Un nouveau nom').construis(),
+        [{ id: 'RECENSEMENT.1', statut: 'fait' }]
+      );
+
+      const [{ versionService, donnees }] = await persistance.servicesComplets({
+        idService: 'S1',
+      });
+      expect(versionService).to.be('v2');
+      expect(donnees.descriptionService.nomService).to.be('Un nouveau nom');
     });
   });
 });
