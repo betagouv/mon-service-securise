@@ -732,6 +732,16 @@ const creeDepot = (config = {}) => {
   const versionsServiceUtiliseesParUtilisateur = async (idUtilisateur) =>
     adaptateurPersistance.versionsServiceUtiliseesParUtilisateur(idUtilisateur);
 
+  const migreServiceVersV2 = async (
+    idService,
+    descriptionV2,
+    donneesMesuresV2
+  ) => {
+    const existant = await p.lis.un(idService);
+    existant.migreVersV2(descriptionV2, donneesMesuresV2, referentielV2);
+    await p.sauvegarde(idService, existant.donneesAPersister().toutes());
+  };
+
   return {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
@@ -748,6 +758,7 @@ const creeDepot = (config = {}) => {
     metsAJourMesuresSpecifiquesDesServices,
     metsAJourRisqueSpecifiqueDuService,
     metsAJourService,
+    migreServiceVersV2,
     nombreServices,
     nouveauService,
     rechercheContributeurs,

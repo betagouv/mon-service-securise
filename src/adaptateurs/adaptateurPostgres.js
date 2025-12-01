@@ -223,13 +223,20 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     return total[0]?.count;
   };
 
-  const metsAJourService = (id, donnees, nomServiceHash, siretHash) =>
+  const metsAJourService = (
+    id,
+    donnees,
+    nomServiceHash,
+    siretHash,
+    versionService
+  ) =>
     knex('services')
       .where({ id })
       .first()
       .then(() =>
         knex('services').where({ id }).update({
           donnees,
+          version_service: versionService,
           nom_service_hash: nomServiceHash,
           siret_hash: siretHash,
         })
@@ -340,7 +347,13 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
 
     return testExistence.then((dejaConnu) =>
       dejaConnu
-        ? metsAJourService(id, donneesService, nomServiceHash, siretHash)
+        ? metsAJourService(
+            id,
+            donneesService,
+            nomServiceHash,
+            siretHash,
+            versionService
+          )
         : ajouteService(
             id,
             donneesService,
