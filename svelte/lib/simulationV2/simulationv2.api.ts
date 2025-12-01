@@ -63,3 +63,9 @@ export const lisEvolutionMesures = async (
       `/api/service/${idService}/simulation-migration-referentiel/evolution-mesures`
     )
   ).data as ResumeEvolutions;
+
+export const finaliseMigration = async (idService: UUID) => {
+  await axios.post(
+    `/api/service/${idService}/simulation-migration-referentiel/finalise`
+  );
+};

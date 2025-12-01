@@ -10,6 +10,10 @@
   import donneesNiveauxDeSecurite from '../../niveauxDeSecurite/donneesNiveauxDeSecurite';
   import Tableau from '../../ui/Tableau.svelte';
   import Onglets from '../../ui/Onglets.svelte';
+  import { brouillonEstCompletStore } from '../../creationV2/etapes/brouillonEstComplet.store';
+
+  export let estComplete: boolean;
+  $: estComplete = $brouillonEstCompletStore;
 
   let resumeEvolutions: ResumeEvolutions;
   let ongletActif: StatutEvolutionMesure = 'ajoutee';

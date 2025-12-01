@@ -117,12 +117,30 @@
     );
   };
 
+  const afficheToasterSuccesChangementReferentielSiBesoin = () => {
+    const url = new URL(window.location.href);
+    const succesChangementReferentiel = url.searchParams.get(
+      'succesChangementReferentiel'
+    );
+    if (succesChangementReferentiel === 'true') {
+      toasterStore.succes(
+        'Le référentiel a été mis à jour avec succès.',
+        'Vous pouvez maintenant mettre à jour les mesures.'
+      );
+      url.searchParams.delete('succesChangementReferentiel');
+      history.replaceState(history.state, '', url.href); //on supprime le paramètre sans recharger la page
+    }
+  };
+
   onMount(async () => {
+    afficheToasterSuccesChangementReferentielSiBesoin();
+
     await Promise.all([
       rafraichisMesures(),
       rafraichisContributeurs(),
       rafraichisAutorisations(),
     ]);
+
     if (!$nombreResultats.nombreParAvancement.statutADefinir)
       $rechercheParAvancement = 'enAction';
   });
