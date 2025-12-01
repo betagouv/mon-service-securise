@@ -9,9 +9,14 @@
   } from '../creationV2/etapes/toutesEtapes';
   import type { UUID } from '../typesBasiquesSvelte';
   import { leBrouillon } from '../creationV2/etapes/brouillon.store';
-  import { lisSimulation, metsAJourSimulation } from './simulationv2.api';
+  import {
+    finaliseMigration,
+    lisSimulation,
+    metsAJourSimulation,
+  } from './simulationv2.api';
   import type { BrouillonServiceV2 } from '../creationV2/creationV2.types';
   import { etapeCourante } from '../creationV2/etapes/etapeCourante.store';
+  import { toasterStore } from '../ui/stores/toaster.store';
 
   export let idService: UUID;
 
@@ -43,7 +48,12 @@
       navigationStore.suivant();
   };
 
-  const finalise = async () => {};
+  const finalise = async () => {
+    enCoursDeChargement = true;
+    await finaliseMigration(idService);
+    window.location.href = `/service/${idService}/mesures?succesChangementReferentiel=true`;
+    enCoursDeChargement = false;
+  };
 </script>
 
 <AssistantServiceV2
