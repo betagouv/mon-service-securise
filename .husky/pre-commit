@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx lint-staged
-npx tsc --noEmit -p svelte/tsconfig.json
+./node_modules/.bin/lint-staged
+./node_modules/.bin/tsc --noEmit -p svelte/tsconfig.json
