@@ -54,6 +54,8 @@ import { EvenementServiceRattacheAPrestataire } from './evenementServiceRattache
 import { consigneRattachementDeServiceAPrestataireDansJournal } from './abonnements/consigneRattachementDeServiceAPrestataireDansJournal.js';
 import { EvenementCguAccepteesParUtilisateur } from './evenementCguAccepteesParUtilisateur.js';
 import { consigneAcceptationCguDansJournal } from './abonnements/consigneAcceptationCguDansJournal.js';
+import { consigneServiceV1MigreEnV2 } from './abonnements/consigneServiceV1MigreEnV2DansJournal.js';
+import EvenementServiceV1MigreEnV2 from './evenementServiceV1MigreEnV2.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -214,6 +216,11 @@ const cableTousLesAbonnes = (
   busEvenements.abonne(
     EvenementCguAccepteesParUtilisateur,
     consigneAcceptationCguDansJournal({ adaptateurJournal })
+  );
+
+  busEvenements.abonne(
+    EvenementServiceV1MigreEnV2,
+    consigneServiceV1MigreEnV2({ adaptateurJournal })
   );
 };
 
