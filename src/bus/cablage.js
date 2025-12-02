@@ -218,10 +218,10 @@ const cableTousLesAbonnes = (
     consigneAcceptationCguDansJournal({ adaptateurJournal })
   );
 
-  busEvenements.abonne(
-    EvenementServiceV1MigreEnV2,
-    consigneServiceV1MigreEnV2({ adaptateurJournal })
-  );
+  busEvenements.abonnePlusieurs(EvenementServiceV1MigreEnV2, [
+    consigneServiceV1MigreEnV2({ adaptateurJournal }),
+    consigneCompletudeDansJournal({ adaptateurJournal }),
+  ]);
 };
 
 export { cableTousLesAbonnes };
