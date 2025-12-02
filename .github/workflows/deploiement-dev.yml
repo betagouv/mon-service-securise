@@ -36,5 +36,4 @@ jobs:
           ID_APP: ${{ secrets.CLEVER_CLOUD_ID_APP }}
           ID_ORGANISATION: ${{ secrets.CLEVER_CLOUD_ID_ORGANISATION }}
         run: |
-          clever link -o="$ID_ORGANISATION" "$ID_APP"
           clever deploy --force --same-commit-policy=rebuild
