@@ -19,6 +19,7 @@ import MesureGenerale from '../modeles/mesureGenerale.js';
 import EvenementMesureModifieeEnMasse from '../bus/evenementMesureModifieeEnMasse.js';
 import MesureSpecifique from '../modeles/mesureSpecifique.js';
 import { VersionService } from '../modeles/versionService.js';
+import EvenementServiceV1MigreEnV2 from '../bus/evenementServiceV1MigreEnV2.js';
 
 const fabriqueChiffrement = (adaptateurChiffrement) => {
   const chiffre = async (chaine) => adaptateurChiffrement.chiffre(chaine);
@@ -733,13 +734,20 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance.versionsServiceUtiliseesParUtilisateur(idUtilisateur);
 
   const migreServiceVersV2 = async (
+    idUtilisateur,
     idService,
     descriptionV2,
     donneesMesuresV2
   ) => {
     const existant = await p.lis.un(idService);
+
     existant.migreVersV2(descriptionV2, donneesMesuresV2, referentielV2);
     await p.sauvegarde(idService, existant.donneesAPersister().toutes());
+
+    const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
+    busEvenements.publie(
+      new EvenementServiceV1MigreEnV2({ service: existant, utilisateur: u })
+    );
   };
 
   return {

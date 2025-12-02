@@ -14,10 +14,7 @@ import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 import { UUID } from '../../../src/typesBasiques.js';
 import { unBrouillonComplet } from '../../constructeurs/constructeurBrouillonService.js';
 import { unService } from '../../constructeurs/constructeurService.js';
-import {
-  DescriptionServiceV2,
-  DonneesDescriptionServiceV2,
-} from '../../../src/modeles/descriptionServiceV2.js';
+import { DescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.js';
 import { DonneesMesureGenerale } from '../../../src/modeles/mesureGenerale.type.js';
 import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 
@@ -513,16 +510,24 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
     it('délègue au dépôt de données la migration du service en V2', async () => {
       let donneesRecues;
       testeur.depotDonnees().migreServiceVersV2 = async (
+        idUtilisateur: UUID,
         idService: UUID,
         descriptionServiceV2: DescriptionServiceV2,
         donneesMesuresV2: DonneesMesureGenerale<IdMesureV2>[]
       ) => {
-        donneesRecues = { idService, descriptionServiceV2, donneesMesuresV2 };
+        donneesRecues = {
+          idUtilisateur,
+          idService,
+          descriptionServiceV2,
+          donneesMesuresV2,
+        };
       };
       const idService = unUUIDRandom();
       const serviceV1 = unService().avecId(idService).construis();
-      // @ts-expect-error on ne veut réinitialiser que le service
-      testeur.middleware().reinitialise({ serviceARenvoyer: serviceV1 });
+      testeur.middleware().reinitialise({
+        serviceARenvoyer: serviceV1,
+        idUtilisateur: unUUID('1'),
+      });
       testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
         unBrouillonComplet().construis();
 
@@ -531,6 +536,7 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
       );
 
       expect(reponse.status).toBe(201);
+      expect(donneesRecues!.idUtilisateur).toBe(unUUID('1'));
       expect(donneesRecues!.idService).toBe(idService);
       expect(donneesRecues!.descriptionServiceV2.nomService).toBe('Service A');
       expect(donneesRecues!.donneesMesuresV2).not.toBe(undefined);
