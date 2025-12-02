@@ -10,11 +10,9 @@ ENV PUPPETEER_SKIP_DOWNLOAD=true
 
 RUN apt-get update
 
-RUN npm install -g npm
-
 WORKDIR /usr/src/app
 COPY package.json package-lock.json /usr/src/app/
-RUN npm install
+RUN npm ci
 
 COPY . /usr/src/app
 EXPOSE 3000
