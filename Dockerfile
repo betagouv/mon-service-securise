@@ -8,8 +8,6 @@ FROM docker.io/node:$NODE_VERSION
 # **MAIS** on ne veut pas que Puppeteer déclenche le téléchargement d'un navigateur local.
 ENV PUPPETEER_SKIP_DOWNLOAD=true
 
-RUN apt-get update
-
 WORKDIR /usr/src/app
 COPY package.json package-lock.json /usr/src/app/
 RUN npm ci
