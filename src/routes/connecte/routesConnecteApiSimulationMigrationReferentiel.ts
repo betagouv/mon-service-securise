@@ -14,7 +14,10 @@ import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import { DepotDonneesService } from '../../depots/depotDonneesService.interface.js';
 import { SimulationMigrationReferentiel } from '../../moteurRegles/simulationMigration/simulationMigrationReferentiel.js';
-import { RequestRouteConnecteService } from './routesConnecte.types.js';
+import {
+  RequestRouteConnecte,
+  RequestRouteConnecteService,
+} from './routesConnecte.types.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;
@@ -175,6 +178,9 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
     valideParams(z.strictObject({ id: z.uuidv4() })),
     async (requete, reponse, suite) => {
       const { id } = requete.params;
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
+
       try {
         const brouillonService =
           await depotDonnees.lisSimulationMigrationReferentiel(id as UUID);
@@ -188,6 +194,7 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
         });
 
         await depotDonnees.migreServiceVersV2(
+          idUtilisateurCourant,
           id as UUID,
           brouillonService.enDescriptionV2(referentielV2),
           simulation.donneesMesuresGeneralesV2()

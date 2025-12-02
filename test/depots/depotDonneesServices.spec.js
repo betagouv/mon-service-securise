@@ -54,6 +54,7 @@ import EvenementRisqueServiceModifie from '../../src/bus/evenementRisqueServiceM
 import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.js';
 import { VersionService } from '../../src/modeles/versionService.js';
 import { creeReferentielV2 } from '../../src/referentielV2.js';
+import EvenementServiceV1MigreEnV2 from '../../src/bus/evenementServiceV1MigreEnV2.js';
 
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 const { ECRITURE } = Permissions;
@@ -2934,6 +2935,7 @@ describe('Le dépôt de données des services', () => {
       referentiel = Referentiel.creeReferentiel({
         statutsMesures: { fait: {}, nonFait: {} },
       });
+      busEvenements = fabriqueBusPourLesTests();
       persistance = unePersistanceMemoire()
         .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
         .ajouteUnService(
@@ -2944,6 +2946,7 @@ describe('Le dépôt de données des services', () => {
         .construis();
 
       depot = unDepotDeDonneesServices()
+        .avecBusEvenements(busEvenements)
         .avecAdaptateurPersistance(persistance)
         .avecReferentiel(referentiel)
         .avecReferentielV2(referentielV2)
@@ -2952,6 +2955,7 @@ describe('Le dépôt de données des services', () => {
 
     it('mets à jour le service et le sauvegarde', async () => {
       await depot.migreServiceVersV2(
+        'U1',
         'S1',
         uneDescriptionV2Valide().avecNomService('Un nouveau nom').construis(),
         [{ id: 'RECENSEMENT.1', statut: 'fait' }]
@@ -2962,6 +2966,24 @@ describe('Le dépôt de données des services', () => {
       });
       expect(versionService).to.be('v2');
       expect(donnees.descriptionService.nomService).to.be('Un nouveau nom');
+    });
+
+    it('publie un événement de « service v1 migré en v2»', async () => {
+      await depot.migreServiceVersV2(
+        'U1',
+        'S1',
+        uneDescriptionV2Valide().construis(),
+        []
+      );
+
+      expect(busEvenements.aRecuUnEvenement(EvenementServiceV1MigreEnV2)).to.be(
+        true
+      );
+      const evenement = busEvenements.recupereEvenement(
+        EvenementServiceV1MigreEnV2
+      );
+      expect(evenement.service.id).to.be('S1');
+      expect(evenement.utilisateur.id).to.be('U1');
     });
   });
 });

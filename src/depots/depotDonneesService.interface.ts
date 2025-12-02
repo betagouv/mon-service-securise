@@ -19,6 +19,7 @@ export interface DepotDonneesService {
   ) => Promise<UUID>;
   service: (idService: UUID) => Promise<Service | undefined>;
   migreServiceVersV2: (
+    idUtilisateur: UUID,
     idService: UUID,
     descriptionV2: DescriptionServiceV2,
     donneesMesuresV2: DonneesMesureGenerale<IdMesureV2>[]
