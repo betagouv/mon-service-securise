@@ -20,7 +20,7 @@ jobs:
 
       - name: Installer la CLI Clever Cloud
         shell: bash
-        run: npm install -g clever-tools
+        run: npm install -g clever-tools@4.4.0
 
       - name: Spécifier la version de Node.js à utiliser auprès de Clever Cloud
         env:
@@ -62,7 +62,7 @@ jobs:
 
       - name: Installer la CLI Clever Cloud
         shell: bash
-        run: npm install -g clever-tools
+        run: npm install -g clever-tools@4.4.0
 
       - name: Spécifier la version de Node.js à utiliser auprès de Clever Cloud
         env:
