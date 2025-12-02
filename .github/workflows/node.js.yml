@@ -35,19 +35,19 @@ jobs:
           PUPPETEER_SKIP_DOWNLOAD: true
 
       - name: Contrôler la mise en forme avec Prettier
-        run: npx prettier --check .
+        run: ./node_modules/.bin/prettier --check .
 
       - name: Contrôler la cohérence avec Eslint
-        run: npx eslint .
+        run: ./node_modules/.bin/eslint .
 
       - name: Contrôler le Typescript du Backend
-        run: npx tsc --noEmit
+        run: ./node_modules/.bin/tsc --noEmit
 
       - name: Contrôler le Typescript de Svelte
-        run: npx tsc --noEmit -p svelte/tsconfig.json
+        run: ./node_modules/.bin/tsc --noEmit -p svelte/tsconfig.json
 
       - name: Exécuter les tests
-        run: npx vitest --reporter junit --outputFile=./test-report.xml
+        run: ./node_modules/.bin/vitest --reporter junit --outputFile=./test-report.xml
 
       - name: Rapport des tests
         uses: dorny/test-reporter@v2

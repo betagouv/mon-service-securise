@@ -32,7 +32,7 @@ services:
     tty: true
     command: bash -c "
       npm run migration-bdd &&
-      npx concurrently -n 'SERVEUR,FRONT SVELTE' -c 'blue.bold,magenta.underline'
+      ./node_modules/.bin/concurrently -n 'SERVEUR,FRONT SVELTE' -c 'blue.bold,magenta.underline'
       'SVELTE_DEV_LOCAL_AVEC_HOT_RELOAD=\"true\" npm run dev:back'
       'npm run dev:front'
       "
