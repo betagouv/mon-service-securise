@@ -56,6 +56,8 @@ import { EvenementCguAccepteesParUtilisateur } from './evenementCguAccepteesParU
 import { consigneAcceptationCguDansJournal } from './abonnements/consigneAcceptationCguDansJournal.js';
 import { consigneServiceV1MigreEnV2 } from './abonnements/consigneServiceV1MigreEnV2DansJournal.js';
 import EvenementServiceV1MigreEnV2 from './evenementServiceV1MigreEnV2.js';
+import EvenementSimulationMigrationReferentielCreee from './evenementSimulationMigrationReferentielCreee.js';
+import { consigneSimulationMigrationReferentielCreee } from './abonnements/consigneSimulationMigrationReferentielCreeeDansJournal.js';
 
 const cableTousLesAbonnes = (
   busEvenements,
@@ -222,6 +224,11 @@ const cableTousLesAbonnes = (
     consigneServiceV1MigreEnV2({ adaptateurJournal }),
     consigneCompletudeDansJournal({ adaptateurJournal }),
   ]);
+
+  busEvenements.abonne(
+    EvenementSimulationMigrationReferentielCreee,
+    consigneSimulationMigrationReferentielCreee({ adaptateurJournal })
+  );
 };
 
 export { cableTousLesAbonnes };
