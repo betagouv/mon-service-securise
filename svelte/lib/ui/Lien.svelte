@@ -14,6 +14,7 @@
       | 'ajout-liste'
       | 'brouillon'
       | 'redemarrer'
+      | 'rafraichir'
       | undefined;
     type?:
       | 'bouton-primaire'
@@ -39,6 +40,7 @@
     | 'brouillon'
     | 'ajout-liste'
     | 'redemarrer'
+    | 'rafraichir'
     | undefined = undefined;
   export let type:
     | 'bouton-primaire'
@@ -129,7 +131,11 @@
   }
 
   .redemarrer:before {
-    background-image: url('/statique/assets/images/icone_redemarrer.svg');
+    background-image: url('/statique/assets/images/icone_rafraichir.svg');
+  }
+
+  .rafraichir:before {
+    background-image: url('/statique/assets/images/icone_reprendre.svg');
   }
 
   .avecIcone:before {

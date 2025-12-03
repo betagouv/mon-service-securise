@@ -95,4 +95,14 @@
     icone="redemarrer"
     classe="simulerReferentielV2"
   />
+{:else if action.id === 'continuerSimulationReferentielV2'}
+  <Lien
+    inactif={!action.autorisee}
+    titre="Continuer les modifications"
+    type="bouton-secondaire"
+    href="/service/{idService}/simulation-referentiel-v2"
+    taille="petit"
+    icone="rafraichir"
+    classe="simulerReferentielV2"
+  />
 {/if}
