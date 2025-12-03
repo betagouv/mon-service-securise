@@ -85,4 +85,14 @@
         services: [service],
       })}
   />
+{:else if action.id === 'simulerReferentielV2'}
+  <Lien
+    inactif={!action.autorisee}
+    titre="Simuler le référentiel 2025"
+    type="bouton-secondaire"
+    href="/service/{idService}/simulation-referentiel-v2"
+    taille="petit"
+    icone="redemarrer"
+    classe="simulerReferentielV2"
+  />
 {/if}
