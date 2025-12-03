@@ -12,6 +12,10 @@ import { fabriqueReferentiel } from '../../../src/fabriqueReferentiel.js';
 import { EquivalencesMesuresV1V2 } from '../../../donneesConversionReferentielMesures.ts';
 import { toutesEquivalencesAvecStatut } from './equivalencesMesuresV1V2.aide.ts';
 import MesureGenerale from '../../../src/modeles/mesureGenerale.js';
+import ActiviteMesure, {
+  IdMesure,
+} from '../../../src/modeles/activiteMesure.ts';
+import { unUUID } from '../../constructeurs/UUID.ts';
 
 describe('La simulation de migration du référentiel V1 vers V2', () => {
   let referentielV1: Referentiel;
@@ -342,6 +346,71 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
       expect(v2).toBeGreaterThan(0);
       expect(v2).toBeLessThan(5);
       expect(max).toBe(5);
+    });
+  });
+
+  describe('sur demande des nouvelles activites de mesure', () => {
+    const uneActivite = (idMesure: IdMesure) =>
+      new ActiviteMesure({
+        idMesure,
+        idService: unUUID('s'),
+        type: 'ajoutPriorite',
+        typeMesure: 'generale',
+        idActeur: unUUID('a'),
+        details: {},
+      });
+
+    const uneActiviteMesureSpecifique = (idMesure: IdMesure) =>
+      new ActiviteMesure({
+        idMesure,
+        idService: unUUID('s'),
+        type: 'ajoutPriorite',
+        typeMesure: 'specifique',
+        idActeur: unUUID('a'),
+        details: {},
+      });
+
+    it('retourne les nouvelles activités de mesure', () => {
+      const nouvellesActivites = uneSimulation().activitesMesures([
+        uneActivite('exigencesSecurite'),
+      ]);
+
+      expect(nouvellesActivites).toHaveLength(1);
+      expect(nouvellesActivites[0].idMesure).toBe('CONTRAT.1');
+    });
+
+    it('ne conserve que les actvités des mesures présentes dans le service V2', () => {
+      const nouvellesActivites = uneSimulation().activitesMesures([
+        uneActivite('listeComptesPrivilegies'),
+      ]);
+
+      expect(nouvellesActivites).toHaveLength(0);
+    });
+
+    it('sait produire les activités V2 pour une mesure V1 ayant plusieurs équivalents V2', () => {
+      const nouvellesActivites = uneSimulation().activitesMesures([
+        uneActivite('contraintesMotDePasse'),
+      ]);
+
+      expect(nouvellesActivites).toHaveLength(2);
+      expect(nouvellesActivites[0].idMesure).toBe('AUTH.4');
+      expect(nouvellesActivites[1].idMesure).toBe('AUTH.7');
+    });
+
+    it('ne conserve que les activités dont les mesures conservent les données lors de la migration', () => {
+      const nouvellesActivites = uneSimulation().activitesMesures([
+        uneActivite('misesAJour'),
+      ]);
+
+      expect(nouvellesActivites).toHaveLength(0);
+    });
+
+    it('conserve les activités de mesure spécifique', () => {
+      const nouvellesActivites = uneSimulation().activitesMesures([
+        uneActiviteMesureSpecifique(unUUID('m')),
+      ]);
+
+      expect(nouvellesActivites).toHaveLength(1);
     });
   });
 });

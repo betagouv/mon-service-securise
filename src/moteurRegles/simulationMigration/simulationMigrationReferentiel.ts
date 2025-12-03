@@ -121,7 +121,41 @@ export class SimulationMigrationReferentiel {
   }
 
   activitesMesures(activitesExistantes: ActiviteMesure[]): ActiviteMesure[] {
-    return [];
+    const moteurRegleV2 = new MoteurReglesV2(
+      this.referentielV2,
+      this.referentielV2.reglesMoteurV2()
+    );
+
+    const idMesuresDuServiceV2 = Object.keys(
+      moteurRegleV2.mesures(this.descriptionServiceV2)
+    );
+
+    const activitesMesuresSpecifiques = activitesExistantes.filter(
+      (a) => a.typeMesure === 'specifique'
+    );
+
+    const nouvellesActivitesMesuresGeneralesV2 = activitesExistantes
+      .filter((a) => a.typeMesure === 'generale')
+      .filter((a) => {
+        const { idsMesureV2, conservationDonnees } =
+          this.equivalences[a.idMesure as IdMesureV1];
+        return (
+          conservationDonnees &&
+          idsMesureV2.some((id) => idMesuresDuServiceV2.includes(id))
+        );
+      })
+      .flatMap((a) => {
+        const { idsMesureV2 } = this.equivalences[a.idMesure as IdMesureV1];
+        return idsMesureV2.map((idMesure) => ({
+          ...a,
+          idMesure,
+        }));
+      });
+
+    return [
+      ...nouvellesActivitesMesuresGeneralesV2,
+      ...activitesMesuresSpecifiques,
+    ];
   }
 
   donneesMesuresGeneralesV2(): DonneesMesureGenerale<IdMesureV2>[] {
