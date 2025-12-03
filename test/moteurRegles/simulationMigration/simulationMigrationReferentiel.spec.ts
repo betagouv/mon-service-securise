@@ -75,12 +75,12 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         ...toutesEquivalencesAvecStatut('modifiee'),
         exigencesSecurite: {
           statut: 'inchangee',
-          idsMesureV2: ['ADMIN.2'],
+          idsMesureV2: ['RECENSEMENT.1'],
           conservationDonnees: true,
         },
         identificationDonneesSensibles: {
           statut: 'inchangee',
-          idsMesureV2: ['ADMIN.1'],
+          idsMesureV2: ['RECENSEMENT.2'],
           conservationDonnees: true,
         },
       };
@@ -178,7 +178,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         statut: 'supprimee',
       });
 
-      expect(detailsMesures.length).toBe(71);
+      expect(detailsMesures.length).toBe(56);
     });
 
     describe('concernant les mesures ne faisant pas partie des mesures personnalisées selon la description V2', () => {
@@ -196,6 +196,22 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         const evolution = simulation.evolutionMesures();
 
         expect(evolution.nbMesuresModifiees).toBe(0);
+      });
+
+      it('ne les compte pas dans les mesures inchangées', () => {
+        const uneInchangee: EquivalencesMesuresV1V2 = {
+          ...toutesEquivalencesAvecStatut('modifiee'),
+          exigencesSecurite: {
+            statut: 'inchangee',
+            idsMesureV2: ['ADMIN.2'], // Cette mesure ne fait pas partie des mesures V2
+            conservationDonnees: true,
+          },
+        };
+        const simulation = uneSimulation(uneInchangee);
+
+        const evolution = simulation.evolutionMesures();
+
+        expect(evolution.nbMesuresInchangees).toBe(0);
       });
     });
   });
