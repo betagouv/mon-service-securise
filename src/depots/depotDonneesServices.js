@@ -181,6 +181,7 @@ const creeDepot = (config = {}) => {
     adaptateurRechercheEntite,
     busEvenements,
     depotDonneesUtilisateurs,
+    depotDonneesSuggestionsActions,
     referentiel,
     referentielV2,
   } = config;
@@ -743,6 +744,10 @@ const creeDepot = (config = {}) => {
 
     existant.migreVersV2(descriptionV2, donneesMesuresV2, referentielV2);
     await p.sauvegarde(idService, existant.donneesAPersister().toutes());
+
+    await depotDonneesSuggestionsActions.supprimeSuggestionsActionsPourService(
+      idService
+    );
 
     const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
     busEvenements.publie(

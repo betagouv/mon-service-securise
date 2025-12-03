@@ -600,6 +600,12 @@ const nouvelAdaptateur = (
       );
   };
 
+  const supprimeSuggestionsActionsPourService = async (idService) => {
+    donnees.suggestionsActions = donnees.suggestionsActions.filter(
+      (s) => s.idService === idService
+    );
+  };
+
   const ajouteBrouillonService = async (
     id,
     idUtilisateur,
@@ -715,6 +721,7 @@ const nouvelAdaptateur = (
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
     supprimeServices,
+    supprimeSuggestionsActionsPourService,
     supprimeTeleversementModelesMesureSpecifique,
     supprimeTeleversementServices,
     supprimeTousLiensEntreUnServiceEtModelesMesureSpecifique,
