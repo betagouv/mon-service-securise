@@ -115,6 +115,8 @@ export class SimulationMigrationReferentiel {
     };
   }
 
+  activitesMesures() {}
+
   donneesMesuresGeneralesV2(): DonneesMesureGenerale<IdMesureV2>[] {
     const idMesuresV1AConserver = Object.entries(this.equivalences)
       .filter(([, valeur]) => valeur.conservationDonnees)
