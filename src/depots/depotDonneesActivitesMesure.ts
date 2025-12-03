@@ -67,4 +67,7 @@ const creeDepot = (config: {
     migreActivitesMesuresVersV2,
   };
 };
+
+export type DepotDonneesActivitesMesure = ReturnType<typeof creeDepot>;
+
 export { creeDepot };
