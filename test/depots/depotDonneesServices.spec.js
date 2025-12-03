@@ -2985,5 +2985,31 @@ describe('Le dépôt de données des services', () => {
       expect(evenement.service.id).to.be('S1');
       expect(evenement.utilisateur.id).to.be('U1');
     });
+
+    it("délègue au dépôt de données des suggestions d'action la suppression des suggestion du service migré", async () => {
+      let idRecu;
+      const depotSuggestions = {
+        supprimeSuggestionsActionsPourService: (idService) => {
+          idRecu = idService;
+        },
+      };
+
+      depot = unDepotDeDonneesServices()
+        .avecBusEvenements(busEvenements)
+        .avecAdaptateurPersistance(persistance)
+        .avecReferentiel(referentiel)
+        .avecReferentielV2(referentielV2)
+        .avecDepotDonneesSuggestionsActions(depotSuggestions)
+        .construis();
+
+      await depot.migreServiceVersV2(
+        'U1',
+        'S1',
+        uneDescriptionV2Valide().avecNomService('Un nouveau nom').construis(),
+        [{ id: 'RECENSEMENT.1', statut: 'fait' }]
+      );
+
+      expect(idRecu).to.be('S1');
+    });
   });
 });

@@ -4,6 +4,7 @@ import * as Referentiel from '../../src/referentiel.js';
 import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
 import * as DepotDonneesUtilisateurs from '../../src/depots/depotDonneesUtilisateurs.js';
+import * as DepotDonneesSuggestionsActions from '../../src/depots/depotDonneesSuggestionsActions.js';
 import { creeReferentielV2 } from '../../src/referentielV2.js';
 
 class ConstructeurDepotDonneesServices {
@@ -62,6 +63,11 @@ class ConstructeurDepotDonneesServices {
     return this;
   }
 
+  avecDepotDonneesSuggestionsActions(depotSuggestions) {
+    this.depotDonneesSuggestionsActions = depotSuggestions;
+    return this;
+  }
+
   construis() {
     const adaptateurPersistance =
       this.adaptateurPersistance ??
@@ -79,6 +85,9 @@ class ConstructeurDepotDonneesServices {
           adaptateurPersistance,
           adaptateurChiffrement: this.adaptateurChiffrement,
         }),
+      depotDonneesSuggestionsActions:
+        this.depotDonneesSuggestionsActions ??
+        DepotDonneesSuggestionsActions.creeDepot({ adaptateurPersistance }),
       referentiel: this.referentiel,
       referentielV2: this.referentielV2,
     });

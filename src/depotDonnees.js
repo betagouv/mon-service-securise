@@ -48,12 +48,17 @@ const creeDepot = (config = {}) => {
     serviceCgu,
   });
 
+  const depotSuggestionsActions = depotDonneesSuggestionsActions.creeDepot({
+    adaptateurPersistance,
+  });
+
   const depotServices = depotDonneesServices.creeDepot({
     adaptateurChiffrement,
     adaptateurPersistance,
     adaptateurUUID,
     adaptateurRechercheEntite,
     depotDonneesUtilisateurs: depotUtilisateurs,
+    depotDonneesSuggestionsActions: depotSuggestionsActions,
     busEvenements,
     referentiel,
     referentielV2,
@@ -82,10 +87,6 @@ const creeDepot = (config = {}) => {
   const depotNotifications = depotDonneesNotifications.creeDepot({
     adaptateurPersistance,
     depotServices,
-  });
-
-  const depotSuggestionsActions = depotDonneesSuggestionsActions.creeDepot({
-    adaptateurPersistance,
   });
 
   const depotActivitesMesure = depotDonneesActivitesMesure.creeDepot({
