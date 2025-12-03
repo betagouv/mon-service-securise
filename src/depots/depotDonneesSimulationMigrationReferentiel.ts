@@ -8,6 +8,8 @@ import { convertisDescriptionV1BrouillonV2 } from '../modeles/convertisseurDescr
 import DescriptionService from '../modeles/descriptionService.js';
 import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
 import { ErreurSimulationInexistante } from '../erreurs.js';
+import type BusEvenements from '../bus/busEvenements.js';
+import EvenementSimulationMigrationReferentielCreee from '../bus/evenementSimulationMigrationReferentielCreee.js';
 
 export type DepotDonneesSimulationMigrationReferentiel = {
   sauvegardeSimulationMigrationReferentiel: (
@@ -35,9 +37,11 @@ type PersistanceSimulationMigrationReferentiel = {
 const creeDepot = ({
   persistance,
   adaptateurChiffrement,
+  busEvenements,
 }: {
   persistance: PersistanceSimulationMigrationReferentiel;
   adaptateurChiffrement: AdaptateurChiffrement;
+  busEvenements: BusEvenements;
 }): DepotDonneesSimulationMigrationReferentiel => {
   const sauvegardeSimulationMigrationReferentiel = async (
     idService: UUID,
@@ -65,6 +69,9 @@ const creeDepot = ({
     );
 
     await sauvegardeSimulationMigrationReferentiel(service.id, simulation);
+    busEvenements.publie(
+      new EvenementSimulationMigrationReferentielCreee({ service })
+    );
   };
 
   const lisSimulationMigrationReferentiel = async (idService: UUID) => {

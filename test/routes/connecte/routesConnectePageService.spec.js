@@ -45,6 +45,8 @@ describe('Le serveur MSS des routes /service/*', () => {
             { numero: 2, id: 'deuxieme', reserveePeutHomologuer: true },
           ],
         });
+        testeur.depotDonnees().ajouteSimulationMigrationReferentielSiNecessaire =
+          async () => {};
       });
 
       it("vérifie que l'utilisateur a accepté les CGU", async () => {
