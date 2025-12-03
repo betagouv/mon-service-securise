@@ -88,6 +88,11 @@ class ConstructeurService {
     this.donnees.versionService = version;
     return this;
   }
+
+  avecUneSimulationExistante() {
+    this.donnees.aUneSimulationMigrationReferentiel = true;
+    return this;
+  }
 }
 
 const unService = (referentiel = Referentiel.creeReferentielVide()) =>
