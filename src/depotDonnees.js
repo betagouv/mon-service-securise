@@ -243,7 +243,11 @@ const creeDepot = (config = {}) => {
     supprimeSuggestionsActionsPourService,
   } = depotSuggestionsActions;
 
-  const { ajouteActiviteMesure, lisActivitesMesure } = depotActivitesMesure;
+  const {
+    ajouteActiviteMesure,
+    lisActivitesMesure,
+    migreActivitesMesuresVersV2,
+  } = depotActivitesMesure;
 
   const { lisDernierIndiceCyber, sauvegardeNouvelIndiceCyber } =
     depotEvolutionsIndiceCyber;
@@ -369,6 +373,7 @@ const creeDepot = (config = {}) => {
     metsAJourRisqueSpecifiqueDuService,
     metsAJourUtilisateur,
     metsAJourService,
+    migreActivitesMesuresVersV2,
     migreServiceVersV2,
     nbRestantModelesMesureSpecifiquePourUtilisateur,
     nombreServices,
