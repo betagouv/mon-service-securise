@@ -13,6 +13,7 @@
       | 'medaille'
       | 'ajout-liste'
       | 'brouillon'
+      | 'redemarrer'
       | undefined;
     type?:
       | 'bouton-primaire'
@@ -37,6 +38,7 @@
     | 'medaille'
     | 'brouillon'
     | 'ajout-liste'
+    | 'redemarrer'
     | undefined = undefined;
   export let type:
     | 'bouton-primaire'
@@ -124,6 +126,10 @@
 
   .brouillon:before {
     background-image: url('/statique/assets/images/icone_continuer_brouillon.svg');
+  }
+
+  .redemarrer:before {
+    background-image: url('/statique/assets/images/icone_redemarrer.svg');
   }
 
   .avecIcone:before {
