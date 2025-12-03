@@ -18,6 +18,7 @@ import {
   RequestRouteConnecte,
   RequestRouteConnecteService,
 } from './routesConnecte.types.js';
+import { DepotDonneesActivitesMesure } from '../../depots/depotDonneesActivitesMesure.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;
@@ -29,7 +30,8 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
   referentielV2,
 }: {
   depotDonnees: DepotDonneesSimulationMigrationReferentiel &
-    DepotDonneesService;
+    DepotDonneesService &
+    DepotDonneesActivitesMesure;
   middleware: Middleware;
   referentiel: Referentiel;
   referentielV2: ReferentielV2;
@@ -199,6 +201,8 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
           brouillonService.enDescriptionV2(referentielV2),
           simulation.donneesMesuresGeneralesV2()
         );
+
+        await depotDonnees.migreActivitesMesuresVersV2(simulation);
 
         return reponse.sendStatus(201);
       } catch (e) {

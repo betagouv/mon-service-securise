@@ -17,6 +17,8 @@ import { unService } from '../../constructeurs/constructeurService.js';
 import { DescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.js';
 import { DonneesMesureGenerale } from '../../../src/modeles/mesureGenerale.type.js';
 import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
+import { SimulationMigrationReferentiel } from '../../../src/moteurRegles/simulationMigration/simulationMigrationReferentiel.ts';
+import Service from '../../../src/modeles/service.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER } = Rubriques;
@@ -473,6 +475,21 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
   });
 
   describe('quand requête POST sur `/api/service/:id/simulation-migration-referentiel/finalise`', () => {
+    const idService = unUUIDRandom();
+    let serviceV1: Service;
+
+    beforeEach(() => {
+      testeur.depotDonnees().migreServiceVersV2 = async () => {};
+      testeur.depotDonnees().migreActivitesMesuresVersV2 = async () => {};
+      serviceV1 = unService().avecId(idService).construis();
+      testeur.middleware().reinitialise({
+        serviceARenvoyer: serviceV1,
+        idUtilisateur: unUUID('1'),
+      });
+      testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
+        unBrouillonComplet().construis();
+    });
+
     it('recherche le service correspondant', async () => {
       await testeur.middleware().verifieRechercheService(
         [
@@ -511,25 +528,17 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
       let donneesRecues;
       testeur.depotDonnees().migreServiceVersV2 = async (
         idUtilisateur: UUID,
-        idService: UUID,
+        idServiceRecu: UUID,
         descriptionServiceV2: DescriptionServiceV2,
         donneesMesuresV2: DonneesMesureGenerale<IdMesureV2>[]
       ) => {
         donneesRecues = {
           idUtilisateur,
-          idService,
+          idService: idServiceRecu,
           descriptionServiceV2,
           donneesMesuresV2,
         };
       };
-      const idService = unUUIDRandom();
-      const serviceV1 = unService().avecId(idService).construis();
-      testeur.middleware().reinitialise({
-        serviceARenvoyer: serviceV1,
-        idUtilisateur: unUUID('1'),
-      });
-      testeur.depotDonnees().lisSimulationMigrationReferentiel = async () =>
-        unBrouillonComplet().construis();
 
       const reponse = await testeur.post(
         `/api/service/${idService}/simulation-migration-referentiel/finalise`
@@ -540,6 +549,24 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
       expect(donneesRecues!.idService).toBe(idService);
       expect(donneesRecues!.descriptionServiceV2.nomService).toBe('Service A');
       expect(donneesRecues!.donneesMesuresV2).not.toBe(undefined);
+    });
+
+    it('délègue au dépôt de données la migration des activités de mesure du service en V2', async () => {
+      let donneesRecues;
+      testeur.depotDonnees().migreServiceVersV2 = async () => {};
+      testeur.depotDonnees().migreActivitesMesuresVersV2 = async (
+        simulation: SimulationMigrationReferentiel
+      ) => {
+        donneesRecues = {
+          simulation,
+        };
+      };
+
+      await testeur.post(
+        `/api/service/${idService}/simulation-migration-referentiel/finalise`
+      );
+
+      expect(donneesRecues!.simulation.idService()).toBe(idService);
     });
   });
 });
