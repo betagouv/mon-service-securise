@@ -12,6 +12,7 @@ import { DetailMesure } from './simulationMigrationReferentiel.types.js';
 import { DescriptionEquivalenceMesure } from './descriptionEquivalenceMesure.js';
 import { DonneesMesureGenerale } from '../../modeles/mesureGenerale.type.js';
 import { VersionService } from '../../modeles/versionService.js';
+import ActiviteMesure from '../../modeles/activiteMesure.js';
 
 export class SimulationMigrationReferentiel {
   private readonly serviceV1: Service;
@@ -39,6 +40,10 @@ export class SimulationMigrationReferentiel {
     this.referentielV1 = referentielV1;
     this.referentielV2 = referentielV2;
     this.equivalences = equivalences;
+  }
+
+  idService() {
+    return this.serviceV1.id;
   }
 
   evolutionMesures() {
@@ -115,7 +120,9 @@ export class SimulationMigrationReferentiel {
     };
   }
 
-  activitesMesures() {}
+  activitesMesures(activitesExistantes: ActiviteMesure[]): ActiviteMesure[] {
+    return [];
+  }
 
   donneesMesuresGeneralesV2(): DonneesMesureGenerale<IdMesureV2>[] {
     const idMesuresV1AConserver = Object.entries(this.equivalences)

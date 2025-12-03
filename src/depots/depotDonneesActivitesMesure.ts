@@ -3,6 +3,7 @@ import ActiviteMesure, {
   TypeActiviteMesure,
 } from '../modeles/activiteMesure.js';
 import { UUID } from '../typesBasiques.js';
+import { SimulationMigrationReferentiel } from '../moteurRegles/simulationMigration/simulationMigrationReferentiel.js';
 
 export type PersistanceActiviteMesure = {
   ajouteActiviteMesure: (
@@ -13,10 +14,12 @@ export type PersistanceActiviteMesure = {
     typeMesure: 'generale' | 'specifique',
     details: Record<string, unknown>
   ) => Promise<void>;
+  ajouteActivitesMesure: (activitesMesure: ActiviteMesure[]) => Promise<void>;
   activitesMesure: (
     idService: UUID,
     idMesure: IdMesure
   ) => Promise<ActiviteMesure[]>;
+  lisToutesActivitesMesures: (idService: UUID) => Promise<ActiviteMesure[]>;
 };
 
 const creeDepot = (config: {
@@ -44,9 +47,21 @@ const creeDepot = (config: {
       .sort((a, b) => +b.date - +a.date);
   };
 
+  const migreActivitesMesuresVersV2 = async (
+    simulation: SimulationMigrationReferentiel
+  ) => {
+    const activitesExistantes =
+      await adaptateurPersistance.lisToutesActivitesMesures(
+        simulation.idService()
+      );
+    const activitesMigrees = simulation.activitesMesures(activitesExistantes);
+    await adaptateurPersistance.ajouteActivitesMesure(activitesMigrees);
+  };
+
   return {
     ajouteActiviteMesure,
     lisActivitesMesure,
+    migreActivitesMesuresVersV2,
   };
 };
 export { creeDepot };
