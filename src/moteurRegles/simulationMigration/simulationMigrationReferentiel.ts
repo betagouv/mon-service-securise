@@ -73,12 +73,18 @@ export class SimulationMigrationReferentiel {
       equivalence.ajoutee(idMesure)
     );
 
+    const idsMesureV2DuService = new Set(
+      Object.keys(mesuresDuServiceV2)
+    ) as Set<IdMesureV2>;
     const detailsAutresMesures = tousLesIdMesureV1.flatMap<DetailMesure>(
       (idMesureV1) => {
         const { idsMesureV2, statut } = this.equivalences[idMesureV1];
         if (statut === 'inchangee')
           return equivalence.inchangees(idMesureV1, idsMesureV2);
-        if (statut === 'modifiee')
+        if (
+          statut === 'modifiee' &&
+          idsMesureV2.some((id) => idsMesureV2DuService.has(id))
+        )
           return equivalence.modifiees(idMesureV1, idsMesureV2);
         return equivalence.supprimee(idMesureV1);
       }

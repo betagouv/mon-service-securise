@@ -22,6 +22,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
   beforeEach(() => {
     referentielV1 = fabriqueReferentiel().v1();
     referentielV2 = fabriqueReferentiel().v2();
+    // Cette description de service conduit aux mesures 'RECENSEMENT.1', 'RECENSEMENT.2', 'RECENSEMENT.3'
     descriptionServiceV2 = uneDescriptionV2Valide()
       .avecDureeDysfonctionnementAcceptable('plusDe24h')
       .avecCategoriesDonneesTraitees([])
@@ -53,12 +54,12 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         ...toutesEquivalencesAvecStatut('inchangee'),
         exigencesSecurite: {
           statut: 'modifiee',
-          idsMesureV2: ['ADMIN.2'],
+          idsMesureV2: ['RECENSEMENT.1'],
           conservationDonnees: true,
         },
         identificationDonneesSensibles: {
           statut: 'modifiee',
-          idsMesureV2: ['ADMIN.1'],
+          idsMesureV2: ['RECENSEMENT.2'],
           conservationDonnees: true,
         },
       };
@@ -162,9 +163,9 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
       );
       expect(premiereMesureModifiee).toEqual({
         ancienneDescription:
-          'Procéder à des vérifications techniques automatiques de la sécurité du service',
+          "Sensibiliser les administrateurs aux consignes de sécurité liées à l'utilisation du service",
         nouvelleDescription:
-          'Procéder a minima annuellement à une revue de configuration des équipements et applicatifs',
+          "Mettre en œuvre un programme de sensibilisation à la sécurité pour l'ensemble des acteurs intervenant sur le système d'information",
         statut: 'modifiee',
       });
 
@@ -178,6 +179,24 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
       });
 
       expect(detailsMesures.length).toBe(71);
+    });
+
+    describe('concernant les mesures ne faisant pas partie des mesures personnalisées selon la description V2', () => {
+      it('ne les compte pas dans les mesures modifiées', () => {
+        const uneModifiee: EquivalencesMesuresV1V2 = {
+          ...toutesEquivalencesAvecStatut('inchangee'),
+          exigencesSecurite: {
+            statut: 'modifiee',
+            idsMesureV2: ['ADMIN.2'], // Cette mesure ne fait pas partie des mesures V2
+            conservationDonnees: true,
+          },
+        };
+        const simulation = uneSimulation(uneModifiee);
+
+        const evolution = simulation.evolutionMesures();
+
+        expect(evolution.nbMesuresModifiees).toBe(0);
+      });
     });
   });
 
