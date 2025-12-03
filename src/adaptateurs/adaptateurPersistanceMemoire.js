@@ -144,6 +144,10 @@ const nouvelAdaptateur = (
       );
       return {
         ...unService,
+        aUneSimulationMigrationReferentiel:
+          donnees.simulationsMigrationReferentiel.some(
+            (s) => s.idService === unService.id
+          ),
         utilisateurs: autorisationsDuService.map((a) =>
           donnees.utilisateurs.find((u) => u.id === a.idUtilisateur)
         ),
