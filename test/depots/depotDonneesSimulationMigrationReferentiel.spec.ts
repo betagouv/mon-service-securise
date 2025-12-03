@@ -8,16 +8,21 @@ import { UUID } from '../../src/typesBasiques.js';
 import { unAdaptateurChiffrementQuiWrap } from '../mocks/adaptateurChiffrementQuiWrap.js';
 import { AdaptateurChiffrement } from '../../src/adaptateurs/adaptateurChiffrement.interface.js';
 import { ErreurSimulationInexistante } from '../../src/erreurs.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import EvenementSimulationMigrationReferentielCreee from '../../src/bus/evenementSimulationMigrationReferentielCreee.js';
+import BusEvenements from '../../src/bus/busEvenements.js';
 
 describe('Le dépôt de données des simulations de migration du référentiel v2', () => {
   let persistance: ReturnType<
     typeof AdaptateurPersistanceMemoire.nouvelAdaptateur
   >;
   let adaptateurChiffrement: AdaptateurChiffrement;
+  let busEvenements: ReturnType<typeof fabriqueBusPourLesTests> & BusEvenements;
 
   beforeEach(() => {
     persistance = unePersistanceMemoire().construis();
     adaptateurChiffrement = unAdaptateurChiffrementQuiWrap();
+    busEvenements = fabriqueBusPourLesTests() as unknown as BusEvenements;
   });
 
   describe("sur demande d'ajout d'une simulation si nécessaire", () => {
@@ -25,6 +30,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
+          busEvenements,
           persistance,
         });
 
@@ -66,6 +72,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
+          busEvenements,
           persistance,
         });
 
@@ -73,6 +80,61 @@ describe('Le dépôt de données des simulations de migration du référentiel v
 
       await leDepot().ajouteSimulationMigrationReferentielSiNecessaire(service);
       expect(peristanceAppelee).toBe(false);
+    });
+
+    it('publie un événement de « simulation créée »', async () => {
+      const leDepot = () =>
+        DepotDonneesSimulationMigrationReferentiel.creeDepot({
+          adaptateurChiffrement,
+          busEvenements,
+          persistance,
+        });
+
+      const service = unService()
+        .avecNomService('Mon service en V2')
+        .avecId(unUUID('s'))
+        .construis();
+
+      await leDepot().ajouteSimulationMigrationReferentielSiNecessaire(service);
+
+      expect(
+        busEvenements.aRecuUnEvenement(
+          EvenementSimulationMigrationReferentielCreee
+        )
+      ).toBe(true);
+      const evenement: EvenementSimulationMigrationReferentielCreee =
+        busEvenements.recupereEvenement(
+          EvenementSimulationMigrationReferentielCreee
+        );
+      expect(evenement.service.id).toBe(unUUID('s'));
+    });
+
+    it("ne publie pas d'événement de « simulation créée » si la simulation existe", async () => {
+      persistance = unePersistanceMemoire()
+        .ajouteUneSimulationMigrationReferentiel(
+          unUUID('s'),
+          unBrouillonComplet().donneesBrouillon()
+        )
+        .construis();
+      const leDepot = () =>
+        DepotDonneesSimulationMigrationReferentiel.creeDepot({
+          adaptateurChiffrement,
+          busEvenements,
+          persistance,
+        });
+
+      const service = unService()
+        .avecNomService('Mon service en V2')
+        .avecId(unUUID('s'))
+        .construis();
+
+      await leDepot().ajouteSimulationMigrationReferentielSiNecessaire(service);
+
+      expect(
+        busEvenements.nAPasRecuUnEvenement(
+          EvenementSimulationMigrationReferentielCreee
+        )
+      ).toBe(true);
     });
   });
 
@@ -90,6 +152,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
+          busEvenements,
           persistance,
         });
 
@@ -103,6 +166,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
+          busEvenements,
           persistance,
         });
 
@@ -118,6 +182,7 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       const leDepot = () =>
         DepotDonneesSimulationMigrationReferentiel.creeDepot({
           adaptateurChiffrement,
+          busEvenements,
           persistance,
         });
 
