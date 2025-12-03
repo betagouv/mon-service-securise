@@ -161,6 +161,11 @@ export class Autorisation extends Base {
     [DECRIRE]: LECTURE,
   };
 
+  static DROIT_MIGRATION_REFERENTIEL_V2: Partial<Droits> = {
+    [SECURISER]: ECRITURE,
+    [DECRIRE]: ECRITURE,
+  };
+
   static DROIT_TAMPON_HOMOLOGATION_ZIP: Partial<Droits> = {
     [HOMOLOGUER]: LECTURE,
     [DECRIRE]: LECTURE,
