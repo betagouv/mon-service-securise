@@ -14,6 +14,11 @@ const { HOMOLOGUER } = Rubriques;
 const { LECTURE } = Permissions;
 
 describe("L'objet d'API de `GET /services`", () => {
+  const adaptateurEnvironnement = {
+    featureFlag: () => ({
+      avecDecrireV2: () => false,
+    }),
+  };
   const referentiel = Referentiel.creeReferentiel({
     statutsHomologation: {
       nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
@@ -58,7 +63,8 @@ describe("L'objet d'API de `GET /services`", () => {
     const { services } = objetGetServices.donnees(
       [service],
       [autorisationComplete],
-      referentiel
+      referentiel,
+      adaptateurEnvironnement
     );
     expect(services.length).to.be(1);
     expect(services[0].id).to.be('123');
@@ -100,7 +106,8 @@ describe("L'objet d'API de `GET /services`", () => {
           autorisationPourUnAutreService,
           autorisationPourUnTroisiemeService,
         ],
-        referentiel
+        referentiel,
+        adaptateurEnvironnement
       ).resume
     ).to.eql({
       nombreServices: 3,
@@ -129,7 +136,8 @@ describe("L'objet d'API de `GET /services`", () => {
     const donnees = objetGetServices.donnees(
       services,
       [autorisationPourUnService, autorisationSansHomologuerPourUnAutreService],
-      referentiel
+      referentiel,
+      adaptateurEnvironnement
     );
     expect(donnees.resume.nombreServices).to.equal(2);
     expect(donnees.resume.nombreServicesHomologues).to.equal(1);
@@ -147,7 +155,8 @@ describe("L'objet d'API de `GET /services`", () => {
     const donnees = objetGetServices.donnees(
       services,
       [autorisationSansHomologuerPourUnAutreService],
-      referentiel
+      referentiel,
+      adaptateurEnvironnement
     );
     expect(donnees.resume.nombreServices).to.equal(1);
     expect(donnees.resume.nombreHomologationsExpirees).to.equal(0);

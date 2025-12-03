@@ -3,8 +3,8 @@ import * as objetGetService from '../../../src/modeles/objetsApi/objetGetService
 import * as Referentiel from '../../../src/referentiel.js';
 import { uneAutorisation } from '../../constructeurs/constructeurAutorisation.js';
 import {
-  Rubriques,
   Permissions,
+  Rubriques,
 } from '../../../src/modeles/autorisations/gestionDroits.js';
 import { unService } from '../../constructeurs/constructeurService.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
@@ -16,6 +16,11 @@ const { HOMOLOGUER, DECRIRE, SECURISER } = Rubriques;
 const { LECTURE, ECRITURE } = Permissions;
 
 describe("L'objet d'API de `GET /service`", () => {
+  const adaptateurEnvironnement = {
+    featureFlag: () => ({
+      avecDecrireV2: () => false,
+    }),
+  };
   const referentiel = Referentiel.creeReferentiel({
     statutsHomologation: {
       nonRealisee: { libelle: 'Non réalisée', ordre: 1 },
@@ -84,7 +89,14 @@ describe("L'objet d'API de `GET /service`", () => {
     .construis();
 
   it('fournit les données nécessaires', () => {
-    expect(objetGetService.donnees(service, autorisation, referentiel)).to.eql({
+    expect(
+      objetGetService.donnees(
+        service,
+        autorisation,
+        referentiel,
+        adaptateurEnvironnement
+      )
+    ).to.eql({
       id: '123',
       nomService: 'Un service',
       organisationResponsable: 'Une organisation',
@@ -132,7 +144,8 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       unServiceAvecDossierBientotExpire,
       autorisation,
-      referentiel
+      referentiel,
+      adaptateurEnvironnement
     );
 
     const dans3jours = dateEnFrancais(
@@ -148,7 +161,8 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       service,
       autorisationSansHomologuer,
-      referentiel
+      referentiel,
+      adaptateurEnvironnement
     );
     expect(donnees.statutHomologation).to.be(undefined);
   });
@@ -160,7 +174,8 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       service,
       autorisationSansDecrire,
-      referentiel
+      referentiel,
+      adaptateurEnvironnement
     );
     expect(donnees.niveauSecurite).to.be(undefined);
   });
@@ -172,7 +187,8 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       service,
       autorisationSansSecuriser,
-      referentiel
+      referentiel,
+      adaptateurEnvironnement
     );
     expect(donnees.pourcentageCompletude).to.be(undefined);
   });
@@ -207,7 +223,8 @@ describe("L'objet d'API de `GET /service`", () => {
     const donnees = objetGetService.donnees(
       serviceAvecDossierFinalise,
       autorisation,
-      referentielDeuxEtapes
+      referentielDeuxEtapes,
+      adaptateurEnvironnement
     );
     expect(donnees.statutHomologation.etapeCourante).to.be('autorite');
   });
@@ -227,7 +244,8 @@ describe("L'objet d'API de `GET /service`", () => {
         objetGetService.donnees(
           unServiceDontAestCreateur,
           uneAutorisation().deProprietaire('A', '123').construis(),
-          referentiel
+          referentiel,
+          adaptateurEnvironnement
         ).permissions
       ).to.eql({ gestionContributeurs: true });
     });
@@ -245,7 +263,8 @@ describe("L'objet d'API de `GET /service`", () => {
         objetGetService.donnees(
           unServiceDontAestCreateur,
           autorisation,
-          referentiel
+          referentiel,
+          adaptateurEnvironnement
         ).permissions
       ).to.eql({ gestionContributeurs: false });
     });
