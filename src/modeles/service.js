@@ -376,7 +376,13 @@ class Service {
     return new ObjetPDFAnnexeRisques(this, this.referentiel);
   }
 
-  actionRecommandee() {
+  actionRecommandee(adaptateurEnvironnement) {
+    if (
+      adaptateurEnvironnement.featureFlag().avecDecrireV2() &&
+      this.version() === VersionService.v1
+    )
+      return Service.ACTIONS_RECOMMANDEES.SIMULER_REFERENTIEL_V2;
+
     if (this.aUneSuggestionDAction())
       return Service.ACTIONS_RECOMMANDEES.METTRE_A_JOUR;
 
