@@ -58,6 +58,7 @@ class Service {
       suggestionsActions = [],
       prochainIdNumeriqueDeRisqueSpecifique = 1,
       modelesDisponiblesDeMesureSpecifique = {},
+      aUneSimulationMigrationReferentiel = false,
     } = donnees;
 
     this.id = id;
@@ -92,6 +93,8 @@ class Service {
     this.suggestionsActions = suggestionsActions.map(
       (s) => new SuggestionAction(s, referentiel)
     );
+    this.aUneSimulationMigrationReferentiel =
+      aUneSimulationMigrationReferentiel;
 
     this.referentiel = referentiel;
   }
@@ -377,6 +380,9 @@ class Service {
   }
 
   actionRecommandee(adaptateurEnvironnement) {
+    if (this.aUneSimulationMigrationReferentiel)
+      return Service.ACTIONS_RECOMMANDEES.CONTINUER_SIMULATION_REFERENTIEL_V2;
+
     if (
       adaptateurEnvironnement.featureFlag().avecDecrireV2() &&
       this.version() === VersionService.v1

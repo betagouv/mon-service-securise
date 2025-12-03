@@ -1164,6 +1164,22 @@ describe('Un service', () => {
       };
     });
 
+    it("retourne 'continuerSimulationReferentielV2' si le service a une simulation", () => {
+      adaptateurEnvironnement = {
+        featureFlag: () => ({
+          avecDecrireV2: () => true,
+        }),
+      };
+      const service = unService()
+        .avecVersion(VersionService.v1)
+        .avecUneSimulationExistante()
+        .construis();
+
+      expect(service.actionRecommandee(adaptateurEnvironnement).id).toBe(
+        'continuerSimulationReferentielV2'
+      );
+    });
+
     it("retourne 'simulerReferentielV2' si le service est en v1 et que le feature flag est activé", () => {
       const service = unService().avecVersion(VersionService.v1).construis();
       adaptateurEnvironnement = {

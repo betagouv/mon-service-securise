@@ -9,6 +9,10 @@ export const ToutesActionsRecommandees: Record<
     id: 'simulerReferentielV2',
     droitsNecessaires: Autorisation.DROIT_MIGRATION_REFERENTIEL_V2,
   },
+  CONTINUER_SIMULATION_REFERENTIEL_V2: {
+    id: 'continuerSimulationReferentielV2',
+    droitsNecessaires: Autorisation.DROIT_MIGRATION_REFERENTIEL_V2,
+  },
   METTRE_A_JOUR: {
     id: 'mettreAJour',
     droitsNecessaires: Autorisation.DROITS_EDITER_DESCRIPTION,
