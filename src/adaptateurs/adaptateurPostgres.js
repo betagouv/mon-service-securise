@@ -113,6 +113,19 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       details,
     });
 
+  const ajouteActivitesMesure = (activites) =>
+    knex('activites_mesure').insert(
+      activites.map((a) => ({
+        id_acteur: a.idActeur,
+        id_service: a.idService,
+        id_mesure: a.idMesure,
+        type_mesure: a.typeMesure,
+        type: a.type,
+        details: a.details,
+        date: a.date,
+      }))
+    );
+
   const activitesMesure = async (idService, idMesure) =>
     knex('activites_mesure')
       .where({ id_service: idService, id_mesure: idMesure })
@@ -125,6 +138,22 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
         'id_mesure as idMesure',
         'type_mesure as typeMesure'
       );
+
+  const lisToutesActivitesMesures = async (idService) =>
+    knex('activites_mesure')
+      .where({ id_service: idService })
+      .select(
+        'type',
+        'details',
+        'date',
+        'id_acteur as idActeur',
+        'id_service as idService',
+        'id_mesure as idMesure',
+        'type_mesure as typeMesure'
+      );
+
+  const supprimeToutesActivitesMesure = async (idService) =>
+    knex('activites_mesure').where({ id_service: idService }).delete();
 
   const arreteTout = () => knex.destroy();
 
@@ -959,6 +988,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     ajouteTacheDeService,
     ajouteUtilisateur,
     ajouteActiviteMesure,
+    ajouteActivitesMesure,
     ajouteModeleMesureSpecifique,
     ajoutePlusieursModelesMesureSpecifique,
     ajouteTeleversementServices,
@@ -982,6 +1012,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     lisSuperviseursConcernes,
     lisTeleversementModelesMesureSpecifique,
     lisTeleversementServices,
+    lisToutesActivitesMesures,
     marqueNouveauteLue,
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
@@ -1022,6 +1053,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     supprimeTeleversementModelesMesureSpecifique,
     supprimeTeleversementServices,
     supprimeTousLiensEntreUnServiceEtModelesMesureSpecifique,
+    supprimeToutesActivitesMesure,
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tachesDeServicePour,
