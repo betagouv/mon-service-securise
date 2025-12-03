@@ -417,6 +417,12 @@ const nouvelAdaptateur = (
       details,
     });
 
+  const ajouteActivitesMesure = async (activites) =>
+    donnees.activitesMesure.push(...activites);
+
+  const lisToutesActivitesMesures = async (idService) =>
+    donnees.activitesMesure.filter((a) => a.idService === idService);
+
   const lisSuperviseursConcernes = async (siret) =>
     donnees.superviseurs
       .filter(({ entiteSupervisee }) => entiteSupervisee.siret === siret)
@@ -665,6 +671,7 @@ const nouvelAdaptateur = (
   return {
     activitesMesure,
     ajouteActiviteMesure,
+    ajouteActivitesMesure,
     ajouteAutorisation,
     ajouteBrouillonService,
     ajouteEntiteAuSuperviseur,
@@ -692,6 +699,7 @@ const nouvelAdaptateur = (
     lisSuperviseursConcernes,
     lisTeleversementModelesMesureSpecifique,
     lisTeleversementServices,
+    lisToutesActivitesMesures,
     marqueNouveauteLue,
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,

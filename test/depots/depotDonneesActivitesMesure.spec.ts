@@ -1,8 +1,11 @@
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import * as DepotDonneesActivitesMesure from '../../src/depots/depotDonneesActivitesMesure.js';
-import ActiviteMesure from '../../src/modeles/activiteMesure.js';
+import ActiviteMesure, {
+  TypeActiviteMesure,
+} from '../../src/modeles/activiteMesure.js';
 import { PersistanceActiviteMesure } from '../../src/depots/depotDonneesActivitesMesure.js';
 import { unUUID } from '../constructeurs/UUID.js';
+import { SimulationMigrationReferentiel } from '../../src/moteurRegles/simulationMigration/simulationMigrationReferentiel.ts';
 
 describe('Le dépôt de données des activités de mesure', () => {
   let adaptateurPersistance: PersistanceActiviteMesure;
@@ -133,6 +136,48 @@ describe('Le dépôt de données des activités de mesure', () => {
 
       expect(activites[0].type).toBe('ajoutPriorite');
       expect(activites[1].type).toBe('ajoutStatut');
+    });
+  });
+
+  describe("sur demande de migration des activites d'un service", () => {
+    it('transforme les activités pour utiliser les identifiants V2 équivalents', async () => {
+      const idService = unUUID('s');
+      const idMesure = unUUID('m');
+      const idMesureV2 = unUUID('2');
+      const donneesActiviteMesure = {
+        idService,
+        idActeur: unUUID('a'),
+        typeMesure: 'generale' as 'generale' | 'specifique',
+        type: 'ajoutPriorite' as TypeActiviteMesure,
+        details: {},
+      };
+
+      const simulation = {
+        idService: () => idService,
+        activitesMesures: () => [
+          new ActiviteMesure({
+            ...donneesActiviteMesure,
+            idMesure: idMesureV2,
+          }),
+        ],
+      };
+
+      adaptateurPersistance = unePersistanceMemoire()
+        .avecUneActiviteMesure({
+          ...donneesActiviteMesure,
+          idMesure,
+        })
+        .construis();
+
+      await depot().migreActivitesMesuresVersV2(
+        simulation as unknown as SimulationMigrationReferentiel
+      );
+
+      const activitesMesureV2 = await depot().lisActivitesMesure(
+        idService,
+        idMesureV2
+      );
+      expect(activitesMesureV2[0].idMesure).toBe(idMesureV2);
     });
   });
 });
