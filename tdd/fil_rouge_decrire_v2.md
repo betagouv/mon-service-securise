@@ -4,10 +4,12 @@
 
 #### Migration activité mesures
 
-- on lit en mémoire toutes les activités du service migré
-- on mappe les activités des mesures v1 vers v2 pour les mesures conservées en v2
-- on supprime toutes les activités du service
-- on insère les nouvelles activités mappées
+- [x] on lit en mémoire toutes les activités du service migré
+- [x] on mappe les activités des mesures v1 vers v2 pour les mesures conservées en v2
+- [x] on supprime toutes les activités du service
+- [x] on insère les nouvelles activités mappées
+- [ ] implémenter les méthodes de la persistance
+- [ ] implémenter la méthode de simulationMigration
 
 #### MEP V2
 

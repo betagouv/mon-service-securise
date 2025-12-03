@@ -20,6 +20,7 @@ export type PersistanceActiviteMesure = {
     idMesure: IdMesure
   ) => Promise<ActiviteMesure[]>;
   lisToutesActivitesMesures: (idService: UUID) => Promise<ActiviteMesure[]>;
+  supprimeToutesActivitesMesure: (idService: UUID) => Promise<void>;
 };
 
 const creeDepot = (config: {
@@ -50,11 +51,13 @@ const creeDepot = (config: {
   const migreActivitesMesuresVersV2 = async (
     simulation: SimulationMigrationReferentiel
   ) => {
+    const idService = simulation.idService();
+
     const activitesExistantes =
-      await adaptateurPersistance.lisToutesActivitesMesures(
-        simulation.idService()
-      );
+      await adaptateurPersistance.lisToutesActivitesMesures(idService);
     const activitesMigrees = simulation.activitesMesures(activitesExistantes);
+
+    await adaptateurPersistance.supprimeToutesActivitesMesure(idService);
     await adaptateurPersistance.ajouteActivitesMesure(activitesMigrees);
   };
 
