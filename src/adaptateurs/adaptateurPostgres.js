@@ -179,7 +179,12 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
         SELECT s.*,
                COALESCE(suggestions_du_service.suggestions, '[]')   AS suggestions,
                COALESCE(utilisateurs_du_service.utilisateurs, '[]') AS utilisateurs,
-               COALESCE(modeles_de_mesure_specifique.tous_les_modeles_disponibles, '[]') AS "modelesDisponiblesDeMesureSpecifique"
+               COALESCE(modeles_de_mesure_specifique.tous_les_modeles_disponibles, '[]') AS "modelesDisponiblesDeMesureSpecifique",
+               EXISTS (
+                  SELECT 1
+                  FROM simulation_migration_referentiel simulation
+                  WHERE simulation.id_service = s.id
+               ) AS "aUneSimulationMigrationReferentiel"
         FROM services s
 
                LEFT JOIN (SELECT id_service, json_agg(nature) AS suggestions

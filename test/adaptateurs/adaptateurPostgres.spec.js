@@ -146,6 +146,23 @@ describe("L'adaptateur persistance Postgres", () => {
 
       expect(services[0].versionService).to.be('v1');
     });
+
+    it('sait indiquer si une simulation est en cours pour un service', async () => {
+      const idService = await insereService();
+      await persistance.sauvegardeSimulationMigrationReferentiel(idService, {});
+
+      const services = await persistance.servicesComplets({ idService });
+
+      expect(services[0].aUneSimulationMigrationReferentiel).to.be(true);
+    });
+
+    it("sait indiquer si une simulation n'est pas en cours pour un service", async () => {
+      const idService = await insereService();
+
+      const services = await persistance.servicesComplets({ idService });
+
+      expect(services[0].aUneSimulationMigrationReferentiel).to.be(false);
+    });
   });
 
   describe('concernant la lecture des modèles de mesure spécifique', () => {
