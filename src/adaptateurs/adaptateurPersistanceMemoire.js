@@ -423,6 +423,12 @@ const nouvelAdaptateur = (
   const lisToutesActivitesMesures = async (idService) =>
     donnees.activitesMesure.filter((a) => a.idService === idService);
 
+  const supprimeToutesActivitesMesure = async (idService) => {
+    donnees.activitesMesure = donnees.activitesMesure.filter(
+      (a) => a.idService !== idService
+    );
+  };
+
   const lisSuperviseursConcernes = async (siret) =>
     donnees.superviseurs
       .filter(({ entiteSupervisee }) => entiteSupervisee.siret === siret)
@@ -737,6 +743,7 @@ const nouvelAdaptateur = (
     supprimeTeleversementModelesMesureSpecifique,
     supprimeTeleversementServices,
     supprimeTousLiensEntreUnServiceEtModelesMesureSpecifique,
+    supprimeToutesActivitesMesure,
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tachesDeServicePour,

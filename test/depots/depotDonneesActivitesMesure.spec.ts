@@ -140,10 +140,12 @@ describe('Le dépôt de données des activités de mesure', () => {
   });
 
   describe("sur demande de migration des activites d'un service", () => {
-    it('transforme les activités pour utiliser les identifiants V2 équivalents', async () => {
-      const idService = unUUID('s');
-      const idMesure = unUUID('m');
-      const idMesureV2 = unUUID('2');
+    const idService = unUUID('s');
+    const idMesure = unUUID('m');
+    const idMesureV2 = unUUID('2');
+    let simulation: SimulationMigrationReferentiel;
+
+    beforeEach(() => {
       const donneesActiviteMesure = {
         idService,
         idActeur: unUUID('a'),
@@ -152,7 +154,7 @@ describe('Le dépôt de données des activités de mesure', () => {
         details: {},
       };
 
-      const simulation = {
+      simulation = {
         idService: () => idService,
         activitesMesures: () => [
           new ActiviteMesure({
@@ -160,7 +162,7 @@ describe('Le dépôt de données des activités de mesure', () => {
             idMesure: idMesureV2,
           }),
         ],
-      };
+      } as unknown as SimulationMigrationReferentiel;
 
       adaptateurPersistance = unePersistanceMemoire()
         .avecUneActiviteMesure({
@@ -168,16 +170,26 @@ describe('Le dépôt de données des activités de mesure', () => {
           idMesure,
         })
         .construis();
+    });
 
-      await depot().migreActivitesMesuresVersV2(
-        simulation as unknown as SimulationMigrationReferentiel
-      );
+    it('transforme les activités pour utiliser les identifiants V2 équivalents', async () => {
+      await depot().migreActivitesMesuresVersV2(simulation);
 
       const activitesMesureV2 = await depot().lisActivitesMesure(
         idService,
         idMesureV2
       );
       expect(activitesMesureV2[0].idMesure).toBe(idMesureV2);
+    });
+
+    it('supprime les activités v1', async () => {
+      await depot().migreActivitesMesuresVersV2(simulation);
+
+      const activitesMesureSupprimee = await depot().lisActivitesMesure(
+        idService,
+        idMesure
+      );
+      expect(activitesMesureSupprimee).toHaveLength(0);
     });
   });
 });
