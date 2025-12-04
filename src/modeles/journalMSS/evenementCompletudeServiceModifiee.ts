@@ -1,14 +1,28 @@
 import Evenement from './evenement.js';
+import Service from '../service.js';
+import DescriptionService from '../descriptionService.js';
+import PointsAcces from '../pointsAcces.js';
+import FonctionnalitesSpecifiques from '../fonctionnalitesSpecifiques.js';
+import DonneesSensiblesSpecifiques from '../donneesSensiblesSpecifiques.js';
+import { CategorieMesure, DonneesIndiceCyber } from '../indiceCyber.type.js';
+
+type TableauIndiceCyber = Array<{ categorie: CategorieMesure; indice: number }>;
+type BornesOrganisations = { borneBasse: number; borneHaute: number };
+
+const nombreOuUn = (nombre: number) => Number(nombre) || 1;
 
 class EvenementCompletudeServiceModifiee extends Evenement {
-  constructor(donnees, options = {}) {
+  constructor(donnees: { service: Service }, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
     Evenement.verifieProprietesRenseignees(donnees, ['service']);
 
-    const enTableau = (donneesIndiceCyber) =>
-      Object.entries(donneesIndiceCyber).reduce(
-        (acc, [categorie, indice]) => [...acc, { categorie, indice }],
+    const enTableau = (donneesIndiceCyber: DonneesIndiceCyber) =>
+      Object.entries(donneesIndiceCyber).reduce<TableauIndiceCyber>(
+        (acc, [categorie, indice]) => [
+          ...acc,
+          { categorie: categorie as CategorieMesure, indice },
+        ],
         []
       );
 
@@ -30,10 +44,9 @@ class EvenementCompletudeServiceModifiee extends Evenement {
       localisationDonnees,
       delaiAvantImpactCritique,
       niveauSecurite,
-    } = service.descriptionService;
-    const { borneBasse, borneHaute } = nombreOrganisationsUtilisatrices;
-
-    const nombreOuUn = (nombre) => Number(nombre) || 1;
+    } = service.descriptionService as DescriptionService;
+    const { borneBasse, borneHaute } =
+      nombreOrganisationsUtilisatrices as BornesOrganisations;
 
     super(
       'COMPLETUDE_SERVICE_MODIFIEE',
@@ -49,11 +62,15 @@ class EvenementCompletudeServiceModifiee extends Evenement {
         typeService,
         provenanceService,
         statutDeploiement,
-        pointsAcces: pointsAcces.nombre(),
+        pointsAcces: (pointsAcces as PointsAcces).nombre(),
         fonctionnalites,
-        fonctionnalitesSpecifiques: fonctionnalitesSpecifiques.nombre(),
+        fonctionnalitesSpecifiques: (
+          fonctionnalitesSpecifiques as FonctionnalitesSpecifiques
+        ).nombre(),
         donneesCaracterePersonnel,
-        donneesSensiblesSpecifiques: donneesSensiblesSpecifiques.nombre(),
+        donneesSensiblesSpecifiques: (
+          donneesSensiblesSpecifiques as DonneesSensiblesSpecifiques
+        ).nombre(),
         localisationDonnees,
         delaiAvantImpactCritique,
         niveauSecurite,
