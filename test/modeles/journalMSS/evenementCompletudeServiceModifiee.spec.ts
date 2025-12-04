@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import ConstructeurEvenementCompletudeServiceModifiee from './constructeurEvenementCompletudeServiceModifiee.js';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
 import {
@@ -6,14 +5,16 @@ import {
   unServiceV2,
 } from '../../constructeurs/constructeurService.js';
 import Mesures from '../../../src/modeles/mesures.js';
-import * as Referentiel from '../../../src/referentiel.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
+import { creeReferentielVide } from '../../../src/referentiel.js';
 
 describe('Un événement de complétude modifiée', () => {
   const unEvenement = () =>
     new ConstructeurEvenementCompletudeServiceModifiee();
 
-  const hacheEnMajuscules = { hacheSha256: (valeur) => valeur?.toUpperCase() };
+  const hacheEnMajuscules = {
+    hacheSha256: (valeur: string) => valeur?.toUpperCase(),
+  };
 
   it("chiffre l'identifiant du service qui lui est donné", () => {
     const evenement = unEvenement()
@@ -22,21 +23,23 @@ describe('Un événement de complétude modifiée', () => {
       .construis()
       .toJSON();
 
-    expect(evenement.donnees.idService).to.be('ABC');
+    expect(evenement.donnees.idService).toBe('ABC');
   });
 
   it('complète avec le niveau de sécurité minimal', () => {
-    const referentiel = Referentiel.creeReferentielVide();
+    const referentiel = creeReferentielVide();
     const service = unService()
       .avecDescription(uneDescriptionValide(referentiel).deNiveau2().donnees)
       .construis();
+
     const evenement = unEvenement().avecService(service).construis().toJSON();
 
-    expect(evenement.donnees.niveauSecuriteMinimal).to.eql('niveau2');
+    expect(evenement.donnees.niveauSecuriteMinimal).toBe('niveau2');
   });
 
   it("sait se convertir en JSON sans dévoiler le SIRET de l'organisation responsable", () => {
-    const referentiel = Referentiel.creeReferentiel({
+    const referentiel = creeReferentielVide();
+    referentiel.recharge({
       categoriesMesures: { gouvernance: 'Gouvernance' },
       indiceCyber: { noteMax: 5 },
       prioritesMesures: { p1: {} },
@@ -102,7 +105,7 @@ describe('Un événement de complétude modifiée', () => {
       .quiAEuLieuLe('08/03/2024')
       .construis();
 
-    expect(evenement.toJSON()).to.eql({
+    expect(evenement.toJSON()).toEqual({
       type: 'COMPLETUDE_SERVICE_MODIFIEE',
       donnees: {
         idService: 'ABC',
@@ -141,7 +144,8 @@ describe('Un événement de complétude modifiée', () => {
   });
 
   it("range les données de l'indice cyber par catégorie", () => {
-    const referentiel = Referentiel.creeReferentiel({
+    const referentiel = creeReferentielVide();
+    referentiel.recharge({
       mesures: { mesureA: {} },
       categoriesMesures: { gouvernance: 'Gouvernance' },
       statutsMesures: { fait: 'Faite', enCours: 'Partielle' },
@@ -156,7 +160,7 @@ describe('Un événement de complétude modifiée', () => {
     const service = unService(referentiel).avecMesures(mesures).construis();
     const evenement = unEvenement().avecService(service).construis().toJSON();
 
-    expect(evenement.donnees.detailIndiceCyber).to.eql([
+    expect(evenement.donnees.detailIndiceCyber).toEqual([
       { categorie: 'total', indice: 5 },
       { categorie: 'gouvernance', indice: 5 },
     ]);
@@ -168,28 +172,22 @@ describe('Un événement de complétude modifiée', () => {
       .construis()
       .toJSON();
 
-    expect(evenement.donnees.nombreOrganisationsUtilisatrices).to.eql({
+    expect(evenement.donnees.nombreOrganisationsUtilisatrices).toEqual({
       borneBasse: 1,
       borneHaute: 1,
     });
   });
 
   it('exige que le service soit renseigné', () => {
-    try {
+    expect(() => {
       unEvenement().sans('service').construis();
-
-      expect().fail(
-        Error("L'instanciation de l'événement aurait dû lever une exception")
-      );
-    } catch (e) {
-      expect(e).to.be.an(ErreurDonneeManquante);
-    }
+    }).toThrowError(ErreurDonneeManquante);
   });
 
   it('lève une exception sur la conversion en JSON quand on lui passe un service v2', () => {
     const serviceV2 = unServiceV2().construis();
     expect(() =>
       unEvenement().avecService(serviceV2).construis().toJSON()
-    ).to.throwError();
+    ).toThrowError();
   });
 });
