@@ -11,20 +11,20 @@ type BornesOrganisations = { borneBasse: number; borneHaute: number };
 
 const nombreOuUn = (nombre: number) => Number(nombre) || 1;
 
+const enTableau = (donneesIndiceCyber: DonneesIndiceCyber) =>
+  Object.entries(donneesIndiceCyber).reduce<TableauIndiceCyber>(
+    (acc, [categorie, indice]) => [
+      ...acc,
+      { categorie: categorie as CategorieMesure, indice },
+    ],
+    []
+  );
+
 class EvenementCompletudeServiceModifiee extends Evenement {
   constructor(donnees: { service: Service }, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
     Evenement.verifieProprietesRenseignees(donnees, ['service']);
-
-    const enTableau = (donneesIndiceCyber: DonneesIndiceCyber) =>
-      Object.entries(donneesIndiceCyber).reduce<TableauIndiceCyber>(
-        (acc, [categorie, indice]) => [
-          ...acc,
-          { categorie: categorie as CategorieMesure, indice },
-        ],
-        []
-      );
 
     const { service } = donnees;
     const niveauSecuriteMinimal = service.estimeNiveauDeSecurite();
