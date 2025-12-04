@@ -11,7 +11,9 @@ block append styles
 
 block append scripts
   script(type = 'module', src = '/statique/scripts/menuNavigation.mjs')
+  script(type = 'module', id= 'bandeau-referentiel-v2', src = '/statique/service/bandeauReferentielV2.js' data-avec-decrire-v2=process.env.FEATURE_FLAG_AVEC_DECRIRE_V2 data-version-service=service.version())
   +composantSvelte('gestionContributeurs.js')
+  +composantSvelte('bandeauReferentielV2.js')
 
 block header-gauche
   .conteneur-logo
@@ -28,6 +30,7 @@ block main
       .zone-principale
         block zone-principale
           .formulaire
+            #conteneur-bandeau-referentiel-v2
             .conteneur-entete
               .avancement-etape
                 block avancement-etape
