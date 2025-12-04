@@ -1,4 +1,6 @@
 import ActiviteMesure, {
+  DonneesActiviteMesure,
+  DonneesCreationActiviteMesure,
   IdMesure,
   TypeActiviteMesure,
 } from '../modeles/activiteMesure.js';
@@ -18,8 +20,10 @@ export type PersistanceActiviteMesure = {
   activitesMesure: (
     idService: UUID,
     idMesure: IdMesure
-  ) => Promise<ActiviteMesure[]>;
-  lisToutesActivitesMesures: (idService: UUID) => Promise<ActiviteMesure[]>;
+  ) => Promise<DonneesActiviteMesure[]>;
+  lisToutesActivitesMesures: (
+    idService: UUID
+  ) => Promise<DonneesActiviteMesure[]>;
   supprimeToutesActivitesMesure: (idService: UUID) => Promise<void>;
 };
 
@@ -28,7 +32,7 @@ const creeDepot = (config: {
 }) => {
   const { adaptateurPersistance } = config;
 
-  const ajouteActiviteMesure = (activite: ActiviteMesure) =>
+  const ajouteActiviteMesure = (activite: DonneesCreationActiviteMesure) =>
     adaptateurPersistance.ajouteActiviteMesure(
       activite.idActeur,
       activite.idService,
@@ -44,7 +48,7 @@ const creeDepot = (config: {
       idMesure
     );
     return activitesMesure
-      .map((a) => ({ ...a, date: new Date(a.date!) }))
+      .map((a) => new ActiviteMesure({ ...a, date: new Date(a.date) }))
       .sort((a, b) => +b.date - +a.date);
   };
 

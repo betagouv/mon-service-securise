@@ -1,6 +1,7 @@
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import * as DepotDonneesActivitesMesure from '../../src/depots/depotDonneesActivitesMesure.js';
 import ActiviteMesure, {
+  DonneesCreationActiviteMesure,
   TypeActiviteMesure,
 } from '../../src/modeles/activiteMesure.js';
 import { PersistanceActiviteMesure } from '../../src/depots/depotDonneesActivitesMesure.js';
@@ -39,14 +40,14 @@ describe('Le dépôt de données des activités de mesure', () => {
         typeMesureActivite = typeMesure;
         detailsActivite = details;
       };
-      const activite = new ActiviteMesure({
+      const activite: DonneesCreationActiviteMesure = {
         idService: unUUID('1'),
         idActeur: unUUID('A'),
         type: 'miseAJourStatut',
         typeMesure: 'generale',
         details: { nouveauStatut: 'fait' },
         idMesure: 'audit',
-      });
+      };
 
       depot().ajouteActiviteMesure(activite);
 
@@ -152,6 +153,7 @@ describe('Le dépôt de données des activités de mesure', () => {
         typeMesure: 'generale' as 'generale' | 'specifique',
         type: 'ajoutPriorite' as TypeActiviteMesure,
         details: {},
+        date: new Date(),
       };
 
       simulation = {
