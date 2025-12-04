@@ -9,15 +9,21 @@
   let elementModale: Modale;
   let elementModaleConfirmationFermeture: Modale;
   let aTermine = false;
+  export let afficheAuMontage = true;
 
   onMount(() => {
-    elementModale?.affiche();
+    if (afficheAuMontage) elementModale?.affiche();
   });
 
   const termineExplications = async () => {
     await axios.post('/api/explicationNouveauReferentiel/termine');
     aTermine = true;
     elementModale?.ferme();
+  };
+
+  export const affiche = () => {
+    indexEtapeCourante = 0;
+    elementModale?.affiche();
   };
 
   const comparaisonNombresMesures: Record<

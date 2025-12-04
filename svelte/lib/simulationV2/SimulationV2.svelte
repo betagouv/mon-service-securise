@@ -16,7 +16,6 @@
   } from './simulationv2.api';
   import type { BrouillonServiceV2 } from '../creationV2/creationV2.types';
   import { etapeCourante } from '../creationV2/etapes/etapeCourante.store';
-  import { toasterStore } from '../ui/stores/toaster.store';
 
   export let idService: UUID;
 
