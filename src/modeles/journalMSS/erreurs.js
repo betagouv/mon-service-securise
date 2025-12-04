@@ -11,6 +11,7 @@ class ErreurDonneeManquante extends ErreurJournal {
 }
 
 export {
+  ErreurJournal,
   ErreurDateDerniereConnexionInvalide,
   ErreurDonneeManquante,
   ErreurServiceManquant,
