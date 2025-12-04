@@ -2,7 +2,7 @@ import Evenement from './evenement.js';
 import Service from '../service.js';
 import { completudeV1 } from './evenementCompletudeServiceModifiee.serviceV1.js';
 import { VersionService } from '../versionService.js';
-import { ErreurJournal } from './erreurs.js';
+import { completudeV2 } from './evenementCompletudeServiceModifiee.serviceV2.js';
 
 class EvenementCompletudeServiceModifiee extends Evenement {
   constructor(donnees: { service: Service }, options = {}) {
@@ -12,12 +12,11 @@ class EvenementCompletudeServiceModifiee extends Evenement {
 
     const { service } = donnees;
 
-    if (service.version() !== VersionService.v1)
-      throw new ErreurJournal(
-        `Impossible de générer la complétude pour ${service.version()}. Seule v1 est supportée.`
-      );
+    const donneesJournal =
+      service.version() === VersionService.v1
+        ? completudeV1(service, adaptateurChiffrement)
+        : completudeV2(service, adaptateurChiffrement);
 
-    const donneesJournal = completudeV1(service, adaptateurChiffrement);
     super('COMPLETUDE_SERVICE_MODIFIEE', donneesJournal, date);
   }
 }

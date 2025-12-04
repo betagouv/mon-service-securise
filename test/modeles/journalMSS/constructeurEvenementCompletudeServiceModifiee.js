@@ -1,9 +1,17 @@
 import EvenementCompletudeServiceModifiee from '../../../src/modeles/journalMSS/evenementCompletudeServiceModifiee.js';
-import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
+import { VersionService } from '../../../src/modeles/versionService.js';
 
 class ConstructeurEvenementCompletudeServiceModifiee {
-  constructor() {
-    const service = unService().avecId('abc').construis();
+  constructor(versionService) {
+    const service = (
+      versionService === VersionService.v1 ? unService() : unServiceV2()
+    )
+      .avecId('abc')
+      .construis();
     this.donnees = { service, organisationResponsable: {} };
     this.date = '14/02/2023';
     this.adaptateurChiffrement = { hacheSha256: (valeur) => valeur };

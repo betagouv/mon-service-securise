@@ -1,24 +1,22 @@
 import ConstructeurEvenementCompletudeServiceModifiee from './constructeurEvenementCompletudeServiceModifiee.js';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
-import {
-  unService,
-  unServiceV2,
-} from '../../constructeurs/constructeurService.js';
+import { unService } from '../../constructeurs/constructeurService.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 import { creeReferentielVide } from '../../../src/referentiel.js';
+import { VersionService } from '../../../src/modeles/versionService.ts';
 
 describe('Un événement de complétude modifiée', () => {
-  const unEvenement = () =>
-    new ConstructeurEvenementCompletudeServiceModifiee();
-
   const hacheEnMajuscules = {
     hacheSha256: (valeur: string) => valeur?.toUpperCase(),
   };
 
   describe('qui traite un service v1', () => {
+    const unEvenementSurV1 = () =>
+      new ConstructeurEvenementCompletudeServiceModifiee(VersionService.v1);
+
     it("chiffre l'identifiant du service qui lui est donné", () => {
-      const evenement = unEvenement()
+      const evenement = unEvenementSurV1()
         .avecIdService('abc')
         .quiChiffreAvec(hacheEnMajuscules)
         .construis()
@@ -33,7 +31,10 @@ describe('Un événement de complétude modifiée', () => {
         .avecDescription(uneDescriptionValide(referentiel).deNiveau2().donnees)
         .construis();
 
-      const evenement = unEvenement().avecService(service).construis().toJSON();
+      const evenement = unEvenementSurV1()
+        .avecService(service)
+        .construis()
+        .toJSON();
 
       expect(evenement.donnees.niveauSecuriteMinimal).toBe('niveau2');
     });
@@ -99,7 +100,7 @@ describe('Un événement de complétude modifiée', () => {
         departement: '33',
       };
 
-      const evenement = unEvenement()
+      const evenement = unEvenementSurV1()
         .avecService(service)
         .deLOrganisation(detailsOrganisationResponsable)
         .quiChiffreAvec(hacheEnMajuscules)
@@ -159,7 +160,10 @@ describe('Un événement de complétude modifiée', () => {
         mesuresPersonnalises
       );
       const service = unService(referentiel).avecMesures(mesures).construis();
-      const evenement = unEvenement().avecService(service).construis().toJSON();
+      const evenement = unEvenementSurV1()
+        .avecService(service)
+        .construis()
+        .toJSON();
 
       expect(evenement.donnees.detailIndiceCyber).toEqual([
         { categorie: 'total', indice: 5 },
@@ -168,7 +172,7 @@ describe('Un événement de complétude modifiée', () => {
     });
 
     it("utilise des bornes à « 1 » pour les services dont le nombre d'organisations utilisatrices est à « 0 »", () => {
-      const evenement = unEvenement()
+      const evenement = unEvenementSurV1()
         .avecNombreOrganisationsUtilisatricesInconnu()
         .construis()
         .toJSON();
@@ -181,17 +185,23 @@ describe('Un événement de complétude modifiée', () => {
 
     it('exige que le service soit renseigné', () => {
       expect(() => {
-        unEvenement().sans('service').construis();
+        unEvenementSurV1().sans('service').construis();
       }).toThrowError(ErreurDonneeManquante);
     });
   });
 
   describe('qui traite un service v2', () => {
-    it('lève une exception sur la conversion en JSON', () => {
-      const serviceV2 = unServiceV2().construis();
-      expect(() =>
-        unEvenement().avecService(serviceV2).construis().toJSON()
-      ).toThrowError();
+    const unEvenementSurV2 = () =>
+      new ConstructeurEvenementCompletudeServiceModifiee(VersionService.v2);
+
+    it("chiffre l'identifiant du service qui lui est donné", () => {
+      const evenement = unEvenementSurV2()
+        .avecIdService('abc')
+        .quiChiffreAvec(hacheEnMajuscules)
+        .construis()
+        .toJSON();
+
+      expect(evenement.donnees.idService).toBe('ABC');
     });
   });
 });
