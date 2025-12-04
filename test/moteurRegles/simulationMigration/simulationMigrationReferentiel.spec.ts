@@ -358,6 +358,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         typeMesure: 'generale',
         idActeur: unUUID('a'),
         details: {},
+        date: new Date(),
       });
 
     const uneActiviteMesureSpecifique = (idMesure: IdMesure) =>
@@ -368,6 +369,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         typeMesure: 'specifique',
         idActeur: unUUID('a'),
         details: {},
+        date: new Date(),
       });
 
     it('retourne les nouvelles activités de mesure', () => {

@@ -16,15 +16,17 @@ export type TypeActiviteMesure =
   | 'miseAJourEcheance'
   | 'ajoutCommentaire';
 
-type DonneesActiviteMesure = {
+export type DonneesActiviteMesure = {
   idActeur: UUID;
   idService: UUID;
   idMesure: IdMesure;
   type: TypeActiviteMesure;
   typeMesure: 'generale' | 'specifique';
   details: Record<string, unknown>;
-  date?: Date;
+  date: Date;
 };
+
+export type DonneesCreationActiviteMesure = Omit<DonneesActiviteMesure, 'date'>;
 
 class ActiviteMesure {
   idActeur: UUID;
@@ -33,7 +35,7 @@ class ActiviteMesure {
   type: TypeActiviteMesure;
   typeMesure: 'generale' | 'specifique';
   details: Record<string, unknown>;
-  date?: Date;
+  date: Date;
 
   constructor(donnees: DonneesActiviteMesure) {
     this.idService = donnees.idService;
