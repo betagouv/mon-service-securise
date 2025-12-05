@@ -57,6 +57,7 @@ export type DonneesDescriptionServiceV2 = {
 };
 
 export class DescriptionServiceV2 {
+  readonly activitesExternalisees: ActiviteExternalisee[];
   readonly nomService: string;
   readonly organisationResponsable: Entite;
   readonly niveauSecurite: NiveauSecurite;
@@ -68,9 +69,8 @@ export class DescriptionServiceV2 {
   readonly dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
   readonly pointsAcces: PointsAcces;
   readonly typeService: TypeDeService[];
+  readonly typeHebergement: TypeHebergement;
   private readonly presentation: string | undefined;
-  private readonly typeHebergement: TypeHebergement;
-  private readonly activitesExternalisees: ActiviteExternalisee[];
   private readonly ouvertureSysteme: OuvertureSysteme;
   private readonly audienceCible: AudienceCible;
   private readonly localisationDonneesTraitees: LocalisationDonneesTraitees;
