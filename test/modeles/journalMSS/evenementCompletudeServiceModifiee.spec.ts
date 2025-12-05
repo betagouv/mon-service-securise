@@ -283,6 +283,8 @@ describe('Un événement de complétude modifiée', () => {
             .quiExternalise(['administrationTechnique'])
             .avecNiveauSecurite('niveau3')
             .avecStatutDeploiement('enLigne')
+            .avecOuvertureSysteme('interneRestreint')
+            .avecAudienceCible('limitee')
             .donneesDescription()
         )
         .construis();
@@ -322,6 +324,8 @@ describe('Un événement de complétude modifiée', () => {
           specificitesProjet: ['annuaire'],
           typeHebergement: 'cloud',
           activitesExternalisees: ['administrationTechnique'],
+          ouvertureSysteme: 'interneRestreint',
+          audienceCible: 'limitee',
           // provenanceService: 'developpement',
           // fonctionnalites: ['reseauSocial'],
           // fonctionnalitesSpecifiques: 2,

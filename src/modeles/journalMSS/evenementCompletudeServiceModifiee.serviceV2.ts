@@ -5,6 +5,8 @@ export const completudeV2 = (service: Service) => {
 
   return {
     activitesExternalisees: description.activitesExternalisees,
+    audienceCible: description.audienceCible,
+    ouvertureSysteme: description.ouvertureSysteme,
     specificitesProjet: description.specificitesProjet,
     typeHebergement: description.typeHebergement,
   };
