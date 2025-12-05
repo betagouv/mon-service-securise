@@ -8,10 +8,29 @@ import Mesures from '../../../src/modeles/mesures.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 import { creeReferentielVide } from '../../../src/referentiel.js';
 import { VersionService } from '../../../src/modeles/versionService.ts';
-import { uneDescriptionDeNiveauDeSecuriteEstime3 } from '../../constructeurs/constructeurDescriptionServiceV2.ts';
+import {
+  uneDescriptionDeNiveauDeSecuriteEstime1,
+  uneDescriptionDeNiveauDeSecuriteEstime3,
+} from '../../constructeurs/constructeurDescriptionServiceV2.ts';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 
 describe('Un événement de complétude modifiée', () => {
+  const detailsOrganisationResponsable = {
+    estServicePublic: false,
+    estFiness: false,
+    estEss: true,
+    estEntrepreneurIndividuel: false,
+    estAssociation: false,
+    categorieEntreprise: null,
+    activitePrincipale: '68.20B',
+    trancheEffectifSalarie: null,
+    natureJuridique: '6540',
+    sectionActivitePrincipale: 'L',
+    anneeTrancheEffectifSalarie: null,
+    commune: '33376',
+    departement: '33',
+  };
+
   const hacheEnMajuscules = {
     hacheSha256: (valeur: string) => valeur?.toUpperCase(),
   };
@@ -89,21 +108,6 @@ describe('Un événement de complétude modifiée', () => {
           niveauSecurite: 'niveau3',
         })
         .construis();
-      const detailsOrganisationResponsable = {
-        estServicePublic: false,
-        estFiness: false,
-        estEss: true,
-        estEntrepreneurIndividuel: false,
-        estAssociation: false,
-        categorieEntreprise: null,
-        activitePrincipale: '68.20B',
-        trancheEffectifSalarie: null,
-        natureJuridique: '6540',
-        sectionActivitePrincipale: 'L',
-        anneeTrancheEffectifSalarie: null,
-        commune: '33376',
-        departement: '33',
-      };
 
       const evenement = unEvenementSurV1()
         .avecService(service)
@@ -248,6 +252,78 @@ describe('Un événement de complétude modifiée', () => {
         { categorie: 'defense', indice: 0 },
         { categorie: 'resilience', indice: 0 },
       ]);
+    });
+
+    it("sait se convertir en JSON sans dévoiler le SIRET de l'organisation responsable", () => {
+      const uneMesureV2 = 'RECENSEMENT.1';
+      const referentielV2 = creeReferentielV2();
+      const mesures = new Mesures(
+        {
+          mesuresGenerales: [
+            {
+              id: uneMesureV2,
+              statut: 'fait',
+              priorite: 'p1',
+              echeance: '2024-09-13',
+            },
+          ],
+        },
+        referentielV2,
+        { [uneMesureV2]: { categorie: 'gouvernance' } }
+      );
+      const descriptionNiveau1 =
+        uneDescriptionDeNiveauDeSecuriteEstime1().donneesDescription();
+      const service = unServiceV2(referentielV2)
+        .avecId('ABC')
+        .avecMesures(mesures)
+        .avecDescription(descriptionNiveau1)
+        .construis();
+
+      const evenement = unEvenementSurV2()
+        .avecService(service)
+        .deLOrganisation(detailsOrganisationResponsable)
+        .quiAEuLieuLe('08/03/2024')
+        .construis();
+
+      expect(evenement.toJSON()).toEqual({
+        type: 'COMPLETUDE_SERVICE_MODIFIEE',
+        donnees: {
+          idService: 'ABC',
+          // nombreTotalMesures: 1,
+          // nombreMesuresCompletes: 1,
+          // detailMesures: [
+          //   {
+          //     idMesure: 'mesureA',
+          //     statut: 'fait',
+          //     priorite: 'p1',
+          //     echeance: '2024-09-13',
+          //     nbResponsables: 0,
+          //   },
+          // ],
+          detailIndiceCyber: [
+            { categorie: 'total', indice: 5 },
+            { categorie: 'gouvernance', indice: 5 },
+            { categorie: 'protection', indice: 0 },
+            { categorie: 'defense', indice: 0 },
+            { categorie: 'resilience', indice: 0 },
+          ],
+          // versionIndiceCyber: 'v2',
+          // nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
+          // typeService: ['applicationMobile'],
+          // provenanceService: 'developpement',
+          // statutDeploiement: 'unStatutDeploiement',
+          // pointsAcces: 2,
+          // fonctionnalites: ['reseauSocial'],
+          // fonctionnalitesSpecifiques: 2,
+          // donneesCaracterePersonnel: ['donnee A', 'donnee B'],
+          // donneesSensiblesSpecifiques: 1,
+          // localisationDonnees: 'uneLocalisation',
+          // delaiAvantImpactCritique: 'uneHeure',
+          // niveauSecurite: 'niveau3',
+          niveauSecuriteMinimal: 'niveau1',
+        },
+        date: '08/03/2024',
+      });
     });
 
     it('exige que le service soit renseigné', () => {
