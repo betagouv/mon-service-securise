@@ -1,27 +1,15 @@
-import { CategorieMesure, DonneesIndiceCyber } from '../indiceCyber.type.js';
 import Service from '../service.js';
 import DescriptionService from '../descriptionService.js';
 import PointsAcces from '../pointsAcces.js';
 import FonctionnalitesSpecifiques from '../fonctionnalitesSpecifiques.js';
 import DonneesSensiblesSpecifiques from '../donneesSensiblesSpecifiques.js';
 
-type TableauIndiceCyber = Array<{ categorie: CategorieMesure; indice: number }>;
-
 type BornesOrganisations = { borneBasse: number; borneHaute: number };
 
 const nombreOuUn = (nombre: number) => Number(nombre) || 1;
 
-const enTableau = (donneesIndiceCyber: DonneesIndiceCyber) =>
-  Object.entries(donneesIndiceCyber).reduce<TableauIndiceCyber>(
-    (acc, [categorie, indice]) => [
-      ...acc,
-      { categorie: categorie as CategorieMesure, indice },
-    ],
-    []
-  );
-
 export const completudeV1 = (service: Service) => {
-  const { indiceCyber, ...autreDonneesCompletude } =
+  const { nombreTotalMesures, nombreMesuresCompletes, detailMesures } =
     service.completudeMesures();
 
   const {
@@ -42,9 +30,10 @@ export const completudeV1 = (service: Service) => {
     nombreOrganisationsUtilisatrices as BornesOrganisations;
 
   return {
-    detailIndiceCyber: enTableau(indiceCyber),
     versionIndiceCyber: 'v2',
-    ...autreDonneesCompletude,
+    nombreTotalMesures,
+    nombreMesuresCompletes,
+    detailMesures,
     nombreOrganisationsUtilisatrices: {
       borneBasse: nombreOuUn(borneBasse),
       borneHaute: nombreOuUn(borneHaute),

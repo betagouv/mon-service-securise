@@ -9,6 +9,7 @@ import uneDescriptionValide from '../../constructeurs/constructeurDescriptionSer
 import { creeReferentielVide } from '../../../src/referentiel.js';
 import { VersionService } from '../../../src/modeles/versionService.ts';
 import { uneDescriptionDeNiveauDeSecuriteEstime3 } from '../../constructeurs/constructeurDescriptionServiceV2.ts';
+import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 
 describe('Un événement de complétude modifiée', () => {
   const hacheEnMajuscules = {
@@ -223,6 +224,30 @@ describe('Un événement de complétude modifiée', () => {
         .toJSON();
 
       expect(evenement.donnees.niveauSecuriteMinimal).toBe('niveau3');
+    });
+
+    it("range les données de l'indice cyber par catégorie", () => {
+      const uneMesureV2 = 'RECENSEMENT.1';
+      const referentiel = creeReferentielV2();
+      const mesures = new Mesures(
+        { mesuresGenerales: [{ id: uneMesureV2, statut: 'fait' }] },
+        referentiel,
+        { [uneMesureV2]: { categorie: 'gouvernance' } }
+      );
+      const service = unServiceV2(referentiel).avecMesures(mesures).construis();
+
+      const evenement = unEvenementSurV2()
+        .avecService(service)
+        .construis()
+        .toJSON();
+
+      expect(evenement.donnees.detailIndiceCyber).toEqual([
+        { categorie: 'total', indice: 5 },
+        { categorie: 'gouvernance', indice: 5 },
+        { categorie: 'protection', indice: 0 },
+        { categorie: 'defense', indice: 0 },
+        { categorie: 'resilience', indice: 0 },
+      ]);
     });
 
     it('exige que le service soit renseigné', () => {
