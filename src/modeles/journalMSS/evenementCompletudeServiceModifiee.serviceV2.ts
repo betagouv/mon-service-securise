@@ -12,8 +12,10 @@ export const completudeV2 = (service: Service) => {
       description.categoriesDonneesTraiteesSupplementaires?.length,
     dureeDysfonctionnementAcceptable:
       description.dureeDysfonctionnementAcceptable,
+    localisationDonneesTraitees: description.localisationDonneesTraitees,
     ouvertureSysteme: description.ouvertureSysteme,
     specificitesProjet: description.specificitesProjet,
     typeHebergement: description.typeHebergement,
+    volumetrieDonneesTraitees: description.volumetrieDonneesTraitees,
   };
 };
