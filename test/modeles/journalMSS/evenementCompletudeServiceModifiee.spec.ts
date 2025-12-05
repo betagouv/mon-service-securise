@@ -285,6 +285,7 @@ describe('Un événement de complétude modifiée', () => {
             .avecStatutDeploiement('enLigne')
             .avecOuvertureSysteme('interneRestreint')
             .avecAudienceCible('limitee')
+            .avecDureeDysfonctionnementAcceptable('moinsDe12h')
             .donneesDescription()
         )
         .construis();
@@ -326,6 +327,7 @@ describe('Un événement de complétude modifiée', () => {
           activitesExternalisees: ['administrationTechnique'],
           ouvertureSysteme: 'interneRestreint',
           audienceCible: 'limitee',
+          dureeDysfonctionnementAcceptable: 'moinsDe12h',
           // provenanceService: 'developpement',
           // fonctionnalites: ['reseauSocial'],
           // fonctionnalitesSpecifiques: 2,
