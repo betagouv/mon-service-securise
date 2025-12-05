@@ -12,7 +12,6 @@ export const completudeV1 = (service: Service) => {
     typeService,
     nombreOrganisationsUtilisatrices,
     provenanceService,
-    statutDeploiement,
     fonctionnalites,
     fonctionnalitesSpecifiques,
     donneesCaracterePersonnel,
@@ -30,7 +29,6 @@ export const completudeV1 = (service: Service) => {
     },
     typeService,
     provenanceService,
-    statutDeploiement,
     fonctionnalites,
     fonctionnalitesSpecifiques: (
       fonctionnalitesSpecifiques as FonctionnalitesSpecifiques
