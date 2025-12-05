@@ -64,11 +64,6 @@ class ConstructeurDescriptionServiceV2 {
     return this;
   }
 
-  avecVolumetrieDonneesTraitees(volumetrie: VolumetrieDonneesTraitees) {
-    this.donnees.volumetrieDonneesTraitees = volumetrie;
-    return this;
-  }
-
   avecNomService(nom: string): ConstructeurDescriptionServiceV2 {
     this.donnees.nomService = nom;
     return this;

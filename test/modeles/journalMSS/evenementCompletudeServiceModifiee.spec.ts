@@ -288,6 +288,8 @@ describe('Un événement de complétude modifiée', () => {
             .avecDureeDysfonctionnementAcceptable('moinsDe12h')
             .avecCategoriesDonneesTraitees(['donneesDIdentite'])
             .avecAutresDonneesTraitees(['a', 'b', 'c'])
+            .avecVolumeDonneesTraitees('faible')
+            .avecLocalisationDonneesTraitees('UE')
             .donneesDescription()
         )
         .construis();
@@ -332,13 +334,8 @@ describe('Un événement de complétude modifiée', () => {
           dureeDysfonctionnementAcceptable: 'moinsDe12h',
           categoriesDonneesTraitees: ['donneesDIdentite'],
           categoriesDonneesTraiteesSupplementaires: 3,
-          // provenanceService: 'developpement',
-          // fonctionnalites: ['reseauSocial'],
-          // fonctionnalitesSpecifiques: 2,
-          // donneesCaracterePersonnel: ['donnee A', 'donnee B'],
-          // donneesSensiblesSpecifiques: 1,
-          // localisationDonnees: 'uneLocalisation',
-          // delaiAvantImpactCritique: 'uneHeure',
+          volumetrieDonneesTraitees: 'faible',
+          localisationDonneesTraitees: 'UE',
           niveauSecurite: 'niveau3',
           niveauSecuriteMinimal: 'niveau1',
         },
