@@ -9,7 +9,6 @@ const nombreOuUn = (nombre: number) => Number(nombre) || 1;
 
 export const completudeV1 = (service: Service) => {
   const {
-    typeService,
     nombreOrganisationsUtilisatrices,
     provenanceService,
     fonctionnalites,
@@ -27,7 +26,6 @@ export const completudeV1 = (service: Service) => {
       borneBasse: nombreOuUn(borneBasse),
       borneHaute: nombreOuUn(borneHaute),
     },
-    typeService,
     provenanceService,
     fonctionnalites,
     fonctionnalitesSpecifiques: (

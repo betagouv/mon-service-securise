@@ -277,6 +277,7 @@ describe('Un événement de complétude modifiée', () => {
         .avecDescription(
           uneDescriptionDeNiveauDeSecuriteEstime1()
             .avecPointsAcces(['a.fr', 'b.fr'])
+            .avecTypesService(['portailInformation', 'serviceEnLigne'])
             .avecNiveauSecurite('niveau3')
             .avecStatutDeploiement('enLigne')
             .donneesDescription()
@@ -314,7 +315,7 @@ describe('Un événement de complétude modifiée', () => {
           versionIndiceCyber: 'v2',
           pointsAcces: 2,
           statutDeploiement: 'enLigne',
-          // typeService: ['applicationMobile'],
+          typeService: ['portailInformation', 'serviceEnLigne'],
           // provenanceService: 'developpement',
           // fonctionnalites: ['reseauSocial'],
           // fonctionnalitesSpecifiques: 2,
