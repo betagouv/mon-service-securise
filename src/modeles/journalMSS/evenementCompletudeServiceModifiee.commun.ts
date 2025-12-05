@@ -38,5 +38,6 @@ export const completudeCommune = (
     statutDeploiement: description.statutDeploiement,
     typeService: description.typeService,
     versionIndiceCyber: 'v2',
+    versionService: service.version(),
   };
 };

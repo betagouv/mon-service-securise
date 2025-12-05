@@ -149,6 +149,7 @@ describe('Un événement de complétude modifiée', () => {
           delaiAvantImpactCritique: 'uneHeure',
           niveauSecurite: 'niveau3',
           niveauSecuriteMinimal: 'niveau2',
+          versionService: 'v1',
         },
         date: '08/03/2024',
       });
@@ -338,6 +339,7 @@ describe('Un événement de complétude modifiée', () => {
           localisationDonneesTraitees: 'UE',
           niveauSecurite: 'niveau3',
           niveauSecuriteMinimal: 'niveau1',
+          versionService: 'v2',
         },
         date: '08/03/2024',
       });
