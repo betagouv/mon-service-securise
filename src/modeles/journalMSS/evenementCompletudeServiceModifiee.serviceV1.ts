@@ -8,34 +8,26 @@ type BornesOrganisations = { borneBasse: number; borneHaute: number };
 const nombreOuUn = (nombre: number) => Number(nombre) || 1;
 
 export const completudeV1 = (service: Service) => {
-  const {
-    nombreOrganisationsUtilisatrices,
-    provenanceService,
-    fonctionnalites,
-    fonctionnalitesSpecifiques,
-    donneesCaracterePersonnel,
-    donneesSensiblesSpecifiques,
-    localisationDonnees,
-    delaiAvantImpactCritique,
-  } = service.descriptionService as DescriptionService;
+  const description = service.descriptionService as DescriptionService;
+
   const { borneBasse, borneHaute } =
-    nombreOrganisationsUtilisatrices as BornesOrganisations;
+    description.nombreOrganisationsUtilisatrices as BornesOrganisations;
 
   return {
+    delaiAvantImpactCritique: description.delaiAvantImpactCritique,
+    donneesCaracterePersonnel: description.donneesCaracterePersonnel,
+    donneesSensiblesSpecifiques: (
+      description.donneesSensiblesSpecifiques as DonneesSensiblesSpecifiques
+    ).nombre(),
+    fonctionnalites: description.fonctionnalites,
+    fonctionnalitesSpecifiques: (
+      description.fonctionnalitesSpecifiques as FonctionnalitesSpecifiques
+    ).nombre(),
+    localisationDonnees: description.localisationDonnees,
     nombreOrganisationsUtilisatrices: {
       borneBasse: nombreOuUn(borneBasse),
       borneHaute: nombreOuUn(borneHaute),
     },
-    provenanceService,
-    fonctionnalites,
-    fonctionnalitesSpecifiques: (
-      fonctionnalitesSpecifiques as FonctionnalitesSpecifiques
-    ).nombre(),
-    donneesCaracterePersonnel,
-    donneesSensiblesSpecifiques: (
-      donneesSensiblesSpecifiques as DonneesSensiblesSpecifiques
-    ).nombre(),
-    localisationDonnees,
-    delaiAvantImpactCritique,
+    provenanceService: description.provenanceService,
   };
 };
