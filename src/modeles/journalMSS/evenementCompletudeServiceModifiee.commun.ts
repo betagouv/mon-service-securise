@@ -36,6 +36,7 @@ export const completudeCommune = (
     nombreTotalMesures,
     pointsAcces: (description.pointsAcces as PointsAcces).nombre(),
     statutDeploiement: description.statutDeploiement,
+    typeService: description.typeService,
     versionIndiceCyber: 'v2',
   };
 };

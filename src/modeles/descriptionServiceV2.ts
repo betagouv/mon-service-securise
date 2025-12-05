@@ -67,8 +67,8 @@ export class DescriptionServiceV2 {
   readonly categoriesDonneesTraiteesSupplementaires: string[];
   readonly dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
   readonly pointsAcces: PointsAcces;
+  readonly typeService: TypeDeService[];
   private readonly presentation: string | undefined;
-  private readonly typeService: TypeDeService[];
   private readonly typeHebergement: TypeHebergement;
   private readonly activitesExternalisees: ActiviteExternalisee[];
   private readonly ouvertureSysteme: OuvertureSysteme;
