@@ -277,6 +277,7 @@ describe('Un événement de complétude modifiée', () => {
         .avecDescription(
           uneDescriptionDeNiveauDeSecuriteEstime1()
             .avecPointsAcces(['a.fr', 'b.fr'])
+            .avecNiveauSecurite('niveau3')
             .donneesDescription()
         )
         .construis();
@@ -321,7 +322,7 @@ describe('Un événement de complétude modifiée', () => {
           // donneesSensiblesSpecifiques: 1,
           // localisationDonnees: 'uneLocalisation',
           // delaiAvantImpactCritique: 'uneHeure',
-          // niveauSecurite: 'niveau3',
+          niveauSecurite: 'niveau3',
           niveauSecuriteMinimal: 'niveau1',
         },
         date: '08/03/2024',
