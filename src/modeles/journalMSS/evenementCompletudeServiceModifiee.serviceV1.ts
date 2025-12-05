@@ -19,7 +19,6 @@ export const completudeV1 = (service: Service) => {
     donneesSensiblesSpecifiques,
     localisationDonnees,
     delaiAvantImpactCritique,
-    niveauSecurite,
   } = service.descriptionService as DescriptionService;
   const { borneBasse, borneHaute } =
     nombreOrganisationsUtilisatrices as BornesOrganisations;
@@ -42,6 +41,5 @@ export const completudeV1 = (service: Service) => {
     ).nombre(),
     localisationDonnees,
     delaiAvantImpactCritique,
-    niveauSecurite,
   };
 };
