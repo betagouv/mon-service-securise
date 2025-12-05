@@ -59,6 +59,7 @@ export type DonneesDescriptionServiceV2 = {
 export class DescriptionServiceV2 {
   readonly activitesExternalisees: ActiviteExternalisee[];
   readonly audienceCible: AudienceCible;
+  readonly localisationDonneesTraitees: LocalisationDonneesTraitees;
   readonly nomService: string;
   readonly organisationResponsable: Entite;
   readonly ouvertureSysteme: OuvertureSysteme;
@@ -73,7 +74,6 @@ export class DescriptionServiceV2 {
   readonly typeService: TypeDeService[];
   readonly typeHebergement: TypeHebergement;
   private readonly presentation: string | undefined;
-  private readonly localisationDonneesTraitees: LocalisationDonneesTraitees;
   private readonly referentiel: Referentiel;
 
   constructor(donnees: DonneesDescriptionServiceV2, referentiel: Referentiel) {
