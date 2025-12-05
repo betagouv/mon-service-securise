@@ -27,15 +27,15 @@ export const completudeCommune = (
   const description = service.descriptionService;
 
   return {
-    idService: adaptateurChiffrement.hacheSha256(service.id),
-    niveauSecuriteMinimal: service.estimeNiveauDeSecurite(),
-    niveauSecurite: description.niveauSecurite,
-    nombreTotalMesures,
-    nombreMesuresCompletes,
-    detailMesures,
     detailIndiceCyber: enTableau(indiceCyber),
-    versionIndiceCyber: 'v2',
+    detailMesures,
+    idService: adaptateurChiffrement.hacheSha256(service.id),
+    niveauSecurite: description.niveauSecurite,
+    niveauSecuriteMinimal: service.estimeNiveauDeSecurite(),
+    nombreMesuresCompletes,
+    nombreTotalMesures,
     pointsAcces: (description.pointsAcces as PointsAcces).nombre(),
     statutDeploiement: description.statutDeploiement,
+    versionIndiceCyber: 'v2',
   };
 };
