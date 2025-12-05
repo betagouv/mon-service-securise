@@ -1,13 +1,20 @@
 import EvenementNouveauServiceCree from '../../modeles/journalMSS/evenementNouveauServiceCree.js';
+import { EvenementNouveauServiceCree as MssNouveauServiceCree } from '../evenementNouveauServiceCree.js';
+import { UUID } from '../../typesBasiques.js';
+import { AdaptateurJournal } from '../../adaptateurs/adaptateurJournal.interface.js';
 
-const leveException = (raison) => {
+const leveException = (raison: 'service' | 'créateur') => {
   throw new Error(
     `Impossible de consigner un nouveau service dans le journal MSS sans avoir le ${raison} en paramètre.`
   );
 };
 
-function consigneNouveauServiceDansJournal({ adaptateurJournal }) {
-  return async (evenement) => {
+function consigneNouveauServiceDansJournal({
+  adaptateurJournal,
+}: {
+  adaptateurJournal: AdaptateurJournal;
+}) {
+  return async (evenement: MssNouveauServiceCree) => {
     const { service, utilisateur } = evenement;
 
     if (!service) leveException('service');
@@ -15,7 +22,7 @@ function consigneNouveauServiceDansJournal({ adaptateurJournal }) {
 
     const creation = new EvenementNouveauServiceCree({
       idService: service.id,
-      idUtilisateur: utilisateur.id,
+      idUtilisateur: utilisateur.id as UUID,
       versionService: service.version(),
     });
 

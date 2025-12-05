@@ -57,8 +57,12 @@ export type DonneesDescriptionServiceV2 = {
 };
 
 export class DescriptionServiceV2 {
+  readonly activitesExternalisees: ActiviteExternalisee[];
+  readonly audienceCible: AudienceCible;
+  readonly localisationDonneesTraitees: LocalisationDonneesTraitees;
   readonly nomService: string;
   readonly organisationResponsable: Entite;
+  readonly ouvertureSysteme: OuvertureSysteme;
   readonly niveauSecurite: NiveauSecurite;
   readonly statutDeploiement: StatutDeploiement;
   readonly volumetrieDonneesTraitees: VolumetrieDonneesTraitees;
@@ -66,14 +70,10 @@ export class DescriptionServiceV2 {
   readonly categoriesDonneesTraitees: CategorieDonneesTraitees[];
   readonly categoriesDonneesTraiteesSupplementaires: string[];
   readonly dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable;
+  readonly pointsAcces: PointsAcces;
+  readonly typeService: TypeDeService[];
+  readonly typeHebergement: TypeHebergement;
   private readonly presentation: string | undefined;
-  private readonly pointsAcces: PointsAcces;
-  private readonly typeService: TypeDeService[];
-  private readonly typeHebergement: TypeHebergement;
-  private readonly activitesExternalisees: ActiviteExternalisee[];
-  private readonly ouvertureSysteme: OuvertureSysteme;
-  private readonly audienceCible: AudienceCible;
-  private readonly localisationDonneesTraitees: LocalisationDonneesTraitees;
   private readonly referentiel: Referentiel;
 
   constructor(donnees: DonneesDescriptionServiceV2, referentiel: Referentiel) {
