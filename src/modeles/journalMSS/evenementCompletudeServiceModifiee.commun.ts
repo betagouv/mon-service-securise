@@ -1,6 +1,7 @@
 import Service from '../service.js';
 import { AdaptateurChiffrement } from '../../adaptateurs/adaptateurChiffrement.interface.js';
 import { CategorieMesure, DonneesIndiceCyber } from '../indiceCyber.type.js';
+import PointsAcces from '../pointsAcces.js';
 
 type TableauIndiceCyber = Array<{ categorie: CategorieMesure; indice: number }>;
 
@@ -17,12 +18,22 @@ export const completudeCommune = (
   service: Service,
   adaptateurChiffrement: AdaptateurChiffrement
 ) => {
-  const niveauSecuriteMinimal = service.estimeNiveauDeSecurite();
-  const { indiceCyber } = service.completudeMesures();
+  const {
+    indiceCyber,
+    nombreTotalMesures,
+    nombreMesuresCompletes,
+    detailMesures,
+  } = service.completudeMesures();
+  const description = service.descriptionService;
 
   return {
     idService: adaptateurChiffrement.hacheSha256(service.id),
-    niveauSecuriteMinimal,
+    niveauSecuriteMinimal: service.estimeNiveauDeSecurite(),
+    nombreTotalMesures,
+    nombreMesuresCompletes,
+    detailMesures,
     detailIndiceCyber: enTableau(indiceCyber),
+    versionIndiceCyber: 'v2',
+    pointsAcces: (description.pointsAcces as PointsAcces).nombre(),
   };
 };

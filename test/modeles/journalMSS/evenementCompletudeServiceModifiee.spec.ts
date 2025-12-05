@@ -271,12 +271,14 @@ describe('Un événement de complétude modifiée', () => {
         referentielV2,
         { [uneMesureV2]: { categorie: 'gouvernance' } }
       );
-      const descriptionNiveau1 =
-        uneDescriptionDeNiveauDeSecuriteEstime1().donneesDescription();
       const service = unServiceV2(referentielV2)
         .avecId('ABC')
         .avecMesures(mesures)
-        .avecDescription(descriptionNiveau1)
+        .avecDescription(
+          uneDescriptionDeNiveauDeSecuriteEstime1()
+            .avecPointsAcces(['a.fr', 'b.fr'])
+            .donneesDescription()
+        )
         .construis();
 
       const evenement = unEvenementSurV2()
@@ -289,17 +291,17 @@ describe('Un événement de complétude modifiée', () => {
         type: 'COMPLETUDE_SERVICE_MODIFIEE',
         donnees: {
           idService: 'ABC',
-          // nombreTotalMesures: 1,
-          // nombreMesuresCompletes: 1,
-          // detailMesures: [
-          //   {
-          //     idMesure: 'mesureA',
-          //     statut: 'fait',
-          //     priorite: 'p1',
-          //     echeance: '2024-09-13',
-          //     nbResponsables: 0,
-          //   },
-          // ],
+          nombreTotalMesures: 1,
+          nombreMesuresCompletes: 1,
+          detailMesures: [
+            {
+              idMesure: 'RECENSEMENT.1',
+              statut: 'fait',
+              priorite: 'p1',
+              echeance: '2024-09-13',
+              nbResponsables: 0,
+            },
+          ],
           detailIndiceCyber: [
             { categorie: 'total', indice: 5 },
             { categorie: 'gouvernance', indice: 5 },
@@ -307,12 +309,12 @@ describe('Un événement de complétude modifiée', () => {
             { categorie: 'defense', indice: 0 },
             { categorie: 'resilience', indice: 0 },
           ],
-          // versionIndiceCyber: 'v2',
+          versionIndiceCyber: 'v2',
+          pointsAcces: 2,
           // nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
           // typeService: ['applicationMobile'],
           // provenanceService: 'developpement',
           // statutDeploiement: 'unStatutDeploiement',
-          // pointsAcces: 2,
           // fonctionnalites: ['reseauSocial'],
           // fonctionnalitesSpecifiques: 2,
           // donneesCaracterePersonnel: ['donnee A', 'donnee B'],
