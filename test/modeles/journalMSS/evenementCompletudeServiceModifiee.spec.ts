@@ -279,6 +279,8 @@ describe('Un événement de complétude modifiée', () => {
             .avecPointsAcces(['a.fr', 'b.fr'])
             .avecTypesService(['portailInformation', 'serviceEnLigne'])
             .avecSpecificitesProjet(['annuaire'])
+            .avecTypeHebergement('cloud')
+            .quiExternalise(['administrationTechnique'])
             .avecNiveauSecurite('niveau3')
             .avecStatutDeploiement('enLigne')
             .donneesDescription()
@@ -318,6 +320,8 @@ describe('Un événement de complétude modifiée', () => {
           statutDeploiement: 'enLigne',
           typeService: ['portailInformation', 'serviceEnLigne'],
           specificitesProjet: ['annuaire'],
+          typeHebergement: 'cloud',
+          activitesExternalisees: ['administrationTechnique'],
           // provenanceService: 'developpement',
           // fonctionnalites: ['reseauSocial'],
           // fonctionnalitesSpecifiques: 2,
