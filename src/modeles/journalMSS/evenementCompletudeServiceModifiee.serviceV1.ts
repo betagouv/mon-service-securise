@@ -1,6 +1,5 @@
 import { CategorieMesure, DonneesIndiceCyber } from '../indiceCyber.type.js';
 import Service from '../service.js';
-import { AdaptateurChiffrement } from '../../adaptateurs/adaptateurChiffrement.interface.js';
 import DescriptionService from '../descriptionService.js';
 import PointsAcces from '../pointsAcces.js';
 import FonctionnalitesSpecifiques from '../fonctionnalitesSpecifiques.js';
@@ -21,11 +20,7 @@ const enTableau = (donneesIndiceCyber: DonneesIndiceCyber) =>
     []
   );
 
-export const completudeV1 = (
-  service: Service,
-  adaptateurChiffrement: AdaptateurChiffrement
-) => {
-  const niveauSecuriteMinimal = service.estimeNiveauDeSecurite();
+export const completudeV1 = (service: Service) => {
   const { indiceCyber, ...autreDonneesCompletude } =
     service.completudeMesures();
 
@@ -47,7 +42,6 @@ export const completudeV1 = (
     nombreOrganisationsUtilisatrices as BornesOrganisations;
 
   return {
-    idService: adaptateurChiffrement.hacheSha256(service.id),
     detailIndiceCyber: enTableau(indiceCyber),
     versionIndiceCyber: 'v2',
     ...autreDonneesCompletude,
@@ -70,6 +64,5 @@ export const completudeV1 = (
     localisationDonnees,
     delaiAvantImpactCritique,
     niveauSecurite,
-    niveauSecuriteMinimal,
   };
 };
