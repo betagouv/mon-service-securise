@@ -224,5 +224,11 @@ describe('Un événement de complétude modifiée', () => {
 
       expect(evenement.donnees.niveauSecuriteMinimal).toBe('niveau3');
     });
+
+    it('exige que le service soit renseigné', () => {
+      expect(() => {
+        unEvenementSurV2().sans('service').construis();
+      }).toThrowError(ErreurDonneeManquante);
+    });
   });
 });
