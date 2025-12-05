@@ -481,7 +481,9 @@ const routesConnecteApiService = ({
           e instanceof ErreurRisqueInconnu ||
           e instanceof ErreurNiveauVraisemblanceInconnu
         ) {
-          reponse.status(400).send(e.message);
+          reponse
+            .status(400)
+            .send('Le risque ou son niveau de vraisemblance est inconnu');
         } else {
           suite(e);
         }
@@ -545,7 +547,7 @@ const routesConnecteApiService = ({
           e instanceof ErreurCategoriesRisqueManquantes ||
           e instanceof ErreurCategorieRisqueInconnue
         ) {
-          reponse.status(400).send(e.message);
+          reponse.status(400).send(e.constructor.name);
           return;
         }
         suite(e);
@@ -605,7 +607,7 @@ const routesConnecteApiService = ({
         reponse.status(200).send(risque.toJSON());
       } catch (e) {
         if (e instanceof ErreurRisqueInconnu) {
-          reponse.status(404).send(e.message);
+          reponse.status(404).send('Le risque est introuvable');
           return;
         }
         if (
@@ -615,7 +617,7 @@ const routesConnecteApiService = ({
           e instanceof ErreurCategoriesRisqueManquantes ||
           e instanceof ErreurCategorieRisqueInconnue
         ) {
-          reponse.status(400).send(e.message);
+          reponse.status(400).send(e.constructor.name);
           return;
         }
         suite(e);
