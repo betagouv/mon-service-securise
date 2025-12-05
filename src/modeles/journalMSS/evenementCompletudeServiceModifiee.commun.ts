@@ -29,6 +29,7 @@ export const completudeCommune = (
   return {
     idService: adaptateurChiffrement.hacheSha256(service.id),
     niveauSecuriteMinimal: service.estimeNiveauDeSecurite(),
+    niveauSecurite: description.niveauSecurite,
     nombreTotalMesures,
     nombreMesuresCompletes,
     detailMesures,
