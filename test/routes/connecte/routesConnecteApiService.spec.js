@@ -1117,9 +1117,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         }
       );
       expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be(
-        'Le niveau de gravité "inexistant" n\'est pas répertorié'
-      );
+      expect(reponse.text).to.be('ErreurNiveauGraviteInconnu');
     });
 
     it("retourne une erreur 400 si le niveau de vraisemblance n'existe pas", async () => {
@@ -1132,21 +1130,17 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         }
       );
       expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be(
-        'Le niveau de vraisemblance "inexistant" n\'est pas répertorié'
-      );
+      expect(reponse.text).to.be('ErreurNiveauVraisemblanceInconnu');
     });
 
     it("retourne une erreur 400 si l'intitulé est vide", async () => {
       const reponse = await testeur.post(
         '/api/service/456/risquesSpecifiques',
-        {
-          categories: ['C1'],
-        }
+        { categories: ['C1'] }
       );
 
       expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be("L'intitulé du risque est obligatoire.");
+      expect(reponse.text).to.be('ErreurIntituleRisqueManquant');
     });
 
     it("retourne une erreur 400 si la catégorie n'existe pas", async () => {
@@ -1159,9 +1153,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
 
       expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be(
-        'La catégorie "inexistante" n\'est pas répertoriée'
-      );
+      expect(reponse.text).to.be('ErreurCategorieRisqueInconnue');
     });
 
     it("délègue au dépôt de donnée l'ajout du risque", async () => {
@@ -1284,9 +1276,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         }
       );
       expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be(
-        'Le niveau de gravité "inexistant" n\'est pas répertorié'
-      );
+      expect(reponse.text).to.be('ErreurNiveauGraviteInconnu');
     });
 
     it("retourne une erreur 400 si le niveau de vraisemblance n'existe pas", async () => {
@@ -1300,9 +1290,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
 
       expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be(
-        'Le niveau de vraisemblance "inexistant" n\'est pas répertorié'
-      );
+      expect(reponse.text).to.be('ErreurNiveauVraisemblanceInconnu');
     });
 
     it("retourne une erreur 400 si l'intitulé est vide", async () => {
@@ -1313,7 +1301,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         }
       );
       expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be("L'intitulé du risque est obligatoire.");
+      expect(reponse.text).to.be('ErreurIntituleRisqueManquant');
     });
 
     it("retourne une erreur 400 si la catégorie n'existe pas", async () => {
@@ -1326,14 +1314,12 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
 
       expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be(
-        'La catégorie "inexistante" n\'est pas répertoriée'
-      );
+      expect(reponse.text).to.be('ErreurCategorieRisqueInconnue');
     });
 
     it('renvoi une erreur 404 si le risque est introuvable', async () => {
       testeur.depotDonnees().metsAJourRisqueSpecifiqueDuService = async () => {
-        throw new ErreurRisqueInconnu('Le risque est introuvable');
+        throw new ErreurRisqueInconnu();
       };
       await testeur.verifieRequeteGenereErreurHTTP(
         404,
@@ -1473,7 +1459,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       expect(reponse.status).to.be(400);
       expect(reponse.text).to.be(
-        'Le risque "unRisqueInexistant" n\'est pas répertorié'
+        'Le risque ou son niveau de vraisemblance est inconnu'
       );
     });
 
@@ -1486,7 +1472,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
       expect(reponse.status).to.be(400);
       expect(reponse.text).to.be(
-        'Le niveau de vraisemblance "inexistant" n\'est pas répertorié'
+        'Le risque ou son niveau de vraisemblance est inconnu'
       );
     });
 
