@@ -4,6 +4,11 @@ import { AdaptateurChiffrement } from '../../adaptateurs/adaptateurChiffrement.i
 export const completudeV2 = (
   service: Service,
   adaptateurChiffrement: AdaptateurChiffrement
-) => ({
-  idService: adaptateurChiffrement.hacheSha256(service.id),
-});
+) => {
+  const niveauSecuriteMinimal = service.estimeNiveauDeSecurite();
+
+  return {
+    idService: adaptateurChiffrement.hacheSha256(service.id),
+    niveauSecuriteMinimal,
+  };
+};
