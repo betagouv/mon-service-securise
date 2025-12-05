@@ -1,10 +1,14 @@
 import ConstructeurEvenementCompletudeServiceModifiee from './constructeurEvenementCompletudeServiceModifiee.js';
 import { ErreurDonneeManquante } from '../../../src/modeles/journalMSS/erreurs.js';
-import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 import { creeReferentielVide } from '../../../src/referentiel.js';
 import { VersionService } from '../../../src/modeles/versionService.ts';
+import { uneDescriptionDeNiveauDeSecuriteEstime3 } from '../../constructeurs/constructeurDescriptionServiceV2.ts';
 
 describe('Un événement de complétude modifiée', () => {
   const hacheEnMajuscules = {
@@ -202,6 +206,23 @@ describe('Un événement de complétude modifiée', () => {
         .toJSON();
 
       expect(evenement.donnees.idService).toBe('ABC');
+    });
+
+    it('complète avec le niveau de sécurité minimal', () => {
+      const serviceV2Niveau3 = unServiceV2()
+        .avecDescription(
+          uneDescriptionDeNiveauDeSecuriteEstime3()
+            .construis()
+            .donneesSerialisees()
+        )
+        .construis();
+
+      const evenement = unEvenementSurV2()
+        .avecService(serviceV2Niveau3)
+        .construis()
+        .toJSON();
+
+      expect(evenement.donnees.niveauSecuriteMinimal).toBe('niveau3');
     });
   });
 });
