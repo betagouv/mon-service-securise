@@ -1,14 +1,9 @@
 import Service from '../service.js';
-import { AdaptateurChiffrement } from '../../adaptateurs/adaptateurChiffrement.interface.js';
 
-export const completudeV2 = (
-  service: Service,
-  adaptateurChiffrement: AdaptateurChiffrement
-) => {
-  const niveauSecuriteMinimal = service.estimeNiveauDeSecurite();
+export const completudeV2 = (service: Service) => {
+  const description = service.descriptionService;
 
   return {
-    idService: adaptateurChiffrement.hacheSha256(service.id),
-    niveauSecuriteMinimal,
+    specificitesProjet: description.specificitesProjet,
   };
 };

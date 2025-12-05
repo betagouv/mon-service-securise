@@ -17,7 +17,7 @@ class EvenementCompletudeServiceModifiee extends Evenement {
     const donneesSpecifiques =
       service.version() === VersionService.v1
         ? completudeV1(service)
-        : completudeV2(service, adaptateurChiffrement);
+        : completudeV2(service);
 
     super(
       'COMPLETUDE_SERVICE_MODIFIEE',

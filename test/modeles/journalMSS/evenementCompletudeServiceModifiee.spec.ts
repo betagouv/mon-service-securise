@@ -278,6 +278,7 @@ describe('Un événement de complétude modifiée', () => {
           uneDescriptionDeNiveauDeSecuriteEstime1()
             .avecPointsAcces(['a.fr', 'b.fr'])
             .avecTypesService(['portailInformation', 'serviceEnLigne'])
+            .avecSpecificitesProjet(['annuaire'])
             .avecNiveauSecurite('niveau3')
             .avecStatutDeploiement('enLigne')
             .donneesDescription()
@@ -316,6 +317,7 @@ describe('Un événement de complétude modifiée', () => {
           pointsAcces: 2,
           statutDeploiement: 'enLigne',
           typeService: ['portailInformation', 'serviceEnLigne'],
+          specificitesProjet: ['annuaire'],
           // provenanceService: 'developpement',
           // fonctionnalites: ['reseauSocial'],
           // fonctionnalitesSpecifiques: 2,
