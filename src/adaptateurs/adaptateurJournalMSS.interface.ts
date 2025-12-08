@@ -1,3 +1,9 @@
+export type EvenementJournal = {
+  type: string;
+  date: Date;
+  donnees: Record<string, unknown>;
+};
+
 export interface AdaptateurJournalMSS {
-  consigneEvenement: (donnees: Record<string, unknown>) => Promise<void>;
+  consigneEvenement(evenement: EvenementJournal): Promise<void>;
 }
