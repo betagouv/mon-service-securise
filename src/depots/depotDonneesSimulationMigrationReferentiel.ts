@@ -22,6 +22,7 @@ export type DepotDonneesSimulationMigrationReferentiel = {
   lisSimulationMigrationReferentiel: (
     idService: UUID
   ) => Promise<BrouillonService>;
+  supprimeSimulationMigrationReferentiel: (idService: UUID) => Promise<void>;
 };
 
 type PersistanceSimulationMigrationReferentiel = {
@@ -32,6 +33,7 @@ type PersistanceSimulationMigrationReferentiel = {
   lisSimulationMigrationReferentiel: (
     idService: UUID
   ) => Promise<{ donnees: DonneesChiffrees }>;
+  supprimeSimulationMigrationReferentiel: (idService: UUID) => Promise<void>;
 };
 
 const creeDepot = ({
@@ -87,10 +89,15 @@ const creeDepot = ({
     return new BrouillonService(idService, donneesEnClair);
   };
 
+  const supprimeSimulationMigrationReferentiel = async (idService: UUID) => {
+    await persistance.supprimeSimulationMigrationReferentiel(idService);
+  };
+
   return {
     sauvegardeSimulationMigrationReferentiel,
     ajouteSimulationMigrationReferentielSiNecessaire,
     lisSimulationMigrationReferentiel,
+    supprimeSimulationMigrationReferentiel,
   };
 };
 

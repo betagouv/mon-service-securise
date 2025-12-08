@@ -208,4 +208,27 @@ describe('Le dépôt de données des simulations de migration du référentiel v
       expect(donneesRecues!.coffreFort.nomService).toBe('Service A');
     });
   });
+
+  describe("sur demande de suppression d'une simulation", () => {
+    it('supprime la simulation', async () => {
+      const idService = unUUID('1');
+
+      persistance = unePersistanceMemoire()
+        .ajouteUneSimulationMigrationReferentiel(idService, {})
+        .construis();
+
+      const leDepot = () =>
+        DepotDonneesSimulationMigrationReferentiel.creeDepot({
+          adaptateurChiffrement,
+          busEvenements,
+          persistance,
+        });
+
+      await leDepot().supprimeSimulationMigrationReferentiel(idService);
+
+      const simulationSupprimee =
+        await persistance.lisSimulationMigrationReferentiel(idService);
+      expect(simulationSupprimee).toBe(undefined);
+    });
+  });
 });

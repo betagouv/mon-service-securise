@@ -481,6 +481,8 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
     beforeEach(() => {
       testeur.depotDonnees().migreServiceVersV2 = async () => {};
       testeur.depotDonnees().migreActivitesMesuresVersV2 = async () => {};
+      testeur.depotDonnees().supprimeSimulationMigrationReferentiel =
+        async () => {};
       serviceV1 = unService().avecId(idService).construis();
       testeur.middleware().reinitialise({
         serviceARenvoyer: serviceV1,
@@ -567,6 +569,21 @@ describe('Le serveur MSS des routes /api/service/:id/simulation-migration-refere
       );
 
       expect(donneesRecues!.simulation.idService()).toBe(idService);
+    });
+
+    it('supprime la simulation après avoir migré le service', async () => {
+      let idRecu;
+      testeur.depotDonnees().supprimeSimulationMigrationReferentiel = async (
+        idServiceConcerne: UUID
+      ) => {
+        idRecu = idServiceConcerne;
+      };
+
+      await testeur.post(
+        `/api/service/${idService}/simulation-migration-referentiel/finalise`
+      );
+
+      expect(idRecu).toBe(idService);
     });
   });
 });

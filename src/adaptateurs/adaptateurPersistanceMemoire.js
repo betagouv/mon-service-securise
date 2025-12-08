@@ -674,6 +674,13 @@ const nouvelAdaptateur = (
     });
   };
 
+  const supprimeSimulationMigrationReferentiel = async (idService) => {
+    donnees.simulationsMigrationReferentiel =
+      donnees.simulationsMigrationReferentiel.filter(
+        (s) => s.idService !== idService
+      );
+  };
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -739,6 +746,7 @@ const nouvelAdaptateur = (
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
     supprimeServices,
+    supprimeSimulationMigrationReferentiel,
     supprimeSuggestionsActionsPourService,
     supprimeTeleversementModelesMesureSpecifique,
     supprimeTeleversementServices,
