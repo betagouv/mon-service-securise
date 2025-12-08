@@ -179,13 +179,13 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
     middleware.trouveService({ [DECRIRE]: ECRITURE, [SECURISER]: ECRITURE }),
     valideParams(z.strictObject({ id: z.uuidv4() })),
     async (requete, reponse, suite) => {
-      const { id } = requete.params;
+      const idService = requete.params.id as UUID;
       const { idUtilisateurCourant } =
         requete as unknown as RequestRouteConnecte;
 
       try {
         const brouillonService =
-          await depotDonnees.lisSimulationMigrationReferentiel(id as UUID);
+          await depotDonnees.lisSimulationMigrationReferentiel(idService);
 
         const simulation = new SimulationMigrationReferentiel({
           serviceV1: (requete as unknown as RequestRouteConnecteService)
@@ -197,12 +197,14 @@ const routesConnecteApiSimulationMigrationReferentiel = ({
 
         await depotDonnees.migreServiceVersV2(
           idUtilisateurCourant,
-          id as UUID,
+          idService,
           brouillonService.enDescriptionV2(referentielV2),
           simulation.donneesMesuresGeneralesV2()
         );
 
         await depotDonnees.migreActivitesMesuresVersV2(simulation);
+
+        await depotDonnees.supprimeSimulationMigrationReferentiel(idService);
 
         return reponse.sendStatus(201);
       } catch (e) {

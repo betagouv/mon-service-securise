@@ -978,6 +978,11 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       .onConflict('id_service')
       .merge();
 
+  const supprimeSimulationMigrationReferentiel = async (idService) =>
+    knex('simulation_migration_referentiel')
+      .where({ id_service: idService })
+      .delete();
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -1049,6 +1054,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     supprimeNotificationsExpirationHomologationPourService,
     supprimeService,
     supprimeServices,
+    supprimeSimulationMigrationReferentiel,
     supprimeSuggestionsActionsPourService,
     supprimeTeleversementModelesMesureSpecifique,
     supprimeTeleversementServices,

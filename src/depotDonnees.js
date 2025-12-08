@@ -310,6 +310,7 @@ const creeDepot = (config = {}) => {
     ajouteSimulationMigrationReferentielSiNecessaire,
     lisSimulationMigrationReferentiel,
     sauvegardeSimulationMigrationReferentiel,
+    supprimeSimulationMigrationReferentiel,
   } = depotSimulationMigration;
 
   return {
@@ -402,6 +403,7 @@ const creeDepot = (config = {}) => {
     supprimeMesureSpecifiqueDuService,
     supprimeRisqueSpecifiqueDuService,
     supprimeService,
+    supprimeSimulationMigrationReferentiel,
     supprimeTeleversementModelesMesureSpecifique,
     supprimeTeleversementServices,
     supprimeIdResetMotDePassePourUtilisateur,
