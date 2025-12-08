@@ -1302,7 +1302,7 @@ export const questionsV2 = {
       criticite: 4,
     },
     donneesCaracterePersonnelPersonneARisque: {
-      nom: 'Données à caractère personnel de personnes à risque',
+      nom: 'Données personnelles de personnes à risque',
       exemple: 'ex. mineurs',
       criticite: 3,
     },
