@@ -1240,7 +1240,7 @@ export const questionsV2 = {
         'ex. une application permettant de visualiser des vidéos en ligne',
     },
     autreSystemeInformation: {
-      nom: "Autre Système d'information",
+      nom: "Autre système d'information",
       exemple: '',
     },
   },
