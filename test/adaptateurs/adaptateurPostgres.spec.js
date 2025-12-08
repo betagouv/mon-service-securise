@@ -286,4 +286,14 @@ describe("L'adaptateur persistance Postgres", () => {
       expect(idModelesSauvegardes.includes(idMod2)).to.be(true);
     });
   });
+
+  describe("concernant l'ajout multiple d'activités de mesure", () => {
+    it("reste robuste en cas de demande d'ajout vide", async () => {
+      try {
+        await persistance.ajouteActivitesMesure([]);
+      } catch (e) {
+        assert.fail("L'appel n'aurait pas dû lever d'exception");
+      }
+    });
+  });
 });
