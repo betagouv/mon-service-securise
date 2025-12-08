@@ -486,5 +486,7 @@
   .info-ancien-référentiel {
     order: 30;
     margin-bottom: 24px;
+    width: 100%;
+    text-align: left;
   }
 </style>
