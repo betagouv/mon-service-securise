@@ -743,6 +743,7 @@ const creeDepot = (config = {}) => {
     const existant = await p.lis.un(idService);
 
     existant.migreVersV2(descriptionV2, donneesMesuresV2, referentielV2);
+    await completeDescriptionService(existant.descriptionService);
     await p.sauvegarde(idService, existant.donneesAPersister().toutes());
 
     await depotDonneesSuggestionsActions.supprimeSuggestionsActionsPourService(
