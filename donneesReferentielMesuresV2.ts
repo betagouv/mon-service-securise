@@ -1296,7 +1296,7 @@ export const questionsV2 = {
       criticite: 4,
     },
     secretsDEntreprise: {
-      nom: "Données liées au secret d'entreprise",
+      nom: "Données stratégiques de l'entité",
       exemple:
         'ex. Processus de fabrication spécifique, données de recherche & développement',
       criticite: 4,
