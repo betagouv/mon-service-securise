@@ -1182,7 +1182,7 @@ export const mesuresV2 = {
     description:
       'Conserver et centraliser le journal des accès des administrateurs technique',
     descriptionLongue:
-      "Activer la journalisation et la centralisation des accès des administrateurs, des utilisateurs et des applicatifs concourant au fonctionnement du service.<br><br>Cette mesure permet de faciliter la détection d'actions inhabituelles susceptibles d'être malveillantes et d'investiguer a posteriori les causes d'un incident de sécurité, en vue de faciliter sa remédiation.",
+      "Activer la journalisation et la centralisation des accès des administrateurs techniques concourant au fonctionnement du service.<br><br>Cette mesure permet de faciliter la détection d'actions inhabituelles susceptibles d'être malveillantes et d'investiguer a posteriori les causes d'un incident de sécurité, en vue de faciliter sa remédiation.",
     categorie: 'defense',
     identifiantNumerique: '0159',
     referentiel: 'ANSSI',
