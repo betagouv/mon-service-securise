@@ -110,7 +110,7 @@
     <Tableau
       colonnes={[
         { cle: 'ancienneDescription', libelle: 'Mesure actuelle' },
-        { cle: 'nouvelleDescription', libelle: 'Nouvelle version proprosée' },
+        { cle: 'nouvelleDescription', libelle: 'Nouvelle version proposée' },
         { cle: 'statut', libelle: 'Type de changement' },
       ]}
       donnees={donneesAAfficher}
