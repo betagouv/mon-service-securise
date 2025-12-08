@@ -3,12 +3,12 @@ import { unService } from '../../constructeurs/constructeurService.js';
 import { consigneNouveauServiceDansJournal } from '../../../src/bus/abonnements/consigneNouveauServiceDansJournal.ts';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import {
-  AdaptateurJournal,
+  AdaptateurJournalMSS,
   EvenementJournal,
-} from '../../../src/adaptateurs/adaptateurJournal.interface.ts';
+} from '../../../src/adaptateurs/adaptateurJournalMSS.interface.ts';
 
 describe("L'abonnement qui consigne la création d'un nouveau service dans le journal MSS", () => {
-  let adaptateurJournal: AdaptateurJournal;
+  let adaptateurJournal: AdaptateurJournalMSS;
 
   beforeEach(() => {
     adaptateurJournal = AdaptateurJournalMSSMemoire.nouvelAdaptateur();
