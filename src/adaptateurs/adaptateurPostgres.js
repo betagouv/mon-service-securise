@@ -113,8 +113,9 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       details,
     });
 
-  const ajouteActivitesMesure = (activites) =>
-    knex('activites_mesure').insert(
+  const ajouteActivitesMesure = async (activites) => {
+    if (activites.length === 0) return;
+    await knex('activites_mesure').insert(
       activites.map((a) => ({
         id_acteur: a.idActeur,
         id_service: a.idService,
@@ -125,6 +126,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
         date: a.date,
       }))
     );
+  };
 
   const activitesMesure = async (idService, idMesure) =>
     knex('activites_mesure')
