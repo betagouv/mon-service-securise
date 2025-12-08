@@ -3011,5 +3011,40 @@ describe('Le dépôt de données des services', () => {
 
       expect(idRecu).to.be('S1');
     });
+
+    it("complète l'organisation responsable et la sauvegarder", async () => {
+      const adaptateurRechercheEntite = {
+        rechercheOrganisations: async () => [
+          {
+            nom: 'MonEntite',
+            departement: '75',
+            siret: 'MonSiret',
+          },
+        ],
+      };
+
+      const descriptionDuService = uneDescriptionV2Valide()
+        .avecNomService('Un nouveau nom')
+        .avecSiret('MonSiret')
+        .construis();
+      depot = unDepotDeDonneesServices()
+        .avecBusEvenements(busEvenements)
+        .avecAdaptateurPersistance(persistance)
+        .avecReferentiel(referentiel)
+        .avecReferentielV2(referentielV2)
+        .avecAdaptateurRechercheEntite(adaptateurRechercheEntite)
+        .construis();
+
+      await depot.migreServiceVersV2('U1', 'S1', descriptionDuService, [
+        { id: 'RECENSEMENT.1', statut: 'fait' },
+      ]);
+
+      const [{ donnees }] = await persistance.servicesComplets({
+        idService: 'S1',
+      });
+      expect(donnees.descriptionService.organisationResponsable.nom).to.be(
+        'MonEntite'
+      );
+    });
   });
 });
