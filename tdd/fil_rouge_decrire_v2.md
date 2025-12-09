@@ -2,6 +2,9 @@
 
 ## TODO
 
+- le bouton "Télécharger la liste des mesures" sur la page des mesures de l'utilisateur, pour l'instant ne télécharge
+  que les v1 (routesConnectePage /mesures/export.csv)
+
 #### MEP V2
 
 - retirer le bouton de téléversement V1
@@ -22,10 +25,12 @@
 - La route GET `api/referentiel/mesures` renvoi les mesures V1 par défaut, pour un utilisateur sans service
   - On veut sûrement renvoyer les mesures V2 après la MEP
 - l'adaptateurEnvironnement dans actionRecommandee()
+- suppression de la route création v1
+  - supprimer dans referentiel `versionServiceParDefaut`
 
 #### Référentiel v2
 
-- [ ] Chasser chaque utilisation de `referentiel.xxx()` pour le remplacer par `service.referentiel.xxx()`
+- [x] Chasser chaque utilisation de `referentiel.xxx()` pour le remplacer par `service.referentiel.xxx()`
 
 #### Moteur v2
 
