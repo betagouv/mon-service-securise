@@ -77,8 +77,8 @@
           <b
             >Le formulaire d’ajout de service a été mis à jour avec de nouvelles
             questions. Les mesures associées à chaque besoin de sécurité ont
-            également été évoluées : certaines ont été ajoutées, d'autres
-            modifiées ou supprimées.</b
+            également évolué : certaines ont été ajoutées, d'autres modifiées ou
+            supprimées.</b
           >
         </p>
         <div>

@@ -108,7 +108,7 @@ const etapesQuestionsFormulaire: Array<EtapeDuWizard> = [
         composant: QuestionTypesService,
         explications: [
           "Cette information permet d'évaluer le type de système d'information et ainsi de commencer à sélectionner les exigences nécessaires pour son homologation.",
-          'Par exemple, si "Une application mobile" n\'est pas sélectionnée, il ne serait pas intéressant de recommander d\'utiliser des magasins officiels d’applications mobiles pour leur téléchargement.',
+          'Par exemple, si "Portail d\'information" est sélectionné, il ne serait pas intéressant de recommander de mettre en œuvre la déconnexion automatique des sessions des utilisateurs après une certaine durée.',
         ],
       },
       {
