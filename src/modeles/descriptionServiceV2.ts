@@ -244,6 +244,10 @@ export class DescriptionServiceV2 {
     ).nom;
   }
 
+  identifiantLocalisationDonnees() {
+    return this.localisationDonneesTraitees;
+  }
+
   descriptionTypeService() {
     return this.typeService
       .map((t) => this.referentiel.typeService(t).nom)

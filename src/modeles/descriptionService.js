@@ -48,6 +48,10 @@ class DescriptionService extends InformationsService {
     return this.referentiel.localisationDonnees(this.localisationDonnees);
   }
 
+  identifiantLocalisationDonnees() {
+    return this.localisationDonnees;
+  }
+
   descriptionStatutDeploiement() {
     return this.referentiel.descriptionStatutDeploiement(
       this.statutDeploiement

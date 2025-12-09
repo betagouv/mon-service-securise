@@ -241,7 +241,7 @@ class Service {
   }
 
   localisationDonnees() {
-    return this.descriptionService.localisationDonnees;
+    return this.descriptionService.identifiantLocalisationDonnees();
   }
 
   mesuresParStatutEtCategorie() {
