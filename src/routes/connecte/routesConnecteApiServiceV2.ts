@@ -13,6 +13,7 @@ import {
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
+import { ReferentielV2 } from '../../referentiel.interface.js';
 
 const { ECRITURE } = Permissions;
 const { DECRIRE } = Rubriques;
@@ -39,7 +40,7 @@ const routesConnecteApiServiceV2 = ({
         requete.params.id,
         new DescriptionServiceV2(
           requete.body as DonneesDescriptionServiceV2,
-          service.referentiel
+          service.referentiel as ReferentielV2
         )
       );
       reponse.sendStatus(200);
