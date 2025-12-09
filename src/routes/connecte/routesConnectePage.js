@@ -4,12 +4,14 @@ import Service from '../../modeles/service.js';
 import InformationsService from '../../modeles/informationsService.js';
 import routesConnectePageService from './routesConnectePageService.js';
 import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
+import { VersionService } from '../../modeles/versionService.js';
 
 const routesConnectePage = ({
   middleware,
   moteurRegles,
   depotDonnees,
   referentiel,
+  referentielV2,
   adaptateurCsv,
   adaptateurGestionErreur,
   adaptateurHorloge,
@@ -208,13 +210,18 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     async (requete, reponse) => {
       try {
+        const { version } = requete.query;
         const modelesMesureSpecifique =
           await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
             requete.idUtilisateurCourant
           );
+        const mesuresGenerales =
+          version === VersionService.v2
+            ? referentielV2.mesures()
+            : referentiel.mesures();
         const bufferCsv = await adaptateurCsv.genereCsvMesures(
           {
-            mesuresGenerales: referentiel.mesures(),
+            mesuresGenerales,
             mesuresSpecifiques: modelesMesureSpecifique,
           },
           [],
