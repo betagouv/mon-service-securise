@@ -1,7 +1,7 @@
 - const estSurCreationDeService = !!service.id === false
 - const urlDeService = (suffixe) => `/service/${service.id}/${suffixe}`
 
-mixin etapeParcours({ id, url, nom, sousTitre, estVisible, statut })
+mixin etapeParcours({ id, url, nom, sousTitre, estVisible, statut, icone })
   -
     const estActive = etapeActive === id
     const statutSaisie = (s) => {
@@ -16,7 +16,7 @@ mixin etapeParcours({ id, url, nom, sousTitre, estVisible, statut })
     li
       a(href= estSurCreationDeService ? '#' : url, class = estActive ? 'actif' : '')
         .pastille
-          span.action-saisie(id = id)
+          lab-anssi-icone(nom=icone taille="md")
         .none-si-ferme
           span.nom-action= nom
           span.sous-titre= sousTitre
@@ -38,20 +38,13 @@ mixin etapeParcours({ id, url, nom, sousTitre, estVisible, statut })
       if estSurCreationDeService
         +etapeParcours({
           id: 'descriptionService',
-          nom: 'Décrire',
-          sousTitre: 'Évaluer les besoins de sécurité',
+          nom: 'Récapitulatif',
+          sousTitre: 'Consulter la description et les besoins de sécurité du service',
           statut: service.descriptionService.statutSaisie(),
-          estVisible: true
+          estVisible: true,
+          icone: "survey-line"
         })
       else
-        +etapeParcours({
-          id: 'descriptionService',
-          url: urlDeService('descriptionService'),
-          nom: 'Décrire',
-          sousTitre: 'Évaluer les besoins de sécurité',
-          statut: service.descriptionService.statutSaisie(),
-          estVisible: !(autorisationsService.DECRIRE.estMasque)
-        })
         +etapeParcours({
           id: 'mesures',
           url: urlDeService('mesures'),
@@ -59,7 +52,8 @@ mixin etapeParcours({ id, url, nom, sousTitre, estVisible, statut })
           sousTitre: "Mesurer et renforcer l'indice cyber",
           visibileSurCreationService: false,
           statut: service.mesures.statutSaisie(),
-          estVisible: !(autorisationsService.SECURISER.estMasque)
+          estVisible: !(autorisationsService.SECURISER.estMasque),
+          icone: "list-unordered"
         })
           a.none-si-ferme#lien-indice-cyber(href=urlDeService('indiceCyber'))
             | Indice cyber
@@ -70,7 +64,17 @@ mixin etapeParcours({ id, url, nom, sousTitre, estVisible, statut })
           nom: 'Homologuer',
           sousTitre: "Générer un dossier d'homologation",
           statut: service.dossiers.statutSaisie(),
-          estVisible: !(autorisationsService.HOMOLOGUER.estMasque)
+          estVisible: !(autorisationsService.HOMOLOGUER.estMasque),
+          icone: "award-line"
+        })
+        +etapeParcours({
+          id: 'descriptionService',
+          url: urlDeService('descriptionService'),
+          nom: 'Récapitulatif',
+          sousTitre: 'Consulter la description et les besoins de sécurité du service',
+          statut: service.descriptionService.statutSaisie(),
+          estVisible: !(autorisationsService.DECRIRE.estMasque),
+          icone: "survey-line"
         })
 
   if !estSurCreationDeService
@@ -80,17 +84,17 @@ mixin etapeParcours({ id, url, nom, sousTitre, estVisible, statut })
           li
             a(href = urlDeService('risques'), class = etapeActive === 'risques' ? 'actif' : '')
               .pastille
-                img(src = '/statique/assets/images/icone_risques.svg' alt="Icône d'un panneau « Danger »", id = 'icone-risques')
+                lab-anssi-icone(nom="warning-line" taille="md")
               span.none-si-ferme Risques
         if !autorisationsService.CONTACTS.estMasque
           li
             a(href = urlDeService('rolesResponsabilites'), class = etapeActive === 'contactsUtiles' ? 'actif' : '')
               .pastille
-                img(src = '/statique/assets/images/icone_contacts_utiles.svg' alt="Icône d'un livre ouvert")
+                lab-anssi-icone(nom="mail-line" taille="md")
               span.none-si-ferme Contacts utiles
         li
           a#voir-telechargement(href = '#')
             .pastille
-              img(src = '/statique/assets/images/icone_telechargement_fichier.svg' alt='Icône de téléchargement de fichier')
+              lab-anssi-icone(nom="file-download-line" taille="md")
             span.none-si-ferme Télécharger les PDF
 
