@@ -1,4 +1,6 @@
 import { type Autorisation } from './autorisation.js';
+import Service from '../service.js';
+import DescriptionService from '../descriptionService.js';
 
 export const Permissions = {
   ECRITURE: 2,
@@ -30,10 +32,16 @@ type ConfigurationDroitsRoute = {
 
 export const premiereRouteDisponible = (
   autorisation: Autorisation,
+  service: Service,
   routesPersonnalisees: ConfigurationDroitsRoute[] = []
 ) => {
+  const aUneDescriptionComplete =
+    service.descriptionService.statutSaisie() === DescriptionService.COMPLETES;
+
   const routesParDefaut: ConfigurationDroitsRoute[] = [
-    { rubrique: DECRIRE, route: '/descriptionService', niveau: LECTURE },
+    ...(aUneDescriptionComplete
+      ? []
+      : [{ rubrique: DECRIRE, route: '/descriptionService', niveau: LECTURE }]),
     { rubrique: SECURISER, route: '/mesures', niveau: LECTURE },
     { rubrique: HOMOLOGUER, route: '/dossiers', niveau: LECTURE },
     { rubrique: RISQUES, route: '/risques', niveau: LECTURE },
