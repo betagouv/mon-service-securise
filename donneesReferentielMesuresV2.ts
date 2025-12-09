@@ -93,7 +93,7 @@ export const mesuresV2 = {
   },
   'ECOSYSTEME.2': {
     description:
-      "Lister les interconnexions avec le systèmes d'information et leur point de contact",
+      "Lister les interconnexions avec le système d'information et leur point de contact",
     descriptionLongue:
       "Lister les interconnexions du système d'information à d'autres systèmes (externes et/ou internes) et renseigner un point de contact pour chacune de ces interconnexions. Mettre cette liste à jour a minima annuellement.<br><br>Cette mesure permet le suivi des communications ouvertes et autorisées entre le système d'information et son écosystème, permettant ainsi la mise en place de mesures de filtrage et de cloisonnement ainsi que la réaction efficace en cas de compromission d'un système interconnecté. ",
     categorie: 'gouvernance',
@@ -182,7 +182,7 @@ export const mesuresV2 = {
   },
   'MCO_MCS.1': {
     description:
-      'Formaliser et mettre en œuvre une procédure de maintien en conditions opérationnelle et de sécurité des équipements et applicatifs',
+      'Formaliser et mettre en œuvre une procédure de maintien en conditions opérationnelles et de sécurité des équipements et applicatifs',
     descriptionLongue:
       "Formaliser et mettre en œuvre une procédure de maintien en condition opérationnelle et de sécurité des ressources matérielles et logicielles du système d'information.<br><br>Cette mesure permet de minimiser les temps d'arrêt des systèmes d'information, de garantir que celui-ci fonctionne à un niveau de performance voulu et adapté, et corriger les vulnérabilités du système d’information avant qu’elles ne soient exploitées.",
     categorie: 'protection',
