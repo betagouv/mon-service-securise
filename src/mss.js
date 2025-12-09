@@ -114,6 +114,7 @@ const creeServeur = ({
       middleware,
       moteurRegles,
       referentiel,
+      referentielV2,
       adaptateurCsv,
       adaptateurGestionErreur,
       adaptateurHorloge,

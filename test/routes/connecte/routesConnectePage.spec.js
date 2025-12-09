@@ -356,5 +356,20 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         'Un modèle de mesure spécifique'
       );
     });
+
+    it("utilise les mesures du référentiel v2 si c'est demandé", async () => {
+      let donneesMesuresRecues;
+      testeur.adaptateurCsv().genereCsvMesures = async (donneesMesures) => {
+        donneesMesuresRecues = donneesMesures;
+      };
+
+      await testeur.get('/mesures/export.csv?version=v2');
+
+      expect(
+        Object.keys(donneesMesuresRecues.mesuresGenerales).includes(
+          'RECENSEMENT.1'
+        )
+      ).to.be(true);
+    });
   });
 });

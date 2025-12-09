@@ -23,6 +23,7 @@ type MethodesSpecifiquesReferentielV2 = {
   ) => string;
   enregistreReglesMoteurV2: (regles: ReglesDuReferentielMesuresV2) => void;
   reglesMoteurV2: () => ReglesDuReferentielMesuresV2;
+  mesures: () => typeof mesuresV2;
 };
 
 type Surcharge<A, B> = Omit<A, keyof B> & B;
@@ -61,6 +62,8 @@ export const creeReferentielV2 = (
 
   const mesure = (idMesure: IdMesureV2) => donnees.mesures[idMesure];
 
+  const mesures = () => structuredClone(donnees.mesures);
+
   const typeService = (type: TypeDeService) => donnees.typeDeService[type];
 
   const reglesMoteurV2 = () => reglesMoteurV2Enregistrees;
@@ -75,6 +78,7 @@ export const creeReferentielV2 = (
     estIdentifiantMesureConnu,
     localisationDonnees,
     mesure,
+    mesures,
     typeService,
     reglesMoteurV2,
     version: () => 'v2',

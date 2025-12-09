@@ -2,9 +2,6 @@
 
 ## TODO
 
-- le bouton "Télécharger la liste des mesures" sur la page des mesures de l'utilisateur, pour l'instant ne télécharge
-  que les v1 (routesConnectePage /mesures/export.csv)
-
 #### MEP V2
 
 - retirer le bouton de téléversement V1
@@ -27,10 +24,6 @@
 - l'adaptateurEnvironnement dans actionRecommandee()
 - suppression de la route création v1
   - supprimer dans referentiel `versionServiceParDefaut`
-
-#### Référentiel v2
-
-- [x] Chasser chaque utilisation de `referentiel.xxx()` pour le remplacer par `service.referentiel.xxx()`
 
 #### Moteur v2
 

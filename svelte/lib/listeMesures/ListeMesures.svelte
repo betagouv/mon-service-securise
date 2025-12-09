@@ -263,7 +263,7 @@
   <div slot="actionsComplementaires" class="conteneur-actions-complementaires">
     <Lien
       type="bouton-tertiaire"
-      href="/mesures/export.csv"
+      href="/mesures/export.csv?version={$storeVersionsDeService.versionSelectionnee}"
       titre="Télécharger la liste de mesures"
       target="_blank"
       icone="telecharger"
