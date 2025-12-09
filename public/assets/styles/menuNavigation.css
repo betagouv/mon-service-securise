@@ -106,41 +106,9 @@
   column-gap: 16px;
 }
 
-.menu-navigation .etapes li:nth-child(2) {
-  height: 85px;
-}
-
 .menu-navigation .etapes li div {
   display: flex;
   flex-direction: column;
-}
-
-.menu-navigation .etapes #descriptionService {
-  -webkit-mask: url(../images/actionsSaisie/descriptionService.svg) no-repeat
-    center;
-  mask: url(../images/actionsSaisie/descriptionService.svg) no-repeat center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-}
-
-.menu-navigation .etapes #mesures {
-  -webkit-mask: url(../images/actionsSaisie/mesures.svg) no-repeat center;
-  mask: url(../images/actionsSaisie/mesures.svg) no-repeat center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-}
-
-.menu-navigation .etapes #dossiers {
-  -webkit-mask: url(../images/actionsSaisie/dossiers.svg) no-repeat center;
-  mask: url(../images/actionsSaisie/dossiers.svg) no-repeat center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
-}
-
-.menu-navigation .action-saisie {
-  background: var(--menu-couleur-etapes-defaut);
-  width: 24px;
-  height: 24px;
 }
 
 .menu-navigation .etapes .nom-action {
