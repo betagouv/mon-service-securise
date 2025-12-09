@@ -2,11 +2,13 @@ import xlsx from 'xlsx';
 import { ErreurFichierXlsInvalide } from '../../erreurs.js';
 
 class LecteurExcel {
-  constructor(buffer) {
+  readonly buffer: Buffer;
+
+  constructor(buffer: Buffer) {
     this.buffer = buffer;
   }
 
-  donneesDeFeuille(nomFeuille, indexLigneDuHeader) {
+  donneesDeFeuille(nomFeuille: string, indexLigneDuHeader: number) {
     const fichierXLS = xlsx.read(this.buffer, { type: 'buffer' });
 
     if (
@@ -26,7 +28,10 @@ class LecteurExcel {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  lesLignesSontCompletes(tableauDeLignes, proprietesAttendues) {
+  lesLignesSontCompletes(
+    tableauDeLignes: { [propName: string]: string }[],
+    proprietesAttendues: string[]
+  ) {
     return tableauDeLignes.every((ligneDonnee) => {
       const proprietesDeLaLigne = new Set(Object.keys(ligneDonnee));
       return proprietesAttendues.every((p) => proprietesDeLaLigne.has(p));
