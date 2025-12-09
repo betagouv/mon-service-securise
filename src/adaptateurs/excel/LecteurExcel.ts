@@ -1,24 +1,22 @@
-import xlsx from 'xlsx';
+import xlsx, { WorkBook } from 'xlsx';
 import { ErreurFichierXlsInvalide } from '../../erreurs.js';
 
 class LecteurExcel {
-  readonly buffer: Buffer;
+  readonly fichierXLS: WorkBook;
 
   constructor(buffer: Buffer) {
-    this.buffer = buffer;
+    this.fichierXLS = xlsx.read(buffer, { type: 'buffer' });
   }
 
   donneesDeFeuille(nomFeuille: string, indexLigneDuHeader: number) {
-    const fichierXLS = xlsx.read(this.buffer, { type: 'buffer' });
-
     if (
-      Object.keys(fichierXLS.Sheets).length > 1 ||
-      !fichierXLS.Sheets[nomFeuille]
+      Object.keys(this.fichierXLS.Sheets).length > 1 ||
+      !this.fichierXLS.Sheets[nomFeuille]
     ) {
       throw new ErreurFichierXlsInvalide();
     }
 
-    const feuille = fichierXLS.Sheets[nomFeuille];
+    const feuille = this.fichierXLS.Sheets[nomFeuille];
 
     return xlsx.utils.sheet_to_json(feuille, {
       range: indexLigneDuHeader - 1,
