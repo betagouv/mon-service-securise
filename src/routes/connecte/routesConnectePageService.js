@@ -52,13 +52,14 @@ const routesConnectePageService = ({
     middleware.trouveService({}),
     middleware.chargeAutorisationsService,
     async (requete, reponse) => {
-      const { autorisationService } = requete;
+      const { autorisationService, service } = requete;
 
       const routesDesSuggestions =
         requete.service.routesDesSuggestionsActions();
 
       const routeRedirection = premiereRouteDisponible(
         autorisationService,
+        service,
         routesDesSuggestions
       );
 

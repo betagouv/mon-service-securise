@@ -16,6 +16,7 @@ import {
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { donneesPartagees } from '../../aides/http.js';
 import Risque from '../../../src/modeles/risque.js';
+import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
@@ -181,7 +182,9 @@ describe('Le serveur MSS des routes /service/*', () => {
         it(`redirige vers \`${redirectionAttendue}\` avec le droit de lecture sur \`${
           Object.keys(droits)[0] ?? 'aucune rubrique'
         }\``, async () => {
-          const service = unService().construis();
+          const service = unService()
+            .avecDescription(uneDescriptionValide().deLOrganisation({}).donnees)
+            .construis();
           service.indiceCyber = () => ({ total: 2 });
           testeur.middleware().reinitialise({
             autorisationACharger: uneAutorisation()
