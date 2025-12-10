@@ -155,6 +155,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         nouvelleDescription:
           'Minimiser les données stockées aux seules données nécessaires aux traitements',
         statut: 'ajoutee',
+        detailStatut: 'introduite',
       });
 
       const premiereMesureInchangee = detailsMesures.find(
@@ -166,6 +167,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         nouvelleDescription:
           'Identifier ou fixer les engagements des prestataires en matière de sécurité',
         statut: 'inchangee',
+        detailStatut: 'conforme',
       });
 
       const premiereMesureModifiee = detailsMesures.find(
@@ -177,6 +179,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         nouvelleDescription:
           "Mettre en œuvre un programme de sensibilisation à la sécurité pour l'ensemble des acteurs intervenant sur le système d'information",
         statut: 'modifiee',
+        detailStatut: 'modificationMajeure',
       });
 
       const premiereMesureSupprimee = detailsMesures.find(
@@ -186,6 +189,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         ancienneDescription:
           "Limiter et connaître les interconnexions entre le service numérique et d'autres systèmes d'information",
         statut: 'supprimee',
+        detailStatut: 'split',
       });
 
       expect(detailsMesures.length).toBe(56);
