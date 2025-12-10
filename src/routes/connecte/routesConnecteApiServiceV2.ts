@@ -13,6 +13,7 @@ import {
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
+import { ErreurNomServiceDejaExistant } from '../../erreurs.js';
 import { ReferentielV2 } from '../../referentiel.interface.js';
 
 const { ECRITURE } = Permissions;
@@ -32,18 +33,28 @@ const routesConnecteApiServiceV2 = ({
     middleware.trouveService({ [DECRIRE]: ECRITURE }),
     valideParams(z.strictObject({ id: z.uuidv4() })),
     valideBody(z.strictObject(reglesValidationDescriptionServiceV2)),
-    async (requete, reponse) => {
+    async (requete, reponse, suite) => {
       const { idUtilisateurCourant, service } =
         requete as unknown as RequestRouteConnecteService;
-      await depotDonnees.ajouteDescriptionService(
-        idUtilisateurCourant,
-        requete.params.id,
-        new DescriptionServiceV2(
-          requete.body as DonneesDescriptionServiceV2,
-          service.referentiel as ReferentielV2
-        )
-      );
-      reponse.sendStatus(200);
+
+      try {
+        await depotDonnees.ajouteDescriptionService(
+          idUtilisateurCourant,
+          requete.params.id,
+          new DescriptionServiceV2(
+            requete.body as DonneesDescriptionServiceV2,
+            service.referentiel as ReferentielV2
+          )
+        );
+        return reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurNomServiceDejaExistant) {
+          return reponse
+            .status(422)
+            .send({ erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } });
+        }
+        return suite(e);
+      }
     }
   );
 
