@@ -71,7 +71,8 @@ export class SimulationMigrationReferentiel {
 
     const equivalence = new DescriptionEquivalenceMesure(
       this.referentielV1,
-      this.referentielV2
+      this.referentielV2,
+      this.equivalences
     );
 
     const detailsMesuresAjoutees = mesuresAjouteesEnV2.map((idMesure) =>
