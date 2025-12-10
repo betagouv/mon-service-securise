@@ -58,11 +58,13 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         ...toutesEquivalencesAvecStatut('inchangee'),
         exigencesSecurite: {
           statut: 'modifiee',
+          detailStatut: 'modificationMineure',
           idsMesureV2: ['RECENSEMENT.1'],
           conservationDonnees: true,
         },
         identificationDonneesSensibles: {
           statut: 'modifiee',
+          detailStatut: 'modificationMineure',
           idsMesureV2: ['RECENSEMENT.2'],
           conservationDonnees: true,
         },
@@ -79,11 +81,13 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         ...toutesEquivalencesAvecStatut('modifiee'),
         exigencesSecurite: {
           statut: 'inchangee',
+          detailStatut: 'conforme',
           idsMesureV2: ['RECENSEMENT.1'],
           conservationDonnees: true,
         },
         identificationDonneesSensibles: {
           statut: 'inchangee',
+          detailStatut: 'conforme',
           idsMesureV2: ['RECENSEMENT.2'],
           conservationDonnees: true,
         },
@@ -100,11 +104,13 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         ...toutesEquivalencesAvecStatut('inchangee'),
         exigencesSecurite: {
           statut: 'supprimee',
+          detailStatut: 'absente',
           idsMesureV2: [],
           conservationDonnees: false,
         },
         identificationDonneesSensibles: {
           statut: 'supprimee',
+          detailStatut: 'absente',
           idsMesureV2: [],
           conservationDonnees: false,
         },
@@ -191,6 +197,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
           ...toutesEquivalencesAvecStatut('inchangee'),
           exigencesSecurite: {
             statut: 'modifiee',
+            detailStatut: 'modificationMineure',
             idsMesureV2: ['ADMIN.2'], // Cette mesure ne fait pas partie des mesures V2
             conservationDonnees: true,
           },
@@ -207,6 +214,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
           ...toutesEquivalencesAvecStatut('modifiee'),
           exigencesSecurite: {
             statut: 'inchangee',
+            detailStatut: 'conforme',
             idsMesureV2: ['ADMIN.2'], // Cette mesure ne fait pas partie des mesures V2
             conservationDonnees: true,
           },
@@ -225,12 +233,14 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
       ...toutesEquivalencesAvecStatut('supprimee'),
       exigencesSecurite: {
         statut: 'inchangee',
+        detailStatut: 'conforme',
         // On prend une mesure v2 qui sera présente sur notre service de test
         idsMesureV2: ['RECENSEMENT.2'],
         conservationDonnees: true,
       },
       identificationDonneesSensibles: {
         statut: 'inchangee',
+        detailStatut: 'conforme',
         // On prend une mesure v2 qui sera présente sur notre service de test
         idsMesureV2: ['DEV.1'],
         conservationDonnees: true,
@@ -295,6 +305,7 @@ describe('La simulation de migration du référentiel V1 vers V2', () => {
         ...toutesEquivalencesAvecStatut('supprimee'),
         exigencesSecurite: {
           statut: 'inchangee',
+          detailStatut: 'conforme',
           idsMesureV2: ['RECENSEMENT.2', 'DEV.1'],
           conservationDonnees: true,
         },

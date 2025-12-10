@@ -26,6 +26,14 @@ del(.["Libellé MSS v1"])
                      elif .Evaluation == "Réunification" then "supprimee"
                      elif .Evaluation == "Absente" then "supprimee"
                      else .Evaluation end)
+| .detailStatut = (if .Evaluation == "Conforme" then "conforme"
+                     elif .Evaluation == "Modification mineure" then "modificationMineure"
+                     elif .Evaluation == "Modification majeure" then "modificationMajeure"
+                     elif .Evaluation == "Conforme + Split" then "conformeSplit"
+                     elif .Evaluation == "Split" then "split"
+                     elif .Evaluation == "Réunification" then "reunification"
+                     elif .Evaluation == "Absente" then "absente"
+                     else .Evaluation end)
 | del(.Evaluation)
 | .conservationDonnees = (if .["Conservation des données"] == "Oui" then true
                      else false end)
