@@ -118,15 +118,15 @@
       }
     }
 
-    &:active {
-      background-color: #eee;
-    }
-
     &:focus {
       background-color: white;
       outline: 2px solid #0079d0;
       outline-offset: 1px;
       text-decoration: none;
+    }
+
+    &:active {
+      background-color: rgba(0, 0, 0, 0.08);
     }
   }
 </style>
