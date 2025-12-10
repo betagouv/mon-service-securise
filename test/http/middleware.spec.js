@@ -589,6 +589,20 @@ describe('Le middleware MSS', () => {
         );
       });
 
+      it('autorise le chargement de tous les styles du domaine et via un nonce', async () => {
+        verifiePositionnementHeader(
+          'content-security-policy',
+          "style-src 'self' 'nonce-"
+        );
+      });
+
+      it('autorise le chargement de tous les éléments de style du domaine et via un nonce', async () => {
+        verifiePositionnementHeader(
+          'content-security-policy',
+          "style-src-elem 'self' 'nonce-"
+        );
+      });
+
       it('autorise la connexion vers MSS, Sentry et stats.beta.gouv (pour Matomo)', async () => {
         verifiePositionnementHeader(
           'content-security-policy',

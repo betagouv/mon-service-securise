@@ -39,6 +39,7 @@ const middleware = (configuration = {}) => {
     const mediaCsp = `media-src 'self' ${CSP_BIBLIOTHEQUES.monservicesecurise.media}`;
 
     const styleCsp = `style-src 'self' 'nonce-${nonce}'`;
+    const styleSrcElemCsp = `style-src-elem 'self' 'nonce-${nonce}'`;
     const scriptCsp = `script-src 'self' https://browser.sentry-cdn.com 'nonce-${nonce}'`;
     const frameCsp = adaptateurEnvironnement.supervision().domaineMetabaseMSS()
       ? `frame-src ${adaptateurEnvironnement
@@ -52,6 +53,7 @@ const middleware = (configuration = {}) => {
       imgCsp,
       mediaCsp,
       styleCsp,
+      styleSrcElemCsp,
       scriptCsp,
       frameCsp,
     ].filter((csp) => csp !== '');
