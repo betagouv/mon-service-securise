@@ -10,6 +10,7 @@
   let elementModaleConfirmationFermeture: Modale;
   let aTermine = false;
   export let afficheAuMontage = true;
+  export let avecModaleConfirmation = true;
 
   onMount(() => {
     if (afficheAuMontage) elementModale?.affiche();
@@ -52,7 +53,8 @@
   };
 
   const gereFermetureModale = () => {
-    if (!aTermine) elementModaleConfirmationFermeture.affiche();
+    if (!aTermine && avecModaleConfirmation)
+      elementModaleConfirmationFermeture.affiche();
   };
 
   const afficheEtape = (index: number) => {

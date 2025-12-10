@@ -32,6 +32,7 @@
 
 <ExplicationNouveauReferentiel
   afficheAuMontage={false}
+  avecModaleConfirmation={false}
   bind:this={modaleExplication}
 />
 
