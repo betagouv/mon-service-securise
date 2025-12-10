@@ -24,6 +24,7 @@ export type ResumeEvolutions = {
 };
 
 export type StatutEvolutionMesure = DetailMesure['statut'];
+export type DetailStatutEvolutionMesure = DetailMesure['detailStatut'];
 
 export const lisSimulation = async (idService: UUID): Promise<Simulation> =>
   (
