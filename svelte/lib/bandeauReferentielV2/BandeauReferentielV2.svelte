@@ -12,7 +12,8 @@
       Un nouveau référentiel de mesures est désormais disponible
     </p>
     <p>
-      Il fait évoluer le formulaire “Décrire” (nouvelles questions). <br />
+      Il fait évoluer le formulaire de création d'un service (nouvelles
+      questions). <br />
       Visualisez les changements (mesures, indice cyber) avant d’opérer le changement.
     </p>
   </div>
