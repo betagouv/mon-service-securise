@@ -54,6 +54,12 @@
   const gereFermetureModale = () => {
     if (!aTermine) elementModaleConfirmationFermeture.affiche();
   };
+
+  const afficheEtape = (index: number) => {
+    indexEtapeCourante = index;
+    const contenuScrollable = document.querySelector('.contenu-modale');
+    if (contenuScrollable) contenuScrollable.scrollTop = 0;
+  };
 </script>
 
 <Modale
@@ -225,7 +231,7 @@
           <button
             class="pagination-etape"
             class:etape-courante={idx === indexEtapeCourante}
-            on:click={() => (indexEtapeCourante = idx)}
+            on:click={() => afficheEtape(idx)}
           ></button>
         {/each}
       </div>
@@ -238,7 +244,7 @@
             taille="md"
             icone=""
             positionIcone="sans"
-            on:click={() => indexEtapeCourante--}
+            on:click={() => afficheEtape(indexEtapeCourante - 1)}
           />
         {/if}
         {#if indexEtapeCourante === 2}
@@ -259,7 +265,7 @@
             taille="md"
             icone=""
             positionIcone="sans"
-            on:click={() => indexEtapeCourante++}
+            on:click={() => afficheEtape(indexEtapeCourante + 1)}
           />
         {/if}
       </div>
