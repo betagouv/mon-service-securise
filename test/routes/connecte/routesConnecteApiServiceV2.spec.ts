@@ -8,6 +8,7 @@ import { unUUIDRandom } from '../../constructeurs/UUID.js';
 import { UUID } from '../../../src/typesBasiques.js';
 import { DonneesDescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.js';
 import Service from '../../../src/modeles/service.js';
+import { ErreurNomServiceDejaExistant } from '../../../src/erreurs.js';
 
 const { ECRITURE } = Permissions;
 const { DECRIRE } = Rubriques;
@@ -103,6 +104,22 @@ describe('Le serveur MSS des routes /api/service-v2/*', () => {
       expect(donneeTransmises?.idUtilisateur).to.equal(idUtilisateur);
       expect(donneeTransmises?.idService).to.equal(idService);
       expect(donneeTransmises?.donnees.nomService).to.equal('Nouveau Nom');
+    });
+
+    it('retourne une erreur 422 si le nom de service est déjà utilisé', async () => {
+      testeur.depotDonnees().ajouteDescriptionService = async () => {
+        throw new ErreurNomServiceDejaExistant();
+      };
+
+      const reponse = await testeur.put(
+        `/api/service-v2/${idService}`,
+        donneesDescriptionValide
+      );
+
+      expect(reponse.status).to.equal(422);
+      expect(reponse.body).to.eql({
+        erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' },
+      });
     });
   });
 });

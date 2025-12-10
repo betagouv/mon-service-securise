@@ -93,6 +93,49 @@
     );
     if (recalculEstNecessaire) await rafraichisNiveauSecuriteMinimal();
   };
+
+  const enregistreDescriptionService = async () => {
+    const niveauActuelInsuffisant =
+      questionsV2.niveauSecurite[descriptionEditable.niveauSecurite].position <
+      questionsV2.niveauSecurite[niveauDeSecuriteMinimal].position;
+
+    if (niveauActuelInsuffisant) {
+      ongletActif = 'besoinsSecurite';
+      majForceeBesoinsSecurite = true;
+      descriptionEditable.niveauSecurite = niveauDeSecuriteMinimal;
+      return;
+    }
+
+    try {
+      await metsAJourDescriptionService(idService, descriptionEditable);
+
+      const messageSucces = majForceeBesoinsSecurite
+        ? miseAJourForceeReussie(
+            copiePourRestauration.niveauSecurite,
+            descriptionEditable.niveauSecurite
+          )
+        : 'Les informations de votre service ont été mises à jour avec succès.';
+      toasterStore.succes('Mise à jour réussie', messageSucces);
+
+      copiePourRestauration = structuredClone(descriptionEditable);
+      retourAuModeResume();
+    } catch (e) {
+      if (
+        e.response?.status === 422 &&
+        e.response?.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT'
+      ) {
+        const elementRacine: HTMLElement & {
+          status: string;
+          errorMessage: string;
+        } = document.querySelector("dsfr-input[nom='nom-service']")!;
+        elementRacine.status = 'error';
+        elementRacine.errorMessage = 'Ce nom de service est déjà utilisé.';
+        document
+          .querySelector('.formulaire')
+          ?.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 </script>
 
 <Toaster />
@@ -172,31 +215,7 @@
       afficheInfoBesoinsSecurite={mode === 'Édition' &&
         ongletActif === 'informations' &&
         !majForceeBesoinsSecurite}
-      on:enregistrer={async () => {
-        const niveauActuelInsuffisant =
-          questionsV2.niveauSecurite[descriptionEditable.niveauSecurite]
-            .position <
-          questionsV2.niveauSecurite[niveauDeSecuriteMinimal].position;
-
-        if (niveauActuelInsuffisant) {
-          ongletActif = 'besoinsSecurite';
-          majForceeBesoinsSecurite = true;
-          descriptionEditable.niveauSecurite = niveauDeSecuriteMinimal;
-          return;
-        }
-
-        await metsAJourDescriptionService(idService, descriptionEditable);
-        const messageSucces = majForceeBesoinsSecurite
-          ? miseAJourForceeReussie(
-              copiePourRestauration.niveauSecurite,
-              descriptionEditable.niveauSecurite
-            )
-          : 'Les informations de votre service ont été mises à jour avec succès.';
-        toasterStore.succes('Mise à jour réussie', messageSucces);
-
-        copiePourRestauration = structuredClone(descriptionEditable);
-        retourAuModeResume();
-      }}
+      on:enregistrer={async () => enregistreDescriptionService()}
       on:annuler={() => {
         descriptionEditable = structuredClone(copiePourRestauration);
         retourAuModeResume();
