@@ -124,7 +124,7 @@
     );
     if (succesChangementReferentiel === 'true') {
       toasterStore.succes(
-        'Le référentiel a été mis à jour avec succès.',
+        'Le référentiel a été mis à jour avec succès',
         'Vous pouvez maintenant mettre à jour les mesures.'
       );
       url.searchParams.delete('succesChangementReferentiel');
@@ -132,8 +132,22 @@
     }
   };
 
+  const afficheToasterSuccesCreationServiceSiBesoin = () => {
+    const url = new URL(window.location.href);
+    const succesCreationService = url.searchParams.get('succesCreationService');
+    if (succesCreationService === 'true') {
+      toasterStore.succes(
+        'Service créé avec succès',
+        'Vous pouvez maintenant mettre à jour les mesures.'
+      );
+      url.searchParams.delete('succesCreationService');
+      history.replaceState(history.state, '', url.href); //on supprime le paramètre sans recharger la page
+    }
+  };
+
   onMount(async () => {
     afficheToasterSuccesChangementReferentielSiBesoin();
+    afficheToasterSuccesCreationServiceSiBesoin();
 
     await Promise.all([
       rafraichisMesures(),

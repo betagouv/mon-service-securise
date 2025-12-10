@@ -63,7 +63,7 @@
     enCoursDeChargement = true;
     try {
       const idService = await finaliseBrouillonService($leBrouillon.id!);
-      window.location.href = `/service/${idService}/mesures`;
+      window.location.href = `/service/${idService}/mesures?succesCreationService=true`;
     } catch (e) {
       if (
         e.response?.status === 422 &&
