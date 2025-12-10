@@ -3,6 +3,7 @@
     type ResumeEvolutions,
     lisEvolutionMesures,
     type StatutEvolutionMesure,
+    type DetailStatutEvolutionMesure,
   } from '../simulationv2.api';
   import { onMount } from 'svelte';
   import { leBrouillon } from '../../creationV2/etapes/brouillon.store';
@@ -27,14 +28,15 @@
       (m) => m.statut === ongletActif
     ) || [];
 
-  const configurationStatut: Record<
-    StatutEvolutionMesure,
-    { label: string; icone: string }
-  > = {
-    ajoutee: { label: 'Ajoutée', icone: 'icone_tableau_ajout' },
-    inchangee: { label: 'Inchangée', icone: 'icone_tableau_succes' },
-    modifiee: { label: 'Modifiée', icone: 'icone_tableau_modifie' },
-    supprimee: { label: 'Supprimée', icone: 'icone_tableau_supprime' },
+  const configurationStatut: Record<DetailStatutEvolutionMesure, string> = {
+    absente: 'Mesure supprimée.',
+    conforme: 'Aucune modification apportée à cette mesure.',
+    conformeSplit: 'Mesure supprimée et répartie en plusieurs mesures.',
+    introduite: 'Nouvelle mesure introduite.',
+    modificationMajeure: 'Mesure significativement modifiée.',
+    modificationMineure: 'Mesure conservée, avec de légers ajustements.',
+    split: 'Mesure supprimée et répartie en plusieurs mesures.',
+    reunification: 'Mesure retirée et intégrée à d’autres mesures.',
   };
 </script>
 
@@ -111,7 +113,7 @@
       colonnes={[
         { cle: 'ancienneDescription', libelle: 'Mesure actuelle' },
         { cle: 'nouvelleDescription', libelle: 'Nouvelle version proposée' },
-        { cle: 'statut', libelle: 'Type de changement' },
+        { cle: 'detailStatut', libelle: 'Type de changement' },
       ]}
       donnees={donneesAAfficher}
     >
@@ -143,14 +145,9 @@
           <span>{donnee.ancienneDescription ?? '-'}</span>
         {:else if colonne.cle === 'nouvelleDescription'}
           <span>{donnee.nouvelleDescription ?? '-'}</span>
-        {:else if colonne.cle === 'statut'}
-          {@const { label, icone } = configurationStatut[donnee.statut]}
+        {:else if colonne.cle === 'detailStatut'}
           <div class="conteneur-statut">
-            <img
-              src="/statique/assets/images/{icone}.svg"
-              alt="Icône du statut {label}"
-            />
-            <span>{label}</span>
+            <span>{configurationStatut[donnee.detailStatut]}</span>
           </div>
         {/if}
       </svelte:fragment>
@@ -255,7 +252,7 @@
       .tableau-evolutions-mesures td:nth-child(1),
       .tableau-evolutions-mesures td:nth-child(2)
     ) {
-    width: 40%;
+    width: 33%;
   }
 
   .tableau-evolutions-mesures {
@@ -271,7 +268,6 @@
     .conteneur-statut {
       display: flex;
       align-items: center;
-      gap: 12px;
     }
   }
 </style>
