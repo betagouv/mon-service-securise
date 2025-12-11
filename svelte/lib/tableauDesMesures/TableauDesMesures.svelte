@@ -286,12 +286,9 @@
   <div class="info-ancien-référentiel">
     <dsfr-badge
       label="Ancien référentiel"
-      type="accent"
-      accent="pink-macaron"
+      type="status"
+      status="warning"
       size="md"
-      hasIcon
-      icon="alert-fill"
-      ellipsis={false}
     />
   </div>
 {/if}
