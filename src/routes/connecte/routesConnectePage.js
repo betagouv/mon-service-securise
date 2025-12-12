@@ -15,6 +15,7 @@ const routesConnectePage = ({
   adaptateurCsv,
   adaptateurGestionErreur,
   adaptateurHorloge,
+  adaptateurEnvironnement,
 }) => {
   const routes = express.Router();
 
@@ -149,13 +150,16 @@ const routesConnectePage = ({
       };
 
       if (idEtape === 'decrire') {
-        reponse.render('service/creation', {
-          InformationsService,
-          referentiel,
-          service,
-          etapeActive: 'descriptionService',
-          departements: referentiel.departements(),
-        });
+        if (adaptateurEnvironnement.featureFlag().avecDecrireV2())
+          reponse.render('visiteGuidee/creationService');
+        else
+          reponse.render('service/creation', {
+            InformationsService,
+            referentiel,
+            service,
+            etapeActive: 'descriptionService',
+            departements: referentiel.departements(),
+          });
       } else if (idEtape === 'securiser') {
         const mesures = moteurRegles.mesures(service.descriptionService);
 
