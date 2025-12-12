@@ -9,6 +9,11 @@ type DetailsPositionModale = {
   leftPointe: string;
 };
 
+type DetailsPositionRond = {
+  top: number;
+  left: number;
+};
+
 export const recuperePositionModale = (
   positionCible: DOMRect,
   positionModale: PositionModale
@@ -105,15 +110,45 @@ export const recuperePositionModale = (
         positionRond: 'Haut',
         leftPointe: '50%',
       };
+  }
+};
 
-    default:
+export const recuperePositionRond = (
+  positionCible: DOMRect,
+  positionRond: PositionRond
+): DetailsPositionRond => {
+  switch (positionRond) {
+    case 'Gauche':
       return {
-        top: '0px',
-        left: '0px',
-        transformY: '0%',
-        transformX: '0%',
-        positionRond: 'Haut',
-        leftPointe: '0%',
+        top: positionCible.top + positionCible.height / 2 - 9,
+        left: positionCible.left - 9,
+      };
+
+    case 'Droite':
+      return {
+        top: positionCible.top + positionCible.height / 2 - 9,
+        left: positionCible.right - 9,
+      };
+
+    case 'Bas':
+      return {
+        top: positionCible.bottom - 9,
+        left: positionCible.left + positionCible.width / 2 - 9,
+      };
+
+    case 'Haut':
+      return {
+        top: positionCible.top - 9,
+        left: positionCible.left + positionCible.width / 2 - 9,
+      };
+
+    case 'DeuxTiersCentre':
+      return {
+        top: positionCible.top + positionCible.height / 2 - 9,
+        left:
+          positionCible.right -
+          (positionCible.right - positionCible.left) / 3 -
+          16,
       };
   }
 };
