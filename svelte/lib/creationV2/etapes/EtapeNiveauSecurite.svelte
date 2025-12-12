@@ -32,6 +32,10 @@
         });
       }
       niveauSelectionne = $leBrouillon.niveauSecurite;
+    } else {
+      // Dans le cas de la visite guidée
+      niveauSelectionne = 'niveau1';
+      niveauDeSecuriteMinimal = 'niveau1';
     }
   });
 

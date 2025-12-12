@@ -4,7 +4,6 @@
 
   let cibleNomService: HTMLElement;
   let cibleBesoinsSecurite: HTMLElement;
-  let cibleGererContributeurs: HTMLElement;
   onMount(() => {
     document.body.dispatchEvent(
       new CustomEvent('svelte-recharge-niveaux-de-securite', {
@@ -19,11 +18,10 @@
     );
     cibleNomService = document.getElementById('nom-service')!;
     cibleBesoinsSecurite = document.getElementById('niveaux-de-securite')!;
-    cibleGererContributeurs = document.getElementById('gerer-contributeurs')!;
   });
 </script>
 
-{#if cibleNomService && cibleBesoinsSecurite && cibleGererContributeurs}
+{#if cibleNomService && cibleBesoinsSecurite}
   <ModaleSousEtape
     sousEtapes={[
       {
@@ -61,33 +59,6 @@
           'Sélectionnez les besoins identifiés par l’ANSSI ou des besoins plus élevés pour découvrir la liste des mesures pour sécuriser votre service.',
         animation: '/statique/assets/images/visiteGuidee/besoins_securite.gif',
         margesElementMisEnAvant: '0 20 0 20',
-      },
-      {
-        cible: cibleGererContributeurs,
-        callbackInitialeCible: (cible) => {
-          cible.inert = true;
-          document.getElementsByClassName(
-            'inviter-contributeurs'
-          )[0].style.display = 'flex';
-          document.body.dispatchEvent(
-            new CustomEvent('jquery-deplie-menu-navigation-visite-guidee')
-          );
-          document.body.dispatchEvent(
-            new CustomEvent('jquery-affiche-tiroir-contributeurs-visite-guidee')
-          );
-          document.getElementsByClassName('tiroir')[0].style.zIndex = '10001';
-        },
-        callbackFinaleCible: () =>
-          document
-            .getElementsByClassName('fermeture-tiroir')[0]
-            .dispatchEvent(new Event('click')),
-        delaiAvantAffichage: 500,
-        positionnementModale: 'HautDroite',
-        titre: 'Collaborez avec votre équipe',
-        description:
-          'Vous pouvez travailler en équipe, inviter vos collègues mais également vos prestataires. Différents niveaux de droits sont disponibles (lecture, édition…).',
-        animation: '/statique/assets/images/visiteGuidee/contributeurs.gif',
-        margeElementMisEnAvant: 3,
       },
     ]}
   />

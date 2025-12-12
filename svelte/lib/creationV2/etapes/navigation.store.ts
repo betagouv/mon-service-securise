@@ -33,6 +33,7 @@ type NavigationStore = {
   precedent: () => void;
   suivant: () => void;
   retourneEtapeNomService: () => void;
+  avanceEtapeBesoinsSecurite: () => void;
   reprendreEditionDe: (
     brouillon: BrouillonServiceV2,
     modeRapide: boolean
@@ -95,6 +96,15 @@ export const navigationStore: NavigationStore = {
       return {
         ...etat,
         etapeEnCours: 0,
+        questionEnCours: 0,
+      };
+    });
+  },
+  avanceEtapeBesoinsSecurite: () => {
+    etatNavigation.update((etat) => {
+      return {
+        ...etat,
+        etapeEnCours: 4,
         questionEnCours: 0,
       };
     });

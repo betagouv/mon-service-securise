@@ -3,6 +3,10 @@
   import { onDestroy, onMount } from 'svelte';
   import Confetti from '../../ui/Confetti.svelte';
   import type { PositionRond, SousEtape } from './ModaleSousEtape.d';
+  import {
+    recuperePositionModale,
+    recuperePositionRond,
+  } from './positionModale';
 
   export let sousEtapes: SousEtape[];
 
@@ -37,101 +41,10 @@
 
   $: {
     if (sousEtape && positionCible) {
-      switch (sousEtape.positionnementModale) {
-        case 'DeuxTiersCentre':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${
-              positionCible.right -
-              (positionCible.right - positionCible.left) / 3
-            }px`,
-            transformY: '50%',
-            transformX: '0',
-            positionRond: 'DeuxTiersCentre',
-            leftPointe: '0%',
-          };
-          break;
-        case 'MilieuDroite':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${positionCible.right + 7}px`,
-            transformY: '50%',
-            transformX: '0',
-            positionRond: 'Droite',
-            leftPointe: '0%',
-          };
-          break;
-        case 'HautDroite':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${positionCible.right + 7}px`,
-            transformY: '20%',
-            transformX: '0',
-            positionRond: 'Droite',
-            leftPointe: '0%',
-          };
-          break;
-        case 'BasDroite':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${positionCible.right + 7}px`,
-            transformY: '80%',
-            transformX: '0',
-            positionRond: 'Droite',
-            leftPointe: '0%',
-          };
-          break;
-        case 'MilieuGauche':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${positionCible.right - positionCible.width - 7}px`,
-            transformY: '50%',
-            transformX: '-100%',
-            positionRond: 'Gauche',
-            leftPointe: '100%',
-          };
-          break;
-        case 'HautGauche':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${positionCible.right - positionCible.width - 7}px`,
-            transformY: '20%',
-            transformX: '-100%',
-            positionRond: 'Gauche',
-            leftPointe: '100%',
-          };
-          break;
-        case 'BasGauche':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${positionCible.right - positionCible.width - 7}px`,
-            transformY: '80%',
-            transformX: '-100%',
-            positionRond: 'Gauche',
-            leftPointe: '100%',
-          };
-          break;
-        case 'BasMilieu':
-          positionModale = {
-            top: `${positionCible.bottom + 7}px`,
-            left: `${positionCible.right - positionCible.width / 2}px`,
-            transformY: '0%',
-            transformX: '-50%',
-            positionRond: 'Bas',
-            leftPointe: '50%',
-          };
-          break;
-        case 'HautMilieu':
-          positionModale = {
-            top: `${positionCible.top - 7}px`,
-            left: `${positionCible.right - positionCible.width / 2}px`,
-            transformY: '100%',
-            transformX: '-50%',
-            positionRond: 'Haut',
-            leftPointe: '50%',
-          };
-          break;
-      }
+      positionModale = recuperePositionModale(
+        positionCible,
+        sousEtape.positionnementModale
+      );
     }
   }
 
@@ -145,10 +58,10 @@
     positionCible = sousEtape.cible.getBoundingClientRect();
     let { left, top, right, bottom } = positionCible;
     if (sousEtape.margeElementMisEnAvant || sousEtape.margesElementMisEnAvant) {
-      let margeGauche;
-      let margeDroite;
-      let margeBas;
-      let margeHaut;
+      let margeGauche: number = 0;
+      let margeDroite: number = 0;
+      let margeBas: number = 0;
+      let margeHaut: number = 0;
       if (sousEtape.margeElementMisEnAvant) {
         margeGauche = sousEtape.margeElementMisEnAvant;
         margeDroite = sousEtape.margeElementMisEnAvant;
@@ -183,41 +96,10 @@
   let decallageRond: { top: number; left: number };
   $: {
     if (positionModale) {
-      switch (positionModale.positionRond) {
-        case 'Gauche':
-          decallageRond = {
-            top: positionCible.top + positionCible.height / 2 - 9,
-            left: positionCible.left - 9,
-          };
-          break;
-        case 'Droite':
-          decallageRond = {
-            top: positionCible.top + positionCible.height / 2 - 9,
-            left: positionCible.right - 9,
-          };
-          break;
-        case 'Bas':
-          decallageRond = {
-            top: positionCible.bottom - 9,
-            left: positionCible.left + positionCible.width / 2 - 9,
-          };
-          break;
-        case 'Haut':
-          decallageRond = {
-            top: positionCible.top - 9,
-            left: positionCible.left + positionCible.width / 2 - 9,
-          };
-          break;
-        case 'DeuxTiersCentre':
-          decallageRond = {
-            top: positionCible.top + positionCible.height / 2 - 9,
-            left:
-              positionCible.right -
-              (positionCible.right - positionCible.left) / 3 -
-              16,
-          };
-          break;
-      }
+      decallageRond = recuperePositionRond(
+        positionCible,
+        positionModale.positionRond
+      );
     }
   }
 

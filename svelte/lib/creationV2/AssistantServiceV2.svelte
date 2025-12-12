@@ -198,7 +198,7 @@
     margin-bottom: 8px;
   }
 
-  :global(#creation-v2, #simulation-v2) {
+  :global(#creation-v2, #simulation-v2, #visite-guidee-creation-service) {
     background: white;
     width: 100%;
     height: 100%;

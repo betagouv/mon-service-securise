@@ -41,57 +41,61 @@
 
   <slot name="infoMajNecessaire" />
 
-  {#each donneesNiveauxDeSecurite as niveauSecurite, index}
-    <details
-      id={niveauSecurite.id}
-      class="conteneur-niveau-securite"
-      class:selectionne={niveauSelectionne === niveauSecurite.id}
-    >
-      <summary class="entete-niveau-securite">
-        <h5>{niveauSecurite.nom}</h5>
-        {#if niveauSecurite.id === niveauDeSecuriteMinimal}
-          <dsfr-tag
-            label="Besoins identifiés par l'ANSSI"
-            size="md"
-            hasIcon
-            icon="star-s-fill"
-          />
-        {/if}
-        <p>{niveauSecurite.resume}</p>
-        <span class="bouton-selection">
-          {#if estNiveauTropBas(niveauSecurite.id)}
-            <Infobulle
-              contenu="Il est impossible de sélectionner des besoins de sécurité moins élevés que ceux identifiés par l'ANSSI."
+  <div id="niveaux-securite">
+    {#each donneesNiveauxDeSecurite as niveauSecurite, index}
+      <details
+        id={niveauSecurite.id}
+        class="conteneur-niveau-securite"
+        class:selectionne={niveauSelectionne === niveauSecurite.id}
+      >
+        <summary class="entete-niveau-securite">
+          <h5>{niveauSecurite.nom}</h5>
+          {#if niveauSecurite.id === niveauDeSecuriteMinimal}
+            <dsfr-tag
+              label="Besoins identifiés par l'ANSSI"
+              size="md"
+              hasIcon
+              icon="star-s-fill"
             />
           {/if}
-          <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-          <lab-anssi-bouton
-            titre={niveauSelectionne === niveauSecurite.id
-              ? 'Sélectionné'
-              : 'Sélectionner'}
-            variante={niveauSelectionne === niveauSecurite.id
-              ? 'primaire'
-              : 'secondaire'}
-            taille="sm"
-            actif={!estNiveauTropBas(niveauSecurite.id)}
-            icone={niveauSelectionne === niveauSecurite.id ? 'check-line' : ''}
-            positionIcone={niveauSelectionne === niveauSecurite.id
-              ? 'gauche'
-              : 'sans'}
-            on:click={async () => await selectionneNiveau(niveauSecurite.id)}
-          />
-        </span>
-      </summary>
-      <hr />
-      <ResumeNiveauSecurite
-        niveau={niveauSecurite.id}
-        afficheAvertissementAttaqueEtatique
-        afficheToastNiveauSuperieurSelectionne={estNiveauSuperieur(
-          niveauSecurite.id
-        )}
-      />
-    </details>
-  {/each}
+          <p>{niveauSecurite.resume}</p>
+          <span class="bouton-selection">
+            {#if estNiveauTropBas(niveauSecurite.id)}
+              <Infobulle
+                contenu="Il est impossible de sélectionner des besoins de sécurité moins élevés que ceux identifiés par l'ANSSI."
+              />
+            {/if}
+            <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+            <lab-anssi-bouton
+              titre={niveauSelectionne === niveauSecurite.id
+                ? 'Sélectionné'
+                : 'Sélectionner'}
+              variante={niveauSelectionne === niveauSecurite.id
+                ? 'primaire'
+                : 'secondaire'}
+              taille="sm"
+              actif={!estNiveauTropBas(niveauSecurite.id)}
+              icone={niveauSelectionne === niveauSecurite.id
+                ? 'check-line'
+                : ''}
+              positionIcone={niveauSelectionne === niveauSecurite.id
+                ? 'gauche'
+                : 'sans'}
+              on:click={async () => await selectionneNiveau(niveauSecurite.id)}
+            />
+          </span>
+        </summary>
+        <hr />
+        <ResumeNiveauSecurite
+          niveau={niveauSecurite.id}
+          afficheAvertissementAttaqueEtatique
+          afficheToastNiveauSuperieurSelectionne={estNiveauSuperieur(
+            niveauSecurite.id
+          )}
+        />
+      </details>
+    {/each}
+  </div>
 </div>
 
 <style lang="scss">

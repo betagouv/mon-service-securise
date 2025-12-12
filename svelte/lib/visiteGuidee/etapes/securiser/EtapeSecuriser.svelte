@@ -4,6 +4,7 @@
 
   let ciblePremiereMesure: HTMLDivElement;
   let cibleOnglets: HTMLDivElement;
+  let cibleGererContributeurs: HTMLElement;
   let cibleTiroirMesure: HTMLDivElement;
   let cibleIndiceCyber: HTMLDivElement;
   onMount(() => {
@@ -16,6 +17,7 @@
     cibleOnglets = document.getElementsByClassName(
       'conteneur-onglet'
     )[0]! as HTMLDivElement;
+    cibleGererContributeurs = document.getElementById('gerer-contributeurs')!;
     cibleTiroirMesure = document.getElementsByClassName(
       'tiroir'
     )[0]! as HTMLDivElement;
@@ -25,7 +27,7 @@
   });
 </script>
 
-{#if ciblePremiereMesure && cibleOnglets && cibleTiroirMesure && cibleIndiceCyber}
+{#if ciblePremiereMesure && cibleOnglets && cibleGererContributeurs && cibleTiroirMesure && cibleIndiceCyber}
   <ModaleSousEtape
     sousEtapes={[
       {
@@ -33,6 +35,9 @@
         callbackInitialeCible: (cible) => {
           const ligneMesure = cible.parentElement;
           if (ligneMesure) ligneMesure.inert = true;
+          document.body.dispatchEvent(
+            new CustomEvent('jquery-deplie-menu-navigation-visite-guidee')
+          );
         },
         delaiAvantAffichage: 200,
         positionnementModale: 'BasDroite',
@@ -54,6 +59,29 @@
         description:
           'En fonction du statut défini, les mesures sont catégorisées par onglets afin de faciliter le suivi de celles qui vous restent à faire.',
         animation: '/statique/assets/images/visiteGuidee/securiser_2.gif',
+      },
+      {
+        cible: cibleGererContributeurs,
+        callbackInitialeCible: (cible) => {
+          cible.inert = true;
+          document.getElementsByClassName(
+            'inviter-contributeurs'
+          )[0].style.display = 'flex';
+          document.body.dispatchEvent(
+            new CustomEvent('jquery-affiche-tiroir-contributeurs-visite-guidee')
+          );
+          document.getElementsByClassName('tiroir')[0].style.zIndex = '10001';
+        },
+        callbackFinaleCible: () =>
+          document
+            .getElementsByClassName('fermeture-tiroir')[0]
+            .dispatchEvent(new Event('click')),
+        positionnementModale: 'HautDroite',
+        titre: 'Collaborez avec votre équipe',
+        description:
+          'Vous pouvez travailler en équipe, inviter vos collègues mais également vos prestataires. Différents niveaux de droits sont disponibles (lecture, édition…).',
+        animation: '/statique/assets/images/visiteGuidee/contributeurs.gif',
+        margeElementMisEnAvant: 3,
       },
       {
         cible: cibleTiroirMesure,
