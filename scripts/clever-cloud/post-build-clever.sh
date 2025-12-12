@@ -1,4 +1,4 @@
 #! /bin/sh
 
-npm run build:front
-npm run build:back
+pnpm run build:front
+pnpm run build:back

@@ -4,14 +4,15 @@ ARG NODE_VERSION=22
 #checkov:skip=CKV_DOCKER_3:Uniquement utilisé en local pour le dev
 FROM docker.io/node:$NODE_VERSION
 
-# La génération de PDF utilise Puppeteer pour se connecter à un navigateur distant
-# **MAIS** on ne veut pas que Puppeteer déclenche le téléchargement d'un navigateur local.
-ENV PUPPETEER_SKIP_DOWNLOAD=true
+RUN apt-get update -y
+RUN apt-get install -y \
+  jq
 
 WORKDIR /usr/src/app
-COPY package.json package-lock.json /usr/src/app/
-RUN npm ci
+COPY package.json pnpm-lock.yaml /usr/src/app/
+RUN npm install -g "$(jq -r '.packageManager' package.json)"
+RUN pnpm install
 
 COPY . /usr/src/app
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
