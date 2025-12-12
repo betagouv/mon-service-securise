@@ -1,0 +1,12 @@
+extends ../mssConnecte
+
+block title
+  title Ajouter un service | MonServiceSécurisé
+
+block append scripts
+  +composantSvelte('visiteGuideeCreationService.js')
+  script(type='module', nonce=nonce).
+    document.body.dispatchEvent(new CustomEvent('svelte-recharge-visite-guidee-creation-service'));
+
+block main
+  #visite-guidee-creation-service
