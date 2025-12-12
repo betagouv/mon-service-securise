@@ -3,7 +3,10 @@
   import { onDestroy, onMount } from 'svelte';
   import Confetti from '../../ui/Confetti.svelte';
   import type { PositionRond, SousEtape } from './ModaleSousEtape.d';
-  import { recuperePositionModale } from './positionModale';
+  import {
+    recuperePositionModale,
+    recuperePositionRond,
+  } from './positionModale';
 
   export let sousEtapes: SousEtape[];
 
@@ -93,41 +96,10 @@
   let decallageRond: { top: number; left: number };
   $: {
     if (positionModale) {
-      switch (positionModale.positionRond) {
-        case 'Gauche':
-          decallageRond = {
-            top: positionCible.top + positionCible.height / 2 - 9,
-            left: positionCible.left - 9,
-          };
-          break;
-        case 'Droite':
-          decallageRond = {
-            top: positionCible.top + positionCible.height / 2 - 9,
-            left: positionCible.right - 9,
-          };
-          break;
-        case 'Bas':
-          decallageRond = {
-            top: positionCible.bottom - 9,
-            left: positionCible.left + positionCible.width / 2 - 9,
-          };
-          break;
-        case 'Haut':
-          decallageRond = {
-            top: positionCible.top - 9,
-            left: positionCible.left + positionCible.width / 2 - 9,
-          };
-          break;
-        case 'DeuxTiersCentre':
-          decallageRond = {
-            top: positionCible.top + positionCible.height / 2 - 9,
-            left:
-              positionCible.right -
-              (positionCible.right - positionCible.left) / 3 -
-              16,
-          };
-          break;
-      }
+      decallageRond = recuperePositionRond(
+        positionCible,
+        positionModale.positionRond
+      );
     }
   }
 
