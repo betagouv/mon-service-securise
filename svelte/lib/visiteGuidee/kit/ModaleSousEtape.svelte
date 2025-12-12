@@ -3,6 +3,7 @@
   import { onDestroy, onMount } from 'svelte';
   import Confetti from '../../ui/Confetti.svelte';
   import type { PositionRond, SousEtape } from './ModaleSousEtape.d';
+  import { recuperePositionModale } from './positionModale';
 
   export let sousEtapes: SousEtape[];
 
@@ -37,101 +38,10 @@
 
   $: {
     if (sousEtape && positionCible) {
-      switch (sousEtape.positionnementModale) {
-        case 'DeuxTiersCentre':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${
-              positionCible.right -
-              (positionCible.right - positionCible.left) / 3
-            }px`,
-            transformY: '50%',
-            transformX: '0',
-            positionRond: 'DeuxTiersCentre',
-            leftPointe: '0%',
-          };
-          break;
-        case 'MilieuDroite':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${positionCible.right + 7}px`,
-            transformY: '50%',
-            transformX: '0',
-            positionRond: 'Droite',
-            leftPointe: '0%',
-          };
-          break;
-        case 'HautDroite':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${positionCible.right + 7}px`,
-            transformY: '20%',
-            transformX: '0',
-            positionRond: 'Droite',
-            leftPointe: '0%',
-          };
-          break;
-        case 'BasDroite':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${positionCible.right + 7}px`,
-            transformY: '80%',
-            transformX: '0',
-            positionRond: 'Droite',
-            leftPointe: '0%',
-          };
-          break;
-        case 'MilieuGauche':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${positionCible.right - positionCible.width - 7}px`,
-            transformY: '50%',
-            transformX: '-100%',
-            positionRond: 'Gauche',
-            leftPointe: '100%',
-          };
-          break;
-        case 'HautGauche':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${positionCible.right - positionCible.width - 7}px`,
-            transformY: '20%',
-            transformX: '-100%',
-            positionRond: 'Gauche',
-            leftPointe: '100%',
-          };
-          break;
-        case 'BasGauche':
-          positionModale = {
-            top: `${positionCible.top + positionCible.height / 2}px`,
-            left: `${positionCible.right - positionCible.width - 7}px`,
-            transformY: '80%',
-            transformX: '-100%',
-            positionRond: 'Gauche',
-            leftPointe: '100%',
-          };
-          break;
-        case 'BasMilieu':
-          positionModale = {
-            top: `${positionCible.bottom + 7}px`,
-            left: `${positionCible.right - positionCible.width / 2}px`,
-            transformY: '0%',
-            transformX: '-50%',
-            positionRond: 'Bas',
-            leftPointe: '50%',
-          };
-          break;
-        case 'HautMilieu':
-          positionModale = {
-            top: `${positionCible.top - 7}px`,
-            left: `${positionCible.right - positionCible.width / 2}px`,
-            transformY: '100%',
-            transformX: '-50%',
-            positionRond: 'Haut',
-            leftPointe: '50%',
-          };
-          break;
-      }
+      positionModale = recuperePositionModale(
+        positionCible,
+        sousEtape.positionnementModale
+      );
     }
   }
 
