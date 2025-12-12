@@ -112,7 +112,7 @@ Les scripts de migration de la base de données sont exécutés automatiquement 
 Si vous avez besoin d'exécuter manuellement ces migrations, vous pouvez le faire en exécutant la commande suivante :
 
 ```sh
-$ docker compose exec web npm run migration-bdd
+$ docker compose exec web pnpm run migration-bdd
 ```
 
 ## 🏗️ Conception

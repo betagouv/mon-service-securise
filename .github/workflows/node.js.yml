@@ -30,9 +30,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Installer les dépendances
-        run: npm ci
-        env:
-          PUPPETEER_SKIP_DOWNLOAD: true
+        run: npm install -g "$(jq -r '.packageManager' package.json)" && pnpm install
 
       - name: Contrôler la mise en forme avec Prettier
         run: ./node_modules/.bin/prettier --check .

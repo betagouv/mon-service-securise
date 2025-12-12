@@ -2,6 +2,7 @@
   "type": "module",
   "name": "MonServiceSécurisé",
   "version": "1.0.0",
+  "packageManager": "pnpm@10.24.0",
   "description": "",
   "scripts": {
     "build:front": "vite build --config svelte/vite.config.mts",
@@ -13,7 +14,8 @@
     "test": "eslint . && vitest",
     "test:watch": "vitest",
     "start": "node --require dotenv/config dist/server.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "preinstall": "npx only-allow@1.2.2 pnpm"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
@@ -36,6 +38,7 @@
     "@tiptap/extension-mention": "^2.7.1",
     "@tiptap/extension-placeholder": "^2.7.1",
     "@tiptap/starter-kit": "^2.7.1",
+    "@tiptap/suggestion": "^2.7.2",
     "axios": "^0.30.2",
     "bcrypt": "^5.1.0",
     "commander": "^14.0.0",
