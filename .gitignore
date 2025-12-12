@@ -8,3 +8,4 @@ public/composants-svelte
 /dist/
 *report.json
 *report.xml
+.pnpm-store
