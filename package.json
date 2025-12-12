@@ -14,7 +14,8 @@
     "test": "eslint . && vitest",
     "test:watch": "vitest",
     "start": "node --require dotenv/config dist/server.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "preinstall": "npx only-allow@1.2.2 pnpm"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
