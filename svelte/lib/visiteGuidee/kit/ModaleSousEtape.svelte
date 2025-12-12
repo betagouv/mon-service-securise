@@ -58,10 +58,10 @@
     positionCible = sousEtape.cible.getBoundingClientRect();
     let { left, top, right, bottom } = positionCible;
     if (sousEtape.margeElementMisEnAvant || sousEtape.margesElementMisEnAvant) {
-      let margeGauche;
-      let margeDroite;
-      let margeBas;
-      let margeHaut;
+      let margeGauche: number = 0;
+      let margeDroite: number = 0;
+      let margeBas: number = 0;
+      let margeHaut: number = 0;
       if (sousEtape.margeElementMisEnAvant) {
         margeGauche = sousEtape.margeElementMisEnAvant;
         margeDroite = sousEtape.margeElementMisEnAvant;
