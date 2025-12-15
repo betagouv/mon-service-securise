@@ -26,14 +26,16 @@
     sousEtapes={[
       {
         cible: cibleNomService,
-        callbackInitialeCible: (cible) => {
+        callbackInitialeCible: async (cible) => {
           document.body.dispatchEvent(
             new CustomEvent('jquery-affiche-decrire-etape-1')
           );
           cible.style.width = '50%';
           window.scrollTo(0, 0); // Ici on force le scroll pour ne pas être dérangé par "Erreur de saisie"
         },
-        callbackFinaleCible: (cible) => (cible.style.width = '100%'),
+        callbackFinaleCible: async (cible) => {
+          cible.style.width = '100%';
+        },
         positionnementModale: 'MilieuDroite',
         titre: 'Décrivez votre service',
         description:
@@ -43,14 +45,14 @@
       },
       {
         cible: cibleBesoinsSecurite,
-        callbackInitialeCible: (cible) => {
+        callbackInitialeCible: async (cible) => {
           document.body.dispatchEvent(
             new CustomEvent('jquery-affiche-decrire-etape-3')
           );
           cible.scrollIntoView({ block: 'start' });
         },
         delaiAvantAffichage: 300,
-        callbackFinaleCible: () => {
+        callbackFinaleCible: async () => {
           window.scrollTo(0, 0);
         },
         positionnementModale: 'DeuxTiersCentre',

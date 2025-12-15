@@ -28,12 +28,12 @@
   let sousEtape: SousEtape;
   let afficheModale = true;
 
-  const afficheEtape = (index: number) => {
+  const afficheEtape = async (index: number) => {
     afficheModale = false;
-    sousEtape?.callbackFinaleCible?.(sousEtape.cible);
+    await sousEtape?.callbackFinaleCible?.(sousEtape.cible);
     indexEtapeCourante = index;
     sousEtape = sousEtapes[indexEtapeCourante];
-    sousEtape.callbackInitialeCible?.(sousEtape.cible);
+    await sousEtape.callbackInitialeCible?.(sousEtape.cible);
     setTimeout(() => {
       positionCible = sousEtape.cible.getBoundingClientRect();
 
@@ -56,8 +56,8 @@
     }, sousEtape.delaiAvantAffichage ?? 0);
   };
 
-  onMount(() => {
-    afficheEtape(indexEtapeCourante);
+  onMount(async () => {
+    await afficheEtape(indexEtapeCourante);
   });
 
   $: estDerniereSousEtape = indexEtapeCourante === sousEtapes.length - 1;
@@ -106,8 +106,8 @@
 
   let decallageRond: { top: number; left: number };
 
-  onDestroy(() => {
-    sousEtape?.callbackFinaleCible?.(sousEtape.cible);
+  onDestroy(async () => {
+    await sousEtape?.callbackFinaleCible?.(sousEtape.cible);
     rideau.style.clipPath = 'none';
   });
 </script>
@@ -141,7 +141,7 @@
           <button
             class="pagination-etape"
             class:etape-courante={idx === indexEtapeCourante}
-            on:click={() => afficheEtape(idx)}
+            on:click={async () => await afficheEtape(idx)}
           ></button>
         {/each}
       </div>
@@ -150,7 +150,7 @@
           {#if !estPremiereSousEtape}
             <button
               class="bouton bouton-tertiaire"
-              on:click={() => afficheEtape(indexEtapeCourante - 1)}
+              on:click={async () => await afficheEtape(indexEtapeCourante - 1)}
             >
               Précédent
             </button>
@@ -170,7 +170,7 @@
                 ? await visiteGuidee.finalise()
                 : estDerniereSousEtape
                 ? await visiteGuidee.etapeSuivante()
-                : afficheEtape(indexEtapeCourante + 1)}
+                : await afficheEtape(indexEtapeCourante + 1)}
           >
             {sousEtape?.texteBoutonDerniereEtape
               ? sousEtape.texteBoutonDerniereEtape
