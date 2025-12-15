@@ -11,6 +11,7 @@ export type VisiteGuideeProps = {
   enPause: boolean;
   utilisateurCourant: Utilisateur;
   urlEtapePrecedente?: string;
+  avecDecrireV2: boolean;
 };
 
 export type Utilisateur = {

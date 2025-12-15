@@ -46,6 +46,7 @@ block footer-bandeau-mss
 
 block visite-guidee
   +donneesPartagees('etat-visite-guidee', etatVisiteGuidee || {})
+  +donneesPartagees('avec-decrire-v2-visite-guidee', featureFlags.avecDecrireV2)
 
   if etatVisiteGuidee && etatVisiteGuidee.dejaTerminee === false
     if etatVisiteGuidee.enPause === false
