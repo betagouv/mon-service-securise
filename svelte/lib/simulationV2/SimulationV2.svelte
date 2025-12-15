@@ -120,7 +120,7 @@
 <style lang="scss">
   :global(#modale-confirmation-migration) {
     max-width: 556px;
-    max-height: 480px;
+    height: fit-content;
 
     :global(.contenu-modale) {
       display: flex;
