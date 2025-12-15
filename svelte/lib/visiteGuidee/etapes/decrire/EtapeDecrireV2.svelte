@@ -68,6 +68,7 @@
         await detecteElementHTML('dsfr-input[nom="nom-service"]');
         await detecteElementADisparu('#niveaux-securite');
         cibleNomService = recupereCibleNomService();
+        cibleNomService.scrollIntoView({ behavior: 'instant' });
         return cibleNomService;
       },
       positionnementModale: 'MilieuDroite',
