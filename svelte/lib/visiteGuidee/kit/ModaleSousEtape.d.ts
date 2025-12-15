@@ -11,8 +11,8 @@ export type PositionModale =
 
 export type SousEtape = {
   cible: HTMLElement;
-  callbackInitialeCible?: (cible: HTMLElement) => void;
-  callbackFinaleCible?: (cible: HTMLElement) => void;
+  callbackInitialeCible?: (cible: HTMLElement) => Promise<void>;
+  callbackFinaleCible?: (cible: HTMLElement) => Promise<void>;
   delaiAvantAffichage?: number;
   margeElementMisEnAvant?: number;
   margesElementMisEnAvant?: string; // sous la forme "10 23 12 0" pour haut droite bas gauche

@@ -32,7 +32,7 @@
     sousEtapes={[
       {
         cible: ciblePremiereMesure,
-        callbackInitialeCible: (cible) => {
+        callbackInitialeCible: async (cible) => {
           const ligneMesure = cible.parentElement;
           if (ligneMesure) ligneMesure.inert = true;
           document.body.dispatchEvent(
@@ -48,7 +48,7 @@
       },
       {
         cible: cibleOnglets,
-        callbackInitialeCible: (cible) => {
+        callbackInitialeCible: async (cible) => {
           const onglets = cible.querySelectorAll('button.onglet');
           for (let i = 0; i < onglets.length; i++) {
             onglets[i].inert = true;
@@ -62,7 +62,7 @@
       },
       {
         cible: cibleGererContributeurs,
-        callbackInitialeCible: (cible) => {
+        callbackInitialeCible: async (cible) => {
           cible.inert = true;
           document.getElementsByClassName(
             'inviter-contributeurs'
@@ -72,7 +72,7 @@
           );
           document.getElementsByClassName('tiroir')[0].style.zIndex = '10001';
         },
-        callbackFinaleCible: () => {
+        callbackFinaleCible: async () => {
           document
             .getElementsByClassName('fermeture-tiroir')[0]
             .dispatchEvent(new Event('click'));
@@ -87,7 +87,7 @@
       },
       {
         cible: cibleTiroirMesure,
-        callbackInitialeCible: () => {
+        callbackInitialeCible: async () => {
           document
             .getElementsByClassName('titre-mesure')[0]
             .dispatchEvent(new Event('click'));
@@ -111,7 +111,7 @@
           }, 300);
         },
         delaiAvantAffichage: 300,
-        callbackFinaleCible: () => {
+        callbackFinaleCible: async () => {
           document
             .getElementsByClassName('fermeture-tiroir')[0]
             .dispatchEvent(new Event('click'));
@@ -124,7 +124,7 @@
       },
       {
         cible: cibleTiroirMesure,
-        callbackInitialeCible: () => {
+        callbackInitialeCible: async () => {
           document
             .getElementsByClassName('titre-mesure')[0]
             .dispatchEvent(new Event('click'));
@@ -148,7 +148,7 @@
           }, 300);
         },
         delaiAvantAffichage: 300,
-        callbackFinaleCible: () => {
+        callbackFinaleCible: async () => {
           document
             .getElementsByClassName('fermeture-tiroir')[0]
             .dispatchEvent(new Event('click'));
@@ -162,7 +162,7 @@
       },
       {
         cible: cibleIndiceCyber,
-        callbackInitialeCible: (cible) => cible.removeAttribute('href'),
+        callbackInitialeCible: async (cible) => cible.removeAttribute('href'),
         margeElementMisEnAvant: 3,
         positionnementModale: 'MilieuGauche',
         titre: "Améliorez l'indice cyber de votre service",

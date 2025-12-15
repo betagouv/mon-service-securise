@@ -17,7 +17,7 @@
     sousEtapes={[
       {
         cible: cibleNouvelleHomologation,
-        callbackInitialeCible: () => {
+        callbackInitialeCible: async () => {
           document.getElementById('commencer-homologation').inert = true;
         },
         positionnementModale: 'BasGauche',
@@ -29,7 +29,7 @@
       },
       {
         cible: cibleTelechargement,
-        callbackInitialeCible: (cible) => {
+        callbackInitialeCible: async (cible) => {
           document.body.dispatchEvent(
             new CustomEvent(
               'jquery-affiche-tiroir-telechargement-visite-guidee'
@@ -41,7 +41,7 @@
           )[0].disabled = true;
           cible.inert = true;
         },
-        callbackFinaleCible: () => {
+        callbackFinaleCible: async () => {
           document
             .getElementsByClassName('fermeture-tiroir')[0]
             .dispatchEvent(new Event('click'));

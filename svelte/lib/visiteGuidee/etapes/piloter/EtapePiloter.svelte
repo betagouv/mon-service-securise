@@ -36,7 +36,7 @@
         cible: cibleNouveauService,
         positionnementModale: 'HautGauche',
         margesElementMisEnAvant: '3 3 -3 3',
-        callbackInitialeCible: (cible) => {
+        callbackInitialeCible: async (cible) => {
           const cibleBouton = cible.getElementsByClassName(
             'bouton'
           )[0] as HTMLButtonElement;
@@ -51,7 +51,7 @@
     return {
       cible: cibleLignePremierService,
       positionnementModale: 'HautMilieu',
-      callbackInitialeCible: (cible) => {
+      callbackInitialeCible: async (cible) => {
         cible.inert = true;
       },
       titre: 'Collaborez avec votre équipe !',
@@ -68,7 +68,7 @@
       {
         cible: cibleNomService,
         positionnementModale: 'BasDroite',
-        callbackInitialeCible: () => {
+        callbackInitialeCible: async () => {
           document
             .getElementsByClassName('lien-service')[0]
             .removeAttribute('href');
@@ -85,7 +85,7 @@
         cible: cibleCentreNotifications,
         positionnementModale: 'BasMilieu',
         margeElementMisEnAvant: 3,
-        callbackInitialeCible: (cible) => {
+        callbackInitialeCible: async (cible) => {
           cible.disabled = true;
         },
         titre: 'Découvrez le centre de notifications',
