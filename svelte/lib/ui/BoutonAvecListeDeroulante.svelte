@@ -1,15 +1,18 @@
-<script lang="ts">
-  import Bouton from './Bouton.svelte';
-  import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
-
-  type Options = {
+<script lang="ts" context="module">
+  export type OptionBoutonListeDeroulante = {
     label: string;
     icone: 'plus' | 'televerser';
     href?: string;
     action?: () => void;
-  }[];
+  };
+</script>
+
+<script lang="ts">
+  import Bouton from './Bouton.svelte';
+  import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
+
   export let titre: string;
-  export let options: Options;
+  export let options: OptionBoutonListeDeroulante[];
   export let disabled: boolean = false;
 
   let ouvert = false;
