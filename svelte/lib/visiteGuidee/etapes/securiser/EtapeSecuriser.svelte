@@ -72,10 +72,12 @@
           );
           document.getElementsByClassName('tiroir')[0].style.zIndex = '10001';
         },
-        callbackFinaleCible: () =>
+        callbackFinaleCible: () => {
           document
             .getElementsByClassName('fermeture-tiroir')[0]
-            .dispatchEvent(new Event('click')),
+            .dispatchEvent(new Event('click'));
+          document.getElementsByClassName('tiroir')[0].style.zIndex = '1001';
+        },
         positionnementModale: 'HautDroite',
         titre: 'Collaborez avec votre équipe',
         description:

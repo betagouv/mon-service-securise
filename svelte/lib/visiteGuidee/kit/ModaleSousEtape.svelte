@@ -27,26 +27,38 @@
   };
   let sousEtape: SousEtape;
   let afficheModale = true;
-  $: {
+
+  const afficheEtape = (index: number) => {
     afficheModale = false;
     sousEtape?.callbackFinaleCible?.(sousEtape.cible);
+    indexEtapeCourante = index;
     sousEtape = sousEtapes[indexEtapeCourante];
     sousEtape.callbackInitialeCible?.(sousEtape.cible);
     setTimeout(() => {
       positionCible = sousEtape.cible.getBoundingClientRect();
+
+      if (sousEtape && positionCible) {
+        positionModale = recuperePositionModale(
+          positionCible,
+          sousEtape.positionnementModale
+        );
+      }
+      if (positionModale) {
+        decallageRond = recuperePositionRond(
+          positionCible,
+          positionModale.positionRond
+        );
+      }
+
       calculePolygone();
+
       afficheModale = true;
     }, sousEtape.delaiAvantAffichage ?? 0);
-  }
+  };
 
-  $: {
-    if (sousEtape && positionCible) {
-      positionModale = recuperePositionModale(
-        positionCible,
-        sousEtape.positionnementModale
-      );
-    }
-  }
+  onMount(() => {
+    afficheEtape(indexEtapeCourante);
+  });
 
   $: estDerniereSousEtape = indexEtapeCourante === sousEtapes.length - 1;
   $: estPremiereSousEtape = indexEtapeCourante === 0;
@@ -55,7 +67,6 @@
 
   const calculePolygone = () => {
     if (!positionCible || !sousEtape) return;
-    positionCible = sousEtape.cible.getBoundingClientRect();
     let { left, top, right, bottom } = positionCible;
     if (sousEtape.margeElementMisEnAvant || sousEtape.margesElementMisEnAvant) {
       let margeGauche: number = 0;
@@ -94,16 +105,6 @@
   };
 
   let decallageRond: { top: number; left: number };
-  $: {
-    if (positionModale) {
-      decallageRond = recuperePositionRond(
-        positionCible,
-        positionModale.positionRond
-      );
-    }
-  }
-
-  onMount(() => calculePolygone());
 
   onDestroy(() => {
     sousEtape?.callbackFinaleCible?.(sousEtape.cible);
@@ -140,7 +141,7 @@
           <button
             class="pagination-etape"
             class:etape-courante={idx === indexEtapeCourante}
-            on:click={() => (indexEtapeCourante = idx)}
+            on:click={() => afficheEtape(idx)}
           ></button>
         {/each}
       </div>
@@ -149,7 +150,7 @@
           {#if !estPremiereSousEtape}
             <button
               class="bouton bouton-tertiaire"
-              on:click={() => indexEtapeCourante--}
+              on:click={() => afficheEtape(indexEtapeCourante - 1)}
             >
               Précédent
             </button>
@@ -169,7 +170,7 @@
                 ? await visiteGuidee.finalise()
                 : estDerniereSousEtape
                 ? await visiteGuidee.etapeSuivante()
-                : indexEtapeCourante++}
+                : afficheEtape(indexEtapeCourante + 1)}
           >
             {sousEtape?.texteBoutonDerniereEtape
               ? sousEtape.texteBoutonDerniereEtape
