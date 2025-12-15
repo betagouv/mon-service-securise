@@ -53,7 +53,7 @@
         class="bouton bouton-tertiaire"
         on:click={async () =>
           await visiteGuidee.fermeDefinitivementVisiteGuidee()}
-        >Je n’ai pas besoin d’aide</button
+        >Ignorer la visite guidée</button
       >
     </form>
     <button
