@@ -188,12 +188,15 @@
           </button>
         </div>
         {#if !sousEtape?.texteBoutonDerniereEtape}
-          <button
-            class="lien"
-            on:click={async () =>
-              await visiteGuidee.fermeDefinitivementVisiteGuidee()}
-            >Je n’ai plus besoin d’aide</button
-          >
+          <span>
+            Déjà vu ?
+            <button
+              class="lien"
+              on:click={async () =>
+                await visiteGuidee.fermeDefinitivementVisiteGuidee()}
+              >Ne plus voir ces astuces</button
+            >
+          </span>
         {/if}
       </div>
     </div>

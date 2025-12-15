@@ -47,7 +47,7 @@
         class="lien"
         on:click={async () =>
           await visiteGuidee.fermeDefinitivementVisiteGuidee()}
-        >Non merci, je n’ai pas besoin d’aide</button
+        >Ignorer la visite guidée</button
       >
     </div>
   </div>
