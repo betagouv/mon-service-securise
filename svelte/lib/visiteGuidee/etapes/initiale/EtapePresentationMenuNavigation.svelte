@@ -11,7 +11,7 @@
       configuration={{
         etapes: [
           {
-            titre: 'Décrivez',
+            titre: 'Ajoutez un service',
             id: 'DECRIRE',
             icone:
               '/statique/assets/images/actionsSaisie/descriptionService.svg',
