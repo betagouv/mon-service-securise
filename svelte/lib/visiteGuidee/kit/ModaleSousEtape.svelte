@@ -1,6 +1,6 @@
 <script lang="ts">
   import { visiteGuidee } from '../visiteGuidee.store';
-  import { onDestroy, onMount } from 'svelte';
+  import { onDestroy, onMount, tick } from 'svelte';
   import Confetti from '../../ui/Confetti.svelte';
   import type { PositionRond, SousEtape } from './ModaleSousEtape.d';
   import {
@@ -33,7 +33,12 @@
     await sousEtape?.callbackFinaleCible?.(sousEtape.cible);
     indexEtapeCourante = index;
     sousEtape = sousEtapes[indexEtapeCourante];
-    await sousEtape.callbackInitialeCible?.(sousEtape.cible);
+    await tick();
+    const nouvelleCible = await sousEtape.callbackInitialeCible?.(
+      sousEtape.cible
+    );
+    if (nouvelleCible) sousEtape.cible = nouvelleCible;
+
     setTimeout(() => {
       positionCible = sousEtape.cible.getBoundingClientRect();
 
