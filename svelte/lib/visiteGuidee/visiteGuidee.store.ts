@@ -11,6 +11,7 @@ import {
   metsEnPause,
   termineEtape,
 } from './visiteGuidee.api';
+import EtapeDecrireV2 from './etapes/decrire/EtapeDecrireV2.svelte';
 
 const etatParDefaut: EtatVisiteGuidee = {
   etapeCourante: 'BIENVENUE',
@@ -30,9 +31,12 @@ const redirigeApresFinalisationVisite = () => {
     : `/service/${idService}`;
 };
 
+const avecDecrireV2Store = writable(false);
+
 export const visiteGuidee = {
-  initialise: (etatVisiteGuidee: EtatVisiteGuidee) => {
+  initialise: (etatVisiteGuidee: EtatVisiteGuidee, avecDecrireV2: boolean) => {
     set(etatVisiteGuidee.etapeCourante ? etatVisiteGuidee : etatParDefaut);
+    avecDecrireV2Store.set(avecDecrireV2);
   },
   subscribe,
   async masqueEtapeCourante() {
@@ -74,21 +78,25 @@ export const utilisateurCourant = {
   initialise: (utilisateur: Utilisateur) => setUtilisateur(utilisateur),
 };
 
-export const composantVisiteGuidee = derived(visiteGuidee, ($visiteGuidee) => {
-  switch ($visiteGuidee.etapeCourante) {
-    case 'BIENVENUE':
-      return EtapeBienvenue;
-    case 'PRESENTATION_MENU_NAV':
-      return EtapePresentationMenuNavigation;
-    case 'DECRIRE':
-      return EtapeDecrire;
-    case 'SECURISER':
-      return EtapeSecuriser;
-    case 'HOMOLOGUER':
-      return EtapeHomologuer;
-    case 'PILOTER':
-      return EtapePiloter;
-    case 'MASQUE':
-      return null;
+export const composantVisiteGuidee = derived(
+  [visiteGuidee, avecDecrireV2Store],
+  ([$visiteGuidee, $avecDecrireV2]) => {
+    switch ($visiteGuidee.etapeCourante) {
+      case 'BIENVENUE':
+        return EtapeBienvenue;
+      case 'PRESENTATION_MENU_NAV':
+        return EtapePresentationMenuNavigation;
+      case 'DECRIRE':
+        if ($avecDecrireV2) return EtapeDecrireV2;
+        return EtapeDecrire;
+      case 'SECURISER':
+        return EtapeSecuriser;
+      case 'HOMOLOGUER':
+        return EtapeHomologuer;
+      case 'PILOTER':
+        return EtapePiloter;
+      case 'MASQUE':
+        return null;
+    }
   }
-});
+);
