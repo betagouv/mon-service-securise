@@ -102,6 +102,32 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         expect(reponse.text).to.contain('id="visite-guidee-creation-service"');
       });
     });
+
+    describe("concernant la version du 'faux' service utilisé", () => {
+      it('sert un service v1 par défaut', async () => {
+        const reponse = await testeur.get('/visiteGuidee/securiser');
+
+        const versionService = donneesPartagees(
+          reponse.text,
+          'version-service'
+        );
+        expect(versionService).to.be('v1');
+      });
+
+      it('sert un service v2 si le feature flag est activé', async () => {
+        testeur.adaptateurEnvironnement().featureFlag = () => ({
+          avecDecrireV2: () => true,
+        });
+
+        const reponse = await testeur.get('/visiteGuidee/securiser');
+
+        const versionService = donneesPartagees(
+          reponse.text,
+          'version-service'
+        );
+        expect(versionService).to.be('v2');
+      });
+    });
   });
 
   describe('quand requête GET sur `/deconnexion', () => {
