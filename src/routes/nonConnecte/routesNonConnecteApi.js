@@ -11,10 +11,11 @@ import {
   obtentionDonneesDeBaseUtilisateur,
 } from '../mappeur/utilisateur.js';
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
-import { valideBody } from '../../http/validePayloads.js';
+import { valideBody, valideQuery } from '../../http/validePayloads.js';
 import {
   reglesValidationAuthentificationParLoginMotDePasse,
   reglesValidationCreationUtilisateur,
+  reglesValidationRechercheOrganisations,
   reglesValidationReinitialisationMotDePasse,
 } from './routesNonConnecteApi.schema.js';
 
@@ -167,25 +168,16 @@ const routesNonConnecteApi = ({
 
   routes.get(
     '/annuaire/organisations',
-    middleware.aseptise('recherche', 'departement'),
-    (requete, reponse) => {
+    valideQuery(z.strictObject(reglesValidationRechercheOrganisations)),
+    async (requete, reponse) => {
       const { recherche = '', departement = null } = requete.query;
 
-      if (recherche === '') {
-        reponse.status(400).send('Le terme de recherche ne peut pas être vide');
-        return;
-      }
-      if (
-        departement !== null &&
-        !referentiel.estCodeDepartement(departement)
-      ) {
-        reponse.status(400).send('Le département doit être valide (01 à 989)');
-        return;
-      }
+      const suggestions = await serviceAnnuaire.rechercheOrganisations(
+        recherche,
+        departement
+      );
 
-      serviceAnnuaire
-        .rechercheOrganisations(recherche, departement)
-        .then((suggestions) => reponse.status(200).json({ suggestions }));
+      return reponse.status(200).json({ suggestions });
     }
   );
 

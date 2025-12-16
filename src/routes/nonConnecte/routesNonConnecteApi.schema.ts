@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { departements } from '../../../donneesReferentielDepartements.js';
 
 export const reglesValidationCreationUtilisateur = {
   telephone: z
@@ -27,4 +28,9 @@ export const reglesValidationReinitialisationMotDePasse = {
 export const reglesValidationAuthentificationParLoginMotDePasse = {
   login: z.email(),
   motDePasse: z.string().nonempty(),
+};
+
+export const reglesValidationRechercheOrganisations = {
+  departement: z.enum(departements.map((d) => d.code)).optional(),
+  recherche: z.string().min(3).max(200),
 };

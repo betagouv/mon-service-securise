@@ -38,3 +38,22 @@ export const valideParams =
 
     return suite();
   };
+
+export const valideQuery =
+  <TZod extends z.ZodType, TQuery extends z.infer<TZod>>(objet: TZod) =>
+  async (
+    requete: Request<unknown, unknown, unknown, TQuery, never>,
+    reponse: Response,
+    suite: NextFunction
+  ) => {
+    const resultat = objet.safeParse(requete.query);
+
+    if (!resultat.success) return reponse.sendStatus(400);
+
+    // Ici on veut bel et bien ré-écrire la requête, car c'est comme ça qu'expressjs est conçu.
+    // On réassigne pour que les suivants récupèrent le contenu assaini par Zod.
+    // eslint-disable-next-line no-param-reassign
+    requete.query = resultat.data as TQuery;
+
+    return suite();
+  };
