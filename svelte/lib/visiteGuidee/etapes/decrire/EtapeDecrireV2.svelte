@@ -55,7 +55,7 @@
 
   onMount(async () => {
     cibleNomService = recupereCibleNomService();
-    cibleBesoinsSecurite = document.getElementById('niveaux-securite')!;
+    cibleBesoinsSecurite = document.getElementById('niveau1')!;
   });
 </script>
 
@@ -82,8 +82,11 @@
       callbackInitialeCible: async () => {
         navigationStore.avanceEtapeBesoinsSecurite();
         await tick();
-        cibleBesoinsSecurite = await detecteElementHTML('#niveaux-securite');
-        cibleBesoinsSecurite.scrollIntoView({ behavior: 'instant' });
+        cibleBesoinsSecurite = await detecteElementHTML('#niveau1');
+        cibleBesoinsSecurite.scrollIntoView({
+          behavior: 'instant',
+          block: 'end',
+        });
         if (cibleBesoinsSecurite) cibleBesoinsSecurite.inert = true;
         return cibleBesoinsSecurite;
       },
