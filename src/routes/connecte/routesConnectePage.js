@@ -126,7 +126,11 @@ const routesConnectePage = ({
       const service = Service.creePourUnUtilisateur(utilisateurVisiteGuidee);
       service.id = 'ID-SERVICE-VISITE-GUIDEE';
       service.descriptionService.niveauSecurite = 'niveau2';
-      service.versionService = 'v1';
+      service.versionService = adaptateurEnvironnement
+        .featureFlag()
+        .avecDecrireV2()
+        ? 'v2'
+        : 'v1';
 
       const { idEtape } = requete.params;
       const idEtapeCourante = idEtape.toUpperCase();
