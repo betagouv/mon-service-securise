@@ -2,16 +2,17 @@ import expect from 'expect.js';
 import uneDescriptionValide from '../constructeurs/constructeurDescriptionService.js';
 
 import {
-  ErreurDonneesObligatoiresManquantes,
-  ErreurServiceInexistant,
-  ErreurNomServiceDejaExistant,
   ErreurDonneesNiveauSecuriteInsuffisant,
+  ErreurDonneesObligatoiresManquantes,
+  ErreurNomServiceDejaExistant,
   ErreurRisqueInconnu,
+  ErreurServiceInexistant,
   ErreurStatutMesureManquant,
   ErreurVersionServiceIncompatible,
 } from '../../src/erreurs.js';
 
 import * as Referentiel from '../../src/referentiel.js';
+import { creeReferentielVide } from '../../src/referentiel.js';
 import * as AdaptateurPersistanceMemoire from '../../src/adaptateurs/adaptateurPersistanceMemoire.js';
 import { fabriqueAdaptateurUUID } from '../../src/adaptateurs/adaptateurUUID.js';
 import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
@@ -32,8 +33,8 @@ import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPe
 import { unDepotDeDonneesServices } from '../constructeurs/constructeurDepotDonneesServices.js';
 import { unDossier } from '../constructeurs/constructeurDossier.js';
 import {
-  Rubriques,
   Permissions,
+  Rubriques,
 } from '../../src/modeles/autorisations/gestionDroits.js';
 import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
 import { EvenementNouveauServiceCree } from '../../src/bus/evenementNouveauServiceCree.js';
@@ -46,12 +47,14 @@ import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntre
 import Entite from '../../src/modeles/entite.js';
 import Utilisateur from '../../src/modeles/utilisateur.js';
 import * as DepotDonneesUtilisateurs from '../../src/depots/depotDonneesUtilisateurs.js';
-import { creeReferentielVide } from '../../src/referentiel.js';
 import EvenementMesureServiceModifiee from '../../src/bus/evenementMesureServiceModifiee.js';
 import EvenementMesureServiceSupprimee from '../../src/bus/evenementMesureServiceSupprimee.js';
 import Risques from '../../src/modeles/risques.js';
 import EvenementRisqueServiceModifie from '../../src/bus/evenementRisqueServiceModifie.js';
-import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.js';
+import {
+  uneDescriptionDeNiveauDeSecuriteEstime1,
+  uneDescriptionV2Valide,
+} from '../constructeurs/constructeurDescriptionServiceV2.js';
 import { VersionService } from '../../src/modeles/versionService.js';
 import { creeReferentielV2 } from '../../src/referentielV2.js';
 import EvenementServiceV1MigreEnV2 from '../../src/bus/evenementServiceV1MigreEnV2.js';
@@ -2968,22 +2971,34 @@ describe('Le dépôt de données des services', () => {
       expect(donnees.descriptionService.nomService).to.be('Un nouveau nom');
     });
 
-    it('publie un événement de « service v1 migré en v2»', async () => {
+    it('publie un événement de « service v1 migré en v2 », contenant le service à jour', async () => {
+      referentielV2.enregistreReglesMoteurV2([
+        {
+          reference: 'CONFORMITE.1',
+          besoinsDeSecurite: 'niveau1',
+          dansSocleInitial: true,
+          modificateurs: {},
+        },
+      ]);
+
       await depot.migreServiceVersV2(
         'U1',
         'S1',
-        uneDescriptionV2Valide().construis(),
-        []
+        uneDescriptionDeNiveauDeSecuriteEstime1().construis(),
+        [{ id: 'CONFORMITE.1', statut: 'fait' }]
       );
 
       expect(busEvenements.aRecuUnEvenement(EvenementServiceV1MigreEnV2)).to.be(
         true
       );
-      const evenement = busEvenements.recupereEvenement(
-        EvenementServiceV1MigreEnV2
-      );
-      expect(evenement.service.id).to.be('S1');
-      expect(evenement.utilisateur.id).to.be('U1');
+      const e = busEvenements.recupereEvenement(EvenementServiceV1MigreEnV2);
+      const { service, utilisateur } = e;
+      expect(service.id).to.be('S1');
+      expect(utilisateur.id).to.be('U1');
+      // On vérifie qu'on conserve bien les mesures et leur statut
+      expect(service.completudeMesures().detailMesures).to.eql([
+        { idMesure: 'CONFORMITE.1', statut: 'fait', nbResponsables: 0 },
+      ]);
     });
 
     it("délègue au dépôt de données des suggestions d'action la suppression des suggestion du service migré", async () => {

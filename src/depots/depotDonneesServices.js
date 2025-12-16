@@ -750,9 +750,10 @@ const creeDepot = (config = {}) => {
       idService
     );
 
+    const s = await p.lis.un(idService);
     const u = await depotDonneesUtilisateurs.utilisateur(idUtilisateur);
     busEvenements.publie(
-      new EvenementServiceV1MigreEnV2({ service: existant, utilisateur: u })
+      new EvenementServiceV1MigreEnV2({ service: s, utilisateur: u })
     );
   };
 
