@@ -537,6 +537,24 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       });
     });
 
+    it("répond 400 si le login n'est pas un email", async () => {
+      const reponse = await testeur.post('/api/token', {
+        login: 'Jean.DUPONT',
+        motDePasse: 'mdp_12345',
+      });
+
+      expect(reponse.status).to.equal(400);
+    });
+
+    it("répond 400 si le mot de passe n'est pas renseigné", async () => {
+      const reponse = await testeur.post('/api/token', {
+        login: 'Jean.DUPONT@mail.com',
+        motDePasse: '',
+      });
+
+      expect(reponse.status).to.equal(400);
+    });
+
     it("authentifie l'utilisateur avec le login en minuscules", async () => {
       testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur =
         async () => {};
@@ -678,7 +696,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         await testeur.verifieRequeteGenereErreurHTTP(
           401,
           "L'authentification a échoué",
-          { method: 'post', url: '/api/token', data: {} }
+          {
+            method: 'post',
+            url: '/api/token',
+            data: {
+              login: 'jean.dupont@mail.fr',
+              motDePasse: 'mdp_12345',
+            },
+          }
         );
       });
     });

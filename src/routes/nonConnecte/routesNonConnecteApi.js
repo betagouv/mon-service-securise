@@ -13,6 +13,7 @@ import {
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 import { valideBody } from '../../http/validePayloads.js';
 import {
+  reglesValidationAuthentificationParLoginMotDePasse,
   reglesValidationCreationUtilisateur,
   reglesValidationReinitialisationMotDePasse,
 } from './routesNonConnecteApi.schema.js';
@@ -125,6 +126,9 @@ const routesNonConnecteApi = ({
   routes.post(
     '/token',
     middleware.protegeTrafic(),
+    valideBody(
+      z.strictObject(reglesValidationAuthentificationParLoginMotDePasse)
+    ),
     async (requete, reponse, suite) => {
       const login = requete.body.login?.toLowerCase();
       const { motDePasse } = requete.body;
