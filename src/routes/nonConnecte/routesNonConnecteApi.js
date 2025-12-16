@@ -12,7 +12,10 @@ import {
 } from '../mappeur/utilisateur.js';
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 import { valideBody } from '../../http/validePayloads.js';
-import { reglesValidationCreationUtilisateur } from './routesNonConnecteApi.schema.js';
+import {
+  reglesValidationCreationUtilisateur,
+  reglesValidationReinitialisationMotDePasse,
+} from './routesNonConnecteApi.schema.js';
 
 const routesNonConnecteApi = ({
   middleware,
@@ -100,6 +103,7 @@ const routesNonConnecteApi = ({
   routes.post(
     '/reinitialisationMotDePasse',
     middleware.protegeTrafic(),
+    valideBody(z.strictObject(reglesValidationReinitialisationMotDePasse)),
     (requete, reponse, suite) => {
       const email = requete.body.email?.toLowerCase();
 
