@@ -478,9 +478,15 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       });
     });
 
-    it("échoue silencieusement si l'email n'est pas renseigné", async () => {
-      testeur.depotDonnees().nouvelUtilisateur = () => Promise.resolve();
+    it("renvoie une erreur 400 si l'email est invalide", async () => {
+      const reponse = await testeur.post('/api/reinitialisationMotDePasse', {
+        email: 'invalide',
+      });
 
+      expect(reponse.status).to.equal(400);
+    });
+
+    it("échoue silencieusement si l'email n'est pas renseigné", async () => {
       await testeur.post('/api/reinitialisationMotDePasse');
     });
 

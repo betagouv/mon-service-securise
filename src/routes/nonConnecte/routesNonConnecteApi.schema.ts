@@ -19,3 +19,7 @@ export const reglesValidationCreationUtilisateur = {
   siretEntite: z.string().regex(/^\d{14}$/),
   token: z.string().nonempty(),
 };
+
+export const reglesValidationReinitialisationMotDePasse = {
+  email: z.email().optional(),
+};
