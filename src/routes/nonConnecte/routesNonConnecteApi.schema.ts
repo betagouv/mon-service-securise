@@ -23,3 +23,8 @@ export const reglesValidationCreationUtilisateur = {
 export const reglesValidationReinitialisationMotDePasse = {
   email: z.email().optional(),
 };
+
+export const reglesValidationAuthentificationParLoginMotDePasse = {
+  login: z.email(),
+  motDePasse: z.string().nonempty(),
+};
