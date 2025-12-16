@@ -714,41 +714,35 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       testeur.referentiel().estCodeDepartement = () => true;
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['recherche', 'departement'],
-          testeur.app(),
-          {
-            method: 'get',
-            url: '/api/annuaire/organisations',
-          }
+    it.each([{ valeurIncorrecte: '7500' }, { valeurIncorrecte: 'abcd' }])(
+      'renvoie une erreur 400 car $valeurErronee est une valeur invalide pour le département',
+      async ({ valeurIncorrecte }) => {
+        testeur.serviceAnnuaire().rechercheOrganisations = async () => {};
+
+        const reponse = await testeur.get(
+          `/api/annuaire/organisations?recherche=mairie&departement=${valeurIncorrecte}`
         );
-    });
 
-    it('retourne une erreur HTTP 400 si le terme de recherche est vide', async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        400,
-        'Le terme de recherche ne peut pas être vide',
-        {
-          method: 'get',
-          url: '/api/annuaire/organisations?departement=75',
-        }
-      );
-    });
+        expect(reponse.status).to.equal(400);
+      }
+    );
 
-    it("retourne une erreur HTTP 400 si le département n'est pas dans le referentiel", async () => {
-      testeur.referentiel().estCodeDepartement = () => false;
-      await testeur.verifieRequeteGenereErreurHTTP(
-        400,
-        'Le département doit être valide (01 à 989)',
-        {
-          method: 'get',
-          url: '/api/annuaire/organisations?recherche=mairie&departement=990',
-        }
-      );
-    });
+    it.each([
+      { valeurIncorrecte: '' },
+      { valeurIncorrecte: 'ab' },
+      { valeurIncorrecte: uneChaineDeCaracteres(201, 'a') },
+    ])(
+      'renvoie une erreur 400 car $valeurErronee est une valeur invalide pour la recherche',
+      async ({ valeurIncorrecte }) => {
+        testeur.serviceAnnuaire().rechercheOrganisations = async () => {};
+
+        const reponse = await testeur.get(
+          `/api/annuaire/organisations?recherche=${valeurIncorrecte}&departement=75`
+        );
+
+        expect(reponse.status).to.equal(400);
+      }
+    );
 
     it("recherche les organisations correspondantes grâce au service d'annuaire", async () => {
       let adaptateurAppele = false;
