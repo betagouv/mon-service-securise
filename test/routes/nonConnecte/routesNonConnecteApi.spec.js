@@ -774,28 +774,30 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       event: 'unsubscribe',
     };
 
-    it("retourne une erreur HTTP 400 si l'événement n'est pas une désinscription", async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        400,
-        { erreur: "L'événement doit être de type 'unsubscribe'" },
-        {
-          method: 'post',
-          url: '/api/desinscriptionInfolettre',
-        }
-      );
+    it("retourne une erreur HTTP 400 si l'évènement n'est pas une désinscription", async () => {
+      const reponse = await testeur.post('/api/desinscriptionInfolettre', {
+        email: 'jean.dujardin@mail.com',
+        event: 'autre chose',
+      });
+
+      expect(reponse.status).to.equal(400);
     });
 
-    it("retourne une erreur HTTP 400 si le champ email n'est pas présent", async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        400,
-        { erreur: "Le champ 'email' doit être présent" },
-        {
-          method: 'post',
-          url: '/api/desinscriptionInfolettre',
-          data: { event: 'unsubscribe' },
-        }
-      );
-    });
+    it.each([
+      { valeurInvalide: '' },
+      { valeurInvalide: 'hello.world' },
+      { valeurInvalide: undefined },
+    ])(
+      "retourne une erreur HTTP 400 car $valeurInvalide n'est pas une valeur valide pour l'email",
+      async ({ valeurInvalide }) => {
+        const reponse = await testeur.post('/api/desinscriptionInfolettre', {
+          email: valeurInvalide,
+          event: 'unsubscribe',
+        });
+
+        expect(reponse.status).to.equal(400);
+      }
+    );
 
     it("retourne une erreur HTTP 424 si l'adresse email est introuvable", async () => {
       testeur.depotDonnees().utilisateurAvecEmail = () =>
