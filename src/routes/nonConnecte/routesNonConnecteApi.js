@@ -1,16 +1,18 @@
 import express from 'express';
-import Utilisateur from '../../modeles/utilisateur.js';
+import * as z from 'zod';
 import {
-  ErreurUtilisateurExistant,
   EchecEnvoiMessage,
-  ErreurModele,
   ErreurJWTManquant,
+  ErreurModele,
+  ErreurUtilisateurExistant,
 } from '../../erreurs.js';
 import {
   messageErreurDonneesUtilisateur,
   obtentionDonneesDeBaseUtilisateur,
 } from '../mappeur/utilisateur.js';
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
+import { valideBody } from '../../http/validePayloads.js';
+import { reglesValidationCreationUtilisateur } from './routesNonConnecteApi.schema.js';
 
 const routesNonConnecteApi = ({
   middleware,
@@ -29,12 +31,7 @@ const routesNonConnecteApi = ({
   routes.post(
     '/utilisateur',
     middleware.protegeTrafic(),
-    middleware.aseptise(
-      ...Utilisateur.nomsProprietesBase().filter(
-        (propriete) => !['prenom', 'nom', 'email'].includes(propriete)
-      ),
-      'siretEntite'
-    ),
+    valideBody(z.strictObject(reglesValidationCreationUtilisateur)),
     async (requete, reponse, suite) => {
       const { token } = requete.body;
 

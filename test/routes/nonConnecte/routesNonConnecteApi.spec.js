@@ -2,10 +2,10 @@ import expect from 'expect.js';
 import testeurMSS from '../testeurMSS.js';
 
 import {
-  ErreurUtilisateurExistant,
   ErreurEmailManquant,
   ErreurJWTInvalide,
   ErreurJWTManquant,
+  ErreurUtilisateurExistant,
 } from '../../../src/erreurs.js';
 
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
@@ -13,6 +13,7 @@ import {
   decodeSessionDuCookie,
   expectContenuSessionValide,
 } from '../../aides/cookie.js';
+import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 
 describe('Le serveur MSS des routes publiques /api/*', () => {
   const testeur = testeurMSS();
@@ -29,8 +30,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         postes: ['RSSI', "Chargé des systèmes d'informations"],
         siretEntite: '13000766900018',
         estimationNombreServices: {
-          borneBasse: 1,
-          borneHaute: 10,
+          borneBasse: '1',
+          borneHaute: '10',
         },
         cguAcceptees: 'true',
         infolettreAcceptee: 'true',
@@ -68,26 +69,179 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       });
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          [
-            'telephone',
-            'cguAcceptees',
-            'infolettreAcceptee',
-            'transactionnelAccepte',
-            'postes.*',
-            'estimationNombreServices.*',
-            'siretEntite',
+    describe('concernant la validation des données de la requête', () => {
+      it('accepte une payload correcte', async () => {
+        const reponse = await testeur.post('/api/utilisateur', donneesRequete);
+
+        expect(reponse.status).to.equal(200);
+      });
+
+      it.each([
+        { valeurErronee: '01234567890' },
+        { valeurErronee: '1234567890' },
+        { valeurErronee: '012345678' },
+      ])(
+        'renvoie une erreur 400 car $valeurErronee est une valeur invalide pour le téléphone',
+        async ({ valeurErronee }) => {
+          donneesRequete.telephone = valeurErronee;
+
+          const reponse = await testeur.post(
+            '/api/utilisateur',
+            donneesRequete
+          );
+
+          expect(reponse.status).to.equal(400);
+        }
+      );
+
+      it.each([
+        { valeurErronee: 'false' },
+        { valeurErronee: '1' },
+        { valeurErronee: undefined },
+      ])(
+        "renvoie une erreur 400 car $valeurErronee est une valeur invalide pour l'acceptation des CGU",
+        async ({ valeurErronee }) => {
+          donneesRequete.cguAcceptees = valeurErronee;
+
+          const reponse = await testeur.post(
+            '/api/utilisateur',
+            donneesRequete
+          );
+
+          expect(reponse.status).to.equal(400);
+        }
+      );
+
+      it.each([{ valeurErronee: '1' }, { valeurErronee: undefined }])(
+        "renvoie une erreur 400 car $valeurErronee est une valeur invalide pour l'acceptation de l'infolettre",
+        async ({ valeurErronee }) => {
+          donneesRequete.infolettreAcceptee = valeurErronee;
+
+          const reponse = await testeur.post(
+            '/api/utilisateur',
+            donneesRequete
+          );
+
+          expect(reponse.status).to.equal(400);
+        }
+      );
+
+      it.each([{ valeurErronee: '1' }, { valeurErronee: undefined }])(
+        "renvoie une erreur 400 car $valeurErronee est une valeur invalide pour l'acceptation du transactionnel",
+        async ({ valeurErronee }) => {
+          donneesRequete.transactionnelAccepte = valeurErronee;
+
+          const reponse = await testeur.post(
+            '/api/utilisateur',
+            donneesRequete
+          );
+
+          expect(reponse.status).to.equal(400);
+        }
+      );
+
+      it.each([
+        { valeurErronee: [] },
+        { valeurErronee: [uneChaineDeCaracteres(201, 'a')] },
+        {
+          valeurErronee: [
+            'poste1',
+            'poste2',
+            'poste3',
+            'poste4',
+            'poste5',
+            'poste6',
+            'poste7',
+            'poste8',
+            'poste9',
           ],
-          testeur.app(),
-          {
-            method: 'post',
-            url: '/api/utilisateur',
-            data: donneesRequete,
-          }
-        );
+        },
+      ])(
+        "renvoie une erreur 400 car $valeurErronee est une valeur invalide pour l'acceptation du transactionnel",
+        async ({ valeurErronee }) => {
+          donneesRequete.postes = valeurErronee;
+
+          const reponse = await testeur.post(
+            '/api/utilisateur',
+            donneesRequete
+          );
+
+          expect(reponse.status).to.equal(400);
+        }
+      );
+
+      it.each([
+        { valeurErronee: { borneBasse: '10', borneHaute: '42' } },
+        { valeurErronee: undefined },
+      ])(
+        "renvoie une erreur 400 car $valeurErronee est une valeur invalide pour l'acceptation du transactionnel",
+        async ({ valeurErronee }) => {
+          donneesRequete.estimationNombreServices = valeurErronee;
+
+          const reponse = await testeur.post(
+            '/api/utilisateur',
+            donneesRequete
+          );
+
+          expect(reponse.status).to.equal(400);
+        }
+      );
+
+      it.each([
+        { valeurValide: { borneBasse: '1', borneHaute: '10' } },
+        { valeurValide: { borneBasse: '10', borneHaute: '49' } },
+        { valeurValide: { borneBasse: '50', borneHaute: '99' } },
+        { valeurValide: { borneBasse: '100', borneHaute: '100' } },
+        { valeurValide: { borneBasse: '-1', borneHaute: '-1' } },
+      ])(
+        'accepte les valeurs de bornes prédéfinies',
+        async ({ valeurValide }) => {
+          donneesRequete.estimationNombreServices = valeurValide;
+
+          const reponse = await testeur.post(
+            '/api/utilisateur',
+            donneesRequete
+          );
+
+          expect(reponse.status).to.equal(200);
+        }
+      );
+
+      it.each([{ valeurErronee: '1234' }, { valeurErronee: undefined }])(
+        'renvoie une erreur 400 car $valeurErronee est une valeur invalide pour le siret',
+        async ({ valeurErronee }) => {
+          donneesRequete.siretEntite = valeurErronee;
+
+          const reponse = await testeur.post(
+            '/api/utilisateur',
+            donneesRequete
+          );
+
+          expect(reponse.status).to.equal(400);
+        }
+      );
+
+      it.each([{ valeurErronee: '' }, { valeurErronee: undefined }])(
+        'renvoie une erreur 400 car $valeurErronee est une valeur invalide pour le token',
+        async ({ valeurErronee }) => {
+          donneesRequete.token = valeurErronee;
+
+          const reponse = await testeur.post(
+            '/api/utilisateur',
+            donneesRequete
+          );
+
+          expect(reponse.status).to.equal(400);
+        }
+      );
+
+      it('renvoie une erreur 400 si un paramètre est en trop', async () => {
+        donneesRequete.unParametreInconnu = 'hello';
+
+        const reponse = await testeur.post('/api/utilisateur', donneesRequete);
+
+        expect(reponse.status).to.equal(400);
+      });
     });
 
     it("convertit l'email en minuscules", async () => {
@@ -129,20 +283,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       donneesRequete.infolettreAcceptee = 'true';
 
       await testeur.post('/api/utilisateur', donneesRequete);
-    });
-
-    it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", async () => {
-      donneesRequete.siretEntite = '';
-
-      await testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        'La création d\'un nouvel utilisateur a échoué car les paramètres sont invalides. La propriété "entite.siret" est requise',
-        {
-          method: 'post',
-          url: '/api/utilisateur',
-          data: donneesRequete,
-        }
-      );
     });
 
     it("demande au dépôt de créer l'utilisateur", async () => {
@@ -304,16 +444,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           data: donneesRequete,
         }
       );
-    });
-
-    it('jette une erreur si le token est absent', async () => {
-      donneesRequete.token = '';
-
-      await testeur.verifieRequeteGenereErreurHTTP(422, 'Le token est requis', {
-        method: 'post',
-        url: '/api/utilisateur',
-        data: donneesRequete,
-      });
     });
   });
 
