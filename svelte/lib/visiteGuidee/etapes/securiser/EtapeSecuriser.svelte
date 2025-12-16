@@ -36,7 +36,7 @@
           const ligneMesure = cible.parentElement;
           if (ligneMesure) ligneMesure.inert = true;
           document.body.dispatchEvent(
-            new CustomEvent('jquery-deplie-menu-navigation-visite-guidee')
+            new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
           );
         },
         delaiAvantAffichage: 200,
@@ -53,12 +53,16 @@
           for (let i = 0; i < onglets.length; i++) {
             onglets[i].inert = true;
           }
+          document.body.dispatchEvent(
+            new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
+          );
         },
         positionnementModale: 'MilieuDroite',
         titre: 'Définissez un statut pour chaque mesure !',
         description:
           'En fonction du statut défini, les mesures sont catégorisées par onglets afin de faciliter le suivi de celles qui vous restent à faire.',
         animation: '/statique/assets/images/visiteGuidee/securiser_2.gif',
+        delaiAvantAffichage: 300,
       },
       {
         cible: cibleGererContributeurs,

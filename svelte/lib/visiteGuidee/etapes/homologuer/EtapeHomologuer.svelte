@@ -19,6 +19,9 @@
         cible: cibleNouvelleHomologation,
         callbackInitialeCible: async () => {
           document.getElementById('commencer-homologation').inert = true;
+          document.body.dispatchEvent(
+            new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
+          );
         },
         positionnementModale: 'BasGauche',
         titre: 'Homologuez votre service',
@@ -26,6 +29,7 @@
           "Générez un dossier et un projet de décision d'homologation pour vous mettre en conformité avec la réglementation.",
         animation: '/statique/assets/images/visiteGuidee/homologuer.gif',
         margeElementMisEnAvant: 3,
+        delaiAvantAffichage: 300,
       },
       {
         cible: cibleTelechargement,
@@ -34,6 +38,9 @@
             new CustomEvent(
               'jquery-affiche-tiroir-telechargement-visite-guidee'
             )
+          );
+          document.body.dispatchEvent(
+            new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
           );
           document.getElementsByClassName('tiroir')[0].style.zIndex = '10001';
           document.getElementsByClassName(
@@ -52,6 +59,7 @@
         description:
           "Obtenez en 1 clic le dossier et le projet de décision pour signature par votre autorité d'homologation.",
         animation: '/statique/assets/images/visiteGuidee/pdf.gif',
+        delaiAvantAffichage: 300,
       },
     ]}
   />
