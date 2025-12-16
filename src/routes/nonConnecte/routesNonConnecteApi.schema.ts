@@ -34,3 +34,8 @@ export const reglesValidationRechercheOrganisations = {
   departement: z.enum(departements.map((d) => d.code)).optional(),
   recherche: z.string().min(3).max(200),
 };
+
+export const reglesValidationDesinscriptionInfolettre = {
+  event: z.literal('unsubscribe'),
+  email: z.email(),
+};

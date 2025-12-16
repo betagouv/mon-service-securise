@@ -15,6 +15,7 @@ import { valideBody, valideQuery } from '../../http/validePayloads.js';
 import {
   reglesValidationAuthentificationParLoginMotDePasse,
   reglesValidationCreationUtilisateur,
+  reglesValidationDesinscriptionInfolettre,
   reglesValidationRechercheOrganisations,
   reglesValidationReinitialisationMotDePasse,
 } from './routesNonConnecteApi.schema.js';
@@ -184,37 +185,22 @@ const routesNonConnecteApi = ({
   routes.post(
     '/desinscriptionInfolettre',
     middleware.verificationAddresseIP(['185.107.232.1/24', '1.179.112.1/20']),
-    (requete, reponse, suite) => {
-      const { event: typeEvenement, email } = requete.body;
+    valideBody(z.looseObject(reglesValidationDesinscriptionInfolettre)),
+    async (requete, reponse) => {
+      const { email } = requete.body;
 
-      if (typeEvenement !== 'unsubscribe') {
+      const utilisateur = await depotDonnees.utilisateurAvecEmail(email);
+      if (!utilisateur) {
         reponse
-          .status(400)
-          .json({ erreur: "L'événement doit être de type 'unsubscribe'" });
+          .status(424)
+          .json({ erreur: `L'email '${email}' est introuvable` });
         return;
       }
 
-      if (!email) {
-        reponse
-          .status(400)
-          .json({ erreur: "Le champ 'email' doit être présent" });
-        return;
-      }
-
-      depotDonnees.utilisateurAvecEmail(email).then((utilisateur) => {
-        if (!utilisateur) {
-          reponse
-            .status(424)
-            .json({ erreur: `L'email '${email}' est introuvable` });
-          return;
-        }
-        depotDonnees
-          .metsAJourUtilisateur(utilisateur.id, {
-            transactionnelAccepte: false,
-          })
-          .then(() => reponse.sendStatus(200))
-          .catch(suite);
+      await depotDonnees.metsAJourUtilisateur(utilisateur.id, {
+        transactionnelAccepte: false,
       });
+      reponse.sendStatus(200);
     }
   );
 
