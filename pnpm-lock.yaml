@@ -105,8 +105,8 @@ importers:
         specifier: ~8.8.0
         version: 8.8.0
       pug:
-        specifier: ~3.0.2
-        version: 3.0.2
+        specifier: ~3.0.3
+        version: 3.0.3
       puppeteer:
         specifier: ~24.4.0
         version: 24.4.0(typescript@5.2.2)
@@ -221,7 +221,7 @@ importers:
         version: 4.2.19
       svelte-check:
         specifier: ~3.8.6
-        version: 3.8.6(@babel/core@7.28.5)(postcss-load-config@3.1.4(postcss@8.5.4))(postcss@8.5.4)(pug@3.0.2)(sass@1.91.0)(svelte@4.2.19)
+        version: 3.8.6(@babel/core@7.28.5)(postcss-load-config@3.1.4(postcss@8.5.4))(postcss@8.5.4)(pug@3.0.3)(sass@1.91.0)(svelte@4.2.19)
       svelte-eslint-parser:
         specifier: ~0.33.0
         version: 0.33.0(svelte@4.2.19)
@@ -285,10 +285,6 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0
 
-  '@babel/helper-string-parser@7.25.9':
-    resolution: {integrity: sha512-4A/SCr/2KLd5jrtOMFzaKjVtAei3+2r/NChoBNoZ3EyP/+GlhoaEGoWOZUmFmoITP7zOJyHIMm+DYRd8o3PvHA==}
-    engines: {node: '>=6.9.0'}
-
   '@babel/helper-string-parser@7.27.1':
     resolution: {integrity: sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA==}
     engines: {node: '>=6.9.0'}
@@ -308,11 +304,6 @@ packages:
   '@babel/helpers@7.28.4':
     resolution: {integrity: sha512-HFN59MmQXGHVyYadKLVumYsA9dBFun/ldYxipEjzA4196jpLZd8UjEEBLkbEkvfYreDqJhZxYAWFPtrfhNpj4w==}
     engines: {node: '>=6.9.0'}
-
-  '@babel/parser@7.26.5':
-    resolution: {integrity: sha512-SRJ4jYmXRqV1/Xc+TIVG84WjHBXKlxO9sHQnA2Pf12QQEAp1LOh6kDzNHXcUnbH1QI0FDoPPVOt+vyUDucxpaw==}
-    engines: {node: '>=6.0.0'}
-    hasBin: true
 
   '@babel/parser@7.28.5':
     resolution: {integrity: sha512-KKBU1VGYR7ORr3At5HAtUQ+TV3SzRCXmA/8OdDZiLDBIZxVyzXuztPjfLd3BV1PRAQGCMWWSHYhL0F8d5uHBDQ==}
@@ -337,10 +328,6 @@ packages:
 
   '@babel/traverse@7.28.5':
     resolution: {integrity: sha512-TCCj4t55U90khlYkVV/0TfkJkAkUg3jZFA3Neb7unZT8CPok7iiRfaX0F+WnqWqt7OxhOn0uBKXCw4lbL8W0aQ==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/types@7.26.5':
-    resolution: {integrity: sha512-L6mZmwFDK6Cjh1nRCLXpa6no13ZIioJDz7mdkzHv399pThrTa/k0nUlNaenOeh2kWu/iaOQYElEpKPUswUa9Vg==}
     engines: {node: '>=6.9.0'}
 
   '@babel/types@7.28.5':
@@ -1638,8 +1625,8 @@ packages:
   asap@2.0.6:
     resolution: {integrity: sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==}
 
-  assert-never@1.2.1:
-    resolution: {integrity: sha512-TaTivMB6pYI1kXwrFlEhLeGfOqoDNdTxjCdwRfFFkEA30Eu+k48W34nlok2EYWJfFFzqaEmichdNM7th6M5HNw==}
+  assert-never@1.4.0:
+    resolution: {integrity: sha512-5oJg84os6NMQNl27T9LnZkvvqzvAnHu03ShCnoj6bsJwS7L8AO4lf+C/XjK/nvzEqQB744moC6V128RucQd1jA==}
 
   assertion-error@2.0.1:
     resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
@@ -3827,8 +3814,8 @@ packages:
   pug-walk@2.0.0:
     resolution: {integrity: sha512-yYELe9Q5q9IQhuvqsZNwA5hfPkMJ8u92bQLIMcsMxf/VADjNtEYptU+inlufAFYcWdHlwNfZOEnOOQrZrcyJCQ==}
 
-  pug@3.0.2:
-    resolution: {integrity: sha512-bp0I/hiK1D1vChHh6EfDxtndHji55XP/ZJKwsRqrz6lRia6ZC2OZbdAymlxdVFwd1L70ebrVJw4/eZ79skrIaw==}
+  pug@3.0.3:
+    resolution: {integrity: sha512-uBi6kmc9f3SZ3PXxqcHiUZLmIXgfgWooKWXcwSGwQd2Zi5Rb0bT14+8CJjJgI8AB+nndLaNgHGrcc6bPIB665g==}
 
   pump@3.0.2:
     resolution: {integrity: sha512-tUPXtzlGM8FE3P0ZL6DVs/3P58k9nk8/jZeQCurTJylQA8qFYzHFfhBJkuqyE0FifOsQ0uKWekiZ5g8wtr28cw==}
@@ -4890,8 +4877,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-string-parser@7.25.9': {}
-
   '@babel/helper-string-parser@7.27.1': {}
 
   '@babel/helper-validator-identifier@7.25.9': {}
@@ -4904,10 +4889,6 @@ snapshots:
     dependencies:
       '@babel/template': 7.27.2
       '@babel/types': 7.28.5
-
-  '@babel/parser@7.26.5':
-    dependencies:
-      '@babel/types': 7.26.5
 
   '@babel/parser@7.28.5':
     dependencies:
@@ -4940,11 +4921,6 @@ snapshots:
       debug: 4.4.1
     transitivePeerDependencies:
       - supports-color
-
-  '@babel/types@7.26.5':
-    dependencies:
-      '@babel/helper-string-parser': 7.25.9
-      '@babel/helper-validator-identifier': 7.25.9
 
   '@babel/types@7.28.5':
     dependencies:
@@ -6111,7 +6087,7 @@ snapshots:
 
   asap@2.0.6: {}
 
-  assert-never@1.2.1: {}
+  assert-never@1.4.0: {}
 
   assertion-error@2.0.1: {}
 
@@ -6157,7 +6133,7 @@ snapshots:
 
   babel-walk@3.0.0-canary-5:
     dependencies:
-      '@babel/types': 7.26.5
+      '@babel/types': 7.28.5
 
   balanced-match@1.0.2: {}
 
@@ -6302,7 +6278,7 @@ snapshots:
 
   character-parser@2.2.0:
     dependencies:
-      is-regex: 1.1.4
+      is-regex: 1.2.1
 
   check-error@2.1.1: {}
 
@@ -6409,8 +6385,8 @@ snapshots:
 
   constantinople@4.0.1:
     dependencies:
-      '@babel/parser': 7.26.5
-      '@babel/types': 7.26.5
+      '@babel/parser': 7.28.5
+      '@babel/types': 7.28.5
 
   content-disposition@0.5.4:
     dependencies:
@@ -8550,7 +8526,7 @@ snapshots:
       jstransformer: 1.0.0
       pug-error: 2.1.0
       pug-walk: 2.0.0
-      resolve: 1.22.0
+      resolve: 1.22.11
 
   pug-lexer@5.0.1:
     dependencies:
@@ -8581,7 +8557,7 @@ snapshots:
 
   pug-walk@2.0.0: {}
 
-  pug@3.0.2:
+  pug@3.0.3:
     dependencies:
       pug-code-gen: 3.0.3
       pug-filters: 4.0.0
@@ -9149,14 +9125,14 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  svelte-check@3.8.6(@babel/core@7.28.5)(postcss-load-config@3.1.4(postcss@8.5.4))(postcss@8.5.4)(pug@3.0.2)(sass@1.91.0)(svelte@4.2.19):
+  svelte-check@3.8.6(@babel/core@7.28.5)(postcss-load-config@3.1.4(postcss@8.5.4))(postcss@8.5.4)(pug@3.0.3)(sass@1.91.0)(svelte@4.2.19):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       chokidar: 3.5.3
       picocolors: 1.1.1
       sade: 1.8.1
       svelte: 4.2.19
-      svelte-preprocess: 5.1.4(@babel/core@7.28.5)(postcss-load-config@3.1.4(postcss@8.5.4))(postcss@8.5.4)(pug@3.0.2)(sass@1.91.0)(svelte@4.2.19)(typescript@5.2.2)
+      svelte-preprocess: 5.1.4(@babel/core@7.28.5)(postcss-load-config@3.1.4(postcss@8.5.4))(postcss@8.5.4)(pug@3.0.3)(sass@1.91.0)(svelte@4.2.19)(typescript@5.2.2)
       typescript: 5.2.2
     transitivePeerDependencies:
       - '@babel/core'
@@ -9183,7 +9159,7 @@ snapshots:
     dependencies:
       svelte: 4.2.19
 
-  svelte-preprocess@5.1.4(@babel/core@7.28.5)(postcss-load-config@3.1.4(postcss@8.5.4))(postcss@8.5.4)(pug@3.0.2)(sass@1.91.0)(svelte@4.2.19)(typescript@5.2.2):
+  svelte-preprocess@5.1.4(@babel/core@7.28.5)(postcss-load-config@3.1.4(postcss@8.5.4))(postcss@8.5.4)(pug@3.0.3)(sass@1.91.0)(svelte@4.2.19)(typescript@5.2.2):
     dependencies:
       '@types/pug': 2.0.10
       detect-indent: 6.1.0
@@ -9195,7 +9171,7 @@ snapshots:
       '@babel/core': 7.28.5
       postcss: 8.5.4
       postcss-load-config: 3.1.4(postcss@8.5.4)
-      pug: 3.0.2
+      pug: 3.0.3
       sass: 1.91.0
       typescript: 5.2.2
 
@@ -9649,9 +9625,9 @@ snapshots:
 
   with@7.0.2:
     dependencies:
-      '@babel/parser': 7.26.5
-      '@babel/types': 7.26.5
-      assert-never: 1.2.1
+      '@babel/parser': 7.28.5
+      '@babel/types': 7.28.5
+      assert-never: 1.4.0
       babel-walk: 3.0.0-canary-5
 
   word-wrap@1.2.5: {}

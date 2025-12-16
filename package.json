@@ -64,7 +64,7 @@
     "papaparse": "~5.5.2",
     "pdf-lib": "~1.17.1",
     "pg": "~8.8.0",
-    "pug": "~3.0.2",
+    "pug": "~3.0.3",
     "puppeteer": "~24.4.0",
     "string-strip-html": "~8.4.0",
     "svelte-tiptap": "~1.1.3",
