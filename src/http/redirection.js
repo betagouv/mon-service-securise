@@ -9,10 +9,4 @@ const ajouteLaRedirectionPostConnexion = (urlDemandee) => {
   return `/connexion?urlRedirection=${encodeURIComponent(urlDemandee)}`;
 };
 
-const construisUrlAbsolueVersPage = (page) => process.env.URL_BASE_MSS + page;
-
-export {
-  ajouteLaRedirectionPostConnexion,
-  construisUrlAbsolueVersPage,
-  estUrlLegalePourRedirection,
-};
+export { ajouteLaRedirectionPostConnexion, estUrlLegalePourRedirection };
