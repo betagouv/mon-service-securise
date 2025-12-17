@@ -5,7 +5,8 @@ export const reglesValidationCreationUtilisateur = {
   telephone: z
     .string()
     .regex(/^0\d{9}$/)
-    .optional(),
+    .optional()
+    .or(z.literal('')),
   cguAcceptees: z.literal('true'),
   infolettreAcceptee: z.enum(['true', 'false']),
   transactionnelAccepte: z.enum(['true', 'false']),

@@ -95,6 +95,24 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       );
 
       it.each([
+        { valeurValide: '0123456789' },
+        { valeurValide: '' },
+        { valeurValide: undefined },
+      ])(
+        'accepte $valeurValide comme valeur valide pour le téléphone',
+        async ({ valeurValide }) => {
+          donneesRequete.telephone = valeurValide;
+
+          const reponse = await testeur.post(
+            '/api/utilisateur',
+            donneesRequete
+          );
+
+          expect(reponse.status).to.equal(200);
+        }
+      );
+
+      it.each([
         { valeurErronee: 'false' },
         { valeurErronee: '1' },
         { valeurErronee: undefined },
