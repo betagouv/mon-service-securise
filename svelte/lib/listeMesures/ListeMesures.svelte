@@ -243,10 +243,13 @@
     { cle: 'servicesAssocies', libelle: 'Services associés' },
     { cle: 'actions', libelle: 'Action' },
   ]}
-  donnees={configurationTableau.donnees}
+  donnees={configurationTableau.donnees.map((d) => ({
+    ...d,
+    idPourDOM: d.id.replaceAll('.', '-'),
+  }))}
   configurationRecherche={configurationTableau.configurationRecherche}
   configurationFiltrage={configurationTableau.configurationFiltrage}
-  champIdentifiantLigne="id"
+  champIdentifiantLigne="idPourDOM"
   composantTableauVide={ongletActif === 'specifiques' &&
   configurationTableau.donnees.length === 0
     ? {

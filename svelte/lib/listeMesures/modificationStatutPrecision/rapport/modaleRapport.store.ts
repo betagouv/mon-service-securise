@@ -24,7 +24,8 @@ export const modaleRapportStore = {
       }
     }
     if (!id) return;
-    const cible = document.querySelector(`#ligne-${id}`);
+    const idPourDOM = id.replaceAll('.', '-');
+    const cible = document.querySelector(`#ligne-${idPourDOM}`);
     cible?.scrollIntoView({
       behavior: 'smooth',
       block: 'center',
