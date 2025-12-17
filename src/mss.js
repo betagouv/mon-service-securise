@@ -126,7 +126,6 @@ const creeServeur = ({
     middleware.chargeTypeRequete(TYPES_REQUETES.API),
     routesNonConnecteApi({
       middleware,
-      referentiel,
       depotDonnees,
       serviceAnnuaire,
       adaptateurGestionErreur,
