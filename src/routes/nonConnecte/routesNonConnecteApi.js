@@ -22,7 +22,6 @@ import {
 
 const routesNonConnecteApi = ({
   middleware,
-  referentiel,
   depotDonnees,
   serviceAnnuaire,
   adaptateurMail,
