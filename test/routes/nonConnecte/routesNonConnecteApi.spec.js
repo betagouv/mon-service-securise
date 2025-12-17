@@ -33,9 +33,9 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           borneBasse: '1',
           borneHaute: '10',
         },
-        cguAcceptees: 'true',
-        infolettreAcceptee: 'true',
-        transactionnelAccepte: 'true',
+        cguAcceptees: true,
+        infolettreAcceptee: true,
+        transactionnelAccepte: true,
         token: 'unTokenValide',
       };
 
@@ -113,7 +113,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       );
 
       it.each([
-        { valeurErronee: 'false' },
+        { valeurErronee: false },
         { valeurErronee: '1' },
         { valeurErronee: undefined },
       ])(
@@ -285,7 +285,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         return utilisateur;
       };
 
-      donneesRequete.cguAcceptees = 'true';
+      donneesRequete.cguAcceptees = true;
 
       await testeur.post('/api/utilisateur', donneesRequete);
 
@@ -298,7 +298,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         return Promise.resolve(utilisateur);
       };
 
-      donneesRequete.infolettreAcceptee = 'true';
+      donneesRequete.infolettreAcceptee = true;
 
       await testeur.post('/api/utilisateur', donneesRequete);
     });
