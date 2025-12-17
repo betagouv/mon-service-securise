@@ -805,7 +805,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       await testeur.verifieRequeteGenereErreurHTTP(
         424,
-        { erreur: "L'email 'jean.dujardin@mail.com' est introuvable" },
+        { erreur: "L'email fourni est introuvable" },
         {
           method: 'post',
           url: '/api/desinscriptionInfolettre',
