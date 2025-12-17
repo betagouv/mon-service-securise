@@ -481,6 +481,23 @@ class ConsoleAdministration {
     }
   }
 
+  async creeUtilisateurAvecMotDePasse(email, motDePasse) {
+    const u = await this.depotDonnees.nouvelUtilisateur({
+      prenom: 'Prénom',
+      nom: 'Nom',
+      email,
+      entite: {
+        siret: '13000766900018',
+        nom: 'ANSSI',
+        departement: 75,
+      },
+      estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
+      cguAcceptees: true,
+    });
+
+    await this.depotDonnees.metsAJourMotDePasse(u.id, motDePasse);
+  }
+
   async afficheAutorisationsDeUtilisateurAvecEmail(email) {
     const utilisateur = await this.utilisateurAvecEmail(email);
     if (!utilisateur) {
