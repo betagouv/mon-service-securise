@@ -8,6 +8,13 @@ block append scripts
   +donneesPartagees('donnees-profil', { entite })
   script(type = 'module', src = '/statique/creationV2.mjs')
 
+block header-gauche
+  .bloc-marque
+    .marianne
+    .republique-francaise RÉPUBLIQUE<br>FRANÇAISE
+    .devise
+  a.logo-anssi(href='https://cyber.gouv.fr')
+  a.logo-mss(href='/tableauDeBord')
 
 block main
   #creation-v2
