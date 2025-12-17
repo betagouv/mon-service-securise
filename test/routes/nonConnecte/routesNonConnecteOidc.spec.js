@@ -28,6 +28,16 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         .verifieRequeteExigeSuppressionCookie(testeur.app(), '/oidc/connexion');
     });
 
+    it("répond 400 si l'url de redirection est trop longue", async () => {
+      const tropLong = new Array(1001).fill('a').join('');
+
+      const reponse = await testeur.get(
+        `/oidc/connexion?urlRedirection=${tropLong}`
+      );
+
+      expect(reponse.status).to.be(400);
+    });
+
     it('redirige vers la page d’autorisation', async () => {
       const reponse = await testeur.get('/oidc/connexion');
 
@@ -465,6 +475,12 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           testeur.app(),
           '/oidc/apres-deconnexion?state=unState'
         );
+    });
+
+    it('rejette une requête sans state', async () => {
+      const reponse = await testeur.get('/oidc/apres-deconnexion?state=');
+
+      expect(reponse.status).to.be(400);
     });
 
     it("ne déconnecte pas l'utilisateur si le state ne correspond pas", async () => {
