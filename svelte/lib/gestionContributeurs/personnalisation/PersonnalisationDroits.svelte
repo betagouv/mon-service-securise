@@ -18,7 +18,11 @@
 
   let rubriques: { id: Rubrique; nom: string; droit: Permission }[];
   $: rubriques = [
-    { id: 'DECRIRE', nom: 'Décrire', droit: redefinis.DECRIRE },
+    {
+      id: 'DECRIRE',
+      nom: 'Récapitulatif du service',
+      droit: redefinis.DECRIRE,
+    },
     { id: 'SECURISER', nom: 'Sécuriser', droit: redefinis.SECURISER },
     { id: 'HOMOLOGUER', nom: 'Homologuer', droit: redefinis.HOMOLOGUER },
     { id: 'RISQUES', nom: 'Risques de sécurité', droit: redefinis.RISQUES },

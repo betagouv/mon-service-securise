@@ -48,7 +48,8 @@
     {#if enErreur}
       <span>
         Le service n'a pas été dupliqué car toutes les informations obligatoires
-        n'ont pas été remplies dans la rubrique « Décrire ».<br />
+        n'ont pas été remplies dans la rubrique « Récapitulatif » du service.<br
+        />
         Remplissez ces informations avant de pouvoir dupliquer.
       </span>
     {:else}
@@ -77,7 +78,7 @@
     {#if enErreur}
       <Lien
         type="bouton-primaire"
-        titre="Aller dans « Décrire »"
+        titre="Aller dans « Récapitulatif » du service"
         href="/service/{service.id}/descriptionService"
       />
     {:else}
