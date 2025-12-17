@@ -8,10 +8,6 @@ export const donneesEvolutionQuestions: EvolutionQuestion[] = [
     label: "Le projet inclut-il l'une des spécificités suivantes ?",
     statut: '🆕 Ajoutée',
   },
-  {
-    statut: '🆕 Ajoutée',
-    label: "Le projet inclut-il l'une des spécificités suivantes ?",
-  },
   { statut: '🆕 Ajoutée', label: 'Comment le système est-il hébergé ?' },
   {
     statut: '🆕 Ajoutée',
