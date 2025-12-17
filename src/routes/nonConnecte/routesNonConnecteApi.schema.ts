@@ -7,9 +7,9 @@ export const reglesValidationCreationUtilisateur = {
     .regex(/^0\d{9}$/)
     .optional()
     .or(z.literal('')),
-  cguAcceptees: z.literal('true'),
-  infolettreAcceptee: z.enum(['true', 'false']),
-  transactionnelAccepte: z.enum(['true', 'false']),
+  cguAcceptees: z.literal(true),
+  infolettreAcceptee: z.boolean(),
+  transactionnelAccepte: z.boolean(),
   postes: z.array(z.string().max(200)).max(8).min(1),
   estimationNombreServices: z.union([
     z.object({ borneBasse: z.literal('1'), borneHaute: z.literal('10') }),

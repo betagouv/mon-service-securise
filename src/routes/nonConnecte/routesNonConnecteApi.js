@@ -8,7 +8,7 @@ import {
 } from '../../erreurs.js';
 import {
   messageErreurDonneesUtilisateur,
-  obtentionDonneesDeBaseUtilisateur,
+  obtentionDonneesDeBaseUtilisateurBaseeSurBooleens,
 } from '../mappeur/utilisateur.js';
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 import { valideBody, valideQuery } from '../../http/validePayloads.js';
@@ -52,7 +52,7 @@ const routesNonConnecteApi = ({
         return;
       }
 
-      const donnees = obtentionDonneesDeBaseUtilisateur(
+      const donnees = obtentionDonneesDeBaseUtilisateurBaseeSurBooleens(
         requete.body,
         serviceCgu
       );

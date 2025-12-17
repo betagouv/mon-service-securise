@@ -20,6 +20,28 @@ const obtentionDonneesDeBaseUtilisateur = (corps, serviceCGU) => {
   return donnees;
 };
 
+const obtentionDonneesDeBaseUtilisateurBaseeSurBooleens = (
+  corps,
+  serviceCGU
+) => {
+  const donnees = {
+    prenom: corps.prenom,
+    nom: corps.nom,
+    telephone: corps.telephone,
+    entite: {
+      siret: corps.siretEntite,
+    },
+    estimationNombreServices: corps.estimationNombreServices,
+    infolettreAcceptee: corps.infolettreAcceptee,
+    transactionnelAccepte: corps.transactionnelAccepte,
+    postes: corps.postes,
+  };
+  if (corps.cguAcceptees) {
+    donnees.cguAcceptees = serviceCGU.versionActuelle();
+  }
+  return donnees;
+};
+
 const messageErreurDonneesUtilisateur = (donneesRequete, utilisateurExiste) => {
   try {
     Utilisateur.valideDonnees(donneesRequete, utilisateurExiste);
@@ -29,4 +51,8 @@ const messageErreurDonneesUtilisateur = (donneesRequete, utilisateurExiste) => {
   }
 };
 
-export { obtentionDonneesDeBaseUtilisateur, messageErreurDonneesUtilisateur };
+export {
+  obtentionDonneesDeBaseUtilisateur,
+  obtentionDonneesDeBaseUtilisateurBaseeSurBooleens,
+  messageErreurDonneesUtilisateur,
+};
