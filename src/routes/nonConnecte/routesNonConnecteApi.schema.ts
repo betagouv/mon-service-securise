@@ -8,6 +8,7 @@ export const reglesValidationCreationUtilisateur = {
     .optional()
     .or(z.literal('')),
   cguAcceptees: z.literal(true),
+  agentConnect: z.literal(true).optional(),
   infolettreAcceptee: z.boolean(),
   transactionnelAccepte: z.boolean(),
   postes: z.array(z.string().max(200)).max(8).min(1),

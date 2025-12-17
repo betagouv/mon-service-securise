@@ -253,6 +253,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         }
       );
 
+      it('accepte un paramètre optionnel agentConnect à true', async () => {
+        donneesRequete.agentConnect = true;
+
+        const reponse = await testeur.post('/api/utilisateur', donneesRequete);
+
+        expect(reponse.status).to.equal(200);
+      });
+
       it('renvoie une erreur 400 si un paramètre est en trop', async () => {
         donneesRequete.unParametreInconnu = 'hello';
 
