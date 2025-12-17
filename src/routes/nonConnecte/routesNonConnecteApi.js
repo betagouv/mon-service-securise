@@ -190,9 +190,7 @@ const routesNonConnecteApi = ({
 
       const utilisateur = await depotDonnees.utilisateurAvecEmail(email);
       if (!utilisateur) {
-        reponse
-          .status(424)
-          .json({ erreur: `L'email '${email}' est introuvable` });
+        reponse.status(424).json({ erreur: `L'email fourni est introuvable` });
         return;
       }
 
