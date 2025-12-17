@@ -14,6 +14,14 @@ block append scripts
 block append styles
   link(href = '/statique/assets/styles/fond-blanc.css', rel = 'stylesheet')
 
+block header-gauche
+  .bloc-marque
+    .marianne
+    .republique-francaise RÉPUBLIQUE<br>FRANÇAISE
+    .devise
+  a.logo-anssi(href='https://cyber.gouv.fr')
+  a.logo-mss(href='/tableauDeBord')
+
 block bandeau-titre
   -
     const filAriane = [
