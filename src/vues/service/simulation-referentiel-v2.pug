@@ -8,6 +8,13 @@ block append scripts
   +donneesPartagees('donnees-id-service', { idService })
   script(type = 'module', src = '/statique/simulationV2.mjs')
 
+block header-gauche
+  .bloc-marque
+    .marianne
+    .republique-francaise RÉPUBLIQUE<br>FRANÇAISE
+    .devise
+  a.logo-anssi(href='https://cyber.gouv.fr')
+  a.logo-mss(href='/tableauDeBord')
 
 block main
   #simulation-v2
