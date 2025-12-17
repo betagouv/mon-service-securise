@@ -1,8 +1,10 @@
 import express from 'express';
+import { z } from 'zod';
 import { estUrlLegalePourRedirection } from '../../http/redirection.js';
 import { fabriqueAdaptateurGestionErreur } from '../../adaptateurs/fabriqueAdaptateurGestionErreur.js';
 import { serviceApresAuthentification } from '../../utilisateur/serviceApresAuthentification.js';
 import { executeurApresAuthentification } from '../../utilisateur/executeurApresAuthentification.js';
+import { valideQuery } from '../../http/validePayloads.js';
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
@@ -18,6 +20,9 @@ const routesNonConnecteOidc = ({
 
   routes.get(
     '/connexion',
+    valideQuery(
+      z.strictObject({ urlRedirection: z.string().max(1000).optional() })
+    ),
     middleware.suppressionCookie,
     async (requete, reponse, suite) => {
       try {
@@ -84,15 +89,19 @@ const routesNonConnecteOidc = ({
     }
   });
 
-  routes.get('/apres-deconnexion', async (requete, reponse) => {
-    const state = requete.cookies.AgentConnectInfo?.state;
-    if (state !== requete.query.state) {
-      reponse.sendStatus(401);
-      return;
+  routes.get(
+    '/apres-deconnexion',
+    valideQuery(z.strictObject({ state: z.string().min(1).max(1000) })),
+    async (requete, reponse) => {
+      const state = requete.cookies.AgentConnectInfo?.state;
+      if (state !== requete.query.state) {
+        reponse.sendStatus(401);
+        return;
+      }
+      reponse.clearCookie('AgentConnectInfo');
+      reponse.redirect('/connexion');
     }
-    reponse.clearCookie('AgentConnectInfo');
-    reponse.redirect('/connexion');
-  });
+  );
 
   return routes;
 };
