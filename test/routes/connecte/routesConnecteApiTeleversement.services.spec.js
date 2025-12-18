@@ -7,7 +7,7 @@ import donneesReferentiel from '../../../donneesReferentiel.js';
 
 describe('Les routes connecté de téléversement de services', () => {
   const testeur = testeurMSS();
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
   beforeEach(() => {
     testeur.depotDonnees().nouveauTeleversementServices = async () => {};
   });

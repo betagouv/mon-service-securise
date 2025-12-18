@@ -21,7 +21,7 @@ const { SECURISER, RISQUES, DECRIRE, HOMOLOGUER } = Rubriques;
 describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   describe('quand requête GET sur `/api/service/:id/pdf/annexes.pdf`', () => {
     it('recherche le service correspondant', async () => {

@@ -6,7 +6,7 @@ import { unUtilisateur } from './constructeurs/constructeurUtilisateur.js';
 describe('Le serveur MSS', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   it('utilise un filtrage IP pour ne servir que les IP autorisées', async () => {
     await testeur.middleware().verifieFiltrageIp(testeur.app(), '/');

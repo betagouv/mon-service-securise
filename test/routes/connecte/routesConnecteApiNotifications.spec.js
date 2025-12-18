@@ -6,7 +6,7 @@ import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 describe('Le serveur MSS des routes privées /api/notifications', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   beforeEach(() => {
     testeur.middleware().reinitialise({ idUtilisateur: 'U1' });

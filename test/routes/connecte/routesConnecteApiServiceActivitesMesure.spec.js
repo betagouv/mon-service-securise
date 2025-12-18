@@ -7,18 +7,35 @@ import {
 import ActiviteMesure from '../../../src/modeles/activiteMesure.js';
 import { unService } from '../../constructeurs/constructeurService.js';
 import Mesures from '../../../src/modeles/mesures.js';
+import { unUUIDRandom } from '../../constructeurs/UUID.js';
+import { creeReferentiel } from '../../../src/referentiel.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
 
 describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activites`', () => {
   const testeur = testeurMSS();
+  const idService = unUUIDRandom();
 
-  beforeEach(testeur.initialise);
+  beforeEach(async () => {
+    const referentiel = creeReferentiel({
+      mesures: {
+        audit: { identifiantNumerique: '0007', categorie: 'gouvernance' },
+      },
+      categoriesMesures: { gouvernance: {} },
+    });
+    await testeur.initialise(referentiel);
+  });
 
   describe('quand requête GET sur `/api/service/:id/mesures/:id/activites`', () => {
     beforeEach(() => {
       testeur.depotDonnees().lisActivitesMesure = () => [];
+      testeur.middleware().reinitialise({
+        idUtilisateur: 'U1',
+        serviceARenvoyer: unService(testeur.referentiel())
+          .avecId(idService)
+          .construis(),
+      });
     });
 
     it('recherche le service correspondant', async () => {
@@ -29,19 +46,39 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
           testeur.app(),
           {
             method: 'get',
-            url: '/api/service/456/mesures/audit/activites',
+            url: `/api/service/${idService}/mesures/audit/activites`,
           }
         );
     });
 
+    it("renvoie 400 si l'id de la mesure est invalide", async () => {
+      const reponse = await testeur.get(
+        `/api/service/${idService}/mesures/uneMesureQuiNexistePas/activites`
+      );
+
+      expect(reponse.status).to.be(400);
+    });
+
+    it.each([
+      { valeurValide: unUUIDRandom() },
+      { valeurValide: 'RECENSEMENT.1' },
+      { valeurValide: 'audit' },
+    ])(
+      'accepte les id de mesure v1, v2, et uuid pour les spécifiques: $valeurValide',
+      async ({ valeurValide }) => {
+        const reponse = await testeur.get(
+          `/api/service/${idService}/mesures/${valeurValide}/activites`
+        );
+
+        expect(reponse.status).to.be(200);
+      }
+    );
+
     it('renvoie la liste des activités de la mesure', async () => {
-      testeur.referentiel().enrichis({
-        mesures: { audit: { identifiantNumerique: '0007' } },
-      });
       testeur.middleware().reinitialise({
         idUtilisateur: 'U1',
         serviceARenvoyer: unService(testeur.referentiel())
-          .avecId('456')
+          .avecId(idService)
           .construis(),
       });
       testeur.depotDonnees().lisActivitesMesure = () => [
@@ -56,7 +93,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
       ];
 
       const reponse = await testeur.get(
-        '/api/service/456/mesures/audit/activites'
+        `/api/service/${idService}/mesures/audit/activites`
       );
 
       expect(reponse.status).to.be(200);
@@ -74,15 +111,15 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
     it('retourne uniquement les activités de la mesure et du service', async () => {
       let idServiceUtilise;
       let idMesureUtilise;
-      testeur.depotDonnees().lisActivitesMesure = (idService, idMesure) => {
-        idServiceUtilise = idService;
+      testeur.depotDonnees().lisActivitesMesure = (idS, idMesure) => {
+        idServiceUtilise = idS;
         idMesureUtilise = idMesure;
         return [];
       };
 
-      await testeur.get('/api/service/456/mesures/audit/activites');
+      await testeur.get(`/api/service/${idService}/mesures/audit/activites`);
 
-      expect(idServiceUtilise).to.be('456');
+      expect(idServiceUtilise).to.be(idService);
       expect(idMesureUtilise).to.be('audit');
     });
 
@@ -99,7 +136,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
       ];
 
       const reponse = await testeur.get(
-        '/api/service/456/mesures/audit/activites'
+        `/api/service/${idService}/mesures/audit/activites`
       );
 
       expect(reponse.body[0].identifiantNumeriqueMesure).to.be(undefined);
@@ -121,7 +158,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
           testeur.app(),
           {
             method: 'post',
-            url: '/api/service/456/mesures/audit/activites/commentaires',
+            url: `/api/service/${idService}/mesures/audit/activites/commentaires`,
           }
         );
     });
@@ -131,7 +168,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         .middleware()
         .verifieAseptisationParametres(['contenu'], testeur.app(), {
           method: 'post',
-          url: '/api/service/456/mesures/audit/activites/commentaires',
+          url: `/api/service/${idService}/mesures/audit/activites/commentaires`,
         });
     });
 
@@ -143,7 +180,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         testeur.middleware().reinitialise({
           idUtilisateur: 'U1',
           serviceARenvoyer: unService(testeur.referentiel())
-            .avecId('456')
+            .avecId(idService)
             .construis(),
         });
         let activiteRecue;
@@ -152,7 +189,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         };
 
         await testeur.post(
-          '/api/service/456/mesures/audit/activites/commentaires',
+          `/api/service/${idService}/mesures/audit/activites/commentaires`,
           {
             contenu: 'mon commentaire',
           }
@@ -161,7 +198,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         expect(activiteRecue).to.be.an(ActiviteMesure);
         expect(activiteRecue).to.eql(
           new ActiviteMesure({
-            idService: '456',
+            idService,
             idActeur: 'U1',
             type: 'ajoutCommentaire',
             details: { contenu: 'mon commentaire' },
@@ -175,7 +212,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         testeur.middleware().reinitialise({
           idUtilisateur: 'U1',
           serviceARenvoyer: unService()
-            .avecId('456')
+            .avecId(idService)
             .avecMesures(
               new Mesures(
                 { mesuresGenerales: [], mesuresSpecifiques: [{ id: 'MS1' }] },
@@ -191,7 +228,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         };
 
         await testeur.post(
-          '/api/service/456/mesures/MS1/activites/commentaires',
+          `/api/service/${idService}/mesures/MS1/activites/commentaires`,
           {
             contenu: 'mon commentaire',
           }
@@ -200,7 +237,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         expect(activiteRecue).to.be.an(ActiviteMesure);
         expect(activiteRecue).to.eql(
           new ActiviteMesure({
-            idService: '456',
+            idService,
             idActeur: 'U1',
             type: 'ajoutCommentaire',
             details: { contenu: 'mon commentaire' },
@@ -213,7 +250,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
 
     it('jette une erreur 404 si la mesure est introuvable', async () => {
       const reponse = await testeur.post(
-        '/api/service/456/mesures/idMesureInconnu/activites/commentaires'
+        `/api/service/${idService}/mesures/idMesureInconnu/activites/commentaires`
       );
 
       expect(reponse.status).to.be(404);

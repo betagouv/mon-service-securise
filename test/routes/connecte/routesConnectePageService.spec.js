@@ -24,7 +24,7 @@ const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   [
     '/creation',

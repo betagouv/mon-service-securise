@@ -26,7 +26,7 @@ const { DECRIRE, SECURISER } = Rubriques;
 describe('Le serveur MSS des routes /api/service/:id/simulation-migration-referentiel/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   describe('quand requête GET sur `/api/service/:id/simulation-migration-referentiel`', () => {
     it('recherche le service correspondant', async () => {

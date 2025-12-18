@@ -10,7 +10,7 @@ import { ReferentielV2 } from '../../../src/referentiel.interface.ts';
 
 describe('Les routes connecté de téléversement de services V2', () => {
   const testeur = testeurMSS();
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
   beforeEach(() => {
     testeur.depotDonnees().nouveauTeleversementServices = async () => {};
   });

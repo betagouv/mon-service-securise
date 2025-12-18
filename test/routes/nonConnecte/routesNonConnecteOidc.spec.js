@@ -11,7 +11,7 @@ import { donneesPartagees } from '../../aides/http.js';
 describe('Le serveur MSS des routes publiques /oidc/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   describe('quand requête GET sur `/oidc/connexion`', () => {
     beforeEach(() => {

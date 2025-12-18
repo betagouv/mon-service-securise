@@ -5,7 +5,7 @@ import ParcoursUtilisateur from '../../../src/modeles/parcoursUtilisateur.js';
 describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   it("vérifie que l'utilisateur est authentifié sur toutes les routes", async () => {
     // On vérifie une seule route privée.

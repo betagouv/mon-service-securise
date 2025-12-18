@@ -11,7 +11,7 @@ import {
 describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   describe(`quand GET sur /motDePasse/initialisation`, () => {
     beforeEach(() => {

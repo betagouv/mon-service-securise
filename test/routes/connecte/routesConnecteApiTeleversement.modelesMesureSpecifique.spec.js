@@ -11,7 +11,7 @@ import TeleversementModelesMesureSpecifique from '../../../src/modeles/televerse
 
 describe('Les routes connecté de téléversement des modèles de mesure spécifique', () => {
   const testeur = testeurMSS();
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   it("vérifie que l'utilisateur est authentifié, 1 seul test suffit car le middleware est placé au niveau de l'instanciation du routeur", async () => {
     await testeur

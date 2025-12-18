@@ -34,7 +34,7 @@ const { RISQUES, DECRIRE, SECURISER, CONTACTS, HOMOLOGUER } = Rubriques;
 describe('Le serveur MSS des routes /api/service/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   describe('quand requête POST sur `/api/service`', () => {
     beforeEach(() => {

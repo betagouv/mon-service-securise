@@ -80,7 +80,9 @@ const testeurMss = () => {
     else expect(reponse.body).to.eql(messageErreur);
   };
 
-  const initialise = async () => {
+  const initialise = async (
+    referentielV1 = Referentiel.creeReferentielVide()
+  ) => {
     serviceAnnuaire = {};
     serviceSupervision = {};
     adaptateurHorloge = fabriqueAdaptateurHorloge();
@@ -140,7 +142,7 @@ const testeurMss = () => {
     adaptateurJWT = fabriqueAdaptateurJWT();
     adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssiVide();
     middleware.reinitialise({});
-    referentiel = Referentiel.creeReferentielVide();
+    referentiel = referentielV1;
     referentielV2 = creeReferentielV2();
     procedures = fabriqueProcedures({
       depotDonnees,

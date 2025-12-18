@@ -3,7 +3,7 @@ import testeurMSS from '../testeurMSS.js';
 describe('Le serveur MSS des routes /bibliotheques/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   it('retourne une erreur HTTP 404 si la bibliothèque est inconnue', async () => {
     await testeur.verifieRequeteGenereErreurHTTP(

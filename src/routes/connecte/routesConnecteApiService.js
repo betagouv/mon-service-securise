@@ -80,6 +80,8 @@ const routesConnecteApiService = ({
     routesConnecteApiServiceActivitesMesure({
       middleware,
       depotDonnees,
+      referentiel,
+      referentielV2,
     })
   );
 

@@ -19,7 +19,7 @@ import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 describe('Le serveur MSS des routes publiques /api/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   describe('quand requête POST sur `/api/utilisateur`', () => {
     const tokenJWT = jwt.sign({ donnees: 'unTokenValide' }, 'secret-jwt');
