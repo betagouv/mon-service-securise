@@ -91,7 +91,7 @@ const routesNonConnecteOidc = ({
 
   routes.get(
     '/apres-deconnexion',
-    valideQuery(z.strictObject({ state: z.string().min(1).max(1000) })),
+    valideQuery(z.strictObject({ state: z.string().min(1).max(100) })),
     async (requete, reponse) => {
       const state = requete.cookies.AgentConnectInfo?.state;
       if (state !== requete.query.state) {
