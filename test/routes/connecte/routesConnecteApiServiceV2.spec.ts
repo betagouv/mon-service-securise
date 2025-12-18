@@ -16,7 +16,7 @@ const { DECRIRE } = Rubriques;
 describe('Le serveur MSS des routes /api/service-v2/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   describe('quand requête POST sur `/api/service-v2/niveauSecuriteRequis`', () => {
     it('jette une erreur 400 si les données sont invalides', async () => {

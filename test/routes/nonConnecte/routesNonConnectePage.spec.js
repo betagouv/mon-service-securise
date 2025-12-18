@@ -8,7 +8,7 @@ import { ErreurJWTInvalide, ErreurJWTManquant } from '../../../src/erreurs.js';
 describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   [
     '/',

@@ -5,7 +5,7 @@ import { enObjet } from '../../aides/cookie.js';
 describe('Le serveur MSS des routes connectées /oidc/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   describe('quand requête GET sur /oidc/deconnexion', () => {
     let idTokenAgentConnect;

@@ -17,7 +17,7 @@ import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
   const testeur = testeurMSS();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   describe('quand requête POST sur `/api/brouillon-service`', () => {
     it('crée un brouillon de service et retourne son id', async () => {

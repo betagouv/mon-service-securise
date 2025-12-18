@@ -1,9 +1,12 @@
 import express from 'express';
+import { z } from 'zod';
 import {
   Permissions,
   Rubriques,
 } from '../../modeles/autorisations/gestionDroits.js';
 import ActiviteMesure from '../../modeles/activiteMesure.js';
+import { valideParams } from '../../http/validePayloads.js';
+import { reglesValidationIdMesure } from './routesConnecteApiServiceActivitesMesure.schema.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -11,11 +14,16 @@ const { SECURISER } = Rubriques;
 const routesConnecteApiServiceActivitesMesure = ({
   middleware,
   depotDonnees,
+  referentiel,
+  referentielV2,
 }) => {
   const routes = express.Router();
 
   routes.get(
     '/:id/mesures/:idMesure/activites',
+    valideParams(
+      z.strictObject(reglesValidationIdMesure(referentiel, referentielV2))
+    ),
     middleware.trouveService({ [SECURISER]: LECTURE }),
     async (requete, reponse) => {
       const { service } = requete;

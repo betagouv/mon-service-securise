@@ -41,7 +41,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     )
     .construis();
 
-  beforeEach(testeur.initialise);
+  beforeEach(() => testeur.initialise());
 
   it("vérifie que l'utilisateur est authentifié sur toutes les routes", async () => {
     // On vérifie une seule route privée.
