@@ -5,10 +5,14 @@ import {
   Rubriques,
 } from '../../../src/modeles/autorisations/gestionDroits.js';
 import ActiviteMesure from '../../../src/modeles/activiteMesure.js';
-import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import { unUUIDRandom } from '../../constructeurs/UUID.js';
 import { creeReferentiel } from '../../../src/referentiel.js';
+import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -145,9 +149,86 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
 
   describe('quand requête POST sur `/api/service/:id/mesures/:id/activites/commentaires`', () => {
     beforeEach(() => {
-      testeur.referentiel().enrichis({
-        mesures: { audit: {} },
+      testeur.middleware().reinitialise({
+        idUtilisateur: 'U1',
+        serviceARenvoyer: unService(testeur.referentiel())
+          .avecId(idService)
+          .construis(),
       });
+    });
+
+    it.each([
+      { valeurInvalide: undefined },
+      { valeurInvalide: '' },
+      { valeurInvalide: uneChaineDeCaracteres(1001, 'a') },
+    ])(
+      'renvoie 400 si le commentaire reçu est invalide : $valeurInvalide',
+      async ({ valeurInvalide }) => {
+        const reponse = await testeur.post(
+          `/api/service/${idService}/mesures/audit/activites/commentaires`,
+          { contenu: valeurInvalide }
+        );
+
+        expect(reponse.status).to.be(400);
+      }
+    );
+
+    it("renvoie 400 si l'id de la mesure est invalide", async () => {
+      const reponse = await testeur.post(
+        `/api/service/${idService}/mesures/uneMesureQuiNexistePas/activites/commentaires`,
+        { contenu: 'mon commentaire' }
+      );
+
+      expect(reponse.status).to.be(400);
+    });
+
+    it('accepte les id de mesure v1', async () => {
+      testeur.middleware().reinitialise({
+        idUtilisateur: 'U1',
+        serviceARenvoyer: unService(testeur.referentiel())
+          .avecId(idService)
+          .construis(),
+      });
+
+      const reponse = await testeur.post(
+        `/api/service/${idService}/mesures/audit/activites/commentaires`,
+        { contenu: 'mon commentaire' }
+      );
+
+      expect(reponse.status).to.be(200);
+    });
+
+    it('accepte les id de mesure v2', async () => {
+      testeur.middleware().reinitialise({
+        idUtilisateur: 'U1',
+        serviceARenvoyer: unServiceV2().avecId(idService).construis(),
+      });
+
+      const reponse = await testeur.post(
+        `/api/service/${idService}/mesures/RECENSEMENT.1/activites/commentaires`,
+        { contenu: 'mon commentaire' }
+      );
+
+      expect(reponse.status).to.be(200);
+    });
+
+    it('accepte les id de mesure spécifique', async () => {
+      const unServiceV1 = unService(testeur.referentiel())
+        .avecId(idService)
+        .construis();
+      const idMesure = unUUIDRandom();
+      unServiceV1.ajouteMesureSpecifique({ id: idMesure });
+      testeur.middleware().reinitialise({
+        idUtilisateur: 'U1',
+        serviceARenvoyer: unServiceV1,
+      });
+
+      const reponse = await testeur.post(
+        `/api/service/${idService}/mesures/${idMesure}/activites/commentaires`,
+        { contenu: 'mon commentaire' }
+      );
+
+      expect(reponse.status).to.be(200);
     });
 
     it('recherche le service correspondant', async () => {
@@ -159,101 +240,111 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
           {
             method: 'post',
             url: `/api/service/${idService}/mesures/audit/activites/commentaires`,
+            data: { contenu: 'hello' },
           }
         );
-    });
-
-    it('aseptise les paramètres', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['contenu'], testeur.app(), {
-          method: 'post',
-          url: `/api/service/${idService}/mesures/audit/activites/commentaires`,
-        });
     });
 
     describe("délègue au dépôt de données l'enregistrement du commentaire", () => {
-      it("dans le cas d'une mesure générale", async () => {
-        testeur.referentiel().enrichis({
-          mesures: { audit: {} },
-        });
-        testeur.middleware().reinitialise({
-          idUtilisateur: 'U1',
-          serviceARenvoyer: unService(testeur.referentiel())
-            .avecId(idService)
-            .construis(),
-        });
-        let activiteRecue;
-        testeur.depotDonnees().ajouteActiviteMesure = (activite) => {
-          activiteRecue = activite;
-        };
+      describe("dans le cas d'une mesure générale", () => {
+        it('si elle existe dans le référentiel associé', async () => {
+          testeur.referentiel().enrichis({
+            mesures: { audit: {} },
+          });
+          testeur.middleware().reinitialise({
+            idUtilisateur: 'U1',
+            serviceARenvoyer: unService(testeur.referentiel())
+              .avecId(idService)
+              .construis(),
+          });
+          let activiteRecue;
+          testeur.depotDonnees().ajouteActiviteMesure = (activite) => {
+            activiteRecue = activite;
+          };
 
-        await testeur.post(
-          `/api/service/${idService}/mesures/audit/activites/commentaires`,
-          {
-            contenu: 'mon commentaire',
-          }
-        );
+          await testeur.post(
+            `/api/service/${idService}/mesures/audit/activites/commentaires`,
+            {
+              contenu: 'mon commentaire',
+            }
+          );
 
-        expect(activiteRecue).to.be.an(ActiviteMesure);
-        expect(activiteRecue).to.eql(
-          new ActiviteMesure({
-            idService,
-            idActeur: 'U1',
-            type: 'ajoutCommentaire',
-            details: { contenu: 'mon commentaire' },
-            idMesure: 'audit',
-            typeMesure: 'generale',
-          })
-        );
+          expect(activiteRecue).to.be.an(ActiviteMesure);
+          expect(activiteRecue).to.eql(
+            new ActiviteMesure({
+              idService,
+              idActeur: 'U1',
+              type: 'ajoutCommentaire',
+              details: { contenu: 'mon commentaire' },
+              idMesure: 'audit',
+              typeMesure: 'generale',
+            })
+          );
+        });
+
+        it("jette une erreur 404 si la mesure n'appartient pas au référentiel du service", async () => {
+          const reponse = await testeur.post(
+            `/api/service/${idService}/mesures/RECENSEMENT.1/activites/commentaires`,
+            { contenu: 'mon commentaire' }
+          );
+
+          expect(reponse.status).to.be(404);
+        });
       });
 
-      it("dans le cas d'une mesure spécifique", async () => {
-        testeur.middleware().reinitialise({
-          idUtilisateur: 'U1',
-          serviceARenvoyer: unService()
-            .avecId(idService)
-            .avecMesures(
-              new Mesures(
-                { mesuresGenerales: [], mesuresSpecifiques: [{ id: 'MS1' }] },
-                testeur.referentiel(),
-                {}
+      describe("dans le cas d'une mesure spécifique", () => {
+        it('si elle existe', async () => {
+          const idMesure = unUUIDRandom();
+          testeur.middleware().reinitialise({
+            idUtilisateur: 'U1',
+            serviceARenvoyer: unService()
+              .avecId(idService)
+              .avecMesures(
+                new Mesures(
+                  {
+                    mesuresGenerales: [],
+                    mesuresSpecifiques: [{ id: idMesure }],
+                  },
+                  testeur.referentiel(),
+                  {}
+                )
               )
-            )
-            .construis(),
+              .construis(),
+          });
+          let activiteRecue;
+          testeur.depotDonnees().ajouteActiviteMesure = (activite) => {
+            activiteRecue = activite;
+          };
+
+          await testeur.post(
+            `/api/service/${idService}/mesures/${idMesure}/activites/commentaires`,
+            {
+              contenu: 'mon commentaire',
+            }
+          );
+
+          expect(activiteRecue).to.be.an(ActiviteMesure);
+          expect(activiteRecue).to.eql(
+            new ActiviteMesure({
+              idService,
+              idActeur: 'U1',
+              type: 'ajoutCommentaire',
+              details: { contenu: 'mon commentaire' },
+              idMesure,
+              typeMesure: 'specifique',
+            })
+          );
         });
-        let activiteRecue;
-        testeur.depotDonnees().ajouteActiviteMesure = (activite) => {
-          activiteRecue = activite;
-        };
 
-        await testeur.post(
-          `/api/service/${idService}/mesures/MS1/activites/commentaires`,
-          {
-            contenu: 'mon commentaire',
-          }
-        );
+        it('jette une erreur 404 si la mesure est introuvable', async () => {
+          const reponse = await testeur.post(
+            `/api/service/${idService}/mesures/${unUUIDRandom()}/activites/commentaires`,
+            { contenu: 'mon commentaire' }
+          );
 
-        expect(activiteRecue).to.be.an(ActiviteMesure);
-        expect(activiteRecue).to.eql(
-          new ActiviteMesure({
-            idService,
-            idActeur: 'U1',
-            type: 'ajoutCommentaire',
-            details: { contenu: 'mon commentaire' },
-            idMesure: 'MS1',
-            typeMesure: 'specifique',
-          })
-        );
+          expect(reponse.status).to.be(404);
+        });
       });
-    });
-
-    it('jette une erreur 404 si la mesure est introuvable', async () => {
-      const reponse = await testeur.post(
-        `/api/service/${idService}/mesures/idMesureInconnu/activites/commentaires`
-      );
-
-      expect(reponse.status).to.be(404);
     });
   });
 });

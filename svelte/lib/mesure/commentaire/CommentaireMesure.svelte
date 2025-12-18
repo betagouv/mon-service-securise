@@ -13,6 +13,10 @@
 
   let editor: Readable<Editor>;
   $: contenuCommentaire = $editor?.getText();
+  $: commentaireValide =
+    !!contenuCommentaire &&
+    contenuCommentaire.trim().length > 0 &&
+    contenuCommentaire.length <= 1000;
 
   onMount(() => {
     editor = createEditor({
@@ -80,11 +84,7 @@
   <div class="conteneur-editeur">
     <EditorContent editor={$editor} />
   </div>
-  <button
-    type="submit"
-    class="envoi-commentaire"
-    disabled={!contenuCommentaire}
-  >
+  <button type="submit" class="envoi-commentaire" disabled={!commentaireValide}>
     <img
       src="/statique/assets/images/icone_envoyer.svg"
       alt="Envoyer le commentaire"
