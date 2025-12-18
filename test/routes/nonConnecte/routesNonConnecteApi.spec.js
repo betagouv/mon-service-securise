@@ -1,4 +1,5 @@
 import expect from 'expect.js';
+import jwt from 'jsonwebtoken';
 import testeurMSS from '../testeurMSS.js';
 
 import {
@@ -21,6 +22,11 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
   beforeEach(testeur.initialise);
 
   describe('quand requête POST sur `/api/utilisateur`', () => {
+    const tokenJWT = jwt.sign({ donnees: 'unTokenValide' }, 'secret-jwt');
+    const tokenJWTInvalide = jwt.sign(
+      { donnees: 'unTokenInvalide' },
+      'mauvais-secret-jwt'
+    );
     const utilisateur = { id: '123', genereToken: () => 'un token' };
     let donneesRequete;
 
@@ -36,17 +42,17 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         cguAcceptees: true,
         infolettreAcceptee: true,
         transactionnelAccepte: true,
-        token: 'unTokenValide',
+        token: tokenJWT,
       };
 
       testeur.adaptateurJWT().decode = (token) => {
-        if (token === 'unTokenValide')
+        if (token === tokenJWT)
           return {
             prenom: 'Jean',
             nom: 'Dupont',
             email: 'jean.dupont@mail.fr',
           };
-        if (token === 'tokenInvalide') {
+        if (token === tokenJWTInvalide) {
           throw new ErreurJWTInvalide();
         }
         throw new ErreurJWTManquant();
@@ -459,7 +465,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it('jette une erreur si le token est invalide', async () => {
-      donneesRequete.token = 'tokenInvalide';
+      donneesRequete.token = tokenJWTInvalide;
 
       await testeur.verifieRequeteGenereErreurHTTP(
         422,
