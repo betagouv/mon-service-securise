@@ -20,7 +20,7 @@ export const reglesValidationCreationUtilisateur = {
     z.object({ borneBasse: z.literal('-1'), borneHaute: z.literal('-1') }),
   ]),
   siretEntite: z.string().regex(/^\d{14}$/),
-  token: z.string().nonempty(),
+  token: z.jwt(),
 };
 
 export const reglesValidationReinitialisationMotDePasse = {
