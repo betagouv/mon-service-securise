@@ -5,7 +5,7 @@ import {
   Rubriques,
 } from '../../modeles/autorisations/gestionDroits.js';
 import ActiviteMesure from '../../modeles/activiteMesure.js';
-import { valideParams } from '../../http/validePayloads.js';
+import { valideBody, valideParams } from '../../http/validePayloads.js';
 import { reglesValidationIdMesure } from './routesConnecteApiServiceActivitesMesure.schema.js';
 
 const { LECTURE, ECRITURE } = Permissions;
@@ -49,7 +49,10 @@ const routesConnecteApiServiceActivitesMesure = ({
 
   routes.post(
     '/:id/mesures/:idMesure/activites/commentaires',
-    middleware.aseptise('contenu'),
+    valideParams(
+      z.strictObject(reglesValidationIdMesure(referentiel, referentielV2))
+    ),
+    valideBody(z.strictObject({ contenu: z.string().min(1).max(1000) })),
     middleware.trouveService({ [SECURISER]: ECRITURE }),
     async (requete, reponse) => {
       const { idMesure } = requete.params;
