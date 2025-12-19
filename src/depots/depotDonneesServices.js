@@ -329,8 +329,8 @@ const creeDepot = (config = {}) => {
 
   const tousLesServicesAvecSiret = (siret) => p.lis.ceuxAvecSiret(siret);
 
-  const enregistreDossier = (idHomologation, dossier) =>
-    ajouteAItemsDuService('dossiers', idHomologation, dossier);
+  const enregistreDossier = (idService, dossier) =>
+    ajouteAItemsDuService('dossiers', idService, dossier);
 
   const finaliseDossierCourant = async (s) => {
     const dossierAvantFinalisation = s.dossierCourant();
