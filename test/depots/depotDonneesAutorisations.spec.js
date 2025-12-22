@@ -590,4 +590,55 @@ describe('Le dépôt de données des autorisations', () => {
       expect(accesAutoriseEnLecture).to.be(true);
     });
   });
+
+  describe("sur demande d'analyse sur les proprietaires", () => {
+    it('ne renvoie que les propriétaires, avec le domaine de leurs emails (et pas le mail complet)', async () => {
+      const seulementUnProprietaire = unePersistanceMemoire()
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U1', 'S1').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deContributeur('U2', 'S1').donnees
+        )
+        .ajouteUnUtilisateur(
+          unUtilisateur().avecId('U1').avecEmail('jeanne@conseil.fr').donnees
+        )
+        .construis();
+
+      const depot = creeDepot(seulementUnProprietaire);
+      const resultat = await depot.analyseDesProprietaires();
+
+      expect(resultat).to.eql([
+        {
+          idService: 'S1',
+          idUtilisateur: 'U1',
+          domaineEmailUtilisateur: 'conseil.fr',
+        },
+      ]);
+    });
+
+    it("peut filter les domaines pour ne garder que ceux ciblés par l'analyse", async () => {
+      const deuxProprietaires = unePersistanceMemoire()
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U1', 'S1').donnees
+        )
+        .ajouteUneAutorisation(
+          uneAutorisation().deProprietaire('U2', 'S1').donnees
+        )
+        .ajouteUnUtilisateur(
+          unUtilisateur().avecId('U1').avecEmail('jeanne@conseil.fr').donnees
+        )
+        .ajouteUnUtilisateur(
+          unUtilisateur().avecId('U2').avecEmail('pierre@le-domaine.fr').donnees
+        )
+        .construis();
+
+      const depot = creeDepot(deuxProprietaires);
+      const cibles = ['le-domaine.fr'];
+      const resultat = await depot.analyseDesProprietaires(cibles);
+
+      expect(resultat.length).to.be(1);
+      expect(resultat[0].domaineEmailUtilisateur).to.be('le-domaine.fr');
+    });
+  });
 });

@@ -158,10 +158,32 @@ const creeDepot = (config = {}) => {
     await publieAutorisationsDuService(idService);
   };
 
+  const analyseDesProprietaires = async (filtredomainesEmails = []) => {
+    const lesProprietaires =
+      await adaptateurPersistance.toutesLesAutorisationsDeProprietaire();
+
+    const avecLesDomaines = await Promise.all(
+      lesProprietaires.map(async (a) => ({
+        idService: a.idService,
+        idUtilisateur: a.idUtilisateur,
+        domaineEmailUtilisateur: (
+          await depotUtilisateurs.utilisateur(a.idUtilisateur)
+        ).email.split('@')[1],
+      }))
+    );
+
+    return avecLesDomaines.filter(
+      (ligne) =>
+        filtredomainesEmails.length === 0 ||
+        filtredomainesEmails.includes(ligne.domaineEmailUtilisateur)
+    );
+  };
+
   return {
     accesAutorise,
     accesAutoriseAUneListeDeService,
     ajouteContributeurAuService,
+    analyseDesProprietaires,
     autorisation,
     autorisationExiste,
     autorisationPour,

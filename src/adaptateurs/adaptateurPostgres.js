@@ -985,6 +985,17 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       .where({ id_service: idService })
       .delete();
 
+  const toutesLesAutorisationsDeProprietaire = async () => {
+    const requete = await knex('autorisations')
+      .whereRaw("(donnees->>'estProprietaire')::boolean=true")
+      .select('donnees');
+
+    return requete.map((a) => ({
+      idService: a.donnees.idService,
+      idUtilisateur: a.donnees.idUtilisateur,
+    }));
+  };
+
   return {
     activitesMesure,
     ajouteAutorisation,
@@ -1068,6 +1079,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     tousLesSelsDeHachage,
     tousServicesSontAssociesAuModeleMesureSpecifique,
     tousUtilisateurs,
+    toutesLesAutorisationsDeProprietaire,
     utilisateur,
     utilisateurAvecEmailHash,
     utilisateurAvecIdReset,

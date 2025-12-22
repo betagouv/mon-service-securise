@@ -681,6 +681,9 @@ const nouvelAdaptateur = (
       );
   };
 
+  const toutesLesAutorisationsDeProprietaire = async () =>
+    donnees.autorisations.filter((a) => a.estProprietaire);
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -757,6 +760,7 @@ const nouvelAdaptateur = (
     tachesDeServicePour,
     tousServicesSontAssociesAuModeleMesureSpecifique,
     tousUtilisateurs,
+    toutesLesAutorisationsDeProprietaire,
     utilisateur,
     utilisateurAvecEmailHash,
     utilisateurAvecIdReset,
