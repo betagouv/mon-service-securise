@@ -38,9 +38,8 @@ jobs:
           ID_APP: ${{ secrets.CLEVER_CLOUD_ID_APP }}
           ID_ORGANISATION: ${{ secrets.CLEVER_CLOUD_ID_ORGANISATION }}
         run: |
-          NODE_VERSION="$(./scripts/get-node-version.sh)"
           clever link -o="$ID_ORGANISATION" "$ID_APP"
-          clever env set CC_NODE_VERSION "$NODE_VERSION"
+          clever env set CC_NODE_VERSION "${{ env.NODE_VERSION }}"
 
       - name: Déployer en DÉMO
         env:
@@ -88,9 +87,8 @@ jobs:
           ID_APP: ${{ secrets.CLEVER_CLOUD_ID_APP }}
           ID_ORGANISATION: ${{ secrets.CLEVER_CLOUD_ID_ORGANISATION }}
         run: |
-          NODE_VERSION="$(./scripts/get-node-version.sh)"
           clever link -o="$ID_ORGANISATION" "$ID_APP"
-          clever env set CC_NODE_VERSION "$NODE_VERSION"
+          clever env set CC_NODE_VERSION "${{ env.NODE_VERSION }}"
 
       - name: Déployer en PROD
         env:
