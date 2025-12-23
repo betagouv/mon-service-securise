@@ -299,24 +299,6 @@
     align-items: center;
   }
 
-  :global(.erreur-champ-saisie) {
-    margin: 4px 0 0 0;
-    color: var(--rose-anssi);
-    font-weight: normal;
-    flex-direction: row;
-  }
-
-  :global(.erreur-champ-saisie:before) {
-    content: '';
-    display: flex;
-    background-image: url('/statique/assets/images/icone_attention_rose.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
-  }
-
   :global(textarea.invalide, select.invalide) {
     border-color: var(--rose-anssi);
   }
