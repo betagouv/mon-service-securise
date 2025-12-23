@@ -1335,6 +1335,15 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           expect(reponse.status).to.be(400);
         }
       );
+
+      it.each([null, undefined, 'abc', 10])(
+        `refuse le transactionnel accepté "%s"`,
+        async (transactionnelAccepte) => {
+          donneesRequete.transactionnelAccepte = transactionnelAccepte;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
     });
 
     it('aseptise les paramètres de la requête', async () => {

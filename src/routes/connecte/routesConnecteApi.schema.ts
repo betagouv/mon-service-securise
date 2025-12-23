@@ -15,4 +15,5 @@ export const schemaPutUtilisateur = {
   prenom: z.string().trim().min(1).max(200),
   siretEntite: z.string().regex(/^\d{14}$/),
   telephone: z.string().regex(/^0\d{9}$/),
+  transactionnelAccepte: z.stringbool(),
 };
