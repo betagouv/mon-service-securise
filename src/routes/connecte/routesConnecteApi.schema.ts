@@ -14,6 +14,6 @@ export const schemaPutUtilisateur = {
   postes: z.array(z.string().trim().min(1).max(100)).min(1).max(8),
   prenom: z.string().trim().min(1).max(200),
   siretEntite: z.string().regex(/^\d{14}$/),
-  telephone: z.string().regex(/^0\d{9}$/),
+  telephone: z.xor([z.string().regex(/^0\d{9}$/), z.literal('')]),
   transactionnelAccepte: z.stringbool(),
 };

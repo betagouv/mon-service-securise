@@ -1303,7 +1303,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         expect(reponse.status).to.be(400);
       });
 
-      it.each([undefined, '01 02 03 04 05', '01223344'])(
+      it.each([null, undefined, '01 02 03 04 05', '01223344'])(
         `refuse le numéro de téléphone "%s"`,
         async (telephone) => {
           donneesRequete.telephone = telephone;
@@ -1311,6 +1311,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           expect(reponse.status).to.be(400);
         }
       );
+
+      it('accepte un numéro de téléphone vide', async () => {
+        donneesRequete.telephone = '';
+        const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+        expect(reponse.status).to.be(200);
+      });
 
       it.each([undefined, 'abc', '123456789'])(
         `refuse le SIRET "%s"`,
