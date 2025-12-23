@@ -1261,7 +1261,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         telephone: '0100000000',
         postes: ['RSSI', "Chargé des systèmes d'informations"],
         siretEntite: '13000766900018',
-        estimationNombreServices: { borneBasse: 1, borneHaute: 10 },
+        estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
         infolettreAcceptee: 'true',
         transactionnelAccepte: 'true',
         cguAcceptees: 'true',
@@ -1316,6 +1316,21 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         `refuse le SIRET "%s"`,
         async (siret) => {
           donneesRequete.siretEntite = siret;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
+
+      it.each([
+        {},
+        { borneBasse: 1 },
+        { borneHaute: 1 },
+        { borneBasse: 1, borneHaute: 50 },
+        { borneBasse: '1', borneHaute: '50' },
+      ])(
+        `refuse les estimations de nombre de services "%s"`,
+        async (estimation) => {
+          donneesRequete.estimationNombreServices = estimation;
           const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
           expect(reponse.status).to.be(400);
         }
