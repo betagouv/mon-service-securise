@@ -1291,6 +1291,17 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           expect(reponse.status).to.be(400);
         }
       );
+
+      it.each([
+        { postes: [] },
+        { postes: [1] },
+        { postes: [uneChaineDeCaracteres(101, 'i')] },
+        { postes: Array(9).fill('i') },
+      ])(`refuse des postes "$postes"`, async ({ postes }) => {
+        donneesRequete.postes = postes;
+        const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+        expect(reponse.status).to.be(400);
+      });
     });
 
     it('aseptise les paramètres de la requête', async () => {
