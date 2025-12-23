@@ -109,6 +109,7 @@
           bind:valeur={utilisateur.telephone}
           aideSaisie="ex : 0XXXXXXXXX"
           modele={modeleTelephone}
+          messageErreur="Le téléphone doit commencer par un 0 et être composé de 10 chiffres."
         />
       </div>
     </div>
