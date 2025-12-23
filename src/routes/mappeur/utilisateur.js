@@ -11,7 +11,7 @@ const obtentionDonneesDeBaseUtilisateur = (corps, serviceCGU) => {
     },
     estimationNombreServices: corps.estimationNombreServices,
     infolettreAcceptee: valeurBooleenne(corps.infolettreAcceptee),
-    transactionnelAccepte: valeurBooleenne(corps.transactionnelAccepte),
+    transactionnelAccepte: corps.transactionnelAccepte,
     postes: corps.postes,
   };
   if (valeurBooleenne(corps.cguAcceptees)) {

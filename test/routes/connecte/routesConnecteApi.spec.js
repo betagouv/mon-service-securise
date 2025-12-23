@@ -27,6 +27,7 @@ import { SourceAuthentification } from '../../../src/modeles/sourceAuthentificat
 import Mesures from '../../../src/modeles/mesures.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
+import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 
 const { SECURISER } = Rubriques;
 const { LECTURE, INVISIBLE } = Permissions;
@@ -1260,10 +1261,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         telephone: '0100000000',
         postes: ['RSSI', "Chargé des systèmes d'informations"],
         siretEntite: '13000766900018',
-        estimationNombreServices: {
-          borneBasse: 1,
-          borneHaute: 10,
-        },
+        estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
         infolettreAcceptee: 'true',
         transactionnelAccepte: 'true',
         cguAcceptees: 'true',
@@ -1273,6 +1271,85 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       const depotDonnees = testeur.depotDonnees();
       depotDonnees.metsAJourUtilisateur = async () => utilisateur;
       depotDonnees.utilisateur = async () => utilisateur;
+    });
+
+    describe('concernant la validation de la requête', () => {
+      it.each([undefined, '', uneChaineDeCaracteres(201, 'a')])(
+        'refuse un prénom "%s"',
+        async (valeurInvalide) => {
+          donneesRequete.prenom = valeurInvalide;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
+
+      it.each([undefined, '', uneChaineDeCaracteres(201, 'a')])(
+        'refuse un nom "%s"',
+        async (valeurInvalide) => {
+          donneesRequete.nom = valeurInvalide;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
+
+      it.each([
+        { postes: [] },
+        { postes: [1] },
+        { postes: [uneChaineDeCaracteres(101, 'i')] },
+        { postes: Array(9).fill('i') },
+      ])(`refuse des postes "$postes"`, async ({ postes }) => {
+        donneesRequete.postes = postes;
+        const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+        expect(reponse.status).to.be(400);
+      });
+
+      it.each([null, undefined, '01 02 03 04 05', '01223344'])(
+        `refuse le numéro de téléphone "%s"`,
+        async (telephone) => {
+          donneesRequete.telephone = telephone;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
+
+      it('accepte un numéro de téléphone vide', async () => {
+        donneesRequete.telephone = '';
+        const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+        expect(reponse.status).to.be(200);
+      });
+
+      it.each([undefined, 'abc', '123456789'])(
+        `refuse le SIRET "%s"`,
+        async (siret) => {
+          donneesRequete.siretEntite = siret;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
+
+      it.each([
+        {},
+        { borneBasse: 1 },
+        { borneHaute: 1 },
+        { borneBasse: 1, borneHaute: 50 },
+        { borneBasse: '1', borneHaute: '50' },
+      ])(
+        `refuse les estimations de nombre de services "%s"`,
+        async (estimation) => {
+          donneesRequete.estimationNombreServices = estimation;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
+
+      it.each([null, undefined, 'abc', 10])(
+        `refuse le transactionnel accepté "%s"`,
+        async (transactionnelAccepte) => {
+          donneesRequete.transactionnelAccepte = transactionnelAccepte;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
     });
 
     it('aseptise les paramètres de la requête', async () => {
@@ -1299,18 +1376,14 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         );
     });
 
-    it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", async () => {
+    it("est en erreur 400 quand le prénom de l'utilisateur est vide", async () => {
       donneesRequete.prenom = '';
 
-      await testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        'La mise à jour de l\'utilisateur a échoué car les paramètres sont invalides. La propriété "prenom" est requise',
-        {
-          method: 'put',
-          url: '/api/utilisateur',
-          data: donneesRequete,
-        }
-      );
+      await testeur.verifieRequeteGenereErreurHTTP(400, 'Bad Request', {
+        method: 'put',
+        url: '/api/utilisateur',
+        data: donneesRequete,
+      });
     });
 
     it("met à jour les autres informations de l'utilisateur", async () => {
