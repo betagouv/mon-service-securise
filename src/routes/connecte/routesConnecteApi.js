@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import express from 'express';
 import { valeurBooleenne } from '../../utilitaires/aseptisation.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
@@ -42,6 +43,8 @@ import routesConnecteApiServiceV2 from './routesConnecteApiServiceV2.js';
 import { routesConnecteApiExplicationNouveauReferentiel } from './routesConnecteApiExplicationNouveauReferentiel.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
+import { valideBody } from '../../http/validePayloads.js';
+import { schemaPutUtilisateur } from './routesConnecteApi.schema.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -494,6 +497,7 @@ const routesConnecteApi = ({
       ...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email'),
       'siretEntite'
     ),
+    valideBody(z.looseObject(schemaPutUtilisateur)),
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const donnees = obtentionDonneesDeBaseUtilisateur(
