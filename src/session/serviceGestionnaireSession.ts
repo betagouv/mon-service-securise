@@ -12,9 +12,12 @@ export const fabriqueServiceGestionnaireSession = () => ({
     utilisateur: Utilisateur,
     source: SourceAuthentification
   ) => {
+    /* eslint-disable no-param-reassign */
     requete.session.token = utilisateur.genereToken(source);
     requete.session.cguAcceptees = utilisateur.accepteCGU();
     requete.session.estInvite = utilisateur.estUnInvite();
+    requete.session.sourceAuthentification = source;
+    /* eslint-enable no-param-reassign */
   },
   cguAcceptees: (requete: RequeteAvecSession) => requete.session?.cguAcceptees,
 });

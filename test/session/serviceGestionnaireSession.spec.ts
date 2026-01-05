@@ -54,6 +54,15 @@ describe('Le service gestionnaire de session', () => {
       );
       expect(requete.session.token).toBe('un token de source MSS');
     });
+
+    it("enregistre la source d'authentification dans la session", async () => {
+      gestionnaireSession.enregistreSession(
+        requete,
+        utilisateur,
+        SourceAuthentification.MSS
+      );
+      expect(requete.session.sourceAuthentification).toBe('MSS');
+    });
   });
 
   describe('sur demande de lecture de `cguAcceptees`', () => {
