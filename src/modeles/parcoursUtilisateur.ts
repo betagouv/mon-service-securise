@@ -3,10 +3,7 @@ import {
   AdaptateurHorloge,
   fabriqueAdaptateurHorloge,
 } from '../adaptateurs/adaptateurHorloge.js';
-import {
-  DonneesExplicationNouveauReferentiel,
-  ExplicationNouveauReferentiel,
-} from './explicationNouveauReferentiel.js';
+import { ExplicationNouveauReferentiel } from './explicationNouveauReferentiel.js';
 import { UUID } from '../typesBasiques.js';
 import { VersionService } from './versionService.js';
 import { creeReferentielVide } from '../referentiel.js';
@@ -19,15 +16,17 @@ type DonneesEtatVisiteGuidee = {
 };
 
 type DonneesParcoursUtilisateur = {
+  aVuTableauDeBordDepuisConnexion: boolean;
   dateDerniereConnexion?: string;
   etatVisiteGuidee: DonneesEtatVisiteGuidee;
-  explicationNouveauReferentiel: DonneesExplicationNouveauReferentiel;
+  explicationNouveauReferentiel: { dejaTermine: boolean };
   idUtilisateur: UUID;
   versionsService?: VersionService[];
 };
 
 class ParcoursUtilisateur {
   private readonly adaptateurHorloge: AdaptateurHorloge;
+  private aVuTableauDeBordDepuisConnexion: boolean;
   readonly idUtilisateur: UUID;
   readonly etatVisiteGuidee: EtatVisiteGuidee;
   readonly explicationNouveauReferentiel: ExplicationNouveauReferentiel;
@@ -38,6 +37,8 @@ class ParcoursUtilisateur {
     referentiel = creeReferentielVide(),
     adaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
+    this.aVuTableauDeBordDepuisConnexion =
+      donnees.aVuTableauDeBordDepuisConnexion;
     this.idUtilisateur = donnees.idUtilisateur;
     this.dateDerniereConnexion = donnees.dateDerniereConnexion;
     this.etatVisiteGuidee = new EtatVisiteGuidee(
@@ -45,7 +46,8 @@ class ParcoursUtilisateur {
       referentiel
     );
     this.explicationNouveauReferentiel = new ExplicationNouveauReferentiel({
-      ...donnees.explicationNouveauReferentiel,
+      dejaTermine: donnees.explicationNouveauReferentiel.dejaTermine,
+      aVuTableauDeBordDepuisConnexion: this.aVuTableauDeBordDepuisConnexion,
       versionsService: donnees.versionsService,
     });
     this.adaptateurHorloge = adaptateurHorloge;
@@ -55,7 +57,7 @@ class ParcoursUtilisateur {
     this.dateDerniereConnexion = this.adaptateurHorloge
       .maintenant()
       .toISOString();
-    this.explicationNouveauReferentiel.aVuTableauDeBordDepuisConnexion = false;
+    this.aVuTableauDeBordDepuisConnexion = false;
   }
 
   finaliseExplicationNouveauReferentiel() {
@@ -63,11 +65,11 @@ class ParcoursUtilisateur {
   }
 
   marqueTableauDeBordVu() {
-    this.explicationNouveauReferentiel.aVuTableauDeBordDepuisConnexion = true;
+    this.aVuTableauDeBordDepuisConnexion = true;
   }
 
   aVuTableauDeBord() {
-    return this.explicationNouveauReferentiel.aVuTableauDeBordDepuisConnexion;
+    return this.aVuTableauDeBordDepuisConnexion;
   }
 
   doitAfficherExplicationNouveauReferentiel() {
@@ -81,11 +83,11 @@ class ParcoursUtilisateur {
   ) {
     return new ParcoursUtilisateur(
       {
+        aVuTableauDeBordDepuisConnexion: false,
         idUtilisateur,
         etatVisiteGuidee: { dejaTerminee: false, enPause: false },
         explicationNouveauReferentiel: {
           dejaTermine: false,
-          aVuTableauDeBordDepuisConnexion: false,
         },
         versionsService,
       },
@@ -95,6 +97,7 @@ class ParcoursUtilisateur {
 
   toJSON(): DonneesParcoursUtilisateur {
     return {
+      aVuTableauDeBordDepuisConnexion: this.aVuTableauDeBordDepuisConnexion,
       idUtilisateur: this.idUtilisateur,
       dateDerniereConnexion: this.dateDerniereConnexion,
       etatVisiteGuidee:

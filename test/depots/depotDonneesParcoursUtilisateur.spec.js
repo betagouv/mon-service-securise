@@ -172,9 +172,7 @@ describe('Le dépôt de données Parcours utilisateur', () => {
       await depot.sauvegardeParcoursUtilisateur(
         new ParcoursUtilisateur({
           idUtilisateur: '123',
-          explicationNouveauReferentiel: {
-            aVuTableauDeBordDepuisConnexion: true,
-          },
+          aVuTableauDeBordDepuisConnexion: true,
         })
       );
       let persistanceAppelee = false;

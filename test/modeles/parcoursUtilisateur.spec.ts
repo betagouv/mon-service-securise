@@ -5,12 +5,12 @@ import { creeReferentielVide } from '../../src/referentiel.js';
 import { unUUID } from '../constructeurs/UUID.ts';
 
 const donneesParcoursUtilisateur = () => ({
+  aVuTableauDeBordDepuisConnexion: false,
   idUtilisateur: unUUID('1'),
   dateDerniereConnexion: '2023-01-01',
   etatVisiteGuidee: { dejaTerminee: false, enPause: true },
   explicationNouveauReferentiel: {
     dejaTermine: false,
-    aVuTableauDeBordDepuisConnexion: false,
   },
 });
 
@@ -19,12 +19,12 @@ describe('Un parcours utilisateur', () => {
     const unParcours = new ParcoursUtilisateur(donneesParcoursUtilisateur());
 
     expect(unParcours.toJSON()).toEqual({
+      aVuTableauDeBordDepuisConnexion: false,
       idUtilisateur: unUUID('1'),
       dateDerniereConnexion: '2023-01-01',
       etatVisiteGuidee: { dejaTerminee: false, enPause: true },
       explicationNouveauReferentiel: {
         dejaTermine: false,
-        aVuTableauDeBordDepuisConnexion: false,
       },
     });
   });

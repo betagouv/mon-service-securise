@@ -29,13 +29,12 @@ export class ExplicationNouveauReferentiel {
   toJSON() {
     return {
       dejaTermine: this.dejaTermine,
-      aVuTableauDeBordDepuisConnexion: this.aVuTableauDeBordDepuisConnexion,
     };
   }
 
   doitEtreAffichee() {
     return (
-      this.dejaTermine === false &&
+      !this.dejaTermine &&
       !this.aVuTableauDeBordDepuisConnexion &&
       this.versionsService.includes(VersionService.v1)
     );

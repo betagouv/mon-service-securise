@@ -27,7 +27,6 @@ describe('Le modèle explicationNouveauReferentiel', () => {
 
     expect(json).toEqual({
       dejaTermine: false,
-      aVuTableauDeBordDepuisConnexion: false,
     });
   });
 
