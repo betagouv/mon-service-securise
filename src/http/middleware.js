@@ -267,6 +267,13 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
+  const chargeExplicationFinCompteLegacy = async (requete, reponse, suite) => {
+    reponse.locals.afficheExplicationFinCompteLegacy =
+      requete.session?.sourceAuthentification === SourceAuthentification.MSS;
+
+    suite();
+  };
+
   const chargeEtatAgentConnect = async (_requete, reponse, suite) => {
     reponse.locals.agentConnectActif = adaptateurEnvironnement
       .featureFlag()
@@ -428,6 +435,7 @@ const middleware = (configuration = {}) => {
     chargeAutorisationsService,
     chargeEtatAgentConnect,
     chargeEtatVisiteGuidee,
+    chargeExplicationFinCompteLegacy,
     chargeExplicationNouveauReferentiel,
     chargeFeatureFlags,
     chargePreferencesUtilisateur,

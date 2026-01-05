@@ -15,6 +15,7 @@ import {
   Permissions,
   Rubriques,
 } from '../../src/modeles/autorisations/gestionDroits.js';
+import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.ts';
 
 const { DECRIRE, SECURISER, HOMOLOGUER } = Rubriques;
 const { LECTURE, ECRITURE, INVISIBLE } = Permissions;
@@ -1083,6 +1084,57 @@ describe('Le middleware MSS', () => {
           undefined
         );
       });
+    });
+  });
+
+  describe("sur demande de chargement de l'explication de la fin des comptes legacy (compte login + mot de passe)", () => {
+    it("demande l'affichage de l'explication pour une requête connectée avec MSS comme source d'authentification", async () => {
+      let doitAfficher;
+      const middleware = leMiddleware();
+      requete.session.sourceAuthentification = SourceAuthentification.MSS;
+
+      await middleware.chargeExplicationFinCompteLegacy(
+        requete,
+        reponse,
+        () => {
+          doitAfficher = reponse.locals.afficheExplicationFinCompteLegacy;
+        }
+      );
+
+      expect(doitAfficher).to.be(true);
+    });
+
+    it("ne demande pas l'affichage de l'explication pour une requête connectée avec ProConnect comme source d'authentification", async () => {
+      let doitAfficher;
+      const middleware = leMiddleware();
+      requete.session.sourceAuthentification =
+        SourceAuthentification.AGENT_CONNECT;
+
+      await middleware.chargeExplicationFinCompteLegacy(
+        requete,
+        reponse,
+        () => {
+          doitAfficher = reponse.locals.afficheExplicationFinCompteLegacy;
+        }
+      );
+
+      expect(doitAfficher).to.be(false);
+    });
+
+    it("ne demande pas l'affichage pour une requête non connectée", async () => {
+      let doitAfficher;
+      const middleware = leMiddleware();
+      requete.session = null;
+
+      await middleware.chargeExplicationFinCompteLegacy(
+        requete,
+        reponse,
+        () => {
+          doitAfficher = reponse.locals.afficheExplicationFinCompteLegacy;
+        }
+      );
+
+      expect(doitAfficher).to.be(false);
     });
   });
 
