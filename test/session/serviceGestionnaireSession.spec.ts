@@ -1,27 +1,31 @@
-import expect from 'expect.js';
-import { fabriqueServiceGestionnaireSession } from '../../src/session/serviceGestionnaireSession.js';
+import {
+  fabriqueServiceGestionnaireSession,
+  RequeteAvecSession,
+  ServiceGestionnaireSession,
+} from '../../src/session/serviceGestionnaireSession.js';
 import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.js';
+import Utilisateur from '../../src/modeles/utilisateur.js';
 
 describe('Le service gestionnaire de session', () => {
-  let gestionnaireSession;
+  let gestionnaireSession: ServiceGestionnaireSession;
 
   beforeEach(() => {
     gestionnaireSession = fabriqueServiceGestionnaireSession();
   });
 
   describe("sur demande d'enregistrement de session", () => {
-    let requete;
-    let utilisateur;
+    let requete: RequeteAvecSession;
+    let utilisateur: Utilisateur;
 
     beforeEach(() => {
       requete = {
         session: {},
-      };
+      } as RequeteAvecSession;
       utilisateur = {
-        accepteCGU: () => 'CGU',
-        estUnInvite: () => 'INVITÉ',
+        accepteCGU: () => true,
+        estUnInvite: () => true,
         genereToken: (source) => `un token de source ${source}`,
-      };
+      } as Utilisateur;
     });
 
     it('enregistre `cguAcceptees` dans la session', async () => {
@@ -30,7 +34,7 @@ describe('Le service gestionnaire de session', () => {
         utilisateur,
         SourceAuthentification.MSS
       );
-      expect(requete.session.cguAcceptees).to.be('CGU');
+      expect(requete.session.cguAcceptees).toBe(true);
     });
 
     it('enregistre `estInvite` dans la session', async () => {
@@ -39,7 +43,7 @@ describe('Le service gestionnaire de session', () => {
         utilisateur,
         SourceAuthentification.MSS
       );
-      expect(requete.session.estInvite).to.be('INVITÉ');
+      expect(requete.session.estInvite).toBe(true);
     });
 
     it("enregistre le token JWT de l'utilisateur dans la session", async () => {
@@ -48,23 +52,25 @@ describe('Le service gestionnaire de session', () => {
         utilisateur,
         SourceAuthentification.MSS
       );
-      expect(requete.session.token).to.be('un token de source MSS');
+      expect(requete.session.token).toBe('un token de source MSS');
     });
   });
 
   describe('sur demande de lecture de `cguAcceptees`', () => {
     it('peut lire depuis la session', () => {
-      const requete = { session: { cguAcceptees: true } };
+      const requete = {
+        session: { cguAcceptees: true },
+      } as unknown as RequeteAvecSession;
       const cguAcceptees = gestionnaireSession.cguAcceptees(requete);
 
-      expect(cguAcceptees).to.be(true);
+      expect(cguAcceptees).toBe(true);
     });
 
     it("reste robuste si la requête n'a pas de session", () => {
-      const requete = { session: null };
+      const requete = { session: null } as unknown as RequeteAvecSession;
       const cguAcceptees = gestionnaireSession.cguAcceptees(requete);
 
-      expect(cguAcceptees).to.be(undefined);
+      expect(cguAcceptees).toBe(undefined);
     });
   });
 });
