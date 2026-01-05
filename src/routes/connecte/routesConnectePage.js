@@ -95,6 +95,7 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
     middleware.chargeExplicationNouveauReferentiel,
+    middleware.chargeExplicationFinCompteLegacy,
     async (requete, reponse) => {
       const { idUtilisateurCourant } = requete;
       const estSuperviseur =

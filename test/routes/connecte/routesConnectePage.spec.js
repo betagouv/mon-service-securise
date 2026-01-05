@@ -254,6 +254,15 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         );
     });
 
+    it("vérifie que l'état de l'explication de fin des comptes legacy est chargé", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteChargeExplicationFinCompteLegacy(
+          testeur.app(),
+          '/tableauDeBord'
+        );
+    });
+
     it("délègue au dépôt de données la mise à jour du fait que l'utilisateur a vu le tableau de bord depuis sa connexion", async () => {
       let idRecu;
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
