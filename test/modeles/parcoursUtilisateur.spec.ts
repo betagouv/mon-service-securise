@@ -29,6 +29,12 @@ describe('Un parcours utilisateur', () => {
     });
   });
 
+  it('sait se sérialiser', () => {
+    const unParcours = new ParcoursUtilisateur(donneesParcoursUtilisateur());
+
+    expect(unParcours.donneesSerialisees()).toEqual(unParcours.toJSON());
+  });
+
   it('sait se créer pour un utilisateur avec des valeurs par défaut', () => {
     const etatInitial = ParcoursUtilisateur.pourUtilisateur(
       unUUID('1'),

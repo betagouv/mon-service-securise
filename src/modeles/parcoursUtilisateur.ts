@@ -106,6 +106,10 @@ class ParcoursUtilisateur {
         this.explicationNouveauReferentiel.toJSON(),
     };
   }
+
+  donneesSerialisees() {
+    return this.toJSON();
+  }
 }
 
 export default ParcoursUtilisateur;
