@@ -1,15 +1,17 @@
 import { VersionService } from './versionService.js';
 
+export type DonneesExplicationNouveauReferentiel = {
+  dejaTermine: boolean;
+  versionsService?: VersionService[];
+  aVuTableauDeBordDepuisConnexion: boolean;
+};
+
 export class ExplicationNouveauReferentiel {
   private dejaTermine: boolean;
   private versionsService: VersionService[];
   aVuTableauDeBordDepuisConnexion: boolean;
 
-  constructor(donnees: {
-    dejaTermine: boolean;
-    versionsService: VersionService[];
-    aVuTableauDeBordDepuisConnexion: boolean;
-  }) {
+  constructor(donnees: DonneesExplicationNouveauReferentiel) {
     this.dejaTermine = donnees?.dejaTermine;
     this.versionsService = donnees?.versionsService || [];
     this.aVuTableauDeBordDepuisConnexion =
