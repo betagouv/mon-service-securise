@@ -1,19 +1,45 @@
-import Base from './base.js';
-import * as Referentiel from '../referentiel.js';
 import EtatVisiteGuidee from './etatVisiteGuidee.js';
-import { fabriqueAdaptateurHorloge } from '../adaptateurs/adaptateurHorloge.js';
-import { ExplicationNouveauReferentiel } from './explicationNouveauReferentiel.js';
+import {
+  AdaptateurHorloge,
+  fabriqueAdaptateurHorloge,
+} from '../adaptateurs/adaptateurHorloge.js';
+import {
+  DonneesExplicationNouveauReferentiel,
+  ExplicationNouveauReferentiel,
+} from './explicationNouveauReferentiel.js';
+import { UUID } from '../typesBasiques.js';
+import { VersionService } from './versionService.js';
+import { creeReferentielVide } from '../referentiel.js';
+import { Referentiel } from '../referentiel.interface.js';
 
-class ParcoursUtilisateur extends Base {
+type DonneesEtatVisiteGuidee = {
+  dejaTerminee: boolean;
+  enPause: boolean;
+  etapesVues?: string[];
+};
+
+type DonneesParcoursUtilisateur = {
+  dateDerniereConnexion?: string;
+  etatVisiteGuidee: DonneesEtatVisiteGuidee;
+  explicationNouveauReferentiel: DonneesExplicationNouveauReferentiel;
+  idUtilisateur: UUID;
+  versionsService?: VersionService[];
+};
+
+class ParcoursUtilisateur {
+  private readonly adaptateurHorloge: AdaptateurHorloge;
+  readonly idUtilisateur: UUID;
+  readonly etatVisiteGuidee: EtatVisiteGuidee;
+  readonly explicationNouveauReferentiel: ExplicationNouveauReferentiel;
+  dateDerniereConnexion?: string;
+
   constructor(
-    donnees = {},
-    referentiel = Referentiel.creeReferentielVide(),
+    donnees: DonneesParcoursUtilisateur,
+    referentiel = creeReferentielVide(),
     adaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
-    super({
-      proprietesAtomiquesRequises: ['idUtilisateur', 'dateDerniereConnexion'],
-    });
-    this.renseigneProprietes(donnees);
+    this.idUtilisateur = donnees.idUtilisateur;
+    this.dateDerniereConnexion = donnees.dateDerniereConnexion;
     this.etatVisiteGuidee = new EtatVisiteGuidee(
       donnees.etatVisiteGuidee,
       referentiel
@@ -23,7 +49,6 @@ class ParcoursUtilisateur extends Base {
       versionsService: donnees.versionsService,
     });
     this.adaptateurHorloge = adaptateurHorloge;
-    this.referentiel = referentiel;
   }
 
   enregistreDerniereConnexionMaintenant() {
@@ -49,7 +74,11 @@ class ParcoursUtilisateur extends Base {
     return this.explicationNouveauReferentiel.doitEtreAffichee();
   }
 
-  static pourUtilisateur(idUtilisateur, referentiel, versionsService = []) {
+  static pourUtilisateur(
+    idUtilisateur: UUID,
+    referentiel: Referentiel,
+    versionsService: VersionService[] = []
+  ) {
     return new ParcoursUtilisateur(
       {
         idUtilisateur,
@@ -64,10 +93,12 @@ class ParcoursUtilisateur extends Base {
     );
   }
 
-  toJSON() {
+  toJSON(): DonneesParcoursUtilisateur {
     return {
-      ...super.toJSON(),
-      etatVisiteGuidee: this.etatVisiteGuidee.toJSON(),
+      idUtilisateur: this.idUtilisateur,
+      dateDerniereConnexion: this.dateDerniereConnexion,
+      etatVisiteGuidee:
+        this.etatVisiteGuidee.toJSON() as DonneesEtatVisiteGuidee,
       explicationNouveauReferentiel:
         this.explicationNouveauReferentiel.toJSON(),
     };
