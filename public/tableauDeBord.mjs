@@ -31,10 +31,19 @@ $(() => {
   const afficheExplicationNouveauReferentiel = lisDonneesPartagees(
     'affiche-explication-nouveau-referentiel'
   );
-  if (afficheExplicationNouveauReferentiel && !visiteGuideeActive) {
-    document.body.dispatchEvent(
-      new CustomEvent('svelte-recharge-explication-nouveau-referentiel')
-    );
+  const afficheExplicationFinCompteLegacy = lisDonneesPartagees(
+    'affiche-explication-fin-compte-legacy'
+  );
+  if (!visiteGuideeActive) {
+    // On donne priorité à la modale de fin des comptes legacy
+    if (afficheExplicationFinCompteLegacy)
+      document.body.dispatchEvent(
+        new CustomEvent('svelte-recharge-explication-fin-compte-legacy')
+      );
+    else if (afficheExplicationNouveauReferentiel)
+      document.body.dispatchEvent(
+        new CustomEvent('svelte-recharge-explication-nouveau-referentiel')
+      );
   }
 
   const requete = new URLSearchParams(window.location.search);
