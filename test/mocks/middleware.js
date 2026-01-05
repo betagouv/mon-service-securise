@@ -69,6 +69,7 @@ let parametresAseptises = [];
 let preferencesChargees = false;
 let etatVisiteGuideeCharge = false;
 let etatExplicationNouveauReferentielCharge = false;
+let etatExplicationFinCompteLegacy = false;
 let activationAgentConnectCharge = false;
 let filtrageIpEstActif = false;
 let rechercheDossierCourantEffectuee = false;
@@ -108,6 +109,7 @@ const middlewareFantaisie = {
     preferencesChargees = false;
     etatVisiteGuideeCharge = false;
     etatExplicationNouveauReferentielCharge = false;
+    etatExplicationFinCompteLegacy = false;
     activationAgentConnectCharge = false;
     filtrageIpEstActif = false;
     rechercheDossierCourantEffectuee = false;
@@ -167,6 +169,11 @@ const middlewareFantaisie = {
       nombreEtapesRestantes: () => 2,
     };
     etatVisiteGuideeCharge = true;
+    suite();
+  },
+
+  chargeExplicationFinCompteLegacy: (_requete, _reponse, suite) => {
+    etatExplicationFinCompteLegacy = true;
     suite();
   },
 
@@ -360,6 +367,13 @@ const middlewareFantaisie = {
   verifieRequeteChargeEtatVisiteGuidee: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => etatVisiteGuideeCharge },
+      app,
+      ...params
+    ),
+
+  verifieRequeteChargeExplicationFinCompteLegacy: async (app, ...params) =>
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => etatExplicationFinCompteLegacy },
       app,
       ...params
     ),
