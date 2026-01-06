@@ -1,12 +1,15 @@
 import { Issuer, generators } from 'openid-client';
+import { Request } from 'express';
 import { oidc } from './adaptateurEnvironnement.js';
 
 const configurationOidc = oidc();
 
 async function recupereClient() {
-  const agentConnect = await Issuer.discover(configurationOidc.urlBase());
+  const agentConnect = await Issuer.discover(
+    configurationOidc.urlBase() as string
+  );
   return new agentConnect.Client({
-    client_id: configurationOidc.clientId(),
+    client_id: configurationOidc.clientId() as string,
     client_secret: configurationOidc.clientSecret(),
     redirect_uris: [configurationOidc.urlRedirectionApresAuthentification()],
     response_types: ['code'],
@@ -28,7 +31,7 @@ const genereDemandeAutorisation = async () => {
   return { url, nonce, state };
 };
 
-const genereDemandeDeconnexion = async (idToken) => {
+const genereDemandeDeconnexion = async (idToken: string) => {
   const state = generators.state(32);
   const client = await recupereClient();
   const url = client.endSessionUrl({
@@ -44,7 +47,7 @@ const genereDemandeDeconnexion = async (idToken) => {
   };
 };
 
-const recupereJeton = async (requete) => {
+const recupereJeton = async (requete: Request) => {
   const client = await recupereClient();
   const params = client.callbackParams(requete);
 
@@ -61,7 +64,7 @@ const recupereJeton = async (requete) => {
   };
 };
 
-const recupereInformationsUtilisateur = async (accessToken) => {
+const recupereInformationsUtilisateur = async (accessToken: string) => {
   const client = await recupereClient();
   const {
     given_name: prenom,
