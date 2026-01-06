@@ -15,7 +15,8 @@ import {
   Permissions,
   Rubriques,
 } from '../../src/modeles/autorisations/gestionDroits.js';
-import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.ts';
+import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.js';
+import { unUUID } from '../constructeurs/UUID.js';
 
 const { DECRIRE, SECURISER, HOMOLOGUER } = Rubriques;
 const { LECTURE, ECRITURE, INVISIBLE } = Permissions;
@@ -1088,20 +1089,50 @@ describe('Le middleware MSS', () => {
   });
 
   describe("sur demande de chargement de l'explication de la fin des comptes legacy (compte login + mot de passe)", () => {
-    it("demande l'affichage de l'explication pour une requête connectée avec MSS comme source d'authentification", async () => {
-      let doitAfficher;
-      const middleware = leMiddleware();
-      requete.session.sourceAuthentification = SourceAuthentification.MSS;
+    describe('pour une connexion par compte Legacy', () => {
+      it("demande l'affichage de l'explication", async () => {
+        let doitAfficher;
+        depotDonnees.lisParcoursUtilisateur = async () =>
+          ParcoursUtilisateur.pourUtilisateur(unUUID('1'), creeReferentiel());
 
-      await middleware.chargeExplicationFinCompteLegacy(
-        requete,
-        reponse,
-        () => {
-          doitAfficher = reponse.locals.afficheExplicationFinCompteLegacy;
-        }
-      );
+        const middleware = leMiddleware();
+        requete.session.sourceAuthentification = SourceAuthentification.MSS;
 
-      expect(doitAfficher).to.be(true);
+        await middleware.chargeExplicationFinCompteLegacy(
+          requete,
+          reponse,
+          () => {
+            doitAfficher = reponse.locals.afficheExplicationFinCompteLegacy;
+          }
+        );
+
+        expect(doitAfficher).to.be(true);
+      });
+
+      it("ne demande pas l'affichage si le tableau de bord a déjà été vu pendant la navigation", async () => {
+        let doitAfficher;
+        depotDonnees.lisParcoursUtilisateur = async () => {
+          const aNavigueSurTDB = ParcoursUtilisateur.pourUtilisateur(
+            unUUID('1'),
+            creeReferentiel()
+          );
+          aNavigueSurTDB.marqueTableauDeBordVu();
+          return aNavigueSurTDB;
+        };
+
+        const middleware = leMiddleware();
+        requete.session.sourceAuthentification = SourceAuthentification.MSS;
+
+        await middleware.chargeExplicationFinCompteLegacy(
+          requete,
+          reponse,
+          () => {
+            doitAfficher = reponse.locals.afficheExplicationFinCompteLegacy;
+          }
+        );
+
+        expect(doitAfficher).to.be(false);
+      });
     });
 
     it("ne demande pas l'affichage de l'explication pour une requête connectée avec ProConnect comme source d'authentification", async () => {

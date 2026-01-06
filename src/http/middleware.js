@@ -268,7 +268,12 @@ const middleware = (configuration = {}) => {
   };
 
   const chargeExplicationFinCompteLegacy = async (requete, reponse, suite) => {
+    const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
+      requete.idUtilisateurCourant
+    );
+
     reponse.locals.afficheExplicationFinCompteLegacy =
+      !parcoursUtilisateur.aVuTableauDeBord() &&
       requete.session?.sourceAuthentification === SourceAuthentification.MSS;
 
     suite();
