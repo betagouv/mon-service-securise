@@ -1,17 +1,17 @@
-import ParcoursUtilisateur from '../../src/modeles/parcoursUtilisateur.ts';
+import ParcoursUtilisateur, {
+  DonneesParcoursUtilisateur,
+} from '../../src/modeles/parcoursUtilisateur.ts';
 import * as Referentiel from '../../src/referentiel.js';
 import EtatVisiteGuidee from '../../src/modeles/etatVisiteGuidee.js';
 import { creeReferentielVide } from '../../src/referentiel.js';
 import { unUUID } from '../constructeurs/UUID.ts';
 
-const donneesParcoursUtilisateur = () => ({
+const donneesParcoursUtilisateur = (): DonneesParcoursUtilisateur => ({
   aVuTableauDeBordDepuisConnexion: false,
   idUtilisateur: unUUID('1'),
   dateDerniereConnexion: '2023-01-01',
   etatVisiteGuidee: { dejaTerminee: false, enPause: true },
-  explicationNouveauReferentiel: {
-    dejaTermine: false,
-  },
+  explicationNouveauReferentiel: { dejaTermine: false },
 });
 
 describe('Un parcours utilisateur', () => {
@@ -65,5 +65,14 @@ describe('Un parcours utilisateur', () => {
 
     const dateParcours = unParcours.toJSON().dateDerniereConnexion;
     expect(dateParcours).toEqual(dateDeConnexion.toISOString());
+  });
+
+  it("par défaut : indique que l'explication du nouveau référentiel n'est pas terminée", () => {
+    const sansExplicationPrealable = donneesParcoursUtilisateur();
+    delete sansExplicationPrealable.explicationNouveauReferentiel;
+
+    const p = new ParcoursUtilisateur(sansExplicationPrealable);
+
+    expect(p.explicationNouveauReferentiel.estTermine()).toBe(false);
   });
 });
