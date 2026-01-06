@@ -8,6 +8,7 @@ block append styles
 block append scripts
   +composantSvelte('tableauDeBord.js')
   +composantSvelte('explicationNouveauReferentiel.js')
+  +composantSvelte('explicationFinCompteLegacy.js')
   +donneesPartagees('utilisateur-superviseur', {estSuperviseur})
   +donneesPartagees('avec-promotion-de-msc', featureFlags.avecBandeauMSC)
   +donneesPartagees('avec-decrire-v2', featureFlags.avecDecrireV2)
@@ -19,3 +20,4 @@ block main
   #tableau-de-bord
   #rapport-televersement
   #explication-nouveau-referentiel
+  #explication-fin-compte-legacy
