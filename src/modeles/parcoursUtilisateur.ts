@@ -15,11 +15,11 @@ type DonneesEtatVisiteGuidee = {
   etapesVues?: string[];
 };
 
-type DonneesParcoursUtilisateur = {
+export type DonneesParcoursUtilisateur = {
   aVuTableauDeBordDepuisConnexion: boolean;
   dateDerniereConnexion?: string;
   etatVisiteGuidee: DonneesEtatVisiteGuidee;
-  explicationNouveauReferentiel: { dejaTermine: boolean };
+  explicationNouveauReferentiel?: { dejaTermine: boolean };
   idUtilisateur: UUID;
   versionsService?: VersionService[];
 };
@@ -46,7 +46,7 @@ class ParcoursUtilisateur {
       referentiel
     );
     this.explicationNouveauReferentiel = new ExplicationNouveauReferentiel({
-      dejaTermine: donnees.explicationNouveauReferentiel.dejaTermine,
+      dejaTermine: donnees.explicationNouveauReferentiel?.dejaTermine || false,
       aVuTableauDeBordDepuisConnexion: this.aVuTableauDeBordDepuisConnexion,
       versionsService: donnees.versionsService,
     });
