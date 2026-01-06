@@ -3,6 +3,7 @@
   import Bouton from '../ui/Bouton.svelte';
   import MotDePasse from '../ui/MotDePasse.svelte';
   import Formulaire from '../ui/Formulaire.svelte';
+  import Lien from '../ui/Lien.svelte';
 
   export let urlRedirection: string;
 
@@ -52,6 +53,21 @@
         </p>
       </div>
       <hr class="separation-agent-connect" />
+      <div class="mise-en-avant">
+        <lab-anssi-icone nom="info-line" taille="md"></lab-anssi-icone>
+        <span class="titre"><b>Évolution des modes de connexion</b></span>
+        <br />
+        <span
+          >À partir de mars 2026, la connexion à MonServiceSécurisé se fera
+          uniquement via ProConnect.</span
+        >
+        <Lien
+          titre="En savoir plus"
+          href="https://aide.monservicesecurise.cyber.gouv.fr/fr/article/la-connexion-a-monservicesecurise-evolue-1jr2z6k"
+          type="bouton-secondaire"
+          target="_blank"
+        />
+      </div>
       <Formulaire on:formulaireValide={connecte}>
         <div class="connexion-mss">
           <span class="mention-obligatoire requis">champ obligatoire</span>
@@ -96,7 +112,7 @@
   </div>
 </div>
 
-<style>
+<style lang="scss">
   .conteneur {
     display: flex;
     width: 100%;
@@ -115,7 +131,7 @@
   }
 
   .contenu-connexion {
-    width: 385px;
+    width: 496px;
     margin: 0 auto;
   }
 
@@ -194,5 +210,29 @@
   .afficheErreur {
     display: flex;
     align-items: start;
+  }
+
+  .mise-en-avant {
+    padding: 16px 24px;
+    text-align: left;
+    color: #3a3a3a;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #eee;
+    border-left: 4px solid var(--bleu-mise-en-avant);
+    margin-bottom: 8px;
+
+    .titre {
+      color: #161616;
+      font-size: 1.375rem;
+      line-height: 1.75rem;
+    }
+
+    span {
+      font-size: 1.125rem;
+      font-weight: 400;
+      line-height: 1.75rem;
+    }
   }
 </style>
