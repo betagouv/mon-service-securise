@@ -26,6 +26,8 @@ const genereDemandeAutorisation = async () => {
     scope: 'openid email given_name usual_name siret',
     nonce,
     state,
+    // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/niveaux-acr#les-m%C3%A9thodes-dauthentifications
+    claims: { id_token: { amr: null } },
   });
 
   return { url, nonce, state };
@@ -41,11 +43,16 @@ const genereDemandeDeconnexion = async (idToken: string) => {
     state,
   });
 
-  return {
-    url,
-    state,
-  };
+  return { url, state };
 };
+
+// La liste des identifiants de méthodes est disponible ici :
+// https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/niveaux-acr#les-m%C3%A9thodes-dauthentifications
+type MethodeAuthentification = 'totp' | 'pop' | 'mfa' | 'pwd' | 'mail';
+
+const estUneMethodeAuthentificationAvecMFA = (
+  methodesAuthentification: MethodeAuthentification[]
+) => methodesAuthentification.includes('mfa');
 
 const recupereJeton = async (requete: Request) => {
   const client = await recupereClient();
@@ -58,9 +65,15 @@ const recupereJeton = async (requete: Request) => {
     { nonce, state }
   );
 
+  const { amr } = token.claims();
+  const connexionAvecMFA =
+    !!amr &&
+    estUneMethodeAuthentificationAvecMFA(amr as MethodeAuthentification[]);
+
   return {
-    idToken: token.id_token,
     accessToken: token.access_token,
+    connexionAvecMFA,
+    idToken: token.id_token,
   };
 };
 
@@ -76,6 +89,7 @@ const recupereInformationsUtilisateur = async (accessToken: string) => {
 };
 
 export {
+  estUneMethodeAuthentificationAvecMFA,
   genereDemandeAutorisation,
   genereDemandeDeconnexion,
   recupereInformationsUtilisateur,
