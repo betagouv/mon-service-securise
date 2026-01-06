@@ -118,6 +118,7 @@ const routesConnectePage = ({
     '/visiteGuidee/:idEtape',
     middleware.verificationAcceptationCGU,
     middleware.chargePreferencesUtilisateur,
+    middleware.chargeExplicationNouveauReferentiel,
     middleware.chargeEtatVisiteGuidee,
     (requete, reponse) => {
       const utilisateurVisiteGuidee = new Utilisateur({
