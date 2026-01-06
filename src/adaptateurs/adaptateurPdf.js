@@ -16,6 +16,7 @@ const formatPdfA4 = (enteteHtml, piedPageHtml) => ({
   headerTemplate: enteteHtml,
   footerTemplate: piedPageHtml,
   margin: { bottom: '2cm', left: '1cm', right: '1cm', top: '23mm' },
+  timeout: 0,
 });
 
 const generePdfs = async (pagesHtml) => {
