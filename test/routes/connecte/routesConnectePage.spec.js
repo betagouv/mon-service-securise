@@ -94,6 +94,15 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         );
     });
 
+    it("charge l'explication de fin des comptes legacy, car c'est nécessaire au tableau de bord", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteChargeExplicationFinCompteLegacy(
+          testeur.app(),
+          '/visiteGuidee/piloter'
+        );
+    });
+
     describe("pour l'étape 'Décrire'", () => {
       it("affiche l'étape 'Décrire V1' par défaut", async () => {
         const reponse = await testeur.get('/visiteGuidee/decrire');

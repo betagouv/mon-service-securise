@@ -120,6 +120,7 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     middleware.chargePreferencesUtilisateur,
     middleware.chargeExplicationNouveauReferentiel,
+    middleware.chargeExplicationFinCompteLegacy,
     middleware.chargeEtatVisiteGuidee,
     (requete, reponse) => {
       const utilisateurVisiteGuidee = new Utilisateur({
