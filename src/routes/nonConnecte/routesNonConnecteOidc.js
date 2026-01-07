@@ -56,7 +56,7 @@ const routesNonConnecteOidc = ({
       return;
     }
     try {
-      const { idToken, accessToken } =
+      const { idToken, accessToken, connexionAvecMFA } =
         await adaptateurOidc.recupereJeton(requete);
       const { urlRedirection } = requete.cookies.AgentConnectInfo;
 
@@ -82,6 +82,7 @@ const routesNonConnecteOidc = ({
         urlRedirection,
         adaptateurEnvironnement,
         serviceGestionnaireSession,
+        connexionAvecMFA,
       });
     } catch (e) {
       fabriqueAdaptateurGestionErreur().logueErreur(e);
