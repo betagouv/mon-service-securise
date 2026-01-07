@@ -63,6 +63,27 @@ describe('Le service gestionnaire de session', () => {
       );
       expect(requete.session.sourceAuthentification).toBe('MSS');
     });
+
+    describe("concernant l'utilisation du MFA", () => {
+      it("indique que l'utilisateur utilise un MFA", () => {
+        gestionnaireSession.enregistreSession(
+          requete,
+          utilisateur,
+          SourceAuthentification.AGENT_CONNECT,
+          true
+        );
+        expect(requete.session.connexionAvecMFA).toBe(true);
+      });
+
+      it("indique que l'utilisateur n'utilise pas un MFA par défaut", () => {
+        gestionnaireSession.enregistreSession(
+          requete,
+          utilisateur,
+          SourceAuthentification.AGENT_CONNECT
+        );
+        expect(requete.session.connexionAvecMFA).toBe(false);
+      });
+    });
   });
 
   describe('sur demande de lecture de `cguAcceptees`', () => {

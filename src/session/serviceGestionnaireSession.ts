@@ -10,13 +10,15 @@ export const fabriqueServiceGestionnaireSession = () => ({
   enregistreSession: (
     requete: RequeteAvecSession,
     utilisateur: Utilisateur,
-    source: SourceAuthentification
+    source: SourceAuthentification,
+    connexionAvecMFA?: boolean
   ) => {
     /* eslint-disable no-param-reassign */
     requete.session.token = utilisateur.genereToken(source);
     requete.session.cguAcceptees = utilisateur.accepteCGU();
     requete.session.estInvite = utilisateur.estUnInvite();
     requete.session.sourceAuthentification = source;
+    requete.session.connexionAvecMFA = connexionAvecMFA || false;
     /* eslint-enable no-param-reassign */
   },
   cguAcceptees: (requete: RequeteAvecSession) => requete.session?.cguAcceptees,
