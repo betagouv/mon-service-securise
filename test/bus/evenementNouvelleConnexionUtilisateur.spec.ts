@@ -37,4 +37,16 @@ describe("L'événement `EvenementNouvelleConnexionUtilisateur", () => {
         })
     ).toThrowError();
   });
+
+  it("lève une exception s'il est instancié sans source", () => {
+    expect(
+      () =>
+        new EvenementNouvelleConnexionUtilisateur({
+          idUtilisateur: unUUID('1'),
+          dateDerniereConnexion: '2024-01-01',
+          // @ts-expect-error On force volontairement la valeur `null` pour déclencher une erreur
+          source: null,
+        })
+    ).toThrowError();
+  });
 });
