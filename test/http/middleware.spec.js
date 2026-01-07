@@ -1169,6 +1169,81 @@ describe('Le middleware MSS', () => {
     });
   });
 
+  describe("sur demande de chargement de l'explication de l'utilisation du MFA (ProConnect)", () => {
+    describe('pour une connexion par compte ProConnect', () => {
+      it("demande l'affichage de l'explication si le MFA n'a pas été utilisé", async () => {
+        let doitAfficher;
+        depotDonnees.lisParcoursUtilisateur = async () =>
+          ParcoursUtilisateur.pourUtilisateur(unUUID('1'), creeReferentiel());
+
+        const middleware = leMiddleware();
+        requete.session.sourceAuthentification =
+          SourceAuthentification.AGENT_CONNECT;
+        requete.session.connexionAvecMFA = false;
+
+        await middleware.chargeExplicationUtilisationMFA(
+          requete,
+          reponse,
+          () => {
+            doitAfficher = reponse.locals.afficheExplicationUtilisationMFA;
+          }
+        );
+
+        expect(doitAfficher).to.be(true);
+      });
+
+      it("ne demande pas l'affichage si le tableau de bord a déjà été vu pendant la navigation", async () => {
+        let doitAfficher;
+        depotDonnees.lisParcoursUtilisateur = async () => {
+          const aNavigueSurTDB = ParcoursUtilisateur.pourUtilisateur(
+            unUUID('1'),
+            creeReferentiel()
+          );
+          aNavigueSurTDB.marqueTableauDeBordVu();
+          return aNavigueSurTDB;
+        };
+
+        const middleware = leMiddleware();
+        requete.session.sourceAuthentification =
+          SourceAuthentification.AGENT_CONNECT;
+
+        await middleware.chargeExplicationUtilisationMFA(
+          requete,
+          reponse,
+          () => {
+            doitAfficher = reponse.locals.afficheExplicationUtilisationMFA;
+          }
+        );
+
+        expect(doitAfficher).to.be(false);
+      });
+    });
+
+    it("ne demande pas l'affichage de l'explication pour une requête connectée avec un compte legacy", async () => {
+      let doitAfficher;
+      const middleware = leMiddleware();
+      requete.session.sourceAuthentification = SourceAuthentification.MSS;
+
+      await middleware.chargeExplicationUtilisationMFA(requete, reponse, () => {
+        doitAfficher = reponse.locals.afficheExplicationUtilisationMFA;
+      });
+
+      expect(doitAfficher).to.be(false);
+    });
+
+    it("ne demande pas l'affichage pour une requête non connectée", async () => {
+      let doitAfficher;
+      const middleware = leMiddleware();
+      requete.session = null;
+
+      await middleware.chargeExplicationUtilisationMFA(requete, reponse, () => {
+        doitAfficher = reponse.locals.afficheExplicationUtilisationMFA;
+      });
+
+      expect(doitAfficher).to.be(false);
+    });
+  });
+
   it('ajoute la version de build dans `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
     const adaptateurEnvironnement = {
       versionDeBuild: () => '1.1',
