@@ -24,7 +24,8 @@ const executeurApresAuthentification = async (
     requete.session.AgentConnectIdToken = agentConnectIdToken;
     await depotDonnees.enregistreNouvelleConnexionUtilisateur(
       ordre.utilisateurAConnecter.id,
-      SourceAuthentification.AGENT_CONNECT
+      SourceAuthentification.AGENT_CONNECT,
+      connexionAvecMFA
     );
   }
 
