@@ -7,6 +7,7 @@ type DonneesEvenementConnexionUtilisateur = {
   idUtilisateur: UUID;
   dateDerniereConnexion: string;
   source: SourceAuthentification;
+  connexionAvecMFA: boolean;
 };
 
 class EvenementConnexionUtilisateur extends Evenement {
@@ -15,6 +16,7 @@ class EvenementConnexionUtilisateur extends Evenement {
 
     const valide = () => {
       Evenement.verifieProprietesRenseignees(donnees, [
+        'connexionAvecMFA',
         'idUtilisateur',
         'dateDerniereConnexion',
         'source',
@@ -26,10 +28,12 @@ class EvenementConnexionUtilisateur extends Evenement {
 
     valide();
 
-    const { idUtilisateur, dateDerniereConnexion, source } = donnees;
+    const { connexionAvecMFA, idUtilisateur, dateDerniereConnexion, source } =
+      donnees;
     super(
       'CONNEXION_UTILISATEUR',
       {
+        connexionAvecMFA,
         dateDerniereConnexion,
         idUtilisateur: adaptateurChiffrement.hacheSha256(idUtilisateur),
         source,

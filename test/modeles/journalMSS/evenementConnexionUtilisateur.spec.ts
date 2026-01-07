@@ -15,6 +15,7 @@ describe('Un événement de connexion utilisateur', () => {
     idUtilisateur: unUUID('a'),
     dateDerniereConnexion: '2022-07-07',
     source: SourceAuthentification.MSS,
+    connexionAvecMFA: false,
   });
 
   it("hache l'identifiant de l'utilisateur qui lui est donné", () => {
@@ -37,6 +38,7 @@ describe('Un événement de connexion utilisateur', () => {
         idUtilisateur: unUUID('A'),
         dateDerniereConnexion: '2022-07-07',
         source: SourceAuthentification.MSS,
+        connexionAvecMFA: false,
       },
       date: '17/11/2022',
     });
@@ -80,6 +82,17 @@ describe('Un événement de connexion utilisateur', () => {
         new EvenementConnexionUtilisateur(
           // @ts-expect-error On force volontairement la valeur `null` pour déclencher une erreur
           { ...donneesEvenement(), source: null },
+          { adaptateurChiffrement: hacheEnMajuscules }
+        )
+    ).toThrowError(ErreurDonneeManquante);
+  });
+
+  it('exige que la connexion avec MFA soit renseignée', () => {
+    expect(
+      () =>
+        new EvenementConnexionUtilisateur(
+          // @ts-expect-error On force volontairement la valeur `null` pour déclencher une erreur
+          { ...donneesEvenement(), connexionAvecMFA: null },
           { adaptateurChiffrement: hacheEnMajuscules }
         )
     ).toThrowError(ErreurDonneeManquante);
