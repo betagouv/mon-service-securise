@@ -17,6 +17,7 @@ class EvenementConnexionUtilisateur extends Evenement {
       Evenement.verifieProprietesRenseignees(donnees, [
         'idUtilisateur',
         'dateDerniereConnexion',
+        'source',
       ]);
 
       if (Number.isNaN(new Date(donnees.dateDerniereConnexion).valueOf()))
