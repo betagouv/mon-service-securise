@@ -1,5 +1,22 @@
+import { UUID } from 'node:crypto';
+import { SourceAuthentification } from '../modeles/sourceAuthentification.js';
+
+type DonneesEvenementNouvelleConnexionUtilisateur = {
+  idUtilisateur: UUID;
+  dateDerniereConnexion: string;
+  source: SourceAuthentification;
+};
+
 class EvenementNouvelleConnexionUtilisateur {
-  constructor({ idUtilisateur, dateDerniereConnexion, source }) {
+  readonly idUtilisateur: UUID;
+  readonly dateDerniereConnexion: string;
+  readonly source: SourceAuthentification;
+
+  constructor({
+    idUtilisateur,
+    dateDerniereConnexion,
+    source,
+  }: DonneesEvenementNouvelleConnexionUtilisateur) {
     if (!idUtilisateur)
       throw Error("Impossible d'instancier l'événement sans id utilisateur");
     if (!dateDerniereConnexion)
