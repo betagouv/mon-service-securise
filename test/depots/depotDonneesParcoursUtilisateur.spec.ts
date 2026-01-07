@@ -62,21 +62,40 @@ describe('Le dépôt de données Parcours utilisateur', () => {
       expect(parcoursPersiste.dateDerniereConnexion).not.toBe(undefined);
     });
 
-    it("publie un événement de 'Nouvelle connexion utilisateur'", async () => {
-      await depot.enregistreNouvelleConnexionUtilisateur(
-        unUUID('1'),
-        SourceAuthentification.MSS
-      );
+    describe("sur publication d'un évènement de 'Nouvelle connexion utilisateur'", () => {
+      it("publie un événement de 'Nouvelle connexion utilisateur'", async () => {
+        await depot.enregistreNouvelleConnexionUtilisateur(
+          unUUID('1'),
+          SourceAuthentification.AGENT_CONNECT,
+          true
+        );
 
-      expect(
-        busEvenements.aRecuUnEvenement(EvenementNouvelleConnexionUtilisateur)
-      ).toBe(true);
-      const evenement = busEvenements.recupereEvenement(
-        EvenementNouvelleConnexionUtilisateur
-      );
-      expect(evenement.idUtilisateur).toBe(unUUID('1'));
-      expect(evenement.dateDerniereConnexion).not.toBe(undefined);
-      expect(evenement.source).toBe('MSS');
+        expect(
+          busEvenements.aRecuUnEvenement(EvenementNouvelleConnexionUtilisateur)
+        ).toBe(true);
+        const evenement = busEvenements.recupereEvenement(
+          EvenementNouvelleConnexionUtilisateur
+        );
+        expect(evenement.idUtilisateur).toBe(unUUID('1'));
+        expect(evenement.dateDerniereConnexion).not.toBe(undefined);
+        expect(evenement.source).toBe(SourceAuthentification.AGENT_CONNECT);
+        expect(evenement.connexionAvecMFA).toBe(true);
+      });
+
+      it("utilise une valeur 'false' par défaut si `connexionAvecMFA` n'est pas fourni", async () => {
+        await depot.enregistreNouvelleConnexionUtilisateur(
+          unUUID('1'),
+          SourceAuthentification.MSS
+        );
+
+        expect(
+          busEvenements.aRecuUnEvenement(EvenementNouvelleConnexionUtilisateur)
+        ).toBe(true);
+        const evenement = busEvenements.recupereEvenement(
+          EvenementNouvelleConnexionUtilisateur
+        );
+        expect(evenement.connexionAvecMFA).toBe(false);
+      });
     });
 
     it("indique que l'utilisateur n'a pas encore vu le tableau de bord depuis sa connexion", async () => {

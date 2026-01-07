@@ -58,7 +58,8 @@ const creeDepot = (config: {
 
   const enregistreNouvelleConnexionUtilisateur = async (
     idUtilisateur: UUID,
-    source: SourceAuthentification
+    source: SourceAuthentification,
+    connexionAvecMFA?: boolean
   ) => {
     const parcoursUtilisateur = await lisParcoursUtilisateur(idUtilisateur);
 
@@ -68,6 +69,7 @@ const creeDepot = (config: {
     await busEvenements.publie(
       new EvenementNouvelleConnexionUtilisateur({
         idUtilisateur,
+        connexionAvecMFA: connexionAvecMFA || false,
         dateDerniereConnexion:
           parcoursUtilisateur.dateDerniereConnexion as string,
         source,
