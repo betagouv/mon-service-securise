@@ -237,6 +237,26 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         expectContenuSessionValide(reponse, 'AGENT_CONNECT', true, false, 1);
       });
 
+      it("indique que l'utilisateur utilise un MFA pour se connecter", async () => {
+        const utilisateurAuthentifie = unUtilisateur()
+          .avecEmail('jean.dujardin@beta.gouv.fr')
+          .quiAccepteCGU()
+          .construis();
+        utilisateurAuthentifie.genereToken = (source) =>
+          `un token de source ${source}`;
+        testeur.depotDonnees().utilisateurAvecEmail = (email) =>
+          email === 'jean.dujardin@beta.gouv.fr'
+            ? utilisateurAuthentifie
+            : undefined;
+        testeur.adaptateurOidc().recupereJeton = async () => ({
+          connexionAvecMFA: true,
+        });
+
+        const reponse = await testeur.get('/oidc/apres-authentification');
+
+        expect(decodeSessionDuCookie(reponse, 1).connexionAvecMFA).to.be(true);
+      });
+
       it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {
         let idUtilisateurPasse = {};
         let sourcePassee;
