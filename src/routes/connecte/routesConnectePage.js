@@ -122,6 +122,7 @@ const routesConnectePage = ({
     middleware.chargePreferencesUtilisateur,
     middleware.chargeExplicationNouveauReferentiel,
     middleware.chargeExplicationFinCompteLegacy,
+    middleware.chargeExplicationUtilisationMFA,
     middleware.chargeEtatVisiteGuidee,
     (requete, reponse) => {
       const utilisateurVisiteGuidee = new Utilisateur({

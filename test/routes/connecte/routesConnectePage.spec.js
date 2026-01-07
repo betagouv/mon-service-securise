@@ -85,7 +85,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         );
     });
 
-    it("charge l'explication du nouveau réféfentiel, car c'est nécessaire au tableau de bord", async () => {
+    it("charge l'explication du nouveau référentiel, car c'est nécessaire au tableau de bord", async () => {
       await testeur
         .middleware()
         .verifieRequeteChargeExplicationNouveauReferentiel(
@@ -98,6 +98,15 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       await testeur
         .middleware()
         .verifieRequeteChargeExplicationFinCompteLegacy(
+          testeur.app(),
+          '/visiteGuidee/piloter'
+        );
+    });
+
+    it("charge l'explication de l'utilisation du MFA, car c'est nécessaire au tableau de bord", async () => {
+      await testeur
+        .middleware()
+        .verifieRequeteChargeExplicationUtilisationMFA(
           testeur.app(),
           '/visiteGuidee/piloter'
         );
