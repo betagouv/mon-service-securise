@@ -27,6 +27,7 @@ class EvenementNouvelleConnexionUtilisateur {
       throw Error(
         "Impossible d'instancier l'événement sans date de dernière connexion valide"
       );
+    if (!source) throw Error("Impossible d'instancier l'événement sans source");
 
     this.idUtilisateur = idUtilisateur;
     this.dateDerniereConnexion = dateDerniereConnexion;
