@@ -1,136 +1,159 @@
-import expect from 'expect.js';
 import * as AdaptateurPersistanceMemoire from '../../src/adaptateurs/adaptateurPersistanceMemoire.js';
 import * as DepotDonneesParcoursUtilisateur from '../../src/depots/depotDonneesParcoursUtilisateur.js';
-import ParcoursUtilisateur from '../../src/modeles/parcoursUtilisateur.js';
+import {
+  DepotDonneesParcoursUtilisateurs,
+  PersistanceParcoursUtilisateur,
+} from '../../src/depots/depotDonneesParcoursUtilisateur.js';
+import ParcoursUtilisateur, {
+  DonneesParcoursUtilisateur,
+} from '../../src/modeles/parcoursUtilisateur.js';
 import EtatVisiteGuidee from '../../src/modeles/etatVisiteGuidee.js';
 import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
 import EvenementNouvelleConnexionUtilisateur from '../../src/bus/evenementNouvelleConnexionUtilisateur.js';
 import { unService } from '../constructeurs/constructeurService.js';
 import { VersionService } from '../../src/modeles/versionService.js';
 import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
+import { creeReferentielVide } from '../../src/referentiel.js';
+import BusEvenements from '../../src/bus/busEvenements.js';
+import { Referentiel } from '../../src/referentiel.interface.ts';
+import { unUUID } from '../constructeurs/UUID.ts';
+import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.ts';
 
 describe('Le dépôt de données Parcours utilisateur', () => {
-  let adaptateurPersistance;
-  let depot;
+  let adaptateurPersistance: PersistanceParcoursUtilisateur;
+  let depot: DepotDonneesParcoursUtilisateurs;
+  let busEvenements: ReturnType<typeof fabriqueBusPourLesTests>;
+  let referentiel: Referentiel;
+
+  const donneesParcoursUtilisateur = (): DonneesParcoursUtilisateur => ({
+    idUtilisateur: unUUID('1'),
+    explicationNouveauReferentiel: {
+      dejaTermine: false,
+    },
+    aVuTableauDeBordDepuisConnexion: true,
+    etatVisiteGuidee: {
+      dejaTerminee: false,
+      enPause: false,
+    },
+  });
+
   beforeEach(() => {
+    referentiel = creeReferentielVide();
     adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
       parcoursUtilisateurs: [],
     });
+    busEvenements = fabriqueBusPourLesTests();
     depot = DepotDonneesParcoursUtilisateur.creeDepot({
       adaptateurPersistance,
+      busEvenements: busEvenements as unknown as BusEvenements,
+      referentiel,
     });
   });
 
   describe("sur demande d'enregistrement d'une nouvelle connexion utilisateur", () => {
-    let busEvenements;
-
-    beforeEach(() => {
-      busEvenements = fabriqueBusPourLesTests();
-
-      depot = DepotDonneesParcoursUtilisateur.creeDepot({
-        adaptateurPersistance,
-        busEvenements,
-      });
-    });
-
     it('sauvegarde la nouvelle date de connexion', async () => {
-      await depot.enregistreNouvelleConnexionUtilisateur('123');
+      await depot.enregistreNouvelleConnexionUtilisateur(
+        unUUID('1'),
+        SourceAuthentification.MSS
+      );
 
-      const parcoursPersiste = await depot.lisParcoursUtilisateur('123');
+      const parcoursPersiste = await depot.lisParcoursUtilisateur(unUUID('1'));
 
-      expect(parcoursPersiste.dateDerniereConnexion).not.to.be(undefined);
+      expect(parcoursPersiste.dateDerniereConnexion).not.toBe(undefined);
     });
 
     it("publie un événement de 'Nouvelle connexion utilisateur'", async () => {
-      await depot.enregistreNouvelleConnexionUtilisateur('123', 'MSS');
+      await depot.enregistreNouvelleConnexionUtilisateur(
+        unUUID('1'),
+        SourceAuthentification.MSS
+      );
 
       expect(
         busEvenements.aRecuUnEvenement(EvenementNouvelleConnexionUtilisateur)
-      ).to.be(true);
+      ).toBe(true);
       const evenement = busEvenements.recupereEvenement(
         EvenementNouvelleConnexionUtilisateur
       );
-      expect(evenement.idUtilisateur).to.be('123');
-      expect(evenement.dateDerniereConnexion).not.to.be(undefined);
-      expect(evenement.source).to.be('MSS');
+      expect(evenement.idUtilisateur).toBe(unUUID('1'));
+      expect(evenement.dateDerniereConnexion).not.toBe(undefined);
+      expect(evenement.source).toBe('MSS');
     });
 
     it("indique que l'utilisateur n'a pas encore vu le tableau de bord depuis sa connexion", async () => {
       await depot.sauvegardeParcoursUtilisateur(
-        new ParcoursUtilisateur({
-          idUtilisateur: '123',
-          explicationNouveauReferentiel: {
-            dejaTermine: false,
-            aVuTableauDeBordDepuisConnexion: true,
-          },
-        })
+        new ParcoursUtilisateur(donneesParcoursUtilisateur())
       );
-      await depot.enregistreNouvelleConnexionUtilisateur('123');
+      await depot.enregistreNouvelleConnexionUtilisateur(
+        unUUID('1'),
+        SourceAuthentification.MSS
+      );
 
-      const parcoursPersiste = await depot.lisParcoursUtilisateur('123');
+      const parcoursPersiste = await depot.lisParcoursUtilisateur(unUUID('1'));
 
       expect(
         parcoursPersiste.explicationNouveauReferentiel
           .aVuTableauDeBordDepuisConnexion
-      ).to.be(false);
+      ).toBe(false);
     });
   });
 
   describe('sur demande de sauvegarde', () => {
     it("utilise l'ID utilisateur comme ID de stockage", async () => {
       let idRecu;
-      adaptateurPersistance.sauvegardeParcoursUtilisateur = async (id, _) => {
+      adaptateurPersistance.sauvegardeParcoursUtilisateur = async (id) => {
         idRecu = id;
       };
 
       await depot.sauvegardeParcoursUtilisateur(
-        new ParcoursUtilisateur({ idUtilisateur: '123' })
+        new ParcoursUtilisateur(donneesParcoursUtilisateur())
       );
 
-      expect(idRecu).to.equal('123');
+      expect(idRecu).toEqual(unUUID('1'));
     });
 
     it('stocke les données du parcours utilisateur', async () => {
       await depot.sauvegardeParcoursUtilisateur(
         new ParcoursUtilisateur({
-          idUtilisateur: '123',
+          ...donneesParcoursUtilisateur(),
           dateDerniereConnexion: '2023-01-01',
         })
       );
 
-      const parcoursPersiste = await depot.lisParcoursUtilisateur('123');
+      const parcoursPersiste = await depot.lisParcoursUtilisateur(unUUID('1'));
 
-      expect(parcoursPersiste.dateDerniereConnexion).to.equal('2023-01-01');
+      expect(parcoursPersiste.dateDerniereConnexion).toEqual('2023-01-01');
     });
   });
 
   describe('sur demande de lecture', () => {
     it("sait fournir une instance par défaut lorsqu'aucun parcours n'est stocké pour un utilisateur", async () => {
-      const parcours = await depot.lisParcoursUtilisateur('nouvel utilisateur');
+      const parcours = await depot.lisParcoursUtilisateur(unUUID('z'));
 
-      expect(parcours).to.be.a(ParcoursUtilisateur);
-      expect(parcours.idUtilisateur).to.equal('nouvel utilisateur');
-      expect(parcours.etatVisiteGuidee).to.be.an(EtatVisiteGuidee);
-      expect(parcours.etatVisiteGuidee.dejaTerminee).to.be(false);
+      expect(parcours).toBeInstanceOf(ParcoursUtilisateur);
+      expect(parcours.idUtilisateur).toEqual(unUUID('z'));
+      expect(parcours.etatVisiteGuidee).toBeInstanceOf(EtatVisiteGuidee);
+      expect(parcours.etatVisiteGuidee.dejaTerminee).toBe(false);
     });
 
     it('sait lire les versions de service pour un utilisateur ayant un parcours', async () => {
       adaptateurPersistance = AdaptateurPersistanceMemoire.nouvelAdaptateur({
-        parcoursUtilisateurs: [{ id: 'U1' }],
+        parcoursUtilisateurs: [{ id: unUUID('1') }],
         services: [
           unService().avecVersion(VersionService.v1).avecId('S1').construis(),
         ],
         autorisations: [
-          uneAutorisation().deProprietaire('U1', 'S1').construis(),
+          uneAutorisation().deProprietaire(unUUID('1'), 'S1').construis(),
         ],
       });
       depot = DepotDonneesParcoursUtilisateur.creeDepot({
         adaptateurPersistance,
+        busEvenements: busEvenements as unknown as BusEvenements,
+        referentiel,
       });
 
-      const parcours = await depot.lisParcoursUtilisateur('U1');
+      const parcours = await depot.lisParcoursUtilisateur(unUUID('1'));
 
-      expect(parcours.explicationNouveauReferentiel.versionsService).to.eql([
+      expect(parcours.explicationNouveauReferentiel.versionsService).toEqual([
         VersionService.v1,
       ]);
     });
@@ -142,16 +165,18 @@ describe('Le dépôt de données Parcours utilisateur', () => {
           unService().avecVersion(VersionService.v1).avecId('S1').construis(),
         ],
         autorisations: [
-          uneAutorisation().deProprietaire('U1', 'S1').construis(),
+          uneAutorisation().deProprietaire(unUUID('1'), 'S1').construis(),
         ],
       });
       depot = DepotDonneesParcoursUtilisateur.creeDepot({
         adaptateurPersistance,
+        busEvenements: busEvenements as unknown as BusEvenements,
+        referentiel,
       });
 
-      const parcours = await depot.lisParcoursUtilisateur('U1');
+      const parcours = await depot.lisParcoursUtilisateur(unUUID('1'));
 
-      expect(parcours.explicationNouveauReferentiel.versionsService).to.eql([
+      expect(parcours.explicationNouveauReferentiel.versionsService).toEqual([
         VersionService.v1,
       ]);
     });
@@ -159,30 +184,27 @@ describe('Le dépôt de données Parcours utilisateur', () => {
 
   describe('sur demande de marquer vu le tableau de bord', () => {
     it('marque le tableau de bord comme vu', async () => {
-      await depot.marqueTableauDeBordVuDansParcoursUtilisateur('123');
+      await depot.marqueTableauDeBordVuDansParcoursUtilisateur(unUUID('1'));
 
-      const parcoursAJour = await depot.lisParcoursUtilisateur('123');
+      const parcoursAJour = await depot.lisParcoursUtilisateur(unUUID('1'));
       expect(
         parcoursAJour.explicationNouveauReferentiel
           .aVuTableauDeBordDepuisConnexion
-      ).to.be(true);
+      ).toBe(true);
     });
 
     it('ne persiste pas le parcours si le tableau de bord était déjà vu', async () => {
       await depot.sauvegardeParcoursUtilisateur(
-        new ParcoursUtilisateur({
-          idUtilisateur: '123',
-          aVuTableauDeBordDepuisConnexion: true,
-        })
+        new ParcoursUtilisateur(donneesParcoursUtilisateur())
       );
       let persistanceAppelee = false;
       adaptateurPersistance.sauvegardeParcoursUtilisateur = async () => {
         persistanceAppelee = true;
       };
 
-      await depot.marqueTableauDeBordVuDansParcoursUtilisateur('123');
+      await depot.marqueTableauDeBordVuDansParcoursUtilisateur(unUUID('1'));
 
-      expect(persistanceAppelee).to.be(false);
+      expect(persistanceAppelee).toBe(false);
     });
   });
 });

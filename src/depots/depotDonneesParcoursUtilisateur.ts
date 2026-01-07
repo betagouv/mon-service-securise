@@ -1,10 +1,34 @@
-import ParcoursUtilisateur from '../modeles/parcoursUtilisateur.js';
+import ParcoursUtilisateur, {
+  DonneesParcoursUtilisateur,
+} from '../modeles/parcoursUtilisateur.js';
 import EvenementNouvelleConnexionUtilisateur from '../bus/evenementNouvelleConnexionUtilisateur.js';
+import { Referentiel } from '../referentiel.interface.js';
+import BusEvenements from '../bus/busEvenements.js';
+import { UUID } from '../typesBasiques.js';
+import { VersionService } from '../modeles/versionService.js';
+import { SourceAuthentification } from '../modeles/sourceAuthentification.js';
 
-const creeDepot = (config = {}) => {
+export type PersistanceParcoursUtilisateur = {
+  lisParcoursUtilisateur: (
+    idUtilisateur: UUID
+  ) => Promise<DonneesParcoursUtilisateur>;
+  versionsServiceUtiliseesParUtilisateur: (
+    idUtilisateur: UUID
+  ) => Promise<VersionService[]>;
+  sauvegardeParcoursUtilisateur: (
+    idUtilisateur: UUID,
+    donnees: DonneesParcoursUtilisateur
+  ) => Promise<void>;
+};
+
+const creeDepot = (config: {
+  adaptateurPersistance: PersistanceParcoursUtilisateur;
+  referentiel: Referentiel;
+  busEvenements: BusEvenements;
+}) => {
   const { adaptateurPersistance, referentiel, busEvenements } = config;
 
-  const lisParcoursUtilisateur = async (idUtilisateur) => {
+  const lisParcoursUtilisateur = async (idUtilisateur: UUID) => {
     const parcoursConnu =
       await adaptateurPersistance.lisParcoursUtilisateur(idUtilisateur);
     const versionsService =
@@ -23,7 +47,9 @@ const creeDepot = (config = {}) => {
         );
   };
 
-  const sauvegardeParcoursUtilisateur = async (parcoursUtilisateur) => {
+  const sauvegardeParcoursUtilisateur = async (
+    parcoursUtilisateur: ParcoursUtilisateur
+  ) => {
     await adaptateurPersistance.sauvegardeParcoursUtilisateur(
       parcoursUtilisateur.idUtilisateur,
       parcoursUtilisateur.donneesSerialisees()
@@ -31,8 +57,8 @@ const creeDepot = (config = {}) => {
   };
 
   const enregistreNouvelleConnexionUtilisateur = async (
-    idUtilisateur,
-    source
+    idUtilisateur: UUID,
+    source: SourceAuthentification
   ) => {
     const parcoursUtilisateur = await lisParcoursUtilisateur(idUtilisateur);
 
@@ -42,14 +68,15 @@ const creeDepot = (config = {}) => {
     await busEvenements.publie(
       new EvenementNouvelleConnexionUtilisateur({
         idUtilisateur,
-        dateDerniereConnexion: parcoursUtilisateur.dateDerniereConnexion,
+        dateDerniereConnexion:
+          parcoursUtilisateur.dateDerniereConnexion as string,
         source,
       })
     );
   };
 
   const marqueTableauDeBordVuDansParcoursUtilisateur = async (
-    idUtilisateur
+    idUtilisateur: UUID
   ) => {
     const parcoursUtilisateur = await lisParcoursUtilisateur(idUtilisateur);
 
@@ -68,5 +95,7 @@ const creeDepot = (config = {}) => {
     enregistreNouvelleConnexionUtilisateur,
   };
 };
+
+export type DepotDonneesParcoursUtilisateurs = ReturnType<typeof creeDepot>;
 
 export { creeDepot };
