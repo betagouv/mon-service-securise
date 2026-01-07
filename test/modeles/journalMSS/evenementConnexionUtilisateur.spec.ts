@@ -73,4 +73,15 @@ describe('Un événement de connexion utilisateur', () => {
         )
     ).toThrowError(ErreurDateDerniereConnexionInvalide);
   });
+
+  it('exige que la source soit renseignée', () => {
+    expect(
+      () =>
+        new EvenementConnexionUtilisateur(
+          // @ts-expect-error On force volontairement la valeur `null` pour déclencher une erreur
+          { ...donneesEvenement(), source: null },
+          { adaptateurChiffrement: hacheEnMajuscules }
+        )
+    ).toThrowError(ErreurDonneeManquante);
+  });
 });
