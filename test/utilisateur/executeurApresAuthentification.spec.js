@@ -161,14 +161,20 @@ describe("L'executeur après authentification", () => {
     it('enregistre une session', async () => {
       let sessionEnregistree;
       serviceGestionnaireSession = {
-        enregistreSession: (req, utilisateur, source) => {
-          sessionEnregistree = { requete: req, utilisateur, source };
+        enregistreSession: (req, utilisateur, source, connexionAvecMFA) => {
+          sessionEnregistree = {
+            requete: req,
+            utilisateur,
+            source,
+            connexionAvecMFA,
+          };
         },
       };
       await executeurApresAuthentification(ordre, {
         serviceGestionnaireSession,
         requete,
         depotDonnees,
+        connexionAvecMFA: true,
       });
 
       expect(sessionEnregistree).not.to.be(undefined);
@@ -177,6 +183,7 @@ describe("L'executeur après authentification", () => {
       expect(sessionEnregistree.source).to.be(
         SourceAuthentification.AGENT_CONNECT
       );
+      expect(sessionEnregistree.connexionAvecMFA).to.be(true);
     });
 
     it("enregistre l'idToken de ProConnect", async () => {
