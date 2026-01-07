@@ -8,7 +8,7 @@ export type DonneesExplicationNouveauReferentiel = {
 
 export class ExplicationNouveauReferentiel {
   private dejaTermine: boolean;
-  private versionsService: VersionService[];
+  readonly versionsService: VersionService[];
   aVuTableauDeBordDepuisConnexion: boolean;
 
   constructor(donnees: DonneesExplicationNouveauReferentiel) {
