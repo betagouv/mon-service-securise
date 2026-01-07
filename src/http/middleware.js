@@ -279,6 +279,25 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
+  const chargeExplicationUtilisationMFA = async (requete, reponse, suite) => {
+    const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
+      requete.idUtilisateurCourant
+    );
+
+    let doitAfficher = false;
+    if (
+      requete.session?.sourceAuthentification ===
+      SourceAuthentification.AGENT_CONNECT
+    ) {
+      doitAfficher =
+        !parcoursUtilisateur.aVuTableauDeBord() &&
+        !requete.session.connexionAvecMFA;
+    }
+    reponse.locals.afficheExplicationUtilisationMFA = doitAfficher;
+
+    suite();
+  };
+
   const chargeEtatAgentConnect = async (_requete, reponse, suite) => {
     reponse.locals.agentConnectActif = adaptateurEnvironnement
       .featureFlag()
@@ -443,6 +462,7 @@ const middleware = (configuration = {}) => {
     chargeEtatVisiteGuidee,
     chargeExplicationFinCompteLegacy,
     chargeExplicationNouveauReferentiel,
+    chargeExplicationUtilisationMFA,
     chargeFeatureFlags,
     chargePreferencesUtilisateur,
     chargeTypeRequete,
