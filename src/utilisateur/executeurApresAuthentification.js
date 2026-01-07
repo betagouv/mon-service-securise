@@ -11,13 +11,15 @@ const executeurApresAuthentification = async (
     urlRedirection,
     adaptateurEnvironnement,
     serviceGestionnaireSession,
+    connexionAvecMFA,
   }
 ) => {
   if (ordre.utilisateurAConnecter) {
     serviceGestionnaireSession.enregistreSession(
       requete,
       ordre.utilisateurAConnecter,
-      SourceAuthentification.AGENT_CONNECT
+      SourceAuthentification.AGENT_CONNECT,
+      connexionAvecMFA
     );
     requete.session.AgentConnectIdToken = agentConnectIdToken;
     await depotDonnees.enregistreNouvelleConnexionUtilisateur(
