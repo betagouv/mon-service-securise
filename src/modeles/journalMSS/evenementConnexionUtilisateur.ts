@@ -1,8 +1,16 @@
 import Evenement from './evenement.js';
 import { ErreurDateDerniereConnexionInvalide } from './erreurs.js';
+import { UUID } from '../../typesBasiques.js';
+import { SourceAuthentification } from '../sourceAuthentification.js';
+
+type DonneesEvenementConnexionUtilisateur = {
+  idUtilisateur: UUID;
+  dateDerniereConnexion: string;
+  source: SourceAuthentification;
+};
 
 class EvenementConnexionUtilisateur extends Evenement {
-  constructor(donnees, options = {}) {
+  constructor(donnees: DonneesEvenementConnexionUtilisateur, options = {}) {
     const { date, adaptateurChiffrement } = Evenement.optionsParDefaut(options);
 
     const valide = () => {
@@ -17,11 +25,13 @@ class EvenementConnexionUtilisateur extends Evenement {
 
     valide();
 
+    const { idUtilisateur, dateDerniereConnexion, source } = donnees;
     super(
       'CONNEXION_UTILISATEUR',
       {
-        ...donnees,
-        idUtilisateur: adaptateurChiffrement.hacheSha256(donnees.idUtilisateur),
+        dateDerniereConnexion,
+        idUtilisateur: adaptateurChiffrement.hacheSha256(idUtilisateur),
+        source,
       },
       date
     );
