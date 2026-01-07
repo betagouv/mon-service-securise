@@ -220,6 +220,14 @@
       afficheTiroirModificationMultipleMesuresGenerales(modeleMesure);
     }
   };
+
+  $: nombresMesuresPourOnglets = {
+    mesuresGenerales: Object.values($modelesMesureGenerale).filter(
+      (m) =>
+        m.versionReferentiel === $storeVersionsDeService.versionSelectionnee
+    ).length,
+    mesureSpecifiques: $modelesMesureSpecifique.length,
+  };
 </script>
 
 <Toaster />
@@ -304,18 +312,18 @@
           id: 'toutes',
           label: 'Toutes les mesures',
           badge:
-            Object.keys($modelesMesureGenerale).length +
-            $modelesMesureSpecifique.length,
+            nombresMesuresPourOnglets.mesuresGenerales +
+            nombresMesuresPourOnglets.mesureSpecifiques,
         },
         {
           id: 'generales',
           label: 'Les mesures ANSSI & CNIL',
-          badge: Object.keys($modelesMesureGenerale).length,
+          badge: nombresMesuresPourOnglets.mesuresGenerales,
         },
         {
           id: 'specifiques',
           label: 'Mes mesures ajoutées',
-          badge: $modelesMesureSpecifique.length,
+          badge: nombresMesuresPourOnglets.mesureSpecifiques,
         },
       ]}
     />
