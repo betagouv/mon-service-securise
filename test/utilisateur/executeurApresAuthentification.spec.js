@@ -202,9 +202,10 @@ describe("L'executeur après authentification", () => {
       depotDonnees = {
         enregistreNouvelleConnexionUtilisateur: async (
           idUtilisateur,
-          source
+          source,
+          connexionAvecMFA
         ) => {
-          connexionEnregistree = { idUtilisateur, source };
+          connexionEnregistree = { idUtilisateur, source, connexionAvecMFA };
         },
       };
 
@@ -213,6 +214,7 @@ describe("L'executeur après authentification", () => {
         requete,
         agentConnectIdToken: 'Un token ProConnect',
         depotDonnees,
+        connexionAvecMFA: true,
       });
 
       expect(connexionEnregistree).not.to.be(undefined);
@@ -220,6 +222,7 @@ describe("L'executeur après authentification", () => {
       expect(connexionEnregistree.source).to.be(
         SourceAuthentification.AGENT_CONNECT
       );
+      expect(connexionEnregistree.connexionAvecMFA).to.be(true);
     });
   });
 });
