@@ -3,14 +3,20 @@ import { unUUID } from '../constructeurs/UUID.ts';
 import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.ts';
 
 describe("L'événement `EvenementNouvelleConnexionUtilisateur", () => {
+  const donneesEvenements = () => ({
+    idUtilisateur: unUUID('1'),
+    dateDerniereConnexion: '2024-03-25',
+    source: SourceAuthentification.MSS,
+    connexionAvecMFA: false,
+  });
+
   it("lève une exception s'il est instancié sans id utilisateur", () => {
     expect(
       () =>
         new EvenementNouvelleConnexionUtilisateur({
+          ...donneesEvenements(),
           // @ts-expect-error On force volontairement la valeur `null` pour déclencher une erreur
           idUtilisateur: null,
-          dateDerniereConnexion: '2024-03-25',
-          source: SourceAuthentification.MSS,
         })
     ).toThrowError();
   });
@@ -19,10 +25,9 @@ describe("L'événement `EvenementNouvelleConnexionUtilisateur", () => {
     expect(
       () =>
         new EvenementNouvelleConnexionUtilisateur({
-          idUtilisateur: unUUID('1'),
+          ...donneesEvenements(),
           // @ts-expect-error On force volontairement la valeur `null` pour déclencher une erreur
           dateDerniereConnexion: null,
-          source: SourceAuthentification.MSS,
         })
     ).toThrowError();
   });
@@ -31,9 +36,8 @@ describe("L'événement `EvenementNouvelleConnexionUtilisateur", () => {
     expect(
       () =>
         new EvenementNouvelleConnexionUtilisateur({
-          idUtilisateur: unUUID('1'),
+          ...donneesEvenements(),
           dateDerniereConnexion: 'pasUneDate',
-          source: SourceAuthentification.MSS,
         })
     ).toThrowError();
   });
@@ -42,10 +46,20 @@ describe("L'événement `EvenementNouvelleConnexionUtilisateur", () => {
     expect(
       () =>
         new EvenementNouvelleConnexionUtilisateur({
-          idUtilisateur: unUUID('1'),
-          dateDerniereConnexion: '2024-01-01',
+          ...donneesEvenements(),
           // @ts-expect-error On force volontairement la valeur `null` pour déclencher une erreur
           source: null,
+        })
+    ).toThrowError();
+  });
+
+  it("lève une exception s'il est instancié sans connexion avec MFA", () => {
+    expect(
+      () =>
+        new EvenementNouvelleConnexionUtilisateur({
+          ...donneesEvenements(),
+          // @ts-expect-error On force volontairement la valeur `null` pour déclencher une erreur
+          connexionAvecMFA: null,
         })
     ).toThrowError();
   });
