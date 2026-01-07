@@ -70,6 +70,7 @@ let preferencesChargees = false;
 let etatVisiteGuideeCharge = false;
 let etatExplicationNouveauReferentielCharge = false;
 let etatExplicationFinCompteLegacy = false;
+let etatExplicationUtilisationMFA = false;
 let activationAgentConnectCharge = false;
 let filtrageIpEstActif = false;
 let rechercheDossierCourantEffectuee = false;
@@ -110,6 +111,7 @@ const middlewareFantaisie = {
     etatVisiteGuideeCharge = false;
     etatExplicationNouveauReferentielCharge = false;
     etatExplicationFinCompteLegacy = false;
+    etatExplicationUtilisationMFA = false;
     activationAgentConnectCharge = false;
     filtrageIpEstActif = false;
     rechercheDossierCourantEffectuee = false;
@@ -180,6 +182,11 @@ const middlewareFantaisie = {
   chargeExplicationNouveauReferentiel: (_requete, reponse, suite) => {
     reponse.locals.afficheExplicationNouveauReferentiel = true;
     etatExplicationNouveauReferentielCharge = true;
+    suite();
+  },
+
+  chargeExplicationUtilisationMFA: (_requete, _reponse, suite) => {
+    etatExplicationUtilisationMFA = true;
     suite();
   },
 
@@ -381,6 +388,13 @@ const middlewareFantaisie = {
   verifieRequeteChargeExplicationNouveauReferentiel: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => etatExplicationNouveauReferentielCharge },
+      app,
+      ...params
+    ),
+
+  verifieRequeteChargeExplicationUtilisationMFA: async (app, ...params) =>
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => etatExplicationUtilisationMFA },
       app,
       ...params
     ),

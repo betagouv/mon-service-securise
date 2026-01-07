@@ -96,6 +96,7 @@ const routesConnectePage = ({
     middleware.chargeEtatVisiteGuidee,
     middleware.chargeExplicationNouveauReferentiel,
     middleware.chargeExplicationFinCompteLegacy,
+    middleware.chargeExplicationUtilisationMFA,
     async (requete, reponse) => {
       const { idUtilisateurCourant } = requete;
       const estSuperviseur =
