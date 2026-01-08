@@ -1,5 +1,9 @@
+import * as crypto from 'node:crypto';
 import { fabriqueAdaptateurHorloge } from './adaptateurHorloge.js';
-import { unUUIDRandom } from '../../test/constructeurs/UUID.js';
+
+// On réimplémente cette méthode pour éviter d'importer la fonction qui se trouve dans le repertoire de test
+// Importer depuis `test/` casse notre redémarrage chez CleverCloud, car l'archive buildé ne contient pas les dossiers /test*/
+const unUUIDRandom = () => crypto.randomUUID();
 
 const nouvelAdaptateur = (
   donnees = {},
