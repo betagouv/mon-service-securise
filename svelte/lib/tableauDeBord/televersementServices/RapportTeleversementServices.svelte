@@ -13,8 +13,6 @@
   import type { RapportDetaille } from './rapportTeleversementServices.types';
   import ModaleDeProgression from '../../rapportTeleversement/ModaleDeProgression.svelte';
   import { toasterStore } from '../../ui/stores/toaster.store';
-  import { tiroirStore } from '../../ui/stores/tiroir.store';
-  import TiroirTeleversementServices from './TiroirTeleversementServices.svelte';
   import { enleveParametreDeUrl } from '../../outils/url';
   import { triRapportDetaille } from '../../rapportTeleversement/tri';
 
@@ -75,7 +73,6 @@
     on:retenteTeleversement={async () => {
       await supprimeTeleversement();
       etatReseau = 'IMPORT_FINI';
-      tiroirStore.afficheContenu(TiroirTeleversementServices, {});
       enleveParametreDeUrl('rapportTeleversement');
     }}
     on:annule={() => {

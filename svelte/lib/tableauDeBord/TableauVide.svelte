@@ -7,45 +7,13 @@
     filtrageServicesVide,
   } from './stores/filtrageServices.store';
   import { tiroirStore } from '../ui/stores/tiroir.store';
-  import TiroirTeleversementServices from './televersementServices/TiroirTeleversementServices.svelte';
-  import BoutonAvecListeDeroulante, {
-    type OptionBoutonListeDeroulante,
-  } from '../ui/BoutonAvecListeDeroulante.svelte';
+  import BoutonAvecListeDeroulante from '../ui/BoutonAvecListeDeroulante.svelte';
   import TiroirTeleversementServicesV2 from './televersementServices/TiroirTeleversementServicesV2.svelte';
-
-  export let avecDecrireV2: boolean;
 
   const supprimeRechercheEtFiltres = () => {
     $rechercheTextuelle = '';
     $filtrageServices = { ...filtrageServicesVide };
   };
-
-  const boutonsDisponiblesV1: OptionBoutonListeDeroulante[] = [
-    {
-      label: 'Ajouter un service',
-      icone: 'plus',
-      href: '/service/creation',
-    },
-    {
-      label: 'Téléverser des services',
-      icone: 'televerser',
-      action: () => tiroirStore.afficheContenu(TiroirTeleversementServices, {}),
-    },
-  ];
-
-  const boutonsDisponiblesV2: OptionBoutonListeDeroulante[] = [
-    {
-      label: 'Ajouter un service',
-      icone: 'plus',
-      href: '/service/v2/creation',
-    },
-    {
-      label: 'Téléverser des services',
-      icone: 'televerser',
-      action: () =>
-        tiroirStore.afficheContenu(TiroirTeleversementServicesV2, {}),
-    },
-  ];
 </script>
 
 <div class="conteneur-tableau-vide">
@@ -58,7 +26,19 @@
       </p>
       <BoutonAvecListeDeroulante
         titre="Ajouter votre premier service"
-        options={avecDecrireV2 ? boutonsDisponiblesV2 : boutonsDisponiblesV1}
+        options={[
+          {
+            label: 'Ajouter un service',
+            icone: 'plus',
+            href: '/service/v2/creation',
+          },
+          {
+            label: 'Téléverser des services',
+            icone: 'televerser',
+            action: () =>
+              tiroirStore.afficheContenu(TiroirTeleversementServicesV2, {}),
+          },
+        ]}
       />
     </div>
   {:else if $affichageTableauVide.etat === 'aucunResultatDeRecherche'}

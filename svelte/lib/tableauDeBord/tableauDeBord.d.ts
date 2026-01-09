@@ -12,7 +12,6 @@ export type TableauDeBordProps = {
   dateInscriptionUtilisateur: Date;
   profilUtilisateurComplet?: boolean;
   avecPromotionDeMsc: boolean;
-  avecDecrireV2: boolean;
 };
 
 type Contributeur = {
