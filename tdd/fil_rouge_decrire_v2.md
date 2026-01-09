@@ -9,12 +9,6 @@
 
 ##### Nettoyage post MEP
 
-- TiroirTeleversementServices.svelte
-- évènement : svelte-recharge-rapport-televersement-services
-- paramètre url : rapportTeleversement
-- RapportTeleversementServices.svelte
-- les fonctions v1 dans rapportTeleversementServices.api.ts
-- ` || !(televersementServices instanceof TeleversementServicesV2)` dans la route
 - table televersement_services colonne version_service + adaptateur Postgres
 - adaptateurTeleversementServices.xls la méthode v1 et les constantes associées
 - La route GET `api/referentiel/mesures` renvoi les mesures V1 par défaut, pour un utilisateur sans service
