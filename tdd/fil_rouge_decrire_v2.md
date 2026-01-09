@@ -4,10 +4,11 @@
 
 ##### Nettoyage post MEP
 
-- évènement : svelte-recharge-rapport-televersement-services
-- paramètre url : rapportTeleversement
-- RapportTeleversementServices.svelte
-- les fonctions v1 dans rapportTeleversementServices.api.ts
+- les endpoints API de téléversement v1
+  - GET /api/televersement/services
+  - DELETE /api/televersement/services
+  - POST /api/televersement/services/confirme
+  - GET /api/televersement/services/progression
 - serviceTeleverse.js
 - televersementServices.js
 - ` || !(televersementServices instanceof TeleversementServicesV2)` dans la route
