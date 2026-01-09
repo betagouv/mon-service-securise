@@ -688,16 +688,11 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       empreinte: 'empreinte',
     });
 
-  const ajouteTeleversementServices = async (
-    idUtilisateur,
-    donnees,
-    versionService
-  ) =>
+  const ajouteTeleversementServices = async (idUtilisateur, donnees) =>
     knex('televersement_services')
       .insert({
         id_utilisateur: idUtilisateur,
         donnees: { services: donnees },
-        version_service: versionService,
         progression: -1,
       })
       .onConflict('id_utilisateur')
@@ -706,7 +701,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
   const lisTeleversementServices = async (idUtilisateur) =>
     knex('televersement_services')
       .where({ id_utilisateur: idUtilisateur })
-      .select({ donnees: 'donnees', versionService: 'version_service' })
+      .select({ donnees: 'donnees' })
       .first();
 
   const lisProgressionTeleversementServices = async (idUtilisateur) =>
