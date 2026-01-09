@@ -1,5 +1,4 @@
 import { UUID } from '../typesBasiques.js';
-import TeleversementServices from '../modeles/televersement/televersementServices.js';
 import TeleversementServicesV2 from '../modeles/televersement/televersementServicesV2.js';
 import { LigneServiceTeleverseV2 } from '../modeles/televersement/serviceTeleverseV2.js';
 import { VersionService } from '../modeles/versionService.js';
@@ -10,7 +9,7 @@ export interface DepotDonneesTeleversementServices {
   ) => Promise<number | undefined>;
   lisTeleversementServices: (
     idUtilisateur: UUID
-  ) => Promise<TeleversementServices | TeleversementServicesV2 | undefined>;
+  ) => Promise<TeleversementServicesV2 | undefined>;
   metsAJourProgressionTeleversement: (
     idUtilisateur: UUID,
     progression: number

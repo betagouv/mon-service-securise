@@ -1,4 +1,3 @@
-import TeleversementServices from '../modeles/televersement/televersementServices.js';
 import { DonneesChiffrees, UUID } from '../typesBasiques.js';
 import { VersionService } from '../modeles/versionService.js';
 import { LigneServiceTeleverseV2 } from '../modeles/televersement/serviceTeleverseV2.js';
@@ -43,7 +42,6 @@ const creeDepot = (
   const {
     adaptateurPersistance: persistance,
     adaptateurChiffrement: chiffrement,
-    referentiel,
     referentielV2,
   } = config;
 
@@ -69,9 +67,6 @@ const creeDepot = (
 
     const { donnees, versionService } = persistees;
     const services = await chiffrement.dechiffre(donnees.services);
-
-    if (versionService === VersionService.v1)
-      return new TeleversementServices({ services }, referentiel);
 
     if (versionService === VersionService.v2) {
       const lignes = (services as LigneServiceTeleverseV2[]).map((s) => ({
@@ -117,4 +112,5 @@ const creeDepot = (
     supprimeTeleversementServices,
   };
 };
+
 export { creeDepot };
