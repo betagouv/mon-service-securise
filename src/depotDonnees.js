@@ -117,7 +117,6 @@ const creeDepot = (config = {}) => {
     depotDonneesTeleversementServices.creeDepot({
       adaptateurChiffrement,
       adaptateurPersistance,
-      referentiel,
       referentielV2,
     });
 
