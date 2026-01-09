@@ -4,7 +4,6 @@
 
 ##### Nettoyage post MEP
 
-- TiroirTeleversementServices.svelte
 - évènement : svelte-recharge-rapport-televersement-services
 - paramètre url : rapportTeleversement
 - RapportTeleversementServices.svelte

@@ -20,7 +20,6 @@
   export let modeVisiteGuidee: boolean;
   export let dateInscriptionUtilisateur: Date;
   export let avecPromotionDeMsc: boolean;
-  export let avecDecrireV2: boolean;
   export let profilUtilisateurComplet: boolean = true;
 
   let enCoursChargement = true;
@@ -96,11 +95,8 @@
       {indiceCyberMoyen}
       {estSuperviseur}
     />
-    <BandeauFiltres {avecDecrireV2} />
-    <TableauDesServices
-      indicesCyberCharges={indiceCyberMoyen !== undefined}
-      {avecDecrireV2}
-    />
+    <BandeauFiltres />
+    <TableauDesServices indicesCyberCharges={indiceCyberMoyen !== undefined} />
     <BandeauBlog {dateInscriptionUtilisateur} {avecPromotionDeMsc} />
   {/if}
 </div>
