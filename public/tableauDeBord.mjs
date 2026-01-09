@@ -13,7 +13,6 @@ $(() => {
   );
 
   const avecPromotionDeMsc = lisDonneesPartagees('avec-promotion-de-msc');
-  const avecDecrireV2 = lisDonneesPartagees('avec-decrire-v2');
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-tableau-de-bord', {
@@ -23,7 +22,6 @@ $(() => {
         profilUtilisateurComplet,
         dateInscriptionUtilisateur,
         avecPromotionDeMsc,
-        avecDecrireV2,
       },
     })
   );
@@ -56,11 +54,6 @@ $(() => {
   }
 
   const requete = new URLSearchParams(window.location.search);
-
-  if (requete.has('rapportTeleversement'))
-    document.body.dispatchEvent(
-      new CustomEvent('svelte-recharge-rapport-televersement-services')
-    );
 
   if (requete.has('rapportTeleversementV2'))
     document.body.dispatchEvent(

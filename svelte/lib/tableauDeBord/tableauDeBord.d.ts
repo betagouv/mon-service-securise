@@ -1,7 +1,6 @@
 declare global {
   interface HTMLElementEventMap {
     'svelte-recharge-tableau-de-bord': CustomEvent;
-    'svelte-recharge-rapport-televersement-services': CustomEvent;
     'svelte-recharge-rapport-televersement-services-v2': CustomEvent;
   }
 }
@@ -12,7 +11,6 @@ export type TableauDeBordProps = {
   dateInscriptionUtilisateur: Date;
   profilUtilisateurComplet?: boolean;
   avecPromotionDeMsc: boolean;
-  avecDecrireV2: boolean;
 };
 
 type Contributeur = {
