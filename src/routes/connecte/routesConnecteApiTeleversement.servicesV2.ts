@@ -5,7 +5,6 @@ import { LigneServiceTeleverseV2 } from '../../modeles/televersement/serviceTele
 import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonneesTeleversementServices } from '../../depots/depotDonneesTeleversementServices.interface.js';
 import { RequestRouteConnecte } from './routesConnecte.types.js';
-import { VersionService } from '../../modeles/versionService.js';
 import { UUID } from '../../typesBasiques.js';
 import Service from '../../modeles/service.js';
 import { DepotPourTeleversementServices } from '../../modeles/televersement/televersementServicesV2.js';
@@ -46,8 +45,7 @@ const routesConnecteApiTeleversementServicesV2 = ({
         );
       await depotDonnees.nouveauTeleversementServices(
         idUtilisateurCourant,
-        donneesTeleversement,
-        VersionService.v2
+        donneesTeleversement
       );
     } catch (e) {
       if (e instanceof ErreurFichierXlsInvalide) {

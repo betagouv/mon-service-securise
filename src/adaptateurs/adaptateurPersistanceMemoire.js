@@ -26,15 +26,13 @@ const nouvelAdaptateur = (
 
   const ajouteTeleversementServices = async (
     idUtilisateur,
-    donneesChiffrees,
-    versionService
+    donneesChiffrees
   ) => {
     const id = unUUIDRandom();
     donnees.televersements.services.push({
       id,
       idUtilisateur,
       donnees: { services: donneesChiffrees },
-      versionService,
       progression: 0,
     });
     return id;
