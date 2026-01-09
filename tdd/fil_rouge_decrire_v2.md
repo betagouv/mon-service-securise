@@ -15,7 +15,6 @@
 - RapportTeleversementServices.svelte
 - les fonctions v1 dans rapportTeleversementServices.api.ts
 - serviceTeleverse.js
-- televersementServices.js
 - ` || !(televersementServices instanceof TeleversementServicesV2)` dans la route
 - table televersement_services colonne version_service + adaptateur Postgres
 - adaptateurTeleversementServices.xls la méthode v1 et les constantes associées
