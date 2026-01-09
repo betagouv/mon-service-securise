@@ -8,9 +8,7 @@ import { RequestRouteConnecte } from './routesConnecte.types.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { UUID } from '../../typesBasiques.js';
 import Service from '../../modeles/service.js';
-import TeleversementServicesV2, {
-  DepotPourTeleversementServices,
-} from '../../modeles/televersement/televersementServicesV2.js';
+import { DepotPourTeleversementServices } from '../../modeles/televersement/televersementServicesV2.js';
 
 type ConfigurationRoutes = {
   lecteurDeFormData: {
@@ -67,11 +65,7 @@ const routesConnecteApiTeleversementServicesV2 = ({
     const televersementServices =
       await depotDonnees.lisTeleversementServices(idUtilisateurCourant);
 
-    if (
-      !televersementServices ||
-      !(televersementServices instanceof TeleversementServicesV2)
-    )
-      return reponse.sendStatus(404);
+    if (!televersementServices) return reponse.sendStatus(404);
 
     const rapportDetaille = await televersementServices.rapportDetaille(
       idUtilisateurCourant,
@@ -87,11 +81,7 @@ const routesConnecteApiTeleversementServicesV2 = ({
     const televersementServices =
       await depotDonnees.lisTeleversementServices(idUtilisateurCourant);
 
-    if (
-      !televersementServices ||
-      !(televersementServices instanceof TeleversementServicesV2)
-    )
-      return reponse.sendStatus(404);
+    if (!televersementServices) return reponse.sendStatus(404);
 
     const rapportDetaille = await televersementServices.rapportDetaille(
       idUtilisateurCourant,
