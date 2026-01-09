@@ -1,7 +1,6 @@
 import { UUID } from '../typesBasiques.js';
 import TeleversementServicesV2 from '../modeles/televersement/televersementServicesV2.js';
 import { LigneServiceTeleverseV2 } from '../modeles/televersement/serviceTeleverseV2.js';
-import { VersionService } from '../modeles/versionService.js';
 
 export interface DepotDonneesTeleversementServices {
   lisPourcentageProgressionTeleversementServices: (
@@ -16,8 +15,7 @@ export interface DepotDonneesTeleversementServices {
   ) => Promise<void>;
   nouveauTeleversementServices: (
     idUtilisateur: UUID,
-    donneesTeleversementServices: LigneServiceTeleverseV2[],
-    versionService: VersionService
+    donneesTeleversementServices: LigneServiceTeleverseV2[]
   ) => Promise<UUID>;
   supprimeTeleversementServices: (idUtilisateur: UUID) => Promise<void>;
 }

@@ -9,7 +9,6 @@
 
 ##### Nettoyage post MEP
 
-- table televersement_services colonne version_service + adaptateur Postgres
 - La route GET `api/referentiel/mesures` renvoi les mesures V1 par défaut, pour un utilisateur sans service
   - On veut sûrement renvoyer les mesures V2 après la MEP
 - l'adaptateurEnvironnement dans actionRecommandee()
