@@ -1,5 +1,4 @@
 import express from 'express';
-import routesConnecteApiTeleversementServices from './routesConnecteApiTeleversement.services.js';
 import routesConnecteApiTeleversementModelesMesure from './routesConnecteApiTeleversement.modelesMesureSpecifique.js';
 import { routesConnecteApiTeleversementServicesV2 } from './routesConnecteApiTeleversement.servicesV2.js';
 
@@ -12,17 +11,6 @@ const routesConnecteApiTeleversement = ({
   middleware,
 }) => {
   const routes = express.Router();
-
-  routes.use(
-    '/services',
-    routesConnecteApiTeleversementServices({
-      lecteurDeFormData,
-      adaptateurTeleversementServices,
-      busEvenements,
-      depotDonnees,
-      middleware,
-    })
-  );
 
   routes.use(
     '/services-v2',
