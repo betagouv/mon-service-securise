@@ -1129,198 +1129,154 @@ describe('Un service', () => {
   });
 
   describe("sur demande de l'action recommandée", () => {
-    let referentiel;
+    let referentielV2;
     let mesuresToutesFaites;
     let mesuresNonFaites;
     let mesuresNonRemplies;
-    let adaptateurEnvironnement;
 
     beforeEach(() => {
-      referentiel = Referentiel.creeReferentiel({
-        echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
-        statutsAvisDossierHomologation: { favorable: {} },
-        categoriesMesures: { gouvernance: {} },
-        statutsMesures: { fait: {}, enCours: {} },
-        mesures: { mesureA: {} },
-        indiceCyber: { noteMax: 5 },
-      });
+      referentielV2 = creeReferentielV2();
       mesuresToutesFaites = new Mesures(
-        { mesuresGenerales: [{ id: 'mesureA', statut: 'fait' }] },
-        referentiel,
-        { mesureA: { categorie: 'gouvernance' } }
+        { mesuresGenerales: [{ id: 'RECENSEMENT.1', statut: 'fait' }] },
+        referentielV2,
+        { 'RECENSEMENT.1': { categorie: 'gouvernance' } }
       );
       mesuresNonFaites = new Mesures(
-        { mesuresGenerales: [{ id: 'mesureA', statut: 'enCours' }] },
-        referentiel,
-        { mesureA: { categorie: 'gouvernance' } }
+        { mesuresGenerales: [{ id: 'RECENSEMENT.1', statut: 'enCours' }] },
+        referentielV2,
+        { 'RECENSEMENT.1': { categorie: 'gouvernance' } }
       );
-      mesuresNonRemplies = new Mesures({ mesuresGenerales: [] }, referentiel, {
-        mesureA: { categorie: 'gouvernance' },
-      });
-      adaptateurEnvironnement = {
-        featureFlag: () => ({
-          avecDecrireV2: () => false,
-        }),
-      };
+      mesuresNonRemplies = new Mesures(
+        { mesuresGenerales: [] },
+        referentielV2,
+        { 'RECENSEMENT.1': { categorie: 'gouvernance' } }
+      );
     });
 
-    it("retourne 'continuerSimulationReferentielV2' si le service a une simulation", () => {
-      adaptateurEnvironnement = {
-        featureFlag: () => ({
-          avecDecrireV2: () => true,
-        }),
-      };
-      const service = unService()
+    it("retourne 'continuerSimulationReferentielV2' si le service est v1 avec une simulation démarrée", () => {
+      const v1AvecSimulation = unService()
         .avecVersion(VersionService.v1)
         .avecUneSimulationExistante()
         .construis();
 
-      expect(service.actionRecommandee(adaptateurEnvironnement).id).toBe(
+      expect(v1AvecSimulation.actionRecommandee().id).toBe(
         'continuerSimulationReferentielV2'
       );
     });
 
     it("retourne 'simulerReferentielV2' si le service est en v1 et que le feature flag est activé", () => {
-      const service = unService().avecVersion(VersionService.v1).construis();
-      adaptateurEnvironnement = {
-        featureFlag: () => ({
-          avecDecrireV2: () => true,
-        }),
-      };
+      const v1SansSimulation = unService()
+        .avecVersion(VersionService.v1)
+        .construis();
 
-      expect(service.actionRecommandee(adaptateurEnvironnement).id).toBe(
+      expect(v1SansSimulation.actionRecommandee().id).toBe(
         'simulerReferentielV2'
       );
     });
 
-    it("ne retourne pas 'simulerReferentielV2' si le service est en v2 et que le feature flag est activé", () => {
+    it("ne retourne pas 'simulerReferentielV2' si le service est en v2", () => {
       const service = unServiceV2().construis();
-      adaptateurEnvironnement = {
-        featureFlag: () => ({
-          avecDecrireV2: () => true,
-        }),
-      };
 
-      expect(service.actionRecommandee(adaptateurEnvironnement)).toBe(
-        undefined
-      );
+      expect(service.actionRecommandee()).toBe(undefined);
     });
 
     it("retourne 'mettreAJour' si le service a une suggestion d'action", () => {
-      referentiel = Referentiel.creeReferentiel({
-        naturesSuggestionsActions: { 'siret-a-renseigner': { lien: '' } },
-      });
-
-      const service = unService(referentiel)
-        .avecSuggestionAction({ nature: 'siret-a-renseigner' })
+      const service = unServiceV2()
+        .avecSuggestionAction({ nature: 'miseAJourSiret' })
         .construis();
 
-      expect(service.actionRecommandee(adaptateurEnvironnement).id).toBe(
-        'mettreAJour'
-      );
+      expect(service.actionRecommandee().id).toBe('mettreAJour');
     });
 
     it("retourne 'continuerHomologation' si le service a un un dossier d'homologation en cours et un indice cyber supérieur à 4", () => {
-      const service = unService(referentiel)
+      const service = unServiceV2()
         .avecDossiers([
-          unDossier(referentiel).quiEstComplet().quiEstNonFinalise().donnees,
+          unDossier(referentielV2).quiEstComplet().quiEstNonFinalise().donnees,
         ])
         .avecMesures(mesuresToutesFaites)
         .construis();
 
-      expect(service.actionRecommandee(adaptateurEnvironnement).id).toBe(
-        'continuerHomologation'
-      );
+      expect(service.actionRecommandee().id).toBe('continuerHomologation');
     });
 
     it("retourne 'augmenterIndiceCyber' si le service a un un dossier d'homologation en cours et un indice cyber inférieur à 4", () => {
-      const service = unService(referentiel)
+      const service = unServiceV2(referentielV2)
         .avecDossiers([
-          unDossier(referentiel).quiEstComplet().quiEstNonFinalise().donnees,
+          unDossier(referentielV2).quiEstComplet().quiEstNonFinalise().donnees,
         ])
         .avecMesures(mesuresNonFaites)
         .construis();
 
-      expect(service.actionRecommandee(adaptateurEnvironnement).id).toBe(
-        'augmenterIndiceCyber'
-      );
+      expect(service.actionRecommandee().id).toBe('augmenterIndiceCyber');
     });
 
     it("retourne 'telechargerEncartHomologation' si le service a un un dossier d'homologation actif et en cours de validité", () => {
-      const service = unService(referentiel)
+      const service = unServiceV2(referentielV2)
         .avecDossiers([
-          unDossier(referentiel).quiEstComplet().quiEstActif().donnees,
+          unDossier(referentielV2).quiEstComplet().quiEstActif().donnees,
         ])
         .construis();
 
-      expect(service.actionRecommandee(adaptateurEnvironnement).id).toBe(
+      expect(service.actionRecommandee().id).toBe(
         'telechargerEncartHomologation'
       );
     });
 
     it("ne retourne pas 'telechargerEncartHomologation' si le service a un un dossier d'homologation actif mais qu'il a été importé", () => {
-      const service = unService(referentiel)
+      const service = unServiceV2(referentielV2)
         .avecDossiers([
-          unDossier(referentiel).quiEstComplet().quiEstActif().quiAEteImporte()
-            .donnees,
+          unDossier(referentielV2)
+            .quiEstComplet()
+            .quiEstActif()
+            .quiAEteImporte().donnees,
         ])
         .construis();
 
-      expect(service.actionRecommandee(adaptateurEnvironnement)?.id).not.toBe(
+      expect(service.actionRecommandee()?.id).not.toBe(
         'telechargerEncartHomologation'
       );
     });
 
     it("retourne 'homologuerANouveau' si le service a un un dossier d'homologation expirée", () => {
-      const service = unService(referentiel)
+      const service = unServiceV2(referentielV2)
         .avecDossiers([
-          unDossier(referentiel).quiEstComplet().quiEstExpire().donnees,
+          unDossier(referentielV2).quiEstComplet().quiEstExpire().donnees,
         ])
         .construis();
 
-      expect(service.actionRecommandee(adaptateurEnvironnement).id).toBe(
-        'homologuerANouveau'
-      );
+      expect(service.actionRecommandee().id).toBe('homologuerANouveau');
     });
 
     it("retourne 'inviterContributeur' si le service n'a qu'un contributeur, un taux de complétion inférieur à 80% et indice cyber inférieur à 4", () => {
-      const service = unService(referentiel)
+      const service = unServiceV2()
         .avecNContributeurs(1)
         .avecMesures(mesuresNonRemplies)
         .construis();
 
-      expect(service.actionRecommandee(adaptateurEnvironnement).id).toBe(
-        'inviterContributeur'
-      );
+      expect(service.actionRecommandee().id).toBe('inviterContributeur');
     });
 
     it("retourne 'augmenterIndiceCyber' si le service a plus d'un contributeur, un taux de complétion inférieur à 80% et indice cyber inférieur à 4", () => {
-      const service = unService(referentiel)
+      const service = unServiceV2()
         .avecNContributeurs(2)
         .avecMesures(mesuresNonRemplies)
         .construis();
 
-      expect(service.actionRecommandee(adaptateurEnvironnement).id).toBe(
-        'augmenterIndiceCyber'
-      );
+      expect(service.actionRecommandee().id).toBe('augmenterIndiceCyber');
     });
 
     it("retourne 'homologuerService' si le service a un taux de complétion supérieur à 80% et indice cyber supérieur à 4", () => {
-      const service = unService(referentiel)
+      const service = unServiceV2()
         .avecMesures(mesuresToutesFaites)
         .construis();
 
-      expect(service.actionRecommandee(adaptateurEnvironnement).id).toBe(
-        'homologuerService'
-      );
+      expect(service.actionRecommandee().id).toBe('homologuerService');
     });
 
     it("retourne 'undefined' si aucune action recommandée", () => {
-      const service = unService().construis();
+      const service = unServiceV2().construis();
 
-      expect(service.actionRecommandee(adaptateurEnvironnement)).toBe(
-        undefined
-      );
+      expect(service.actionRecommandee()).toBe(undefined);
     });
   });
 

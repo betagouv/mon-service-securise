@@ -52,9 +52,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
     it("sauvegarde l'étape vue de la visite guidée", async () => {
       testeur.depotDonnees().lisParcoursUtilisateur = () =>
         new ParcoursUtilisateur(
-          {
-            etatVisiteGuidee: { dejaTerminee: false },
-          },
+          { etatVisiteGuidee: { dejaTerminee: false } },
           testeur.referentiel()
         );
       let parcoursUtilisateurPasse;
@@ -87,9 +85,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
   describe('quand requête POST sur /visiteGuidee/termine', () => {
     beforeEach(() => {
       testeur.referentiel().recharge({
-        etapesVisiteGuidee: {
-          DECRIRE: { idEtapeSuivante: 'SECURISER' },
-        },
+        etapesVisiteGuidee: { DECRIRE: { idEtapeSuivante: 'SECURISER' } },
       });
     });
 
@@ -120,9 +116,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
     it('sauvegarde la pause de la visite guidée', async () => {
       testeur.depotDonnees().lisParcoursUtilisateur = () =>
         new ParcoursUtilisateur(
-          {
-            etatVisiteGuidee: { dejaTerminee: false, enPause: false },
-          },
+          { etatVisiteGuidee: { dejaTerminee: false, enPause: false } },
           testeur.referentiel()
         );
       let parcoursUtilisateurPasse;
@@ -142,9 +136,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
     it('sauvegarde la reprise de la visite guidée', async () => {
       testeur.depotDonnees().lisParcoursUtilisateur = () =>
         new ParcoursUtilisateur(
-          {
-            etatVisiteGuidee: { dejaTerminee: false, enPause: true },
-          },
+          { etatVisiteGuidee: { dejaTerminee: false, enPause: true } },
           testeur.referentiel()
         );
       let parcoursUtilisateurPasse;
@@ -163,9 +155,7 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
   it('quand requête POST sur /visiteGuidee/reprends, sauvegarde la réinitialisation de la visite guidée', async () => {
     testeur.depotDonnees().lisParcoursUtilisateur = () =>
       new ParcoursUtilisateur(
-        {
-          etatVisiteGuidee: { dejaTerminee: true, enPause: false },
-        },
+        { etatVisiteGuidee: { dejaTerminee: true, enPause: false } },
         testeur.referentiel()
       );
     let parcoursUtilisateurPasse;

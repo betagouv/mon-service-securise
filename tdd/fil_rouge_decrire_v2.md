@@ -21,9 +21,9 @@
 - adaptateurTeleversementServices.xls la méthode v1 et les constantes associées
 - La route GET `api/referentiel/mesures` renvoi les mesures V1 par défaut, pour un utilisateur sans service
   - On veut sûrement renvoyer les mesures V2 après la MEP
-- l'adaptateurEnvironnement dans actionRecommandee()
 - suppression de la route création v1
   - supprimer dans referentiel `versionServiceParDefaut`
+- `adaptateurEnvironnement` dans routesConnecteApiServicePdf
 
 #### Moteur v2
 
