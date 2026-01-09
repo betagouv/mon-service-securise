@@ -9,7 +9,6 @@ import { AdaptateurChiffrement } from '../../src/adaptateurs/adaptateurChiffreme
 import { creeReferentiel } from '../../src/referentiel.js';
 import { Referentiel, ReferentielV2 } from '../../src/referentiel.interface.ts';
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
-import { VersionService } from '../../src/modeles/versionService.ts';
 import TeleversementServicesV2 from '../../src/modeles/televersement/televersementServicesV2.ts';
 import { creeReferentielV2 } from '../../src/referentielV2.ts';
 
@@ -43,8 +42,7 @@ describe('Le dépôt de données des téléversements de services', () => {
       ];
       await persistance.ajouteTeleversementServices(
         unUUID('2'),
-        await chiffrement.chiffre(troisServices),
-        VersionService.v2
+        await chiffrement.chiffre(troisServices)
       );
       await depot.metsAJourProgressionTeleversement(unUUID('2'), 1);
 
@@ -62,8 +60,7 @@ describe('Le dépôt de données des téléversements de services', () => {
         unUUID('2'),
         await chiffrement.chiffre([
           { nom: 'Mairie A', siret: '12345678912345' },
-        ]),
-        VersionService.v2
+        ])
       );
 
       const t = await depot.lisTeleversementServices(unUUID('2'));

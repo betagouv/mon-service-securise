@@ -1,5 +1,4 @@
 import { DonneesChiffrees, UUID } from '../typesBasiques.js';
-import { VersionService } from '../modeles/versionService.js';
 import { LigneServiceTeleverseV2 } from '../modeles/televersement/serviceTeleverseV2.js';
 import { DepotDonneesTeleversementServices } from './depotDonneesTeleversementServices.interface.js';
 import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
@@ -9,16 +8,11 @@ import TeleversementServicesV2 from '../modeles/televersement/televersementServi
 export type PersistanceTeleversementServices = {
   ajouteTeleversementServices: (
     idUtilisateur: UUID,
-    donneesChiffrees: DonneesChiffrees,
-    versionService: VersionService
+    donneesChiffrees: DonneesChiffrees
   ) => Promise<UUID>;
-  lisTeleversementServices: (idUtilisateur: UUID) => Promise<
-    | undefined
-    | {
-        donnees: { services: DonneesChiffrees };
-        versionService: VersionService;
-      }
-  >;
+  lisTeleversementServices: (
+    idUtilisateur: UUID
+  ) => Promise<undefined | { donnees: { services: DonneesChiffrees } }>;
   lisProgressionTeleversementServices: (
     idUtilisateur: UUID
   ) => Promise<{ progression: number }>;
@@ -47,16 +41,14 @@ const creeDepot = (
 
   const nouveauTeleversementServices = async (
     idUtilisateur: UUID,
-    donneesTeleversementServices: LigneServiceTeleverseV2[],
-    versionService: VersionService
+    donneesTeleversementServices: LigneServiceTeleverseV2[]
   ) => {
     const donneesChiffrees = await chiffrement.chiffre(
       donneesTeleversementServices
     );
     return persistance.ajouteTeleversementServices(
       idUtilisateur,
-      donneesChiffrees,
-      versionService
+      donneesChiffrees
     );
   };
 
@@ -65,22 +57,16 @@ const creeDepot = (
       await persistance.lisTeleversementServices(idUtilisateur);
     if (!persistees) return undefined;
 
-    const { donnees, versionService } = persistees;
+    const { donnees } = persistees;
     const services = await chiffrement.dechiffre(donnees.services);
 
-    if (versionService === VersionService.v2) {
-      const lignes = (services as LigneServiceTeleverseV2[]).map((s) => ({
-        ...s,
-        dateHomologation: s.dateHomologation
-          ? new Date(s.dateHomologation)
-          : undefined,
-      }));
-      return new TeleversementServicesV2({ services: lignes }, referentielV2);
-    }
-
-    throw new Error(
-      `Impossible de lire la version du téléversement de ${idUtilisateur}`
-    );
+    const lignes = (services as LigneServiceTeleverseV2[]).map((s) => ({
+      ...s,
+      dateHomologation: s.dateHomologation
+        ? new Date(s.dateHomologation)
+        : undefined,
+    }));
+    return new TeleversementServicesV2({ services: lignes }, referentielV2);
   };
 
   const lisPourcentageProgressionTeleversementServices = async (

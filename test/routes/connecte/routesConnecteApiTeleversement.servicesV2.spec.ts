@@ -2,7 +2,6 @@ import testeurMSS from '../testeurMSS.js';
 import { ErreurFichierXlsInvalide } from '../../../src/erreurs.js';
 import { UUID } from '../../../src/typesBasiques.js';
 import { LigneServiceTeleverseV2 } from '../../../src/modeles/televersement/serviceTeleverseV2.js';
-import { VersionService } from '../../../src/modeles/versionService.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 import TeleversementServicesV2 from '../../../src/modeles/televersement/televersementServicesV2.ts';
 import { unUUID } from '../../constructeurs/UUID.ts';
@@ -79,22 +78,18 @@ describe('Les routes connecté de téléversement de services V2', () => {
         async () => [{ nom: 'Un service' }];
       let idUtilisateurQuiTeleverse;
       let donneesRecues;
-      let versionRecue: VersionService;
       testeur.depotDonnees().nouveauTeleversementServices = async (
         idUtilisateurCourant: UUID,
-        donnees: LigneServiceTeleverseV2[],
-        versionService: VersionService
+        donnees: LigneServiceTeleverseV2[]
       ) => {
         idUtilisateurQuiTeleverse = idUtilisateurCourant;
         donneesRecues = donnees;
-        versionRecue = versionService;
       };
 
       await testeur.post('/api/televersement/services-v2');
 
       expect(idUtilisateurQuiTeleverse).toBe('123');
       expect(donneesRecues).toEqual([{ nom: 'Un service' }]);
-      expect(versionRecue!).toBe('v2');
     });
   });
 
