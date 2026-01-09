@@ -217,8 +217,7 @@ const routesConnecteApiService = ({
       const donnees = objetGetService.donnees(
         requete.service,
         requete.autorisationService,
-        referentiel,
-        adaptateurEnvironnement
+        referentiel
       );
       reponse.json(donnees);
     }

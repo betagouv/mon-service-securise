@@ -7,12 +7,7 @@ const {
   DROITS_VOIR_MESURES,
 } = Autorisation;
 
-const donnees = (
-  service,
-  autorisation,
-  referentiel,
-  adaptateurEnvironnement
-) => {
+const donnees = (service, autorisation, referentiel) => {
   const enCoursEdition =
     service.dossiers.statutSaisie() === Dossiers.A_COMPLETER;
   const etapeCouranteAutorisee = referentiel.etapeDossierAutorisee(
@@ -21,7 +16,7 @@ const donnees = (
   );
   const dateExpiration = service.dossiers.dateExpiration();
   const completude = service.completudeMesures();
-  const actionRecommandee = service.actionRecommandee(adaptateurEnvironnement);
+  const actionRecommandee = service.actionRecommandee();
   return {
     id: service.id,
     nomService: service.nomService(),
