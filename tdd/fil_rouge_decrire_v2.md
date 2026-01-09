@@ -2,11 +2,6 @@
 
 ## TODO
 
-#### MEP V2
-
-- retirer le bouton de téléversement V1
-- supprimer les téléversements V1 en base
-
 ##### Nettoyage post MEP
 
 - TiroirTeleversementServices.svelte
