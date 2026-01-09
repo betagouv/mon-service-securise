@@ -4,18 +4,12 @@ import { Autorisation } from '../autorisations/autorisation.js';
 
 const { DROITS_VOIR_STATUT_HOMOLOGATION } = Autorisation;
 
-const donnees = (
-  services,
-  autorisations,
-  referentiel,
-  adaptateurEnvironnement
-) => ({
+const donnees = (services, autorisations, referentiel) => ({
   services: services.map((s) =>
     objetGetService.donnees(
       s,
       autorisations.find((a) => a.idService === s.id),
-      referentiel,
-      adaptateurEnvironnement
+      referentiel
     )
   ),
   resume: {

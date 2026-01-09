@@ -379,14 +379,11 @@ class Service {
     return new ObjetPDFAnnexeRisques(this, this.referentiel);
   }
 
-  actionRecommandee(adaptateurEnvironnement) {
+  actionRecommandee() {
     if (this.aUneSimulationMigrationReferentiel)
       return Service.ACTIONS_RECOMMANDEES.CONTINUER_SIMULATION_REFERENTIEL_V2;
 
-    if (
-      adaptateurEnvironnement.featureFlag().avecDecrireV2() &&
-      this.version() === VersionService.v1
-    )
+    if (this.version() === VersionService.v1)
       return Service.ACTIONS_RECOMMANDEES.SIMULER_REFERENTIEL_V2;
 
     if (this.aUneSuggestionDAction())
