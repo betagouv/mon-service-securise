@@ -12,7 +12,6 @@
 - serviceTeleverse.js
 - ` || !(televersementServices instanceof TeleversementServicesV2)` dans la route
 - table televersement_services colonne version_service + adaptateur Postgres
-- adaptateurTeleversementServices.xls la méthode v1 et les constantes associées
 - La route GET `api/referentiel/mesures` renvoi les mesures V1 par défaut, pour un utilisateur sans service
   - On veut sûrement renvoyer les mesures V2 après la MEP
 - suppression de la route création v1

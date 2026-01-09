@@ -155,7 +155,6 @@ const testeurMss = () => {
       extraisDonneesXLS: async () => Buffer.from([]),
     };
     adaptateurTeleversementServices = {
-      extraisTeleversementServices: async () => {},
       extraisTeleversementServicesV2: async () => {},
     };
     adaptateurTeleversementModelesMesureSpecifique = {
