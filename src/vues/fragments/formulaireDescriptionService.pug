@@ -13,8 +13,7 @@ block append scripts
   script(type="module", src = "/statique/modules/suggestion/suggestionEntite.mjs")
 
 mixin formulaireDescriptionService(idService)
-  - const estEnCreation = !idService;
-  - const estLectureSeule  = estEnCreation ? false : autorisationsService.DECRIRE.estLectureSeule;
+  - const estLectureSeule = autorisationsService.DECRIRE.estLectureSeule;
   - const entite = service?.descriptionService?.organisationResponsable || {};
   .homologation#homologation
     form.etape-decrire#decrire-etape-1
@@ -248,13 +247,10 @@ mixin formulaireDescriptionService(idService)
       button.bouton#etape-suivante Suivant
       .conteneur-bouton-finaliser
         if !estLectureSeule
-          if !estEnCreation
-            button.bouton#diagnostic(idService = idService, disabled) Enregistrer les modifications
-          else
-            button.bouton#diagnostic(disabled) Commencer à sécuriser le service
+          button.bouton#diagnostic(idService = idService, disabled) Enregistrer les modifications
 
   script(type = 'module', src = '/statique/service/descriptionService.mjs')
-  +donneesPartagees('niveau-securite-existant', estEnCreation ? null : service.descriptionService.niveauSecurite)
+  +donneesPartagees('niveau-securite-existant', service.descriptionService.niveauSecurite)
   +donneesPartagees('niveau-securite-recommande-lecture-seule', niveauRecommandeLectureSeule ? niveauRecommandeLectureSeule : null)
   +donneesPartagees('decrire-lecture-seule', estLectureSeule)
-  +donneesPartagees('suggestion-controle-besoins-securite-retrogrades', estEnCreation ? false : service.pourraitFaire('controleBesoinsDeSecuriteRetrogrades'))
+  +donneesPartagees('suggestion-controle-besoins-securite-retrogrades', service.pourraitFaire('controleBesoinsDeSecuriteRetrogrades'))

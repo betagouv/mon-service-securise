@@ -26,15 +26,7 @@ const initialiseComportementFormulaire = (
     requete.data = fonctionExtractionParametres(selecteurFormulaire);
 
     const redirige = ({ data: { idService } }) => {
-      const estCreationDeService = !identifiantService;
-      if (estCreationDeService) {
-        $('#modale-creation-service')[0].showModal();
-        setTimeout(() => {
-          window.location = `/service/${idService}/mesures`;
-        }, 3000);
-      } else {
-        window.location = `/service/${idService}/descriptionService`;
-      }
+      window.location = `/service/${idService}/descriptionService`;
     };
 
     try {
