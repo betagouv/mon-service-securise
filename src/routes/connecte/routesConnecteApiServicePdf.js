@@ -5,7 +5,6 @@ import { dateYYYYMMDD } from '../../utilitaires/date.js';
 import { VersionService } from '../../modeles/versionService.js';
 
 const routesConnecteApiServicePdf = ({
-  adaptateurEnvironnement,
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurZip,
@@ -20,8 +19,7 @@ const routesConnecteApiServicePdf = ({
     const donneesRisques = service.vueAnnexePDFRisques().donnees();
 
     const donneesEntete =
-      service.version() === VersionService.v1 &&
-      adaptateurEnvironnement.featureFlag().avecDecrireV2()
+      service.version() === VersionService.v1
         ? { afficheBadgeAncienReferentiel: true }
         : {};
 

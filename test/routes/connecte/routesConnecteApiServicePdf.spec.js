@@ -12,7 +12,10 @@ import {
   Permissions,
   Rubriques,
 } from '../../../src/modeles/autorisations/gestionDroits.js';
-import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
 import { VersionService } from '../../../src/modeles/versionService.js';
 
 const { LECTURE } = Permissions;
@@ -56,7 +59,10 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
     });
 
     describe("concernant l'affichage du badge 'ancien référentiel'", () => {
-      it("ne l'affiche pas par défaut", async () => {
+      it("ne l'affiche pas si le service est V2", async () => {
+        const unV2 = unServiceV2().construis();
+        testeur.middleware().reinitialise({ serviceARenvoyer: unV2 });
+
         let donneesEnteteRecu;
         testeur.adaptateurPdf().genereAnnexes = async ({ donneesEntete }) => {
           donneesEnteteRecu = donneesEntete;
@@ -68,12 +74,9 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
         expect(donneesEnteteRecu).to.eql({});
       });
 
-      it('affiche le badge si le service est V1 est que le feature flag est activé', async () => {
-        const serviceARenvoyer = unService().construis();
-        testeur.middleware().reinitialise({ serviceARenvoyer });
-        testeur.adaptateurEnvironnement().featureFlag = () => ({
-          avecDecrireV2: () => true,
-        });
+      it('affiche le badge si le service est V1', async () => {
+        const unV1 = unService().construis();
+        testeur.middleware().reinitialise({ serviceARenvoyer: unV1 });
 
         let donneesEnteteRecu;
         testeur.adaptateurPdf().genereAnnexes = async ({ donneesEntete }) => {
