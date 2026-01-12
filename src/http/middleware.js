@@ -261,7 +261,6 @@ const middleware = (configuration = {}) => {
     );
 
     reponse.locals.afficheExplicationNouveauReferentiel =
-      adaptateurEnvironnement.featureFlag().avecDecrireV2() &&
       parcoursUtilisateur.doitAfficherExplicationNouveauReferentiel();
 
     suite();

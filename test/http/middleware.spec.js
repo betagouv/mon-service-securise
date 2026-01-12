@@ -1073,12 +1073,9 @@ describe('Le middleware MSS', () => {
     });
 
     it("ajoute l'état d'affichage de l'explication du nouveau référentiel à `reponse.locals`", async () => {
-      const adaptateurEnvironnement = {
-        featureFlag: () => ({ avecDecrireV2: () => true }),
-      };
       reponse.locals.afficheExplicationNouveauReferentiel = undefined;
       requete.idUtilisateurCourant = '1234';
-      middleware = leMiddleware({ adaptateurEnvironnement });
+      middleware = leMiddleware();
 
       middleware.chargeExplicationNouveauReferentiel(requete, reponse, () => {
         expect(reponse.locals.afficheExplicationNouveauReferentiel).not.to.be(
