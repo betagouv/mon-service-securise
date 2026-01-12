@@ -13,14 +13,10 @@ $(() => {
   document.body.dispatchEvent(new CustomEvent('svelte-recharge-tiroir'));
 
   const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
-  const avecDecrireV2 = lisDonneesPartagees('avec-decrire-v2-visite-guidee');
   if (etatVisiteGuidee.dejaTerminee === false) {
     document.body.dispatchEvent(
       new CustomEvent('svelte-recharge-visite-guidee', {
-        detail: {
-          ...etatVisiteGuidee,
-          avecDecrireV2,
-        },
+        detail: etatVisiteGuidee,
       })
     );
   }

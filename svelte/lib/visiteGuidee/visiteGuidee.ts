@@ -24,11 +24,8 @@ const rechargeApp = (props: VisiteGuideeProps) => {
 
   if (!props.enPause) {
     app?.$destroy();
-    const { etapeCourante, urlEtapePrecedente, avecDecrireV2 } = props;
-    visiteGuidee.initialise(
-      { etapeCourante, urlEtapePrecedente },
-      avecDecrireV2
-    );
+    const { etapeCourante, urlEtapePrecedente } = props;
+    visiteGuidee.initialise({ etapeCourante, urlEtapePrecedente });
     utilisateurCourant.initialise(props.utilisateurCourant);
     app = new VisiteGuidee({
       target: document.getElementById('visite-guidee')!,

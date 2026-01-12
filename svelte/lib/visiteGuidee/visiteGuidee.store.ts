@@ -1,7 +1,6 @@
 import { derived, get, writable } from 'svelte/store';
 import EtapeBienvenue from './etapes/initiale/EtapeBienvenue.svelte';
 import EtapePresentationMenuNavigation from './etapes/initiale/EtapePresentationMenuNavigation.svelte';
-import EtapeDecrire from './etapes/decrire/EtapeDecrire.svelte';
 import type { EtatVisiteGuidee, Utilisateur } from './visiteGuidee.d';
 import EtapeSecuriser from './etapes/securiser/EtapeSecuriser.svelte';
 import EtapeHomologuer from './etapes/homologuer/EtapeHomologuer.svelte';
@@ -31,12 +30,9 @@ const redirigeApresFinalisationVisite = () => {
     : `/service/${idService}`;
 };
 
-const avecDecrireV2Store = writable(false);
-
 export const visiteGuidee = {
-  initialise: (etatVisiteGuidee: EtatVisiteGuidee, avecDecrireV2: boolean) => {
+  initialise: (etatVisiteGuidee: EtatVisiteGuidee) => {
     set(etatVisiteGuidee.etapeCourante ? etatVisiteGuidee : etatParDefaut);
-    avecDecrireV2Store.set(avecDecrireV2);
   },
   subscribe,
   async masqueEtapeCourante() {
@@ -79,16 +75,15 @@ export const utilisateurCourant = {
 };
 
 export const composantVisiteGuidee = derived(
-  [visiteGuidee, avecDecrireV2Store],
-  ([$visiteGuidee, $avecDecrireV2]) => {
+  [visiteGuidee],
+  ([$visiteGuidee]) => {
     switch ($visiteGuidee.etapeCourante) {
       case 'BIENVENUE':
         return EtapeBienvenue;
       case 'PRESENTATION_MENU_NAV':
         return EtapePresentationMenuNavigation;
       case 'DECRIRE':
-        if ($avecDecrireV2) return EtapeDecrireV2;
-        return EtapeDecrire;
+        return EtapeDecrireV2;
       case 'SECURISER':
         return EtapeSecuriser;
       case 'HOMOLOGUER':

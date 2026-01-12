@@ -170,16 +170,6 @@ const brancheComportementNavigationEtapes = () => {
     }
   };
 
-  $(document.body).on('jquery-affiche-decrire-etape-3', () => {
-    etapeCourante = 3;
-    afficheEtape();
-  });
-
-  $(document.body).on('jquery-affiche-decrire-etape-1', () => {
-    etapeCourante = 1;
-    afficheEtape();
-  });
-
   $boutonPrecedent().on('click', () => {
     etapeCourante = Math.max(etapeCourante - 1, 1);
     afficheEtape();
