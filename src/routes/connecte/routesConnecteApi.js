@@ -340,7 +340,6 @@ const routesConnecteApi = ({
   routes.use(
     '/service',
     routesConnecteApiService({
-      adaptateurEnvironnement,
       middleware,
       depotDonnees,
       referentiel,
