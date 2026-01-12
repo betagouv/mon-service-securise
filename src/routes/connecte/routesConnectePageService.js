@@ -6,7 +6,6 @@ import {
   Rubriques,
 } from '../../modeles/autorisations/gestionDroits.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
-import Service from '../../modeles/service.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
 import RisqueGeneral from '../../modeles/risqueGeneral.js';
 import { VersionService } from '../../modeles/versionService.js';
@@ -25,26 +24,6 @@ const routesConnectePageService = ({
 }) => {
   const routes = express.Router();
   const departements = referentiel.departements();
-
-  routes.get(
-    '/creation',
-    middleware.chargePreferencesUtilisateur,
-    (requete, reponse, suite) => {
-      const { idUtilisateurCourant } = requete;
-      depotDonnees
-        .utilisateur(idUtilisateurCourant)
-        .then((utilisateur) => {
-          reponse.render('service/creation', {
-            InformationsService,
-            referentiel,
-            service: Service.creePourUnUtilisateur(utilisateur),
-            etapeActive: 'descriptionService',
-            departements,
-          });
-        })
-        .catch(suite);
-    }
-  );
 
   routes.get(
     '/:id',

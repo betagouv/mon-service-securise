@@ -27,7 +27,6 @@ describe('Le serveur MSS des routes /service/*', () => {
   beforeEach(() => testeur.initialise());
 
   [
-    '/creation',
     '/ID-SERVICE/descriptionService',
     '/ID-SERVICE/mesures',
     '/ID-SERVICE/indiceCyber',
@@ -71,39 +70,6 @@ describe('Le serveur MSS des routes /service/*', () => {
         expect(reponse.status).to.equal(200);
         expect(reponse.headers['content-type']).to.contain('text/html');
       });
-    });
-  });
-
-  describe('quand requête GET sur `/service/creation `', () => {
-    beforeEach(() => {
-      testeur.middleware().reinitialise({ idUtilisateur: '123' });
-      testeur
-        .referentiel()
-        .recharge({ actionsSaisie: { descriptionService: { position: 0 } } });
-      testeur.depotDonnees().utilisateur = async (idUtilisateur) => ({
-        id: idUtilisateur,
-        entite: {
-          nom: 'une entité',
-        },
-      });
-    });
-
-    it("Récupère dans le dépôt le nom de l'organisation de l'utilisateur", async () => {
-      let idRecu;
-
-      testeur.depotDonnees().utilisateur = async (idUtilisateur) => {
-        idRecu = idUtilisateur;
-        return { id: idUtilisateur, entite: { nom: 'une entité' } };
-      };
-
-      await testeur.get('/service/creation');
-      expect(idRecu).to.equal('123');
-    });
-
-    it("charge les préférences de l'utilisateur", async () => {
-      await testeur
-        .middleware()
-        .verifieChargementDesPreferences(testeur.app(), '/service/creation');
     });
   });
 
