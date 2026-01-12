@@ -8,13 +8,13 @@ import {
 } from '../../erreurs.js';
 import {
   messageErreurDonneesUtilisateur,
-  obtentionDonneesDeBaseUtilisateurBaseeSurBooleens,
+  obtentionDonneesDeBaseUtilisateur,
 } from '../mappeur/utilisateur.js';
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 import { valideBody, valideQuery } from '../../http/validePayloads.js';
 import {
   reglesValidationAuthentificationParLoginMotDePasse,
-  reglesValidationCreationUtilisateur,
+  schemaPostUtilisateur,
   reglesValidationDesinscriptionInfolettre,
   reglesValidationRechercheOrganisations,
   reglesValidationReinitialisationMotDePasse,
@@ -36,7 +36,7 @@ const routesNonConnecteApi = ({
   routes.post(
     '/utilisateur',
     middleware.protegeTrafic(),
-    valideBody(z.strictObject(reglesValidationCreationUtilisateur)),
+    valideBody(z.strictObject(schemaPostUtilisateur)),
     async (requete, reponse, suite) => {
       const { token } = requete.body;
 
@@ -52,7 +52,7 @@ const routesNonConnecteApi = ({
         return;
       }
 
-      const donnees = obtentionDonneesDeBaseUtilisateurBaseeSurBooleens(
+      const donnees = obtentionDonneesDeBaseUtilisateur(
         requete.body,
         serviceCgu
       );
