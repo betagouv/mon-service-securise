@@ -113,17 +113,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     });
 
     describe("pour l'étape 'Décrire'", () => {
-      it("affiche l'étape 'Décrire V1' par défaut", async () => {
-        const reponse = await testeur.get('/visiteGuidee/decrire');
-
-        expect(reponse.text).to.contain('id="homologation"');
-      });
-
-      it("affiche l'étape 'Décrire V2' si le feature flag est actif", async () => {
-        testeur.adaptateurEnvironnement().featureFlag = () => ({
-          avecDecrireV2: () => true,
-        });
-
+      it("affiche l'étape 'Décrire V2'", async () => {
         const reponse = await testeur.get('/visiteGuidee/decrire');
 
         expect(reponse.text).to.contain('id="visite-guidee-creation-service"');
@@ -131,21 +121,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     });
 
     describe("concernant la version du 'faux' service utilisé", () => {
-      it('sert un service v1 par défaut', async () => {
-        const reponse = await testeur.get('/visiteGuidee/securiser');
-
-        const versionService = donneesPartagees(
-          reponse.text,
-          'version-service'
-        );
-        expect(versionService).to.be('v1');
-      });
-
-      it('sert un service v2 si le feature flag est activé', async () => {
-        testeur.adaptateurEnvironnement().featureFlag = () => ({
-          avecDecrireV2: () => true,
-        });
-
+      it('sert un service v2 par défaut', async () => {
         const reponse = await testeur.get('/visiteGuidee/securiser');
 
         const versionService = donneesPartagees(

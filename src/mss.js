@@ -117,7 +117,6 @@ const creeServeur = ({
       referentielV2,
       adaptateurCsv,
       adaptateurGestionErreur,
-      adaptateurEnvironnement,
       adaptateurHorloge,
     })
   );

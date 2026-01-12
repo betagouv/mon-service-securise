@@ -15,7 +15,6 @@ const routesConnectePage = ({
   adaptateurCsv,
   adaptateurGestionErreur,
   adaptateurHorloge,
-  adaptateurEnvironnement,
 }) => {
   const routes = express.Router();
 
@@ -131,11 +130,7 @@ const routesConnectePage = ({
       const service = Service.creePourUnUtilisateur(utilisateurVisiteGuidee);
       service.id = 'ID-SERVICE-VISITE-GUIDEE';
       service.descriptionService.niveauSecurite = 'niveau2';
-      service.versionService = adaptateurEnvironnement
-        .featureFlag()
-        .avecDecrireV2()
-        ? 'v2'
-        : 'v1';
+      service.versionService = VersionService.v2;
 
       const { idEtape } = requete.params;
       const idEtapeCourante = idEtape.toUpperCase();
@@ -159,16 +154,7 @@ const routesConnectePage = ({
       };
 
       if (idEtape === 'decrire') {
-        if (adaptateurEnvironnement.featureFlag().avecDecrireV2())
-          reponse.render('visiteGuidee/creationService');
-        else
-          reponse.render('service/creation', {
-            InformationsService,
-            referentiel,
-            service,
-            etapeActive: 'descriptionService',
-            departements: referentiel.departements(),
-          });
+        reponse.render('visiteGuidee/creationService');
       } else if (idEtape === 'securiser') {
         const mesures = moteurRegles.mesures(service.descriptionService);
 
