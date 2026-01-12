@@ -27,6 +27,7 @@ import { SourceAuthentification } from '../../../src/modeles/sourceAuthentificat
 import Mesures from '../../../src/modeles/mesures.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
+import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 
 const { SECURISER } = Rubriques;
 const { LECTURE, INVISIBLE } = Permissions;
@@ -1260,13 +1261,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         telephone: '0100000000',
         postes: ['RSSI', "Chargé des systèmes d'informations"],
         siretEntite: '13000766900018',
-        estimationNombreServices: {
-          borneBasse: 1,
-          borneHaute: 10,
-        },
-        infolettreAcceptee: 'true',
-        transactionnelAccepte: 'true',
-        cguAcceptees: 'true',
+        estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
+        infolettreAcceptee: true,
+        transactionnelAccepte: true,
+        cguAcceptees: true,
       };
 
       testeur.referentiel().departement = () => 'Paris';
@@ -1275,40 +1273,81 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       depotDonnees.utilisateur = async () => utilisateur;
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          [
-            'prenom',
-            'nom',
-            'telephone',
-            'cguAcceptees',
-            'infolettreAcceptee',
-            'transactionnelAccepte',
-            'postes.*',
-            'estimationNombreServices.*',
-            'siretEntite',
-          ],
-          testeur.app(),
-          {
-            method: 'put',
-            url: '/api/utilisateur',
-            data: donneesRequete,
-          }
-        );
-    });
+    describe('concernant la validation de la requête', () => {
+      it.each([undefined, '', uneChaineDeCaracteres(201, 'a')])(
+        'refuse un prénom "%s"',
+        async (valeurInvalide) => {
+          donneesRequete.prenom = valeurInvalide;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
 
-    it("est en erreur 422  quand les propriétés de l'utilisateur ne sont pas valides", async () => {
-      donneesRequete.prenom = '';
+      it.each([undefined, '', uneChaineDeCaracteres(201, 'a')])(
+        'refuse un nom "%s"',
+        async (valeurInvalide) => {
+          donneesRequete.nom = valeurInvalide;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
 
-      await testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        'La mise à jour de l\'utilisateur a échoué car les paramètres sont invalides. La propriété "prenom" est requise',
-        {
-          method: 'put',
-          url: '/api/utilisateur',
-          data: donneesRequete,
+      it.each([
+        { postes: [] },
+        { postes: [1] },
+        { postes: [uneChaineDeCaracteres(201, 'i')] },
+        { postes: Array(9).fill('i') },
+      ])(`refuse des postes "$postes"`, async ({ postes }) => {
+        donneesRequete.postes = postes;
+        const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+        expect(reponse.status).to.be(400);
+      });
+
+      it.each([null, '01 02 03 04 05', '01223344'])(
+        `refuse le numéro de téléphone "%s"`,
+        async (telephone) => {
+          donneesRequete.telephone = telephone;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
+
+      it('accepte un numéro de téléphone vide', async () => {
+        donneesRequete.telephone = '';
+        const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+        expect(reponse.status).to.be(200);
+      });
+
+      it.each([undefined, 'abc', '123456789'])(
+        `refuse le SIRET "%s"`,
+        async (siret) => {
+          donneesRequete.siretEntite = siret;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
+
+      it.each([
+        {},
+        { borneBasse: 1 },
+        { borneHaute: 1 },
+        { borneBasse: 1, borneHaute: 50 },
+        { borneBasse: '1', borneHaute: '50' },
+      ])(
+        `refuse les estimations de nombre de services "%s"`,
+        async (estimation) => {
+          donneesRequete.estimationNombreServices = estimation;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
+        }
+      );
+
+      it.each([null, undefined, 'abc', 10])(
+        `refuse le transactionnel accepté "%s"`,
+        async (transactionnelAccepte) => {
+          donneesRequete.transactionnelAccepte = transactionnelAccepte;
+          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+          expect(reponse.status).to.be(400);
         }
       );
     });
@@ -1342,7 +1381,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     });
 
     describe("concernant l'acceptation des CGU", () => {
-      it('quand les CGU sont acceptées, passe la dernière version des CGU au dépôt de données', async () => {
+      it("quand l'acception des CGU est présente dans la payload (cas d'un invité qui confirme son compte) alors c'est version actuelle des CGU qui est passée au dépôt de données", async () => {
         let versionCGURecue;
         testeur.referentiel().recharge({ versionActuelleCgu: 'v2.0' });
         testeur.depotDonnees().metsAJourUtilisateur = async (_, donnees) => {
@@ -1355,7 +1394,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         expect(versionCGURecue).to.be('v2.0');
       });
 
-      it('quand les CGU ne sont pas présentes, ne les passe pas au dépôt de données', async () => {
+      it("quand l'acceptation des CGU n'est *pas* dans la payload, alors aucune info concernant les CGU n'est passée au dépôt de données", async () => {
         let versionCGURecue;
         testeur.depotDonnees().metsAJourUtilisateur = async (_, donnees) => {
           versionCGURecue = donnees.cguAcceptees;
@@ -1383,8 +1422,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return u;
       };
 
-      donneesRequete.infolettreAcceptee = 'true';
-      donneesRequete.transactionnelAccepte = 'true';
+      donneesRequete.infolettreAcceptee = true;
+      donneesRequete.transactionnelAccepte = true;
       await testeur.put('/api/utilisateur', donneesRequete);
 
       expect(preferencesChangees).to.eql({

@@ -29,7 +29,13 @@
       try {
         enCoursEnvoi = true;
         await axios.put('/api/utilisateur', {
-          ...utilisateur,
+          nom: utilisateur.nom,
+          prenom: utilisateur.prenom,
+          estimationNombreServices: utilisateur.estimationNombreServices,
+          infolettreAcceptee: utilisateur.infolettreAcceptee,
+          postes: utilisateur.postes,
+          telephone: utilisateur.telephone,
+          transactionnelAccepte: utilisateur.transactionnelAccepte,
           siretEntite: entite.siret,
         });
       } finally {

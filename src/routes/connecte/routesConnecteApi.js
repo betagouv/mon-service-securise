@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import express from 'express';
 import { valeurBooleenne } from '../../utilitaires/aseptisation.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
@@ -20,7 +21,6 @@ import {
   ErreurServiceInexistant,
 } from '../../erreurs.js';
 import routesConnecteApiService from './routesConnecteApiService.js';
-import Utilisateur from '../../modeles/utilisateur.js';
 import * as objetGetServices from '../../modeles/objetsApi/objetGetServices.js';
 import * as objetGetIndicesCyber from '../../modeles/objetsApi/objetGetIndicesCyber.js';
 import * as objetGetMesures from '../../modeles/objetsApi/objetGetMesures.js';
@@ -42,6 +42,8 @@ import routesConnecteApiServiceV2 from './routesConnecteApiServiceV2.js';
 import { routesConnecteApiExplicationNouveauReferentiel } from './routesConnecteApiExplicationNouveauReferentiel.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
+import { valideBody } from '../../http/validePayloads.js';
+import { schemaPutUtilisateur } from './routesConnecteApi.schema.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -489,10 +491,7 @@ const routesConnecteApi = ({
 
   routes.put(
     '/utilisateur',
-    middleware.aseptise(
-      ...Utilisateur.nomsProprietesBase().filter((nom) => nom !== 'email'),
-      'siretEntite'
-    ),
+    valideBody(z.strictObject(schemaPutUtilisateur)),
     (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const donnees = obtentionDonneesDeBaseUtilisateur(
