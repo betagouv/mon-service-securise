@@ -50,6 +50,7 @@ import {
   schemaDeleteAutorisation,
   schemaPatchMotDePasse,
   schemaPostAutorisation,
+  schemaPostModelesMesureSpecifique,
   schemaPutMesureGenerale,
   schemaPutMesuresSpecifiques,
   schemaPutMotDePasse,
@@ -736,22 +737,13 @@ const routesConnecteApi = ({
   routes.post(
     '/modeles/mesureSpecifique',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('description', 'descriptionLongue', 'categorie'),
+    valideBody(
+      z.strictObject(
+        schemaPostModelesMesureSpecifique(referentiel, referentielV2)
+      )
+    ),
     async (requete, reponse) => {
       const { categorie, description, descriptionLongue } = requete.body;
-
-      try {
-        referentiel.verifieCategoriesMesuresSontRepertoriees([categorie]);
-      } catch (e) {
-        if (e instanceof ErreurCategorieInconnue) {
-          reponse.status(400).send('La catégorie est invalide');
-          return;
-        }
-      }
-      if (!description) {
-        reponse.status(400).send('La description est obligatoire');
-        return;
-      }
 
       try {
         const idModele = await depotDonnees.ajouteModeleMesureSpecifique(

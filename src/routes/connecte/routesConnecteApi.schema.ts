@@ -66,3 +66,12 @@ export const schemaPutMesuresSpecifiques = (
     .or(z.literal('')),
   modalites: schemaMesureSpecifique.modalites(),
 });
+
+export const schemaPostModelesMesureSpecifique = (
+  referentiel: Referentiel,
+  referentielV2: ReferentielV2
+) => ({
+  description: schemaMesureSpecifique.description(),
+  descriptionLongue: schemaMesureSpecifique.descriptionLongue(),
+  categorie: schemaMesureSpecifique.categorie(referentiel, referentielV2),
+});

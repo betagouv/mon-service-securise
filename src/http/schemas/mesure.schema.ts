@@ -20,6 +20,13 @@ export const schemaMesureGenerale = {
 };
 
 export const schemaMesureSpecifique = {
+  categorie: (referentiel: Referentiel, referentielV2: ReferentielV2) =>
+    z.enum([
+      ...Object.keys(referentiel.categoriesMesures()),
+      ...Object.keys(referentielV2.categoriesMesures()),
+    ]),
+  description: () => z.string().min(1).max(1000),
+  descriptionLongue: () => z.string().min(0).max(2000),
   statut,
   modalites,
 };
