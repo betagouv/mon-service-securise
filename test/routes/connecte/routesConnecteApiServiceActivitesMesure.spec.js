@@ -27,6 +27,7 @@ describe('Le serveur MSS des routes privées `/api/service/:id/mesures/:id/activ
         audit: { identifiantNumerique: '0007', categorie: 'gouvernance' },
       },
       categoriesMesures: { gouvernance: {} },
+      statutsMesures: {},
     });
     await testeur.initialise(referentiel);
   });
