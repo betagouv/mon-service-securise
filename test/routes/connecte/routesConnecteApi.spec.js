@@ -1643,6 +1643,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête DELETE sur `/api/autorisation`', () => {
+    const uneQueryStringValide = (
+      idService = unUUIDRandom(),
+      idContributeur = unUUIDRandom()
+    ) => `idService=${idService}&idContributeur=${idContributeur}`;
+
     beforeEach(() => {
       testeur.middleware().reinitialise({ idUtilisateur: '456' });
       testeur.depotDonnees().autorisationPour = async () =>
@@ -1650,14 +1655,20 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.depotDonnees().supprimeContributeur = async () => {};
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['idService', 'idContributeur'],
-          testeur.app(),
-          { method: 'delete', url: '/api/autorisation' }
-        );
+    it("jette une erreur quand l'ID service n'est pas un UUID", async () => {
+      const reponse = await testeur.delete(
+        `/api/autorisation?${uneQueryStringValide('123', unUUIDRandom())}`
+      );
+
+      expect(reponse.status).to.equal(400);
+    });
+
+    it("jette une erreur quand l'ID du contributeur n'est pas un UUID", async () => {
+      const reponse = await testeur.delete(
+        `/api/autorisation?${uneQueryStringValide(unUUIDRandom(), 'abc')}`
+      );
+
+      expect(reponse.status).to.equal(400);
     });
 
     it("vérifie que l'utilisateur est authentifié", async () => {
@@ -1665,7 +1676,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         .middleware()
         .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'delete',
-          url: '/api/autorisation',
+          url: `/api/autorisation?${uneQueryStringValide()}`,
         });
     });
 
@@ -1679,17 +1690,23 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return uneAutorisation().deProprietaire().construis();
       };
 
-      await testeur.delete('/api/autorisation?idService=123');
+      const idService = unUUIDRandom();
+      await testeur.delete(
+        `/api/autorisation?${uneQueryStringValide(idService)}`
+      );
 
       expect(autorisationCherchee.idUtilisateur).to.be('456');
-      expect(autorisationCherchee.idService).to.be('123');
+      expect(autorisationCherchee.idService).to.be(idService);
     });
 
     it("retourne une erreur HTTP 403 si l'utilisateur n'a pas le droit de supprimer un contributeur", async () => {
       const contributeurSimple = uneAutorisation().deContributeur().construis();
       testeur.depotDonnees().autorisationPour = async () => contributeurSimple;
 
-      const reponse = await testeur.delete('/api/autorisation?idService=123');
+      const reponse = await testeur.delete(
+        `/api/autorisation?${uneQueryStringValide()}`
+      );
+
       expect(reponse.status).to.equal(403);
       expect(reponse.text).to.equal(
         'Suppression non autorisé pour un contributeur'
@@ -1711,12 +1728,15 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return {};
       };
 
+      const idService = unUUIDRandom();
+      const idContributeur = unUUIDRandom();
+
       await testeur.delete(
-        '/api/autorisation?idService=ABC&idContributeur=999'
+        `/api/autorisation?${uneQueryStringValide(idService, idContributeur)}`
       );
 
-      expect(suppressionDemandee.idContributeur).to.be('999');
-      expect(suppressionDemandee.idService).to.be('ABC');
+      expect(suppressionDemandee.idContributeur).to.be(idContributeur);
+      expect(suppressionDemandee.idService).to.be(idService);
       expect(suppressionDemandee.idUtilisateurCourant).to.be('456');
     });
 
@@ -1730,12 +1750,14 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           };
         };
 
+      const idService = unUUIDRandom();
+      const idContributeur = unUUIDRandom();
       await testeur.delete(
-        '/api/autorisation?idService=ABC&idContributeur=999'
+        `/api/autorisation?${uneQueryStringValide(idService, idContributeur)}`
       );
 
-      expect(suppressionDemandee.idContributeur).to.be('999');
-      expect(suppressionDemandee.idService).to.be('ABC');
+      expect(suppressionDemandee.idService).to.be(idService);
+      expect(suppressionDemandee.idContributeur).to.be(idContributeur);
     });
 
     it("retourne une erreur HTTP 424 si le dépôt ne peut pas supprimer l'autorisation", async () => {
@@ -1744,8 +1766,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       };
 
       const reponse = await testeur.delete(
-        '/api/autorisation?idService=123&emailContributeur=jean.dupont@mail.fr'
+        `/api/autorisation?${uneQueryStringValide()}`
       );
+
       expect(reponse.status).to.equal(424);
       expect(reponse.text).to.equal("Un message d'erreur");
     });

@@ -33,3 +33,8 @@ export const schemaPutMotDePasse = () => ({
 export const schemaPatchMotDePasse = () => ({
   motDePasse: schemaUtilisateur.motDePasse(),
 });
+
+export const schemaDeleteAutorisation = () => ({
+  idService: z.uuid(),
+  idContributeur: z.uuid(),
+});
