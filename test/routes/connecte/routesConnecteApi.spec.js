@@ -1352,6 +1352,15 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           expect(reponse.status).to.be(400);
         }
       );
+
+      it('accepte une requête avec une source de connexion ProConnect : cas où un invité vient finaliser son incription en ayant suivi le parcours ProConnect', async () => {
+        const reponse = await testeur.put('/api/utilisateur', {
+          ...donneesRequete,
+          agentConnect: true,
+        });
+
+        expect(reponse.status).to.be(200);
+      });
     });
 
     it("met à jour les autres informations de l'utilisateur", async () => {
