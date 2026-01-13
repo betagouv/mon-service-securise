@@ -4,6 +4,7 @@ import { VersionService } from '../../modeles/versionService.js';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import { schemaMesureGenerale } from '../../http/schemas/mesureGenerale.schema.js';
 import { schemaUtilisateur } from '../../http/schemas/utilisateur.schema.js';
+import { Permissions } from '../../modeles/autorisations/gestionDroits.js';
 
 export const schemaPutUtilisateur = {
   ...schemaCommunPutPostUtilisateur,
@@ -37,4 +38,17 @@ export const schemaPatchMotDePasse = () => ({
 export const schemaDeleteAutorisation = () => ({
   idService: z.uuid(),
   idContributeur: z.uuid(),
+});
+
+export const schemaPostAutorisation = () => ({
+  idServices: z.array(z.uuid()).min(1),
+  emailContributeur: z.email(),
+  droits: z.strictObject({
+    DECRIRE: z.enum(Permissions),
+    SECURISER: z.enum(Permissions),
+    HOMOLOGUER: z.enum(Permissions),
+    RISQUES: z.enum(Permissions),
+    CONTACTS: z.enum(Permissions),
+    estProprietaire: z.boolean().optional(),
+  }),
 });
