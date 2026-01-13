@@ -989,7 +989,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       const reponse = await testeur.put('/api/motDePasse', {
         motDePasse: 'mdp_ABC12345',
       });
-      await testeur.verifieSessionDeposee(reponse);
+
+      testeur.verifieSessionDeposee(reponse);
     });
 
     it('ajoute une session utilisateur', async () => {
