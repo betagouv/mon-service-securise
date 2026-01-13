@@ -49,6 +49,7 @@ import {
 import {
   schemaDeleteAutorisation,
   schemaPatchMotDePasse,
+  schemaPostAutorisation,
   schemaPutMesureGenerale,
   schemaPutMotDePasse,
   schemaPutUtilisateur,
@@ -543,7 +544,7 @@ const routesConnecteApi = ({
   routes.post(
     '/autorisation',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('idServices.*', 'emailContributeur'),
+    valideBody(z.strictObject(schemaPostAutorisation())),
     async (requete, reponse, suite) => {
       const { idServices = [], droits } = requete.body;
       const idUtilisateur = requete.idUtilisateurCourant;

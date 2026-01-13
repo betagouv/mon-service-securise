@@ -1486,19 +1486,28 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.procedures().ajoutContributeurSurServices = async () => {};
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['idServices.*', 'emailContributeur'],
-          testeur.app(),
-          {
-            method: 'post',
-            url: '/api/autorisation',
-            data: { droits: tousDroitsEnEcriture() },
-          }
-        );
+    const unePayloadValide = () => ({
+      emailContributeur: 'jean.dupont@mail.fr',
+      idServices: [unUUIDRandom()],
+      droits: tousDroitsEnEcriture(),
     });
+
+    it.each([
+      { cle: 'idServices', valeur: [] },
+      { cle: 'idServices', valeur: [1] },
+      { cle: 'emailContributeur', valeur: 'pasUnEmail' },
+      { cle: 'droits', valeur: { RUBRIQUE_INCONNUE: 2 } },
+    ])(
+      'jette une erreur quand le paramètre $cle vaut $valeur',
+      async ({ cle, valeur }) => {
+        const reponse = await testeur.post('/api/autorisation', {
+          ...unePayloadValide(),
+          [cle]: valeur,
+        });
+
+        expect(reponse.status).to.be(400);
+      }
+    );
 
     it("vérifie que l'utilisateur est authentifié", async () => {
       await testeur
@@ -1506,7 +1515,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'post',
           url: '/api/autorisation',
-          data: { droits: tousDroitsEnEcriture() },
+          data: unePayloadValide(),
         });
     });
 
@@ -1535,14 +1544,15 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         CONTACTS: 2,
       };
 
+      const idService = unUUIDRandom();
       await testeur.post('/api/autorisation', {
         emailContributeur: 'jean.dupont@mail.fr',
-        idServices: ['123'],
+        idServices: [idService],
         droits: droitsEnvoyes,
       });
 
       expect(ajout.emailContributeur).to.be('jean.dupont@mail.fr');
-      expect(ajout.services[0].id).to.be('123');
+      expect(ajout.services[0].id).to.be(idService);
       expect(ajout.droits).to.eql(droitsEnvoyes);
       expect(ajout.emetteur.id).to.be('EMETTEUR');
     });
@@ -1561,15 +1571,16 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         cibles = services;
       };
 
+      const s1 = unUUIDRandom();
+      const s2 = unUUIDRandom();
       await testeur.post('/api/autorisation', {
-        emailContributeur: 'jean.dupont@mail.fr',
-        idServices: ['123', '456'],
-        droits: tousDroitsEnEcriture(),
+        ...unePayloadValide(),
+        idServices: [s1, s2],
       });
 
       expect(cibles.length).to.be(2);
-      expect(cibles[0].id).to.be('123');
-      expect(cibles[1].id).to.be('456');
+      expect(cibles[0].id).to.be(s1);
+      expect(cibles[1].id).to.be(s2);
     });
 
     it("met l'email du contributeur en minuscules pour éviter de créer des comptes en double", async () => {
@@ -1582,9 +1593,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       };
 
       await testeur.post('/api/autorisation', {
+        ...unePayloadValide(),
         emailContributeur: 'JEAN.DUPONT@MAIL.FR',
-        idServices: ['123'],
-        droits: tousDroitsEnEcriture(),
       });
 
       const enMinucsules = 'jean.dupont@mail.fr';
@@ -1596,11 +1606,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         throw new EchecAutorisation();
       };
 
-      const reponse = await testeur.post('/api/autorisation', {
-        emailContributeur: 'jean.dupont@mail.fr',
-        idServices: ['123'],
-        droits: tousDroitsEnEcriture(),
-      });
+      const reponse = await testeur.post(
+        '/api/autorisation',
+        unePayloadValide()
+      );
+
       expect(reponse.status).to.equal(403);
       expect(reponse.text).to.equal("Ajout non autorisé d'un contributeur");
     });
@@ -1613,29 +1623,16 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       await testeur.verifieRequeteGenereErreurHTTP(422, 'oups', {
         method: 'post',
         url: '/api/autorisation',
-        data: { droits: tousDroitsEnEcriture() },
+        data: unePayloadValide(),
       });
     });
 
-    it('retourne une erreur HTTP 422 si les droits sont incohérents', async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        { erreur: { code: 'DROITS_INCOHERENTS' } },
-        {
-          method: 'post',
-          url: '/api/autorisation',
-          data: { droits: { RUBRIQUE_INCONNUE: 2 } },
-        }
-      );
-    });
-
     it('ne retourne pas une erreur HTTP 422 si les droits contiennent estProprietaire=false', async () => {
+      const record = { ...tousDroitsEnEcriture(), estProprietaire: false };
+
       const reponse = await testeur.post('/api/autorisation', {
-        emailContributeur: 'jean.dupont@mail.fr',
-        idServices: ['123'],
-        droits: {
-          estProprietaire: false,
-        },
+        ...unePayloadValide(),
+        droits: record,
       });
 
       expect(reponse.status).to.be(200);
