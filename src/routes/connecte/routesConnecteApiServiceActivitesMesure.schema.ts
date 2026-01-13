@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
-import { schemaMesureGenerale } from '../../http/schemas/mesureGenerale.schema.js';
+import { schemaMesureGenerale } from '../../http/schemas/mesure.schema.js';
 
 export const reglesValidationIdMesure = (
   referentiel: Referentiel,

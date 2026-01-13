@@ -55,7 +55,7 @@ import {
   schemaPutMotDePasse,
   schemaPutUtilisateur,
 } from './routesConnecteApi.schema.js';
-import { schemaMesureGenerale } from '../../http/schemas/mesureGenerale.schema.js';
+import { schemaMesureGenerale } from '../../http/schemas/mesure.schema.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;

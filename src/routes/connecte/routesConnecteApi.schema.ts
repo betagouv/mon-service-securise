@@ -2,7 +2,10 @@ import { z } from 'zod';
 import { schemaCommunPutPostUtilisateur } from '../nonConnecte/routesNonConnecteApi.schema.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
-import { schemaMesureGenerale } from '../../http/schemas/mesureGenerale.schema.js';
+import {
+  schemaMesureGenerale,
+  schemaMesureSpecifique,
+} from '../../http/schemas/mesure.schema.js';
 import { schemaUtilisateur } from '../../http/schemas/utilisateur.schema.js';
 import { Permissions } from '../../modeles/autorisations/gestionDroits.js';
 
@@ -58,8 +61,8 @@ export const schemaPutMesuresSpecifiques = (
   referentielV2: ReferentielV2
 ) => ({
   idsServices: z.array(z.uuid()).min(1),
-  statut: schemaMesureGenerale
+  statut: schemaMesureSpecifique
     .statut(referentiel, referentielV2)
     .or(z.literal('')),
-  modalites: schemaMesureGenerale.modalites(),
+  modalites: schemaMesureSpecifique.modalites(),
 });
