@@ -3,6 +3,7 @@ import { schemaCommunPutPostUtilisateur } from '../nonConnecte/routesNonConnecte
 import { VersionService } from '../../modeles/versionService.js';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import { schemaMesureGenerale } from '../../http/schemas/mesureGenerale.schema.js';
+import { schemaUtilisateur } from '../../http/schemas/utilisateur.schema.js';
 
 export const schemaPutUtilisateur = {
   ...schemaCommunPutPostUtilisateur,
@@ -21,4 +22,10 @@ export const schemaPutMesureGenerale = (
     .statut(referentiel, referentielV2)
     .or(z.literal('')),
   modalites: schemaMesureGenerale.modalites(),
+});
+
+export const schemaPutMotDePasse = () => ({
+  cguAcceptees: schemaUtilisateur.cguAcceptees(),
+  infolettreAcceptee: schemaUtilisateur.infolettreAcceptee().optional(),
+  motDePasse: schemaUtilisateur.motDePasse(),
 });

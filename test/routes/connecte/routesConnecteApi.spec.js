@@ -917,6 +917,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   describe('quand requête PUT sur `/api/motDePasse`', () => {
     let utilisateur;
 
+    const unePayloadValide = () => ({
+      motDePasse: 'mdp_ABC12345',
+      cguAcceptees: true,
+    });
+
     beforeEach(() => {
       utilisateur = {
         id: '123',
@@ -934,19 +939,21 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         utilisateur;
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['cguAcceptees', 'infolettreAcceptee'],
-          testeur.app(),
-          {
-            method: 'put',
-            url: '/api/motDePasse',
-            data: { motDePasse: 'mdp', cguAcceptees: true },
-          }
-        );
-    });
+    it.each([
+      { cle: 'cguAcceptees', valeur: '' },
+      { cle: 'infolettreAcceptee', valeur: '' },
+      { cle: 'motDePasse', valeur: 1 },
+    ])(
+      'jette une erreur si le paramètre $cle vaut $valeur',
+      async ({ cle, valeur }) => {
+        const reponse = await testeur.put('/api/motDePasse', {
+          ...unePayloadValide(),
+          [cle]: valeur,
+        });
+
+        expect(reponse.status).to.be(400);
+      }
+    );
 
     it('met à jour le mot de passe', async () => {
       let majMotDePasse;
@@ -962,6 +969,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       };
 
       const reponse = await testeur.put('/api/motDePasse', {
+        ...unePayloadValide(),
         motDePasse: 'mdp_ABC12345',
       });
 
@@ -980,23 +988,19 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         {
           method: 'put',
           url: '/api/motDePasse',
-          data: { motDePasse: '1234' },
+          data: { ...unePayloadValide(), motDePasse: '1234' },
         }
       );
     });
 
     it('pose un nouveau cookie', async () => {
-      const reponse = await testeur.put('/api/motDePasse', {
-        motDePasse: 'mdp_ABC12345',
-      });
+      const reponse = await testeur.put('/api/motDePasse', unePayloadValide());
 
       testeur.verifieSessionDeposee(reponse);
     });
 
     it('ajoute une session utilisateur', async () => {
-      const reponse = await testeur.put('/api/motDePasse', {
-        motDePasse: 'mdp_ABC12345',
-      });
+      const reponse = await testeur.put('/api/motDePasse', unePayloadValide());
 
       expectContenuSessionValide(reponse, 'MSS', true, false);
     });
@@ -1010,9 +1014,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         inscriptionEffectuee = emailUtilisateur;
       };
 
-      await testeur.put('/api/motDePasse', {
-        motDePasse: 'mdp_ABC12345',
-      });
+      await testeur.put('/api/motDePasse', unePayloadValide());
 
       expect(inscriptionEffectuee).to.equal('jean.dujardin@beta.gouv.fr');
     });
@@ -1033,8 +1035,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       };
 
       await testeur.put('/api/motDePasse', {
-        motDePasse: 'mdp_ABC12345',
-        infolettreAcceptee: 'true',
+        ...unePayloadValide(),
+        infolettreAcceptee: true,
       });
 
       expect(inscriptionEffectuee).to.equal('jean.dujardin@beta.gouv.fr');
@@ -1054,9 +1056,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         utilisateurQuiEstReset = u;
       };
 
-      await testeur.put('/api/motDePasse', {
-        motDePasse: 'mdp_ABC12345',
-      });
+      await testeur.put('/api/motDePasse', unePayloadValide());
 
       expect(utilisateurQuiEstReset.id).to.be('123');
     });
@@ -1078,7 +1078,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
             {
               method: 'put',
               url: '/api/motDePasse',
-              data: { motDePasse: 'mdp_12345' },
+              data: { ...unePayloadValide(), cguAcceptees: false },
             }
           );
         });
@@ -1090,8 +1090,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           };
 
           const reponse = await testeur.put('/api/motDePasse', {
+            ...unePayloadValide(),
             motDePasse: 'mdp_12345',
           });
+
           expect(reponse.status).to.be(422);
           expect(motDePasseMisAJour).to.be(false);
         });
@@ -1110,8 +1112,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           };
 
           await testeur.put('/api/motDePasse', {
-            motDePasse: 'mdp_ABC12345',
-            cguAcceptees: 'true',
+            ...unePayloadValide(),
+            cguAcceptees: true,
           });
 
           expect(utilisateurQuiAccepte.id).to.be('123');
@@ -1124,8 +1126,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           };
 
           await testeur.put('/api/motDePasse', {
-            motDePasse: 'mdp_ABC12345',
-            cguAcceptees: 'true',
+            ...unePayloadValide(),
+            cguAcceptees: true,
           });
 
           expect(motDePasseMisAJour).to.be(true);

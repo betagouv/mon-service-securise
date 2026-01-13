@@ -45,6 +45,7 @@ import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
   schemaPutMesureGenerale,
+  schemaPutMotDePasse,
   schemaPutUtilisateur,
 } from './routesConnecteApi.schema.js';
 import { schemaMesureGenerale } from '../../http/schemas/mesureGenerale.schema.js';
@@ -400,15 +401,15 @@ const routesConnecteApi = ({
 
   routes.put(
     '/motDePasse',
-    middleware.aseptise('cguAcceptees', 'infolettreAcceptee'),
+    valideBody(z.strictObject(schemaPutMotDePasse())),
     async (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const cguDejaAcceptees = requete.cguAcceptees;
-      const cguEnCoursDAcceptation = valeurBooleenne(requete.body.cguAcceptees);
-      const infolettreAcceptee = valeurBooleenne(
-        requete.body.infolettreAcceptee
-      );
-      const { motDePasse } = requete.body;
+      const {
+        motDePasse,
+        infolettreAcceptee,
+        cguAcceptees: cguEnCoursDAcceptation,
+      } = requete.body;
 
       if (!cguDejaAcceptees && !cguEnCoursDAcceptation) {
         reponse.status(422).send('CGU non acceptées');
