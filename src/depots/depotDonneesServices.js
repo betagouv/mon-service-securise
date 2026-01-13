@@ -518,11 +518,7 @@ const creeDepot = (config = {}) => {
         if (!statut) throw new ErreurStatutMesureManquant();
 
         nouvelleMesure = new MesureGenerale(
-          {
-            id: idMesure,
-            statut,
-            modalites,
-          },
+          { id: idMesure, statut, modalites },
           s.referentiel
         );
       } else {
