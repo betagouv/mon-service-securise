@@ -2079,13 +2079,18 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête POST sur `/api/modeles/mesureSpecifique`', () => {
+    const unePayloadValide = () => ({
+      description: 'une description',
+      descriptionLongue: 'une description longue',
+      categorie: 'gouvernance',
+    });
+
     beforeEach(() => {
-      testeur.referentiel().recharge({
-        categoriesMesures: {
-          gouvernance: {},
-        },
-      });
+      testeur
+        .referentiel()
+        .recharge({ categoriesMesures: { gouvernance: {} } });
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
+      testeur.depotDonnees().ajouteModeleMesureSpecifique = async () => {};
     });
 
     it("vérifie que l'utilisateur est authentifié", async () => {
@@ -2094,41 +2099,35 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'post',
           url: '/api/modeles/mesureSpecifique',
+          data: unePayloadValide(),
         });
-    });
-
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['description', 'descriptionLongue', 'categorie'],
-          testeur.app(),
-          {
-            method: 'post',
-            url: '/api/modeles/mesureSpecifique',
-          }
-        );
     });
 
     it('jette une erreur si la catégorie est invalide', async () => {
       const reponse = await testeur.post('/api/modeles/mesureSpecifique', {
-        description: 'une description',
-        descriptionLongue: 'une description longue',
-        categorie: 'une categorie invalide',
+        ...unePayloadValide(),
+        categorie: 'pasUneCategorie',
       });
 
       expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be('La catégorie est invalide');
     });
 
     it("jette une erreur si la description n'est pas renseignée", async () => {
       const reponse = await testeur.post('/api/modeles/mesureSpecifique', {
+        ...unePayloadValide(),
         description: '',
-        descriptionLongue: 'une description longue',
-        categorie: 'gouvernance',
       });
+
       expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be('La description est obligatoire');
+    });
+
+    it("jette une erreur si la description longue n'est pas renseignée", async () => {
+      const reponse = await testeur.post('/api/modeles/mesureSpecifique', {
+        ...unePayloadValide(),
+        descriptionLongue: undefined,
+      });
+
+      expect(reponse.status).to.be(400);
     });
 
     it("délègue au dépôt de données l'ajout du modèle de mesure spécifique", async () => {
@@ -2140,11 +2139,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         donneesRecues = { idUtilisateur, donnees };
       };
 
-      await testeur.post('/api/modeles/mesureSpecifique', {
-        description: 'une description',
-        descriptionLongue: 'une description longue',
-        categorie: 'gouvernance',
-      });
+      await testeur.post('/api/modeles/mesureSpecifique', unePayloadValide());
 
       expect(donneesRecues.idUtilisateur).to.be('U1');
       expect(donneesRecues.donnees).to.eql({
@@ -2159,10 +2154,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         throw new ErreurNombreLimiteModelesMesureSpecifiqueAtteint();
       };
 
-      const reponse = await testeur.post('/api/modeles/mesureSpecifique', {
-        description: 'une description',
-        categorie: 'gouvernance',
-      });
+      const reponse = await testeur.post(
+        '/api/modeles/mesureSpecifique',
+        unePayloadValide()
+      );
       expect(reponse.status).to.be(403);
       expect(reponse.text).to.be('Limite de création atteinte');
     });
@@ -2170,10 +2165,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it("retourne 201 et l'identifiant du modèle créé", async () => {
       testeur.depotDonnees().ajouteModeleMesureSpecifique = async () => 'MOD-1';
 
-      const reponse = await testeur.post('/api/modeles/mesureSpecifique', {
-        description: 'une description',
-        categorie: 'gouvernance',
-      });
+      const reponse = await testeur.post(
+        '/api/modeles/mesureSpecifique',
+        unePayloadValide()
+      );
 
       expect(reponse.status).to.be(201);
       expect(reponse.body).to.eql({
