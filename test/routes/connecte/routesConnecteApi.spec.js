@@ -587,6 +587,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête PUT sur `/api/services/mesuresSpecifiques/:id`', () => {
+    const unePayloadValide = () => ({
+      statut: 'fait',
+      modalites: 'une modalité',
+      idsServices: [unUUIDRandom()],
+    });
+
     beforeEach(() => {
       testeur.depotDonnees().accesAutoriseAUneListeDeService = async () => true;
     });
@@ -596,21 +602,32 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         .middleware()
         .verifieRequeteExigeAcceptationCGU(testeur.app(), {
           method: 'put',
-          url: '/api/services/mesuresSpecifiques/unIdDeModele',
+          url: `/api/services/mesuresSpecifiques/${unUUIDRandom()}`,
         });
     });
 
-    it('aseptise les données', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['idsServices.*', 'idModele', 'statut', 'modalites'],
-          testeur.app(),
-          {
-            method: 'put',
-            url: '/api/services/mesuresSpecifiques/unIdDeModele',
-          }
+    it.each([
+      { cle: 'idsServices', valeur: [] },
+      { cle: 'statut', valeur: 'pasUnStatut' },
+      { cle: 'modalites', valeur: uneChaineDeCaracteres(2001, 'a') },
+    ])(
+      'jette une erreur quand le paramètre $cle vaut $valeur',
+      async ({ cle, valeur }) => {
+        const reponse = await testeur.put(
+          `/api/services/mesuresSpecifiques/${unUUIDRandom()}`,
+          { ...unePayloadValide(), [cle]: valeur }
         );
+
+        expect(reponse.status).to.be(400);
+      }
+    );
+
+    it("jette une erreur si l'identifiant du modèle de mesure est invalide", async () => {
+      const reponse = await testeur.put(
+        '/api/services/mesuresSpecifiques/pasUnUUID',
+        unePayloadValide()
+      );
+      expect(reponse.status).to.be(400);
     });
 
     it('jette une erreur si le statut ET les modalités ne sont pas précisés', async () => {
@@ -629,22 +646,23 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         async () => [];
 
       const reponse = await testeur.put(
-        '/api/services/mesuresSpecifiques/unModeleInconnu',
-        {
-          statut: 'fait',
-        }
+        `/api/services/mesuresSpecifiques/${unUUIDRandom()}`,
+        unePayloadValide()
       );
       expect(reponse.status).to.be(404);
     });
 
     describe('lorsque le modèle de mesure est connu', () => {
+      let idMesureConnu;
+
       beforeEach(() => {
         testeur.depotDonnees().metsAJourMesuresSpecifiquesDesServices =
           async () => {};
+        idMesureConnu = unUUIDRandom();
         testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur =
           async () => [
             {
-              id: 'unModeleConnu',
+              id: idMesureConnu,
               description: 'une description',
               categorie: 'gouvernance',
               descriptionLongue: 'une description longue',
@@ -657,8 +675,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
           statutsMesures: { unStatut: {} },
         });
         const reponse = await testeur.put(
-          '/api/services/mesuresSpecifiques/unModeleConnu',
+          `/api/services/mesuresSpecifiques/${idMesureConnu}`,
           {
+            ...unePayloadValide(),
             statut: 'unStatutInconnu',
           }
         );
@@ -668,10 +687,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       it("ne jette pas d'erreur si le statut est vide", async () => {
         const reponse = await testeur.put(
-          '/api/services/mesuresSpecifiques/unModeleConnu',
+          `/api/services/mesuresSpecifiques/${idMesureConnu}`,
           {
+            ...unePayloadValide(),
             statut: '',
-            modalites: 'une modalité',
           }
         );
 
@@ -681,16 +700,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       it("jette une erreur si l'utilisateur n'a pas les droits d'écriture sur un des services ciblés", async () => {
         testeur.depotDonnees().accesAutoriseAUneListeDeService = async () =>
           false;
-        testeur.referentiel().recharge({
-          statutsMesures: { unStatut: {} },
-        });
 
         const reponse = await testeur.put(
-          '/api/services/mesuresSpecifiques/unModeleConnu',
-          {
-            statut: 'unStatut',
-            idsServices: ['S1'],
-          }
+          `/api/services/mesuresSpecifiques/${idMesureConnu}`,
+          unePayloadValide()
         );
 
         expect(reponse.status).to.be(403);
@@ -714,20 +727,17 @@ describe('Le serveur MSS des routes privées /api/*', () => {
             modalites,
           };
         };
-        testeur.referentiel().recharge({
-          statutsMesures: { fait: {} },
-        });
 
-        await testeur.put('/api/services/mesuresSpecifiques/unModeleConnu', {
-          statut: 'fait',
-          modalites: 'une modalité',
-          idsServices: ['S1', 'S2'],
-        });
+        const payloadValide = unePayloadValide();
+        await testeur.put(
+          `/api/services/mesuresSpecifiques/${idMesureConnu}`,
+          payloadValide
+        );
 
         expect(donneesRecues).to.eql({
           idUtilisateur: 'U1',
-          idsServices: ['S1', 'S2'],
-          idModele: 'unModeleConnu',
+          idsServices: payloadValide.idsServices,
+          idModele: idMesureConnu,
           statut: 'fait',
           modalites: 'une modalité',
         });
