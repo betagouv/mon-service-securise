@@ -42,8 +42,12 @@ import routesConnecteApiServiceV2 from './routesConnecteApiServiceV2.js';
 import { routesConnecteApiExplicationNouveauReferentiel } from './routesConnecteApiExplicationNouveauReferentiel.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
-import { valideBody } from '../../http/validePayloads.js';
-import { schemaPutUtilisateur } from './routesConnecteApi.schema.js';
+import { valideBody, valideParams } from '../../http/validePayloads.js';
+import {
+  schemaPutMesureGenerale,
+  schemaPutUtilisateur,
+} from './routesConnecteApi.schema.js';
+import { schemaMesureGenerale } from '../../http/schemas/mesureGenerale.schema.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -170,37 +174,25 @@ const routesConnecteApi = ({
   routes.put(
     '/services/mesuresGenerales/:id',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise(
-      'idsServices.*',
-      'id',
-      'statut',
-      'modalites',
-      'version'
+    valideParams(
+      z.strictObject({
+        id: schemaMesureGenerale.id(referentiel, referentielV2),
+      })
+    ),
+    valideBody(
+      z.strictObject(schemaPutMesureGenerale(referentiel, referentielV2))
     ),
     async (requete, reponse) => {
       const { statut, modalites, idsServices, version } = requete.body;
       const { id } = requete.params;
 
-      if (
-        !version ||
-        ![VersionService.v1, VersionService.v2].includes(version)
-      ) {
-        reponse.sendStatus(400);
-        return;
-      }
-
-      const referentielAUtiliser =
+      const referentielCible =
         version === VersionService.v1 ? referentiel : referentielV2;
 
       if (
         (!statut && !modalites) ||
-        !referentielAUtiliser.estIdentifiantMesureConnu(id)
+        !referentielCible.estIdentifiantMesureConnu(id)
       ) {
-        reponse.sendStatus(400);
-        return;
-      }
-
-      if (statut && !referentielAUtiliser.estStatutMesureConnu(statut)) {
         reponse.sendStatus(400);
         return;
       }
