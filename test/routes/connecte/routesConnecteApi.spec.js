@@ -1197,12 +1197,21 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.depotDonnees().metsAJourMotDePasse = async () => utilisateur;
     });
 
+    it('jette une erreur si le mot de passe est invalide', async () => {
+      const reponse = await testeur.patch('/api/motDePasse', {
+        motDePasse: 1,
+      });
+
+      expect(reponse.status).to.be(400);
+    });
+
     it('utilise le middleware de challenge du mot de passe', async () => {
       await testeurMSS()
         .middleware()
         .verifieChallengeMotDePasse(testeur.app(), {
           method: 'patch',
           url: '/api/motDePasse',
+          data: { motDePasse: 'MDP' },
         });
     });
 
