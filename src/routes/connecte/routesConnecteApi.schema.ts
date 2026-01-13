@@ -29,3 +29,7 @@ export const schemaPutMotDePasse = () => ({
   infolettreAcceptee: schemaUtilisateur.infolettreAcceptee().optional(),
   motDePasse: schemaUtilisateur.motDePasse(),
 });
+
+export const schemaPatchMotDePasse = () => ({
+  motDePasse: schemaUtilisateur.motDePasse(),
+});

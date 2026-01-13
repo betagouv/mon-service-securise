@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import express from 'express';
-import { valeurBooleenne } from '../../utilitaires/aseptisation.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
 import { zipTableaux } from '../../utilitaires/tableau.js';
 import {
@@ -44,6 +43,7 @@ import { VersionService } from '../../modeles/versionService.js';
 import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
+  schemaPatchMotDePasse,
   schemaPutMesureGenerale,
   schemaPutMotDePasse,
   schemaPutUtilisateur,
@@ -465,6 +465,7 @@ const routesConnecteApi = ({
 
   routes.patch(
     '/motDePasse',
+    valideBody(z.strictObject(schemaPatchMotDePasse())),
     middleware.challengeMotDePasse,
     async (requete, reponse) => {
       const idUtilisateur = requete.idUtilisateurCourant;

@@ -23,7 +23,7 @@ $(() => {
   $(selecteurFormulaire).on('submit', (e) => {
     e.preventDefault();
 
-    const enModeInitialisation = lisDonneesPartagees('mode-initialisation');
+    const { enModeInitialisation } = lisDonneesPartagees('mode-initialisation');
     const { estInvitation } = lisDonneesPartagees('invitation-contributeur');
     if (enModeInitialisation) {
       axios
