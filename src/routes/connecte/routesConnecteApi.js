@@ -41,8 +41,13 @@ import routesConnecteApiServiceV2 from './routesConnecteApiServiceV2.js';
 import { routesConnecteApiExplicationNouveauReferentiel } from './routesConnecteApiExplicationNouveauReferentiel.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
-import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
+  valideBody,
+  valideParams,
+  valideQuery,
+} from '../../http/validePayloads.js';
+import {
+  schemaDeleteAutorisation,
   schemaPatchMotDePasse,
   schemaPutMesureGenerale,
   schemaPutMotDePasse,
@@ -582,7 +587,7 @@ const routesConnecteApi = ({
   routes.delete(
     '/autorisation',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('idService', 'idContributeur'),
+    valideQuery(z.strictObject(schemaDeleteAutorisation())),
     async (requete, reponse, suite) => {
       const idUtilisateur = requete.idUtilisateurCourant;
       const { idService, idContributeur } = requete.query;
