@@ -18,12 +18,12 @@ export const schemaCommunPutPostUtilisateur = {
     .or(z.literal('')),
   transactionnelAccepte: z.boolean(),
   infolettreAcceptee: z.boolean(),
+  agentConnect: z.literal(true).optional(),
 };
 
 export const schemaPostUtilisateur = {
   ...schemaCommunPutPostUtilisateur,
   cguAcceptees: z.literal(true),
-  agentConnect: z.literal(true).optional(),
   token: z.jwt(),
 };
 
