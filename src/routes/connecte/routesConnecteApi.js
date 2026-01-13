@@ -51,6 +51,7 @@ import {
   schemaPatchMotDePasse,
   schemaPostAutorisation,
   schemaPutMesureGenerale,
+  schemaPutMesuresSpecifiques,
   schemaPutMotDePasse,
   schemaPutUtilisateur,
 } from './routesConnecteApi.schema.js';
@@ -231,7 +232,10 @@ const routesConnecteApi = ({
   routes.put(
     '/services/mesuresSpecifiques/:idModele',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('idsServices.*', 'idModele', 'statut', 'modalites'),
+    valideParams(z.strictObject({ idModele: z.uuid() })),
+    valideBody(
+      z.strictObject(schemaPutMesuresSpecifiques(referentiel, referentielV2))
+    ),
     async (requete, reponse) => {
       const { statut, modalites, idsServices } = requete.body;
       const { idModele } = requete.params;
@@ -247,11 +251,6 @@ const routesConnecteApi = ({
         );
       if (!modelesExistants.some((m) => m.id === idModele)) {
         reponse.sendStatus(404);
-        return;
-      }
-
-      if (statut && !referentiel.estStatutMesureConnu(statut)) {
-        reponse.sendStatus(400);
         return;
       }
 

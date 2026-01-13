@@ -52,3 +52,14 @@ export const schemaPostAutorisation = () => ({
     estProprietaire: z.boolean().optional(),
   }),
 });
+
+export const schemaPutMesuresSpecifiques = (
+  referentiel: Referentiel,
+  referentielV2: ReferentielV2
+) => ({
+  idsServices: z.array(z.uuid()).min(1),
+  statut: schemaMesureGenerale
+    .statut(referentiel, referentielV2)
+    .or(z.literal('')),
+  modalites: schemaMesureGenerale.modalites(),
+});
