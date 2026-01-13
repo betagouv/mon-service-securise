@@ -28,6 +28,7 @@ import Mesures from '../../../src/modeles/mesures.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 import { mesuresV2 } from '../../../donneesReferentielMesuresV2.js';
 import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
+import { unUUIDRandom } from '../../constructeurs/UUID.js';
 
 const { SECURISER } = Rubriques;
 const { LECTURE, INVISIBLE } = Permissions;
@@ -403,6 +404,14 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête PUT sur `/api/services/mesuresGenerales/:id`', () => {
+    const idsServices = [unUUIDRandom()];
+    const unePayloadValide = () => ({
+      statut: 'fait',
+      modalites: 'une modalité',
+      idsServices,
+      version: 'v2',
+    });
+
     beforeEach(() => {
       testeur.depotDonnees().accesAutoriseAUneListeDeService = async () => true;
     });
@@ -410,91 +419,94 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it("vérifie que l'utilisateur est authentifié", async () =>
       testeur.middleware().verifieRequeteExigeAcceptationCGU(testeur.app(), {
         method: 'put',
-        url: '/api/services/mesuresGenerales/unIdDeMesure',
+        url: '/api/services/mesuresGenerales/RECENSEMENT.1',
       }));
 
-    it('aseptise les données', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['idsServices.*', 'id', 'statut', 'modalites', 'version'],
-          testeur.app(),
-          {
-            method: 'put',
-            url: '/api/services/mesuresGenerales/unIdDeMesure',
-          }
-        );
-    });
-
-    it('jette une erreur si le statut ET les modalités ne sont pas précisés', async () => {
+    it("jette une erreur si aucun ID service n'est fourni", async () => {
       const reponse = await testeur.put(
-        '/api/services/mesuresGenerales/unIdDeMesure',
-        {
-          statut: undefined,
-          modalites: undefined,
-        }
+        '/api/services/mesuresGenerales/RECENSEMENT.1',
+        { ...unePayloadValide(), idsServices: [] }
       );
       expect(reponse.status).to.be(400);
     });
 
-    it("jette une erreur si la version n'est pas précisée", async () => {
-      testeur.referentiel().recharge({
-        mesures: { uneMesureConnue: {} },
-      });
+    it.each([['abc'], [1]])(
+      `jette une erreur si les ID de services sont [%s] (seuls les UUID sont acceptés)`,
+      async (ids) => {
+        const reponse = await testeur.put(
+          '/api/services/mesuresGenerales/RECENSEMENT.1',
+          { ...unePayloadValide(), idsServices: ids }
+        );
+        expect(reponse.status).to.be(400);
+      }
+    );
+
+    it("jette une erreur si la mesure ciblée n'est pas de la version de référentiel donnée", async () => {
+      const idMesureV2 = 'RECENSEMENT.1';
       const reponse = await testeur.put(
-        '/api/services/mesuresGenerales/uneMesureConnue',
-        {
-          statut: '',
-          modalites: 'une modalité',
-        }
+        `/api/services/mesuresGenerales/${idMesureV2}`,
+        { ...unePayloadValide(), version: 'v1' }
       );
+
       expect(reponse.status).to.be(400);
     });
 
     it("jette une erreur si l'identifiant de la mesure est inconnu", async () => {
-      testeur.referentiel().recharge({
-        mesures: {
-          uneMesureConnue: {},
-        },
-      });
       const reponse = await testeur.put(
         '/api/services/mesuresGenerales/uneMesureInconnue',
-        {
-          statut: 'fait',
-        }
+        unePayloadValide()
       );
+
       expect(reponse.status).to.be(400);
     });
 
-    it('jette une erreur si le statut est inconnu', async () => {
-      testeur.referentiel().recharge({
-        mesures: { uneMesureConnue: {} },
-        statutsMesures: { unStatut: {} },
-      });
+    it.each([null, 1, uneChaineDeCaracteres(2001, 'a')])(
+      `jette une erreur si la modalité est invalide`,
+      async (modalites) => {
+        const reponse = await testeur.put(
+          '/api/services/mesuresGenerales/RECENSEMENT.1',
+          { ...unePayloadValide(), modalites }
+        );
+        expect(reponse.status).to.be(400);
+      }
+    );
+
+    it('jette une erreur si le statut ET les modalités ne sont pas précisés', async () => {
       const reponse = await testeur.put(
-        '/api/services/mesuresGenerales/uneMesureConnue',
-        {
-          statut: 'unStatutInconnu',
-        }
+        '/api/services/mesuresGenerales/RECENSEMENT.1',
+        { ...unePayloadValide(), statut: '', modalites: '' }
+      );
+
+      expect(reponse.status).to.be(400);
+    });
+
+    it.each([null, 1, undefined, 'pasUneVersion'])(
+      `jette une erreur si la version vaut %s`,
+      async (version) => {
+        const reponse = await testeur.put(
+          '/api/services/mesuresGenerales/RECENSEMENT.1',
+          { ...unePayloadValide(), version }
+        );
+        expect(reponse.status).to.be(400);
+      }
+    );
+
+    it('jette une erreur si le statut est inconnu', async () => {
+      const reponse = await testeur.put(
+        '/api/services/mesuresGenerales/RECENSEMENT.1',
+        { ...unePayloadValide(), statut: 'unStatutInconnu' }
       );
 
       expect(reponse.status).to.be(400);
     });
 
     it("ne jette pas d'erreur si le statut est vide", async () => {
-      testeur.referentiel().recharge({
-        mesures: { uneMesureConnue: {} },
-      });
       testeur.depotDonnees().metsAJourMesureGeneraleDesServices =
         async () => {};
 
       const reponse = await testeur.put(
-        '/api/services/mesuresGenerales/uneMesureConnue',
-        {
-          statut: '',
-          modalites: 'une modalité',
-          version: 'v1',
-        }
+        '/api/services/mesuresGenerales/RECENSEMENT.1',
+        { ...unePayloadValide(), statut: '' }
       );
 
       expect(reponse.status).to.be(200);
@@ -503,21 +515,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it("jette une erreur si l'utilisateur n'a pas les droits d'écriture sur un des services ciblés", async () => {
       testeur.depotDonnees().accesAutoriseAUneListeDeService = async () =>
         false;
-      testeur.referentiel().recharge({
-        mesures: {
-          uneMesureConnue: {},
-        },
-        statutsMesures: { unStatut: {} },
-      });
 
       const reponse = await testeur.put(
-        '/api/services/mesuresGenerales/uneMesureConnue',
-        {
-          statut: 'unStatut',
-          idsServices: ['S1'],
-          version: 'v1',
-        }
+        '/api/services/mesuresGenerales/RECENSEMENT.1',
+        unePayloadValide()
       );
+
       expect(reponse.status).to.be(403);
     });
 
@@ -526,7 +529,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
       testeur.depotDonnees().metsAJourMesureGeneraleDesServices = async (
         idUtilisateur,
-        idsServices,
+        ids,
         id,
         statut,
         modalites,
@@ -534,34 +537,26 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       ) => {
         donneesRecues = {
           idUtilisateur,
-          idsServices,
+          idsServices: ids,
           id,
           statut,
           modalites,
           version,
         };
       };
-      testeur.referentiel().recharge({
-        mesures: {
-          uneMesureConnue: {},
-        },
-        statutsMesures: { fait: {} },
-      });
 
-      await testeur.put('/api/services/mesuresGenerales/uneMesureConnue', {
-        statut: 'fait',
-        modalites: 'une modalité',
-        idsServices: ['S1', 'S2'],
-        version: 'v1',
-      });
+      await testeur.put(
+        '/api/services/mesuresGenerales/RECENSEMENT.1',
+        unePayloadValide()
+      );
 
       expect(donneesRecues).to.eql({
         idUtilisateur: 'U1',
-        idsServices: ['S1', 'S2'],
-        id: 'uneMesureConnue',
+        idsServices,
+        id: 'RECENSEMENT.1',
         statut: 'fait',
         modalites: 'une modalité',
-        version: 'v1',
+        version: 'v2',
       });
     });
 
@@ -582,12 +577,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       const reponse = await testeur.put(
         '/api/services/mesuresGenerales/RECENSEMENT.1',
-        {
-          statut: 'fait',
-          modalites: 'une modalité',
-          idsServices: ['S1'],
-          version: 'v2',
-        }
+        { ...unePayloadValide(), version: 'v2' }
       );
 
       expect(reponse.status).to.be(200);
