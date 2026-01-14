@@ -918,7 +918,6 @@ const routesConnecteApiService = ({
   routes.get(
     '/:id/indiceCyberPersonnalise',
     middleware.trouveService({ [SECURISER]: LECTURE }),
-    middleware.aseptise('id'),
     (requete, reponse) => {
       const { service } = requete;
       reponse.json(service.indiceCyberPersonnalise());
