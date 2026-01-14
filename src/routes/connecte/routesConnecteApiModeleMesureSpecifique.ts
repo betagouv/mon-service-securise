@@ -4,26 +4,35 @@ import { valideBody } from '../../http/validePayloads.js';
 import { schemaPostModelesMesureSpecifique } from './routesConnecteApi.schema.js';
 import {
   ErreurAutorisationInexistante,
-  ErreurCategorieInconnue,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
   ErreurServiceInexistant,
 } from '../../erreurs.js';
+import { DepotDonnees } from '../../depotDonnees.interface.js';
+import { Middleware } from '../../http/middleware.interface.js';
+import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
+import { RequestRouteConnecte } from './routesConnecte.types.js';
+import { UUID } from '../../typesBasiques.js';
 
 const routesConnecteApiModeleMesureSpecifique = ({
   depotDonnees,
   middleware,
   referentiel,
   referentielV2,
+}: {
+  depotDonnees: DepotDonnees;
+  middleware: Middleware;
+  referentiel: Referentiel;
+  referentielV2: ReferentielV2;
 }) => {
   const routes = express.Router();
 
   routes.get('/', async (requete, reponse) => {
     const modeles =
       await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
-        requete.idUtilisateurCourant
+        (requete as RequestRouteConnecte).idUtilisateurCourant
       );
 
     reponse.json(modeles);
@@ -41,7 +50,7 @@ const routesConnecteApiModeleMesureSpecifique = ({
 
       try {
         const idModele = await depotDonnees.ajouteModeleMesureSpecifique(
-          requete.idUtilisateurCourant,
+          (requete as RequestRouteConnecte).idUtilisateurCourant,
           { description, descriptionLongue, categorie }
         );
 
@@ -65,9 +74,11 @@ const routesConnecteApiModeleMesureSpecifique = ({
 
       const modelesMesureDeUtilisateur =
         await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
-          requete.idUtilisateurCourant
+          (requete as unknown as RequestRouteConnecte).idUtilisateurCourant
         );
-      const modele = modelesMesureDeUtilisateur.find((m) => m.id === idModele);
+      const modele = modelesMesureDeUtilisateur.find(
+        (m: { id: UUID }) => m.id === idModele
+      );
       if (!modele) {
         reponse.sendStatus(404);
         return;
@@ -87,7 +98,7 @@ const routesConnecteApiModeleMesureSpecifique = ({
       }
 
       await depotDonnees.metsAJourModeleMesureSpecifique(
-        requete.idUtilisateurCourant,
+        (requete as unknown as RequestRouteConnecte).idUtilisateurCourant,
         idModele,
         {
           categorie,
@@ -105,14 +116,16 @@ const routesConnecteApiModeleMesureSpecifique = ({
     middleware.aseptise('detacheMesures'),
     async (requete, reponse) => {
       try {
+        const { idUtilisateurCourant } =
+          requete as unknown as RequestRouteConnecte;
         if (requete.query.detacheMesures === 'true') {
           await depotDonnees.supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees(
-            requete.idUtilisateurCourant,
+            idUtilisateurCourant,
             requete.params.id
           );
         } else {
           await depotDonnees.supprimeModeleMesureSpecifiqueEtMesuresAssociees(
-            requete.idUtilisateurCourant,
+            idUtilisateurCourant,
             requete.params.id
           );
         }
@@ -140,12 +153,16 @@ const routesConnecteApiModeleMesureSpecifique = ({
     async (requete, reponse) => {
       const { id: idModele } = requete.params;
       const { idsServicesAAssocier } = requete.body;
+      const { idUtilisateurCourant } =
+        requete as unknown as RequestRouteConnecte;
 
       const modelesMesureDeUtilisateur =
         await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
-          requete.idUtilisateurCourant
+          idUtilisateurCourant
         );
-      const modele = modelesMesureDeUtilisateur.find((m) => m.id === idModele);
+      const modele = modelesMesureDeUtilisateur.find(
+        (m: { id: UUID }) => m.id === idModele
+      );
       if (!modele) {
         reponse.sendStatus(404);
         return;
@@ -154,7 +171,7 @@ const routesConnecteApiModeleMesureSpecifique = ({
         await depotDonnees.associeModeleMesureSpecifiqueAuxServices(
           idModele,
           idsServicesAAssocier,
-          requete.idUtilisateurCourant
+          idUtilisateurCourant
         );
         reponse.sendStatus(200);
       } catch (e) {
@@ -186,8 +203,11 @@ const routesConnecteApiModeleMesureSpecifique = ({
     middleware.aseptise('idsServices.*'),
     async (requete, reponse) => {
       try {
+        const { idUtilisateurCourant } =
+          requete as unknown as RequestRouteConnecte;
+
         await depotDonnees.supprimeDesMesuresAssocieesAuModele(
-          requete.idUtilisateurCourant,
+          idUtilisateurCourant,
           requete.params.id,
           requete.body.idsServices
         );
