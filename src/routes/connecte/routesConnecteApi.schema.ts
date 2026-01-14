@@ -84,3 +84,7 @@ export const schemaPutModelesMesureSpecifique = (
   descriptionLongue: schemaMesureSpecifique.descriptionLongue(),
   categorie: schemaMesureSpecifique.categorie(referentiel, referentielV2),
 });
+
+export const schemaDeleteModelesMesureSpecifique = () => ({
+  detacheMesures: z.stringbool().optional(),
+});

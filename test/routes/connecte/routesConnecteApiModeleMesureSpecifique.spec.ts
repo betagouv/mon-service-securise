@@ -371,7 +371,10 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
   });
 
   describe('quand requête DELETE sur `/api/modeles/mesureSpecifique/:idModele`', () => {
+    let idModeleExistant: UUID;
+
     beforeEach(() => {
+      idModeleExistant = unUUIDRandom();
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
       testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtMesuresAssociees =
         () => {};
@@ -379,13 +382,12 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
         () => {};
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['detacheMesures'], testeur.app(), {
-          method: 'delete',
-          url: '/api/modeles/mesureSpecifique/MOD-1',
-        });
+    it("jette une erreur si l'id de modèle est invalide", async () => {
+      const reponse = await testeur.delete(
+        '/api/modeles/mesureSpecifique/pasUnUUID'
+      );
+
+      expect(reponse.status).toBe(400);
     });
 
     describe('sans paramètre pour conserver les mesures associées', () => {
@@ -396,10 +398,12 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
             donneesRecues = { idUtilisateur, idModele };
           };
 
-        await testeur.delete('/api/modeles/mesureSpecifique/MOD-1');
+        await testeur.delete(
+          `/api/modeles/mesureSpecifique/${idModeleExistant}`
+        );
 
         expect(donneesRecues!.idUtilisateur).toBe('U1');
-        expect(donneesRecues!.idModele).toBe('MOD-1');
+        expect(donneesRecues!.idModele).toBe(idModeleExistant);
       });
 
       it("jette une 404 si le modele n'existe pas", async () => {
@@ -410,7 +414,7 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
             );
           };
         const reponse = await testeur.delete(
-          '/api/modeles/mesureSpecifique/MOD-INEXISTANT'
+          `/api/modeles/mesureSpecifique/${unUUIDRandom()}`
         );
         expect(reponse.status).toBe(404);
       });
@@ -421,7 +425,7 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
             throw new ErreurAutorisationInexistante();
           };
         const reponse = await testeur.delete(
-          '/api/modeles/mesureSpecifique/MOD-1'
+          `/api/modeles/mesureSpecifique/${idModeleExistant}`
         );
         expect(reponse.status).toBe(403);
       });
@@ -436,12 +440,21 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
             );
           };
         const reponse = await testeur.delete(
-          '/api/modeles/mesureSpecifique/MOD-1'
+          `/api/modeles/mesureSpecifique/${idModeleExistant}`
         );
         expect(reponse.status).toBe(403);
       });
     });
+
     describe('avec paramètre pour détacher les mesures associées', () => {
+      it('jette une erreur si le paramètre `detacheMesures` est invalide', async () => {
+        const reponse = await testeur.delete(
+          `/api/modeles/mesureSpecifique/${unUUIDRandom()}?detacheMesures=pasUnBooleen`
+        );
+
+        expect(reponse.status).toBe(400);
+      });
+
       it('délègue au dépôt de données la suppression du service et le détachement des mesures associées', async () => {
         let donneesRecues;
         testeur.depotDonnees().supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees =
@@ -450,11 +463,11 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
           };
 
         await testeur.delete(
-          '/api/modeles/mesureSpecifique/MOD-1?detacheMesures=true'
+          `/api/modeles/mesureSpecifique/${idModeleExistant}?detacheMesures=true`
         );
 
         expect(donneesRecues!.idUtilisateur).toBe('U1');
-        expect(donneesRecues!.idModele).toBe('MOD-1');
+        expect(donneesRecues!.idModele).toBe(idModeleExistant);
       });
     });
 
@@ -464,7 +477,7 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
           throw new ErreurModeleDeMesureSpecifiqueIntrouvable('MOD-INEXISTANT');
         };
       const reponse = await testeur.delete(
-        '/api/modeles/mesureSpecifique/MOD-INEXISTANT?detacheMesures=true'
+        `/api/modeles/mesureSpecifique/${unUUIDRandom()}?detacheMesures=true`
       );
       expect(reponse.status).toBe(404);
     });
@@ -475,7 +488,7 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
           throw new ErreurAutorisationInexistante();
         };
       const reponse = await testeur.delete(
-        '/api/modeles/mesureSpecifique/MOD-1?detacheMesures=true'
+        `/api/modeles/mesureSpecifique/${idModeleExistant}?detacheMesures=true`
       );
       expect(reponse.status).toBe(403);
     });
@@ -490,7 +503,7 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
           );
         };
       const reponse = await testeur.delete(
-        '/api/modeles/mesureSpecifique/MOD-1?detacheMesures=true'
+        `/api/modeles/mesureSpecifique/${idModeleExistant}?detacheMesures=true`
       );
       expect(reponse.status).toBe(403);
     });
