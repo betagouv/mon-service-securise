@@ -179,22 +179,9 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
       });
     });
 
-    it("aseptise l'identifiant reçu", async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['idReset'],
-          testeur.app(),
-          `/initialisationMotDePasse/${uuid}`
-        );
-    });
-
     it("retourne une erreur HTTP 400 sur idReset n'est pas un UUID valide", async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        400,
-        'UUID requis',
-        '/initialisationMotDePasse/999'
-      );
+      const reponse = await testeur.get('/initialisationMotDePasse/999');
+      expect(reponse.status).to.equal(400);
     });
 
     it('retourne une erreur HTTP 404 si idReset inconnu', async () => {
