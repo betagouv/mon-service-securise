@@ -135,30 +135,28 @@ const middleware = (configuration = {}) => {
         "L'objet de droits doit être de la forme `{ [Rubrique]: niveau }`"
       );
 
-    await verificationAcceptationCGU(requete, reponse, () =>
-      depotDonnees
-        .service(idService)
-        .then((service) => {
-          const idUtilisateur = requete.idUtilisateurCourant;
+    await verificationAcceptationCGU(requete, reponse, async () => {
+      try {
+        const service = await depotDonnees.service(idService);
+        const idUtilisateur = requete.idUtilisateurCourant;
 
-          if (!service) reponse.status(404).send('Service non trouvé');
+        if (!service) reponse.status(404).send('Service non trouvé');
+        else {
+          const accesAutorise = await depotDonnees.accesAutorise(
+            idUtilisateur,
+            idService,
+            droitsRequis
+          );
+          if (!accesAutorise) reponse.status(403).render('erreurAccesRefuse');
           else {
-            depotDonnees
-              .accesAutorise(idUtilisateur, idService, droitsRequis)
-              .then((accesAutorise) => {
-                if (!accesAutorise)
-                  reponse.status(403).render('erreurAccesRefuse');
-                else {
-                  requete.service = service;
-                  suite();
-                }
-              });
+            requete.service = service;
+            suite();
           }
-        })
-        .catch(() =>
-          reponse.status(422).send("Le service n'a pas pu être récupéré")
-        )
-    );
+        }
+      } catch {
+        reponse.status(422).send("Le service n'a pas pu être récupéré");
+      }
+    });
   };
 
   const trouveDossierCourant = (requete, reponse, suite) => {
