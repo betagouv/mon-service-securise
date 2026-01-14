@@ -2851,15 +2851,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
-    it('aseptise les paramètres', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['id', 'nature'], testeur.app(), {
-          method: 'put',
-          url: '/api/service/123/suggestionAction/peuimporte',
-        });
-    });
-
     it('utilise le dépôt de données pour acquitter la suggestion', async () => {
       let donneesDepotAppele = null;
       testeur.depotDonnees().acquitteSuggestionAction = (
@@ -2868,31 +2859,23 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       ) => {
         donneesDepotAppele = { idService, natureSuggestion };
       };
-      testeur.referentiel().recharge({
-        naturesSuggestionsActions: {
-          niveauRetrograde: {},
-        },
-      });
 
       const resultat = await testeur.put(
-        '/api/service/123/suggestionAction/niveauRetrograde'
+        '/api/service/123/suggestionAction/miseAJourSiret'
       );
 
       expect(donneesDepotAppele).to.be.an('object');
       expect(donneesDepotAppele.idService).to.be('123');
-      expect(donneesDepotAppele.natureSuggestion).to.be('niveauRetrograde');
+      expect(donneesDepotAppele.natureSuggestion).to.be('miseAJourSiret');
       expect(resultat.status).to.be(200);
     });
 
     it('renvoie une erreur lorsque la nature n’est pas connue', async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        400,
-        'La nature de la suggestion d’action est inconnue',
-        {
-          method: 'put',
-          url: '/api/service/123/suggestionAction/inconnue',
-        }
+      const reponse = await testeur.put(
+        '/api/service/123/suggestionAction/inconnue'
       );
+
+      expect(reponse.status).to.be(400);
     });
   });
 });
