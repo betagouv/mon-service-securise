@@ -10,14 +10,7 @@ import {
   EchecAutorisation,
   EchecEnvoiMessage,
   ErreurAutorisationExisteDeja,
-  ErreurAutorisationInexistante,
-  ErreurCategorieInconnue,
-  ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurModele,
-  ErreurModeleDeMesureSpecifiqueDejaAssociee,
-  ErreurModeleDeMesureSpecifiqueIntrouvable,
-  ErreurNombreLimiteModelesMesureSpecifiqueAtteint,
-  ErreurServiceInexistant,
 } from '../../erreurs.js';
 import routesConnecteApiService from './routesConnecteApiService.js';
 import * as objetGetServices from '../../modeles/objetsApi/objetGetServices.js';
@@ -50,13 +43,13 @@ import {
   schemaDeleteAutorisation,
   schemaPatchMotDePasse,
   schemaPostAutorisation,
-  schemaPostModelesMesureSpecifique,
   schemaPutMesureGenerale,
   schemaPutMesuresSpecifiques,
   schemaPutMotDePasse,
   schemaPutUtilisateur,
 } from './routesConnecteApi.schema.js';
 import { schemaMesureGenerale } from '../../http/schemas/mesure.schema.js';
+import routesConnecteApiModeleMesureSpecifique from './routesConnecteApiModeleMesureSpecifique.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -405,6 +398,17 @@ const routesConnecteApi = ({
     })
   );
 
+  routes.use(
+    '/modeles/mesureSpecifique',
+    middleware.verificationAcceptationCGU,
+    routesConnecteApiModeleMesureSpecifique({
+      depotDonnees,
+      middleware,
+      referentiel,
+      referentielV2,
+    })
+  );
+
   routes.put(
     '/motDePasse',
     valideBody(z.strictObject(schemaPutMotDePasse())),
@@ -718,208 +722,6 @@ const routesConnecteApi = ({
         };
 
       reponse.json(mesuresInteressantes);
-    }
-  );
-
-  routes.get(
-    '/modeles/mesureSpecifique',
-    middleware.verificationAcceptationCGU,
-    async (requete, reponse) => {
-      const modeles =
-        await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
-          requete.idUtilisateurCourant
-        );
-
-      reponse.json(modeles);
-    }
-  );
-
-  routes.post(
-    '/modeles/mesureSpecifique',
-    middleware.verificationAcceptationCGU,
-    valideBody(
-      z.strictObject(
-        schemaPostModelesMesureSpecifique(referentiel, referentielV2)
-      )
-    ),
-    async (requete, reponse) => {
-      const { categorie, description, descriptionLongue } = requete.body;
-
-      try {
-        const idModele = await depotDonnees.ajouteModeleMesureSpecifique(
-          requete.idUtilisateurCourant,
-          { description, descriptionLongue, categorie }
-        );
-
-        reponse.status(201).send({ id: idModele });
-      } catch (e) {
-        if (e instanceof ErreurNombreLimiteModelesMesureSpecifiqueAtteint) {
-          reponse.status(403).send('Limite de création atteinte');
-          return;
-        }
-        throw e;
-      }
-    }
-  );
-
-  routes.put(
-    '/modeles/mesureSpecifique/:id',
-    middleware.verificationAcceptationCGU,
-    middleware.aseptise('description', 'descriptionLongue', 'categorie'),
-    async (requete, reponse) => {
-      const idModele = requete.params.id;
-      const { categorie, description, descriptionLongue } = requete.body;
-
-      const modelesMesureDeUtilisateur =
-        await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
-          requete.idUtilisateurCourant
-        );
-      const modele = modelesMesureDeUtilisateur.find((m) => m.id === idModele);
-      if (!modele) {
-        reponse.sendStatus(404);
-        return;
-      }
-
-      try {
-        referentiel.verifieCategoriesMesuresSontRepertoriees([categorie]);
-      } catch (e) {
-        if (e instanceof ErreurCategorieInconnue) {
-          reponse.status(400).send('La catégorie est invalide');
-          return;
-        }
-      }
-      if (!description) {
-        reponse.status(400).send('La description est obligatoire');
-        return;
-      }
-
-      await depotDonnees.metsAJourModeleMesureSpecifique(
-        requete.idUtilisateurCourant,
-        idModele,
-        {
-          categorie,
-          description,
-          descriptionLongue,
-        }
-      );
-
-      reponse.sendStatus(200);
-    }
-  );
-
-  routes.delete(
-    '/modeles/mesureSpecifique/:id',
-    middleware.verificationAcceptationCGU,
-    middleware.aseptise('detacheMesures'),
-    async (requete, reponse) => {
-      try {
-        if (requete.query.detacheMesures === 'true') {
-          await depotDonnees.supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees(
-            requete.idUtilisateurCourant,
-            requete.params.id
-          );
-        } else {
-          await depotDonnees.supprimeModeleMesureSpecifiqueEtMesuresAssociees(
-            requete.idUtilisateurCourant,
-            requete.params.id
-          );
-        }
-        reponse.sendStatus(200);
-      } catch (e) {
-        if (e instanceof ErreurModeleDeMesureSpecifiqueIntrouvable) {
-          reponse.sendStatus(404);
-          return;
-        }
-        if (
-          e instanceof ErreurAutorisationInexistante ||
-          e instanceof ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
-        ) {
-          reponse.sendStatus(403);
-          return;
-        }
-        throw e;
-      }
-    }
-  );
-
-  routes.put(
-    '/modeles/mesureSpecifique/:id/services',
-    middleware.verificationAcceptationCGU,
-    middleware.aseptise('idsServicesAAssocier.*'),
-    async (requete, reponse) => {
-      const { id: idModele } = requete.params;
-      const { idsServicesAAssocier } = requete.body;
-
-      const modelesMesureDeUtilisateur =
-        await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
-          requete.idUtilisateurCourant
-        );
-      const modele = modelesMesureDeUtilisateur.find((m) => m.id === idModele);
-      if (!modele) {
-        reponse.sendStatus(404);
-        return;
-      }
-      try {
-        await depotDonnees.associeModeleMesureSpecifiqueAuxServices(
-          idModele,
-          idsServicesAAssocier,
-          requete.idUtilisateurCourant
-        );
-        reponse.sendStatus(200);
-      } catch (e) {
-        if (e instanceof ErreurModeleDeMesureSpecifiqueDejaAssociee) {
-          reponse.sendStatus(400);
-          return;
-        }
-        if (
-          e instanceof ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
-        ) {
-          reponse.sendStatus(403);
-          return;
-        }
-        if (e instanceof ErreurAutorisationInexistante) {
-          reponse.sendStatus(404);
-          return;
-        }
-        if (e instanceof ErreurServiceInexistant) {
-          reponse.sendStatus(400);
-          return;
-        }
-        throw e;
-      }
-    }
-  );
-
-  routes.delete(
-    '/modeles/mesureSpecifique/:id/services',
-    middleware.verificationAcceptationCGU,
-    middleware.aseptise('idsServices.*'),
-    async (requete, reponse) => {
-      try {
-        await depotDonnees.supprimeDesMesuresAssocieesAuModele(
-          requete.idUtilisateurCourant,
-          requete.params.id,
-          requete.body.idsServices
-        );
-        reponse.sendStatus(200);
-      } catch (e) {
-        if (e instanceof ErreurModeleDeMesureSpecifiqueIntrouvable) {
-          reponse.sendStatus(404);
-          return;
-        }
-        if (
-          e instanceof ErreurAutorisationInexistante ||
-          e instanceof ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
-        ) {
-          reponse.sendStatus(403);
-          return;
-        }
-        if (e instanceof ErreurServiceInexistant) {
-          reponse.sendStatus(400);
-          return;
-        }
-        throw e;
-      }
     }
   );
 
