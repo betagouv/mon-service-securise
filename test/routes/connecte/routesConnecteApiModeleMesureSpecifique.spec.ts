@@ -523,19 +523,32 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
   });
 
   describe('quand requête DELETE sur `/api/modeles/mesureSpecifique/:idModele/services`', () => {
+    let idModeleExistant: UUID;
+
+    const unePayloadValide = () => ({ idsServices: [unUUIDRandom()] });
+
     beforeEach(() => {
+      idModeleExistant = unUUIDRandom();
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
       testeur.depotDonnees().supprimeDesMesuresAssocieesAuModele =
         async () => {};
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['idsServices.*'], testeur.app(), {
-          method: 'delete',
-          url: '/api/modeles/mesureSpecifique/MOD-1/services',
-        });
+    it("jette une erreur si l'id de modèle est invalide", async () => {
+      const reponse = await testeur.delete(
+        '/api/modeles/mesureSpecifique/pasUnUUID/services'
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it('jette une erreur si les ids de services sont invalides', async () => {
+      const reponse = await testeur.delete(
+        `/api/modeles/mesureSpecifique/${idModeleExistant}/services`,
+        { idsServicesAAssocier: ['pasUnUUID'] }
+      );
+
+      expect(reponse.status).toBe(400);
     });
 
     it('délègue au dépôt de données la suppression des mesures associées au modèle', async () => {
@@ -548,13 +561,15 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
         donneesRecues = { idUtilisateur, idModele, idsServices };
       };
 
-      await testeur.delete('/api/modeles/mesureSpecifique/MOD-1/services', {
-        idsServices: ['S1'],
-      });
+      const payloadValide = unePayloadValide();
+      await testeur.delete(
+        `/api/modeles/mesureSpecifique/${idModeleExistant}/services`,
+        payloadValide
+      );
 
       expect(donneesRecues!.idUtilisateur).toBe('U1');
-      expect(donneesRecues!.idModele).toBe('MOD-1');
-      expect(donneesRecues!.idsServices).toEqual(['S1']);
+      expect(donneesRecues!.idModele).toBe(idModeleExistant);
+      expect(donneesRecues!.idsServices).toEqual(payloadValide.idsServices);
     });
 
     it("jette une 404 si le modele n'existe pas", async () => {
@@ -562,7 +577,8 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
         throw new ErreurModeleDeMesureSpecifiqueIntrouvable('MOD-INEXISTANT');
       };
       const reponse = await testeur.delete(
-        '/api/modeles/mesureSpecifique/MOD-INEXISTANT/services'
+        `/api/modeles/mesureSpecifique/${unUUIDRandom()}/services`,
+        unePayloadValide()
       );
       expect(reponse.status).toBe(404);
     });
@@ -572,7 +588,8 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
         throw new ErreurAutorisationInexistante();
       };
       const reponse = await testeur.delete(
-        '/api/modeles/mesureSpecifique/MOD-1/services'
+        `/api/modeles/mesureSpecifique/${idModeleExistant}/services`,
+        unePayloadValide()
       );
       expect(reponse.status).toBe(403);
     });
@@ -586,7 +603,8 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
         );
       };
       const reponse = await testeur.delete(
-        '/api/modeles/mesureSpecifique/MOD-1/services'
+        `/api/modeles/mesureSpecifique/${idModeleExistant}/services`,
+        unePayloadValide()
       );
       expect(reponse.status).toBe(403);
     });
