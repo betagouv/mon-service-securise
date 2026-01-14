@@ -1,6 +1,7 @@
 import controlAcces from 'express-ip-access-control';
 import { check } from 'express-validator';
 import { IpFilter as ipfilter } from 'express-ipfilter';
+import { z } from 'zod';
 import * as adaptateurEnvironnementParDefaut from '../adaptateurs/adaptateurEnvironnement.js';
 import { CSP_BIBLIOTHEQUES } from '../routes/nonConnecte/routesNonConnecteApiBibliotheques.js';
 import {
@@ -126,6 +127,9 @@ const middleware = (configuration = {}) => {
   };
 
   const trouveService = (droitsRequis) => async (requete, reponse, suite) => {
+    const resultat = z.looseObject({ id: z.uuid() }).safeParse(requete.params);
+    if (!resultat.success) reponse.sendStatus(400);
+
     const idService = requete.params.id;
 
     const droitsCoherents = verifieCoherenceDesDroits(droitsRequis);

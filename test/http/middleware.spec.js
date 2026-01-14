@@ -16,7 +16,7 @@ import {
   Rubriques,
 } from '../../src/modeles/autorisations/gestionDroits.js';
 import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.js';
-import { unUUID } from '../constructeurs/UUID.js';
+import { unUUID, unUUIDRandom } from '../constructeurs/UUID.js';
 
 const { DECRIRE, SECURISER, HOMOLOGUER } = Rubriques;
 const { LECTURE, ECRITURE, INVISIBLE } = Permissions;
@@ -395,6 +395,19 @@ describe('Le middleware MSS', () => {
       idService = unUUIDRandom();
       depotDonnees.service = () => Promise.resolve();
       depotDonnees.utilisateur = () => ({ genereToken: () => 'NOUVEAU_TOKEN' });
+    });
+
+    it("jette une erreur si l'id est invalide", async () => {
+      let statutRenvoye;
+      reponse.sendStatus = (statut) => {
+        statutRenvoye = statut;
+      };
+      const middleware = leMiddleware();
+      requete.params = { id: 'pasUnUUID' };
+
+      await middleware.trouveService({})(requete, reponse);
+
+      expect(statutRenvoye).to.be(400);
     });
 
     it('requête le dépôt de données', async () => {
