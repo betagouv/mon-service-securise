@@ -1,4 +1,5 @@
 import express from 'express';
+import { z } from 'zod';
 import InformationsService from '../../modeles/informationsService.js';
 import {
   Permissions,
@@ -9,6 +10,7 @@ import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
 import RisqueGeneral from '../../modeles/risqueGeneral.js';
 import { VersionService } from '../../modeles/versionService.js';
+import { valideQuery } from '../../http/validePayloads.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -101,7 +103,12 @@ const routesConnectePageService = ({
 
   routes.get(
     '/:id/mesures/export.csv',
-    middleware.aseptise('id', 'avecDonneesAdditionnelles'),
+    valideQuery(
+      z.strictObject({
+        avecDonneesAdditionnelles: z.stringbool().optional(),
+        timestamp: z.string().optional(),
+      })
+    ),
     middleware.trouveService({ [SECURISER]: LECTURE }),
     async (requete, reponse) => {
       const { service } = requete;
