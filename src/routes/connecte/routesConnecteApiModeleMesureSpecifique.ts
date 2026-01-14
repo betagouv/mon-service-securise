@@ -1,7 +1,10 @@
 import express from 'express';
 import { z } from 'zod';
-import { valideBody } from '../../http/validePayloads.js';
-import { schemaPostModelesMesureSpecifique } from './routesConnecteApi.schema.js';
+import { valideBody, valideParams } from '../../http/validePayloads.js';
+import {
+  schemaPostModelesMesureSpecifique,
+  schemaPutModelesMesureSpecifique,
+} from './routesConnecteApi.schema.js';
 import {
   ErreurAutorisationInexistante,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
@@ -67,9 +70,14 @@ const routesConnecteApiModeleMesureSpecifique = ({
 
   routes.put(
     '/:id',
-    middleware.aseptise('description', 'descriptionLongue', 'categorie'),
+    valideParams(z.strictObject({ id: z.uuid() })),
+    valideBody(
+      z.strictObject(
+        schemaPutModelesMesureSpecifique(referentiel, referentielV2)
+      )
+    ),
     async (requete, reponse) => {
-      const idModele = requete.params.id;
+      const { id: idModele } = requete.params;
       const { categorie, description, descriptionLongue } = requete.body;
 
       const modelesMesureDeUtilisateur =
@@ -81,19 +89,6 @@ const routesConnecteApiModeleMesureSpecifique = ({
       );
       if (!modele) {
         reponse.sendStatus(404);
-        return;
-      }
-
-      try {
-        referentiel.verifieCategoriesMesuresSontRepertoriees([categorie]);
-      } catch (e) {
-        if (e instanceof ErreurCategorieInconnue) {
-          reponse.status(400).send('La catégorie est invalide');
-          return;
-        }
-      }
-      if (!description) {
-        reponse.status(400).send('La description est obligatoire');
         return;
       }
 

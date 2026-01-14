@@ -75,3 +75,12 @@ export const schemaPostModelesMesureSpecifique = (
   descriptionLongue: schemaMesureSpecifique.descriptionLongue(),
   categorie: schemaMesureSpecifique.categorie(referentiel, referentielV2),
 });
+
+export const schemaPutModelesMesureSpecifique = (
+  referentiel: Referentiel,
+  referentielV2: ReferentielV2
+) => ({
+  description: schemaMesureSpecifique.description(),
+  descriptionLongue: schemaMesureSpecifique.descriptionLongue(),
+  categorie: schemaMesureSpecifique.categorie(referentiel, referentielV2),
+});
