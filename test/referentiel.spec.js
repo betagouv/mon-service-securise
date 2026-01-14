@@ -982,15 +982,6 @@ describe('Le référentiel', () => {
     });
   });
 
-  it('sait dire si une étape de visite guidée existe', () => {
-    const referentiel = Referentiel.creeReferentiel({
-      etapesVisiteGuidee: { DECRIRE: {} },
-    });
-
-    expect(referentiel.etapeVisiteGuideeExiste('DECRIRE')).to.be(true);
-    expect(referentiel.etapeVisiteGuideeExiste('MAUVAIS_ID')).to.be(false);
-  });
-
   it("lève une exception lorsqu'on lui demande une nature de suggestion d'action inconnue", () => {
     const sansNature = Referentiel.creeReferentielVide();
 
