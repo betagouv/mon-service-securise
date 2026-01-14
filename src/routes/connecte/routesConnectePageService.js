@@ -27,7 +27,6 @@ const routesConnectePageService = ({
 
   routes.get(
     '/:id',
-    middleware.aseptise('id'),
     middleware.trouveService({}),
     middleware.chargeAutorisationsService,
     async (requete, reponse) => {

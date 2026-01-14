@@ -98,12 +98,6 @@ describe('Le serveur MSS des routes /service/*', () => {
         .verifieRequeteChargeEtatVisiteGuidee(testeur.app(), `/service/456`);
     });
 
-    it("aseptise l'identifiant reçu", async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['id'], testeur.app(), '/service/456');
-    });
-
     it('recherche le service correspondant', async () => {
       await testeur
         .middleware()
