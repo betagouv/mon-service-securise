@@ -7,6 +7,7 @@ import {
 } from '../../http/validePayloads.js';
 import {
   schemaDeleteModelesMesureSpecifique,
+  schemaDeleteModelesMesureSpecifiqueServices,
   schemaPostModelesMesureSpecifique,
   schemaPutModelesMesureSpecifique,
   schemaPutModelesMesureSpecifiqueServices,
@@ -27,7 +28,6 @@ import { UUID } from '../../typesBasiques.js';
 
 const routesConnecteApiModeleMesureSpecifique = ({
   depotDonnees,
-  middleware,
   referentiel,
   referentielV2,
 }: {
@@ -203,7 +203,8 @@ const routesConnecteApiModeleMesureSpecifique = ({
 
   routes.delete(
     '/:id/services',
-    middleware.aseptise('idsServices.*'),
+    valideParams(z.strictObject({ id: z.uuid() })),
+    valideBody(z.strictObject(schemaDeleteModelesMesureSpecifiqueServices())),
     async (requete, reponse) => {
       try {
         const { idUtilisateurCourant } =

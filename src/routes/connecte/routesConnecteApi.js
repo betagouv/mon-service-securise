@@ -403,7 +403,6 @@ const routesConnecteApi = ({
     middleware.verificationAcceptationCGU,
     routesConnecteApiModeleMesureSpecifique({
       depotDonnees,
-      middleware,
       referentiel,
       referentielV2,
     })
