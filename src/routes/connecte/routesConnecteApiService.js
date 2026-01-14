@@ -1,4 +1,5 @@
 import express from 'express';
+import { z } from 'zod';
 import routesConnecteApiServicePdf from './routesConnecteApiServicePdf.js';
 import {
   EchecAutorisation,
@@ -8,7 +9,6 @@ import {
   ErreurDossierCourantInexistant,
   ErreurStatutMesureInvalide,
   ErreurMesureInconnue,
-  ErreurDonneesReferentielIncorrectes,
   ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
   ErreurRisqueInconnu,
@@ -48,6 +48,8 @@ import MesureSpecifique from '../../modeles/mesureSpecifique.js';
 import RisqueSpecifique from '../../modeles/risqueSpecifique.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import routesConnecteApiSimulationMigrationReferentiel from './routesConnecteApiSimulationMigrationReferentiel.js';
+import { schemaSuggestionAction } from '../../http/schemas/suggestionAction.schema.js';
+import { valideParams } from '../../http/validePayloads.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -966,23 +968,11 @@ const routesConnecteApiService = ({
   routes.put(
     '/:id/suggestionAction/:nature',
     middleware.trouveService({}),
-    middleware.aseptise('id', 'nature'),
-    async (requete, reponse, suite) => {
-      try {
-        const { nature, id } = requete.params;
-        if (referentiel.natureSuggestionAction(nature)) {
-          await depotDonnees.acquitteSuggestionAction(id, nature);
-        }
-        reponse.sendStatus(200);
-      } catch (e) {
-        if (e instanceof ErreurDonneesReferentielIncorrectes) {
-          reponse
-            .status(400)
-            .send('La nature de la suggestion d’action est inconnue');
-        } else {
-          suite(e);
-        }
-      }
+    valideParams(z.looseObject({ nature: schemaSuggestionAction.nature() })),
+    async (requete, reponse) => {
+      const { nature, id } = requete.params;
+      await depotDonnees.acquitteSuggestionAction(id, nature);
+      reponse.sendStatus(200);
     }
   );
 
