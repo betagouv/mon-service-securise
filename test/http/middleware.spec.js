@@ -386,22 +386,28 @@ describe('Le middleware MSS', () => {
   });
 
   describe("sur recherche d'un service existant", () => {
+    let idService;
+
     const adaptateurJWT = {
       decode: () => ({ idUtilisateur: '999' }),
     };
     beforeEach(() => {
+      idService = unUUIDRandom();
       depotDonnees.service = () => Promise.resolve();
       depotDonnees.utilisateur = () => ({ genereToken: () => 'NOUVEAU_TOKEN' });
     });
 
     it('requête le dépôt de données', async () => {
+      let idRecu;
       depotDonnees.service = async (id) => {
-        expect(id).to.equal('123');
+        idRecu = id;
       };
       const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
 
-      requete.params = { id: '123' };
+      requete.params = { id: idService };
       await middleware.trouveService({})(requete, reponse);
+
+      expect(idRecu).to.be(idService);
     });
 
     it('renvoie une erreur HTTP 404 si service non trouvée', async () => {
