@@ -2564,15 +2564,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         );
     });
 
-    it("aseptise l'id du service", async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['id'], testeur.app(), {
-          method: 'get',
-          url: '/api/service/456/indiceCyber',
-        });
-    });
-
     it("renvoie l'indice cyber du service", async () => {
       const serviceARenvoyer = unService().construis();
       serviceARenvoyer.indiceCyber = () => ({ total: 1.5 });
