@@ -143,6 +143,12 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
   });
 
   describe('quand requête PUT sur `/api/modeles/mesureSpecifique/idModele`', () => {
+    const unePayloadValide = () => ({
+      description: 'une description',
+      descriptionLongue: 'une description longue',
+      categorie: 'gouvernance',
+    });
+
     beforeEach(() => {
       testeur.referentiel().recharge({
         categoriesMesures: {
@@ -152,17 +158,13 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['description', 'descriptionLongue', 'categorie'],
-          testeur.app(),
-          {
-            method: 'put',
-            url: '/api/modeles/mesureSpecifique/unIdDeModele',
-          }
-        );
+    it("jette une erreur si l'id de modèle est invalide", async () => {
+      const reponse = await testeur.put(
+        '/api/modeles/mesureSpecifique/pasUnUUID',
+        unePayloadValide()
+      );
+
+      expect(reponse.status).toBe(400);
     });
 
     it("jette une erreur si le modele de mesure spécifique n'existe pas", async () => {
@@ -170,23 +172,22 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
         async () => [];
 
       const reponse = await testeur.put(
-        '/api/modeles/mesureSpecifique/unIdInexistant',
-        {
-          description: 'une description',
-          descriptionLongue: 'une description longue',
-          categorie: 'gouvernance',
-        }
+        `/api/modeles/mesureSpecifique/${unUUIDRandom()}`,
+        unePayloadValide()
       );
 
       expect(reponse.status).toBe(404);
     });
 
     describe('quand le modèle de mesure spécifique existe', () => {
+      let idModeleExistant: UUID;
+
       beforeEach(() => {
+        idModeleExistant = unUUIDRandom();
         testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur =
           async () => [
             {
-              id: 'MOD-1',
+              id: idModeleExistant,
               description: 'une description',
               categorie: 'gouvernance',
               descriptionLongue: 'une description longue',
@@ -196,30 +197,38 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
 
       it('jette une erreur si la catégorie est invalide', async () => {
         const reponse = await testeur.put(
-          '/api/modeles/mesureSpecifique/MOD-1',
+          `/api/modeles/mesureSpecifique/${idModeleExistant}`,
           {
-            description: 'une description',
-            descriptionLongue: 'une description longue',
+            ...unePayloadValide(),
             categorie: 'une categorie invalide',
           }
         );
 
         expect(reponse.status).toBe(400);
-        expect(reponse.text).toBe('La catégorie est invalide');
       });
 
       it("jette une erreur si la description n'est pas renseignée", async () => {
         const reponse = await testeur.put(
-          '/api/modeles/mesureSpecifique/MOD-1',
+          `/api/modeles/mesureSpecifique/${idModeleExistant}`,
           {
+            ...unePayloadValide(),
             description: '',
-            descriptionLongue: 'une description longue',
-            categorie: 'gouvernance',
           }
         );
 
         expect(reponse.status).toBe(400);
-        expect(reponse.text).toBe('La description est obligatoire');
+      });
+
+      it("jette une erreur si la description longue n'est pas renseignée", async () => {
+        const reponse = await testeur.put(
+          `/api/modeles/mesureSpecifique/${idModeleExistant}`,
+          {
+            ...unePayloadValide(),
+            descriptionLongue: undefined,
+          }
+        );
+
+        expect(reponse.status).toBe(400);
       });
 
       it('délègue au dépôt de données la mise à jour du modèle de mesure spécifique', async () => {
@@ -233,16 +242,12 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
         };
 
         const reponse = await testeur.put(
-          '/api/modeles/mesureSpecifique/MOD-1',
-          {
-            description: 'une description',
-            descriptionLongue: 'une description longue',
-            categorie: 'gouvernance',
-          }
+          `/api/modeles/mesureSpecifique/${idModeleExistant}`,
+          unePayloadValide()
         );
 
         expect(donneesRecues!.idUtilisateur).toBe('U1');
-        expect(donneesRecues!.idModele).toBe('MOD-1');
+        expect(donneesRecues!.idModele).toBe(idModeleExistant);
         expect(donneesRecues!.donnees).toEqual({
           description: 'une description',
           descriptionLongue: 'une description longue',
