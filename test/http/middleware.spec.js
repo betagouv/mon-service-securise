@@ -810,6 +810,27 @@ describe('Le middleware MSS', () => {
   });
 
   describe('sur challenge du mot de passe', () => {
+    beforeEach(() => {
+      depotDonnees.verifieMotDePasse = async () => {};
+    });
+
+    it.each([null, undefined, ''])(
+      'jette une erreur si le champ `motDePasseChallenge` vaut %s',
+      (valeur) => {
+        let statutRenvoye;
+        reponse.sendStatus = (statut) => {
+          statutRenvoye = statut;
+        };
+        requete.body.motDePasseChallenge = valeur;
+        requete.idUtilisateurCourant = '123';
+        const middleware = leMiddleware();
+
+        middleware.challengeMotDePasse(requete, reponse);
+
+        expect(statutRenvoye).to.be(400);
+      }
+    );
+
     it("jette une erreur technique si l'ID de l'utilisateur courant n'est pas présent dans la requête", async () => {
       requete.idUtilisateurCourant = null;
 
@@ -823,22 +844,6 @@ describe('Le middleware MSS', () => {
           'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
         );
       });
-    });
-
-    it("renvoie une erreur HTTP 422 si le mot de passe n'est pas présent dans la requête", async () => {
-      requete.idUtilisateurCourant = '123';
-      requete.body = {};
-
-      prepareVerificationReponse(
-        reponse,
-        422,
-        'Le champ `motDePasseChallenge` est obligatoire'
-      );
-      const suite = () =>
-        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
-
-      const middleware = leMiddleware();
-      middleware.challengeMotDePasse(requete, reponse, suite);
     });
 
     it('renvoie une erreur HTTP 401 si le mot de passe est incorrect', async () => {

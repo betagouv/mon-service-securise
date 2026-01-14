@@ -360,13 +360,13 @@ const middleware = (configuration = {}) => {
         'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
       );
 
+    const resultat = z
+      .looseObject({ motDePasseChallenge: z.string().min(1) })
+      .safeParse(requete.body);
+
+    if (!resultat.success) reponse.sendStatus(400);
+
     const { motDePasseChallenge } = requete.body;
-    if (!motDePasseChallenge) {
-      reponse
-        .status(422)
-        .send('Le champ `motDePasseChallenge` est obligatoire');
-      return;
-    }
 
     depotDonnees
       .verifieMotDePasse(requete.idUtilisateurCourant, motDePasseChallenge)
