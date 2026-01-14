@@ -1,8 +1,9 @@
 import express from 'express';
-import * as uuid from 'uuid';
 import { ErreurArticleCrispIntrouvable } from '@lab-anssi/lib';
+import { z } from 'zod';
 import { estUrlLegalePourRedirection } from '../../http/redirection.js';
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
+import { valideParams } from '../../http/validePayloads.js';
 
 const { MSS } = SourceAuthentification;
 
@@ -129,16 +130,10 @@ const routesNonConnectePage = ({
 
   routes.get(
     '/initialisationMotDePasse/:idReset',
-    middleware.aseptise('idReset'),
     middleware.chargeEtatAgentConnect,
+    valideParams(z.strictObject({ idReset: z.uuid() })),
     async (requete, reponse) => {
       const { idReset } = requete.params;
-
-      const pasUnUUID = !uuid.validate(idReset);
-      if (pasUnUUID) {
-        reponse.status(400).send(`UUID requis`);
-        return;
-      }
 
       const utilisateur = await depotDonnees.utilisateurAFinaliser(idReset);
       if (!utilisateur) {
