@@ -9,6 +9,7 @@ import {
   schemaDeleteModelesMesureSpecifique,
   schemaPostModelesMesureSpecifique,
   schemaPutModelesMesureSpecifique,
+  schemaPutModelesMesureSpecifiqueServices,
 } from './routesConnecteApi.schema.js';
 import {
   ErreurAutorisationInexistante,
@@ -150,7 +151,8 @@ const routesConnecteApiModeleMesureSpecifique = ({
 
   routes.put(
     '/:id/services',
-    middleware.aseptise('idsServicesAAssocier.*'),
+    valideParams(z.strictObject({ id: z.uuid() })),
+    valideBody(z.strictObject(schemaPutModelesMesureSpecifiqueServices())),
     async (requete, reponse) => {
       const { id: idModele } = requete.params;
       const { idsServicesAAssocier } = requete.body;

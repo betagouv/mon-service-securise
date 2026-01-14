@@ -259,14 +259,19 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
   });
 
   describe('quand requête PUT sur `/api/modeles/mesureSpecifique/:idModele/services`', () => {
+    let idModeleExistant: UUID;
+
+    const unePayloadValide = () => ({ idsServicesAAssocier: [unUUIDRandom()] });
+
     beforeEach(() => {
+      idModeleExistant = unUUIDRandom();
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
       testeur.depotDonnees().associeModeleMesureSpecifiqueAuxServices =
         () => {};
       testeur.depotDonnees().lisModelesMesureSpecifiquePourUtilisateur =
         async () => [
           {
-            id: 'MOD-1',
+            id: idModeleExistant,
             description: 'une description',
             categorie: 'gouvernance',
             descriptionLongue: 'une description longue',
@@ -274,22 +279,27 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
         ];
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['idsServicesAAssocier.*'],
-          testeur.app(),
-          {
-            method: 'put',
-            url: '/api/modeles/mesureSpecifique/MOD-1/services',
-          }
-        );
+    it("jette une erreur si l'id de modèle est invalide", async () => {
+      const reponse = await testeur.put(
+        '/api/modeles/mesureSpecifique/pasUnUUID/services'
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it('jette une erreur si les ids de services sont invalides', async () => {
+      const reponse = await testeur.put(
+        `/api/modeles/mesureSpecifique/${idModeleExistant}/services`,
+        { idsServicesAAssocier: ['pasUnUUID'] }
+      );
+
+      expect(reponse.status).toBe(400);
     });
 
     it("jette une erreur si le modele de mesure spécifique n'existe pas", async () => {
       const reponse = await testeur.put(
-        '/api/modeles/mesureSpecifique/unIdInexistant/services'
+        `/api/modeles/mesureSpecifique/${unUUIDRandom()}/services`,
+        unePayloadValide()
       );
 
       expect(reponse.status).toBe(404);
@@ -305,16 +315,17 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
         donneesRecues = { idModele, idsServices, idUtilisateurAssociant };
       };
 
+      const payloadValide = unePayloadValide();
       const reponse = await testeur.put(
-        '/api/modeles/mesureSpecifique/MOD-1/services',
-        {
-          idsServicesAAssocier: ['S1', 'S2'],
-        }
+        `/api/modeles/mesureSpecifique/${idModeleExistant}/services`,
+        payloadValide
       );
 
       expect(donneesRecues!.idUtilisateurAssociant).toBe('U1');
-      expect(donneesRecues!.idModele).toBe('MOD-1');
-      expect(donneesRecues!.idsServices).toEqual(['S1', 'S2']);
+      expect(donneesRecues!.idModele).toBe(idModeleExistant);
+      expect(donneesRecues!.idsServices).toEqual(
+        payloadValide.idsServicesAAssocier
+      );
       expect(reponse.status).toBe(200);
     });
 
@@ -342,7 +353,8 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
           );
         };
       const reponse = await testeur.put(
-        '/api/modeles/mesureSpecifique/MOD-1/services'
+        `/api/modeles/mesureSpecifique/${idModeleExistant}/services`,
+        unePayloadValide()
       );
       expect(reponse.status).toBe(403);
     });
@@ -353,7 +365,8 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
           throw new ErreurAutorisationInexistante();
         };
       const reponse = await testeur.put(
-        '/api/modeles/mesureSpecifique/MOD-1/services'
+        `/api/modeles/mesureSpecifique/${idModeleExistant}/services`,
+        unePayloadValide()
       );
       expect(reponse.status).toBe(404);
     });
