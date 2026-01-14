@@ -1,7 +1,12 @@
 import express from 'express';
 import { z } from 'zod';
-import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
+  valideBody,
+  valideParams,
+  valideQuery,
+} from '../../http/validePayloads.js';
+import {
+  schemaDeleteModelesMesureSpecifique,
   schemaPostModelesMesureSpecifique,
   schemaPutModelesMesureSpecifique,
 } from './routesConnecteApi.schema.js';
@@ -108,12 +113,13 @@ const routesConnecteApiModeleMesureSpecifique = ({
 
   routes.delete(
     '/:id',
-    middleware.aseptise('detacheMesures'),
+    valideParams(z.strictObject({ id: z.uuid() })),
+    valideQuery(z.strictObject(schemaDeleteModelesMesureSpecifique())),
     async (requete, reponse) => {
       try {
         const { idUtilisateurCourant } =
           requete as unknown as RequestRouteConnecte;
-        if (requete.query.detacheMesures === 'true') {
+        if (requete.query.detacheMesures === true) {
           await depotDonnees.supprimeModeleMesureSpecifiqueEtDetacheMesuresAssociees(
             idUtilisateurCourant,
             requete.params.id
