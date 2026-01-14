@@ -88,3 +88,7 @@ export const schemaPutModelesMesureSpecifique = (
 export const schemaDeleteModelesMesureSpecifique = () => ({
   detacheMesures: z.stringbool().optional(),
 });
+
+export const schemaPutModelesMesureSpecifiqueServices = () => ({
+  idsServicesAAssocier: z.array(z.uuid()),
+});
