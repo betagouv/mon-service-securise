@@ -827,7 +827,6 @@ const routesConnecteApiService = ({
   routes.get(
     '/:id/autorisations',
     middleware.trouveService({}),
-    middleware.aseptise('id'),
     async (requete, reponse) => {
       const { id: idService } = requete.service;
       let autorisations = await depotDonnees.autorisationsDuService(idService);
