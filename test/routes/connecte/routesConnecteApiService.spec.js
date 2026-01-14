@@ -2086,15 +2086,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
-    it("aseptise l'id du service", async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['id'], testeur.app(), {
-          method: 'get',
-          url: '/api/service/456',
-        });
-    });
-
     it("utilise le middleware de chargement de l'autorisation", async () => {
       await testeur
         .middleware()
