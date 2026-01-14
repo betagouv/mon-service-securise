@@ -368,7 +368,6 @@ const routesConnecteApi = ({
     '/visiteGuidee',
     middleware.verificationAcceptationCGU,
     routesConnecteApiVisiteGuidee({
-      middleware,
       depotDonnees,
       referentiel,
     })

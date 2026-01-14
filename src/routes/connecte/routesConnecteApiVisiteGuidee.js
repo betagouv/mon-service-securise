@@ -1,23 +1,17 @@
 import express from 'express';
+import { z } from 'zod';
+import { valideParams } from '../../http/validePayloads.js';
+import { schemaVisiteGuidee } from '../../http/schemas/visiteGuidee.schema.js';
 
-const routesConnecteApiVisiteGuidee = ({
-  middleware,
-  depotDonnees,
-  referentiel,
-}) => {
+const routesConnecteApiVisiteGuidee = ({ depotDonnees, referentiel }) => {
   const routes = express.Router();
 
   routes.post(
     '/:idEtape/termine',
-    middleware.aseptise('idEtape'),
+    valideParams(z.strictObject({ idEtape: schemaVisiteGuidee.idEtape() })),
     async (requete, reponse) => {
       const { idUtilisateurCourant } = requete;
       const { idEtape } = requete.params;
-
-      if (!referentiel.etapeVisiteGuideeExiste(idEtape)) {
-        reponse.status(400).send("Identifiant d'étape inconnu");
-        return;
-      }
 
       const parcoursUtilisateur =
         await depotDonnees.lisParcoursUtilisateur(idUtilisateurCourant);

@@ -29,24 +29,12 @@ describe('Le serveur MSS des routes privées /api/visiteGuidee/*', () => {
       });
     });
 
-    it("aseptise l'identifiant d'étape", async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['idEtape'], testeur.app(), {
-          method: 'post',
-          url: '/api/visiteGuidee/DECRIRE/termine',
-        });
-    });
-
-    it("retourne une erreur HTTP 400 si l'ID d'étape n'existe pas", async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        400,
-        "Identifiant d'étape inconnu",
-        {
-          method: 'POST',
-          url: '/api/visiteGuidee/MAUVAIS_ID/termine',
-        }
+    it("jette une erreur si l'identifiant d'étape est invalide", async () => {
+      const reponse = await testeur.post(
+        '/api/visiteGuidee/pasUnIdentifiantEtape/termine'
       );
+
+      expect(reponse.status).to.be(400);
     });
 
     it("sauvegarde l'étape vue de la visite guidée", async () => {
