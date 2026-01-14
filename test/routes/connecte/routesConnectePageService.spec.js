@@ -298,17 +298,20 @@ describe('Le serveur MSS des routes /service/*', () => {
         );
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['id', 'avecDonneesAdditionnelles'],
-          testeur.app(),
-          {
-            method: 'GET',
-            url: '/service/456/mesures/export.csv',
-          }
-        );
+    it('jette une erreur si le paramètres `avecDonneesAdditionnelles` est invalide', async () => {
+      const reponse = await testeur.get(
+        '/service/456/mesures/export.csv?avecDonneesAdditionnelles=pasUnBooleen'
+      );
+
+      expect(reponse.status).to.eql(400);
+    });
+
+    it('autorise le paramètre `timestamp`', async () => {
+      const reponse = await testeur.get(
+        '/service/456/mesures/export.csv?avecDonneesAdditionnelles=true&timestamp=12345'
+      );
+
+      expect(reponse.status).to.eql(200);
     });
 
     it('utilise un adaptateur CSV pour la génération', async () => {
