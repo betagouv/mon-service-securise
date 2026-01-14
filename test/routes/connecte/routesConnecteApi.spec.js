@@ -1071,17 +1071,20 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
 
       describe("et que l'utilisateur n'est pas en train de les accepter", () => {
-        it('renvoie une erreur HTTP 422', async () => {
-          await testeur.verifieRequeteGenereErreurHTTP(
-            422,
-            'CGU non acceptées',
-            {
-              method: 'put',
-              url: '/api/motDePasse',
-              data: { ...unePayloadValide(), cguAcceptees: false },
-            }
-          );
-        });
+        it.each([false, undefined])(
+          'renvoie une erreur HTTP 422',
+          async (valeur) => {
+            await testeur.verifieRequeteGenereErreurHTTP(
+              422,
+              'CGU non acceptées',
+              {
+                method: 'put',
+                url: '/api/motDePasse',
+                data: { ...unePayloadValide(), cguAcceptees: valeur },
+              }
+            );
+          }
+        );
 
         it('ne met pas le mot de passe à jour', async () => {
           let motDePasseMisAJour = false;

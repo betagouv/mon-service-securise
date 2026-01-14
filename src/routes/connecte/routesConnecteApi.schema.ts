@@ -26,7 +26,7 @@ export const schemaPutMesureGenerale = (
 });
 
 export const schemaPutMotDePasse = () => ({
-  cguAcceptees: schemaUtilisateur.cguAcceptees(),
+  cguAcceptees: schemaUtilisateur.cguAcceptees().optional(),
   infolettreAcceptee: schemaUtilisateur.infolettreAcceptee().optional(),
   motDePasse: schemaUtilisateur.motDePasse(),
 });
