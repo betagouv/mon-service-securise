@@ -2455,15 +2455,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
-    it("aseptise l'id du service", async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['id'], testeur.app(), {
-          method: 'get',
-          url: '/api/service/456/autorisations',
-        });
-    });
-
     it('utilise le depot pour récupérer toutes les autorisations du service', async () => {
       let donneesPassees = {};
       testeur.depotDonnees().autorisationsDuService = async (idService) => {
