@@ -287,6 +287,15 @@ describe('Le serveur MSS des routes privées /api/modeles/mesureSpecifique/*', (
       expect(reponse.status).toBe(400);
     });
 
+    it("jette une erreur si aucun service n'est mentionné", async () => {
+      const reponse = await testeur.put(
+        `/api/modeles/mesureSpecifique/${idModeleExistant}/services`,
+        { idsServicesAAssocier: [] }
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
     it('jette une erreur si les ids de services sont invalides', async () => {
       const reponse = await testeur.put(
         `/api/modeles/mesureSpecifique/${idModeleExistant}/services`,
