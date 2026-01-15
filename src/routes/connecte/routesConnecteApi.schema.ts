@@ -90,7 +90,7 @@ export const schemaDeleteModelesMesureSpecifique = () => ({
 });
 
 export const schemaPutModelesMesureSpecifiqueServices = () => ({
-  idsServicesAAssocier: z.array(z.uuid()),
+  idsServicesAAssocier: z.array(z.uuid()).min(1),
 });
 
 export const schemaDeleteModelesMesureSpecifiqueServices = () => ({
