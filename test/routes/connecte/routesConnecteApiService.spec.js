@@ -24,6 +24,7 @@ import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import * as Referentiel from '../../../src/referentiel.js';
 import Risques from '../../../src/modeles/risques.js';
+import { unUUIDRandom } from '../../constructeurs/UUID.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { RISQUES, DECRIRE, SECURISER, CONTACTS, HOMOLOGUER } = Rubriques;
@@ -2166,18 +2167,22 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
-    it("aseptise l'id du service et de l'autorisation", async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['id', 'idAutorisation'],
-          testeur.app(),
-          {
-            method: 'PATCH',
-            url: '/api/service/456/autorisations/uuid-1',
-            data: { droits: tousDroitsEnEcriture() },
-          }
-        );
+    it("jette une erreur si l'id d'autorisation est invalide", async () => {
+      const { status } = await testeur.patch(
+        '/api/service/456/autorisations/pasUnUUID',
+        { droits: tousDroitsEnEcriture() }
+      );
+
+      expect(status).to.be(400);
+    });
+
+    it('jette une erreur si les droits sont invalides', async () => {
+      const { status } = await testeur.patch(
+        `/api/service/456/autorisations/${unUUIDRandom()}`,
+        { droits: 'pasDesDroits' }
+      );
+
+      expect(status).to.be(400);
     });
 
     it("utilise le middleware de chargement de l'autorisation", async () => {
@@ -2202,10 +2207,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       testeur.depotDonnees().autorisation = async () => monAutorisation;
 
       const reponse = await testeur.patch(
-        '/api/service/456/autorisations/uuid-1',
-        {
-          droits: tousDroitsEnEcriture(),
-        }
+        `/api/service/456/autorisations/${unUUIDRandom()}`,
+        { droits: tousDroitsEnEcriture() }
       );
 
       expect(reponse.status).to.equal(422);
@@ -2229,8 +2232,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .construis();
       testeur.depotDonnees().autorisation = async () => autorisationSurDEF;
 
-      const leroyVeutModifierDEF =
-        '/api/service/456/autorisations/uuid-appartenant-a-DEF';
+      const leroyVeutModifierDEF = `/api/service/456/autorisations/${unUUIDRandom()}`;
       const reponse = await testeur.patch(leroyVeutModifierDEF, {
         droits: tousDroitsEnEcriture(),
       });
@@ -2245,10 +2247,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
 
       const reponse = await testeur.patch(
-        '/api/service/456/autorisations/uuid-1',
-        {
-          droits: tousDroitsEnEcriture(),
-        }
+        `/api/service/456/autorisations/${unUUIDRandom()}`,
+        { droits: tousDroitsEnEcriture() }
       );
 
       expect(reponse.status).to.equal(403);
@@ -2274,11 +2274,12 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         RISQUES: 0,
         CONTACTS: 2,
       };
-      await testeur.patch('/api/service/456/autorisations/uuid-1', {
+      const idAutorisation = unUUIDRandom();
+      await testeur.patch(`/api/service/456/autorisations/${idAutorisation}`, {
         droits: droitsCible,
       });
 
-      expect(autorisationCiblee).to.be('uuid-1');
+      expect(autorisationCiblee).to.be(idAutorisation);
       expect(autorisationPersistee.droits).to.eql(droitsCible);
     });
 
@@ -2309,7 +2310,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
           RISQUES: 0,
           CONTACTS: 2,
         };
-        await testeur.patch('/api/service/S1/autorisations/A1', {
+        await testeur.patch(`/api/service/S1/autorisations/${unUUIDRandom()}`, {
           droits: droitsCible,
         });
 
@@ -2381,40 +2382,27 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         CONTACTS: 2,
       };
 
+      const idAutorisation = unUUIDRandom();
       const reponse = await testeur.patch(
-        '/api/service/456/autorisations/uuid-1',
+        `/api/service/456/autorisations/${idAutorisation}`,
         { droits: droitsCible }
       );
 
       expect(reponse.body).to.eql({
-        idAutorisation: 'uuid-1',
+        idAutorisation,
         idUtilisateur: '888',
         resumeNiveauDroit: 'PERSONNALISE',
         droits: droitsCible,
       });
     });
 
-    it('jette une erreur 422 si les droits envoyés sont incohérents', async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        { code: 'DROITS_INCOHERENTS' },
-        {
-          method: 'PATCH',
-          url: '/api/service/456/autorisations/uuid-1',
-          data: { droits: { MAUVAISE_RUBRIQUE: 1 } },
-        }
-      );
-    });
-
-    it('ne renvoie pas d’erreur 422 si propritaire est false', async () => {
+    it('ne renvoie pas d’erreur 422 si propriétaire est false', async () => {
       testeur.depotDonnees().autorisation = async (id) =>
         uneAutorisation().avecId(id).deContributeur('888', '456').construis();
 
       const reponse = await testeur.patch(
-        '/api/service/456/autorisations/uuid-1',
-        {
-          droits: { estProprietaire: false },
-        }
+        `/api/service/456/autorisations/${unUUIDRandom()}`,
+        { droits: { ...tousDroitsEnEcriture(), estProprietaire: false } }
       );
 
       expect(reponse.status).to.be(200);
@@ -2429,8 +2417,8 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         autorisationPersistee = autorisation;
       };
 
-      await testeur.patch('/api/service/456/autorisations/uuid-1', {
-        droits: { estProprietaire: true },
+      await testeur.patch(`/api/service/456/autorisations/${unUUIDRandom()}`, {
+        droits: { ...tousDroitsEnEcriture(), estProprietaire: true },
       });
 
       expect(autorisationPersistee.estProprietaire).to.be(true);
