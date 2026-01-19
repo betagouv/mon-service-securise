@@ -1142,20 +1142,6 @@ describe('Le référentiel', () => {
   describe("sur demande des niveaux de sécurité d'un service", () => {
     const referentielProd = Referentiel.creeReferentiel(donneesDeProd);
 
-    ['niveau1', 'niveau2', 'niveau3'].forEach((cle) => {
-      it(`valide le niveau de sécurité ${cle}`, () => {
-        const estValide = referentielProd.estNiveauDeSecuriteValide(cle);
-
-        expect(estValide).to.be(true);
-      });
-    });
-
-    it('ne valide pas un niveau de sécurité inexistant', () => {
-      const valide = referentielProd.estNiveauDeSecuriteValide('inexistant');
-
-      expect(valide).to.be(false);
-    });
-
     it('sait comparer deux niveaux entre eux', () => {
       const niveauRecommande = 'niveau1';
       const niveauReel = 'niveau2';

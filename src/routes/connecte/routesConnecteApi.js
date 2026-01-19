@@ -41,6 +41,7 @@ import {
 } from '../../http/validePayloads.js';
 import {
   schemaDeleteAutorisation,
+  schemaGetSupervision,
   schemaPatchMotDePasse,
   schemaPostAutorisation,
   schemaPutMesureGenerale,
@@ -649,9 +650,10 @@ const routesConnecteApi = ({
   routes.get(
     '/supervision',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('filtreDate', 'filtreBesoinsSecurite', 'filtreEntite'),
+    valideQuery(z.strictObject(schemaGetSupervision(referentielV2))),
     async (requete, reponse) => {
       const idUtilisateur = requete.idUtilisateurCourant;
+
       const estSuperviseur = await depotDonnees.estSuperviseur(idUtilisateur);
       if (!estSuperviseur) {
         reponse.sendStatus(401);
@@ -659,19 +661,6 @@ const routesConnecteApi = ({
       }
 
       const { filtreDate, filtreBesoinsSecurite, filtreEntite } = requete.query;
-
-      if (filtreDate && !referentiel.estOptionFiltrageDateConnue(filtreDate)) {
-        reponse.sendStatus(400);
-        return;
-      }
-      if (
-        filtreBesoinsSecurite &&
-        !referentiel.estNiveauDeSecuriteValide(filtreBesoinsSecurite)
-      ) {
-        reponse.sendStatus(400);
-        return;
-      }
-
       const urlSupervision = serviceSupervision.genereURLSupervision(
         idUtilisateur,
         { filtreDate, filtreBesoinsSecurite, filtreEntite }
