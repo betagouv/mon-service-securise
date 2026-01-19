@@ -51,6 +51,7 @@ import routesConnecteApiSimulationMigrationReferentiel from './routesConnecteApi
 import { schemaSuggestionAction } from '../../http/schemas/suggestionAction.schema.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
+  schemaPostMesureSpecifique,
   schemaPutAutoriteHomologation,
   schemaPutRisqueGeneral,
 } from './routesConnecteApiService.schema.js';
@@ -246,46 +247,39 @@ const routesConnecteApiService = ({
     '/:id/mesuresSpecifiques',
     middleware.verificationAcceptationCGU,
     middleware.trouveService({ [SECURISER]: ECRITURE }),
-    middleware.aseptise(
-      'description',
-      'categorie',
-      'statut',
-      'modalites',
-      'priorite',
-      'echeance',
-      'responsables.*'
+    valideBody(
+      z.strictObject(schemaPostMesureSpecifique(referentiel, referentielV2))
     ),
     async (requete, reponse) => {
       const { idUtilisateurCourant: idUtilisateur, service, body } = requete;
 
-      if (!body.statut) {
-        reponse.status(400).send('Le statut de la mesure est obligatoire.');
-        return;
-      }
+      const {
+        description,
+        categorie,
+        statut,
+        modalites,
+        priorite,
+        echeance,
+        responsables,
+      } = body;
 
-      try {
-        if (body.echeance) {
-          body.echeance = body.echeance.replaceAll('&#x2F;', '/');
-        }
-
-        await depotDonnees.ajouteMesureSpecifiqueAuService(
-          new MesureSpecifique({ ...body }, referentiel),
-          idUtilisateur,
-          service.id
-        );
-        reponse.sendStatus(201);
-      } catch (e) {
-        if (
-          e instanceof ErreurStatutMesureInvalide ||
-          e instanceof ErreurPrioriteMesureInvalide ||
-          e instanceof ErreurEcheanceMesureInvalide
-        ) {
-          reponse.status(400).send('La mesure est invalide.');
-          return;
-        }
-
-        reponse.status(400).send(e.message);
-      }
+      await depotDonnees.ajouteMesureSpecifiqueAuService(
+        new MesureSpecifique(
+          {
+            description,
+            categorie,
+            statut,
+            modalites,
+            priorite,
+            echeance,
+            responsables,
+          },
+          referentiel
+        ),
+        idUtilisateur,
+        service.id
+      );
+      reponse.sendStatus(201);
     }
   );
 
