@@ -410,6 +410,19 @@ describe('Le middleware MSS', () => {
       expect(statutRenvoye).to.be(400);
     });
 
+    it("ne jette pas d'erreur si d'autres paramètres sont présent dans la requête", async () => {
+      let statutRenvoye = 'AUCUNE_ERREUR';
+      reponse.sendStatus = (statut) => {
+        statutRenvoye = statut;
+      };
+      const middleware = leMiddleware();
+      requete.params = { id: idService, autreParametre: 'unParametre' };
+
+      await middleware.trouveService({})(requete, reponse);
+
+      expect(statutRenvoye).to.be('AUCUNE_ERREUR');
+    });
+
     it('requête le dépôt de données', async () => {
       let idRecu;
       depotDonnees.service = async (id) => {
