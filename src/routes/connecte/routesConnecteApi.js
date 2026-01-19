@@ -627,14 +627,9 @@ const routesConnecteApi = ({
   routes.get(
     '/annuaire/contributeurs',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('recherche'),
+    valideQuery(z.strictObject({ recherche: z.string().min(1) })),
     async (requete, reponse) => {
       const { recherche = '' } = requete.query;
-
-      if (recherche === '') {
-        reponse.status(400).send('Le terme de recherche ne peut pas être vide');
-        return;
-      }
 
       const contributeurs = await serviceAnnuaire.rechercheContributeurs(
         requete.idUtilisateurCourant,

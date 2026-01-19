@@ -1791,24 +1791,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         );
     });
 
-    it('aseptise la chaine de recherche', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['recherche'], testeur.app(), {
-          method: 'get',
-          url: '/api/annuaire/contributeurs',
-        });
-    });
-
     it('retourne une erreur HTTP 400 si le terme de recherche est vide', async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        400,
-        'Le terme de recherche ne peut pas être vide',
-        {
-          method: 'get',
-          url: '/api/annuaire/contributeurs',
-        }
-      );
+      const reponse = await testeur.get('/api/annuaire/contributeurs');
+      expect(reponse.status).to.be(400);
     });
 
     it("utilise le service d'annuaire pour suggérer des contributeurs", async () => {
