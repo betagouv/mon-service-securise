@@ -770,6 +770,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         const reponse = await testeur.get(
           '/api/services/export.csv?idsServices=pasUnUUID'
         );
+
         expect(reponse.status).to.be(400);
       });
 
@@ -785,6 +786,14 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
         expect(reponse.status).to.be(200);
       });
+    });
+
+    it('accepte un timestamp, qui est optionnel', async () => {
+      const reponse = await testeur.get(
+        `/api/services/export.csv?idsServices=${unUUIDRandom()}&timestamp=1768833972997`
+      );
+
+      expect(reponse.status).to.be(200);
     });
 
     it("interroge le dépôt de données pour récupérer les autorisations de l'utilisateur", async () => {
