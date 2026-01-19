@@ -844,6 +844,23 @@ describe('Le middleware MSS', () => {
       }
     );
 
+    it("ne jette pas d'erreur si d'autres paramètres sont présent dans le body de la requête", async () => {
+      let statutRenvoye = 'AUCUNE_ERREUR';
+      reponse.sendStatus = (statut) => {
+        statutRenvoye = statut;
+      };
+      const middleware = leMiddleware();
+      requete.body = {
+        motDePasseChallenge: 'unMotDePasse',
+        autreParametre: 'unParametre',
+      };
+      requete.idUtilisateurCourant = '123';
+
+      middleware.challengeMotDePasse(requete, reponse);
+
+      expect(statutRenvoye).to.be('AUCUNE_ERREUR');
+    });
+
     it("jette une erreur technique si l'ID de l'utilisateur courant n'est pas présent dans la requête", async () => {
       requete.idUtilisateurCourant = null;
 
