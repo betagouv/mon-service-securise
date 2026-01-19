@@ -49,7 +49,8 @@ import RisqueSpecifique from '../../modeles/risqueSpecifique.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import routesConnecteApiSimulationMigrationReferentiel from './routesConnecteApiSimulationMigrationReferentiel.js';
 import { schemaSuggestionAction } from '../../http/schemas/suggestionAction.schema.js';
-import { valideParams } from '../../http/validePayloads.js';
+import { valideBody, valideParams } from '../../http/validePayloads.js';
+import { schemaPutAutoriteHomologation } from './routesConnecteApiService.schema.ts';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -601,7 +602,7 @@ const routesConnecteApiService = ({
     '/:id/homologation/autorite',
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
-    middleware.aseptise('nom', 'fonction'),
+    valideBody(z.strictObject(schemaPutAutoriteHomologation())),
     (requete, reponse, suite) => {
       const { service, dossierCourant } = requete;
 
