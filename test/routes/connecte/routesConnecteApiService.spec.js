@@ -2,7 +2,6 @@ import expect from 'expect.js';
 import testeurMSS from '../testeurMSS.js';
 import { unDossier } from '../../constructeurs/constructeurDossier.js';
 import { unService } from '../../constructeurs/constructeurService.js';
-
 import {
   ErreurDonneesObligatoiresManquantes,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
@@ -1418,13 +1417,22 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
-    it('aseptise les paramètres reçus', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['nom', 'fonction'], testeur.app(), {
-          url: '/api/service/456/homologation/autorite',
-          method: 'put',
-        });
+    it('jette une erreur si le nom est invalide', async () => {
+      const { status } = await testeur.put(
+        '/api/service/456/homologation/autorite',
+        { nom: undefined, fonction: 'RSSI' }
+      );
+
+      expect(status).to.be(400);
+    });
+
+    it('jette une erreur si la fonction est invalide', async () => {
+      const { status } = await testeur.put(
+        '/api/service/456/homologation/autorite',
+        { nom: 'Jean Duj', fonction: undefined }
+      );
+
+      expect(status).to.be(400);
     });
 
     it("utilise le dépôt pour enregistrer l'autorité d'homologation", async () => {
