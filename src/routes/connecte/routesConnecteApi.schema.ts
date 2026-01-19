@@ -7,8 +7,8 @@ import {
   schemaMesureSpecifique,
 } from '../../http/schemas/mesure.schema.js';
 import { schemaUtilisateur } from '../../http/schemas/utilisateur.schema.js';
-import { Permissions } from '../../modeles/autorisations/gestionDroits.js';
 import { schemaSiret } from '../../http/schemas/siret.schema.js';
+import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
 
 export const schemaPutUtilisateur = {
   ...schemaCommunPutPostUtilisateur,
@@ -47,14 +47,7 @@ export const schemaDeleteAutorisation = () => ({
 export const schemaPostAutorisation = () => ({
   idServices: z.array(z.uuid()).min(1),
   emailContributeur: z.email(),
-  droits: z.strictObject({
-    DECRIRE: z.enum(Permissions),
-    SECURISER: z.enum(Permissions),
-    HOMOLOGUER: z.enum(Permissions),
-    RISQUES: z.enum(Permissions),
-    CONTACTS: z.enum(Permissions),
-    estProprietaire: z.boolean().optional(),
-  }),
+  droits: schemaAutorisation.droits(),
 });
 
 export const schemaPutMesuresSpecifiques = (

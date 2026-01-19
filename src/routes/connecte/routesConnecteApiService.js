@@ -55,6 +55,7 @@ import {
   schemaPutAutoriteHomologation,
   schemaPutRisqueGeneral,
 } from './routesConnecteApiService.schema.js';
+import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -828,7 +829,8 @@ const routesConnecteApiService = ({
     '/:id/autorisations/:idAutorisation',
     middleware.trouveService({}),
     middleware.chargeAutorisationsService,
-    middleware.aseptise('id', 'idAutorisation'),
+    valideParams(z.looseObject({ idAutorisation: z.uuid() })),
+    valideBody(z.strictObject({ droits: schemaAutorisation.droits() })),
     async (requete, reponse) => {
       const { autorisationService, idUtilisateurCourant } = requete;
       const { idAutorisation } = requete.params;
