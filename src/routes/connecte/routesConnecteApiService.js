@@ -3,23 +3,23 @@ import { z } from 'zod';
 import routesConnecteApiServicePdf from './routesConnecteApiServicePdf.js';
 import {
   EchecAutorisation,
-  ErreurModele,
-  ErreurDonneesObligatoiresManquantes,
-  ErreurNomServiceDejaExistant,
-  ErreurDossierCourantInexistant,
-  ErreurStatutMesureInvalide,
-  ErreurMesureInconnue,
-  ErreurPrioriteMesureInvalide,
-  ErreurEcheanceMesureInvalide,
-  ErreurRisqueInconnu,
-  ErreurNiveauGraviteInconnu,
-  ErreurIntituleRisqueManquant,
-  ErreurCategoriesRisqueManquantes,
   ErreurCategorieRisqueInconnue,
-  ErreurNiveauVraisemblanceInconnu,
-  ErreurModeleDeMesureSpecifiqueIntrouvable,
+  ErreurCategoriesRisqueManquantes,
+  ErreurDonneesObligatoiresManquantes,
+  ErreurDossierCourantInexistant,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
+  ErreurEcheanceMesureInvalide,
+  ErreurIntituleRisqueManquant,
+  ErreurMesureInconnue,
+  ErreurModele,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
+  ErreurModeleDeMesureSpecifiqueIntrouvable,
+  ErreurNiveauGraviteInconnu,
+  ErreurNiveauVraisemblanceInconnu,
+  ErreurNomServiceDejaExistant,
+  ErreurPrioriteMesureInvalide,
+  ErreurRisqueInconnu,
+  ErreurStatutMesureInvalide,
   ErreurSuppressionImpossible,
 } from '../../erreurs.js';
 import ActeursHomologation from '../../modeles/acteursHomologation.js';
@@ -50,7 +50,10 @@ import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import routesConnecteApiSimulationMigrationReferentiel from './routesConnecteApiSimulationMigrationReferentiel.js';
 import { schemaSuggestionAction } from '../../http/schemas/suggestionAction.schema.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
-import { schemaPutAutoriteHomologation } from './routesConnecteApiService.schema.ts';
+import {
+  schemaPutAutoriteHomologation,
+  schemaPutRisqueGeneral,
+} from './routesConnecteApiService.schema.ts';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -413,41 +416,21 @@ const routesConnecteApiService = ({
   routes.put(
     '/:id/risques/:idRisque',
     middleware.trouveService({ [RISQUES]: ECRITURE }),
-    middleware.aseptise(
-      'niveauGravite',
-      'niveauVraisemblance',
-      'commentaire',
-      'desactive'
+    valideParams(
+      z.looseObject({ idRisque: z.enum(referentielV2.identifiantsRisques()) })
     ),
-    async (requete, reponse, suite) => {
+    valideBody(z.strictObject(schemaPutRisqueGeneral(referentielV2))),
+    async (requete, reponse) => {
       const { niveauGravite, niveauVraisemblance, commentaire, desactive } =
         requete.body;
-      try {
-        const risque = new RisqueGeneral(
-          {
-            id: requete.params.idRisque,
-            niveauGravite,
-            niveauVraisemblance,
-            commentaire,
-            desactive: valeurBooleenne(desactive),
-          },
-          referentiel
-        );
-        await depotDonnees.ajouteRisqueGeneralAService(requete.service, risque);
+      const { idRisque: id } = requete.params;
+      const risque = new RisqueGeneral(
+        { id, niveauGravite, niveauVraisemblance, commentaire, desactive },
+        referentielV2
+      );
+      await depotDonnees.ajouteRisqueGeneralAService(requete.service, risque);
 
-        reponse.status(200).send(risque.toJSON());
-      } catch (e) {
-        if (
-          e instanceof ErreurRisqueInconnu ||
-          e instanceof ErreurNiveauVraisemblanceInconnu
-        ) {
-          reponse
-            .status(400)
-            .send('Le risque ou son niveau de vraisemblance est inconnu');
-        } else {
-          suite(e);
-        }
-      }
+      reponse.status(200).send(risque.toJSON());
     }
   );
 
