@@ -53,7 +53,7 @@ import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
   schemaPutAutoriteHomologation,
   schemaPutRisqueGeneral,
-} from './routesConnecteApiService.schema.ts';
+} from './routesConnecteApiService.schema.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
