@@ -1846,21 +1846,8 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       testeur.depotDonnees().estSuperviseur = async () => false;
       await testeur.verifieRequeteGenereErreurHTTP(401, 'Unauthorized', {
         method: 'get',
-        url: '/api/supervision',
+        url: '/api/supervision?filtreDate=hier',
       });
-    });
-
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['filtreDate', 'filtreBesoinsSecurite', 'filtreEntite'],
-          testeur.app(),
-          {
-            method: 'get',
-            url: '/api/supervision',
-          }
-        );
     });
 
     it("retourne une erreur HTTP 400 si le filtre de date n'existe pas dans le référentiel", async () => {
@@ -1874,6 +1861,13 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       await testeur.verifieRequeteGenereErreurHTTP(400, 'Bad Request', {
         method: 'get',
         url: '/api/supervision?filtreBesoinsSecurite=nexistePas',
+      });
+    });
+
+    it("retourne une erreur HTTP 400 si le filtre d'entité n'est pas un SIRET", async () => {
+      await testeur.verifieRequeteGenereErreurHTTP(400, 'Bad Request', {
+        method: 'get',
+        url: '/api/supervision?filtreEntite=pasUnSiret',
       });
     });
 
@@ -1893,10 +1887,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
     it('transmet les filtres de date, entité et besoins de sécurité au service de supervision', async () => {
       let filtrageRecu;
-      testeur.referentiel().recharge({
-        optionsFiltrageDate: { unFiltreDate: '' },
-        niveauxDeSecurite: ['niveau1'],
-      });
       testeur.middleware().reinitialise({ idUtilisateur: 'U1' });
       testeur.serviceSupervision().genereURLSupervision = (_, filtrage) => {
         filtrageRecu = filtrage;
@@ -1904,12 +1894,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       };
 
       await testeur.get(
-        '/api/supervision?filtreDate=unFiltreDate&filtreBesoinsSecurite=niveau1&filtreEntite=unSiret'
+        '/api/supervision?filtreDate=hier&filtreBesoinsSecurite=niveau1&filtreEntite=88208014600013'
       );
 
-      expect(filtrageRecu.filtreDate).to.be('unFiltreDate');
+      expect(filtrageRecu.filtreDate).to.be('hier');
       expect(filtrageRecu.filtreBesoinsSecurite).to.be('niveau1');
-      expect(filtrageRecu.filtreEntite).to.be('unSiret');
+      expect(filtrageRecu.filtreEntite).to.be('88208014600013');
     });
   });
 

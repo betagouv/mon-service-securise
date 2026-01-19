@@ -114,8 +114,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     niveauxVraisemblance()[idNiveau] || {};
   const niveauxRisque = () => donnees.niveauxRisques || {};
   const optionsFiltrageDate = () => donnees.optionsFiltrageDate || {};
-  const estOptionFiltrageDateConnue = (filtreDate) =>
-    Object.keys(optionsFiltrageDate()).includes(filtreDate);
   const identifiantsNiveauxGravite = () => Object.keys(niveauxGravite() || {});
   const identifiantsNiveauxVraisemblance = () =>
     Object.keys(niveauxVraisemblance() || {});
@@ -443,8 +441,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   const versionServiceParDefaut = () => donnees.versionServiceParDefaut;
 
-  const estNiveauDeSecuriteValide = (niveau) =>
-    donnees.niveauxDeSecurite.indexOf(niveau) >= 0;
+  const niveauxDeSecurite = () => donnees.niveauxDeSecurite;
 
   const niveauDeSecuriteDepasseRecommandation = (
     niveauCandidat,
@@ -491,8 +488,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     estIdentifiantMesureConnu,
     estIdentifiantStatutAvisDossierHomologationConnu,
     estimationNombreServices,
-    estNiveauDeSecuriteValide,
-    estOptionFiltrageDateConnue,
     estStatutMesureConnu,
     etapeDossierAutorisee,
     etapeExiste,
@@ -524,6 +519,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     nbMoisBientotExpire,
     nbMoisRappelsExpiration,
     niveauDeSecuriteDepasseRecommandation,
+    niveauxDeSecurite,
     niveauGravite,
     niveauxGravite,
     niveauRisque,

@@ -2,6 +2,7 @@ import * as z from 'zod';
 import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 import donneesReferentiel from '../../../donneesReferentiel.js';
 import { DonneesServiceTeleverseV2 } from './serviceTeleverseV2.js';
+import { schemaSiret } from '../../http/schemas/siret.schema.js';
 
 enum ERREURS {
   NOM_INVALIDE = 'NOM_INVALIDE',
@@ -34,7 +35,9 @@ export class ValidationServiceTeleverseV2 {
         .nonempty(e.NOM_INVALIDE)
         .max(200, e.NOM_INVALIDE)
         .refine((n) => !this.nomServicesExistants.includes(n), e.NOM_EXISTANT),
-      siret: z.string(e.SIRET_INVALIDE).regex(/^\d{14}$/, e.SIRET_INVALIDE),
+      siret: z
+        .string(e.SIRET_INVALIDE)
+        .regex(schemaSiret.regexSiret(), e.SIRET_INVALIDE),
       statutDeploiement: z.enum(
         Object.values(questionsV2.statutDeploiement).map((s) => s.description),
         e.STATUT_DEPLOIEMENT_INVALIDE

@@ -8,6 +8,7 @@ import {
 } from '../../http/schemas/mesure.schema.js';
 import { schemaUtilisateur } from '../../http/schemas/utilisateur.schema.js';
 import { Permissions } from '../../modeles/autorisations/gestionDroits.js';
+import { schemaSiret } from '../../http/schemas/siret.schema.js';
 
 export const schemaPutUtilisateur = {
   ...schemaCommunPutPostUtilisateur,
@@ -95,4 +96,12 @@ export const schemaPutModelesMesureSpecifiqueServices = () => ({
 
 export const schemaDeleteModelesMesureSpecifiqueServices = () => ({
   idsServices: z.array(z.uuid()),
+});
+
+export const schemaGetSupervision = (referentielV2: ReferentielV2) => ({
+  filtreDate: z
+    .enum(Object.keys(referentielV2.optionsFiltrageDate()))
+    .optional(),
+  filtreBesoinsSecurite: z.enum(referentielV2.niveauxDeSecurite()).optional(),
+  filtreEntite: schemaSiret.siret().optional(),
 });
