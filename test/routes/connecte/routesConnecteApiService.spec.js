@@ -12,7 +12,6 @@ import {
   ErreurRisqueInconnu,
   ErreurSuppressionImpossible,
 } from '../../../src/erreurs.js';
-
 import Service from '../../../src/modeles/service.js';
 import {
   Permissions,
@@ -196,6 +195,17 @@ describe('Le serveur MSS des routes /api/service/*', () => {
   });
 
   describe('quand requête POST sur `api/service/:id/mesuresSpecifiques`', () => {
+    const unePayloadValideSauf = (cleValeur) => ({
+      description: 'une description',
+      descriptionLongue: 'des détails',
+      categorie: 'gouvernance',
+      statut: 'fait',
+      priorite: '',
+      modalites: '',
+      echeance: '01/23/2025',
+      ...cleValeur,
+    });
+
     beforeEach(() => {
       testeur.depotDonnees().ajouteMesureSpecifiqueAuService = async () => {};
       testeur.referentiel().enrichis({
@@ -206,9 +216,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     it('retourne une réponse 201', async () => {
       const reponse = await testeur.post(
         '/api/service/456/mesuresSpecifiques',
-        {
-          statut: 'fait',
-        }
+        unePayloadValideSauf()
       );
 
       expect(reponse.status).to.be(201);
@@ -229,28 +237,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .middleware()
         .verifieRechercheService(
           [{ niveau: ECRITURE, rubrique: SECURISER }],
-          testeur.app(),
-          {
-            method: 'post',
-            url: '/api/service/456/mesuresSpecifiques',
-            data: [],
-          }
-        );
-    });
-
-    it('aseptise tous les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          [
-            'description',
-            'categorie',
-            'statut',
-            'modalites',
-            'priorite',
-            'echeance',
-            'responsables.*',
-          ],
           testeur.app(),
           {
             method: 'post',
@@ -281,11 +267,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         idServiceRecu = idService;
       };
 
-      await testeur.post('/api/service/456/mesuresSpecifiques', {
-        description: 'une description',
-        categorie: 'gouvernance',
-        statut: 'fait',
-      });
+      await testeur.post(
+        '/api/service/456/mesuresSpecifiques',
+        unePayloadValideSauf()
+      );
 
       expect(idServiceRecu).to.be('456');
       expect(idUtilisateurRecu).to.be('999');
@@ -294,100 +279,105 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(mesureRecue.statut).to.be('fait');
     });
 
-    it("décode les 'slash' de la date d'échéance", async () => {
-      const slash = '&#x2F;';
-      let mesureRecue;
-      testeur.depotDonnees().ajouteMesureSpecifiqueAuService = (
-        mesure,
-        __,
-        _
-      ) => {
-        mesureRecue = mesure;
-      };
+    describe('jette une erreur 400 si', () => {
+      it('la description est invalide', async () => {
+        const { status } = await testeur.post(
+          '/api/service/456/mesuresSpecifiques',
+          unePayloadValideSauf({ description: undefined })
+        );
 
-      const mesureSpecifique = {
-        statut: 'fait',
-        echeance: `01${slash}01${slash}2024`,
-      };
+        expect(status).to.be(400);
+      });
 
-      await testeur.post(
-        '/api/service/456/mesuresSpecifiques',
-        mesureSpecifique
-      );
+      it('la catégorie est invalide', async () => {
+        const { status } = await testeur.post(
+          '/api/service/456/mesuresSpecifiques',
+          unePayloadValideSauf({ categorie: undefined })
+        );
 
-      expect(mesureRecue.echeance.getTime()).to.equal(
-        new Date('01/01/2024').getTime()
-      );
-    });
+        expect(status).to.be(400);
+      });
 
-    it('renvoi une erreur 400 si la mesure est malformée', async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        400,
-        'La catégorie "MAUVAISE_CATEGORIE" n\'est pas répertoriée',
-        {
-          method: 'post',
-          url: '/api/service/456/mesuresSpecifiques',
-          data: {
-            description: 'une description',
-            categorie: 'MAUVAISE_CATEGORIE',
-            statut: 'fait',
-          },
-        }
-      );
-    });
+      it('le statut est invalide', async () => {
+        const { status } = await testeur.post(
+          '/api/service/456/mesuresSpecifiques',
+          unePayloadValideSauf({ statut: 'pasUnStatut' })
+        );
 
-    it('jette une erreur 400 si le statut est vide', async () => {
-      const mesure = {
-        statut: '',
-      };
+        expect(status).to.be(400);
+      });
 
-      const reponse = await testeur.post(
-        '/api/service/456/mesuresSpecifiques',
-        mesure
-      );
-      expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be('Le statut de la mesure est obligatoire.');
-    });
+      it('la priorité est invalide', async () => {
+        const { status } = await testeur.post(
+          '/api/service/456/mesuresSpecifiques',
+          unePayloadValideSauf({ priorite: 'invalide' })
+        );
 
-    it('renvoie une erreur 400 si la mesure est invalide à cause du statut', async () => {
-      const mesure = {
-        statut: 'invalide',
-      };
+        expect(status).to.be(400);
+      });
 
-      const reponse = await testeur.post(
-        '/api/service/456/mesuresSpecifiques',
-        mesure
-      );
-      expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be('La mesure est invalide.');
-    });
+      it('… mais une priorité vide est acceptée', async () => {
+        const { status } = await testeur.post(
+          '/api/service/456/mesuresSpecifiques',
+          unePayloadValideSauf({ priorite: '' })
+        );
 
-    it('renvoie une erreur 400 si la mesure est invalide à cause de la priorité', async () => {
-      const mesure = {
-        priorite: 'invalide',
-        statut: 'enCours',
-      };
+        expect(status).to.be(201);
+      });
 
-      const reponse = await testeur.post(
-        '/api/service/456/mesuresSpecifiques',
-        mesure
-      );
-      expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be('La mesure est invalide.');
-    });
+      it("l'échéance est invalide", async () => {
+        const { status } = await testeur.post(
+          '/api/service/456/mesuresSpecifiques',
+          unePayloadValideSauf({ echeance: 'invalide' })
+        );
 
-    it("renvoie une erreur 400 si la mesure est invalide à cause de l'échéance", async () => {
-      const mesure = {
-        echeance: 'invalide',
-        statut: 'enCours',
-      };
+        expect(status).to.be(400);
+      });
 
-      const reponse = await testeur.post(
-        '/api/service/456/mesuresSpecifiques',
-        mesure
-      );
-      expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be('La mesure est invalide.');
+      it('les modalités sont invalides', async () => {
+        const { status } = await testeur.post(
+          '/api/service/456/mesuresSpecifiques',
+          unePayloadValideSauf({ modalites: 123 })
+        );
+
+        expect(status).to.be(400);
+      });
+
+      it('les responsables sont invalides', async () => {
+        const { status } = await testeur.post(
+          '/api/service/456/mesuresSpecifiques',
+          unePayloadValideSauf({ responsables: ['pasUnUUID'] })
+        );
+
+        expect(status).to.be(400);
+      });
+
+      it('… mais des responsables non définis sont acceptés', async () => {
+        const { status } = await testeur.post(
+          '/api/service/456/mesuresSpecifiques',
+          unePayloadValideSauf({ responsables: undefined })
+        );
+
+        expect(status).to.be(201);
+      });
+
+      it('la description longue est invalide', async () => {
+        const { status } = await testeur.post(
+          '/api/service/456/mesuresSpecifiques',
+          unePayloadValideSauf({ descriptionLongue: 123 })
+        );
+
+        expect(status).to.be(400);
+      });
+
+      it('… mais la description longue est optionnelle', async () => {
+        const { status } = await testeur.post(
+          '/api/service/456/mesuresSpecifiques',
+          unePayloadValideSauf({ descriptionLongue: undefined })
+        );
+
+        expect(status).to.be(201);
+      });
     });
   });
 

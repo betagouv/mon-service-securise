@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
+import { schemaDate } from './date.schema.js';
 
 const statut = (referentiel: Referentiel, referentielV2: ReferentielV2) =>
   z.enum([
@@ -29,4 +30,11 @@ export const schemaMesureSpecifique = {
   descriptionLongue: () => z.string().min(0).max(2000),
   statut,
   modalites,
+};
+
+export const schemaPlanActionMesure = {
+  priorite: (referentiel: ReferentielV2) =>
+    z.enum(Object.keys(referentiel.prioritesMesures())),
+  echeance: () => schemaDate.mmJJaaaa(),
+  responsables: () => z.array(z.uuid()),
 };
