@@ -1286,11 +1286,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
   describe('quand requête PUT sur `/api/service/:id/risques/:idRisque`', () => {
     beforeEach(() => {
       testeur.depotDonnees().ajouteRisqueGeneralAService = async () => {};
-      testeur.referentiel().recharge({
-        risques: { unRisqueExistant: {} },
-        niveauxGravite: { unNiveau: {} },
-        vraisemblancesRisques: { unNiveauVraisemblance: {} },
-      });
     });
 
     it('recherche le service correspondant', async () => {
@@ -1306,40 +1301,59 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         );
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['niveauGravite', 'niveauVraisemblance', 'commentaire', 'desactive'],
-          testeur.app(),
-          {
-            method: 'put',
-            url: '/api/service/456/risques/unRisqueExistant',
-          }
+    describe('retourne une erreur 400 si', () => {
+      it("l'id du risque est invalide", async () => {
+        const { status } = await testeur.put(
+          '/api/service/456/risques/unIdRisqueInexistant'
         );
+
+        expect(status).to.be(400);
+      });
+
+      it('le niveau de gravité est invalide', async () => {
+        const { status } = await testeur.put(
+          '/api/service/456/risques/indisponibiliteService',
+          { niveauGravite: 'pasUnNiveau', niveauVraisemblance: '' }
+        );
+
+        expect(status).to.be(400);
+      });
+
+      it('le niveau de vraisemblance est invalide', async () => {
+        const { status } = await testeur.put(
+          '/api/service/456/risques/indisponibiliteService',
+          { niveauGravite: '', niveauVraisemblance: 'pasUnNiveau' }
+        );
+
+        expect(status).to.be(400);
+      });
+
+      it('le commentaire est invalide', async () => {
+        const { status } = await testeur.put(
+          '/api/service/456/risques/indisponibiliteService',
+          { niveauGravite: '', niveauVraisemblance: '', commentaire: 123 }
+        );
+
+        expect(status).to.be(400);
+      });
+
+      it('la désactivation est invalide', async () => {
+        const { status } = await testeur.put(
+          '/api/service/456/risques/indisponibiliteService',
+          { niveauGravite: '', niveauVraisemblance: '', desactive: 123 }
+        );
+
+        expect(status).to.be(400);
+      });
     });
 
-    it('retourne une erreur 400 si les données sont invalides', async () => {
-      const reponse = await testeur.put(
-        '/api/service/456/risques/unRisqueInexistant'
+    it('accepte des niveaux vides (pour les remettre à zéro)', async () => {
+      const { status } = await testeur.put(
+        '/api/service/456/risques/indisponibiliteService',
+        { niveauGravite: '', niveauVraisemblance: '' }
       );
-      expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be(
-        'Le risque ou son niveau de vraisemblance est inconnu'
-      );
-    });
 
-    it("retourne une erreur 400 si le niveau de vraisemblance n'existe pas", async () => {
-      const reponse = await testeur.put(
-        '/api/service/456/risques/unRisqueExistant',
-        {
-          niveauVraisemblance: 'inexistant',
-        }
-      );
-      expect(reponse.status).to.be(400);
-      expect(reponse.text).to.be(
-        'Le risque ou son niveau de vraisemblance est inconnu'
-      );
+      expect(status).to.be(200);
     });
 
     it('délègue au dépôt de donnée la mise à jour du risque', async () => {
@@ -1353,34 +1367,34 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         donneesRecues = donnees;
       };
 
-      await testeur.put('/api/service/456/risques/unRisqueExistant', {
-        niveauGravite: 'unNiveau',
+      await testeur.put('/api/service/456/risques/indisponibiliteService', {
+        niveauGravite: 'nonConcerne',
+        niveauVraisemblance: 'peuVraisemblable',
         commentaire: "c'est important",
-        niveauVraisemblance: 'unNiveauVraisemblance',
-        desactive: 'true',
+        desactive: true,
       });
 
       expect(idServiceRecu).to.be('456');
-      expect(donneesRecues.niveauGravite).to.eql('unNiveau');
-      expect(donneesRecues.niveauVraisemblance).to.eql('unNiveauVraisemblance');
+      expect(donneesRecues.niveauGravite).to.eql('nonConcerne');
+      expect(donneesRecues.niveauVraisemblance).to.eql('peuVraisemblable');
       expect(donneesRecues.commentaire).to.eql("c'est important");
       expect(donneesRecues.desactive).to.eql(true);
-      expect(donneesRecues.id).to.eql('unRisqueExistant');
+      expect(donneesRecues.id).to.eql('indisponibiliteService');
     });
 
     it('retourne la représentation du risque modifié', async () => {
       testeur.depotDonnees().ajouteRisqueGeneralAService = async () => {};
 
       const reponse = await testeur.put(
-        '/api/service/456/risques/unRisqueExistant',
+        '/api/service/456/risques/indisponibiliteService',
         {
-          niveauGravite: 'unNiveau',
-          niveauVraisemblance: 'unNiveauVraisemblance',
+          niveauGravite: 'nonConcerne',
+          niveauVraisemblance: 'peuVraisemblable',
           commentaire: "c'est important",
         }
       );
 
-      expect(reponse.body.niveauVraisemblance).to.be('unNiveauVraisemblance');
+      expect(reponse.body.niveauVraisemblance).to.be('peuVraisemblable');
     });
   });
 
