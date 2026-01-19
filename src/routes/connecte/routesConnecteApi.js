@@ -276,7 +276,10 @@ const routesConnecteApi = ({
     '/services/export.csv',
     middleware.verificationAcceptationCGU,
     valideQuery(
-      z.strictObject({ idsServices: z.array(z.uuid()).min(1).or(z.uuid()) })
+      z.strictObject({
+        idsServices: z.array(z.uuid()).min(1).or(z.uuid()),
+        timestamp: z.string().optional(),
+      })
     ),
     async (requete, reponse) => {
       const { idsServices = [] } = requete.query;
