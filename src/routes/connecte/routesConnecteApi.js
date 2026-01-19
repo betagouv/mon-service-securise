@@ -275,16 +275,11 @@ const routesConnecteApi = ({
   routes.get(
     '/services/export.csv',
     middleware.verificationAcceptationCGU,
-    middleware.aseptise('idsServices.*'),
+    valideQuery(
+      z.strictObject({ idsServices: z.array(z.uuid()).min(1).or(z.uuid()) })
+    ),
     async (requete, reponse) => {
       const { idsServices = [] } = requete.query;
-
-      const mauvaisType =
-        !Array.isArray(idsServices) && typeof idsServices !== 'string';
-      if (mauvaisType) {
-        reponse.sendStatus(400);
-        return;
-      }
 
       const donneesCsvServices = (services, autorisations) => {
         const servicesSansIndice = objetGetServices.donnees(

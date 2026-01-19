@@ -737,7 +737,11 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête GET sur `/api/services/export.csv`', () => {
+    let idServiceExport;
+
     beforeEach(() => {
+      idServiceExport = unUUIDRandom();
+      service.id = idServiceExport;
       testeur.adaptateurCsv().genereCsvServices = async () => {};
       testeur.referentiel().recharge({
         statutsHomologation: {
@@ -746,7 +750,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
       testeur.depotDonnees().autorisations = async () => [
         uneAutorisation()
-          .deProprietaire('123', '456')
+          .deProprietaire('123', idServiceExport)
           .avecDroits({ [SECURISER]: LECTURE })
           .construis(),
       ];
@@ -761,19 +765,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         );
     });
 
-    it('aseptise les identifiants des services à exporter', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['idsServices.*'], testeur.app(), {
-          method: 'get',
-          url: '/api/services/export.csv',
-        });
-    });
-
     describe('concernant le paramètre en query string `idsServices`', () => {
-      it("retourne une erreur 400 si le paramètre n'est pas un tableau", async () => {
+      it('retourne une erreur 400 si les ids de services sont invalides', async () => {
         const reponse = await testeur.get(
-          '/api/services/export.csv?idsServices[a]=1' // Sera interprété par express comme {a: 1}
+          '/api/services/export.csv?idsServices=pasUnUUID'
         );
         expect(reponse.status).to.be(400);
       });
@@ -782,7 +777,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         // Dans le cas d'un seul ID envoyé, express va interpréter cet ID en `string`, pas en `array`.
         // Ce cas de test vérifie qu'on sait bien gérer ce cas d'une `string` qui arrive à l'API
         const queryString = new URLSearchParams();
-        queryString.append('idsServices', '123');
+        queryString.append('idsServices', unUUIDRandom());
 
         const reponse = await testeur.get(
           `/api/services/export.csv?${queryString}`
@@ -806,7 +801,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         ];
       };
 
-      await testeur.get('/api/services/export.csv');
+      await testeur.get(
+        `/api/services/export.csv?idsServices=${unUUIDRandom()}`
+      );
+
       expect(donneesPassees).to.eql({ idUtilisateur: '123' });
     });
 
@@ -819,7 +817,9 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return Promise.resolve([service]);
       };
 
-      const reponse = await testeur.get('/api/services/export.csv');
+      const reponse = await testeur.get(
+        `/api/services/export.csv?idsServices=${unUUIDRandom()}`
+      );
 
       expect(reponse.status).to.equal(200);
       expect(donneesPassees.idUtilisateur).to.equal('123');
@@ -843,9 +843,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         return 'Fichier CSV';
       };
 
-      await testeur.get('/api/services/export.csv?idsServices=456');
+      await testeur.get(
+        `/api/services/export.csv?idsServices=${idServiceExport}`
+      );
+
       expect(donneesRecues.length).to.be(1);
-      expect(donneesRecues[0].id).to.equal('456');
+      expect(donneesRecues[0].id).to.equal(idServiceExport);
     });
 
     it('utilise un adaptateur de CSV pour la génération', async () => {
@@ -853,26 +856,25 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       testeur.depotDonnees().autorisations = async () => [
         uneAutorisation()
-          .deProprietaire('123', '456')
+          .deProprietaire('123', idServiceExport)
           .avecDroits({})
           .construis(),
       ];
 
-      testeur.depotDonnees().services = () =>
-        Promise.resolve([
-          unService()
-            .avecId('456')
-            .avecNomService('Un service')
-            .avecOrganisationResponsable({ nom: 'ANSSI' })
-            .ajouteUnContributeur(
-              unUtilisateur().avecId('123').avecEmail('email.createur@mail.fr')
-                .donnees
-            )
-            .construis(),
-        ]);
+      testeur.depotDonnees().services = async () => [
+        unService()
+          .avecId(idServiceExport)
+          .avecNomService('Un service')
+          .avecOrganisationResponsable({ nom: 'ANSSI' })
+          .ajouteUnContributeur(
+            unUtilisateur().avecId('123').avecEmail('email.createur@mail.fr')
+              .donnees
+          )
+          .construis(),
+      ];
 
       let adaptateurCsvAppele = false;
-      testeur.adaptateurCsv().genereCsvServices = (donnees) => {
+      testeur.adaptateurCsv().genereCsvServices = async (donnees) => {
         adaptateurCsvAppele = true;
 
         const serviceRecu = donnees[0];
@@ -881,17 +883,20 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         expect(serviceRecu.nombreContributeurs).to.eql(1);
         expect(serviceRecu.estProprietaire).to.be(true);
 
-        return Promise.resolve('Fichier CSV');
+        return 'Fichier CSV';
       };
 
-      await testeur.get('/api/services/export.csv?idsServices=456');
+      await testeur.get(
+        `/api/services/export.csv?idsServices=${idServiceExport}`
+      );
+
       expect(adaptateurCsvAppele).to.be(true);
     });
 
     it('sert un fichier de type CSV', async () => {
       await verifieTypeFichierServiEstCSV(
         testeur.app(),
-        '/api/services/export.csv'
+        `/api/services/export.csv?idsServices=${idServiceExport}`
       );
     });
 
@@ -900,7 +905,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       await verifieNomFichierServi(
         testeur.app(),
-        '/api/services/export.csv',
+        `/api/services/export.csv?idsServices=${idServiceExport}`,
         'MSS_services_20230128.csv'
       );
     });
@@ -910,7 +915,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
         throw new Error();
       };
 
-      const reponse = await testeur.get('/api/services/export.csv');
+      const reponse = await testeur.get(
+        `/api/services/export.csv?idsServices=${idServiceExport}`
+      );
+
       expect(reponse.status).to.be(424);
     });
   });
