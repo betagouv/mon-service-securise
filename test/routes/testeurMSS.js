@@ -205,7 +205,7 @@ const testeurMss = () => {
       });
       app = serveur.app;
     } catch (e) {
-      expect().fail("Erreur à l'initialisation du testeur MSS.");
+      expect().fail(`Erreur à l'initialisation du testeur MSS : ${e}`);
     }
   };
 
