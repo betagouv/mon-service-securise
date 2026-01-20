@@ -276,6 +276,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(idServiceRecu).to.be('456');
       expect(idUtilisateurRecu).to.be('999');
       expect(mesureRecue.description).to.be('une description');
+      expect(mesureRecue.descriptionLongue).to.be('des détails');
       expect(mesureRecue.categorie).to.be('gouvernance');
       expect(mesureRecue.statut).to.be('fait');
     });
