@@ -4,12 +4,9 @@ import routesConnecteApiServicePdf from './routesConnecteApiServicePdf.js';
 import {
   EchecAutorisation,
   ErreurDonneesObligatoiresManquantes,
-  ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurEcheanceMesureInvalide,
   ErreurMesureInconnue,
   ErreurModele,
-  ErreurModeleDeMesureSpecifiqueDejaAssociee,
-  ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurNomServiceDejaExistant,
   ErreurPrioriteMesureInvalide,
   ErreurStatutMesureInvalide,
@@ -42,6 +39,7 @@ import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
 import { routesConnecteApiServiceMesuresSpecifiques } from './routesConnecteApiServiceMesuresSpecifiques.js';
 import { routesConnecteApiServiceHomologation } from './routesConnecteApiServiceHomologation.js';
 import { routesConnecteApiServiceRisquesSpecifiques } from './routesConnecteApiServiceRisquesSpecifiques.js';
+import { routesConnecteApiServiceModeleMesureSpecifique } from './routesConnecteApiServiceModeleMesureSpecifique.ts';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, DECRIRE } = Rubriques;
@@ -100,6 +98,13 @@ const routesConnecteApiService = ({
       depotDonnees,
       middleware,
       referentielV2,
+    })
+  );
+
+  routes.use(
+    routesConnecteApiServiceModeleMesureSpecifique({
+      depotDonnees,
+      middleware,
     })
   );
 
@@ -252,36 +257,6 @@ const routesConnecteApiService = ({
           return;
         }
         suite(e);
-      }
-    }
-  );
-
-  routes.put(
-    '/:id/modeles/mesureSpecifique',
-    middleware.verificationAcceptationCGU,
-    middleware.trouveService({ [SECURISER]: ECRITURE }),
-    middleware.aseptise('idsModeles.*'),
-    async (requete, reponse) => {
-      try {
-        await depotDonnees.associeModelesMesureSpecifiqueAuService(
-          requete.body.idsModeles,
-          requete.service.id,
-          requete.idUtilisateurCourant
-        );
-        reponse.sendStatus(200);
-      } catch (e) {
-        if (
-          e instanceof ErreurModeleDeMesureSpecifiqueIntrouvable ||
-          e instanceof ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique
-        ) {
-          reponse.sendStatus(403);
-          return;
-        }
-        if (e instanceof ErreurModeleDeMesureSpecifiqueDejaAssociee) {
-          reponse.sendStatus(400);
-          return;
-        }
-        throw e;
       }
     }
   );
