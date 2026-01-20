@@ -1,12 +1,7 @@
+import { z } from 'zod';
 import express from 'express';
 import * as objetGetMesures from '../../modeles/objetsApi/objetGetMesures.js';
 import MesureGenerale from '../../modeles/mesureGenerale.js';
-import {
-  ErreurEcheanceMesureInvalide,
-  ErreurMesureInconnue,
-  ErreurPrioriteMesureInvalide,
-  ErreurStatutMesureInvalide,
-} from '../../erreurs.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import {
@@ -14,6 +9,10 @@ import {
   Rubriques,
 } from '../../modeles/autorisations/gestionDroits.js';
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
+import { valideBody, valideParams } from '../../http/validePayloads.js';
+import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
+import { schemaPutMesureGenerale } from './routesConnecteApiServiceMesuresGenerales.schema.js';
+import { schemaMesureGenerale } from '../../http/schemas/mesure.schema.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -21,9 +20,13 @@ const { SECURISER } = Rubriques;
 export const routesConnecteApiServiceMesuresGenerales = ({
   depotDonnees,
   middleware,
+  referentiel,
+  referentielV2,
 }: {
   depotDonnees: DepotDonnees;
   middleware: Middleware;
+  referentiel: Referentiel;
+  referentielV2: ReferentielV2;
 }) => {
   const routes = express.Router();
 
@@ -41,48 +44,38 @@ export const routesConnecteApiServiceMesuresGenerales = ({
     '/:id/mesures/:idMesure',
     middleware.verificationAcceptationCGU,
     middleware.trouveService({ [SECURISER]: ECRITURE }),
-    middleware.aseptise(
-      'statut',
-      'modalites',
-      'priorite',
-      'echeance',
-      'responsables.*'
+    valideParams(
+      z.looseObject({
+        idMesure: schemaMesureGenerale.id(referentiel, referentielV2),
+      })
     ),
-    async (requete, reponse, suite) => {
+    valideBody(
+      z.strictObject(schemaPutMesureGenerale(referentiel, referentielV2))
+    ),
+    async (requete, reponse) => {
       const { service, idUtilisateurCourant } =
         requete as unknown as RequestRouteConnecteService;
-      const { body, params } = requete;
 
-      if (!body.statut) {
-        reponse.status(400).send('Le statut de la mesure est obligatoire.');
-        return;
-      }
+      const { idMesure } = requete.params;
+      const { statut, modalites, echeance, responsables, priorite } =
+        requete.body;
 
-      if (body.echeance) {
-        body.echeance = body.echeance.replaceAll('&#x2F;', '/');
-      }
-      const mesureGenerale = { ...body, id: params.idMesure };
+      const mesureGenerale = {
+        id: idMesure,
+        statut,
+        modalites,
+        echeance,
+        responsables,
+        priorite,
+      };
 
-      try {
-        const mesure = new MesureGenerale(mesureGenerale, service.referentiel);
-        await depotDonnees.metsAJourMesureGeneraleDuService(
-          service.id,
-          idUtilisateurCourant,
-          mesure
-        );
-        reponse.sendStatus(200);
-      } catch (e) {
-        if (
-          e instanceof ErreurMesureInconnue ||
-          e instanceof ErreurStatutMesureInvalide ||
-          e instanceof ErreurPrioriteMesureInvalide ||
-          e instanceof ErreurEcheanceMesureInvalide
-        ) {
-          reponse.status(400).send('La mesure est invalide.');
-          return;
-        }
-        suite(e);
-      }
+      const mesure = new MesureGenerale(mesureGenerale, service.referentiel);
+      await depotDonnees.metsAJourMesureGeneraleDuService(
+        service.id,
+        idUtilisateurCourant,
+        mesure
+      );
+      reponse.sendStatus(200);
     }
   );
 

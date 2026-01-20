@@ -1,5 +1,8 @@
 import testeurMSS from '../testeurMSS.js';
-import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
 import {
   Permissions,
   Rubriques,
@@ -8,6 +11,7 @@ import { UUID } from '../../../src/typesBasiques.ts';
 import MesureGenerale from '../../../src/modeles/mesureGenerale.js';
 import Mesures from '../../../src/modeles/mesures.js';
 import { creeReferentiel } from '../../../src/referentiel.js';
+import { unUUIDRandom } from '../../constructeurs/UUID.js';
 
 const { LECTURE, ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -69,15 +73,9 @@ describe('Les routes API des mesures générales des services', () => {
 
   describe('quand requête PUT sur `/api/service/:id/mesures/:idMesure`', () => {
     beforeEach(() => {
-      testeur.referentiel().recharge({
-        mesures: { audit: {} },
-      });
-
       testeur.middleware().reinitialise({
         idUtilisateur: '123',
-        serviceARenvoyer: unService(testeur.referentiel())
-          .avecId('456')
-          .construis(),
+        serviceARenvoyer: unServiceV2().avecId('456').construis(),
       });
 
       testeur.depotDonnees().metsAJourMesureGeneraleDuService = async () => {};
@@ -102,26 +100,39 @@ describe('Les routes API des mesures générales des services', () => {
         );
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['statut', 'modalites', 'priorite', 'echeance', 'responsables.*'],
-          testeur.app(),
-          { method: 'put', url: '/api/service/456/mesures/audit' }
-        );
+    const unePayloadValideSauf = (cleValeur?: Record<string, unknown>) => ({
+      statut: 'fait',
+      modalites: '',
+      priorite: 'p1',
+      echeance: '1/7/2026',
+      responsables: [unUUIDRandom()],
+      ...cleValeur,
     });
 
-    it('jette une erreur 400 si le statut est vide', async () => {
-      const mesureGenerale = { statut: '' };
-
-      const reponse = await testeur.put(
-        '/api/service/456/mesures/audit',
-        mesureGenerale
+    it("jette une erreur 400 si l'ID de mesure est invalide", async () => {
+      const { status } = await testeur.put(
+        '/api/service/456/mesures/pasUnUUID',
+        unePayloadValideSauf()
       );
 
-      expect(reponse.status).toBe(400);
-      expect(reponse.text).toBe('Le statut de la mesure est obligatoire.');
+      expect(status).toBe(400);
+    });
+
+    describe('jette une erreur 400 si …', () => {
+      it.each([
+        { statut: undefined },
+        { modalites: 123 },
+        { priorite: 'pasUnePriorite' },
+        { echeance: 'pasUneEcheance' },
+        { responsables: 'pasUnResponsable' },
+      ])('la payload contient %s', async (donneesDuTest) => {
+        const { status } = await testeur.put(
+          '/api/service/456/mesures/RECENSEMENT.1',
+          unePayloadValideSauf(donneesDuTest)
+        );
+
+        expect(status).toBe(400);
+      });
     });
 
     it('délègue au dépôt de données la mise à jour des mesures générales', async () => {
@@ -138,73 +149,15 @@ describe('Les routes API des mesures générales des services', () => {
         idUtilisateurRecu = idUtilisateur;
       };
 
-      const mesureGenerale = { statut: 'fait' };
-
-      await testeur.put('/api/service/456/mesures/audit', mesureGenerale);
+      await testeur.put(
+        '/api/service/456/mesures/RECENSEMENT.1',
+        unePayloadValideSauf()
+      );
 
       expect(idServiceRecu).to.equal('456');
       expect(idUtilisateurRecu).to.equal('123');
-      expect(donneesRecues!.id).to.equal('audit');
+      expect(donneesRecues!.id).to.equal('RECENSEMENT.1');
       expect(donneesRecues!.statut).to.equal('fait');
-    });
-
-    it('renvoie une erreur 400 si la mesure est invalide à cause du statut', async () => {
-      const mesureGenerale = { statut: 'invalide' };
-
-      const reponse = await testeur.put(
-        '/api/service/456/mesures/audit',
-        mesureGenerale
-      );
-
-      expect(reponse.status).toBe(400);
-      expect(reponse.text).toBe('La mesure est invalide.');
-    });
-
-    it('renvoie une erreur 400 si la mesure est invalide à cause de la priorité', async () => {
-      const mesureGenerale = { priorite: 'invalide', statut: 'enCours' };
-
-      const reponse = await testeur.put(
-        '/api/service/456/mesures/audit',
-        mesureGenerale
-      );
-
-      expect(reponse.status).toBe(400);
-      expect(reponse.text).toBe('La mesure est invalide.');
-    });
-
-    it("renvoie une erreur 400 si la mesure est invalide à cause de l'échéance", async () => {
-      const mesureGenerale = { echeance: 'invalide', statut: 'enCours' };
-
-      const reponse = await testeur.put(
-        '/api/service/456/mesures/audit',
-        mesureGenerale
-      );
-
-      expect(reponse.status).toBe(400);
-      expect(reponse.text).toBe('La mesure est invalide.');
-    });
-
-    it("décode les 'slash' de la date d'échéance", async () => {
-      const slash = '&#x2F;';
-      let donneesRecues;
-      testeur.depotDonnees().metsAJourMesureGeneraleDuService = (
-        _: UUID,
-        __: UUID,
-        donnees: MesureGenerale
-      ) => {
-        donneesRecues = donnees;
-      };
-
-      const mesureGenerale = {
-        statut: 'fait',
-        echeance: `01${slash}01${slash}2024`,
-      };
-
-      await testeur.put('/api/service/456/mesures/audit', mesureGenerale);
-
-      expect(donneesRecues!.echeance.getTime()).to.equal(
-        new Date('01/01/2024').getTime()
-      );
     });
   });
 });

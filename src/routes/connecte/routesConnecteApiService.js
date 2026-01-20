@@ -34,7 +34,7 @@ import { routesConnecteApiServiceHomologation } from './routesConnecteApiService
 import { routesConnecteApiServiceRisquesSpecifiques } from './routesConnecteApiServiceRisquesSpecifiques.js';
 import { routesConnecteApiServiceModeleMesureSpecifique } from './routesConnecteApiServiceModeleMesureSpecifique.js';
 import { routesConnecteApiServiceRetourUtilisateur } from './routesConnecteApiServiceRetourUtilisateur.js';
-import { routesConnecteApiServiceMesuresGenerales } from './routesConnecteApiServiceMesuresGenerales.ts';
+import { routesConnecteApiServiceMesuresGenerales } from './routesConnecteApiServiceMesuresGenerales.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, DECRIRE } = Rubriques;
@@ -113,7 +113,12 @@ const routesConnecteApiService = ({
   );
 
   routes.use(
-    routesConnecteApiServiceMesuresGenerales({ depotDonnees, middleware })
+    routesConnecteApiServiceMesuresGenerales({
+      depotDonnees,
+      middleware,
+      referentiel,
+      referentielV2,
+    })
   );
 
   routes.put(
