@@ -4,18 +4,13 @@ import routesConnecteApiServicePdf from './routesConnecteApiServicePdf.js';
 import {
   EchecAutorisation,
   ErreurDonneesObligatoiresManquantes,
-  ErreurEcheanceMesureInvalide,
-  ErreurMesureInconnue,
   ErreurModele,
   ErreurNomServiceDejaExistant,
-  ErreurPrioriteMesureInvalide,
-  ErreurStatutMesureInvalide,
 } from '../../erreurs.js';
 import ActeursHomologation from '../../modeles/acteursHomologation.js';
 import DescriptionService from '../../modeles/descriptionService.js';
 import FonctionnalitesSpecifiques from '../../modeles/fonctionnalitesSpecifiques.js';
 import DonneesSensiblesSpecifiques from '../../modeles/donneesSensiblesSpecifiques.js';
-import MesureGenerale from '../../modeles/mesureGenerale.js';
 import PartiesPrenantes from '../../modeles/partiesPrenantes/partiesPrenantes.js';
 import PointsAcces from '../../modeles/pointsAcces.js';
 import RisqueGeneral from '../../modeles/risqueGeneral.js';
@@ -27,7 +22,6 @@ import {
   Rubriques,
   verifieCoherenceDesDroits,
 } from '../../modeles/autorisations/gestionDroits.js';
-import * as objetGetMesures from '../../modeles/objetsApi/objetGetMesures.js';
 import routesConnecteApiServiceActivitesMesure from './routesConnecteApiServiceActivitesMesure.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import routesConnecteApiSimulationMigrationReferentiel from './routesConnecteApiSimulationMigrationReferentiel.js';
@@ -40,6 +34,7 @@ import { routesConnecteApiServiceHomologation } from './routesConnecteApiService
 import { routesConnecteApiServiceRisquesSpecifiques } from './routesConnecteApiServiceRisquesSpecifiques.js';
 import { routesConnecteApiServiceModeleMesureSpecifique } from './routesConnecteApiServiceModeleMesureSpecifique.js';
 import { routesConnecteApiServiceRetourUtilisateur } from './routesConnecteApiServiceRetourUtilisateur.js';
+import { routesConnecteApiServiceMesuresGenerales } from './routesConnecteApiServiceMesuresGenerales.ts';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, DECRIRE } = Rubriques;
@@ -115,6 +110,10 @@ const routesConnecteApiService = ({
       referentiel,
       referentielV2,
     })
+  );
+
+  routes.use(
+    routesConnecteApiServiceMesuresGenerales({ depotDonnees, middleware })
   );
 
   routes.put(
@@ -210,63 +209,6 @@ const routesConnecteApiService = ({
         referentiel
       );
       reponse.json(donnees);
-    }
-  );
-
-  routes.get(
-    '/:id/mesures',
-    middleware.trouveService({ [SECURISER]: LECTURE }),
-    (requete, reponse) => {
-      const { service } = requete;
-
-      reponse.json(objetGetMesures.donnees(service));
-    }
-  );
-
-  routes.put(
-    '/:id/mesures/:idMesure',
-    middleware.verificationAcceptationCGU,
-    middleware.trouveService({ [SECURISER]: ECRITURE }),
-    middleware.aseptise(
-      'statut',
-      'modalites',
-      'priorite',
-      'echeance',
-      'responsables.*'
-    ),
-    async (requete, reponse, suite) => {
-      const { service, idUtilisateurCourant, body, params } = requete;
-      if (!body.statut) {
-        reponse.status(400).send('Le statut de la mesure est obligatoire.');
-        return;
-      }
-      if (body.echeance) {
-        body.echeance = body.echeance.replaceAll('&#x2F;', '/');
-      }
-      const mesureGenerale = {
-        ...body,
-        id: params.idMesure,
-      };
-      try {
-        const mesure = new MesureGenerale(mesureGenerale, service.referentiel);
-        await depotDonnees.metsAJourMesureGeneraleDuService(
-          service.id,
-          idUtilisateurCourant,
-          mesure
-        );
-        reponse.sendStatus(200);
-      } catch (e) {
-        if (
-          e instanceof ErreurMesureInconnue ||
-          e instanceof ErreurStatutMesureInvalide ||
-          e instanceof ErreurPrioriteMesureInvalide ||
-          e instanceof ErreurEcheanceMesureInvalide
-        ) {
-          reponse.status(400).send('La mesure est invalide.');
-          return;
-        }
-        suite(e);
-      }
     }
   );
 
