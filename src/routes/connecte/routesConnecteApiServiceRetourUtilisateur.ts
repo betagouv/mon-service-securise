@@ -1,4 +1,5 @@
 import express from 'express';
+import z from 'zod';
 import {
   Permissions,
   Rubriques,
@@ -7,45 +8,40 @@ import EvenementRetourUtilisateurMesure from '../../modeles/journalMSS/evenement
 import { Middleware } from '../../http/middleware.interface.js';
 import { AdaptateurJournalMSS } from '../../adaptateurs/adaptateurJournalMSS.interface.js';
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
+import { valideBody } from '../../http/validePayloads.js';
+import { schemaMesureGenerale } from '../../http/schemas/mesure.schema.js';
+import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 
 const { ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
 
 export const routesConnecteApiServiceRetourUtilisateur = ({
-  middleware,
   adaptateurJournal,
+  middleware,
+  referentiel,
+  referentielV2,
 }: {
-  middleware: Middleware;
   adaptateurJournal: AdaptateurJournalMSS;
+  middleware: Middleware;
+  referentiel: Referentiel;
+  referentielV2: ReferentielV2;
 }) => {
   const routes = express.Router();
 
   routes.post(
     '/:id/retourUtilisateurMesure',
     middleware.trouveService({ [SECURISER]: ECRITURE }),
-    middleware.aseptise('id', 'idMesure', 'idRetour', 'commentaire'),
+    valideBody(
+      z.strictObject({
+        idMesure: schemaMesureGenerale.id(referentiel, referentielV2),
+        idRetour: z.enum(Object.keys(referentielV2.retoursUtilisateurMesure())),
+        commentaire: z.string().max(1000).optional(),
+      })
+    ),
     async (requete, reponse) => {
       const { service, idUtilisateurCourant } =
         requete as unknown as RequestRouteConnecteService;
       const { idRetour, idMesure, commentaire } = requete.body;
-      const retourUtilisateur =
-        service.referentiel.retourUtilisateurMesureAvecId(idRetour);
-
-      if (!retourUtilisateur) {
-        reponse.status(424).send({
-          type: 'DONNEES_INCORRECTES',
-          message: "L'identifiant de retour utilisateur est incorrect.",
-        });
-        return;
-      }
-
-      if (!service.referentiel.estIdentifiantMesureConnu(idMesure)) {
-        reponse.status(424).send({
-          type: 'DONNEES_INCORRECTES',
-          message: "L'identifiant de mesure est incorrect.",
-        });
-        return;
-      }
 
       await adaptateurJournal.consigneEvenement(
         new EvenementRetourUtilisateurMesure({

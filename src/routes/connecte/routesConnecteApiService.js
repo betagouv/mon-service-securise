@@ -109,7 +109,12 @@ const routesConnecteApiService = ({
   );
 
   routes.use(
-    routesConnecteApiServiceRetourUtilisateur({ middleware, adaptateurJournal })
+    routesConnecteApiServiceRetourUtilisateur({
+      middleware,
+      adaptateurJournal,
+      referentiel,
+      referentielV2,
+    })
   );
 
   routes.put(
