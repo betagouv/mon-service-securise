@@ -13,6 +13,18 @@ export const schemaPutDecisionHomologation = (referentiel: ReferentielV2) => ({
 });
 
 export const schemaPutDocumentsHomologation = () => ({
-  documents: z.array(z.string().max(1000)),
   avecDocuments: z.boolean(),
+  documents: z.array(z.string().max(1000)),
+});
+
+export const schemaPutAvisHomologation = (referentiel: ReferentielV2) => ({
+  avecAvis: z.boolean(),
+  avis: z.array(
+    z.strictObject({
+      collaborateurs: z.array(z.string()).min(1),
+      statut: z.enum(Object.keys(referentiel.statutsAvisDossierHomologation())),
+      dureeValidite: z.enum(referentiel.identifiantsEcheancesRenouvellement()),
+      commentaires: z.string().optional(),
+    })
+  ),
 });
