@@ -6,7 +6,6 @@ import {
   ErreurCategorieRisqueInconnue,
   ErreurCategoriesRisqueManquantes,
   ErreurDonneesObligatoiresManquantes,
-  ErreurDossierCourantInexistant,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurEcheanceMesureInvalide,
   ErreurIntituleRisqueManquant,
@@ -22,7 +21,6 @@ import {
   ErreurStatutMesureInvalide,
 } from '../../erreurs.js';
 import ActeursHomologation from '../../modeles/acteursHomologation.js';
-import Avis from '../../modeles/avis.js';
 import DescriptionService from '../../modeles/descriptionService.js';
 import FonctionnalitesSpecifiques from '../../modeles/fonctionnalitesSpecifiques.js';
 import DonneesSensiblesSpecifiques from '../../modeles/donneesSensiblesSpecifiques.js';
@@ -31,8 +29,6 @@ import PartiesPrenantes from '../../modeles/partiesPrenantes/partiesPrenantes.js
 import PointsAcces from '../../modeles/pointsAcces.js';
 import RisqueGeneral from '../../modeles/risqueGeneral.js';
 import RolesResponsabilites from '../../modeles/rolesResponsabilites.js';
-import { dateInvalide } from '../../utilitaires/date.js';
-import { valeurBooleenne } from '../../utilitaires/aseptisation.js';
 import * as objetGetService from '../../modeles/objetsApi/objetGetService.js';
 import * as objetGetAutorisation from '../../modeles/objetsApi/objetGetAutorisation.js';
 import {
@@ -48,15 +44,13 @@ import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import routesConnecteApiSimulationMigrationReferentiel from './routesConnecteApiSimulationMigrationReferentiel.js';
 import { schemaSuggestionAction } from '../../http/schemas/suggestionAction.schema.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
-import {
-  schemaPutAutoriteHomologation,
-  schemaPutRisqueGeneral,
-} from './routesConnecteApiService.schema.js';
+import { schemaPutRisqueGeneral } from './routesConnecteApiService.schema.js';
 import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
 import { routesConnecteApiServiceMesuresSpecifiques } from './routesConnecteApiServiceMesuresSpecifiques.js';
+import { routesConnecteApiServiceHomologation } from './routesConnecteApiServiceHomologation.js';
 
 const { ECRITURE, LECTURE } = Permissions;
-const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
+const { CONTACTS, SECURISER, RISQUES, DECRIRE } = Rubriques;
 
 const routesConnecteApiService = ({
   middleware,
@@ -95,6 +89,15 @@ const routesConnecteApiService = ({
       middleware,
       referentiel,
       referentielV2,
+    })
+  );
+
+  routes.use(
+    routesConnecteApiServiceHomologation({
+      adaptateurHorloge,
+      depotDonnees,
+      middleware,
+      referentiel,
     })
   );
 
@@ -468,163 +471,6 @@ const routesConnecteApiService = ({
       await depotDonnees.supprimeRisqueSpecifiqueDuService(idService, idRisque);
 
       reponse.sendStatus(200);
-    }
-  );
-
-  routes.put(
-    '/:id/homologation/autorite',
-    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
-    middleware.trouveDossierCourant,
-    valideBody(z.strictObject(schemaPutAutoriteHomologation())),
-    (requete, reponse, suite) => {
-      const { service, dossierCourant } = requete;
-
-      const {
-        body: { nom, fonction },
-      } = requete;
-      dossierCourant.enregistreAutoriteHomologation(nom, fonction);
-      depotDonnees
-        .enregistreDossier(service.id, dossierCourant)
-        .then(() => reponse.sendStatus(204))
-        .catch(suite);
-    }
-  );
-
-  routes.put(
-    '/:id/homologation/decision',
-    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
-    middleware.trouveDossierCourant,
-    middleware.aseptise('dateHomologation', 'dureeValidite'),
-    (requete, reponse, suite) => {
-      const { dateHomologation, dureeValidite } = requete.body;
-      if (dateInvalide(dateHomologation)) {
-        reponse.status(422).send("Date d'homologation invalide");
-        return;
-      }
-
-      if (
-        !referentiel.estIdentifiantEcheanceRenouvellementConnu(dureeValidite)
-      ) {
-        reponse.status(422).send('Durée de validité invalide');
-        return;
-      }
-
-      const { service, dossierCourant } = requete;
-
-      dossierCourant.enregistreDecision(dateHomologation, dureeValidite);
-      depotDonnees
-        .enregistreDossier(service.id, dossierCourant)
-        .then(() => reponse.sendStatus(204))
-        .catch(suite);
-    }
-  );
-
-  routes.put(
-    '/:id/homologation/telechargement',
-    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
-    middleware.trouveDossierCourant,
-    (requete, reponse, suite) => {
-      const { service, dossierCourant } = requete;
-
-      const dateTelechargement = adaptateurHorloge.maintenant();
-      dossierCourant.enregistreDateTelechargement(dateTelechargement);
-      depotDonnees
-        .enregistreDossier(service.id, dossierCourant)
-        .then(() => reponse.sendStatus(204))
-        .catch(suite);
-    }
-  );
-
-  routes.put(
-    '/:id/homologation/avis',
-    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
-    middleware.trouveDossierCourant,
-    middleware.aseptiseListes([
-      {
-        nom: 'avis',
-        proprietes: [
-          ...Avis.proprietesAtomiquesRequises(),
-          ...Avis.proprietesAtomiquesFacultatives(),
-        ],
-      },
-    ]),
-    middleware.aseptise('avis.*.collaborateurs.*', 'avecAvis'),
-    (requete, reponse, suite) => {
-      const {
-        body: { avis },
-      } = requete;
-      if (!avis) {
-        reponse.sendStatus(400);
-        return;
-      }
-
-      const { service, dossierCourant } = requete;
-      const avecAvis = valeurBooleenne(requete.body.avecAvis);
-
-      if (avecAvis) dossierCourant.enregistreAvis(avis);
-      else dossierCourant.declareSansAvis();
-
-      depotDonnees
-        .enregistreDossier(service.id, dossierCourant)
-        .then(() => reponse.sendStatus(204))
-        .catch(suite);
-    }
-  );
-
-  routes.put(
-    '/:id/homologation/documents',
-    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
-    middleware.trouveDossierCourant,
-    middleware.aseptise('documents.*', 'avecDocuments'),
-    (requete, reponse, suite) => {
-      const {
-        body: { documents },
-      } = requete;
-      if (!documents) {
-        reponse.sendStatus(400);
-        return;
-      }
-
-      const { service, dossierCourant } = requete;
-      const avecDocuments = valeurBooleenne(requete.body.avecDocuments);
-
-      if (avecDocuments) dossierCourant.enregistreDocuments(documents);
-      else dossierCourant.declareSansDocument();
-
-      depotDonnees
-        .enregistreDossier(service.id, dossierCourant)
-        .then(() => reponse.sendStatus(204))
-        .catch(suite);
-    }
-  );
-
-  routes.post(
-    '/:id/homologation/finalise',
-    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
-    (requete, reponse, suite) => {
-      const { service } = requete;
-
-      depotDonnees
-        .finaliseDossierCourant(service)
-        .then(() => reponse.sendStatus(204))
-        .catch(suite);
-    }
-  );
-
-  routes.delete(
-    '/:id/homologation/dossierCourant',
-    middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
-    async (requete, reponse, suite) => {
-      const { service } = requete;
-      try {
-        service.supprimeDossierCourant();
-        await depotDonnees.metsAJourService(service);
-        reponse.sendStatus(204);
-      } catch (e) {
-        if (e instanceof ErreurDossierCourantInexistant)
-          reponse.status(422).send(e.message);
-        else suite(e);
-      }
     }
   );
 
