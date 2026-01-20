@@ -3,21 +3,15 @@ import { z } from 'zod';
 import routesConnecteApiServicePdf from './routesConnecteApiServicePdf.js';
 import {
   EchecAutorisation,
-  ErreurCategorieRisqueInconnue,
-  ErreurCategoriesRisqueManquantes,
   ErreurDonneesObligatoiresManquantes,
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
   ErreurEcheanceMesureInvalide,
-  ErreurIntituleRisqueManquant,
   ErreurMesureInconnue,
   ErreurModele,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
-  ErreurNiveauGraviteInconnu,
-  ErreurNiveauVraisemblanceInconnu,
   ErreurNomServiceDejaExistant,
   ErreurPrioriteMesureInvalide,
-  ErreurRisqueInconnu,
   ErreurStatutMesureInvalide,
 } from '../../erreurs.js';
 import ActeursHomologation from '../../modeles/acteursHomologation.js';
@@ -39,7 +33,6 @@ import {
 import * as objetGetMesures from '../../modeles/objetsApi/objetGetMesures.js';
 import EvenementRetourUtilisateurMesure from '../../modeles/journalMSS/evenementRetourUtilisateurMesure.js';
 import routesConnecteApiServiceActivitesMesure from './routesConnecteApiServiceActivitesMesure.js';
-import RisqueSpecifique from '../../modeles/risqueSpecifique.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import routesConnecteApiSimulationMigrationReferentiel from './routesConnecteApiSimulationMigrationReferentiel.js';
 import { schemaSuggestionAction } from '../../http/schemas/suggestionAction.schema.js';
@@ -48,6 +41,7 @@ import { schemaPutRisqueGeneral } from './routesConnecteApiService.schema.js';
 import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
 import { routesConnecteApiServiceMesuresSpecifiques } from './routesConnecteApiServiceMesuresSpecifiques.js';
 import { routesConnecteApiServiceHomologation } from './routesConnecteApiServiceHomologation.js';
+import { routesConnecteApiServiceRisquesSpecifiques } from './routesConnecteApiServiceRisquesSpecifiques.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, DECRIRE } = Rubriques;
@@ -89,6 +83,14 @@ const routesConnecteApiService = ({
       middleware,
       referentiel,
       referentielV2,
+    })
+  );
+
+  routes.use(
+    routesConnecteApiServiceRisquesSpecifiques({
+      depotDonnees,
+      middleware,
+      referentiel,
     })
   );
 
@@ -324,153 +326,6 @@ const routesConnecteApiService = ({
       await depotDonnees.ajouteRisqueGeneralAService(requete.service, risque);
 
       reponse.status(200).send(risque.toJSON());
-    }
-  );
-
-  routes.post(
-    '/:id/risquesSpecifiques',
-    middleware.trouveService({ [RISQUES]: ECRITURE }),
-    middleware.aseptise(
-      'niveauGravite',
-      'niveauVraisemblance',
-      'commentaire',
-      'description',
-      'intitule',
-      'categories.*'
-    ),
-    async (requete, reponse, suite) => {
-      const {
-        niveauGravite,
-        niveauVraisemblance,
-        intitule,
-        commentaire,
-        description,
-        categories,
-      } = requete.body;
-      try {
-        RisqueSpecifique.valide(
-          {
-            niveauVraisemblance,
-            niveauGravite,
-            intitule,
-            commentaire,
-            description,
-            categories,
-          },
-          referentiel
-        );
-        const risque = new RisqueSpecifique(
-          {
-            niveauGravite,
-            niveauVraisemblance,
-            intitule,
-            commentaire,
-            description,
-            categories,
-          },
-          referentiel
-        );
-        await depotDonnees.ajouteRisqueSpecifiqueAService(
-          requete.service.id,
-          risque
-        );
-        reponse.status(201).send(risque.toJSON());
-      } catch (e) {
-        if (
-          e instanceof ErreurNiveauGraviteInconnu ||
-          e instanceof ErreurNiveauVraisemblanceInconnu ||
-          e instanceof ErreurIntituleRisqueManquant ||
-          e instanceof ErreurCategoriesRisqueManquantes ||
-          e instanceof ErreurCategorieRisqueInconnue
-        ) {
-          reponse.status(400).send(e.constructor.name);
-          return;
-        }
-        suite(e);
-      }
-    }
-  );
-
-  routes.put(
-    '/:id/risquesSpecifiques/:idRisque',
-    middleware.trouveService({ [RISQUES]: ECRITURE }),
-    middleware.aseptise(
-      'niveauGravite',
-      'niveauVraisemblance',
-      'commentaire',
-      'description',
-      'intitule',
-      'categories.*'
-    ),
-    async (requete, reponse, suite) => {
-      const {
-        niveauGravite,
-        niveauVraisemblance,
-        intitule,
-        commentaire,
-        description,
-        categories,
-      } = requete.body;
-      const { idRisque } = requete.params;
-      try {
-        RisqueSpecifique.valide(
-          {
-            niveauGravite,
-            niveauVraisemblance,
-            intitule,
-            commentaire,
-            description,
-            categories,
-          },
-          referentiel
-        );
-        const risque = new RisqueSpecifique(
-          {
-            id: idRisque,
-            niveauGravite,
-            niveauVraisemblance,
-            intitule,
-            commentaire,
-            description,
-            categories,
-          },
-          referentiel
-        );
-        await depotDonnees.metsAJourRisqueSpecifiqueDuService(
-          requete.service.id,
-          risque
-        );
-        reponse.status(200).send(risque.toJSON());
-      } catch (e) {
-        if (e instanceof ErreurRisqueInconnu) {
-          reponse.status(404).send('Le risque est introuvable');
-          return;
-        }
-        if (
-          e instanceof ErreurNiveauGraviteInconnu ||
-          e instanceof ErreurNiveauVraisemblanceInconnu ||
-          e instanceof ErreurIntituleRisqueManquant ||
-          e instanceof ErreurCategoriesRisqueManquantes ||
-          e instanceof ErreurCategorieRisqueInconnue
-        ) {
-          reponse.status(400).send(e.constructor.name);
-          return;
-        }
-        suite(e);
-      }
-    }
-  );
-
-  routes.delete(
-    '/:id/risquesSpecifiques/:idRisque',
-    middleware.trouveService({ [RISQUES]: ECRITURE }),
-    async (requete, reponse) => {
-      const { idRisque } = requete.params;
-      const { id: idService } = requete.service;
-
-      await depotDonnees.supprimeRisqueSpecifiqueDuService(idService, idRisque);
-
-      reponse.sendStatus(200);
     }
   );
 
