@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import express from 'express';
 import {
   ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
@@ -11,6 +12,7 @@ import {
 } from '../../modeles/autorisations/gestionDroits.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
+import { valideBody } from '../../http/validePayloads.js';
 
 const { ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -28,7 +30,7 @@ export const routesConnecteApiServiceModeleMesureSpecifique = ({
     '/:id/modeles/mesureSpecifique',
     middleware.verificationAcceptationCGU,
     middleware.trouveService({ [SECURISER]: ECRITURE }),
-    middleware.aseptise('idsModeles.*'),
+    valideBody(z.strictObject({ idsModeles: z.array(z.uuid()).min(1) })),
     async (requete, reponse) => {
       try {
         const { service, idUtilisateurCourant } =

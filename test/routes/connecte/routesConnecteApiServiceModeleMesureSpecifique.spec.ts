@@ -58,13 +58,13 @@ describe("Les routes d'API des modèles de mesures spécifiques associés aux se
         );
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(['idsModeles.*'], testeur.app(), {
-          method: 'put',
-          url: '/api/service/S1/modeles/mesureSpecifique',
-        });
+    it('jette une erreur 400 si les ID de modèles de mesures sont invalides', async () => {
+      const { status } = await testeur.put(
+        '/api/service/S1/modeles/mesureSpecifique',
+        { idsModeles: ['pasUnUUID'] }
+      );
+
+      expect(status).toBe(400);
     });
 
     it("délègue au dépôt de données l'association des modèles au service", async () => {
@@ -77,11 +77,12 @@ describe("Les routes d'API des modèles de mesures spécifiques associés aux se
         donnesRecues = { idsModeles, idService, idUtilisateur };
       };
 
+      const deuxModeles = [unUUIDRandom(), unUUIDRandom()];
       await testeur.put('/api/service/S1/modeles/mesureSpecifique', {
-        idsModeles: ['MOD-1', 'MOD-2'],
+        idsModeles: deuxModeles,
       });
 
-      expect(donnesRecues!.idsModeles).toEqual(['MOD-1', 'MOD-2']);
+      expect(donnesRecues!.idsModeles).toEqual(deuxModeles);
       expect(donnesRecues!.idService).toBe('S1');
       expect(donnesRecues!.idUtilisateur).toBe('U1');
     });
@@ -93,7 +94,8 @@ describe("Les routes d'API des modèles de mesures spécifiques associés aux se
         };
 
       const { status } = await testeur.put(
-        '/api/service/S1/modeles/mesureSpecifique'
+        '/api/service/S1/modeles/mesureSpecifique',
+        { idsModeles: [unUUIDRandom()] }
       );
 
       expect(status).toBe(403);
@@ -110,7 +112,8 @@ describe("Les routes d'API des modèles de mesures spécifiques associés aux se
         };
 
       const { status } = await testeur.put(
-        '/api/service/S1/modeles/mesureSpecifique'
+        '/api/service/S1/modeles/mesureSpecifique',
+        { idsModeles: [unUUIDRandom()] }
       );
 
       expect(status).toBe(403);
@@ -126,7 +129,8 @@ describe("Les routes d'API des modèles de mesures spécifiques associés aux se
         };
 
       const { status } = await testeur.put(
-        '/api/service/S1/modeles/mesureSpecifique'
+        '/api/service/S1/modeles/mesureSpecifique',
+        { idsModeles: [unUUIDRandom()] }
       );
 
       expect(status).toBe(400);
