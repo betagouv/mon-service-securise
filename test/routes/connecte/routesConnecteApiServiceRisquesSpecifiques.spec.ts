@@ -1,12 +1,12 @@
 import { unService } from '../../constructeurs/constructeurService.js';
 import Risques from '../../../src/modeles/risques.js';
-import { ErreurRisqueInconnu } from '../../../src/erreurs.ts';
+import { ErreurRisqueInconnu } from '../../../src/erreurs.js';
 import testeurMSS from '../testeurMSS.js';
 import {
   Permissions,
   Rubriques,
-} from '../../../src/modeles/autorisations/gestionDroits.ts';
-import { UUID } from '../../../src/typesBasiques.ts';
+} from '../../../src/modeles/autorisations/gestionDroits.js';
+import { UUID } from '../../../src/typesBasiques.js';
 import RisqueSpecifique from '../../../src/modeles/risqueSpecifique.js';
 
 const { ECRITURE } = Permissions;
@@ -18,12 +18,17 @@ describe('Les routes API des risques spécifiques de services', () => {
   beforeEach(() => testeur.initialise());
 
   describe('quand requête POST sur `/api/service/:id/risquesSpecifiques', () => {
+    const unePayloadValideSauf = (cleValeur?: Record<string, unknown>) => ({
+      niveauGravite: 'significatif',
+      niveauVraisemblance: 'peuVraisemblable',
+      commentaire: '',
+      description: '',
+      intitule: 'risque',
+      categories: ['integrite'],
+      ...cleValeur,
+    });
+
     beforeEach(() => {
-      testeur.referentiel().recharge({
-        niveauxGravite: { unNiveau: {} },
-        vraisemblancesRisques: { unNiveauVraisemblance: {} },
-        categoriesRisques: { C1: {} },
-      });
       testeur.depotDonnees().ajouteRisqueSpecifiqueAService = async () => {};
     });
 
@@ -40,70 +45,21 @@ describe('Les routes API des risques spécifiques de services', () => {
         );
     });
 
-    it('aseptise les paramètres de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          [
-            'niveauGravite',
-            'niveauVraisemblance',
-            'commentaire',
-            'description',
-            'intitule',
-            'categories.*',
-          ],
-          testeur.app(),
-          {
-            method: 'post',
-            url: '/api/service/456/risquesSpecifiques',
-          }
+    describe('jette une erreur 400...', () => {
+      it.each([
+        { niveauGravite: undefined },
+        { niveauVraisemblance: undefined },
+        { commentaire: 123 },
+        { description: 123 },
+        { intitule: undefined },
+        { categories: [] },
+      ])('si la payload contient %s', async (donneesDuTest) => {
+        const { status } = await testeur.post(
+          '/api/service/456/risquesSpecifiques',
+          unePayloadValideSauf(donneesDuTest)
         );
-    });
-
-    it("retourne une erreur 400 si le niveau de gravité n'existe pas", async () => {
-      const reponse = await testeur.post(
-        '/api/service/456/risquesSpecifiques',
-        {
-          niveauGravite: 'inexistant',
-          intitule: 'risque',
-          categories: ['C1'],
-        }
-      );
-      expect(reponse.status).toBe(400);
-      expect(reponse.text).toBe('ErreurNiveauGraviteInconnu');
-    });
-
-    it("retourne une erreur 400 si le niveau de vraisemblance n'existe pas", async () => {
-      const reponse = await testeur.post(
-        '/api/service/456/risquesSpecifiques',
-        {
-          niveauVraisemblance: 'inexistant',
-          intitule: 'risque',
-          categories: ['C1'],
-        }
-      );
-      expect(reponse.status).toBe(400);
-      expect(reponse.text).toBe('ErreurNiveauVraisemblanceInconnu');
-    });
-
-    it("retourne une erreur 400 si l'intitulé est vide", async () => {
-      const reponse = await testeur.post(
-        '/api/service/456/risquesSpecifiques',
-        { categories: ['C1'] }
-      );
-
-      expect(reponse.status).toBe(400);
-      expect(reponse.text).toBe('ErreurIntituleRisqueManquant');
-    });
-
-    it("retourne une erreur 400 si la catégorie n'existe pas", async () => {
-      const reponse = await testeur.post(
-        '/api/service/456/risquesSpecifiques',
-        { categories: ['inexistante'], intitule: 'un risque' }
-      );
-
-      expect(reponse.status).toBe(400);
-      expect(reponse.text).toBe('ErreurCategorieRisqueInconnue');
+        expect(status).toBe(400);
+      });
     });
 
     it("délègue au dépôt de donnée l'ajout du risque", async () => {
@@ -119,21 +75,16 @@ describe('Les routes API des risques spécifiques de services', () => {
         donnees.id = 'RS1';
       };
 
-      await testeur.post('/api/service/456/risquesSpecifiques', {
-        intitule: 'un risque important',
-        niveauGravite: 'unNiveau',
-        niveauVraisemblance: 'unNiveauVraisemblance',
-        commentaire: "c'est important",
-        categories: ['C1'],
-      });
+      await testeur.post(
+        '/api/service/456/risquesSpecifiques',
+        unePayloadValideSauf()
+      );
 
       expect(idServiceRecu).toBe('456');
-      expect(donneesRecues!.intitule).to.eql('un risque important');
-      expect(donneesRecues!.niveauGravite).to.eql('unNiveau');
-      expect(donneesRecues!.niveauVraisemblance).to.eql(
-        'unNiveauVraisemblance'
-      );
-      expect(donneesRecues!.commentaire).to.eql("c'est important");
+      expect(donneesRecues!.intitule).to.eql('risque');
+      expect(donneesRecues!.niveauGravite).to.eql('significatif');
+      expect(donneesRecues!.niveauVraisemblance).to.eql('peuVraisemblable');
+      expect(donneesRecues!.commentaire).to.eql('');
     });
 
     it('retourne la représentation du risque ajouté', async () => {
@@ -149,13 +100,7 @@ describe('Les routes API des risques spécifiques de services', () => {
 
       const reponse = await testeur.post(
         '/api/service/456/risquesSpecifiques',
-        {
-          intitule: 'un risque important',
-          niveauGravite: 'unNiveau',
-          niveauVraisemblance: 'unNiveauVraisemblance',
-          commentaire: "c'est important",
-          categories: ['C1'],
-        }
+        unePayloadValideSauf()
       );
 
       expect(reponse.body.id).toBe('abcd');
