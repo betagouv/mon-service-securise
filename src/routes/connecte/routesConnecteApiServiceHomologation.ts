@@ -85,16 +85,16 @@ export const routesConnecteApiServiceHomologation = ({
     '/:id/homologation/telechargement',
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
-    (requete, reponse, suite) => {
+    async (requete, reponse) => {
       const { service, dossierCourant } =
         requete as unknown as RequeteAvecServiceEtDossierCourant;
 
       const dateTelechargement = adaptateurHorloge.maintenant();
       dossierCourant.enregistreDateTelechargement(dateTelechargement);
-      depotDonnees
-        .enregistreDossier(service.id, dossierCourant)
-        .then(() => reponse.sendStatus(204))
-        .catch(suite);
+
+      await depotDonnees.enregistreDossier(service.id, dossierCourant);
+
+      reponse.sendStatus(204);
     }
   );
 
@@ -112,7 +112,7 @@ export const routesConnecteApiServiceHomologation = ({
       },
     ]),
     middleware.aseptise('avis.*.collaborateurs.*', 'avecAvis'),
-    (requete, reponse, suite) => {
+    async (requete, reponse) => {
       const {
         body: { avis },
       } = requete;
@@ -128,10 +128,9 @@ export const routesConnecteApiServiceHomologation = ({
       if (avecAvis) dossierCourant.enregistreAvis(avis);
       else dossierCourant.declareSansAvis();
 
-      depotDonnees
-        .enregistreDossier(service.id, dossierCourant)
-        .then(() => reponse.sendStatus(204))
-        .catch(suite);
+      await depotDonnees.enregistreDossier(service.id, dossierCourant);
+
+      reponse.sendStatus(204);
     }
   );
 
@@ -140,7 +139,7 @@ export const routesConnecteApiServiceHomologation = ({
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
     middleware.aseptise('documents.*', 'avecDocuments'),
-    (requete, reponse, suite) => {
+    async (requete, reponse) => {
       const {
         body: { documents },
       } = requete;
@@ -156,23 +155,20 @@ export const routesConnecteApiServiceHomologation = ({
       if (avecDocuments) dossierCourant.enregistreDocuments(documents);
       else dossierCourant.declareSansDocument();
 
-      depotDonnees
-        .enregistreDossier(service.id, dossierCourant)
-        .then(() => reponse.sendStatus(204))
-        .catch(suite);
+      await depotDonnees.enregistreDossier(service.id, dossierCourant);
+
+      reponse.sendStatus(204);
     }
   );
 
   routes.post(
     '/:id/homologation/finalise',
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
-    (requete, reponse, suite) => {
+    async (requete, reponse) => {
       const { service } = requete as unknown as RequeteAvecService;
 
-      depotDonnees
-        .finaliseDossierCourant(service)
-        .then(() => reponse.sendStatus(204))
-        .catch(suite);
+      await depotDonnees.finaliseDossierCourant(service);
+      reponse.sendStatus(204);
     }
   );
 
