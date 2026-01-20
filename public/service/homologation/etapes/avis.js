@@ -77,5 +77,5 @@ $(() => {
   $('#avis .item-ajoute').each((_indice, element) => {
     brancheCollaborateursEtiquettes($(element));
   });
-  brancheComportemenFormulaireEtape(soumissionEtapeAvis('form'));
+  brancheComportemenFormulaireEtape(soumissionEtapeAvis('form.homologation'));
 });
