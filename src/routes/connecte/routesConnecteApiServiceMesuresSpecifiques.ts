@@ -1,4 +1,4 @@
-import express, { Request } from 'express';
+import express from 'express';
 import { z } from 'zod';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
@@ -17,16 +17,10 @@ import {
 } from '../../modeles/autorisations/gestionDroits.js';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
-import Service from '../../modeles/service.js';
-import { UUID } from '../../typesBasiques.js';
+import { RequestRouteConnecteService } from './routesConnecte.types.js';
 
 const { ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
-
-type RequeteAuthentifieeAvecService = Request & {
-  idUtilisateurCourant: UUID;
-  service: Service;
-};
 
 export const routesConnecteApiServiceMesuresSpecifiques = ({
   depotDonnees,
@@ -53,7 +47,7 @@ export const routesConnecteApiServiceMesuresSpecifiques = ({
         idUtilisateurCourant: idUtilisateur,
         service,
         body,
-      } = requete as unknown as RequeteAuthentifieeAvecService;
+      } = requete as unknown as RequestRouteConnecteService;
 
       const {
         description,
@@ -97,7 +91,7 @@ export const routesConnecteApiServiceMesuresSpecifiques = ({
     ),
     async (requete, reponse, suite) => {
       const { service, idUtilisateurCourant } =
-        requete as unknown as RequeteAuthentifieeAvecService;
+        requete as unknown as RequestRouteConnecteService;
 
       const { idMesure } = requete.params;
       const {
@@ -147,7 +141,7 @@ export const routesConnecteApiServiceMesuresSpecifiques = ({
     middleware.trouveService({ [SECURISER]: ECRITURE }),
     async (requete, reponse) => {
       const { service, idUtilisateurCourant } =
-        requete as unknown as RequeteAuthentifieeAvecService;
+        requete as unknown as RequestRouteConnecteService;
       const { idMesure } = requete.params;
 
       try {
