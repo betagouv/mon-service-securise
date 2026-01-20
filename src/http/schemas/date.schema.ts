@@ -16,4 +16,11 @@ export const schemaDate = {
           date.getDate() === dd
         );
       }, 'Date invalide'),
+  uneDateValideEnChaine: () =>
+    z
+      .string()
+      .refine(
+        (chaineDate) => !Number.isNaN(new Date(chaineDate).valueOf()),
+        'Date invalide'
+      ),
 };

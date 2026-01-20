@@ -33,11 +33,6 @@ export const schemaPutMesureSpecifique = (
   responsables: schemaPlanActionMesure.responsables().optional(),
 });
 
-export const schemaPutAutoriteHomologation = () => ({
-  nom: z.string().trim().min(1).max(200),
-  fonction: z.string().trim().min(1).max(400),
-});
-
 export const schemaPutRisqueGeneral = (referentielV2: ReferentielV2) => ({
   niveauGravite: z
     .enum(referentielV2.identifiantsNiveauxGravite())

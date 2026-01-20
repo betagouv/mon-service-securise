@@ -129,41 +129,26 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
-    it('aseptise les paramètres reçus', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['dateHomologation', 'dureeValidite'],
-          testeur.app(),
-          {
-            url: '/api/service/456/homologation/decision',
-            method: 'put',
-          }
-        );
-    });
-
-    it("renvoie une erreur 422 si la date d'homologation est invalide", async () => {
-      const reponse = await testeur.put(
+    it("renvoie une erreur si la date d'homologation est invalide", async () => {
+      const { status } = await testeur.put(
         '/api/service/456/homologation/decision',
         {
           dateHomologation: 'dateInvalide',
           dureeValidite: 'unAn',
         }
       );
-      expect(reponse.status).toBe(422);
-      expect(reponse.text).toBe("Date d'homologation invalide");
+      expect(status).toBe(400);
     });
 
-    it('renvoie une erreur 422 si la durée de validité est inconnue du référentiel', async () => {
-      const reponse = await testeur.put(
+    it('renvoie une erreur si la durée de validité est invalide', async () => {
+      const { status } = await testeur.put(
         '/api/service/456/homologation/decision',
         {
           dateHomologation: new Date(),
           dureeValidite: 'dureeInconnue',
         }
       );
-      expect(reponse.status).toBe(422);
-      expect(reponse.text).toBe('Durée de validité invalide');
+      expect(status).toBe(400);
     });
 
     it("utilise le dépôt pour enregistrer la décision d'homologation", async () => {
