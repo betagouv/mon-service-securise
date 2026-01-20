@@ -20,7 +20,6 @@ import {
   ErreurPrioriteMesureInvalide,
   ErreurRisqueInconnu,
   ErreurStatutMesureInvalide,
-  ErreurSuppressionImpossible,
 } from '../../erreurs.js';
 import ActeursHomologation from '../../modeles/acteursHomologation.js';
 import Avis from '../../modeles/avis.js';
@@ -44,19 +43,17 @@ import {
 import * as objetGetMesures from '../../modeles/objetsApi/objetGetMesures.js';
 import EvenementRetourUtilisateurMesure from '../../modeles/journalMSS/evenementRetourUtilisateurMesure.js';
 import routesConnecteApiServiceActivitesMesure from './routesConnecteApiServiceActivitesMesure.js';
-import MesureSpecifique from '../../modeles/mesureSpecifique.js';
 import RisqueSpecifique from '../../modeles/risqueSpecifique.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import routesConnecteApiSimulationMigrationReferentiel from './routesConnecteApiSimulationMigrationReferentiel.js';
 import { schemaSuggestionAction } from '../../http/schemas/suggestionAction.schema.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
-  schemaPostMesureSpecifique,
   schemaPutAutoriteHomologation,
-  schemaPutMesureSpecifique,
   schemaPutRisqueGeneral,
 } from './routesConnecteApiService.schema.js';
 import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
+import { routesConnecteApiServiceMesuresSpecifiques } from './routesConnecteApiServiceMesuresSpecifiques.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { CONTACTS, SECURISER, RISQUES, HOMOLOGUER, DECRIRE } = Rubriques;
@@ -87,6 +84,15 @@ const routesConnecteApiService = ({
     routesConnecteApiServiceActivitesMesure({
       middleware,
       depotDonnees,
+      referentiel,
+      referentielV2,
+    })
+  );
+
+  routes.use(
+    routesConnecteApiServiceMesuresSpecifiques({
+      depotDonnees,
+      middleware,
       referentiel,
       referentielV2,
     })
@@ -195,125 +201,6 @@ const routesConnecteApiService = ({
       const { service } = requete;
 
       reponse.json(objetGetMesures.donnees(service));
-    }
-  );
-
-  routes.put(
-    '/:id/mesuresSpecifiques/:idMesure',
-    middleware.verificationAcceptationCGU,
-    middleware.trouveService({ [SECURISER]: ECRITURE }),
-    valideParams(z.looseObject({ idMesure: z.uuid() })),
-    valideBody(
-      z.strictObject(schemaPutMesureSpecifique(referentiel, referentielV2))
-    ),
-    async (requete, reponse, _suite) => {
-      const { service } = requete;
-      const { idMesure } = requete.params;
-      const {
-        description,
-        descriptionLongue,
-        categorie,
-        statut,
-        modalites,
-        priorite,
-        echeance,
-        responsables,
-      } = requete.body;
-
-      try {
-        const mesureSpecifique = new MesureSpecifique(
-          {
-            id: idMesure,
-            description,
-            descriptionLongue,
-            categorie,
-            statut,
-            modalites,
-            priorite,
-            echeance,
-            responsables,
-          },
-          referentiel
-        );
-        await depotDonnees.metsAJourMesureSpecifiqueDuService(
-          service.id,
-          requete.idUtilisateurCourant,
-          mesureSpecifique
-        );
-
-        reponse.sendStatus(200);
-      } catch (e) {
-        if (e instanceof ErreurMesureInconnue)
-          reponse.status(404).send('La mesure est introuvable');
-        else suite(e);
-      }
-    }
-  );
-
-  routes.post(
-    '/:id/mesuresSpecifiques',
-    middleware.verificationAcceptationCGU,
-    middleware.trouveService({ [SECURISER]: ECRITURE }),
-    valideBody(
-      z.strictObject(schemaPostMesureSpecifique(referentiel, referentielV2))
-    ),
-    async (requete, reponse) => {
-      const { idUtilisateurCourant: idUtilisateur, service, body } = requete;
-
-      const {
-        description,
-        descriptionLongue,
-        categorie,
-        statut,
-        modalites,
-        priorite,
-        echeance,
-        responsables,
-      } = body;
-
-      await depotDonnees.ajouteMesureSpecifiqueAuService(
-        new MesureSpecifique(
-          {
-            description,
-            descriptionLongue,
-            categorie,
-            statut,
-            modalites,
-            priorite,
-            echeance,
-            responsables,
-          },
-          referentiel
-        ),
-        idUtilisateur,
-        service.id
-      );
-      reponse.sendStatus(201);
-    }
-  );
-
-  routes.delete(
-    '/:id/mesuresSpecifiques/:idMesure',
-    middleware.verificationAcceptationCGU,
-    middleware.trouveService({ [SECURISER]: ECRITURE }),
-    async (requete, reponse, _suite) => {
-      const { service, idUtilisateurCourant } = requete;
-      const { idMesure } = requete.params;
-
-      try {
-        await depotDonnees.supprimeMesureSpecifiqueDuService(
-          service.id,
-          idUtilisateurCourant,
-          idMesure
-        );
-        reponse.sendStatus(200);
-      } catch (e) {
-        if (e instanceof ErreurSuppressionImpossible) {
-          reponse.sendStatus(400);
-          return;
-        }
-        throw e;
-      }
     }
   );
 
