@@ -24,28 +24,27 @@ export const enregistreMesures = async (
   }
 
   async function enregistreMesuresSpecifiques() {
-    const { id, echeance, ...donnees } = $store.mesureEditee.mesure;
+    const { id, echeance, identifiantNumerique, ...donnees } =
+      $store.mesureEditee.mesure;
+
     const payload = {
       ...donnees,
       ...(echeance && {
         echeance: formatteurDate.format(new Date(echeance)),
       }),
     };
-    if ($store.etape === 'Creation') {
+
+    if ($store.etape === 'Creation')
       await axios.post(`/api/service/${idService}/mesuresSpecifiques`, payload);
-    } else {
+    else
       await axios.put(
         `/api/service/${idService}/mesuresSpecifiques/${id}`,
         payload
       );
-    }
   }
 
-  if ($store.etape === 'EditionGenerale') {
-    await enregistreMesureGenerale();
-  } else {
-    await enregistreMesuresSpecifiques();
-  }
+  if ($store.etape === 'EditionGenerale') await enregistreMesureGenerale();
+  else await enregistreMesuresSpecifiques();
 };
 
 export const supprimeMesureSpecifique = async (

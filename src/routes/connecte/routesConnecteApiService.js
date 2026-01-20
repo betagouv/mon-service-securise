@@ -256,6 +256,7 @@ const routesConnecteApiService = ({
 
       const {
         description,
+        descriptionLongue,
         categorie,
         statut,
         modalites,
@@ -268,6 +269,7 @@ const routesConnecteApiService = ({
         new MesureSpecifique(
           {
             description,
+            descriptionLongue,
             categorie,
             statut,
             modalites,
