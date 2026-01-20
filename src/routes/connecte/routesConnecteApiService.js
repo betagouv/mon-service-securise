@@ -97,7 +97,7 @@ const routesConnecteApiService = ({
       adaptateurHorloge,
       depotDonnees,
       middleware,
-      referentiel,
+      referentielV2,
     })
   );
 

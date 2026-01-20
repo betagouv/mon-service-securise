@@ -6,16 +6,18 @@ import {
   Rubriques,
 } from '../../modeles/autorisations/gestionDroits.js';
 import { Middleware } from '../../http/middleware.interface.js';
-import { schemaPutAutoriteHomologation } from './routesConnecteApiService.schema.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
-import { dateInvalide } from '../../utilitaires/date.js';
-import { Referentiel } from '../../referentiel.interface.js';
+import { ReferentielV2 } from '../../referentiel.interface.js';
 import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
 import { valeurBooleenne } from '../../utilitaires/aseptisation.js';
 import Avis from '../../modeles/avis.js';
 import Service from '../../modeles/service.js';
 import Dossier from '../../modeles/dossier.js';
 import { ErreurDossierCourantInexistant } from '../../erreurs.js';
+import {
+  schemaPutAutoriteHomologation,
+  schemaPutDecisionHomologation,
+} from './routesConnecteApiServiceHomologation.schema.js';
 
 const { ECRITURE } = Permissions;
 const { HOMOLOGUER } = Rubriques;
@@ -32,12 +34,12 @@ export const routesConnecteApiServiceHomologation = ({
   adaptateurHorloge,
   depotDonnees,
   middleware,
-  referentiel,
+  referentielV2,
 }: {
   adaptateurHorloge: AdaptateurHorloge;
   depotDonnees: DepotDonnees;
   middleware: Middleware;
-  referentiel: Referentiel;
+  referentielV2: ReferentielV2;
 }) => {
   const routes = express.Router();
 
@@ -65,29 +67,17 @@ export const routesConnecteApiServiceHomologation = ({
     '/:id/homologation/decision',
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
-    middleware.aseptise('dateHomologation', 'dureeValidite'),
-    (requete, reponse, suite) => {
+    valideBody(z.strictObject(schemaPutDecisionHomologation(referentielV2))),
+    async (requete, reponse) => {
       const { dateHomologation, dureeValidite } = requete.body;
-      if (dateInvalide(dateHomologation)) {
-        reponse.status(422).send("Date d'homologation invalide");
-        return;
-      }
-
-      if (
-        !referentiel.estIdentifiantEcheanceRenouvellementConnu(dureeValidite)
-      ) {
-        reponse.status(422).send('Durée de validité invalide');
-        return;
-      }
 
       const { service, dossierCourant } =
         requete as unknown as RequeteAvecServiceEtDossierCourant;
 
       dossierCourant.enregistreDecision(dateHomologation, dureeValidite);
-      depotDonnees
-        .enregistreDossier(service.id, dossierCourant)
-        .then(() => reponse.sendStatus(204))
-        .catch(suite);
+      await depotDonnees.enregistreDossier(service.id, dossierCourant);
+
+      reponse.sendStatus(204);
     }
   );
 
