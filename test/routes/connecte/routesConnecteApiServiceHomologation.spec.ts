@@ -398,25 +398,20 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
-    it('aseptise la liste des documents et le paramètres "avecDocuments"', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['documents.*', 'avecDocuments'],
-          testeur.app(),
-          {
-            url: '/api/service/456/homologation/documents',
-            method: 'put',
-          }
-        );
+    it("renvoie une 400 si aucun document n'est envoyé", async () => {
+      const { status } = await testeur.put(
+        '/api/service/456/homologation/documents',
+        { avecDocuments: true, documents: undefined }
+      );
+      expect(status).toBe(400);
     });
 
-    it("renvoie une 400 si aucun document n'est envoyé", async () => {
-      const reponse = await testeur.put(
+    it("renvoie une 400 si 'avecDocuments' n'est pas envoyé", async () => {
+      const { status } = await testeur.put(
         '/api/service/456/homologation/documents',
-        {}
+        { documents: [], avecDocuments: undefined }
       );
-      expect(reponse.status).toBe(400);
+      expect(status).toBe(400);
     });
 
     describe('utilise le dépôt pour enregistrer les documents', () => {
@@ -436,7 +431,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
         await testeur.put('/api/service/456/homologation/documents', {
           documents: ['unDocument'],
-          avecDocuments: 'true',
+          avecDocuments: true,
         });
         expect(depotAppele).toBe(true);
       });
@@ -456,7 +451,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
         await testeur.put('/api/service/456/homologation/documents', {
           documents: [],
-          avecDocuments: 'false',
+          avecDocuments: false,
         });
         expect(depotAppele).toBe(true);
       });

@@ -17,6 +17,7 @@ import { ErreurDossierCourantInexistant } from '../../erreurs.js';
 import {
   schemaPutAutoriteHomologation,
   schemaPutDecisionHomologation,
+  schemaPutDocumentsHomologation,
 } from './routesConnecteApiServiceHomologation.schema.js';
 
 const { ECRITURE } = Permissions;
@@ -138,19 +139,14 @@ export const routesConnecteApiServiceHomologation = ({
     '/:id/homologation/documents',
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
-    middleware.aseptise('documents.*', 'avecDocuments'),
+    valideBody(z.strictObject(schemaPutDocumentsHomologation())),
     async (requete, reponse) => {
       const {
-        body: { documents },
+        body: { documents, avecDocuments },
       } = requete;
-      if (!documents) {
-        reponse.sendStatus(400);
-        return;
-      }
 
       const { service, dossierCourant } =
         requete as unknown as RequeteAvecServiceEtDossierCourant;
-      const avecDocuments = valeurBooleenne(requete.body.avecDocuments);
 
       if (avecDocuments) dossierCourant.enregistreDocuments(documents);
       else dossierCourant.declareSansDocument();
