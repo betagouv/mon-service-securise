@@ -19,6 +19,20 @@ export const schemaPostMesureSpecifique = (
   responsables: schemaPlanActionMesure.responsables().optional(),
 });
 
+export const schemaPutMesureSpecifique = (
+  referentiel: Referentiel,
+  referentielV2: ReferentielV2
+) => ({
+  description: schemaMesureSpecifique.description(),
+  descriptionLongue: schemaMesureSpecifique.descriptionLongue().optional(),
+  categorie: schemaMesureSpecifique.categorie(referentiel, referentielV2),
+  statut: schemaMesureSpecifique.statut(referentiel, referentielV2),
+  modalites: schemaMesureSpecifique.modalites(),
+  priorite: schemaPlanActionMesure.priorite(referentielV2).or(z.literal('')),
+  echeance: schemaPlanActionMesure.echeance().optional(),
+  responsables: schemaPlanActionMesure.responsables().optional(),
+});
+
 export const schemaPutAutoriteHomologation = () => ({
   nom: z.string().trim().min(1).max(200),
   fonction: z.string().trim().min(1).max(400),

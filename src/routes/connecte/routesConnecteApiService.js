@@ -53,6 +53,7 @@ import { valideBody, valideParams } from '../../http/validePayloads.js';
 import {
   schemaPostMesureSpecifique,
   schemaPutAutoriteHomologation,
+  schemaPutMesureSpecifique,
   schemaPutRisqueGeneral,
 } from './routesConnecteApiService.schema.js';
 import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
@@ -201,31 +202,36 @@ const routesConnecteApiService = ({
     '/:id/mesuresSpecifiques/:idMesure',
     middleware.verificationAcceptationCGU,
     middleware.trouveService({ [SECURISER]: ECRITURE }),
-    middleware.aseptise(
-      'description',
-      'categorie',
-      'statut',
-      'modalites',
-      'priorite',
-      'echeance',
-      'responsables.*'
+    valideParams(z.looseObject({ idMesure: z.uuid() })),
+    valideBody(
+      z.strictObject(schemaPutMesureSpecifique(referentiel, referentielV2))
     ),
     async (requete, reponse, _suite) => {
       const { service } = requete;
       const { idMesure } = requete.params;
-      const { echeance, statut } = requete.body;
-
-      if (!statut) {
-        reponse.status(400).send('Le statut de la mesure est obligatoire.');
-        return;
-      }
+      const {
+        description,
+        descriptionLongue,
+        categorie,
+        statut,
+        modalites,
+        priorite,
+        echeance,
+        responsables,
+      } = requete.body;
 
       try {
         const mesureSpecifique = new MesureSpecifique(
           {
             id: idMesure,
-            ...requete.body,
-            ...(echeance && { echeance: echeance.replaceAll('&#x2F;', '/') }),
+            description,
+            descriptionLongue,
+            categorie,
+            statut,
+            modalites,
+            priorite,
+            echeance,
+            responsables,
           },
           referentiel
         );
@@ -239,7 +245,7 @@ const routesConnecteApiService = ({
       } catch (e) {
         if (e instanceof ErreurMesureInconnue)
           reponse.status(404).send('La mesure est introuvable');
-        else reponse.status(400).send(e.message);
+        else suite(e);
       }
     }
   );
