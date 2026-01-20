@@ -29,7 +29,7 @@ describe('Les routes des mesures spécifiques de service', () => {
       statut: 'fait',
       priorite: '',
       modalites: '',
-      echeance: '01/23/2025',
+      echeance: '1/7/2025',
       ...cleValeur,
     });
 
