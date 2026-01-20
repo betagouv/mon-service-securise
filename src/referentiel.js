@@ -273,8 +273,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     donnees.tachesCompletudeProfil.find((t) => t.id === id);
 
   const retoursUtilisateurMesure = () => donnees.retoursUtilisateurMesure || {};
-  const retourUtilisateurMesureAvecId = (idRetour) =>
-    retoursUtilisateurMesure()[idRetour] ?? null;
 
   const verifieCategoriesMesuresSontRepertoriees = (categories) => {
     const distinctes = [...new Set(categories)];
@@ -539,7 +537,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     recharge,
     reglesPersonnalisation,
     retoursUtilisateurMesure,
-    retourUtilisateurMesureAvecId,
     risques,
     descriptionStatutDeploiement,
     statutsAvisDossierHomologation,

@@ -886,28 +886,6 @@ describe('Le référentiel', () => {
     });
   });
 
-  describe("sur demande d'un retour utilisateur sur une mesure par id", () => {
-    it('retourne la valeur', () => {
-      const referentiel = Referentiel.creeReferentiel({
-        retoursUtilisateurMesure: { unAvis: { description: 'un avis' } },
-      });
-
-      expect(referentiel.retourUtilisateurMesureAvecId('unAvis')).to.eql({
-        description: 'un avis',
-      });
-    });
-
-    it("retourne `null` si l'id est introuvable", () => {
-      const referentiel = Referentiel.creeReferentiel({
-        retoursUtilisateurMesure: {},
-      });
-
-      expect(referentiel.retourUtilisateurMesureAvecId('unAvis')).to.equal(
-        null
-      );
-    });
-  });
-
   describe("sur demande de l'étape suivante de la visite guidée", () => {
     it("retourne l'ID de l'étape suivante", () => {
       const referentiel = Referentiel.creeReferentiel({

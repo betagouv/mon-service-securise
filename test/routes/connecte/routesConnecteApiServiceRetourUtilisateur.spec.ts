@@ -15,6 +15,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
   beforeEach(() => testeur.initialise());
 
   describe('quand requête POST sur `/api/service/:id/retourUtilisateurMesure', () => {
+    const unePayloadValideSauf = (cleValeur?: Record<string, unknown>) => ({
+      idMesure: 'RECENSEMENT.1',
+      idRetour: 'mesureUtile',
+      commentaire: 'un commentaire',
+      ...cleValeur,
+    });
+
     it('recherche le service correspondant', async () => {
       await testeur
         .middleware()
@@ -28,54 +35,16 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         );
     });
 
-    it('aseptise les données de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['id', 'idMesure', 'idRetour', 'commentaire'],
-          testeur.app(),
-          {
-            method: 'post',
-            url: '/api/service/456/retourUtilisateurMesure',
-          }
-        );
-    });
+    describe('jette une erreur 400 si...', () => {
+      it.each([{ idMesure: 'pasUneMesureV1', idRetour: 'pasUnIdRetour' }])(
+        'la payload contient %s',
+        async (donneesDuTest) => {
+          const { status } = await testeur.post(
+            '/api/service/456/retourUtilisateurMesure',
+            unePayloadValideSauf(donneesDuTest)
+          );
 
-    it("retourne une erreur HTTP 424 si l'id du retour utilisateur est inconnu", async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        424,
-        {
-          type: 'DONNEES_INCORRECTES',
-          message: "L'identifiant de retour utilisateur est incorrect.",
-        },
-        {
-          method: 'post',
-          url: '/api/service/456/retourUtilisateurMesure',
-          data: { idRetour: 'idRetourInconnu' },
-        }
-      );
-    });
-
-    it("retourne une erreur HTTP 424 si l'id de mesure est inconnu", async () => {
-      testeur.referentiel().recharge({
-        retoursUtilisateurMesure: { idRetour: 'un retour utilisateur' },
-      });
-      // @ts-expect-error La fonction `reinitialise` devrait prendre des paramètres optionnels
-      testeur.middleware().reinitialise({
-        serviceARenvoyer: unService(testeur.referentiel())
-          .avecId('456')
-          .construis(),
-      });
-      await testeur.verifieRequeteGenereErreurHTTP(
-        424,
-        {
-          type: 'DONNEES_INCORRECTES',
-          message: "L'identifiant de mesure est incorrect.",
-        },
-        {
-          method: 'post',
-          url: '/api/service/456/retourUtilisateurMesure',
-          data: { idMesure: 'idMesureInconnu', idRetour: 'idRetour' },
+          expect(status).toBe(400);
         }
       );
     });
@@ -98,11 +67,10 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         evenementRecu = evenement;
       };
 
-      await testeur.post('/api/service/456/retourUtilisateurMesure', {
-        idMesure: 'implementerMfa',
-        idRetour: 'bonneMesure',
-        commentaire: 'un commentaire',
-      });
+      await testeur.post(
+        '/api/service/456/retourUtilisateurMesure',
+        unePayloadValideSauf()
+      );
 
       expect(evenementRecu!.type).toEqual('RETOUR_UTILISATEUR_MESURE_RECU');
     });
