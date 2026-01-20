@@ -136,6 +136,7 @@ export const routesConnecteApiServiceRisquesSpecifiques = ({
   routes.delete(
     '/:id/risquesSpecifiques/:idRisque',
     middleware.trouveService({ [RISQUES]: ECRITURE }),
+    valideParams(z.looseObject({ idRisque: z.uuid() })),
     async (requete, reponse) => {
       const { idRisque } = requete.params;
       const { service } = requete as unknown as RequeteAvecService;

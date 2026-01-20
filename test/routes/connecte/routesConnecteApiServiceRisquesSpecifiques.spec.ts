@@ -238,8 +238,19 @@ describe('Les routes API des risques spécifiques de services', () => {
         .verifieRechercheService(
           [{ niveau: ECRITURE, rubrique: RISQUES }],
           testeur.app(),
-          { method: 'delete', url: '/api/service/456/risquesSpecifiques/RS1' }
+          {
+            method: 'delete',
+            url: `/api/service/456/risquesSpecifiques/${unUUIDRandom()}`,
+          }
         );
+    });
+
+    it("jette une erreur 400 si l'ID est invalide", async () => {
+      const { status } = await testeur.delete(
+        '/api/service/456/risquesSpecifiques/pasUnUUID'
+      );
+
+      expect(status).toBe(400);
     });
 
     it('délègue au dépôt de donnée la suppression du risque', async () => {
@@ -253,10 +264,11 @@ describe('Les routes API des risques spécifiques de services', () => {
         idRisqueRecu = idRisque;
       };
 
-      await testeur.delete('/api/service/456/risquesSpecifiques/RS1');
+      const idRisque = unUUIDRandom();
+      await testeur.delete(`/api/service/456/risquesSpecifiques/${idRisque}`);
 
       expect(idServiceRecu).toBe('456');
-      expect(idRisqueRecu).toBe('RS1');
+      expect(idRisqueRecu).toBe(idRisque);
     });
   });
 });
