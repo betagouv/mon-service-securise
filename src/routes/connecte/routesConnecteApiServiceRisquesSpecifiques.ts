@@ -1,4 +1,5 @@
 import express, { Request } from 'express';
+import { z } from 'zod';
 import RisqueSpecifique from '../../modeles/risqueSpecifique.js';
 import {
   ErreurCategorieRisqueInconnue,
@@ -13,9 +14,11 @@ import {
   Rubriques,
 } from '../../modeles/autorisations/gestionDroits.js';
 import { Middleware } from '../../http/middleware.interface.js';
-import { Referentiel } from '../../referentiel.interface.js';
+import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import Service from '../../modeles/service.js';
+import { valideBody } from '../../http/validePayloads.js';
+import { schemaPostRisqueSpecifique } from './routesConnecteApiServiceRisquesSpecifiques.schema.js';
 
 const { ECRITURE } = Permissions;
 const { RISQUES } = Rubriques;
@@ -28,25 +31,20 @@ export const routesConnecteApiServiceRisquesSpecifiques = ({
   depotDonnees,
   middleware,
   referentiel,
+  referentielV2,
 }: {
   depotDonnees: DepotDonnees;
   middleware: Middleware;
   referentiel: Referentiel;
+  referentielV2: ReferentielV2;
 }) => {
   const routes = express.Router();
 
   routes.post(
     '/:id/risquesSpecifiques',
     middleware.trouveService({ [RISQUES]: ECRITURE }),
-    middleware.aseptise(
-      'niveauGravite',
-      'niveauVraisemblance',
-      'commentaire',
-      'description',
-      'intitule',
-      'categories.*'
-    ),
-    async (requete, reponse, suite) => {
+    valideBody(z.strictObject(schemaPostRisqueSpecifique(referentielV2))),
+    async (requete, reponse) => {
       const { service } = requete as unknown as RequeteAvecService;
       const {
         niveauGravite,
@@ -56,44 +54,33 @@ export const routesConnecteApiServiceRisquesSpecifiques = ({
         description,
         categories,
       } = requete.body;
-      try {
-        RisqueSpecifique.valide(
-          {
-            niveauVraisemblance,
-            niveauGravite,
-            intitule,
-            commentaire,
-            description,
-            categories,
-          },
-          referentiel
-        );
-        const risque = new RisqueSpecifique(
-          {
-            niveauGravite,
-            niveauVraisemblance,
-            intitule,
-            commentaire,
-            description,
-            categories,
-          },
-          referentiel
-        );
-        await depotDonnees.ajouteRisqueSpecifiqueAService(service.id, risque);
-        reponse.status(201).send(risque.toJSON());
-      } catch (e) {
-        if (
-          e instanceof ErreurNiveauGraviteInconnu ||
-          e instanceof ErreurNiveauVraisemblanceInconnu ||
-          e instanceof ErreurIntituleRisqueManquant ||
-          e instanceof ErreurCategoriesRisqueManquantes ||
-          e instanceof ErreurCategorieRisqueInconnue
-        ) {
-          reponse.status(400).send(e.constructor.name);
-          return;
-        }
-        suite(e);
-      }
+
+      RisqueSpecifique.valide(
+        {
+          niveauVraisemblance,
+          niveauGravite,
+          intitule,
+          commentaire,
+          description,
+          categories,
+        },
+        referentielV2
+      );
+      const risque = new RisqueSpecifique(
+        {
+          niveauGravite,
+          niveauVraisemblance,
+          intitule,
+          commentaire,
+          description,
+          categories,
+        },
+        referentielV2
+      );
+
+      await depotDonnees.ajouteRisqueSpecifiqueAService(service.id, risque);
+
+      reponse.status(201).send(risque.toJSON());
     }
   );
 
