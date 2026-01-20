@@ -1,24 +1,20 @@
 import express, { Request } from 'express';
 import { z } from 'zod';
 import RisqueSpecifique from '../../modeles/risqueSpecifique.js';
-import {
-  ErreurCategorieRisqueInconnue,
-  ErreurCategoriesRisqueManquantes,
-  ErreurIntituleRisqueManquant,
-  ErreurNiveauGraviteInconnu,
-  ErreurNiveauVraisemblanceInconnu,
-  ErreurRisqueInconnu,
-} from '../../erreurs.js';
+import { ErreurRisqueInconnu } from '../../erreurs.js';
 import {
   Permissions,
   Rubriques,
 } from '../../modeles/autorisations/gestionDroits.js';
 import { Middleware } from '../../http/middleware.interface.js';
-import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
+import { ReferentielV2 } from '../../referentiel.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import Service from '../../modeles/service.js';
-import { valideBody } from '../../http/validePayloads.js';
-import { schemaPostRisqueSpecifique } from './routesConnecteApiServiceRisquesSpecifiques.schema.js';
+import { valideBody, valideParams } from '../../http/validePayloads.js';
+import {
+  schemaPostRisqueSpecifique,
+  schemaPutRisqueSpecifique,
+} from './routesConnecteApiServiceRisquesSpecifiques.schema.js';
 
 const { ECRITURE } = Permissions;
 const { RISQUES } = Rubriques;
@@ -30,12 +26,10 @@ type RequeteAvecService = Request & {
 export const routesConnecteApiServiceRisquesSpecifiques = ({
   depotDonnees,
   middleware,
-  referentiel,
   referentielV2,
 }: {
   depotDonnees: DepotDonnees;
   middleware: Middleware;
-  referentiel: Referentiel;
   referentielV2: ReferentielV2;
 }) => {
   const routes = express.Router();
@@ -87,14 +81,8 @@ export const routesConnecteApiServiceRisquesSpecifiques = ({
   routes.put(
     '/:id/risquesSpecifiques/:idRisque',
     middleware.trouveService({ [RISQUES]: ECRITURE }),
-    middleware.aseptise(
-      'niveauGravite',
-      'niveauVraisemblance',
-      'commentaire',
-      'description',
-      'intitule',
-      'categories.*'
-    ),
+    valideParams(z.looseObject({ idRisque: z.uuid() })),
+    valideBody(z.strictObject(schemaPutRisqueSpecifique(referentielV2))),
     async (requete, reponse, suite) => {
       const {
         niveauGravite,
@@ -116,7 +104,7 @@ export const routesConnecteApiServiceRisquesSpecifiques = ({
             description,
             categories,
           },
-          referentiel
+          referentielV2
         );
         const risque = new RisqueSpecifique(
           {
@@ -128,7 +116,7 @@ export const routesConnecteApiServiceRisquesSpecifiques = ({
             description,
             categories,
           },
-          referentiel
+          referentielV2
         );
         await depotDonnees.metsAJourRisqueSpecifiqueDuService(
           service.id,
@@ -138,16 +126,6 @@ export const routesConnecteApiServiceRisquesSpecifiques = ({
       } catch (e) {
         if (e instanceof ErreurRisqueInconnu) {
           reponse.status(404).send('Le risque est introuvable');
-          return;
-        }
-        if (
-          e instanceof ErreurNiveauGraviteInconnu ||
-          e instanceof ErreurNiveauVraisemblanceInconnu ||
-          e instanceof ErreurIntituleRisqueManquant ||
-          e instanceof ErreurCategoriesRisqueManquantes ||
-          e instanceof ErreurCategorieRisqueInconnue
-        ) {
-          reponse.status(400).send(e.constructor.name);
           return;
         }
         suite(e);
