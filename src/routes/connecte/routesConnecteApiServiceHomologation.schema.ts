@@ -11,3 +11,8 @@ export const schemaPutDecisionHomologation = (referentiel: ReferentielV2) => ({
   dateHomologation: schemaDate.uneDateValideEnChaine(),
   dureeValidite: z.enum(referentiel.identifiantsEcheancesRenouvellement()),
 });
+
+export const schemaPutDocumentsHomologation = () => ({
+  documents: z.array(z.string().max(1000)),
+  avecDocuments: z.boolean(),
+});
