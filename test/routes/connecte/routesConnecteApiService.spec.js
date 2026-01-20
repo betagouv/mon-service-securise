@@ -4,9 +4,6 @@ import { unDossier } from '../../constructeurs/constructeurDossier.js';
 import { unService } from '../../constructeurs/constructeurService.js';
 import {
   ErreurDonneesObligatoiresManquantes,
-  ErreurDroitsInsuffisantsPourModelesDeMesureSpecifique,
-  ErreurModeleDeMesureSpecifiqueDejaAssociee,
-  ErreurModeleDeMesureSpecifiqueIntrouvable,
   ErreurNomServiceDejaExistant,
 } from '../../../src/erreurs.js';
 import {
@@ -1225,97 +1222,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
 
       expect(reponse.body.total).to.be(2.5);
-    });
-  });
-
-  describe('quand requête POST sur `/api/service/:id/retourUtilisateurMesure', () => {
-    it('recherche le service correspondant', async () => {
-      await testeur
-        .middleware()
-        .verifieRechercheService(
-          [{ niveau: ECRITURE, rubrique: SECURISER }],
-          testeur.app(),
-          {
-            method: 'post',
-            url: '/api/service/456/retourUtilisateurMesure',
-          }
-        );
-    });
-
-    it('aseptise les données de la requête', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['id', 'idMesure', 'idRetour', 'commentaire'],
-          testeur.app(),
-          {
-            method: 'post',
-            url: '/api/service/456/retourUtilisateurMesure',
-          }
-        );
-    });
-
-    it("retourne une erreur HTTP 424 si l'id du retour utilisateur est inconnu", async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        424,
-        {
-          type: 'DONNEES_INCORRECTES',
-          message: "L'identifiant de retour utilisateur est incorrect.",
-        },
-        {
-          method: 'post',
-          url: '/api/service/456/retourUtilisateurMesure',
-          data: { idRetour: 'idRetourInconnu' },
-        }
-      );
-    });
-
-    it("retourne une erreur HTTP 424 si l'id de mesure est inconnu", async () => {
-      testeur.referentiel().recharge({
-        retoursUtilisateurMesure: { idRetour: 'un retour utilisateur' },
-      });
-      testeur.middleware().reinitialise({
-        serviceARenvoyer: unService(testeur.referentiel())
-          .avecId('456')
-          .construis(),
-      });
-      await testeur.verifieRequeteGenereErreurHTTP(
-        424,
-        {
-          type: 'DONNEES_INCORRECTES',
-          message: "L'identifiant de mesure est incorrect.",
-        },
-        {
-          method: 'post',
-          url: '/api/service/456/retourUtilisateurMesure',
-          data: { idMesure: 'idMesureInconnu', idRetour: 'idRetour' },
-        }
-      );
-    });
-
-    it('consigne un événement de retour utilisateur sur une mesure', async () => {
-      testeur.referentiel().recharge({
-        retoursUtilisateurMesure: { bonneMesure: 'mesure satisfaisante' },
-        mesures: { implementerMfa: {} },
-      });
-      testeur.middleware().reinitialise({
-        idUtilisateur: '123',
-        serviceARenvoyer: unService(testeur.referentiel())
-          .avecId('456')
-          .construis(),
-      });
-      let evenementRecu = {};
-      testeur.adaptateurJournalMSS().consigneEvenement = async (donnees) => {
-        evenementRecu = donnees;
-      };
-
-      await testeur.post('/api/service/456/retourUtilisateurMesure', {
-        idMesure: 'implementerMfa',
-        idRetour: 'bonneMesure',
-        commentaire: 'un commentaire',
-      });
-
-      expect(evenementRecu.type).to.equal('RETOUR_UTILISATEUR_MESURE_RECU');
     });
   });
 
