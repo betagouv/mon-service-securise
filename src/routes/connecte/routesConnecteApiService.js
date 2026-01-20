@@ -90,7 +90,6 @@ const routesConnecteApiService = ({
     routesConnecteApiServiceRisquesSpecifiques({
       depotDonnees,
       middleware,
-      referentiel,
       referentielV2,
     })
   );
