@@ -1,6 +1,9 @@
 import testeurMSS from '../testeurMSS.js';
 import { unDossier } from '../../constructeurs/constructeurDossier.js';
-import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
 import Service from '../../../src/modeles/service.js';
 import {
   Permissions,
@@ -231,24 +234,30 @@ describe('Le serveur MSS des routes /api/service/*', () => {
   });
 
   describe('quand requête PUT sur /api/service/:id/homologation/avis', () => {
-    beforeEach(() => {
-      const serviceAvecDossier = new Service(
+    const unePayloadValideSauf = (cleValeur?: Record<string, unknown>) => ({
+      avecAvis: true,
+      avis: [
         {
-          id: '456',
-          descriptionService: { nomService: 'un service' },
-          dossiers: [{ id: '999' }],
+          collaborateurs: ['Jean Dujardin'],
+          statut: 'favorable',
+          dureeValidite: 'sixMois',
+          commentaires: 'Un commentaire',
         },
-        testeur.referentiel()
-      );
+      ],
+      ...cleValeur,
+    });
+
+    beforeEach(() => {
+      const serviceAvecDossier = unServiceV2()
+        .avecId('456')
+        .avecNomService('un service')
+        .avecDossiers([unDossier().avecId('999').donnees])
+        .construis();
       testeur
         .middleware()
         // @ts-expect-error La méthode `reinitialise` devrait prendre des paramètres optionnels
         .reinitialise({ serviceARenvoyer: serviceAvecDossier });
       testeur.depotDonnees().enregistreDossier = () => Promise.resolve();
-      testeur.referentiel().recharge({
-        echeancesRenouvellement: { unAn: {} },
-        statutsAvisDossierHomologation: { favorable: {} },
-      });
     });
 
     it('recherche le service correspondant', async () => {
@@ -271,38 +280,20 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       });
     });
 
-    it('aseptise la liste des avis', async () => {
-      await testeur.put('/api/service/456/homologation/avis', {
-        avis: [],
-      });
-      testeur
-        .middleware()
-        .verifieAseptisationListe('avis', [
-          'statut',
-          'dureeValidite',
-          'commentaires',
-        ]);
-    });
-
-    it('aseptise les collaborateurs mentionnés dans les avis et le paramètres "avecAvis"', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          ['avis.*.collaborateurs.*', 'avecAvis'],
-          testeur.app(),
-          {
-            url: '/api/service/456/homologation/avis',
-            method: 'put',
-          }
-        );
-    });
-
-    it("renvoie une 400 si aucun avis n'est envoyé", async () => {
-      const reponse = await testeur.put(
+    it('jette une erreur si `avecAvis` est invalide', async () => {
+      const { status } = await testeur.put(
         '/api/service/456/homologation/avis',
-        {}
+        unePayloadValideSauf({ avecAvis: undefined })
       );
-      expect(reponse.status).toBe(400);
+      expect(status).toBe(400);
+    });
+
+    it('jette une erreur si `avis` est invalide', async () => {
+      const { status } = await testeur.put(
+        '/api/service/456/homologation/avis',
+        unePayloadValideSauf({ avis: undefined })
+      );
+      expect(status).toBe(400);
     });
 
     describe('utilise le dépôt pour enregistrer les avis', () => {
@@ -334,7 +325,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
               commentaires: 'Ok',
             },
           ],
-          avecAvis: 'true',
+          avecAvis: true,
         });
         expect(depotAppele).toBe(true);
       });
@@ -354,7 +345,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
         await testeur.put('/api/service/456/homologation/avis', {
           avis: [],
-          avecAvis: 'false',
+          avecAvis: false,
         });
         expect(depotAppele).toBe(true);
       });

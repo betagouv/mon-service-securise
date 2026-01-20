@@ -9,13 +9,12 @@ import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { ReferentielV2 } from '../../referentiel.interface.js';
 import { AdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
-import { valeurBooleenne } from '../../utilitaires/aseptisation.js';
-import Avis from '../../modeles/avis.js';
 import Service from '../../modeles/service.js';
 import Dossier from '../../modeles/dossier.js';
 import { ErreurDossierCourantInexistant } from '../../erreurs.js';
 import {
   schemaPutAutoriteHomologation,
+  schemaPutAvisHomologation,
   schemaPutDecisionHomologation,
   schemaPutDocumentsHomologation,
 } from './routesConnecteApiServiceHomologation.schema.js';
@@ -103,28 +102,14 @@ export const routesConnecteApiServiceHomologation = ({
     '/:id/homologation/avis',
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
-    middleware.aseptiseListes([
-      {
-        nom: 'avis',
-        proprietes: [
-          ...Avis.proprietesAtomiquesRequises(),
-          ...Avis.proprietesAtomiquesFacultatives(),
-        ],
-      },
-    ]),
-    middleware.aseptise('avis.*.collaborateurs.*', 'avecAvis'),
+    valideBody(z.strictObject(schemaPutAvisHomologation(referentielV2))),
     async (requete, reponse) => {
       const {
-        body: { avis },
+        body: { avis, avecAvis },
       } = requete;
-      if (!avis) {
-        reponse.sendStatus(400);
-        return;
-      }
 
       const { service, dossierCourant } =
         requete as unknown as RequeteAvecServiceEtDossierCourant;
-      const avecAvis = valeurBooleenne(requete.body.avecAvis);
 
       if (avecAvis) dossierCourant.enregistreAvis(avis);
       else dossierCourant.declareSansAvis();
