@@ -4,15 +4,9 @@ import routesConnecteApiServicePdf from './routesConnecteApiServicePdf.js';
 import {
   EchecAutorisation,
   ErreurDonneesObligatoiresManquantes,
-  ErreurModele,
-  ErreurNomServiceDejaExistant,
 } from '../../erreurs.js';
 import ActeursHomologation from '../../modeles/acteursHomologation.js';
-import DescriptionService from '../../modeles/descriptionService.js';
-import FonctionnalitesSpecifiques from '../../modeles/fonctionnalitesSpecifiques.js';
-import DonneesSensiblesSpecifiques from '../../modeles/donneesSensiblesSpecifiques.js';
 import PartiesPrenantes from '../../modeles/partiesPrenantes/partiesPrenantes.js';
-import PointsAcces from '../../modeles/pointsAcces.js';
 import RisqueGeneral from '../../modeles/risqueGeneral.js';
 import RolesResponsabilites from '../../modeles/rolesResponsabilites.js';
 import * as objetGetService from '../../modeles/objetsApi/objetGetService.js';
@@ -35,9 +29,10 @@ import { routesConnecteApiServiceRisquesSpecifiques } from './routesConnecteApiS
 import { routesConnecteApiServiceModeleMesureSpecifique } from './routesConnecteApiServiceModeleMesureSpecifique.js';
 import { routesConnecteApiServiceRetourUtilisateur } from './routesConnecteApiServiceRetourUtilisateur.js';
 import { routesConnecteApiServiceMesuresGenerales } from './routesConnecteApiServiceMesuresGenerales.js';
+import { routesConnecteApiServiceDescription } from './routesConnecteApiServiceDescription.js';
 
 const { ECRITURE, LECTURE } = Permissions;
-const { CONTACTS, SECURISER, RISQUES, DECRIRE } = Rubriques;
+const { CONTACTS, SECURISER, RISQUES } = Rubriques;
 
 const routesConnecteApiService = ({
   middleware,
@@ -121,86 +116,12 @@ const routesConnecteApiService = ({
     })
   );
 
-  routes.put(
-    '/:id',
-    middleware.trouveService({ [DECRIRE]: ECRITURE }),
-    middleware.aseptise(
-      'nomService',
-      'organisationsResponsables.*',
-      'nombreOrganisationsUtilisatrices.*'
-    ),
-    middleware.aseptiseListes([
-      { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
-      {
-        nom: 'fonctionnalitesSpecifiques',
-        proprietes: FonctionnalitesSpecifiques.proprietesItem(),
-      },
-      {
-        nom: 'donneesSensiblesSpecifiques',
-        proprietes: DonneesSensiblesSpecifiques.proprietesItem(),
-      },
-    ]),
-    async (requete, reponse, suite) => {
-      try {
-        const descriptionService = new DescriptionService(
-          requete.body,
-          referentiel
-        );
-
-        await depotDonnees.ajouteDescriptionService(
-          requete.idUtilisateurCourant,
-          requete.params.id,
-          descriptionService
-        );
-
-        reponse.send({ idService: requete.service.id });
-      } catch (e) {
-        if (e instanceof ErreurNomServiceDejaExistant)
-          reponse
-            .status(422)
-            .json({ erreur: { code: 'NOM_SERVICE_DEJA_EXISTANT' } });
-        else if (e instanceof ErreurModele) reponse.status(422).send(e.message);
-        else suite(e);
-      }
-    }
-  );
-
-  routes.post(
-    '/estimationNiveauSecurite',
-    middleware.verificationAcceptationCGU,
-    middleware.aseptise(
-      'nomService',
-      'organisationsResponsables.*',
-      'nombreOrganisationsUtilisatrices.*'
-    ),
-    middleware.aseptiseListes([
-      { nom: 'pointsAcces', proprietes: PointsAcces.proprietesItem() },
-      {
-        nom: 'fonctionnalitesSpecifiques',
-        proprietes: FonctionnalitesSpecifiques.proprietesItem(),
-      },
-      {
-        nom: 'donneesSensiblesSpecifiques',
-        proprietes: DonneesSensiblesSpecifiques.proprietesItem(),
-      },
-    ]),
-    async (requete, reponse, suite) => {
-      try {
-        const descriptionService = new DescriptionService(
-          requete.body,
-          referentiel
-        );
-
-        reponse.json({
-          niveauDeSecuriteMinimal:
-            DescriptionService.estimeNiveauDeSecurite(descriptionService),
-        });
-      } catch (e) {
-        if (e instanceof ErreurModele)
-          reponse.status(400).send('La description du service est invalide');
-        else suite(e);
-      }
-    }
+  routes.use(
+    routesConnecteApiServiceDescription({
+      depotDonnees,
+      middleware,
+      referentiel,
+    })
   );
 
   routes.get(
