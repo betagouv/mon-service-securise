@@ -5,10 +5,7 @@ import {
   EchecAutorisation,
   ErreurDonneesObligatoiresManquantes,
 } from '../../erreurs.js';
-import ActeursHomologation from '../../modeles/acteursHomologation.js';
-import PartiesPrenantes from '../../modeles/partiesPrenantes/partiesPrenantes.js';
 import RisqueGeneral from '../../modeles/risqueGeneral.js';
-import RolesResponsabilites from '../../modeles/rolesResponsabilites.js';
 import * as objetGetService from '../../modeles/objetsApi/objetGetService.js';
 import * as objetGetAutorisation from '../../modeles/objetsApi/objetGetAutorisation.js';
 import {
@@ -30,9 +27,10 @@ import { routesConnecteApiServiceModeleMesureSpecifique } from './routesConnecte
 import { routesConnecteApiServiceRetourUtilisateur } from './routesConnecteApiServiceRetourUtilisateur.js';
 import { routesConnecteApiServiceMesuresGenerales } from './routesConnecteApiServiceMesuresGenerales.js';
 import { routesConnecteApiServiceDescription } from './routesConnecteApiServiceDescription.js';
+import { routesConnecteApiServiceRolesReponsaibilites } from './routesConnecteApiServiceRolesReponsabilites.js';
 
 const { ECRITURE, LECTURE } = Permissions;
-const { CONTACTS, SECURISER, RISQUES } = Rubriques;
+const { SECURISER, RISQUES } = Rubriques;
 
 const routesConnecteApiService = ({
   middleware,
@@ -125,6 +123,10 @@ const routesConnecteApiService = ({
     })
   );
 
+  routes.use(
+    routesConnecteApiServiceRolesReponsaibilites({ depotDonnees, middleware })
+  );
+
   routes.get(
     '/:id',
     middleware.trouveService({}),
@@ -136,28 +138,6 @@ const routesConnecteApiService = ({
         referentiel
       );
       reponse.json(donnees);
-    }
-  );
-
-  routes.post(
-    '/:id/rolesResponsabilites',
-    middleware.trouveService({ [CONTACTS]: ECRITURE }),
-    middleware.aseptiseListes([
-      {
-        nom: 'acteursHomologation',
-        proprietes: ActeursHomologation.proprietesItem(),
-      },
-      {
-        nom: 'partiesPrenantes',
-        proprietes: PartiesPrenantes.proprietesItem(),
-      },
-    ]),
-    (requete, reponse) => {
-      const rolesResponsabilites = new RolesResponsabilites(requete.body);
-      const idService = requete.service.id;
-      depotDonnees
-        .ajouteRolesResponsabilitesAService(idService, rolesResponsabilites)
-        .then(() => reponse.send({ idService }));
     }
   );
 
