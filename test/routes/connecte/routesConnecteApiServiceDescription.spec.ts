@@ -139,6 +139,13 @@ describe('Le serveur MSS des routes /api/service/*', () => {
   });
 
   describe('quand requête POST sur `/api/service/estimationNiveauSecurite`', () => {
+    beforeEach(() => {
+      testeur.referentiel().recharge({
+        statutsDeploiement: { enLigne: {} },
+        localisationsDonnees: { france: {} },
+      });
+    });
+
     it("vérifie que l'utilisateur est authentifié", async () => {
       await testeur
         .middleware()
@@ -148,63 +155,41 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         });
     });
 
-    it('aseptise les paramètres', async () => {
-      await testeur
-        .middleware()
-        .verifieAseptisationParametres(
-          [
-            'nomService',
-            'organisationsResponsables.*',
-            'nombreOrganisationsUtilisatrices.*',
-          ],
-          testeur.app(),
-          {
-            method: 'post',
-            url: '/api/service/estimationNiveauSecurite',
-          }
+    describe('jette une erreur 400 si...', () => {
+      it.each([
+        { nomService: undefined },
+        { organisationResponsable: undefined },
+        { nombreOrganisationsUtilisatrices: undefined },
+        { pointsAcces: undefined },
+        { fonctionnalitesSpecifiques: undefined },
+        { donneesSensiblesSpecifiques: undefined },
+        { typeService: undefined },
+        { provenanceService: undefined },
+        { statutDeploiement: undefined },
+        { presentation: undefined },
+        { fonctionnalites: undefined },
+        { donneesCaracterePersonnel: undefined },
+        { localisationDonnees: undefined },
+        { delaiAvantImpactCritique: undefined },
+        { niveauSecurite: undefined },
+      ])('la payload contient %s', async (donneesDuTest) => {
+        const { status } = await testeur.post(
+          '/api/service/estimationNiveauSecurite',
+          unePayloadValideSauf(donneesDuTest)
         );
-    });
 
-    it('aseptise les listes de paramètres ainsi que leur contenu', async () => {
-      await testeur.post('/api/service/estimationNiveauSecurite');
-
-      testeur
-        .middleware()
-        .verifieAseptisationListe('pointsAcces', ['description']);
-      testeur
-        .middleware()
-        .verifieAseptisationListe('fonctionnalitesSpecifiques', [
-          'description',
-        ]);
-      testeur
-        .middleware()
-        .verifieAseptisationListe('donneesSensiblesSpecifiques', [
-          'description',
-        ]);
+        expect(status).toEqual(400);
+      });
     });
 
     it("retourne l'estimation du niveau de sécurité pour la description donnée", async () => {
-      const donneesDescriptionNiveau1 = { nomService: 'Mon service' };
-      const resultat = await testeur.post(
+      const { body, status } = await testeur.post(
         '/api/service/estimationNiveauSecurite',
-        donneesDescriptionNiveau1
+        unePayloadValideSauf()
       );
 
-      expect(resultat.status).toBe(200);
-      expect(resultat.body.niveauDeSecuriteMinimal).toBe('niveau1');
-    });
-
-    it('retourne une erreur HTTP 400 si les données de description de service sont invalides', async () => {
-      const donneesInvalides = { statutDeploiement: 'statutInvalide' };
-      await testeur.verifieRequeteGenereErreurHTTP(
-        400,
-        'La description du service est invalide',
-        {
-          method: 'post',
-          url: '/api/service/estimationNiveauSecurite',
-          data: donneesInvalides,
-        }
-      );
+      expect(status).toBe(200);
+      expect(body.niveauDeSecuriteMinimal).toBe('niveau2');
     });
   });
 });
