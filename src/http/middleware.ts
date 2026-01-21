@@ -1,24 +1,62 @@
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 import controlAcces from 'express-ip-access-control';
 import { IpFilter as ipfilter } from 'express-ipfilter';
 import { z } from 'zod';
 import * as adaptateurEnvironnementParDefaut from '../adaptateurs/adaptateurEnvironnement.js';
 import { CSP_BIBLIOTHEQUES } from '../routes/nonConnecte/routesNonConnecteApiBibliotheques.js';
 import {
-  verifieCoherenceDesDroits,
+  Droits,
+  DroitsAvecEstProprietaire,
   Permissions,
+  verifieCoherenceDesDroits,
 } from '../modeles/autorisations/gestionDroits.js';
 import {
-  ErreurDroitsIncoherents,
   ErreurChainageMiddleware,
+  ErreurDroitsIncoherents,
 } from '../erreurs.js';
 import { ajouteLaRedirectionPostConnexion } from './redirection.js';
 import { extraisIp } from './requeteHttp.js';
 import { SourceAuthentification } from '../modeles/sourceAuthentification.js';
 import { TYPES_REQUETES } from './configurationServeur.js';
+import { DepotDonnees } from '../depotDonnees.interface.js';
+import { AdaptateurHorloge } from '../adaptateurs/adaptateurHorloge.js';
+import { AdaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement.interface.js';
+import { AdaptateurJWT } from '../adaptateurs/adaptateurJWT.interface.js';
+import { AdaptateurProtection } from '../adaptateurs/adaptateurProtection.interface.js';
+import { AdaptateurGestionErreur } from '../adaptateurs/adaptateurGestionErreur.interface.js';
+import { AdaptateurChiffrement } from '../adaptateurs/adaptateurChiffrement.interface.js';
+import { UUID } from '../typesBasiques.js';
+import Service from '../modeles/service.js';
+import Dossier from '../modeles/dossier.js';
+import Utilisateur from '../modeles/utilisateur.js';
+import { Autorisation } from '../modeles/autorisations/autorisation.js';
 
 const { LECTURE, INVISIBLE } = Permissions;
 
-const middleware = (configuration = {}) => {
+type ConfigurationMiddleware = {
+  adaptateurHorloge: AdaptateurHorloge;
+  adaptateurEnvironnement: AdaptateurEnvironnement;
+  adaptateurJWT: AdaptateurJWT;
+  adaptateurProtection: AdaptateurProtection;
+  adaptateurGestionErreur: AdaptateurGestionErreur;
+  adaptateurChiffrement: AdaptateurChiffrement;
+  depotDonnees: DepotDonnees;
+};
+
+export type TypeRequete = 'API' | 'NAVIGATION' | 'RESSOURCE';
+
+export type RequeteMSS = Request & {
+  autorisationService?: Autorisation;
+  cguAcceptees?: boolean;
+  dossierCourant?: Dossier;
+  estInvite?: boolean;
+  idUtilisateurCourant?: UUID;
+  service?: Service;
+  sourceAuthentification?: SourceAuthentification;
+  typeRequete?: TypeRequete;
+};
+
+const middleware = (configuration: ConfigurationMiddleware) => {
   const {
     depotDonnees,
     adaptateurEnvironnement = adaptateurEnvironnementParDefaut,
@@ -29,7 +67,7 @@ const middleware = (configuration = {}) => {
     adaptateurChiffrement,
   } = configuration;
 
-  const positionneHeaders = (_requete, reponse, suite) => {
+  const positionneHeaders: RequestHandler = (_requete, reponse, suite) => {
     const nonce = adaptateurChiffrement.nonce();
     reponse.locals.nonce = nonce;
 
@@ -70,12 +108,16 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
-  const suppressionCookie = (requete, _reponse, suite) => {
+  const suppressionCookie: RequestHandler = (requete, _reponse, suite) => {
     requete.session = null;
     suite();
   };
 
-  const verificationJWT = async (requete, reponse, suite) => {
+  const verificationJWT = async (
+    requete: RequeteMSS,
+    reponse: Response,
+    suite: NextFunction
+  ) => {
     const renvoieUtilisateurSansJWTValide = () => {
       if (requete.typeRequete === TYPES_REQUETES.API) {
         return reponse.status(401).send({ cause: 'TOKEN_EXPIRE' });
@@ -86,7 +128,7 @@ const middleware = (configuration = {}) => {
     };
 
     try {
-      const token = adaptateurJWT.decode(requete.session.token);
+      const token = adaptateurJWT.decode(requete.session?.token);
 
       const utilisateur = await depotDonnees.utilisateur(token.idUtilisateur);
       if (!utilisateur) return renvoieUtilisateurSansJWTValide();
@@ -97,18 +139,24 @@ const middleware = (configuration = {}) => {
       );
 
       requete.idUtilisateurCourant = token.idUtilisateur;
-      requete.cguAcceptees = requete.session.cguAcceptees;
-      requete.estInvite = requete.session.estInvite;
+      requete.cguAcceptees = requete.session?.cguAcceptees;
+      requete.estInvite = requete.session?.estInvite;
       requete.sourceAuthentification = token.source;
-
-      requete.session.token = utilisateur.genereToken(token.source);
-    } catch (e) {
+      if (requete.session)
+        requete.session.token = utilisateur.genereToken(token.source);
+    } catch {
       return renvoieUtilisateurSansJWTValide();
     }
     return suite();
   };
 
-  const verificationAcceptationCGU = async (requete, reponse, suite) => {
+  // On ajoute le générique <P> permettant de remplir les `params` de la requête
+  // Cela aide Typescript pour comprendre qu'une route avec `/:id` a un `requete.params.id`
+  const verificationAcceptationCGU = async <P = { [key: string]: string }>(
+    requete: RequeteMSS & Request<P>,
+    reponse: Response,
+    suite: NextFunction
+  ) => {
     await verificationJWT(requete, reponse, () => {
       if (requete.estInvite) {
         return reponse.redirect(
@@ -125,44 +173,60 @@ const middleware = (configuration = {}) => {
     });
   };
 
-  const trouveService = (droitsRequis) => async (requete, reponse, suite) => {
-    const resultat = z.looseObject({ id: z.uuid() }).safeParse(requete.params);
-    if (!resultat.success) reponse.sendStatus(400);
+  // On ajoute le générique <P> permettant de remplir les `params` de la requête
+  // Cela aide Typescript pour comprendre qu'une route avec `/:id` a un `requete.params.id`
+  const trouveService =
+    (droitsRequis: Partial<Droits>) =>
+    async <P = { [key: string]: string }>(
+      requete: RequeteMSS & Request<P>,
+      reponse: Response,
+      suite: NextFunction
+    ) => {
+      const resultat = z
+        .looseObject({ id: z.uuid() })
+        .safeParse(requete.params);
+      if (!resultat.success) reponse.sendStatus(400);
 
-    const idService = requete.params.id;
+      const idService = requete.params.id;
 
-    const droitsCoherents = verifieCoherenceDesDroits(droitsRequis);
-
-    if (!droitsCoherents)
-      throw new ErreurDroitsIncoherents(
-        "L'objet de droits doit être de la forme `{ [Rubrique]: niveau }`"
+      const droitsCoherents = verifieCoherenceDesDroits(
+        droitsRequis as DroitsAvecEstProprietaire
       );
 
-    await verificationAcceptationCGU(requete, reponse, async () => {
-      try {
-        const service = await depotDonnees.service(idService);
-        const idUtilisateur = requete.idUtilisateurCourant;
+      if (!droitsCoherents)
+        throw new ErreurDroitsIncoherents(
+          "L'objet de droits doit être de la forme `{ [Rubrique]: niveau }`"
+        );
 
-        if (!service) reponse.status(404).send('Service non trouvé');
-        else {
-          const accesAutorise = await depotDonnees.accesAutorise(
-            idUtilisateur,
-            idService,
-            droitsRequis
-          );
-          if (!accesAutorise) reponse.status(403).render('erreurAccesRefuse');
+      await verificationAcceptationCGU(requete, reponse, async () => {
+        try {
+          const service = await depotDonnees.service(idService);
+          const idUtilisateur = requete.idUtilisateurCourant;
+
+          if (!service) reponse.status(404).send('Service non trouvé');
           else {
-            requete.service = service;
-            suite();
+            const accesAutorise = await depotDonnees.accesAutorise(
+              idUtilisateur,
+              idService,
+              droitsRequis
+            );
+            if (!accesAutorise) reponse.status(403).render('erreurAccesRefuse');
+            else {
+              requete.service = service;
+              suite();
+            }
           }
+        } catch {
+          reponse.status(422).send("Le service n'a pas pu être récupéré");
         }
-      } catch {
-        reponse.status(422).send("Le service n'a pas pu être récupéré");
-      }
-    });
-  };
+      });
+    };
 
-  const trouveDossierCourant = (requete, reponse, suite) => {
+  const trouveDossierCourant = (
+    requete: RequeteMSS,
+    reponse: Response,
+    suite: NextFunction
+  ) => {
     if (!requete.service)
       throw new ErreurChainageMiddleware(
         'Un service doit être présent dans la requête. Manque-t-il un appel à `trouveService` ?'
@@ -177,7 +241,11 @@ const middleware = (configuration = {}) => {
     }
   };
 
-  const chargeEtatVisiteGuidee = async (requete, reponse, suite) => {
+  const chargeEtatVisiteGuidee = async (
+    requete: RequeteMSS,
+    reponse: Response,
+    suite: NextFunction
+  ) => {
     if (!requete.idUtilisateurCourant)
       throw new ErreurChainageMiddleware(
         'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
@@ -186,9 +254,9 @@ const middleware = (configuration = {}) => {
     const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
       requete.idUtilisateurCourant
     );
-    const utilisateur = await depotDonnees.utilisateur(
+    const utilisateur = (await depotDonnees.utilisateur(
       requete.idUtilisateurCourant
-    );
+    )) as Utilisateur;
 
     reponse.locals.etatVisiteGuidee = {
       ...parcoursUtilisateur.etatVisiteGuidee.toJSON(),
@@ -205,9 +273,9 @@ const middleware = (configuration = {}) => {
   };
 
   const chargeExplicationNouveauReferentiel = async (
-    requete,
-    reponse,
-    suite
+    requete: RequeteMSS,
+    reponse: Response,
+    suite: NextFunction
   ) => {
     if (!requete.idUtilisateurCourant)
       throw new ErreurChainageMiddleware(
@@ -224,7 +292,16 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
-  const chargeExplicationFinCompteLegacy = async (requete, reponse, suite) => {
+  const chargeExplicationFinCompteLegacy = async (
+    requete: RequeteMSS,
+    reponse: Response,
+    suite: NextFunction
+  ) => {
+    if (!requete.idUtilisateurCourant)
+      throw new ErreurChainageMiddleware(
+        'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
+      );
+
     const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
       requete.idUtilisateurCourant
     );
@@ -236,7 +313,16 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
-  const chargeExplicationUtilisationMFA = async (requete, reponse, suite) => {
+  const chargeExplicationUtilisationMFA = async (
+    requete: RequeteMSS,
+    reponse: Response,
+    suite: NextFunction
+  ) => {
+    if (!requete.idUtilisateurCourant)
+      throw new ErreurChainageMiddleware(
+        'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
+      );
+
     const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
       requete.idUtilisateurCourant
     );
@@ -255,7 +341,11 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
-  const chargeEtatAgentConnect = async (_requete, reponse, suite) => {
+  const chargeEtatAgentConnect: RequestHandler = async (
+    _requete,
+    reponse,
+    suite
+  ) => {
     reponse.locals.agentConnectActif = adaptateurEnvironnement
       .featureFlag()
       .avecAgentConnect();
@@ -263,21 +353,30 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
-  const chargePreferencesUtilisateur = (requete, reponse, suite) => {
+  const chargePreferencesUtilisateur: RequestHandler = (
+    requete,
+    reponse,
+    suite
+  ) => {
     reponse.locals.preferencesUtilisateur = {
       etatMenuNavigation: requete.cookies['etat-menu-navigation'],
     };
     suite();
   };
 
-  const chargeAutorisationsService = (requete, reponse, suite) => {
+  const chargeAutorisationsService = (
+    requete: RequeteMSS,
+    reponse: Response,
+    suite: NextFunction
+  ) => {
     if (!requete.idUtilisateurCourant || !requete.service)
       throw new ErreurChainageMiddleware(
         'Un utilisateur courant et un service doivent être présent dans la requête. Manque-t-il un appel à `verificationJWT` et `trouveService` ?'
       );
+
     depotDonnees
       .autorisationPour(requete.idUtilisateurCourant, requete.service.id)
-      .then((autorisation) => {
+      .then((autorisation: Autorisation) => {
         const droitsRubriques = Object.entries(autorisation.droits).reduce(
           (droits, [rubrique, niveau]) => ({
             ...droits,
@@ -300,17 +399,21 @@ const middleware = (configuration = {}) => {
       });
   };
 
-  const verificationAddresseIP = (listeAddressesIPsAutorisee) =>
+  const verificationAddresseIP = (listeAddressesIPsAutorisee: string[]) =>
     controlAcces({
       mode: 'allow',
       allows: listeAddressesIPsAutorisee,
       forceConnectionAddress: false,
       log: false,
-      statusCode: 401,
+      statusCode: '401',
       message: 'Non autorisé',
     });
 
-  const challengeMotDePasse = (requete, reponse, suite) => {
+  const challengeMotDePasse = (
+    requete: RequeteMSS,
+    reponse: Response,
+    suite: NextFunction
+  ) => {
     if (!requete.idUtilisateurCourant)
       throw new ErreurChainageMiddleware(
         'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
@@ -337,7 +440,7 @@ const middleware = (configuration = {}) => {
     const config = adaptateurEnvironnement.filtrageIp();
 
     if (!config.activerFiltrageIp()) {
-      const aucunFiltrage = (_req, _rep, suite) => suite();
+      const aucunFiltrage: RequestHandler = (_req, _rep, suite) => suite();
       return aucunFiltrage;
     }
 
@@ -350,16 +453,26 @@ const middleware = (configuration = {}) => {
     });
   };
 
-  const ajouteVersionFichierCompiles = (_requete, reponse, suite) => {
+  const ajouteVersionFichierCompiles: RequestHandler = (
+    _requete,
+    reponse,
+    suite
+  ) => {
     reponse.locals.version = adaptateurEnvironnement.versionDeBuild();
     suite();
   };
 
-  const verificationModeMaintenance = (_requete, reponse, suite) => {
+  const verificationModeMaintenance: RequestHandler = (
+    _requete,
+    reponse,
+    suite
+  ) => {
     const modeMaintenance = adaptateurEnvironnement.modeMaintenance();
     const modeMaintenanceEnPreparation = modeMaintenance.enPreparation();
-    if (modeMaintenanceEnPreparation) {
-      const [jour, heure] = modeMaintenance.detailsPreparation().split(' - ');
+    const modeMaintenanceDetailsPreparation =
+      modeMaintenance.detailsPreparation();
+    if (modeMaintenanceEnPreparation && modeMaintenanceDetailsPreparation) {
+      const [jour, heure] = modeMaintenanceDetailsPreparation.split(' - ');
       reponse.locals.avertissementMaintenance = { jour, heure };
     }
     const modeMaintenanceActif = modeMaintenance.actif();
@@ -370,10 +483,10 @@ const middleware = (configuration = {}) => {
     }
   };
 
-  const redirigeVersUrlBase = (requete, reponse, suite) => {
+  const redirigeVersUrlBase: RequestHandler = (requete, reponse, suite) => {
     if (
       requete.headers.host ===
-      new URL(adaptateurEnvironnement.mss().urlBase()).host
+      new URL(adaptateurEnvironnement.mss().urlBase()!).host
     ) {
       suite();
       return;
@@ -383,12 +496,14 @@ const middleware = (configuration = {}) => {
     );
   };
 
-  const chargeTypeRequete = (typeRequete) => (requete, _reponse, suite) => {
-    requete.typeRequete = typeRequete;
-    suite();
-  };
+  const chargeTypeRequete =
+    (typeRequete: TypeRequete) =>
+    (requete: RequeteMSS, _reponse: Response, suite: NextFunction) => {
+      requete.typeRequete = typeRequete;
+      suite();
+    };
 
-  const interdisLaMiseEnCache = (_requete, reponse, suite) => {
+  const interdisLaMiseEnCache: RequestHandler = (_requete, reponse, suite) => {
     reponse.set({
       'cache-control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
       pragma: 'no-cache',
@@ -398,11 +513,13 @@ const middleware = (configuration = {}) => {
     suite();
   };
 
-  const chargeFeatureFlags = (_requete, reponse, suite) => {
+  const chargeFeatureFlags: RequestHandler = (_requete, reponse, suite) => {
     reponse.locals.featureFlags = {
       avecBandeauMSC:
         adaptateurHorloge.maintenant() >
-        new Date(adaptateurEnvironnement.featureFlag().dateDebutBandeauMSC()),
+        new Date(
+          adaptateurEnvironnement.featureFlag().dateDebutBandeauMSC() || 0
+        ),
       avecDecrireV2: adaptateurEnvironnement.featureFlag().avecDecrireV2(),
     };
     suite();
