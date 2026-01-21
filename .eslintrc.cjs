@@ -90,6 +90,14 @@ module.exports = {
         'lines-between-class-members': 'off',
         // On veut pouvoir utiliser les constructeurs avec
         'no-useless-constructor': 'off',
+        // On veut pouvoir assigner des valeurs dans `requete` et `reponse` car c'est le fonctionnement normal d'express
+        'no-param-reassign': [
+          'error',
+          {
+            props: true,
+            ignorePropertyModificationsFor: ['requete', 'reponse'],
+          },
+        ],
       },
     },
     {
