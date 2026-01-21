@@ -141,6 +141,9 @@ importers:
       '@types/bcrypt':
         specifier: ~6.0.0
         version: 6.0.0
+      '@types/cookie-session':
+        specifier: ^2.0.49
+        version: 2.0.49
       '@types/express':
         specifier: ~5.0.3
         version: 5.0.3
@@ -1212,6 +1215,9 @@ packages:
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
 
+  '@types/cookie-session@2.0.49':
+    resolution: {integrity: sha512-4E/bBjlqLhU5l4iGPR+NkVJH593hpNsT4dC3DJDr+ODm6Qpe13kZQVkezRIb+TYDXaBMemS3yLQ+0leba3jlkQ==}
+
   '@types/deep-eql@4.0.2':
     resolution: {integrity: sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==}
 
@@ -1229,6 +1235,9 @@ packages:
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+
+  '@types/keygrip@1.0.6':
+    resolution: {integrity: sha512-lZuNAY9xeJt7Bx4t4dx0rYCDqGPW8RXhQZK1td7d4H6E9zYbLoOtjBvfwdTKpsyxQI/2jv+armjX/RW+ZNpXOQ==}
 
   '@types/mime@1.3.5':
     resolution: {integrity: sha512-/pyBZWSLD2n0dcHE3hq8s8ZvcETHtEuF+3E7XVt0Ig2nvsVQXdghHVcEkIWjy9A0wKfTn97a/PSDYohKIlnP/w==}
@@ -5446,6 +5455,11 @@ snapshots:
     dependencies:
       '@types/node': 22.18.3
 
+  '@types/cookie-session@2.0.49':
+    dependencies:
+      '@types/express': 5.0.3
+      '@types/keygrip': 1.0.6
+
   '@types/deep-eql@4.0.2': {}
 
   '@types/estree@1.0.8': {}
@@ -5466,6 +5480,8 @@ snapshots:
   '@types/http-errors@2.0.5': {}
 
   '@types/json5@0.0.29': {}
+
+  '@types/keygrip@1.0.6': {}
 
   '@types/mime@1.3.5': {}
 
