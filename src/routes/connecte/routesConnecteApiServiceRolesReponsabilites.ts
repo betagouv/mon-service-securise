@@ -1,6 +1,5 @@
 import express from 'express';
-import ActeursHomologation from '../../modeles/acteursHomologation.js';
-import PartiesPrenantes from '../../modeles/partiesPrenantes/partiesPrenantes.js';
+import { z } from 'zod';
 import RolesResponsabilites from '../../modeles/rolesResponsabilites.js';
 import {
   Permissions,
@@ -9,6 +8,8 @@ import {
 import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
+import { valideBody } from '../../http/validePayloads.js';
+import { schemaPostRolesResponsabilites } from './routesConnecteApiServiceRolesReponsabilites.schema.js';
 
 const { ECRITURE } = Permissions;
 const { CONTACTS } = Rubriques;
@@ -25,18 +26,33 @@ export const routesConnecteApiServiceRolesReponsaibilites = ({
   routes.post(
     '/:id/rolesResponsabilites',
     middleware.trouveService({ [CONTACTS]: ECRITURE }),
-    middleware.aseptiseListes([
-      {
-        nom: 'acteursHomologation',
-        proprietes: ActeursHomologation.proprietesItem(),
-      },
-      {
-        nom: 'partiesPrenantes',
-        proprietes: PartiesPrenantes.proprietesItem(),
-      },
-    ]),
+    valideBody(z.strictObject(schemaPostRolesResponsabilites())),
     async (requete, reponse) => {
-      const rolesResponsabilites = new RolesResponsabilites(requete.body);
+      const {
+        acteursHomologation,
+        autoriteHomologation,
+        fonctionAutoriteHomologation,
+        fonctionDelegueProtectionDonnees,
+        delegueProtectionDonnees,
+        fonctionExpertCybersecurite,
+        expertCybersecurite,
+        fonctionPiloteProjet,
+        piloteProjet,
+        partiesPrenantes,
+      } = requete.body;
+
+      const rolesResponsabilites = new RolesResponsabilites({
+        acteursHomologation,
+        autoriteHomologation,
+        fonctionAutoriteHomologation,
+        fonctionDelegueProtectionDonnees,
+        delegueProtectionDonnees,
+        fonctionExpertCybersecurite,
+        expertCybersecurite,
+        fonctionPiloteProjet,
+        piloteProjet,
+        partiesPrenantes,
+      });
 
       const {
         service: { id: idService },
@@ -46,6 +62,7 @@ export const routesConnecteApiServiceRolesReponsaibilites = ({
         idService,
         rolesResponsabilites
       );
+
       reponse.send({ idService });
     }
   );
