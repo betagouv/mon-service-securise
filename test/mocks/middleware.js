@@ -63,9 +63,7 @@ let noncePositionne = false;
 let serviceTrouve;
 let idUtilisateurCourant;
 let sourceAuthentification;
-let listesAseptisees = [];
 let listeAdressesIPsAutorisee = [];
-let parametresAseptises = [];
 let preferencesChargees = false;
 let etatVisiteGuideeCharge = false;
 let etatExplicationNouveauReferentielCharge = false;
@@ -104,9 +102,7 @@ const middlewareFantaisie = {
     serviceTrouve = serviceARenvoyer;
     idUtilisateurCourant = idUtilisateur;
     autorisationChargee = autorisationACharger;
-    listesAseptisees = [];
     listeAdressesIPsAutorisee = [];
-    parametresAseptises = [];
     preferencesChargees = false;
     etatVisiteGuideeCharge = false;
     etatExplicationNouveauReferentielCharge = false;
@@ -129,20 +125,6 @@ const middlewareFantaisie = {
 
   ajouteVersionFichierCompiles: (_requete, _reponse, suite) => {
     versionBuildeeChargee = true;
-    suite();
-  },
-
-  aseptise:
-    (...nomsParametres) =>
-    (_requete, _reponse, suite) => {
-      parametresAseptises = nomsParametres;
-      suite();
-    },
-
-  aseptiseListes: (listes) => (_requete, _reponse, suite) => {
-    listes.forEach(({ nom, proprietes }) =>
-      listesAseptisees.push({ nom, proprietes })
-    );
     suite();
   },
 
@@ -282,23 +264,6 @@ const middlewareFantaisie = {
     listeAdressesIPsAutorisee = listeAdressesIPs;
     suite();
   },
-
-  verifieAseptisationListe: (nom, proprietesParametre) => {
-    expect(listesAseptisees.some((liste) => liste?.nom === nom)).to.be(true);
-    const listeRecherche = listesAseptisees.find((liste) => liste.nom === nom);
-    expect(listeRecherche?.proprietes).to.eql(proprietesParametre);
-  },
-
-  verifieAseptisationParametres: async (nomsParametres, app, requete) =>
-    verifieRequeteChangeEtat(
-      {
-        lectureEtat: () => parametresAseptises,
-        etatInitial: [],
-        etatFinal: nomsParametres,
-      },
-      app,
-      requete
-    ),
 
   verifieAdresseIP: async (listeAdressesIp, app, ...params) =>
     verifieRequeteChangeEtat(

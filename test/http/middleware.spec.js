@@ -550,40 +550,6 @@ describe('Le middleware MSS', () => {
     });
   });
 
-  describe("sur demande d'aseptisation", () => {
-    it('supprime les espaces au début et à la fin du paramètre', async () => {
-      const middleware = leMiddleware();
-      requete.body.param = '  une valeur ';
-
-      await middleware.aseptise('param')(requete, reponse, () => {
-        expect(requete.body.param).to.equal('une valeur');
-      });
-    });
-
-    it('prend en compte plusieurs paramètres', async () => {
-      const middleware = leMiddleware();
-      requete.body.paramRenseigne = '  une valeur ';
-
-      await middleware.aseptise('paramAbsent', 'paramRenseigne')(
-        requete,
-        reponse,
-        () => {
-          expect(requete.body.paramRenseigne).to.equal('une valeur');
-        }
-      );
-    });
-
-    it('ne cherche pas à aseptiser les tableaux vides', async () => {
-      const middleware = leMiddleware();
-      requete.body.param = [];
-
-      await middleware.aseptise('*')(requete, reponse, () => {
-        expect(Array.isArray(requete.body.param)).to.be(true);
-        expect(requete.body.param).to.eql([]);
-      });
-    });
-  });
-
   describe('sur demande positionnement des headers', () => {
     beforeEach(() => (requete.nonce = undefined));
 
@@ -693,98 +659,6 @@ describe('Le middleware MSS', () => {
       });
       middleware.positionneHeaders(requete, reponse, () => {
         expect(reponse.locals.nonce).to.eql('UN-NONCE');
-      });
-    });
-  });
-
-  describe("sur une demande d'aseptisation d'une liste", () => {
-    it('supprime les éléments dont toutes les propriétés sont vides', async () => {
-      const middleware = leMiddleware();
-      requete.body.listeAvecProprieteVide = [
-        { description: 'une description' },
-        { description: null },
-      ];
-      middleware.aseptiseListe('listeAvecProprieteVide', ['description'])(
-        requete,
-        reponse,
-        () => {
-          expect(requete.body.listeAvecProprieteVide).to.have.length(1);
-        }
-      );
-    });
-
-    it('conserve les éléments dont au moins une propriété est renseignée', async () => {
-      const middleware = leMiddleware();
-      requete.body.listeAvecProprietesPartiellementVides = [
-        { description: 'une description', nom: null },
-      ];
-      middleware.aseptiseListe('listeAvecProprietesPartiellementVides', [
-        'description',
-        'nom',
-      ])(requete, reponse, () => {
-        expect(
-          requete.body.listeAvecProprietesPartiellementVides
-        ).to.have.length(1);
-      });
-    });
-
-    it('ne supprime pas les éléments dont les propriétés sont des tableaux vides', async () => {
-      const middleware = leMiddleware();
-      requete.body.listeAvecProprieteTableauVide = [{ description: [] }];
-      middleware.aseptiseListe('listeAvecProprieteTableauVide', [
-        'description',
-      ])(requete, reponse, () => {
-        expect(requete.body.listeAvecProprieteTableauVide).to.have.length(1);
-      });
-    });
-
-    it("renvoie une 400 si l'élément aseptisé n'est pas un tableau", async () => {
-      const middleware = leMiddleware();
-
-      prepareVerificationReponse(
-        reponse,
-        400,
-        '[proprieteNonTableau] devrait être un tableau'
-      );
-      const suite = () =>
-        expect().fail("Le middleware suivant n'aurait pas dû être appelé");
-
-      requete.body.proprieteNonTableau = {};
-      middleware.aseptiseListe('proprieteNonTableau', [])(
-        requete,
-        reponse,
-        suite
-      );
-    });
-  });
-
-  describe("sur une demande d'aseptisation de plusieurs listes", () => {
-    it('supprime dans chaque liste les éléments dont toutes les propriétés sont vides', async () => {
-      const middleware = leMiddleware();
-      requete.body.listeUn = [
-        { description: 'une description' },
-        { description: null },
-      ];
-      requete.body.listeDeux = [
-        { description: 'une description' },
-        { description: null },
-      ];
-      middleware.aseptiseListes([
-        { nom: 'listeUn', proprietes: ['description'] },
-        { nom: 'listeDeux', proprietes: ['description'] },
-      ])(requete, reponse, () => {
-        expect(requete.body.listeUn).to.have.length(1);
-        expect(requete.body.listeDeux).to.have.length(1);
-      });
-    });
-
-    it('aseptise les paramètres en correspondants aux propriétés', async () => {
-      const middleware = leMiddleware();
-      requete.body.listeUn = [{ description: '  une description  ' }];
-      middleware.aseptiseListes([
-        { nom: 'listeUn', proprietes: ['description'] },
-      ])(requete, reponse, () => {
-        expect(requete.body.listeUn[0].description).to.equal('une description');
       });
     });
   });

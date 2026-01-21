@@ -1,5 +1,4 @@
 import controlAcces from 'express-ip-access-control';
-import { check } from 'express-validator';
 import { IpFilter as ipfilter } from 'express-ipfilter';
 import { z } from 'zod';
 import * as adaptateurEnvironnementParDefaut from '../adaptateurs/adaptateurEnvironnement.js';
@@ -177,49 +176,6 @@ const middleware = (configuration = {}) => {
       suite();
     }
   };
-
-  const aseptise =
-    (...nomsParametres) =>
-    (requete, _reponse, suite) => {
-      const paramsTableauxVides = Object.keys(requete.body).filter(
-        (p) => Array.isArray(requete.body[p]) && requete.body[p].length === 0
-      );
-
-      const aseptisations = nomsParametres.map((p) =>
-        check(p).trim().run(requete)
-      );
-
-      return Promise.all(aseptisations)
-        .then(() => paramsTableauxVides.forEach((p) => (requete.body[p] = [])))
-        .then(() => suite())
-        .catch(suite);
-    };
-
-  const aseptiseListes = (listes) => (requete, reponse, suite) => {
-    const nonTableau = listes
-      .filter(({ nom }) => !Array.isArray(requete.body[nom]))
-      .map((p) => p.nom);
-
-    if (nonTableau.length > 0) {
-      reponse
-        .status(400)
-        .send(`[${nonTableau.join(', ')}] devrait être un tableau`);
-      return () => {};
-    }
-
-    listes.forEach(({ nom, proprietes }) => {
-      requete.body[nom] &&= requete.body[nom].filter((element) =>
-        proprietes.some((propriete) => element && element[propriete])
-      );
-    });
-    const proprietesAAseptiser = listes.flatMap(({ nom, proprietes }) =>
-      proprietes.map((propriete) => `${nom}.*.${propriete}`)
-    );
-    return aseptise(proprietesAAseptiser)(requete, reponse, suite);
-  };
-
-  const aseptiseListe = (nomListe, proprietesParametre) =>
-    aseptiseListes([{ nom: nomListe, proprietes: proprietesParametre }]);
 
   const chargeEtatVisiteGuidee = async (requete, reponse, suite) => {
     if (!requete.idUtilisateurCourant)
@@ -454,9 +410,6 @@ const middleware = (configuration = {}) => {
 
   return {
     ajouteVersionFichierCompiles,
-    aseptise,
-    aseptiseListe,
-    aseptiseListes,
     challengeMotDePasse,
     chargeAutorisationsService,
     chargeEtatAgentConnect,
