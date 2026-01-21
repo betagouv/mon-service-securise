@@ -14,7 +14,6 @@ export const valideBody =
 
     // Ici on veut bel et bien ré-écrire la requête, car c'est comme ça qu'expressjs est conçu.
     // On réassigne pour que les suivants récupèrent le contenu assaini par Zod.
-    // eslint-disable-next-line no-param-reassign
     requete.body = resultat.data as TBody;
 
     return suite();
@@ -33,7 +32,6 @@ export const valideParams =
 
     // Ici on veut bel et bien ré-écrire la requête, car c'est comme ça qu'expressjs est conçu.
     // On réassigne pour que les suivants récupèrent le contenu assaini par Zod.
-    // eslint-disable-next-line no-param-reassign
     requete.params = resultat.data as TParams;
 
     return suite();
@@ -52,7 +50,6 @@ export const valideQuery =
 
     // Ici on veut bel et bien ré-écrire la requête, car c'est comme ça qu'expressjs est conçu.
     // On réassigne pour que les suivants récupèrent le contenu assaini par Zod.
-    // eslint-disable-next-line no-param-reassign
     requete.query = resultat.data as TQuery;
 
     return suite();
