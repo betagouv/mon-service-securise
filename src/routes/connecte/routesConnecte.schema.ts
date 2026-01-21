@@ -7,9 +7,10 @@ import {
   questionsV2,
   VolumetrieDonneesTraitees,
 } from '../../../donneesReferentielMesuresV2.js';
+import { schemaService } from '../../http/schemas/service.schema.js';
 
 const reglesValidationsCommunesABrouillonEtDescription = {
-  nomService: z.string().trim().nonempty().max(200),
+  nomService: schemaService.nomService(),
   statutDeploiement: z.enum(Object.keys(questionsV2.statutDeploiement)),
   presentation: z.string().trim().max(2000).optional(),
   typeService: z

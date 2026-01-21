@@ -121,6 +121,7 @@ const routesConnecteApiService = ({
       depotDonnees,
       middleware,
       referentiel,
+      referentielV2,
     })
   );
 
