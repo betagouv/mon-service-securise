@@ -21,6 +21,7 @@ import { fabriqueAdaptateurChiffrement } from './adaptateurs/fabriqueAdaptateurC
 import { fabriqueAdaptateurProfilAnssi } from './adaptateurs/fabriqueAdaptateurProfilAnssi.js';
 import * as depotDonneesBrouillonService from './depots/depotDonneesBrouillonService.js';
 import * as depotSimulationMigrationReferentiel from './depots/depotDonneesSimulationMigrationReferentiel.js';
+import * as depotDonneesSession from './depots/depotDonneesSession.js';
 
 const creeDepot = (config = {}) => {
   const {
@@ -152,6 +153,8 @@ const creeDepot = (config = {}) => {
       adaptateurChiffrement,
       busEvenements,
     });
+
+  const depotSession = depotDonneesSession.creeDepot();
 
   const {
     ajouteDescriptionService,
@@ -313,6 +316,8 @@ const creeDepot = (config = {}) => {
     supprimeSimulationMigrationReferentiel,
   } = depotSimulationMigration;
 
+  const { revoqueJwt } = depotSession;
+
   return {
     accesAutorise,
     accesAutoriseAUneListeDeService,
@@ -389,6 +394,7 @@ const creeDepot = (config = {}) => {
     rafraichisProfilUtilisateurLocal,
     reinitialiseMotDePasse,
     rechercheContributeurs,
+    revoqueJwt,
     revoqueSuperviseur,
     santeDuDepot,
     sauvegardeAutorisation,
