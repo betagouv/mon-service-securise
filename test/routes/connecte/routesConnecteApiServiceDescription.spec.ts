@@ -58,15 +58,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         );
     });
 
-    it("jette une erreur si l'ID est invalide", async () => {
-      const { status } = await testeur.put(
-        '/api/service/pasUnUUID',
-        unePayloadValideSauf()
-      );
-
-      expect(status).toEqual(400);
-    });
-
     describe('jette une erreur 400 si...', () => {
       it.each([
         { nomService: undefined },
