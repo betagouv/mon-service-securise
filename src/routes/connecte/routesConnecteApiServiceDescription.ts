@@ -10,7 +10,7 @@ import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
-import { valideBody, valideParams } from '../../http/validePayloads.js';
+import { valideBody } from '../../http/validePayloads.js';
 import {
   schemaPostEstimationNiveauSecurite,
   schemaPutDescriptionService,
@@ -35,7 +35,6 @@ export const routesConnecteApiServiceDescription = ({
   routes.put(
     '/:id',
     middleware.trouveService({ [DECRIRE]: ECRITURE }),
-    valideParams(z.strictObject({ id: z.uuid() })),
     valideBody(z.strictObject(schemaPutDescriptionService(referentielV2))),
     async (requete, reponse, suite) => {
       try {
