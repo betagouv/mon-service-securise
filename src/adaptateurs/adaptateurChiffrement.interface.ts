@@ -11,6 +11,7 @@ export type AdaptateurChiffrement = {
     chaineChiffree: string
   ) => Promise<boolean>;
   hacheSha256: (chaineEnClair: string) => string;
+  hacheSha256SansSel: (chaineEnClair: string) => string;
   nonce: () => string;
 };
 

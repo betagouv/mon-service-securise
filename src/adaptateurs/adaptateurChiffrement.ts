@@ -22,6 +22,9 @@ const adaptateurChiffrement = ({
       .update(chaine + sel)
       .digest('hex');
 
+  const hacheSha256SansSel = (chaine: string) =>
+    hacheSha256AvecUnSeulSel(chaine, '');
+
   return {
     chiffre: async (chaineOuObjet: Stringifiable) =>
       chaineOuObjet as DonneesChiffrees,
@@ -30,6 +33,7 @@ const adaptateurChiffrement = ({
       chaineChiffree as T,
 
     hacheBCrypt,
+    hacheSha256SansSel,
 
     compareBCrypt: bcrypt.compare,
 

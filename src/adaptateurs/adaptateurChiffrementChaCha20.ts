@@ -68,6 +68,7 @@ export const adaptateurChiffrementChaCha20 = ({
     compareBCrypt: adaptateurChiffrementDeBase.compareBCrypt,
     hacheBCrypt: adaptateurChiffrementDeBase.hacheBCrypt,
     hacheSha256: adaptateurChiffrementDeBase.hacheSha256,
+    hacheSha256SansSel: adaptateurChiffrementDeBase.hacheSha256SansSel,
     nonce: adaptateurChiffrementDeBase.nonce,
   };
 };
