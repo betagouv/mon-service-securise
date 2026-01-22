@@ -1,3 +1,4 @@
 export interface DepotDonneesSession {
-  revoqueJwt(tokenJwt: string): Promise<void>;
+  revoqueJwt(jwt: string): Promise<void>;
+  estJwtRevoque(jwt: string): Promise<boolean>;
 }

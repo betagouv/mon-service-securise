@@ -132,6 +132,10 @@ describe('Le middleware MSS', () => {
   });
 
   describe('sur vérification du token JWT', () => {
+    beforeEach(() => {
+      depotDonnees.estJwtRevoque = async () => false;
+    });
+
     it("redirige l'utilisateur vers la mire de login quand échec vérification JWT", async () => {
       const adaptateurJWT = {
         decode: (token) => {
@@ -143,6 +147,24 @@ describe('Le middleware MSS', () => {
 
       const middleware = leMiddleware({ adaptateurJWT });
       await middleware.verificationJWT(requete, reponse);
+    });
+
+    it("redirige l'utilisateur vers la mire de login quand le JWT a été révoqué", async () => {
+      const adaptateurJWT = {
+        decode: () => ({ idUtilisateur: 'U1', iat: 123, source: 'MSS' }),
+      };
+      depotDonnees.utilisateur = () => ({ genereToken: () => 'NOUVEAU_TOKEN' });
+      depotDonnees.estJwtRevoque = async () => true;
+
+      let urlDeRedirection;
+      reponse.redirect = (url) => {
+        urlDeRedirection = url;
+      };
+
+      const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
+      await middleware.verificationJWT(requete, reponse, () => {});
+
+      expect(urlDeRedirection).to.be('/connexion');
     });
 
     it("ajoute l'URL originale à la redirection si elle commence par un '/'", async () => {
