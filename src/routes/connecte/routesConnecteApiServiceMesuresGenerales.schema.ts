@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import {
   schemaMesureGenerale,
@@ -10,7 +11,10 @@ export const schemaPutMesureGenerale = (
 ) => ({
   statut: schemaMesureGenerale.statut(referentiel, referentielV2),
   modalites: schemaMesureGenerale.modalites().optional(),
-  priorite: schemaPlanActionMesure.priorite(referentielV2).optional(),
-  echeance: schemaPlanActionMesure.echeance().optional(),
+  priorite: schemaPlanActionMesure
+    .priorite(referentielV2)
+    .or(z.literal(''))
+    .optional(),
+  echeance: schemaPlanActionMesure.echeance().or(z.literal('')).optional(),
   responsables: schemaPlanActionMesure.responsables().optional(),
 });
