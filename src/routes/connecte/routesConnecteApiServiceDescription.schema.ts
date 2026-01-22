@@ -33,7 +33,6 @@ export const schemaPostEstimationNiveauSecurite = (
   fonctionnalites: schemaService.fonctionnalites(referentielV2),
   fonctionnalitesSpecifiques: schemaService.fonctionnalitesSpecifiques(),
   localisationDonnees: schemaService.localisationDonnees(referentielV2),
-  niveauSecurite: schemaService.niveauSecurite(referentielV2),
   nomService: schemaService.nomService(),
   nombreOrganisationsUtilisatrices:
     schemaService.nombreOrganisationsUtilisatrices(),
