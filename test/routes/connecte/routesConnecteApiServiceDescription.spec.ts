@@ -16,30 +16,30 @@ describe('Le serveur MSS des routes /api/service/*', () => {
 
   beforeEach(() => testeur.initialise());
 
-  const unePayloadValideSauf = (cleValeur?: Record<string, unknown>) => ({
-    nomService: 'Service de test',
-    nombreOrganisationsUtilisatrices: { borneBasse: '2', borneHaute: '2' },
-    typeService: ['siteInternet'],
-    provenanceService: 'developpement',
-    statutDeploiement: 'enLigne',
-    presentation: 'une présentation',
-    fonctionnalites: ['newsletter'],
-    donneesCaracterePersonnel: ['identite'],
-    localisationDonnees: 'france',
-    delaiAvantImpactCritique: 'plusUneJournee',
-    niveauSecurite: 'niveau3',
-    pointsAcces: [{ description: "un point d'accès" }],
-    fonctionnalitesSpecifiques: [
-      { description: 'une fonctionnalité spécifique' },
-    ],
-    donneesSensiblesSpecifiques: [
-      { description: 'une donnée sensible spécifique' },
-    ],
-    organisationResponsable: { siret: '93939105800012' },
-    ...cleValeur,
-  });
-
   describe('quand requête PUT sur `/api/service/:id`', () => {
+    const unePayloadValideSauf = (cleValeur?: Record<string, unknown>) => ({
+      nomService: 'Service de test',
+      nombreOrganisationsUtilisatrices: { borneBasse: '2', borneHaute: '2' },
+      typeService: ['siteInternet'],
+      provenanceService: 'developpement',
+      statutDeploiement: 'enLigne',
+      presentation: 'une présentation',
+      fonctionnalites: ['newsletter'],
+      donneesCaracterePersonnel: ['identite'],
+      localisationDonnees: 'france',
+      delaiAvantImpactCritique: 'plusUneJournee',
+      niveauSecurite: 'niveau3',
+      pointsAcces: [{ description: "un point d'accès" }],
+      fonctionnalitesSpecifiques: [
+        { description: 'une fonctionnalité spécifique' },
+      ],
+      donneesSensiblesSpecifiques: [
+        { description: 'une donnée sensible spécifique' },
+      ],
+      organisationResponsable: { siret: '93939105800012' },
+      ...cleValeur,
+    });
+
     beforeEach(() => {
       testeur.depotDonnees().ajouteDescriptionService = async () => {};
       testeur.referentiel().recharge({
@@ -139,6 +139,28 @@ describe('Le serveur MSS des routes /api/service/*', () => {
   });
 
   describe('quand requête POST sur `/api/service/estimationNiveauSecurite`', () => {
+    const unePayloadValideSauf = (cleValeur?: Record<string, unknown>) => ({
+      nomService: 'Service de test',
+      nombreOrganisationsUtilisatrices: { borneBasse: '2', borneHaute: '2' },
+      typeService: ['siteInternet'],
+      provenanceService: 'developpement',
+      statutDeploiement: 'enLigne',
+      presentation: 'une présentation',
+      fonctionnalites: ['newsletter'],
+      donneesCaracterePersonnel: ['identite'],
+      localisationDonnees: 'france',
+      delaiAvantImpactCritique: 'plusUneJournee',
+      pointsAcces: [{ description: "un point d'accès" }],
+      fonctionnalitesSpecifiques: [
+        { description: 'une fonctionnalité spécifique' },
+      ],
+      donneesSensiblesSpecifiques: [
+        { description: 'une donnée sensible spécifique' },
+      ],
+      organisationResponsable: { siret: '93939105800012' },
+      ...cleValeur,
+    });
+
     beforeEach(() => {
       testeur.referentiel().recharge({
         statutsDeploiement: { enLigne: {} },
@@ -171,7 +193,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         { donneesCaracterePersonnel: undefined },
         { localisationDonnees: undefined },
         { delaiAvantImpactCritique: undefined },
-        { niveauSecurite: undefined },
       ])('la payload contient %s', async (donneesDuTest) => {
         const { status } = await testeur.post(
           '/api/service/estimationNiveauSecurite',
