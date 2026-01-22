@@ -134,9 +134,21 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   });
 
   describe('quand requête GET sur /deconnexion', () => {
+    it("révoque la session de l'utilisateur", async () => {
+      let sessionRevoquee = false;
+      testeur.serviceGestionnaireSession().revoqueSession = async () => {
+        sessionRevoquee = true;
+      };
+
+      await testeur.get('/deconnexion');
+
+      expect(sessionRevoquee).to.be(true);
+    });
+
     describe("en tant qu'utilisateur connecté avec MSS", () => {
       it('redirige vers /connexion', async () => {
         testeur.middleware().reinitialise({ authentificationAUtiliser: 'MSS' });
+        testeur.serviceGestionnaireSession().revoqueSession = async () => {};
 
         const reponse = await testeur.get('/deconnexion');
 
@@ -144,11 +156,13 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         expect(reponse.headers.location).to.be('/connexion');
       });
     });
+
     describe("en tant qu'utilisateur connecté avec Agent Connect", () => {
       it('redirige vers /oidc/deconnexion', async () => {
         testeur
           .middleware()
           .reinitialise({ authentificationAUtiliser: 'AGENT_CONNECT' });
+        testeur.serviceGestionnaireSession().revoqueSession = async () => {};
 
         const reponse = await testeur.get('/deconnexion');
 

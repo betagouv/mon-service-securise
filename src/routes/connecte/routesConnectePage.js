@@ -15,6 +15,7 @@ const routesConnectePage = ({
   adaptateurCsv,
   adaptateurGestionErreur,
   adaptateurHorloge,
+  gestionnaireSession,
 }) => {
   const routes = express.Router();
 
@@ -107,13 +108,19 @@ const routesConnectePage = ({
     }
   );
 
-  routes.get('/deconnexion', middleware.verificationJWT, (requete, reponse) => {
-    if (requete.sourceAuthentification === 'MSS') {
-      reponse.redirect('/connexion');
-      return;
+  routes.get(
+    '/deconnexion',
+    middleware.verificationJWT,
+    async (requete, reponse) => {
+      await gestionnaireSession.revoqueSession(requete);
+
+      if (requete.sourceAuthentification === 'MSS') {
+        reponse.redirect('/connexion');
+        return;
+      }
+      reponse.redirect('/oidc/deconnexion');
     }
-    reponse.redirect('/oidc/deconnexion');
-  });
+  );
 
   routes.get(
     '/visiteGuidee/:idEtape',
