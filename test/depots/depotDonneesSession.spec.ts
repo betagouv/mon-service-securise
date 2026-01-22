@@ -16,4 +16,19 @@ describe('Le dépôt de données des sessions', () => {
       expect(resultat).toBe(true);
     });
   });
+
+  it('sait dire si un jwt a été révoqué, en le hachant', async () => {
+    const chiffrement = {
+      hacheSha256SansSel: (chaine: string) => `${chaine}-hachee`,
+    };
+    const persistance = unePersistanceMemoire().construis();
+    await persistance.revoqueJwt('jwt-du-test-hachee');
+    const depot = creeDepot({ chiffrement, persistance });
+
+    const resultat = await depot.estJwtRevoque('jwt-du-test');
+    expect(resultat).toBe(true);
+
+    const unAutreJwt = await depot.estJwtRevoque('un-autre');
+    expect(unAutreJwt).toBe(false);
+  });
 });

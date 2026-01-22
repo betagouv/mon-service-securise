@@ -991,12 +991,16 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     }));
   };
 
-  const revoqueJwt = async (jwtHashe) => {
-    await knex('revocations_jwt').insert({
+  const revoqueJwt = async (jwtHashe) =>
+    knex('revocations_jwt').insert({
       hash_jwt_revoque: jwtHashe,
       date_expiration: new Date('1987-09-13'),
     });
-  };
+
+  const estJwtRevoque = async (jwtHashe) =>
+    (await knex('revocations_jwt')
+      .where({ hash_jwt_revoque: jwtHashe })
+      .first()) !== undefined;
 
   return {
     activitesMesure,
@@ -1021,6 +1025,7 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     autorisations,
     autorisationsDuService,
     contributeursDesServicesDe,
+    estJwtRevoque,
     estSuperviseur,
     lisBrouillonsService,
     lisDernierIndiceCyber,

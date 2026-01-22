@@ -20,4 +20,9 @@ export const creeDepot = ({
     const hash = chiffrement.hacheSha256SansSel(jwt);
     await persistance.revoqueJwt(hash);
   },
+
+  estJwtRevoque: async (jwt: string) => {
+    const hash = chiffrement.hacheSha256SansSel(jwt);
+    return persistance.estJwtRevoque(hash);
+  },
 });

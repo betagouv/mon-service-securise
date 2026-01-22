@@ -129,6 +129,10 @@ const middleware = (configuration: ConfigurationMiddleware) => {
 
     try {
       const token = adaptateurJWT.decode(requete.session?.token);
+      const estRevoque = await depotDonnees.estJwtRevoque(
+        requete.session?.token
+      );
+      if (estRevoque) return renvoieUtilisateurSansJWTValide();
 
       const utilisateur = await depotDonnees.utilisateur(token.idUtilisateur);
       if (!utilisateur) return renvoieUtilisateurSansJWTValide();
@@ -145,6 +149,7 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     } catch {
       return renvoieUtilisateurSansJWTValide();
     }
+
     return suite();
   };
 

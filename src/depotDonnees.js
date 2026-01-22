@@ -319,7 +319,7 @@ const creeDepot = (config = {}) => {
     supprimeSimulationMigrationReferentiel,
   } = depotSimulationMigration;
 
-  const { revoqueJwt } = depotSession;
+  const { estJwtRevoque, revoqueJwt } = depotSession;
 
   return {
     accesAutorise,
@@ -350,6 +350,7 @@ const creeDepot = (config = {}) => {
     confirmeTeleversementModelesMesureSpecifique,
     dissocieTousModelesMesureSpecifiqueDeUtilisateurSurService,
     dupliqueService,
+    estJwtRevoque,
     estSuperviseur,
     finaliseBrouillonService,
     service,
