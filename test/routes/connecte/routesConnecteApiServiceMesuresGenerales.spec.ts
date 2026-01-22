@@ -135,6 +135,24 @@ describe('Les routes API des mesures générales des services', () => {
       });
     });
 
+    it('accepte une priorité vide', async () => {
+      const { status } = await testeur.put(
+        '/api/service/456/mesures/RECENSEMENT.1',
+        unePayloadValideSauf({ priorite: '' })
+      );
+
+      expect(status).toBe(200);
+    });
+
+    it('accepte une échéance vide', async () => {
+      const { status } = await testeur.put(
+        '/api/service/456/mesures/RECENSEMENT.1',
+        unePayloadValideSauf({ echeance: '' })
+      );
+
+      expect(status).toBe(200);
+    });
+
     it('délègue au dépôt de données la mise à jour des mesures générales', async () => {
       let donneesRecues;
       let idServiceRecu;
