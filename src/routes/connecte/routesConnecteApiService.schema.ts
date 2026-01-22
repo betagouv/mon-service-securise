@@ -28,8 +28,11 @@ export const schemaPutMesureSpecifique = (
   descriptionLongue: schemaMesureSpecifique.descriptionLongue().optional(),
   categorie: schemaMesureSpecifique.categorie(referentiel, referentielV2),
   statut: schemaMesureSpecifique.statut(referentiel, referentielV2),
-  modalites: schemaMesureSpecifique.modalites(),
-  priorite: schemaPlanActionMesure.priorite(referentielV2).or(z.literal('')),
+  modalites: schemaMesureSpecifique.modalites().optional(),
+  priorite: schemaPlanActionMesure
+    .priorite(referentielV2)
+    .or(z.literal(''))
+    .optional(),
   echeance: schemaPlanActionMesure.echeance().or(z.literal('')).optional(),
   responsables: schemaPlanActionMesure.responsables().optional(),
 });

@@ -214,7 +214,9 @@ describe('Les routes des mesures spécifiques de service', () => {
       it.each([
         { priorite: '' },
         { echeance: '' },
+        { priorite: undefined },
         { responsables: undefined },
+        { modalites: undefined },
         { descriptionLongue: undefined },
       ])('%s', async (donneesDuTest) => {
         const { status } = await testeur.put(
