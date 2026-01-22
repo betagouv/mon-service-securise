@@ -75,7 +75,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     });
   });
 
-  describe('quand requête GET sur `/visiteGuidee/:idEtape`', () => {
+  describe('quand requête GET sur /visiteGuidee/:idEtape', () => {
     it("charge les préférences de l'utilisateur", async () => {
       await testeur
         .middleware()
@@ -133,7 +133,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
     });
   });
 
-  describe('quand requête GET sur `/deconnexion', () => {
+  describe('quand requête GET sur /deconnexion', () => {
     describe("en tant qu'utilisateur connecté avec MSS", () => {
       it('redirige vers /connexion', async () => {
         testeur.middleware().reinitialise({ authentificationAUtiliser: 'MSS' });
