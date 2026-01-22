@@ -1,3 +1,4 @@
+import { beforeEach } from 'vitest';
 import testeurMSS from '../testeurMSS.js';
 import { unService } from '../../constructeurs/constructeurService.js';
 import {
@@ -28,10 +29,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .verifieRechercheService(
           [{ niveau: ECRITURE, rubrique: SECURISER }],
           testeur.app(),
-          {
-            method: 'post',
-            url: '/api/service/456/retourUtilisateurMesure',
-          }
+          { method: 'post', url: '/api/service/456/retourUtilisateurMesure' }
         );
     });
 
@@ -49,30 +47,51 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
     });
 
-    it('consigne un événement de retour utilisateur sur une mesure', async () => {
-      testeur.referentiel().recharge({
-        retoursUtilisateurMesure: { bonneMesure: 'mesure satisfaisante' },
-        mesures: { implementerMfa: {} },
+    describe('consigne dans le journal…', () => {
+      beforeEach(() => {
+        testeur.referentiel().recharge({
+          retoursUtilisateurMesure: { bonneMesure: 'mesure satisfaisante' },
+          mesures: { implementerMfa: {} },
+        });
+        testeur.middleware().reinitialise({
+          idUtilisateur: '123',
+          serviceARenvoyer: unService(testeur.referentiel())
+            .avecId('456')
+            .construis(),
+        });
       });
-      testeur.middleware().reinitialise({
-        idUtilisateur: '123',
-        serviceARenvoyer: unService(testeur.referentiel())
-          .avecId('456')
-          .construis(),
+
+      it('un événement de retour utilisateur sur une mesure', async () => {
+        let evenementRecu: Evenement;
+        testeur.adaptateurJournalMSS().consigneEvenement = async (
+          evenement: Evenement
+        ) => {
+          evenementRecu = evenement;
+        };
+
+        await testeur.post(
+          '/api/service/456/retourUtilisateurMesure',
+          unePayloadValideSauf()
+        );
+
+        expect(evenementRecu!.type).toEqual('RETOUR_UTILISATEUR_MESURE_RECU');
       });
-      let evenementRecu: Evenement;
-      testeur.adaptateurJournalMSS().consigneEvenement = async (
-        evenement: Evenement
-      ) => {
-        evenementRecu = evenement;
-      };
 
-      await testeur.post(
-        '/api/service/456/retourUtilisateurMesure',
-        unePayloadValideSauf()
-      );
+      it("un commentaire si l'utilisateur ne l'envoie pas", async () => {
+        let evenementRecu: Evenement;
+        testeur.adaptateurJournalMSS().consigneEvenement = async (
+          evenement: Evenement
+        ) => {
+          evenementRecu = evenement;
+        };
 
-      expect(evenementRecu!.type).toEqual('RETOUR_UTILISATEUR_MESURE_RECU');
+        await testeur.post(
+          '/api/service/456/retourUtilisateurMesure',
+          unePayloadValideSauf({ commentaire: undefined })
+        );
+
+        expect(evenementRecu!.donnees.commentaire).toEqual('');
+      });
     });
   });
 });

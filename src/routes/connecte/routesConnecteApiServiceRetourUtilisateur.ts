@@ -49,7 +49,7 @@ export const routesConnecteApiServiceRetourUtilisateur = ({
           idUtilisateur: idUtilisateurCourant,
           idMesure,
           idRetour,
-          commentaire,
+          commentaire: commentaire || '',
         }).toJSON()
       );
 
