@@ -154,7 +154,10 @@ const creeDepot = (config = {}) => {
       busEvenements,
     });
 
-  const depotSession = depotDonneesSession.creeDepot();
+  const depotSession = depotDonneesSession.creeDepot({
+    chiffrement: adaptateurChiffrement,
+    persistance: adaptateurPersistance,
+  });
 
   const {
     ajouteDescriptionService,

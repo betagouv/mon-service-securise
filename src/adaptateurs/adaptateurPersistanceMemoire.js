@@ -23,6 +23,7 @@ const nouvelAdaptateur = (
   donnees.televersements = { modelesMesureSpecifique: [], services: [] };
   donnees.brouillonsServices ||= [];
   donnees.simulationsMigrationReferentiel ||= [];
+  donnees.revocationsJwt ||= [];
 
   const ajouteTeleversementServices = async (
     idUtilisateur,
@@ -686,6 +687,13 @@ const nouvelAdaptateur = (
   const toutesLesAutorisationsDeProprietaire = async () =>
     donnees.autorisations.filter((a) => a.estProprietaire);
 
+  const revoqueJwt = async (jwtHashe) => {
+    donnees.revocationsJwt.push(jwtHashe);
+  };
+
+  const estJwtRevoque = async (jwtHashe) =>
+    donnees.revocationsJwt.some((r) => r === jwtHashe);
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -707,6 +715,7 @@ const nouvelAdaptateur = (
     autorisations,
     autorisationsDuService,
     contributeursDesServicesDe,
+    estJwtRevoque,
     estSuperviseur,
     lisBrouillonsService,
     lisModelesMesureSpecifiquePourUtilisateur,
@@ -730,6 +739,7 @@ const nouvelAdaptateur = (
     nbModelesMesureSpecifiquePourUtilisateur,
     nombreServices,
     nouveautesPourUtilisateur,
+    revoqueJwt,
     sauvegardeAutorisation,
     sauvegardeBrouillonService,
     sauvegardeNotificationsExpirationHomologation,
