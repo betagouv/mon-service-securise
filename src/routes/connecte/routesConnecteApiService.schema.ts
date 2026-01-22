@@ -30,7 +30,7 @@ export const schemaPutMesureSpecifique = (
   statut: schemaMesureSpecifique.statut(referentiel, referentielV2),
   modalites: schemaMesureSpecifique.modalites(),
   priorite: schemaPlanActionMesure.priorite(referentielV2).or(z.literal('')),
-  echeance: schemaPlanActionMesure.echeance().optional(),
+  echeance: schemaPlanActionMesure.echeance().or(z.literal('')).optional(),
   responsables: schemaPlanActionMesure.responsables().optional(),
 });
 

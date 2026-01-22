@@ -213,6 +213,7 @@ describe('Les routes des mesures spécifiques de service', () => {
     describe('… mais accepte une payload avec', () => {
       it.each([
         { priorite: '' },
+        { echeance: '' },
         { responsables: undefined },
         { descriptionLongue: undefined },
       ])('%s', async (donneesDuTest) => {
