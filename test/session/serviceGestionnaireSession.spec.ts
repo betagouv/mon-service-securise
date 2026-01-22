@@ -5,12 +5,17 @@ import {
 } from '../../src/session/serviceGestionnaireSession.js';
 import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.js';
 import Utilisateur from '../../src/modeles/utilisateur.js';
+import { DepotDonneesSession } from '../../src/depots/depotDonneesSession.interface.ts';
 
 describe('Le service gestionnaire de session', () => {
   let gestionnaireSession: ServiceGestionnaireSession;
+  let depotDonnees: DepotDonneesSession;
 
   beforeEach(() => {
-    gestionnaireSession = fabriqueServiceGestionnaireSession();
+    depotDonnees = {
+      revoqueJwt: async () => {},
+    };
+    gestionnaireSession = fabriqueServiceGestionnaireSession({ depotDonnees });
   });
 
   describe("sur demande d'enregistrement de session", () => {
@@ -83,6 +88,22 @@ describe('Le service gestionnaire de session', () => {
         );
         expect(requete.session.connexionAvecMFA).toBe(false);
       });
+    });
+  });
+
+  describe('sur demande de révocation de session', () => {
+    it('utilise le dépôt de données pour révoquer le JWT', async () => {
+      let tokenRevoque;
+      depotDonnees.revoqueJwt = async (jwt: string) => {
+        tokenRevoque = jwt;
+      };
+
+      const requete = {
+        session: { token: 'jwt-du-test' },
+      } as unknown as RequeteAvecSession;
+      await gestionnaireSession.revoqueSession(requete);
+
+      expect(tokenRevoque).toBe('jwt-du-test');
     });
   });
 

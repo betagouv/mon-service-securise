@@ -72,7 +72,9 @@ const serviceAnnuaire = fabriqueAnnuaire({
   depotDonnees,
 });
 
-const serviceGestionnaireSession = fabriqueServiceGestionnaireSession();
+const serviceGestionnaireSession = fabriqueServiceGestionnaireSession({
+  depotDonnees,
+});
 
 const serviceVerificationCoherenceSels =
   fabriqueServiceVerificationCoherenceSels({

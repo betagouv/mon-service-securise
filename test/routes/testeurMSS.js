@@ -150,7 +150,9 @@ const testeurMss = () => {
       adaptateurTracking,
     });
     serviceCgu = fabriqueServiceCgu({ referentiel });
-    serviceGestionnaireSession = fabriqueServiceGestionnaireSession();
+    serviceGestionnaireSession = fabriqueServiceGestionnaireSession({
+      depotDonnees,
+    });
     lecteurDeFormData = {
       extraisDonneesXLS: async () => Buffer.from([]),
     };
