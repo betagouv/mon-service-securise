@@ -33,6 +33,19 @@ const chaineDateFrEnChaineDateISO = (chaineDateFr: string) => {
   return `${annee}-${mois}-${jour}`;
 };
 
+const secondesJusqua23h59m59s = (moment: Date) => {
+  const finDuJour = new Date(
+    moment.getFullYear(),
+    moment.getMonth(),
+    moment.getDate(),
+    23,
+    59,
+    59
+  );
+
+  return Math.ceil((finDuJour.valueOf() - moment.valueOf()) / 1_000);
+};
+
 export {
   ajouteMoisADate,
   dateEnFrancais,
@@ -40,4 +53,5 @@ export {
   chaineDateFrEnChaineDateISO,
   dateInvalide,
   dateYYYYMMDD,
+  secondesJusqua23h59m59s,
 };
