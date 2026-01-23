@@ -6,14 +6,10 @@ describe("L'adaptateur JWT", () => {
   describe('sur demande de décodage des données', () => {
     it('jette une erreur lorsque les données à décoder ne sont pas définies', () => {
       const adaptateurEnvironnement = {
-        JWT: () => ({
-          secret: () => 'unsecret',
-        }),
+        JWT: () => ({ secret: () => 'unsecret' }),
       };
 
-      const { decode } = adaptateurJWT({
-        adaptateurEnvironnement,
-      });
+      const { decode } = adaptateurJWT({ adaptateurEnvironnement });
 
       [null, undefined].forEach((valeurNonDefinie) => {
         try {
@@ -27,9 +23,7 @@ describe("L'adaptateur JWT", () => {
 
     it('décode les données signées avec le même secret', () => {
       const adaptateurEnvironnement = {
-        JWT: () => ({
-          secret: () => 'unsecret',
-        }),
+        JWT: () => ({ secret: () => 'unsecret' }),
       };
 
       const { signeDonnees, decode } = adaptateurJWT({
@@ -45,14 +39,10 @@ describe("L'adaptateur JWT", () => {
 
     it('jette une exception pour des données signées avec un autre secret', () => {
       const adaptateurEnvironnementLorsDeLaSignature = {
-        JWT: () => ({
-          secret: () => 'unsecret',
-        }),
+        JWT: () => ({ secret: () => 'unsecret' }),
       };
       const adaptateurEnvironnementLorsDuDecodage = {
-        JWT: () => ({
-          secret: () => 'unautresecret',
-        }),
+        JWT: () => ({ secret: () => 'unautresecret' }),
       };
 
       const donnees = { toto: 42 };
