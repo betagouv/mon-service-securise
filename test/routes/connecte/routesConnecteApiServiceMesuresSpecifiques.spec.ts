@@ -152,23 +152,25 @@ describe('Les routes des mesures spécifiques de service', () => {
       priorite: '',
       modalites: '',
       echeance: '01/20/2026',
+      idModele: unUUIDRandom(),
       ...cleValeur,
     });
 
     beforeEach(() => {
       testeur.depotDonnees().metsAJourMesureSpecifiqueDuService =
         async () => {};
-      testeur.referentiel().enrichis({
-        categoriesMesures: { gouvernance: '' },
-      });
+      testeur
+        .referentiel()
+        .enrichis({ categoriesMesures: { gouvernance: '' } });
+
       const serviceARenvoyer = unService(testeur.referentiel())
         .avecId('456')
         .avecMesures(new Mesures({ mesuresSpecifiques: [{ id: 'M1' }] }))
         .construis();
-      testeur.middleware().reinitialise({
-        idUtilisateur: '999',
-        serviceARenvoyer,
-      });
+
+      testeur
+        .middleware()
+        .reinitialise({ idUtilisateur: '999', serviceARenvoyer });
     });
 
     it("vérifie que l'utilisateur est authentifié", async () => {
@@ -256,9 +258,10 @@ describe('Les routes des mesures spécifiques de service', () => {
         mesureRecue = mesure;
       };
 
+      const idModele = unUUIDRandom();
       await testeur.put(
         `/api/service/456/mesuresSpecifiques/${unUUIDRandom()}`,
-        unePayloadValideSauf()
+        unePayloadValideSauf({ idModele })
       );
 
       expect(idServiceRecu).toBe('456');
@@ -269,6 +272,7 @@ describe('Les routes des mesures spécifiques de service', () => {
       expect(mesureRecue!.echeance.getTime()).toBe(
         new Date('01/20/2026').getTime()
       );
+      expect(mesureRecue!.idModele).toBe(idModele);
     });
 
     it('renvoi une erreur 404 si la mesure est introuvable', async () => {

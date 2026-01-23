@@ -28,6 +28,7 @@ export const schemaMesureSpecifique = {
     ]),
   description: () => z.string().min(1).max(1000),
   descriptionLongue: () => z.string().min(0).max(2000),
+  idModele: () => z.uuid(),
   statut,
   modalites,
 };

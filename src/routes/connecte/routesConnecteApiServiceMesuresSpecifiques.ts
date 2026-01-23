@@ -97,6 +97,7 @@ export const routesConnecteApiServiceMesuresSpecifiques = ({
       const {
         description,
         descriptionLongue,
+        idModele,
         categorie,
         statut,
         modalites,
@@ -111,6 +112,7 @@ export const routesConnecteApiServiceMesuresSpecifiques = ({
             id: idMesure,
             description,
             descriptionLongue,
+            idModele,
             categorie,
             statut,
             modalites,
