@@ -26,6 +26,7 @@ export const schemaPutMesureSpecifique = (
 ) => ({
   description: schemaMesureSpecifique.description(),
   descriptionLongue: schemaMesureSpecifique.descriptionLongue().optional(),
+  idModele: schemaMesureSpecifique.idModele().optional(),
   categorie: schemaMesureSpecifique.categorie(referentiel, referentielV2),
   statut: schemaMesureSpecifique.statut(referentiel, referentielV2),
   modalites: schemaMesureSpecifique.modalites().optional(),
