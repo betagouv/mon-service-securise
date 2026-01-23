@@ -26,11 +26,7 @@ const adaptateurJWT = ({ adaptateurEnvironnement }) => {
   const genereToken = (idUtilisateur, source, estInvite) =>
     signeDonnees({ idUtilisateur, source, estInvite });
 
-  return {
-    decode,
-    signeDonnees,
-    genereToken,
-  };
+  return { decode, signeDonnees, genereToken };
 };
 
 const fabriqueAdaptateurJWT = () =>

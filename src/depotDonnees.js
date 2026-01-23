@@ -157,6 +157,7 @@ const creeDepot = (config = {}) => {
   const depotSession = depotDonneesSession.creeDepot({
     chiffrement: adaptateurChiffrement,
     persistance: adaptateurPersistance,
+    decodeJwt: adaptateurJWT.decode,
   });
 
   const {

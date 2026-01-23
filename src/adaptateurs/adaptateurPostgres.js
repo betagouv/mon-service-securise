@@ -991,10 +991,10 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     }));
   };
 
-  const revoqueJwt = async (jwtHashe) =>
+  const revoqueJwt = async (jwtHashe, dateExpirationJwt) =>
     knex('revocations_jwt').insert({
       hash_jwt_revoque: jwtHashe,
-      date_expiration: new Date('1987-09-13'),
+      date_expiration: dateExpirationJwt,
     });
 
   const estJwtRevoque = async (jwtHashe) =>
