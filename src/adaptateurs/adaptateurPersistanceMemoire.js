@@ -687,7 +687,7 @@ const nouvelAdaptateur = (
   const toutesLesAutorisationsDeProprietaire = async () =>
     donnees.autorisations.filter((a) => a.estProprietaire);
 
-  const revoqueJwt = async (jwtHashe) => {
+  const revoqueJwt = async (jwtHashe, _dateExpirationJwt) => {
     donnees.revocationsJwt.push(jwtHashe);
   };
 
