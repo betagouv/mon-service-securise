@@ -142,8 +142,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       requete.cguAcceptees = requete.session?.cguAcceptees;
       requete.estInvite = requete.session?.estInvite;
       requete.sourceAuthentification = token.source;
-      if (requete.session)
-        requete.session.token = utilisateur.genereToken(token.source);
     } catch {
       return renvoieUtilisateurSansJWTValide();
     }
