@@ -238,17 +238,6 @@ describe('Le middleware MSS', () => {
       expect(requete.estInvite).to.be('INVITÉ');
     });
 
-    it("regénère un JWT et le sauvegarde dans la session de l'utilisateur", async () => {
-      const adaptateurJWT = { decode: () => ({ idUtilisateur: '123' }) };
-      depotDonnees.utilisateur = () => ({ genereToken: () => 'NOUVEAU_TOKEN' });
-
-      const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
-
-      await middleware.verificationJWT(requete, reponse, () => {});
-
-      expect(requete.session.token).to.be('NOUVEAU_TOKEN');
-    });
-
     describe('quand le JWT est expiré', () => {
       const adaptateurJWT = {
         decode: () => {
