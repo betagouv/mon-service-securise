@@ -1,5 +1,26 @@
 import * as z from 'zod';
 import { NextFunction, Request, Response } from 'express';
+import { fabriqueAdaptateurGestionErreur } from '../adaptateurs/fabriqueAdaptateurGestionErreur.js';
+
+const loguerDetailsDuRejet = (
+  requete: { url: string; body: unknown; params: unknown; query: unknown },
+  resultatZod: object,
+  cible: 'BODY' | 'PARAMS' | 'QUERY'
+) => {
+  if (process.env.API_ACTIVE_LOG_DES_ERREURS_400 !== 'true') return;
+
+  fabriqueAdaptateurGestionErreur().logueErreur(
+    new Error('Erreur 400. Voir les détails pour analyser.'),
+    {
+      cible,
+      url: requete.url,
+      body: requete.body,
+      params: requete.params,
+      query: requete.query,
+      resultatZod,
+    }
+  );
+};
 
 export const valideBody =
   <TZod extends z.ZodType, TBody extends z.infer<TZod>>(objet: TZod) =>
@@ -10,7 +31,10 @@ export const valideBody =
   ) => {
     const resultat = objet.safeParse(requete.body);
 
-    if (!resultat.success) return reponse.sendStatus(400);
+    if (!resultat.success) {
+      loguerDetailsDuRejet(requete, resultat, 'BODY');
+      return reponse.sendStatus(400);
+    }
 
     // Ici on veut bel et bien ré-écrire la requête, car c'est comme ça qu'expressjs est conçu.
     // On réassigne pour que les suivants récupèrent le contenu assaini par Zod.
@@ -28,7 +52,10 @@ export const valideParams =
   ) => {
     const resultat = objet.safeParse(requete.params);
 
-    if (!resultat.success) return reponse.sendStatus(400);
+    if (!resultat.success) {
+      loguerDetailsDuRejet(requete, resultat, 'PARAMS');
+      return reponse.sendStatus(400);
+    }
 
     // Ici on veut bel et bien ré-écrire la requête, car c'est comme ça qu'expressjs est conçu.
     // On réassigne pour que les suivants récupèrent le contenu assaini par Zod.
@@ -46,7 +73,10 @@ export const valideQuery =
   ) => {
     const resultat = objet.safeParse(requete.query);
 
-    if (!resultat.success) return reponse.sendStatus(400);
+    if (!resultat.success) {
+      loguerDetailsDuRejet(requete, resultat, 'QUERY');
+      return reponse.sendStatus(400);
+    }
 
     // Ici on veut bel et bien ré-écrire la requête, car c'est comme ça qu'expressjs est conçu.
     // On réassigne pour que les suivants récupèrent le contenu assaini par Zod.
