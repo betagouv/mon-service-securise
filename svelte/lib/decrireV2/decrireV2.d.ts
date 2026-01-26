@@ -25,6 +25,7 @@ export type DecrireV2Props = {
   descriptionService: DescriptionServiceV2API;
   lectureSeule: boolean;
   idService: UUID;
+  doitFinaliserDescription: boolean;
 };
 
 export type DescriptionServiceV2API = {
