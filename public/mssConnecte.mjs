@@ -1,7 +1,6 @@
 import initialiseComportementModale from './modules/interactions/modale.mjs';
-import lanceDecompteDeconnexion from './modules/deconnexion.js';
 import lisDonneesPartagees from './modules/donneesPartagees.mjs';
-import DUREE_SESSION from './configuration.js';
+import { lanceDecompteDeconnexion } from './modules/deconnexion.js';
 
 $(() => {
   initialiseComportementModale($('.rideau#deconnexion'));
@@ -35,5 +34,5 @@ $(() => {
     }
   });
 
-  lanceDecompteDeconnexion(DUREE_SESSION);
+  lanceDecompteDeconnexion();
 });

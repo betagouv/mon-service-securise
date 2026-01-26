@@ -1,24 +1,29 @@
-import afficheModaleDeconnexion from './interactions/afficheModaleDeconnexion.mjs';
+const leProchainMinuitUtc = () => {
+  const maintenant = new Date();
 
-const HEURE_DECONNEXION = 'heureDeconnexion';
-
-const lanceDecompteAffichage = () => {
-  if (Date.now() >= localStorage.getItem(HEURE_DECONNEXION)) {
-    afficheModaleDeconnexion('.rideau#deconnexion', '.rideau');
-  } else {
-    setTimeout(
-      lanceDecompteAffichage,
-      localStorage.getItem(HEURE_DECONNEXION) - Date.now()
-    );
-  }
-};
-
-const lanceDecompteDeconnexion = (dureeSession) => {
-  localStorage.setItem(
-    HEURE_DECONNEXION,
-    new Date(Date.now() + dureeSession).valueOf()
+  return new Date(
+    Date.UTC(
+      maintenant.getUTCFullYear(),
+      maintenant.getUTCMonth(),
+      maintenant.getUTCDate() + 1,
+      0,
+      0,
+      0,
+      0
+    )
   );
-  setTimeout(lanceDecompteAffichage, dureeSession);
 };
 
-export default lanceDecompteDeconnexion;
+export const afficheModaleDeconnexion = () => {
+  $('.rideau').trigger('fermeModale');
+  $('.rideau#deconnexion').trigger('afficheModale');
+};
+
+export const lanceDecompteDeconnexion = () => {
+  const aMinuit = leProchainMinuitUtc().getTime();
+  const tempsRestant = aMinuit - Date.now();
+
+  setTimeout(() => {
+    afficheModaleDeconnexion();
+  }, tempsRestant);
+};
