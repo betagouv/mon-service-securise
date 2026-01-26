@@ -57,6 +57,7 @@
   export let descriptionService: DescriptionServiceV2API;
   export let idService: UUID;
   export let lectureSeule: boolean;
+  export let doitFinaliserDescription: boolean;
 
   let mode: ModeAffichage = 'Résumé';
   let ongletActif: 'informations' | 'besoinsSecurite' = 'informations';
@@ -140,6 +141,18 @@
 
 <Toaster />
 <div class="conteneur-decrire-v2">
+  {#if doitFinaliserDescription}
+    <div class="conteneur-alerte">
+      <dsfr-alert
+        has-title
+        title="Complétez les informations de votre service"
+        has-description
+        text="Pour obtenir une évaluation de sécurité au plus proche de la réalité de votre service, renseignez l’ensemble des informations : description, fonctionnalités et données traitées."
+        type="info"
+        size="md"
+      ></dsfr-alert>
+    </div>
+  {/if}
   <OngletsDecrireV2 bind:ongletActif />
   {#if ongletActif === 'informations'}
     <div class="conteneur-resume">
@@ -251,6 +264,16 @@
     max-width: 1000px;
     padding: 0 54px;
     margin: 24px auto;
+  }
+
+  .conteneur-alerte {
+    max-width: 1000px;
+    margin: 32px auto -8px;
+
+    dsfr-alert {
+      max-width: 792px;
+      text-align: left;
+    }
   }
 
   .conteneur-besoins-securite {

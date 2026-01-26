@@ -18,6 +18,7 @@ block append scripts
   +composantSvelte('decrireV2.js')
   +donneesPartagees('donnees-description-service', { idService: service.id, descriptionService: service.descriptionService.toJSON() })
   +donneesPartagees('donnees-lecture-seule', autorisationsService.DECRIRE.estLectureSeule)
+  +donneesPartagees('donnees-doit-finaliser-description', service.pourraitFaire('finalisationDescriptionServiceImporte'))
   script(type = 'module', src = '/statique/service/decrireV2.mjs')
 
 
