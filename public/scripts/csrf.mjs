@@ -1,5 +1,5 @@
-import lanceDecompteDeconnexion from '../modules/deconnexion.js';
 import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
+import { afficheModaleDeconnexion } from '../modules/deconnexion.js';
 
 $(() => {
   const { token } = lisDonneesPartagees('infos-csrf');
@@ -12,7 +12,7 @@ $(() => {
         typeof error?.response?.data === 'string' &&
         error?.response?.data?.includes('CSRF token mismatch')
       ) {
-        lanceDecompteDeconnexion(0);
+        afficheModaleDeconnexion();
       }
       return Promise.reject(error);
     }

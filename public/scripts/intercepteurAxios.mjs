@@ -1,18 +1,14 @@
-import lanceDecompteDeconnexion from '../modules/deconnexion.js';
-import DUREE_SESSION from '../configuration.js';
+import { afficheModaleDeconnexion } from '../modules/deconnexion.js';
 
 $(() => {
   axios.interceptors.response.use(
-    (response) => {
-      lanceDecompteDeconnexion(DUREE_SESSION);
-      return response;
-    },
+    (response) => response,
     (error) => {
       if (
         error?.response?.status === 401 &&
         error?.response?.data?.cause === 'TOKEN_EXPIRE'
       ) {
-        lanceDecompteDeconnexion(0);
+        afficheModaleDeconnexion();
       }
       return Promise.reject(error);
     }
