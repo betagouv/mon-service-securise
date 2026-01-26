@@ -28,12 +28,22 @@ describe('Le serveur MSS des routes connectées /oidc/*', () => {
     });
 
     it('dépose un cookie avec le state', async () => {
-      const reponse = await testeur.get('/oidc/deconnexion');
+      const reponse = await testeur.getAvecCookie(
+        '/oidc/deconnexion',
+        encodeSession({ AgentConnectIdToken: 'idTokenAgentConnect' })
+      );
 
       const headerCookie = reponse.headers['set-cookie'];
       const cookie = enObjet(headerCookie[0]).AgentConnectInfo;
 
       expect(cookie).to.contain('unState');
+    });
+
+    it("redirige directement vers la page de connexion si la session ne contient pas un id ProConnect (cas d'une navigation par erreur)", async () => {
+      const reponse = await testeur.get('/oidc/deconnexion');
+
+      expect(reponse.status).to.be(302);
+      expect(reponse.headers.location).to.be('/connexion');
     });
   });
 });

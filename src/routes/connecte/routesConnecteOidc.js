@@ -4,6 +4,10 @@ const routesConnecteOidc = ({ adaptateurOidc }) => {
   const routes = express.Router();
 
   routes.get('/deconnexion', async (requete, reponse) => {
+    if (!requete.session?.AgentConnectIdToken) {
+      return reponse.redirect('/connexion');
+    }
+
     const { url, state } = await adaptateurOidc.genereDemandeDeconnexion(
       requete.session.AgentConnectIdToken
     );
@@ -19,7 +23,7 @@ const routesConnecteOidc = ({ adaptateurOidc }) => {
       }
     );
 
-    reponse.redirect(url);
+    return reponse.redirect(url);
   });
   return routes;
 };
