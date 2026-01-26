@@ -90,6 +90,29 @@ const routesNonConnecteOidc = ({
     }
   });
 
+  routes.get('/deconnexion', async (requete, reponse) => {
+    if (!requete.session?.AgentConnectIdToken) {
+      return reponse.redirect('/connexion');
+    }
+
+    const { url, state } = await adaptateurOidc.genereDemandeDeconnexion(
+      requete.session.AgentConnectIdToken
+    );
+
+    reponse.cookie(
+      'AgentConnectInfo',
+      { state },
+      {
+        maxAge: 30_000,
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      }
+    );
+
+    return reponse.redirect(url);
+  });
+
   routes.get(
     '/apres-deconnexion',
     valideQuery(z.strictObject({ state: z.string().min(1).max(100) })),
