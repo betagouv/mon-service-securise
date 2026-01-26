@@ -17,6 +17,14 @@ const decodeSessionDuCookie = (reponse, indiceHeader) => {
   }
 };
 
+const encodeSession = (contenuSession) => {
+  const sessionEnBase64 = Buffer.from(
+    JSON.stringify(contenuSession),
+    'utf-8'
+  ).toString('base64');
+  return `session=${sessionEnBase64}`;
+};
+
 const expectContenuSessionValide = (
   reponse,
   source,
@@ -35,4 +43,9 @@ const expectContenuSessionValide = (
   );
 };
 
-export { enObjet, decodeSessionDuCookie, expectContenuSessionValide };
+export {
+  encodeSession,
+  enObjet,
+  decodeSessionDuCookie,
+  expectContenuSessionValide,
+};

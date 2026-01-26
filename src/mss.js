@@ -71,6 +71,7 @@ const creeServeur = ({
       sameSite: true,
       secret: process.env.SECRET_COOKIE,
       secure: avecCookieSecurise,
+      signed: avecCookieSecurise,
     })
   );
 
