@@ -14,7 +14,6 @@ import routesNonConnecteApiStyles from './routes/nonConnecte/routesNonConnecteAp
 import routesNonConnectePage from './routes/nonConnecte/routesNonConnectePage.js';
 import routesConnectePage from './routes/connecte/routesConnectePage.js';
 import routesNonConnecteOidc from './routes/nonConnecte/routesNonConnecteOidc.js';
-import routesConnecteOidc from './routes/connecte/routesConnecteOidc.js';
 import { ajouteHtmlEntitiesEncode } from './http/encodeEntitesHTML.js';
 
 dotenv.config();
@@ -151,14 +150,7 @@ const creeServeur = ({
       serviceAnnuaire,
     })
   );
-  app.use(
-    '/oidc',
-    middleware.chargeTypeRequete(TYPES_REQUETES.NAVIGATION),
-    routesConnecteOidc({
-      middleware,
-      adaptateurOidc,
-    })
-  );
+
   app.use(
     '/api',
     middleware.chargeTypeRequete(TYPES_REQUETES.API),

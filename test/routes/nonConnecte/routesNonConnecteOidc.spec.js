@@ -4,6 +4,7 @@ import {
   enObjet,
   decodeSessionDuCookie,
   expectContenuSessionValide,
+  encodeSession,
 } from '../../aides/cookie.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { donneesPartagees } from '../../aides/http.js';
@@ -467,6 +468,46 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           tokenDonneesInvite: 'unJetonSigne',
         });
       });
+    });
+  });
+
+  describe('quand requête GET sur /oidc/deconnexion', () => {
+    let idTokenAgentConnect;
+    beforeEach(() => {
+      testeur.adaptateurOidc().genereDemandeDeconnexion = async (idToken) => {
+        idTokenAgentConnect = idToken;
+        return { state: 'unState', url: 'https://apres-deconnexion.fr' };
+      };
+    });
+
+    it('redirige vers la page de déconnexion', async () => {
+      const reponse = await testeur.getAvecCookie(
+        '/oidc/deconnexion',
+        encodeSession({ AgentConnectIdToken: 'idTokenAgentConnect' })
+      );
+
+      expect(reponse.status).to.be(302);
+      expect(reponse.headers.location).to.be('https://apres-deconnexion.fr');
+      expect(idTokenAgentConnect).to.be('idTokenAgentConnect');
+    });
+
+    it('dépose un cookie avec le state', async () => {
+      const reponse = await testeur.getAvecCookie(
+        '/oidc/deconnexion',
+        encodeSession({ AgentConnectIdToken: 'idTokenAgentConnect' })
+      );
+
+      const headerCookie = reponse.headers['set-cookie'];
+      const cookie = enObjet(headerCookie[0]).AgentConnectInfo;
+
+      expect(cookie).to.contain('unState');
+    });
+
+    it("redirige directement vers la page de connexion si la session ne contient pas un id ProConnect (cas d'une navigation par erreur)", async () => {
+      const reponse = await testeur.get('/oidc/deconnexion');
+
+      expect(reponse.status).to.be(302);
+      expect(reponse.headers.location).to.be('/connexion');
     });
   });
 
