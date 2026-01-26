@@ -1,3 +1,4 @@
 [
-  "0 10,13,15 * * * $ROOT/scripts/taches/tacheEnvoieMailsNotificationExpiration.sh"
+  "0 10,13,15 * * * $ROOT/scripts/taches/tacheEnvoieMailsNotificationExpiration.sh",
+  "10 0 * * * psql \"$URL_SERVEUR_BASE_DONNEES\" -c \"DELETE FROM revocations_jwt where date_expiration < NOW();\""
 ]
