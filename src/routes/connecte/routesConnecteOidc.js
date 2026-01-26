@@ -1,30 +1,26 @@
 import express from 'express';
 
-const routesConnecteOidc = ({ adaptateurOidc, middleware }) => {
+const routesConnecteOidc = ({ adaptateurOidc }) => {
   const routes = express.Router();
 
-  routes.get(
-    '/deconnexion',
-    middleware.verificationJWT,
-    async (requete, reponse) => {
-      const { url, state } = await adaptateurOidc.genereDemandeDeconnexion(
-        requete.session.AgentConnectIdToken
-      );
+  routes.get('/deconnexion', async (requete, reponse) => {
+    const { url, state } = await adaptateurOidc.genereDemandeDeconnexion(
+      requete.session.AgentConnectIdToken
+    );
 
-      reponse.cookie(
-        'AgentConnectInfo',
-        { state },
-        {
-          maxAge: 30_000,
-          httpOnly: true,
-          sameSite: 'none',
-          secure: true,
-        }
-      );
+    reponse.cookie(
+      'AgentConnectInfo',
+      { state },
+      {
+        maxAge: 30_000,
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      }
+    );
 
-      reponse.redirect(url);
-    }
-  );
+    reponse.redirect(url);
+  });
   return routes;
 };
 

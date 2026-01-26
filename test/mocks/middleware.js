@@ -78,7 +78,6 @@ let verificationJWTMenee = false;
 let verificationCGUMenee = false;
 let versionBuildeeChargee = false;
 let typeRequeteCharge = null;
-let idTokenAgentConnect;
 let fonctionDeposeCookie;
 
 const middlewareFantaisie = {
@@ -91,7 +90,6 @@ const middlewareFantaisie = {
       .construis(),
     autorisationACharger = uneAutorisation().construis(),
     authentificationAUtiliser = SourceAuthentification.MSS,
-    idTokenAgentConnectAUtiliser = undefined,
     fonctionDeposeCookieAAppeler = undefined,
   }) => {
     autorisationsChargees = false;
@@ -118,7 +116,6 @@ const middlewareFantaisie = {
     challengeMotDePasseEffectue = false;
     versionBuildeeChargee = false;
     sourceAuthentification = authentificationAUtiliser;
-    idTokenAgentConnect = idTokenAgentConnectAUtiliser;
     fonctionDeposeCookie = fonctionDeposeCookieAAppeler;
     typeRequeteCharge = null;
   },
@@ -227,9 +224,6 @@ const middlewareFantaisie = {
   },
 
   verificationJWT: (requete, _reponse, suite) => {
-    if (idTokenAgentConnect) {
-      requete.session.AgentConnectIdToken = idTokenAgentConnect;
-    }
     requete.sourceAuthentification = sourceAuthentification;
     requete.idUtilisateurCourant = idUtilisateurCourant;
     requete.cguAcceptees = cguAcceptees;

@@ -222,6 +222,8 @@ const testeurMss = () => {
     supertest(app).delete(url).send(donnees);
   const copy = async (url, donnees = {}) =>
     supertest(app).copy(url).send(donnees);
+  const getAvecCookie = async (url, contenuCookie) =>
+    supertest(app).get(url).set('Cookie', [contenuCookie]);
 
   return {
     app: () => app,
@@ -257,6 +259,7 @@ const testeurMss = () => {
     verifieSessionDeposee,
     copy,
     get,
+    getAvecCookie,
     patch,
     put,
     post,
