@@ -12,10 +12,7 @@ const extraisParametresDescriptionService = (
     (formulaire) => formulaire.id
   );
   const params = idFormulaires.reduce(
-    (acc, idFormulaire) => ({
-      ...acc,
-      ...parametres(`#${idFormulaire}`),
-    }),
+    (acc, idFormulaire) => ({ ...acc, ...parametres(`#${idFormulaire}`) }),
     {}
   );
 
@@ -23,15 +20,15 @@ const extraisParametresDescriptionService = (
     modifieParametresAvecItemsExtraits(params, cle, sourceRegExpParamsItem)
   );
 
-  params.organisationResponsable = {
-    siret: params.siretEntite,
-  };
+  params.organisationResponsable = { siret: params.siretEntite };
 
   delete params.siretEntite;
   delete params.nomEntite;
   delete params.departementEntite;
   delete params['siretEntite-selectize'];
   delete params['departementEntite-selectize'];
+
+  if (pourEstimationNiveauSecurite) delete params.niveauSecurite;
 
   if (
     pourEstimationNiveauSecurite &&
