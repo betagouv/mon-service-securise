@@ -1,10 +1,10 @@
+import { AdaptateurProfilAnssi } from '@lab-anssi/lib';
 import {
   ProfilProConnect,
   serviceApresAuthentification,
 } from '../../src/utilisateur/serviceApresAuthentification.js';
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
 import Utilisateur from '../../src/modeles/utilisateur.js';
-import { AdaptateurProfilAnssi } from '@lab-anssi/lib';
 import { ServiceAnnuaire } from '../../src/annuaire/serviceAnnuaire.interface.ts';
 import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
 import { UUID } from '../../src/typesBasiques.ts';
@@ -68,7 +68,7 @@ describe("Le service d'après authentification", () => {
     it('ne le connecte pas', async () => {
       const resultat = await serviceApresAuthentification(parametresParDefaut);
 
-      expect(resultat.utilisateurAConnecter).toBe(undefined);
+      expect(resultat).not.toHaveProperty('utilisateurAConnecter');
     });
 
     describe('concernant les données utilisateur', () => {
@@ -111,7 +111,7 @@ describe("Le service d'après authentification", () => {
         it("renvoie les données de ProConnect complétées par l'annuaire recherche entreprise", async () => {
           serviceAnnuaire.rechercheOrganisations = async (siret) =>
             siret === '1234'
-              ? [{ nom: 'MonOrganisation', departement: '75' }]
+              ? [{ nom: 'MonOrganisation', departement: '75', siret }]
               : [];
 
           const resultat =
@@ -135,7 +135,7 @@ describe("Le service d'après authentification", () => {
             profilProConnect: profilProConnect.sansSiret(),
           });
 
-          expect(resultat.donnees.organisation).toBe(undefined);
+          expect(resultat.donnees!.organisation).toBe(undefined);
         });
 
         it("reste robuste si l'entreprise n'est pas trouvée", async () => {
@@ -146,8 +146,8 @@ describe("Le service d'après authentification", () => {
             } as unknown as ServiceAnnuaire,
           });
 
-          expect(resultat.donnees.organisation).toBe(undefined);
-          expect(Object.keys(resultat.donnees)).not.toContain('organisation');
+          expect(resultat.donnees!.organisation).toBe(undefined);
+          expect(Object.keys(resultat.donnees!)).not.toContain('organisation');
         });
       });
     });
@@ -164,6 +164,11 @@ describe("Le service d'après authentification", () => {
 
     it('le connecte', async () => {
       const resultat = await serviceApresAuthentification(parametresParDefaut);
+
+      if (resultat.type !== 'rendu')
+        expect.fail(
+          `Le type d'ordre devrai être un rendu, reçu : ${resultat.type}`
+        );
 
       expect(resultat.utilisateurAConnecter).toBeInstanceOf(Utilisateur);
       expect(resultat.utilisateurAConnecter!.email).toBe(
@@ -189,7 +194,8 @@ describe("Le service d'après authentification", () => {
         const resultat =
           await serviceApresAuthentification(parametresParDefaut);
 
-        expect(resultat.donnees.invite).toBe(true);
+        // @ts-expect-error On sait que la propriété est présente
+        expect(resultat.donnees!.invite).toBe(true);
       });
 
       it('ne rafraîchit pas son profil utilisateur local', async () => {
