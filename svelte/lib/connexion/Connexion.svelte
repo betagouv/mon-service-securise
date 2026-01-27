@@ -13,6 +13,8 @@
   let afficheErreur: boolean = false;
 
   export const connecte = async () => {
+    if (!login || !motDePasse) return;
+
     try {
       await axios.post('/api/token', { login, motDePasse });
       window.location.href = urlRedirection ?? '/tableauDeBord';
