@@ -937,7 +937,6 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
     const unePayloadValide = () => ({
       motDePasse: 'mdp_ABC12345',
-      cguAcceptees: true,
     });
 
     beforeEach(() => {
