@@ -1,7 +1,17 @@
+import { Response } from 'express';
 import { SourceAuthentification } from '../modeles/sourceAuthentification.js';
+import { OrdreApresAuthentification } from './serviceApresAuthentification.js';
+import { AdaptateurJWT } from '../adaptateurs/adaptateurJWT.interface.js';
+import { DepotDonnees } from '../depotDonnees.interface.js';
+import { AdaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement.interface.js';
+import {
+  RequeteAvecSession,
+  ServiceGestionnaireSession,
+} from '../session/serviceGestionnaireSession.js';
+import { UUID } from '../typesBasiques.js';
 
 const executeurApresAuthentification = async (
-  ordre,
+  ordre: OrdreApresAuthentification,
   {
     requete,
     reponse,
@@ -12,9 +22,19 @@ const executeurApresAuthentification = async (
     adaptateurEnvironnement,
     serviceGestionnaireSession,
     connexionAvecMFA,
+  }: {
+    requete: RequeteAvecSession;
+    reponse: Response;
+    agentConnectIdToken: string;
+    adaptateurJWT: AdaptateurJWT;
+    depotDonnees: DepotDonnees;
+    urlRedirection?: string;
+    adaptateurEnvironnement: AdaptateurEnvironnement;
+    serviceGestionnaireSession: ServiceGestionnaireSession;
+    connexionAvecMFA?: boolean;
   }
 ) => {
-  if (ordre.utilisateurAConnecter) {
+  if (ordre.type === 'rendu' && ordre.utilisateurAConnecter) {
     serviceGestionnaireSession.enregistreSession(
       requete,
       ordre.utilisateurAConnecter,
@@ -23,7 +43,7 @@ const executeurApresAuthentification = async (
     );
     requete.session.AgentConnectIdToken = agentConnectIdToken;
     await depotDonnees.enregistreNouvelleConnexionUtilisateur(
-      ordre.utilisateurAConnecter.id,
+      ordre.utilisateurAConnecter.id as UUID,
       SourceAuthentification.AGENT_CONNECT,
       connexionAvecMFA
     );
