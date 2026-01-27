@@ -1,131 +1,186 @@
-import expect from 'expect.js';
+import { Response } from 'express';
 import { executeurApresAuthentification } from '../../src/utilisateur/executeurApresAuthentification.js';
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
 import { SourceAuthentification } from '../../src/modeles/sourceAuthentification.js';
+import { OrdreApresAuthentification } from '../../src/utilisateur/serviceApresAuthentification.ts';
+import { AdaptateurJWT } from '../../src/adaptateurs/adaptateurJWT.interface.ts';
+import {
+  RequeteAvecSession,
+  ServiceGestionnaireSession,
+} from '../../src/session/serviceGestionnaireSession.ts';
+import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
+import { AdaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement.interface.ts';
+import Utilisateur from '../../src/modeles/utilisateur.js';
 
 class MockReponse {
-  redirect(cible) {
+  urlRedirection: string | undefined;
+  pageRendue: string | undefined;
+  donneesDeRenduDePage: Record<string, unknown> | undefined;
+
+  redirect(cible: string) {
     this.urlRedirection = cible;
   }
 
-  render(cible, donnees) {
+  render(cible: string, donnees: Record<string, unknown>) {
     this.pageRendue = cible;
     this.donneesDeRenduDePage = donnees;
   }
 }
 
 describe("L'executeur après authentification", () => {
-  let reponse;
+  let adaptateurJWT: AdaptateurJWT;
+  let adaptateurEnvironnement: AdaptateurEnvironnement;
+  let reponse: MockReponse;
+  let serviceGestionnaireSession: ServiceGestionnaireSession;
+  let requete: RequeteAvecSession;
+  let depotDonnees: DepotDonnees;
+
+  const donneesUtilisateur = {
+    nom: 'Jean',
+    prenom: 'Dujardin',
+    email: 'jean.dujardin@beta.gouv.fr',
+    organisation: {
+      nom: 'ANSSI',
+      departement: '75',
+      siret: '1234',
+    },
+  };
+
+  const executeurDuTest = async (
+    ordre: OrdreApresAuthentification,
+    configurationOptionnelle?: {
+      urlRedirection?: string;
+      connexionAvecMFA?: boolean;
+      agentConnectIdToken?: string;
+    }
+  ) => {
+    await executeurApresAuthentification(ordre, {
+      adaptateurJWT,
+      adaptateurEnvironnement,
+      reponse: reponse as unknown as Response,
+      requete,
+      agentConnectIdToken: '',
+      depotDonnees,
+      serviceGestionnaireSession,
+      ...(configurationOptionnelle && {
+        urlRedirection: configurationOptionnelle.urlRedirection,
+        connexionAvecMFA: configurationOptionnelle.connexionAvecMFA,
+        agentConnectIdToken: configurationOptionnelle.agentConnectIdToken,
+      }),
+    });
+  };
 
   beforeEach(() => {
+    adaptateurJWT = {
+      signeDonnees: () => 'données-signées',
+    } as AdaptateurJWT;
+    adaptateurEnvironnement = {
+      mss: () => ({
+        urlBase: () => '',
+      }),
+    } as AdaptateurEnvironnement;
     reponse = new MockReponse();
+    requete = {
+      session: {},
+    } as RequeteAvecSession;
+    serviceGestionnaireSession = {
+      enregistreSession: () => {},
+    } as unknown as ServiceGestionnaireSession;
+    depotDonnees = {
+      enregistreNouvelleConnexionUtilisateur: () => {},
+    } as unknown as DepotDonnees;
   });
 
   describe("lorsque le type de l'ordre est une redirection", () => {
+    const ordre: OrdreApresAuthentification = {
+      type: 'redirection',
+      cible: '/creation-compte',
+      donnees: donneesUtilisateur,
+    };
+
     it('redirige', async () => {
-      const ordre = {
-        type: 'redirection',
-        cible: '/une-url',
-      };
+      await executeurDuTest(ordre);
 
-      await executeurApresAuthentification(ordre, { reponse });
-
-      expect(reponse.urlRedirection).to.be('/une-url');
+      expect(reponse.urlRedirection).toBe(
+        '/creation-compte?token=données-signées'
+      );
     });
 
     it("génère un token avec les données de l'ordre", async () => {
-      const ordre = {
-        type: 'redirection',
-        cible: '/une-url',
-        donnees: {
-          champ: 'valeur',
-        },
-      };
-      const adaptateurJWT = {
-        signeDonnees: (donnees) => `${donnees.champ}-jwt`,
-      };
+      adaptateurJWT.signeDonnees = (donnees) => `${donnees.nom}-jwt`;
 
-      await executeurApresAuthentification(ordre, { reponse, adaptateurJWT });
+      await executeurDuTest(ordre);
 
-      expect(reponse.urlRedirection).to.be('/une-url?token=valeur-jwt');
+      expect(reponse.urlRedirection).toBe('/creation-compte?token=Jean-jwt');
     });
   });
 
   describe("lorsque le type de l'ordre est un rendu", () => {
-    let adaptateurEnvironnement;
-
     beforeEach(() => {
       adaptateurEnvironnement = {
         mss: () => ({
           urlBase: () => 'http://mss',
         }),
-      };
+      } as AdaptateurEnvironnement;
     });
 
     it('rend une page', async () => {
-      const ordre = {
+      const ordre: OrdreApresAuthentification = {
         type: 'rendu',
-        cible: 'un-pug',
+        cible: 'apresAuthentification',
+        utilisateurAConnecter: unUtilisateur().construis(),
       };
 
-      await executeurApresAuthentification(ordre, { reponse });
+      await executeurDuTest(ordre);
 
-      expect(reponse.pageRendue).to.be('un-pug');
+      expect(reponse.pageRendue).toBe('apresAuthentification');
     });
 
     describe('lorsque des données sont fournies', () => {
-      let adaptateurJWT;
-      let ordre;
+      let ordre: OrdreApresAuthentification;
 
       beforeEach(() => {
         adaptateurJWT = {
-          signeDonnees: (donnees) => `${donnees.champ}-jwt`,
-        };
+          signeDonnees: (donnees) => `${donnees.nom}-jwt`,
+        } as AdaptateurJWT;
         ordre = {
           type: 'rendu',
-          cible: 'un-pug',
-          donnees: {
-            champ: 'valeur',
-          },
+          cible: 'apresAuthentification',
+          donnees: donneesUtilisateur,
+          utilisateurAConnecter: unUtilisateur().construis(),
         };
       });
 
       it("génère un token avec les données de l'ordre", async () => {
-        await executeurApresAuthentification(ordre, { reponse, adaptateurJWT });
+        await executeurDuTest(ordre);
 
-        expect(reponse.donneesDeRenduDePage).to.eql({
-          tokenDonneesInvite: 'valeur-jwt',
+        expect(reponse.donneesDeRenduDePage).toEqual({
+          tokenDonneesInvite: 'Jean-jwt',
         });
       });
 
       it("ajoute l'url de redirection si elle est fournie", async () => {
-        await executeurApresAuthentification(ordre, {
-          reponse,
-          adaptateurEnvironnement,
-          urlRedirection: '/tableau-bord',
-          adaptateurJWT,
-        });
+        await executeurDuTest(ordre, { urlRedirection: '/tableau-bord' });
 
-        expect(reponse.donneesDeRenduDePage).to.eql({
+        expect(reponse.donneesDeRenduDePage).toEqual({
           urlRedirection: 'http://mss/tableau-bord',
-          tokenDonneesInvite: 'valeur-jwt',
+          tokenDonneesInvite: 'Jean-jwt',
         });
       });
     });
     describe("lorsqu'aucune donnée n'est fournie", () => {
       it("ajoute l'url de redirection si elle est fournie", async () => {
-        const ordre = {
+        const ordre: OrdreApresAuthentification = {
           type: 'rendu',
-          cible: 'un-pug',
+          cible: 'apresAuthentification',
+          utilisateurAConnecter: unUtilisateur().construis(),
         };
 
-        await executeurApresAuthentification(ordre, {
-          reponse,
-          adaptateurEnvironnement,
+        await executeurDuTest(ordre, {
           urlRedirection: '/tableau-bord',
         });
 
-        expect(reponse.donneesDeRenduDePage).to.eql({
+        expect(reponse.donneesDeRenduDePage).toEqual({
           urlRedirection: 'http://mss/tableau-bord',
         });
       });
@@ -133,11 +188,8 @@ describe("L'executeur après authentification", () => {
   });
 
   describe("lorsqu'il y a un utilisateur à connecter", () => {
-    let utilisateurAConnecter;
-    let ordre;
-    let serviceGestionnaireSession;
-    let requete;
-    let depotDonnees;
+    let utilisateurAConnecter: Utilisateur;
+    let ordre: OrdreApresAuthentification;
 
     beforeEach(() => {
       utilisateurAConnecter = unUtilisateur()
@@ -145,84 +197,70 @@ describe("L'executeur après authentification", () => {
         .quiEstComplet()
         .construis();
       ordre = {
+        type: 'rendu',
+        cible: 'apresAuthentification',
         utilisateurAConnecter,
-      };
-      serviceGestionnaireSession = {
-        enregistreSession: () => {},
-      };
-      requete = {
-        session: {},
-      };
-      depotDonnees = {
-        enregistreNouvelleConnexionUtilisateur: async () => {},
       };
     });
 
     it('enregistre une session', async () => {
       let sessionEnregistree;
-      serviceGestionnaireSession = {
-        enregistreSession: (req, utilisateur, source, connexionAvecMFA) => {
-          sessionEnregistree = {
-            requete: req,
-            utilisateur,
-            source,
-            connexionAvecMFA,
-          };
-        },
+      serviceGestionnaireSession.enregistreSession = (
+        req,
+        utilisateur,
+        source,
+        connexionAvecMFA
+      ) => {
+        sessionEnregistree = {
+          requete: req,
+          utilisateur,
+          source,
+          connexionAvecMFA,
+        };
       };
-      await executeurApresAuthentification(ordre, {
-        serviceGestionnaireSession,
-        requete,
-        depotDonnees,
+
+      await executeurDuTest(ordre, {
         connexionAvecMFA: true,
       });
 
-      expect(sessionEnregistree).not.to.be(undefined);
-      expect(sessionEnregistree.requete).to.eql(requete);
-      expect(sessionEnregistree.utilisateur).to.be(utilisateurAConnecter);
-      expect(sessionEnregistree.source).to.be(
+      expect(sessionEnregistree).not.toBe(undefined);
+      expect(sessionEnregistree!.requete).toEqual(requete);
+      expect(sessionEnregistree!.utilisateur).toBe(utilisateurAConnecter);
+      expect(sessionEnregistree!.source).toBe(
         SourceAuthentification.AGENT_CONNECT
       );
-      expect(sessionEnregistree.connexionAvecMFA).to.be(true);
+      expect(sessionEnregistree!.connexionAvecMFA).toBe(true);
     });
 
     it("enregistre l'idToken de ProConnect", async () => {
-      await executeurApresAuthentification(ordre, {
-        serviceGestionnaireSession,
-        requete,
+      await executeurDuTest(ordre, {
         agentConnectIdToken: 'Un token ProConnect',
-        depotDonnees,
       });
 
-      expect(requete.session.AgentConnectIdToken).to.be('Un token ProConnect');
+      expect(requete.session.AgentConnectIdToken).toBe('Un token ProConnect');
     });
 
     it('enregistre une nouvelle connexion', async () => {
       let connexionEnregistree;
-      depotDonnees = {
-        enregistreNouvelleConnexionUtilisateur: async (
-          idUtilisateur,
-          source,
-          connexionAvecMFA
-        ) => {
-          connexionEnregistree = { idUtilisateur, source, connexionAvecMFA };
-        },
+      depotDonnees.enregistreNouvelleConnexionUtilisateur = async (
+        idUtilisateur,
+        source,
+        connexionAvecMFA
+      ) => {
+        connexionEnregistree = { idUtilisateur, source, connexionAvecMFA };
       };
 
-      await executeurApresAuthentification(ordre, {
-        serviceGestionnaireSession,
-        requete,
+      await executeurDuTest(ordre, {
         agentConnectIdToken: 'Un token ProConnect',
-        depotDonnees,
         connexionAvecMFA: true,
       });
 
-      expect(connexionEnregistree).not.to.be(undefined);
-      expect(connexionEnregistree.idUtilisateur).to.be('U1');
-      expect(connexionEnregistree.source).to.be(
+      expect(connexionEnregistree).not.toBe(undefined);
+      expect(connexionEnregistree!.idUtilisateur).toBe('U1');
+      expect(connexionEnregistree!.source).toBe(
         SourceAuthentification.AGENT_CONNECT
       );
-      expect(connexionEnregistree.connexionAvecMFA).to.be(true);
+      expect(connexionEnregistree!.connexionAvecMFA).toBe(true);
     });
   });
 });

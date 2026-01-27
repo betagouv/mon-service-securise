@@ -67,7 +67,7 @@ type OrdreRedirection = {
 type OrdreRendu = {
   type: 'rendu';
   cible: 'apresAuthentification';
-  donnees?: DonneesUtilisateur & { invite: true };
+  donnees?: DonneesUtilisateur & { invite?: true };
   utilisateurAConnecter: Utilisateur;
 };
 
