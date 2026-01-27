@@ -59,7 +59,7 @@ const initialise = (applicationExpress) => {
 const controleurErreurs = (erreur, requete, reponse, suite) => {
   const estErreurDeFiltrageIp = erreur instanceof ipFilter.IpDeniedError;
   if (estErreurDeFiltrageIp) {
-    // On termine la connexion directement si qqun nous appelle sans passer par Baleen.
+    // On termine la connexion directement si qqun nous appelle sans passer par le WAF.
     reponse.status(401);
     reponse.end();
     return;
