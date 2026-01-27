@@ -10,6 +10,17 @@ export type ProfilProConnect = {
   siret?: string;
 };
 
+type DonneesUtilisateur = {
+  nom: string;
+  prenom: string;
+  email: string;
+  organisation?: {
+    nom: string;
+    departement: string;
+    siret: string;
+  };
+};
+
 const recupereDonneesUtilisateur = async ({
   adaptateurProfilAnssi,
   profilProConnect,
@@ -18,11 +29,11 @@ const recupereDonneesUtilisateur = async ({
   adaptateurProfilAnssi: AdaptateurProfilAnssi;
   profilProConnect: ProfilProConnect;
   serviceAnnuaire: ServiceAnnuaire;
-}) => {
-  const profilAnssi = await adaptateurProfilAnssi.recupere(
+}): Promise<DonneesUtilisateur> => {
+  const profilAnssi: DonneesUtilisateur = await adaptateurProfilAnssi.recupere(
     profilProConnect.email
   );
-  let donnees = profilAnssi;
+  let donnees: DonneesUtilisateur = profilAnssi;
 
   if (!profilAnssi) {
     let organisation;
@@ -43,8 +54,24 @@ const recupereDonneesUtilisateur = async ({
       ...(organisation && { organisation }),
     };
   }
+
   return donnees;
 };
+
+type OrdreRedirection = {
+  type: 'redirection';
+  cible: '/creation-compte';
+  donnees: DonneesUtilisateur;
+};
+
+type OrdreRendu = {
+  type: 'rendu';
+  cible: 'apresAuthentification';
+  donnees?: DonneesUtilisateur & { invite: true };
+  utilisateurAConnecter: Utilisateur;
+};
+
+export type OrdreApresAuthentification = OrdreRedirection | OrdreRendu;
 
 const serviceApresAuthentification = async ({
   adaptateurProfilAnssi,
@@ -56,7 +83,7 @@ const serviceApresAuthentification = async ({
   serviceAnnuaire: ServiceAnnuaire;
   profilProConnect: ProfilProConnect;
   depotDonnees: DepotDonnees;
-}) => {
+}): Promise<OrdreApresAuthentification> => {
   const utilisateur = await depotDonnees.utilisateurAvecEmail(
     profilProConnect.email
   );
