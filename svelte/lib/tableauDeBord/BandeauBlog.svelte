@@ -49,7 +49,7 @@
 
   {#if avecPromotionDeMsc}
     <CarteDePromotion
-      titre="Découvez MesServicesCyber !"
+      titre="Découvrez MesServicesCyber !"
       href="https://messervices.cyber.gouv.fr/"
       fondIllustration="jaune"
     >
