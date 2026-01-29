@@ -1,4 +1,4 @@
-import expect from 'expect.js';
+import { Request } from 'express';
 import testeurMSS from '../testeurMSS.js';
 import {
   enObjet,
@@ -8,6 +8,9 @@ import {
 } from '../../aides/cookie.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { donneesPartagees } from '../../aides/http.js';
+import { UUID } from '../../../src/typesBasiques.ts';
+import { SourceAuthentification } from '../../../src/modeles/sourceAuthentification.ts';
+import Utilisateur from '../../../src/modeles/utilisateur.js';
 
 describe('Le serveur MSS des routes publiques /oidc/*', () => {
   const testeur = testeurMSS();
@@ -36,14 +39,14 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         `/oidc/connexion?urlRedirection=${tropLong}`
       );
 
-      expect(reponse.status).to.be(400);
+      expect(reponse.status).toBe(400);
     });
 
     it('redirige vers la page d’autorisation', async () => {
       const reponse = await testeur.get('/oidc/connexion');
 
-      expect(reponse.status).to.be(302);
-      expect(reponse.headers.location).to.be('http');
+      expect(reponse.status).toBe(302);
+      expect(reponse.headers.location).toBe('http');
     });
 
     it('dépose un cookie avec le nonce et le state', async () => {
@@ -52,8 +55,8 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       const headerCookie = reponse.headers['set-cookie'];
       const cookie = enObjet(headerCookie[0]).AgentConnectInfo;
 
-      expect(cookie).to.contain('unState');
-      expect(cookie).to.contain('unNonce');
+      expect(cookie).toContain('unState');
+      expect(cookie).toContain('unNonce');
     });
 
     it("ajoute l'url de redirection au cookie si elle est présente dans la query", async () => {
@@ -64,7 +67,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       const headerCookie = reponse.headers['set-cookie'];
       const cookie = enObjet(headerCookie[0]).AgentConnectInfo;
 
-      expect(cookie).to.contain('tableauDeBord');
+      expect(cookie).toContain('tableauDeBord');
     });
 
     it("n'ajoute pas l'url de redirection au cookie si elle est présente dans la query mais illégale (dangereuse)", async () => {
@@ -75,7 +78,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       const headerCookie = reponse.headers['set-cookie'];
       const cookie = enObjet(headerCookie[0]).AgentConnectInfo;
 
-      expect(cookie).not.to.contain('unautresite');
+      expect(cookie).not.toContain('unautresite');
     });
   });
 
@@ -90,18 +93,20 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       testeur.adaptateurOidc().recupereInformationsUtilisateur = async () => ({
         email: 'jean.dujardin@beta.gouv.fr',
       });
-      testeur.depotDonnees().utilisateurAvecEmail = (email) =>
+      testeur.depotDonnees().utilisateurAvecEmail = (email: string) =>
         email === 'unEmailInconnu' ? undefined : utilisateur;
       testeur.depotDonnees().utilisateur = () => utilisateur;
       testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = () => {};
       testeur.depotDonnees().metsAJourUtilisateur = () => {};
       testeur.depotDonnees().rafraichisProfilUtilisateurLocal = () => {};
       testeur.middleware().reinitialise({
-        fonctionDeposeCookieAAppeler: (requete) =>
-          (requete.cookies.AgentConnectInfo = {
+        // @ts-expect-error Le middleware de test n'est pas typé
+        fonctionDeposeCookieAAppeler: (requete: Request) => {
+          requete.cookies.AgentConnectInfo = {
             state: 'unState',
             nonce: 'unNonce',
-          }),
+          };
+        },
       });
       testeur.serviceAnnuaire().rechercheOrganisations = () => [];
       testeur.adaptateurProfilAnssi().recupere = () => undefined;
@@ -110,37 +115,41 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
     it('sert une page HTML', async () => {
       const reponse = await testeur.get('/oidc/apres-authentification');
 
-      expect(reponse.status).to.equal(200);
-      expect(reponse.headers['content-type']).to.contain('text/html');
+      expect(reponse.status).toEqual(200);
+      expect(reponse.headers['content-type']).toContain('text/html');
     });
 
     it('considère une url de redirection comme relative pour se protéger des open redirect', async () => {
       testeur.middleware().reinitialise({
-        fonctionDeposeCookieAAppeler: (requete) =>
-          (requete.cookies.AgentConnectInfo = {
+        // @ts-expect-error Le middleware de test n'est pas typé
+        fonctionDeposeCookieAAppeler: (requete: Request) => {
+          requete.cookies.AgentConnectInfo = {
             state: 'unState',
             nonce: 'unNonce',
             urlRedirection: '//redirect.com',
-          }),
+          };
+        },
       });
 
       const reponse = await testeur.get('/oidc/apres-authentification');
 
-      expect(reponse.text).to.contain('//redirect.com');
+      expect(reponse.text).toContain('//redirect.com');
     });
 
     it("ne fait aucune redirection en cas d'absence d'URL de redirection", async () => {
       testeur.middleware().reinitialise({
-        fonctionDeposeCookieAAppeler: (requete) =>
-          (requete.cookies.AgentConnectInfo = {
+        // @ts-expect-error Le middleware de test n'est pas typé
+        fonctionDeposeCookieAAppeler: (requete: Request) => {
+          requete.cookies.AgentConnectInfo = {
             state: 'unState',
             nonce: 'unNonce',
-          }),
+          };
+        },
       });
 
       const reponse = await testeur.get('/oidc/apres-authentification');
 
-      expect(reponse.body).not.to.contain('');
+      expect(reponse.body).not.toContain('');
     });
 
     it("reste robuste en cas d'erreur de récupération du jeton", async () => {
@@ -161,7 +170,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       });
       const reponse = await testeur.get('/oidc/apres-authentification');
       const tokenDecode = decodeSessionDuCookie(reponse, 1);
-      expect(tokenDecode.AgentConnectIdToken).to.be('unIdToken');
+      expect(tokenDecode.AgentConnectIdToken).toBe('unIdToken');
     });
 
     describe("si l'utilisateur est inconnu", () => {
@@ -171,7 +180,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           accessToken: 'unAccessToken',
         });
         testeur.adaptateurOidc().recupereInformationsUtilisateur = async (
-          accessToken
+          accessToken: string
         ) => {
           if (accessToken === 'unAccessToken')
             return {
@@ -184,18 +193,20 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
             'La méthode doit être appellée avec un `accessToken`'
           );
         };
-        testeur.adaptateurJWT().signeDonnees = (donnees) => {
+        testeur.adaptateurJWT().signeDonnees = (
+          donnees: Record<string, unknown>
+        ) => {
           donneesRecues = donnees;
           return 'unJetonSigne';
         };
 
         const reponse = await testeur.get('/oidc/apres-authentification');
 
-        expect(reponse.status).to.be(302);
-        expect(reponse.headers.location).to.be(
+        expect(reponse.status).toBe(302);
+        expect(reponse.headers.location).toBe(
           '/creation-compte?token=unJetonSigne'
         );
-        expect(donneesRecues).to.eql({
+        expect(donneesRecues).toEqual({
           email: 'unEmailInconnu',
           nom: 'Dujardin',
           prenom: 'Jean',
@@ -210,7 +221,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           .quiAccepteCGU()
           .construis();
         utilisateurAuthentifie.genereToken = (source) => `unJetonJWT-${source}`;
-        testeur.depotDonnees().utilisateurAvecEmail = (email) =>
+        testeur.depotDonnees().utilisateurAvecEmail = (email: string) =>
           email === 'jean.dujardin@beta.gouv.fr'
             ? utilisateurAuthentifie
             : undefined;
@@ -218,7 +229,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         const reponse = await testeur.get('/oidc/apres-authentification');
 
         const tokenDecode = decodeSessionDuCookie(reponse, 1);
-        expect(tokenDecode.token).to.be('unJetonJWT-AGENT_CONNECT');
+        expect(tokenDecode.token).toBe('unJetonJWT-AGENT_CONNECT');
       });
 
       it('ajoute une session utilisateur', async () => {
@@ -228,7 +239,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           .construis();
         utilisateurAuthentifie.genereToken = (source) =>
           `un token de source ${source}`;
-        testeur.depotDonnees().utilisateurAvecEmail = (email) =>
+        testeur.depotDonnees().utilisateurAvecEmail = (email: string) =>
           email === 'jean.dujardin@beta.gouv.fr'
             ? utilisateurAuthentifie
             : undefined;
@@ -245,7 +256,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           .construis();
         utilisateurAuthentifie.genereToken = (source) =>
           `un token de source ${source}`;
-        testeur.depotDonnees().utilisateurAvecEmail = (email) =>
+        testeur.depotDonnees().utilisateurAvecEmail = (email: string) =>
           email === 'jean.dujardin@beta.gouv.fr'
             ? utilisateurAuthentifie
             : undefined;
@@ -255,15 +266,15 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
         const reponse = await testeur.get('/oidc/apres-authentification');
 
-        expect(decodeSessionDuCookie(reponse, 1).connexionAvecMFA).to.be(true);
+        expect(decodeSessionDuCookie(reponse, 1).connexionAvecMFA).toBe(true);
       });
 
       it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {
         let idUtilisateurPasse = {};
         let sourcePassee;
         testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = async (
-          idUtilisateur,
-          source
+          idUtilisateur: UUID,
+          source: SourceAuthentification
         ) => {
           idUtilisateurPasse = idUtilisateur;
           sourcePassee = source;
@@ -279,15 +290,15 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
         await testeur.get('/oidc/apres-authentification');
 
-        expect(idUtilisateurPasse).to.be('456');
-        expect(sourcePassee).to.be('AGENT_CONNECT');
+        expect(idUtilisateurPasse).toBe('456');
+        expect(sourcePassee).toBe('AGENT_CONNECT');
       });
 
       it("enrichis le profil de l'utilisateur avec les informations ProConnect dans le cas d'un profil incomplet", async () => {
         let donneesRecues;
         testeur.depotDonnees().metsAJourUtilisateur = async (
-          idUtilisateur,
-          donnees
+          idUtilisateur: UUID,
+          donnees: Record<string, unknown>
         ) => {
           donneesRecues = { idUtilisateur, donnees };
         };
@@ -311,10 +322,10 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
         await testeur.get('/oidc/apres-authentification');
 
-        expect(donneesRecues.idUtilisateur).to.be('456');
-        expect(donneesRecues.donnees.prenom).to.be('Jean');
-        expect(donneesRecues.donnees.nom).to.be('Dujardin');
-        expect(donneesRecues.donnees.entite.siret).to.be('12345');
+        expect(donneesRecues!.idUtilisateur).toBe('456');
+        expect(donneesRecues!.donnees.prenom).toBe('Jean');
+        expect(donneesRecues!.donnees.nom).toBe('Dujardin');
+        expect(donneesRecues!.donnees.entite.siret).toBe('12345');
       });
 
       it("n'enrichis pas le profil de l'utilisateur s'il est invité, pour éviter qu'une erreur de profil incomplet soit jetée par MPA", async () => {
@@ -332,13 +343,13 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
         await testeur.get('/oidc/apres-authentification');
 
-        expect(depotAppele).to.be(false);
+        expect(depotAppele).toBe(false);
       });
 
       it("rafraîchis la copie locale du profil Utilisateur dans le cas d'un profil complet : on veut rappatrier les données MPA chez MSS", async () => {
         let idRafraichi;
         testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async (
-          idUtilisateur
+          idUtilisateur: UUID
         ) => {
           idRafraichi = idUtilisateur;
         };
@@ -362,19 +373,19 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
         await testeur.get('/oidc/apres-authentification');
 
-        expect(idRafraichi).to.be('456');
+        expect(idRafraichi).toBe('456');
       });
     });
 
     describe("si l'utilisateur existe et qu'il a été invité", () => {
-      let invite;
+      let invite: Utilisateur;
 
       beforeEach(() => {
         invite = unUtilisateur()
           .avecEmail('jean.dujardin@beta.gouv.fr')
           .quiAEteInvite()
           .construis();
-        testeur.depotDonnees().utilisateurAvecEmail = (email) =>
+        testeur.depotDonnees().utilisateurAvecEmail = (email: string) =>
           email === 'jean.dujardin@beta.gouv.fr' ? invite : undefined;
         invite.genereToken = () => 'unJetonJWT-AGENT_CONNECT-INVITE';
       });
@@ -383,7 +394,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         const reponse = await testeur.get('/oidc/apres-authentification');
 
         const tokenDecode = decodeSessionDuCookie(reponse, 1);
-        expect(tokenDecode.token).to.be('unJetonJWT-AGENT_CONNECT-INVITE');
+        expect(tokenDecode.token).toBe('unJetonJWT-AGENT_CONNECT-INVITE');
       });
 
       it("retourne la page `apresAuthentification` avec le jeton signé de l'invité dans les données", async () => {
@@ -391,7 +402,9 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           accessToken: 'unAccessToken',
         });
         let donneesRecuesPourCreationTokenSigne;
-        testeur.adaptateurJWT().signeDonnees = (donnees) => {
+        testeur.adaptateurJWT().signeDonnees = (
+          donnees: Record<string, unknown>
+        ) => {
           donneesRecuesPourCreationTokenSigne = donnees;
           return 'unJetonSigne';
         };
@@ -414,15 +427,15 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
         const reponse = await testeur.get('/oidc/apres-authentification');
 
-        expect(reponse.status).to.be(200);
-        expect(reponse.headers['content-type']).to.contain('text/html');
-        expect(donneesRecuesPourCreationTokenSigne).to.eql({
+        expect(reponse.status).toBe(200);
+        expect(reponse.headers['content-type']).toContain('text/html');
+        expect(donneesRecuesPourCreationTokenSigne).toEqual({
           email: 'jean.dujardin@beta.gouv.fr',
           nom: 'Dujardin',
           prenom: 'Jean',
           invite: true,
         });
-        expect(donneesPartagees(reponse.text, 'tokenDonneesInvite')).to.eql({
+        expect(donneesPartagees(reponse.text, 'tokenDonneesInvite')).toEqual({
           tokenDonneesInvite: 'unJetonSigne',
         });
       });
@@ -432,7 +445,9 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           accessToken: 'unAccessToken',
         });
         let donneesRecuesPourCreationTokenSigne;
-        testeur.adaptateurJWT().signeDonnees = (donnees) => {
+        testeur.adaptateurJWT().signeDonnees = (
+          donnees: Record<string, unknown>
+        ) => {
           donneesRecuesPourCreationTokenSigne = donnees;
           return 'unJetonSigne';
         };
@@ -456,15 +471,15 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
         const reponse = await testeur.get('/oidc/apres-authentification');
 
-        expect(reponse.status).to.be(200);
-        expect(reponse.headers['content-type']).to.contain('text/html');
-        expect(donneesRecuesPourCreationTokenSigne).to.eql({
+        expect(reponse.status).toBe(200);
+        expect(reponse.headers['content-type']).toContain('text/html');
+        expect(donneesRecuesPourCreationTokenSigne).toEqual({
           email: 'jean.dujardin@beta.gouv.fr',
           nom: 'Dujardin ProConnect',
           prenom: 'Jean ProConnect',
           invite: true,
         });
-        expect(donneesPartagees(reponse.text, 'tokenDonneesInvite')).to.eql({
+        expect(donneesPartagees(reponse.text, 'tokenDonneesInvite')).toEqual({
           tokenDonneesInvite: 'unJetonSigne',
         });
       });
@@ -472,9 +487,11 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
   });
 
   describe('quand requête GET sur /oidc/deconnexion', () => {
-    let idTokenAgentConnect;
+    let idTokenAgentConnect: string;
     beforeEach(() => {
-      testeur.adaptateurOidc().genereDemandeDeconnexion = async (idToken) => {
+      testeur.adaptateurOidc().genereDemandeDeconnexion = async (
+        idToken: string
+      ) => {
         idTokenAgentConnect = idToken;
         return { state: 'unState', url: 'https://apres-deconnexion.fr' };
       };
@@ -486,9 +503,9 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         encodeSession({ AgentConnectIdToken: 'idTokenAgentConnect' })
       );
 
-      expect(reponse.status).to.be(302);
-      expect(reponse.headers.location).to.be('https://apres-deconnexion.fr');
-      expect(idTokenAgentConnect).to.be('idTokenAgentConnect');
+      expect(reponse.status).toBe(302);
+      expect(reponse.headers.location).toBe('https://apres-deconnexion.fr');
+      expect(idTokenAgentConnect).toBe('idTokenAgentConnect');
     });
 
     it('dépose un cookie avec le state', async () => {
@@ -500,21 +517,22 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       const headerCookie = reponse.headers['set-cookie'];
       const cookie = enObjet(headerCookie[0]).AgentConnectInfo;
 
-      expect(cookie).to.contain('unState');
+      expect(cookie).toContain('unState');
     });
 
     it("redirige directement vers la page de connexion si la session ne contient pas un id ProConnect (cas d'une navigation par erreur)", async () => {
       const reponse = await testeur.get('/oidc/deconnexion');
 
-      expect(reponse.status).to.be(302);
-      expect(reponse.headers.location).to.be('/connexion');
+      expect(reponse.status).toBe(302);
+      expect(reponse.headers.location).toBe('/connexion');
     });
   });
 
   describe('quand requête GET sur `/oidc/apres-deconnexion`', () => {
     beforeEach(() => {
       testeur.middleware().reinitialise({
-        fonctionDeposeCookieAAppeler: (requete) => {
+        // @ts-expect-error Le middleware de test n'est pas typé
+        fonctionDeposeCookieAAppeler: (requete: Request) => {
           requete.cookies.AgentConnectInfo = { state: 'unState' };
         },
       });
@@ -525,8 +543,8 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         '/oidc/apres-deconnexion?state=unState'
       );
 
-      expect(reponse.status).to.be(302);
-      expect(reponse.headers.location).to.be('/connexion');
+      expect(reponse.status).toBe(302);
+      expect(reponse.headers.location).toBe('/connexion');
     });
 
     it("supprime la session de l'utilisateur via la page /connexion", async () => {
@@ -541,7 +559,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
     it('rejette une requête sans state', async () => {
       const reponse = await testeur.get('/oidc/apres-deconnexion?state=');
 
-      expect(reponse.status).to.be(400);
+      expect(reponse.status).toBe(400);
     });
 
     it("ne déconnecte pas l'utilisateur si le state ne correspond pas", async () => {
@@ -549,12 +567,13 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         '/oidc/apres-deconnexion?state=pasLeBonState'
       );
 
-      expect(reponse.status).to.be(401);
+      expect(reponse.status).toBe(401);
     });
 
     it("ne déconnecte pas l'utilisateur si le cookie n'est pas positionné", async () => {
       testeur.middleware().reinitialise({
-        fonctionDeposeCookieAAppeler: (requete) => {
+        // @ts-expect-error Le middleware de test n'est pas typé
+        fonctionDeposeCookieAAppeler: (requete: Request) => {
           requete.cookies.AgentConnectInfo = null;
         },
       });
@@ -563,7 +582,7 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         '/oidc/apres-deconnexion?state=unState'
       );
 
-      expect(reponse.status).to.be(401);
+      expect(reponse.status).toBe(401);
     });
 
     it('supprime le cookie contenant le state', async () => {
@@ -572,8 +591,8 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       );
 
       const cookies = reponse.headers['set-cookie'];
-      expect(cookies).not.to.be(undefined);
-      expect(enObjet(cookies[0]).AgentConnectInfo).to.be('');
+      expect(cookies).not.toBe(undefined);
+      expect(enObjet(cookies[0]).AgentConnectInfo).toBe('');
     });
   });
 });

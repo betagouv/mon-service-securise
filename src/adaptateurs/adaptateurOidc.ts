@@ -71,9 +71,9 @@ const recupereJeton = async (requete: Request) => {
     estUneMethodeAuthentificationAvecMFA(amr as MethodeAuthentification[]);
 
   return {
-    accessToken: token.access_token,
+    accessToken: token.access_token as string,
     connexionAvecMFA,
-    idToken: token.id_token,
+    idToken: token.id_token as string,
   };
 };
 
@@ -85,7 +85,12 @@ const recupereInformationsUtilisateur = async (accessToken: string) => {
     email,
     siret,
   } = await client.userinfo(accessToken);
-  return { prenom, nom, email, siret };
+  return {
+    prenom: prenom as string,
+    nom: nom as string,
+    email: email as string,
+    siret: siret as string | undefined,
+  };
 };
 
 export {

@@ -1,10 +1,21 @@
 import express from 'express';
 import { z } from 'zod';
+import { AdaptateurProfilAnssi } from '@lab-anssi/lib';
 import { estUrlLegalePourRedirection } from '../../http/redirection.js';
 import { fabriqueAdaptateurGestionErreur } from '../../adaptateurs/fabriqueAdaptateurGestionErreur.js';
 import { serviceApresAuthentification } from '../../utilisateur/serviceApresAuthentification.js';
 import { executeurApresAuthentification } from '../../utilisateur/executeurApresAuthentification.js';
 import { valideQuery } from '../../http/validePayloads.js';
+import { AdaptateurOidc } from '../../adaptateurs/adaptateurOidc.interface.js';
+import { AdaptateurJWT } from '../../adaptateurs/adaptateurJWT.interface.js';
+import { DepotDonnees } from '../../depotDonnees.interface.js';
+import { Middleware } from '../../http/middleware.interface.js';
+import { AdaptateurEnvironnement } from '../../adaptateurs/adaptateurEnvironnement.interface.js';
+import {
+  RequeteAvecSession,
+  ServiceGestionnaireSession,
+} from '../../session/serviceGestionnaireSession.js';
+import { ServiceAnnuaire } from '../../annuaire/serviceAnnuaire.interface.js';
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
@@ -15,6 +26,15 @@ const routesNonConnecteOidc = ({
   serviceGestionnaireSession,
   adaptateurProfilAnssi,
   serviceAnnuaire,
+}: {
+  adaptateurOidc: AdaptateurOidc;
+  adaptateurJWT: AdaptateurJWT;
+  depotDonnees: DepotDonnees;
+  middleware: Middleware;
+  adaptateurEnvironnement: AdaptateurEnvironnement;
+  serviceGestionnaireSession: ServiceGestionnaireSession;
+  adaptateurProfilAnssi: AdaptateurProfilAnssi;
+  serviceAnnuaire: ServiceAnnuaire;
 }) => {
   const routes = express.Router();
 
@@ -58,6 +78,7 @@ const routesNonConnecteOidc = ({
     try {
       const { idToken, accessToken, connexionAvecMFA } =
         await adaptateurOidc.recupereJeton(requete);
+
       const { urlRedirection } = requete.cookies.AgentConnectInfo;
 
       reponse.clearCookie('AgentConnectInfo');
@@ -74,7 +95,7 @@ const routesNonConnecteOidc = ({
       });
 
       await executeurApresAuthentification(ordre, {
-        requete,
+        requete: requete as RequeteAvecSession,
         reponse,
         agentConnectIdToken: idToken,
         adaptateurJWT,
