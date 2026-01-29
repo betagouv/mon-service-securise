@@ -157,6 +157,7 @@ mixin formulaireDescriptionService(idService)
             name = 'presentation',
             placeholder = 'ex : site internet de la médiathèque permettant de créer un compte utilisateur, de réserver, prolonger leur réservation de contenus multimédia.',
             readonly = estLectureSeule
+            maxlength = 2000
           )= service.descriptionService.presentation
 
         label(id='label-acces') Accès
