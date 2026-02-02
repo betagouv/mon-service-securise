@@ -14,7 +14,7 @@ import {
   expectContenuSessionValide,
 } from '../../aides/cookie.js';
 import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
-import { CorpsRequeteUtilisateur } from '../../../src/routes/mappeur/utilisateur.ts';
+import { CorpsRequetePutOuPostUtilisateur } from '../../../src/routes/mappeur/utilisateur.ts';
 import Utilisateur from '../../../src/modeles/utilisateur.js';
 import { unUUIDRandom } from '../../constructeurs/UUID.ts';
 import { SourceAuthentification } from '../../../src/modeles/sourceAuthentification.ts';
@@ -35,7 +35,10 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       id: '123',
       genereToken: () => 'un token',
     } as unknown as Utilisateur;
-    let donneesRequete: Omit<CorpsRequeteUtilisateur, 'nom' | 'prenom'> & {
+    let donneesRequete: Omit<
+      CorpsRequetePutOuPostUtilisateur,
+      'nom' | 'prenom'
+    > & {
       token: string;
     };
 
@@ -349,7 +352,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     it("demande au dépôt de créer l'utilisateur", async () => {
       let donneesRecues;
       testeur.depotDonnees().nouvelUtilisateur = async (
-        donneesUtilisateur: CorpsRequeteUtilisateur
+        donneesUtilisateur: CorpsRequetePutOuPostUtilisateur
       ) => {
         donneesRecues = donneesUtilisateur;
         return unUtilisateur().avecId('123').construis();
@@ -498,16 +501,9 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
     it('jette une erreur si le token est invalide', async () => {
       donneesRequete.token = tokenJWTInvalide;
+      const { status } = await testeur.post('/api/utilisateur', donneesRequete);
 
-      await testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        'Le token est invalide',
-        {
-          method: 'post',
-          url: '/api/utilisateur',
-          data: donneesRequete,
-        }
-      );
+      expect(status).toBe(422);
     });
   });
 

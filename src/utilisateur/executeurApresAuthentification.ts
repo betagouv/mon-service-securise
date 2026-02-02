@@ -1,9 +1,6 @@
 import { Response } from 'express';
 import { SourceAuthentification } from '../modeles/sourceAuthentification.js';
-import {
-  OrdreApresAuthentification,
-  TokenMSSPourCreationUtilisateur,
-} from './serviceApresAuthentification.js';
+import { OrdreApresAuthentification } from './serviceApresAuthentification.js';
 import { AdaptateurJWT } from '../adaptateurs/adaptateurJWT.interface.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import { AdaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement.interface.js';
@@ -12,6 +9,7 @@ import {
   ServiceGestionnaireSession,
 } from '../session/serviceGestionnaireSession.js';
 import { UUID } from '../typesBasiques.js';
+import { TokenMSSPourCreationUtilisateur } from './tokenMSSPourCreationUtilisateur.js';
 
 const executeurApresAuthentification = async (
   ordre: OrdreApresAuthentification,
@@ -56,9 +54,9 @@ const executeurApresAuthentification = async (
     case 'rendu':
       reponse.render(ordre.cible, {
         ...(ordre.donnees && {
-          tokenDonneesInvite: adaptateurJWT.signeDonnees(
-            ordre.donnees as TokenMSSPourCreationUtilisateur
-          ),
+          tokenDonneesInvite: new TokenMSSPourCreationUtilisateur(
+            adaptateurJWT
+          ).cree(ordre.donnees),
         }),
         ...(urlRedirection && {
           urlRedirection: `${adaptateurEnvironnement
@@ -69,8 +67,8 @@ const executeurApresAuthentification = async (
       break;
     case 'redirection':
       if (ordre.donnees) {
-        const token = adaptateurJWT.signeDonnees(
-          ordre.donnees as TokenMSSPourCreationUtilisateur
+        const token = new TokenMSSPourCreationUtilisateur(adaptateurJWT).cree(
+          ordre.donnees
         );
         reponse.redirect(`${ordre.cible}?token=${token}`);
       } else {

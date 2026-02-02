@@ -1,6 +1,4 @@
 export type PartieModifiableProfilUtilisateur = {
-  prenom: string;
-  nom: string;
   telephone?: string;
   entite: { siret: string };
   estimationNombreServices: {
@@ -11,4 +9,10 @@ export type PartieModifiableProfilUtilisateur = {
   transactionnelAccepte: boolean;
   postes: string[];
   cguAcceptees?: string;
+};
+
+export type IdentiteFournieParProConnect = {
+  nom: string;
+  prenom: string;
+  email: string;
 };

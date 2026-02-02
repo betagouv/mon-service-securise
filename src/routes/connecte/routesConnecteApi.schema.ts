@@ -12,9 +12,8 @@ import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
 
 export const schemaPutUtilisateur = {
   ...schemaCommunPutPostUtilisateur,
-  nom: z.string().trim().min(1).max(200).optional(),
-  prenom: z.string().trim().min(1).max(200).optional(),
   cguAcceptees: z.literal(true).optional(),
+  // Optionnel, car le token est seulement présent dans le cas d'une finalisation de compte d'invité
   token: z.string().optional(),
 };
 
