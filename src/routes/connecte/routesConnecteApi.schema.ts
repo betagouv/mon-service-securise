@@ -12,8 +12,8 @@ import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
 
 export const schemaPutUtilisateur = {
   ...schemaCommunPutPostUtilisateur,
-  nom: z.string().trim().min(1).max(200),
-  prenom: z.string().trim().min(1).max(200),
+  nom: z.string().trim().min(1).max(200).optional(),
+  prenom: z.string().trim().min(1).max(200).optional(),
   cguAcceptees: z.literal(true).optional(),
   token: z.string().optional(),
 };

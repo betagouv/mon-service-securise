@@ -363,20 +363,18 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
     });
 
     describe('concernant la validation de la requête', () => {
-      it.each([undefined, '', uneChaineDeCaracteres(201, 'a')])(
+      it.each(['', uneChaineDeCaracteres(201, 'a')])(
         'refuse un prénom "%s"',
         async (valeurInvalide) => {
-          // @ts-expect-error On force des valeurs invalides pour le test.
           donneesRequete.prenom = valeurInvalide;
           const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
           expect(reponse.status).toBe(400);
         }
       );
 
-      it.each([undefined, '', uneChaineDeCaracteres(201, 'a')])(
+      it.each(['', uneChaineDeCaracteres(201, 'a')])(
         'refuse un nom "%s"',
         async (valeurInvalide) => {
-          // @ts-expect-error On force des valeurs invalides pour le test.
           donneesRequete.nom = valeurInvalide;
           const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
           expect(reponse.status).toBe(400);
