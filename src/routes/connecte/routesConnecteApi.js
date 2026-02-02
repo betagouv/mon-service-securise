@@ -46,6 +46,7 @@ const { SECURISER } = Rubriques;
 
 const routesConnecteApi = ({
   middleware,
+  adaptateurJWT,
   adaptateurMail,
   busEvenements,
   depotDonnees,
@@ -348,6 +349,7 @@ const routesConnecteApi = ({
   routes.use(
     '',
     routesConnecteApiUtilisateur({
+      adaptateurJWT,
       adaptateurMail,
       depotDonnees,
       middleware,

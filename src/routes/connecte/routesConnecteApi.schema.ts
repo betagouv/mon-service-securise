@@ -15,6 +15,7 @@ export const schemaPutUtilisateur = {
   nom: z.string().trim().min(1).max(200),
   prenom: z.string().trim().min(1).max(200),
   cguAcceptees: z.literal(true).optional(),
+  token: z.string().optional(),
 };
 
 export const schemaPutMesureGenerale = (

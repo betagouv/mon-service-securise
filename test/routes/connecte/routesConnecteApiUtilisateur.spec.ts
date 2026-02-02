@@ -446,6 +446,13 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
         }
       );
 
+      it("valide le champ `token` s'il est présent", async () => {
+        // @ts-expect-error On force un valeur invalide pour le test.
+        donneesRequete.token = 123;
+        const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
+        expect(reponse.status).toBe(400);
+      });
+
       it('accepte une requête avec une source de connexion ProConnect : cas où un invité vient finaliser son incription en ayant suivi le parcours ProConnect', async () => {
         const reponse = await testeur.put('/api/utilisateur', {
           ...donneesRequete,
@@ -485,6 +492,39 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
         'RSSI',
         "Chargé des systèmes d'informations",
       ]);
+    });
+
+    it('utilise les données du token plutôt que celle de la payload si elles sont présentes', async () => {
+      let donneesRecues;
+      testeur.adaptateurJWT().decode = () => ({
+        prenom: 'Jean Token',
+        nom: 'Dupont Token',
+        email: 'jean.token@beta.gouv.fr',
+      });
+      testeur.depotDonnees().metsAJourUtilisateur = async (
+        _: UUID,
+        donnees: Utilisateur
+      ) => {
+        donneesRecues = donnees;
+        return utilisateur;
+      };
+
+      donneesRequete.token = 'un-token-jwt';
+      await testeur.put('/api/utilisateur', donneesRequete);
+
+      expect(donneesRecues!.prenom).toEqual('Jean Token');
+      expect(donneesRecues!.nom).toEqual('Dupont Token');
+    });
+
+    it('jette une erreur si le token est présent mais invalide', async () => {
+      testeur.adaptateurJWT().decode = () => {
+        throw new Error('Token invalide');
+      };
+
+      donneesRequete.token = 'un-token-jwt-invalide';
+      const { status } = await testeur.put('/api/utilisateur', donneesRequete);
+
+      expect(status).toBe(422);
     });
 
     describe("concernant l'acceptation des CGU", () => {
