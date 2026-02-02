@@ -26,14 +26,19 @@ import { AdaptateurMail } from '../../adaptateurs/adaptateurMail.interface.js';
 import Utilisateur from '../../modeles/utilisateur.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import { ServiceCgu } from '../../serviceCgu.interface.js';
+import { TokenMSSPourCreationUtilisateur } from '../../utilisateur/serviceApresAuthentification.js';
+import { ErreurJWTManquant } from '../../erreurs.js';
+import { AdaptateurJWT } from '../../adaptateurs/adaptateurJWT.interface.js';
 
 export const routesConnecteApiUtilisateur = ({
+  adaptateurJWT,
   adaptateurMail,
   depotDonnees,
   middleware,
   serviceCgu,
   serviceGestionnaireSession,
 }: {
+  adaptateurJWT: AdaptateurJWT;
   adaptateurMail: AdaptateurMail;
   depotDonnees: DepotDonnees;
   middleware: Middleware;
@@ -150,6 +155,26 @@ export const routesConnecteApiUtilisateur = ({
         requete.body,
         serviceCgu
       );
+
+      const { token } = requete.body;
+      if (token) {
+        let donneesToken: TokenMSSPourCreationUtilisateur;
+        try {
+          donneesToken = adaptateurJWT.decode(
+            token
+          ) as TokenMSSPourCreationUtilisateur;
+
+          donnees.prenom = donneesToken.prenom;
+          donnees.nom = donneesToken.nom;
+        } catch (e) {
+          const message =
+            e instanceof ErreurJWTManquant
+              ? 'Le token est requis'
+              : 'Le token est invalide';
+          reponse.status(422).send(message);
+          return;
+        }
+      }
 
       const { donneesInvalides, messageErreur } =
         messageErreurDonneesUtilisateur(

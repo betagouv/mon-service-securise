@@ -157,6 +157,7 @@ const creeServeur = ({
     middleware.verificationJWT,
     routesConnecteApi({
       middleware,
+      adaptateurJWT,
       adaptateurMail,
       busEvenements,
       depotDonnees,
