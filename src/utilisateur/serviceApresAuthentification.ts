@@ -14,12 +14,11 @@ type DonneesUtilisateur = {
   nom: string;
   prenom: string;
   email: string;
-  organisation?: {
-    nom: string;
-    departement: string;
-    siret: string;
-  };
+  organisation?: { nom: string; departement: string; siret: string };
 };
+
+// Alias de type pour faciliter la découverte du code qui participe au process d'inscription MSS.
+export type TokenMSSPourCreationUtilisateur = DonneesUtilisateur;
 
 const recupereDonneesUtilisateur = async ({
   adaptateurProfilAnssi,
