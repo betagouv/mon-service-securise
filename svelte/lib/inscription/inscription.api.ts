@@ -3,7 +3,7 @@ import type { FormulaireInscription } from './inscription.d';
 export const finaliseInscriptionSuiteInvitation = (
   formulaireInscription: FormulaireInscription
 ) => {
-  const { token, ...donneesProfilInvite } = formulaireInscription;
+  const { prenom, nom, ...donneesProfilInvite } = formulaireInscription;
   return axios.put('/api/utilisateur', donneesProfilInvite);
 };
 
