@@ -128,7 +128,11 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     };
 
     try {
-      const token = adaptateurJWT.decode(requete.session?.token);
+      const token = adaptateurJWT.decode(requete.session?.token) as {
+        idUtilisateur: UUID;
+        iat: number;
+        source: SourceAuthentification;
+      };
       const estRevoque = await depotDonnees.estJwtRevoque(
         requete.session?.token
       );
