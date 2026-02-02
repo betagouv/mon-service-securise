@@ -15,10 +15,10 @@ import { SourceAuthentification } from '../../modeles/sourceAuthentification.js'
 import { valideBody, valideQuery } from '../../http/validePayloads.js';
 import {
   reglesValidationAuthentificationParLoginMotDePasse,
-  schemaPostUtilisateur,
   reglesValidationDesinscriptionInfolettre,
   reglesValidationRechercheOrganisations,
   reglesValidationReinitialisationMotDePasse,
+  schemaPostUtilisateur,
 } from './routesNonConnecteApi.schema.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
@@ -34,8 +34,7 @@ import {
 } from '../../session/serviceGestionnaireSession.js';
 import { PartieModifiableProfilUtilisateur } from '../../modeles/utilisateur.types.js';
 import { UUID } from '../../typesBasiques.js';
-
-type DonneesToken = { nom: string; prenom: string; email: string };
+import { TokenMSSPourCreationUtilisateur } from '../../utilisateur/serviceApresAuthentification.js';
 
 const routesNonConnecteApi = ({
   middleware,
@@ -67,9 +66,11 @@ const routesNonConnecteApi = ({
     async (requete, reponse, suite) => {
       const { token } = requete.body;
 
-      let donneesToken: DonneesToken;
+      let donneesToken: TokenMSSPourCreationUtilisateur;
       try {
-        donneesToken = adaptateurJWT.decode(token) as DonneesToken;
+        donneesToken = adaptateurJWT.decode(
+          token
+        ) as TokenMSSPourCreationUtilisateur;
       } catch (e) {
         const message =
           e instanceof ErreurJWTManquant

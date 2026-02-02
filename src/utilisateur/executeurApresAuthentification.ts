@@ -1,6 +1,9 @@
 import { Response } from 'express';
 import { SourceAuthentification } from '../modeles/sourceAuthentification.js';
-import { OrdreApresAuthentification } from './serviceApresAuthentification.js';
+import {
+  OrdreApresAuthentification,
+  TokenMSSPourCreationUtilisateur,
+} from './serviceApresAuthentification.js';
 import { AdaptateurJWT } from '../adaptateurs/adaptateurJWT.interface.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
 import { AdaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement.interface.js';
@@ -53,7 +56,9 @@ const executeurApresAuthentification = async (
     case 'rendu':
       reponse.render(ordre.cible, {
         ...(ordre.donnees && {
-          tokenDonneesInvite: adaptateurJWT.signeDonnees(ordre.donnees),
+          tokenDonneesInvite: adaptateurJWT.signeDonnees(
+            ordre.donnees as TokenMSSPourCreationUtilisateur
+          ),
         }),
         ...(urlRedirection && {
           urlRedirection: `${adaptateurEnvironnement
@@ -64,7 +69,9 @@ const executeurApresAuthentification = async (
       break;
     case 'redirection':
       if (ordre.donnees) {
-        const token = adaptateurJWT.signeDonnees(ordre.donnees);
+        const token = adaptateurJWT.signeDonnees(
+          ordre.donnees as TokenMSSPourCreationUtilisateur
+        );
         reponse.redirect(`${ordre.cible}?token=${token}`);
       } else {
         reponse.redirect(`${ordre.cible}`);
