@@ -29,6 +29,7 @@ const creeDepot = (config = {}) => {
     adaptateurEnvironnement,
     adaptateurJWT = fabriqueAdaptateurJWT(),
     adaptateurPersistance = fabriqueAdaptateurPersistance(process.env.NODE_ENV),
+    adaptateurProfilAnssi = fabriqueAdaptateurProfilAnssi(),
     adaptateurUUID = fabriqueAdaptateurUUID(),
     referentiel = Referentiel.creeReferentiel(),
     referentielV2,
@@ -44,7 +45,7 @@ const creeDepot = (config = {}) => {
     adaptateurPersistance,
     adaptateurUUID,
     adaptateurRechercheEntite,
-    adaptateurProfilAnssi: fabriqueAdaptateurProfilAnssi(),
+    adaptateurProfilAnssi,
     busEvenements,
     serviceCgu,
   });
