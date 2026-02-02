@@ -66,14 +66,33 @@
   <Formulaire classe="formulaire-profil" bind:this={formulaire}>
     <div class="bloc">
       <div>
-        <div class="info-champ-obligatoire requis">Champ obligatoire</div>
         <h3>Mon identité</h3>
       </div>
+      <dsfr-callout
+        text="Pour modifier votre prénom ou votre nom, rendez-vous sur votre profil ProConnect."
+        has-button
+        accent="défaut"
+      >
+        <dsfr-button
+          slot="button"
+          label="Se rendre sur ProConnect"
+          kind="secondary"
+          size="md"
+          has-icon
+          icon="external-link-line"
+          icon-place="right"
+          markup="a"
+          type={undefined}
+          href={'https://identite.proconnect.gouv.fr'}
+          target="blank"
+        />
+      </dsfr-callout>
       <div class="identite-lecture-seule">
         <span>Mail professionnel : <b>{utilisateur.email}</b></span>
         <span>Prénom : <b>{utilisateur.prenom}</b></span>
         <span>Nom : <b>{utilisateur.nom}</b></span>
       </div>
+      <div class="info-champ-obligatoire requis">Champ obligatoire</div>
       <div class="champ">
         <label class="requis" for="domaine-specialite"
           >Domaine de spécialité</label
