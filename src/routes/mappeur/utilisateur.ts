@@ -6,7 +6,7 @@ import { PartieModifiableProfilUtilisateur } from '../../modeles/utilisateur.typ
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const corpsRequete = z.object(schemaPutUtilisateur);
-type CorpsRequeteUtilisateur = z.infer<typeof corpsRequete>;
+export type CorpsRequeteUtilisateur = z.infer<typeof corpsRequete>;
 
 const obtentionDonneesDeBaseUtilisateur = (
   corps: CorpsRequeteUtilisateur,
