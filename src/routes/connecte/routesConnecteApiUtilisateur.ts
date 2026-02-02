@@ -7,11 +7,7 @@ import {
   schemaPutUtilisateur,
 } from './routesConnecteApi.schema.js';
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
-import {
-  CorpsRequeteUtilisateur,
-  messageErreurDonneesUtilisateur,
-  obtentionDonneesDeBaseUtilisateur,
-} from '../mappeur/utilisateur.js';
+import { obtentionDonneesDeBaseUtilisateur } from '../mappeur/utilisateur.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import {
   RequeteAvecSession,
@@ -26,9 +22,12 @@ import { AdaptateurMail } from '../../adaptateurs/adaptateurMail.interface.js';
 import Utilisateur from '../../modeles/utilisateur.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import { ServiceCgu } from '../../serviceCgu.interface.js';
-import { TokenMSSPourCreationUtilisateur } from '../../utilisateur/serviceApresAuthentification.js';
-import { ErreurJWTManquant } from '../../erreurs.js';
 import { AdaptateurJWT } from '../../adaptateurs/adaptateurJWT.interface.js';
+import {
+  IdentiteFournieParProConnect,
+  PartieModifiableProfilUtilisateur,
+} from '../../modeles/utilisateur.types.js';
+import { TokenMSSPourCreationUtilisateur } from '../../utilisateur/tokenMSSPourCreationUtilisateur.js';
 
 export const routesConnecteApiUtilisateur = ({
   adaptateurJWT,
@@ -154,41 +153,19 @@ export const routesConnecteApiUtilisateur = ({
       const donnees = obtentionDonneesDeBaseUtilisateur(
         requete.body,
         serviceCgu
-      );
+      ) as PartieModifiableProfilUtilisateur & IdentiteFournieParProConnect;
 
       const { token } = requete.body;
       if (token) {
-        let donneesToken: TokenMSSPourCreationUtilisateur;
         try {
-          donneesToken = adaptateurJWT.decode(
-            token
-          ) as TokenMSSPourCreationUtilisateur;
-
+          const tokenMSS = new TokenMSSPourCreationUtilisateur(adaptateurJWT);
+          const donneesToken = tokenMSS.lis(token);
           donnees.prenom = donneesToken.prenom;
           donnees.nom = donneesToken.nom;
-        } catch (e) {
-          const message =
-            e instanceof ErreurJWTManquant
-              ? 'Le token est requis'
-              : 'Le token est invalide';
-          reponse.status(422).send(message);
+        } catch {
+          reponse.sendStatus(422);
           return;
         }
-      }
-
-      const { donneesInvalides, messageErreur } =
-        messageErreurDonneesUtilisateur(
-          donnees as unknown as CorpsRequeteUtilisateur,
-          true
-        );
-
-      if (donneesInvalides) {
-        reponse
-          .status(422)
-          .send(
-            `La mise à jour de l'utilisateur a échoué car les paramètres sont invalides. ${messageErreur}`
-          );
-        return;
       }
 
       depotDonnees

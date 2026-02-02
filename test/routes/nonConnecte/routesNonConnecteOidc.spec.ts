@@ -294,58 +294,6 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         expect(sourcePassee).toBe('AGENT_CONNECT');
       });
 
-      it("enrichis le profil de l'utilisateur avec les informations ProConnect dans le cas d'un profil incomplet", async () => {
-        let donneesRecues;
-        testeur.depotDonnees().metsAJourUtilisateur = async (
-          idUtilisateur: UUID,
-          donnees: Record<string, unknown>
-        ) => {
-          donneesRecues = { idUtilisateur, donnees };
-        };
-        testeur.adaptateurOidc().recupereInformationsUtilisateur =
-          async () => ({
-            email: 'jean.dujardin@beta.gouv.fr',
-            nom: 'Dujardin',
-            prenom: 'Jean',
-            siret: '12345',
-          });
-
-        const profilIncomplet = unUtilisateur()
-          .avecEmail('jean.dujardin@beta.gouv.fr')
-          .quiSAppelle('')
-          .avecId('456')
-          .quiAccepteCGU()
-          .construis();
-        profilIncomplet.genereToken = () => 'unJetonJWT';
-        testeur.depotDonnees().utilisateurAvecEmail = async () =>
-          profilIncomplet;
-
-        await testeur.get('/oidc/apres-authentification');
-
-        expect(donneesRecues!.idUtilisateur).toBe('456');
-        expect(donneesRecues!.donnees.prenom).toBe('Jean');
-        expect(donneesRecues!.donnees.nom).toBe('Dujardin');
-        expect(donneesRecues!.donnees.entite.siret).toBe('12345');
-      });
-
-      it("n'enrichis pas le profil de l'utilisateur s'il est invité, pour éviter qu'une erreur de profil incomplet soit jetée par MPA", async () => {
-        let depotAppele = false;
-        testeur.depotDonnees().metsAJourUtilisateur = async () => {
-          depotAppele = true;
-        };
-
-        const profilInvite = unUtilisateur()
-          .avecEmail('jean.dujardin@beta.gouv.fr')
-          .quiAEteInvite()
-          .construis();
-        profilInvite.genereToken = () => 'unJetonJWT';
-        testeur.depotDonnees().utilisateurAvecEmail = async () => profilInvite;
-
-        await testeur.get('/oidc/apres-authentification');
-
-        expect(depotAppele).toBe(false);
-      });
-
       it("rafraîchis la copie locale du profil Utilisateur dans le cas d'un profil complet : on veut rappatrier les données MPA chez MSS", async () => {
         let idRafraichi;
         testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async (
@@ -374,6 +322,24 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         await testeur.get('/oidc/apres-authentification');
 
         expect(idRafraichi).toBe('456');
+      });
+
+      it("ne rafraîchis pas le profil de l'utilisateur s'il est invité, pour éviter qu'une erreur de profil incomplet soit jetée par MPA", async () => {
+        let depotAppele = false;
+        testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async () => {
+          depotAppele = true;
+        };
+
+        const profilInvite = unUtilisateur()
+          .avecEmail('jean.dujardin@beta.gouv.fr')
+          .quiAEteInvite()
+          .construis();
+        profilInvite.genereToken = () => 'unJetonJWT';
+        testeur.depotDonnees().utilisateurAvecEmail = async () => profilInvite;
+
+        await testeur.get('/oidc/apres-authentification');
+
+        expect(depotAppele).toBe(false);
       });
     });
 

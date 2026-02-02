@@ -5,7 +5,7 @@ import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import Utilisateur from '../../../src/modeles/utilisateur.js';
 import { uneChaineDeCaracteres } from '../../constructeurs/String.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
-import { CorpsRequeteUtilisateur } from '../../../src/routes/mappeur/utilisateur.ts';
+import { CorpsRequetePutOuPostUtilisateur } from '../../../src/routes/mappeur/utilisateur.ts';
 
 describe("Les routes connectées d'API pour l'utilisateur", () => {
   const testeur = testeurMSS();
@@ -339,14 +339,12 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
   });
 
   describe('quand requête PUT sur `/api/utilisateur`', () => {
-    let donneesRequete: CorpsRequeteUtilisateur;
+    let donneesRequete: CorpsRequetePutOuPostUtilisateur;
 
     beforeEach(() => {
       utilisateur = unUtilisateur().avecId('123').construis();
 
       donneesRequete = {
-        prenom: 'Jean',
-        nom: 'Dupont',
         telephone: '0100000000',
         postes: ['RSSI', "Chargé des systèmes d'informations"],
         siretEntite: '13000766900018',
@@ -363,24 +361,6 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
     });
 
     describe('concernant la validation de la requête', () => {
-      it.each(['', uneChaineDeCaracteres(201, 'a')])(
-        'refuse un prénom "%s"',
-        async (valeurInvalide) => {
-          donneesRequete.prenom = valeurInvalide;
-          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
-          expect(reponse.status).toBe(400);
-        }
-      );
-
-      it.each(['', uneChaineDeCaracteres(201, 'a')])(
-        'refuse un nom "%s"',
-        async (valeurInvalide) => {
-          donneesRequete.nom = valeurInvalide;
-          const reponse = await testeur.put(`/api/utilisateur`, donneesRequete);
-          expect(reponse.status).toBe(400);
-        }
-      );
-
       it.each([
         { postes: [] },
         { postes: [1] },
@@ -461,7 +441,7 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
       });
     });
 
-    it("met à jour les autres informations de l'utilisateur", async () => {
+    it("utilise les saisies de l'utilisateur pour mettre à jour les informations autres que nom/prénom (qui sont extraits du token)", async () => {
       let idRecu;
       let donneesRecues;
       testeur.referentiel().recharge({ versionActuelleCgu: 'v2.0' });
@@ -480,8 +460,6 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
       expect(reponse.status).toEqual(200);
       expect(reponse.body).to.eql({ idUtilisateur: '123' });
       expect(idRecu).toEqual('123');
-      expect(donneesRecues!.prenom).toEqual('Jean');
-      expect(donneesRecues!.nom).toEqual('Dupont');
       expect(donneesRecues!.telephone).toEqual('0100000000');
       expect(donneesRecues!.entite.siret).toEqual('13000766900018');
       expect(donneesRecues!.infolettreAcceptee).toEqual(true);
@@ -492,7 +470,7 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
       ]);
     });
 
-    it('utilise les données du token plutôt que celle de la payload si elles sont présentes', async () => {
+    it("utilise le nom et le prénom du token, s'il est présent (cas de finalisation d'inscription ; il est absent si l'utilisateur est sur sa page profil)", async () => {
       let donneesRecues;
       testeur.adaptateurJWT().decode = () => ({
         prenom: 'Jean Token',

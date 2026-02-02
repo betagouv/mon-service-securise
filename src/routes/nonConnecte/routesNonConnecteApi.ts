@@ -2,15 +2,10 @@ import express from 'express';
 import * as z from 'zod';
 import {
   EchecEnvoiMessage,
-  ErreurJWTManquant,
   ErreurModele,
   ErreurUtilisateurExistant,
 } from '../../erreurs.js';
-import {
-  CorpsRequeteUtilisateur,
-  messageErreurDonneesUtilisateur,
-  obtentionDonneesDeBaseUtilisateur,
-} from '../mappeur/utilisateur.js';
+import { obtentionDonneesDeBaseUtilisateur } from '../mappeur/utilisateur.js';
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 import { valideBody, valideQuery } from '../../http/validePayloads.js';
 import {
@@ -32,9 +27,13 @@ import {
   RequeteAvecSession,
   ServiceGestionnaireSession,
 } from '../../session/serviceGestionnaireSession.js';
-import { PartieModifiableProfilUtilisateur } from '../../modeles/utilisateur.types.js';
+import {
+  IdentiteFournieParProConnect,
+  PartieModifiableProfilUtilisateur,
+} from '../../modeles/utilisateur.types.js';
 import { UUID } from '../../typesBasiques.js';
-import { TokenMSSPourCreationUtilisateur } from '../../utilisateur/serviceApresAuthentification.js';
+
+import { TokenMSSPourCreationUtilisateur } from '../../utilisateur/tokenMSSPourCreationUtilisateur.js';
 
 const routesNonConnecteApi = ({
   middleware,
@@ -66,67 +65,47 @@ const routesNonConnecteApi = ({
     async (requete, reponse, suite) => {
       const { token } = requete.body;
 
-      let donneesToken: TokenMSSPourCreationUtilisateur;
+      const donnees = obtentionDonneesDeBaseUtilisateur(
+        requete.body,
+        serviceCgu
+      ) as PartieModifiableProfilUtilisateur & IdentiteFournieParProConnect;
+
       try {
-        donneesToken = adaptateurJWT.decode(
-          token
-        ) as TokenMSSPourCreationUtilisateur;
-      } catch (e) {
-        const message =
-          e instanceof ErreurJWTManquant
-            ? 'Le token est requis'
-            : 'Le token est invalide';
-        reponse.status(422).send(message);
+        const tokenMSS = new TokenMSSPourCreationUtilisateur(adaptateurJWT);
+        const donneesToken = tokenMSS.lis(token);
+        donnees.prenom = donneesToken.prenom;
+        donnees.nom = donneesToken.nom;
+        donnees.email = donneesToken.email?.toLowerCase();
+      } catch {
+        reponse.sendStatus(422);
         return;
       }
 
-      const donnees: PartieModifiableProfilUtilisateur & { email?: string } =
-        obtentionDonneesDeBaseUtilisateur(requete.body, serviceCgu);
+      try {
+        const { agentConnect } = requete.body;
 
-      donnees.prenom = donneesToken.prenom;
-      donnees.nom = donneesToken.nom;
-      donnees.email = donneesToken.email?.toLowerCase();
-      const { donneesInvalides, messageErreur } =
-        messageErreurDonneesUtilisateur(
-          donnees as unknown as CorpsRequeteUtilisateur,
-          false
+        const source = agentConnect
+          ? SourceAuthentification.AGENT_CONNECT
+          : SourceAuthentification.MSS;
+        const utilisateur = await inscriptionUtilisateur.inscrisUtilisateur(
+          donnees,
+          source
         );
 
-      if (donneesInvalides) {
-        reponse
-          .status(422)
-          .send(
-            `La création d'un nouvel utilisateur a échoué car les paramètres sont invalides. ${messageErreur}`
+        reponse.json({ idUtilisateur: utilisateur.id });
+      } catch (e) {
+        if (e instanceof ErreurUtilisateurExistant) {
+          await adaptateurMail.envoieNotificationTentativeReinscription(
+            donnees.email
           );
-      } else {
-        try {
-          const { agentConnect } = requete.body;
-
-          const source = agentConnect
-            ? SourceAuthentification.AGENT_CONNECT
-            : SourceAuthentification.MSS;
-          const utilisateur = await inscriptionUtilisateur.inscrisUtilisateur(
-            donnees,
-            source
-          );
-
-          reponse.json({ idUtilisateur: utilisateur.id });
-        } catch (e) {
-          if (e instanceof ErreurUtilisateurExistant) {
-            await adaptateurMail.envoieNotificationTentativeReinscription(
-              donnees.email
-            );
-            reponse.json({ idUtilisateur: e.idUtilisateur });
-          } else if (e instanceof EchecEnvoiMessage) {
-            reponse
-              .status(424)
-              .send(
-                "L'envoi de l'email de finalisation d'inscription a échoué"
-              );
-          } else if (e instanceof ErreurModele) {
-            reponse.status(422).send(e.message);
-          } else suite(e);
-        }
+          reponse.json({ idUtilisateur: e.idUtilisateur });
+        } else if (e instanceof EchecEnvoiMessage) {
+          reponse
+            .status(424)
+            .send("L'envoi de l'email de finalisation d'inscription a échoué");
+        } else if (e instanceof ErreurModele) {
+          reponse.status(422).send(e.message);
+        } else suite(e);
       }
     }
   );
