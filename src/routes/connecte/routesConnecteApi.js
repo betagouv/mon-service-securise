@@ -3,10 +3,6 @@ import express from 'express';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
 import { zipTableaux } from '../../utilitaires/tableau.js';
 import {
-  resultatValidation,
-  valideMotDePasse,
-} from '../../http/validationMotDePasse.js';
-import {
   EchecAutorisation,
   EchecEnvoiMessage,
   ErreurAutorisationExisteDeja,
@@ -17,17 +13,12 @@ import * as objetGetServices from '../../modeles/objetsApi/objetGetServices.js';
 import * as objetGetIndicesCyber from '../../modeles/objetsApi/objetGetIndicesCyber.js';
 import * as objetGetMesures from '../../modeles/objetsApi/objetGetMesures.js';
 import {
-  messageErreurDonneesUtilisateur,
-  obtentionDonneesDeBaseUtilisateur,
-} from '../mappeur/utilisateur.js';
-import {
   Permissions,
   Rubriques,
   verifieCoherenceDesDroits,
 } from '../../modeles/autorisations/gestionDroits.js';
 import routesConnecteApiVisiteGuidee from './routesConnecteApiVisiteGuidee.js';
 import routesConnecteApiNotifications from './routesConnecteApiNotifications.js';
-import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 import routesConnecteApiTeleversement from './routesConnecteApiTeleversement.js';
 import routesConnecteApiBrouillonService from './routesConnecteApiBrouillonService.js';
 import routesConnecteApiServiceV2 from './routesConnecteApiServiceV2.js';
@@ -42,15 +33,13 @@ import {
 import {
   schemaDeleteAutorisation,
   schemaGetSupervision,
-  schemaPatchMotDePasse,
   schemaPostAutorisation,
   schemaPutMesureGenerale,
   schemaPutMesuresSpecifiques,
-  schemaPutMotDePasse,
-  schemaPutUtilisateur,
 } from './routesConnecteApi.schema.js';
 import { schemaMesureGenerale } from '../../http/schemas/mesure.schema.js';
 import routesConnecteApiModeleMesureSpecifique from './routesConnecteApiModeleMesureSpecifique.js';
+import { routesConnecteApiUtilisateur } from './routesConnecteApiUtilisateur.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -357,6 +346,17 @@ const routesConnecteApi = ({
   );
 
   routes.use(
+    '',
+    routesConnecteApiUtilisateur({
+      adaptateurMail,
+      depotDonnees,
+      middleware,
+      serviceCgu,
+      serviceGestionnaireSession,
+    })
+  );
+
+  routes.use(
     '/visiteGuidee',
     middleware.verificationAcceptationCGU,
     routesConnecteApiVisiteGuidee({
@@ -405,143 +405,6 @@ const routesConnecteApi = ({
       referentielV2,
     })
   );
-
-  routes.put(
-    '/motDePasse',
-    valideBody(z.strictObject(schemaPutMotDePasse())),
-    async (requete, reponse, suite) => {
-      const idUtilisateur = requete.idUtilisateurCourant;
-      const cguDejaAcceptees = requete.cguAcceptees;
-      const {
-        motDePasse,
-        infolettreAcceptee,
-        cguAcceptees: cguEnCoursDAcceptation,
-      } = requete.body;
-
-      if (!cguDejaAcceptees && !cguEnCoursDAcceptation) {
-        reponse.status(422).send('CGU non acceptées');
-        return;
-      }
-
-      if (
-        valideMotDePasse(motDePasse) !== resultatValidation.MOT_DE_PASSE_VALIDE
-      ) {
-        reponse.status(422).send('Mot de passe trop simple');
-        return;
-      }
-
-      try {
-        let u = await depotDonnees.utilisateur(idUtilisateur);
-        await depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse);
-        u = await depotDonnees.valideAcceptationCGUPourUtilisateur(u);
-        await depotDonnees.supprimeIdResetMotDePassePourUtilisateur(u);
-        await adaptateurMail.inscrisEmailsTransactionnels(u.email);
-        if (infolettreAcceptee) {
-          await adaptateurMail.inscrisInfolettre(u.email);
-          await depotDonnees.metsAJourUtilisateur(u.id, {
-            infolettreAcceptee: true,
-          });
-        }
-
-        serviceGestionnaireSession.enregistreSession(
-          requete,
-          u,
-          SourceAuthentification.MSS
-        );
-
-        reponse.json({ idUtilisateur });
-      } catch (e) {
-        suite(e);
-      }
-    }
-  );
-
-  routes.put('/utilisateur/acceptationCGU', async (requete, reponse) => {
-    const idUtilisateur = requete.idUtilisateurCourant;
-    let u = await depotDonnees.utilisateur(idUtilisateur);
-    u = await depotDonnees.valideAcceptationCGUPourUtilisateur(u);
-
-    serviceGestionnaireSession.enregistreSession(
-      requete,
-      u,
-      requete.sourceAuthentification
-    );
-
-    reponse.sendStatus(200);
-  });
-
-  routes.patch(
-    '/motDePasse',
-    valideBody(z.strictObject(schemaPatchMotDePasse())),
-    middleware.challengeMotDePasse,
-    async (requete, reponse) => {
-      const idUtilisateur = requete.idUtilisateurCourant;
-      const { motDePasse } = requete.body;
-
-      const mdpInvalide =
-        valideMotDePasse(motDePasse) !== resultatValidation.MOT_DE_PASSE_VALIDE;
-      if (mdpInvalide) {
-        reponse.status(422).send('Mot de passe trop simple');
-        return;
-      }
-
-      await depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse);
-      reponse.json({ idUtilisateur });
-    }
-  );
-
-  routes.put(
-    '/utilisateur',
-    valideBody(z.strictObject(schemaPutUtilisateur)),
-    (requete, reponse, suite) => {
-      const idUtilisateur = requete.idUtilisateurCourant;
-      const donnees = obtentionDonneesDeBaseUtilisateur(
-        requete.body,
-        serviceCgu
-      );
-      const { donneesInvalides, messageErreur } =
-        messageErreurDonneesUtilisateur(donnees, true);
-
-      if (donneesInvalides) {
-        reponse
-          .status(422)
-          .send(
-            `La mise à jour de l'utilisateur a échoué car les paramètres sont invalides. ${messageErreur}`
-          );
-        return;
-      }
-
-      depotDonnees
-        .utilisateur(idUtilisateur)
-        .then((utilisateur) =>
-          utilisateur.changePreferencesCommunication(
-            {
-              infolettreAcceptee: donnees.infolettreAcceptee,
-              transactionnelAccepte: donnees.transactionnelAccepte,
-            },
-            adaptateurMail
-          )
-        )
-        .then(() => depotDonnees.metsAJourUtilisateur(idUtilisateur, donnees))
-        .then(() => reponse.json({ idUtilisateur }))
-        .catch(suite);
-    }
-  );
-
-  routes.get('/utilisateurCourant', (requete, reponse) => {
-    const idUtilisateur = requete.idUtilisateurCourant;
-    if (idUtilisateur) {
-      depotDonnees.utilisateur(idUtilisateur).then((utilisateur) => {
-        reponse.json({
-          sourceAuthentification: requete.sourceAuthentification,
-          utilisateur: {
-            prenomNom: utilisateur.prenomNom(),
-          },
-        });
-      });
-    } else reponse.status(401).send("Pas d'utilisateur courant");
-  });
-
   routes.post(
     '/autorisation',
     middleware.verificationAcceptationCGU,
