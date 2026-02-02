@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import jwt from 'jsonwebtoken';
 import testeurMSS from '../testeurMSS.js';
 
@@ -15,6 +14,11 @@ import {
   expectContenuSessionValide,
 } from '../../aides/cookie.js';
 import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
+import { CorpsRequeteUtilisateur } from '../../../src/routes/mappeur/utilisateur.ts';
+import Utilisateur from '../../../src/modeles/utilisateur.js';
+import { unUUIDRandom } from '../../constructeurs/UUID.ts';
+import { SourceAuthentification } from '../../../src/modeles/sourceAuthentification.ts';
+import { UUID } from '../../../src/typesBasiques.ts';
 
 describe('Le serveur MSS des routes publiques /api/*', () => {
   const testeur = testeurMSS();
@@ -27,8 +31,13 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       { donnees: 'unTokenInvalide' },
       'mauvais-secret-jwt'
     );
-    const utilisateur = { id: '123', genereToken: () => 'un token' };
-    let donneesRequete;
+    const utilisateur = {
+      id: '123',
+      genereToken: () => 'un token',
+    } as unknown as Utilisateur;
+    let donneesRequete: Omit<CorpsRequeteUtilisateur, 'nom' | 'prenom'> & {
+      token: string;
+    };
 
     beforeEach(() => {
       donneesRequete = {
@@ -45,7 +54,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         token: tokenJWT,
       };
 
-      testeur.adaptateurJWT().decode = (token) => {
+      testeur.adaptateurJWT().decode = (token: string) => {
         if (token === tokenJWT)
           return {
             prenom: 'Jean',
@@ -79,7 +88,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       it('accepte une payload correcte', async () => {
         const reponse = await testeur.post('/api/utilisateur', donneesRequete);
 
-        expect(reponse.status).to.equal(200);
+        expect(reponse.status).toEqual(200);
       });
 
       it.each([
@@ -96,7 +105,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             donneesRequete
           );
 
-          expect(reponse.status).to.equal(400);
+          expect(reponse.status).toEqual(400);
         }
       );
 
@@ -114,7 +123,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             donneesRequete
           );
 
-          expect(reponse.status).to.equal(200);
+          expect(reponse.status).toEqual(200);
         }
       );
 
@@ -125,6 +134,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       ])(
         "renvoie une erreur 400 car $valeurErronee est une valeur invalide pour l'acceptation des CGU",
         async ({ valeurErronee }) => {
+          // @ts-expect-error On force des "mauvaises" valeurs pour tester la validation
           donneesRequete.cguAcceptees = valeurErronee;
 
           const reponse = await testeur.post(
@@ -132,13 +142,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             donneesRequete
           );
 
-          expect(reponse.status).to.equal(400);
+          expect(reponse.status).toEqual(400);
         }
       );
 
       it.each([{ valeurErronee: '1' }, { valeurErronee: undefined }])(
         "renvoie une erreur 400 car $valeurErronee est une valeur invalide pour l'acceptation de l'infolettre",
         async ({ valeurErronee }) => {
+          // @ts-expect-error On force des "mauvaises" valeurs pour tester la validation
           donneesRequete.infolettreAcceptee = valeurErronee;
 
           const reponse = await testeur.post(
@@ -146,13 +157,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             donneesRequete
           );
 
-          expect(reponse.status).to.equal(400);
+          expect(reponse.status).toEqual(400);
         }
       );
 
       it.each([{ valeurErronee: '1' }, { valeurErronee: undefined }])(
         "renvoie une erreur 400 car $valeurErronee est une valeur invalide pour l'acceptation du transactionnel",
         async ({ valeurErronee }) => {
+          // @ts-expect-error On force des "mauvaises" valeurs pour tester la validation
           donneesRequete.transactionnelAccepte = valeurErronee;
 
           const reponse = await testeur.post(
@@ -160,7 +172,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             donneesRequete
           );
 
-          expect(reponse.status).to.equal(400);
+          expect(reponse.status).toEqual(400);
         }
       );
 
@@ -190,7 +202,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             donneesRequete
           );
 
-          expect(reponse.status).to.equal(400);
+          expect(reponse.status).toEqual(400);
         }
       );
 
@@ -200,6 +212,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       ])(
         "renvoie une erreur 400 car $valeurErronee est une valeur invalide pour l'acceptation du transactionnel",
         async ({ valeurErronee }) => {
+          // @ts-expect-error On force des "mauvaises" valeurs pour tester la validation
           donneesRequete.estimationNombreServices = valeurErronee;
 
           const reponse = await testeur.post(
@@ -207,7 +220,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             donneesRequete
           );
 
-          expect(reponse.status).to.equal(400);
+          expect(reponse.status).toEqual(400);
         }
       );
 
@@ -220,6 +233,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       ])(
         'accepte les valeurs de bornes prédéfinies',
         async ({ valeurValide }) => {
+          // @ts-expect-error On force des "vraies" valeurs pour tester la validation
           donneesRequete.estimationNombreServices = valeurValide;
 
           const reponse = await testeur.post(
@@ -227,13 +241,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             donneesRequete
           );
 
-          expect(reponse.status).to.equal(200);
+          expect(reponse.status).toEqual(200);
         }
       );
 
       it.each([{ valeurErronee: '1234' }, { valeurErronee: undefined }])(
         'renvoie une erreur 400 car $valeurErronee est une valeur invalide pour le siret',
         async ({ valeurErronee }) => {
+          // @ts-expect-error On force des "mauvaises" valeurs pour tester la validation
           donneesRequete.siretEntite = valeurErronee;
 
           const reponse = await testeur.post(
@@ -241,13 +256,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             donneesRequete
           );
 
-          expect(reponse.status).to.equal(400);
+          expect(reponse.status).toEqual(400);
         }
       );
 
       it.each([{ valeurErronee: '' }, { valeurErronee: undefined }])(
         'renvoie une erreur 400 car $valeurErronee est une valeur invalide pour le token',
         async ({ valeurErronee }) => {
+          // @ts-expect-error On force des "mauvaises" valeurs pour tester la validation
           donneesRequete.token = valeurErronee;
 
           const reponse = await testeur.post(
@@ -255,7 +271,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
             donneesRequete
           );
 
-          expect(reponse.status).to.equal(400);
+          expect(reponse.status).toEqual(400);
         }
       );
 
@@ -264,21 +280,26 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
         const reponse = await testeur.post('/api/utilisateur', donneesRequete);
 
-        expect(reponse.status).to.equal(200);
+        expect(reponse.status).toEqual(200);
       });
 
       it('renvoie une erreur 400 si un paramètre est en trop', async () => {
+        // @ts-expect-error On force des "mauvaises" valeurs pour tester la validation
         donneesRequete.unParametreInconnu = 'hello';
 
         const reponse = await testeur.post('/api/utilisateur', donneesRequete);
 
-        expect(reponse.status).to.equal(400);
+        expect(reponse.status).toEqual(400);
       });
     });
 
     it("convertit l'email en minuscules", async () => {
-      testeur.depotDonnees().nouvelUtilisateur = ({ email }) => {
-        expect(email).to.equal('jean.dupont@mail.fr');
+      testeur.depotDonnees().nouvelUtilisateur = ({
+        email,
+      }: {
+        email: string;
+      }) => {
+        expect(email).toEqual('jean.dupont@mail.fr');
         return Promise.resolve(utilisateur);
       };
 
@@ -294,7 +315,11 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     it('si les CGU sont acceptées, passe la valeur de la version actuelle des CGU au dépôt', async () => {
       let cguRecues;
       testeur.referentiel().recharge({ versionActuelleCgu: 'v2.0' });
-      testeur.depotDonnees().nouvelUtilisateur = async ({ cguAcceptees }) => {
+      testeur.depotDonnees().nouvelUtilisateur = async ({
+        cguAcceptees,
+      }: {
+        cguAcceptees: boolean;
+      }) => {
         cguRecues = cguAcceptees;
         return utilisateur;
       };
@@ -303,12 +328,16 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       await testeur.post('/api/utilisateur', donneesRequete);
 
-      expect(cguRecues).to.be('v2.0');
+      expect(cguRecues).toBe('v2.0');
     });
 
     it("convertit l'infolettre acceptée en valeur booléenne", async () => {
-      testeur.depotDonnees().nouvelUtilisateur = ({ infolettreAcceptee }) => {
-        expect(infolettreAcceptee).to.equal(true);
+      testeur.depotDonnees().nouvelUtilisateur = ({
+        infolettreAcceptee,
+      }: {
+        infolettreAcceptee: true;
+      }) => {
+        expect(infolettreAcceptee).toEqual(true);
         return Promise.resolve(utilisateur);
       };
 
@@ -318,32 +347,35 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it("demande au dépôt de créer l'utilisateur", async () => {
-      testeur.depotDonnees().nouvelUtilisateur = (donneesUtilisateur) => {
-        const donneesAttendues = {
-          prenom: 'Jean',
-          nom: 'Dupont',
-          telephone: '0100000000',
-          entite: {
-            siret: '13000766900018',
-          },
-          estimationNombreServices: {
-            borneBasse: 1,
-            borneHaute: 10,
-          },
-          infolettreAcceptee: true,
-          transactionnelAccepte: true,
-          postes: ['RSSI', "Chargé des systèmes d'informations"],
-          cguAcceptees: true,
-          email: 'jean.dupont@mail.fr',
-        };
-        expect(donneesUtilisateur).to.eql(donneesAttendues);
-        return Promise.resolve(utilisateur);
+      let donneesRecues;
+      testeur.depotDonnees().nouvelUtilisateur = async (
+        donneesUtilisateur: CorpsRequeteUtilisateur
+      ) => {
+        donneesRecues = donneesUtilisateur;
+        return unUtilisateur().avecId('123').construis();
       };
 
       const reponse = await testeur.post('/api/utilisateur', donneesRequete);
 
-      expect(reponse.status).to.equal(200);
-      expect(reponse.body).to.eql({ idUtilisateur: '123' });
+      expect(reponse.status).toEqual(200);
+      expect(reponse.body).toEqual({ idUtilisateur: '123' });
+      expect(donneesRecues).toEqual({
+        prenom: 'Jean',
+        nom: 'Dupont',
+        telephone: '0100000000',
+        entite: {
+          siret: '13000766900018',
+        },
+        estimationNombreServices: {
+          borneBasse: '1',
+          borneHaute: '10',
+        },
+        infolettreAcceptee: true,
+        transactionnelAccepte: true,
+        postes: ['RSSI', "Chargé des systèmes d'informations"],
+        cguAcceptees: true,
+        email: 'jean.dupont@mail.fr',
+      });
     });
 
     it("utilise l'adaptateur de tracking pour envoyer un événement d'inscription", async () => {
@@ -352,7 +384,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       let donneesPassees = {};
       testeur.adaptateurTracking().envoieTrackingInscription = (
-        destinataire
+        destinataire: string
       ) => {
         donneesPassees = { destinataire };
         return Promise.resolve();
@@ -360,26 +392,26 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       await testeur.post('/api/utilisateur', donneesRequete);
 
-      expect(donneesPassees).to.eql({
+      expect(donneesPassees).toEqual({
         destinataire: 'jean.dupont@mail.fr',
       });
     });
 
     it('crée un contact email', async () => {
       testeur.adaptateurMail().creeContact = (
-        destinataire,
-        prenom,
-        nom,
-        telephone,
-        bloqueEmails,
-        bloqueMarketing
+        destinataire: string,
+        prenom: string,
+        nom: string,
+        telephone: string,
+        bloqueEmails: boolean,
+        bloqueMarketing: boolean
       ) => {
-        expect(destinataire).to.equal('jean.dupont@mail.fr');
-        expect(prenom).to.equal('Jean');
-        expect(nom).to.equal('Dupont');
-        expect(telephone).to.equal('0100000000');
-        expect(bloqueEmails).to.equal(false);
-        expect(bloqueMarketing).to.be(false);
+        expect(destinataire).toEqual('jean.dupont@mail.fr');
+        expect(prenom).toEqual('Jean');
+        expect(nom).toEqual('Dupont');
+        expect(telephone).toEqual('0100000000');
+        expect(bloqueEmails).toEqual(false);
+        expect(bloqueMarketing).toBe(false);
         return Promise.resolve();
       };
 
@@ -391,11 +423,11 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       utilisateur.idResetMotDePasse = '999';
 
       testeur.adaptateurMail().envoieMessageFinalisationInscription = (
-        destinataire,
-        idResetMotDePasse
+        destinataire: string,
+        idResetMotDePasse: string
       ) => {
-        expect(destinataire).to.equal('jean.dupont@mail.fr');
-        expect(idResetMotDePasse).to.equal('999');
+        expect(destinataire).toEqual('jean.dupont@mail.fr');
+        expect(idResetMotDePasse).toEqual('999');
         return Promise.resolve();
       };
 
@@ -404,7 +436,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
     it("n'envoie pas de message de notification à l'utilisateur Agent Connect créé", async () => {
       testeur.adaptateurMail().envoieMessageFinalisationInscription = () => {
-        expect().fail("N'aurait pas dû envoyer de message");
+        expect.fail("N'aurait pas dû envoyer de message");
       };
 
       await testeur.post('/api/utilisateur', {
@@ -437,19 +469,19 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       let notificationEnvoyee = false;
 
       testeur.depotDonnees().nouvelUtilisateur = () =>
-        Promise.reject(new ErreurUtilisateurExistant('oups', '123'));
+        Promise.reject(new ErreurUtilisateurExistant('oups', unUUIDRandom()));
 
       testeur.adaptateurMail().envoieNotificationTentativeReinscription = (
-        destinataire
+        destinataire: string
       ) => {
-        expect(destinataire).to.equal('jean.dupont@mail.fr');
+        expect(destinataire).toEqual('jean.dupont@mail.fr');
         notificationEnvoyee = true;
         return Promise.resolve();
       };
 
       await testeur.post('/api/utilisateur', donneesRequete);
 
-      expect(notificationEnvoyee).to.be(true);
+      expect(notificationEnvoyee).toBe(true);
     });
 
     it("génère une erreur HTTP 422 si l'email n'est pas renseigné", async () => {
@@ -500,8 +532,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it("convertit l'email en minuscules", async () => {
-      testeur.depotDonnees().reinitialiseMotDePasse = (email) => {
-        expect(email).to.equal('jean.dupont@mail.fr');
+      testeur.depotDonnees().reinitialiseMotDePasse = (email: string) => {
+        expect(email).toEqual('jean.dupont@mail.fr');
         return Promise.resolve(utilisateur);
       };
 
@@ -515,7 +547,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         email: 'invalide',
       });
 
-      expect(reponse.status).to.equal(400);
+      expect(reponse.status).toEqual(400);
     });
 
     it("échoue silencieusement si l'email n'est pas renseigné", async () => {
@@ -523,9 +555,9 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it('demande au dépôt de réinitialiser le mot de passe', async () => {
-      testeur.depotDonnees().reinitialiseMotDePasse = (email) =>
+      testeur.depotDonnees().reinitialiseMotDePasse = (email: string) =>
         new Promise((resolve) => {
-          expect(email).to.equal('jean.dupont@mail.fr');
+          expect(email).toEqual('jean.dupont@mail.fr');
           resolve(utilisateur);
         });
 
@@ -533,31 +565,29 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         email: 'jean.dupont@mail.fr',
       });
 
-      expect(reponse.status).to.equal(200);
-      expect(reponse.body).to.eql({});
+      expect(reponse.status).toEqual(200);
+      expect(reponse.body).toEqual({});
     });
 
     it("envoie un mail à l'utilisateur", async () => {
       let messageEnvoye = false;
 
-      expect(utilisateur.idResetMotDePasse).to.equal('999');
+      expect(utilisateur.idResetMotDePasse).toEqual('999');
 
-      testeur.adaptateurMail().envoieMessageReinitialisationMotDePasse = (
-        email,
-        idReset
-      ) =>
-        new Promise((resolve) => {
-          expect(email).to.equal('jean.dupont@mail.fr');
-          expect(idReset).to.equal('999');
-          messageEnvoye = true;
-          resolve();
-        });
+      testeur.adaptateurMail().envoieMessageReinitialisationMotDePasse = async (
+        email: string,
+        idReset: string
+      ) => {
+        expect(email).toEqual('jean.dupont@mail.fr');
+        expect(idReset).toEqual('999');
+        messageEnvoye = true;
+      };
 
       await testeur.post('/api/reinitialisationMotDePasse', {
         email: 'jean.dupont@mail.fr',
       });
 
-      expect(messageEnvoye).to.be(true);
+      expect(messageEnvoye).toBe(true);
     });
   });
 
@@ -575,7 +605,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         motDePasse: 'mdp_12345',
       });
 
-      expect(reponse.status).to.equal(400);
+      expect(reponse.status).toEqual(400);
     });
 
     it("répond 400 si le mot de passe n'est pas renseigné", async () => {
@@ -584,7 +614,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         motDePasse: '',
       });
 
-      expect(reponse.status).to.equal(400);
+      expect(reponse.status).toEqual(400);
     });
 
     it("authentifie l'utilisateur avec le login en minuscules", async () => {
@@ -598,10 +628,13 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         estUnInvite: () => false,
       };
 
-      testeur.depotDonnees().utilisateurAuthentifie = (login, motDePasse) => {
+      testeur.depotDonnees().utilisateurAuthentifie = (
+        login: string,
+        motDePasse: string
+      ) => {
         try {
-          expect(login).to.equal('jean.dupont@mail.fr');
-          expect(motDePasse).to.equal('mdp_12345');
+          expect(login).toEqual('jean.dupont@mail.fr');
+          expect(motDePasse).toEqual('mdp_12345');
           return Promise.resolve(utilisateur);
         } catch (e) {
           return Promise.reject(e);
@@ -617,17 +650,18 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     describe("avec authentification réussie de l'utilisateur", () => {
-      let utilisateur;
+      let utilisateur: Utilisateur;
 
       beforeEach(() => {
         utilisateur = {
           email: 'jean.dupont@mail.fr',
           id: '456',
           toJSON: () => ({ prenomNom: 'Jean Dupont' }),
-          genereToken: (source) => `un token de source ${source}`,
+          genereToken: (source: SourceAuthentification) =>
+            `un token de source ${source}`,
           accepteCGU: () => true,
           estUnInvite: () => false,
-        };
+        } as unknown as Utilisateur;
 
         testeur.depotDonnees().utilisateurAuthentifie = () =>
           Promise.resolve(utilisateur);
@@ -645,7 +679,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           motDePasse: 'mdp_12345',
         });
 
-        await testeur.verifieSessionDeposee(reponse);
+        testeur.verifieSessionDeposee(reponse);
       });
 
       it('ajoute une session utilisateur', async () => {
@@ -661,8 +695,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         let idUtilisateurPasse = {};
         let sourcePassee;
         testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = async (
-          idUtilisateur,
-          source
+          idUtilisateur: UUID,
+          source: SourceAuthentification
         ) => {
           idUtilisateurPasse = idUtilisateur;
           sourcePassee = source;
@@ -673,14 +707,14 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           motDePasse: 'mdp_12345',
         });
 
-        expect(idUtilisateurPasse).to.be('456');
-        expect(sourcePassee).to.be('MSS');
+        expect(idUtilisateurPasse).toBe('456');
+        expect(sourcePassee).toBe('MSS');
       });
 
       it('déclenche un rafraîchissement de la copie locale du profil utilisateur (pour recopier les données MPA)', async () => {
         let idUtilisateurPasse;
         testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async (
-          idUtilisateur
+          idUtilisateur: UUID
         ) => {
           idUtilisateurPasse = idUtilisateur;
         };
@@ -690,12 +724,12 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           motDePasse: 'mdp_12345',
         });
 
-        expect(idUtilisateurPasse).to.be('456');
+        expect(idUtilisateurPasse).toBe('456');
       });
 
       it('lis de nouveau le profil utilisateur après rafraichissement', async () => {
         let idUtilisateurPasse;
-        testeur.depotDonnees().utilisateur = async (idUtilisateur) => {
+        testeur.depotDonnees().utilisateur = async (idUtilisateur: UUID) => {
           idUtilisateurPasse = idUtilisateur;
           return utilisateur;
         };
@@ -705,7 +739,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           motDePasse: 'mdp_12345',
         });
 
-        expect(idUtilisateurPasse).to.be('456');
+        expect(idUtilisateurPasse).toBe('456');
       });
 
       it('ajoute la source dans le jeton', async () => {
@@ -717,7 +751,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         });
 
         const token = decodeSessionDuCookie(reponse, 0);
-        expect(token.token).to.be('un token de-MSS');
+        expect(token.token).toBe('un token de-MSS');
       });
     });
 
@@ -755,7 +789,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           `/api/annuaire/organisations?recherche=mairie&departement=${valeurIncorrecte}`
         );
 
-        expect(reponse.status).to.equal(400);
+        expect(reponse.status).toEqual(400);
       }
     );
 
@@ -772,19 +806,19 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           `/api/annuaire/organisations?recherche=${valeurIncorrecte}&departement=75`
         );
 
-        expect(reponse.status).to.equal(400);
+        expect(reponse.status).toEqual(400);
       }
     );
 
     it("recherche les organisations correspondantes grâce au service d'annuaire", async () => {
       let adaptateurAppele = false;
       testeur.serviceAnnuaire().rechercheOrganisations = (
-        terme,
-        departement
+        terme: string,
+        departement: string
       ) => {
         adaptateurAppele = true;
-        expect(terme).to.equal('mairie');
-        expect(departement).to.equal('01');
+        expect(terme).toEqual('mairie');
+        expect(departement).toEqual('01');
         return Promise.resolve([{ nom: 'un résultat', departement: '01' }]);
       };
 
@@ -792,9 +826,9 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         '/api/annuaire/organisations?recherche=mairie&departement=01'
       );
 
-      expect(adaptateurAppele).to.be(true);
-      expect(reponse.status).to.be(200);
-      expect(reponse.body.suggestions).to.eql([
+      expect(adaptateurAppele).toBe(true);
+      expect(reponse.status).toBe(200);
+      expect(reponse.body.suggestions).toEqual([
         { nom: 'un résultat', departement: '01' },
       ]);
     });
@@ -812,7 +846,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         event: 'autre chose',
       });
 
-      expect(reponse.status).to.equal(400);
+      expect(reponse.status).toEqual(400);
     });
 
     it.each([
@@ -827,7 +861,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
           event: 'unsubscribe',
         });
 
-        expect(reponse.status).to.equal(400);
+        expect(reponse.status).toEqual(400);
       }
     );
 
@@ -865,13 +899,16 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         .avecId('123')
         .quiAccepteEmailsTransactionnels()
         .construis();
-      testeur.depotDonnees().utilisateurAvecEmail = (email) => {
-        expect(email).to.equal('jean.dujardin@mail.com');
+      testeur.depotDonnees().utilisateurAvecEmail = (email: string) => {
+        expect(email).toEqual('jean.dujardin@mail.com');
         return Promise.resolve(utilisateur);
       };
-      testeur.depotDonnees().metsAJourUtilisateur = (id, donnees) => {
-        expect(id).to.equal('123');
-        expect(donnees).to.eql({ transactionnelAccepte: false });
+      testeur.depotDonnees().metsAJourUtilisateur = (
+        id: UUID,
+        donnees: Record<string, unknown>
+      ) => {
+        expect(id).toEqual('123');
+        expect(donnees).toEqual({ transactionnelAccepte: false });
         return Promise.resolve();
       };
 
@@ -897,8 +934,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       const reponse = await testeur.get('/api/sante');
 
-      expect(depotAppele).to.be(true);
-      expect(reponse.status).to.be(200);
+      expect(depotAppele).toBe(true);
+      expect(reponse.status).toBe(200);
     });
 
     it('renvoi une erreur 503 si le dépôt est défectueux', async () => {
@@ -908,23 +945,23 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       const reponse = await testeur.get('/api/sante');
 
-      expect(reponse.status).to.be(503);
+      expect(reponse.status).toBe(503);
     });
 
     it('loggue une erreur si le dépôt est défectueux', async () => {
       testeur.depotDonnees().santeDuDepot = () => {
         throw new Error();
       };
-      let erreurLoguee;
-      testeur.adaptateurGestionErreur().logueErreur = (erreur) => {
+      let erreurLoguee: Error;
+      testeur.adaptateurGestionErreur().logueErreur = (erreur: Error) => {
         erreurLoguee = erreur;
       };
 
       try {
         await testeur.get('/api/sante');
-        expect().fail("L'appel aurait du échouer");
-      } catch (e) {
-        expect(erreurLoguee.message).to.be(
+        expect.fail("L'appel aurait du échouer");
+      } catch {
+        expect(erreurLoguee!.message).toBe(
           'La base de données est injoignable'
         );
       }
@@ -935,11 +972,11 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
       const reponse = await testeur.get('/api/sante');
 
-      expect(reponse.headers['surrogate-control']).to.be('no-store');
-      expect(reponse.headers['cache-control']).to.be(
+      expect(reponse.headers['surrogate-control']).toBe('no-store');
+      expect(reponse.headers['cache-control']).toBe(
         'no-store, no-cache, must-revalidate, proxy-revalidate'
       );
-      expect(reponse.headers.expires).to.be('0');
+      expect(reponse.headers.expires).toBe('0');
     });
   });
 });

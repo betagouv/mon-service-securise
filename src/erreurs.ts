@@ -100,7 +100,7 @@ class ErreurNombreLimiteModelesMesureSpecifiqueAtteint extends ErreurModele {}
 class ErreurUtilisateurExistant extends ErreurModele {
   constructor(
     message: string,
-    private readonly idUtilisateur: UUID
+    readonly idUtilisateur: UUID
   ) {
     super(message);
   }
