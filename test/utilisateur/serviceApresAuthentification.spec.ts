@@ -8,6 +8,11 @@ import Utilisateur from '../../src/modeles/utilisateur.js';
 import { ServiceAnnuaire } from '../../src/annuaire/serviceAnnuaire.interface.ts';
 import { DepotDonnees } from '../../src/depotDonnees.interface.ts';
 import { UUID } from '../../src/typesBasiques.ts';
+import { creeDepot } from '../../src/depotDonnees.js';
+import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
+import fauxAdaptateurRechercheEntreprise from '../mocks/adaptateurRechercheEntreprise.js';
+import { fabriqueBusPourLesTests } from '../bus/aides/busPourLesTests.js';
+import fauxAdaptateurChiffrement from '../mocks/adaptateurChiffrement.js';
 
 describe("Le service d'après authentification", () => {
   let adaptateurProfilAnssi: AdaptateurProfilAnssi;
@@ -27,10 +32,13 @@ describe("Le service d'après authentification", () => {
   beforeEach(() => {
     adaptateurProfilAnssi = {
       recupere: async () => undefined,
+      metsAJour: async () => {},
     } as unknown as AdaptateurProfilAnssi;
+
     serviceAnnuaire = {
       rechercheOrganisations: async () => [],
     } as unknown as ServiceAnnuaire;
+
     profilProConnect = {
       complet: () => ({
         email: 'jean.dujardin@beta.gouv.fr',
@@ -43,12 +51,14 @@ describe("Le service d'après authentification", () => {
         siret: undefined,
       }),
     };
+
     depotDonnees = {
       utilisateurAvecEmail: async () => undefined,
       utilisateur: async () => undefined,
       metsAJourUtilisateur: async () => undefined,
       rafraichisProfilUtilisateurLocal: async () => {},
     } as unknown as DepotDonnees;
+
     parametresParDefaut = {
       adaptateurProfilAnssi,
       serviceAnnuaire,
@@ -220,6 +230,60 @@ describe("Le service d'après authentification", () => {
             .construis();
       });
 
+      it('synchronise les informations utilisateurs : ProCo > MPA > Local. Les infos ProCo font autorité sur nom & prénom.', async () => {
+        let donneesMpa: Record<string, unknown>;
+        const mpaDuTest = {
+          metsAJour: async (donnees: Record<string, unknown>) => {
+            donneesMpa = donnees;
+          },
+          recupere: async () => ({
+            ...donneesMpa,
+            telephone: '06…',
+            domainesSpecialite: ['RSSI'],
+            organisation: {
+              nom: 'Orga MPA du test',
+              departement: '33',
+              siret: 12345678901234,
+            },
+          }),
+        } as unknown as AdaptateurProfilAnssi;
+
+        const depotDuTest = creeDepot({
+          adaptateurChiffrement: fauxAdaptateurChiffrement(),
+          adaptateurPersistance: unePersistanceMemoire().construis(),
+          adaptateurRechercheEntite: fauxAdaptateurRechercheEntreprise(),
+          adaptateurProfilAnssi: mpaDuTest,
+          busEvenements: fabriqueBusPourLesTests(),
+        });
+        await depotDuTest.nouvelUtilisateur(
+          unUtilisateur()
+            .avecEmail('jean.dujardin@beta.gouv.fr')
+            .quiSAppelle('Prénom-MSS Nom-MSS').donnees
+        );
+
+        await serviceApresAuthentification({
+          ...parametresParDefaut,
+          adaptateurProfilAnssi: mpaDuTest,
+          depotDonnees: depotDuTest,
+          profilProConnect: {
+            nom: 'Nom ProConnect',
+            prenom: 'Prénom ProConnect',
+            email: 'jean.dujardin@beta.gouv.fr',
+          },
+        });
+
+        const [apres] = await depotDuTest.tousUtilisateurs();
+        expect(apres.nom).toBe('Nom ProConnect');
+        expect(apres.prenom).toBe('Prénom ProConnect');
+        expect(apres.telephone).toBe('06…');
+        expect(apres.postes).toEqual(['RSSI']);
+        expect(apres.entite.toJSON()).toEqual({
+          departement: '33',
+          nom: 'Orga MPA du test',
+          siret: 12345678901234,
+        });
+      });
+
       it('rafraîchis son profil utilisateur local', async () => {
         let idUtilisateurRafraichis;
         depotDonnees.rafraichisProfilUtilisateurLocal = async (id: UUID) => {
@@ -262,42 +326,6 @@ describe("Le service d'après authentification", () => {
           await serviceApresAuthentification(parametresParDefaut);
 
           expect(miseAJourAppelee).toBe(false);
-        });
-      });
-
-      describe('si son profil MSS est incomplet', () => {
-        beforeEach(() => {
-          depotDonnees.utilisateur = async (id) =>
-            unUtilisateur()
-              .avecId(id)
-              .quiNAPasRempliSonProfil()
-              .quiAccepteCGU()
-              .construis();
-        });
-
-        it('complète le profil avec les données de ProConnect', async () => {
-          let donneesRecues;
-          depotDonnees.metsAJourUtilisateur = async (id, donnees) => {
-            if (id === 'U1') {
-              donneesRecues = donnees;
-            }
-            return undefined;
-          };
-
-          await serviceApresAuthentification({
-            ...parametresParDefaut,
-            profilProConnect: {
-              nom: 'Nom PC',
-              prenom: 'Prenom PC',
-              email: 'Email PC',
-              siret: 'Siret PC',
-            },
-          });
-          expect(donneesRecues).toEqual({
-            nom: 'Nom PC',
-            prenom: 'Prenom PC',
-            entite: { siret: 'Siret PC' },
-          });
         });
       });
     });

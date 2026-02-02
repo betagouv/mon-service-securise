@@ -110,18 +110,16 @@ const serviceApresAuthentification = async ({
     };
   }
 
-  await depotDonnees.rafraichisProfilUtilisateurLocal(utilisateur.id);
+  const actuelMPA = await adaptateurProfilAnssi.recupere(
+    profilProConnect.email
+  );
 
-  const utilisateurAJour = (await depotDonnees.utilisateur(
-    utilisateur.id
-  )) as Utilisateur;
-  if (!utilisateurAJour.aLesInformationsAgentConnect()) {
-    await depotDonnees.metsAJourUtilisateur(utilisateur.id, {
-      nom: profilProConnect.nom,
-      prenom: profilProConnect.prenom,
-      entite: { siret: profilProConnect.siret },
-    });
-  }
+  await adaptateurProfilAnssi.metsAJour({
+    ...actuelMPA,
+    nom: profilProConnect.nom,
+    prenom: profilProConnect.prenom,
+  });
+  await depotDonnees.rafraichisProfilUtilisateurLocal(utilisateur.id);
 
   return {
     type: 'rendu',
