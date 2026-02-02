@@ -29,8 +29,6 @@
       try {
         enCoursEnvoi = true;
         await axios.put('/api/utilisateur', {
-          nom: utilisateur.nom,
-          prenom: utilisateur.prenom,
           estimationNombreServices: utilisateur.estimationNombreServices,
           infolettreAcceptee: utilisateur.infolettreAcceptee,
           postes: utilisateur.postes,
@@ -71,28 +69,10 @@
         <div class="info-champ-obligatoire requis">Champ obligatoire</div>
         <h3>Mon identité</h3>
       </div>
-      <span>Mail professionnel : <b>{utilisateur.email}</b></span>
-      <div class="champ">
-        <label class="requis" for="prenom">Prénom</label>
-        <ChampTexte
-          id="prenom"
-          nom="prenom"
-          bind:valeur={utilisateur.prenom}
-          aideSaisie="ex : Jean"
-          requis
-          messageErreur="Le prénom est obligatoire. Les chiffres ne sont pas autorisés."
-        />
-      </div>
-      <div class="champ">
-        <label class="requis" for="nom">Nom</label>
-        <ChampTexte
-          id="nom"
-          nom="nom"
-          bind:valeur={utilisateur.nom}
-          aideSaisie="ex : Dupont"
-          requis
-          messageErreur="Le nom est obligatoire. Les chiffres ne sont pas autorisés."
-        />
+      <div class="identite-lecture-seule">
+        <span>Mail professionnel : <b>{utilisateur.email}</b></span>
+        <span>Prénom : <b>{utilisateur.prenom}</b></span>
+        <span>Nom : <b>{utilisateur.nom}</b></span>
       </div>
       <div class="champ">
         <label class="requis" for="domaine-specialite"
@@ -248,13 +228,19 @@
   .bloc {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 24px;
     margin-bottom: 48px;
   }
 
   .champ {
     display: flex;
     flex-direction: column;
+  }
+
+  .identite-lecture-seule {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   label {
