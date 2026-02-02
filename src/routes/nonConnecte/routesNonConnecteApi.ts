@@ -7,6 +7,7 @@ import {
   ErreurUtilisateurExistant,
 } from '../../erreurs.js';
 import {
+  CorpsRequeteUtilisateur,
   messageErreurDonneesUtilisateur,
   obtentionDonneesDeBaseUtilisateur,
 } from '../mappeur/utilisateur.js';
@@ -19,6 +20,22 @@ import {
   reglesValidationRechercheOrganisations,
   reglesValidationReinitialisationMotDePasse,
 } from './routesNonConnecteApi.schema.js';
+import { Middleware } from '../../http/middleware.interface.js';
+import { DepotDonnees } from '../../depotDonnees.interface.js';
+import { ServiceAnnuaire } from '../../annuaire/serviceAnnuaire.interface.js';
+import { AdaptateurMail } from '../../adaptateurs/adaptateurMail.interface.js';
+import { AdaptateurJWT } from '../../adaptateurs/adaptateurJWT.interface.js';
+import { InscriptionUtilisateur } from '../../modeles/inscriptionUtilisateur.interface.js';
+import { AdaptateurGestionErreur } from '../../adaptateurs/adaptateurGestionErreur.interface.js';
+import { ServiceCgu } from '../../serviceCgu.interface.js';
+import {
+  RequeteAvecSession,
+  ServiceGestionnaireSession,
+} from '../../session/serviceGestionnaireSession.js';
+import { PartieModifiableProfilUtilisateur } from '../../modeles/utilisateur.types.js';
+import { UUID } from '../../typesBasiques.js';
+
+type DonneesToken = { nom: string; prenom: string; email: string };
 
 const routesNonConnecteApi = ({
   middleware,
@@ -30,6 +47,16 @@ const routesNonConnecteApi = ({
   adaptateurGestionErreur,
   serviceCgu,
   serviceGestionnaireSession,
+}: {
+  middleware: Middleware;
+  depotDonnees: DepotDonnees;
+  serviceAnnuaire: ServiceAnnuaire;
+  adaptateurMail: AdaptateurMail;
+  adaptateurJWT: AdaptateurJWT;
+  inscriptionUtilisateur: InscriptionUtilisateur;
+  adaptateurGestionErreur: AdaptateurGestionErreur;
+  serviceCgu: ServiceCgu;
+  serviceGestionnaireSession: ServiceGestionnaireSession;
 }) => {
   const routes = express.Router();
 
@@ -40,9 +67,9 @@ const routesNonConnecteApi = ({
     async (requete, reponse, suite) => {
       const { token } = requete.body;
 
-      let donneesToken;
+      let donneesToken: DonneesToken;
       try {
-        donneesToken = await adaptateurJWT.decode(token);
+        donneesToken = adaptateurJWT.decode(token) as DonneesToken;
       } catch (e) {
         const message =
           e instanceof ErreurJWTManquant
@@ -52,16 +79,17 @@ const routesNonConnecteApi = ({
         return;
       }
 
-      const donnees = obtentionDonneesDeBaseUtilisateur(
-        requete.body,
-        serviceCgu
-      );
+      const donnees: PartieModifiableProfilUtilisateur & { email?: string } =
+        obtentionDonneesDeBaseUtilisateur(requete.body, serviceCgu);
 
       donnees.prenom = donneesToken.prenom;
       donnees.nom = donneesToken.nom;
       donnees.email = donneesToken.email?.toLowerCase();
       const { donneesInvalides, messageErreur } =
-        messageErreurDonneesUtilisateur(donnees, false);
+        messageErreurDonneesUtilisateur(
+          donnees as unknown as CorpsRequeteUtilisateur,
+          false
+        );
 
       if (donneesInvalides) {
         reponse
@@ -149,13 +177,13 @@ const routesNonConnecteApi = ({
         utilisateur = await depotDonnees.utilisateur(utilisateur.id);
 
         serviceGestionnaireSession.enregistreSession(
-          requete,
-          utilisateur,
+          requete as RequeteAvecSession,
+          utilisateur!,
           SourceAuthentification.MSS
         );
 
         await depotDonnees.enregistreNouvelleConnexionUtilisateur(
-          utilisateur.id,
+          utilisateur!.id as UUID,
           SourceAuthentification.MSS
         );
 
@@ -170,7 +198,7 @@ const routesNonConnecteApi = ({
     '/annuaire/organisations',
     valideQuery(z.strictObject(reglesValidationRechercheOrganisations)),
     async (requete, reponse) => {
-      const { recherche = '', departement = null } = requete.query;
+      const { recherche = '', departement = undefined } = requete.query;
 
       const suggestions = await serviceAnnuaire.rechercheOrganisations(
         recherche,
@@ -214,7 +242,7 @@ const routesNonConnecteApi = ({
         );
         reponse.setHeader('Expires', '0');
         reponse.sendStatus(200);
-      } catch (e) {
+      } catch {
         adaptateurGestionErreur.logueErreur(
           new Error('La base de données est injoignable')
         );
