@@ -21,7 +21,8 @@ map(
           | map(gsub("^\\s+|\\s+$"; ""))        # trim les espaces
           | map(select(length > 0))             # enlève les entrées vides
           | map(if . == "Personne responsable de la sécurité" then "RSSI" else . end)
-        )
+        ),
+      thematique: (."Tag : Filtre MSS")
     }
   }
 )
