@@ -249,7 +249,12 @@
       placeholder="Rechercher par intitulé, description, ID"
     />
   </div>
-  <MenuFiltres {categories} {priorites} on:supprimeFiltres={supprimeFiltres} />
+  <MenuFiltres
+    {categories}
+    {priorites}
+    {versionService}
+    on:supprimeFiltres={supprimeFiltres}
+  />
 </div>
 {#if $nouveautesPage.doitAfficherNouveautePourPage('ongletStatutsMesures') && !modeVisiteGuidee}
   <Avertissement

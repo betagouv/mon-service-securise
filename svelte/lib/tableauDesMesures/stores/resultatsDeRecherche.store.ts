@@ -33,6 +33,11 @@ import {
   appliqueFiltreMesMesures,
   rechercheMesMesures,
 } from './rechercheMesMesures.store';
+import {
+  appliqueFiltreParThematique,
+  type IdThematique,
+  rechercheParThematique,
+} from './rechercheParThematique.store';
 
 type Filtre = (mesure: MesureSpecifique | MesureGenerale) => boolean;
 type Predicats = {
@@ -46,7 +51,8 @@ const construisFiltres = (
   priorites: PrioriteMesure[],
   referentiels: IdReferentiel[],
   avancement: 'statutADefinir' | 'enAction' | 'traite' | 'toutes',
-  uniquementMesMesures: boolean
+  uniquementMesMesures: boolean,
+  thematiques: IdThematique[]
 ) => {
   const filtres: Filtre[] = [];
 
@@ -68,6 +74,11 @@ const construisFiltres = (
   if (referentiels.length > 0)
     filtres.push((mesure: MesureSpecifique | MesureGenerale) =>
       appliqueRechercheParReferentiel(mesure, referentiels)
+    );
+
+  if (thematiques.length > 0)
+    filtres.push((mesure: MesureSpecifique | MesureGenerale) =>
+      appliqueFiltreParThematique(mesure, thematiques)
     );
 
   if (avancement)
@@ -92,6 +103,7 @@ const predicats = derived<
     typeof rechercheParReferentiel,
     typeof rechercheParAvancement,
     typeof rechercheMesMesures,
+    typeof rechercheParThematique,
   ],
   Predicats
 >(
@@ -102,6 +114,7 @@ const predicats = derived<
     rechercheParReferentiel,
     rechercheParAvancement,
     rechercheMesMesures,
+    rechercheParThematique,
   ],
   ([
     $rechercheTextuelle,
@@ -110,6 +123,7 @@ const predicats = derived<
     $rechercheParReferentiel,
     $rechercheParAvancement,
     $rechercheMesMesures,
+    $rechercheParThematique,
   ]) => ({
     filtres: construisFiltres(
       $rechercheTextuelle,
@@ -117,7 +131,8 @@ const predicats = derived<
       $rechercheParPriorite,
       $rechercheParReferentiel,
       $rechercheParAvancement,
-      $rechercheMesMesures
+      $rechercheMesMesures,
+      $rechercheParThematique
     ),
     substitueAvancement: (avancementDeSimulation: Avancement) => ({
       filtres: construisFiltres(
@@ -126,7 +141,8 @@ const predicats = derived<
         $rechercheParPriorite,
         $rechercheParReferentiel,
         avancementDeSimulation,
-        $rechercheMesMesures
+        $rechercheMesMesures,
+        $rechercheParThematique
       ),
     }),
   })

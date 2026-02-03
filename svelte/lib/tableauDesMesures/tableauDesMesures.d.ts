@@ -36,6 +36,7 @@ export type MesureGenerale = {
   priorite?: PrioriteMesure;
   echeance?: EcheanceMesure;
   responsables?: IdUtilisateur[];
+  thematique?: IdThematique;
 };
 
 export type MesureSpecifique = {
@@ -50,6 +51,7 @@ export type MesureSpecifique = {
   priorite?: PrioriteMesure;
   echeance?: EcheanceMesure;
   responsables?: IdUtilisateur[];
+  thematique?: IdThematique;
 };
 
 export type IdUtilisateur = string;

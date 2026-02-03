@@ -13,9 +13,15 @@
   import { rechercheParPriorite } from '../stores/rechercheParPriorite.store';
   import { rechercheMesMesures } from '../stores/rechercheMesMesures.store';
   import { createEventDispatcher } from 'svelte';
+  import {
+    rechercheParThematique,
+    thematiques,
+  } from '../stores/rechercheParThematique.store';
+  import type { VersionService } from '../../../../src/modeles/versionService';
 
   export let categories: Record<IdCategorie, string>;
   export let priorites: ReferentielPriorite;
+  export let versionService: VersionService;
 
   const declenche = createEventDispatcher<{ supprimeFiltres: null }>();
 
@@ -70,6 +76,24 @@
         </div>
       {/each}
     </fieldset>
+    {#if versionService === 'v2'}
+      <fieldset>
+        <legend>Thématiques</legend>
+        {#each thematiques as thematique}
+          {@const id = thematique.replaceAll(' ', '-').toLowerCase()}
+          <div class="case-et-label">
+            <input
+              type="checkbox"
+              {id}
+              name={id}
+              bind:group={$rechercheParThematique}
+              value={thematique}
+            />
+            <label for={id}>{thematique}</label>
+          </div>
+        {/each}
+      </fieldset>
+    {/if}
     <fieldset>
       <legend>Mesures par référentiel</legend>
       <div class="case-et-label">
@@ -236,7 +260,7 @@
 
   .case-et-label {
     display: flex;
-    align-items: center;
+    align-items: normal;
     gap: 1em;
     margin-top: 1em;
   }
