@@ -39,6 +39,7 @@ export type MesureGeneraleEnrichie = MesureGenerale & {
   identifiantNumerique: string;
   lienBlog?: string;
   porteursSinguliers?: string[];
+  thematique?: string;
 };
 
 export type MesureSpecifique = PlanAction & {
@@ -51,6 +52,7 @@ export type MesureSpecifique = PlanAction & {
   descriptionLongue?: string;
   identifiantNumerique: string;
   porteursSinguliers?: undefined;
+  thematique?: undefined;
 };
 
 export type MesureEditee = {
