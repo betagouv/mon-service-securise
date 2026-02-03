@@ -331,7 +331,9 @@ describe('Les mesures liées à un service', () => {
       it('ajoutent les porteurs singuliers des mesures v2', () => {
         const referentielV2 = creeReferentielV2({
           mesures: { mesure1: {} },
-          porteursSinguliersMesuresGenerales: { mesure1: ['RSSI'] },
+          donneesComplementairesMesures: {
+            mesure1: { porteursSinguliers: ['RSSI'] },
+          },
         });
 
         const mesures = new Mesures(
