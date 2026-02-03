@@ -9,15 +9,19 @@ import {
   ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
 } from '../erreurs.js';
+import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import type { PrioriteMesure, StatutMesure } from '../../referentiel.types.js';
 
 const STATUTS = {
   STATUT_FAIT: 'fait',
   STATUT_EN_COURS: 'enCours',
   STATUT_NON_FAIT: 'nonFait',
   STATUT_A_LANCER: 'aLancer',
-};
+} as const;
 
-class Mesure extends InformationsService {
+const identifiantsStatuts = Object.values(STATUTS);
+
+abstract class Mesure extends InformationsService {
   estIndispensable() {
     return false;
   }
@@ -43,11 +47,18 @@ class Mesure extends InformationsService {
     return resultat;
   }
 
-  static statutRenseigne(statut) {
-    return Object.values(STATUTS).includes(statut);
+  static statutRenseigne(statut?: StatutMesure) {
+    return identifiantsStatuts.includes(statut as StatutMesure);
   }
 
-  static valide({ statut, priorite, echeance }, referentiel) {
+  static valide(
+    {
+      statut,
+      priorite,
+      echeance,
+    }: { statut?: StatutMesure; priorite?: PrioriteMesure; echeance?: string },
+    referentiel: Referentiel | ReferentielV2
+  ) {
     if (statut && !this.statutsPossibles().includes(statut)) {
       throw new ErreurStatutMesureInvalide(
         `Le statut "${statut}" est invalide`
@@ -71,8 +82,11 @@ class Mesure extends InformationsService {
       }
     }
   }
-}
 
-Object.assign(Mesure, STATUTS);
+  static STATUT_FAIT = STATUTS.STATUT_FAIT;
+  static STATUT_EN_COURS = STATUTS.STATUT_EN_COURS;
+  static STATUT_NON_FAIT = STATUTS.STATUT_NON_FAIT;
+  static STATUT_A_LANCER = STATUTS.STATUT_A_LANCER;
+}
 
 export default Mesure;
