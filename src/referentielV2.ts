@@ -12,10 +12,14 @@ import {
   TypeDeService,
 } from '../donneesReferentielMesuresV2.js';
 import { ReglesDuReferentielMesuresV2 } from './moteurRegles/v2/moteurReglesV2.js';
+import {
+  DonneesComplementairesMesuresV2,
+  donneesComplementairesMesureV2,
+} from '../donneesComplementairesReferentielMesuresV2.js';
 
 export type DonneesReferentielV2 = typeof questionsV2 & {
   mesures: typeof mesuresV2;
-  porteursSinguliersMesuresGenerales?: Record<IdMesureV2, string[]>;
+  donneesComplementairesMesures: DonneesComplementairesMesuresV2;
 };
 
 type MethodesSpecifiquesReferentielV2 = {
@@ -31,7 +35,11 @@ type MethodesSpecifiquesReferentielV2 = {
 type Surcharge<A, B> = Omit<A, keyof B> & B;
 
 export const creeReferentielV2 = (
-  donnees: DonneesReferentielV2 = { ...questionsV2, mesures: mesuresV2 }
+  donnees: DonneesReferentielV2 = {
+    ...questionsV2,
+    mesures: mesuresV2,
+    donneesComplementairesMesures: donneesComplementairesMesureV2,
+  }
 ): Surcharge<Referentiel, MethodesSpecifiquesReferentielV2> => {
   let reglesMoteurV2Enregistrees: ReglesDuReferentielMesuresV2 = [];
   const identifiantsMesure = new Set<string>(Object.keys(donnees.mesures));
@@ -71,7 +79,7 @@ export const creeReferentielV2 = (
   const reglesMoteurV2 = () => reglesMoteurV2Enregistrees;
 
   const porteursSinguliersDeMesure = (idMesure: IdMesureV2) =>
-    donnees.porteursSinguliersMesuresGenerales?.[idMesure] || [];
+    donnees.donneesComplementairesMesures[idMesure].porteursSinguliers;
 
   return {
     ...creeReferentiel(),
