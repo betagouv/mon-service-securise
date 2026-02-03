@@ -27,12 +27,15 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    font-size: 1rem;
+    line-height: 1.5rem;
   }
 
   summary:before {
     content: 'Description de la mesure';
     font-size: 1rem;
     line-height: 1.5rem;
+    color: #282828;
   }
 
   summary:after {
@@ -51,6 +54,9 @@
   details p {
     margin: 8px 0 0;
     font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.375rem;
+    color: #000000;
   }
 
   a.lien-blog {
