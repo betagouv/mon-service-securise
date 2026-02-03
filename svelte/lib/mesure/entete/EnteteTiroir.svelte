@@ -50,5 +50,6 @@
     background: #eee;
     color: #161616;
     font-weight: 400;
+    white-space: nowrap;
   }
 </style>
