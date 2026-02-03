@@ -58,6 +58,18 @@
       />
     </label>
   {/if}
+  {#if $configurationAffichage.doitAfficherPorteursSinguliers && $store.mesureEditee.mesure.porteursSinguliers}
+    <div class="porteurs-singuliers">
+      <span class="titre"><b>Responsable indicatif</b></span>
+      <span class="sous-titre"
+        >Le rôle indiqué est proposé à titre indicatif. Chaque équipe reste
+        libre de définir son propre responsable.</span
+      >
+      <span class="contenu"
+        >{$store.mesureEditee.mesure.porteursSinguliers.join(', ')}</span
+      >
+    </div>
+  {/if}
 
   <div class="conteneur-statut">
     <SelectionStatut
@@ -131,7 +143,7 @@
   {/if}
 </div>
 
-<style>
+<style lang="scss">
   #contenu-onglet-mesure:not(.visible) {
     display: none;
   }
@@ -192,5 +204,31 @@
 
   .mention-requis .asterisque {
     color: var(--rose-anssi);
+  }
+
+  .porteurs-singuliers {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .titre {
+      font-size: 1rem;
+      line-height: 1.5rem;
+      color: #282828;
+    }
+
+    .sous-titre {
+      font-size: 0.75rem;
+      line-height: 1.25rem;
+      margin-bottom: 4px;
+      color: #666666;
+    }
+
+    .contenu {
+      font-size: 1rem;
+      line-height: 1.375rem;
+      margin-bottom: 32px;
+      color: #000;
+    }
   }
 </style>
