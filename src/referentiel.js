@@ -448,6 +448,9 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     donnees.niveauxDeSecurite.indexOf(niveauCandidat) >
     donnees.niveauxDeSecurite.indexOf(niveauRecommandation);
 
+  // Seulement supporté par le référentiel v2.
+  const porteursSinguliersDeMesure = () => undefined;
+
   valideDonnees();
 
   return {
@@ -548,6 +551,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     tacheCompletudeProfil,
     trancheIndiceCyber,
     typeService,
+    porteursSinguliersDeMesure,
     typeServiceParDescription,
     typesService,
     verifieCategoriesMesuresSontRepertoriees,

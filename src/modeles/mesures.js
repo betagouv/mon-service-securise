@@ -138,9 +138,16 @@ class Mesures extends InformationsService {
           delete generale.id;
         }
 
+        const porteursSinguliers =
+          this.referentiel.porteursSinguliersDeMesure(id);
+
         return {
           ...acc,
-          [id]: { ...donnees, ...(generale && { ...generale }) },
+          [id]: {
+            ...donnees,
+            ...(generale && { ...generale }),
+            ...(porteursSinguliers && { porteursSinguliers }),
+          },
         };
       },
       {}

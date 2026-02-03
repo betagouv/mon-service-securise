@@ -15,6 +15,7 @@ import { ReglesDuReferentielMesuresV2 } from './moteurRegles/v2/moteurReglesV2.j
 
 export type DonneesReferentielV2 = typeof questionsV2 & {
   mesures: typeof mesuresV2;
+  porteursSinguliersMesuresGenerales?: Record<IdMesureV2, string[]>;
 };
 
 type MethodesSpecifiquesReferentielV2 = {
@@ -24,6 +25,7 @@ type MethodesSpecifiquesReferentielV2 = {
   enregistreReglesMoteurV2: (regles: ReglesDuReferentielMesuresV2) => void;
   reglesMoteurV2: () => ReglesDuReferentielMesuresV2;
   mesures: () => typeof mesuresV2;
+  porteursSinguliersDeMesure: (idMesure: IdMesureV2) => string[];
 };
 
 type Surcharge<A, B> = Omit<A, keyof B> & B;
@@ -68,6 +70,9 @@ export const creeReferentielV2 = (
 
   const reglesMoteurV2 = () => reglesMoteurV2Enregistrees;
 
+  const porteursSinguliersDeMesure = (idMesure: IdMesureV2) =>
+    donnees.porteursSinguliersMesuresGenerales?.[idMesure] || [];
+
   return {
     ...creeReferentiel(),
     descriptionDelaiAvantImpactCritique,
@@ -79,6 +84,7 @@ export const creeReferentielV2 = (
     localisationDonnees,
     mesure,
     mesures,
+    porteursSinguliersDeMesure,
     typeService,
     reglesMoteurV2,
     version: () => 'v2',
