@@ -16,12 +16,12 @@
 </script>
 
 <div class="conteneur">
+  {#if referentiel !== Referentiel.SPECIFIQUE}
+    <CartoucheIndispensable indispensable={indispensable ?? false} />
+  {/if}
   <CartoucheReferentiel {referentiel} />
   {#if categorie}
     <CartoucheCategorieMesure {categorie} />
-  {/if}
-  {#if referentiel !== Referentiel.SPECIFIQUE}
-    <CartoucheIndispensable indispensable={indispensable ?? false} />
   {/if}
   {#if thematique}
     <span class="cartouche">{thematique}</span>
