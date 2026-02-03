@@ -30,6 +30,7 @@ type MethodesSpecifiquesReferentielV2 = {
   reglesMoteurV2: () => ReglesDuReferentielMesuresV2;
   mesures: () => typeof mesuresV2;
   porteursSinguliersDeMesure: (idMesure: IdMesureV2) => string[];
+  thematiqueDeMesure: (idMesure: IdMesureV2) => string;
 };
 
 type Surcharge<A, B> = Omit<A, keyof B> & B;
@@ -81,6 +82,9 @@ export const creeReferentielV2 = (
   const porteursSinguliersDeMesure = (idMesure: IdMesureV2) =>
     donnees.donneesComplementairesMesures[idMesure].porteursSinguliers;
 
+  const thematiqueDeMesure = (idMesure: IdMesureV2) =>
+    donnees.donneesComplementairesMesures[idMesure].thematique;
+
   return {
     ...creeReferentiel(),
     descriptionDelaiAvantImpactCritique,
@@ -95,6 +99,7 @@ export const creeReferentielV2 = (
     porteursSinguliersDeMesure,
     typeService,
     reglesMoteurV2,
+    thematiqueDeMesure,
     version: () => 'v2',
   };
 };

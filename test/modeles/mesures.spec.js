@@ -361,6 +361,41 @@ describe('Les mesures liées à un service', () => {
         expect(mesure1.porteursSinguliers).to.be(undefined);
       });
     });
+
+    describe('concernant les thématiques', () => {
+      it('ajoutent les thématiques des mesures v2', () => {
+        const referentielV2 = creeReferentielV2({
+          mesures: { mesure1: {} },
+          donneesComplementairesMesures: {
+            mesure1: { thematique: "Gestion de l'écosystème" },
+          },
+        });
+
+        const mesures = new Mesures(
+          { mesuresGenerales: [{ id: 'mesure1' }], mesuresSpecifiques: [] },
+          referentielV2,
+          { mesure1: {} }
+        );
+
+        const enrichies = mesures.enrichiesAvecDonneesPersonnalisees();
+
+        const { mesure1 } = enrichies.mesuresGenerales;
+        expect(mesure1.thematique).to.eql("Gestion de l'écosystème");
+      });
+
+      it("n'ajoutent aucune thématique sur les mesures v1 (car la notion n'existe pas)", () => {
+        const mesures = new Mesures(
+          { mesuresGenerales: [{ id: 'mesure1' }], mesuresSpecifiques: [] },
+          referentiel,
+          { mesure1: {} }
+        );
+
+        const enrichies = mesures.enrichiesAvecDonneesPersonnalisees();
+
+        const { mesure1 } = enrichies.mesuresGenerales;
+        expect(mesure1.thematique).to.be(undefined);
+      });
+    });
   });
 
   it('connait le nombre total de mesures "nonFait"', () => {
