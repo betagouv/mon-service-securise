@@ -450,6 +450,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   // Seulement supporté par le référentiel v2.
   const porteursSinguliersDeMesure = () => undefined;
+  const thematiqueDeMesure = () => undefined;
 
   valideDonnees();
 
@@ -569,6 +570,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     descriptionLocalisationDonnees,
     descriptionsDelaiAvantImpactCritique,
     descriptionsEcheanceRenouvellement,
+    thematiqueDeMesure,
     version: () => 'v1',
   };
 };

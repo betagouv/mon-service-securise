@@ -10,6 +10,7 @@ type DonneesComplementaireMesureV2 = {
     | 'Administrateur fonctionnel'
     | 'DPO'
   >;
+  thematique?: string;
 };
 
 export type DonneesComplementairesMesuresV2 = Record<
