@@ -1,5 +1,3 @@
-import expect from 'expect.js';
-
 import {
   ErreurCategorieInconnue,
   ErreurStatutMesureInvalide,
@@ -8,51 +6,68 @@ import {
   ErreurDetachementModeleMesureSpecifiqueImpossible,
 } from '../../src/erreurs.js';
 
-import * as Referentiel from '../../src/referentiel.js';
+import { creeReferentiel } from '../../src/referentiel.js';
 import InformationsService from '../../src/modeles/informationsService.js';
-import MesureSpecifique from '../../src/modeles/mesureSpecifique.js';
+import MesureSpecifique, {
+  DonneesMesureSpecifique,
+} from '../../src/modeles/mesureSpecifique.js';
+import { unUUIDRandom } from '../constructeurs/UUID.ts';
+import { CategorieMesure, StatutMesure } from '../../referentiel.types.ts';
 
 describe('Une mesure spécifique', () => {
-  const referentiel = Referentiel.creeReferentiel({
-    categoriesMesures: { uneCategorie: 'Une catégorie' },
+  const referentiel = creeReferentiel();
+  referentiel.enrichis({
+    categoriesMesures: { gouvernance: 'Gouvernance' },
+  });
+
+  const donneesDeBase = () => ({
+    id: unUUIDRandom(),
+    description: 'Une description',
+    categorie: 'gouvernance' as CategorieMesure,
+    statut: 'fait' as StatutMesure,
   });
 
   it('sait se décrire', () => {
     referentiel.enrichis({ prioritesMesures: { p3: {} } });
 
+    const idModele = unUUIDRandom();
+    const unIdUtilisateur = unUUIDRandom();
+    const unAutreIdUtilisateur = unUUIDRandom();
     const mesure = new MesureSpecifique(
       {
+        id: unUUIDRandom(),
         description: 'Une mesure spécifique',
         descriptionLongue: 'Une description longue',
-        idModele: 'M1',
-        categorie: 'uneCategorie',
+        idModele,
+        categorie: 'gouvernance',
         statut: 'fait',
         modalites: 'Des modalités de mise en œuvre',
         priorite: 'p3',
         echeance: '01/01/2023',
-        responsables: ['unIdUtilisateur', 'unAutreIdUtilisateur'],
+        responsables: [unIdUtilisateur, unAutreIdUtilisateur],
       },
       referentiel
     );
 
-    expect(mesure.description).to.equal('Une mesure spécifique');
-    expect(mesure.descriptionLongue).to.equal('Une description longue');
-    expect(mesure.idModele).to.equal('M1');
-    expect(mesure.categorie).to.equal('uneCategorie');
-    expect(mesure.statut).to.equal('fait');
-    expect(mesure.modalites).to.equal('Des modalités de mise en œuvre');
-    expect(mesure.priorite).to.equal('p3');
-    expect(mesure.echeance.getTime()).to.equal(
+    expect(mesure.description).toEqual('Une mesure spécifique');
+    expect(mesure.descriptionLongue).toEqual('Une description longue');
+    expect(mesure.idModele).toEqual(idModele);
+    expect(mesure.categorie).toEqual('gouvernance');
+    expect(mesure.statut).toEqual('fait');
+    expect(mesure.modalites).toEqual('Des modalités de mise en œuvre');
+    expect(mesure.priorite).toEqual('p3');
+    // @ts-expect-error On sait qu'il s'agit d'une date
+    expect(mesure.echeance!.getTime()).toEqual(
       new Date('01/01/2023').getTime()
     );
-    expect(mesure.responsables).to.eql([
-      'unIdUtilisateur',
-      'unAutreIdUtilisateur',
+    expect(mesure.responsables).toEqual([
+      unIdUtilisateur,
+      unAutreIdUtilisateur,
     ]);
   });
 
   it('connaît ses propriétés obligatoires', () => {
-    expect(MesureSpecifique.proprietesObligatoires()).to.eql([
+    expect(MesureSpecifique.proprietesObligatoires()).toEqual([
       'id',
       'description',
       'categorie',
@@ -63,113 +78,116 @@ describe('Une mesure spécifique', () => {
   it('ne tient pas compte du champ `modalites` ni de la priorite pour déterminer le statut de saisie', () => {
     const mesure = new MesureSpecifique(
       {
-        id: 'x',
+        id: unUUIDRandom(),
         description: 'Une mesure spécifique',
-        categorie: 'uneCategorie',
+        categorie: 'gouvernance',
         statut: 'fait',
       },
       referentiel
     );
 
-    expect(mesure.statutSaisie()).to.equal(InformationsService.COMPLETES);
+    expect(mesure.statutSaisie()).toEqual(InformationsService.COMPLETES);
   });
 
   it('vérifie que le statut est bien valide', () => {
-    try {
-      new MesureSpecifique({ statut: 'statutInconnu' });
-      expect.fail('La création de la mesure aurait dû lever une exception.');
-    } catch (e) {
-      expect(e).to.be.an(ErreurStatutMesureInvalide);
-      expect(e.message).to.equal('Le statut "statutInconnu" est invalide');
-    }
+    expect(
+      // @ts-expect-error On force une valeur incorrecte
+      () => new MesureSpecifique({ statut: 'statutInconnu' }, referentiel)
+    ).toThrowError(
+      new ErreurStatutMesureInvalide('Le statut "statutInconnu" est invalide')
+    );
   });
 
   it('vérifie la valeur de la priorité', () => {
     referentiel.enrichis({ prioritesMesures: {} });
-    try {
-      new MesureSpecifique({ priorite: 'prioriteInvalide' }, referentiel);
-      expect().fail('La création de la mesure aurait dû lever une exception');
-    } catch (e) {
-      expect(e).to.be.a(ErreurPrioriteMesureInvalide);
-      expect(e.message).to.equal('La priorité "prioriteInvalide" est invalide');
-    }
+    expect(
+      // @ts-expect-error On force une valeur incorrecte
+      () => new MesureSpecifique({ priorite: 'prioriteInvalide' }, referentiel)
+    ).toThrowError(
+      new ErreurPrioriteMesureInvalide(
+        'La priorité "prioriteInvalide" est invalide'
+      )
+    );
   });
 
   it("vérifie la valeur de l'échéance", () => {
-    try {
-      new MesureSpecifique({ echeance: 'pasUneDate' }, referentiel);
-      expect().fail('La création de la mesure aurait dû lever une exception');
-    } catch (e) {
-      expect(e).to.be.a(ErreurEcheanceMesureInvalide);
-      expect(e.message).to.equal('L\'échéance "pasUneDate" est invalide');
-    }
+    expect(
+      // @ts-expect-error On force une valeur incorrecte
+      () => new MesureSpecifique({ echeance: 'pasUneDate' }, referentiel)
+    ).toThrowError(
+      new ErreurEcheanceMesureInvalide('L\'échéance "pasUneDate" est invalide')
+    );
   });
 
   it('vérifie que la catégorie est bien répertoriée', () => {
-    try {
-      new MesureSpecifique({ categorie: 'categorieInconnue' });
-      expect().fail('La création de la mesure aurait dû lever une exception.');
-    } catch (e) {
-      expect(e).to.be.an(ErreurCategorieInconnue);
-      expect(e.message).to.equal(
+    expect(
+      () =>
+        // @ts-expect-error On force une valeur incorrecte
+        new MesureSpecifique({ categorie: 'categorieInconnue' }, referentiel)
+    ).toThrowError(
+      new ErreurCategorieInconnue(
         'La catégorie "categorieInconnue" n\'est pas répertoriée'
-      );
-    }
+      )
+    );
   });
 
   it("ne tient pas compte de la catégorie si elle n'est pas renseignée", () => {
-    try {
-      new MesureSpecifique();
-    } catch {
-      expect().fail(
-        "La création de la mesure sans catégorie n'aurait pas dû lever d'exception."
-      );
-    }
+    expect(
+      () =>
+        new MesureSpecifique(
+          // @ts-expect-error On force une valeur incorrecte
+          { ...donneesDeBase(), categorie: undefined },
+          referentiel
+        )
+    ).not.toThrowError();
   });
 
   it("n'est pas indispensable selon l'ANSSI", () => {
-    const mesure = new MesureSpecifique();
-    expect(mesure.estIndispensable()).to.be(false);
+    const mesure = new MesureSpecifique(donneesDeBase(), referentiel);
+    expect(mesure.estIndispensable()).toBe(false);
   });
 
   it("n'est pas recommandée par l'ANSSI", () => {
-    const mesure = new MesureSpecifique();
-    expect(mesure.estRecommandee()).to.be(false);
+    const mesure = new MesureSpecifique(donneesDeBase(), referentiel);
+    expect(mesure.estRecommandee()).toBe(false);
   });
 
   it('sait si son statut est renseigné', () => {
-    const mesure = new MesureSpecifique({ statut: 'fait' });
-    expect(mesure.statutRenseigne()).to.be(true);
+    const mesure = new MesureSpecifique(
+      { ...donneesDeBase(), statut: 'fait' },
+      referentiel
+    );
+    expect(mesure.statutRenseigne()).toBe(true);
   });
 
   describe('concernant la persistance', () => {
-    let donneesMesureSpecifique;
+    let donneesMesureSpecifique: DonneesMesureSpecifique;
 
     beforeEach(() => {
       referentiel.enrichis({ prioritesMesures: { p3: {} } });
       donneesMesureSpecifique = {
-        id: 'M1',
+        id: unUUIDRandom(),
         description: 'Une mesure spécifique',
         descriptionLongue: 'Une description longue',
-        categorie: 'uneCategorie',
+        categorie: 'gouvernance',
         statut: 'fait',
         modalites: 'Des modalités de mise en œuvre',
         priorite: 'p3',
         echeance: '01/23/2024 10:00Z',
-        responsables: ['unIdUtilisateur', 'unAutreIdUtilisateur'],
+        responsables: [unUUIDRandom(), unUUIDRandom()],
       };
     });
 
     it("persiste sa date d'échéance au format ISO en UTC", () => {
       const janvierNonIso = '01/23/2024 10:00Z';
       const avecEcheance = new MesureSpecifique(
-        { echeance: janvierNonIso },
+        { ...donneesDeBase(), echeance: janvierNonIso },
         referentiel
       );
 
       const persistance = avecEcheance.donneesSerialisees();
 
-      expect(persistance.echeance).to.be('2024-01-23T10:00:00.000Z');
+      expect(persistance.echeance).toBe('2024-01-23T10:00:00.000Z');
     });
 
     it('persiste toutes ses données', () => {
@@ -180,60 +198,70 @@ describe('Une mesure spécifique', () => {
 
       const persistance = mesureSpecifique.donneesSerialisees();
 
-      expect(persistance).to.eql({
-        id: 'M1',
+      expect(persistance).toEqual({
+        id: donneesMesureSpecifique.id,
         description: 'Une mesure spécifique',
         descriptionLongue: 'Une description longue',
-        categorie: 'uneCategorie',
+        categorie: 'gouvernance',
         statut: 'fait',
         modalites: 'Des modalités de mise en œuvre',
         priorite: 'p3',
         echeance: '2024-01-23T10:00:00.000Z',
-        responsables: ['unIdUtilisateur', 'unAutreIdUtilisateur'],
+        responsables: donneesMesureSpecifique.responsables,
       });
     });
 
     it('ne persiste pas les données du modèle si la mesure a un modèle, car elles ne doivent apparaître que dans le modèle', () => {
       const mesureAvecModele = new MesureSpecifique(
-        { ...donneesMesureSpecifique, idModele: 'MS1' },
+        { ...donneesMesureSpecifique, idModele: unUUIDRandom() },
         referentiel
       );
 
       const persistance = mesureAvecModele.donneesSerialisees();
 
-      expect(persistance.description).to.be(undefined);
-      expect(persistance.descriptionLongue).to.be(undefined);
-      expect(persistance.categorie).to.be(undefined);
+      expect(persistance.description).toBe(undefined);
+      expect(persistance.descriptionLongue).toBe(undefined);
+      expect(persistance.categorie).toBe(undefined);
     });
   });
 
   describe('concernant le détachement de son modèle', () => {
     it("jette une erreur si la mesure n'est pas reliée à un modèle", () => {
-      const mesure = new MesureSpecifique({ id: 'MS1', idModele: undefined });
+      const donnees = donneesDeBase();
+      const mesure = new MesureSpecifique(
+        { ...donnees, idModele: undefined },
+        referentiel
+      );
 
-      expect(() => mesure.detacheDeSonModele()).to.throwError((e) => {
-        expect(e).to.be.an(ErreurDetachementModeleMesureSpecifiqueImpossible);
-        expect(e.message).to.be(
-          "Impossible de détacher la mesure 'MS1' : elle n'est pas reliée à un modèle."
-        );
-      });
+      expect(() => mesure.detacheDeSonModele()).toThrowError(
+        new ErreurDetachementModeleMesureSpecifiqueImpossible(
+          `Impossible de détacher la mesure '${donnees.id}' : elle n'est pas reliée à un modèle.`
+        )
+      );
     });
 
     it("supprime l'identifiant du modèle, la rendant donc autonome", () => {
-      const mesure = new MesureSpecifique({
-        id: 'MS1',
-        idModele: 'MOD-1',
-        statut: 'fait',
-        description: 'Ma mesure spécifique',
-      });
+      const id = unUUIDRandom();
+      const mesure = new MesureSpecifique(
+        {
+          id,
+          idModele: unUUIDRandom(),
+          statut: 'fait',
+          description: 'Ma mesure spécifique',
+          categorie: 'gouvernance',
+        },
+        referentiel
+      );
 
       mesure.detacheDeSonModele();
 
-      expect(mesure.donneesSerialisees()).to.eql({
-        id: 'MS1',
+      expect(mesure.donneesSerialisees()).toEqual({
+        id,
+        categorie: 'gouvernance',
         description: 'Ma mesure spécifique',
         responsables: [],
         statut: 'fait',
+        echeance: '',
       });
     });
   });

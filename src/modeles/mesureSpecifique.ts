@@ -3,12 +3,56 @@ import {
   ErreurCategorieInconnue,
   ErreurDetachementModeleMesureSpecifiqueImpossible,
 } from '../erreurs.js';
-import * as Referentiel from '../referentiel.js';
+import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { UUID } from '../typesBasiques.js';
+import type {
+  CategorieMesure,
+  PrioriteMesure,
+  StatutMesure,
+} from '../../referentiel.types.js';
+
+export type DonneesMesureSpecifique = {
+  id: UUID;
+  description: string;
+  categorie: CategorieMesure;
+  statut: StatutMesure;
+  modalites?: string;
+  priorite?: PrioriteMesure;
+  echeance?: string;
+  descriptionLongue?: string;
+  idModele?: UUID;
+  responsables?: UUID[];
+};
+
+type DonneesMesureSpecifiqueSerialisees = {
+  id: UUID;
+  description?: string;
+  categorie?: CategorieMesure;
+  statut: StatutMesure;
+  modalites?: string;
+  priorite?: PrioriteMesure;
+  echeance?: string;
+  descriptionLongue?: string;
+  idModele?: UUID;
+  responsables: UUID[];
+};
 
 class MesureSpecifique extends Mesure {
+  readonly id!: UUID;
+  readonly description!: string;
+  readonly categorie!: CategorieMesure;
+  readonly statut!: StatutMesure;
+  readonly modalites?: string;
+  readonly priorite?: PrioriteMesure;
+  readonly echeance?: Date | '';
+  readonly descriptionLongue?: string;
+  idModele?: UUID;
+  responsables!: UUID[];
+  private readonly referentiel: Referentiel | ReferentielV2;
+
   constructor(
-    donneesMesure = {},
-    referentiel = Referentiel.creeReferentielVide()
+    donneesMesure: DonneesMesureSpecifique,
+    referentiel: Referentiel | ReferentielV2
   ) {
     super({
       proprietesAtomiquesRequises: MesureSpecifique.proprietesObligatoires(),
@@ -23,10 +67,12 @@ class MesureSpecifique extends Mesure {
     });
 
     MesureSpecifique.valide(donneesMesure, referentiel);
-    this.renseigneProprietes(donneesMesure);
+    this.renseigneProprietes(donneesMesure, referentiel);
 
     this.referentiel = referentiel;
-    this.echeance = donneesMesure.echeance && new Date(donneesMesure.echeance);
+    this.echeance = donneesMesure.echeance
+      ? new Date(donneesMesure.echeance)
+      : '';
   }
 
   descriptionMesure() {
@@ -37,8 +83,9 @@ class MesureSpecifique extends Mesure {
     return Mesure.statutRenseigne(this.statut);
   }
 
-  donneesSerialisees() {
-    const toutesDonnees = super.donneesSerialisees();
+  donneesSerialisees(): DonneesMesureSpecifiqueSerialisees {
+    const toutesDonnees =
+      super.donneesSerialisees() as DonneesMesureSpecifiqueSerialisees;
 
     const lieeAUnModele = toutesDonnees.idModele;
     if (lieeAUnModele) {
@@ -53,7 +100,7 @@ class MesureSpecifique extends Mesure {
     };
   }
 
-  supprimeResponsable(idUtilisateur) {
+  supprimeResponsable(idUtilisateur: UUID) {
     this.responsables = this.responsables.filter((r) => r !== idUtilisateur);
   }
 
@@ -70,7 +117,10 @@ class MesureSpecifique extends Mesure {
     return ['id', 'description', 'categorie', 'statut'];
   }
 
-  static valide({ categorie, statut, priorite, echeance }, referentiel) {
+  static valide(
+    { categorie, statut, priorite, echeance }: DonneesMesureSpecifique,
+    referentiel: Referentiel | ReferentielV2
+  ) {
     super.valide({ statut, priorite, echeance }, referentiel);
 
     const identifiantsCategoriesMesures =
