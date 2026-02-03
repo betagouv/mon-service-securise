@@ -1,4 +1,4 @@
-import type { Referentiel } from '../referentiel.interface.js';
+import type { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
 
 const proprietePresente = (valeur: unknown): boolean => {
   if (Array.isArray(valeur)) {
@@ -23,7 +23,7 @@ const proprietePresente = (valeur: unknown): boolean => {
 
 type ConstructeurAgregat = new (
   donnees: Record<string, unknown>,
-  referentiel: Referentiel
+  referentiel: Referentiel | ReferentielV2
   // eslint-disable-next-line no-use-before-define
 ) => Base;
 
@@ -63,7 +63,7 @@ abstract class Base {
 
   renseigneProprietes(
     donnees: Record<string, unknown>,
-    referentiel: Referentiel
+    referentiel: Referentiel | ReferentielV2
   ) {
     [
       ...this.proprietesAtomiquesRequises,
