@@ -3,6 +3,7 @@ import InformationsService from '../../src/modeles/informationsService.js';
 import Mesures from '../../src/modeles/mesures.js';
 import MesuresSpecifiques from '../../src/modeles/mesuresSpecifiques.js';
 import * as Referentiel from '../../src/referentiel.js';
+import { creeReferentielV2 } from '../../src/referentielV2.js';
 
 const { A_COMPLETER, COMPLETES } = InformationsService;
 
@@ -325,20 +326,46 @@ describe('Les mesures liées à un service', () => {
         ],
       });
     });
+
+    describe('concernant les porteurs singuliers', () => {
+      it('ajoutent les porteurs singuliers des mesures v2', () => {
+        const referentielV2 = creeReferentielV2({
+          mesures: { mesure1: {} },
+          porteursSinguliersMesuresGenerales: { mesure1: ['RSSI'] },
+        });
+
+        const mesures = new Mesures(
+          { mesuresGenerales: [{ id: 'mesure1' }], mesuresSpecifiques: [] },
+          referentielV2,
+          { mesure1: {} }
+        );
+
+        const enrichies = mesures.enrichiesAvecDonneesPersonnalisees();
+
+        const { mesure1 } = enrichies.mesuresGenerales;
+        expect(mesure1.porteursSinguliers).to.eql(['RSSI']);
+      });
+
+      it("n'ajoutent aucun porteur sur les mesures v1 (car la notion n'existe pas)", () => {
+        const mesures = new Mesures(
+          { mesuresGenerales: [{ id: 'mesure1' }], mesuresSpecifiques: [] },
+          referentiel,
+          { mesure1: {} }
+        );
+
+        const enrichies = mesures.enrichiesAvecDonneesPersonnalisees();
+
+        const { mesure1 } = enrichies.mesuresGenerales;
+        expect(mesure1.porteursSinguliers).to.be(undefined);
+      });
+    });
   });
 
   it('connait le nombre total de mesures "nonFait"', () => {
     const referentiel = Referentiel.creeReferentiel({
       categoriesMesures: { C1: 'C1', C2: 'C2' },
-      statutsMesures: {
-        fait: 'Faite',
-        nonFait: 'Non prise en compte',
-      },
-      mesures: {
-        M1: {},
-        M2: {},
-        M3: {},
-      },
+      statutsMesures: { fait: 'Faite', nonFait: 'Non prise en compte' },
+      mesures: { M1: {}, M2: {}, M3: {} },
     });
 
     const mesures = new Mesures(
@@ -349,14 +376,8 @@ describe('Les mesures liées à un service', () => {
           { id: 'M3', statut: 'fait' },
         ],
         mesuresSpecifiques: [
-          {
-            statut: 'nonFait',
-            categorie: 'C1',
-          },
-          {
-            statut: 'fait',
-            categorie: 'C2',
-          },
+          { statut: 'nonFait', categorie: 'C1' },
+          { statut: 'fait', categorie: 'C2' },
         ],
       },
       referentiel,
