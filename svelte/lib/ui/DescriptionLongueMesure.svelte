@@ -2,13 +2,49 @@
   export let description: string;
   export let lienBlog: string | undefined = undefined;
   export let repliee: boolean = false;
+
+  const recupereObjectif = (
+    descriptionComplete: string
+  ): {
+    description: string;
+    objectif?: string;
+  } => {
+    const marqueurs = ['<p>Cette mesure', 'Cette mesure'];
+
+    for (const marqueur of marqueurs) {
+      const index = descriptionComplete.indexOf(marqueur);
+      if (index !== -1) {
+        return {
+          description: descriptionComplete.slice(0, index),
+          objectif: descriptionComplete.slice(index),
+        };
+      }
+    }
+
+    return { description };
+  };
+
+  let descriptionAAfficher: string;
+  let objectifAAfficher: string | undefined;
+  $: {
+    const resultat = recupereObjectif(description);
+    descriptionAAfficher = resultat.description;
+    objectifAAfficher = resultat.objectif;
+  }
 </script>
 
 <details open={!repliee}>
   <summary />
   <p class="description">
-    {@html description}
+    {@html descriptionAAfficher}
   </p>
+  {#if objectifAAfficher}
+    <dsfr-highlight text="Du texte">
+      <div slot="text" class="objectif-mesure">
+        {@html objectifAAfficher}
+      </div>
+    </dsfr-highlight>
+  {/if}
   {#if lienBlog}
     <a class="lien-blog" href={lienBlog} target="_blank" rel="noopener"
       >Comment mettre en œuvre cette mesure ?</a
@@ -78,5 +114,17 @@
 
   .description {
     max-width: 700px;
+  }
+
+  .objectif-mesure {
+    color: #3a3a3a;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5rem;
+  }
+
+  dsfr-highlight {
+    margin-left: -32px;
   }
 </style>
