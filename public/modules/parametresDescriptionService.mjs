@@ -22,6 +22,13 @@ const extraisParametresDescriptionService = (
 
   params.organisationResponsable = { siret: params.siretEntite };
 
+  // Exclut les valeurs vides qui arrivent si un champ vide est placé
+  // avant un champ rempli
+  params.fonctionnalitesSpecifiques =
+    params.fonctionnalitesSpecifiques.filter(Boolean);
+  params.donneesSensiblesSpecifiques =
+    params.donneesSensiblesSpecifiques.filter(Boolean);
+
   delete params.siretEntite;
   delete params.nomEntite;
   delete params.departementEntite;
