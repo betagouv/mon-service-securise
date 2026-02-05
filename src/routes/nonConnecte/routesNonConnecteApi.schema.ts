@@ -38,7 +38,7 @@ export const reglesValidationAuthentificationParLoginMotDePasse = {
 
 export const reglesValidationRechercheOrganisations = {
   departement: z.enum(departements.map((d) => d.code)).optional(),
-  recherche: z.string().min(3).max(200),
+  recherche: z.string().min(2).max(200),
 };
 
 export const reglesValidationDesinscriptionInfolettre = {

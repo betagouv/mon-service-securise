@@ -791,7 +791,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
     it.each([
       { valeurIncorrecte: '' },
-      { valeurIncorrecte: 'ab' },
+      { valeurIncorrecte: 'a' },
       { valeurIncorrecte: uneChaineDeCaracteres(201, 'a') },
     ])(
       'renvoie une erreur 400 car $valeurErronee est une valeur invalide pour la recherche',
