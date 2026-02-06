@@ -4,14 +4,13 @@ import {
   CategorieDonneesTraitees,
   mesuresV2,
 } from '../../../donneesReferentielMesuresV2.js';
-import * as Referentiel from '../../../src/referentiel.js';
-import donneesReferentiel from '../../../donneesReferentiel.js';
 import { MoteurReglesV2 } from '../../../src/moteurRegles/v2/moteurReglesV2.js';
 import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.js';
 import { DescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.js';
 import { mesuresCas1 } from './mesuresCas1.js';
 import { mesuresCas2 } from './mesuresCas2.js';
 import { mesuresCas3 } from './mesuresCas3.js';
+import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 
 /*
   Commande pour exporter les mesures depuis le fichier CSV :
@@ -36,7 +35,7 @@ describe("Les tests d'acceptance du nouveau moteur de rÃ¨gles et de niveau de sÃ
   let moteur: MoteurReglesV2;
 
   beforeEach(async () => {
-    const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
+    const referentiel = creeReferentielV2();
     const lecteur = new LecteurDeCSVDeReglesV2(mesuresV2);
     const reglesDeProd = lecteur.lis(
       `${__dirname}/../../../src/moteurRegles/v2/mesures_V2_prod_05-02-2026.csv`
