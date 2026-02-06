@@ -147,8 +147,8 @@ describe('Le lecteur de CSV de règles V2', () => {
     );
   });
 
-  it('ignore les modificateurs "grisée" et "dégrisée" : ils ne causent pas d\'erreur', async () => {
-    const regles = await lisLeFichier(`MESURES_V2_GRISEE_DEGRISEE.csv`);
+  it('ignore les modificateurs "projet", "mixte" et "presta" : ils ne causent pas d\'erreur', async () => {
+    const regles = await lisLeFichier(`MESURES_V2_PROJET_PRESTA.csv`);
 
     expect(regles[0].modificateurs).toEqual({});
   });
@@ -163,7 +163,7 @@ describe('Le lecteur de CSV de règles V2', () => {
 
   it('peut lire le CSV de production', async () => {
     const reglesDeProd = await lisLeFichier(
-      '../../../../src/moteurRegles/v2/mesures_V2_prod_07-11-2025.csv'
+      '../../../../src/moteurRegles/v2/mesures_V2_prod_05-02-2026.csv'
     );
 
     expect(reglesDeProd).toHaveLength(135);

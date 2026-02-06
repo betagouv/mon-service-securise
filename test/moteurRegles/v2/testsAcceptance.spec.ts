@@ -39,7 +39,7 @@ describe("Les tests d'acceptance du nouveau moteur de r√®gles et de niveau de s√
     const referentiel = Referentiel.creeReferentiel(donneesReferentiel);
     const lecteur = new LecteurDeCSVDeReglesV2(mesuresV2);
     const reglesDeProd = lecteur.lis(
-      `${__dirname}/../../../src/moteurRegles/v2/mesures_V2_prod_07-11-2025.csv`
+      `${__dirname}/../../../src/moteurRegles/v2/mesures_V2_prod_05-02-2026.csv`
     );
 
     moteur = new MoteurReglesV2(referentiel, reglesDeProd);

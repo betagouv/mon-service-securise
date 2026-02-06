@@ -255,9 +255,11 @@ export class LecteurDeCSVDeReglesV2 {
   private traduisTousModificateurs(valeurCSV: string): Modificateur[] {
     if (!valeurCSV) return [];
 
+    const modificateursIgnores = ['Projet', 'Mixte', 'Presta'];
+
     return valeurCSV
       .split(', ')
-      .filter((v) => v !== 'Grisée' && v !== 'Dégrisée')
+      .filter((v) => !modificateursIgnores.includes(v))
       .map((v) => this.traduisModificateur(v));
   }
 
