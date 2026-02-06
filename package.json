@@ -6,7 +6,7 @@
   "description": "",
   "scripts": {
     "build:front": "vite build --config svelte/vite.config.mts",
-    "build:back": "tsc && cp src/moteurRegles/v2/mesures_V2_prod_07-11-2025.csv ./dist/src/moteurRegles/v2/",
+    "build:back": "tsc && cp src/moteurRegles/v2/mesures_V2_prod_05-02-2026.csv ./dist/src/moteurRegles/v2/",
     "cree-utilisateur-demo": "node --import tsx creeUtilisateurDemo.js",
     "dev:back": "node --watch --import tsx server.ts",
     "dev:front": "cd svelte && vite dev --host 0.0.0.0",
