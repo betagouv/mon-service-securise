@@ -57,6 +57,7 @@ describe('Le lecteur de CSV de règles V2', () => {
       filtre1,
       filtre2,
       filtre3,
+      dev1,
     ] = regles;
 
     expect(recensement1.modificateurs.criticiteDonneesTraitees).toEqual([
@@ -105,6 +106,11 @@ describe('Le lecteur de CSV de règles V2', () => {
       ['cloud', ['Retirer']],
       ['saas', ['RendreIndispensable']],
     ]);
+    expect(dev1.modificateurs.activitesExternalisees).toEqual([
+      ['administrationTechnique', ['Projet']],
+      ['developpementLogiciel', ['Presta']],
+      ['LesDeux', ['Mixte']],
+    ]);
   });
 
   it('peut lire des modificateurs multiples dans une seule « cellule »', async () => {
@@ -145,12 +151,6 @@ describe('Le lecteur de CSV de règles V2', () => {
         "La mesure 'MAUVAIS_ID' n'existe pas dans le référentiel MSS"
       )
     );
-  });
-
-  it('ignore les modificateurs "projet", "mixte" et "presta" : ils ne causent pas d\'erreur', async () => {
-    const regles = await lisLeFichier(`MESURES_V2_PROJET_PRESTA.csv`);
-
-    expect(regles[0].modificateurs).toEqual({});
   });
 
   it('jette une erreur si un modificateur est inconnu', async () => {

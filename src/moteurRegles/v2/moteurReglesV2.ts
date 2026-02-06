@@ -14,7 +14,10 @@ export type Modificateur =
   | 'RendreIndispensable'
   | 'RendreRecommandee'
   | 'Ajouter'
-  | 'Retirer';
+  | 'Retirer'
+  | 'Projet'
+  | 'Presta'
+  | 'Mixte';
 
 export type ProjectionDescriptionPourMoteur = {
   criticiteDonneesTraitees: NiveauCriticite;

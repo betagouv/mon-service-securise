@@ -255,12 +255,7 @@ export class LecteurDeCSVDeReglesV2 {
   private traduisTousModificateurs(valeurCSV: string): Modificateur[] {
     if (!valeurCSV) return [];
 
-    const modificateursIgnores = ['Projet', 'Mixte', 'Presta'];
-
-    return valeurCSV
-      .split(', ')
-      .filter((v) => !modificateursIgnores.includes(v))
-      .map((v) => this.traduisModificateur(v));
+    return valeurCSV.split(', ').map((v) => this.traduisModificateur(v));
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -269,6 +264,9 @@ export class LecteurDeCSVDeReglesV2 {
     if (valeurCSV === 'Recommandation') return 'RendreRecommandee';
     if (valeurCSV === 'Ajoutée') return 'Ajouter';
     if (valeurCSV === 'Retirée') return 'Retirer';
+    if (valeurCSV === 'Projet') return 'Projet';
+    if (valeurCSV === 'Presta') return 'Presta';
+    if (valeurCSV === 'Mixte') return 'Mixte';
 
     throw new ErreurMoteurDeReglesV2(
       `Le modificateur '${valeurCSV}' est inconnu`
