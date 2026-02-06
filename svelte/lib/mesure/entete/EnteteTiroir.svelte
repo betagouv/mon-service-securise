@@ -37,6 +37,7 @@
     flex-direction: row;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
   }
 
   .cartouche {
