@@ -2,6 +2,7 @@ import { ReferentielV2 } from '../../referentiel.interface.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import {
   ActiviteExternalisee,
+  DetailReferentielMesureV2,
   IdMesureV2,
   SpecificiteProjet,
   TypeDeService,
@@ -9,6 +10,7 @@ import {
 } from '../../../donneesReferentielMesuresV2.js';
 import { RegleV2 } from './regleV2.js';
 import { NiveauCriticite } from './niveauSecurite.js';
+import { PartieResponsable } from './modifications.js';
 
 export type Modificateur =
   | 'RendreIndispensable'
@@ -78,7 +80,13 @@ export class MoteurReglesV2 {
     );
   }
 
-  mesures(descriptionService: DescriptionServiceV2) {
+  mesures(descriptionService: DescriptionServiceV2): Record<
+    IdMesureV2,
+    DetailReferentielMesureV2 & {
+      indispensable: boolean;
+      partieResponsable: PartieResponsable;
+    }
+  > {
     const mesures = [];
 
     const niveauDuService = descriptionService.niveauSecurite;

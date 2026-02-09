@@ -1,6 +1,14 @@
 // Voir scripts/moteurRegles/transformeCSVGristEnJSON.sh pour générer ce JSON à partir du CSV Grist.
 
-export const mesuresV2 = {
+export type DetailReferentielMesureV2 = {
+  description: string;
+  descriptionLongue: string;
+  categorie: 'defense' | 'gouvernance' | 'resilience' | 'protection';
+  identifiantNumerique: string;
+  referentiel: 'ANSSI' | 'CNIL';
+};
+
+export const mesuresV2: Record<string, DetailReferentielMesureV2> = {
   'RECENSEMENT.1': {
     description:
       "Etablir la liste de l'ensemble des services et données à protéger",
