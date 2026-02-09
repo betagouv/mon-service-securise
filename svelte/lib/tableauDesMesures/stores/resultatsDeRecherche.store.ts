@@ -4,6 +4,7 @@ import type {
   MesureGenerale,
   Mesures,
   MesureSpecifique,
+  PartieResponsable,
 } from '../tableauDesMesures.d';
 import {
   appliqueFiltreTextuel,
@@ -38,6 +39,10 @@ import {
   type IdThematique,
   rechercheParThematique,
 } from './rechercheParThematique.store';
+import {
+  appliqueFiltrePartieResponsable,
+  rechercheParPartieResponsable,
+} from './rechercheParPartieResponsable.store';
 
 type Filtre = (mesure: MesureSpecifique | MesureGenerale) => boolean;
 type Predicats = {
@@ -52,7 +57,8 @@ const construisFiltres = (
   referentiels: IdReferentiel[],
   avancement: 'statutADefinir' | 'enAction' | 'traite' | 'toutes',
   uniquementMesMesures: boolean,
-  thematiques: IdThematique[]
+  thematiques: IdThematique[],
+  partiesResponsables: PartieResponsable[]
 ) => {
   const filtres: Filtre[] = [];
 
@@ -92,6 +98,11 @@ const construisFiltres = (
     );
   }
 
+  if (partiesResponsables.length > 0)
+    filtres.push((mesure: MesureSpecifique | MesureGenerale) =>
+      appliqueFiltrePartieResponsable(mesure, partiesResponsables)
+    );
+
   return filtres;
 };
 
@@ -104,6 +115,7 @@ const predicats = derived<
     typeof rechercheParAvancement,
     typeof rechercheMesMesures,
     typeof rechercheParThematique,
+    typeof rechercheParPartieResponsable,
   ],
   Predicats
 >(
@@ -115,6 +127,7 @@ const predicats = derived<
     rechercheParAvancement,
     rechercheMesMesures,
     rechercheParThematique,
+    rechercheParPartieResponsable,
   ],
   ([
     $rechercheTextuelle,
@@ -124,6 +137,7 @@ const predicats = derived<
     $rechercheParAvancement,
     $rechercheMesMesures,
     $rechercheParThematique,
+    $rechercheParPartieResponsable,
   ]) => ({
     filtres: construisFiltres(
       $rechercheTextuelle,
@@ -132,7 +146,8 @@ const predicats = derived<
       $rechercheParReferentiel,
       $rechercheParAvancement,
       $rechercheMesMesures,
-      $rechercheParThematique
+      $rechercheParThematique,
+      $rechercheParPartieResponsable
     ),
     substitueAvancement: (avancementDeSimulation: Avancement) => ({
       filtres: construisFiltres(
@@ -142,7 +157,8 @@ const predicats = derived<
         $rechercheParReferentiel,
         avancementDeSimulation,
         $rechercheMesMesures,
-        $rechercheParThematique
+        $rechercheParThematique,
+        $rechercheParPartieResponsable
       ),
     }),
   })

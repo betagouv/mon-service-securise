@@ -18,6 +18,7 @@
     thematiques,
   } from '../stores/rechercheParThematique.store';
   import type { VersionService } from '../../../../src/modeles/versionService';
+  import { rechercheParPartieResponsable } from '../stores/rechercheParPartieResponsable.store';
 
   export let categories: Record<IdCategorie, string>;
   export let priorites: ReferentielPriorite;
@@ -172,6 +173,39 @@
           bind:checked={$rechercheMesMesures}
         />
         <label for="mes-mesures">Mesure(s) dont je suis responsable</label>
+      </div>
+      <div class="case-et-label">
+        <input
+          type="checkbox"
+          id="mon-organisation"
+          value="Projet"
+          bind:group={$rechercheParPartieResponsable}
+        />
+        <label for="mon-organisation">
+          Mesure(s) dont mon organisation est responsable
+        </label>
+      </div>
+      <div class="case-et-label">
+        <input
+          type="checkbox"
+          id="mon-presta"
+          value="Presta"
+          bind:group={$rechercheParPartieResponsable}
+        />
+        <label for="mon-presta">
+          Mesure(s) dont mon prestataire est responsable
+        </label>
+      </div>
+      <div class="case-et-label">
+        <input
+          type="checkbox"
+          id="mon-organisation-et-mon-presta"
+          value="Mixte"
+          bind:group={$rechercheParPartieResponsable}
+        />
+        <label for="mon-organisation-et-mon-presta">
+          Mesure(s) dont mon organisation et mon prestataire sont responsables
+        </label>
       </div>
     </fieldset>
     <button
