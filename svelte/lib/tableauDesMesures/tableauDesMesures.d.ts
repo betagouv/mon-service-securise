@@ -24,6 +24,8 @@ export type TableauDesMesuresProps = {
   versionService: VersionService;
 };
 
+export type PartieResponsable = 'Projet' | 'Presta' | 'Mixte';
+
 export type MesureGenerale = {
   description: string;
   categorie: string;
@@ -37,7 +39,7 @@ export type MesureGenerale = {
   echeance?: EcheanceMesure;
   responsables?: IdUtilisateur[];
   thematique?: IdThematique;
-  partieResponsable?: 'Projet' | 'Presta' | 'Mixte';
+  partieResponsable?: PartieResponsable;
 };
 
 export type MesureSpecifique = {
