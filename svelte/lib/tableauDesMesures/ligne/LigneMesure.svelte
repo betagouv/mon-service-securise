@@ -63,11 +63,11 @@
       {@html texteSurligne}
     </p>
     <div class="conteneur-cartouches">
-      <CartoucheReferentiel {referentiel} />
-      <span class="categorie">{categorie}</span>
       {#if referentiel !== Referentiel.SPECIFIQUE}
         <CartoucheIndispensable {indispensable} />
       {/if}
+      <CartoucheReferentiel {referentiel} />
+      <span class="categorie">{categorie}</span>
       {#if mesure.thematique}
         <CartoucheThematique thematique={mesure.thematique} />
       {/if}
