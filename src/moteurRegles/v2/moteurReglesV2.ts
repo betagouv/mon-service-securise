@@ -96,6 +96,7 @@ export class MoteurReglesV2 {
           regle.reference,
           {
             indispensable: modifications.rendreIndispensable(),
+            partieResponsable: modifications.partieResponsable(),
             ...this.referentiel.mesure(regle.reference),
           },
         ]);

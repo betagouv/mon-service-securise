@@ -22,6 +22,25 @@ export class Modifications {
     return nonExclue || this.modificateurs.includes('Ajouter');
   }
 
+  partieResponsable() {
+    const sansDoublons = new Set(
+      this.modificateurs.filter(
+        (m) => m === 'Presta' || m === 'Projet' || m === 'Mixte'
+      )
+    );
+
+    if (sansDoublons.has('Presta') && sansDoublons.has('Projet'))
+      return 'Mixte';
+
+    if (sansDoublons.has('Mixte')) return 'Mixte';
+
+    if (sansDoublons.has('Projet')) return 'Projet';
+
+    if (sansDoublons.has('Presta')) return 'Presta';
+
+    return undefined;
+  }
+
   rendreIndispensable() {
     const besoinDuNiveauDuService =
       this.besoinsDeSecurite[this.niveauDeSecuriteDuService];
