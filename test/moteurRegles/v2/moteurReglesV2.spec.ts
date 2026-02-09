@@ -3,6 +3,7 @@ import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.js';
 import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.js';
 import { besoins } from './besoinsDeSecurite.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.js';
+import { PartieResponsable } from '../../../src/moteurRegles/v2/modifications.ts';
 
 function uneDescriptionAuNiveau(niveauSecurite: NiveauSecurite) {
   return uneDescriptionV2Valide()
@@ -235,8 +236,6 @@ describe('Le moteur de règles V2', () => {
   });
 
   describe('concernant la partie responsable', () => {
-    type PartieResponsable = 'Presta' | 'Projet' | 'Mixte';
-
     const mesuresDUnServiceAvecPartiesResponsables = (
       premiere: PartieResponsable,
       seconde: PartieResponsable
