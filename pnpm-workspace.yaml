@@ -4,4 +4,4 @@ minimumReleaseAge: 10080 # 7 jours (exprimé en minutes)
 preferFrozenLockfile: true
 
 onlyBuiltDependencies:
-  - bcrypt@5.1.1
+  - bcrypt@6.0.0
