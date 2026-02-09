@@ -114,12 +114,14 @@ const serviceApresAuthentification = async ({
     profilProConnect.email
   );
 
-  await adaptateurProfilAnssi.metsAJour({
-    ...actuelMPA,
-    nom: profilProConnect.nom,
-    prenom: profilProConnect.prenom,
-  });
-  await depotDonnees.rafraichisProfilUtilisateurLocal(utilisateur.id);
+  if (actuelMPA) {
+    await adaptateurProfilAnssi.metsAJour({
+      ...actuelMPA,
+      nom: profilProConnect.nom,
+      prenom: profilProConnect.prenom,
+    });
+    await depotDonnees.rafraichisProfilUtilisateurLocal(utilisateur.id);
+  }
 
   return {
     type: 'rendu',

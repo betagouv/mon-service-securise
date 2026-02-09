@@ -295,6 +295,10 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       });
 
       it("rafraîchis la copie locale du profil Utilisateur dans le cas d'un profil complet : on veut rappatrier les données MPA chez MSS", async () => {
+        testeur.adaptateurProfilAnssi().recupere = async () => ({
+          email: 'jean.dujardin@beta.gouv.fr',
+        });
+
         let idRafraichi;
         testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async (
           idUtilisateur: UUID

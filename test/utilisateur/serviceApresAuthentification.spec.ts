@@ -285,6 +285,10 @@ describe("Le service d'après authentification", () => {
       });
 
       it('rafraîchis son profil utilisateur local', async () => {
+        adaptateurProfilAnssi.recupere = async () => ({
+          email: 'jean.dujardin@beta.gouv.fr',
+        });
+
         let idUtilisateurRafraichis;
         depotDonnees.rafraichisProfilUtilisateurLocal = async (id: UUID) => {
           idUtilisateurRafraichis = id;
@@ -308,6 +312,20 @@ describe("Le service d'après authentification", () => {
           await serviceApresAuthentification(parametresParDefaut);
 
         expect(resultat.donnees).toBe(undefined);
+      });
+
+      it("ne met pas à jour MPA si MPA ne connait pas l'utilisateur : on essayerait dans ce cas de mettre à jour avec un email vide", async () => {
+        adaptateurProfilAnssi.recupere = async () => undefined;
+
+        let miseAJourAppelee = false;
+        adaptateurProfilAnssi.metsAJour = async () => {
+          miseAJourAppelee = true;
+          return undefined;
+        };
+
+        await serviceApresAuthentification(parametresParDefaut);
+
+        expect(miseAJourAppelee).toBe(false);
       });
 
       describe('si son profil MSS est complet après rafraîchissement', () => {
