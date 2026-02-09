@@ -57,7 +57,7 @@ const routesNonConnecteOidc = ({
           'AgentConnectInfo',
           { state, nonce, ...(urlValide && { urlRedirection }) },
           {
-            maxAge: 120_000,
+            maxAge: 5 * 60_000,
             httpOnly: true,
             sameSite: 'none',
             secure: true,
