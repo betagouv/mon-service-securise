@@ -5,6 +5,7 @@
   import CartoucheIndispensable from '../../ui/CartoucheIndispensable.svelte';
   import CartoucheIdentifiantMesure from '../../ui/CartoucheIdentifiantMesure.svelte';
   import CartoucheCategorieMesure from '../../ui/CartoucheCategorieMesure.svelte';
+  import CartoucheThematique from '../../ui/CartoucheThematique.svelte';
 
   const {
     referentiel,
@@ -24,7 +25,7 @@
     <CartoucheCategorieMesure {categorie} />
   {/if}
   {#if thematique}
-    <span class="cartouche">{thematique}</span>
+    <CartoucheThematique {thematique} />
   {/if}
   <CartoucheIdentifiantMesure identifiant={identifiantNumerique} />
 </div>
@@ -38,19 +39,5 @@
     align-items: center;
     gap: 8px;
     flex-wrap: wrap;
-  }
-
-  .cartouche {
-    padding: 1px 8px 3px;
-    font-size: 0.9em;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: fit-content;
-    background: #eee;
-    color: #161616;
-    font-weight: 400;
-    white-space: nowrap;
   }
 </style>
