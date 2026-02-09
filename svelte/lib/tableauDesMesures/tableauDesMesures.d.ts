@@ -37,6 +37,7 @@ export type MesureGenerale = {
   echeance?: EcheanceMesure;
   responsables?: IdUtilisateur[];
   thematique?: IdThematique;
+  partieResponsable?: 'Projet' | 'Presta' | 'Mixte';
 };
 
 export type MesureSpecifique = {
@@ -52,6 +53,7 @@ export type MesureSpecifique = {
   echeance?: EcheanceMesure;
   responsables?: IdUtilisateur[];
   thematique?: IdThematique;
+  partieResponsable?: undefined;
 };
 
 export type IdUtilisateur = string;
