@@ -52,6 +52,8 @@
   import { rechercheMesMesures } from './stores/rechercheMesMesures.store';
   import { enleveParametreDeUrl } from '../outils/url';
   import type { VersionService } from '../../../src/modeles/versionService';
+  import { rechercheParThematique } from './stores/rechercheParThematique.store';
+  import { rechercheParPartieResponsable } from './stores/rechercheParPartieResponsable.store';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -218,9 +220,11 @@
 
   const supprimeFiltres = () => {
     $rechercheParCategorie = [];
+    $rechercheParThematique = [];
     $rechercheParReferentiel = [];
     $rechercheParPriorite = [];
     $rechercheMesMesures = false;
+    $rechercheParPartieResponsable = [];
   };
 </script>
 
