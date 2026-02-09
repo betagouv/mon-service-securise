@@ -174,39 +174,41 @@
         />
         <label for="mes-mesures">Mesure(s) dont je suis responsable</label>
       </div>
-      <div class="case-et-label">
-        <input
-          type="checkbox"
-          id="mon-organisation"
-          value="Projet"
-          bind:group={$rechercheParPartieResponsable}
-        />
-        <label for="mon-organisation">
-          Mesure(s) dont mon organisation est responsable
-        </label>
-      </div>
-      <div class="case-et-label">
-        <input
-          type="checkbox"
-          id="mon-presta"
-          value="Presta"
-          bind:group={$rechercheParPartieResponsable}
-        />
-        <label for="mon-presta">
-          Mesure(s) dont mon prestataire est responsable
-        </label>
-      </div>
-      <div class="case-et-label">
-        <input
-          type="checkbox"
-          id="mon-organisation-et-mon-presta"
-          value="Mixte"
-          bind:group={$rechercheParPartieResponsable}
-        />
-        <label for="mon-organisation-et-mon-presta">
-          Mesure(s) dont mon organisation et mon prestataire sont responsables
-        </label>
-      </div>
+      {#if versionService === 'v2'}
+        <div class="case-et-label">
+          <input
+            type="checkbox"
+            id="mon-organisation"
+            value="Projet"
+            bind:group={$rechercheParPartieResponsable}
+          />
+          <label for="mon-organisation">
+            Mesure(s) dont mon organisation est responsable
+          </label>
+        </div>
+        <div class="case-et-label">
+          <input
+            type="checkbox"
+            id="mon-presta"
+            value="Presta"
+            bind:group={$rechercheParPartieResponsable}
+          />
+          <label for="mon-presta">
+            Mesure(s) dont mon prestataire est responsable
+          </label>
+        </div>
+        <div class="case-et-label">
+          <input
+            type="checkbox"
+            id="mon-organisation-et-mon-presta"
+            value="Mixte"
+            bind:group={$rechercheParPartieResponsable}
+          />
+          <label for="mon-organisation-et-mon-presta">
+            Mesure(s) dont mon organisation et mon prestataire sont responsables
+          </label>
+        </div>
+      {/if}
     </fieldset>
     <button
       class="bouton bouton-secondaire bouton-effacer-filtre"
