@@ -24,6 +24,7 @@
   } from '../../modeles/modeleMesure';
   import SelectionResponsables from '../../ui/SelectionResponsables.svelte';
   import CartoucheThematique from '../../ui/CartoucheThematique.svelte';
+  import { partieResponsable } from './mapPartieResponsable';
 
   type IdDom = string;
 
@@ -59,6 +60,11 @@
 
 <tr class="ligne-de-mesure">
   <td class="titre-mesure" on:click on:keypress>
+    {#if mesure.partieResponsable}
+      <p class="partie-responsable">
+        {partieResponsable[mesure.partieResponsable]}
+      </p>
+    {/if}
     <p class="titre">
       {@html texteSurligne}
     </p>
@@ -116,7 +122,7 @@
   </td>
 </tr>
 
-<style>
+<style lang="scss">
   .ligne-de-mesure {
     position: relative;
     border: 1px solid var(--liseres-fonce);
@@ -140,6 +146,13 @@
     align-items: flex-start;
     gap: 8px;
     cursor: pointer;
+
+    .partie-responsable {
+      font-size: 0.75rem;
+      line-height: 1.25rem;
+      font-style: italic;
+      color: #3a3a3a;
+    }
   }
 
   .titre-mesure:hover .titre {
