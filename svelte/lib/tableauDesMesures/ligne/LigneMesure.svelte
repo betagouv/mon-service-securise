@@ -23,6 +23,7 @@
     type StatutMesure,
   } from '../../modeles/modeleMesure';
   import SelectionResponsables from '../../ui/SelectionResponsables.svelte';
+  import CartoucheThematique from '../../ui/CartoucheThematique.svelte';
 
   type IdDom = string;
 
@@ -66,6 +67,9 @@
       <span class="categorie">{categorie}</span>
       {#if referentiel !== Referentiel.SPECIFIQUE}
         <CartoucheIndispensable {indispensable} />
+      {/if}
+      {#if mesure.thematique}
+        <CartoucheThematique thematique={mesure.thematique} />
       {/if}
       <CartoucheIdentifiantMesure identifiant={mesure.identifiantNumerique} />
     </div>
