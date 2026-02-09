@@ -40,7 +40,7 @@
     "@tiptap/starter-kit": "~2.7.2",
     "@tiptap/suggestion": "~2.7.2",
     "axios": "~0.30.2",
-    "bcrypt": "~5.1.1",
+    "bcrypt": "~6.0.0",
     "commander": "~14.0.0",
     "cookie-parser": "~1.4.7",
     "cookie-session": "~2.1.1",
