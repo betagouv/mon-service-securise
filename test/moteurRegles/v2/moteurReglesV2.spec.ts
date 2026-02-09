@@ -233,4 +233,70 @@ describe('Le moteur de règles V2', () => {
       "Etablir la liste de l'ensemble des services et données à protéger"
     );
   });
+
+  describe('concernant la partie responsable', () => {
+    type PartieResponsable = 'Presta' | 'Projet' | 'Mixte';
+
+    const mesuresDUnServiceAvecPartiesResponsables = (
+      premiere: PartieResponsable,
+      seconde: PartieResponsable
+    ) => {
+      const referentiel = creeReferentielV2();
+      const moteur = new MoteurReglesV2(referentiel, [
+        {
+          reference: 'RECENSEMENT.1',
+          dansSocleInitial: true,
+          besoinsDeSecurite: besoins('R-R-R'),
+          modificateurs: {
+            specificitesProjet: [['annuaire', [premiere]]],
+            typeService: [['portailInformation', [seconde]]],
+          },
+        },
+      ]);
+
+      const service = uneDescriptionV2Valide()
+        .avecSpecificitesProjet(['annuaire'])
+        .avecTypesService(['portailInformation'])
+        .construis();
+
+      return moteur.mesures(service);
+    };
+
+    it.each([
+      { premiere: 'Projet', seconde: 'Projet', resultat: 'Projet' },
+      { premiere: 'Presta', seconde: 'Presta', resultat: 'Presta' },
+      { premiere: 'Mixte', seconde: 'Mixte', resultat: 'Mixte' },
+      { premiere: 'Presta', seconde: 'Projet', resultat: 'Mixte' },
+      { premiere: 'Mixte', seconde: 'Presta', resultat: 'Mixte' },
+      { premiere: 'Mixte', seconde: 'Projet', resultat: 'Mixte' },
+    ])(
+      'sait prioriser les désignations de partie reponsable: $premiere + $seconde doit donner $resultat',
+      ({ premiere, seconde, resultat }) => {
+        const mesures = mesuresDUnServiceAvecPartiesResponsables(
+          premiere as PartieResponsable,
+          seconde as PartieResponsable
+        );
+
+        expect(mesures['RECENSEMENT.1'].partieResponsable).toBe(resultat);
+      }
+    );
+
+    it("n'ajoute pas de partie responsable s'il n'y en a pas", async () => {
+      const referentiel = creeReferentielV2();
+      const moteur = new MoteurReglesV2(referentiel, [
+        {
+          reference: 'RECENSEMENT.1',
+          dansSocleInitial: true,
+          besoinsDeSecurite: besoins('R-R-R'),
+          modificateurs: {},
+        },
+      ]);
+
+      const service = uneDescriptionV2Valide().construis();
+
+      const mesures = moteur.mesures(service);
+
+      expect(mesures['RECENSEMENT.1'].partieResponsable).toBeUndefined();
+    });
+  });
 });
