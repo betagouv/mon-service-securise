@@ -8,7 +8,7 @@ const statut = (referentiel: Referentiel, referentielV2: ReferentielV2) =>
     ...Object.keys(referentielV2.statutsMesures()),
   ]);
 
-const modalites = () => z.string().min(0).max(2000);
+const modalites = () => z.string().min(0).max(3_000);
 
 export const schemaMesureGenerale = {
   id: (referentiel: Referentiel, referentielV2: ReferentielV2) =>

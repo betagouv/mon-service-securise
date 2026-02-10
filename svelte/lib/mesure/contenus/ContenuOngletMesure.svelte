@@ -91,7 +91,7 @@
     <textarea
       rows="6"
       bind:value={$store.mesureEditee.mesure.modalites}
-      maxlength="2000"
+      maxlength="3000"
       id="details"
       placeholder="Apportez des précisions sur la mesure, ses modalités de mise en œuvre, etc."
       readonly={estLectureSeule}
