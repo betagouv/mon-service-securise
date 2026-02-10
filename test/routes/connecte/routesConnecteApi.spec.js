@@ -449,7 +449,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(reponse.status).to.be(400);
     });
 
-    it.each([null, 1, uneChaineDeCaracteres(2001, 'a')])(
+    it.each([null, 1, uneChaineDeCaracteres(3_001, 'a')])(
       `jette une erreur si la modalité est invalide`,
       async (modalites) => {
         const reponse = await testeur.put(
@@ -598,7 +598,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     it.each([
       { cle: 'idsServices', valeur: [] },
       { cle: 'statut', valeur: 'pasUnStatut' },
-      { cle: 'modalites', valeur: uneChaineDeCaracteres(2001, 'a') },
+      { cle: 'modalites', valeur: uneChaineDeCaracteres(3_001, 'a') },
     ])(
       'jette une erreur quand le paramètre $cle vaut $valeur',
       async ({ cle, valeur }) => {
