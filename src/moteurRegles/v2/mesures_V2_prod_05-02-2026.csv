@@ -1,6 +1,6 @@
 REF,ORGA/SI,Statut initial,Basique,Modéré,Avancé,Données : +,Données : ++,Données : +++,Données : ++++,Données : Hors UE,Dispo : +,Dispo : ++,Dispo : +++,Dispo : ++++,Ouv : +,Ouv : ++,Ouv : +++,Ouv : ++++,Accès physique : Salles techniques,Accès physique : Bureaux,Annuaire,Signature électronique,Application mobile,Echange et/ou réception d'emails,API,Portail d'information,Service en ligne,Autre Système d'information,Poste de travail ou téléphone,EXT : Admin tech,EXT : Dév,EXT : MCO/MCS,EXT : On-premise,EXT : PaaS / IaaS,EXT : SaaS
 RECENSEMENT.1,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
-RECENSEMENT.2,SI,Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
+RECENSEMENT.2,SI,Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
 RECENSEMENT.3,SI,Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
 CONFORMITE.1,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
 CONFORMITE.3,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
@@ -9,27 +9,27 @@ CONTRAT.1,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,
 CONTRAT.2,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
 DEV.1,SI,Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Presta,Presta,Projet,Mixte,Presta
 ECOSYSTEME.1,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
-ECOSYSTEME.2,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-ECOSYSTEME.3,SI,Absente,Recommandation,Recommandation,Recommandation,,,,,Ajoutée,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Presta,Presta
-ECOSYSTEME.4,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Presta
-ECOSYSTEME.5,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Presta
-ECOSYSTEME.6,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,Retirée,Retirée,Retirée,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Presta
+ECOSYSTEME.2,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+ECOSYSTEME.3,SI,Absente,Recommandation,Recommandation,Recommandation,,,,,Ajoutée,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
+ECOSYSTEME.4,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
+ECOSYSTEME.5,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
+ECOSYSTEME.6,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,Retirée,Retirée,Retirée,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
 RH.2,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
 RH.4,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Mixte
-CARTO.2,SI,Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-DONNEES.1,SI,Présente,,Indispensable,Indispensable,Recommandation,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Projet,Projet,Presta
-DONNEES.2,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Projet,Projet,Presta
-MCO_MCS.1,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Mixte,Projet,Mixte,Presta
+CARTO.2,SI,Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+DONNEES.1,SI,Présente,,Indispensable,Indispensable,Recommandation,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Presta,Projet,Projet,Presta
+DONNEES.2,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Presta,Projet,Projet,Presta
+MCO_MCS.1,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Presta,Projet,Mixte,Presta
 MCO_MCS.10,SI,Absente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,Ajoutée,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
-MCO_MCS.11,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Presta,Presta
-MCO_MCS.12,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Presta,Presta
-MCO_MCS.14,SI,Absente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,"Ajoutée, Projet",Projet,Projet,Projet,Projet,Presta,"Ajoutée, Presta"
+MCO_MCS.11,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,Projet,,,,Projet,Presta,Presta
+MCO_MCS.12,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,Projet,,,,Projet,Presta,Presta
+MCO_MCS.14,SI,Absente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,"Ajoutée, Projet",Presta,Projet,Presta,Projet,Presta,"Ajoutée, Presta"
 MCO_MCS.15,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
-MCO_MCS.16,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
+MCO_MCS.16,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
 MCO_MCS.17,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Presta,Projet,Mixte,Presta
-MCO_MCS.3,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-MCO_MCS.4,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-MCO_MCS.5,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Mixte,Projet,Mixte,Presta
+MCO_MCS.3,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Mixte,Projet,Mixte,Mixte
+MCO_MCS.4,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Presta,Projet,Mixte,Presta
+MCO_MCS.5,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Presta,Projet,Mixte,Presta
 MCO_MCS.6,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Presta,Projet,Mixte,Presta
 MCO_MCS.7,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Presta,Projet,Mixte,Presta
 RGPD.1,SI,Présente,Indispensable,Indispensable,Indispensable,Retirée,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Mixte
@@ -38,40 +38,40 @@ RGPD.3,SI,Présente,Indispensable,Indispensable,Indispensable,Retirée,,,,,,,,,,
 RGPD.4,SI,Présente,Indispensable,Indispensable,Indispensable,Retirée,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Mixte
 RGPD.5,SI,Présente,Indispensable,Indispensable,Indispensable,Retirée,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Mixte
 RGPD.6,SI,Présente,Indispensable,Indispensable,Indispensable,Retirée,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
-PHYS.1,"ORGA, SI",Absente,,Indispensable,Indispensable,,,,,,,,,,,,,,"Ajoutée, Projet","Ajoutée, Projet",,,,,,,,,,Projet,Projet,Projet,Projet,"Ajoutée, Presta","Ajoutée, Presta"
-PHYS.2,"ORGA, SI",Absente,,,Indispensable,,,,,,,,,,,,,,"Ajoutée, Projet","Ajoutée, Projet",,,,,,,,,,Projet,Projet,Projet,Projet,"Ajoutée, Presta","Ajoutée, Presta"
-CLOISON.1,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-CLOISON.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-CLOISON.3,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-CLOISON.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-CLOISON.5,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-CLOISON.6,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-FILTRE.1,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-FILTRE.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-FILTRE.3,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-FILTRE.4,SI,Absente,,Indispensable,Indispensable,,,,,,,,Ajoutée,Ajoutée,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Mixte,Presta
-FILTRE.5,SI,Présente,,Indispensable,Indispensable,,,,,,,,,,Retirée,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Mixte,Presta
-FILTRE.6,SI,Absente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,"Ajoutée, Projet",Projet,Projet,Projet,Projet,Presta,"Ajoutée, Presta"
-FILTRE.7,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,Recommandation,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-MAIL.1,SI,Absente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,Ajoutée,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-MAIL.2,SI,Absente,Recommandation,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,Ajoutée,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-DISTANCE.1,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
+PHYS.1,"ORGA, SI",Absente,,Indispensable,Indispensable,,,,,,,,,,,,,,"Ajoutée, Projet","Ajoutée, Projet",,,,,,,,,,,,,Projet,"Ajoutée, Presta","Ajoutée, Presta"
+PHYS.2,"ORGA, SI",Absente,,,Indispensable,,,,,,,,,,,,,,"Ajoutée, Projet","Ajoutée, Projet",,,,,,,,,,,,,Projet,"Ajoutée, Presta","Ajoutée, Presta"
+CLOISON.1,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+CLOISON.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+CLOISON.3,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+CLOISON.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+CLOISON.5,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+CLOISON.6,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+FILTRE.1,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+FILTRE.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+FILTRE.3,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+FILTRE.4,SI,Absente,,Indispensable,Indispensable,,,,,,,,Ajoutée,Ajoutée,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+FILTRE.5,SI,Présente,,Indispensable,Indispensable,,,,,,,,,,Retirée,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+FILTRE.6,SI,Absente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,"Ajoutée, Projet",Mixte,Mixte,Presta,Projet,Presta,"Ajoutée, Presta"
+FILTRE.7,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,Recommandation,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+MAIL.1,SI,Absente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,Ajoutée,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+MAIL.2,SI,Absente,Recommandation,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,Ajoutée,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+DISTANCE.1,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
 DISTANCE.2,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Mixte
-DISTANCE.3,"ORGA, SI",Absente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,"Ajoutée, Projet",Projet,Projet,Projet,Projet,Mixte,"Ajoutée, Presta"
-DISTANCE.4,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-MALWARE.3,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,Projet,,,,,Projet,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-MALWARE.4,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-MALWARE.5,SI,Absente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,"Ajoutée, Projet",Mixte,Mixte,Mixte,Projet,Mixte,"Ajoutée, Presta"
-MALWARE.6,SI,Absente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,"Ajoutée, Projet",Mixte,Mixte,Mixte,Projet,Mixte,"Ajoutée, Presta"
+DISTANCE.3,"ORGA, SI",Absente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,"Ajoutée, Projet",Presta,Projet,Presta,Projet,Mixte,"Ajoutée, Presta"
+DISTANCE.4,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+MALWARE.3,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,Projet,,,,,Projet,Mixte,Mixte,Presta,Projet,Mixte,Presta
+MALWARE.4,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Presta,Projet,Mixte,Presta
+MALWARE.5,SI,Absente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,"Ajoutée, Projet",Mixte,Mixte,Presta,Projet,Mixte,"Ajoutée, Presta"
+MALWARE.6,SI,Absente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,"Ajoutée, Projet",Mixte,Mixte,Presta,Projet,Mixte,"Ajoutée, Presta"
 AUTH.1,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Presta,Projet,Mixte,Presta
-AUTH.10,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-AUTH.11,SI,Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-AUTH.12,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
+AUTH.10,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+AUTH.11,SI,Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+AUTH.12,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
 AUTH.2,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Mixte
 AUTH.3,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Mixte
-AUTH.4,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-AUTH.5,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-AUTH.6,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,Presta,Projet,Presta,Projet,Projet,Presta
+AUTH.4,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+AUTH.5,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
+AUTH.6,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
 AUTH.7,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Presta,Presta,Projet,Projet,Presta
 AUTH.8,SI,Présente,,Recommandation,Recommandation,,,,,,,,,,,,,,,,Ajoutée,,Ajoutée,,Ajoutée,Retirée,Ajoutée,Ajoutée,"Ajoutée, Projet",Projet,Presta,Presta,Projet,Projet,Presta
 AUTH.9,SI,Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,Recommandation,Indispensable,Indispensable,Indispensable,,,Ajoutée,,Ajoutée,,Ajoutée,Retirée,Ajoutée,Ajoutée,"Ajoutée, Projet",Projet,Presta,Presta,Projet,Projet,Presta
@@ -92,17 +92,17 @@ COMPADMIN.3,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Presta,
 COMPADMIN.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Presta,Projet,Presta,Projet,Mixte,Presta
 COMPADMIN.5,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Presta,Projet,Presta,Projet,Mixte,Presta
 COMPADMIN.6,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Presta,Projet,Presta,Projet,Mixte,Presta
-COMPADMIN.7,"SI, ORGA",Absente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,"Ajoutée, Projet",Mixte,Mixte,Mixte,Projet,Mixte,"Ajoutée, Presta"
+COMPADMIN.7,"SI, ORGA",Absente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,"Ajoutée, Projet",Mixte,Projet,Presta,Projet,Mixte,"Ajoutée, Presta"
 COMPADMIN.9,"SI, ORGA",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Presta,Projet,Presta,Projet,Mixte,Presta
 INCIDENT.1,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Mixte,Mixte
 INCIDENT.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Mixte,Mixte
 INCIDENT.3,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Mixte,Mixte
 INCIDENT.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Mixte,Mixte
-INCIDENT.6,SI,Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Presta
+INCIDENT.6,SI,Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
 INCIDENT.7,SI,Présente,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Mixte,Mixte
 INCIDENT.8,"ORGA, SI",Présente,,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Mixte,Mixte
 CONTINU.1,"ORGA, SI",Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Projet,Mixte,Projet,Mixte,Mixte
-CONTINU.2,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Mixte,Presta
+CONTINU.2,"ORGA, SI",Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Presta,Projet,Mixte,Presta
 CONTINU.3,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
 CONTINU.5,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Projet,Mixte,Projet,Mixte,Mixte
 CONTINU.6,SI,Absente,,Recommandation,Recommandation,,,,,,,,Ajoutée,Ajoutée,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Mixte,Mixte
@@ -115,10 +115,10 @@ AUDIT.4,SI,Présente,,,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Proj
 AUDIT.5,SI,Présente,,,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
 AUDIT.6,SI,Présente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Presta,Presta,Projet,Mixte,Presta
 AUDIT.7,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Projet,Projet,Projet,Projet,Projet
-CONFIG.1,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Mixte,Projet,Mixte,Presta
+CONFIG.1,"ORGA, SI",Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Presta,Projet,Mixte,Presta
 CONFIG.2,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Mixte,Presta,Projet,Mixte,Presta
 CONFIG.3,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,Projet,Presta,Projet,Presta,Projet,Mixte,Presta
-CONFIG.4,SI,Absente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,Ajoutée,Ajoutée,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
+CONFIG.4,SI,Absente,Indispensable,Indispensable,Indispensable,,,,,,,,,,,,Ajoutée,Ajoutée,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
 CONFIG.5,SI,Présente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
 CONFIG.6,SI,Présente,Recommandation,Indispensable,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Presta,Projet,Mixte,Presta
 CONFIG.7,SI,Absente,,Indispensable,Indispensable,,,,,,,,,,,,,,,,,Ajoutée,,,,,,,,Mixte,Mixte,Presta,Projet,Projet,Presta
@@ -130,7 +130,7 @@ ADMIN.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Presta,Proj
 ADMIN.5,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Presta,Projet,Presta,Projet,Mixte,Presta
 ADMIN.6,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Presta,Projet,Presta,Projet,Mixte,Presta
 ADMIN.7,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Presta,Projet,Presta,Projet,Mixte,Presta
-SUPERVISION.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-SUPERVISION.5,"ORGA, SI",Présente,Recommandation,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-SUPERVISION.6,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
-SUPERVISION.7,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,Mixte,Mixte,Mixte,Projet,Mixte,Presta
+SUPERVISION.4,"ORGA, SI",Présente,,,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Presta
+SUPERVISION.5,"ORGA, SI",Présente,Recommandation,Recommandation,Indispensable,,,,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Presta
+SUPERVISION.6,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Presta
+SUPERVISION.7,SI,Présente,Recommandation,Recommandation,Recommandation,,,,,,,,,,,,,,,,,,,,,,,,,,,,Projet,Mixte,Presta
