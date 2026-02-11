@@ -2,7 +2,21 @@
 
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 
-type IdVecteurRisque = `V${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12}`;
+type IdVecteurRisque = `V${
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13
+  | 14}`;
 
 type AjouteOuRetire = 'Ajouter' | 'Retirer';
 
@@ -14,44 +28,55 @@ type ReglesDeSelection = {
   specificitesProjet?: { postesDeTravail?: AjouteOuRetire };
 };
 
+type ReglePourVecteur = {
+  presentInitialement: boolean;
+  regles: ReglesDeSelection;
+};
+
 export type ConfigurationSelectionVecteurs = Record<
   IdVecteurRisque,
-  {
-    presentInitialement: boolean;
-    regles: ReglesDeSelection;
-  }
+  ReglePourVecteur
 >;
 
 export class SelectionVecteurs {
   constructor(private readonly configuration: ConfigurationSelectionVecteurs) {}
 
   selectionnePourService(service: DescriptionServiceV2) {
-    const vecteur = this.configuration.V1;
+    const vecteursRetenus = [];
 
-    const choix = new Set<AjouteOuRetire>();
+    for (const [idVecteur, vecteur] of this.tousLesVecteurs()) {
+      const choix = new Set<AjouteOuRetire>();
 
-    if (vecteur.presentInitialement) choix.add('Ajouter');
+      if (vecteur.presentInitialement) choix.add('Ajouter');
 
-    for (const cle of this.enumereRegles(vecteur)) {
-      const regle = vecteur.regles[cle];
+      for (const cle of this.enumereRegles(vecteur)) {
+        const regle = vecteur.regles[cle];
 
-      for (const modificateur of this.enumereModificateurs(regle)) {
-        const ordre = regle![modificateur];
-        const serviceEstConcerne =
-          (Array.isArray(service[cle]) &&
-            service[cle].includes(modificateur)) ||
-          service[cle] === modificateur;
+        for (const modificateur of this.enumereModificateurs(regle)) {
+          const ordre = regle![modificateur];
+          const serviceEstConcerne =
+            (Array.isArray(service[cle]) &&
+              service[cle].includes(modificateur)) ||
+            service[cle] === modificateur;
 
-        if (ordre && serviceEstConcerne) {
-          if (ordre === 'Ajouter') choix.add('Ajouter');
-          if (ordre === 'Retirer') choix.add('Retirer');
+          if (ordre && serviceEstConcerne) {
+            if (ordre === 'Ajouter') choix.add('Ajouter');
+            if (ordre === 'Retirer') choix.add('Retirer');
+          }
         }
       }
+
+      if (choix.has('Ajouter') && !choix.has('Retirer'))
+        vecteursRetenus.push(idVecteur);
     }
 
-    if (choix.has('Retirer')) return [];
-    if (choix.has('Ajouter')) return ['V1'];
-    return [];
+    return vecteursRetenus;
+  }
+
+  private tousLesVecteurs() {
+    return Object.entries(this.configuration) as Array<
+      [IdVecteurRisque, ReglePourVecteur]
+    >;
   }
 
   private enumereModificateurs(
