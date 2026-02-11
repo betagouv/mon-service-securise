@@ -14,8 +14,10 @@ export class SelectionVecteurs {
     private readonly configuration: ConfigurationSelectionVecteurs = configurationSelectionVecteurs
   ) {}
 
-  selectionnePourService(service: DescriptionServiceV2) {
-    const vecteursRetenus = [];
+  selectionnePourService(
+    service: DescriptionServiceV2
+  ): Array<IdVecteurRisque> {
+    const vecteursRetenus: Array<IdVecteurRisque> = [];
 
     for (const [idVecteur, vecteur] of this.tousLesVecteurs()) {
       const choix = new Set<AjouteOuRetire>();
