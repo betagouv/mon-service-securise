@@ -1,10 +1,12 @@
+/* eslint-disable no-restricted-syntax, class-methods-use-this, no-empty-function */
+
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 
 type IdVecteurRisque = 'V1';
 
 type AjouteOuRetire = 'Ajouter' | 'Retirer';
 
-type Modificateurs = {
+type ReglesDeSelection = {
   niveauSecurite?: {
     niveau1?: AjouteOuRetire;
     niveau2?: AjouteOuRetire;
@@ -16,12 +18,11 @@ export type ConfigurationSelectionVecteurs = Record<
   IdVecteurRisque,
   {
     presentInitialement: boolean;
-    modificateurs: Modificateurs;
+    regles: ReglesDeSelection;
   }
 >;
 
 export class SelectionVecteurs {
-  // eslint-disable-next-line no-empty-function
   constructor(private readonly configuration: ConfigurationSelectionVecteurs) {}
 
   selectionnePourService(service: DescriptionServiceV2) {
@@ -31,24 +32,15 @@ export class SelectionVecteurs {
 
     if (vecteur.presentInitialement) choix.add('Ajouter');
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const proprieteDuService of Object.keys(
-      vecteur.modificateurs
-    ) as (keyof Modificateurs)[]) {
-      const modificateur = vecteur.modificateurs[proprieteDuService];
+    for (const cle of this.enumereRegles(vecteur)) {
+      const regle = vecteur.regles[cle];
 
-      // eslint-disable-next-line no-continue
-      if (!modificateur) continue;
-
-      // eslint-disable-next-line no-restricted-syntax
-      for (const valeur of Object.keys(
-        modificateur
-      ) as (keyof typeof modificateur)[]) {
-        const ordre = modificateur[valeur];
+      for (const modificateur of this.enumereModificateurs(regle)) {
+        const ordre = regle![modificateur];
         const serviceEstConcerne =
-          (Array.isArray(service[proprieteDuService]) &&
-            service[proprieteDuService].includes(valeur)) ||
-          service[proprieteDuService] === valeur;
+          (Array.isArray(service[cle]) &&
+            service[cle].includes(modificateur)) ||
+          service[cle] === modificateur;
 
         if (ordre && serviceEstConcerne) {
           if (ordre === 'Ajouter') choix.add('Ajouter');
@@ -60,5 +52,15 @@ export class SelectionVecteurs {
     if (choix.has('Retirer')) return [];
     if (choix.has('Ajouter')) return ['V1'];
     return [];
+  }
+
+  private enumereModificateurs(
+    regle: ReglesDeSelection[keyof ReglesDeSelection]
+  ) {
+    return Object.keys(regle!) as (keyof typeof regle)[];
+  }
+
+  private enumereRegles(vecteur: { regles: ReglesDeSelection }) {
+    return Object.keys(vecteur.regles) as Array<keyof ReglesDeSelection>;
   }
 }

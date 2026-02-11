@@ -16,7 +16,7 @@ describe('La sélection des vecteurs', () => {
   describe('applique la présence initiale', () => {
     it('par défaut : sait appliquer la présence initiale de chaque vecteur', () => {
       const s = new SelectionVecteurs({
-        V1: { presentInitialement: true, modificateurs: {} },
+        V1: { presentInitialement: true, regles: {} },
       });
 
       const resultat = s.selectionnePourService(unServiceNiveau1());
@@ -26,7 +26,7 @@ describe('La sélection des vecteurs', () => {
 
     it("par défaut : sait appliquer l'absence initiale de chaque vecteur", () => {
       const s = new SelectionVecteurs({
-        V1: { presentInitialement: false, modificateurs: {} },
+        V1: { presentInitialement: false, regles: {} },
       });
 
       const resultat = s.selectionnePourService(unServiceNiveau1());
@@ -39,7 +39,7 @@ describe('La sélection des vecteurs', () => {
       const s = new SelectionVecteurs({
         V1: {
           presentInitialement: false,
-          modificateurs: { niveauSecurite: { niveau1: 'Ajouter' } },
+          regles: { niveauSecurite: { niveau1: 'Ajouter' } },
         },
       });
 
@@ -54,7 +54,7 @@ describe('La sélection des vecteurs', () => {
       const s = new SelectionVecteurs({
         V1: {
           presentInitialement: true, // Absent initialiement
-          modificateurs: { niveauSecurite: { niveau2: 'Retirer' } },
+          regles: { niveauSecurite: { niveau2: 'Retirer' } },
         },
       });
 
@@ -71,7 +71,7 @@ describe('La sélection des vecteurs', () => {
       const s = new SelectionVecteurs({
         V1: {
           presentInitialement: false,
-          modificateurs: { specificitesProjet: { postesDeTravail: 'Ajouter' } },
+          regles: { specificitesProjet: { postesDeTravail: 'Ajouter' } },
         },
       });
 
@@ -92,7 +92,7 @@ describe('La sélection des vecteurs', () => {
       const s = new SelectionVecteurs({
         V1: {
           presentInitialement: true, // Présent par défaut
-          modificateurs: { specificitesProjet: { postesDeTravail: 'Retirer' } },
+          regles: { specificitesProjet: { postesDeTravail: 'Retirer' } },
         },
       });
 
@@ -114,7 +114,7 @@ describe('La sélection des vecteurs', () => {
     const s = new SelectionVecteurs({
       V1: {
         presentInitialement: false,
-        modificateurs: {
+        regles: {
           niveauSecurite: { niveau1: 'Retirer' },
           specificitesProjet: { postesDeTravail: 'Ajouter' },
         },
