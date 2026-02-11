@@ -31,6 +31,8 @@ describe('La sélection des vecteurs', () => {
     V10: { presentInitialement: false, regles: {} },
     V11: { presentInitialement: false, regles: {} },
     V12: { presentInitialement: false, regles: {} },
+    V13: { presentInitialement: false, regles: {} },
+    V14: { presentInitialement: false, regles: {} },
     ...surcharge,
   });
 
@@ -163,5 +165,33 @@ describe('La sélection des vecteurs', () => {
     );
 
     expect(resultat).not.toContain('V1');
+  });
+
+  it('sait raisonner sur plusieurs vecteurs', () => {
+    const s = new SelectionVecteurs(
+      configurationVecteurs({
+        V1: {
+          presentInitialement: false,
+          regles: {
+            niveauSecurite: { niveau1: 'Ajouter' },
+          },
+        },
+        V2: {
+          presentInitialement: false,
+          regles: {
+            specificitesProjet: { postesDeTravail: 'Ajouter' },
+          },
+        },
+      })
+    );
+
+    const resultat = s.selectionnePourService(
+      uneDescriptionDeNiveauDeSecuriteEstime1()
+        .avecSpecificitesProjet(['postesDeTravail'])
+        .construis()
+    );
+
+    expect(resultat).toContain('V1');
+    expect(resultat).toContain('V2');
   });
 });
