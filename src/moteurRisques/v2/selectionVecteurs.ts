@@ -20,12 +20,31 @@ type IdVecteurRisque = `V${
 
 type AjouteOuRetire = 'Ajouter' | 'Retirer';
 
-type ReglesDeSelection = {
+export type ReglesDeSelection = {
+  activitesExternalisees?: {
+    administrationTechnique?: AjouteOuRetire;
+    developpementLogiciel?: AjouteOuRetire;
+  };
+  dureeDysfonctionnementAcceptable?: {
+    moinsDe12h?: AjouteOuRetire;
+    moinsDe4h?: AjouteOuRetire;
+  };
   niveauSecurite?: {
     niveau1?: AjouteOuRetire;
     niveau2?: AjouteOuRetire;
   };
-  specificitesProjet?: { postesDeTravail?: AjouteOuRetire };
+  ouvertureSysteme?: {
+    internePlusTiers?: AjouteOuRetire;
+    accessibleSurInternet?: AjouteOuRetire;
+  };
+  specificitesProjet?: {
+    postesDeTravail?: AjouteOuRetire;
+    accesPhysiqueAuxSallesTechniques?: AjouteOuRetire;
+  };
+  typeHebergement?: {
+    cloud?: AjouteOuRetire;
+    saas?: AjouteOuRetire;
+  };
 };
 
 type ReglePourVecteur = {

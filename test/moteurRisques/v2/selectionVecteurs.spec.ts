@@ -1,5 +1,6 @@
 import {
   ConfigurationSelectionVecteurs,
+  ReglesDeSelection,
   SelectionVecteurs,
 } from '../../../src/moteurRisques/v2/selectionVecteurs.ts';
 import { DescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.ts';
@@ -193,5 +194,131 @@ describe('La sélection des vecteurs', () => {
 
     expect(resultat).toContain('V1');
     expect(resultat).toContain('V2');
+  });
+
+  describe('pour les cas métier', () => {
+    // Ce type force une paire "règle + modificateur" cohérente
+    type UneRegle = {
+      [K in keyof ReglesDeSelection]: {
+        regle: K;
+        modificateur: keyof NonNullable<ReglesDeSelection[K]>;
+        service: DescriptionServiceV2;
+      };
+    }[keyof ReglesDeSelection];
+
+    const casDeTests: Array<NonNullable<UneRegle>> = [
+      {
+        // Effet : Basique
+        regle: 'niveauSecurite',
+        modificateur: 'niveau1',
+        service: uneDescriptionDeNiveauDeSecuriteEstime1().construis(),
+      },
+      {
+        // Effet : Modéré
+        regle: 'niveauSecurite',
+        modificateur: 'niveau2',
+        service: uneDescriptionDeNiveauDeSecuriteEstime2().construis(),
+      },
+      {
+        // Effet : Postes de travail,
+        regle: 'specificitesProjet',
+        modificateur: 'postesDeTravail',
+        service: uneDescriptionV2Valide()
+          .avecSpecificitesProjet(['postesDeTravail'])
+          .construis(),
+      },
+      {
+        // Effet : Accès physiques,
+        regle: 'specificitesProjet',
+        modificateur: 'accesPhysiqueAuxSallesTechniques',
+        service: uneDescriptionV2Valide()
+          .avecSpecificitesProjet(['accesPhysiqueAuxSallesTechniques'])
+          .construis(),
+      },
+      {
+        // Effet : IaaS / PaaS,
+        regle: 'typeHebergement',
+        modificateur: 'cloud',
+        service: uneDescriptionV2Valide()
+          .avecTypeHebergement('cloud')
+          .construis(),
+      },
+      {
+        // Effet : SaaS,
+        regle: 'typeHebergement',
+        modificateur: 'saas',
+        service: uneDescriptionV2Valide()
+          .avecTypeHebergement('saas')
+          .construis(),
+      },
+      {
+        // Effet : Admin tech externalisé,
+        regle: 'activitesExternalisees',
+        modificateur: 'administrationTechnique',
+        service: uneDescriptionV2Valide()
+          .quiExternalise(['administrationTechnique'])
+          .construis(),
+      },
+      {
+        // Effet : Développement externalisé,
+        regle: 'activitesExternalisees',
+        modificateur: 'developpementLogiciel',
+        service: uneDescriptionV2Valide()
+          .quiExternalise(['developpementLogiciel'])
+          .construis(),
+      },
+      {
+        // Effet : Ouv +++,
+        regle: 'ouvertureSysteme',
+        modificateur: 'internePlusTiers',
+        service: uneDescriptionV2Valide()
+          .avecOuvertureSysteme('internePlusTiers')
+          .construis(),
+      },
+      {
+        // Effet : Ouv ++++,
+        regle: 'ouvertureSysteme',
+        modificateur: 'accessibleSurInternet',
+        service: uneDescriptionV2Valide()
+          .avecOuvertureSysteme('accessibleSurInternet')
+          .construis(),
+      },
+      {
+        // Effet : Dispo +++,
+        regle: 'dureeDysfonctionnementAcceptable',
+        modificateur: 'moinsDe12h',
+        service: uneDescriptionV2Valide()
+          .avecDureeDysfonctionnementAcceptable('moinsDe12h')
+          .construis(),
+      },
+      {
+        // Effet : Dispo ++++
+        regle: 'dureeDysfonctionnementAcceptable',
+        modificateur: 'moinsDe4h',
+        service: uneDescriptionV2Valide()
+          .avecDureeDysfonctionnementAcceptable('moinsDe4h')
+          .construis(),
+      },
+    ];
+
+    it.each(casDeTests)(
+      'sait appliquer le modificateur $regle -> $modificateur',
+      ({ regle, modificateur, service }) => {
+        const s = new SelectionVecteurs(
+          configurationVecteurs({
+            V1: {
+              presentInitialement: false,
+              regles: {
+                [regle]: { [modificateur]: 'Ajouter' },
+              },
+            },
+          })
+        );
+
+        const resultat = s.selectionnePourService(service);
+
+        expect(resultat).toContain('V1');
+      }
+    );
   });
 });
