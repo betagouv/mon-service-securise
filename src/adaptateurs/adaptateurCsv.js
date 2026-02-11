@@ -51,6 +51,12 @@ const genereCsvMesures = async (
   referentiel,
   avecTypeMesure = true
 ) => {
+  const { mesuresGenerales, mesuresSpecifiques } = donneesMesures;
+
+  const avecPorteursSinguliers = Object.values(mesuresGenerales).some(
+    (m) => m.porteursSinguliers
+  );
+
   // Les `id` doivent correspondrent aux champs des objets dans `donneesCsv`
   const colonnes = [
     { id: 'identifiant', title: 'Identifiant de la mesure' },
@@ -58,6 +64,9 @@ const genereCsvMesures = async (
     { id: 'referentiel', title: 'Référentiel' },
     ...(avecTypeMesure ? [{ id: 'type', title: 'Type' }] : []),
     { id: 'categorie', title: 'Catégorie' },
+    ...(avecPorteursSinguliers
+      ? [{ id: 'porteursSinguliers', title: 'Mesure portée par' }]
+      : []),
     { id: 'descriptionLongue', title: 'Description' },
   ];
 
@@ -68,8 +77,6 @@ const genereCsvMesures = async (
     colonnes.push({ id: 'echeance', title: 'Échéance' });
     colonnes.push({ id: 'responsables', title: 'Responsables' });
   }
-
-  const { mesuresGenerales, mesuresSpecifiques } = donneesMesures;
 
   const formatteResponsables = (responsables) =>
     separesParVirgule(
@@ -83,6 +90,7 @@ const genereCsvMesures = async (
       referentiel: m.referentiel,
       type: m.indispensable ? 'Indispensable' : 'Recommandée',
       categorie: referentiel.descriptionCategorie(m.categorie),
+      porteursSinguliers: m.porteursSinguliers?.join(', '),
       descriptionLongue: stripHtml(m.descriptionLongue).result,
       statut: referentiel.descriptionStatutMesure(m.statut),
       commentaires: sansRetoursChariots(m.modalites),
