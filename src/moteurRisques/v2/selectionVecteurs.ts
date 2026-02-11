@@ -1,6 +1,14 @@
 /* eslint-disable no-restricted-syntax, class-methods-use-this, no-empty-function */
 
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
+import {
+  ActiviteExternalisee,
+  DureeDysfonctionnementAcceptable,
+  NiveauSecurite,
+  OuvertureSysteme,
+  SpecificiteProjet,
+  TypeHebergement,
+} from '../../../donneesReferentielMesuresV2.js';
 
 type IdVecteurRisque = `V${
   | 1
@@ -21,30 +29,36 @@ type IdVecteurRisque = `V${
 type AjouteOuRetire = 'Ajouter' | 'Retirer';
 
 export type ReglesDeSelection = {
-  activitesExternalisees?: {
-    administrationTechnique?: AjouteOuRetire;
-    developpementLogiciel?: AjouteOuRetire;
-  };
-  dureeDysfonctionnementAcceptable?: {
-    moinsDe12h?: AjouteOuRetire;
-    moinsDe4h?: AjouteOuRetire;
-  };
-  niveauSecurite?: {
-    niveau1?: AjouteOuRetire;
-    niveau2?: AjouteOuRetire;
-  };
-  ouvertureSysteme?: {
-    internePlusTiers?: AjouteOuRetire;
-    accessibleSurInternet?: AjouteOuRetire;
-  };
-  specificitesProjet?: {
-    postesDeTravail?: AjouteOuRetire;
-    accesPhysiqueAuxSallesTechniques?: AjouteOuRetire;
-  };
-  typeHebergement?: {
-    cloud?: AjouteOuRetire;
-    saas?: AjouteOuRetire;
-  };
+  activitesExternalisees?: Partial<
+    Record<ActiviteExternalisee, AjouteOuRetire>
+  >;
+  dureeDysfonctionnementAcceptable?: Partial<
+    Record<
+      Extract<DureeDysfonctionnementAcceptable, 'moinsDe4h' | 'moinsDe12h'>,
+      AjouteOuRetire
+    >
+  >;
+  niveauSecurite?: Partial<
+    Record<Extract<NiveauSecurite, 'niveau1' | 'niveau2'>, AjouteOuRetire>
+  >;
+  ouvertureSysteme?: Partial<
+    Record<
+      Extract<OuvertureSysteme, 'internePlusTiers' | 'accessibleSurInternet'>,
+      AjouteOuRetire
+    >
+  >;
+  specificitesProjet?: Partial<
+    Record<
+      Extract<
+        SpecificiteProjet,
+        'postesDeTravail' | 'accesPhysiqueAuxSallesTechniques'
+      >,
+      AjouteOuRetire
+    >
+  >;
+  typeHebergement?: Partial<
+    Record<Extract<TypeHebergement, 'cloud' | 'saas'>, AjouteOuRetire>
+  >;
 };
 
 type ReglePourVecteur = {
