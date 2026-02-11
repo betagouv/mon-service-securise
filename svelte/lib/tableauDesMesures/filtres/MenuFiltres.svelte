@@ -183,7 +183,7 @@
             bind:group={$rechercheParPartieResponsable}
           />
           <label for="mon-organisation">
-            Mesure(s) dont mon entité est responsable
+            Mesure(s) dont mon équipe projet est responsable
           </label>
         </div>
         <div class="case-et-label">
@@ -205,7 +205,8 @@
             bind:group={$rechercheParPartieResponsable}
           />
           <label for="mon-organisation-et-mon-presta">
-            Mesure(s) dont mon entité et mon prestataire sont responsables
+            Mesure(s) dont mon équipe projet et mon prestataire sont
+            responsables
           </label>
         </div>
       {/if}

@@ -1,5 +1,5 @@
 export const partieResponsable = {
-  Projet: 'Pour votre entité',
-  Presta: 'Pour votre prestataire',
-  Mixte: 'Pour votre entité et votre prestataire',
+  Projet: 'Portée par votre équipe projet',
+  Presta: 'Portée par votre prestataire',
+  Mixte: 'Portée par votre équipe projet et votre prestataire',
 };
