@@ -1,14 +1,14 @@
-import {
-  ConfigurationSelectionVecteurs,
-  ReglesDeSelection,
-  SelectionVecteurs,
-} from '../../../src/moteurRisques/v2/selectionVecteurs.ts';
+import { SelectionVecteurs } from '../../../src/moteurRisques/v2/selectionVecteurs.ts';
 import { DescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2.ts';
 import {
   uneDescriptionDeNiveauDeSecuriteEstime1,
   uneDescriptionDeNiveauDeSecuriteEstime2,
   uneDescriptionV2Valide,
 } from '../../constructeurs/constructeurDescriptionServiceV2.ts';
+import {
+  ConfigurationSelectionVecteurs,
+  ReglesDeSelection,
+} from '../../../src/moteurRisques/v2/selectionVecteurs.types.ts';
 
 describe('La sélection des vecteurs', () => {
   const unServiceNiveau1 = (): DescriptionServiceV2 =>
