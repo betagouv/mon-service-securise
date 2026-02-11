@@ -9,6 +9,12 @@ const sansRetoursChariots = (texte) =>
   texte ? texte.replaceAll('\n', ' ') : '';
 const separesParVirgule = (liste) => liste.join(', ');
 
+const transcoPartieResponsable = {
+  Projet: 'Votre équipe projet',
+  Presta: 'Votre prestataire',
+  Mixte: 'Votre équipe projet et votre prestataire',
+};
+
 const creeWriterDeCsv = (headerDuCsv) =>
   createObjectCsvStringifier({ header: headerDuCsv, fieldDelimiter: ';' });
 
@@ -53,8 +59,8 @@ const genereCsvMesures = async (
 ) => {
   const { mesuresGenerales, mesuresSpecifiques } = donneesMesures;
 
-  const avecPorteursSinguliers = Object.values(mesuresGenerales).some(
-    (m) => m.porteursSinguliers
+  const avecPartieResponsable = Object.values(mesuresGenerales).some(
+    (m) => m.partieResponsable
   );
 
   // Les `id` doivent correspondrent aux champs des objets dans `donneesCsv`
@@ -64,8 +70,8 @@ const genereCsvMesures = async (
     { id: 'referentiel', title: 'Référentiel' },
     ...(avecTypeMesure ? [{ id: 'type', title: 'Type' }] : []),
     { id: 'categorie', title: 'Catégorie' },
-    ...(avecPorteursSinguliers
-      ? [{ id: 'porteursSinguliers', title: 'Mesure portée par' }]
+    ...(avecPartieResponsable
+      ? [{ id: 'partieResponsable', title: 'Mesure portée par' }]
       : []),
     { id: 'descriptionLongue', title: 'Description' },
   ];
@@ -90,7 +96,7 @@ const genereCsvMesures = async (
       referentiel: m.referentiel,
       type: m.indispensable ? 'Indispensable' : 'Recommandée',
       categorie: referentiel.descriptionCategorie(m.categorie),
-      porteursSinguliers: m.porteursSinguliers?.join(', '),
+      partieResponsable: transcoPartieResponsable[m.partieResponsable],
       descriptionLongue: stripHtml(m.descriptionLongue).result,
       statut: referentiel.descriptionStatutMesure(m.statut),
       commentaires: sansRetoursChariots(m.modalites),
