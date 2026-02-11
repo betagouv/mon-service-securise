@@ -2,7 +2,7 @@
 
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 
-type IdVecteurRisque = 'V1';
+type IdVecteurRisque = `V${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12}`;
 
 type AjouteOuRetire = 'Ajouter' | 'Retirer';
 
