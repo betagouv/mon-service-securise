@@ -178,6 +178,9 @@ export const uneDescriptionDeNiveauDeSecuriteEstime1 = () =>
     .avecCategoriesDonneesTraitees([])
     .avecNiveauSecurite('niveau1');
 
+export const uneDescriptionDeNiveauDeSecuriteEstime2 = () =>
+  uneDescriptionDeNiveauDeSecuriteEstime1().avecNiveauSecurite('niveau2');
+
 export const uneDescriptionDeNiveauDeSecuriteEstime3 = () =>
   uneDescriptionV2Valide()
     .avecDureeDysfonctionnementAcceptable('moinsDe4h')
