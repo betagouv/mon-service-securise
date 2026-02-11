@@ -7,9 +7,12 @@ import {
   ReglePourVecteur,
   ReglesDeSelection,
 } from './selectionVecteurs.types.js';
+import { configurationSelectionVecteurs } from './selectionVecteurs.configuration.js';
 
 export class SelectionVecteurs {
-  constructor(private readonly configuration: ConfigurationSelectionVecteurs) {}
+  constructor(
+    private readonly configuration: ConfigurationSelectionVecteurs = configurationSelectionVecteurs
+  ) {}
 
   selectionnePourService(service: DescriptionServiceV2) {
     const vecteursRetenus = [];
