@@ -22,6 +22,7 @@ import { creeReferentielV2 } from '../referentielV2.js';
 import { ObjetPDFAnnexeDescriptionV2 } from './objetsPDF/objetPDFAnnexeDescriptionV2.js';
 import { ToutesActionsRecommandees } from './actionsRecommandees.js';
 import MesuresGenerales from './mesuresGenerales.js';
+import { MoteurRisquesV2 } from '../moteurRisques/v2/moteurRisques.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -97,6 +98,9 @@ class Service {
       aUneSimulationMigrationReferentiel;
 
     this.referentiel = referentiel;
+
+    if (versionService === VersionService.v2)
+      this.moteurRisques = new MoteurRisquesV2(this.descriptionService);
   }
 
   version() {
