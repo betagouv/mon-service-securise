@@ -1413,4 +1413,22 @@ describe('Un service', () => {
       expect(service.mesuresGenerales().toutes()[0].statut).toBe('fait');
     });
   });
+
+  describe('sur demande de ses risques V2', () => {
+    describe('un service V1', () => {
+      it("n'a pas connaissance du moteur de règles", () => {
+        const service = unService().construis();
+
+        expect(service.moteurRisques).toBeUndefined();
+      });
+    });
+
+    describe('un service V2', () => {
+      it('connait son moteur de règles', () => {
+        const service = unServiceV2().construis();
+
+        expect(service.moteurRisques).toBeDefined();
+      });
+    });
+  });
 });
