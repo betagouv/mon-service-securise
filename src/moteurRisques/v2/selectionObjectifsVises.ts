@@ -8,10 +8,11 @@ import {
   ReglesDeSelectionObjectifVise,
 } from './selectionObjectifsVises.types.js';
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
+import { configurationSelectionObjectifsVises } from './selectionObjectifsVises.configuration.js';
 
 export class SelectionObjectifsVises {
   constructor(
-    private readonly configuration: ConfigurationSelectionObjectifsVises
+    private readonly configuration: ConfigurationSelectionObjectifsVises = configurationSelectionObjectifsVises
   ) {}
 
   selectionnePourService(service: DescriptionServiceV2): Array<IdObjectifVise> {
