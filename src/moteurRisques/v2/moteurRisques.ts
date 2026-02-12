@@ -7,16 +7,9 @@ import { Gravite, GraviteObjectifsVises } from './graviteObjectifsVises.js';
 
 export class MoteurRisquesV2 {
   private readonly selectionVecteurs: Array<IdVecteurRisque>;
-  private readonly selectionObjectifsVises: Array<IdObjectifVise>;
-  private readonly graviteObjectifsVises: Record<IdObjectifVise, Gravite>;
 
   constructor(private readonly descriptionService: DescriptionServiceV2) {
     this.selectionVecteurs = new SelectionVecteurs().selectionnePourService(
-      descriptionService
-    );
-    this.selectionObjectifsVises =
-      new SelectionObjectifsVises().selectionnePourService(descriptionService);
-    this.graviteObjectifsVises = new GraviteObjectifsVises().calculePourService(
       descriptionService
     );
   }
@@ -26,11 +19,13 @@ export class MoteurRisquesV2 {
   }
 
   objectifsVises(): Partial<Record<IdObjectifVise, Gravite>> {
-    return Object.fromEntries(
-      this.selectionObjectifsVises.map((ov) => [
-        ov,
-        this.graviteObjectifsVises[ov],
-      ])
+    const gravites = new GraviteObjectifsVises().calculePourService(
+      this.descriptionService
     );
+    const OVs = new SelectionObjectifsVises().selectionnePourService(
+      this.descriptionService
+    );
+
+    return Object.fromEntries(OVs.map((ov) => [ov, gravites[ov]]));
   }
 }
