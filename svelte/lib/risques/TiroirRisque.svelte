@@ -188,6 +188,7 @@
                   aideSaisie="Ce risque signifie que…"
                   lignes={6}
                   bind:valeur={risque.description}
+                  max={1000}
                 />
               </ControleFormulaireTiroir>
               <ControleFormulaireTiroir libelle="Catégorie" requis={true}>
