@@ -28,4 +28,17 @@ describe('Le moteur de risques V2', () => {
       OV3: 4,
     });
   });
+
+  it('sait donner les risques pour le service (en utilisant les vecteurs et objectifs visés pertinents)', () => {
+    const uneAPISimple = uneDescriptionV2Valide()
+      .avecTypesService(['api'])
+      .avecSpecificitesProjet([])
+      .avecVolumeDonneesTraitees('moyen')
+      .avecDureeDysfonctionnementAcceptable('moinsDe4h')
+      .construis();
+
+    const moteur = new MoteurRisquesV2(uneAPISimple);
+
+    expect(moteur.risques().V3).toEqual({ gravite: 4 });
+  });
 });
