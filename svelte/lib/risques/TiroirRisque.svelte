@@ -222,6 +222,7 @@
                 bind:valeur={risque.commentaire}
                 aideSaisie="Apportez des précisions sur le risque"
                 lignes={4}
+                max={1000}
               />
             </ControleFormulaireTiroir>
           </div>
