@@ -14,7 +14,9 @@ export class GraviteVecteurs {
   calcule(
     vecteurs: Array<IdVecteurRisque>,
     gravitesOV: Partial<Record<IdObjectifVise, Gravite>>
-  ) {
+  ): Partial<
+    Record<IdVecteurRisque, Partial<Record<IdObjectifVise, Gravite>>>
+  > {
     return Object.fromEntries(
       vecteurs.map((vecteur) => {
         const gravitesUtiles = Object.fromEntries(
