@@ -14,13 +14,18 @@ describe('Le moteur de risques V2', () => {
   });
 
   it('sélectionne les objectifs visés pertinents pour le service', () => {
-    const description = uneDescriptionV2Valide()
-      .avecTypesService(['portailInformation'])
+    const uneAPISimple = uneDescriptionV2Valide()
+      .avecTypesService(['api'])
+      .avecSpecificitesProjet([])
+      .avecVolumeDonneesTraitees('moyen')
+      .avecDureeDysfonctionnementAcceptable('moinsDe4h')
       .construis();
 
-    const moteur = new MoteurRisquesV2(description);
+    const moteur = new MoteurRisquesV2(uneAPISimple);
 
-    expect(moteur.objectifsVises()).toHaveLength(3);
-    expect(moteur.objectifsVises()).toContain('OV1');
+    expect(moteur.objectifsVises()).toEqual({
+      OV2: 2,
+      OV3: 4,
+    });
   });
 });
