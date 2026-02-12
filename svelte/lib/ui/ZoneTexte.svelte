@@ -6,6 +6,7 @@
   export let requis: boolean = false;
   export let messageErreur: string = '';
   export let lignes: number | undefined = undefined;
+  export let max: number | undefined = undefined;
 </script>
 
 <textarea
@@ -15,6 +16,7 @@
   use:validationChamp={requis ? messageErreur : ''}
   rows={lignes}
   class:sans-hauteur={!lignes}
+  maxlength={max}
 ></textarea>
 
 <style>
