@@ -180,6 +180,7 @@
                   messageErreur="L'intitulé est obligatoire. Veuillez le renseigner."
                   requis={true}
                   lignes={2}
+                  max={200}
                 />
               </ControleFormulaireTiroir>
               <ControleFormulaireTiroir libelle="Description du risque">
