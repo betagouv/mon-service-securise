@@ -2,13 +2,13 @@
 import { IdVecteurRisque } from './selectionVecteurs.types.js';
 import { IdObjectifVise } from './selectionObjectifsVises.types.js';
 import { Gravite } from './graviteObjectifsVises.js';
+import { matriceVecteurOV as matriceProduction } from './graviteVecteurs.configuration.js';
+
+export type MatriceVecteurOV = Record<IdVecteurRisque, Array<IdObjectifVise>>;
 
 export class GraviteVecteurs {
   constructor(
-    private readonly matriceVecteurOV: Record<
-      IdVecteurRisque,
-      Array<IdObjectifVise>
-    >
+    private readonly matriceVecteurOV: MatriceVecteurOV = matriceProduction
   ) {}
 
   calcule(
