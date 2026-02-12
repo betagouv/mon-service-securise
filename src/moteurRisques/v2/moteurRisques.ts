@@ -4,6 +4,7 @@ import { IdVecteurRisque } from './selectionVecteurs.types.js';
 import { SelectionObjectifsVises } from './selectionObjectifsVises.js';
 import { IdObjectifVise } from './selectionObjectifsVises.types.js';
 import { Gravite, GraviteObjectifsVises } from './graviteObjectifsVises.js';
+import { GraviteVecteurs } from './graviteVecteurs.js';
 
 export class MoteurRisquesV2 {
   private readonly selectionVecteurs: Array<IdVecteurRisque>;
@@ -27,5 +28,19 @@ export class MoteurRisquesV2 {
     );
 
     return Object.fromEntries(OVs.map((ov) => [ov, gravites[ov]]));
+  }
+
+  risques() {
+    const gravitesParVecteur = new GraviteVecteurs().calcule(
+      this.vecteurs(),
+      this.objectifsVises()
+    );
+
+    return Object.fromEntries(
+      Object.entries(gravitesParVecteur).map(([id, ovs]) => {
+        const graviteMax = Object.values(ovs)[0]; // Toutes les gravités retournées ici sont "max", on prend donc la première
+        return [id, { gravite: graviteMax }];
+      })
+    );
   }
 }
