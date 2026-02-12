@@ -12,4 +12,15 @@ describe('Le moteur de risques V2', () => {
     expect(moteur.vecteurs()).toHaveLength(12);
     expect(moteur.vecteurs()).toContain('V1');
   });
+
+  it('sélectionne les objectifs visés pertinents pour le service', () => {
+    const description = uneDescriptionV2Valide()
+      .avecTypesService(['portailInformation'])
+      .construis();
+
+    const moteur = new MoteurRisquesV2(description);
+
+    expect(moteur.objectifsVises()).toHaveLength(3);
+    expect(moteur.objectifsVises()).toContain('OV1');
+  });
 });
