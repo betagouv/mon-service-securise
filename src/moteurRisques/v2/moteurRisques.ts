@@ -31,17 +31,14 @@ export class MoteurRisquesV2 {
     return Object.fromEntries(OVs.map((ov) => [ov, gravites[ov]]));
   }
 
-  risques() {
+  risques(): RisqueV2[] {
     const gravitesParVecteur = new GraviteVecteurs().calcule(
       this.vecteurs(),
       this.objectifsVises()
     );
 
-    return Object.fromEntries(
-      Object.entries(gravitesParVecteur).map(([id, ovs]) => {
-        const risque = new RisqueV2(id as IdVecteurRisque, ovs);
-        return [id, { gravite: risque.gravite }];
-      })
+    return Object.entries(gravitesParVecteur).map(
+      ([id, ovs]) => new RisqueV2(id as IdVecteurRisque, ovs)
     );
   }
 }
