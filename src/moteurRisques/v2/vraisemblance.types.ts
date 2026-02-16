@@ -1,21 +1,28 @@
 import type { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 import type MesureGenerale from '../../modeles/mesureGenerale.js';
 
-type IdentifiantGroupe = 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
+export type IdentifiantGroupeMesureVraisemblance =
+  | 'a'
+  | 'b'
+  | 'c'
+  | 'd'
+  | 'e'
+  | 'f';
 
-export type ConfigurationPredicatVraisemblance = {
-  [K in IdentifiantGroupe]: MesureGenerale[];
-} & {
-  [K in Capitalize<IdentifiantGroupe> as `poids${K}`]: number;
+export type PoidsGroupeMesure = {
+  [K in Capitalize<IdentifiantGroupeMesureVraisemblance> as `poids${K}`]: number;
 };
 
-type ConfigurationPourNiveau = {
+export type ConfigurationPredicatVraisemblance = {
+  [K in IdentifiantGroupeMesureVraisemblance]: MesureGenerale[];
+} & PoidsGroupeMesure;
+export type ConfigurationPourNiveau = {
   formules: Array<
     (configuration: ConfigurationPredicatVraisemblance) => number
   >;
   groupes: Partial<
     Record<
-      IdentifiantGroupe,
+      IdentifiantGroupeMesureVraisemblance,
       {
         poids: number;
         idsMesures: IdMesureV2[];
