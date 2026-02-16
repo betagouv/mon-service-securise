@@ -177,5 +177,38 @@ describe('Le calcul de vraisemblance pour un risque', () => {
 
       expect(vraisemblance).toBe(5);
     });
+
+    it("par sécurité, assigne une mesure 'non faite' s'il n'existe pas dans le service", () => {
+      const v = new VraisemblanceRisque(
+        configurationVraisemblance({
+          niveau1: {
+            groupes: {
+              a: { poids: 1, idsMesures: ['RECENSEMENT.1'] },
+            },
+            formules: [
+              ({ a }) => a.filter((mesure) => mesure.statut === '').length,
+            ],
+          },
+        })
+      );
+      const referentiel = creeReferentielV2();
+
+      const service = donneesServiceNiveau1()
+        .avecMesures(
+          new Mesures(
+            {
+              mesuresGenerales: [],
+            },
+            // @ts-expect-error L'objet Mesures devrait pouvoir prendre un ReferentielV2
+            referentiel,
+            {}
+          )
+        )
+        .construis();
+
+      const vraisemblance = v.calculePourService(service);
+
+      expect(vraisemblance).toBe(1);
+    });
   });
 });
