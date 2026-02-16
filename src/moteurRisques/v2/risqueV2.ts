@@ -1,6 +1,7 @@
 import { IdVecteurRisque } from './selectionVecteurs.types.js';
 import { IdObjectifVise } from './selectionObjectifsVises.types.js';
 import { Gravite } from './graviteObjectifsVises.js';
+import { configurationRisqueV2 } from './risqueV2.configuration.js';
 
 export type ConfigurationRisqueV2 = Record<
   IdVecteurRisque,
@@ -17,7 +18,7 @@ export class RisqueV2 {
   constructor(
     private readonly idVecteur: IdVecteurRisque,
     private readonly objectifsVises: Partial<Record<IdObjectifVise, Gravite>>,
-    private readonly configuration: ConfigurationRisqueV2
+    private readonly configuration: ConfigurationRisqueV2 = configurationRisqueV2
   ) {
     this.gravite = Math.max(...Object.values(objectifsVises)) as Gravite;
     this.intitule = this.genereIntitule();
