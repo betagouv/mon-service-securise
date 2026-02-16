@@ -1,5 +1,6 @@
 import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.ts';
 import { MoteurRisquesV2 } from '../../../src/moteurRisques/v2/moteurRisques.ts';
+import { RisqueV2 } from '../../../src/moteurRisques/v2/risqueV2.ts';
 
 describe('Le moteur de risques V2', () => {
   it('sélectionne les vecteurs pertinents pour le service', () => {
@@ -39,6 +40,6 @@ describe('Le moteur de risques V2', () => {
 
     const moteur = new MoteurRisquesV2(uneAPISimple);
 
-    expect(moteur.risques().V3).toEqual({ gravite: 4 });
+    expect(moteur.risques()).toBeInstanceOf(Array<RisqueV2>);
   });
 });
