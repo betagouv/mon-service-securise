@@ -30,7 +30,9 @@ export class VraisemblanceRisque {
       Object.entries(configurationPourNiveauSecurite.groupes).map(
         ([cleGroupe, groupe]) => [
           cleGroupe,
-          groupe.idsMesures.map((id) => mesuresPersonnalisees[id]),
+          groupe.idsMesures.map(
+            (id) => mesuresPersonnalisees[id] || { statut: '' }
+          ),
         ]
       )
     ) as Record<IdentifiantGroupeMesureVraisemblance, MesureGenerale[]>;
