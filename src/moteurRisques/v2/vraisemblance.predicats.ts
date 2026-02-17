@@ -5,3 +5,6 @@ export const siTout = (mesures: MesureGenerale[]) =>
 
 export const siAucune = (mesures: MesureGenerale[]) =>
   mesures.every((m) => m.statut !== 'fait') ? 1 : 0;
+
+export const siPasTout = (mesures: MesureGenerale[]) =>
+  !mesures.every((m) => m.statut === 'fait') ? 1 : 0;
