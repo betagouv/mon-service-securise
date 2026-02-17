@@ -1,2 +1,17 @@
 a(href='https://www.monservicesecurise.cyber.gouv.fr/' rel='noopener' target='_blank')
   img(src=`data:image/png;base64, ${base64}` alt="Tampon d'homologation de MonServiceSécurisé" width=largeur)
+details
+  - const formatteDateFrancaise = Intl.DateTimeFormat('fr-FR').format
+  summary Transcription
+  p
+    span Homologation&nbsp;:&nbsp;
+    span= service.nomService()
+  p
+    span Organisation responsable&nbsp;:&nbsp;
+    span= service.descriptionService.organisationResponsable.nom
+  p
+    span Date d'homologation&nbsp;:&nbsp;
+    span= formatteDateFrancaise(new Date(dossier.decision.dateHomologation))
+  p
+    span Durée et échéance de l'homologation&nbsp;:&nbsp;
+    span= `${referentiel.descriptionEcheanceRenouvellement(dossier.decision.dureeValidite)} | ${formatteDateFrancaise(dossier.dateProchaineHomologation())}`
