@@ -22,7 +22,7 @@ FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/vraisemblance.$ID
 
 {
   echo "import { ConfigurationVraisemblancePourUnVecteur, ConfigurationPredicatVraisemblance } from './vraisemblance.types.js';"
-  echo "import { siTout, siAucune } from './vraisemblance.predicats.js';"
+  echo "import { siTout, siAucune, siPasTout } from './vraisemblance.predicats.js';"
   echo ""
   echo "export const ${IDENTIFIANT_RISQUE}: ConfigurationVraisemblancePourUnVecteur ="
 
@@ -63,6 +63,7 @@ FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/vraisemblance.$ID
     | gsub(" "; "")
     | if . == "tout" then "siTout"
       elif . == "aucune" then "siAucune"
+      elif . == "pastout" then "siPasTout"
       else "si" + .
       end;
 
