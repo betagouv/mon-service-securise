@@ -1,6 +1,7 @@
 /* eslint-disable no-empty-function */
 import Service from '../../modeles/service.js';
 import {
+  ConfigurationPourNiveau,
   ConfigurationVraisemblancePourUnVecteur,
   IdentifiantGroupeMesureVraisemblance,
   PoidsGroupeMesure,
@@ -17,10 +18,9 @@ export class VraisemblanceRisque {
   ) {}
 
   calculePourService(service: Service) {
-    const configurationPourNiveauSecurite =
-      this.configuration[
-        service.descriptionService.niveauSecurite as NiveauSecurite
-      ];
+    const configurationPourNiveauSecurite = this.configuration[
+      service.descriptionService.niveauSecurite as NiveauSecurite
+    ] as ConfigurationPourNiveau;
 
     const mesuresPersonnalisees =
       service.mesures.enrichiesAvecDonneesPersonnalisees()

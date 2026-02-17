@@ -33,7 +33,7 @@ export type ConfigurationPourNiveau = {
 };
 
 export type ConfigurationVraisemblancePourUnVecteur = {
-  niveau1: ConfigurationPourNiveau;
-  niveau2: ConfigurationPourNiveau;
-  niveau3: ConfigurationPourNiveau;
+  niveau1?: ConfigurationPourNiveau;
+  niveau2?: ConfigurationPourNiveau;
+  niveau3?: ConfigurationPourNiveau;
 };

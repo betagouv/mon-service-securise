@@ -108,20 +108,21 @@ FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/vraisemblance.$ID
 
   # Construit la sortie Typescript
   formules as $f
-  | {
-     niveau1: {
-       groupes: groupes(niveaux.niveau1),
-       formules: $f.niveau1
-     },
-     niveau2: {
-       groupes: groupes(niveaux.niveau2),
-       formules: $f.niveau2
-     },
-     niveau3: {
-       groupes: groupes(niveaux.niveau3),
-       formules: $f.niveau3
-     }
-   }
+  | [
+      { key: "niveau1", groupes: groupes(niveaux.niveau1), formules: $f.niveau1 },
+      { key: "niveau2", groupes: groupes(niveaux.niveau2), formules: $f.niveau2 },
+      { key: "niveau3", groupes: groupes(niveaux.niveau3), formules: $f.niveau3 }
+    ]
+  | map(select(
+      (.groupes != null and (.groupes|length>0)) or (.formules|length>0)
+    ))
+  | map({
+      (.key): {
+        groupes: .groupes,
+        formules: .formules
+      }
+    })
+  | add
   | "{" ,
     (to_entries[] |
       "  \(.key): {\n"
