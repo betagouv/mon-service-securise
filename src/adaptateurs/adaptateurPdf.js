@@ -159,6 +159,7 @@ const genereTamponHomologation = async (donnees) => {
     const compileImageEnHTMLBase64 = (buffer, largeur) =>
       Buffer.from(
         pug.compileFile('src/pdf/modeles/tamponHomologation.base64.pug')({
+          ...donnees,
           base64: buffer.toString('base64'),
           largeur,
         }),
