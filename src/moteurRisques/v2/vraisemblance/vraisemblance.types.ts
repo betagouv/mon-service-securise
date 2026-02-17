@@ -1,6 +1,8 @@
 import type { IdMesureV2 } from '../../../../donneesReferentielMesuresV2.js';
 import type MesureGenerale from '../../../modeles/mesureGenerale.js';
 
+export type Vraisemblance = 1 | 2 | 3 | 4;
+
 export type IdentifiantGroupeMesureVraisemblance =
   | 'a'
   | 'b'

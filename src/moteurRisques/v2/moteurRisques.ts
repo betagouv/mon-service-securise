@@ -38,7 +38,7 @@ export class MoteurRisquesV2 {
     );
 
     return Object.entries(gravitesParVecteur).map(
-      ([id, ovs]) => new RisqueV2(id as IdVecteurRisque, ovs)
+      ([id, ovs]) => new RisqueV2(id as IdVecteurRisque, ovs, 1)
     );
   }
 }
