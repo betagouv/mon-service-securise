@@ -2,6 +2,7 @@ import { IdVecteurRisque } from './selectionVecteurs.types.js';
 import { IdObjectifVise } from './selectionObjectifsVises.types.js';
 import { Gravite } from './graviteObjectifsVises.js';
 import { configurationRisqueV2 } from './risqueV2.configuration.js';
+import { Vraisemblance } from './vraisemblance/vraisemblance.types.js';
 
 export type ConfigurationRisqueV2 = Record<
   IdVecteurRisque,
@@ -18,6 +19,7 @@ export class RisqueV2 {
   constructor(
     private readonly idVecteur: IdVecteurRisque,
     private readonly objectifsVises: Partial<Record<IdObjectifVise, Gravite>>,
+    public readonly vraisemblance: Vraisemblance,
     private readonly configuration: ConfigurationRisqueV2 = configurationRisqueV2
   ) {
     this.gravite = Math.max(...Object.values(objectifsVises)) as Gravite;

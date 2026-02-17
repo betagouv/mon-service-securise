@@ -33,7 +33,7 @@ describe('Un risque V2', () => {
 
   describe('concernant sa gravité', () => {
     it('connait son niveau de gravité', () => {
-      const risque = new RisqueV2('V1', { OV1: 3 }, configurationRisque());
+      const risque = new RisqueV2('V1', { OV1: 3 }, 1, configurationRisque());
 
       expect(risque.gravite).toBe(3);
     });
@@ -42,11 +42,24 @@ describe('Un risque V2', () => {
       const risque = new RisqueV2(
         'V1',
         { OV2: 3, OV3: 3 },
+        1,
         configurationRisque()
       );
 
       expect(risque.gravite).toBe(3);
     });
+  });
+
+  it('connaît sa vraisemblance', () => {
+    const tresVraisemblable = 3;
+    const risque = new RisqueV2(
+      'V1',
+      { OV1: 3 },
+      tresVraisemblable,
+      configurationRisque()
+    );
+
+    expect(risque.vraisemblance).toBe(3);
   });
 
   describe('concernant son intitulé', () => {
@@ -61,6 +74,7 @@ describe('Un risque V2', () => {
       const risque = new RisqueV2(
         'V1',
         { OV1: 3 },
+        1,
         configurationRisque(configurationV1)
       );
 
@@ -82,6 +96,7 @@ describe('Un risque V2', () => {
       const risque = new RisqueV2(
         'V1',
         { OV1: 3, OV2: 3, OV3: 3 },
+        1,
         configurationRisque(configurationV1)
       );
 
