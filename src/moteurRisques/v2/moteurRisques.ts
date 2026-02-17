@@ -6,13 +6,20 @@ import { IdObjectifVise } from './selectionObjectifsVises.types.js';
 import { Gravite, GraviteObjectifsVises } from './graviteObjectifsVises.js';
 import { GraviteVecteurs } from './graviteVecteurs.js';
 import { RisqueV2 } from './risqueV2.js';
+import { VraisemblanceRisque } from './vraisemblanceRisque.js';
+import { configurationVraisemblance } from './vraisemblance/vraisemblance.configuration.js';
+import type Service from '../../modeles/service.js';
 
 export class MoteurRisquesV2 {
   private readonly selectionVecteurs: Array<IdVecteurRisque>;
+  private readonly descriptionService: DescriptionServiceV2;
 
-  constructor(private readonly descriptionService: DescriptionServiceV2) {
+  constructor(private readonly service: Service) {
+    this.descriptionService =
+      service.descriptionService as DescriptionServiceV2;
+
     this.selectionVecteurs = new SelectionVecteurs().selectionnePourService(
-      descriptionService
+      this.descriptionService
     );
   }
 
@@ -37,8 +44,12 @@ export class MoteurRisquesV2 {
       this.objectifsVises()
     );
 
-    return Object.entries(gravitesParVecteur).map(
-      ([id, ovs]) => new RisqueV2(id as IdVecteurRisque, ovs, 1)
-    );
+    return Object.entries(gravitesParVecteur).map(([id, ovs]) => {
+      const vraisemblance = new VraisemblanceRisque(
+        configurationVraisemblance[id as IdVecteurRisque]
+      ).calculePourService(this.service);
+
+      return new RisqueV2(id as IdVecteurRisque, ovs, vraisemblance);
+    });
   }
 }
