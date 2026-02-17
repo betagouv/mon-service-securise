@@ -12,7 +12,7 @@ sur votre site internet.
   - 3 images d'encart d'homologation. Pour les formats téléphone, tablette et bureau.
   - 1 image de tampon d'homologation.
 - Au format .html
-  - 3 fichiers contenant les encarts d'homologation au format « base64 ».
+  - 3 fichiers contenant les encarts d'homologation au format « base64 » avec une transcription textuelle des informations de l'encart, afin de faciliter l'accessibilité numérique.
   - 1 fichier contenant le tampon d'homologation au format « base64 ».`,
   'utf-8'
 );
