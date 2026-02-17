@@ -22,7 +22,7 @@ FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/vraisemblance.$ID
 
 {
   echo "import { ConfigurationVraisemblancePourUnVecteur, ConfigurationPredicatVraisemblance } from './vraisemblance.types.js';"
-  echo "import { siTout } from './vraisemblance.predicats.js';"
+  echo "import { siTout, siAucune } from './vraisemblance.predicats.js';"
   echo ""
   echo "export const ${IDENTIFIANT_RISQUE}: ConfigurationVraisemblancePourUnVecteur ="
 
@@ -66,29 +66,37 @@ FICHIER_TYPESCRIPT="$(dirname "$0")/../../src/moteurRisques/v2/vraisemblance.$ID
       else "si" + .
       end;
 
-  # Convert des formules vers fonction Typescript
+  # Conversion des formules vers fonction Typescript (support + et -)
   def formule_vers_typescript:
-    sub("^V\\s*=\\s*"; "")                       # supprime "V ="
-    | capture("(?<base>[0-9]+)\\s*-\\s*(?<rest>.*)")
+    sub("^V\\s*=\\s*"; "")
+    | capture("(?<base>[0-9]+)\\s*(?<rest>.*)")
     | .base as $base
     | .rest
-    | split(" - ")
-    | map(capture("(?<grp>[a-zA-Z])\\(SI (?<cond>[^)]+)\\)"))
+    # trouve tous les termes avec leur opérateur
+    | [ match("([+-])\\s*([a-zA-Z])\\(SI ([^)]+)\\)"; "g") ]
+    | map({
+        op: .captures[0].string,
+        grp: .captures[1].string,
+        cond: .captures[2].string
+      })
     | . as $terms
-    | ($terms | map(.grp) | unique) as $groups   # extrait les groupes unique de lettres
+    | ($terms | map(.grp) | unique) as $groups
     | ($groups | map("poids" + ascii_upcase)) as $poidsVars
     | "({ " + ($groups + $poidsVars | join(", ")) + " }: ConfigurationPredicatVraisemblance) => "
       + $base
-      + " - "
-      + ($terms
+      + (
+          $terms
           | map(
-              "poids" + (.grp|ascii_upcase)
+              " "
+              + .op
+              + " poids" + (.grp|ascii_upcase)
               + " * "
               + (.cond | predicat_vers_fonction)
               + "(" + .grp + ")"
             )
-          | join(" - ")
+          | join("")
         );
+
 
   # Split les formules et convertit en typescript
   def decoupe_formules:
