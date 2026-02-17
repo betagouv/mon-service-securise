@@ -5,7 +5,7 @@ import {
   ConfigurationVraisemblancePourUnVecteur,
   IdentifiantGroupeMesureVraisemblance,
   PoidsGroupeMesure,
-} from './vraisemblance.types.js';
+} from './vraisemblance/vraisemblance.types.js';
 import {
   IdMesureV2,
   NiveauSecurite,

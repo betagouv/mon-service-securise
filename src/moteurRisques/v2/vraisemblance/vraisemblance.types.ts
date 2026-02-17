@@ -1,5 +1,5 @@
-import type { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
-import type MesureGenerale from '../../modeles/mesureGenerale.js';
+import type { IdMesureV2 } from '../../../../donneesReferentielMesuresV2.js';
+import type MesureGenerale from '../../../modeles/mesureGenerale.js';
 
 export type IdentifiantGroupeMesureVraisemblance =
   | 'a'

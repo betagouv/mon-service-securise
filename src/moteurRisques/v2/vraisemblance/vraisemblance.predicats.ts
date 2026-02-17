@@ -1,4 +1,4 @@
-import MesureGenerale from '../../modeles/mesureGenerale.js';
+import MesureGenerale from '../../../modeles/mesureGenerale.js';
 
 export const siTout = (mesures: MesureGenerale[]) =>
   mesures.every((m) => m.statut === 'fait') ? 1 : 0;
