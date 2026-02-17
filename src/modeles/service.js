@@ -100,7 +100,7 @@ class Service {
     this.referentiel = referentiel;
 
     if (versionService === VersionService.v2)
-      this.moteurRisques = new MoteurRisquesV2(this.descriptionService);
+      this.moteurRisques = new MoteurRisquesV2(this);
   }
 
   version() {

@@ -13,18 +13,9 @@ describe('Le calcul de vraisemblance pour un risque', () => {
   const configurationVraisemblance = (
     surcharge?: Partial<Record<NiveauSecurite, ConfigurationPourNiveau>>
   ): ConfigurationVraisemblancePourUnVecteur => ({
-    niveau1: {
-      formules: [() => 3],
-      groupes: {},
-    },
-    niveau2: {
-      formules: [],
-      groupes: {},
-    },
-    niveau3: {
-      formules: [],
-      groupes: {},
-    },
+    niveau1: { formules: [() => 3], groupes: {} },
+    niveau2: { formules: [], groupes: {} },
+    niveau3: { formules: [], groupes: {} },
     ...surcharge,
   });
 
@@ -40,10 +31,7 @@ describe('Le calcul de vraisemblance pour un risque', () => {
   it('utilise les formules du niveau de sécurité du service pour calculer la vraisemblance', () => {
     const v = new VraisemblanceRisque(
       configurationVraisemblance({
-        niveau1: {
-          formules: [() => 3],
-          groupes: {},
-        },
+        niveau1: { formules: [() => 3], groupes: {} },
       })
     );
     const service = unServiceDeNiveau1();
@@ -51,6 +39,19 @@ describe('Le calcul de vraisemblance pour un risque', () => {
     const vraisemblance = v.calculePourService(service);
 
     expect(vraisemblance).toBe(3);
+  });
+
+  it('ne dépasse jamais 4, qui est la vraisemblance maximale', () => {
+    const v = new VraisemblanceRisque(
+      configurationVraisemblance({
+        niveau1: { formules: [() => 6], groupes: {} },
+      })
+    );
+    const service = unServiceDeNiveau1();
+
+    const vraisemblance = v.calculePourService(service);
+
+    expect(vraisemblance).toBe(4);
   });
 
   it('retourne la vraisemblance maximale entre toutes les formules calculées', () => {
@@ -143,7 +144,7 @@ describe('Le calcul de vraisemblance pour un risque', () => {
           niveau1: {
             groupes: {
               a: { poids: 2, idsMesures: ['RECENSEMENT.1'] },
-              b: { poids: 3, idsMesures: ['RECENSEMENT.2'] },
+              b: { poids: 1, idsMesures: ['RECENSEMENT.2'] },
             },
             formules: [
               ({ a, b, poidsA, poidsB }) =>
@@ -175,7 +176,7 @@ describe('Le calcul de vraisemblance pour un risque', () => {
 
       const vraisemblance = v.calculePourService(service);
 
-      expect(vraisemblance).toBe(5);
+      expect(vraisemblance).toBe(3);
     });
 
     it("par sécurité, assigne une mesure 'non faite' s'il n'existe pas dans le service", () => {

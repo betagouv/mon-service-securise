@@ -5,6 +5,7 @@ import {
   ConfigurationVraisemblancePourUnVecteur,
   IdentifiantGroupeMesureVraisemblance,
   PoidsGroupeMesure,
+  Vraisemblance,
 } from './vraisemblance/vraisemblance.types.js';
 import {
   IdMesureV2,
@@ -17,7 +18,7 @@ export class VraisemblanceRisque {
     private readonly configuration: ConfigurationVraisemblancePourUnVecteur
   ) {}
 
-  calculePourService(service: Service) {
+  calculePourService(service: Service): Vraisemblance {
     const configurationPourNiveauSecurite = this.configuration[
       service.descriptionService.niveauSecurite as NiveauSecurite
     ] as ConfigurationPourNiveau;
@@ -50,6 +51,9 @@ export class VraisemblanceRisque {
       (f) => f({ ...groupes, ...poids })
     );
 
-    return Math.max(...toutesVraisemblance);
+    const maxCalcule = Math.max(...toutesVraisemblance);
+    const maxBorne = Math.min(maxCalcule, 4);
+
+    return maxBorne as Vraisemblance;
   }
 }
