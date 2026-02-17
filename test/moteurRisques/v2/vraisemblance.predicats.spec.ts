@@ -4,7 +4,7 @@ import {
   siAucune,
   siPasTout,
   siTout,
-} from '../../../src/moteurRisques/v2/vraisemblance.predicats.ts';
+} from '../../../src/moteurRisques/v2/vraisemblance/vraisemblance.predicats.ts';
 import { ReferentielV2 } from '../../../src/referentiel.interface.ts';
 
 describe('Les prédicats de calculs de vraisemblance', () => {

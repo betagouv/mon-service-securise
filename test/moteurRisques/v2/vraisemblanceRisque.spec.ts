@@ -4,7 +4,7 @@ import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescript
 import {
   ConfigurationPourNiveau,
   ConfigurationVraisemblancePourUnVecteur,
-} from '../../../src/moteurRisques/v2/vraisemblance.types.ts';
+} from '../../../src/moteurRisques/v2/vraisemblance/vraisemblance.types.ts';
 import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.ts';
 import Mesures from '../../../src/modeles/mesures.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
