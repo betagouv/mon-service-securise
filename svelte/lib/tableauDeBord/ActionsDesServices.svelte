@@ -1,5 +1,9 @@
 <script context="module" lang="ts">
+  import type { BrouillonService, Service } from './tableauDeBord.d';
   export type TypeSelection = 'Service' | 'Brouillon';
+  export type ServiceOuBrouillon = (Service | BrouillonService) & {
+    type: TypeSelection;
+  };
 </script>
 
 <script lang="ts">
@@ -7,14 +11,9 @@
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirDuplication from '../ui/tiroirs/TiroirDuplication.svelte';
   import TiroirExportServices from '../ui/tiroirs/TiroirExportServices.svelte';
-  import type { BrouillonService, Service } from './tableauDeBord.d';
   import TiroirTelechargementDocumentsService from '../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import TiroirSuppression from '../ui/tiroirs/TiroirSuppression.svelte';
-
-  type ServiceOuBrouillon = (Service | BrouillonService) & {
-    type: TypeSelection;
-  };
 
   export let selection: ServiceOuBrouillon[];
 
@@ -107,7 +106,7 @@
       actif={actionsDisponibles && estProprietaireDesServicesSelectionnes}
       on:click={() =>
         tiroirStore.afficheContenu(TiroirSuppression, {
-          services: enServices(selection),
+          servicesEtBrouillon: selection,
         })}
     />
   </div>
