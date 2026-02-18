@@ -199,4 +199,21 @@ describe('Le dépôt de données des brouillons de Service', () => {
       });
     });
   });
+
+  describe("sur demande de suppression d'un brouillon", () => {
+    it('supprime le brouillon', async () => {
+      depotDonneesService.nouveauService = async () => unUUID('S');
+      const idBrouillon = unUUID('B');
+      await persistance.ajouteBrouillonService(
+        idBrouillon,
+        unUUID('U'),
+        await adaptateurChiffrement.chiffre({ nomService: 'Mairie A' })
+      );
+
+      await leDepot().supprimeBrouillonService(idBrouillon);
+
+      const restants = await persistance.lisBrouillonsService(unUUID('U'));
+      expect(restants).toHaveLength(0);
+    });
+  });
 });
