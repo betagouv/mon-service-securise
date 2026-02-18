@@ -564,7 +564,9 @@ const routesConnecteApi = ({
         const mesuresV2AvecThematique = Object.fromEntries(
           Object.entries(mesuresV2).map(([id, mesure]) => {
             const thematique = referentielV2.thematiqueDeMesure(id);
-            return [id, { ...mesure, thematique }];
+            const porteursSinguliers =
+              referentielV2.porteursSinguliersDeMesure(id);
+            return [id, { ...mesure, thematique, porteursSinguliers }];
           })
         );
 
