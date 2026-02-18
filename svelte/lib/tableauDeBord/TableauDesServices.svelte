@@ -125,7 +125,11 @@
   {:else}
     <tbody class="contenu-tableau-services">
       {#each $resultatsDeRechercheBrouillons as brouillon (brouillon.id)}
-        <tr class="ligne-service brouillon" data-id-brouillon={brouillon.id}>
+        <tr
+          class="ligne-service brouillon"
+          data-id-brouillon={brouillon.id}
+          class:selectionnee={$selectionIdsServices.includes(brouillon.id)}
+        >
           <th class="cellule-selection" scope="row">
             <input
               class="selection-service"
