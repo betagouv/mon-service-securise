@@ -34,13 +34,16 @@
       .map((b) => ({ ...b, type: 'Brouillon' as TypeSelection })),
   ];
 
-  $: toutEstCoche = selection.length === $resultatsDeRecherche.length;
+  $: toutEstCoche =
+    selection.length ===
+    $resultatsDeRecherche.length + $resultatsDeRechercheBrouillons.length;
   const basculeSelectionTousServices = () => {
     if (toutEstCoche) $selectionIdsServices = [];
     else
-      $selectionIdsServices = $resultatsDeRecherche.map(
-        (service) => service.id
-      );
+      $selectionIdsServices = [
+        ...$resultatsDeRecherche.map((service) => service.id),
+        ...$resultatsDeRechercheBrouillons.map((brouillon) => brouillon.id),
+      ];
   };
 
   $: $resultatsDeRecherche, selectionIdsServices.vide();
