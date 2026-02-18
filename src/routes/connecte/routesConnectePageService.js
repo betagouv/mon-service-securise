@@ -122,7 +122,7 @@ const routesConnectePageService = ({
           service.mesures.enrichiesAvecDonneesPersonnalisees(),
           contributeurs,
           avecDonneesAdditionnelles,
-          referentiel
+          service.referentiel
         );
 
         const s = service

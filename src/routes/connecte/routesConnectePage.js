@@ -221,10 +221,9 @@ const routesConnectePage = ({
           await depotDonnees.lisModelesMesureSpecifiquePourUtilisateur(
             requete.idUtilisateurCourant
           );
-        const mesuresGenerales =
-          version === VersionService.v2
-            ? referentielV2.mesures()
-            : referentiel.mesures();
+        const referentielAUtiliser =
+          version === VersionService.v2 ? referentielV2 : referentiel;
+        const mesuresGenerales = referentielAUtiliser.mesures();
         const bufferCsv = await adaptateurCsv.genereCsvMesures(
           {
             mesuresGenerales,
@@ -232,7 +231,7 @@ const routesConnectePage = ({
           },
           [],
           false,
-          referentiel,
+          referentielAUtiliser,
           false
         );
         reponse
