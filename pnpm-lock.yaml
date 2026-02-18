@@ -205,8 +205,8 @@ importers:
         specifier: ~21.1.0
         version: 21.1.0
       knex-pglite:
-        specifier: ~0.11.0
-        version: 0.11.0(pg@8.8.0)
+        specifier: ~0.13.0
+        version: 0.13.0(@electric-sql/pglite@0.3.5)(knex@3.1.0(pg@8.8.0))
       lint-staged:
         specifier: ~13.2.2
         version: 13.2.2
@@ -327,9 +327,6 @@ packages:
   '@babel/types@7.28.5':
     resolution: {integrity: sha512-qQ5m48eI/MFLQ5PxQj4PFaprjyCTLI37ElWMmNs0K8Lk3dVeOdNpB3ks8jc7yM5CDmVC73eMVk/trk3fgmrUpA==}
     engines: {node: '>=6.9.0'}
-
-  '@electric-sql/pglite@0.2.17':
-    resolution: {integrity: sha512-qEpKRT2oUaWDH6tjRxLHjdzMqRUGYDnGZlKrnL4dJ77JVMcP2Hpo3NYnOSPKdZdeec57B6QPprCUFg0picx5Pw==}
 
   '@electric-sql/pglite@0.3.5':
     resolution: {integrity: sha512-fhODErXJjOrnsJj5f1A8sH/Zj0INpLUbqOCiskufIUImUsFOBNHE6/FApY656Q2VSOp46wkXX3rvbBBO8O8Cag==}
@@ -2882,8 +2879,11 @@ packages:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
     engines: {node: '>=6'}
 
-  knex-pglite@0.11.0:
-    resolution: {integrity: sha512-Z3v+vaF8C/VMJll7J2NHqFZo31ijLfYBsHMKU8jTnjfIF0edUonAB3sbAZYmUbSeJDDGfZdJPsvcB4ZyGBERcA==}
+  knex-pglite@0.13.0:
+    resolution: {integrity: sha512-p27m7uXwjWLOJ6qb6JheCJViWBrDghU16ZyMVtUyOzwMo024OBKeEA20gwu6sxaAjdSnqT3lOkwlNqvSQxNQYg==}
+    peerDependencies:
+      '@electric-sql/pglite': 0.x
+      knex: 3.x
 
   knex@3.1.0:
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
@@ -4611,8 +4611,6 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
-
-  '@electric-sql/pglite@0.2.17': {}
 
   '@electric-sql/pglite@0.3.5': {}
 
@@ -7233,19 +7231,10 @@ snapshots:
 
   kleur@4.1.5: {}
 
-  knex-pglite@0.11.0(pg@8.8.0):
+  knex-pglite@0.13.0(@electric-sql/pglite@0.3.5)(knex@3.1.0(pg@8.8.0)):
     dependencies:
-      '@electric-sql/pglite': 0.2.17
+      '@electric-sql/pglite': 0.3.5
       knex: 3.1.0(pg@8.8.0)
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
 
   knex@3.1.0(pg@8.8.0):
     dependencies:

@@ -6,20 +6,6 @@ import { nouvelAdaptateur } from '../../src/adaptateurs/adaptateurPostgres.js';
 import { genereUUID } from '../../src/adaptateurs/adaptateurUUID.js';
 import { Autorisation } from '../../src/modeles/autorisations/autorisation.js';
 
-function patchKnexFirst(knexInstance) {
-  const prototypeQueryBuilder = Object.getPrototypeOf(
-    knexInstance.queryBuilder()
-  );
-
-  const firstOriginal = prototypeQueryBuilder.first;
-
-  // eslint-disable-next-line func-names
-  prototypeQueryBuilder.first = async function (...args) {
-    const resultat = await firstOriginal.apply(this, args);
-    return resultat && resultat.rows.length === 0 ? undefined : resultat;
-  };
-}
-
 describe("L'adaptateur persistance Postgres", () => {
   let knex;
   let persistance;
@@ -29,7 +15,6 @@ describe("L'adaptateur persistance Postgres", () => {
 
   beforeAll(async () => {
     knex = Knex({ client: ClientPgLite, dialect: 'postgres', connection: {} });
-    patchKnexFirst(knex);
     await knex.migrate.latest();
     persistance = nouvelAdaptateur({ knexSurcharge: knex });
   });
