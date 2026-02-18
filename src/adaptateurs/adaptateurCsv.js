@@ -2,6 +2,7 @@ import { createObjectCsvStringifier } from 'csv-writer';
 import { stripHtml } from 'string-strip-html';
 import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
 import { dateEnFrancais } from '../utilitaires/date.js';
+import { VersionService } from '../modeles/versionService.js';
 
 const remplaceBooleen = (booleen) => (booleen ? 'Oui' : 'Non');
 const avecBOM = (...contenus) => `\uFEFF${contenus.join('')}`;
@@ -63,10 +64,13 @@ const genereCsvMesures = async (
     (m) => m.partieResponsable
   );
 
+  const avecThematique = referentiel.version() === VersionService.v2;
+
   // Les `id` doivent correspondrent aux champs des objets dans `donneesCsv`
   const colonnes = [
     { id: 'identifiant', title: 'Identifiant de la mesure' },
     { id: 'description', title: 'Nom de la mesure' },
+    ...(avecThematique ? [{ id: 'thematique', title: 'Thématique' }] : []),
     { id: 'referentiel', title: 'Référentiel' },
     ...(avecTypeMesure ? [{ id: 'type', title: 'Type' }] : []),
     { id: 'categorie', title: 'Catégorie' },
@@ -89,13 +93,14 @@ const genereCsvMesures = async (
       responsables.map((id) => contributeurs[id]).filter((value) => !!value)
     );
 
-  const donneesCsv = Object.values(mesuresGenerales)
-    .map((m) => ({
+  const donneesCsv = Object.entries(mesuresGenerales)
+    .map(([idMesure, m]) => ({
       identifiant: `#${m.identifiantNumerique}`,
       description: m.description,
       referentiel: m.referentiel,
       type: m.indispensable ? 'Indispensable' : 'Recommandée',
       categorie: referentiel.descriptionCategorie(m.categorie),
+      thematique: referentiel.thematiqueDeMesure(idMesure),
       partieResponsable: transcoPartieResponsable[m.partieResponsable],
       descriptionLongue: stripHtml(m.descriptionLongue).result,
       statut: referentiel.descriptionStatutMesure(m.statut),
