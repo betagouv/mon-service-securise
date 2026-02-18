@@ -445,4 +445,28 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       expect(reponse.status).toBe(404);
     });
   });
+
+  describe('quand requête DELETE sur `/api/brouillon-service/:id`', () => {
+    it("renvoie une erreur 400 si l'ID passé n'est pas un UUID", async () => {
+      const reponse = await testeur.delete(
+        '/api/brouillon-service/pas-un-uuid'
+      );
+
+      expect(reponse.status).toBe(400);
+    });
+
+    it('délègue au dépôt de données la suppression du brouillon', async () => {
+      let depotAppele = false;
+      testeur.depotDonnees().supprimeBrouillonService = async () => {
+        depotAppele = true;
+      };
+
+      const { status } = await testeur.delete(
+        `/api/brouillon-service/${unUUIDRandom()}`
+      );
+
+      expect(status).toBe(200);
+      expect(depotAppele).toBe(true);
+    });
+  });
 });
