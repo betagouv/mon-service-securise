@@ -2,15 +2,20 @@ import * as z from 'zod';
 import { NextFunction, Request, Response } from 'express';
 import { fabriqueAdaptateurGestionErreur } from '../adaptateurs/fabriqueAdaptateurGestionErreur.js';
 
+const regexUUID =
+  /\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/gi;
+
 const loguerDetailsDuRejet = (
-  requete: { url: string; body: unknown; params: unknown; query: unknown },
+  requete: Request<unknown, unknown, unknown, unknown, never>,
   resultatZod: object,
   cible: 'BODY' | 'PARAMS' | 'QUERY'
 ) => {
   if (process.env.API_ACTIVE_LOG_DES_ERREURS_400 !== 'true') return;
 
+  const urlSansUUID = requete.originalUrl.replaceAll(regexUUID, ':id');
+
   fabriqueAdaptateurGestionErreur().logueErreur(
-    new Error('Erreur 400. Voir les détails pour analyser.'),
+    new Error(`Erreur 400 sur ${requete.method} ${urlSansUUID}`),
     {
       cible,
       url: requete.url,
