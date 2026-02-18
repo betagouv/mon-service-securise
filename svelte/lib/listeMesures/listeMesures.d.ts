@@ -62,6 +62,7 @@ export type ModeleDeMesure = {
   idsServicesAssocies: string[];
   type: 'generale' | 'specifique';
   versionReferentiel?: VersionService;
+  thematique?: string;
 };
 
 export type CapaciteAjoutDeMesure = {

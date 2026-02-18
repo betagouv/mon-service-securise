@@ -44,6 +44,7 @@
   import TableauVideMesuresSpecifiques from './mesureSpecifique/TableauVideMesuresSpecifiques.svelte';
   import Infobulle from '../ui/Infobulle.svelte';
   import FiltreSurV1V2 from './FiltreSurV1V2.svelte';
+  import CartoucheThematique from '../ui/CartoucheThematique.svelte';
 
   export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
@@ -345,6 +346,9 @@
         <div>
           <CartoucheReferentiel referentiel={donnee.referentiel} />
           <CartoucheCategorieMesure categorie={donnee.categorie} />
+          {#if donnee.thematique}
+            <CartoucheThematique thematique={donnee.thematique} />
+          {/if}
           <CartoucheIdentifiantMesure
             identifiant={donnee.identifiantNumerique}
           />
