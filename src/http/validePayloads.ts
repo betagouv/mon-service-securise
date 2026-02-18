@@ -85,7 +85,9 @@ export const valideQuery =
 
     // Ici on veut bel et bien ré-écrire la requête, car c'est comme ça qu'expressjs est conçu.
     // On réassigne pour que les suivants récupèrent le contenu assaini par Zod.
-    requete.query = resultat.data as TQuery;
+    Object.defineProperty(requete, 'query', {
+      value: resultat.data as TQuery,
+    });
 
     return suite();
   };
