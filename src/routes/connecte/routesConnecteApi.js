@@ -560,11 +560,19 @@ const routesConnecteApi = ({
           referentiel.mesures()
         );
 
-      if (versions.includes(VersionService.v2) || versions.length === 0)
+      if (versions.includes(VersionService.v2) || versions.length === 0) {
+        const mesuresV2AvecThematique = Object.fromEntries(
+          Object.entries(mesuresV2).map(([id, mesure]) => {
+            const thematique = referentielV2.thematiqueDeMesure(id);
+            return [id, { ...mesure, thematique }];
+          })
+        );
+
         mesuresInteressantes = {
           ...mesuresInteressantes,
-          ...ajouteVersion(VersionService.v2, mesuresV2),
+          ...ajouteVersion(VersionService.v2, mesuresV2AvecThematique),
         };
+      }
 
       reponse.json(mesuresInteressantes);
     }

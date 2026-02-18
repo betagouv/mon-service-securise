@@ -1347,6 +1347,12 @@ describe('Le serveur MSS des routes privées /api/*', () => {
   });
 
   describe('quand requête GET sur `/api/referentiel/mesures`', () => {
+    const premiereMesureV2Complete = {
+      ...mesuresV2['RECENSEMENT.1'],
+      thematique: 'Gouvernance et gestion des risques',
+      versionReferentiel: 'v2',
+    };
+
     beforeEach(() => {
       testeur.middleware().reinitialise({ idUtilisateur: '123' });
 
@@ -1403,7 +1409,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(utilisateurRecu).to.be('123');
       const [, premiereMesure] = Object.entries(reponse.body)[0];
       expect(premiereMesure).to.eql({
-        ...mesuresV2['RECENSEMENT.1'],
+        ...premiereMesureV2Complete,
         versionReferentiel: 'v2',
       });
     });
@@ -1431,10 +1437,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
 
       const [id2, deuxiemeMesure] = Object.entries(reponse.body)[1];
       expect(id2).to.be('RECENSEMENT.1');
-      expect(deuxiemeMesure).to.eql({
-        ...mesuresV2['RECENSEMENT.1'],
-        versionReferentiel: 'v2',
-      });
+      expect(deuxiemeMesure).to.eql(premiereMesureV2Complete);
     });
 
     it("retourne les mesures v2 quand l'utilisateur n'a aucun service, depuis la mise en production de la V2 complète", async () => {
@@ -1452,8 +1455,21 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(utilisateurRecu).to.be('123');
       const [, premiereMesure] = Object.entries(reponse.body)[0];
       expect(premiereMesure).to.eql({
-        ...mesuresV2['RECENSEMENT.1'],
+        ...premiereMesureV2Complete,
         versionReferentiel: 'v2',
+      });
+    });
+
+    it('ajoute la thématique aux mesures v2', async () => {
+      testeur.depotDonnees().versionsServiceUtiliseesParUtilisateur =
+        async () => ['v2'];
+
+      const reponse = await testeur.get('/api/referentiel/mesures');
+
+      const [, premiereMesure] = Object.entries(reponse.body)[0];
+      expect(premiereMesure).to.eql({
+        ...premiereMesureV2Complete,
+        thematique: 'Gouvernance et gestion des risques',
       });
     });
   });
