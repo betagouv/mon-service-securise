@@ -6,10 +6,11 @@
   import EtiquetteProprietaire from './elementsDeService/EtiquetteProprietaire.svelte';
   import ActionRecommandee from './elementsDeService/ActionRecommandee.svelte';
   import { resultatsDeRecherche } from './stores/resultatDeRecherche.store';
-  import ActionsDesServices from './ActionsDesServices.svelte';
+  import ActionsDesServices, {
+    type TypeSelection,
+  } from './ActionsDesServices.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
-  import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
   import {
     affichageParStatutHomologation,
     affichageParStatutHomologationSelectionne,
@@ -24,9 +25,14 @@
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
   import { resultatsDeRechercheBrouillons } from './stores/resultatDeRechercheBrouillons.store';
 
-  $: selection = $resultatsDeRecherche.filter((service) =>
-    $selectionIdsServices.includes(service.id)
-  );
+  $: selection = [
+    ...$resultatsDeRecherche
+      .filter((service) => $selectionIdsServices.includes(service.id))
+      .map((s) => ({ ...s, type: 'Service' as TypeSelection })),
+    ...$resultatsDeRechercheBrouillons
+      .filter((brouillon) => $selectionIdsServices.includes(brouillon.id))
+      .map((b) => ({ ...b, type: 'Brouillon' as TypeSelection })),
+  ];
 
   $: toutEstCoche = selection.length === $resultatsDeRecherche.length;
   const basculeSelectionTousServices = () => {
@@ -40,10 +46,6 @@
   $: $resultatsDeRecherche, selectionIdsServices.vide();
 
   $: $selectionIdsServices, tiroirStore.ferme();
-
-  const supprimeRechercheEtFiltres = () => {
-    $rechercheTextuelle = '';
-  };
 
   export let indicesCyberCharges: boolean = false;
 </script>
@@ -124,7 +126,15 @@
     <tbody class="contenu-tableau-services">
       {#each $resultatsDeRechercheBrouillons as brouillon (brouillon.id)}
         <tr class="ligne-service brouillon" data-id-brouillon={brouillon.id}>
-          <th class="cellule-selection" scope="row"></th>
+          <th class="cellule-selection" scope="row">
+            <input
+              class="selection-service"
+              type="checkbox"
+              bind:group={$selectionIdsServices}
+              value={brouillon.id}
+              title="Sélection du brouillon {brouillon.nomService}"
+            />
+          </th>
           <td class="cellule-noms">
             <a
               class="lien-service"
