@@ -554,13 +554,13 @@ const routesConnecteApi = ({
 
       let mesuresInteressantes = {};
 
-      if (versions.includes(VersionService.v1) || versions.length === 0)
+      if (versions.includes(VersionService.v1))
         mesuresInteressantes = ajouteVersion(
           VersionService.v1,
           referentiel.mesures()
         );
 
-      if (versions.includes(VersionService.v2))
+      if (versions.includes(VersionService.v2) || versions.length === 0)
         mesuresInteressantes = {
           ...mesuresInteressantes,
           ...ajouteVersion(VersionService.v2, mesuresV2),

@@ -1437,7 +1437,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       });
     });
 
-    it("retourne les mesures v1 quand l'utilisateur n'a aucun service, afin de ne pas casser la liste actuelle, en attendant la mise en production de la V2 complète", async () => {
+    it("retourne les mesures v2 quand l'utilisateur n'a aucun service, depuis la mise en production de la V2 complète", async () => {
       const sansService = [];
       let utilisateurRecu;
       testeur.depotDonnees().versionsServiceUtiliseesParUtilisateur = async (
@@ -1450,11 +1450,10 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       const reponse = await testeur.get('/api/referentiel/mesures');
 
       expect(utilisateurRecu).to.be('123');
-      expect(reponse.body).to.eql({
-        mesureA: {
-          description: 'une mesure du référentiel v1',
-          versionReferentiel: 'v1',
-        },
+      const [, premiereMesure] = Object.entries(reponse.body)[0];
+      expect(premiereMesure).to.eql({
+        ...mesuresV2['RECENSEMENT.1'],
+        versionReferentiel: 'v2',
       });
     });
   });
