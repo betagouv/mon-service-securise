@@ -1350,6 +1350,7 @@ describe('Le serveur MSS des routes privées /api/*', () => {
     const premiereMesureV2Complete = {
       ...mesuresV2['RECENSEMENT.1'],
       thematique: 'Gouvernance et gestion des risques',
+      porteursSinguliers: ['Chef de projet numérique', 'Chef de projet métier'],
       versionReferentiel: 'v2',
     };
 
@@ -1470,6 +1471,22 @@ describe('Le serveur MSS des routes privées /api/*', () => {
       expect(premiereMesure).to.eql({
         ...premiereMesureV2Complete,
         thematique: 'Gouvernance et gestion des risques',
+      });
+    });
+
+    it('ajoute les porteurs singuliers aux mesures v2', async () => {
+      testeur.depotDonnees().versionsServiceUtiliseesParUtilisateur =
+        async () => ['v2'];
+
+      const reponse = await testeur.get('/api/referentiel/mesures');
+
+      const [, premiereMesure] = Object.entries(reponse.body)[0];
+      expect(premiereMesure).to.eql({
+        ...premiereMesureV2Complete,
+        porteursSinguliers: [
+          'Chef de projet numérique',
+          'Chef de projet métier',
+        ],
       });
     });
   });
