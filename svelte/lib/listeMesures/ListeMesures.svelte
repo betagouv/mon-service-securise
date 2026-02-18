@@ -45,6 +45,7 @@
   import Infobulle from '../ui/Infobulle.svelte';
   import FiltreSurV1V2 from './FiltreSurV1V2.svelte';
   import CartoucheThematique from '../ui/CartoucheThematique.svelte';
+  import { thematiques } from './thematiques';
 
   export let statuts: ReferentielStatut;
   export let categories: ListeMesuresProps['categories'];
@@ -82,22 +83,22 @@
     { libelle: 'ANSSI', valeur: Referentiel.ANSSI, idCategorie: 'referentiel' },
     { libelle: 'CNIL', valeur: Referentiel.CNIL, idCategorie: 'referentiel' },
   ];
-  const itemsFiltrageReferentielAvecMesureSpecifiques = [
-    ...itemsFiltrageReferentiel,
-    {
-      libelle: 'Mesures ajoutées',
-      valeur: Referentiel.SPECIFIQUE,
-      idCategorie: 'referentiel',
-    },
-  ];
+
   const itemsFiltrageCategories = categories.map((c) => ({
     libelle: c.label,
     valeur: c.id,
     idCategorie: 'categorie',
   }));
 
+  const itemsFiltrageThematiques = thematiques.map((t) => ({
+    libelle: t,
+    valeur: t,
+    idCategorie: 'thematique',
+  }));
+
   const groupeReferentiel = { id: 'referentiel', libelle: 'Référentiel' };
   const groupeCategorie = { id: 'categorie', libelle: 'Catégories' };
+  const groupeThematique = { id: 'thematique', libelle: 'Thématiques' };
 
   type ConfigurationTableau = {
     donnees: ModeleDeMesure[];
@@ -125,6 +126,19 @@
         type: 'specifique',
       }));
 
+    const categoriesFiltragePourMesuresGenerales = [
+      groupeReferentiel,
+      groupeCategorie,
+    ];
+    const itemsFiltragePourMesuresGenerales = [
+      ...itemsFiltrageReferentiel,
+      ...itemsFiltrageCategories,
+    ];
+    if ($storeVersionsDeService.versionSelectionnee === 'v2') {
+      categoriesFiltragePourMesuresGenerales.push(groupeThematique);
+      itemsFiltragePourMesuresGenerales.push(...itemsFiltrageThematiques);
+    }
+
     if (ongletActif === 'generales') {
       configurationTableau.donnees = listeModeleMesuresGenerales;
       configurationTableau.configurationRecherche.champsRecherche = [
@@ -132,8 +146,8 @@
         'identifiantNumerique',
       ];
       configurationTableau.configurationFiltrage.options = {
-        categories: [groupeReferentiel, groupeCategorie],
-        items: [...itemsFiltrageReferentiel, ...itemsFiltrageCategories],
+        categories: categoriesFiltragePourMesuresGenerales,
+        items: itemsFiltragePourMesuresGenerales,
       };
     } else if (ongletActif === 'specifiques') {
       configurationTableau.donnees = listeModelesMesureSpecifique;
@@ -154,10 +168,14 @@
         'identifiantNumerique',
       ];
       configurationTableau.configurationFiltrage.options = {
-        categories: [groupeReferentiel, groupeCategorie],
+        categories: categoriesFiltragePourMesuresGenerales,
         items: [
-          ...itemsFiltrageReferentielAvecMesureSpecifiques,
-          ...itemsFiltrageCategories,
+          ...itemsFiltragePourMesuresGenerales,
+          {
+            libelle: 'Mesures ajoutées',
+            valeur: Referentiel.SPECIFIQUE,
+            idCategorie: 'referentiel',
+          },
         ],
       };
     }
