@@ -31,6 +31,7 @@
   } from '../../modificationStatutPrecision/etapes/EtapesModificationMultipleStatutPrecision.svelte';
   import { mesuresAvecServicesAssociesStore } from '../../servicesAssocies/mesuresAvecServicesAssocies.store';
   import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
+  import PorteursSinguliersMesure from '../../kit/PorteursSinguliersMesure.svelte';
 
   export const titre: string = 'Configurer la mesure';
   export const sousTitre: string =
@@ -100,6 +101,11 @@
   {#if etapeCourante === 1}
     <div>
       <DescriptionCompleteMesure modeleDeMesure={modeleMesureGenerale} />
+      {#if modeleMesureGenerale.porteursSinguliers}
+        <PorteursSinguliersMesure
+          porteursSinguliers={modeleMesureGenerale.porteursSinguliers}
+        />
+      {/if}
       <SeparateurHorizontal />
     </div>
   {/if}

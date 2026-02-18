@@ -72,6 +72,7 @@ export type ModeleMesureGenerale = ModeleMesure & {
   identifiantNumerique: string;
   referentiel: Referentiel;
   versionReferentiel: VersionService;
+  porteursSinguliers?: string[];
 };
 
 export type ModeleMesureSpecifique = ModeleMesure & {
