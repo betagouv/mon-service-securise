@@ -4,6 +4,7 @@
   import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
   import DescriptionLongueMesure from '../../ui/DescriptionLongueMesure.svelte';
   import type { ModeleDeMesure } from '../listeMesures.d';
+  import CartoucheThematique from '../../ui/CartoucheThematique.svelte';
 
   export let modeleDeMesure: Omit<
     ModeleDeMesure,
@@ -15,6 +16,9 @@
 <div class="cartouches">
   <CartoucheReferentiel referentiel={modeleDeMesure.referentiel} />
   <CartoucheCategorieMesure categorie={modeleDeMesure.categorie} />
+  {#if modeleDeMesure.thematique}
+    <CartoucheThematique thematique={modeleDeMesure.thematique} />
+  {/if}
   <CartoucheIdentifiantMesure
     identifiant={modeleDeMesure.identifiantNumerique}
   />
