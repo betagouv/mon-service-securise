@@ -53,39 +53,6 @@ describe("L'objet PDF de l'annexe de description V2", () => {
     expect(donnees.versionService).toBe('v2');
   });
 
-  it('fournit la liste des spécificités du projet', () => {
-    const vueAnnexePDFDescription = new ObjetPDFAnnexeDescriptionV2(service);
-
-    const donnees = vueAnnexePDFDescription.donnees();
-
-    expect(donnees.specificitesProjet).toEqual([
-      'Un annuaire',
-      'Des postes de travail',
-    ]);
-  });
-
-  it('fournit la liste des données traitées', () => {
-    const vueAnnexePDFDescription = new ObjetPDFAnnexeDescriptionV2(service);
-
-    const donnees = vueAnnexePDFDescription.donnees();
-
-    expect(donnees.donneesStockees).toEqual([
-      'Documents identifiants',
-      'Données sensibles',
-      'Mes données ajoutées',
-    ]);
-  });
-
-  it('fournit la durée de dysfonctionnement maximum acceptable', () => {
-    const vueAnnexePDFDescription = new ObjetPDFAnnexeDescriptionV2(service);
-
-    const donnees = vueAnnexePDFDescription.donnees();
-
-    expect(donnees.dureeDysfonctionnementMaximumAcceptable).toEqual(
-      'Moins de 4h'
-    );
-  });
-
   it('fournit les informations génériques du service', () => {
     const vueAnnexePDFDescription = new ObjetPDFAnnexeDescriptionV2(service);
 

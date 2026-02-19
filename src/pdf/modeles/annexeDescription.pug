@@ -21,10 +21,9 @@ mixin bloc-descriptions-multiple(liste, legende)
 block page
   if donneesDescription.versionService === 'v1'
     +bloc-description(donneesDescription.fonctionnalites, 'Fonctionnalités offertes')
+    +bloc-description(donneesDescription.donneesStockees, 'Données stockées')
+    +bloc-description([donneesDescription.dureeDysfonctionnementMaximumAcceptable], 'Durée maximale acceptable de dysfonctionnement grave du service')
   else
     +bloc-descriptions-multiple(donneesDescription.informationsGeneriques, 'Informations génériques sur le projet')
     +bloc-descriptions-multiple(donneesDescription.caracteristiques, 'Caractéristique du projet')
     +bloc-descriptions-multiple(donneesDescription.criticiteExposition, "Évaluation de la criticité et de l'exposition du projet")
-    +bloc-description(donneesDescription.specificitesProjet, 'Spécificités du projet')
-  +bloc-description(donneesDescription.donneesStockees, 'Données stockées')
-  +bloc-description([donneesDescription.dureeDysfonctionnementMaximumAcceptable], 'Durée maximale acceptable de dysfonctionnement grave du service')
