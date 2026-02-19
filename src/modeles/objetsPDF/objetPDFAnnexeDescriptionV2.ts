@@ -28,6 +28,26 @@ export class ObjetPDFAnnexeDescriptionV2 {
         this.referentiel.descriptionDelaiAvantImpactCritique(
           descriptionService.dureeDysfonctionnementAcceptable
         ),
+      caracteristiques: [
+        this.metEnForme(
+          'Type de projet à sécuriser',
+          descriptionService.typeService.map((t) =>
+            this.referentiel.descriptionTypeService(t)
+          )
+        ),
+        this.metEnForme(
+          'Sécurisation prévues',
+          descriptionService.specificitesProjet.map((s) =>
+            this.referentiel.descriptionSpecificiteProjet(s)
+          )
+        ),
+        this.metEnForme(
+          'Hébergement du système',
+          this.referentiel.descriptionTypeHebergement(
+            descriptionService.typeHebergement
+          )
+        ),
+      ],
       informationsGeneriques: [
         this.metEnForme('Nom du projet', this.service.nomService()),
         this.metEnForme(

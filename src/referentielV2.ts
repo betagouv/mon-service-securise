@@ -10,12 +10,14 @@ import {
   SpecificiteProjet,
   StatutDeploiement,
   TypeDeService,
+  TypeHebergement,
 } from '../donneesReferentielMesuresV2.js';
 import { ReglesDuReferentielMesuresV2 } from './moteurRegles/v2/moteurReglesV2.js';
 import {
   DonneesComplementairesMesuresV2,
   donneesComplementairesMesureV2,
 } from '../donneesComplementairesReferentielMesuresV2.js';
+import { TypeService } from '../svelte/lib/creationV2/creationV2.types.js';
 
 export type DonneesReferentielV2 = typeof questionsV2 & {
   mesures: typeof mesuresV2;
@@ -27,6 +29,8 @@ type MethodesSpecifiquesReferentielV2 = {
   descriptionSpecificiteProjet: (
     specificiteProjet: SpecificiteProjet
   ) => string;
+  descriptionTypeHebergement: (typeHebergement: TypeHebergement) => string;
+  descriptionTypeService: (typeService: TypeService) => string;
   enregistreReglesMoteurV2: (regles: ReglesDuReferentielMesuresV2) => void;
   reglesMoteurV2: () => ReglesDuReferentielMesuresV2;
   mesures: () => typeof mesuresV2;
@@ -61,6 +65,12 @@ export const creeReferentielV2 = (
 
   const descriptionStatutDeploiement = (statutDeploiement: StatutDeploiement) =>
     donnees.statutDeploiement[statutDeploiement].description;
+
+  const descriptionTypeHebergement = (typeHebergement: TypeHebergement) =>
+    donnees.typeHebergement[typeHebergement].nom;
+
+  const descriptionTypeService = (typeService: TypeDeService) =>
+    donnees.typeDeService[typeService].nom;
 
   const enregistreReglesMoteurV2 = (regles: ReglesDuReferentielMesuresV2) => {
     reglesMoteurV2Enregistrees = regles;
@@ -102,6 +112,8 @@ export const creeReferentielV2 = (
     descriptionsDonneesCaracterePersonnel,
     descriptionSpecificiteProjet,
     descriptionStatutDeploiement,
+    descriptionTypeHebergement,
+    descriptionTypeService,
     enregistreReglesMoteurV2,
     estIdentifiantMesureConnu,
     localisationDonnees,
