@@ -1,13 +1,16 @@
 import { VraisemblanceRisque } from '../../../src/moteurRisques/v2/vraisemblanceRisque.ts';
-import { unServiceV2 } from '../../constructeurs/constructeurService.js';
-import { uneDescriptionV2Valide } from '../../constructeurs/constructeurDescriptionServiceV2.ts';
 import {
   ConfigurationPourNiveau,
   ConfigurationVraisemblancePourUnVecteur,
 } from '../../../src/moteurRisques/v2/vraisemblance/vraisemblance.types.ts';
-import { NiveauSecurite } from '../../../donneesReferentielMesuresV2.ts';
+import {
+  IdMesureV2,
+  NiveauSecurite,
+} from '../../../donneesReferentielMesuresV2.ts';
 import Mesures from '../../../src/modeles/mesures.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
+import { unServiceV2 } from '../../constructeurs/constructeurService.js';
+import MesureGenerale from '../../../src/modeles/mesureGenerale.js';
 
 describe('Le calcul de vraisemblance pour un risque', () => {
   const configurationVraisemblance = (
@@ -19,24 +22,14 @@ describe('Le calcul de vraisemblance pour un risque', () => {
     ...surcharge,
   });
 
-  const donneesServiceNiveau1 = () =>
-    unServiceV2().avecDescription(
-      uneDescriptionV2Valide()
-        .avecNiveauSecurite('niveau1')
-        .donneesDescription()
-    );
-
-  const unServiceDeNiveau1 = () => donneesServiceNiveau1().construis();
-
   it('utilise les formules du niveau de sécurité du service pour calculer la vraisemblance', () => {
     const v = new VraisemblanceRisque(
       configurationVraisemblance({
         niveau1: { formules: [() => 3], groupes: {} },
       })
     );
-    const service = unServiceDeNiveau1();
 
-    const vraisemblance = v.calculePourService(service);
+    const vraisemblance = v.calculePourService('niveau1', {});
 
     expect(vraisemblance).toBe(3);
   });
@@ -47,9 +40,8 @@ describe('Le calcul de vraisemblance pour un risque', () => {
         niveau1: { formules: [() => 6], groupes: {} },
       })
     );
-    const service = unServiceDeNiveau1();
 
-    const vraisemblance = v.calculePourService(service);
+    const vraisemblance = v.calculePourService('niveau1', {});
 
     expect(vraisemblance).toBe(4);
   });
@@ -63,14 +55,35 @@ describe('Le calcul de vraisemblance pour un risque', () => {
         },
       })
     );
-    const service = unServiceDeNiveau1();
 
-    const vraisemblance = v.calculePourService(service);
+    const vraisemblance = v.calculePourService('niveau1', {});
 
     expect(vraisemblance).toBe(4);
   });
 
   describe('concernant les groupes de mesures', () => {
+    const desMesuresPersonnalisees = (
+      mesuresGenerales: Array<{ id: IdMesureV2 }>
+    ): Record<string, MesureGenerale> => {
+      const referentiel = creeReferentielV2();
+
+      const service = unServiceV2()
+        .avecMesures(
+          new Mesures(
+            { mesuresGenerales },
+            // @ts-expect-error L'objet Mesures devrait pouvoir prendre un ReferentielV2
+            referentiel,
+            Object.fromEntries(mesuresGenerales.map((m) => [m.id, {}]))
+          )
+        )
+        .construis();
+
+      return service.mesures.enrichiesAvecDonneesPersonnalisees() as unknown as Record<
+        string,
+        MesureGenerale
+      >;
+    };
+
     it('utilise les groupes de mesures personnalisées pour calculer les formules', () => {
       const v = new VraisemblanceRisque(
         configurationVraisemblance({
@@ -82,20 +95,9 @@ describe('Le calcul de vraisemblance pour un risque', () => {
           },
         })
       );
-      const referentiel = creeReferentielV2();
+      const mesures = desMesuresPersonnalisees([{ id: 'RECENSEMENT.1' }]);
 
-      const service = donneesServiceNiveau1()
-        .avecMesures(
-          new Mesures(
-            { mesuresGenerales: [{ id: 'RECENSEMENT.1' }] },
-            // @ts-expect-error L'objet Mesures devrait pouvoir prendre un ReferentielV2
-            referentiel,
-            { 'RECENSEMENT.1': { categorie: 'gouvernance' } }
-          )
-        )
-        .construis();
-
-      const vraisemblance = v.calculePourService(service);
+      const vraisemblance = v.calculePourService('niveau1', mesures);
 
       expect(vraisemblance).toBe(1);
     });
@@ -112,28 +114,12 @@ describe('Le calcul de vraisemblance pour un risque', () => {
           },
         })
       );
-      const referentiel = creeReferentielV2();
+      const mesures = desMesuresPersonnalisees([
+        { id: 'RECENSEMENT.1' },
+        { id: 'RECENSEMENT.2' },
+      ]);
 
-      const service = donneesServiceNiveau1()
-        .avecMesures(
-          new Mesures(
-            {
-              mesuresGenerales: [
-                { id: 'RECENSEMENT.1' },
-                { id: 'RECENSEMENT.2' },
-              ],
-            },
-            // @ts-expect-error L'objet Mesures devrait pouvoir prendre un ReferentielV2
-            referentiel,
-            {
-              'RECENSEMENT.1': { categorie: 'gouvernance' },
-              'RECENSEMENT.2': { categorie: 'gouvernance' },
-            }
-          )
-        )
-        .construis();
-
-      const vraisemblance = v.calculePourService(service);
+      const vraisemblance = v.calculePourService('niveau1', mesures);
 
       expect(vraisemblance).toBe(2);
     });
@@ -153,28 +139,12 @@ describe('Le calcul de vraisemblance pour un risque', () => {
           },
         })
       );
-      const referentiel = creeReferentielV2();
+      const mesures = desMesuresPersonnalisees([
+        { id: 'RECENSEMENT.1' },
+        { id: 'RECENSEMENT.2' },
+      ]);
 
-      const service = donneesServiceNiveau1()
-        .avecMesures(
-          new Mesures(
-            {
-              mesuresGenerales: [
-                { id: 'RECENSEMENT.1' },
-                { id: 'RECENSEMENT.2' },
-              ],
-            },
-            // @ts-expect-error L'objet Mesures devrait pouvoir prendre un ReferentielV2
-            referentiel,
-            {
-              'RECENSEMENT.1': { categorie: 'gouvernance' },
-              'RECENSEMENT.2': { categorie: 'gouvernance' },
-            }
-          )
-        )
-        .construis();
-
-      const vraisemblance = v.calculePourService(service);
+      const vraisemblance = v.calculePourService('niveau1', mesures);
 
       expect(vraisemblance).toBe(3);
     });
@@ -192,22 +162,9 @@ describe('Le calcul de vraisemblance pour un risque', () => {
           },
         })
       );
-      const referentiel = creeReferentielV2();
+      const mesures = desMesuresPersonnalisees([]);
 
-      const service = donneesServiceNiveau1()
-        .avecMesures(
-          new Mesures(
-            {
-              mesuresGenerales: [],
-            },
-            // @ts-expect-error L'objet Mesures devrait pouvoir prendre un ReferentielV2
-            referentiel,
-            {}
-          )
-        )
-        .construis();
-
-      const vraisemblance = v.calculePourService(service);
+      const vraisemblance = v.calculePourService('niveau1', mesures);
 
       expect(vraisemblance).toBe(1);
     });

@@ -1,5 +1,4 @@
 /* eslint-disable no-empty-function */
-import Service from '../../modeles/service.js';
 import {
   ConfigurationPourNiveau,
   ConfigurationVraisemblancePourUnVecteur,
@@ -7,25 +6,24 @@ import {
   PoidsGroupeMesure,
   Vraisemblance,
 } from './vraisemblance/vraisemblance.types.js';
-import {
+import type {
   IdMesureV2,
   NiveauSecurite,
 } from '../../../donneesReferentielMesuresV2.js';
-import MesureGenerale from '../../modeles/mesureGenerale.js';
+import type MesureGenerale from '../../modeles/mesureGenerale.js';
 
 export class VraisemblanceRisque {
   constructor(
     private readonly configuration: ConfigurationVraisemblancePourUnVecteur
   ) {}
 
-  calculePourService(service: Service): Vraisemblance {
+  calculePourService(
+    niveauSecurite: NiveauSecurite,
+    mesuresPersonnalisees: Record<IdMesureV2, MesureGenerale>
+  ): Vraisemblance {
     const configurationPourNiveauSecurite = this.configuration[
-      service.descriptionService.niveauSecurite as NiveauSecurite
+      niveauSecurite
     ] as ConfigurationPourNiveau;
-
-    const mesuresPersonnalisees =
-      service.mesures.enrichiesAvecDonneesPersonnalisees()
-        .mesuresGenerales as unknown as Record<IdMesureV2, MesureGenerale>;
 
     const groupes = Object.fromEntries(
       Object.entries(configurationPourNiveauSecurite.groupes).map(
