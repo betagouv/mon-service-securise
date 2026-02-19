@@ -7,10 +7,22 @@ mixin bloc-description(liste, legende)
         each item in liste
           li= item
 
+mixin bloc-descriptions-multiple(liste, legende)
+  if liste.length
+    +boite-grise(legende)
+      ul.liste-puce
+        each item in liste
+          - const valeur = Array.isArray(item.valeur) ? item.valeur.join(', ') : item.valeur
+          li
+            span
+              b= `${item.label} : `
+              span= valeur
+
 block page
   if donneesDescription.versionService === 'v1'
     +bloc-description(donneesDescription.fonctionnalites, 'Fonctionnalités offertes')
   else
+    +bloc-descriptions-multiple(donneesDescription.informationsGeneriques, 'Informations génériques sur le projet')
     +bloc-description(donneesDescription.specificitesProjet, 'Spécificités du projet')
   +bloc-description(donneesDescription.donneesStockees, 'Données stockées')
   +bloc-description([donneesDescription.dureeDysfonctionnementMaximumAcceptable], 'Durée maximale acceptable de dysfonctionnement grave du service')
