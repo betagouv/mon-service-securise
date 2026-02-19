@@ -1,6 +1,10 @@
 import Knex from 'knex';
 import * as uuid from 'uuid';
 import { journalMSS } from './adaptateurEnvironnement.js';
+import {
+  AdaptateurJournalMSS,
+  EvenementJournal,
+} from './adaptateurJournalMSS.interface.js';
 
 const config = {
   client: 'pg',
@@ -8,13 +12,13 @@ const config = {
   pool: { min: 0, max: journalMSS().poolMaximumConnexion() },
 };
 
-const nouvelAdaptateur = () => {
+const nouvelAdaptateur = (): AdaptateurJournalMSS => {
   const knex = Knex(config);
 
-  const consigneEvenement = (donneesEvenement) => {
-    const { type, donnees, date } = donneesEvenement;
+  const consigneEvenement = async (evenement: EvenementJournal) => {
+    const { type, donnees, date } = evenement;
 
-    return knex('journal_mss.evenements').insert({
+    await knex('journal_mss.evenements').insert({
       id: uuid.v4(),
       type,
       donnees,
