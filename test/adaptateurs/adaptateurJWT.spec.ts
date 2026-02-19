@@ -1,30 +1,26 @@
-import expect from 'expect.js';
 import { adaptateurJWT } from '../../src/adaptateurs/adaptateurJWT.js';
 import { ErreurJWTManquant, ErreurJWTInvalide } from '../../src/erreurs.js';
+import { AdaptateurEnvironnement } from '../../src/adaptateurs/adaptateurEnvironnement.interface.ts';
 
 describe("L'adaptateur JWT", () => {
   describe('sur demande de décodage des données', () => {
     it('jette une erreur lorsque les données à décoder ne sont pas définies', () => {
       const adaptateurEnvironnement = {
         JWT: () => ({ secret: () => 'unsecret' }),
-      };
+      } as AdaptateurEnvironnement;
 
       const { decode } = adaptateurJWT({ adaptateurEnvironnement });
 
       [null, undefined].forEach((valeurNonDefinie) => {
-        try {
-          decode(valeurNonDefinie);
-          expect().fail("L'appel aurait dû jeter une erreur");
-        } catch (e) {
-          expect(e).to.be.an(ErreurJWTManquant);
-        }
+        // @ts-expect-error On force une valeur invalide
+        expect(() => decode(valeurNonDefinie)).toThrowError(ErreurJWTManquant);
       });
     });
 
     it('décode les données signées avec le même secret', () => {
       const adaptateurEnvironnement = {
         JWT: () => ({ secret: () => 'unsecret' }),
-      };
+      } as AdaptateurEnvironnement;
 
       const { signeDonnees, decode } = adaptateurJWT({
         adaptateurEnvironnement,
@@ -34,30 +30,27 @@ describe("L'adaptateur JWT", () => {
       const donneesSignees = signeDonnees(donnees);
       const donneesDecodees = decode(donneesSignees);
 
-      expect(donneesDecodees.toto).to.be(42);
+      expect(donneesDecodees.toto).toBe(42);
     });
 
     it('jette une exception pour des données signées avec un autre secret', () => {
       const adaptateurEnvironnementLorsDeLaSignature = {
         JWT: () => ({ secret: () => 'unsecret' }),
-      };
+      } as AdaptateurEnvironnement;
       const adaptateurEnvironnementLorsDuDecodage = {
         JWT: () => ({ secret: () => 'unautresecret' }),
-      };
+      } as AdaptateurEnvironnement;
 
       const donnees = { toto: 42 };
       const donneesSignees = adaptateurJWT({
         adaptateurEnvironnement: adaptateurEnvironnementLorsDeLaSignature,
       }).signeDonnees(donnees);
 
-      try {
+      expect(() =>
         adaptateurJWT({
           adaptateurEnvironnement: adaptateurEnvironnementLorsDuDecodage,
-        }).decode(donneesSignees);
-        expect().fail("L'appel aurait dû jeter une erreur");
-      } catch (e) {
-        expect(e).to.be.an(ErreurJWTInvalide);
-      }
+        }).decode(donneesSignees)
+      ).toThrowError(ErreurJWTInvalide);
     });
   });
 });
