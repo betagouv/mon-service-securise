@@ -15,24 +15,47 @@ export class ObjetPDFAnnexeDescriptionV2 {
   }
 
   donnees() {
+    const { descriptionService } = this.service;
+    const { organisationResponsable } = descriptionService;
     return {
       donneesStockees: [
-        ...this.service.descriptionService.categoriesDonneesTraitees.map((c) =>
+        ...descriptionService.categoriesDonneesTraitees.map((c) =>
           this.referentiel.descriptionsDonneesCaracterePersonnel(c)
         ),
-        ...this.service.descriptionService
-          .categoriesDonneesTraiteesSupplementaires,
+        ...descriptionService.categoriesDonneesTraiteesSupplementaires,
       ],
       dureeDysfonctionnementMaximumAcceptable:
         this.referentiel.descriptionDelaiAvantImpactCritique(
-          this.service.descriptionService.dureeDysfonctionnementAcceptable
+          descriptionService.dureeDysfonctionnementAcceptable
         ),
+      informationsGeneriques: [
+        this.metEnForme('Nom du projet', this.service.nomService()),
+        this.metEnForme(
+          "Nom de l'organisation",
+          `${organisationResponsable.nom} (${organisationResponsable.siret})`
+        ),
+        this.metEnForme(
+          'Statut',
+          this.referentiel.descriptionStatutDeploiement(
+            descriptionService.statutDeploiement
+          )
+        ),
+        this.metEnForme('Présentation', descriptionService.presentation),
+        this.metEnForme(
+          'URL(s) du projet',
+          descriptionService.pointsAcces.descriptions()
+        ),
+      ],
       nomService: this.service.nomService(),
       versionService: this.service.version(),
-      specificitesProjet:
-        this.service.descriptionService.specificitesProjet.map((s) =>
-          this.referentiel.descriptionSpecificiteProjet(s)
-        ),
+      specificitesProjet: descriptionService.specificitesProjet.map((s) =>
+        this.referentiel.descriptionSpecificiteProjet(s)
+      ),
     };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private metEnForme(label: string, valeur: unknown) {
+    return { label, valeur };
   }
 }
