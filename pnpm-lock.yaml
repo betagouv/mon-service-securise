@@ -156,6 +156,9 @@ importers:
       '@types/papaparse':
         specifier: ~5.3.16
         version: 5.3.16
+      '@types/pug':
+        specifier: ^2.0.10
+        version: 2.0.10
       '@types/uuid':
         specifier: ~10.0.0
         version: 10.0.0
