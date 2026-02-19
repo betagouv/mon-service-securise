@@ -48,6 +48,32 @@ export class ObjetPDFAnnexeDescriptionV2 {
           )
         ),
       ],
+      criticiteExposition: [
+        this.metEnForme(
+          'Ouverture du système',
+          this.referentiel.descriptionOuvertureSysteme(
+            descriptionService.ouvertureSysteme
+          )
+        ),
+        this.metEnForme(
+          'Audience cible du projet',
+          this.referentiel.descriptionAudienceCible(
+            descriptionService.audienceCible
+          )
+        ),
+        this.metEnForme(
+          'Durée maximale acceptable de dysfonctionnement du système',
+          this.referentiel.descriptionDelaiAvantImpactCritique(
+            descriptionService.dureeDysfonctionnementAcceptable
+          )
+        ),
+        this.metEnForme('Données traitées', [
+          ...descriptionService.categoriesDonneesTraitees.map((c) =>
+            this.referentiel.descriptionsDonneesCaracterePersonnel(c)
+          ),
+          ...descriptionService.categoriesDonneesTraiteesSupplementaires,
+        ]),
+      ],
       informationsGeneriques: [
         this.metEnForme('Nom du projet', this.service.nomService()),
         this.metEnForme(

@@ -1,11 +1,13 @@
 import { creeReferentiel } from './referentiel.js';
 import { Referentiel } from './referentiel.interface.js';
 import {
+  AudienceCible,
   CategorieDonneesTraitees,
   DureeDysfonctionnementAcceptable,
   IdMesureV2,
   LocalisationDonneesTraitees,
   mesuresV2,
+  OuvertureSysteme,
   questionsV2,
   SpecificiteProjet,
   StatutDeploiement,
@@ -26,11 +28,13 @@ export type DonneesReferentielV2 = typeof questionsV2 & {
 
 type MethodesSpecifiquesReferentielV2 = {
   ajouteThematiqueEtPorteurs: (mesures: typeof mesuresV2) => typeof mesuresV2;
+  descriptionAudienceCible: (audienceCible: AudienceCible) => string;
   descriptionSpecificiteProjet: (
     specificiteProjet: SpecificiteProjet
   ) => string;
   descriptionTypeHebergement: (typeHebergement: TypeHebergement) => string;
   descriptionTypeService: (typeService: TypeService) => string;
+  descriptionOuvertureSysteme: (ouvertureSysteme: OuvertureSysteme) => string;
   enregistreReglesMoteurV2: (regles: ReglesDuReferentielMesuresV2) => void;
   reglesMoteurV2: () => ReglesDuReferentielMesuresV2;
   mesures: () => typeof mesuresV2;
@@ -60,6 +64,9 @@ export const creeReferentielV2 = (
     donneesCaracterePersonnel: CategorieDonneesTraitees
   ) => donnees.categorieDonneesTraitees[donneesCaracterePersonnel].nom;
 
+  const descriptionAudienceCible = (audienceCible: AudienceCible) =>
+    `${donnees.audienceCible[audienceCible].nom} : ${donnees.audienceCible[audienceCible].description}`;
+
   const descriptionSpecificiteProjet = (specificiteProjet: SpecificiteProjet) =>
     donnees.specificiteProjet[specificiteProjet].nom;
 
@@ -71,6 +78,9 @@ export const creeReferentielV2 = (
 
   const descriptionTypeService = (typeService: TypeDeService) =>
     donnees.typeDeService[typeService].nom;
+
+  const descriptionOuvertureSysteme = (ouvertureSysteme: OuvertureSysteme) =>
+    donnees.ouvertureSysteme[ouvertureSysteme].nom;
 
   const enregistreReglesMoteurV2 = (regles: ReglesDuReferentielMesuresV2) => {
     reglesMoteurV2Enregistrees = regles;
@@ -108,12 +118,14 @@ export const creeReferentielV2 = (
   return {
     ...creeReferentiel(),
     ajouteThematiqueEtPorteurs,
+    descriptionAudienceCible,
     descriptionDelaiAvantImpactCritique,
     descriptionsDonneesCaracterePersonnel,
     descriptionSpecificiteProjet,
     descriptionStatutDeploiement,
     descriptionTypeHebergement,
     descriptionTypeService,
+    descriptionOuvertureSysteme,
     enregistreReglesMoteurV2,
     estIdentifiantMesureConnu,
     localisationDonnees,

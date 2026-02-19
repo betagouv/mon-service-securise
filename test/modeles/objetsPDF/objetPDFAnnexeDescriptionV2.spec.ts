@@ -25,6 +25,8 @@ describe("L'objet PDF de l'annexe de description V2", () => {
         .avecTypesService(['portailInformation', 'api'])
         .avecSpecificitesProjet(['annuaire', 'postesDeTravail'])
         .avecTypeHebergement('saas')
+        .avecOuvertureSysteme('accessibleSurInternet')
+        .avecAudienceCible('moyenne')
         .avecDonneesTraitees(
           ['documentsIdentifiants', 'donneesSensibles'],
           ['Mes données ajoutées']
@@ -119,6 +121,36 @@ describe("L'objet PDF de l'annexe de description V2", () => {
         label: 'Hébergement du système',
         valeur:
           "Le système est entièrement fourni et vous l'utilisez directement via une interface (SaaS)",
+      },
+    ]);
+  });
+
+  it("fournit la criticité et l'exposition du service", () => {
+    const vueAnnexePDFDescription = new ObjetPDFAnnexeDescriptionV2(service);
+
+    const donnees = vueAnnexePDFDescription.donnees();
+
+    expect(donnees.criticiteExposition).toEqual([
+      {
+        label: 'Ouverture du système',
+        valeur: 'Accessible depuis internet',
+      },
+      {
+        label: 'Audience cible du projet',
+        valeur:
+          'Moyenne : Utilisé par un périmètre restreint à l’échelle locale ou régionale.',
+      },
+      {
+        label: 'Durée maximale acceptable de dysfonctionnement du système',
+        valeur: 'Moins de 4h',
+      },
+      {
+        label: 'Données traitées',
+        valeur: [
+          'Documents identifiants',
+          'Données sensibles',
+          'Mes données ajoutées',
+        ],
       },
     ]);
   });
