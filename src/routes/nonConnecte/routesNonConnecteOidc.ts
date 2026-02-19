@@ -106,7 +106,7 @@ const routesNonConnecteOidc = ({
         connexionAvecMFA,
       });
     } catch (e) {
-      fabriqueAdaptateurGestionErreur().logueErreur(e);
+      fabriqueAdaptateurGestionErreur().logueErreur(e as Error);
       reponse.status(401).send("Erreur d'authentification");
     }
   });
