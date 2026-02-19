@@ -28,6 +28,7 @@ const extraisParametresDescriptionService = (
     params.fonctionnalitesSpecifiques.filter(Boolean);
   params.donneesSensiblesSpecifiques =
     params.donneesSensiblesSpecifiques.filter(Boolean);
+  params.pointsAcces = params.donneesSensiblesSpecifiques.filter(Boolean);
 
   delete params.siretEntite;
   delete params.nomEntite;
