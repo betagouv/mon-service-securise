@@ -73,7 +73,7 @@ export class DescriptionServiceV2 {
   readonly pointsAcces: PointsAcces;
   readonly typeService: TypeDeService[];
   readonly typeHebergement: TypeHebergement;
-  private readonly presentation: string | undefined;
+  readonly presentation: string | undefined;
   private readonly referentiel: ReferentielV2;
 
   constructor(

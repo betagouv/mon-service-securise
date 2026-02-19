@@ -15,6 +15,13 @@ describe("L'objet PDF de l'annexe de description V2", () => {
       idUtilisateur: '456',
       descriptionService: uneDescriptionV2Valide()
         .avecNomService('Nom Service')
+        .avecOrganisationResponsable({
+          siret: 'un SIRET',
+          nom: 'Mon organisation',
+        })
+        .avecPresentation('Ma présentation')
+        .avecPointsAcces(['https://monprojet.fr', 'https://monautreprojet.fr'])
+        .avecStatutDeploiement('enProjet')
         .avecSpecificitesProjet(['annuaire', 'postesDeTravail'])
         .avecDonneesTraitees(
           ['documentsIdentifiants', 'donneesSensibles'],
@@ -73,5 +80,22 @@ describe("L'objet PDF de l'annexe de description V2", () => {
     expect(donnees.dureeDysfonctionnementMaximumAcceptable).toEqual(
       'Moins de 4h'
     );
+  });
+
+  it('fournit les informations génériques du service', () => {
+    const vueAnnexePDFDescription = new ObjetPDFAnnexeDescriptionV2(service);
+
+    const donnees = vueAnnexePDFDescription.donnees();
+
+    expect(donnees.informationsGeneriques).toEqual([
+      { label: 'Nom du projet', valeur: 'Nom Service' },
+      { label: "Nom de l'organisation", valeur: 'Mon organisation (un SIRET)' },
+      { label: 'Statut', valeur: 'En conception' },
+      { label: 'Présentation', valeur: 'Ma présentation' },
+      {
+        label: 'URL(s) du projet',
+        valeur: ['https://monprojet.fr', 'https://monautreprojet.fr'],
+      },
+    ]);
   });
 });

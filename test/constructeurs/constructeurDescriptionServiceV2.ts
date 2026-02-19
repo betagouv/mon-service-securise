@@ -1,6 +1,7 @@
 import {
   DescriptionServiceV2,
   DonneesDescriptionServiceV2,
+  DonneesEntite,
 } from '../../src/modeles/descriptionServiceV2.js';
 import {
   ActiviteExternalisee,
@@ -78,6 +79,11 @@ class ConstructeurDescriptionServiceV2 {
 
   avecSiret(siret: string): ConstructeurDescriptionServiceV2 {
     this.donnees.organisationResponsable!.siret = siret;
+    return this;
+  }
+
+  avecOrganisationResponsable(organisation: DonneesEntite) {
+    this.donnees.organisationResponsable = organisation;
     return this;
   }
 
