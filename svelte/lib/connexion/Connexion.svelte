@@ -19,7 +19,7 @@
       await axios.post('/api/token', { login, motDePasse });
       window.location.href = urlRedirection ?? '/tableauDeBord';
     } catch (erreur: any) {
-      if (erreur.response.status === 401) {
+      if (erreur?.response?.status === 401) {
         afficheErreur = true;
       }
     }
