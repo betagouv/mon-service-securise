@@ -18,16 +18,6 @@ export class ObjetPDFAnnexeDescriptionV2 {
     const { descriptionService } = this.service;
     const { organisationResponsable } = descriptionService;
     return {
-      donneesStockees: [
-        ...descriptionService.categoriesDonneesTraitees.map((c) =>
-          this.referentiel.descriptionsDonneesCaracterePersonnel(c)
-        ),
-        ...descriptionService.categoriesDonneesTraiteesSupplementaires,
-      ],
-      dureeDysfonctionnementMaximumAcceptable:
-        this.referentiel.descriptionDelaiAvantImpactCritique(
-          descriptionService.dureeDysfonctionnementAcceptable
-        ),
       caracteristiques: [
         this.metEnForme(
           'Type de projet à sécuriser',
@@ -94,9 +84,6 @@ export class ObjetPDFAnnexeDescriptionV2 {
       ],
       nomService: this.service.nomService(),
       versionService: this.service.version(),
-      specificitesProjet: descriptionService.specificitesProjet.map((s) =>
-        this.referentiel.descriptionSpecificiteProjet(s)
-      ),
     };
   }
 
