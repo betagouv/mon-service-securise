@@ -22,7 +22,9 @@ describe("L'objet PDF de l'annexe de description V2", () => {
         .avecPresentation('Ma présentation')
         .avecPointsAcces(['https://monprojet.fr', 'https://monautreprojet.fr'])
         .avecStatutDeploiement('enProjet')
+        .avecTypesService(['portailInformation', 'api'])
         .avecSpecificitesProjet(['annuaire', 'postesDeTravail'])
+        .avecTypeHebergement('saas')
         .avecDonneesTraitees(
           ['documentsIdentifiants', 'donneesSensibles'],
           ['Mes données ajoutées']
@@ -95,6 +97,28 @@ describe("L'objet PDF de l'annexe de description V2", () => {
       {
         label: 'URL(s) du projet',
         valeur: ['https://monprojet.fr', 'https://monautreprojet.fr'],
+      },
+    ]);
+  });
+
+  it('fournit les caractéristiques du service', () => {
+    const vueAnnexePDFDescription = new ObjetPDFAnnexeDescriptionV2(service);
+
+    const donnees = vueAnnexePDFDescription.donnees();
+
+    expect(donnees.caracteristiques).toEqual([
+      {
+        label: 'Type de projet à sécuriser',
+        valeur: ["Portail d'information", 'API'],
+      },
+      {
+        label: 'Sécurisation prévues',
+        valeur: ['Un annuaire', 'Des postes de travail'],
+      },
+      {
+        label: 'Hébergement du système',
+        valeur:
+          "Le système est entièrement fourni et vous l'utilisez directement via une interface (SaaS)",
       },
     ]);
   });
