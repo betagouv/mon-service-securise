@@ -1,21 +1,42 @@
+<script context="module" lang="ts">
+  import type { BrouillonService, Service } from './tableauDeBord.d';
+  export type TypeSelection = 'Service' | 'Brouillon';
+  export type ServiceOuBrouillon = (Service | BrouillonService) & {
+    type: TypeSelection;
+  };
+</script>
+
 <script lang="ts">
   import Bouton from '../ui/Bouton.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirDuplication from '../ui/tiroirs/TiroirDuplication.svelte';
   import TiroirExportServices from '../ui/tiroirs/TiroirExportServices.svelte';
-  import type { Service } from './tableauDeBord.d';
   import TiroirTelechargementDocumentsService from '../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import TiroirSuppression from '../ui/tiroirs/TiroirSuppression.svelte';
 
-  export let selection: Service[];
+  export let selection: ServiceOuBrouillon[];
+
+  const estService = (
+    s: ServiceOuBrouillon
+  ): s is Service & { type: TypeSelection } => s.type === 'Service';
+
+  const enServices = (tous: ServiceOuBrouillon[]): Service[] =>
+    tous
+      .filter((s) => s.type === 'Service')
+      .map(({ type, ...service }) => service as Service);
 
   $: actionsDisponibles = selection.length !== 0;
   $: selectionUnique = selection.length === 1;
-  $: estProprietaireDesServicesSelectionnes = selection.every(
-    (s) => s.estProprietaire
+  $: estProprietaireDesServicesSelectionnes = selection
+    .filter((s) => estService(s))
+    .every((s) => s.estProprietaire);
+  $: selectionPossedeDesBrouillons = selection.some(
+    (s) => s.type === 'Brouillon'
   );
-  $: ontDesDocuments = selection.every((s) => s.documentsPdfDisponibles.length);
+  $: ontDesDocuments = selection.every(
+    (s) => estService(s) && s.documentsPdfDisponibles.length
+  );
 </script>
 
 <div class="conteneur-actions" class:avec-nombre-lignes={actionsDisponibles}>
@@ -33,10 +54,12 @@
       icone="contributeurs"
       taille="moyen"
       type="lien"
-      actif={actionsDisponibles && estProprietaireDesServicesSelectionnes}
+      actif={actionsDisponibles &&
+        estProprietaireDesServicesSelectionnes &&
+        !selectionPossedeDesBrouillons}
       on:click={() =>
         tiroirStore.afficheContenu(TiroirGestionContributeurs, {
-          services: selection,
+          services: enServices(selection),
         })}
     />
     <Bouton
@@ -47,7 +70,7 @@
       actif={actionsDisponibles && selectionUnique && ontDesDocuments}
       on:click={() =>
         tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
-          service: selection[0],
+          service: enServices(selection)[0],
         })}
     />
     <Bouton
@@ -55,10 +78,10 @@
       icone="export"
       taille="moyen"
       type="lien"
-      actif={actionsDisponibles}
+      actif={actionsDisponibles && !selectionPossedeDesBrouillons}
       on:click={() =>
         tiroirStore.afficheContenu(TiroirExportServices, {
-          services: selection,
+          services: enServices(selection),
         })}
     />
     <Bouton
@@ -68,10 +91,11 @@
       type="lien"
       actif={actionsDisponibles &&
         selectionUnique &&
-        estProprietaireDesServicesSelectionnes}
+        estProprietaireDesServicesSelectionnes &&
+        !selectionPossedeDesBrouillons}
       on:click={() =>
         tiroirStore.afficheContenu(TiroirDuplication, {
-          service: selection[0],
+          service: enServices(selection)[0],
         })}
     />
     <Bouton
@@ -81,7 +105,9 @@
       type="lien"
       actif={actionsDisponibles && estProprietaireDesServicesSelectionnes}
       on:click={() =>
-        tiroirStore.afficheContenu(TiroirSuppression, { services: selection })}
+        tiroirStore.afficheContenu(TiroirSuppression, {
+          servicesEtBrouillon: selection,
+        })}
     />
   </div>
 </div>

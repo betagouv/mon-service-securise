@@ -312,6 +312,7 @@ const creeDepot = (config = {}) => {
     lisBrouillonsService,
     finaliseBrouillonService,
     sauvegardeBrouillonService,
+    supprimeBrouillonService,
   } = depotBrouillonsService;
 
   const {
@@ -411,6 +412,7 @@ const creeDepot = (config = {}) => {
     sauvegardeNotificationsExpirationHomologation,
     sauvegardeSimulationMigrationReferentiel,
     superviseur,
+    supprimeBrouillonService,
     supprimeContributeur,
     supprimeDesMesuresAssocieesAuModele,
     supprimeMesureSpecifiqueDuService,

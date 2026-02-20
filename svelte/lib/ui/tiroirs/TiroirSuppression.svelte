@@ -4,25 +4,29 @@
   import ContenuTiroir from './ContenuTiroir.svelte';
   import { tiroirStore } from '../stores/tiroir.store';
   import Formulaire from '../Formulaire.svelte';
-  import type { Service } from '../../tableauDeBord/tableauDeBord.d';
+  import type {
+    BrouillonService,
+    Service,
+  } from '../../tableauDeBord/tableauDeBord.d';
   import Avertissement from '../Avertissement.svelte';
   import ChampTexte from '../ChampTexte.svelte';
+  import type { ServiceOuBrouillon } from '../../tableauDeBord/ActionsDesServices.svelte';
 
-  export let services: Service[];
+  export let servicesEtBrouillon: ServiceOuBrouillon[];
   export const titre = 'Supprimer';
   export const sousTitre =
-    services.length > 1
+    servicesEtBrouillon.length > 1
       ? 'Effacer toutes les données des services sélectionnés.'
       : 'Effacer toutes les données du service sélectionné.';
 
   const confirmationSuppression =
-    services.length > 1
-      ? `${services.length} services`
-      : services[0].nomService;
+    servicesEtBrouillon.length > 1
+      ? `${servicesEtBrouillon.length} services`
+      : servicesEtBrouillon[0].nomService;
   const intituleSuppression =
-    services.length > 1
-      ? `les ${services.length} services séléctionnés`
-      : `le service ${services[0].nomService}`;
+    servicesEtBrouillon.length > 1
+      ? `les ${servicesEtBrouillon.length} services séléctionnés`
+      : `le service ${servicesEtBrouillon[0].nomService}`;
 
   let confirmation = '';
 
@@ -30,9 +34,15 @@
   const supprimeService = async () => {
     enCoursEnvoi = true;
 
-    await Promise.all(
-      services.map((s) => axios.delete(`/api/service/${s.id}`))
+    const services = servicesEtBrouillon?.filter((s) => s.type === 'Service');
+    const brouillons = servicesEtBrouillon?.filter(
+      (s) => s.type === 'Brouillon'
     );
+
+    await Promise.all([
+      ...services.map((s) => axios.delete(`/api/service/${s.id}`)),
+      ...brouillons.map((b) => axios.delete(`/api/brouillon-service/${b.id}`)),
+    ]);
     tiroirStore.ferme();
     document.body.dispatchEvent(new CustomEvent('rafraichis-services'));
 

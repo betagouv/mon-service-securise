@@ -6,10 +6,11 @@
   import EtiquetteProprietaire from './elementsDeService/EtiquetteProprietaire.svelte';
   import ActionRecommandee from './elementsDeService/ActionRecommandee.svelte';
   import { resultatsDeRecherche } from './stores/resultatDeRecherche.store';
-  import ActionsDesServices from './ActionsDesServices.svelte';
+  import ActionsDesServices, {
+    type TypeSelection,
+  } from './ActionsDesServices.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
-  import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
   import {
     affichageParStatutHomologation,
     affichageParStatutHomologationSelectionne,
@@ -24,26 +25,30 @@
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
   import { resultatsDeRechercheBrouillons } from './stores/resultatDeRechercheBrouillons.store';
 
-  $: selection = $resultatsDeRecherche.filter((service) =>
-    $selectionIdsServices.includes(service.id)
-  );
+  $: selection = [
+    ...$resultatsDeRecherche
+      .filter((service) => $selectionIdsServices.includes(service.id))
+      .map((s) => ({ ...s, type: 'Service' as TypeSelection })),
+    ...$resultatsDeRechercheBrouillons
+      .filter((brouillon) => $selectionIdsServices.includes(brouillon.id))
+      .map((b) => ({ ...b, type: 'Brouillon' as TypeSelection })),
+  ];
 
-  $: toutEstCoche = selection.length === $resultatsDeRecherche.length;
+  $: toutEstCoche =
+    selection.length ===
+    $resultatsDeRecherche.length + $resultatsDeRechercheBrouillons.length;
   const basculeSelectionTousServices = () => {
     if (toutEstCoche) $selectionIdsServices = [];
     else
-      $selectionIdsServices = $resultatsDeRecherche.map(
-        (service) => service.id
-      );
+      $selectionIdsServices = [
+        ...$resultatsDeRecherche.map((service) => service.id),
+        ...$resultatsDeRechercheBrouillons.map((brouillon) => brouillon.id),
+      ];
   };
 
   $: $resultatsDeRecherche, selectionIdsServices.vide();
 
   $: $selectionIdsServices, tiroirStore.ferme();
-
-  const supprimeRechercheEtFiltres = () => {
-    $rechercheTextuelle = '';
-  };
 
   export let indicesCyberCharges: boolean = false;
 </script>
@@ -123,8 +128,20 @@
   {:else}
     <tbody class="contenu-tableau-services">
       {#each $resultatsDeRechercheBrouillons as brouillon (brouillon.id)}
-        <tr class="ligne-service brouillon" data-id-brouillon={brouillon.id}>
-          <th class="cellule-selection" scope="row"></th>
+        <tr
+          class="ligne-service brouillon"
+          data-id-brouillon={brouillon.id}
+          class:selectionnee={$selectionIdsServices.includes(brouillon.id)}
+        >
+          <th class="cellule-selection" scope="row">
+            <input
+              class="selection-service"
+              type="checkbox"
+              bind:group={$selectionIdsServices}
+              value={brouillon.id}
+              title="Sélection du brouillon {brouillon.nomService}"
+            />
+          </th>
           <td class="cellule-noms">
             <a
               class="lien-service"

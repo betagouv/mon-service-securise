@@ -26,6 +26,7 @@ export type DepotDonneesBrouillonService = {
     idUtilisateur: UUID,
     brouillon: BrouillonService
   ) => Promise<void>;
+  supprimeBrouillonService: (idBrouillon: UUID) => Promise<void>;
 };
 
 type PersistanceBrouillonService = {
@@ -148,12 +149,16 @@ const creeDepot = ({
     );
   };
 
+  const supprimeBrouillonService = async (idBrouillon: UUID) =>
+    persistance.supprimeBrouillonService(idBrouillon);
+
   return {
     finaliseBrouillonService,
     nouveauBrouillonService,
     lisBrouillonService,
     lisBrouillonsService,
     sauvegardeBrouillonService,
+    supprimeBrouillonService,
   };
 };
 
