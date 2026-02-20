@@ -104,6 +104,7 @@
     <Bouton
       titre="Annuler"
       type="secondaire"
+      boutonSoumission={false}
       on:click={() => {
         if (!enCoursEnvoi) tiroirStore.ferme();
       }}
