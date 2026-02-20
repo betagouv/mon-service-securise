@@ -42,5 +42,6 @@
     display: flex;
     gap: 8px;
     margin-bottom: 30px;
+    align-items: baseline;
   }
 </style>
