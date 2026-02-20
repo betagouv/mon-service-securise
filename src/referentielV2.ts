@@ -23,6 +23,7 @@ export type DonneesReferentielV2 = typeof questionsV2 & {
 };
 
 type MethodesSpecifiquesReferentielV2 = {
+  ajouteThematiqueEtPorteurs: (mesures: typeof mesuresV2) => typeof mesuresV2;
   descriptionSpecificiteProjet: (
     specificiteProjet: SpecificiteProjet
   ) => string;
@@ -85,8 +86,18 @@ export const creeReferentielV2 = (
   const thematiqueDeMesure = (idMesure: IdMesureV2) =>
     donnees.donneesComplementairesMesures[idMesure].thematique;
 
+  const ajouteThematiqueEtPorteurs = (desMesures: typeof mesuresV2) =>
+    Object.fromEntries(
+      Object.entries(desMesures).map(([id, m]) => {
+        const thematique = thematiqueDeMesure(id);
+        const porteursSinguliers = porteursSinguliersDeMesure(id);
+        return [id, { ...m, thematique, porteursSinguliers }];
+      })
+    );
+
   return {
     ...creeReferentiel(),
+    ajouteThematiqueEtPorteurs,
     descriptionDelaiAvantImpactCritique,
     descriptionsDonneesCaracterePersonnel,
     descriptionSpecificiteProjet,
