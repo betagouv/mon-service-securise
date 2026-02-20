@@ -561,18 +561,12 @@ const routesConnecteApi = ({
         );
 
       if (versions.includes(VersionService.v2) || versions.length === 0) {
-        const mesuresV2AvecThematique = Object.fromEntries(
-          Object.entries(mesuresV2).map(([id, mesure]) => {
-            const thematique = referentielV2.thematiqueDeMesure(id);
-            const porteursSinguliers =
-              referentielV2.porteursSinguliersDeMesure(id);
-            return [id, { ...mesure, thematique, porteursSinguliers }];
-          })
-        );
-
         mesuresInteressantes = {
           ...mesuresInteressantes,
-          ...ajouteVersion(VersionService.v2, mesuresV2AvecThematique),
+          ...ajouteVersion(
+            VersionService.v2,
+            referentielV2.ajouteThematiqueEtPorteurs(mesuresV2)
+          ),
         };
       }
 
