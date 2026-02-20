@@ -94,7 +94,7 @@
     flex-direction: column;
     position: absolute;
     background-color: #fff;
-    z-index: 1;
+    z-index: 2;
     gap: 16px;
     padding: 16px;
   }
