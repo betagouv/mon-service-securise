@@ -55,7 +55,7 @@ mixin dossier({ statut, dossier, service, indiceCyber, indiceCyberPersonnalise, 
         .contenu-details
           .details
             if dossier.finalise
-              div= `Autorité d'homologation : ${texteTronque(dossier.autorite.nom, 37)} | ${texteTronque(dossier.autorite.fonction, 37)}`
+              div= `Autorité d'homologation : ${texteTronque(dossier.autorite.nom || '', 37)} | ${texteTronque(dossier.autorite.fonction || '', 37)}`
               div= `Date d'échéance : ${dossier.descriptionProchaineDateHomologation()}`
             else
               - const titreEtape = referentiel.etapesParcoursHomologation().find((e) => e.id === etapeCourante)
