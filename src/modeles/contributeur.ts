@@ -1,8 +1,20 @@
 import { Identite } from './identite.js';
+import { UUID } from '../typesBasiques.js';
+
+export type DonneesContributeur = {
+  id: UUID;
+  email: string;
+  prenom: string;
+  nom: string;
+  postes: string[];
+};
 
 class Contributeur {
-  constructor(donneesUtilisateur) {
-    const { id, email, prenom, nom, postes } = donneesUtilisateur;
+  public readonly idUtilisateur: UUID;
+  private readonly identite: Identite;
+
+  constructor(donnees: DonneesContributeur) {
+    const { id, email, prenom, nom, postes } = donnees;
     this.idUtilisateur = id;
     this.identite = new Identite({ email, prenom, nom, postes });
   }

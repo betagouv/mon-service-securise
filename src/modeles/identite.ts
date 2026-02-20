@@ -1,7 +1,19 @@
 import { formatteListeFr } from '../utilitaires/liste.js';
 
+export type DonneesIdentite = {
+  prenom: string;
+  nom: string;
+  email: string;
+  postes: string[];
+};
+
 class Identite {
-  constructor(donnees) {
+  private readonly prenom: string;
+  private readonly nom: string;
+  private readonly email: string;
+  private readonly postes: string[];
+
+  constructor(donnees: DonneesIdentite) {
     const { prenom, nom, email, postes } = donnees;
     this.prenom = prenom;
     this.nom = nom;
@@ -10,7 +22,7 @@ class Identite {
   }
 
   initiales() {
-    const premiereLettreMajuscule = (s) =>
+    const premiereLettreMajuscule = (s: string | null) =>
       typeof s === 'string' ? s.charAt(0).toUpperCase() : '';
 
     return (

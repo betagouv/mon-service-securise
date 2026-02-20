@@ -1,9 +1,14 @@
 import axios from 'axios';
+import express, { Request, Response, NextFunction } from 'express';
 import * as Sentry from '@sentry/node';
 import ipFilter from 'express-ipfilter';
 import { sentry } from './adaptateurEnvironnement.js';
+import { UUID } from '../typesBasiques.js';
 
-const logueErreur = (erreur, infosDeContexte = {}) => {
+const logueErreur = (
+  erreur: Error,
+  infosDeContexte: Record<string, unknown> = {}
+) => {
   Sentry.withScope(() => {
     Object.entries(infosDeContexte).forEach(([cle, valeur]) =>
       Sentry.setExtra(cle, valeur)
@@ -35,7 +40,7 @@ const logueErreur = (erreur, infosDeContexte = {}) => {
   });
 };
 
-const initialise = (applicationExpress) => {
+const initialise = (applicationExpress: express.Application) => {
   const config = sentry();
 
   Sentry.init({
@@ -56,7 +61,12 @@ const initialise = (applicationExpress) => {
   applicationExpress.use(Sentry.Handlers.tracingHandler());
 };
 
-const controleurErreurs = (erreur, requete, reponse, suite) => {
+const controleurErreurs = (
+  erreur: Error,
+  requete: Request,
+  reponse: Response,
+  suite: NextFunction
+) => {
   const estErreurDeFiltrageIp = erreur instanceof ipFilter.IpDeniedError;
   if (estErreurDeFiltrageIp) {
     // On termine la connexion directement si qqun nous appelle sans passer par le WAF.
@@ -80,7 +90,10 @@ const controleurErreurs = (erreur, requete, reponse, suite) => {
   Sentry.Handlers.errorHandler()(erreur, requete, reponse, suite);
 };
 
-const identifieUtilisateur = (idUtilisateur, timestampTokenJwt) => {
+const identifieUtilisateur = (
+  idUtilisateur: UUID,
+  timestampTokenJwt: number
+) => {
   Sentry.setUser({
     id: idUtilisateur,
     'Connexion UTC': new Date(timestampTokenJwt * 1_000),
