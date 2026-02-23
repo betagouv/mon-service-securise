@@ -216,10 +216,6 @@ const routesNonConnectePage = ({
     reponse.sendFile('/public/assets/fichiers/sitemap.xml', { root: '.' });
   });
 
-  routes.get('/ui-kit', (_requete, reponse) => {
-    reponse.render('uiKit');
-  });
-
   return routes;
 };
 
