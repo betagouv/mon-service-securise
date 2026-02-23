@@ -1,20 +1,47 @@
 import {
-  ErreurStatutDeploiementInvalide,
-  ErreurLocalisationDonneesInvalide,
-  ErreurDonneesObligatoiresManquantes,
   ErreurDonneesNiveauSecuriteInsuffisant,
+  ErreurDonneesObligatoiresManquantes,
+  ErreurLocalisationDonneesInvalide,
+  ErreurStatutDeploiementInvalide,
 } from '../erreurs.js';
 import DonneesSensiblesSpecifiques from './donneesSensiblesSpecifiques.js';
 import FonctionnalitesSpecifiques from './fonctionnalitesSpecifiques.js';
 import InformationsService from './informationsService.js';
 import PointsAcces from './pointsAcces.js';
-import * as Referentiel from '../referentiel.js';
 import Entite from './entite.js';
+import { Referentiel } from '../referentiel.interface.js';
+import { creeReferentielVide } from '../referentiel.js';
+import { NiveauSecurite } from '../../donneesReferentielMesuresV2.js';
+import {
+  DonneesDescriptionService,
+  DonneesPourEstimationNiveauSecurite,
+  NombreOrganisationsUtilisatrices,
+} from './descriptionService.types.js';
 
 const tousNiveauxSecurite = ['niveau1', 'niveau2', 'niveau3'];
 
 class DescriptionService extends InformationsService {
-  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
+  readonly delaiAvantImpactCritique!: string;
+  readonly localisationDonnees!: string;
+  readonly nomService!: string;
+  readonly provenanceService!: string;
+  readonly statutDeploiement!: string;
+  readonly nombreOrganisationsUtilisatrices!: NombreOrganisationsUtilisatrices;
+  readonly niveauSecurite!: NiveauSecurite;
+  readonly presentation?: string;
+  readonly donneesCaracterePersonnel!: string[];
+  readonly fonctionnalites!: string[];
+  readonly typeService!: string[];
+  readonly donneesSensiblesSpecifiques!: DonneesSensiblesSpecifiques;
+  readonly fonctionnalitesSpecifiques!: FonctionnalitesSpecifiques;
+  readonly pointsAcces!: PointsAcces;
+  readonly organisationResponsable: Entite;
+  private readonly referentiel: Referentiel;
+
+  constructor(
+    donnees: Partial<DonneesDescriptionService> = {},
+    referentiel: Referentiel = creeReferentielVide()
+  ) {
     super({
       proprietesAtomiquesRequises: [
         'delaiAvantImpactCritique',
@@ -96,7 +123,10 @@ class DescriptionService extends InformationsService {
     ];
   }
 
-  static valide(donnees, referentiel) {
+  static valide(
+    donnees: Partial<DonneesDescriptionService>,
+    referentiel: Referentiel
+  ) {
     const { statutDeploiement, localisationDonnees } = donnees;
 
     if (
@@ -136,7 +166,7 @@ class DescriptionService extends InformationsService {
     );
   }
 
-  static estimeNiveauDeSecurite(donnees) {
+  static estimeNiveauDeSecurite(donnees: DonneesPourEstimationNiveauSecurite) {
     const estDeNiveau3 =
       donnees.fonctionnalites?.includes('signatureElectronique') ||
       donnees.donneesCaracterePersonnel?.includes('sensibiliteParticuliere') ||
@@ -163,7 +193,11 @@ class DescriptionService extends InformationsService {
     return 'niveau1';
   }
 
-  static niveauSecuriteChoisiSuffisant(donnees) {
+  static niveauSecuriteChoisiSuffisant(
+    donnees: DonneesPourEstimationNiveauSecurite & {
+      niveauSecurite: NiveauSecurite;
+    }
+  ) {
     const niveauMinimal = DescriptionService.estimeNiveauDeSecurite(donnees);
     return (
       tousNiveauxSecurite.indexOf(donnees.niveauSecurite) >=
@@ -171,7 +205,7 @@ class DescriptionService extends InformationsService {
     );
   }
 
-  static valideDonneesCreation(donnees) {
+  static valideDonneesCreation(donnees: DonneesDescriptionService) {
     if (!DescriptionService.proprietesObligatoiresRenseignees(donnees)) {
       throw new ErreurDonneesObligatoiresManquantes(
         'Certaines données obligatoires ne sont pas renseignées'

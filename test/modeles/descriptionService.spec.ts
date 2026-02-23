@@ -1,22 +1,22 @@
-import expect from 'expect.js';
 import {
-  ErreurStatutDeploiementInvalide,
   ErreurLocalisationDonneesInvalide,
+  ErreurStatutDeploiementInvalide,
 } from '../../src/erreurs.js';
-import * as Referentiel from '../../src/referentiel.js';
 import DescriptionService from '../../src/modeles/descriptionService.js';
 import InformationsService from '../../src/modeles/informationsService.js';
-
-const elle = it;
+import { creeReferentielVide } from '../../src/referentiel.js';
 
 describe('La description du service', () => {
-  const referentielAvecStatutValide = (statut) =>
-    Referentiel.creeReferentiel({
+  const referentielAvecStatutValide = (statut: string) => {
+    const referentiel = creeReferentielVide();
+    referentiel.recharge({
       statutsDeploiement: { [statut]: {} },
       localisationsDonnees: { france: {} },
     });
+    return referentiel;
+  };
 
-  elle('connaît ses constituants', () => {
+  it('connaît ses constituants', () => {
     const descriptionService = new DescriptionService(
       {
         delaiAvantImpactCritique: 'unDelai',
@@ -27,7 +27,7 @@ describe('La description du service', () => {
         localisationDonnees: 'france',
         typeService: ['unType'],
         nomService: 'Super Service',
-        organisationResponsable: { nom: 'Une organisation' },
+        organisationResponsable: { nom: 'Une organisation', siret: 'unSiret' },
         pointsAcces: [{ description: 'Une description' }],
         presentation: 'Une présentation du service',
         provenanceService: 'uneProvenance',
@@ -38,30 +38,32 @@ describe('La description du service', () => {
       referentielAvecStatutValide('unStatut')
     );
 
-    expect(descriptionService.delaiAvantImpactCritique).to.equal('unDelai');
-    expect(descriptionService.donneesCaracterePersonnel).to.eql(['desDonnees']);
-    expect(descriptionService.fonctionnalites).to.eql(['uneFonctionnalite']);
-    expect(descriptionService.localisationDonnees).to.equal('france');
-    expect(descriptionService.typeService).to.eql(['unType']);
-    expect(descriptionService.nomService).to.equal('Super Service');
-    expect(descriptionService.organisationResponsable.nom).to.eql(
+    expect(descriptionService.delaiAvantImpactCritique).toEqual('unDelai');
+    expect(descriptionService.donneesCaracterePersonnel).toEqual([
+      'desDonnees',
+    ]);
+    expect(descriptionService.fonctionnalites).toEqual(['uneFonctionnalite']);
+    expect(descriptionService.localisationDonnees).toEqual('france');
+    expect(descriptionService.typeService).toEqual(['unType']);
+    expect(descriptionService.nomService).toEqual('Super Service');
+    expect(descriptionService.organisationResponsable.nom).toEqual(
       'Une organisation'
     );
-    expect(descriptionService.presentation).to.equal(
+    expect(descriptionService.presentation).toEqual(
       'Une présentation du service'
     );
-    expect(descriptionService.provenanceService).to.eql('uneProvenance');
-    expect(descriptionService.statutDeploiement).to.equal('unStatut');
-    expect(descriptionService.nombreOrganisationsUtilisatrices).to.eql({
+    expect(descriptionService.provenanceService).toEqual('uneProvenance');
+    expect(descriptionService.statutDeploiement).toEqual('unStatut');
+    expect(descriptionService.nombreOrganisationsUtilisatrices).toEqual({
       borneBasse: 1,
       borneHaute: 5,
     });
 
-    expect(descriptionService.niveauSecurite).to.equal('niveau1');
+    expect(descriptionService.niveauSecurite).toEqual('niveau1');
   });
 
-  elle('connaît ses propriétés obligatoires', () => {
-    expect(DescriptionService.proprietesObligatoires()).to.eql([
+  it('connaît ses propriétés obligatoires', () => {
+    expect(DescriptionService.proprietesObligatoires()).toEqual([
       'delaiAvantImpactCritique',
       'localisationDonnees',
       'nomService',
@@ -73,8 +75,9 @@ describe('La description du service', () => {
     ]);
   });
 
-  elle('décrit le type service', () => {
-    const referentiel = Referentiel.creeReferentiel({
+  it('décrit le type service', () => {
+    const referentiel = creeReferentielVide();
+    referentiel.recharge({
       typesService: {
         unType: { description: 'Un type' },
         unAutre: { description: 'Un autre' },
@@ -88,13 +91,14 @@ describe('La description du service', () => {
       referentiel
     );
 
-    expect(descriptionService.descriptionTypeService()).to.equal(
+    expect(descriptionService.descriptionTypeService()).toEqual(
       'Un type, Un autre'
     );
   });
 
-  elle('décrit la localisation des données', () => {
-    const referentiel = Referentiel.creeReferentiel({
+  it('décrit la localisation des données', () => {
+    const referentiel = creeReferentielVide();
+    referentiel.recharge({
       localisationsDonnees: {
         france: { description: 'Quelque part en France' },
       },
@@ -107,13 +111,14 @@ describe('La description du service', () => {
       referentiel
     );
 
-    expect(descriptionService.descriptionLocalisationDonnees()).to.equal(
+    expect(descriptionService.descriptionLocalisationDonnees()).toEqual(
       'Quelque part en France'
     );
   });
 
-  elle('décrit le statut de déploiement', () => {
-    const referentiel = Referentiel.creeReferentiel({
+  it('décrit le statut de déploiement', () => {
+    const referentiel = creeReferentielVide();
+    referentiel.recharge({
       statutsDeploiement: {
         enLigne: {
           description: 'En ligne',
@@ -128,98 +133,90 @@ describe('La description du service', () => {
       referentiel
     );
 
-    expect(descriptionService.descriptionStatutDeploiement()).to.equal(
+    expect(descriptionService.descriptionStatutDeploiement()).toEqual(
       'En ligne'
     );
   });
 
-  elle(
-    "se comporte correctement si le type de service n'est pas présent",
-    () => {
-      const descriptionService = new DescriptionService();
-      expect(descriptionService.descriptionTypeService()).to.equal(
-        'Type de service non renseignée'
-      );
-    }
-  );
+  it("se comporte correctement si le type de service n'est pas présent", () => {
+    const descriptionService = new DescriptionService();
+    expect(descriptionService.descriptionTypeService()).toEqual(
+      'Type de service non renseignée'
+    );
+  });
 
-  elle('valide que le statut de déploiement est bien du référentiel', () => {
-    const referentiel = Referentiel.creeReferentiel({ statutsDeploiement: {} });
+  it('valide que le statut de déploiement est bien du référentiel', () => {
+    const referentiel = creeReferentielVide();
+    referentiel.recharge({ statutsDeploiement: {} });
     const creeDescriptionService = () =>
       new DescriptionService(
         { statutDeploiement: 'pasAccessible' },
         referentiel
       );
 
-    expect(creeDescriptionService).to.throwException((error) => {
-      expect(error).to.be.a(ErreurStatutDeploiementInvalide);
-      expect(error.message).to.equal(
+    expect(() => creeDescriptionService()).toThrowError(
+      new ErreurStatutDeploiementInvalide(
         'Le statut de déploiement "pasAccessible" est invalide'
-      );
-    });
+      )
+    );
   });
 
-  elle('valide la localisation des données si elle est présente', () => {
-    const referentiel = Referentiel.creeReferentiel({
+  it('valide la localisation des données si elle est présente', () => {
+    const referentiel = creeReferentielVide();
+    referentiel.recharge({
       localisationsDonnees: {
         france: { description: 'Quelque part en France' },
       },
     });
-    try {
-      new DescriptionService(
-        { localisationDonnees: 'localisationInvalide' },
-        referentiel
-      );
-      expect().fail(
-        'La création de la description du service aurait dû lever une ErreurLocalisationDonneesInvalide'
-      );
-    } catch (e) {
-      expect(e).to.be.a(ErreurLocalisationDonneesInvalide);
-      expect(e.message).to.equal(
+    expect(
+      () =>
+        new DescriptionService(
+          { localisationDonnees: 'localisationInvalide' },
+          referentiel
+        )
+    ).toThrowError(
+      new ErreurLocalisationDonneesInvalide(
         'La localisation des données "localisationInvalide" est invalide'
-      );
-    }
+      )
+    );
   });
 
-  elle("détecte qu'elle est encore à saisir", () => {
+  it("détecte qu'elle est encore à saisir", () => {
     const descriptionService = new DescriptionService();
-    expect(descriptionService.statutSaisie()).to.equal(
+    expect(descriptionService.statutSaisie()).toEqual(
       InformationsService.A_SAISIR
     );
   });
 
-  elle("détecte qu'elle est partiellement saisie", () => {
+  it("détecte qu'elle est partiellement saisie", () => {
     const descriptionService = new DescriptionService({
       nomService: 'Super Service',
     });
-    expect(descriptionService.statutSaisie()).to.equal(
+    expect(descriptionService.statutSaisie()).toEqual(
       InformationsService.A_COMPLETER
     );
   });
 
-  elle(
-    "détecte qu'elle est partiellement saisie si tout est rempli sauf le siret",
-    () => {
-      const descriptionService = new DescriptionService(
-        {
-          nomService: 'Super Service',
-          delaiAvantImpactCritique: 'uneJournee',
-          localisationDonnees: 'france',
-          presentation: 'Une présentation',
-          provenanceService: 'uneProvenance',
-          statutDeploiement: 'accessible',
-          nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
-          organisationResponsable: { nom: 'MonOrga' },
-        },
-        referentielAvecStatutValide('accessible')
-      );
-      expect(descriptionService.statutSaisie()).to.equal(
-        InformationsService.A_COMPLETER
-      );
-    }
-  );
+  it("détecte qu'elle est partiellement saisie si tout est rempli sauf le siret", () => {
+    const descriptionService = new DescriptionService(
+      {
+        nomService: 'Super Service',
+        delaiAvantImpactCritique: 'uneJournee',
+        localisationDonnees: 'france',
+        presentation: 'Une présentation',
+        provenanceService: 'uneProvenance',
+        statutDeploiement: 'accessible',
+        nombreOrganisationsUtilisatrices: { borneBasse: 1, borneHaute: 5 },
+        organisationResponsable: { nom: 'MonOrga', siret: 'unSiret' },
+      },
+      referentielAvecStatutValide('accessible')
+    );
+    expect(descriptionService.statutSaisie()).toEqual(
+      InformationsService.A_COMPLETER
+    );
+  });
 
-  elle("détecte qu'elle est complètement saisie", () => {
+  it("détecte qu'elle est complètement saisie", () => {
     const descriptionService = new DescriptionService(
       {
         nomService: 'Super Service',
@@ -235,7 +232,7 @@ describe('La description du service', () => {
       referentielAvecStatutValide('accessible')
     );
 
-    expect(descriptionService.statutSaisie()).to.equal(
+    expect(descriptionService.statutSaisie()).toEqual(
       InformationsService.COMPLETES
     );
   });
@@ -249,13 +246,13 @@ describe('La description du service', () => {
       it(`retourne 'niveau3' si la propriété '${propriete}' est présente dans '${cle}'`, () => {
         const descriptionDeNiveau3 = new DescriptionService({
           nomService: 'Super Service',
-          [cle]: propriete,
+          [cle as string]: propriete,
         });
 
         const estimation =
           DescriptionService.estimeNiveauDeSecurite(descriptionDeNiveau3);
 
-        expect(estimation).to.be('niveau3');
+        expect(estimation).toBe('niveau3');
       });
     });
 
@@ -272,13 +269,13 @@ describe('La description du service', () => {
       it(`retourne 'niveau2' si la propriété '${propriete}' est présente dans '${cle}'`, () => {
         const descriptionDeNiveau2 = new DescriptionService({
           nomService: 'Super Service',
-          [cle]: propriete,
+          [cle as string]: propriete,
         });
 
         const estimation =
           DescriptionService.estimeNiveauDeSecurite(descriptionDeNiveau2);
 
-        expect(estimation).to.be('niveau2');
+        expect(estimation).toBe('niveau2');
       });
     });
 
@@ -293,7 +290,7 @@ describe('La description du service', () => {
       const estimation =
         DescriptionService.estimeNiveauDeSecurite(descriptionDeNiveau1);
 
-      expect(estimation).to.be('niveau1');
+      expect(estimation).toBe('niveau1');
     });
 
     ['fonctionnalites', 'donneesCaracterePersonnel'].forEach((cle) => {
@@ -310,7 +307,7 @@ describe('La description du service', () => {
           descriptionDeNiveauIncomplete
         );
 
-        expect(estimation).to.be('niveau1');
+        expect(estimation).toBe('niveau1');
       });
     });
   });
