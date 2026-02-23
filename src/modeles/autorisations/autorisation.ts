@@ -36,7 +36,6 @@ export class Autorisation extends Base {
         'droits',
       ],
     });
-    // @ts-expect-error On omet le référentiel car aucun `listesAgregats` présent
     this.renseigneProprietes(donnees);
   }
 

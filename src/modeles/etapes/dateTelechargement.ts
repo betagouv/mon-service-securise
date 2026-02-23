@@ -7,7 +7,6 @@ export type DonneeEtapeDateTelechargement = {
 class DateTelechargement extends Etape {
   constructor(donnees: DonneeEtapeDateTelechargement = {}) {
     super({ proprietesAtomiquesRequises: ['date'] });
-    // @ts-expect-error On omet le référentiel car aucun `listesAgregats` présent
     this.renseigneProprietes(donnees);
   }
 
