@@ -28,7 +28,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/co-construire-monservicesecurise',
     '/conseils-cyber',
     '/doctrine-homologation-anssi',
-    '/ui-kit',
   ].forEach((route) => {
     beforeEach(() => {
       testeur.adaptateurJWT().decode = () => ({});
