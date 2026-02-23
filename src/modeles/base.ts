@@ -89,7 +89,7 @@ abstract class Base {
     return typeof valeur !== 'undefined';
   }
 
-  toJSON() {
+  toJSON(): object {
     const resultat: Record<string, unknown> = {};
 
     [
