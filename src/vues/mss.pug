@@ -58,7 +58,8 @@ block page
             const diffDate = new Date(avertissementMaintenance.jour) - dateDuJour
             const diffJour = Math.round(diffDate   / (1000 * 60 * 60 * 24));
             const diffFormatee = new Intl.RelativeTimeFormat('fr', { numeric: 'auto' }).format(diffJour, 'day');
-          span Une maintenance est prévue #{diffFormatee} (#{avertissementMaintenance.jour}) sur MonServiceSécurisé, de #{avertissementMaintenance.heure}.
+            const jourFormate = new Intl.DateTimeFormat('fr', { dateStyle: "full" }).format(new Date(avertissementMaintenance.jour));
+          span Une maintenance est prévue #{diffFormatee} (#{jourFormate}) sur MonServiceSécurisé, #{avertissementMaintenance.heure}.
           br
           span La plateforme sera inaccessible. Nous nous excusons pour la gêne occasionée.
 
