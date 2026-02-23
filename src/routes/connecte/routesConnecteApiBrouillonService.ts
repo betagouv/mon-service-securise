@@ -179,9 +179,22 @@ const routesConnecteApiBrouillonService = ({
   routes.delete(
     '/:id',
     valideParams(z.strictObject({ id: z.uuidv4() })),
-    async (requete, reponse) => {
-      await depotDonnees.supprimeBrouillonService(requete.params.id as UUID);
-      reponse.sendStatus(200);
+    async (requete, reponse, suite) => {
+      try {
+        const { idUtilisateurCourant } =
+          requete as unknown as RequestRouteConnecte;
+
+        await depotDonnees.supprimeBrouillonService(
+          idUtilisateurCourant,
+          requete.params.id as UUID
+        );
+        return reponse.sendStatus(200);
+      } catch (e) {
+        if (e instanceof ErreurBrouillonInexistant)
+          return reponse.sendStatus(401);
+
+        return suite(e);
+      }
     }
   );
 

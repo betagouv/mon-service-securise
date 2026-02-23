@@ -204,16 +204,25 @@ describe('Le dépôt de données des brouillons de Service', () => {
     it('supprime le brouillon', async () => {
       depotDonneesService.nouveauService = async () => unUUID('S');
       const idBrouillon = unUUID('B');
+      const idUtilisateur = unUUID('U');
       await persistance.ajouteBrouillonService(
         idBrouillon,
-        unUUID('U'),
+        idUtilisateur,
         await adaptateurChiffrement.chiffre({ nomService: 'Mairie A' })
       );
 
-      await leDepot().supprimeBrouillonService(idBrouillon);
+      await leDepot().supprimeBrouillonService(idUtilisateur, idBrouillon);
 
-      const restants = await persistance.lisBrouillonsService(unUUID('U'));
+      const restants = await persistance.lisBrouillonsService(idUtilisateur);
       expect(restants).toHaveLength(0);
+    });
+
+    it("jette une erreur si le brouillon n'existe pas pour cet utilisateur", async () => {
+      const idUtilisateur = unUUID('U');
+      const idBrouillon = unUUID('B');
+      await expect(() =>
+        leDepot().supprimeBrouillonService(idUtilisateur, idBrouillon)
+      ).rejects.toThrow(ErreurBrouillonInexistant);
     });
   });
 });

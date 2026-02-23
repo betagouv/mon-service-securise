@@ -468,5 +468,17 @@ describe('Le serveur MSS des routes /api/brouillon-service/*', () => {
       expect(status).toBe(200);
       expect(depotAppele).toBe(true);
     });
+
+    it('renvoie une erreur 401 si le brouillon est introuvable pour cet utilisateur', async () => {
+      testeur.depotDonnees().supprimeBrouillonService = async () => {
+        throw new ErreurBrouillonInexistant();
+      };
+
+      const reponse = await testeur.delete(
+        `/api/brouillon-service/${unUUIDRandom()}`
+      );
+
+      expect(reponse.status).toBe(401);
+    });
   });
 });
