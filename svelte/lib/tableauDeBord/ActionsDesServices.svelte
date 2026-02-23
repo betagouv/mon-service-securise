@@ -21,15 +21,13 @@
     s: ServiceOuBrouillon
   ): s is Service & { type: TypeSelection } => s.type === 'Service';
 
-  const enServices = (tous: ServiceOuBrouillon[]): Service[] =>
-    tous
-      .filter((s) => s.type === 'Service')
-      .map(({ type, ...service }) => service as Service);
+  const seulementLesServices = (tous: ServiceOuBrouillon[]): Service[] =>
+    tous.filter(estService).map(({ type, ...service }) => service as Service);
 
   $: actionsDisponibles = selection.length !== 0;
   $: selectionUnique = selection.length === 1;
   $: estProprietaireDesServicesSelectionnes = selection
-    .filter((s) => estService(s))
+    .filter(estService)
     .every((s) => s.estProprietaire);
   $: selectionPossedeDesBrouillons = selection.some(
     (s) => s.type === 'Brouillon'
@@ -59,7 +57,7 @@
         !selectionPossedeDesBrouillons}
       on:click={() =>
         tiroirStore.afficheContenu(TiroirGestionContributeurs, {
-          services: enServices(selection),
+          services: seulementLesServices(selection),
         })}
     />
     <Bouton
@@ -70,7 +68,7 @@
       actif={actionsDisponibles && selectionUnique && ontDesDocuments}
       on:click={() =>
         tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
-          service: enServices(selection)[0],
+          service: seulementLesServices(selection)[0],
         })}
     />
     <Bouton
@@ -81,7 +79,7 @@
       actif={actionsDisponibles && !selectionPossedeDesBrouillons}
       on:click={() =>
         tiroirStore.afficheContenu(TiroirExportServices, {
-          services: enServices(selection),
+          services: seulementLesServices(selection),
         })}
     />
     <Bouton
@@ -95,7 +93,7 @@
         !selectionPossedeDesBrouillons}
       on:click={() =>
         tiroirStore.afficheContenu(TiroirDuplication, {
-          service: enServices(selection)[0],
+          service: seulementLesServices(selection)[0],
         })}
     />
     <Bouton
