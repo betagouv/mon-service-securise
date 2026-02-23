@@ -8,7 +8,6 @@ export type DonneeEtapeAutorite = {
 class Autorite extends Etape {
   constructor({ nom, fonction }: DonneeEtapeAutorite = {}) {
     super({ proprietesAtomiquesRequises: ['nom', 'fonction'] });
-    // @ts-expect-error On omet le référentiel car aucun `listesAgregats` présent
     this.renseigneProprietes({ nom, fonction });
   }
 

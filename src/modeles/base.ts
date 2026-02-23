@@ -23,7 +23,7 @@ const proprietePresente = (valeur: unknown): boolean => {
 
 type ConstructeurAgregat = new (
   donnees: Record<string, unknown>,
-  referentiel: Referentiel
+  referentiel?: Referentiel
   // eslint-disable-next-line no-use-before-define
 ) => Base;
 
@@ -63,7 +63,7 @@ abstract class Base {
 
   renseigneProprietes(
     donnees: Record<string, unknown>,
-    referentiel: Referentiel
+    referentiel?: Referentiel
   ) {
     [
       ...this.proprietesAtomiquesRequises,
