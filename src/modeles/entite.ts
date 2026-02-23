@@ -1,9 +1,20 @@
 import { ErreurDonneesObligatoiresManquantes } from '../erreurs.js';
 import { fabriqueAdaptateurGestionErreur } from '../adaptateurs/fabriqueAdaptateurGestionErreur.js';
 import InformationsService from './informationsService.js';
+import { ServiceAnnuaire } from '../annuaire/serviceAnnuaire.interface.js';
+
+export type DonneesEntite = {
+  siret: string;
+  nom?: string;
+  departement?: string;
+};
 
 class Entite extends InformationsService {
-  constructor(donnees = {}) {
+  readonly siret!: string;
+  readonly nom?: string;
+  readonly departement?: string;
+
+  constructor(donnees: Partial<DonneesEntite> = {}) {
     super({
       proprietesAtomiquesRequises: ['siret'],
       proprietesAtomiquesFacultatives: ['nom', 'departement'],
@@ -11,7 +22,7 @@ class Entite extends InformationsService {
     this.renseigneProprietes(donnees);
   }
 
-  static valideDonnees(donnees = {}) {
+  static valideDonnees(donnees: Partial<DonneesEntite>) {
     if (typeof donnees.siret !== 'string' || donnees.siret === '') {
       throw new ErreurDonneesObligatoiresManquantes(
         'La propriété "entite.siret" est requise'
@@ -19,9 +30,13 @@ class Entite extends InformationsService {
     }
   }
 
-  static async completeDonnees(donnees, adaptateurServiceAnnuaire) {
-    const organisations =
-      await adaptateurServiceAnnuaire.rechercheOrganisations(donnees.siret);
+  static async completeDonnees(
+    donnees: DonneesEntite,
+    serviceAnnuaire: ServiceAnnuaire
+  ) {
+    const organisations = await serviceAnnuaire.rechercheOrganisations(
+      donnees.siret
+    );
     if (organisations.length !== 1) {
       fabriqueAdaptateurGestionErreur().logueErreur(
         new Error(

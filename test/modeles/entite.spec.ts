@@ -1,37 +1,37 @@
-import expect from 'expect.js';
 import Entite from '../../src/modeles/entite.js';
+import { ServiceAnnuaire } from '../../src/annuaire/serviceAnnuaire.interface.ts';
 
 describe('Une entité', () => {
   describe('sur demande de complétion des donnees', () => {
     it('sait compléter avec son département et nom à partir de son SIRET', async () => {
       let siretUtilisePourLaRecherche;
       const fauxAdaptateurRechercheEntreprise = {
-        rechercheOrganisations: async (siret) => {
+        rechercheOrganisations: async (siret: string) => {
           siretUtilisePourLaRecherche = siret;
           return [{ nom: 'NomEntite', departement: '33', siret }];
         },
-      };
+      } as ServiceAnnuaire;
       const donneesEntite = await Entite.completeDonnees(
         { siret: '12345' },
         fauxAdaptateurRechercheEntreprise
       );
 
-      expect(siretUtilisePourLaRecherche).to.equal('12345');
-      expect(donneesEntite.siret).to.equal('12345');
-      expect(donneesEntite.nom).to.equal('NomEntite');
-      expect(donneesEntite.departement).to.equal('33');
+      expect(siretUtilisePourLaRecherche).toEqual('12345');
+      expect(donneesEntite.siret).toEqual('12345');
+      expect(donneesEntite.nom).toEqual('NomEntite');
+      expect(donneesEntite.departement).toEqual('33');
     });
 
     it("retourne les données passées en entrée s'il n'y a pas de résultat de recherche d'entreprise", async () => {
       const fauxAdaptateurRechercheEntreprise = {
         rechercheOrganisations: async () => [],
-      };
+      } as unknown as ServiceAnnuaire;
       const donneesEntite = await Entite.completeDonnees(
         { siret: '12345' },
         fauxAdaptateurRechercheEntreprise
       );
 
-      expect(donneesEntite).to.eql({ siret: '12345' });
+      expect(donneesEntite).toEqual({ siret: '12345' });
     });
 
     it("retourne les données passées en entrée s'il y a plusieurs résultats de recherche d'entreprise", async () => {
@@ -44,13 +44,13 @@ describe('Une entité', () => {
             siret: '1235',
           },
         ],
-      };
+      } as unknown as ServiceAnnuaire;
       const donneesEntite = await Entite.completeDonnees(
         { siret: '12345' },
         fauxAdaptateurRechercheEntreprise
       );
 
-      expect(donneesEntite).to.eql({ siret: '12345' });
+      expect(donneesEntite).toEqual({ siret: '12345' });
     });
   });
 
@@ -61,8 +61,8 @@ describe('Une entité', () => {
       departement: '33',
     });
 
-    expect(uneEntite.siret).to.equal('12345');
-    expect(uneEntite.nom).to.equal('NomEntite');
-    expect(uneEntite.departement).to.equal('33');
+    expect(uneEntite.siret).toEqual('12345');
+    expect(uneEntite.nom).toEqual('NomEntite');
+    expect(uneEntite.departement).toEqual('33');
   });
 });
