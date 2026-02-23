@@ -1,14 +1,24 @@
 import InformationsService from './informationsService.js';
+import { Referentiel } from '../referentiel.interface.js';
 
-class ListeItems extends InformationsService {
-  constructor(fonctionCreation, donnees, referentiel) {
+class ListeItems<
+  TItem extends InformationsService,
+> extends InformationsService {
+  readonly items: TItem[];
+  private readonly referentiel: Referentiel;
+
+  constructor(
+    fonctionCreation: (donnees: Record<string, unknown>) => TItem,
+    donnees: { items: Array<Record<string, unknown>> },
+    referentiel: Referentiel
+  ) {
     super();
     const { items } = donnees;
     this.items = items.map(fonctionCreation);
     this.referentiel = referentiel;
   }
 
-  item(index) {
+  item(index: number) {
     return this.items[index];
   }
 
