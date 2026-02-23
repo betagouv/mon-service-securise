@@ -26,7 +26,10 @@ export type DepotDonneesBrouillonService = {
     idUtilisateur: UUID,
     brouillon: BrouillonService
   ) => Promise<void>;
-  supprimeBrouillonService: (idBrouillon: UUID) => Promise<void>;
+  supprimeBrouillonService: (
+    idUtilisateur: UUID,
+    idBrouillon: UUID
+  ) => Promise<void>;
 };
 
 type PersistanceBrouillonService = {
@@ -149,8 +152,18 @@ const creeDepot = ({
     );
   };
 
-  const supprimeBrouillonService = async (idBrouillon: UUID) =>
-    persistance.supprimeBrouillonService(idBrouillon);
+  const supprimeBrouillonService = async (
+    idUtilisateur: UUID,
+    idBrouillon: UUID
+  ) => {
+    const tousLesBrouillons =
+      await persistance.lisBrouillonsService(idUtilisateur);
+
+    const persiste = tousLesBrouillons.find((b) => b.id === idBrouillon);
+    if (!persiste) throw new ErreurBrouillonInexistant();
+
+    await persistance.supprimeBrouillonService(idBrouillon);
+  };
 
   return {
     finaliseBrouillonService,
