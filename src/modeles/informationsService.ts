@@ -1,5 +1,7 @@
 import Base from './base.js';
 
+type StatutSaisie = 'aSaisir' | 'aCompleter' | 'completes';
+
 class InformationsService extends Base {
   aucunAgregatSaisi() {
     return Object.keys(this.listesAgregats).every(
@@ -53,9 +55,9 @@ class InformationsService extends Base {
     return InformationsService.COMPLETES;
   }
 
-  static A_SAISIR = 'aSaisir';
-  static A_COMPLETER = 'aCompleter';
-  static COMPLETES = 'completes';
+  static A_SAISIR: StatutSaisie = 'aSaisir';
+  static A_COMPLETER: StatutSaisie = 'aCompleter';
+  static COMPLETES: StatutSaisie = 'completes';
 }
 
 export default InformationsService;
