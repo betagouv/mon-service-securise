@@ -47,39 +47,29 @@ export class MoteurRisquesV2 {
   }
 
   risques(): RisqueV2[] {
-    const gravitesParVecteur = new GraviteVecteurs().calcule(
-      this.vecteurs(),
-      this.objectifsVises()
-    );
-
-    return Object.entries(gravitesParVecteur).map(([id, ovs]) => {
-      const vraisemblance = new VraisemblanceRisque(
-        configurationVraisemblance[id as IdVecteurRisque]
-      ).calculePourService(
-        this.descriptionService.niveauSecurite,
-        this.mesuresAvecStatut
-      );
-
-      return new RisqueV2(id as IdVecteurRisque, ovs, vraisemblance);
-    });
+    return this.calculePour(this.mesuresAvecStatut);
   }
 
   risquesBruts(): RisqueV2[] {
+    const statutsVides = structuredClone(this.mesuresAvecStatut);
+    // eslint-disable-next-line no-restricted-syntax,guard-for-in
+    for (const idMesure in statutsVides) {
+      statutsVides[idMesure].statut = '';
+    }
+
+    return this.calculePour(statutsVides);
+  }
+
+  private calculePour(mesures: Record<IdMesureV2, MesureAvecStatut>) {
     const gravitesParVecteur = new GraviteVecteurs().calcule(
       this.vecteurs(),
       this.objectifsVises()
     );
 
-    const copie = structuredClone(this.mesuresAvecStatut);
-    // eslint-disable-next-line no-restricted-syntax,guard-for-in
-    for (const idMesure in copie) {
-      copie[idMesure].statut = '';
-    }
-
     return Object.entries(gravitesParVecteur).map(([id, ovs]) => {
       const vraisemblance = new VraisemblanceRisque(
         configurationVraisemblance[id as IdVecteurRisque]
-      ).calculePourService(this.descriptionService.niveauSecurite, copie);
+      ).calculePourService(this.descriptionService.niveauSecurite, mesures);
 
       return new RisqueV2(id as IdVecteurRisque, ovs, vraisemblance);
     });
