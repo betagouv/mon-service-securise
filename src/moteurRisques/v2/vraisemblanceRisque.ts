@@ -3,6 +3,7 @@ import {
   ConfigurationPourNiveau,
   ConfigurationVraisemblancePourUnVecteur,
   IdentifiantGroupeMesureVraisemblance,
+  MesureAvecStatut,
   PoidsGroupeMesure,
   Vraisemblance,
 } from './vraisemblance/vraisemblance.types.js';
@@ -10,7 +11,6 @@ import type {
   IdMesureV2,
   NiveauSecurite,
 } from '../../../donneesReferentielMesuresV2.js';
-import type MesureGenerale from '../../modeles/mesureGenerale.js';
 
 export class VraisemblanceRisque {
   constructor(
@@ -19,7 +19,7 @@ export class VraisemblanceRisque {
 
   calculePourService(
     niveauSecurite: NiveauSecurite,
-    mesuresPersonnalisees: Record<IdMesureV2, MesureGenerale>
+    mesuresPersonnalisees: Record<IdMesureV2, MesureAvecStatut>
   ): Vraisemblance {
     const configurationPourNiveauSecurite = this.configuration[
       niveauSecurite
@@ -34,7 +34,7 @@ export class VraisemblanceRisque {
           ),
         ]
       )
-    ) as Record<IdentifiantGroupeMesureVraisemblance, MesureGenerale[]>;
+    ) as Record<IdentifiantGroupeMesureVraisemblance, MesureAvecStatut[]>;
 
     const poids = Object.fromEntries(
       Object.entries(configurationPourNiveauSecurite.groupes).map(
