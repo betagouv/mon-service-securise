@@ -5,7 +5,7 @@ class ListeItems<
   TItem extends InformationsService,
 > extends InformationsService {
   items: TItem[];
-  private readonly referentiel: Referentiel;
+  readonly referentiel: Referentiel;
 
   constructor(
     fonctionCreation: (donnees: Record<string, unknown>) => TItem,
