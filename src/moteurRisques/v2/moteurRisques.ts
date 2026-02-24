@@ -63,4 +63,25 @@ export class MoteurRisquesV2 {
       return new RisqueV2(id as IdVecteurRisque, ovs, vraisemblance);
     });
   }
+
+  risquesBruts(): RisqueV2[] {
+    const gravitesParVecteur = new GraviteVecteurs().calcule(
+      this.vecteurs(),
+      this.objectifsVises()
+    );
+
+    const copie = structuredClone(this.mesuresAvecStatut);
+    // eslint-disable-next-line no-restricted-syntax,guard-for-in
+    for (const idMesure in copie) {
+      copie[idMesure].statut = '';
+    }
+
+    return Object.entries(gravitesParVecteur).map(([id, ovs]) => {
+      const vraisemblance = new VraisemblanceRisque(
+        configurationVraisemblance[id as IdVecteurRisque]
+      ).calculePourService(this.descriptionService.niveauSecurite, copie);
+
+      return new RisqueV2(id as IdVecteurRisque, ovs, vraisemblance);
+    });
+  }
 }

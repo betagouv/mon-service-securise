@@ -1,3 +1,4 @@
+import { beforeEach } from 'vitest';
 import {
   uneDescriptionDeNiveauDeSecuriteEstime1,
   uneDescriptionV2Valide,
@@ -37,30 +38,47 @@ describe('Le moteur de risques V2', () => {
     });
   });
 
-  it('sait donner les risques pour le service (en utilisant les vecteurs et objectifs visés pertinents)', () => {
-    const referentiel = creeReferentielV2();
-    const mesureFaite = (id: IdMesureV2) => ({
-      [id]: new MesureGenerale({ statut: 'fait', id }, referentiel),
+  describe('concernant les risques', () => {
+    let moteurAvecMesuresFaites: MoteurRisquesV2;
+
+    beforeEach(() => {
+      const referentiel = creeReferentielV2();
+      const mesureFaite = (id: IdMesureV2) => ({
+        [id]: new MesureGenerale({ statut: 'fait', id }, referentiel),
+      });
+
+      moteurAvecMesuresFaites = new MoteurRisquesV2(
+        // Un service dont le premier risque est "R3"
+        uneDescriptionDeNiveauDeSecuriteEstime1()
+          .avecNiveauSecurite('niveau1')
+          .construis(),
+        {
+          // La mesure du groupe "g" qui fait baisser la vraisemblance de 1
+          ...mesureFaite('CONTRAT.1'),
+        }
+      );
     });
 
-    const moteur = new MoteurRisquesV2(
-      // Un service dont le premier risque est "R3"
-      uneDescriptionDeNiveauDeSecuriteEstime1()
-        .avecNiveauSecurite('niveau1')
-        .construis(),
-      {
-        // La mesure du groupe "g" qui fait baisser la vraisemblance de 1
-        ...mesureFaite('CONTRAT.1'),
-        // Les mesures du groupe "a" qui font baisser la vraisemblance de 2
-        ...mesureFaite('MCO_MCS.14'),
-        ...mesureFaite('MCO_MCS.5'),
-        ...mesureFaite('MCO_MCS.6'),
-      }
-    );
+    it('sait donner les risques résiduels pour le service', () => {
+      const residuels = moteurAvecMesuresFaites.risques();
 
-    const risques = moteur.risques();
+      expect(residuels).toBeInstanceOf(Array<RisqueV2>);
+      expect(residuels[0].vraisemblance).toBe(3);
+    });
 
-    expect(risques).toBeInstanceOf(Array<RisqueV2>);
-    expect(risques[0].vraisemblance).toBe(1);
+    it("sait donner les risques bruts : comme si le service n'avait fait aucune mesure", () => {
+      const bruts = moteurAvecMesuresFaites.risquesBruts();
+
+      expect(bruts).toBeInstanceOf(Array<RisqueV2>);
+      expect(bruts[0].vraisemblance).toBe(4);
+    });
+
+    it('peut calculer les 3 types de risques sans interférences les uns avec les autres (pas de mutation)', () => {
+      const bruts = moteurAvecMesuresFaites.risquesBruts();
+      const residuels = moteurAvecMesuresFaites.risques();
+
+      expect(bruts[0].vraisemblance).toBe(4);
+      expect(residuels[0].vraisemblance).toBe(3);
+    });
   });
 });
