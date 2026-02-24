@@ -50,6 +50,10 @@ export class MoteurRisquesV2 {
     return this.calculePour(this.mesures.avecStatutVide());
   }
 
+  risquesCibles() {
+    return this.calculePour(this.mesures.avecStatutFait());
+  }
+
   private calculePour(mesures: Record<IdMesureV2, MesureAvecStatut>) {
     const gravitesParVecteur = new GraviteVecteurs().calcule(
       this.vecteurs(),
