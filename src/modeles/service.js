@@ -2,7 +2,6 @@ import MoteurRegles from '../moteurRegles/v1/moteurRegles.js';
 import * as Referentiel from '../referentiel.js';
 import DescriptionService from './descriptionService.js';
 import Dossiers from './dossiers.js';
-import Mesure from './mesure.js';
 import Mesures from './mesures.js';
 import ObjetPersistanceService from './objetsPersistance/objetPersistanceService.js';
 import Risques from './risques.js';
@@ -161,13 +160,6 @@ class Service {
 
   descriptionStatutDeploiement() {
     return this.descriptionService.descriptionStatutDeploiement();
-  }
-
-  descriptionStatutsMesures() {
-    return Mesure.statutsPossibles().reduce((acc, s) => {
-      acc[s] = { description: this.referentiel.descriptionStatutMesure(s) };
-      return acc;
-    }, {});
   }
 
   documentsPdfDisponibles(autorisation) {
