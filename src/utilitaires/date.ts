@@ -12,7 +12,7 @@ const ajouteMoisADate = (nbMois: number, chaineDate: string | Date) => {
   return date;
 };
 
-const dateEnFrancais = (chaineDate: string) => {
+const dateEnFrancais = (chaineDate: string | Date) => {
   const date = new Date(chaineDate);
   return date.toLocaleString('fr-FR', { dateStyle: 'short' });
 };

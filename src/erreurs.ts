@@ -42,14 +42,14 @@ class ErreurDonneesReferentielIncorrectes extends Error {}
 class ErreurDossierCourantInexistant extends ErreurModele {}
 class ErreurDossierDejaFinalise extends ErreurModele {}
 class ErreurDossierEtapeInconnue extends ErreurModele {
-  constructor(private readonly etapeInconnue: string) {
+  constructor(readonly etapeInconnue: string) {
     super(`L'étape ${etapeInconnue} n'est pas une propriété du dossier.`);
   }
 }
 class ErreurDossierNonFinalisable extends ErreurModele {
   constructor(
     message: string,
-    private readonly etapesIncompletes: string
+    readonly etapesIncompletes: string | string[]
   ) {
     super(message);
   }

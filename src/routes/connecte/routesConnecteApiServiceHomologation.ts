@@ -89,7 +89,7 @@ export const routesConnecteApiServiceHomologation = ({
       const { service, dossierCourant } =
         requete as unknown as RequeteAvecServiceEtDossierCourant;
 
-      const dateTelechargement = adaptateurHorloge.maintenant();
+      const dateTelechargement = adaptateurHorloge.maintenant().toISOString();
       dossierCourant.enregistreDateTelechargement(dateTelechargement);
 
       await depotDonnees.enregistreDossier(service.id, dossierCourant);

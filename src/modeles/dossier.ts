@@ -1,24 +1,70 @@
-import { fabriqueAdaptateurHorloge } from '../adaptateurs/adaptateurHorloge.js';
-import Autorite from './etapes/autorite.js';
-import DateTelechargement from './etapes/dateTelechargement.js';
-import Decision from './etapes/decision.js';
-import Documents from './etapes/documents.js';
-import EtapeAvis from './etapes/etapeAvis.js';
+import {
+  AdaptateurHorloge,
+  fabriqueAdaptateurHorloge,
+} from '../adaptateurs/adaptateurHorloge.js';
+import Autorite, { DonneeEtapeAutorite } from './etapes/autorite.js';
+import DateTelechargement, {
+  DonneeEtapeDateTelechargement,
+} from './etapes/dateTelechargement.js';
+import Decision, { DonneesDecision, DureeValidite } from './etapes/decision.js';
+import Documents, { DonneesDocuments } from './etapes/documents.js';
+import EtapeAvis, { DonneesEtapeAvis } from './etapes/etapeAvis.js';
 import InformationsService from './informationsService.js';
-import * as Referentiel from '../referentiel.js';
 import {
   ErreurDossierDejaFinalise,
   ErreurDossierEtapeInconnue,
   ErreurDossierNonFinalisable,
   ErreurDossierNonFinalise,
 } from '../erreurs.js';
+import { Referentiel } from '../referentiel.interface.js';
+import { UUID } from '../typesBasiques.js';
+import { creeReferentielVide } from '../referentiel.js';
+import { DonneesAvis } from './avis.js';
+
+type DonneesDossier = {
+  id?: UUID;
+  finalise?: boolean;
+  archive?: boolean;
+  indiceCyber?: number;
+  indiceCyberPersonnalise?: number;
+  importe?: boolean;
+  decision?: DonneesDecision;
+  autorite?: DonneeEtapeAutorite;
+  dateTelechargement?: DonneeEtapeDateTelechargement;
+  avis?: DonneesEtapeAvis['avis'];
+  avecAvis?: DonneesEtapeAvis['avecAvis'];
+  documents?: DonneesDocuments['documents'];
+  avecDocuments?: DonneesDocuments['avecDocuments'];
+};
+
+type IdentifiantEtape =
+  | 'decision'
+  | 'dateTelechargement'
+  | 'autorite'
+  | 'avis'
+  | 'documents';
 
 class Dossier extends InformationsService {
+  readonly id!: UUID;
+  finalise?: boolean;
+  archive?: boolean;
+  indiceCyber?: number;
+  indiceCyberPersonnalise?: number;
+  importe?: boolean;
+  readonly decision: Decision;
+  readonly autorite: Autorite;
+  readonly dateTelechargement: DateTelechargement;
+  readonly avis: EtapeAvis;
+  readonly documents: Documents;
+  private readonly referentiel: Referentiel;
+  private readonly adaptateurHorloge: AdaptateurHorloge;
+
   constructor(
-    donneesDossier = {},
-    referentiel = Referentiel.creeReferentielVide(),
-    adaptateurHorloge = fabriqueAdaptateurHorloge()
+    donneesDossier: Partial<DonneesDossier> = {},
+    referentiel: Referentiel = creeReferentielVide(),
+    adaptateurHorloge: AdaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
+    // eslint-disable-next-line no-param-reassign
     donneesDossier.finalise = !!donneesDossier.finalise;
 
     super({
@@ -73,7 +119,7 @@ class Dossier extends InformationsService {
     return this.decision.descriptionProchaineDateHomologation();
   }
 
-  enregistreAutoriteHomologation(nom, fonction) {
+  enregistreAutoriteHomologation(nom: string, fonction: string) {
     if (this.finalise) throw new ErreurDossierDejaFinalise();
 
     this.autorite.enregistreAutoriteHomologation(nom, fonction);
@@ -104,7 +150,7 @@ class Dossier extends InformationsService {
     this.avis.declareSansAvis();
   }
 
-  enregistreAvis(avis) {
+  enregistreAvis(avis: Partial<DonneesAvis>[]) {
     if (this.finalise) throw new ErreurDossierDejaFinalise();
 
     this.avis.enregistreAvis(avis);
@@ -122,25 +168,32 @@ class Dossier extends InformationsService {
     this.archive = true;
   }
 
-  enregistreDocuments(documents) {
+  enregistreDocuments(documents: string[]) {
     if (this.finalise) throw new ErreurDossierDejaFinalise();
 
     this.documents.enregistreDocuments(documents);
   }
 
-  enregistreDateTelechargement(date) {
+  enregistreDateTelechargement(date: string) {
     if (this.finalise) throw new ErreurDossierDejaFinalise();
 
     this.dateTelechargement.enregistreDateTelechargement(date);
   }
 
-  enregistreDecision(dateHomologation, dureeHomologation) {
+  enregistreDecision(
+    dateHomologation: string,
+    dureeHomologation: DureeValidite
+  ) {
     if (this.finalise) throw new ErreurDossierDejaFinalise();
 
     this.decision.enregistre(dateHomologation, dureeHomologation);
   }
 
-  enregistreFinalisation(indiceCyber, indiceCyberPersonnalise) {
+  enregistreFinalisation(
+    indiceCyber?: number,
+    indiceCyberPersonnalise?: number
+  ) {
+    // Les paramètres sont optionnels, car une finalisation déclenchée par téléversement n'a pas d'indice cyber.
     if (!this.estComplet()) {
       const etapesIncompletes = Dossier.etapesObligatoires().filter(
         (etape) => !this[etape].estComplete()
@@ -173,11 +226,13 @@ class Dossier extends InformationsService {
   }
 
   etapeCourante() {
-    if (this.estComplet()) return this.referentiel.derniereEtapeParcours().id;
+    if (this.estComplet()) return this.referentiel.derniereEtapeParcours()!.id;
 
     const etapesOrdonnees = this.referentiel
       .etapesParcoursHomologation()
-      .sort((e1, e2) => e1.numero - e2.numero);
+      .sort((e1, e2) => e1.numero - e2.numero) as unknown as Array<{
+      id: IdentifiantEtape;
+    }>;
 
     const premiereNonComplete = etapesOrdonnees.find((e) => {
       try {
@@ -187,10 +242,10 @@ class Dossier extends InformationsService {
       }
     });
 
-    return premiereNonComplete.id;
+    return premiereNonComplete!.id;
   }
 
-  static etapesObligatoires() {
+  static etapesObligatoires(): Array<IdentifiantEtape> {
     return ['decision', 'dateTelechargement', 'autorite', 'avis', 'documents'];
   }
 
