@@ -1,9 +1,9 @@
-import expect from 'expect.js';
 import EtapeAvis from '../../../src/modeles/etapes/etapeAvis.js';
-import * as Referentiel from '../../../src/referentiel.js';
+import { creeReferentielVide } from '../../../src/referentiel.js';
 
 describe('Une étape « Avis »', () => {
-  const referentiel = Referentiel.creeReferentiel({
+  const referentiel = creeReferentielVide();
+  referentiel.recharge({
     echeancesRenouvellement: { unAn: {} },
     statutsAvisDossierHomologation: { favorable: {} },
   });
@@ -24,7 +24,7 @@ describe('Une étape « Avis »', () => {
       referentiel
     );
 
-    expect(etape.toJSON()).to.eql({
+    expect(etape.toJSON()).toEqual({
       avis: [
         {
           collaborateurs: ['Jean Durand'],
@@ -40,7 +40,7 @@ describe('Une étape « Avis »', () => {
   it("reste robuste s'il n'y a pas d'avis dans les données", () => {
     const etape = new EtapeAvis();
 
-    expect(etape.toJSON()).to.eql({ avis: [], avecAvis: null });
+    expect(etape.toJSON()).toEqual({ avis: [], avecAvis: null });
   });
 
   it("sait déclarer l'étape sans avis", () => {
@@ -56,8 +56,8 @@ describe('Une étape « Avis »', () => {
 
     etape.declareSansAvis();
 
-    expect(etape.avecAvis).to.be(false);
-    expect(etape.avis).to.eql([]);
+    expect(etape.avecAvis).toBe(false);
+    expect(etape.avis).toEqual([]);
   });
 
   it('sait enregistrer des avis', () => {
@@ -72,18 +72,18 @@ describe('Une étape « Avis »', () => {
       },
     ]);
 
-    expect(etape.avecAvis).to.be(true);
+    expect(etape.avecAvis).toBe(true);
   });
 
   describe("sur vérification que l'étape est complète", () => {
     it('est incomplète par défaut', () => {
       const etapeParDefaut = new EtapeAvis();
-      expect(etapeParDefaut.estComplete()).to.be(false);
+      expect(etapeParDefaut.estComplete()).toBe(false);
     });
 
     it("est complète s'il n'y a aucun avis et qu'elle est déclarée sans avis", () => {
       const aucunAvis = new EtapeAvis({ avis: [], avecAvis: false });
-      expect(aucunAvis.estComplete()).to.be(true);
+      expect(aucunAvis.estComplete()).toBe(true);
     });
 
     describe("dans le cas où l'étape est déclarée avec avis", () => {
@@ -97,7 +97,7 @@ describe('Une étape « Avis »', () => {
           referentiel
         );
 
-        expect(avecAvisNonSaisis.estComplete()).to.be(false);
+        expect(avecAvisNonSaisis.estComplete()).toBe(false);
       });
 
       it('est complète si tous les avis sont saisis', () => {
@@ -115,7 +115,7 @@ describe('Une étape « Avis »', () => {
           referentiel
         );
 
-        expect(avecAvisSaisis.estComplete()).to.be(true);
+        expect(avecAvisSaisis.estComplete()).toBe(true);
       });
     });
   });

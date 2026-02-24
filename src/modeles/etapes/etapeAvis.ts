@@ -1,20 +1,31 @@
 import Etape from './etape.js';
-import Avis from '../avis.js';
+import Avis, { DonneesAvis } from '../avis.js';
 import InformationsService from '../informationsService.js';
+import { Referentiel } from '../../referentiel.interface.js';
 import { creeReferentielVide } from '../../referentiel.js';
 
+export type DonneesEtapeAvis = {
+  avecAvis?: boolean | null;
+  avis?: Array<Partial<DonneesAvis>>;
+};
+
 class EtapeAvis extends Etape {
+  avecAvis!: boolean | null;
+  avis!: Avis[];
+  private readonly referentiel!: Referentiel;
+
   constructor(
-    { avis = [], avecAvis = null } = {},
-    referentiel = creeReferentielVide()
+    { avis = [], avecAvis = null }: Partial<DonneesEtapeAvis> = {},
+    referentiel: Referentiel = creeReferentielVide()
   ) {
     super({ proprietesAtomiquesRequises: ['avecAvis'] }, referentiel);
 
     this.renseigneProprietes({ avecAvis });
+    this.referentiel = referentiel;
     this.avis = avis.map((a) => new Avis(a, this.referentiel));
   }
 
-  enregistreAvis(avis) {
+  enregistreAvis(avis: Array<Partial<DonneesAvis>>) {
     this.avecAvis = true;
     this.avis = avis.map((a) => new Avis(a, this.referentiel));
   }
