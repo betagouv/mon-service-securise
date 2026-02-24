@@ -1,17 +1,15 @@
-import expect from 'expect.js';
 import Mesure from '../../src/modeles/mesure.js';
 import {
-  ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
+  ErreurPrioriteMesureInvalide,
 } from '../../src/erreurs.js';
 import * as Referentiel from '../../src/referentiel.js';
-
-const elle = it;
+import { creeReferentielVide } from '../../src/referentiel.js';
 
 describe('Une mesure', () => {
   describe('sur demande des statuts possibles', () => {
-    elle('retourne les statuts avec `fait` en premier par défaut', () => {
-      expect(Mesure.statutsPossibles()).to.eql([
+    it('retourne les statuts avec `fait` en premier par défaut', () => {
+      expect(Mesure.statutsPossibles()).toEqual([
         'fait',
         'enCours',
         'nonFait',
@@ -19,23 +17,20 @@ describe('Une mesure', () => {
       ]);
     });
 
-    elle(
-      'peut retourner les statuts avec `fait` en dernier si on le spécifie',
-      () => {
-        const statutFaitALaFin = true;
-        expect(Mesure.statutsPossibles(statutFaitALaFin)).to.eql([
-          'enCours',
-          'nonFait',
-          'aLancer',
-          'fait',
-        ]);
-      }
-    );
+    it('peut retourner les statuts avec `fait` en dernier si on le spécifie', () => {
+      const statutFaitALaFin = true;
+      expect(Mesure.statutsPossibles(statutFaitALaFin)).toEqual([
+        'enCours',
+        'nonFait',
+        'aLancer',
+        'fait',
+      ]);
+    });
   });
 
-  elle("ne tient pas compte du statut s'il n'est pas renseigné", () => {
+  it("ne tient pas compte du statut s'il n'est pas renseigné", () => {
     try {
-      Mesure.valide({ statut: undefined });
+      Mesure.valide({ statut: undefined }, creeReferentielVide());
     } catch {
       expect.fail(
         "La validation de la mesure sans statut n'aurait pas dû lever d'exception."
@@ -44,15 +39,12 @@ describe('Une mesure', () => {
   });
 
   describe('sur une interrogation de statut renseigné', () => {
-    elle(
-      'répond favorablement quand le statut est dans les statuts concernés',
-      () => {
-        expect(Mesure.statutRenseigne('fait')).to.be(true);
-      }
-    );
+    it('répond favorablement quand le statut est dans les statuts concernés', () => {
+      expect(Mesure.statutRenseigne('fait')).toBe(true);
+    });
 
-    elle("répond défavorablement quand le statut n'est pas renseigné", () => {
-      expect(Mesure.statutRenseigne()).to.be(false);
+    it("répond défavorablement quand le statut n'est pas renseigné", () => {
+      expect(Mesure.statutRenseigne()).toBe(false);
     });
   });
 
@@ -61,13 +53,11 @@ describe('Une mesure', () => {
       const referentiel = Referentiel.creeReferentielVide();
       referentiel.enrichis({ prioritesMesures: {} });
 
-      try {
-        Mesure.valide({ priorite: 'inconnue' }, referentiel);
-        expect().fail('L’appel aurait dû lancer une exception');
-      } catch (e) {
-        expect(e).to.be.an(ErreurPrioriteMesureInvalide);
-        expect(e.message).to.be('La priorité "inconnue" est invalide');
-      }
+      expect(() =>
+        Mesure.valide({ priorite: 'inconnue' }, referentiel)
+      ).toThrowError(
+        new ErreurPrioriteMesureInvalide('La priorité "inconnue" est invalide')
+      );
     });
 
     it('valide la priorité si elle est dans le référentiel', () => {
@@ -82,16 +72,16 @@ describe('Une mesure', () => {
 
   describe("sur validation de l'échéance", () => {
     it("ne valide pas si l'échéance n'est pas une date valide", () => {
-      try {
+      expect(() =>
         Mesure.valide(
           { echeance: 'pasunedate' },
           Referentiel.creeReferentielVide()
-        );
-        expect().fail('L’appel aurait dû lancer une exception');
-      } catch (e) {
-        expect(e).to.be.an(ErreurEcheanceMesureInvalide);
-        expect(e.message).to.be('L\'échéance "pasunedate" est invalide');
-      }
+        )
+      ).toThrowError(
+        new ErreurEcheanceMesureInvalide(
+          'L\'échéance "pasunedate" est invalide'
+        )
+      );
     });
 
     it("valide si l'échéance est une date valide", () => {
