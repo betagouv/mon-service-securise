@@ -111,4 +111,31 @@ describe('Un risque V2', () => {
       );
     });
   });
+
+  describe('concernant ses catégories', () => {
+    it.each([
+      { ov: 'OV1', categories: ['integrite'] },
+      { ov: 'OV2', categories: ['confidentialite', 'integrite'] },
+      { ov: 'OV3', categories: ['disponibilite'] },
+      { ov: 'OV4', categories: ['integrite'] },
+    ])(
+      'connaît ses catégories qui sont fonction de ses OV: $ov donne $categories',
+      ({ ov, categories }) => {
+        const r1 = new RisqueV2('V1', { [ov]: 3 }, 1, configurationRisque());
+
+        expect(r1.categories).toEqual(categories);
+      }
+    );
+
+    it('sait combiner les OV sans dupliquer les catégories', () => {
+      const r1 = new RisqueV2(
+        'V1',
+        { OV2: 3, OV4: 1 },
+        1,
+        configurationRisque()
+      );
+
+      expect(r1.categories).toEqual(['confidentialite', 'integrite']);
+    });
+  });
 });

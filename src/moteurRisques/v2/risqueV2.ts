@@ -28,10 +28,24 @@ export type IdRisqueV2 = `R${
   | 13
   | 14}`;
 
+type CategorieRisque =
+  | 'disponibilite'
+  | 'integrite'
+  | 'confidentialite'
+  | 'tracabilite';
+
+const ovVersCategories = new Map<IdObjectifVise, CategorieRisque[]>([
+  ['OV1', ['integrite']],
+  ['OV2', ['confidentialite', 'integrite']],
+  ['OV3', ['disponibilite']],
+  ['OV4', ['integrite']],
+]);
+
 export class RisqueV2 {
-  id: IdRisqueV2;
-  gravite: Gravite;
-  intitule: string;
+  readonly id: IdRisqueV2;
+  readonly gravite: Gravite;
+  readonly intitule: string;
+  readonly categories: Array<CategorieRisque>;
 
   constructor(
     private readonly idVecteur: IdVecteurRisque,
@@ -42,6 +56,7 @@ export class RisqueV2 {
     this.id = idVecteur.replace('V', 'R') as IdRisqueV2;
     this.gravite = Math.max(...Object.values(objectifsVises)) as Gravite;
     this.intitule = this.genereIntitule();
+    this.categories = this.getCategories();
   }
 
   private genereIntitule() {
@@ -57,5 +72,16 @@ export class RisqueV2 {
     );
 
     return `${vecteur.intitule} ${intitulesOv}`;
+  }
+
+  private getCategories() {
+    return [
+      ...new Set(
+        Object.keys(this.objectifsVises).flatMap(
+          (ov) =>
+            ovVersCategories.get(ov as IdObjectifVise) as CategorieRisque[]
+        )
+      ),
+    ];
   }
 }
