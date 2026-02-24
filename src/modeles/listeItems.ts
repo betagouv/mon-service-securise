@@ -4,7 +4,7 @@ import { Referentiel } from '../referentiel.interface.js';
 class ListeItems<
   TItem extends InformationsService,
 > extends InformationsService {
-  readonly items: TItem[];
+  items: TItem[];
   private readonly referentiel: Referentiel;
 
   constructor(

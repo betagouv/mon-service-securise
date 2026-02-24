@@ -1,12 +1,24 @@
-import Dossier from '../../src/modeles/dossier.js';
-import * as Referentiel from '../../src/referentiel.js';
-import { fabriqueAdaptateurHorloge } from '../../src/adaptateurs/adaptateurHorloge.js';
+import Dossier, { DonneesDossier } from '../../src/modeles/dossier.js';
+import {
+  AdaptateurHorloge,
+  fabriqueAdaptateurHorloge,
+} from '../../src/adaptateurs/adaptateurHorloge.js';
+import { UUID } from '../../src/typesBasiques.ts';
+import { unUUID } from './UUID.ts';
+import { creeReferentielVide } from '../../src/referentiel.js';
+import { Referentiel } from '../../src/referentiel.interface.ts';
+import { DonneesAvis } from '../../src/modeles/avis.ts';
+import { DureeValidite } from '../../src/modeles/etapes/decision.ts';
 
 class ConstructeurDossierFantaisie {
+  readonly donnees: Partial<DonneesDossier>;
+  private readonly referentiel: Referentiel;
+  private readonly adaptateurHorloge: AdaptateurHorloge;
+
   constructor(
-    id = '1',
-    referentiel = Referentiel.creeReferentielVide(),
-    adaptateurHorloge = fabriqueAdaptateurHorloge()
+    id: UUID = unUUID('1'),
+    referentiel: Referentiel = creeReferentielVide(),
+    adaptateurHorloge: AdaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     this.donnees = { id };
     this.referentiel = referentiel;
@@ -18,32 +30,32 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
-  avecId(id) {
+  avecId(id: UUID) {
     this.donnees.id = id;
     return this;
   }
 
-  avecDateHomologation(date) {
-    this.donnees.decision.dateHomologation = date.toISOString();
+  avecDateHomologation(date: Date) {
+    this.donnees.decision!.dateHomologation = date.toISOString();
     return this;
   }
 
-  avecDateTelechargement(date) {
-    this.donnees.dateTelechargement.date = new Date(date).toISOString();
+  avecDateTelechargement(date: Date) {
+    this.donnees.dateTelechargement!.date = new Date(date).toISOString();
     return this;
   }
 
-  avecAutorite(nom, fonction) {
+  avecAutorite(nom: string, fonction: string) {
     this.donnees.autorite = { nom, fonction };
     return this;
   }
 
-  avecAvis(avis) {
+  avecAvis(avis: Partial<DonneesAvis>[]) {
     this.donnees.avis = avis;
     return this;
   }
 
-  avecDecision(dateHomologation, dureeValidite) {
+  avecDecision(dateHomologation: string, dureeValidite: string) {
     this.donnees.decision = {
       dateHomologation,
       dureeValidite,
@@ -51,7 +63,7 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
-  avecDocuments(documents) {
+  avecDocuments(documents: string[]) {
     this.donnees.documents = documents;
     return this;
   }
@@ -72,7 +84,7 @@ class ConstructeurDossierFantaisie {
       dateHomologation: '2023-01-01',
       dureeValidite: 'unAn',
     };
-    this.donnees.dateTelechargement = { date: new Date() };
+    this.donnees.dateTelechargement = { date: new Date().toISOString() };
     this.donnees.autorite = { nom: 'Jean Dupond', fonction: 'RSSI' };
     return this;
   }
@@ -112,7 +124,7 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
-  quiVaExpirer(dansNJours, dureeValidite) {
+  quiVaExpirer(dansNJours: number, dureeValidite: DureeValidite) {
     // Aujourd'hui - (nb de mois de validité) + rajouter nb jours d'expiration
     // Expire dans 3 jours, valide 1 an : je veux un début à 362 jours dans le passé.
     const aujourdhui = new Date();
@@ -128,7 +140,7 @@ class ConstructeurDossierFantaisie {
       dateHomologation: debutActif.toISOString(),
       dureeValidite,
     };
-    this.donnees.avis = this.donnees.avis.map((avis) => ({
+    this.donnees.avis = this.donnees.avis!.map((avis) => ({
       ...avis,
       dureeValidite,
     }));
@@ -145,7 +157,10 @@ class ConstructeurDossierFantaisie {
   }
 }
 
-const unDossier = (referentiel, adaptateurHorloge) =>
-  new ConstructeurDossierFantaisie('1', referentiel, adaptateurHorloge);
+const unDossier = (
+  referentiel: Referentiel,
+  adaptateurHorloge: AdaptateurHorloge = fabriqueAdaptateurHorloge()
+) =>
+  new ConstructeurDossierFantaisie(unUUID('1'), referentiel, adaptateurHorloge);
 
 export { ConstructeurDossierFantaisie, unDossier };

@@ -1,4 +1,4 @@
-import Dossier from './dossier.js';
+import Dossier, { DonneesDossier } from './dossier.js';
 import ElementsConstructibles from './elementsConstructibles.js';
 
 import {
@@ -6,21 +6,24 @@ import {
   ErreurDossierNonFinalisable,
   ErreurDossierCourantInexistant,
 } from '../erreurs.js';
-
-import * as Referentiel from '../referentiel.js';
 import { dateEnFrancais } from '../utilitaires/date.js';
+import { Referentiel } from '../referentiel.interface.js';
+import { creeReferentielVide } from '../referentiel.js';
 
-const STATUTS_HOMOLOGATION = {
-  NON_REALISEE: 'nonRealisee',
-  ACTIVEE: 'activee',
-  EXPIREE: 'expiree',
-  BIENTOT_EXPIREE: 'bientotExpiree',
+type StatutHomologation =
+  | 'nonRealisee'
+  | 'activee'
+  | 'expiree'
+  | 'bientotExpiree';
+
+type DonneesDossiers = {
+  dossiers: DonneesDossier[];
 };
 
-class Dossiers extends ElementsConstructibles {
+class Dossiers extends ElementsConstructibles<Dossier> {
   constructor(
-    donnees = { dossiers: [] },
-    referentiel = Referentiel.creeReferentielVide()
+    donnees: DonneesDossiers = { dossiers: [] },
+    referentiel: Referentiel = creeReferentielVide()
   ) {
     const { dossiers } = donnees;
     Dossiers.valide(donnees);
@@ -32,8 +35,8 @@ class Dossiers extends ElementsConstructibles {
       .filter((i) => i.archive)
       .sort(
         (a, b) =>
-          new Date(b.dateProchaineHomologation()) -
-          new Date(a.dateProchaineHomologation())
+          new Date(b.dateProchaineHomologation()).getTime() -
+          new Date(a.dateProchaineHomologation()).getTime()
       );
   }
 
@@ -53,7 +56,7 @@ class Dossiers extends ElementsConstructibles {
   }
 
   dossierCourant() {
-    return this.items.find((i) => !i.finalise);
+    return this.items.find((i) => !i.finalise) as Dossier;
   }
 
   dossierActif() {
@@ -61,13 +64,14 @@ class Dossiers extends ElementsConstructibles {
       throw new ErreurDossiersInvalides(
         "Les dossiers ne peuvent pas avoir plus d'un dossier actif"
       );
-    return this.items.find((dossier) => dossier.estActif());
+    return this.items.find((dossier) => dossier.estActif()) as Dossier;
   }
 
-  finaliseDossierCourant(indiceCyber, indiceCyberPersonnalise) {
+  finaliseDossierCourant(indiceCyber: number, indiceCyberPersonnalise: number) {
     if (!this.dossierCourant())
       throw new ErreurDossierNonFinalisable(
-        'Aucun dossier courant à finaliser'
+        'Aucun dossier courant à finaliser',
+        []
       );
 
     this.items.forEach((dossier) => {
@@ -105,7 +109,7 @@ class Dossiers extends ElementsConstructibles {
     this.items = this.items.filter((d) => d !== dossierCourant);
   }
 
-  static valide({ dossiers }) {
+  static valide({ dossiers }: DonneesDossiers) {
     const nombreDossiersNonFinalises = dossiers.filter(
       (d) => !d.finalise
     ).length;
@@ -116,7 +120,11 @@ class Dossiers extends ElementsConstructibles {
       );
     }
   }
+
+  static NON_REALISEE: StatutHomologation = 'nonRealisee';
+  static ACTIVEE: StatutHomologation = 'activee';
+  static EXPIREE: StatutHomologation = 'expiree';
+  static BIENTOT_EXPIREE: StatutHomologation = 'bientotExpiree';
 }
 
-Object.assign(Dossiers, STATUTS_HOMOLOGATION);
 export default Dossiers;

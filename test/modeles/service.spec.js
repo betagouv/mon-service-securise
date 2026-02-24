@@ -24,6 +24,7 @@ import { DescriptionServiceV2 } from '../../src/modeles/descriptionServiceV2.js'
 import { VersionService } from '../../src/modeles/versionService.js';
 import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.js';
 import { creeReferentielV2 } from '../../src/referentielV2.js';
+import { unUUID } from '../constructeurs/UUID.js';
 
 const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER } = Rubriques;
 const { LECTURE } = Permissions;
@@ -857,7 +858,7 @@ describe('Un service', () => {
         },
         dossiers: [
           {
-            id: '1',
+            id: unUUID('1'),
             avecAvis: true,
             avis: [
               {
