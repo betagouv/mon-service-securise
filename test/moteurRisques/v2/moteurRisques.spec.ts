@@ -46,6 +46,9 @@ describe('Le moteur de risques V2', () => {
       const mesureFaite = (id: IdMesureV2) => ({
         [id]: new MesureGenerale({ statut: 'fait', id }, referentiel),
       });
+      const mesureNonFaite = (id: IdMesureV2) => ({
+        [id]: new MesureGenerale({ statut: '', id }, referentiel),
+      });
 
       moteurAvecMesuresFaites = new MoteurRisquesV2(
         // Un service dont le premier risque est "R3"
@@ -55,6 +58,10 @@ describe('Le moteur de risques V2', () => {
         {
           // La mesure du groupe "g" qui fait baisser la vraisemblance de 1
           ...mesureFaite('CONTRAT.1'),
+          // Les mesures du groupe "a"
+          ...mesureNonFaite('MCO_MCS.5'),
+          ...mesureNonFaite('MCO_MCS.6'),
+          ...mesureNonFaite('MCO_MCS.14'),
         }
       );
     });
@@ -73,11 +80,20 @@ describe('Le moteur de risques V2', () => {
       expect(bruts[0].vraisemblance).toBe(4);
     });
 
+    it('sait donner les risques cibles : comme si le service avait fait toutes ses mesures', () => {
+      const cibles = moteurAvecMesuresFaites.risquesCibles();
+
+      expect(cibles).toBeInstanceOf(Array<RisqueV2>);
+      expect(cibles[0].vraisemblance).toBe(1);
+    });
+
     it('peut calculer les 3 types de risques sans interférences les uns avec les autres (pas de mutation)', () => {
       const bruts = moteurAvecMesuresFaites.risquesBruts();
+      const cibles = moteurAvecMesuresFaites.risquesCibles();
       const residuels = moteurAvecMesuresFaites.risques();
 
       expect(bruts[0].vraisemblance).toBe(4);
+      expect(cibles[0].vraisemblance).toBe(1);
       expect(residuels[0].vraisemblance).toBe(3);
     });
   });
