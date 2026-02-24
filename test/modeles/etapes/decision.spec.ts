@@ -1,13 +1,12 @@
-import expect from 'expect.js';
 import Decision from '../../../src/modeles/etapes/decision.js';
 import {
   ErreurDateHomologationInvalide,
   ErreurDureeValiditeInvalide,
 } from '../../../src/erreurs.js';
-import * as Referentiel from '../../../src/referentiel.js';
+import { creeReferentielVide } from '../../../src/referentiel.js';
 
 describe('Une étape « Décision »', () => {
-  const referentiel = Referentiel.creeReferentielVide();
+  const referentiel = creeReferentielVide();
 
   beforeEach(() =>
     referentiel.recharge({ echeancesRenouvellement: { unAn: {} } })
@@ -19,46 +18,28 @@ describe('Une étape « Décision »', () => {
       referentiel
     );
 
-    expect(decision.toJSON()).to.eql({
+    expect(decision.toJSON()).toEqual({
       dateHomologation: '2022-12-01',
       dureeValidite: 'unAn',
     });
   });
 
   it('valide la valeur passée pour la durée de validité', () => {
-    try {
-      new Decision({ dureeValidite: 'dureeInvalide' });
-      expect().fail(
-        "la création d'une étape date aurait dû lever une exception"
-      );
-    } catch (e) {
-      expect(e).to.be.a(ErreurDureeValiditeInvalide);
-      expect(e.message).to.equal(
+    expect(() => new Decision({ dureeValidite: 'dureeInvalide' })).toThrowError(
+      new ErreurDureeValiditeInvalide(
         'La durée de validité "dureeInvalide" est invalide'
-      );
-    }
+      )
+    );
   });
 
   it("valide la valeur passée pour la date d'homologation", () => {
-    try {
-      new Decision({ dateHomologation: '2022-13-01' });
-      expect().fail(
-        "la création d'une étape date aurait dû lever une exception"
-      );
-    } catch (e) {
-      expect(e).to.be.a(ErreurDateHomologationInvalide);
-      expect(e.message).to.equal('La date "2022-13-01" est invalide');
-    }
+    expect(() => new Decision({ dateHomologation: '2022-13-01' })).toThrowError(
+      new ErreurDateHomologationInvalide('La date "2022-13-01" est invalide')
+    );
   });
 
   it("ne lève pas d'exception si la durée de validité ou la date d'homologation ne sont pas renseignées", () => {
-    try {
-      new Decision();
-    } catch (e) {
-      expect().fail(
-        "la création d'une étape date n'aurait pas dû lever une exception"
-      );
-    }
+    expect(() => new Decision()).not.toThrowError();
   });
 
   describe('sur demande de la description de la durée de validité', () => {
@@ -67,23 +48,23 @@ describe('Une étape « Décision »', () => {
         echeancesRenouvellement: { unAn: { description: '1 an' } },
       });
       const decision = new Decision({ dureeValidite: 'unAn' }, referentiel);
-      expect(decision.descriptionDureeValidite()).to.equal('1 an');
+      expect(decision.descriptionDureeValidite()).toEqual('1 an');
     });
 
     it("retourne une chaîne vide si la durée de validité n'est pas renseignée", () => {
       const decision = new Decision();
-      expect(decision.descriptionDureeValidite()).to.equal('');
+      expect(decision.descriptionDureeValidite()).toEqual('');
     });
   });
 
   it("présente la date d'homologation localisée en français", () => {
     const decision = new Decision({ dateHomologation: '2022-11-27' });
-    expect(decision.descriptionDateHomologation()).to.equal('27/11/2022');
+    expect(decision.descriptionDateHomologation()).toEqual('27/11/2022');
   });
 
   it("présente une chaîne vide s'il n'y a pas de date d'homologation renseignée", () => {
     const decision = new Decision();
-    expect(decision.descriptionDateHomologation()).to.equal('');
+    expect(decision.descriptionDateHomologation()).toEqual('');
   });
 
   describe('sur demande de la date de prochaine homologation', () => {
@@ -98,19 +79,19 @@ describe('Une étape « Décision »', () => {
         { dateHomologation: '2022-11-27', dureeValidite: 'unAn' },
         referentiel
       );
-      expect(decision.descriptionProchaineDateHomologation()).to.equal(
+      expect(decision.descriptionProchaineDateHomologation()).toEqual(
         '27/11/2023'
       );
     });
 
     it("retourne une chaîne vide si la date n'est renseignée", () => {
       const decision = new Decision({ dureeValidite: 'unAn' }, referentiel);
-      expect(decision.descriptionProchaineDateHomologation()).to.equal('');
+      expect(decision.descriptionProchaineDateHomologation()).toEqual('');
     });
 
     it("retourne une chaîne vide si la durée de validité n'est pas renseignée", () => {
       const decision = new Decision({ dateHomologation: '2022-11-27' });
-      expect(decision.descriptionProchaineDateHomologation()).to.equal('');
+      expect(decision.descriptionProchaineDateHomologation()).toEqual('');
     });
   });
 
@@ -119,7 +100,7 @@ describe('Une étape « Décision »', () => {
       const decisionIncomplete = new Decision({
         dateHomologation: '2022-11-27',
       });
-      expect(decisionIncomplete.estComplete()).to.be(false);
+      expect(decisionIncomplete.estComplete()).toBe(false);
     });
 
     it("retourne `false` s'il manque la date d'homologation", () => {
@@ -128,7 +109,7 @@ describe('Une étape « Décision »', () => {
         { dureeValidite: 'unAn' },
         referentiel
       );
-      expect(decisionIncomplete.estComplete()).to.be(false);
+      expect(decisionIncomplete.estComplete()).toBe(false);
     });
 
     it("retourne `true` s'il ne manque rien", () => {
@@ -137,7 +118,7 @@ describe('Une étape « Décision »', () => {
         { dateHomologation: '2022-11-27', dureeValidite: 'unAn' },
         referentiel
       );
-      expect(decisionIncomplete.estComplete()).to.be(true);
+      expect(decisionIncomplete.estComplete()).toBe(true);
     });
   });
 });

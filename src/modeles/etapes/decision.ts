@@ -2,20 +2,36 @@ import {
   ErreurDateHomologationInvalide,
   ErreurDureeValiditeInvalide,
 } from '../../erreurs.js';
-import { fabriqueAdaptateurHorloge } from '../../adaptateurs/adaptateurHorloge.js';
+import {
+  AdaptateurHorloge,
+  fabriqueAdaptateurHorloge,
+} from '../../adaptateurs/adaptateurHorloge.js';
 import Etape from './etape.js';
 import {
   ajouteMoisADate,
   dateEnFrancais,
   dateInvalide,
 } from '../../utilitaires/date.js';
-import * as Referentiel from '../../referentiel.js';
+import { Referentiel } from '../../referentiel.interface.js';
+import { creeReferentielVide } from '../../referentiel.js';
+
+export type DonneesDecision = {
+  dateHomologation?: string;
+  dureeValidite?: string;
+};
+
+export type DureeValidite = 'sixMois' | 'unAn' | 'deuxAns' | 'troisAns';
 
 class Decision extends Etape {
+  dateHomologation!: string;
+  dureeValidite!: DureeValidite;
+  private readonly adaptateurHorloge: AdaptateurHorloge;
+  private readonly referentiel!: Referentiel;
+
   constructor(
-    { dateHomologation, dureeValidite } = {},
-    referentiel = Referentiel.creeReferentielVide(),
-    adaptateurHorloge = fabriqueAdaptateurHorloge()
+    { dateHomologation, dureeValidite }: Partial<DonneesDecision> = {},
+    referentiel: Referentiel = creeReferentielVide(),
+    adaptateurHorloge: AdaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     super(
       {
@@ -23,6 +39,7 @@ class Decision extends Etape {
       },
       referentiel
     );
+    this.referentiel = referentiel;
     Decision.valide({ dateHomologation, dureeValidite }, referentiel);
     this.renseigneProprietes({ dateHomologation, dureeValidite });
     this.adaptateurHorloge = adaptateurHorloge;
@@ -61,7 +78,7 @@ class Decision extends Etape {
     return dateEnFrancais(this.dateProchaineHomologation());
   }
 
-  enregistre(dateHomologation, dureeValidite) {
+  enregistre(dateHomologation: string, dureeValidite: DureeValidite) {
     this.dateHomologation = dateHomologation;
     this.dureeValidite = dureeValidite;
   }
@@ -78,7 +95,10 @@ class Decision extends Etape {
     );
   }
 
-  static valide({ dateHomologation, dureeValidite }, referentiel) {
+  static valide(
+    { dateHomologation, dureeValidite }: Partial<DonneesDecision>,
+    referentiel: Referentiel
+  ) {
     const identifiantsDureesHomologation =
       referentiel.identifiantsEcheancesRenouvellement();
     if (
