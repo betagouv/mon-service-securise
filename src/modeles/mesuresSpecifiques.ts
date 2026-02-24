@@ -1,6 +1,7 @@
 import ElementsConstructibles from './elementsConstructibles.js';
-import MesureSpecifique from './mesureSpecifique.js';
-import * as Referentiel from '../referentiel.js';
+import MesureSpecifique, {
+  DonneesMesureSpecifique,
+} from './mesureSpecifique.js';
 
 import {
   ErreurMesureInconnue,
@@ -9,13 +10,39 @@ import {
   ErreurSuppressionImpossible,
 } from '../erreurs.js';
 
-import Mesure from './mesure.js';
+import Mesure, { StatutMesure } from './mesure.js';
+import { creeReferentielVide } from '../referentiel.js';
+import { Referentiel } from '../referentiel.interface.js';
+import { UUID } from '../typesBasiques.js';
 
-class MesuresSpecifiques extends ElementsConstructibles {
+type DonneesMesuresSpecifiques = {
+  mesuresSpecifiques: Array<DonneesMesureSpecifique>;
+};
+
+type DonneesModeleMesureSpecifique = {
+  idUtilisateur: UUID;
+  description: string;
+  descriptionLongue: string;
+  categorie: string;
+};
+
+type ModelesDisponiblesMesureSpecifique = Record<
+  UUID,
+  DonneesModeleMesureSpecifique
+>;
+
+type ParStatutEtCategorie = Record<
+  StatutMesure,
+  Record<string, Array<{ description: string; modalites?: string }>>
+>;
+
+class MesuresSpecifiques extends ElementsConstructibles<MesureSpecifique> {
+  private readonly modelesDisponiblesDeMesureSpecifique: ModelesDisponiblesMesureSpecifique;
+
   constructor(
-    donnees = {},
-    referentiel = Referentiel.creeReferentielVide(),
-    modelesDisponiblesDeMesureSpecifique = {}
+    donnees: Partial<DonneesMesuresSpecifiques> = {},
+    referentiel: Referentiel = creeReferentielVide(),
+    modelesDisponiblesDeMesureSpecifique: ModelesDisponiblesMesureSpecifique = {}
   ) {
     const { mesuresSpecifiques = [] } = donnees;
 
@@ -30,12 +57,11 @@ class MesuresSpecifiques extends ElementsConstructibles {
   }
 
   static completeMesuresSpecifiques(
-    mesuresSpecifiques,
-    modelesDisponiblesDeMesureSpecifique
+    mesuresSpecifiques: DonneesMesureSpecifique[],
+    modelesDisponiblesDeMesureSpecifique: ModelesDisponiblesMesureSpecifique
   ) {
     return mesuresSpecifiques.map((m) => {
-      const lieeAUnModele = m.idModele;
-      if (!lieeAUnModele) return m;
+      if (!m.idModele) return m;
 
       const modele = modelesDisponiblesDeMesureSpecifique[m.idModele];
       if (!modele)
@@ -47,7 +73,7 @@ class MesuresSpecifiques extends ElementsConstructibles {
     });
   }
 
-  metsAJourMesure(mesure) {
+  metsAJourMesure(mesure: MesureSpecifique) {
     const index = this.items.findIndex((m) => m.id === mesure.id);
     if (index === -1) throw new ErreurMesureInconnue();
     this.items[index] = mesure;
@@ -55,23 +81,24 @@ class MesuresSpecifiques extends ElementsConstructibles {
 
   parStatutEtCategorie(
     accumulateur = MesureSpecifique.accumulateurInitialStatuts(true)
-  ) {
+  ): ParStatutEtCategorie {
     return this.toutes().reduce((acc, mesure) => {
       if (!mesure.statut || !mesure.categorie) return acc;
-      acc[mesure.statut][mesure.categorie] ||= [];
-      acc[mesure.statut][mesure.categorie].push({
+      // eslint-disable-next-line no-param-reassign
+      acc[mesure.statut as StatutMesure][mesure.categorie] ||= [];
+      acc[mesure.statut as StatutMesure][mesure.categorie].push({
         description: mesure.descriptionMesure(),
         modalites: mesure.modalites,
       });
       return acc;
-    }, accumulateur);
+    }, accumulateur as ParStatutEtCategorie);
   }
 
-  ajouteMesure(mesure) {
+  ajouteMesure(mesure: MesureSpecifique) {
     this.items.push(mesure);
   }
 
-  supprimeMesure(idMesure) {
+  supprimeMesure(idMesure: UUID) {
     if (this.avecId(idMesure)?.idModele) {
       throw new ErreurSuppressionImpossible(
         'Impossible de supprimer directement une mesure spécifique associée à un modèle.'
@@ -80,7 +107,7 @@ class MesuresSpecifiques extends ElementsConstructibles {
     this.items = this.items.filter((m) => m.id !== idMesure);
   }
 
-  supprimeResponsable(idUtilisateur) {
+  supprimeResponsable(idUtilisateur: UUID) {
     this.toutes().forEach((m) => m.supprimeResponsable(idUtilisateur));
   }
 
@@ -88,15 +115,15 @@ class MesuresSpecifiques extends ElementsConstructibles {
     return this.toutes().filter((ms) => !ms.statutRenseigne()).length;
   }
 
-  avecId(idMesure) {
+  avecId(idMesure: UUID) {
     return this.toutes().find((m) => m.id === idMesure);
   }
 
-  avecIdModele(idModele) {
+  avecIdModele(idModele: UUID) {
     return this.toutes().find((m) => m.idModele === idModele);
   }
 
-  detacheMesureDuModele(idModele) {
+  detacheMesureDuModele(idModele: UUID) {
     this.items.forEach((m) => {
       if (m.idModele === idModele) {
         m.detacheDeSonModele();
@@ -104,7 +131,9 @@ class MesuresSpecifiques extends ElementsConstructibles {
     });
   }
 
-  detacheMesuresNonAssocieesA(idUtilisateurProprietaireDesModelesAConserver) {
+  detacheMesuresNonAssocieesA(
+    idUtilisateurProprietaireDesModelesAConserver: UUID
+  ) {
     this.items.forEach((m) => {
       if (!m.idModele) {
         return;
@@ -125,11 +154,11 @@ class MesuresSpecifiques extends ElementsConstructibles {
     return this.items.map((m) => m.idModele).filter(Boolean);
   }
 
-  supprimeMesureAssocieeAuModele(idModele) {
+  supprimeMesureAssocieeAuModele(idModele: UUID) {
     this.items = this.items.filter((m) => m.idModele !== idModele);
   }
 
-  associeAuModele(idModele, idNouvelleMesure) {
+  associeAuModele(idModele: UUID, idNouvelleMesure: UUID) {
     const modele = this.modelesDisponiblesDeMesureSpecifique[idModele];
 
     const modeleInconnu = !modele;

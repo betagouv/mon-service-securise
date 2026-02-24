@@ -1,7 +1,7 @@
-import expect from 'expect.js';
-import MesureSpecifique from '../../src/modeles/mesureSpecifique.js';
+import MesureSpecifique, {
+  DonneesMesureSpecifique,
+} from '../../src/modeles/mesureSpecifique.js';
 import MesuresSpecifiques from '../../src/modeles/mesuresSpecifiques.js';
-import * as Referentiel from '../../src/referentiel.js';
 
 import {
   ErreurMesureInconnue,
@@ -9,43 +9,64 @@ import {
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
   ErreurSuppressionImpossible,
 } from '../../src/erreurs.js';
+import { Referentiel } from '../../src/referentiel.interface.ts';
+import { creeReferentielVide } from '../../src/referentiel.js';
+import { unUUID } from '../constructeurs/UUID.ts';
 
 describe('La liste des mesures spécifiques', () => {
-  let referentiel;
+  let referentiel: Referentiel;
+
   beforeEach(() => {
-    referentiel = Referentiel.creeReferentielVide();
+    referentiel = creeReferentielVide();
     referentiel.identifiantsCategoriesMesures = () => ['categorie1'];
+  });
+
+  const uneMesureSpecifique = (
+    surcharge?: Partial<DonneesMesureSpecifique>
+  ): DonneesMesureSpecifique => ({
+    id: unUUID('1'),
+    description: 'Une mesure spécifique',
+    modalites: 'Des modalités',
+    categorie: 'categorie1',
+    statut: 'fait',
+    ...surcharge,
   });
 
   it('sait se dénombrer', () => {
     const mesures = new MesuresSpecifiques({ mesuresSpecifiques: [] });
-    expect(mesures.nombre()).to.equal(0);
+    expect(mesures.nombre()).toEqual(0);
   });
 
   it('est composée de mesures spécifiques', () => {
-    const mesures = new MesuresSpecifiques({
-      mesuresSpecifiques: [
-        { description: 'Une mesure spécifique', modalites: 'Des modalités' },
-      ],
-    });
+    const mesures = new MesuresSpecifiques(
+      {
+        mesuresSpecifiques: [
+          uneMesureSpecifique({
+            description: 'Une mesure spécifique',
+            modalites: 'Des modalités',
+          }),
+        ],
+      },
+      referentiel
+    );
 
-    expect(mesures.item(0)).to.be.a(MesureSpecifique);
+    expect(mesures.item(0)).toBeInstanceOf(MesureSpecifique);
   });
 
   it('peut être triée par statut', () => {
     const mesures = new MesuresSpecifiques(
       {
         mesuresSpecifiques: [
-          {
+          uneMesureSpecifique({
             description: 'Mesure Spécifique 1',
             statut: 'fait',
             categorie: 'categorie1',
-          },
-          {
+          }),
+          uneMesureSpecifique({
             description: 'Mesure Spécifique 2',
             statut: 'nonFait',
             categorie: 'categorie1',
-          },
+          }),
         ],
       },
       referentiel
@@ -53,58 +74,58 @@ describe('La liste des mesures spécifiques', () => {
 
     expect(
       mesures.parStatutEtCategorie().fait.categorie1[0].description
-    ).to.equal('Mesure Spécifique 1');
+    ).toEqual('Mesure Spécifique 1');
     expect(
       mesures.parStatutEtCategorie().nonFait.categorie1[0].description
-    ).to.equal('Mesure Spécifique 2');
+    ).toEqual('Mesure Spécifique 2');
   });
 
   it('prend le modalités lors du tri par statut', () => {
     const mesures = new MesuresSpecifiques(
       {
         mesuresSpecifiques: [
-          {
+          uneMesureSpecifique({
             description: 'Mesure Spécifique 1',
             statut: 'fait',
             categorie: 'categorie1',
             modalites: 'Modalités',
-          },
+          }),
         ],
       },
       referentiel
     );
 
-    expect(mesures.parStatutEtCategorie().fait.categorie1.length).to.equal(1);
-    expect(
-      mesures.parStatutEtCategorie().fait.categorie1[0].modalites
-    ).to.equal('Modalités');
+    expect(mesures.parStatutEtCategorie().fait.categorie1.length).toEqual(1);
+    expect(mesures.parStatutEtCategorie().fait.categorie1[0].modalites).toEqual(
+      'Modalités'
+    );
   });
 
   it("ordonne les status comme précisé par l'accumulateur", () => {
     const mesures = new MesuresSpecifiques(
       {
         mesuresSpecifiques: [
-          {
+          uneMesureSpecifique({
             description: 'Mesure Spécifique 1',
             statut: 'fait',
             categorie: 'categorie1',
-          },
-          {
+          }),
+          uneMesureSpecifique({
             description: 'Mesure Spécifique 2',
             statut: 'nonFait',
             categorie: 'categorie1',
-          },
-          {
+          }),
+          uneMesureSpecifique({
             description: 'Mesure Spécifique 3',
             statut: 'enCours',
             categorie: 'categorie1',
-          },
+          }),
         ],
       },
       referentiel
     );
 
-    expect(Object.keys(mesures.parStatutEtCategorie())).to.eql([
+    expect(Object.keys(mesures.parStatutEtCategorie())).toEqual([
       'enCours',
       'nonFait',
       'aLancer',
@@ -116,64 +137,65 @@ describe('La liste des mesures spécifiques', () => {
     const mesures = new MesuresSpecifiques(
       {
         mesuresSpecifiques: [
-          {
+          uneMesureSpecifique({
             description: 'Mesure Spécifique 1',
             statut: 'fait',
             categorie: 'categorie1',
             modalites: 'Modalités',
-          },
-          {
+          }),
+          uneMesureSpecifique({
             description: 'Mesure Spécifique 2',
             categorie: 'categorie1',
             modalites: 'Modalités',
-          },
+            statut: '',
+          }),
         ],
       },
       referentiel
     );
 
-    expect(mesures.parStatutEtCategorie().fait.categorie1.length).to.equal(1);
-    expect(
-      mesures.parStatutEtCategorie().fait.categorie1[0].modalites
-    ).to.equal('Modalités');
+    expect(mesures.parStatutEtCategorie().fait.categorie1.length).toEqual(1);
+    expect(mesures.parStatutEtCategorie().fait.categorie1[0].modalites).toEqual(
+      'Modalités'
+    );
   });
 
   it('exclut les mesures sans categorie', () => {
     const mesures = new MesuresSpecifiques(
       {
         mesuresSpecifiques: [
-          {
+          uneMesureSpecifique({
             description: 'Mesure Spécifique 1',
             statut: 'fait',
             categorie: 'categorie1',
             modalites: 'Modalités',
-          },
-          {
+          }),
+          uneMesureSpecifique({
             description: 'Mesure Spécifique 2',
             statut: 'fait',
             categorie: undefined,
             modalites: 'Modalités',
-          },
+          }),
         ],
       },
       referentiel
     );
 
-    expect(Object.keys(mesures.parStatutEtCategorie().fait).length).to.equal(1);
+    expect(Object.keys(mesures.parStatutEtCategorie().fait).length).toEqual(1);
     expect(
       mesures.parStatutEtCategorie().fait.categorie1[0].description
-    ).to.equal('Mesure Spécifique 1');
+    ).toEqual('Mesure Spécifique 1');
   });
 
   it('peut être triée par statut en utilisant un accumulateur personnalisé', () => {
     const mesures = new MesuresSpecifiques(
       {
         mesuresSpecifiques: [
-          {
+          uneMesureSpecifique({
             description: 'Mesure Spécifique 1',
             statut: 'fait',
             categorie: 'categorie1',
-          },
+          }),
         ],
       },
       referentiel
@@ -185,12 +207,13 @@ describe('La liste des mesures spécifiques', () => {
       },
       enCours: {},
       nonFait: {},
+      aLancer: {},
     });
-    expect(mesuresParStatut.fait.categorie1.length).to.equal(2);
-    expect(mesuresParStatut.fait.categorie1[0].description).to.equal(
+    expect(mesuresParStatut.fait.categorie1.length).toEqual(2);
+    expect(mesuresParStatut.fait.categorie1[0].description).toEqual(
       'Mesure une'
     );
-    expect(mesuresParStatut.fait.categorie1[1].description).to.equal(
+    expect(mesuresParStatut.fait.categorie1[1].description).toEqual(
       'Mesure Spécifique 1'
     );
   });
@@ -200,7 +223,7 @@ describe('La liste des mesures spécifiques', () => {
       {
         mesuresSpecifiques: [
           {
-            id: 'M1',
+            id: unUUID('1'),
             description: 'Mesure Spécifique 1',
             statut: 'fait',
             categorie: 'categorie1',
@@ -210,51 +233,60 @@ describe('La liste des mesures spécifiques', () => {
       referentiel
     );
 
-    mesures.supprimeMesure('M1');
+    mesures.supprimeMesure(unUUID('1'));
 
-    expect(mesures.items.length).to.be(0);
+    expect(mesures.items.length).toBe(0);
   });
 
   it("jette une erreur lors de la suppression d'une mesure spécifique associée à un modèle", () => {
-    try {
+    expect(() => {
       const mesures = new MesuresSpecifiques(
         {
           mesuresSpecifiques: [
-            {
-              id: 'M1',
-              idModele: 'MOD-1',
-            },
+            uneMesureSpecifique({
+              id: unUUID('1'),
+              idModele: unUUID('2'),
+            }),
           ],
         },
         referentiel,
-        { 'MOD-1': {} }
+        {
+          [unUUID('2')]: {
+            idUtilisateur: unUUID('U'),
+            description: '',
+            descriptionLongue: '',
+            categorie: '',
+          },
+        }
       );
 
-      mesures.supprimeMesure('M1');
-
-      expect().fail("L'appel aurait dû jeter une erreur");
-    } catch (e) {
-      expect(e).to.be.an(ErreurSuppressionImpossible);
-      expect(e.message).to.be(
+      mesures.supprimeMesure(unUUID('1'));
+    }).toThrowError(
+      new ErreurSuppressionImpossible(
         'Impossible de supprimer directement une mesure spécifique associée à un modèle.'
-      );
-    }
+      )
+    );
   });
 
   describe('concernant les mesures spécifiques liées à un modèle', () => {
     it('complète les mesures rattachées à un modèle avec les données extraites du modèle… pour que les consommateurs ne fassent pas la différence avec des mesures "classiques"', () => {
       const modelesDisponiblesDeMesureSpecifique = {
-        'MOD-1': {
+        [unUUID('2')]: {
           description: 'Description du modèle',
           descriptionLongue: 'Longue du modèle',
           categorie: 'categorie1',
+          idUtilisateur: unUUID('U'),
         },
       };
 
       const avecUnModele = new MesuresSpecifiques(
         {
           mesuresSpecifiques: [
-            { id: 'M-1', idModele: 'MOD-1', statut: 'fait' },
+            uneMesureSpecifique({
+              id: unUUID('1'),
+              idModele: unUUID('2'),
+              statut: 'fait',
+            }),
           ],
         },
         referentiel,
@@ -262,40 +294,43 @@ describe('La liste des mesures spécifiques', () => {
       );
 
       const mesureCompletee = avecUnModele.toutes()[0];
-      expect(mesureCompletee.description).to.be('Description du modèle');
-      expect(mesureCompletee.descriptionLongue).to.be('Longue du modèle');
-      expect(mesureCompletee.categorie).to.be('categorie1');
+      expect(mesureCompletee.description).toBe('Description du modèle');
+      expect(mesureCompletee.descriptionLongue).toBe('Longue du modèle');
+      expect(mesureCompletee.categorie).toBe('categorie1');
     });
 
     it('jette une erreur lorsque le modèle de la mesure est introuvable', () => {
       const modelesVide = {};
 
-      expect(() => {
-        new MesuresSpecifiques(
-          {
-            mesuresSpecifiques: [
-              { id: 'M-1', idModele: 'MODELE-INTROUVABLE-1', statut: 'fait' },
-            ],
-          },
-          referentiel,
-          modelesVide
-        );
-      }).to.throwError((e) => {
-        expect(e.message).to.be(
-          "Le modèle de mesure spécifique 'MODELE-INTROUVABLE-1' est introuvable."
-        );
-      });
+      expect(
+        () =>
+          new MesuresSpecifiques(
+            {
+              mesuresSpecifiques: [
+                uneMesureSpecifique({
+                  id: unUUID('1'),
+                  idModele: unUUID('X'),
+                  statut: 'fait',
+                }),
+              ],
+            },
+            referentiel,
+            modelesVide
+          )
+      ).toThrowError(
+        `Le modèle de mesure spécifique '${unUUID('X')}' est introuvable.`
+      );
     });
   });
 
   describe('sur demande de mise à jour', () => {
     it('peut mettre à jour une mesure spécifique', () => {
-      const donneesMesure = {
-        id: 'M1',
+      const donneesMesure = uneMesureSpecifique({
+        id: unUUID('1'),
         description: 'Mesure Spécifique 1',
         statut: 'fait',
         categorie: 'categorie1',
-      };
+      });
       const mesures = new MesuresSpecifiques(
         { mesuresSpecifiques: [donneesMesure] },
         referentiel
@@ -310,7 +345,7 @@ describe('La liste des mesures spécifiques', () => {
 
       mesures.metsAJourMesure(mesureAJour);
 
-      expect(mesures.items[0].description).to.be('Nouvelle description');
+      expect(mesures.items[0].description).toBe('Nouvelle description');
     });
 
     it('jette une erreur si la mesure est introuvable', () => {
@@ -320,25 +355,30 @@ describe('La liste des mesures spécifiques', () => {
       );
 
       const mesureAJour = new MesureSpecifique(
-        {
-          id: 'INTROUVABLE',
+        uneMesureSpecifique({
+          id: unUUID('X'),
           description: 'une description',
           statut: 'fait',
           categorie: 'categorie1',
-        },
+        }),
         referentiel
       );
 
-      expect(() => mesures.metsAJourMesure(mesureAJour)).to.throwError((e) => {
-        expect(e).to.be.an(ErreurMesureInconnue);
-      });
+      expect(() => mesures.metsAJourMesure(mesureAJour)).toThrowError(
+        ErreurMesureInconnue
+      );
     });
   });
 
   describe("sur demande d'association à un modèle", () => {
     it('ajoute une mesure spécifique qui reprend les données du modèle, avec un statut « À lancer » et un identifiant', () => {
       const modelesAvecM1 = {
-        'M-1': { description: 'Mesure M1', categorie: 'categorie1' },
+        [unUUID('1')]: {
+          description: 'Mesure M1',
+          categorie: 'categorie1',
+          idUtilisateur: unUUID('U'),
+          descriptionLongue: '',
+        },
       };
       const connaitM1 = new MesuresSpecifiques(
         { mesuresSpecifiques: [] },
@@ -346,14 +386,15 @@ describe('La liste des mesures spécifiques', () => {
         modelesAvecM1
       );
 
-      connaitM1.associeAuModele('M-1', 'ID-MESURE-1');
+      connaitM1.associeAuModele(unUUID('1'), unUUID('2'));
 
-      expect(connaitM1.toutes()[0].toJSON()).to.eql({
-        idModele: 'M-1',
-        id: 'ID-MESURE-1',
+      expect(connaitM1.toutes()[0].toJSON()).toEqual({
+        id: '22222222-2222-2222-2222-222222222222',
+        idModele: '11111111-1111-1111-1111-111111111111',
         categorie: 'categorie1',
         description: 'Mesure M1',
         statut: 'aLancer',
+        descriptionLongue: '',
         responsables: [],
       });
     });
@@ -367,14 +408,19 @@ describe('La liste des mesures spécifiques', () => {
         modelesAvecM1
       );
 
-      expect(() => connaitM1.associeAuModele('M-2')).to.throwError((e) => {
-        expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueIntrouvable);
-      });
+      expect(() =>
+        connaitM1.associeAuModele(unUUID('2'), unUUID('X'))
+      ).toThrowError(ErreurModeleDeMesureSpecifiqueIntrouvable);
     });
 
     it('jette une erreur si une mesure spécifique est déjà associée au modèle', () => {
       const modelesAvecM1 = {
-        'M-1': { description: 'Mesure M1', categorie: 'categorie1' },
+        [unUUID('1')]: {
+          description: 'Mesure M1',
+          categorie: 'categorie1',
+          idUtilisateur: unUUID('U'),
+          descriptionLongue: '',
+        },
       };
 
       const connaitraM1 = new MesuresSpecifiques(
@@ -382,57 +428,71 @@ describe('La liste des mesures spécifiques', () => {
         referentiel,
         modelesAvecM1
       );
-      connaitraM1.associeAuModele('M-1', 'ID-MESURE-1');
+      connaitraM1.associeAuModele(unUUID('1'), unUUID('2'));
 
       expect(() => {
-        connaitraM1.associeAuModele('M-1', 'ID-MESURE-1');
-      }).to.throwError((e) => {
-        expect(e).to.be.an(ErreurModeleDeMesureSpecifiqueDejaAssociee);
-        expect(e.message).to.be(
-          'Le modèle de mesure spécifique M-1 est déjà associé à la mesure ID-MESURE-1'
-        );
-      });
+        connaitraM1.associeAuModele(unUUID('1'), unUUID('2'));
+      }).toThrowError(
+        new ErreurModeleDeMesureSpecifiqueDejaAssociee(unUUID('1'), unUUID('2'))
+      );
     });
   });
 
   describe("sur demande de détachement d'un modèle", () => {
     it('détache la mesure spécifique liée à ce modèle', () => {
       const modelesDisponiblesDeMesureSpecifique = {
-        'MOD-1': {
+        [unUUID('3')]: {
           description: 'Description du modèle 1',
           descriptionLongue: 'Longue du modèle 1',
           categorie: 'categorie1',
+          idUtilisateur: unUUID('U'),
         },
-        'MOD-2': {
+        [unUUID('4')]: {
           description: 'Description du modèle 2',
           descriptionLongue: 'Longue du modèle 2',
           categorie: 'categorie1',
+          idUtilisateur: unUUID('U'),
         },
       };
 
       const mesures = new MesuresSpecifiques(
         {
           mesuresSpecifiques: [
-            { id: 'M1', idModele: 'MOD-1', statut: 'fait' },
-            { id: 'M2', idModele: 'MOD-2', statut: 'fait' },
+            uneMesureSpecifique({
+              id: unUUID('1'),
+              idModele: unUUID('3'),
+              statut: 'fait',
+            }),
+            uneMesureSpecifique({
+              id: unUUID('2'),
+              idModele: unUUID('4'),
+              statut: 'fait',
+            }),
           ],
         },
         referentiel,
         modelesDisponiblesDeMesureSpecifique
       );
 
-      mesures.detacheMesureDuModele('MOD-1');
+      mesures.detacheMesureDuModele(unUUID('3'));
 
-      expect(mesures.donneesSerialisees()).to.eql([
+      expect(mesures.donneesSerialisees()).toEqual([
         {
-          id: 'M1',
+          id: unUUID('1'),
           categorie: 'categorie1',
           description: 'Description du modèle 1',
           descriptionLongue: 'Longue du modèle 1',
           responsables: [],
+          modalites: 'Des modalités',
           statut: 'fait',
         },
-        { id: 'M2', idModele: 'MOD-2', responsables: [], statut: 'fait' },
+        {
+          id: unUUID('2'),
+          idModele: unUUID('4'),
+          responsables: [],
+          modalites: 'Des modalités',
+          statut: 'fait',
+        },
       ]);
     });
   });
@@ -440,34 +500,54 @@ describe('La liste des mesures spécifiques', () => {
   describe("sur demande de suppression d'une mesure associée à un modèle", () => {
     it('supprime la mesure', () => {
       const modelesDisponiblesDeMesureSpecifique = {
-        'MOD-1': { categorie: 'categorie1' },
+        [unUUID('2')]: {
+          categorie: 'categorie1',
+          idUtilisateur: unUUID('U'),
+          description: '',
+          descriptionLongue: '',
+        },
       };
 
       const mesures = new MesuresSpecifiques(
         {
-          mesuresSpecifiques: [{ id: 'M1', idModele: 'MOD-1', statut: 'fait' }],
+          mesuresSpecifiques: [
+            uneMesureSpecifique({
+              id: unUUID('1'),
+              idModele: unUUID('2'),
+              statut: 'fait',
+            }),
+          ],
         },
         referentiel,
         modelesDisponiblesDeMesureSpecifique
       );
 
-      mesures.supprimeMesureAssocieeAuModele('MOD-1');
+      mesures.supprimeMesureAssocieeAuModele(unUUID('2'));
 
-      expect(mesures.donneesSerialisees()).to.eql([]);
+      expect(mesures.donneesSerialisees()).toEqual([]);
     });
   });
 
   describe('sur demande de liste des modèles associés', () => {
     it('retourne une liste des id de modèles', () => {
       const modelesDisponiblesDeMesureSpecifique = {
-        'MOD-1': { categorie: 'categorie1' },
+        [unUUID('3')]: {
+          categorie: 'categorie1',
+          idUtilisateur: unUUID('U'),
+          description: '',
+          descriptionLongue: '',
+        },
       };
 
       const mesures = new MesuresSpecifiques(
         {
           mesuresSpecifiques: [
-            { id: 'M1', idModele: 'MOD-1', statut: 'fait' },
-            { id: 'M2', statut: 'fait' },
+            uneMesureSpecifique({
+              id: unUUID('1'),
+              idModele: unUUID('3'),
+              statut: 'fait',
+            }),
+            uneMesureSpecifique({ id: unUUID('2'), statut: 'fait' }),
           ],
         },
         referentiel,
@@ -476,34 +556,52 @@ describe('La liste des mesures spécifiques', () => {
 
       const listeModeles = mesures.listeIdentifiantsModelesAssocies();
 
-      expect(listeModeles).to.eql(['MOD-1']);
+      expect(listeModeles).toEqual([unUUID('3')]);
     });
   });
 
   describe("sur demande de détachement de toutes les mesures associées à un modèle qui n'appartient pas à un utilisateur", () => {
     it('détache ces mesures uniquement', () => {
       const modelesDisponiblesDeMesureSpecifique = {
-        'MOD-1': { categorie: 'categorie1', idUtilisateur: 'U1' },
-        'MOD-2': { categorie: 'categorie1', idUtilisateur: 'U2' },
+        [unUUID('3')]: {
+          categorie: 'categorie1',
+          idUtilisateur: unUUID('U'),
+          description: '',
+          descriptionLongue: '',
+        },
+        [unUUID('4')]: {
+          categorie: 'categorie1',
+          idUtilisateur: unUUID('V'),
+          description: '',
+          descriptionLongue: '',
+        },
       };
 
       const mesures = new MesuresSpecifiques(
         {
           mesuresSpecifiques: [
-            { id: 'M1', idModele: 'MOD-1', statut: 'fait' },
-            { id: 'M2', idModele: 'MOD-2', statut: 'fait' },
+            uneMesureSpecifique({
+              id: unUUID('1'),
+              idModele: unUUID('3'),
+              statut: 'fait',
+            }),
+            uneMesureSpecifique({
+              id: unUUID('2'),
+              idModele: unUUID('4'),
+              statut: 'fait',
+            }),
           ],
         },
         referentiel,
         modelesDisponiblesDeMesureSpecifique
       );
 
-      mesures.detacheMesuresNonAssocieesA('U1');
+      mesures.detacheMesuresNonAssocieesA(unUUID('U'));
 
       const toutesMesures = mesures.toutes();
-      expect(toutesMesures.length).to.be(2);
-      expect(toutesMesures[0].idModele).to.be('MOD-1');
-      expect(toutesMesures[1].idModele).to.be(undefined);
+      expect(toutesMesures.length).toBe(2);
+      expect(toutesMesures[0].idModele).toBe(unUUID('3'));
+      expect(toutesMesures[1].idModele).toBe(undefined);
     });
   });
 });
