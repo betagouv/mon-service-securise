@@ -10,6 +10,7 @@ import Dossier from '../dossier.js';
 import BusEvenements from '../../bus/busEvenements.js';
 import { VersionService } from '../versionService.js';
 import Service from '../service.js';
+import { DureeValidite } from '../etapes/decision.js';
 
 const STATUT = {
   INVALIDE: 'INVALIDE',
@@ -105,7 +106,10 @@ class TeleversementServicesV2 {
         dossierMetier.declareSansDocument();
         const dateIso = decision.dateHomologation.toISOString();
         dossierMetier.enregistreDateTelechargement(dateIso);
-        dossierMetier.enregistreDecision(dateIso, decision.dureeValidite);
+        dossierMetier.enregistreDecision(
+          dateIso,
+          decision.dureeValidite as DureeValidite
+        );
         dossierMetier.declareImporte();
         await busEvenements.publie(
           new EvenementDossierHomologationImporte({

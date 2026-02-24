@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import { unDossier } from '../constructeurs/constructeurDossier.js';
 import donneesReferentiel from '../../donneesReferentiel.js';
 import Dossier from '../../src/modeles/dossier.js';
@@ -10,6 +9,7 @@ import {
   ErreurDossierNonFinalise,
   ErreurDossierEtapeInconnue,
 } from '../../src/erreurs.js';
+import { unUUID, unUUIDRandom } from '../constructeurs/UUID.ts';
 
 describe("Un dossier d'homologation", () => {
   const referentiel = Referentiel.creeReferentielVide();
@@ -25,7 +25,7 @@ describe("Un dossier d'homologation", () => {
   it('sait se convertir en JSON', () => {
     const dossier = new Dossier(
       {
-        id: '123',
+        id: unUUID('1'),
         decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
         autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
         dateTelechargement: { date: '2023-01-01T00:00:00.000Z' },
@@ -48,8 +48,8 @@ describe("Un dossier d'homologation", () => {
       referentiel
     );
 
-    expect(dossier.toJSON()).to.eql({
-      id: '123',
+    expect(dossier.toJSON()).toEqual({
+      id: unUUID('1'),
       decision: { dateHomologation: '2022-12-01', dureeValidite: 'unAn' },
       autorite: { nom: 'Jean Courage', fonction: 'Responsable' },
       dateTelechargement: { date: '2023-01-01T00:00:00.000Z' },
@@ -72,8 +72,8 @@ describe("Un dossier d'homologation", () => {
   });
 
   it('est non-finalisé par défaut', () => {
-    const dossier = new Dossier({ id: '123' }, referentiel);
-    expect(dossier.finalise).to.be(false);
+    const dossier = new Dossier({ id: unUUIDRandom() }, referentiel);
+    expect(dossier.finalise).toBe(false);
   });
 
   describe("sur demande d'enregistrement de l'autorité d'homolgation", () => {
@@ -82,7 +82,7 @@ describe("Un dossier d'homologation", () => {
 
       expect(() =>
         dossierFinalise.enregistreAutoriteHomologation('Jean Dupond', 'RSSI')
-      ).to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+      ).toThrowError(ErreurDossierDejaFinalise);
     });
 
     it("met à jour l'autorité d'homologation avec les données fournies", () => {
@@ -90,8 +90,8 @@ describe("Un dossier d'homologation", () => {
 
       dossier.enregistreAutoriteHomologation('Jean Dupond', 'RSSI');
 
-      expect(dossier.autorite.nom).to.equal('Jean Dupond');
-      expect(dossier.autorite.fonction).to.equal('RSSI');
+      expect(dossier.autorite.nom).toEqual('Jean Dupond');
+      expect(dossier.autorite.fonction).toEqual('RSSI');
     });
   });
 
@@ -100,18 +100,18 @@ describe("Un dossier d'homologation", () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
       expect(() =>
-        dossierFinalise.enregistreDecision(new Date(), 'unAn')
-      ).to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+        dossierFinalise.enregistreDecision(new Date().toISOString(), 'unAn')
+      ).toThrowError(ErreurDossierDejaFinalise);
     });
 
     it('met à jour la décision du dossier avec les informations fournies', () => {
       const dossier = new Dossier();
-      const maintenant = new Date();
+      const maintenant = new Date().toISOString();
 
       dossier.enregistreDecision(maintenant, 'unAn');
 
-      expect(dossier.decision.dateHomologation).to.equal(maintenant);
-      expect(dossier.decision.dureeValidite).to.equal('unAn');
+      expect(dossier.decision.dateHomologation).toEqual(maintenant);
+      expect(dossier.decision.dureeValidite).toEqual('unAn');
     });
   });
 
@@ -120,17 +120,17 @@ describe("Un dossier d'homologation", () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
       expect(() =>
-        dossierFinalise.enregistreDateTelechargement('decision', new Date())
-      ).to.throwError((e) => expect(e).to.be.an(ErreurDossierDejaFinalise));
+        dossierFinalise.enregistreDateTelechargement(new Date().toISOString())
+      ).toThrowError(ErreurDossierDejaFinalise);
     });
 
     it("met à jour la date de téléchargement des documents d'homologation avec la date fournie", () => {
       const dossier = new Dossier();
-      const maintenant = new Date();
+      const maintenant = new Date().toISOString();
 
       dossier.enregistreDateTelechargement(maintenant);
 
-      expect(dossier.dateTelechargement.date).to.equal(maintenant);
+      expect(dossier.dateTelechargement.date).toEqual(maintenant);
     });
   });
 
@@ -138,8 +138,8 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.enregistreAvis([])).to.throwError((e) =>
-        expect(e).to.be.an(ErreurDossierDejaFinalise)
+      expect(() => dossierFinalise.enregistreAvis([])).toThrowError(
+        ErreurDossierDejaFinalise
       );
     });
 
@@ -153,8 +153,8 @@ describe("Un dossier d'homologation", () => {
 
       dossier.enregistreAvis([avisComplet]);
 
-      expect(dossier.avis.avis[0].toJSON()).to.eql(avisComplet);
-      expect(dossier.avis.avecAvis).to.be(true);
+      expect(dossier.avis.avis[0].toJSON()).toEqual(avisComplet);
+      expect(dossier.avis.avecAvis).toBe(true);
     });
   });
 
@@ -162,8 +162,8 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.declareSansAvis()).to.throwError((e) =>
-        expect(e).to.be.an(ErreurDossierDejaFinalise)
+      expect(() => dossierFinalise.declareSansAvis()).toThrowError(
+        ErreurDossierDejaFinalise
       );
     });
 
@@ -184,8 +184,8 @@ describe("Un dossier d'homologation", () => {
 
       dossier.declareSansAvis();
 
-      expect(dossier.avis.avecAvis).to.be(false);
-      expect(dossier.avis.avis).to.eql([]);
+      expect(dossier.avis.avecAvis).toBe(false);
+      expect(dossier.avis.avis).toEqual([]);
     });
   });
 
@@ -193,8 +193,8 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.enregistreDocuments([])).to.throwError((e) =>
-        expect(e).to.be.an(ErreurDossierDejaFinalise)
+      expect(() => dossierFinalise.enregistreDocuments([])).toThrowError(
+        ErreurDossierDejaFinalise
       );
     });
 
@@ -204,8 +204,8 @@ describe("Un dossier d'homologation", () => {
 
       dossier.enregistreDocuments(documents);
 
-      expect(dossier.documents.documents).to.eql(documents);
-      expect(dossier.documents.avecDocuments).to.be(true);
+      expect(dossier.documents.documents).toEqual(documents);
+      expect(dossier.documents.avecDocuments).toBe(true);
     });
   });
 
@@ -213,8 +213,8 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.declareSansDocument()).to.throwError((e) =>
-        expect(e).to.be.an(ErreurDossierDejaFinalise)
+      expect(() => dossierFinalise.declareSansDocument()).toThrowError(
+        ErreurDossierDejaFinalise
       );
     });
 
@@ -226,15 +226,15 @@ describe("Un dossier d'homologation", () => {
 
       dossier.declareSansDocument();
 
-      expect(dossier.documents.avecDocuments).to.be(false);
-      expect(dossier.documents.documents).to.eql([]);
+      expect(dossier.documents.avecDocuments).toBe(false);
+      expect(dossier.documents.documents).toEqual([]);
     });
   });
 
   describe('sur vérification que ce dossier est complet', () => {
     it('demande à chaque étape si elle est complète', () => {
-      const etapesInterrogees = [];
-      const bouchonneEtape = (etape) => ({
+      const etapesInterrogees: string[] = [];
+      const bouchonneEtape = (etape: string) => ({
         estComplete: () => {
           etapesInterrogees.push(etape);
           return true;
@@ -249,7 +249,7 @@ describe("Un dossier d'homologation", () => {
 
       dossier.estComplet();
 
-      expect(etapesInterrogees).to.eql(etapes);
+      expect(etapesInterrogees).toEqual(etapes);
     });
   });
 
@@ -268,7 +268,7 @@ describe("Un dossier d'homologation", () => {
         .quiEstNonFinalise()
         .construit();
 
-      expect(nonFinalise.statutHomologation()).to.be('nonRealisee');
+      expect(nonFinalise.statutHomologation()).toBe('nonRealisee');
     });
 
     it('est « Réalisée » même si le dossier est finalisé avec une date de début dans le futur', () => {
@@ -280,7 +280,7 @@ describe("Un dossier d'homologation", () => {
         .avecDateHomologation(new Date('2023-06-02'))
         .construit();
 
-      expect(actifLeDeuxJuin.statutHomologation()).to.be('activee');
+      expect(actifLeDeuxJuin.statutHomologation()).toBe('activee');
     });
 
     it('est « Bientôt expirée » si le dossier est finalisé avec une date de fin qui est proche', () => {
@@ -292,7 +292,7 @@ describe("Un dossier d'homologation", () => {
         .avecDecision('2022-06-11', 'unAn')
         .construit();
 
-      expect(expireDansDixJours.statutHomologation()).to.be('bientotExpiree');
+      expect(expireDansDixJours.statutHomologation()).toBe('bientotExpiree');
     });
 
     it("est « Activée » si le dossier est finalisé et que sa période d'homologation couvre la date du jour", () => {
@@ -304,7 +304,7 @@ describe("Un dossier d'homologation", () => {
         .avecDecision('2023-01-01', 'unAn')
         .construit();
 
-      expect(actifAnneeComplete.statutHomologation()).to.be('activee');
+      expect(actifAnneeComplete.statutHomologation()).toBe('activee');
     });
 
     it("est « Expirée » si le dossier est finalisé et que sa date de fin d'homologation est passée", () => {
@@ -316,7 +316,7 @@ describe("Un dossier d'homologation", () => {
         .avecDecision('2021-06-15', 'unAn')
         .construit();
 
-      expect(finiDepuis2022.statutHomologation()).to.be('expiree');
+      expect(finiDepuis2022.statutHomologation()).toBe('expiree');
     });
   });
 
@@ -333,12 +333,12 @@ describe("Un dossier d'homologation", () => {
         .quiEstNonFinalise()
         .construit();
 
-      expect(nonFinalise.estActif()).to.equal(false);
+      expect(nonFinalise.estActif()).toEqual(false);
     });
 
     it('retourne `false` si le dossier est archivé', () => {
       const dossierArchive = unDossier(referentiel).quiEstArchive().construit();
-      expect(dossierArchive.estActif()).to.equal(false);
+      expect(dossierArchive.estActif()).toEqual(false);
     });
 
     it('retourne `true` si le dossier est finalisé sans être archivé', () => {
@@ -347,7 +347,7 @@ describe("Un dossier d'homologation", () => {
         .nonArchive()
         .construit();
 
-      expect(dossierFinaliseNonArchive.estActif()).to.equal(true);
+      expect(dossierFinaliseNonArchive.estActif()).toEqual(true);
     });
   });
 
@@ -356,19 +356,23 @@ describe("Un dossier d'homologation", () => {
       referentiel.recharge({ documentsHomologation: { unDocument: {} } });
       const dossier = new Dossier({}, referentiel);
 
-      expect(() => dossier.enregistreFinalisation(0)).to.throwError((e) => {
-        expect(e).to.be.an(ErreurDossierNonFinalisable);
-        expect(e.message).to.equal(
+      try {
+        dossier.enregistreFinalisation(0, 0);
+        expect.fail("L'appel aurait dû lever une exception");
+      } catch (e) {
+        expect(e).toBeInstanceOf(ErreurDossierNonFinalisable);
+        const erreur = e as ErreurDossierNonFinalisable;
+        expect(erreur.message).toEqual(
           'Ce dossier comporte des étapes incomplètes.'
         );
-        expect(e.etapesIncompletes).to.eql([
+        expect(erreur.etapesIncompletes).toEqual([
           'decision',
           'dateTelechargement',
           'autorite',
           'avis',
           'documents',
         ]);
-      });
+      }
     });
 
     it("enregistre la finalisation s'il est complet", () => {
@@ -383,9 +387,9 @@ describe("Un dossier d'homologation", () => {
         .construit();
 
       dossierComplet.enregistreFinalisation(3.5, 4.5);
-      expect(dossierComplet.finalise).to.be(true);
-      expect(dossierComplet.indiceCyber).to.be(3.5);
-      expect(dossierComplet.indiceCyberPersonnalise).to.be(4.5);
+      expect(dossierComplet.finalise).toBe(true);
+      expect(dossierComplet.indiceCyber).toBe(3.5);
+      expect(dossierComplet.indiceCyberPersonnalise).toBe(4.5);
     });
   });
 
@@ -404,13 +408,13 @@ describe("Un dossier d'homologation", () => {
     it("renvoie la première etape si le dossier vient d'être créé", () => {
       const nouveauDossier = new Dossier({}, referentiel);
 
-      expect(nouveauDossier.etapeCourante()).to.equal('autorite');
+      expect(nouveauDossier.etapeCourante()).toEqual('autorite');
     });
 
     it("renvoie l'étape « Récapitulatif » si toutes les étapes précédentes sont complètes", () => {
       const dossierComplet = unDossier(referentiel).quiEstComplet().construit();
 
-      expect(dossierComplet.etapeCourante()).to.equal('recapitulatif');
+      expect(dossierComplet.etapeCourante()).toEqual('recapitulatif');
     });
 
     it("renvoie l'étape qui suit la dernière étape complète", () => {
@@ -418,7 +422,7 @@ describe("Un dossier d'homologation", () => {
         .avecAutorite('Jean', 'RSSI')
         .construit();
 
-      expect(etapeUneComplete.etapeCourante()).to.equal('avis');
+      expect(etapeUneComplete.etapeCourante()).toEqual('avis');
     });
 
     it('jette une erreur si les données du référentiel et les propriété du dossier ne correspondent pas', () => {
@@ -432,10 +436,14 @@ describe("Un dossier d'homologation", () => {
 
       const dossierDesynchronise = new Dossier({}, referentiel);
 
-      expect(() => dossierDesynchronise.etapeCourante()).to.throwError((e) => {
-        expect(e).to.be.an(ErreurDossierEtapeInconnue);
-        expect(e.etapeInconnue).to.equal('etapeInconnue');
-      });
+      try {
+        dossierDesynchronise.etapeCourante();
+        expect.fail("L'appel aurait dû lever une exception");
+      } catch (e) {
+        expect(e).toBeInstanceOf(ErreurDossierEtapeInconnue);
+        const erreur = e as ErreurDossierEtapeInconnue;
+        expect(erreur.etapeInconnue).toEqual('etapeInconnue');
+      }
     });
   });
 
@@ -452,7 +460,7 @@ describe("Un dossier d'homologation", () => {
         .quiVaExpirer(30, 'sixMois')
         .construit();
 
-      expect(dossierExpirantDans30Jours.estBientotExpire()).to.be(true);
+      expect(dossierExpirantDans30Jours.estBientotExpire()).toBe(true);
     });
 
     it("retourne 'false' si la date de fin est postérieure « bientôt expiré » associé à la durée d'homologation", () => {
@@ -467,7 +475,7 @@ describe("Un dossier d'homologation", () => {
         .quiVaExpirer(60, 'sixMois')
         .construit();
 
-      expect(dossierExpirantDans60Jours.estBientotExpire()).to.be(false);
+      expect(dossierExpirantDans60Jours.estBientotExpire()).toBe(false);
     });
 
     it("retourne 'false' si la date de fin est déjà passée", () => {
@@ -485,7 +493,7 @@ describe("Un dossier d'homologation", () => {
         .avecDecision('2020-01-10', 'unAn')
         .construit();
 
-      expect(dejaExpire.estBientotExpire()).to.be(false);
+      expect(dejaExpire.estBientotExpire()).toBe(false);
     });
   });
 
@@ -503,7 +511,7 @@ describe("Un dossier d'homologation", () => {
         .quiEstExpire()
         .construit();
 
-      expect(dossierExpire.estExpire()).to.be(true);
+      expect(dossierExpire.estExpire()).toBe(true);
     });
 
     it("retourne 'false' si le dossier n'est pas expiré", () => {
@@ -512,7 +520,7 @@ describe("Un dossier d'homologation", () => {
         .quiEstActif()
         .construit();
 
-      expect(dossierActif.estExpire()).to.be(false);
+      expect(dossierActif.estExpire()).toBe(false);
     });
   });
 
@@ -522,9 +530,9 @@ describe("Un dossier d'homologation", () => {
         .quiEstComplet()
         .construit();
 
-      expect(dossierFinalise.archive).to.be(undefined);
+      expect(dossierFinalise.archive).toBe(undefined);
       dossierFinalise.enregistreArchivage();
-      expect(dossierFinalise.archive).to.be(true);
+      expect(dossierFinalise.archive).toBe(true);
     });
 
     it("jette une erreur s'il n'est pas finalisé", () => {
@@ -532,10 +540,13 @@ describe("Un dossier d'homologation", () => {
         .quiEstNonFinalise()
         .construit();
 
-      expect(() => dossierFinalise.enregistreArchivage()).to.throwError((e) => {
-        expect(e).to.be.an(ErreurDossierNonFinalise);
-        expect(dossierFinalise.archive).to.be(undefined);
-      });
+      try {
+        dossierFinalise.enregistreArchivage();
+        expect.fail("L'appel aurait dû lever une exception");
+      } catch (e) {
+        expect(e).toBeInstanceOf(ErreurDossierNonFinalise);
+        expect(dossierFinalise.archive).toBe(undefined);
+      }
     });
   });
 
@@ -543,8 +554,8 @@ describe("Un dossier d'homologation", () => {
     it('jette une erreur si le dossier est déjà finalisé', () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
-      expect(() => dossierFinalise.declareImporte()).to.throwError((e) =>
-        expect(e).to.be.an(ErreurDossierDejaFinalise)
+      expect(() => dossierFinalise.declareImporte()).toThrowError(
+        ErreurDossierDejaFinalise
       );
     });
 
@@ -553,7 +564,7 @@ describe("Un dossier d'homologation", () => {
 
       dossier.declareImporte();
 
-      expect(dossier.importe).to.be(true);
+      expect(dossier.importe).toBe(true);
     });
   });
 });
