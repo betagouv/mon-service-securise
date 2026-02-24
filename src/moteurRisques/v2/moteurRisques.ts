@@ -10,17 +10,25 @@ import { VraisemblanceRisque } from './vraisemblanceRisque.js';
 import { configurationVraisemblance } from './vraisemblance/vraisemblance.configuration.js';
 import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 import MesureGenerale from '../../modeles/mesureGenerale.js';
+import { MesureAvecStatut } from './vraisemblance/vraisemblance.types.js';
 
 export class MoteurRisquesV2 {
   private readonly selectionVecteurs: Array<IdVecteurRisque>;
+  private readonly mesuresAvecStatut: Record<IdMesureV2, MesureAvecStatut>;
 
   constructor(
     private readonly descriptionService: DescriptionServiceV2,
-    private readonly mesuresPersonnalisees: Record<IdMesureV2, MesureGenerale>
+    mesuresPersonnalisees: Record<IdMesureV2, MesureGenerale>
   ) {
     this.selectionVecteurs = new SelectionVecteurs().selectionnePourService(
       descriptionService
     );
+    this.mesuresAvecStatut = Object.fromEntries(
+      Object.entries(mesuresPersonnalisees).map(([id, mesure]) => [
+        id,
+        { statut: mesure.statut },
+      ])
+    ) as Record<IdMesureV2, MesureAvecStatut>;
   }
 
   vecteurs(): Array<IdVecteurRisque> {
@@ -49,7 +57,7 @@ export class MoteurRisquesV2 {
         configurationVraisemblance[id as IdVecteurRisque]
       ).calculePourService(
         this.descriptionService.niveauSecurite,
-        this.mesuresPersonnalisees
+        this.mesuresAvecStatut
       );
 
       return new RisqueV2(id as IdVecteurRisque, ovs, vraisemblance);
