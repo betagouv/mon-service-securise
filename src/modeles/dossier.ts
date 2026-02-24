@@ -21,7 +21,7 @@ import { UUID } from '../typesBasiques.js';
 import { creeReferentielVide } from '../referentiel.js';
 import { DonneesAvis } from './avis.js';
 
-type DonneesDossier = {
+export type DonneesDossier = {
   id?: UUID;
   finalise?: boolean;
   archive?: boolean;
