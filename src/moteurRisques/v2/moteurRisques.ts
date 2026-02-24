@@ -11,10 +11,11 @@ import { configurationVraisemblance } from './vraisemblance/vraisemblance.config
 import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 import MesureGenerale from '../../modeles/mesureGenerale.js';
 import { MesureAvecStatut } from './vraisemblance/vraisemblance.types.js';
+import { MesuresPourRisque } from './mesuresPourRisque.js';
 
 export class MoteurRisquesV2 {
   private readonly selectionVecteurs: Array<IdVecteurRisque>;
-  private readonly mesuresAvecStatut: Record<IdMesureV2, MesureAvecStatut>;
+  private mesures: MesuresPourRisque;
 
   constructor(
     private readonly descriptionService: DescriptionServiceV2,
@@ -23,12 +24,7 @@ export class MoteurRisquesV2 {
     this.selectionVecteurs = new SelectionVecteurs().selectionnePourService(
       descriptionService
     );
-    this.mesuresAvecStatut = Object.fromEntries(
-      Object.entries(mesuresPersonnalisees).map(([id, mesure]) => [
-        id,
-        { statut: mesure.statut },
-      ])
-    ) as Record<IdMesureV2, MesureAvecStatut>;
+    this.mesures = new MesuresPourRisque(mesuresPersonnalisees);
   }
 
   vecteurs(): Array<IdVecteurRisque> {
@@ -47,17 +43,11 @@ export class MoteurRisquesV2 {
   }
 
   risques(): RisqueV2[] {
-    return this.calculePour(this.mesuresAvecStatut);
+    return this.calculePour(this.mesures.avecStatutReel());
   }
 
   risquesBruts(): RisqueV2[] {
-    const statutsVides = structuredClone(this.mesuresAvecStatut);
-    // eslint-disable-next-line no-restricted-syntax,guard-for-in
-    for (const idMesure in statutsVides) {
-      statutsVides[idMesure].statut = '';
-    }
-
-    return this.calculePour(statutsVides);
+    return this.calculePour(this.mesures.avecStatutVide());
   }
 
   private calculePour(mesures: Record<IdMesureV2, MesureAvecStatut>) {
