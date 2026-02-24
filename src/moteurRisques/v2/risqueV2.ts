@@ -12,7 +12,24 @@ export type ConfigurationRisqueV2 = Record<
   }
 >;
 
+export type IdRisqueV2 = `R${
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13
+  | 14}`;
+
 export class RisqueV2 {
+  id: IdRisqueV2;
   gravite: Gravite;
   intitule: string;
 
@@ -22,6 +39,7 @@ export class RisqueV2 {
     public readonly vraisemblance: Vraisemblance,
     private readonly configuration: ConfigurationRisqueV2 = configurationRisqueV2
   ) {
+    this.id = idVecteur.replace('V', 'R') as IdRisqueV2;
     this.gravite = Math.max(...Object.values(objectifsVises)) as Gravite;
     this.intitule = this.genereIntitule();
   }

@@ -31,6 +31,12 @@ describe('Un risque V2', () => {
     ...surchargeVecteur,
   });
 
+  it('connaît son identifiant qui est fonction de son vecteur', () => {
+    const r1 = new RisqueV2('V1', { OV1: 3 }, 1, configurationRisque());
+
+    expect(r1.id).toBe('R1');
+  });
+
   describe('concernant sa gravité', () => {
     it('connait son niveau de gravité', () => {
       const risque = new RisqueV2('V1', { OV1: 3 }, 1, configurationRisque());
