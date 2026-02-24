@@ -1,7 +1,18 @@
 import Etape from './etape.js';
 
+export type DonneesDocuments = {
+  avecDocuments?: boolean | null;
+  documents?: string[];
+};
+
 class Documents extends Etape {
-  constructor({ documents = [], avecDocuments = null } = {}) {
+  avecDocuments!: boolean | null;
+  documents!: string[];
+
+  constructor({
+    documents = [],
+    avecDocuments = null,
+  }: Partial<DonneesDocuments> = {}) {
     super({
       proprietesAtomiquesRequises: ['avecDocuments'],
       proprietesListes: ['documents'],
@@ -10,7 +21,7 @@ class Documents extends Etape {
     this.renseigneProprietes({ documents, avecDocuments });
   }
 
-  enregistreDocuments(documents) {
+  enregistreDocuments(documents: string[]) {
     this.avecDocuments = true;
     this.documents = documents;
   }

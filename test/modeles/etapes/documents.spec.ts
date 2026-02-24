@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import Documents from '../../../src/modeles/etapes/documents.js';
 
 describe('Une étape « Documents »', () => {
@@ -8,7 +7,7 @@ describe('Une étape « Documents »', () => {
       avecDocuments: true,
     });
 
-    expect(etape.toJSON()).to.eql({
+    expect(etape.toJSON()).toEqual({
       avecDocuments: true,
       documents: ['unDocument'],
     });
@@ -19,8 +18,8 @@ describe('Une étape « Documents »', () => {
 
     etape.declareSansDocument();
 
-    expect(etape.avecDocuments).to.be(false);
-    expect(etape.documents).to.eql([]);
+    expect(etape.avecDocuments).toBe(false);
+    expect(etape.documents).toEqual([]);
   });
 
   it('sait enregistrer des documents', () => {
@@ -28,14 +27,14 @@ describe('Une étape « Documents »', () => {
 
     etape.enregistreDocuments(['A', 'B']);
 
-    expect(etape.avecDocuments).to.be(true);
-    expect(etape.documents).to.eql(['A', 'B']);
+    expect(etape.avecDocuments).toBe(true);
+    expect(etape.documents).toEqual(['A', 'B']);
   });
 
   describe("sur vérification que l'étape est complète", () => {
     it('est incomplète par défaut', () => {
       const etapeParDefaut = new Documents();
-      expect(etapeParDefaut.estComplete()).to.be(false);
+      expect(etapeParDefaut.estComplete()).toBe(false);
     });
 
     it("est complète s'il n'y a aucun document et qu'elle est déclarée sans document", () => {
@@ -43,7 +42,7 @@ describe('Une étape « Documents »', () => {
         documents: [],
         avecDocuments: false,
       });
-      expect(aucunDocuments.estComplete()).to.be(true);
+      expect(aucunDocuments.estComplete()).toBe(true);
     });
 
     describe("dans le cas où l'étape est déclarée avec documents", () => {
@@ -53,7 +52,7 @@ describe('Une étape « Documents »', () => {
           avecDocuments: true,
         });
 
-        expect(sansDocuments.estComplete()).to.be(false);
+        expect(sansDocuments.estComplete()).toBe(false);
       });
 
       it("est complète s'il y a des documents", () => {
@@ -62,7 +61,7 @@ describe('Une étape « Documents »', () => {
           avecDocuments: true,
         });
 
-        expect(avecDocumentss.estComplete()).to.be(true);
+        expect(avecDocumentss.estComplete()).toBe(true);
       });
     });
   });
