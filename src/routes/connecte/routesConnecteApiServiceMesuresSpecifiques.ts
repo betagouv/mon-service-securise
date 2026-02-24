@@ -18,6 +18,7 @@ import {
 import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
+import { UUID } from '../../typesBasiques.js';
 
 const { ECRITURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -109,7 +110,7 @@ export const routesConnecteApiServiceMesuresSpecifiques = ({
       try {
         const mesureSpecifique = new MesureSpecifique(
           {
-            id: idMesure,
+            id: idMesure as UUID,
             description,
             descriptionLongue,
             idModele,
