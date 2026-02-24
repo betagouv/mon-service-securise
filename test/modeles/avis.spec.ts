@@ -1,14 +1,14 @@
-import expect from 'expect.js';
 import {
   ErreurDureeValiditeInvalide,
   ErreurAvisInvalide,
 } from '../../src/erreurs.js';
 import Avis from '../../src/modeles/avis.js';
 import InformationsService from '../../src/modeles/informationsService.js';
-import * as Referentiel from '../../src/referentiel.js';
+import { creeReferentielVide } from '../../src/referentiel.js';
 
 describe("Un avis sur un dossier d'homologation", () => {
-  const referentiel = Referentiel.creeReferentiel({
+  const referentiel = creeReferentielVide();
+  referentiel.recharge({
     statutsAvisDossierHomologation: { favorable: {} },
     echeancesRenouvellement: { unAn: {} },
   });
@@ -23,16 +23,17 @@ describe("Un avis sur un dossier d'homologation", () => {
       referentiel
     );
 
-    expect(avis.statutSaisie()).to.be(InformationsService.COMPLETES);
+    expect(avis.statutSaisie()).toBe(InformationsService.COMPLETES);
   });
 
   it("est incomplet si la liste des collaborateurs n'est pas remplie", () => {
-    const verifieAvecCollaborateurs = (collaborateurs) => {
+    const verifieAvecCollaborateurs = (collaborateurs: unknown) => {
       const avis = new Avis(
+        // @ts-expect-error On force une valeur invalide
         { statut: 'favorable', dureeValidite: 'unAn', collaborateurs },
         referentiel
       );
-      expect(avis.statutSaisie()).to.be(InformationsService.A_COMPLETER);
+      expect(avis.statutSaisie()).toBe(InformationsService.A_COMPLETER);
     };
 
     verifieAvecCollaborateurs([null]);
@@ -43,17 +44,18 @@ describe("Un avis sur un dossier d'homologation", () => {
   });
 
   it('est invalide si la durée de validité est inconnue dans le référentiel', () => {
-    expect(() => {
-      new Avis({ dureeValidite: 'dureeInvalide' }, referentiel);
-    }).to.throwError((e) => expect(e).to.be.an(ErreurDureeValiditeInvalide));
+    expect(
+      () => new Avis({ dureeValidite: 'dureeInvalide' }, referentiel)
+    ).toThrowError(ErreurDureeValiditeInvalide);
   });
 
   it('est invalide si le statut de validité est inconnu dans le référentiel', () => {
-    expect(() => {
-      new Avis(
-        { dureeValidite: 'unAn', statut: 'statutInvalide' },
-        referentiel
-      );
-    }).to.throwError((e) => expect(e).to.be.an(ErreurAvisInvalide));
+    expect(
+      () =>
+        new Avis(
+          { dureeValidite: 'unAn', statut: 'statutInvalide' },
+          referentiel
+        )
+    ).toThrowError(ErreurAvisInvalide);
   });
 });

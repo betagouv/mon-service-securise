@@ -1,9 +1,28 @@
 import InformationsService from './informationsService.js';
 import { ErreurDureeValiditeInvalide, ErreurAvisInvalide } from '../erreurs.js';
-import * as Referentiel from '../referentiel.js';
+import { Referentiel } from '../referentiel.interface.js';
+import { creeReferentielVide } from '../referentiel.js';
+
+export type DonneesAvis = {
+  statut: string;
+  dureeValidite: string;
+  commentaires?: string;
+  collaborateurs: string[];
+};
 
 class Avis extends InformationsService {
-  constructor(donnees = {}, referentiel = Referentiel.creeReferentielVide()) {
+  private readonly statut!:
+    | 'favorable'
+    | 'favorableAvecReserve'
+    | 'defavorable';
+  private readonly dureeValidite!: 'sixMois' | 'unAn' | 'deuxAns' | 'troisAns';
+  private readonly commentaires?: string;
+  private readonly collaborateurs!: string[];
+
+  constructor(
+    donnees: Partial<DonneesAvis> = {},
+    referentiel: Referentiel = creeReferentielVide()
+  ) {
     super({
       proprietesAtomiquesRequises: Avis.proprietesAtomiquesRequises(),
       proprietesAtomiquesFacultatives: Avis.proprietesAtomiquesFacultatives(),
@@ -26,7 +45,10 @@ class Avis extends InformationsService {
     return ['collaborateurs'];
   }
 
-  static valide({ dureeValidite, statut }, referentiel) {
+  static valide(
+    { dureeValidite, statut }: Partial<DonneesAvis>,
+    referentiel: Referentiel
+  ) {
     if (!referentiel.estIdentifiantEcheanceRenouvellementConnu(dureeValidite)) {
       throw new ErreurDureeValiditeInvalide(
         `La durée de validité "${dureeValidite}" est invalide`
