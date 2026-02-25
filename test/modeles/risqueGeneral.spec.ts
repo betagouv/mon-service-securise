@@ -1,29 +1,29 @@
-import expect from 'expect.js';
 import { ErreurRisqueInconnu } from '../../src/erreurs.js';
-import * as Referentiel from '../../src/referentiel.js';
 import RisqueGeneral from '../../src/modeles/risqueGeneral.js';
 import Risque from '../../src/modeles/risque.js';
+import { Referentiel } from '../../src/referentiel.interface.ts';
+import { creeReferentiel } from '../../src/referentiel.js';
 
 describe('Un risque général', () => {
-  let referentiel;
+  let referentiel: Referentiel;
 
-  beforeEach(
-    () =>
-      (referentiel = Referentiel.creeReferentiel({
-        niveauxGravite: { unNiveau: {} },
-        risques: {
-          unRisque: {
-            description: 'Une description',
-            categories: ['CR1'],
-            identifiantNumerique: 'R1',
-          },
+  beforeEach(() => {
+    referentiel = creeReferentiel();
+    referentiel.recharge({
+      niveauxGravite: { unNiveau: {} },
+      risques: {
+        unRisque: {
+          description: 'Une description',
+          categories: ['CR1'],
+          identifiantNumerique: 'R1',
         },
-      }))
-  );
+      },
+    });
+  });
 
   it('retourne un JSON avec incluant la description du risque', () => {
     const risque = new RisqueGeneral({ id: 'unRisque' }, referentiel);
-    expect(risque.toJSON().intitule).to.equal('Une description');
+    expect(risque.toJSON().intitule).toEqual('Une description');
   });
 
   it('sait se décrire', () => {
@@ -32,17 +32,16 @@ describe('Un risque général', () => {
         id: 'unRisque',
         commentaire: 'Un commentaire',
         niveauGravite: 'unNiveau',
-        categories: ['CR1'],
         desactive: true,
       },
       referentiel
     );
 
-    expect(risque.id).to.equal('unRisque');
-    expect(risque.commentaire).to.equal('Un commentaire');
-    expect(risque.niveauGravite).to.equal('unNiveau');
-    expect(risque.desactive).to.equal(true);
-    expect(risque.toJSON()).to.eql({
+    expect(risque.id).toEqual('unRisque');
+    expect(risque.commentaire).toEqual('Un commentaire');
+    expect(risque.niveauGravite).toEqual('unNiveau');
+    expect(risque.desactive).toEqual(true);
+    expect(risque.toJSON()).toEqual({
       id: 'unRisque',
       commentaire: 'Un commentaire',
       intitule: 'Une description',
@@ -59,7 +58,7 @@ describe('Un risque général', () => {
       risques: { unRisque: { description: 'Une description' } },
     });
     const risque = new RisqueGeneral({ id: 'unRisque' }, referentiel);
-    expect(risque.intituleRisque()).to.equal('Une description');
+    expect(risque.intituleRisque()).toEqual('Une description');
   });
 
   it('connaît ses catégories', () => {
@@ -70,12 +69,12 @@ describe('Un risque général', () => {
       categoriesRisques: { C1: {} },
     });
     const risque = new RisqueGeneral({ id: 'unRisque' }, referentiel);
-    expect(risque.categoriesRisque()).to.eql(['C1']);
+    expect(risque.categoriesRisque()).toEqual(['C1']);
   });
 
   it('retourne un JSON partiel si certaines informations sont inexistantes', () => {
     const risque = new RisqueGeneral({ id: 'unRisque' }, referentiel);
-    expect(risque.toJSON()).to.eql({
+    expect(risque.toJSON()).toEqual({
       id: 'unRisque',
       intitule: 'Une description',
       categories: ['CR1'],
@@ -85,15 +84,13 @@ describe('Un risque général', () => {
   });
 
   it('vérifie que le risque est bien répertorié', () => {
-    try {
-      new RisqueGeneral({ id: 'identifiantInconnu' }, referentiel);
-      expect().fail('La création du risque aurait dû lever une exception.');
-    } catch (e) {
-      expect(e).to.be.a(ErreurRisqueInconnu);
-      expect(e.message).to.equal(
+    expect(
+      () => new RisqueGeneral({ id: 'identifiantInconnu' }, referentiel)
+    ).toThrowError(
+      new ErreurRisqueInconnu(
         'Le risque "identifiantInconnu" n\'est pas répertorié'
-      );
-    }
+      )
+    );
   });
 
   it('sait se sérialiser', () => {
@@ -107,7 +104,7 @@ describe('Un risque général', () => {
       referentiel
     );
 
-    expect(risque.donneesSerialisees()).to.eql({
+    expect(risque.donneesSerialisees()).toEqual({
       id: 'unRisque',
       commentaire: 'Un commentaire',
       niveauGravite: 'unNiveau',

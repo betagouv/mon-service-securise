@@ -1,29 +1,41 @@
-import Risque from './risque.js';
+import Risque, { DonneesRisque } from './risque.js';
 import { ErreurRisqueInconnu } from '../erreurs.js';
-import * as Referentiel from '../referentiel.js';
+import { Referentiel } from '../referentiel.interface.js';
+import { creeReferentielVide } from '../referentiel.js';
+
+export type DonneesRisqueGeneral = DonneesRisque & {
+  desactive?: boolean;
+};
+
+type CategorieRisque =
+  | 'disponibilite'
+  | 'integrite'
+  | 'confidentialite'
+  | 'tracabilite';
 
 class RisqueGeneral extends Risque {
+  readonly desactive?: boolean;
+
   constructor(
-    donneesRisque = {},
-    referentiel = Referentiel.creeReferentielVide()
+    donneesRisque: Partial<DonneesRisqueGeneral> = {},
+    referentiel: Referentiel = creeReferentielVide()
   ) {
     super(donneesRisque, referentiel);
     this.proprietesAtomiquesFacultatives.push('desactive');
 
     RisqueGeneral.valide(donneesRisque, referentiel);
     this.renseigneProprietes(donneesRisque);
-    this.referentiel = referentiel;
   }
 
-  categoriesRisque() {
+  categoriesRisque(): CategorieRisque {
     return this.referentiel.categoriesRisque(this.id);
   }
 
-  intituleRisque() {
+  intituleRisque(): string {
     return this.referentiel.descriptionRisque(this.id);
   }
 
-  identifiantNumeriqueRisque() {
+  identifiantNumeriqueRisque(): string {
     return this.referentiel.identifiantNumeriqueRisque(this.id);
   }
 
@@ -41,11 +53,14 @@ class RisqueGeneral extends Risque {
     return super.toJSON();
   }
 
-  static valide(donnees, referentiel) {
+  static valide(
+    donnees: Partial<DonneesRisqueGeneral>,
+    referentiel: Referentiel
+  ) {
     super.valide(donnees, referentiel);
     const { id } = donnees;
     const identifiantsRisquesRepertories = referentiel.identifiantsRisques();
-    if (!identifiantsRisquesRepertories.includes(id)) {
+    if (!id || !identifiantsRisquesRepertories.includes(id)) {
       throw new ErreurRisqueInconnu(`Le risque "${id}" n'est pas répertorié`);
     }
   }
