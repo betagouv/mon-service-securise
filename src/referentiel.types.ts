@@ -21,6 +21,8 @@ export type IdLocalisationDonnees = keyof typeof donnees.localisationsDonnees;
 export type IdTypeService = keyof typeof donnees.typesService;
 export type IdEtapeHomologation =
   (typeof donnees.etapesParcoursHomologation)[number]['id'];
+export type EtapeHomologation =
+  (typeof donnees.etapesParcoursHomologation)[number];
 export type IdTacheCompletudeProfil =
   (typeof donnees.tachesCompletudeProfil)[number]['id'];
 export type IdEtapeVisiteGuidee = keyof typeof donnees.etapesVisiteGuidee;

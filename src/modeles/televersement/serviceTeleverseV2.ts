@@ -165,7 +165,7 @@ export class ServiceTeleverseV2 {
             dureeValidite:
               this.referentiel.echeanceRenouvellementParDescription(
                 this.donnees.dossierHomologation.dureeHomologation
-              ),
+              ) as string,
           },
           autorite: {
             nom: this.donnees.dossierHomologation.nomAutoriteHomologation,

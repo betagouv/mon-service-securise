@@ -2,10 +2,14 @@ import InformationsService from './informationsService.js';
 import { ErreurDureeValiditeInvalide, ErreurAvisInvalide } from '../erreurs.js';
 import { Referentiel } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
+import {
+  IdEcheanceRenouvellement,
+  IdStatutHomologation,
+} from '../referentiel.types.js';
 
 export type DonneesAvis = {
-  statut: string;
-  dureeValidite: string;
+  statut: IdStatutHomologation;
+  dureeValidite: IdEcheanceRenouvellement;
   commentaires?: string;
   collaborateurs: string[];
 };

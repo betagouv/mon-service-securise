@@ -3,6 +3,7 @@ import { Referentiel } from './referentiel.interface.js';
 import {
   AudienceCible,
   CategorieDonneesTraitees,
+  DetailReferentielMesureV2,
   DureeDysfonctionnementAcceptable,
   IdMesureV2,
   LocalisationDonneesTraitees,
@@ -29,17 +30,31 @@ export type DonneesReferentielV2 = typeof questionsV2 & {
 type MethodesSpecifiquesReferentielV2 = {
   ajouteThematiqueEtPorteurs: (mesures: typeof mesuresV2) => typeof mesuresV2;
   descriptionAudienceCible: (audienceCible: AudienceCible) => string;
+  descriptionDelaiAvantImpactCritique: (
+    dureeDysfonctionnementAcceptable: DureeDysfonctionnementAcceptable
+  ) => string;
+  descriptionsDonneesCaracterePersonnel: (
+    donneesCaracterePersonnel: CategorieDonneesTraitees
+  ) => string;
   descriptionSpecificiteProjet: (
     specificiteProjet: SpecificiteProjet
+  ) => string;
+  descriptionStatutDeploiement: (
+    statutDeploiement: StatutDeploiement
   ) => string;
   descriptionTypeHebergement: (typeHebergement: TypeHebergement) => string;
   descriptionTypeService: (typeService: TypeService) => string;
   descriptionOuvertureSysteme: (ouvertureSysteme: OuvertureSysteme) => string;
   enregistreReglesMoteurV2: (regles: ReglesDuReferentielMesuresV2) => void;
+  localisationDonnees: (localisation: LocalisationDonneesTraitees) => {
+    nom: string;
+  };
   reglesMoteurV2: () => ReglesDuReferentielMesuresV2;
   mesures: () => typeof mesuresV2;
+  mesure: (idMesure: IdMesureV2) => DetailReferentielMesureV2;
   porteursSinguliersDeMesure: (idMesure: IdMesureV2) => string[];
   thematiqueDeMesure: (idMesure: IdMesureV2) => string;
+  typeService: (type: TypeDeService) => { nom: string; exemple: string };
 };
 
 type Surcharge<A, B> = Omit<A, keyof B> & B;
