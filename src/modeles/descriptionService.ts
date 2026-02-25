@@ -17,21 +17,26 @@ import {
   DonneesPourEstimationNiveauSecurite,
   NombreOrganisationsUtilisatrices,
 } from './descriptionService.types.js';
+import {
+  IdLocalisationDonnees,
+  IdStatutDeploiement,
+  IdTypeService,
+} from '../referentiel.types.js';
 
 const tousNiveauxSecurite = ['niveau1', 'niveau2', 'niveau3'];
 
 class DescriptionService extends InformationsService {
   readonly delaiAvantImpactCritique!: string;
-  readonly localisationDonnees!: string;
+  readonly localisationDonnees!: IdLocalisationDonnees;
   readonly nomService!: string;
   readonly provenanceService!: string;
-  readonly statutDeploiement!: string;
+  readonly statutDeploiement!: IdStatutDeploiement;
   readonly nombreOrganisationsUtilisatrices!: NombreOrganisationsUtilisatrices;
   readonly niveauSecurite!: NiveauSecurite;
   readonly presentation?: string;
   readonly donneesCaracterePersonnel!: string[];
   readonly fonctionnalites!: string[];
-  readonly typeService!: string[];
+  readonly typeService!: Array<IdTypeService>;
   readonly donneesSensiblesSpecifiques!: DonneesSensiblesSpecifiques;
   readonly fonctionnalitesSpecifiques!: FonctionnalitesSpecifiques;
   readonly pointsAcces!: PointsAcces;

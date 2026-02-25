@@ -1,5 +1,6 @@
 import { NiveauSecurite } from '../../donneesReferentielMesuresV2.js';
 import { DonneesEntite } from './entite.js';
+import { IdStatutDeploiement } from '../referentiel.types.js';
 
 type DonneesAvecDescription = Array<{ description: string }>;
 
@@ -13,7 +14,7 @@ export type DonneesDescriptionService = {
   localisationDonnees: string;
   nomService: string;
   provenanceService: string;
-  statutDeploiement: string;
+  statutDeploiement: IdStatutDeploiement;
   nombreOrganisationsUtilisatrices: NombreOrganisationsUtilisatrices;
   niveauSecurite: NiveauSecurite;
   presentation: string;

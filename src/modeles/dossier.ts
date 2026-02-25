@@ -230,12 +230,11 @@ class Dossier extends InformationsService {
 
     const etapesOrdonnees = this.referentiel
       .etapesParcoursHomologation()
-      .sort((e1, e2) => e1.numero - e2.numero) as unknown as Array<{
-      id: IdentifiantEtape;
-    }>;
+      .sort((e1, e2) => e1.numero - e2.numero);
 
     const premiereNonComplete = etapesOrdonnees.find((e) => {
       try {
+        // @ts-expect-error On garantit que l'id d'étape n'est pas "récapitulatif" car sinon le dossier serait complet
         return !this[e.id].estComplete();
       } catch {
         throw new ErreurDossierEtapeInconnue(e.id);

@@ -5,6 +5,7 @@ import {
 import donneesParDefaut from '../donneesReferentiel.js';
 import {
   DonneesReferentiel,
+  EtapeHomologation,
   IdCategorieMesure,
   IdDelaiAvantImpactCritique,
   IdDonneeCaracterePersonnel,
@@ -90,9 +91,11 @@ const creeReferentiel = (
     ids
       ?.map((id) => descriptionDonneesCaracterePersonnel(id))
       .filter((id) => id !== undefined);
-  const etapesParcoursHomologation = (peutHomologuer = true) => {
+  const etapesParcoursHomologation = (
+    peutHomologuer = true
+  ): EtapeHomologation[] => {
     const etapes = donnees.etapesParcoursHomologation || [];
-    if (peutHomologuer) return etapes;
+    if (peutHomologuer) return [...etapes];
     return etapes.filter(
       (etape) =>
         !('reserveePeutHomologuer' in etape && etape.reserveePeutHomologuer)
@@ -101,13 +104,14 @@ const creeReferentiel = (
   const identifiantsEcheancesRenouvellement = () =>
     Object.keys(echeancesRenouvellement());
   const estIdentifiantEcheanceRenouvellementConnu = (
-    idEcheance: IdEcheanceRenouvellement
-  ) => identifiantsEcheancesRenouvellement().includes(idEcheance);
+    idEcheance?: IdEcheanceRenouvellement
+  ) => idEcheance && identifiantsEcheancesRenouvellement().includes(idEcheance);
   const identifiantsStatutAvisDossierHomologation = () =>
     Object.keys(statutsAvisDossierHomologation());
   const estIdentifiantStatutAvisDossierHomologationConnu = (
-    idStatut: IdStatutHomologation
-  ) => identifiantsStatutAvisDossierHomologation().includes(idStatut);
+    idStatut?: IdStatutHomologation
+  ) =>
+    idStatut && identifiantsStatutAvisDossierHomologation().includes(idStatut);
   const fonctionnalites = () => donnees.fonctionnalites;
   const formatteListeDeReferentiels = (referentiels: IdReferentielMesure[]) => {
     const formatte = new Intl.ListFormat('fr', {
