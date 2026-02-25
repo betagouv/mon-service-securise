@@ -15,6 +15,7 @@ import {
   schemaPostRisqueSpecifique,
   schemaPutRisqueSpecifique,
 } from './routesConnecteApiServiceRisquesSpecifiques.schema.js';
+import { UUID } from '../../typesBasiques.js';
 
 const { ECRITURE } = Permissions;
 const { RISQUES } = Rubriques;
@@ -108,7 +109,7 @@ export const routesConnecteApiServiceRisquesSpecifiques = ({
         );
         const risque = new RisqueSpecifique(
           {
-            id: idRisque,
+            id: idRisque as UUID,
             niveauGravite,
             niveauVraisemblance,
             intitule,
