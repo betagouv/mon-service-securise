@@ -1,4 +1,4 @@
-import Risque, { DonneesRisque } from './risque.js';
+import Risque, { CategorieRisque, DonneesRisque } from './risque.js';
 import { ErreurRisqueInconnu } from '../erreurs.js';
 import { Referentiel } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
@@ -6,12 +6,6 @@ import { creeReferentielVide } from '../referentiel.js';
 export type DonneesRisqueGeneral = DonneesRisque & {
   desactive?: boolean;
 };
-
-type CategorieRisque =
-  | 'disponibilite'
-  | 'integrite'
-  | 'confidentialite'
-  | 'tracabilite';
 
 class RisqueGeneral extends Risque {
   readonly desactive?: boolean;

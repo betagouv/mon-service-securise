@@ -1,13 +1,32 @@
-import Risque from './risque.js';
+import Risque, { CategorieRisque, DonneesRisque } from './risque.js';
 
 import {
   ErreurIntituleRisqueManquant,
   ErreurCategoriesRisqueManquantes,
   ErreurCategorieRisqueInconnue,
 } from '../erreurs.js';
+import { Referentiel } from '../referentiel.interface.js';
+import { UUID } from '../typesBasiques.js';
+
+export type DonneesRisqueSpecifique = DonneesRisque & {
+  id: UUID;
+  intitule: string;
+  identifiantNumerique: string;
+  categories: CategorieRisque[];
+  description?: string;
+};
 
 class RisqueSpecifique extends Risque {
-  constructor(donneesRisque, referentiel) {
+  declare readonly id: UUID;
+  readonly intitule!: string;
+  private readonly identifiantNumerique!: string;
+  private readonly categories!: CategorieRisque[];
+  readonly description?: string;
+
+  constructor(
+    donneesRisque: DonneesRisqueSpecifique,
+    referentiel: Referentiel
+  ) {
     super(donneesRisque, referentiel);
 
     this.proprietesAtomiquesRequises.push('intitule', 'identifiantNumerique');
@@ -40,7 +59,10 @@ class RisqueSpecifique extends Risque {
     return super.toJSON();
   }
 
-  static valide(donneesRisque, referentiel) {
+  static valide(
+    donneesRisque: Partial<DonneesRisqueSpecifique>,
+    referentiel: Referentiel
+  ) {
     super.valide(donneesRisque, referentiel);
     const { intitule, categories } = donneesRisque;
     if (!intitule) {

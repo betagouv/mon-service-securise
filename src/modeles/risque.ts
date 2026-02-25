@@ -11,6 +11,12 @@ type NiveauVraisemblance =
   | 'tresVraisemblable'
   | 'quasiCertain';
 
+export type CategorieRisque =
+  | 'disponibilite'
+  | 'integrite'
+  | 'confidentialite'
+  | 'tracabilite';
+
 export type DonneesRisque = {
   id: string;
   niveauGravite: string;
