@@ -1,14 +1,34 @@
 import InformationsService from './informationsService.js';
-import NiveauGravite from './niveauGravite.js';
-import * as Referentiel from '../referentiel.js';
+import NiveauGravite, { IdNiveauGravite } from './niveauGravite.js';
 import { ErreurNiveauVraisemblanceInconnu } from '../erreurs.js';
+import { Referentiel } from '../referentiel.interface.js';
+import { creeReferentielVide } from '../referentiel.js';
 
-const NiveauRisque = { NIVEAU_RISQUE_INDETERMINABLE: 'indeterminable' };
+type NiveauVraisemblance =
+  | 'invraisemblable'
+  | 'peuVraisemblable'
+  | 'vraisemblable'
+  | 'tresVraisemblable'
+  | 'quasiCertain';
+
+export type DonneesRisque = {
+  id: string;
+  niveauGravite: string;
+  niveauVraisemblance: NiveauVraisemblance;
+  commentaire?: string;
+};
 
 class Risque extends InformationsService {
+  readonly id!: string;
+  readonly niveauGravite!: IdNiveauGravite;
+  readonly niveauVraisemblance!: NiveauVraisemblance;
+  readonly commentaire?: string;
+  private readonly objetNiveauGravite: NiveauGravite;
+  readonly referentiel: Referentiel;
+
   constructor(
-    donneesRisque = {},
-    referentiel = Referentiel.creeReferentielVide()
+    donneesRisque: Partial<DonneesRisque> = {},
+    referentiel: Referentiel = creeReferentielVide()
   ) {
     super({
       proprietesAtomiquesRequises: [
@@ -41,7 +61,7 @@ class Risque extends InformationsService {
 
   niveauRisque() {
     if (!this.niveauVraisemblance || !this.niveauGravite) {
-      return NiveauRisque.NIVEAU_RISQUE_INDETERMINABLE;
+      return Risque.NIVEAU_RISQUE_INDETERMINABLE;
     }
     return this.referentiel.niveauRisque(
       this.niveauVraisemblance,
@@ -49,7 +69,10 @@ class Risque extends InformationsService {
     );
   }
 
-  static valide({ niveauVraisemblance }, referentiel) {
+  static valide(
+    { niveauVraisemblance }: { niveauVraisemblance?: string },
+    referentiel: Referentiel
+  ) {
     const identifiantsNiveauxVraisemblance =
       referentiel.identifiantsNiveauxVraisemblance();
     if (
@@ -61,7 +84,8 @@ class Risque extends InformationsService {
       );
     }
   }
+
+  static NIVEAU_RISQUE_INDETERMINABLE = 'indeterminable';
 }
 
-Object.assign(Risque, NiveauRisque);
 export default Risque;
