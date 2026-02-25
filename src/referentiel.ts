@@ -3,6 +3,31 @@ import {
   ErreurCategorieInconnue,
 } from './erreurs.js';
 import donneesParDefaut from '../donneesReferentiel.js';
+import {
+  DonneesReferentiel,
+  IdCategorieMesure,
+  IdDelaiAvantImpactCritique,
+  IdDonneeCaracterePersonnel,
+  IdEcheanceRenouvellement,
+  IdEtapeHomologation,
+  IdEtapeVisiteGuidee,
+  IdFonctionnalite,
+  IdLocalisationDonnees,
+  IdMesure,
+  IdNatureSuggestionAction,
+  IdNatureTacheService,
+  IdNiveauGravite,
+  IdNiveauRisque,
+  IdNiveauSecurite,
+  IdReferentielMesure,
+  IdRisque,
+  IdStatutDeploiement,
+  IdStatutHomologation,
+  IdStatutMesure,
+  IdTacheCompletudeProfil,
+  IdTypeService,
+  IdVraisemblanceRisque,
+} from './referentiel.types.js';
 
 const donneesReferentielVide = {
   articlesDefinisReferentielsMesure: {},
@@ -34,48 +59,57 @@ const donneesReferentielVide = {
   niveauxDeSecurite: [],
 };
 
-const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
-  let donnees = donneesReferentiel;
+const creeReferentiel = (
+  donneesReferentiel: DonneesReferentiel = donneesParDefaut
+) => {
+  let donnees: DonneesReferentiel = donneesReferentiel;
 
   const versionActuelleCgu = () => donnees.versionActuelleCgu || true;
   const statutsAvisDossierHomologation = () =>
     donnees.statutsAvisDossierHomologation || {};
-  const statutHomologation = (idStatut) =>
+  const statutHomologation = (idStatut: IdStatutHomologation) =>
     donnees.statutsHomologation[idStatut];
   const categoriesMesures = () => donnees.categoriesMesures;
-  const descriptionCategorie = (idCategorie) =>
+  const descriptionCategorie = (idCategorie: IdCategorieMesure) =>
     categoriesMesures()[idCategorie];
   const identifiantsCategoriesMesures = () => Object.keys(categoriesMesures());
   const echeancesRenouvellement = () => donnees.echeancesRenouvellement || [];
-  const estDocumentHomologation = (idDocument) =>
-    donnees.documentsHomologation[idDocument] !== undefined;
-  const descriptionEcheanceRenouvellement = (id) =>
+  const descriptionEcheanceRenouvellement = (id: IdEcheanceRenouvellement) =>
     echeancesRenouvellement()[id]?.description;
   const delaisAvantImpactCritique = () => donnees.delaisAvantImpactCritique;
-  const descriptionDelaiAvantImpactCritique = (id) =>
-    delaisAvantImpactCritique()[id]?.description;
+  const descriptionDelaiAvantImpactCritique = (
+    id: IdDelaiAvantImpactCritique
+  ) => delaisAvantImpactCritique()[id]?.description;
   const donneesCaracterePersonnel = () => donnees.donneesCaracterePersonnel;
-  const descriptionDonneesCaracterePersonnel = (id) =>
-    donneesCaracterePersonnel()[id]?.description;
-  const descriptionsDonneesCaracterePersonnel = (ids) =>
+  const descriptionDonneesCaracterePersonnel = (
+    id: IdDonneeCaracterePersonnel
+  ) => donneesCaracterePersonnel()[id]?.description;
+  const descriptionsDonneesCaracterePersonnel = (
+    ids: Array<IdDonneeCaracterePersonnel>
+  ) =>
     ids
       ?.map((id) => descriptionDonneesCaracterePersonnel(id))
       .filter((id) => id !== undefined);
   const etapesParcoursHomologation = (peutHomologuer = true) => {
     const etapes = donnees.etapesParcoursHomologation || [];
     if (peutHomologuer) return etapes;
-    return etapes.filter((etape) => !etape.reserveePeutHomologuer);
+    return etapes.filter(
+      (etape) =>
+        !('reserveePeutHomologuer' in etape && etape.reserveePeutHomologuer)
+    );
   };
   const identifiantsEcheancesRenouvellement = () =>
     Object.keys(echeancesRenouvellement());
-  const estIdentifiantEcheanceRenouvellementConnu = (idEcheance) =>
-    identifiantsEcheancesRenouvellement().includes(idEcheance);
+  const estIdentifiantEcheanceRenouvellementConnu = (
+    idEcheance: IdEcheanceRenouvellement
+  ) => identifiantsEcheancesRenouvellement().includes(idEcheance);
   const identifiantsStatutAvisDossierHomologation = () =>
     Object.keys(statutsAvisDossierHomologation());
-  const estIdentifiantStatutAvisDossierHomologationConnu = (idStatut) =>
-    identifiantsStatutAvisDossierHomologation().includes(idStatut);
+  const estIdentifiantStatutAvisDossierHomologationConnu = (
+    idStatut: IdStatutHomologation
+  ) => identifiantsStatutAvisDossierHomologation().includes(idStatut);
   const fonctionnalites = () => donnees.fonctionnalites;
-  const formatteListeDeReferentiels = (referentiels) => {
+  const formatteListeDeReferentiels = (referentiels: IdReferentielMesure[]) => {
     const formatte = new Intl.ListFormat('fr', {
       type: 'conjunction',
     });
@@ -86,31 +120,35 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     );
     return formatte.format(referentielsSansDoublon);
   };
-  const descriptionFonctionnalite = (id) => fonctionnalites()[id]?.description;
-  const descriptionsFonctionnalites = (ids) =>
+  const descriptionFonctionnalite = (id: IdFonctionnalite) =>
+    fonctionnalites()[id]?.description;
+  const descriptionsFonctionnalites = (ids: Array<IdFonctionnalite>) =>
     ids
       ?.map((id) => descriptionFonctionnalite(id))
       .filter((id) => id !== undefined);
   const localisationsDonnees = () => donnees.localisationsDonnees;
   const identifiantsLocalisationsDonnees = () =>
     Object.keys(localisationsDonnees());
-  const mesureIndispensable = (idMesure) =>
-    !!donnees.mesures[idMesure].indispensable;
+  const mesureIndispensable = (idMesure: IdMesure) => {
+    const mesure = donnees.mesures[idMesure];
+    return 'indispensable' in mesure && mesure.indispensable;
+  };
   const mesures = () => structuredClone(donnees.mesures);
-  const estIdentifiantMesureConnu = (id) =>
+  const estIdentifiantMesureConnu = (id: IdMesure) =>
     Object.keys(donnees.mesures).includes(id);
-  const mesure = (id) => structuredClone(donnees.mesures[id]);
+  const mesure = (id: IdMesure) => structuredClone(donnees.mesures[id]);
   const typesService = () => donnees.typesService;
-  const nbMoisDecalage = (idEcheance) =>
+  const nbMoisDecalage = (idEcheance: IdEcheanceRenouvellement) =>
     echeancesRenouvellement()[idEcheance]?.nbMoisDecalage;
-  const nbMoisBientotExpire = (idEcheance) =>
+  const nbMoisBientotExpire = (idEcheance: IdEcheanceRenouvellement) =>
     echeancesRenouvellement()[idEcheance]?.nbMoisBientotExpire;
-  const nbMoisRappelsExpiration = (idEcheance) =>
+  const nbMoisRappelsExpiration = (idEcheance: IdEcheanceRenouvellement) =>
     echeancesRenouvellement()[idEcheance]?.rappelsExpirationMois;
   const niveauxGravite = () => donnees.niveauxGravite || {};
-  const niveauGravite = (idNiveau) => niveauxGravite()[idNiveau] || {};
+  const niveauGravite = (idNiveau: IdNiveauGravite) =>
+    niveauxGravite()[idNiveau] || {};
   const niveauxVraisemblance = () => donnees.vraisemblancesRisques || {};
-  const niveauVraisemblance = (idNiveau) =>
+  const niveauVraisemblance = (idNiveau: IdVraisemblanceRisque) =>
     niveauxVraisemblance()[idNiveau] || {};
   const niveauxRisque = () => donnees.niveauxRisques || {};
   const optionsFiltrageDate = () => donnees.optionsFiltrageDate || {};
@@ -121,28 +159,31 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const reglesPersonnalisation = () => donnees.reglesPersonnalisation || {};
   const risques = () => donnees.risques;
   const identifiantsRisques = () => Object.keys(donnees.risques);
-  const risque = (id) => risques()[id] || {};
-  const definitionRisque = (idRisque) => risque(idRisque).definition;
-  const categoriesRisque = (idRisque) => risque(idRisque).categories;
-  const identifiantNumeriqueRisque = (idRisque) =>
+  const risque = (id: IdRisque) => risques()[id] || {};
+  const definitionRisque = (idRisque: IdRisque) => risque(idRisque).definition;
+  const categoriesRisque = (idRisque: IdRisque) => risque(idRisque).categories;
+  const identifiantNumeriqueRisque = (idRisque: IdRisque) =>
     risque(idRisque).identifiantNumerique;
   const identifiantsCategoriesRisque = () =>
     Object.keys(donnees.categoriesRisques);
   const detailCategoriesRisque = () => donnees.categoriesRisques;
-  const descriptionRisque = (idRisque) => risque(idRisque).description;
+  const descriptionRisque = (idRisque: IdRisque) =>
+    risque(idRisque).description;
   const statutsDeploiement = () => donnees.statutsDeploiement;
-  const descriptionStatutDeploiement = (idStatut) =>
+  const descriptionStatutDeploiement = (idStatut: IdStatutDeploiement) =>
     statutsDeploiement()[idStatut]?.description;
-  const statutDeploiementValide = (id) =>
+  const statutDeploiementValide = (id: IdStatutDeploiement) =>
     Object.keys(statutsDeploiement()).includes(id);
   const statutsMesures = () => donnees.statutsMesures;
-  const descriptionStatutMesure = (idStatut) => statutsMesures()[idStatut];
+  const descriptionStatutMesure = (idStatut: IdStatutMesure) =>
+    statutsMesures()[idStatut];
   const prioritesMesures = () => donnees.prioritesMesures;
   const departements = () => donneesReferentiel.departements || [];
   const codeDepartements = () =>
     donneesReferentiel.departements?.map((departement) => departement.code);
-  const estCodeDepartement = (code) => codeDepartements().includes(code);
-  const departement = (code) =>
+  const estCodeDepartement = (code: string) =>
+    codeDepartements()?.includes(code);
+  const departement = (code: string) =>
     donneesReferentiel.departements?.find(
       (unDepartement) => unDepartement.code === code
     )?.nom;
@@ -161,19 +202,33 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   const indiceCyberNoteMax = () => donnees.indiceCyber?.noteMax || 10;
 
-  const verifieIndiceEstDansTranche = (indiceCyber, tranche) =>
+  const verifieIndiceEstDansTranche = (
+    indiceCyber: number,
+    tranche: {
+      borneInferieure: number;
+      borneSuperieure: number;
+      borneSuperieureIncluse?: boolean;
+    }
+  ) =>
     indiceCyber >= tranche.borneInferieure &&
     (tranche.borneSuperieureIncluse
       ? indiceCyber <= tranche.borneSuperieure
       : indiceCyber < tranche.borneSuperieure);
 
-  const trancheIndiceCyber = (indiceCyber) =>
+  const trancheIndiceCyber = (indiceCyber: number) =>
     donnees.tranchesIndicesCybers.find((tranche) =>
       verifieIndiceEstDansTranche(indiceCyber, tranche)
     ) || {};
 
-  const descriptionsTranchesIndiceCyber = (indiceCyber) =>
-    donnees.tranchesIndicesCybers
+  const descriptionsTranchesIndiceCyber = (indiceCyber: number) =>
+    (
+      donnees.tranchesIndicesCybers as unknown as Array<{
+        borneInferieure: number;
+        borneSuperieure: number;
+        borneSuperieureIncluse?: boolean;
+        description: string;
+      }>
+    )
       .sort((a, b) => a.borneInferieure - b.borneInferieure)
       .map((tranche) => ({
         description: tranche.description,
@@ -183,30 +238,32 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const infosNiveauxGravite = (ordreInverse = false) => {
     const niveaux = Object.keys(niveauxGravite()).map((clef) => ({
       identifiant: clef,
-      ...niveauGravite(clef),
+      ...niveauGravite(clef as IdNiveauGravite),
     }));
     return ordreInverse ? niveaux.reverse() : niveaux;
   };
 
-  const infosNiveauxGraviteConcernes = (ordreInverse) =>
-    infosNiveauxGravite(ordreInverse).filter((niveau) => !niveau.nonConcerne);
+  const infosNiveauxGraviteConcernes = (ordreInverse: boolean) =>
+    infosNiveauxGravite(ordreInverse).filter(
+      (niveau) => !('nonConcerne' in niveau && niveau.nonConcerne)
+    );
 
-  const localisationDonnees = (identifiant) => {
+  const localisationDonnees = (identifiant?: IdLocalisationDonnees) => {
     if (!identifiant) return 'Localisation des données non renseignée';
     return localisationsDonnees()[identifiant].description;
   };
 
-  const typeService = (identifiants) => {
+  const typeService = (identifiants: Array<IdTypeService>) => {
     if (identifiants.length === 0) return 'Type de service non renseignée';
     return identifiants
       .map((identifiant) => typesService()[identifiant].description)
       .join(', ');
   };
 
-  const numeroEtape = (idEtape) =>
+  const numeroEtape = (idEtape: IdEtapeHomologation) =>
     etapesParcoursHomologation().find((e) => e.id === idEtape)?.numero;
 
-  const libelleEtape = (idEtape) =>
+  const libelleEtape = (idEtape: IdEtapeHomologation) =>
     etapesParcoursHomologation().find((e) => e.id === idEtape)?.libelle;
 
   const premiereEtapeParcours = () =>
@@ -223,33 +280,39 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
         )
     );
 
-  const etapeExiste = (idEtape) =>
+  const etapeExiste = (idEtape: IdEtapeHomologation) =>
     etapesParcoursHomologation()
       .map((e) => e.id)
       .includes(idEtape);
 
-  const idEtapeSuivante = (idEtape) => {
-    const numeroSuivant = numeroEtape(idEtape) + 1;
+  const idEtapeSuivante = (idEtape: IdEtapeHomologation) => {
+    const actuel = numeroEtape(idEtape);
+    if (!actuel) return undefined;
+    const numeroSuivant = actuel + 1;
     return etapesParcoursHomologation().find((e) => e.numero === numeroSuivant)
-      .id;
+      ?.id;
   };
 
-  const etapeSuffisantePourDossierDecision = (idEtape) => {
+  const etapeSuffisantePourDossierDecision = (idEtape: IdEtapeHomologation) => {
     const numeroEtapeSuffisante = numeroEtape(
       donnees.etapeNecessairePourDossierDecision
     );
     const numeroEtapeCourante = numeroEtape(idEtape);
+    if (!numeroEtapeSuffisante || !numeroEtapeCourante) return undefined;
     return numeroEtapeCourante >= numeroEtapeSuffisante;
   };
 
-  const etapeDossierAutorisee = (idEtape, peutHomologuer) => {
+  const etapeDossierAutorisee = (
+    idEtape: IdEtapeHomologation,
+    peutHomologuer: boolean
+  ) => {
     if (peutHomologuer) return idEtape;
     const etapesDisponibles = etapesParcoursHomologation(peutHomologuer);
     const numeroMaxDisponible = Math.max(
       ...etapesDisponibles.map((e) => e.numero)
     );
     const numeroEtapeAutorisee = Math.min(
-      numeroEtape(idEtape),
+      numeroEtape(idEtape) as number,
       numeroMaxDisponible
     );
     return etapesDisponibles.find((e) => e.numero === numeroEtapeAutorisee)?.id;
@@ -269,12 +332,14 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
 
   const nouvellesFonctionnalites = () => donnees.nouvellesFonctionnalites || [];
 
-  const tacheCompletudeProfil = (id) =>
+  const tacheCompletudeProfil = (id: IdTacheCompletudeProfil) =>
     donnees.tachesCompletudeProfil.find((t) => t.id === id);
 
   const retoursUtilisateurMesure = () => donnees.retoursUtilisateurMesure || {};
 
-  const verifieCategoriesMesuresSontRepertoriees = (categories) => {
+  const verifieCategoriesMesuresSontRepertoriees = (
+    categories: Array<IdCategorieMesure>
+  ) => {
     const distinctes = [...new Set(categories)];
     const repertoriees = identifiantsCategoriesMesures();
     const categorieInconnue = distinctes.find((c) => !repertoriees.includes(c));
@@ -285,26 +350,35 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
       );
   };
 
-  const recharge = (nouvellesDonnees) => {
+  const recharge = (nouvellesDonnees: DonneesReferentiel) => {
     donnees = { ...donneesReferentielVide, ...nouvellesDonnees };
     valideDonnees();
   };
 
-  const enrichis = (nouvellesDonnees) => {
+  const enrichis = (nouvellesDonnees: DonneesReferentiel) => {
     donnees = { ...donnees, ...nouvellesDonnees };
     valideDonnees();
   };
 
-  const etapeVisiteGuidee = (idEtape) => donnees.etapesVisiteGuidee[idEtape];
-  const etapeSuivanteVisiteGuidee = (idEtapeCourante) =>
-    donnees.etapesVisiteGuidee[idEtapeCourante]?.idEtapeSuivante ?? null;
-  const etapePrecedenteVisiteGuidee = (idEtapeCourante) =>
-    donnees.etapesVisiteGuidee[idEtapeCourante]?.idEtapePrecedente ?? null;
+  const etapeVisiteGuidee = (idEtape: IdEtapeVisiteGuidee) =>
+    donnees.etapesVisiteGuidee[idEtape];
+  const etapeSuivanteVisiteGuidee = (idEtapeCourante: IdEtapeVisiteGuidee) => {
+    const etape = donnees.etapesVisiteGuidee[idEtapeCourante];
+    if (etape && 'idEtapeSuivante' in etape) return etape.idEtapeSuivante;
+    return null;
+  };
+  const etapePrecedenteVisiteGuidee = (
+    idEtapeCourante: IdEtapeVisiteGuidee
+  ) => {
+    const etape = donnees.etapesVisiteGuidee[idEtapeCourante];
+    if (etape && 'idEtapePrecedente' in etape) return etape.idEtapePrecedente;
+    return null;
+  };
   const nbEtapesVisiteGuidee = () =>
     Object.keys(donnees.etapesVisiteGuidee || {}).length;
-  const natureTachesService = (nature) =>
+  const natureTachesService = (nature: IdNatureTacheService) =>
     (donnees.naturesTachesService || {})[nature];
-  const natureSuggestionAction = (nature) => {
+  const natureSuggestionAction = (nature: IdNatureSuggestionAction) => {
     const natures = donnees.naturesSuggestionsActions;
 
     if (!Object.keys(natures).includes(nature)) {
@@ -317,14 +391,20 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   };
 
   const matriceNiveauxRisques = () => {
-    const resultat = [];
-    const idNiveauxRisque = Object.keys(donnees.niveauxRisques);
+    const resultat: Array<Array<IdNiveauRisque>> = [];
+    const idNiveauxRisque = Object.keys(
+      donnees.niveauxRisques
+    ) as Array<IdNiveauRisque>;
 
-    function enTableau(item) {
+    function enTableau(item: unknown) {
       return Array.isArray(item) ? item : [item];
     }
 
-    function ajouteCorrespondance(vraisemblances, gravites, niveauRisque) {
+    function ajouteCorrespondance(
+      vraisemblances: Array<number>,
+      gravites: Array<number>,
+      niveauRisque: IdNiveauRisque
+    ) {
       vraisemblances.forEach((valeurVraisemblance) => {
         while (resultat.length <= valeurVraisemblance) {
           resultat.push([]);
@@ -338,8 +418,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     idNiveauxRisque.forEach((niveauRisque) => {
       const { correspondances } = donnees.niveauxRisques[niveauRisque];
       correspondances.forEach(({ gravite, vraisemblance }) => {
-        const vraisemblances = enTableau(vraisemblance);
-        const gravites = enTableau(gravite);
+        const vraisemblances: Array<number> = enTableau(vraisemblance);
+        const gravites: Array<number> = enTableau(gravite);
 
         ajouteCorrespondance(vraisemblances, gravites, niveauRisque);
       });
@@ -347,7 +427,11 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return resultat;
   };
 
-  function estDansLaMatrice(positionVraisemblance, positionGravite, matrice) {
+  function estDansLaMatrice(
+    positionVraisemblance: number | undefined,
+    positionGravite: number | undefined,
+    matrice: Array<Array<IdNiveauRisque>>
+  ) {
     return (
       positionVraisemblance !== undefined &&
       positionGravite !== undefined &&
@@ -355,7 +439,10 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     );
   }
 
-  const niveauRisque = (vraisemblance, gravite) => {
+  const niveauRisque = (
+    vraisemblance: IdVraisemblanceRisque,
+    gravite: IdNiveauGravite
+  ) => {
     const positionVraisemblance =
       donnees.vraisemblancesRisques[vraisemblance]?.position;
     const positionGravite = donnees.niveauxGravite[gravite]?.position;
@@ -367,8 +454,9 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     return matrice[positionVraisemblance][positionGravite];
   };
 
-  const recupereDescriptions = (proprietes) =>
-    Object.values(proprietes).map((v) => v.description);
+  const recupereDescriptions = (
+    proprietes: Record<string, { description: string }>
+  ) => Object.values(proprietes).map((v) => v.description);
 
   const descriptionsTypeService = () =>
     recupereDescriptions(donnees.typesService);
@@ -391,35 +479,38 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const labelsNombreOrganisationsUtilisatrices = () =>
     Object.values(donnees.nombreOrganisationsUtilisatrices).map((v) => v.label);
 
-  const proprieteParDescription = (proprietes, description) =>
+  const proprieteParDescription = (
+    proprietes: Record<string, { description: string }>,
+    description: string
+  ) =>
     Object.entries(proprietes).find(
-      ([_cle, valeur]) => valeur.description === description
-    )[0];
+      ([, valeur]) => valeur.description === description
+    )?.[0];
 
-  const typeServiceParDescription = (description) =>
+  const typeServiceParDescription = (description: string) =>
     proprieteParDescription(donnees.typesService, description);
 
-  const provenanceServiceParDescription = (description) =>
+  const provenanceServiceParDescription = (description: string) =>
     proprieteParDescription(donnees.provenancesService, description);
 
-  const statutDeploiementParDescription = (description) =>
+  const statutDeploiementParDescription = (description: string) =>
     proprieteParDescription(donnees.statutsDeploiement, description);
 
-  const localisationDonneesParDescription = (description) =>
+  const localisationDonneesParDescription = (description: string) =>
     proprieteParDescription(donnees.localisationsDonnees, description);
 
-  const delaiAvantImpactCritiqueParDescription = (description) =>
+  const delaiAvantImpactCritiqueParDescription = (description: string) =>
     proprieteParDescription(donnees.delaisAvantImpactCritique, description);
 
-  const echeanceRenouvellementParDescription = (description) =>
+  const echeanceRenouvellementParDescription = (description: string) =>
     proprieteParDescription(donnees.echeancesRenouvellement, description);
 
-  const categorieMesureParLabel = (label) =>
+  const categorieMesureParLabel = (label: string) =>
     Object.entries(donnees.categoriesMesures).find(
       ([, leLabel]) => label === leLabel
     );
 
-  const nombreOrganisationsUtilisatricesParLabel = (label) => {
+  const nombreOrganisationsUtilisatricesParLabel = (label: string) => {
     const nombreAvecLabel = donnees.nombreOrganisationsUtilisatrices.find(
       (description) => description.label === label
     );
@@ -431,7 +522,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     };
   };
 
-  const estStatutMesureConnu = (statut) =>
+  const estStatutMesureConnu = (statut: IdStatutMesure) =>
     Object.keys(statutsMesures()).includes(statut);
 
   const nombreMaximumDeModelesMesureSpecifiqueParUtilisateur = () =>
@@ -442,8 +533,8 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
   const niveauxDeSecurite = () => donnees.niveauxDeSecurite;
 
   const niveauDeSecuriteDepasseRecommandation = (
-    niveauCandidat,
-    niveauRecommandation
+    niveauCandidat: IdNiveauSecurite,
+    niveauRecommandation: IdNiveauSecurite
   ) =>
     donnees.niveauxDeSecurite.indexOf(niveauCandidat) >
     donnees.niveauxDeSecurite.indexOf(niveauRecommandation);
@@ -485,7 +576,6 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     echeancesRenouvellement,
     enrichis,
     estCodeDepartement,
-    estDocumentHomologation,
     estIdentifiantEcheanceRenouvellementConnu,
     estIdentifiantMesureConnu,
     estIdentifiantStatutAvisDossierHomologationConnu,
@@ -574,6 +664,7 @@ const creeReferentiel = (donneesReferentiel = donneesParDefaut) => {
     version: () => 'v1',
   };
 };
-const creeReferentielVide = () => creeReferentiel(donneesReferentielVide);
+const creeReferentielVide = () =>
+  creeReferentiel(donneesReferentielVide as unknown as DonneesReferentiel);
 
 export { creeReferentiel, creeReferentielVide };
