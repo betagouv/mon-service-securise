@@ -6,7 +6,7 @@ type DonneesRisquesGeneraux = {
   risquesGeneraux: DonneesRisqueGeneral[];
 };
 
-class RisquesGeneraux extends ListeRisques {
+class RisquesGeneraux extends ListeRisques<RisqueGeneral> {
   constructor(donnees: DonneesRisquesGeneraux, referentiel: Referentiel) {
     const { risquesGeneraux } = donnees;
     super(RisqueGeneral, { items: risquesGeneraux }, referentiel);
