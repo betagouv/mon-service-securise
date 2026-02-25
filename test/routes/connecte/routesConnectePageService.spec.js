@@ -32,6 +32,7 @@ describe('Le serveur MSS des routes /service/*', () => {
     '/ID-SERVICE/indiceCyber',
     '/ID-SERVICE/rolesResponsabilites',
     '/ID-SERVICE/risques',
+    '/ID-SERVICE/risques/v2',
     '/ID-SERVICE/dossiers',
     '/ID-SERVICE/simulation-referentiel-v2',
   ].forEach((route) => {
