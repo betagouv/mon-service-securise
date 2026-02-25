@@ -3,7 +3,7 @@ import { ErreurRisqueInconnu } from '../erreurs.js';
 import Risque from './risque.js';
 import { IdNiveauGravite } from './niveauGravite.js';
 
-class ListeRisques extends ElementsConstructibles<Risque> {
+class ListeRisques<T extends Risque> extends ElementsConstructibles<T> {
   principaux() {
     return this.items.filter((risque) => risque.important());
   }
@@ -20,7 +20,7 @@ class ListeRisques extends ElementsConstructibles<Risque> {
     );
   }
 
-  ajouteRisque(risque: Risque) {
+  ajouteRisque(risque: T) {
     this.items.push(risque);
   }
 
@@ -39,7 +39,7 @@ class ListeRisques extends ElementsConstructibles<Risque> {
     return this.items[this.trouveIndex(idRisque)];
   }
 
-  metsAJourRisque(risque: Risque) {
+  metsAJourRisque(risque: T) {
     const index = this.trouveIndex(risque.id);
     this.items[index] = risque;
   }
