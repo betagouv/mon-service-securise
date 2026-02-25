@@ -211,6 +211,21 @@ const routesConnectePageService = ({
   );
 
   routes.get(
+    '/:id/risques/v2',
+    middleware.trouveService({ [RISQUES]: LECTURE }),
+    middleware.chargeAutorisationsService,
+    middleware.chargePreferencesUtilisateur,
+    (requete, reponse) => {
+      const { service } = requete;
+
+      reponse.render('service/risquesV2', {
+        InformationsService,
+        service,
+      });
+    }
+  );
+
+  routes.get(
     '/:id/dossiers',
     middleware.trouveService({ [HOMOLOGUER]: LECTURE }),
     middleware.chargeAutorisationsService,

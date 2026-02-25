@@ -1,0 +1,23 @@
+extends ../parcoursService
+include ../fragments/texteTronque
+
+block title
+  title Risques de sécurité | MonServiceSécurisé
+
+block header-titre-page
+  h3
+    +texteTronque({texte: service.nomService() || ''})
+
+block titre
+  h1 Risques de sécurité
+
+block sous-titre
+  h2
+    span Réalisez une première analyse de risque grâce aux risques courants suggérés par l’ANSSI et/ou
+    br
+    span recensez les risques identifiés dans le cadre d’une analyse de risque plus approfondie.
+
+block formulaire
+  #conteneur-risques-v2
+  +composantSvelte('risquesV2.js')
+  script(type = 'module', src = '/statique/service/risquesV2.mjs')
