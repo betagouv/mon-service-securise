@@ -19,12 +19,12 @@ export type DonneesRisqueSpecifique = DonneesRisque & {
 class RisqueSpecifique extends Risque {
   declare readonly id: UUID;
   readonly intitule!: string;
-  private readonly identifiantNumerique!: string;
+  identifiantNumerique!: string;
   private readonly categories!: CategorieRisque[];
   readonly description?: string;
 
   constructor(
-    donneesRisque: DonneesRisqueSpecifique,
+    donneesRisque: Partial<DonneesRisqueSpecifique>,
     referentiel: Referentiel
   ) {
     super(donneesRisque, referentiel);
