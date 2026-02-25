@@ -4,7 +4,7 @@ import RisqueSpecifique, {
 } from './risqueSpecifique.js';
 import { Referentiel } from '../referentiel.interface.js';
 
-type DonneesRisquesSpecifiques = {
+export type DonneesRisquesSpecifiques = {
   risquesSpecifiques: DonneesRisqueSpecifique[];
 };
 
@@ -16,6 +16,7 @@ class RisquesSpecifiques extends ListeRisques<RisqueSpecifique> {
 
   metsAJourRisque(risque: RisqueSpecifique) {
     const risqueExistant = this.trouveParId(risque.id);
+    // eslint-disable-next-line no-param-reassign
     risque.identifiantNumerique = risqueExistant.identifiantNumerique;
     super.metsAJourRisque(risque);
   }
