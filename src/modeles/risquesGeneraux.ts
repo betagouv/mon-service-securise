@@ -2,7 +2,7 @@ import ListeRisques from './listeRisques.js';
 import RisqueGeneral, { DonneesRisqueGeneral } from './risqueGeneral.js';
 import { Referentiel } from '../referentiel.interface.js';
 
-type DonneesRisquesGeneraux = {
+export type DonneesRisquesGeneraux = {
   risquesGeneraux: DonneesRisqueGeneral[];
 };
 
