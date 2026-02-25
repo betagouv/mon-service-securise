@@ -3,12 +3,12 @@ import { departements } from './donneesReferentielDepartements.js';
 const recommandationPoursuiteRenforcement =
   "L'ANSSI recommande la poursuite du renforcement de la sécurité du service numérique.";
 
-const expiration = (duree) =>
+const expiration = (duree: string) =>
   `${duree.charAt(0).toUpperCase()}${duree.slice(
     1
   )} après signature de la présente homologation`;
 
-export default {
+const donnees = {
   indiceCyber: {
     coefficientIndispensables: 0.6,
     coefficientRecommandees: 0.4,
@@ -1711,4 +1711,6 @@ export default {
   },
   niveauxDeSecurite: ['niveau1', 'niveau2', 'niveau3'],
   versionServiceParDefaut: 'v1',
-};
+} as const;
+
+export default donnees;
