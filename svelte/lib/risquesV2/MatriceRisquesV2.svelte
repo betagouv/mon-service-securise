@@ -1,9 +1,15 @@
 <script lang="ts">
+  import type { Risque } from './risquesV2.d';
+
+  export let risques: Risque[];
+  export let transparent: boolean = false;
 </script>
 
-<table class="relatif">
-  <caption class="legende"><span>Gravité</span></caption>
-  <caption class="legende bas-droite"><span>Vraisemblance</span></caption>
+<table class="relatif" class:transparent>
+  {#if !transparent}
+    <caption class="legende"><span>Gravité</span></caption>
+    <caption class="legende bas-droite"><span>Vraisemblance</span></caption>
+  {/if}
   <tbody>
     {#each new Array(4).fill(0) as _ligne, indexLigne (indexLigne)}
       {@const gravite = indexLigne * -1 + 4}
@@ -20,9 +26,15 @@
               : niveauRisque >= 8 && vraisemblance > 2 && gravite >= 2
               ? 'rouge'
               : 'orange'}
+          {@const risqueDeCetteCellule = risques.filter(
+            (r) => r.gravite === gravite && r.vraisemblance === vraisemblance
+          )}
+          {@const idRisques = risqueDeCetteCellule.map((r) => r.id).join(', ')}
           <td>
             <div class="contenu-cellule {couleur}">
-              <span></span>
+              {#if idRisques}
+                <span>{idRisques}</span>
+              {/if}
             </div>
           </td>
         {/each}
@@ -46,6 +58,13 @@
     --rouge: #e1000f;
     --orange: #fa7a35;
     --vert: #77b645;
+
+    &.transparent {
+      --bordure: transparent;
+      --rouge: transparent;
+      --orange: transparent;
+      --vert: transparent;
+    }
 
     th {
       color: #929292;
@@ -71,6 +90,13 @@
         .contenu-cellule {
           width: 123px;
           height: 72px;
+          color: #fff;
+          font-size: 1rem;
+          font-weight: bold;
+          line-height: 1.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
           &.vert {
             background: var(--vert);
