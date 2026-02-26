@@ -50,8 +50,16 @@ export class MoteurRisquesV2 {
     return this.calculePour(this.mesures.avecStatutVide());
   }
 
-  risquesCibles() {
+  risquesCibles(): RisqueV2[] {
     return this.calculePour(this.mesures.avecStatutFait());
+  }
+
+  toJSON() {
+    return {
+      risques: this.risques().map((r) => r.toJSON()),
+      risquesBruts: this.risquesBruts().map((r) => r.toJSON()),
+      risquesCibles: this.risquesCibles().map((r) => r.toJSON()),
+    };
   }
 
   private calculePour(mesures: Record<IdMesureV2, MesureAvecStatut>) {
