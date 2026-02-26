@@ -59,6 +59,16 @@ export class RisqueV2 {
     this.categories = this.getCategories();
   }
 
+  toJSON() {
+    return {
+      id: this.id,
+      intitule: this.intitule,
+      gravite: this.gravite,
+      vraisemblance: this.vraisemblance,
+      categories: this.categories,
+    };
+  }
+
   private genereIntitule() {
     const formatteurListe = new Intl.ListFormat('fr', {
       style: 'long',
