@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { Risque } from './risquesV2.d';
+  import type { RisqueGeneral } from './risquesV2.d';
   import { couleur } from './kit';
 
-  export let risques: Risque[];
+  export let risques: RisqueGeneral[];
   export let transparent: boolean = false;
 </script>
 
