@@ -161,6 +161,15 @@ class Mesures extends InformationsService {
     };
   }
 
+  personnaliseesAvecStatutSeul() {
+    return Object.fromEntries(
+      Object.keys(this.mesuresPersonnalisees).map((id) => {
+        const statut = this.mesuresGenerales.avecId(id)?.statut;
+        return [id, { statut }];
+      })
+    );
+  }
+
   statistiquesMesuresGenerales() {
     return new StatistiquesMesures(
       {
