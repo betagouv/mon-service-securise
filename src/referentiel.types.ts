@@ -33,4 +33,11 @@ export type IdNatureSuggestionAction =
 export type IdNiveauRisque = keyof typeof donnees.niveauxRisques;
 export type IdNiveauSecurite = (typeof donnees.niveauxDeSecurite)[number];
 
-export type DonneesReferentiel = typeof donnees;
+export type DonneesReferentiel = {
+  indiceCyber: {
+    coefficientIndispensables: number;
+    coefficientRecommandees: number;
+    coefficientStatutPartiel: number;
+    noteMax: number;
+  };
+} & Omit<typeof donnees, 'indiceCyber'>;

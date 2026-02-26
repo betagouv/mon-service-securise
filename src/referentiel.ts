@@ -354,12 +354,15 @@ const creeReferentiel = (
       );
   };
 
-  const recharge = (nouvellesDonnees: DonneesReferentiel) => {
-    donnees = { ...donneesReferentielVide, ...nouvellesDonnees };
+  const recharge = (nouvellesDonnees: Partial<DonneesReferentiel>) => {
+    donnees = {
+      ...donneesReferentielVide,
+      ...nouvellesDonnees,
+    } as unknown as DonneesReferentiel;
     valideDonnees();
   };
 
-  const enrichis = (nouvellesDonnees: DonneesReferentiel) => {
+  const enrichis = (nouvellesDonnees: Partial<DonneesReferentiel>) => {
     donnees = { ...donnees, ...nouvellesDonnees };
     valideDonnees();
   };
