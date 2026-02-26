@@ -2,8 +2,8 @@ import expect from 'expect.js';
 import InformationsService from '../../src/modeles/informationsService.js';
 import Mesures from '../../src/modeles/mesures.js';
 import MesuresSpecifiques from '../../src/modeles/mesuresSpecifiques.js';
-import * as Referentiel from '../../src/referentiel.js';
 import { creeReferentielV2 } from '../../src/referentielV2.js';
+import { creeReferentiel, creeReferentielVide } from '../../src/referentiel.js';
 
 const { A_COMPLETER, COMPLETES } = InformationsService;
 
@@ -12,7 +12,7 @@ describe('Les mesures liées à un service', () => {
     const mesuresPersonnalisees = { uneMesure: {} };
     const mesures = new Mesures(
       {},
-      Referentiel.creeReferentielVide(),
+      creeReferentielVide(),
       mesuresPersonnalisees
     );
 
@@ -37,7 +37,7 @@ describe('Les mesures liées à un service', () => {
   });
 
   it('ont comme statut `COMPLETES` lorsque toutes les mesures personnalisées sont renseignées et sans mesures spécifiques', () => {
-    const referentiel = Referentiel.creeReferentiel({
+    const referentiel = creeReferentiel({
       mesures: { mesure1: {} },
     });
     const mesures = new Mesures(
@@ -53,7 +53,7 @@ describe('Les mesures liées à un service', () => {
   });
 
   it('ont comme statut `COMPLETES` lorsque toutes les mesures personnalisées sont renseignées et avec mesures spécifiques', () => {
-    const referentiel = Referentiel.creeReferentiel({
+    const referentiel = creeReferentiel({
       mesures: { mesure1: {} },
       categoriesMesures: { gouvernance: {} },
     });
@@ -77,7 +77,7 @@ describe('Les mesures liées à un service', () => {
   });
 
   it('ont comme statut `A_COMPLETER` lorsque certaines mesures sont renseignées, mais pas toutes', () => {
-    const referentiel = Referentiel.creeReferentiel({
+    const referentiel = creeReferentiel({
       mesures: { mesure1: {}, mesure2: {} },
     });
     const sansMesure2 = new Mesures(
@@ -93,7 +93,7 @@ describe('Les mesures liées à un service', () => {
   });
 
   it('ont comme statut `COMPLETES` même s’il y a des mesures qui ne sont plus d’actualité', () => {
-    const referentiel = Referentiel.creeReferentiel({
+    const referentiel = creeReferentiel({
       mesures: { mesure1: {}, mesure2: {} },
     });
     const avecMesure2EnTrop = new Mesures(
@@ -112,7 +112,7 @@ describe('Les mesures liées à un service', () => {
   });
 
   it('connaissent le nombre total de mesures générales', () => {
-    const referentiel = Referentiel.creeReferentielVide();
+    const referentiel = creeReferentielVide();
 
     const mesures = new Mesures(
       { mesuresGenerales: [], mesuresSpecifiques: [] },
@@ -133,12 +133,39 @@ describe('Les mesures liées à un service', () => {
     expect(mesures.nombreMesuresSpecifiques()).to.equal(1);
   });
 
+  it('savent fournir les mesures personnalisées avec seulement leur statut (utile au moteur de risques v2)', () => {
+    const referentiel = creeReferentiel({
+      mesures: { mesure1: {}, mesure2: {}, mesure33: {} },
+      categoriesMesures: { categorie1: 'Catégorie 1' },
+    });
+
+    const mesures = new Mesures(
+      {
+        mesuresGenerales: [
+          { id: 'mesure1', statut: 'fait' },
+          { id: 'mesure33', statut: 'enCours' }, // La 33 ne fait plus partie des personnalisées
+        ],
+        mesuresSpecifiques: [],
+      },
+      referentiel,
+      {
+        mesure1: { categorie: 'categorie1' },
+        mesure2: { categorie: 'categorie1' },
+      }
+    );
+
+    expect(mesures.personnaliseesAvecStatutSeul()).to.eql({
+      mesure1: { statut: 'fait' },
+      mesure2: { statut: undefined },
+    });
+  });
+
   describe('sur une demande des mesures par statut', () => {
     let referentiel;
     let statutVide;
 
     beforeEach(() => {
-      referentiel = Referentiel.creeReferentiel({
+      referentiel = creeReferentiel({
         mesures: {
           mesure1: {
             description: 'Mesure une',
@@ -259,7 +286,7 @@ describe('Les mesures liées à un service', () => {
     let referentiel;
 
     beforeEach(() => {
-      referentiel = Referentiel.creeReferentiel({
+      referentiel = creeReferentiel({
         mesures: { mesure1: {} },
         categoriesMesures: { categorie1: 'Catégorie 1' },
       });
@@ -399,7 +426,7 @@ describe('Les mesures liées à un service', () => {
   });
 
   it('connait le nombre total de mesures "nonFait"', () => {
-    const referentiel = Referentiel.creeReferentiel({
+    const referentiel = creeReferentiel({
       categoriesMesures: { C1: 'C1', C2: 'C2' },
       statutsMesures: { fait: 'Faite', nonFait: 'Non prise en compte' },
       mesures: { M1: {}, M2: {}, M3: {} },

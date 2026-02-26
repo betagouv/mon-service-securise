@@ -13,6 +13,7 @@
     risquesBruts: [],
     risques: [],
     risquesCibles: [],
+    risquesSpecifiques: [],
   };
 
   onMount(async () => {
@@ -100,18 +101,27 @@
       { cle: 'gravite', libelle: 'Gravité' },
       { cle: 'vraisemblance', libelle: 'Vraisemblance' },
     ]}
-    donnees={risques.risques}
+    donnees={[...risques.risques, ...risques.risquesSpecifiques]}
   >
     <svelte:fragment slot="cellule" let:donnee let:colonne>
       {#if colonne.cle === 'id'}
-        {@const label = `${donnee.id.replace('R', 'Risque ')} (${donnee.id})`}
-        {@const laCouleur = couleur(donnee.gravite, donnee.vraisemblance)}
         <div class="colonne-identifiant">
-          <dsfr-badge
-            {label}
-            type="accent"
-            accent={mappingCouleursDSFR[laCouleur]}
-          ></dsfr-badge>
+          {#if donnee.type === 'GENERAL'}
+            <dsfr-badge
+              label={`${donnee.id.replace('R', 'Risque ')} (${donnee.id})`}
+              type="accent"
+              accent={mappingCouleursDSFR[
+                couleur(donnee.gravite, donnee.vraisemblance)
+              ]}
+            ></dsfr-badge>
+          {/if}
+          {#if donnee.type === 'SPECIFIQUE'}
+            <dsfr-badge
+              label="Risque spécifique"
+              type="accent"
+              accent="beige-gris-galet"
+            ></dsfr-badge>
+          {/if}
         </div>
       {:else if colonne.cle === 'intitule'}
         <div class="colonne-intitule">
