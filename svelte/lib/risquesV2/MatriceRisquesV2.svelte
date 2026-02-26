@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Risque } from './risquesV2.d';
+  import { couleur } from './kit';
 
   export let risques: Risque[];
   export let transparent: boolean = false;
@@ -19,19 +20,13 @@
         </th>
         {#each new Array(4).fill(0) as _colonne, indexColonne (indexColonne)}
           {@const vraisemblance = indexColonne + 1}
-          {@const niveauRisque = gravite * vraisemblance}
-          {@const couleur =
-            niveauRisque <= 4 && vraisemblance < 3 && gravite < 4
-              ? 'vert'
-              : niveauRisque >= 8 && vraisemblance > 2 && gravite >= 2
-              ? 'rouge'
-              : 'orange'}
+          {@const laCouleur = couleur(gravite, vraisemblance)}
           {@const risqueDeCetteCellule = risques.filter(
             (r) => r.gravite === gravite && r.vraisemblance === vraisemblance
           )}
           {@const idRisques = risqueDeCetteCellule.map((r) => r.id).join(', ')}
           <td>
-            <div class="contenu-cellule {couleur}">
+            <div class="contenu-cellule {laCouleur}">
               {#if idRisques}
                 <span>{idRisques}</span>
               {/if}
