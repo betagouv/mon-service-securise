@@ -912,6 +912,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(reponse.body.risques).to.be.an(Array);
       expect(reponse.body.risquesCibles).to.be.an(Array);
       expect(reponse.body.risquesBruts).to.be.an(Array);
+      expect(reponse.body.risquesSpecifiques).to.be.an(Array);
     });
   });
 });
