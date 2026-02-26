@@ -96,5 +96,19 @@ describe('Le moteur de risques V2', () => {
       expect(cibles[0].vraisemblance).toBe(1);
       expect(residuels[0].vraisemblance).toBe(3);
     });
+
+    it('peut se sérialiser en JSON', () => {
+      const { risquesBruts, risques, risquesCibles } =
+        moteurAvecMesuresFaites.toJSON();
+
+      expect(risquesBruts[0].id).toBe('R3');
+      expect(risquesBruts[0].vraisemblance).toBe(4);
+
+      expect(risques[0].id).toBe('R3');
+      expect(risques[0].vraisemblance).toBe(3);
+
+      expect(risquesCibles[0].id).toBe('R3');
+      expect(risquesCibles[0].vraisemblance).toBe(1);
+    });
   });
 });
