@@ -1,18 +1,19 @@
-import Risque, { CategorieRisque, DonneesRisque } from './risque.js';
+import Risque, { DonneesRisque } from './risque.js';
 
 import {
-  ErreurIntituleRisqueManquant,
-  ErreurCategoriesRisqueManquantes,
   ErreurCategorieRisqueInconnue,
+  ErreurCategoriesRisqueManquantes,
+  ErreurIntituleRisqueManquant,
 } from '../erreurs.js';
 import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
 import { UUID } from '../typesBasiques.js';
+import { IdCategorieRisque } from '../referentiel.types.js';
 
 export type DonneesRisqueSpecifique = DonneesRisque & {
   id: UUID;
   intitule: string;
   identifiantNumerique: string;
-  categories: CategorieRisque[];
+  categories: IdCategorieRisque[];
   description?: string;
 };
 
@@ -20,7 +21,7 @@ class RisqueSpecifique extends Risque {
   declare readonly id: UUID;
   readonly intitule!: string;
   identifiantNumerique!: string;
-  private readonly categories!: CategorieRisque[];
+  private readonly categories!: IdCategorieRisque[];
   readonly description?: string;
 
   constructor(

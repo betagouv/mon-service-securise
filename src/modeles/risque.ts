@@ -1,33 +1,24 @@
 import InformationsService from './informationsService.js';
-import NiveauGravite, { IdNiveauGravite } from './niveauGravite.js';
+import NiveauGravite from './niveauGravite.js';
 import { ErreurNiveauVraisemblanceInconnu } from '../erreurs.js';
 import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
-
-type NiveauVraisemblance =
-  | 'invraisemblable'
-  | 'peuVraisemblable'
-  | 'vraisemblable'
-  | 'tresVraisemblable'
-  | 'quasiCertain';
-
-export type CategorieRisque =
-  | 'disponibilite'
-  | 'integrite'
-  | 'confidentialite'
-  | 'tracabilite';
+import {
+  IdNiveauGravite,
+  IdVraisemblanceRisque,
+} from '../referentiel.types.js';
 
 export type DonneesRisque = {
   id: string;
   niveauGravite: string;
-  niveauVraisemblance: NiveauVraisemblance;
+  niveauVraisemblance: IdVraisemblanceRisque;
   commentaire?: string;
 };
 
 class Risque extends InformationsService {
   readonly id!: string;
   readonly niveauGravite!: IdNiveauGravite;
-  readonly niveauVraisemblance!: NiveauVraisemblance;
+  readonly niveauVraisemblance!: IdVraisemblanceRisque;
   readonly commentaire?: string;
   private readonly objetNiveauGravite: NiveauGravite;
   readonly referentiel: Referentiel | ReferentielV2;

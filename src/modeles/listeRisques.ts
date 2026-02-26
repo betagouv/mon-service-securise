@@ -1,7 +1,7 @@
 import ElementsConstructibles from './elementsConstructibles.js';
 import { ErreurRisqueInconnu } from '../erreurs.js';
 import Risque from './risque.js';
-import { IdNiveauGravite } from './niveauGravite.js';
+import { IdNiveauGravite } from '../referentiel.types.js';
 
 class ListeRisques<T extends Risque> extends ElementsConstructibles<T> {
   principaux() {

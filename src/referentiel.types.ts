@@ -2,6 +2,7 @@ import donnees from '../donneesReferentiel.js';
 
 export type IdStatutHomologation = keyof typeof donnees.statutsHomologation;
 export type IdCategorieMesure = keyof typeof donnees.categoriesMesures;
+export type IdCategorieRisque = keyof typeof donnees.categoriesRisques;
 export type IdEcheanceRenouvellement =
   keyof typeof donnees.echeancesRenouvellement;
 export type IdDelaiAvantImpactCritique =

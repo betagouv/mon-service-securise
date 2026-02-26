@@ -1,13 +1,15 @@
-import Risque, { CategorieRisque, DonneesRisque } from './risque.js';
+import Risque, { DonneesRisque } from './risque.js';
 import { ErreurRisqueInconnu } from '../erreurs.js';
 import { Referentiel } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
+import { IdCategorieRisque, IdRisque } from '../referentiel.types.js';
 
 export type DonneesRisqueGeneral = DonneesRisque & {
   desactive?: boolean;
 };
 
 class RisqueGeneral extends Risque {
+  declare id: IdRisque;
   readonly desactive?: boolean;
 
   constructor(
@@ -21,7 +23,7 @@ class RisqueGeneral extends Risque {
     this.renseigneProprietes(donneesRisque);
   }
 
-  categoriesRisque(): CategorieRisque {
+  categoriesRisque(): ReadonlyArray<IdCategorieRisque> {
     return this.referentiel.categoriesRisque(this.id);
   }
 
