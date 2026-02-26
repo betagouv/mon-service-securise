@@ -2,6 +2,7 @@ import { VraisemblanceRisque } from '../../../src/moteurRisques/v2/vraisemblance
 import {
   ConfigurationPourNiveau,
   ConfigurationVraisemblancePourUnVecteur,
+  MesureAvecStatut,
 } from '../../../src/moteurRisques/v2/vraisemblance/vraisemblance.types.ts';
 import {
   IdMesureV2,
@@ -10,7 +11,6 @@ import {
 import Mesures from '../../../src/modeles/mesures.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 import { unServiceV2 } from '../../constructeurs/constructeurService.js';
-import MesureGenerale from '../../../src/modeles/mesureGenerale.js';
 
 describe('Le calcul de vraisemblance pour un risque', () => {
   const configurationVraisemblance = (
@@ -61,7 +61,7 @@ describe('Le calcul de vraisemblance pour un risque', () => {
   describe('concernant les groupes de mesures', () => {
     const desMesuresPersonnalisees = (
       mesuresGenerales: Array<{ id: IdMesureV2 }>
-    ): Record<string, MesureGenerale> => {
+    ): Record<string, MesureAvecStatut> => {
       const referentiel = creeReferentielV2();
 
       const service = unServiceV2()
@@ -75,10 +75,8 @@ describe('Le calcul de vraisemblance pour un risque', () => {
         )
         .construis();
 
-      return service.mesures.enrichiesAvecDonneesPersonnalisees() as unknown as Record<
-        string,
-        MesureGenerale
-      >;
+      return service.mesures.enrichiesAvecDonneesPersonnalisees()
+        .mesuresGenerales as Record<string, MesureAvecStatut>;
     };
 
     it('utilise les groupes de mesures personnalisées pour calculer les formules', () => {
