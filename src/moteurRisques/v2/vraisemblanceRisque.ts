@@ -30,7 +30,7 @@ export class VraisemblanceRisque {
         ([cleGroupe, groupe]) => [
           cleGroupe,
           groupe.idsMesures.map(
-            (id) => mesuresPersonnalisees[id] || { statut: '' }
+            (id) => mesuresPersonnalisees[id] || { statut: 'fait' }
           ),
         ]
       )

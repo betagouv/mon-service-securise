@@ -49,10 +49,7 @@ describe('Le calcul de vraisemblance pour un risque', () => {
   it('retourne la vraisemblance maximale entre toutes les formules calculées', () => {
     const v = new VraisemblanceRisque(
       configurationVraisemblance({
-        niveau1: {
-          formules: [() => 3, () => 4],
-          groupes: {},
-        },
+        niveau1: { formules: [() => 3, () => 4], groupes: {} },
       })
     );
 
@@ -88,9 +85,7 @@ describe('Le calcul de vraisemblance pour un risque', () => {
       const v = new VraisemblanceRisque(
         configurationVraisemblance({
           niveau1: {
-            groupes: {
-              a: { poids: 1, idsMesures: ['RECENSEMENT.1'] },
-            },
+            groupes: { a: { poids: 1, idsMesures: ['RECENSEMENT.1'] } },
             formules: [({ a }) => a.length],
           },
         })
@@ -149,7 +144,7 @@ describe('Le calcul de vraisemblance pour un risque', () => {
       expect(vraisemblance).toBe(3);
     });
 
-    it("par sécurité, assigne une mesure 'non faite' s'il n'existe pas dans le service", () => {
+    it("considère chaque mesure absente du service comme « faite » : c'est la règle métier pour cohabiter avec moteur de règles v2", () => {
       const v = new VraisemblanceRisque(
         configurationVraisemblance({
           niveau1: {
@@ -157,7 +152,7 @@ describe('Le calcul de vraisemblance pour un risque', () => {
               a: { poids: 1, idsMesures: ['RECENSEMENT.1'] },
             },
             formules: [
-              ({ a }) => a.filter((mesure) => mesure.statut === '').length,
+              ({ a }) => a.filter((mesure) => mesure.statut === 'fait').length,
             ],
           },
         })
