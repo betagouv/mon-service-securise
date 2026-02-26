@@ -133,6 +133,33 @@ describe('Les mesures liées à un service', () => {
     expect(mesures.nombreMesuresSpecifiques()).to.equal(1);
   });
 
+  it('savent fournir les mesures personnalisées avec seulement leur statut (utile au moteur de risques v2)', () => {
+    const referentiel = creeReferentiel({
+      mesures: { mesure1: {}, mesure2: {}, mesure33: {} },
+      categoriesMesures: { categorie1: 'Catégorie 1' },
+    });
+
+    const mesures = new Mesures(
+      {
+        mesuresGenerales: [
+          { id: 'mesure1', statut: 'fait' },
+          { id: 'mesure33', statut: 'enCours' }, // La 33 ne fait plus partie des personnalisées
+        ],
+        mesuresSpecifiques: [],
+      },
+      referentiel,
+      {
+        mesure1: { categorie: 'categorie1' },
+        mesure2: { categorie: 'categorie1' },
+      }
+    );
+
+    expect(mesures.personnaliseesAvecStatutSeul()).to.eql({
+      mesure1: { statut: 'fait' },
+      mesure2: { statut: undefined },
+    });
+  });
+
   describe('sur une demande des mesures par statut', () => {
     let referentiel;
     let statutVide;

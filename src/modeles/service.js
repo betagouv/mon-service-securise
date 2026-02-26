@@ -101,7 +101,7 @@ class Service {
     if (versionService === VersionService.v2)
       this.moteurRisques = new MoteurRisquesV2(
         this.descriptionService,
-        this.mesures.enrichiesAvecDonneesPersonnalisees().mesuresGenerales
+        this.mesures.personnaliseesAvecStatutSeul()
       );
   }
 
