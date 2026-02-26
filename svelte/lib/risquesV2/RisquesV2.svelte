@@ -1,8 +1,10 @@
 <script lang="ts">
   import MatriceRisquesV2 from './MatriceRisquesV2.svelte';
   import { onMount } from 'svelte';
-  import type { Risque, TousRisques } from './risquesV2.d';
+  import type { TousRisques } from './risquesV2.d';
   import * as api from './risquesV2.api';
+  import Tableau from '../ui/Tableau.svelte';
+  import { couleur, mappingCouleursDSFR, mappingNomCategories } from './kit';
 
   export let idService: string;
 
@@ -78,6 +80,49 @@
       {/each}
     </div>
   </div>
+</div>
+
+<div class="conteneur-tableau">
+  <h2>Risques</h2>
+  <div class="sous-titre">
+    <span>
+      Le tableau ci-dessous présente le détail des risques, accompagné de leur
+      gravité et de leur vraisemblance résiduelle actuelles. Pour les risques
+      ANSSI, la gravité et la vraisemblance sont non modifiables.
+    </span>
+  </div>
+
+  <Tableau
+    colonnes={[
+      { cle: 'id', libelle: 'Identifiant' },
+      { cle: 'intitule', libelle: 'Intitulé du risque' },
+    ]}
+    donnees={risques.risques}
+  >
+    <svelte:fragment slot="cellule" let:donnee let:colonne>
+      {#if colonne.cle === 'id'}
+        {@const label = `${donnee.id.replace('R', 'Risque ')} (${donnee.id})`}
+        {@const laCouleur = couleur(donnee.gravite, donnee.vraisemblance)}
+        <div class="colonne-identifiant">
+          <dsfr-badge
+            {label}
+            type="accent"
+            accent={mappingCouleursDSFR[laCouleur]}
+          ></dsfr-badge>
+        </div>
+      {:else if colonne.cle === 'intitule'}
+        <div class="colonne-intitule">
+          <span>{donnee.intitule}</span>
+          <div class="tags">
+            <dsfr-tag label="ANSSI"></dsfr-tag>
+            {#each donnee.categories as categorie}
+              <dsfr-tag label={mappingNomCategories[categorie]}></dsfr-tag>
+            {/each}
+          </div>
+        </div>
+      {/if}
+    </svelte:fragment>
+  </Tableau>
 </div>
 
 <style lang="scss">
@@ -179,6 +224,36 @@
           line-height: 1.5rem;
         }
       }
+    }
+  }
+
+  .conteneur-tableau {
+    text-align: left;
+
+    h2 {
+      margin-top: 24px;
+      margin-bottom: 8px;
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+
+    .sous-titre {
+      margin-bottom: 24px;
+    }
+
+    .colonne-identifiant {
+      width: 168px;
+    }
+
+    .colonne-intitule {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 8px;
     }
   }
 </style>
