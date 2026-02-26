@@ -98,6 +98,7 @@
       { cle: 'id', libelle: 'Identifiant' },
       { cle: 'intitule', libelle: 'Intitulé du risque' },
       { cle: 'gravite', libelle: 'Gravité' },
+      { cle: 'vraisemblance', libelle: 'Vraisemblance' },
     ]}
     donnees={risques.risques}
   >
@@ -125,6 +126,10 @@
       {:else if colonne.cle === 'gravite'}
         <div class="colonne-gravite">
           <Niveau niveau={donnee.gravite} />
+        </div>
+      {:else if colonne.cle === 'vraisemblance'}
+        <div class="colonne-vraisemblance">
+          <Niveau niveau={donnee.vraisemblance} />
         </div>
       {/if}
     </svelte:fragment>
@@ -241,6 +246,7 @@
       margin-bottom: 8px;
       font-size: 1.25rem;
       line-height: 1.75rem;
+      color: black;
     }
 
     .sous-titre {
