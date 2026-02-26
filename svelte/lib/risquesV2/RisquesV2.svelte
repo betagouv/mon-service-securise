@@ -5,6 +5,7 @@
   import * as api from './risquesV2.api';
   import Tableau from '../ui/Tableau.svelte';
   import { couleur, mappingCouleursDSFR, mappingNomCategories } from './kit';
+  import Niveau from './Niveau.svelte';
 
   export let idService: string;
 
@@ -96,6 +97,7 @@
     colonnes={[
       { cle: 'id', libelle: 'Identifiant' },
       { cle: 'intitule', libelle: 'Intitulé du risque' },
+      { cle: 'gravite', libelle: 'Gravité' },
     ]}
     donnees={risques.risques}
   >
@@ -119,6 +121,10 @@
               <dsfr-tag label={mappingNomCategories[categorie]}></dsfr-tag>
             {/each}
           </div>
+        </div>
+      {:else if colonne.cle === 'gravite'}
+        <div class="colonne-gravite">
+          <Niveau niveau={donnee.gravite} />
         </div>
       {/if}
     </svelte:fragment>
