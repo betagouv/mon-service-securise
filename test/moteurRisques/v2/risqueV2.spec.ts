@@ -138,4 +138,16 @@ describe('Un risque V2', () => {
       expect(r1.categories).toEqual(['confidentialite', 'integrite']);
     });
   });
+
+  it('peut se sérialiser en JSON', () => {
+    const r1 = new RisqueV2('V1', { OV1: 3 }, 1, configurationRisque());
+
+    expect(r1.toJSON()).toEqual({
+      id: 'R1',
+      intitule: 'V1 avec OV1',
+      categories: ['integrite'],
+      gravite: 3,
+      vraisemblance: 1,
+    });
+  });
 });
