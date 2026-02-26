@@ -1,13 +1,7 @@
 import { ErreurNiveauGraviteInconnu } from '../erreurs.js';
 import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
-
-export type IdNiveauGravite =
-  | 'nonConcerne'
-  | 'minime'
-  | 'significatif'
-  | 'grave'
-  | 'critique';
+import { IdNiveauGravite } from '../referentiel.types.js';
 
 const valide = (idNiveau: string, referentiel: Referentiel | ReferentielV2) => {
   const identifiantsNiveauxGravite = referentiel.identifiantsNiveauxGravite();
