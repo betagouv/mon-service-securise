@@ -162,6 +162,17 @@ const routesConnecteApiService = ({
     }
   );
 
+  routes.get(
+    '/:id/risques/v2',
+    middleware.trouveService({ [RISQUES]: LECTURE }),
+    middleware.chargeAutorisationsService,
+    async (requete, reponse) => {
+      const { service } = requete;
+
+      reponse.json(service.moteurRisques.toJSON());
+    }
+  );
+
   routes.delete(
     '/:id',
     middleware.trouveService({}),

@@ -1,7 +1,10 @@
 import expect from 'expect.js';
 import testeurMSS from '../testeurMSS.js';
 import { unDossier } from '../../constructeurs/constructeurDossier.js';
-import { unService } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
 import { ErreurDonneesObligatoiresManquantes } from '../../../src/erreurs.js';
 import {
   Permissions,
@@ -873,6 +876,42 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
 
       expect(reponse.status).to.be(400);
+    });
+  });
+
+  describe('quand requête GET sur `/api/service/:id/risques/v2', () => {
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: RISQUES }],
+          testeur.app(),
+          {
+            method: 'get',
+            url: '/api/service/456/risques/v2',
+          }
+        );
+    });
+
+    it("utilise le middleware de chargement de l'autorisation", async () => {
+      await testeur
+        .middleware()
+        .verifieChargementDesAutorisations(
+          testeur.app(),
+          '/api/service/456/risques/v2'
+        );
+    });
+
+    it('retourne la représentation des risques V2', async () => {
+      testeur
+        .middleware()
+        .reinitialise({ serviceARenvoyer: unServiceV2().construis() });
+
+      const reponse = await testeur.get('/api/service/456/risques/v2');
+
+      expect(reponse.body.risques).to.be.an(Array);
+      expect(reponse.body.risquesCibles).to.be.an(Array);
+      expect(reponse.body.risquesBruts).to.be.an(Array);
     });
   });
 });
