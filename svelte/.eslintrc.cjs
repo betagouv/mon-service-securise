@@ -3,7 +3,8 @@ module.exports = {
   extends: ['plugin:svelte/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: 'svelte/tsconfig.json',
+    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
     extraFileExtensions: ['.svelte'], // This is a required setting in `@typescript-eslint/parser` v4.24.0.
   },
   overrides: [
