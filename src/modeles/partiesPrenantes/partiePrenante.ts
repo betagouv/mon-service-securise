@@ -1,7 +1,17 @@
 import InformationsService from '../informationsService.js';
 
+export type DonneesPartiePrenante = {
+  nom: string;
+  natureAcces?: string;
+  pointContact?: string;
+};
+
 class PartiePrenante extends InformationsService {
-  constructor(donnees = {}) {
+  readonly nom!: string;
+  readonly natureAcces?: string;
+  readonly pointContact?: string;
+
+  constructor(donnees: Partial<DonneesPartiePrenante> = {}) {
     super({
       proprietesAtomiquesRequises: ['nom'],
       proprietesAtomiquesFacultatives: ['natureAcces', 'pointContact'],
@@ -10,7 +20,7 @@ class PartiePrenante extends InformationsService {
     this.renseigneProprietes(donnees);
   }
 
-  estDeType(Type) {
+  estDeType(Type: { name: string } | null) {
     return this.constructor.name === Type?.name;
   }
 
