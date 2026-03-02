@@ -19,6 +19,7 @@ type Contributeur = {
   initiales: string;
   poste: string;
   estUtilisateurCourant: boolean;
+  email: string;
 };
 
 export type NiveauSecuriteService = 'niveau1' | 'niveau2' | 'niveau3';

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { type MiseAJour } from '../creationV2/creationV2.api';
+  import type { MiseAJour } from '../creationV2/creationV2.api';
   import AssistantServiceV2 from '../creationV2/AssistantServiceV2.svelte';
   import { navigationStore } from '../creationV2/etapes/navigation.store';
   import {

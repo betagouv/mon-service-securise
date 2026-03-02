@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { ReferentielStatut } from './types';
+  import type { StatutMesure } from '../modeles/modeleMesure';
 
-  export let statut: string | undefined;
+  export let statut: StatutMesure | undefined;
   export let actif: boolean = false;
   export let referentielStatuts: ReferentielStatut;
 </script>

@@ -19,6 +19,12 @@
   $: {
     if (!statut) statut = '';
   }
+
+  const metAJour = (e: Event) => {
+    dispatch('input', {
+      statut: (e.target as HTMLInputElement).value as StatutMesure,
+    });
+  };
 </script>
 
 <label
@@ -39,9 +45,7 @@
     use:validationChamp={requis
       ? 'Ce champ est obligatoire. Veuillez sélectionner une option.'
       : ''}
-    on:input={(e) => {
-      dispatch('input', { statut: e.target?.value });
-    }}
+    on:input={metAJour}
     on:click|stopPropagation
   >
     <option value="" disabled={requis} selected

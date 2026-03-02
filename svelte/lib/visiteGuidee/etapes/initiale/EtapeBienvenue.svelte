@@ -9,8 +9,10 @@
     elementModale.inert = true;
     elementModale.showModal();
     elementModale.inert = false;
-    document.getElementById('visite-guidee-menu-navigation').style.display =
-      'none';
+    const menuNavigation = document.getElementById(
+      'visite-guidee-menu-navigation'
+    );
+    if (menuNavigation) menuNavigation.style.display = 'none';
   });
 </script>
 

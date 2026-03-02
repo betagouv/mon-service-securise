@@ -3,7 +3,7 @@
 
   export let niveauGravite: IdentifiantGravite;
   export let referentielGravites: ReferentielGravites;
-  export let estLectureSeule;
+  export let estLectureSeule: boolean | undefined;
   export let avecLibelleOption: boolean = false;
 </script>
 

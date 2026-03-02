@@ -92,6 +92,12 @@
       siret = undefined;
     }
   };
+
+  const metAJour = (e: CustomEvent<string>) => {
+    siret = undefined;
+    saisie = e.detail;
+    avecTemporisation(rechercheSuggestions);
+  };
 </script>
 
 <div class="conteneur" class:avec-label={label !== ''}>
@@ -106,11 +112,7 @@
     errorMessage="Le SIRET est obligatoire."
     status={disabled ? 'default' : siret ? 'default' : 'error'}
     {disabled}
-    on:valuechanged={(e) => {
-      siret = undefined;
-      saisie = e.detail;
-      avecTemporisation(rechercheSuggestions);
-    }}
+    on:valuechanged={metAJour}
     on:keydown={gereTouchePressee}
   >
   </dsfr-input>

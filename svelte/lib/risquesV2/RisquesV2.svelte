@@ -26,6 +26,8 @@
   ];
 
   let opacite = 2;
+
+  const metAJourOpacite = (e: CustomEvent<number>) => (opacite = e.detail);
 </script>
 
 <div class="conteneur">
@@ -63,7 +65,7 @@
           step={0.5}
           is-step
           indicators={false}
-          on:valuechanged={(e) => (opacite = e.detail)}
+          on:valuechanged={metAJourOpacite}
         ></dsfr-range>
         <div class="conteneur-legende-slider">
           <span>Risques bruts</span>

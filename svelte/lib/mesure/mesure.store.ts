@@ -1,15 +1,28 @@
 import { derived, writable } from 'svelte/store';
-import type { MesureEditee, MesureGeneraleEnrichie } from './mesure.d';
-import { Referentiel } from '../ui/types.d';
+import type {
+  MesureEditee,
+  MesureGeneraleEnrichie,
+  MesureSpecifique,
+} from './mesure.d';
+import { CategorieMesure, Referentiel } from '../ui/types.d';
 
 type Etape =
   | 'Creation'
   | 'EditionGenerale'
   | 'EditionSpecifique'
   | 'SuppressionSpecifique';
+
+type AvecModalites<T> = T & {
+  modalites: string;
+};
+
+type MesureEditeeAvecModalites = Omit<MesureEditee, 'mesure'> & {
+  mesure: AvecModalites<MesureSpecifique | MesureGeneraleEnrichie>;
+};
+
 export type MesureStore = {
   etape: Etape;
-  mesureEditee: MesureEditee;
+  mesureEditee: MesureEditeeAvecModalites;
 };
 
 const mesureEditeeParDefaut = (): MesureEditee => ({
@@ -37,9 +50,12 @@ export const store = {
       : mesureEditee.metadonnees.typeMesure === 'GENERALE'
       ? 'EditionGenerale'
       : 'EditionSpecifique';
+    const mesureEditeeAvecModalites = mesureEditee ?? mesureEditeeParDefaut();
+    if (!mesureEditeeAvecModalites.mesure.modalites)
+      mesureEditeeAvecModalites.mesure.modalites = '';
     set({
       etape,
-      mesureEditee: mesureEditee ?? mesureEditeeParDefaut(),
+      mesureEditee: mesureEditeeAvecModalites as MesureEditeeAvecModalites,
     });
   },
   afficheEtapeSuppression: () =>
@@ -53,6 +69,12 @@ export const configurationAffichage = derived(store, ($store) => {
     $store.etape === 'EditionGenerale'
       ? ($store.mesureEditee.mesure as MesureGeneraleEnrichie).referentiel
       : Referentiel.SPECIFIQUE;
+
+  const categorie: CategorieMesure | '' =
+    $store.etape === 'EditionGenerale' || $store.etape === 'EditionSpecifique'
+      ? ($store.mesureEditee.mesure.categorie as CategorieMesure)
+      : '';
+
   return {
     referentiel,
     indispensable:
@@ -63,10 +85,7 @@ export const configurationAffichage = derived(store, ($store) => {
       $store.etape === 'EditionGenerale'
         ? $store.mesureEditee.mesure.identifiantNumerique
         : '',
-    categorie:
-      $store.etape === 'EditionGenerale' || $store.etape === 'EditionSpecifique'
-        ? $store.mesureEditee.mesure.categorie
-        : '',
+    categorie,
     thematique:
       $store.etape === 'EditionGenerale'
         ? $store.mesureEditee.mesure.thematique

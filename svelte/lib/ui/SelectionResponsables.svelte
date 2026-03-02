@@ -6,7 +6,7 @@
   import Initiales from './Initiales.svelte';
   import { storeAutorisations } from '../gestionContributeurs/stores/autorisations.store';
 
-  export let responsables: IdUtilisateur[] | null;
+  export let responsables: IdUtilisateur[] | null | undefined;
   export let estLectureSeule: boolean;
 
   $: responsablesAffiches = responsables

@@ -1,5 +1,6 @@
 <script lang="ts">
   import type {
+    Droits,
     Invitation,
     Permission,
     Rubrique,
@@ -19,9 +20,7 @@
     supprimerInvitation: Utilisateur;
   }>();
 
-  const resumeLesDroits = (
-    droits: Record<Rubrique, Permission> & { estProprietaire: boolean }
-  ): ResumeNiveauDroit => {
+  const resumeLesDroits = (droits: Droits): ResumeNiveauDroit => {
     if (droits.estProprietaire) return 'PROPRIETAIRE';
     if (Object.values(droits).every((p) => p === 1)) return 'LECTURE';
     if (Object.values(droits).every((p) => p === 2)) return 'ECRITURE';

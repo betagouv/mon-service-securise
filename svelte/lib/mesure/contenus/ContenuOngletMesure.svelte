@@ -40,10 +40,12 @@
       />
     </label>
   {/if}
-  {#if $configurationAffichage.doitAfficherDescriptionLongue}
+  {#if $configurationAffichage.doitAfficherDescriptionLongue && texteSurligne}
     <DescriptionLongueMesure
       description={texteSurligne}
-      lienBlog={$store.mesureEditee.mesure.lienBlog}
+      lienBlog={('lienBlog' in $store.mesureEditee.mesure &&
+        $store.mesureEditee.mesure.lienBlog) ||
+        undefined}
     />
   {/if}
   {#if $configurationAffichage.doitAfficherDescriptionLongueEditable}

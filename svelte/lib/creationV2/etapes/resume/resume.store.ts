@@ -18,7 +18,7 @@ import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
 
 export const convertisDonneesDescriptionEnLibelles = (
   donnees: DescriptionServiceV2
-): Record<keyof DescriptionServiceV2, string | string[] | undefined> => ({
+): Record<keyof DescriptionServiceV2, string | string[]> => ({
   niveauSecurite: donnees.niveauSecurite,
   nomService: donnees.nomService,
   siret: donnees.siret,
@@ -26,7 +26,7 @@ export const convertisDonneesDescriptionEnLibelles = (
     questionsV2.statutDeploiement[
       donnees.statutDeploiement as StatutDeploiement
     ].description,
-  presentation: donnees.presentation,
+  presentation: donnees.presentation || '',
   pointsAcces: donnees.pointsAcces,
   typeService: donnees.typeService.map(
     (typeService) => questionsV2.typeDeService[typeService as TypeService].nom
@@ -70,5 +70,5 @@ export const convertisDonneesDescriptionEnLibelles = (
 
 export const resume = derived<
   [typeof leBrouillon],
-  Record<keyof DescriptionServiceV2, string | string[] | undefined>
+  Record<keyof DescriptionServiceV2, string | string[]>
 >([leBrouillon], ([$b]) => convertisDonneesDescriptionEnLibelles($b));

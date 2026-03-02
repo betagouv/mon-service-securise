@@ -56,7 +56,7 @@
     {noteMax}
   </text>
   <foreignObject x="0" y="0" width={taille} height={taille} mask="url(#masque)">
-    <div class="gradient" xmlns="http://www.w3.org/1999/xhtml"></div>
+    <div class="gradient"></div>
   </foreignObject>
   <mask id="masque">
     {#each new Array(avancement).fill(0) as _, i}

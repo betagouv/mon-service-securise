@@ -18,6 +18,12 @@
   $: {
     if (!priorite) priorite = '';
   }
+
+  const metAJour = (e: Event) => {
+    dispatch('input', {
+      priorite: (e.target as HTMLInputElement).value as PrioriteMesure,
+    });
+  };
 </script>
 
 <label for={`priorite-${id}`} class:a-label={label !== ''}>
@@ -29,9 +35,7 @@
     class:avecLibelleOption
     class:vide={!priorite}
     disabled={estLectureSeule}
-    on:input={(e) => {
-      dispatch('input', { priorite: e.target?.value });
-    }}
+    on:input={metAJour}
     on:click|stopPropagation
   >
     <option value="" disabled selected

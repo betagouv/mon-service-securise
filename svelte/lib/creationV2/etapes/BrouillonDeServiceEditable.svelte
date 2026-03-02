@@ -1,10 +1,23 @@
 <script lang="ts">
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import { tick, createEventDispatcher } from 'svelte';
-  import { type MiseAJour } from '../creationV2.api';
+  import type { MiseAJour } from '../creationV2.api';
   import ListeChampTexte from './ListeChampTexte.svelte';
   import ChampOrganisation from '../../ui/ChampOrganisation.svelte';
-  import type { DescriptionServiceV2 } from '../creationV2.types';
+  import type {
+    ActiviteExternalisee,
+    AudienceCible,
+    CategorieDonneesTraitees,
+    DescriptionServiceV2,
+    DureeDysfonctionnementAcceptable,
+    LocalisationDonneesTraitees,
+    OuvertureSysteme,
+    SpecificiteProjet,
+    StatutDeploiement,
+    TypeHebergement,
+    TypeService,
+    VolumetrieDonneesTraitees,
+  } from '../creationV2.types';
 
   export let donnees: DescriptionServiceV2;
   export let seulementNomServiceEditable: boolean;
@@ -67,6 +80,110 @@
   };
 
   let elementHtml: HTMLElement & { errorMessage: string; status: string };
+
+  type BlurEvent = FocusEvent & { target: HTMLInputElement };
+  const metAJour = {
+    localisationDonneesTraitees: async (
+      e: CustomEvent<LocalisationDonneesTraitees | ''>
+    ) => {
+      donnees.localisationDonneesTraitees = e.detail;
+      await champModifie(
+        'localisationDonneesTraitees',
+        donnees.localisationDonneesTraitees
+      );
+    },
+    volumetrieDonneesTraitees: async (
+      e: CustomEvent<VolumetrieDonneesTraitees | ''>
+    ) => {
+      donnees.volumetrieDonneesTraitees = e.detail;
+      await champModifie(
+        'volumetrieDonneesTraitees',
+        donnees.volumetrieDonneesTraitees
+      );
+    },
+    categoriesDonneesTraitees: async (
+      e: CustomEvent<CategorieDonneesTraitees[]>
+    ) => {
+      donnees.categoriesDonneesTraitees = e.detail;
+      await champModifie(
+        'categoriesDonneesTraitees',
+        donnees.categoriesDonneesTraitees
+      );
+    },
+    dureeDysfonctionnementAcceptable: async (
+      e: CustomEvent<DureeDysfonctionnementAcceptable | ''>
+    ) => {
+      donnees.dureeDysfonctionnementAcceptable = e.detail;
+      await champModifie(
+        'dureeDysfonctionnementAcceptable',
+        donnees.dureeDysfonctionnementAcceptable
+      );
+    },
+    audienceCible: async (e: CustomEvent<AudienceCible | ''>) => {
+      donnees.audienceCible = e.detail;
+      await champModifie('audienceCible', donnees.audienceCible);
+    },
+    ouvertureSysteme: async (e: CustomEvent<OuvertureSysteme | ''>) => {
+      donnees.ouvertureSysteme = e.detail;
+      await champModifie('ouvertureSysteme', donnees.ouvertureSysteme);
+    },
+    nomService: (e: CustomEvent<string>) => {
+      donnees.nomService = e.detail;
+      if (donnees.nomService.length === 0 || donnees.nomService.length > 200) {
+        elementHtml.errorMessage =
+          'Le nom du service est obligatoire et ne doit pas dépasser 200 caractères';
+        elementHtml.status = 'error';
+      } else {
+        elementHtml.errorMessage = '';
+        elementHtml.status = 'info';
+      }
+    },
+    statutDeploiement: async (e: CustomEvent<StatutDeploiement>) => {
+      donnees.statutDeploiement = e.detail;
+      await champModifie('statutDeploiement', donnees.statutDeploiement);
+    },
+    presentation: async (e: BlurEvent) => {
+      donnees.presentation = e.target.value;
+      if (
+        donnees.presentation &&
+        donnees.presentation.length >= 1 &&
+        donnees.presentation.length <= 2000
+      )
+        await champModifie('presentation', donnees.presentation);
+    },
+    typeService: async (e: CustomEvent<TypeService[]>) => {
+      donnees.typeService = e.detail;
+      if (donnees.typeService.length >= 1) {
+        await champModifie('typeService', donnees.typeService);
+      }
+    },
+    specificitesProjet: async (e: CustomEvent<SpecificiteProjet[]>) => {
+      donnees.specificitesProjet = e.detail;
+      if (donnees.specificitesProjet.length >= 1)
+        await champModifie('specificitesProjet', donnees.specificitesProjet);
+    },
+    typeHebergement: async (e: CustomEvent<TypeHebergement | ''>) => {
+      donnees.typeHebergement = e.detail;
+
+      donnees.activitesExternalisees =
+        donnees.typeHebergement === 'saas'
+          ? ['administrationTechnique', 'developpementLogiciel']
+          : [];
+
+      await champModifie(
+        'activitesExternalisees',
+        donnees.activitesExternalisees
+      );
+      await champModifie('typeHebergement', donnees.typeHebergement);
+    },
+    activitesExternalisees: async (e: CustomEvent<ActiviteExternalisee[]>) => {
+      donnees.activitesExternalisees = e.detail;
+      await champModifie(
+        'activitesExternalisees',
+        donnees.activitesExternalisees
+      );
+    },
+  };
 </script>
 
 <div class="conteneur-avec-cadre">
@@ -82,20 +199,7 @@
       value={donnees.nomService}
       status="info"
       infoMessage="200 caractères maximum"
-      on:valuechanged={(e) => {
-        donnees.nomService = e.detail;
-        if (
-          donnees.nomService.length === 0 ||
-          donnees.nomService.length > 200
-        ) {
-          elementHtml.errorMessage =
-            'Le nom du service est obligatoire et ne doit pas dépasser 200 caractères';
-          elementHtml.status = 'error';
-        } else {
-          elementHtml.errorMessage = '';
-          elementHtml.status = 'info';
-        }
-      }}
+      on:valuechanged={metAJour.nomService}
       on:blur={async () => {
         if (donnees.nomService.length >= 1 && donnees.nomService.length <= 200)
           await champModifie('nomService', donnees.nomService);
@@ -123,10 +227,7 @@
       value={donnees.statutDeploiement}
       disabled={seulementNomServiceEditable}
       id="statutDeploiement"
-      on:valuechanged={async (e) => {
-        donnees.statutDeploiement = e.detail;
-        await champModifie('statutDeploiement', donnees.statutDeploiement);
-      }}
+      on:valuechanged={metAJour.statutDeploiement}
       placeholderDisabled
     />
 
@@ -146,15 +247,7 @@
       errorMessage={donnees.presentation && donnees.presentation.length > 2000
         ? 'La présentation ne doit pas dépasser 2000 caractères'
         : ''}
-      on:blur={async (e) => {
-        donnees.presentation = e.target.value;
-        if (
-          donnees.presentation &&
-          donnees.presentation.length >= 1 &&
-          donnees.presentation.length <= 2000
-        )
-          await champModifie('presentation', donnees.presentation);
-      }}
+      on:blur={metAJour.presentation}
     />
 
     <div
@@ -199,12 +292,7 @@
       values={donnees.typeService}
       disabled={seulementNomServiceEditable}
       id="typeService"
-      on:valuechanged={async (e) => {
-        donnees.typeService = e.detail;
-        if (donnees.typeService.length >= 1) {
-          await champModifie('typeService', donnees.typeService);
-        }
-      }}
+      on:valuechanged={metAJour.typeService}
       status={!seulementNomServiceEditable && donnees.typeService.length < 1
         ? 'error'
         : 'default'}
@@ -225,14 +313,7 @@
         values={donnees.specificitesProjet}
         disabled={seulementNomServiceEditable}
         id="specificitesProjet"
-        on:valuechanged={async (e) => {
-          donnees.specificitesProjet = e.detail;
-          if (donnees.specificitesProjet.length >= 1)
-            await champModifie(
-              'specificitesProjet',
-              donnees.specificitesProjet
-            );
-        }}
+        on:valuechanged={metAJour.specificitesProjet}
       />
     </div>
 
@@ -249,20 +330,7 @@
         value={donnees.typeHebergement}
         disabled={seulementNomServiceEditable}
         id="typeHebergement"
-        on:valuechanged={async (e) => {
-          donnees.typeHebergement = e.detail;
-
-          donnees.activitesExternalisees =
-            donnees.typeHebergement === 'saas'
-              ? ['administrationTechnique', 'developpementLogiciel']
-              : [];
-
-          await champModifie(
-            'activitesExternalisees',
-            donnees.activitesExternalisees
-          );
-          await champModifie('typeHebergement', donnees.typeHebergement);
-        }}
+        on:valuechanged={metAJour.typeHebergement}
         placeholderDisabled
       />
     </div>
@@ -282,13 +350,7 @@
         )}
         values={donnees.activitesExternalisees}
         id="activitesExternalisees"
-        on:valuechanged={async (e) => {
-          donnees.activitesExternalisees = e.detail;
-          await champModifie(
-            'activitesExternalisees',
-            donnees.activitesExternalisees
-          );
-        }}
+        on:valuechanged={metAJour.activitesExternalisees}
       />
     </div>
   </div>
@@ -310,10 +372,7 @@
       value={donnees.ouvertureSysteme}
       disabled={seulementNomServiceEditable}
       id="ouvertureSysteme"
-      on:valuechanged={async (e) => {
-        donnees.ouvertureSysteme = e.detail;
-        await champModifie('ouvertureSysteme', donnees.ouvertureSysteme);
-      }}
+      on:valuechanged={metAJour.ouvertureSysteme}
       placeholderDisabled
     />
 
@@ -326,10 +385,7 @@
       value={donnees.audienceCible}
       disabled={seulementNomServiceEditable}
       id="audienceCible"
-      on:valuechanged={async (e) => {
-        donnees.audienceCible = e.detail;
-        await champModifie('audienceCible', donnees.audienceCible);
-      }}
+      on:valuechanged={metAJour.audienceCible}
       placeholderDisabled
     />
 
@@ -342,13 +398,7 @@
       value={donnees.dureeDysfonctionnementAcceptable}
       disabled={seulementNomServiceEditable}
       id="dureeDysfonctionnementAcceptable"
-      on:valuechanged={async (e) => {
-        donnees.dureeDysfonctionnementAcceptable = e.detail;
-        await champModifie(
-          'dureeDysfonctionnementAcceptable',
-          donnees.dureeDysfonctionnementAcceptable
-        );
-      }}
+      on:valuechanged={metAJour.dureeDysfonctionnementAcceptable}
       placeholderDisabled
     />
 
@@ -365,13 +415,7 @@
       values={donnees.categoriesDonneesTraitees}
       disabled={seulementNomServiceEditable}
       id="categoriesDonneesTraitees"
-      on:valuechanged={async (e) => {
-        donnees.categoriesDonneesTraitees = e.detail;
-        await champModifie(
-          'categoriesDonneesTraitees',
-          donnees.categoriesDonneesTraitees
-        );
-      }}
+      on:valuechanged={metAJour.categoriesDonneesTraitees}
     />
 
     <div
@@ -405,13 +449,7 @@
       value={donnees.volumetrieDonneesTraitees}
       disabled={seulementNomServiceEditable}
       id="volumetrieDonneesTraitees"
-      on:valuechanged={async (e) => {
-        donnees.volumetrieDonneesTraitees = e.detail;
-        await champModifie(
-          'volumetrieDonneesTraitees',
-          donnees.volumetrieDonneesTraitees
-        );
-      }}
+      on:valuechanged={metAJour.volumetrieDonneesTraitees}
       placeholderDisabled
     />
 
@@ -429,13 +467,7 @@
       value={donnees.localisationDonneesTraitees}
       disabled={seulementNomServiceEditable}
       id="localisationDonneesTraitees"
-      on:valuechanged={async (e) => {
-        donnees.localisationDonneesTraitees = e.detail;
-        await champModifie(
-          'localisationDonneesTraitees',
-          donnees.localisationDonneesTraitees
-        );
-      }}
+      on:valuechanged={metAJour.localisationDonneesTraitees}
     />
   </div>
 </div>
