@@ -4,7 +4,7 @@ import { Referentiel } from '../referentiel.interface.js';
 
 type Constructible<T> = new (
   data: Record<string, unknown>,
-  referentiel: Referentiel
+  referentiel?: Referentiel
 ) => T;
 
 class ElementsConstructibles<
@@ -13,7 +13,7 @@ class ElementsConstructibles<
   constructor(
     ClasseItem: Constructible<T>,
     donnees: { items: Array<Record<string, unknown>> },
-    referentiel: Referentiel
+    referentiel?: Referentiel
   ) {
     super((donneesItem) => new ClasseItem(donneesItem, referentiel), donnees);
   }
