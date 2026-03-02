@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import InformationsService from '../../src/modeles/informationsService.js';
 import Hebergement from '../../src/modeles/partiesPrenantes/hebergement.js';
 import RolesResponsabilites from '../../src/modeles/rolesResponsabilites.js';
@@ -18,37 +17,37 @@ describe("L'ensemble des rôles et responsabilités", () => {
       partiesPrenantes: [{ type: 'Hebergement', nom: 'hébergeur' }],
     });
 
-    expect(rolesResponsabilites.autoriteHomologation).to.equal('Jean Dupont');
-    expect(rolesResponsabilites.fonctionAutoriteHomologation).to.equal('Maire');
-    expect(rolesResponsabilites.delegueProtectionDonnees).to.equal(
+    expect(rolesResponsabilites.autoriteHomologation).toEqual('Jean Dupont');
+    expect(rolesResponsabilites.fonctionAutoriteHomologation).toEqual('Maire');
+    expect(rolesResponsabilites.delegueProtectionDonnees).toEqual(
       'Rémi Fassol'
     );
-    expect(rolesResponsabilites.fonctionDelegueProtectionDonnees).to.equal(
+    expect(rolesResponsabilites.fonctionDelegueProtectionDonnees).toEqual(
       'DSI'
     );
-    expect(rolesResponsabilites.piloteProjet).to.equal('Sylvie Martin');
-    expect(rolesResponsabilites.fonctionPiloteProjet).to.equal(
+    expect(rolesResponsabilites.piloteProjet).toEqual('Sylvie Martin');
+    expect(rolesResponsabilites.fonctionPiloteProjet).toEqual(
       'Responsable métier'
     );
-    expect(rolesResponsabilites.expertCybersecurite).to.equal('Anna Dubreuil');
-    expect(rolesResponsabilites.fonctionExpertCybersecurite).to.equal('RSSI');
-    expect(rolesResponsabilites.acteursHomologation.item(0).role).to.equal(
+    expect(rolesResponsabilites.expertCybersecurite).toEqual('Anna Dubreuil');
+    expect(rolesResponsabilites.fonctionExpertCybersecurite).toEqual('RSSI');
+    expect(rolesResponsabilites.acteursHomologation.item(0).role).toEqual(
       'DSI'
     );
-    expect(rolesResponsabilites.acteursHomologation.item(0).nom).to.equal(
+    expect(rolesResponsabilites.acteursHomologation.item(0).nom).toEqual(
       'John'
     );
-    expect(rolesResponsabilites.acteursHomologation.item(0).fonction).to.equal(
+    expect(rolesResponsabilites.acteursHomologation.item(0).fonction).toEqual(
       'Maire'
     );
-    expect(rolesResponsabilites.partiesPrenantes.items[0]).to.be.an(
+    expect(rolesResponsabilites.partiesPrenantes.items[0]).toBeInstanceOf(
       Hebergement
     );
-    expect(rolesResponsabilites.partiesPrenantes.items[0].nom).to.equal(
+    expect(rolesResponsabilites.partiesPrenantes.items[0].nom).toEqual(
       'hébergeur'
     );
 
-    expect(rolesResponsabilites.toJSON()).to.eql({
+    expect(rolesResponsabilites.toJSON()).toEqual({
       autoriteHomologation: 'Jean Dupont',
       fonctionAutoriteHomologation: 'Maire',
       delegueProtectionDonnees: 'Rémi Fassol',
@@ -68,7 +67,7 @@ describe("L'ensemble des rôles et responsabilités", () => {
       fonctionDelegueProtectionDonnees: 'DSI',
     });
 
-    expect(rolesResponsabilites.descriptionDelegueProtectionDonnees()).to.equal(
+    expect(rolesResponsabilites.descriptionDelegueProtectionDonnees()).toEqual(
       'Jean Dupont (DSI)'
     );
   });
@@ -79,7 +78,7 @@ describe("L'ensemble des rôles et responsabilités", () => {
         partiesPrenantes: [{ type: 'Hebergement', nom: 'Un hébergeur' }],
       });
 
-      expect(rolesResponsabilites.descriptionHebergeur()).to.equal(
+      expect(rolesResponsabilites.descriptionHebergeur()).toEqual(
         'Un hébergeur'
       );
     });
@@ -87,7 +86,7 @@ describe("L'ensemble des rôles et responsabilités", () => {
     it("retourne une valeur par défaut lorsque l'hébergement n'est pas présent", () => {
       const rolesResponsabilites = new RolesResponsabilites();
 
-      expect(rolesResponsabilites.descriptionHebergeur()).to.equal(
+      expect(rolesResponsabilites.descriptionHebergeur()).toEqual(
         'Hébergeur non renseigné'
       );
     });
@@ -95,7 +94,7 @@ describe("L'ensemble des rôles et responsabilités", () => {
 
   it('détermine le statut de saisie', () => {
     const rolesResponsabilites = new RolesResponsabilites();
-    expect(rolesResponsabilites.statutSaisie()).to.equal(
+    expect(rolesResponsabilites.statutSaisie()).toEqual(
       InformationsService.A_SAISIR
     );
   });
@@ -108,7 +107,7 @@ describe("L'ensemble des rôles et responsabilités", () => {
         ],
       });
 
-      expect(rolesResponsabilites.descriptionStructureDeveloppement()).to.equal(
+      expect(rolesResponsabilites.descriptionStructureDeveloppement()).toEqual(
         'Une structure'
       );
     });
@@ -116,7 +115,7 @@ describe("L'ensemble des rôles et responsabilités", () => {
     it("reste robuste lorsque la structure n'est pas présent", () => {
       const rolesResponsabilites = new RolesResponsabilites();
 
-      expect(rolesResponsabilites.descriptionStructureDeveloppement()).to.equal(
+      expect(rolesResponsabilites.descriptionStructureDeveloppement()).toEqual(
         ''
       );
     });

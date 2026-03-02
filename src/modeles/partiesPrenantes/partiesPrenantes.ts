@@ -7,7 +7,7 @@ import PartiePrenanteSpecifique from './partiePrenanteSpecifique.js';
 import SecuriteService from './securiteService.js';
 import { fabriquePartiePrenante } from './fabriquePartiePrenante.js';
 
-type DonneesPartiesPrenantes = {
+export type DonneesPartiesPrenantes = {
   partiesPrenantes: Array<DonneesPartiePrenante & { type: string }>;
 };
 
