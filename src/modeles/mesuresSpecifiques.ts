@@ -38,6 +38,7 @@ type ParStatutEtCategorie = Record<
 
 class MesuresSpecifiques extends ElementsConstructibles<MesureSpecifique> {
   private readonly modelesDisponiblesDeMesureSpecifique: ModelesDisponiblesMesureSpecifique;
+  private readonly referentiel: Referentiel;
 
   constructor(
     donnees: Partial<DonneesMesuresSpecifiques> = {},
@@ -54,6 +55,7 @@ class MesuresSpecifiques extends ElementsConstructibles<MesureSpecifique> {
     super(MesureSpecifique, { items: mesuresCompletees }, referentiel);
     this.modelesDisponiblesDeMesureSpecifique =
       modelesDisponiblesDeMesureSpecifique;
+    this.referentiel = referentiel;
   }
 
   static completeMesuresSpecifiques(

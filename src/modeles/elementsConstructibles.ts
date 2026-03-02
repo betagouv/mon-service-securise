@@ -15,11 +15,7 @@ class ElementsConstructibles<
     donnees: { items: Array<Record<string, unknown>> },
     referentiel: Referentiel
   ) {
-    super(
-      (donneesItem) => new ClasseItem(donneesItem, referentiel),
-      donnees,
-      referentiel
-    );
+    super((donneesItem) => new ClasseItem(donneesItem, referentiel), donnees);
   }
 }
 
