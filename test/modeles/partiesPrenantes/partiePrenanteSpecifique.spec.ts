@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import PartiePrenanteSpecifique from '../../../src/modeles/partiesPrenantes/partiePrenanteSpecifique.js';
 
 describe('Une partie prenante spécifique', () => {
@@ -6,7 +5,7 @@ describe('Une partie prenante spécifique', () => {
     const partiePrenanteSpecifique = new PartiePrenanteSpecifique({
       nom: 'partie',
     });
-    expect(partiePrenanteSpecifique.toJSON()).to.eql({
+    expect(partiePrenanteSpecifique.toJSON()).toEqual({
       type: 'PartiePrenanteSpecifique',
       nom: 'partie',
     });
