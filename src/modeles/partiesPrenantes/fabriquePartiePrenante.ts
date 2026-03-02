@@ -4,8 +4,9 @@ import MaintenanceService from './maintenanceService.js';
 import PartiePrenanteSpecifique from './partiePrenanteSpecifique.js';
 import SecuriteService from './securiteService.js';
 import { ErreurTypeInconnu } from '../../erreurs.js';
+import PartiePrenante from './partiePrenante.js';
 
-const partiesPrenantesAutorises = [
+const partiesPrenantesAutorises: Array<typeof PartiePrenante> = [
   DeveloppementFourniture,
   Hebergement,
   MaintenanceService,
@@ -14,7 +15,7 @@ const partiesPrenantesAutorises = [
 ];
 
 export const fabriquePartiePrenante = {
-  cree: (donnees) => {
+  cree: (donnees: Record<string, unknown>) => {
     const { type } = donnees;
 
     if (!partiesPrenantesAutorises.some((classe) => classe.name === type)) {
@@ -23,7 +24,7 @@ export const fabriquePartiePrenante = {
 
     const ClassePartiePrenante = partiesPrenantesAutorises.find(
       (classe) => classe.name === type
-    );
+    )!;
     return new ClassePartiePrenante(donnees);
   },
 };
