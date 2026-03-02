@@ -33,7 +33,7 @@ export type QuestionBindeeSurBrouillon = {
 
 export type EtapeGlobale = {
   composant: typeof SvelteComponent<{}>;
-  clesPropriete: [];
+  clesPropriete: Array<keyof BrouillonServiceV2>;
   explications: [];
   avecAvanceRapide: false;
 };

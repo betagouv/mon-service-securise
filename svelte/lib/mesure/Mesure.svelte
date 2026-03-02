@@ -1,7 +1,11 @@
 <script lang="ts">
   import Formulaire from '../ui/Formulaire.svelte';
   import SuppressionMesureSpecifique from './suppression/SuppressionMesureSpecifique.svelte';
-  import type { IdService } from '../tableauDesMesures/tableauDesMesures.d';
+  import type {
+    IdService,
+    MesureGenerale,
+    MesureSpecifique,
+  } from '../tableauDesMesures/tableauDesMesures.d';
 
   import { configurationAffichage, store } from './mesure.store';
   import {
@@ -67,7 +71,7 @@
     rafraichisListeMesure();
     if (statutInitial !== $store.mesureEditee.mesure.statut) {
       toasterStore.afficheToastChangementStatutMesure(
-        $store.mesureEditee.mesure,
+        $store.mesureEditee.mesure as MesureGenerale | MesureSpecifique,
         statuts
       );
     }
@@ -93,11 +97,18 @@
   };
 
   $: doitAfficherTiroirModeleMesureSpecifique =
-    ongletActif === 'mesure' && !!$store.mesureEditee.mesure.idModele;
+    ongletActif === 'mesure' &&
+    'idModele' in $store.mesureEditee.mesure &&
+    !!$store.mesureEditee.mesure.idModele;
 
   let etapeCouranteModeleMesureSpecifique: 1 | 2 = 1;
 
   const supprimeMesureSpecifiqueAssocieeAuModele = async () => {
+    if (
+      !('idModele' in $store.mesureEditee.mesure) ||
+      !$store.mesureEditee.mesure.idModele
+    )
+      return;
     enCoursEnvoi = true;
     const nomMesure = $store.mesureEditee.mesure.description;
     try {
@@ -137,8 +148,9 @@
       cetOnglet="planAction"
       labelOnglet="Plan d'action"
       sansBordureEnBas
-      badge={!planDActionDisponible($store.mesureEditee.mesure.statut) &&
-        'info'}
+      badge={!planDActionDisponible($store.mesureEditee.mesure.statut)
+        ? 'info'
+        : 0}
     />
     <Onglet
       bind:ongletActif

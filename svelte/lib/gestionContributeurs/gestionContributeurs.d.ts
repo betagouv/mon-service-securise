@@ -69,9 +69,11 @@ export const enDroitsSurRubrique = (
   }
 };
 
+type Droits = Record<Rubrique, Permission> & { estProprietaire?: boolean };
+
 export type Invitation = {
   utilisateur: Utilisateur;
-  droits: Record<Rubrique, Permission> & { estProprietaire: boolean };
+  droits: Droits;
 };
 
 export type IdAutorisation = string;
@@ -80,5 +82,5 @@ export type Autorisation = {
   idAutorisation: IdAutorisation;
   idUtilisateur: IdUtilisateur;
   resumeNiveauDroit: ResumeNiveauDroit;
-  droits: Record<Rubrique, Permission>;
+  droits: Droits;
 };

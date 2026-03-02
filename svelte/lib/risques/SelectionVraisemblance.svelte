@@ -5,7 +5,7 @@
   } from './risques.d';
 
   export let niveauVraisemblance: IdentifiantVraisemblance;
-  export let estLectureSeule;
+  export let estLectureSeule: boolean | undefined;
   export let referentielVraisemblances: ReferentielVraisemblances;
   export let avecLibelleOption: boolean = false;
 </script>

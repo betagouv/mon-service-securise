@@ -16,6 +16,7 @@
   import type { BrouillonServiceV2 } from './creationV2.types';
   import { etapeCourante } from './etapes/etapeCourante.store';
   import { toasterStore } from '../ui/stores/toaster.store';
+  import type { AxiosError } from 'axios';
 
   export let entite: Entite | undefined;
   let enCoursDeChargement = false;
@@ -65,9 +66,10 @@
       const idService = await finaliseBrouillonService($leBrouillon.id!);
       window.location.href = `/service/${idService}/mesures?succesCreationService=true`;
     } catch (e) {
+      const x = e as AxiosError<{ erreur: { code: string } }>;
       if (
-        e.response?.status === 422 &&
-        e.response?.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT'
+        x.response?.status === 422 &&
+        x.response?.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT'
       ) {
         navigationStore.retourneEtapeNomService();
         toasterStore.erreur(

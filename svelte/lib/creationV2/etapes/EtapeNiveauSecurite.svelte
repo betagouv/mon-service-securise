@@ -61,7 +61,8 @@
   {niveauDeSecuriteMinimal}
   on:champModifie={async (e) => {
     $leBrouillon.niveauSecurite = e.detail.niveauSecurite;
-    await metsAJourBrouillonService($leBrouillon.id, e.detail);
+    if ($leBrouillon.id)
+      await metsAJourBrouillonService($leBrouillon.id, e.detail);
   }}
 />
 

@@ -17,7 +17,7 @@
   export let etapeCouranteModeleMesureSpecifique: 1 | 2;
 
   let mesureSpecifique: MesureSpecifique;
-  $: mesureSpecifique = $store.mesureEditee.mesure;
+  $: mesureSpecifique = $store.mesureEditee.mesure as MesureSpecifique;
   $: estProprietaireDuModele =
     mesureSpecifique.idModele &&
     $modelesMesureSpecifique.find((m) => m.id === mesureSpecifique.idModele);

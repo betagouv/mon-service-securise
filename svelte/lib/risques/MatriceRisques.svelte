@@ -1,9 +1,9 @@
 <script lang="ts">
-  import {
-    type ReferentielGravites,
-    type ReferentielVraisemblances,
-    type Risque,
-    type MatriceNiveauxRisque,
+  import type {
+    ReferentielGravites,
+    ReferentielVraisemblances,
+    Risque,
+    MatriceNiveauxRisque,
   } from './risques.d';
 
   export let risques: Risque[];
@@ -37,7 +37,7 @@
       const x = positionVraisemblance(risque) - 1;
       const y = Math.abs(4 - positionGravite(risque));
       resultat[y][x] = resultat[y][x] || [];
-      resultat[y][x].push(risque);
+      resultat[y][x]!.push(risque);
     });
     return resultat;
   };

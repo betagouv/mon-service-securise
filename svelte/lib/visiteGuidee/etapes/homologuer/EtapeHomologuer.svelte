@@ -1,24 +1,23 @@
 <script lang="ts">
   import ModaleSousEtape from '../../kit/ModaleSousEtape.svelte';
   import { onMount } from 'svelte';
+  import type { SousEtape } from '../../kit/ModaleSousEtape';
 
   let cibleNouvelleHomologation: HTMLElement;
   let cibleTelechargement: HTMLElement;
+
+  let sousEtapes: SousEtape[] = [];
   onMount(() => {
     cibleNouvelleHomologation = document.getElementById(
       'commencer-homologation'
     )!;
     cibleTelechargement = document.getElementById('voir-telechargement')!;
-  });
-</script>
-
-{#if cibleNouvelleHomologation && cibleTelechargement}
-  <ModaleSousEtape
-    sousEtapes={[
+    sousEtapes = [
       {
         cible: cibleNouvelleHomologation,
         callbackInitialeCible: async () => {
-          document.getElementById('commencer-homologation').inert = true;
+          const bouton = document.getElementById('commencer-homologation');
+          if (bouton) bouton.inert = true;
           document.body.dispatchEvent(
             new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
           );
@@ -42,10 +41,11 @@
           document.body.dispatchEvent(
             new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
           );
-          document.getElementsByClassName('tiroir')[0].style.zIndex = '10001';
-          document.getElementsByClassName(
-            'fermeture-tiroir'
-          )[0].disabled = true;
+          const tiroir = document.querySelector<HTMLDivElement>('.tiroir');
+          if (tiroir) tiroir.style.zIndex = '10001';
+          const boutonFermeture =
+            document.querySelector<HTMLButtonElement>('.fermeture-tiroir');
+          if (boutonFermeture) boutonFermeture.disabled = true;
           cible.inert = true;
         },
         callbackFinaleCible: async () => {
@@ -61,6 +61,10 @@
         animation: '/statique/assets/images/visiteGuidee/pdf.gif',
         delaiAvantAffichage: 300,
       },
-    ]}
-  />
+    ];
+  });
+</script>
+
+{#if cibleNouvelleHomologation && cibleTelechargement}
+  <ModaleSousEtape {sousEtapes} />
 {/if}

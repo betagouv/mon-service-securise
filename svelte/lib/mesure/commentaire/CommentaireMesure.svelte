@@ -2,7 +2,7 @@
   import { createEventDispatcher, onMount } from 'svelte';
 
   import StarterKit from '@tiptap/starter-kit';
-  import Mention from '@tiptap/extension-mention';
+  import Mention, { MentionPluginKey } from '@tiptap/extension-mention';
   import Placeholder from '@tiptap/extension-placeholder';
   import type { Readable } from 'svelte/store';
   import suggestion from './suggestion';
@@ -29,6 +29,7 @@
         handleKeyDown: (vue, evenement) => {
           if (
             evenement.key === 'Enter' &&
+            // @ts-expect-error le plugin `mention` ajoute cet état
             !vue.state.mention$.active &&
             !evenement.shiftKey &&
             !evenement.altKey &&

@@ -4,6 +4,7 @@
   import CheckboxIllustree from './CheckboxIllustree.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
+  import type { TypeService } from '../../creationV2.types';
 
   export let estComplete: boolean;
 

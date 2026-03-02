@@ -2,7 +2,6 @@
   import donneesNiveauxDeSecurite from '../niveauxDeSecurite/donneesNiveauxDeSecurite.js';
   import Infobulle from '../ui/Infobulle.svelte';
   import type { IdNiveauDeSecurite } from '../ui/types';
-  import { type MiseAJour } from './creationV2.api';
   import { ordreDesNiveaux } from '../niveauxDeSecurite/niveauxDeSecurite.d';
   import { createEventDispatcher } from 'svelte';
   import ResumeNiveauSecurite from '../ui/ResumeNiveauSecurite.svelte';
@@ -10,7 +9,9 @@
   export let niveauSelectionne: IdNiveauDeSecurite | '';
   export let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
 
-  const dispatch = createEventDispatcher<{ champModifie: MiseAJour }>();
+  const dispatch = createEventDispatcher<{
+    champModifie: { niveauSecurite: IdNiveauDeSecurite };
+  }>();
 
   $: estNiveauTropBas = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] < ordreDesNiveaux[niveauDeSecuriteMinimal];

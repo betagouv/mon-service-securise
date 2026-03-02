@@ -1,12 +1,15 @@
 <script lang="ts">
   import ModaleSousEtape from '../../kit/ModaleSousEtape.svelte';
   import { onMount } from 'svelte';
+  import type { SousEtape } from '../../kit/ModaleSousEtape';
 
   let ciblePremiereMesure: HTMLDivElement;
   let cibleOnglets: HTMLDivElement;
   let cibleGererContributeurs: HTMLElement;
   let cibleTiroirMesure: HTMLDivElement;
   let cibleIndiceCyber: HTMLDivElement;
+
+  let sousEtapes: SousEtape[] = [];
   onMount(() => {
     document.body.dispatchEvent(
       new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
@@ -24,12 +27,8 @@
     cibleIndiceCyber = document.getElementsByClassName(
       'conteneur-indice-cyber'
     )[0]! as HTMLDivElement;
-  });
-</script>
 
-{#if ciblePremiereMesure && cibleOnglets && cibleGererContributeurs && cibleTiroirMesure && cibleIndiceCyber}
-  <ModaleSousEtape
-    sousEtapes={[
+    sousEtapes = [
       {
         cible: ciblePremiereMesure,
         callbackInitialeCible: async (cible) => {
@@ -49,7 +48,8 @@
       {
         cible: cibleOnglets,
         callbackInitialeCible: async (cible) => {
-          const onglets = cible.querySelectorAll('button.onglet');
+          const onglets =
+            cible.querySelectorAll<HTMLDivElement>('button.onglet');
           for (let i = 0; i < onglets.length; i++) {
             onglets[i].inert = true;
           }
@@ -68,19 +68,24 @@
         cible: cibleGererContributeurs,
         callbackInitialeCible: async (cible) => {
           cible.inert = true;
-          document.getElementsByClassName(
-            'inviter-contributeurs'
-          )[0].style.display = 'flex';
+          const invitation = document.querySelectorAll<HTMLDivElement>(
+            '.inviter-contributeurs'
+          )[0];
+          invitation.style.display = 'flex';
           document.body.dispatchEvent(
             new CustomEvent('jquery-affiche-tiroir-contributeurs-visite-guidee')
           );
-          document.getElementsByClassName('tiroir')[0].style.zIndex = '10001';
+          const tiroir =
+            document.querySelectorAll<HTMLDivElement>('.tiroir')[0];
+          tiroir.style.zIndex = '10001';
         },
         callbackFinaleCible: async () => {
           document
             .getElementsByClassName('fermeture-tiroir')[0]
             .dispatchEvent(new Event('click'));
-          document.getElementsByClassName('tiroir')[0].style.zIndex = '1001';
+          const tiroir =
+            document.querySelectorAll<HTMLDivElement>('.tiroir')[0];
+          tiroir.style.zIndex = '1001';
         },
         positionnementModale: 'HautDroite',
         titre: 'Collaborez avec votre équipe',
@@ -95,13 +100,14 @@
           document
             .getElementsByClassName('titre-mesure')[0]
             .dispatchEvent(new Event('click'));
-          document.querySelector(
+          const bouton = document.querySelector<HTMLButtonElement>(
             '#conteneur-mesure .conteneur-actions button'
-          ).disabled = true;
-          document.getElementsByClassName(
-            'fermeture-tiroir'
-          )[0].disabled = true;
-          const onglets = document.querySelectorAll(
+          );
+          if (bouton) bouton.disabled = true;
+          const boutonFermeture =
+            document.querySelector<HTMLButtonElement>('.fermeture-tiroir');
+          if (boutonFermeture) boutonFermeture.disabled = true;
+          const onglets = document.querySelectorAll<HTMLDivElement>(
             '#conteneur-mesure .conteneur-onglet .onglet'
           );
           for (let i = 0; i < onglets.length; i++) {
@@ -111,7 +117,7 @@
             const ongletPlanAction = document.querySelector(
               '#conteneur-mesure .conteneur-onglet .onglet:nth-of-type(2)'
             );
-            ongletPlanAction.dispatchEvent(new Event('click'));
+            ongletPlanAction?.dispatchEvent(new Event('click'));
           }, 300);
         },
         delaiAvantAffichage: 300,
@@ -132,13 +138,14 @@
           document
             .getElementsByClassName('titre-mesure')[0]
             .dispatchEvent(new Event('click'));
-          document.querySelector(
+          const bouton = document.querySelector<HTMLButtonElement>(
             '#conteneur-mesure .conteneur-actions button'
-          ).disabled = true;
-          document.getElementsByClassName(
-            'fermeture-tiroir'
-          )[0].disabled = true;
-          const onglets = document.querySelectorAll(
+          );
+          if (bouton) bouton.disabled = true;
+          const boutonFermeture =
+            document.querySelector<HTMLButtonElement>('.fermeture-tiroir');
+          if (boutonFermeture) boutonFermeture.disabled = true;
+          const onglets = document.querySelectorAll<HTMLDivElement>(
             '#conteneur-mesure .conteneur-onglet .onglet'
           );
           for (let i = 0; i < onglets.length; i++) {
@@ -148,7 +155,7 @@
             const ongletActivites = document.querySelector(
               '#conteneur-mesure .conteneur-onglet .onglet:nth-of-type(3)'
             );
-            ongletActivites.dispatchEvent(new Event('click'));
+            ongletActivites?.dispatchEvent(new Event('click'));
           }, 300);
         },
         delaiAvantAffichage: 300,
@@ -174,6 +181,10 @@
           'Mettez en œuvre les mesures proposées et obtenez une évaluation indicative du niveau de sécurisation de votre service.',
         animation: '/statique/assets/images/visiteGuidee/indice_cyber.gif',
       },
-    ]}
-  />
+    ];
+  });
+</script>
+
+{#if ciblePremiereMesure && cibleOnglets && cibleGererContributeurs && cibleTiroirMesure && cibleIndiceCyber}
+  <ModaleSousEtape {sousEtapes} />
 {/if}

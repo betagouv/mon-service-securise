@@ -1,5 +1,6 @@
 <script lang="ts">
   import type {
+    Droits,
     Invitation,
     Permission,
     Rubrique,
@@ -29,9 +30,7 @@
     utilisateur: enPersonnalisation!,
     droits: invitations[enPersonnalisation!.email].droits,
   });
-  const personnaliseLesDroitsInvite = (
-    personnalises: Record<Rubrique, Permission> & { estProprietaire: boolean }
-  ) => {
+  const personnaliseLesDroitsInvite = (personnalises: Droits) => {
     personnalises.estProprietaire = false;
     invitations[enPersonnalisation!.email].droits = personnalises;
     invitations = invitations;

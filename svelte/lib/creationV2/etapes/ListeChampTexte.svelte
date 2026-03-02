@@ -12,6 +12,10 @@
     suppression: number;
     ajout: void;
   }>();
+
+  const metAJour = (index: number) => (e: CustomEvent<string>) => {
+    valeurs[index] = e.detail;
+  };
 </script>
 
 {#each valeurs as valeur, index}
@@ -33,9 +37,7 @@
       errorMessage={estInvalide
         ? `Le champ ne doit pas dépasser ${limiteTaille} caractères`
         : ''}
-      on:valuechanged={(e) => {
-        valeur = e.detail;
-      }}
+      on:valuechanged={metAJour(index)}
       on:blur
     />
     <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->

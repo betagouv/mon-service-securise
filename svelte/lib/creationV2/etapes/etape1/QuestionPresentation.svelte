@@ -11,6 +11,10 @@
   $: estComplete = ($leBrouillon.presentation?.length || 0) <= 2000;
   $: estInvalide =
     $leBrouillon.presentation && $leBrouillon.presentation.length > 2000;
+
+  const metAJourPresentation = (e: CustomEvent<string>) => {
+    $leBrouillon.presentation = e.detail;
+  };
 </script>
 
 <label for="presentation" class="titre-question">
@@ -24,9 +28,7 @@
   errorMessage={estInvalide
     ? 'La présentation ne doit pas dépasser 2000 caractères'
     : ''}
-  on:valuechanged={(e) => {
-    $leBrouillon.presentation = e.detail;
-  }}
+  on:valuechanged={metAJourPresentation}
   on:blur={() =>
     emetEvenement('champModifie', {
       presentation: $leBrouillon.presentation,

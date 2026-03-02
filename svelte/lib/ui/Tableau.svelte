@@ -8,7 +8,7 @@
     options: OptionsListeDeroulanteRiche<any>;
   };
 
-  export type ConfigurationSelection = {
+  export type ConfigurationSelection<T> = {
     texteIndicatif: {
       vide: string;
       unique: string;
@@ -31,7 +31,7 @@
 
   export let configurationRecherche: ConfigurationRecherche | null = null;
   export let configurationFiltrage: ConfigurationFiltrage | null = null;
-  export let configurationSelection: ConfigurationSelection | null = null;
+  export let configurationSelection: ConfigurationSelection<T> | null = null;
   export let selection: string[] = [];
   export let preSelectionImmuable: string[] = [];
   export let champIdentifiantLigne: string = '';
@@ -59,7 +59,7 @@
 
     if (configurationRecherche && recherche)
       donneesFiltrees = donneesFiltrees.filter((donnee) =>
-        configurationRecherche.champsRecherche.some((champ) =>
+        configurationRecherche!.champsRecherche.some((champ) =>
           donnee[champ]?.toLowerCase().includes(recherche.toLowerCase())
         )
       );
@@ -94,12 +94,13 @@
       videSelectionSansReactivite();
     }
   }
+
   const basculeSelectionTous = () => {
     if (!configurationSelection) return;
     if (toutEstSelectionne) selection = [];
     else
       selection = donneesFiltreesSelectionnables.map(
-        (donnee) => donnee[configurationSelection.champSelection]
+        (donnee) => donnee[configurationSelection!.champSelection]
       );
   };
 </script>

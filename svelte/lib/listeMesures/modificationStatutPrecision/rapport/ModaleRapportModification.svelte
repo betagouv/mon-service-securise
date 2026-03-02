@@ -10,12 +10,14 @@
     ReferentielTypesService,
   } from '../../../ui/types.d';
   import { encode } from 'html-entities';
+  import type { ServiceAssocieAUneMesure } from '../../listeMesures.d';
 
   export let referentielStatuts: ReferentielStatut;
   export let referentielTypesService: ReferentielTypesService;
 
   let elementModale: Modale;
 
+  let servicesAvecMesure: ServiceAssocieAUneMesure[];
   $: servicesAvecMesure = $modaleRapportStore.modeleMesureGenerale
     ? $servicesAvecMesuresAssociees
         .filter((s) => $modaleRapportStore.idServicesModifies?.includes(s.id))

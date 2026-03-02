@@ -4,11 +4,12 @@
   import type { StatutMesure } from '../../../modeles/modeleMesure';
   import TableauServicesAssocies from '../../servicesAssocies/TableauServicesAssocies.svelte';
   import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
+  import type { ServiceAssocieAUneMesure } from '../../listeMesures.d';
 
   export let statuts: ReferentielStatut;
   export let statutSelectionne: StatutMesure | '';
   export let precision: string;
-  export let servicesConcernes;
+  export let servicesConcernes: ServiceAssocieAUneMesure[];
 
   const intitulePluralise =
     servicesConcernes.length > 1

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type MiseAJour } from './creationV2.api';
+  import type { MiseAJour } from './creationV2.api';
   import { createEventDispatcher } from 'svelte';
   import JaugeDeProgression from './JaugeDeProgression.svelte';
   import { navigationStore } from './etapes/navigation.store';
@@ -8,7 +8,7 @@
   import Switch from '../ui/Switch.svelte';
   import Toaster from '../ui/Toaster.svelte';
 
-  export let enCoursDeChargement;
+  export let enCoursDeChargement: boolean;
   export let titreAssistant: string;
   export let titreBoutonFinalise: string;
   let questionCouranteEstComplete = false;

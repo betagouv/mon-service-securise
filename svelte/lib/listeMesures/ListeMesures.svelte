@@ -188,7 +188,8 @@
 
   const estModeleMesureGenerale = (
     modeleMesure: ModeleDeMesure
-  ): modeleMesure is ModeleMesureGenerale => modeleMesure.type === 'generale';
+  ): modeleMesure is Extract<ModeleDeMesure, { type: 'generale' }> =>
+    modeleMesure.type === 'generale';
 
   const afficheDetailServiceAssocies = async (modeleMesure: ModeleDeMesure) => {
     await afficheModaleDetailsMesure(modeleMesure);

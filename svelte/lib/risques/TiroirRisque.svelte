@@ -37,7 +37,7 @@
   export let referentielCategories: ReferentielCategories;
   export let referentielGravites: ReferentielGravites;
   export let referentielVraisemblances: ReferentielVraisemblances;
-  export let estLectureSeule;
+  export let estLectureSeule: boolean;
   export let idService: string;
   export let modeAffichageTiroir: ModeAffichageTiroir = '';
   let enCoursEnvoi: boolean = false;
@@ -243,7 +243,7 @@
                 actif={!risque.desactive}
                 id="switch-{risque.id}-tiroir"
                 on:change={(e) => {
-                  risque.desactive = !e.detail;
+                  if (risque) risque.desactive = !e.detail;
                 }}
               />
             {/if}

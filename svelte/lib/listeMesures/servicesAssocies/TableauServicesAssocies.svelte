@@ -2,6 +2,7 @@
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import Tableau from '../../ui/Tableau.svelte';
   import type {
+    IdTypeService,
     ReferentielStatut,
     ReferentielTypesService,
   } from '../../ui/types.d';
@@ -55,11 +56,15 @@
       {/if}
     {:else if colonne.cle === 'typeService' && referentielTypesService}
       <div class="type-service">
-        <span
-          >{donnee.typeService
-            .map((t) => referentielTypesService[t].description)
-            .join(', ')}</span
-        >
+        <span>
+          <!-- On ne comprend pas pourquoi on doit assert ici, car on s'assure que `referentielTypesService` est défini au dessus -->
+          {donnee.typeService
+            .map((t) => {
+              if (!referentielTypesService) return '';
+              return referentielTypesService[t].description;
+            })
+            .join(', ')}
+        </span>
       </div>
     {:else if colonne.cle === 'niveauSecurite'}
       <div class="besoin-securite">

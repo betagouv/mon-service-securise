@@ -1,5 +1,6 @@
 <script lang="ts">
   import type {
+    Droits,
     IdUtilisateur,
     Permission,
     Rubrique,
@@ -11,9 +12,7 @@
   import OnOff from '../kit/OnOff.svelte';
 
   export let utilisateur: Utilisateur;
-  export let droitsOriginaux: Record<Rubrique, Permission> & {
-    estProprietaire: boolean;
-  };
+  export let droitsOriginaux: Droits;
   $: redefinis = { ...droitsOriginaux };
 
   let rubriques: { id: Rubrique; nom: string; droit: Permission }[];
@@ -30,7 +29,7 @@
   ];
 
   const dispatch = createEventDispatcher<{
-    valider: Record<IdUtilisateur, Permission>;
+    valider: Droits;
     annuler: null;
   }>();
 </script>

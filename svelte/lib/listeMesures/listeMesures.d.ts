@@ -5,6 +5,12 @@ import type {
   ReferentielStatut,
 } from '../ui/types.d';
 import type { VersionService } from '../../../src/modeles/versionService';
+import type { StatutMesure } from '../modeles/modeleMesure';
+import {
+  CategorieMesure,
+  Referentiel,
+  ReferentielTypesService,
+} from '../ui/types.d';
 
 declare global {
   interface HTMLElementEventMap {
@@ -25,7 +31,7 @@ export type RapportTeleversementProps = {
 };
 
 export type PersonnalisationMesure = {
-  statut?: string;
+  statut?: StatutMesure;
   modalites?: string;
   id?: string;
   type?: 'generale' | 'specifique';

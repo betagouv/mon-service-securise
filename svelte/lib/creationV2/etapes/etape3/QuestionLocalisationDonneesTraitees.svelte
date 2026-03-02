@@ -24,12 +24,16 @@
     UE: 'UE.svg',
     horsUE: 'horsUE.svg',
   };
+
+  const localisations = Object.entries(
+    questionsV2.localisationDonneesTraitees
+  ) as Array<[LocalisationDonneesTraitees, { nom: string }]>;
 </script>
 
 <label for="localisations-donnees-traitees" class="titre-question">
   Où sont localisées les données traitées ?*
   <span class="indication">Sélectionnez une réponse</span>
-  {#each Object.entries(questionsV2.localisationDonneesTraitees) as [idType, { nom }]}
+  {#each localisations as [idType, { nom }]}
     {@const illustration = `/statique/assets/images/localisationDonneesTraitees/${illustrations[idType]}`}
     <Radio
       id={idType}

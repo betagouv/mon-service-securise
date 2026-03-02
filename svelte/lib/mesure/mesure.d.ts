@@ -19,7 +19,7 @@ export type MesureProps = {
 
 type IdUtilisateur = string;
 type PlanAction = {
-  priorite?: string;
+  priorite?: PrioriteMesure;
   echeance?: string;
   responsables?: IdUtilisateur[];
 };

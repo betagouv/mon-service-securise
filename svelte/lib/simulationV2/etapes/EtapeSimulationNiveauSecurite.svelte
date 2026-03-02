@@ -4,7 +4,7 @@
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import { leBrouillon } from '../../creationV2/etapes/brouillon.store';
   import NiveauDeSecuriteEditable from '../../creationV2/NiveauDeSecuriteEditable.svelte';
-  import { type MiseAJour } from '../../creationV2/creationV2.api';
+  import type { MiseAJour } from '../../creationV2/creationV2.api';
   import {
     metsAJourSimulation,
     niveauSecuriteMinimalRequis,
@@ -35,8 +35,11 @@
   });
 
   const metsAJour = async (e: CustomEvent<MiseAJour>) => {
-    $leBrouillon.niveauSecurite = e.detail.niveauSecurite;
-    await metsAJourSimulation($leBrouillon.id!, e.detail);
+    const niveau = e.detail.niveauSecurite;
+    if (niveau !== undefined) {
+      $leBrouillon.niveauSecurite = niveau;
+      await metsAJourSimulation($leBrouillon.id!, e.detail);
+    }
   };
 
   const niveauEstConformeAuMinimumRequis = (

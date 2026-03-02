@@ -9,7 +9,10 @@
     metsAJourDescriptionService,
     niveauSecuriteMinimalRequis,
   } from './decrireV2.api';
-  import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
+  import {
+    type NiveauSecurite,
+    questionsV2,
+  } from '../../../donneesReferentielMesuresV2.js';
   import { toasterStore } from '../ui/stores/toaster.store';
   import type { UUID } from '../typesBasiquesSvelte';
   import ResumeNiveauSecurite from '../ui/ResumeNiveauSecurite.svelte';
@@ -27,6 +30,7 @@
   import type { DonneesDescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2';
   import type { MiseAJour } from '../creationV2/creationV2.api';
   import { donneesDeServiceSontCompletes } from '../creationV2/etapes/brouillonEstComplet.store';
+  import type { AxiosError } from 'axios';
 
   const ChampsImpactantsLeNiveauDeSecurite: (keyof DonneesDescriptionServiceV2)[] =
     [
@@ -96,6 +100,8 @@
   };
 
   const enregistreDescriptionService = async () => {
+    if (descriptionEditable.niveauSecurite === '') return;
+
     const niveauActuelInsuffisant =
       questionsV2.niveauSecurite[descriptionEditable.niveauSecurite].position <
       questionsV2.niveauSecurite[niveauDeSecuriteMinimal].position;
@@ -112,7 +118,7 @@
 
       const messageSucces = majForceeBesoinsSecurite
         ? miseAJourForceeReussie(
-            copiePourRestauration.niveauSecurite,
+            copiePourRestauration.niveauSecurite as NiveauSecurite,
             descriptionEditable.niveauSecurite
           )
         : 'Les informations de votre service ont été mises à jour avec succès.';
@@ -121,9 +127,10 @@
       copiePourRestauration = structuredClone(descriptionEditable);
       retourAuModeResume();
     } catch (e) {
+      const x = e as AxiosError<{ erreur: { code: string } }>;
       if (
-        e.response?.status === 422 &&
-        e.response?.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT'
+        x.response?.status === 422 &&
+        x.response?.data?.erreur?.code === 'NOM_SERVICE_DEJA_EXISTANT'
       ) {
         const elementRacine: HTMLElement & {
           status: string;
@@ -168,20 +175,22 @@
     </div>
   {:else if mode === 'Résumé'}
     {@const niveau = descriptionEditable.niveauSecurite}
-    <div class="conteneur-besoins-securite">
-      <div class="conteneur-titre">
-        <h5>{nomNiveauDeSecurite(niveau)}</h5>
-        {#if niveau === niveauDeSecuriteMinimal}
-          <dsfr-tag
-            label="Besoins identifiés par l'ANSSI"
-            size="md"
-            hasIcon
-            icon="star-s-fill"
-          />
-        {/if}
+    {#if niveau}
+      <div class="conteneur-besoins-securite">
+        <div class="conteneur-titre">
+          <h5>{nomNiveauDeSecurite(niveau)}</h5>
+          {#if niveau === niveauDeSecuriteMinimal}
+            <dsfr-tag
+              label="Besoins identifiés par l'ANSSI"
+              size="md"
+              hasIcon
+              icon="star-s-fill"
+            />
+          {/if}
+        </div>
+        <ResumeNiveauSecurite {niveau} />
       </div>
-      <ResumeNiveauSecurite {niveau} />
-    </div>
+    {/if}
   {:else}
     <div class="conteneur-resume">
       <NiveauDeSecuriteEditable
@@ -192,7 +201,7 @@
         }}
       >
         <svelte:fragment slot="infoMajNecessaire">
-          {#if majForceeBesoinsSecurite}
+          {#if majForceeBesoinsSecurite && copiePourRestauration.niveauSecurite}
             <div class="conteneur-info-maj-necessaire">
               <Toast
                 niveau="alerte"

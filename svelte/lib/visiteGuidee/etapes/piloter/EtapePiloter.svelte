@@ -12,8 +12,41 @@
   const elementDeClasse = (classe: string) =>
     document.getElementsByClassName(classe)[0]! as HTMLElement;
 
+  let sousEtapes: SousEtape[] = [];
   onMount(() => {
     rechargeEtape();
+    const derniereEtape = derniereSousEtape();
+    sousEtapes = [
+      {
+        cible: cibleNomService,
+        positionnementModale: 'BasDroite',
+        callbackInitialeCible: async () => {
+          document
+            .getElementsByClassName('lien-service')[0]
+            .removeAttribute('href');
+          const bouton =
+            document.querySelector<HTMLButtonElement>('.selection-service');
+          if (bouton) bouton.disabled = true;
+        },
+        titre: 'Pilotez vos services grâce au tableau de bord',
+        description:
+          "Suivez l'état de vos homologations, la progression de vos mesures de sécurité et bénéficiez de recommandations personnalisées pour optimiser la protection de vos services.",
+        animation: '/statique/assets/images/visiteGuidee/tableau_de_bord.gif',
+      },
+      {
+        cible: cibleCentreNotifications,
+        positionnementModale: 'BasMilieu',
+        margeElementMisEnAvant: 3,
+        callbackInitialeCible: async (cible) => {
+          (cible as HTMLButtonElement).disabled = true;
+        },
+        titre: 'Découvrez le centre de notifications',
+        description:
+          'Ne ratez aucune information ou nouveauté importante de MonServiceSécurisé !',
+        animation: '/statique/assets/images/visiteGuidee/nouveautes.gif',
+      },
+    ];
+    if (derniereEtape) sousEtapes.push(derniereEtape);
   });
 
   const rechargeEtape = () => {
@@ -63,37 +96,5 @@
 </script>
 
 {#if cibleNomService && cibleCentreNotifications && cibleNouveauService && cibleLignePremierService}
-  <ModaleSousEtape
-    sousEtapes={[
-      {
-        cible: cibleNomService,
-        positionnementModale: 'BasDroite',
-        callbackInitialeCible: async () => {
-          document
-            .getElementsByClassName('lien-service')[0]
-            .removeAttribute('href');
-          document.getElementsByClassName(
-            'selection-service'
-          )[0].disabled = true;
-        },
-        titre: 'Pilotez vos services grâce au tableau de bord',
-        description:
-          "Suivez l'état de vos homologations, la progression de vos mesures de sécurité et bénéficiez de recommandations personnalisées pour optimiser la protection de vos services.",
-        animation: '/statique/assets/images/visiteGuidee/tableau_de_bord.gif',
-      },
-      {
-        cible: cibleCentreNotifications,
-        positionnementModale: 'BasMilieu',
-        margeElementMisEnAvant: 3,
-        callbackInitialeCible: async (cible) => {
-          cible.disabled = true;
-        },
-        titre: 'Découvrez le centre de notifications',
-        description:
-          'Ne ratez aucune information ou nouveauté importante de MonServiceSécurisé !',
-        animation: '/statique/assets/images/visiteGuidee/nouveautes.gif',
-      },
-      derniereSousEtape(),
-    ]}
-  />
+  <ModaleSousEtape {sousEtapes} />
 {/if}
