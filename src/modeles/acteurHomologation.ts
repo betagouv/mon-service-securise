@@ -1,7 +1,17 @@
 import InformationsService from './informationsService.js';
 
+export type DonneesActeurHomologation = {
+  role: string;
+  nom: string;
+  fonction: string;
+};
+
 class ActeurHomologation extends InformationsService {
-  constructor(donnees) {
+  readonly role!: string;
+  readonly nom!: string;
+  readonly fonction!: string;
+
+  constructor(donnees: Partial<DonneesActeurHomologation>) {
     super({ proprietesAtomiquesRequises: ['role', 'nom', 'fonction'] });
     this.renseigneProprietes(donnees);
   }

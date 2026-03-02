@@ -1,4 +1,3 @@
-import expect from 'expect.js';
 import ActeurHomologation from '../../src/modeles/acteurHomologation.js';
 
 describe("Un acteur de l'homologation", () => {
@@ -9,18 +8,22 @@ describe("Un acteur de l'homologation", () => {
   });
 
   it('connaît son rôle', () => {
-    expect(acteurHomologation.role).to.equal('DSI');
+    expect(acteurHomologation.role).toEqual('DSI');
   });
 
   it('connaît son nom', () => {
-    expect(acteurHomologation.nom).to.equal('John Doe');
+    expect(acteurHomologation.nom).toEqual('John Doe');
   });
 
   it('connaît sa fonction', () => {
-    expect(acteurHomologation.fonction).to.equal('Maire');
+    expect(acteurHomologation.fonction).toEqual('Maire');
   });
 
   it('donne les clés de ses propriétés', () => {
-    expect(ActeurHomologation.proprietes()).to.eql(['role', 'nom', 'fonction']);
+    expect(ActeurHomologation.proprietes()).toEqual([
+      'role',
+      'nom',
+      'fonction',
+    ]);
   });
 });
