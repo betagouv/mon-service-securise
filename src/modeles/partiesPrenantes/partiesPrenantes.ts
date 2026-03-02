@@ -2,18 +2,22 @@ import DeveloppementFourniture from './developpementFourniture.js';
 import ElementsFabricables from '../elementsFabricables.js';
 import Hebergement from './hebergement.js';
 import MaintenanceService from './maintenanceService.js';
-import PartiePrenante from './partiePrenante.js';
+import PartiePrenante, { DonneesPartiePrenante } from './partiePrenante.js';
 import PartiePrenanteSpecifique from './partiePrenanteSpecifique.js';
 import SecuriteService from './securiteService.js';
 import { fabriquePartiePrenante } from './fabriquePartiePrenante.js';
 
-class PartiesPrenantes extends ElementsFabricables {
-  constructor(donnees = {}) {
+type DonneesPartiesPrenantes = {
+  partiesPrenantes: Array<DonneesPartiePrenante & { type: string }>;
+};
+
+class PartiesPrenantes extends ElementsFabricables<PartiePrenante> {
+  constructor(donnees: Partial<DonneesPartiesPrenantes> = {}) {
     const { partiesPrenantes = [] } = donnees;
     super(fabriquePartiePrenante, { items: partiesPrenantes });
   }
 
-  type(Type) {
+  type(Type: { name: string } | null) {
     return this.toutes()
       .find((partiePrenante) => partiePrenante.estDeType(Type))
       ?.toJSON();

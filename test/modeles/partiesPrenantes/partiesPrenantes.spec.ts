@@ -1,71 +1,63 @@
-import expect from 'expect.js';
 import PartiesPrenantes from '../../../src/modeles/partiesPrenantes/partiesPrenantes.js';
 
-const elles = it;
-
 describe('Les parties prenantes', () => {
-  elles('savent se décrire en JSON', () => {
+  it('savent se décrire en JSON', () => {
     const partiesPrenantes = new PartiesPrenantes({
       partiesPrenantes: [{ type: 'Hebergement', nom: 'hébergeur' }],
     });
 
-    expect(partiesPrenantes.toJSON()).to.eql([
+    expect(partiesPrenantes.toJSON()).toEqual([
       { type: 'Hebergement', nom: 'hébergeur' },
     ]);
   });
 
-  elles("savent transmettre l'hébergement", () => {
+  it("savent transmettre l'hébergement", () => {
     const partiesPrenantes = new PartiesPrenantes({
       partiesPrenantes: [{ type: 'Hebergement', nom: 'hébergeur' }],
     });
 
-    expect(partiesPrenantes.hebergement()).to.eql({
+    expect(partiesPrenantes.hebergement()).toEqual({
       type: 'Hebergement',
       nom: 'hébergeur',
     });
   });
 
-  elles(
-    'savent transmettre les informations du développement et fourniture du service',
-    () => {
-      const partiesPrenantes = new PartiesPrenantes({
-        partiesPrenantes: [
-          { type: 'DeveloppementFourniture', nom: 'structure' },
-        ],
-      });
+  it('savent transmettre les informations du développement et fourniture du service', () => {
+    const partiesPrenantes = new PartiesPrenantes({
+      partiesPrenantes: [{ type: 'DeveloppementFourniture', nom: 'structure' }],
+    });
 
-      expect(partiesPrenantes.developpementFourniture()).to.eql({
-        type: 'DeveloppementFourniture',
-        nom: 'structure',
-      });
-    }
-  );
+    expect(partiesPrenantes.developpementFourniture()).toEqual({
+      type: 'DeveloppementFourniture',
+      nom: 'structure',
+    });
+  });
 
-  elles('savent transmettre la maintenance du service', () => {
+  it('savent transmettre la maintenance du service', () => {
     const partiesPrenantes = new PartiesPrenantes({
       partiesPrenantes: [{ type: 'MaintenanceService', nom: 'mainteneur' }],
     });
 
-    expect(partiesPrenantes.maintenanceService()).to.eql({
+    expect(partiesPrenantes.maintenanceService()).toEqual({
       type: 'MaintenanceService',
       nom: 'mainteneur',
     });
   });
 
-  elles('savent transmettre la sécurité du service', () => {
+  it('savent transmettre la sécurité du service', () => {
     const partiesPrenantes = new PartiesPrenantes({
       partiesPrenantes: [
         { type: 'SecuriteService', nom: 'Structure supervision' },
       ],
     });
 
-    expect(partiesPrenantes.securiteService()).to.eql({
+    expect(partiesPrenantes.securiteService()).toEqual({
       type: 'SecuriteService',
       nom: 'Structure supervision',
     });
   });
 
-  elles('savent transmettre les parties prenantes spécifiques', () => {
+  it('savent transmettre les parties prenantes spécifiques', () => {
     const partiesPrenantes = new PartiesPrenantes({
       partiesPrenantes: [
         { type: 'PartiePrenanteSpecifique', nom: 'une partie' },
@@ -74,14 +66,14 @@ describe('Les parties prenantes', () => {
     });
 
     expect(partiesPrenantes.specifiques()).to.have.length(2);
-    expect(partiesPrenantes.specifiques()[0]).to.eql({
+    expect(partiesPrenantes.specifiques()[0]).toEqual({
       type: 'PartiePrenanteSpecifique',
       nom: 'une partie',
     });
   });
 
-  elles('donnent la liste des propriétés de la partie prenante', () => {
-    expect(PartiesPrenantes.proprietesItem()).to.eql([
+  it('donnent la liste des propriétés de la partie prenante', () => {
+    expect(PartiesPrenantes.proprietesItem()).toEqual([
       'nom',
       'natureAcces',
       'pointContact',
