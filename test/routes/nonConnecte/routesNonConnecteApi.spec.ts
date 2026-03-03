@@ -1,23 +1,16 @@
 import jwt from 'jsonwebtoken';
 import testeurMSS from '../testeurMSS.js';
-
 import {
   ErreurEmailManquant,
   ErreurJWTInvalide,
   ErreurJWTManquant,
   ErreurUtilisateurExistant,
 } from '../../../src/erreurs.js';
-
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
-import {
-  decodeSessionDuCookie,
-  expectContenuSessionValide,
-} from '../../aides/cookie.js';
 import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 import { CorpsRequetePutOuPostUtilisateur } from '../../../src/routes/mappeur/utilisateur.ts';
 import Utilisateur from '../../../src/modeles/utilisateur.js';
 import { unUUIDRandom } from '../../constructeurs/UUID.ts';
-import { SourceAuthentification } from '../../../src/modeles/sourceAuthentification.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 
 describe('Le serveur MSS des routes publiques /api/*', () => {
@@ -584,190 +577,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       });
 
       expect(messageEnvoye).toBe(true);
-    });
-  });
-
-  describe('quand requête POST sur `/api/token`', () => {
-    it('applique une protection de trafic', async () => {
-      await testeur.middleware().verifieProtectionTrafic(testeur.app(), {
-        method: 'post',
-        url: '/api/token',
-      });
-    });
-
-    it("répond 400 si le login n'est pas un email", async () => {
-      const reponse = await testeur.post('/api/token', {
-        login: 'Jean.DUPONT',
-        motDePasse: 'mdp_12345',
-      });
-
-      expect(reponse.status).toEqual(400);
-    });
-
-    it("répond 400 si le mot de passe n'est pas renseigné", async () => {
-      const reponse = await testeur.post('/api/token', {
-        login: 'Jean.DUPONT@mail.com',
-        motDePasse: '',
-      });
-
-      expect(reponse.status).toEqual(400);
-    });
-
-    it("authentifie l'utilisateur avec le login en minuscules", async () => {
-      testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur =
-        async () => {};
-
-      const utilisateur = {
-        toJSON: () => {},
-        genereToken: () => {},
-        accepteCGU: () => true,
-        estUnInvite: () => false,
-      };
-
-      testeur.depotDonnees().utilisateurAuthentifie = (
-        login: string,
-        motDePasse: string
-      ) => {
-        try {
-          expect(login).toEqual('jean.dupont@mail.fr');
-          expect(motDePasse).toEqual('mdp_12345');
-          return Promise.resolve(utilisateur);
-        } catch (e) {
-          return Promise.reject(e);
-        }
-      };
-      testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async () => {};
-      testeur.depotDonnees().utilisateur = async () => utilisateur;
-
-      await testeur.post('/api/token', {
-        login: 'Jean.DUPONT@mail.fr',
-        motDePasse: 'mdp_12345',
-      });
-    });
-
-    describe("avec authentification réussie de l'utilisateur", () => {
-      let utilisateur: Utilisateur;
-
-      beforeEach(() => {
-        utilisateur = {
-          email: 'jean.dupont@mail.fr',
-          id: '456',
-          toJSON: () => ({ prenomNom: 'Jean Dupont' }),
-          genereToken: (source: SourceAuthentification) =>
-            `un token de source ${source}`,
-          accepteCGU: () => true,
-          estUnInvite: () => false,
-        } as unknown as Utilisateur;
-
-        testeur.depotDonnees().utilisateurAuthentifie = () =>
-          Promise.resolve(utilisateur);
-        testeur.depotDonnees().utilisateur = async () => utilisateur;
-        testeur.depotDonnees().rafraichisProfilUtilisateurLocal =
-          async () => {};
-
-        testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur =
-          async () => {};
-      });
-
-      it('pose un cookie', async () => {
-        const reponse = await testeur.post('/api/token', {
-          login: 'jean.dupont@mail.fr',
-          motDePasse: 'mdp_12345',
-        });
-
-        testeur.verifieSessionDeposee(reponse);
-      });
-
-      it('ajoute une session utilisateur', async () => {
-        const reponse = await testeur.post('/api/token', {
-          login: 'jean.dupont@mail.fr',
-          motDePasse: 'mdp_12345',
-        });
-
-        expectContenuSessionValide(reponse, 'MSS', true, false);
-      });
-
-      it("délègue au dépôt de données l'enregistrement de la dernière connexion utilisateur'", async () => {
-        let idUtilisateurPasse = {};
-        let sourcePassee;
-        testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = async (
-          idUtilisateur: UUID,
-          source: SourceAuthentification
-        ) => {
-          idUtilisateurPasse = idUtilisateur;
-          sourcePassee = source;
-        };
-
-        await testeur.post('/api/token', {
-          login: 'jean.dupont@mail.fr',
-          motDePasse: 'mdp_12345',
-        });
-
-        expect(idUtilisateurPasse).toBe('456');
-        expect(sourcePassee).toBe('MSS');
-      });
-
-      it('déclenche un rafraîchissement de la copie locale du profil utilisateur (pour recopier les données MPA)', async () => {
-        let idUtilisateurPasse;
-        testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async (
-          idUtilisateur: UUID
-        ) => {
-          idUtilisateurPasse = idUtilisateur;
-        };
-
-        await testeur.post('/api/token', {
-          login: 'jean.dupont@mail.fr',
-          motDePasse: 'mdp_12345',
-        });
-
-        expect(idUtilisateurPasse).toBe('456');
-      });
-
-      it('lis de nouveau le profil utilisateur après rafraichissement', async () => {
-        let idUtilisateurPasse;
-        testeur.depotDonnees().utilisateur = async (idUtilisateur: UUID) => {
-          idUtilisateurPasse = idUtilisateur;
-          return utilisateur;
-        };
-
-        await testeur.post('/api/token', {
-          login: 'jean.dupont@mail.fr',
-          motDePasse: 'mdp_12345',
-        });
-
-        expect(idUtilisateurPasse).toBe('456');
-      });
-
-      it('ajoute la source dans le jeton', async () => {
-        utilisateur.genereToken = (source) => `un token de-${source}`;
-
-        const reponse = await testeur.post('/api/token', {
-          login: 'jean.dupont@mail.fr',
-          motDePasse: 'mdp_12345',
-        });
-
-        const token = decodeSessionDuCookie(reponse, 0);
-        expect(token.token).toBe('un token de-MSS');
-      });
-    });
-
-    describe("avec échec de l'authentification de l'utilisateur", () => {
-      it('retourne un HTTP 401', async () => {
-        testeur.depotDonnees().utilisateurAuthentifie = async () => {};
-
-        await testeur.verifieRequeteGenereErreurHTTP(
-          401,
-          "L'authentification a échoué",
-          {
-            method: 'post',
-            url: '/api/token',
-            data: {
-              login: 'jean.dupont@mail.fr',
-              motDePasse: 'mdp_12345',
-            },
-          }
-        );
-      });
     });
   });
 

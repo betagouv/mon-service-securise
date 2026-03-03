@@ -19,13 +19,4 @@ describe('Le dépôt de données vide', () => {
     const u = await depot.utilisateur('456');
     expect(u).to.be(undefined);
   });
-
-  it("n'authentifie pas l'utilisateur", async () => {
-    const depot = await depotVide();
-    const utilisateur = await depot.utilisateurAuthentifie(
-      'jean.dupont@mail.fr',
-      'mdp_12345'
-    );
-    expect(utilisateur).to.be(undefined);
-  });
 });

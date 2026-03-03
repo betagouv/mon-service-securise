@@ -9,7 +9,6 @@ import { obtentionDonneesDeBaseUtilisateur } from '../mappeur/utilisateur.js';
 import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 import { valideBody, valideQuery } from '../../http/validePayloads.js';
 import {
-  reglesValidationAuthentificationParLoginMotDePasse,
   reglesValidationDesinscriptionInfolettre,
   reglesValidationRechercheOrganisations,
   reglesValidationReinitialisationMotDePasse,
@@ -24,14 +23,9 @@ import { InscriptionUtilisateur } from '../../modeles/inscriptionUtilisateur.int
 import { AdaptateurGestionErreur } from '../../adaptateurs/adaptateurGestionErreur.interface.js';
 import { ServiceCgu } from '../../serviceCgu.interface.js';
 import {
-  RequeteAvecSession,
-  ServiceGestionnaireSession,
-} from '../../session/serviceGestionnaireSession.js';
-import {
   IdentiteFournieParProConnect,
   PartieModifiableProfilUtilisateur,
 } from '../../modeles/utilisateur.types.js';
-import { UUID } from '../../typesBasiques.js';
 
 import { TokenMSSPourCreationUtilisateur } from '../../utilisateur/tokenMSSPourCreationUtilisateur.js';
 
@@ -44,7 +38,6 @@ const routesNonConnecteApi = ({
   inscriptionUtilisateur,
   adaptateurGestionErreur,
   serviceCgu,
-  serviceGestionnaireSession,
 }: {
   middleware: Middleware;
   depotDonnees: DepotDonnees;
@@ -54,7 +47,6 @@ const routesNonConnecteApi = ({
   inscriptionUtilisateur: InscriptionUtilisateur;
   adaptateurGestionErreur: AdaptateurGestionErreur;
   serviceCgu: ServiceCgu;
-  serviceGestionnaireSession: ServiceGestionnaireSession;
 }) => {
   const routes = express.Router();
 
@@ -129,48 +121,6 @@ const routesNonConnecteApi = ({
         })
         .then(() => reponse.send(''))
         .catch(suite);
-    }
-  );
-
-  routes.post(
-    '/token',
-    middleware.protegeTrafic(),
-    valideBody(
-      z.strictObject(reglesValidationAuthentificationParLoginMotDePasse)
-    ),
-    async (requete, reponse, suite) => {
-      const login = requete.body.login?.toLowerCase();
-      const { motDePasse } = requete.body;
-
-      try {
-        let utilisateur = await depotDonnees.utilisateurAuthentifie(
-          login,
-          motDePasse
-        );
-
-        if (!utilisateur) {
-          reponse.status(401).send("L'authentification a échoué");
-          return;
-        }
-
-        await depotDonnees.rafraichisProfilUtilisateurLocal(utilisateur.id);
-        utilisateur = await depotDonnees.utilisateur(utilisateur.id);
-
-        serviceGestionnaireSession.enregistreSession(
-          requete as RequeteAvecSession,
-          utilisateur!,
-          SourceAuthentification.MSS
-        );
-
-        await depotDonnees.enregistreNouvelleConnexionUtilisateur(
-          utilisateur!.id as UUID,
-          SourceAuthentification.MSS
-        );
-
-        reponse.sendStatus(200);
-      } catch (e) {
-        suite(e);
-      }
     }
   );
 

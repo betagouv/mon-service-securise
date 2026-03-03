@@ -31,11 +31,6 @@ export const reglesValidationReinitialisationMotDePasse = {
   email: z.email().optional(),
 };
 
-export const reglesValidationAuthentificationParLoginMotDePasse = {
-  login: z.email(),
-  motDePasse: z.string().nonempty(),
-};
-
 export const reglesValidationRechercheOrganisations = {
   departement: z.enum(departements.map((d) => d.code)).optional(),
   recherche: z.string().min(2).max(200),

@@ -133,7 +133,6 @@ const creeServeur = ({
       adaptateurMail,
       inscriptionUtilisateur,
       serviceCgu,
-      serviceGestionnaireSession,
     })
   );
   app.use(
