@@ -67,7 +67,6 @@ let listeAdressesIPsAutorisee = [];
 let preferencesChargees = false;
 let etatVisiteGuideeCharge = false;
 let etatExplicationNouveauReferentielCharge = false;
-let etatExplicationFinCompteLegacy = false;
 let etatExplicationUtilisationMFA = false;
 let filtrageIpEstActif = false;
 let rechercheDossierCourantEffectuee = false;
@@ -103,7 +102,6 @@ const middlewareFantaisie = {
     preferencesChargees = false;
     etatVisiteGuideeCharge = false;
     etatExplicationNouveauReferentielCharge = false;
-    etatExplicationFinCompteLegacy = false;
     etatExplicationUtilisationMFA = false;
     filtrageIpEstActif = false;
     rechercheDossierCourantEffectuee = false;
@@ -148,11 +146,6 @@ const middlewareFantaisie = {
       nombreEtapesRestantes: () => 2,
     };
     etatVisiteGuideeCharge = true;
-    suite();
-  },
-
-  chargeExplicationFinCompteLegacy: (_requete, _reponse, suite) => {
-    etatExplicationFinCompteLegacy = true;
     suite();
   },
 
@@ -326,13 +319,6 @@ const middlewareFantaisie = {
   verifieRequeteChargeEtatVisiteGuidee: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => etatVisiteGuideeCharge },
-      app,
-      ...params
-    ),
-
-  verifieRequeteChargeExplicationFinCompteLegacy: async (app, ...params) =>
-    verifieRequeteChangeEtat(
-      { lectureEtat: () => etatExplicationFinCompteLegacy },
       app,
       ...params
     ),

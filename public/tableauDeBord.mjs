@@ -29,20 +29,12 @@ $(() => {
   const afficheExplicationNouveauReferentiel = lisDonneesPartagees(
     'affiche-explication-nouveau-referentiel'
   );
-  const afficheExplicationFinCompteLegacy = lisDonneesPartagees(
-    'affiche-explication-fin-compte-legacy'
-  );
   const afficheExplicationUtilisationMFA = lisDonneesPartagees(
     'affiche-explication-utilisation-mfa'
   );
   if (!visiteGuideeActive) {
-    // On donne priorité à la modale de fin des comptes legacy
-    if (afficheExplicationFinCompteLegacy)
-      document.body.dispatchEvent(
-        new CustomEvent('svelte-recharge-explication-fin-compte-legacy')
-      );
-    // Puis à celle de l'utilisation du MFA
-    else if (afficheExplicationUtilisationMFA)
+    // On donne priorité à la modale de l'utilisation du MFA
+    if (afficheExplicationUtilisationMFA)
       document.body.dispatchEvent(
         new CustomEvent('svelte-recharge-explication-utilisation-mfa')
       );

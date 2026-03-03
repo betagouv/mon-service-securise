@@ -8,12 +8,10 @@ block append styles
 block append scripts
   +composantSvelte('tableauDeBord.js')
   +composantSvelte('explicationNouveauReferentiel.js')
-  +composantSvelte('explicationFinCompteLegacy.js')
   +composantSvelte('explicationUtilisationMFA.js')
   +donneesPartagees('utilisateur-superviseur', {estSuperviseur})
   +donneesPartagees('avec-promotion-de-msc', featureFlags.avecBandeauMSC)
   +donneesPartagees('affiche-explication-nouveau-referentiel', afficheExplicationNouveauReferentiel)
-  +donneesPartagees('affiche-explication-fin-compte-legacy', afficheExplicationFinCompteLegacy)
   +donneesPartagees('affiche-explication-utilisation-mfa', afficheExplicationUtilisationMFA)
   script(type = 'module', src = '/statique/tableauDeBord.mjs')
 
@@ -21,5 +19,4 @@ block main
   #tableau-de-bord
   #rapport-televersement
   #explication-nouveau-referentiel
-  #explication-fin-compte-legacy
   #explication-utilisation-mfa
