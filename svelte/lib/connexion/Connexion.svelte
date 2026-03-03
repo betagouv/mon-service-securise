@@ -1,36 +1,14 @@
 <script lang="ts">
-  import ChampTexte from '../ui/ChampTexte.svelte';
-  import Bouton from '../ui/Bouton.svelte';
-  import MotDePasse from '../ui/MotDePasse.svelte';
-  import Formulaire from '../ui/Formulaire.svelte';
   import Lien from '../ui/Lien.svelte';
 
   export let urlRedirection: string;
-
-  let login: string;
-  let motDePasse: string;
-
-  let afficheErreur: boolean = false;
-
-  export const connecte = async () => {
-    if (!login || !motDePasse) return;
-
-    try {
-      await axios.post('/api/token', { login, motDePasse });
-      window.location.href = urlRedirection ?? '/tableauDeBord';
-    } catch (erreur: any) {
-      if (erreur?.response?.status === 401) {
-        afficheErreur = true;
-      }
-    }
-  };
 
   const cheminRedirection = urlRedirection && new URL(urlRedirection).pathname;
 </script>
 
 <div class="conteneur">
   <div class="contenu-texte">
-    <h1>Connectez-vous</h1>
+    <h1>Connectez-vous à MonServiceSécurisé</h1>
     <div class="contenu-connexion">
       <div>
         <a
@@ -54,15 +32,14 @@
           </a>
         </p>
       </div>
-      <hr class="separation-agent-connect" />
       <div class="mise-en-avant">
         <lab-anssi-icone nom="info-line" taille="md"></lab-anssi-icone>
         <span class="titre"><b>Évolution des modes de connexion</b></span>
         <br />
-        <span
-          >À partir de mars 2026, la connexion à MonServiceSécurisé se fera
-          uniquement via ProConnect.</span
-        >
+        <span>
+          Depuis le 5 mars 2026, la connexion à MonServiceSécurisé se fait
+          uniquement via ProConnect.
+        </span>
         <Lien
           titre="En savoir plus"
           href="https://aide.monservicesecurise.cyber.gouv.fr/fr/article/la-connexion-a-monservicesecurise-evolue-1jr2z6k"
@@ -70,39 +47,11 @@
           target="_blank"
         />
       </div>
-      <Formulaire on:formulaireValide={connecte}>
-        <div class="connexion-mss">
-          <span class="mention-obligatoire requis">champ obligatoire</span>
-          <div class="champ">
-            <label for="email" class="requis">Mail professionnel</label>
-            <ChampTexte
-              type="email"
-              id="email"
-              nom="email"
-              bind:valeur={login}
-            />
-          </div>
-          <div class="champ">
-            <label for="mot-de-passe" class="requis">Mot de passe</label>
-            <MotDePasse
-              id="mot-de-passe"
-              nom="mot-de-passe"
-              bind:valeur={motDePasse}
-            />
-            <a href="/reinitialisationMotDePasse">mot de passe oublié</a>
-          </div>
-          <span class:afficheErreur class="message-erreur">
-            L'email et le mot de passe saisis ne correspondent à aucun compte.
-            Veuillez renseigner les identifiants d'un compte existant.
-          </span>
 
-          <Bouton type="primaire" titre="Se connecter" />
-          <div class="pas-de-compte">
-            <span>Vous n’avez pas encore de compte ?</span>
-            <a href="/inscription">S’inscrire</a>
-          </div>
-        </div>
-      </Formulaire>
+      <div class="pas-encore-compte">
+        <span>Vous n'avez pas encore de compte ?</span>
+        <a href="/inscription">S'inscrire</a>
+      </div>
     </div>
   </div>
 
@@ -138,6 +87,9 @@
   }
 
   .contenu-texte h1 {
+    color: black;
+    max-width: 500px;
+    align-self: center;
     font-weight: bold;
     font-size: 2.25rem;
     margin-bottom: 30px;
@@ -153,68 +105,8 @@
     justify-content: center;
   }
 
-  .connexion-mss {
-    text-align: left;
-    align-items: normal;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .champ {
-    display: flex;
-    flex-direction: column;
-  }
-
-  label {
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-
-  .pas-de-compte {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .mention-obligatoire {
-    margin-left: auto;
-  }
-
-  .requis:before {
-    content: '*';
-    color: #e3271c;
-    margin-right: 4px;
-    font-size: 1rem;
-  }
-
-  .message-erreur {
-    position: relative;
-    display: none;
-    color: var(--rose-anssi);
-    font-weight: normal;
-    align-items: center;
-    flex-direction: row;
-    gap: 8px;
-  }
-
-  .message-erreur::before {
-    content: '';
-    display: flex;
-    flex-shrink: 0;
-    background-image: url(/statique/assets/images/icone_attention_rose.svg);
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 24px;
-    height: 24px;
-  }
-
-  .afficheErreur {
-    display: flex;
-    align-items: start;
-  }
-
   .mise-en-avant {
+    margin-top: 40px;
     padding: 16px 24px;
     text-align: left;
     color: #3a3a3a;
@@ -236,5 +128,12 @@
       font-weight: 400;
       line-height: 1.75rem;
     }
+  }
+
+  .pas-encore-compte {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 </style>
