@@ -73,15 +73,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         );
     });
 
-    it("charge l'explication de fin des comptes legacy, car c'est nécessaire au tableau de bord", async () => {
-      await testeur
-        .middleware()
-        .verifieRequeteChargeExplicationFinCompteLegacy(
-          testeur.app(),
-          '/visiteGuidee/piloter'
-        );
-    });
-
     it("charge l'explication de l'utilisation du MFA, car c'est nécessaire au tableau de bord", async () => {
       await testeur
         .middleware()
@@ -236,15 +227,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       await testeur
         .middleware()
         .verifieRequeteChargeExplicationNouveauReferentiel(
-          testeur.app(),
-          '/tableauDeBord'
-        );
-    });
-
-    it("vérifie que l'état de l'explication de fin des comptes legacy est chargé", async () => {
-      await testeur
-        .middleware()
-        .verifieRequeteChargeExplicationFinCompteLegacy(
           testeur.app(),
           '/tableauDeBord'
         );

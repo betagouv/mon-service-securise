@@ -299,27 +299,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     suite();
   };
 
-  const chargeExplicationFinCompteLegacy = async (
-    requete: RequeteMSS,
-    reponse: Response,
-    suite: NextFunction
-  ) => {
-    if (!requete.idUtilisateurCourant)
-      throw new ErreurChainageMiddleware(
-        'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
-      );
-
-    const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
-      requete.idUtilisateurCourant
-    );
-
-    reponse.locals.afficheExplicationFinCompteLegacy =
-      !parcoursUtilisateur.aVuTableauDeBord() &&
-      requete.session?.sourceAuthentification === SourceAuthentification.MSS;
-
-    suite();
-  };
-
   const chargeExplicationUtilisationMFA = async (
     requete: RequeteMSS,
     reponse: Response,
@@ -525,7 +504,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     challengeMotDePasse,
     chargeAutorisationsService,
     chargeEtatVisiteGuidee,
-    chargeExplicationFinCompteLegacy,
     chargeExplicationNouveauReferentiel,
     chargeExplicationUtilisationMFA,
     chargeFeatureFlags,

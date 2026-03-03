@@ -68,7 +68,6 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     middleware.chargeEtatVisiteGuidee,
     middleware.chargeExplicationNouveauReferentiel,
-    middleware.chargeExplicationFinCompteLegacy,
     middleware.chargeExplicationUtilisationMFA,
     async (requete, reponse) => {
       const { idUtilisateurCourant } = requete;
@@ -100,7 +99,6 @@ const routesConnectePage = ({
     middleware.verificationAcceptationCGU,
     middleware.chargePreferencesUtilisateur,
     middleware.chargeExplicationNouveauReferentiel,
-    middleware.chargeExplicationFinCompteLegacy,
     middleware.chargeExplicationUtilisationMFA,
     middleware.chargeEtatVisiteGuidee,
     (requete, reponse) => {
