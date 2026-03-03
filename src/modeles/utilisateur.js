@@ -18,7 +18,6 @@ class Utilisateur extends Base {
       proprietesAtomiquesRequises: [
         'dateCreation',
         'id',
-        'idResetMotDePasse',
         'prenom',
         'nom',
         'email',

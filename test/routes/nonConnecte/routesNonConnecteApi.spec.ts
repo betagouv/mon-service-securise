@@ -416,14 +416,11 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
     it("envoie un message de notification à l'utilisateur créé", async () => {
       utilisateur.email = 'jean.dupont@mail.fr';
-      utilisateur.idResetMotDePasse = '999';
 
       testeur.adaptateurMail().envoieMessageFinalisationInscription = (
-        destinataire: string,
-        idResetMotDePasse: string
+        destinataire: string
       ) => {
         expect(destinataire).toEqual('jean.dupont@mail.fr');
-        expect(idResetMotDePasse).toEqual('999');
         return Promise.resolve();
       };
 

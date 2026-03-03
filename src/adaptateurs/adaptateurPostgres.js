@@ -4,7 +4,6 @@ import config from '../../knexfile.js';
 const CORRESPONDANCE_COLONNES_PROPRIETES = {
   date_creation: 'dateCreation',
   email_hash: 'emailHash',
-  id_reset_mdp: 'idResetMotDePasse',
 };
 
 const nouvelAdaptateur = ({ env, knexSurcharge }) => {
@@ -276,16 +275,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
           nom_service_hash: nomServiceHash,
           siret_hash: siretHash,
         })
-      );
-
-  const metsAJourIdResetMdpUtilisateur = (id, idResetMotDePasse) =>
-    knex('utilisateurs')
-      .where({ id })
-      .first()
-      .then(() =>
-        knex('utilisateurs')
-          .where({ id })
-          .update({ id_reset_mdp: idResetMotDePasse || null })
       );
 
   const metsAJourUtilisateur = (id, donneesAMettreAJour, emailHash) =>
@@ -1034,7 +1023,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     marqueNouveauteLue,
     marqueSuggestionActionFaiteMaintenant,
     marqueTacheDeServiceLue,
-    metsAJourIdResetMdpUtilisateur,
     metsAJourModeleMesureSpecifique,
     metsAJourParrainage,
     metsAJourProgressionTeleversement,
