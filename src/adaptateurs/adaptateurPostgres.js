@@ -321,13 +321,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
       emailHash
     );
 
-  const utilisateurAvecIdReset = (idReset) =>
-    elementDeTableAvecValeurColonneSansMiseAPlatDonnees(
-      'utilisateurs',
-      'id_reset_mdp',
-      idReset
-    );
-
   const tousUtilisateurs = () =>
     knex('utilisateurs').then((tous) =>
       tous.map(convertisLigneEnObjetSansMiseAPlatDonnees)
@@ -1092,7 +1085,6 @@ const nouvelAdaptateur = ({ env, knexSurcharge }) => {
     toutesLesAutorisationsDeProprietaire,
     utilisateur,
     utilisateurAvecEmailHash,
-    utilisateurAvecIdReset,
     verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
     verifieTousLesServicesExistent,

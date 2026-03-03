@@ -533,28 +533,6 @@ describe('Le dépôt de données des utilisateurs', () => {
     expect(utilisateur.dateCreation).to.eql(date);
   });
 
-  it("retourne l'utilisateur associé à un identifiant reset de mot de passe", async () => {
-    const depot = DepotDonneesUtilisateurs.creeDepot({
-      adaptateurChiffrement,
-      adaptateurJWT,
-      adaptateurPersistance: unePersistanceMemoire()
-        .ajouteUnUtilisateur({
-          id: '123',
-          prenom: 'Jean',
-          nom: 'Dupont',
-          email: 'jean.dupont@mail.fr',
-          idResetMotDePasse: '999',
-        })
-        .construis(),
-    });
-
-    const utilisateur = await depot.utilisateurAFinaliser('999');
-
-    expect(utilisateur).to.be.an(Utilisateur);
-    expect(utilisateur.id).to.equal('123');
-    expect(utilisateur.adaptateurJWT).to.equal(adaptateurJWT);
-  });
-
   describe("sur réception d'une demande d'enregistrement d'un nouvel utilisateur", () => {
     let depot;
 

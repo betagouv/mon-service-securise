@@ -265,9 +265,6 @@ const nouvelAdaptateur = (
   const utilisateurAvecEmailHash = async (emailHash) =>
     donnees.utilisateurs.find((u) => u.emailHash === emailHash);
 
-  const utilisateurAvecIdReset = async (idReset) =>
-    donnees.utilisateurs.find((u) => u.idResetMotDePasse === idReset);
-
   const tousUtilisateurs = async () => donnees.utilisateurs;
 
   const autorisation = async (id) =>
@@ -775,7 +772,6 @@ const nouvelAdaptateur = (
     toutesLesAutorisationsDeProprietaire,
     utilisateur,
     utilisateurAvecEmailHash,
-    utilisateurAvecIdReset,
     verifieModeleMesureSpecifiqueExiste,
     verifieServiceExiste,
     verifieTousLesServicesExistent,

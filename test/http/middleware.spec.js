@@ -1296,18 +1296,6 @@ describe('Le middleware MSS', () => {
     });
   });
 
-  it("ajoute le feature flag 'agentConnectActif' si les variables d'environnement sont présentes", async () => {
-    const adaptateurEnvironnement = {
-      featureFlag: () => ({ avecAgentConnect: () => true }),
-    };
-
-    const middleware = leMiddleware({ adaptateurEnvironnement });
-
-    await middleware.chargeEtatAgentConnect(requete, reponse, () => {
-      expect(reponse.locals.agentConnectActif).to.be(true);
-    });
-  });
-
   describe('concernant le type de requête', () => {
     it('sait charger le type de requête', async () => {
       const middleware = leMiddleware({});

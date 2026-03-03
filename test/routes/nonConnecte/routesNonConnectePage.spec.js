@@ -2,7 +2,6 @@ import expect from 'expect.js';
 import { ErreurArticleCrispIntrouvable } from '@lab-anssi/lib';
 import testeurMSS from '../testeurMSS.js';
 import { donneesPartagees } from '../../aides/http.js';
-import { expectContenuSessionValide } from '../../aides/cookie.js';
 import { ErreurJWTInvalide, ErreurJWTManquant } from '../../../src/erreurs.js';
 
 describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
@@ -89,95 +88,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         404,
         `Article Crisp inconnu`,
         `/articles/un-slug-inexistant`
-      );
-    });
-  });
-
-  describe('quand requête GET sur `/initialisationMotDePasse/:idReset`', () => {
-    const uuid = '109156be-c4fb-41ea-b1b4-efe1671c5836';
-
-    it("charge l'état d'activation d'AgentConnect", async () => {
-      await testeur
-        .middleware()
-        .verifieRequeteChargeActivationAgentConnect(
-          testeur.app(),
-          '/initialisationMotDePasse/unUUID'
-        );
-    });
-
-    describe('avec idReset valide', () => {
-      const utilisateur = {
-        id: '123',
-        genereToken: (source) => {
-          expect(source).to.be('MSS');
-          return `un token de source ${source}`;
-        },
-        accepteCGU: () => false,
-        estUnInvite: () => false,
-      };
-
-      beforeEach(() => {
-        testeur.depotDonnees().utilisateurAFinaliser = async () => utilisateur;
-        testeur.depotDonnees().utilisateur = async () => utilisateur;
-      });
-
-      it('dépose le jeton dans un cookie', async () => {
-        let idRecu;
-        testeur.depotDonnees().utilisateurAFinaliser = async (idReset) => {
-          idRecu = idReset;
-          return utilisateur;
-        };
-
-        const reponse = await testeur.get(`/initialisationMotDePasse/${uuid}`);
-
-        expect(idRecu).to.be(uuid);
-        await testeur.verifieSessionDeposee(reponse, () => {});
-      });
-
-      it('ajoute une session utilisateur', async () => {
-        const reponse = await testeur.get(`/initialisationMotDePasse/${uuid}`);
-
-        expectContenuSessionValide(reponse, 'MSS', false, false);
-      });
-
-      it('sert le contenu HTML de la page', async () => {
-        const reponse = await testeur.get(`/initialisationMotDePasse/${uuid}`);
-
-        expect(reponse.status).to.equal(200);
-        expect(reponse.headers['content-type']).to.contain('text/html');
-      });
-
-      it("pour un utilisateur invité, redirige vers la page d'inscription pour l'empêcher de créer un compte avec mot de passe MSS", async () => {
-        const utilisateurInvite = {
-          id: '123',
-          genereToken: () => {
-            expect().fail("N'aurait pas dû générer de token");
-          },
-          estUnInvite: () => true,
-        };
-        testeur.depotDonnees().utilisateurAFinaliser = async () =>
-          utilisateurInvite;
-        testeur.depotDonnees().utilisateur = async () => utilisateurInvite;
-
-        const reponse = await testeur.get(`/initialisationMotDePasse/${uuid}`);
-
-        expect(reponse.status).to.be(302);
-        expect(reponse.headers.location).to.be('/inscription');
-      });
-    });
-
-    it("retourne une erreur HTTP 400 sur idReset n'est pas un UUID valide", async () => {
-      const reponse = await testeur.get('/initialisationMotDePasse/999');
-      expect(reponse.status).to.equal(400);
-    });
-
-    it('retourne une erreur HTTP 404 si idReset inconnu', async () => {
-      testeur.depotDonnees().utilisateurAFinaliser = async () => {};
-
-      await testeur.verifieRequeteGenereErreurHTTP(
-        404,
-        `Identifiant d'initialisation de mot de passe inconnu`,
-        `/initialisationMotDePasse/${uuid}`
       );
     });
   });
