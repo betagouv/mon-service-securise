@@ -100,7 +100,6 @@ const creeServeur = ({
       adaptateurStatistiques,
       adaptateurJWT,
       cmsCrisp,
-      depotDonnees,
       middleware,
       referentiel,
       serviceGestionnaireSession,

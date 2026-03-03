@@ -86,11 +86,6 @@ function fabriquePersistance({
           await adaptateurPersistance.utilisateurAvecEmailHash(emailHash);
         return dechiffreUtilisateur(donnees);
       },
-      celuiAvecIdReset: async (idReset) => {
-        const donnees =
-          await adaptateurPersistance.utilisateurAvecIdReset(idReset);
-        return dechiffreUtilisateur(donnees);
-      },
       nbAutorisationsProprietaire: async (idUtilisateur) =>
         adaptateurPersistance.nbAutorisationsProprietaire(idUtilisateur),
       tous: async () => {
@@ -230,9 +225,6 @@ const creeDepot = (config = {}) => {
 
     return u;
   };
-
-  const utilisateurAFinaliser = async (idReset) =>
-    p.lis.celuiAvecIdReset(idReset);
 
   const utilisateurExiste = async (id) => {
     const u = await p.lis.un(id);
@@ -380,7 +372,6 @@ const creeDepot = (config = {}) => {
     supprimeUtilisateur,
     tousUtilisateurs,
     utilisateur,
-    utilisateurAFinaliser,
     utilisateurExiste,
     utilisateurAvecEmail,
     valideAcceptationCGUPourUtilisateur,

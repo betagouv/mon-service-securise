@@ -1,18 +1,12 @@
 import express from 'express';
 import { ErreurArticleCrispIntrouvable } from '@lab-anssi/lib';
-import { z } from 'zod';
 import { estUrlLegalePourRedirection } from '../../http/redirection.js';
-import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
-import { valideParams } from '../../http/validePayloads.js';
-
-const { MSS } = SourceAuthentification;
 
 const routesNonConnectePage = ({
   adaptateurEnvironnement,
   adaptateurStatistiques,
   adaptateurJWT,
   cmsCrisp,
-  depotDonnees,
   middleware,
   referentiel,
   serviceGestionnaireSession,
@@ -119,35 +113,6 @@ const routesNonConnectePage = ({
       urlRedirection: urlRedirectionAvecBase,
     });
   });
-
-  routes.get(
-    '/initialisationMotDePasse/:idReset',
-    middleware.chargeEtatAgentConnect,
-    valideParams(z.strictObject({ idReset: z.uuid() })),
-    async (requete, reponse) => {
-      const { idReset } = requete.params;
-
-      const utilisateur = await depotDonnees.utilisateurAFinaliser(idReset);
-      if (!utilisateur) {
-        reponse
-          .status(404)
-          .send(`Identifiant d'initialisation de mot de passe inconnu`);
-        return;
-      }
-
-      if (utilisateur.estUnInvite()) {
-        reponse.redirect('/inscription');
-        return;
-      }
-
-      serviceGestionnaireSession.enregistreSession(requete, utilisateur, MSS);
-
-      reponse.render('motDePasse/edition', {
-        utilisateur,
-        enModeInitialisation: true,
-      });
-    }
-  );
 
   routes.get(
     '/devenir-ambassadeurrice-monservicesecurise',

@@ -348,18 +348,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     suite();
   };
 
-  const chargeEtatAgentConnect: RequestHandler = async (
-    _requete,
-    reponse,
-    suite
-  ) => {
-    reponse.locals.agentConnectActif = adaptateurEnvironnement
-      .featureFlag()
-      .avecAgentConnect();
-
-    suite();
-  };
-
   const chargePreferencesUtilisateur: RequestHandler = (
     requete,
     reponse,
@@ -536,7 +524,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     ajouteVersionFichierCompiles,
     challengeMotDePasse,
     chargeAutorisationsService,
-    chargeEtatAgentConnect,
     chargeEtatVisiteGuidee,
     chargeExplicationFinCompteLegacy,
     chargeExplicationNouveauReferentiel,

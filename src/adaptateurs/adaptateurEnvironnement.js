@@ -80,10 +80,6 @@ const chiffrement = () => ({
 
 const featureFlag = () => ({
   avecServiceMonProfilAnssi: () => process.env.PROFIL_ANSSI_ACTIF === 'true',
-  avecAgentConnect: () =>
-    process.env.OIDC_URL_BASE &&
-    process.env.OIDC_CLIENT_ID &&
-    process.env.OIDC_CLIENT_SECRET,
   dateDebutBandeauMSC: () => process.env.FEATURE_FLAG_MSC_BANDEAU_DATE_DEBUT,
   avecDecrireV2: () => process.env.FEATURE_FLAG_AVEC_DECRIRE_V2 === 'true',
 });
