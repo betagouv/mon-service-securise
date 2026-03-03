@@ -74,12 +74,6 @@ function fabriquePersistance({
             await adaptateurPersistance.utilisateur(idUtilisateur);
           return dechiffreDonneesUtilisateur(donnees);
         },
-        deCeluiAvecEmail: async (email) => {
-          const emailHash = adaptateurChiffrement.hacheSha256(email);
-          const donnees =
-            await adaptateurPersistance.utilisateurAvecEmailHash(emailHash);
-          return dechiffreDonneesUtilisateur(donnees);
-        },
       },
       un: async (idUtilisateur) => {
         const donnees = await adaptateurPersistance.utilisateur(idUtilisateur);
@@ -240,26 +234,6 @@ const creeDepot = (config = {}) => {
   const utilisateurAFinaliser = async (idReset) =>
     p.lis.celuiAvecIdReset(idReset);
 
-  const utilisateurAuthentifie = async (login, motDePasse) => {
-    const u = await p.lis.donnees.deCeluiAvecEmail(login);
-
-    const motDePasseStocke = u && u.motDePasse;
-    const echecAuthentification = undefined;
-
-    if (!motDePasseStocke) return echecAuthentification;
-
-    const authentificationReussie = await adaptateurChiffrement.compareBCrypt(
-      motDePasse,
-      motDePasseStocke
-    );
-
-    const cguActuelles = serviceCgu.versionActuelle();
-
-    return authentificationReussie
-      ? new Utilisateur(u, { adaptateurJWT, cguActuelles })
-      : echecAuthentification;
-  };
-
   const utilisateurExiste = async (id) => {
     const u = await p.lis.un(id);
     return !!u;
@@ -419,7 +393,6 @@ const creeDepot = (config = {}) => {
     tousUtilisateurs,
     utilisateur,
     utilisateurAFinaliser,
-    utilisateurAuthentifie,
     utilisateurExiste,
     utilisateurAvecEmail,
     valideAcceptationCGUPourUtilisateur,
