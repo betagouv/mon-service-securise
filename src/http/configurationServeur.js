@@ -10,7 +10,6 @@ const ENDPOINTS_SANS_CSRF = [
   // En conséquence, on ne protège pas ces routes publiques contre les attaques CSRF.
   // Cf. https://stackoverflow.com/a/60941601
   { path: '/api/utilisateur', type: 'exact' },
-  { path: '/api/reinitialisationMotDePasse', type: 'exact' },
   // La désinscription est appelée par un webhook coté Brevo
   { path: '/api/desinscriptionInfolettre', type: 'exact' },
   // Les événements Matomo partent vers l'infra beta : on ne fait que passe-plat donc on ne protège pas.

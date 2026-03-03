@@ -200,18 +200,6 @@ const envoieMessageInvitationInscription = (
     }
   );
 
-const envoieMessageReinitialisationMotDePasse = (
-  destinataire,
-  idResetMotDePasse
-) =>
-  envoieEmail(
-    destinataire,
-    parseInt(process.env.SENDINBLUE_TEMPLATE_REINITIALISATION_MOT_DE_PASSE, 10),
-    {
-      URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
-    }
-  );
-
 const envoieNotificationTentativeReinscription = (destinataire) =>
   envoieEmail(
     destinataire,
@@ -387,7 +375,6 @@ export {
   envoieMessageFinalisationInscription,
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,
-  envoieMessageReinitialisationMotDePasse,
   envoieNotificationExpirationHomologationCadencee as envoieNotificationExpirationHomologation,
   envoieNotificationTentativeReinscription,
   recupereEntreprise,

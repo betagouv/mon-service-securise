@@ -22,7 +22,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
     '/creation-compte?token=unToken',
     '/activation',
     '/connexion',
-    '/reinitialisationMotDePasse',
     '/devenir-ambassadeurrice-monservicesecurise',
     '/faire-connaitre-et-recommander-monservicesecurise',
     '/co-construire-monservicesecurise',
@@ -91,17 +90,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Non connecté"', () => {
         `Article Crisp inconnu`,
         `/articles/un-slug-inexistant`
       );
-    });
-  });
-
-  describe('quand requête GET sur `/reinitialisationMotDePasse`', () => {
-    it("déconnecte l'utilisateur courant", async () => {
-      await testeur
-        .middleware()
-        .verifieRequeteExigeSuppressionCookie(
-          testeur.app(),
-          '/reinitialisationMotDePasse'
-        );
     });
   });
 
