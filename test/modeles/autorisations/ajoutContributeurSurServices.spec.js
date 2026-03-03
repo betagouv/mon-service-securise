@@ -238,11 +238,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
       busEvenements = fabriqueBusPourLesTests();
       let utilisateurInexistant;
       depotDonnees.utilisateurAvecEmail = async () => utilisateurInexistant;
-      contributeurCree = {
-        id: '789',
-        email: 'jean.dupont@mail.fr',
-        idResetMotDePasse: 'reset',
-      };
+      contributeurCree = { id: '789', email: 'jean.dupont@mail.fr' };
       depotDonnees.nouvelUtilisateur = async () => contributeurCree;
     });
 
@@ -251,11 +247,7 @@ describe("L'ajout d'un contributeur sur des services", () => {
 
       depotDonnees.nouvelUtilisateur = async (donneesUtilisateur) => {
         emailAjoute = donneesUtilisateur.email;
-        return {
-          id: '789',
-          email: 'jean.dupont@mail.fr',
-          idResetMotDePasse: 'reset',
-        };
+        return { id: '789', email: 'jean.dupont@mail.fr' };
       };
 
       await ajoutContributeurSurServices({

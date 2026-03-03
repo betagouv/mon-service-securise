@@ -46,7 +46,6 @@ describe('Le dépôt de données des utilisateurs', () => {
         .ajouteUnUtilisateur(
           unUtilisateur()
             .avecId('123')
-            .avecIdResetMotDePasse('unIdReset')
             .quiSAppelle('Jean Dupont')
             .avecEmail('jean.dupont@mail.fr')
             .quiAccepteCGU().donnees
@@ -117,15 +116,6 @@ describe('Le dépôt de données des utilisateurs', () => {
       expect(u.emailHash).to.equal('jean.dubois@mail.fr-haché256');
     });
 
-    it("ne modifie pas l'idResetMotDePasse s'il ne fait pas partie du delta de données", async () => {
-      const deltaSansIdReset = { nom: 'Dupont', prenom: 'Jean' };
-
-      await depot.metsAJourUtilisateur('123', deltaSansIdReset);
-
-      const u = await depot.utilisateur('123');
-      expect(u.idResetMotDePasse).to.equal('unIdReset');
-    });
-
     it("complète les informations de l'entité et les enregistre", async () => {
       adaptateurRechercheEntite.rechercheOrganisations = async () => [
         { nom: 'MonEntite', departement: '75', siret: '12345' },
@@ -183,7 +173,6 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       const u = await adaptateurPersistance.utilisateur('123');
       expect(u.donnees.id).to.be(undefined);
-      expect(u.donnees.idResetMotDePasse).to.be(undefined);
       expect(u.donnees.dateCreation).to.be(undefined);
     });
 
@@ -650,7 +639,6 @@ describe('Le dépôt de données des utilisateurs', () => {
 
         const utilisateur = await depot.utilisateur('1');
         expect(utilisateur).to.be.an(Utilisateur);
-        expect(utilisateur.idResetMotDePasse).to.equal('2');
         expect(utilisateur.prenom).to.equal('Jean');
         expect(utilisateur.nom).to.equal('Dupont');
         expect(utilisateur.email).to.equal('jean.dupont@mail.fr');
@@ -801,32 +789,6 @@ describe('Le dépôt de données des utilisateurs', () => {
           expect(e.idUtilisateur).to.equal('123');
         }
       });
-    });
-
-    it('supprime un identifiant de reset de mot de passe', async () => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [
-            {
-              id: '123',
-              idResetMotDePasse: '999',
-              donnees: {
-                email: 'jean.dupont@mail.fr',
-              },
-            },
-          ],
-        });
-      depot = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurChiffrement,
-        adaptateurPersistance,
-      });
-      const utilisateur = await depot.utilisateur('123');
-      expect(utilisateur.idResetMotDePasse).to.equal('999');
-
-      await depot.supprimeIdResetMotDePassePourUtilisateur(utilisateur);
-
-      const nouvelUtilisateur = await depot.utilisateur('123');
-      expect(nouvelUtilisateur.idResetMotDePasse).to.be(undefined);
     });
   });
 

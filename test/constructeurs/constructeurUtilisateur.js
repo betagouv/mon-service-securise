@@ -5,7 +5,6 @@ class ConstructeurUtilisateur {
     this.donnees = {
       dateCreation: '',
       id: '999',
-      idResetMotDePasse: '',
       prenom: '',
       nom: '',
       email: 'jean.dujardin@beta.gouv.com',
@@ -41,11 +40,6 @@ class ConstructeurUtilisateur {
 
   avecId(idUtilisateur) {
     this.donnees.id = idUtilisateur;
-    return this;
-  }
-
-  avecIdResetMotDePasse(idReset) {
-    this.donnees.idResetMotDePasse = idReset;
     return this;
   }
 

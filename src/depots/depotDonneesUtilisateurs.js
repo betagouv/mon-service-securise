@@ -47,7 +47,6 @@ function fabriquePersistance({
     return {
       ...donneesEnClair,
       id: donneesUtilisateur.id,
-      idResetMotDePasse: donneesUtilisateur.idResetMotDePasse,
       dateCreation: donneesUtilisateur.dateCreation,
     };
   };
@@ -119,7 +118,6 @@ function fabriquePersistance({
         id: _,
         dateCreation: __,
         emailHash: ___,
-        idResetMotDePasse: ____,
         ...donneesEnClairASauvegarder
       } = donneesEnClairAJour;
       const donneesChiffreesASauvegarder = await chiffre.donneesUtilisateur(
@@ -134,15 +132,6 @@ function fabriquePersistance({
     supprime: async (id) => {
       await adaptateurPersistance.supprimeAutorisationsContribution(id);
       await adaptateurPersistance.supprimeUtilisateur(id);
-    },
-    idResetMotDePasse: {
-      sauvegarde: async (id, idResetMotDePasse) =>
-        adaptateurPersistance.metsAJourIdResetMdpUtilisateur(
-          id,
-          idResetMotDePasse
-        ),
-      efface: async (id) =>
-        adaptateurPersistance.metsAJourIdResetMdpUtilisateur(id, undefined),
     },
     estProConnecte: async (email) => {
       const emailMinuscule = email.toLowerCase();
@@ -193,7 +182,6 @@ const creeDepot = (config = {}) => {
       );
 
     const id = adaptateurUUID.genereUUID();
-    const idResetMotDePasse = adaptateurUUID.genereUUID();
     donneesUtilisateur.transactionnelAccepte = true;
     if (donneesUtilisateur.entite) {
       donneesUtilisateur.entite = await Entite.completeDonnees(
@@ -203,7 +191,6 @@ const creeDepot = (config = {}) => {
     }
 
     await p.ajoute(id, donneesUtilisateur);
-    await p.idResetMotDePasse.sauvegarde(id, idResetMotDePasse);
     u = await p.lis.un(id);
 
     if (!u.estUnInvite()) {
@@ -279,7 +266,6 @@ const creeDepot = (config = {}) => {
     utilisateurAModifier
   ) => {
     const { id } = utilisateurAModifier;
-    await p.idResetMotDePasse.efface(id);
     return p.lis.un(id);
   };
 
