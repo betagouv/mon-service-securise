@@ -13,28 +13,7 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
 
   beforeEach(() => testeur.initialise());
 
-  describe(`quand GET sur /motDePasse/initialisation`, () => {
-    beforeEach(() => {
-      const utilisateur = unUtilisateur().construis();
-      testeur.depotDonnees().utilisateur = async () => utilisateur;
-    });
-
-    it("vérifie que l'utilisateur est authentifié", async () => {
-      await testeur
-        .middleware()
-        .verifieRequeteExigeJWT(testeur.app(), '/motDePasse/initialisation');
-    });
-
-    it('sert le contenu HTML de la page', async () => {
-      const reponse = await testeur.get('/motDePasse/initialisation');
-
-      expect(reponse.status).to.equal(200);
-      expect(reponse.headers['content-type']).to.contain('text/html');
-    });
-  });
-
   [
-    '/motDePasse/edition',
     '/profil',
     '/tableauDeBord',
     '/visiteGuidee/decrire',

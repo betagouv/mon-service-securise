@@ -40,7 +40,7 @@ describe('Le serveur MSS', () => {
         routeur: "'non connecté' de page",
       },
       {
-        url: '/motDePasse/edition',
+        url: '/profil',
         typeAttendu: TYPES_REQUETES.NAVIGATION,
         routeur: "'connecté' de page",
         callbackInitialisation: () => {

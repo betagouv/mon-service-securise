@@ -25,9 +25,6 @@
     <div class="menu">
       <a href="/tableauDeBord">Mon tableau de bord</a>
       <a href="/profil">Mettre à jour mon profil</a>
-      {#if connecte.sourceAuthentification === 'MSS'}
-        <a href="/motDePasse/edition">Changer mon mot de passe</a>
-      {/if}
     </div>
   {/if}
 

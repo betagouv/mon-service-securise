@@ -20,20 +20,6 @@ const routesConnectePage = ({
   const routes = express.Router();
 
   routes.get(
-    '/motDePasse/edition',
-    middleware.verificationAcceptationCGU,
-    middleware.chargeEtatVisiteGuidee,
-    (requete, reponse) => {
-      const idUtilisateur = requete.idUtilisateurCourant;
-      depotDonnees
-        .utilisateur(idUtilisateur)
-        .then((utilisateur) =>
-          reponse.render('motDePasse/edition', { utilisateur })
-        );
-    }
-  );
-
-  routes.get(
     '/supervision',
     middleware.verificationAcceptationCGU,
     async (requete, reponse) => {
@@ -49,19 +35,6 @@ const routesConnectePage = ({
         referentiel,
         entitesSupervisees: superviseur.entitesSupervisees,
       });
-    }
-  );
-
-  routes.get(
-    '/motDePasse/initialisation',
-    middleware.verificationJWT,
-    (requete, reponse) => {
-      const idUtilisateur = requete.idUtilisateurCourant;
-      depotDonnees
-        .utilisateur(idUtilisateur)
-        .then((utilisateur) =>
-          reponse.render('motDePasse/edition', { utilisateur })
-        );
     }
   );
 
