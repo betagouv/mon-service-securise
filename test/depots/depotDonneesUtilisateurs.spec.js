@@ -852,62 +852,6 @@ describe('Le dépôt de données des utilisateurs', () => {
     });
   });
 
-  describe('Sur demande réinitialisation du mot de passe', () => {
-    it("ajoute un identifiant de reset de mot de passe à l'utilisateur", async () => {
-      const depot = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurChiffrement,
-        adaptateurUUID: {
-          genereUUID: () => '11111111-1111-1111-1111-111111111111',
-        },
-        adaptateurPersistance: unePersistanceMemoire()
-          .ajouteUnUtilisateur({
-            id: '123',
-            email: 'jean.dupont@mail.fr',
-            emailHash: 'jean.dupont@mail.fr-haché256',
-            motDePasse: 'UnMDP',
-          })
-          .construis(),
-      });
-
-      const avant = await depot.utilisateur('123');
-      expect(avant.idResetMotDePasse).to.be(undefined);
-
-      const apres = await depot.reinitialiseMotDePasse('jean.dupont@mail.fr');
-      expect(apres.idResetMotDePasse).to.equal(
-        '11111111-1111-1111-1111-111111111111'
-      );
-    });
-
-    it("échoue silencieusement si l'utilisateur est inconnu", async () => {
-      const depot = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurChiffrement,
-        adaptateurPersistance: unePersistanceMemoire().construis(),
-      });
-
-      const u = await depot.reinitialiseMotDePasse('jean.dupont@mail.fr');
-
-      expect(u).to.be(undefined);
-    });
-
-    it("échoue silencieusement si l'utilisateur est ProConnecté", async () => {
-      const depot = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurChiffrement,
-        adaptateurPersistance: unePersistanceMemoire()
-          .ajouteUnUtilisateur({
-            id: '123',
-            email: 'jean.dupont@mail.fr',
-            emailHash: 'jean.dupont@mail.fr-haché256',
-            motDePasse: undefined,
-          })
-          .construis(),
-      });
-
-      const u = await depot.reinitialiseMotDePasse('jean.dupont@mail.fr');
-
-      expect(u).to.be(undefined);
-    });
-  });
-
   describe("sur demande de suppression d'un utilisateur", () => {
     it("lève une exception si l'utilisateur a créé des services", async () => {
       const adaptateurPersistance =

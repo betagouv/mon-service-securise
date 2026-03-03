@@ -11,7 +11,6 @@ import { valideBody, valideQuery } from '../../http/validePayloads.js';
 import {
   reglesValidationDesinscriptionInfolettre,
   reglesValidationRechercheOrganisations,
-  reglesValidationReinitialisationMotDePasse,
   schemaPostUtilisateur,
 } from './routesNonConnecteApi.schema.js';
 import { Middleware } from '../../http/middleware.interface.js';
@@ -99,28 +98,6 @@ const routesNonConnecteApi = ({
           reponse.status(422).send(e.message);
         } else suite(e);
       }
-    }
-  );
-
-  routes.post(
-    '/reinitialisationMotDePasse',
-    middleware.protegeTrafic(),
-    valideBody(z.strictObject(reglesValidationReinitialisationMotDePasse)),
-    (requete, reponse, suite) => {
-      const email = requete.body.email?.toLowerCase();
-
-      depotDonnees
-        .reinitialiseMotDePasse(email)
-        .then((utilisateur) => {
-          if (utilisateur) {
-            adaptateurMail.envoieMessageReinitialisationMotDePasse(
-              utilisateur.email,
-              utilisateur.idResetMotDePasse
-            );
-          }
-        })
-        .then(() => reponse.send(''))
-        .catch(suite);
     }
   );
 

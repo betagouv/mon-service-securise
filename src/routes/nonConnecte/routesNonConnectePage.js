@@ -121,14 +121,6 @@ const routesNonConnectePage = ({
   });
 
   routes.get(
-    '/reinitialisationMotDePasse',
-    middleware.suppressionCookie,
-    (_requete, reponse) => {
-      reponse.render('reinitialisationMotDePasse');
-    }
-  );
-
-  routes.get(
     '/initialisationMotDePasse/:idReset',
     middleware.chargeEtatAgentConnect,
     valideParams(z.strictObject({ idReset: z.uuid() })),

@@ -27,10 +27,6 @@ export const schemaPostUtilisateur = {
   token: z.jwt(),
 };
 
-export const reglesValidationReinitialisationMotDePasse = {
-  email: z.email().optional(),
-};
-
 export const reglesValidationRechercheOrganisations = {
   departement: z.enum(departements.map((d) => d.code)).optional(),
   recherche: z.string().min(2).max(200),

@@ -283,17 +283,6 @@ const creeDepot = (config = {}) => {
     return u;
   };
 
-  const reinitialiseMotDePasse = async (email) => {
-    const u = await p.lis.celuiAvecEmail(email);
-    if (!u) return undefined;
-
-    if (await p.estProConnecte(email)) return undefined;
-
-    const idResetMotDePasse = adaptateurUUID.genereUUID();
-    await p.idResetMotDePasse.sauvegarde(u.id, idResetMotDePasse);
-    return p.lis.un(u.id);
-  };
-
   const supprimeIdResetMotDePassePourUtilisateur = async (
     utilisateurAModifier
   ) => {
@@ -387,7 +376,6 @@ const creeDepot = (config = {}) => {
     metsAJourUtilisateur,
     nouvelUtilisateur,
     rafraichisProfilUtilisateurLocal,
-    reinitialiseMotDePasse,
     supprimeIdResetMotDePassePourUtilisateur,
     supprimeUtilisateur,
     tousUtilisateurs,
