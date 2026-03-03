@@ -44,6 +44,9 @@ jobs:
       - name: Contrôler le Typescript de Svelte
         run: ./node_modules/.bin/tsc --noEmit -p svelte/tsconfig.json
 
+      - name: Contrôler la cohérence de Svelte avec `svelte-check`
+        run: ./node_modules/.bin/svelte-check --workspace svelte --no-tsconfig --threshold error
+
       - name: Exécuter les tests
         run: ./node_modules/.bin/vitest --reporter junit --outputFile=./test-report.xml
 
