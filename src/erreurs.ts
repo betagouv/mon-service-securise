@@ -76,7 +76,6 @@ class ErreurModeleDeMesureSpecifiqueDejaAssociee extends ErreurModele {
   }
 }
 class ErreurDetachementModeleMesureSpecifiqueImpossible extends ErreurModele {}
-class ErreurMotDePasseIncorrect extends ErreurModele {}
 class ErreurNiveauGraviteInconnu extends ErreurModele {}
 class ErreurNiveauVraisemblanceInconnu extends ErreurModele {}
 class ErreurNomServiceDejaExistant extends ErreurModele {}
@@ -153,7 +152,6 @@ export {
   ErreurMesureInconnue,
   ErreurModeleDeMesureSpecifiqueDejaAssociee,
   ErreurModeleDeMesureSpecifiqueIntrouvable,
-  ErreurMotDePasseIncorrect,
   ErreurModele,
   ErreurMoteurDeReglesV2,
   ErreurNiveauGraviteInconnu,
