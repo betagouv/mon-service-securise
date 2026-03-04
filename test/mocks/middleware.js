@@ -87,7 +87,7 @@ const middlewareFantaisie = {
       .avecNomService('un service')
       .construis(),
     autorisationACharger = uneAutorisation().construis(),
-    authentificationAUtiliser = SourceAuthentification.MSS,
+    authentificationAUtiliser = SourceAuthentification.AGENT_CONNECT,
     fonctionDeposeCookieAAppeler = undefined,
   }) => {
     autorisationsChargees = false;

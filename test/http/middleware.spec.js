@@ -1074,18 +1074,6 @@ describe('Le middleware MSS', () => {
       });
     });
 
-    it("ne demande pas l'affichage de l'explication pour une requête connectée avec un compte legacy", async () => {
-      let doitAfficher;
-      const middleware = leMiddleware();
-      requete.session.sourceAuthentification = SourceAuthentification.MSS;
-
-      await middleware.chargeExplicationUtilisationMFA(requete, reponse, () => {
-        doitAfficher = reponse.locals.afficheExplicationUtilisationMFA;
-      });
-
-      expect(doitAfficher).to.be(false);
-    });
-
     it("ne demande pas l'affichage pour une requête non connectée", async () => {
       let doitAfficher;
       const middleware = leMiddleware();

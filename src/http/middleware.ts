@@ -313,15 +313,10 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       requete.idUtilisateurCourant
     );
 
-    let doitAfficher = false;
-    if (
-      requete.session?.sourceAuthentification ===
-      SourceAuthentification.AGENT_CONNECT
-    ) {
-      doitAfficher =
-        !parcoursUtilisateur.aVuTableauDeBord() &&
-        !requete.session.connexionAvecMFA;
-    }
+    const doitAfficher =
+      !parcoursUtilisateur.aVuTableauDeBord() &&
+      !requete.session?.connexionAvecMFA;
+
     reponse.locals.afficheExplicationUtilisationMFA = doitAfficher;
 
     suite();
