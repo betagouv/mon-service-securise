@@ -20,14 +20,17 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
 
   describe('quand requête POST sur `/api/utilisateur`', () => {
     const tokenJWT = jwt.sign({ donnees: 'unTokenValide' }, 'secret-jwt');
+
     const tokenJWTInvalide = jwt.sign(
       { donnees: 'unTokenInvalide' },
       'mauvais-secret-jwt'
     );
+
     const utilisateur = {
       id: '123',
       genereToken: () => 'un token',
     } as unknown as Utilisateur;
+
     let donneesRequete: Omit<
       CorpsRequetePutOuPostUtilisateur,
       'nom' | 'prenom'
@@ -40,10 +43,7 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         telephone: '0100000000',
         postes: ['RSSI', "Chargé des systèmes d'informations"],
         siretEntite: '13000766900018',
-        estimationNombreServices: {
-          borneBasse: '1',
-          borneHaute: '10',
-        },
+        estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
         cguAcceptees: true,
         infolettreAcceptee: true,
         transactionnelAccepte: true,
@@ -63,14 +63,10 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         throw new ErreurJWTManquant();
       };
       testeur.referentiel().departement = () => 'Paris';
-      testeur.adaptateurMail().creeContact = () => Promise.resolve();
-      testeur.adaptateurMail().envoieMessageFinalisationInscription = () =>
-        Promise.resolve();
-      testeur.adaptateurMail().envoieMessageReinitialisationMotDePasse = () =>
-        Promise.resolve();
-
-      testeur.depotDonnees().nouvelUtilisateur = () =>
-        Promise.resolve(utilisateur);
+      testeur.adaptateurMail().creeContact = async () => {};
+      testeur.adaptateurMail().envoieMessageReinitialisationMotDePasse =
+        async () => {};
+      testeur.depotDonnees().nouvelUtilisateur = async () => utilisateur;
     });
 
     it('applique une protection de trafic', async () => {
@@ -290,13 +286,15 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it("convertit l'email en minuscules", async () => {
-      testeur.depotDonnees().nouvelUtilisateur = ({
+      let conversionFaite = false;
+      testeur.depotDonnees().nouvelUtilisateur = async ({
         email,
       }: {
         email: string;
       }) => {
         expect(email).toEqual('jean.dupont@mail.fr');
-        return Promise.resolve(utilisateur);
+        conversionFaite = true;
+        return utilisateur;
       };
 
       testeur.adaptateurJWT().decode = () => ({
@@ -306,6 +304,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       });
 
       await testeur.post('/api/utilisateur', donneesRequete);
+
+      expect(conversionFaite).toBe(true);
     });
 
     it('si les CGU sont acceptées, passe la valeur de la version actuelle des CGU au dépôt', async () => {
@@ -328,18 +328,23 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it("convertit l'infolettre acceptée en valeur booléenne", async () => {
-      testeur.depotDonnees().nouvelUtilisateur = ({
+      let effectue = false;
+
+      testeur.depotDonnees().nouvelUtilisateur = async ({
         infolettreAcceptee,
       }: {
         infolettreAcceptee: true;
       }) => {
         expect(infolettreAcceptee).toEqual(true);
-        return Promise.resolve(utilisateur);
+        effectue = true;
+        return utilisateur;
       };
 
       donneesRequete.infolettreAcceptee = true;
 
       await testeur.post('/api/utilisateur', donneesRequete);
+
+      expect(effectue).toBe(true);
     });
 
     it("demande au dépôt de créer l'utilisateur", async () => {
@@ -359,13 +364,8 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         prenom: 'Jean',
         nom: 'Dupont',
         telephone: '0100000000',
-        entite: {
-          siret: '13000766900018',
-        },
-        estimationNombreServices: {
-          borneBasse: '1',
-          borneHaute: '10',
-        },
+        entite: { siret: '13000766900018' },
+        estimationNombreServices: { borneBasse: '1', borneHaute: '10' },
         infolettreAcceptee: true,
         transactionnelAccepte: true,
         postes: ['RSSI', "Chargé des systèmes d'informations"],
@@ -375,26 +375,26 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
     });
 
     it("utilise l'adaptateur de tracking pour envoyer un événement d'inscription", async () => {
-      testeur.depotDonnees().nouvelUtilisateur = () =>
-        Promise.resolve({ email: 'jean.dupont@mail.fr' });
+      testeur.depotDonnees().nouvelUtilisateur = async () => ({
+        email: 'jean.dupont@mail.fr',
+      });
 
       let donneesPassees = {};
-      testeur.adaptateurTracking().envoieTrackingInscription = (
+      testeur.adaptateurTracking().envoieTrackingInscription = async (
         destinataire: string
       ) => {
         donneesPassees = { destinataire };
-        return Promise.resolve();
       };
 
       await testeur.post('/api/utilisateur', donneesRequete);
 
-      expect(donneesPassees).toEqual({
-        destinataire: 'jean.dupont@mail.fr',
-      });
+      expect(donneesPassees).toEqual({ destinataire: 'jean.dupont@mail.fr' });
     });
 
     it('crée un contact email', async () => {
-      testeur.adaptateurMail().creeContact = (
+      let contactCree = false;
+
+      testeur.adaptateurMail().creeContact = async (
         destinataire: string,
         prenom: string,
         nom: string,
@@ -408,69 +408,26 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
         expect(telephone).toEqual('0100000000');
         expect(bloqueEmails).toEqual(false);
         expect(bloqueMarketing).toBe(false);
-        return Promise.resolve();
+        contactCree = true;
       };
 
       await testeur.post('/api/utilisateur', donneesRequete);
-    });
 
-    it("envoie un message de notification à l'utilisateur créé", async () => {
-      utilisateur.email = 'jean.dupont@mail.fr';
-
-      testeur.adaptateurMail().envoieMessageFinalisationInscription = (
-        destinataire: string
-      ) => {
-        expect(destinataire).toEqual('jean.dupont@mail.fr');
-        return Promise.resolve();
-      };
-
-      await testeur.post('/api/utilisateur', donneesRequete);
-    });
-
-    it("n'envoie pas de message de notification à l'utilisateur Agent Connect créé", async () => {
-      testeur.adaptateurMail().envoieMessageFinalisationInscription = () => {
-        expect.fail("N'aurait pas dû envoyer de message");
-      };
-
-      await testeur.post('/api/utilisateur', {
-        ...donneesRequete,
-        agentConnect: true,
-      });
-    });
-
-    describe("si l'envoi de mail échoue", () => {
-      beforeEach(() => {
-        testeur.adaptateurMail().envoieMessageFinalisationInscription = () =>
-          Promise.reject(new Error('Oups.'));
-        testeur.depotDonnees().supprimeUtilisateur = () => Promise.resolve();
-      });
-
-      it('retourne une erreur HTTP 424', async () => {
-        await testeur.verifieRequeteGenereErreurHTTP(
-          424,
-          "L'envoi de l'email de finalisation d'inscription a échoué",
-          {
-            method: 'post',
-            url: '/api/utilisateur',
-            data: donneesRequete,
-          }
-        );
-      });
+      expect(contactCree).toBe(true);
     });
 
     it('envoie un email de notification de tentative de réinscription', async () => {
       let notificationEnvoyee = false;
 
-      testeur.depotDonnees().nouvelUtilisateur = () =>
-        Promise.reject(new ErreurUtilisateurExistant('oups', unUUIDRandom()));
-
-      testeur.adaptateurMail().envoieNotificationTentativeReinscription = (
-        destinataire: string
-      ) => {
-        expect(destinataire).toEqual('jean.dupont@mail.fr');
-        notificationEnvoyee = true;
-        return Promise.resolve();
+      testeur.depotDonnees().nouvelUtilisateur = async () => {
+        throw new ErreurUtilisateurExistant('oups', unUUIDRandom());
       };
+
+      testeur.adaptateurMail().envoieNotificationTentativeReinscription =
+        async (destinataire: string) => {
+          expect(destinataire).toEqual('jean.dupont@mail.fr');
+          notificationEnvoyee = true;
+        };
 
       await testeur.post('/api/utilisateur', donneesRequete);
 

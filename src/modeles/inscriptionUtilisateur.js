@@ -1,5 +1,4 @@
 import { EchecEnvoiMessage } from '../erreurs.js';
-import { SourceAuthentification } from './sourceAuthentification.js';
 
 function fabriqueInscriptionUtilisateur(config = {}) {
   const { adaptateurMail, adaptateurTracking, depotDonnees } = config;
@@ -25,30 +24,14 @@ function fabriqueInscriptionUtilisateur(config = {}) {
     );
   };
 
-  const envoieMessageFinalisationInscription = async (utilisateur) => {
-    await verifieSuccesEnvoiMessage(
-      adaptateurMail.envoieMessageFinalisationInscription(
-        utilisateur.email,
-        utilisateur.idResetMotDePasse,
-        utilisateur.prenom
-      )
-    );
-  };
-
-  const inscrisUtilisateur = async (donnees, source) => {
+  const inscrisUtilisateur = async (donnees) => {
     await creeContactEmail(donnees);
     const utilisateur = await depotDonnees.nouvelUtilisateur(donnees);
-    if (source === SourceAuthentification.MSS) {
-      await envoieMessageFinalisationInscription(utilisateur);
-    }
-
     await adaptateurTracking.envoieTrackingInscription(utilisateur.email);
     return utilisateur;
   };
 
-  return {
-    inscrisUtilisateur,
-  };
+  return { inscrisUtilisateur };
 }
 
 export { fabriqueInscriptionUtilisateur };

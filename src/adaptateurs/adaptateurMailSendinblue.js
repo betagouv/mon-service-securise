@@ -156,20 +156,6 @@ const envoieEmail = (destinataire, idTemplate, params) =>
       return Promise.reject(e);
     });
 
-const envoieMessageFinalisationInscription = (
-  destinataire,
-  idResetMotDePasse,
-  prenom
-) =>
-  envoieEmail(
-    destinataire,
-    parseInt(process.env.SENDINBLUE_TEMPLATE_FINALISATION_INSCRIPTION, 10),
-    {
-      PRENOM: prenom,
-      URL: `${process.env.URL_BASE_MSS}/initialisationMotDePasse/${idResetMotDePasse}`,
-    }
-  );
-
 const envoieMessageInvitationContribution = (
   destinataire,
   prenomNomEmetteur,
@@ -372,7 +358,6 @@ export {
   inscrisEmailsTransactionnels,
   inscrisInfolettre,
   envoieMessageFelicitationHomologation,
-  envoieMessageFinalisationInscription,
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,
   envoieNotificationExpirationHomologationCadencee as envoieNotificationExpirationHomologation,
