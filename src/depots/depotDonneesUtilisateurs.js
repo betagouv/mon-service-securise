@@ -6,7 +6,6 @@ import {
   ErreurSuppressionImpossible,
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
-  ErreurMotDePasseIncorrect,
 } from '../erreurs.js';
 import Utilisateur from '../modeles/utilisateur.js';
 import Entite from '../modeles/entite.js';
@@ -300,24 +299,6 @@ const creeDepot = (config = {}) => {
     return p.lis.un(utilisateurAModifier.id);
   };
 
-  const verifieMotDePasse = async (idUtilisateur, motDePasse) => {
-    const erreurMotDePasseIncorrect = new ErreurMotDePasseIncorrect(
-      'Le mot de passe est incorrect'
-    );
-    const u = await p.lis.donnees.de(idUtilisateur);
-
-    const motDePasseStocke = u && u.motDePasse;
-
-    if (!motDePasseStocke) throw erreurMotDePasseIncorrect;
-
-    const authentificationReussie = await adaptateurChiffrement.compareBCrypt(
-      motDePasse,
-      motDePasseStocke
-    );
-
-    if (!authentificationReussie) throw erreurMotDePasseIncorrect;
-  };
-
   const rafraichisProfilUtilisateurLocal = async (id) => {
     const donneesMSS = await p.lis.donnees.de(id);
     const donneesMPA = await adaptateurProfilAnssi.recupere(donneesMSS.email);
@@ -353,7 +334,6 @@ const creeDepot = (config = {}) => {
     utilisateurExiste,
     utilisateurAvecEmail,
     valideAcceptationCGUPourUtilisateur,
-    verifieMotDePasse,
   };
 };
 

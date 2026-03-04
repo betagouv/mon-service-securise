@@ -6,7 +6,6 @@ import {
   schemaMesureGenerale,
   schemaMesureSpecifique,
 } from '../../http/schemas/mesure.schema.js';
-import { schemaUtilisateur } from '../../http/schemas/utilisateur.schema.js';
 import { schemaSiret } from '../../http/schemas/siret.schema.js';
 import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
 
@@ -27,10 +26,6 @@ export const schemaPutMesureGenerale = (
     .statut(referentiel, referentielV2)
     .or(z.literal('')),
   modalites: schemaMesureGenerale.modalites(),
-});
-
-export const schemaPatchMotDePasse = () => ({
-  motDePasse: schemaUtilisateur.motDePasse(),
 });
 
 export const schemaDeleteAutorisation = () => ({

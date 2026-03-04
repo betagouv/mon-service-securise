@@ -10,7 +10,6 @@ import {
   ErreurSuppressionImpossible,
   ErreurUtilisateurExistant,
   ErreurUtilisateurInexistant,
-  ErreurMotDePasseIncorrect,
 } from '../../src/erreurs.js';
 import Utilisateur from '../../src/modeles/utilisateur.js';
 import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
@@ -889,65 +888,6 @@ describe('Le dépôt de données des utilisateurs', () => {
 
       const u = await depot.utilisateur('999');
       expect(u).to.be(undefined);
-    });
-  });
-
-  describe('sur demande de vérification du mot de passe', () => {
-    it('jette une erreur si le mot de passe est incorrect', async () => {
-      let erreurJetee;
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '123', motDePasse: 'MDP' }],
-        });
-      const depot = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-        adaptateurChiffrement,
-      });
-
-      try {
-        await depot.verifieMotDePasse('123', 'MDP_INCORRECT');
-      } catch (e) {
-        erreurJetee = true;
-        expect(e).to.be.an(ErreurMotDePasseIncorrect);
-        expect(e.message).to.equal('Le mot de passe est incorrect');
-      } finally {
-        expect(erreurJetee).to.be(true);
-      }
-    });
-
-    it("jette une erreur si aucun mot de passe n'est stocké", async () => {
-      let erreurJetee;
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '123' }],
-        });
-      const depot = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-        adaptateurChiffrement,
-      });
-
-      try {
-        await depot.verifieMotDePasse('123', '');
-      } catch (e) {
-        erreurJetee = true;
-        expect(e).to.be.an(ErreurMotDePasseIncorrect);
-        expect(e.message).to.equal('Le mot de passe est incorrect');
-      } finally {
-        expect(erreurJetee).to.be(true);
-      }
-    });
-
-    it('ne jette aucune erreur si le mot de passe est correct', async () => {
-      const adaptateurPersistance =
-        AdaptateurPersistanceMemoire.nouvelAdaptateur({
-          utilisateurs: [{ id: '123', donnees: { motDePasse: 'MDP-haché' } }],
-        });
-      const depot = DepotDonneesUtilisateurs.creeDepot({
-        adaptateurPersistance,
-        adaptateurChiffrement,
-      });
-
-      await depot.verifieMotDePasse('123', 'MDP');
     });
   });
 

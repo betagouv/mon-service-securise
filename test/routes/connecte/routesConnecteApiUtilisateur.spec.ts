@@ -69,64 +69,6 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
     });
   });
 
-  describe('quand requête PATCH sur `/api/motDePasse', () => {
-    beforeEach(() => {
-      testeur.depotDonnees().metsAJourMotDePasse = async () => utilisateur;
-    });
-
-    it('jette une erreur si le mot de passe est invalide', async () => {
-      const reponse = await testeur.patch('/api/motDePasse', {
-        motDePasse: 1,
-      });
-
-      expect(reponse.status).toBe(400);
-    });
-
-    it('utilise le middleware de challenge du mot de passe', async () => {
-      await testeurMSS()
-        .middleware()
-        .verifieChallengeMotDePasse(testeur.app(), {
-          method: 'patch',
-          url: '/api/motDePasse',
-          data: { motDePasse: 'MDP' },
-        });
-    });
-
-    it('met à jour le mot de passe', async () => {
-      let motDePasseMisAJour = false;
-      testeur.middleware().reinitialise({ idUtilisateur: utilisateur.id });
-      testeur.depotDonnees().metsAJourMotDePasse = async (
-        idUtilisateur: UUID,
-        motDePasse: string
-      ) => {
-        expect(idUtilisateur).toEqual('123');
-        expect(motDePasse).toEqual('mdp_ABC12345');
-        motDePasseMisAJour = true;
-        return utilisateur;
-      };
-
-      const reponse = await testeur.patch('/api/motDePasse', {
-        motDePasse: 'mdp_ABC12345',
-      });
-
-      expect(motDePasseMisAJour).toBe(true);
-      expect(reponse.status).toEqual(200);
-      expect(reponse.body).to.eql({ idUtilisateur: '123' });
-    });
-
-    it("retourne une erreur HTTP 422 si le mot de passe n'est pas assez robuste", async () => {
-      await testeur.verifieRequeteGenereErreurHTTP(
-        422,
-        'Mot de passe trop simple',
-        {
-          method: 'patch',
-          url: '/api/motDePasse',
-          data: { motDePasse: '1234' },
-        }
-      );
-    });
-  });
-
   describe('quand requête PUT sur `/api/utilisateur`', () => {
     let donneesRequete: CorpsRequetePutOuPostUtilisateur;
 
