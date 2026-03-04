@@ -193,7 +193,6 @@ const creeDepot = (config = {}) => {
   } = depotServices;
 
   const {
-    metsAJourMotDePasse,
     metsAJourUtilisateur,
     nouvelUtilisateur,
     rafraichisProfilUtilisateurLocal,
@@ -372,7 +371,6 @@ const creeDepot = (config = {}) => {
     marqueTableauDeBordVuDansParcoursUtilisateur,
     marqueTacheDeServiceLue,
     metsAJourModeleMesureSpecifique,
-    metsAJourMotDePasse,
     metsAJourMesureGeneraleDesServices,
     metsAJourMesureGeneraleDuService,
     metsAJourMesureSpecifiqueDuService,
