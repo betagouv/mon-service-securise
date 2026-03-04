@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import fabriqueAdaptateurPersistance from './src/adaptateurs/fabriqueAdaptateurPersistance.js';
 import { creeDepot } from './src/depotDonnees.js';
 import DescriptionService from './src/modeles/descriptionService.js';
@@ -71,36 +72,37 @@ const creeDonnees = async (depotDonnees, persistance) => {
 };
 
 const main = async () => {
-  if (process.env.CREATION_UTILISATEUR_DEMO) {
-    const adaptateurPersistance = fabriqueAdaptateurPersistance(
-      process.env.NODE_ENV
-    );
-    const busEvenements = new BusEvenements({
-      adaptateurGestionErreur: fabriqueAdaptateurGestionErreur(),
-    });
-    const adaptateurChiffrement = fabriqueAdaptateurChiffrement();
-    const depotDonnees = creeDepot({
-      adaptateurPersistance,
-      adaptateurRechercheEntite,
-      adaptateurChiffrement,
-      busEvenements,
-    });
-
-    /* eslint-disable no-console */
-    const u = await depotDonnees.utilisateurAvecEmail(
-      process.env.EMAIL_UTILISATEUR_DEMO
-    );
-
-    if (u) {
-      console.log('Utilisateur déjà existant !…');
-      process.exit(0);
-    }
-
-    await creeDonnees(depotDonnees, adaptateurPersistance);
-    console.log('Utilisateur de démonstration créé !');
+  if (!process.env.CREATION_UTILISATEUR_DEMO) {
     process.exit(0);
-    /* eslint-enable no-console */
   }
+
+  const adaptateurPersistance = fabriqueAdaptateurPersistance(
+    process.env.NODE_ENV
+  );
+  const busEvenements = new BusEvenements({
+    adaptateurGestionErreur: fabriqueAdaptateurGestionErreur(),
+  });
+  const adaptateurChiffrement = fabriqueAdaptateurChiffrement();
+  const depotDonnees = creeDepot({
+    adaptateurPersistance,
+    adaptateurRechercheEntite,
+    adaptateurChiffrement,
+    busEvenements,
+  });
+
+  const u = await depotDonnees.utilisateurAvecEmail(
+    process.env.EMAIL_UTILISATEUR_DEMO
+  );
+
+  if (u) {
+    console.log('Utilisateur déjà existant !…');
+    process.exit(0);
+  }
+
+  await creeDonnees(depotDonnees, adaptateurPersistance);
+
+  console.log('Utilisateur de démonstration créé !');
+  process.exit(0);
 };
 
 main().then(() => {});
