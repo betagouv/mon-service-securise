@@ -36,10 +36,6 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoyer('Inscription aux emails transactionnels', args);
   };
 
-  const envoieMessageFinalisationInscription = async (...args) => {
-    envoyer("Envoie de l'email de finalisation de l'inscription", args);
-  };
-
   const envoieMessageInvitationContribution = async (...args) => {
     envoyer("Envoie de l'email d'invitation à contribuer", args);
   };
@@ -134,7 +130,6 @@ const fabriqueAdaptateurMailMemoire = () => {
     inscrisEmailsTransactionnels,
     inscrisInfolettre,
     envoieMessageFelicitationHomologation,
-    envoieMessageFinalisationInscription,
     envoieMessageInvitationContribution,
     envoieMessageInvitationInscription,
     envoieNotificationExpirationHomologation,

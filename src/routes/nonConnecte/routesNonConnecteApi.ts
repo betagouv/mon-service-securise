@@ -6,7 +6,6 @@ import {
   ErreurUtilisateurExistant,
 } from '../../erreurs.js';
 import { obtentionDonneesDeBaseUtilisateur } from '../mappeur/utilisateur.js';
-import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 import { valideBody, valideQuery } from '../../http/validePayloads.js';
 import {
   reglesValidationDesinscriptionInfolettre,
@@ -73,15 +72,8 @@ const routesNonConnecteApi = ({
       }
 
       try {
-        const { agentConnect } = requete.body;
-
-        const source = agentConnect
-          ? SourceAuthentification.AGENT_CONNECT
-          : SourceAuthentification.MSS;
-        const utilisateur = await inscriptionUtilisateur.inscrisUtilisateur(
-          donnees,
-          source
-        );
+        const utilisateur =
+          await inscriptionUtilisateur.inscrisUtilisateur(donnees);
 
         reponse.json({ idUtilisateur: utilisateur.id });
       } catch (e) {
