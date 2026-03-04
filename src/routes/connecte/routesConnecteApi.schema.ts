@@ -29,12 +29,6 @@ export const schemaPutMesureGenerale = (
   modalites: schemaMesureGenerale.modalites(),
 });
 
-export const schemaPutMotDePasse = () => ({
-  cguAcceptees: schemaUtilisateur.cguAcceptees().optional(),
-  infolettreAcceptee: schemaUtilisateur.infolettreAcceptee().optional(),
-  motDePasse: schemaUtilisateur.motDePasse(),
-});
-
 export const schemaPatchMotDePasse = () => ({
   motDePasse: schemaUtilisateur.motDePasse(),
 });

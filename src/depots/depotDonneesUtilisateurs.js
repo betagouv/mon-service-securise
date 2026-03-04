@@ -262,13 +262,6 @@ const creeDepot = (config = {}) => {
     return u;
   };
 
-  const supprimeIdResetMotDePassePourUtilisateur = async (
-    utilisateurAModifier
-  ) => {
-    const { id } = utilisateurAModifier;
-    return p.lis.un(id);
-  };
-
   const supprimeUtilisateur = async (id) => {
     const verifieUtilisateurExistant = async () => {
       const u = await p.lis.un(id);
@@ -354,7 +347,6 @@ const creeDepot = (config = {}) => {
     metsAJourUtilisateur,
     nouvelUtilisateur,
     rafraichisProfilUtilisateurLocal,
-    supprimeIdResetMotDePassePourUtilisateur,
     supprimeUtilisateur,
     tousUtilisateurs,
     utilisateur,

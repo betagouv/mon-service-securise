@@ -3,10 +3,8 @@ import { z } from 'zod';
 import { valideBody } from '../../http/validePayloads.js';
 import {
   schemaPatchMotDePasse,
-  schemaPutMotDePasse,
   schemaPutUtilisateur,
 } from './routesConnecteApi.schema.js';
-import { SourceAuthentification } from '../../modeles/sourceAuthentification.js';
 import { obtentionDonneesDeBaseUtilisateur } from '../mappeur/utilisateur.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import {
@@ -45,64 +43,6 @@ export const routesConnecteApiUtilisateur = ({
   serviceGestionnaireSession: ServiceGestionnaireSession;
 }) => {
   const routes = express.Router();
-
-  routes.put(
-    '/motDePasse',
-    valideBody(z.strictObject(schemaPutMotDePasse())),
-    async (requete, reponse, suite) => {
-      const {
-        idUtilisateurCourant: idUtilisateur,
-        cguAcceptees: cguDejaAcceptees,
-      } = requete as RequeteMSS;
-
-      const {
-        motDePasse,
-        infolettreAcceptee,
-        cguAcceptees: cguEnCoursDAcceptation,
-      } = requete.body;
-
-      if (!cguDejaAcceptees && !cguEnCoursDAcceptation) {
-        reponse.status(422).send('CGU non acceptées');
-        return;
-      }
-
-      if (
-        valideMotDePasse(motDePasse) !== resultatValidation.MOT_DE_PASSE_VALIDE
-      ) {
-        reponse.status(422).send('Mot de passe trop simple');
-        return;
-      }
-
-      try {
-        let u = await depotDonnees.utilisateur(idUtilisateur);
-        await depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse);
-
-        u = (await depotDonnees.valideAcceptationCGUPourUtilisateur(
-          u
-        )) as Utilisateur;
-
-        await depotDonnees.supprimeIdResetMotDePassePourUtilisateur(u);
-        await adaptateurMail.inscrisEmailsTransactionnels(u.email);
-
-        if (infolettreAcceptee) {
-          await adaptateurMail.inscrisInfolettre(u.email);
-          await depotDonnees.metsAJourUtilisateur(u.id, {
-            infolettreAcceptee: true,
-          });
-        }
-
-        serviceGestionnaireSession.enregistreSession(
-          requete as RequeteAvecSession,
-          u,
-          SourceAuthentification.MSS
-        );
-
-        reponse.json({ idUtilisateur });
-      } catch (e) {
-        suite(e);
-      }
-    }
-  );
 
   routes.put('/utilisateur/acceptationCGU', async (requete, reponse) => {
     const { idUtilisateurCourant: idUtilisateur, sourceAuthentification } =
