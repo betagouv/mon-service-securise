@@ -378,30 +378,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       message: 'Non autorisé',
     });
 
-  const challengeMotDePasse = (
-    requete: RequeteMSS,
-    reponse: Response,
-    suite: NextFunction
-  ) => {
-    if (!requete.idUtilisateurCourant)
-      throw new ErreurChainageMiddleware(
-        'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
-      );
-
-    const resultat = z
-      .looseObject({ motDePasseChallenge: z.string().min(1) })
-      .safeParse(requete.body);
-
-    if (!resultat.success) reponse.sendStatus(400);
-
-    const { motDePasseChallenge } = requete.body;
-
-    depotDonnees
-      .verifieMotDePasse(requete.idUtilisateurCourant, motDePasseChallenge)
-      .then(() => suite())
-      .catch(() => reponse.status(401).send('Mot de passe incorrect'));
-  };
-
   const protegeTrafic = () =>
     adaptateurProtection.protectionLimiteTraficEndpointSensible();
 
@@ -496,7 +472,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
 
   return {
     ajouteVersionFichierCompiles,
-    challengeMotDePasse,
     chargeAutorisationsService,
     chargeEtatVisiteGuidee,
     chargeExplicationNouveauReferentiel,

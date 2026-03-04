@@ -203,7 +203,6 @@ const creeDepot = (config = {}) => {
     utilisateurExiste,
     utilisateurAvecEmail,
     valideAcceptationCGUPourUtilisateur,
-    verifieMotDePasse,
   } = depotUtilisateurs;
 
   const {
@@ -431,7 +430,6 @@ const creeDepot = (config = {}) => {
     utilisateurAvecEmail,
     valideAcceptationCGUPourUtilisateur,
     verifieLaCoherenceDesSels,
-    verifieMotDePasse,
     versionsServiceUtiliseesParUtilisateur,
   };
 };

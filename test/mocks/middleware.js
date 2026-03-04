@@ -56,7 +56,6 @@ const verifieRequeteChangeEtat = async (donneesEtat, app, requete) => {
 let autorisationChargee;
 let autorisationsChargees = false;
 let cguAcceptees;
-let challengeMotDePasseEffectue = false;
 let droitVerifie = null;
 let headersPositionnes = false;
 let noncePositionne = false;
@@ -109,7 +108,6 @@ const middlewareFantaisie = {
     traficProtege = false;
     verificationJWTMenee = false;
     verificationCGUMenee = false;
-    challengeMotDePasseEffectue = false;
     versionBuildeeChargee = false;
     sourceAuthentification = authentificationAUtiliser;
     fonctionDeposeCookie = fonctionDeposeCookieAAppeler;
@@ -118,11 +116,6 @@ const middlewareFantaisie = {
 
   ajouteVersionFichierCompiles: (_requete, _reponse, suite) => {
     versionBuildeeChargee = true;
-    suite();
-  },
-
-  challengeMotDePasse: (_requete, _reponse, suite) => {
-    challengeMotDePasseEffectue = true;
     suite();
   },
 
@@ -356,13 +349,6 @@ const middlewareFantaisie = {
       { lectureEtat: () => noncePositionne },
       app,
       ...params
-    ),
-
-  verifieChallengeMotDePasse: async (app, requete) =>
-    verifieRequeteChangeEtat(
-      { lectureEtat: () => challengeMotDePasseEffectue },
-      app,
-      requete
     ),
 
   verifieChargementDeLaVersionBuildee: async (app, ...params) =>

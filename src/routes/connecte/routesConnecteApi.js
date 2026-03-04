@@ -352,7 +352,6 @@ const routesConnecteApi = ({
       adaptateurJWT,
       adaptateurMail,
       depotDonnees,
-      middleware,
       serviceCgu,
       serviceGestionnaireSession,
     })

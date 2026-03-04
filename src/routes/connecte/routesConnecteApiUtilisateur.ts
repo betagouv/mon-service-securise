@@ -1,10 +1,7 @@
 import express from 'express';
 import { z } from 'zod';
 import { valideBody } from '../../http/validePayloads.js';
-import {
-  schemaPatchMotDePasse,
-  schemaPutUtilisateur,
-} from './routesConnecteApi.schema.js';
+import { schemaPutUtilisateur } from './routesConnecteApi.schema.js';
 import { obtentionDonneesDeBaseUtilisateur } from '../mappeur/utilisateur.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import {
@@ -12,13 +9,8 @@ import {
   ServiceGestionnaireSession,
 } from '../../session/serviceGestionnaireSession.js';
 import { RequeteMSS } from '../../http/middleware.js';
-import {
-  resultatValidation,
-  valideMotDePasse,
-} from '../../http/validationMotDePasse.js';
 import { AdaptateurMail } from '../../adaptateurs/adaptateurMail.interface.js';
 import Utilisateur from '../../modeles/utilisateur.js';
-import { Middleware } from '../../http/middleware.interface.js';
 import { ServiceCgu } from '../../serviceCgu.interface.js';
 import { AdaptateurJWT } from '../../adaptateurs/adaptateurJWT.interface.js';
 import {
@@ -31,14 +23,12 @@ export const routesConnecteApiUtilisateur = ({
   adaptateurJWT,
   adaptateurMail,
   depotDonnees,
-  middleware,
   serviceCgu,
   serviceGestionnaireSession,
 }: {
   adaptateurJWT: AdaptateurJWT;
   adaptateurMail: AdaptateurMail;
   depotDonnees: DepotDonnees;
-  middleware: Middleware;
   serviceCgu: ServiceCgu;
   serviceGestionnaireSession: ServiceGestionnaireSession;
 }) => {
@@ -61,28 +51,6 @@ export const routesConnecteApiUtilisateur = ({
 
     reponse.sendStatus(200);
   });
-
-  routes.patch(
-    '/motDePasse',
-    valideBody(z.strictObject(schemaPatchMotDePasse())),
-    middleware.challengeMotDePasse,
-    async (requete, reponse) => {
-      const { idUtilisateurCourant: idUtilisateur } = requete as RequeteMSS;
-
-      const { motDePasse } = requete.body;
-
-      const mdpInvalide =
-        valideMotDePasse(motDePasse) !== resultatValidation.MOT_DE_PASSE_VALIDE;
-
-      if (mdpInvalide) {
-        reponse.status(422).send('Mot de passe trop simple');
-        return;
-      }
-
-      await depotDonnees.metsAJourMotDePasse(idUtilisateur, motDePasse);
-      reponse.json({ idUtilisateur });
-    }
-  );
 
   routes.put(
     '/utilisateur',
