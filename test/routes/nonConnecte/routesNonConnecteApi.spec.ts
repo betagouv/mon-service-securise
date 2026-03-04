@@ -62,8 +62,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       };
       testeur.referentiel().departement = () => 'Paris';
       testeur.adaptateurMail().creeContact = async () => {};
-      testeur.adaptateurMail().envoieMessageReinitialisationMotDePasse =
-        async () => {};
       testeur.depotDonnees().nouvelUtilisateur = async () => utilisateur;
     });
 
