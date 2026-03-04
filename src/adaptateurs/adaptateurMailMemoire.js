@@ -44,13 +44,6 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoyer("Envoie de l'email d'invitation à s'inscrire", args);
   };
 
-  const envoieNotificationTentativeReinscription = async (...args) => {
-    envoyer(
-      "Envoie de l'email de notification de tentative de réinscription",
-      args
-    );
-  };
-
   const envoieNotificationExpirationHomologation = async (...args) => {
     envoyer(
       "Envoie de l'email de notification d'expiration d'homologation",
@@ -133,7 +126,6 @@ const fabriqueAdaptateurMailMemoire = () => {
     envoieMessageInvitationContribution,
     envoieMessageInvitationInscription,
     envoieNotificationExpirationHomologation,
-    envoieNotificationTentativeReinscription,
     recupereEntreprise,
     recupereEntrepriseDuContact,
     recupereIdentifiantContact,
