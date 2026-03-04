@@ -132,15 +132,6 @@ function fabriquePersistance({
       await adaptateurPersistance.supprimeAutorisationsContribution(id);
       await adaptateurPersistance.supprimeUtilisateur(id);
     },
-    estProConnecte: async (email) => {
-      const emailMinuscule = email.toLowerCase();
-      const emailHash = adaptateurChiffrement.hacheSha256(emailMinuscule);
-      const donnees =
-        await adaptateurPersistance.utilisateurAvecEmailHash(emailHash);
-      const donneesDechiffrees = await dechiffreDonneesUtilisateur(donnees);
-
-      return !donneesDechiffrees.motDePasse;
-    },
   };
 }
 
@@ -220,8 +211,6 @@ const creeDepot = (config = {}) => {
   const utilisateurAvecEmail = async (email) => p.lis.celuiAvecEmail(email);
 
   const metsAJourUtilisateur = async (id, donnees) => {
-    delete donnees.motDePasse;
-
     if (donnees.entite && donnees.entite.siret)
       donnees.entite = await Entite.completeDonnees(
         donnees.entite,
