@@ -338,7 +338,6 @@ describe('Le dépôt de données des utilisateurs', () => {
           prenom: 'Jean',
           nom: 'Dupont',
           email: 'jean.dupont@mail.fr',
-          motDePasse: 'XXX',
         })
         .construis(),
     });
@@ -365,7 +364,6 @@ describe('Le dépôt de données des utilisateurs', () => {
               prenom: 'Jean',
               nom: 'Dupont',
               email: 'jean.dupont@mail.fr',
-              motDePasse: 'XXX',
             },
           },
         ],
@@ -387,7 +385,6 @@ describe('Le dépôt de données des utilisateurs', () => {
       prenom: 'Jean',
       nom: 'Dupont',
       email: 'jean.dupont@mail.fr',
-      motDePasse: 'XXX',
     });
   });
 
@@ -402,7 +399,6 @@ describe('Le dépôt de données des utilisateurs', () => {
                 prenom: 'Jean',
                 nom: 'Dupont',
                 email: 'jean.dupont@mail.fr',
-                motDePasse: 'XXX',
               },
               emailHash: 'jean.dupont@mail.fr-haché256',
             },
@@ -433,7 +429,6 @@ describe('Le dépôt de données des utilisateurs', () => {
                 prenom: 'Jean',
                 nom: 'Dupont',
                 email: 'jean.dupont@mail.fr',
-                motDePasse: 'XXX',
               },
               emailHash: 'jean.dupont@mail.fr-haché256',
             },
@@ -463,17 +458,11 @@ describe('Le dépôt de données des utilisateurs', () => {
               prenom: 'Jean',
               nom: 'Dupont',
               email: 'jean.dupont@mail.fr',
-              motDePasse: 'XXX',
             },
           },
           {
             id: '456',
-            donnees: {
-              prenom: 'Murielle',
-              nom: 'Renard',
-              email: 'mr@mail.fr',
-              motDePasse: 'ZZZ',
-            },
+            donnees: { prenom: 'Murielle', nom: 'Renard', email: 'mr@mail.fr' },
           },
         ],
       }
@@ -501,7 +490,6 @@ describe('Le dépôt de données des utilisateurs', () => {
               prenom: 'Jean',
               nom: 'Dupont',
               email: 'jean.dupont@mail.fr',
-              motDePasse: 'XXX',
             },
             dateCreation: date,
           },
@@ -721,15 +709,6 @@ describe('Le dépôt de données des utilisateurs', () => {
             bus.nAPasRecuUnEvenement(EvenementCguAccepteesParUtilisateur)
           ).to.be(true);
         });
-      });
-
-      it("ne crée pas de mot de passe pour l'utilisateur", async () => {
-        // il n’est pas nécessaire de générer un mot de passe pour l’utilisateur car il existe un contrôle
-        // lors de l’authentification qui vérifie que le mot de passe est défini
-        await depot.nouvelUtilisateur(unUtilisateur().donnees);
-
-        const utilisateur = await adaptateurPersistance.utilisateur('1');
-        expect(utilisateur.donnees.motDePasse).to.be(undefined);
       });
 
       it("inscris l'utilisateur avec un compte complet dans MonProfilAnssi", async () => {
