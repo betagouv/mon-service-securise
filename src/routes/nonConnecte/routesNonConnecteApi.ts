@@ -1,10 +1,6 @@
 import express from 'express';
 import * as z from 'zod';
-import {
-  EchecEnvoiMessage,
-  ErreurModele,
-  ErreurUtilisateurExistant,
-} from '../../erreurs.js';
+import { EchecEnvoiMessage, ErreurModele } from '../../erreurs.js';
 import { obtentionDonneesDeBaseUtilisateur } from '../mappeur/utilisateur.js';
 import { valideBody, valideQuery } from '../../http/validePayloads.js';
 import {
@@ -15,7 +11,6 @@ import {
 import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { ServiceAnnuaire } from '../../annuaire/serviceAnnuaire.interface.js';
-import { AdaptateurMail } from '../../adaptateurs/adaptateurMail.interface.js';
 import { AdaptateurJWT } from '../../adaptateurs/adaptateurJWT.interface.js';
 import { InscriptionUtilisateur } from '../../modeles/inscriptionUtilisateur.interface.js';
 import { AdaptateurGestionErreur } from '../../adaptateurs/adaptateurGestionErreur.interface.js';
@@ -31,7 +26,6 @@ const routesNonConnecteApi = ({
   middleware,
   depotDonnees,
   serviceAnnuaire,
-  adaptateurMail,
   adaptateurJWT,
   inscriptionUtilisateur,
   adaptateurGestionErreur,
@@ -40,7 +34,6 @@ const routesNonConnecteApi = ({
   middleware: Middleware;
   depotDonnees: DepotDonnees;
   serviceAnnuaire: ServiceAnnuaire;
-  adaptateurMail: AdaptateurMail;
   adaptateurJWT: AdaptateurJWT;
   inscriptionUtilisateur: InscriptionUtilisateur;
   adaptateurGestionErreur: AdaptateurGestionErreur;
@@ -77,12 +70,7 @@ const routesNonConnecteApi = ({
 
         reponse.json({ idUtilisateur: utilisateur.id });
       } catch (e) {
-        if (e instanceof ErreurUtilisateurExistant) {
-          await adaptateurMail.envoieNotificationTentativeReinscription(
-            donnees.email
-          );
-          reponse.json({ idUtilisateur: e.idUtilisateur });
-        } else if (e instanceof EchecEnvoiMessage) {
+        if (e instanceof EchecEnvoiMessage) {
           reponse
             .status(424)
             .send("L'envoi de l'email de finalisation d'inscription a échoué");

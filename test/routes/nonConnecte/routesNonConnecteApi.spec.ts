@@ -4,13 +4,11 @@ import {
   ErreurEmailManquant,
   ErreurJWTInvalide,
   ErreurJWTManquant,
-  ErreurUtilisateurExistant,
 } from '../../../src/erreurs.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { uneChaineDeCaracteres } from '../../constructeurs/String.js';
 import { CorpsRequetePutOuPostUtilisateur } from '../../../src/routes/mappeur/utilisateur.ts';
 import Utilisateur from '../../../src/modeles/utilisateur.js';
-import { unUUIDRandom } from '../../constructeurs/UUID.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
 
 describe('Le serveur MSS des routes publiques /api/*', () => {
@@ -414,24 +412,6 @@ describe('Le serveur MSS des routes publiques /api/*', () => {
       await testeur.post('/api/utilisateur', donneesRequete);
 
       expect(contactCree).toBe(true);
-    });
-
-    it('envoie un email de notification de tentative de réinscription', async () => {
-      let notificationEnvoyee = false;
-
-      testeur.depotDonnees().nouvelUtilisateur = async () => {
-        throw new ErreurUtilisateurExistant('oups', unUUIDRandom());
-      };
-
-      testeur.adaptateurMail().envoieNotificationTentativeReinscription =
-        async (destinataire: string) => {
-          expect(destinataire).toEqual('jean.dupont@mail.fr');
-          notificationEnvoyee = true;
-        };
-
-      await testeur.post('/api/utilisateur', donneesRequete);
-
-      expect(notificationEnvoyee).toBe(true);
     });
 
     it("génère une erreur HTTP 422 si l'email n'est pas renseigné", async () => {

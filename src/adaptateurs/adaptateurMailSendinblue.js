@@ -186,16 +186,6 @@ const envoieMessageInvitationInscription = (
     }
   );
 
-const envoieNotificationTentativeReinscription = (destinataire) =>
-  envoieEmail(
-    destinataire,
-    parseInt(process.env.SENDINBLUE_TEMPLATE_TENTATIVE_REINSCRIPTION, 10),
-    {
-      URL_INSCRIPTION: `${process.env.URL_BASE_MSS}/inscription`,
-      URL_REINITIALISATION_MOT_DE_PASSE: `${process.env.URL_BASE_MSS}/reinitialisationMotDePasse`,
-    }
-  );
-
 const envoieNotificationExpirationHomologation = (
   destinataire,
   idService,
@@ -361,7 +351,6 @@ export {
   envoieMessageInvitationContribution,
   envoieMessageInvitationInscription,
   envoieNotificationExpirationHomologationCadencee as envoieNotificationExpirationHomologation,
-  envoieNotificationTentativeReinscription,
   recupereEntreprise,
   recupereEntrepriseDuContact,
   recupereIdentifiantContact,
