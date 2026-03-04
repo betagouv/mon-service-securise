@@ -19,7 +19,8 @@
   import Modale from '../ui/Modale.svelte';
 
   export let idService: UUID;
-  export let elementModaleConfirmationMigration: Modale;
+
+  let elementModaleConfirmationMigration: Modale;
 
   let enCoursDeChargement = false;
 
