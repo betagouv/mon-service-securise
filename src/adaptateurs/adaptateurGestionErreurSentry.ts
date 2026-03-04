@@ -1,5 +1,5 @@
 import axios from 'axios';
-import express, { Request, Response, NextFunction } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import * as Sentry from '@sentry/node';
 import ipFilter from 'express-ipfilter';
 import { sentry } from './adaptateurEnvironnement.js';
@@ -78,12 +78,6 @@ const controleurErreurs = (
   if (estErreurCSRF) {
     logueErreur(new Error('Une erreur CSRF mismatch a été détectée'), {
       'Token CSRF du client': requete.headers['x-csrf-token'],
-    });
-  }
-
-  if (requete && requete.body) {
-    Object.keys(requete.body).forEach((cle) => {
-      if (cle.includes('motDePasse')) requete.body[cle] = '********';
     });
   }
 
