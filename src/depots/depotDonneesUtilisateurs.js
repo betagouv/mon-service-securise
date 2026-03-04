@@ -219,12 +219,6 @@ const creeDepot = (config = {}) => {
 
   const utilisateurAvecEmail = async (email) => p.lis.celuiAvecEmail(email);
 
-  const metsAJourMotDePasse = async (idUtilisateur, motDePasse) => {
-    const hash = await adaptateurChiffrement.hacheBCrypt(motDePasse);
-    await p.sauvegarde(idUtilisateur, { motDePasse: hash });
-    return p.lis.un(idUtilisateur);
-  };
-
   const metsAJourUtilisateur = async (id, donnees) => {
     delete donnees.motDePasse;
 
@@ -324,7 +318,6 @@ const creeDepot = (config = {}) => {
 
   return {
     dechiffreUtilisateur,
-    metsAJourMotDePasse,
     metsAJourUtilisateur,
     nouvelUtilisateur,
     rafraichisProfilUtilisateurLocal,
