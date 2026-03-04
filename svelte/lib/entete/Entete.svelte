@@ -157,7 +157,7 @@
       -webkit-mask-size: contain;
       mask-size: contain;
       -webkit-mask-position-y: 0.2em;
-      mask-position-y: 0.2em;
+      mask-position: 0 0.2em;
     }
 
     @media screen and (max-width: 1247px) {

@@ -112,6 +112,6 @@
     overflow-y: auto;
     overflow-x: hidden;
     max-height: 200px;
-    overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch;
   }
 </style>
