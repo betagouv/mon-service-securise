@@ -13,7 +13,7 @@ import ActiviteAjoutCommentaire from './ActiviteAjoutCommentaire.svelte';
 
 export type VisualisationActivite = {
   titre: string;
-  composantContenu: typeof SvelteComponent;
+  composantContenu: typeof SvelteComponent<{}>;
   aBesoinPriorites?: boolean;
   aBesoinStatuts?: boolean;
 };
