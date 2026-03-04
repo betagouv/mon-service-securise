@@ -14,7 +14,7 @@ describe('Un événement de connexion utilisateur', () => {
   const donneesEvenement = () => ({
     idUtilisateur: unUUID('a'),
     dateDerniereConnexion: '2022-07-07',
-    source: SourceAuthentification.MSS,
+    source: SourceAuthentification.AGENT_CONNECT,
     connexionAvecMFA: false,
   });
 
@@ -37,7 +37,7 @@ describe('Un événement de connexion utilisateur', () => {
       donnees: {
         idUtilisateur: unUUID('A'),
         dateDerniereConnexion: '2022-07-07',
-        source: SourceAuthentification.MSS,
+        source: SourceAuthentification.AGENT_CONNECT,
         connexionAvecMFA: false,
       },
       date: '17/11/2022',
