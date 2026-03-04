@@ -2,6 +2,7 @@ import {
   type EcheanceMesure,
   type PrioriteMesure,
   Referentiel,
+  type ReferentielPriorite,
 } from '../ui/types.d';
 import type { StatutMesure } from '../modeles/modeleMesure';
 import type { VersionService } from '../../../src/modeles/versionService';
@@ -19,6 +20,7 @@ export type TableauDesMesuresProps = {
   idService: IdService;
   categories: Record<IdCategorie, string>;
   statuts: Record<StatutMesure, string>;
+  priorites: ReferentielPriorite;
   estLectureSeule: boolean;
   modeVisiteGuidee: boolean;
   versionService: VersionService;
