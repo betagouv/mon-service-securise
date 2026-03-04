@@ -27,20 +27,18 @@
     nomNiveauDeSecurite,
   } from './niveauDeSecurite.messages';
   import { onMount } from 'svelte';
-  import type { DonneesDescriptionServiceV2 } from '../../../src/modeles/descriptionServiceV2';
   import type { MiseAJour } from '../creationV2/creationV2.api';
   import { donneesDeServiceSontCompletes } from '../creationV2/etapes/brouillonEstComplet.store';
   import type { AxiosError } from 'axios';
 
-  const ChampsImpactantsLeNiveauDeSecurite: (keyof DonneesDescriptionServiceV2)[] =
-    [
-      'volumetrieDonneesTraitees',
-      'categoriesDonneesTraitees',
-      'categoriesDonneesTraiteesSupplementaires',
-      'dureeDysfonctionnementAcceptable',
-      'audienceCible',
-      'ouvertureSysteme',
-    ];
+  const ChampsImpactantsLeNiveauDeSecurite: string[] = [
+    'volumetrieDonneesTraitees',
+    'categoriesDonneesTraitees',
+    'categoriesDonneesTraiteesSupplementaires',
+    'dureeDysfonctionnementAcceptable',
+    'audienceCible',
+    'ouvertureSysteme',
+  ];
 
   type ModeAffichage = 'Résumé' | 'Édition';
 
@@ -92,9 +90,7 @@
     descriptionEditable = { ...descriptionEditable, ...e.detail };
 
     const recalculEstNecessaire = Object.keys(e.detail).some((cle) =>
-      ChampsImpactantsLeNiveauDeSecurite.includes(
-        cle as keyof DonneesDescriptionServiceV2
-      )
+      ChampsImpactantsLeNiveauDeSecurite.includes(cle)
     );
     if (recalculEstNecessaire) await rafraichisNiveauSecuriteMinimal();
   };
