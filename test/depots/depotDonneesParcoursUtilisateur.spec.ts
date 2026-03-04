@@ -54,7 +54,7 @@ describe('Le dépôt de données Parcours utilisateur', () => {
     it('sauvegarde la nouvelle date de connexion', async () => {
       await depot.enregistreNouvelleConnexionUtilisateur(
         unUUID('1'),
-        SourceAuthentification.MSS
+        SourceAuthentification.AGENT_CONNECT
       );
 
       const parcoursPersiste = await depot.lisParcoursUtilisateur(unUUID('1'));
@@ -85,7 +85,7 @@ describe('Le dépôt de données Parcours utilisateur', () => {
       it("utilise une valeur 'false' par défaut si `connexionAvecMFA` n'est pas fourni", async () => {
         await depot.enregistreNouvelleConnexionUtilisateur(
           unUUID('1'),
-          SourceAuthentification.MSS
+          SourceAuthentification.AGENT_CONNECT
         );
 
         expect(
@@ -104,7 +104,7 @@ describe('Le dépôt de données Parcours utilisateur', () => {
       );
       await depot.enregistreNouvelleConnexionUtilisateur(
         unUUID('1'),
-        SourceAuthentification.MSS
+        SourceAuthentification.AGENT_CONNECT
       );
 
       const parcoursPersiste = await depot.lisParcoursUtilisateur(unUUID('1'));

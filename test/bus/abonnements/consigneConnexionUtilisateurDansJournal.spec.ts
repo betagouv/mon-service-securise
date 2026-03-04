@@ -23,7 +23,7 @@ describe("L'abonnement qui consigne (dans le journal MSS) la connexion d'un util
     await consigneConnexionUtilisateurDansJournal({ adaptateurJournal })({
       idUtilisateur: unUUID('1'),
       dateDerniereConnexion: '2022-09-02',
-      source: SourceAuthentification.MSS,
+      source: SourceAuthentification.AGENT_CONNECT,
       connexionAvecMFA: false,
     });
 

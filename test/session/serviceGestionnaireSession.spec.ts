@@ -37,7 +37,7 @@ describe('Le service gestionnaire de session', () => {
       gestionnaireSession.enregistreSession(
         requete,
         utilisateur,
-        SourceAuthentification.MSS
+        SourceAuthentification.AGENT_CONNECT
       );
       expect(requete.session.cguAcceptees).toBe(true);
     });
@@ -46,7 +46,7 @@ describe('Le service gestionnaire de session', () => {
       gestionnaireSession.enregistreSession(
         requete,
         utilisateur,
-        SourceAuthentification.MSS
+        SourceAuthentification.AGENT_CONNECT
       );
       expect(requete.session.estInvite).toBe(true);
     });
@@ -55,18 +55,18 @@ describe('Le service gestionnaire de session', () => {
       gestionnaireSession.enregistreSession(
         requete,
         utilisateur,
-        SourceAuthentification.MSS
+        SourceAuthentification.AGENT_CONNECT
       );
-      expect(requete.session.token).toBe('un token de source MSS');
+      expect(requete.session.token).toBe('un token de source AGENT_CONNECT');
     });
 
     it("enregistre la source d'authentification dans la session", async () => {
       gestionnaireSession.enregistreSession(
         requete,
         utilisateur,
-        SourceAuthentification.MSS
+        SourceAuthentification.AGENT_CONNECT
       );
-      expect(requete.session.sourceAuthentification).toBe('MSS');
+      expect(requete.session.sourceAuthentification).toBe('AGENT_CONNECT');
     });
 
     describe("concernant l'utilisation du MFA", () => {
