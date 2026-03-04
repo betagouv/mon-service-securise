@@ -6,16 +6,16 @@
   export let lienExterne: boolean = false;
 </script>
 
-<a class="tuile-telechargement" {href} title={titre}>
+<a class="tuile-telechargement" {href} title={titre} target="_blank">
   <div class="conteneur-image">
     <img src={illustration} alt="" />
   </div>
   <div class="conteneur-texte">
     <p class="titre">{titre}</p>
     <p class="contenu">{contenu}</p>
-    <a {href} target="_blank" class="lien" class:lien-externe={lienExterne}
-      >{lienExterne ? 'Découvrir le document' : 'Télécharger le PDF'}</a
-    >
+    <span class="lien" class:lien-externe={lienExterne}>
+      {lienExterne ? 'Découvrir le document' : 'Télécharger le PDF'}
+    </span>
   </div>
 </a>
 
@@ -71,25 +71,25 @@
     margin-top: 0;
   }
 
-  a.lien {
+  .lien {
+    color: var(--bleu-mise-en-avant);
     font-size: 12px;
     font-style: normal;
     line-height: 20px;
     align-self: end;
     display: flex;
     gap: 12px;
-    align-items: end;
     text-underline-offset: 4px;
   }
 
-  a.lien:after {
+  .lien:after {
     content: url(/statique/assets/images/icone_telechargement.svg);
     display: flex;
     width: 16px;
     height: 16px;
   }
 
-  a.lien.lien-externe:after {
+  .lien.lien-externe:after {
     content: url(/statique/assets/images/icone_lien_nouvel_onglet.svg);
   }
 
@@ -101,7 +101,7 @@
     transform: translateY(36px);
   }
 
-  .tuile-telechargement:hover a.lien {
+  .tuile-telechargement:hover .lien {
     text-decoration: underline;
   }
 </style>
