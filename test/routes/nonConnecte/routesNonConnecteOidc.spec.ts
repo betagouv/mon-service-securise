@@ -19,11 +19,13 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
   describe('quand requête GET sur `/oidc/connexion`', () => {
     beforeEach(() => {
-      testeur.adaptateurOidc().genereDemandeAutorisation = async () => ({
-        nonce: 'unNonce',
-        state: 'unState',
-        url: 'http',
-      });
+      testeur.adaptateurOidc().genereDemandeAutorisation = {
+        sansForcerLeMFA: async () => ({
+          nonce: 'unNonce',
+          state: 'unState',
+          url: 'http',
+        }),
+      };
     });
 
     it("déconnecte l'utilisateur courant", async () => {
@@ -93,12 +95,13 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       testeur.adaptateurOidc().recupereInformationsUtilisateur = async () => ({
         email: 'jean.dujardin@beta.gouv.fr',
       });
-      testeur.depotDonnees().utilisateurAvecEmail = (email: string) =>
+      testeur.depotDonnees().utilisateurAvecEmail = async (email: string) =>
         email === 'unEmailInconnu' ? undefined : utilisateur;
-      testeur.depotDonnees().utilisateur = () => utilisateur;
-      testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = () => {};
-      testeur.depotDonnees().metsAJourUtilisateur = () => {};
-      testeur.depotDonnees().rafraichisProfilUtilisateurLocal = () => {};
+      testeur.depotDonnees().utilisateur = async () => utilisateur;
+      testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur =
+        async () => {};
+      testeur.depotDonnees().metsAJourUtilisateur = async () => {};
+      testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async () => {};
       testeur.middleware().reinitialise({
         // @ts-expect-error Le middleware de test n'est pas typé
         fonctionDeposeCookieAAppeler: (requete: Request) => {
@@ -108,8 +111,8 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           };
         },
       });
-      testeur.serviceAnnuaire().rechercheOrganisations = () => [];
-      testeur.adaptateurProfilAnssi().recupere = () => undefined;
+      testeur.serviceAnnuaire().rechercheOrganisations = async () => [];
+      testeur.adaptateurProfilAnssi().recupere = async () => undefined;
     });
 
     it('sert une page HTML', async () => {
@@ -451,6 +454,36 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         });
         expect(donneesPartagees(reponse.text, 'tokenDonneesInvite')).toEqual({
           tokenDonneesInvite: 'unJetonSigne',
+        });
+      });
+    });
+
+    describe('concernant le MFA obligatoire', () => {
+      describe('quand il doit rediriger vers ProConnect car le MFA est supporté par le fournisseur', () => {
+        it('redirige le navigateur vers ProConnect en ayant posé un cookie', async () => {
+          testeur.adaptateurEnvironnement().oidc = () => ({
+            fournisseursAvecMFA: () => ['F-1'],
+          });
+          testeur.adaptateurOidc().recupereInformationsUtilisateur = () => ({
+            idFournisseurIdentite: 'F-1',
+          });
+
+          testeur.adaptateurOidc().genereDemandeAutorisation = {
+            quiForceLeMFA: async () => ({
+              url: 'https://proconnect.fr',
+              state: 'state-pour-mfa',
+              nonce: 'nonce-pour-mfa',
+            }),
+          };
+
+          const reponse = await testeur.get('/oidc/apres-authentification');
+
+          expect(reponse.status).toBe(302);
+          expect(reponse.headers.location).toBe('https://proconnect.fr');
+          const cookieProConnect = reponse.headers['set-cookie'][1];
+          expect(cookieProConnect).toContain('AgentConnectInfo=');
+          expect(cookieProConnect).toContain('state-pour-mfa');
+          expect(cookieProConnect).toContain('nonce-pour-mfa');
         });
       });
     });
