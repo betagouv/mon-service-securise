@@ -18,19 +18,21 @@ async function recupereClient() {
   });
 }
 
-const genereDemandeAutorisation = async () => {
-  const client = await recupereClient();
-  const nonce = generators.nonce(32);
-  const state = generators.state(32);
-  const url = client.authorizationUrl({
-    scope: 'openid email given_name usual_name siret idp_id',
-    nonce,
-    state,
-    // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/niveaux-acr#les-m%C3%A9thodes-dauthentifications
-    claims: { id_token: { amr: null } },
-  });
+const genereDemandeAutorisation = {
+  sansForcerLeMFA: async () => {
+    const client = await recupereClient();
+    const nonce = generators.nonce(32);
+    const state = generators.state(32);
+    const url = client.authorizationUrl({
+      scope: 'openid email given_name usual_name siret idp_id',
+      nonce,
+      state,
+      // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/niveaux-acr#les-m%C3%A9thodes-dauthentifications
+      claims: { id_token: { amr: null } },
+    });
 
-  return { url, nonce, state };
+    return { url, nonce, state };
+  },
 };
 
 const genereDemandeDeconnexion = async (idToken: string) => {

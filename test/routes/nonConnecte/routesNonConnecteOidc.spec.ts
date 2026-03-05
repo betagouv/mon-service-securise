@@ -19,11 +19,13 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
 
   describe('quand requête GET sur `/oidc/connexion`', () => {
     beforeEach(() => {
-      testeur.adaptateurOidc().genereDemandeAutorisation = async () => ({
-        nonce: 'unNonce',
-        state: 'unState',
-        url: 'http',
-      });
+      testeur.adaptateurOidc().genereDemandeAutorisation = {
+        sansForcerLeMFA: async () => ({
+          nonce: 'unNonce',
+          state: 'unState',
+          url: 'http',
+        }),
+      };
     });
 
     it("déconnecte l'utilisateur courant", async () => {

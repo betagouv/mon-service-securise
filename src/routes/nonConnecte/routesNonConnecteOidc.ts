@@ -47,7 +47,7 @@ const routesNonConnecteOidc = ({
     async (requete, reponse, suite) => {
       try {
         const { url, state, nonce } =
-          await adaptateurOidc.genereDemandeAutorisation();
+          await adaptateurOidc.genereDemandeAutorisation.sansForcerLeMFA();
 
         const { urlRedirection } = requete.query;
         const urlValide =
