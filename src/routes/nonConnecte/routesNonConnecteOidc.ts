@@ -1,7 +1,6 @@
-import express from 'express';
+import express, { Request } from 'express';
 import { z } from 'zod';
 import { AdaptateurProfilAnssi } from '@lab-anssi/lib';
-import { estUrlLegalePourRedirection } from '../../http/redirection.js';
 import { fabriqueAdaptateurGestionErreur } from '../../adaptateurs/fabriqueAdaptateurGestionErreur.js';
 import { serviceApresAuthentification } from '../../utilisateur/serviceApresAuthentification.js';
 import { executeurApresAuthentification } from '../../utilisateur/executeurApresAuthentification.js';
@@ -16,6 +15,7 @@ import {
   ServiceGestionnaireSession,
 } from '../../session/serviceGestionnaireSession.js';
 import { ServiceAnnuaire } from '../../annuaire/serviceAnnuaire.interface.js';
+import { cookieProConnect } from '../../oidc/cookies.js';
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
@@ -50,18 +50,11 @@ const routesNonConnecteOidc = ({
           await adaptateurOidc.genereDemandeAutorisation.sansForcerLeMFA();
 
         const { urlRedirection } = requete.query;
-        const urlValide =
-          urlRedirection && estUrlLegalePourRedirection(urlRedirection);
-
-        reponse.cookie(
-          'AgentConnectInfo',
-          { state, nonce, ...(urlValide && { urlRedirection }) },
-          {
-            maxAge: 5 * 60_000,
-            httpOnly: true,
-            sameSite: 'none',
-            secure: true,
-          }
+        cookieProConnect.deposePourConnexion(
+          reponse,
+          urlRedirection as string | undefined,
+          state,
+          nonce
         );
         reponse.redirect(url);
       } catch (e) {
@@ -71,7 +64,7 @@ const routesNonConnecteOidc = ({
   );
 
   routes.get('/apres-authentification', async (requete, reponse) => {
-    if (!requete.cookies.AgentConnectInfo) {
+    if (!cookieProConnect.existe(requete)) {
       reponse.status(401).send("Erreur d'authentification");
       return;
     }
@@ -79,12 +72,12 @@ const routesNonConnecteOidc = ({
       const { idToken, accessToken, connexionAvecMFA } =
         await adaptateurOidc.recupereJeton(requete);
 
-      const { urlRedirection } = requete.cookies.AgentConnectInfo;
-
-      reponse.clearCookie('AgentConnectInfo');
+      const { urlRedirection } = cookieProConnect.recupere(requete);
+      cookieProConnect.supprime(reponse);
 
       const { nom, prenom, email, siret } =
         await adaptateurOidc.recupereInformationsUtilisateur(accessToken);
+
       const profilProConnect = { nom, prenom, email, siret };
 
       const ordre = await serviceApresAuthentification({
@@ -120,16 +113,7 @@ const routesNonConnecteOidc = ({
       requete.session.AgentConnectIdToken
     );
 
-    reponse.cookie(
-      'AgentConnectInfo',
-      { state },
-      {
-        maxAge: 30_000,
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-      }
-    );
+    cookieProConnect.deposePourDeconnexion(reponse, state);
 
     return reponse.redirect(url);
   });
@@ -138,12 +122,12 @@ const routesNonConnecteOidc = ({
     '/apres-deconnexion',
     valideQuery(z.strictObject({ state: z.string().min(1).max(100) })),
     async (requete, reponse) => {
-      const state = requete.cookies.AgentConnectInfo?.state;
+      const { state } = cookieProConnect.recupere(requete as Request);
       if (state !== requete.query.state) {
         reponse.sendStatus(401);
         return;
       }
-      reponse.clearCookie('AgentConnectInfo');
+      cookieProConnect.supprime(reponse);
       reponse.redirect('/connexion');
     }
   );
