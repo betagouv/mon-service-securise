@@ -95,12 +95,13 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
       testeur.adaptateurOidc().recupereInformationsUtilisateur = async () => ({
         email: 'jean.dujardin@beta.gouv.fr',
       });
-      testeur.depotDonnees().utilisateurAvecEmail = (email: string) =>
+      testeur.depotDonnees().utilisateurAvecEmail = async (email: string) =>
         email === 'unEmailInconnu' ? undefined : utilisateur;
-      testeur.depotDonnees().utilisateur = () => utilisateur;
-      testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur = () => {};
-      testeur.depotDonnees().metsAJourUtilisateur = () => {};
-      testeur.depotDonnees().rafraichisProfilUtilisateurLocal = () => {};
+      testeur.depotDonnees().utilisateur = async () => utilisateur;
+      testeur.depotDonnees().enregistreNouvelleConnexionUtilisateur =
+        async () => {};
+      testeur.depotDonnees().metsAJourUtilisateur = async () => {};
+      testeur.depotDonnees().rafraichisProfilUtilisateurLocal = async () => {};
       testeur.middleware().reinitialise({
         // @ts-expect-error Le middleware de test n'est pas typé
         fonctionDeposeCookieAAppeler: (requete: Request) => {
@@ -110,8 +111,8 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
           };
         },
       });
-      testeur.serviceAnnuaire().rechercheOrganisations = () => [];
-      testeur.adaptateurProfilAnssi().recupere = () => undefined;
+      testeur.serviceAnnuaire().rechercheOrganisations = async () => [];
+      testeur.adaptateurProfilAnssi().recupere = async () => undefined;
     });
 
     it('sert une page HTML', async () => {
