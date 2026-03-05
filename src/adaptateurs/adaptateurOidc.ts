@@ -1,6 +1,7 @@
 import { Issuer, generators } from 'openid-client';
 import { Request } from 'express';
 import { oidc } from './adaptateurEnvironnement.js';
+import { cookieProConnect } from '../oidc/cookies.js';
 
 const configurationOidc = oidc();
 
@@ -60,7 +61,7 @@ const recupereJeton = async (requete: Request) => {
   const client = await recupereClient();
   const params = client.callbackParams(requete);
 
-  const { nonce, state } = requete.cookies.AgentConnectInfo;
+  const { nonce, state } = cookieProConnect.recupere(requete);
   const token = await client.callback(
     configurationOidc.urlRedirectionApresAuthentification(),
     params,
