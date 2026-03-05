@@ -16,6 +16,8 @@ import {
 } from '../../session/serviceGestionnaireSession.js';
 import { ServiceAnnuaire } from '../../annuaire/serviceAnnuaire.interface.js';
 import { cookieProConnect } from '../../oidc/cookies.js';
+import { ServiceForceMFA } from '../../oidc/serviceForceMFA.js';
+import { estUrlLegalePourRedirection } from '../../http/redirection.js';
 
 const routesNonConnecteOidc = ({
   adaptateurOidc,
@@ -69,14 +71,41 @@ const routesNonConnecteOidc = ({
       return;
     }
     try {
-      const { idToken, accessToken, connexionAvecMFA } =
+      const { idToken, accessToken, connexionAvecMFA, acr } =
         await adaptateurOidc.recupereJeton(requete);
 
       const { urlRedirection } = cookieProConnect.recupere(requete);
       cookieProConnect.supprime(reponse);
 
-      const { nom, prenom, email, siret } =
+      const { nom, prenom, email, siret, idFournisseurIdentite } =
         await adaptateurOidc.recupereInformationsUtilisateur(accessToken);
+
+      const forceMFA = new ServiceForceMFA({
+        fournisseursAvecMFA: adaptateurEnvironnement
+          .oidc()
+          .fournisseursAvecMFA(),
+        generationUrlProConnectMFA:
+          adaptateurOidc.genereDemandeAutorisation.quiForceLeMFA,
+      });
+
+      const politiqueMFA = await forceMFA.execute({
+        idFournisseurIdentite,
+        email,
+        acr,
+      });
+
+      if (politiqueMFA.action === 'REDIRIGE_VERS_PROCONNECT') {
+        const urlValide =
+          urlRedirection && estUrlLegalePourRedirection(urlRedirection);
+        cookieProConnect.deposePourConnexion(
+          reponse,
+          urlValide ? urlRedirection : undefined,
+          politiqueMFA.state,
+          politiqueMFA.nonce
+        );
+        reponse.redirect(politiqueMFA.url);
+        return;
+      }
 
       const profilProConnect = { nom, prenom, email, siret };
 

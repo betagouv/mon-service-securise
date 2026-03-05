@@ -124,6 +124,7 @@ const testeurMss = () => {
       featureFlag: () => ({
         avecDecrireV2: () => false,
       }),
+      oidc: () => ({ fournisseursAvecMFA: () => [] }),
     };
     adaptateurProtection = {
       protectionCsrf: () => (_requete, _reponse, suite) => suite(),
@@ -135,7 +136,11 @@ const testeurMss = () => {
     adaptateurJournal = {
       consigneEvenement: async () => {},
     };
-    adaptateurOidc = {};
+    adaptateurOidc = {
+      genereDemandeAutorisation: {
+        quiForceLeMFA: async () => ({ url: 'https://url-dans-testeur-mss.fr' }),
+      },
+    };
     adaptateurStatistiques = {
       recupereStatistiques: async () => {},
     };
