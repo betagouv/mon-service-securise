@@ -104,6 +104,13 @@ const oidc = () => ({
   urlBase: () => process.env.OIDC_URL_BASE,
   clientId: () => process.env.OIDC_CLIENT_ID,
   clientSecret: () => process.env.OIDC_CLIENT_SECRET,
+  fournisseursAvecMFA: () => {
+    const fournisseurs = process.env.OIDC_FOURNISSEURS_AVEC_MFA;
+
+    if (!fournisseurs) return [];
+
+    return fournisseurs.split(',').map((f) => f.trim());
+  },
 });
 
 const trustProxy = () => {

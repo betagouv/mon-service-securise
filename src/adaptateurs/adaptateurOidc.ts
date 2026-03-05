@@ -2,6 +2,7 @@ import { Issuer, generators } from 'openid-client';
 import { Request } from 'express';
 import { oidc } from './adaptateurEnvironnement.js';
 import { cookieProConnect } from '../oidc/cookies.js';
+import { ACR, ACR_GARANTISSANT_MFA } from '../oidc/serviceForceMFA.js';
 
 const configurationOidc = oidc();
 
@@ -30,6 +31,25 @@ const genereDemandeAutorisation = {
       state,
       // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/niveaux-acr#les-m%C3%A9thodes-dauthentifications
       claims: { id_token: { amr: null } },
+    });
+
+    return { url, nonce, state };
+  },
+  quiForceLeMFA: async (email: string) => {
+    const client = await recupereClient();
+    const nonce = generators.nonce(32);
+    const state = generators.state(32);
+    const url = client.authorizationUrl({
+      scope: 'openid email given_name usual_name siret idp_id',
+      nonce,
+      state,
+      login_hint: email,
+      claims: {
+        id_token: {
+          amr: null,
+          acr: { essential: true, values: [...ACR_GARANTISSANT_MFA] },
+        },
+      },
     });
 
     return { url, nonce, state };
@@ -68,7 +88,7 @@ const recupereJeton = async (requete: Request) => {
     { nonce, state }
   );
 
-  const { amr } = token.claims();
+  const { amr, acr } = token.claims();
   const connexionAvecMFA =
     !!amr &&
     estUneMethodeAuthentificationAvecMFA(amr as MethodeAuthentification[]);
@@ -77,6 +97,7 @@ const recupereJeton = async (requete: Request) => {
     accessToken: token.access_token as string,
     connexionAvecMFA,
     idToken: token.id_token as string,
+    acr: acr as ACR,
   };
 };
 
@@ -95,7 +116,7 @@ const recupereInformationsUtilisateur = async (accessToken: string) => {
     nom: nom as string,
     email: email as string,
     siret: siret as string | undefined,
-    identifiantFournisseurIdentite: idFournisseurIdentite as string,
+    idFournisseurIdentite: idFournisseurIdentite as string,
   };
 };
 

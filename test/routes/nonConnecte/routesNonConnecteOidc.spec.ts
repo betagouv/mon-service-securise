@@ -457,6 +457,36 @@ describe('Le serveur MSS des routes publiques /oidc/*', () => {
         });
       });
     });
+
+    describe('concernant le MFA obligatoire', () => {
+      describe('quand il doit rediriger vers ProConnect car le MFA est supporté par le fournisseur', () => {
+        it('redirige le navigateur vers ProConnect en ayant posé un cookie', async () => {
+          testeur.adaptateurEnvironnement().oidc = () => ({
+            fournisseursAvecMFA: () => ['F-1'],
+          });
+          testeur.adaptateurOidc().recupereInformationsUtilisateur = () => ({
+            idFournisseurIdentite: 'F-1',
+          });
+
+          testeur.adaptateurOidc().genereDemandeAutorisation = {
+            quiForceLeMFA: async () => ({
+              url: 'https://proconnect.fr',
+              state: 'state-pour-mfa',
+              nonce: 'nonce-pour-mfa',
+            }),
+          };
+
+          const reponse = await testeur.get('/oidc/apres-authentification');
+
+          expect(reponse.status).toBe(302);
+          expect(reponse.headers.location).toBe('https://proconnect.fr');
+          const cookieProConnect = reponse.headers['set-cookie'][1];
+          expect(cookieProConnect).toContain('AgentConnectInfo=');
+          expect(cookieProConnect).toContain('state-pour-mfa');
+          expect(cookieProConnect).toContain('nonce-pour-mfa');
+        });
+      });
+    });
   });
 
   describe('quand requête GET sur /oidc/deconnexion', () => {
