@@ -86,10 +86,6 @@ const routesConnectePage = ({
     async (requete, reponse) => {
       await gestionnaireSession.revoqueSession(requete);
 
-      if (requete.sourceAuthentification === 'MSS') {
-        reponse.redirect('/connexion');
-        return;
-      }
       reponse.redirect('/oidc/deconnexion');
     }
   );

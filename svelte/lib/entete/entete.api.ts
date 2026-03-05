@@ -1,6 +1,6 @@
 export type ProfilUtilisateur = {
   utilisateur: { prenomNom: string };
-  sourceAuthentification: 'MSS' | 'AGENT_CONNECT';
+  sourceAuthentification: 'AGENT_CONNECT';
 };
 
 export const getUtilisateurCourant =

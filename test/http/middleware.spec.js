@@ -96,6 +96,7 @@ describe('Le middleware MSS', () => {
     depotDonnees.service = async () => {};
     depotDonnees.utilisateur = async () =>
       unUtilisateur().avecId('123').construis();
+    depotDonnees.estJwtRevoque = async () => false;
   });
 
   it("redirige l'utilisateur vers l'url de base s'il vient d'un sous domaine", async () => {
@@ -151,7 +152,11 @@ describe('Le middleware MSS', () => {
 
     it("redirige l'utilisateur vers la mire de login quand le JWT a été révoqué", async () => {
       const adaptateurJWT = {
-        decode: () => ({ idUtilisateur: 'U1', iat: 123, source: 'MSS' }),
+        decode: () => ({
+          idUtilisateur: 'U1',
+          iat: 123,
+          source: SourceAuthentification.AGENT_CONNECT,
+        }),
       };
       depotDonnees.utilisateur = () => ({ genereToken: () => 'NOUVEAU_TOKEN' });
       depotDonnees.estJwtRevoque = async () => true;
@@ -318,24 +323,6 @@ describe('Le middleware MSS', () => {
     });
 
     describe('pour un utilisateur invité', () => {
-      it("redirige l'utilisateur connecté via MSS", async () => {
-        requete.session = { ...requete.session, estInvite: true };
-        const adaptateurJWT = {
-          decode: () => ({ source: 'MSS' }),
-        };
-        const middleware = leMiddleware({ adaptateurJWT, depotDonnees });
-
-        reponse.redirect = (url) => {
-          expect(url).to.equal('/connexion');
-        };
-
-        let suiteAppelee = false;
-        await middleware.verificationAcceptationCGU(requete, reponse, () => {
-          suiteAppelee = true;
-        });
-        expect(suiteAppelee).to.be(false);
-      });
-
       it("redirige l'utilisateur connecté via Agent Connect", async () => {
         requete.session = { ...requete.session, estInvite: true };
         const adaptateurJWT = {
