@@ -7,6 +7,7 @@ import {
   verifieNomFichierServi,
   verifieTypeFichierServiEstCSV,
 } from '../../aides/verifieFichierServi.js';
+import { SourceAuthentification } from '../../../src/modeles/sourceAuthentification.js';
 
 describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   const testeur = testeurMSS();
@@ -115,23 +116,11 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
       expect(sessionRevoquee).to.be(true);
     });
 
-    describe("en tant qu'utilisateur connecté avec MSS", () => {
-      it('redirige vers /connexion', async () => {
-        testeur.middleware().reinitialise({ authentificationAUtiliser: 'MSS' });
-        testeur.serviceGestionnaireSession().revoqueSession = async () => {};
-
-        const reponse = await testeur.get('/deconnexion');
-
-        expect(reponse.status).to.be(302);
-        expect(reponse.headers.location).to.be('/connexion');
-      });
-    });
-
     describe("en tant qu'utilisateur connecté avec Agent Connect", () => {
       it('redirige vers /oidc/deconnexion', async () => {
-        testeur
-          .middleware()
-          .reinitialise({ authentificationAUtiliser: 'AGENT_CONNECT' });
+        testeur.middleware().reinitialise({
+          authentificationAUtiliser: SourceAuthentification.AGENT_CONNECT,
+        });
         testeur.serviceGestionnaireSession().revoqueSession = async () => {};
 
         const reponse = await testeur.get('/deconnexion');

@@ -166,11 +166,7 @@ const middleware = (configuration: ConfigurationMiddleware) => {
   ) => {
     await verificationJWT(requete, reponse, () => {
       if (requete.estInvite) {
-        return reponse.redirect(
-          requete.sourceAuthentification === SourceAuthentification.MSS
-            ? '/connexion'
-            : '/oidc/connexion'
-        );
+        return reponse.redirect('/oidc/connexion');
       }
 
       if (!requete.cguAcceptees) {
