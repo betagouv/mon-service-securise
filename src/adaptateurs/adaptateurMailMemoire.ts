@@ -1,6 +1,7 @@
 import { emailMemoire } from './adaptateurEnvironnement.js';
+import { AdaptateurMail } from './adaptateurMail.interface.js';
 
-const fabriqueAdaptateurMailMemoire = () => {
+const fabriqueAdaptateurMailMemoire = (): AdaptateurMail => {
   const doitLoguer = emailMemoire().logEmailDansConsole();
 
   const envoyer = (texte, args) => {
