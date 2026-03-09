@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { visiteGuidee, utilisateurCourant } from '../../visiteGuidee.store';
 
-  let elementModale: HTMLDialogElement;
+  let elementModale: HTMLDialogElement = $state();
 
   onMount(() => {
     // Cela permet d'éviter de faire un focus sur les éléments de la modale
@@ -20,7 +20,7 @@
   <form class="entete" method="dialog">
     <button
       class="bouton-fermeture"
-      on:click={async () => await visiteGuidee.masqueEtapeCourante()}
+      onclick={async () => await visiteGuidee.masqueEtapeCourante()}
       >Fermer</button
     >
   </form>
@@ -53,14 +53,14 @@
     <form method="dialog">
       <button
         class="bouton bouton-tertiaire"
-        on:click={async () =>
+        onclick={async () =>
           await visiteGuidee.fermeDefinitivementVisiteGuidee()}
         >Ignorer la visite guidée</button
       >
     </form>
     <button
       class="bouton"
-      on:click={async () => await visiteGuidee.etapeSuivante()}
+      onclick={async () => await visiteGuidee.etapeSuivante()}
       >Démarrer la visite guidée</button
     >
   </div>

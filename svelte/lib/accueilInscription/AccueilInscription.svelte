@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let invite: boolean;
+  interface Props {
+    invite: boolean;
+  }
+
+  let { invite }: Props = $props();
 </script>
 
 <div class="conteneur">

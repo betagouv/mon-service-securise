@@ -2,8 +2,12 @@
   import type { ReferentielGravites } from './risques.d';
   import TiroirLegende from './TiroirLegende.svelte';
 
-  export let ouvert: boolean;
-  export let referentielGravites: ReferentielGravites;
+  interface Props {
+    ouvert: boolean;
+    referentielGravites: ReferentielGravites;
+  }
+
+  let { ouvert = $bindable(), referentielGravites }: Props = $props();
 </script>
 
 <TiroirLegende

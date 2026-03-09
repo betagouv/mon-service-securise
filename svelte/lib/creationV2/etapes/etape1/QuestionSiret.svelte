@@ -1,11 +1,17 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { createEventDispatcher, onMount } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { entiteDeUtilisateur, leBrouillon } from '../brouillon.store';
   import ChampOrganisation from '../../../ui/ChampOrganisation.svelte';
   import { brouillonAEteCreeStore } from '../../brouillonAEteCree.store';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
@@ -23,12 +29,14 @@
     });
   });
 
-  $: estComplete = !!$leBrouillon.id && /^\d{14}$/.test($leBrouillon.siret);
+  run(() => {
+    estComplete = !!$leBrouillon.id && /^\d{14}$/.test($leBrouillon.siret);
+  });
 
-  $: {
+  run(() => {
     if (estComplete)
       emetEvenement('champModifie', { siret: $leBrouillon.siret });
-  }
+  });
 </script>
 
 <label for="siret" class="titre-question">

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { createEventDispatcher } from 'svelte';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
@@ -10,14 +12,22 @@
     SpecificiteProjet,
   } from '../../creationV2.types';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: estComplete = !!$leBrouillon.localisationDonneesTraitees;
+  run(() => {
+    estComplete = !!$leBrouillon.localisationDonneesTraitees;
+  });
 
-  $: emetEvenement('champModifie', {
-    localisationDonneesTraitees: $leBrouillon.localisationDonneesTraitees,
+  run(() => {
+    emetEvenement('champModifie', {
+      localisationDonneesTraitees: $leBrouillon.localisationDonneesTraitees,
+    });
   });
 
   const illustrations: Record<LocalisationDonneesTraitees, string> = {

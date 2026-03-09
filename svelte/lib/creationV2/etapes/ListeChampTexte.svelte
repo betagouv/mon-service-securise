@@ -1,12 +1,26 @@
 <script lang="ts">
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import { createEventDispatcher } from 'svelte';
 
-  export let valeurs: string[];
-  export let nomGroupe: string;
-  export let titreSuppression: string;
-  export let titreAjout: string;
-  export let inactif = false;
-  export let limiteTaille: number | undefined = undefined;
+  interface Props {
+    valeurs: string[];
+    nomGroupe: string;
+    titreSuppression: string;
+    titreAjout: string;
+    inactif?: boolean;
+    limiteTaille?: number | undefined;
+  }
+
+  let {
+    valeurs = $bindable(),
+    nomGroupe,
+    titreSuppression,
+    titreAjout,
+    inactif = false,
+    limiteTaille = undefined,
+  }: Props = $props();
 
   const dispatche = createEventDispatcher<{
     suppression: number;
@@ -32,15 +46,15 @@
       infoMessage={estInvalide
         ? ''
         : afficheInfo
-        ? `${limiteTaille} caractères maximum`
-        : ''}
+          ? `${limiteTaille} caractères maximum`
+          : ''}
       errorMessage={estInvalide
         ? `Le champ ne doit pas dépasser ${limiteTaille} caractères`
         : ''}
-      on:valuechanged={metAJour(index)}
-      on:blur
-    />
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      onvaluechanged={metAJour(index)}
+      onblur={bubble('blur')}
+    ></dsfr-input>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre={titreSuppression}
       variante="tertiaire"
@@ -48,12 +62,12 @@
       actif={!inactif}
       icone="delete-line"
       positionIcone="seule"
-      on:click={() => dispatche('suppression', index)}
-    />
+      onclick={() => dispatche('suppression', index)}
+    ></lab-anssi-bouton>
   </div>
 {/each}
 <div class="conteneur-actions">
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   <lab-anssi-bouton
     titre={titreAjout}
     variante="tertiaire"
@@ -61,8 +75,8 @@
     icone="add-line"
     positionIcone="gauche"
     actif={!inactif}
-    on:click={() => dispatche('ajout')}
-  />
+    onclick={() => dispatche('ajout')}
+  ></lab-anssi-bouton>
 </div>
 
 <style lang="scss">

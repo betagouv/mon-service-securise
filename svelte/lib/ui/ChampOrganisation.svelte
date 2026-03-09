@@ -7,18 +7,26 @@
   type Organisation = { nom: string; siret: string; departement: string };
   type OrganisationAvecLabel = Organisation & { label: string };
 
-  export let siret: string | undefined = undefined;
-  export let label: string = '';
-  export let disabled: boolean = false;
+  interface Props {
+    siret?: string | undefined;
+    label?: string;
+    disabled?: boolean;
+  }
 
-  let saisie: string;
+  let {
+    siret = $bindable(undefined),
+    label = '',
+    disabled = false,
+  }: Props = $props();
+
+  let saisie: string = $state();
   let minuteur: NodeJS.Timeout;
   let dureeDebounceEnMs = 300;
-  let suggestions: OrganisationAvecLabel[] = [];
-  let suggestionsVisibles = false;
+  let suggestions: OrganisationAvecLabel[] = $state([]);
+  let suggestionsVisibles = $state(false);
   let elementInput:
     | (HTMLInputElement & { status: 'default' | 'error' })
-    | undefined = undefined;
+    | undefined = $state(undefined);
 
   onMount(async () => {
     if (!siret) return;
@@ -101,7 +109,7 @@
 </script>
 
 <div class="conteneur" class:avec-label={label !== ''}>
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
   <dsfr-input
     bind:this={elementInput}
     {label}
@@ -112,8 +120,8 @@
     errorMessage="Le SIRET est obligatoire."
     status={disabled ? 'default' : siret ? 'default' : 'error'}
     {disabled}
-    on:valuechanged={metAJour}
-    on:keydown={gereTouchePressee}
+    onvaluechanged={metAJour}
+    onkeydown={gereTouchePressee}
   >
   </dsfr-input>
   <div class="liste-suggestions" class:visible={suggestionsVisibles}>
@@ -122,10 +130,10 @@
         class="option"
         role="button"
         tabindex="0"
-        on:click={async () => {
+        onclick={async () => {
           await choisisOrganisation(suggestion);
         }}
-        on:keypress={async (e) => {
+        onkeypress={async (e) => {
           if (e.code === 'Enter') {
             await choisisOrganisation(suggestion);
           }

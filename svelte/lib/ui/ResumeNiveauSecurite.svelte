@@ -4,9 +4,17 @@
   import type { NiveauDeSecurite } from '../niveauxDeSecurite/niveauxDeSecurite.d';
   import donneesNiveauxDeSecurite from '../niveauxDeSecurite/donneesNiveauxDeSecurite';
 
-  export let niveau: IdNiveauDeSecurite;
-  export let afficheToastNiveauSuperieurSelectionne: boolean = false;
-  export let afficheAvertissementAttaqueEtatique: boolean = false;
+  interface Props {
+    niveau: IdNiveauDeSecurite;
+    afficheToastNiveauSuperieurSelectionne?: boolean;
+    afficheAvertissementAttaqueEtatique?: boolean;
+  }
+
+  let {
+    niveau,
+    afficheToastNiveauSuperieurSelectionne = false,
+    afficheAvertissementAttaqueEtatique = false,
+  }: Props = $props();
 
   const donneesNiveau: NiveauDeSecurite = donneesNiveauxDeSecurite.find(
     (d) => d.id === niveau
@@ -40,7 +48,7 @@
           hasIcon
           icon="info-fill"
           ellipsis={false}
-        />
+        ></dsfr-badge>
         {#if niveau !== 'niveau3' && afficheAvertissementAttaqueEtatique}
           <p class="info-attaque-etatique">
             Si vous considérez que le système d'information peut faire l'objet

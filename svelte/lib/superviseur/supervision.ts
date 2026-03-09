@@ -1,5 +1,6 @@
 import Supervision from './Supervision.svelte';
 import type { SupervisionProps } from './supervision.d';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-supervision',
@@ -9,7 +10,7 @@ document.body.addEventListener(
 let app: Supervision;
 const rechargeApp = (props: SupervisionProps) => {
   app?.$destroy();
-  app = new Supervision({
+  app = mount(Supervision, {
     target: document.getElementById('conteneur-supervision')!,
     props,
   });

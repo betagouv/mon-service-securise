@@ -2,8 +2,12 @@
   import type { Risque } from './risquesV2.d';
   import { couleur } from './kit';
 
-  export let risques: Risque[];
-  export let transparent: boolean = false;
+  interface Props {
+    risques: Risque[];
+    transparent?: boolean;
+  }
+
+  let { risques, transparent = false }: Props = $props();
 </script>
 
 <table class="relatif" class:transparent>

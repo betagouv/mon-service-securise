@@ -1,19 +1,29 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { createEventDispatcher } from 'svelte';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: estComplete = !!$leBrouillon.dureeDysfonctionnementAcceptable;
+  run(() => {
+    estComplete = !!$leBrouillon.dureeDysfonctionnementAcceptable;
+  });
 
-  $: emetEvenement('champModifie', {
-    dureeDysfonctionnementAcceptable:
-      $leBrouillon.dureeDysfonctionnementAcceptable,
+  run(() => {
+    emetEvenement('champModifie', {
+      dureeDysfonctionnementAcceptable:
+        $leBrouillon.dureeDysfonctionnementAcceptable,
+    });
   });
 </script>
 

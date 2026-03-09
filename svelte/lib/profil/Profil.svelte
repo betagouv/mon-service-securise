@@ -12,17 +12,27 @@
   import SelectionNombreServices from '../inscription/SelectionNombreServices.svelte';
   import Bouton from '../ui/Bouton.svelte';
 
-  export let departements: Departement[];
-  export let utilisateur: Utilisateur;
-  export let entite: Organisation;
-  export let estimationNombreServices: EstimationNombreServices[];
+  interface Props {
+    departements: Departement[];
+    utilisateur: Utilisateur;
+    entite: Organisation;
+    estimationNombreServices: EstimationNombreServices[];
+  }
+
+  let {
+    departements,
+    utilisateur = $bindable(),
+    entite = $bindable(),
+    estimationNombreServices,
+  }: Props = $props();
 
   const modeleTelephone = '^0\\d{9}$';
-  let departement: Departement | undefined =
-    entite && departements.find((d) => d.code === entite.departement);
+  let departement: Departement | undefined = $state(
+    entite && departements.find((d) => d.code === entite.departement)
+  );
 
-  let formulaire: Formulaire;
-  let enCoursEnvoi: boolean = false;
+  let formulaire: Formulaire = $state();
+  let enCoursEnvoi: boolean = $state(false);
 
   const valide = async () => {
     if (formulaire.estValide()) {
@@ -43,7 +53,7 @@
     }
   };
 
-  let elementSelectionDepartement: SelectionDepartement;
+  let elementSelectionDepartement: SelectionDepartement = $state();
   const modifieDepartementApresChoixOrganisation = (
     e: CustomEvent<Organisation>
   ) => {
@@ -85,7 +95,7 @@
           type={undefined}
           href={'https://identite.proconnect.gouv.fr'}
           target="blank"
-        />
+        ></dsfr-button>
       </dsfr-callout>
       <div class="identite-lecture-seule">
         <span>Mail professionnel : <b>{utilisateur.email}</b></span>

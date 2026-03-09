@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let identifiant: string = '';
+  interface Props {
+    identifiant?: string;
+  }
+
+  let { identifiant = '' }: Props = $props();
 </script>
 
 {#if identifiant}

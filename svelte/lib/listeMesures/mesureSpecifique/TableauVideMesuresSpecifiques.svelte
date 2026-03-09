@@ -11,10 +11,15 @@
   } from '../listeMesures.d';
   import TiroirTeleversementModeleMesureSpecifique from '../televersement/TiroirTeleversementModeleMesureSpecifique.svelte';
 
-  export let statuts: ReferentielStatut;
-  export let categories: ListeMesuresProps['categories'];
-  export let typesService: ReferentielTypesService;
-  export let capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+  interface Props {
+    statuts: ReferentielStatut;
+    categories: ListeMesuresProps['categories'];
+    typesService: ReferentielTypesService;
+    capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+  }
+
+  let { statuts, categories, typesService, capaciteAjoutDeMesure }: Props =
+    $props();
 
   const afficheTiroirAjout = () => {
     tiroirStore.afficheContenu(TiroirAjoutModeleMesureSpecifique, {
@@ -39,20 +44,20 @@
       ajoutez-les manuellement
     </p>
   </div>
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   <lab-anssi-bouton
     variante="primaire"
     taille="lg"
     titre="Importer des mesures depuis un fichier XLSX"
-    on:click={afficheTiroirTeleversement}
-  />
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    onclick={afficheTiroirTeleversement}
+  ></lab-anssi-bouton>
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   <lab-anssi-bouton
     variante="secondaire"
     taille="lg"
     titre="Saisir manuellement une mesure"
-    on:click={afficheTiroirAjout}
-  />
+    onclick={afficheTiroirAjout}
+  ></lab-anssi-bouton>
 </div>
 
 <style lang="scss">

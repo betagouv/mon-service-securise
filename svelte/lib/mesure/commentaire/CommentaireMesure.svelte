@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run, preventDefault } from 'svelte/legacy';
+
   import { createEventDispatcher, onMount } from 'svelte';
 
   import StarterKit from '@tiptap/starter-kit';
@@ -8,15 +10,22 @@
   import suggestion from './suggestion';
   import { createEditor, Editor, EditorContent } from 'svelte-tiptap';
 
-  export let contenuCommentaire: string;
-  export let nonce: string;
+  interface Props {
+    contenuCommentaire: string;
+    nonce: string;
+  }
 
-  let editor: Readable<Editor>;
-  $: contenuCommentaire = $editor?.getText();
-  $: commentaireValide =
+  let { contenuCommentaire = $bindable(), nonce }: Props = $props();
+
+  let editor: Readable<Editor> = $state();
+  run(() => {
+    contenuCommentaire = $editor?.getText();
+  });
+  let commentaireValide = $derived(
     !!contenuCommentaire &&
-    contenuCommentaire.trim().length > 0 &&
-    contenuCommentaire.length <= 1000;
+      contenuCommentaire.trim().length > 0 &&
+      contenuCommentaire.length <= 1000
+  );
 
   onMount(() => {
     editor = createEditor({
@@ -70,12 +79,12 @@
   };
 </script>
 
-<form on:submit|preventDefault={sauvegardeCommentaire}>
+<form onsubmit={preventDefault(sauvegardeCommentaire)}>
   <button
     type="button"
     class="mention-commentaire"
     title="Ajouter une mention"
-    on:click={() => $editor.commands.insertContent('@')}
+    onclick={() => $editor.commands.insertContent('@')}
   >
     <img
       src="/statique/assets/images/icone_mention.svg"

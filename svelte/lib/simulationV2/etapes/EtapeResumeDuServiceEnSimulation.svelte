@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { brouillonEstCompletStore } from '../../creationV2/etapes/brouillonEstComplet.store';
   import ResumeDuServiceLectureSeule from '../../creationV2/etapes/resume/ResumeDuServiceLectureSeule.svelte';
   import { resume } from '../../creationV2/etapes/resume/resume.store';
@@ -7,10 +9,16 @@
   import type { MiseAJour } from '../../creationV2/creationV2.api';
   import { metsAJourSimulation } from '../simulationv2.api';
 
-  let lectureSeule = true;
+  let lectureSeule = $state(true);
 
-  export let estComplete: boolean;
-  $: estComplete = $brouillonEstCompletStore;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
+  run(() => {
+    estComplete = $brouillonEstCompletStore;
+  });
 
   const metsAJour = async (e: CustomEvent<MiseAJour>) => {
     await metsAJourSimulation($leBrouillon.id!, e.detail);
@@ -19,15 +27,15 @@
 
 {#if lectureSeule}
   <div class="conteneur-bouton-modifier">
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre="Modifier le service"
       variante="tertiaire"
       taille="md"
       icone="edit-line"
       positionIcone="droite"
-      on:click={() => (lectureSeule = false)}
-    />
+      onclick={() => (lectureSeule = false)}
+    ></lab-anssi-bouton>
   </div>
   <ResumeDuServiceLectureSeule donnees={$resume} />
 {:else}

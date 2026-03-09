@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let erreurs: string[];
+  interface Props {
+    erreurs: string[];
+  }
+
+  let { erreurs }: Props = $props();
 </script>
 
 <div class="infobulle">

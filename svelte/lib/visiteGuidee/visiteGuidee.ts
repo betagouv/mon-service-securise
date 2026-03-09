@@ -2,6 +2,7 @@ import VisiteGuidee from './VisiteGuidee.svelte';
 import type { VisiteGuideeProps } from './visiteGuidee.d';
 import { utilisateurCourant, visiteGuidee } from './visiteGuidee.store';
 import MenuNavigation from './kit/MenuNavigation.svelte';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-visite-guidee',
@@ -12,7 +13,7 @@ let appMenuNavigation: MenuNavigation;
 let app: VisiteGuidee;
 const rechargeApp = (props: VisiteGuideeProps) => {
   appMenuNavigation?.$destroy();
-  appMenuNavigation = new MenuNavigation({
+  appMenuNavigation = mount(MenuNavigation, {
     target: document.getElementById('visite-guidee-menu-navigation')!,
     props: {
       nombreEtapesRestantes: props.nombreEtapesRestantes,
@@ -27,7 +28,7 @@ const rechargeApp = (props: VisiteGuideeProps) => {
     const { etapeCourante, urlEtapePrecedente } = props;
     visiteGuidee.initialise({ etapeCourante, urlEtapePrecedente });
     utilisateurCourant.initialise(props.utilisateurCourant);
-    app = new VisiteGuidee({
+    app = mount(VisiteGuidee, {
       target: document.getElementById('visite-guidee')!,
     });
   }

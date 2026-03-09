@@ -9,7 +9,11 @@
     type RapportServiceV2,
   } from './rapportTeleversementServicesV2.types';
 
-  export let ligne: RapportServiceV2;
+  interface Props {
+    ligne: RapportServiceV2;
+  }
+
+  let { ligne }: Props = $props();
 
   const donneesService = ligne.service;
   const aUneErreur = ligne.erreurs.length > 0;

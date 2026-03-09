@@ -1,17 +1,19 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { store } from '../gestionContributeurs.store';
   import PersonnalisationDroits from './PersonnalisationDroits.svelte';
   import { storeAutorisations } from '../stores/autorisations.store';
   import type { Autorisation, Utilisateur } from '../gestionContributeurs.d';
 
-  let contributeur: Utilisateur;
-  let originaux: Autorisation;
+  let contributeur: Utilisateur = $state();
+  let originaux: Autorisation = $state();
 
-  $: {
+  run(() => {
     contributeur = $store.utilisateurEnCoursDePersonnalisation!;
     if (contributeur)
       originaux = $storeAutorisations.autorisations[contributeur.id];
-  }
+  });
 
   const envoyerDroits = async (droits: any) => {
     const idService = $store.services[0].id;

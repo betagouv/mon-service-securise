@@ -1,8 +1,10 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   export type ModeAffichageTiroir = 'AJOUT' | 'EDITION' | '';
 </script>
 
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import CartoucheCategorieRisque from '../ui/CartoucheCategorieRisque.svelte';
   import type {
@@ -31,19 +33,34 @@
   import IdentifiantRisque from './IdentifiantRisque.svelte';
   import Switch from '../ui/Switch.svelte';
 
-  export let ouvert = true;
-  export let risque: Risque | undefined;
-  export let referentielRisques: ReferentielRisques;
-  export let referentielCategories: ReferentielCategories;
-  export let referentielGravites: ReferentielGravites;
-  export let referentielVraisemblances: ReferentielVraisemblances;
-  export let estLectureSeule: boolean;
-  export let idService: string;
-  export let modeAffichageTiroir: ModeAffichageTiroir = '';
-  let enCoursEnvoi: boolean = false;
+  interface Props {
+    ouvert?: boolean;
+    risque: Risque | undefined;
+    referentielRisques: ReferentielRisques;
+    referentielCategories: ReferentielCategories;
+    referentielGravites: ReferentielGravites;
+    referentielVraisemblances: ReferentielVraisemblances;
+    estLectureSeule: boolean;
+    idService: string;
+    modeAffichageTiroir?: ModeAffichageTiroir;
+  }
 
-  $: risqueDuReferentiel =
-    risque && risque.type === 'GENERAL' && referentielRisques[risque.id];
+  let {
+    ouvert = $bindable(true),
+    risque = $bindable(),
+    referentielRisques,
+    referentielCategories,
+    referentielGravites,
+    referentielVraisemblances,
+    estLectureSeule,
+    idService,
+    modeAffichageTiroir = '',
+  }: Props = $props();
+  let enCoursEnvoi: boolean = $state(false);
+
+  let risqueDuReferentiel = $derived(
+    risque && risque.type === 'GENERAL' && referentielRisques[risque.id]
+  );
 
   const emet = createEventDispatcher<{
     risqueMisAJour: Risque;
@@ -81,12 +98,13 @@
       }
     }
   };
-  $: titreTiroir =
+  let titreTiroir = $derived(
     risque && modeAffichageTiroir === 'EDITION'
       ? intituleRisque(risque)
-      : 'Ajouter un risque';
+      : 'Ajouter un risque'
+  );
 
-  let afficheConfirmationSuppressionRisque = false;
+  let afficheConfirmationSuppressionRisque = $state(false);
   const supprimeRisque = async () => {
     if (risque && risque.type === 'SPECIFIQUE') {
       try {
@@ -100,7 +118,9 @@
     }
   };
 
-  $: risque, (afficheConfirmationSuppressionRisque = false);
+  run(() => {
+    (risque, (afficheConfirmationSuppressionRisque = false));
+  });
 </script>
 
 <div class="tiroir-risque {risque?.type}" class:ouvert>
@@ -123,7 +143,7 @@
           {/if}
         </div>
       </div>
-      <button class="fermeture" on:click={fermeTiroir}>✕</button>
+      <button class="fermeture" onclick={fermeTiroir}>✕</button>
     </div>
     <div class="contenu-risque">
       {#if afficheConfirmationSuppressionRisque}

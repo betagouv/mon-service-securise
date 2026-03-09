@@ -5,14 +5,18 @@
   import FilAriane from '../ui/FilAriane.svelte';
   import ListeDeroulante from '../ui/ListeDeroulante.svelte';
 
-  export let optionsFiltrageDate: Record<string, string>;
-  export let entitesSupervisees: EntiteSupervisee[];
-  let urlSupervision: string;
-  let enCoursChargement: boolean = false;
+  interface Props {
+    optionsFiltrageDate: Record<string, string>;
+    entitesSupervisees: EntiteSupervisee[];
+  }
 
-  let filtreDate: string;
-  let filtreBesoinsSecurite: string;
-  let filtreEntite: string;
+  let { optionsFiltrageDate, entitesSupervisees }: Props = $props();
+  let urlSupervision: string = $state();
+  let enCoursChargement: boolean = $state(false);
+
+  let filtreDate: string = $state();
+  let filtreBesoinsSecurite: string = $state();
+  let filtreEntite: string = $state();
 
   onMount(async () => {
     await recupereUrlIframe();
@@ -101,8 +105,8 @@
     width="800"
     height="1000"
     allowtransparency
-    on:load={() => (enCoursChargement = false)}
-  />
+    onload={() => (enCoursChargement = false)}
+  ></iframe>
 {/if}
 
 <style>

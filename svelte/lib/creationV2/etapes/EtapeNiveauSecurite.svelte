@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import type { IdNiveauDeSecurite } from '../../ui/types';
   import {
     metsAJourBrouillonService,
@@ -9,10 +11,14 @@
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import NiveauDeSecuriteEditable from '../NiveauDeSecuriteEditable.svelte';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+  }
 
-  let niveauSelectionne: IdNiveauDeSecurite | '';
-  let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+  let { estComplete = $bindable() }: Props = $props();
+
+  let niveauSelectionne: IdNiveauDeSecurite | '' = $state();
+  let niveauDeSecuriteMinimal: IdNiveauDeSecurite = $state();
 
   onMount(async () => {
     if ($leBrouillon.id) {
@@ -46,12 +52,14 @@
     questionsV2.niveauSecurite[niveau]?.position >=
     questionsV2.niveauSecurite[niveauDeSecuriteMinimal]?.position;
 
-  $: estComplete =
-    niveauSelectionne !== '' &&
-    niveauEstConformeAuMinimumRequis(
-      niveauSelectionne,
-      niveauDeSecuriteMinimal
-    );
+  run(() => {
+    estComplete =
+      niveauSelectionne !== '' &&
+      niveauEstConformeAuMinimumRequis(
+        niveauSelectionne,
+        niveauDeSecuriteMinimal
+      );
+  });
 </script>
 
 <hr class="separateur-etapier" />

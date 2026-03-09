@@ -4,15 +4,15 @@
   import { utilisateurCourant, visiteGuidee } from '../../visiteGuidee.store';
   import type { SousEtape } from '../../kit/ModaleSousEtape';
 
-  let cibleNomService: HTMLElement;
-  let cibleCentreNotifications: HTMLElement;
-  let cibleNouveauService: HTMLElement;
-  let cibleLignePremierService: HTMLElement;
+  let cibleNomService: HTMLElement = $state();
+  let cibleCentreNotifications: HTMLElement = $state();
+  let cibleNouveauService: HTMLElement = $state();
+  let cibleLignePremierService: HTMLElement = $state();
 
   const elementDeClasse = (classe: string) =>
     document.getElementsByClassName(classe)[0]! as HTMLElement;
 
-  let sousEtapes: SousEtape[] = [];
+  let sousEtapes: SousEtape[] = $state([]);
   onMount(() => {
     rechargeEtape();
     const derniereEtape = derniereSousEtape();

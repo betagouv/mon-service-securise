@@ -1,5 +1,6 @@
 import Connexion from './Connexion.svelte';
 import type { ConnexionProps } from './connexion.d';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-connexion',
@@ -9,7 +10,7 @@ document.body.addEventListener(
 let app: Connexion;
 const rechargeApp = (props: ConnexionProps) => {
   app?.$destroy();
-  app = new Connexion({
+  app = mount(Connexion, {
     target: document.getElementById('conteneur-connexion')!,
     props: props,
   });

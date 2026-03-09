@@ -3,15 +3,26 @@
   import Pastille from './Pastille.svelte';
   import type { OptionsListeDeroulanteRiche } from './ui.types.d';
 
-  export let id: string;
-  export let libelle: string;
-  export let options: OptionsListeDeroulanteRiche<T>;
-  export let valeursSelectionnees: Record<string, T[]> = {};
-  let menuOuvert: boolean = false;
-  let declencheurEl: HTMLButtonElement;
-  let contenuEl: HTMLDivElement;
+  interface Props {
+    id: string;
+    libelle: string;
+    options: OptionsListeDeroulanteRiche<T>;
+    valeursSelectionnees?: Record<string, T[]>;
+  }
 
-  $: nbFiltresActifs = Object.values(valeursSelectionnees).flat().length;
+  let {
+    id,
+    libelle,
+    options,
+    valeursSelectionnees = $bindable({}),
+  }: Props = $props();
+  let menuOuvert: boolean = $state(false);
+  let declencheurEl: HTMLButtonElement = $state();
+  let contenuEl: HTMLDivElement = $state();
+
+  let nbFiltresActifs = $derived(
+    Object.values(valeursSelectionnees).flat().length
+  );
 </script>
 
 <FermetureSurClicEnDehors
@@ -20,7 +31,7 @@
 />
 <div class="conteneur-liste-deroulante">
   <button
-    on:click={() => (menuOuvert = !menuOuvert)}
+    onclick={() => (menuOuvert = !menuOuvert)}
     class="conteneur-select"
     bind:this={declencheurEl}
   >

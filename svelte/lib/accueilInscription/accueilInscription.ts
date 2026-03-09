@@ -1,5 +1,6 @@
 import AccueilInscription from './AccueilInscription.svelte';
 import type { AccueilInscriptionProps } from './accueilInscription.d';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-accueil-inscription',
@@ -9,7 +10,7 @@ document.body.addEventListener(
 let app: AccueilInscription;
 const rechargeApp = (props: AccueilInscriptionProps) => {
   app?.$destroy();
-  app = new AccueilInscription({
+  app = mount(AccueilInscription, {
     target: document.getElementById('conteneur-accueil-inscription')!,
     props: props,
   });

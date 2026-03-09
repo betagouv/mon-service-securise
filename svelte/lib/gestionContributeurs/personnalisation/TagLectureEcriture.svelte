@@ -21,27 +21,28 @@
     },
   ];
 
-  export let droit: Lecture | Ecriture;
+  interface Props {
+    droit: Lecture | Ecriture;
+  }
+
+  let { droit }: Props = $props();
   const dispatch = createEventDispatcher<{
     droitChange: Lecture | Ecriture;
   }>();
 </script>
 
 <MenuFlottant fermeMenuSiClicInterne={true}>
-  <div
-    slot="declencheur"
-    class="droit"
-    class:lecture={droit === 1}
-    class:ecriture={droit === 2}
-  >
-    {LIBELLE_DROITS[droit]}
-  </div>
+  {#snippet declencheur()}
+    <div class="droit" class:lecture={droit === 1} class:ecriture={droit === 2}>
+      {LIBELLE_DROITS[droit]}
+    </div>
+  {/snippet}
 
   <div class="droits-disponibles">
     {#each droitsDisponibles as { nom, description, droit }}
       <button
         class="droit-propose"
-        on:click={() => dispatch('droitChange', droit)}
+        onclick={() => dispatch('droitChange', droit)}
         class:lecture={droit === 1}
         class:ecriture={droit === 2}
       >

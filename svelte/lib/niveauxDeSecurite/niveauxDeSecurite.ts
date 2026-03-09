@@ -1,5 +1,6 @@
 import NiveauxDeSecurite from './NiveauxDeSecurite.svelte';
 import type { NiveauxDeSecuriteProps } from './niveauxDeSecurite.d';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-niveaux-de-securite',
@@ -9,7 +10,7 @@ document.body.addEventListener(
 let app: NiveauxDeSecurite;
 const rechargeApp = (props: NiveauxDeSecuriteProps) => {
   app?.$destroy();
-  app = new NiveauxDeSecurite({
+  app = mount(NiveauxDeSecurite, {
     target: document.getElementById('niveaux-de-securite')!,
     props,
   });

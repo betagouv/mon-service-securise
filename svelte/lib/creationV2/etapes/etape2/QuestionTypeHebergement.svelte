@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { createEventDispatcher, tick } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import Radio from '../../Radio.svelte';
@@ -7,8 +9,14 @@
   import type { ActiviteExternalisee } from '../../creationV2.types';
   import CaseACocher from '../../../ui/CaseACocher.svelte';
 
-  export let estComplete: boolean;
-  $: estComplete = !!$leBrouillon.typeHebergement;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
+  run(() => {
+    estComplete = !!$leBrouillon.typeHebergement;
+  });
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import {
     EtatEnregistrement,
     type IdCategorie,
@@ -57,15 +59,27 @@
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
-  export let idService: IdService;
-  export let categories: Record<IdCategorie, string>;
-  export let statuts: ReferentielStatut;
-  export let priorites: ReferentielPriorite;
-  export let estLectureSeule: boolean;
-  export let modeVisiteGuidee: boolean;
-  export let versionService: VersionService;
+  interface Props {
+    idService: IdService;
+    categories: Record<IdCategorie, string>;
+    statuts: ReferentielStatut;
+    priorites: ReferentielPriorite;
+    estLectureSeule: boolean;
+    modeVisiteGuidee: boolean;
+    versionService: VersionService;
+  }
 
-  $: {
+  let {
+    idService,
+    categories,
+    statuts,
+    priorites,
+    estLectureSeule,
+    modeVisiteGuidee,
+    versionService,
+  }: Props = $props();
+
+  run(() => {
     const requete = new URLSearchParams(window.location.search);
     const idModele = requete.get('idModele');
     const idMesure = requete.get('idMesure');
@@ -94,7 +108,7 @@
         enleveParametreDeUrl('idMesure');
       }
     }
-  }
+  });
 
   const rafraichisMesures = async () => {
     mesures.reinitialise(
@@ -160,7 +174,7 @@
       $rechercheParAvancement = 'enAction';
   });
 
-  let etatEnregistrement: EtatEnregistrement = Jamais;
+  let etatEnregistrement: EtatEnregistrement = $state(Jamais);
 
   const metsAJourMesureSpecifique = async (
     indexReel: number,
@@ -212,7 +226,9 @@
     await storeNotifications.marqueLue('nouveaute', 'ongletStatutsMesures');
   };
 
-  $: affichePlanAction = $rechercheParAvancement !== 'statutADefinir';
+  let affichePlanAction = $derived(
+    $rechercheParAvancement !== 'statutADefinir'
+  );
 
   if (modeVisiteGuidee) {
     $rechercheParAvancement = 'enAction';
@@ -229,14 +245,14 @@
 </script>
 
 <svelte:body
-  on:mesure-modifiee={rafraichisMesures}
-  on:collaboratif-service-modifie={() =>
+  onmesure-modifiee={rafraichisMesures}
+  oncollaboratif-service-modifie={() =>
     Promise.all([
       rafraichisContributeurs(), // Pour avoir une liste à jour dans la sélection des responsables
       rafraichisAutorisations(), // Pour avoir des pastilles de couleur à jour sur les droits
       rafraichisMesures(), // Pour avoir les responsables de mesures à jour
     ])}
-  on:modeles-mesure-specifique-associes={() =>
+  onmodeles-mesure-specifique-associes={() =>
     ($rechercheParAvancement = 'enAction')}
 />
 <Toaster />
@@ -297,7 +313,7 @@
       type="status"
       status="warning"
       size="md"
-    />
+    ></dsfr-badge>
   </div>
 {/if}
 

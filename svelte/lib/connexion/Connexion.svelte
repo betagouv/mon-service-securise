@@ -1,7 +1,11 @@
 <script lang="ts">
   import Lien from '../ui/Lien.svelte';
 
-  export let urlRedirection: string;
+  interface Props {
+    urlRedirection: string;
+  }
+
+  let { urlRedirection }: Props = $props();
 
   const cheminRedirection = urlRedirection && new URL(urlRedirection).pathname;
 </script>

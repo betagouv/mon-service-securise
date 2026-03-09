@@ -1,12 +1,15 @@
 <script lang="ts">
-  export let icone:
-    | 'information'
-    | 'tri-aucun'
-    | 'tri-ascendant'
-    | 'tri-descendant';
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
+  interface Props {
+    icone: 'information' | 'tri-aucun' | 'tri-ascendant' | 'tri-descendant';
+  }
+
+  let { icone }: Props = $props();
 </script>
 
-<button type="button" class={icone} on:click></button>
+<button type="button" class={icone} onclick={bubble('click')}></button>
 
 <style>
   button {

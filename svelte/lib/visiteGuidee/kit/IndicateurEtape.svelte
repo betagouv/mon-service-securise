@@ -1,12 +1,19 @@
 <script lang="ts">
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import type {
     ConfigurationIndicateurEtape,
     EtapeVisiteGuidee,
   } from '../visiteGuidee.d';
 
-  export let configuration: ConfigurationIndicateurEtape;
-  export let etapeCourante: EtapeVisiteGuidee;
-  export let etapesVues: EtapeVisiteGuidee[] = [];
+  interface Props {
+    configuration: ConfigurationIndicateurEtape;
+    etapeCourante: EtapeVisiteGuidee;
+    etapesVues?: EtapeVisiteGuidee[];
+  }
+
+  let { configuration, etapeCourante, etapesVues = [] }: Props = $props();
   const premiereEtapeNonVue = configuration.etapes.filter(
     (e) => !etapesVues.includes(e.id)
   )[0];
@@ -19,7 +26,7 @@
     {@const disponible = etape.id === premiereEtapeNonVue.id}
     {@const navigable = vue || active || disponible}
     <li id="etape-{etape.id}" class:active class:vue class:disponible>
-      <a href={navigable ? etape.lien : null} on:click>
+      <a href={navigable ? etape.lien : null} onclick={bubble('click')}>
         <img
           src={vue && !active
             ? '/statique/assets/images/icone_fait.svg'

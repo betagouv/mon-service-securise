@@ -1,22 +1,28 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { validationChamp } from '../directives/validationChamp';
   import type { EstimationNombreServices, Intervalle } from './inscription.d';
 
-  export let id: string;
-  export let estimationNombreServices: EstimationNombreServices[];
-  export let valeur: Intervalle | null;
+  interface Props {
+    id: string;
+    estimationNombreServices: EstimationNombreServices[];
+    valeur: Intervalle | null;
+  }
 
-  let nombreServices: string = valeur
-    ? `${valeur.borneBasse}_${valeur.borneHaute}`
-    : '';
-  $: {
+  let { id, estimationNombreServices, valeur = $bindable() }: Props = $props();
+
+  let nombreServices: string = $state(
+    valeur ? `${valeur.borneBasse}_${valeur.borneHaute}` : ''
+  );
+  run(() => {
     valeur = nombreServices
       ? {
           borneBasse: nombreServices.split('_')[0],
           borneHaute: nombreServices.split('_')[1],
         }
       : null;
-  }
+  });
 </script>
 
 <div class="conteneur">

@@ -9,6 +9,7 @@ import type {
   SuggestionKeyDownProps,
 } from '@tiptap/suggestion';
 import { SvelteRenderer } from 'svelte-tiptap';
+import { mount } from 'svelte';
 
 const suggestion = () => {
   return {
@@ -32,7 +33,7 @@ const suggestion = () => {
           conteneur = document.createElement('div');
           editor.view.dom.parentNode?.appendChild(conteneur);
 
-          composant = new ListeSuggestionsMention({
+          composant = mount(ListeSuggestionsMention, {
             target: conteneur,
             props: {
               items: props.items,

@@ -40,12 +40,12 @@
     <div class="conteneur-actions">
       <button
         class="bouton"
-        on:click={async () => await visiteGuidee.etapeSuivante()}
+        onclick={async () => await visiteGuidee.etapeSuivante()}
         >C'est parti !</button
       >
       <button
         class="lien"
-        on:click={async () =>
+        onclick={async () =>
           await visiteGuidee.fermeDefinitivementVisiteGuidee()}
         >Ignorer la visite guidée</button
       >
@@ -53,7 +53,7 @@
   </div>
   <button
     class="fermeture-menu"
-    on:click={async () => await visiteGuidee.masqueEtapeCourante()}
+    onclick={async () => await visiteGuidee.masqueEtapeCourante()}
   >
     <img
       src="/statique/assets/images/icone_fermeture_modale.svg"

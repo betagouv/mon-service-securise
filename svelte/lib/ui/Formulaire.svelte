@@ -1,11 +1,23 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import { createEventDispatcher } from 'svelte';
 
-  export let id: string = '';
-  export let classe: string = '';
-  export let formulaireDuTiroir: boolean = false;
+  interface Props {
+    id?: string;
+    classe?: string;
+    formulaireDuTiroir?: boolean;
+    children?: import('svelte').Snippet;
+  }
 
-  let formulaire: HTMLFormElement;
+  let {
+    id = '',
+    classe = '',
+    formulaireDuTiroir = false,
+    children,
+  }: Props = $props();
+
+  let formulaire: HTMLFormElement = $state();
 
   const trouveLibellePour = (element: Element) => {
     for (const libelle of document.getElementsByTagName('label')) {
@@ -41,13 +53,13 @@
 
 <form
   bind:this={formulaire}
-  on:submit|preventDefault={verifieValidite}
+  onsubmit={preventDefault(verifieValidite)}
   {id}
   novalidate
   class={classe}
   class:formulaireDuTiroir
 >
-  <slot />
+  {@render children?.()}
 </form>
 
 <style>

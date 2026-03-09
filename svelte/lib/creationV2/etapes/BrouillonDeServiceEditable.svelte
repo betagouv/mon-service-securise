@@ -19,8 +19,12 @@
     VolumetrieDonneesTraitees,
   } from '../creationV2.types';
 
-  export let donnees: DescriptionServiceV2;
-  export let seulementNomServiceEditable: boolean;
+  interface Props {
+    donnees: DescriptionServiceV2;
+    seulementNomServiceEditable: boolean;
+  }
+
+  let { donnees = $bindable(), seulementNomServiceEditable }: Props = $props();
 
   const dispatch = createEventDispatcher<{ champModifie: MiseAJour }>();
 
@@ -79,7 +83,8 @@
     dispatch('champModifie', { [propriete]: valeur });
   };
 
-  let elementHtml: HTMLElement & { errorMessage: string; status: string };
+  let elementHtml: HTMLElement & { errorMessage: string; status: string } =
+    $state();
 
   type BlurEvent = FocusEvent & { target: HTMLInputElement };
   const metAJour = {
@@ -199,12 +204,12 @@
       value={donnees.nomService}
       status="info"
       infoMessage="200 caractères maximum"
-      on:valuechanged={metAJour.nomService}
-      on:blur={async () => {
+      onvaluechanged={metAJour.nomService}
+      onblur={async () => {
         if (donnees.nomService.length >= 1 && donnees.nomService.length <= 200)
           await champModifie('nomService', donnees.nomService);
       }}
-    />
+    ></dsfr-input>
 
     {#key donnees.siret}
       <ChampOrganisation
@@ -227,9 +232,9 @@
       value={donnees.statutDeploiement}
       disabled={seulementNomServiceEditable}
       id="statutDeploiement"
-      on:valuechanged={metAJour.statutDeploiement}
+      onvaluechanged={metAJour.statutDeploiement}
       placeholderDisabled
-    />
+    ></dsfr-select>
 
     <dsfr-textarea
       label="Présentation du service"
@@ -247,8 +252,8 @@
       errorMessage={donnees.presentation && donnees.presentation.length > 2000
         ? 'La présentation ne doit pas dépasser 2000 caractères'
         : ''}
-      on:blur={metAJour.presentation}
-    />
+      onblur={metAJour.presentation}
+    ></dsfr-textarea>
 
     <div
       class="conteneur-liste-champs"
@@ -292,12 +297,12 @@
       values={donnees.typeService}
       disabled={seulementNomServiceEditable}
       id="typeService"
-      on:valuechanged={metAJour.typeService}
+      onvaluechanged={metAJour.typeService}
       status={!seulementNomServiceEditable && donnees.typeService.length < 1
         ? 'error'
         : 'default'}
       errorMessage="Le type de service est obligatoire."
-    />
+    ></lab-anssi-multi-select>
 
     <div class="conteneur-marge-haute-negative">
       <lab-anssi-multi-select
@@ -313,8 +318,8 @@
         values={donnees.specificitesProjet}
         disabled={seulementNomServiceEditable}
         id="specificitesProjet"
-        on:valuechanged={metAJour.specificitesProjet}
-      />
+        onvaluechanged={metAJour.specificitesProjet}
+      ></lab-anssi-multi-select>
     </div>
 
     <div class="conteneur-marge-haute-negative">
@@ -330,9 +335,9 @@
         value={donnees.typeHebergement}
         disabled={seulementNomServiceEditable}
         id="typeHebergement"
-        on:valuechanged={metAJour.typeHebergement}
+        onvaluechanged={metAJour.typeHebergement}
         placeholderDisabled
-      />
+      ></dsfr-select>
     </div>
 
     <div class="conteneur-marge-basse-negative">
@@ -350,8 +355,8 @@
         )}
         values={donnees.activitesExternalisees}
         id="activitesExternalisees"
-        on:valuechanged={metAJour.activitesExternalisees}
-      />
+        onvaluechanged={metAJour.activitesExternalisees}
+      ></lab-anssi-multi-select>
     </div>
   </div>
 </div>
@@ -372,9 +377,9 @@
       value={donnees.ouvertureSysteme}
       disabled={seulementNomServiceEditable}
       id="ouvertureSysteme"
-      on:valuechanged={metAJour.ouvertureSysteme}
+      onvaluechanged={metAJour.ouvertureSysteme}
       placeholderDisabled
-    />
+    ></dsfr-select>
 
     <dsfr-select
       label="Audience cible du service*"
@@ -385,9 +390,9 @@
       value={donnees.audienceCible}
       disabled={seulementNomServiceEditable}
       id="audienceCible"
-      on:valuechanged={metAJour.audienceCible}
+      onvaluechanged={metAJour.audienceCible}
       placeholderDisabled
-    />
+    ></dsfr-select>
 
     <dsfr-select
       label="Durée maximale acceptable de dysfonctionnement du système*"
@@ -398,9 +403,9 @@
       value={donnees.dureeDysfonctionnementAcceptable}
       disabled={seulementNomServiceEditable}
       id="dureeDysfonctionnementAcceptable"
-      on:valuechanged={metAJour.dureeDysfonctionnementAcceptable}
+      onvaluechanged={metAJour.dureeDysfonctionnementAcceptable}
       placeholderDisabled
-    />
+    ></dsfr-select>
 
     <lab-anssi-multi-select
       label="Données traitées"
@@ -415,8 +420,8 @@
       values={donnees.categoriesDonneesTraitees}
       disabled={seulementNomServiceEditable}
       id="categoriesDonneesTraitees"
-      on:valuechanged={metAJour.categoriesDonneesTraitees}
-    />
+      onvaluechanged={metAJour.categoriesDonneesTraitees}
+    ></lab-anssi-multi-select>
 
     <div
       class="conteneur-liste-champs conteneur-marge-haute-negative"
@@ -449,9 +454,9 @@
       value={donnees.volumetrieDonneesTraitees}
       disabled={seulementNomServiceEditable}
       id="volumetrieDonneesTraitees"
-      on:valuechanged={metAJour.volumetrieDonneesTraitees}
+      onvaluechanged={metAJour.volumetrieDonneesTraitees}
       placeholderDisabled
-    />
+    ></dsfr-select>
 
     <dsfr-select
       label="Localisation des données traitées*"
@@ -467,8 +472,8 @@
       value={donnees.localisationDonneesTraitees}
       disabled={seulementNomServiceEditable}
       id="localisationDonneesTraitees"
-      on:valuechanged={metAJour.localisationDonneesTraitees}
-    />
+      onvaluechanged={metAJour.localisationDonneesTraitees}
+    ></dsfr-select>
   </div>
 </div>
 

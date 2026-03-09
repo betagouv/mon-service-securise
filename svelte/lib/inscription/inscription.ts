@@ -1,5 +1,6 @@
 import Inscription from './Inscription.svelte';
 import type { InscriptionProps } from './inscription.d';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-inscription',
@@ -9,7 +10,7 @@ document.body.addEventListener(
 let app: Inscription;
 const rechargeApp = (props: InscriptionProps) => {
   app?.$destroy();
-  app = new Inscription({
+  app = mount(Inscription, {
     target: document.getElementById('conteneur-inscription')!,
     props: props,
   });

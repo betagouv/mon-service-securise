@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import {
     type Risque,
     type ReferentielRisques,
@@ -23,22 +25,36 @@
   import LegendeMatriceRisques from './LegendeMatriceRisques.svelte';
   import BoutonIcone from '../ui/BoutonIcone.svelte';
 
-  export let idService: string;
-  export let estLectureSeule: boolean;
-  export let risques: Risque[];
-  export let categories: ReferentielCategories;
-  export let niveauxGravite: ReferentielGravites;
-  export let niveauxVraisemblance: ReferentielVraisemblances;
-  export let referentielRisques: ReferentielRisques;
-  export let matriceNiveauxRisque: MatriceNiveauxRisque;
-  export let niveauxRisque: ReferentielNiveauxRisque;
-  let tiroirRisqueOuvert = false;
-  let tiroirLegendeGraviteOuvert = false;
-  let tiroirLegendeVraisemblanceOuvert = false;
-  let modeAffichageTiroir: ModeAffichageTiroir = '';
-  let risqueEnEdition: Risque | undefined;
-  let triParGravite: Tri = 'aucun';
-  let triParVraisemblance: Tri = 'aucun';
+  interface Props {
+    idService: string;
+    estLectureSeule: boolean;
+    risques: Risque[];
+    categories: ReferentielCategories;
+    niveauxGravite: ReferentielGravites;
+    niveauxVraisemblance: ReferentielVraisemblances;
+    referentielRisques: ReferentielRisques;
+    matriceNiveauxRisque: MatriceNiveauxRisque;
+    niveauxRisque: ReferentielNiveauxRisque;
+  }
+
+  let {
+    idService,
+    estLectureSeule,
+    risques = $bindable(),
+    categories,
+    niveauxGravite,
+    niveauxVraisemblance,
+    referentielRisques,
+    matriceNiveauxRisque,
+    niveauxRisque,
+  }: Props = $props();
+  let tiroirRisqueOuvert = $state(false);
+  let tiroirLegendeGraviteOuvert = $state(false);
+  let tiroirLegendeVraisemblanceOuvert = $state(false);
+  let modeAffichageTiroir: ModeAffichageTiroir = $state('');
+  let risqueEnEdition: Risque | undefined = $state();
+  let triParGravite: Tri = $state('aucun');
+  let triParVraisemblance: Tri = $state('aucun');
 
   type Tri = 'aucun' | 'ascendant' | 'descendant';
 
@@ -103,7 +119,7 @@
     triParVraisemblance = triSuivant(triParVraisemblance);
   };
 
-  $: doitAfficherAvertissement = risques.some(risqueAMettreAJour);
+  let doitAfficherAvertissement = $derived(risques.some(risqueAMettreAJour));
 
   const compare = (risque1: Risque, risque2: Risque): number => {
     const positionGraviteRisque1 = risque1.niveauGravite
@@ -138,10 +154,12 @@
     return 0;
   };
 
-  let risquesTries: Risque[];
-  $: triParGravite,
-    triParVraisemblance,
-    (risquesTries = [...risques].sort(compare));
+  let risquesTries: Risque[] = $state();
+  run(() => {
+    (triParGravite,
+      triParVraisemblance,
+      (risquesTries = [...risques].sort(compare)));
+  });
 </script>
 
 <div class="au-dessus-tableau">

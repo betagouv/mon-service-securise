@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { createEventDispatcher, tick } from 'svelte';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
@@ -11,7 +13,11 @@
   } from '../../creationV2.types';
   import ListeChampTexte from '../ListeChampTexte.svelte';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
 
   const illustrations: Record<CategorieDonneesTraitees, string> = {
     documentsIdentifiants: 'documentsIdentifiants.svg',
@@ -30,11 +36,13 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: estComplete =
-    $leBrouillon.categoriesDonneesTraiteesSupplementaires.length === 0 ||
-    $leBrouillon.categoriesDonneesTraiteesSupplementaires.every(
-      (c) => c.length <= 200
-    );
+  run(() => {
+    estComplete =
+      $leBrouillon.categoriesDonneesTraiteesSupplementaires.length === 0 ||
+      $leBrouillon.categoriesDonneesTraiteesSupplementaires.every(
+        (c) => c.length <= 200
+      );
+  });
 
   const supprimeValeur = (index: number) => {
     $leBrouillon.categoriesDonneesTraiteesSupplementaires =
@@ -59,10 +67,11 @@
     });
   };
 
-  let valeurCategoriesDonneesTraitees: CategorieDonneesTraitees[] =
-    $leBrouillon.categoriesDonneesTraitees;
+  let valeurCategoriesDonneesTraitees: CategorieDonneesTraitees[] = $state(
+    $leBrouillon.categoriesDonneesTraitees
+  );
 
-  $: {
+  run(() => {
     if (
       valeurCategoriesDonneesTraitees !== $leBrouillon.categoriesDonneesTraitees
     ) {
@@ -71,7 +80,7 @@
         categoriesDonneesTraitees: $leBrouillon.categoriesDonneesTraitees,
       });
     }
-  }
+  });
 
   const categorieDonneesTraitees = Object.entries(
     questionsV2.categorieDonneesTraitees

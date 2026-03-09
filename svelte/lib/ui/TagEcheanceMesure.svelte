@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let echeance: Date;
+  interface Props {
+    echeance: Date;
+  }
+
+  let { echeance }: Props = $props();
   const echeanceFormattee = new Intl.DateTimeFormat('fr-FR', {
     year: 'numeric',
     month: 'short',

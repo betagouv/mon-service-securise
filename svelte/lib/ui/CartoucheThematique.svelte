@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let thematique: string;
+  interface Props {
+    thematique: string;
+  }
+
+  let { thematique }: Props = $props();
 </script>
 
 <span class="cartouche">{thematique}</span>

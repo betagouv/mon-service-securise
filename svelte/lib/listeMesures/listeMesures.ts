@@ -4,6 +4,7 @@ import type {
   RapportTeleversementProps,
 } from './listeMesures.d';
 import RapportTeleversementModelesMesureSpecifique from './televersement/RapportTeleversementModelesMesureSpecifique.svelte';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-liste-mesures',
@@ -19,7 +20,7 @@ document.body.addEventListener(
 let app: ListeMesures;
 const rechargeApp = (props: ListeMesuresProps) => {
   app?.$destroy();
-  app = new ListeMesures({
+  app = mount(ListeMesures, {
     target: document.getElementById('liste-mesures')!,
     props,
   });
@@ -28,7 +29,7 @@ const rechargeApp = (props: ListeMesuresProps) => {
 let rapport: RapportTeleversementModelesMesureSpecifique;
 const rechargeRapport = (props: RapportTeleversementProps) => {
   rapport?.$destroy();
-  rapport = new RapportTeleversementModelesMesureSpecifique({
+  rapport = mount(RapportTeleversementModelesMesureSpecifique, {
     target: document.getElementById('rapport-televersement')!,
     props,
   });

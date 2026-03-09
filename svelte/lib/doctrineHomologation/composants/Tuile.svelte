@@ -1,8 +1,12 @@
 <script lang="ts">
-  export let titre: string;
-  export let illustration: string;
-  export let contenu: string;
-  export let classe: string = '';
+  interface Props {
+    titre: string;
+    illustration: string;
+    contenu: string;
+    classe?: string;
+  }
+
+  let { titre, illustration, contenu, classe = '' }: Props = $props();
 </script>
 
 <div class="tuile {classe ?? ''}">

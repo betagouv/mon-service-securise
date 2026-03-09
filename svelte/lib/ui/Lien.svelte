@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { HTMLAnchorAttributes } from 'svelte/elements';
 
-  interface $$Props extends HTMLAnchorAttributes {
+  interface Props {
     titre: string;
     icone?:
       | 'plus'
@@ -25,30 +25,19 @@
     classe?: string;
     href: string;
     inactif?: boolean;
+    [key: string]: any;
   }
-  export let titre: string;
-  export let href: string;
-  export let classe: string | undefined = undefined;
-  export let icone:
-    | 'plus'
-    | 'editer'
-    | 'homologation'
-    | 'indiceCyber'
-    | 'telecharger'
-    | 'telecharger-blanc'
-    | 'medaille'
-    | 'brouillon'
-    | 'ajout-liste'
-    | 'redemarrer'
-    | 'rafraichir'
-    | undefined = undefined;
-  export let type:
-    | 'bouton-primaire'
-    | 'bouton-secondaire'
-    | 'bouton-tertiaire'
-    | 'lien' = 'bouton-primaire';
-  export let taille: 'petit' | 'moyen' = 'moyen';
-  export let inactif: boolean = false;
+
+  let {
+    titre,
+    icone = undefined,
+    type = 'bouton-primaire',
+    taille = 'moyen',
+    classe = undefined,
+    href,
+    inactif = false,
+    ...rest
+  }: Props = $props();
 </script>
 
 <a
@@ -56,8 +45,8 @@
   class:avecIcone={!!icone}
   class:inactif
   href={inactif ? '#' : href}
-  rel={$$restProps.rel || 'noopener'}
-  {...$$restProps}
+  rel={rest.rel || 'noopener'}
+  {...rest}
 >
   {titre}
 </a>

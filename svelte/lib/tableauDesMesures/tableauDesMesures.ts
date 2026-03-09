@@ -2,6 +2,7 @@ import TableauDesMesures from './TableauDesMesures.svelte';
 import type { TableauDesMesuresProps } from './tableauDesMesures.d';
 
 import { mesures } from './stores/mesures.store';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-tableau-mesures',
@@ -16,7 +17,7 @@ let app: TableauDesMesures;
 const rechargeApp = (props: TableauDesMesuresProps) => {
   app?.$destroy();
   reinitialiseStore();
-  app = new TableauDesMesures({
+  app = mount(TableauDesMesures, {
     target: document.getElementById('tableau-des-mesures')!,
     props,
   });

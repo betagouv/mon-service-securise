@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import type { OptionsListeDeroulanteRiche } from './ui.types';
   export type ConfigurationRecherche = {
     champsRecherche: string[];
@@ -20,27 +20,50 @@
 </script>
 
 <script lang="ts" generics="T extends ObjetDeDonnees">
+  import { run } from 'svelte/legacy';
+
   import type { ObjetDeDonnees } from './types';
   import TableauVideAucunResultat from './TableauVideAucunResultat.svelte';
   import ListeDeroulanteRiche from './ListeDeroulanteRiche.svelte';
   import BarreDeRecherche from './BarreDeRecherche.svelte';
   import type { ComponentType } from 'svelte';
 
-  export let colonnes: { cle: string; libelle: string }[];
-  export let donnees: T[];
+  interface Props {
+    colonnes: { cle: string; libelle: string }[];
+    donnees: T[];
+    configurationRecherche?: ConfigurationRecherche | null;
+    configurationFiltrage?: ConfigurationFiltrage | null;
+    configurationSelection?: ConfigurationSelection<T> | null;
+    selection?: string[];
+    preSelectionImmuable?: string[];
+    champIdentifiantLigne?: string;
+    composantTableauVide?:
+      | { composant: ComponentType; props: Record<string, any> }
+      | undefined;
+    actionsComplementaires?: import('svelte').Snippet;
+    onglets?: import('svelte').Snippet;
+    barre_action_dans_thead?: import('svelte').Snippet;
+    cellule?: import('svelte').Snippet<[any]>;
+  }
 
-  export let configurationRecherche: ConfigurationRecherche | null = null;
-  export let configurationFiltrage: ConfigurationFiltrage | null = null;
-  export let configurationSelection: ConfigurationSelection<T> | null = null;
-  export let selection: string[] = [];
-  export let preSelectionImmuable: string[] = [];
-  export let champIdentifiantLigne: string = '';
-  export let composantTableauVide:
-    | { composant: ComponentType; props: Record<string, any> }
-    | undefined = undefined;
+  let {
+    colonnes,
+    donnees,
+    configurationRecherche = null,
+    configurationFiltrage = null,
+    configurationSelection = null,
+    selection = $bindable([]),
+    preSelectionImmuable = [],
+    champIdentifiantLigne = '',
+    composantTableauVide = undefined,
+    actionsComplementaires,
+    onglets,
+    barre_action_dans_thead,
+    cellule,
+  }: Props = $props();
 
-  let recherche: string = '';
-  let filtrage: Record<string, any> = {};
+  let recherche: string = $state('');
+  let filtrage: Record<string, any> = $state({});
   const effaceRechercheEtFiltres = () => {
     recherche = '';
     filtrage = Object.fromEntries(
@@ -48,13 +71,15 @@
     );
   };
 
-  let donneesFiltrees: T[] = [];
-  $: donneesFiltreesSelectionnables = donneesFiltrees.filter((donnee) =>
-    configurationSelection?.predicatSelectionDesactive
-      ? !configurationSelection.predicatSelectionDesactive(donnee)
-      : true
+  let donneesFiltrees: T[] = $state([]);
+  let donneesFiltreesSelectionnables = $derived(
+    donneesFiltrees.filter((donnee) =>
+      configurationSelection?.predicatSelectionDesactive
+        ? !configurationSelection.predicatSelectionDesactive(donnee)
+        : true
+    )
   );
-  $: {
+  run(() => {
     donneesFiltrees = donnees;
 
     if (configurationRecherche && recherche)
@@ -76,7 +101,7 @@
           });
       });
     }
-  }
+  });
 
   const nbColonnes = colonnes.length + (configurationSelection ? 1 : 0);
 
@@ -84,16 +109,17 @@
     selection = [];
   };
 
-  $: toutEstSelectionne =
+  let toutEstSelectionne = $derived(
     selection.length !== 0 &&
-    selection.length === donneesFiltreesSelectionnables.length;
-  $: {
+      selection.length === donneesFiltreesSelectionnables.length
+  );
+  run(() => {
     if (recherche || filtrage) {
       // On appelle ici une méthode plutot que de vider nous même `selection` afin de ne pas
       // déclencher cette même réactivité
       videSelectionSansReactivite();
     }
-  }
+  });
 
   const basculeSelectionTous = () => {
     if (!configurationSelection) return;
@@ -119,20 +145,17 @@
           options={configurationFiltrage.options}
         />
       {/if}
-      <slot name="actionsComplementaires" />
+      {@render actionsComplementaires?.()}
     </div>
   {/if}
   <div>
-    <slot name="onglets" />
+    {@render onglets?.()}
     <table>
       {#if composantTableauVide}
-        <svelte:component
-          this={composantTableauVide.composant}
-          {...composantTableauVide.props}
-        />
+        <composantTableauVide.composant {...composantTableauVide.props} />
       {:else}
         <thead>
-          <slot name="barre-action-dans-thead" />
+          {@render barre_action_dans_thead?.()}
           {#if configurationSelection}
             {@const { vide, unique, multiple } =
               configurationSelection.texteIndicatif}
@@ -141,8 +164,8 @@
                 {selection.length === 0
                   ? vide
                   : selection.length === 1
-                  ? `1 ${unique}`
-                  : `${selection.length} ${multiple}`}
+                    ? `1 ${unique}`
+                    : `${selection.length} ${multiple}`}
               </th>
             </tr>
           {/if}
@@ -152,7 +175,7 @@
                 <div>
                   <input
                     type="checkbox"
-                    on:change={basculeSelectionTous}
+                    onchange={basculeSelectionTous}
                     disabled={donneesFiltrees.length === 0 ||
                       preSelectionImmuable.length === donnees.length}
                     checked={toutEstSelectionne && donneesFiltrees.length > 0}
@@ -207,9 +230,9 @@
               {/if}
               {#each colonnes as colonne (colonne.cle)}
                 <td>
-                  <slot name="cellule" {donnee} {colonne}>
+                  {#if cellule}{@render cellule({ donnee, colonne })}{:else}
                     {donnee[colonne.cle]}
-                  </slot>
+                  {/if}
                 </td>
               {/each}
             </tr>

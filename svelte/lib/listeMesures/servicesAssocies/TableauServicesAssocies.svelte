@@ -9,12 +9,21 @@
   import type { ServiceAssocieAUneMesure } from '../listeMesures.d';
   import { referentielNiveauxSecurite } from '../../ui/referentielNiveauxSecurite';
 
-  export let referentielStatuts: ReferentielStatut;
-  export let referentielTypesService: ReferentielTypesService | undefined =
-    undefined;
-  export let servicesAssocies: ServiceAssocieAUneMesure[];
-  export let avecNomCliquable: boolean = false;
-  export let avecTypeEtBesoinDeSecurite: boolean = false;
+  interface Props {
+    referentielStatuts: ReferentielStatut;
+    referentielTypesService?: ReferentielTypesService | undefined;
+    servicesAssocies: ServiceAssocieAUneMesure[];
+    avecNomCliquable?: boolean;
+    avecTypeEtBesoinDeSecurite?: boolean;
+  }
+
+  let {
+    referentielStatuts,
+    referentielTypesService = undefined,
+    servicesAssocies,
+    avecNomCliquable = false,
+    avecTypeEtBesoinDeSecurite = false,
+  }: Props = $props();
 </script>
 
 <Tableau
@@ -31,7 +40,7 @@
   ]}
   donnees={servicesAssocies}
 >
-  <svelte:fragment slot="cellule" let:donnee let:colonne>
+  {#snippet cellule({ donnee, colonne })}
     {#if colonne.cle === 'nom'}
       {#if avecNomCliquable}
         {@const urlSecuriserService = `/service/${donnee.id}/mesures?${
@@ -90,7 +99,7 @@
         {/if}
       </div>
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </Tableau>
 
 <style lang="scss">

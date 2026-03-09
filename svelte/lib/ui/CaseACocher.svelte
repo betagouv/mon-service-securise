@@ -1,14 +1,21 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
 
-  export let id: string;
-  export let valeurs: string[] = [];
-  export let label: string = '';
-  export let actif = true;
+  interface Props {
+    id: string;
+    valeurs?: string[];
+    label?: string;
+    actif?: boolean;
+  }
 
-  let cochee: boolean;
+  let {
+    id,
+    valeurs = $bindable([]),
+    label = '',
+    actif = true,
+  }: Props = $props();
 
-  $: cochee = valeurs.includes(id);
+  let cochee: boolean = $derived(valeurs.includes(id));
 
   const emetEvenement = createEventDispatcher();
 
@@ -30,7 +37,7 @@
     disabled={!actif}
     value={id}
     checked={cochee}
-    on:change={metsAJourLesValeursCochees}
+    onchange={metsAJourLesValeursCochees}
   />
   <span>{label}</span>
 </label>

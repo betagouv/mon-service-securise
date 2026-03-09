@@ -3,13 +3,13 @@
   import { onMount } from 'svelte';
   import type { SousEtape } from '../../kit/ModaleSousEtape';
 
-  let ciblePremiereMesure: HTMLDivElement;
-  let cibleOnglets: HTMLDivElement;
-  let cibleGererContributeurs: HTMLElement;
-  let cibleTiroirMesure: HTMLDivElement;
-  let cibleIndiceCyber: HTMLDivElement;
+  let ciblePremiereMesure: HTMLDivElement | undefined = $state();
+  let cibleOnglets: HTMLDivElement | undefined = $state();
+  let cibleGererContributeurs: HTMLElement | undefined = $state();
+  let cibleTiroirMesure: HTMLDivElement | undefined = $state();
+  let cibleIndiceCyber: HTMLDivElement | undefined = $state();
 
-  let sousEtapes: SousEtape[] = [];
+  let sousEtapes: SousEtape[] = $state([]);
   onMount(() => {
     document.body.dispatchEvent(
       new CustomEvent('jquery-replie-menu-navigation-visite-guidee')

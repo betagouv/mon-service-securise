@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import ChampTexte from '../ui/ChampTexte.svelte';
   import { createEventDispatcher, tick } from 'svelte';
   import type { Departement, Organisation } from './inscription.d';
@@ -8,16 +10,20 @@
     label: string;
   };
 
-  export let filtreDepartement: Departement | undefined;
-  export let valeur: Organisation | undefined;
-  export let id: string = '';
+  interface Props {
+    filtreDepartement: Departement | undefined;
+    valeur: Organisation | undefined;
+    id?: string;
+  }
 
-  let saisie: string;
+  let { filtreDepartement, valeur = $bindable(), id = '' }: Props = $props();
+
+  let saisie: string = $state();
   let minuteur: NodeJS.Timeout;
   let dureeDebounceEnMs = 300;
-  let suggestions: OrganisationAvecLabel[] = [];
-  let suggestionsVisibles = false;
-  let champValeur: HTMLInputElement;
+  let suggestions: OrganisationAvecLabel[] = $state([]);
+  let suggestionsVisibles = $state(false);
+  let champValeur: HTMLInputElement = $state();
 
   const avecTemporisation = (fonction: () => Promise<any>) => {
     clearTimeout(minuteur);
@@ -74,11 +80,11 @@
     envoiEvenement('organisationChoisie', item);
   };
 
-  $: {
+  run(() => {
     if (valeur) {
       tick().then(() => champValeur.dispatchEvent(new Event('input')));
     }
-  }
+  });
 
   saisie = valeur ? construisLabel(valeur) : '';
 </script>
@@ -98,10 +104,10 @@
         class="option"
         role="button"
         tabindex="0"
-        on:click={() => {
+        onclick={() => {
           choisisOrganisation(suggestion);
         }}
-        on:keypress={(e) => {
+        onkeypress={(e) => {
           if (e.code === 'Enter') {
             choisisOrganisation(suggestion);
           }

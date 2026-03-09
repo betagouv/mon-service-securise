@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   export type DonneesModificationAAppliquer = {
     statut: StatutMesure | '';
     modalites: string;
@@ -7,6 +7,8 @@
 </script>
 
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import EtapierTiroir from '../EtapierTiroir.svelte';
   import SecondeEtape from './SecondeEtape.svelte';
   import TroisiemeEtape from './TroisiemeEtape.svelte';
@@ -17,16 +19,27 @@
   import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
   import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
 
-  export let etapeCourante: number;
-  export let statuts: ReferentielStatut;
-  export let servicesAssocies: ServiceAssocie[];
-  export let boutonSuivantActif: boolean = false;
+  interface Props {
+    etapeCourante: number;
+    statuts: ReferentielStatut;
+    servicesAssocies: ServiceAssocie[];
+    boutonSuivantActif?: boolean;
+  }
 
-  let statutSelectionne: StatutMesure | '' = '';
-  let precision: string = '';
-  let idsServicesSelectionnes: string[] = [];
+  let {
+    etapeCourante = $bindable(),
+    statuts,
+    servicesAssocies,
+    boutonSuivantActif = $bindable(false),
+  }: Props = $props();
 
-  $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
+  let statutSelectionne: StatutMesure | '' = $state('');
+  let precision: string = $state('');
+  let idsServicesSelectionnes: string[] = $state([]);
+
+  let modificationPrecisionUniquement = $derived(
+    !statutSelectionne && !!precision
+  );
 
   const emetEvenement = createEventDispatcher<{
     'modification-a-appliquer': DonneesModificationAAppliquer;
@@ -46,7 +59,7 @@
       });
   };
 
-  $: {
+  run(() => {
     switch (etapeCourante) {
       case 1:
         boutonSuivantActif = !!statutSelectionne || !!precision;
@@ -58,7 +71,7 @@
         boutonSuivantActif = true;
         break;
     }
-  }
+  });
 </script>
 
 <EtapierTiroir {etapeCourante} />

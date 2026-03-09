@@ -4,9 +4,11 @@
   const uneCouleur = couleurs[Math.floor(Math.random() * couleurs.length)];
   const dureeAnimation = 800;
 
-  let confettiEl: HTMLElement;
+  let confettiEl: HTMLElement | undefined = $state();
 
   setTimeout(() => {
+    if (!confettiEl) return;
+
     confettiEl!.parentNode!.removeChild(confettiEl);
   }, dureeAnimation);
 
@@ -18,7 +20,7 @@
   style="background: {uneCouleur}; animation: bang {dureeAnimation}ms ease-out forwards; transform: translate3d({random(
     500
   ) - 250}px, {random(200) - 150}px, 0) rotate({random(360)}deg);"
-/>
+></i>
 
 <style>
   @keyframes -global-bang {

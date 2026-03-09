@@ -3,7 +3,11 @@
   import Lien from '../Lien.svelte';
   import type { Service } from '../../tableauDeBord/tableauDeBord.d';
 
-  export let services: Service[];
+  interface Props {
+    services: Service[];
+  }
+
+  let { services }: Props = $props();
   export const titre = 'Exporter la sélection';
   export const sousTitre =
     services.length > 1

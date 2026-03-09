@@ -1,4 +1,5 @@
 import CentreNotifications from './CentreNotifications.svelte';
+import { mount } from 'svelte';
 
 document.body.addEventListener('svelte-recharge-centre-notifications', () =>
   rechargeApp()
@@ -7,7 +8,7 @@ document.body.addEventListener('svelte-recharge-centre-notifications', () =>
 let app: CentreNotifications;
 const rechargeApp = () => {
   app?.$destroy();
-  app = new CentreNotifications({
+  app = mount(CentreNotifications, {
     target: document.getElementById('centre-notifications')!,
   });
 };

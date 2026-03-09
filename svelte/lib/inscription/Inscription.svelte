@@ -21,27 +21,43 @@
     inscrisNouvelUtilisateur,
   } from './inscription.api';
 
-  export let estimationNombreServices: EstimationNombreServices[];
-  export let informationsProfessionnelles: InformationsProfessionnelles;
   const modeleTelephone = '^0\\d{9}$';
-  export let departements: Departement[];
-  export let invite: boolean;
-  export let token: string;
+  interface Props {
+    estimationNombreServices: EstimationNombreServices[];
+    informationsProfessionnelles: InformationsProfessionnelles;
+    departements: Departement[];
+    invite: boolean;
+    token: string;
+  }
 
-  let etapeCourante = 1;
+  let {
+    estimationNombreServices,
+    informationsProfessionnelles,
+    departements,
+    invite,
+    token,
+  }: Props = $props();
 
-  $: titreEtape = [
-    'Vos informations professionnelles',
-    'Vos informations complémentaires',
-    'Vos consentements',
-  ][etapeCourante - 1];
+  let etapeCourante = $state(1);
 
-  let formulaireEtape1: Formulaire;
-  let formulaireEtape2: Formulaire;
-  let formulaireEtape3: Formulaire;
+  let titreEtape = $derived(
+    [
+      'Vos informations professionnelles',
+      'Vos informations complémentaires',
+      'Vos consentements',
+    ][etapeCourante - 1]
+  );
 
-  $: tousFormulaires = [formulaireEtape1, formulaireEtape2, formulaireEtape3];
-  $: formulaireCourant = tousFormulaires[etapeCourante - 1];
+  let formulaireEtape1: Formulaire = $state();
+  let formulaireEtape2: Formulaire = $state();
+  let formulaireEtape3: Formulaire = $state();
+
+  let tousFormulaires = $derived([
+    formulaireEtape1,
+    formulaireEtape2,
+    formulaireEtape3,
+  ]);
+  let formulaireCourant = $derived(tousFormulaires[etapeCourante - 1]);
 
   const etapePrecedente = () => {
     if (etapeCourante > 1) etapeCourante--;
@@ -52,7 +68,7 @@
     }
   };
 
-  let enCoursEnvoi = false;
+  let enCoursEnvoi = $state(false);
 
   const valide = async () => {
     if (formulaireCourant.estValide()) {
@@ -70,7 +86,7 @@
     }
   };
 
-  let formulaireInscription: FormulaireInscription = {
+  let formulaireInscription: FormulaireInscription = $state({
     prenom: informationsProfessionnelles.prenom,
     nom: informationsProfessionnelles.nom,
     siretEntite: informationsProfessionnelles.organisation?.siret,
@@ -82,14 +98,12 @@
     infolettreAcceptee: false,
     transactionnelAccepte: true,
     token,
-  };
+  });
 
-  let departement: Departement;
-  let organisation: Organisation;
-  $: {
-    formulaireInscription.siretEntite =
-      informationsProfessionnelles.organisation?.siret || organisation?.siret;
-  }
+  let departement: Departement = $state();
+  let organisation: Organisation = $derived(
+    informationsProfessionnelles.organisation?.siret || organisation?.siret
+  );
 </script>
 
 <div class="entete-inscription">

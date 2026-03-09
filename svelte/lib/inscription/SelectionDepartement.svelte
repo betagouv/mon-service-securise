@@ -3,14 +3,18 @@
   import type { Departement } from './inscription.d';
   import FermetureSurClicEnDehors from '../ui/FermetureSurClicEnDehors.svelte';
 
-  export let departements: Departement[];
-  export let valeur: Departement | '' = '';
+  interface Props {
+    departements: Departement[];
+    valeur?: Departement | '';
+  }
 
-  let saisie: string;
+  let { departements, valeur = $bindable('') }: Props = $props();
+
+  let saisie: string = $state();
   let minuteur: NodeJS.Timeout;
   let dureeDebounceEnMs = 300;
-  let suggestions: Departement[] = [];
-  let suggestionsVisibles = false;
+  let suggestions: Departement[] = $state([]);
+  let suggestionsVisibles = $state(false);
 
   const avecTemporisation = (fonction: () => Promise<any>) => {
     clearTimeout(minuteur);
@@ -34,7 +38,7 @@
     suggestionsVisibles = false;
   };
 
-  let suggestionsEl: HTMLDivElement;
+  let suggestionsEl: HTMLDivElement = $state();
   if (valeur) {
     saisie = `${valeur.nom} (${valeur.code})`;
   }
@@ -60,10 +64,10 @@
         class="option"
         role="button"
         tabindex="0"
-        on:click={() => {
+        onclick={() => {
           choisisDepartement(suggestion);
         }}
-        on:keypress={(e) => {
+        onkeypress={(e) => {
           if (e.code === 'Enter') {
             choisisDepartement(suggestion);
           }

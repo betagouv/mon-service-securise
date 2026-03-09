@@ -1,6 +1,7 @@
 import DoctrineHomologation from './DoctrineHomologation.svelte';
+import { mount } from 'svelte';
 
-const app = new DoctrineHomologation({
+const app = mount(DoctrineHomologation, {
   target: document.getElementById('doctrine-homologation')!,
 });
 

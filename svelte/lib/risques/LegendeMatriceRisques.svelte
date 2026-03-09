@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { ReferentielNiveauxRisque } from './risques.d';
 
-  export let niveauxRisque: ReferentielNiveauxRisque;
+  interface Props {
+    niveauxRisque: ReferentielNiveauxRisque;
+  }
+
+  let { niveauxRisque }: Props = $props();
   const niveaux = Object.entries(niveauxRisque)
     .filter(([_, n]) => n.position >= 0)
     .sort(([_, a], [__, b]) => a.position - b.position);

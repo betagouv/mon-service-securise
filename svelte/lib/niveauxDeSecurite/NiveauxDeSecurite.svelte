@@ -1,19 +1,32 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { ordreDesNiveaux } from './niveauxDeSecurite.d';
   import donneesNiveauxDeSecurite from './donneesNiveauxDeSecurite';
   import { acquitteSuggestionBesoinsSecuriteRetrogrades } from './niveauxDeSecurite.api';
   import Avertissement from '../ui/Avertissement.svelte';
   import type { IdNiveauDeSecurite } from '../ui/types';
 
-  export let idService: string;
-  export let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
-  export let niveauSecuriteExistant: IdNiveauDeSecurite | null = null;
-  export let lectureSeule: boolean;
-  export let avecSuggestionBesoinsSecuriteRetrogrades: boolean;
-  export let modeVisiteGuidee: boolean = false;
+  interface Props {
+    idService: string;
+    niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+    niveauSecuriteExistant?: IdNiveauDeSecurite | null;
+    lectureSeule: boolean;
+    avecSuggestionBesoinsSecuriteRetrogrades: boolean;
+    modeVisiteGuidee?: boolean;
+  }
 
-  let niveauChoisi: IdNiveauDeSecurite;
-  let niveauSurbrillance: IdNiveauDeSecurite;
+  let {
+    idService,
+    niveauDeSecuriteMinimal,
+    niveauSecuriteExistant = null,
+    lectureSeule,
+    avecSuggestionBesoinsSecuriteRetrogrades = $bindable(),
+    modeVisiteGuidee = false,
+  }: Props = $props();
+
+  let niveauChoisi: IdNiveauDeSecurite = $state();
+  let niveauSurbrillance: IdNiveauDeSecurite = $state();
 
   const niveauEstRehausse = !niveauSecuriteExistant
     ? false
@@ -31,11 +44,11 @@
   const estNiveauSuperieur = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] > ordreDesNiveaux[niveauDeSecuriteMinimal];
 
-  $: {
+  run(() => {
     if (niveauChoisi) {
       document.getElementById('diagnostic')?.removeAttribute('disabled');
     }
-  }
+  });
 
   const masqueSuggestionBesoinsSecuriteRetrogrades = async () => {
     await acquitteSuggestionBesoinsSecuriteRetrogrades(idService);
@@ -96,7 +109,7 @@
         class:est-niveau-recommande={niveau.id === niveauDeSecuriteMinimal}
         class:niveau-choisi={niveau.id === niveauChoisi}
         class:boite-en-surbrillance={niveau.id === niveauSurbrillance}
-        on:click={() => {
+        onclick={() => {
           if (!modeVisiteGuidee) niveauSurbrillance = niveau.id;
         }}
       >
@@ -224,7 +237,7 @@
               type="button"
               class="fleche-navigation"
               class:masque={!niveauPrecedent}
-              on:click={() => {
+              onclick={() => {
                 if (niveauPrecedent) niveauSurbrillance = niveauPrecedent.id;
               }}
             >
@@ -236,8 +249,8 @@
               <button
                 type="button"
                 class:actif={niveauSurbrillance === niveau.id}
-                on:click={() => (niveauSurbrillance = niveau.id)}
-              />
+                onclick={() => (niveauSurbrillance = niveau.id)}
+              ></button>
             {/each}
           </div>
           <div class="suivant">
@@ -245,7 +258,7 @@
               type="button"
               class="fleche-navigation"
               class:masque={!niveauSuivant}
-              on:click={() => {
+              onclick={() => {
                 if (niveauSuivant) niveauSurbrillance = niveauSuivant.id;
               }}
             >

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import ResumeDuServiceLectureSeule from './ResumeDuServiceLectureSeule.svelte';
   import BrouillonDeServiceEditable from '../BrouillonDeServiceEditable.svelte';
   import { brouillonEstCompletStore } from '../brouillonEstComplet.store';
@@ -9,23 +11,29 @@
   import { metsAJourBrouillonService } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
 
-  let lectureSeule = true;
+  let lectureSeule = $state(true);
 
-  export let estComplete: boolean;
-  $: estComplete = $brouillonEstCompletStore;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
+  run(() => {
+    estComplete = $brouillonEstCompletStore;
+  });
 </script>
 
 {#if lectureSeule}
   <div class="conteneur-bouton-modifier">
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre="Modifier le service"
       variante="tertiaire"
       taille="md"
       icone="edit-line"
       positionIcone="droite"
-      on:click={() => (lectureSeule = false)}
-    />
+      onclick={() => (lectureSeule = false)}
+    ></lab-anssi-bouton>
   </div>
   <ResumeDuServiceLectureSeule donnees={$resume} />
 {:else}

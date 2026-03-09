@@ -1,15 +1,32 @@
 <script lang="ts">
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import { validationChamp } from '../directives/validationChamp';
 
-  export let nom: string;
-  export let id: string;
-  export let valeur: string = '';
-  export let requis: boolean = false;
-  export let aideSaisie: string = '';
-  export let messageErreur: string = '';
-  export let modele: string | undefined = undefined;
-  export let type: string = 'text';
-  export let autocomplete: string = '';
+  interface Props {
+    nom: string;
+    id: string;
+    valeur?: string;
+    requis?: boolean;
+    aideSaisie?: string;
+    messageErreur?: string;
+    modele?: string | undefined;
+    type?: string;
+    autocomplete?: string;
+  }
+
+  let {
+    nom,
+    id,
+    valeur = $bindable(''),
+    requis = false,
+    aideSaisie = '',
+    messageErreur = '',
+    modele = undefined,
+    type = 'text',
+    autocomplete = '',
+  }: Props = $props();
 
   const typeChamp = (node: HTMLInputElement) => {
     node.type = type;
@@ -25,9 +42,9 @@
   placeholder={aideSaisie}
   use:validationChamp={requis || modele ? messageErreur : ''}
   pattern={modele}
-  on:input
-  on:focus
-  on:blur
+  oninput={bubble('input')}
+  onfocus={bubble('focus')}
+  onblur={bubble('blur')}
   {autocomplete}
 />
 

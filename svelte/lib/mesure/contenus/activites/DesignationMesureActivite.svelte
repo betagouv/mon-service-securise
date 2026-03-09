@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { ActiviteMesure } from '../../mesure.d';
 
-  export let activite: ActiviteMesure;
+  interface Props {
+    activite: ActiviteMesure;
+  }
+
+  let { activite }: Props = $props();
 </script>
 
 {#if activite.identifiantNumeriqueMesure}

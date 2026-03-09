@@ -1,7 +1,11 @@
 <script lang="ts">
   import { CategorieMesure } from './types.d';
 
-  export let categorie: CategorieMesure;
+  interface Props {
+    categorie: CategorieMesure;
+  }
+
+  let { categorie }: Props = $props();
   const labelsCategories: Record<CategorieMesure, string> = {
     [CategorieMesure.DEFENSE]: 'Défense',
     [CategorieMesure.GOUVERNANCE]: 'Gouvernance',

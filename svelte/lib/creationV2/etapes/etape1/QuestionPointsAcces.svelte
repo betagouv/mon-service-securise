@@ -1,10 +1,16 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { createEventDispatcher, onMount, tick } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import ListeChampTexte from '../ListeChampTexte.svelte';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
@@ -13,9 +19,11 @@
     if ($leBrouillon.pointsAcces.length === 0) ajouteValeur();
   });
 
-  $: estComplete =
-    $leBrouillon.pointsAcces.length === 0 ||
-    $leBrouillon.pointsAcces.every((p) => p.length <= 200);
+  run(() => {
+    estComplete =
+      $leBrouillon.pointsAcces.length === 0 ||
+      $leBrouillon.pointsAcces.every((p) => p.length <= 200);
+  });
 
   const supprimeValeur = (index: number) => {
     $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(

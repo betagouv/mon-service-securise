@@ -1,12 +1,23 @@
 <script lang="ts">
   import { validationChamp } from '../directives/validationChamp';
 
-  export let valeur: string = '';
-  export let aideSaisie: string = '';
-  export let requis: boolean = false;
-  export let messageErreur: string = '';
-  export let lignes: number | undefined = undefined;
-  export let max: number | undefined = undefined;
+  interface Props {
+    valeur?: string;
+    aideSaisie?: string;
+    requis?: boolean;
+    messageErreur?: string;
+    lignes?: number | undefined;
+    max?: number | undefined;
+  }
+
+  let {
+    valeur = $bindable(''),
+    aideSaisie = '',
+    requis = false,
+    messageErreur = '',
+    lignes = undefined,
+    max = undefined,
+  }: Props = $props();
 </script>
 
 <textarea

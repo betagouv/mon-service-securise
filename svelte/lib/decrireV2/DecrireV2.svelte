@@ -56,26 +56,38 @@
     window.scrollTo(0, 0);
   };
 
-  export let descriptionService: DescriptionServiceV2API;
-  export let idService: UUID;
-  export let lectureSeule: boolean;
-  export let doitFinaliserDescription: boolean;
+  interface Props {
+    descriptionService: DescriptionServiceV2API;
+    idService: UUID;
+    lectureSeule: boolean;
+    doitFinaliserDescription: boolean;
+  }
 
-  let mode: ModeAffichage = 'Résumé';
-  let ongletActif: 'informations' | 'besoinsSecurite' = 'informations';
-  let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
-  let majForceeBesoinsSecurite: boolean = false;
+  let {
+    descriptionService,
+    idService,
+    lectureSeule,
+    doitFinaliserDescription,
+  }: Props = $props();
 
-  let copiePourRestauration: DescriptionServiceV2 = structuredClone(
+  let mode: ModeAffichage = $state('Résumé');
+  let ongletActif: 'informations' | 'besoinsSecurite' = $state('informations');
+  let niveauDeSecuriteMinimal: IdNiveauDeSecurite = $state();
+  let majForceeBesoinsSecurite: boolean = $state(false);
+
+  let copiePourRestauration: DescriptionServiceV2 = $state(
+    structuredClone(enEditable(descriptionService))
+  );
+  let descriptionEditable: DescriptionServiceV2 = $state(
     enEditable(descriptionService)
   );
-  let descriptionEditable: DescriptionServiceV2 =
-    enEditable(descriptionService);
 
-  $: descriptionAffichable =
-    convertisDonneesDescriptionEnLibelles(descriptionEditable);
-  $: descriptionEstComplete =
-    donneesDeServiceSontCompletes(descriptionEditable);
+  let descriptionAffichable = $derived(
+    convertisDonneesDescriptionEnLibelles(descriptionEditable)
+  );
+  let descriptionEstComplete = $derived(
+    donneesDeServiceSontCompletes(descriptionEditable)
+  );
 
   const rafraichisNiveauSecuriteMinimal = async () => {
     niveauDeSecuriteMinimal =
@@ -181,7 +193,7 @@
               size="md"
               hasIcon
               icon="star-s-fill"
-            />
+            ></dsfr-tag>
           {/if}
         </div>
         <ResumeNiveauSecurite {niveau} />
@@ -196,7 +208,7 @@
           descriptionEditable.niveauSecurite = e.detail.niveauSecurite;
         }}
       >
-        <svelte:fragment slot="infoMajNecessaire">
+        {#snippet infoMajNecessaire()}
           {#if majForceeBesoinsSecurite && copiePourRestauration.niveauSecurite}
             <div class="conteneur-info-maj-necessaire">
               <Toast
@@ -211,7 +223,7 @@
               />
             </div>
           {/if}
-        </svelte:fragment>
+        {/snippet}
       </NiveauDeSecuriteEditable>
     </div>
   {/if}

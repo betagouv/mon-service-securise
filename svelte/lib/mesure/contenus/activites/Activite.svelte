@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import type { ActiviteMesure } from '../../mesure.d';
   import type {
     ReferentielPriorite,
@@ -11,9 +13,13 @@
   import { formatteDateHeureFr } from '../../../formatDate/formatDate';
   import { obtientVisualisation } from './visualisation';
 
-  export let activite: ActiviteMesure;
-  export let priorites: ReferentielPriorite;
-  export let statuts: ReferentielStatut;
+  interface Props {
+    activite: ActiviteMesure;
+    priorites: ReferentielPriorite;
+    statuts: ReferentielStatut;
+  }
+
+  let { activite, priorites, statuts }: Props = $props();
 
   const visualisation = obtientVisualisation(activite);
 
@@ -22,9 +28,9 @@
     initiales: string;
     resumeNiveauDroit?: ResumeNiveauDroit;
   };
-  let acteur: Acteur;
+  let acteur: Acteur = $state();
 
-  $: {
+  run(() => {
     const contributeursTrouves = $contributeurs.filter(
       (c) => c.id === activite.idActeur
     );
@@ -41,14 +47,14 @@
               $storeAutorisations.autorisations[activite.idActeur]
                 ?.resumeNiveauDroit,
           };
-  }
+  });
   const proprietes: {
     activite: ActiviteMesure;
     statuts?: ReferentielStatut;
     priorites?: ReferentielPriorite;
-  } = {
+  } = $state({
     activite,
-  };
+  });
   if (visualisation.aBesoinPriorites) {
     proprietes.priorites = priorites;
   }
@@ -73,7 +79,7 @@
       <span>{formatteDateHeureFr(activite.date)}</span>
     </div>
     <div class="description">
-      <svelte:component this={visualisation.composantContenu} {...proprietes} />
+      <visualisation.composantContenu {...proprietes} />
     </div>
   </div>
 </div>

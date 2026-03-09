@@ -1,5 +1,6 @@
 import BandeauReferentielV2 from './BandeauReferentielV2.svelte';
 import type { BandeauReferentielV2Props } from './bandeauReferentielV2.d';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-bandeau-referentiel-v2',
@@ -9,7 +10,7 @@ document.body.addEventListener(
 let app: BandeauReferentielV2;
 const rechargeApp = (props: BandeauReferentielV2Props) => {
   app?.$destroy();
-  app = new BandeauReferentielV2({
+  app = mount(BandeauReferentielV2, {
     target: document.getElementById('conteneur-bandeau-referentiel-v2')!,
     props,
   });

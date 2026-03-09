@@ -6,10 +6,15 @@
   import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
   import type { ServiceAssocieAUneMesure } from '../../listeMesures.d';
 
-  export let statuts: ReferentielStatut;
-  export let statutSelectionne: StatutMesure | '';
-  export let precision: string;
-  export let servicesConcernes: ServiceAssocieAUneMesure[];
+  interface Props {
+    statuts: ReferentielStatut;
+    statutSelectionne: StatutMesure | '';
+    precision: string;
+    servicesConcernes: ServiceAssocieAUneMesure[];
+  }
+
+  let { statuts, statutSelectionne, precision, servicesConcernes }: Props =
+    $props();
 
   const intitulePluralise =
     servicesConcernes.length > 1

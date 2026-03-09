@@ -2,9 +2,13 @@
   import { store } from '../mesure.store';
   import { supprimeMesureSpecifique } from '../mesure.api';
 
-  export let idService: string;
+  interface Props {
+    idService: string;
+  }
 
-  let enCoursEnvoi = false;
+  let { idService }: Props = $props();
+
+  let enCoursEnvoi = $state(false);
   const supprimeMesure = async () => {
     enCoursEnvoi = true;
     await supprimeMesureSpecifique(idService, $store.mesureEditee.mesure.id);
@@ -34,14 +38,14 @@
 <div class="conteneur-actions">
   <button
     class="bouton bouton-secondaire"
-    on:click={store.afficheEtapeEditionSpecifique}
+    onclick={store.afficheEtapeEditionSpecifique}
     >Annuler
   </button>
   <button
     class="bouton"
     class:en-cours-chargement={enCoursEnvoi}
     disabled={enCoursEnvoi}
-    on:click={supprimeMesure}
+    onclick={supprimeMesure}
   >
     Confirmer la suppression
   </button>

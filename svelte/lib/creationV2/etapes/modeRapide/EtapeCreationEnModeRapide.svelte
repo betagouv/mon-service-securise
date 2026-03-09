@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import BrouillonDeServiceEditable from '../BrouillonDeServiceEditable.svelte';
   import { brouillonEstCompletStore } from '../brouillonEstComplet.store';
   import {
@@ -9,8 +11,14 @@
   import { entiteDeUtilisateur, leBrouillon } from '../brouillon.store';
   import { ajouteParametreAUrl } from '../../../outils/url';
 
-  export let estComplete: boolean;
-  $: estComplete = $brouillonEstCompletStore;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
+  run(() => {
+    estComplete = $brouillonEstCompletStore;
+  });
 
   const enregistre = async (maj: MiseAJour) => {
     const doitCreerLeBrouillon = !$leBrouillon.id && maj.nomService;

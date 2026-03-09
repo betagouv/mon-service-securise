@@ -1,13 +1,32 @@
 <script lang="ts">
-  export let id: string;
-  export let nom: string;
-  export let valeur: string;
-  export let exemple: string | undefined = undefined;
-  export let illustration: string | undefined = undefined;
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
+  interface Props {
+    id: string;
+    nom: string;
+    valeur: string;
+    exemple?: string | undefined;
+    illustration?: string | undefined;
+  }
+
+  let {
+    id,
+    nom,
+    valeur = $bindable(),
+    exemple = undefined,
+    illustration = undefined,
+  }: Props = $props();
 </script>
 
 <div class="conteneur-radio" class:avec-illustration={!!illustration}>
-  <input type="radio" {id} value={id} bind:group={valeur} on:change />
+  <input
+    type="radio"
+    {id}
+    value={id}
+    bind:group={valeur}
+    onchange={bubble('change')}
+  />
   <label for={id}>
     {#if illustration}
       <img src={illustration} alt="" />
@@ -33,22 +52,22 @@
       cursor: pointer;
     }
 
-    &:has(input:hover) {
+    &:has(:global(input:hover)) {
       border-color: var(--bleu-mise-en-avant);
       background: #f6f6f6;
     }
 
-    &:has(input:checked) {
+    &:has(:global(input:checked)) {
       box-shadow: 0 0 0 1px var(--bleu-mise-en-avant);
       border-color: var(--bleu-mise-en-avant);
       background: #f1f5f9;
 
-      &:has(input:hover) {
+      &:has(:global(input:hover)) {
         background: #d0e5fb;
       }
     }
 
-    &:has(input:focus-visible) {
+    &:has(:global(input:focus-visible)) {
       outline: 2px solid var(--bleu-mise-en-avant);
       outline-offset: 2px;
     }

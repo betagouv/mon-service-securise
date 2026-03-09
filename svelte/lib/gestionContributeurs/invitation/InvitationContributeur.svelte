@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { createBubbler, preventDefault } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import type {
     Droits,
     Invitation,
@@ -18,14 +21,18 @@
   import { contributeursRechercheVisiteGuidee } from '../modeVisiteGuidee/donneesVisiteGuidee';
   import { toasterStore } from '../../ui/stores/toaster.store';
 
-  export let modeVisiteGuidee: boolean;
+  interface Props {
+    modeVisiteGuidee: boolean;
+  }
+
+  let { modeVisiteGuidee }: Props = $props();
 
   type Etape = 'Ajout' | 'Personnalisation' | 'EnvoiEnCours' | 'Rapport';
   type Email = string;
 
-  let invitations: Record<Email, Invitation> = {};
-  let etapeCourante: Etape = 'Ajout';
-  let enPersonnalisation: Utilisateur | null;
+  let invitations: Record<Email, Invitation> = $state({});
+  let etapeCourante: Etape = $state('Ajout');
+  let enPersonnalisation: Utilisateur | null = $state();
   const aPersonnaliser = () => ({
     utilisateur: enPersonnalisation!,
     droits: invitations[enPersonnalisation!.email].droits,
@@ -36,9 +43,10 @@
     invitations = invitations;
   };
 
-  $: services = $store.services;
-  $: afficheLesBoutonsAction =
-    $store.etapeCourante === 'InvitationContributeurs';
+  let services = $derived($store.services);
+  let afficheLesBoutonsAction = $derived(
+    $store.etapeCourante === 'InvitationContributeurs'
+  );
 
   const ajouteInvitation = (evenement: CustomEvent<Utilisateur>) => {
     store.navigation.afficheEtapeInvitation();
@@ -78,7 +86,10 @@
 </script>
 
 {#if etapeCourante === 'Ajout'}
-  <form class="conteneur-formulaire" on:submit|preventDefault>
+  <form
+    class="conteneur-formulaire"
+    onsubmit={preventDefault(bubble('submit'))}
+  >
     <label for="email-invitation-collaboration">
       Ajouter un ou plusieurs contributeurs
       {#if modeVisiteGuidee}

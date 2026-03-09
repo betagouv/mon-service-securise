@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { run, createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import { createEventDispatcher } from 'svelte';
   import { encode } from 'html-entities';
   import type {
@@ -28,24 +31,39 @@
 
   type IdDom = string;
 
-  export let id: IdDom;
-  export let referentiel: Referentiel;
-  export let indispensable = false;
-  export let mesure: MesureSpecifique | MesureGenerale;
-  export let nom: string;
-  export let categorie: string;
-  export let referentielStatuts: ReferentielStatut;
-  export let estLectureSeule: boolean;
-  export let affichePlanAction: boolean;
-  export let priorites: ReferentielPriorite;
+  interface Props {
+    id: IdDom;
+    referentiel: Referentiel;
+    indispensable?: boolean;
+    mesure: MesureSpecifique | MesureGenerale;
+    nom: string;
+    categorie: string;
+    referentielStatuts: ReferentielStatut;
+    estLectureSeule: boolean;
+    affichePlanAction: boolean;
+    priorites: ReferentielPriorite;
+  }
+
+  let {
+    id,
+    referentiel,
+    indispensable = false,
+    mesure = $bindable(),
+    nom,
+    categorie,
+    referentielStatuts,
+    estLectureSeule,
+    affichePlanAction,
+    priorites,
+  }: Props = $props();
 
   const dispatch = createEventDispatcher<{
     modificationStatut: { statut: StatutMesure };
     modificationPriorite: { priorite: PrioriteMesure | undefined };
   }>();
 
-  let texteSurligne = '';
-  $: {
+  let texteSurligne = $state('');
+  run(() => {
     const rechercheEncapsuleAvecMarqueur = nom.replace(
       new RegExp($rechercheTextuelle, 'ig'),
       (texte: string) => ($rechercheTextuelle ? `_%%${texte}%%_` : texte)
@@ -55,11 +73,15 @@
       new RegExp(/_%%(.*?)%%_/, 'ig'),
       (_, texte: string) => `<mark>${texte}</mark>`
     );
-  }
+  });
 </script>
 
 <tr class="ligne-de-mesure">
-  <td class="titre-mesure" on:click on:keypress>
+  <td
+    class="titre-mesure"
+    onclick={bubble('click')}
+    onkeypress={bubble('keypress')}
+  >
     {#if mesure.partieResponsable}
       <p class="partie-responsable">
         {partieResponsable[mesure.partieResponsable]}
@@ -128,7 +150,7 @@
     border: 1px solid var(--liseres-fonce);
   }
 
-  .ligne-de-mesure:has(.titre-mesure:hover) {
+  .ligne-de-mesure:has(:global(.titre-mesure:hover)) {
     box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
   }
 

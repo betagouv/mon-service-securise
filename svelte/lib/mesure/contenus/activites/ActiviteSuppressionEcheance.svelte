@@ -2,7 +2,11 @@
   import type { ActiviteMesure } from '../../mesure.d';
   import DesignationMesureActivite from './DesignationMesureActivite.svelte';
 
-  export let activite: ActiviteMesure;
+  interface Props {
+    activite: ActiviteMesure;
+  }
+
+  let { activite }: Props = $props();
 </script>
 
 <div>

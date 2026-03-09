@@ -1,7 +1,13 @@
 <script lang="ts">
-  export let description: string;
-  export let lienBlog: string | undefined = undefined;
-  export let repliee: boolean = false;
+  import { run } from 'svelte/legacy';
+
+  interface Props {
+    description: string;
+    lienBlog?: string | undefined;
+    repliee?: boolean;
+  }
+
+  let { description, lienBlog = undefined, repliee = false }: Props = $props();
 
   const recupereObjectif = (
     descriptionComplete: string
@@ -24,17 +30,17 @@
     return { description };
   };
 
-  let descriptionAAfficher: string;
-  let objectifAAfficher: string | undefined;
-  $: {
+  let descriptionAAfficher: string = $state();
+  let objectifAAfficher: string | undefined = $state();
+  run(() => {
     const resultat = recupereObjectif(description);
     descriptionAAfficher = resultat.description;
     objectifAAfficher = resultat.objectif;
-  }
+  });
 </script>
 
 <details open={!repliee}>
-  <summary />
+  <summary></summary>
   <p class="description">
     {@html descriptionAAfficher}
   </p>

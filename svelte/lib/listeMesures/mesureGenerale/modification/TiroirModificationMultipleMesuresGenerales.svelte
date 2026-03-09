@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   import type {
     PersonnalisationMesure,
     ServiceAvecMesuresAssociees,
@@ -13,6 +13,8 @@
 </script>
 
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import ContenuTiroir from '../../../ui/tiroirs/ContenuTiroir.svelte';
   import DescriptionCompleteMesure from '../../kit/DescriptionCompleteMesure.svelte';
   import type {
@@ -38,27 +40,33 @@
     'Le statut et la précision de cette mesure peuvent être modifiés et appliqués simultanément à plusieurs services.';
   export const taille = 'large';
 
-  export let modeleMesureGenerale: ModeleMesureGenerale;
-  export let statuts: ReferentielStatut;
+  interface Props {
+    modeleMesureGenerale: ModeleMesureGenerale;
+    statuts: ReferentielStatut;
+  }
 
-  let etapeCourante = 1;
-  let enCoursEnvoi = false;
+  let { modeleMesureGenerale, statuts }: Props = $props();
 
-  let boutonSuivantActif = false;
+  let etapeCourante = $state(1);
+  let enCoursEnvoi = $state(false);
 
-  let servicesAssocies: ServiceAssocie[] = [];
-  $: servicesAssocies =
-    modeleMesureGenerale &&
-    $servicesAvecMesuresAssociees
-      .filter((s) => {
-        return $mesuresAvecServicesAssociesStore[
-          modeleMesureGenerale.id
-        ].includes(s?.id);
-      })
-      .map(({ mesuresAssociees, ...autresDonnees }) => ({
-        mesure: mesuresAssociees[modeleMesureGenerale.id],
-        ...autresDonnees,
-      }));
+  let boutonSuivantActif = $state(false);
+
+  let servicesAssocies: ServiceAssocie[] = $state([]);
+  run(() => {
+    servicesAssocies =
+      modeleMesureGenerale &&
+      $servicesAvecMesuresAssociees
+        .filter((s) => {
+          return $mesuresAvecServicesAssociesStore[
+            modeleMesureGenerale.id
+          ].includes(s?.id);
+        })
+        .map(({ mesuresAssociees, ...autresDonnees }) => ({
+          mesure: mesuresAssociees[modeleMesureGenerale.id],
+          ...autresDonnees,
+        }));
+  });
 
   const appliqueModifications = async (
     e: CustomEvent<DonneesModificationAAppliquer>
@@ -94,7 +102,8 @@
     }
   };
 
-  let elementEtapesModification: EtapesModificationMultipleStatutPrecision;
+  let elementEtapesModification: EtapesModificationMultipleStatutPrecision =
+    $state();
 </script>
 
 <ContenuTiroir>

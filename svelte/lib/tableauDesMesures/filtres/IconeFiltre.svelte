@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let filtresActifs: boolean = false;
+  interface Props {
+    filtresActifs?: boolean;
+  }
+
+  let { filtresActifs = false }: Props = $props();
 </script>
 
 <picture class:filtres-actifs={filtresActifs}>
