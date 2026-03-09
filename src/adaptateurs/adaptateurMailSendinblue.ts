@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
-import { ErreurApiBrevo } from '../erreurs.js';
 import { enCadence } from '../utilitaires/pThrottle.js';
+import { UUID } from '../typesBasiques.js';
+import { ErreurApiBrevo } from '../erreurs.js';
 
 const enteteJSON = {
   headers: {
@@ -15,7 +16,9 @@ const idListeInfolettre = Number(
   process.env.SENDINBLUE_ID_LISTE_POUR_INFOLETTRE
 );
 
-const desinscrisInfolettre = async (destinataire) => {
+type ErreurBrevo = AxiosError<{ message: string }>;
+
+const desinscrisInfolettre = async (destinataire: string) => {
   // https://developers.brevo.com/reference/removecontactfromlist
   const url = new URL(
     `${urlBase}/contacts/lists/${idListeInfolettre}/contacts/remove`
@@ -24,20 +27,21 @@ const desinscrisInfolettre = async (destinataire) => {
   try {
     await axios.post(url.toString(), { emails: [destinataire] }, enteteJSON);
   } catch (e) {
+    const erreur = e as ErreurBrevo;
     if (
-      e.response.data.message ===
+      erreur.response?.data?.message ===
       'Contact already removed from list and/or does not exist'
     )
       return;
 
-    fabriqueAdaptateurGestionErreur().logueErreur(e, {
-      'Erreur renvoyée par API Brevo': e.response.data,
+    fabriqueAdaptateurGestionErreur().logueErreur(erreur, {
+      'Erreur renvoyée par API Brevo': erreur.response?.data,
     });
     throw e;
   }
 };
 
-const inscrisInfolettre = async (destinataire) => {
+const inscrisInfolettre = async (destinataire: string) => {
   // https://developers.brevo.com/reference/addcontacttolist-1
   const url = new URL(
     `${urlBase}/contacts/lists/${idListeInfolettre}/contacts/add`
@@ -46,29 +50,30 @@ const inscrisInfolettre = async (destinataire) => {
   try {
     await axios.post(url.toString(), { emails: [destinataire] }, enteteJSON);
   } catch (e) {
+    const erreur = e as ErreurBrevo;
     if (
-      e.response.data.message ===
+      erreur.response?.data?.message ===
       'Contact already in list and/or does not exist'
     )
       return;
 
-    fabriqueAdaptateurGestionErreur().logueErreur(e, {
-      'Erreur renvoyée par API Brevo': e.response.data,
+    fabriqueAdaptateurGestionErreur().logueErreur(erreur, {
+      'Erreur renvoyée par API Brevo': erreur.response?.data,
     });
     throw e;
   }
 };
 
-const numeroTelephoneAvecIndicatif = (numero) =>
+const numeroTelephoneAvecIndicatif = (numero: string) =>
   numero ? `+33${numero.substring(1)}` : '';
 
 const creeContact = (
-  destinataire,
-  prenom,
-  nom,
-  telephone,
-  bloqueNewsletter,
-  bloqueMarketing
+  destinataire: string,
+  prenom: string,
+  nom: string,
+  telephone: string,
+  bloqueNewsletter: boolean,
+  bloqueMarketing: boolean
 ) =>
   axios
     .post(
@@ -96,7 +101,10 @@ const creeContact = (
       return Promise.reject(e);
     });
 
-const metAJourDonneesContact = async (destinataire, donnees) => {
+const metAJourDonneesContact = async (
+  destinataire: string,
+  donnees: Record<string, unknown>
+) => {
   try {
     await axios.put(
       `${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
@@ -104,21 +112,27 @@ const metAJourDonneesContact = async (destinataire, donnees) => {
       enteteJSON
     );
   } catch (e) {
-    fabriqueAdaptateurGestionErreur().logueErreur(e, {
-      'Erreur renvoyée par API Brevo': e.response.data,
+    const erreur = e as ErreurBrevo;
+    fabriqueAdaptateurGestionErreur().logueErreur(erreur, {
+      'Erreur renvoyée par API Brevo': erreur.response?.data,
     });
     throw e;
   }
 };
 
-const metAJourContact = (destinataire, prenom, nom, telephone) =>
+const metAJourContact = (
+  destinataire: string,
+  prenom: string,
+  nom: string,
+  telephone: string
+) =>
   metAJourDonneesContact(destinataire, {
     PRENOM: prenom,
     NOM: nom,
     sync_mss_numero_telephone: numeroTelephoneAvecIndicatif(telephone),
   });
 
-const basculeEmailsTransactionnels = (destinataire, etat) =>
+const basculeEmailsTransactionnels = (destinataire: string, etat: boolean) =>
   axios
     .put(
       `${urlBase}/contacts/${encodeURIComponent(destinataire)}`,
@@ -132,13 +146,17 @@ const basculeEmailsTransactionnels = (destinataire, etat) =>
       return Promise.reject(e);
     });
 
-const inscrisEmailsTransactionnels = async (destinataire) =>
+const inscrisEmailsTransactionnels = async (destinataire: string) =>
   basculeEmailsTransactionnels(destinataire, false);
 
-const desinscrisEmailsTransactionnels = async (destinataire) =>
+const desinscrisEmailsTransactionnels = async (destinataire: string) =>
   basculeEmailsTransactionnels(destinataire, true);
 
-const envoieEmail = (destinataire, idTemplate, params) =>
+const envoieEmail = (
+  destinataire: string,
+  idTemplate: number,
+  params: Record<string, unknown>
+) =>
   axios
     .post(
       `${urlBase}/smtp/email`,
@@ -157,13 +175,16 @@ const envoieEmail = (destinataire, idTemplate, params) =>
     });
 
 const envoieMessageInvitationContribution = (
-  destinataire,
-  prenomNomEmetteur,
-  nbServices
+  destinataire: string,
+  prenomNomEmetteur: string,
+  nbServices: string
 ) =>
   envoieEmail(
     destinataire,
-    parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_CONTRIBUTION, 10),
+    parseInt(
+      process.env.SENDINBLUE_TEMPLATE_INVITATION_CONTRIBUTION as string,
+      10
+    ),
     {
       emetteur: prenomNomEmetteur,
       nb_services_invitation: Number(nbServices),
@@ -172,13 +193,16 @@ const envoieMessageInvitationContribution = (
   );
 
 const envoieMessageInvitationInscription = (
-  destinataire,
-  prenomNomEmetteur,
-  nbServices
+  destinataire: string,
+  prenomNomEmetteur: string,
+  nbServices: number
 ) =>
   envoieEmail(
     destinataire,
-    parseInt(process.env.SENDINBLUE_TEMPLATE_INVITATION_INSCRIPTION, 10),
+    parseInt(
+      process.env.SENDINBLUE_TEMPLATE_INVITATION_INSCRIPTION as string,
+      10
+    ),
     {
       emetteur: prenomNomEmetteur,
       nb_services_invitation: Number(nbServices),
@@ -187,37 +211,45 @@ const envoieMessageInvitationInscription = (
   );
 
 const envoieNotificationExpirationHomologation = (
-  destinataire,
-  idService,
-  delaiAvantExpirationMois
+  destinataire: string,
+  idService: UUID,
+  delaiAvantExpirationMois: number
 ) => {
   const idTemplate =
     delaiAvantExpirationMois === 0
-      ? process.env.SENDINBLUE_TEMPLATE_NOTIFICATION_HOMOLOGATION_EXPIREE
-      : process.env.SENDINBLUE_TEMPLATE_NOTIFICATION_EXPIRATION_HOMOLOGATION;
+      ? (process.env
+          .SENDINBLUE_TEMPLATE_NOTIFICATION_HOMOLOGATION_EXPIREE as string)
+      : (process.env
+          .SENDINBLUE_TEMPLATE_NOTIFICATION_EXPIRATION_HOMOLOGATION as string);
   return envoieEmail(destinataire, parseInt(idTemplate, 10), {
     id_service: idService,
     delai_expiration: delaiAvantExpirationMois,
   });
 };
 
-const envoieMessageFelicitationHomologation = (destinataire, idService) =>
+const envoieMessageFelicitationHomologation = (
+  destinataire: string,
+  idService: UUID
+) =>
   envoieEmail(
     destinataire,
-    parseInt(process.env.SENDINBLUE_TEMPLATE_FELICITATION_HOMOLOGATION, 10),
+    parseInt(
+      process.env.SENDINBLUE_TEMPLATE_FELICITATION_HOMOLOGATION as string,
+      10
+    ),
     {
       id_service: idService,
     }
   );
 
-const recupereIdentifiantContact = async (email) => {
+const recupereIdentifiantContact = async (email: string) => {
   const reponse = await axios.get(`${urlBase}/contacts/${email}`, enteteJSON);
   const idContact = reponse?.data?.id;
   if (!idContact) throw new ErreurApiBrevo(`Contact introuvable: ${email}`);
   return idContact;
 };
 
-const recupereEntreprise = async (siret) => {
+const recupereEntreprise = async (siret: string) => {
   const reponse = await axios.get(
     `${urlBase}/companies?filters=${encodeURIComponent(
       JSON.stringify({
@@ -232,7 +264,7 @@ const recupereEntreprise = async (siret) => {
   return idEntreprise ?? null;
 };
 
-const recupereEntrepriseDuContact = async (idContact) => {
+const recupereEntrepriseDuContact = async (idContact: string) => {
   const reponse = await axios.get(
     `${urlBase}/companies?linkedContactsIds=${idContact}`,
     enteteJSON
@@ -245,7 +277,10 @@ const recupereEntrepriseDuContact = async (idContact) => {
   return idEntreprise ?? null;
 };
 
-const relieContactAEntreprise = async (idContact, idEntreprise) => {
+const relieContactAEntreprise = async (
+  idContact: string,
+  idEntreprise: string
+) => {
   try {
     await axios.patch(
       `${urlBase}/companies/link-unlink/${idEntreprise}`,
@@ -253,8 +288,9 @@ const relieContactAEntreprise = async (idContact, idEntreprise) => {
       enteteJSON
     );
   } catch (e) {
-    fabriqueAdaptateurGestionErreur().logueErreur(e, {
-      'Erreur renvoyée par API Brevo': e.response.data,
+    const erreur = e as ErreurBrevo;
+    fabriqueAdaptateurGestionErreur().logueErreur(erreur, {
+      'Erreur renvoyée par API Brevo': erreur.response?.data,
       'identifiant entreprise': idEntreprise,
       'identifiant contact à lier': idContact,
     });
@@ -263,8 +299,8 @@ const relieContactAEntreprise = async (idContact, idEntreprise) => {
 };
 
 const supprimeLienEntreContactEtEntreprise = async (
-  idContact,
-  idEntreprise
+  idContact: string,
+  idEntreprise: string
 ) => {
   try {
     await axios.patch(
@@ -273,8 +309,9 @@ const supprimeLienEntreContactEtEntreprise = async (
       enteteJSON
     );
   } catch (e) {
-    fabriqueAdaptateurGestionErreur().logueErreur(e, {
-      'Erreur renvoyée par API Brevo': e.response.data,
+    const erreur = e as ErreurBrevo;
+    fabriqueAdaptateurGestionErreur().logueErreur(erreur, {
+      'Erreur renvoyée par API Brevo': erreur.response?.data,
       'identifiant entreprise': idEntreprise,
       'identifiant contact à délier': idContact,
     });
@@ -282,7 +319,11 @@ const supprimeLienEntreContactEtEntreprise = async (
   }
 };
 
-const creeEntreprise = async (siret, nom, natureJuridique) => {
+const creeEntreprise = async (
+  siret: string,
+  nom: string,
+  natureJuridique: string
+) => {
   const reponse = await axios.post(
     `${urlBase}/companies`,
     {
@@ -306,36 +347,55 @@ const creeEntreprise = async (siret, nom, natureJuridique) => {
   return idEntreprise;
 };
 
-const supprimeContact = async (email) => {
+const supprimeContact = async (email: string) => {
   try {
     await axios.delete(`${urlBase}/contacts/${email}`, enteteJSON);
   } catch (e) {
-    fabriqueAdaptateurGestionErreur().logueErreur(e, {
-      'Erreur renvoyée par API Brevo': e.response.data,
+    const erreur = e as ErreurBrevo;
+    fabriqueAdaptateurGestionErreur().logueErreur(erreur, {
+      'Erreur renvoyée par API Brevo': erreur.response?.data,
     });
     throw e;
   }
 };
 
 // On limite les prochains méthodes à 3 appels par seconde pour ne pas prendre de 429 de Brevo.
-let cadenceMiseAJourContact;
-const metAJourDonneesContactCadencee = async (destinataire, donnees) => {
+let cadenceMiseAJourContact: (
+  destinataire: string,
+  donnees: Record<string, unknown>
+) => Promise<void>;
+const metAJourDonneesContactCadencee = async (
+  destinataire: string,
+  donnees: Record<string, unknown>
+) => {
   if (!cadenceMiseAJourContact)
-    cadenceMiseAJourContact = enCadence(300, metAJourDonneesContact);
+    cadenceMiseAJourContact = enCadence<[string, Record<string, unknown>]>(
+      300,
+      metAJourDonneesContact
+    );
   await cadenceMiseAJourContact(destinataire, donnees);
 };
 
-let cadenceEnvoieNotification;
+let cadenceEnvoieNotification: (
+  destinataire: string,
+  idService: UUID,
+  delaiAvantExpirationMois: number
+) => Promise<AxiosResponse>;
 const envoieNotificationExpirationHomologationCadencee = async (
-  destinataire,
-  ...donnees
+  destinataire: string,
+  idService: UUID,
+  delaiAvantExpirationMois: number
 ) => {
   if (!cadenceEnvoieNotification)
-    cadenceEnvoieNotification = enCadence(
-      300,
-      envoieNotificationExpirationHomologation
-    );
-  await cadenceEnvoieNotification(destinataire, ...donnees);
+    cadenceEnvoieNotification = enCadence<
+      [string, UUID, number],
+      AxiosResponse
+    >(300, envoieNotificationExpirationHomologation);
+  await cadenceEnvoieNotification(
+    destinataire,
+    idService,
+    delaiAvantExpirationMois
+  );
 };
 
 export {
