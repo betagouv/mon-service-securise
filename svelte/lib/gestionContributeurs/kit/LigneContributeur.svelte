@@ -8,13 +8,23 @@
   import { storeAutorisations } from '../stores/autorisations.store';
   import BoutonSuppressionContributeur from '../../ui/BoutonSuppressionContributeur.svelte';
 
-  export let droitsModifiables: boolean;
-  export let afficheDroits: boolean = true;
-  export let utilisateur: Utilisateur;
+  interface Props {
+    droitsModifiables: boolean;
+    afficheDroits?: boolean;
+    utilisateur: Utilisateur;
+  }
 
-  let serviceUnique: Service;
-  $: serviceUnique = $store.services[0];
-  $: autorisation = $storeAutorisations.autorisations[utilisateur.id];
+  let {
+    droitsModifiables,
+    afficheDroits = true,
+    utilisateur,
+  }: Props = $props();
+
+  let serviceUnique: Service = $derived($store.services[0]);
+
+  let autorisation = $derived(
+    $storeAutorisations.autorisations[utilisateur.id]
+  );
 
   const changeDroits = async (nouveauDroit: ResumeNiveauDroit) => {
     const idAutorisation = autorisation!.idAutorisation;

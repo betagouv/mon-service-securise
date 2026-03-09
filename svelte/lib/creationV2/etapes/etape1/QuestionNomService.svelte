@@ -1,21 +1,31 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { createEventDispatcher } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
 
   const emetEvenement = createEventDispatcher<{
     champModifie: MiseAJour;
   }>();
 
-  let elementHtml: HTMLElement & { errorMessage: string; status: string };
+  let elementHtml: HTMLElement & { errorMessage: string; status: string } =
+    $state();
 
-  $: estComplete =
-    $leBrouillon.nomService.trim().length > 0 &&
-    $leBrouillon.nomService.length <= 200;
-  $: estInvalide =
-    $leBrouillon.nomService && $leBrouillon.nomService.length > 200;
+  run(() => {
+    estComplete =
+      $leBrouillon.nomService.trim().length > 0 &&
+      $leBrouillon.nomService.length <= 200;
+  });
+  let estInvalide = $derived(
+    $leBrouillon.nomService && $leBrouillon.nomService.length > 200
+  );
 
   const metAJourNomService = (e: CustomEvent<string>) => {
     $leBrouillon.nomService = e.detail;
@@ -47,8 +57,8 @@
   errorMessage={estInvalide
     ? 'Le nom du service est obligatoire et ne doit pas dépasser 200 caractères'
     : ''}
-  on:valuechanged={metAJourNomService}
-  on:blur={async () => {
+  onvaluechanged={metAJourNomService}
+  onblur={async () => {
     emetEvenement('champModifie', { nomService: $leBrouillon.nomService });
   }}
-/>
+></dsfr-input>

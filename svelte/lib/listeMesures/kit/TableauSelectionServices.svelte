@@ -5,25 +5,38 @@
   import type { ServiceAssocie } from '../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
   import type { ReferentielStatut } from '../../ui/types';
 
-  export let services: ServiceAssocie[];
-  export let statuts: ReferentielStatut;
-  export let predicationDesactivation: (donnee: ServiceAssocie) => boolean;
-  export let idsServicesSelectionnes: string[];
+  interface Props {
+    services: ServiceAssocie[];
+    statuts: ReferentielStatut;
+    predicationDesactivation: (donnee: ServiceAssocie) => boolean;
+    idsServicesSelectionnes: string[];
+    infoStatutMesure?: import('svelte').Snippet<[any]>;
+  }
 
-  $: servicesOrdonnesAvecStatutAPlat = services
-    .sort((a, b) => {
-      if (
-        (predicationDesactivation(a) && predicationDesactivation(b)) ||
-        (!predicationDesactivation(a) && !predicationDesactivation(b))
-      ) {
-        return a.nomService.localeCompare(b.nomService);
-      }
-      return predicationDesactivation(a) ? 1 : -1;
-    })
-    .map((s) => ({
-      ...s,
-      statut: s.mesure.statut,
-    }));
+  let {
+    services,
+    statuts,
+    predicationDesactivation,
+    idsServicesSelectionnes = $bindable(),
+    infoStatutMesure,
+  }: Props = $props();
+
+  let servicesOrdonnesAvecStatutAPlat = $derived(
+    services
+      .sort((a, b) => {
+        if (
+          (predicationDesactivation(a) && predicationDesactivation(b)) ||
+          (!predicationDesactivation(a) && !predicationDesactivation(b))
+        ) {
+          return a.nomService.localeCompare(b.nomService);
+        }
+        return predicationDesactivation(a) ? 1 : -1;
+      })
+      .map((s) => ({
+        ...s,
+        statut: s.mesure.statut,
+      }))
+  );
 
   const optionsFiltrage = {
     categories: [{ id: 'statut', libelle: 'Statuts' }],
@@ -60,7 +73,7 @@
   }}
   bind:selection={idsServicesSelectionnes}
 >
-  <svelte:fragment slot="cellule" let:donnee let:colonne>
+  {#snippet cellule({ donnee, colonne })}
     {@const desactive = predicationDesactivation(donnee)}
     {#if colonne.cle === 'nom'}
       <div class="contenu-nom-service">
@@ -84,7 +97,7 @@
             statut={donnee.mesure.statut}
           />
         </div>
-        <slot name="infoStatutMesure" {donnee} />
+        {@render infoStatutMesure?.({ donnee })}
       </div>
     {:else if colonne.cle === 'modalites'}
       {@const contenu = donnee.mesure.modalites ?? ''}
@@ -102,7 +115,7 @@
         {/if}
       </div>
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </Tableau>
 
 <style lang="scss">

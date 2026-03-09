@@ -1,8 +1,12 @@
 <script lang="ts">
   import CarteDePromotion from './CarteDePromotion.svelte';
 
-  export let dateInscriptionUtilisateur: Date;
-  export let avecPromotionDeMsc: boolean;
+  interface Props {
+    dateInscriptionUtilisateur: Date;
+    avecPromotionDeMsc: boolean;
+  }
+
+  let { dateInscriptionUtilisateur, avecPromotionDeMsc }: Props = $props();
 
   const ilYA1Mois = new Date().setMonth(new Date().getMonth() - 1);
   const utilisateurInscritDepuisPlusD1Mois =
@@ -24,12 +28,13 @@
       titre="Notre équipe est à votre écoute"
       href="https://calendly.com/fabien-giraud/presentation-de-monservicesecurise-1"
     >
-      <img
-        slot="illustration"
-        alt=""
-        src="/statique/assets/images/tableauDeBord/image_equipe_webinaire.png"
-        width="78"
-      />
+      {#snippet illustration()}
+        <img
+          alt=""
+          src="/statique/assets/images/tableauDeBord/image_equipe_webinaire.png"
+          width="78"
+        />
+      {/snippet}
       Nous vous guiderons dans la découverte et prise en main de MonServiceSécurisé
       au sein de votre organisation.
     </CarteDePromotion>
@@ -39,11 +44,12 @@
     titre="Rejoignez la communauté"
     href="https://tally.so/r/wa6o22"
   >
-    <img
-      slot="illustration"
-      src="/statique/assets/images/tableauDeBord/image_rejoignez_communaute.svg"
-      alt=""
-    />
+    {#snippet illustration()}
+      <img
+        src="/statique/assets/images/tableauDeBord/image_rejoignez_communaute.svg"
+        alt=""
+      />
+    {/snippet}
     <b>Échangez</b> directement avec vos pairs pour une collaboration facilitée.
   </CarteDePromotion>
 
@@ -53,12 +59,13 @@
       href="https://messervices.cyber.gouv.fr/"
       fondIllustration="jaune"
     >
-      <img
-        slot="illustration"
-        src="/statique/assets/images/tableauDeBord/image_promotion_msc.png"
-        width="135"
-        alt=""
-      />
+      {#snippet illustration()}
+        <img
+          src="/statique/assets/images/tableauDeBord/image_promotion_msc.png"
+          width="135"
+          alt=""
+        />
+      {/snippet}
       MesServicesCyber, la plateforme pour faciliter l'accès de tous aux services
       et ressources de l'ANSSI et de ses partenaires.
     </CarteDePromotion>
@@ -68,11 +75,12 @@
       href="/conseils-cyber"
       fondIllustration="bleu-clair"
     >
-      <img
-        slot="illustration"
-        src="/statique/assets/images/tableauDeBord/image_decouvrez_blog.svg"
-        alt=""
-      />
+      {#snippet illustration()}
+        <img
+          src="/statique/assets/images/tableauDeBord/image_decouvrez_blog.svg"
+          alt=""
+        />
+      {/snippet}
       Toutes les réponses à vos questions sur l'homologation de sécurité, la mise
       en oeuvre des mesures
     </CarteDePromotion>

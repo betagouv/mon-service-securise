@@ -13,9 +13,13 @@
 
   const { EnCours } = EtatEnregistrement;
 
-  export let etatEnregistrement: EtatEnregistrement;
-  export let categories: Record<IdCategorie, string>;
-  export let idService: IdService;
+  interface Props {
+    etatEnregistrement: EtatEnregistrement;
+    categories: Record<IdCategorie, string>;
+    idService: IdService;
+  }
+
+  let { etatEnregistrement, categories, idService }: Props = $props();
 
   const afficheTiroirAssociationModeles = () => {
     tiroirStore.afficheContenu(
@@ -30,7 +34,7 @@
     <div class="actions">
       <button
         class="bouton-action-mesure association-modeles"
-        on:click={() => afficheTiroirAssociationModeles()}
+        onclick={() => afficheTiroirAssociationModeles()}
         disabled={etatEnregistrement === EnCours}
       >
         <img src="/statique/assets/images/icone_ajout_liste.svg" alt="" />
@@ -38,7 +42,7 @@
       </button>
       <button
         class="bouton-action-mesure"
-        on:click={() => afficheTiroirCreeMesure()}
+        onclick={() => afficheTiroirCreeMesure()}
         disabled={etatEnregistrement === EnCours}
       >
         <img src="/statique/assets/images/icone_plus_gris.svg" alt="" />
@@ -46,7 +50,7 @@
       </button>
       <button
         class="bouton-action-mesure"
-        on:click={afficheTiroirExportDesMesures}
+        onclick={afficheTiroirExportDesMesures}
       >
         <img src="/statique/assets/images/icone_export_gris.svg" alt="" />
         Exporter la liste des mesures

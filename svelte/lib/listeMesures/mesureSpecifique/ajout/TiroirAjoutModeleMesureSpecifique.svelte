@@ -15,24 +15,29 @@
   } from '../../../ui/types';
   import { servicesAvecMesuresAssociees } from '../../servicesAssocies/servicesAvecMesuresAssociees.store';
 
-  export let statuts: ReferentielStatut;
-  export let referentielTypesService: ReferentielTypesService;
-  export let categories: ListeMesuresProps['categories'];
+  interface Props {
+    statuts: ReferentielStatut;
+    referentielTypesService: ReferentielTypesService;
+    categories: ListeMesuresProps['categories'];
+  }
+
+  let { statuts, referentielTypesService, categories }: Props = $props();
   export const titre: string = 'Ajouter une mesure';
   export const sousTitre: string =
     'Ajoutez une mesure, associez-la aux services de votre choix et ajustez le statut ou la précision sur plusieurs services simultanément.';
   export const taille = 'large';
 
-  let donneesModeleMesureAjoute = {
+  let donneesModeleMesureAjoute = $state({
     description: '',
     descriptionLongue: '',
     categorie: '',
-  };
-  let enCoursDenvoi = false;
+  });
+  let enCoursDenvoi = $state(false);
 
-  $: formulaireValide =
+  let formulaireValide = $derived(
     !!donneesModeleMesureAjoute.description &&
-    !!donneesModeleMesureAjoute.categorie;
+      !!donneesModeleMesureAjoute.categorie
+  );
 
   const ajouteModele = async () => {
     enCoursDenvoi = true;
@@ -72,21 +77,21 @@
   />
 </ContenuTiroir>
 <ActionsTiroir>
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   <lab-anssi-bouton
     variante="tertiaire-sans-bordure"
     taille="md"
     titre="Annuler"
-    on:click={() => tiroirStore.ferme()}
-  />
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    onclick={() => tiroirStore.ferme()}
+  ></lab-anssi-bouton>
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   <lab-anssi-bouton
     variante="primaire"
     taille="md"
     titre="Ajouter cette mesure"
     icone="add-line"
     position-icone="gauche"
-    on:click={async () => await ajouteModele()}
+    onclick={async () => await ajouteModele()}
     actif={formulaireValide && !enCoursDenvoi}
-  />
+  ></lab-anssi-bouton>
 </ActionsTiroir>

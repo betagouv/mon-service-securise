@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import EtiquetteIndiceCyber from './elementsDeService/EtiquetteIndiceCyber.svelte';
   import EtiquetteHomologation from './elementsDeService/EtiquetteHomologation.svelte';
   import EtiquetteContributeurs from './elementsDeService/EtiquetteContributeurs.svelte';
@@ -25,18 +27,19 @@
   import { referentielNiveauxSecurite } from '../ui/referentielNiveauxSecurite';
   import { resultatsDeRechercheBrouillons } from './stores/resultatDeRechercheBrouillons.store';
 
-  $: selection = [
+  let selection = $derived([
     ...$resultatsDeRecherche
       .filter((service) => $selectionIdsServices.includes(service.id))
       .map((s) => ({ ...s, type: 'Service' as TypeSelection })),
     ...$resultatsDeRechercheBrouillons
       .filter((brouillon) => $selectionIdsServices.includes(brouillon.id))
       .map((b) => ({ ...b, type: 'Brouillon' as TypeSelection })),
-  ];
+  ]);
 
-  $: toutEstCoche =
+  let toutEstCoche = $derived(
     selection.length ===
-    $resultatsDeRecherche.length + $resultatsDeRechercheBrouillons.length;
+      $resultatsDeRecherche.length + $resultatsDeRechercheBrouillons.length
+  );
   const basculeSelectionTousServices = () => {
     if (toutEstCoche) $selectionIdsServices = [];
     else
@@ -46,11 +49,19 @@
       ];
   };
 
-  $: $resultatsDeRecherche, selectionIdsServices.vide();
+  run(() => {
+    ($resultatsDeRecherche, selectionIdsServices.vide());
+  });
 
-  $: $selectionIdsServices, tiroirStore.ferme();
+  run(() => {
+    ($selectionIdsServices, tiroirStore.ferme());
+  });
 
-  export let indicesCyberCharges: boolean = false;
+  interface Props {
+    indicesCyberCharges?: boolean;
+  }
+
+  let { indicesCyberCharges = false }: Props = $props();
 </script>
 
 <table>
@@ -107,7 +118,7 @@
         <th class="cellule-selection" id="selection-toutes-lignes" scope="row">
           <input
             type="checkbox"
-            on:change={basculeSelectionTousServices}
+            onchange={basculeSelectionTousServices}
             checked={toutEstCoche}
             indeterminate={!toutEstCoche && selection.length > 0}
             title="Sélection de tous les services"
@@ -298,9 +309,9 @@
   #ligne-entete-tableau:after,
   #ligne-entete-action:after {
     content: '';
-    background-image: linear-gradient(0deg, #ddd, #ddd),
+    background-image:
       linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd),
-      linear-gradient(0deg, #ddd, #ddd);
+      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd);
     background-position:
       0 0,
       100% 0,
@@ -341,8 +352,8 @@
   }
 
   .ligne-service td {
-    background-image: linear-gradient(0deg, #ddd, #ddd),
-      linear-gradient(0deg, #ddd, #ddd);
+    background-image:
+      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd);
     background-position: 100% 100%;
     background-repeat: no-repeat;
     background-size: 100% 1px;
@@ -350,8 +361,8 @@
 
   .ligne-service th,
   #ligne-entete-tableau th:first-of-type {
-    background-image: linear-gradient(0deg, #ddd, #ddd),
-      linear-gradient(0deg, #ddd, #ddd);
+    background-image:
+      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd);
     background-position:
       0 100%,
       100% 0;
@@ -382,9 +393,9 @@
     top: 0;
     width: 100%;
     z-index: 1;
-    background-image: linear-gradient(0deg, #ddd, #ddd),
+    background-image:
       linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd),
-      linear-gradient(0deg, #ddd, #ddd);
+      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd);
   }
 
   table {
@@ -395,7 +406,7 @@
     background-color: #fafbfc;
   }
 
-  .ligne-service:has(a:active) {
+  .ligne-service:has(:global(a:active)) {
     background-color: #eee;
   }
 
@@ -404,7 +415,8 @@
   }
 
   table tr.ligne-service::after {
-    background-image: linear-gradient(
+    background-image:
+      linear-gradient(
         0deg,
         var(--bleu-mise-en-avant),
         var(--bleu-mise-en-avant)
@@ -620,9 +632,9 @@
   }
 
   .ligne-onglet:after {
-    background-image: linear-gradient(0deg, white, white),
+    background-image:
       linear-gradient(0deg, white, white), linear-gradient(0deg, white, white),
-      linear-gradient(0deg, white, white);
+      linear-gradient(0deg, white, white), linear-gradient(0deg, white, white);
     background-position:
       0 0,
       100% 0,

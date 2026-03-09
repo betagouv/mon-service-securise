@@ -7,8 +7,12 @@
   } from '../../../ui/rechercheOrganisation';
   import { onMount } from 'svelte';
 
-  export let donnees: Record<keyof DescriptionServiceV2, string | string[]>;
-  let entite: Entite | undefined;
+  interface Props {
+    donnees: Record<keyof DescriptionServiceV2, string | string[]>;
+  }
+
+  let { donnees }: Props = $props();
+  let entite: Entite | undefined = $state();
 
   onMount(async () => {
     entite = (await rechercheOrganisation(donnees.siret as string))[0];

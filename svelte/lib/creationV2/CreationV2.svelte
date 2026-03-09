@@ -18,8 +18,12 @@
   import { toasterStore } from '../ui/stores/toaster.store';
   import type { AxiosError } from 'axios';
 
-  export let entite: Entite | undefined;
-  let enCoursDeChargement = false;
+  interface Props {
+    entite: Entite | undefined;
+  }
+
+  let { entite }: Props = $props();
+  let enCoursDeChargement = $state(false);
 
   onMount(async () => {
     const requete = new URLSearchParams(window.location.search);

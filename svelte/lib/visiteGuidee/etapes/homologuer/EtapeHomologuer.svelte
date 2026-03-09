@@ -3,10 +3,10 @@
   import { onMount } from 'svelte';
   import type { SousEtape } from '../../kit/ModaleSousEtape';
 
-  let cibleNouvelleHomologation: HTMLElement;
-  let cibleTelechargement: HTMLElement;
+  let cibleNouvelleHomologation: HTMLElement = $state();
+  let cibleTelechargement: HTMLElement = $state();
 
-  let sousEtapes: SousEtape[] = [];
+  let sousEtapes: SousEtape[] = $state([]);
   onMount(() => {
     cibleNouvelleHomologation = document.getElementById(
       'commencer-homologation'

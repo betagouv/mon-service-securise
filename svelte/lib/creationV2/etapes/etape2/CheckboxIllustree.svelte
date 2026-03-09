@@ -1,13 +1,21 @@
 <script lang="ts">
-  export let id: string;
-  export let nomGroupe: string;
-  export let details: { nom: string; exemple?: string };
-  export let valeurs: string[];
-  export let illustration: string;
+  interface Props {
+    id: string;
+    nomGroupe: string;
+    details: { nom: string; exemple?: string };
+    valeurs: string[];
+    illustration: string;
+  }
 
-  let cochee: boolean;
+  let {
+    id,
+    nomGroupe,
+    details,
+    valeurs = $bindable(),
+    illustration,
+  }: Props = $props();
 
-  $: cochee = valeurs.includes(id);
+  let cochee: boolean = $derived(valeurs.includes(id));
 
   const metsAJourLesValeursCochees = (event: Event) => {
     const input = event.target as HTMLInputElement;
@@ -26,7 +34,7 @@
     name={nomGroupe}
     value={id}
     checked={cochee}
-    on:change={metsAJourLesValeursCochees}
+    onchange={metsAJourLesValeursCochees}
   />
 
   <label for={id}>
@@ -60,22 +68,22 @@
       padding: 0;
     }
 
-    &:has(input:hover) {
+    &:has(:global(input:hover)) {
       border-color: var(--bleu-mise-en-avant);
       background: #f6f6f6;
     }
 
-    &:has(input:checked) {
+    &:has(:global(input:checked)) {
       box-shadow: 0 0 0 1px var(--bleu-mise-en-avant);
       border-color: var(--bleu-mise-en-avant);
       background: #f1f5f9;
 
-      &:has(input:hover) {
+      &:has(:global(input:hover)) {
         background: #d0e5fb;
       }
     }
 
-    &:has(input:focus-visible) {
+    &:has(:global(input:focus-visible)) {
       outline: 2px solid var(--bleu-mise-en-avant);
       outline-offset: 2px;
     }

@@ -7,13 +7,17 @@
   import { couleur, mappingCouleursDSFR, mappingNomCategories } from './kit';
   import Niveau from './Niveau.svelte';
 
-  export let idService: string;
+  interface Props {
+    idService: string;
+  }
 
-  let risques: TousRisques = {
+  let { idService }: Props = $props();
+
+  let risques: TousRisques = $state({
     risquesBruts: [],
     risques: [],
     risquesCibles: [],
-  };
+  });
 
   onMount(async () => {
     risques = await api.recupereRisques(idService);
@@ -25,7 +29,7 @@
     { classe: 'rouge', label: 'Élevé : Inacceptable' },
   ];
 
-  let opacite = 2;
+  let opacite = $state(2);
 
   const metAJourOpacite = (e: CustomEvent<number>) => (opacite = e.detail);
 </script>
@@ -65,7 +69,7 @@
           step={0.5}
           is-step
           indicators={false}
-          on:valuechanged={metAJourOpacite}
+          onvaluechanged={metAJourOpacite}
         ></dsfr-range>
         <div class="conteneur-legende-slider">
           <span>Risques bruts</span>
@@ -104,7 +108,7 @@
     ]}
     donnees={risques.risques}
   >
-    <svelte:fragment slot="cellule" let:donnee let:colonne>
+    {#snippet cellule({ donnee, colonne })}
       {#if colonne.cle === 'id'}
         {@const label = `${donnee.id.replace('R', 'Risque ')} (${donnee.id})`}
         {@const laCouleur = couleur(donnee.gravite, donnee.vraisemblance)}
@@ -134,7 +138,7 @@
           <Niveau niveau={donnee.vraisemblance} />
         </div>
       {/if}
-    </svelte:fragment>
+    {/snippet}
   </Tableau>
 </div>
 

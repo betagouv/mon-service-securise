@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import type {
     ReferentielCategories,
     ReferentielGravites,
@@ -14,13 +17,23 @@
   import IdentifiantRisque from './IdentifiantRisque.svelte';
   import Switch from '../ui/Switch.svelte';
 
-  export let categories: ReferentielCategories;
-  export let niveauxGravite: ReferentielGravites;
-  export let niveauxVraisemblance: ReferentielVraisemblances;
-  export let estLectureSeule: boolean;
-  export let risque: Risque;
+  interface Props {
+    categories: ReferentielCategories;
+    niveauxGravite: ReferentielGravites;
+    niveauxVraisemblance: ReferentielVraisemblances;
+    estLectureSeule: boolean;
+    risque: Risque;
+  }
 
-  $: estSpecifiqueAMettreAJour = risqueAMettreAJour(risque);
+  let {
+    categories,
+    niveauxGravite,
+    niveauxVraisemblance,
+    estLectureSeule,
+    risque = $bindable(),
+  }: Props = $props();
+
+  let estSpecifiqueAMettreAJour = $derived(risqueAMettreAJour(risque));
 
   const emet = createEventDispatcher<{
     metAJourRisque: null;
@@ -35,7 +48,11 @@
   <td>
     <IdentifiantRisque {risque} />
   </td>
-  <td class="intitule" class:inactif={risque.desactive} on:click>
+  <td
+    class="intitule"
+    class:inactif={risque.desactive}
+    onclick={bubble('click')}
+  >
     <p
       class="intitule-risques"
       title={estSpecifiqueAMettreAJour ? 'Ce risque doit être mis à jour' : ''}
@@ -107,7 +124,7 @@
     border: 1px solid #cbd5e1;
   }
 
-  tr:has(.intitule:hover) {
+  tr:has(:global(.intitule:hover)) {
     box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
   }
 

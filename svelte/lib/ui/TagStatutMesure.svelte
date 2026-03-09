@@ -2,9 +2,13 @@
   import type { ReferentielStatut } from './types';
   import type { StatutMesure } from '../modeles/modeleMesure';
 
-  export let statut: StatutMesure | undefined;
-  export let actif: boolean = false;
-  export let referentielStatuts: ReferentielStatut;
+  interface Props {
+    statut: StatutMesure | undefined;
+    actif?: boolean;
+    referentielStatuts: ReferentielStatut;
+  }
+
+  let { statut, actif = false, referentielStatuts }: Props = $props();
 </script>
 
 {#if statut}

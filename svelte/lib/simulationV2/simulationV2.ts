@@ -1,5 +1,6 @@
 import SimulationV2 from './SimulationV2.svelte';
 import type { SimulationV2Props } from './simulationV2.d';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-simulation-v2',
@@ -9,7 +10,7 @@ document.body.addEventListener(
 let app: SimulationV2;
 const rechargeApp = (props: SimulationV2Props) => {
   app?.$destroy();
-  app = new SimulationV2({
+  app = mount(SimulationV2, {
     target: document.getElementById('simulation-v2')!,
     props,
   });

@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { VersionService } from '../../../src/modeles/versionService';
 
-  export let value: VersionService;
+  interface Props {
+    value: VersionService;
+  }
+
+  let { value = $bindable() }: Props = $props();
 
   const selectionneVersion = (version: string) => {
     value = version as VersionService;
@@ -11,7 +15,7 @@
 <th colspan="3">
   <div>
     <label for="version-v2" class:actif={value === 'v2'}>
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
         titre="Nouveau référentiel"
         variante={value === 'v2' ? 'secondaire' : 'tertiaire'}
@@ -19,11 +23,11 @@
         icone=""
         positionIcone="sans"
         id="version-v2"
-        on:click={() => selectionneVersion('v2')}
-      />
+        onclick={() => selectionneVersion('v2')}
+      ></lab-anssi-bouton>
     </label>
     <label for="version-v1" class:actif={value === 'v1'}>
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
         titre="Ancien référentiel"
         variante={value === 'v1' ? 'secondaire' : 'tertiaire'}
@@ -31,8 +35,8 @@
         icone=""
         positionIcone="sans"
         id="version-v1"
-        on:click={() => selectionneVersion('v1')}
-      />
+        onclick={() => selectionneVersion('v1')}
+      ></lab-anssi-bouton>
     </label>
   </div>
 </th>

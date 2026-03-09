@@ -1,9 +1,10 @@
 <script lang="ts">
   import { etapeCourante } from './etapes/etapeCourante.store';
 
-  $: avancement =
+  let avancement = $derived(
     ($etapeCourante.numeroQuestionCourante / $etapeCourante.nombreQuestions) *
-    100;
+      100
+  );
 </script>
 
 <div class="courante">

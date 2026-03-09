@@ -1,16 +1,20 @@
 <script lang="ts">
-  export let ongletActif: 'informations' | 'besoinsSecurite';
+  interface Props {
+    ongletActif: 'informations' | 'besoinsSecurite';
+  }
+
+  let { ongletActif = $bindable() }: Props = $props();
 </script>
 
 <div class="conteneur-onglets">
   <button
-    on:click={() => (ongletActif = 'informations')}
+    onclick={() => (ongletActif = 'informations')}
     class:actif={ongletActif === 'informations'}
   >
     Informations sur le service
   </button>
   <button
-    on:click={() => (ongletActif = 'besoinsSecurite')}
+    onclick={() => (ongletActif = 'besoinsSecurite')}
     class:actif={ongletActif === 'besoinsSecurite'}
   >
     Besoins de sécurité

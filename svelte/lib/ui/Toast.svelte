@@ -2,14 +2,25 @@
   import { createEventDispatcher } from 'svelte';
   import { glisse } from './animations/transitions';
 
-  export let niveau: 'info' | 'succes' | 'erreur' | 'alerte';
-  export let titre: string;
-  export let contenu: string;
+  interface Props {
+    niveau: 'info' | 'succes' | 'erreur' | 'alerte';
+    titre: string;
+    contenu: string;
+    avecOmbre?: boolean;
+    avecAnimation?: boolean;
+    avecFermeture?: boolean;
+    avecInterpolationHTMLDangereuse?: boolean;
+  }
 
-  export let avecOmbre: boolean = true;
-  export let avecAnimation: boolean = true;
-  export let avecFermeture: boolean = false;
-  export let avecInterpolationHTMLDangereuse: boolean = false;
+  let {
+    niveau,
+    titre,
+    contenu,
+    avecOmbre = true,
+    avecAnimation = true,
+    avecFermeture = false,
+    avecInterpolationHTMLDangereuse = false,
+  }: Props = $props();
 
   const icones = {
     info: 'icone_info',
@@ -40,7 +51,7 @@
   {#if avecFermeture}
     <button
       class="fermeture"
-      on:click={() => emetEvenement('close')}
+      onclick={() => emetEvenement('close')}
       title="Fermeture du toast">✕</button
     >
   {/if}

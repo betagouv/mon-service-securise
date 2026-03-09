@@ -6,23 +6,40 @@
   import type { ReferentielStatut } from '../../ui/types';
   import DescriptionLongueMesure from '../../ui/DescriptionLongueMesure.svelte';
 
-  export let estLectureSeule: boolean;
-  export let categories: Record<string, string>;
-  export let statuts: ReferentielStatut;
-  export let retoursUtilisateur: Record<string, string>;
-  export let visible: boolean;
-  export let retourUtilisateur: string;
-  export let commentaireRetourUtilisateur: string;
+  interface Props {
+    estLectureSeule: boolean;
+    categories: Record<string, string>;
+    statuts: ReferentielStatut;
+    retoursUtilisateur: Record<string, string>;
+    visible: boolean;
+    retourUtilisateur: string;
+    commentaireRetourUtilisateur: string;
+  }
 
-  $: texteSurligne = $store.mesureEditee.mesure.descriptionLongue
-    ?.replace(new RegExp($rechercheTextuelle, 'ig'), (texte: string) =>
-      $rechercheTextuelle ? `<mark>${texte}</mark>` : texte
-    )
-    .replace(
-      new RegExp(/<a.*(<mark>(.*)<\/mark>).*\/a>/gi),
-      (chaineEntiere: string, baliseMark: string, contenuSansBalise: string) =>
-        chaineEntiere.replaceAll(baliseMark, contenuSansBalise)
-    );
+  let {
+    estLectureSeule,
+    categories,
+    statuts,
+    retoursUtilisateur,
+    visible,
+    retourUtilisateur = $bindable(),
+    commentaireRetourUtilisateur = $bindable(),
+  }: Props = $props();
+
+  let texteSurligne = $derived(
+    $store.mesureEditee.mesure.descriptionLongue
+      ?.replace(new RegExp($rechercheTextuelle, 'ig'), (texte: string) =>
+        $rechercheTextuelle ? `<mark>${texte}</mark>` : texte
+      )
+      .replace(
+        new RegExp(/<a.*(<mark>(.*)<\/mark>).*\/a>/gi),
+        (
+          chaineEntiere: string,
+          baliseMark: string,
+          contenuSansBalise: string
+        ) => chaineEntiere.replaceAll(baliseMark, contenuSansBalise)
+      )
+  );
 </script>
 
 <div class:visible id="contenu-onglet-mesure">
@@ -37,7 +54,7 @@
         readonly={estLectureSeule}
         required
         use:validationChamp={"L'intitulé est obligatoire. Veuillez le renseigner."}
-      />
+      ></textarea>
     </label>
   {/if}
   {#if $configurationAffichage.doitAfficherDescriptionLongue && texteSurligne}
@@ -57,7 +74,7 @@
         id="descriptionLongue"
         placeholder="Description de la mesure"
         readonly={estLectureSeule}
-      />
+      ></textarea>
     </label>
   {/if}
   {#if $configurationAffichage.doitAfficherPorteursSinguliers && $store.mesureEditee.mesure.porteursSinguliers}
@@ -97,7 +114,7 @@
       id="details"
       placeholder="Apportez des précisions sur la mesure, ses modalités de mise en œuvre, etc."
       readonly={estLectureSeule}
-    />
+    ></textarea>
   </label>
 
   {#if $configurationAffichage.doitAfficherChoixCategorie}

@@ -1,12 +1,16 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte';
 
-  export let apiGetProgression: () => Promise<number>;
-  export let delaiRafraichissement = 1_000;
+  interface Props {
+    apiGetProgression: () => Promise<number>;
+    delaiRafraichissement?: number;
+  }
+
+  let { apiGetProgression, delaiRafraichissement = 1_000 }: Props = $props();
 
   const dispatch = createEventDispatcher<{ fini: null }>();
-  let elementModale: HTMLDialogElement;
-  let progression = 0;
+  let elementModale: HTMLDialogElement = $state();
+  let progression = $state(0);
 
   async function monitoreProgression() {
     try {
@@ -45,7 +49,7 @@
         </h2>
         <span>Merci de ne pas rafraichir votre navigateur</span>
       </div>
-      <progress value={progression} max="100" />
+      <progress value={progression} max="100"></progress>
     </div>
   </div>
 </dialog>

@@ -1,9 +1,19 @@
 <script lang="ts">
-  export let titre: string;
-  export let illustration: string;
-  export let contenu: string;
-  export let href: string;
-  export let lienExterne: boolean = false;
+  interface Props {
+    titre: string;
+    illustration: string;
+    contenu: string;
+    href: string;
+    lienExterne?: boolean;
+  }
+
+  let {
+    titre,
+    illustration,
+    contenu,
+    href,
+    lienExterne = false,
+  }: Props = $props();
 </script>
 
 <a class="tuile-telechargement" {href} title={titre} target="_blank">

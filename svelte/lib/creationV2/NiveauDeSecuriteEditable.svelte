@@ -6,18 +6,31 @@
   import { createEventDispatcher } from 'svelte';
   import ResumeNiveauSecurite from '../ui/ResumeNiveauSecurite.svelte';
 
-  export let niveauSelectionne: IdNiveauDeSecurite | '';
-  export let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+  interface Props {
+    niveauSelectionne: IdNiveauDeSecurite | '';
+    niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+    infoMajNecessaire?: import('svelte').Snippet;
+  }
+
+  let {
+    niveauSelectionne = $bindable(),
+    niveauDeSecuriteMinimal,
+    infoMajNecessaire,
+  }: Props = $props();
 
   const dispatch = createEventDispatcher<{
     champModifie: { niveauSecurite: IdNiveauDeSecurite };
   }>();
 
-  $: estNiveauTropBas = (candidat: IdNiveauDeSecurite) =>
-    ordreDesNiveaux[candidat] < ordreDesNiveaux[niveauDeSecuriteMinimal];
+  let estNiveauTropBas = $derived(
+    (candidat: IdNiveauDeSecurite) =>
+      ordreDesNiveaux[candidat] < ordreDesNiveaux[niveauDeSecuriteMinimal]
+  );
 
-  $: estNiveauSuperieur = (candidat: IdNiveauDeSecurite) =>
-    ordreDesNiveaux[candidat] > ordreDesNiveaux[niveauDeSecuriteMinimal];
+  let estNiveauSuperieur = $derived(
+    (candidat: IdNiveauDeSecurite) =>
+      ordreDesNiveaux[candidat] > ordreDesNiveaux[niveauDeSecuriteMinimal]
+  );
 
   const selectionneNiveau = async (niveau: IdNiveauDeSecurite) => {
     niveauSelectionne = niveau;
@@ -37,10 +50,10 @@
       href="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/LAB_Homologation_Simplifiee.pdf"
       cible="_blank"
       titre="l’homologation simplifiée"
-    />
+    ></lab-anssi-lien>
   </p>
 
-  <slot name="infoMajNecessaire" />
+  {@render infoMajNecessaire?.()}
 
   <div id="niveaux-securite">
     {#each donneesNiveauxDeSecurite as niveauSecurite, index}
@@ -57,7 +70,7 @@
               size="md"
               hasIcon
               icon="star-s-fill"
-            />
+            ></dsfr-tag>
           {/if}
           <p>{niveauSecurite.resume}</p>
           <span class="bouton-selection">
@@ -66,7 +79,7 @@
                 contenu="Il est impossible de sélectionner des besoins de sécurité moins élevés que ceux identifiés par l'ANSSI."
               />
             {/if}
-            <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+            <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
             <lab-anssi-bouton
               titre={niveauSelectionne === niveauSecurite.id
                 ? 'Sélectionné'
@@ -82,8 +95,8 @@
               positionIcone={niveauSelectionne === niveauSecurite.id
                 ? 'gauche'
                 : 'sans'}
-              on:click={async () => await selectionneNiveau(niveauSecurite.id)}
-            />
+              onclick={async () => await selectionneNiveau(niveauSecurite.id)}
+            ></lab-anssi-bouton>
           </span>
         </summary>
         <hr />

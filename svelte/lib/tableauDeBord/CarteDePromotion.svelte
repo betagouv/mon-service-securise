@@ -1,9 +1,21 @@
 <script lang="ts">
-  export let href: string;
-  export let titre: string;
-  export let fondIllustration: 'bleu' | 'jaune' | 'bleu-clair' = 'bleu';
+  interface Props {
+    href: string;
+    titre: string;
+    fondIllustration?: 'bleu' | 'jaune' | 'bleu-clair';
+    illustration?: import('svelte').Snippet;
+    children?: import('svelte').Snippet;
+  }
 
-  let avecIllustration = $$slots.illustration;
+  let {
+    href,
+    titre,
+    fondIllustration = 'bleu',
+    illustration,
+    children,
+  }: Props = $props();
+
+  let avecIllustration = illustration;
 </script>
 
 <a
@@ -14,12 +26,12 @@
   class:avec-illustration={avecIllustration}
 >
   <div class={`illustration fond-${fondIllustration}`}>
-    <slot name="illustration" />
+    {@render illustration?.()}
   </div>
 
   <div class="promotion">
     <h3>{titre}</h3>
-    <p><slot /></p>
+    <p>{@render children?.()}</p>
     <img
       class="fleche-navigation"
       alt=""

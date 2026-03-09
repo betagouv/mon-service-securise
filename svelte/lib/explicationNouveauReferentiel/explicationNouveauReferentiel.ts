@@ -1,4 +1,5 @@
 import ExplicationNouveauReferentiel from './ExplicationNouveauReferentiel.svelte';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-explication-nouveau-referentiel',
@@ -11,7 +12,7 @@ const rechargeApp = () => {
   if (!conteneur) return;
 
   app?.$destroy();
-  app = new ExplicationNouveauReferentiel({ target: conteneur });
+  app = mount(ExplicationNouveauReferentiel, { target: conteneur });
 };
 
 export default app!;

@@ -7,9 +7,17 @@
     badge?: number;
   };
 
-  export let onglets: ConfigurationOnglet[];
-  export let ongletActif: string;
-  export let sansBordureEnBas: boolean = false;
+  interface Props {
+    onglets: ConfigurationOnglet[];
+    ongletActif: string;
+    sansBordureEnBas?: boolean;
+  }
+
+  let {
+    onglets,
+    ongletActif = $bindable(),
+    sansBordureEnBas = false,
+  }: Props = $props();
 </script>
 
 <div class="conteneur-onglets">

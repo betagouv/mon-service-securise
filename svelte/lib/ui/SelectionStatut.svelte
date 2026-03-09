@@ -1,24 +1,39 @@
 <script lang="ts">
+  import { run, createBubbler, stopPropagation } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import type { ReferentielStatut } from './types.d';
   import { validationChamp } from '../directives/validationChamp';
   import { createEventDispatcher } from 'svelte';
   import type { StatutMesure } from '../modeles/modeleMesure';
 
-  export let id: string;
-  export let statut: string | undefined;
-  export let referentielStatuts: ReferentielStatut;
+  interface Props {
+    id: string;
+    statut: string | undefined;
+    referentielStatuts: ReferentielStatut;
+    label?: string;
+    estLectureSeule?: boolean;
+    requis?: boolean;
+    version?: 'normale' | 'accentuee';
+    labelChoixVide?: string;
+  }
 
-  export let label = '';
-  export let estLectureSeule = false;
-  export let requis = false;
-  export let version: 'normale' | 'accentuee' = 'normale';
-  export let labelChoixVide: string = '';
+  let {
+    id,
+    statut = $bindable(),
+    referentielStatuts,
+    label = '',
+    estLectureSeule = false,
+    requis = false,
+    version = 'normale',
+    labelChoixVide = '',
+  }: Props = $props();
 
   const dispatch = createEventDispatcher<{ input: { statut: StatutMesure } }>();
 
-  $: {
+  run(() => {
     if (!statut) statut = '';
-  }
+  });
 
   const metAJour = (e: Event) => {
     dispatch('input', {
@@ -45,8 +60,8 @@
     use:validationChamp={requis
       ? 'Ce champ est obligatoire. Veuillez sélectionner une option.'
       : ''}
-    on:input={metAJour}
-    on:click|stopPropagation
+    oninput={metAJour}
+    onclick={stopPropagation(bubble('click'))}
   >
     <option value="" disabled={requis} selected
       >{labelChoixVide || 'Statut à définir'}</option

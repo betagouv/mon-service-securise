@@ -1,19 +1,29 @@
 <script lang="ts">
+  import { run, stopPropagation } from 'svelte/legacy';
+
   import { createEventDispatcher } from 'svelte';
   import type { EcheanceMesure } from './types';
 
-  export let echeance: string | undefined;
-  export let estLectureSeule = false;
-  export let avecLabel = false;
+  interface Props {
+    echeance: string | undefined;
+    estLectureSeule?: boolean;
+    avecLabel?: boolean;
+  }
+
+  let {
+    echeance = $bindable(),
+    estLectureSeule = false,
+    avecLabel = false,
+  }: Props = $props();
 
   const dispatch = createEventDispatcher<{
     modificationEcheance: { echeance: EcheanceMesure };
   }>();
 
-  let elementDate: HTMLInputElement;
+  let elementDate: HTMLInputElement = $state();
 
-  let dateFormattee: string | undefined = undefined;
-  $: {
+  let dateFormattee: string | undefined = $state(undefined);
+  run(() => {
     const formatFR = new Intl.DateTimeFormat('fr-FR');
     try {
       if (echeance) dateFormattee = formatFR.format(new Date(echeance));
@@ -21,7 +31,7 @@
     } catch (e) {
       dateFormattee = undefined;
     }
-  }
+  });
 
   const modifieEcheance = (e: any) => {
     const nouvelleEcheance = e.target.value;
@@ -29,7 +39,7 @@
     dispatch('modificationEcheance', { echeance: nouvelleEcheance });
   };
 
-  let dateEcheance: string;
+  let dateEcheance: string = $state();
 
   if (echeance) {
     dateEcheance = new Date(Date.parse(echeance))
@@ -46,7 +56,7 @@
   {/if}
   <button
     type="button"
-    on:click|stopPropagation={() => elementDate.showPicker()}
+    onclick={stopPropagation(() => elementDate.showPicker())}
     class:vide={!dateFormattee}
     disabled={estLectureSeule}
     class:avecLabel
@@ -57,7 +67,7 @@
   <input
     type="date"
     bind:this={elementDate}
-    on:input={modifieEcheance}
+    oninput={modifieEcheance}
     value={dateEcheance}
   />
 </div>

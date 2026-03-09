@@ -1,12 +1,17 @@
 <script lang="ts">
-  export let libelle: string;
-  export let requis: boolean = false;
+  interface Props {
+    libelle: string;
+    requis?: boolean;
+    children?: import('svelte').Snippet;
+  }
+
+  let { libelle, requis = false, children }: Props = $props();
 </script>
 
 <label>
   <span class:requis class="libelle">{libelle}</span>
   <span class="contenu">
-    <slot />
+    {@render children?.()}
   </span>
 </label>
 

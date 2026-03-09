@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { createEventDispatcher, onMount } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import CheckboxIllustree from './CheckboxIllustree.svelte';
@@ -6,7 +8,11 @@
   import { leBrouillon } from '../brouillon.store';
   import type { TypeService } from '../../creationV2.types';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
 
   const illustrations: Record<TypeService, string> = {
     api: 'api.svg',
@@ -18,9 +24,13 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: estComplete = $leBrouillon.typeService.length > 0;
+  run(() => {
+    estComplete = $leBrouillon.typeService.length > 0;
+  });
 
-  $: emetEvenement('champModifie', { typeService: $leBrouillon.typeService });
+  run(() => {
+    emetEvenement('champModifie', { typeService: $leBrouillon.typeService });
+  });
 
   const typesDeService = Object.entries(questionsV2.typeDeService) as [
     TypeService,

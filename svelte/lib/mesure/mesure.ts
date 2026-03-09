@@ -2,6 +2,7 @@ import Mesure from './Mesure.svelte';
 import EnteteTiroir from './entete/EnteteTiroir.svelte';
 import type { MesureEditee, MesureProps } from './mesure.d';
 import { store } from './mesure.store';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-mesure',
@@ -15,7 +16,7 @@ const changeCartoucheDuReferentiel = () => {
   if (!cible) {
     throw new Error('Element titre du tiroir non trouvé');
   }
-  enteteTiroir = new EnteteTiroir({ target: cible });
+  enteteTiroir = mount(EnteteTiroir, { target: cible });
 };
 
 const reinitialiseStore = (mesureAEditer?: MesureEditee) => {
@@ -27,7 +28,7 @@ const rechargeApp = ({ mesureAEditer, ...autreProps }: MesureProps) => {
   app?.$destroy();
   reinitialiseStore(mesureAEditer);
   changeCartoucheDuReferentiel();
-  app = new Mesure({
+  app = mount(Mesure, {
     target: document.getElementById('conteneur-mesure')!,
     props: autreProps,
   });

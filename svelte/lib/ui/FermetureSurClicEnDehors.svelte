@@ -1,6 +1,10 @@
 <script lang="ts">
-  export let elements: HTMLElement[];
-  export let doitEtreOuvert: boolean;
+  interface Props {
+    elements: HTMLElement[];
+    doitEtreOuvert: boolean;
+  }
+
+  let { elements, doitEtreOuvert = $bindable() }: Props = $props();
 
   const gereClic = (e: MouseEvent) => {
     const clicInterieur =
@@ -10,4 +14,4 @@
   };
 </script>
 
-<svelte:body on:click={gereClic} />
+<svelte:body onclick={gereClic} />

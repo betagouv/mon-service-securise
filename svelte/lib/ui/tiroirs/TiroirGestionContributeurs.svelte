@@ -4,7 +4,11 @@
   import type { Service } from '../../gestionContributeurs/gestionContributeurs.d';
   import { store } from '../../gestionContributeurs/gestionContributeurs.store';
 
-  export let services: Service[];
+  interface Props {
+    services: Service[];
+  }
+
+  let { services }: Props = $props();
   export const titre: string = 'Gérer les contributeurs';
   export const sousTitre: string =
     services.length > 1

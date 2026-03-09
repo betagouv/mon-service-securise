@@ -11,12 +11,15 @@
   import { createEventDispatcher } from 'svelte';
   import OnOff from '../kit/OnOff.svelte';
 
-  export let utilisateur: Utilisateur;
-  export let droitsOriginaux: Droits;
-  $: redefinis = { ...droitsOriginaux };
+  interface Props {
+    utilisateur: Utilisateur;
+    droitsOriginaux: Droits;
+  }
 
-  let rubriques: { id: Rubrique; nom: string; droit: Permission }[];
-  $: rubriques = [
+  let { utilisateur, droitsOriginaux }: Props = $props();
+  let redefinis = $derived({ ...droitsOriginaux });
+
+  let rubriques: { id: Rubrique; nom: string; droit: Permission }[] = $derived([
     {
       id: 'DECRIRE',
       nom: 'Récapitulatif du service',
@@ -26,7 +29,7 @@
     { id: 'HOMOLOGUER', nom: 'Homologuer', droit: redefinis.HOMOLOGUER },
     { id: 'RISQUES', nom: 'Risques de sécurité', droit: redefinis.RISQUES },
     { id: 'CONTACTS', nom: 'Contacts utiles', droit: redefinis.CONTACTS },
-  ];
+  ]);
 
   const dispatch = createEventDispatcher<{
     valider: Droits;
@@ -77,14 +80,14 @@
   <button
     class="bouton bouton-secondaire"
     type="button"
-    on:click={() => dispatch('annuler')}
+    onclick={() => dispatch('annuler')}
   >
     Annuler
   </button>
   <button
     class="bouton"
     type="button"
-    on:click={() => dispatch('valider', redefinis)}
+    onclick={() => dispatch('valider', redefinis)}
   >
     Enregistrer
   </button>

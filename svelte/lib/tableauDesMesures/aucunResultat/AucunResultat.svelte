@@ -6,7 +6,11 @@
   import { rechercheParAvancement } from '../stores/rechercheParAvancement.store';
   import { createEventDispatcher } from 'svelte';
 
-  export let referentielStatuts: ReferentielStatut;
+  interface Props {
+    referentielStatuts: ReferentielStatut;
+  }
+
+  let { referentielStatuts }: Props = $props();
 
   const declenche = createEventDispatcher<{ supprimeFiltres: null }>();
 
@@ -27,7 +31,7 @@
         Aucune mesure ne correspond à la recherche.
         <button
           class="bouton bouton-secondaire"
-          on:click={supprimeRechercheEtFiltres}
+          onclick={supprimeRechercheEtFiltres}
         >
           Effacer la recherche
         </button>

@@ -1,11 +1,24 @@
 <script lang="ts">
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import AsterisqueChampRequis from './AsterisqueChampRequis.svelte';
 
-  export let contenu: string;
-  export let label: string;
-  export let aideSaisie: string = '';
-  export let requis: boolean = false;
-  export let tailleMinimale: number = 3;
+  interface Props {
+    contenu: string;
+    label: string;
+    aideSaisie?: string;
+    requis?: boolean;
+    tailleMinimale?: number;
+  }
+
+  let {
+    contenu = $bindable(),
+    label,
+    aideSaisie = '',
+    requis = false,
+    tailleMinimale = 3,
+  }: Props = $props();
 </script>
 
 <label>
@@ -18,8 +31,8 @@
     rows={tailleMinimale}
     placeholder={aideSaisie}
     required={requis}
-    on:blur
-  />
+    onblur={bubble('blur')}
+  ></textarea>
 </label>
 
 <style lang="scss">

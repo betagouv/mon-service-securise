@@ -5,6 +5,7 @@ import type {
   RisquesProps,
   TypeRisque,
 } from './risques.d';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-risques',
@@ -41,7 +42,7 @@ const rechargeApp = (props: RisquesProps) => {
     ...props.risques.risquesGeneraux.map(convertisDonneesRisqueGeneral),
     ...props.risques.risquesSpecifiques.map(convertisDonneesRisqueSpecifique),
   ];
-  app = new Risques({
+  app = mount(Risques, {
     target: document.getElementById('conteneur-risques')!,
     props: { ...props, risques: tousRisques },
   });

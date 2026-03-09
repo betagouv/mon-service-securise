@@ -3,8 +3,8 @@
   import { onMount, tick } from 'svelte';
   import { navigationStore } from '../../../creationV2/etapes/navigation.store';
 
-  let cibleNomService: HTMLElement;
-  let cibleBesoinsSecurite: HTMLElement;
+  let cibleNomService: HTMLElement = $state();
+  let cibleBesoinsSecurite: HTMLElement = $state();
 
   const detecteElementHTML = async (
     selecteur: string

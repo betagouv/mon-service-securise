@@ -1,4 +1,5 @@
 import Entete from './Entete.svelte';
+import { mount } from 'svelte';
 
 document.body.addEventListener('svelte-recharge-entete', () => rechargeApp());
 
@@ -8,7 +9,7 @@ const rechargeApp = () => {
   if (!conteneur) return;
 
   app?.$destroy();
-  app = new Entete({ target: conteneur });
+  app = mount(Entete, { target: conteneur });
 };
 
 export default app!;

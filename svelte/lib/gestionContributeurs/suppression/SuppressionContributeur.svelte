@@ -3,8 +3,10 @@
   import { store } from '../gestionContributeurs.store';
   import { toasterStore } from '../../ui/stores/toaster.store';
 
-  $: service = $store.services[0];
-  $: utilisateur = $store.utilisateurEnCoursDeSuppression as Utilisateur;
+  let service = $derived($store.services[0]);
+  let utilisateur = $derived(
+    $store.utilisateurEnCoursDeSuppression as Utilisateur
+  );
 
   const supprimeContributeur = async () => {
     await axios.delete('/api/autorisation', {
@@ -28,14 +30,14 @@
     <button
       class="bouton bouton-secondaire"
       type="button"
-      on:click={() => store.navigation.afficheEtapeListe()}
+      onclick={() => store.navigation.afficheEtapeListe()}
     >
       Annuler
     </button>
     <button
       class="bouton confirmation-suppression"
       type="button"
-      on:click={supprimeContributeur}
+      onclick={supprimeContributeur}
     >
       Retirer du service
     </button>

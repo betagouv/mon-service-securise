@@ -16,18 +16,28 @@
   import Toaster from '../ui/Toaster.svelte';
   import { brouillonsService } from './stores/brouillonsService.store';
 
-  export let estSuperviseur: boolean;
-  export let modeVisiteGuidee: boolean;
-  export let dateInscriptionUtilisateur: Date;
-  export let avecPromotionDeMsc: boolean;
-  export let profilUtilisateurComplet: boolean = true;
+  interface Props {
+    estSuperviseur: boolean;
+    modeVisiteGuidee: boolean;
+    dateInscriptionUtilisateur: Date;
+    avecPromotionDeMsc: boolean;
+    profilUtilisateurComplet?: boolean;
+  }
 
-  let enCoursChargement = true;
+  let {
+    estSuperviseur,
+    modeVisiteGuidee,
+    dateInscriptionUtilisateur,
+    avecPromotionDeMsc,
+    profilUtilisateurComplet = true,
+  }: Props = $props();
 
-  let nombreServices: number;
-  let nombreServicesHomologues: number;
-  let nombreHomologationsExpirees: number;
-  let indiceCyberMoyen: IndiceCyberMoyen | undefined;
+  let enCoursChargement = $state(true);
+
+  let nombreServices: number = $state();
+  let nombreServicesHomologues: number = $state();
+  let nombreHomologationsExpirees: number = $state();
+  let indiceCyberMoyen: IndiceCyberMoyen | undefined = $state();
 
   onMount(async () => {
     if (modeVisiteGuidee && profilUtilisateurComplet) {
@@ -74,8 +84,8 @@
 </script>
 
 <svelte:body
-  on:rafraichis-services={rafraichisServices}
-  on:collaboratif-service-modifie={rafraichisServices}
+  onrafraichis-services={rafraichisServices}
+  oncollaboratif-service-modifie={rafraichisServices}
 />
 <Toaster />
 <div class="tableau-de-bord">

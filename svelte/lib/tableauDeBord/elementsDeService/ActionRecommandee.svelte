@@ -6,8 +6,12 @@
   import TiroirGestionContributeurs from '../../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import type { Service } from '../tableauDeBord.d';
 
-  export let action: ActionRecommandee;
-  export let service: Service;
+  interface Props {
+    action: ActionRecommandee;
+    service: Service;
+  }
+
+  let { action, service }: Props = $props();
 
   const idService = service.id;
 </script>

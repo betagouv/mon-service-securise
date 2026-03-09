@@ -2,8 +2,12 @@
   import type { UUID } from '../typesBasiquesSvelte';
   import ExplicationNouveauReferentiel from '../explicationNouveauReferentiel/ExplicationNouveauReferentiel.svelte';
 
-  export let idService: UUID;
-  let modaleExplication: ExplicationNouveauReferentiel;
+  interface Props {
+    idService: UUID;
+  }
+
+  let { idService }: Props = $props();
+  let modaleExplication: ExplicationNouveauReferentiel = $state();
 </script>
 
 <div class="conteneur-bandeau-referentiel-v2">
@@ -25,9 +29,8 @@
       taille="md"
       positionIcone="sans"
       href="/service/{idService}/simulation-referentiel-v2"
-    />
-    <button on:click={() => modaleExplication?.affiche()}>En savoir plus</button
-    >
+    ></lab-anssi-lien>
+    <button onclick={() => modaleExplication?.affiche()}>En savoir plus</button>
   </div>
 </div>
 

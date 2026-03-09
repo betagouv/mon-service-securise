@@ -10,10 +10,15 @@
     annule: null;
   }>();
 
-  export let titreDuRapport: string;
-  export let resume: undefined | ResumeRapportTeleversement;
+  interface Props {
+    titreDuRapport: string;
+    resume: undefined | ResumeRapportTeleversement;
+    tableau_du_rapport?: import('svelte').Snippet;
+  }
 
-  let elementModale: HTMLDialogElement;
+  let { titreDuRapport, resume, tableau_du_rapport }: Props = $props();
+
+  let elementModale: HTMLDialogElement = $state();
 
   onMount(() => {
     elementModale.inert = true;
@@ -27,7 +32,7 @@
   class="dialog-rapport-televersement-generique"
 >
   <div class="conteneur-fermeture">
-    <button on:click={() => dispatch('annule')}>Fermer</button>
+    <button onclick={() => dispatch('annule')}>Fermer</button>
   </div>
   <div class="conteneur-modale">
     <div class="entete-modale">
@@ -66,21 +71,21 @@
     <div class="contenu-modale">
       <h2>Rapport détaillé</h2>
       <div class="conteneur-rapport-detaille">
-        <slot name="tableau-du-rapport" />
+        {@render tableau_du_rapport?.()}
       </div>
     </div>
     <div class="pied-modale">
       <div class="conteneur-actions">
-        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
         <lab-anssi-bouton
           titre="Annuler"
           variante="tertiaire-sans-bordure"
           taille="md"
           positionIcone="sans"
-          on:click={() => dispatch('annule')}
-        />
+          onclick={() => dispatch('annule')}
+        ></lab-anssi-bouton>
 
-        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
         <lab-anssi-bouton
           titre={resume?.statut === 'VALIDE'
             ? resume.labelValiderTeleversement
@@ -89,13 +94,13 @@
           taille="md"
           icone={resume?.statut === 'VALIDE' ? 'check-line' : 'refresh-line'}
           positionIcone="gauche"
-          on:click={() =>
+          onclick={() =>
             dispatch(
               resume?.statut === 'VALIDE'
                 ? 'confirmeTeleversement'
                 : 'retenteTeleversement'
             )}
-        />
+        ></lab-anssi-bouton>
       </div>
     </div>
   </div>
@@ -232,10 +237,10 @@
   }
 
   :global(
-      .dialog-rapport-televersement-generique tr th:last-of-type,
-      .dialog-rapport-televersement-generique tr td:last-of-type,
-      .dialog-rapport-televersement-generique .bordure-droite
-    ) {
+    .dialog-rapport-televersement-generique tr th:last-of-type,
+    .dialog-rapport-televersement-generique tr td:last-of-type,
+    .dialog-rapport-televersement-generique .bordure-droite
+  ) {
     border-right: 1px solid var(--systeme-design-etat-contour-champs);
   }
 

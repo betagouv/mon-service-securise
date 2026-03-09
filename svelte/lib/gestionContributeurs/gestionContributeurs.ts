@@ -5,6 +5,7 @@ import type {
 } from './gestionContributeurs.d';
 import { store } from './gestionContributeurs.store';
 import { donneesServiceVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-contributeurs',
@@ -21,7 +22,7 @@ const rechargeApp = (props: GestionContributeursProps) => {
   app?.$destroy();
   const { modeVisiteGuidee, services } = props;
   reinitialiseStore(modeVisiteGuidee ? [donneesServiceVisiteGuidee] : services);
-  app = new GestionContributeurs({
+  app = mount(GestionContributeurs, {
     target: document.getElementById('conteneur-gestion-contributeurs')!,
     props: { modeVisiteGuidee },
   });

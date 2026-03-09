@@ -1,7 +1,7 @@
 <script lang="ts">
   import Tuile from './Tuile.svelte';
 
-  let elementCarrousel: HTMLDivElement;
+  let elementCarrousel: HTMLDivElement = $state();
 
   const versDirection = (direction: number) => {
     if (elementCarrousel) {
@@ -40,8 +40,8 @@
     />
   </div>
   <div class="conteneur-actions">
-    <button class="precedent" on:click={precedent}>Précédent</button>
-    <button class="suivant" on:click={suivant}>Suivant</button>
+    <button class="precedent" onclick={precedent}>Précédent</button>
+    <button class="suivant" onclick={suivant}>Suivant</button>
   </div>
 </div>
 

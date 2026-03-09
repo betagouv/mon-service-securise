@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import Bouton from '../Bouton.svelte';
   import type {
     EtatTeleversement,
@@ -7,16 +9,26 @@
   import { createEventDispatcher } from 'svelte';
   import Loader from '../Loader.svelte';
 
-  export let etape1: string;
-  export let template: {
-    href: string;
-    nom: string;
-    titre: string;
-    sousTitre: string;
-  };
-  export let apiPostDuTeleversement: string;
-  export let formatAccepte: FormatAccepte;
-  export let lesLimitations: string[] = [];
+  interface Props {
+    etape1: string;
+    template: {
+      href: string;
+      nom: string;
+      titre: string;
+      sousTitre: string;
+    };
+    apiPostDuTeleversement: string;
+    formatAccepte: FormatAccepte;
+    lesLimitations?: string[];
+  }
+
+  let {
+    etape1,
+    template,
+    apiPostDuTeleversement,
+    formatAccepte,
+    lesLimitations = [],
+  }: Props = $props();
 
   const formatteTailleFichier = Intl.NumberFormat('fr-FR', {
     notation: 'compact',
@@ -29,11 +41,11 @@
     televersementChange: EtatTeleversement;
   }>();
 
-  let elementFichier: HTMLInputElement;
-  let fichier: FileList;
-  let enCoursDeDrop = false;
+  let elementFichier: HTMLInputElement = $state();
+  let fichier: FileList = $state();
+  let enCoursDeDrop = $state(false);
 
-  let etatTeleversement: EtatTeleversement = 'EnAttente';
+  let etatTeleversement: EtatTeleversement = $state('EnAttente');
 
   const gereDropFichier = (e: DragEvent) => {
     enCoursDeDrop = false;
@@ -89,9 +101,9 @@
     aria-label="Zone de dépôt pour téléverser un fichier"
     class="conteneur-drag-and-drop"
     class:pret-a-drop={enCoursDeDrop}
-    on:drop|preventDefault={gereDropFichier}
-    on:dragover|preventDefault={(e) => (enCoursDeDrop = true)}
-    on:dragleave={() => (enCoursDeDrop = false)}
+    ondrop={preventDefault(gereDropFichier)}
+    ondragover={preventDefault((e) => (enCoursDeDrop = true))}
+    ondragleave={() => (enCoursDeDrop = false)}
   >
     <img
       src="/statique/assets/images/icone_documents.svg"
@@ -110,7 +122,7 @@
       accept={formatAccepte}
       bind:files={fichier}
       bind:this={elementFichier}
-      on:change={() => gereVerificationFichier()}
+      onchange={() => gereVerificationFichier()}
     />
     <p>ou faites glisser un fichier ici</p>
     <div>
@@ -138,7 +150,7 @@
         />
         <div>
           {#if fichier[0]}
-            <button on:click={supprimeFichierTeleverse}>
+            <button onclick={supprimeFichierTeleverse}>
               <img
                 src="/statique/assets/images/icone_fermeture_modale.svg"
                 alt="Suppression du fichier"

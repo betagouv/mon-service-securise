@@ -33,28 +33,38 @@
     UNIQUEMENT_SERVICES_CHOISIS = 'UNIQUEMENT_SERVICES_CHOISIS',
   }
 
-  export let modeleMesure: ModeleMesureSpecifique;
-  export let statuts: ReferentielStatut;
+  interface Props {
+    modeleMesure: ModeleMesureSpecifique;
+    statuts: ReferentielStatut;
+  }
 
-  let idsServicesSelectionnes: string[] = [];
-  let modeSuppressionSelectionne: ModeDeSuppression = ModeDeSuppression.COMPLET;
-  let enCoursEnvoi = false;
-  let etapeSuppressionSelectionService: 1 | 2 = 1;
+  let { modeleMesure, statuts }: Props = $props();
+
+  let idsServicesSelectionnes: string[] = $state([]);
+  let modeSuppressionSelectionne: ModeDeSuppression = $state(
+    ModeDeSuppression.COMPLET
+  );
+  let enCoursEnvoi = $state(false);
+  let etapeSuppressionSelectionService: 1 | 2 = $state(1);
 
   const predicationDesactivation = (donnee: ServiceAssocie) =>
     !donnee.peutEtreModifie;
 
-  $: servicesAvecMesure = modeleMesure
-    ? $servicesAvecMesuresAssociees
-        .filter((s) => modeleMesure.idsServicesAssocies.includes(s.id))
-        .map(({ mesuresAssociees, mesuresSpecifiques, ...autresDonnees }) => ({
-          ...autresDonnees,
-          mesuresSpecifiques,
-          mesure: mesuresSpecifiques.find(
-            (m) => m.idModele === modeleMesure.id
-          )!,
-        }))
-    : [];
+  let servicesAvecMesure = $derived(
+    modeleMesure
+      ? $servicesAvecMesuresAssociees
+          .filter((s) => modeleMesure.idsServicesAssocies.includes(s.id))
+          .map(
+            ({ mesuresAssociees, mesuresSpecifiques, ...autresDonnees }) => ({
+              ...autresDonnees,
+              mesuresSpecifiques,
+              mesure: mesuresSpecifiques.find(
+                (m) => m.idModele === modeleMesure.id
+              )!,
+            })
+          )
+      : []
+  );
 
   const supprime = async () => {
     enCoursEnvoi = true;
@@ -236,45 +246,45 @@
   </div>
 </ContenuTiroir>
 <ActionsTiroir>
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   <lab-anssi-bouton
     variante="tertiaire-sans-bordure"
     taille="md"
     titre="Annuler"
-    on:click={() => tiroirStore.ferme()}
-  />
+    onclick={() => tiroirStore.ferme()}
+  ></lab-anssi-bouton>
   {#if modeSuppressionSelectionne === ModeDeSuppression.COMPLET || modeSuppressionSelectionne === ModeDeSuppression.UNIQUEMENT_MODELE}
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre="Valider la suppression"
       variante="primaire"
       taille="md"
       icone="delete-line"
       position-icone="gauche"
-      on:click={supprime}
+      onclick={supprime}
       actif={!enCoursEnvoi}
-    />
+    ></lab-anssi-bouton>
   {:else if etapeSuppressionSelectionService === 1}
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre="Valider la suppression"
       variante="primaire"
       taille="md"
       icone="delete-line"
       position-icone="gauche"
-      on:click={() => (etapeSuppressionSelectionService = 2)}
+      onclick={() => (etapeSuppressionSelectionService = 2)}
       actif={idsServicesSelectionnes.length > 0}
-    />
+    ></lab-anssi-bouton>
   {:else}
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre="Confirmer la suppression"
       variante="primaire"
       taille="md"
       icone="delete-line"
       position-icone="gauche"
-      on:click={supprime}
-    />
+      onclick={supprime}
+    ></lab-anssi-bouton>
   {/if}
 </ActionsTiroir>
 

@@ -7,8 +7,12 @@
   import type { PrioriteMesure, ReferentielPriorite } from '../../../ui/types';
   import DesignationMesureActivite from './DesignationMesureActivite.svelte';
 
-  export let activite: ActiviteMesure;
-  export let priorites: ReferentielPriorite;
+  interface Props {
+    activite: ActiviteMesure;
+    priorites: ReferentielPriorite;
+  }
+
+  let { activite, priorites }: Props = $props();
 
   const details = <DetailsMiseAJourPropriete>activite.details;
   const ancienneValeur: PrioriteMesure = <PrioriteMesure>details.ancienneValeur;

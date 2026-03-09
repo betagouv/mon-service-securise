@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { Referentiel } from './types.d';
 
-  export let referentiel: Referentiel;
+  interface Props {
+    referentiel: Referentiel;
+  }
+
+  let { referentiel }: Props = $props();
 </script>
 
 <span class={referentiel.toLowerCase().replaceAll(' ', '-')}>{referentiel}</span

@@ -3,7 +3,11 @@
   import TagEcheanceMesure from '../../../ui/TagEcheanceMesure.svelte';
   import DesignationMesureActivite from './DesignationMesureActivite.svelte';
 
-  export let activite: ActiviteMesure;
+  interface Props {
+    activite: ActiviteMesure;
+  }
+
+  let { activite }: Props = $props();
 
   const details = <DetailsAjoutPropriete>activite.details;
   const echeance = new Date(details.nouvelleValeur);

@@ -1,5 +1,6 @@
 import CreationV2 from './CreationV2.svelte';
 import type { CreationV2Props } from './creationV2.d';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-creation-v2',
@@ -9,7 +10,7 @@ document.body.addEventListener(
 let app: CreationV2;
 const rechargeApp = (props: CreationV2Props) => {
   app?.$destroy();
-  app = new CreationV2({
+  app = mount(CreationV2, {
     target: document.getElementById('creation-v2')!,
     props,
   });

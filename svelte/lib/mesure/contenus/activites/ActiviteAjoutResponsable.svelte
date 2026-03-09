@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import type {
     ActiviteMesure,
     DetailsModificationResponsable,
@@ -6,12 +8,16 @@
   import { contributeurs } from '../../../tableauDesMesures/stores/contributeurs.store';
   import DesignationMesureActivite from './DesignationMesureActivite.svelte';
 
-  export let activite: ActiviteMesure;
+  interface Props {
+    activite: ActiviteMesure;
+  }
+
+  let { activite }: Props = $props();
 
   const details = <DetailsModificationResponsable>activite.details;
   const idResponsable: string = details.valeur;
-  let intitule: string;
-  $: {
+  let intitule: string = $state();
+  run(() => {
     const contributeursTrouves = $contributeurs.filter(
       (c) => c.id === idResponsable
     );
@@ -19,7 +25,7 @@
       contributeursTrouves.length === 0
         ? 'Un·e utilisateur·rice'
         : contributeursTrouves[0].prenomNom;
-  }
+  });
 </script>
 
 <div>

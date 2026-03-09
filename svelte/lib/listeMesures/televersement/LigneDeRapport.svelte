@@ -8,7 +8,11 @@
   import CelluleDonnee from '../../rapportTeleversement/composants/CelluleDonnee.svelte';
   import TooltipErreursMultiple from '../../rapportTeleversement/composants/TooltipErreursMultiple.svelte';
 
-  export let ligne: ModeleTeleverse;
+  interface Props {
+    ligne: ModeleTeleverse;
+  }
+
+  let { ligne }: Props = $props();
 
   const aUneErreur = ligne.erreurs.length > 0;
   const aDesErreurs = ligne.erreurs.length > 1;
@@ -45,7 +49,7 @@
       couleurFond="#f1f5f9"
       couleurTexte="#667892"
       label={ligne.modele.categorie}
-    />
+    ></lab-anssi-tag>
   </CelluleDonnee>
 </tr>
 

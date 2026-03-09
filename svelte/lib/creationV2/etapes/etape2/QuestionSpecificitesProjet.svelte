@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { createEventDispatcher } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import CheckboxIllustree from './CheckboxIllustree.svelte';
@@ -6,7 +8,11 @@
   import type { SpecificiteProjet } from '../../creationV2.types';
   import { leBrouillon } from '../brouillon.store';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
 
   estComplete = true;
 
@@ -21,8 +27,10 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  $: emetEvenement('champModifie', {
-    specificitesProjet: $leBrouillon.specificitesProjet,
+  run(() => {
+    emetEvenement('champModifie', {
+      specificitesProjet: $leBrouillon.specificitesProjet,
+    });
   });
 
   const specificiteProjet = Object.entries(questionsV2.specificiteProjet) as [

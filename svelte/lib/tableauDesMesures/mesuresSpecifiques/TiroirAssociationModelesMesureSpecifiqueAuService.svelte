@@ -21,12 +21,16 @@
     'Sélectionnez des mesures que vous souhaitez ajouter à ce service.';
   export const taille = 'large';
 
-  export let categories: Record<IdCategorie, string>;
-  export let idService: IdService;
+  interface Props {
+    categories: Record<IdCategorie, string>;
+    idService: IdService;
+  }
 
-  let etapeCourante: 1 | 2 = 1;
-  let idsModelesSelectionnes: string[] = [];
-  let enCoursEnvoi = false;
+  let { categories, idService }: Props = $props();
+
+  let etapeCourante: 1 | 2 = $state(1);
+  let idsModelesSelectionnes: string[] = $state([]);
+  let enCoursEnvoi = $state(false);
 
   const itemsFiltrageCategories = Object.entries(categories).map(
     ([id, label]) => ({
@@ -36,22 +40,26 @@
     })
   );
 
-  $: modelesAssociesACeService = $modelesMesureSpecifique.filter((m) =>
-    m.idsServicesAssocies.includes(idService)
+  let modelesAssociesACeService = $derived(
+    $modelesMesureSpecifique.filter((m) =>
+      m.idsServicesAssocies.includes(idService)
+    )
   );
 
   const doitEtreALaFin = (modeleMesure: ModeleMesureSpecifique) =>
     modeleMesure.idsServicesAssocies.includes(idService);
 
-  $: modelesMesureSpecifiqueOrdonnes = $modelesMesureSpecifique.sort((a, b) => {
-    if (
-      (doitEtreALaFin(a) && doitEtreALaFin(b)) ||
-      (!doitEtreALaFin(a) && !doitEtreALaFin(b))
-    ) {
-      return 0;
-    }
-    return doitEtreALaFin(a) ? 1 : -1;
-  });
+  let modelesMesureSpecifiqueOrdonnes = $derived(
+    $modelesMesureSpecifique.sort((a, b) => {
+      if (
+        (doitEtreALaFin(a) && doitEtreALaFin(b)) ||
+        (!doitEtreALaFin(a) && !doitEtreALaFin(b))
+      ) {
+        return 0;
+      }
+      return doitEtreALaFin(a) ? 1 : -1;
+    })
+  );
 
   const associeModeles = async () => {
     enCoursEnvoi = true;
@@ -149,7 +157,7 @@
         preSelectionImmuable={modelesAssociesACeService.map((m) => m.id)}
         bind:selection={idsModelesSelectionnes}
       >
-        <svelte:fragment slot="cellule" let:donnee let:colonne>
+        {#snippet cellule({ donnee, colonne })}
           {@const { description, descriptionLongue, categorie } = donnee}
           {@const desactive = donnee.idsServicesAssocies.includes(idService)}
           {#if colonne.cle === 'description'}
@@ -168,7 +176,7 @@
               <CartoucheCategorieMesure {categorie} />
             </div>
           {/if}
-        </svelte:fragment>
+        {/snippet}
       </Tableau>
     {/if}
   {:else}
@@ -185,8 +193,8 @@
     </div>
     <SeparateurHorizontal />
     <h4>
-      {idsModelesSelectionnes.length} mesure{pluralise} concernée{pluralise} par
-      cette modification
+      {idsModelesSelectionnes.length} mesure{pluralise} concernée{pluralise} par cette
+      modification
     </h4>
     <Tableau
       colonnes={[
@@ -198,7 +206,7 @@
         idsModelesSelectionnes.includes(m.id)
       )}
     >
-      <svelte:fragment slot="cellule" let:donnee let:colonne>
+      {#snippet cellule({ donnee, colonne })}
         {@const { description, descriptionLongue, categorie } = donnee}
         {#if colonne.cle === 'description'}
           <b>{description}</b>
@@ -207,20 +215,20 @@
         {:else if colonne.cle === 'categorie'}
           <CartoucheCategorieMesure {categorie} />
         {/if}
-      </svelte:fragment>
+      {/snippet}
     </Tableau>
   {/if}
 </ContenuTiroir>
 <ActionsTiroir>
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   <lab-anssi-bouton
     variante="tertiaire-sans-bordure"
     taille="md"
     titre="Annuler"
-    on:click={() => tiroirStore.ferme()}
-  />
+    onclick={() => tiroirStore.ferme()}
+  ></lab-anssi-bouton>
   {#if etapeCourante === 1}
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       variante="primaire"
       taille="md"
@@ -229,18 +237,18 @@
       } à mon service`}
       icone="add-line"
       position-icone="gauche"
-      on:click={() => (etapeCourante = 2)}
+      onclick={() => (etapeCourante = 2)}
       actif={idsModelesSelectionnes.length > 0}
-    />
+    ></lab-anssi-bouton>
   {:else}
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       variante="primaire"
       taille="md"
       titre="Valider les modifications"
-      on:click={associeModeles}
+      onclick={associeModeles}
       disabled={enCoursEnvoi}
-    />
+    ></lab-anssi-bouton>
   {/if}
 </ActionsTiroir>
 

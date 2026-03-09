@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import type { ListeMesuresProps } from '../../listeMesures.d';
   import ContenuTiroir from '../../../ui/tiroirs/ContenuTiroir.svelte';
   import Onglets from '../../../ui/Onglets.svelte';
@@ -35,15 +37,11 @@
     'Le statut et la précision de cette mesure peuvent être modifiés et appliqués simultanément à plusieurs services.';
   export const taille = 'large';
 
-  export let statuts: ReferentielStatut;
-  export let categories: ListeMesuresProps['categories'];
-  export let modeleMesure: ModeleMesureSpecifique;
-  export let referentielTypesService: ReferentielTypesService;
-  let idsServicesSelectionnes: string[] = [];
+  let idsServicesSelectionnes: string[] = $state([]);
 
-  let etapeStatutEtPrecision: 1 | 2 | 3 = 1;
-  let etapeServicesAssocies: 1 | 2 = 1;
-  let etapeInformations: 1 | 2 = 1;
+  let etapeStatutEtPrecision: 1 | 2 | 3 = $state(1);
+  let etapeServicesAssocies: 1 | 2 = $state(1);
+  let etapeInformations: 1 | 2 = $state(1);
 
   const metEnAvantMesureApresModification = () => {
     modaleRapportStore.metEnAvantMesureApresModification(modeleMesure.id);
@@ -80,41 +78,58 @@
     }
   };
 
-  export let ongletActif: 'info' | 'servicesAssocies' | 'statut-precision' =
-    'servicesAssocies';
+  interface Props {
+    statuts: ReferentielStatut;
+    categories: ListeMesuresProps['categories'];
+    modeleMesure: ModeleMesureSpecifique;
+    referentielTypesService: ReferentielTypesService;
+    ongletActif?: 'info' | 'servicesAssocies' | 'statut-precision';
+  }
 
-  let donneesModeleMesureEdite = structuredClone(modeleMesure);
-  $: mesureAEteEditee =
+  let {
+    statuts,
+    categories,
+    modeleMesure = $bindable(),
+    referentielTypesService,
+    ongletActif = $bindable('servicesAssocies'),
+  }: Props = $props();
+
+  let donneesModeleMesureEdite = $state(structuredClone(modeleMesure));
+  let mesureAEteEditee = $derived(
     modeleMesure.description !== donneesModeleMesureEdite.description ||
-    modeleMesure.descriptionLongue !==
-      donneesModeleMesureEdite.descriptionLongue ||
-    modeleMesure.categorie !== donneesModeleMesureEdite.categorie;
+      modeleMesure.descriptionLongue !==
+        donneesModeleMesureEdite.descriptionLongue ||
+      modeleMesure.categorie !== donneesModeleMesureEdite.categorie
+  );
 
-  $: formulaireValide =
+  let formulaireValide = $derived(
     !!donneesModeleMesureEdite.description &&
-    !!donneesModeleMesureEdite.categorie;
+      !!donneesModeleMesureEdite.categorie
+  );
 
-  let servicesAssocies: ServiceAssocie[] = [];
-  $: servicesAssocies =
-    modeleMesure &&
-    $servicesAvecMesuresAssociees
-      .filter((s) => modeleMesure.idsServicesAssocies.includes(s.id))
-      .map((s) => {
-        const mesureSpecifique = s!.mesuresSpecifiques.find(
-          (ms) => ms.idModele === modeleMesure.id
-        );
-        return {
-          ...s,
-          mesure: {
-            statut: mesureSpecifique?.statut,
-            modalites: mesureSpecifique?.modalites,
-          },
-        };
-      });
+  let servicesAssocies: ServiceAssocie[] = $state([]);
+  run(() => {
+    servicesAssocies =
+      modeleMesure &&
+      $servicesAvecMesuresAssociees
+        .filter((s) => modeleMesure.idsServicesAssocies.includes(s.id))
+        .map((s) => {
+          const mesureSpecifique = s!.mesuresSpecifiques.find(
+            (ms) => ms.idModele === modeleMesure.id
+          );
+          return {
+            ...s,
+            mesure: {
+              statut: mesureSpecifique?.statut,
+              modalites: mesureSpecifique?.modalites,
+            },
+          };
+        });
+  });
 
-  let enCoursDenvoi = false;
+  let enCoursDenvoi = $state(false);
 
-  let boutonSuivantActif = false;
+  let boutonSuivantActif = $state(false);
 
   const associeServices = async () => {
     enCoursDenvoi = true;
@@ -170,15 +185,16 @@
     }
   };
 
-  $: {
+  run(() => {
     if (ongletActif) {
       etapeServicesAssocies = 1;
       etapeStatutEtPrecision = 1;
       etapeInformations = 1;
     }
-  }
+  });
 
-  let elementEtapesModification: EtapesModificationMultipleStatutPrecision;
+  let elementEtapesModification: EtapesModificationMultipleStatutPrecision =
+    $state();
 </script>
 
 <ContenuTiroir>
@@ -263,37 +279,37 @@
 </ContenuTiroir>
 <ActionsTiroir>
   {#if ongletActif === 'servicesAssocies'}
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       variante="tertiaire-sans-bordure"
       taille="md"
       titre="Annuler"
-      on:click={() => tiroirStore.ferme()}
-    />
+      onclick={() => tiroirStore.ferme()}
+    ></lab-anssi-bouton>
   {/if}
   {#if ongletActif === 'info'}
     {#if etapeInformations === 1}
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
         variante="tertiaire-sans-bordure"
         taille="md"
         titre="Supprimer la mesure"
         icone="delete-line"
         position-icone="gauche"
-        on:click={() =>
+        onclick={() =>
           tiroirStore.afficheContenu(TiroirSuppressionModeleMesureSpecifique, {
             statuts,
             modeleMesure,
           })}
-      />
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      ></lab-anssi-bouton>
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
         titre="Enregistrer les modifications"
         variante="primaire"
         taille="md"
         icone="save-line"
         position-icone="gauche"
-        on:click={async () => {
+        onclick={async () => {
           if (servicesAssocies.length === 0) {
             await sauvegardeInformations();
           } else {
@@ -301,23 +317,23 @@
           }
         }}
         actif={formulaireValide && mesureAEteEditee}
-      />
+      ></lab-anssi-bouton>
     {:else}
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
         variante="tertiaire-sans-bordure"
         taille="md"
         titre="Annuler"
-        on:click={() => tiroirStore.ferme()}
-      />
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+        onclick={() => tiroirStore.ferme()}
+      ></lab-anssi-bouton>
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
         titre="Valider les modifications"
         variante="primaire"
         taille="md"
-        on:click={async () => await sauvegardeInformations()}
+        onclick={async () => await sauvegardeInformations()}
         actif={!enCoursDenvoi}
-      />
+      ></lab-anssi-bouton>
     {/if}
   {:else if ongletActif === 'statut-precision'}
     {#if etapeStatutEtPrecision === 1}
@@ -344,25 +360,25 @@
     />
   {:else if ongletActif === 'servicesAssocies'}
     {#if etapeServicesAssocies === 1}
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
         titre="Enregistrer les modifications"
         variante="primaire"
         taille="md"
         icone="save-line"
         position-icone="gauche"
-        on:click={() => (etapeServicesAssocies = 2)}
+        onclick={() => (etapeServicesAssocies = 2)}
         actif={idsServicesSelectionnes.length > 0}
-      />
+      ></lab-anssi-bouton>
     {:else if etapeServicesAssocies === 2}
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
         titre="Valider les modifications"
         variante="primaire"
         taille="md"
-        on:click={async () => await associeServices()}
+        onclick={async () => await associeServices()}
         actif={!enCoursDenvoi}
-      />
+      ></lab-anssi-bouton>
     {/if}
   {/if}
 </ActionsTiroir>

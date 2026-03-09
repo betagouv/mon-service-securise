@@ -1,12 +1,19 @@
 <script lang="ts">
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import type { Contributeur } from '../../tableauDesMesures/tableauDesMesures.d';
   import Initiales from '../../ui/Initiales.svelte';
   import { storeAutorisations } from '../../gestionContributeurs/stores/autorisations.store';
 
-  export let items: Contributeur[];
-  export let callback: (c: Contributeur) => void;
+  interface Props {
+    items: Contributeur[];
+    callback: (c: Contributeur) => void;
+  }
 
-  let activeIdx = 0;
+  let { items, callback }: Props = $props();
+
+  let activeIdx = $state(0);
 
   export function onKeyDown(event: KeyboardEvent) {
     if (event.repeat) {
@@ -42,12 +49,12 @@
       <div
         class:active={i === activeIdx}
         class="contenu-nom-prenom"
-        on:click={() => callback(contributeur)}
-        on:keypress
+        onclick={() => callback(contributeur)}
+        onkeypress={bubble('keypress')}
         role="button"
         tabindex="0"
-        on:mouseover={() => survol(i)}
-        on:focus
+        onmouseover={() => survol(i)}
+        onfocus={bubble('focus')}
       >
         <Initiales
           valeur={contributeur.initiales}

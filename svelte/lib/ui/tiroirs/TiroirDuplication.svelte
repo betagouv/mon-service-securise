@@ -8,14 +8,18 @@
   import Lien from '../Lien.svelte';
   import type { Service } from '../../tableauDeBord/tableauDeBord.d';
 
-  export let service: Service;
+  interface Props {
+    service: Service;
+  }
+
+  let { service }: Props = $props();
   export const titre = 'Dupliquer';
   export const sousTitre =
     "Créer une ou plusieurs copies du services sélectionné. Cette copie n'inclut pas les données concernant son homologation.";
 
-  let nombreCopies: number = 1;
-  let enCoursEnvoi = false;
-  let enErreur = false;
+  let nombreCopies: number = $state(1);
+  let enCoursEnvoi = $state(false);
+  let enErreur = $state(false);
   const dupliqueService = async () => {
     enCoursEnvoi = true;
     const uneCopie = () =>

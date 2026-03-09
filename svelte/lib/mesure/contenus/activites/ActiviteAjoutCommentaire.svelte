@@ -3,7 +3,11 @@
   import type { ActiviteMesure, DetailsAjoutCommentaire } from '../../mesure.d';
   import { contributeurs } from '../../../tableauDesMesures/stores/contributeurs.store';
 
-  export let activite: ActiviteMesure;
+  interface Props {
+    activite: ActiviteMesure;
+  }
+
+  let { activite }: Props = $props();
   const details = <DetailsAjoutCommentaire>activite.details;
 
   const regexUUID =

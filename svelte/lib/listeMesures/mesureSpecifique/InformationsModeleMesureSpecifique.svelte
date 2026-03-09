@@ -9,8 +9,12 @@
     categorie: string;
   };
 
-  export let donneesModeleMesure: InformationModeleMesure;
-  export let categories: ListeMesuresProps['categories'];
+  interface Props {
+    donneesModeleMesure: InformationModeleMesure;
+    categories: ListeMesuresProps['categories'];
+  }
+
+  let { donneesModeleMesure = $bindable(), categories }: Props = $props();
 </script>
 
 <h3>Modifier les informations de la mesure</h3>

@@ -1,10 +1,22 @@
 <script lang="ts">
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import type { IdentifiantGravite, ReferentielGravites } from './risques.d';
 
-  export let niveauGravite: IdentifiantGravite;
-  export let referentielGravites: ReferentielGravites;
-  export let estLectureSeule: boolean | undefined;
-  export let avecLibelleOption: boolean = false;
+  interface Props {
+    niveauGravite: IdentifiantGravite;
+    referentielGravites: ReferentielGravites;
+    estLectureSeule: boolean | undefined;
+    avecLibelleOption?: boolean;
+  }
+
+  let {
+    niveauGravite = $bindable(),
+    referentielGravites,
+    estLectureSeule,
+    avecLibelleOption = false,
+  }: Props = $props();
 </script>
 
 <div class="conteneur-gravite">
@@ -14,18 +26,18 @@
     class:avecLibelleOption
     bind:value={niveauGravite}
     disabled={estLectureSeule}
-    on:change
+    onchange={bubble('change')}
   >
     <option
       label={avecLibelleOption ? 'Définir la gravité' : '+'}
       value=""
       disabled
-    />
+    ></option>
     {#each Object.entries(referentielGravites) as [id, niveau] (id)}
       <option
         label={`${niveau.position.toString()} - ${niveau.description}`}
         value={id}
-      />
+      ></option>
     {/each}
   </select>
 </div>
@@ -59,11 +71,11 @@
     border: none;
   }
 
-  .conteneur-gravite:has(select.avecLibelleOption) {
+  .conteneur-gravite:has(:global(select.avecLibelleOption)) {
     --couleur-option: white;
   }
 
-  .conteneur-gravite:has(select.avecLibelleOption.vide) {
+  .conteneur-gravite:has(:global(select.avecLibelleOption.vide)) {
     --couleur-option: var(--liseres-fonce);
   }
 

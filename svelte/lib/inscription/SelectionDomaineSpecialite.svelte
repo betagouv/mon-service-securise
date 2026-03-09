@@ -1,16 +1,28 @@
 <script lang="ts">
+  import {
+    run,
+    createBubbler,
+    preventDefault,
+    stopPropagation,
+  } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import MenuFlottant from '../ui/MenuFlottant.svelte';
   import ChampTexte from '../ui/ChampTexte.svelte';
   import ControleFormulaire from '../ui/ControleFormulaire.svelte';
   import { validationChamp } from '../directives/validationChamp';
   import { tick } from 'svelte';
 
-  export let valeurs: string[];
-  export let requis: boolean = false;
-  export let id: string = '';
-  let menu: MenuFlottant;
-  let autreDomaine: string = '';
-  let champDeclencheur: HTMLInputElement;
+  interface Props {
+    valeurs: string[];
+    requis?: boolean;
+    id?: string;
+  }
+
+  let { valeurs = $bindable(), requis = false, id = '' }: Props = $props();
+  let menu: MenuFlottant = $state();
+  let autreDomaine: string = $state('');
+  let champDeclencheur: HTMLInputElement = $state();
 
   if (!valeurs) valeurs = [];
 
@@ -26,31 +38,36 @@
   ];
   const idsDesDomaines = domaines.map((f) => f.id);
 
-  let selection: string[] = valeurs.filter((v) => idsDesDomaines.includes(v));
+  let selection: string[] = $state(
+    valeurs.filter((v) => idsDesDomaines.includes(v))
+  );
   const autreValeur = valeurs.find((v) => !idsDesDomaines.includes(v));
   if (autreValeur) {
     selection.push('autre');
     autreDomaine = autreValeur;
   }
 
-  $: label = selection
-    .map((id) => domaines.find((f) => f.id === id)?.libelle)
-    .join(', ');
+  let label = $derived(
+    selection.map((id) => domaines.find((f) => f.id === id)?.libelle).join(', ')
+  );
 
-  $: {
+  run(() => {
     if (label) {
       tick().then(() => champDeclencheur.dispatchEvent(new Event('input')));
     }
-  }
+  });
 
-  $: labelRappelDeclencheur =
-    selection.length === 0 ? 'Sélectionner un domaine de spécialité' : label;
+  let labelRappelDeclencheur = $derived(
+    selection.length === 0 ? 'Sélectionner un domaine de spécialité' : label
+  );
 
-  $: afficheAutre = selection.includes('autre');
-  $: valeurs = [
-    ...selection.filter((f) => f !== 'autre'),
-    ...(afficheAutre ? [autreDomaine] : ''),
-  ];
+  let afficheAutre = $derived(selection.includes('autre'));
+  run(() => {
+    valeurs = [
+      ...selection.filter((f) => f !== 'autre'),
+      ...(afficheAutre ? [autreDomaine] : ''),
+    ];
+  });
 
   const refermeMenu = () => menu.fermeLeMenu();
 </script>
@@ -61,29 +78,31 @@
     parDessusDeclencheur={true}
     classePersonnalisee="selection-domaine"
   >
-    <div slot="declencheur" class="avec-fleche">
-      <input
-        {id}
-        type="text"
-        role="button"
-        placeholder="Sélectionner un domaine de spécialité"
-        class="bouton bouton-secondaire contenu-declencheur"
-        class:complete={selection.length > 0}
-        bind:value={label}
-        required
-        use:validationChamp={requis
-          ? 'Le domaine est obligatoire. Veuillez le renseigner.'
-          : ''}
-        bind:this={champDeclencheur}
-      />
-    </div>
+    {#snippet declencheur()}
+      <div class="avec-fleche">
+        <input
+          {id}
+          type="text"
+          role="button"
+          placeholder="Sélectionner un domaine de spécialité"
+          class="bouton bouton-secondaire contenu-declencheur"
+          class:complete={selection.length > 0}
+          bind:value={label}
+          required
+          use:validationChamp={requis
+            ? 'Le domaine est obligatoire. Veuillez le renseigner.'
+            : ''}
+          bind:this={champDeclencheur}
+        />
+      </div>
+    {/snippet}
     <div class="domaines">
       <div
         role="button"
         tabindex="0"
-        on:keypress
+        onkeypress={bubble('keypress')}
         class="rappel-declencheur contenu-declencheur"
-        on:click|stopPropagation|preventDefault={refermeMenu}
+        onclick={stopPropagation(preventDefault(refermeMenu))}
       >
         {labelRappelDeclencheur}
       </div>

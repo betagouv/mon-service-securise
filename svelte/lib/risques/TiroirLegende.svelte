@@ -1,7 +1,17 @@
 <script lang="ts">
-  export let ouvert: boolean;
-  export let titre = '';
-  export let sousTitre = '';
+  interface Props {
+    ouvert: boolean;
+    titre?: string;
+    sousTitre?: string;
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    ouvert = $bindable(),
+    titre = '',
+    sousTitre = '',
+    children,
+  }: Props = $props();
 
   const fermeTiroir = () => {
     ouvert = false;
@@ -13,11 +23,11 @@
     <div>
       <h2 class="titre-tiroir-legende">{titre}</h2>
     </div>
-    <button class="fermeture" on:click={fermeTiroir}>✕</button>
+    <button class="fermeture" onclick={fermeTiroir}>✕</button>
   </div>
   <div class="contenu-legende">
     <h3>{sousTitre}</h3>
-    <slot />
+    {@render children?.()}
   </div>
 </div>
 

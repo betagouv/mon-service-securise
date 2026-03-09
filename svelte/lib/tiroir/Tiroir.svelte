@@ -4,7 +4,7 @@
     tiroirStore,
   } from '../ui/stores/tiroir.store';
 
-  let composant: ConfigurationTiroir;
+  let composant: ConfigurationTiroir = $state();
 </script>
 
 <div
@@ -15,7 +15,7 @@
   {#key $tiroirStore}
     {#if $tiroirStore.contenu}
       <div class="entete-tiroir">
-        <button class="fermeture-tiroir" on:click={() => tiroirStore.ferme()}>
+        <button class="fermeture-tiroir" onclick={() => tiroirStore.ferme()}>
           Fermer
         </button>
         <h2 class="titre-tiroir">{composant?.titre}</h2>
@@ -23,11 +23,8 @@
           {composant?.sousTitre}
         </p>
       </div>
-      <svelte:component
-        this={$tiroirStore.contenu.composant}
-        bind:this={composant}
-        {...$tiroirStore.contenu.props}
-      />
+      {@const SvelteComponent = $tiroirStore.contenu.composant}
+      <SvelteComponent bind:this={composant} {...$tiroirStore.contenu.props} />
     {/if}
   {/key}
 </div>

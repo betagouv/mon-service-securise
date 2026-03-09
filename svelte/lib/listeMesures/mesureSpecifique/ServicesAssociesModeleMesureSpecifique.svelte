@@ -11,18 +11,27 @@
   import { referentielNiveauxSecurite } from '../../ui/referentielNiveauxSecurite';
   import SeparateurHorizontal from '../../ui/SeparateurHorizontal.svelte';
 
-  export let modeleMesure: ModeleMesureSpecifique;
-  export let referentielTypesService: ReferentielTypesService;
-  export let idsServicesSelectionnes: string[];
+  interface Props {
+    modeleMesure: ModeleMesureSpecifique;
+    referentielTypesService: ReferentielTypesService;
+    idsServicesSelectionnes: string[];
+    etapeActive: 1 | 2;
+  }
 
-  export let etapeActive: 1 | 2;
+  let {
+    modeleMesure,
+    referentielTypesService,
+    idsServicesSelectionnes = $bindable(),
+    etapeActive,
+  }: Props = $props();
 
-  $: configurationRecherche =
+  let configurationRecherche = $derived(
     etapeActive === 1
       ? {
           champsRecherche: ['nomService', 'organisationResponsable'],
         }
-      : null;
+      : null
+  );
 
   const optionsFiltrage = {
     categories: [
@@ -45,9 +54,10 @@
     ],
   };
 
-  $: configurationFiltrage =
-    etapeActive === 1 ? { options: optionsFiltrage } : null;
-  $: configurationSelection =
+  let configurationFiltrage = $derived(
+    etapeActive === 1 ? { options: optionsFiltrage } : null
+  );
+  let configurationSelection = $derived(
     etapeActive === 1
       ? {
           texteIndicatif: {
@@ -59,14 +69,15 @@
           predicatSelectionDesactive: (donnee: ServiceAvecMesuresAssociees) =>
             modeleMesure!.idsServicesAssocies.includes(donnee.id),
         }
-      : null;
+      : null
+  );
 
   const doitEtreALaFin = (service: ServiceAvecMesuresAssociees) =>
     !service.peutEtreModifie ||
     modeleMesure.idsServicesAssocies.includes(service.id);
 
-  $: servicesAvecMesuresAssocieesOrdonnes = $servicesAvecMesuresAssociees.sort(
-    (a, b) => {
+  let servicesAvecMesuresAssocieesOrdonnes = $derived(
+    $servicesAvecMesuresAssociees.sort((a, b) => {
       if (
         (doitEtreALaFin(a) && doitEtreALaFin(b)) ||
         (!doitEtreALaFin(a) && !doitEtreALaFin(b))
@@ -74,7 +85,7 @@
         return a.nomService.localeCompare(b.nomService);
       }
       return doitEtreALaFin(a) ? 1 : -1;
-    }
+    })
   );
 </script>
 
@@ -128,7 +139,7 @@
   bind:selection={idsServicesSelectionnes}
   preSelectionImmuable={modeleMesure.idsServicesAssocies}
 >
-  <svelte:fragment slot="cellule" let:donnee let:colonne>
+  {#snippet cellule({ donnee, colonne })}
     {@const desactive = donnee.mesuresSpecifiques.some(
       (mesure) => mesure.idModele === modeleMesure.id
     )}
@@ -165,7 +176,7 @@
         </div>
       </div>
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </Tableau>
 
 <style lang="scss">

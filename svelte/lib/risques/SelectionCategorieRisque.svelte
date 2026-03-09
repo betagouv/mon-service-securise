@@ -1,15 +1,32 @@
 <script lang="ts">
+  import {
+    run,
+    createBubbler,
+    preventDefault,
+    stopPropagation,
+  } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import MenuFlottant from '../ui/MenuFlottant.svelte';
   import { validationChamp } from '../directives/validationChamp';
   import { tick } from 'svelte';
   import type { ReferentielCategories } from './risques.d';
 
-  export let valeurs: string[];
-  export let requis: boolean = false;
-  export let id: string = '';
-  export let referentielCategories: ReferentielCategories;
-  let menu: MenuFlottant;
-  let champDeclencheur: HTMLInputElement;
+  interface Props {
+    valeurs: string[];
+    requis?: boolean;
+    id?: string;
+    referentielCategories: ReferentielCategories;
+  }
+
+  let {
+    valeurs = $bindable(),
+    requis = false,
+    id = '',
+    referentielCategories,
+  }: Props = $props();
+  let menu: MenuFlottant = $state();
+  let champDeclencheur: HTMLInputElement = $state();
 
   if (!valeurs) valeurs = [];
 
@@ -18,18 +35,19 @@
     libelle: referentielCategories[id],
   }));
 
-  $: label = valeurs
-    .map((id) => categories.find((f) => f.id === id)?.libelle)
-    .join(', ');
+  let label = $derived(
+    valeurs.map((id) => categories.find((f) => f.id === id)?.libelle).join(', ')
+  );
 
-  $: {
+  run(() => {
     if (label) {
       tick().then(() => champDeclencheur.dispatchEvent(new Event('input')));
     }
-  }
+  });
 
-  $: labelRappelDeclencheur =
-    valeurs.length === 0 ? 'Définir la/les catégorie·s' : label;
+  let labelRappelDeclencheur = $derived(
+    valeurs.length === 0 ? 'Définir la/les catégorie·s' : label
+  );
 
   const refermeMenu = () => menu.fermeLeMenu();
 </script>
@@ -40,29 +58,31 @@
     parDessusDeclencheur={true}
     classePersonnalisee="selection-categorie"
   >
-    <div slot="declencheur" class="avec-fleche">
-      <input
-        {id}
-        type="text"
-        role="button"
-        placeholder="Définir la/les catégorie·s"
-        class="bouton bouton-secondaire contenu-declencheur"
-        class:complete={valeurs.length > 0}
-        bind:value={label}
-        required
-        use:validationChamp={requis
-          ? 'La catégorie est obligatoire. Veuillez la renseigner.'
-          : ''}
-        bind:this={champDeclencheur}
-      />
-    </div>
+    {#snippet declencheur()}
+      <div class="avec-fleche">
+        <input
+          {id}
+          type="text"
+          role="button"
+          placeholder="Définir la/les catégorie·s"
+          class="bouton bouton-secondaire contenu-declencheur"
+          class:complete={valeurs.length > 0}
+          bind:value={label}
+          required
+          use:validationChamp={requis
+            ? 'La catégorie est obligatoire. Veuillez la renseigner.'
+            : ''}
+          bind:this={champDeclencheur}
+        />
+      </div>
+    {/snippet}
     <div class="categories">
       <div
         role="button"
         tabindex="0"
-        on:keypress
+        onkeypress={bubble('keypress')}
         class="rappel-declencheur contenu-declencheur"
-        on:click|stopPropagation|preventDefault={refermeMenu}
+        onclick={stopPropagation(preventDefault(refermeMenu))}
       >
         {labelRappelDeclencheur}
       </div>

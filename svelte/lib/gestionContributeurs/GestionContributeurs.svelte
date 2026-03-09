@@ -8,11 +8,15 @@
   import { autorisationsVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
   import { storeAutorisations } from './stores/autorisations.store';
 
-  export let modeVisiteGuidee: boolean;
+  interface Props {
+    modeVisiteGuidee: boolean;
+  }
 
-  $: surServiceUnique = $store.services.length === 1;
-  $: serviceUnique = $store.services[0];
-  $: contributeurs = serviceUnique.contributeurs;
+  let { modeVisiteGuidee }: Props = $props();
+
+  let surServiceUnique = $derived($store.services.length === 1);
+  let serviceUnique = $derived($store.services[0]);
+  let contributeurs = $derived(serviceUnique.contributeurs);
 
   onMount(async () => {
     if (modeVisiteGuidee) storeAutorisations.charge(autorisationsVisiteGuidee);

@@ -1,6 +1,10 @@
 <script lang="ts">
-  export let score: number;
-  export let idService: string;
+  interface Props {
+    score: number;
+    idService: string;
+  }
+
+  let { score, idService }: Props = $props();
 
   const couleurs = ['rose', 'violet', 'marine', 'bleu', 'turquoise', 'or'];
   const couleur = couleurs[Math.floor(score)];

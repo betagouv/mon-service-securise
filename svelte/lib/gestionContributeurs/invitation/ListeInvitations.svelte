@@ -13,7 +13,11 @@
   import type { ResumeNiveauDroit } from '../../ui/types';
   import BoutonSuppressionContributeur from '../../ui/BoutonSuppressionContributeur.svelte';
 
-  export let invitations: Invitation[];
+  interface Props {
+    invitations: Invitation[];
+  }
+
+  let { invitations }: Props = $props();
   const dispatch = createEventDispatcher<{
     droitsChange: Invitation;
     choixPersonnalisation: Utilisateur;

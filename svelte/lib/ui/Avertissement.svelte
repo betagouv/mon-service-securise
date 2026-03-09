@@ -1,12 +1,25 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import { glisse } from '../ui/animations/transitions';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
-  export let niveau: 'info' | 'avertissement' = 'info';
-  export let avecBoutonFermeture: boolean = false;
-  export let id: string | undefined = undefined;
-  export let classeSupplementaire: string = '';
+  interface Props {
+    niveau?: 'info' | 'avertissement';
+    avecBoutonFermeture?: boolean;
+    id?: string | undefined;
+    classeSupplementaire?: string;
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    niveau = 'info',
+    avecBoutonFermeture = false,
+    id = undefined,
+    classeSupplementaire = '',
+    children,
+  }: Props = $props();
 </script>
 
 <div
@@ -18,7 +31,7 @@
     <button
       class="fermeture-avertissement"
       type="button"
-      on:click|preventDefault={() => dispatch('fermeture')}
+      onclick={preventDefault(() => dispatch('fermeture'))}
       >×
     </button>
   {/if}
@@ -31,7 +44,7 @@
     <img src="/statique/assets/images/icone_danger.svg" alt="Icône de danger" />
   {/if}
   <div class="contenu-avertissement">
-    <slot />
+    {@render children?.()}
   </div>
 </div>
 

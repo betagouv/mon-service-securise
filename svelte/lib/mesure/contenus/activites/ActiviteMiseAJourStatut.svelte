@@ -8,8 +8,12 @@
   import TagStatutMesure from '../../../ui/TagStatutMesure.svelte';
   import DesignationMesureActivite from './DesignationMesureActivite.svelte';
 
-  export let activite: ActiviteMesure;
-  export let statuts: ReferentielStatut;
+  interface Props {
+    activite: ActiviteMesure;
+    statuts: ReferentielStatut;
+  }
+
+  let { activite, statuts }: Props = $props();
 
   const details = <DetailsMiseAJourPropriete>activite.details;
   const ancienStatut = <StatutMesure>details.ancienneValeur;

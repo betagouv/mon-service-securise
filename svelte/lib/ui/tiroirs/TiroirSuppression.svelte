@@ -12,7 +12,11 @@
   import ChampTexte from '../ChampTexte.svelte';
   import type { ServiceOuBrouillon } from '../../tableauDeBord/ActionsDesServices.svelte';
 
-  export let servicesEtBrouillon: ServiceOuBrouillon[];
+  interface Props {
+    servicesEtBrouillon: ServiceOuBrouillon[];
+  }
+
+  let { servicesEtBrouillon }: Props = $props();
   export const titre = 'Supprimer';
   export const sousTitre =
     servicesEtBrouillon.length > 1
@@ -28,9 +32,9 @@
       ? `les ${servicesEtBrouillon.length} services séléctionnés`
       : `le service ${servicesEtBrouillon[0].nomService}`;
 
-  let confirmation = '';
+  let confirmation = $state('');
 
-  let enCoursEnvoi = false;
+  let enCoursEnvoi = $state(false);
   const supprimeService = async () => {
     enCoursEnvoi = true;
 
@@ -84,8 +88,8 @@
         <span>
           <b>Cette action est irréversible</b>
           <br />
-          Les données seront définitivement effacées. Les contributeurs n'auront
-          plus accès à ce service.
+          Les données seront définitivement effacées. Les contributeurs n'auront plus
+          accès à ce service.
         </span>
       </Avertissement>
       <Avertissement>

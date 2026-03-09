@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import MenuFlottant from '../../ui/MenuFlottant.svelte';
   import type { IdCategorie } from '../tableauDesMesures.d';
   import { nombreResultats } from '../stores/nombreDeResultats.store';
@@ -20,17 +22,22 @@
   import type { VersionService } from '../../../../src/modeles/versionService';
   import { rechercheParPartieResponsable } from '../stores/rechercheParPartieResponsable.store';
 
-  export let categories: Record<IdCategorie, string>;
-  export let priorites: ReferentielPriorite;
-  export let versionService: VersionService;
+  interface Props {
+    categories: Record<IdCategorie, string>;
+    priorites: ReferentielPriorite;
+    versionService: VersionService;
+  }
+
+  let { categories, priorites, versionService }: Props = $props();
 
   const declenche = createEventDispatcher<{ supprimeFiltres: null }>();
 
-  $: cocheGlobaleANSSI =
+  let cocheGlobaleANSSI = $derived(
     $rechercheParReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
-    $rechercheParReferentiel.includes(IdReferentiel.ANSSIIndispensable);
-  let selectionPartielleANSSI: boolean;
-  $: {
+      $rechercheParReferentiel.includes(IdReferentiel.ANSSIIndispensable)
+  );
+  let selectionPartielleANSSI: boolean = $state();
+  run(() => {
     const estRecommandee = $rechercheParReferentiel.includes(
       IdReferentiel.ANSSIRecommandee
     );
@@ -40,7 +47,7 @@
     selectionPartielleANSSI = estRecommandee
       ? !estIndispensable
       : estIndispensable;
-  }
+  });
   const gereCocheANSSI = () => {
     const devientCochee = !cocheGlobaleANSSI;
     if (devientCochee) rechercheParReferentiel.ajouteLesReferentielsANSSI();
@@ -49,11 +56,13 @@
 </script>
 
 <MenuFlottant parDessusDeclencheur={true}>
-  <div slot="declencheur">
-    <button class="bouton bouton-secondaire bouton-filtre">
-      <IconeFiltre filtresActifs={$nombreResultats.aDesFiltresAppliques} />
-    </button>
-  </div>
+  {#snippet declencheur()}
+    <div>
+      <button class="bouton bouton-secondaire bouton-filtre">
+        <IconeFiltre filtresActifs={$nombreResultats.aDesFiltresAppliques} />
+      </button>
+    </div>
+  {/snippet}
 
   <div class="filtres-disponibles">
     <div class="entete">
@@ -103,7 +112,7 @@
           id="anssi"
           name="anssi"
           bind:checked={cocheGlobaleANSSI}
-          on:click={gereCocheANSSI}
+          onclick={gereCocheANSSI}
           class:selection-partielle={selectionPartielleANSSI}
         />
         <label for="anssi">ANSSI</label>
@@ -213,7 +222,7 @@
     </fieldset>
     <button
       class="bouton bouton-secondaire bouton-effacer-filtre"
-      on:click={() => declenche('supprimeFiltres')}
+      onclick={() => declenche('supprimeFiltres')}
     >
       Effacer les filtres
     </button>

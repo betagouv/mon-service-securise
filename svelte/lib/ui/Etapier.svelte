@@ -1,11 +1,15 @@
 <script lang="ts">
-  export let etapeCourante: number;
-  export let nombreEtapes: number;
+  interface Props {
+    etapeCourante: number;
+    nombreEtapes: number;
+  }
+
+  let { etapeCourante, nombreEtapes }: Props = $props();
 </script>
 
 <div>
   {#each new Array(nombreEtapes).fill(0) as _, i}
-    <span class:accessible={i + 1 <= etapeCourante} />
+    <span class:accessible={i + 1 <= etapeCourante}></span>
   {/each}
 </div>
 

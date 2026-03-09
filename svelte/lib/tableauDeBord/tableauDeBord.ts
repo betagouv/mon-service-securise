@@ -4,6 +4,7 @@ import type {
   NiveauSecuriteService,
 } from './tableauDeBord.d';
 import RapportTeleversementServicesV2 from './televersementServices/RapportTeleversementServicesV2.svelte';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-tableau-de-bord',
@@ -18,7 +19,7 @@ document.body.addEventListener(
 let tdb: TableauDeBord;
 const rechargeTableauDeBord = (props: TableauDeBordProps) => {
   tdb?.$destroy();
-  tdb = new TableauDeBord({
+  tdb = mount(TableauDeBord, {
     target: document.getElementById('tableau-de-bord')!,
     props,
   });
@@ -27,7 +28,7 @@ const rechargeTableauDeBord = (props: TableauDeBordProps) => {
 let rapportV2: RapportTeleversementServicesV2;
 const rechargeRapportTeleversementV2 = () => {
   rapportV2?.$destroy();
-  rapportV2 = new RapportTeleversementServicesV2({
+  rapportV2 = mount(RapportTeleversementServicesV2, {
     target: document.getElementById('rapport-televersement')!,
   });
 };

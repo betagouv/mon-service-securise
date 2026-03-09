@@ -1,8 +1,12 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
 
-  export let id: string;
-  export let checked: boolean;
+  interface Props {
+    id: string;
+    checked: boolean;
+  }
+
+  let { id, checked }: Props = $props();
 
   const dispatch = createEventDispatcher<{
     change: boolean;
@@ -15,7 +19,7 @@
 </script>
 
 <div class="on-off">
-  <input type="checkbox" {id} {checked} on:change={(e) => signaleChange(e)} />
+  <input type="checkbox" {id} {checked} onchange={(e) => signaleChange(e)} />
   <label for={id}></label>
 </div>
 

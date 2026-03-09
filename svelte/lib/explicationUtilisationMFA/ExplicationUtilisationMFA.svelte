@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import Modale from '../ui/Modale.svelte';
 
-  let elementModale: Modale;
+  let elementModale: Modale = $state();
 
   onMount(() => {
     elementModale?.affiche();
@@ -10,13 +10,13 @@
 </script>
 
 <Modale id="modale-explication-utilisation-mfa" bind:this={elementModale}>
-  <svelte:fragment slot="contenu">
+  {#snippet contenu()}
     <dsfr-badge
       label="Message important"
       type="status"
       status="warning"
       size="md"
-    />
+    ></dsfr-badge>
     <h4>Activez l'authentification multifacteurs sur ProConnect</h4>
     <div class="contenu-modale">
       <p>
@@ -60,17 +60,17 @@
         </li>
       </ol>
     </div>
-  </svelte:fragment>
-  <svelte:fragment slot="actions">
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  {/snippet}
+  {#snippet actions()}
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre="Me le rappeler plus tard"
       variante="secondaire"
       taille="md"
       positionIcone="sans"
-      on:click={() => elementModale?.ferme()}
-    />
-  </svelte:fragment>
+      onclick={() => elementModale?.ferme()}
+    ></lab-anssi-bouton>
+  {/snippet}
 </Modale>
 
 <style lang="scss">

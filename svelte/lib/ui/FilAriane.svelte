@@ -1,6 +1,10 @@
 <script lang="ts">
   import type { ItemFilAriane } from './ui.types.d';
-  export let items: ItemFilAriane[];
+  interface Props {
+    items: ItemFilAriane[];
+  }
+
+  let { items }: Props = $props();
 </script>
 
 <div class="conteneur-fil-ariane">

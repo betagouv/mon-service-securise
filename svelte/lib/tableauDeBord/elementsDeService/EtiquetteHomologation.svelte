@@ -1,8 +1,17 @@
 <script lang="ts">
-  export let statutHomologation: string;
-  export let label: string;
-  export let idService: string;
-  export let dateExpiration: string = '';
+  interface Props {
+    statutHomologation: string;
+    label: string;
+    idService: string;
+    dateExpiration?: string;
+  }
+
+  let {
+    statutHomologation,
+    label,
+    idService,
+    dateExpiration = '',
+  }: Props = $props();
 </script>
 
 <a

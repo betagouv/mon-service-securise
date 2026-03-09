@@ -1,4 +1,5 @@
 import ExplicationUtilisationMFA from './ExplicationUtilisationMFA.svelte';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-explication-utilisation-mfa',
@@ -11,7 +12,7 @@ const rechargeApp = () => {
   if (!conteneur) return;
 
   app?.$destroy();
-  app = new ExplicationUtilisationMFA({ target: conteneur });
+  app = mount(ExplicationUtilisationMFA, { target: conteneur });
 };
 
 export default app!;

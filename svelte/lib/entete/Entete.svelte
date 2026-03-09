@@ -2,8 +2,8 @@
   import { onMount } from 'svelte';
   import { getUtilisateurCourant, type ProfilUtilisateur } from './entete.api';
 
-  let connecte: ProfilUtilisateur | null;
-  let menuVisible = false;
+  let connecte: ProfilUtilisateur | null = $state();
+  let menuVisible = $state(false);
 
   onMount(async () => {
     connecte = await getUtilisateurCourant();
@@ -16,7 +16,7 @@
 {:else}
   <button
     class="nom-utilisateur-courant"
-    on:click={() => (menuVisible = !menuVisible)}
+    onclick={() => (menuVisible = !menuVisible)}
   >
     {connecte.utilisateur.prenomNom}
   </button>

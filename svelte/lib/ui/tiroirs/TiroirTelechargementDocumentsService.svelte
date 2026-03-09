@@ -3,8 +3,12 @@
   import ContenuTiroir from './ContenuTiroir.svelte';
   import DocumentTelechargeable from './DocumentTelechargeable.svelte';
 
-  export let service: Service;
-  export let modeVisiteGuidee: boolean = false;
+  interface Props {
+    service: Service;
+    modeVisiteGuidee?: boolean;
+  }
+
+  let { service, modeVisiteGuidee = false }: Props = $props();
 
   export const titre = 'Télécharger les PDF';
   export const sousTitre =

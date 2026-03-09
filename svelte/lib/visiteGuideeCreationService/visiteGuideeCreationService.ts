@@ -1,4 +1,5 @@
 import VisiteGuideeCreationService from './VisiteGuideeCreationService.svelte';
+import { mount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-visite-guidee-creation-service',
@@ -7,7 +8,7 @@ document.body.addEventListener(
 
 let app: VisiteGuideeCreationService;
 const rechargeApp = () => {
-  app = new VisiteGuideeCreationService({
+  app = mount(VisiteGuideeCreationService, {
     target: document.getElementById('visite-guidee-creation-service')!,
   });
 };

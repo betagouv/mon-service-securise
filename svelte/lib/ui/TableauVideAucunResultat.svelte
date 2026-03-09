@@ -1,7 +1,13 @@
+<script lang="ts">
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
+</script>
+
 <div class="aucun-resultat">
   <img src="/statique/assets/images/illustration_recherche_vide.svg" alt="" />
   Aucune mesure ne correspond à la recherche.
-  <button class="bouton bouton-secondaire" on:click>
+  <button class="bouton bouton-secondaire" onclick={bubble('click')}>
     Effacer la recherche
   </button>
 </div>

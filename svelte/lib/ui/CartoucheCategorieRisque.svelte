@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let libelleCategorie: string;
+  interface Props {
+    libelleCategorie: string;
+  }
+
+  let { libelleCategorie }: Props = $props();
 </script>
 
 <span>{libelleCategorie}</span>

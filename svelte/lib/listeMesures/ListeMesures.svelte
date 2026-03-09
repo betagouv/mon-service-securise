@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import {
     servicesAvecMesuresAssociees,
     servicesAvecMesuresAssocieesEnCoursDeChargement,
@@ -47,10 +49,15 @@
   import CartoucheThematique from '../ui/CartoucheThematique.svelte';
   import { thematiques } from './thematiques';
 
-  export let statuts: ReferentielStatut;
-  export let categories: ListeMesuresProps['categories'];
-  export let typesService: ReferentielTypesService;
-  export let capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+  interface Props {
+    statuts: ReferentielStatut;
+    categories: ListeMesuresProps['categories'];
+    typesService: ReferentielTypesService;
+    capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+  }
+
+  let { statuts, categories, typesService, capaciteAjoutDeMesure }: Props =
+    $props();
 
   onMount(async () => {
     await servicesAvecMesuresAssociees.rafraichis();
@@ -61,19 +68,20 @@
   const valeursOnglets = ['toutes', 'generales', 'specifiques'];
   type OngletListeMesures = (typeof valeursOnglets)[number];
 
-  let modaleDetailsMesure: ModaleDetailsMesure;
+  let modaleDetailsMesure: ModaleDetailsMesure = $state();
 
-  let ongletActif: OngletListeMesures;
+  let ongletActif: OngletListeMesures = $state();
 
-  $: {
+  run(() => {
     const ongletDemande = requete.get('ongletActif') as OngletListeMesures;
     ongletActif = valeursOnglets.includes(ongletDemande)
       ? ongletDemande
       : 'toutes';
-  }
+  });
 
-  $: peutAjouterModelesMesureSpecifique =
-    $modelesMesureSpecifique.length < capaciteAjoutDeMesure.nombreMaximum;
+  let peutAjouterModelesMesureSpecifique = $derived(
+    $modelesMesureSpecifique.length < capaciteAjoutDeMesure.nombreMaximum
+  );
 
   const afficheModaleDetailsMesure = async (modeleMesure: ModeleDeMesure) => {
     await modaleDetailsMesure.affiche(modeleMesure);
@@ -105,13 +113,13 @@
     configurationRecherche: { champsRecherche: string[] };
     configurationFiltrage: ConfigurationFiltrage;
   };
-  let configurationTableau: ConfigurationTableau = {
+  let configurationTableau: ConfigurationTableau = $state({
     donnees: [],
     configurationRecherche: { champsRecherche: [] },
     configurationFiltrage: { options: { categories: [], items: [] } },
-  };
+  });
 
-  $: {
+  run(() => {
     const listeModeleMesuresGenerales: ModeleDeMesure[] = Object.values(
       $modelesMesureGenerale
     ).map((m) => ({
@@ -184,7 +192,7 @@
       configurationTableau.donnees,
       $storeVersionsDeService.versionSelectionnee
     );
-  }
+  });
 
   const estModeleMesureGenerale = (
     modeleMesure: ModeleDeMesure
@@ -241,13 +249,13 @@
     }
   };
 
-  $: nombresMesuresPourOnglets = {
+  let nombresMesuresPourOnglets = $derived({
     mesuresGenerales: Object.values($modelesMesureGenerale).filter(
       (m) =>
         m.versionReferentiel === $storeVersionsDeService.versionSelectionnee
     ).length,
     mesureSpecifiques: $modelesMesureSpecifique.length,
-  };
+  });
 </script>
 
 <Toaster />
@@ -286,69 +294,73 @@
       }
     : undefined}
 >
-  <svelte:fragment slot="barre-action-dans-thead">
+  {#snippet barre_action_dans_thead()}
     {#if $storeVersionsDeService.plusieursVersionsDeService}
       <FiltreSurV1V2 bind:value={$storeVersionsDeService.versionSelectionnee} />
     {/if}
-  </svelte:fragment>
-  <div slot="actionsComplementaires" class="conteneur-actions-complementaires">
-    <Lien
-      type="bouton-tertiaire"
-      href="/mesures/export.csv?version={$storeVersionsDeService.versionSelectionnee}"
-      titre="Télécharger la liste de mesures"
-      target="_blank"
-      icone="telecharger"
-    />
-    <div class="action-ajout-modeles-mesure-specifique">
-      <BoutonAvecListeDeroulante
-        titre="Ajouter une / des mesures"
-        options={[
+  {/snippet}
+  {#snippet actionsComplementaires()}
+    <div class="conteneur-actions-complementaires">
+      <Lien
+        type="bouton-tertiaire"
+        href="/mesures/export.csv?version={$storeVersionsDeService.versionSelectionnee}"
+        titre="Télécharger la liste de mesures"
+        target="_blank"
+        icone="telecharger"
+      />
+      <div class="action-ajout-modeles-mesure-specifique">
+        <BoutonAvecListeDeroulante
+          titre="Ajouter une / des mesures"
+          options={[
+            {
+              label: 'Ajouter une mesure',
+              icone: 'plus',
+              action: afficheTiroirAjout,
+            },
+            {
+              label: 'Téléverser des mesures',
+              icone: 'televerser',
+              action: afficheTiroirTeleversement,
+            },
+          ]}
+          disabled={!peutAjouterModelesMesureSpecifique}
+        />
+        {#if !peutAjouterModelesMesureSpecifique}
+          <Infobulle
+            contenu={`Vous avez atteint la limite maximale de ${capaciteAjoutDeMesure.nombreMaximum} mesures. Pour ajouter des mesures, veuillez d'abord en supprimer.`}
+          />
+        {/if}
+      </div>
+    </div>
+  {/snippet}
+
+  {#snippet onglets()}
+    <div>
+      <Onglets
+        bind:ongletActif
+        onglets={[
           {
-            label: 'Ajouter une mesure',
-            icone: 'plus',
-            action: afficheTiroirAjout,
+            id: 'toutes',
+            label: 'Toutes les mesures',
+            badge:
+              nombresMesuresPourOnglets.mesuresGenerales +
+              nombresMesuresPourOnglets.mesureSpecifiques,
           },
           {
-            label: 'Téléverser des mesures',
-            icone: 'televerser',
-            action: afficheTiroirTeleversement,
+            id: 'generales',
+            label: 'Les mesures ANSSI & CNIL',
+            badge: nombresMesuresPourOnglets.mesuresGenerales,
+          },
+          {
+            id: 'specifiques',
+            label: 'Mes mesures ajoutées',
+            badge: nombresMesuresPourOnglets.mesureSpecifiques,
           },
         ]}
-        disabled={!peutAjouterModelesMesureSpecifique}
       />
-      {#if !peutAjouterModelesMesureSpecifique}
-        <Infobulle
-          contenu={`Vous avez atteint la limite maximale de ${capaciteAjoutDeMesure.nombreMaximum} mesures. Pour ajouter des mesures, veuillez d'abord en supprimer.`}
-        />
-      {/if}
     </div>
-  </div>
-
-  <div slot="onglets">
-    <Onglets
-      bind:ongletActif
-      onglets={[
-        {
-          id: 'toutes',
-          label: 'Toutes les mesures',
-          badge:
-            nombresMesuresPourOnglets.mesuresGenerales +
-            nombresMesuresPourOnglets.mesureSpecifiques,
-        },
-        {
-          id: 'generales',
-          label: 'Les mesures ANSSI & CNIL',
-          badge: nombresMesuresPourOnglets.mesuresGenerales,
-        },
-        {
-          id: 'specifiques',
-          label: 'Mes mesures ajoutées',
-          badge: nombresMesuresPourOnglets.mesureSpecifiques,
-        },
-      ]}
-    />
-  </div>
-  <svelte:fragment slot="cellule" let:donnee let:colonne>
+  {/snippet}
+  {#snippet cellule({ donnee, colonne })}
     {@const aDesServicesAssocies = donnee.idsServicesAssocies?.length > 0}
     {@const typeMesure = donnee.type}
     {@const cliquable = typeMesure === 'specifique' || aDesServicesAssocies}
@@ -358,8 +370,8 @@
         class:cliquable
         role="button"
         tabindex="0"
-        on:keypress={() => cliquable && ouvreTiroirEdition(donnee)}
-        on:click={() => cliquable && ouvreTiroirEdition(donnee)}
+        onkeypress={() => cliquable && ouvreTiroirEdition(donnee)}
+        onclick={() => cliquable && ouvreTiroirEdition(donnee)}
       >
         <span>{donnee.description}</span>
         <div>
@@ -416,7 +428,7 @@
         />
       {/if}
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </Tableau>
 
 <style lang="scss">

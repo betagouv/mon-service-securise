@@ -1,7 +1,11 @@
 <script lang="ts">
   import { infobulle } from './directives/infobulle';
 
-  export let contenu: string;
+  interface Props {
+    contenu: string;
+  }
+
+  let { contenu }: Props = $props();
 </script>
 
 <div class="conteneur-image" use:infobulle={contenu}>

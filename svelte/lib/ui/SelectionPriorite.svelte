@@ -1,23 +1,37 @@
 <script lang="ts">
+  import { run, createBubbler, stopPropagation } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import type { PrioriteMesure, ReferentielPriorite } from './types.d';
   import { createEventDispatcher } from 'svelte';
 
   type IdDom = string;
 
-  export let id: IdDom;
-  export let priorite: PrioriteMesure | undefined | '';
-  export let label = '';
-  export let estLectureSeule = false;
-  export let avecLibelleOption: boolean = false;
-  export let priorites: ReferentielPriorite;
+  interface Props {
+    id: IdDom;
+    priorite: PrioriteMesure | undefined | '';
+    label?: string;
+    estLectureSeule?: boolean;
+    avecLibelleOption?: boolean;
+    priorites: ReferentielPriorite;
+  }
+
+  let {
+    id,
+    priorite = $bindable(),
+    label = '',
+    estLectureSeule = false,
+    avecLibelleOption = false,
+    priorites,
+  }: Props = $props();
 
   const dispatch = createEventDispatcher<{
     input: { priorite: PrioriteMesure };
   }>();
 
-  $: {
+  run(() => {
     if (!priorite) priorite = '';
-  }
+  });
 
   const metAJour = (e: Event) => {
     dispatch('input', {
@@ -35,8 +49,8 @@
     class:avecLibelleOption
     class:vide={!priorite}
     disabled={estLectureSeule}
-    on:input={metAJour}
-    on:click|stopPropagation
+    oninput={metAJour}
+    onclick={stopPropagation(bubble('click'))}
   >
     <option value="" disabled selected
       >{avecLibelleOption ? 'Définir la priorité' : '+'}</option
@@ -55,7 +69,7 @@
     color: var(--texte-clair);
   }
 
-  label:has(> select:disabled) {
+  label:has(:global(> select:disabled)) {
     color: var(--liseres-fonce);
   }
 

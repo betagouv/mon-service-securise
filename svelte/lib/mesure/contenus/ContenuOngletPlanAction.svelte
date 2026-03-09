@@ -11,23 +11,31 @@
   import type { IdUtilisateur } from '../mesure.d';
   import { storeAutorisations } from '../../gestionContributeurs/stores/autorisations.store';
 
-  export let visible: boolean;
-  export let estLectureSeule: boolean;
-  export let priorites: ReferentielPriorite;
-  export let statuts: ReferentielStatut;
+  interface Props {
+    visible: boolean;
+    estLectureSeule: boolean;
+    priorites: ReferentielPriorite;
+    statuts: ReferentielStatut;
+  }
 
-  $: planDactionNonDisponible = !planDActionDisponible(
-    $store.mesureEditee.mesure.statut
+  let { visible, estLectureSeule, priorites, statuts }: Props = $props();
+
+  let planDactionNonDisponible = $derived(
+    !planDActionDisponible($store.mesureEditee.mesure.statut)
   );
 
-  $: selectionDesactivee = estLectureSeule || planDactionNonDisponible;
+  let selectionDesactivee = $derived(
+    estLectureSeule || planDactionNonDisponible
+  );
 
   const afficheAvertissementStatut = !planDActionDisponible(
     $store.mesureEditee.mesure.statut
   );
 
-  $: niveauDeDroitDe = (idUtilisateur: IdUtilisateur) =>
-    $storeAutorisations.autorisations[idUtilisateur]?.resumeNiveauDroit;
+  let niveauDeDroitDe = $derived(
+    (idUtilisateur: IdUtilisateur) =>
+      $storeAutorisations.autorisations[idUtilisateur]?.resumeNiveauDroit
+  );
 </script>
 
 <div id="contenu-onglet-plan-action" class:visible>
@@ -80,7 +88,7 @@
       <button
         disabled={selectionDesactivee}
         type="button"
-        on:click={() =>
+        onclick={() =>
           document.body.dispatchEvent(
             new CustomEvent('jquery-affiche-tiroir-contributeurs')
           )}>Gérer les contributeurs</button

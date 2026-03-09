@@ -10,8 +10,12 @@
     PERSONNALISE: 'Personnalisé',
   };
 
-  export let niveau: ResumeNiveauDroit;
-  export let droitsModifiables: boolean;
+  interface Props {
+    niveau: ResumeNiveauDroit;
+    droitsModifiables: boolean;
+  }
+
+  let { niveau, droitsModifiables }: Props = $props();
 
   const dispatch = createEventDispatcher<{
     droitsChange: ResumeNiveauDroit;
@@ -25,14 +29,16 @@
   </div>
 {:else}
   <MenuFlottant fermeMenuSiClicInterne={true}>
-    <span slot="declencheur" class="role role-modifiable {niveau}">
-      {STATUS_DROITS[niveau]}
-    </span>
+    {#snippet declencheur()}
+      <span class="role role-modifiable {niveau}">
+        {STATUS_DROITS[niveau]}
+      </span>
+    {/snippet}
 
     <div class="roles-disponibles">
       <button
         class="role-propose lecture"
-        on:click={() => dispatch('droitsChange', 'LECTURE')}
+        onclick={() => dispatch('droitsChange', 'LECTURE')}
       >
         <span class="nom">Lecture</span>
         <br />
@@ -40,7 +46,7 @@
       </button>
       <button
         class="role-propose ecriture"
-        on:click={() => dispatch('droitsChange', 'ECRITURE')}
+        onclick={() => dispatch('droitsChange', 'ECRITURE')}
       >
         <span class="nom">Édition</span>
         <br />
@@ -48,7 +54,7 @@
       </button>
       <button
         class="role-propose personnalise"
-        on:click={() => dispatch('choixPersonnalisation')}
+        onclick={() => dispatch('choixPersonnalisation')}
       >
         <span class="nom">Personnalisé</span>
         <br />
@@ -58,7 +64,7 @@
       </button>
       <button
         class="role-propose proprietaire"
-        on:click={() => dispatch('droitsChange', 'PROPRIETAIRE')}
+        onclick={() => dispatch('droitsChange', 'PROPRIETAIRE')}
       >
         <span class="nom">Propriétaire</span>
         <br />

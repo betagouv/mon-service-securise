@@ -4,21 +4,33 @@
   import { createEventDispatcher } from 'svelte';
   import Initiales from '../../ui/Initiales.svelte';
 
-  export let id: string;
-  export let callbackDeRecherche: (recherche: string) => Promise<Utilisateur[]>;
-  export let dureeDebounceEnMs = 300;
-  export let valeurInitiale: string = '';
-  export let modeVisiteGuidee: boolean = false;
+  interface Props {
+    id: string;
+    callbackDeRecherche: (recherche: string) => Promise<Utilisateur[]>;
+    dureeDebounceEnMs?: number;
+    valeurInitiale?: string;
+    modeVisiteGuidee?: boolean;
+  }
 
-  let saisie = valeurInitiale;
+  let {
+    id,
+    callbackDeRecherche,
+    dureeDebounceEnMs = 300,
+    valeurInitiale = '',
+    modeVisiteGuidee = false,
+  }: Props = $props();
+
+  let saisie = $state(valeurInitiale);
   let minuteur: NodeJS.Timeout;
-  let suggestions: Utilisateur[] = [];
+  let suggestions: Utilisateur[] = $state([]);
 
   const envoiEvenement = createEventDispatcher();
 
   const REGEX_EMAIL = /^[\w\-+.]+@[\w\-.]{2,}\.\w{2,}$/i;
-  $: proposeAjout = REGEX_EMAIL.test(saisie);
-  $: suggestionsVisibles = saisie && (suggestions.length > 0 || proposeAjout);
+  let proposeAjout = $derived(REGEX_EMAIL.test(saisie));
+  let suggestionsVisibles = $derived(
+    saisie && (suggestions.length > 0 || proposeAjout)
+  );
 
   const rechercheSuggestions = async () => {
     if (saisie.length > 2) {
@@ -47,7 +59,7 @@
   <input
     {id}
     type="text"
-    on:input={() => avecTemporisation(rechercheSuggestions)}
+    oninput={() => avecTemporisation(rechercheSuggestions)}
     bind:value={saisie}
     autocomplete="off"
     placeholder="Si nouveau contributeur email, sinon nom ou prénom"
@@ -58,13 +70,13 @@
         class="create option-ajout"
         role="button"
         tabindex="0"
-        on:click={() =>
+        onclick={() =>
           choisisContributeur({
             email: saisie.toLocaleLowerCase('fr'),
             initiales: '',
             prenomNom: saisie.toLocaleLowerCase('fr'),
           })}
-        on:keypress={(e) => {
+        onkeypress={(e) => {
           if (e.code === 'Enter') {
             choisisContributeur({
               email: saisie.toLocaleLowerCase('fr'),
@@ -82,11 +94,11 @@
         class="option suggestion-contributeur"
         role="button"
         tabindex="0"
-        on:click={() => {
+        onclick={() => {
           if (modeVisiteGuidee) return;
           choisisContributeur(suggestion);
         }}
-        on:keypress={(e) => {
+        onkeypress={(e) => {
           if (e.code === 'Enter') {
             if (modeVisiteGuidee) return;
             choisisContributeur(suggestion);

@@ -8,25 +8,33 @@
   }>();
 
   type ModeAffichage = 'Résumé' | 'Édition' | 'MiseÀJourForcéeBesoinsSécurité';
-  export let mode: ModeAffichage;
-  export let afficheInfoBesoinsSecurite = false;
-  export let activeBoutonEnregistrer = true;
+  interface Props {
+    mode: ModeAffichage;
+    afficheInfoBesoinsSecurite?: boolean;
+    activeBoutonEnregistrer?: boolean;
+  }
+
+  let {
+    mode,
+    afficheInfoBesoinsSecurite = false,
+    activeBoutonEnregistrer = true,
+  }: Props = $props();
 </script>
 
 <div class="barre-actions">
   <div class="les-boutons">
     {#if mode === 'Résumé'}
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
         titre="Modifier le service"
         variante="tertiaire"
         taille="md"
         icone="edit-line"
         positionIcone="droite"
-        on:click={() => dispatch('modifier')}
-      />
+        onclick={() => dispatch('modifier')}
+      ></lab-anssi-bouton>
     {:else if mode === 'Édition' || mode === 'MiseÀJourForcéeBesoinsSécurité'}
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
         titre="Enregistrer les modifications"
         variante="primaire"
@@ -34,16 +42,16 @@
         icone="save-line"
         positionIcone="gauche"
         actif={activeBoutonEnregistrer}
-        on:click={() => dispatch('enregistrer')}
-      />
-      <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+        onclick={() => dispatch('enregistrer')}
+      ></lab-anssi-bouton>
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
         titre={mode === 'Édition' ? 'Annuler' : 'Annuler les modifications'}
         variante="tertiaire"
         taille="md"
         positionIcone="sans"
-        on:click={() => dispatch('annuler')}
-      />
+        onclick={() => dispatch('annuler')}
+      ></lab-anssi-bouton>
       {#if afficheInfoBesoinsSecurite}
         <span class="attention-aux-besoins">
           <img src="/statique/assets/images/icone_attention_rose.svg" alt="" />

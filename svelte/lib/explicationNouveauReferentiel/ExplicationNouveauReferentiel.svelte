@@ -5,12 +5,17 @@
   import type { IdNiveauDeSecurite } from '../ui/types';
   import { donneesEvolutionQuestions } from './donneesEvolutionQuestions';
 
-  let indexEtapeCourante = 0;
-  let elementModale: Modale;
-  let elementModaleConfirmationFermeture: Modale;
+  let indexEtapeCourante = $state(0);
+  let elementModale: Modale = $state();
+  let elementModaleConfirmationFermeture: Modale = $state();
   let aTermine = false;
-  export let afficheAuMontage = true;
-  export let avecModaleConfirmation = true;
+  interface Props {
+    afficheAuMontage?: boolean;
+    avecModaleConfirmation?: boolean;
+  }
+
+  let { afficheAuMontage = true, avecModaleConfirmation = true }: Props =
+    $props();
 
   onMount(() => {
     if (afficheAuMontage) elementModale?.affiche();
@@ -69,7 +74,7 @@
   bind:this={elementModale}
   on:close={gereFermetureModale}
 >
-  <svelte:fragment slot="contenu">
+  {#snippet contenu()}
     <dsfr-badge
       label="Nouveau"
       type="accent"
@@ -77,7 +82,7 @@
       size="md"
       hasIcon
       icon="flashlight-fill"
-    />
+    ></dsfr-badge>
     {#if indexEtapeCourante === 0}
       <h4>Mise en place d’un nouveau référentiel de mesures</h4>
       <div class="contenu-modale">
@@ -225,60 +230,60 @@
         </table>
       </div>
     {/if}
-  </svelte:fragment>
-  <svelte:fragment slot="actions">
+  {/snippet}
+  {#snippet actions()}
     <div class="actions-modale">
       <div class="conteneur-pagination">
         {#each new Array(3) as _, idx (idx)}
           <button
             class="pagination-etape"
             class:etape-courante={idx === indexEtapeCourante}
-            on:click={() => afficheEtape(idx)}
+            onclick={() => afficheEtape(idx)}
           ></button>
         {/each}
       </div>
       <div class="conteneur-boutons-actions">
         {#if indexEtapeCourante > 0}
-          <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+          <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
           <lab-anssi-bouton
             titre="Précédent"
             variante="secondaire"
             taille="md"
             icone=""
             positionIcone="sans"
-            on:click={() => afficheEtape(indexEtapeCourante - 1)}
-          />
+            onclick={() => afficheEtape(indexEtapeCourante - 1)}
+          ></lab-anssi-bouton>
         {/if}
         {#if indexEtapeCourante === 2}
-          <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+          <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
           <lab-anssi-bouton
             titre="J’ai compris 👍"
             variante="primaire"
             taille="md"
             icone=""
             positionIcone="sans"
-            on:click={termineExplications}
-          />
+            onclick={termineExplications}
+          ></lab-anssi-bouton>
         {:else}
-          <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+          <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
           <lab-anssi-bouton
             titre="Suivant"
             variante="primaire"
             taille="md"
             icone=""
             positionIcone="sans"
-            on:click={() => afficheEtape(indexEtapeCourante + 1)}
-          />
+            onclick={() => afficheEtape(indexEtapeCourante + 1)}
+          ></lab-anssi-bouton>
         {/if}
       </div>
     </div>
-  </svelte:fragment>
+  {/snippet}
 </Modale>
 <Modale
   id="modale-confirmation-fermeture"
   bind:this={elementModaleConfirmationFermeture}
 >
-  <svelte:fragment slot="contenu">
+  {#snippet contenu()}
     <div class="contenu-modale">
       <h4>⚠️ Rappel important</h4>
       <p>
@@ -291,30 +296,30 @@
         votre prochaine visite tant que vous ne l’aurez pas validée.
       </p>
     </div>
-  </svelte:fragment>
-  <svelte:fragment slot="actions">
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  {/snippet}
+  {#snippet actions()}
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre="Me le reproposer plus tard"
       variante="secondaire"
       taille="md"
       icone=""
       positionIcone="sans"
-      on:click={() => elementModaleConfirmationFermeture.ferme()}
-    />
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      onclick={() => elementModaleConfirmationFermeture.ferme()}
+    ></lab-anssi-bouton>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre="Valider maintenant"
       variante="primaire"
       taille="md"
       icone=""
       positionIcone="sans"
-      on:click={() => {
+      onclick={() => {
         elementModaleConfirmationFermeture.ferme();
         elementModale.affiche();
       }}
-    />
-  </svelte:fragment>
+    ></lab-anssi-bouton>
+  {/snippet}
 </Modale>
 
 <style lang="scss">

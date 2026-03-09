@@ -1,14 +1,19 @@
 <script lang="ts">
   import type { Risque } from './risques.d';
 
-  export let risque: Risque;
+  interface Props {
+    risque: Risque;
+  }
 
-  $: libelle =
+  let { risque }: Props = $props();
+
+  let libelle = $derived(
     risque.type === 'GENERAL'
       ? `Risque ${risque.identifiantNumerique.substring(1)} (${
           risque.identifiantNumerique
         })`
-      : `Risque spécifique ${risque.identifiantNumerique.substring(2)}`;
+      : `Risque spécifique ${risque.identifiantNumerique.substring(2)}`
+  );
 </script>
 
 <span

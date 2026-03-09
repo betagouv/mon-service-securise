@@ -1,30 +1,46 @@
 <script lang="ts">
-  export let titre: string;
-  export let icone:
-    | 'suppression'
-    | 'ajout'
-    | 'copie'
-    | 'export'
-    | 'telechargement'
-    | 'contributeurs'
-    | 'rafraichir'
-    | 'inviter'
-    | 'plus'
-    | 'configuration'
-    | '' = '';
-  export let taille: 'petit' | 'moyen' | 'grand' = 'grand';
-  export let type: 'primaire' | 'secondaire' | 'lien' | 'lien-dsfr';
-  export let actif: boolean = true;
-  export let enCoursEnvoi: boolean = false;
-  export let boutonSoumission: boolean = true;
-  export let classe: string = '';
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
+  interface Props {
+    titre: string;
+    icone?:
+      | 'suppression'
+      | 'ajout'
+      | 'copie'
+      | 'export'
+      | 'telechargement'
+      | 'contributeurs'
+      | 'rafraichir'
+      | 'inviter'
+      | 'plus'
+      | 'configuration'
+      | '';
+    taille?: 'petit' | 'moyen' | 'grand';
+    type: 'primaire' | 'secondaire' | 'lien' | 'lien-dsfr';
+    actif?: boolean;
+    enCoursEnvoi?: boolean;
+    boutonSoumission?: boolean;
+    classe?: string;
+  }
+
+  let {
+    titre,
+    icone = '',
+    taille = 'grand',
+    type,
+    actif = true,
+    enCoursEnvoi = false,
+    boutonSoumission = true,
+    classe = '',
+  }: Props = $props();
 </script>
 
 <button
   class="bouton {type} {icone} {taille} {classe}"
   class:avecIcone={!!icone}
   type={boutonSoumission ? 'submit' : 'button'}
-  on:click
+  onclick={bubble('click')}
   disabled={!actif || enCoursEnvoi}
   class:en-cours-chargement={enCoursEnvoi}
 >

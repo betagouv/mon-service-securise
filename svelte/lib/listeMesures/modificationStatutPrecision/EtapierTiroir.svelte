@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let etapeCourante: number;
+  interface Props {
+    etapeCourante: number;
+  }
+
+  let { etapeCourante }: Props = $props();
 
   const etapes = [
     'Mettre à jour le statut et/ou la précision',
@@ -8,7 +12,7 @@
   ];
   const nbEtapes = etapes.length;
 
-  $: indiceEtapeCourante = etapeCourante - 1;
+  let indiceEtapeCourante = $derived(etapeCourante - 1);
 </script>
 
 <div class="etapier">
@@ -18,7 +22,7 @@
     {#each new Array(nbEtapes)
       .fill(0)
       .map( (_, index) => (index <= indiceEtapeCourante ? 'actif' : '') ) as actif}
-      <div class="indicateur-etape {actif}" />
+      <div class="indicateur-etape {actif}"></div>
     {/each}
   </div>
   {#if etapes[indiceEtapeCourante + 1]}
