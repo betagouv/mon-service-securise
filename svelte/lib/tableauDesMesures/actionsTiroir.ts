@@ -1,7 +1,4 @@
-import { get } from 'svelte/store';
-import { metEnFormeMesures } from './tableauDesMesures.api';
 import type { MesureGenerale, MesureSpecifique } from './tableauDesMesures.d';
-import { mesures } from './stores/mesures.store';
 
 type MesureAEditer = {
   mesure: MesureSpecifique | MesureGenerale;

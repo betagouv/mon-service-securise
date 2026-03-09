@@ -6,7 +6,7 @@ document.body.addEventListener(
   () => rechargeApp()
 );
 
-let app: VisiteGuideeCreationService;
+let app: ReturnType<typeof mount>;
 const rechargeApp = () => {
   app = mount(VisiteGuideeCreationService, {
     target: document.getElementById('visite-guidee-creation-service')!,

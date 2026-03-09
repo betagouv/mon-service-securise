@@ -6,7 +6,7 @@ export const validationChamp = (
 ) => {
   if (!messageSiInvalide) return;
 
-  let messageErreur = document.createElement('span');
+  const messageErreur = document.createElement('span');
   messageErreur.classList.add('erreur-champ-saisie');
   messageErreur.style.display = 'none';
   noeud.after(messageErreur);

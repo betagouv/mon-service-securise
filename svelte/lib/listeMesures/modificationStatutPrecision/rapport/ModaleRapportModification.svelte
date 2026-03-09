@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { servicesAvecMesuresAssociees } from '../../servicesAssocies/servicesAvecMesuresAssociees.store';
   import Modale from '../../../ui/Modale.svelte';
   import Bouton from '../../../ui/Bouton.svelte';
@@ -21,7 +19,7 @@
 
   let { referentielStatuts, referentielTypesService }: Props = $props();
 
-  let elementModale: Modale = $state();
+  let elementModale: Modale | undefined = $state();
 
   let servicesAvecMesure: ServiceAssocieAUneMesure[] = $derived(
     $modaleRapportStore.modeleMesureGenerale
@@ -43,8 +41,9 @@
   );
 
   let titre = $state('');
-  let contenu = $state('');
-  run(() => {
+  let contenuTexte = $state('');
+
+  $effect(() => {
     const { champsModifies, idServicesModifies, modeleMesureGenerale } =
       $modaleRapportStore;
     if (champsModifies && idServicesModifies && modeleMesureGenerale) {
@@ -69,7 +68,7 @@
         titre = 'Précision mise à jour avec succès';
       }
 
-      contenu = `${sujetChaine} de la mesure <b>${encode(
+      contenuTexte = `${sujetChaine} de la mesure <b>${encode(
         modeleMesureGenerale!.description
       )}</b> ${verbe} à ${idServicesModifies.length} service${
         servicesMultiples ? 's' : ''
@@ -85,7 +84,7 @@
       {titre}
       avecAnimation={false}
       niveau="succes"
-      {contenu}
+      contenu={contenuTexte}
       avecInterpolationHTMLDangereuse
     />
     <h4>
@@ -110,7 +109,7 @@
       titre="Retour à la liste de mesures"
       type="secondaire"
       taille="moyen"
-      on:click={() => modaleRapportStore.ferme()}
+      onclick={() => modaleRapportStore.ferme()}
     />
   {/snippet}
 </Modale>

@@ -1,8 +1,6 @@
 <script lang="ts">
   import { run } from 'svelte/legacy';
-
   import { createEventDispatcher } from 'svelte';
-  import ChampDeSaisie from '../../../ui/ChampDeSaisie.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
 

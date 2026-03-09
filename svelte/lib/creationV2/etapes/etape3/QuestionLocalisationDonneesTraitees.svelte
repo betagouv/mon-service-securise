@@ -6,11 +6,7 @@
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
-  import CheckboxIllustree from '../etape2/CheckboxIllustree.svelte';
-  import type {
-    LocalisationDonneesTraitees,
-    SpecificiteProjet,
-  } from '../../creationV2.types';
+  import type { LocalisationDonneesTraitees } from '../../creationV2.types';
 
   interface Props {
     estComplete: boolean;
@@ -43,7 +39,7 @@
 <label for="localisations-donnees-traitees" class="titre-question">
   Où sont localisées les données traitées ?*
   <span class="indication">Sélectionnez une réponse</span>
-  {#each localisations as [idType, { nom }]}
+  {#each localisations as [idType, { nom }] (idType)}
     {@const illustration = `/statique/assets/images/localisationDonneesTraitees/${illustrations[idType]}`}
     <Radio
       id={idType}

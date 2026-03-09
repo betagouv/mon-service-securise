@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run, createBubbler, stopPropagation } from 'svelte/legacy';
+  import { createBubbler, stopPropagation } from 'svelte/legacy';
 
   const bubble = createBubbler();
   import type { ReferentielStatut } from './types.d';
@@ -31,8 +31,10 @@
 
   const dispatch = createEventDispatcher<{ input: { statut: StatutMesure } }>();
 
-  run(() => {
-    if (!statut) statut = '';
+  $effect(() => {
+    if (statut === undefined) {
+      statut = '';
+    }
   });
 
   const metAJour = (e: Event) => {
@@ -66,7 +68,7 @@
     <option value="" disabled={requis} selected
       >{labelChoixVide || 'Statut à définir'}</option
     >
-    {#each Object.entries(referentielStatuts) as [valeur, label]}
+    {#each Object.entries(referentielStatuts) as [valeur, label] (valeur)}
       <option value={valeur}>{label}</option>
     {/each}
   </select>

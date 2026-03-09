@@ -3,8 +3,8 @@ export const couleur = (gravite: number, vraisemblance: number) => {
   return niveauRisque <= 4 && vraisemblance < 3 && gravite < 4
     ? 'vert'
     : niveauRisque >= 8 && vraisemblance > 2 && gravite >= 2
-    ? 'rouge'
-    : 'orange';
+      ? 'rouge'
+      : 'orange';
 };
 
 export const mappingCouleursDSFR = {

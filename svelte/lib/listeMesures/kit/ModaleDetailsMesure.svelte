@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import type {
     ModeleMesureGenerale,
     ReferentielStatut,
@@ -30,20 +28,22 @@
   let { referentielStatuts, referentielTypesService, categories }: Props =
     $props();
 
-  let elementModale: Modale = $state();
-  let modeleDeMesure: ModeleDeMesure = $state();
+  let elementModale: Modale | undefined = $state();
+  let modeleDeMesure: ModeleDeMesure | undefined = $state();
 
   let servicesAvecMesure: ServiceAssocieAUneMesure[] = $state([]);
 
-  run(() => {
+  $effect(() => {
+    if (!modeleDeMesure) return;
+
     servicesAvecMesure =
       modeleDeMesure &&
       $servicesAvecMesuresAssociees
-        .filter((s) => modeleDeMesure.idsServicesAssocies.includes(s?.id))
+        .filter((s) => modeleDeMesure?.idsServicesAssocies.includes(s?.id))
         .map(({ mesuresAssociees, mesuresSpecifiques, ...autresDonnees }) => ({
           ...autresDonnees,
           mesure:
-            modeleDeMesure.type === 'generale'
+            modeleDeMesure?.type === 'generale'
               ? {
                   ...mesuresAssociees[modeleDeMesure.id],
                   id: modeleDeMesure.id,
@@ -51,9 +51,9 @@
                 }
               : {
                   ...mesuresSpecifiques.find(
-                    (ms) => ms.idModele === modeleDeMesure.id
+                    (ms) => ms.idModele === modeleDeMesure?.id
                   ),
-                  id: modeleDeMesure.id,
+                  id: modeleDeMesure?.id,
                   type: 'specifique',
                 },
         }));
@@ -62,10 +62,12 @@
   export const affiche = async (modeleMesureAAfficher: ModeleDeMesure) => {
     modeleDeMesure = modeleMesureAAfficher;
     await tick();
-    elementModale.affiche();
+    elementModale?.affiche();
   };
 
   const configureMesure = () => {
+    if (!modeleDeMesure) return;
+
     if (modeleDeMesure.type === 'generale') {
       tiroirStore.afficheContenu(TiroirModificationMultipleMesuresGenerales, {
         modeleMesureGenerale: modeleDeMesure as ModeleMesureGenerale,
@@ -80,7 +82,7 @@
         ongletActif: 'info',
       });
     }
-    elementModale.ferme();
+    elementModale?.ferme();
   };
 </script>
 
@@ -88,7 +90,9 @@
   <Modale bind:this={elementModale}>
     {#snippet entete()}
       <h4>Mesure</h4>
-      <DescriptionCompleteMesure {modeleDeMesure} />
+      {#if modeleDeMesure}
+        <DescriptionCompleteMesure {modeleDeMesure} />
+      {/if}
       <h4>
         {servicesAvecMesure.length}
         {servicesAvecMesure.length > 1
@@ -110,14 +114,14 @@
         titre="Retour à la liste de mesures"
         type="secondaire"
         taille="moyen"
-        on:click={() => elementModale.ferme()}
+        onclick={() => elementModale?.ferme()}
       />
       <Bouton
         titre="Configurer la mesure"
         type="primaire"
         taille="moyen"
         icone="configuration"
-        on:click={configureMesure}
+        onclick={configureMesure}
       />
     {/snippet}
   </Modale>

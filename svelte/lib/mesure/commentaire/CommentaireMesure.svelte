@@ -1,14 +1,13 @@
 <script lang="ts">
-  import { run, preventDefault } from 'svelte/legacy';
-
-  import { createEventDispatcher, onMount } from 'svelte';
-
+  import { preventDefault } from 'svelte/legacy';
+  import { createEventDispatcher, onDestroy, onMount } from 'svelte';
   import StarterKit from '@tiptap/starter-kit';
-  import Mention, { MentionPluginKey } from '@tiptap/extension-mention';
   import Placeholder from '@tiptap/extension-placeholder';
-  import type { Readable } from 'svelte/store';
-  import suggestion from './suggestion';
-  import { createEditor, Editor, EditorContent } from 'svelte-tiptap';
+  import { Editor } from '@tiptap/core';
+  import Mention from '@tiptap/extension-mention';
+  import { get } from 'svelte/store';
+  import { contributeurs } from '../../tableauDesMesures/stores/contributeurs.store';
+  import ListeSuggestionsMention from './ListeSuggestionsMention.svelte';
 
   interface Props {
     contenuCommentaire: string;
@@ -17,10 +16,11 @@
 
   let { contenuCommentaire = $bindable(), nonce }: Props = $props();
 
-  let editor: Readable<Editor> = $state();
-  run(() => {
-    contenuCommentaire = $editor?.getText();
-  });
+  let editor: Editor | undefined = $state();
+  let editorEl: HTMLDivElement | undefined = $state();
+  let listeSuggestionsMentionEl: ListeSuggestionsMention;
+  let listeVisible: boolean = $state(false);
+
   let commentaireValide = $derived(
     !!contenuCommentaire &&
       contenuCommentaire.trim().length > 0 &&
@@ -28,18 +28,16 @@
   );
 
   onMount(() => {
-    editor = createEditor({
+    editor = new Editor({
+      element: editorEl,
       injectCSS: true,
       injectNonce: nonce,
       editorProps: {
-        attributes: {
-          class: 'champ-commentaire',
-        },
+        attributes: { class: 'champ-commentaire' },
         handleKeyDown: (vue, evenement) => {
           if (
             evenement.key === 'Enter' &&
-            // @ts-expect-error le plugin `mention` ajoute cet état
-            !vue.state.mention$.active &&
+            !listeVisible &&
             !evenement.shiftKey &&
             !evenement.altKey &&
             !evenement.ctrlKey
@@ -51,8 +49,20 @@
       },
       extensions: [
         StarterKit,
+        Placeholder.configure({ placeholder: 'Écrivez un commentaire...' }),
         Mention.configure({
-          suggestion: suggestion(),
+          HTMLAttributes: { class: 'mention' },
+          suggestion: {
+            char: '@',
+            items: ({ query }) => {
+              return get(contributeurs)
+                .filter((c) =>
+                  c.prenomNom.toLowerCase().includes(query.toLowerCase())
+                )
+                .slice(0, 5);
+            },
+            render: () => listeSuggestionsMentionEl,
+          },
           renderHTML({ options, node }) {
             return [
               'span',
@@ -64,17 +74,25 @@
             return `${options.suggestion.char}[${node.attrs.id}]`;
           },
         }),
-        Placeholder.configure({
-          placeholder: 'Écrivez un commentaire...',
-        }),
       ],
+      onTransaction: () => {
+        if (!editor) return;
+        editor = editor;
+      },
+      onUpdate: ({ editor }) => {
+        contenuCommentaire = editor.getText();
+      },
     });
+  });
+
+  onDestroy(() => {
+    if (editor) editor.destroy();
   });
 
   const dispatch = createEventDispatcher<{ submit: null }>();
   const sauvegardeCommentaire = () => {
     dispatch('submit');
-    $editor.commands.clearContent();
+    editor?.commands.clearContent();
     contenuCommentaire = '';
   };
 </script>
@@ -84,7 +102,7 @@
     type="button"
     class="mention-commentaire"
     title="Ajouter une mention"
-    onclick={() => $editor.commands.insertContent('@')}
+    onclick={() => editor?.commands.insertContent('@')}
   >
     <img
       src="/statique/assets/images/icone_mention.svg"
@@ -92,7 +110,11 @@
     />
   </button>
   <div class="conteneur-editeur">
-    <EditorContent editor={$editor} />
+    <div bind:this={editorEl}></div>
+    <ListeSuggestionsMention
+      bind:this={listeSuggestionsMentionEl}
+      bind:listeVisible
+    />
   </div>
   <button type="submit" class="envoi-commentaire" disabled={!commentaireValide}>
     <img

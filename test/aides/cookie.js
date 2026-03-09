@@ -12,7 +12,7 @@ const decodeSessionDuCookie = (reponse, indiceHeader) => {
     const headerCookie = reponse.headers['set-cookie'];
     const cookieSession = enObjet(headerCookie[indiceHeader]);
     return JSON.parse(Buffer.from(cookieSession.session, 'base64').toString());
-  } catch (e) {
+  } catch {
     return undefined;
   }
 };

@@ -8,7 +8,7 @@
 </script>
 
 <div class="conteneur-fil-ariane">
-  {#each items as item, index}
+  {#each items as item, index (index)}
     {#if item.lien}
       <a href={item.lien}>{item.label}</a>
     {:else}

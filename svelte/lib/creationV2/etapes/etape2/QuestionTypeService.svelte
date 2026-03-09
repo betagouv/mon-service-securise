@@ -1,7 +1,7 @@
 <script lang="ts">
   import { run } from 'svelte/legacy';
 
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import CheckboxIllustree from './CheckboxIllustree.svelte';
   import type { MiseAJour } from '../../creationV2.api';
@@ -42,7 +42,7 @@
   Quel est le type de service à sécuriser ?*
 
   <span class="indication">Sélectionnez une ou plusieurs réponses</span>
-  {#each typesDeService as [idType, details]}
+  {#each typesDeService as [idType, details] (idType)}
     {@const nomImage = illustrations[idType]}
     <CheckboxIllustree
       id={idType}

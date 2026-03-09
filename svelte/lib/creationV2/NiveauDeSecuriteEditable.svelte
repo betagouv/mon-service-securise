@@ -56,7 +56,7 @@
   {@render infoMajNecessaire?.()}
 
   <div id="niveaux-securite">
-    {#each donneesNiveauxDeSecurite as niveauSecurite, index}
+    {#each donneesNiveauxDeSecurite as niveauSecurite, index (index)}
       <details
         id={niveauSecurite.id}
         class="conteneur-niveau-securite"

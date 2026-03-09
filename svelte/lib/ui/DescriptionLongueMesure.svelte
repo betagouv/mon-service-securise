@@ -30,7 +30,7 @@
     return { description };
   };
 
-  let descriptionAAfficher: string = $state();
+  let descriptionAAfficher: string = $state('');
   let objectifAAfficher: string | undefined = $state();
   run(() => {
     const resultat = recupereObjectif(description);

@@ -90,8 +90,8 @@
     }
   };
 
-  let retourUtilisateur: string = $state();
-  let commentaireRetourUtilisateur: string = $state();
+  let retourUtilisateur: string = $state('');
+  let commentaireRetourUtilisateur: string = $state('');
   let ongletActif: string = $state('mesure');
 
   const activeOngletMesure = () => {
@@ -136,7 +136,7 @@
         `Vous avez supprimé la mesure <b>${encode(nomMesure)}</b>.`,
         true
       );
-    } catch (e) {
+    } catch {
       toasterStore.erreur(
         'Une erreur est survenue',
         "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."

@@ -55,8 +55,8 @@
       progressionJaugeMin
   );
 
-  let animationJauge: SVGAnimateTransformElement = $state();
-  let animationFleche: SVGAnimateTransformElement = $state();
+  let animationJauge: SVGAnimateTransformElement | undefined = $state();
+  let animationFleche: SVGAnimateTransformElement | undefined = $state();
 
   const metAJourIndiceCyber = async () => {
     if (!idService) return;
@@ -67,7 +67,7 @@
   };
 </script>
 
-<svelte:body onmesure-modifiee={metAJourIndiceCyber} />
+<svelte:body on:mesure-modifiee={metAJourIndiceCyber} />
 <svg
   id="score-indice-cyber-{idAleatoire}"
   viewBox="0 0 160 160"

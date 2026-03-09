@@ -30,7 +30,7 @@
   Quelle est l'ouverture du système ?*
 
   <span class="indication">Sélectionnez une réponse</span>
-  {#each Object.entries(questionsV2.ouvertureSysteme) as [idType, { nom, exemple }]}
+  {#each Object.entries(questionsV2.ouvertureSysteme) as [idType, { nom, exemple }] (idType)}
     <Radio
       id={idType}
       {nom}

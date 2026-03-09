@@ -34,8 +34,8 @@
   services={servicesAssocies}
   {predicationDesactivation}
 >
-  {#snippet infoStatutMesure({ donnee })}
-    {#if modificationPrecisionUniquement && !donnee.mesure.statut}
+  {#snippet infoStatutMesure({ statut })}
+    {#if modificationPrecisionUniquement && !statut}
       <Infobulle
         contenu="Cette précision ne peut pas être appliquée à ce service, car il ne dispose pas actuellement d'un statut."
       ></Infobulle>

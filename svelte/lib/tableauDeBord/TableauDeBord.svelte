@@ -34,9 +34,9 @@
 
   let enCoursChargement = $state(true);
 
-  let nombreServices: number = $state();
-  let nombreServicesHomologues: number = $state();
-  let nombreHomologationsExpirees: number = $state();
+  let nombreServices: number | undefined = $state();
+  let nombreServicesHomologues: number | undefined = $state();
+  let nombreHomologationsExpirees: number | undefined = $state();
   let indiceCyberMoyen: IndiceCyberMoyen | undefined = $state();
 
   onMount(async () => {
@@ -84,8 +84,8 @@
 </script>
 
 <svelte:body
-  onrafraichis-services={rafraichisServices}
-  oncollaboratif-service-modifie={rafraichisServices}
+  on:rafraichis-services={rafraichisServices}
+  on:collaboratif-service-modifie={rafraichisServices}
 />
 <Toaster />
 <div class="tableau-de-bord">
@@ -98,13 +98,15 @@
       <ChargementEnCours />
     </div>
   {:else}
-    <BandeauInfo
-      {nombreServices}
-      {nombreServicesHomologues}
-      {nombreHomologationsExpirees}
-      {indiceCyberMoyen}
-      {estSuperviseur}
-    />
+    {#if nombreServices !== undefined && nombreServicesHomologues !== undefined && nombreHomologationsExpirees !== undefined}
+      <BandeauInfo
+        {nombreServices}
+        {nombreServicesHomologues}
+        {nombreHomologationsExpirees}
+        {indiceCyberMoyen}
+        {estSuperviseur}
+      />
+    {/if}
     <BandeauFiltres />
     <TableauDesServices indicesCyberCharges={indiceCyberMoyen !== undefined} />
     <BandeauBlog {dateInscriptionUtilisateur} {avecPromotionDeMsc} />

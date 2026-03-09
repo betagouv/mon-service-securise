@@ -1,15 +1,13 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   interface Props {
     nombreContributeurs: number;
+    onclick: (e: MouseEvent) => void;
   }
 
-  let { nombreContributeurs }: Props = $props();
+  let { nombreContributeurs, onclick }: Props = $props();
 </script>
 
-<button class="contributeurs-service" onclick={bubble('click')}>
+<button class="contributeurs-service" {onclick}>
   <img
     src="/statique/assets/images/icone_contributeurs.svg"
     alt="Icône du nombre de contributeurs"

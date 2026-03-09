@@ -1,6 +1,5 @@
 <script lang="ts">
   import {
-    run,
     createBubbler,
     preventDefault,
     stopPropagation,
@@ -25,23 +24,25 @@
     id = '',
     referentielCategories,
   }: Props = $props();
-  let menu: MenuFlottant = $state();
-  let champDeclencheur: HTMLInputElement = $state();
+  let menu: MenuFlottant | undefined = $state();
+  let champDeclencheur: HTMLInputElement | undefined = $state();
 
   if (!valeurs) valeurs = [];
 
-  const categories = Object.keys(referentielCategories).map((id) => ({
-    id,
-    libelle: referentielCategories[id],
-  }));
+  let categories = $derived(
+    Object.keys(referentielCategories).map((id) => ({
+      id,
+      libelle: referentielCategories[id],
+    }))
+  );
 
   let label = $derived(
     valeurs.map((id) => categories.find((f) => f.id === id)?.libelle).join(', ')
   );
 
-  run(() => {
+  $effect(() => {
     if (label) {
-      tick().then(() => champDeclencheur.dispatchEvent(new Event('input')));
+      tick().then(() => champDeclencheur?.dispatchEvent(new Event('input')));
     }
   });
 
@@ -49,7 +50,7 @@
     valeurs.length === 0 ? 'Définir la/les catégorie·s' : label
   );
 
-  const refermeMenu = () => menu.fermeLeMenu();
+  const refermeMenu = () => menu?.fermeLeMenu();
 </script>
 
 <div class="conteneur">
@@ -87,7 +88,7 @@
         {labelRappelDeclencheur}
       </div>
       <div class="options">
-        {#each categories as categorie}
+        {#each categories as categorie (categorie.id)}
           <div class="case-et-label">
             <input
               type="checkbox"

@@ -44,7 +44,7 @@
   périmètre de l'homologation ?
 
   <span class="indication">Sélectionnez une ou plusieurs réponses</span>
-  {#each specificiteProjet as [idType, details]}
+  {#each specificiteProjet as [idType, details] (idType)}
     {@const nomImage = illustrations[idType]}
     <CheckboxIllustree
       id={idType}

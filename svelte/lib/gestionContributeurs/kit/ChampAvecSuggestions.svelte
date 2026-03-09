@@ -21,7 +21,7 @@
   }: Props = $props();
 
   let saisie = $state(valeurInitiale);
-  let minuteur: NodeJS.Timeout;
+  let minuteur: ReturnType<typeof setTimeout>;
   let suggestions: Utilisateur[] = $state([]);
 
   const envoiEvenement = createEventDispatcher();
@@ -38,14 +38,14 @@
     }
   };
 
-  const avecTemporisation = (fonction: () => Promise<any>) => {
+  const avecTemporisation = (fonction: () => Promise<void>) => {
     clearTimeout(minuteur);
     minuteur = setTimeout(async () => {
       await fonction();
     }, dureeDebounceEnMs);
   };
 
-  const choisisContributeur = (donnees: Record<string, any>) => {
+  const choisisContributeur = (donnees: Record<string, unknown>) => {
     saisie = '';
     envoiEvenement('contributeurChoisi', donnees);
   };
@@ -89,7 +89,7 @@
         Ajouter ce contributeur
       </div>
     {/if}
-    {#each suggestions as suggestion}
+    {#each suggestions as suggestion, i (i)}
       <div
         class="option suggestion-contributeur"
         role="button"

@@ -59,12 +59,13 @@ export const visiteGuidee = {
       case 'PRESENTATION_MENU_NAV':
         window.location.href = '/visiteGuidee/decrire';
         break;
-      default:
+      default: {
         const urlEtapeSuivante = await termineEtape(etat.etapeCourante);
         if (urlEtapeSuivante) {
           window.location.href = urlEtapeSuivante;
         }
         break;
+      }
     }
   },
 };

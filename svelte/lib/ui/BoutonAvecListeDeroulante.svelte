@@ -20,12 +20,12 @@
   let { titre, options, disabled = false }: Props = $props();
 
   let ouvert = $state(false);
-  let elementBoutonDeroulant: HTMLDivElement = $state();
+  let elementBoutonDeroulant: HTMLDivElement | undefined = $state();
 </script>
 
 <FermetureSurClicEnDehors
   bind:doitEtreOuvert={ouvert}
-  elements={[elementBoutonDeroulant]}
+  elements={elementBoutonDeroulant ? [elementBoutonDeroulant] : []}
 />
 <div
   class="conteneur-bouton nouveau-service"
@@ -37,7 +37,7 @@
     icone="plus"
     taille="moyen"
     actif={!disabled}
-    on:click={() => (ouvert = !ouvert)}
+    onclick={() => (ouvert = !ouvert)}
   />
   {#if ouvert}
     <ul class="contenu-deroulant">

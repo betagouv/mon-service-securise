@@ -31,6 +31,7 @@
 
   const transitionConditionnelle = (
     noeud: HTMLElement,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     options: Record<string, any>
   ) => {
     if (avecAnimation) return options.fonction(noeud, options);

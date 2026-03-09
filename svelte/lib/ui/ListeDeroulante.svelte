@@ -1,10 +1,8 @@
-<script lang="ts" generics="T extends any">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
+<script lang="ts" generics="T extends string | number">
   import type { OptionsListeDeroulante } from './ui.types.d';
   import { validationChampDsfr } from '../directives/validationChampDsfr';
   import AsterisqueChampRequis from './AsterisqueChampRequis.svelte';
+  import type { ChangeEventHandler } from 'svelte/elements';
 
   interface Props {
     label: string;
@@ -17,6 +15,7 @@
     requis?: boolean;
     messageErreur?: string;
     messageValide?: string;
+    onchange?: ChangeEventHandler<HTMLSelectElement>;
   }
 
   let {
@@ -30,6 +29,7 @@
     requis = false,
     messageErreur = '',
     messageValide = '',
+    onchange,
   }: Props = $props();
 </script>
 
@@ -58,10 +58,10 @@
         ? { invalide: messageErreur, valide: messageValide }
         : { invalide: '', valide: '' }}
       class:avecValidation={messageValide !== ''}
-      onchange={bubble('change')}
+      {onchange}
     >
       <option value={null} selected disabled hidden>{aideSaisie}</option>
-      {#each options as option}
+      {#each options as option (option.valeur)}
         <option label={option.label} value={option.valeur}></option>
       {/each}
     </select>

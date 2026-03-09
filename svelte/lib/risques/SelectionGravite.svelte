@@ -1,14 +1,13 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   import type { IdentifiantGravite, ReferentielGravites } from './risques.d';
+  import type { ChangeEventHandler } from 'svelte/elements';
 
   interface Props {
     niveauGravite: IdentifiantGravite;
     referentielGravites: ReferentielGravites;
     estLectureSeule: boolean | undefined;
     avecLibelleOption?: boolean;
+    onchange?: ChangeEventHandler<HTMLSelectElement>;
   }
 
   let {
@@ -16,6 +15,7 @@
     referentielGravites,
     estLectureSeule,
     avecLibelleOption = false,
+    onchange,
   }: Props = $props();
 </script>
 
@@ -26,7 +26,7 @@
     class:avecLibelleOption
     bind:value={niveauGravite}
     disabled={estLectureSeule}
-    onchange={bubble('change')}
+    {onchange}
   >
     <option
       label={avecLibelleOption ? 'Définir la gravité' : '+'}

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { HTMLAnchorAttributes } from 'svelte/elements';
-
   interface Props {
     titre: string;
     icone?:
@@ -25,6 +23,7 @@
     classe?: string;
     href: string;
     inactif?: boolean;
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   }
 

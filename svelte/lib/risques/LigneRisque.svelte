@@ -80,7 +80,7 @@
         risque.desactive}
       referentielGravites={niveauxGravite}
       bind:niveauGravite={risque.niveauGravite}
-      on:change={metAJourRisque}
+      onchange={metAJourRisque}
     />
   </td>
   <td>
@@ -90,7 +90,7 @@
         risque.desactive}
       referentielVraisemblances={niveauxVraisemblance}
       bind:niveauVraisemblance={risque.niveauVraisemblance}
-      on:change={metAJourRisque}
+      onchange={metAJourRisque}
     />
   </td>
   <td class="actions">

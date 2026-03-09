@@ -34,7 +34,7 @@
     use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
   >
     <option value="" disabled selected>Sélectionner un nombre</option>
-    {#each estimationNombreServices as estimation}
+    {#each estimationNombreServices as estimation, i (i)}
       {@const valeur = `${estimation.borneBasse}_${estimation.borneHaute}`}
       <option value={valeur}>{estimation.label}</option>
     {/each}

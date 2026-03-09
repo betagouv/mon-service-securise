@@ -7,7 +7,7 @@
   }
 
   let { idService }: Props = $props();
-  let modaleExplication: ExplicationNouveauReferentiel = $state();
+  let modaleExplication: ExplicationNouveauReferentiel | undefined = $state();
 </script>
 
 <div class="conteneur-bandeau-referentiel-v2">

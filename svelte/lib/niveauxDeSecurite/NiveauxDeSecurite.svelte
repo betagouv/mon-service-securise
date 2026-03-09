@@ -25,18 +25,22 @@
     modeVisiteGuidee = false,
   }: Props = $props();
 
-  let niveauChoisi: IdNiveauDeSecurite = $state();
-  let niveauSurbrillance: IdNiveauDeSecurite = $state();
+  let niveauChoisi: IdNiveauDeSecurite | undefined = $state();
+  let niveauSurbrillance: IdNiveauDeSecurite | undefined = $state();
 
-  const niveauEstRehausse = !niveauSecuriteExistant
-    ? false
-    : ordreDesNiveaux[niveauDeSecuriteMinimal] >
-      ordreDesNiveaux[niveauSecuriteExistant];
+  let niveauEstRehausse = $derived(
+    !niveauSecuriteExistant
+      ? false
+      : ordreDesNiveaux[niveauDeSecuriteMinimal] >
+          ordreDesNiveaux[niveauSecuriteExistant]
+  );
 
-  if (niveauSecuriteExistant && !niveauEstRehausse) {
-    niveauChoisi = niveauSecuriteExistant;
-    niveauSurbrillance = niveauSecuriteExistant;
-  }
+  $effect(() => {
+    if (niveauSecuriteExistant && !niveauEstRehausse) {
+      niveauChoisi = niveauSecuriteExistant;
+      niveauSurbrillance = niveauSecuriteExistant;
+    }
+  });
 
   const estNiveauTropBas = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] < ordreDesNiveaux[niveauDeSecuriteMinimal];
@@ -180,7 +184,7 @@
         {/if}
         <span class="chip">Exemples de services numériques</span>
         <ul class="liste-exemples-services">
-          {#each descriptionNiveau.exemplesServicesNumeriques as exemple}
+          {#each descriptionNiveau.exemplesServicesNumeriques as exemple, i (i)}
             <li>{exemple}</li>
           {/each}
         </ul>
@@ -211,7 +215,7 @@
             <p>{@html descriptionNiveau.securisation[0]}</p>
           {:else}
             <ul>
-              {#each descriptionNiveau.securisation as securisation}
+              {#each descriptionNiveau.securisation as securisation, i (i)}
                 <li>{@html securisation}</li>
               {/each}
             </ul>
@@ -226,7 +230,7 @@
             Homologation
           </summary>
           <ul>
-            {#each descriptionNiveau.homologation as homologation}
+            {#each descriptionNiveau.homologation as homologation, i (i)}
               <li>{@html homologation}</li>
             {/each}
           </ul>
@@ -245,9 +249,10 @@
             </button>
           </div>
           <div class="pagination">
-            {#each donneesNiveauxDeSecurite as niveau}
+            {#each donneesNiveauxDeSecurite as niveau (niveau.id)}
               <button
                 type="button"
+                aria-label={`Aller au niveau ${niveau.titreNiveau}`}
                 class:actif={niveauSurbrillance === niveau.id}
                 onclick={() => (niveauSurbrillance = niveau.id)}
               ></button>

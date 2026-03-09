@@ -32,7 +32,7 @@
   };
 </script>
 
-{#each valeurs as valeur, index}
+{#each valeurs as valeur, index (index)}
   {@const afficheInfo = limiteTaille && index === valeurs.length - 1}
   {@const estInvalide = limiteTaille && valeur.length > limiteTaille}
   <div class="conteneur-champs-texte">

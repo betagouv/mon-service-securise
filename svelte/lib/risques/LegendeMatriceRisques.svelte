@@ -6,14 +6,16 @@
   }
 
   let { niveauxRisque }: Props = $props();
-  const niveaux = Object.entries(niveauxRisque)
-    .filter(([_, n]) => n.position >= 0)
-    .sort(([_, a], [__, b]) => a.position - b.position);
+  let niveaux = $derived(
+    Object.entries(niveauxRisque)
+      .filter(([_, n]) => n.position >= 0)
+      .sort(([_, a], [__, b]) => a.position - b.position)
+  );
 </script>
 
 <div class="legende-matrice">
   <ul>
-    {#each niveaux as [id, descriptionNiveau]}
+    {#each niveaux as [id, descriptionNiveau] (id)}
       <li class={id}>
         <span class="niveau">{descriptionNiveau.libelle} :&nbsp;</span
         >{descriptionNiveau.description}

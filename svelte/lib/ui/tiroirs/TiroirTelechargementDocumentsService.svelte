@@ -14,8 +14,8 @@
   export const sousTitre =
     "Obtenir les documents utiles à la sécurisation et à l'homologation du service sélectionné.";
 
-  const idService = service.id;
-  const nbPdfDisponibles = service.documentsPdfDisponibles.length;
+  let idService = $derived(service.id);
+  let nbPdfDisponibles = $derived(service.documentsPdfDisponibles.length);
 
   const documentDisponible = (document: string) =>
     document === 'archive'

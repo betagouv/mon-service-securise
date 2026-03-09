@@ -276,7 +276,7 @@ describe("L'adaptateur persistance Postgres", () => {
     it("reste robuste en cas de demande d'ajout vide", async () => {
       try {
         await persistance.ajouteActivitesMesure([]);
-      } catch (e) {
+      } catch {
         assert.fail("L'appel n'aurait pas dû lever d'exception");
       }
     });

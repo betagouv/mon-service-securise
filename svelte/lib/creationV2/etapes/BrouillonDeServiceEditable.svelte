@@ -83,8 +83,9 @@
     dispatch('champModifie', { [propriete]: valeur });
   };
 
-  let elementHtml: HTMLElement & { errorMessage: string; status: string } =
-    $state();
+  let elementHtml:
+    | (HTMLElement & { errorMessage: string; status: string })
+    | undefined = $state();
 
   type BlurEvent = FocusEvent & { target: HTMLInputElement };
   const metAJour = {
@@ -133,6 +134,7 @@
       await champModifie('ouvertureSysteme', donnees.ouvertureSysteme);
     },
     nomService: (e: CustomEvent<string>) => {
+      if (!elementHtml) return;
       donnees.nomService = e.detail;
       if (donnees.nomService.length === 0 || donnees.nomService.length > 200) {
         elementHtml.errorMessage =

@@ -8,7 +8,7 @@
   import { storeNotifications } from '../ui/stores/notifications.store';
 
   let ouvert = $state(false);
-  let elementCentreNotifications: HTMLDivElement = $state();
+  let elementCentreNotifications: HTMLDivElement | undefined = $state();
   let ongletActif: TypeOnglet = $state('aFaire');
 
   const calculNbNonLue = (notifications: Notification[]) =>
@@ -35,7 +35,7 @@
 
 <FermetureSurClicEnDehors
   bind:doitEtreOuvert={ouvert}
-  elements={[elementCentreNotifications]}
+  elements={elementCentreNotifications ? [elementCentreNotifications] : []}
 />
 <div
   class="centre-notifications"

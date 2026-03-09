@@ -11,12 +11,12 @@
   }
 
   let { optionsFiltrageDate, entitesSupervisees }: Props = $props();
-  let urlSupervision: string = $state();
+  let urlSupervision: string | undefined = $state();
   let enCoursChargement: boolean = $state(false);
 
-  let filtreDate: string = $state();
-  let filtreBesoinsSecurite: string = $state();
-  let filtreEntite: string = $state();
+  let filtreDate: string | undefined = $state();
+  let filtreBesoinsSecurite: string | undefined = $state();
+  let filtreEntite: string | undefined = $state();
 
   onMount(async () => {
     await recupereUrlIframe();
@@ -52,7 +52,7 @@
 <div class="conteneur-filtres">
   <ListeDeroulante
     bind:valeur={filtreBesoinsSecurite}
-    on:change={metAJourFiltres}
+    onchange={metAJourFiltres}
     label="Besoins de sécurité"
     id="filtre-besoins-securite"
     options={[
@@ -65,7 +65,7 @@
   />
   <ListeDeroulante
     bind:valeur={filtreDate}
-    on:change={metAJourFiltres}
+    onchange={metAJourFiltres}
     label="Date"
     id="filtre-date"
     options={[
@@ -79,7 +79,7 @@
   />
   <ListeDeroulante
     bind:valeur={filtreEntite}
-    on:change={metAJourFiltres}
+    onchange={metAJourFiltres}
     label="Entité"
     id="filtre-entite"
     options={[

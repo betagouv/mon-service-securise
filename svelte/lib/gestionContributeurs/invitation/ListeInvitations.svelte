@@ -2,8 +2,6 @@
   import type {
     Droits,
     Invitation,
-    Permission,
-    Rubrique,
     Utilisateur,
   } from '../gestionContributeurs.d';
   import { enDroitsSurRubrique } from '../gestionContributeurs.d';

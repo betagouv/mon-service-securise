@@ -3,13 +3,17 @@
     type ConfigurationTiroir,
     tiroirStore,
   } from '../ui/stores/tiroir.store';
+  import type { SvelteComponent } from 'svelte';
 
-  let composant: ConfigurationTiroir = $state();
+  let composant: SvelteComponent | undefined = $state();
+  let configuration: ConfigurationTiroir = $derived(
+    composant as unknown as ConfigurationTiroir
+  );
 </script>
 
 <div
   id="tiroir"
-  class={composant?.taille || 'normal'}
+  class={configuration?.taille || 'normal'}
   class:ouvert={$tiroirStore.ouvert}
 >
   {#key $tiroirStore}
@@ -18,13 +22,13 @@
         <button class="fermeture-tiroir" onclick={() => tiroirStore.ferme()}>
           Fermer
         </button>
-        <h2 class="titre-tiroir">{composant?.titre}</h2>
+        <h2 class="titre-tiroir">{configuration?.titre}</h2>
         <p class="texte-tiroir">
-          {composant?.sousTitre}
+          {configuration?.sousTitre}
         </p>
       </div>
-      {@const SvelteComponent = $tiroirStore.contenu.composant}
-      <SvelteComponent bind:this={composant} {...$tiroirStore.contenu.props} />
+      {@const Composant = $tiroirStore.contenu.composant}
+      <Composant bind:this={composant} {...$tiroirStore.contenu.props} />
     {/if}
   {/key}
 </div>

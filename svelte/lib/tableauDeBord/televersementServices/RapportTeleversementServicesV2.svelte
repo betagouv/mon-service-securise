@@ -18,8 +18,8 @@
   import LigneServiceV2 from './LigneServiceV2.svelte';
   import type { RapportDetailleV2 } from './rapportTeleversementServicesV2.types';
 
-  let rapport: RapportDetailleV2 = $state();
-  let resume: ResumeRapportTeleversement = $state();
+  let rapport: RapportDetailleV2 | undefined = $state();
+  let resume: ResumeRapportTeleversement | undefined = $state();
 
   let etatReseau:
     | 'CHARGEMENT_DU_RAPPORT'
@@ -107,7 +107,7 @@
           </tr>
         </thead>
         <tbody>
-          {#each rapport.services.toSorted(triRapportDetaille) as ligne}
+          {#each rapport?.services.toSorted(triRapportDetaille) as ligne, index (index)}
             <LigneServiceV2 {ligne} />
           {/each}
         </tbody>
@@ -121,6 +121,8 @@
       return data.progression;
     }}
     on:fini={() => {
+      if (!rapport) return;
+
       const nb = rapport.services.length;
       toasterStore.succes(
         singulierPluriel(

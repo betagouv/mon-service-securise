@@ -67,7 +67,7 @@
         `Vous avez modifié la mesure ${modeleMesure.description} sur ${idsServices.length} service${pluriel}.`
       );
       metEnAvantMesureApresModification();
-    } catch (e) {
+    } catch {
       tiroirStore.ferme();
       toasterStore.erreur(
         'Une erreur est survenue',
@@ -154,7 +154,7 @@
       etapeServicesAssocies = 1;
       idsServicesSelectionnes = [];
       metEnAvantMesureApresModification();
-    } catch (e) {
+    } catch {
       toasterStore.erreur(
         'Une erreur est survenue',
         "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
@@ -175,7 +175,7 @@
         'Les informations de la mesure ont été mises à jour'
       );
       metEnAvantMesureApresModification();
-    } catch (e) {
+    } catch {
       toasterStore.erreur(
         'Une erreur est survenue',
         "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
@@ -193,8 +193,9 @@
     }
   });
 
-  let elementEtapesModification: EtapesModificationMultipleStatutPrecision =
-    $state();
+  let elementEtapesModification:
+    | EtapesModificationMultipleStatutPrecision
+    | undefined = $state();
 </script>
 
 <ContenuTiroir>
@@ -258,7 +259,7 @@
           </p>
           <div class="retour-onglet-services">
             <Bouton
-              on:click={() => (ongletActif = 'servicesAssocies')}
+              onclick={() => (ongletActif = 'servicesAssocies')}
               type="secondaire"
               titre="Associer des services"
             />
@@ -337,16 +338,12 @@
     {/if}
   {:else if ongletActif === 'statut-precision'}
     {#if etapeStatutEtPrecision === 1}
-      <Bouton
-        type="lien"
-        titre="Annuler"
-        on:click={() => tiroirStore.ferme()}
-      />
+      <Bouton type="lien" titre="Annuler" onclick={() => tiroirStore.ferme()} />
     {:else}
       <Bouton
         type="lien"
         titre="Précédent"
-        on:click={() => elementEtapesModification.etapePrecedente()}
+        onclick={() => elementEtapesModification?.etapePrecedente()}
       />
     {/if}
     <Bouton
@@ -356,7 +353,7 @@
       type="primaire"
       actif={boutonSuivantActif}
       enCoursEnvoi={enCoursDenvoi}
-      on:click={() => elementEtapesModification.etapeSuivante()}
+      onclick={() => elementEtapesModification?.etapeSuivante()}
     />
   {:else if ongletActif === 'servicesAssocies'}
     {#if etapeServicesAssocies === 1}

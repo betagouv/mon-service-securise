@@ -1,6 +1,5 @@
 <script lang="ts">
   import {
-    run,
     createBubbler,
     preventDefault,
     stopPropagation,
@@ -20,9 +19,9 @@
   }
 
   let { valeurs = $bindable(), requis = false, id = '' }: Props = $props();
-  let menu: MenuFlottant = $state();
+  let menu: MenuFlottant | undefined = $state();
   let autreDomaine: string = $state('');
-  let champDeclencheur: HTMLInputElement = $state();
+  let champDeclencheur: HTMLInputElement | undefined = $state();
 
   if (!valeurs) valeurs = [];
 
@@ -51,9 +50,9 @@
     selection.map((id) => domaines.find((f) => f.id === id)?.libelle).join(', ')
   );
 
-  run(() => {
+  $effect(() => {
     if (label) {
-      tick().then(() => champDeclencheur.dispatchEvent(new Event('input')));
+      tick().then(() => champDeclencheur?.dispatchEvent(new Event('input')));
     }
   });
 
@@ -62,14 +61,14 @@
   );
 
   let afficheAutre = $derived(selection.includes('autre'));
-  run(() => {
+  $effect(() => {
     valeurs = [
       ...selection.filter((f) => f !== 'autre'),
       ...(afficheAutre ? [autreDomaine] : ''),
     ];
   });
 
-  const refermeMenu = () => menu.fermeLeMenu();
+  const refermeMenu = () => menu?.fermeLeMenu();
 </script>
 
 <div class="conteneur">
@@ -107,7 +106,7 @@
         {labelRappelDeclencheur}
       </div>
       <div class="options">
-        {#each domaines as domaine}
+        {#each domaines as domaine (domaine.id)}
           <div class="case-et-label">
             <input
               type="checkbox"

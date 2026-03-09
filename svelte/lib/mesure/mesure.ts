@@ -2,16 +2,17 @@ import Mesure from './Mesure.svelte';
 import EnteteTiroir from './entete/EnteteTiroir.svelte';
 import type { MesureEditee, MesureProps } from './mesure.d';
 import { store } from './mesure.store';
-import { mount } from 'svelte';
+import { mount, unmount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-mesure',
-  (e: CustomEvent<MesureProps>) => rechargeApp({ ...e.detail })
+  async (e: CustomEvent<MesureProps>) => await rechargeApp({ ...e.detail })
 );
 
-let enteteTiroir: EnteteTiroir;
-const changeCartoucheDuReferentiel = () => {
-  enteteTiroir?.$destroy();
+let enteteTiroir: ReturnType<typeof mount>;
+const changeCartoucheDuReferentiel = async () => {
+  if (enteteTiroir) await unmount(enteteTiroir);
+
   const cible = document.querySelector('.titre-tiroir');
   if (!cible) {
     throw new Error('Element titre du tiroir non trouvé');
@@ -24,10 +25,11 @@ const reinitialiseStore = (mesureAEditer?: MesureEditee) => {
 };
 
 let app: Mesure;
-const rechargeApp = ({ mesureAEditer, ...autreProps }: MesureProps) => {
-  app?.$destroy();
+const rechargeApp = async ({ mesureAEditer, ...autreProps }: MesureProps) => {
+  if (app) await unmount(app);
+
   reinitialiseStore(mesureAEditer);
-  changeCartoucheDuReferentiel();
+  await changeCartoucheDuReferentiel();
   app = mount(Mesure, {
     target: document.getElementById('conteneur-mesure')!,
     props: autreProps,

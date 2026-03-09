@@ -8,7 +8,7 @@ export const getUtilisateurCourant =
     try {
       const { data } = await axios.get('/api/utilisateurCourant');
       return data;
-    } catch (e) {
+    } catch {
       return null;
     }
   };

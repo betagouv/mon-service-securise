@@ -18,9 +18,10 @@
 
   let { titreDuRapport, resume, tableau_du_rapport }: Props = $props();
 
-  let elementModale: HTMLDialogElement = $state();
+  let elementModale: HTMLDialogElement | undefined = $state();
 
   onMount(() => {
+    if (!elementModale) return;
     elementModale.inert = true;
     elementModale.showModal();
     elementModale.inert = false;

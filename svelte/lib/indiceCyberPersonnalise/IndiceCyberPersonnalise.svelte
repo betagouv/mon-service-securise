@@ -35,7 +35,7 @@
   };
 </script>
 
-<svelte:body onmesure-modifiee={metAJourIndiceCyber} />
+<svelte:body on:mesure-modifiee={metAJourIndiceCyber} />
 <svg
   id="score-indice-cyber-personnalise"
   viewBox="0 0 {taille} {taille}"
@@ -70,7 +70,7 @@
     <div class="gradient"></div>
   </foreignObject>
   <mask id="masque">
-    {#each new Array(avancement).fill(0) as _, i}
+    {#each new Array(avancement).fill(0) as _, i (i)}
       {@const angle = (i / nbTraits) * 2 * Math.PI - Math.PI / 2}
       {@const x = radius * Math.cos(angle) + taille / 2}
       {@const y = radius * Math.sin(angle) + taille / 2}

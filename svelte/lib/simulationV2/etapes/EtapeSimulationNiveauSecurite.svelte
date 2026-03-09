@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import type { IdNiveauDeSecurite } from '../../ui/types';
   import { onMount } from 'svelte';
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
@@ -18,8 +16,8 @@
 
   let { estComplete = $bindable() }: Props = $props();
 
-  let niveauSelectionne: IdNiveauDeSecurite | '' = $state();
-  let niveauDeSecuriteMinimal: IdNiveauDeSecurite = $state();
+  let niveauSelectionne: IdNiveauDeSecurite | '' = $state('');
+  let niveauDeSecuriteMinimal: IdNiveauDeSecurite | undefined = $state();
 
   onMount(async () => {
     niveauDeSecuriteMinimal = await niveauSecuriteMinimalRequis(
@@ -55,9 +53,10 @@
     questionsV2.niveauSecurite[niveau]?.position >=
     questionsV2.niveauSecurite[niveauDeSecuriteMinimal]?.position;
 
-  run(() => {
+  $effect(() => {
     estComplete =
       niveauSelectionne !== '' &&
+      !!niveauDeSecuriteMinimal &&
       niveauEstConformeAuMinimumRequis(
         niveauSelectionne,
         niveauDeSecuriteMinimal
@@ -67,11 +66,13 @@
 
 <hr class="separateur-etapier" />
 
-<NiveauDeSecuriteEditable
-  bind:niveauSelectionne
-  {niveauDeSecuriteMinimal}
-  on:champModifie={metsAJour}
-/>
+{#if niveauDeSecuriteMinimal}
+  <NiveauDeSecuriteEditable
+    bind:niveauSelectionne
+    {niveauDeSecuriteMinimal}
+    on:champModifie={metsAJour}
+  />
+{/if}
 
 <style>
   hr {

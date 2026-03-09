@@ -1,4 +1,4 @@
-<script lang="ts" generics="T extends string">
+<script lang="ts">
   import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
   import Pastille from './Pastille.svelte';
   import type { OptionsListeDeroulanteRiche } from './ui.types.d';
@@ -6,8 +6,8 @@
   interface Props {
     id: string;
     libelle: string;
-    options: OptionsListeDeroulanteRiche<T>;
-    valeursSelectionnees?: Record<string, T[]>;
+    options: OptionsListeDeroulanteRiche<string>;
+    valeursSelectionnees?: Record<string, string[]>;
   }
 
   let {
@@ -17,8 +17,8 @@
     valeursSelectionnees = $bindable({}),
   }: Props = $props();
   let menuOuvert: boolean = $state(false);
-  let declencheurEl: HTMLButtonElement = $state();
-  let contenuEl: HTMLDivElement = $state();
+  let declencheurEl: HTMLButtonElement | undefined = $state();
+  let contenuEl: HTMLDivElement | undefined = $state();
 
   let nbFiltresActifs = $derived(
     Object.values(valeursSelectionnees).flat().length
@@ -27,7 +27,7 @@
 
 <FermetureSurClicEnDehors
   bind:doitEtreOuvert={menuOuvert}
-  elements={[declencheurEl, contenuEl]}
+  elements={declencheurEl && contenuEl ? [declencheurEl, contenuEl] : []}
 />
 <div class="conteneur-liste-deroulante">
   <button
@@ -47,9 +47,9 @@
     />
   </button>
   <div class="contenu-menu-deroulant" class:menuOuvert bind:this={contenuEl}>
-    {#each options.categories as categorie}
+    {#each options.categories as categorie (categorie.id)}
       <p class="categorie">{categorie.libelle}</p>
-      {#each options.items.filter((item) => item.idCategorie === categorie.id) as item}
+      {#each options.items.filter((item) => item.idCategorie === categorie.id) as item, index (index)}
         <div class="option-liste-deroulante">
           <input
             id={item.valeur}

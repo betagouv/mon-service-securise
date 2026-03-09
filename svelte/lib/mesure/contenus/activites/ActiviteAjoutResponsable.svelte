@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import type {
     ActiviteMesure,
     DetailsModificationResponsable,
@@ -16,8 +14,8 @@
 
   const details = <DetailsModificationResponsable>activite.details;
   const idResponsable: string = details.valeur;
-  let intitule: string = $state();
-  run(() => {
+  let intitule: string = $state('');
+  $effect(() => {
     const contributeursTrouves = $contributeurs.filter(
       (c) => c.id === idResponsable
     );

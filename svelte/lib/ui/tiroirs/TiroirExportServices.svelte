@@ -2,6 +2,7 @@
   import ContenuTiroir from './ContenuTiroir.svelte';
   import Lien from '../Lien.svelte';
   import type { Service } from '../../tableauDeBord/tableauDeBord.d';
+  import { SvelteURLSearchParams } from 'svelte/reactivity';
 
   interface Props {
     services: Service[];
@@ -14,9 +15,12 @@
       ? 'Télécharger la liste des services sélectionnés dans le tableau de bord.'
       : 'Télécharger les données du service sélectionné dans le tableau de bord.';
 
-  const queryString = new URLSearchParams();
-  services.forEach((service) => queryString.append('idsServices', service.id));
-  queryString.append('timestamp', Date.now().toString());
+  const queryString = () => {
+    const requete = new SvelteURLSearchParams();
+    services.forEach((service) => requete.append('idsServices', service.id));
+    requete.append('timestamp', Date.now().toString());
+    return requete.toString();
+  };
 
   const formatDateCourt = Intl.DateTimeFormat('fr-CA', {
     year: 'numeric',
@@ -35,7 +39,10 @@
       <div class="nom-document">
         <p>{nomFichierCsv}</p>
       </div>
-      <Lien href="/api/services/export.csv?{queryString}" titre="Télécharger" />
+      <Lien
+        href="/api/services/export.csv?{queryString()}"
+        titre="Télécharger"
+      />
     </li>
   </ul>
 </ContenuTiroir>

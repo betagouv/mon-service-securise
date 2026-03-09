@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import Modale from '../ui/Modale.svelte';
 
-  let elementModale: Modale = $state();
+  let elementModale: Modale | undefined = $state();
 
   onMount(() => {
     elementModale?.affiche();

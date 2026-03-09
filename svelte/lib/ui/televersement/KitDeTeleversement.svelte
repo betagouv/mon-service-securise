@@ -41,13 +41,14 @@
     televersementChange: EtatTeleversement;
   }>();
 
-  let elementFichier: HTMLInputElement = $state();
-  let fichier: FileList = $state();
+  let elementFichier: HTMLInputElement | undefined = $state();
+  let fichier: FileList | undefined = $state();
   let enCoursDeDrop = $state(false);
 
   let etatTeleversement: EtatTeleversement = $state('EnAttente');
 
   const gereDropFichier = (e: DragEvent) => {
+    e.preventDefault();
     enCoursDeDrop = false;
 
     if (e.dataTransfer?.files.length === 1) {
@@ -62,7 +63,7 @@
   };
 
   const gereVerificationFichier = async () => {
-    if (fichier.length === 0) {
+    if (fichier?.length === 0) {
       changeEtat('EnAttente');
       return;
     }
@@ -70,13 +71,13 @@
     changeEtat('EnCoursEnvoi');
 
     const donnees = new FormData();
-    donnees.append('fichier', fichier[0]);
+    donnees.append('fichier', fichier![0]);
     try {
       await axios.post(apiPostDuTeleversement, donnees, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       changeEtat('Valide');
-    } catch (e) {
+    } catch {
       changeEtat('Invalide');
     }
   };
@@ -101,8 +102,8 @@
     aria-label="Zone de dépôt pour téléverser un fichier"
     class="conteneur-drag-and-drop"
     class:pret-a-drop={enCoursDeDrop}
-    ondrop={preventDefault(gereDropFichier)}
-    ondragover={preventDefault((e) => (enCoursDeDrop = true))}
+    ondrop={gereDropFichier}
+    ondragover={preventDefault(() => (enCoursDeDrop = true))}
     ondragleave={() => (enCoursDeDrop = false)}
   >
     <img
@@ -113,7 +114,7 @@
       type="secondaire"
       titre="Parcourir"
       taille="moyen"
-      on:click={() => elementFichier.click()}
+      onclick={() => elementFichier?.click()}
     />
     <input
       type="file"
@@ -126,7 +127,7 @@
     />
     <p>ou faites glisser un fichier ici</p>
     <div>
-      {#each lesLimitations as l}
+      {#each lesLimitations as l, index (index)}
         <span>{l}</span>
       {/each}
     </div>
@@ -149,7 +150,7 @@
           height="40px"
         />
         <div>
-          {#if fichier[0]}
+          {#if fichier?.[0]}
             <button onclick={supprimeFichierTeleverse}>
               <img
                 src="/statique/assets/images/icone_fermeture_modale.svg"

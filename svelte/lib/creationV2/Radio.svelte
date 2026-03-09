@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
+  import type { ChangeEventHandler } from 'svelte/elements';
 
-  const bubble = createBubbler();
   interface Props {
     id: string;
     nom: string;
     valeur: string;
     exemple?: string | undefined;
     illustration?: string | undefined;
+    onchange?: ChangeEventHandler<HTMLInputElement>;
   }
 
   let {
@@ -16,17 +16,12 @@
     valeur = $bindable(),
     exemple = undefined,
     illustration = undefined,
+    onchange,
   }: Props = $props();
 </script>
 
 <div class="conteneur-radio" class:avec-illustration={!!illustration}>
-  <input
-    type="radio"
-    {id}
-    value={id}
-    bind:group={valeur}
-    onchange={bubble('change')}
-  />
+  <input type="radio" {id} value={id} bind:group={valeur} {onchange} />
   <label for={id}>
     {#if illustration}
       <img src={illustration} alt="" />

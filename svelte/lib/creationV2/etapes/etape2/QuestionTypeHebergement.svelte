@@ -50,12 +50,12 @@
 
   <span class="indication">Sélectionnez une réponse</span>
 
-  {#each Object.entries(questionsV2.typeHebergement) as [idType, { nom }]}
+  {#each Object.entries(questionsV2.typeHebergement) as [idType, { nom }] (idType)}
     <Radio
       id={idType}
       {nom}
       bind:valeur={$leBrouillon.typeHebergement}
-      on:change={externaliseSiNecessaire}
+      onchange={externaliseSiNecessaire}
     />
   {/each}
 </label>
@@ -67,7 +67,7 @@
   <span class="titre-question-activites"
     >Quelles activités du projet sont entièrement externalisées ?</span
   >
-  {#each Object.entries(questionsV2.activiteExternalisee) as [idActivite, { nom, exemple }]}
+  {#each Object.entries(questionsV2.activiteExternalisee) as [idActivite, { nom, exemple }] (idActivite)}
     {@const actif =
       !!$leBrouillon.typeHebergement && $leBrouillon.typeHebergement !== 'saas'}
     <div class="conteneur-case-avec-exemple">

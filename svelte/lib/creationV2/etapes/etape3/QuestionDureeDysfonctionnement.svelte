@@ -31,7 +31,7 @@
   Quelle serait la durée maximale acceptable de dysfonctionnement du système ?*
 
   <span class="indication">Sélectionnez une réponse</span>
-  {#each Object.entries(questionsV2.dureeDysfonctionnementAcceptable) as [idType, { nom }]}
+  {#each Object.entries(questionsV2.dureeDysfonctionnementAcceptable) as [idType, { nom }] (idType)}
     <Radio
       id={idType}
       {nom}

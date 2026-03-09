@@ -32,12 +32,12 @@
   let idsModelesSelectionnes: string[] = $state([]);
   let enCoursEnvoi = $state(false);
 
-  const itemsFiltrageCategories = Object.entries(categories).map(
-    ([id, label]) => ({
+  let itemsFiltrageCategories = $derived(
+    Object.entries(categories).map(([id, label]) => ({
       libelle: label,
       valeur: id,
       idCategorie: 'categorie',
-    })
+    }))
   );
 
   let modelesAssociesACeService = $derived(
@@ -89,7 +89,7 @@
       );
       await modelesMesureSpecifique.rafraichis();
       tiroirStore.ferme();
-    } catch (e) {
+    } catch {
       toasterStore.erreur(
         'Une erreur est survenue',
         "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."

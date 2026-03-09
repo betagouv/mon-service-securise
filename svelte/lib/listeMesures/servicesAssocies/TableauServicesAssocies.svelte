@@ -2,7 +2,6 @@
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import Tableau from '../../ui/Tableau.svelte';
   import type {
-    IdTypeService,
     ReferentielStatut,
     ReferentielTypesService,
   } from '../../ui/types.d';

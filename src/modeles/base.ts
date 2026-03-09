@@ -24,7 +24,6 @@ const proprietePresente = (valeur: unknown): boolean => {
 type ConstructeurAgregat = new (
   donnees: Record<string, unknown>,
   referentiel?: Referentiel
-  // eslint-disable-next-line no-use-before-define
 ) => Base;
 
 export type ProprietesBase = {

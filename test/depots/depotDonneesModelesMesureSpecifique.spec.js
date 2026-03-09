@@ -437,7 +437,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
           'U1'
         );
         expect().fail("L'appel aurait du lever une erreur.");
-      } catch (e) {
+      } catch {
         const s1ApresTentative = await depotServices.service('S1');
         expect(s1ApresTentative.mesuresSpecifiques().toutes().length).to.be(1);
 
@@ -610,7 +610,7 @@ describe('Le dépôt de données des modèles de mesure spécifique', () => {
           'U1'
         );
         expect().fail("L'appel aurait du lever une erreur.");
-      } catch (e) {
+      } catch {
         const s1ApresTentative = await depotServices.service('S1');
         expect(s1ApresTentative.mesuresSpecifiques().toutes().length).to.be(1);
       }

@@ -48,8 +48,8 @@ export const store = {
     const etape: Etape = !mesureEditee
       ? 'Creation'
       : mesureEditee.metadonnees.typeMesure === 'GENERALE'
-      ? 'EditionGenerale'
-      : 'EditionSpecifique';
+        ? 'EditionGenerale'
+        : 'EditionSpecifique';
     const mesureEditeeAvecModalites = mesureEditee ?? mesureEditeeParDefaut();
     if (!mesureEditeeAvecModalites.mesure.modalites)
       mesureEditeeAvecModalites.mesure.modalites = '';

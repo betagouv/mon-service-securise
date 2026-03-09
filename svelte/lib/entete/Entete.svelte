@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { getUtilisateurCourant, type ProfilUtilisateur } from './entete.api';
 
-  let connecte: ProfilUtilisateur | null = $state();
+  let connecte: ProfilUtilisateur | null | undefined = $state();
   let menuVisible = $state(false);
 
   onMount(async () => {

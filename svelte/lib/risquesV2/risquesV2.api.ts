@@ -1,4 +1,4 @@
-import type { Risque, TousRisques } from './risquesV2.d';
+import type { TousRisques } from './risquesV2.d';
 
 export const recupereRisques = async (idService: string) => {
   const donnees = await axios.get<TousRisques>(

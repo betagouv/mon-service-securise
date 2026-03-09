@@ -24,7 +24,7 @@
 
   let { idService }: Props = $props();
 
-  let elementModaleConfirmationMigration: Modale = $state();
+  let elementModaleConfirmationMigration: Modale | undefined = $state();
 
   let enCoursDeChargement = $state(false);
 
@@ -64,7 +64,7 @@
 
 <AssistantServiceV2
   on:champModifie={metsAJourPropriete}
-  on:finalise={() => elementModaleConfirmationMigration.affiche()}
+  on:finalise={() => elementModaleConfirmationMigration?.affiche()}
   bind:enCoursDeChargement
   titreAssistant="Actualiser votre service"
   titreBoutonFinalise="Passer au nouveau référentiel"
@@ -96,7 +96,7 @@
         hasTitle
         hasDescription
         title="Cette action est irréversible."
-        text="Il ne sera pas possible de revenir en arrière une fois la bascule effectuée. Cependant, les données déjà renseignées (questions inchangées dans l’ajout d’un service, mesures de sécurité, statuts, commentaires, plans d'action, etc) seront automatiquement reprises."
+        text="Il ne sera pas possible de revenir en arrière une fois la bascule effectuée. Cependant, les données déjà renseignées (questions inchangées dans l’ajout d’un service, mesures de sécurité, statuts, commentaires, plans d'action, etc) seront automatiquement reprises."
       ></dsfr-alert>
     </div>
   {/snippet}
@@ -108,7 +108,7 @@
       taille="md"
       icone=""
       positionIcone="sans"
-      onclick={() => elementModaleConfirmationMigration.ferme()}
+      onclick={() => elementModaleConfirmationMigration?.ferme()}
     ></lab-anssi-bouton>
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton

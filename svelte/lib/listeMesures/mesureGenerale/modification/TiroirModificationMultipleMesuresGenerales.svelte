@@ -91,7 +91,7 @@
         idServicesModifies: idsServices,
         modeleMesureGenerale,
       });
-    } catch (e) {
+    } catch {
       tiroirStore.ferme();
       toasterStore.erreur(
         'Une erreur est survenue',
@@ -102,8 +102,9 @@
     }
   };
 
-  let elementEtapesModification: EtapesModificationMultipleStatutPrecision =
-    $state();
+  let elementEtapesModification:
+    | EtapesModificationMultipleStatutPrecision
+    | undefined = $state();
 </script>
 
 <ContenuTiroir>
@@ -132,13 +133,13 @@
     <Bouton
       type="lien"
       titre="Retour à la liste de mesures"
-      on:click={() => tiroirStore.ferme()}
+      onclick={() => tiroirStore.ferme()}
     />
   {:else}
     <Bouton
       type="lien"
       titre="Précédent"
-      on:click={() => elementEtapesModification.etapePrecedente()}
+      onclick={() => elementEtapesModification?.etapePrecedente()}
     />
   {/if}
   <Bouton
@@ -146,6 +147,6 @@
     type="primaire"
     actif={boutonSuivantActif}
     {enCoursEnvoi}
-    on:click={() => elementEtapesModification.etapeSuivante()}
+    onclick={() => elementEtapesModification?.etapeSuivante()}
   />
 </ActionsTiroir>

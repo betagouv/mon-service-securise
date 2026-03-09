@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import EtiquetteIndiceCyber from './elementsDeService/EtiquetteIndiceCyber.svelte';
   import EtiquetteHomologation from './elementsDeService/EtiquetteHomologation.svelte';
   import EtiquetteContributeurs from './elementsDeService/EtiquetteContributeurs.svelte';
@@ -49,12 +47,12 @@
       ];
   };
 
-  run(() => {
-    ($resultatsDeRecherche, selectionIdsServices.vide());
+  $effect(() => {
+    if ($resultatsDeRecherche) selectionIdsServices.vide();
   });
 
-  run(() => {
-    ($selectionIdsServices, tiroirStore.ferme());
+  $effect(() => {
+    if ($selectionIdsServices) tiroirStore.ferme();
   });
 
   interface Props {
@@ -233,7 +231,7 @@
           <td>
             <EtiquetteContributeurs
               nombreContributeurs={service.nombreContributeurs}
-              on:click={() =>
+              onclick={() =>
                 tiroirStore.afficheContenu(TiroirGestionContributeurs, {
                   services: [service],
                 })}

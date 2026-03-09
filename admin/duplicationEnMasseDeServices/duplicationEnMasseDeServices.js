@@ -28,7 +28,6 @@ const log = {
   rouge: (txt) => process.stdout.write(`\x1b[31m${txt}\x1b[0m`),
 };
 
-/* eslint-disable no-console */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
 
