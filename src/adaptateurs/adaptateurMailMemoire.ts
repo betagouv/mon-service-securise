@@ -1,62 +1,63 @@
 import { emailMemoire } from './adaptateurEnvironnement.js';
-import { AdaptateurMail } from './adaptateurMail.interface.js';
 
-const fabriqueAdaptateurMailMemoire = (): AdaptateurMail => {
+const fabriqueAdaptateurMailMemoire = () => {
   const doitLoguer = emailMemoire().logEmailDansConsole();
 
-  const envoyer = (texte, args) => {
+  const envoyer = (texte: string, ...args: unknown[]) => {
     // eslint-disable-next-line no-console
     if (doitLoguer) console.log(texte, args);
   };
 
-  const creeContact = async (...args) => {
+  const creeContact = async (...args: unknown[]) => {
     envoyer("Création d'un contact email", args);
   };
 
-  const metAJourContact = async (...args) => {
+  const metAJourContact = async (...args: unknown[]) => {
     envoyer('Mise à jour du contact email', args);
   };
 
-  const metAJourDonneesContact = async (...args) => {
+  const metAJourDonneesContact = async (...args: unknown[]) => {
     envoyer("Mise à jour des données d'un contact email", args);
   };
 
-  const desinscrisInfolettre = async (...args) => {
+  const desinscrisInfolettre = async (...args: unknown[]) => {
     envoyer("Désinscription de l'infolettre MSS", args);
   };
 
-  const inscrisInfolettre = async (...args) => {
+  const inscrisInfolettre = async (...args: unknown[]) => {
     envoyer("Inscription à l'infolettre MSS", args);
   };
 
-  const desinscrisEmailsTransactionnels = async (...args) => {
-    envoyer('Désinscription des emails transactionnels', args);
+  const desinscrisEmailsTransactionnels = async (destinataire: string) => {
+    envoyer('Désinscription des emails transactionnels', destinataire);
   };
 
-  const inscrisEmailsTransactionnels = async (...args) => {
+  const inscrisEmailsTransactionnels = async (...args: unknown[]) => {
     envoyer('Inscription aux emails transactionnels', args);
   };
 
-  const envoieMessageInvitationContribution = async (...args) => {
+  const envoieMessageInvitationContribution = async (...args: unknown[]) => {
     envoyer("Envoie de l'email d'invitation à contribuer", args);
   };
 
-  const envoieMessageInvitationInscription = async (...args) => {
+  const envoieMessageInvitationInscription = async (...args: unknown[]) => {
     envoyer("Envoie de l'email d'invitation à s'inscrire", args);
   };
 
-  const envoieNotificationExpirationHomologation = async (...args) => {
+  const envoieNotificationExpirationHomologation = async (
+    ...args: unknown[]
+  ) => {
     envoyer(
       "Envoie de l'email de notification d'expiration d'homologation",
       args
     );
   };
 
-  const envoieMessageFelicitationHomologation = async (...args) => {
+  const envoieMessageFelicitationHomologation = async (...args: unknown[]) => {
     envoyer("Envoie de l'email de félicitation d'homologation", args);
   };
 
-  const recupereIdentifiantContact = async (email) => {
+  const recupereIdentifiantContact = async (email: string) => {
     if (doitLoguer)
       // eslint-disable-next-line no-console
       console.log(
@@ -65,13 +66,13 @@ const fabriqueAdaptateurMailMemoire = (): AdaptateurMail => {
     return 42;
   };
 
-  const recupereEntreprise = async (siret) => {
+  const recupereEntreprise = async (siret: string) => {
     if (doitLoguer)
       // eslint-disable-next-line no-console
       console.log(`Récupération de l'entreprise Brevo pour le SIRET ${siret}`);
   };
 
-  const recupereEntrepriseDuContact = async (idContact) => {
+  const recupereEntrepriseDuContact = async (idContact: string) => {
     if (doitLoguer)
       // eslint-disable-next-line no-console
       console.log(
@@ -79,7 +80,10 @@ const fabriqueAdaptateurMailMemoire = (): AdaptateurMail => {
       );
   };
 
-  const relieContactAEntreprise = async (idContact, idEntreprise) => {
+  const relieContactAEntreprise = async (
+    idContact: string,
+    idEntreprise: string
+  ) => {
     if (doitLoguer)
       // eslint-disable-next-line no-console
       console.log(
@@ -88,8 +92,8 @@ const fabriqueAdaptateurMailMemoire = (): AdaptateurMail => {
   };
 
   const supprimeLienEntreContactEtEntreprise = async (
-    idContact,
-    idEntreprise
+    idContact: string,
+    idEntreprise: string
   ) => {
     if (doitLoguer)
       // eslint-disable-next-line no-console
@@ -98,7 +102,7 @@ const fabriqueAdaptateurMailMemoire = (): AdaptateurMail => {
       );
   };
 
-  const creeEntreprise = async (...args) => {
+  const creeEntreprise = async (...args: unknown[]) => {
     if (doitLoguer)
       // eslint-disable-next-line no-console
       console.log(
@@ -108,7 +112,7 @@ const fabriqueAdaptateurMailMemoire = (): AdaptateurMail => {
       );
   };
 
-  const supprimeContact = async (email) => {
+  const supprimeContact = async (email: string) => {
     if (doitLoguer)
       // eslint-disable-next-line no-console
       console.log(`Suppression du contact ${email}`);
