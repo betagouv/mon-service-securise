@@ -4,13 +4,15 @@
   import Tableau from '../../ui/Tableau.svelte';
   import type { ServiceAssocie } from '../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
   import type { ReferentielStatut } from '../../ui/types';
+  import type { Snippet } from 'svelte';
+  import type { StatutMesure } from '../../modeles/modeleMesure';
 
   interface Props {
     services: ServiceAssocie[];
     statuts: ReferentielStatut;
     predicationDesactivation: (donnee: ServiceAssocie) => boolean;
     idsServicesSelectionnes: string[];
-    infoStatutMesure?: import('svelte').Snippet<[any]>;
+    infoStatutMesure?: Snippet<[{ statut: StatutMesure | undefined }]>;
   }
 
   let {
@@ -32,16 +34,13 @@
         }
         return predicationDesactivation(a) ? 1 : -1;
       })
-      .map((s) => ({
-        ...s,
-        statut: s.mesure.statut,
-      }))
+      .map((s) => ({ ...s, statut: s.mesure.statut }))
   );
 
   const optionsFiltrage = {
     categories: [{ id: 'statut', libelle: 'Statuts' }],
     items: [
-      { libelle: 'À définir', valeur: undefined, idCategorie: 'statut' },
+      { libelle: 'À définir', valeur: '', idCategorie: 'statut' },
       ...Object.entries(statuts).map(([id, statut]) => ({
         libelle: statut,
         valeur: id,
@@ -97,7 +96,7 @@
             statut={donnee.mesure.statut}
           />
         </div>
-        {@render infoStatutMesure?.({ donnee })}
+        {@render infoStatutMesure?.({ statut: donnee.mesure.statut })}
       </div>
     {:else if colonne.cle === 'modalites'}
       {@const contenu = donnee.mesure.modalites ?? ''}

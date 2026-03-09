@@ -24,8 +24,12 @@ export const enregistreMesures = async (
   }
 
   async function enregistreMesuresSpecifiques() {
-    const { id, echeance, identifiantNumerique, ...donnees } =
-      $store.mesureEditee.mesure;
+    const {
+      id,
+      echeance,
+      identifiantNumerique: _,
+      ...donnees
+    } = $store.mesureEditee.mesure;
 
     const payload = {
       ...donnees,
@@ -69,6 +73,8 @@ export const enregistreRetourUtilisateur = async (
   });
 };
 
+type ActiviteMesureApi = Omit<ActiviteMesure, 'date'> & { date: string };
+
 export const recupereActiviteMesure = async (
   idService: string,
   idMesure: string | number
@@ -79,7 +85,10 @@ export const recupereActiviteMesure = async (
 
   if (!Array.isArray(reponse.data)) return [];
 
-  return reponse.data.map((a: any) => ({ ...a, date: new Date(a.date) }));
+  return reponse.data.map((a: ActiviteMesureApi) => ({
+    ...a,
+    date: new Date(a.date),
+  }));
 };
 
 export const enregistreCommentaire = async (

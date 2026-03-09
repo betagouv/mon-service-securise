@@ -15,9 +15,9 @@
 
   let { ligne }: Props = $props();
 
-  const donneesService = ligne.service;
-  const aUneErreur = ligne.erreurs.length > 0;
-  const aDesErreurs = ligne.erreurs.length > 1;
+  let donneesService = $derived(ligne.service);
+  let aUneErreur = $derived(ligne.erreurs.length > 0);
+  let aDesErreurs = $derived(ligne.erreurs.length > 1);
 
   const contientErreur = (erreur: ErreurServiceV2) =>
     ligne.erreurs.includes(erreur);

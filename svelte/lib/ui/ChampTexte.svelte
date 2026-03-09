@@ -1,8 +1,10 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   import { validationChamp } from '../directives/validationChamp';
+  import type {
+    FocusEventHandler,
+    FormEventHandler,
+    FullAutoFill,
+  } from 'svelte/elements';
 
   interface Props {
     nom: string;
@@ -13,7 +15,10 @@
     messageErreur?: string;
     modele?: string | undefined;
     type?: string;
-    autocomplete?: string;
+    autocomplete?: FullAutoFill;
+    oninput?: FormEventHandler<HTMLInputElement>;
+    onfocus?: FocusEventHandler<HTMLInputElement>;
+    onblur?: FocusEventHandler<HTMLInputElement>;
   }
 
   let {
@@ -26,6 +31,9 @@
     modele = undefined,
     type = 'text',
     autocomplete = '',
+    oninput,
+    onfocus,
+    onblur,
   }: Props = $props();
 
   const typeChamp = (node: HTMLInputElement) => {
@@ -42,9 +50,9 @@
   placeholder={aideSaisie}
   use:validationChamp={requis || modele ? messageErreur : ''}
   pattern={modele}
-  oninput={bubble('input')}
-  onfocus={bubble('focus')}
-  onblur={bubble('blur')}
+  {oninput}
+  {onfocus}
+  {onblur}
   {autocomplete}
 />
 

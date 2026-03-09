@@ -16,7 +16,7 @@
   }
 
   let {
-    enCoursDeChargement,
+    enCoursDeChargement = $bindable(),
     titreAssistant,
     titreBoutonFinalise,
     action_supplementaire,
@@ -82,7 +82,7 @@
       {/if}
       <SvelteComponent
         bind:estComplete={questionCouranteEstComplete}
-        on:champModifie={metsAJourPropriete}
+        onchampmodifie={metsAJourPropriete}
       />
     </div>
     <div
@@ -156,7 +156,7 @@
         <img alt="" src={$etapeCourante.illustration} />
         {#if !modeRapide}
           <h3>Pourquoi demander ces informations ?</h3>
-          {#each $etapeCourante.questionCourante.explications as explication}
+          {#each $etapeCourante.questionCourante.explications as explication, index (index)}
             <p>{explication}</p>
           {/each}
         {/if}

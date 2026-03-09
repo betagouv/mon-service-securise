@@ -27,14 +27,15 @@
   }: Props = $props();
 
   const modeleTelephone = '^0\\d{9}$';
-  let departement: Departement | undefined = $state(
+  let departement: Departement | undefined = $derived(
     entite && departements.find((d) => d.code === entite.departement)
   );
 
-  let formulaire: Formulaire = $state();
+  let formulaire: Formulaire | undefined = $state();
   let enCoursEnvoi: boolean = $state(false);
 
   const valide = async () => {
+    if (!formulaire) return;
     if (formulaire.estValide()) {
       try {
         enCoursEnvoi = true;
@@ -53,10 +54,11 @@
     }
   };
 
-  let elementSelectionDepartement: SelectionDepartement = $state();
+  let elementSelectionDepartement: SelectionDepartement | undefined = $state();
   const modifieDepartementApresChoixOrganisation = (
     e: CustomEvent<Organisation>
   ) => {
+    if (!elementSelectionDepartement) return;
     const d = departements.find((d) => d.code === e.detail.departement);
     if (d) {
       elementSelectionDepartement.choisisDepartement(d);
@@ -93,7 +95,7 @@
           icon-place="right"
           markup="a"
           type={undefined}
-          href={'https://identite.proconnect.gouv.fr'}
+          href="https://identite.proconnect.gouv.fr"
           target="blank"
         ></dsfr-button>
       </dsfr-callout>
@@ -202,7 +204,7 @@
   </Formulaire>
 
   <div class="actions">
-    <Bouton type="primaire" titre="Valider" on:click={valide} {enCoursEnvoi} />
+    <Bouton type="primaire" titre="Valider" onclick={valide} {enCoursEnvoi} />
   </div>
 </div>
 

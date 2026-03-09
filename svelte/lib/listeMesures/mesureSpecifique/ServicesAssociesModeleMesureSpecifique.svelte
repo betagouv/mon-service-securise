@@ -22,7 +22,7 @@
     modeleMesure,
     referentielTypesService,
     idsServicesSelectionnes = $bindable(),
-    etapeActive,
+    etapeActive = $bindable(),
   }: Props = $props();
 
   let configurationRecherche = $derived(

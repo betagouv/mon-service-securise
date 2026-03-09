@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import type { IdNiveauDeSecurite } from '../../ui/types';
   import {
     metsAJourBrouillonService,
@@ -17,8 +15,8 @@
 
   let { estComplete = $bindable() }: Props = $props();
 
-  let niveauSelectionne: IdNiveauDeSecurite | '' = $state();
-  let niveauDeSecuriteMinimal: IdNiveauDeSecurite = $state();
+  let niveauSelectionne: IdNiveauDeSecurite | '' = $state('');
+  let niveauDeSecuriteMinimal: IdNiveauDeSecurite | undefined = $state();
 
   onMount(async () => {
     if ($leBrouillon.id) {
@@ -52,9 +50,10 @@
     questionsV2.niveauSecurite[niveau]?.position >=
     questionsV2.niveauSecurite[niveauDeSecuriteMinimal]?.position;
 
-  run(() => {
+  $effect(() => {
     estComplete =
       niveauSelectionne !== '' &&
+      !!niveauDeSecuriteMinimal &&
       niveauEstConformeAuMinimumRequis(
         niveauSelectionne,
         niveauDeSecuriteMinimal
@@ -64,15 +63,17 @@
 
 <hr class="separateur-etapier" />
 
-<NiveauDeSecuriteEditable
-  bind:niveauSelectionne
-  {niveauDeSecuriteMinimal}
-  on:champModifie={async (e) => {
-    $leBrouillon.niveauSecurite = e.detail.niveauSecurite;
-    if ($leBrouillon.id)
-      await metsAJourBrouillonService($leBrouillon.id, e.detail);
-  }}
-/>
+{#if niveauDeSecuriteMinimal}
+  <NiveauDeSecuriteEditable
+    bind:niveauSelectionne
+    {niveauDeSecuriteMinimal}
+    on:champModifie={async (e) => {
+      $leBrouillon.niveauSecurite = e.detail.niveauSecurite;
+      if ($leBrouillon.id)
+        await metsAJourBrouillonService($leBrouillon.id, e.detail);
+    }}
+  />
+{/if}
 
 <style>
   hr {

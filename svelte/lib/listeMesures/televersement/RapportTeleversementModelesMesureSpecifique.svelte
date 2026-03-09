@@ -27,8 +27,8 @@
 
   let { capaciteAjoutDeMesure }: Props = $props();
 
-  let rapport: RapportDetaille = $state();
-  let resume: ResumeRapportTeleversement = $state();
+  let rapport: RapportDetaille | undefined = $state();
+  let resume: ResumeRapportTeleversement | undefined = $state();
 
   let etatReseau:
     | 'CHARGEMENT_DU_RAPPORT'
@@ -128,7 +128,7 @@
           </tr>
         </thead>
         <tbody>
-          {#each rapport.modelesTeleverses.toSorted(triRapportDetaille) as ligne, idx (idx)}
+          {#each rapport?.modelesTeleverses.toSorted(triRapportDetaille) as ligne, idx (idx)}
             <LigneDeRapport {ligne} />
           {/each}
         </tbody>
@@ -140,6 +140,7 @@
     delaiRafraichissement={50}
     apiGetProgression={async () => await fausseProgression()}
     on:fini={async () => {
+      if (!rapport) return;
       const nb = rapport.modelesTeleverses.length;
       toasterStore.succes(
         singulierPluriel(

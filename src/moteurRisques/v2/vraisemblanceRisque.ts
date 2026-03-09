@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-function */
 import {
   ConfigurationPourNiveau,
   ConfigurationVraisemblancePourUnVecteur,

@@ -10,13 +10,13 @@
 
   let { departements, valeur = $bindable('') }: Props = $props();
 
-  let saisie: string = $state();
-  let minuteur: NodeJS.Timeout;
+  let saisie: string = $state('');
+  let minuteur: ReturnType<typeof setTimeout>;
   let dureeDebounceEnMs = 300;
   let suggestions: Departement[] = $state([]);
   let suggestionsVisibles = $state(false);
 
-  const avecTemporisation = (fonction: () => Promise<any>) => {
+  const avecTemporisation = (fonction: () => Promise<void>) => {
     clearTimeout(minuteur);
     minuteur = setTimeout(async () => {
       await fonction();
@@ -38,7 +38,7 @@
     suggestionsVisibles = false;
   };
 
-  let suggestionsEl: HTMLDivElement = $state();
+  let suggestionsEl: HTMLDivElement | undefined = $state();
   if (valeur) {
     saisie = `${valeur.nom} (${valeur.code})`;
   }
@@ -49,9 +49,9 @@
     id="departement"
     nom="departement"
     bind:valeur={saisie}
-    on:input={() => avecTemporisation(rechercheSuggestions)}
+    oninput={() => avecTemporisation(rechercheSuggestions)}
     aideSaisie="ex : 33, Morbihan"
-    on:focus={() => avecTemporisation(rechercheSuggestions)}
+    onfocus={() => avecTemporisation(rechercheSuggestions)}
     autocomplete="off"
   />
   <div
@@ -59,7 +59,7 @@
     class:visible={suggestionsVisibles}
     bind:this={suggestionsEl}
   >
-    {#each suggestions as suggestion}
+    {#each suggestions as suggestion, i (i)}
       <div
         class="option"
         role="button"

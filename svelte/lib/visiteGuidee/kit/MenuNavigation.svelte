@@ -101,7 +101,7 @@
         {etapeCourante}
         {etapesVues}
         {configuration}
-        on:click={gereRepriseVisiteGuidee}
+        onclick={gereRepriseVisiteGuidee}
       />
       <div class="conteneur-actions">
         <button class="bouton" onclick={async () => await continuerVisite()}

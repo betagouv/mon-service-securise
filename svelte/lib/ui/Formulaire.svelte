@@ -17,7 +17,7 @@
     children,
   }: Props = $props();
 
-  let formulaire: HTMLFormElement = $state();
+  let formulaire: HTMLFormElement | undefined = $state();
 
   const trouveLibellePour = (element: Element) => {
     for (const libelle of document.getElementsByTagName('label')) {
@@ -26,6 +26,8 @@
   };
 
   export const estValide = () => {
+    if (!formulaire) return;
+
     const valide = formulaire.checkValidity();
     const champAvecErreur = formulaire.querySelectorAll(
       'input:invalid, select:invalid'
@@ -45,6 +47,8 @@
   }>();
 
   const verifieValidite = () => {
+    if (!formulaire) return;
+
     dispatch(
       formulaire.checkValidity() ? 'formulaireValide' : 'formulaireInvalide'
     );

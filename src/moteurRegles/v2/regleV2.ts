@@ -11,7 +11,7 @@ export class RegleV2 {
     readonly reference: string,
     private readonly besoinsAssocies: BesoinsDeSecurite,
     private readonly dansSocleInitial: boolean,
-    private readonly modificateurs: ModificateursDeRegles // eslint-disable-next-line no-empty-function
+    private readonly modificateurs: ModificateursDeRegles
   ) {}
 
   public estPourNiveau(niveau: NiveauSecurite) {

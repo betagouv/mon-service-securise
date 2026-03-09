@@ -1,15 +1,13 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   interface Props {
     icone: 'information' | 'tri-aucun' | 'tri-ascendant' | 'tri-descendant';
+    onclick?: (e: MouseEvent) => void;
   }
 
-  let { icone }: Props = $props();
+  let { icone, onclick }: Props = $props();
 </script>
 
-<button type="button" class={icone} onclick={bubble('click')}></button>
+<button type="button" class={icone} {onclick} title={icone}></button>
 
 <style>
   button {

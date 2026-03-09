@@ -2,9 +2,11 @@
   import { onMount } from 'svelte';
   import { visiteGuidee, utilisateurCourant } from '../../visiteGuidee.store';
 
-  let elementModale: HTMLDialogElement = $state();
+  let elementModale: HTMLDialogElement | undefined = $state();
 
   onMount(() => {
+    if (!elementModale) return;
+
     // Cela permet d'éviter de faire un focus sur les éléments de la modale
     elementModale.inert = true;
     elementModale.showModal();

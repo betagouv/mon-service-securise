@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   interface Props {
     titre: string;
     icone?:
@@ -22,6 +19,7 @@
     enCoursEnvoi?: boolean;
     boutonSoumission?: boolean;
     classe?: string;
+    onclick?: (e: MouseEvent) => void;
   }
 
   let {
@@ -33,6 +31,7 @@
     enCoursEnvoi = false,
     boutonSoumission = true,
     classe = '',
+    onclick,
   }: Props = $props();
 </script>
 
@@ -40,7 +39,7 @@
   class="bouton {type} {icone} {taille} {classe}"
   class:avecIcone={!!icone}
   type={boutonSoumission ? 'submit' : 'button'}
-  onclick={bubble('click')}
+  {onclick}
   disabled={!actif || enCoursEnvoi}
   class:en-cours-chargement={enCoursEnvoi}
 >

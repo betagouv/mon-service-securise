@@ -48,9 +48,9 @@
     ][etapeCourante - 1]
   );
 
-  let formulaireEtape1: Formulaire = $state();
-  let formulaireEtape2: Formulaire = $state();
-  let formulaireEtape3: Formulaire = $state();
+  let formulaireEtape1: Formulaire | undefined = $state();
+  let formulaireEtape2: Formulaire | undefined = $state();
+  let formulaireEtape3: Formulaire | undefined = $state();
 
   let tousFormulaires = $derived([
     formulaireEtape1,
@@ -63,7 +63,7 @@
     if (etapeCourante > 1) etapeCourante--;
   };
   const etapeSuivante = () => {
-    if (formulaireCourant.estValide() && etapeCourante < 3) {
+    if (formulaireCourant?.estValide() && etapeCourante < 3) {
       etapeCourante++;
     }
   };
@@ -71,7 +71,7 @@
   let enCoursEnvoi = $state(false);
 
   const valide = async () => {
-    if (formulaireCourant.estValide()) {
+    if (formulaireCourant?.estValide()) {
       try {
         enCoursEnvoi = true;
         if (invite) {
@@ -100,10 +100,17 @@
     token,
   });
 
-  let departement: Departement = $state();
-  let organisation: Organisation = $derived(
-    informationsProfessionnelles.organisation?.siret || organisation?.siret
-  );
+  let departement: Departement | undefined = $state();
+  let organisation: Organisation | undefined = $state();
+
+  $effect(() => {
+    if (formulaireInscription) {
+      formulaireInscription.siretEntite =
+        informationsProfessionnelles.organisation?.siret ||
+        organisation?.siret ||
+        '';
+    }
+  });
 </script>
 
 <div class="entete-inscription">
@@ -278,18 +285,13 @@
     <Bouton
       type="secondaire"
       titre="Précédent"
-      on:click={etapePrecedente}
+      onclick={etapePrecedente}
       actif={etapeCourante > 1}
     />
     {#if etapeCourante === 3}
-      <Bouton
-        type="primaire"
-        titre="Valider"
-        on:click={valide}
-        {enCoursEnvoi}
-      />
+      <Bouton type="primaire" titre="Valider" onclick={valide} {enCoursEnvoi} />
     {:else}
-      <Bouton type="primaire" titre="Suivant" on:click={etapeSuivante} />
+      <Bouton type="primaire" titre="Suivant" onclick={etapeSuivante} />
     {/if}
   </div>
 </div>

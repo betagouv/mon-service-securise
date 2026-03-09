@@ -1,16 +1,10 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { createEventDispatcher, tick } from 'svelte';
-  import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import CheckboxIllustree from '../etape2/CheckboxIllustree.svelte';
-  import type {
-    CategorieDonneesTraitees,
-    SpecificiteProjet,
-  } from '../../creationV2.types';
+  import type { CategorieDonneesTraitees } from '../../creationV2.types';
   import ListeChampTexte from '../ListeChampTexte.svelte';
 
   interface Props {
@@ -36,7 +30,7 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  run(() => {
+  $effect(() => {
     estComplete =
       $leBrouillon.categoriesDonneesTraiteesSupplementaires.length === 0 ||
       $leBrouillon.categoriesDonneesTraiteesSupplementaires.every(
@@ -71,7 +65,7 @@
     $leBrouillon.categoriesDonneesTraitees
   );
 
-  run(() => {
+  $effect(() => {
     if (
       valeurCategoriesDonneesTraitees !== $leBrouillon.categoriesDonneesTraitees
     ) {
@@ -92,7 +86,7 @@
 
   <span class="indication">Sélectionnez une ou plusieurs réponses</span>
 
-  {#each categorieDonneesTraitees as [idType, details]}
+  {#each categorieDonneesTraitees as [idType, details] (idType)}
     {@const nomImage = illustrations[idType]}
     <CheckboxIllustree
       id={idType}

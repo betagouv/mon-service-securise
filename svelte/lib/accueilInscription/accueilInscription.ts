@@ -1,15 +1,17 @@
 import AccueilInscription from './AccueilInscription.svelte';
 import type { AccueilInscriptionProps } from './accueilInscription.d';
-import { mount } from 'svelte';
+import { mount, unmount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-accueil-inscription',
-  (e: CustomEvent<AccueilInscriptionProps>) => rechargeApp({ ...e.detail })
+  async (e: CustomEvent<AccueilInscriptionProps>) =>
+    await rechargeApp({ ...e.detail })
 );
 
 let app: AccueilInscription;
-const rechargeApp = (props: AccueilInscriptionProps) => {
-  app?.$destroy();
+const rechargeApp = async (props: AccueilInscriptionProps) => {
+  if (app) await unmount(app);
+
   app = mount(AccueilInscription, {
     target: document.getElementById('conteneur-accueil-inscription')!,
     props: props,

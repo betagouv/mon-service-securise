@@ -30,7 +30,7 @@
   Quel est le statut de votre service ?*
 
   <span class="indication">Sélectionnez une réponse</span>
-  {#each Object.entries(questionsV2.statutDeploiement) as [id, { description }]}
+  {#each Object.entries(questionsV2.statutDeploiement) as [id, { description }] (id)}
     <Radio
       {id}
       nom={description}

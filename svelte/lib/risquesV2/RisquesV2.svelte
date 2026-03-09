@@ -124,7 +124,7 @@
           <span>{donnee.intitule}</span>
           <div class="tags">
             <dsfr-tag label="ANSSI"></dsfr-tag>
-            {#each donnee.categories as categorie}
+            {#each donnee.categories as categorie (categorie)}
               <dsfr-tag label={mappingNomCategories[categorie]}></dsfr-tag>
             {/each}
           </div>

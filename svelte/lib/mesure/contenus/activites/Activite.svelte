@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import type { ActiviteMesure } from '../../mesure.d';
   import type {
     ReferentielPriorite,
@@ -28,9 +26,9 @@
     initiales: string;
     resumeNiveauDroit?: ResumeNiveauDroit;
   };
-  let acteur: Acteur = $state();
+  let acteur: Acteur | undefined = $state();
 
-  run(() => {
+  $effect(() => {
     const contributeursTrouves = $contributeurs.filter(
       (c) => c.id === activite.idActeur
     );
@@ -63,26 +61,29 @@
   }
 </script>
 
-<div class="activite">
-  <div>
-    <div class="cartouche">
-      <Initiales
-        valeur={acteur.initiales}
-        resumeNiveauDroit={acteur.resumeNiveauDroit}
-      />
+{#if acteur}
+  {@const Composant = visualisation.composantContenu}
+  <div class="activite">
+    <div>
+      <div class="cartouche">
+        <Initiales
+          valeur={acteur.initiales}
+          resumeNiveauDroit={acteur.resumeNiveauDroit}
+        />
+      </div>
+    </div>
+    <div class="contenu">
+      <div class="titre">{visualisation.titre}</div>
+      <div class="infos">
+        <span>{acteur.intitule}</span> &bull;
+        <span>{formatteDateHeureFr(activite.date)}</span>
+      </div>
+      <div class="description">
+        <Composant {...proprietes} />
+      </div>
     </div>
   </div>
-  <div class="contenu">
-    <div class="titre">{visualisation.titre}</div>
-    <div class="infos">
-      <span>{acteur.intitule}</span> &bull;
-      <span>{formatteDateHeureFr(activite.date)}</span>
-    </div>
-    <div class="description">
-      <visualisation.composantContenu {...proprietes} />
-    </div>
-  </div>
-</div>
+{/if}
 
 <style>
   .cartouche {

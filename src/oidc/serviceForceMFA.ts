@@ -26,7 +26,6 @@ type OrdrePourMFA =
     };
 
 export class ServiceForceMFA {
-  // eslint-disable-next-line no-empty-function
   constructor(private readonly config: ConfigurationServiceForceMFA) {}
 
   async execute({

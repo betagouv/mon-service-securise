@@ -52,7 +52,7 @@
         titre="Effacer la recherche"
         type="secondaire"
         icone="rafraichir"
-        on:click={supprimeRechercheEtFiltres}
+        onclick={supprimeRechercheEtFiltres}
       />
     </div>
   {:else if $affichageTableauVide.etat === 'aucunDossierHomologationEnCours'}
@@ -80,9 +80,9 @@
   }
 
   .conteneur-tableau-vide:after {
-    background-image: linear-gradient(0deg, #ddd, #ddd),
+    background-image:
       linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd),
-      linear-gradient(0deg, #ddd, #ddd);
+      linear-gradient(0deg, #ddd, #ddd), linear-gradient(0deg, #ddd, #ddd);
     background-position:
       0 0,
       100% 0,

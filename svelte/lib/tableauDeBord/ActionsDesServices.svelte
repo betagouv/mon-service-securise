@@ -26,7 +26,9 @@
   ): s is Service & { type: TypeSelection } => s.type === 'Service';
 
   const seulementLesServices = (tous: ServiceOuBrouillon[]): Service[] =>
-    tous.filter(estService).map(({ type, ...service }) => service as Service);
+    tous
+      .filter(estService)
+      .map(({ type: _type, ...service }) => service as Service);
 
   let actionsDisponibles = $derived(selection.length !== 0);
   let selectionUnique = $derived(selection.length === 1);
@@ -59,7 +61,7 @@
       actif={actionsDisponibles &&
         estProprietaireDesServicesSelectionnes &&
         !selectionPossedeDesBrouillons}
-      on:click={() =>
+      onclick={() =>
         tiroirStore.afficheContenu(TiroirGestionContributeurs, {
           services: seulementLesServices(selection),
         })}
@@ -70,7 +72,7 @@
       taille="moyen"
       type="lien"
       actif={actionsDisponibles && selectionUnique && ontDesDocuments}
-      on:click={() =>
+      onclick={() =>
         tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
           service: seulementLesServices(selection)[0],
         })}
@@ -81,7 +83,7 @@
       taille="moyen"
       type="lien"
       actif={actionsDisponibles && !selectionPossedeDesBrouillons}
-      on:click={() =>
+      onclick={() =>
         tiroirStore.afficheContenu(TiroirExportServices, {
           services: seulementLesServices(selection),
         })}
@@ -95,7 +97,7 @@
         selectionUnique &&
         estProprietaireDesServicesSelectionnes &&
         !selectionPossedeDesBrouillons}
-      on:click={() =>
+      onclick={() =>
         tiroirStore.afficheContenu(TiroirDuplication, {
           service: seulementLesServices(selection)[0],
         })}
@@ -106,7 +108,7 @@
       taille="moyen"
       type="lien"
       actif={actionsDisponibles && estProprietaireDesServicesSelectionnes}
-      on:click={() =>
+      onclick={() =>
         tiroirStore.afficheContenu(TiroirSuppression, {
           servicesEtBrouillon: selection,
         })}

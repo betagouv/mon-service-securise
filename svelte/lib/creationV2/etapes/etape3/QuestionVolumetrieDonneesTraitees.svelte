@@ -30,7 +30,7 @@
   Quel est le volume des données traitées au sein du système d’information ?*
 
   <span class="indication">Sélectionnez une réponse</span>
-  {#each Object.entries(questionsV2.volumetrieDonneesTraitees) as [idType, { nom, description }]}
+  {#each Object.entries(questionsV2.volumetrieDonneesTraitees) as [idType, { nom, description }] (idType)}
     <Radio
       id={idType}
       {nom}

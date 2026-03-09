@@ -60,7 +60,7 @@
 
       <h6>Exemples de services numériques</h6>
       <ul class="liste-exemples-services">
-        {#each donneesNiveau.description.exemplesServicesNumeriques as exemple}
+        {#each donneesNiveau.description.exemplesServicesNumeriques as exemple, index (index)}
           <li>{exemple}</li>
         {/each}
       </ul>
@@ -69,14 +69,14 @@
         <p>{@html donneesNiveau.description.securisation[0]}</p>
       {:else}
         <ul>
-          {#each donneesNiveau.description.securisation as securisation}
+          {#each donneesNiveau.description.securisation as securisation, index (index)}
             <li>{@html securisation}</li>
           {/each}
         </ul>
       {/if}
       <h6>Homologation</h6>
       <ul>
-        {#each donneesNiveau.description.homologation as homologation}
+        {#each donneesNiveau.description.homologation as homologation, index (index)}
           <li>{@html homologation}</li>
         {/each}
       </ul>

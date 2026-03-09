@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import ChampTexte from '../ui/ChampTexte.svelte';
   import { createEventDispatcher, tick } from 'svelte';
   import type { Departement, Organisation } from './inscription.d';
@@ -18,14 +16,14 @@
 
   let { filtreDepartement, valeur = $bindable(), id = '' }: Props = $props();
 
-  let saisie: string = $state();
-  let minuteur: NodeJS.Timeout;
+  let saisie: string = $state('');
+  let minuteur: ReturnType<typeof setTimeout>;
   let dureeDebounceEnMs = 300;
   let suggestions: OrganisationAvecLabel[] = $state([]);
   let suggestionsVisibles = $state(false);
-  let champValeur: HTMLInputElement = $state();
+  let champValeur: HTMLInputElement | undefined = $state();
 
-  const avecTemporisation = (fonction: () => Promise<any>) => {
+  const avecTemporisation = (fonction: () => Promise<void>) => {
     clearTimeout(minuteur);
     minuteur = setTimeout(async () => {
       await fonction();
@@ -80,9 +78,9 @@
     envoiEvenement('organisationChoisie', item);
   };
 
-  run(() => {
+  $effect(() => {
     if (valeur) {
-      tick().then(() => champValeur.dispatchEvent(new Event('input')));
+      tick().then(() => champValeur?.dispatchEvent(new Event('input')));
     }
   });
 
@@ -94,12 +92,12 @@
     {id}
     nom="organisation"
     bind:valeur={saisie}
-    on:input={() => avecTemporisation(rechercheSuggestions)}
+    oninput={() => avecTemporisation(rechercheSuggestions)}
     aideSaisie="ex : 13261762000010, Agglomération de Mansart, Société Y"
     autocomplete="off"
   />
   <div class="liste-suggestions" class:visible={suggestionsVisibles}>
-    {#each suggestions as suggestion}
+    {#each suggestions as suggestion, i (i)}
       <div
         class="option"
         role="button"

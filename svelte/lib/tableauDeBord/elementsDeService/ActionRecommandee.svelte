@@ -13,7 +13,7 @@
 
   let { action, service }: Props = $props();
 
-  const idService = service.id;
+  let idService = $derived(service.id);
 </script>
 
 {#if action.id === 'mettreAJour'}
@@ -84,7 +84,7 @@
     taille="petit"
     icone="inviter"
     classe="inviterContributeur"
-    on:click={() =>
+    onclick={() =>
       tiroirStore.afficheContenu(TiroirGestionContributeurs, {
         services: [service],
       })}

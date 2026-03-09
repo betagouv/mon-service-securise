@@ -1,24 +1,24 @@
 <script lang="ts">
-  import { onDestroy, createEventDispatcher } from 'svelte';
+  import { onDestroy, createEventDispatcher, type Snippet } from 'svelte';
 
   interface Props {
     id?: string | undefined;
-    entete?: import('svelte').Snippet;
-    contenu?: import('svelte').Snippet;
-    actions?: import('svelte').Snippet;
+    entete?: Snippet;
+    contenu?: Snippet;
+    actions?: Snippet;
   }
 
   let { id = undefined, entete, contenu, actions }: Props = $props();
 
-  let elementModale: HTMLDialogElement = $state();
+  let elementModale: HTMLDialogElement | undefined = $state();
 
   export const ferme = () => {
-    elementModale.close();
+    elementModale?.close();
     debloqueScroll();
   };
 
   export const affiche = () => {
-    elementModale.showModal();
+    elementModale?.showModal();
     bloqueScroll();
   };
 

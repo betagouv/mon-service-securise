@@ -49,9 +49,9 @@
   };
 </script>
 
-<svelte:body onactivites-modifiees={rechargeActivites} />
+<svelte:body on:activites-modifiees={rechargeActivites} />
 <div id="contenu-onglet-activite" class:visible>
-  {#each $storeActivites as activite}
+  {#each $storeActivites as activite, i (i)}
     {#key $storeActivites}
       <Activite {priorites} {statuts} {activite} />
     {/key}

@@ -1,7 +1,6 @@
 <script lang="ts">
   import type {
     Droits,
-    IdUtilisateur,
     Permission,
     Rubrique,
     Utilisateur,
@@ -51,7 +50,7 @@
   <div class="titre">Permissions</div>
   <div>Sélectionner les droits d'accès pour chaque rubrique.</div>
   <div class="personnalisation">
-    {#each rubriques as { id, nom, droit }}
+    {#each rubriques as { id, nom, droit }, i (i)}
       <div class="rubrique">
         <div>
           <OnOff

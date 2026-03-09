@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import {
     servicesAvecMesuresAssociees,
     servicesAvecMesuresAssocieesEnCoursDeChargement,
@@ -8,7 +6,6 @@
   import { onMount } from 'svelte';
   import ModaleDetailsMesure from './kit/ModaleDetailsMesure.svelte';
   import {
-    type ModeleMesureGenerale,
     Referentiel,
     type ReferentielStatut,
     type ReferentielTypesService,
@@ -68,11 +65,11 @@
   const valeursOnglets = ['toutes', 'generales', 'specifiques'];
   type OngletListeMesures = (typeof valeursOnglets)[number];
 
-  let modaleDetailsMesure: ModaleDetailsMesure = $state();
+  let modaleDetailsMesure: ModaleDetailsMesure | undefined = $state();
 
-  let ongletActif: OngletListeMesures = $state();
+  let ongletActif: OngletListeMesures = $state('toutes');
 
-  run(() => {
+  $effect(() => {
     const ongletDemande = requete.get('ongletActif') as OngletListeMesures;
     ongletActif = valeursOnglets.includes(ongletDemande)
       ? ongletDemande
@@ -84,7 +81,7 @@
   );
 
   const afficheModaleDetailsMesure = async (modeleMesure: ModeleDeMesure) => {
-    await modaleDetailsMesure.affiche(modeleMesure);
+    await modaleDetailsMesure?.affiche(modeleMesure);
   };
 
   const itemsFiltrageReferentiel = [
@@ -119,7 +116,7 @@
     configurationFiltrage: { options: { categories: [], items: [] } },
   });
 
-  run(() => {
+  $effect(() => {
     const listeModeleMesuresGenerales: ModeleDeMesure[] = Object.values(
       $modelesMesureGenerale
     ).map((m) => ({
@@ -396,7 +393,7 @@
             titre={`${donnee.idsServicesAssocies.length} ${
               donnee.idsServicesAssocies.length > 1 ? 'services' : 'service'
             }`}
-            on:click={async () => {
+            onclick={async () => {
               await afficheDetailServiceAssocies(donnee);
             }}
           />
@@ -412,7 +409,7 @@
           taille="petit"
           icone="configuration"
           actif={aDesServicesAssocies}
-          on:click={() => {
+          onclick={() => {
             afficheTiroirModificationMultipleMesuresGenerales(donnee);
           }}
         />
@@ -422,7 +419,7 @@
           type="secondaire"
           taille="petit"
           icone="configuration"
-          on:click={() => {
+          onclick={() => {
             afficheTiroirModificationModeleMesureSpecifique(donnee);
           }}
         />

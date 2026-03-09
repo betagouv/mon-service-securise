@@ -4,7 +4,6 @@ import { MesureAvecStatut } from './vraisemblance/vraisemblance.types.js';
 import type { StatutMesure } from '../../modeles/mesure.js';
 
 export class MesuresPourRisque {
-  // eslint-disable-next-line no-empty-function
   constructor(private readonly mesures: Record<IdMesureV2, MesureGenerale>) {}
 
   avecStatutReel(): Record<IdMesureV2, MesureAvecStatut> {

@@ -5,7 +5,7 @@
   };
 
   export type ConfigurationFiltrage = {
-    options: OptionsListeDeroulanteRiche<any>;
+    options: OptionsListeDeroulanteRiche<string>;
   };
 
   export type ConfigurationSelection<T> = {
@@ -20,13 +20,11 @@
 </script>
 
 <script lang="ts" generics="T extends ObjetDeDonnees">
-  import { run } from 'svelte/legacy';
-
   import type { ObjetDeDonnees } from './types';
   import TableauVideAucunResultat from './TableauVideAucunResultat.svelte';
   import ListeDeroulanteRiche from './ListeDeroulanteRiche.svelte';
   import BarreDeRecherche from './BarreDeRecherche.svelte';
-  import type { ComponentType } from 'svelte';
+  import type { Component, Snippet } from 'svelte';
 
   interface Props {
     colonnes: { cle: string; libelle: string }[];
@@ -37,13 +35,14 @@
     selection?: string[];
     preSelectionImmuable?: string[];
     champIdentifiantLigne?: string;
-    composantTableauVide?:
-      | { composant: ComponentType; props: Record<string, any> }
-      | undefined;
-    actionsComplementaires?: import('svelte').Snippet;
-    onglets?: import('svelte').Snippet;
-    barre_action_dans_thead?: import('svelte').Snippet;
-    cellule?: import('svelte').Snippet<[any]>;
+    composantTableauVide?: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      { composant: Component<any>; props: Record<string, any> } | undefined;
+    actionsComplementaires?: Snippet;
+    onglets?: Snippet;
+    barre_action_dans_thead?: Snippet;
+    cellule?: Snippet<
+      [{ donnee: T; colonne: { cle: string; libelle: string } }]
+    >;
   }
 
   let {
@@ -63,7 +62,7 @@
   }: Props = $props();
 
   let recherche: string = $state('');
-  let filtrage: Record<string, any> = $state({});
+  let filtrage: Record<string, string[]> = $state({});
   const effaceRechercheEtFiltres = () => {
     recherche = '';
     filtrage = Object.fromEntries(
@@ -79,7 +78,8 @@
         : true
     )
   );
-  run(() => {
+
+  $effect(() => {
     donneesFiltrees = donnees;
 
     if (configurationRecherche && recherche)
@@ -113,7 +113,8 @@
     selection.length !== 0 &&
       selection.length === donneesFiltreesSelectionnables.length
   );
-  run(() => {
+
+  $effect(() => {
     if (recherche || filtrage) {
       // On appelle ici une méthode plutot que de vider nous même `selection` afin de ne pas
       // déclencher cette même réactivité

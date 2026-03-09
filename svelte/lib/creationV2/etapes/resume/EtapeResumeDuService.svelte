@@ -5,9 +5,6 @@
   import BrouillonDeServiceEditable from '../BrouillonDeServiceEditable.svelte';
   import { brouillonEstCompletStore } from '../brouillonEstComplet.store';
   import { resume } from './resume.store';
-  import { onMount } from 'svelte';
-  import { rechercheOrganisation } from '../../../ui/rechercheOrganisation';
-  import type { Entite } from '../../../ui/types';
   import { metsAJourBrouillonService } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
 

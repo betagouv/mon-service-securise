@@ -55,7 +55,11 @@
       ? $servicesAvecMesuresAssociees
           .filter((s) => modeleMesure.idsServicesAssocies.includes(s.id))
           .map(
-            ({ mesuresAssociees, mesuresSpecifiques, ...autresDonnees }) => ({
+            ({
+              mesuresAssociees: _,
+              mesuresSpecifiques,
+              ...autresDonnees
+            }) => ({
               ...autresDonnees,
               mesuresSpecifiques,
               mesure: mesuresSpecifiques.find(
@@ -105,7 +109,7 @@
       tiroirStore.ferme();
       await servicesAvecMesuresAssociees.rafraichis();
       await modelesMesureSpecifique.rafraichis();
-    } catch (e) {
+    } catch {
       tiroirStore.ferme();
       toasterStore.erreur(
         'Une erreur est survenue',

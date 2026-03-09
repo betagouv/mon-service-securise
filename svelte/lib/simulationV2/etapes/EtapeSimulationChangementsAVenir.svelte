@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import {
     type ResumeEvolutions,
     lisEvolutionMesures,
@@ -20,11 +18,11 @@
   }
 
   let { estComplete = $bindable() }: Props = $props();
-  run(() => {
+  $effect(() => {
     estComplete = $brouillonEstCompletStore;
   });
 
-  let resumeEvolutions: ResumeEvolutions = $state();
+  let resumeEvolutions: ResumeEvolutions | undefined = $state();
   let ongletActif: StatutEvolutionMesure = $state('ajoutee');
 
   onMount(async () => {

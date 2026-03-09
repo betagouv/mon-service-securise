@@ -12,7 +12,7 @@ import { get } from 'svelte/store';
 import { storeNotifications } from '../../../lib/ui/stores/notifications.store';
 import axios from 'axios';
 
-const globalAny: any = global;
+const globalAny: Record<string, unknown> = global;
 
 describe('Le store de notifications', () => {
   beforeAll(() => {

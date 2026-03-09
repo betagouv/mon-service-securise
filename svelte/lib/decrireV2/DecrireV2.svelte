@@ -72,7 +72,7 @@
 
   let mode: ModeAffichage = $state('Résumé');
   let ongletActif: 'informations' | 'besoinsSecurite' = $state('informations');
-  let niveauDeSecuriteMinimal: IdNiveauDeSecurite = $state();
+  let niveauDeSecuriteMinimal: IdNiveauDeSecurite | undefined = $state();
   let majForceeBesoinsSecurite: boolean = $state(false);
 
   let copiePourRestauration: DescriptionServiceV2 = $state(
@@ -108,7 +108,8 @@
   };
 
   const enregistreDescriptionService = async () => {
-    if (descriptionEditable.niveauSecurite === '') return;
+    if (!niveauDeSecuriteMinimal || descriptionEditable.niveauSecurite === '')
+      return;
 
     const niveauActuelInsuffisant =
       questionsV2.niveauSecurite[descriptionEditable.niveauSecurite].position <
@@ -201,30 +202,32 @@
     {/if}
   {:else}
     <div class="conteneur-resume">
-      <NiveauDeSecuriteEditable
-        bind:niveauSelectionne={descriptionEditable.niveauSecurite}
-        {niveauDeSecuriteMinimal}
-        on:champModifie={async (e) => {
-          descriptionEditable.niveauSecurite = e.detail.niveauSecurite;
-        }}
-      >
-        {#snippet infoMajNecessaire()}
-          {#if majForceeBesoinsSecurite && copiePourRestauration.niveauSecurite}
-            <div class="conteneur-info-maj-necessaire">
-              <Toast
-                niveau="alerte"
-                avecAnimation={false}
-                avecOmbre={false}
-                titre="Mise à jour des besoins en sécurité"
-                contenu={avertissementChangementObligatoire(
-                  copiePourRestauration.niveauSecurite,
-                  niveauDeSecuriteMinimal
-                )}
-              />
-            </div>
-          {/if}
-        {/snippet}
-      </NiveauDeSecuriteEditable>
+      {#if niveauDeSecuriteMinimal}
+        <NiveauDeSecuriteEditable
+          bind:niveauSelectionne={descriptionEditable.niveauSecurite}
+          {niveauDeSecuriteMinimal}
+          on:champModifie={async (e) => {
+            descriptionEditable.niveauSecurite = e.detail.niveauSecurite;
+          }}
+        >
+          {#snippet infoMajNecessaire()}
+            {#if niveauDeSecuriteMinimal && majForceeBesoinsSecurite && copiePourRestauration.niveauSecurite}
+              <div class="conteneur-info-maj-necessaire">
+                <Toast
+                  niveau="alerte"
+                  avecAnimation={false}
+                  avecOmbre={false}
+                  titre="Mise à jour des besoins en sécurité"
+                  contenu={avertissementChangementObligatoire(
+                    copiePourRestauration.niveauSecurite,
+                    niveauDeSecuriteMinimal
+                  )}
+                />
+              </div>
+            {/if}
+          {/snippet}
+        </NiveauDeSecuriteEditable>
+      {/if}
     </div>
   {/if}
 

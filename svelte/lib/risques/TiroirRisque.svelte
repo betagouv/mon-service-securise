@@ -3,8 +3,6 @@
 </script>
 
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import CartoucheCategorieRisque from '../ui/CartoucheCategorieRisque.svelte';
   import type {
@@ -118,8 +116,8 @@
     }
   };
 
-  run(() => {
-    (risque, (afficheConfirmationSuppressionRisque = false));
+  $effect(() => {
+    if (risque) afficheConfirmationSuppressionRisque = false;
   });
 </script>
 
@@ -133,7 +131,7 @@
           <IdentifiantRisque {risque} />
           {#if risqueDuReferentiel}
             <CartoucheReferentiel referentiel={Referentiel.ANSSI} />
-            {#each risque.categories as categorie}
+            {#each risque.categories as categorie (categorie)}
               <CartoucheCategorieRisque
                 libelleCategorie={referentielCategories[categorie]}
               />
@@ -161,7 +159,7 @@
               titre="Annuler"
               type="secondaire"
               boutonSoumission={false}
-              on:click={() => {
+              onclick={() => {
                 afficheConfirmationSuppressionRisque = false;
               }}
             />
@@ -169,7 +167,7 @@
               type="primaire"
               boutonSoumission={false}
               {enCoursEnvoi}
-              on:click={supprimeRisque}
+              onclick={supprimeRisque}
               titre="Confirmer la suppression"
             />
           </div>
@@ -253,7 +251,7 @@
                 icone="suppression"
                 titre="Supprimer le risque"
                 boutonSoumission={false}
-                on:click={() => {
+                onclick={() => {
                   afficheConfirmationSuppressionRisque = true;
                 }}
               />

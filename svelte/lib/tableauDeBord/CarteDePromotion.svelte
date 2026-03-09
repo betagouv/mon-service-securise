@@ -15,7 +15,7 @@
     children,
   }: Props = $props();
 
-  let avecIllustration = illustration;
+  let avecIllustration = $derived(illustration);
 </script>
 
 <a

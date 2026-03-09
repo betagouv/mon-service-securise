@@ -22,7 +22,6 @@ enum ERREURS {
 }
 
 export class ValidationServiceTeleverseV2 {
-  // eslint-disable-next-line no-empty-function
   constructor(private readonly nomServicesExistants: string[]) {}
 
   private schemaZod() {

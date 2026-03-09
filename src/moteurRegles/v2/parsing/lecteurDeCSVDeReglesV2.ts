@@ -65,7 +65,6 @@ type LigneDeCSVTransformee = {
 export class LecteurDeCSVDeReglesV2 {
   private statutsInitiaux = { Présente: true, Absente: false };
 
-  // eslint-disable-next-line no-empty-function
   constructor(private readonly referentielMesures: typeof mesuresV2) {}
 
   lis(cheminCSV: PathLike): ReglesDuReferentielMesuresV2 {
@@ -241,7 +240,6 @@ export class LecteurDeCSVDeReglesV2 {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   private traduisStatutInitial(valeurCSV: string) {
     if (!(valeurCSV in this.statutsInitiaux))
       throw new ErreurMoteurDeReglesV2(
@@ -251,7 +249,6 @@ export class LecteurDeCSVDeReglesV2 {
     return this.statutsInitiaux[valeurCSV as keyof typeof this.statutsInitiaux];
   }
 
-  // eslint-disable-next-line class-methods-use-this
   private traduisTousModificateurs(valeurCSV: string): Modificateur[] {
     if (!valeurCSV) return [];
 

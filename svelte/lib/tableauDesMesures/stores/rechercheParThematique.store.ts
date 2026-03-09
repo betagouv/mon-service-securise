@@ -1,9 +1,5 @@
 import { writable } from 'svelte/store';
-import type {
-  IdCategorie,
-  MesureGenerale,
-  MesureSpecifique,
-} from '../tableauDesMesures.d';
+import type { MesureGenerale, MesureSpecifique } from '../tableauDesMesures.d';
 
 export const thematiques = [
   'Gouvernance et gestion des risques',

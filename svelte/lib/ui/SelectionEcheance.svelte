@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run, stopPropagation } from 'svelte/legacy';
+  import { stopPropagation } from 'svelte/legacy';
 
   import { createEventDispatcher } from 'svelte';
   import type { EcheanceMesure } from './types';
@@ -20,26 +20,30 @@
     modificationEcheance: { echeance: EcheanceMesure };
   }>();
 
-  let elementDate: HTMLInputElement = $state();
+  let elementDate: HTMLInputElement | undefined = $state();
 
   let dateFormattee: string | undefined = $state(undefined);
-  run(() => {
+  $effect(() => {
     const formatFR = new Intl.DateTimeFormat('fr-FR');
     try {
       if (echeance) dateFormattee = formatFR.format(new Date(echeance));
       else dateFormattee = undefined;
-    } catch (e) {
+    } catch {
       dateFormattee = undefined;
     }
   });
 
-  const modifieEcheance = (e: any) => {
-    const nouvelleEcheance = e.target.value;
+  const modifieEcheance = (
+    e: Event & {
+      currentTarget: EventTarget & HTMLInputElement;
+    }
+  ) => {
+    const nouvelleEcheance = e.currentTarget.value;
     echeance = nouvelleEcheance;
     dispatch('modificationEcheance', { echeance: nouvelleEcheance });
   };
 
-  let dateEcheance: string = $state();
+  let dateEcheance: string | undefined = $state();
 
   if (echeance) {
     dateEcheance = new Date(Date.parse(echeance))
@@ -56,7 +60,7 @@
   {/if}
   <button
     type="button"
-    onclick={stopPropagation(() => elementDate.showPicker())}
+    onclick={stopPropagation(() => elementDate?.showPicker())}
     class:vide={!dateFormattee}
     disabled={estLectureSeule}
     class:avecLabel

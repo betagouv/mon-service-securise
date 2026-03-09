@@ -245,14 +245,14 @@
 </script>
 
 <svelte:body
-  onmesure-modifiee={rafraichisMesures}
-  oncollaboratif-service-modifie={() =>
+  on:mesure-modifiee={rafraichisMesures}
+  on:collaboratif-service-modifie={() =>
     Promise.all([
       rafraichisContributeurs(), // Pour avoir une liste à jour dans la sélection des responsables
       rafraichisAutorisations(), // Pour avoir des pastilles de couleur à jour sur les droits
       rafraichisMesures(), // Pour avoir les responsables de mesures à jour
     ])}
-  onmodeles-mesure-specifique-associes={() =>
+  on:modeles-mesure-specifique-associes={() =>
     ($rechercheParAvancement = 'enAction')}
 />
 <Toaster />

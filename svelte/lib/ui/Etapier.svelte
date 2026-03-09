@@ -8,7 +8,7 @@
 </script>
 
 <div>
-  {#each new Array(nombreEtapes).fill(0) as _, i}
+  {#each new Array(nombreEtapes).fill(0) as _, i (i)}
     <span class:accessible={i + 1 <= etapeCourante}></span>
   {/each}
 </div>

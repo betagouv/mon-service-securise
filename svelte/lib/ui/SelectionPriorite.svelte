@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run, createBubbler, stopPropagation } from 'svelte/legacy';
+  import { createBubbler, stopPropagation } from 'svelte/legacy';
 
   const bubble = createBubbler();
   import type { PrioriteMesure, ReferentielPriorite } from './types.d';
@@ -29,8 +29,8 @@
     input: { priorite: PrioriteMesure };
   }>();
 
-  run(() => {
-    if (!priorite) priorite = '';
+  $effect(() => {
+    if (priorite === undefined) priorite = '';
   });
 
   const metAJour = (e: Event) => {
@@ -55,7 +55,7 @@
     <option value="" disabled selected
       >{avecLibelleOption ? 'Définir la priorité' : '+'}</option
     >
-    {#each Object.entries(priorites) as [valeur, labels]}
+    {#each Object.entries(priorites) as [valeur, labels] (valeur)}
       <option value={valeur}>{labels.libelleComplet}</option>
     {/each}
   </select>

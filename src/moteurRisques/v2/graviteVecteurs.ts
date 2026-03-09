@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-function */
 import { IdVecteurRisque } from './selectionVecteurs.types.js';
 import { IdObjectifVise } from './selectionObjectifsVises.types.js';
 import { Gravite } from './graviteObjectifsVises.js';

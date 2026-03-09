@@ -9,7 +9,7 @@
   let { apiGetProgression, delaiRafraichissement = 1_000 }: Props = $props();
 
   const dispatch = createEventDispatcher<{ fini: null }>();
-  let elementModale: HTMLDialogElement = $state();
+  let elementModale: HTMLDialogElement | undefined = $state();
   let progression = $state(0);
 
   async function monitoreProgression() {
@@ -18,7 +18,7 @@
 
       if (progression === 100) dispatch('fini');
       else setTimeout(monitoreProgression, delaiRafraichissement);
-    } catch (e) {
+    } catch {
       setTimeout(monitoreProgression, 5_000);
       return;
     }

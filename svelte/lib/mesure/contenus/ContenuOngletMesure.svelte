@@ -128,7 +128,7 @@
         use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
       >
         <option value="" disabled selected>-</option>
-        {#each Object.entries(categories) as [valeur, label]}
+        {#each Object.entries(categories) as [valeur, label] (valeur)}
           <option value={valeur}>{label}</option>
         {/each}
       </select>
@@ -146,7 +146,7 @@
             bind:value={retourUtilisateur}
           >
             <option value="" disabled selected>-</option>
-            {#each Object.entries(retoursUtilisateur) as [valeur, label]}
+            {#each Object.entries(retoursUtilisateur) as [valeur, label] (valeur)}
               <option value={valeur}>{label}</option>
             {/each}
           </select>

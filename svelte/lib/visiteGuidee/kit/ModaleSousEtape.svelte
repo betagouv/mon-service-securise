@@ -20,7 +20,7 @@
   const parametresDeRecherche = new URLSearchParams(window.location.search);
   const afficheDerniereSousEtape =
     parametresDeRecherche.has('derniereSousEtape');
-  let indexEtapeCourante = $state(
+  let indexEtapeCourante = $derived(
     afficheDerniereSousEtape ? sousEtapes.length - 1 : 0
   );
 
@@ -52,7 +52,7 @@
     setTimeout(() => {
       if (!sousEtape) return;
 
-      positionCible = sousEtape.cible.getBoundingClientRect();
+      positionCible = sousEtape.cible?.getBoundingClientRect();
 
       if (sousEtape && positionCible) {
         positionModale = recuperePositionModale(
@@ -60,7 +60,7 @@
           sousEtape.positionnementModale
         );
       }
-      if (positionModale) {
+      if (positionModale && positionCible) {
         decallageRond = recuperePositionRond(
           positionCible,
           positionModale.positionRond
@@ -161,6 +161,7 @@
         {#each new Array(sousEtapes.length) as _, idx (idx)}
           <button
             class="pagination-etape"
+            aria-label={`Étape ${idx + 1}`}
             class:etape-courante={idx === indexEtapeCourante}
             onclick={async () => await afficheEtape(idx)}
           ></button>
@@ -197,7 +198,7 @@
               ? sousEtape.texteBoutonDerniereEtape
               : 'Suivant'}
             {#if sousEtape?.texteBoutonDerniereEtape}
-              {#each new Array(50).fill(0) as _}
+              {#each new Array(50).fill(0) as _, index (index)}
                 <Confetti />
               {/each}
             {/if}

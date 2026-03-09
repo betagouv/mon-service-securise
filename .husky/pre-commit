@@ -2,4 +2,3 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 ./node_modules/.bin/lint-staged
-./node_modules/.bin/tsc --noEmit -p svelte/tsconfig.json

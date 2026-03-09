@@ -4,10 +4,6 @@
   import ContenuTiroir from './ContenuTiroir.svelte';
   import { tiroirStore } from '../stores/tiroir.store';
   import Formulaire from '../Formulaire.svelte';
-  import type {
-    BrouillonService,
-    Service,
-  } from '../../tableauDeBord/tableauDeBord.d';
   import Avertissement from '../Avertissement.svelte';
   import ChampTexte from '../ChampTexte.svelte';
   import type { ServiceOuBrouillon } from '../../tableauDeBord/ActionsDesServices.svelte';
@@ -23,14 +19,16 @@
       ? 'Effacer toutes les données des services sélectionnés.'
       : 'Effacer toutes les données du service sélectionné.';
 
-  const confirmationSuppression =
+  let confirmationSuppression = $derived(
     servicesEtBrouillon.length > 1
       ? `${servicesEtBrouillon.length} services`
-      : servicesEtBrouillon[0].nomService;
-  const intituleSuppression =
+      : servicesEtBrouillon[0].nomService
+  );
+  let intituleSuppression = $derived(
     servicesEtBrouillon.length > 1
       ? `les ${servicesEtBrouillon.length} services séléctionnés`
-      : `le service ${servicesEtBrouillon[0].nomService}`;
+      : `le service ${servicesEtBrouillon[0].nomService}`
+  );
 
   let confirmation = $state('');
 
@@ -119,7 +117,7 @@
       titre="Annuler"
       type="secondaire"
       boutonSoumission={false}
-      on:click={() => {
+      onclick={() => {
         if (!enCoursEnvoi) tiroirStore.ferme();
       }}
     />

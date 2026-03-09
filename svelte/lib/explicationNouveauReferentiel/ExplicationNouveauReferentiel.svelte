@@ -6,8 +6,8 @@
   import { donneesEvolutionQuestions } from './donneesEvolutionQuestions';
 
   let indexEtapeCourante = $state(0);
-  let elementModale: Modale = $state();
-  let elementModaleConfirmationFermeture: Modale = $state();
+  let elementModale: Modale | undefined = $state();
+  let elementModaleConfirmationFermeture: Modale | undefined = $state();
   let aTermine = false;
   interface Props {
     afficheAuMontage?: boolean;
@@ -59,7 +59,7 @@
 
   const gereFermetureModale = () => {
     if (!aTermine && avecModaleConfirmation)
-      elementModaleConfirmationFermeture.affiche();
+      elementModaleConfirmationFermeture?.affiche();
   };
 
   const afficheEtape = (index: number) => {
@@ -305,7 +305,7 @@
       taille="md"
       icone=""
       positionIcone="sans"
-      onclick={() => elementModaleConfirmationFermeture.ferme()}
+      onclick={() => elementModaleConfirmationFermeture?.ferme()}
     ></lab-anssi-bouton>
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
@@ -315,8 +315,8 @@
       icone=""
       positionIcone="sans"
       onclick={() => {
-        elementModaleConfirmationFermeture.ferme();
-        elementModale.affiche();
+        elementModaleConfirmationFermeture?.ferme();
+        elementModale?.affiche();
       }}
     ></lab-anssi-bouton>
   {/snippet}

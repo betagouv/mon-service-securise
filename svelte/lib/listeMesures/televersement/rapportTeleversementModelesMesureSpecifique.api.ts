@@ -6,7 +6,7 @@ export const recupereRapportDetaille = async () => {
       '/api/televersement/modelesMesureSpecifique'
     );
     return reponse.data;
-  } catch (e) {
+  } catch {
     return;
   }
 };

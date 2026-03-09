@@ -55,7 +55,7 @@
         ongletActif: 'servicesAssocies',
       });
       toasterStore.succes('Succès', 'La mesure a été créée');
-    } catch (e) {
+    } catch {
       toasterStore.erreur(
         'Une erreur est survenue',
         "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."

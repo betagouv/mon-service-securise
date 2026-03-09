@@ -19,8 +19,8 @@
     disabled = false,
   }: Props = $props();
 
-  let saisie: string = $state();
-  let minuteur: NodeJS.Timeout;
+  let saisie: string | undefined = $state();
+  let minuteur: ReturnType<typeof setTimeout>;
   let dureeDebounceEnMs = 300;
   let suggestions: OrganisationAvecLabel[] = $state([]);
   let suggestionsVisibles = $state(false);
@@ -42,7 +42,7 @@
     }
   });
 
-  const avecTemporisation = (fonction: () => Promise<any>) => {
+  const avecTemporisation = (fonction: () => Promise<void>) => {
     clearTimeout(minuteur);
     minuteur = setTimeout(async () => {
       await fonction();
@@ -67,6 +67,7 @@
   };
 
   const rechercheSuggestions = async () => {
+    if (!saisie) return;
     if (saisie.length === 0) {
       siret = undefined;
     }
@@ -125,7 +126,7 @@
   >
   </dsfr-input>
   <div class="liste-suggestions" class:visible={suggestionsVisibles}>
-    {#each suggestions as suggestion}
+    {#each suggestions as suggestion (suggestion.siret)}
       <div
         class="option"
         role="button"

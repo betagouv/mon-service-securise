@@ -21,7 +21,7 @@
   <div class="indicateurs-etape">
     {#each new Array(nbEtapes)
       .fill(0)
-      .map( (_, index) => (index <= indiceEtapeCourante ? 'actif' : '') ) as actif}
+      .map( (_, index) => (index <= indiceEtapeCourante ? 'actif' : '') ) as actif, i (i)}
       <div class="indicateur-etape {actif}"></div>
     {/each}
   </div>

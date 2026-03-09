@@ -35,7 +35,7 @@
     <dt>URL du service :</dt>
     <dd>
       {#if donnees.pointsAcces.length > 0}
-        {#each donnees.pointsAcces as pointAcces}
+        {#each donnees.pointsAcces as pointAcces, i (i)}
           <span>{pointAcces}</span>
         {/each}
       {:else}
@@ -49,14 +49,14 @@
   <dl>
     <dt>Type de service à sécuriser :</dt>
     <dd>
-      {#each donnees.typeService as typeDeService}
+      {#each donnees.typeService as typeDeService, i (i)}
         <span>{typeDeService}</span>
       {/each}
     </dd>
     <dt>Sécurisations prévues :</dt>
     <dd>
       {#if donnees.specificitesProjet.length > 0}
-        {#each donnees.specificitesProjet as sp}
+        {#each donnees.specificitesProjet as sp, i (i)}
           <span>{sp}</span>
         {/each}
       {:else}
@@ -68,7 +68,7 @@
     <dt>Activités du projet entièrement externalisées :</dt>
     <dd>
       {#if donnees.activitesExternalisees.length > 0}
-        {#each donnees.activitesExternalisees as ae}
+        {#each donnees.activitesExternalisees as ae, i (i)}
           <span>{ae}</span>
         {/each}
       {:else}
@@ -89,10 +89,10 @@
     <dt>Données traitées :</dt>
     <dd>
       {#if donnees.categoriesDonneesTraitees.length > 0 || donnees.categoriesDonneesTraiteesSupplementaires.length > 0}
-        {#each donnees.categoriesDonneesTraitees as c}
+        {#each donnees.categoriesDonneesTraitees as c, i (i)}
           <span>{c}</span>
         {/each}
-        {#each donnees.categoriesDonneesTraiteesSupplementaires as cs}
+        {#each donnees.categoriesDonneesTraiteesSupplementaires as cs, i (i)}
           <span>{cs}</span>
         {/each}
       {:else}

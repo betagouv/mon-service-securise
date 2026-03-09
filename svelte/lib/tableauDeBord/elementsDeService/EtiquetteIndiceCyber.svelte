@@ -7,7 +7,7 @@
   let { score, idService }: Props = $props();
 
   const couleurs = ['rose', 'violet', 'marine', 'bleu', 'turquoise', 'or'];
-  const couleur = couleurs[Math.floor(score)];
+  let couleur = $derived(couleurs[Math.floor(score)]);
 </script>
 
 <a

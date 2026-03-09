@@ -5,8 +5,6 @@
   import type {
     Droits,
     Invitation,
-    Permission,
-    Rubrique,
     Utilisateur,
   } from '../gestionContributeurs.d';
   import { enDroitsSurRubrique } from '../gestionContributeurs.d';
@@ -32,7 +30,7 @@
 
   let invitations: Record<Email, Invitation> = $state({});
   let etapeCourante: Etape = $state('Ajout');
-  let enPersonnalisation: Utilisateur | null = $state();
+  let enPersonnalisation: Utilisateur | undefined = $state();
   const aPersonnaliser = () => ({
     utilisateur: enPersonnalisation!,
     droits: invitations[enPersonnalisation!.email].droits,
@@ -137,7 +135,7 @@
     utilisateur={aPersonnaliser().utilisateur}
     droitsOriginaux={aPersonnaliser().droits}
     on:annuler={() => {
-      enPersonnalisation = null;
+      enPersonnalisation = undefined;
       etapeCourante = 'Ajout';
     }}
     on:valider={({ detail: personnalises }) => {

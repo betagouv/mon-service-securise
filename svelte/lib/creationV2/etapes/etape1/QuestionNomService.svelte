@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { createEventDispatcher } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
@@ -15,19 +13,23 @@
     champModifie: MiseAJour;
   }>();
 
-  let elementHtml: HTMLElement & { errorMessage: string; status: string } =
-    $state();
+  let elementHtml:
+    | (HTMLElement & { errorMessage: string; status: string })
+    | undefined = $state();
 
-  run(() => {
+  $effect(() => {
     estComplete =
       $leBrouillon.nomService.trim().length > 0 &&
       $leBrouillon.nomService.length <= 200;
   });
+
   let estInvalide = $derived(
     $leBrouillon.nomService && $leBrouillon.nomService.length > 200
   );
 
   const metAJourNomService = (e: CustomEvent<string>) => {
+    if (!elementHtml) return;
+
     $leBrouillon.nomService = e.detail;
     if (
       $leBrouillon.nomService.length === 0 ||

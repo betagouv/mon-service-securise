@@ -4,22 +4,24 @@ import type {
   RapportTeleversementProps,
 } from './listeMesures.d';
 import RapportTeleversementModelesMesureSpecifique from './televersement/RapportTeleversementModelesMesureSpecifique.svelte';
-import { mount } from 'svelte';
+import { mount, unmount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-liste-mesures',
-  (e: CustomEvent<ListeMesuresProps>) => rechargeApp({ ...e.detail })
+  async (e: CustomEvent<ListeMesuresProps>) =>
+    await rechargeApp({ ...e.detail })
 );
 
 document.body.addEventListener(
   'svelte-recharge-rapport-televersement-modeles-mesure-specifique',
-  (e: CustomEvent<RapportTeleversementProps>) =>
-    rechargeRapport({ ...e.detail })
+  async (e: CustomEvent<RapportTeleversementProps>) =>
+    await rechargeRapport({ ...e.detail })
 );
 
 let app: ListeMesures;
-const rechargeApp = (props: ListeMesuresProps) => {
-  app?.$destroy();
+const rechargeApp = async (props: ListeMesuresProps) => {
+  if (app) await unmount(app);
+
   app = mount(ListeMesures, {
     target: document.getElementById('liste-mesures')!,
     props,
@@ -27,8 +29,9 @@ const rechargeApp = (props: ListeMesuresProps) => {
 };
 
 let rapport: RapportTeleversementModelesMesureSpecifique;
-const rechargeRapport = (props: RapportTeleversementProps) => {
-  rapport?.$destroy();
+const rechargeRapport = async (props: RapportTeleversementProps) => {
+  if (rapport) await unmount(rapport);
+
   rapport = mount(RapportTeleversementModelesMesureSpecifique, {
     target: document.getElementById('rapport-televersement')!,
     props,

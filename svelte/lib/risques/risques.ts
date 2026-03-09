@@ -5,11 +5,11 @@ import type {
   RisquesProps,
   TypeRisque,
 } from './risques.d';
-import { mount } from 'svelte';
+import { mount, unmount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-risques',
-  (e: CustomEvent<RisquesProps>) => rechargeApp({ ...e.detail })
+  async (e: CustomEvent<RisquesProps>) => await rechargeApp({ ...e.detail })
 );
 
 let app: Risques;
@@ -36,8 +36,9 @@ export const convertisDonneesRisqueSpecifique = (
   type: 'SPECIFIQUE' as TypeRisque,
 });
 
-const rechargeApp = (props: RisquesProps) => {
-  app?.$destroy();
+const rechargeApp = async (props: RisquesProps) => {
+  if (app) await unmount(app);
+
   const tousRisques: Risque[] = [
     ...props.risques.risquesGeneraux.map(convertisDonneesRisqueGeneral),
     ...props.risques.risquesSpecifiques.map(convertisDonneesRisqueSpecifique),

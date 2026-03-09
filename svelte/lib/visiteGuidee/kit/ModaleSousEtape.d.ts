@@ -10,9 +10,11 @@ export type PositionModale =
   | 'DeuxTiersCentre';
 
 export type SousEtape = {
-  cible: HTMLElement;
-  callbackInitialeCible?: (cible: HTMLElement) => Promise<void | HTMLElement>;
-  callbackFinaleCible?: (cible: HTMLElement) => Promise<void>;
+  cible: HTMLElement | undefined;
+  callbackInitialeCible?: (
+    cible: HTMLElement | undefined
+  ) => Promise<void | HTMLElement>;
+  callbackFinaleCible?: (cible: HTMLElement | undefined) => Promise<void>;
   delaiAvantAffichage?: number;
   margeElementMisEnAvant?: number;
   margesElementMisEnAvant?: string; // sous la forme "10 23 12 0" pour haut droite bas gauche

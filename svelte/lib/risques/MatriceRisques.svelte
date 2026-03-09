@@ -81,7 +81,7 @@
     <span>4</span>
   </div>
   <div class="conteneur-matrice">
-    {#each new Array(16).fill(0) as _, index}
+    {#each new Array(16).fill(0) as _, index (index)}
       {@const x = index % 4}
       {@const y = Math.floor(index / 4)}
       {@const classe = niveauRisqueCellule(x, y)}

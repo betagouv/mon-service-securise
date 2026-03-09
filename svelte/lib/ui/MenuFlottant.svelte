@@ -23,8 +23,8 @@
     children,
   }: Props = $props();
 
-  let declencheurEl: HTMLButtonElement = $state();
-  let contenuEl: HTMLDivElement = $state();
+  let declencheurEl: HTMLButtonElement | undefined = $state();
+  let contenuEl: HTMLDivElement | undefined = $state();
 
   const ouvreLeMenu = (e: MouseEvent) => {
     if (stopPropagation) e.stopPropagation();

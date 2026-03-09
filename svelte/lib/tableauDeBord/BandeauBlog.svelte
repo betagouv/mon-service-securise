@@ -1,5 +1,6 @@
 <script lang="ts">
   import CarteDePromotion from './CarteDePromotion.svelte';
+  import { SvelteDate } from 'svelte/reactivity';
 
   interface Props {
     dateInscriptionUtilisateur: Date;
@@ -8,9 +9,10 @@
 
   let { dateInscriptionUtilisateur, avecPromotionDeMsc }: Props = $props();
 
-  const ilYA1Mois = new Date().setMonth(new Date().getMonth() - 1);
-  const utilisateurInscritDepuisPlusD1Mois =
-    dateInscriptionUtilisateur.getTime() < ilYA1Mois;
+  const ilYA1Mois = new SvelteDate().setMonth(new Date().getMonth() - 1);
+  let utilisateurInscritDepuisPlusD1Mois = $derived(
+    dateInscriptionUtilisateur.getTime() < ilYA1Mois
+  );
 </script>
 
 <h2>Des contenus qui pourraient vous intéresser</h2>

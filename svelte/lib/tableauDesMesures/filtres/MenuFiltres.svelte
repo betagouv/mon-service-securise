@@ -36,7 +36,7 @@
     $rechercheParReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
       $rechercheParReferentiel.includes(IdReferentiel.ANSSIIndispensable)
   );
-  let selectionPartielleANSSI: boolean = $state();
+  let selectionPartielleANSSI: boolean | undefined = $state();
   run(() => {
     const estRecommandee = $rechercheParReferentiel.includes(
       IdReferentiel.ANSSIRecommandee
@@ -73,7 +73,7 @@
     </div>
     <fieldset>
       <legend>Catégories de cybersécurité</legend>
-      {#each Object.entries(categories) as [id, categorie]}
+      {#each Object.entries(categories) as [id, categorie] (id)}
         <div class="case-et-label">
           <input
             type="checkbox"
@@ -89,7 +89,7 @@
     {#if versionService === 'v2'}
       <fieldset>
         <legend>Thématiques</legend>
-        {#each thematiques as thematique}
+        {#each thematiques as thematique (thematique)}
           {@const id = thematique.replaceAll(' ', '-').toLowerCase()}
           <div class="case-et-label">
             <input
@@ -160,7 +160,7 @@
     </fieldset>
     <fieldset>
       <legend>Priorité</legend>
-      {#each Object.entries(priorites) as [id, labels]}
+      {#each Object.entries(priorites) as [id, labels] (id)}
         <div class="case-et-label">
           <input
             type="checkbox"

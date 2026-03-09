@@ -7,6 +7,6 @@ export const rechercheMesMesures = writable<boolean>(false);
 export const appliqueFiltreMesMesures = (
   mesure: MesureGenerale | MesureSpecifique
 ) => {
-  let idUtilisateurCourant = get(utilisateurCourant).id;
+  const idUtilisateurCourant = get(utilisateurCourant).id;
   return mesure.responsables?.includes(idUtilisateurCourant) || false;
 };

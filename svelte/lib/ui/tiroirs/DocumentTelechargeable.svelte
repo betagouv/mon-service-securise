@@ -19,7 +19,9 @@
     modeVisiteGuidee = false,
   }: Props = $props();
 
-  const lien = `/api/service/${idService}/pdf/${cheminDocument}?timestamp=${Date.now()}`;
+  let lien = $derived(
+    `/api/service/${idService}/pdf/${cheminDocument}?timestamp=${Date.now()}`
+  );
 </script>
 
 <div class="document-telechargeable">

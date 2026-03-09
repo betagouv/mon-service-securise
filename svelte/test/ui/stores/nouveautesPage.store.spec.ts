@@ -13,7 +13,7 @@ import { nouveautesPage } from '../../../lib/ui/stores/nouveautesPage.store';
 import axios from 'axios';
 import { storeNotifications } from '../../../lib/ui/stores/notifications.store';
 
-const globalAny: any = global;
+const globalAny: Record<string, unknown> = global;
 
 describe('Le store dérivé des nouveautes de page', () => {
   beforeAll(() => {

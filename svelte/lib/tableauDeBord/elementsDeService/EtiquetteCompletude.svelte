@@ -6,7 +6,7 @@
 
   let { pourcentageCompletude, idService }: Props = $props();
 
-  const valeurCompletude = pourcentageCompletude || 0;
+  let valeurCompletude = $derived(pourcentageCompletude || 0);
 </script>
 
 <a class="conteneur-completude" href="/service/{idService}/mesures">

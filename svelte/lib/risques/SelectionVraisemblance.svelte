@@ -1,17 +1,16 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   import type {
     IdentifiantVraisemblance,
     ReferentielVraisemblances,
   } from './risques.d';
+  import type { ChangeEventHandler } from 'svelte/elements';
 
   interface Props {
     niveauVraisemblance: IdentifiantVraisemblance;
     estLectureSeule: boolean | undefined;
     referentielVraisemblances: ReferentielVraisemblances;
     avecLibelleOption?: boolean;
+    onchange?: ChangeEventHandler<HTMLSelectElement>;
   }
 
   let {
@@ -19,6 +18,7 @@
     estLectureSeule,
     referentielVraisemblances,
     avecLibelleOption = false,
+    onchange,
   }: Props = $props();
 </script>
 
@@ -29,7 +29,7 @@
     class:avecLibelleOption
     bind:value={niveauVraisemblance}
     disabled={estLectureSeule}
-    onchange={bubble('change')}
+    {onchange}
   >
     <option
       label={avecLibelleOption ? 'Définir la vraisemblance initiale' : '+'}

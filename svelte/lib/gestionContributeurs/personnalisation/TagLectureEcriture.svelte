@@ -39,7 +39,7 @@
   {/snippet}
 
   <div class="droits-disponibles">
-    {#each droitsDisponibles as { nom, description, droit }}
+    {#each droitsDisponibles as { nom, description, droit }, i (i)}
       <button
         class="droit-propose"
         onclick={() => dispatch('droitChange', droit)}

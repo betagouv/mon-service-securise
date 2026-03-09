@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import {
     type Risque,
     type ReferentielRisques,
@@ -154,11 +152,10 @@
     return 0;
   };
 
-  let risquesTries: Risque[] = $state();
-  run(() => {
-    (triParGravite,
-      triParVraisemblance,
-      (risquesTries = [...risques].sort(compare)));
+  let risquesTries: Risque[] = $state([]);
+  $effect(() => {
+    if (triParGravite || triParVraisemblance)
+      risquesTries = [...risques].sort(compare);
   });
 </script>
 
@@ -206,7 +203,7 @@
     titre="Ajouter un risque"
     icone="ajout"
     boutonSoumission={false}
-    on:click={ouvreAjoutRisque}
+    onclick={ouvreAjoutRisque}
   />
 </div>
 {#if doitAfficherAvertissement}
@@ -232,13 +229,13 @@
           Gravité potentielle
           <BoutonIcone
             icone="information"
-            on:click={() => {
+            onclick={() => {
               tiroirLegendeGraviteOuvert = true;
               tiroirLegendeVraisemblanceOuvert = false;
               tiroirRisqueOuvert = false;
             }}
           />
-          <BoutonIcone icone={`tri-${triParGravite}`} on:click={triGravite} />
+          <BoutonIcone icone={`tri-${triParGravite}`} onclick={triGravite} />
         </div>
       </th>
       <th>
@@ -246,7 +243,7 @@
           Vraisemblance initiale
           <BoutonIcone
             icone="information"
-            on:click={() => {
+            onclick={() => {
               tiroirLegendeVraisemblanceOuvert = true;
               tiroirLegendeGraviteOuvert = false;
               tiroirRisqueOuvert = false;
@@ -254,7 +251,7 @@
           />
           <BoutonIcone
             icone={`tri-${triParVraisemblance}`}
-            on:click={triVraisemblance}
+            onclick={triVraisemblance}
           />
         </div>
       </th>

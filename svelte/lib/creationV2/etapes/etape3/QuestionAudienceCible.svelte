@@ -36,7 +36,7 @@
   </span>
 
   <span class="indication">Sélectionnez une réponse</span>
-  {#each Object.entries(questionsV2.audienceCible) as [idType, { nom, description }]}
+  {#each Object.entries(questionsV2.audienceCible) as [idType, { nom, description }] (idType)}
     <Radio
       id={idType}
       {nom}
