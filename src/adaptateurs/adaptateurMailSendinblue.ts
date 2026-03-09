@@ -85,7 +85,7 @@ const creeContact = (
         attributes: {
           PRENOM: prenom,
           NOM: nom,
-          sync_mss_numero_telephone: numeroTelephoneAvecIndicatif(telephone),
+          SMS: numeroTelephoneAvecIndicatif(telephone),
         },
         ...(!bloqueNewsletter && { listIds: [idListeInfolettre] }),
       },
@@ -129,7 +129,7 @@ const metAJourContact = (
   metAJourDonneesContact(destinataire, {
     PRENOM: prenom,
     NOM: nom,
-    sync_mss_numero_telephone: numeroTelephoneAvecIndicatif(telephone),
+    SMS: numeroTelephoneAvecIndicatif(telephone),
   });
 
 const basculeEmailsTransactionnels = (destinataire: string, etat: boolean) =>
