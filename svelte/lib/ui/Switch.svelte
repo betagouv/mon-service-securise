@@ -28,6 +28,7 @@
 <div>
   <button
     type="button"
+    aria-label={actif ? labelActif : labelInactif}
     role="switch"
     aria-checked={actif}
     {id}

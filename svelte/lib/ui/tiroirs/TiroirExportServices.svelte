@@ -3,6 +3,7 @@
   import Lien from '../Lien.svelte';
   import type { Service } from '../../tableauDeBord/tableauDeBord.d';
   import { SvelteURLSearchParams } from 'svelte/reactivity';
+  import { untrack } from 'svelte';
 
   interface Props {
     services: Service[];
@@ -10,10 +11,11 @@
 
   let { services }: Props = $props();
   export const titre = 'Exporter la sélection';
-  export const sousTitre =
+  export const sousTitre = untrack(() =>
     services.length > 1
       ? 'Télécharger la liste des services sélectionnés dans le tableau de bord.'
-      : 'Télécharger les données du service sélectionné dans le tableau de bord.';
+      : 'Télécharger les données du service sélectionné dans le tableau de bord.'
+  );
 
   const queryString = () => {
     const requete = new SvelteURLSearchParams();

@@ -75,10 +75,10 @@
   let niveauDeSecuriteMinimal: IdNiveauDeSecurite | undefined = $state();
   let majForceeBesoinsSecurite: boolean = $state(false);
 
-  let copiePourRestauration: DescriptionServiceV2 = $state(
+  let copiePourRestauration: DescriptionServiceV2 = $derived(
     structuredClone(enEditable(descriptionService))
   );
-  let descriptionEditable: DescriptionServiceV2 = $state(
+  let descriptionEditable: DescriptionServiceV2 = $derived(
     enEditable(descriptionService)
   );
 

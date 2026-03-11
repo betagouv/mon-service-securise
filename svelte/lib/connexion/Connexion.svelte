@@ -7,7 +7,9 @@
 
   let { urlRedirection }: Props = $props();
 
-  const cheminRedirection = urlRedirection && new URL(urlRedirection).pathname;
+  let cheminRedirection = $derived(
+    urlRedirection && new URL(urlRedirection).pathname
+  );
 </script>
 
 <div class="conteneur">

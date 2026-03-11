@@ -19,7 +19,7 @@
 
   let { activite, priorites, statuts }: Props = $props();
 
-  const visualisation = obtientVisualisation(activite);
+  let visualisation = $derived(obtientVisualisation(activite));
 
   type Acteur = {
     intitule: string;
@@ -50,15 +50,18 @@
     activite: ActiviteMesure;
     statuts?: ReferentielStatut;
     priorites?: ReferentielPriorite;
-  } = $state({
+  } = $derived({
     activite,
   });
-  if (visualisation.aBesoinPriorites) {
-    proprietes.priorites = priorites;
-  }
-  if (visualisation.aBesoinStatuts) {
-    proprietes.statuts = statuts;
-  }
+
+  $effect(() => {
+    if (visualisation.aBesoinPriorites) {
+      proprietes.priorites = priorites;
+    }
+    if (visualisation.aBesoinStatuts) {
+      proprietes.statuts = statuts;
+    }
+  });
 </script>
 
 {#if acteur}

@@ -12,9 +12,10 @@
 
   let { activite }: Props = $props();
 
-  const details = <DetailsModificationResponsable>activite.details;
-  const idResponsable: string = details.valeur;
+  let details = $derived(activite.details as DetailsModificationResponsable);
+  let idResponsable: string = $derived(details.valeur);
   let intitule: string = $state('');
+
   $effect(() => {
     const contributeursTrouves = $contributeurs.filter(
       (c) => c.id === idResponsable

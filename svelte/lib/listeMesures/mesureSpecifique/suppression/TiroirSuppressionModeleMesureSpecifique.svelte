@@ -21,17 +21,12 @@
   import TableauSelectionServices from '../../kit/TableauSelectionServices.svelte';
   import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
   import { encode } from 'html-entities';
+  import { ModeDeSuppression } from './modeSuppression';
 
   export const titre: string = 'Supprimer la mesure';
   export const sousTitre: string =
     'Choisissez où cette mesure doit être supprimée : partout, partiellement ou uniquement de la liste centralisée.';
   export const taille = 'large';
-
-  enum ModeDeSuppression {
-    COMPLET = 'COMPLET',
-    UNIQUEMENT_MODELE = 'UNIQUEMENT_MODELE',
-    UNIQUEMENT_SERVICES_CHOISIS = 'UNIQUEMENT_SERVICES_CHOISIS',
-  }
 
   interface Props {
     modeleMesure: ModeleMesureSpecifique;

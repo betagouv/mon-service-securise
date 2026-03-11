@@ -7,6 +7,7 @@
   import Avertissement from '../Avertissement.svelte';
   import ChampTexte from '../ChampTexte.svelte';
   import type { ServiceOuBrouillon } from '../../tableauDeBord/ActionsDesServices.svelte';
+  import { untrack } from 'svelte';
 
   interface Props {
     servicesEtBrouillon: ServiceOuBrouillon[];
@@ -14,10 +15,11 @@
 
   let { servicesEtBrouillon }: Props = $props();
   export const titre = 'Supprimer';
-  export const sousTitre =
+  export const sousTitre = untrack(() =>
     servicesEtBrouillon.length > 1
       ? 'Effacer toutes les données des services sélectionnés.'
-      : 'Effacer toutes les données du service sélectionné.';
+      : 'Effacer toutes les données du service sélectionné.'
+  );
 
   let confirmationSuppression = $derived(
     servicesEtBrouillon.length > 1

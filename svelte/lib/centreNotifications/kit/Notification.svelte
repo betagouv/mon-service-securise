@@ -9,15 +9,23 @@
 
   let { notification }: Props = $props();
 
-  const enteteNotification =
-    notification.type === 'nouveaute' ? 'Nouveautés' : notification.entete;
-  const cibleCta = notification.type === 'nouveaute' ? '_blank' : '';
-  const relationCta = notification.type === 'nouveaute' ? 'noopener' : '';
-  const actionClick = notification.doitNotifierLecture
-    ? async () => {
-        await storeNotifications.marqueLue(notification.type, notification.id);
-      }
-    : () => {};
+  let enteteNotification = $derived(
+    notification.type === 'nouveaute' ? 'Nouveautés' : notification.entete
+  );
+  let cibleCta = $derived(notification.type === 'nouveaute' ? '_blank' : '');
+  let relationCta = $derived(
+    notification.type === 'nouveaute' ? 'noopener' : ''
+  );
+  let actionClick = $derived(
+    notification.doitNotifierLecture
+      ? async () => {
+          await storeNotifications.marqueLue(
+            notification.type,
+            notification.id
+          );
+        }
+      : () => {}
+  );
 </script>
 
 <a

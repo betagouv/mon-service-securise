@@ -51,7 +51,7 @@
       .substring(0, 10);
   }
 
-  const labelVide = avecLabel ? 'Définir l’échéance' : 'Échéance';
+  let labelVide = $derived(avecLabel ? 'Définir l’échéance' : 'Échéance');
 </script>
 
 <div class="conteneur-date">

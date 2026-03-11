@@ -230,9 +230,11 @@
     $rechercheParAvancement !== 'statutADefinir'
   );
 
-  if (modeVisiteGuidee) {
-    $rechercheParAvancement = 'enAction';
-  }
+  $effect(() => {
+    if (modeVisiteGuidee) {
+      $rechercheParAvancement = 'enAction';
+    }
+  });
 
   const supprimeFiltres = () => {
     $rechercheParCategorie = [];

@@ -12,9 +12,9 @@
 
   let { activite }: Props = $props();
 
-  const details = <DetailsMiseAJourPropriete>activite.details;
-  const ancienneEcheance = new Date(details.ancienneValeur);
-  const nouvelleEcheance = new Date(details.nouvelleValeur);
+  let details = $derived(activite.details as DetailsMiseAJourPropriete);
+  let ancienneEcheance = $derived(new Date(details.ancienneValeur));
+  let nouvelleEcheance = $derived(new Date(details.nouvelleValeur));
 </script>
 
 <div>
