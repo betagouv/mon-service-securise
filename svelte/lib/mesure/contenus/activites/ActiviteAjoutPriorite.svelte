@@ -11,8 +11,8 @@
 
   let { activite, priorites }: Props = $props();
 
-  const details = <DetailsAjoutPropriete>activite.details;
-  const priorite: PrioriteMesure = <PrioriteMesure>details.nouvelleValeur;
+  let details = $derived(activite.details as DetailsAjoutPropriete);
+  let priorite = $derived(details.nouvelleValeur as PrioriteMesure);
 </script>
 
 <div>

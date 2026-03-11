@@ -86,7 +86,7 @@
     }
   };
 
-  let formulaireInscription: FormulaireInscription = $state({
+  let formulaireInscription: FormulaireInscription = $derived({
     prenom: informationsProfessionnelles.prenom,
     nom: informationsProfessionnelles.nom,
     siretEntite: informationsProfessionnelles.organisation?.siret,

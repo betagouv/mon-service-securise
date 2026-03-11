@@ -33,7 +33,7 @@
       : null
   );
 
-  const optionsFiltrage = {
+  let optionsFiltrage = $derived({
     categories: [
       { id: 'typeService', libelle: 'Type de service' },
       { id: 'niveauSecurite', libelle: 'Besoins de sécurité' },
@@ -52,7 +52,7 @@
         idCategorie: 'niveauSecurite',
       })),
     ],
-  };
+  });
 
   let configurationFiltrage = $derived(
     etapeActive === 1 ? { options: optionsFiltrage } : null

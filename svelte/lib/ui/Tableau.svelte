@@ -103,7 +103,7 @@
     }
   });
 
-  const nbColonnes = colonnes.length + (configurationSelection ? 1 : 0);
+  let nbColonnes = $derived(colonnes.length + (configurationSelection ? 1 : 0));
 
   const videSelectionSansReactivite = () => {
     selection = [];

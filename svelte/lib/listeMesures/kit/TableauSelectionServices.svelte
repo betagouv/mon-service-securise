@@ -37,7 +37,7 @@
       .map((s) => ({ ...s, statut: s.mesure.statut }))
   );
 
-  const optionsFiltrage = {
+  let optionsFiltrage = $derived({
     categories: [{ id: 'statut', libelle: 'Statuts' }],
     items: [
       { libelle: 'À définir', valeur: '', idCategorie: 'statut' },
@@ -47,7 +47,7 @@
         idCategorie: 'statut',
       })),
     ],
-  };
+  });
 </script>
 
 <Tableau

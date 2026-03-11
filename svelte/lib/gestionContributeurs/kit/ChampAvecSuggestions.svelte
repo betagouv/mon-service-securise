@@ -20,7 +20,7 @@
     modeVisiteGuidee = false,
   }: Props = $props();
 
-  let saisie = $state(valeurInitiale);
+  let saisie = $derived(valeurInitiale);
   let minuteur: ReturnType<typeof setTimeout>;
   let suggestions: Utilisateur[] = $state([]);
 
@@ -50,9 +50,11 @@
     envoiEvenement('contributeurChoisi', donnees);
   };
 
-  if (modeVisiteGuidee) {
-    rechercheSuggestions();
-  }
+  $effect(() => {
+    if (modeVisiteGuidee) {
+      rechercheSuggestions();
+    }
+  });
 </script>
 
 <div class="conteneur-suggestions">

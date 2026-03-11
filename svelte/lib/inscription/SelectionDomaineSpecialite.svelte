@@ -41,10 +41,13 @@
     valeurs.filter((v) => idsDesDomaines.includes(v))
   );
   const autreValeur = valeurs.find((v) => !idsDesDomaines.includes(v));
-  if (autreValeur) {
-    selection.push('autre');
-    autreDomaine = autreValeur;
-  }
+
+  $effect(() => {
+    if (autreValeur) {
+      selection.push('autre');
+      autreDomaine = autreValeur;
+    }
+  });
 
   let label = $derived(
     selection.map((id) => domaines.find((f) => f.id === id)?.libelle).join(', ')

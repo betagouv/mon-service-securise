@@ -16,10 +16,11 @@
   let { statuts, statutSelectionne, precision, servicesConcernes }: Props =
     $props();
 
-  const intitulePluralise =
+  let intitulePluralise = $derived(
     servicesConcernes.length > 1
       ? 'services concernés par ces modifications'
-      : 'service concerné par cette modification';
+      : 'service concerné par cette modification'
+  );
 </script>
 
 <div class="contenu-resume">

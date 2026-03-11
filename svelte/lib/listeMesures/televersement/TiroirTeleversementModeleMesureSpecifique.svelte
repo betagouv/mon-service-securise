@@ -21,8 +21,9 @@
 
   let { capaciteAjoutDeMesure }: Props = $props();
 
-  let nombreRestantModelesAjoutables =
-    capaciteAjoutDeMesure.nombreMaximum - $modelesMesureSpecifique.length;
+  let nombreRestantModelesAjoutables = $derived(
+    capaciteAjoutDeMesure.nombreMaximum - $modelesMesureSpecifique.length
+  );
 
   let etatTeleversement: EtatTeleversement = $state('EnAttente');
 

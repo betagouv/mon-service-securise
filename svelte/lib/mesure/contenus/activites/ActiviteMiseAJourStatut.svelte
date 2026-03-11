@@ -15,9 +15,9 @@
 
   let { activite, statuts }: Props = $props();
 
-  const details = <DetailsMiseAJourPropriete>activite.details;
-  const ancienStatut = <StatutMesure>details.ancienneValeur;
-  const nouveauStatut = <StatutMesure>details.nouvelleValeur;
+  let details = $derived(activite.details as DetailsMiseAJourPropriete);
+  let ancienStatut = $derived(details.ancienneValeur as StatutMesure);
+  let nouveauStatut = $derived(details.nouvelleValeur as StatutMesure);
 </script>
 
 <div>

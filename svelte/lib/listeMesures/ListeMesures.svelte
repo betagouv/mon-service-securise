@@ -89,11 +89,13 @@
     { libelle: 'CNIL', valeur: Referentiel.CNIL, idCategorie: 'referentiel' },
   ];
 
-  const itemsFiltrageCategories = categories.map((c) => ({
-    libelle: c.label,
-    valeur: c.id,
-    idCategorie: 'categorie',
-  }));
+  let itemsFiltrageCategories = $derived(
+    categories.map((c) => ({
+      libelle: c.label,
+      valeur: c.id,
+      idCategorie: 'categorie',
+    }))
+  );
 
   const itemsFiltrageThematiques = thematiques.map((t) => ({
     libelle: t,

@@ -12,8 +12,8 @@
 
   let { activite, statuts }: Props = $props();
 
-  const details = <DetailsAjoutPropriete>activite.details;
-  const statut = <StatutMesure>details.nouvelleValeur;
+  let details = $derived(activite.details as DetailsAjoutPropriete);
+  let statut = $derived(details.nouvelleValeur as StatutMesure);
 </script>
 
 <div>

@@ -237,6 +237,7 @@
         {#each new Array(3) as _, idx (idx)}
           <button
             class="pagination-etape"
+            aria-label={`Etape ${idx + 1}`}
             class:etape-courante={idx === indexEtapeCourante}
             onclick={() => afficheEtape(idx)}
           ></button>

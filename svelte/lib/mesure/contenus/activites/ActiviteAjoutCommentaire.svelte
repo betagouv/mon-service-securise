@@ -8,18 +8,22 @@
   }
 
   let { activite }: Props = $props();
-  const details = <DetailsAjoutCommentaire>activite.details;
+  let details = $derived(activite.details as DetailsAjoutCommentaire);
 
   const regexUUID =
     /@\[([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\]/gm;
 
-  const contenu = encode(details.contenu)
-    .replaceAll(regexUUID, (_s, idUtilisateur) => {
-      const contributeur = $contributeurs.find((c) => c.id === idUtilisateur);
-      const texte = contributeur ? contributeur.prenomNom : 'Utilisateur·rice';
-      return `<mss-mention>@${encode(texte)}</mss-mention>`;
-    })
-    .replaceAll(/\n/gm, '<br>');
+  let contenu = $derived(
+    encode(details.contenu)
+      .replaceAll(regexUUID, (_s, idUtilisateur) => {
+        const contributeur = $contributeurs.find((c) => c.id === idUtilisateur);
+        const texte = contributeur
+          ? contributeur.prenomNom
+          : 'Utilisateur·rice';
+        return `<mss-mention>@${encode(texte)}</mss-mention>`;
+      })
+      .replaceAll(/\n/gm, '<br>')
+  );
 </script>
 
 <div>

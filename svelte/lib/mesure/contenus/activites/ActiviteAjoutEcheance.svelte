@@ -9,8 +9,8 @@
 
   let { activite }: Props = $props();
 
-  const details = <DetailsAjoutPropriete>activite.details;
-  const echeance = new Date(details.nouvelleValeur);
+  let details = $derived(activite.details as DetailsAjoutPropriete);
+  let echeance = $derived(new Date(details.nouvelleValeur));
 </script>
 
 <div>

@@ -14,8 +14,8 @@
 
   let { ligne }: Props = $props();
 
-  const aUneErreur = ligne.erreurs.length > 0;
-  const aDesErreurs = ligne.erreurs.length > 1;
+  let aUneErreur = $derived(ligne.erreurs.length > 0);
+  let aDesErreurs = $derived(ligne.erreurs.length > 1);
 
   const contientErreur = (erreur: ErreurModele) =>
     ligne.erreurs.includes(erreur);
