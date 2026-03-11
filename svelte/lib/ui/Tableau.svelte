@@ -70,20 +70,11 @@
     );
   };
 
-  let donneesFiltrees: T[] = $state([]);
-  let donneesFiltreesSelectionnables = $derived(
-    donneesFiltrees.filter((donnee) =>
-      configurationSelection?.predicatSelectionDesactive
-        ? !configurationSelection.predicatSelectionDesactive(donnee)
-        : true
-    )
-  );
-
-  $effect(() => {
-    donneesFiltrees = donnees;
+  let donneesFiltrees: T[] = $derived.by(() => {
+    let filtrees = donnees;
 
     if (configurationRecherche && recherche)
-      donneesFiltrees = donneesFiltrees.filter((donnee) =>
+      filtrees = filtrees.filter((donnee) =>
         configurationRecherche!.champsRecherche.some((champ) =>
           donnee[champ]?.toLowerCase().includes(recherche.toLowerCase())
         )
@@ -92,7 +83,7 @@
     if (configurationFiltrage && filtrage) {
       Object.entries(filtrage).forEach(([cleFiltrage, valeurs]) => {
         if (valeurs && valeurs.length)
-          donneesFiltrees = donneesFiltrees.filter((d) => {
+          filtrees = filtrees.filter((d) => {
             const donnee = d[cleFiltrage];
             if (Array.isArray(donnee)) {
               return donnee.some((v) => valeurs.includes(v));
@@ -101,7 +92,16 @@
           });
       });
     }
+    return filtrees;
   });
+
+  let donneesFiltreesSelectionnables = $derived(
+    donneesFiltrees.filter((donnee) =>
+      configurationSelection?.predicatSelectionDesactive
+        ? !configurationSelection.predicatSelectionDesactive(donnee)
+        : true
+    )
+  );
 
   let nbColonnes = $derived(colonnes.length + (configurationSelection ? 1 : 0));
 

@@ -20,6 +20,7 @@
     finaliseInscriptionSuiteInvitation,
     inscrisNouvelUtilisateur,
   } from './inscription.api';
+  import { untrack } from 'svelte';
 
   const modeleTelephone = '^0\\d{9}$';
   interface Props {
@@ -86,18 +87,19 @@
     }
   };
 
-  let formulaireInscription: FormulaireInscription = $derived({
-    prenom: informationsProfessionnelles.prenom,
-    nom: informationsProfessionnelles.nom,
-    siretEntite: informationsProfessionnelles.organisation?.siret,
-    telephone: informationsProfessionnelles.telephone,
-    postes: informationsProfessionnelles.domainesSpecialite,
+  let formulaireInscription: FormulaireInscription = $state({
+    prenom: untrack(() => informationsProfessionnelles).prenom,
+    nom: untrack(() => informationsProfessionnelles).nom,
+    siretEntite: untrack(() => informationsProfessionnelles).organisation
+      ?.siret,
+    telephone: untrack(() => informationsProfessionnelles).telephone,
+    postes: untrack(() => informationsProfessionnelles).domainesSpecialite,
     estimationNombreServices: null,
     agentConnect: true,
     cguAcceptees: false,
     infolettreAcceptee: false,
     transactionnelAccepte: true,
-    token,
+    token: untrack(() => token),
   });
 
   let departement: Departement | undefined = $state();

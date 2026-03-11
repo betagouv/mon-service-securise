@@ -101,7 +101,8 @@
       : 'Ajouter un risque'
   );
 
-  let afficheConfirmationSuppressionRisque = $state(false);
+  let afficheConfirmationSuppressionRisque = $derived(!risque);
+
   const supprimeRisque = async () => {
     if (risque && risque.type === 'SPECIFIQUE') {
       try {
@@ -114,10 +115,6 @@
       }
     }
   };
-
-  $effect(() => {
-    if (risque) afficheConfirmationSuppressionRisque = false;
-  });
 </script>
 
 <div class="tiroir-risque {risque?.type}" class:ouvert>

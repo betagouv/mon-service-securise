@@ -5,14 +5,14 @@
 
   interface Props {
     statuts: ReferentielStatut;
-    statutSelectionne?: keyof ReferentielStatut | '';
-    precision?: string;
+    statutSelectionne: keyof ReferentielStatut | '';
+    precision: string;
   }
 
   let {
     statuts,
-    statutSelectionne = $bindable(''),
-    precision = $bindable(''),
+    statutSelectionne = $bindable(),
+    precision = $bindable(),
   }: Props = $props();
 </script>
 

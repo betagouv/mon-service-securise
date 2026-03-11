@@ -29,8 +29,8 @@
       for (let i = 0; i < nombreCopies; i++) {
         await uneCopie();
       }
-      tiroirStore.ferme();
       document.body.dispatchEvent(new CustomEvent('rafraichis-services'));
+      tiroirStore.ferme();
     } catch (exc) {
       if (axios.isAxiosError(exc) && exc.response) {
         const { data, status } = exc.response;

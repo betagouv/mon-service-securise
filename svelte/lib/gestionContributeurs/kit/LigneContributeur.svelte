@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Service, Utilisateur } from '../gestionContributeurs.d';
+  import type { Utilisateur } from '../gestionContributeurs.d';
   import { enDroitsSurRubrique } from '../gestionContributeurs.d';
   import { store } from '../gestionContributeurs.store';
   import Initiales from '../../ui/Initiales.svelte';
@@ -8,6 +8,7 @@
   import { storeAutorisations } from '../stores/autorisations.store';
   import BoutonSuppressionContributeur from '../../ui/BoutonSuppressionContributeur.svelte';
   import type { Contributeur } from './ChampAvecSuggestions.svelte';
+  import { derived } from 'svelte/store';
 
   interface Props {
     droitsModifiables: boolean;
@@ -21,22 +22,20 @@
     utilisateur,
   }: Props = $props();
 
-  let serviceUnique: Service = $derived($store.services[0]);
+  let serviceUnique = derived(store, ($s) => $s.services[0]);
 
-  let autorisation = $derived(
-    'id' in utilisateur
-      ? $storeAutorisations.autorisations[utilisateur.id]
-      : undefined
-  );
+  let autorisation = derived(storeAutorisations, ($s) => {
+    return 'id' in utilisateur ? $s.autorisations[utilisateur.id] : undefined;
+  });
 
   const estUtilisateur = (u: Contributeur | Utilisateur): u is Utilisateur =>
     'id' in u;
 
   const changeDroits = async (nouveauDroit: ResumeNiveauDroit) => {
-    const idAutorisation = autorisation!.idAutorisation;
+    const idAutorisation = $autorisation!.idAutorisation;
 
     const { data: autorisationMAJ } = await axios.patch(
-      `/api/service/${serviceUnique.id}/autorisations/${idAutorisation}`,
+      `/api/service/${$serviceUnique.id}/autorisations/${idAutorisation}`,
       { droits: enDroitsSurRubrique(nouveauDroit) }
     );
 
@@ -48,7 +47,7 @@
   <div class="contenu-nom-prenom">
     <Initiales
       valeur={utilisateur.initiales}
-      resumeNiveauDroit={autorisation?.resumeNiveauDroit}
+      resumeNiveauDroit={$autorisation?.resumeNiveauDroit}
     />
     <div class="nom-prenom-poste">
       <div class="nom-contributeur">{utilisateur.prenomNom}</div>
@@ -58,9 +57,9 @@
     </div>
   </div>
   <div class="conteneur-actions">
-    {#if afficheDroits && autorisation?.resumeNiveauDroit && estUtilisateur(utilisateur)}
+    {#if afficheDroits && $autorisation?.resumeNiveauDroit && estUtilisateur(utilisateur)}
       <TagNiveauDroit
-        niveau={autorisation.resumeNiveauDroit}
+        niveau={$autorisation.resumeNiveauDroit}
         {droitsModifiables}
         onDroitsChange={(nouveauxDroits) => changeDroits(nouveauxDroits)}
         onChoixPersonnalisation={() =>

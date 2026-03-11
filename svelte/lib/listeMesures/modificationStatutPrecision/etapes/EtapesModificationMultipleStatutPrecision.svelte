@@ -48,9 +48,9 @@
     if (etapeCourante < 3) etapeCourante++;
     else
       onModificationAAppliquer({
-        statut: statutSelectionne,
-        modalites: precision,
-        idsServices: idsServicesSelectionnes,
+        statut: $state.snapshot(statutSelectionne),
+        modalites: $state.snapshot(precision),
+        idsServices: $state.snapshot(idsServicesSelectionnes),
       });
   };
 

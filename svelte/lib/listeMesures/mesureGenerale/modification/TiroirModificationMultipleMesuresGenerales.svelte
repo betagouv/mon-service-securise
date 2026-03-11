@@ -78,7 +78,6 @@
         idsServices,
         version: modeleMesureGenerale.versionReferentiel,
       });
-      tiroirStore.ferme();
       await servicesAvecMesuresAssociees.rafraichis();
       modaleRapportStore.affiche({
         champsModifies: [
@@ -89,13 +88,13 @@
         modeleMesureGenerale,
       });
     } catch {
-      tiroirStore.ferme();
       toasterStore.erreur(
         'Une erreur est survenue',
         "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
       );
     } finally {
       enCoursEnvoi = false;
+      tiroirStore.ferme();
     }
   };
 

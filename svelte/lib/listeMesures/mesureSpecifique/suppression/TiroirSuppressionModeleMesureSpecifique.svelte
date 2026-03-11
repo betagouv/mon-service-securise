@@ -101,17 +101,16 @@
         );
       }
       toasterStore.succes(titreToaster, soustitreToaster, true);
-      tiroirStore.ferme();
       await servicesAvecMesuresAssociees.rafraichis();
       await modelesMesureSpecifique.rafraichis();
     } catch {
-      tiroirStore.ferme();
       toasterStore.erreur(
         'Une erreur est survenue',
         "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
       );
     } finally {
       enCoursEnvoi = false;
+      tiroirStore.ferme();
     }
   };
 </script>

@@ -47,10 +47,10 @@
       ...services.map((s) => axios.delete(`/api/service/${s.id}`)),
       ...brouillons.map((b) => axios.delete(`/api/brouillon-service/${b.id}`)),
     ]);
-    tiroirStore.ferme();
     document.body.dispatchEvent(new CustomEvent('rafraichis-services'));
 
     enCoursEnvoi = false;
+    tiroirStore.ferme();
   };
 
   const echappeTexte = (texte: string) => {

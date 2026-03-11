@@ -18,7 +18,7 @@ export const convertisDonneesRisqueGeneral = (
   donneesRisque: DonneesRisque
 ) => ({
   ...donneesRisque,
-  commentaire: donneesRisque.commentaire,
+  commentaire: donneesRisque.commentaire ?? '',
   niveauGravite: donneesRisque.niveauGravite ?? '',
   niveauVraisemblance: donneesRisque.niveauVraisemblance ?? '',
   type: 'GENERAL' as TypeRisque,
@@ -29,8 +29,8 @@ export const convertisDonneesRisqueSpecifique = (
 ) => ({
   ...donneesRisque,
   intitule: donneesRisque.intitule,
-  commentaire: donneesRisque.commentaire,
-  description: donneesRisque.description,
+  commentaire: donneesRisque.commentaire ?? '',
+  description: donneesRisque.description ?? '',
   niveauGravite: donneesRisque.niveauGravite ?? '',
   niveauVraisemblance: donneesRisque.niveauVraisemblance ?? '',
   type: 'SPECIFIQUE' as TypeRisque,

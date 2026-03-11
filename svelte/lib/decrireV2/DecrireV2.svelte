@@ -26,7 +26,7 @@
     miseAJourForceeReussie,
     nomNiveauDeSecurite,
   } from './niveauDeSecurite.messages';
-  import { onMount } from 'svelte';
+  import { onMount, untrack } from 'svelte';
   import type { MiseAJour } from '../creationV2/creationV2.api';
   import { donneesDeServiceSontCompletes } from '../creationV2/etapes/brouillonEstComplet.store';
   import type { AxiosError } from 'axios';
@@ -75,11 +75,11 @@
   let niveauDeSecuriteMinimal: IdNiveauDeSecurite | undefined = $state();
   let majForceeBesoinsSecurite: boolean = $state(false);
 
-  let copiePourRestauration: DescriptionServiceV2 = $derived(
-    structuredClone(enEditable(descriptionService))
+  let copiePourRestauration: DescriptionServiceV2 = $state(
+    untrack(() => enEditable(descriptionService))
   );
-  let descriptionEditable: DescriptionServiceV2 = $derived(
-    enEditable(descriptionService)
+  let descriptionEditable: DescriptionServiceV2 = $state(
+    untrack(() => enEditable(descriptionService))
   );
 
   let descriptionAffichable = $derived(
@@ -133,7 +133,7 @@
         : 'Les informations de votre service ont été mises à jour avec succès.';
       toasterStore.succes('Mise à jour réussie', messageSucces);
 
-      copiePourRestauration = structuredClone(descriptionEditable);
+      copiePourRestauration = $state.snapshot(descriptionEditable);
       retourAuModeResume();
     } catch (e) {
       const x = e as AxiosError<{ erreur: { code: string } }>;
@@ -250,7 +250,7 @@
         !majForceeBesoinsSecurite}
       onEnregistrer={async () => enregistreDescriptionService()}
       onAnnuler={() => {
-        descriptionEditable = structuredClone(copiePourRestauration);
+        descriptionEditable = $state.snapshot(copiePourRestauration);
         retourAuModeResume();
       }}
     />

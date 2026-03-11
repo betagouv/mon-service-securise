@@ -65,14 +65,13 @@
     onclick,
   }: Props = $props();
 
-  let texteSurligne = $state('');
-  $effect(() => {
+  let texteSurligne = $derived.by(() => {
     const rechercheEncapsuleAvecMarqueur = nom.replace(
       new RegExp($rechercheTextuelle, 'ig'),
       (texte: string) => ($rechercheTextuelle ? `_%%${texte}%%_` : texte)
     );
     const nomCompletEncodeAvecMarqueur = encode(rechercheEncapsuleAvecMarqueur);
-    texteSurligne = nomCompletEncodeAvecMarqueur.replace(
+    return nomCompletEncodeAvecMarqueur.replace(
       new RegExp(/_%%(.*?)%%_/, 'ig'),
       (_, texte: string) => `<mark>${texte}</mark>`
     );
@@ -104,7 +103,7 @@
   {#if affichePlanAction}
     <td>
       <SelectionPriorite
-        bind:priorite={mesure.priorite}
+        priorite={mesure.priorite}
         {id}
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
@@ -114,7 +113,7 @@
     </td>
     <td>
       <SelectionEcheance
-        bind:echeance={mesure.echeance}
+        echeance={mesure.echeance}
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
         {onModificationEcheance}
@@ -122,7 +121,7 @@
     </td>
     <td>
       <SelectionResponsables
-        bind:responsables={mesure.responsables}
+        responsables={mesure.responsables}
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
         {onModificationResponsables}
@@ -131,7 +130,7 @@
   {/if}
   <td>
     <SelectionStatut
-      bind:statut={mesure.statut}
+      statut={mesure.statut}
       {id}
       {estLectureSeule}
       {referentielStatuts}

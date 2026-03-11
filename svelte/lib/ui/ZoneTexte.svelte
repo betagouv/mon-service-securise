@@ -11,13 +11,15 @@
   }
 
   let {
-    valeur = $bindable(''),
+    valeur = $bindable(),
     aideSaisie = '',
     requis = false,
     messageErreur = '',
     lignes = undefined,
     max = undefined,
   }: Props = $props();
+
+  valeur ??= '';
 </script>
 
 <textarea

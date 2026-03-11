@@ -17,14 +17,12 @@
 
   let elementDate: HTMLInputElement | undefined = $state();
 
-  let dateFormattee: string | undefined = $state(undefined);
-  $effect(() => {
+  let dateFormattee: string | undefined = $derived.by(() => {
     const formatFR = new Intl.DateTimeFormat('fr-FR');
     try {
-      if (echeance) dateFormattee = formatFR.format(new Date(echeance));
-      else dateFormattee = undefined;
+      if (echeance) return formatFR.format(new Date(echeance));
     } catch {
-      dateFormattee = undefined;
+      return undefined;
     }
   });
 
