@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { brouillonEstCompletStore } from '../../creationV2/etapes/brouillonEstComplet.store';
   import BrouillonDeServiceEditable from '../../creationV2/etapes/BrouillonDeServiceEditable.svelte';
   import { leBrouillon } from '../../creationV2/etapes/brouillon.store';
@@ -12,7 +10,7 @@
   }
 
   let { estComplete = $bindable() }: Props = $props();
-  run(() => {
+  $effect(() => {
     estComplete = $brouillonEstCompletStore;
   });
 

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   interface Props {
     description: string;
     lienBlog?: string | undefined;
@@ -32,7 +30,7 @@
 
   let descriptionAAfficher: string = $state('');
   let objectifAAfficher: string | undefined = $state();
-  run(() => {
+  $effect(() => {
     const resultat = recupereObjectif(description);
     descriptionAAfficher = resultat.description;
     objectifAAfficher = resultat.objectif;

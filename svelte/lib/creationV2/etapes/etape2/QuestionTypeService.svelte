@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { createEventDispatcher } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import CheckboxIllustree from './CheckboxIllustree.svelte';
@@ -24,11 +22,11 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  run(() => {
+  $effect(() => {
     estComplete = $leBrouillon.typeService.length > 0;
   });
 
-  run(() => {
+  $effect(() => {
     emetEvenement('champModifie', { typeService: $leBrouillon.typeService });
   });
 

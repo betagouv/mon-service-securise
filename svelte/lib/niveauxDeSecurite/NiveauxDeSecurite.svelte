@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { ordreDesNiveaux } from './niveauxDeSecurite.d';
   import donneesNiveauxDeSecurite from './donneesNiveauxDeSecurite';
   import { acquitteSuggestionBesoinsSecuriteRetrogrades } from './niveauxDeSecurite.api';
@@ -48,7 +46,7 @@
   const estNiveauSuperieur = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] > ordreDesNiveaux[niveauDeSecuriteMinimal];
 
-  run(() => {
+  $effect(() => {
     if (niveauChoisi) {
       document.getElementById('diagnostic')?.removeAttribute('disabled');
     }

@@ -52,10 +52,8 @@
 
   let boutonSuivantActif = $state(false);
 
-  let servicesAssocies: ServiceAssocie[] = $state([]);
-  run(() => {
-    servicesAssocies =
-      modeleMesureGenerale &&
+  let servicesAssocies: ServiceAssocie[] = $derived(
+    (modeleMesureGenerale &&
       $servicesAvecMesuresAssociees
         .filter((s) => {
           return $mesuresAvecServicesAssociesStore[
@@ -65,8 +63,9 @@
         .map(({ mesuresAssociees, ...autresDonnees }) => ({
           mesure: mesuresAssociees[modeleMesureGenerale.id],
           ...autresDonnees,
-        }));
-  });
+        }))) ||
+      []
+  );
 
   const appliqueModifications = async (
     e: CustomEvent<DonneesModificationAAppliquer>

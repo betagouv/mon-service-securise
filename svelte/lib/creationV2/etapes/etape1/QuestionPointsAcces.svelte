@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { createEventDispatcher, onMount, tick } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
@@ -19,7 +17,7 @@
     if ($leBrouillon.pointsAcces.length === 0) ajouteValeur();
   });
 
-  run(() => {
+  $effect(() => {
     estComplete =
       $leBrouillon.pointsAcces.length === 0 ||
       $leBrouillon.pointsAcces.every((p) => p.length <= 200);

@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { run, createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
+  import { createBubbler } from 'svelte/legacy';
   import { createEventDispatcher } from 'svelte';
   import { encode } from 'html-entities';
   import type {
@@ -28,6 +26,8 @@
   import SelectionResponsables from '../../ui/SelectionResponsables.svelte';
   import CartoucheThematique from '../../ui/CartoucheThematique.svelte';
   import { partieResponsable } from './mapPartieResponsable';
+
+  const bubble = createBubbler();
 
   type IdDom = string;
 
@@ -63,7 +63,7 @@
   }>();
 
   let texteSurligne = $state('');
-  run(() => {
+  $effect(() => {
     const rechercheEncapsuleAvecMarqueur = nom.replace(
       new RegExp($rechercheTextuelle, 'ig'),
       (texte: string) => ($rechercheTextuelle ? `_%%${texte}%%_` : texte)

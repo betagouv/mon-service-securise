@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { visiteGuidee } from '../visiteGuidee.store';
   import { onDestroy, onMount, tick } from 'svelte';
   import Confetti from '../../ui/Confetti.svelte';
@@ -82,7 +80,7 @@
   );
   let estPremiereSousEtape = $derived(indexEtapeCourante === 0);
 
-  run(() => {
+  $effect(() => {
     if (!afficheModale) rideau.style.clipPath = 'none';
   });
 
