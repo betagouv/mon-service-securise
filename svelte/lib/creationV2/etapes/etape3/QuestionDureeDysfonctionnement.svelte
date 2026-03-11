@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { createEventDispatcher } from 'svelte';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
@@ -15,11 +13,11 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  run(() => {
+  $effect(() => {
     estComplete = !!$leBrouillon.dureeDysfonctionnementAcceptable;
   });
 
-  run(() => {
+  $effect(() => {
     emetEvenement('champModifie', {
       dureeDysfonctionnementAcceptable:
         $leBrouillon.dureeDysfonctionnementAcceptable,

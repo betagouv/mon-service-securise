@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import MenuFlottant from '../../ui/MenuFlottant.svelte';
   import type { IdCategorie } from '../tableauDesMesures.d';
   import { nombreResultats } from '../stores/nombreDeResultats.store';
@@ -37,7 +35,8 @@
       $rechercheParReferentiel.includes(IdReferentiel.ANSSIIndispensable)
   );
   let selectionPartielleANSSI: boolean | undefined = $state();
-  run(() => {
+
+  $effect(() => {
     const estRecommandee = $rechercheParReferentiel.includes(
       IdReferentiel.ANSSIRecommandee
     );
@@ -48,6 +47,7 @@
       ? !estIndispensable
       : estIndispensable;
   });
+
   const gereCocheANSSI = () => {
     const devientCochee = !cocheGlobaleANSSI;
     if (devientCochee) rechercheParReferentiel.ajouteLesReferentielsANSSI();

@@ -14,7 +14,7 @@
   }
 
   let { estComplete = $bindable() }: Props = $props();
-  run(() => {
+  $effect(() => {
     estComplete = !!$leBrouillon.typeHebergement;
   });
 

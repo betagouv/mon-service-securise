@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import {
     EtatEnregistrement,
     type IdCategorie,
@@ -79,7 +77,7 @@
     versionService,
   }: Props = $props();
 
-  run(() => {
+  $effect(() => {
     const requete = new URLSearchParams(window.location.search);
     const idModele = requete.get('idModele');
     const idMesure = requete.get('idMesure');

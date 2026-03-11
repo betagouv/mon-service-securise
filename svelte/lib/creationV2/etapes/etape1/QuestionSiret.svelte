@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { createEventDispatcher, onMount } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { entiteDeUtilisateur, leBrouillon } from '../brouillon.store';
@@ -29,11 +27,11 @@
     });
   });
 
-  run(() => {
+  $effect(() => {
     estComplete = !!$leBrouillon.id && /^\d{14}$/.test($leBrouillon.siret);
   });
 
-  run(() => {
+  $effect(() => {
     if (estComplete)
       emetEvenement('champModifie', { siret: $leBrouillon.siret });
   });

@@ -59,7 +59,7 @@
       });
   };
 
-  run(() => {
+  $effect(() => {
     switch (etapeCourante) {
       case 1:
         boutonSuivantActif = !!statutSelectionne || !!precision;

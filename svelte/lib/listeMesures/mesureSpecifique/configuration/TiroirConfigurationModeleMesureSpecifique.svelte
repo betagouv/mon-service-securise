@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import type { ListeMesuresProps } from '../../listeMesures.d';
   import ContenuTiroir from '../../../ui/tiroirs/ContenuTiroir.svelte';
   import Onglets from '../../../ui/Onglets.svelte';
@@ -107,10 +105,8 @@
       !!donneesModeleMesureEdite.categorie
   );
 
-  let servicesAssocies: ServiceAssocie[] = $state([]);
-  run(() => {
-    servicesAssocies =
-      modeleMesure &&
+  let servicesAssocies: ServiceAssocie[] = $derived(
+    (modeleMesure &&
       $servicesAvecMesuresAssociees
         .filter((s) => modeleMesure.idsServicesAssocies.includes(s.id))
         .map((s) => {
@@ -124,8 +120,9 @@
               modalites: mesureSpecifique?.modalites,
             },
           };
-        });
-  });
+        })) ||
+      []
+  );
 
   let enCoursDenvoi = $state(false);
 
@@ -185,7 +182,7 @@
     }
   };
 
-  run(() => {
+  $effect(() => {
     if (ongletActif) {
       etapeServicesAssocies = 1;
       etapeStatutEtPrecision = 1;

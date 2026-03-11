@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { validationChamp } from '../directives/validationChamp';
   import type { EstimationNombreServices, Intervalle } from './inscription.d';
 
@@ -15,7 +13,7 @@
   let nombreServices: string = $state(
     valeur ? `${valeur.borneBasse}_${valeur.borneHaute}` : ''
   );
-  run(() => {
+  $effect(() => {
     valeur = nombreServices
       ? {
           borneBasse: nombreServices.split('_')[0],

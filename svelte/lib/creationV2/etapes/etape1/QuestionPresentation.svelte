@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
   import { createEventDispatcher } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
@@ -12,7 +11,7 @@
 
   const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
-  run(() => {
+  $effect(() => {
     estComplete = ($leBrouillon.presentation?.length || 0) <= 2000;
   });
   let estInvalide = $derived(
