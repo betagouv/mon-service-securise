@@ -3,10 +3,10 @@
   import InvitationContributeur from './invitation/InvitationContributeur.svelte';
   import LigneContributeur from './kit/LigneContributeur.svelte';
   import SuppressionContributeur from './suppression/SuppressionContributeur.svelte';
-  import { onMount } from 'svelte';
   import PersonnalisationContributeur from './personnalisation/PersonnalisationContributeur.svelte';
   import { autorisationsVisiteGuidee } from './modeVisiteGuidee/donneesVisiteGuidee';
   import { storeAutorisations } from './stores/autorisations.store';
+  import { derived } from 'svelte/store';
 
   interface Props {
     modeVisiteGuidee: boolean;
@@ -14,17 +14,18 @@
 
   let { modeVisiteGuidee }: Props = $props();
 
-  let surServiceUnique = $derived($store.services.length === 1);
-  let serviceUnique = $derived($store.services[0]);
-  let contributeurs = $derived(serviceUnique.contributeurs);
+  let surServiceUnique = derived(store, ($s) => $s.services.length === 1);
+  let serviceUnique = derived(store, ($s) => $s.services[0]);
 
-  onMount(async () => {
+  $effect(() => {
     if (modeVisiteGuidee) storeAutorisations.charge(autorisationsVisiteGuidee);
-    else if (surServiceUnique) {
-      const reponse = await axios.get(
-        `/api/service/${serviceUnique.id}/autorisations`
-      );
-      storeAutorisations.charge(reponse.data);
+    else if ($surServiceUnique) {
+      (async () => {
+        const reponse = await axios.get(
+          `/api/service/${$serviceUnique.id}/autorisations`
+        );
+        storeAutorisations.charge(reponse.data);
+      })();
     }
   });
 </script>
@@ -37,16 +38,18 @@
   {#if $store.services.every((s) => s.estProprietaire)}
     <InvitationContributeur {modeVisiteGuidee} />
   {/if}
-  {#if $store.etapeCourante !== 'InvitationContributeurs' && surServiceUnique}
+  {#if $store.etapeCourante !== 'InvitationContributeurs' && $surServiceUnique}
     <h3 class="titre-liste">Liste des contributeurs au service</h3>
     <ul class="liste-contributeurs contributeurs-actifs">
-      {#each contributeurs as contributeur (contributeur.id)}
-        <LigneContributeur
-          droitsModifiables={!contributeur.estUtilisateurCourant &&
-            serviceUnique.permissions.gestionContributeurs}
-          utilisateur={contributeur}
-        />
-      {/each}
+      {#if $serviceUnique}
+        {#each $serviceUnique.contributeurs as contributeur (contributeur.id)}
+          <LigneContributeur
+            droitsModifiables={!contributeur.estUtilisateurCourant &&
+              $serviceUnique.permissions.gestionContributeurs}
+            utilisateur={contributeur}
+          />
+        {/each}
+      {/if}
     </ul>
   {/if}
 {/if}

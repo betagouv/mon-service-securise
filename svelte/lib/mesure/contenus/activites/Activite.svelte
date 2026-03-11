@@ -10,6 +10,7 @@
   import { storeAutorisations } from '../../../gestionContributeurs/stores/autorisations.store';
   import { formatteDateHeureFr } from '../../../formatDate/formatDate';
   import { obtientVisualisation } from './visualisation';
+  import { derived, type Readable } from 'svelte/store';
 
   interface Props {
     activite: ActiviteMesure;
@@ -26,63 +27,52 @@
     initiales: string;
     resumeNiveauDroit?: ResumeNiveauDroit;
   };
-  let acteur: Acteur | undefined = $state();
-
-  $effect(() => {
-    const contributeursTrouves = $contributeurs.filter(
-      (c) => c.id === activite.idActeur
-    );
-    acteur =
-      contributeursTrouves.length === 0
-        ? {
-            intitule: 'Utilisateur·rice',
-            initiales: '',
-          }
-        : {
-            ...contributeursTrouves[0],
-            intitule: contributeursTrouves[0].prenomNom,
-            resumeNiveauDroit:
-              $storeAutorisations.autorisations[activite.idActeur]
-                ?.resumeNiveauDroit,
-          };
-  });
-  const proprietes: {
-    activite: ActiviteMesure;
-    statuts?: ReferentielStatut;
-    priorites?: ReferentielPriorite;
-  } = $derived({
-    activite,
+  let acteur: Readable<Acteur> = derived(contributeurs, ($s) => {
+    const contributeursTrouves = $s.filter((c) => c.id === activite.idActeur);
+    return contributeursTrouves.length === 0
+      ? { intitule: 'Utilisateur·rice', initiales: '' }
+      : {
+          ...contributeursTrouves[0],
+          intitule: contributeursTrouves[0].prenomNom,
+          resumeNiveauDroit:
+            $storeAutorisations.autorisations[activite.idActeur]
+              ?.resumeNiveauDroit,
+        };
   });
 
-  $effect(() => {
-    if (visualisation.aBesoinPriorites) {
-      proprietes.priorites = priorites;
-    }
-    if (visualisation.aBesoinStatuts) {
-      proprietes.statuts = statuts;
-    }
+  const propsActivite = $derived.by(() => {
+    const resultat: {
+      activite: ActiviteMesure;
+      statuts?: ReferentielStatut;
+      priorites?: ReferentielPriorite;
+    } = { activite };
+
+    if (visualisation.aBesoinPriorites) resultat.priorites = priorites;
+    if (visualisation.aBesoinStatuts) resultat.statuts = statuts;
+
+    return resultat;
   });
 </script>
 
-{#if acteur}
+{#if $acteur}
   {@const Composant = visualisation.composantContenu}
   <div class="activite">
     <div>
       <div class="cartouche">
         <Initiales
-          valeur={acteur.initiales}
-          resumeNiveauDroit={acteur.resumeNiveauDroit}
+          valeur={$acteur.initiales}
+          resumeNiveauDroit={$acteur.resumeNiveauDroit}
         />
       </div>
     </div>
     <div class="contenu">
       <div class="titre">{visualisation.titre}</div>
       <div class="infos">
-        <span>{acteur.intitule}</span> &bull;
+        <span>{$acteur.intitule}</span> &bull;
         <span>{formatteDateHeureFr(activite.date)}</span>
       </div>
       <div class="description">
-        <Composant {...proprietes} />
+        <Composant {...propsActivite} />
       </div>
     </div>
   </div>

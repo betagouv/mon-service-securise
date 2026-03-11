@@ -57,7 +57,6 @@
         modalites,
         idsServices,
       });
-      tiroirStore.ferme();
       await servicesAvecMesuresAssociees.rafraichis();
       const pluriel = idsServices.length > 1 ? 's' : '';
       toasterStore.succes(
@@ -66,13 +65,13 @@
       );
       metEnAvantMesureApresModification();
     } catch {
-      tiroirStore.ferme();
       toasterStore.erreur(
         'Une erreur est survenue',
         "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
       );
     } finally {
       enCoursDenvoi = false;
+      tiroirStore.ferme();
     }
   };
 
@@ -166,12 +165,12 @@
     try {
       await sauvegardeModeleMesureSpecifique(donneesModeleMesureEdite);
       await modelesMesureSpecifique.rafraichis();
-      tiroirStore.ferme();
       toasterStore.succes(
         'Succès',
         'Les informations de la mesure ont été mises à jour'
       );
       metEnAvantMesureApresModification();
+      tiroirStore.ferme();
     } catch {
       toasterStore.erreur(
         'Une erreur est survenue',

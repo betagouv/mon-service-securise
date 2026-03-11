@@ -24,7 +24,7 @@
   let {
     nom,
     id,
-    valeur = $bindable(''),
+    valeur = $bindable(),
     requis = false,
     aideSaisie = '',
     messageErreur = '',
@@ -35,6 +35,8 @@
     onfocus,
     onblur,
   }: Props = $props();
+
+  valeur ??= '';
 
   const typeChamp = (node: HTMLInputElement) => {
     node.type = type;

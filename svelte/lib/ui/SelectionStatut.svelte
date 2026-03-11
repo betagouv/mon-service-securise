@@ -27,11 +27,7 @@
     onStatutChange,
   }: Props = $props();
 
-  $effect(() => {
-    if (statut === undefined) {
-      statut = '';
-    }
-  });
+  statut ??= '';
 
   const metAJour = (e: Event) => {
     onStatutChange?.((e.target as HTMLInputElement).value as StatutMesure);

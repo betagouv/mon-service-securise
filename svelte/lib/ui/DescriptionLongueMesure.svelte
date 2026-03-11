@@ -28,13 +28,10 @@
     return { description };
   };
 
-  let descriptionAAfficher: string = $state('');
-  let objectifAAfficher: string | undefined = $state();
-  $effect(() => {
-    const resultat = recupereObjectif(description);
-    descriptionAAfficher = resultat.description;
-    objectifAAfficher = resultat.objectif;
-  });
+  let descriptionAAfficher = $derived(
+    recupereObjectif(description).description
+  );
+  let objectifAAfficher = $derived(recupereObjectif(description).objectif);
 </script>
 
 <details open={!repliee}>

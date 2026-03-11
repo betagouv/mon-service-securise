@@ -18,6 +18,7 @@
   } from '../stores/rechercheParThematique.store';
   import type { VersionService } from '../../../../src/modeles/versionService';
   import { rechercheParPartieResponsable } from '../stores/rechercheParPartieResponsable.store';
+  import { derived } from 'svelte/store';
 
   interface Props {
     categories: Record<IdCategorie, string>;
@@ -33,18 +34,10 @@
     $rechercheParReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
       $rechercheParReferentiel.includes(IdReferentiel.ANSSIIndispensable)
   );
-  let selectionPartielleANSSI: boolean | undefined = $state();
-
-  $effect(() => {
-    const estRecommandee = $rechercheParReferentiel.includes(
-      IdReferentiel.ANSSIRecommandee
-    );
-    const estIndispensable = $rechercheParReferentiel.includes(
-      IdReferentiel.ANSSIIndispensable
-    );
-    selectionPartielleANSSI = estRecommandee
-      ? !estIndispensable
-      : estIndispensable;
+  let selectionPartielleANSSI = derived(rechercheParReferentiel, ($s) => {
+    const estRecommandee = $s.includes(IdReferentiel.ANSSIRecommandee);
+    const estIndispensable = $s.includes(IdReferentiel.ANSSIIndispensable);
+    return estRecommandee ? !estIndispensable : estIndispensable;
   });
 
   const gereCocheANSSI = () => {
@@ -112,7 +105,7 @@
           name="anssi"
           bind:checked={cocheGlobaleANSSI}
           onclick={gereCocheANSSI}
-          class:selection-partielle={selectionPartielleANSSI}
+          class:selection-partielle={$selectionPartielleANSSI}
         />
         <label for="anssi">ANSSI</label>
       </div>

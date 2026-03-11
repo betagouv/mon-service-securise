@@ -49,8 +49,8 @@
             id="visibilite-{id}"
             checked={droit > 0}
             onChange={(estCochee) => {
-              if (estCochee) redefinis[id] = 1;
-              else redefinis[id] = 0;
+              const valeur = estCochee ? 1 : 0;
+              redefinis = { ...redefinis, [id]: valeur };
             }}
           />
           <div class="nom-rubrique">{nom}</div>
@@ -59,7 +59,9 @@
           {#if droit !== 0}
             <TagLectureEcriture
               {droit}
-              onDroitChange={(droit) => (redefinis[id] = droit)}
+              onDroitChange={(droit) => {
+                redefinis = { ...redefinis, [id]: droit };
+              }}
             />
           {/if}
         </div>

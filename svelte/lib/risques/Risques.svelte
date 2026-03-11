@@ -46,6 +46,7 @@
     matriceNiveauxRisque,
     niveauxRisque,
   }: Props = $props();
+
   let tiroirRisqueOuvert = $state(false);
   let tiroirLegendeGraviteOuvert = $state(false);
   let tiroirLegendeVraisemblanceOuvert = $state(false);
@@ -63,6 +64,7 @@
 
   const rafraichisRisqueDansLeTableau = (risque: Risque) => {
     risques[risques.findIndex((r) => r.id === risque.id)] = risque;
+    risques = [...risques];
   };
 
   const supprimeRisqueDansTableau = (risque: Risque) => {
@@ -152,10 +154,9 @@
     return 0;
   };
 
-  let risquesTries: Risque[] = $state([]);
-  $effect(() => {
-    if (triParGravite || triParVraisemblance)
-      risquesTries = [...risques].sort(compare);
+  let risquesTries: Risque[] = $derived.by(() => {
+    if (triParGravite || triParVraisemblance) return [...risques].sort(compare);
+    return [];
   });
 </script>
 
@@ -212,11 +213,11 @@
     classeSupplementaire="avertissement-risques-specifiques"
   >
     <strong>Risques spécifiques à mettre à jour.</strong>
-    <span
-      >Suite à l'ajout de l'échelle de vraisemblance et de la catégorie sur les
+    <span>
+      Suite à l'ajout de l'échelle de vraisemblance et de la catégorie sur les
       risques, nous vous invitons à mettre à jour les risques spécifiques que
-      vous avez ajoutés afin de compléter les informations manquantes</span
-    >
+      vous avez ajoutés afin de compléter les informations manquantes
+    </span>
   </Avertissement>
 {/if}
 <table>

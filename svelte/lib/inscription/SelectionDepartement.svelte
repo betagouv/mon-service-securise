@@ -8,7 +8,9 @@
     valeur?: Departement | '';
   }
 
-  let { departements, valeur = $bindable('') }: Props = $props();
+  let { departements, valeur = $bindable() }: Props = $props();
+
+  valeur ??= '';
 
   let saisie: string = $state('');
   let minuteur: ReturnType<typeof setTimeout>;

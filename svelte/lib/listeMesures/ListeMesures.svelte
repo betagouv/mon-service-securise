@@ -45,6 +45,7 @@
   import FiltreSurV1V2 from './FiltreSurV1V2.svelte';
   import CartoucheThematique from '../ui/CartoucheThematique.svelte';
   import { thematiques } from './thematiques';
+  import { derived } from 'svelte/store';
 
   interface Props {
     statuts: ReferentielStatut;
@@ -76,8 +77,9 @@
       : 'toutes';
   });
 
-  let peutAjouterModelesMesureSpecifique = $derived(
-    $modelesMesureSpecifique.length < capaciteAjoutDeMesure.nombreMaximum
+  let peutAjouterModelesMesureSpecifique = derived(
+    modelesMesureSpecifique,
+    ($s) => $s.length < capaciteAjoutDeMesure.nombreMaximum
   );
 
   const afficheModaleDetailsMesure = async (modeleMesure: ModeleDeMesure) => {
@@ -112,72 +114,81 @@
     configurationRecherche: { champsRecherche: string[] };
     configurationFiltrage: ConfigurationFiltrage;
   };
-  let configurationTableau: ConfigurationTableau = $state({
-    donnees: [],
-    configurationRecherche: { champsRecherche: [] },
-    configurationFiltrage: { options: { categories: [], items: [] } },
-  });
-
-  $effect(() => {
-    const listeModeleMesuresGenerales: ModeleDeMesure[] = Object.values(
-      $modelesMesureGenerale
-    ).map((m) => ({
-      ...m,
-      idsServicesAssocies: $mesuresAvecServicesAssociesStore[m.id],
-      type: 'generale',
-    }));
-    const listeModelesMesureSpecifique: ModeleDeMesure[] =
-      $modelesMesureSpecifique.map((m) => ({
+  const listeModeleMesuresGenerales = derived(
+    [modelesMesureGenerale, mesuresAvecServicesAssociesStore],
+    ([$mMG, $mASAS]) =>
+      Object.values($mMG).map((m) => ({
         ...m,
-        referentiel: Referentiel.SPECIFIQUE,
-        type: 'specifique',
-      }));
+        idsServicesAssocies: $mASAS[m.id],
+        type: 'generale' as ModeleDeMesure['type'],
+      }))
+  );
 
-    const categoriesFiltragePourMesuresGenerales = [
-      groupeReferentiel,
-      groupeCategorie,
-    ];
-    const itemsFiltragePourMesuresGenerales = [
-      ...itemsFiltrageReferentiel,
-      ...itemsFiltrageCategories,
-    ];
-    if ($storeVersionsDeService.versionSelectionnee === 'v2') {
-      categoriesFiltragePourMesuresGenerales.push(groupeThematique);
-      itemsFiltragePourMesuresGenerales.push(...itemsFiltrageThematiques);
+  const categoriesFiltragePourMesuresGenerales = derived(
+    storeVersionsDeService,
+    ($s) => {
+      const categoriesFiltrage = [groupeReferentiel, groupeCategorie];
+      if ($s.versionSelectionnee === 'v2') {
+        categoriesFiltrage.push(groupeThematique);
+      }
+      return categoriesFiltrage;
     }
+  );
 
+  const itemsFiltragePourMesuresGenerales = derived(
+    storeVersionsDeService,
+    ($s) => {
+      const items = [...itemsFiltrageReferentiel, ...itemsFiltrageCategories];
+      if ($s.versionSelectionnee === 'v2') {
+        items.push(...itemsFiltrageThematiques);
+      }
+      return items;
+    }
+  );
+
+  const listeModelesMesureSpecifique = derived(modelesMesureSpecifique, ($s) =>
+    $s.map((m) => ({
+      ...m,
+      referentiel: Referentiel.SPECIFIQUE,
+      type: 'specifique' as ModeleDeMesure['type'],
+    }))
+  );
+  let configurationTableau: ConfigurationTableau = $derived.by(() => {
+    let config = {
+      donnees: [],
+      configurationRecherche: { champsRecherche: [] },
+      configurationFiltrage: { options: { categories: [], items: [] } },
+    } as ConfigurationTableau;
     if (ongletActif === 'generales') {
-      configurationTableau.donnees = listeModeleMesuresGenerales;
-      configurationTableau.configurationRecherche.champsRecherche = [
+      config.donnees = $listeModeleMesuresGenerales;
+      config.configurationRecherche.champsRecherche = [
         'description',
         'identifiantNumerique',
       ];
-      configurationTableau.configurationFiltrage.options = {
-        categories: categoriesFiltragePourMesuresGenerales,
-        items: itemsFiltragePourMesuresGenerales,
+      config.configurationFiltrage.options = {
+        categories: $categoriesFiltragePourMesuresGenerales,
+        items: $itemsFiltragePourMesuresGenerales,
       };
     } else if (ongletActif === 'specifiques') {
-      configurationTableau.donnees = listeModelesMesureSpecifique;
-      configurationTableau.configurationRecherche.champsRecherche = [
-        'description',
-      ];
-      configurationTableau.configurationFiltrage.options = {
+      config.donnees = $listeModelesMesureSpecifique;
+      config.configurationRecherche.champsRecherche = ['description'];
+      config.configurationFiltrage.options = {
         categories: [groupeCategorie],
         items: [...itemsFiltrageCategories],
       };
     } else if (ongletActif === 'toutes') {
-      configurationTableau.donnees = [
-        ...listeModeleMesuresGenerales,
-        ...listeModelesMesureSpecifique,
+      config.donnees = [
+        ...$listeModeleMesuresGenerales,
+        ...$listeModelesMesureSpecifique,
       ];
-      configurationTableau.configurationRecherche.champsRecherche = [
+      config.configurationRecherche.champsRecherche = [
         'description',
         'identifiantNumerique',
       ];
-      configurationTableau.configurationFiltrage.options = {
-        categories: categoriesFiltragePourMesuresGenerales,
+      config.configurationFiltrage.options = {
+        categories: $categoriesFiltragePourMesuresGenerales,
         items: [
-          ...itemsFiltragePourMesuresGenerales,
+          ...$itemsFiltragePourMesuresGenerales,
           {
             libelle: 'Mesures ajoutées',
             valeur: Referentiel.SPECIFIQUE,
@@ -186,11 +197,11 @@
         ],
       };
     }
-
-    configurationTableau.donnees = seulementCellesDeLaVersion(
-      configurationTableau.donnees,
+    config.donnees = seulementCellesDeLaVersion(
+      config.donnees,
       $storeVersionsDeService.versionSelectionnee
     );
+    return config;
   });
 
   const estModeleMesureGenerale = (
@@ -322,9 +333,9 @@
               action: afficheTiroirTeleversement,
             },
           ]}
-          disabled={!peutAjouterModelesMesureSpecifique}
+          disabled={!$peutAjouterModelesMesureSpecifique}
         />
-        {#if !peutAjouterModelesMesureSpecifique}
+        {#if !$peutAjouterModelesMesureSpecifique}
           <Infobulle
             contenu={`Vous avez atteint la limite maximale de ${capaciteAjoutDeMesure.nombreMaximum} mesures. Pour ajouter des mesures, veuillez d'abord en supprimer.`}
           />

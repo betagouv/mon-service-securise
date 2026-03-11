@@ -12,7 +12,8 @@
     valeurSelectionnee?: string;
   }
 
-  let { options, valeurSelectionnee = $bindable('') }: Props = $props();
+  let { options, valeurSelectionnee = $bindable() }: Props = $props();
+  valeurSelectionnee ??= '';
 
   const nomUnique = crypto.randomUUID();
 </script>
