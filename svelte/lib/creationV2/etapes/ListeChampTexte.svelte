@@ -1,9 +1,4 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
-  import { createEventDispatcher } from 'svelte';
-
   interface Props {
     valeurs: string[];
     nomGroupe: string;
@@ -11,6 +6,9 @@
     titreAjout: string;
     inactif?: boolean;
     limiteTaille?: number | undefined;
+    onSuppression: (index: number) => void;
+    onAjout: () => void;
+    onblur?: (e: FocusEvent) => void;
   }
 
   let {
@@ -20,12 +18,10 @@
     titreAjout,
     inactif = false,
     limiteTaille = undefined,
+    onSuppression,
+    onAjout,
+    onblur,
   }: Props = $props();
-
-  const dispatche = createEventDispatcher<{
-    suppression: number;
-    ajout: void;
-  }>();
 
   const metAJour = (index: number) => (e: CustomEvent<string>) => {
     valeurs[index] = e.detail;
@@ -52,7 +48,7 @@
         ? `Le champ ne doit pas dépasser ${limiteTaille} caractères`
         : ''}
       onvaluechanged={metAJour(index)}
-      onblur={bubble('blur')}
+      {onblur}
     ></dsfr-input>
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
@@ -62,7 +58,7 @@
       actif={!inactif}
       icone="delete-line"
       positionIcone="seule"
-      onclick={() => dispatche('suppression', index)}
+      onclick={() => onSuppression(index)}
     ></lab-anssi-bouton>
   </div>
 {/each}
@@ -75,7 +71,7 @@
     icone="add-line"
     positionIcone="gauche"
     actif={!inactif}
-    onclick={() => dispatche('ajout')}
+    onclick={() => onAjout()}
   ></lab-anssi-bouton>
 </div>
 

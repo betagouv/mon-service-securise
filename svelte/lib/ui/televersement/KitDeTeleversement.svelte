@@ -1,12 +1,9 @@
 <script lang="ts">
-  import { preventDefault } from 'svelte/legacy';
-
   import Bouton from '../Bouton.svelte';
   import type {
     EtatTeleversement,
     FormatAccepte,
   } from './KitDeTeleversement.types';
-  import { createEventDispatcher } from 'svelte';
   import Loader from '../Loader.svelte';
 
   interface Props {
@@ -20,6 +17,7 @@
     apiPostDuTeleversement: string;
     formatAccepte: FormatAccepte;
     lesLimitations?: string[];
+    onTeleversementChange: (etat: EtatTeleversement) => void;
   }
 
   let {
@@ -28,6 +26,7 @@
     apiPostDuTeleversement,
     formatAccepte,
     lesLimitations = [],
+    onTeleversementChange,
   }: Props = $props();
 
   const formatteTailleFichier = Intl.NumberFormat('fr-FR', {
@@ -36,10 +35,6 @@
     unit: 'byte',
     unitDisplay: 'narrow',
   });
-
-  const dispatch = createEventDispatcher<{
-    televersementChange: EtatTeleversement;
-  }>();
 
   let elementFichier: HTMLInputElement | undefined = $state();
   let fichier: FileList | undefined = $state();
@@ -59,7 +54,7 @@
 
   const changeEtat = (nouvelEtat: EtatTeleversement) => {
     etatTeleversement = nouvelEtat;
-    dispatch('televersementChange', nouvelEtat);
+    onTeleversementChange(nouvelEtat);
   };
 
   const gereVerificationFichier = async () => {
@@ -103,7 +98,10 @@
     class="conteneur-drag-and-drop"
     class:pret-a-drop={enCoursDeDrop}
     ondrop={gereDropFichier}
-    ondragover={preventDefault(() => (enCoursDeDrop = true))}
+    ondragover={(e) => {
+      e.preventDefault();
+      enCoursDeDrop = true;
+    }}
     ondragleave={() => (enCoursDeDrop = false)}
   >
     <img

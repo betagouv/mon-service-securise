@@ -1,10 +1,6 @@
 <script lang="ts">
-  import { createBubbler, stopPropagation } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   import type { ReferentielStatut } from './types.d';
   import { validationChamp } from '../directives/validationChamp';
-  import { createEventDispatcher } from 'svelte';
   import type { StatutMesure } from '../modeles/modeleMesure';
 
   interface Props {
@@ -16,6 +12,7 @@
     requis?: boolean;
     version?: 'normale' | 'accentuee';
     labelChoixVide?: string;
+    onStatutChange?: (statut: StatutMesure) => void;
   }
 
   let {
@@ -27,9 +24,8 @@
     requis = false,
     version = 'normale',
     labelChoixVide = '',
+    onStatutChange,
   }: Props = $props();
-
-  const dispatch = createEventDispatcher<{ input: { statut: StatutMesure } }>();
 
   $effect(() => {
     if (statut === undefined) {
@@ -38,9 +34,7 @@
   });
 
   const metAJour = (e: Event) => {
-    dispatch('input', {
-      statut: (e.target as HTMLInputElement).value as StatutMesure,
-    });
+    onStatutChange?.((e.target as HTMLInputElement).value as StatutMesure);
   };
 </script>
 
@@ -63,7 +57,9 @@
       ? 'Ce champ est obligatoire. Veuillez sélectionner une option.'
       : ''}
     oninput={metAJour}
-    onclick={stopPropagation(bubble('click'))}
+    onclick={(e) => {
+      e.stopPropagation();
+    }}
   >
     <option value="" disabled={requis} selected
       >{labelChoixVide || 'Statut à définir'}</option

@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
-  import { createEventDispatcher, tick } from 'svelte';
+  import { tick } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
@@ -11,14 +9,13 @@
 
   interface Props {
     estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  let { estComplete = $bindable() }: Props = $props();
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
   $effect(() => {
     estComplete = !!$leBrouillon.typeHebergement;
   });
-
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
   const externaliseSiNecessaire = (e: Event) => {
     const aucune = [] as ActiviteExternalisee[];
@@ -31,7 +28,7 @@
     $leBrouillon.activitesExternalisees =
       typeHebergement === 'saas' ? toutes : aucune;
 
-    emetEvenement('champModifie', {
+    onChampModifie({
       typeHebergement: $leBrouillon.typeHebergement,
       activitesExternalisees: $leBrouillon.activitesExternalisees,
     });
@@ -39,7 +36,7 @@
 
   const metsAJourActivitesExternalisees = async () => {
     await tick();
-    emetEvenement('champModifie', {
+    onChampModifie({
       activitesExternalisees: $leBrouillon.activitesExternalisees,
     });
   };
@@ -76,7 +73,7 @@
         {actif}
         bind:valeurs={$leBrouillon.activitesExternalisees}
         label={nom}
-        on:change={async () => await metsAJourActivitesExternalisees()}
+        onchange={async () => await metsAJourActivitesExternalisees()}
       />
       {#if exemple}
         <span class="indication-libelle" class:inactif={!actif}>{exemple}</span>

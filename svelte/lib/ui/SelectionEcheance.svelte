@@ -1,24 +1,19 @@
 <script lang="ts">
-  import { stopPropagation } from 'svelte/legacy';
-
-  import { createEventDispatcher } from 'svelte';
   import type { EcheanceMesure } from './types';
 
   interface Props {
     echeance: string | undefined;
     estLectureSeule?: boolean;
     avecLabel?: boolean;
+    onModificationEcheance?: (echeance: EcheanceMesure) => void;
   }
 
   let {
     echeance = $bindable(),
     estLectureSeule = false,
     avecLabel = false,
+    onModificationEcheance,
   }: Props = $props();
-
-  const dispatch = createEventDispatcher<{
-    modificationEcheance: { echeance: EcheanceMesure };
-  }>();
 
   let elementDate: HTMLInputElement | undefined = $state();
 
@@ -40,7 +35,7 @@
   ) => {
     const nouvelleEcheance = e.currentTarget.value;
     echeance = nouvelleEcheance;
-    dispatch('modificationEcheance', { echeance: nouvelleEcheance });
+    onModificationEcheance?.(nouvelleEcheance);
   };
 
   let dateEcheance: string | undefined = $state();
@@ -60,7 +55,10 @@
   {/if}
   <button
     type="button"
-    onclick={stopPropagation(() => elementDate?.showPicker())}
+    onclick={(e) => {
+      e.stopPropagation();
+      elementDate?.showPicker();
+    }}
     class:vide={!dateFormattee}
     disabled={estLectureSeule}
     class:avecLabel

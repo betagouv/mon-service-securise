@@ -14,7 +14,6 @@
   } from './risques.d';
   import { Referentiel } from '../ui/types.d';
   import SelectionGravite from './SelectionGravite.svelte';
-  import { createEventDispatcher } from 'svelte';
   import Formulaire from '../ui/Formulaire.svelte';
   import Bouton from '../ui/Bouton.svelte';
   import ControleFormulaireTiroir from '../ui/ControleFormulaireTiroir.svelte';
@@ -41,6 +40,9 @@
     estLectureSeule: boolean;
     idService: string;
     modeAffichageTiroir?: ModeAffichageTiroir;
+    onRisqueMisAJour: (risque: Risque) => void;
+    onRisqueSupprime: (risque: Risque) => void;
+    onRisqueAjoute: (risque: Risque) => void;
   }
 
   let {
@@ -53,18 +55,15 @@
     estLectureSeule,
     idService,
     modeAffichageTiroir = '',
+    onRisqueMisAJour,
+    onRisqueSupprime,
+    onRisqueAjoute,
   }: Props = $props();
   let enCoursEnvoi: boolean = $state(false);
 
   let risqueDuReferentiel = $derived(
     risque && risque.type === 'GENERAL' && referentielRisques[risque.id]
   );
-
-  const emet = createEventDispatcher<{
-    risqueMisAJour: Risque;
-    risqueSupprime: Risque;
-    risqueAjoute: Risque;
-  }>();
 
   const fermeTiroir = () => {
     ouvert = false;
@@ -76,7 +75,7 @@
       try {
         enCoursEnvoi = true;
         const risqueMisAJour = await enregistreRisque(idService, risque);
-        emet('risqueMisAJour', risqueMisAJour);
+        onRisqueMisAJour(risqueMisAJour);
         fermeTiroir();
       } finally {
         enCoursEnvoi = false;
@@ -89,7 +88,7 @@
       try {
         enCoursEnvoi = true;
         const risqueAjoute = await ajouteRisqueSpecifique(idService, risque);
-        emet('risqueAjoute', risqueAjoute);
+        onRisqueAjoute(risqueAjoute);
         fermeTiroir();
       } finally {
         enCoursEnvoi = false;
@@ -108,7 +107,7 @@
       try {
         enCoursEnvoi = true;
         await supprimeRisqueSpecifique(idService, risque);
-        emet('risqueSupprime', risque);
+        onRisqueSupprime(risque);
         fermeTiroir();
       } finally {
         enCoursEnvoi = false;
@@ -174,7 +173,7 @@
         </div>
       {:else}
         <Formulaire
-          on:formulaireValide={modeAffichageTiroir === 'EDITION'
+          onFormulaireValide={modeAffichageTiroir === 'EDITION'
             ? metsAJour
             : ajoute}
           classe="formulaire-risque"
@@ -260,8 +259,8 @@
               <Switch
                 actif={!risque.desactive}
                 id="switch-{risque.id}-tiroir"
-                on:change={(e) => {
-                  if (risque) risque.desactive = !e.detail;
+                onChange={(actif) => {
+                  if (risque) risque.desactive = !actif;
                 }}
               />
             {/if}

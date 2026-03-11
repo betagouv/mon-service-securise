@@ -25,7 +25,7 @@ import type { MiseAJour } from '../creationV2.api';
 
 type ComposantQuestion = Component<{
   estComplete: boolean;
-  onchampmodifie?: (e: CustomEvent<MiseAJour>) => void;
+  onChampModifie: (miseAJour: MiseAJour) => void;
 }>;
 
 export type QuestionBindeeSurBrouillon = {

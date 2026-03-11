@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import { glisse } from './animations/transitions';
 
   interface Props {
@@ -10,6 +9,7 @@
     avecAnimation?: boolean;
     avecFermeture?: boolean;
     avecInterpolationHTMLDangereuse?: boolean;
+    onClose?: () => void;
   }
 
   let {
@@ -20,6 +20,7 @@
     avecAnimation = true,
     avecFermeture = false,
     avecInterpolationHTMLDangereuse = false,
+    onClose,
   }: Props = $props();
 
   const icones = {
@@ -36,8 +37,6 @@
   ) => {
     if (avecAnimation) return options.fonction(noeud, options);
   };
-
-  const emetEvenement = createEventDispatcher();
 </script>
 
 <article
@@ -52,7 +51,7 @@
   {#if avecFermeture}
     <button
       class="fermeture"
-      onclick={() => emetEvenement('close')}
+      onclick={() => onClose?.()}
       title="Fermeture du toast">✕</button
     >
   {/if}

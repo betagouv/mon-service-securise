@@ -67,18 +67,18 @@
   <RapportTeleversementGenerique
     titreDuRapport="Rapport du téléversement des services"
     {resume}
-    on:confirmeTeleversement={async () => {
+    onConfirmeTeleversement={async () => {
       etatReseau = 'IMPORT_EN_COURS';
       await confirmeImportV2();
       enleveParametreDeUrl('rapportTeleversementV2');
     }}
-    on:retenteTeleversement={async () => {
+    onRetenteTeleversement={async () => {
       await supprimeTeleversementV2();
       etatReseau = 'IMPORT_FINI';
       tiroirStore.afficheContenu(TiroirTeleversementServicesV2, {});
       enleveParametreDeUrl('rapportTeleversementV2');
     }}
-    on:annule={() => {
+    onAnnule={() => {
       etatReseau = 'IMPORT_FINI';
       enleveParametreDeUrl('rapportTeleversementV2');
     }}
@@ -120,7 +120,7 @@
       const { data } = await progressionTeleversementV2();
       return data.progression;
     }}
-    on:fini={() => {
+    onFini={() => {
       if (!rapport) return;
 
       const nb = rapport.services.length;

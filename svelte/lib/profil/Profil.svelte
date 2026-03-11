@@ -56,10 +56,10 @@
 
   let elementSelectionDepartement: SelectionDepartement | undefined = $state();
   const modifieDepartementApresChoixOrganisation = (
-    e: CustomEvent<Organisation>
+    organisation: Organisation
   ) => {
     if (!elementSelectionDepartement) return;
-    const d = departements.find((d) => d.code === e.detail.departement);
+    const d = departements.find((d) => d.code === organisation.departement);
     if (d) {
       elementSelectionDepartement.choisisDepartement(d);
     }
@@ -151,7 +151,7 @@
           id="nomSiret"
           bind:valeur={entite}
           filtreDepartement={departement}
-          on:organisationChoisie={modifieDepartementApresChoixOrganisation}
+          onOrganisationChoisie={modifieDepartementApresChoixOrganisation}
         />
       </div>
     </div>

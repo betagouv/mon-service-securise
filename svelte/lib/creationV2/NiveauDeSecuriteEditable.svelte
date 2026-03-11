@@ -3,24 +3,25 @@
   import Infobulle from '../ui/Infobulle.svelte';
   import type { IdNiveauDeSecurite } from '../ui/types';
   import { ordreDesNiveaux } from '../niveauxDeSecurite/niveauxDeSecurite.d';
-  import { createEventDispatcher } from 'svelte';
   import ResumeNiveauSecurite from '../ui/ResumeNiveauSecurite.svelte';
 
   interface Props {
     niveauSelectionne: IdNiveauDeSecurite | '';
     niveauDeSecuriteMinimal: IdNiveauDeSecurite;
     infoMajNecessaire?: import('svelte').Snippet;
+    onChampModifie: ({
+      niveauSecurite,
+    }: {
+      niveauSecurite: IdNiveauDeSecurite;
+    }) => Promise<void>;
   }
 
   let {
     niveauSelectionne = $bindable(),
     niveauDeSecuriteMinimal,
     infoMajNecessaire,
+    onChampModifie,
   }: Props = $props();
-
-  const dispatch = createEventDispatcher<{
-    champModifie: { niveauSecurite: IdNiveauDeSecurite };
-  }>();
 
   let estNiveauTropBas = $derived(
     (candidat: IdNiveauDeSecurite) =>
@@ -34,7 +35,7 @@
 
   const selectionneNiveau = async (niveau: IdNiveauDeSecurite) => {
     niveauSelectionne = niveau;
-    dispatch('champModifie', { niveauSecurite: niveauSelectionne });
+    onChampModifie({ niveauSecurite: niveauSelectionne });
   };
 </script>
 

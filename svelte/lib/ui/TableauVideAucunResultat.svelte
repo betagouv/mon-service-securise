@@ -1,13 +1,15 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
+  interface Props {
+    onclick: (e: MouseEvent) => void;
+  }
 
-  const bubble = createBubbler();
+  let { onclick }: Props = $props();
 </script>
 
 <div class="aucun-resultat">
   <img src="/statique/assets/images/illustration_recherche_vide.svg" alt="" />
   Aucune mesure ne correspond à la recherche.
-  <button class="bouton bouton-secondaire" onclick={bubble('click')}>
+  <button class="bouton bouton-secondaire" {onclick}>
     Effacer la recherche
   </button>
 </div>

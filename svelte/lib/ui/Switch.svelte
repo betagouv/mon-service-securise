@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-
   interface Props {
     actif: boolean;
     id: string;
     labelActif?: string;
     labelInactif?: string;
+    onChange: (actif: boolean) => void;
   }
 
   let {
@@ -13,15 +12,12 @@
     id,
     labelActif = 'Activé',
     labelInactif = 'Désactivé',
+    onChange,
   }: Props = $props();
-
-  const emetEvenement = createEventDispatcher<{
-    change: boolean;
-  }>();
 
   const gereChangementEtat = () => {
     actif = !actif;
-    emetEvenement('change', actif);
+    onChange(actif);
   };
 </script>
 

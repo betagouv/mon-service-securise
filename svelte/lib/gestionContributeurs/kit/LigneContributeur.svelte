@@ -1,17 +1,18 @@
 <script lang="ts">
   import type { Service, Utilisateur } from '../gestionContributeurs.d';
+  import { enDroitsSurRubrique } from '../gestionContributeurs.d';
   import { store } from '../gestionContributeurs.store';
   import Initiales from '../../ui/Initiales.svelte';
   import TagNiveauDroit from './TagNiveauDroit.svelte';
-  import { enDroitsSurRubrique } from '../gestionContributeurs.d';
   import type { ResumeNiveauDroit } from '../../ui/types';
   import { storeAutorisations } from '../stores/autorisations.store';
   import BoutonSuppressionContributeur from '../../ui/BoutonSuppressionContributeur.svelte';
+  import type { Contributeur } from './ChampAvecSuggestions.svelte';
 
   interface Props {
     droitsModifiables: boolean;
     afficheDroits?: boolean;
-    utilisateur: Utilisateur;
+    utilisateur: Contributeur | Utilisateur;
   }
 
   let {
@@ -23,8 +24,13 @@
   let serviceUnique: Service = $derived($store.services[0]);
 
   let autorisation = $derived(
-    $storeAutorisations.autorisations[utilisateur.id]
+    'id' in utilisateur
+      ? $storeAutorisations.autorisations[utilisateur.id]
+      : undefined
   );
+
+  const estUtilisateur = (u: Contributeur | Utilisateur): u is Utilisateur =>
+    'id' in u;
 
   const changeDroits = async (nouveauDroit: ResumeNiveauDroit) => {
     const idAutorisation = autorisation!.idAutorisation;
@@ -46,26 +52,25 @@
     />
     <div class="nom-prenom-poste">
       <div class="nom-contributeur">{utilisateur.prenomNom}</div>
-      {#if utilisateur.poste}
+      {#if 'poste' in utilisateur}
         <div class="poste-contributeur">{utilisateur.poste}</div>
       {/if}
     </div>
   </div>
   <div class="conteneur-actions">
-    {#if afficheDroits && autorisation?.resumeNiveauDroit}
+    {#if afficheDroits && autorisation?.resumeNiveauDroit && estUtilisateur(utilisateur)}
       <TagNiveauDroit
         niveau={autorisation.resumeNiveauDroit}
         {droitsModifiables}
-        on:droitsChange={({ detail: nouveauxDroits }) =>
-          changeDroits(nouveauxDroits)}
-        on:choixPersonnalisation={() =>
+        onDroitsChange={(nouveauxDroits) => changeDroits(nouveauxDroits)}
+        onChoixPersonnalisation={() =>
           store.navigation.affichePersonnalisationContributeur(utilisateur)}
       />
     {/if}
 
-    {#if droitsModifiables}
+    {#if droitsModifiables && estUtilisateur(utilisateur)}
       <BoutonSuppressionContributeur
-        on:click={() => store.navigation.afficheEtapeSuppression(utilisateur)}
+        onclick={() => store.navigation.afficheEtapeSuppression(utilisateur)}
       />
     {/if}
   </div>

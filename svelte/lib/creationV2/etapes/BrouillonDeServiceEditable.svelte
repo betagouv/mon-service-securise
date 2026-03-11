@@ -1,6 +1,6 @@
 <script lang="ts">
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
-  import { tick, createEventDispatcher } from 'svelte';
+  import { tick } from 'svelte';
   import type { MiseAJour } from '../creationV2.api';
   import ListeChampTexte from './ListeChampTexte.svelte';
   import ChampOrganisation from '../../ui/ChampOrganisation.svelte';
@@ -22,11 +22,14 @@
   interface Props {
     donnees: DescriptionServiceV2;
     seulementNomServiceEditable: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  let { donnees = $bindable(), seulementNomServiceEditable }: Props = $props();
-
-  const dispatch = createEventDispatcher<{ champModifie: MiseAJour }>();
+  let {
+    donnees = $bindable(),
+    seulementNomServiceEditable,
+    onChampModifie,
+  }: Props = $props();
 
   const supprimeValeurPointAcces = (index: number) => {
     donnees.pointsAcces = donnees.pointsAcces.filter((_, i) => i !== index);
@@ -80,7 +83,7 @@
   };
 
   const champModifie = async (propriete: string, valeur: string | string[]) => {
-    dispatch('champModifie', { [propriete]: valeur });
+    onChampModifie({ [propriete]: valeur });
   };
 
   let elementHtml:
@@ -216,9 +219,9 @@
     {#key donnees.siret}
       <ChampOrganisation
         siret={donnees.siret}
-        on:siretChoisi={async (e) => {
-          donnees.siret = e.detail;
-          await champModifie('siret', e.detail);
+        onSiretChoisi={async (siret) => {
+          donnees.siret = siret;
+          await champModifie('siret', siret);
         }}
         label="Organisation responsable du projet*"
         disabled={seulementNomServiceEditable}
@@ -266,14 +269,14 @@
       <ListeChampTexte
         nomGroupe="pointsAcces"
         bind:valeurs={donnees.pointsAcces}
-        on:ajout={ajouteValeurPointAcces}
+        onAjout={ajouteValeurPointAcces}
         titreSuppression="Supprimer l'URL"
         titreAjout="Ajouter une URL"
         inactif={seulementNomServiceEditable}
         limiteTaille={200}
-        on:blur={() => enregistrePointsAcces()}
-        on:suppression={async (e) => {
-          supprimeValeurPointAcces(e.detail);
+        onblur={() => enregistrePointsAcces()}
+        onSuppression={async (index) => {
+          supprimeValeurPointAcces(index);
           await tick();
           await enregistrePointsAcces();
         }}
@@ -433,14 +436,14 @@
       <ListeChampTexte
         nomGroupe="categoriesDonneesTraiteesSupplementaires"
         bind:valeurs={donnees.categoriesDonneesTraiteesSupplementaires}
-        on:ajout={ajouteCategoriesDonneesTraiteesSupplementaires}
+        onAjout={ajouteCategoriesDonneesTraiteesSupplementaires}
         titreSuppression="Supprimer les données"
         titreAjout="Ajouter des données"
         inactif={seulementNomServiceEditable}
         limiteTaille={200}
-        on:blur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
-        on:suppression={async (e) => {
-          supprimeCategoriesDonneesTraiteesSupplementaires(e.detail);
+        onblur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
+        onSuppression={async (index) => {
+          supprimeCategoriesDonneesTraiteesSupplementaires(index);
           await tick();
           await enregistreCategoriesDonneesTraiteesSupplementaires();
         }}

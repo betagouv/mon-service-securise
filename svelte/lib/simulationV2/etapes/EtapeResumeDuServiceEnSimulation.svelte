@@ -18,8 +18,8 @@
     estComplete = $brouillonEstCompletStore;
   });
 
-  const metsAJour = async (e: CustomEvent<MiseAJour>) => {
-    await metsAJourSimulation($leBrouillon.id!, e.detail);
+  const metsAJour = async (miseAJour: MiseAJour) => {
+    await metsAJourSimulation($leBrouillon.id!, miseAJour);
   };
 </script>
 
@@ -41,7 +41,7 @@
     <BrouillonDeServiceEditable
       bind:donnees={$leBrouillon}
       seulementNomServiceEditable={false}
-      on:champModifie={metsAJour}
+      onChampModifie={metsAJour}
     />
   </div>
 {/if}

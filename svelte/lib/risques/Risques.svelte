@@ -262,12 +262,12 @@
     {#each risquesTries as risque (risque.id)}
       <LigneRisque
         {risque}
-        on:click={() => ouvreRisque(risque)}
+        onclick={() => ouvreRisque(risque)}
         {categories}
         {niveauxGravite}
         {niveauxVraisemblance}
         {estLectureSeule}
-        on:metAJourRisque={() => metAJourRisque(risque)}
+        onMetAJourRisque={() => metAJourRisque(risque)}
       />
     {/each}
   </tbody>
@@ -291,9 +291,9 @@
   referentielGravites={niveauxGravite}
   referentielVraisemblances={niveauxVraisemblance}
   {estLectureSeule}
-  on:risqueMisAJour={(e) => rafraichisRisqueDansLeTableau(e.detail)}
-  on:risqueSupprime={(e) => supprimeRisqueDansTableau(e.detail)}
-  on:risqueAjoute={(e) => ajouteRisqueDansTableau(e.detail)}
+  onRisqueMisAJour={(risque) => rafraichisRisqueDansLeTableau(risque)}
+  onRisqueSupprime={(risque) => supprimeRisqueDansTableau(risque)}
+  onRisqueAjoute={(risque) => ajouteRisqueDansTableau(risque)}
   {modeAffichageTiroir}
   {idService}
 />

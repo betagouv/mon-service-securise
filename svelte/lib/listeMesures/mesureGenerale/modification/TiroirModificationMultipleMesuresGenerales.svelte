@@ -13,8 +13,6 @@
 </script>
 
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import ContenuTiroir from '../../../ui/tiroirs/ContenuTiroir.svelte';
   import DescriptionCompleteMesure from '../../kit/DescriptionCompleteMesure.svelte';
   import type {
@@ -68,11 +66,11 @@
   );
 
   const appliqueModifications = async (
-    e: CustomEvent<DonneesModificationAAppliquer>
+    donnees: DonneesModificationAAppliquer
   ) => {
     enCoursEnvoi = true;
     try {
-      const { idsServices, modalites, statut } = e.detail;
+      const { idsServices, modalites, statut } = donnees;
       await enregistreModificationMesureGeneraleSurServicesMultiples({
         idMesure: modeleMesureGenerale.id,
         statut,
@@ -124,7 +122,7 @@
     bind:boutonSuivantActif
     {statuts}
     {servicesAssocies}
-    on:modification-a-appliquer={appliqueModifications}
+    onModificationAAppliquer={appliqueModifications}
   />
 </ContenuTiroir>
 <ActionsTiroir>

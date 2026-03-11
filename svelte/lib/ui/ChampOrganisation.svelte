@@ -1,8 +1,5 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
-  import { createEventDispatcher } from 'svelte';
-
-  const dispatch = createEventDispatcher<{ siretChoisi: string }>();
 
   type Organisation = { nom: string; siret: string; departement: string };
   type OrganisationAvecLabel = Organisation & { label: string };
@@ -11,12 +8,14 @@
     siret?: string | undefined;
     label?: string;
     disabled?: boolean;
+    onSiretChoisi?: (siret: string) => void;
   }
 
   let {
     siret = $bindable(undefined),
     label = '',
     disabled = false,
+    onSiretChoisi,
   }: Props = $props();
 
   let saisie: string | undefined = $state();
@@ -88,7 +87,7 @@
 
   const choisisOrganisation = async (item: OrganisationAvecLabel) => {
     siret = item.siret;
-    dispatch('siretChoisi', siret);
+    onSiretChoisi?.(siret);
     saisie = construisLabel(item);
     await tick();
     if (elementInput) elementInput.value = saisie;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { entiteDeUtilisateur, leBrouillon } from '../brouillon.store';
   import ChampOrganisation from '../../../ui/ChampOrganisation.svelte';
@@ -7,11 +7,10 @@
 
   interface Props {
     estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  let { estComplete = $bindable() }: Props = $props();
-
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   let doitForcerEvenement = false;
 
@@ -22,7 +21,7 @@
         $leBrouillon.siret = $entiteDeUtilisateur.siret;
       }
       if (existe && doitForcerEvenement && estComplete) {
-        emetEvenement('champModifie', { siret: $leBrouillon.siret });
+        onChampModifie({ siret: $leBrouillon.siret });
       }
     });
   });
@@ -32,8 +31,7 @@
   });
 
   $effect(() => {
-    if (estComplete)
-      emetEvenement('champModifie', { siret: $leBrouillon.siret });
+    if (estComplete) onChampModifie({ siret: $leBrouillon.siret });
   });
 </script>
 

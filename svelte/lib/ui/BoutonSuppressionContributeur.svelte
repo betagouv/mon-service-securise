@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
+  interface Props {
+    onclick: (e: MouseEvent) => void;
+  }
+  let { onclick }: Props = $props();
 </script>
 
-<button type="button" onclick={bubble('click')}>
+<button type="button" {onclick}>
   <img
     class="bouton-suppression-contributeur"
     src="/statique/assets/images/icone_supprimer_gris.svg"

@@ -40,7 +40,7 @@
 <BrouillonDeServiceEditable
   bind:donnees={$leBrouillon}
   seulementNomServiceEditable={!$leBrouillon.id}
-  on:champModifie={async (e) => {
-    await enregistre(e.detail);
+  onChampModifie={async (miseAJour) => {
+    await enregistre(miseAJour);
   }}
 />

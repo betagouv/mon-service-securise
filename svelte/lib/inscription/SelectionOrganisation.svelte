@@ -1,8 +1,8 @@
 <script lang="ts">
   import ChampTexte from '../ui/ChampTexte.svelte';
-  import { createEventDispatcher, tick } from 'svelte';
   import type { Departement, Organisation } from './inscription.d';
   import { validationChamp } from '../directives/validationChamp';
+  import { tick } from 'svelte';
 
   type OrganisationAvecLabel = Organisation & {
     label: string;
@@ -12,9 +12,15 @@
     filtreDepartement: Departement | undefined;
     valeur: Organisation | undefined;
     id?: string;
+    onOrganisationChoisie?: (organisation: Organisation) => void;
   }
 
-  let { filtreDepartement, valeur = $bindable(), id = '' }: Props = $props();
+  let {
+    filtreDepartement,
+    valeur = $bindable(),
+    id = '',
+    onOrganisationChoisie,
+  }: Props = $props();
 
   let saisie: string = $state('');
   let minuteur: ReturnType<typeof setTimeout>;
@@ -67,15 +73,11 @@
     suggestionsVisibles = suggestions.length > 0;
   };
 
-  const envoiEvenement = createEventDispatcher<{
-    organisationChoisie: Organisation;
-  }>();
-
   const choisisOrganisation = (item: OrganisationAvecLabel) => {
     valeur = item;
     saisie = item.label;
     suggestionsVisibles = false;
-    envoiEvenement('organisationChoisie', item);
+    onOrganisationChoisie?.(item);
   };
 
   $effect(() => {

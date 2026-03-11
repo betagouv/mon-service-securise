@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { preventDefault } from 'svelte/legacy';
-
-  import { createEventDispatcher } from 'svelte';
+  import type { Snippet } from 'svelte';
 
   interface Props {
     id?: string;
     classe?: string;
     formulaireDuTiroir?: boolean;
-    children?: import('svelte').Snippet;
+    children?: Snippet;
+    onFormulaireValide?: () => void;
+    onFormulaireInvalide?: () => void;
   }
 
   let {
@@ -15,6 +15,8 @@
     classe = '',
     formulaireDuTiroir = false,
     children,
+    onFormulaireValide,
+    onFormulaireInvalide,
   }: Props = $props();
 
   let formulaire: HTMLFormElement | undefined = $state();
@@ -41,23 +43,22 @@
     return valide;
   };
 
-  const dispatch = createEventDispatcher<{
-    formulaireValide: null;
-    formulaireInvalide: null;
-  }>();
-
   const verifieValidite = () => {
     if (!formulaire) return;
-
-    dispatch(
-      formulaire.checkValidity() ? 'formulaireValide' : 'formulaireInvalide'
-    );
+    if (formulaire.checkValidity()) {
+      onFormulaireValide?.();
+    } else {
+      onFormulaireInvalide?.();
+    }
   };
 </script>
 
 <form
   bind:this={formulaire}
-  onsubmit={preventDefault(verifieValidite)}
+  onsubmit={(e) => {
+    e.preventDefault();
+    verifieValidite();
+  }}
   {id}
   novalidate
   class={classe}

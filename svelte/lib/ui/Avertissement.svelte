@@ -1,16 +1,13 @@
 <script lang="ts">
-  import { preventDefault } from 'svelte/legacy';
-
   import { glisse } from '../ui/animations/transitions';
-  import { createEventDispatcher } from 'svelte';
 
-  const dispatch = createEventDispatcher();
   interface Props {
     niveau?: 'info' | 'avertissement';
     avecBoutonFermeture?: boolean;
     id?: string | undefined;
     classeSupplementaire?: string;
     children?: import('svelte').Snippet;
+    onFermeture?: () => void;
   }
 
   let {
@@ -19,6 +16,7 @@
     id = undefined,
     classeSupplementaire = '',
     children,
+    onFermeture,
   }: Props = $props();
 </script>
 
@@ -31,7 +29,10 @@
     <button
       class="fermeture-avertissement"
       type="button"
-      onclick={preventDefault(() => dispatch('fermeture'))}
+      onclick={(e) => {
+        e.preventDefault();
+        onFermeture?.();
+      }}
       >×
     </button>
   {/if}

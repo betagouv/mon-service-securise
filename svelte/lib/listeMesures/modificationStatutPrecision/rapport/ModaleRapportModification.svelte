@@ -15,9 +15,11 @@
   interface Props {
     referentielStatuts: ReferentielStatut;
     referentielTypesService: ReferentielTypesService;
+    onClose?: () => void;
   }
 
-  let { referentielStatuts, referentielTypesService }: Props = $props();
+  let { referentielStatuts, referentielTypesService, onClose }: Props =
+    $props();
 
   let elementModale: Modale | undefined = $state();
 
@@ -77,7 +79,7 @@
   });
 </script>
 
-<Modale bind:this={elementModale} on:close>
+<Modale bind:this={elementModale} {onClose}>
   {#snippet entete()}
     <Toast
       avecOmbre={false}

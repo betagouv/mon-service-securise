@@ -47,7 +47,7 @@
   };
 </script>
 
-<Formulaire on:formulaireValide={dupliqueService} formulaireDuTiroir>
+<Formulaire onFormulaireValide={dupliqueService} formulaireDuTiroir>
   <ContenuTiroir>
     {#if enErreur}
       <span>

@@ -67,10 +67,10 @@
   <NiveauDeSecuriteEditable
     bind:niveauSelectionne
     {niveauDeSecuriteMinimal}
-    on:champModifie={async (e) => {
-      $leBrouillon.niveauSecurite = e.detail.niveauSecurite;
+    onChampModifie={async (miseAJour) => {
+      $leBrouillon.niveauSecurite = miseAJour.niveauSecurite;
       if ($leBrouillon.id)
-        await metsAJourBrouillonService($leBrouillon.id, e.detail);
+        await metsAJourBrouillonService($leBrouillon.id, miseAJour);
     }}
   />
 {/if}

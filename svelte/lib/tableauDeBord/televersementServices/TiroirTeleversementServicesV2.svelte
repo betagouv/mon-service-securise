@@ -43,8 +43,8 @@
       ]}
       apiPostDuTeleversement="/api/televersement/services-v2"
       formatAccepte={FormatAccepte.Excel}
-      on:televersementChange={(e) => {
-        etatTeleversement = e.detail;
+      onTeleversementChange={(etat) => {
+        etatTeleversement = etat;
       }}
     />
   </ContenuTiroir>

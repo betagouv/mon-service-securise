@@ -31,7 +31,7 @@
   <PersonnalisationDroits
     utilisateur={contributeur}
     droitsOriginaux={originaux.droits}
-    on:valider={({ detail: nouveauxDroits }) => envoyerDroits(nouveauxDroits)}
-    on:annuler={() => store.navigation.afficheEtapeListe()}
+    onValider={(droits) => envoyerDroits(droits)}
+    onAnnuler={() => store.navigation.afficheEtapeListe()}
   />
 {/if}

@@ -60,8 +60,8 @@
     ]}
     apiPostDuTeleversement="/api/televersement/modelesMesureSpecifique"
     formatAccepte={FormatAccepte.Excel}
-    on:televersementChange={(e) => {
-      etatTeleversement = e.detail;
+    onTeleversementChange={(etat) => {
+      etatTeleversement = etat;
     }}
   />
 </ContenuTiroir>

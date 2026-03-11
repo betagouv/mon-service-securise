@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-
   interface Props {
     id: string;
     valeurs?: string[];
     label?: string;
     actif?: boolean;
+    onchange?: (event: Event) => void;
   }
 
   let {
@@ -13,11 +12,10 @@
     valeurs = $bindable([]),
     label = '',
     actif = true,
+    onchange,
   }: Props = $props();
 
   let cochee: boolean = $derived(valeurs.includes(id));
-
-  const emetEvenement = createEventDispatcher();
 
   const metsAJourLesValeursCochees = (event: Event) => {
     const input = event.target as HTMLInputElement;
@@ -26,7 +24,7 @@
     } else {
       valeurs = valeurs.filter((item) => item !== id);
     }
-    emetEvenement('change', event);
+    onchange?.(event);
   };
 </script>
 

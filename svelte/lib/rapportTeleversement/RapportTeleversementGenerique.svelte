@@ -2,21 +2,24 @@
   import Toast from '../ui/Toast.svelte';
   import { onMount } from 'svelte';
   import type { ResumeRapportTeleversement } from './rapportTeleversementGenerique.types.d';
-  import { createEventDispatcher } from 'svelte';
-
-  const dispatch = createEventDispatcher<{
-    confirmeTeleversement: null;
-    retenteTeleversement: null;
-    annule: null;
-  }>();
 
   interface Props {
     titreDuRapport: string;
     resume: undefined | ResumeRapportTeleversement;
     tableau_du_rapport?: import('svelte').Snippet;
+    onConfirmeTeleversement: () => void;
+    onRetenteTeleversement: () => void;
+    onAnnule: () => void;
   }
 
-  let { titreDuRapport, resume, tableau_du_rapport }: Props = $props();
+  let {
+    titreDuRapport,
+    resume,
+    tableau_du_rapport,
+    onConfirmeTeleversement,
+    onRetenteTeleversement,
+    onAnnule,
+  }: Props = $props();
 
   let elementModale: HTMLDialogElement | undefined = $state();
 
@@ -33,7 +36,7 @@
   class="dialog-rapport-televersement-generique"
 >
   <div class="conteneur-fermeture">
-    <button onclick={() => dispatch('annule')}>Fermer</button>
+    <button onclick={onAnnule}>Fermer</button>
   </div>
   <div class="conteneur-modale">
     <div class="entete-modale">
@@ -83,7 +86,7 @@
           variante="tertiaire-sans-bordure"
           taille="md"
           positionIcone="sans"
-          onclick={() => dispatch('annule')}
+          onclick={onAnnule}
         ></lab-anssi-bouton>
 
         <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
@@ -95,12 +98,13 @@
           taille="md"
           icone={resume?.statut === 'VALIDE' ? 'check-line' : 'refresh-line'}
           positionIcone="gauche"
-          onclick={() =>
-            dispatch(
-              resume?.statut === 'VALIDE'
-                ? 'confirmeTeleversement'
-                : 'retenteTeleversement'
-            )}
+          onclick={() => {
+            if (resume?.statut === 'VALIDE') {
+              onConfirmeTeleversement();
+            } else {
+              onRetenteTeleversement();
+            }
+          }}
         ></lab-anssi-bouton>
       </div>
     </div>
