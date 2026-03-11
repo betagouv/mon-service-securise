@@ -1,14 +1,15 @@
 <script lang="ts">
-  import { onDestroy, createEventDispatcher, type Snippet } from 'svelte';
+  import { onDestroy, type Snippet } from 'svelte';
 
   interface Props {
     id?: string | undefined;
     entete?: Snippet;
     contenu?: Snippet;
     actions?: Snippet;
+    onClose?: () => void;
   }
 
-  let { id = undefined, entete, contenu, actions }: Props = $props();
+  let { id = undefined, entete, contenu, actions, onClose }: Props = $props();
 
   let elementModale: HTMLDialogElement | undefined = $state();
 
@@ -31,7 +32,6 @@
   };
 
   onDestroy(() => debloqueScroll());
-  const emetEvent = createEventDispatcher();
 </script>
 
 <dialog
@@ -39,7 +39,7 @@
   bind:this={elementModale}
   onclose={() => {
     debloqueScroll();
-    emetEvent('close');
+    onClose?.();
   }}
 >
   <div class="conteneur-fermeture">

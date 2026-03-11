@@ -98,10 +98,10 @@
     await rafraichisNiveauSecuriteMinimal();
   });
 
-  const metsAJourDescriptionEditable = async (e: CustomEvent<MiseAJour>) => {
-    descriptionEditable = { ...descriptionEditable, ...e.detail };
+  const metsAJourDescriptionEditable = async (miseAJour: MiseAJour) => {
+    descriptionEditable = { ...descriptionEditable, ...miseAJour };
 
-    const recalculEstNecessaire = Object.keys(e.detail).some((cle) =>
+    const recalculEstNecessaire = Object.keys(miseAJour).some((cle) =>
       ChampsImpactantsLeNiveauDeSecurite.includes(cle)
     );
     if (recalculEstNecessaire) await rafraichisNiveauSecuriteMinimal();
@@ -178,7 +178,7 @@
         <BrouillonDeServiceEditable
           bind:donnees={descriptionEditable}
           seulementNomServiceEditable={false}
-          on:champModifie={metsAJourDescriptionEditable}
+          onChampModifie={metsAJourDescriptionEditable}
         />
       {/if}
     </div>
@@ -206,8 +206,8 @@
         <NiveauDeSecuriteEditable
           bind:niveauSelectionne={descriptionEditable.niveauSecurite}
           {niveauDeSecuriteMinimal}
-          on:champModifie={async (e) => {
-            descriptionEditable.niveauSecurite = e.detail.niveauSecurite;
+          onChampModifie={async (miseAJour) => {
+            descriptionEditable.niveauSecurite = miseAJour.niveauSecurite;
           }}
         >
           {#snippet infoMajNecessaire()}
@@ -234,7 +234,7 @@
   {#if !lectureSeule && mode === 'Résumé'}
     <BarreActions
       mode="Résumé"
-      on:modifier={() => {
+      onModifier={() => {
         mode = 'Édition';
       }}
     />
@@ -248,8 +248,8 @@
       afficheInfoBesoinsSecurite={mode === 'Édition' &&
         ongletActif === 'informations' &&
         !majForceeBesoinsSecurite}
-      on:enregistrer={async () => enregistreDescriptionService()}
-      on:annuler={() => {
+      onEnregistrer={async () => enregistreDescriptionService()}
+      onAnnuler={() => {
         descriptionEditable = structuredClone(copiePourRestauration);
         retourAuModeResume();
       }}

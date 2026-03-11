@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-  import { createEventDispatcher } from 'svelte';
   import { encode } from 'html-entities';
   import type {
     MesureGenerale,
@@ -8,6 +6,7 @@
   } from '../tableauDesMesures.d';
   import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
   import {
+    type EcheanceMesure,
     type PrioriteMesure,
     Referentiel,
     type ReferentielPriorite,
@@ -26,8 +25,7 @@
   import SelectionResponsables from '../../ui/SelectionResponsables.svelte';
   import CartoucheThematique from '../../ui/CartoucheThematique.svelte';
   import { partieResponsable } from './mapPartieResponsable';
-
-  const bubble = createBubbler();
+  import type { IdUtilisateur } from '../../mesure/mesure.d';
 
   type IdDom = string;
 
@@ -42,6 +40,11 @@
     estLectureSeule: boolean;
     affichePlanAction: boolean;
     priorites: ReferentielPriorite;
+    onModificationResponsables: (responsables: IdUtilisateur[]) => void;
+    onModificationStatut: (statut: StatutMesure) => void;
+    onModificationPriorite: (priorite: PrioriteMesure | undefined) => void;
+    onModificationEcheance: (echeance: EcheanceMesure) => void;
+    onclick: (e: MouseEvent) => void;
   }
 
   let {
@@ -55,12 +58,12 @@
     estLectureSeule,
     affichePlanAction,
     priorites,
+    onModificationResponsables,
+    onModificationStatut,
+    onModificationPriorite,
+    onModificationEcheance,
+    onclick,
   }: Props = $props();
-
-  const dispatch = createEventDispatcher<{
-    modificationStatut: { statut: StatutMesure };
-    modificationPriorite: { priorite: PrioriteMesure | undefined };
-  }>();
 
   let texteSurligne = $state('');
   $effect(() => {
@@ -77,11 +80,7 @@
 </script>
 
 <tr class="ligne-de-mesure">
-  <td
-    class="titre-mesure"
-    onclick={bubble('click')}
-    onkeypress={bubble('keypress')}
-  >
+  <td class="titre-mesure" {onclick}>
     {#if mesure.partieResponsable}
       <p class="partie-responsable">
         {partieResponsable[mesure.partieResponsable]}
@@ -110,8 +109,7 @@
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
         {priorites}
-        on:input={(e) =>
-          dispatch('modificationPriorite', { priorite: e.detail.priorite })}
+        onPrioriteModifiee={(priorite) => onModificationPriorite(priorite)}
       />
     </td>
     <td>
@@ -119,7 +117,7 @@
         bind:echeance={mesure.echeance}
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
-        on:modificationEcheance
+        {onModificationEcheance}
       />
     </td>
     <td>
@@ -127,7 +125,7 @@
         bind:responsables={mesure.responsables}
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
-        on:modificationResponsables
+        {onModificationResponsables}
       />
     </td>
   {/if}
@@ -137,8 +135,7 @@
       {id}
       {estLectureSeule}
       {referentielStatuts}
-      on:input={(e) =>
-        dispatch('modificationStatut', { statut: e.detail.statut })}
+      onStatutChange={(statut) => onModificationStatut(statut)}
       requis
     />
   </td>

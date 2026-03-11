@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import MenuFlottant from '../../ui/MenuFlottant.svelte';
   import type { ResumeNiveauDroit } from '../../ui/types';
 
@@ -13,14 +12,16 @@
   interface Props {
     niveau: ResumeNiveauDroit;
     droitsModifiables: boolean;
+    onDroitsChange: (droits: ResumeNiveauDroit) => void;
+    onChoixPersonnalisation: () => void;
   }
 
-  let { niveau, droitsModifiables }: Props = $props();
-
-  const dispatch = createEventDispatcher<{
-    droitsChange: ResumeNiveauDroit;
-    choixPersonnalisation: null;
-  }>();
+  let {
+    niveau,
+    droitsModifiables,
+    onDroitsChange,
+    onChoixPersonnalisation,
+  }: Props = $props();
 </script>
 
 {#if !droitsModifiables}
@@ -38,7 +39,7 @@
     <div class="roles-disponibles">
       <button
         class="role-propose lecture"
-        onclick={() => dispatch('droitsChange', 'LECTURE')}
+        onclick={() => onDroitsChange('LECTURE')}
       >
         <span class="nom">Lecture</span>
         <br />
@@ -46,7 +47,7 @@
       </button>
       <button
         class="role-propose ecriture"
-        onclick={() => dispatch('droitsChange', 'ECRITURE')}
+        onclick={() => onDroitsChange('ECRITURE')}
       >
         <span class="nom">Édition</span>
         <br />
@@ -54,7 +55,7 @@
       </button>
       <button
         class="role-propose personnalise"
-        onclick={() => dispatch('choixPersonnalisation')}
+        onclick={() => onChoixPersonnalisation()}
       >
         <span class="nom">Personnalisé</span>
         <br />
@@ -64,7 +65,7 @@
       </button>
       <button
         class="role-propose proprietaire"
-        onclick={() => dispatch('droitsChange', 'PROPRIETAIRE')}
+        onclick={() => onDroitsChange('PROPRIETAIRE')}
       >
         <span class="nom">Propriétaire</span>
         <br />

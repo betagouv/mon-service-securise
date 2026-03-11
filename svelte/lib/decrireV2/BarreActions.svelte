@@ -1,23 +1,21 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-
-  const dispatch = createEventDispatcher<{
-    modifier: null;
-    enregistrer: null;
-    annuler: null;
-  }>();
-
   type ModeAffichage = 'Résumé' | 'Édition' | 'MiseÀJourForcéeBesoinsSécurité';
   interface Props {
     mode: ModeAffichage;
     afficheInfoBesoinsSecurite?: boolean;
     activeBoutonEnregistrer?: boolean;
+    onModifier?: () => void;
+    onEnregistrer?: () => void;
+    onAnnuler?: () => void;
   }
 
   let {
     mode,
     afficheInfoBesoinsSecurite = false,
     activeBoutonEnregistrer = true,
+    onAnnuler,
+    onEnregistrer,
+    onModifier,
   }: Props = $props();
 </script>
 
@@ -31,7 +29,7 @@
         taille="md"
         icone="edit-line"
         positionIcone="droite"
-        onclick={() => dispatch('modifier')}
+        onclick={() => onModifier?.()}
       ></lab-anssi-bouton>
     {:else if mode === 'Édition' || mode === 'MiseÀJourForcéeBesoinsSécurité'}
       <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
@@ -42,7 +40,7 @@
         icone="save-line"
         positionIcone="gauche"
         actif={activeBoutonEnregistrer}
-        onclick={() => dispatch('enregistrer')}
+        onclick={() => onEnregistrer?.()}
       ></lab-anssi-bouton>
       <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
       <lab-anssi-bouton
@@ -50,7 +48,7 @@
         variante="tertiaire"
         taille="md"
         positionIcone="sans"
-        onclick={() => dispatch('annuler')}
+        onclick={() => onAnnuler?.()}
       ></lab-anssi-bouton>
       {#if afficheInfoBesoinsSecurite}
         <span class="attention-aux-besoins">

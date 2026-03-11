@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   import AsterisqueChampRequis from './AsterisqueChampRequis.svelte';
 
   interface Props {
@@ -31,7 +28,6 @@
     rows={tailleMinimale}
     placeholder={aideSaisie}
     required={requis}
-    onblur={bubble('blur')}
   ></textarea>
 </label>
 

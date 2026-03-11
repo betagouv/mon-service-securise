@@ -36,9 +36,9 @@
     <BrouillonDeServiceEditable
       bind:donnees={$leBrouillon}
       seulementNomServiceEditable={false}
-      on:champModifie={async (e) => {
+      onChampModifie={async (miseAJour) => {
         if ($leBrouillon.id)
-          await metsAJourBrouillonService($leBrouillon.id, e.detail);
+          await metsAJourBrouillonService($leBrouillon.id, miseAJour);
       }}
     />
   </div>

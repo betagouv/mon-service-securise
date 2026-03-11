@@ -12,7 +12,6 @@
   import type { ReferentielPriorite } from '../../ui/types.d';
   import { rechercheParPriorite } from '../stores/rechercheParPriorite.store';
   import { rechercheMesMesures } from '../stores/rechercheMesMesures.store';
-  import { createEventDispatcher } from 'svelte';
   import {
     rechercheParThematique,
     thematiques,
@@ -24,11 +23,11 @@
     categories: Record<IdCategorie, string>;
     priorites: ReferentielPriorite;
     versionService: VersionService;
+    onSupprimeFiltres?: () => void;
   }
 
-  let { categories, priorites, versionService }: Props = $props();
-
-  const declenche = createEventDispatcher<{ supprimeFiltres: null }>();
+  let { categories, priorites, versionService, onSupprimeFiltres }: Props =
+    $props();
 
   let cocheGlobaleANSSI = $derived(
     $rechercheParReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
@@ -222,7 +221,7 @@
     </fieldset>
     <button
       class="bouton bouton-secondaire bouton-effacer-filtre"
-      onclick={() => declenche('supprimeFiltres')}
+      onclick={onSupprimeFiltres}
     >
       Effacer les filtres
     </button>

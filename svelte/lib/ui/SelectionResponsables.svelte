@@ -1,20 +1,21 @@
 <script lang="ts">
-  import { createBubbler, stopPropagation } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   import type { IdUtilisateur } from '../tableauDesMesures/tableauDesMesures.d';
   import MenuFlottant from './MenuFlottant.svelte';
   import { contributeurs } from '../tableauDesMesures/stores/contributeurs.store';
-  import { createEventDispatcher } from 'svelte';
   import Initiales from './Initiales.svelte';
   import { storeAutorisations } from '../gestionContributeurs/stores/autorisations.store';
 
   interface Props {
     responsables: IdUtilisateur[] | null | undefined;
     estLectureSeule: boolean;
+    onModificationResponsables: (responsables: IdUtilisateur[]) => void;
   }
 
-  let { responsables = $bindable(), estLectureSeule }: Props = $props();
+  let {
+    responsables = $bindable(),
+    estLectureSeule,
+    onModificationResponsables,
+  }: Props = $props();
 
   let responsablesAffiches = $derived(
     responsables
@@ -33,11 +34,8 @@
     );
   };
 
-  const dispatch = createEventDispatcher<{
-    modificationResponsables: { responsables: IdUtilisateur[] };
-  }>();
   const modifieResponsables = () => {
-    if (responsables) dispatch('modificationResponsables', { responsables });
+    if (responsables) onModificationResponsables(responsables);
   };
 
   let niveauDeDroitDe = $derived(
@@ -57,8 +55,8 @@
   {/snippet}
   <div
     class="conteneur-responsables"
-    onclick={stopPropagation(bubble('click'))}
-    onkeypress={stopPropagation(bubble('keypress'))}
+    onclick={(e) => e.stopPropagation()}
+    onkeypress={(e) => e.stopPropagation()}
     role="menu"
     tabindex="0"
   >

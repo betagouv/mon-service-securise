@@ -1,9 +1,5 @@
 <script lang="ts">
-  import { createBubbler, stopPropagation } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   import type { PrioriteMesure, ReferentielPriorite } from './types.d';
-  import { createEventDispatcher } from 'svelte';
 
   type IdDom = string;
 
@@ -14,6 +10,7 @@
     estLectureSeule?: boolean;
     avecLibelleOption?: boolean;
     priorites: ReferentielPriorite;
+    onPrioriteModifiee?: (priorite: PrioriteMesure) => void;
   }
 
   let {
@@ -23,20 +20,17 @@
     estLectureSeule = false,
     avecLibelleOption = false,
     priorites,
+    onPrioriteModifiee,
   }: Props = $props();
-
-  const dispatch = createEventDispatcher<{
-    input: { priorite: PrioriteMesure };
-  }>();
 
   $effect(() => {
     if (priorite === undefined) priorite = '';
   });
 
   const metAJour = (e: Event) => {
-    dispatch('input', {
-      priorite: (e.target as HTMLInputElement).value as PrioriteMesure,
-    });
+    onPrioriteModifiee?.(
+      (e.target as HTMLInputElement).value as PrioriteMesure
+    );
   };
 </script>
 
@@ -50,7 +44,7 @@
     class:vide={!priorite}
     disabled={estLectureSeule}
     oninput={metAJour}
-    onclick={stopPropagation(bubble('click'))}
+    onclick={(e) => e.stopPropagation()}
   >
     <option value="" disabled selected
       >{avecLibelleOption ? 'Définir la priorité' : '+'}</option

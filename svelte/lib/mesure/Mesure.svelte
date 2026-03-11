@@ -175,9 +175,9 @@
   </div>
 
   <Formulaire
-    on:formulaireValide={enregistreMesure}
+    onFormulaireValide={enregistreMesure}
     id="formulaire-mesure"
-    on:formulaireInvalide={activeOngletMesure}
+    onFormulaireInvalide={activeOngletMesure}
   >
     <div class="corps-formulaire">
       {#if doitAfficherTiroirModeleMesureSpecifique}
@@ -280,7 +280,7 @@
         {/if}
       {:else}
         <CommentaireMesure
-          on:submit={sauvegardeCommentaire}
+          onsubmit={sauvegardeCommentaire}
           bind:contenuCommentaire
           {nonce}
         />

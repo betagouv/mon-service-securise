@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { preventDefault } from 'svelte/legacy';
-  import { createEventDispatcher, onDestroy, onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import StarterKit from '@tiptap/starter-kit';
   import Placeholder from '@tiptap/extension-placeholder';
   import { Editor } from '@tiptap/core';
@@ -12,9 +11,10 @@
   interface Props {
     contenuCommentaire: string;
     nonce: string;
+    onsubmit: () => void;
   }
 
-  let { contenuCommentaire = $bindable(), nonce }: Props = $props();
+  let { contenuCommentaire = $bindable(), nonce, onsubmit }: Props = $props();
 
   let editor: Editor | undefined = $state();
   let editorEl: HTMLDivElement | undefined = $state();
@@ -89,15 +89,19 @@
     if (editor) editor.destroy();
   });
 
-  const dispatch = createEventDispatcher<{ submit: null }>();
   const sauvegardeCommentaire = () => {
-    dispatch('submit');
+    onsubmit();
     editor?.commands.clearContent();
     contenuCommentaire = '';
   };
 </script>
 
-<form onsubmit={preventDefault(sauvegardeCommentaire)}>
+<form
+  onsubmit={(e) => {
+    e?.preventDefault();
+    sauvegardeCommentaire();
+  }}
+>
   <button
     type="button"
     class="mention-commentaire"

@@ -95,12 +95,12 @@
   <RapportTeleversementGenerique
     titreDuRapport="Rapport du téléversement des mesures"
     {resume}
-    on:confirmeTeleversement={async () => {
+    onConfirmeTeleversement={async () => {
       etatReseau = 'IMPORT_EN_COURS';
       await confirmeTeleversementEnCours();
       enleveParametreDeUrl('rapportTeleversement');
     }}
-    on:retenteTeleversement={async () => {
+    onRetenteTeleversement={async () => {
       enleveParametreDeUrl('rapportTeleversement');
       await supprimeTeleversementEnCours();
       etatReseau = 'IMPORT_FINI';
@@ -109,7 +109,7 @@
       });
       enleveParametreDeUrl('rapportTeleversement');
     }}
-    on:annule={async () => {
+    onAnnule={async () => {
       etatReseau = 'IMPORT_FINI';
       enleveParametreDeUrl('rapportTeleversement');
       await supprimeTeleversementEnCours();
@@ -139,7 +139,7 @@
   <ModaleDeProgression
     delaiRafraichissement={50}
     apiGetProgression={async () => await fausseProgression()}
-    on:fini={async () => {
+    onFini={async () => {
       if (!rapport) return;
       const nb = rapport.modelesTeleverses.length;
       toasterStore.succes(

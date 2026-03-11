@@ -12,7 +12,7 @@
         {contenu}
         {avecInterpolationHTMLDangereuse}
         avecFermeture
-        on:close={() => toasterStore.fermeToast(id)}
+        onClose={() => toasterStore.fermeToast(id)}
       />
     {/each}
   </aside>

@@ -1,11 +1,4 @@
 <script lang="ts">
-  import {
-    createBubbler,
-    preventDefault,
-    stopPropagation,
-  } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   import MenuFlottant from '../ui/MenuFlottant.svelte';
   import ChampTexte from '../ui/ChampTexte.svelte';
   import ControleFormulaire from '../ui/ControleFormulaire.svelte';
@@ -99,12 +92,16 @@
       </div>
     {/snippet}
     <div class="domaines">
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
       <div
         role="button"
         tabindex="0"
-        onkeypress={bubble('keypress')}
         class="rappel-declencheur contenu-declencheur"
-        onclick={stopPropagation(preventDefault(refermeMenu))}
+        onclick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          refermeMenu();
+        }}
       >
         {labelRappelDeclencheur}
       </div>

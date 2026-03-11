@@ -1,15 +1,10 @@
 <script lang="ts">
-  import { createBubbler, preventDefault } from 'svelte/legacy';
-
-  const bubble = createBubbler();
-  import type {
-    Droits,
-    Invitation,
-    Utilisateur,
-  } from '../gestionContributeurs.d';
+  import type { Droits, Invitation } from '../gestionContributeurs.d';
   import { enDroitsSurRubrique } from '../gestionContributeurs.d';
   import { store } from '../gestionContributeurs.store';
-  import ChampAvecSuggestions from '../kit/ChampAvecSuggestions.svelte';
+  import ChampAvecSuggestions, {
+    type Contributeur,
+  } from '../kit/ChampAvecSuggestions.svelte';
   import PersonnalisationDroits from '../personnalisation/PersonnalisationDroits.svelte';
   import ListeInvitations from './ListeInvitations.svelte';
   import * as api from './invitation.api';
@@ -30,7 +25,7 @@
 
   let invitations: Record<Email, Invitation> = $state({});
   let etapeCourante: Etape = $state('Ajout');
-  let enPersonnalisation: Utilisateur | undefined = $state();
+  let enPersonnalisation: Contributeur | undefined = $state();
   const aPersonnaliser = () => ({
     utilisateur: enPersonnalisation!,
     droits: invitations[enPersonnalisation!.email].droits,
@@ -46,27 +41,27 @@
     $store.etapeCourante === 'InvitationContributeurs'
   );
 
-  const ajouteInvitation = (evenement: CustomEvent<Utilisateur>) => {
+  const ajouteInvitation = (contributeur: Contributeur) => {
     store.navigation.afficheEtapeInvitation();
 
     const memesEmails = (email1: string, email2: string) =>
       email1.localeCompare(email2, 'fr', { sensitivity: 'accent' }) === 0;
 
     const dejaInvite = Object.values(invitations).find((i) =>
-      memesEmails(i.utilisateur.email, evenement.detail.email)
+      memesEmails(i.utilisateur.email, contributeur.email)
     );
 
     if (!dejaInvite)
       invitations = {
         ...invitations,
-        [evenement.detail.email]: {
-          utilisateur: evenement.detail,
+        [contributeur.email]: {
+          utilisateur: contributeur,
           droits: enDroitsSurRubrique('ECRITURE'),
         },
       };
   };
 
-  const supprimeInvitation = ({ email }: Utilisateur) => {
+  const supprimeInvitation = ({ email }: Contributeur) => {
     delete invitations[email];
     invitations = invitations;
   };
@@ -84,10 +79,7 @@
 </script>
 
 {#if etapeCourante === 'Ajout'}
-  <form
-    class="conteneur-formulaire"
-    onsubmit={preventDefault(bubble('submit'))}
-  >
+  <form class="conteneur-formulaire" onsubmit={(e) => e.preventDefault()}>
     <label for="email-invitation-collaboration">
       Ajouter un ou plusieurs contributeurs
       {#if modeVisiteGuidee}
@@ -101,32 +93,31 @@
         <ChampAvecSuggestions
           id="email-invitation-collaboration"
           callbackDeRecherche={api.rechercheContributeurs}
-          on:contributeurChoisi={ajouteInvitation}
+          onContributeurChoisi={ajouteInvitation}
         />
       {/if}
     </label>
     <ListeInvitations
       invitations={Object.values(invitations)}
-      on:droitsChange={({ detail: nouveauxDroits }) => {
+      onDroitsChange={(nouveauxDroits) => {
         invitations[nouveauxDroits.utilisateur.email].droits =
           nouveauxDroits.droits;
         invitations = invitations;
       }}
-      on:choixPersonnalisation={({ detail: utilisateur }) => {
+      onChoixPersonnalisation={(utilisateur) => {
         enPersonnalisation = utilisateur;
         etapeCourante = 'Personnalisation';
       }}
-      on:supprimerInvitation={({ detail: aSupprimer }) =>
-        supprimeInvitation(aSupprimer)}
+      onSupprimerInvitation={(aSupprimer) => supprimeInvitation(aSupprimer)}
     />
     {#if afficheLesBoutonsAction}
       <BoutonsActions
         afficherBoutonEnvoyer={Object.values(invitations).length > 0}
-        on:annuler={() => {
+        onAnnuler={() => {
           invitations = {};
           store.navigation.afficheEtapeListe();
         }}
-        on:envoyer={() => envoiInvitation()}
+        onEnvoyer={() => envoiInvitation()}
       />
     {/if}
   </form>
@@ -134,12 +125,12 @@
   <PersonnalisationDroits
     utilisateur={aPersonnaliser().utilisateur}
     droitsOriginaux={aPersonnaliser().droits}
-    on:annuler={() => {
+    onAnnuler={() => {
       enPersonnalisation = undefined;
       etapeCourante = 'Ajout';
     }}
-    on:valider={({ detail: personnalises }) => {
-      personnaliseLesDroitsInvite(personnalises);
+    onValider={(droits) => {
+      personnaliseLesDroitsInvite(droits);
       etapeCourante = 'Ajout';
     }}
   />

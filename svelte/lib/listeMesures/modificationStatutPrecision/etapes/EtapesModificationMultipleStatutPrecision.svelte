@@ -7,15 +7,12 @@
 </script>
 
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import EtapierTiroir from '../EtapierTiroir.svelte';
   import SecondeEtape from './SecondeEtape.svelte';
   import TroisiemeEtape from './TroisiemeEtape.svelte';
   import PremiereEtape from './PremiereEtape.svelte';
   import type { ReferentielStatut } from '../../../ui/types';
   import type { StatutMesure } from '../../../modeles/modeleMesure';
-  import { createEventDispatcher } from 'svelte';
   import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
   import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
 
@@ -24,6 +21,7 @@
     statuts: ReferentielStatut;
     servicesAssocies: ServiceAssocie[];
     boutonSuivantActif?: boolean;
+    onModificationAAppliquer: (donnees: DonneesModificationAAppliquer) => void;
   }
 
   let {
@@ -31,6 +29,7 @@
     statuts,
     servicesAssocies,
     boutonSuivantActif = $bindable(false),
+    onModificationAAppliquer,
   }: Props = $props();
 
   let statutSelectionne: StatutMesure | '' = $state('');
@@ -41,10 +40,6 @@
     !statutSelectionne && !!precision
   );
 
-  const emetEvenement = createEventDispatcher<{
-    'modification-a-appliquer': DonneesModificationAAppliquer;
-  }>();
-
   export const etapePrecedente = () => {
     if (etapeCourante > 0) etapeCourante--;
   };
@@ -52,7 +47,7 @@
   export const etapeSuivante = () => {
     if (etapeCourante < 3) etapeCourante++;
     else
-      emetEvenement('modification-a-appliquer', {
+      onModificationAAppliquer({
         statut: statutSelectionne,
         modalites: precision,
         idsServices: idsServicesSelectionnes,

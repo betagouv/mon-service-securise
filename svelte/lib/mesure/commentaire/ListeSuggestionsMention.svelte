@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   import Initiales from '../../ui/Initiales.svelte';
   import { storeAutorisations } from '../../gestionContributeurs/stores/autorisations.store';
   import type {
@@ -118,15 +115,14 @@
 <ul bind:this={element} class="invisible">
   {#each items as contributeur, i (i)}
     <li>
+      <!-- svelte-ignore a11y_click_events_have_key_events,a11y_mouse_events_have_key_events -->
       <div
         class:active={i === indexActif}
         class="contenu-nom-prenom"
         onclick={() => selectionneItem(contributeur)}
-        onkeypress={bubble('keypress')}
         role="button"
         tabindex="0"
         onmouseover={() => survol(i)}
-        onfocus={bubble('focus')}
       >
         <Initiales
           valeur={contributeur.initiales}

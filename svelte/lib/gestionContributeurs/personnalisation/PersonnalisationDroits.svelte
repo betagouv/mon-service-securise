@@ -1,21 +1,18 @@
 <script lang="ts">
-  import type {
-    Droits,
-    Permission,
-    Rubrique,
-    Utilisateur,
-  } from '../gestionContributeurs.d';
+  import type { Droits, Permission, Rubrique } from '../gestionContributeurs.d';
   import LigneContributeur from '../kit/LigneContributeur.svelte';
   import TagLectureEcriture from '../personnalisation/TagLectureEcriture.svelte';
-  import { createEventDispatcher } from 'svelte';
   import OnOff from '../kit/OnOff.svelte';
+  import type { Contributeur } from '../kit/ChampAvecSuggestions.svelte';
 
   interface Props {
-    utilisateur: Utilisateur;
+    utilisateur: Contributeur;
     droitsOriginaux: Droits;
+    onValider: (droits: Droits) => void;
+    onAnnuler: () => void;
   }
 
-  let { utilisateur, droitsOriginaux }: Props = $props();
+  let { utilisateur, droitsOriginaux, onValider, onAnnuler }: Props = $props();
   let redefinis = $derived({ ...droitsOriginaux });
 
   let rubriques: { id: Rubrique; nom: string; droit: Permission }[] = $derived([
@@ -29,11 +26,6 @@
     { id: 'RISQUES', nom: 'Risques de sécurité', droit: redefinis.RISQUES },
     { id: 'CONTACTS', nom: 'Contacts utiles', droit: redefinis.CONTACTS },
   ]);
-
-  const dispatch = createEventDispatcher<{
-    valider: Droits;
-    annuler: null;
-  }>();
 </script>
 
 <div class="identite-contributeur">
@@ -56,7 +48,7 @@
           <OnOff
             id="visibilite-{id}"
             checked={droit > 0}
-            on:change={({ detail: estCochee }) => {
+            onChange={(estCochee) => {
               if (estCochee) redefinis[id] = 1;
               else redefinis[id] = 0;
             }}
@@ -67,7 +59,7 @@
           {#if droit !== 0}
             <TagLectureEcriture
               {droit}
-              on:droitChange={(e) => (redefinis[id] = e.detail)}
+              onDroitChange={(droit) => (redefinis[id] = droit)}
             />
           {/if}
         </div>
@@ -76,18 +68,10 @@
   </div>
 </div>
 <div class="conteneur-actions">
-  <button
-    class="bouton bouton-secondaire"
-    type="button"
-    onclick={() => dispatch('annuler')}
-  >
+  <button class="bouton bouton-secondaire" type="button" onclick={onAnnuler}>
     Annuler
   </button>
-  <button
-    class="bouton"
-    type="button"
-    onclick={() => dispatch('valider', redefinis)}
-  >
+  <button class="bouton" type="button" onclick={() => onValider(redefinis)}>
     Enregistrer
   </button>
 </div>

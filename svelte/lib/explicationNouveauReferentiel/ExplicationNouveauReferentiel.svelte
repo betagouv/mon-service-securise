@@ -72,7 +72,7 @@
 <Modale
   id="modale-explication-nouveau-referentiel"
   bind:this={elementModale}
-  on:close={gereFermetureModale}
+  onClose={gereFermetureModale}
 >
   {#snippet contenu()}
     <dsfr-badge

@@ -4,18 +4,16 @@
   import type { ReferentielStatut } from '../../ui/types';
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import { rechercheParAvancement } from '../stores/rechercheParAvancement.store';
-  import { createEventDispatcher } from 'svelte';
 
   interface Props {
     referentielStatuts: ReferentielStatut;
+    onSupprimeFiltres?: () => void;
   }
 
-  let { referentielStatuts }: Props = $props();
-
-  const declenche = createEventDispatcher<{ supprimeFiltres: null }>();
+  let { referentielStatuts, onSupprimeFiltres }: Props = $props();
 
   const supprimeRechercheEtFiltres = () => {
-    declenche('supprimeFiltres');
+    onSupprimeFiltres?.();
     $rechercheTextuelle = '';
   };
 </script>

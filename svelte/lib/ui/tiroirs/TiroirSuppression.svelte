@@ -79,7 +79,7 @@
   };
 </script>
 
-<Formulaire on:formulaireValide={supprimeService} formulaireDuTiroir>
+<Formulaire onFormulaireValide={supprimeService} formulaireDuTiroir>
   <ContenuTiroir>
     <span>Souhaitez-vous vraiment supprimer <b>{intituleSuppression}</b> ?</span
     >

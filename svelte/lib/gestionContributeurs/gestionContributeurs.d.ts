@@ -2,6 +2,7 @@
 // On veut utiliser Axios ici car il est configuré pour utiliser le token CSRF
 import type { ResumeNiveauDroit } from '../ui/types';
 import type { AxiosStatic } from 'axios';
+import type { Contributeur } from './kit/ChampAvecSuggestions.svelte';
 
 declare global {
   const axios: AxiosStatic;
@@ -72,7 +73,7 @@ export const enDroitsSurRubrique = (
 type Droits = Record<Rubrique, Permission> & { estProprietaire?: boolean };
 
 export type Invitation = {
-  utilisateur: Utilisateur;
+  utilisateur: Contributeur;
   droits: Droits;
 };
 

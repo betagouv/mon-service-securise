@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, tick } from 'svelte';
+  import { tick } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
@@ -9,9 +9,10 @@
 
   interface Props {
     estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  let { estComplete = $bindable() }: Props = $props();
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   const illustrations: Record<CategorieDonneesTraitees, string> = {
     documentsIdentifiants: 'documentsIdentifiants.svg',
@@ -27,8 +28,6 @@
     documentsRHSensibles: 'documentsRHSensibles.svg',
     donneesSensibles: 'donneesSensibles.svg',
   };
-
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
 
   $effect(() => {
     estComplete =
@@ -53,7 +52,7 @@
   };
 
   const enregistre = () => {
-    emetEvenement('champModifie', {
+    onChampModifie({
       categoriesDonneesTraiteesSupplementaires:
         $leBrouillon.categoriesDonneesTraiteesSupplementaires.filter(
           (c) => c.trim().length > 0
@@ -70,7 +69,7 @@
       valeurCategoriesDonneesTraitees !== $leBrouillon.categoriesDonneesTraitees
     ) {
       $leBrouillon.categoriesDonneesTraitees = valeurCategoriesDonneesTraitees;
-      emetEvenement('champModifie', {
+      onChampModifie({
         categoriesDonneesTraitees: $leBrouillon.categoriesDonneesTraitees,
       });
     }
@@ -107,13 +106,13 @@
     <ListeChampTexte
       nomGroupe="categoriesDonneesTraiteesSupplementaires"
       bind:valeurs={$leBrouillon.categoriesDonneesTraiteesSupplementaires}
-      on:ajout={ajouteValeur}
+      onAjout={ajouteValeur}
       titreSuppression="Supprimer la donnée"
       titreAjout="Ajouter des données"
       limiteTaille={200}
-      on:blur={() => enregistre()}
-      on:suppression={async (e) => {
-        supprimeValeur(e.detail);
+      onblur={() => enregistre()}
+      onSuppression={async (index) => {
+        supprimeValeur(index);
         await tick();
         if (estComplete) enregistre();
       }}

@@ -1,17 +1,13 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
 
   interface Props {
     estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
   }
 
-  let { estComplete = $bindable() }: Props = $props();
-
-  const emetEvenement = createEventDispatcher<{
-    champModifie: MiseAJour;
-  }>();
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   let elementHtml:
     | (HTMLElement & { errorMessage: string; status: string })
@@ -61,6 +57,6 @@
     : ''}
   onvaluechanged={metAJourNomService}
   onblur={async () => {
-    emetEvenement('champModifie', { nomService: $leBrouillon.nomService });
+    onChampModifie({ nomService: $leBrouillon.nomService });
   }}
 ></dsfr-input>

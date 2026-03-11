@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import MenuFlottant from '../../ui/MenuFlottant.svelte';
   import type { Ecriture, Lecture } from '../gestionContributeurs.d';
 
@@ -23,12 +22,10 @@
 
   interface Props {
     droit: Lecture | Ecriture;
+    onDroitChange: (droit: Lecture | Ecriture) => void;
   }
 
-  let { droit }: Props = $props();
-  const dispatch = createEventDispatcher<{
-    droitChange: Lecture | Ecriture;
-  }>();
+  let { droit, onDroitChange }: Props = $props();
 </script>
 
 <MenuFlottant fermeMenuSiClicInterne={true}>
@@ -42,7 +39,7 @@
     {#each droitsDisponibles as { nom, description, droit }, i (i)}
       <button
         class="droit-propose"
-        onclick={() => dispatch('droitChange', droit)}
+        onclick={() => onDroitChange(droit)}
         class:lecture={droit === 1}
         class:ecriture={droit === 2}
       >

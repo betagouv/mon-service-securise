@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   interface Props {
     recherche: string;
     taille?: 'moyen' | 'grand';
@@ -34,11 +31,7 @@
       />
     </button>
   {/if}
-  <button
-    class="conteneur-icone"
-    onclick={bubble('click')}
-    disabled={desactive}
-  >
+  <button class="conteneur-icone" disabled={desactive}>
     <img
       src="/statique/assets/images/icone_loupe.svg"
       alt="Icône de recherche"

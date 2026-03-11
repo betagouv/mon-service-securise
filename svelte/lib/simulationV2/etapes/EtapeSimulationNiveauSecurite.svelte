@@ -38,11 +38,11 @@
     niveauSelectionne = $leBrouillon.niveauSecurite;
   });
 
-  const metsAJour = async (e: CustomEvent<MiseAJour>) => {
-    const niveau = e.detail.niveauSecurite;
+  const metsAJour = async (miseAJour: MiseAJour) => {
+    const niveau = miseAJour.niveauSecurite;
     if (niveau !== undefined) {
       $leBrouillon.niveauSecurite = niveau;
-      await metsAJourSimulation($leBrouillon.id!, e.detail);
+      await metsAJourSimulation($leBrouillon.id!, miseAJour);
     }
   };
 
@@ -70,7 +70,7 @@
   <NiveauDeSecuriteEditable
     bind:niveauSelectionne
     {niveauDeSecuriteMinimal}
-    on:champModifie={metsAJour}
+    onChampModifie={metsAJour}
   />
 {/if}
 

@@ -46,11 +46,11 @@
   };
 
   const appliqueModifications = async (
-    e: CustomEvent<DonneesModificationAAppliquer>
+    donnees: DonneesModificationAAppliquer
   ) => {
     enCoursDenvoi = true;
     try {
-      const { idsServices, modalites, statut } = e.detail;
+      const { idsServices, modalites, statut } = donnees;
       await enregistreModificationMesuresSpecifiquesSurServicesMultiples({
         idModele: modeleMesure.id,
         statut,
@@ -270,7 +270,7 @@
         bind:boutonSuivantActif
         {statuts}
         {servicesAssocies}
-        on:modification-a-appliquer={appliqueModifications}
+        onModificationAAppliquer={appliqueModifications}
       />
     {/if}
   {/if}

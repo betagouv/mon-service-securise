@@ -85,7 +85,7 @@
     <Avertissement
       niveau="avertissement"
       avecBoutonFermeture
-      on:fermeture={masqueSuggestionBesoinsSecuriteRetrogrades}
+      onFermeture={masqueSuggestionBesoinsSecuriteRetrogrades}
     >
       <div>
         <span>

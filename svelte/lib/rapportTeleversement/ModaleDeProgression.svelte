@@ -1,14 +1,18 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { onMount } from 'svelte';
 
   interface Props {
     apiGetProgression: () => Promise<number>;
     delaiRafraichissement?: number;
+    onFini: () => void;
   }
 
-  let { apiGetProgression, delaiRafraichissement = 1_000 }: Props = $props();
+  let {
+    apiGetProgression,
+    delaiRafraichissement = 1_000,
+    onFini,
+  }: Props = $props();
 
-  const dispatch = createEventDispatcher<{ fini: null }>();
   let elementModale: HTMLDialogElement | undefined = $state();
   let progression = $state(0);
 
@@ -16,7 +20,7 @@
     try {
       progression = await apiGetProgression();
 
-      if (progression === 100) dispatch('fini');
+      if (progression === 100) onFini();
       else setTimeout(monitoreProgression, delaiRafraichissement);
     } catch {
       setTimeout(monitoreProgression, 5_000);

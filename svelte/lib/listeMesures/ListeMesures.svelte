@@ -262,7 +262,7 @@
 <ModaleRapportModification
   referentielStatuts={statuts}
   referentielTypesService={typesService}
-  on:close={() => modaleRapportStore.metEnAvantMesureApresModification()}
+  onClose={() => modaleRapportStore.metEnAvantMesureApresModification()}
 />
 
 <ModaleDetailsMesure

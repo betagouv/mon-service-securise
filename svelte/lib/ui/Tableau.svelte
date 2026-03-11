@@ -241,7 +241,7 @@
           {#if donneesFiltrees.length === 0}
             <tr>
               <td colspan={nbColonnes}>
-                <TableauVideAucunResultat on:click={effaceRechercheEtFiltres} />
+                <TableauVideAucunResultat onclick={effaceRechercheEtFiltres} />
               </td>
             </tr>
           {/if}

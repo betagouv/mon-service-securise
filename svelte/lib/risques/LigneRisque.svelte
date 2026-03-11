@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   import type {
     ReferentielCategories,
     ReferentielGravites,
@@ -10,7 +7,6 @@
   } from './risques.d';
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import { Referentiel } from '../ui/types.d';
-  import { createEventDispatcher } from 'svelte';
   import SelectionGravite from './SelectionGravite.svelte';
   import { intituleRisque, risqueAMettreAJour } from './risques';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
@@ -23,6 +19,8 @@
     niveauxVraisemblance: ReferentielVraisemblances;
     estLectureSeule: boolean;
     risque: Risque;
+    onMetAJourRisque: () => void;
+    onclick: (e: MouseEvent) => void;
   }
 
   let {
@@ -31,28 +29,18 @@
     niveauxVraisemblance,
     estLectureSeule,
     risque = $bindable(),
+    onMetAJourRisque,
+    onclick,
   }: Props = $props();
 
   let estSpecifiqueAMettreAJour = $derived(risqueAMettreAJour(risque));
-
-  const emet = createEventDispatcher<{
-    metAJourRisque: null;
-  }>();
-
-  const metAJourRisque = () => {
-    emet('metAJourRisque');
-  };
 </script>
 
 <tr>
   <td>
     <IdentifiantRisque {risque} />
   </td>
-  <td
-    class="intitule"
-    class:inactif={risque.desactive}
-    onclick={bubble('click')}
-  >
+  <td class="intitule" class:inactif={risque.desactive} {onclick}>
     <p
       class="intitule-risques"
       title={estSpecifiqueAMettreAJour ? 'Ce risque doit être mis à jour' : ''}
@@ -80,7 +68,7 @@
         risque.desactive}
       referentielGravites={niveauxGravite}
       bind:niveauGravite={risque.niveauGravite}
-      onchange={metAJourRisque}
+      onchange={onMetAJourRisque}
     />
   </td>
   <td>
@@ -90,7 +78,7 @@
         risque.desactive}
       referentielVraisemblances={niveauxVraisemblance}
       bind:niveauVraisemblance={risque.niveauVraisemblance}
-      onchange={metAJourRisque}
+      onchange={onMetAJourRisque}
     />
   </td>
   <td class="actions">
@@ -98,9 +86,9 @@
       <Switch
         actif={!risque.desactive}
         id="switch-{risque.id}"
-        on:change={(e) => {
-          risque.desactive = !e.detail;
-          metAJourRisque();
+        onChange={(actif) => {
+          risque.desactive = !actif;
+          onMetAJourRisque();
         }}
       />
     {/if}

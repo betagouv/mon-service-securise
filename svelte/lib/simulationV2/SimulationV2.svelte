@@ -38,11 +38,11 @@
     leBrouillon.chargeDonnees(donneesSimulation);
   });
 
-  const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {
-    await metsAJourSimulation(idService, e.detail);
+  const metsAJourPropriete = async (miseAJour: MiseAJour) => {
+    await metsAJourSimulation(idService, miseAJour);
 
     const nomChampModifie = Object.keys(
-      e.detail
+      miseAJour
     )[0] as keyof BrouillonServiceV2;
     const onEstToujoursSurLaQuestionQuiAEnvoyeLaMaj =
       $etapeCourante.questionCourante.clesPropriete.includes(nomChampModifie);
@@ -63,8 +63,8 @@
 </script>
 
 <AssistantServiceV2
-  on:champModifie={metsAJourPropriete}
-  on:finalise={() => elementModaleConfirmationMigration?.affiche()}
+  onChampModifie={metsAJourPropriete}
+  onFinalise={async () => elementModaleConfirmationMigration?.affiche()}
   bind:enCoursDeChargement
   titreAssistant="Actualiser votre service"
   titreBoutonFinalise="Passer au nouveau référentiel"
