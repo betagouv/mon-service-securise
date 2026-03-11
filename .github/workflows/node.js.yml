@@ -45,7 +45,7 @@ jobs:
         run: ./node_modules/.bin/tsc --noEmit
 
       - name: Contrôler la cohérence de Svelte avec `svelte-check`
-        run: ./node_modules/.bin/svelte-check --workspace svelte
+        run: ./node_modules/.bin/svelte-check --workspace svelte --fail-on-warnings
 
       - name: Exécuter les tests
         run: ./node_modules/.bin/vitest --reporter junit --outputFile=./test-report.xml
