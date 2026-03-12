@@ -12,6 +12,7 @@
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
   import IdentifiantRisque from './IdentifiantRisque.svelte';
   import Switch from '../ui/Switch.svelte';
+  import { untrack } from 'svelte';
 
   interface Props {
     categories: ReferentielCategories;
@@ -19,7 +20,7 @@
     niveauxVraisemblance: ReferentielVraisemblances;
     estLectureSeule: boolean;
     risque: Risque;
-    onMetAJourRisque: () => void;
+    onMetAJourRisque: (risque: Risque) => void;
     onclick: (e: MouseEvent) => void;
   }
 
@@ -28,10 +29,18 @@
     niveauxGravite,
     niveauxVraisemblance,
     estLectureSeule,
-    risque = $bindable(),
+    risque: r,
     onMetAJourRisque,
     onclick,
   }: Props = $props();
+
+  let risque = $state<Risque>(untrack(() => r));
+
+  $effect(() => {
+    if (r) {
+      risque = r;
+    }
+  });
 
   let estSpecifiqueAMettreAJour = $derived(risqueAMettreAJour(risque));
 </script>
@@ -68,7 +77,7 @@
         risque.desactive}
       referentielGravites={niveauxGravite}
       bind:niveauGravite={risque.niveauGravite}
-      onchange={onMetAJourRisque}
+      onchange={() => onMetAJourRisque(risque)}
     />
   </td>
   <td>
@@ -78,7 +87,7 @@
         risque.desactive}
       referentielVraisemblances={niveauxVraisemblance}
       bind:niveauVraisemblance={risque.niveauVraisemblance}
-      onchange={onMetAJourRisque}
+      onchange={() => onMetAJourRisque(risque)}
     />
   </td>
   <td class="actions">
@@ -88,7 +97,7 @@
         id="switch-{risque.id}"
         onChange={(actif) => {
           risque.desactive = !actif;
-          onMetAJourRisque();
+          onMetAJourRisque(risque);
         }}
       />
     {/if}
