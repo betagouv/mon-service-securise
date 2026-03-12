@@ -1,26 +1,41 @@
 <script lang="ts">
-  import type { Service, Utilisateur } from '../gestionContributeurs.d';
+  import type { Utilisateur } from '../gestionContributeurs.d';
+  import { enDroitsSurRubrique } from '../gestionContributeurs.d';
   import { store } from '../gestionContributeurs.store';
   import Initiales from '../../ui/Initiales.svelte';
   import TagNiveauDroit from './TagNiveauDroit.svelte';
-  import { enDroitsSurRubrique } from '../gestionContributeurs.d';
   import type { ResumeNiveauDroit } from '../../ui/types';
   import { storeAutorisations } from '../stores/autorisations.store';
   import BoutonSuppressionContributeur from '../../ui/BoutonSuppressionContributeur.svelte';
+  import type { Contributeur } from './ChampAvecSuggestions.svelte';
+  import { derived } from 'svelte/store';
 
-  export let droitsModifiables: boolean;
-  export let afficheDroits: boolean = true;
-  export let utilisateur: Utilisateur;
+  interface Props {
+    droitsModifiables: boolean;
+    afficheDroits?: boolean;
+    utilisateur: Contributeur | Utilisateur;
+  }
 
-  let serviceUnique: Service;
-  $: serviceUnique = $store.services[0];
-  $: autorisation = $storeAutorisations.autorisations[utilisateur.id];
+  let {
+    droitsModifiables,
+    afficheDroits = true,
+    utilisateur,
+  }: Props = $props();
+
+  let serviceUnique = derived(store, ($s) => $s.services[0]);
+
+  let autorisation = derived(storeAutorisations, ($s) => {
+    return 'id' in utilisateur ? $s.autorisations[utilisateur.id] : undefined;
+  });
+
+  const estUtilisateur = (u: Contributeur | Utilisateur): u is Utilisateur =>
+    'id' in u;
 
   const changeDroits = async (nouveauDroit: ResumeNiveauDroit) => {
-    const idAutorisation = autorisation!.idAutorisation;
+    const idAutorisation = $autorisation!.idAutorisation;
 
     const { data: autorisationMAJ } = await axios.patch(
-      `/api/service/${serviceUnique.id}/autorisations/${idAutorisation}`,
+      `/api/service/${$serviceUnique.id}/autorisations/${idAutorisation}`,
       { droits: enDroitsSurRubrique(nouveauDroit) }
     );
 
@@ -32,30 +47,29 @@
   <div class="contenu-nom-prenom">
     <Initiales
       valeur={utilisateur.initiales}
-      resumeNiveauDroit={autorisation?.resumeNiveauDroit}
+      resumeNiveauDroit={$autorisation?.resumeNiveauDroit}
     />
     <div class="nom-prenom-poste">
       <div class="nom-contributeur">{utilisateur.prenomNom}</div>
-      {#if utilisateur.poste}
+      {#if 'poste' in utilisateur}
         <div class="poste-contributeur">{utilisateur.poste}</div>
       {/if}
     </div>
   </div>
   <div class="conteneur-actions">
-    {#if afficheDroits && autorisation?.resumeNiveauDroit}
+    {#if afficheDroits && $autorisation?.resumeNiveauDroit && estUtilisateur(utilisateur)}
       <TagNiveauDroit
-        niveau={autorisation.resumeNiveauDroit}
+        niveau={$autorisation.resumeNiveauDroit}
         {droitsModifiables}
-        on:droitsChange={({ detail: nouveauxDroits }) =>
-          changeDroits(nouveauxDroits)}
-        on:choixPersonnalisation={() =>
+        onDroitsChange={(nouveauxDroits) => changeDroits(nouveauxDroits)}
+        onChoixPersonnalisation={() =>
           store.navigation.affichePersonnalisationContributeur(utilisateur)}
       />
     {/if}
 
-    {#if droitsModifiables}
+    {#if droitsModifiables && estUtilisateur(utilisateur)}
       <BoutonSuppressionContributeur
-        on:click={() => store.navigation.afficheEtapeSuppression(utilisateur)}
+        onclick={() => store.navigation.afficheEtapeSuppression(utilisateur)}
       />
     {/if}
   </div>

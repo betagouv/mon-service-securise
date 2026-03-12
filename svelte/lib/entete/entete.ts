@@ -1,14 +1,19 @@
 import Entete from './Entete.svelte';
+import { mount, unmount } from 'svelte';
 
-document.body.addEventListener('svelte-recharge-entete', () => rechargeApp());
+document.body.addEventListener(
+  'svelte-recharge-entete',
+  async () => await rechargeApp()
+);
 
 let app: Entete;
-const rechargeApp = () => {
+const rechargeApp = async () => {
   const conteneur = document.querySelector('.utilisateur-courant');
   if (!conteneur) return;
 
-  app?.$destroy();
-  app = new Entete({ target: conteneur });
+  if (app) await unmount(app);
+
+  app = mount(Entete, { target: conteneur });
 };
 
 export default app!;

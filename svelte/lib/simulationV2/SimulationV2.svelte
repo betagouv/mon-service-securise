@@ -18,11 +18,15 @@
   import { etapeCourante } from '../creationV2/etapes/etapeCourante.store';
   import Modale from '../ui/Modale.svelte';
 
-  export let idService: UUID;
+  interface Props {
+    idService: UUID;
+  }
 
-  let elementModaleConfirmationMigration: Modale;
+  let { idService }: Props = $props();
 
-  let enCoursDeChargement = false;
+  let elementModaleConfirmationMigration: Modale | undefined = $state();
+
+  let enCoursDeChargement = $state(false);
 
   navigationStore.chargeConfigurationEtapes(
     toutesEtapesSimulation,
@@ -34,11 +38,11 @@
     leBrouillon.chargeDonnees(donneesSimulation);
   });
 
-  const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {
-    await metsAJourSimulation(idService, e.detail);
+  const metsAJourPropriete = async (miseAJour: MiseAJour) => {
+    await metsAJourSimulation(idService, miseAJour);
 
     const nomChampModifie = Object.keys(
-      e.detail
+      miseAJour
     )[0] as keyof BrouillonServiceV2;
     const onEstToujoursSurLaQuestionQuiAEnvoyeLaMaj =
       $etapeCourante.questionCourante.clesPropriete.includes(nomChampModifie);
@@ -59,13 +63,13 @@
 </script>
 
 <AssistantServiceV2
-  on:champModifie={metsAJourPropriete}
-  on:finalise={() => elementModaleConfirmationMigration.affiche()}
+  onChampModifie={metsAJourPropriete}
+  onFinalise={async () => elementModaleConfirmationMigration?.affiche()}
   bind:enCoursDeChargement
   titreAssistant="Actualiser votre service"
   titreBoutonFinalise="Passer au nouveau référentiel"
 >
-  <svelte:fragment slot="action-supplementaire">
+  {#snippet action_supplementaire()}
     {#if $etapeCourante.estDerniereQuestion}
       <lab-anssi-lien
         titre="Je reviendrai plus tard"
@@ -74,16 +78,16 @@
         taille="md"
         positionIcone="sans"
         href="/tableauDeBord"
-      />
+      ></lab-anssi-lien>
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </AssistantServiceV2>
 
 <Modale
   id="modale-confirmation-migration"
   bind:this={elementModaleConfirmationMigration}
 >
-  <svelte:fragment slot="contenu">
+  {#snippet contenu()}
     <div class="contenu-modale">
       <h4>Êtes-vous sûr de vouloir passer au nouveau référentiel ?</h4>
       <dsfr-alert
@@ -92,30 +96,30 @@
         hasTitle
         hasDescription
         title="Cette action est irréversible."
-        text="Il ne sera pas possible de revenir en arrière une fois la bascule effectuée. Cependant, les données déjà renseignées (questions inchangées dans l’ajout d’un service, mesures de sécurité, statuts, commentaires, plans d'action, etc) seront automatiquement reprises."
-      />
+        text="Il ne sera pas possible de revenir en arrière une fois la bascule effectuée. Cependant, les données déjà renseignées (questions inchangées dans l’ajout d’un service, mesures de sécurité, statuts, commentaires, plans d'action, etc) seront automatiquement reprises."
+      ></dsfr-alert>
     </div>
-  </svelte:fragment>
-  <svelte:fragment slot="actions">
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  {/snippet}
+  {#snippet actions()}
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre="Annuler"
       variante="secondaire"
       taille="md"
       icone=""
       positionIcone="sans"
-      on:click={() => elementModaleConfirmationMigration.ferme()}
-    />
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      onclick={() => elementModaleConfirmationMigration?.ferme()}
+    ></lab-anssi-bouton>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre="Confirmer le changement"
       variante="primaire"
       taille="md"
       icone=""
       positionIcone="sans"
-      on:click={() => finalise()}
-    />
-  </svelte:fragment>
+      onclick={() => finalise()}
+    ></lab-anssi-bouton>
+  {/snippet}
 </Modale>
 
 <style lang="scss">

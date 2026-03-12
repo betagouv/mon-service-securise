@@ -9,14 +9,19 @@
   import { referentielNiveauxSecurite } from '../../../ui/referentielNiveauxSecurite';
   import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
 
-  export let modeleMesure: ModeleMesureSpecifique;
-  export let referentielTypesService: ReferentielTypesService;
+  interface Props {
+    modeleMesure: ModeleMesureSpecifique;
+    referentielTypesService: ReferentielTypesService;
+  }
 
-  $: servicesAssocies =
+  let { modeleMesure, referentielTypesService }: Props = $props();
+
+  let servicesAssocies = $derived(
     modeleMesure &&
-    $servicesAvecMesuresAssociees.filter((s) =>
-      modeleMesure.idsServicesAssocies.includes(s.id)
-    );
+      $servicesAvecMesuresAssociees.filter((s) =>
+        modeleMesure.idsServicesAssocies.includes(s.id)
+      )
+  );
 </script>
 
 <div class="entete">
@@ -51,7 +56,7 @@
   ]}
   donnees={servicesAssocies}
 >
-  <svelte:fragment slot="cellule" let:donnee let:colonne>
+  {#snippet cellule({ donnee, colonne })}
     {#if colonne.cle === 'nom'}
       <div class="contenu-nom-service">
         <div class="intitule-service">
@@ -80,7 +85,7 @@
         </div>
       </div>
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </Tableau>
 
 <style lang="scss">

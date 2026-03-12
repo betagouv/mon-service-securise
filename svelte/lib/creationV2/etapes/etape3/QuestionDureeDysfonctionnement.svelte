@@ -1,19 +1,25 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
+  }
 
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
-  $: estComplete = !!$leBrouillon.dureeDysfonctionnementAcceptable;
+  $effect(() => {
+    estComplete = !!$leBrouillon.dureeDysfonctionnementAcceptable;
+  });
 
-  $: emetEvenement('champModifie', {
-    dureeDysfonctionnementAcceptable:
-      $leBrouillon.dureeDysfonctionnementAcceptable,
+  $effect(() => {
+    onChampModifie({
+      dureeDysfonctionnementAcceptable:
+        $leBrouillon.dureeDysfonctionnementAcceptable,
+    });
   });
 </script>
 
@@ -21,7 +27,7 @@
   Quelle serait la durée maximale acceptable de dysfonctionnement du système ?*
 
   <span class="indication">Sélectionnez une réponse</span>
-  {#each Object.entries(questionsV2.dureeDysfonctionnementAcceptable) as [idType, { nom }]}
+  {#each Object.entries(questionsV2.dureeDysfonctionnementAcceptable) as [idType, { nom }] (idType)}
     <Radio
       id={idType}
       {nom}

@@ -10,10 +10,14 @@
     niveauSecuriteMinimalRequis,
   } from '../simulationv2.api';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+  }
 
-  let niveauSelectionne: IdNiveauDeSecurite | '';
-  let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+  let { estComplete = $bindable() }: Props = $props();
+
+  let niveauSelectionne: IdNiveauDeSecurite | '' = $state('');
+  let niveauDeSecuriteMinimal: IdNiveauDeSecurite | undefined = $state();
 
   onMount(async () => {
     niveauDeSecuriteMinimal = await niveauSecuriteMinimalRequis(
@@ -34,11 +38,11 @@
     niveauSelectionne = $leBrouillon.niveauSecurite;
   });
 
-  const metsAJour = async (e: CustomEvent<MiseAJour>) => {
-    const niveau = e.detail.niveauSecurite;
+  const metsAJour = async (miseAJour: MiseAJour) => {
+    const niveau = miseAJour.niveauSecurite;
     if (niveau !== undefined) {
       $leBrouillon.niveauSecurite = niveau;
-      await metsAJourSimulation($leBrouillon.id!, e.detail);
+      await metsAJourSimulation($leBrouillon.id!, miseAJour);
     }
   };
 
@@ -49,21 +53,26 @@
     questionsV2.niveauSecurite[niveau]?.position >=
     questionsV2.niveauSecurite[niveauDeSecuriteMinimal]?.position;
 
-  $: estComplete =
-    niveauSelectionne !== '' &&
-    niveauEstConformeAuMinimumRequis(
-      niveauSelectionne,
-      niveauDeSecuriteMinimal
-    );
+  $effect(() => {
+    estComplete =
+      niveauSelectionne !== '' &&
+      !!niveauDeSecuriteMinimal &&
+      niveauEstConformeAuMinimumRequis(
+        niveauSelectionne,
+        niveauDeSecuriteMinimal
+      );
+  });
 </script>
 
 <hr class="separateur-etapier" />
 
-<NiveauDeSecuriteEditable
-  bind:niveauSelectionne
-  {niveauDeSecuriteMinimal}
-  on:champModifie={metsAJour}
-/>
+{#if niveauDeSecuriteMinimal}
+  <NiveauDeSecuriteEditable
+    bind:niveauSelectionne
+    {niveauDeSecuriteMinimal}
+    onChampModifie={metsAJour}
+  />
+{/if}
 
 <style>
   hr {

@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax, class-methods-use-this, no-empty-function */
+/* eslint-disable no-restricted-syntax, class-methods-use-this */
 import { DescriptionServiceV2 } from '../../modeles/descriptionServiceV2.js';
 import {
   AjouteOuRetire,
@@ -31,7 +31,7 @@ export class SelectionVecteurs {
           const ordre = regle![modificateur];
           const serviceEstConcerne =
             (Array.isArray(service[cle]) &&
-              service[cle].includes(modificateur)) ||
+              (service[cle] as string).includes(modificateur)) ||
             service[cle] === modificateur;
 
           if (ordre && serviceEstConcerne) {

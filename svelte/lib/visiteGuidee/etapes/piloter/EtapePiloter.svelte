@@ -1,18 +1,18 @@
 <script lang="ts">
   import ModaleSousEtape from '../../kit/ModaleSousEtape.svelte';
   import { onMount } from 'svelte';
-  import { utilisateurCourant, visiteGuidee } from '../../visiteGuidee.store';
+  import { utilisateurCourant } from '../../visiteGuidee.store';
   import type { SousEtape } from '../../kit/ModaleSousEtape';
 
-  let cibleNomService: HTMLElement;
-  let cibleCentreNotifications: HTMLElement;
-  let cibleNouveauService: HTMLElement;
-  let cibleLignePremierService: HTMLElement;
+  let cibleNomService: HTMLElement | undefined = $state();
+  let cibleCentreNotifications: HTMLElement | undefined = $state();
+  let cibleNouveauService: HTMLElement | undefined = $state();
+  let cibleLignePremierService: HTMLElement | undefined = $state();
 
   const elementDeClasse = (classe: string) =>
     document.getElementsByClassName(classe)[0]! as HTMLElement;
 
-  let sousEtapes: SousEtape[] = [];
+  let sousEtapes: SousEtape[] = $state([]);
   onMount(() => {
     rechargeEtape();
     const derniereEtape = derniereSousEtape();
@@ -70,6 +70,7 @@
         positionnementModale: 'HautGauche',
         margesElementMisEnAvant: '3 3 -3 3',
         callbackInitialeCible: async (cible) => {
+          if (!cible) return;
           const cibleBouton = cible.getElementsByClassName(
             'bouton'
           )[0] as HTMLButtonElement;
@@ -85,6 +86,7 @@
       cible: cibleLignePremierService,
       positionnementModale: 'HautMilieu',
       callbackInitialeCible: async (cible) => {
+        if (!cible) return;
         cible.inert = true;
       },
       titre: 'Collaborez avec votre équipe !',

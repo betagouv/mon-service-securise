@@ -1,10 +1,16 @@
 <script lang="ts">
-  export let echeance: Date;
-  const echeanceFormattee = new Intl.DateTimeFormat('fr-FR', {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-  }).format(echeance);
+  interface Props {
+    echeance: Date;
+  }
+
+  let { echeance }: Props = $props();
+  let echeanceFormattee = $derived(
+    new Intl.DateTimeFormat('fr-FR', {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+    }).format(echeance)
+  );
 </script>
 
 <span class="dateEcheance">

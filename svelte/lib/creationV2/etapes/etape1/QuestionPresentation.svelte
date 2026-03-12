@@ -1,16 +1,20 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-  import ChampDeSaisie from '../../../ui/ChampDeSaisie.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
+  }
 
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
-  $: estComplete = ($leBrouillon.presentation?.length || 0) <= 2000;
-  $: estInvalide =
-    $leBrouillon.presentation && $leBrouillon.presentation.length > 2000;
+  $effect(() => {
+    estComplete = ($leBrouillon.presentation?.length || 0) <= 2000;
+  });
+  let estInvalide = $derived(
+    $leBrouillon.presentation && $leBrouillon.presentation.length > 2000
+  );
 
   const metAJourPresentation = (e: CustomEvent<string>) => {
     $leBrouillon.presentation = e.detail;
@@ -28,12 +32,12 @@
   errorMessage={estInvalide
     ? 'La présentation ne doit pas dépasser 2000 caractères'
     : ''}
-  on:valuechanged={metAJourPresentation}
-  on:blur={() =>
-    emetEvenement('champModifie', {
+  onvaluechanged={metAJourPresentation}
+  onblur={() =>
+    onChampModifie({
       presentation: $leBrouillon.presentation,
     })}
-/>
+></dsfr-textarea>
 
 <style lang="scss">
   dsfr-textarea {

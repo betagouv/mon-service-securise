@@ -1,6 +1,5 @@
 <script lang="ts">
   import Bloc from './composants/Bloc.svelte';
-  import Tuile from './composants/Tuile.svelte';
   import Lien from '../ui/Lien.svelte';
   import CarrouselTuiles from './composants/CarrouselTuiles.svelte';
   import TuileTelechargement from './composants/TuileTelechargement.svelte';

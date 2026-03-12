@@ -1,25 +1,35 @@
 <script lang="ts">
   import ChampTexte from '../ui/ChampTexte.svelte';
-  import { createEventDispatcher, tick } from 'svelte';
   import type { Departement, Organisation } from './inscription.d';
   import { validationChamp } from '../directives/validationChamp';
+  import { tick } from 'svelte';
 
   type OrganisationAvecLabel = Organisation & {
     label: string;
   };
 
-  export let filtreDepartement: Departement | undefined;
-  export let valeur: Organisation | undefined;
-  export let id: string = '';
+  interface Props {
+    filtreDepartement: Departement | undefined;
+    valeur: Organisation | undefined;
+    id?: string;
+    onOrganisationChoisie?: (organisation: Organisation) => void;
+  }
 
-  let saisie: string;
-  let minuteur: NodeJS.Timeout;
+  let {
+    filtreDepartement,
+    valeur = $bindable(),
+    id = '',
+    onOrganisationChoisie,
+  }: Props = $props();
+
+  let saisie: string = $state('');
+  let minuteur: ReturnType<typeof setTimeout>;
   let dureeDebounceEnMs = 300;
-  let suggestions: OrganisationAvecLabel[] = [];
-  let suggestionsVisibles = false;
-  let champValeur: HTMLInputElement;
+  let suggestions: OrganisationAvecLabel[] = $state([]);
+  let suggestionsVisibles = $state(false);
+  let champValeur: HTMLInputElement | undefined = $state();
 
-  const avecTemporisation = (fonction: () => Promise<any>) => {
+  const avecTemporisation = (fonction: () => Promise<void>) => {
     clearTimeout(minuteur);
     minuteur = setTimeout(async () => {
       await fonction();
@@ -63,22 +73,18 @@
     suggestionsVisibles = suggestions.length > 0;
   };
 
-  const envoiEvenement = createEventDispatcher<{
-    organisationChoisie: Organisation;
-  }>();
-
   const choisisOrganisation = (item: OrganisationAvecLabel) => {
     valeur = item;
     saisie = item.label;
     suggestionsVisibles = false;
-    envoiEvenement('organisationChoisie', item);
+    onOrganisationChoisie?.(item);
   };
 
-  $: {
+  $effect(() => {
     if (valeur) {
-      tick().then(() => champValeur.dispatchEvent(new Event('input')));
+      tick().then(() => champValeur?.dispatchEvent(new Event('input')));
     }
-  }
+  });
 
   saisie = valeur ? construisLabel(valeur) : '';
 </script>
@@ -88,20 +94,20 @@
     {id}
     nom="organisation"
     bind:valeur={saisie}
-    on:input={() => avecTemporisation(rechercheSuggestions)}
+    oninput={() => avecTemporisation(rechercheSuggestions)}
     aideSaisie="ex : 13261762000010, Agglomération de Mansart, Société Y"
     autocomplete="off"
   />
   <div class="liste-suggestions" class:visible={suggestionsVisibles}>
-    {#each suggestions as suggestion}
+    {#each suggestions as suggestion, i (i)}
       <div
         class="option"
         role="button"
         tabindex="0"
-        on:click={() => {
+        onclick={() => {
           choisisOrganisation(suggestion);
         }}
-        on:keypress={(e) => {
+        onkeypress={(e) => {
           if (e.code === 'Enter') {
             choisisOrganisation(suggestion);
           }

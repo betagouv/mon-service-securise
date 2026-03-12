@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   export type DonneesModificationAAppliquer = {
     statut: StatutMesure | '';
     modalites: string;
@@ -13,24 +13,32 @@
   import PremiereEtape from './PremiereEtape.svelte';
   import type { ReferentielStatut } from '../../../ui/types';
   import type { StatutMesure } from '../../../modeles/modeleMesure';
-  import { createEventDispatcher } from 'svelte';
   import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
   import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
 
-  export let etapeCourante: number;
-  export let statuts: ReferentielStatut;
-  export let servicesAssocies: ServiceAssocie[];
-  export let boutonSuivantActif: boolean = false;
+  interface Props {
+    etapeCourante: number;
+    statuts: ReferentielStatut;
+    servicesAssocies: ServiceAssocie[];
+    boutonSuivantActif?: boolean;
+    onModificationAAppliquer: (donnees: DonneesModificationAAppliquer) => void;
+  }
 
-  let statutSelectionne: StatutMesure | '' = '';
-  let precision: string = '';
-  let idsServicesSelectionnes: string[] = [];
+  let {
+    etapeCourante = $bindable(),
+    statuts,
+    servicesAssocies,
+    boutonSuivantActif = $bindable(false),
+    onModificationAAppliquer,
+  }: Props = $props();
 
-  $: modificationPrecisionUniquement = !statutSelectionne && !!precision;
+  let statutSelectionne: StatutMesure | '' = $state('');
+  let precision: string = $state('');
+  let idsServicesSelectionnes: string[] = $state([]);
 
-  const emetEvenement = createEventDispatcher<{
-    'modification-a-appliquer': DonneesModificationAAppliquer;
-  }>();
+  let modificationPrecisionUniquement = $derived(
+    !statutSelectionne && !!precision
+  );
 
   export const etapePrecedente = () => {
     if (etapeCourante > 0) etapeCourante--;
@@ -39,14 +47,14 @@
   export const etapeSuivante = () => {
     if (etapeCourante < 3) etapeCourante++;
     else
-      emetEvenement('modification-a-appliquer', {
-        statut: statutSelectionne,
-        modalites: precision,
-        idsServices: idsServicesSelectionnes,
+      onModificationAAppliquer({
+        statut: $state.snapshot(statutSelectionne),
+        modalites: $state.snapshot(precision),
+        idsServices: $state.snapshot(idsServicesSelectionnes),
       });
   };
 
-  $: {
+  $effect(() => {
     switch (etapeCourante) {
       case 1:
         boutonSuivantActif = !!statutSelectionne || !!precision;
@@ -58,7 +66,7 @@
         boutonSuivantActif = true;
         break;
     }
-  }
+  });
 </script>
 
 <EtapierTiroir {etapeCourante} />

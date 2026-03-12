@@ -3,17 +3,29 @@
   import { formatteDifferenceDateRelative } from '../../formatDate/formatDate';
   import { storeNotifications } from '../../ui/stores/notifications.store';
 
-  export let notification: Notification;
+  interface Props {
+    notification: Notification;
+  }
 
-  const enteteNotification =
-    notification.type === 'nouveaute' ? 'Nouveautés' : notification.entete;
-  const cibleCta = notification.type === 'nouveaute' ? '_blank' : '';
-  const relationCta = notification.type === 'nouveaute' ? 'noopener' : '';
-  const actionClick = notification.doitNotifierLecture
-    ? async () => {
-        await storeNotifications.marqueLue(notification.type, notification.id);
-      }
-    : () => {};
+  let { notification }: Props = $props();
+
+  let enteteNotification = $derived(
+    notification.type === 'nouveaute' ? 'Nouveautés' : notification.entete
+  );
+  let cibleCta = $derived(notification.type === 'nouveaute' ? '_blank' : '');
+  let relationCta = $derived(
+    notification.type === 'nouveaute' ? 'noopener' : ''
+  );
+  let actionClick = $derived(
+    notification.doitNotifierLecture
+      ? async () => {
+          await storeNotifications.marqueLue(
+            notification.type,
+            notification.id
+          );
+        }
+      : () => {}
+  );
 </script>
 
 <a
@@ -21,11 +33,11 @@
   href={notification.lien}
   rel={relationCta}
   target={cibleCta}
-  on:click={actionClick}
+  onclick={actionClick}
 >
   <div class="conteneur-pictogramme {notification.type}">
     {#if notification.statutLecture === 'nonLue'}
-      <div class="pastille-non-lue" />
+      <div class="pastille-non-lue"></div>
     {/if}
     <img
       src="/statique/assets/images/notifications/{notification.type}.svg"

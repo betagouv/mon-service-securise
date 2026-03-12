@@ -7,16 +7,18 @@
   import Onglet from '../ui/Onglet.svelte';
   import { storeNotifications } from '../ui/stores/notifications.store';
 
-  let ouvert = false;
-  let elementCentreNotifications: HTMLDivElement;
-  let ongletActif: TypeOnglet = 'aFaire';
+  let ouvert = $state(false);
+  let elementCentreNotifications: HTMLDivElement | undefined = $state();
+  let ongletActif: TypeOnglet = $state('aFaire');
 
   const calculNbNonLue = (notifications: Notification[]) =>
     notifications.filter((n) => n.statutLecture === 'nonLue').length;
 
-  $: nbNonLue = calculNbNonLue($storeNotifications.pourCentreNotifications);
+  let nbNonLue = $derived(
+    calculNbNonLue($storeNotifications.pourCentreNotifications)
+  );
 
-  $: notificationsParOnglet = {
+  let notificationsParOnglet = $derived({
     aFaire: $storeNotifications.pourCentreNotifications.filter(
       (n) => n.type === 'tache'
     ),
@@ -24,7 +26,7 @@
       (n) => n.type === 'nouveaute'
     ),
     toutes: $storeNotifications.pourCentreNotifications,
-  };
+  });
 
   onMount(async () => {
     await storeNotifications.rafraichis();
@@ -33,14 +35,14 @@
 
 <FermetureSurClicEnDehors
   bind:doitEtreOuvert={ouvert}
-  elements={[elementCentreNotifications]}
+  elements={elementCentreNotifications ? [elementCentreNotifications] : []}
 />
 <div
   class="centre-notifications"
   class:ouvert
   bind:this={elementCentreNotifications}
 >
-  <button id="affiche-notifications" on:click={() => (ouvert = !ouvert)}>
+  <button id="affiche-notifications" onclick={() => (ouvert = !ouvert)}>
     {#if nbNonLue}
       <span class="pastille-nb-non-lue">{nbNonLue}</span>
     {/if}
@@ -52,7 +54,7 @@
   <div class="conteneur-notifications">
     <div class="entete-centre-notifications">
       <p class="titre-centre-notifications">Notifications</p>
-      <button id="masque-notifications" on:click={() => (ouvert = false)}>
+      <button id="masque-notifications" onclick={() => (ouvert = false)}>
         Fermer
       </button>
     </div>

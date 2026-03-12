@@ -12,32 +12,40 @@
   import { encode } from 'html-entities';
   import type { ServiceAssocieAUneMesure } from '../../listeMesures.d';
 
-  export let referentielStatuts: ReferentielStatut;
-  export let referentielTypesService: ReferentielTypesService;
+  interface Props {
+    referentielStatuts: ReferentielStatut;
+    referentielTypesService: ReferentielTypesService;
+    onClose?: () => void;
+  }
 
-  let elementModale: Modale;
+  let { referentielStatuts, referentielTypesService, onClose }: Props =
+    $props();
 
-  let servicesAvecMesure: ServiceAssocieAUneMesure[];
-  $: servicesAvecMesure = $modaleRapportStore.modeleMesureGenerale
-    ? $servicesAvecMesuresAssociees
-        .filter((s) => $modaleRapportStore.idServicesModifies?.includes(s.id))
-        .map(({ mesuresAssociees, ...autresDonnees }) => ({
-          ...autresDonnees,
-          mesure: {
-            ...mesuresAssociees[$modaleRapportStore.modeleMesureGenerale!.id],
-            id: $modaleRapportStore.modeleMesureGenerale!.id,
-            type: 'generale',
-          },
-        }))
-    : [];
+  let elementModale: Modale | undefined = $state();
+
+  let servicesAvecMesure: ServiceAssocieAUneMesure[] = $derived(
+    $modaleRapportStore.modeleMesureGenerale
+      ? $servicesAvecMesuresAssociees
+          .filter((s) => $modaleRapportStore.idServicesModifies?.includes(s.id))
+          .map(({ mesuresAssociees, ...autresDonnees }) => ({
+            ...autresDonnees,
+            mesure: {
+              ...mesuresAssociees[$modaleRapportStore.modeleMesureGenerale!.id],
+              id: $modaleRapportStore.modeleMesureGenerale!.id,
+              type: 'generale',
+            },
+          }))
+      : []
+  );
 
   modaleRapportStore.subscribe(({ ouvert }) =>
     ouvert ? elementModale?.affiche() : elementModale?.ferme()
   );
 
-  let titre = '';
-  let contenu = '';
-  $: {
+  let titre = $state('');
+  let contenuTexte = $state('');
+
+  $effect(() => {
     const { champsModifies, idServicesModifies, modeleMesureGenerale } =
       $modaleRapportStore;
     if (champsModifies && idServicesModifies && modeleMesureGenerale) {
@@ -62,23 +70,23 @@
         titre = 'Précision mise à jour avec succès';
       }
 
-      contenu = `${sujetChaine} de la mesure <b>${encode(
+      contenuTexte = `${sujetChaine} de la mesure <b>${encode(
         modeleMesureGenerale!.description
       )}</b> ${verbe} à ${idServicesModifies.length} service${
         servicesMultiples ? 's' : ''
       }.`;
     }
-  }
+  });
 </script>
 
-<Modale bind:this={elementModale} on:close>
-  <svelte:fragment slot="entete">
+<Modale bind:this={elementModale} {onClose}>
+  {#snippet entete()}
     <Toast
       avecOmbre={false}
       {titre}
       avecAnimation={false}
       niveau="succes"
-      {contenu}
+      contenu={contenuTexte}
       avecInterpolationHTMLDangereuse
     />
     <h4>
@@ -86,8 +94,8 @@
       {servicesAvecMesure.length > 1 ? 'services associés' : 'service associé'} à
       cette mesure
     </h4>
-  </svelte:fragment>
-  <svelte:fragment slot="contenu">
+  {/snippet}
+  {#snippet contenu()}
     {#if servicesAvecMesure}
       <TableauServicesAssocies
         servicesAssocies={servicesAvecMesure}
@@ -97,15 +105,15 @@
         avecTypeEtBesoinDeSecurite
       />
     {/if}
-  </svelte:fragment>
-  <svelte:fragment slot="actions">
+  {/snippet}
+  {#snippet actions()}
     <Bouton
       titre="Retour à la liste de mesures"
       type="secondaire"
       taille="moyen"
-      on:click={() => modaleRapportStore.ferme()}
+      onclick={() => modaleRapportStore.ferme()}
     />
-  </svelte:fragment>
+  {/snippet}
 </Modale>
 
 <style lang="scss">

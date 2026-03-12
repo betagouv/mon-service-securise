@@ -5,25 +5,40 @@
   import Avertissement from '../ui/Avertissement.svelte';
   import type { IdNiveauDeSecurite } from '../ui/types';
 
-  export let idService: string;
-  export let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
-  export let niveauSecuriteExistant: IdNiveauDeSecurite | null = null;
-  export let lectureSeule: boolean;
-  export let avecSuggestionBesoinsSecuriteRetrogrades: boolean;
-  export let modeVisiteGuidee: boolean = false;
-
-  let niveauChoisi: IdNiveauDeSecurite;
-  let niveauSurbrillance: IdNiveauDeSecurite;
-
-  const niveauEstRehausse = !niveauSecuriteExistant
-    ? false
-    : ordreDesNiveaux[niveauDeSecuriteMinimal] >
-      ordreDesNiveaux[niveauSecuriteExistant];
-
-  if (niveauSecuriteExistant && !niveauEstRehausse) {
-    niveauChoisi = niveauSecuriteExistant;
-    niveauSurbrillance = niveauSecuriteExistant;
+  interface Props {
+    idService: string;
+    niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+    niveauSecuriteExistant?: IdNiveauDeSecurite | null;
+    lectureSeule: boolean;
+    avecSuggestionBesoinsSecuriteRetrogrades: boolean;
+    modeVisiteGuidee?: boolean;
   }
+
+  let {
+    idService,
+    niveauDeSecuriteMinimal,
+    niveauSecuriteExistant = null,
+    lectureSeule,
+    avecSuggestionBesoinsSecuriteRetrogrades = $bindable(),
+    modeVisiteGuidee = false,
+  }: Props = $props();
+
+  let niveauChoisi: IdNiveauDeSecurite | undefined = $state();
+  let niveauSurbrillance: IdNiveauDeSecurite | undefined = $state();
+
+  let niveauEstRehausse = $derived(
+    !niveauSecuriteExistant
+      ? false
+      : ordreDesNiveaux[niveauDeSecuriteMinimal] >
+          ordreDesNiveaux[niveauSecuriteExistant]
+  );
+
+  $effect(() => {
+    if (niveauSecuriteExistant && !niveauEstRehausse) {
+      niveauChoisi = niveauSecuriteExistant;
+      niveauSurbrillance = niveauSecuriteExistant;
+    }
+  });
 
   const estNiveauTropBas = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] < ordreDesNiveaux[niveauDeSecuriteMinimal];
@@ -31,11 +46,11 @@
   const estNiveauSuperieur = (candidat: IdNiveauDeSecurite) =>
     ordreDesNiveaux[candidat] > ordreDesNiveaux[niveauDeSecuriteMinimal];
 
-  $: {
+  $effect(() => {
     if (niveauChoisi) {
       document.getElementById('diagnostic')?.removeAttribute('disabled');
     }
-  }
+  });
 
   const masqueSuggestionBesoinsSecuriteRetrogrades = async () => {
     await acquitteSuggestionBesoinsSecuriteRetrogrades(idService);
@@ -70,7 +85,7 @@
     <Avertissement
       niveau="avertissement"
       avecBoutonFermeture
-      on:fermeture={masqueSuggestionBesoinsSecuriteRetrogrades}
+      onFermeture={masqueSuggestionBesoinsSecuriteRetrogrades}
     >
       <div>
         <span>
@@ -96,7 +111,7 @@
         class:est-niveau-recommande={niveau.id === niveauDeSecuriteMinimal}
         class:niveau-choisi={niveau.id === niveauChoisi}
         class:boite-en-surbrillance={niveau.id === niveauSurbrillance}
-        on:click={() => {
+        onclick={() => {
           if (!modeVisiteGuidee) niveauSurbrillance = niveau.id;
         }}
       >
@@ -167,7 +182,7 @@
         {/if}
         <span class="chip">Exemples de services numériques</span>
         <ul class="liste-exemples-services">
-          {#each descriptionNiveau.exemplesServicesNumeriques as exemple}
+          {#each descriptionNiveau.exemplesServicesNumeriques as exemple, i (i)}
             <li>{exemple}</li>
           {/each}
         </ul>
@@ -198,7 +213,7 @@
             <p>{@html descriptionNiveau.securisation[0]}</p>
           {:else}
             <ul>
-              {#each descriptionNiveau.securisation as securisation}
+              {#each descriptionNiveau.securisation as securisation, i (i)}
                 <li>{@html securisation}</li>
               {/each}
             </ul>
@@ -213,7 +228,7 @@
             Homologation
           </summary>
           <ul>
-            {#each descriptionNiveau.homologation as homologation}
+            {#each descriptionNiveau.homologation as homologation, i (i)}
               <li>{@html homologation}</li>
             {/each}
           </ul>
@@ -224,7 +239,7 @@
               type="button"
               class="fleche-navigation"
               class:masque={!niveauPrecedent}
-              on:click={() => {
+              onclick={() => {
                 if (niveauPrecedent) niveauSurbrillance = niveauPrecedent.id;
               }}
             >
@@ -232,12 +247,13 @@
             </button>
           </div>
           <div class="pagination">
-            {#each donneesNiveauxDeSecurite as niveau}
+            {#each donneesNiveauxDeSecurite as niveau (niveau.id)}
               <button
                 type="button"
+                aria-label={`Aller au niveau ${niveau.titreNiveau}`}
                 class:actif={niveauSurbrillance === niveau.id}
-                on:click={() => (niveauSurbrillance = niveau.id)}
-              />
+                onclick={() => (niveauSurbrillance = niveau.id)}
+              ></button>
             {/each}
           </div>
           <div class="suivant">
@@ -245,7 +261,7 @@
               type="button"
               class="fleche-navigation"
               class:masque={!niveauSuivant}
-              on:click={() => {
+              onclick={() => {
                 if (niveauSuivant) niveauSurbrillance = niveauSuivant.id;
               }}
             >

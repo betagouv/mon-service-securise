@@ -16,18 +16,28 @@
   import Toaster from '../ui/Toaster.svelte';
   import { brouillonsService } from './stores/brouillonsService.store';
 
-  export let estSuperviseur: boolean;
-  export let modeVisiteGuidee: boolean;
-  export let dateInscriptionUtilisateur: Date;
-  export let avecPromotionDeMsc: boolean;
-  export let profilUtilisateurComplet: boolean = true;
+  interface Props {
+    estSuperviseur: boolean;
+    modeVisiteGuidee: boolean;
+    dateInscriptionUtilisateur: Date;
+    avecPromotionDeMsc: boolean;
+    profilUtilisateurComplet?: boolean;
+  }
 
-  let enCoursChargement = true;
+  let {
+    estSuperviseur,
+    modeVisiteGuidee,
+    dateInscriptionUtilisateur,
+    avecPromotionDeMsc,
+    profilUtilisateurComplet = true,
+  }: Props = $props();
 
-  let nombreServices: number;
-  let nombreServicesHomologues: number;
-  let nombreHomologationsExpirees: number;
-  let indiceCyberMoyen: IndiceCyberMoyen | undefined;
+  let enCoursChargement = $state(true);
+
+  let nombreServices: number | undefined = $state();
+  let nombreServicesHomologues: number | undefined = $state();
+  let nombreHomologationsExpirees: number | undefined = $state();
+  let indiceCyberMoyen: IndiceCyberMoyen | undefined = $state();
 
   onMount(async () => {
     if (modeVisiteGuidee && profilUtilisateurComplet) {
@@ -88,13 +98,15 @@
       <ChargementEnCours />
     </div>
   {:else}
-    <BandeauInfo
-      {nombreServices}
-      {nombreServicesHomologues}
-      {nombreHomologationsExpirees}
-      {indiceCyberMoyen}
-      {estSuperviseur}
-    />
+    {#if nombreServices !== undefined && nombreServicesHomologues !== undefined && nombreHomologationsExpirees !== undefined}
+      <BandeauInfo
+        {nombreServices}
+        {nombreServicesHomologues}
+        {nombreHomologationsExpirees}
+        {indiceCyberMoyen}
+        {estSuperviseur}
+      />
+    {/if}
     <BandeauFiltres />
     <TableauDesServices indicesCyberCharges={indiceCyberMoyen !== undefined} />
     <BandeauBlog {dateInscriptionUtilisateur} {avecPromotionDeMsc} />

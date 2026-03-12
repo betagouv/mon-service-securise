@@ -1,17 +1,19 @@
 import ExplicationUtilisationMFA from './ExplicationUtilisationMFA.svelte';
+import { mount, unmount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-explication-utilisation-mfa',
-  () => rechargeApp()
+  async () => await rechargeApp()
 );
 
 let app: ExplicationUtilisationMFA;
-const rechargeApp = () => {
+const rechargeApp = async () => {
   const conteneur = document.querySelector('#explication-utilisation-mfa');
   if (!conteneur) return;
 
-  app?.$destroy();
-  app = new ExplicationUtilisationMFA({ target: conteneur });
+  if (app) await unmount(app);
+
+  app = mount(ExplicationUtilisationMFA, { target: conteneur });
 };
 
 export default app!;

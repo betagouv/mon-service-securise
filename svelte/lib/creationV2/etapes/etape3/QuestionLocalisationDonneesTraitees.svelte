@@ -1,23 +1,25 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
-  import CheckboxIllustree from '../etape2/CheckboxIllustree.svelte';
-  import type {
-    LocalisationDonneesTraitees,
-    SpecificiteProjet,
-  } from '../../creationV2.types';
+  import type { LocalisationDonneesTraitees } from '../../creationV2.types';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
+  }
 
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
-  $: estComplete = !!$leBrouillon.localisationDonneesTraitees;
+  $effect(() => {
+    estComplete = !!$leBrouillon.localisationDonneesTraitees;
+  });
 
-  $: emetEvenement('champModifie', {
-    localisationDonneesTraitees: $leBrouillon.localisationDonneesTraitees,
+  $effect(() => {
+    onChampModifie({
+      localisationDonneesTraitees: $leBrouillon.localisationDonneesTraitees,
+    });
   });
 
   const illustrations: Record<LocalisationDonneesTraitees, string> = {
@@ -33,7 +35,7 @@
 <label for="localisations-donnees-traitees" class="titre-question">
   Où sont localisées les données traitées ?*
   <span class="indication">Sélectionnez une réponse</span>
-  {#each localisations as [idType, { nom }]}
+  {#each localisations as [idType, { nom }] (idType)}
     {@const illustration = `/statique/assets/images/localisationDonneesTraitees/${illustrations[idType]}`}
     <Radio
       id={idType}

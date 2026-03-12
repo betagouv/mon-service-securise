@@ -21,16 +21,20 @@
   import type { CapaciteAjoutDeMesure } from '../listeMesures.d';
   import { messageDepassement } from './rapportTeleversementModelesMesureSpecifique.messages';
 
-  export let capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+  interface Props {
+    capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+  }
 
-  let rapport: RapportDetaille;
-  let resume: ResumeRapportTeleversement;
+  let { capaciteAjoutDeMesure }: Props = $props();
+
+  let rapport: RapportDetaille | undefined = $state();
+  let resume: ResumeRapportTeleversement | undefined = $state();
 
   let etatReseau:
     | 'CHARGEMENT_DU_RAPPORT'
     | 'RAPPORT_OBTENU'
     | 'IMPORT_EN_COURS'
-    | 'IMPORT_FINI' = 'CHARGEMENT_DU_RAPPORT';
+    | 'IMPORT_FINI' = $state('CHARGEMENT_DU_RAPPORT');
 
   onMount(async () => {
     const resultat = await recupereRapportDetaille();
@@ -73,8 +77,8 @@
             depassement.nombreMaximum
           )
         : rapport.modelesTeleverses.length === 0
-        ? 'Aucune ligne détectée'
-        : null,
+          ? 'Aucune ligne détectée'
+          : null,
     };
 
     etatReseau = 'RAPPORT_OBTENU';
@@ -91,12 +95,12 @@
   <RapportTeleversementGenerique
     titreDuRapport="Rapport du téléversement des mesures"
     {resume}
-    on:confirmeTeleversement={async () => {
+    onConfirmeTeleversement={async () => {
       etatReseau = 'IMPORT_EN_COURS';
       await confirmeTeleversementEnCours();
       enleveParametreDeUrl('rapportTeleversement');
     }}
-    on:retenteTeleversement={async () => {
+    onRetenteTeleversement={async () => {
       enleveParametreDeUrl('rapportTeleversement');
       await supprimeTeleversementEnCours();
       etatReseau = 'IMPORT_FINI';
@@ -105,35 +109,38 @@
       });
       enleveParametreDeUrl('rapportTeleversement');
     }}
-    on:annule={async () => {
+    onAnnule={async () => {
       etatReseau = 'IMPORT_FINI';
       enleveParametreDeUrl('rapportTeleversement');
       await supprimeTeleversementEnCours();
     }}
   >
-    <table slot="tableau-du-rapport">
-      <thead>
-        <tr>
-          <th scope="colgroup">État</th>
-          <th scope="colgroup" class="bordure-droite">Raison de l'erreur</th>
-          <th>Ligne</th>
-          <th>Intitulé de la mesure</th>
-          <th>Description de la mesure</th>
-          <th>Catégorie</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each rapport.modelesTeleverses.toSorted(triRapportDetaille) as ligne, idx (idx)}
-          <LigneDeRapport {ligne} />
-        {/each}
-      </tbody>
-    </table>
+    {#snippet tableau_du_rapport()}
+      <table>
+        <thead>
+          <tr>
+            <th scope="colgroup">État</th>
+            <th scope="colgroup" class="bordure-droite">Raison de l'erreur</th>
+            <th>Ligne</th>
+            <th>Intitulé de la mesure</th>
+            <th>Description de la mesure</th>
+            <th>Catégorie</th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each rapport?.modelesTeleverses.toSorted(triRapportDetaille) as ligne, idx (idx)}
+            <LigneDeRapport {ligne} />
+          {/each}
+        </tbody>
+      </table>
+    {/snippet}
   </RapportTeleversementGenerique>
 {:else if etatReseau === 'IMPORT_EN_COURS'}
   <ModaleDeProgression
     delaiRafraichissement={50}
     apiGetProgression={async () => await fausseProgression()}
-    on:fini={async () => {
+    onFini={async () => {
+      if (!rapport) return;
       const nb = rapport.modelesTeleverses.length;
       toasterStore.succes(
         singulierPluriel(

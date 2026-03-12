@@ -5,10 +5,11 @@ import type {
   RisquesProps,
   TypeRisque,
 } from './risques.d';
+import { mount, unmount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-risques',
-  (e: CustomEvent<RisquesProps>) => rechargeApp({ ...e.detail })
+  async (e: CustomEvent<RisquesProps>) => await rechargeApp({ ...e.detail })
 );
 
 let app: Risques;
@@ -17,7 +18,7 @@ export const convertisDonneesRisqueGeneral = (
   donneesRisque: DonneesRisque
 ) => ({
   ...donneesRisque,
-  commentaire: donneesRisque.commentaire,
+  commentaire: donneesRisque.commentaire ?? '',
   niveauGravite: donneesRisque.niveauGravite ?? '',
   niveauVraisemblance: donneesRisque.niveauVraisemblance ?? '',
   type: 'GENERAL' as TypeRisque,
@@ -28,20 +29,21 @@ export const convertisDonneesRisqueSpecifique = (
 ) => ({
   ...donneesRisque,
   intitule: donneesRisque.intitule,
-  commentaire: donneesRisque.commentaire,
-  description: donneesRisque.description,
+  commentaire: donneesRisque.commentaire ?? '',
+  description: donneesRisque.description ?? '',
   niveauGravite: donneesRisque.niveauGravite ?? '',
   niveauVraisemblance: donneesRisque.niveauVraisemblance ?? '',
   type: 'SPECIFIQUE' as TypeRisque,
 });
 
-const rechargeApp = (props: RisquesProps) => {
-  app?.$destroy();
+const rechargeApp = async (props: RisquesProps) => {
+  if (app) await unmount(app);
+
   const tousRisques: Risque[] = [
     ...props.risques.risquesGeneraux.map(convertisDonneesRisqueGeneral),
     ...props.risques.risquesSpecifiques.map(convertisDonneesRisqueSpecifique),
   ];
-  app = new Risques({
+  app = mount(Risques, {
     target: document.getElementById('conteneur-risques')!,
     props: { ...props, risques: tousRisques },
   });

@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { MiseAJour } from './creationV2.api';
-  import { createEventDispatcher } from 'svelte';
   import JaugeDeProgression from './JaugeDeProgression.svelte';
   import { navigationStore } from './etapes/navigation.store';
   import { etapeCourante } from './etapes/etapeCourante.store';
@@ -8,21 +7,30 @@
   import Switch from '../ui/Switch.svelte';
   import Toaster from '../ui/Toaster.svelte';
 
-  export let enCoursDeChargement: boolean;
-  export let titreAssistant: string;
-  export let titreBoutonFinalise: string;
-  let questionCouranteEstComplete = false;
-  let modeRapide = false;
+  interface Props {
+    enCoursDeChargement: boolean;
+    titreAssistant: string;
+    titreBoutonFinalise: string;
+    action_supplementaire?: import('svelte').Snippet;
+    onChampModifie?: (miseAJour: MiseAJour) => Promise<void>;
+    onFinalise?: () => Promise<void>;
+  }
 
-  const emetEvenement = createEventDispatcher<{
-    champModifie: MiseAJour;
-    finalise: void;
-  }>();
+  let {
+    enCoursDeChargement = $bindable(),
+    titreAssistant,
+    titreBoutonFinalise,
+    action_supplementaire,
+    onChampModifie,
+    onFinalise,
+  }: Props = $props();
+  let questionCouranteEstComplete = $state(false);
+  let modeRapide = $state(false);
 
-  const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {
+  const metsAJourPropriete = async (miseAJour: MiseAJour) => {
     if (!questionCouranteEstComplete) return;
 
-    emetEvenement('champModifie', e.detail);
+    await onChampModifie?.(miseAJour);
   };
 
   const suivant = () => {
@@ -32,9 +40,7 @@
       ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const finalise = async () => {
-    emetEvenement('finalise');
-  };
+  const SvelteComponent = $derived($etapeCourante.questionCourante.composant);
 </script>
 
 <Toaster />
@@ -58,7 +64,7 @@
         nextStep={$etapeCourante.titreEtapeSuivante}
         currentStep={$etapeCourante.numero}
         stepCount={$etapeCourante.numeroMax}
-      />
+      ></dsfr-stepper>
       {#if $etapeCourante.nombreQuestions > 1}
         <hr />
         {#if $etapeCourante.estPremiereQuestion && !$navigationStore.modeRapide}
@@ -68,10 +74,9 @@
         {/if}
         <JaugeDeProgression />
       {/if}
-      <svelte:component
-        this={$etapeCourante.questionCourante.composant}
+      <SvelteComponent
         bind:estComplete={questionCouranteEstComplete}
-        on:champModifie={metsAJourPropriete}
+        onChampModifie={metsAJourPropriete}
       />
     </div>
     <div
@@ -87,22 +92,22 @@
             taille="md"
             positionIcone="sans"
             href="/tableauDeBord"
-          />
+          ></lab-anssi-lien>
         {:else}
-          <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+          <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
           <lab-anssi-bouton
             titre="Précédent"
             variante="tertiaire-sans-bordure"
             taille="md"
             icone="arrow-left-line"
             positionIcone="gauche"
-            on:click={navigationStore.precedent}
-          />
+            onclick={navigationStore.precedent}
+          ></lab-anssi-bouton>
         {/if}
 
-        <slot name="action-supplementaire" />
+        {@render action_supplementaire?.()}
 
-        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
         <lab-anssi-bouton
           titre={$etapeCourante.estDerniereQuestion
             ? titreBoutonFinalise
@@ -114,9 +119,11 @@
             : 'arrow-right-line'}
           positionIcone="droite"
           actif={questionCouranteEstComplete && !enCoursDeChargement}
-          on:click={async () =>
-            $etapeCourante.estDerniereQuestion ? await finalise() : suivant()}
-        />
+          onclick={async () =>
+            $etapeCourante.estDerniereQuestion
+              ? await onFinalise?.()
+              : suivant()}
+        ></lab-anssi-bouton>
         <div class="info-enregistrement-automatique">
           <em>Brouillon enregistré automatiquement</em>
         </div>
@@ -132,7 +139,7 @@
             bind:actif={modeRapide}
             labelActif="⚡ Mode rapide"
             labelInactif="⚡ Mode rapide"
-            on:change={() => {
+            onChange={() => {
               navigationStore.reprendreEditionDe($leBrouillon, modeRapide);
             }}
           />
@@ -145,7 +152,7 @@
         <img alt="" src={$etapeCourante.illustration} />
         {#if !modeRapide}
           <h3>Pourquoi demander ces informations ?</h3>
-          {#each $etapeCourante.questionCourante.explications as explication}
+          {#each $etapeCourante.questionCourante.explications as explication, index (index)}
             <p>{explication}</p>
           {/each}
         {/if}

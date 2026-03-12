@@ -11,11 +11,11 @@ export const validationChampDsfr = (
 ) => {
   if (!messages.invalide || !messages.valide) return;
 
-  let messageErreur = document.createElement('span');
+  const messageErreur = document.createElement('span');
   messageErreur.classList.add('erreur-champ-saisie-dsfr');
   messageErreur.style.display = 'none';
 
-  let messageValide = document.createElement('span');
+  const messageValide = document.createElement('span');
   messageValide.classList.add('valide-champ-saisie-dsfr');
   messageValide.style.display = 'none';
 

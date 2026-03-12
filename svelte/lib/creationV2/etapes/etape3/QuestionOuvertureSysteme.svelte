@@ -1,18 +1,24 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
+  }
 
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
-  $: estComplete = !!$leBrouillon.ouvertureSysteme;
+  $effect(() => {
+    estComplete = !!$leBrouillon.ouvertureSysteme;
+  });
 
-  $: emetEvenement('champModifie', {
-    ouvertureSysteme: $leBrouillon.ouvertureSysteme,
+  $effect(() => {
+    onChampModifie({
+      ouvertureSysteme: $leBrouillon.ouvertureSysteme,
+    });
   });
 </script>
 
@@ -20,7 +26,7 @@
   Quelle est l'ouverture du système ?*
 
   <span class="indication">Sélectionnez une réponse</span>
-  {#each Object.entries(questionsV2.ouvertureSysteme) as [idType, { nom, exemple }]}
+  {#each Object.entries(questionsV2.ouvertureSysteme) as [idType, { nom, exemple }] (idType)}
     <Radio
       id={idType}
       {nom}

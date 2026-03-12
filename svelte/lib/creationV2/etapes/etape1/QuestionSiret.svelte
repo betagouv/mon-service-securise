@@ -1,13 +1,16 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { entiteDeUtilisateur, leBrouillon } from '../brouillon.store';
   import ChampOrganisation from '../../../ui/ChampOrganisation.svelte';
   import { brouillonAEteCreeStore } from '../../brouillonAEteCree.store';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
+  }
 
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   let doitForcerEvenement = false;
 
@@ -18,17 +21,18 @@
         $leBrouillon.siret = $entiteDeUtilisateur.siret;
       }
       if (existe && doitForcerEvenement && estComplete) {
-        emetEvenement('champModifie', { siret: $leBrouillon.siret });
+        onChampModifie({ siret: $leBrouillon.siret });
       }
     });
   });
 
-  $: estComplete = !!$leBrouillon.id && /^\d{14}$/.test($leBrouillon.siret);
+  $effect(() => {
+    estComplete = !!$leBrouillon.id && /^\d{14}$/.test($leBrouillon.siret);
+  });
 
-  $: {
-    if (estComplete)
-      emetEvenement('champModifie', { siret: $leBrouillon.siret });
-  }
+  $effect(() => {
+    if (estComplete) onChampModifie({ siret: $leBrouillon.siret });
+  });
 </script>
 
 <label for="siret" class="titre-question">

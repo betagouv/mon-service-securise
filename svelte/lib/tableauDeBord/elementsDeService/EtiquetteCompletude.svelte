@@ -1,13 +1,17 @@
 <script lang="ts">
-  export let pourcentageCompletude: number;
-  export let idService: string;
+  interface Props {
+    pourcentageCompletude: number;
+    idService: string;
+  }
 
-  const valeurCompletude = pourcentageCompletude || 0;
+  let { pourcentageCompletude, idService }: Props = $props();
+
+  let valeurCompletude = $derived(pourcentageCompletude || 0);
 </script>
 
 <a class="conteneur-completude" href="/service/{idService}/mesures">
   <span>{Math.round(valeurCompletude * 100)}%</span>
-  <progress max="1" value={valeurCompletude} />
+  <progress max="1" value={valeurCompletude}></progress>
 </a>
 
 <style>

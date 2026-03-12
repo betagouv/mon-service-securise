@@ -1,28 +1,34 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  interface Props {
+    actif: boolean;
+    id: string;
+    labelActif?: string;
+    labelInactif?: string;
+    onChange: (actif: boolean) => void;
+  }
 
-  export let actif: boolean;
-  export let id: string;
-  export let labelActif = 'Activé';
-  export let labelInactif = 'Désactivé';
-
-  const emetEvenement = createEventDispatcher<{
-    change: boolean;
-  }>();
+  let {
+    actif = $bindable(),
+    id,
+    labelActif = 'Activé',
+    labelInactif = 'Désactivé',
+    onChange,
+  }: Props = $props();
 
   const gereChangementEtat = () => {
     actif = !actif;
-    emetEvenement('change', actif);
+    onChange(actif);
   };
 </script>
 
 <div>
   <button
     type="button"
+    aria-label={actif ? labelActif : labelInactif}
     role="switch"
     aria-checked={actif}
     {id}
-    on:click={gereChangementEtat}
+    onclick={gereChangementEtat}
   >
   </button>
   <label for={id}>{actif ? labelActif : labelInactif}</label>

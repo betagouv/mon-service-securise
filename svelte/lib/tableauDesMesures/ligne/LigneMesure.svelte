@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import { encode } from 'html-entities';
   import type {
     MesureGenerale,
@@ -7,6 +6,7 @@
   } from '../tableauDesMesures.d';
   import CartoucheReferentiel from '../../ui/CartoucheReferentiel.svelte';
   import {
+    type EcheanceMesure,
     type PrioriteMesure,
     Referentiel,
     type ReferentielPriorite,
@@ -25,41 +25,61 @@
   import SelectionResponsables from '../../ui/SelectionResponsables.svelte';
   import CartoucheThematique from '../../ui/CartoucheThematique.svelte';
   import { partieResponsable } from './mapPartieResponsable';
+  import type { IdUtilisateur } from '../../mesure/mesure.d';
 
   type IdDom = string;
 
-  export let id: IdDom;
-  export let referentiel: Referentiel;
-  export let indispensable = false;
-  export let mesure: MesureSpecifique | MesureGenerale;
-  export let nom: string;
-  export let categorie: string;
-  export let referentielStatuts: ReferentielStatut;
-  export let estLectureSeule: boolean;
-  export let affichePlanAction: boolean;
-  export let priorites: ReferentielPriorite;
+  interface Props {
+    id: IdDom;
+    referentiel: Referentiel;
+    indispensable?: boolean;
+    mesure: MesureSpecifique | MesureGenerale;
+    nom: string;
+    categorie: string;
+    referentielStatuts: ReferentielStatut;
+    estLectureSeule: boolean;
+    affichePlanAction: boolean;
+    priorites: ReferentielPriorite;
+    onModificationResponsables: (responsables: IdUtilisateur[]) => void;
+    onModificationStatut: (statut: StatutMesure) => void;
+    onModificationPriorite: (priorite: PrioriteMesure | undefined) => void;
+    onModificationEcheance: (echeance: EcheanceMesure) => void;
+    onclick: (e: MouseEvent) => void;
+  }
 
-  const dispatch = createEventDispatcher<{
-    modificationStatut: { statut: StatutMesure };
-    modificationPriorite: { priorite: PrioriteMesure | undefined };
-  }>();
+  let {
+    id,
+    referentiel,
+    indispensable = false,
+    mesure = $bindable(),
+    nom,
+    categorie,
+    referentielStatuts,
+    estLectureSeule,
+    affichePlanAction,
+    priorites,
+    onModificationResponsables,
+    onModificationStatut,
+    onModificationPriorite,
+    onModificationEcheance,
+    onclick,
+  }: Props = $props();
 
-  let texteSurligne = '';
-  $: {
+  let texteSurligne = $derived.by(() => {
     const rechercheEncapsuleAvecMarqueur = nom.replace(
       new RegExp($rechercheTextuelle, 'ig'),
       (texte: string) => ($rechercheTextuelle ? `_%%${texte}%%_` : texte)
     );
     const nomCompletEncodeAvecMarqueur = encode(rechercheEncapsuleAvecMarqueur);
-    texteSurligne = nomCompletEncodeAvecMarqueur.replace(
+    return nomCompletEncodeAvecMarqueur.replace(
       new RegExp(/_%%(.*?)%%_/, 'ig'),
       (_, texte: string) => `<mark>${texte}</mark>`
     );
-  }
+  });
 </script>
 
 <tr class="ligne-de-mesure">
-  <td class="titre-mesure" on:click on:keypress>
+  <td class="titre-mesure" {onclick}>
     {#if mesure.partieResponsable}
       <p class="partie-responsable">
         {partieResponsable[mesure.partieResponsable]}
@@ -83,40 +103,38 @@
   {#if affichePlanAction}
     <td>
       <SelectionPriorite
-        bind:priorite={mesure.priorite}
+        priorite={mesure.priorite}
         {id}
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
         {priorites}
-        on:input={(e) =>
-          dispatch('modificationPriorite', { priorite: e.detail.priorite })}
+        onPrioriteModifiee={(priorite) => onModificationPriorite(priorite)}
       />
     </td>
     <td>
       <SelectionEcheance
-        bind:echeance={mesure.echeance}
+        echeance={mesure.echeance}
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
-        on:modificationEcheance
+        {onModificationEcheance}
       />
     </td>
     <td>
       <SelectionResponsables
-        bind:responsables={mesure.responsables}
+        responsables={mesure.responsables}
         estLectureSeule={estLectureSeule ||
           !planDActionDisponible(mesure.statut)}
-        on:modificationResponsables
+        {onModificationResponsables}
       />
     </td>
   {/if}
   <td>
     <SelectionStatut
-      bind:statut={mesure.statut}
+      statut={mesure.statut}
       {id}
       {estLectureSeule}
       {referentielStatuts}
-      on:input={(e) =>
-        dispatch('modificationStatut', { statut: e.detail.statut })}
+      onStatutChange={(statut) => onModificationStatut(statut)}
       requis
     />
   </td>
@@ -128,7 +146,7 @@
     border: 1px solid var(--liseres-fonce);
   }
 
-  .ligne-de-mesure:has(.titre-mesure:hover) {
+  .ligne-de-mesure:has(:global(.titre-mesure:hover)) {
     box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
   }
 

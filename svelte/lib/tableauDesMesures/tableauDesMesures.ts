@@ -2,10 +2,12 @@ import TableauDesMesures from './TableauDesMesures.svelte';
 import type { TableauDesMesuresProps } from './tableauDesMesures.d';
 
 import { mesures } from './stores/mesures.store';
+import { mount, unmount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-tableau-mesures',
-  (e: CustomEvent<TableauDesMesuresProps>) => rechargeApp({ ...e.detail })
+  async (e: CustomEvent<TableauDesMesuresProps>) =>
+    await rechargeApp({ ...e.detail })
 );
 
 const reinitialiseStore = () => {
@@ -13,10 +15,11 @@ const reinitialiseStore = () => {
 };
 
 let app: TableauDesMesures;
-const rechargeApp = (props: TableauDesMesuresProps) => {
-  app?.$destroy();
+const rechargeApp = async (props: TableauDesMesuresProps) => {
+  if (app) await unmount(app);
+
   reinitialiseStore();
-  app = new TableauDesMesures({
+  app = mount(TableauDesMesures, {
     target: document.getElementById('tableau-des-mesures')!,
     props,
   });

@@ -6,10 +6,11 @@
   import type { ModeleDeMesure } from '../listeMesures.d';
   import CartoucheThematique from '../../ui/CartoucheThematique.svelte';
 
-  export let modeleDeMesure: Omit<
-    ModeleDeMesure,
-    'type' | 'idsServicesAssocies'
-  >;
+  interface Props {
+    modeleDeMesure: Omit<ModeleDeMesure, 'type' | 'idsServicesAssocies'>;
+  }
+
+  let { modeleDeMesure }: Props = $props();
 </script>
 
 <p class="description">{modeleDeMesure.description}</p>

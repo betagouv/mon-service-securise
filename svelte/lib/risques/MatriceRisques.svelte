@@ -6,10 +6,19 @@
     MatriceNiveauxRisque,
   } from './risques.d';
 
-  export let risques: Risque[];
-  export let niveauxGravite: ReferentielGravites;
-  export let niveauxVraisemblance: ReferentielVraisemblances;
-  export let matriceNiveauxRisque: MatriceNiveauxRisque;
+  interface Props {
+    risques: Risque[];
+    niveauxGravite: ReferentielGravites;
+    niveauxVraisemblance: ReferentielVraisemblances;
+    matriceNiveauxRisque: MatriceNiveauxRisque;
+  }
+
+  let {
+    risques,
+    niveauxGravite,
+    niveauxVraisemblance,
+    matriceNiveauxRisque,
+  }: Props = $props();
 
   type Cellule = Risque[] | null;
 
@@ -41,7 +50,7 @@
     });
     return resultat;
   };
-  $: grille = calculeGrille(risques);
+  let grille = $derived(calculeGrille(risques));
 
   const niveauRisqueCellule = (colonne: number, ligne: number) => {
     return matriceNiveauxRisque[colonne + 1][4 - ligne];
@@ -72,7 +81,7 @@
     <span>4</span>
   </div>
   <div class="conteneur-matrice">
-    {#each new Array(16).fill(0) as _, index}
+    {#each new Array(16).fill(0) as _, index (index)}
       {@const x = index % 4}
       {@const y = Math.floor(index / 4)}
       {@const classe = niveauRisqueCellule(x, y)}

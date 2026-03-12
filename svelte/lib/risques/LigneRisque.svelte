@@ -7,35 +7,49 @@
   } from './risques.d';
   import CartoucheReferentiel from '../ui/CartoucheReferentiel.svelte';
   import { Referentiel } from '../ui/types.d';
-  import { createEventDispatcher } from 'svelte';
   import SelectionGravite from './SelectionGravite.svelte';
   import { intituleRisque, risqueAMettreAJour } from './risques';
   import SelectionVraisemblance from './SelectionVraisemblance.svelte';
   import IdentifiantRisque from './IdentifiantRisque.svelte';
   import Switch from '../ui/Switch.svelte';
+  import { untrack } from 'svelte';
 
-  export let categories: ReferentielCategories;
-  export let niveauxGravite: ReferentielGravites;
-  export let niveauxVraisemblance: ReferentielVraisemblances;
-  export let estLectureSeule: boolean;
-  export let risque: Risque;
+  interface Props {
+    categories: ReferentielCategories;
+    niveauxGravite: ReferentielGravites;
+    niveauxVraisemblance: ReferentielVraisemblances;
+    estLectureSeule: boolean;
+    risque: Risque;
+    onMetAJourRisque: (risque: Risque) => void;
+    onclick: (e: MouseEvent) => void;
+  }
 
-  $: estSpecifiqueAMettreAJour = risqueAMettreAJour(risque);
+  let {
+    categories,
+    niveauxGravite,
+    niveauxVraisemblance,
+    estLectureSeule,
+    risque: r,
+    onMetAJourRisque,
+    onclick,
+  }: Props = $props();
 
-  const emet = createEventDispatcher<{
-    metAJourRisque: null;
-  }>();
+  let risque = $state<Risque>(untrack(() => r));
 
-  const metAJourRisque = () => {
-    emet('metAJourRisque');
-  };
+  $effect(() => {
+    if (r) {
+      risque = r;
+    }
+  });
+
+  let estSpecifiqueAMettreAJour = $derived(risqueAMettreAJour(risque));
 </script>
 
 <tr>
   <td>
     <IdentifiantRisque {risque} />
   </td>
-  <td class="intitule" class:inactif={risque.desactive} on:click>
+  <td class="intitule" class:inactif={risque.desactive} {onclick}>
     <p
       class="intitule-risques"
       title={estSpecifiqueAMettreAJour ? 'Ce risque doit être mis à jour' : ''}
@@ -63,7 +77,7 @@
         risque.desactive}
       referentielGravites={niveauxGravite}
       bind:niveauGravite={risque.niveauGravite}
-      on:change={metAJourRisque}
+      onchange={() => onMetAJourRisque(risque)}
     />
   </td>
   <td>
@@ -73,7 +87,7 @@
         risque.desactive}
       referentielVraisemblances={niveauxVraisemblance}
       bind:niveauVraisemblance={risque.niveauVraisemblance}
-      on:change={metAJourRisque}
+      onchange={() => onMetAJourRisque(risque)}
     />
   </td>
   <td class="actions">
@@ -81,9 +95,9 @@
       <Switch
         actif={!risque.desactive}
         id="switch-{risque.id}"
-        on:change={(e) => {
-          risque.desactive = !e.detail;
-          metAJourRisque();
+        onChange={(actif) => {
+          risque.desactive = !actif;
+          onMetAJourRisque(risque);
         }}
       />
     {/if}
@@ -107,7 +121,7 @@
     border: 1px solid #cbd5e1;
   }
 
-  tr:has(.intitule:hover) {
+  tr:has(:global(.intitule:hover)) {
     box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
   }
 

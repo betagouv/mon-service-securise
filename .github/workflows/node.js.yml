@@ -38,14 +38,14 @@ jobs:
       - name: Contrôler la cohérence avec Eslint
         run: ./node_modules/.bin/eslint .
 
+      - name: Contrôler la cohérence du Frontend avec Eslint
+        run: ./node_modules/.bin/eslint -c svelte/eslint.config.js svelte
+
       - name: Contrôler le Typescript du Backend
         run: ./node_modules/.bin/tsc --noEmit
 
-      - name: Contrôler le Typescript de Svelte
-        run: ./node_modules/.bin/tsc --noEmit -p svelte/tsconfig.json
-
       - name: Contrôler la cohérence de Svelte avec `svelte-check`
-        run: ./node_modules/.bin/svelte-check --workspace svelte
+        run: ./node_modules/.bin/svelte-check --workspace svelte --fail-on-warnings
 
       - name: Exécuter les tests
         run: ./node_modules/.bin/vitest --reporter junit --outputFile=./test-report.xml

@@ -1,21 +1,26 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount, tick } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import ListeChampTexte from '../ListeChampTexte.svelte';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
+  }
 
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   onMount(() => {
     // Force la présence d'au moins un point, pour avoir une UI agréable qui montre un champ
     if ($leBrouillon.pointsAcces.length === 0) ajouteValeur();
   });
 
-  $: estComplete =
-    $leBrouillon.pointsAcces.length === 0 ||
-    $leBrouillon.pointsAcces.every((p) => p.length <= 200);
+  $effect(() => {
+    estComplete =
+      $leBrouillon.pointsAcces.length === 0 ||
+      $leBrouillon.pointsAcces.every((p) => p.length <= 200);
+  });
 
   const supprimeValeur = (index: number) => {
     $leBrouillon.pointsAcces = $leBrouillon.pointsAcces.filter(
@@ -28,7 +33,7 @@
   };
 
   const enregistre = () => {
-    emetEvenement('champModifie', {
+    onChampModifie({
       pointsAcces: $leBrouillon.pointsAcces.filter(
         (pointAcces) => pointAcces.trim().length > 0
       ),
@@ -45,13 +50,13 @@
   <ListeChampTexte
     nomGroupe="pointsAcces"
     bind:valeurs={$leBrouillon.pointsAcces}
-    on:ajout={ajouteValeur}
+    onAjout={ajouteValeur}
     titreSuppression="Supprimer l'URL"
     titreAjout="Ajouter une URL"
     limiteTaille={200}
-    on:blur={() => enregistre()}
-    on:suppression={async (e) => {
-      supprimeValeur(e.detail);
+    onblur={() => enregistre()}
+    onSuppression={async (index) => {
+      supprimeValeur(index);
       await tick();
       if (estComplete) enregistre();
     }}

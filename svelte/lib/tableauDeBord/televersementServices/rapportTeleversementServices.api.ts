@@ -6,7 +6,7 @@ export const recupereRapportDetailleV2 = async () => {
       '/api/televersement/services-v2'
     );
     return reponse.data;
-  } catch (e) {
+  } catch {
     return;
   }
 };

@@ -90,6 +90,7 @@ export type MesureSpecifique = {
   modalites: string;
 };
 
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ObjetDeDonnees = Record<string, any>;
 
 export type IdNiveauDeSecurite = 'niveau1' | 'niveau2' | 'niveau3';

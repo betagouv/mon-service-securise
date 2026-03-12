@@ -19,44 +19,55 @@
   } from '../listeMesures.d';
   import TiroirConfigurationModeleMesureSpecifique from '../mesureSpecifique/configuration/TiroirConfigurationModeleMesureSpecifique.svelte';
 
-  export let referentielStatuts: ReferentielStatut;
-  export let referentielTypesService: ReferentielTypesService;
-  export let categories: ListeMesuresProps['categories'];
+  interface Props {
+    referentielStatuts: ReferentielStatut;
+    referentielTypesService: ReferentielTypesService;
+    categories: ListeMesuresProps['categories'];
+  }
 
-  let elementModale: Modale;
-  let modeleDeMesure: ModeleDeMesure;
+  let { referentielStatuts, referentielTypesService, categories }: Props =
+    $props();
 
-  let servicesAvecMesure: ServiceAssocieAUneMesure[] = [];
+  let elementModale: Modale | undefined = $state();
+  let modeleDeMesure: ModeleDeMesure | undefined = $state();
 
-  $: servicesAvecMesure =
-    modeleDeMesure &&
-    $servicesAvecMesuresAssociees
-      .filter((s) => modeleDeMesure.idsServicesAssocies.includes(s?.id))
-      .map(({ mesuresAssociees, mesuresSpecifiques, ...autresDonnees }) => ({
-        ...autresDonnees,
-        mesure:
-          modeleDeMesure.type === 'generale'
-            ? {
-                ...mesuresAssociees[modeleDeMesure.id],
-                id: modeleDeMesure.id,
-                type: 'generale',
-              }
-            : {
-                ...mesuresSpecifiques.find(
-                  (ms) => ms.idModele === modeleDeMesure.id
-                ),
-                id: modeleDeMesure.id,
-                type: 'specifique',
-              },
-      }));
+  let servicesAvecMesure: ServiceAssocieAUneMesure[] = $state([]);
+
+  $effect(() => {
+    if (!modeleDeMesure) return;
+
+    servicesAvecMesure =
+      modeleDeMesure &&
+      $servicesAvecMesuresAssociees
+        .filter((s) => modeleDeMesure?.idsServicesAssocies.includes(s?.id))
+        .map(({ mesuresAssociees, mesuresSpecifiques, ...autresDonnees }) => ({
+          ...autresDonnees,
+          mesure:
+            modeleDeMesure?.type === 'generale'
+              ? {
+                  ...mesuresAssociees[modeleDeMesure.id],
+                  id: modeleDeMesure.id,
+                  type: 'generale',
+                }
+              : {
+                  ...mesuresSpecifiques.find(
+                    (ms) => ms.idModele === modeleDeMesure?.id
+                  ),
+                  id: modeleDeMesure?.id,
+                  type: 'specifique',
+                },
+        }));
+  });
 
   export const affiche = async (modeleMesureAAfficher: ModeleDeMesure) => {
     modeleDeMesure = modeleMesureAAfficher;
     await tick();
-    elementModale.affiche();
+    elementModale?.affiche();
   };
 
   const configureMesure = () => {
+    if (!modeleDeMesure) return;
+
     if (modeleDeMesure.type === 'generale') {
       tiroirStore.afficheContenu(TiroirModificationMultipleMesuresGenerales, {
         modeleMesureGenerale: modeleDeMesure as ModeleMesureGenerale,
@@ -71,23 +82,25 @@
         ongletActif: 'info',
       });
     }
-    elementModale.ferme();
+    elementModale?.ferme();
   };
 </script>
 
 {#if modeleDeMesure}
   <Modale bind:this={elementModale}>
-    <svelte:fragment slot="entete">
+    {#snippet entete()}
       <h4>Mesure</h4>
-      <DescriptionCompleteMesure {modeleDeMesure} />
+      {#if modeleDeMesure}
+        <DescriptionCompleteMesure {modeleDeMesure} />
+      {/if}
       <h4>
         {servicesAvecMesure.length}
         {servicesAvecMesure.length > 1
           ? 'services associés'
           : 'service associé'} à cette mesure
       </h4>
-    </svelte:fragment>
-    <svelte:fragment slot="contenu">
+    {/snippet}
+    {#snippet contenu()}
       <TableauServicesAssocies
         servicesAssocies={servicesAvecMesure}
         {referentielStatuts}
@@ -95,22 +108,22 @@
         avecTypeEtBesoinDeSecurite
         avecNomCliquable
       />
-    </svelte:fragment>
-    <svelte:fragment slot="actions">
+    {/snippet}
+    {#snippet actions()}
       <Bouton
         titre="Retour à la liste de mesures"
         type="secondaire"
         taille="moyen"
-        on:click={() => elementModale.ferme()}
+        onclick={() => elementModale?.ferme()}
       />
       <Bouton
         titre="Configurer la mesure"
         type="primaire"
         taille="moyen"
         icone="configuration"
-        on:click={configureMesure}
+        onclick={configureMesure}
       />
-    </svelte:fragment>
+    {/snippet}
   </Modale>
 {/if}
 

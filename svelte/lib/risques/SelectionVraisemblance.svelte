@@ -3,11 +3,23 @@
     IdentifiantVraisemblance,
     ReferentielVraisemblances,
   } from './risques.d';
+  import type { ChangeEventHandler } from 'svelte/elements';
 
-  export let niveauVraisemblance: IdentifiantVraisemblance;
-  export let estLectureSeule: boolean | undefined;
-  export let referentielVraisemblances: ReferentielVraisemblances;
-  export let avecLibelleOption: boolean = false;
+  interface Props {
+    niveauVraisemblance: IdentifiantVraisemblance;
+    estLectureSeule: boolean | undefined;
+    referentielVraisemblances: ReferentielVraisemblances;
+    avecLibelleOption?: boolean;
+    onchange?: ChangeEventHandler<HTMLSelectElement>;
+  }
+
+  let {
+    niveauVraisemblance = $bindable(),
+    estLectureSeule,
+    referentielVraisemblances,
+    avecLibelleOption = false,
+    onchange,
+  }: Props = $props();
 </script>
 
 <div class="conteneur-vraisemblance">
@@ -17,18 +29,18 @@
     class:avecLibelleOption
     bind:value={niveauVraisemblance}
     disabled={estLectureSeule}
-    on:change
+    {onchange}
   >
     <option
       label={avecLibelleOption ? 'Définir la vraisemblance initiale' : '+'}
       value=""
       disabled
-    />
+    ></option>
     {#each Object.entries(referentielVraisemblances) as [id, niveau] (id)}
       <option
         label={`${niveau.position.toString()} - ${niveau.libelle}`}
         value={id}
-      />
+      ></option>
     {/each}
   </select>
 </div>
@@ -116,11 +128,11 @@
     position: relative;
   }
 
-  .conteneur-vraisemblance:has(select.avecLibelleOption) {
+  .conteneur-vraisemblance:has(:global(select.avecLibelleOption)) {
     --couleur-option: white;
   }
 
-  .conteneur-vraisemblance:has(select.avecLibelleOption.vide) {
+  .conteneur-vraisemblance:has(:global(select.avecLibelleOption.vide)) {
     --couleur-option: var(--liseres-fonce);
   }
 

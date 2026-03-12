@@ -1,8 +1,13 @@
 <script lang="ts">
-  export let nombreContributeurs: number;
+  interface Props {
+    nombreContributeurs: number;
+    onclick: (e: MouseEvent) => void;
+  }
+
+  let { nombreContributeurs, onclick }: Props = $props();
 </script>
 
-<button class="contributeurs-service" on:click>
+<button class="contributeurs-service" {onclick}>
   <img
     src="/statique/assets/images/icone_contributeurs.svg"
     alt="Icône du nombre de contributeurs"

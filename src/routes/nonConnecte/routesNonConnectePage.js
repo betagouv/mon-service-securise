@@ -66,7 +66,7 @@ const routesNonConnectePage = ({
     let informationsProfessionnelles;
     try {
       informationsProfessionnelles = adaptateurJWT.decode(token);
-    } catch (e) {
+    } catch {
       reponse.sendStatus(400);
       return;
     }

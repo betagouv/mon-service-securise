@@ -1,7 +1,7 @@
 import type { ActiviteMesure, TypeActiviteMesure } from '../../mesure.d';
 import ActiviteAjoutPriorite from './ActiviteAjoutPriorite.svelte';
 import ActiviteMiseAJourPriorite from './ActiviteMiseAJourPriorite.svelte';
-import type { SvelteComponent } from 'svelte';
+import type { Component } from 'svelte';
 import ActiviteAjoutStatut from './ActiviteAjoutStatut.svelte';
 import ActiviteMiseAJourStatut from './ActiviteMiseAJourStatut.svelte';
 import ActiviteAjoutEcheance from './ActiviteAjoutEcheance.svelte';
@@ -13,7 +13,8 @@ import ActiviteAjoutCommentaire from './ActiviteAjoutCommentaire.svelte';
 
 export type VisualisationActivite = {
   titre: string;
-  composantContenu: typeof SvelteComponent<{}>;
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  composantContenu: Component<any>;
   aBesoinPriorites?: boolean;
   aBesoinStatuts?: boolean;
 };

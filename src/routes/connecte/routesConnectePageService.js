@@ -285,7 +285,7 @@ const routesConnectePageService = ({
           etapeActive: 'dossiers',
           idEtape,
         });
-      } catch (e) {
+      } catch {
         suite();
       }
     }

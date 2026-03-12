@@ -1,8 +1,12 @@
 <script lang="ts">
   import type { ResumeNiveauDroit } from './types';
 
-  export let valeur: string;
-  export let resumeNiveauDroit: ResumeNiveauDroit | undefined = undefined;
+  interface Props {
+    valeur: string;
+    resumeNiveauDroit?: ResumeNiveauDroit | undefined;
+  }
+
+  let { valeur, resumeNiveauDroit = undefined }: Props = $props();
 </script>
 
 <div

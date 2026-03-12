@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax, class-methods-use-this, no-empty-function */
+/* eslint-disable no-restricted-syntax, class-methods-use-this */
 
 import {
   Ajoute,

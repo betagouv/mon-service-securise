@@ -10,73 +10,73 @@
   import { storeAutorisations } from '../../../gestionContributeurs/stores/autorisations.store';
   import { formatteDateHeureFr } from '../../../formatDate/formatDate';
   import { obtientVisualisation } from './visualisation';
+  import { derived, type Readable } from 'svelte/store';
 
-  export let activite: ActiviteMesure;
-  export let priorites: ReferentielPriorite;
-  export let statuts: ReferentielStatut;
+  interface Props {
+    activite: ActiviteMesure;
+    priorites: ReferentielPriorite;
+    statuts: ReferentielStatut;
+  }
 
-  const visualisation = obtientVisualisation(activite);
+  let { activite, priorites, statuts }: Props = $props();
+
+  let visualisation = $derived(obtientVisualisation(activite));
 
   type Acteur = {
     intitule: string;
     initiales: string;
     resumeNiveauDroit?: ResumeNiveauDroit;
   };
-  let acteur: Acteur;
+  let acteur: Readable<Acteur> = derived(contributeurs, ($s) => {
+    const contributeursTrouves = $s.filter((c) => c.id === activite.idActeur);
+    return contributeursTrouves.length === 0
+      ? { intitule: 'Utilisateur·rice', initiales: '' }
+      : {
+          ...contributeursTrouves[0],
+          intitule: contributeursTrouves[0].prenomNom,
+          resumeNiveauDroit:
+            $storeAutorisations.autorisations[activite.idActeur]
+              ?.resumeNiveauDroit,
+        };
+  });
 
-  $: {
-    const contributeursTrouves = $contributeurs.filter(
-      (c) => c.id === activite.idActeur
-    );
-    acteur =
-      contributeursTrouves.length === 0
-        ? {
-            intitule: 'Utilisateur·rice',
-            initiales: '',
-          }
-        : {
-            ...contributeursTrouves[0],
-            intitule: contributeursTrouves[0].prenomNom,
-            resumeNiveauDroit:
-              $storeAutorisations.autorisations[activite.idActeur]
-                ?.resumeNiveauDroit,
-          };
-  }
-  const proprietes: {
-    activite: ActiviteMesure;
-    statuts?: ReferentielStatut;
-    priorites?: ReferentielPriorite;
-  } = {
-    activite,
-  };
-  if (visualisation.aBesoinPriorites) {
-    proprietes.priorites = priorites;
-  }
-  if (visualisation.aBesoinStatuts) {
-    proprietes.statuts = statuts;
-  }
+  const propsActivite = $derived.by(() => {
+    const resultat: {
+      activite: ActiviteMesure;
+      statuts?: ReferentielStatut;
+      priorites?: ReferentielPriorite;
+    } = { activite };
+
+    if (visualisation.aBesoinPriorites) resultat.priorites = priorites;
+    if (visualisation.aBesoinStatuts) resultat.statuts = statuts;
+
+    return resultat;
+  });
 </script>
 
-<div class="activite">
-  <div>
-    <div class="cartouche">
-      <Initiales
-        valeur={acteur.initiales}
-        resumeNiveauDroit={acteur.resumeNiveauDroit}
-      />
+{#if $acteur}
+  {@const Composant = visualisation.composantContenu}
+  <div class="activite">
+    <div>
+      <div class="cartouche">
+        <Initiales
+          valeur={$acteur.initiales}
+          resumeNiveauDroit={$acteur.resumeNiveauDroit}
+        />
+      </div>
+    </div>
+    <div class="contenu">
+      <div class="titre">{visualisation.titre}</div>
+      <div class="infos">
+        <span>{$acteur.intitule}</span> &bull;
+        <span>{formatteDateHeureFr(activite.date)}</span>
+      </div>
+      <div class="description">
+        <Composant {...propsActivite} />
+      </div>
     </div>
   </div>
-  <div class="contenu">
-    <div class="titre">{visualisation.titre}</div>
-    <div class="infos">
-      <span>{acteur.intitule}</span> &bull;
-      <span>{formatteDateHeureFr(activite.date)}</span>
-    </div>
-    <div class="description">
-      <svelte:component this={visualisation.composantContenu} {...proprietes} />
-    </div>
-  </div>
-</div>
+{/if}
 
 <style>
   .cartouche {

@@ -9,11 +9,16 @@
   import type { IdService } from '../../tableauDesMesures/tableauDesMesures.d';
   import { activitesVisiteGuidee } from '../modeVisiteGuidee/donneesVisiteGuidee';
 
-  export let visible: boolean;
-  export let idService: IdService;
-  export let priorites: ReferentielPriorite;
-  export let statuts: ReferentielStatut;
-  export let modeVisiteGuidee: boolean;
+  interface Props {
+    visible: boolean;
+    idService: IdService;
+    priorites: ReferentielPriorite;
+    statuts: ReferentielStatut;
+    modeVisiteGuidee: boolean;
+  }
+
+  let { visible, idService, priorites, statuts, modeVisiteGuidee }: Props =
+    $props();
 
   const { subscribe, update } = writable<ActiviteMesure[]>([]);
 
@@ -46,7 +51,7 @@
 
 <svelte:body on:activites-modifiees={rechargeActivites} />
 <div id="contenu-onglet-activite" class:visible>
-  {#each $storeActivites as activite}
+  {#each $storeActivites as activite, i (i)}
     {#key $storeActivites}
       <Activite {priorites} {statuts} {activite} />
     {/key}

@@ -26,7 +26,7 @@
     miseAJourForceeReussie,
     nomNiveauDeSecurite,
   } from './niveauDeSecurite.messages';
-  import { onMount } from 'svelte';
+  import { onMount, untrack } from 'svelte';
   import type { MiseAJour } from '../creationV2/creationV2.api';
   import { donneesDeServiceSontCompletes } from '../creationV2/etapes/brouillonEstComplet.store';
   import type { AxiosError } from 'axios';
@@ -56,26 +56,38 @@
     window.scrollTo(0, 0);
   };
 
-  export let descriptionService: DescriptionServiceV2API;
-  export let idService: UUID;
-  export let lectureSeule: boolean;
-  export let doitFinaliserDescription: boolean;
+  interface Props {
+    descriptionService: DescriptionServiceV2API;
+    idService: UUID;
+    lectureSeule: boolean;
+    doitFinaliserDescription: boolean;
+  }
 
-  let mode: ModeAffichage = 'Résumé';
-  let ongletActif: 'informations' | 'besoinsSecurite' = 'informations';
-  let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
-  let majForceeBesoinsSecurite: boolean = false;
+  let {
+    descriptionService,
+    idService,
+    lectureSeule,
+    doitFinaliserDescription,
+  }: Props = $props();
 
-  let copiePourRestauration: DescriptionServiceV2 = structuredClone(
-    enEditable(descriptionService)
+  let mode: ModeAffichage = $state('Résumé');
+  let ongletActif: 'informations' | 'besoinsSecurite' = $state('informations');
+  let niveauDeSecuriteMinimal: IdNiveauDeSecurite | undefined = $state();
+  let majForceeBesoinsSecurite: boolean = $state(false);
+
+  let copiePourRestauration: DescriptionServiceV2 = $state(
+    untrack(() => enEditable(descriptionService))
   );
-  let descriptionEditable: DescriptionServiceV2 =
-    enEditable(descriptionService);
+  let descriptionEditable: DescriptionServiceV2 = $state(
+    untrack(() => enEditable(descriptionService))
+  );
 
-  $: descriptionAffichable =
-    convertisDonneesDescriptionEnLibelles(descriptionEditable);
-  $: descriptionEstComplete =
-    donneesDeServiceSontCompletes(descriptionEditable);
+  let descriptionAffichable = $derived(
+    convertisDonneesDescriptionEnLibelles(descriptionEditable)
+  );
+  let descriptionEstComplete = $derived(
+    donneesDeServiceSontCompletes(descriptionEditable)
+  );
 
   const rafraichisNiveauSecuriteMinimal = async () => {
     niveauDeSecuriteMinimal =
@@ -86,17 +98,18 @@
     await rafraichisNiveauSecuriteMinimal();
   });
 
-  const metsAJourDescriptionEditable = async (e: CustomEvent<MiseAJour>) => {
-    descriptionEditable = { ...descriptionEditable, ...e.detail };
+  const metsAJourDescriptionEditable = async (miseAJour: MiseAJour) => {
+    descriptionEditable = { ...descriptionEditable, ...miseAJour };
 
-    const recalculEstNecessaire = Object.keys(e.detail).some((cle) =>
+    const recalculEstNecessaire = Object.keys(miseAJour).some((cle) =>
       ChampsImpactantsLeNiveauDeSecurite.includes(cle)
     );
     if (recalculEstNecessaire) await rafraichisNiveauSecuriteMinimal();
   };
 
   const enregistreDescriptionService = async () => {
-    if (descriptionEditable.niveauSecurite === '') return;
+    if (!niveauDeSecuriteMinimal || descriptionEditable.niveauSecurite === '')
+      return;
 
     const niveauActuelInsuffisant =
       questionsV2.niveauSecurite[descriptionEditable.niveauSecurite].position <
@@ -120,7 +133,7 @@
         : 'Les informations de votre service ont été mises à jour avec succès.';
       toasterStore.succes('Mise à jour réussie', messageSucces);
 
-      copiePourRestauration = structuredClone(descriptionEditable);
+      copiePourRestauration = $state.snapshot(descriptionEditable);
       retourAuModeResume();
     } catch (e) {
       const x = e as AxiosError<{ erreur: { code: string } }>;
@@ -165,7 +178,7 @@
         <BrouillonDeServiceEditable
           bind:donnees={descriptionEditable}
           seulementNomServiceEditable={false}
-          on:champModifie={metsAJourDescriptionEditable}
+          onChampModifie={metsAJourDescriptionEditable}
         />
       {/if}
     </div>
@@ -181,7 +194,7 @@
               size="md"
               hasIcon
               icon="star-s-fill"
-            />
+            ></dsfr-tag>
           {/if}
         </div>
         <ResumeNiveauSecurite {niveau} />
@@ -189,37 +202,39 @@
     {/if}
   {:else}
     <div class="conteneur-resume">
-      <NiveauDeSecuriteEditable
-        bind:niveauSelectionne={descriptionEditable.niveauSecurite}
-        {niveauDeSecuriteMinimal}
-        on:champModifie={async (e) => {
-          descriptionEditable.niveauSecurite = e.detail.niveauSecurite;
-        }}
-      >
-        <svelte:fragment slot="infoMajNecessaire">
-          {#if majForceeBesoinsSecurite && copiePourRestauration.niveauSecurite}
-            <div class="conteneur-info-maj-necessaire">
-              <Toast
-                niveau="alerte"
-                avecAnimation={false}
-                avecOmbre={false}
-                titre="Mise à jour des besoins en sécurité"
-                contenu={avertissementChangementObligatoire(
-                  copiePourRestauration.niveauSecurite,
-                  niveauDeSecuriteMinimal
-                )}
-              />
-            </div>
-          {/if}
-        </svelte:fragment>
-      </NiveauDeSecuriteEditable>
+      {#if niveauDeSecuriteMinimal}
+        <NiveauDeSecuriteEditable
+          bind:niveauSelectionne={descriptionEditable.niveauSecurite}
+          {niveauDeSecuriteMinimal}
+          onChampModifie={async (miseAJour) => {
+            descriptionEditable.niveauSecurite = miseAJour.niveauSecurite;
+          }}
+        >
+          {#snippet infoMajNecessaire()}
+            {#if niveauDeSecuriteMinimal && majForceeBesoinsSecurite && copiePourRestauration.niveauSecurite}
+              <div class="conteneur-info-maj-necessaire">
+                <Toast
+                  niveau="alerte"
+                  avecAnimation={false}
+                  avecOmbre={false}
+                  titre="Mise à jour des besoins en sécurité"
+                  contenu={avertissementChangementObligatoire(
+                    copiePourRestauration.niveauSecurite,
+                    niveauDeSecuriteMinimal
+                  )}
+                />
+              </div>
+            {/if}
+          {/snippet}
+        </NiveauDeSecuriteEditable>
+      {/if}
     </div>
   {/if}
 
   {#if !lectureSeule && mode === 'Résumé'}
     <BarreActions
       mode="Résumé"
-      on:modifier={() => {
+      onModifier={() => {
         mode = 'Édition';
       }}
     />
@@ -233,9 +248,9 @@
       afficheInfoBesoinsSecurite={mode === 'Édition' &&
         ongletActif === 'informations' &&
         !majForceeBesoinsSecurite}
-      on:enregistrer={async () => enregistreDescriptionService()}
-      on:annuler={() => {
-        descriptionEditable = structuredClone(copiePourRestauration);
+      onEnregistrer={async () => enregistreDescriptionService()}
+      onAnnuler={() => {
+        descriptionEditable = $state.snapshot(copiePourRestauration);
         retourAuModeResume();
       }}
     />

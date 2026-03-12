@@ -69,7 +69,7 @@ const ajoutContributeurSurServices = ({
         emetteur.prenomNom(),
         services.length
       );
-    } catch (e) {
+    } catch {
       throw new EchecEnvoiMessage();
     }
   };

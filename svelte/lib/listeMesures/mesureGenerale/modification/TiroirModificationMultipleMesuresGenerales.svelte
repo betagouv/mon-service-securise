@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   import type {
     PersonnalisationMesure,
     ServiceAvecMesuresAssociees,
@@ -38,34 +38,39 @@
     'Le statut et la précision de cette mesure peuvent être modifiés et appliqués simultanément à plusieurs services.';
   export const taille = 'large';
 
-  export let modeleMesureGenerale: ModeleMesureGenerale;
-  export let statuts: ReferentielStatut;
+  interface Props {
+    modeleMesureGenerale: ModeleMesureGenerale;
+    statuts: ReferentielStatut;
+  }
 
-  let etapeCourante = 1;
-  let enCoursEnvoi = false;
+  let { modeleMesureGenerale, statuts }: Props = $props();
 
-  let boutonSuivantActif = false;
+  let etapeCourante = $state(1);
+  let enCoursEnvoi = $state(false);
 
-  let servicesAssocies: ServiceAssocie[] = [];
-  $: servicesAssocies =
-    modeleMesureGenerale &&
-    $servicesAvecMesuresAssociees
-      .filter((s) => {
-        return $mesuresAvecServicesAssociesStore[
-          modeleMesureGenerale.id
-        ].includes(s?.id);
-      })
-      .map(({ mesuresAssociees, ...autresDonnees }) => ({
-        mesure: mesuresAssociees[modeleMesureGenerale.id],
-        ...autresDonnees,
-      }));
+  let boutonSuivantActif = $state(false);
+
+  let servicesAssocies: ServiceAssocie[] = $derived(
+    (modeleMesureGenerale &&
+      $servicesAvecMesuresAssociees
+        .filter((s) => {
+          return $mesuresAvecServicesAssociesStore[
+            modeleMesureGenerale.id
+          ].includes(s?.id);
+        })
+        .map(({ mesuresAssociees, ...autresDonnees }) => ({
+          mesure: mesuresAssociees[modeleMesureGenerale.id],
+          ...autresDonnees,
+        }))) ||
+      []
+  );
 
   const appliqueModifications = async (
-    e: CustomEvent<DonneesModificationAAppliquer>
+    donnees: DonneesModificationAAppliquer
   ) => {
     enCoursEnvoi = true;
     try {
-      const { idsServices, modalites, statut } = e.detail;
+      const { idsServices, modalites, statut } = donnees;
       await enregistreModificationMesureGeneraleSurServicesMultiples({
         idMesure: modeleMesureGenerale.id,
         statut,
@@ -73,7 +78,6 @@
         idsServices,
         version: modeleMesureGenerale.versionReferentiel,
       });
-      tiroirStore.ferme();
       await servicesAvecMesuresAssociees.rafraichis();
       modaleRapportStore.affiche({
         champsModifies: [
@@ -83,18 +87,20 @@
         idServicesModifies: idsServices,
         modeleMesureGenerale,
       });
-    } catch (e) {
-      tiroirStore.ferme();
+    } catch {
       toasterStore.erreur(
         'Une erreur est survenue',
         "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
       );
     } finally {
       enCoursEnvoi = false;
+      tiroirStore.ferme();
     }
   };
 
-  let elementEtapesModification: EtapesModificationMultipleStatutPrecision;
+  let elementEtapesModification:
+    | EtapesModificationMultipleStatutPrecision
+    | undefined = $state();
 </script>
 
 <ContenuTiroir>
@@ -115,7 +121,7 @@
     bind:boutonSuivantActif
     {statuts}
     {servicesAssocies}
-    on:modification-a-appliquer={appliqueModifications}
+    onModificationAAppliquer={appliqueModifications}
   />
 </ContenuTiroir>
 <ActionsTiroir>
@@ -123,13 +129,13 @@
     <Bouton
       type="lien"
       titre="Retour à la liste de mesures"
-      on:click={() => tiroirStore.ferme()}
+      onclick={() => tiroirStore.ferme()}
     />
   {:else}
     <Bouton
       type="lien"
       titre="Précédent"
-      on:click={() => elementEtapesModification.etapePrecedente()}
+      onclick={() => elementEtapesModification?.etapePrecedente()}
     />
   {/if}
   <Bouton
@@ -137,6 +143,6 @@
     type="primaire"
     actif={boutonSuivantActif}
     {enCoursEnvoi}
-    on:click={() => elementEtapesModification.etapeSuivante()}
+    onclick={() => elementEtapesModification?.etapeSuivante()}
   />
 </ActionsTiroir>

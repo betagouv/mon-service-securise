@@ -1,17 +1,25 @@
 <script lang="ts">
-  import { onDestroy, createEventDispatcher } from 'svelte';
+  import { onDestroy, type Snippet } from 'svelte';
 
-  export let id: string | undefined = undefined;
+  interface Props {
+    id?: string | undefined;
+    entete?: Snippet;
+    contenu?: Snippet;
+    actions?: Snippet;
+    onClose?: () => void;
+  }
 
-  let elementModale: HTMLDialogElement;
+  let { id = undefined, entete, contenu, actions, onClose }: Props = $props();
+
+  let elementModale: HTMLDialogElement | undefined = $state();
 
   export const ferme = () => {
-    elementModale.close();
+    elementModale?.close();
     debloqueScroll();
   };
 
   export const affiche = () => {
-    elementModale.showModal();
+    elementModale?.showModal();
     bloqueScroll();
   };
 
@@ -24,30 +32,29 @@
   };
 
   onDestroy(() => debloqueScroll());
-  const emetEvent = createEventDispatcher();
 </script>
 
 <dialog
   {id}
   bind:this={elementModale}
-  on:close={() => {
+  onclose={() => {
     debloqueScroll();
-    emetEvent('close');
+    onClose?.();
   }}
 >
   <div class="conteneur-fermeture">
-    <button on:click={() => ferme()}>Fermer</button>
+    <button onclick={() => ferme()}>Fermer</button>
   </div>
   <div class="conteneur-modale">
     <div class="entete-modale">
-      <slot name="entete" />
+      {@render entete?.()}
     </div>
     <div class="contenu-modale">
-      <slot name="contenu" />
+      {@render contenu?.()}
     </div>
     <div class="pied-modale">
       <div class="conteneur-actions">
-        <slot name="actions" />
+        {@render actions?.()}
       </div>
     </div>
   </div>

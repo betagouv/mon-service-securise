@@ -1,11 +1,21 @@
 <script lang="ts" generics="T extends string">
   import Pastille from './Pastille.svelte';
 
-  export let ongletActif: T;
-  export let cetOnglet: T;
-  export let labelOnglet: string;
-  export let badge: 'info' | number = 0;
-  export let sansBordureEnBas: boolean = false;
+  interface Props {
+    ongletActif: T;
+    cetOnglet: T;
+    labelOnglet: string;
+    badge?: 'info' | number;
+    sansBordureEnBas?: boolean;
+  }
+
+  let {
+    ongletActif = $bindable(),
+    cetOnglet,
+    labelOnglet,
+    badge = 0,
+    sansBordureEnBas = false,
+  }: Props = $props();
 </script>
 
 <button
@@ -13,7 +23,7 @@
   class="onglet"
   class:active={ongletActif === cetOnglet}
   class:sansBordureEnBas
-  on:click={() => (ongletActif = cetOnglet)}
+  onclick={() => (ongletActif = cetOnglet)}
 >
   <span class="label">{labelOnglet}</span>
   {#if badge === 'info'}

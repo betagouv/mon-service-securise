@@ -1,14 +1,25 @@
 <script lang="ts">
-  export let contenu: string = '';
-  export let enErreur: boolean = false;
-  export let large: boolean = false;
-  export let gras: boolean = false;
+  interface Props {
+    contenu?: string;
+    enErreur?: boolean;
+    large?: boolean;
+    gras?: boolean;
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    contenu = '',
+    enErreur = false,
+    large = false,
+    gras = false,
+    children,
+  }: Props = $props();
 </script>
 
 <td class:enErreur class:large class:gras>
-  <slot>
+  {#if children}{@render children()}{:else}
     {contenu || '-'}
-  </slot>
+  {/if}
 </td>
 
 <style lang="scss">

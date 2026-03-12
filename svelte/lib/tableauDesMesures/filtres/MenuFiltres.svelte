@@ -12,35 +12,34 @@
   import type { ReferentielPriorite } from '../../ui/types.d';
   import { rechercheParPriorite } from '../stores/rechercheParPriorite.store';
   import { rechercheMesMesures } from '../stores/rechercheMesMesures.store';
-  import { createEventDispatcher } from 'svelte';
   import {
     rechercheParThematique,
     thematiques,
   } from '../stores/rechercheParThematique.store';
   import type { VersionService } from '../../../../src/modeles/versionService';
   import { rechercheParPartieResponsable } from '../stores/rechercheParPartieResponsable.store';
+  import { derived } from 'svelte/store';
 
-  export let categories: Record<IdCategorie, string>;
-  export let priorites: ReferentielPriorite;
-  export let versionService: VersionService;
-
-  const declenche = createEventDispatcher<{ supprimeFiltres: null }>();
-
-  $: cocheGlobaleANSSI =
-    $rechercheParReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
-    $rechercheParReferentiel.includes(IdReferentiel.ANSSIIndispensable);
-  let selectionPartielleANSSI: boolean;
-  $: {
-    const estRecommandee = $rechercheParReferentiel.includes(
-      IdReferentiel.ANSSIRecommandee
-    );
-    const estIndispensable = $rechercheParReferentiel.includes(
-      IdReferentiel.ANSSIIndispensable
-    );
-    selectionPartielleANSSI = estRecommandee
-      ? !estIndispensable
-      : estIndispensable;
+  interface Props {
+    categories: Record<IdCategorie, string>;
+    priorites: ReferentielPriorite;
+    versionService: VersionService;
+    onSupprimeFiltres?: () => void;
   }
+
+  let { categories, priorites, versionService, onSupprimeFiltres }: Props =
+    $props();
+
+  let cocheGlobaleANSSI = $derived(
+    $rechercheParReferentiel.includes(IdReferentiel.ANSSIRecommandee) &&
+      $rechercheParReferentiel.includes(IdReferentiel.ANSSIIndispensable)
+  );
+  let selectionPartielleANSSI = derived(rechercheParReferentiel, ($s) => {
+    const estRecommandee = $s.includes(IdReferentiel.ANSSIRecommandee);
+    const estIndispensable = $s.includes(IdReferentiel.ANSSIIndispensable);
+    return estRecommandee ? !estIndispensable : estIndispensable;
+  });
+
   const gereCocheANSSI = () => {
     const devientCochee = !cocheGlobaleANSSI;
     if (devientCochee) rechercheParReferentiel.ajouteLesReferentielsANSSI();
@@ -49,11 +48,13 @@
 </script>
 
 <MenuFlottant parDessusDeclencheur={true}>
-  <div slot="declencheur">
-    <button class="bouton bouton-secondaire bouton-filtre">
-      <IconeFiltre filtresActifs={$nombreResultats.aDesFiltresAppliques} />
-    </button>
-  </div>
+  {#snippet declencheur()}
+    <div>
+      <button class="bouton bouton-secondaire bouton-filtre">
+        <IconeFiltre filtresActifs={$nombreResultats.aDesFiltresAppliques} />
+      </button>
+    </div>
+  {/snippet}
 
   <div class="filtres-disponibles">
     <div class="entete">
@@ -64,7 +65,7 @@
     </div>
     <fieldset>
       <legend>Catégories de cybersécurité</legend>
-      {#each Object.entries(categories) as [id, categorie]}
+      {#each Object.entries(categories) as [id, categorie] (id)}
         <div class="case-et-label">
           <input
             type="checkbox"
@@ -80,7 +81,7 @@
     {#if versionService === 'v2'}
       <fieldset>
         <legend>Thématiques</legend>
-        {#each thematiques as thematique}
+        {#each thematiques as thematique (thematique)}
           {@const id = thematique.replaceAll(' ', '-').toLowerCase()}
           <div class="case-et-label">
             <input
@@ -103,8 +104,8 @@
           id="anssi"
           name="anssi"
           bind:checked={cocheGlobaleANSSI}
-          on:click={gereCocheANSSI}
-          class:selection-partielle={selectionPartielleANSSI}
+          onclick={gereCocheANSSI}
+          class:selection-partielle={$selectionPartielleANSSI}
         />
         <label for="anssi">ANSSI</label>
       </div>
@@ -151,7 +152,7 @@
     </fieldset>
     <fieldset>
       <legend>Priorité</legend>
-      {#each Object.entries(priorites) as [id, labels]}
+      {#each Object.entries(priorites) as [id, labels] (id)}
         <div class="case-et-label">
           <input
             type="checkbox"
@@ -213,7 +214,7 @@
     </fieldset>
     <button
       class="bouton bouton-secondaire bouton-effacer-filtre"
-      on:click={() => declenche('supprimeFiltres')}
+      onclick={onSupprimeFiltres}
     >
       Effacer les filtres
     </button>

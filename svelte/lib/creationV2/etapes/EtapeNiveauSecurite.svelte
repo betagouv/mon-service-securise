@@ -9,10 +9,14 @@
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
   import NiveauDeSecuriteEditable from '../NiveauDeSecuriteEditable.svelte';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+  }
 
-  let niveauSelectionne: IdNiveauDeSecurite | '';
-  let niveauDeSecuriteMinimal: IdNiveauDeSecurite;
+  let { estComplete = $bindable() }: Props = $props();
+
+  let niveauSelectionne: IdNiveauDeSecurite | '' = $state('');
+  let niveauDeSecuriteMinimal: IdNiveauDeSecurite | undefined = $state();
 
   onMount(async () => {
     if ($leBrouillon.id) {
@@ -46,25 +50,30 @@
     questionsV2.niveauSecurite[niveau]?.position >=
     questionsV2.niveauSecurite[niveauDeSecuriteMinimal]?.position;
 
-  $: estComplete =
-    niveauSelectionne !== '' &&
-    niveauEstConformeAuMinimumRequis(
-      niveauSelectionne,
-      niveauDeSecuriteMinimal
-    );
+  $effect(() => {
+    estComplete =
+      niveauSelectionne !== '' &&
+      !!niveauDeSecuriteMinimal &&
+      niveauEstConformeAuMinimumRequis(
+        niveauSelectionne,
+        niveauDeSecuriteMinimal
+      );
+  });
 </script>
 
 <hr class="separateur-etapier" />
 
-<NiveauDeSecuriteEditable
-  bind:niveauSelectionne
-  {niveauDeSecuriteMinimal}
-  on:champModifie={async (e) => {
-    $leBrouillon.niveauSecurite = e.detail.niveauSecurite;
-    if ($leBrouillon.id)
-      await metsAJourBrouillonService($leBrouillon.id, e.detail);
-  }}
-/>
+{#if niveauDeSecuriteMinimal}
+  <NiveauDeSecuriteEditable
+    bind:niveauSelectionne
+    {niveauDeSecuriteMinimal}
+    onChampModifie={async (miseAJour) => {
+      $leBrouillon.niveauSecurite = miseAJour.niveauSecurite;
+      if ($leBrouillon.id)
+        await metsAJourBrouillonService($leBrouillon.id, miseAJour);
+    }}
+  />
+{/if}
 
 <style>
   hr {

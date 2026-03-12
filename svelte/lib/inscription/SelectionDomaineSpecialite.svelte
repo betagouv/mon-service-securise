@@ -5,12 +5,16 @@
   import { validationChamp } from '../directives/validationChamp';
   import { tick } from 'svelte';
 
-  export let valeurs: string[];
-  export let requis: boolean = false;
-  export let id: string = '';
-  let menu: MenuFlottant;
-  let autreDomaine: string = '';
-  let champDeclencheur: HTMLInputElement;
+  interface Props {
+    valeurs: string[];
+    requis?: boolean;
+    id?: string;
+  }
+
+  let { valeurs = $bindable(), requis = false, id = '' }: Props = $props();
+  let menu: MenuFlottant | undefined = $state();
+  let autreDomaine: string = $state('');
+  let champDeclencheur: HTMLInputElement | undefined = $state();
 
   if (!valeurs) valeurs = [];
 
@@ -26,33 +30,41 @@
   ];
   const idsDesDomaines = domaines.map((f) => f.id);
 
-  let selection: string[] = valeurs.filter((v) => idsDesDomaines.includes(v));
+  let selection: string[] = $state(
+    valeurs.filter((v) => idsDesDomaines.includes(v))
+  );
   const autreValeur = valeurs.find((v) => !idsDesDomaines.includes(v));
-  if (autreValeur) {
-    selection.push('autre');
-    autreDomaine = autreValeur;
-  }
 
-  $: label = selection
-    .map((id) => domaines.find((f) => f.id === id)?.libelle)
-    .join(', ');
-
-  $: {
-    if (label) {
-      tick().then(() => champDeclencheur.dispatchEvent(new Event('input')));
+  $effect(() => {
+    if (autreValeur) {
+      selection.push('autre');
+      autreDomaine = autreValeur;
     }
-  }
+  });
 
-  $: labelRappelDeclencheur =
-    selection.length === 0 ? 'Sélectionner un domaine de spécialité' : label;
+  let label = $derived(
+    selection.map((id) => domaines.find((f) => f.id === id)?.libelle).join(', ')
+  );
 
-  $: afficheAutre = selection.includes('autre');
-  $: valeurs = [
-    ...selection.filter((f) => f !== 'autre'),
-    ...(afficheAutre ? [autreDomaine] : ''),
-  ];
+  $effect(() => {
+    if (label) {
+      tick().then(() => champDeclencheur?.dispatchEvent(new Event('input')));
+    }
+  });
 
-  const refermeMenu = () => menu.fermeLeMenu();
+  let labelRappelDeclencheur = $derived(
+    selection.length === 0 ? 'Sélectionner un domaine de spécialité' : label
+  );
+
+  let afficheAutre = $derived(selection.includes('autre'));
+  $effect(() => {
+    valeurs = [
+      ...selection.filter((f) => f !== 'autre'),
+      ...(afficheAutre ? [autreDomaine] : ''),
+    ];
+  });
+
+  const refermeMenu = () => menu?.fermeLeMenu();
 </script>
 
 <div class="conteneur">
@@ -61,34 +73,40 @@
     parDessusDeclencheur={true}
     classePersonnalisee="selection-domaine"
   >
-    <div slot="declencheur" class="avec-fleche">
-      <input
-        {id}
-        type="text"
-        role="button"
-        placeholder="Sélectionner un domaine de spécialité"
-        class="bouton bouton-secondaire contenu-declencheur"
-        class:complete={selection.length > 0}
-        bind:value={label}
-        required
-        use:validationChamp={requis
-          ? 'Le domaine est obligatoire. Veuillez le renseigner.'
-          : ''}
-        bind:this={champDeclencheur}
-      />
-    </div>
+    {#snippet declencheur()}
+      <div class="avec-fleche">
+        <input
+          {id}
+          type="text"
+          role="button"
+          placeholder="Sélectionner un domaine de spécialité"
+          class="bouton bouton-secondaire contenu-declencheur"
+          class:complete={selection.length > 0}
+          bind:value={label}
+          required
+          use:validationChamp={requis
+            ? 'Le domaine est obligatoire. Veuillez le renseigner.'
+            : ''}
+          bind:this={champDeclencheur}
+        />
+      </div>
+    {/snippet}
     <div class="domaines">
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
       <div
         role="button"
         tabindex="0"
-        on:keypress
         class="rappel-declencheur contenu-declencheur"
-        on:click|stopPropagation|preventDefault={refermeMenu}
+        onclick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          refermeMenu();
+        }}
       >
         {labelRappelDeclencheur}
       </div>
       <div class="options">
-        {#each domaines as domaine}
+        {#each domaines as domaine (domaine.id)}
           <div class="case-et-label">
             <input
               type="checkbox"

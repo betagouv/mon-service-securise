@@ -4,19 +4,30 @@
     EtatTeleversement,
     FormatAccepte,
   } from './KitDeTeleversement.types';
-  import { createEventDispatcher } from 'svelte';
   import Loader from '../Loader.svelte';
 
-  export let etape1: string;
-  export let template: {
-    href: string;
-    nom: string;
-    titre: string;
-    sousTitre: string;
-  };
-  export let apiPostDuTeleversement: string;
-  export let formatAccepte: FormatAccepte;
-  export let lesLimitations: string[] = [];
+  interface Props {
+    etape1: string;
+    template: {
+      href: string;
+      nom: string;
+      titre: string;
+      sousTitre: string;
+    };
+    apiPostDuTeleversement: string;
+    formatAccepte: FormatAccepte;
+    lesLimitations?: string[];
+    onTeleversementChange: (etat: EtatTeleversement) => void;
+  }
+
+  let {
+    etape1,
+    template,
+    apiPostDuTeleversement,
+    formatAccepte,
+    lesLimitations = [],
+    onTeleversementChange,
+  }: Props = $props();
 
   const formatteTailleFichier = Intl.NumberFormat('fr-FR', {
     notation: 'compact',
@@ -25,17 +36,14 @@
     unitDisplay: 'narrow',
   });
 
-  const dispatch = createEventDispatcher<{
-    televersementChange: EtatTeleversement;
-  }>();
+  let elementFichier: HTMLInputElement | undefined = $state();
+  let fichier: FileList | undefined = $state();
+  let enCoursDeDrop = $state(false);
 
-  let elementFichier: HTMLInputElement;
-  let fichier: FileList;
-  let enCoursDeDrop = false;
-
-  let etatTeleversement: EtatTeleversement = 'EnAttente';
+  let etatTeleversement: EtatTeleversement = $state('EnAttente');
 
   const gereDropFichier = (e: DragEvent) => {
+    e.preventDefault();
     enCoursDeDrop = false;
 
     if (e.dataTransfer?.files.length === 1) {
@@ -46,11 +54,11 @@
 
   const changeEtat = (nouvelEtat: EtatTeleversement) => {
     etatTeleversement = nouvelEtat;
-    dispatch('televersementChange', nouvelEtat);
+    onTeleversementChange(nouvelEtat);
   };
 
   const gereVerificationFichier = async () => {
-    if (fichier.length === 0) {
+    if (fichier?.length === 0) {
       changeEtat('EnAttente');
       return;
     }
@@ -58,13 +66,13 @@
     changeEtat('EnCoursEnvoi');
 
     const donnees = new FormData();
-    donnees.append('fichier', fichier[0]);
+    donnees.append('fichier', fichier![0]);
     try {
       await axios.post(apiPostDuTeleversement, donnees, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       changeEtat('Valide');
-    } catch (e) {
+    } catch {
       changeEtat('Invalide');
     }
   };
@@ -89,9 +97,12 @@
     aria-label="Zone de dépôt pour téléverser un fichier"
     class="conteneur-drag-and-drop"
     class:pret-a-drop={enCoursDeDrop}
-    on:drop|preventDefault={gereDropFichier}
-    on:dragover|preventDefault={(e) => (enCoursDeDrop = true)}
-    on:dragleave={() => (enCoursDeDrop = false)}
+    ondrop={gereDropFichier}
+    ondragover={(e) => {
+      e.preventDefault();
+      enCoursDeDrop = true;
+    }}
+    ondragleave={() => (enCoursDeDrop = false)}
   >
     <img
       src="/statique/assets/images/icone_documents.svg"
@@ -101,7 +112,7 @@
       type="secondaire"
       titre="Parcourir"
       taille="moyen"
-      on:click={() => elementFichier.click()}
+      onclick={() => elementFichier?.click()}
     />
     <input
       type="file"
@@ -110,11 +121,11 @@
       accept={formatAccepte}
       bind:files={fichier}
       bind:this={elementFichier}
-      on:change={() => gereVerificationFichier()}
+      onchange={() => gereVerificationFichier()}
     />
     <p>ou faites glisser un fichier ici</p>
     <div>
-      {#each lesLimitations as l}
+      {#each lesLimitations as l, index (index)}
         <span>{l}</span>
       {/each}
     </div>
@@ -137,8 +148,8 @@
           height="40px"
         />
         <div>
-          {#if fichier[0]}
-            <button on:click={supprimeFichierTeleverse}>
+          {#if fichier?.[0]}
+            <button onclick={supprimeFichierTeleverse}>
               <img
                 src="/statique/assets/images/icone_fermeture_modale.svg"
                 alt="Suppression du fichier"

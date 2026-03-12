@@ -3,10 +3,10 @@
   import { onMount } from 'svelte';
   import type { SousEtape } from '../../kit/ModaleSousEtape';
 
-  let cibleNouvelleHomologation: HTMLElement;
-  let cibleTelechargement: HTMLElement;
+  let cibleNouvelleHomologation: HTMLElement | undefined = $state();
+  let cibleTelechargement: HTMLElement | undefined = $state();
 
-  let sousEtapes: SousEtape[] = [];
+  let sousEtapes: SousEtape[] = $state([]);
   onMount(() => {
     cibleNouvelleHomologation = document.getElementById(
       'commencer-homologation'
@@ -46,7 +46,7 @@
           const boutonFermeture =
             document.querySelector<HTMLButtonElement>('.fermeture-tiroir');
           if (boutonFermeture) boutonFermeture.disabled = true;
-          cible.inert = true;
+          if (cible) cible.inert = true;
         },
         callbackFinaleCible: async () => {
           document

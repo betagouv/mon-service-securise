@@ -10,7 +10,7 @@ export class DescriptionEquivalenceMesure {
   constructor(
     private readonly referentielV1: Referentiel,
     private readonly referentielV2: ReferentielV2,
-    private readonly equivalences: EquivalencesMesuresV1V2 // eslint-disable-next-line no-empty-function
+    private readonly equivalences: EquivalencesMesuresV1V2
   ) {}
 
   ajoutee(idMesure: IdMesureV2): DetailMesure {

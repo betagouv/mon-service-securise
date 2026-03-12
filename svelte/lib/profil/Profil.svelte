@@ -11,29 +11,50 @@
   } from '../inscription/inscription.d';
   import SelectionNombreServices from '../inscription/SelectionNombreServices.svelte';
   import Bouton from '../ui/Bouton.svelte';
+  import { untrack } from 'svelte';
+  import { writable } from 'svelte/store';
 
-  export let departements: Departement[];
-  export let utilisateur: Utilisateur;
-  export let entite: Organisation;
-  export let estimationNombreServices: EstimationNombreServices[];
+  interface Props {
+    departements: Departement[];
+    utilisateur: Utilisateur;
+    entite: Organisation;
+    estimationNombreServices: EstimationNombreServices[];
+  }
+
+  let {
+    departements,
+    utilisateur: u,
+    entite,
+    estimationNombreServices,
+  }: Props = $props();
+
+  let utilisateur = writable(untrack(() => u));
 
   const modeleTelephone = '^0\\d{9}$';
-  let departement: Departement | undefined =
-    entite && departements.find((d) => d.code === entite.departement);
+  let departement: Departement = $state(
+    untrack(
+      () =>
+        (entite && departements.find((d) => d.code === entite.departement)) || {
+          nom: '',
+          code: '',
+        }
+    )
+  );
 
-  let formulaire: Formulaire;
-  let enCoursEnvoi: boolean = false;
+  let formulaire: Formulaire | undefined = $state();
+  let enCoursEnvoi: boolean = $state(false);
 
   const valide = async () => {
+    if (!formulaire) return;
     if (formulaire.estValide()) {
       try {
         enCoursEnvoi = true;
         await axios.put('/api/utilisateur', {
-          estimationNombreServices: utilisateur.estimationNombreServices,
-          infolettreAcceptee: utilisateur.infolettreAcceptee,
-          postes: utilisateur.postes,
-          telephone: utilisateur.telephone,
-          transactionnelAccepte: utilisateur.transactionnelAccepte,
+          estimationNombreServices: $utilisateur.estimationNombreServices,
+          infolettreAcceptee: $utilisateur.infolettreAcceptee,
+          postes: $utilisateur.postes,
+          telephone: $utilisateur.telephone,
+          transactionnelAccepte: $utilisateur.transactionnelAccepte,
           siretEntite: entite.siret,
         });
       } finally {
@@ -43,11 +64,12 @@
     }
   };
 
-  let elementSelectionDepartement: SelectionDepartement;
+  let elementSelectionDepartement: SelectionDepartement | undefined = $state();
   const modifieDepartementApresChoixOrganisation = (
-    e: CustomEvent<Organisation>
+    organisation: Organisation
   ) => {
-    const d = departements.find((d) => d.code === e.detail.departement);
+    if (!elementSelectionDepartement) return;
+    const d = departements.find((d) => d.code === organisation.departement);
     if (d) {
       elementSelectionDepartement.choisisDepartement(d);
     }
@@ -83,14 +105,14 @@
           icon-place="right"
           markup="a"
           type={undefined}
-          href={'https://identite.proconnect.gouv.fr'}
+          href="https://identite.proconnect.gouv.fr"
           target="blank"
-        />
+        ></dsfr-button>
       </dsfr-callout>
       <div class="identite-lecture-seule">
-        <span>Mail professionnel : <b>{utilisateur.email}</b></span>
-        <span>Prénom : <b>{utilisateur.prenom}</b></span>
-        <span>Nom : <b>{utilisateur.nom}</b></span>
+        <span>Mail professionnel : <b>{$utilisateur.email}</b></span>
+        <span>Prénom : <b>{$utilisateur.prenom}</b></span>
+        <span>Nom : <b>{$utilisateur.nom}</b></span>
       </div>
       <div class="info-champ-obligatoire requis">Champ obligatoire</div>
       <div class="champ">
@@ -100,7 +122,7 @@
         <SelectionDomaineSpecialite
           id="domaine-specialite"
           requis
-          bind:valeurs={utilisateur.postes}
+          bind:valeurs={$utilisateur.postes}
         />
       </div>
       <div class="champ">
@@ -111,7 +133,7 @@
         <ChampTexte
           id="telephone"
           nom="telephone"
-          bind:valeur={utilisateur.telephone}
+          bind:valeur={$utilisateur.telephone}
           aideSaisie="ex : 0XXXXXXXXX"
           modele={modeleTelephone}
           messageErreur="Le téléphone doit commencer par un 0 et être composé de 10 chiffres."
@@ -139,7 +161,7 @@
           id="nomSiret"
           bind:valeur={entite}
           filtreDepartement={departement}
-          on:organisationChoisie={modifieDepartementApresChoixOrganisation}
+          onOrganisationChoisie={modifieDepartementApresChoixOrganisation}
         />
       </div>
     </div>
@@ -157,7 +179,7 @@
         <SelectionNombreServices
           id="estimation-nombre-services"
           {estimationNombreServices}
-          bind:valeur={utilisateur.estimationNombreServices}
+          bind:valeur={$utilisateur.estimationNombreServices}
         />
       </div>
     </div>
@@ -169,7 +191,7 @@
         <input
           id="infolettreAcceptee"
           type="checkbox"
-          bind:checked={utilisateur.infolettreAcceptee}
+          bind:checked={$utilisateur.infolettreAcceptee}
           name="infolettreAcceptee"
         />
         <label for="infolettreAcceptee">
@@ -180,7 +202,7 @@
         <input
           id="transactionnelAccepte"
           type="checkbox"
-          bind:checked={utilisateur.transactionnelAccepte}
+          bind:checked={$utilisateur.transactionnelAccepte}
           name="transactionnelAccepte"
         />
         <label for="transactionnelAccepte">
@@ -192,7 +214,7 @@
   </Formulaire>
 
   <div class="actions">
-    <Bouton type="primaire" titre="Valider" on:click={valide} {enCoursEnvoi} />
+    <Bouton type="primaire" titre="Valider" onclick={valide} {enCoursEnvoi} />
   </div>
 </div>
 

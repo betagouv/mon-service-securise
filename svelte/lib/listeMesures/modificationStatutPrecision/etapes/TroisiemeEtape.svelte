@@ -6,15 +6,21 @@
   import SeparateurHorizontal from '../../../ui/SeparateurHorizontal.svelte';
   import type { ServiceAssocieAUneMesure } from '../../listeMesures.d';
 
-  export let statuts: ReferentielStatut;
-  export let statutSelectionne: StatutMesure | '';
-  export let precision: string;
-  export let servicesConcernes: ServiceAssocieAUneMesure[];
+  interface Props {
+    statuts: ReferentielStatut;
+    statutSelectionne: StatutMesure | '';
+    precision: string;
+    servicesConcernes: ServiceAssocieAUneMesure[];
+  }
 
-  const intitulePluralise =
+  let { statuts, statutSelectionne, precision, servicesConcernes }: Props =
+    $props();
+
+  let intitulePluralise = $derived(
     servicesConcernes.length > 1
       ? 'services concernés par ces modifications'
-      : 'service concerné par cette modification';
+      : 'service concerné par cette modification'
+  );
 </script>
 
 <div class="contenu-resume">

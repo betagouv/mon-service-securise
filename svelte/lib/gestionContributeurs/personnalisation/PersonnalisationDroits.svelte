@@ -1,22 +1,21 @@
 <script lang="ts">
-  import type {
-    Droits,
-    IdUtilisateur,
-    Permission,
-    Rubrique,
-    Utilisateur,
-  } from '../gestionContributeurs.d';
+  import type { Droits, Permission, Rubrique } from '../gestionContributeurs.d';
   import LigneContributeur from '../kit/LigneContributeur.svelte';
   import TagLectureEcriture from '../personnalisation/TagLectureEcriture.svelte';
-  import { createEventDispatcher } from 'svelte';
   import OnOff from '../kit/OnOff.svelte';
+  import type { Contributeur } from '../kit/ChampAvecSuggestions.svelte';
 
-  export let utilisateur: Utilisateur;
-  export let droitsOriginaux: Droits;
-  $: redefinis = { ...droitsOriginaux };
+  interface Props {
+    utilisateur: Contributeur;
+    droitsOriginaux: Droits;
+    onValider: (droits: Droits) => void;
+    onAnnuler: () => void;
+  }
 
-  let rubriques: { id: Rubrique; nom: string; droit: Permission }[];
-  $: rubriques = [
+  let { utilisateur, droitsOriginaux, onValider, onAnnuler }: Props = $props();
+  let redefinis = $derived({ ...droitsOriginaux });
+
+  let rubriques: { id: Rubrique; nom: string; droit: Permission }[] = $derived([
     {
       id: 'DECRIRE',
       nom: 'Récapitulatif du service',
@@ -26,12 +25,7 @@
     { id: 'HOMOLOGUER', nom: 'Homologuer', droit: redefinis.HOMOLOGUER },
     { id: 'RISQUES', nom: 'Risques de sécurité', droit: redefinis.RISQUES },
     { id: 'CONTACTS', nom: 'Contacts utiles', droit: redefinis.CONTACTS },
-  ];
-
-  const dispatch = createEventDispatcher<{
-    valider: Droits;
-    annuler: null;
-  }>();
+  ]);
 </script>
 
 <div class="identite-contributeur">
@@ -48,15 +42,15 @@
   <div class="titre">Permissions</div>
   <div>Sélectionner les droits d'accès pour chaque rubrique.</div>
   <div class="personnalisation">
-    {#each rubriques as { id, nom, droit }}
+    {#each rubriques as { id, nom, droit }, i (i)}
       <div class="rubrique">
         <div>
           <OnOff
             id="visibilite-{id}"
             checked={droit > 0}
-            on:change={({ detail: estCochee }) => {
-              if (estCochee) redefinis[id] = 1;
-              else redefinis[id] = 0;
+            onChange={(estCochee) => {
+              const valeur = estCochee ? 1 : 0;
+              redefinis = { ...redefinis, [id]: valeur };
             }}
           />
           <div class="nom-rubrique">{nom}</div>
@@ -65,7 +59,9 @@
           {#if droit !== 0}
             <TagLectureEcriture
               {droit}
-              on:droitChange={(e) => (redefinis[id] = e.detail)}
+              onDroitChange={(droit) => {
+                redefinis = { ...redefinis, [id]: droit };
+              }}
             />
           {/if}
         </div>
@@ -74,18 +70,10 @@
   </div>
 </div>
 <div class="conteneur-actions">
-  <button
-    class="bouton bouton-secondaire"
-    type="button"
-    on:click={() => dispatch('annuler')}
-  >
+  <button class="bouton bouton-secondaire" type="button" onclick={onAnnuler}>
     Annuler
   </button>
-  <button
-    class="bouton"
-    type="button"
-    on:click={() => dispatch('valider', redefinis)}
-  >
+  <button class="bouton" type="button" onclick={() => onValider(redefinis)}>
     Enregistrer
   </button>
 </div>

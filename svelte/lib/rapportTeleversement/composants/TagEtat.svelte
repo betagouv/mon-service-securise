@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let valide: boolean;
+  interface Props {
+    valide: boolean;
+  }
+
+  let { valide }: Props = $props();
 </script>
 
 <span class:valide>{valide ? 'Valide' : 'Erreur'}</span>

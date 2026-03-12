@@ -57,15 +57,27 @@
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
-  export let idService: IdService;
-  export let categories: Record<IdCategorie, string>;
-  export let statuts: ReferentielStatut;
-  export let priorites: ReferentielPriorite;
-  export let estLectureSeule: boolean;
-  export let modeVisiteGuidee: boolean;
-  export let versionService: VersionService;
+  interface Props {
+    idService: IdService;
+    categories: Record<IdCategorie, string>;
+    statuts: ReferentielStatut;
+    priorites: ReferentielPriorite;
+    estLectureSeule: boolean;
+    modeVisiteGuidee: boolean;
+    versionService: VersionService;
+  }
 
-  $: {
+  let {
+    idService,
+    categories,
+    statuts,
+    priorites,
+    estLectureSeule,
+    modeVisiteGuidee,
+    versionService,
+  }: Props = $props();
+
+  $effect(() => {
     const requete = new URLSearchParams(window.location.search);
     const idModele = requete.get('idModele');
     const idMesure = requete.get('idMesure');
@@ -94,7 +106,7 @@
         enleveParametreDeUrl('idMesure');
       }
     }
-  }
+  });
 
   const rafraichisMesures = async () => {
     mesures.reinitialise(
@@ -160,7 +172,7 @@
       $rechercheParAvancement = 'enAction';
   });
 
-  let etatEnregistrement: EtatEnregistrement = Jamais;
+  let etatEnregistrement: EtatEnregistrement = $state(Jamais);
 
   const metsAJourMesureSpecifique = async (
     indexReel: number,
@@ -212,11 +224,15 @@
     await storeNotifications.marqueLue('nouveaute', 'ongletStatutsMesures');
   };
 
-  $: affichePlanAction = $rechercheParAvancement !== 'statutADefinir';
+  let affichePlanAction = $derived(
+    $rechercheParAvancement !== 'statutADefinir'
+  );
 
-  if (modeVisiteGuidee) {
-    $rechercheParAvancement = 'enAction';
-  }
+  $effect(() => {
+    if (modeVisiteGuidee) {
+      $rechercheParAvancement = 'enAction';
+    }
+  });
 
   const supprimeFiltres = () => {
     $rechercheParCategorie = [];
@@ -257,7 +273,7 @@
     {categories}
     {priorites}
     {versionService}
-    on:supprimeFiltres={supprimeFiltres}
+    onSupprimeFiltres={supprimeFiltres}
   />
 </div>
 {#if $nouveautesPage.doitAfficherNouveautePourPage('ongletStatutsMesures') && !modeVisiteGuidee}
@@ -265,7 +281,7 @@
     id="nouveaute-onglet-statuts-mesures"
     niveau="info"
     avecBoutonFermeture
-    on:fermeture={marqueNouveauteLue}
+    onFermeture={marqueNouveauteLue}
   >
     <div>
       <span>
@@ -297,7 +313,7 @@
       type="status"
       status="warning"
       size="md"
-    />
+    ></dsfr-badge>
   </div>
 {/if}
 
@@ -354,7 +370,7 @@
     {#if $nombreResultats.aucunResultat}
       <AucunResultat
         referentielStatuts={statuts}
-        on:supprimeFiltres={supprimeFiltres}
+        onSupprimeFiltres={supprimeFiltres}
       />
     {:else}
       {#each Object.entries($resultatsDeRecherche.mesuresGenerales).sort(([_, mesure1], [__, mesure2]) => parseInt(mesure1.identifiantNumerique) - parseInt(mesure2.identifiantNumerique)) as [id, mesure] (id)}
@@ -367,26 +383,23 @@
           referentielStatuts={statuts}
           {priorites}
           bind:mesure={$mesures.mesuresGenerales[id]}
-          on:modificationStatut={(e) => {
-            mesures.metAJourStatutMesureGenerale(id, e.detail.statut);
+          onModificationStatut={(statut) => {
+            mesures.metAJourStatutMesureGenerale(id, statut);
             metsAJourMesureGenerale(id, true);
           }}
-          on:modificationPriorite={(e) => {
-            mesures.metAJourPrioriteMesureGenerale(id, e.detail.priorite);
+          onModificationPriorite={(priorite) => {
+            mesures.metAJourPrioriteMesureGenerale(id, priorite);
             metsAJourMesureGenerale(id);
           }}
-          on:modificationEcheance={(e) => {
-            mesures.metAJourEcheanceMesureGenerale(id, e.detail.echeance);
+          onModificationEcheance={(echeance) => {
+            mesures.metAJourEcheanceMesureGenerale(id, echeance);
             metsAJourMesureGenerale(id);
           }}
-          on:modificationResponsables={(e) => {
-            mesures.metAJourResponsablesMesureGenerale(
-              id,
-              e.detail.responsables
-            );
+          onModificationResponsables={(responsables) => {
+            mesures.metAJourResponsablesMesureGenerale(id, responsables);
             metsAJourMesureGenerale(id);
           }}
-          on:click={() =>
+          onclick={() =>
             afficheTiroirEditeMesure({
               mesure: { ...mesure },
               metadonnees: { typeMesure: 'GENERALE', idMesure: id },
@@ -405,32 +418,26 @@
           referentielStatuts={statuts}
           {priorites}
           bind:mesure={$mesures.mesuresSpecifiques[indexReel]}
-          on:modificationStatut={(e) => {
-            mesures.metAJourStatutMesureSpecifique(indexReel, e.detail.statut);
+          onModificationStatut={(statut) => {
+            mesures.metAJourStatutMesureSpecifique(indexReel, statut);
             metsAJourMesureSpecifique(indexReel, true);
           }}
-          on:modificationPriorite={(e) => {
-            mesures.metAJourPrioriteMesureSpecifique(
-              indexReel,
-              e.detail.priorite
-            );
+          onModificationPriorite={(priorite) => {
+            mesures.metAJourPrioriteMesureSpecifique(indexReel, priorite);
             metsAJourMesureSpecifique(indexReel);
           }}
-          on:modificationEcheance={(e) => {
-            mesures.metAJourEcheanceMesureSpecifique(
-              indexReel,
-              e.detail.echeance
-            );
+          onModificationEcheance={(echeance) => {
+            mesures.metAJourEcheanceMesureSpecifique(indexReel, echeance);
             metsAJourMesureSpecifique(indexReel);
           }}
-          on:modificationResponsables={(e) => {
+          onModificationResponsables={(responsables) => {
             mesures.metAJourResponsablesMesureSpecifique(
               indexReel,
-              e.detail.responsables
+              responsables
             );
             metsAJourMesureSpecifique(indexReel);
           }}
-          on:click={() =>
+          onclick={() =>
             afficheTiroirEditeMesure({
               mesure: { ...mesure },
               metadonnees: { typeMesure: 'SPECIFIQUE', idMesure: indexReel },

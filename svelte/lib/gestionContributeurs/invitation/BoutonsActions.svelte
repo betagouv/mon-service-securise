@@ -1,24 +1,24 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  interface Props {
+    afficherBoutonEnvoyer: boolean;
+    onAnnuler?: () => void;
+    onEnvoyer?: () => void;
+  }
 
-  export let afficherBoutonEnvoyer: boolean;
-  const dispatch = createEventDispatcher<{
-    annuler: null;
-    envoyer: null;
-  }>();
+  let { afficherBoutonEnvoyer, onAnnuler, onEnvoyer }: Props = $props();
 </script>
 
 <div class="conteneur-actions">
   <button
     class="bouton bouton-secondaire fermeture-tiroir"
     type="button"
-    on:click={() => dispatch('annuler')}
+    onclick={onAnnuler}
   >
     Annuler
   </button>
 
   {#if afficherBoutonEnvoyer}
-    <button class="bouton" type="button" on:click={() => dispatch('envoyer')}>
+    <button class="bouton" type="button" onclick={onEnvoyer}>
       Envoyer une invitation
     </button>
   {/if}

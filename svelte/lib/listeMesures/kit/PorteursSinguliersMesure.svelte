@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let porteursSinguliers: string[];
+  interface Props {
+    porteursSinguliers: string[];
+  }
+
+  let { porteursSinguliers }: Props = $props();
 </script>
 
 <div class="porteurs-singuliers">

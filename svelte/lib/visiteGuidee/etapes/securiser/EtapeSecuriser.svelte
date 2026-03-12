@@ -3,13 +3,13 @@
   import { onMount } from 'svelte';
   import type { SousEtape } from '../../kit/ModaleSousEtape';
 
-  let ciblePremiereMesure: HTMLDivElement;
-  let cibleOnglets: HTMLDivElement;
-  let cibleGererContributeurs: HTMLElement;
-  let cibleTiroirMesure: HTMLDivElement;
-  let cibleIndiceCyber: HTMLDivElement;
+  let ciblePremiereMesure: HTMLDivElement | undefined = $state();
+  let cibleOnglets: HTMLDivElement | undefined = $state();
+  let cibleGererContributeurs: HTMLElement | undefined = $state();
+  let cibleTiroirMesure: HTMLDivElement | undefined = $state();
+  let cibleIndiceCyber: HTMLDivElement | undefined = $state();
 
-  let sousEtapes: SousEtape[] = [];
+  let sousEtapes: SousEtape[] = $state([]);
   onMount(() => {
     document.body.dispatchEvent(
       new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
@@ -32,6 +32,8 @@
       {
         cible: ciblePremiereMesure,
         callbackInitialeCible: async (cible) => {
+          if (!cible) return;
+
           const ligneMesure = cible.parentElement;
           if (ligneMesure) ligneMesure.inert = true;
           document.body.dispatchEvent(
@@ -48,6 +50,8 @@
       {
         cible: cibleOnglets,
         callbackInitialeCible: async (cible) => {
+          if (!cible) return;
+
           const onglets =
             cible.querySelectorAll<HTMLDivElement>('button.onglet');
           for (let i = 0; i < onglets.length; i++) {
@@ -67,7 +71,7 @@
       {
         cible: cibleGererContributeurs,
         callbackInitialeCible: async (cible) => {
-          cible.inert = true;
+          if (cible) cible.inert = true;
           const invitation = document.querySelectorAll<HTMLDivElement>(
             '.inviter-contributeurs'
           )[0];
@@ -173,7 +177,7 @@
       },
       {
         cible: cibleIndiceCyber,
-        callbackInitialeCible: async (cible) => cible.removeAttribute('href'),
+        callbackInitialeCible: async (cible) => cible?.removeAttribute('href'),
         margeElementMisEnAvant: 3,
         positionnementModale: 'MilieuGauche',
         titre: "Améliorez l'indice cyber de votre service",

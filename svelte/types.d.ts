@@ -1,5 +1,7 @@
-declare namespace svelteHTML {
-  interface HTMLAttributes<T> {
+import 'svelte/elements';
+
+declare module 'svelte/elements' {
+  interface HTMLAttributes {
     'on:activites-modifiees'?: (event: CustomEvent<never>) => void;
     'on:mesure-modifiee'?: (event: CustomEvent<never>) => void;
     'on:collaboratif-service-modifie'?: (event: CustomEvent<never>) => void;

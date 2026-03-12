@@ -5,16 +5,22 @@
   import { metsAJourSimulation } from '../simulationv2.api';
   import type { MiseAJour } from '../../creationV2/creationV2.api';
 
-  export let estComplete: boolean;
-  $: estComplete = $brouillonEstCompletStore;
+  interface Props {
+    estComplete: boolean;
+  }
 
-  const metsAJour = async (e: CustomEvent<MiseAJour>) => {
-    await metsAJourSimulation($leBrouillon.id!, e.detail);
+  let { estComplete = $bindable() }: Props = $props();
+  $effect(() => {
+    estComplete = $brouillonEstCompletStore;
+  });
+
+  const metsAJour = async (miseAJour: MiseAJour) => {
+    await metsAJourSimulation($leBrouillon.id!, miseAJour);
   };
 </script>
 
 <BrouillonDeServiceEditable
   bind:donnees={$leBrouillon}
   seulementNomServiceEditable={false}
-  on:champModifie={metsAJour}
+  onChampModifie={metsAJour}
 />

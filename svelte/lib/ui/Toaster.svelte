@@ -1,9 +1,6 @@
 <script lang="ts">
   import { toasterStore } from './stores/toaster.store';
-  import { glisse } from './animations/transitions';
   import Toast from './Toast.svelte';
-
-  const icones = { info: 'icone_info', succes: 'icone_succes' };
 </script>
 
 {#if $toasterStore.queue.length}
@@ -15,7 +12,7 @@
         {contenu}
         {avecInterpolationHTMLDangereuse}
         avecFermeture
-        on:close={() => toasterStore.fermeToast(id)}
+        onClose={() => toasterStore.fermeToast(id)}
       />
     {/each}
   </aside>

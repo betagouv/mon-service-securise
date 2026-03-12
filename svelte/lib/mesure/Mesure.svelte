@@ -25,18 +25,31 @@
   import ContenuOngletMesureSpecifiqueLieeAModele from './contenus/ContenuOngletMesureSpecifiqueLieeAModele.svelte';
   import { encode } from 'html-entities';
 
-  export let idService: IdService;
-  export let categories: Record<string, string>;
-  export let statuts: ReferentielStatut;
-  export let retoursUtilisateur: Record<string, string>;
-  export let estLectureSeule: boolean;
-  export let priorites: ReferentielPriorite;
-  export let modeVisiteGuidee: boolean;
-  export let nonce: string;
+  interface Props {
+    idService: IdService;
+    categories: Record<string, string>;
+    statuts: ReferentielStatut;
+    retoursUtilisateur: Record<string, string>;
+    estLectureSeule: boolean;
+    priorites: ReferentielPriorite;
+    modeVisiteGuidee: boolean;
+    nonce: string;
+  }
+
+  let {
+    idService,
+    categories,
+    statuts,
+    retoursUtilisateur,
+    estLectureSeule,
+    priorites,
+    modeVisiteGuidee,
+    nonce,
+  }: Props = $props();
 
   const statutInitial = $store.mesureEditee.mesure.statut;
 
-  let enCoursEnvoi = false;
+  let enCoursEnvoi = $state(false);
 
   const rafraichisListeMesure = () => {
     document.body.dispatchEvent(
@@ -77,16 +90,16 @@
     }
   };
 
-  let retourUtilisateur: string;
-  let commentaireRetourUtilisateur: string;
-  let ongletActif: string = 'mesure';
+  let retourUtilisateur: string = $state('');
+  let commentaireRetourUtilisateur: string = $state('');
+  let ongletActif: string = $state('mesure');
 
   const activeOngletMesure = () => {
     ongletActif = 'mesure';
   };
 
-  $: doitAfficherActions = ongletActif !== 'activite';
-  let contenuCommentaire: string = '';
+  let doitAfficherActions = $derived(ongletActif !== 'activite');
+  let contenuCommentaire: string = $state('');
   const sauvegardeCommentaire = async () => {
     const idMesure =
       $store.mesureEditee.metadonnees.typeMesure === 'GENERALE'
@@ -96,12 +109,13 @@
     document.body.dispatchEvent(new CustomEvent('activites-modifiees'));
   };
 
-  $: doitAfficherTiroirModeleMesureSpecifique =
+  let doitAfficherTiroirModeleMesureSpecifique = $derived(
     ongletActif === 'mesure' &&
-    'idModele' in $store.mesureEditee.mesure &&
-    !!$store.mesureEditee.mesure.idModele;
+      'idModele' in $store.mesureEditee.mesure &&
+      !!$store.mesureEditee.mesure.idModele
+  );
 
-  let etapeCouranteModeleMesureSpecifique: 1 | 2 = 1;
+  let etapeCouranteModeleMesureSpecifique: 1 | 2 = $state(1);
 
   const supprimeMesureSpecifiqueAssocieeAuModele = async () => {
     if (
@@ -122,7 +136,7 @@
         `Vous avez supprimé la mesure <b>${encode(nomMesure)}</b>.`,
         true
       );
-    } catch (e) {
+    } catch {
       toasterStore.erreur(
         'Une erreur est survenue',
         "Veuillez réessayer. Si l'erreur persiste, merci de contacter le support."
@@ -161,9 +175,9 @@
   </div>
 
   <Formulaire
-    on:formulaireValide={enregistreMesure}
+    onFormulaireValide={enregistreMesure}
     id="formulaire-mesure"
-    on:formulaireInvalide={activeOngletMesure}
+    onFormulaireInvalide={activeOngletMesure}
   >
     <div class="corps-formulaire">
       {#if doitAfficherTiroirModeleMesureSpecifique}
@@ -203,24 +217,24 @@
         {#if doitAfficherTiroirModeleMesureSpecifique}
           <div class="conteneur-boutons-modele-mesure-specifique">
             {#if estLectureSeule}
-              <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+              <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
               <lab-anssi-bouton
                 titre="Fermer"
                 variante="primaire"
                 taille="md"
-                on:click={fermeTiroir}
-              />
+                onclick={fermeTiroir}
+              ></lab-anssi-bouton>
             {:else if etapeCouranteModeleMesureSpecifique === 1}
-              <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+              <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
               <lab-anssi-bouton
                 titre="Supprimer la mesure du service"
                 variante="tertiaire-sans-bordure"
                 taille="md"
                 icone="delete-line"
                 position-icone="gauche"
-                on:click={() => (etapeCouranteModeleMesureSpecifique = 2)}
-              />
-              <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+                onclick={() => (etapeCouranteModeleMesureSpecifique = 2)}
+              ></lab-anssi-bouton>
+              <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
               <lab-anssi-bouton
                 titre="Enregistrer"
                 variante="primaire"
@@ -228,17 +242,17 @@
                 icone="save-line"
                 position-icone="gauche"
                 actif={!enCoursEnvoi}
-                on:click={() => enregistreMesure()}
-              />
+                onclick={() => enregistreMesure()}
+              ></lab-anssi-bouton>
             {:else}
-              <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+              <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
               <lab-anssi-bouton
                 titre="Annuler"
                 variante="tertiaire-sans-bordure"
                 taille="md"
-                on:click={fermeTiroir}
-              />
-              <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+                onclick={fermeTiroir}
+              ></lab-anssi-bouton>
+              <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
               <lab-anssi-bouton
                 titre="Confirmer la suppression"
                 variante="primaire"
@@ -246,13 +260,13 @@
                 icone="delete-line"
                 position-icone="gauche"
                 actif={!enCoursEnvoi}
-                on:click={() => supprimeMesureSpecifiqueAssocieeAuModele()}
-              />
+                onclick={() => supprimeMesureSpecifiqueAssocieeAuModele()}
+              ></lab-anssi-bouton>
             {/if}
           </div>
         {:else}
           {#if $configurationAffichage.doitAfficherSuppression}
-            <button type="button" on:click={store.afficheEtapeSuppression}>
+            <button type="button" onclick={store.afficheEtapeSuppression}>
               Supprimer la mesure
             </button>
           {/if}
@@ -266,7 +280,7 @@
         {/if}
       {:else}
         <CommentaireMesure
-          on:submit={sauvegardeCommentaire}
+          onsubmit={sauvegardeCommentaire}
           bind:contenuCommentaire
           {nonce}
         />

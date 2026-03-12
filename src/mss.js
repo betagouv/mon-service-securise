@@ -202,7 +202,6 @@ const creeServeur = ({
   app.use(adaptateurGestionErreur.controleurErreurs);
 
   if (avecPageErreur) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     app.use((erreur, _requete, reponse, suite) => {
       if (erreur.message === 'CSRF token mismatch') {
         return suite(erreur);

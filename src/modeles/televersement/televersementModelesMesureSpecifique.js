@@ -60,7 +60,6 @@ class TeleversementModelesMesureSpecifique {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   #controleUnModele(modele, lesAutresModeles) {
     const erreurs = [];
 

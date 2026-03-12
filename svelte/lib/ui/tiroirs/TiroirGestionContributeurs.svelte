@@ -3,15 +3,23 @@
   import GestionContributeurs from '../../gestionContributeurs/GestionContributeurs.svelte';
   import type { Service } from '../../gestionContributeurs/gestionContributeurs.d';
   import { store } from '../../gestionContributeurs/gestionContributeurs.store';
+  import { untrack } from 'svelte';
 
-  export let services: Service[];
+  interface Props {
+    services: Service[];
+  }
+
+  let { services }: Props = $props();
   export const titre: string = 'Gérer les contributeurs';
-  export const sousTitre: string =
+  export const sousTitre: string = untrack(() =>
     services.length > 1
       ? 'Gérer la liste des personnes invitées à contribuer aux services.'
-      : 'Gérer la liste des personnes invitées à contribuer au service.';
+      : 'Gérer la liste des personnes invitées à contribuer au service.'
+  );
 
-  store.reinitialise(services);
+  $effect(() => {
+    store.reinitialise(services);
+  });
 </script>
 
 <ContenuTiroir>

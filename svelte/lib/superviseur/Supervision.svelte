@@ -5,14 +5,18 @@
   import FilAriane from '../ui/FilAriane.svelte';
   import ListeDeroulante from '../ui/ListeDeroulante.svelte';
 
-  export let optionsFiltrageDate: Record<string, string>;
-  export let entitesSupervisees: EntiteSupervisee[];
-  let urlSupervision: string;
-  let enCoursChargement: boolean = false;
+  interface Props {
+    optionsFiltrageDate: Record<string, string>;
+    entitesSupervisees: EntiteSupervisee[];
+  }
 
-  let filtreDate: string;
-  let filtreBesoinsSecurite: string;
-  let filtreEntite: string;
+  let { optionsFiltrageDate, entitesSupervisees }: Props = $props();
+  let urlSupervision: string | undefined = $state();
+  let enCoursChargement: boolean = $state(false);
+
+  let filtreDate: string | undefined = $state();
+  let filtreBesoinsSecurite: string | undefined = $state();
+  let filtreEntite: string | undefined = $state();
 
   onMount(async () => {
     await recupereUrlIframe();
@@ -48,7 +52,7 @@
 <div class="conteneur-filtres">
   <ListeDeroulante
     bind:valeur={filtreBesoinsSecurite}
-    on:change={metAJourFiltres}
+    onchange={metAJourFiltres}
     label="Besoins de sécurité"
     id="filtre-besoins-securite"
     options={[
@@ -61,7 +65,7 @@
   />
   <ListeDeroulante
     bind:valeur={filtreDate}
-    on:change={metAJourFiltres}
+    onchange={metAJourFiltres}
     label="Date"
     id="filtre-date"
     options={[
@@ -75,7 +79,7 @@
   />
   <ListeDeroulante
     bind:valeur={filtreEntite}
-    on:change={metAJourFiltres}
+    onchange={metAJourFiltres}
     label="Entité"
     id="filtre-entite"
     options={[
@@ -101,8 +105,8 @@
     width="800"
     height="1000"
     allowtransparency
-    on:load={() => (enCoursChargement = false)}
-  />
+    onload={() => (enCoursChargement = false)}
+  ></iframe>
 {/if}
 
 <style>

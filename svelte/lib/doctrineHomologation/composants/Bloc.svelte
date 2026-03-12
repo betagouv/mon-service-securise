@@ -1,12 +1,22 @@
 <script lang="ts">
-  export let variation: 'attenue' | 'primaire' | 'defaut' = 'defaut';
-  export let sansMargeLaterale = false;
-  export let classe = '';
+  interface Props {
+    variation?: 'attenue' | 'primaire' | 'defaut';
+    sansMargeLaterale?: boolean;
+    classe?: string;
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    variation = 'defaut',
+    sansMargeLaterale = false,
+    classe = '',
+    children,
+  }: Props = $props();
 </script>
 
 <div class="bloc {variation}" class:sans-marge-laterale={sansMargeLaterale}>
   <div class="contenu-bloc {classe ?? ''}">
-    <slot />
+    {@render children?.()}
   </div>
 </div>
 

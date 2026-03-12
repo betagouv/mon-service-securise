@@ -4,33 +4,37 @@
   import ContenuTiroir from './ContenuTiroir.svelte';
   import { tiroirStore } from '../stores/tiroir.store';
   import Formulaire from '../Formulaire.svelte';
-  import type {
-    BrouillonService,
-    Service,
-  } from '../../tableauDeBord/tableauDeBord.d';
   import Avertissement from '../Avertissement.svelte';
   import ChampTexte from '../ChampTexte.svelte';
   import type { ServiceOuBrouillon } from '../../tableauDeBord/ActionsDesServices.svelte';
+  import { untrack } from 'svelte';
 
-  export let servicesEtBrouillon: ServiceOuBrouillon[];
+  interface Props {
+    servicesEtBrouillon: ServiceOuBrouillon[];
+  }
+
+  let { servicesEtBrouillon }: Props = $props();
   export const titre = 'Supprimer';
-  export const sousTitre =
+  export const sousTitre = untrack(() =>
     servicesEtBrouillon.length > 1
       ? 'Effacer toutes les données des services sélectionnés.'
-      : 'Effacer toutes les données du service sélectionné.';
+      : 'Effacer toutes les données du service sélectionné.'
+  );
 
-  const confirmationSuppression =
+  let confirmationSuppression = $derived(
     servicesEtBrouillon.length > 1
       ? `${servicesEtBrouillon.length} services`
-      : servicesEtBrouillon[0].nomService;
-  const intituleSuppression =
+      : servicesEtBrouillon[0].nomService
+  );
+  let intituleSuppression = $derived(
     servicesEtBrouillon.length > 1
       ? `les ${servicesEtBrouillon.length} services séléctionnés`
-      : `le service ${servicesEtBrouillon[0].nomService}`;
+      : `le service ${servicesEtBrouillon[0].nomService}`
+  );
 
-  let confirmation = '';
+  let confirmation = $state('');
 
-  let enCoursEnvoi = false;
+  let enCoursEnvoi = $state(false);
   const supprimeService = async () => {
     enCoursEnvoi = true;
 
@@ -43,10 +47,10 @@
       ...services.map((s) => axios.delete(`/api/service/${s.id}`)),
       ...brouillons.map((b) => axios.delete(`/api/brouillon-service/${b.id}`)),
     ]);
-    tiroirStore.ferme();
     document.body.dispatchEvent(new CustomEvent('rafraichis-services'));
 
     enCoursEnvoi = false;
+    tiroirStore.ferme();
   };
 
   const echappeTexte = (texte: string) => {
@@ -75,7 +79,7 @@
   };
 </script>
 
-<Formulaire on:formulaireValide={supprimeService} formulaireDuTiroir>
+<Formulaire onFormulaireValide={supprimeService} formulaireDuTiroir>
   <ContenuTiroir>
     <span>Souhaitez-vous vraiment supprimer <b>{intituleSuppression}</b> ?</span
     >
@@ -84,8 +88,8 @@
         <span>
           <b>Cette action est irréversible</b>
           <br />
-          Les données seront définitivement effacées. Les contributeurs n'auront
-          plus accès à ce service.
+          Les données seront définitivement effacées. Les contributeurs n'auront plus
+          accès à ce service.
         </span>
       </Avertissement>
       <Avertissement>
@@ -115,7 +119,7 @@
       titre="Annuler"
       type="secondaire"
       boutonSoumission={false}
-      on:click={() => {
+      onclick={() => {
         if (!enCoursEnvoi) tiroirStore.ferme();
       }}
     />

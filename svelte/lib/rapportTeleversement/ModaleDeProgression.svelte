@@ -1,20 +1,28 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { onMount } from 'svelte';
 
-  export let apiGetProgression: () => Promise<number>;
-  export let delaiRafraichissement = 1_000;
+  interface Props {
+    apiGetProgression: () => Promise<number>;
+    delaiRafraichissement?: number;
+    onFini: () => void;
+  }
 
-  const dispatch = createEventDispatcher<{ fini: null }>();
-  let elementModale: HTMLDialogElement;
-  let progression = 0;
+  let {
+    apiGetProgression,
+    delaiRafraichissement = 1_000,
+    onFini,
+  }: Props = $props();
+
+  let elementModale: HTMLDialogElement | undefined = $state();
+  let progression = $state(0);
 
   async function monitoreProgression() {
     try {
       progression = await apiGetProgression();
 
-      if (progression === 100) dispatch('fini');
+      if (progression === 100) onFini();
       else setTimeout(monitoreProgression, delaiRafraichissement);
-    } catch (e) {
+    } catch {
       setTimeout(monitoreProgression, 5_000);
       return;
     }
@@ -45,7 +53,7 @@
         </h2>
         <span>Merci de ne pas rafraichir votre navigateur</span>
       </div>
-      <progress value={progression} max="100" />
+      <progress value={progression} max="100"></progress>
     </div>
   </div>
 </dialog>

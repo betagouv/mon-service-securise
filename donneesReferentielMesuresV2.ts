@@ -183,7 +183,7 @@ export const mesuresV2: Record<string, DetailReferentielMesureV2> = {
     description:
       "Anonymiser les données collectées concernant l’utilisation du système d'information par les utilisateurs",
     descriptionLongue:
-      "Configurer le service en vue d'anonymiser autant que possible les données à caractère personnel des utilisateurs conservées pour le bon fonctionnement ou la sécurité du service (ex. log de tentatives d'accès au service) ou à des fins d'analyse (ex. statistiques).<br><br>Cette mesure permet de protéger les utilisateurs contre la traçabilité nominative de leurs actions dans le cadre de l'utilisation du service tout en permettant d'assurer la sécurité de ce dernier au travers du suivi et de l'imputabilité des actions.<br><br><br>",
+      "Configurer le service en vue d'anonymiser autant que possible les données à caractère personnel des utilisateurs conservées pour le bon fonctionnement ou la sécurité du service (ex. log de tentatives d'accès au service) ou à des fins d'analyse (ex. statistiques).<br><br>Cette mesure permet de protéger les utilisateurs contre la traçabilité nominative de leurs actions dans le cadre de l'utilisation du service tout en permettant d'assurer la sécurité de ce dernier au travers du suivi et de l'imputabilité des actions.",
     categorie: 'protection',
     identifiantNumerique: '0050',
     referentiel: 'ANSSI',

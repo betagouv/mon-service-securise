@@ -1,15 +1,30 @@
 <script lang="ts">
   import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
 
-  export let parDessusDeclencheur = false;
-  export let fermeMenuSiClicInterne = false;
-  export let estLectureSeule = false;
-  export let menuOuvert = false;
-  export let stopPropagation = false;
-  export let classePersonnalisee = '';
+  interface Props {
+    parDessusDeclencheur?: boolean;
+    fermeMenuSiClicInterne?: boolean;
+    estLectureSeule?: boolean;
+    menuOuvert?: boolean;
+    stopPropagation?: boolean;
+    classePersonnalisee?: string;
+    declencheur?: import('svelte').Snippet;
+    children?: import('svelte').Snippet;
+  }
 
-  let declencheurEl: HTMLButtonElement;
-  let contenuEl: HTMLDivElement;
+  let {
+    parDessusDeclencheur = false,
+    fermeMenuSiClicInterne = false,
+    estLectureSeule = false,
+    menuOuvert = $bindable(false),
+    stopPropagation = false,
+    classePersonnalisee = '',
+    declencheur,
+    children,
+  }: Props = $props();
+
+  let declencheurEl: HTMLButtonElement | undefined = $state();
+  let contenuEl: HTMLDivElement | undefined = $state();
 
   const ouvreLeMenu = (e: MouseEvent) => {
     if (stopPropagation) e.stopPropagation();
@@ -25,11 +40,11 @@
   <button
     type="button"
     class="declencheur"
-    on:click={ouvreLeMenu}
+    onclick={ouvreLeMenu}
     bind:this={declencheurEl}
     disabled={estLectureSeule}
   >
-    <slot name="declencheur" />
+    {@render declencheur?.()}
   </button>
   <div
     class="svelte-menu-flottant"
@@ -37,7 +52,7 @@
     class:invisible={!menuOuvert}
     class:parDessusDeclencheur
   >
-    <slot />
+    {@render children?.()}
   </div>
 </div>
 

@@ -2,20 +2,29 @@
   import Toast from '../ui/Toast.svelte';
   import { onMount } from 'svelte';
   import type { ResumeRapportTeleversement } from './rapportTeleversementGenerique.types.d';
-  import { createEventDispatcher } from 'svelte';
 
-  const dispatch = createEventDispatcher<{
-    confirmeTeleversement: null;
-    retenteTeleversement: null;
-    annule: null;
-  }>();
+  interface Props {
+    titreDuRapport: string;
+    resume: undefined | ResumeRapportTeleversement;
+    tableau_du_rapport?: import('svelte').Snippet;
+    onConfirmeTeleversement: () => void;
+    onRetenteTeleversement: () => void;
+    onAnnule: () => void;
+  }
 
-  export let titreDuRapport: string;
-  export let resume: undefined | ResumeRapportTeleversement;
+  let {
+    titreDuRapport,
+    resume,
+    tableau_du_rapport,
+    onConfirmeTeleversement,
+    onRetenteTeleversement,
+    onAnnule,
+  }: Props = $props();
 
-  let elementModale: HTMLDialogElement;
+  let elementModale: HTMLDialogElement | undefined = $state();
 
   onMount(() => {
+    if (!elementModale) return;
     elementModale.inert = true;
     elementModale.showModal();
     elementModale.inert = false;
@@ -27,7 +36,7 @@
   class="dialog-rapport-televersement-generique"
 >
   <div class="conteneur-fermeture">
-    <button on:click={() => dispatch('annule')}>Fermer</button>
+    <button onclick={onAnnule}>Fermer</button>
   </div>
   <div class="conteneur-modale">
     <div class="entete-modale">
@@ -66,21 +75,21 @@
     <div class="contenu-modale">
       <h2>Rapport détaillé</h2>
       <div class="conteneur-rapport-detaille">
-        <slot name="tableau-du-rapport" />
+        {@render tableau_du_rapport?.()}
       </div>
     </div>
     <div class="pied-modale">
       <div class="conteneur-actions">
-        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
         <lab-anssi-bouton
           titre="Annuler"
           variante="tertiaire-sans-bordure"
           taille="md"
           positionIcone="sans"
-          on:click={() => dispatch('annule')}
-        />
+          onclick={onAnnule}
+        ></lab-anssi-bouton>
 
-        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
         <lab-anssi-bouton
           titre={resume?.statut === 'VALIDE'
             ? resume.labelValiderTeleversement
@@ -89,13 +98,14 @@
           taille="md"
           icone={resume?.statut === 'VALIDE' ? 'check-line' : 'refresh-line'}
           positionIcone="gauche"
-          on:click={() =>
-            dispatch(
-              resume?.statut === 'VALIDE'
-                ? 'confirmeTeleversement'
-                : 'retenteTeleversement'
-            )}
-        />
+          onclick={() => {
+            if (resume?.statut === 'VALIDE') {
+              onConfirmeTeleversement();
+            } else {
+              onRetenteTeleversement();
+            }
+          }}
+        ></lab-anssi-bouton>
       </div>
     </div>
   </div>
@@ -232,10 +242,10 @@
   }
 
   :global(
-      .dialog-rapport-televersement-generique tr th:last-of-type,
-      .dialog-rapport-televersement-generique tr td:last-of-type,
-      .dialog-rapport-televersement-generique .bordure-droite
-    ) {
+    .dialog-rapport-televersement-generique tr th:last-of-type,
+    .dialog-rapport-televersement-generique tr td:last-of-type,
+    .dialog-rapport-televersement-generique .bordure-droite
+  ) {
     border-right: 1px solid var(--systeme-design-etat-contour-champs);
   }
 

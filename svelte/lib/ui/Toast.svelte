@@ -1,15 +1,27 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import { glisse } from './animations/transitions';
 
-  export let niveau: 'info' | 'succes' | 'erreur' | 'alerte';
-  export let titre: string;
-  export let contenu: string;
+  interface Props {
+    niveau: 'info' | 'succes' | 'erreur' | 'alerte';
+    titre: string;
+    contenu: string;
+    avecOmbre?: boolean;
+    avecAnimation?: boolean;
+    avecFermeture?: boolean;
+    avecInterpolationHTMLDangereuse?: boolean;
+    onClose?: () => void;
+  }
 
-  export let avecOmbre: boolean = true;
-  export let avecAnimation: boolean = true;
-  export let avecFermeture: boolean = false;
-  export let avecInterpolationHTMLDangereuse: boolean = false;
+  let {
+    niveau,
+    titre,
+    contenu,
+    avecOmbre = true,
+    avecAnimation = true,
+    avecFermeture = false,
+    avecInterpolationHTMLDangereuse = false,
+    onClose,
+  }: Props = $props();
 
   const icones = {
     info: 'icone_info',
@@ -20,12 +32,11 @@
 
   const transitionConditionnelle = (
     noeud: HTMLElement,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     options: Record<string, any>
   ) => {
     if (avecAnimation) return options.fonction(noeud, options);
   };
-
-  const emetEvenement = createEventDispatcher();
 </script>
 
 <article
@@ -40,7 +51,7 @@
   {#if avecFermeture}
     <button
       class="fermeture"
-      on:click={() => emetEvenement('close')}
+      onclick={() => onClose?.()}
       title="Fermeture du toast">✕</button
     >
   {/if}

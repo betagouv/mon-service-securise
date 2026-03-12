@@ -1,7 +1,11 @@
 <script lang="ts">
-  export let description: string;
-  export let lienBlog: string | undefined = undefined;
-  export let repliee: boolean = false;
+  interface Props {
+    description: string;
+    lienBlog?: string | undefined;
+    repliee?: boolean;
+  }
+
+  let { description, lienBlog = undefined, repliee = false }: Props = $props();
 
   const recupereObjectif = (
     descriptionComplete: string
@@ -24,17 +28,14 @@
     return { description };
   };
 
-  let descriptionAAfficher: string;
-  let objectifAAfficher: string | undefined;
-  $: {
-    const resultat = recupereObjectif(description);
-    descriptionAAfficher = resultat.description;
-    objectifAAfficher = resultat.objectif;
-  }
+  let descriptionAAfficher = $derived(
+    recupereObjectif(description).description
+  );
+  let objectifAAfficher = $derived(recupereObjectif(description).objectif);
 </script>
 
 <details open={!repliee}>
-  <summary />
+  <summary></summary>
   <p class="description">
     {@html descriptionAAfficher}
   </p>

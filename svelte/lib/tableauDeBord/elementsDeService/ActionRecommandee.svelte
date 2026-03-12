@@ -6,10 +6,14 @@
   import TiroirGestionContributeurs from '../../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import type { Service } from '../tableauDeBord.d';
 
-  export let action: ActionRecommandee;
-  export let service: Service;
+  interface Props {
+    action: ActionRecommandee;
+    service: Service;
+  }
 
-  const idService = service.id;
+  let { action, service }: Props = $props();
+
+  let idService = $derived(service.id);
 </script>
 
 {#if action.id === 'mettreAJour'}
@@ -80,7 +84,7 @@
     taille="petit"
     icone="inviter"
     classe="inviterContributeur"
-    on:click={() =>
+    onclick={() =>
       tiroirStore.afficheContenu(TiroirGestionContributeurs, {
         services: [service],
       })}

@@ -1,12 +1,16 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import CheckboxIllustree from './CheckboxIllustree.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import type { SpecificiteProjet } from '../../creationV2.types';
   import { leBrouillon } from '../brouillon.store';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
+  }
+
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   estComplete = true;
 
@@ -19,10 +23,10 @@
     echangeOuReceptionEmails: 'echangeOuReceptionEmails.svg',
   };
 
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
-
-  $: emetEvenement('champModifie', {
-    specificitesProjet: $leBrouillon.specificitesProjet,
+  $effect(() => {
+    onChampModifie({
+      specificitesProjet: $leBrouillon.specificitesProjet,
+    });
   });
 
   const specificiteProjet = Object.entries(questionsV2.specificiteProjet) as [
@@ -36,7 +40,7 @@
   périmètre de l'homologation ?
 
   <span class="indication">Sélectionnez une ou plusieurs réponses</span>
-  {#each specificiteProjet as [idType, details]}
+  {#each specificiteProjet as [idType, details] (idType)}
     {@const nomImage = illustrations[idType]}
     <CheckboxIllustree
       id={idType}

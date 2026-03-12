@@ -2,21 +2,25 @@
   import { validationChamp } from '../directives/validationChamp';
   import type { EstimationNombreServices, Intervalle } from './inscription.d';
 
-  export let id: string;
-  export let estimationNombreServices: EstimationNombreServices[];
-  export let valeur: Intervalle | null;
+  interface Props {
+    id: string;
+    estimationNombreServices: EstimationNombreServices[];
+    valeur: Intervalle | null;
+  }
 
-  let nombreServices: string = valeur
-    ? `${valeur.borneBasse}_${valeur.borneHaute}`
-    : '';
-  $: {
+  let { id, estimationNombreServices, valeur = $bindable() }: Props = $props();
+
+  let nombreServices: string = $state(
+    valeur ? `${valeur.borneBasse}_${valeur.borneHaute}` : ''
+  );
+  $effect(() => {
     valeur = nombreServices
       ? {
           borneBasse: nombreServices.split('_')[0],
           borneHaute: nombreServices.split('_')[1],
         }
       : null;
-  }
+  });
 </script>
 
 <div class="conteneur">
@@ -28,7 +32,7 @@
     use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une option.'}
   >
     <option value="" disabled selected>Sélectionner un nombre</option>
-    {#each estimationNombreServices as estimation}
+    {#each estimationNombreServices as estimation, i (i)}
       {@const valeur = `${estimation.borneBasse}_${estimation.borneHaute}`}
       <option value={valeur}>{estimation.label}</option>
     {/each}

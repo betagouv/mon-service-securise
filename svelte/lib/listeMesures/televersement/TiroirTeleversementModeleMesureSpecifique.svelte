@@ -15,12 +15,17 @@
   export const titre: string = 'Téléverser des mesures';
   export const sousTitre: string =
     'Importez votre liste de mesures, associez-les aux services de votre choix, puis ajustez leur statut ou leur précision simultanément.';
-  export let capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+  interface Props {
+    capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+  }
 
-  let nombreRestantModelesAjoutables =
-    capaciteAjoutDeMesure.nombreMaximum - $modelesMesureSpecifique.length;
+  let { capaciteAjoutDeMesure }: Props = $props();
 
-  let etatTeleversement: EtatTeleversement = 'EnAttente';
+  let nombreRestantModelesAjoutables = $derived(
+    capaciteAjoutDeMesure.nombreMaximum - $modelesMesureSpecifique.length
+  );
+
+  let etatTeleversement: EtatTeleversement = $state('EnAttente');
 
   const afficheRapportDuTeleversement = async () => {
     if (etatTeleversement !== 'Valide') return;
@@ -55,25 +60,25 @@
     ]}
     apiPostDuTeleversement="/api/televersement/modelesMesureSpecifique"
     formatAccepte={FormatAccepte.Excel}
-    on:televersementChange={(e) => {
-      etatTeleversement = e.detail;
+    onTeleversementChange={(etat) => {
+      etatTeleversement = etat;
     }}
   />
 </ContenuTiroir>
 <ActionsTiroir>
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   <lab-anssi-bouton
     titre="Annuler"
     variante="tertiaire-sans-bordure"
     taille="md"
     positionIcone="sans"
     actif={etatTeleversement !== 'EnCoursEnvoi'}
-    on:click={() => {
+    onclick={() => {
       if (etatTeleversement !== 'EnCoursEnvoi') tiroirStore.ferme();
     }}
-  />
+  ></lab-anssi-bouton>
 
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   <lab-anssi-bouton
     titre="Valider le fichier"
     variante="primaire"
@@ -81,6 +86,6 @@
     icone="check-line"
     positionIcone="gauche"
     actif={etatTeleversement === 'Valide'}
-    on:click={afficheRapportDuTeleversement}
-  />
+    onclick={afficheRapportDuTeleversement}
+  ></lab-anssi-bouton>
 </ActionsTiroir>

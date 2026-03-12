@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   export type ModeAffichageTiroir = 'AJOUT' | 'EDITION' | '';
 </script>
 
@@ -14,7 +14,6 @@
   } from './risques.d';
   import { Referentiel } from '../ui/types.d';
   import SelectionGravite from './SelectionGravite.svelte';
-  import { createEventDispatcher } from 'svelte';
   import Formulaire from '../ui/Formulaire.svelte';
   import Bouton from '../ui/Bouton.svelte';
   import ControleFormulaireTiroir from '../ui/ControleFormulaireTiroir.svelte';
@@ -31,25 +30,50 @@
   import IdentifiantRisque from './IdentifiantRisque.svelte';
   import Switch from '../ui/Switch.svelte';
 
-  export let ouvert = true;
-  export let risque: Risque | undefined;
-  export let referentielRisques: ReferentielRisques;
-  export let referentielCategories: ReferentielCategories;
-  export let referentielGravites: ReferentielGravites;
-  export let referentielVraisemblances: ReferentielVraisemblances;
-  export let estLectureSeule: boolean;
-  export let idService: string;
-  export let modeAffichageTiroir: ModeAffichageTiroir = '';
-  let enCoursEnvoi: boolean = false;
+  interface Props {
+    ouvert?: boolean;
+    risque: Risque | undefined;
+    referentielRisques: ReferentielRisques;
+    referentielCategories: ReferentielCategories;
+    referentielGravites: ReferentielGravites;
+    referentielVraisemblances: ReferentielVraisemblances;
+    estLectureSeule: boolean;
+    idService: string;
+    modeAffichageTiroir?: ModeAffichageTiroir;
+    onRisqueMisAJour: (risque: Risque) => void;
+    onRisqueSupprime: (risque: Risque) => void;
+    onRisqueAjoute: (risque: Risque) => void;
+  }
 
-  $: risqueDuReferentiel =
-    risque && risque.type === 'GENERAL' && referentielRisques[risque.id];
+  let {
+    ouvert = $bindable(true),
+    risque: r,
+    referentielRisques,
+    referentielCategories,
+    referentielGravites,
+    referentielVraisemblances,
+    estLectureSeule,
+    idService,
+    modeAffichageTiroir = '',
+    onRisqueMisAJour,
+    onRisqueSupprime,
+    onRisqueAjoute,
+  }: Props = $props();
+  let enCoursEnvoi: boolean = $state(false);
 
-  const emet = createEventDispatcher<{
-    risqueMisAJour: Risque;
-    risqueSupprime: Risque;
-    risqueAjoute: Risque;
-  }>();
+  let risque = $state<Risque | undefined>();
+
+  $effect(() => {
+    if (r) {
+      risque = r;
+    } else {
+      risque = undefined;
+    }
+  });
+
+  let risqueDuReferentiel = $derived(
+    risque && risque.type === 'GENERAL' && referentielRisques[risque.id]
+  );
 
   const fermeTiroir = () => {
     ouvert = false;
@@ -61,7 +85,7 @@
       try {
         enCoursEnvoi = true;
         const risqueMisAJour = await enregistreRisque(idService, risque);
-        emet('risqueMisAJour', risqueMisAJour);
+        onRisqueMisAJour(risqueMisAJour);
         fermeTiroir();
       } finally {
         enCoursEnvoi = false;
@@ -74,33 +98,33 @@
       try {
         enCoursEnvoi = true;
         const risqueAjoute = await ajouteRisqueSpecifique(idService, risque);
-        emet('risqueAjoute', risqueAjoute);
+        onRisqueAjoute(risqueAjoute);
         fermeTiroir();
       } finally {
         enCoursEnvoi = false;
       }
     }
   };
-  $: titreTiroir =
+  let titreTiroir = $derived(
     risque && modeAffichageTiroir === 'EDITION'
       ? intituleRisque(risque)
-      : 'Ajouter un risque';
+      : 'Ajouter un risque'
+  );
 
-  let afficheConfirmationSuppressionRisque = false;
+  let afficheConfirmationSuppressionRisque = $derived(!risque);
+
   const supprimeRisque = async () => {
     if (risque && risque.type === 'SPECIFIQUE') {
       try {
         enCoursEnvoi = true;
         await supprimeRisqueSpecifique(idService, risque);
-        emet('risqueSupprime', risque);
+        onRisqueSupprime(risque);
         fermeTiroir();
       } finally {
         enCoursEnvoi = false;
       }
     }
   };
-
-  $: risque, (afficheConfirmationSuppressionRisque = false);
 </script>
 
 <div class="tiroir-risque {risque?.type}" class:ouvert>
@@ -113,7 +137,7 @@
           <IdentifiantRisque {risque} />
           {#if risqueDuReferentiel}
             <CartoucheReferentiel referentiel={Referentiel.ANSSI} />
-            {#each risque.categories as categorie}
+            {#each risque.categories as categorie (categorie)}
               <CartoucheCategorieRisque
                 libelleCategorie={referentielCategories[categorie]}
               />
@@ -123,7 +147,7 @@
           {/if}
         </div>
       </div>
-      <button class="fermeture" on:click={fermeTiroir}>✕</button>
+      <button class="fermeture" onclick={fermeTiroir}>✕</button>
     </div>
     <div class="contenu-risque">
       {#if afficheConfirmationSuppressionRisque}
@@ -141,7 +165,7 @@
               titre="Annuler"
               type="secondaire"
               boutonSoumission={false}
-              on:click={() => {
+              onclick={() => {
                 afficheConfirmationSuppressionRisque = false;
               }}
             />
@@ -149,14 +173,14 @@
               type="primaire"
               boutonSoumission={false}
               {enCoursEnvoi}
-              on:click={supprimeRisque}
+              onclick={supprimeRisque}
               titre="Confirmer la suppression"
             />
           </div>
         </div>
       {:else}
         <Formulaire
-          on:formulaireValide={modeAffichageTiroir === 'EDITION'
+          onFormulaireValide={modeAffichageTiroir === 'EDITION'
             ? metsAJour
             : ajoute}
           classe="formulaire-risque"
@@ -233,7 +257,7 @@
                 icone="suppression"
                 titre="Supprimer le risque"
                 boutonSoumission={false}
-                on:click={() => {
+                onclick={() => {
                   afficheConfirmationSuppressionRisque = true;
                 }}
               />
@@ -242,8 +266,8 @@
               <Switch
                 actif={!risque.desactive}
                 id="switch-{risque.id}-tiroir"
-                on:change={(e) => {
-                  if (risque) risque.desactive = !e.detail;
+                onChange={(actif) => {
+                  if (risque) risque.desactive = !actif;
                 }}
               />
             {/if}

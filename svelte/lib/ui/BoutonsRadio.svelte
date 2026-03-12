@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   export type OptionBoutonRadio = {
     titre: string;
     sousTitre?: string;
@@ -7,8 +7,13 @@
 </script>
 
 <script lang="ts">
-  export let options: OptionBoutonRadio[];
-  export let valeurSelectionnee: string = '';
+  interface Props {
+    options: OptionBoutonRadio[];
+    valeurSelectionnee?: string;
+  }
+
+  let { options, valeurSelectionnee = $bindable() }: Props = $props();
+  valeurSelectionnee ??= '';
 
   const nomUnique = crypto.randomUUID();
 </script>

@@ -8,14 +8,18 @@
   import Lien from '../Lien.svelte';
   import type { Service } from '../../tableauDeBord/tableauDeBord.d';
 
-  export let service: Service;
+  interface Props {
+    service: Service;
+  }
+
+  let { service }: Props = $props();
   export const titre = 'Dupliquer';
   export const sousTitre =
     "Créer une ou plusieurs copies du services sélectionné. Cette copie n'inclut pas les données concernant son homologation.";
 
-  let nombreCopies: number = 1;
-  let enCoursEnvoi = false;
-  let enErreur = false;
+  let nombreCopies: number = $state(1);
+  let enCoursEnvoi = $state(false);
+  let enErreur = $state(false);
   const dupliqueService = async () => {
     enCoursEnvoi = true;
     const uneCopie = () =>
@@ -25,8 +29,8 @@
       for (let i = 0; i < nombreCopies; i++) {
         await uneCopie();
       }
-      tiroirStore.ferme();
       document.body.dispatchEvent(new CustomEvent('rafraichis-services'));
+      tiroirStore.ferme();
     } catch (exc) {
       if (axios.isAxiosError(exc) && exc.response) {
         const { data, status } = exc.response;
@@ -43,7 +47,7 @@
   };
 </script>
 
-<Formulaire on:formulaireValide={dupliqueService} formulaireDuTiroir>
+<Formulaire onFormulaireValide={dupliqueService} formulaireDuTiroir>
   <ContenuTiroir>
     {#if enErreur}
       <span>
@@ -85,7 +89,7 @@
       <Bouton
         titre="Annuler"
         type="secondaire"
-        on:click={() => {
+        onclick={() => {
           if (!enCoursEnvoi) tiroirStore.ferme();
         }}
       />

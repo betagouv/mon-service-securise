@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import MenuFlottant from '../../ui/MenuFlottant.svelte';
   import type { ResumeNiveauDroit } from '../../ui/types';
 
@@ -10,13 +9,19 @@
     PERSONNALISE: 'Personnalisé',
   };
 
-  export let niveau: ResumeNiveauDroit;
-  export let droitsModifiables: boolean;
+  interface Props {
+    niveau: ResumeNiveauDroit;
+    droitsModifiables: boolean;
+    onDroitsChange: (droits: ResumeNiveauDroit) => void;
+    onChoixPersonnalisation: () => void;
+  }
 
-  const dispatch = createEventDispatcher<{
-    droitsChange: ResumeNiveauDroit;
-    choixPersonnalisation: null;
-  }>();
+  let {
+    niveau,
+    droitsModifiables,
+    onDroitsChange,
+    onChoixPersonnalisation,
+  }: Props = $props();
 </script>
 
 {#if !droitsModifiables}
@@ -25,14 +30,16 @@
   </div>
 {:else}
   <MenuFlottant fermeMenuSiClicInterne={true}>
-    <span slot="declencheur" class="role role-modifiable {niveau}">
-      {STATUS_DROITS[niveau]}
-    </span>
+    {#snippet declencheur()}
+      <span class="role role-modifiable {niveau}">
+        {STATUS_DROITS[niveau]}
+      </span>
+    {/snippet}
 
     <div class="roles-disponibles">
       <button
         class="role-propose lecture"
-        on:click={() => dispatch('droitsChange', 'LECTURE')}
+        onclick={() => onDroitsChange('LECTURE')}
       >
         <span class="nom">Lecture</span>
         <br />
@@ -40,7 +47,7 @@
       </button>
       <button
         class="role-propose ecriture"
-        on:click={() => dispatch('droitsChange', 'ECRITURE')}
+        onclick={() => onDroitsChange('ECRITURE')}
       >
         <span class="nom">Édition</span>
         <br />
@@ -48,7 +55,7 @@
       </button>
       <button
         class="role-propose personnalise"
-        on:click={() => dispatch('choixPersonnalisation')}
+        onclick={() => onChoixPersonnalisation()}
       >
         <span class="nom">Personnalisé</span>
         <br />
@@ -58,7 +65,7 @@
       </button>
       <button
         class="role-propose proprietaire"
-        on:click={() => dispatch('droitsChange', 'PROPRIETAIRE')}
+        onclick={() => onDroitsChange('PROPRIETAIRE')}
       >
         <span class="nom">Propriétaire</span>
         <br />

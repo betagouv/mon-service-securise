@@ -1,12 +1,13 @@
 <script lang="ts">
-  export let icone:
-    | 'information'
-    | 'tri-aucun'
-    | 'tri-ascendant'
-    | 'tri-descendant';
+  interface Props {
+    icone: 'information' | 'tri-aucun' | 'tri-ascendant' | 'tri-descendant';
+    onclick?: (e: MouseEvent) => void;
+  }
+
+  let { icone, onclick }: Props = $props();
 </script>
 
-<button type="button" class={icone} on:click></button>
+<button type="button" class={icone} {onclick} title={icone}></button>
 
 <style>
   button {

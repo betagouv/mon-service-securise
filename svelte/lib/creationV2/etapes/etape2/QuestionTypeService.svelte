@@ -1,12 +1,16 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import CheckboxIllustree from './CheckboxIllustree.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import type { TypeService } from '../../creationV2.types';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
+  }
+
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   const illustrations: Record<TypeService, string> = {
     api: 'api.svg',
@@ -16,11 +20,13 @@
     autreSystemeInformation: 'autreSystemeInformation.svg',
   };
 
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+  $effect(() => {
+    estComplete = $leBrouillon.typeService.length > 0;
+  });
 
-  $: estComplete = $leBrouillon.typeService.length > 0;
-
-  $: emetEvenement('champModifie', { typeService: $leBrouillon.typeService });
+  $effect(() => {
+    onChampModifie({ typeService: $leBrouillon.typeService });
+  });
 
   const typesDeService = Object.entries(questionsV2.typeDeService) as [
     TypeService,
@@ -32,7 +38,7 @@
   Quel est le type de service à sécuriser ?*
 
   <span class="indication">Sélectionnez une ou plusieurs réponses</span>
-  {#each typesDeService as [idType, details]}
+  {#each typesDeService as [idType, details] (idType)}
     {@const nomImage = illustrations[idType]}
     <CheckboxIllustree
       id={idType}

@@ -1,7 +1,7 @@
 <script lang="ts">
   import Tuile from './Tuile.svelte';
 
-  let elementCarrousel: HTMLDivElement;
+  let elementCarrousel: HTMLDivElement | undefined = $state();
 
   const versDirection = (direction: number) => {
     if (elementCarrousel) {
@@ -29,7 +29,7 @@
     <Tuile
       illustration="/statique/assets/images/doctrine-homologation/icone-balance.svg"
       titre="Proportionnée"
-      contenu={`D'une démarche "simplifiée" à une démarche "renforcée", l'homologation doit être adaptée à la criticité d'un système et à son exposition au risque.`}
+      contenu="D'une démarche &quot;simplifiée&quot; à une démarche &quot;renforcée&quot;, l'homologation doit être adaptée à la criticité d'un système et à son exposition au risque."
       classe="tuile-presentation"
     />
     <Tuile
@@ -40,8 +40,8 @@
     />
   </div>
   <div class="conteneur-actions">
-    <button class="precedent" on:click={precedent}>Précédent</button>
-    <button class="suivant" on:click={suivant}>Suivant</button>
+    <button class="precedent" onclick={precedent}>Précédent</button>
+    <button class="suivant" onclick={suivant}>Suivant</button>
   </div>
 </div>
 

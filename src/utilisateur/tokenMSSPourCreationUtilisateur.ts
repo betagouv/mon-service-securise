@@ -3,7 +3,6 @@ import { ErreurJWTManquant } from '../erreurs.js';
 import { DonneesUtilisateur } from './serviceApresAuthentification.js';
 
 export class TokenMSSPourCreationUtilisateur {
-  // eslint-disable-next-line no-empty-function
   constructor(private readonly adaptateurJWT: AdaptateurJWT) {}
 
   cree(donneesDansToken: DonneesUtilisateur): string {

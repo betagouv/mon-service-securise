@@ -1,24 +1,31 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
-  import { createEventDispatcher } from 'svelte';
-
-  const dispatch = createEventDispatcher<{ siretChoisi: string }>();
 
   type Organisation = { nom: string; siret: string; departement: string };
   type OrganisationAvecLabel = Organisation & { label: string };
 
-  export let siret: string | undefined = undefined;
-  export let label: string = '';
-  export let disabled: boolean = false;
+  interface Props {
+    siret?: string | undefined;
+    label?: string;
+    disabled?: boolean;
+    onSiretChoisi?: (siret: string) => void;
+  }
 
-  let saisie: string;
-  let minuteur: NodeJS.Timeout;
+  let {
+    siret = $bindable(undefined),
+    label = '',
+    disabled = false,
+    onSiretChoisi,
+  }: Props = $props();
+
+  let saisie: string | undefined = $state();
+  let minuteur: ReturnType<typeof setTimeout>;
   let dureeDebounceEnMs = 300;
-  let suggestions: OrganisationAvecLabel[] = [];
-  let suggestionsVisibles = false;
+  let suggestions: OrganisationAvecLabel[] = $state([]);
+  let suggestionsVisibles = $state(false);
   let elementInput:
     | (HTMLInputElement & { status: 'default' | 'error' })
-    | undefined = undefined;
+    | undefined = $state(undefined);
 
   onMount(async () => {
     if (!siret) return;
@@ -34,7 +41,7 @@
     }
   });
 
-  const avecTemporisation = (fonction: () => Promise<any>) => {
+  const avecTemporisation = (fonction: () => Promise<void>) => {
     clearTimeout(minuteur);
     minuteur = setTimeout(async () => {
       await fonction();
@@ -59,6 +66,7 @@
   };
 
   const rechercheSuggestions = async () => {
+    if (!saisie) return;
     if (saisie.length === 0) {
       siret = undefined;
     }
@@ -79,7 +87,7 @@
 
   const choisisOrganisation = async (item: OrganisationAvecLabel) => {
     siret = item.siret;
-    dispatch('siretChoisi', siret);
+    onSiretChoisi?.(siret);
     saisie = construisLabel(item);
     await tick();
     if (elementInput) elementInput.value = saisie;
@@ -101,7 +109,7 @@
 </script>
 
 <div class="conteneur" class:avec-label={label !== ''}>
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
   <dsfr-input
     bind:this={elementInput}
     {label}
@@ -112,20 +120,20 @@
     errorMessage="Le SIRET est obligatoire."
     status={disabled ? 'default' : siret ? 'default' : 'error'}
     {disabled}
-    on:valuechanged={metAJour}
-    on:keydown={gereTouchePressee}
+    onvaluechanged={metAJour}
+    onkeydown={gereTouchePressee}
   >
   </dsfr-input>
   <div class="liste-suggestions" class:visible={suggestionsVisibles}>
-    {#each suggestions as suggestion}
+    {#each suggestions as suggestion (suggestion.siret)}
       <div
         class="option"
         role="button"
         tabindex="0"
-        on:click={async () => {
+        onclick={async () => {
           await choisisOrganisation(suggestion);
         }}
-        on:keypress={async (e) => {
+        onkeypress={async (e) => {
           if (e.code === 'Enter') {
             await choisisOrganisation(suggestion);
           }

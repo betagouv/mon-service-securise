@@ -1,24 +1,25 @@
 <script lang="ts">
-  import type {
-    Droits,
-    Invitation,
-    Permission,
-    Rubrique,
-    Utilisateur,
-  } from '../gestionContributeurs.d';
+  import type { Droits, Invitation } from '../gestionContributeurs.d';
   import { enDroitsSurRubrique } from '../gestionContributeurs.d';
   import Initiales from '../../ui/Initiales.svelte';
   import TagNiveauDroit from '../kit/TagNiveauDroit.svelte';
-  import { createEventDispatcher } from 'svelte';
   import type { ResumeNiveauDroit } from '../../ui/types';
   import BoutonSuppressionContributeur from '../../ui/BoutonSuppressionContributeur.svelte';
+  import type { Contributeur } from '../kit/ChampAvecSuggestions.svelte';
 
-  export let invitations: Invitation[];
-  const dispatch = createEventDispatcher<{
-    droitsChange: Invitation;
-    choixPersonnalisation: Utilisateur;
-    supprimerInvitation: Utilisateur;
-  }>();
+  interface Props {
+    invitations: Invitation[];
+    onDroitsChange: (invitation: Invitation) => void;
+    onChoixPersonnalisation: (utilisateur: Contributeur) => void;
+    onSupprimerInvitation: (utilisateur: Contributeur) => void;
+  }
+
+  let {
+    invitations,
+    onChoixPersonnalisation,
+    onDroitsChange,
+    onSupprimerInvitation,
+  }: Props = $props();
 
   const resumeLesDroits = (droits: Droits): ResumeNiveauDroit => {
     if (droits.estProprietaire) return 'PROPRIETAIRE';
@@ -42,16 +43,15 @@
         <TagNiveauDroit
           niveau={resumeLesDroits(droits)}
           droitsModifiables={true}
-          on:droitsChange={(e) =>
-            dispatch('droitsChange', {
+          onDroitsChange={(droits) =>
+            onDroitsChange({
               utilisateur,
-              droits: enDroitsSurRubrique(e.detail),
+              droits: enDroitsSurRubrique(droits),
             })}
-          on:choixPersonnalisation={() =>
-            dispatch('choixPersonnalisation', utilisateur)}
+          onChoixPersonnalisation={() => onChoixPersonnalisation(utilisateur)}
         />
         <BoutonSuppressionContributeur
-          on:click={() => dispatch('supprimerInvitation', utilisateur)}
+          onclick={() => onSupprimerInvitation(utilisateur)}
         />
       </div>
     </li>

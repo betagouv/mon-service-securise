@@ -8,25 +8,33 @@
     recuperePositionRond,
   } from './positionModale';
 
-  export let sousEtapes: SousEtape[];
+  interface Props {
+    sousEtapes: SousEtape[];
+  }
 
-  const rideau = document.getElementById('visite-guidee-rideau')!;
+  let { sousEtapes }: Props = $props();
+
+  const rideau = $state(document.getElementById('visite-guidee-rideau')!);
   const parametresDeRecherche = new URLSearchParams(window.location.search);
   const afficheDerniereSousEtape =
     parametresDeRecherche.has('derniereSousEtape');
-  let indexEtapeCourante = afficheDerniereSousEtape ? sousEtapes.length - 1 : 0;
+  let indexEtapeCourante = $derived(
+    afficheDerniereSousEtape ? sousEtapes.length - 1 : 0
+  );
 
-  let positionCible: DOMRect;
-  let positionModale: {
-    top: string;
-    left: string;
-    transformY: string;
-    transformX: string;
-    positionRond: PositionRond;
-    leftPointe: string;
-  };
-  let sousEtape: SousEtape;
-  let afficheModale = true;
+  let positionCible: DOMRect | undefined = $state();
+  let positionModale:
+    | {
+        top: string;
+        left: string;
+        transformY: string;
+        transformX: string;
+        positionRond: PositionRond;
+        leftPointe: string;
+      }
+    | undefined = $state();
+  let sousEtape: SousEtape | undefined = $state();
+  let afficheModale = $state(true);
 
   const afficheEtape = async (index: number) => {
     afficheModale = false;
@@ -40,7 +48,9 @@
     if (nouvelleCible) sousEtape.cible = nouvelleCible;
 
     setTimeout(() => {
-      positionCible = sousEtape.cible.getBoundingClientRect();
+      if (!sousEtape) return;
+
+      positionCible = sousEtape.cible?.getBoundingClientRect();
 
       if (sousEtape && positionCible) {
         positionModale = recuperePositionModale(
@@ -48,7 +58,7 @@
           sousEtape.positionnementModale
         );
       }
-      if (positionModale) {
+      if (positionModale && positionCible) {
         decallageRond = recuperePositionRond(
           positionCible,
           positionModale.positionRond
@@ -65,10 +75,14 @@
     await afficheEtape(indexEtapeCourante);
   });
 
-  $: estDerniereSousEtape = indexEtapeCourante === sousEtapes.length - 1;
-  $: estPremiereSousEtape = indexEtapeCourante === 0;
+  let estDerniereSousEtape = $derived(
+    indexEtapeCourante === sousEtapes.length - 1
+  );
+  let estPremiereSousEtape = $derived(indexEtapeCourante === 0);
 
-  $: if (!afficheModale) rideau.style.clipPath = 'none';
+  $effect(() => {
+    if (!afficheModale) rideau.style.clipPath = 'none';
+  });
 
   const calculePolygone = () => {
     if (!positionCible || !sousEtape) return;
@@ -109,7 +123,7 @@
         )`;
   };
 
-  let decallageRond: { top: number; left: number };
+  let decallageRond: { top: number; left: number } | undefined = $state();
 
   onDestroy(async () => {
     await sousEtape?.callbackFinaleCible?.(sousEtape.cible);
@@ -117,19 +131,19 @@
   });
 </script>
 
-<svelte:window on:resize={calculePolygone} on:load={calculePolygone} />
-{#if sousEtape && positionCible && afficheModale}
+<svelte:window onresize={calculePolygone} onload={calculePolygone} />
+{#if sousEtape && positionModale && decallageRond && positionCible && afficheModale}
   <div
     class="rond"
     style="top: {decallageRond.top}px ; left: {decallageRond.left}px"
-  />
+  ></div>
   <div
     class="conteneur-modale"
     style="--top: {positionModale.top}; --left: {positionModale.left}; --transformY: {positionModale.transformY}; --transformX: {positionModale.transformX}; --left-pointe: {positionModale.leftPointe}"
   >
     <button
       class="bouton-fermeture"
-      on:click={async () => await visiteGuidee.masqueEtapeCourante()}
+      onclick={async () => await visiteGuidee.masqueEtapeCourante()}
     >
       Fermer
     </button>
@@ -145,8 +159,9 @@
         {#each new Array(sousEtapes.length) as _, idx (idx)}
           <button
             class="pagination-etape"
+            aria-label={`Étape ${idx + 1}`}
             class:etape-courante={idx === indexEtapeCourante}
-            on:click={async () => await afficheEtape(idx)}
+            onclick={async () => await afficheEtape(idx)}
           ></button>
         {/each}
       </div>
@@ -155,7 +170,7 @@
           {#if !estPremiereSousEtape}
             <button
               class="bouton bouton-tertiaire"
-              on:click={async () => await afficheEtape(indexEtapeCourante - 1)}
+              onclick={async () => await afficheEtape(indexEtapeCourante - 1)}
             >
               Précédent
             </button>
@@ -170,18 +185,18 @@
           <button
             class="bouton suivant"
             class:derniereEtape={sousEtape?.texteBoutonDerniereEtape}
-            on:click={async () =>
+            onclick={async () =>
               sousEtape?.texteBoutonDerniereEtape
                 ? await visiteGuidee.finalise()
                 : estDerniereSousEtape
-                ? await visiteGuidee.etapeSuivante()
-                : await afficheEtape(indexEtapeCourante + 1)}
+                  ? await visiteGuidee.etapeSuivante()
+                  : await afficheEtape(indexEtapeCourante + 1)}
           >
             {sousEtape?.texteBoutonDerniereEtape
               ? sousEtape.texteBoutonDerniereEtape
               : 'Suivant'}
             {#if sousEtape?.texteBoutonDerniereEtape}
-              {#each new Array(50).fill(0) as _}
+              {#each new Array(50).fill(0) as _, index (index)}
                 <Confetti />
               {/each}
             {/if}
@@ -192,7 +207,7 @@
             Déjà vu ?
             <button
               class="lien"
-              on:click={async () =>
+              onclick={async () =>
                 await visiteGuidee.fermeDefinitivementVisiteGuidee()}
               >Ne plus voir ces astuces</button
             >

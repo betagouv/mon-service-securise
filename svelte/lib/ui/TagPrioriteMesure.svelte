@@ -1,9 +1,13 @@
 <script lang="ts">
   import type { PrioriteMesure, ReferentielPriorite } from './types';
 
-  export let priorite: PrioriteMesure;
-  export let actif: boolean = false;
-  export let priorites: ReferentielPriorite;
+  interface Props {
+    priorite: PrioriteMesure;
+    actif?: boolean;
+    priorites: ReferentielPriorite;
+  }
+
+  let { priorite, actif = false, priorites }: Props = $props();
 </script>
 
 <span class={priorite} class:actif>{priorites[priorite].libelleCourt}</span>

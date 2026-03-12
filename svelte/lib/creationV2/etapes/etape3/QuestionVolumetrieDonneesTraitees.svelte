@@ -1,18 +1,24 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
+  }
 
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
-  $: estComplete = !!$leBrouillon.volumetrieDonneesTraitees;
+  $effect(() => {
+    estComplete = !!$leBrouillon.volumetrieDonneesTraitees;
+  });
 
-  $: emetEvenement('champModifie', {
-    volumetrieDonneesTraitees: $leBrouillon.volumetrieDonneesTraitees,
+  $effect(() => {
+    onChampModifie({
+      volumetrieDonneesTraitees: $leBrouillon.volumetrieDonneesTraitees,
+    });
   });
 </script>
 
@@ -20,7 +26,7 @@
   Quel est le volume des données traitées au sein du système d’information ?*
 
   <span class="indication">Sélectionnez une réponse</span>
-  {#each Object.entries(questionsV2.volumetrieDonneesTraitees) as [idType, { nom, description }]}
+  {#each Object.entries(questionsV2.volumetrieDonneesTraitees) as [idType, { nom, description }] (idType)}
     <Radio
       id={idType}
       {nom}

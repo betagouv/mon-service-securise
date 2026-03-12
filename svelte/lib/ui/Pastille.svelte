@@ -1,6 +1,10 @@
 <script lang="ts">
-  export let contenu: string;
-  export let active: boolean = false;
+  interface Props {
+    contenu: string;
+    active?: boolean;
+  }
+
+  let { contenu, active = false }: Props = $props();
 </script>
 
 <span class="pastille" class:active>

@@ -23,22 +23,37 @@
   import LegendeMatriceRisques from './LegendeMatriceRisques.svelte';
   import BoutonIcone from '../ui/BoutonIcone.svelte';
 
-  export let idService: string;
-  export let estLectureSeule: boolean;
-  export let risques: Risque[];
-  export let categories: ReferentielCategories;
-  export let niveauxGravite: ReferentielGravites;
-  export let niveauxVraisemblance: ReferentielVraisemblances;
-  export let referentielRisques: ReferentielRisques;
-  export let matriceNiveauxRisque: MatriceNiveauxRisque;
-  export let niveauxRisque: ReferentielNiveauxRisque;
-  let tiroirRisqueOuvert = false;
-  let tiroirLegendeGraviteOuvert = false;
-  let tiroirLegendeVraisemblanceOuvert = false;
-  let modeAffichageTiroir: ModeAffichageTiroir = '';
-  let risqueEnEdition: Risque | undefined;
-  let triParGravite: Tri = 'aucun';
-  let triParVraisemblance: Tri = 'aucun';
+  interface Props {
+    idService: string;
+    estLectureSeule: boolean;
+    risques: Risque[];
+    categories: ReferentielCategories;
+    niveauxGravite: ReferentielGravites;
+    niveauxVraisemblance: ReferentielVraisemblances;
+    referentielRisques: ReferentielRisques;
+    matriceNiveauxRisque: MatriceNiveauxRisque;
+    niveauxRisque: ReferentielNiveauxRisque;
+  }
+
+  let {
+    idService,
+    estLectureSeule,
+    risques = $bindable(),
+    categories,
+    niveauxGravite,
+    niveauxVraisemblance,
+    referentielRisques,
+    matriceNiveauxRisque,
+    niveauxRisque,
+  }: Props = $props();
+
+  let tiroirRisqueOuvert = $state(false);
+  let tiroirLegendeGraviteOuvert = $state(false);
+  let tiroirLegendeVraisemblanceOuvert = $state(false);
+  let modeAffichageTiroir: ModeAffichageTiroir = $state('');
+  let risqueEnEdition: Risque | undefined = $state();
+  let triParGravite: Tri = $state('aucun');
+  let triParVraisemblance: Tri = $state('aucun');
 
   type Tri = 'aucun' | 'ascendant' | 'descendant';
 
@@ -49,6 +64,7 @@
 
   const rafraichisRisqueDansLeTableau = (risque: Risque) => {
     risques[risques.findIndex((r) => r.id === risque.id)] = risque;
+    risques = [...risques];
   };
 
   const supprimeRisqueDansTableau = (risque: Risque) => {
@@ -103,7 +119,7 @@
     triParVraisemblance = triSuivant(triParVraisemblance);
   };
 
-  $: doitAfficherAvertissement = risques.some(risqueAMettreAJour);
+  let doitAfficherAvertissement = $derived(risques.some(risqueAMettreAJour));
 
   const compare = (risque1: Risque, risque2: Risque): number => {
     const positionGraviteRisque1 = risque1.niveauGravite
@@ -138,10 +154,10 @@
     return 0;
   };
 
-  let risquesTries: Risque[];
-  $: triParGravite,
-    triParVraisemblance,
-    (risquesTries = [...risques].sort(compare));
+  let risquesTries: Risque[] = $derived.by(() => {
+    if (triParGravite || triParVraisemblance) return [...risques].sort(compare);
+    return [];
+  });
 </script>
 
 <div class="au-dessus-tableau">
@@ -188,7 +204,7 @@
     titre="Ajouter un risque"
     icone="ajout"
     boutonSoumission={false}
-    on:click={ouvreAjoutRisque}
+    onclick={ouvreAjoutRisque}
   />
 </div>
 {#if doitAfficherAvertissement}
@@ -197,11 +213,11 @@
     classeSupplementaire="avertissement-risques-specifiques"
   >
     <strong>Risques spécifiques à mettre à jour.</strong>
-    <span
-      >Suite à l'ajout de l'échelle de vraisemblance et de la catégorie sur les
+    <span>
+      Suite à l'ajout de l'échelle de vraisemblance et de la catégorie sur les
       risques, nous vous invitons à mettre à jour les risques spécifiques que
-      vous avez ajoutés afin de compléter les informations manquantes</span
-    >
+      vous avez ajoutés afin de compléter les informations manquantes
+    </span>
   </Avertissement>
 {/if}
 <table>
@@ -214,13 +230,13 @@
           Gravité potentielle
           <BoutonIcone
             icone="information"
-            on:click={() => {
+            onclick={() => {
               tiroirLegendeGraviteOuvert = true;
               tiroirLegendeVraisemblanceOuvert = false;
               tiroirRisqueOuvert = false;
             }}
           />
-          <BoutonIcone icone={`tri-${triParGravite}`} on:click={triGravite} />
+          <BoutonIcone icone={`tri-${triParGravite}`} onclick={triGravite} />
         </div>
       </th>
       <th>
@@ -228,7 +244,7 @@
           Vraisemblance initiale
           <BoutonIcone
             icone="information"
-            on:click={() => {
+            onclick={() => {
               tiroirLegendeVraisemblanceOuvert = true;
               tiroirLegendeGraviteOuvert = false;
               tiroirRisqueOuvert = false;
@@ -236,7 +252,7 @@
           />
           <BoutonIcone
             icone={`tri-${triParVraisemblance}`}
-            on:click={triVraisemblance}
+            onclick={triVraisemblance}
           />
         </div>
       </th>
@@ -247,12 +263,12 @@
     {#each risquesTries as risque (risque.id)}
       <LigneRisque
         {risque}
-        on:click={() => ouvreRisque(risque)}
+        onclick={() => ouvreRisque(risque)}
         {categories}
         {niveauxGravite}
         {niveauxVraisemblance}
         {estLectureSeule}
-        on:metAJourRisque={() => metAJourRisque(risque)}
+        onMetAJourRisque={(risque) => metAJourRisque(risque)}
       />
     {/each}
   </tbody>
@@ -276,9 +292,9 @@
   referentielGravites={niveauxGravite}
   referentielVraisemblances={niveauxVraisemblance}
   {estLectureSeule}
-  on:risqueMisAJour={(e) => rafraichisRisqueDansLeTableau(e.detail)}
-  on:risqueSupprime={(e) => supprimeRisqueDansTableau(e.detail)}
-  on:risqueAjoute={(e) => ajouteRisqueDansTableau(e.detail)}
+  onRisqueMisAJour={(risque) => rafraichisRisqueDansLeTableau(risque)}
+  onRisqueSupprime={(risque) => supprimeRisqueDansTableau(risque)}
+  onRisqueAjoute={(risque) => ajouteRisqueDansTableau(risque)}
   {modeAffichageTiroir}
   {idService}
 />

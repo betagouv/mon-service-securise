@@ -2,8 +2,12 @@
   import type { ReferentielVraisemblances } from './risques.d';
   import TiroirLegende from './TiroirLegende.svelte';
 
-  export let ouvert: boolean;
-  export let referentielVraisemblances: ReferentielVraisemblances;
+  interface Props {
+    ouvert: boolean;
+    referentielVraisemblances: ReferentielVraisemblances;
+  }
+
+  let { ouvert = $bindable(), referentielVraisemblances }: Props = $props();
 </script>
 
 <TiroirLegende

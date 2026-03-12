@@ -1,7 +1,15 @@
 <script lang="ts">
-  export let recherche: string;
-  export let taille: 'moyen' | 'grand' = 'moyen';
-  export let desactive: boolean = false;
+  interface Props {
+    recherche: string;
+    taille?: 'moyen' | 'grand';
+    desactive?: boolean;
+  }
+
+  let {
+    recherche = $bindable(),
+    taille = 'moyen',
+    desactive = false,
+  }: Props = $props();
 
   const supprimeRecherche = () => {
     recherche = '';
@@ -16,14 +24,14 @@
     disabled={desactive}
   />
   {#if recherche && !desactive}
-    <button class="suppression-recherche" on:click={supprimeRecherche}>
+    <button class="suppression-recherche" onclick={supprimeRecherche}>
       <img
         src="/statique/assets/images/ui-kit/suppression_champ.svg"
         alt="Suppression de la recherche"
       />
     </button>
   {/if}
-  <button class="conteneur-icone" on:click disabled={desactive}>
+  <button class="conteneur-icone" disabled={desactive}>
     <img
       src="/statique/assets/images/icone_loupe.svg"
       alt="Icône de recherche"

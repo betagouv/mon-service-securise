@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, tick } from 'svelte';
+  import { tick } from 'svelte';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import Radio from '../../Radio.svelte';
   import type { MiseAJour } from '../../creationV2.api';
@@ -7,10 +7,15 @@
   import type { ActiviteExternalisee } from '../../creationV2.types';
   import CaseACocher from '../../../ui/CaseACocher.svelte';
 
-  export let estComplete: boolean;
-  $: estComplete = !!$leBrouillon.typeHebergement;
+  interface Props {
+    estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
+  }
 
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
+  $effect(() => {
+    estComplete = !!$leBrouillon.typeHebergement;
+  });
 
   const externaliseSiNecessaire = (e: Event) => {
     const aucune = [] as ActiviteExternalisee[];
@@ -23,7 +28,7 @@
     $leBrouillon.activitesExternalisees =
       typeHebergement === 'saas' ? toutes : aucune;
 
-    emetEvenement('champModifie', {
+    onChampModifie({
       typeHebergement: $leBrouillon.typeHebergement,
       activitesExternalisees: $leBrouillon.activitesExternalisees,
     });
@@ -31,7 +36,7 @@
 
   const metsAJourActivitesExternalisees = async () => {
     await tick();
-    emetEvenement('champModifie', {
+    onChampModifie({
       activitesExternalisees: $leBrouillon.activitesExternalisees,
     });
   };
@@ -42,12 +47,12 @@
 
   <span class="indication">Sélectionnez une réponse</span>
 
-  {#each Object.entries(questionsV2.typeHebergement) as [idType, { nom }]}
+  {#each Object.entries(questionsV2.typeHebergement) as [idType, { nom }] (idType)}
     <Radio
       id={idType}
       {nom}
       bind:valeur={$leBrouillon.typeHebergement}
-      on:change={externaliseSiNecessaire}
+      onchange={externaliseSiNecessaire}
     />
   {/each}
 </label>
@@ -59,7 +64,7 @@
   <span class="titre-question-activites"
     >Quelles activités du projet sont entièrement externalisées ?</span
   >
-  {#each Object.entries(questionsV2.activiteExternalisee) as [idActivite, { nom, exemple }]}
+  {#each Object.entries(questionsV2.activiteExternalisee) as [idActivite, { nom, exemple }] (idActivite)}
     {@const actif =
       !!$leBrouillon.typeHebergement && $leBrouillon.typeHebergement !== 'saas'}
     <div class="conteneur-case-avec-exemple">
@@ -68,7 +73,7 @@
         {actif}
         bind:valeurs={$leBrouillon.activitesExternalisees}
         label={nom}
-        on:change={async () => await metsAJourActivitesExternalisees()}
+        onchange={async () => await metsAJourActivitesExternalisees()}
       />
       {#if exemple}
         <span class="indication-libelle" class:inactif={!actif}>{exemple}</span>

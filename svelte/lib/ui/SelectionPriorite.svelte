@@ -1,28 +1,34 @@
 <script lang="ts">
   import type { PrioriteMesure, ReferentielPriorite } from './types.d';
-  import { createEventDispatcher } from 'svelte';
 
   type IdDom = string;
 
-  export let id: IdDom;
-  export let priorite: PrioriteMesure | undefined | '';
-  export let label = '';
-  export let estLectureSeule = false;
-  export let avecLibelleOption: boolean = false;
-  export let priorites: ReferentielPriorite;
-
-  const dispatch = createEventDispatcher<{
-    input: { priorite: PrioriteMesure };
-  }>();
-
-  $: {
-    if (!priorite) priorite = '';
+  interface Props {
+    id: IdDom;
+    priorite: PrioriteMesure | undefined | '';
+    label?: string;
+    estLectureSeule?: boolean;
+    avecLibelleOption?: boolean;
+    priorites: ReferentielPriorite;
+    onPrioriteModifiee?: (priorite: PrioriteMesure) => void;
   }
 
+  let {
+    id,
+    priorite = $bindable(),
+    label = '',
+    estLectureSeule = false,
+    avecLibelleOption = false,
+    priorites,
+    onPrioriteModifiee,
+  }: Props = $props();
+
+  priorite ??= '';
+
   const metAJour = (e: Event) => {
-    dispatch('input', {
-      priorite: (e.target as HTMLInputElement).value as PrioriteMesure,
-    });
+    onPrioriteModifiee?.(
+      (e.target as HTMLInputElement).value as PrioriteMesure
+    );
   };
 </script>
 
@@ -35,13 +41,13 @@
     class:avecLibelleOption
     class:vide={!priorite}
     disabled={estLectureSeule}
-    on:input={metAJour}
-    on:click|stopPropagation
+    oninput={metAJour}
+    onclick={(e) => e.stopPropagation()}
   >
     <option value="" disabled selected
       >{avecLibelleOption ? 'Définir la priorité' : '+'}</option
     >
-    {#each Object.entries(priorites) as [valeur, labels]}
+    {#each Object.entries(priorites) as [valeur, labels] (valeur)}
       <option value={valeur}>{labels.libelleComplet}</option>
     {/each}
   </select>
@@ -55,7 +61,7 @@
     color: var(--texte-clair);
   }
 
-  label:has(> select:disabled) {
+  label:has(:global(> select:disabled)) {
     color: var(--liseres-fonce);
   }
 

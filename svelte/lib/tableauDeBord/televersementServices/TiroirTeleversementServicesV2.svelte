@@ -14,7 +14,7 @@
   export const sousTitre =
     "Importez votre liste de services, qu'ils soient homologués ou non. Vous pourrez ainsi piloter plus facilement leur sécurisation dans MonServiceSécurisé grâce au tableau de bord, centre de notifications, mails de rappels, etc...";
 
-  let etatTeleversement: EtatTeleversement = 'EnAttente';
+  let etatTeleversement: EtatTeleversement = $state('EnAttente');
 
   const gereValidationTeleversement = async () => {
     if (etatTeleversement !== 'Valide') return;
@@ -43,25 +43,25 @@
       ]}
       apiPostDuTeleversement="/api/televersement/services-v2"
       formatAccepte={FormatAccepte.Excel}
-      on:televersementChange={(e) => {
-        etatTeleversement = e.detail;
+      onTeleversementChange={(etat) => {
+        etatTeleversement = etat;
       }}
     />
   </ContenuTiroir>
 
   <ActionsTiroir>
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre="Annuler"
       variante="tertiaire-sans-bordure"
       taille="md"
       positionIcone="sans"
       actif={etatTeleversement !== 'EnCoursEnvoi'}
-      on:click={() => {
+      onclick={() => {
         if (etatTeleversement !== 'EnCoursEnvoi') tiroirStore.ferme();
       }}
-    />
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    ></lab-anssi-bouton>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre="Valider le fichier"
       variante="primaire"
@@ -69,7 +69,7 @@
       icone="check-line"
       positionIcone="gauche"
       actif={etatTeleversement === 'Valide'}
-      on:click={gereValidationTeleversement}
-    />
+      onclick={gereValidationTeleversement}
+    ></lab-anssi-bouton>
   </ActionsTiroir>
 </Formulaire>

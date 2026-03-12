@@ -8,10 +8,14 @@
   import CelluleDonnee from '../../rapportTeleversement/composants/CelluleDonnee.svelte';
   import TooltipErreursMultiple from '../../rapportTeleversement/composants/TooltipErreursMultiple.svelte';
 
-  export let ligne: ModeleTeleverse;
+  interface Props {
+    ligne: ModeleTeleverse;
+  }
 
-  const aUneErreur = ligne.erreurs.length > 0;
-  const aDesErreurs = ligne.erreurs.length > 1;
+  let { ligne }: Props = $props();
+
+  let aUneErreur = $derived(ligne.erreurs.length > 0);
+  let aDesErreurs = $derived(ligne.erreurs.length > 1);
 
   const contientErreur = (erreur: ErreurModele) =>
     ligne.erreurs.includes(erreur);
@@ -45,7 +49,7 @@
       couleurFond="#f1f5f9"
       couleurTexte="#667892"
       label={ligne.modele.categorie}
-    />
+    ></lab-anssi-tag>
   </CelluleDonnee>
 </tr>
 

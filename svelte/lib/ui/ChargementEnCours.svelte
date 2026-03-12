@@ -1,11 +1,11 @@
 <span class="icone">
   <span class="barres">
-    <span class="barre barre-1" />
-    <span class="barre barre-2" />
-    <span class="barre barre-3" />
+    <span class="barre barre-1"></span>
+    <span class="barre barre-2"></span>
+    <span class="barre barre-3"></span>
   </span>
-  <span class="pulse" />
-  <span class="barre-chargement" />
+  <span class="pulse"></span>
+  <span class="barre-chargement"></span>
 </span>
 
 <style>

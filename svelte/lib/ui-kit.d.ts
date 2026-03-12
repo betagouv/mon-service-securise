@@ -1,4 +1,4 @@
-import { DOMAttributes, type HTMLAttributes } from 'svelte/elements';
+import { type HTMLAttributes } from 'svelte/elements';
 
 declare namespace svelteHTML {
   interface IntrinsicElements {

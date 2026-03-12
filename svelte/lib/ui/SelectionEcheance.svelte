@@ -1,35 +1,42 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import type { EcheanceMesure } from './types';
 
-  export let echeance: string | undefined;
-  export let estLectureSeule = false;
-  export let avecLabel = false;
-
-  const dispatch = createEventDispatcher<{
-    modificationEcheance: { echeance: EcheanceMesure };
-  }>();
-
-  let elementDate: HTMLInputElement;
-
-  let dateFormattee: string | undefined = undefined;
-  $: {
-    const formatFR = new Intl.DateTimeFormat('fr-FR');
-    try {
-      if (echeance) dateFormattee = formatFR.format(new Date(echeance));
-      else dateFormattee = undefined;
-    } catch (e) {
-      dateFormattee = undefined;
-    }
+  interface Props {
+    echeance: string | undefined;
+    estLectureSeule?: boolean;
+    avecLabel?: boolean;
+    onModificationEcheance?: (echeance: EcheanceMesure) => void;
   }
 
-  const modifieEcheance = (e: any) => {
-    const nouvelleEcheance = e.target.value;
+  let {
+    echeance = $bindable(),
+    estLectureSeule = false,
+    avecLabel = false,
+    onModificationEcheance,
+  }: Props = $props();
+
+  let elementDate: HTMLInputElement | undefined = $state();
+
+  let dateFormattee: string | undefined = $derived.by(() => {
+    const formatFR = new Intl.DateTimeFormat('fr-FR');
+    try {
+      if (echeance) return formatFR.format(new Date(echeance));
+    } catch {
+      return undefined;
+    }
+  });
+
+  const modifieEcheance = (
+    e: Event & {
+      currentTarget: EventTarget & HTMLInputElement;
+    }
+  ) => {
+    const nouvelleEcheance = e.currentTarget.value;
     echeance = nouvelleEcheance;
-    dispatch('modificationEcheance', { echeance: nouvelleEcheance });
+    onModificationEcheance?.(nouvelleEcheance);
   };
 
-  let dateEcheance: string;
+  let dateEcheance: string | undefined = $state();
 
   if (echeance) {
     dateEcheance = new Date(Date.parse(echeance))
@@ -37,7 +44,7 @@
       .substring(0, 10);
   }
 
-  const labelVide = avecLabel ? 'Définir l’échéance' : 'Échéance';
+  let labelVide = $derived(avecLabel ? 'Définir l’échéance' : 'Échéance');
 </script>
 
 <div class="conteneur-date">
@@ -46,7 +53,10 @@
   {/if}
   <button
     type="button"
-    on:click|stopPropagation={() => elementDate.showPicker()}
+    onclick={(e) => {
+      e.stopPropagation();
+      elementDate?.showPicker();
+    }}
     class:vide={!dateFormattee}
     disabled={estLectureSeule}
     class:avecLabel
@@ -57,7 +67,7 @@
   <input
     type="date"
     bind:this={elementDate}
-    on:input={modifieEcheance}
+    oninput={modifieEcheance}
     value={dateEcheance}
   />
 </div>

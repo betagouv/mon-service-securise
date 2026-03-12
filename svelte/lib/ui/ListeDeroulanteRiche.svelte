@@ -1,26 +1,37 @@
-<script lang="ts" generics="T extends string">
+<script lang="ts">
   import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
   import Pastille from './Pastille.svelte';
   import type { OptionsListeDeroulanteRiche } from './ui.types.d';
 
-  export let id: string;
-  export let libelle: string;
-  export let options: OptionsListeDeroulanteRiche<T>;
-  export let valeursSelectionnees: Record<string, T[]> = {};
-  let menuOuvert: boolean = false;
-  let declencheurEl: HTMLButtonElement;
-  let contenuEl: HTMLDivElement;
+  interface Props {
+    id: string;
+    libelle: string;
+    options: OptionsListeDeroulanteRiche<string>;
+    valeursSelectionnees?: Record<string, string[]>;
+  }
 
-  $: nbFiltresActifs = Object.values(valeursSelectionnees).flat().length;
+  let {
+    id,
+    libelle,
+    options,
+    valeursSelectionnees = $bindable({}),
+  }: Props = $props();
+  let menuOuvert: boolean = $state(false);
+  let declencheurEl: HTMLButtonElement | undefined = $state();
+  let contenuEl: HTMLDivElement | undefined = $state();
+
+  let nbFiltresActifs = $derived(
+    Object.values(valeursSelectionnees).flat().length
+  );
 </script>
 
 <FermetureSurClicEnDehors
   bind:doitEtreOuvert={menuOuvert}
-  elements={[declencheurEl, contenuEl]}
+  elements={declencheurEl && contenuEl ? [declencheurEl, contenuEl] : []}
 />
 <div class="conteneur-liste-deroulante">
   <button
-    on:click={() => (menuOuvert = !menuOuvert)}
+    onclick={() => (menuOuvert = !menuOuvert)}
     class="conteneur-select"
     bind:this={declencheurEl}
   >
@@ -36,9 +47,9 @@
     />
   </button>
   <div class="contenu-menu-deroulant" class:menuOuvert bind:this={contenuEl}>
-    {#each options.categories as categorie}
+    {#each options.categories as categorie (categorie.id)}
       <p class="categorie">{categorie.libelle}</p>
-      {#each options.items.filter((item) => item.idCategorie === categorie.id) as item}
+      {#each options.items.filter((item) => item.idCategorie === categorie.id) as item, index (index)}
         <div class="option-liste-deroulante">
           <input
             id={item.valeur}

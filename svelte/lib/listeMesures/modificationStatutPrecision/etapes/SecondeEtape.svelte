@@ -4,10 +4,19 @@
   import type { ServiceAssocie } from '../../mesureGenerale/modification/TiroirModificationMultipleMesuresGenerales.svelte';
   import TableauSelectionServices from '../../kit/TableauSelectionServices.svelte';
 
-  export let statuts: ReferentielStatut;
-  export let modificationPrecisionUniquement: boolean;
-  export let idsServicesSelectionnes: string[];
-  export let servicesAssocies: ServiceAssocie[];
+  interface Props {
+    statuts: ReferentielStatut;
+    modificationPrecisionUniquement: boolean;
+    idsServicesSelectionnes: string[];
+    servicesAssocies: ServiceAssocie[];
+  }
+
+  let {
+    statuts,
+    modificationPrecisionUniquement,
+    idsServicesSelectionnes = $bindable(),
+    servicesAssocies,
+  }: Props = $props();
 
   const predicationDesactivation = (donnee: ServiceAssocie) =>
     (modificationPrecisionUniquement && !donnee.mesure.statut) ||
@@ -25,13 +34,13 @@
   services={servicesAssocies}
   {predicationDesactivation}
 >
-  <svelte:fragment slot="infoStatutMesure" let:donnee>
-    {#if modificationPrecisionUniquement && !donnee.mesure.statut}
+  {#snippet infoStatutMesure({ statut })}
+    {#if modificationPrecisionUniquement && !statut}
       <Infobulle
         contenu="Cette précision ne peut pas être appliquée à ce service, car il ne dispose pas actuellement d'un statut."
       ></Infobulle>
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </TableauSelectionServices>
 
 <style lang="scss">

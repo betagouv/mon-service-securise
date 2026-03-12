@@ -2,20 +2,30 @@
   import type { IdUtilisateur } from '../tableauDesMesures/tableauDesMesures.d';
   import MenuFlottant from './MenuFlottant.svelte';
   import { contributeurs } from '../tableauDesMesures/stores/contributeurs.store';
-  import { createEventDispatcher } from 'svelte';
   import Initiales from './Initiales.svelte';
   import { storeAutorisations } from '../gestionContributeurs/stores/autorisations.store';
 
-  export let responsables: IdUtilisateur[] | null | undefined;
-  export let estLectureSeule: boolean;
+  interface Props {
+    responsables: IdUtilisateur[] | null | undefined;
+    estLectureSeule: boolean;
+    onModificationResponsables: (responsables: IdUtilisateur[]) => void;
+  }
 
-  $: responsablesAffiches = responsables
-    ? [...responsables].filter((r) =>
-        $contributeurs.map((c) => c.id).includes(r)
-      )
-    : [];
+  let {
+    responsables = $bindable(),
+    estLectureSeule,
+    onModificationResponsables,
+  }: Props = $props();
 
-  let menuOuvert = false;
+  let responsablesAffiches = $derived(
+    responsables
+      ? [...responsables].filter((r) =>
+          $contributeurs.map((c) => c.id).includes(r)
+        )
+      : []
+  );
+
+  let menuOuvert = $state(false);
 
   const ouvreTiroirContributeurs = () => {
     menuOuvert = false;
@@ -24,34 +34,35 @@
     );
   };
 
-  const dispatch = createEventDispatcher<{
-    modificationResponsables: { responsables: IdUtilisateur[] };
-  }>();
   const modifieResponsables = () => {
-    if (responsables) dispatch('modificationResponsables', { responsables });
+    if (responsables) onModificationResponsables(responsables);
   };
 
-  $: niveauDeDroitDe = (idUtilisateur: IdUtilisateur) =>
-    $storeAutorisations.autorisations[idUtilisateur]?.resumeNiveauDroit;
+  let niveauDeDroitDe = $derived(
+    (idUtilisateur: IdUtilisateur) =>
+      $storeAutorisations.autorisations[idUtilisateur]?.resumeNiveauDroit
+  );
 </script>
 
 <MenuFlottant bind:menuOuvert {estLectureSeule}>
-  <div slot="declencheur" class="bouton-declencheur" class:estLectureSeule>
-    <div class="conteneur-image">
-      <img src="/statique/assets/images/icone_utilisateur_trait.svg" alt="" />
+  {#snippet declencheur()}
+    <div class="bouton-declencheur" class:estLectureSeule>
+      <div class="conteneur-image">
+        <img src="/statique/assets/images/icone_utilisateur_trait.svg" alt="" />
+      </div>
+      <span>{responsablesAffiches.length}</span>
     </div>
-    <span>{responsablesAffiches.length}</span>
-  </div>
+  {/snippet}
   <div
     class="conteneur-responsables"
-    on:click|stopPropagation
-    on:keypress|stopPropagation
+    onclick={(e) => e.stopPropagation()}
+    onkeypress={(e) => e.stopPropagation()}
     role="menu"
     tabindex="0"
   >
     <div class="entete">
       <span class="titre">Attribuer une mesure</span>
-      <button class="fermeture" on:click={() => (menuOuvert = false)}>✕</button>
+      <button class="fermeture" onclick={() => (menuOuvert = false)}>✕</button>
     </div>
     <div>
       {#each $contributeurs as contributeur (contributeur.id)}
@@ -68,14 +79,13 @@
             value={contributeur.id}
             class="checkbox-contributeur"
             bind:group={responsables}
-            on:change={modifieResponsables}
+            onchange={modifieResponsables}
           />
         </div>
       {/each}
     </div>
     <div class="pied-page">
-      <button on:click={ouvreTiroirContributeurs}
-        >Gérer les contributeurs</button
+      <button onclick={ouvreTiroirContributeurs}>Gérer les contributeurs</button
       >
       <span>pour modifier les droits ou ajouter des responsables.</span>
     </div>

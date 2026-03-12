@@ -2,12 +2,15 @@ import { describe, expect, it } from 'vitest';
 import { mesuresAvecServicesAssociesStore } from '../../lib/listeMesures/servicesAssocies/mesuresAvecServicesAssocies.store';
 import { servicesAvecMesuresAssociees } from '../../lib/listeMesures/servicesAssocies/servicesAvecMesuresAssociees.store';
 import { get } from 'svelte/store';
-import type { ServiceAvecMesuresAssociees } from '../../lib/listeMesures/listeMesures.d';
+import type {
+  PersonnalisationMesure,
+  ServiceAvecMesuresAssociees,
+} from '../../lib/listeMesures/listeMesures.d';
 
 const unService = (
   id: string = 'S1',
   nomService: string = 'ServiceS1',
-  mesuresAssociees: Record<string, any> = { M1: {} }
+  mesuresAssociees: Record<string, PersonnalisationMesure> = { M1: {} }
 ): ServiceAvecMesuresAssociees => ({
   id,
   nomService,

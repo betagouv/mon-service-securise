@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let indispensable: boolean;
+  interface Props {
+    indispensable: boolean;
+  }
+
+  let { indispensable }: Props = $props();
 </script>
 
 <span class:indispensable

@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { Niveau } from './risquesV2.d';
 
-  export let niveau: Niveau;
+  interface Props {
+    niveau: Niveau;
+  }
+
+  let { niveau }: Props = $props();
 </script>
 
 <div class="niveau-{niveau}">

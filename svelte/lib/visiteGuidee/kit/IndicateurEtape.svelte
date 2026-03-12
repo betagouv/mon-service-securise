@@ -4,22 +4,33 @@
     EtapeVisiteGuidee,
   } from '../visiteGuidee.d';
 
-  export let configuration: ConfigurationIndicateurEtape;
-  export let etapeCourante: EtapeVisiteGuidee;
-  export let etapesVues: EtapeVisiteGuidee[] = [];
-  const premiereEtapeNonVue = configuration.etapes.filter(
-    (e) => !etapesVues.includes(e.id)
-  )[0];
+  interface Props {
+    configuration: ConfigurationIndicateurEtape;
+    etapeCourante: EtapeVisiteGuidee;
+    etapesVues?: EtapeVisiteGuidee[];
+    onclick?: (e: MouseEvent) => void;
+  }
+
+  let {
+    configuration,
+    etapeCourante,
+    etapesVues = [],
+    onclick,
+  }: Props = $props();
+
+  let premiereEtapeNonVue = $derived(
+    configuration.etapes.filter((e) => !etapesVues.includes(e.id))[0]
+  );
 </script>
 
 <ul>
-  {#each configuration.etapes as etape}
+  {#each configuration.etapes as etape, index (index)}
     {@const vue = etapesVues.includes(etape.id)}
     {@const active = etape.id === etapeCourante}
     {@const disponible = etape.id === premiereEtapeNonVue.id}
     {@const navigable = vue || active || disponible}
     <li id="etape-{etape.id}" class:active class:vue class:disponible>
-      <a href={navigable ? etape.lien : null} on:click>
+      <a href={navigable ? etape.lien : null} {onclick}>
         <img
           src={vue && !active
             ? '/statique/assets/images/icone_fait.svg'

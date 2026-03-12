@@ -13,20 +13,27 @@
   import Onglets from '../../ui/Onglets.svelte';
   import { brouillonEstCompletStore } from '../../creationV2/etapes/brouillonEstComplet.store';
 
-  export let estComplete: boolean;
-  $: estComplete = $brouillonEstCompletStore;
+  interface Props {
+    estComplete: boolean;
+  }
 
-  let resumeEvolutions: ResumeEvolutions;
-  let ongletActif: StatutEvolutionMesure = 'ajoutee';
+  let { estComplete = $bindable() }: Props = $props();
+  $effect(() => {
+    estComplete = $brouillonEstCompletStore;
+  });
+
+  let resumeEvolutions: ResumeEvolutions | undefined = $state();
+  let ongletActif: StatutEvolutionMesure = $state('ajoutee');
 
   onMount(async () => {
     resumeEvolutions = await lisEvolutionMesures($leBrouillon.id!);
   });
 
-  $: donneesAAfficher =
+  let donneesAAfficher = $derived(
     resumeEvolutions?.evolutionMesures.detailsMesures.filter(
       (m) => m.statut === ongletActif
-    ) || [];
+    ) || []
+  );
 
   const configurationStatut: Record<DetailStatutEvolutionMesure, string> = {
     absente: 'Mesure supprimée.',
@@ -77,7 +84,7 @@
         >
       </div>
     </div>
-    <div class="separateur-vertical" />
+    <div class="separateur-vertical"></div>
     <div class="resume-evolution-indice-cyber">
       <h6>Évolution de l’indice cyber ANSSI</h6>
       <span>En attente de la complétion des mesures.</span>
@@ -117,30 +124,32 @@
       ]}
       donnees={donneesAAfficher}
     >
-      <div slot="onglets">
-        <Onglets
-          bind:ongletActif
-          onglets={[
-            {
-              id: 'ajoutee',
-              label: 'Ajoutées',
-            },
-            {
-              id: 'inchangee',
-              label: 'Inchangées',
-            },
-            {
-              id: 'modifiee',
-              label: 'Modifiées',
-            },
-            {
-              id: 'supprimee',
-              label: 'Supprimées',
-            },
-          ]}
-        />
-      </div>
-      <svelte:fragment slot="cellule" let:donnee let:colonne>
+      {#snippet onglets()}
+        <div>
+          <Onglets
+            bind:ongletActif
+            onglets={[
+              {
+                id: 'ajoutee',
+                label: 'Ajoutées',
+              },
+              {
+                id: 'inchangee',
+                label: 'Inchangées',
+              },
+              {
+                id: 'modifiee',
+                label: 'Modifiées',
+              },
+              {
+                id: 'supprimee',
+                label: 'Supprimées',
+              },
+            ]}
+          />
+        </div>
+      {/snippet}
+      {#snippet cellule({ donnee, colonne })}
         {#if colonne.cle === 'ancienneDescription'}
           <span>{donnee.ancienneDescription ?? '-'}</span>
         {:else if colonne.cle === 'nouvelleDescription'}
@@ -150,7 +159,7 @@
             <span>{configurationStatut[donnee.detailStatut]}</span>
           </div>
         {/if}
-      </svelte:fragment>
+      {/snippet}
     </Tableau>
   </div>
 {/if}
@@ -249,9 +258,9 @@
   }
 
   :global(
-      .tableau-evolutions-mesures td:nth-child(1),
-      .tableau-evolutions-mesures td:nth-child(2)
-    ) {
+    .tableau-evolutions-mesures td:nth-child(1),
+    .tableau-evolutions-mesures td:nth-child(2)
+  ) {
     width: 33%;
   }
 

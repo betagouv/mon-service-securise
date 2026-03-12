@@ -7,14 +7,23 @@
   import { visiteGuidee } from '../visiteGuidee.store';
   import { metsEnPause, reprends } from '../visiteGuidee.api';
 
-  export let nombreEtapesRestantes: number;
-  export let etapeCourante: EtapeVisiteGuidee;
-  export let etapesVues: EtapeVisiteGuidee[] = [];
-  export let enPause: boolean;
+  interface Props {
+    nombreEtapesRestantes: number;
+    etapeCourante: EtapeVisiteGuidee;
+    etapesVues?: EtapeVisiteGuidee[];
+    enPause: boolean;
+  }
 
-  let menuOuvert: boolean = false;
+  let {
+    nombreEtapesRestantes,
+    etapeCourante,
+    etapesVues = [],
+    enPause,
+  }: Props = $props();
 
-  $: doitMontrerNombre = !menuOuvert;
+  let menuOuvert: boolean = $state(false);
+
+  let doitMontrerNombre = $derived(!menuOuvert);
 
   const ouvreMenu = () => {
     menuOuvert = true;
@@ -92,15 +101,15 @@
         {etapeCourante}
         {etapesVues}
         {configuration}
-        on:click={gereRepriseVisiteGuidee}
+        onclick={gereRepriseVisiteGuidee}
       />
       <div class="conteneur-actions">
-        <button class="bouton" on:click={async () => await continuerVisite()}
+        <button class="bouton" onclick={async () => await continuerVisite()}
           >Continuer la visite</button
         >
         <button
           class="bouton bouton-tertiaire bouton-fermeture"
-          on:click={async () =>
+          onclick={async () =>
             await visiteGuidee.fermeDefinitivementVisiteGuidee()}
           >Ignorer la visite guidée</button
         >
@@ -110,7 +119,7 @@
   <div class="conteneur-bouton-declencheur">
     <button
       class="declencheur-menu-navigation"
-      on:click={async () => (menuOuvert ? await fermeMenu() : ouvreMenu())}
+      onclick={async () => (menuOuvert ? await fermeMenu() : ouvreMenu())}
     >
       <img
         src={menuOuvert

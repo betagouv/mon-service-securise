@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   import type { BrouillonService, Service } from './tableauDeBord.d';
   export type TypeSelection = 'Service' | 'Brouillon';
   export type ServiceOuBrouillon = (Service | BrouillonService) & {
@@ -15,25 +15,31 @@
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import TiroirSuppression from '../ui/tiroirs/TiroirSuppression.svelte';
 
-  export let selection: ServiceOuBrouillon[];
+  interface Props {
+    selection: ServiceOuBrouillon[];
+  }
+
+  let { selection }: Props = $props();
 
   const estService = (
     s: ServiceOuBrouillon
   ): s is Service & { type: TypeSelection } => s.type === 'Service';
 
   const seulementLesServices = (tous: ServiceOuBrouillon[]): Service[] =>
-    tous.filter(estService).map(({ type, ...service }) => service as Service);
+    tous
+      .filter(estService)
+      .map(({ type: _type, ...service }) => service as Service);
 
-  $: actionsDisponibles = selection.length !== 0;
-  $: selectionUnique = selection.length === 1;
-  $: estProprietaireDesServicesSelectionnes = selection
-    .filter(estService)
-    .every((s) => s.estProprietaire);
-  $: selectionPossedeDesBrouillons = selection.some(
-    (s) => s.type === 'Brouillon'
+  let actionsDisponibles = $derived(selection.length !== 0);
+  let selectionUnique = $derived(selection.length === 1);
+  let estProprietaireDesServicesSelectionnes = $derived(
+    selection.filter(estService).every((s) => s.estProprietaire)
   );
-  $: ontDesDocuments = selection.every(
-    (s) => estService(s) && s.documentsPdfDisponibles.length
+  let selectionPossedeDesBrouillons = $derived(
+    selection.some((s) => s.type === 'Brouillon')
+  );
+  let ontDesDocuments = $derived(
+    selection.every((s) => estService(s) && s.documentsPdfDisponibles.length)
   );
 </script>
 
@@ -55,7 +61,7 @@
       actif={actionsDisponibles &&
         estProprietaireDesServicesSelectionnes &&
         !selectionPossedeDesBrouillons}
-      on:click={() =>
+      onclick={() =>
         tiroirStore.afficheContenu(TiroirGestionContributeurs, {
           services: seulementLesServices(selection),
         })}
@@ -66,7 +72,7 @@
       taille="moyen"
       type="lien"
       actif={actionsDisponibles && selectionUnique && ontDesDocuments}
-      on:click={() =>
+      onclick={() =>
         tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
           service: seulementLesServices(selection)[0],
         })}
@@ -77,7 +83,7 @@
       taille="moyen"
       type="lien"
       actif={actionsDisponibles && !selectionPossedeDesBrouillons}
-      on:click={() =>
+      onclick={() =>
         tiroirStore.afficheContenu(TiroirExportServices, {
           services: seulementLesServices(selection),
         })}
@@ -91,7 +97,7 @@
         selectionUnique &&
         estProprietaireDesServicesSelectionnes &&
         !selectionPossedeDesBrouillons}
-      on:click={() =>
+      onclick={() =>
         tiroirStore.afficheContenu(TiroirDuplication, {
           service: seulementLesServices(selection)[0],
         })}
@@ -102,7 +108,7 @@
       taille="moyen"
       type="lien"
       actif={actionsDisponibles && estProprietaireDesServicesSelectionnes}
-      on:click={() =>
+      onclick={() =>
         tiroirStore.afficheContenu(TiroirSuppression, {
           servicesEtBrouillon: selection,
         })}

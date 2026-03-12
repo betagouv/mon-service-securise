@@ -1,4 +1,4 @@
-/* eslint-disable no-console, no-await-in-loop, no-constant-condition */
+/* eslint-disable no-console, no-await-in-loop */
 import axios, { AxiosError } from 'axios';
 import { sendinblue } from '../src/adaptateurs/adaptateurEnvironnement.js';
 import { enCadence } from '../src/utilitaires/pThrottle.js';

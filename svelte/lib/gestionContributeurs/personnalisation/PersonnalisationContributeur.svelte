@@ -2,20 +2,21 @@
   import { store } from '../gestionContributeurs.store';
   import PersonnalisationDroits from './PersonnalisationDroits.svelte';
   import { storeAutorisations } from '../stores/autorisations.store';
-  import type { Autorisation, Utilisateur } from '../gestionContributeurs.d';
+  import { derived } from 'svelte/store';
 
-  let contributeur: Utilisateur;
-  let originaux: Autorisation;
+  let contributeur = derived(
+    store,
+    ($s) => $s.utilisateurEnCoursDePersonnalisation!
+  );
+  let originaux = derived([contributeur, storeAutorisations], ([$c, $s]) => {
+    if ($c) return $s.autorisations[$c.id];
+  });
 
-  $: {
-    contributeur = $store.utilisateurEnCoursDePersonnalisation!;
-    if (contributeur)
-      originaux = $storeAutorisations.autorisations[contributeur.id];
-  }
+  const envoyerDroits = async (droits: unknown) => {
+    if (!$originaux) return;
 
-  const envoyerDroits = async (droits: any) => {
     const idService = $store.services[0].id;
-    const idAutorisation = originaux.idAutorisation;
+    const idAutorisation = $originaux.idAutorisation;
     const { data: nouvelleAutorisation } = await axios.patch(
       `/api/service/${idService}/autorisations/${idAutorisation}`,
       { droits }
@@ -25,9 +26,11 @@
   };
 </script>
 
-<PersonnalisationDroits
-  utilisateur={contributeur}
-  droitsOriginaux={originaux.droits}
-  on:valider={({ detail: nouveauxDroits }) => envoyerDroits(nouveauxDroits)}
-  on:annuler={() => store.navigation.afficheEtapeListe()}
-/>
+{#if $contributeur && $originaux}
+  <PersonnalisationDroits
+    utilisateur={$contributeur}
+    droitsOriginaux={$originaux.droits}
+    onValider={(droits) => envoyerDroits(droits)}
+    onAnnuler={() => store.navigation.afficheEtapeListe()}
+  />
+{/if}

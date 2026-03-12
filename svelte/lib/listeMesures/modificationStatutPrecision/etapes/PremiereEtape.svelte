@@ -3,9 +3,17 @@
   import type { ReferentielStatut } from '../../../ui/types.d';
   import ChampDeSaisie from '../../../ui/ChampDeSaisie.svelte';
 
-  export let statuts: ReferentielStatut;
-  export let statutSelectionne: keyof ReferentielStatut | '' = '';
-  export let precision: string = '';
+  interface Props {
+    statuts: ReferentielStatut;
+    statutSelectionne: keyof ReferentielStatut | '';
+    precision: string;
+  }
+
+  let {
+    statuts,
+    statutSelectionne = $bindable(),
+    precision = $bindable(),
+  }: Props = $props();
 </script>
 
 <span class="explications">

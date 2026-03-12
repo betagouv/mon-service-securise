@@ -9,11 +9,15 @@
     type RapportServiceV2,
   } from './rapportTeleversementServicesV2.types';
 
-  export let ligne: RapportServiceV2;
+  interface Props {
+    ligne: RapportServiceV2;
+  }
 
-  const donneesService = ligne.service;
-  const aUneErreur = ligne.erreurs.length > 0;
-  const aDesErreurs = ligne.erreurs.length > 1;
+  let { ligne }: Props = $props();
+
+  let donneesService = $derived(ligne.service);
+  let aUneErreur = $derived(ligne.erreurs.length > 0);
+  let aDesErreurs = $derived(ligne.erreurs.length > 1);
 
   const contientErreur = (erreur: ErreurServiceV2) =>
     ligne.erreurs.includes(erreur);

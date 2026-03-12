@@ -3,16 +3,22 @@
   import type { Departement } from './inscription.d';
   import FermetureSurClicEnDehors from '../ui/FermetureSurClicEnDehors.svelte';
 
-  export let departements: Departement[];
-  export let valeur: Departement | '' = '';
+  interface Props {
+    departements: Departement[];
+    valeur?: Departement | '';
+  }
 
-  let saisie: string;
-  let minuteur: NodeJS.Timeout;
+  let { departements, valeur = $bindable() }: Props = $props();
+
+  valeur ??= '';
+
+  let saisie: string = $state('');
+  let minuteur: ReturnType<typeof setTimeout>;
   let dureeDebounceEnMs = 300;
-  let suggestions: Departement[] = [];
-  let suggestionsVisibles = false;
+  let suggestions: Departement[] = $state([]);
+  let suggestionsVisibles = $state(false);
 
-  const avecTemporisation = (fonction: () => Promise<any>) => {
+  const avecTemporisation = (fonction: () => Promise<void>) => {
     clearTimeout(minuteur);
     minuteur = setTimeout(async () => {
       await fonction();
@@ -34,7 +40,7 @@
     suggestionsVisibles = false;
   };
 
-  let suggestionsEl: HTMLDivElement;
+  let suggestionsEl: HTMLDivElement | undefined = $state();
   if (valeur) {
     saisie = `${valeur.nom} (${valeur.code})`;
   }
@@ -45,9 +51,9 @@
     id="departement"
     nom="departement"
     bind:valeur={saisie}
-    on:input={() => avecTemporisation(rechercheSuggestions)}
+    oninput={() => avecTemporisation(rechercheSuggestions)}
     aideSaisie="ex : 33, Morbihan"
-    on:focus={() => avecTemporisation(rechercheSuggestions)}
+    onfocus={() => avecTemporisation(rechercheSuggestions)}
     autocomplete="off"
   />
   <div
@@ -55,15 +61,15 @@
     class:visible={suggestionsVisibles}
     bind:this={suggestionsEl}
   >
-    {#each suggestions as suggestion}
+    {#each suggestions as suggestion, i (i)}
       <div
         class="option"
         role="button"
         tabindex="0"
-        on:click={() => {
+        onclick={() => {
           choisisDepartement(suggestion);
         }}
-        on:keypress={(e) => {
+        onkeypress={(e) => {
           if (e.code === 'Enter') {
             choisisDepartement(suggestion);
           }

@@ -1,15 +1,24 @@
 <script lang="ts">
   import { recupereIndiceCyberPersonnalise } from './indiceCyberPersonnalise.api';
 
-  export let indiceCyberPersonnalise: number;
-  export let noteMax: number;
+  interface Props {
+    indiceCyberPersonnalise: number;
+    noteMax: number;
+    idService: string;
+  }
 
-  export let idService: string;
+  let {
+    indiceCyberPersonnalise = $bindable(),
+    noteMax,
+    idService,
+  }: Props = $props();
 
-  $: indiceCyberFormatte = Intl.NumberFormat('fr', {
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  }).format(indiceCyberPersonnalise);
+  let indiceCyberFormatte = $derived(
+    Intl.NumberFormat('fr', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format(indiceCyberPersonnalise)
+  );
 
   const taille = 160;
   const nbTraits = 52;
@@ -17,7 +26,9 @@
   const hauteurRectangle = 12;
   const radius = 0.85 * (taille / 2);
 
-  $: avancement = Math.floor((indiceCyberPersonnalise / noteMax) * nbTraits);
+  let avancement = $derived(
+    Math.floor((indiceCyberPersonnalise / noteMax) * nbTraits)
+  );
 
   const metAJourIndiceCyber = async () => {
     indiceCyberPersonnalise = await recupereIndiceCyberPersonnalise(idService);
@@ -59,7 +70,7 @@
     <div class="gradient"></div>
   </foreignObject>
   <mask id="masque">
-    {#each new Array(avancement).fill(0) as _, i}
+    {#each new Array(avancement).fill(0) as _, i (i)}
       {@const angle = (i / nbTraits) * 2 * Math.PI - Math.PI / 2}
       {@const x = radius * Math.cos(angle) + taille / 2}
       {@const y = radius * Math.sin(angle) + taille / 2}

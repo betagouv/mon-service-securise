@@ -9,8 +9,14 @@
   import { entiteDeUtilisateur, leBrouillon } from '../brouillon.store';
   import { ajouteParametreAUrl } from '../../../outils/url';
 
-  export let estComplete: boolean;
-  $: estComplete = $brouillonEstCompletStore;
+  interface Props {
+    estComplete: boolean;
+  }
+
+  let { estComplete = $bindable() }: Props = $props();
+  $effect(() => {
+    estComplete = $brouillonEstCompletStore;
+  });
 
   const enregistre = async (maj: MiseAJour) => {
     const doitCreerLeBrouillon = !$leBrouillon.id && maj.nomService;
@@ -34,7 +40,7 @@
 <BrouillonDeServiceEditable
   bind:donnees={$leBrouillon}
   seulementNomServiceEditable={!$leBrouillon.id}
-  on:champModifie={async (e) => {
-    await enregistre(e.detail);
+  onChampModifie={async (miseAJour) => {
+    await enregistre(miseAJour);
   }}
 />

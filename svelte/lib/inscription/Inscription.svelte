@@ -20,42 +20,59 @@
     finaliseInscriptionSuiteInvitation,
     inscrisNouvelUtilisateur,
   } from './inscription.api';
+  import { untrack } from 'svelte';
 
-  export let estimationNombreServices: EstimationNombreServices[];
-  export let informationsProfessionnelles: InformationsProfessionnelles;
   const modeleTelephone = '^0\\d{9}$';
-  export let departements: Departement[];
-  export let invite: boolean;
-  export let token: string;
+  interface Props {
+    estimationNombreServices: EstimationNombreServices[];
+    informationsProfessionnelles: InformationsProfessionnelles;
+    departements: Departement[];
+    invite: boolean;
+    token: string;
+  }
 
-  let etapeCourante = 1;
+  let {
+    estimationNombreServices,
+    informationsProfessionnelles,
+    departements,
+    invite,
+    token,
+  }: Props = $props();
 
-  $: titreEtape = [
-    'Vos informations professionnelles',
-    'Vos informations complémentaires',
-    'Vos consentements',
-  ][etapeCourante - 1];
+  let etapeCourante = $state(1);
 
-  let formulaireEtape1: Formulaire;
-  let formulaireEtape2: Formulaire;
-  let formulaireEtape3: Formulaire;
+  let titreEtape = $derived(
+    [
+      'Vos informations professionnelles',
+      'Vos informations complémentaires',
+      'Vos consentements',
+    ][etapeCourante - 1]
+  );
 
-  $: tousFormulaires = [formulaireEtape1, formulaireEtape2, formulaireEtape3];
-  $: formulaireCourant = tousFormulaires[etapeCourante - 1];
+  let formulaireEtape1: Formulaire | undefined = $state();
+  let formulaireEtape2: Formulaire | undefined = $state();
+  let formulaireEtape3: Formulaire | undefined = $state();
+
+  let tousFormulaires = $derived([
+    formulaireEtape1,
+    formulaireEtape2,
+    formulaireEtape3,
+  ]);
+  let formulaireCourant = $derived(tousFormulaires[etapeCourante - 1]);
 
   const etapePrecedente = () => {
     if (etapeCourante > 1) etapeCourante--;
   };
   const etapeSuivante = () => {
-    if (formulaireCourant.estValide() && etapeCourante < 3) {
+    if (formulaireCourant?.estValide() && etapeCourante < 3) {
       etapeCourante++;
     }
   };
 
-  let enCoursEnvoi = false;
+  let enCoursEnvoi = $state(false);
 
   const valide = async () => {
-    if (formulaireCourant.estValide()) {
+    if (formulaireCourant?.estValide()) {
       try {
         enCoursEnvoi = true;
         if (invite) {
@@ -70,26 +87,32 @@
     }
   };
 
-  let formulaireInscription: FormulaireInscription = {
-    prenom: informationsProfessionnelles.prenom,
-    nom: informationsProfessionnelles.nom,
-    siretEntite: informationsProfessionnelles.organisation?.siret,
-    telephone: informationsProfessionnelles.telephone,
-    postes: informationsProfessionnelles.domainesSpecialite,
+  let formulaireInscription: FormulaireInscription = $state({
+    prenom: untrack(() => informationsProfessionnelles).prenom,
+    nom: untrack(() => informationsProfessionnelles).nom,
+    siretEntite: untrack(() => informationsProfessionnelles).organisation
+      ?.siret,
+    telephone: untrack(() => informationsProfessionnelles).telephone,
+    postes: untrack(() => informationsProfessionnelles).domainesSpecialite,
     estimationNombreServices: null,
     agentConnect: true,
     cguAcceptees: false,
     infolettreAcceptee: false,
     transactionnelAccepte: true,
-    token,
-  };
+    token: untrack(() => token),
+  });
 
-  let departement: Departement;
-  let organisation: Organisation;
-  $: {
-    formulaireInscription.siretEntite =
-      informationsProfessionnelles.organisation?.siret || organisation?.siret;
-  }
+  let departement: Departement | undefined = $state();
+  let organisation: Organisation | undefined = $state();
+
+  $effect(() => {
+    if (formulaireInscription) {
+      formulaireInscription.siretEntite =
+        informationsProfessionnelles.organisation?.siret ||
+        organisation?.siret ||
+        '';
+    }
+  });
 </script>
 
 <div class="entete-inscription">
@@ -264,18 +287,13 @@
     <Bouton
       type="secondaire"
       titre="Précédent"
-      on:click={etapePrecedente}
+      onclick={etapePrecedente}
       actif={etapeCourante > 1}
     />
     {#if etapeCourante === 3}
-      <Bouton
-        type="primaire"
-        titre="Valider"
-        on:click={valide}
-        {enCoursEnvoi}
-      />
+      <Bouton type="primaire" titre="Valider" onclick={valide} {enCoursEnvoi} />
     {:else}
-      <Bouton type="primaire" titre="Suivant" on:click={etapeSuivante} />
+      <Bouton type="primaire" titre="Suivant" onclick={etapeSuivante} />
     {/if}
   </div>
 </div>

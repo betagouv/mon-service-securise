@@ -1,15 +1,42 @@
 <script lang="ts">
   import { validationChamp } from '../directives/validationChamp';
+  import type {
+    FocusEventHandler,
+    FormEventHandler,
+    FullAutoFill,
+  } from 'svelte/elements';
 
-  export let nom: string;
-  export let id: string;
-  export let valeur: string = '';
-  export let requis: boolean = false;
-  export let aideSaisie: string = '';
-  export let messageErreur: string = '';
-  export let modele: string | undefined = undefined;
-  export let type: string = 'text';
-  export let autocomplete: string = '';
+  interface Props {
+    nom: string;
+    id: string;
+    valeur?: string;
+    requis?: boolean;
+    aideSaisie?: string;
+    messageErreur?: string;
+    modele?: string | undefined;
+    type?: string;
+    autocomplete?: FullAutoFill;
+    oninput?: FormEventHandler<HTMLInputElement>;
+    onfocus?: FocusEventHandler<HTMLInputElement>;
+    onblur?: FocusEventHandler<HTMLInputElement>;
+  }
+
+  let {
+    nom,
+    id,
+    valeur = $bindable(),
+    requis = false,
+    aideSaisie = '',
+    messageErreur = '',
+    modele = undefined,
+    type = 'text',
+    autocomplete = '',
+    oninput,
+    onfocus,
+    onblur,
+  }: Props = $props();
+
+  valeur ??= '';
 
   const typeChamp = (node: HTMLInputElement) => {
     node.type = type;
@@ -25,9 +52,9 @@
   placeholder={aideSaisie}
   use:validationChamp={requis || modele ? messageErreur : ''}
   pattern={modele}
-  on:input
-  on:focus
-  on:blur
+  {oninput}
+  {onfocus}
+  {onblur}
   {autocomplete}
 />
 

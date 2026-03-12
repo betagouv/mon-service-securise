@@ -6,7 +6,6 @@
   import { onMount } from 'svelte';
   import ModaleDetailsMesure from './kit/ModaleDetailsMesure.svelte';
   import {
-    type ModeleMesureGenerale,
     Referentiel,
     type ReferentielStatut,
     type ReferentielTypesService,
@@ -46,11 +45,17 @@
   import FiltreSurV1V2 from './FiltreSurV1V2.svelte';
   import CartoucheThematique from '../ui/CartoucheThematique.svelte';
   import { thematiques } from './thematiques';
+  import { derived } from 'svelte/store';
 
-  export let statuts: ReferentielStatut;
-  export let categories: ListeMesuresProps['categories'];
-  export let typesService: ReferentielTypesService;
-  export let capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+  interface Props {
+    statuts: ReferentielStatut;
+    categories: ListeMesuresProps['categories'];
+    typesService: ReferentielTypesService;
+    capaciteAjoutDeMesure: CapaciteAjoutDeMesure;
+  }
+
+  let { statuts, categories, typesService, capaciteAjoutDeMesure }: Props =
+    $props();
 
   onMount(async () => {
     await servicesAvecMesuresAssociees.rafraichis();
@@ -61,22 +66,24 @@
   const valeursOnglets = ['toutes', 'generales', 'specifiques'];
   type OngletListeMesures = (typeof valeursOnglets)[number];
 
-  let modaleDetailsMesure: ModaleDetailsMesure;
+  let modaleDetailsMesure: ModaleDetailsMesure | undefined = $state();
 
-  let ongletActif: OngletListeMesures;
+  let ongletActif: OngletListeMesures = $state('toutes');
 
-  $: {
+  $effect(() => {
     const ongletDemande = requete.get('ongletActif') as OngletListeMesures;
     ongletActif = valeursOnglets.includes(ongletDemande)
       ? ongletDemande
       : 'toutes';
-  }
+  });
 
-  $: peutAjouterModelesMesureSpecifique =
-    $modelesMesureSpecifique.length < capaciteAjoutDeMesure.nombreMaximum;
+  let peutAjouterModelesMesureSpecifique = derived(
+    modelesMesureSpecifique,
+    ($s) => $s.length < capaciteAjoutDeMesure.nombreMaximum
+  );
 
   const afficheModaleDetailsMesure = async (modeleMesure: ModeleDeMesure) => {
-    await modaleDetailsMesure.affiche(modeleMesure);
+    await modaleDetailsMesure?.affiche(modeleMesure);
   };
 
   const itemsFiltrageReferentiel = [
@@ -84,11 +91,13 @@
     { libelle: 'CNIL', valeur: Referentiel.CNIL, idCategorie: 'referentiel' },
   ];
 
-  const itemsFiltrageCategories = categories.map((c) => ({
-    libelle: c.label,
-    valeur: c.id,
-    idCategorie: 'categorie',
-  }));
+  let itemsFiltrageCategories = $derived(
+    categories.map((c) => ({
+      libelle: c.label,
+      valeur: c.id,
+      idCategorie: 'categorie',
+    }))
+  );
 
   const itemsFiltrageThematiques = thematiques.map((t) => ({
     libelle: t,
@@ -105,72 +114,81 @@
     configurationRecherche: { champsRecherche: string[] };
     configurationFiltrage: ConfigurationFiltrage;
   };
-  let configurationTableau: ConfigurationTableau = {
-    donnees: [],
-    configurationRecherche: { champsRecherche: [] },
-    configurationFiltrage: { options: { categories: [], items: [] } },
-  };
-
-  $: {
-    const listeModeleMesuresGenerales: ModeleDeMesure[] = Object.values(
-      $modelesMesureGenerale
-    ).map((m) => ({
-      ...m,
-      idsServicesAssocies: $mesuresAvecServicesAssociesStore[m.id],
-      type: 'generale',
-    }));
-    const listeModelesMesureSpecifique: ModeleDeMesure[] =
-      $modelesMesureSpecifique.map((m) => ({
+  const listeModeleMesuresGenerales = derived(
+    [modelesMesureGenerale, mesuresAvecServicesAssociesStore],
+    ([$mMG, $mASAS]) =>
+      Object.values($mMG).map((m) => ({
         ...m,
-        referentiel: Referentiel.SPECIFIQUE,
-        type: 'specifique',
-      }));
+        idsServicesAssocies: $mASAS[m.id],
+        type: 'generale' as ModeleDeMesure['type'],
+      }))
+  );
 
-    const categoriesFiltragePourMesuresGenerales = [
-      groupeReferentiel,
-      groupeCategorie,
-    ];
-    const itemsFiltragePourMesuresGenerales = [
-      ...itemsFiltrageReferentiel,
-      ...itemsFiltrageCategories,
-    ];
-    if ($storeVersionsDeService.versionSelectionnee === 'v2') {
-      categoriesFiltragePourMesuresGenerales.push(groupeThematique);
-      itemsFiltragePourMesuresGenerales.push(...itemsFiltrageThematiques);
+  const categoriesFiltragePourMesuresGenerales = derived(
+    storeVersionsDeService,
+    ($s) => {
+      const categoriesFiltrage = [groupeReferentiel, groupeCategorie];
+      if ($s.versionSelectionnee === 'v2') {
+        categoriesFiltrage.push(groupeThematique);
+      }
+      return categoriesFiltrage;
     }
+  );
 
+  const itemsFiltragePourMesuresGenerales = derived(
+    storeVersionsDeService,
+    ($s) => {
+      const items = [...itemsFiltrageReferentiel, ...itemsFiltrageCategories];
+      if ($s.versionSelectionnee === 'v2') {
+        items.push(...itemsFiltrageThematiques);
+      }
+      return items;
+    }
+  );
+
+  const listeModelesMesureSpecifique = derived(modelesMesureSpecifique, ($s) =>
+    $s.map((m) => ({
+      ...m,
+      referentiel: Referentiel.SPECIFIQUE,
+      type: 'specifique' as ModeleDeMesure['type'],
+    }))
+  );
+  let configurationTableau: ConfigurationTableau = $derived.by(() => {
+    let config = {
+      donnees: [],
+      configurationRecherche: { champsRecherche: [] },
+      configurationFiltrage: { options: { categories: [], items: [] } },
+    } as ConfigurationTableau;
     if (ongletActif === 'generales') {
-      configurationTableau.donnees = listeModeleMesuresGenerales;
-      configurationTableau.configurationRecherche.champsRecherche = [
+      config.donnees = $listeModeleMesuresGenerales;
+      config.configurationRecherche.champsRecherche = [
         'description',
         'identifiantNumerique',
       ];
-      configurationTableau.configurationFiltrage.options = {
-        categories: categoriesFiltragePourMesuresGenerales,
-        items: itemsFiltragePourMesuresGenerales,
+      config.configurationFiltrage.options = {
+        categories: $categoriesFiltragePourMesuresGenerales,
+        items: $itemsFiltragePourMesuresGenerales,
       };
     } else if (ongletActif === 'specifiques') {
-      configurationTableau.donnees = listeModelesMesureSpecifique;
-      configurationTableau.configurationRecherche.champsRecherche = [
-        'description',
-      ];
-      configurationTableau.configurationFiltrage.options = {
+      config.donnees = $listeModelesMesureSpecifique;
+      config.configurationRecherche.champsRecherche = ['description'];
+      config.configurationFiltrage.options = {
         categories: [groupeCategorie],
         items: [...itemsFiltrageCategories],
       };
     } else if (ongletActif === 'toutes') {
-      configurationTableau.donnees = [
-        ...listeModeleMesuresGenerales,
-        ...listeModelesMesureSpecifique,
+      config.donnees = [
+        ...$listeModeleMesuresGenerales,
+        ...$listeModelesMesureSpecifique,
       ];
-      configurationTableau.configurationRecherche.champsRecherche = [
+      config.configurationRecherche.champsRecherche = [
         'description',
         'identifiantNumerique',
       ];
-      configurationTableau.configurationFiltrage.options = {
-        categories: categoriesFiltragePourMesuresGenerales,
+      config.configurationFiltrage.options = {
+        categories: $categoriesFiltragePourMesuresGenerales,
         items: [
-          ...itemsFiltragePourMesuresGenerales,
+          ...$itemsFiltragePourMesuresGenerales,
           {
             libelle: 'Mesures ajoutées',
             valeur: Referentiel.SPECIFIQUE,
@@ -179,12 +197,12 @@
         ],
       };
     }
-
-    configurationTableau.donnees = seulementCellesDeLaVersion(
-      configurationTableau.donnees,
+    config.donnees = seulementCellesDeLaVersion(
+      config.donnees,
       $storeVersionsDeService.versionSelectionnee
     );
-  }
+    return config;
+  });
 
   const estModeleMesureGenerale = (
     modeleMesure: ModeleDeMesure
@@ -241,13 +259,13 @@
     }
   };
 
-  $: nombresMesuresPourOnglets = {
+  let nombresMesuresPourOnglets = $derived({
     mesuresGenerales: Object.values($modelesMesureGenerale).filter(
       (m) =>
         m.versionReferentiel === $storeVersionsDeService.versionSelectionnee
     ).length,
     mesureSpecifiques: $modelesMesureSpecifique.length,
-  };
+  });
 </script>
 
 <Toaster />
@@ -255,7 +273,7 @@
 <ModaleRapportModification
   referentielStatuts={statuts}
   referentielTypesService={typesService}
-  on:close={() => modaleRapportStore.metEnAvantMesureApresModification()}
+  onClose={() => modaleRapportStore.metEnAvantMesureApresModification()}
 />
 
 <ModaleDetailsMesure
@@ -286,69 +304,73 @@
       }
     : undefined}
 >
-  <svelte:fragment slot="barre-action-dans-thead">
+  {#snippet barre_action_dans_thead()}
     {#if $storeVersionsDeService.plusieursVersionsDeService}
       <FiltreSurV1V2 bind:value={$storeVersionsDeService.versionSelectionnee} />
     {/if}
-  </svelte:fragment>
-  <div slot="actionsComplementaires" class="conteneur-actions-complementaires">
-    <Lien
-      type="bouton-tertiaire"
-      href="/mesures/export.csv?version={$storeVersionsDeService.versionSelectionnee}"
-      titre="Télécharger la liste de mesures"
-      target="_blank"
-      icone="telecharger"
-    />
-    <div class="action-ajout-modeles-mesure-specifique">
-      <BoutonAvecListeDeroulante
-        titre="Ajouter une / des mesures"
-        options={[
+  {/snippet}
+  {#snippet actionsComplementaires()}
+    <div class="conteneur-actions-complementaires">
+      <Lien
+        type="bouton-tertiaire"
+        href="/mesures/export.csv?version={$storeVersionsDeService.versionSelectionnee}"
+        titre="Télécharger la liste de mesures"
+        target="_blank"
+        icone="telecharger"
+      />
+      <div class="action-ajout-modeles-mesure-specifique">
+        <BoutonAvecListeDeroulante
+          titre="Ajouter une / des mesures"
+          options={[
+            {
+              label: 'Ajouter une mesure',
+              icone: 'plus',
+              action: afficheTiroirAjout,
+            },
+            {
+              label: 'Téléverser des mesures',
+              icone: 'televerser',
+              action: afficheTiroirTeleversement,
+            },
+          ]}
+          disabled={!$peutAjouterModelesMesureSpecifique}
+        />
+        {#if !$peutAjouterModelesMesureSpecifique}
+          <Infobulle
+            contenu={`Vous avez atteint la limite maximale de ${capaciteAjoutDeMesure.nombreMaximum} mesures. Pour ajouter des mesures, veuillez d'abord en supprimer.`}
+          />
+        {/if}
+      </div>
+    </div>
+  {/snippet}
+
+  {#snippet onglets()}
+    <div>
+      <Onglets
+        bind:ongletActif
+        onglets={[
           {
-            label: 'Ajouter une mesure',
-            icone: 'plus',
-            action: afficheTiroirAjout,
+            id: 'toutes',
+            label: 'Toutes les mesures',
+            badge:
+              nombresMesuresPourOnglets.mesuresGenerales +
+              nombresMesuresPourOnglets.mesureSpecifiques,
           },
           {
-            label: 'Téléverser des mesures',
-            icone: 'televerser',
-            action: afficheTiroirTeleversement,
+            id: 'generales',
+            label: 'Les mesures ANSSI & CNIL',
+            badge: nombresMesuresPourOnglets.mesuresGenerales,
+          },
+          {
+            id: 'specifiques',
+            label: 'Mes mesures ajoutées',
+            badge: nombresMesuresPourOnglets.mesureSpecifiques,
           },
         ]}
-        disabled={!peutAjouterModelesMesureSpecifique}
       />
-      {#if !peutAjouterModelesMesureSpecifique}
-        <Infobulle
-          contenu={`Vous avez atteint la limite maximale de ${capaciteAjoutDeMesure.nombreMaximum} mesures. Pour ajouter des mesures, veuillez d'abord en supprimer.`}
-        />
-      {/if}
     </div>
-  </div>
-
-  <div slot="onglets">
-    <Onglets
-      bind:ongletActif
-      onglets={[
-        {
-          id: 'toutes',
-          label: 'Toutes les mesures',
-          badge:
-            nombresMesuresPourOnglets.mesuresGenerales +
-            nombresMesuresPourOnglets.mesureSpecifiques,
-        },
-        {
-          id: 'generales',
-          label: 'Les mesures ANSSI & CNIL',
-          badge: nombresMesuresPourOnglets.mesuresGenerales,
-        },
-        {
-          id: 'specifiques',
-          label: 'Mes mesures ajoutées',
-          badge: nombresMesuresPourOnglets.mesureSpecifiques,
-        },
-      ]}
-    />
-  </div>
-  <svelte:fragment slot="cellule" let:donnee let:colonne>
+  {/snippet}
+  {#snippet cellule({ donnee, colonne })}
     {@const aDesServicesAssocies = donnee.idsServicesAssocies?.length > 0}
     {@const typeMesure = donnee.type}
     {@const cliquable = typeMesure === 'specifique' || aDesServicesAssocies}
@@ -358,8 +380,8 @@
         class:cliquable
         role="button"
         tabindex="0"
-        on:keypress={() => cliquable && ouvreTiroirEdition(donnee)}
-        on:click={() => cliquable && ouvreTiroirEdition(donnee)}
+        onkeypress={() => cliquable && ouvreTiroirEdition(donnee)}
+        onclick={() => cliquable && ouvreTiroirEdition(donnee)}
       >
         <span>{donnee.description}</span>
         <div>
@@ -384,7 +406,7 @@
             titre={`${donnee.idsServicesAssocies.length} ${
               donnee.idsServicesAssocies.length > 1 ? 'services' : 'service'
             }`}
-            on:click={async () => {
+            onclick={async () => {
               await afficheDetailServiceAssocies(donnee);
             }}
           />
@@ -400,7 +422,7 @@
           taille="petit"
           icone="configuration"
           actif={aDesServicesAssocies}
-          on:click={() => {
+          onclick={() => {
             afficheTiroirModificationMultipleMesuresGenerales(donnee);
           }}
         />
@@ -410,13 +432,13 @@
           type="secondaire"
           taille="petit"
           icone="configuration"
-          on:click={() => {
+          onclick={() => {
             afficheTiroirModificationModeleMesureSpecifique(donnee);
           }}
         />
       {/if}
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </Tableau>
 
 <style lang="scss">

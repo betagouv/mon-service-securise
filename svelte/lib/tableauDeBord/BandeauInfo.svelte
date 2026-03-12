@@ -1,11 +1,21 @@
 <script lang="ts">
   import type { IndiceCyberMoyen } from './tableauDeBord.d';
 
-  export let nombreServices: number;
-  export let nombreServicesHomologues: number;
-  export let nombreHomologationsExpirees: number;
-  export let indiceCyberMoyen: IndiceCyberMoyen | undefined;
-  export let estSuperviseur: boolean;
+  interface Props {
+    nombreServices: number;
+    nombreServicesHomologues: number;
+    nombreHomologationsExpirees: number;
+    indiceCyberMoyen: IndiceCyberMoyen | undefined;
+    estSuperviseur: boolean;
+  }
+
+  let {
+    nombreServices,
+    nombreServicesHomologues,
+    nombreHomologationsExpirees,
+    indiceCyberMoyen,
+    estSuperviseur,
+  }: Props = $props();
 
   const pluraliseChaine = (chaine: string, nombre: number) =>
     chaine
@@ -13,12 +23,13 @@
       .map((mot) => `${mot}${nombre > 1 ? 's' : ''}`)
       .join(' ');
 
-  $: valeurIndiceCyberMoyen = (): string =>
+  let valeurIndiceCyberMoyen = $derived((): string =>
     indiceCyberMoyen === undefined || indiceCyberMoyen === '-'
       ? '-'
       : new Intl.NumberFormat('fr-FR', { maximumSignificantDigits: 2 }).format(
           indiceCyberMoyen
-        );
+        )
+  );
 </script>
 
 <div class="bandeau-cartes-info">

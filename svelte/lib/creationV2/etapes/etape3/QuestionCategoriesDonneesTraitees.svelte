@@ -1,17 +1,18 @@
 <script lang="ts">
-  import { createEventDispatcher, tick } from 'svelte';
-  import Radio from '../../Radio.svelte';
+  import { tick } from 'svelte';
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import CheckboxIllustree from '../etape2/CheckboxIllustree.svelte';
-  import type {
-    CategorieDonneesTraitees,
-    SpecificiteProjet,
-  } from '../../creationV2.types';
+  import type { CategorieDonneesTraitees } from '../../creationV2.types';
   import ListeChampTexte from '../ListeChampTexte.svelte';
 
-  export let estComplete: boolean;
+  interface Props {
+    estComplete: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
+  }
+
+  let { estComplete = $bindable(), onChampModifie }: Props = $props();
 
   const illustrations: Record<CategorieDonneesTraitees, string> = {
     documentsIdentifiants: 'documentsIdentifiants.svg',
@@ -28,13 +29,13 @@
     donneesSensibles: 'donneesSensibles.svg',
   };
 
-  const emetEvenement = createEventDispatcher<{ champModifie: MiseAJour }>();
-
-  $: estComplete =
-    $leBrouillon.categoriesDonneesTraiteesSupplementaires.length === 0 ||
-    $leBrouillon.categoriesDonneesTraiteesSupplementaires.every(
-      (c) => c.length <= 200
-    );
+  $effect(() => {
+    estComplete =
+      $leBrouillon.categoriesDonneesTraiteesSupplementaires.length === 0 ||
+      $leBrouillon.categoriesDonneesTraiteesSupplementaires.every(
+        (c) => c.length <= 200
+      );
+  });
 
   const supprimeValeur = (index: number) => {
     $leBrouillon.categoriesDonneesTraiteesSupplementaires =
@@ -51,7 +52,7 @@
   };
 
   const enregistre = () => {
-    emetEvenement('champModifie', {
+    onChampModifie({
       categoriesDonneesTraiteesSupplementaires:
         $leBrouillon.categoriesDonneesTraiteesSupplementaires.filter(
           (c) => c.trim().length > 0
@@ -59,19 +60,20 @@
     });
   };
 
-  let valeurCategoriesDonneesTraitees: CategorieDonneesTraitees[] =
-    $leBrouillon.categoriesDonneesTraitees;
+  let valeurCategoriesDonneesTraitees: CategorieDonneesTraitees[] = $state(
+    $leBrouillon.categoriesDonneesTraitees
+  );
 
-  $: {
+  $effect(() => {
     if (
       valeurCategoriesDonneesTraitees !== $leBrouillon.categoriesDonneesTraitees
     ) {
       $leBrouillon.categoriesDonneesTraitees = valeurCategoriesDonneesTraitees;
-      emetEvenement('champModifie', {
+      onChampModifie({
         categoriesDonneesTraitees: $leBrouillon.categoriesDonneesTraitees,
       });
     }
-  }
+  });
 
   const categorieDonneesTraitees = Object.entries(
     questionsV2.categorieDonneesTraitees
@@ -83,7 +85,7 @@
 
   <span class="indication">Sélectionnez une ou plusieurs réponses</span>
 
-  {#each categorieDonneesTraitees as [idType, details]}
+  {#each categorieDonneesTraitees as [idType, details] (idType)}
     {@const nomImage = illustrations[idType]}
     <CheckboxIllustree
       id={idType}
@@ -104,13 +106,13 @@
     <ListeChampTexte
       nomGroupe="categoriesDonneesTraiteesSupplementaires"
       bind:valeurs={$leBrouillon.categoriesDonneesTraiteesSupplementaires}
-      on:ajout={ajouteValeur}
+      onAjout={ajouteValeur}
       titreSuppression="Supprimer la donnée"
       titreAjout="Ajouter des données"
       limiteTaille={200}
-      on:blur={() => enregistre()}
-      on:suppression={async (e) => {
-        supprimeValeur(e.detail);
+      onblur={() => enregistre()}
+      onSuppression={async (index) => {
+        supprimeValeur(index);
         await tick();
         if (estComplete) enregistre();
       }}

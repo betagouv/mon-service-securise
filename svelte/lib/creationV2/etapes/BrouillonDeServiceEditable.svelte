@@ -1,6 +1,6 @@
 <script lang="ts">
   import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
-  import { tick, createEventDispatcher } from 'svelte';
+  import { tick } from 'svelte';
   import type { MiseAJour } from '../creationV2.api';
   import ListeChampTexte from './ListeChampTexte.svelte';
   import ChampOrganisation from '../../ui/ChampOrganisation.svelte';
@@ -19,10 +19,17 @@
     VolumetrieDonneesTraitees,
   } from '../creationV2.types';
 
-  export let donnees: DescriptionServiceV2;
-  export let seulementNomServiceEditable: boolean;
+  interface Props {
+    donnees: DescriptionServiceV2;
+    seulementNomServiceEditable: boolean;
+    onChampModifie: (miseAJour: MiseAJour) => void;
+  }
 
-  const dispatch = createEventDispatcher<{ champModifie: MiseAJour }>();
+  let {
+    donnees = $bindable(),
+    seulementNomServiceEditable,
+    onChampModifie,
+  }: Props = $props();
 
   const supprimeValeurPointAcces = (index: number) => {
     donnees.pointsAcces = donnees.pointsAcces.filter((_, i) => i !== index);
@@ -76,10 +83,12 @@
   };
 
   const champModifie = async (propriete: string, valeur: string | string[]) => {
-    dispatch('champModifie', { [propriete]: valeur });
+    onChampModifie({ [propriete]: valeur });
   };
 
-  let elementHtml: HTMLElement & { errorMessage: string; status: string };
+  let elementHtml:
+    | (HTMLElement & { errorMessage: string; status: string })
+    | undefined = $state();
 
   type BlurEvent = FocusEvent & { target: HTMLInputElement };
   const metAJour = {
@@ -128,6 +137,7 @@
       await champModifie('ouvertureSysteme', donnees.ouvertureSysteme);
     },
     nomService: (e: CustomEvent<string>) => {
+      if (!elementHtml) return;
       donnees.nomService = e.detail;
       if (donnees.nomService.length === 0 || donnees.nomService.length > 200) {
         elementHtml.errorMessage =
@@ -199,19 +209,19 @@
       value={donnees.nomService}
       status="info"
       infoMessage="200 caractères maximum"
-      on:valuechanged={metAJour.nomService}
-      on:blur={async () => {
+      onvaluechanged={metAJour.nomService}
+      onblur={async () => {
         if (donnees.nomService.length >= 1 && donnees.nomService.length <= 200)
           await champModifie('nomService', donnees.nomService);
       }}
-    />
+    ></dsfr-input>
 
     {#key donnees.siret}
       <ChampOrganisation
         siret={donnees.siret}
-        on:siretChoisi={async (e) => {
-          donnees.siret = e.detail;
-          await champModifie('siret', e.detail);
+        onSiretChoisi={async (siret) => {
+          donnees.siret = siret;
+          await champModifie('siret', siret);
         }}
         label="Organisation responsable du projet*"
         disabled={seulementNomServiceEditable}
@@ -227,9 +237,9 @@
       value={donnees.statutDeploiement}
       disabled={seulementNomServiceEditable}
       id="statutDeploiement"
-      on:valuechanged={metAJour.statutDeploiement}
+      onvaluechanged={metAJour.statutDeploiement}
       placeholderDisabled
-    />
+    ></dsfr-select>
 
     <dsfr-textarea
       label="Présentation du service"
@@ -247,8 +257,8 @@
       errorMessage={donnees.presentation && donnees.presentation.length > 2000
         ? 'La présentation ne doit pas dépasser 2000 caractères'
         : ''}
-      on:blur={metAJour.presentation}
-    />
+      onblur={metAJour.presentation}
+    ></dsfr-textarea>
 
     <div
       class="conteneur-liste-champs"
@@ -259,14 +269,14 @@
       <ListeChampTexte
         nomGroupe="pointsAcces"
         bind:valeurs={donnees.pointsAcces}
-        on:ajout={ajouteValeurPointAcces}
+        onAjout={ajouteValeurPointAcces}
         titreSuppression="Supprimer l'URL"
         titreAjout="Ajouter une URL"
         inactif={seulementNomServiceEditable}
         limiteTaille={200}
-        on:blur={() => enregistrePointsAcces()}
-        on:suppression={async (e) => {
-          supprimeValeurPointAcces(e.detail);
+        onblur={() => enregistrePointsAcces()}
+        onSuppression={async (index) => {
+          supprimeValeurPointAcces(index);
           await tick();
           await enregistrePointsAcces();
         }}
@@ -292,12 +302,12 @@
       values={donnees.typeService}
       disabled={seulementNomServiceEditable}
       id="typeService"
-      on:valuechanged={metAJour.typeService}
+      onvaluechanged={metAJour.typeService}
       status={!seulementNomServiceEditable && donnees.typeService.length < 1
         ? 'error'
         : 'default'}
       errorMessage="Le type de service est obligatoire."
-    />
+    ></lab-anssi-multi-select>
 
     <div class="conteneur-marge-haute-negative">
       <lab-anssi-multi-select
@@ -313,8 +323,8 @@
         values={donnees.specificitesProjet}
         disabled={seulementNomServiceEditable}
         id="specificitesProjet"
-        on:valuechanged={metAJour.specificitesProjet}
-      />
+        onvaluechanged={metAJour.specificitesProjet}
+      ></lab-anssi-multi-select>
     </div>
 
     <div class="conteneur-marge-haute-negative">
@@ -330,9 +340,9 @@
         value={donnees.typeHebergement}
         disabled={seulementNomServiceEditable}
         id="typeHebergement"
-        on:valuechanged={metAJour.typeHebergement}
+        onvaluechanged={metAJour.typeHebergement}
         placeholderDisabled
-      />
+      ></dsfr-select>
     </div>
 
     <div class="conteneur-marge-basse-negative">
@@ -350,8 +360,8 @@
         )}
         values={donnees.activitesExternalisees}
         id="activitesExternalisees"
-        on:valuechanged={metAJour.activitesExternalisees}
-      />
+        onvaluechanged={metAJour.activitesExternalisees}
+      ></lab-anssi-multi-select>
     </div>
   </div>
 </div>
@@ -372,9 +382,9 @@
       value={donnees.ouvertureSysteme}
       disabled={seulementNomServiceEditable}
       id="ouvertureSysteme"
-      on:valuechanged={metAJour.ouvertureSysteme}
+      onvaluechanged={metAJour.ouvertureSysteme}
       placeholderDisabled
-    />
+    ></dsfr-select>
 
     <dsfr-select
       label="Audience cible du service*"
@@ -385,9 +395,9 @@
       value={donnees.audienceCible}
       disabled={seulementNomServiceEditable}
       id="audienceCible"
-      on:valuechanged={metAJour.audienceCible}
+      onvaluechanged={metAJour.audienceCible}
       placeholderDisabled
-    />
+    ></dsfr-select>
 
     <dsfr-select
       label="Durée maximale acceptable de dysfonctionnement du système*"
@@ -398,9 +408,9 @@
       value={donnees.dureeDysfonctionnementAcceptable}
       disabled={seulementNomServiceEditable}
       id="dureeDysfonctionnementAcceptable"
-      on:valuechanged={metAJour.dureeDysfonctionnementAcceptable}
+      onvaluechanged={metAJour.dureeDysfonctionnementAcceptable}
       placeholderDisabled
-    />
+    ></dsfr-select>
 
     <lab-anssi-multi-select
       label="Données traitées"
@@ -415,8 +425,8 @@
       values={donnees.categoriesDonneesTraitees}
       disabled={seulementNomServiceEditable}
       id="categoriesDonneesTraitees"
-      on:valuechanged={metAJour.categoriesDonneesTraitees}
-    />
+      onvaluechanged={metAJour.categoriesDonneesTraitees}
+    ></lab-anssi-multi-select>
 
     <div
       class="conteneur-liste-champs conteneur-marge-haute-negative"
@@ -426,14 +436,14 @@
       <ListeChampTexte
         nomGroupe="categoriesDonneesTraiteesSupplementaires"
         bind:valeurs={donnees.categoriesDonneesTraiteesSupplementaires}
-        on:ajout={ajouteCategoriesDonneesTraiteesSupplementaires}
+        onAjout={ajouteCategoriesDonneesTraiteesSupplementaires}
         titreSuppression="Supprimer les données"
         titreAjout="Ajouter des données"
         inactif={seulementNomServiceEditable}
         limiteTaille={200}
-        on:blur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
-        on:suppression={async (e) => {
-          supprimeCategoriesDonneesTraiteesSupplementaires(e.detail);
+        onblur={() => enregistreCategoriesDonneesTraiteesSupplementaires()}
+        onSuppression={async (index) => {
+          supprimeCategoriesDonneesTraiteesSupplementaires(index);
           await tick();
           await enregistreCategoriesDonneesTraiteesSupplementaires();
         }}
@@ -449,9 +459,9 @@
       value={donnees.volumetrieDonneesTraitees}
       disabled={seulementNomServiceEditable}
       id="volumetrieDonneesTraitees"
-      on:valuechanged={metAJour.volumetrieDonneesTraitees}
+      onvaluechanged={metAJour.volumetrieDonneesTraitees}
       placeholderDisabled
-    />
+    ></dsfr-select>
 
     <dsfr-select
       label="Localisation des données traitées*"
@@ -467,8 +477,8 @@
       value={donnees.localisationDonneesTraitees}
       disabled={seulementNomServiceEditable}
       id="localisationDonneesTraitees"
-      on:valuechanged={metAJour.localisationDonneesTraitees}
-    />
+      onvaluechanged={metAJour.localisationDonneesTraitees}
+    ></dsfr-select>
   </div>
 </div>
 

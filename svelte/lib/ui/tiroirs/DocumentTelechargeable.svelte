@@ -1,14 +1,27 @@
 <script lang="ts">
   import Lien from '../Lien.svelte';
 
-  export let type: 'PDF' | 'ZIP';
-  export let nom: string;
-  export let description: string;
-  export let cheminDocument: string;
-  export let idService: string;
-  export let modeVisiteGuidee: boolean = false;
+  interface Props {
+    type: 'PDF' | 'ZIP';
+    nom: string;
+    description: string;
+    cheminDocument: string;
+    idService: string;
+    modeVisiteGuidee?: boolean;
+  }
 
-  const lien = `/api/service/${idService}/pdf/${cheminDocument}?timestamp=${Date.now()}`;
+  let {
+    type,
+    nom,
+    description,
+    cheminDocument,
+    idService,
+    modeVisiteGuidee = false,
+  }: Props = $props();
+
+  let lien = $derived(
+    `/api/service/${idService}/pdf/${cheminDocument}?timestamp=${Date.now()}`
+  );
 </script>
 
 <div class="document-telechargeable">

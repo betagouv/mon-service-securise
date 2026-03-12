@@ -1,24 +1,42 @@
+<script lang="ts" module>
+  export type Contributeur = {
+    email: string;
+    initiales: string;
+    prenomNom: string;
+  };
+</script>
+
 <script lang="ts">
   import type { Utilisateur } from '../gestionContributeurs.d';
-
-  import { createEventDispatcher } from 'svelte';
   import Initiales from '../../ui/Initiales.svelte';
 
-  export let id: string;
-  export let callbackDeRecherche: (recherche: string) => Promise<Utilisateur[]>;
-  export let dureeDebounceEnMs = 300;
-  export let valeurInitiale: string = '';
-  export let modeVisiteGuidee: boolean = false;
+  interface Props {
+    id: string;
+    callbackDeRecherche: (recherche: string) => Promise<Utilisateur[]>;
+    dureeDebounceEnMs?: number;
+    valeurInitiale?: string;
+    modeVisiteGuidee?: boolean;
+    onContributeurChoisi?: (contributeur: Contributeur) => void;
+  }
 
-  let saisie = valeurInitiale;
-  let minuteur: NodeJS.Timeout;
-  let suggestions: Utilisateur[] = [];
+  let {
+    id,
+    callbackDeRecherche,
+    dureeDebounceEnMs = 300,
+    valeurInitiale = '',
+    modeVisiteGuidee = false,
+    onContributeurChoisi,
+  }: Props = $props();
 
-  const envoiEvenement = createEventDispatcher();
+  let saisie = $derived(valeurInitiale);
+  let minuteur: ReturnType<typeof setTimeout>;
+  let suggestions: Utilisateur[] = $state([]);
 
   const REGEX_EMAIL = /^[\w\-+.]+@[\w\-.]{2,}\.\w{2,}$/i;
-  $: proposeAjout = REGEX_EMAIL.test(saisie);
-  $: suggestionsVisibles = saisie && (suggestions.length > 0 || proposeAjout);
+  let proposeAjout = $derived(REGEX_EMAIL.test(saisie));
+  let suggestionsVisibles = $derived(
+    saisie && (suggestions.length > 0 || proposeAjout)
+  );
 
   const rechercheSuggestions = async () => {
     if (saisie.length > 2) {
@@ -26,28 +44,30 @@
     }
   };
 
-  const avecTemporisation = (fonction: () => Promise<any>) => {
+  const avecTemporisation = (fonction: () => Promise<void>) => {
     clearTimeout(minuteur);
     minuteur = setTimeout(async () => {
       await fonction();
     }, dureeDebounceEnMs);
   };
 
-  const choisisContributeur = (donnees: Record<string, any>) => {
+  const choisisContributeur = (contributeur: Contributeur) => {
     saisie = '';
-    envoiEvenement('contributeurChoisi', donnees);
+    onContributeurChoisi?.(contributeur);
   };
 
-  if (modeVisiteGuidee) {
-    rechercheSuggestions();
-  }
+  $effect(() => {
+    if (modeVisiteGuidee) {
+      rechercheSuggestions();
+    }
+  });
 </script>
 
 <div class="conteneur-suggestions">
   <input
     {id}
     type="text"
-    on:input={() => avecTemporisation(rechercheSuggestions)}
+    oninput={() => avecTemporisation(rechercheSuggestions)}
     bind:value={saisie}
     autocomplete="off"
     placeholder="Si nouveau contributeur email, sinon nom ou prénom"
@@ -58,13 +78,13 @@
         class="create option-ajout"
         role="button"
         tabindex="0"
-        on:click={() =>
+        onclick={() =>
           choisisContributeur({
             email: saisie.toLocaleLowerCase('fr'),
             initiales: '',
             prenomNom: saisie.toLocaleLowerCase('fr'),
           })}
-        on:keypress={(e) => {
+        onkeypress={(e) => {
           if (e.code === 'Enter') {
             choisisContributeur({
               email: saisie.toLocaleLowerCase('fr'),
@@ -77,16 +97,16 @@
         Ajouter ce contributeur
       </div>
     {/if}
-    {#each suggestions as suggestion}
+    {#each suggestions as suggestion, i (i)}
       <div
         class="option suggestion-contributeur"
         role="button"
         tabindex="0"
-        on:click={() => {
+        onclick={() => {
           if (modeVisiteGuidee) return;
           choisisContributeur(suggestion);
         }}
-        on:keypress={(e) => {
+        onkeypress={(e) => {
           if (e.code === 'Enter') {
             if (modeVisiteGuidee) return;
             choisisContributeur(suggestion);

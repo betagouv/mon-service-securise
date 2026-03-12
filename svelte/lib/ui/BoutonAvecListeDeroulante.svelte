@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type OptionBoutonListeDeroulante = {
     label: string;
     icone: 'plus' | 'televerser';
@@ -11,17 +11,21 @@
   import Bouton from './Bouton.svelte';
   import FermetureSurClicEnDehors from './FermetureSurClicEnDehors.svelte';
 
-  export let titre: string;
-  export let options: OptionBoutonListeDeroulante[];
-  export let disabled: boolean = false;
+  interface Props {
+    titre: string;
+    options: OptionBoutonListeDeroulante[];
+    disabled?: boolean;
+  }
 
-  let ouvert = false;
-  let elementBoutonDeroulant: HTMLDivElement;
+  let { titre, options, disabled = false }: Props = $props();
+
+  let ouvert = $state(false);
+  let elementBoutonDeroulant: HTMLDivElement | undefined = $state();
 </script>
 
 <FermetureSurClicEnDehors
   bind:doitEtreOuvert={ouvert}
-  elements={[elementBoutonDeroulant]}
+  elements={elementBoutonDeroulant ? [elementBoutonDeroulant] : []}
 />
 <div
   class="conteneur-bouton nouveau-service"
@@ -33,7 +37,7 @@
     icone="plus"
     taille="moyen"
     actif={!disabled}
-    on:click={() => (ouvert = !ouvert)}
+    onclick={() => (ouvert = !ouvert)}
   />
   {#if ouvert}
     <ul class="contenu-deroulant">
@@ -45,7 +49,7 @@
             tabindex="0"
             role="button"
             href={option.href}
-            on:click={() => {
+            onclick={() => {
               option.action?.();
               ouvert = false;
             }}

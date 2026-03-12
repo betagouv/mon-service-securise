@@ -3,17 +3,22 @@
   import Fleche from './svg/Fleche.svelte';
   import { recupereIndiceCyber } from './indiceCyber.api';
 
-  export let indiceCyber: number;
+  interface Props {
+    indiceCyber: number;
+    noteMax: number;
+    idService?: string;
+  }
 
-  export let noteMax: number;
-  export let idService: string = '';
+  let { indiceCyber = $bindable(), noteMax, idService = '' }: Props = $props();
 
   const idAleatoire = Math.random().toString(36).slice(2, 8);
 
-  $: indiceCyberFormatte = Intl.NumberFormat('fr', {
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  }).format(indiceCyber);
+  let indiceCyberFormatte = $derived(
+    Intl.NumberFormat('fr', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format(indiceCyber)
+  );
 
   const tranchesIndiceCyber = [
     { min: 0, max: 1, gradientDebut: '#A226B8', gradientFin: '#8926C9' },
@@ -23,11 +28,13 @@
     { min: 4, max: 5, gradientDebut: '#18EAC4', gradientFin: '#445CDE' },
     { min: 5, max: 6, gradientDebut: '#F2CA5A', gradientFin: '#DBAF2C' },
   ];
-  $: idxInterval = tranchesIndiceCyber.findIndex(
-    ({ min, max }) => indiceCyber >= min && indiceCyber < max
+  let idxInterval = $derived(
+    tranchesIndiceCyber.findIndex(
+      ({ min, max }) => indiceCyber >= min && indiceCyber < max
+    )
   );
-  $: gradientDebut = tranchesIndiceCyber[idxInterval].gradientDebut;
-  $: gradientFin = tranchesIndiceCyber[idxInterval].gradientFin;
+  let gradientDebut = $derived(tranchesIndiceCyber[idxInterval].gradientDebut);
+  let gradientFin = $derived(tranchesIndiceCyber[idxInterval].gradientFin);
 
   const [rotationFlecheMin, rotationFlecheMax] = [-13, 164];
   const [progressionJaugeMin, progressionJaugeMax] = [0, 176];
@@ -39,15 +46,17 @@
     },0`;
   const cheminDemiCercle = (cx: number, cy: number, r: number) =>
     `M ${cx - r}, ${cy} a ${r},${r} 0 1,0 ${r * 2},0`;
-  $: rotationFleche =
+  let rotationFleche = $derived(
     (indiceCyber / noteMax) * (rotationFlecheMax - rotationFlecheMin) +
-    rotationFlecheMin;
-  $: progressionJauge =
+      rotationFlecheMin
+  );
+  let progressionJauge = $derived(
     (indiceCyber / noteMax) * (progressionJaugeMax - progressionJaugeMin) +
-    progressionJaugeMin;
+      progressionJaugeMin
+  );
 
-  let animationJauge: SVGAnimateTransformElement;
-  let animationFleche: SVGAnimateTransformElement;
+  let animationJauge: SVGAnimateTransformElement | undefined = $state();
+  let animationFleche: SVGAnimateTransformElement | undefined = $state();
 
   const metAJourIndiceCyber = async () => {
     if (!idService) return;

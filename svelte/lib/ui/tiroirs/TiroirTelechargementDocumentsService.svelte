@@ -3,15 +3,19 @@
   import ContenuTiroir from './ContenuTiroir.svelte';
   import DocumentTelechargeable from './DocumentTelechargeable.svelte';
 
-  export let service: Service;
-  export let modeVisiteGuidee: boolean = false;
+  interface Props {
+    service: Service;
+    modeVisiteGuidee?: boolean;
+  }
+
+  let { service, modeVisiteGuidee = false }: Props = $props();
 
   export const titre = 'Télécharger les PDF';
   export const sousTitre =
     "Obtenir les documents utiles à la sécurisation et à l'homologation du service sélectionné.";
 
-  const idService = service.id;
-  const nbPdfDisponibles = service.documentsPdfDisponibles.length;
+  let idService = $derived(service.id);
+  let nbPdfDisponibles = $derived(service.documentsPdfDisponibles.length);
 
   const documentDisponible = (document: string) =>
     document === 'archive'

@@ -1,17 +1,19 @@
 import ExplicationNouveauReferentiel from './ExplicationNouveauReferentiel.svelte';
+import { mount, unmount } from 'svelte';
 
 document.body.addEventListener(
   'svelte-recharge-explication-nouveau-referentiel',
-  () => rechargeApp()
+  async () => await rechargeApp()
 );
 
 let app: ExplicationNouveauReferentiel;
-const rechargeApp = () => {
+const rechargeApp = async () => {
   const conteneur = document.querySelector('#explication-nouveau-referentiel');
   if (!conteneur) return;
 
-  app?.$destroy();
-  app = new ExplicationNouveauReferentiel({ target: conteneur });
+  if (app) await unmount(app);
+
+  app = mount(ExplicationNouveauReferentiel, { target: conteneur });
 };
 
 export default app!;

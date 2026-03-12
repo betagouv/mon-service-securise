@@ -6,7 +6,7 @@ import QuestionPointsAcces from './etape1/QuestionPointsAcces.svelte';
 import QuestionTypesService from './etape2/QuestionTypeService.svelte';
 import QuestionSpecificitesProjet from './etape2/QuestionSpecificitesProjet.svelte';
 import QuestionTypeHebergement from './etape2/QuestionTypeHebergement.svelte';
-import type { SvelteComponent } from 'svelte';
+import type { Component } from 'svelte';
 import type { BrouillonServiceV2 } from '../creationV2.types';
 import QuestionOuvertureSysteme from './etape3/QuestionOuvertureSysteme.svelte';
 import QuestionAudienceCible from './etape3/QuestionAudienceCible.svelte';
@@ -21,8 +21,12 @@ import EtapeSimulationChangementsAVenir from '../../simulationV2/etapes/EtapeSim
 import EtapeSimulationEnModeRapide from '../../simulationV2/etapes/EtapeSimulationEnModeRapide.svelte';
 import EtapeResumeDuServiceEnSimulation from '../../simulationV2/etapes/EtapeResumeDuServiceEnSimulation.svelte';
 import EtapeSimulationNiveauSecurite from '../../simulationV2/etapes/EtapeSimulationNiveauSecurite.svelte';
+import type { MiseAJour } from '../creationV2.api';
 
-type ComposantQuestion = typeof SvelteComponent<{ estComplete: boolean }>;
+type ComposantQuestion = Component<{
+  estComplete: boolean;
+  onChampModifie: (miseAJour: MiseAJour) => void;
+}>;
 
 export type QuestionBindeeSurBrouillon = {
   clesPropriete: Array<keyof BrouillonServiceV2>;
@@ -31,8 +35,9 @@ export type QuestionBindeeSurBrouillon = {
   avecAvanceRapide?: boolean;
 };
 
+type ComposantSansProps = Component;
 export type EtapeGlobale = {
-  composant: typeof SvelteComponent<{}>;
+  composant: ComposantSansProps;
   clesPropriete: Array<keyof BrouillonServiceV2>;
   explications: [];
   avecAvanceRapide: false;

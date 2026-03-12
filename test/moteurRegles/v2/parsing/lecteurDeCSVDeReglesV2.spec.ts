@@ -128,7 +128,6 @@ describe('Le lecteur de CSV de règles V2', () => {
   it('ne renvoie pas de modificateurs "vide"', async () => {
     const regles = await lisLeFichier(`MESURES_V2_OK_TOUS_MODIFICATEURS.csv`);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const sansModificateur: RegleDuReferentielV2 = regles.at(-1)!;
     expect(sansModificateur.modificateurs).toEqual({});
   });

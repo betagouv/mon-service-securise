@@ -2,7 +2,11 @@
   import ComposantNotification from './Notification.svelte';
   import type { Notification } from '../../ui/types.d';
 
-  export let notifications: Notification[];
+  interface Props {
+    notifications: Notification[];
+  }
+
+  let { notifications }: Props = $props();
 </script>
 
 <div class="contenu-notifications">

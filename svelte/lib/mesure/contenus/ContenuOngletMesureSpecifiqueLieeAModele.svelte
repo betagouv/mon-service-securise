@@ -11,19 +11,33 @@
   import Toast from '../../ui/Toast.svelte';
   import { infobulle } from '../../ui/directives/infobulle';
 
-  export let categories: Record<string, string>;
-  export let statuts: ReferentielStatut;
-  export let estLectureSeule: boolean;
-  export let etapeCouranteModeleMesureSpecifique: 1 | 2;
+  interface Props {
+    categories: Record<string, string>;
+    statuts: ReferentielStatut;
+    estLectureSeule: boolean;
+    etapeCouranteModeleMesureSpecifique: 1 | 2;
+  }
 
-  let mesureSpecifique: MesureSpecifique;
-  $: mesureSpecifique = $store.mesureEditee.mesure as MesureSpecifique;
-  $: estProprietaireDuModele =
+  let {
+    categories,
+    statuts,
+    estLectureSeule,
+    etapeCouranteModeleMesureSpecifique = $bindable(),
+  }: Props = $props();
+
+  let mesureSpecifique: MesureSpecifique = $derived(
+    $store.mesureEditee.mesure as MesureSpecifique
+  );
+
+  let estProprietaireDuModele = $derived(
     mesureSpecifique.idModele &&
-    $modelesMesureSpecifique.find((m) => m.id === mesureSpecifique.idModele);
-  $: contenuInfobulle = estProprietaireDuModele
-    ? "Pour modifier l'intitulé, la description et la catégorie de cette mesure, veuillez vous rendre sur sa configuration dans votre liste de mesures."
-    : 'Cette information est modifiable uniquement par le propriétaire de la mesure. Vous pouvez cependant supprimer cette mesure de votre service.';
+      $modelesMesureSpecifique.find((m) => m.id === mesureSpecifique.idModele)
+  );
+  let contenuInfobulle = $derived(
+    estProprietaireDuModele
+      ? "Pour modifier l'intitulé, la description et la catégorie de cette mesure, veuillez vous rendre sur sa configuration dans votre liste de mesures."
+      : 'Cette information est modifiable uniquement par le propriétaire de la mesure. Vous pouvez cependant supprimer cette mesure de votre service.'
+  );
 
   onMount(() => {
     etapeCouranteModeleMesureSpecifique = 1;

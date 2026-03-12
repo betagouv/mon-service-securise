@@ -18,8 +18,12 @@
   import { toasterStore } from '../ui/stores/toaster.store';
   import type { AxiosError } from 'axios';
 
-  export let entite: Entite | undefined;
-  let enCoursDeChargement = false;
+  interface Props {
+    entite: Entite | undefined;
+  }
+
+  let { entite }: Props = $props();
+  let enCoursDeChargement = $state(false);
 
   onMount(async () => {
     const requete = new URLSearchParams(window.location.search);
@@ -34,21 +38,21 @@
     if (entite) $entiteDeUtilisateur = entite;
   });
 
-  const metsAJourPropriete = async (e: CustomEvent<MiseAJour>) => {
+  const metsAJourPropriete = async (miseAJour: MiseAJour) => {
     const doitCreerBrouillon =
       !$leBrouillon.id && $etapeCourante.estPremiereQuestion;
     if (doitCreerBrouillon) {
-      const nomService = e.detail.nomService as string;
+      const nomService = miseAJour.nomService as string;
       const idBrouillon = await creeBrouillonService(nomService);
       ajouteParametreAUrl('id', idBrouillon);
       leBrouillon.chargeDonnees({ id: idBrouillon, nomService });
       return;
     }
 
-    await metsAJourBrouillonService($leBrouillon.id!, e.detail);
+    await metsAJourBrouillonService($leBrouillon.id!, miseAJour);
 
     const nomChampModifie = Object.keys(
-      e.detail
+      miseAJour
     )[0] as keyof BrouillonServiceV2;
     const onEstToujoursSurLaQuestionQuiAEnvoyeLaMaj =
       $etapeCourante.questionCourante.clesPropriete.includes(nomChampModifie);
@@ -98,8 +102,8 @@
 </script>
 
 <AssistantServiceV2
-  on:champModifie={metsAJourPropriete}
-  on:finalise={finalise}
+  onChampModifie={metsAJourPropriete}
+  onFinalise={finalise}
   bind:enCoursDeChargement
   titreAssistant="Ajouter un service"
   titreBoutonFinalise="Commencer à sécuriser le service"

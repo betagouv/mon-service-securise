@@ -1,29 +1,36 @@
 <script lang="ts">
   import type { ReferentielStatut } from './types.d';
   import { validationChamp } from '../directives/validationChamp';
-  import { createEventDispatcher } from 'svelte';
   import type { StatutMesure } from '../modeles/modeleMesure';
 
-  export let id: string;
-  export let statut: string | undefined;
-  export let referentielStatuts: ReferentielStatut;
-
-  export let label = '';
-  export let estLectureSeule = false;
-  export let requis = false;
-  export let version: 'normale' | 'accentuee' = 'normale';
-  export let labelChoixVide: string = '';
-
-  const dispatch = createEventDispatcher<{ input: { statut: StatutMesure } }>();
-
-  $: {
-    if (!statut) statut = '';
+  interface Props {
+    id: string;
+    statut: string | undefined;
+    referentielStatuts: ReferentielStatut;
+    label?: string;
+    estLectureSeule?: boolean;
+    requis?: boolean;
+    version?: 'normale' | 'accentuee';
+    labelChoixVide?: string;
+    onStatutChange?: (statut: StatutMesure) => void;
   }
 
+  let {
+    id,
+    statut = $bindable(),
+    referentielStatuts,
+    label = '',
+    estLectureSeule = false,
+    requis = false,
+    version = 'normale',
+    labelChoixVide = '',
+    onStatutChange,
+  }: Props = $props();
+
+  statut ??= '';
+
   const metAJour = (e: Event) => {
-    dispatch('input', {
-      statut: (e.target as HTMLInputElement).value as StatutMesure,
-    });
+    onStatutChange?.((e.target as HTMLInputElement).value as StatutMesure);
   };
 </script>
 
@@ -45,13 +52,15 @@
     use:validationChamp={requis
       ? 'Ce champ est obligatoire. Veuillez sélectionner une option.'
       : ''}
-    on:input={metAJour}
-    on:click|stopPropagation
+    oninput={metAJour}
+    onclick={(e) => {
+      e.stopPropagation();
+    }}
   >
     <option value="" disabled={requis} selected
       >{labelChoixVide || 'Statut à définir'}</option
     >
-    {#each Object.entries(referentielStatuts) as [valeur, label]}
+    {#each Object.entries(referentielStatuts) as [valeur, label] (valeur)}
       <option value={valeur}>{label}</option>
     {/each}
   </select>

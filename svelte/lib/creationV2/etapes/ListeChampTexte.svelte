@@ -1,24 +1,34 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  interface Props {
+    valeurs: string[];
+    nomGroupe: string;
+    titreSuppression: string;
+    titreAjout: string;
+    inactif?: boolean;
+    limiteTaille?: number | undefined;
+    onSuppression: (index: number) => void;
+    onAjout: () => void;
+    onblur?: (e: FocusEvent) => void;
+  }
 
-  export let valeurs: string[];
-  export let nomGroupe: string;
-  export let titreSuppression: string;
-  export let titreAjout: string;
-  export let inactif = false;
-  export let limiteTaille: number | undefined = undefined;
-
-  const dispatche = createEventDispatcher<{
-    suppression: number;
-    ajout: void;
-  }>();
+  let {
+    valeurs = $bindable(),
+    nomGroupe,
+    titreSuppression,
+    titreAjout,
+    inactif = false,
+    limiteTaille = undefined,
+    onSuppression,
+    onAjout,
+    onblur,
+  }: Props = $props();
 
   const metAJour = (index: number) => (e: CustomEvent<string>) => {
     valeurs[index] = e.detail;
   };
 </script>
 
-{#each valeurs as valeur, index}
+{#each valeurs as valeur, index (index)}
   {@const afficheInfo = limiteTaille && index === valeurs.length - 1}
   {@const estInvalide = limiteTaille && valeur.length > limiteTaille}
   <div class="conteneur-champs-texte">
@@ -32,15 +42,15 @@
       infoMessage={estInvalide
         ? ''
         : afficheInfo
-        ? `${limiteTaille} caractères maximum`
-        : ''}
+          ? `${limiteTaille} caractères maximum`
+          : ''}
       errorMessage={estInvalide
         ? `Le champ ne doit pas dépasser ${limiteTaille} caractères`
         : ''}
-      on:valuechanged={metAJour(index)}
-      on:blur
-    />
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+      onvaluechanged={metAJour(index)}
+      {onblur}
+    ></dsfr-input>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <lab-anssi-bouton
       titre={titreSuppression}
       variante="tertiaire"
@@ -48,12 +58,12 @@
       actif={!inactif}
       icone="delete-line"
       positionIcone="seule"
-      on:click={() => dispatche('suppression', index)}
-    />
+      onclick={() => onSuppression(index)}
+    ></lab-anssi-bouton>
   </div>
 {/each}
 <div class="conteneur-actions">
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   <lab-anssi-bouton
     titre={titreAjout}
     variante="tertiaire"
@@ -61,8 +71,8 @@
     icone="add-line"
     positionIcone="gauche"
     actif={!inactif}
-    on:click={() => dispatche('ajout')}
-  />
+    onclick={() => onAjout()}
+  ></lab-anssi-bouton>
 </div>
 
 <style lang="scss">

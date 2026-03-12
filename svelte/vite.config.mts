@@ -45,6 +45,7 @@ export default defineConfig({
         .filter((file) => !file.includes('.d.ts')),
       fileName: (_, entryname) => `${entryname}.js`,
       formats: ['es'],
+      cssFileName: 'style',
     },
     cssCodeSplit: false,
     emptyOutDir: true,
