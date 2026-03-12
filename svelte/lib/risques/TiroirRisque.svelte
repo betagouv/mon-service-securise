@@ -47,7 +47,7 @@
 
   let {
     ouvert = $bindable(true),
-    risque = $bindable(),
+    risque: r,
     referentielRisques,
     referentielCategories,
     referentielGravites,
@@ -60,6 +60,16 @@
     onRisqueAjoute,
   }: Props = $props();
   let enCoursEnvoi: boolean = $state(false);
+
+  let risque = $state<Risque | undefined>();
+
+  $effect(() => {
+    if (r) {
+      risque = r;
+    } else {
+      risque = undefined;
+    }
+  });
 
   let risqueDuReferentiel = $derived(
     risque && risque.type === 'GENERAL' && referentielRisques[risque.id]

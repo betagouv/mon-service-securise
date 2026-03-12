@@ -268,7 +268,7 @@
         {niveauxGravite}
         {niveauxVraisemblance}
         {estLectureSeule}
-        onMetAJourRisque={() => metAJourRisque(risque)}
+        onMetAJourRisque={(risque) => metAJourRisque(risque)}
       />
     {/each}
   </tbody>
