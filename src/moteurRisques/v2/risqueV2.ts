@@ -23,6 +23,7 @@ export class RisqueV2 {
   readonly intitule: string;
   readonly categories: Array<CategorieRisque>;
   readonly desactive?: boolean;
+  private commentaire?: string;
 
   constructor(
     private readonly idVecteur: IdVecteurRisque,
@@ -36,6 +37,7 @@ export class RisqueV2 {
     this.intitule = this.genereIntitule();
     this.categories = this.getCategories();
     this.desactive = donnees.desactive;
+    this.commentaire = donnees.commentaire;
   }
 
   toJSON() {
@@ -46,6 +48,7 @@ export class RisqueV2 {
       vraisemblance: this.vraisemblance,
       categories: this.categories,
       desactive: this.desactive,
+      commentaire: this.commentaire,
     };
   }
 

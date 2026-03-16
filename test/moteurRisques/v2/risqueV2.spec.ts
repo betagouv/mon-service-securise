@@ -178,5 +178,17 @@ describe('Un risque V2', () => {
 
       expect(risque.toJSON().desactive).toBe(true);
     });
+
+    it('peut avoir un commentaire', () => {
+      const risque = new RisqueV2(
+        'V1',
+        { OV1: 3 },
+        1,
+        { commentaire: 'intelligent' },
+        configurationRisque()
+      );
+
+      expect(risque.toJSON().commentaire).toBe('intelligent');
+    });
   });
 });
