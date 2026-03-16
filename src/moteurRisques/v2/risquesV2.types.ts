@@ -33,4 +33,5 @@ export type CategorieRisque =
 
 export type DonneesRisqueV2 = {
   desactive?: boolean;
+  commentaire?: string;
 };
