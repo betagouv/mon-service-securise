@@ -101,12 +101,16 @@ class Service {
     this.referentiel = referentiel;
 
     if (versionService === VersionService.v2) {
-      this.moteurRisques = new MoteurRisquesV2(
+      const moteurRisques = new MoteurRisquesV2(
         this.descriptionService,
         this.mesures.personnaliseesAvecStatutSeul(),
         risquesV2
       );
-      this.risquesV2 = new RisquesV2(this.moteurRisques.risques());
+      this.risquesV2 = new RisquesV2(
+        moteurRisques.risques(),
+        moteurRisques.risquesBruts(),
+        moteurRisques.risquesCibles()
+      );
     }
   }
 

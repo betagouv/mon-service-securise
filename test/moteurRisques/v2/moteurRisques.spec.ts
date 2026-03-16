@@ -97,20 +97,6 @@ describe('Le moteur de risques V2', () => {
       expect(residuels[0].vraisemblance).toBe(3);
     });
 
-    it('peut se sérialiser en JSON', () => {
-      const { risquesBruts, risques, risquesCibles } =
-        moteurAvecMesuresFaites.toJSON();
-
-      expect(risquesBruts[0].id).toBe('R3');
-      expect(risquesBruts[0].vraisemblance).toBe(4);
-
-      expect(risques[0].id).toBe('R3');
-      expect(risques[0].vraisemblance).toBe(3);
-
-      expect(risquesCibles[0].id).toBe('R3');
-      expect(risquesCibles[0].vraisemblance).toBe(1);
-    });
-
     it('hydrate les risques avec les données passées en argument', () => {
       const moteur = new MoteurRisquesV2(
         uneAPISimple(),
@@ -118,7 +104,7 @@ describe('Le moteur de risques V2', () => {
         { R3: { desactive: true, commentaire: 'un commentaire' } }
       );
 
-      const risqueR3 = moteur.toJSON().risques[0];
+      const risqueR3 = moteur.risques()[0].toJSON();
       expect(risqueR3.commentaire).toBe('un commentaire');
       expect(risqueR3.desactive).toBe(true);
     });
