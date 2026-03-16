@@ -35,3 +35,5 @@ export type DonneesRisqueV2 = {
   desactive?: boolean;
   commentaire?: string;
 };
+
+export type DonneesRisquesV2 = Partial<Record<IdRisqueV2, DonneesRisqueV2>>;
