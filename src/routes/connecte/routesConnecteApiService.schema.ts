@@ -44,3 +44,8 @@ export const schemaPutRisqueGeneral = (referentielV2: ReferentielV2) => ({
   commentaire: z.string().max(1000).optional(),
   desactive: z.boolean().optional(),
 });
+
+export const schemaPutRisqueGeneralV2 = () => ({
+  commentaire: z.string().max(1000).optional(),
+  desactive: z.boolean().optional(),
+});

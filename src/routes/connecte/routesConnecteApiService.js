@@ -18,7 +18,10 @@ import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import routesConnecteApiSimulationMigrationReferentiel from './routesConnecteApiSimulationMigrationReferentiel.js';
 import { schemaSuggestionAction } from '../../http/schemas/suggestionAction.schema.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
-import { schemaPutRisqueGeneral } from './routesConnecteApiService.schema.js';
+import {
+  schemaPutRisqueGeneral,
+  schemaPutRisqueGeneralV2,
+} from './routesConnecteApiService.schema.js';
 import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
 import { routesConnecteApiServiceMesuresSpecifiques } from './routesConnecteApiServiceMesuresSpecifiques.js';
 import { routesConnecteApiServiceHomologation } from './routesConnecteApiServiceHomologation.js';
@@ -170,6 +173,24 @@ const routesConnecteApiService = ({
       const { service } = requete;
 
       reponse.json(service.risquesV2.toJSON());
+    }
+  );
+
+  routes.put(
+    '/:id/risques/v2/:idRisque',
+    middleware.trouveService({ [RISQUES]: ECRITURE }),
+    middleware.chargeAutorisationsService,
+    valideParams(
+      z.looseObject({ idRisque: z.enum(referentielV2.identifiantsRisquesV2()) })
+    ),
+    valideBody(z.strictObject(schemaPutRisqueGeneralV2())),
+    async (requete, reponse) => {
+      const { service } = requete;
+      const { idRisque } = requete.params;
+
+      await depotDonnees.metsAJourRisqueV2(service.id, idRisque, requete.body);
+
+      reponse.sendStatus(204);
     }
   );
 

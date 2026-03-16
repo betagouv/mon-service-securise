@@ -21,10 +21,13 @@ import {
   donneesComplementairesMesureV2,
 } from '../donneesComplementairesReferentielMesuresV2.js';
 import { TypeService } from '../svelte/lib/creationV2/creationV2.types.js';
+import { IdRisqueV2 } from './moteurRisques/v2/risquesV2.types.js';
+import { donneesReferentielRisquesV2 } from '../donneesReferentielRisquesV2.js';
 
 export type DonneesReferentielV2 = typeof questionsV2 & {
   mesures: typeof mesuresV2;
   donneesComplementairesMesures: DonneesComplementairesMesuresV2;
+  risquesV2: typeof donneesReferentielRisquesV2;
 };
 
 type MethodesSpecifiquesReferentielV2 = {
@@ -46,6 +49,7 @@ type MethodesSpecifiquesReferentielV2 = {
   descriptionTypeService: (typeService: TypeService) => string;
   descriptionOuvertureSysteme: (ouvertureSysteme: OuvertureSysteme) => string;
   enregistreReglesMoteurV2: (regles: ReglesDuReferentielMesuresV2) => void;
+  identifiantsRisquesV2: () => IdRisqueV2[];
   localisationDonnees: (localisation: LocalisationDonneesTraitees) => {
     nom: string;
   };
@@ -64,6 +68,7 @@ export const creeReferentielV2 = (
     ...questionsV2,
     mesures: mesuresV2,
     donneesComplementairesMesures: donneesComplementairesMesureV2,
+    risquesV2: donneesReferentielRisquesV2,
   }
 ): Surcharge<Referentiel, MethodesSpecifiquesReferentielV2> => {
   let reglesMoteurV2Enregistrees: ReglesDuReferentielMesuresV2 = [];
@@ -130,6 +135,10 @@ export const creeReferentielV2 = (
       })
     );
 
+  const identifiantsRisquesV2 = () => [
+    ...donneesReferentielRisquesV2.idsRisquesV2,
+  ];
+
   return {
     ...creeReferentiel(),
     ajouteThematiqueEtPorteurs,
@@ -143,6 +152,7 @@ export const creeReferentielV2 = (
     descriptionOuvertureSysteme,
     enregistreReglesMoteurV2,
     estIdentifiantMesureConnu,
+    identifiantsRisquesV2,
     localisationDonnees,
     mesure,
     mesures,
