@@ -9,122 +9,122 @@ importers:
   .:
     dependencies:
       '@lab-anssi/lib':
-        specifier: ~1.4.2
+        specifier: ^1.4.2
         version: 1.4.2
       '@sentry/node':
-        specifier: ~7.102.1
+        specifier: ^7.102.1
         version: 7.102.1
       '@tiptap/core':
-        specifier: ~3.20.0
+        specifier: ^3.20.0
         version: 3.20.0(@tiptap/pm@3.20.0)
       '@tiptap/extension-mention':
-        specifier: ~3.20.0
+        specifier: ^3.20.0
         version: 3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0)(@tiptap/suggestion@3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0))
       '@tiptap/extension-placeholder':
-        specifier: ~3.20.0
+        specifier: ^3.20.0
         version: 3.20.0(@tiptap/extensions@3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0))
       '@tiptap/starter-kit':
-        specifier: ~3.20.0
+        specifier: ^3.20.0
         version: 3.20.0
       '@tiptap/suggestion':
-        specifier: ~3.20.0
+        specifier: ^3.20.0
         version: 3.20.0(@tiptap/core@3.20.0(@tiptap/pm@3.20.0))(@tiptap/pm@3.20.0)
       axios:
-        specifier: ~1.13.5
+        specifier: ^1.13.5
         version: 1.13.5
       bcrypt:
-        specifier: ~6.0.0
+        specifier: ^6.0.0
         version: 6.0.0
       commander:
-        specifier: ~14.0.0
+        specifier: ^14.0.0
         version: 14.0.0
       cookie-parser:
-        specifier: ~1.4.7
+        specifier: ^1.4.7
         version: 1.4.7
       cookie-session:
-        specifier: ~2.1.1
+        specifier: ^2.1.1
         version: 2.1.1
       csv-writer:
-        specifier: ~1.6.0
+        specifier: ^1.6.0
         version: 1.6.0
       dotenv:
-        specifier: ~16.4.7
+        specifier: ^16.4.7
         version: 16.4.7
       express:
-        specifier: ~5.2.1
+        specifier: ^5.2.1
         version: 5.2.1
       express-ip-access-control:
-        specifier: ~1.1.3
+        specifier: ^1.1.3
         version: 1.1.3
       express-ipfilter:
-        specifier: ~1.4.0
+        specifier: ^1.4.0
         version: 1.4.0
       express-rate-limit:
-        specifier: ~8.2.1
+        specifier: ^8.2.1
         version: 8.2.1(express@5.2.1)
       html-entities:
-        specifier: ~2.6.0
+        specifier: ^2.6.0
         version: 2.6.0
       jsonwebtoken:
-        specifier: ~9.0.3
+        specifier: ^9.0.3
         version: 9.0.3
       jszip:
-        specifier: ~3.10.1
+        specifier: ^3.10.1
         version: 3.10.1
       knex:
-        specifier: ~3.1.0
+        specifier: ^3.1.0
         version: 3.1.0(pg@8.8.0)
       lusca:
-        specifier: ~1.7.0
+        specifier: ^1.7.0
         version: 1.7.0
       marked:
-        specifier: ~13.0.3
+        specifier: ^13.0.3
         version: 13.0.3
       multer:
-        specifier: ~2.0.2
+        specifier: ^2.0.2
         version: 2.0.2
       openid-client:
-        specifier: ~5.7.0
+        specifier: ^5.7.0
         version: 5.7.0
       p-map:
-        specifier: ~4.0.0
+        specifier: ^4.0.0
         version: 4.0.0
       p-throttle:
-        specifier: ~4.1.1
+        specifier: ^4.1.1
         version: 4.1.1
       papaparse:
-        specifier: ~5.5.2
+        specifier: ^5.5.2
         version: 5.5.2
       pdf-lib:
-        specifier: ~1.17.1
+        specifier: ^1.17.1
         version: 1.17.1
       pg:
-        specifier: ~8.8.0
+        specifier: ^8.8.0
         version: 8.8.0
       pug:
-        specifier: ~3.0.3
+        specifier: ^3.0.3
         version: 3.0.3
       puppeteer:
-        specifier: ~24.4.0
+        specifier: ^24.4.0
         version: 24.4.0(typescript@5.9.3)
       string-strip-html:
-        specifier: ~8.4.0
+        specifier: ^8.4.0
         version: 8.4.0
       tippy.js:
-        specifier: ~6.3.7
+        specifier: ^6.3.7
         version: 6.3.7
       uuid:
-        specifier: ~9.0.0
+        specifier: ^9.0.0
         version: 9.0.0
       xlsx:
         specifier: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
         version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
       zod:
-        specifier: ~4.1.5
+        specifier: ^4.1.5
         version: 4.1.5
     devDependencies:
       '@electric-sql/pglite':
-        specifier: ~0.3.5
+        specifier: ^0.3.5
         version: 0.3.5
       '@eslint/eslintrc':
         specifier: ^3.3.4
@@ -133,91 +133,91 @@ importers:
         specifier: ^9.39.3
         version: 9.39.3
       '@sentry/vite-plugin':
-        specifier: ~5.1.1
+        specifier: ^5.1.1
         version: 5.1.1(rollup@4.50.0)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^6.2.4
         version: 6.2.4(svelte@5.53.6)(vite@7.3.1(@types/node@22.18.3)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.0))
       '@tsconfig/svelte':
-        specifier: ~5.0.8
+        specifier: ^5.0.8
         version: 5.0.8
       '@types/bcrypt':
-        specifier: ~6.0.0
+        specifier: ^6.0.0
         version: 6.0.0
       '@types/cookie-session':
         specifier: ^2.0.49
         version: 2.0.49
       '@types/express':
-        specifier: ~5.0.3
+        specifier: ^5.0.3
         version: 5.0.3
       '@types/jsonwebtoken':
         specifier: ^9.0.10
         version: 9.0.10
       '@types/node':
-        specifier: ~22.18.3
+        specifier: ^22.18.3
         version: 22.18.3
       '@types/papaparse':
-        specifier: ~5.3.16
+        specifier: ^5.3.16
         version: 5.3.16
       '@types/pug':
         specifier: ^2.0.10
         version: 2.0.10
       '@types/uuid':
-        specifier: ~10.0.0
+        specifier: ^10.0.0
         version: 10.0.0
       '@typescript-eslint/eslint-plugin':
-        specifier: ~8.56.1
+        specifier: ^8.56.1
         version: 8.56.1(@typescript-eslint/parser@8.56.1(eslint@9.39.3)(typescript@5.9.3))(eslint@9.39.3)(typescript@5.9.3)
       '@typescript-eslint/parser':
-        specifier: ~8.56.1
+        specifier: ^8.56.1
         version: 8.56.1(eslint@9.39.3)(typescript@5.9.3)
       '@vitest/eslint-plugin':
-        specifier: ~1.6.9
+        specifier: ^1.6.9
         version: 1.6.9(eslint@9.39.3)(typescript@5.9.3)(vitest@4.0.18(@types/node@22.18.3)(jsdom@21.1.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.0))
       concurrently:
-        specifier: ~9.2.1
+        specifier: ^9.2.1
         version: 9.2.1
       eslint:
-        specifier: ~9.39.3
+        specifier: ^9.39.3
         version: 9.39.3
       eslint-config-airbnb-base:
-        specifier: ~15.0.0
+        specifier: ^15.0.0
         version: 15.0.0(eslint-plugin-import@2.32.0)(eslint@9.39.3)
       eslint-config-prettier:
-        specifier: ~10.1.8
+        specifier: ^10.1.8
         version: 10.1.8(eslint@9.39.3)
       eslint-import-resolver-typescript:
-        specifier: ~4.4.4
+        specifier: ^4.4.4
         version: 4.4.4(eslint-plugin-import@2.32.0)(eslint@9.39.3)
       eslint-plugin-import:
-        specifier: ~2.32.0
+        specifier: ^2.32.0
         version: 2.32.0(@typescript-eslint/parser@8.56.1(eslint@9.39.3)(typescript@5.9.3))(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.3)
       eslint-plugin-svelte:
         specifier: ^3.15.0
         version: 3.15.0(eslint@9.39.3)(svelte@5.53.6)
       expect.js:
-        specifier: ~0.3.1
+        specifier: ^0.3.1
         version: 0.3.1
       glob:
-        specifier: ~13.0.6
+        specifier: ^13.0.6
         version: 13.0.6
       globals:
         specifier: ^17.4.0
         version: 17.4.0
       husky:
-        specifier: ~8.0.3
+        specifier: ^8.0.3
         version: 8.0.3
       jquery:
-        specifier: ~3.6.3
+        specifier: ^3.6.3
         version: 3.6.3
       jsdom:
-        specifier: ~21.1.0
+        specifier: ^21.1.0
         version: 21.1.0
       knex-pglite:
-        specifier: ~0.13.0
+        specifier: ^0.13.0
         version: 0.13.0(@electric-sql/pglite@0.3.5)(knex@3.1.0(pg@8.8.0))
       lint-staged:
-        specifier: ~13.2.2
+        specifier: ^13.2.2
         version: 13.2.2
       prettier:
         specifier: ^3.8.1
@@ -226,10 +226,10 @@ importers:
         specifier: ^3.5.0
         version: 3.5.0(prettier@3.8.1)(svelte@5.53.6)
       sass:
-        specifier: ~1.97.3
+        specifier: ^1.97.3
         version: 1.97.3
       supertest:
-        specifier: ~7.1.4
+        specifier: ^7.1.4
         version: 7.1.4
       svelte:
         specifier: ^5.53.6
@@ -241,10 +241,10 @@ importers:
         specifier: ^1.5.1
         version: 1.5.1(svelte@5.53.6)
       tslib:
-        specifier: ~2.8.1
+        specifier: ^2.8.1
         version: 2.8.1
       tsx:
-        specifier: ~4.21.0
+        specifier: ^4.21.0
         version: 4.21.0
       typescript:
         specifier: ^5.9.3
@@ -253,17 +253,13 @@ importers:
         specifier: ^8.56.1
         version: 8.56.1(eslint@9.39.3)(typescript@5.9.3)
       vite:
-        specifier: ~7.3.1
+        specifier: ^7.3.1
         version: 7.3.1(@types/node@22.18.3)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.0)
       vitest:
-        specifier: ~4.0.18
+        specifier: ^4.0.18
         version: 4.0.18(@types/node@22.18.3)(jsdom@21.1.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.0)
 
 packages:
-
-  '@babel/code-frame@7.26.2':
-    resolution: {integrity: sha512-RJlIHRueQgwWitWgF8OdFYGZX328Ax5BCemNGlqHfplnRT9ESi8JkFlvaVYbS+UubVY6dpv87Fs2u5M29iNFVQ==}
-    engines: {node: '>=6.9.0'}
 
   '@babel/code-frame@7.27.1':
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -301,10 +297,6 @@ packages:
 
   '@babel/helper-string-parser@7.27.1':
     resolution: {integrity: sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/helper-validator-identifier@7.25.9':
-    resolution: {integrity: sha512-Ed61U6XJc3CVRfkERJWDz4dJwKe7iLmmJsbOGu9wSloNSFttHV0I8g6UAgb7qnK5ly5bGLPd4oXZlxCdANBOWQ==}
     engines: {node: '>=6.9.0'}
 
   '@babel/helper-validator-identifier@7.28.5':
@@ -1565,6 +1557,7 @@ packages:
   basic-ftp@5.0.5:
     resolution: {integrity: sha512-4Bcg1P8xhUuqcii/S0Z9wiHIrQVPMermM1any+MX5GeGD7faD3/msQUDGLol9wOcz4/jbg/WJnGqoJF6LiBdtg==}
     engines: {node: '>=10.0.0'}
+    deprecated: Security vulnerability fixed in 5.2.0, please upgrade
 
   bcrypt@6.0.0:
     resolution: {integrity: sha512-cU8v/EGSrnH+HnxV2z0J7/blxH8gq7Xh2JFT6Aroax7UohdmiJJlxApMxtKfuI7z68NvvVcmR78k2LbT6efhRg==}
@@ -1825,15 +1818,6 @@ packages:
 
   debug@4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
-    engines: {node: '>=6.0'}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
-
-  debug@4.4.1:
-    resolution: {integrity: sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==}
     engines: {node: '>=6.0'}
     peerDependencies:
       supports-color: '*'
@@ -2253,10 +2237,6 @@ packages:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
     engines: {node: '>= 0.4'}
 
-  form-data@4.0.4:
-    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
-    engines: {node: '>= 6'}
-
   form-data@4.0.5:
     resolution: {integrity: sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==}
     engines: {node: '>= 6'}
@@ -2323,9 +2303,6 @@ packages:
   get-symbol-description@1.1.0:
     resolution: {integrity: sha512-w9UMqWwJxHNOvoNzSJ2oPF5wvYcvP7jUvYzhp67yEhTi17ZDBBC1z9pTdGuzjD+EFIqLSYRweZjqfiPzQ06Ebg==}
     engines: {node: '>= 0.4'}
-
-  get-tsconfig@4.10.0:
-    resolution: {integrity: sha512-kGzZ3LWWQcGIAmg6iWvXn0ei6WDtV26wzHRMwDSzmAbcXrTEXxHy6IehI6/4eT6VRKyMP1eF1VqwrVUmE/LR7A==}
 
   get-tsconfig@4.13.6:
     resolution: {integrity: sha512-shZT/QMiSHc/YBLxxOkMtgSid5HFoauqCE3/exfsEcwg1WkeqjG+V40yBbBrsD+jW2HDXcs28xOfcbm2jI8Ddw==}
@@ -2704,7 +2681,6 @@ packages:
   keygrip@1.1.0:
     resolution: {integrity: sha512-iYSchDJ+liQ8iwbSI2QqsQOvqv58eJCEanyJPJi+Khyu8smkcKSFUCbPwzFcL7YVtZ6eONjqRX/38caJ7QjRAQ==}
     engines: {node: '>= 0.6'}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -2914,9 +2890,6 @@ packages:
   minimatch@10.2.4:
     resolution: {integrity: sha512-oRjTw/97aTBN0RHbYCdtF1MQfvusSIBQM0IZEgzl6426+8jSC0nF1a/GmnVLpfB9yyr6g6FTqWqiZVbxrtaCIg==}
     engines: {node: 18 || 20 || >=22}
-
-  minimatch@3.1.2:
-    resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
   minimatch@3.1.5:
     resolution: {integrity: sha512-VgjWUsnnT6n+NUk6eZq77zeFdpW2LWDzP6zFGrCbHXiYNul5Dzqk2HHQ5uFH2DNW5Xbp8+jVzaeNt94ssEEl4w==}
@@ -3200,10 +3173,6 @@ packages:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
 
-  picomatch@4.0.2:
-    resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
-    engines: {node: '>=12'}
-
   picomatch@4.0.3:
     resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
     engines: {node: '>=12'}
@@ -3315,9 +3284,6 @@ packages:
   prosemirror-inputrules@1.4.0:
     resolution: {integrity: sha512-6ygpPRuTJ2lcOXs9JkefieMst63wVJBgHZGl5QOytN7oSZs3Co/BYbc3Yx9zm9H37Bxw8kVzCnDsihsVsL4yEg==}
 
-  prosemirror-keymap@1.2.2:
-    resolution: {integrity: sha512-EAlXoksqC6Vbocqc0GtzCruZEzYgrn+iiGnNjsJsH4mrnIGex4qbLdWWNza3AW5W36ZRrlBID0eM6bdKH4OStQ==}
-
   prosemirror-keymap@1.2.3:
     resolution: {integrity: sha512-4HucRlpiLd1IPQQXNqeo81BGtkY8Ai5smHhKW9jjPKRc2wQIxksg7Hl1tTI2IfT2B/LgX6bfYvXxEpJl7aKYKw==}
 
@@ -3335,9 +3301,6 @@ packages:
 
   prosemirror-schema-list@1.5.1:
     resolution: {integrity: sha512-927lFx/uwyQaGwJxLWCZRkjXG0p48KpMj6ueoYiu4JX05GGuGcgzAy62dfiV8eFZftgyBUvLx76RsMe20fJl+Q==}
-
-  prosemirror-state@1.4.3:
-    resolution: {integrity: sha512-goFKORVbvPuAQaXhpbemJFRKJ2aixr+AZMGiquiqKxaucC6hlpHNZHWgz5R7dS4roHiwq9vDctE//CZ++o0W1Q==}
 
   prosemirror-state@1.4.4:
     resolution: {integrity: sha512-6jiYHH2CIGbCfnxdHbXZ12gySFY/fz/ulZE333G6bPqIZ4F+TXo9ifiR86nAHpWnfoNjOb3o5ESi7J8Uz1jXHw==}
@@ -3428,10 +3391,6 @@ packages:
     engines: {node: '>=18'}
     deprecated: < 24.15.0 is no longer supported
     hasBin: true
-
-  qs@6.14.0:
-    resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
-    engines: {node: '>=0.6'}
 
   qs@6.14.1:
     resolution: {integrity: sha512-4EK3+xJl8Ts67nLYNwqw/dsFVnCf+qR7RgXSK9jEEm9unao3njwMDdmsdvoKBKHzxd7tCYz5e5M+SnMjdtXGQQ==}
@@ -3812,10 +3771,6 @@ packages:
     resolution: {integrity: sha512-W/KYk+NFhkmsYpuHq5JykngiOCnxeVL8v8dFnqxSD8qEEdRfXk1SDM6JzNqcERbcGYj9tMrDQBYV9cjgnunFIg==}
     engines: {node: '>=18'}
 
-  tinyglobby@0.2.14:
-    resolution: {integrity: sha512-tX5e7OM1HnYr2+a2C/4V0htOcSQcoSTH9KgJnVvNm5zm/cyEWKJ7j7YutsH9CxMdtOkkLFy2AHrMci9IM8IPZQ==}
-    engines: {node: '>=12.0.0'}
-
   tinyglobby@0.2.15:
     resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
     engines: {node: '>=12.0.0'}
@@ -4074,6 +4029,7 @@ packages:
   whatwg-encoding@2.0.0:
     resolution: {integrity: sha512-p41ogyeMUrw3jWclHWTQg1k05DSVXPLcVxRTYsXUk+ZooOCZLcoYgPZ/HL/D/N+uQPOtcp1me1WhBEaX02mhWg==}
     engines: {node: '>=12'}
+    deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
   whatwg-mimetype@3.0.0:
     resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
@@ -4205,12 +4161,6 @@ packages:
 
 snapshots:
 
-  '@babel/code-frame@7.26.2':
-    dependencies:
-      '@babel/helper-validator-identifier': 7.25.9
-      js-tokens: 4.0.0
-      picocolors: 1.1.1
-
   '@babel/code-frame@7.27.1':
     dependencies:
       '@babel/helper-validator-identifier': 7.28.5
@@ -4274,8 +4224,6 @@ snapshots:
       - supports-color
 
   '@babel/helper-string-parser@7.27.1': {}
-
-  '@babel/helper-validator-identifier@7.25.9': {}
 
   '@babel/helper-validator-identifier@7.28.5': {}
 
@@ -4678,7 +4626,7 @@ snapshots:
       dotenv: 16.4.7
       find-up: 5.0.0
       glob: 13.0.6
-      magic-string: 0.30.17
+      magic-string: 0.30.21
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -4742,7 +4690,7 @@ snapshots:
   '@sentry/rollup-plugin@5.1.1(rollup@4.50.0)':
     dependencies:
       '@sentry/bundler-plugin-core': 5.1.1
-      magic-string: 0.30.17
+      magic-string: 0.30.21
       rollup: 4.50.0
     transitivePeerDependencies:
       - encoding
@@ -4903,15 +4851,15 @@ snapshots:
       prosemirror-gapcursor: 1.3.2
       prosemirror-history: 1.4.1
       prosemirror-inputrules: 1.4.0
-      prosemirror-keymap: 1.2.2
+      prosemirror-keymap: 1.2.3
       prosemirror-markdown: 1.13.4
       prosemirror-menu: 1.2.4
       prosemirror-model: 1.25.4
       prosemirror-schema-basic: 1.2.3
       prosemirror-schema-list: 1.5.1
-      prosemirror-state: 1.4.3
+      prosemirror-state: 1.4.4
       prosemirror-tables: 1.8.5
-      prosemirror-trailing-node: 3.0.0(prosemirror-model@1.25.4)(prosemirror-state@1.4.3)(prosemirror-view@1.41.6)
+      prosemirror-trailing-node: 3.0.0(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.6)
       prosemirror-transform: 1.11.0
       prosemirror-view: 1.41.6
 
@@ -5266,7 +5214,7 @@ snapshots:
 
   acorn-globals@7.0.1:
     dependencies:
-      acorn: 8.14.0
+      acorn: 8.16.0
       acorn-walk: 8.2.0
 
   acorn-jsx@5.3.2(acorn@8.16.0):
@@ -5701,10 +5649,6 @@ snapshots:
     dependencies:
       ms: 2.1.2
 
-  debug@4.4.1:
-    dependencies:
-      ms: 2.1.3
-
   debug@4.4.3:
     dependencies:
       ms: 2.1.3
@@ -5958,7 +5902,7 @@ snapshots:
       get-tsconfig: 4.13.6
       is-bun-module: 2.0.0
       stable-hash-x: 0.2.0
-      tinyglobby: 0.2.14
+      tinyglobby: 0.2.15
       unrs-resolver: 1.11.1
     optionalDependencies:
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.56.1(eslint@9.39.3)(typescript@5.9.3))(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.3)
@@ -5991,7 +5935,7 @@ snapshots:
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
-      minimatch: 3.1.2
+      minimatch: 3.1.5
       object.fromentries: 2.0.8
       object.groupby: 1.0.3
       object.values: 1.2.1
@@ -6067,7 +6011,7 @@ snapshots:
       is-glob: 4.0.3
       json-stable-stringify-without-jsonify: 1.0.1
       lodash.merge: 4.6.2
-      minimatch: 3.1.2
+      minimatch: 3.1.5
       natural-compare: 1.4.0
       optionator: 0.9.4
     transitivePeerDependencies:
@@ -6195,10 +6139,6 @@ snapshots:
     dependencies:
       pend: 1.2.0
 
-  fdir@6.4.6(picomatch@4.0.2):
-    optionalDependencies:
-      picomatch: 4.0.2
-
   fdir@6.4.6(picomatch@4.0.3):
     optionalDependencies:
       picomatch: 4.0.3
@@ -6243,14 +6183,6 @@ snapshots:
   for-each@0.3.5:
     dependencies:
       is-callable: 1.2.7
-
-  form-data@4.0.4:
-    dependencies:
-      asynckit: 0.4.0
-      combined-stream: 1.0.8
-      es-set-tostringtag: 2.1.0
-      hasown: 2.0.2
-      mime-types: 2.1.35
 
   form-data@4.0.5:
     dependencies:
@@ -6323,10 +6255,6 @@ snapshots:
       call-bound: 1.0.4
       es-errors: 1.3.0
       get-intrinsic: 1.3.0
-
-  get-tsconfig@4.10.0:
-    dependencies:
-      resolve-pkg-maps: 1.0.0
 
   get-tsconfig@4.13.6:
     dependencies:
@@ -6638,7 +6566,7 @@ snapshots:
   jsdom@21.1.0:
     dependencies:
       abab: 2.0.6
-      acorn: 8.14.0
+      acorn: 8.16.0
       acorn-globals: 7.0.1
       cssom: 0.5.0
       cssstyle: 2.3.0
@@ -6646,7 +6574,7 @@ snapshots:
       decimal.js: 10.6.0
       domexception: 4.0.0
       escodegen: 2.1.0
-      form-data: 4.0.4
+      form-data: 4.0.5
       html-encoding-sniffer: 3.0.0
       http-proxy-agent: 5.0.0
       https-proxy-agent: 5.0.1
@@ -6780,7 +6708,7 @@ snapshots:
       chalk: 5.2.0
       cli-truncate: 3.1.0
       commander: 10.0.1
-      debug: 4.4.1
+      debug: 4.4.3
       execa: 7.1.1
       lilconfig: 2.1.0
       listr2: 5.0.8
@@ -6911,10 +6839,6 @@ snapshots:
   minimatch@10.2.4:
     dependencies:
       brace-expansion: 5.0.4
-
-  minimatch@3.1.2:
-    dependencies:
-      brace-expansion: 1.1.12
 
   minimatch@3.1.5:
     dependencies:
@@ -7113,7 +7037,7 @@ snapshots:
 
   parse-json@5.2.0:
     dependencies:
-      '@babel/code-frame': 7.26.2
+      '@babel/code-frame': 7.27.1
       error-ex: 1.3.2
       json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.2.4
@@ -7186,8 +7110,6 @@ snapshots:
 
   picomatch@2.3.1: {}
 
-  picomatch@4.0.2: {}
-
   picomatch@4.0.3: {}
 
   pidtree@0.6.0: {}
@@ -7259,43 +7181,38 @@ snapshots:
 
   prosemirror-collab@1.3.1:
     dependencies:
-      prosemirror-state: 1.4.3
+      prosemirror-state: 1.4.4
 
   prosemirror-commands@1.7.1:
     dependencies:
       prosemirror-model: 1.25.4
-      prosemirror-state: 1.4.3
+      prosemirror-state: 1.4.4
       prosemirror-transform: 1.11.0
 
   prosemirror-dropcursor@1.8.1:
     dependencies:
-      prosemirror-state: 1.4.3
+      prosemirror-state: 1.4.4
       prosemirror-transform: 1.11.0
       prosemirror-view: 1.41.6
 
   prosemirror-gapcursor@1.3.2:
     dependencies:
-      prosemirror-keymap: 1.2.2
+      prosemirror-keymap: 1.2.3
       prosemirror-model: 1.25.4
-      prosemirror-state: 1.4.3
+      prosemirror-state: 1.4.4
       prosemirror-view: 1.41.6
 
   prosemirror-history@1.4.1:
     dependencies:
-      prosemirror-state: 1.4.3
+      prosemirror-state: 1.4.4
       prosemirror-transform: 1.11.0
       prosemirror-view: 1.41.6
       rope-sequence: 1.3.4
 
   prosemirror-inputrules@1.4.0:
     dependencies:
-      prosemirror-state: 1.4.3
+      prosemirror-state: 1.4.4
       prosemirror-transform: 1.11.0
-
-  prosemirror-keymap@1.2.2:
-    dependencies:
-      prosemirror-state: 1.4.3
-      w3c-keyname: 2.2.8
 
   prosemirror-keymap@1.2.3:
     dependencies:
@@ -7313,7 +7230,7 @@ snapshots:
       crelt: 1.0.6
       prosemirror-commands: 1.7.1
       prosemirror-history: 1.4.1
-      prosemirror-state: 1.4.3
+      prosemirror-state: 1.4.4
 
   prosemirror-model@1.25.4:
     dependencies:
@@ -7326,14 +7243,8 @@ snapshots:
   prosemirror-schema-list@1.5.1:
     dependencies:
       prosemirror-model: 1.25.4
-      prosemirror-state: 1.4.3
+      prosemirror-state: 1.4.4
       prosemirror-transform: 1.11.0
-
-  prosemirror-state@1.4.3:
-    dependencies:
-      prosemirror-model: 1.25.4
-      prosemirror-transform: 1.11.0
-      prosemirror-view: 1.41.6
 
   prosemirror-state@1.4.4:
     dependencies:
@@ -7349,12 +7260,12 @@ snapshots:
       prosemirror-transform: 1.11.0
       prosemirror-view: 1.41.6
 
-  prosemirror-trailing-node@3.0.0(prosemirror-model@1.25.4)(prosemirror-state@1.4.3)(prosemirror-view@1.41.6):
+  prosemirror-trailing-node@3.0.0(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.6):
     dependencies:
       '@remirror/core-constants': 3.0.0
       escape-string-regexp: 4.0.0
       prosemirror-model: 1.25.4
-      prosemirror-state: 1.4.3
+      prosemirror-state: 1.4.4
       prosemirror-view: 1.41.6
 
   prosemirror-transform@1.11.0:
@@ -7364,7 +7275,7 @@ snapshots:
   prosemirror-view@1.41.6:
     dependencies:
       prosemirror-model: 1.25.4
-      prosemirror-state: 1.4.3
+      prosemirror-state: 1.4.4
       prosemirror-transform: 1.11.0
 
   proxy-addr@2.0.7:
@@ -7493,10 +7404,6 @@ snapshots:
       - supports-color
       - typescript
       - utf-8-validate
-
-  qs@6.14.0:
-    dependencies:
-      side-channel: 1.1.0
 
   qs@6.14.1:
     dependencies:
@@ -7892,11 +7799,11 @@ snapshots:
       cookiejar: 2.1.4
       debug: 4.4.3
       fast-safe-stringify: 2.1.1
-      form-data: 4.0.4
+      form-data: 4.0.5
       formidable: 3.5.4
       methods: 1.1.2
       mime: 2.6.0
-      qs: 6.14.0
+      qs: 6.14.1
     transitivePeerDependencies:
       - supports-color
 
@@ -7992,11 +7899,6 @@ snapshots:
 
   tinyexec@1.0.2: {}
 
-  tinyglobby@0.2.14:
-    dependencies:
-      fdir: 6.4.6(picomatch@4.0.2)
-      picomatch: 4.0.2
-
   tinyglobby@0.2.15:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.3)
@@ -8051,7 +7953,7 @@ snapshots:
   tsx@4.21.0:
     dependencies:
       esbuild: 0.27.3
-      get-tsconfig: 4.10.0
+      get-tsconfig: 4.13.6
     optionalDependencies:
       fsevents: 2.3.3
 
