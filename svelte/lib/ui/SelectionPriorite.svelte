@@ -23,7 +23,9 @@
     onPrioriteModifiee,
   }: Props = $props();
 
-  priorite ??= '';
+  $effect(() => {
+    if (priorite === undefined) priorite = '';
+  });
 
   const metAJour = (e: Event) => {
     onPrioriteModifiee?.(

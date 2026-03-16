@@ -10,7 +10,9 @@
 
   let { departements, valeur = $bindable() }: Props = $props();
 
-  valeur ??= '';
+  $effect(() => {
+    if (valeur === undefined) valeur = '';
+  });
 
   let saisie: string = $state('');
   let minuteur: ReturnType<typeof setTimeout>;
