@@ -6,6 +6,8 @@
   import Tableau from '../ui/Tableau.svelte';
   import { couleur, mappingCouleursDSFR, mappingNomCategories } from './kit';
   import Niveau from './Niveau.svelte';
+  import Switch from '../ui/Switch.svelte';
+  import { metsAJourRisque } from './risquesV2.api';
 
   interface Props {
     idService: string;
@@ -32,6 +34,14 @@
   let opacite = $state(2);
 
   const metAJourOpacite = (e: CustomEvent<number>) => (opacite = e.detail);
+
+  const metsAJourDesactivationRisque = async (
+    idRisque: string,
+    desactive: boolean
+  ) => {
+    await metsAJourRisque(idService, idRisque, desactive);
+    risques = await api.recupereRisques(idService);
+  };
 </script>
 
 <div class="conteneur">
@@ -105,6 +115,7 @@
       { cle: 'intitule', libelle: 'Intitulé du risque' },
       { cle: 'gravite', libelle: 'Gravité' },
       { cle: 'vraisemblance', libelle: 'Vraisemblance' },
+      { cle: 'actions', libelle: 'Actions' },
     ]}
     donnees={risques.risques}
   >
@@ -136,6 +147,17 @@
       {:else if colonne.cle === 'vraisemblance'}
         <div class="colonne-vraisemblance">
           <Niveau niveau={donnee.vraisemblance} />
+        </div>
+      {:else if colonne.cle === 'actions'}
+        <div class="colonne-actions">
+          <Switch
+            bind:actif={
+              () => !donnee.desactive, (valeur) => (donnee.desactive = !valeur)
+            }
+            id="risque-{donnee.id}-actif"
+            onChange={async (actif) =>
+              await metsAJourDesactivationRisque(donnee.id, !actif)}
+          />
         </div>
       {/if}
     {/snippet}

@@ -12,6 +12,8 @@ export type Risque = {
   categories: string[];
   gravite: Niveau;
   vraisemblance: Niveau;
+  desactive?: boolean;
+  commentaire?: string;
 };
 
 export type TousRisques = {
