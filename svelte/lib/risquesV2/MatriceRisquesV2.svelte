@@ -26,7 +26,10 @@
           {@const vraisemblance = indexColonne + 1}
           {@const laCouleur = couleur(gravite, vraisemblance)}
           {@const risqueDeCetteCellule = risques.filter(
-            (r) => r.gravite === gravite && r.vraisemblance === vraisemblance
+            (r) =>
+              !r.desactive &&
+              r.gravite === gravite &&
+              r.vraisemblance === vraisemblance
           )}
           {@const idRisques = risqueDeCetteCellule.map((r) => r.id).join(', ')}
           <td>
