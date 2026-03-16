@@ -22,7 +22,7 @@ export class RisqueV2 {
   readonly gravite: Gravite;
   readonly intitule: string;
   readonly categories: Array<CategorieRisque>;
-  readonly desactive?: boolean;
+  private desactive?: boolean;
   private commentaire?: string;
 
   constructor(
@@ -87,5 +87,10 @@ export class RisqueV2 {
       desactive: this.desactive,
       commentaire: this.commentaire,
     };
+  }
+
+  metsAJour(donnees: DonneesRisqueV2) {
+    this.desactive = donnees.desactive;
+    this.commentaire = donnees.commentaire;
   }
 }

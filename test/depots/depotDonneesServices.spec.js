@@ -28,7 +28,10 @@ import RolesResponsabilites from '../../src/modeles/rolesResponsabilites.js';
 import copie from '../../src/utilitaires/copie.js';
 import { unUtilisateur } from '../constructeurs/constructeurUtilisateur.js';
 import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
-import { unService } from '../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../constructeurs/constructeurService.js';
 import { unePersistanceMemoire } from '../constructeurs/constructeurAdaptateurPersistanceMemoire.js';
 import { unDepotDeDonneesServices } from '../constructeurs/constructeurDepotDonneesServices.js';
 import { unDossier } from '../constructeurs/constructeurDossier.js';
@@ -3060,6 +3063,40 @@ describe('Le dépôt de données des services', () => {
       expect(donnees.descriptionService.organisationResponsable.nom).to.be(
         'MonEntite'
       );
+    });
+  });
+
+  describe("sur demande de mise à jour des données d'un risque v2", () => {
+    let depot;
+    let persistance;
+
+    beforeEach(() => {
+      busEvenements = fabriqueBusPourLesTests();
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnService(
+          unServiceV2().avecId('S1').construis().donneesAPersister().donnees
+        )
+        .nommeCommeProprietaire('U1', ['S1'])
+        .construis();
+
+      depot = unDepotDeDonneesServices()
+        .avecAdaptateurPersistance(persistance)
+        .construis();
+    });
+
+    it('sauvegarde le risque mis à jour', async () => {
+      await depot.metsAJourRisqueV2('S1', 'R3', {
+        commentaire: 'Un commentaire',
+        desactive: true,
+      });
+
+      const serviceAJour = await depot.service('S1');
+
+      const risquesAJour = serviceAJour.risquesV2.toJSON().risques;
+      const risqueR3 = risquesAJour.find((r) => r.id === 'R3');
+      expect(risqueR3.commentaire).to.be('Un commentaire');
+      expect(risqueR3.desactive).to.be(true);
     });
   });
 });

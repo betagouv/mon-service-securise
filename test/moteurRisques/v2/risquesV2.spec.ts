@@ -22,4 +22,22 @@ describe('Les risques V2', () => {
     expect(tousLesRisques.risquesCibles[0].id).toBe('R3');
     expect(tousLesRisques.risquesCibles[0].vraisemblance).toBe(1);
   });
+
+  it("peut mettre à jour les données d'un risque", () => {
+    const tousLesRisques = new RisquesV2(
+      [new RisqueV2('V3', { OV1: 3 }, 4, {})],
+      [],
+      []
+    );
+
+    tousLesRisques.metsAJour('R3', {
+      commentaire: 'un commentaire',
+      desactive: true,
+    });
+
+    expect(tousLesRisques.toJSON().risques[0].commentaire).toBe(
+      'un commentaire'
+    );
+    expect(tousLesRisques.toJSON().risques[0].desactive).toBe(true);
+  });
 });
