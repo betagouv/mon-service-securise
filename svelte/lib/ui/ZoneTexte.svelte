@@ -19,7 +19,9 @@
     max = undefined,
   }: Props = $props();
 
-  valeur ??= '';
+  $effect(() => {
+    if (valeur === undefined) valeur = '';
+  });
 </script>
 
 <textarea

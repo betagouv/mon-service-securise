@@ -36,7 +36,9 @@
     onblur,
   }: Props = $props();
 
-  valeur ??= '';
+  $effect(() => {
+    if (valeur === undefined) valeur = '';
+  });
 
   const typeChamp = (node: HTMLInputElement) => {
     node.type = type;

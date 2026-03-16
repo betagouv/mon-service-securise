@@ -13,7 +13,10 @@
   }
 
   let { options, valeurSelectionnee = $bindable() }: Props = $props();
-  valeurSelectionnee ??= '';
+
+  $effect(() => {
+    if (valeurSelectionnee === undefined) valeurSelectionnee = '';
+  });
 
   const nomUnique = crypto.randomUUID();
 </script>
