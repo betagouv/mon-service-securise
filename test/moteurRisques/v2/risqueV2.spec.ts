@@ -1,7 +1,5 @@
-import {
-  ConfigurationRisqueV2,
-  RisqueV2,
-} from '../../../src/moteurRisques/v2/risqueV2.ts';
+import { RisqueV2 } from '../../../src/moteurRisques/v2/risqueV2.ts';
+import { ConfigurationRisqueV2 } from '../../../src/moteurRisques/v2/risquesV2.types.ts';
 
 describe('Un risque V2', () => {
   const intitulesOVs = () => ({
@@ -32,14 +30,20 @@ describe('Un risque V2', () => {
   });
 
   it('connaît son identifiant qui est fonction de son vecteur', () => {
-    const r1 = new RisqueV2('V1', { OV1: 3 }, 1, configurationRisque());
+    const r1 = new RisqueV2('V1', { OV1: 3 }, 1, {}, configurationRisque());
 
     expect(r1.id).toBe('R1');
   });
 
   describe('concernant sa gravité', () => {
     it('connait son niveau de gravité', () => {
-      const risque = new RisqueV2('V1', { OV1: 3 }, 1, configurationRisque());
+      const risque = new RisqueV2(
+        'V1',
+        { OV1: 3 },
+        1,
+        {},
+        configurationRisque()
+      );
 
       expect(risque.gravite).toBe(3);
     });
@@ -49,6 +53,7 @@ describe('Un risque V2', () => {
         'V1',
         { OV2: 3, OV3: 3 },
         1,
+        {},
         configurationRisque()
       );
 
@@ -62,6 +67,7 @@ describe('Un risque V2', () => {
       'V1',
       { OV1: 3 },
       tresVraisemblable,
+      {},
       configurationRisque()
     );
 
@@ -81,6 +87,7 @@ describe('Un risque V2', () => {
         'V1',
         { OV1: 3 },
         1,
+        {},
         configurationRisque(configurationV1)
       );
 
@@ -103,6 +110,7 @@ describe('Un risque V2', () => {
         'V1',
         { OV1: 3, OV2: 3, OV3: 3 },
         1,
+        {},
         configurationRisque(configurationV1)
       );
 
@@ -121,7 +129,13 @@ describe('Un risque V2', () => {
     ])(
       'connaît ses catégories qui sont fonction de ses OV: $ov donne $categories',
       ({ ov, categories }) => {
-        const r1 = new RisqueV2('V1', { [ov]: 3 }, 1, configurationRisque());
+        const r1 = new RisqueV2(
+          'V1',
+          { [ov]: 3 },
+          1,
+          {},
+          configurationRisque()
+        );
 
         expect(r1.categories).toEqual(categories);
       }
@@ -132,6 +146,7 @@ describe('Un risque V2', () => {
         'V1',
         { OV2: 3, OV4: 1 },
         1,
+        {},
         configurationRisque()
       );
 
@@ -140,7 +155,7 @@ describe('Un risque V2', () => {
   });
 
   it('peut se sérialiser en JSON', () => {
-    const r1 = new RisqueV2('V1', { OV1: 3 }, 1, configurationRisque());
+    const r1 = new RisqueV2('V1', { OV1: 3 }, 1, {}, configurationRisque());
 
     expect(r1.toJSON()).toEqual({
       id: 'R1',
@@ -148,6 +163,20 @@ describe('Un risque V2', () => {
       categories: ['integrite'],
       gravite: 3,
       vraisemblance: 1,
+    });
+  });
+
+  describe('concernant ses données hydratées', () => {
+    it('peut être désactivé', () => {
+      const risque = new RisqueV2(
+        'V1',
+        { OV1: 3 },
+        1,
+        { desactive: true },
+        configurationRisque()
+      );
+
+      expect(risque.toJSON().desactive).toBe(true);
     });
   });
 });

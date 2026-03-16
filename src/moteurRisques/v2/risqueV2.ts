@@ -3,36 +3,12 @@ import { IdObjectifVise } from './selectionObjectifsVises.types.js';
 import { Gravite } from './graviteObjectifsVises.js';
 import { configurationRisqueV2 } from './risqueV2.configuration.js';
 import { Vraisemblance } from './vraisemblance/vraisemblance.types.js';
-
-export type ConfigurationRisqueV2 = Record<
-  IdVecteurRisque,
-  {
-    intitule: string;
-    intitulesObjectifsVises: Partial<Record<IdObjectifVise, string>>;
-  }
->;
-
-export type IdRisqueV2 = `R${
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14}`;
-
-type CategorieRisque =
-  | 'disponibilite'
-  | 'integrite'
-  | 'confidentialite'
-  | 'tracabilite';
+import {
+  CategorieRisque,
+  ConfigurationRisqueV2,
+  DonneesRisqueV2,
+  IdRisqueV2,
+} from './risquesV2.types.js';
 
 const ovVersCategories = new Map<IdObjectifVise, CategorieRisque[]>([
   ['OV1', ['integrite']],
@@ -46,17 +22,20 @@ export class RisqueV2 {
   readonly gravite: Gravite;
   readonly intitule: string;
   readonly categories: Array<CategorieRisque>;
+  readonly desactive?: boolean;
 
   constructor(
     private readonly idVecteur: IdVecteurRisque,
     private readonly objectifsVises: Partial<Record<IdObjectifVise, Gravite>>,
     public readonly vraisemblance: Vraisemblance,
+    donnees: DonneesRisqueV2 = {},
     private readonly configuration: ConfigurationRisqueV2 = configurationRisqueV2
   ) {
     this.id = idVecteur.replace('V', 'R') as IdRisqueV2;
     this.gravite = Math.max(...Object.values(objectifsVises)) as Gravite;
     this.intitule = this.genereIntitule();
     this.categories = this.getCategories();
+    this.desactive = donnees.desactive;
   }
 
   toJSON() {
@@ -66,6 +45,7 @@ export class RisqueV2 {
       gravite: this.gravite,
       vraisemblance: this.vraisemblance,
       categories: this.categories,
+      desactive: this.desactive,
     };
   }
 
