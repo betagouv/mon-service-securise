@@ -110,5 +110,17 @@ describe('Le moteur de risques V2', () => {
       expect(risquesCibles[0].id).toBe('R3');
       expect(risquesCibles[0].vraisemblance).toBe(1);
     });
+
+    it('hydrate les risques avec les données passées en argument', () => {
+      const moteur = new MoteurRisquesV2(
+        uneAPISimple(),
+        {},
+        { R3: { desactive: true, commentaire: 'un commentaire' } }
+      );
+
+      const risqueR3 = moteur.toJSON().risques[0];
+      expect(risqueR3.commentaire).toBe('un commentaire');
+      expect(risqueR3.desactive).toBe(true);
+    });
   });
 });
