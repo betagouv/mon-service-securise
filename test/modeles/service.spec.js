@@ -1320,6 +1320,24 @@ describe('Un service', () => {
 
       expect(() => service.donneesAPersister()).not.toThrowError();
     });
+
+    it('peut sauvegarder des données de risque v2', () => {
+      const service = new Service({
+        id: '123',
+        versionService: VersionService.v2,
+        descriptionService: uneDescriptionV2Valide()
+          .avecNomService('Bibliothèque')
+          .donneesDescription(),
+        risquesV2: { R3: { commentaire: 'un comm', desactive: false } },
+      });
+
+      const { risquesV2 } = service.donneesAPersister().toutes();
+      expect(Object.keys(risquesV2)).toContain('R3');
+      expect(risquesV2.R3).toEqual({
+        commentaire: 'un comm',
+        desactive: false,
+      });
+    });
   });
 
   describe('concernant la validation des données de création', () => {

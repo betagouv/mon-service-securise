@@ -22,6 +22,7 @@ import { ObjetPDFAnnexeDescriptionV2 } from './objetsPDF/objetPDFAnnexeDescripti
 import { ToutesActionsRecommandees } from './actionsRecommandees.js';
 import MesuresGenerales from './mesuresGenerales.js';
 import { MoteurRisquesV2 } from '../moteurRisques/v2/moteurRisques.js';
+import { RisquesV2 } from '../moteurRisques/v2/risquesV2.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -59,6 +60,7 @@ class Service {
       prochainIdNumeriqueDeRisqueSpecifique = 1,
       modelesDisponiblesDeMesureSpecifique = {},
       aUneSimulationMigrationReferentiel = false,
+      risquesV2 = {},
     } = donnees;
 
     this.id = id;
@@ -98,11 +100,14 @@ class Service {
 
     this.referentiel = referentiel;
 
-    if (versionService === VersionService.v2)
+    if (versionService === VersionService.v2) {
       this.moteurRisques = new MoteurRisquesV2(
         this.descriptionService,
-        this.mesures.personnaliseesAvecStatutSeul()
+        this.mesures.personnaliseesAvecStatutSeul(),
+        risquesV2
       );
+      this.risquesV2 = new RisquesV2(this.moteurRisques.risques());
+    }
   }
 
   version() {
@@ -213,6 +218,9 @@ class Service {
       prochainIdNumeriqueDeRisqueSpecifique:
         this.prochainIdNumeriqueDeRisqueSpecifique,
       versionService: this.versionService,
+      ...(this.version() === VersionService.v2 && {
+        risquesV2: this.risquesV2.donneesSerialisees(),
+      }),
     });
   }
 
