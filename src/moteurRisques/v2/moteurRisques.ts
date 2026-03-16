@@ -12,7 +12,7 @@ import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 import MesureGenerale from '../../modeles/mesureGenerale.js';
 import { MesureAvecStatut } from './vraisemblance/vraisemblance.types.js';
 import { MesuresPourRisque } from './mesuresPourRisque.js';
-import { DonneesRisquesV2, IdRisqueV2 } from './risquesV2.types.js';
+import { DonneesRisquesV2 } from './risquesV2.types.js';
 
 export class MoteurRisquesV2 {
   private readonly selectionVecteurs: Array<IdVecteurRisque>;
@@ -75,7 +75,7 @@ export class MoteurRisquesV2 {
         configurationVraisemblance[id as IdVecteurRisque]
       ).calculePourService(this.descriptionService.niveauSecurite, mesures);
 
-      const idRisque = id.replace('V', 'R') as IdRisqueV2;
+      const idRisque = RisqueV2.idPourVecteur(id as IdVecteurRisque);
       const donneesRisque = this.donnees[idRisque];
 
       return new RisqueV2(
