@@ -6,3 +6,13 @@ export const recupereRisques = async (idService: string) => {
   );
   return donnees.data;
 };
+
+export const metsAJourRisque = async (
+  idService: string,
+  idRisque: string,
+  desactive: boolean
+) => {
+  await axios.put(`/api/service/${idService}/risques/v2/${idRisque}`, {
+    desactive,
+  });
+};
