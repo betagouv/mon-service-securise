@@ -32,7 +32,7 @@ export class RisqueV2 {
     donnees: DonneesRisqueV2 = {},
     private readonly configuration: ConfigurationRisqueV2 = configurationRisqueV2
   ) {
-    this.id = idVecteur.replace('V', 'R') as IdRisqueV2;
+    this.id = RisqueV2.idPourVecteur(idVecteur);
     this.gravite = Math.max(...Object.values(objectifsVises)) as Gravite;
     this.intitule = this.genereIntitule();
     this.categories = this.getCategories();
@@ -76,5 +76,9 @@ export class RisqueV2 {
         )
       ),
     ];
+  }
+
+  static idPourVecteur(idVecteur: IdVecteurRisque): IdRisqueV2 {
+    return idVecteur.replace('V', 'R') as IdRisqueV2;
   }
 }
