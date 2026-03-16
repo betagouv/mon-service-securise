@@ -81,4 +81,11 @@ export class RisqueV2 {
   static idPourVecteur(idVecteur: IdVecteurRisque): IdRisqueV2 {
     return idVecteur.replace('V', 'R') as IdRisqueV2;
   }
+
+  donneesSerialisees() {
+    return {
+      desactive: this.desactive,
+      commentaire: this.commentaire,
+    };
+  }
 }
