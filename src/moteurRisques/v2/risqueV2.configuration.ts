@@ -1,4 +1,4 @@
-import { ConfigurationRisqueV2 } from './risqueV2.js';
+import { ConfigurationRisqueV2 } from './risquesV2.types.js';
 
 export const configurationRisqueV2: ConfigurationRisqueV2 = {
   V1: {
