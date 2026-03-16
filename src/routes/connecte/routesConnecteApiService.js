@@ -169,7 +169,7 @@ const routesConnecteApiService = ({
     async (requete, reponse) => {
       const { service } = requete;
 
-      reponse.json(service.moteurRisques.toJSON());
+      reponse.json(service.risquesV2.toJSON());
     }
   );
 
