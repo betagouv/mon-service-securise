@@ -92,6 +92,7 @@
   }
   .option-liste-deroulante label {
     cursor: pointer;
+    margin: 0;
   }
 
   .contenu-menu-deroulant {
