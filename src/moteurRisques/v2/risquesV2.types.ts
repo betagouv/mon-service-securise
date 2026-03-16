@@ -1,5 +1,6 @@
 import { IdVecteurRisque } from './selectionVecteurs.types.js';
 import { IdObjectifVise } from './selectionObjectifsVises.types.js';
+import { idsRisquesV2 } from '../../../donneesReferentielRisquesV2.js';
 
 export type ConfigurationRisqueV2 = Record<
   IdVecteurRisque,
@@ -9,21 +10,7 @@ export type ConfigurationRisqueV2 = Record<
   }
 >;
 
-export type IdRisqueV2 = `R${
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14}`;
+export type IdRisqueV2 = (typeof idsRisquesV2)[number];
 
 export type CategorieRisque =
   | 'disponibilite'
