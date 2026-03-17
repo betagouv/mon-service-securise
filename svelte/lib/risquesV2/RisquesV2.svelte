@@ -133,17 +133,21 @@
   >
     {#snippet cellule({ donnee, colonne })}
       {#if colonne.cle === 'id'}
-        <div class="colonne-identifiant">
+        <div
+          class="colonne-identifiant colonne"
+          class:inactif={donnee.desactive}
+        >
           <CartoucheIdentifiantRisque risque={donnee} />
         </div>
       {:else if colonne.cle === 'intitule'}
         {@const risqueBrut = risques.risquesBruts.find(
           (r) => r.id === donnee.id
         )}
-        <div class="colonne-intitule">
+        <div class="colonne-intitule colonne" class:inactif={donnee.desactive}>
           {#if risqueBrut}
             <button
               class="lien-intitule-risque"
+              disabled={donnee.desactive}
               onclick={() => {
                 tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
                   idService,
@@ -158,11 +162,14 @@
           {/if}
         </div>
       {:else if colonne.cle === 'gravite'}
-        <div class="colonne-gravite">
+        <div class="colonne-gravite colonne" class:inactif={donnee.desactive}>
           <Niveau niveau={donnee.gravite} />
         </div>
       {:else if colonne.cle === 'vraisemblance'}
-        <div class="colonne-vraisemblance">
+        <div
+          class="colonne-vraisemblance colonne"
+          class:inactif={donnee.desactive}
+        >
           <Niveau niveau={donnee.vraisemblance} />
         </div>
       {:else if colonne.cle === 'actions'}
@@ -187,7 +194,7 @@
     background: unset;
   }
 
-  :global(tr:has(.lien-intitule-risque:hover)) {
+  :global(tr:has(.colonne:not(.inactif) .lien-intitule-risque:hover)) {
     box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
   }
 
@@ -302,8 +309,20 @@
       margin-bottom: 24px;
     }
 
+    .colonne.inactif {
+      opacity: 0.5;
+    }
+
     .colonne-identifiant {
       width: 168px;
+    }
+
+    .colonne:not(.inactif) .lien-intitule-risque {
+      cursor: pointer;
+
+      &:hover span {
+        color: var(--bleu-mise-en-avant);
+      }
     }
 
     .colonne-intitule {
@@ -315,16 +334,15 @@
         outline: none;
         background: none;
         text-align: left;
-        cursor: pointer;
 
         span {
           font-weight: 500;
         }
-
-        &:hover span {
-          color: var(--bleu-mise-en-avant);
-        }
       }
+    }
+
+    .colonne-actions {
+      min-width: 132px;
     }
   }
 </style>
