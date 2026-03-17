@@ -95,6 +95,7 @@
           is-step
           indicators={false}
           onvaluechanged={metAJourOpacite}
+          hideOutputLabel={true}
         ></dsfr-range>
         <div class="conteneur-legende-slider">
           <span>Risques bruts</span>
