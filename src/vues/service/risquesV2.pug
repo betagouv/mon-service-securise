@@ -17,6 +17,9 @@ block sous-titre
     br
     span recensez les risques identifiés dans le cadre d’une analyse de risque plus approfondie.
 
+block append scripts
+  +donneesPartagees('referentiel-statuts-mesures', referentiel.statutsMesures())
+
 block formulaire
   #conteneur-risques-v2
   +composantSvelte('risquesV2.js')
