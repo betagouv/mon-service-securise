@@ -9,6 +9,7 @@ import {
   DonneesRisqueV2,
   IdRisqueV2,
 } from './risquesV2.types.js';
+import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.js';
 
 const ovVersCategories = new Map<IdObjectifVise, CategorieRisque[]>([
   ['OV1', ['integrite']],
@@ -29,6 +30,7 @@ export class RisqueV2 {
     private readonly idVecteur: IdVecteurRisque,
     private readonly objectifsVises: Partial<Record<IdObjectifVise, Gravite>>,
     public readonly vraisemblance: Vraisemblance,
+    private readonly idsMesuresAssociees: Array<IdMesureV2>,
     donnees: DonneesRisqueV2 = {},
     private readonly configuration: ConfigurationRisqueV2 = configurationRisqueV2
   ) {
@@ -49,6 +51,7 @@ export class RisqueV2 {
       categories: this.categories,
       desactive: this.desactive,
       commentaire: this.commentaire,
+      mesuresAssociees: this.idsMesuresAssociees,
     };
   }
 
