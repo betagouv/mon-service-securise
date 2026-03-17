@@ -12,12 +12,14 @@
   import CartoucheIdentifiantRisque from './CartoucheIdentifiantRisque.svelte';
   import CartouchesRisqueV2 from './CartouchesRisqueV2.svelte';
   import Toaster from '../ui/Toaster.svelte';
+  import type { ReferentielStatut } from '../ui/types';
 
   interface Props {
     idService: string;
+    statuts: ReferentielStatut;
   }
 
-  let { idService }: Props = $props();
+  let { idService, statuts }: Props = $props();
 
   let risques: TousRisques = $state({
     risquesBruts: [],
@@ -155,6 +157,7 @@
                   idService,
                   risque: donnee,
                   risqueBrut,
+                  statuts,
                 });
               }}
             >

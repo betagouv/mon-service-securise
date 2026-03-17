@@ -220,6 +220,7 @@ const routesConnectePageService = ({
 
       reponse.render('service/risquesV2', {
         InformationsService,
+        referentiel,
         service,
       });
     }

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Risque } from './risquesV2.d';
   import BadgesTiroirRisqueV2 from './BadgesTiroirRisqueV2.svelte';
-  import { untrack } from 'svelte';
+  import { onMount, untrack } from 'svelte';
   import ContenuTiroir from '../ui/tiroirs/ContenuTiroir.svelte';
   import Onglets from '../ui/Onglets.svelte';
   import { mappingNiveauGravite, mappingNiveauVraisemblance } from './kit';
@@ -10,14 +10,18 @@
   import { metsAJourRisque } from './risquesV2.api';
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import { toasterStore } from '../ui/stores/toaster.store';
+  import Tableau from '../ui/Tableau.svelte';
+  import TagStatutMesure from '../ui/TagStatutMesure.svelte';
+  import type { ReferentielStatut } from '../ui/types';
 
   interface Props {
     idService: string;
     risque: Risque;
     risqueBrut: Risque;
+    statuts: ReferentielStatut;
   }
 
-  let { idService, risque, risqueBrut }: Props = $props();
+  let { idService, risque, risqueBrut, statuts }: Props = $props();
 
   export const titre = untrack(() => risque.intitule);
   export const sousTitre = '';
@@ -42,6 +46,27 @@
     toasterStore.succes('Succès', `Le risque ${risque.id} a été mis à jour.`);
     tiroirStore.ferme();
   };
+
+  type MesureGenerale = {
+    description: string;
+    statut?: 'aLancer' | 'enCours' | 'fait' | 'nonFait';
+  };
+  type Mesures = {
+    mesuresGenerales: Record<string, MesureGenerale>;
+  };
+
+  let mesures: Mesures['mesuresGenerales'] | undefined = $state();
+  onMount(async () => {
+    const resultat = await axios.get<Mesures>(
+      `/api/service/${idService}/mesures`
+    );
+    mesures = resultat.data?.mesuresGenerales;
+  });
+
+  let mesuresAssociees = $derived.by(() => {
+    if (!mesures) return [];
+    return risque.mesuresAssociees.map((id) => mesures![id]);
+  });
 </script>
 
 <ContenuTiroir>
@@ -94,7 +119,32 @@
         </div>
       </div>
     {:else if ongletActif === 'mesuresAssociees'}
-      <p>Mesures</p>
+      <p class="intitule-mesures-associees">
+        Vous trouverez ci-dessous la liste des mesures pouvant avoir un impact
+        sur la vraisemblance des risques identifiés.
+      </p>
+      <Tableau
+        colonnes={[
+          { cle: 'description', libelle: 'Intitulé de la mesure' },
+          { cle: 'statut', libelle: 'Statut' },
+        ]}
+        donnees={mesuresAssociees}
+      >
+        {#snippet cellule({ donnee, colonne })}
+          {#if colonne.cle === 'description'}
+            <div class="description">
+              <span>{donnee.description}</span>
+            </div>
+          {:else if colonne.cle === 'statut'}
+            <div class="statut">
+              <TagStatutMesure
+                referentielStatuts={statuts}
+                statut={donnee.statut}
+              />
+            </div>
+          {/if}
+        {/snippet}
+      </Tableau>
     {/if}
   </div>
 </ContenuTiroir>
@@ -136,11 +186,20 @@
       flex-direction: column;
       gap: 32px;
     }
+
     p {
       margin: 0;
       display: flex;
       flex-direction: column;
       gap: 16px;
+    }
+
+    .intitule-mesures-associees {
+      margin-bottom: 32px;
+    }
+
+    .statut {
+      min-width: 80px;
     }
 
     .niveaux-risque {
