@@ -50,6 +50,7 @@
   type MesureGenerale = {
     description: string;
     statut?: 'aLancer' | 'enCours' | 'fait' | 'nonFait';
+    id: string;
   };
   type Mesures = {
     mesuresGenerales: Record<string, MesureGenerale>;
@@ -65,7 +66,7 @@
 
   let mesuresAssociees = $derived.by(() => {
     if (!mesures) return [];
-    return risque.mesuresAssociees.map((id) => mesures![id]);
+    return risque.mesuresAssociees.map((id) => ({ ...mesures![id], id }));
   });
 </script>
 
@@ -133,7 +134,13 @@
         {#snippet cellule({ donnee, colonne })}
           {#if colonne.cle === 'description'}
             <div class="description">
-              <span>{donnee.description}</span>
+              <a
+                href="/service/{idService}/mesures?idMesure={donnee.id}"
+                target="_blank"
+                class="mesure-cliquable"
+              >
+                <span>{donnee.description}</span>
+              </a>
             </div>
           {:else if colonne.cle === 'statut'}
             <div class="statut">
@@ -151,6 +158,7 @@
 <ActionsTiroir>
   <div class="actions">
     <Switch bind:actif id="risque-tiroir-{risque.id}-actif" />
+    <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
     <dsfr-button
       label="Enregistrer les modifications"
       kind="primary"
@@ -200,6 +208,15 @@
 
     .statut {
       min-width: 80px;
+    }
+
+    .mesure-cliquable {
+      text-decoration: none;
+      color: #3a3a3a;
+
+      &:hover {
+        color: var(--bleu-mise-en-avant);
+      }
     }
 
     .niveaux-risque {
