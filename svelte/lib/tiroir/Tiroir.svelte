@@ -23,9 +23,15 @@
           Fermer
         </button>
         <h2 class="titre-tiroir">{configuration?.titre}</h2>
-        <p class="texte-tiroir">
-          {configuration?.sousTitre}
-        </p>
+        {#if configuration?.sousTitre}
+          <p class="texte-tiroir">
+            {configuration.sousTitre}
+          </p>
+        {/if}
+        {#if configuration?.composantEntete}
+          {@const ComposantEntete = configuration.composantEntete}
+          <ComposantEntete />
+        {/if}
       </div>
       {@const Composant = $tiroirStore.contenu.composant}
       <Composant bind:this={composant} {...$tiroirStore.contenu.props} />
@@ -75,7 +81,7 @@
 
   .titre-tiroir {
     font-size: 1.6em;
-    margin: 0;
+    margin: 0 100px 0 0;
   }
 
   .texte-tiroir {

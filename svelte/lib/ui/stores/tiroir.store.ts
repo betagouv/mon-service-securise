@@ -3,8 +3,9 @@ import type { ComponentProps, Component } from 'svelte';
 
 export type ConfigurationTiroir = {
   titre: string;
-  sousTitre: string;
+  sousTitre?: string;
   taille?: 'normal' | 'large';
+  composantEntete?: Component;
 };
 
 type TiroirStoreProps<TComposant extends Component = Component> = {
