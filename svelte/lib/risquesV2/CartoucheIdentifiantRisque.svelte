@@ -14,3 +14,9 @@
 
 <dsfr-badge {label} type="accent" accent={mappingCouleursDSFR[laCouleur]}
 ></dsfr-badge>
+
+<style lang="scss">
+  dsfr-badge {
+    height: fit-content;
+  }
+</style>

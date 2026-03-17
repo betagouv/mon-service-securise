@@ -11,6 +11,7 @@
   import { tiroirStore } from '../ui/stores/tiroir.store';
   import TiroirRisqueGeneralV2 from './TiroirRisqueGeneralV2.svelte';
   import CartoucheIdentifiantRisque from './CartoucheIdentifiantRisque.svelte';
+  import CartouchesRisqueV2 from './CartouchesRisqueV2.svelte';
 
   interface Props {
     idService: string;
@@ -138,12 +139,7 @@
             }}
           >
             <span>{donnee.intitule}</span>
-            <div class="tags">
-              <dsfr-tag label="ANSSI"></dsfr-tag>
-              {#each donnee.categories as categorie (categorie)}
-                <dsfr-tag label={mappingNomCategories[categorie]}></dsfr-tag>
-              {/each}
-            </div>
+            <CartouchesRisqueV2 risque={donnee} />
           </button>
         </div>
       {:else if colonne.cle === 'gravite'}
@@ -314,11 +310,6 @@
           color: var(--bleu-mise-en-avant);
         }
       }
-    }
-
-    .tags {
-      display: flex;
-      gap: 8px;
     }
   }
 </style>
