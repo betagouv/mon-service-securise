@@ -1,7 +1,7 @@
 <script lang="ts">
   import MatriceRisquesV2 from './MatriceRisquesV2.svelte';
   import { onMount } from 'svelte';
-  import type { TousRisques } from './risquesV2.d';
+  import type { Risque, TousRisques } from './risquesV2.d';
   import * as api from './risquesV2.api';
   import { metsAJourRisque } from './risquesV2.api';
   import Tableau from '../ui/Tableau.svelte';
@@ -39,13 +39,22 @@
   const metAJourOpacite = (e: CustomEvent<number>) => (opacite = e.detail);
 
   const metsAJourDesactivationRisque = async (
-    idRisque: string,
+    risque: Risque,
     desactive: boolean
   ) => {
-    await metsAJourRisque(idService, idRisque, desactive);
+    await metsAJourRisque(idService, risque.id, {
+      desactive,
+      commentaire: risque.commentaire,
+    });
+    await rafraichisRisques();
+  };
+
+  const rafraichisRisques = async () => {
     risques = await api.recupereRisques(idService);
   };
 </script>
+
+<svelte:body on:risques-v2-modifies={rafraichisRisques} />
 
 <div class="conteneur">
   <div class="entete">
@@ -137,6 +146,7 @@
               class="lien-intitule-risque"
               onclick={() => {
                 tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
+                  idService,
                   risque: donnee,
                   risqueBrut,
                 });
@@ -163,7 +173,7 @@
             }
             id="risque-{donnee.id}-actif"
             onChange={async (actif) =>
-              await metsAJourDesactivationRisque(donnee.id, !actif)}
+              await metsAJourDesactivationRisque(donnee, !actif)}
           />
         </div>
       {/if}

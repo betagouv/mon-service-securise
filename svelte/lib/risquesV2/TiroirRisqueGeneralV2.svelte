@@ -7,13 +7,16 @@
   import { mappingNiveauGravite, mappingNiveauVraisemblance } from './kit';
   import ActionsTiroir from '../ui/tiroirs/ActionsTiroir.svelte';
   import Switch from '../ui/Switch.svelte';
+  import { metsAJourRisque } from './risquesV2.api';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
 
   interface Props {
+    idService: string;
     risque: Risque;
     risqueBrut: Risque;
   }
 
-  let { risque, risqueBrut }: Props = $props();
+  let { idService, risque, risqueBrut }: Props = $props();
 
   export const titre = untrack(() => risque.intitule);
   export const sousTitre = '';
@@ -28,6 +31,15 @@
   };
 
   let actif = $state(untrack(() => !risque.desactive));
+
+  const metsAJour = async () => {
+    await metsAJourRisque(idService, risque.id, {
+      desactive: !actif,
+      commentaire,
+    });
+    document.body.dispatchEvent(new CustomEvent('risques-v2-modifies'));
+    tiroirStore.ferme();
+  };
 </script>
 
 <ContenuTiroir>
@@ -94,6 +106,7 @@
       has-icon
       icon="save-line"
       icon-place="left"
+      onclick={metsAJour}
     ></dsfr-button>
   </div>
 </ActionsTiroir>
