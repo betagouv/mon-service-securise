@@ -63,17 +63,23 @@ export class MoteurRisquesV2 {
     );
 
     return Object.entries(gravitesParVecteur).map(([id, ovs]) => {
+      const configVraisemblance =
+        configurationVraisemblance[id as IdVecteurRisque];
       const vraisemblance = new VraisemblanceRisque(
-        configurationVraisemblance[id as IdVecteurRisque]
+        configVraisemblance
       ).calculePourService(this.descriptionService.niveauSecurite, mesures);
 
       const idRisque = RisqueV2.idPourVecteur(id as IdVecteurRisque);
       const donneesRisque = this.donnees[idRisque];
+      const mesuresAssociees = Object.values(
+        configVraisemblance[this.descriptionService.niveauSecurite]!.groupes
+      ).flatMap((groupe) => groupe.idsMesures);
 
       return new RisqueV2(
         id as IdVecteurRisque,
         ovs,
         vraisemblance,
+        mesuresAssociees,
         donneesRisque
       );
     });

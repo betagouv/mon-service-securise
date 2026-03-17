@@ -108,5 +108,20 @@ describe('Le moteur de risques V2', () => {
       expect(risqueR3.commentaire).toBe('un commentaire');
       expect(risqueR3.desactive).toBe(true);
     });
+
+    it('sait donner les mesures associées au risque', () => {
+      const moteur = new MoteurRisquesV2(
+        uneDescriptionV2Valide().avecNiveauSecurite('niveau1').construis(),
+        {}
+      );
+
+      const risqueR3 = moteur.risques()[0].toJSON();
+      expect(risqueR3.mesuresAssociees).toEqual([
+        'MCO_MCS.14',
+        'MCO_MCS.5',
+        'MCO_MCS.6',
+        'CONTRAT.1',
+      ]);
+    });
   });
 });
