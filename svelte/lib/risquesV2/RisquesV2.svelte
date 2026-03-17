@@ -3,11 +3,14 @@
   import { onMount } from 'svelte';
   import type { TousRisques } from './risquesV2.d';
   import * as api from './risquesV2.api';
+  import { metsAJourRisque } from './risquesV2.api';
   import Tableau from '../ui/Tableau.svelte';
-  import { couleur, mappingCouleursDSFR, mappingNomCategories } from './kit';
+  import { mappingNomCategories } from './kit';
   import Niveau from './Niveau.svelte';
   import Switch from '../ui/Switch.svelte';
-  import { metsAJourRisque } from './risquesV2.api';
+  import { tiroirStore } from '../ui/stores/tiroir.store';
+  import TiroirRisqueGeneralV2 from './TiroirRisqueGeneralV2.svelte';
+  import CartoucheIdentifiantRisque from './CartoucheIdentifiantRisque.svelte';
 
   interface Props {
     idService: string;
@@ -121,24 +124,27 @@
   >
     {#snippet cellule({ donnee, colonne })}
       {#if colonne.cle === 'id'}
-        {@const label = `${donnee.id.replace('R', 'Risque ')} (${donnee.id})`}
-        {@const laCouleur = couleur(donnee.gravite, donnee.vraisemblance)}
         <div class="colonne-identifiant">
-          <dsfr-badge
-            {label}
-            type="accent"
-            accent={mappingCouleursDSFR[laCouleur]}
-          ></dsfr-badge>
+          <CartoucheIdentifiantRisque risque={donnee} />
         </div>
       {:else if colonne.cle === 'intitule'}
         <div class="colonne-intitule">
-          <span>{donnee.intitule}</span>
-          <div class="tags">
-            <dsfr-tag label="ANSSI"></dsfr-tag>
-            {#each donnee.categories as categorie (categorie)}
-              <dsfr-tag label={mappingNomCategories[categorie]}></dsfr-tag>
-            {/each}
-          </div>
+          <button
+            class="lien-intitule-risque"
+            onclick={() => {
+              tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
+                risque: donnee,
+              });
+            }}
+          >
+            <span>{donnee.intitule}</span>
+            <div class="tags">
+              <dsfr-tag label="ANSSI"></dsfr-tag>
+              {#each donnee.categories as categorie (categorie)}
+                <dsfr-tag label={mappingNomCategories[categorie]}></dsfr-tag>
+              {/each}
+            </div>
+          </button>
         </div>
       {:else if colonne.cle === 'gravite'}
         <div class="colonne-gravite">
@@ -168,6 +174,10 @@
   /* Annule la couleur `fond-pale` positionnée par le pug */
   :global(.zone-principale) {
     background: unset;
+  }
+
+  :global(tr:has(.lien-intitule-risque:hover)) {
+    box-shadow: 0 12px 16px 0 rgba(0, 121, 208, 0.12);
   }
 
   .conteneur {
@@ -286,9 +296,24 @@
     }
 
     .colonne-intitule {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      .lien-intitule-risque {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        border: none;
+        outline: none;
+        background: none;
+        text-align: left;
+        cursor: pointer;
+
+        span {
+          font-weight: 500;
+        }
+
+        &:hover span {
+          color: var(--bleu-mise-en-avant);
+        }
+      }
     }
 
     .tags {

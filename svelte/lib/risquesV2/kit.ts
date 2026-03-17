@@ -1,4 +1,9 @@
-export const couleur = (gravite: number, vraisemblance: number) => {
+export type CouleurNiveauRisque = 'vert' | 'rouge' | 'orange';
+
+export const couleur = (
+  gravite: number,
+  vraisemblance: number
+): CouleurNiveauRisque => {
   const niveauRisque = gravite * vraisemblance;
   return niveauRisque <= 4 && vraisemblance < 3 && gravite < 4
     ? 'vert'
@@ -7,7 +12,7 @@ export const couleur = (gravite: number, vraisemblance: number) => {
       : 'orange';
 };
 
-export const mappingCouleursDSFR = {
+export const mappingCouleursDSFR: Record<CouleurNiveauRisque, string> = {
   vert: 'green-emeraude',
   orange: 'yellow-moutarde',
   rouge: 'pink-macaron',
