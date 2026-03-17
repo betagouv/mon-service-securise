@@ -24,6 +24,7 @@ class ConstructeurBrouillonService {
       volumetrieDonneesTraitees: 'moyen',
       statutDeploiement: 'enCours',
       presentation: 'Le service A …',
+      niveauSecurite: 'niveau3',
     };
   }
 

@@ -1435,18 +1435,18 @@ describe('Un service', () => {
 
   describe('sur demande de ses risques V2', () => {
     describe('un service V1', () => {
-      it("n'a pas connaissance du moteur de règles", () => {
+      it("n'a pas connaissance des risques v2", () => {
         const service = unService().construis();
 
-        expect(service.moteurRisques).toBeUndefined();
+        expect(service.risquesV2).toBeUndefined();
       });
     });
 
     describe('un service V2', () => {
-      it('connait son moteur de règles', () => {
+      it('connait ses risques', () => {
         const service = unServiceV2().construis();
 
-        expect(service.moteurRisques).toBeDefined();
+        expect(service.risquesV2).toBeDefined();
       });
     });
   });

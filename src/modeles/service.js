@@ -222,9 +222,10 @@ class Service {
       prochainIdNumeriqueDeRisqueSpecifique:
         this.prochainIdNumeriqueDeRisqueSpecifique,
       versionService: this.versionService,
-      ...(this.version() === VersionService.v2 && {
-        risquesV2: this.risquesV2.donneesSerialisees(),
-      }),
+      ...(this.version() === VersionService.v2 &&
+        this.risquesV2 && {
+          risquesV2: this.risquesV2.donneesSerialisees(),
+        }),
     });
   }
 
