@@ -3,6 +3,8 @@
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
+  import type { ChangeEventHandler } from 'svelte/elements';
+  import type { VolumetrieDonneesTraitees } from '../../creationV2.types';
 
   interface Props {
     estComplete: boolean;
@@ -15,11 +17,12 @@
     estComplete = !!$leBrouillon.volumetrieDonneesTraitees;
   });
 
-  $effect(() => {
+  const metsAJour: ChangeEventHandler<HTMLInputElement> = (e) => {
     onChampModifie({
-      volumetrieDonneesTraitees: $leBrouillon.volumetrieDonneesTraitees,
+      volumetrieDonneesTraitees: e.currentTarget
+        .value as VolumetrieDonneesTraitees,
     });
-  });
+  };
 </script>
 
 <label for="volumetrie-donnees" class="titre-question">
@@ -32,6 +35,7 @@
       {nom}
       exemple={description}
       bind:valeur={$leBrouillon.volumetrieDonneesTraitees}
+      onchange={metsAJour}
     />
   {/each}
 </label>

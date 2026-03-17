@@ -4,6 +4,7 @@
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
   import type { LocalisationDonneesTraitees } from '../../creationV2.types';
+  import type { ChangeEventHandler } from 'svelte/elements';
 
   interface Props {
     estComplete: boolean;
@@ -16,11 +17,12 @@
     estComplete = !!$leBrouillon.localisationDonneesTraitees;
   });
 
-  $effect(() => {
+  const metsAJour: ChangeEventHandler<HTMLInputElement> = (e) => {
     onChampModifie({
-      localisationDonneesTraitees: $leBrouillon.localisationDonneesTraitees,
+      localisationDonneesTraitees: e.currentTarget
+        .value as LocalisationDonneesTraitees,
     });
-  });
+  };
 
   const illustrations: Record<LocalisationDonneesTraitees, string> = {
     UE: 'UE.svg',
@@ -42,6 +44,7 @@
       {nom}
       {illustration}
       bind:valeur={$leBrouillon.localisationDonneesTraitees}
+      onchange={metsAJour}
     />
   {/each}
 </label>
