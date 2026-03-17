@@ -5,7 +5,6 @@
   import * as api from './risquesV2.api';
   import { metsAJourRisque } from './risquesV2.api';
   import Tableau from '../ui/Tableau.svelte';
-  import { mappingNomCategories } from './kit';
   import Niveau from './Niveau.svelte';
   import Switch from '../ui/Switch.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
@@ -129,18 +128,24 @@
           <CartoucheIdentifiantRisque risque={donnee} />
         </div>
       {:else if colonne.cle === 'intitule'}
+        {@const risqueBrut = risques.risquesBruts.find(
+          (r) => r.id === donnee.id
+        )}
         <div class="colonne-intitule">
-          <button
-            class="lien-intitule-risque"
-            onclick={() => {
-              tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
-                risque: donnee,
-              });
-            }}
-          >
-            <span>{donnee.intitule}</span>
-            <CartouchesRisqueV2 risque={donnee} />
-          </button>
+          {#if risqueBrut}
+            <button
+              class="lien-intitule-risque"
+              onclick={() => {
+                tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
+                  risque: donnee,
+                  risqueBrut,
+                });
+              }}
+            >
+              <span>{donnee.intitule}</span>
+              <CartouchesRisqueV2 risque={donnee} />
+            </button>
+          {/if}
         </div>
       {:else if colonne.cle === 'gravite'}
         <div class="colonne-gravite">

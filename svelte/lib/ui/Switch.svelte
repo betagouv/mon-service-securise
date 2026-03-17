@@ -4,7 +4,7 @@
     id: string;
     labelActif?: string;
     labelInactif?: string;
-    onChange: (actif: boolean) => void;
+    onChange?: (actif: boolean) => void;
   }
 
   let {
@@ -17,7 +17,7 @@
 
   const gereChangementEtat = () => {
     actif = !actif;
-    onChange(actif);
+    onChange?.(actif);
   };
 </script>
 
