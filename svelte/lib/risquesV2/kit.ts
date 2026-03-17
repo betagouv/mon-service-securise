@@ -1,3 +1,5 @@
+import type { Niveau } from './risquesV2.d';
+
 export type CouleurNiveauRisque = 'vert' | 'rouge' | 'orange';
 
 export const couleur = (
@@ -23,4 +25,18 @@ export const mappingNomCategories: Record<string, string> = {
   integrite: 'Intégrité',
   confidentialite: 'Confidentialité',
   tracabilite: 'Traçabilité',
+};
+
+export const mappingNiveauGravite: Record<Niveau, string> = {
+  1: 'Minime',
+  2: 'Significatif',
+  3: 'Grave',
+  4: 'Critique',
+};
+
+export const mappingNiveauVraisemblance: Record<Niveau, string> = {
+  1: 'Peu vraisemblable',
+  2: 'Vraisemblable',
+  3: 'Très vraisemblable',
+  4: 'Quasi-certain',
 };
