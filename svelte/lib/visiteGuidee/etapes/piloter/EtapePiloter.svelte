@@ -68,7 +68,7 @@
       return {
         cible: cibleNouveauService,
         positionnementModale: 'HautGauche',
-        margesElementMisEnAvant: '3 3 -3 3',
+        margesElementMisEnAvant: '3 3 3 3',
         callbackInitialeCible: async (cible) => {
           if (!cible) return;
           const cibleBouton = cible.getElementsByClassName(
