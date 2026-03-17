@@ -30,7 +30,7 @@
         {/if}
         {#if configuration?.composantEntete}
           {@const ComposantEntete = configuration.composantEntete}
-          <ComposantEntete />
+          <ComposantEntete {...configuration.propsComposantEntete} />
         {/if}
       </div>
       {@const Composant = $tiroirStore.contenu.composant}

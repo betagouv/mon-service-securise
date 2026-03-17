@@ -1,11 +1,15 @@
 import { writable } from 'svelte/store';
 import type { ComponentProps, Component } from 'svelte';
 
-export type ConfigurationTiroir = {
+export type ConfigurationTiroir<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TComposantEntete extends Component<any> = Component<any>,
+> = {
   titre: string;
   sousTitre?: string;
   taille?: 'normal' | 'large';
-  composantEntete?: Component;
+  composantEntete?: TComposantEntete;
+  propsComposantEntete?: ComponentProps<TComposantEntete>;
 };
 
 type TiroirStoreProps<TComposant extends Component = Component> = {
