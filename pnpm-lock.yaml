@@ -172,8 +172,8 @@ importers:
         specifier: ^8.56.1
         version: 8.56.1(eslint@9.39.3)(typescript@5.9.3)
       '@vitest/eslint-plugin':
-        specifier: ^1.6.9
-        version: 1.6.9(eslint@9.39.3)(typescript@5.9.3)(vitest@4.0.18(@types/node@22.18.3)(jsdom@21.1.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.0))
+        specifier: ^1.6.10
+        version: 1.6.10(eslint@9.39.3)(typescript@5.9.3)(vitest@4.0.18(@types/node@22.18.3)(jsdom@21.1.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.0))
       concurrently:
         specifier: ^9.2.1
         version: 9.2.1
@@ -1328,8 +1328,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@vitest/eslint-plugin@1.6.9':
-    resolution: {integrity: sha512-9WfPx1OwJ19QLCSRLkqVO7//1WcWnK3fE/3fJhKMAmDe8+9G4rB47xCNIIeCq3FdEzkIoLTfDlwDlPBaUTMhow==}
+  '@vitest/eslint-plugin@1.6.10':
+    resolution: {integrity: sha512-/cOf+mTu4HBJIYHTETo8/OFCSZv3T2p+KfGnouzKfjK063cWLZp0TzvK7EU5B3eFG7ypUNtw6l+jK+SA+p1g8g==}
     engines: {node: '>=18'}
     peerDependencies:
       eslint: '>=8.57.0'
@@ -5169,7 +5169,7 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
-  '@vitest/eslint-plugin@1.6.9(eslint@9.39.3)(typescript@5.9.3)(vitest@4.0.18(@types/node@22.18.3)(jsdom@21.1.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.0))':
+  '@vitest/eslint-plugin@1.6.10(eslint@9.39.3)(typescript@5.9.3)(vitest@4.0.18(@types/node@22.18.3)(jsdom@21.1.0)(sass@1.97.3)(tsx@4.21.0)(yaml@2.8.0))':
     dependencies:
       '@typescript-eslint/scope-manager': 8.56.1
       '@typescript-eslint/utils': 8.56.1(eslint@9.39.3)(typescript@5.9.3)
