@@ -9,6 +9,7 @@
   import Switch from '../ui/Switch.svelte';
   import { metsAJourRisque } from './risquesV2.api';
   import { tiroirStore } from '../ui/stores/tiroir.store';
+  import { toasterStore } from '../ui/stores/toaster.store';
 
   interface Props {
     idService: string;
@@ -38,6 +39,7 @@
       commentaire,
     });
     document.body.dispatchEvent(new CustomEvent('risques-v2-modifies'));
+    toasterStore.succes('Succès', `Le risque ${risque.id} a été mis à jour.`);
     tiroirStore.ferme();
   };
 </script>

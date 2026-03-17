@@ -11,6 +11,7 @@
   import TiroirRisqueGeneralV2 from './TiroirRisqueGeneralV2.svelte';
   import CartoucheIdentifiantRisque from './CartoucheIdentifiantRisque.svelte';
   import CartouchesRisqueV2 from './CartouchesRisqueV2.svelte';
+  import Toaster from '../ui/Toaster.svelte';
 
   interface Props {
     idService: string;
@@ -111,6 +112,7 @@
   </div>
 </div>
 
+<Toaster />
 <div class="conteneur-tableau">
   <h2>Risques</h2>
   <div class="sous-titre">
