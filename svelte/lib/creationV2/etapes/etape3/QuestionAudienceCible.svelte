@@ -3,6 +3,8 @@
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
+  import type { ChangeEventHandler } from 'svelte/elements';
+  import type { AudienceCible } from '../../creationV2.types';
 
   interface Props {
     estComplete: boolean;
@@ -15,11 +17,11 @@
     estComplete = !!$leBrouillon.audienceCible;
   });
 
-  $effect(() => {
+  const metsAJour: ChangeEventHandler<HTMLInputElement> = (e) => {
     onChampModifie({
-      audienceCible: $leBrouillon.audienceCible,
+      audienceCible: e.currentTarget.value as AudienceCible,
     });
-  });
+  };
 </script>
 
 <label for="statut-deploiement" class="titre-question">
@@ -38,6 +40,7 @@
       {nom}
       exemple={description}
       bind:valeur={$leBrouillon.audienceCible}
+      onchange={metsAJour}
     />
   {/each}
 </label>

@@ -3,6 +3,8 @@
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
+  import type { ChangeEventHandler } from 'svelte/elements';
+  import type { StatutDeploiement } from '../../creationV2.types';
 
   interface Props {
     estComplete: boolean;
@@ -15,11 +17,11 @@
     estComplete = !!$leBrouillon.statutDeploiement;
   });
 
-  $effect(() => {
+  const metsAJour: ChangeEventHandler<HTMLInputElement> = (e) => {
     onChampModifie({
-      statutDeploiement: $leBrouillon.statutDeploiement,
+      statutDeploiement: e.currentTarget.value as StatutDeploiement,
     });
-  });
+  };
 </script>
 
 <label for="statut-deploiement" class="titre-question">
@@ -31,6 +33,7 @@
       {id}
       nom={description}
       bind:valeur={$leBrouillon.statutDeploiement}
+      onchange={metsAJour}
     />
   {/each}
 </label>

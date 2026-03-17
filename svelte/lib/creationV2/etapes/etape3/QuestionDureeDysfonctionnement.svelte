@@ -3,6 +3,8 @@
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
+  import type { ChangeEventHandler } from 'svelte/elements';
+  import type { DureeDysfonctionnementAcceptable } from '../../creationV2.types';
 
   interface Props {
     estComplete: boolean;
@@ -15,12 +17,12 @@
     estComplete = !!$leBrouillon.dureeDysfonctionnementAcceptable;
   });
 
-  $effect(() => {
+  const metsAJour: ChangeEventHandler<HTMLInputElement> = (e) => {
     onChampModifie({
-      dureeDysfonctionnementAcceptable:
-        $leBrouillon.dureeDysfonctionnementAcceptable,
+      dureeDysfonctionnementAcceptable: e.currentTarget
+        .value as DureeDysfonctionnementAcceptable,
     });
-  });
+  };
 </script>
 
 <label for="duree-dysfonctionnement-acceptable" class="titre-question">
@@ -32,6 +34,7 @@
       id={idType}
       {nom}
       bind:valeur={$leBrouillon.dureeDysfonctionnementAcceptable}
+      onchange={metsAJour}
     />
   {/each}
 </label>

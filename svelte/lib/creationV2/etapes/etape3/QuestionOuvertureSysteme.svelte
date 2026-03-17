@@ -3,6 +3,8 @@
   import type { MiseAJour } from '../../creationV2.api';
   import { leBrouillon } from '../brouillon.store';
   import { questionsV2 } from '../../../../../donneesReferentielMesuresV2';
+  import type { ChangeEventHandler } from 'svelte/elements';
+  import type { OuvertureSysteme } from '../../creationV2.types';
 
   interface Props {
     estComplete: boolean;
@@ -15,11 +17,11 @@
     estComplete = !!$leBrouillon.ouvertureSysteme;
   });
 
-  $effect(() => {
+  const metsAJour: ChangeEventHandler<HTMLInputElement> = (e) => {
     onChampModifie({
-      ouvertureSysteme: $leBrouillon.ouvertureSysteme,
+      ouvertureSysteme: e.currentTarget.value as OuvertureSysteme,
     });
-  });
+  };
 </script>
 
 <label for="statut-deploiement" class="titre-question">
@@ -32,6 +34,7 @@
       {nom}
       {exemple}
       bind:valeur={$leBrouillon.ouvertureSysteme}
+      onchange={metsAJour}
     />
   {/each}
 </label>
