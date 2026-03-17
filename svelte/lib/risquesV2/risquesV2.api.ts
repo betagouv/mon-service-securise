@@ -10,9 +10,10 @@ export const recupereRisques = async (idService: string) => {
 export const metsAJourRisque = async (
   idService: string,
   idRisque: string,
-  desactive: boolean
+  { desactive, commentaire }: { desactive: boolean; commentaire?: string }
 ) => {
   await axios.put(`/api/service/${idService}/risques/v2/${idRisque}`, {
     desactive,
+    commentaire,
   });
 };
