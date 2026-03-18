@@ -103,7 +103,9 @@ describe("Un dossier d'homologation", () => {
       const dossierFinalise = new Dossier({ finalise: true });
 
       expect(() =>
-        dossierFinalise.enregistreDecision(new Date().toISOString(), 'unAn')
+        dossierFinalise.enregistreDecision(new Date().toISOString(), {
+          dureeHomologation: 'unAn',
+        })
       ).toThrowError(ErreurDossierDejaFinalise);
     });
 
@@ -111,10 +113,21 @@ describe("Un dossier d'homologation", () => {
       const dossier = new Dossier();
       const maintenant = new Date().toISOString();
 
-      dossier.enregistreDecision(maintenant, 'unAn');
+      dossier.enregistreDecision(maintenant, { dureeHomologation: 'unAn' });
 
       expect(dossier.decision.dateHomologation).toEqual(maintenant);
       expect(dossier.decision.dureeValidite).toEqual('unAn');
+    });
+
+    it('peut enregistrer un refus', () => {
+      const dossier = new Dossier();
+      const maintenant = new Date().toISOString();
+
+      dossier.enregistreDecision(maintenant, { refusee: true });
+
+      expect(dossier.decision.dateHomologation).toEqual(maintenant);
+      expect(dossier.decision.dureeValidite).toBeUndefined();
+      expect(dossier.decision.refusee).toBe(true);
     });
   });
 
@@ -544,6 +557,15 @@ describe("Un dossier d'homologation", () => {
         .construit();
 
       expect(dossierActif.estExpire()).toBe(false);
+    });
+
+    it("retourne 'true' si le dossier a été refusé", () => {
+      const dossierExpire = unDossier(referentiel)
+        .quiEstComplet()
+        .quiEstRefuse()
+        .construit();
+
+      expect(dossierExpire.estExpire()).toBe(true);
     });
   });
 

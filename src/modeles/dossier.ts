@@ -126,6 +126,8 @@ class Dossier extends InformationsService {
   }
 
   estExpire() {
+    if (this.decision.refusee) return true;
+
     const dateLimite = new Date(this.dateProchaineHomologation());
     return this.adaptateurHorloge.maintenant() > dateLimite;
   }
@@ -134,7 +136,7 @@ class Dossier extends InformationsService {
     if (this.estExpire()) return false;
 
     const moisBientotExpire = this.referentiel.nbMoisBientotExpire(
-      this.decision.dureeValidite
+      this.decision.dureeValidite!
     );
     const dateLimite = new Date(this.dateProchaineHomologation());
     const premierJourDuBientotExpire =
@@ -182,14 +184,19 @@ class Dossier extends InformationsService {
 
   enregistreDecision(
     dateHomologation: string,
-    dureeHomologation: DureeValidite
+    {
+      dureeHomologation,
+      refusee,
+    }: { dureeHomologation?: DureeValidite; refusee?: boolean }
   ) {
     if (this.finalise) throw new ErreurDossierDejaFinalise();
 
-    this.decision.enregistreDecisionValidee(
-      dateHomologation,
-      dureeHomologation
-    );
+    if (refusee) this.decision.enregistreDecisionRefusee(dateHomologation);
+    else
+      this.decision.enregistreDecisionValidee(
+        dateHomologation,
+        dureeHomologation!
+      );
   }
 
   enregistreFinalisation(

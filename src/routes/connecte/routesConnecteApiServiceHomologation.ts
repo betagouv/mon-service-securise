@@ -74,7 +74,9 @@ export const routesConnecteApiServiceHomologation = ({
       const { service, dossierCourant } =
         requete as unknown as RequeteAvecServiceEtDossierCourant;
 
-      dossierCourant.enregistreDecision(dateHomologation, dureeValidite);
+      dossierCourant.enregistreDecision(dateHomologation, {
+        dureeHomologation: dureeValidite,
+      });
       await depotDonnees.enregistreDossier(service.id, dossierCourant);
 
       reponse.sendStatus(204);
