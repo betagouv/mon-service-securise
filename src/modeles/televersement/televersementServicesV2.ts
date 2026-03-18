@@ -106,10 +106,9 @@ class TeleversementServicesV2 {
         dossierMetier.declareSansDocument();
         const dateIso = decision.dateHomologation.toISOString();
         dossierMetier.enregistreDateTelechargement(dateIso);
-        dossierMetier.enregistreDecision(
-          dateIso,
-          decision.dureeValidite as DureeValidite
-        );
+        dossierMetier.enregistreDecision(dateIso, {
+          dureeHomologation: decision.dureeValidite as DureeValidite,
+        });
         dossierMetier.declareImporte();
         await busEvenements.publie(
           new EvenementDossierHomologationImporte({

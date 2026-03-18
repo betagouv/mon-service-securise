@@ -155,24 +155,23 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     });
 
     it("utilise le dépôt pour enregistrer la décision d'homologation", async () => {
-      let depotAppele = false;
+      let donneesRecues;
 
-      testeur.depotDonnees().enregistreDossier = (
+      testeur.depotDonnees().enregistreDossier = async (
         idHomologation: UUID,
         dossier: Dossier
       ) => {
-        depotAppele = true;
-        expect(idHomologation).toEqual('456');
-        expect(dossier.decision.dateHomologation).toEqual('2023-01-01');
-        expect(dossier.decision.dureeValidite).toEqual('unAn');
-        return Promise.resolve();
+        donneesRecues = { idHomologation, decision: dossier.decision };
       };
 
       await testeur.put('/api/service/456/homologation/decision', {
         dateHomologation: '2023-01-01',
         dureeValidite: 'unAn',
       });
-      expect(depotAppele).toBe(true);
+
+      expect(donneesRecues!.idHomologation).toEqual('456');
+      expect(donneesRecues!.decision.dureeValidite).toEqual('unAn');
+      expect(donneesRecues!.decision.dateHomologation).toEqual('2023-01-01');
     });
   });
 
