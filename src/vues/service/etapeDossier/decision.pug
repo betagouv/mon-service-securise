@@ -17,12 +17,21 @@ block contenu-etape
       <strong>Décision de l'homologation de sécurité</strong>.
 
     .requis
-      label Date d'homologation
-        .infos-complementaires Cette date correspond à la date de signature de l'autorité d'homologation.
+      label Date de la commission d'homologation
+        .infos-complementaires
         input(id = 'date-homologation' nom = 'dateHomologation', type = 'date', required, value = dossierCourant.decision.dateHomologation)
         .message-erreur Ce champ est obligatoire. Veuillez saisir une date.
 
     .requis
+      +inputOuiNon({
+        nom: 'validee',
+        titre: "Validation de l'homologation",
+        objetDonnees: {validee: !dossierCourant.decision.refusee},
+        messageErreur: 'Ce champ est obligatoire. Veuillez choisir une option.',
+        requis: true,
+      })
+
+    .requis(id="conteneur-duree-validite")
       +inputChoix({
         type: 'radio',
         nom: 'dureeValidite',
