@@ -67,15 +67,16 @@ export const routesConnecteApiServiceHomologation = ({
     '/:id/homologation/decision',
     middleware.trouveService({ [HOMOLOGUER]: ECRITURE }),
     middleware.trouveDossierCourant,
-    valideBody(z.strictObject(schemaPutDecisionHomologation(referentielV2))),
+    valideBody(schemaPutDecisionHomologation(referentielV2)),
     async (requete, reponse) => {
-      const { dateHomologation, dureeValidite } = requete.body;
+      const { dateHomologation, dureeValidite, refusee } = requete.body;
 
       const { service, dossierCourant } =
         requete as unknown as RequeteAvecServiceEtDossierCourant;
 
       dossierCourant.enregistreDecision(dateHomologation, {
         dureeHomologation: dureeValidite,
+        refusee,
       });
       await depotDonnees.enregistreDossier(service.id, dossierCourant);
 
