@@ -269,6 +269,8 @@ class Dossier extends InformationsService {
   statutHomologation() {
     if (!this.finalise) return 'nonRealisee';
 
+    if (this.estRefuse()) return 'refusee';
+
     if (this.estBientotExpire()) return 'bientotExpiree';
 
     const activeDansLeFutur =
