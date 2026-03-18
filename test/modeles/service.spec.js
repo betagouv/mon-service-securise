@@ -1248,6 +1248,20 @@ describe('Un service', () => {
       expect(service.actionRecommandee().id).toBe('homologuerANouveau');
     });
 
+    it("retourne 'homologuerANouveau' si le service n'a pas de dossier actif mais a au moins un dossier refusé", () => {
+      const service = unServiceV2(referentielV2)
+        .avecDossiers([
+          unDossier(referentielV2)
+            .quiEstComplet()
+            .quiEstRefuse()
+            .quiEstArchive().donnees,
+        ])
+        .avecNContributeurs(1)
+        .construis();
+
+      expect(service.actionRecommandee().id).toBe('homologuerService');
+    });
+
     it("retourne 'inviterContributeur' si le service n'a qu'un contributeur, un taux de complétion inférieur à 80% et indice cyber inférieur à 4", () => {
       const service = unServiceV2()
         .avecNContributeurs(1)

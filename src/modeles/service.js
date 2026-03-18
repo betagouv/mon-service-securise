@@ -417,6 +417,9 @@ class Service {
     if (this.dossiers.dossierActif()?.statutHomologation() === 'expiree')
       return Service.ACTIONS_RECOMMANDEES.HOMOLOGUER_A_NOUVEAU;
 
+    if (!this.dossiers.dossierActif() && this.dossiers.refuses().length > 0)
+      return Service.ACTIONS_RECOMMANDEES.HOMOLOGUER_SERVICE;
+
     const completude = this.completudeMesures();
     const pourcentageCompletude =
       completude.nombreMesuresCompletes / completude.nombreTotalMesures || 0;
