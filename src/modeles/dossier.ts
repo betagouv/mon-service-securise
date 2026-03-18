@@ -221,6 +221,10 @@ class Dossier extends InformationsService {
     this.finalise = true;
     this.indiceCyber = indiceCyber;
     this.indiceCyberPersonnalise = indiceCyberPersonnalise;
+
+    if (this.estRefuse()) {
+      this.enregistreArchivage();
+    }
   }
 
   declareImporte() {
