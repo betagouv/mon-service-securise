@@ -98,11 +98,13 @@ class Decision extends Etape {
   ) {
     this.dateHomologation = dateHomologation;
     this.dureeValidite = dureeValidite;
+    this.refusee = undefined;
   }
 
   enregistreDecisionRefusee(dateHomologation: string) {
     this.dateHomologation = dateHomologation;
     this.refusee = true;
+    this.dureeValidite = undefined;
   }
 
   estComplete() {
