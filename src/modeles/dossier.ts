@@ -126,7 +126,7 @@ class Dossier extends InformationsService {
   }
 
   estRefuse() {
-    return this.decision.refusee;
+    return !!this.decision?.refusee;
   }
 
   estExpire() {
