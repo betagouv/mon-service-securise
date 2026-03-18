@@ -32,7 +32,17 @@ class Dossiers extends ElementsConstructibles<Dossier> {
 
   archives() {
     return this.items
-      .filter((i) => i.archive)
+      .filter((i) => i.archive && !i.estRefuse())
+      .sort(
+        (a, b) =>
+          new Date(b.dateProchaineHomologation()).getTime() -
+          new Date(a.dateProchaineHomologation()).getTime()
+      );
+  }
+
+  refuses() {
+    return this.items
+      .filter((i) => i.archive && i.estRefuse())
       .sort(
         (a, b) =>
           new Date(b.dateProchaineHomologation()).getTime() -
@@ -74,9 +84,12 @@ class Dossiers extends ElementsConstructibles<Dossier> {
         []
       );
 
-    this.items.forEach((dossier) => {
-      if (dossier !== this.dossierCourant()) dossier.enregistreArchivage();
-    });
+    if (!this.dossierCourant().estRefuse()) {
+      this.items.forEach((dossier) => {
+        if (dossier !== this.dossierCourant()) dossier.enregistreArchivage();
+      });
+    }
+
     this.dossierCourant().enregistreFinalisation(
       indiceCyber,
       indiceCyberPersonnalise

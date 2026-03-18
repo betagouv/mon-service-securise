@@ -152,9 +152,9 @@ class ConstructeurDossierFantaisie {
     return this;
   }
 
-  quiEstRefuse() {
+  quiEstRefuse(dateHomologation = '2023-01-01') {
     this.donnees.decision = {
-      dateHomologation: '2023-01-01',
+      dateHomologation,
       refusee: true,
     };
     return this;

@@ -203,6 +203,27 @@ describe('Les dossiers liés à un service', () => {
       expect(dossierAFinaliser.indiceCyberPersonnalise).toBe(4.5);
     });
 
+    it("s'archive et n'archive pas les autres dossiers si le dossier courant est refusé", () => {
+      const deuxDossiers = new Dossiers(
+        {
+          dossiers: [
+            unDossierComplet(unUUID('1')).donnees,
+            unDossierComplet(unUUID('2')).quiEstNonFinalise().quiEstRefuse()
+              .donnees,
+          ],
+        },
+        referentiel
+      );
+
+      deuxDossiers.finaliseDossierCourant(3.5, 4.5);
+
+      const [dossierAConserver, dossierRefuse] = deuxDossiers.items;
+      expect(dossierAConserver.id).toEqual(unUUID('1'));
+      expect(dossierAConserver.archive).not.toBe(true);
+      expect(dossierRefuse.id).toEqual(unUUID('2'));
+      expect(dossierRefuse.archive).toBe(true);
+    });
+
     it("jette une erreur si aucun dossier courant n'existe", () => {
       const sansDossierCourant = new Dossiers(
         { dossiers: [unDossierComplet().donnees] },
@@ -274,6 +295,33 @@ describe('Les dossiers liés à un service', () => {
     });
   });
 
+  describe('sur demande des dossiers refusés', () => {
+    it("retourne seulement les dossiers refusés dans l'ordre décroissant des dates d'échéances", () => {
+      const dossiers = new Dossiers(
+        {
+          dossiers: [
+            unDossier(referentiel)
+              .avecId(unUUID('d'))
+              .quiEstComplet()
+              .quiEstRefuse('01/01/2023')
+              .quiEstArchive().donnees,
+            unDossier(referentiel)
+              .avecId(unUUID('p'))
+              .quiEstComplet()
+              .quiEstRefuse('01/01/2024')
+              .quiEstArchive().donnees,
+          ],
+        },
+        referentiel
+      );
+
+      const refuses = dossiers.refuses();
+
+      expect(refuses[0].id).toBe(unUUID('p'));
+      expect(refuses[1].id).toBe(unUUID('d'));
+    });
+  });
+
   describe('sur demande des dossiers archivés', () => {
     it('retournent seulement les dossiers avec la propriété `archive` valant `true`', () => {
       const dossiers = new Dossiers(
@@ -296,6 +344,24 @@ describe('Les dossiers liés à un service', () => {
       const archives = dossiers.archives();
       expect(archives.length).toBe(1);
       expect(archives[0].id).toBe(unUUID('a'));
+    });
+
+    it('exclus les dossiers refusés archivés', () => {
+      const dossiers = new Dossiers(
+        {
+          dossiers: [
+            unDossier(referentiel)
+              .avecId(unUUID('a'))
+              .quiEstComplet()
+              .quiEstRefuse()
+              .quiEstArchive().donnees,
+          ],
+        },
+        referentiel
+      );
+
+      const archives = dossiers.archives();
+      expect(archives.length).toBe(0);
     });
 
     it("retournent les dossiers archives dans l'ordre décroissant des dates d'échéances", () => {
