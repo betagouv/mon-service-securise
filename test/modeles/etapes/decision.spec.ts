@@ -9,7 +9,15 @@ describe('Une étape « Décision »', () => {
   const referentiel = creeReferentielVide();
 
   beforeEach(() =>
-    referentiel.recharge({ echeancesRenouvellement: { unAn: {} } })
+    referentiel.recharge({
+      echeancesRenouvellement: {
+        // @ts-expect-error on utilise un référentiel partiel
+        unAn: {
+          description: '1 an',
+          nbMoisDecalage: 12,
+        },
+      },
+    })
   );
 
   it('sait se convertir en JSON', () => {
@@ -44,9 +52,6 @@ describe('Une étape « Décision »', () => {
 
   describe('sur demande de la description de la durée de validité', () => {
     it('retourne la description provenant du référentiel', () => {
-      referentiel.recharge({
-        echeancesRenouvellement: { unAn: { description: '1 an' } },
-      });
       const decision = new Decision({ dureeValidite: 'unAn' }, referentiel);
       expect(decision.descriptionDureeValidite()).toEqual('1 an');
     });
@@ -68,12 +73,6 @@ describe('Une étape « Décision »', () => {
   });
 
   describe('sur demande de la date de prochaine homologation', () => {
-    beforeEach(() =>
-      referentiel.recharge({
-        echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
-      })
-    );
-
     it('retourne la date localisée en français', () => {
       const decision = new Decision(
         { dateHomologation: '2022-11-27', dureeValidite: 'unAn' },
@@ -104,7 +103,6 @@ describe('Une étape « Décision »', () => {
     });
 
     it("retourne `false` s'il manque la date d'homologation", () => {
-      referentiel.recharge({ echeancesRenouvellement: { unAn: {} } });
       const decisionIncomplete = new Decision(
         { dureeValidite: 'unAn' },
         referentiel
@@ -113,7 +111,6 @@ describe('Une étape « Décision »', () => {
     });
 
     it("retourne `true` s'il ne manque rien", () => {
-      referentiel.recharge({ echeancesRenouvellement: { unAn: {} } });
       const decisionIncomplete = new Decision(
         { dateHomologation: '2022-11-27', dureeValidite: 'unAn' },
         referentiel
