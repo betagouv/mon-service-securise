@@ -17,14 +17,32 @@ describe("Une notification d'expiration d'homologation", () => {
   });
 
   describe("sur demande des notifications pour un dossier d'homologation", () => {
-    it('sait renvoyer une liste des notifications qui seront à envoyer pour un dossier donné', () => {
-      const referentiel = Referentiel.creeReferentiel({
+    let referentiel;
+    beforeEach(() => {
+      referentiel = Referentiel.creeReferentiel({
         echeancesRenouvellement: {
           unAn: { nbMoisDecalage: 12, rappelsExpirationMois: [1] },
         },
         statutsAvisDossierHomologation: { favorable: {} },
       });
+    });
 
+    it('renvoie une liste vide si le dossier est refusé', () => {
+      const dossierRefuse = unDossier(referentiel)
+        .quiEstComplet()
+        .quiEstActif()
+        .construit();
+
+      const notifications = NotificationExpirationHomologation.pourUnDossier({
+        idService: '123',
+        dossier: dossierRefuse,
+        referentiel,
+      });
+
+      expect(notifications.length).to.be(2);
+    });
+
+    it('sait renvoyer une liste des notifications qui seront à envoyer pour un dossier donné', () => {
       const debutePremierJanvierEtValideUnAn = unDossier(referentiel)
         .quiEstComplet()
         .quiEstActif()

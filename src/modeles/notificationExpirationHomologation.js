@@ -17,6 +17,10 @@ class NotificationExpirationHomologation {
   }
 
   static pourUnDossier({ idService, dossier, referentiel }) {
+    if (dossier.decision?.refusee) {
+      return [];
+    }
+
     const idEcheance = dossier.decision.dureeValidite;
     const nbMoisExpiration = referentiel.nbMoisDecalage(idEcheance);
 
