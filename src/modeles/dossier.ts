@@ -125,6 +125,10 @@ class Dossier extends InformationsService {
     this.autorite.enregistreAutoriteHomologation(nom, fonction);
   }
 
+  estRefuse() {
+    return this.decision.refusee;
+  }
+
   estExpire() {
     if (this.decision.refusee) return true;
 
