@@ -98,7 +98,7 @@ block contenu-etape
     const dossierActif = dossiers.dossierActif()
     const dossiersPasses = dossiers.archives();
     const dossiersRefuses = dossiers.refuses();
-    const aucunDossier = !dossierCourant && !dossierActif && !dossiersPasses.length
+    const aucunDossier = !dossierCourant && !dossierActif && !dossiersPasses.length && !dossiersRefuses.length
 
   .dossiers
     -

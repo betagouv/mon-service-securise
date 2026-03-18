@@ -9,12 +9,7 @@ import {
 import { dateEnFrancais } from '../utilitaires/date.js';
 import { Referentiel } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
-
-type StatutHomologation =
-  | 'nonRealisee'
-  | 'activee'
-  | 'expiree'
-  | 'bientotExpiree';
+import { IdStatutHomologation } from '../referentiel.types.js';
 
 type DonneesDossiers = {
   dossiers: DonneesDossier[];
@@ -104,6 +99,9 @@ class Dossiers extends ElementsConstructibles<Dossier> {
     if (this.nombre() === 0 || this.finalises().length === 0)
       return Dossiers.NON_REALISEE;
 
+    if (!this.dossierActif() && this.refuses().length > 0)
+      return Dossiers.REFUSEE;
+
     return this.dossierActif().statutHomologation();
   }
 
@@ -134,10 +132,11 @@ class Dossiers extends ElementsConstructibles<Dossier> {
     }
   }
 
-  static NON_REALISEE: StatutHomologation = 'nonRealisee';
-  static ACTIVEE: StatutHomologation = 'activee';
-  static EXPIREE: StatutHomologation = 'expiree';
-  static BIENTOT_EXPIREE: StatutHomologation = 'bientotExpiree';
+  static NON_REALISEE: IdStatutHomologation = 'nonRealisee';
+  static ACTIVEE: IdStatutHomologation = 'activee';
+  static EXPIREE: IdStatutHomologation = 'expiree';
+  static BIENTOT_EXPIREE: IdStatutHomologation = 'bientotExpiree';
+  static REFUSEE: IdStatutHomologation = 'refusee';
 }
 
 export default Dossiers;
