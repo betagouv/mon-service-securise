@@ -113,16 +113,19 @@ describe("Un dossier d'homologation", () => {
       const dossier = new Dossier();
       const maintenant = new Date().toISOString();
 
+      dossier.enregistreDecision(maintenant, { refusee: true });
       dossier.enregistreDecision(maintenant, { dureeHomologation: 'unAn' });
 
       expect(dossier.decision.dateHomologation).toEqual(maintenant);
       expect(dossier.decision.dureeValidite).toEqual('unAn');
+      expect(dossier.decision.refusee).toBeUndefined();
     });
 
     it('peut enregistrer un refus', () => {
       const dossier = new Dossier();
       const maintenant = new Date().toISOString();
 
+      dossier.enregistreDecision(maintenant, { dureeHomologation: 'unAn' });
       dossier.enregistreDecision(maintenant, { refusee: true });
 
       expect(dossier.decision.dateHomologation).toEqual(maintenant);

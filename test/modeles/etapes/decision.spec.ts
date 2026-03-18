@@ -33,6 +33,7 @@ describe('Une étape « Décision »', () => {
         dureeValidite: 'unAn',
       });
     });
+
     it('sait se convertir pour une homologation refusée', () => {
       const decision = new Decision(
         { dateHomologation: '2022-12-01', refusee: true },
