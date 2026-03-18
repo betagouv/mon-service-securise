@@ -41,6 +41,7 @@ describe("L'abonnement qui envoie un mail de félicitation d'homologation", () =
         adaptateurMail,
       })({
         idService: null,
+        dossier: {},
       });
       expect().fail("L'instanciation aurait dû lever une exception.");
     } catch (e) {
@@ -48,6 +49,37 @@ describe("L'abonnement qui envoie un mail de félicitation d'homologation", () =
         "Impossible d'envoyer le mail de félicitation d'homologation sans avoir l'ID du service en paramètre."
       );
     }
+  });
+
+  it("lève une exception s'il ne reçoit pas de dossier", async () => {
+    try {
+      await envoieMailFelicitationHomologation({
+        depotDonnees,
+        adaptateurMail,
+      })({
+        idService: 'S1',
+        dossier: null,
+      });
+      expect().fail("L'instanciation aurait dû lever une exception.");
+    } catch (e) {
+      expect(e.message).to.be(
+        "Impossible d'envoyer le mail de félicitation d'homologation sans avoir le dossier en paramètre."
+      );
+    }
+  });
+
+  it('ne fait rien si le dossier a été refusé', async () => {
+    let adaptateurAppele = false;
+    adaptateurMail.envoieMessageFelicitationHomologation = () => {
+      adaptateurAppele = true;
+    };
+
+    await envoieMailFelicitationHomologation({ depotDonnees, adaptateurMail })({
+      idService: 'S1',
+      dossier: { decision: { refusee: true } },
+    });
+
+    expect(adaptateurAppele).to.be(false);
   });
 
   it('utilise le dépôt de données pour trouver le premier propriétaire du service', async () => {
@@ -65,6 +97,7 @@ describe("L'abonnement qui envoie un mail de félicitation d'homologation", () =
 
     await envoieMailFelicitationHomologation({ depotDonnees, adaptateurMail })({
       idService: 'S1',
+      dossier: {},
     });
 
     expect(donneesRecues).to.eql({
@@ -84,6 +117,7 @@ describe("L'abonnement qui envoie un mail de félicitation d'homologation", () =
 
     await envoieMailFelicitationHomologation({ depotDonnees, adaptateurMail })({
       idService: 'S1',
+      dossier: {},
     });
 
     expect(donneesRecues).to.eql({
