@@ -432,4 +432,53 @@ describe('Les dossiers liés à un service', () => {
       );
     });
   });
+
+  describe("concernant la date d'expiration", () => {
+    it("retourne `undefined` si il n'y a pas de dossier actif", () => {
+      const dossiers = new Dossiers();
+
+      const expiration = dossiers.dateExpiration();
+
+      expect(expiration).toBeUndefined();
+    });
+
+    it('retourne la date de prochaine homologation', () => {
+      const dossiers = new Dossiers(
+        {
+          dossiers: [
+            unDossier(referentiel)
+              .quiEstComplet()
+              .avecDecision('2026-01-01', 'unAn').donnees,
+          ],
+        },
+        referentiel
+      );
+
+      const expiration = dossiers.dateExpiration();
+
+      expect(expiration).toBe('01/01/2027');
+    });
+
+    it("retourne la date de décision du dossier refusé le plus récent si il n'y a pas de dossier actif", () => {
+      const dossiers = new Dossiers(
+        {
+          dossiers: [
+            unDossier(referentiel)
+              .quiEstComplet()
+              .quiEstRefuse('2025-01-01')
+              .quiEstArchive().donnees,
+            unDossier(referentiel)
+              .quiEstComplet()
+              .quiEstRefuse('2026-01-01')
+              .quiEstArchive().donnees,
+          ],
+        },
+        referentiel
+      );
+
+      const expiration = dossiers.dateExpiration();
+
+      expect(expiration).toBe('01/01/2026');
+    });
+  });
 });
