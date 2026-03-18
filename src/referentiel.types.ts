@@ -32,6 +32,7 @@ export type IdNatureSuggestionAction =
   keyof typeof donnees.naturesSuggestionsActions;
 export type IdNiveauRisque = keyof typeof donnees.niveauxRisques;
 export type IdNiveauSecurite = (typeof donnees.niveauxDeSecurite)[number];
+export type IdStatutAvis = keyof typeof donnees.statutsAvisDossierHomologation;
 
 export type DonneesReferentiel = {
   indiceCyber: {

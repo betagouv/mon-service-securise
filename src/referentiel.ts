@@ -22,6 +22,7 @@ import {
   IdNiveauSecurite,
   IdReferentielMesure,
   IdRisque,
+  IdStatutAvis,
   IdStatutDeploiement,
   IdStatutHomologation,
   IdStatutMesure,
@@ -109,7 +110,7 @@ const creeReferentiel = (
   const identifiantsStatutAvisDossierHomologation = () =>
     Object.keys(statutsAvisDossierHomologation());
   const estIdentifiantStatutAvisDossierHomologationConnu = (
-    idStatut?: IdStatutHomologation
+    idStatut?: IdStatutAvis
   ) =>
     idStatut && identifiantsStatutAvisDossierHomologation().includes(idStatut);
   const fonctionnalites = () => donnees.fonctionnalites;
