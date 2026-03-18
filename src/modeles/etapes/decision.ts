@@ -1,5 +1,6 @@
 import {
   ErreurDateHomologationInvalide,
+  ErreurDecisionInvalide,
   ErreurDureeValiditeInvalide,
 } from '../../erreurs.js';
 import {
@@ -18,30 +19,36 @@ import { creeReferentielVide } from '../../referentiel.js';
 export type DonneesDecision = {
   dateHomologation?: string;
   dureeValidite?: string;
+  refusee?: boolean;
 };
 
 export type DureeValidite = 'sixMois' | 'unAn' | 'deuxAns' | 'troisAns';
 
 class Decision extends Etape {
   dateHomologation!: string;
-  dureeValidite!: DureeValidite;
+  dureeValidite?: DureeValidite;
+  refusee?: boolean;
   private readonly adaptateurHorloge: AdaptateurHorloge;
   private readonly referentiel!: Referentiel;
 
   constructor(
-    { dateHomologation, dureeValidite }: Partial<DonneesDecision> = {},
+    { dateHomologation, dureeValidite, refusee }: Partial<DonneesDecision> = {},
     referentiel: Referentiel = creeReferentielVide(),
     adaptateurHorloge: AdaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     super(
       {
-        proprietesAtomiquesFacultatives: ['dateHomologation', 'dureeValidite'],
+        proprietesAtomiquesFacultatives: [
+          'dateHomologation',
+          'dureeValidite',
+          'refusee',
+        ],
       },
       referentiel
     );
     this.referentiel = referentiel;
-    Decision.valide({ dateHomologation, dureeValidite }, referentiel);
-    this.renseigneProprietes({ dateHomologation, dureeValidite });
+    Decision.valide({ dateHomologation, dureeValidite, refusee }, referentiel);
+    this.renseigneProprietes({ dateHomologation, dureeValidite, refusee });
     this.adaptateurHorloge = adaptateurHorloge;
   }
 
@@ -54,7 +61,7 @@ class Decision extends Etape {
   }
 
   descriptionDureeValidite() {
-    if (!this.dureeValidite) {
+    if (this.refusee || !this.dureeValidite) {
       return '';
     }
 
@@ -65,12 +72,19 @@ class Decision extends Etape {
 
   dateProchaineHomologation() {
     const date = new Date(this.dateHomologation);
-    const nbMois = this.referentiel.nbMoisDecalage(this.dureeValidite);
+    if (this.refusee && this.dateHomologation) {
+      return date;
+    }
+    const nbMois = this.referentiel.nbMoisDecalage(this.dureeValidite!);
 
     return ajouteMoisADate(nbMois, date);
   }
 
   descriptionProchaineDateHomologation() {
+    if (this.refusee && this.dateHomologation) {
+      return this.descriptionDateHomologation();
+    }
+
     if (!this.dateHomologation || !this.dureeValidite) {
       return '';
     }
@@ -78,13 +92,21 @@ class Decision extends Etape {
     return dateEnFrancais(this.dateProchaineHomologation());
   }
 
-  enregistre(dateHomologation: string, dureeValidite: DureeValidite) {
+  enregistreDecisionValidee(
+    dateHomologation: string,
+    dureeValidite: DureeValidite
+  ) {
     this.dateHomologation = dateHomologation;
     this.dureeValidite = dureeValidite;
   }
 
+  enregistreDecisionRefusee(dateHomologation: string) {
+    this.dateHomologation = dateHomologation;
+    this.refusee = true;
+  }
+
   estComplete() {
-    return !!this.dateHomologation && !!this.dureeValidite;
+    return !!this.dateHomologation && (this.refusee || !!this.dureeValidite);
   }
 
   periodeHomologationEstEnCours() {
@@ -96,9 +118,15 @@ class Decision extends Etape {
   }
 
   static valide(
-    { dateHomologation, dureeValidite }: Partial<DonneesDecision>,
+    { dateHomologation, dureeValidite, refusee }: Partial<DonneesDecision>,
     referentiel: Referentiel
   ) {
+    if (refusee && dureeValidite) {
+      throw new ErreurDecisionInvalide(
+        'Un dossier refusé ne peut pas avoir de durée de validité.'
+      );
+    }
+
     const identifiantsDureesHomologation =
       referentiel.identifiantsEcheancesRenouvellement();
     if (

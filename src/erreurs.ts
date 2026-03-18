@@ -36,6 +36,7 @@ class ErreurAutorisationInexistante extends ErreurModele {}
 class ErreurAvisInvalide extends ErreurModele {}
 class ErreurCategorieInconnue extends ErreurModele {}
 class ErreurDateHomologationInvalide extends ErreurModele {}
+class ErreurDecisionInvalide extends ErreurModele {}
 class ErreurDonneesObligatoiresManquantes extends ErreurModele {}
 class ErreurDonneesNiveauSecuriteInsuffisant extends ErreurModele {}
 class ErreurDonneesReferentielIncorrectes extends Error {}
@@ -129,6 +130,7 @@ export {
   ErreurCategorieInconnue,
   ErreurChainageMiddleware,
   ErreurDateHomologationInvalide,
+  ErreurDecisionInvalide,
   ErreurDetachementModeleMesureSpecifiqueImpossible,
   ErreurDonneesObligatoiresManquantes,
   ErreurDonneesReferentielIncorrectes,
