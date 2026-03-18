@@ -186,7 +186,10 @@ class Dossier extends InformationsService {
   ) {
     if (this.finalise) throw new ErreurDossierDejaFinalise();
 
-    this.decision.enregistre(dateHomologation, dureeHomologation);
+    this.decision.enregistreDecisionValidee(
+      dateHomologation,
+      dureeHomologation
+    );
   }
 
   enregistreFinalisation(
