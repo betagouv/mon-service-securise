@@ -183,6 +183,10 @@
 }
 
 .homologation .dossier .statut-homologation.expiree {
+  background: #fef4f2;
+}
+
+.homologation .dossier .statut-homologation.refusee {
   background: #ffdfdf;
 }
 

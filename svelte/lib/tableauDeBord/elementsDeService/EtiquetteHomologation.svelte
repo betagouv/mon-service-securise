@@ -21,6 +21,8 @@
   {label}
   {#if statutHomologation === 'bientotExpiree'}
     {dateExpiration}
+  {:else if statutHomologation === 'refusee'}
+    le {dateExpiration}
   {/if}
 </a>
 
@@ -45,6 +47,12 @@
   }
 
   .expiree {
+    --fond: #fef4f2;
+    --fond-hover: #fde7e3;
+    --fond-actif: #fbd0c8;
+  }
+
+  .refusee {
     --fond: #ffe9e9;
     --fond-hover: #ffdbdb;
     --fond-actif: #ffbdbd;
