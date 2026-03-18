@@ -14,13 +14,14 @@ const brancheComportemenFormulaireEtape = (actionSoumission) => {
   const selecteurFormulaire = 'form.homologation';
   const idService = $boutonSuivant.data('id-homologation');
   const idEtapeSuivante = $boutonSuivant.data('id-etape-suivante');
+  const estRefusee = $boutonSuivant.data('decision-refusee');
 
   brancheValidation(selecteurFormulaire);
 
   const versEtapeSuivante = () =>
     (window.location = idEtapeSuivante
       ? `/service/${idService}/homologation/edition/etape/${idEtapeSuivante}`
-      : `/service/${idService}/dossiers?succesHomologation`);
+      : `/service/${idService}/dossiers${estRefusee ? '' : '?succesHomologation'}`);
 
   $(selecteurFormulaire).on('submit', async (e) => {
     e.preventDefault();
