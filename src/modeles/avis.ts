@@ -1,24 +1,21 @@
 import InformationsService from './informationsService.js';
-import { ErreurDureeValiditeInvalide, ErreurAvisInvalide } from '../erreurs.js';
+import { ErreurAvisInvalide, ErreurDureeValiditeInvalide } from '../erreurs.js';
 import { Referentiel } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
 import {
   IdEcheanceRenouvellement,
-  IdStatutHomologation,
+  IdStatutAvis,
 } from '../referentiel.types.js';
 
 export type DonneesAvis = {
-  statut: IdStatutHomologation;
+  statut: IdStatutAvis;
   dureeValidite: IdEcheanceRenouvellement;
   commentaires?: string;
   collaborateurs: string[];
 };
 
 class Avis extends InformationsService {
-  private readonly statut!:
-    | 'favorable'
-    | 'favorableAvecReserve'
-    | 'defavorable';
+  private readonly statut!: IdStatutAvis;
   private readonly dureeValidite!: 'sixMois' | 'unAn' | 'deuxAns' | 'troisAns';
   private readonly commentaires?: string;
   private readonly collaborateurs!: string[];
