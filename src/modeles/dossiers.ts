@@ -54,9 +54,13 @@ class Dossiers extends ElementsConstructibles<Dossier> {
   }
 
   dateExpiration() {
+    if (!this.dossierActif() && this.refuses().length > 0)
+      return dateEnFrancais(this.refuses()[0].dateProchaineHomologation());
+
     if (!this.dossierActif()) {
       return undefined;
     }
+
     return dateEnFrancais(this.dossierActif().dateProchaineHomologation());
   }
 
