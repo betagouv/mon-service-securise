@@ -335,6 +335,7 @@ const donnees = {
     bientotExpiree: { libelle: 'Expire le ', ordre: 1 },
     nonRealisee: { libelle: 'Aucune', ordre: 2 },
     activee: { libelle: 'Réalisée', ordre: 3 },
+    refusee: { libelle: 'Refusée', ordre: 4 },
   },
 
   typesService: {

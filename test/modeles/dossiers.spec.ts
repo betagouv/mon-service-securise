@@ -23,8 +23,10 @@ describe('Les dossiers liés à un service', () => {
   beforeEach(() =>
     referentiel.recharge({
       echeancesRenouvellement: {
+        // @ts-expect-error on recharge un référentiel partiel
         unAn: { nbMoisDecalage: 12, nbMoisBientotExpire: 1 },
       },
+      // @ts-expect-error on recharge un référentiel partiel
       statutsAvisDossierHomologation: { favorable: {} },
     })
   );
@@ -176,6 +178,19 @@ describe('Les dossiers liés à un service', () => {
       const statut = avecDossierActifBouchon.statutHomologation();
 
       expect(statut).toBe(Dossiers.EXPIREE);
+    });
+
+    it("retournent « Refusée » si il n'y a aucun dossier actif, et au moins un dossier refusé", () => {
+      const sansDossierActif = new Dossiers(
+        {
+          dossiers: [unDossierComplet().quiEstRefuse().quiEstArchive().donnees],
+        },
+        referentiel
+      );
+
+      const statut = sansDossierActif.statutHomologation();
+
+      expect(statut).toBe(Dossiers.REFUSEE);
     });
   });
 
