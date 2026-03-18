@@ -292,6 +292,16 @@ describe("Un dossier d'homologation", () => {
       expect(nonFinalise.statutHomologation()).toBe('nonRealisee');
     });
 
+    it('est « Refusée » si le dossier est finalisé et refusé', () => {
+      const nonFinalise = unDossier(referentiel)
+        .quiEstComplet()
+        .quiEstRefuse('2023-06-01')
+        .quiEstArchive()
+        .construit();
+
+      expect(nonFinalise.statutHomologation()).toBe('refusee');
+    });
+
     it('est « Réalisée » même si le dossier est finalisé avec une date de début dans le futur', () => {
       const maintenantPremierJuin = {
         maintenant: () => new Date('2023-06-01'),
