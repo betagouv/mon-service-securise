@@ -97,6 +97,7 @@ block contenu-etape
     const dossierCourant = dossiers.dossierCourant()
     const dossierActif = dossiers.dossierActif()
     const dossiersPasses = dossiers.archives();
+    const dossiersRefuses = dossiers.refuses();
     const aucunDossier = !dossierCourant && !dossierActif && !dossiersPasses.length
 
   .dossiers
@@ -118,6 +119,11 @@ block contenu-etape
       h3.titre-section Homologations passées
       each dossier in dossiersPasses
         +dossierFinalise({ dossier, service, afficheStatutHomologation: false })
+
+    if dossiersRefuses.length
+      h3.titre-section Homologations refusées
+      each dossier in dossiersRefuses
+        +dossierFinalise({dossier, service, afficheStatutHomologation: true})
 
     if aucunDossier
       .aucun-projets
