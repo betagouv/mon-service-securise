@@ -154,6 +154,17 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(status).toBe(400);
     });
 
+    it('renvoie une erreur si le refus est invalide', async () => {
+      const { status } = await testeur.put(
+        '/api/service/456/homologation/decision',
+        {
+          dateHomologation: new Date(),
+          refusee: 'refuseeInvalide',
+        }
+      );
+      expect(status).toBe(400);
+    });
+
     it("utilise le dépôt pour enregistrer la décision d'homologation", async () => {
       let donneesRecues;
 
@@ -172,6 +183,27 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(donneesRecues!.idHomologation).toEqual('456');
       expect(donneesRecues!.decision.dureeValidite).toEqual('unAn');
       expect(donneesRecues!.decision.dateHomologation).toEqual('2023-01-01');
+    });
+
+    it('utilise le dépôt pour enregistrer la décision refusée', async () => {
+      let donneesRecues;
+
+      testeur.depotDonnees().enregistreDossier = async (
+        idHomologation: UUID,
+        dossier: Dossier
+      ) => {
+        donneesRecues = { idHomologation, decision: dossier.decision };
+      };
+
+      await testeur.put('/api/service/456/homologation/decision', {
+        dateHomologation: '2023-01-01',
+        refusee: true,
+      });
+
+      expect(donneesRecues!.idHomologation).toEqual('456');
+      expect(donneesRecues!.decision.dureeValidite).toBeUndefined();
+      expect(donneesRecues!.decision.dateHomologation).toEqual('2023-01-01');
+      expect(donneesRecues!.decision.refusee).toBe(true);
     });
   });
 

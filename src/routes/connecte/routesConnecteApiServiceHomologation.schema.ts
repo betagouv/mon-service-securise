@@ -7,10 +7,18 @@ export const schemaPutAutoriteHomologation = () => ({
   fonction: z.string().trim().min(1).max(400),
 });
 
-export const schemaPutDecisionHomologation = (referentiel: ReferentielV2) => ({
-  dateHomologation: schemaDate.uneDateValideEnChaine(),
-  dureeValidite: z.enum(referentiel.identifiantsEcheancesRenouvellement()),
-});
+export const schemaPutDecisionHomologation = (referentiel: ReferentielV2) =>
+  z
+    .strictObject({
+      dateHomologation: schemaDate.uneDateValideEnChaine(),
+      dureeValidite: z.enum(referentiel.identifiantsEcheancesRenouvellement()),
+    })
+    .or(
+      z.strictObject({
+        dateHomologation: schemaDate.uneDateValideEnChaine(),
+        refusee: z.literal(true),
+      })
+    );
 
 export const schemaPutDocumentsHomologation = () => ({
   avecDocuments: z.boolean(),
