@@ -5,13 +5,16 @@
   import Infobulle from '../../ui/Infobulle.svelte';
   import LegendeMatrice from '../matrice/LegendeMatrice.svelte';
   import TableauRisquesMesuresAssociees from './TableauRisquesMesuresAssociees.svelte';
+  import type { ReferentielStatut } from '../../ui/types';
   let elementModale: Modale | undefined;
 
   interface Props {
     risques: TousRisques;
+    idService: string;
+    statuts: ReferentielStatut;
   }
 
-  let { risques }: Props = $props();
+  let { risques, idService, statuts }: Props = $props();
 
   export const affiche = () => {
     elementModale?.affiche();
@@ -55,7 +58,11 @@
         </div>
       </div>
       <LegendeMatrice />
-      <TableauRisquesMesuresAssociees risques={risques.risques} />
+      <TableauRisquesMesuresAssociees
+        risques={risques.risques}
+        {idService}
+        {statuts}
+      />
     </div>
   {/snippet}
   {#snippet actions()}
@@ -99,6 +106,7 @@
     display: flex;
     gap: 155px;
     padding-left: 54px;
+    overflow-x: scroll;
   }
 
   .conteneur-matrice {
