@@ -4,6 +4,7 @@
   import type { TousRisques } from '../risquesV2.d';
   import Infobulle from '../../ui/Infobulle.svelte';
   import LegendeMatrice from '../matrice/LegendeMatrice.svelte';
+  import TableauRisquesMesuresAssociees from './TableauRisquesMesuresAssociees.svelte';
   let elementModale: Modale | undefined;
 
   interface Props {
@@ -54,6 +55,7 @@
         </div>
       </div>
       <LegendeMatrice />
+      <TableauRisquesMesuresAssociees risques={risques.risques} />
     </div>
   {/snippet}
   {#snippet actions()}
