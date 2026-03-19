@@ -106,7 +106,7 @@
     "prettier": "^3.8.1",
     "prettier-plugin-svelte": "^3.5.0",
     "sass": "^1.97.3",
-    "supertest": "^7.1.4",
+    "supertest": "^7.2.2",
     "svelte": "^5.53.6",
     "svelte-check": "^4.4.4",
     "svelte-eslint-parser": "^1.5.1",
