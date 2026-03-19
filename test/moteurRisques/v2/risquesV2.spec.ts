@@ -17,12 +17,12 @@ describe('Les risques V2', () => {
       }),
     ];
 
-    const tousLesRisques = new RisquesV2(
+    const tousLesRisques = new RisquesV2({
       risques,
       risquesBruts,
       risquesCibles,
-      risquesSpecifiques
-    ).toJSON();
+      risquesSpecifiques,
+    }).toJSON();
 
     expect(tousLesRisques.risquesBruts[0].id).toBe('R3');
     expect(tousLesRisques.risquesBruts[0].vraisemblance).toBe(4);
@@ -38,12 +38,12 @@ describe('Les risques V2', () => {
   });
 
   it("peut mettre à jour les données d'un risque", () => {
-    const tousLesRisques = new RisquesV2(
-      [new RisqueV2('V3', { OV1: 3 }, 4, [], {})],
-      [],
-      [],
-      []
-    );
+    const tousLesRisques = new RisquesV2({
+      risques: [new RisqueV2('V3', { OV1: 3 }, 4, [], {})],
+      risquesBruts: [],
+      risquesCibles: [],
+      risquesSpecifiques: [],
+    });
 
     tousLesRisques.metsAJour('R3', {
       commentaire: 'un commentaire',
