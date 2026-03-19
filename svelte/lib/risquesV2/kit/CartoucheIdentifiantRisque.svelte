@@ -18,5 +18,6 @@
 <style lang="scss">
   dsfr-badge {
     height: fit-content;
+    white-space: nowrap;
   }
 </style>
