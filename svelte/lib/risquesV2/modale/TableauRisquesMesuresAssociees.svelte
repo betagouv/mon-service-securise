@@ -32,6 +32,7 @@
   };
 </script>
 
+<h6>Mesures associées aux risques</h6>
 <div class="tableau-pliable">
   <div class="entete-tableau">
     <span>Identifiant</span>
@@ -107,6 +108,14 @@
 </div>
 
 <style lang="scss">
+  h6 {
+    color: black;
+    font-size: 1.25em;
+    line-height: 1.75em;
+    font-weight: bold;
+    margin: 0;
+  }
+
   .tableau-pliable {
     display: grid;
     grid-template-columns: 1fr 4fr 1fr 1fr;
