@@ -74,7 +74,17 @@
                 statut={mesureAssociee?.statut}
               />
             </div>
-            <div></div>
+            <div>
+              <dsfr-button
+                label="Voir la mesure"
+                kind="secondary"
+                size="sm"
+                markup="a"
+                type={undefined}
+                target="blank"
+                href="/service/{idService}/mesures?idMesure={idMesure}"
+              ></dsfr-button>
+            </div>
           </div>
         {/each}
       {/if}
