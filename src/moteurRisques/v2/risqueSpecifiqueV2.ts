@@ -1,8 +1,10 @@
 import { CategorieRisque } from './risquesV2.types.js';
 import { Vraisemblance } from './vraisemblance/vraisemblance.types.js';
 import { Gravite } from './graviteObjectifsVises.js';
+import { UUID } from '../../typesBasiques.js';
 
-type DonneesRisqueSpecifiqueV2 = {
+export type DonneesRisqueSpecifiqueV2 = {
+  id: UUID;
   intitule: string;
   description?: string;
   categories: CategorieRisque[];
@@ -12,19 +14,26 @@ type DonneesRisqueSpecifiqueV2 = {
   commentaire?: string;
 };
 
+export type DonneesMiseAJourRisqueSpecifiqueV2 = Omit<
+  DonneesRisqueSpecifiqueV2,
+  'id'
+>;
+
 export class RisqueSpecifiqueV2 {
-  private readonly intitule: string;
-  private readonly description?: string;
-  private readonly categories: CategorieRisque[];
-  private readonly risqueBrut: {
+  readonly id: UUID;
+  private intitule: string;
+  private description?: string;
+  private categories: CategorieRisque[];
+  private risqueBrut: {
     gravite: Gravite;
     vraisemblance: Vraisemblance;
   };
-  private readonly gravite: Gravite;
-  private readonly vraisemblance: Vraisemblance;
-  private readonly commentaire?: string;
+  private gravite: Gravite;
+  private vraisemblance: Vraisemblance;
+  private commentaire?: string;
 
   constructor(donnees: DonneesRisqueSpecifiqueV2) {
+    this.id = donnees.id;
     this.intitule = donnees.intitule;
     this.description = donnees.description;
     this.categories = donnees.categories;
@@ -36,6 +45,7 @@ export class RisqueSpecifiqueV2 {
 
   toJSON() {
     return {
+      id: this.id,
       intitule: this.intitule,
       description: this.description,
       categories: this.categories,
@@ -48,6 +58,7 @@ export class RisqueSpecifiqueV2 {
 
   donneesSerialisees() {
     return {
+      id: this.id,
       intitule: this.intitule,
       description: this.description,
       categories: this.categories,
@@ -56,5 +67,15 @@ export class RisqueSpecifiqueV2 {
       vraisemblance: this.vraisemblance,
       commentaire: this.commentaire,
     };
+  }
+
+  metsAJour(donnees: DonneesMiseAJourRisqueSpecifiqueV2) {
+    this.intitule = donnees.intitule;
+    this.description = donnees.description;
+    this.categories = donnees.categories;
+    this.risqueBrut = donnees.risqueBrut;
+    this.gravite = donnees.gravite;
+    this.vraisemblance = donnees.vraisemblance;
+    this.commentaire = donnees.commentaire;
   }
 }

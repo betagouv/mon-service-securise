@@ -1,6 +1,7 @@
 import { RisquesV2 } from '../../../src/moteurRisques/v2/risquesV2.ts';
 import { RisqueV2 } from '../../../src/moteurRisques/v2/risqueV2.ts';
 import { RisqueSpecifiqueV2 } from '../../../src/moteurRisques/v2/risqueSpecifiqueV2.ts';
+import { unUUID } from '../../constructeurs/UUID.ts';
 
 describe('Les risques V2', () => {
   let risquesV2: RisquesV2;
@@ -13,6 +14,7 @@ describe('Les risques V2', () => {
     const risquesCibles = [new RisqueV2('V3', { OV1: 3 }, 1, [], {})];
     const risquesSpecifiques = [
       new RisqueSpecifiqueV2({
+        id: unUUID('a'),
         categories: ['confidentialite'],
         gravite: 2,
         vraisemblance: 1,
@@ -71,5 +73,88 @@ describe('Les risques V2', () => {
       'un commentaire'
     );
     expect(tousLesRisques.toJSON().risques[0].desactive).toBe(true);
+  });
+
+  it('peut ajouter un nouveau risque spécifique', () => {
+    const tousLesRisques = new RisquesV2({
+      risques: [],
+      risquesBruts: [],
+      risquesCibles: [],
+      risquesSpecifiques: [],
+    });
+
+    tousLesRisques.ajouteRisqueSpecifique({
+      id: unUUID('a'),
+      categories: ['confidentialite'],
+      gravite: 2,
+      vraisemblance: 1,
+      intitule: 'un risque',
+      risqueBrut: { vraisemblance: 1, gravite: 1 },
+    });
+
+    expect(tousLesRisques.toJSON().risquesSpecifiques[0].intitule).toEqual(
+      'un risque'
+    );
+  });
+
+  it('peut mettre à jour un risque spécifique', () => {
+    const tousLesRisques = new RisquesV2({
+      risques: [],
+      risquesBruts: [],
+      risquesCibles: [],
+      risquesSpecifiques: [
+        new RisqueSpecifiqueV2({
+          id: unUUID('a'),
+          categories: ['confidentialite'],
+          gravite: 2,
+          vraisemblance: 1,
+          intitule: 'un risque',
+          risqueBrut: { vraisemblance: 1, gravite: 1 },
+        }),
+      ],
+    });
+
+    tousLesRisques.metsAJourRisqueSpecifique(unUUID('a'), {
+      categories: ['confidentialite', 'integrite'],
+      gravite: 3,
+      vraisemblance: 2,
+      intitule: 'un risque',
+      risqueBrut: { vraisemblance: 1, gravite: 1 },
+    });
+
+    expect(tousLesRisques.toJSON().risquesSpecifiques.length).toEqual(1);
+    expect(tousLesRisques.toJSON().risquesSpecifiques[0].id).toEqual(
+      unUUID('a')
+    );
+    expect(tousLesRisques.toJSON().risquesSpecifiques[0].gravite).toEqual(3);
+    expect(tousLesRisques.toJSON().risquesSpecifiques[0].vraisemblance).toEqual(
+      2
+    );
+    expect(tousLesRisques.toJSON().risquesSpecifiques[0].categories).toEqual([
+      'confidentialite',
+      'integrite',
+    ]);
+  });
+
+  it('peut supprimer un risque spécifique', () => {
+    const tousLesRisques = new RisquesV2({
+      risques: [],
+      risquesBruts: [],
+      risquesCibles: [],
+      risquesSpecifiques: [
+        new RisqueSpecifiqueV2({
+          id: unUUID('a'),
+          categories: ['confidentialite'],
+          gravite: 2,
+          vraisemblance: 1,
+          intitule: 'un risque',
+          risqueBrut: { vraisemblance: 1, gravite: 1 },
+        }),
+      ],
+    });
+
+    tousLesRisques.supprimeRisqueSpecifique(unUUID('a'));
+
+    expect(tousLesRisques.toJSON().risquesSpecifiques.length).toEqual(0);
   });
 });
