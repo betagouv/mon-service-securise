@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Risque } from './risquesV2.d';
+  import type { Risque } from '../risquesV2.d';
   import { couleur, mappingCouleursDSFR } from './kit';
 
   interface Props {

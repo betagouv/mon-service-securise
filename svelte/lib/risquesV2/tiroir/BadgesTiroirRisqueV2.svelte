@@ -1,7 +1,7 @@
 <script lang="ts">
-  import CartoucheIdentifiantRisque from './CartoucheIdentifiantRisque.svelte';
-  import type { Risque } from './risquesV2.d';
-  import CartouchesRisqueV2 from './CartouchesRisqueV2.svelte';
+  import CartoucheIdentifiantRisque from '../kit/CartoucheIdentifiantRisque.svelte';
+  import type { Risque } from '../risquesV2.d';
+  import CartouchesRisqueV2 from '../kit/CartouchesRisqueV2.svelte';
 
   interface Props {
     risque: Risque;

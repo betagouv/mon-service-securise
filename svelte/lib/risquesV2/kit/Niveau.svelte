@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Niveau } from './risquesV2.d';
+  import type { Niveau } from '../risquesV2.d';
 
   interface Props {
     niveau: Niveau;

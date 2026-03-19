@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Modale from '../ui/Modale.svelte';
-  import MatriceRisquesV2 from './MatriceRisquesV2.svelte';
-  import type { TousRisques } from './risquesV2.d';
-  import Infobulle from '../ui/Infobulle.svelte';
-  import LegendeMatrice from './LegendeMatrice.svelte';
+  import Modale from '../../ui/Modale.svelte';
+  import MatriceRisquesV2 from '../matrice/MatriceRisquesV2.svelte';
+  import type { TousRisques } from '../risquesV2.d';
+  import Infobulle from '../../ui/Infobulle.svelte';
+  import LegendeMatrice from '../matrice/LegendeMatrice.svelte';
   let elementModale: Modale | undefined;
 
   interface Props {

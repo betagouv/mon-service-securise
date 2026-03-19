@@ -1,18 +1,18 @@
 <script lang="ts">
-  import type { Risque } from './risquesV2.d';
+  import type { Risque } from '../risquesV2.d';
   import BadgesTiroirRisqueV2 from './BadgesTiroirRisqueV2.svelte';
   import { onMount, untrack } from 'svelte';
-  import ContenuTiroir from '../ui/tiroirs/ContenuTiroir.svelte';
-  import Onglets from '../ui/Onglets.svelte';
-  import { mappingNiveauGravite, mappingNiveauVraisemblance } from './kit';
-  import ActionsTiroir from '../ui/tiroirs/ActionsTiroir.svelte';
-  import Switch from '../ui/Switch.svelte';
-  import { metsAJourRisque } from './risquesV2.api';
-  import { tiroirStore } from '../ui/stores/tiroir.store';
-  import { toasterStore } from '../ui/stores/toaster.store';
-  import Tableau from '../ui/Tableau.svelte';
-  import TagStatutMesure from '../ui/TagStatutMesure.svelte';
-  import type { ReferentielStatut } from '../ui/types';
+  import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
+  import Onglets from '../../ui/Onglets.svelte';
+  import { mappingNiveauGravite, mappingNiveauVraisemblance } from '../kit/kit';
+  import ActionsTiroir from '../../ui/tiroirs/ActionsTiroir.svelte';
+  import Switch from '../../ui/Switch.svelte';
+  import { metsAJourRisque } from '../risquesV2.api';
+  import { tiroirStore } from '../../ui/stores/tiroir.store';
+  import { toasterStore } from '../../ui/stores/toaster.store';
+  import Tableau from '../../ui/Tableau.svelte';
+  import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
+  import type { ReferentielStatut } from '../../ui/types';
 
   interface Props {
     idService: string;
