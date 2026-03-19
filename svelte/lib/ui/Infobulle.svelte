@@ -3,12 +3,13 @@
 
   interface Props {
     contenu: string;
+    enfantDirect?: boolean;
   }
 
-  let { contenu }: Props = $props();
+  let { contenu, enfantDirect = false }: Props = $props();
 </script>
 
-<div class="conteneur-image" use:infobulle={contenu}>
+<div class="conteneur-image" use:infobulle={[contenu, enfantDirect]}>
   <img src="/statique/assets/images/icone_infobulle.svg" alt={contenu} />
 </div>
 
