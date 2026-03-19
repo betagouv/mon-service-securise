@@ -1,4 +1,8 @@
-import type { ReferentielStatut } from '../ui/types';
+import type {
+  ReferentielStatut,
+  Referentiel,
+  CategorieMesure,
+} from '../ui/types';
 
 declare global {
   interface HTMLElementEventMap {
@@ -34,6 +38,9 @@ export type MesureGeneraleAssocieeARisque = {
   description: string;
   statut?: 'aLancer' | 'enCours' | 'fait' | 'nonFait';
   id: string;
+  referentiel: Referentiel;
+  categorie: CategorieMesure;
+  indispensable: boolean;
 };
 
 export type MesuresAssocieesARisque = {
