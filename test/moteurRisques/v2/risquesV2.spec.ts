@@ -3,9 +3,13 @@ import { RisqueV2 } from '../../../src/moteurRisques/v2/risqueV2.ts';
 import { RisqueSpecifiqueV2 } from '../../../src/moteurRisques/v2/risqueSpecifiqueV2.ts';
 
 describe('Les risques V2', () => {
-  it('peuvent se sérialiser en JSON', () => {
+  let risquesV2: RisquesV2;
+
+  beforeEach(() => {
     const risquesBruts = [new RisqueV2('V3', { OV1: 3 }, 4, [], {})];
-    const risques = [new RisqueV2('V3', { OV1: 3 }, 3, [], {})];
+    const risques = [
+      new RisqueV2('V3', { OV1: 3 }, 3, [], { commentaire: 'commentaire' }),
+    ];
     const risquesCibles = [new RisqueV2('V3', { OV1: 3 }, 1, [], {})];
     const risquesSpecifiques = [
       new RisqueSpecifiqueV2({
@@ -17,12 +21,16 @@ describe('Les risques V2', () => {
       }),
     ];
 
-    const tousLesRisques = new RisquesV2({
+    risquesV2 = new RisquesV2({
       risques,
       risquesBruts,
       risquesCibles,
       risquesSpecifiques,
-    }).toJSON();
+    });
+  });
+
+  it('peuvent se sérialiser en JSON', () => {
+    const tousLesRisques = risquesV2.toJSON();
 
     expect(tousLesRisques.risquesBruts[0].id).toBe('R3');
     expect(tousLesRisques.risquesBruts[0].vraisemblance).toBe(4);
@@ -35,6 +43,15 @@ describe('Les risques V2', () => {
 
     expect(tousLesRisques.risquesSpecifiques[0].intitule).toBe('un risque');
     expect(tousLesRisques.risquesSpecifiques[0].vraisemblance).toBe(1);
+  });
+
+  it('connait ses données sérialisées', () => {
+    const risquesSerialises = risquesV2.donneesSerialisees();
+
+    expect(risquesSerialises.risquesGeneraux.R3.commentaire).toBe(
+      'commentaire'
+    );
+    expect(risquesSerialises.risquesSpecifiques[0].intitule).toBe('un risque');
   });
 
   it("peut mettre à jour les données d'un risque", () => {

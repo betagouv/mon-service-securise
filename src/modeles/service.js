@@ -23,6 +23,7 @@ import { ToutesActionsRecommandees } from './actionsRecommandees.js';
 import MesuresGenerales from './mesuresGenerales.js';
 import { MoteurRisquesV2 } from '../moteurRisques/v2/moteurRisques.js';
 import { RisquesV2 } from '../moteurRisques/v2/risquesV2.js';
+import { RisqueSpecifiqueV2 } from '../moteurRisques/v2/risqueSpecifiqueV2.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -104,13 +105,16 @@ class Service {
       const moteurRisques = new MoteurRisquesV2(
         this.descriptionService,
         this.mesures.personnaliseesAvecStatutSeul(),
-        risquesV2
+        risquesV2?.risquesGeneraux || {}
       );
       this.risquesV2 = new RisquesV2({
         risques: moteurRisques.risques(),
         risquesBruts: moteurRisques.risquesBruts(),
         risquesCibles: moteurRisques.risquesCibles(),
-        risquesSpecifiques: [],
+        risquesSpecifiques:
+          risquesV2?.risquesSpecifiques?.map(
+            (r) => new RisqueSpecifiqueV2(r)
+          ) || [],
       });
     }
   }
