@@ -461,7 +461,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
         new Date(
           adaptateurEnvironnement.featureFlag().dateDebutBandeauMSC() || 0
         ),
-      avecDecrireV2: adaptateurEnvironnement.featureFlag().avecDecrireV2(),
     };
     suite();
   };

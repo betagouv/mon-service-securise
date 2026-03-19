@@ -81,7 +81,6 @@ const chiffrement = () => ({
 const featureFlag = () => ({
   avecServiceMonProfilAnssi: () => process.env.PROFIL_ANSSI_ACTIF === 'true',
   dateDebutBandeauMSC: () => process.env.FEATURE_FLAG_MSC_BANDEAU_DATE_DEBUT,
-  avecDecrireV2: () => process.env.FEATURE_FLAG_AVEC_DECRIRE_V2 === 'true',
 });
 
 const versionDeBuild = () => {
