@@ -13,6 +13,7 @@
   import CartouchesRisqueV2 from './CartouchesRisqueV2.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import type { ReferentielStatut } from '../ui/types';
+  import ModaleCartographies from './ModaleCartographies.svelte';
 
   interface Props {
     idService: string;
@@ -55,6 +56,8 @@
   const rafraichisRisques = async () => {
     risques = await api.recupereRisques(idService);
   };
+
+  let modaleCartographies: ModaleCartographies | undefined;
 </script>
 
 <svelte:body on:risques-v2-modifies={rafraichisRisques} />
@@ -62,6 +65,14 @@
 <div class="conteneur">
   <div class="entete">
     <h2>Cartographie des risques usuels</h2>
+    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+
+    <dsfr-button
+      label="Voir les 3 cartographies"
+      kind="tertiary"
+      size="md"
+      onclick={() => modaleCartographies?.affiche()}
+    ></dsfr-button>
   </div>
   <div class="conteneur-matrice">
     <div class="relatif">
@@ -194,6 +205,8 @@
   </Tableau>
 </div>
 
+<ModaleCartographies bind:this={modaleCartographies} />
+
 <style lang="scss">
   /* Annule la couleur `fond-pale` positionnée par le pug */
   :global(.zone-principale) {
@@ -220,11 +233,14 @@
     }
 
     .entete {
-      padding: 1rem;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .conteneur-matrice {
-      padding: 1rem;
+      padding: 30px 16px;
       display: flex;
       flex-direction: column;
       justify-content: center;
