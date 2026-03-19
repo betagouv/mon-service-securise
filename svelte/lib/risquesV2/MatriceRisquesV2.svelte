@@ -5,9 +5,10 @@
   interface Props {
     risques: Risque[];
     transparent?: boolean;
+    taille?: 'sm' | 'md';
   }
 
-  let { risques, transparent = false }: Props = $props();
+  let { risques, transparent = false, taille = 'md' }: Props = $props();
 </script>
 
 <table class="relatif" class:transparent>
@@ -33,7 +34,7 @@
           )}
           {@const idRisques = risqueDeCetteCellule.map((r) => r.id).join(', ')}
           <td>
-            <div class="contenu-cellule {laCouleur}">
+            <div class="contenu-cellule {laCouleur} {taille}">
               {#if idRisques}
                 <span>{idRisques}</span>
               {/if}
@@ -90,8 +91,6 @@
         }
 
         .contenu-cellule {
-          width: 123px;
-          height: 72px;
           color: #fff;
           font-size: 1rem;
           font-weight: bold;
@@ -99,6 +98,16 @@
           display: flex;
           align-items: center;
           justify-content: center;
+
+          &.md {
+            width: 123px;
+            height: 72px;
+          }
+
+          &.sm {
+            width: 107px;
+            height: 63px;
+          }
 
           &.vert {
             background: var(--vert);

@@ -66,7 +66,6 @@
   <div class="entete">
     <h2>Cartographie des risques usuels</h2>
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
-
     <dsfr-button
       label="Voir les 3 cartographies"
       kind="tertiary"
@@ -205,7 +204,7 @@
   </Tableau>
 </div>
 
-<ModaleCartographies bind:this={modaleCartographies} />
+<ModaleCartographies bind:this={modaleCartographies} {risques} />
 
 <style lang="scss">
   /* Annule la couleur `fond-pale` positionnée par le pug */
