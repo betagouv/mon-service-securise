@@ -192,7 +192,12 @@
   </Tableau>
 </div>
 
-<ModaleCartographies bind:this={modaleCartographies} {risques} />
+<ModaleCartographies
+  bind:this={modaleCartographies}
+  {risques}
+  {idService}
+  {statuts}
+/>
 
 <style lang="scss">
   /* Annule la couleur `fond-pale` positionnée par le pug */

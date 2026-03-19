@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Risque } from '../risquesV2.d';
+  import type { MesuresAssocieesARisque, Risque } from '../risquesV2.d';
   import BadgesTiroirRisqueV2 from './BadgesTiroirRisqueV2.svelte';
   import { onMount, untrack } from 'svelte';
   import ContenuTiroir from '../../ui/tiroirs/ContenuTiroir.svelte';
@@ -47,18 +47,11 @@
     tiroirStore.ferme();
   };
 
-  type MesureGenerale = {
-    description: string;
-    statut?: 'aLancer' | 'enCours' | 'fait' | 'nonFait';
-    id: string;
-  };
-  type Mesures = {
-    mesuresGenerales: Record<string, MesureGenerale>;
-  };
+  let mesures: MesuresAssocieesARisque['mesuresGenerales'] | undefined =
+    $state();
 
-  let mesures: Mesures['mesuresGenerales'] | undefined = $state();
   onMount(async () => {
-    const resultat = await axios.get<Mesures>(
+    const resultat = await axios.get<MesuresAssocieesARisque>(
       `/api/service/${idService}/mesures`
     );
     mesures = resultat.data?.mesuresGenerales;

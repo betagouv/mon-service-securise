@@ -29,3 +29,13 @@ export type RisquesV2Props = {
   idService: string;
   statuts: ReferentielStatut;
 };
+
+export type MesureGeneraleAssocieeARisque = {
+  description: string;
+  statut?: 'aLancer' | 'enCours' | 'fait' | 'nonFait';
+  id: string;
+};
+
+export type MesuresAssocieesARisque = {
+  mesuresGenerales: Record<string, MesureGeneraleAssocieeARisque>;
+};
