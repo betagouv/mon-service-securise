@@ -22,6 +22,7 @@ describe('Le risque spécifique V2', () => {
       commentaire: 'commentaire',
     });
   });
+
   it('connait ses données à persister', () => {
     const risqueSpecifique = new RisqueSpecifiqueV2({
       intitule: 'intitule',

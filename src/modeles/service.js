@@ -109,7 +109,8 @@ class Service {
       this.risquesV2 = new RisquesV2(
         moteurRisques.risques(),
         moteurRisques.risquesBruts(),
-        moteurRisques.risquesCibles()
+        moteurRisques.risquesCibles(),
+        []
       );
     }
   }
