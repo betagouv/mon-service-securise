@@ -23,6 +23,7 @@ const routesConnectePageService = ({
   adaptateurCsv,
   adaptateurGestionErreur,
   adaptateurHorloge,
+  adaptateurEnvironnement,
 }) => {
   const routes = express.Router();
   const departements = referentiel.departements();
@@ -216,6 +217,11 @@ const routesConnectePageService = ({
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
+      if (!adaptateurEnvironnement.featureFlag().avecRisquesV2()) {
+        reponse.sendStatus(404);
+        return;
+      }
+
       const { service } = requete;
 
       reponse.render('service/risquesV2', {

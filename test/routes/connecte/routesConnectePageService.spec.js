@@ -758,4 +758,15 @@ describe('Le serveur MSS des routes /service/*', () => {
       expect(reponse.status).to.be(400);
     });
   });
+
+  describe('quand requête GET sur `/service/:id/risques/v2`', () => {
+    it('renvoi une 404 si le feature flag est désactivé', async () => {
+      testeur.adaptateurEnvironnement().featureFlag = () => ({
+        avecRisquesV2: () => false,
+      });
+      const { status } = await testeur.get('/service/456/risques/v2');
+
+      expect(status).to.be(404);
+    });
+  });
 });

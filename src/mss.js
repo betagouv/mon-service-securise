@@ -118,6 +118,7 @@ const creeServeur = ({
       adaptateurGestionErreur,
       adaptateurHorloge,
       gestionnaireSession: serviceGestionnaireSession,
+      adaptateurEnvironnement,
     })
   );
   app.use(

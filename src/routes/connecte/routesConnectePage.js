@@ -16,6 +16,7 @@ const routesConnectePage = ({
   adaptateurGestionErreur,
   adaptateurHorloge,
   gestionnaireSession,
+  adaptateurEnvironnement,
 }) => {
   const routes = express.Router();
 
@@ -227,6 +228,7 @@ const routesConnectePage = ({
       adaptateurCsv,
       adaptateurGestionErreur,
       adaptateurHorloge,
+      adaptateurEnvironnement,
     })
   );
 
