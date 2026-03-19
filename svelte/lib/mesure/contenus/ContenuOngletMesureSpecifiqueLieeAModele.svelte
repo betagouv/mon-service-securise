@@ -48,8 +48,9 @@
   {#if estLectureSeule}
     <span
       class="lecture-seule"
-      use:infobulle={"Vous n'avez pas les droits pour modifier cette mesure. Contactez son propriétaire pour en savoir plus."}
-      >Lecture seule</span
+      use:infobulle={[
+        "Vous n'avez pas les droits pour modifier cette mesure. Contactez son propriétaire pour en savoir plus.",
+      ]}>Lecture seule</span
     >
   {/if}
   {#if etapeCouranteModeleMesureSpecifique === 1}

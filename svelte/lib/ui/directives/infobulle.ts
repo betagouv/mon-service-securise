@@ -1,6 +1,6 @@
 export const infobulle = (
   noeud: HTMLElement,
-  [contenu, enfantDirect]: [string, boolean]
+  [contenu, enfantDirect]: [string, boolean?]
 ) => {
   noeud.addEventListener('mouseover', affiche);
   noeud.addEventListener('mouseleave', masque);
