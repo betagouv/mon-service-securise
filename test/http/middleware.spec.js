@@ -36,7 +36,6 @@ const prepareVerificationReponse = (reponse, status, message) => {
   reponse.send = (m) => {
     try {
       if (typeof message !== 'undefined') expect(m).to.equal(message);
-      suite();
     } catch (e) {
       /* eslint-disable no-console */
       console.log(e);
