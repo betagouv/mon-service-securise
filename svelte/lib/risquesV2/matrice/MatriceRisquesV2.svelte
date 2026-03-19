@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Risque } from './risquesV2.d';
-  import { couleur } from './kit';
+  import type { Risque } from '../risquesV2.d';
+  import { couleur } from '../kit/kit';
 
   interface Props {
     risques: Risque[];

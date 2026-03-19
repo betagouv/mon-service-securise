@@ -1,4 +1,4 @@
-import type { Niveau } from './risquesV2.d';
+import type { Niveau } from '../risquesV2.d';
 
 export type CouleurNiveauRisque = 'vert' | 'rouge' | 'orange';
 

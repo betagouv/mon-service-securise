@@ -1,20 +1,20 @@
 <script lang="ts">
-  import MatriceRisquesV2 from './MatriceRisquesV2.svelte';
+  import MatriceRisquesV2 from './matrice/MatriceRisquesV2.svelte';
   import { onMount } from 'svelte';
   import type { Risque, TousRisques } from './risquesV2.d';
   import * as api from './risquesV2.api';
   import { metsAJourRisque } from './risquesV2.api';
   import Tableau from '../ui/Tableau.svelte';
-  import Niveau from './Niveau.svelte';
+  import Niveau from './kit/Niveau.svelte';
   import Switch from '../ui/Switch.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
-  import TiroirRisqueGeneralV2 from './TiroirRisqueGeneralV2.svelte';
-  import CartoucheIdentifiantRisque from './CartoucheIdentifiantRisque.svelte';
-  import CartouchesRisqueV2 from './CartouchesRisqueV2.svelte';
+  import TiroirRisqueGeneralV2 from './tiroir/TiroirRisqueGeneralV2.svelte';
+  import CartoucheIdentifiantRisque from './kit/CartoucheIdentifiantRisque.svelte';
+  import CartouchesRisqueV2 from './kit/CartouchesRisqueV2.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import type { ReferentielStatut } from '../ui/types';
-  import ModaleCartographies from './ModaleCartographies.svelte';
-  import LegendeMatrice from './LegendeMatrice.svelte';
+  import ModaleCartographies from './modale/ModaleCartographies.svelte';
+  import LegendeMatrice from './matrice/LegendeMatrice.svelte';
 
   interface Props {
     idService: string;

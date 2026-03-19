@@ -1,6 +1,6 @@
 <script lang="ts">
   import { mappingNomCategories } from './kit';
-  import type { Risque } from './risquesV2.d';
+  import type { Risque } from '../risquesV2.d';
 
   interface Props {
     risque: Risque;
