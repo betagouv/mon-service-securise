@@ -106,12 +106,12 @@ class Service {
         this.mesures.personnaliseesAvecStatutSeul(),
         risquesV2
       );
-      this.risquesV2 = new RisquesV2(
-        moteurRisques.risques(),
-        moteurRisques.risquesBruts(),
-        moteurRisques.risquesCibles(),
-        []
-      );
+      this.risquesV2 = new RisquesV2({
+        risques: moteurRisques.risques(),
+        risquesBruts: moteurRisques.risquesBruts(),
+        risquesCibles: moteurRisques.risquesCibles(),
+        risquesSpecifiques: [],
+      });
     }
   }
 

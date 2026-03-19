@@ -2,13 +2,25 @@ import { RisqueV2 } from './risqueV2.js';
 import { DonneesRisqueV2, IdRisqueV2 } from './risquesV2.types.js';
 import { RisqueSpecifiqueV2 } from './risqueSpecifiqueV2.js';
 
+type DonneesRisquesV2 = {
+  risques: RisqueV2[];
+  risquesBruts: RisqueV2[];
+  risquesCibles: RisqueV2[];
+  risquesSpecifiques: RisqueSpecifiqueV2[];
+};
+
 export class RisquesV2 {
-  constructor(
-    private readonly risques: RisqueV2[],
-    private readonly risquesBruts: RisqueV2[],
-    private readonly risquesCibles: RisqueV2[],
-    private readonly risquesSpecifiques: RisqueSpecifiqueV2[]
-  ) {}
+  private readonly risques: RisqueV2[];
+  private readonly risquesBruts: RisqueV2[];
+  private readonly risquesCibles: RisqueV2[];
+  private readonly risquesSpecifiques: RisqueSpecifiqueV2[];
+
+  constructor(donnees: DonneesRisquesV2) {
+    this.risques = donnees.risques;
+    this.risquesBruts = donnees.risquesBruts;
+    this.risquesCibles = donnees.risquesCibles;
+    this.risquesSpecifiques = donnees.risquesSpecifiques;
+  }
 
   donneesSerialisees() {
     return Object.fromEntries(
