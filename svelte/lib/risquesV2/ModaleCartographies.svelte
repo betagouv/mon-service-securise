@@ -2,6 +2,7 @@
   import Modale from '../ui/Modale.svelte';
   import MatriceRisquesV2 from './MatriceRisquesV2.svelte';
   import type { TousRisques } from './risquesV2.d';
+  import Infobulle from '../ui/Infobulle.svelte';
   let elementModale: Modale | undefined;
 
   interface Props {
@@ -21,12 +22,33 @@
     <div class="contenu-modale">
       <div class="conteneur-matrices">
         <div class="conteneur-matrice">
+          <div class="conteneur-titre">
+            <h5>Risques usuels bruts</h5>
+            <Infobulle
+              contenu="Les risques bruts sont les risques évalués sans prendre en compte la mise en place des mesures de sécurité."
+              enfantDirect
+            />
+          </div>
           <MatriceRisquesV2 risques={risques.risquesBruts} taille="sm" />
         </div>
         <div class="conteneur-matrice">
+          <div class="conteneur-titre">
+            <h5>Risques résiduels actuels</h5>
+            <Infobulle
+              contenu="Les risques résiduels actuels sont les risques évalués en prenant en compte les mesures de sécurité que vous avez déjà mises en place."
+              enfantDirect
+            />
+          </div>
           <MatriceRisquesV2 risques={risques.risques} taille="sm" />
         </div>
         <div class="conteneur-matrice">
+          <div class="conteneur-titre">
+            <h5>Risques cibles</h5>
+            <Infobulle
+              contenu="Les risques cibles sont les risques évalués en considérant toutes les mesures mises en place."
+              enfantDirect
+            />
+          </div>
           <MatriceRisquesV2 risques={risques.risquesCibles} taille="sm" />
         </div>
       </div>
@@ -58,10 +80,24 @@
     text-align: center;
     display: flex;
     gap: 155px;
-    padding-left: 45px;
+    padding-left: 54px;
   }
 
   .conteneur-matrice {
     max-width: 574px;
+
+    .conteneur-titre {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-left: -44px;
+
+      h5 {
+        font-weight: 500;
+        font-size: 1rem;
+        line-height: 1.5rem;
+        color: #666666;
+      }
+    }
   }
 </style>

@@ -1,4 +1,7 @@
-export const infobulle = (noeud: HTMLElement, contenu: string) => {
+export const infobulle = (
+  noeud: HTMLElement,
+  [contenu, enfantDirect]: [string, boolean]
+) => {
   noeud.addEventListener('mouseover', affiche);
   noeud.addEventListener('mouseleave', masque);
 
@@ -7,7 +10,11 @@ export const infobulle = (noeud: HTMLElement, contenu: string) => {
   elementInfobulle.classList.add('conteneur-infobulle');
   elementContenuInfobulle.textContent = contenu;
   elementInfobulle.appendChild(elementContenuInfobulle);
-  document.body.appendChild(elementInfobulle);
+  if (enfantDirect) {
+    noeud.appendChild(elementInfobulle);
+  } else {
+    document.body.appendChild(elementInfobulle);
+  }
 
   function affiche() {
     elementInfobulle.style.display = 'flex';
