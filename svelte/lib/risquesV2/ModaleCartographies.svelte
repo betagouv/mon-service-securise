@@ -3,6 +3,7 @@
   import MatriceRisquesV2 from './MatriceRisquesV2.svelte';
   import type { TousRisques } from './risquesV2.d';
   import Infobulle from '../ui/Infobulle.svelte';
+  import LegendeMatrice from './LegendeMatrice.svelte';
   let elementModale: Modale | undefined;
 
   interface Props {
@@ -52,6 +53,7 @@
           <MatriceRisquesV2 risques={risques.risquesCibles} taille="sm" />
         </div>
       </div>
+      <LegendeMatrice />
     </div>
   {/snippet}
   {#snippet actions()}
@@ -76,6 +78,20 @@
     }
   }
 
+  h4 {
+    margin-top: 0;
+    margin-bottom: 32px;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: bold;
+  }
+
+  .contenu-modale {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
   .conteneur-matrices {
     text-align: center;
     display: flex;
@@ -91,12 +107,14 @@
       gap: 10px;
       align-items: center;
       margin-left: -44px;
+      margin-bottom: 16px;
 
       h5 {
         font-weight: 500;
         font-size: 1rem;
         line-height: 1.5rem;
         color: #666666;
+        margin: 0;
       }
     }
   }
