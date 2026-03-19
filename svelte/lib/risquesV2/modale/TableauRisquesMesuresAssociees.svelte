@@ -6,6 +6,7 @@
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import type { ReferentielStatut } from '../../ui/types';
   import { SvelteSet } from 'svelte/reactivity';
+  import CartoucheCategorieMesureDSFR from '../../ui/CartoucheCategorieMesureDSFR.svelte';
 
   interface Props {
     risques: Risque[];
@@ -67,7 +68,20 @@
             <div class="intitule-mesure">
               <span><b>{index === 0 ? 'Mesures associées' : ''}</b></span>
             </div>
-            <div><span>{mesureAssociee?.description}</span></div>
+            <div class="description-mesure">
+              <span>{mesureAssociee?.description}</span>
+              <div class="tags-mesure">
+                <dsfr-tag
+                  label={mesureAssociee?.indispensable
+                    ? 'Indispensable'
+                    : 'Recommandée'}
+                ></dsfr-tag>
+                <dsfr-tag label={mesureAssociee?.referentiel}></dsfr-tag>
+                <CartoucheCategorieMesureDSFR
+                  categorie={mesureAssociee?.categorie}
+                />
+              </div>
+            </div>
             <div>
               <TagStatutMesure
                 referentielStatuts={statuts}
@@ -130,7 +144,13 @@
         }
       }
 
-      .intitule {
+      .tags-mesure {
+        display: flex;
+        gap: 8px;
+      }
+
+      .intitule,
+      .description-mesure {
         display: flex;
         flex-direction: column;
         gap: 8px;
