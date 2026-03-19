@@ -17,6 +17,7 @@ import { DonneesRisquesV2 } from './risquesV2.types.js';
 export class MoteurRisquesV2 {
   private readonly selectionVecteurs: Array<IdVecteurRisque>;
   private mesures: MesuresPourRisque;
+  private readonly idMesuresPertinentes: Array<IdMesureV2>;
 
   constructor(
     private readonly descriptionService: DescriptionServiceV2,
@@ -26,6 +27,7 @@ export class MoteurRisquesV2 {
     this.selectionVecteurs = new SelectionVecteurs().selectionnePourService(
       descriptionService
     );
+    this.idMesuresPertinentes = Object.keys(mesuresPersonnalisees);
     this.mesures = new MesuresPourRisque(mesuresPersonnalisees);
   }
 
@@ -73,7 +75,9 @@ export class MoteurRisquesV2 {
       const donneesRisque = this.donnees[idRisque];
       const mesuresAssociees = Object.values(
         configVraisemblance[this.descriptionService.niveauSecurite]!.groupes
-      ).flatMap((groupe) => groupe.idsMesures);
+      )
+        .flatMap((groupe) => groupe.idsMesures)
+        .filter((idMesure) => this.idMesuresPertinentes.includes(idMesure));
 
       return new RisqueV2(
         id as IdVecteurRisque,

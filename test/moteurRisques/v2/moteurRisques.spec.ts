@@ -8,6 +8,7 @@ import { RisqueV2 } from '../../../src/moteurRisques/v2/risqueV2.ts';
 import MesureGenerale from '../../../src/modeles/mesureGenerale.js';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
 import { IdMesureV2 } from '../../../donneesReferentielMesuresV2.ts';
+import { ReferentielV2 } from '../../../src/referentiel.interface.ts';
 
 describe('Le moteur de risques V2', () => {
   const uneAPISimple = () =>
@@ -40,15 +41,16 @@ describe('Le moteur de risques V2', () => {
 
   describe('concernant les risques', () => {
     let moteurAvecMesuresFaites: MoteurRisquesV2;
+    let referentiel: ReferentielV2;
+    const mesureFaite = (id: IdMesureV2) => ({
+      [id]: new MesureGenerale({ statut: 'fait', id }, referentiel),
+    });
+    const mesureNonFaite = (id: IdMesureV2) => ({
+      [id]: new MesureGenerale({ statut: '', id }, referentiel),
+    });
 
     beforeEach(() => {
-      const referentiel = creeReferentielV2();
-      const mesureFaite = (id: IdMesureV2) => ({
-        [id]: new MesureGenerale({ statut: 'fait', id }, referentiel),
-      });
-      const mesureNonFaite = (id: IdMesureV2) => ({
-        [id]: new MesureGenerale({ statut: '', id }, referentiel),
-      });
+      referentiel = creeReferentielV2();
 
       moteurAvecMesuresFaites = new MoteurRisquesV2(
         // Un service dont le premier risque est "R3"
@@ -109,19 +111,36 @@ describe('Le moteur de risques V2', () => {
       expect(risqueR3.desactive).toBe(true);
     });
 
-    it('sait donner les mesures associées au risque', () => {
-      const moteur = new MoteurRisquesV2(
-        uneDescriptionV2Valide().avecNiveauSecurite('niveau1').construis(),
-        {}
-      );
+    describe('concernant les mesures associées au risque', () => {
+      it('sait donner les mesures associées au risque', () => {
+        const moteur = new MoteurRisquesV2(
+          uneDescriptionV2Valide().avecNiveauSecurite('niveau1').construis(),
+          {
+            ...mesureFaite('MCO_MCS.14'),
+            ...mesureFaite('MCO_MCS.5'),
+            ...mesureFaite('MCO_MCS.6'),
+            ...mesureFaite('CONTRAT.1'),
+          }
+        );
 
-      const risqueR3 = moteur.risques()[0].toJSON();
-      expect(risqueR3.mesuresAssociees).toEqual([
-        'MCO_MCS.14',
-        'MCO_MCS.5',
-        'MCO_MCS.6',
-        'CONTRAT.1',
-      ]);
+        const risqueR3 = moteur.risques()[0].toJSON();
+        expect(risqueR3.mesuresAssociees).toEqual([
+          'MCO_MCS.14',
+          'MCO_MCS.5',
+          'MCO_MCS.6',
+          'CONTRAT.1',
+        ]);
+      });
+
+      it("n'inclus pas les mesures qui ne concernent pas le service", () => {
+        const moteur = new MoteurRisquesV2(
+          uneDescriptionV2Valide().avecNiveauSecurite('niveau1').construis(),
+          { ...mesureFaite('MCO_MCS.14') }
+        );
+
+        const risqueR3 = moteur.risques()[0].toJSON();
+        expect(risqueR3.mesuresAssociees).toEqual(['MCO_MCS.14']);
+      });
     });
   });
 });
