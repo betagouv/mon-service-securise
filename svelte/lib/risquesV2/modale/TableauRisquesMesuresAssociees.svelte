@@ -5,6 +5,7 @@
   import { onMount } from 'svelte';
   import TagStatutMesure from '../../ui/TagStatutMesure.svelte';
   import type { ReferentielStatut } from '../../ui/types';
+  import { SvelteSet } from 'svelte/reactivity';
 
   interface Props {
     risques: Risque[];
@@ -22,6 +23,12 @@
     );
     mesures = resultat.data?.mesuresGenerales;
   });
+
+  let risquesReplies = new SvelteSet<string>();
+  const basculeRepliRisque = (idRisque: string) => {
+    if (risquesReplies.has(idRisque)) risquesReplies.delete(idRisque);
+    else risquesReplies.add(idRisque);
+  };
 </script>
 
 <div class="tableau-pliable">
@@ -32,30 +39,45 @@
     <span>Actions</span>
   </div>
   {#each risques as risque (risque.id)}
+    {@const avecMesuresVisibles = !risquesReplies.has(risque.id)}
     <div class="ligne-tableau">
-      <div class="identifiant"><CartoucheIdentifiantRisque {risque} /></div>
+      <div class="identifiant">
+        <button
+          class="identifiant-cliquable"
+          onclick={() => basculeRepliRisque(risque.id)}
+        >
+          <lab-anssi-icone
+            class:ferme={!avecMesuresVisibles}
+            nom="arrow-up-s-line"
+            taille="sm"
+          ></lab-anssi-icone>
+          <CartoucheIdentifiantRisque {risque} />
+        </button>
+      </div>
       <div class="intitule">
         <span>{risque.intitule}</span>
         <CartouchesRisqueV2 {risque} />
       </div>
       <div></div>
       <div></div>
-      {#each risque.mesuresAssociees as idMesure, index (idMesure)}
-        {@const mesureAssociee = mesures[idMesure]}
-        <div class="ligne-mesure">
-          <div class="intitule-mesure">
-            <span><b>{index === 0 ? 'Mesures associées' : ''}</b></span>
+      {#if avecMesuresVisibles}
+        {#each risque.mesuresAssociees as idMesure, index (idMesure)}
+          {@const mesureAssociee = mesures[idMesure]}
+          <div class="ligne-mesure">
+            <div class="intitule-mesure">
+              <span><b>{index === 0 ? 'Mesures associées' : ''}</b></span>
+            </div>
+            <div><span>{mesureAssociee?.description}</span></div>
+            <div>
+              <TagStatutMesure
+                referentielStatuts={statuts}
+                statut={mesureAssociee?.statut}
+              />
+            </div>
+            <div></div>
           </div>
-          <div><span>{mesureAssociee?.description}</span></div>
-          <div>
-            <TagStatutMesure
-              referentielStatuts={statuts}
-              statut={mesureAssociee?.statut}
-            />
-          </div>
-          <div></div>
-        </div>
-      {/each}
+        {/each}
+      {/if}
     </div>
   {/each}
 </div>
@@ -77,6 +99,26 @@
     .ligne-tableau {
       border: 1px solid #929292;
       border-top: none;
+
+      .identifiant-cliquable {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        color: #3a3a3a;
+        gap: 12px;
+
+        lab-anssi-icone {
+          transition: transform 0.1s ease-out;
+
+          &.ferme {
+            transform: rotate(180deg);
+          }
+        }
+      }
 
       .intitule {
         display: flex;
