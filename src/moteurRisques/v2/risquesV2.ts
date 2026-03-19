@@ -23,9 +23,13 @@ export class RisquesV2 {
   }
 
   donneesSerialisees() {
-    return Object.fromEntries(
+    const risquesGeneraux = Object.fromEntries(
       this.risques.map((r) => [r.id, r.donneesSerialisees()])
     );
+    const risquesSpecifiques = this.risquesSpecifiques.map((r) =>
+      r.donneesSerialisees()
+    );
+    return { risquesGeneraux, risquesSpecifiques };
   }
 
   toJSON() {

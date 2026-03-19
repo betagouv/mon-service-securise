@@ -1342,15 +1342,22 @@ describe('Un service', () => {
         descriptionService: uneDescriptionV2Valide()
           .avecNomService('Bibliothèque')
           .donneesDescription(),
-        risquesV2: { R3: { commentaire: 'un comm', desactive: false } },
+        risquesV2: {
+          risquesGeneraux: { R3: { commentaire: 'un comm', desactive: false } },
+          risquesSpecifiques: [
+            { id: 'RS1', intitule: 'intitule', categories: [] },
+          ],
+        },
       });
 
       const { risquesV2 } = service.donneesAPersister().toutes();
-      expect(Object.keys(risquesV2)).toContain('R3');
-      expect(risquesV2.R3).toEqual({
+      const { risquesGeneraux } = risquesV2;
+      expect(Object.keys(risquesGeneraux)).toContain('R3');
+      expect(risquesGeneraux.R3).toEqual({
         commentaire: 'un comm',
         desactive: false,
       });
+      expect(risquesV2.risquesSpecifiques[0].intitule).toBe('intitule');
     });
   });
 
