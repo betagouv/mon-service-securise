@@ -1,6 +1,11 @@
 import { RisqueV2 } from './risqueV2.js';
 import { DonneesRisqueV2, IdRisqueV2 } from './risquesV2.types.js';
-import { RisqueSpecifiqueV2 } from './risqueSpecifiqueV2.js';
+import {
+  DonneesMiseAJourRisqueSpecifiqueV2,
+  DonneesRisqueSpecifiqueV2,
+  RisqueSpecifiqueV2,
+} from './risqueSpecifiqueV2.js';
+import { UUID } from '../../typesBasiques.js';
 
 type DonneesRisquesV2 = {
   risques: RisqueV2[];
@@ -13,7 +18,7 @@ export class RisquesV2 {
   private readonly risques: RisqueV2[];
   private readonly risquesBruts: RisqueV2[];
   private readonly risquesCibles: RisqueV2[];
-  private readonly risquesSpecifiques: RisqueSpecifiqueV2[];
+  private risquesSpecifiques: RisqueSpecifiqueV2[];
 
   constructor(donnees: DonneesRisquesV2) {
     this.risques = donnees.risques;
@@ -43,5 +48,24 @@ export class RisquesV2 {
 
   metsAJour(idRisque: IdRisqueV2, donnees: DonneesRisqueV2) {
     this.risques.find((r) => r.id === idRisque)?.metsAJour(donnees);
+  }
+
+  ajouteRisqueSpecifique(donnees: DonneesRisqueSpecifiqueV2) {
+    this.risquesSpecifiques.push(new RisqueSpecifiqueV2(donnees));
+  }
+
+  metsAJourRisqueSpecifique(
+    idRisqueSpecifique: UUID,
+    donnees: DonneesMiseAJourRisqueSpecifiqueV2
+  ) {
+    this.risquesSpecifiques
+      .find((r) => r.id === idRisqueSpecifique)
+      ?.metsAJour(donnees);
+  }
+
+  supprimeRisqueSpecifique(idRisqueSpecifique: UUID) {
+    this.risquesSpecifiques = this.risquesSpecifiques.filter(
+      (r) => r.id !== idRisqueSpecifique
+    );
   }
 }
