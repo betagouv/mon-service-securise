@@ -63,7 +63,7 @@
     "pdf-lib": "^1.17.1",
     "pg": "^8.8.0",
     "pug": "^3.0.3",
-    "puppeteer": "^24.38.0",
+    "puppeteer": "^24.39.0",
     "string-strip-html": "^8.4.0",
     "tippy.js": "^6.3.7",
     "uuid": "^9.0.0",
