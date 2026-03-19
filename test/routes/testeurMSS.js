@@ -121,7 +121,9 @@ const testeurMss = () => {
         urlBase: () => 'http://localhost:1234',
       }),
       trustProxy: () => 0,
-      featureFlag: () => ({}),
+      featureFlag: () => ({
+        avecRisquesV2: () => true,
+      }),
       oidc: () => ({ fournisseursAvecMFA: () => [] }),
     };
     adaptateurProtection = {
