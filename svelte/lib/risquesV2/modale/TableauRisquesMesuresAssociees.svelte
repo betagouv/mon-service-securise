@@ -53,10 +53,12 @@
             nom="arrow-up-s-line"
             taille="sm"
           ></lab-anssi-icone>
-          <CartoucheIdentifiantRisque {risque} />
+          <div class:inactif={risque.desactive}>
+            <CartoucheIdentifiantRisque {risque} />
+          </div>
         </button>
       </div>
-      <div class="intitule">
+      <div class="intitule" class:inactif={risque.desactive}>
         <span>{risque.intitule}</span>
         <CartouchesRisqueV2 {risque} />
       </div>
@@ -66,12 +68,12 @@
         {#each risque.mesuresAssociees as idMesure, index (idMesure)}
           {@const mesureAssociee = mesures[idMesure]}
           <div class="ligne-mesure">
-            <div class="intitule-mesure">
+            <div class="intitule-mesure" class:inactif={risque.desactive}>
               <span><b>{index === 0 ? 'Mesures associées' : ''}</b></span>
             </div>
-            <div class="description-mesure">
+            <div class="description-mesure" class:inactif={risque.desactive}>
               <span>{mesureAssociee?.description}</span>
-              <div class="tags-mesure">
+              <div class="tags-mesure" class:inactif={risque.desactive}>
                 <dsfr-tag
                   label={mesureAssociee?.indispensable
                     ? 'Indispensable'
@@ -83,7 +85,7 @@
                 />
               </div>
             </div>
-            <div>
+            <div class:inactif={risque.desactive}>
               <TagStatutMesure
                 referentielStatuts={statuts}
                 statut={mesureAssociee?.statut}
@@ -119,6 +121,10 @@
   .tableau-pliable {
     display: grid;
     grid-template-columns: 1fr 4fr 1fr 1fr;
+
+    .inactif {
+      opacity: 0.5;
+    }
 
     & > * {
       padding: 8px 16px;
