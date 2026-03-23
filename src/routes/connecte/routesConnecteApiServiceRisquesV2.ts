@@ -5,11 +5,15 @@ import {
   Rubriques,
 } from '../../modeles/autorisations/gestionDroits.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
-import { schemaPutRisqueGeneralV2 } from './routesConnecteApiService.schema.js';
+import {
+  schemaPostRisqueSpecifiqueV2,
+  schemaPutRisqueGeneralV2,
+} from './routesConnecteApiService.schema.js';
 import { Middleware } from '../../http/middleware.interface.js';
 import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { ReferentielV2 } from '../../referentiel.interface.js';
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
+import { DonneesMiseAJourRisqueSpecifiqueV2 } from '../../moteurRisques/v2/risqueSpecifiqueV2.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { RISQUES } = Rubriques;
@@ -52,6 +56,44 @@ const routesConnecteApiServiceRisquesV2 = ({
       await depotDonnees.metsAJourRisqueV2(service.id, idRisque, requete.body);
 
       reponse.sendStatus(204);
+    }
+  );
+
+  routes.post(
+    '/:id/risques/v2/specifiques',
+    middleware.trouveService({ [RISQUES]: ECRITURE }),
+    middleware.chargeAutorisationsService,
+    valideBody(z.strictObject(schemaPostRisqueSpecifiqueV2(referentielV2))),
+    async (requete, reponse) => {
+      const { service } = requete as unknown as RequestRouteConnecteService;
+
+      const {
+        intitule,
+        description,
+        categories,
+        graviteBrute,
+        vraisemblanceBrute,
+        gravite,
+        vraisemblance,
+        commentaire,
+      } = requete.body;
+
+      const donnees: DonneesMiseAJourRisqueSpecifiqueV2 = {
+        intitule,
+        description,
+        categories,
+        risqueBrut: {
+          gravite: graviteBrute,
+          vraisemblance: vraisemblanceBrute,
+        },
+        gravite,
+        vraisemblance,
+        commentaire,
+      };
+
+      await depotDonnees.ajouteRisqueSpecifiqueV2(service.id, donnees);
+
+      reponse.sendStatus(201);
     }
   );
 

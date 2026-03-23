@@ -4,7 +4,10 @@ import {
   schemaMesureSpecifique,
   schemaPlanActionMesure,
 } from '../../http/schemas/mesure.schema.js';
-import { schemaRisqueGeneral } from '../../http/schemas/risque.schema.js';
+import {
+  schemaRisqueGeneral,
+  schemaRisqueSpecifiqueV2,
+} from '../../http/schemas/risque.schema.js';
 
 export const schemaPostMesureSpecifique = (
   referentiel: Referentiel,
@@ -48,4 +51,16 @@ export const schemaPutRisqueGeneral = (referentielV2: ReferentielV2) => ({
 export const schemaPutRisqueGeneralV2 = () => ({
   commentaire: z.string().max(1000).optional(),
   desactive: z.boolean().optional(),
+});
+
+export const schemaPostRisqueSpecifiqueV2 = (referentielV2: ReferentielV2) => ({
+  intitule: z.string().min(1).max(1000),
+  description: z.string().max(2000).optional(),
+  categories: schemaRisqueSpecifiqueV2.categories(referentielV2),
+  vraisemblance: schemaRisqueSpecifiqueV2.niveauVraisemblance(referentielV2),
+  vraisemblanceBrute:
+    schemaRisqueSpecifiqueV2.niveauVraisemblance(referentielV2),
+  gravite: schemaRisqueSpecifiqueV2.niveauGravite(referentielV2),
+  graviteBrute: schemaRisqueSpecifiqueV2.niveauGravite(referentielV2),
+  commentaire: z.string().max(1000).optional(),
 });
