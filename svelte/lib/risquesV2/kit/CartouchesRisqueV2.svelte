@@ -1,16 +1,18 @@
 <script lang="ts">
   import { mappingNomCategories } from './kit';
-  import type { Risque } from '../risquesV2.d';
 
   interface Props {
-    risque: Risque;
+    risque: {
+      categories: string[];
+    };
+    risqueAjoute?: boolean;
   }
 
-  let { risque }: Props = $props();
+  let { risque, risqueAjoute = false }: Props = $props();
 </script>
 
 <div class="tags">
-  <dsfr-tag label="ANSSI"></dsfr-tag>
+  <dsfr-tag label={risqueAjoute ? 'Risque ajouté' : 'ANSSI'}></dsfr-tag>
   {#each risque.categories as categorie (categorie)}
     <dsfr-tag label={mappingNomCategories[categorie]}></dsfr-tag>
   {/each}
