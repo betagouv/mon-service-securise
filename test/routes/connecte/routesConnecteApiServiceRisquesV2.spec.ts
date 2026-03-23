@@ -9,6 +9,7 @@ import {
   IdRisqueV2,
 } from '../../../src/moteurRisques/v2/risquesV2.types.ts';
 import { UUID } from '../../../src/typesBasiques.ts';
+import { DonneesMiseAJourRisqueSpecifiqueV2 } from '../../../src/moteurRisques/v2/risqueSpecifiqueV2.ts';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { RISQUES } = Rubriques;
@@ -129,6 +130,103 @@ describe('Les routes /service/:id/risques/v2', () => {
       expect(idRisqueRecues).toBe('R3');
       expect(donneesRisqueRecues!.desactive).toBe(true);
       expect(donneesRisqueRecues!.commentaire).toBe('un commentaire');
+    });
+  });
+
+  describe('quand requête POST sur `/api/service/:id/risques/v2/specifiques', () => {
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: RISQUES }],
+          testeur.app(),
+          {
+            method: 'post',
+            url: '/api/service/456/risques/v2/specifiques',
+          }
+        );
+    });
+
+    it("utilise le middleware de chargement de l'autorisation", async () => {
+      await testeur
+        .middleware()
+        .verifieChargementDesAutorisations(testeur.app(), {
+          method: 'post',
+          url: '/api/service/456/risques/v2/specifiques',
+        });
+    });
+
+    it.each([
+      { cle: 'intitule', valeur: '' },
+      { cle: 'description', valeur: 1234 },
+      { cle: 'categories', valeur: ['pasUneCategorie'] },
+      { cle: 'categories', valeur: [] },
+      { cle: 'vraisemblance', valeur: 'pasUneVraisemblance' },
+      { cle: 'vraisemblanceBrute', valeur: 'pasUneVraisemblance' },
+      { cle: 'gravite', valeur: 'pasUneGravite' },
+      { cle: 'graviteBrute', valeur: 'pasUneGravite' },
+      { cle: 'commentaire', valeur: 1234 },
+    ])(
+      'jette une erreur si la propriété $cle est invalide',
+      async ({ cle, valeur }) => {
+        const { status } = await testeur.post(
+          '/api/service/456/risques/v2/specifiques',
+          {
+            intitule: 'Initulé du risque',
+            description: 'une description',
+            categories: ['disponibilite'],
+            vraisemblance: 'peuVraisemblable',
+            vraisemblanceBrute: 'peuVraisemblable',
+            gravite: 'nonConcerne',
+            graviteBrute: 'nonConcerne',
+            commentaire: 'un commentaire',
+            [cle]: valeur,
+          }
+        );
+
+        expect(status).toBe(400);
+      }
+    );
+
+    it("délègue au dépôt de données l'ajout du risque spécifique", async () => {
+      let idServiceRecu;
+      let donneesRisqueRecues;
+      testeur.depotDonnees().ajouteRisqueSpecifiqueV2 = (
+        idService: UUID,
+        donneesRisque: DonneesMiseAJourRisqueSpecifiqueV2
+      ) => {
+        idServiceRecu = idService;
+        donneesRisqueRecues = donneesRisque;
+      };
+
+      const { status } = await testeur.post(
+        '/api/service/456/risques/v2/specifiques',
+        {
+          intitule: 'Initulé du risque',
+          description: 'une description',
+          categories: ['disponibilite'],
+          vraisemblance: 'peuVraisemblable',
+          vraisemblanceBrute: 'peuVraisemblable',
+          gravite: 'nonConcerne',
+          graviteBrute: 'nonConcerne',
+          commentaire: 'un commentaire',
+        }
+      );
+
+      expect(status).toBe(201);
+      expect(idServiceRecu).toBe('456');
+      expect(donneesRisqueRecues).toEqual({
+        intitule: 'Initulé du risque',
+        description: 'une description',
+        categories: ['disponibilite'],
+        risqueBrut: {
+          vraisemblance: 'peuVraisemblable',
+          gravite: 'nonConcerne',
+        },
+        vraisemblance: 'peuVraisemblable',
+        gravite: 'nonConcerne',
+        commentaire: 'un commentaire',
+      });
     });
   });
 });
