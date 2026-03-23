@@ -5,12 +5,22 @@
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import { toasterStore } from '../../ui/stores/toaster.store';
   import BadgesTiroirRisqueSpecifiqueV2 from './BadgesTiroirRisqueSpecifiqueV2.svelte';
+  import type { Niveau, RisqueSpecifiqueV2 } from '../risquesV2.d';
+  import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
+  import type {
+    ReferentielGravites,
+    ReferentielVraisemblances,
+  } from '../../risques/risques.d';
+  import Infobulle from '../../ui/Infobulle.svelte';
+  import { ajouteRisqueSpecifiqueV2 } from '../risquesV2.api';
 
   interface Props {
     idService: string;
+    niveauxGravite: ReferentielGravites;
+    niveauxVraisemblance: ReferentielVraisemblances;
   }
 
-  let { idService }: Props = $props();
+  let { idService, niveauxGravite, niveauxVraisemblance }: Props = $props();
 
   export const titre = 'Ajouter un risque';
   export const sousTitre = '';
@@ -26,17 +36,42 @@
     graviteBrute: '',
     vraisemblanceBrute: '',
     commentaire: '',
-  });
+  }) as unknown as RisqueSpecifiqueV2;
+
+  const metsAJourIntitule = (e: CustomEvent<string>) => {
+    risqueAjoute.intitule = e.detail;
+  };
+
+  const metsAJourDescription = (e: CustomEvent<string>) => {
+    risqueAjoute.description = e.detail;
+  };
+
+  const metsAJourCategories = (e: CustomEvent<string[]>) => {
+    risqueAjoute.categories = e.detail;
+  };
+
+  const metsAJourGraviteBrute = (e: CustomEvent<string>) => {
+    risqueAjoute.graviteBrute = e.detail;
+  };
+
+  const metsAJourVraisemblanceBrute = (e: CustomEvent<string>) => {
+    risqueAjoute.vraisemblanceBrute = e.detail;
+  };
+
+  const metsAJourGravite = (e: CustomEvent<string>) => {
+    risqueAjoute.gravite = e.detail;
+  };
+
+  const metsAJourVraisemblance = (e: CustomEvent<string>) => {
+    risqueAjoute.vraisemblance = e.detail;
+  };
 
   const metsAJourCommentaire = (e: CustomEvent<string>) => {
     risqueAjoute.commentaire = e.detail;
   };
 
   const ajouteRisque = async () => {
-    /*await metsAJourRisque(idService, risque.id, {
-      desactive: !actif,
-      commentaire,
-    });*/
+    await ajouteRisqueSpecifiqueV2(idService, risqueAjoute);
     document.body.dispatchEvent(new CustomEvent('risques-v2-modifies'));
     toasterStore.succes(
       'Succès',
@@ -61,21 +96,114 @@
   <div class="contenu-onglet">
     <div>
       <p>
-        <b>Description du risque</b>
-        <span><i>Temporaire: Lorem Ipsum</i></span>
+        <dsfr-input
+          label="Intitulé du risque"
+          type="text"
+          value={risqueAjoute.intitule}
+          onvaluechanged={metsAJourIntitule}
+          required
+        ></dsfr-input>
       </p>
       <p>
-        <b>Exemple de service numérique</b>
-        <span><i>Temporaire: Lorem Ipsum</i></span>
+        <dsfr-textarea
+          label="Description du risque"
+          type="text"
+          rows="5"
+          value={risqueAjoute.description}
+          onvaluechanged={metsAJourDescription}
+        ></dsfr-textarea>
+      </p>
+      <p>
+        <lab-anssi-multi-select
+          label="Catégories"
+          options={[
+            {
+              id: 'disponibilite',
+              value: 'disponibilite',
+              label: 'Disponibilité',
+            },
+            { id: 'integrite', value: 'integrite', label: 'Intégrité' },
+            {
+              id: 'confidentialite',
+              value: 'confidentialite',
+              label: 'Confidentialité',
+            },
+            { id: 'tracabilite', value: 'tracabilite', label: 'Traçabilité' },
+          ]}
+          placeholder="Sélectionnez au moins une catégorie"
+          values={risqueAjoute.categories}
+          onvaluechanged={metsAJourCategories}
+          required
+        ></lab-anssi-multi-select>
       </p>
       <div class="niveaux-risque">
+        <span
+          ><b>Risque brut</b><Infobulle
+            contenu="Les risques bruts sont les risques évalués sans prendre en compte la mise en place des mesures de sécurité."
+          /></span
+        >
         <div class="ligne-niveau-risque">
-          <span><b>Gravité potentielle :</b></span>
-          <span></span>
+          <dsfr-select
+            label="Gravité potentielle"
+            placeholder="Sélectionnez une valeur"
+            options={Object.entries(niveauxGravite).map(
+              ([niveau, { description }]) => ({
+                value: niveau,
+                label: description,
+              })
+            )}
+            value={risqueAjoute.graviteBrute}
+            onvaluechanged={metsAJourGraviteBrute}
+            required
+          ></dsfr-select>
+          <dsfr-select
+            label="Vraisemblance au départ"
+            placeholder="Sélectionnez une valeur"
+            options={Object.entries(niveauxVraisemblance).map(
+              ([niveau, { libelle }]) => ({
+                value: niveau,
+                label: libelle,
+              })
+            )}
+            value={risqueAjoute.vraisemblanceBrute}
+            onvaluechanged={metsAJourVraisemblanceBrute}
+            required
+          ></dsfr-select>
         </div>
+      </div>
+      <div class="niveaux-risque">
+        <span
+          ><b>Risque résiduel</b><Infobulle
+            contenu="Les risques résiduels actuels sont les risques évalués en prenant en compte les mesures de sécurité que vous avez déjà mises en place."
+          /></span
+        >
         <div class="ligne-niveau-risque">
-          <span><b>Vraisemblance au départ :</b></span>
-          <span></span>
+          <dsfr-select
+            label="Gravité résiduelle"
+            placeholder="Sélectionnez une valeur"
+            options={Object.entries(niveauxGravite).map(
+              ([niveau, { description }]) => ({
+                value: niveau,
+                label: description,
+              })
+            )}
+            value={risqueAjoute.gravite}
+            onvaluechanged={metsAJourGravite}
+            required
+          ></dsfr-select>
+          <dsfr-select
+            label="Vraisemblance résiduelle"
+            placeholder="Sélectionnez une valeur"
+            options={Object.entries(niveauxVraisemblance).map(
+              ([niveau, { libelle }]) => ({
+                value: niveau,
+                label: libelle,
+              })
+            )}
+            value={risqueAjoute.vraisemblance}
+            onvaluechanged={metsAJourVraisemblance}
+            required
+          ></dsfr-select>
         </div>
       </div>
       <div>
@@ -138,21 +266,9 @@
       gap: 16px;
     }
 
-    .intitule-mesures-associees {
-      margin-bottom: 32px;
-    }
-
-    .statut {
-      min-width: 80px;
-    }
-
-    .mesure-cliquable {
-      text-decoration: none;
-      color: #3a3a3a;
-
-      &:hover {
-        color: var(--bleu-mise-en-avant);
-      }
+    dsfr-textarea,
+    lab-anssi-multi-select {
+      margin-bottom: -1.5rem;
     }
 
     .niveaux-risque {
@@ -160,8 +276,15 @@
       flex-direction: column;
       gap: 8px;
 
+      span {
+        display: flex;
+        gap: 0;
+        align-items: center;
+      }
+
       .ligne-niveau-risque {
         display: flex;
+        gap: 24px;
 
         & > * {
           flex: 1;

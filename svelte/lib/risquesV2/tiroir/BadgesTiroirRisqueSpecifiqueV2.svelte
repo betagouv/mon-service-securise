@@ -6,8 +6,15 @@
 </div>
 
 <style lang="scss">
-  dsfr-badge {
-    height: fit-content;
-    white-space: nowrap;
+  div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+
+    dsfr-badge {
+      height: fit-content;
+      white-space: nowrap;
+    }
   }
 </style>

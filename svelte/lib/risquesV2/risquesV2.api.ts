@@ -1,4 +1,4 @@
-import type { TousRisques } from './risquesV2.d';
+import type { RisqueSpecifiqueV2, TousRisques } from './risquesV2.d';
 
 export const recupereRisques = async (idService: string) => {
   const donnees = await axios.get<TousRisques>(
@@ -16,4 +16,11 @@ export const metsAJourRisque = async (
     desactive,
     commentaire,
   });
+};
+
+export const ajouteRisqueSpecifiqueV2 = async (
+  idService: string,
+  donnees: RisqueSpecifiqueV2
+) => {
+  await axios.post(`/api/service/${idService}/risques/v2/specifiques`, donnees);
 };
