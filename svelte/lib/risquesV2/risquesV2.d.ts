@@ -31,6 +31,7 @@ export type TousRisques = {
   risquesBruts: Risque[];
   risques: Risque[];
   risquesCibles: Risque[];
+  risquesSpecifiques: RisqueSpecifiqueV2[];
 };
 
 export type RisquesV2Props = {

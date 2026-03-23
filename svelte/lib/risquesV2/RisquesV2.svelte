@@ -1,7 +1,7 @@
 <script lang="ts">
   import MatriceRisquesV2 from './matrice/MatriceRisquesV2.svelte';
   import { onMount } from 'svelte';
-  import type { Risque, TousRisques } from './risquesV2.d';
+  import type { Risque, RisqueSpecifiqueV2, TousRisques } from './risquesV2.d';
   import * as api from './risquesV2.api';
   import { metsAJourRisque } from './risquesV2.api';
   import Tableau from '../ui/Tableau.svelte';
@@ -35,7 +35,23 @@
     risquesBruts: [],
     risques: [],
     risquesCibles: [],
+    risquesSpecifiques: [],
   });
+
+  type TypeRisque = 'general' | 'specifique';
+  let tousLesRisques = $derived([
+    ...risques.risques.map((r) => ({ ...r, type: 'general' as TypeRisque })),
+    ...risques.risquesSpecifiques.map((r) => ({
+      ...r,
+      type: 'specifique' as TypeRisque,
+      desactive: false,
+    })),
+  ]);
+  const estRisqueGeneral = (
+    r:
+      | (Risque & { type: TypeRisque })
+      | (RisqueSpecifiqueV2 & { type: TypeRisque })
+  ): r is Risque & { type: TypeRisque } => r.type === 'general';
 
   onMount(async () => {
     risques = await api.recupereRisques(idService);
@@ -161,7 +177,7 @@
       { cle: 'vraisemblance', libelle: 'Vraisemblance' },
       { cle: 'actions', libelle: 'Actions' },
     ]}
-    donnees={risques.risques}
+    donnees={tousLesRisques}
   >
     {#snippet cellule({ donnee, colonne })}
       {#if colonne.cle === 'id'}
@@ -169,53 +185,76 @@
           class="colonne-identifiant colonne"
           class:inactif={donnee.desactive}
         >
-          <CartoucheIdentifiantRisque risque={donnee} />
-        </div>
-      {:else if colonne.cle === 'intitule'}
-        {@const risqueBrut = risques.risquesBruts.find(
-          (r) => r.id === donnee.id
-        )}
-        <div class="colonne-intitule colonne" class:inactif={donnee.desactive}>
-          {#if risqueBrut}
-            <button
-              class="lien-intitule-risque"
-              disabled={donnee.desactive}
-              onclick={() => {
-                tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
-                  idService,
-                  risque: donnee,
-                  risqueBrut,
-                  statuts,
-                });
-              }}
-            >
-              <span>{donnee.intitule}</span>
-              <CartouchesRisqueV2 risque={donnee} />
-            </button>
+          {#if estRisqueGeneral(donnee)}
+            <CartoucheIdentifiantRisque risque={donnee} />
+          {:else}
+            <dsfr-badge label="Risque spécifique" type="statut"></dsfr-badge>
           {/if}
         </div>
+      {:else if colonne.cle === 'intitule'}
+        {#if estRisqueGeneral(donnee)}
+          {@const risqueBrut = risques.risquesBruts.find(
+            (r) => r.id === donnee.id
+          )}
+          <div
+            class="colonne-intitule colonne"
+            class:inactif={donnee.desactive}
+          >
+            {#if risqueBrut}
+              <button
+                class="lien-intitule-risque"
+                disabled={donnee.desactive}
+                onclick={() => {
+                  tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
+                    idService,
+                    risque: donnee,
+                    risqueBrut,
+                    statuts,
+                  });
+                }}
+              >
+                <span>{donnee.intitule}</span>
+                <CartouchesRisqueV2 risque={donnee} />
+              </button>
+            {/if}
+          </div>
+        {:else}
+          <div class="colonne-intitule colonne">
+            <button class="lien-intitule-risque" onclick={() => {}}>
+              <span>{donnee.intitule}</span>
+              <CartouchesRisqueV2 risque={donnee} risqueAjoute />
+            </button>
+          </div>
+        {/if}
       {:else if colonne.cle === 'gravite'}
-        <div class="colonne-gravite colonne" class:inactif={donnee.desactive}>
-          <Niveau niveau={donnee.gravite} />
-        </div>
+        {#if estRisqueGeneral(donnee)}
+          <div class="colonne-gravite colonne" class:inactif={donnee.desactive}>
+            <Niveau niveau={donnee.gravite} />
+          </div>
+        {/if}
       {:else if colonne.cle === 'vraisemblance'}
-        <div
-          class="colonne-vraisemblance colonne"
-          class:inactif={donnee.desactive}
-        >
-          <Niveau niveau={donnee.vraisemblance} />
-        </div>
+        {#if estRisqueGeneral(donnee)}
+          <div
+            class="colonne-vraisemblance colonne"
+            class:inactif={donnee.desactive}
+          >
+            <Niveau niveau={donnee.vraisemblance} />
+          </div>
+        {/if}
       {:else if colonne.cle === 'actions'}
-        <div class="colonne-actions">
-          <Switch
-            bind:actif={
-              () => !donnee.desactive, (valeur) => (donnee.desactive = !valeur)
-            }
-            id="risque-{donnee.id}-actif"
-            onChange={async (actif) =>
-              await metsAJourDesactivationRisque(donnee, !actif)}
-          />
-        </div>
+        {#if estRisqueGeneral(donnee)}
+          <div class="colonne-actions">
+            <Switch
+              bind:actif={
+                () => !donnee.desactive,
+                (valeur) => (donnee.desactive = !valeur)
+              }
+              id="risque-{donnee.id}-actif"
+              onChange={async (actif) =>
+                await metsAJourDesactivationRisque(donnee, !actif)}
+            />
+          </div>
+        {/if}
       {/if}
     {/snippet}
   </Tableau>

@@ -49,9 +49,10 @@ export class RisqueSpecifiqueV2 {
       intitule: this.intitule,
       description: this.description,
       categories: this.categories,
-      risqueBrut: this.risqueBrut,
       gravite: this.gravite,
       vraisemblance: this.vraisemblance,
+      graviteBrute: this.risqueBrut.gravite,
+      vraisemblanceBrute: this.risqueBrut.vraisemblance,
       commentaire: this.commentaire,
     };
   }

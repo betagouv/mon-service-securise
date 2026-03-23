@@ -5,8 +5,7 @@
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import { toasterStore } from '../../ui/stores/toaster.store';
   import BadgesTiroirRisqueSpecifiqueV2 from './BadgesTiroirRisqueSpecifiqueV2.svelte';
-  import type { Niveau, RisqueSpecifiqueV2 } from '../risquesV2.d';
-  import { questionsV2 } from '../../../../donneesReferentielMesuresV2';
+  import type { RisqueSpecifiqueV2 } from '../risquesV2.d';
   import type {
     ReferentielGravites,
     ReferentielVraisemblances,
@@ -207,11 +206,9 @@
         </div>
       </div>
       <div>
-        <label for="commentaire"><b>Commentaire</b></label>
         <dsfr-input
+          label="Commentaire"
           type="text"
-          id="commentaire"
-          nom="commentaire"
           value={risqueAjoute.commentaire}
           placeholder="Apportez des précisions sur le risque"
           onvaluechanged={metsAJourCommentaire}
