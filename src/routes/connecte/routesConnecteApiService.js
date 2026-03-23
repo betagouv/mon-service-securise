@@ -18,10 +18,7 @@ import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import routesConnecteApiSimulationMigrationReferentiel from './routesConnecteApiSimulationMigrationReferentiel.js';
 import { schemaSuggestionAction } from '../../http/schemas/suggestionAction.schema.js';
 import { valideBody, valideParams } from '../../http/validePayloads.js';
-import {
-  schemaPutRisqueGeneral,
-  schemaPutRisqueGeneralV2,
-} from './routesConnecteApiService.schema.js';
+import { schemaPutRisqueGeneral } from './routesConnecteApiService.schema.js';
 import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
 import { routesConnecteApiServiceMesuresSpecifiques } from './routesConnecteApiServiceMesuresSpecifiques.js';
 import { routesConnecteApiServiceHomologation } from './routesConnecteApiServiceHomologation.js';
@@ -31,6 +28,7 @@ import { routesConnecteApiServiceRetourUtilisateur } from './routesConnecteApiSe
 import { routesConnecteApiServiceMesuresGenerales } from './routesConnecteApiServiceMesuresGenerales.js';
 import { routesConnecteApiServiceDescription } from './routesConnecteApiServiceDescription.js';
 import { routesConnecteApiServiceRolesReponsaibilites } from './routesConnecteApiServiceRolesReponsabilites.js';
+import routesConnecteApiServiceRisquesV2 from './routesConnecteApiServiceRisquesV2.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER, RISQUES } = Rubriques;
@@ -162,35 +160,6 @@ const routesConnecteApiService = ({
       await depotDonnees.ajouteRisqueGeneralAService(requete.service, risque);
 
       reponse.status(200).send(risque.toJSON());
-    }
-  );
-
-  routes.get(
-    '/:id/risques/v2',
-    middleware.trouveService({ [RISQUES]: LECTURE }),
-    middleware.chargeAutorisationsService,
-    async (requete, reponse) => {
-      const { service } = requete;
-
-      reponse.json(service.risquesV2.toJSON());
-    }
-  );
-
-  routes.put(
-    '/:id/risques/v2/:idRisque',
-    middleware.trouveService({ [RISQUES]: ECRITURE }),
-    middleware.chargeAutorisationsService,
-    valideParams(
-      z.looseObject({ idRisque: z.enum(referentielV2.identifiantsRisquesV2()) })
-    ),
-    valideBody(z.strictObject(schemaPutRisqueGeneralV2())),
-    async (requete, reponse) => {
-      const { service } = requete;
-      const { idRisque } = requete.params;
-
-      await depotDonnees.metsAJourRisqueV2(service.id, idRisque, requete.body);
-
-      reponse.sendStatus(204);
     }
   );
 
@@ -378,6 +347,14 @@ const routesConnecteApiService = ({
       depotDonnees,
       middleware,
       referentiel,
+      referentielV2,
+    })
+  );
+
+  routes.use(
+    routesConnecteApiServiceRisquesV2({
+      depotDonnees,
+      middleware,
       referentielV2,
     })
   );

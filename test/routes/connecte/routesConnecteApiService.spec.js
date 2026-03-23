@@ -1,10 +1,7 @@
 import expect from 'expect.js';
 import testeurMSS from '../testeurMSS.js';
 import { unDossier } from '../../constructeurs/constructeurDossier.js';
-import {
-  unService,
-  unServiceV2,
-} from '../../constructeurs/constructeurService.js';
+import { unService } from '../../constructeurs/constructeurService.js';
 import { ErreurDonneesObligatoiresManquantes } from '../../../src/erreurs.js';
 import {
   Permissions,
@@ -876,119 +873,6 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       );
 
       expect(reponse.status).to.be(400);
-    });
-  });
-
-  describe('quand requête GET sur `/api/service/:id/risques/v2', () => {
-    it('recherche le service correspondant', async () => {
-      await testeur
-        .middleware()
-        .verifieRechercheService(
-          [{ niveau: LECTURE, rubrique: RISQUES }],
-          testeur.app(),
-          {
-            method: 'get',
-            url: '/api/service/456/risques/v2',
-          }
-        );
-    });
-
-    it("utilise le middleware de chargement de l'autorisation", async () => {
-      await testeur
-        .middleware()
-        .verifieChargementDesAutorisations(
-          testeur.app(),
-          '/api/service/456/risques/v2'
-        );
-    });
-
-    it('retourne la représentation des risques V2', async () => {
-      testeur
-        .middleware()
-        .reinitialise({ serviceARenvoyer: unServiceV2().construis() });
-
-      const reponse = await testeur.get('/api/service/456/risques/v2');
-
-      expect(reponse.body.risques).to.be.an(Array);
-      expect(reponse.body.risquesCibles).to.be.an(Array);
-      expect(reponse.body.risquesBruts).to.be.an(Array);
-    });
-  });
-
-  describe('quand requête PUT sur `/api/service/:id/risques/v2/:idRisque', () => {
-    it('recherche le service correspondant', async () => {
-      await testeur
-        .middleware()
-        .verifieRechercheService(
-          [{ niveau: ECRITURE, rubrique: RISQUES }],
-          testeur.app(),
-          {
-            method: 'put',
-            url: '/api/service/456/risques/v2/R3',
-          }
-        );
-    });
-
-    it("utilise le middleware de chargement de l'autorisation", async () => {
-      await testeur
-        .middleware()
-        .verifieChargementDesAutorisations(testeur.app(), {
-          method: 'put',
-          url: '/api/service/456/risques/v2/R3',
-        });
-    });
-
-    it("jette une erreur si l'identifiant du risque est invalide", async () => {
-      const { status } = await testeur.put(
-        '/api/service/456/risques/v2/pasUnRisque',
-        {
-          desactive: true,
-        }
-      );
-
-      expect(status).to.be(400);
-    });
-
-    it('jette une erreur si `desactive` est invalide', async () => {
-      const { status } = await testeur.put('/api/service/456/risques/v2/R3', {
-        desactive: 'invalide',
-      });
-
-      expect(status).to.be(400);
-    });
-
-    it('jette une erreur si `commentaire` est invalide', async () => {
-      const { status } = await testeur.put('/api/service/456/risques/v2/R3', {
-        commentaire: 1234,
-      });
-
-      expect(status).to.be(400);
-    });
-
-    it('mets à jour les données du risque dans le service', async () => {
-      let idServiceRecu;
-      let idRisqueRecues;
-      let donneesRisqueRecues;
-      testeur.depotDonnees().metsAJourRisqueV2 = (
-        idService,
-        idRisque,
-        donneesRisque
-      ) => {
-        idServiceRecu = idService;
-        donneesRisqueRecues = donneesRisque;
-        idRisqueRecues = idRisque;
-      };
-
-      const { status } = await testeur.put('/api/service/456/risques/v2/R3', {
-        desactive: true,
-        commentaire: 'un commentaire',
-      });
-
-      expect(status).to.be(204);
-      expect(idServiceRecu).to.be('456');
-      expect(idRisqueRecues).to.be('R3');
-      expect(donneesRisqueRecues.desactive).to.be(true);
-      expect(donneesRisqueRecues.commentaire).to.be('un commentaire');
     });
   });
 });
