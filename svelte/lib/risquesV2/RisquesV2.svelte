@@ -15,6 +15,7 @@
   import type { ReferentielStatut } from '../ui/types';
   import ModaleCartographies from './modale/ModaleCartographies.svelte';
   import LegendeMatrice from './matrice/LegendeMatrice.svelte';
+  import TiroirRisqueSpecifiqueV2 from './tiroir/TiroirRisqueSpecifiqueV2.svelte';
 
   interface Props {
     idService: string;
@@ -115,13 +116,30 @@
 
 <Toaster />
 <div class="conteneur-tableau">
-  <h2>Risques</h2>
-  <div class="sous-titre">
-    <span>
-      Le tableau ci-dessous présente le détail des risques, accompagné de leur
-      gravité et de leur vraisemblance résiduelle actuelles. Pour les risques
-      ANSSI, la gravité et la vraisemblance sont non modifiables.
-    </span>
+  <div class="entete-conteneur-tableau">
+    <div class="titres">
+      <h2>Risques</h2>
+      <div class="sous-titre">
+        <span>
+          Le tableau ci-dessous présente le détail des risques, accompagné de
+          leur gravité et de leur vraisemblance résiduelle actuelles. Pour les
+          risques ANSSI, la gravité et la vraisemblance sont non modifiables.
+        </span>
+      </div>
+    </div>
+    <div class="actions">
+      <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
+      <dsfr-button
+        label="Ajouter un risque"
+        kind="primary"
+        size="md"
+        has-icon
+        icon="add-line"
+        icon-place="left"
+        onclick={() =>
+          tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, { idService })}
+      ></dsfr-button>
+    </div>
   </div>
 
   <Tableau
@@ -275,8 +293,20 @@
   .conteneur-tableau {
     text-align: left;
 
-    h2 {
+    .entete-conteneur-tableau {
       margin-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+
+      dsfr-button {
+        white-space: nowrap;
+      }
+    }
+
+    h2 {
+      margin: 0px;
       margin-bottom: 8px;
       font-size: 1.25rem;
       line-height: 1.75rem;
