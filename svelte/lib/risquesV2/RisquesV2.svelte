@@ -16,13 +16,20 @@
   import ModaleCartographies from './modale/ModaleCartographies.svelte';
   import LegendeMatrice from './matrice/LegendeMatrice.svelte';
   import TiroirRisqueSpecifiqueV2 from './tiroir/TiroirRisqueSpecifiqueV2.svelte';
+  import type {
+    ReferentielGravites,
+    ReferentielVraisemblances,
+  } from '../risques/risques.d';
 
   interface Props {
     idService: string;
     statuts: ReferentielStatut;
+    niveauxGravite: ReferentielGravites;
+    niveauxVraisemblance: ReferentielVraisemblances;
   }
 
-  let { idService, statuts }: Props = $props();
+  let { idService, statuts, niveauxGravite, niveauxVraisemblance }: Props =
+    $props();
 
   let risques: TousRisques = $state({
     risquesBruts: [],
@@ -137,7 +144,11 @@
         icon="add-line"
         icon-place="left"
         onclick={() =>
-          tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, { idService })}
+          tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
+            idService,
+            niveauxGravite,
+            niveauxVraisemblance,
+          })}
       ></dsfr-button>
     </div>
   </div>

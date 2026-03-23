@@ -3,6 +3,10 @@ import type {
   Referentiel,
   CategorieMesure,
 } from '../ui/types';
+import type {
+  ReferentielGravites,
+  ReferentielVraisemblances,
+} from '../risques/risques.d';
 
 declare global {
   interface HTMLElementEventMap {
@@ -32,6 +36,8 @@ export type TousRisques = {
 export type RisquesV2Props = {
   idService: string;
   statuts: ReferentielStatut;
+  niveauxGravite: ReferentielGravites;
+  niveauxVraisemblance: ReferentielVraisemblances;
 };
 
 export type MesureGeneraleAssocieeARisque = {
@@ -45,4 +51,15 @@ export type MesureGeneraleAssocieeARisque = {
 
 export type MesuresAssocieesARisque = {
   mesuresGenerales: Record<string, MesureGeneraleAssocieeARisque>;
+};
+
+export type RisqueSpecifiqueV2 = {
+  intitule: string;
+  description?: string;
+  categories: string[];
+  gravite: string;
+  vraisemblance: string;
+  graviteBrute: string;
+  vraisemblanceBrute: string;
+  commentaire?: string;
 };
