@@ -3099,4 +3099,45 @@ describe('Le dépôt de données des services', () => {
       expect(risqueR3.desactive).to.be(true);
     });
   });
+
+  describe("sur demande d'ajout d'un risque spécifique v2", () => {
+    let depot;
+    let persistance;
+
+    beforeEach(() => {
+      busEvenements = fabriqueBusPourLesTests();
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnService(
+          unServiceV2().avecId('S1').construis().donneesAPersister().donnees
+        )
+        .nommeCommeProprietaire('U1', ['S1'])
+        .construis();
+
+      depot = unDepotDeDonneesServices()
+        .avecAdaptateurPersistance(persistance)
+        .construis();
+    });
+
+    it('sauvegarde le risque mis à jour', async () => {
+      await depot.ajouteRisqueSpecifiqueV2('S1', {
+        intitule: 'Initulé du risque',
+        description: 'une description',
+        categories: ['disponibilite'],
+        risqueBrut: {
+          vraisemblance: 'peuVraisemblable',
+          gravite: 'nonConcerne',
+        },
+        vraisemblance: 'peuVraisemblable',
+        gravite: 'nonConcerne',
+        commentaire: 'un commentaire',
+      });
+
+      const serviceAJour = await depot.service('S1');
+
+      const risquesAJour = serviceAJour.risquesV2.toJSON().risquesSpecifiques;
+      expect(risquesAJour[0].intitule).to.be('Initulé du risque');
+      expect(risquesAJour[0].id).not.to.be(undefined);
+    });
+  });
 });

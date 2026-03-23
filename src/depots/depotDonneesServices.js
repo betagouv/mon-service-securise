@@ -761,12 +761,22 @@ const creeDepot = (config = {}) => {
     await p.sauvegarde(idService, s.donneesAPersister().toutes());
   };
 
+  const ajouteRisqueSpecifiqueV2 = async (idService, donneesRisque) => {
+    const s = await p.lis.un(idService);
+    const idRisqueV2 = adaptateurUUID.genereUUID();
+
+    s.risquesV2.ajouteRisqueSpecifique({ ...donneesRisque, id: idRisqueV2 });
+
+    await p.sauvegarde(idService, s.donneesAPersister().toutes());
+  };
+
   return {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
     ajouteMesureSpecifiqueAuService,
     ajouteRisqueGeneralAService,
     ajouteRisqueSpecifiqueAService,
+    ajouteRisqueSpecifiqueV2,
     ajouteRolesResponsabilitesAService,
     dupliqueService,
     enregistreDossier,
