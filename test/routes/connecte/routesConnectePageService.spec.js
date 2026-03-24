@@ -423,6 +423,95 @@ describe('Le serveur MSS des routes /service/*', () => {
     });
   });
 
+  describe('quand requête GET sur `/service/:id/risques/export.csv', () => {
+    beforeEach(() => {
+      testeur.adaptateurCsv().genereCsvRisquesV1 = async () => Buffer.from('');
+    });
+
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: LECTURE, rubrique: RISQUES }],
+          testeur.app(),
+          {
+            method: 'GET',
+            url: '/service/456/risques/export.csv',
+          }
+        );
+    });
+
+    it('utilise un adaptateur CSV pour la génération', async () => {
+      let risquesExportes;
+      testeur.adaptateurCsv().genereCsvRisquesV1 = async (risques) => {
+        risquesExportes = risques;
+      };
+
+      await testeur.get('/service/456/risques/export.csv');
+
+      expect(risquesExportes).to.eql({
+        risquesGeneraux: [],
+        risquesSpecifiques: [],
+      });
+    });
+
+    it('sert un fichier de type CSV', async () => {
+      await verifieTypeFichierServiEstCSV(
+        testeur.app(),
+        '/service/456/risques/export.csv'
+      );
+    });
+
+    it('nomme le fichier CSV avec le nom du service et un horodatage', async () => {
+      testeur.middleware().reinitialise({
+        serviceARenvoyer: unService().avecNomService('Mairie').construis(),
+      });
+      testeur.adaptateurHorloge().maintenant = () => new Date(2024, 0, 23);
+      await verifieNomFichierServi(
+        testeur.app(),
+        '/service/456/risques/export.csv',
+        'Mairie Liste anciens risques 20240123.csv'
+      );
+    });
+
+    it('tronque le nom du service à 30 caractères', async () => {
+      const tropLong = new Array(150).fill('A').join('');
+      testeur.middleware().reinitialise({
+        serviceARenvoyer: unService().avecNomService(tropLong).construis(),
+      });
+      testeur.adaptateurHorloge().maintenant = () => new Date(2024, 0, 23);
+
+      const reponse = await testeur.get('/service/456/risques/export.csv');
+
+      expect(reponse.headers['content-disposition']).to.contain(
+        'filename="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA Liste'
+      );
+    });
+
+    it("reste robuste en cas d'erreur de génération CSV", async () => {
+      testeur.adaptateurCsv().genereCsvRisquesV1 = async () => {
+        throw Error('BOOM');
+      };
+
+      const reponse = await testeur.get('/service/456/risques/export.csv');
+      expect(reponse.status).to.be(424);
+    });
+
+    it("logue l'erreur survenue le cas échéant", async () => {
+      let erreurLoguee;
+
+      testeur.adaptateurCsv().genereCsvRisquesV1 = async () => {
+        throw Error('BOOM');
+      };
+      testeur.adaptateurGestionErreur().logueErreur = (erreur) => {
+        erreurLoguee = erreur;
+      };
+
+      await testeur.get('/service/456/risques/export.csv');
+      expect(erreurLoguee).to.be.an(Error);
+    });
+  });
+
   describe('quand requête GET sur `/service/:id/indiceCyber`', () => {
     beforeEach(() => {
       const service = unService().construis();

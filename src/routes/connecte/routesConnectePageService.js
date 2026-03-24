@@ -150,6 +150,40 @@ const routesConnectePageService = ({
   );
 
   routes.get(
+    '/:id/risques/export.csv',
+    middleware.trouveService({ [RISQUES]: LECTURE }),
+    async (requete, reponse) => {
+      const { service } = requete;
+
+      try {
+        const bufferCsv = await adaptateurCsv.genereCsvRisquesV1(
+          service.risques.toJSON(),
+          referentiel
+        );
+
+        const s = service
+          .nomService()
+          .substring(0, 30)
+          .replace(/[^a-zA-Z ]/g, '');
+        const date = dateYYYYMMDD(adaptateurHorloge.maintenant());
+        const fichier = `${s} Liste anciens risques ${date}.csv`;
+        const uriFichier = encodeURIComponent(fichier);
+
+        reponse
+          .contentType('text/csv;charset=utf-8')
+          .set(
+            'Content-Disposition',
+            `attachment; filename="${fichier}"; filename*=UTF-8''${uriFichier}`
+          )
+          .send(bufferCsv);
+      } catch (e) {
+        adaptateurGestionErreur.logueErreur(e);
+        reponse.sendStatus(424);
+      }
+    }
+  );
+
+  routes.get(
     '/:id/indiceCyber',
     middleware.trouveService(Autorisation.DROITS_VOIR_INDICE_CYBER),
     middleware.chargeAutorisationsService,
