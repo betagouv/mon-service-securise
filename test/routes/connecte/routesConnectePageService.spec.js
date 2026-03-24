@@ -23,22 +23,27 @@ const { DECRIRE, SECURISER, HOMOLOGUER, CONTACTS, RISQUES } = Rubriques;
 
 describe('Le serveur MSS des routes /service/*', () => {
   const testeur = testeurMSS();
+  const serviceV1 = unService().construis();
+  const serviceV2 = unServiceV2().construis();
 
   beforeEach(() => testeur.initialise());
 
   [
-    '/ID-SERVICE/descriptionService',
-    '/ID-SERVICE/mesures',
-    '/ID-SERVICE/indiceCyber',
-    '/ID-SERVICE/rolesResponsabilites',
-    '/ID-SERVICE/risques',
-    '/ID-SERVICE/risques/v2',
-    '/ID-SERVICE/dossiers',
-    '/ID-SERVICE/simulation-referentiel-v2',
-  ].forEach((route) => {
-    describe(`quand GET sur /service${route}`, () => {
+    { url: '/ID-SERVICE/descriptionService', service: serviceV1 },
+    { url: '/ID-SERVICE/mesures', service: serviceV1 },
+    { url: '/ID-SERVICE/indiceCyber', service: serviceV1 },
+    { url: '/ID-SERVICE/rolesResponsabilites', service: serviceV1 },
+    { url: '/ID-SERVICE/risques', service: serviceV1 },
+    { url: '/ID-SERVICE/risques/v2', service: serviceV2 },
+    { url: '/ID-SERVICE/dossiers', service: serviceV1 },
+    { url: '/ID-SERVICE/simulation-referentiel-v2', service: serviceV1 },
+  ].forEach(({ url, service }) => {
+    describe(`quand GET sur /service${url}`, () => {
       beforeEach(() => {
         const utilisateur = unUtilisateur().construis();
+        testeur.middleware().reinitialise({
+          serviceARenvoyer: service,
+        });
         testeur.depotDonnees().utilisateur = async () => utilisateur;
         testeur.referentiel().recharge({
           etapesParcoursHomologation: [
@@ -53,7 +58,7 @@ describe('Le serveur MSS des routes /service/*', () => {
       it("vérifie que l'utilisateur a accepté les CGU", async () => {
         await testeur
           .middleware()
-          .verifieRequeteExigeAcceptationCGU(testeur.app(), `/service${route}`);
+          .verifieRequeteExigeAcceptationCGU(testeur.app(), `/service${url}`);
       });
 
       it("vérifie que l'état de la visite guidée est chargé sur la route", async () => {
@@ -61,12 +66,12 @@ describe('Le serveur MSS des routes /service/*', () => {
           .middleware()
           .verifieRequeteChargeEtatVisiteGuidee(
             testeur.app(),
-            `/service${route}`
+            `/service${url}`
           );
       });
 
       it('sert le contenu HTML de la page', async () => {
-        const reponse = await testeur.get(`/service${route}`);
+        const reponse = await testeur.get(`/service${url}`);
 
         expect(reponse.status).to.equal(200);
         expect(reponse.headers['content-type']).to.contain('text/html');
@@ -767,6 +772,17 @@ describe('Le serveur MSS des routes /service/*', () => {
       const { status } = await testeur.get('/service/456/risques/v2');
 
       expect(status).to.be(404);
+    });
+
+    it('redirige vers la page des risques v1 si le service est v1', async () => {
+      testeur.middleware().reinitialise({
+        serviceARenvoyer: unService().avecId('456').construis(),
+      });
+
+      const { status, header } = await testeur.get('/service/456/risques/v2');
+
+      expect(status).to.be(301);
+      expect(header.location).to.contain('/service/456/risques');
     });
   });
 });

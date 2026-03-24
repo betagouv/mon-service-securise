@@ -224,6 +224,11 @@ const routesConnectePageService = ({
 
       const { service } = requete;
 
+      if (service.version() === VersionService.v1) {
+        reponse.redirect(301, `/service/${service.id}/risques`);
+        return;
+      }
+
       reponse.render('service/risquesV2', {
         InformationsService,
         referentiel,
