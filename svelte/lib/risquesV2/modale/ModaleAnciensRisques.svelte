@@ -8,18 +8,25 @@
   import type { ReferentielStatut } from '../../ui/types';
   import TableauRisquesV2 from '../TableauRisquesV2.svelte';
   import type { UUID } from '../../typesBasiquesSvelte';
+  import Lien from '../../ui/Lien.svelte';
 
   let elementModale: Modale | undefined;
 
   interface Props {
+    idService: string;
     risquesV1: RisquesV1;
     niveauxGravite: ReferentielGravites;
     niveauxVraisemblance: ReferentielVraisemblances;
     statuts: ReferentielStatut;
   }
 
-  let { risquesV1, niveauxGravite, niveauxVraisemblance, statuts }: Props =
-    $props();
+  let {
+    idService,
+    risquesV1,
+    niveauxGravite,
+    niveauxVraisemblance,
+    statuts,
+  }: Props = $props();
 
   const graviteDepuisIdentifiant = (identifiant: string) => {
     return niveauxGravite[identifiant as keyof ReferentielGravites]
@@ -90,6 +97,13 @@
       size="md"
       onclick={() => elementModale?.ferme()}
     ></dsfr-button>
+    <Lien
+      type="bouton-primaire"
+      href="/service/{idService}/risques/export.csv"
+      titre="Télécharger la liste de risques en CSV"
+      target="_blank"
+      icone="telecharger"
+    />
   {/snippet}
 </Modale>
 

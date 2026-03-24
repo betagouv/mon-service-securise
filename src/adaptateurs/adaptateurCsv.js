@@ -134,4 +134,58 @@ const genereCsvMesures = async (
   return Buffer.from(csv, 'utf-8');
 };
 
-export { genereCsvMesures, genereCsvServices };
+const genereCsvRisquesV1 = async (donneesRisques, referentiel) => {
+  const { risquesGeneraux, risquesSpecifiques } = donneesRisques;
+
+  const colonnes = [
+    { id: 'identifiant', title: 'Identifiant' },
+    { id: 'intitule', title: 'Intitulé' },
+    { id: 'description', title: 'Description' },
+    { id: 'categories', title: 'Catégories' },
+    { id: 'gravite', title: 'Gravité' },
+    { id: 'vraisemblance', title: 'Vraisemblance' },
+    { id: 'desactive', title: 'Désactivé' },
+    { id: 'commentaire', title: 'Commentaire' },
+  ];
+
+  const donneesCsv = risquesGeneraux
+    .map((risque) => ({
+      identifiant: risque.identifiantNumerique,
+      intitule: risque.intitule,
+      description: referentiel.definitionRisque(risque.id),
+      gravite: referentiel.niveauGravite(risque.niveauGravite)?.description,
+      vraisemblance: referentiel.niveauVraisemblance(risque.niveauVraisemblance)
+        ?.libelle,
+      categories: referentiel
+        .categoriesRisque(risque.id)
+        .map((c) => referentiel.detailCategoriesRisque()[c])
+        .join(', '),
+      desactive: risque.desactive ? 'OUI' : 'NON',
+      commentaire: risque.commentaire,
+    }))
+    .concat(
+      risquesSpecifiques.map((risque) => ({
+        identifiant: risque.identifiantNumerique,
+        intitule: risque.intitule,
+        description: risque.description,
+        gravite: referentiel.niveauGravite(risque.niveauGravite)?.description,
+        vraisemblance: referentiel.niveauVraisemblance(
+          risque.niveauVraisemblance
+        )?.libelle,
+        categories: risque.categories
+          .map((c) => referentiel.detailCategoriesRisque()[c])
+          .join(', '),
+        desactive: 'NON',
+        commentaire: risque.commentaire,
+      }))
+    );
+
+  const writer = creeWriterDeCsv(colonnes);
+  const titre = writer.getHeaderString();
+  const lignes = writer.stringifyRecords(donneesCsv);
+  const csv = avecBOM(titre, lignes);
+
+  return Buffer.from(csv, 'utf-8');
+};
+
+export { genereCsvMesures, genereCsvRisquesV1, genereCsvServices };

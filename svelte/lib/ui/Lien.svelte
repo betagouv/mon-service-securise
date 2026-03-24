@@ -229,6 +229,10 @@
     background-color: transparent;
   }
 
+  .bouton-primaire.avecIcone::before {
+    filter: brightness(0) invert(100%);
+  }
+
   .bouton-secondaire.avecIcone.inactif::before {
     filter: invert(65%) sepia(1%) saturate(0%) hue-rotate(358deg)
       brightness(90%) contrast(84%);
