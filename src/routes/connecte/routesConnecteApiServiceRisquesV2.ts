@@ -97,6 +97,52 @@ const routesConnecteApiServiceRisquesV2 = ({
     }
   );
 
+  routes.put(
+    '/:id/risques/v2/specifiques/:idRisque',
+    middleware.trouveService({ [RISQUES]: ECRITURE }),
+    middleware.chargeAutorisationsService,
+    // @ts-expect-error problème de typage incompréhensible avec les requetes express et zod
+    valideParams(z.looseObject({ idRisque: z.uuid() })),
+    valideBody(z.strictObject(schemaPostRisqueSpecifiqueV2(referentielV2))),
+    async (requete, reponse) => {
+      const { service } = requete as unknown as RequestRouteConnecteService;
+
+      const {
+        intitule,
+        description,
+        categories,
+        graviteBrute,
+        vraisemblanceBrute,
+        gravite,
+        vraisemblance,
+        commentaire,
+      } = requete.body;
+
+      const { idRisque } = requete.params;
+
+      const donnees: DonneesMiseAJourRisqueSpecifiqueV2 = {
+        intitule,
+        description,
+        categories,
+        risqueBrut: {
+          gravite: graviteBrute,
+          vraisemblance: vraisemblanceBrute,
+        },
+        gravite,
+        vraisemblance,
+        commentaire,
+      };
+
+      await depotDonnees.metsAJourRisqueSpecifiqueV2(
+        service.id,
+        idRisque,
+        donnees
+      );
+
+      reponse.sendStatus(200);
+    }
+  );
+
   return routes;
 };
 
