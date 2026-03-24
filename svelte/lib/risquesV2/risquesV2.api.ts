@@ -35,3 +35,12 @@ export const metsAJourRisqueSpecifiqueV2 = async (
     donnees
   );
 };
+
+export const supprimeRisqueSpecifiqueV2 = async (
+  idService: string,
+  idRisque: string
+) => {
+  await axios.delete(
+    `/api/service/${idService}/risques/v2/specifiques/${idRisque}`
+  );
+};
