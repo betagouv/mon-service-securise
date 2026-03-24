@@ -222,6 +222,7 @@
                     copiePourRestauration.niveauSecurite,
                     niveauDeSecuriteMinimal
                   )}
+                  avecInterpolationHTMLDangereuse
                 />
               </div>
             {/if}
