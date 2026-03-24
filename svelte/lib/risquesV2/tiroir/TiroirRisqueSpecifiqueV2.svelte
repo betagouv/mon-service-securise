@@ -50,19 +50,19 @@
   };
 
   const metsAJourGraviteBrute = (e: CustomEvent<string>) => {
-    risqueAjoute.graviteBrute = e.detail;
+    risqueAjoute.graviteBrute = parseInt(e.detail);
   };
 
   const metsAJourVraisemblanceBrute = (e: CustomEvent<string>) => {
-    risqueAjoute.vraisemblanceBrute = e.detail;
+    risqueAjoute.vraisemblanceBrute = parseInt(e.detail);
   };
 
   const metsAJourGravite = (e: CustomEvent<string>) => {
-    risqueAjoute.gravite = e.detail;
+    risqueAjoute.gravite = parseInt(e.detail);
   };
 
   const metsAJourVraisemblance = (e: CustomEvent<string>) => {
-    risqueAjoute.vraisemblance = e.detail;
+    risqueAjoute.vraisemblance = parseInt(e.detail);
   };
 
   const metsAJourCommentaire = (e: CustomEvent<string>) => {
@@ -146,8 +146,8 @@
             label="Gravité potentielle"
             placeholder="Sélectionnez une valeur"
             options={Object.entries(niveauxGravite).map(
-              ([niveau, { description }]) => ({
-                value: niveau,
+              ([, { description, position }]) => ({
+                value: position,
                 label: description,
               })
             )}
@@ -159,8 +159,8 @@
             label="Vraisemblance au départ"
             placeholder="Sélectionnez une valeur"
             options={Object.entries(niveauxVraisemblance).map(
-              ([niveau, { libelle }]) => ({
-                value: niveau,
+              ([, { libelle, position }]) => ({
+                value: position,
                 label: libelle,
               })
             )}
@@ -181,8 +181,8 @@
             label="Gravité résiduelle"
             placeholder="Sélectionnez une valeur"
             options={Object.entries(niveauxGravite).map(
-              ([niveau, { description }]) => ({
-                value: niveau,
+              ([, { description, position }]) => ({
+                value: position,
                 label: description,
               })
             )}
@@ -194,8 +194,8 @@
             label="Vraisemblance résiduelle"
             placeholder="Sélectionnez une valeur"
             options={Object.entries(niveauxVraisemblance).map(
-              ([niveau, { libelle }]) => ({
-                value: niveau,
+              ([, { libelle, position }]) => ({
+                value: position,
                 label: libelle,
               })
             )}

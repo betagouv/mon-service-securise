@@ -10,6 +10,12 @@ const niveauGravite = (referentielV2: ReferentielV2) =>
 const niveauVraisemblanceObligatoire = (referentielV2: ReferentielV2) =>
   z.enum(referentielV2.identifiantsNiveauxVraisemblance());
 
+const positionsVraisemblanceObligatoire = (referentielV2: ReferentielV2) =>
+  z.literal(referentielV2.positionsVraisemblance());
+
+const positionsGraviteObligatoire = (referentielV2: ReferentielV2) =>
+  z.literal(referentielV2.positionsGravite());
+
 const niveauVraisemblance = (referentielV2: ReferentielV2) =>
   niveauVraisemblanceObligatoire(referentielV2).or(z.literal(''));
 
@@ -24,8 +30,8 @@ export const schemaRisqueSpecifique = {
 };
 
 export const schemaRisqueSpecifiqueV2 = {
-  niveauVraisemblance: niveauVraisemblanceObligatoire,
-  niveauGravite: niveauGraviteObligatoire,
+  niveauVraisemblance: positionsVraisemblanceObligatoire,
+  niveauGravite: positionsGraviteObligatoire,
   categories: (referentielV2: ReferentielV2) =>
     z.array(z.enum(referentielV2.identifiantsCategoriesRisque())).min(1),
 };
