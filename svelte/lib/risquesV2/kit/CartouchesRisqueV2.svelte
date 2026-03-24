@@ -19,6 +19,9 @@
 </div>
 
 <style lang="scss">
+  dsfr-tag {
+    white-space: nowrap;
+  }
   .tags {
     display: flex;
     gap: 8px;
