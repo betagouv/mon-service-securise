@@ -784,5 +784,18 @@ describe('Le serveur MSS des routes /service/*', () => {
       expect(status).to.be(301);
       expect(header.location).to.contain('/service/456/risques');
     });
+
+    it('ajoute les risques V1 aux données partagées', async () => {
+      testeur.middleware().reinitialise({
+        serviceARenvoyer: unServiceV2().avecId('456').construis(),
+      });
+
+      const { text } = await testeur.get('/service/456/risques/v2');
+
+      expect(donneesPartagees(text, 'donnees-risques-v1')).to.eql({
+        risquesGeneraux: [],
+        risquesSpecifiques: [],
+      });
+    });
   });
 });

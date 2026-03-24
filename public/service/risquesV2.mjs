@@ -2,6 +2,7 @@ import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
 
 $(() => {
   const idService = $('.page-service').data('id-service');
+  const risquesV1 = lisDonneesPartagees('donnees-risques-v1');
   const statuts = lisDonneesPartagees('referentiel-statuts-mesures');
   const niveauxGravite = lisDonneesPartagees('donnees-referentiel-gravite');
   const niveauxVraisemblance = lisDonneesPartagees(
@@ -10,7 +11,13 @@ $(() => {
 
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-risques-v2', {
-      detail: { idService, statuts, niveauxVraisemblance, niveauxGravite },
+      detail: {
+        idService,
+        statuts,
+        niveauxVraisemblance,
+        niveauxGravite,
+        risquesV1,
+      },
     })
   );
 });
