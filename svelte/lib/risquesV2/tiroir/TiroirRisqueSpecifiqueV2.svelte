@@ -36,10 +36,12 @@
     risque = undefined,
   }: Props = $props();
 
-  export const titre = 'Ajouter un risque';
+  export const titre = untrack(() =>
+    risque ? risque.intitule : 'Ajouter un risque'
+  );
   export const sousTitre = '';
   export const composantEntete = BadgesTiroirRisqueSpecifiqueV2;
-  export const propsComposantEntete = {};
+  export const propsComposantEntete = untrack(() => ({ risque }));
 
   let modeConfirmationSuppression = $state(false);
 
