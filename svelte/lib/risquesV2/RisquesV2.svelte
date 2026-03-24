@@ -49,6 +49,11 @@
     risquesSpecifiques: [],
   });
 
+  let aDesRisquesV1 = $derived(
+    risquesV1.risquesGeneraux.length > 0 ||
+      risquesV1.risquesSpecifiques.length > 0
+  );
+
   type TypeRisque = 'general' | 'specifique';
   let tousLesRisques = $derived([
     ...risques.risques.map((r) => ({ ...r, type: 'general' as TypeRisque })),
@@ -159,6 +164,13 @@
           leur gravité et de leur vraisemblance résiduelle actuelles. Pour les
           risques ANSSI, la gravité et la vraisemblance sont non modifiables.
         </span>
+        {#if aDesRisquesV1}
+          <br />
+          <span
+            >Seuls les risques de la dernière version sont pris en compte ;
+            l'ancienne version reste consultable en lecture seule.</span
+          >
+        {/if}
       </div>
     </div>
     <div class="actions">
