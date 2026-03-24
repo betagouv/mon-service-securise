@@ -25,6 +25,8 @@
     ReferentielGravites,
     ReferentielVraisemblances,
   } from '../risques/risques.d';
+  import Bouton from '../ui/Bouton.svelte';
+  import ModaleAnciensRisques from './modale/ModaleAnciensRisques.svelte';
   import TableauRisquesV2 from './TableauRisquesV2.svelte';
 
   interface Props {
@@ -68,6 +70,11 @@
   };
 
   let modaleCartographies: ModaleCartographies | undefined;
+
+  let modaleAnciensRisques: ModaleAnciensRisques | undefined;
+  const afficheModaleAnciensRisques = () => {
+    modaleAnciensRisques?.affiche();
+  };
 </script>
 
 <svelte:body on:risques-v2-modifies={rafraichisRisques} />
@@ -145,6 +152,11 @@
             >Seuls les risques de la dernière version sont pris en compte ;
             l'ancienne version reste consultable en lecture seule.</span
           >
+          <Bouton
+            type="lien-dsfr"
+            titre="En savoir plus"
+            onclick={afficheModaleAnciensRisques}
+          />
         {/if}
       </div>
     </div>
@@ -181,6 +193,14 @@
   {risques}
   {idService}
   {statuts}
+/>
+
+<ModaleAnciensRisques
+  bind:this={modaleAnciensRisques}
+  {risquesV1}
+  {statuts}
+  {niveauxGravite}
+  {niveauxVraisemblance}
 />
 
 <style lang="scss">

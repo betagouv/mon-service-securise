@@ -17,11 +17,12 @@
   } from '../risques/risques.d';
 
   interface Props {
-    idService: string;
+    idService?: string;
     risques: TousRisques;
     statuts: ReferentielStatut;
     niveauxGravite: ReferentielGravites;
     niveauxVraisemblance: ReferentielVraisemblances;
+    estLectureSeule?: boolean;
   }
 
   let {
@@ -30,6 +31,7 @@
     statuts,
     niveauxGravite,
     niveauxVraisemblance,
+    estLectureSeule = false,
   }: Props = $props();
 
   type TypeRisque = 'general' | 'specifique';
@@ -51,6 +53,8 @@
     risque: Risque,
     desactive: boolean
   ) => {
+    if (!idService) return;
+
     await metsAJourRisque(idService, risque.id, {
       desactive,
       commentaire: risque.commentaire,
@@ -71,7 +75,10 @@
 >
   {#snippet cellule({ donnee, colonne })}
     {#if colonne.cle === 'id'}
-      <div class="colonne-identifiant colonne" class:inactif={donnee.desactive}>
+      <div
+        class="colonne-identifiant colonne"
+        class:inactif={donnee.desactive || estLectureSeule}
+      >
         {#if estRisqueGeneral(donnee)}
           <CartoucheIdentifiantRisque risque={donnee} />
         {:else}
@@ -83,24 +90,26 @@
         {@const risqueBrut = risques.risquesBruts.find(
           (r) => r.id === donnee.id
         )}
-        <div class="colonne-intitule colonne" class:inactif={donnee.desactive}>
-          {#if risqueBrut}
-            <button
-              class="lien-intitule-risque"
-              disabled={donnee.desactive}
-              onclick={() => {
-                tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
-                  idService,
-                  risque: donnee,
-                  risqueBrut,
-                  statuts,
-                });
-              }}
-            >
-              <span>{donnee.intitule}</span>
-              <CartouchesRisqueV2 risque={donnee} />
-            </button>
-          {/if}
+        <div
+          class="colonne-intitule colonne"
+          class:inactif={donnee.desactive || estLectureSeule}
+        >
+          <button
+            class="lien-intitule-risque"
+            disabled={donnee.desactive}
+            onclick={() => {
+              if (!idService || !risqueBrut) return;
+              tiroirStore.afficheContenu(TiroirRisqueGeneralV2, {
+                idService,
+                risque: donnee,
+                risqueBrut,
+                statuts,
+              });
+            }}
+          >
+            <span>{donnee.intitule}</span>
+            <CartouchesRisqueV2 risque={donnee} />
+          </button>
         </div>
       {:else}
         {@const {
@@ -108,16 +117,18 @@
           desactive: _desactive,
           ...donneeRisque
         } = donnee}
-        <div class="colonne-intitule colonne">
+        <div class="colonne-intitule colonne" class:inactif={estLectureSeule}>
           <button
             class="lien-intitule-risque"
-            onclick={() =>
+            onclick={() => {
+              if (!idService) return;
               tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
                 idService,
                 niveauxGravite,
                 niveauxVraisemblance,
                 risque: donneeRisque,
-              })}
+              });
+            }}
           >
             <span>{donnee.intitule}</span>
             <CartouchesRisqueV2 risque={donnee} risqueAjoute />
@@ -125,19 +136,22 @@
         </div>
       {/if}
     {:else if colonne.cle === 'gravite'}
-      <div class="colonne-gravite colonne" class:inactif={donnee.desactive}>
+      <div
+        class="colonne-gravite colonne"
+        class:inactif={donnee.desactive || estLectureSeule}
+      >
         <Niveau niveau={donnee.gravite} />
       </div>
     {:else if colonne.cle === 'vraisemblance'}
       <div
         class="colonne-vraisemblance colonne"
-        class:inactif={donnee.desactive}
+        class:inactif={donnee.desactive || estLectureSeule}
       >
         <Niveau niveau={donnee.vraisemblance} />
       </div>
     {:else if colonne.cle === 'actions'}
       {#if estRisqueGeneral(donnee)}
-        <div class="colonne-actions">
+        <div class="colonne colonne-actions" class:inactif={estLectureSeule}>
           <Switch
             bind:actif={
               () => !donnee.desactive, (valeur) => (donnee.desactive = !valeur)
