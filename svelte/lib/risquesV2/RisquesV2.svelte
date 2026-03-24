@@ -1,21 +1,9 @@
 <script lang="ts">
   import MatriceRisquesV2 from './matrice/MatriceRisquesV2.svelte';
   import { onMount } from 'svelte';
-  import type {
-    DonneesRisqueSpecifiqueV2,
-    Risque,
-    RisquesV1,
-    TousRisques,
-  } from './risquesV2.d';
+  import type { RisquesV1, TousRisques } from './risquesV2.d';
   import * as api from './risquesV2.api';
-  import { metsAJourRisque } from './risquesV2.api';
-  import Tableau from '../ui/Tableau.svelte';
-  import Niveau from './kit/Niveau.svelte';
-  import Switch from '../ui/Switch.svelte';
   import { tiroirStore } from '../ui/stores/tiroir.store';
-  import TiroirRisqueGeneralV2 from './tiroir/TiroirRisqueGeneralV2.svelte';
-  import CartoucheIdentifiantRisque from './kit/CartoucheIdentifiantRisque.svelte';
-  import CartouchesRisqueV2 from './kit/CartouchesRisqueV2.svelte';
   import Toaster from '../ui/Toaster.svelte';
   import type { ReferentielStatut } from '../ui/types';
   import ModaleCartographies from './modale/ModaleCartographies.svelte';
@@ -197,6 +185,7 @@
 
 <ModaleAnciensRisques
   bind:this={modaleAnciensRisques}
+  {idService}
   {risquesV1}
   {statuts}
   {niveauxGravite}
