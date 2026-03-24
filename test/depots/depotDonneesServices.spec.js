@@ -3140,4 +3140,53 @@ describe('Le dépôt de données des services', () => {
       expect(risquesAJour[0].id).not.to.be(undefined);
     });
   });
+
+  describe("sur demande de mise à jour d'un risque spécifique v2", () => {
+    let depot;
+    let persistance;
+    const donneesRisque = {
+      intitule: 'Initulé du risque',
+      description: 'une description',
+      categories: ['disponibilite'],
+      risqueBrut: {
+        vraisemblance: 'peuVraisemblable',
+        gravite: 'nonConcerne',
+      },
+      vraisemblance: 'peuVraisemblable',
+      gravite: 'nonConcerne',
+      commentaire: 'un commentaire',
+    };
+
+    beforeEach(async () => {
+      busEvenements = fabriqueBusPourLesTests();
+      persistance = unePersistanceMemoire()
+        .ajouteUnUtilisateur(unUtilisateur().avecId('U1').donnees)
+        .ajouteUnService(
+          unServiceV2().avecId('S1').construis().donneesAPersister().donnees
+        )
+        .nommeCommeProprietaire('U1', ['S1'])
+        .construis();
+
+      depot = unDepotDeDonneesServices()
+        .avecAdaptateurPersistance(persistance)
+        .construis();
+
+      await depot.ajouteRisqueSpecifiqueV2('S1', donneesRisque);
+    });
+
+    it('mets à jour le risque', async () => {
+      const service = await depot.service('S1');
+      const idRisque = service.risquesV2.toJSON().risquesSpecifiques[0].id;
+
+      await depot.metsAJourRisqueSpecifiqueV2('S1', idRisque, {
+        ...donneesRisque,
+        intitule: 'Un autre intitulé',
+      });
+
+      const serviceAJour = await depot.service('S1');
+      const risquesAJour = serviceAJour.risquesV2.toJSON().risquesSpecifiques;
+      expect(risquesAJour[0].id).to.be(idRisque);
+      expect(risquesAJour[0].intitule).to.be('Un autre intitulé');
+    });
+  });
 });
