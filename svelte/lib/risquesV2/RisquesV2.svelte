@@ -227,20 +227,16 @@
           </div>
         {/if}
       {:else if colonne.cle === 'gravite'}
-        {#if estRisqueGeneral(donnee)}
-          <div class="colonne-gravite colonne" class:inactif={donnee.desactive}>
-            <Niveau niveau={donnee.gravite} />
-          </div>
-        {/if}
+        <div class="colonne-gravite colonne" class:inactif={donnee.desactive}>
+          <Niveau niveau={donnee.gravite} />
+        </div>
       {:else if colonne.cle === 'vraisemblance'}
-        {#if estRisqueGeneral(donnee)}
-          <div
-            class="colonne-vraisemblance colonne"
-            class:inactif={donnee.desactive}
-          >
-            <Niveau niveau={donnee.vraisemblance} />
-          </div>
-        {/if}
+        <div
+          class="colonne-vraisemblance colonne"
+          class:inactif={donnee.desactive}
+        >
+          <Niveau niveau={donnee.vraisemblance} />
+        </div>
       {:else if colonne.cle === 'actions'}
         {#if estRisqueGeneral(donnee)}
           <div class="colonne-actions">

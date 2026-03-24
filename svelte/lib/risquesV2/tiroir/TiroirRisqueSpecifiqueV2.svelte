@@ -5,7 +5,7 @@
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import { toasterStore } from '../../ui/stores/toaster.store';
   import BadgesTiroirRisqueSpecifiqueV2 from './BadgesTiroirRisqueSpecifiqueV2.svelte';
-  import type { RisqueSpecifiqueV2 } from '../risquesV2.d';
+  import type { Niveau, RisqueSpecifiqueV2 } from '../risquesV2.d';
   import type {
     ReferentielGravites,
     ReferentielVraisemblances,
@@ -50,19 +50,19 @@
   };
 
   const metsAJourGraviteBrute = (e: CustomEvent<string>) => {
-    risqueAjoute.graviteBrute = parseInt(e.detail);
+    risqueAjoute.graviteBrute = parseInt(e.detail) as Niveau;
   };
 
   const metsAJourVraisemblanceBrute = (e: CustomEvent<string>) => {
-    risqueAjoute.vraisemblanceBrute = parseInt(e.detail);
+    risqueAjoute.vraisemblanceBrute = parseInt(e.detail) as Niveau;
   };
 
   const metsAJourGravite = (e: CustomEvent<string>) => {
-    risqueAjoute.gravite = parseInt(e.detail);
+    risqueAjoute.gravite = parseInt(e.detail) as Niveau;
   };
 
   const metsAJourVraisemblance = (e: CustomEvent<string>) => {
-    risqueAjoute.vraisemblance = parseInt(e.detail);
+    risqueAjoute.vraisemblance = parseInt(e.detail) as Niveau;
   };
 
   const metsAJourCommentaire = (e: CustomEvent<string>) => {
