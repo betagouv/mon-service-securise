@@ -782,6 +782,14 @@ const creeDepot = (config = {}) => {
     await p.sauvegarde(idService, s.donneesAPersister().toutes());
   };
 
+  const supprimeRisqueSpecifiqueV2 = async (idService, idRisque) => {
+    const s = await p.lis.un(idService);
+
+    s.risquesV2.supprimeRisqueSpecifique(idRisque);
+
+    await p.sauvegarde(idService, s.donneesAPersister().toutes());
+  };
+
   return {
     ajouteDescriptionService,
     ajouteDossierCourantSiNecessaire,
@@ -811,6 +819,7 @@ const creeDepot = (config = {}) => {
     supprimeContributeur,
     supprimeMesureSpecifiqueDuService,
     supprimeRisqueSpecifiqueDuService,
+    supprimeRisqueSpecifiqueV2,
     supprimeService,
     tousLesServices,
     tousLesServicesAvecSiret,
