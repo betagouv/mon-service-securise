@@ -143,6 +143,22 @@ const routesConnecteApiServiceRisquesV2 = ({
     }
   );
 
+  routes.delete(
+    '/:id/risques/v2/specifiques/:idRisque',
+    middleware.trouveService({ [RISQUES]: ECRITURE }),
+    middleware.chargeAutorisationsService,
+    // @ts-expect-error problème de typage incompréhensible avec les requetes express et zod
+    valideParams(z.looseObject({ idRisque: z.uuid() })),
+    async (requete, reponse) => {
+      const { service } = requete as unknown as RequestRouteConnecteService;
+      const { idRisque } = requete.params;
+
+      await depotDonnees.supprimeRisqueSpecifiqueV2(service.id, idRisque);
+
+      reponse.sendStatus(200);
+    }
+  );
+
   return routes;
 };
 

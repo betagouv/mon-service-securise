@@ -331,4 +331,57 @@ describe('Les routes /service/:id/risques/v2', () => {
       });
     });
   });
+
+  describe('quand requête DELETE sur `/api/service/:id/risques/v2/specifiques/:idRisque', () => {
+    it('recherche le service correspondant', async () => {
+      await testeur
+        .middleware()
+        .verifieRechercheService(
+          [{ niveau: ECRITURE, rubrique: RISQUES }],
+          testeur.app(),
+          {
+            method: 'delete',
+            url: `/api/service/456/risques/v2/specifiques/${unUUID('1')}`,
+          }
+        );
+    });
+
+    it("utilise le middleware de chargement de l'autorisation", async () => {
+      await testeur
+        .middleware()
+        .verifieChargementDesAutorisations(testeur.app(), {
+          method: 'delete',
+          url: `/api/service/456/risques/v2/specifiques/${unUUID('1')}`,
+        });
+    });
+
+    it("jette une erreur si l'id de risque est invalide", async () => {
+      const { status } = await testeur.delete(
+        '/api/service/456/risques/v2/specifiques/pasUnUUID'
+      );
+
+      expect(status).toBe(400);
+    });
+
+    it('délègue au dépôt de données la suppression du risque spécifique', async () => {
+      let idServiceRecu;
+      let idRisqueRecu;
+      testeur.depotDonnees().supprimeRisqueSpecifiqueV2 = (
+        idService: UUID,
+        idRisque: UUID
+      ) => {
+        idServiceRecu = idService;
+        idRisqueRecu = idRisque;
+      };
+
+      const idRisque = unUUIDRandom();
+      const { status } = await testeur.delete(
+        `/api/service/456/risques/v2/specifiques/${idRisque}`
+      );
+
+      expect(status).toBe(200);
+      expect(idServiceRecu).toBe('456');
+      expect(idRisqueRecu).toBe(idRisque);
+    });
+  });
 });
