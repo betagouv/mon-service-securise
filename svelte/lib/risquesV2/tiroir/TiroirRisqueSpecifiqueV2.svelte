@@ -5,77 +5,109 @@
   import { tiroirStore } from '../../ui/stores/tiroir.store';
   import { toasterStore } from '../../ui/stores/toaster.store';
   import BadgesTiroirRisqueSpecifiqueV2 from './BadgesTiroirRisqueSpecifiqueV2.svelte';
-  import type { Niveau, RisqueSpecifiqueV2 } from '../risquesV2.d';
+  import type {
+    DonneesRisqueSpecifiqueV2,
+    Niveau,
+    RisqueSpecifiqueV2,
+  } from '../risquesV2.d';
   import type {
     ReferentielGravites,
     ReferentielVraisemblances,
   } from '../../risques/risques.d';
   import Infobulle from '../../ui/Infobulle.svelte';
-  import { ajouteRisqueSpecifiqueV2 } from '../risquesV2.api';
+  import {
+    ajouteRisqueSpecifiqueV2,
+    metsAJourRisqueSpecifiqueV2,
+  } from '../risquesV2.api';
+  import { untrack } from 'svelte';
 
   interface Props {
     idService: string;
     niveauxGravite: ReferentielGravites;
     niveauxVraisemblance: ReferentielVraisemblances;
+    risque?: RisqueSpecifiqueV2;
   }
 
-  let { idService, niveauxGravite, niveauxVraisemblance }: Props = $props();
+  let {
+    idService,
+    niveauxGravite,
+    niveauxVraisemblance,
+    risque = undefined,
+  }: Props = $props();
 
   export const titre = 'Ajouter un risque';
   export const sousTitre = '';
   export const composantEntete = BadgesTiroirRisqueSpecifiqueV2;
   export const propsComposantEntete = {};
 
-  let risqueAjoute = $state({
-    intitule: '',
-    description: '',
-    categories: [],
-    gravite: '',
-    vraisemblance: '',
-    graviteBrute: '',
-    vraisemblanceBrute: '',
-    commentaire: '',
-  }) as unknown as RisqueSpecifiqueV2;
+  let donneesRisque = $state(
+    untrack(() => {
+      if (risque) {
+        const { id: _id, ...donnees } = risque;
+        return donnees;
+      }
+      return undefined;
+    }) ?? {
+      intitule: '',
+      description: '',
+      categories: [],
+      gravite: '',
+      vraisemblance: '',
+      graviteBrute: '',
+      vraisemblanceBrute: '',
+      commentaire: '',
+    }
+  ) as unknown as DonneesRisqueSpecifiqueV2;
+
+  let estModification = $derived(!!risque);
 
   const metsAJourIntitule = (e: CustomEvent<string>) => {
-    risqueAjoute.intitule = e.detail;
+    donneesRisque.intitule = e.detail;
   };
 
   const metsAJourDescription = (e: CustomEvent<string>) => {
-    risqueAjoute.description = e.detail;
+    donneesRisque.description = e.detail;
   };
 
   const metsAJourCategories = (e: CustomEvent<string[]>) => {
-    risqueAjoute.categories = e.detail;
+    donneesRisque.categories = e.detail;
   };
 
   const metsAJourGraviteBrute = (e: CustomEvent<string>) => {
-    risqueAjoute.graviteBrute = parseInt(e.detail) as Niveau;
+    donneesRisque.graviteBrute = parseInt(e.detail) as Niveau;
   };
 
   const metsAJourVraisemblanceBrute = (e: CustomEvent<string>) => {
-    risqueAjoute.vraisemblanceBrute = parseInt(e.detail) as Niveau;
+    donneesRisque.vraisemblanceBrute = parseInt(e.detail) as Niveau;
   };
 
   const metsAJourGravite = (e: CustomEvent<string>) => {
-    risqueAjoute.gravite = parseInt(e.detail) as Niveau;
+    donneesRisque.gravite = parseInt(e.detail) as Niveau;
   };
 
   const metsAJourVraisemblance = (e: CustomEvent<string>) => {
-    risqueAjoute.vraisemblance = parseInt(e.detail) as Niveau;
+    donneesRisque.vraisemblance = parseInt(e.detail) as Niveau;
   };
 
   const metsAJourCommentaire = (e: CustomEvent<string>) => {
-    risqueAjoute.commentaire = e.detail;
+    donneesRisque.commentaire = e.detail;
   };
 
-  const ajouteRisque = async () => {
-    await ajouteRisqueSpecifiqueV2(idService, risqueAjoute);
+  const ajouteOuModifieRisque = async () => {
+    if (estModification) {
+      await metsAJourRisqueSpecifiqueV2(idService, risque!.id, donneesRisque);
+      toasterStore.succes(
+        'Succès',
+        `Le risque ${donneesRisque.intitule} a été mis à jour.`
+      );
+    } else {
+      await ajouteRisqueSpecifiqueV2(idService, donneesRisque);
+      toasterStore.succes(
+        'Succès',
+        `Le risque ${donneesRisque.intitule} a été ajouté.`
+      );
+    }
     document.body.dispatchEvent(new CustomEvent('risques-v2-modifies'));
-    toasterStore.succes(
-      'Succès',
-      `Le risque ${risqueAjoute.intitule} a été ajouté.`
-    );
     tiroirStore.ferme();
   };
 </script>
@@ -98,7 +130,7 @@
         <dsfr-input
           label="Intitulé du risque"
           type="text"
-          value={risqueAjoute.intitule}
+          value={donneesRisque.intitule}
           onvaluechanged={metsAJourIntitule}
           required
         ></dsfr-input>
@@ -108,7 +140,7 @@
           label="Description du risque"
           type="text"
           rows="5"
-          value={risqueAjoute.description}
+          value={donneesRisque.description}
           onvaluechanged={metsAJourDescription}
         ></dsfr-textarea>
       </p>
@@ -130,7 +162,7 @@
             { id: 'tracabilite', value: 'tracabilite', label: 'Traçabilité' },
           ]}
           placeholder="Sélectionnez au moins une catégorie"
-          values={risqueAjoute.categories}
+          values={donneesRisque.categories}
           onvaluechanged={metsAJourCategories}
           required
         ></lab-anssi-multi-select>
@@ -151,7 +183,7 @@
                 label: description,
               })
             )}
-            value={risqueAjoute.graviteBrute}
+            value={donneesRisque.graviteBrute}
             onvaluechanged={metsAJourGraviteBrute}
             required
           ></dsfr-select>
@@ -164,7 +196,7 @@
                 label: libelle,
               })
             )}
-            value={risqueAjoute.vraisemblanceBrute}
+            value={donneesRisque.vraisemblanceBrute}
             onvaluechanged={metsAJourVraisemblanceBrute}
             required
           ></dsfr-select>
@@ -186,7 +218,7 @@
                 label: description,
               })
             )}
-            value={risqueAjoute.gravite}
+            value={donneesRisque.gravite}
             onvaluechanged={metsAJourGravite}
             required
           ></dsfr-select>
@@ -199,7 +231,7 @@
                 label: libelle,
               })
             )}
-            value={risqueAjoute.vraisemblance}
+            value={donneesRisque.vraisemblance}
             onvaluechanged={metsAJourVraisemblance}
             required
           ></dsfr-select>
@@ -209,7 +241,7 @@
         <dsfr-input
           label="Commentaire"
           type="text"
-          value={risqueAjoute.commentaire}
+          value={donneesRisque.commentaire}
           placeholder="Apportez des précisions sur le risque"
           onvaluechanged={metsAJourCommentaire}
         ></dsfr-input>
@@ -221,13 +253,13 @@
   <div class="actions">
     <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
     <dsfr-button
-      label="Ajouter le risque"
+      label={estModification ? 'Enregistrer le risque' : 'Ajouter le risque'}
       kind="primary"
       size="md"
       has-icon
-      icon="add-line"
+      icon={estModification ? 'save-line' : 'add-line'}
       icon-place="left"
-      onclick={ajouteRisque}
+      onclick={ajouteOuModifieRisque}
     ></dsfr-button>
   </div>
 </ActionsTiroir>
@@ -244,11 +276,6 @@
     border: 1px solid #ddd;
     margin-top: -30px;
     border-top: none;
-
-    label {
-      margin-bottom: 8px;
-      display: block;
-    }
 
     & > div {
       display: flex;

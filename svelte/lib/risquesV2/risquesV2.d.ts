@@ -7,6 +7,7 @@ import type {
   ReferentielGravites,
   ReferentielVraisemblances,
 } from '../risques/risques.d';
+import type { UUID } from '../typesBasiquesSvelte';
 
 declare global {
   interface HTMLElementEventMap {
@@ -54,7 +55,7 @@ export type MesuresAssocieesARisque = {
   mesuresGenerales: Record<string, MesureGeneraleAssocieeARisque>;
 };
 
-export type RisqueSpecifiqueV2 = {
+export type DonneesRisqueSpecifiqueV2 = {
   intitule: string;
   description?: string;
   categories: string[];
@@ -64,3 +65,5 @@ export type RisqueSpecifiqueV2 = {
   vraisemblanceBrute: Niveau;
   commentaire?: string;
 };
+
+export type RisqueSpecifiqueV2 = DonneesRisqueSpecifiqueV2 & { id: UUID };

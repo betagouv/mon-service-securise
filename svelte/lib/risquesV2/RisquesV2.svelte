@@ -1,7 +1,11 @@
 <script lang="ts">
   import MatriceRisquesV2 from './matrice/MatriceRisquesV2.svelte';
   import { onMount } from 'svelte';
-  import type { Risque, RisqueSpecifiqueV2, TousRisques } from './risquesV2.d';
+  import type {
+    DonneesRisqueSpecifiqueV2,
+    Risque,
+    TousRisques,
+  } from './risquesV2.d';
   import * as api from './risquesV2.api';
   import { metsAJourRisque } from './risquesV2.api';
   import Tableau from '../ui/Tableau.svelte';
@@ -50,7 +54,7 @@
   const estRisqueGeneral = (
     r:
       | (Risque & { type: TypeRisque })
-      | (RisqueSpecifiqueV2 & { type: TypeRisque })
+      | (DonneesRisqueSpecifiqueV2 & { type: TypeRisque })
   ): r is Risque & { type: TypeRisque } => r.type === 'general';
 
   onMount(async () => {
@@ -219,8 +223,22 @@
             {/if}
           </div>
         {:else}
+          {@const {
+            type: _type,
+            desactive: _desactive,
+            ...donneeRisque
+          } = donnee}
           <div class="colonne-intitule colonne">
-            <button class="lien-intitule-risque" onclick={() => {}}>
+            <button
+              class="lien-intitule-risque"
+              onclick={() =>
+                tiroirStore.afficheContenu(TiroirRisqueSpecifiqueV2, {
+                  idService,
+                  niveauxGravite,
+                  niveauxVraisemblance,
+                  risque: donneeRisque,
+                })}
+            >
               <span>{donnee.intitule}</span>
               <CartouchesRisqueV2 risque={donnee} risqueAjoute />
             </button>
