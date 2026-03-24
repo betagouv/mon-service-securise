@@ -134,6 +134,17 @@ describe('Les routes /service/:id/risques/v2', () => {
   });
 
   describe('quand requête POST sur `/api/service/:id/risques/v2/specifiques', () => {
+    const donneesRisquesSpecifiquesValides = {
+      intitule: 'Initulé du risque',
+      description: 'une description',
+      categories: ['disponibilite'],
+      vraisemblance: 1,
+      vraisemblanceBrute: 2,
+      gravite: 3,
+      graviteBrute: 4,
+      commentaire: 'un commentaire',
+    };
+
     it('recherche le service correspondant', async () => {
       await testeur
         .middleware()
@@ -161,10 +172,10 @@ describe('Les routes /service/:id/risques/v2', () => {
       { cle: 'description', valeur: 1234 },
       { cle: 'categories', valeur: ['pasUneCategorie'] },
       { cle: 'categories', valeur: [] },
-      { cle: 'vraisemblance', valeur: 'pasUneVraisemblance' },
-      { cle: 'vraisemblanceBrute', valeur: 'pasUneVraisemblance' },
-      { cle: 'gravite', valeur: 'pasUneGravite' },
-      { cle: 'graviteBrute', valeur: 'pasUneGravite' },
+      { cle: 'vraisemblance', valeur: 6 },
+      { cle: 'vraisemblanceBrute', valeur: 8 },
+      { cle: 'gravite', valeur: 10 },
+      { cle: 'graviteBrute', valeur: 12 },
       { cle: 'commentaire', valeur: 1234 },
     ])(
       'jette une erreur si la propriété $cle est invalide',
@@ -172,14 +183,7 @@ describe('Les routes /service/:id/risques/v2', () => {
         const { status } = await testeur.post(
           '/api/service/456/risques/v2/specifiques',
           {
-            intitule: 'Initulé du risque',
-            description: 'une description',
-            categories: ['disponibilite'],
-            vraisemblance: 'peuVraisemblable',
-            vraisemblanceBrute: 'peuVraisemblable',
-            gravite: 'nonConcerne',
-            graviteBrute: 'nonConcerne',
-            commentaire: 'un commentaire',
+            ...donneesRisquesSpecifiquesValides,
             [cle]: valeur,
           }
         );
@@ -201,16 +205,7 @@ describe('Les routes /service/:id/risques/v2', () => {
 
       const { status } = await testeur.post(
         '/api/service/456/risques/v2/specifiques',
-        {
-          intitule: 'Initulé du risque',
-          description: 'une description',
-          categories: ['disponibilite'],
-          vraisemblance: 'peuVraisemblable',
-          vraisemblanceBrute: 'peuVraisemblable',
-          gravite: 'nonConcerne',
-          graviteBrute: 'nonConcerne',
-          commentaire: 'un commentaire',
-        }
+        donneesRisquesSpecifiquesValides
       );
 
       expect(status).toBe(201);
@@ -220,11 +215,11 @@ describe('Les routes /service/:id/risques/v2', () => {
         description: 'une description',
         categories: ['disponibilite'],
         risqueBrut: {
-          vraisemblance: 'peuVraisemblable',
-          gravite: 'nonConcerne',
+          vraisemblance: 2,
+          gravite: 4,
         },
-        vraisemblance: 'peuVraisemblable',
-        gravite: 'nonConcerne',
+        vraisemblance: 1,
+        gravite: 3,
         commentaire: 'un commentaire',
       });
     });

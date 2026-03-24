@@ -152,7 +152,11 @@ const creeReferentiel = (
   const niveauxGravite = () => donnees.niveauxGravite || {};
   const niveauGravite = (idNiveau: IdNiveauGravite) =>
     niveauxGravite()[idNiveau] || {};
+  const positionsGravite = () =>
+    Object.values(niveauxGravite()).map((n) => n.position);
   const niveauxVraisemblance = () => donnees.vraisemblancesRisques || {};
+  const positionsVraisemblance = () =>
+    Object.values(niveauxVraisemblance()).map((n) => n.position);
   const niveauVraisemblance = (idNiveau: IdVraisemblanceRisque) =>
     niveauxVraisemblance()[idNiveau] || {};
   const niveauxRisque = () => donnees.niveauxRisques || {};
@@ -632,6 +636,8 @@ const creeReferentiel = (
     nouvellesFonctionnalites,
     numeroEtape,
     optionsFiltrageDate,
+    positionsGravite,
+    positionsVraisemblance,
     premiereEtapeParcours,
     prioritesMesures,
     provenancesService,

@@ -58,9 +58,9 @@ export type RisqueSpecifiqueV2 = {
   intitule: string;
   description?: string;
   categories: string[];
-  gravite: string;
-  vraisemblance: string;
-  graviteBrute: string;
-  vraisemblanceBrute: string;
+  gravite: number;
+  vraisemblance: number;
+  graviteBrute: number;
+  vraisemblanceBrute: number;
   commentaire?: string;
 };
