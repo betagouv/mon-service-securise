@@ -3,9 +3,12 @@ import type {
   Referentiel,
   CategorieMesure,
 } from '../ui/types';
-import type {
-  ReferentielGravites,
-  ReferentielVraisemblances,
+import {
+  type IdentifiantGravite,
+  IdentifiantNiveauRisque,
+  type IdentifiantVraisemblance,
+  type ReferentielGravites,
+  type ReferentielVraisemblances,
 } from '../risques/risques.d';
 import type { UUID } from '../typesBasiquesSvelte';
 
@@ -35,8 +38,27 @@ export type TousRisques = {
   risquesSpecifiques: RisqueSpecifiqueV2[];
 };
 
+export type DonneesRisqueV1 = {
+  niveauGravite: IdentifiantGravite;
+  niveauVraisemblance: IdentifiantVraisemblance;
+  id: string;
+  commentaire: string;
+  intitule: string;
+  categories: string[];
+  identifiantNumerique: string;
+  description: string;
+  niveauRisque: IdentifiantNiveauRisque;
+  desactive?: boolean;
+};
+
+export type RisquesV1 = {
+  risquesGeneraux: DonneesRisqueV1[];
+  risquesSpecifiques: DonneesRisqueV1[];
+};
+
 export type RisquesV2Props = {
   idService: string;
+  risquesV1: RisquesV1;
   statuts: ReferentielStatut;
   niveauxGravite: ReferentielGravites;
   niveauxVraisemblance: ReferentielVraisemblances;

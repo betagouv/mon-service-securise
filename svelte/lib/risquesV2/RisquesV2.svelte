@@ -4,6 +4,7 @@
   import type {
     DonneesRisqueSpecifiqueV2,
     Risque,
+    RisquesV1,
     TousRisques,
   } from './risquesV2.d';
   import * as api from './risquesV2.api';
@@ -27,13 +28,19 @@
 
   interface Props {
     idService: string;
+    risquesV1: RisquesV1;
     statuts: ReferentielStatut;
     niveauxGravite: ReferentielGravites;
     niveauxVraisemblance: ReferentielVraisemblances;
   }
 
-  let { idService, statuts, niveauxGravite, niveauxVraisemblance }: Props =
-    $props();
+  let {
+    idService,
+    risquesV1,
+    statuts,
+    niveauxGravite,
+    niveauxVraisemblance,
+  }: Props = $props();
 
   let risques: TousRisques = $state({
     risquesBruts: [],

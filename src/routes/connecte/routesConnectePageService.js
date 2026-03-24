@@ -233,6 +233,7 @@ const routesConnectePageService = ({
         InformationsService,
         referentiel,
         service,
+        risquesV1: service.risques.toJSON(),
       });
     }
   );
