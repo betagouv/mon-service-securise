@@ -83,7 +83,8 @@
     afficheExplicationRisquesV2,
   }: Props = $props();
 
-  let modaleExplicationRisquesV2: ModaleExplicationRisquesV2 | undefined;
+  let modaleExplicationRisquesV2: ModaleExplicationRisquesV2 | undefined =
+    $state();
 
   $effect(() => {
     const requete = new URLSearchParams(window.location.search);
@@ -120,7 +121,8 @@
     mesures.reinitialise(
       modeVisiteGuidee ? mesuresVisiteGuidee : await recupereMesures(idService)
     );
-    if (avecRisquesV2) await storeVraisemblanceRisqueV2.rafraichis(idService);
+    if (avecRisquesV2 && versionService === 'v2')
+      await storeVraisemblanceRisqueV2.rafraichis(idService);
   };
 
   const rafraichisContributeurs = async () => {
@@ -182,7 +184,7 @@
   });
 
   $effect(() => {
-    if (afficheExplicationRisquesV2) {
+    if (afficheExplicationRisquesV2 && versionService === 'v2') {
       modaleExplicationRisquesV2?.affiche();
     }
   });
@@ -465,10 +467,12 @@
   </tbody>
 </table>
 
-<ModaleExplicationRisquesV2
-  {idService}
-  bind:this={modaleExplicationRisquesV2}
-/>
+{#if afficheExplicationRisquesV2 && versionService === 'v2'}
+  <ModaleExplicationRisquesV2
+    {idService}
+    bind:this={modaleExplicationRisquesV2}
+  />
+{/if}
 
 <style>
   .barre-filtres {
