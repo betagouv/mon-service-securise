@@ -10,7 +10,8 @@
     "checkJs": true,
     "isolatedModules": true,
     "strict": true,
-    "ignoreDeprecations": "5.0"
+    "ignoreDeprecations": "5.0",
+    "types": ["vitest/globals"]
   },
   "include": [
     "types.d.ts",
