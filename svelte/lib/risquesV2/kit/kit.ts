@@ -20,6 +20,12 @@ export const mappingCouleursDSFR: Record<CouleurNiveauRisque, string> = {
   rouge: 'pink-macaron',
 };
 
+export const mappingCouleursNiveau: Record<CouleurNiveauRisque, string> = {
+  vert: 'faible',
+  orange: 'moyen',
+  rouge: 'élevé',
+};
+
 export const mappingNomCategories: Record<string, string> = {
   disponibilite: 'Disponibilité',
   integrite: 'Intégrité',
