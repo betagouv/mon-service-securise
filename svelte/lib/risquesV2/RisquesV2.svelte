@@ -17,6 +17,7 @@
   import ModaleAnciensRisques from './modale/ModaleAnciensRisques.svelte';
   import TableauRisquesV2 from './TableauRisquesV2.svelte';
   import Infobulle from '../ui/Infobulle.svelte';
+  import { couleur, mappingCouleursNiveau } from './kit/kit';
 
   interface Props {
     idService: string;
@@ -139,6 +140,27 @@
       </div>
     </div>
     <LegendeMatrice />
+    <dsfr-transcription
+      fullscreen="Agrandir"
+      fullscreen-aria-label="Agrandir la transcription"
+    >
+      {#each [{ risquesAAfficher: risques.risquesBruts, titre: 'Risques bruts' }, { risquesAAfficher: risques.risques, titre: 'Risques résiduels' }, { risquesAAfficher: risques.risquesCibles, titre: 'Risques cibles' }] as { risquesAAfficher, titre } (titre)}
+        <p>{titre}</p>
+        <dl>
+          {#each risquesAAfficher as risque (risque.id)}
+            <dt>
+              {risque.id}
+            </dt>
+            <dd>
+              vraisemblance {risque.vraisemblance}, gravité {risque.gravite} (risque
+              {mappingCouleursNiveau[
+                couleur(risque.vraisemblance, risque.gravite)
+              ]})
+            </dd>
+          {/each}
+        </dl>
+      {/each}
+    </dsfr-transcription>
   </div>
 </div>
 
@@ -315,5 +337,10 @@
     .sous-titre {
       margin-bottom: 24px;
     }
+  }
+  dsfr-transcription {
+    max-width: 500px;
+    width: 100%;
+    text-align: left;
   }
 </style>
