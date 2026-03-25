@@ -25,6 +25,7 @@ export type TableauDesMesuresProps = {
   modeVisiteGuidee: boolean;
   versionService: VersionService;
   avecRisquesV2: boolean;
+  afficheExplicationRisquesV2: boolean;
 };
 
 export type PartieResponsable = 'Projet' | 'Presta' | 'Mixte';
