@@ -66,6 +66,7 @@
     estLectureSeule: boolean;
     modeVisiteGuidee: boolean;
     versionService: VersionService;
+    avecRisquesV2: boolean;
   }
 
   let {
@@ -76,6 +77,7 @@
     estLectureSeule,
     modeVisiteGuidee,
     versionService,
+    avecRisquesV2,
   }: Props = $props();
 
   $effect(() => {
@@ -113,7 +115,7 @@
     mesures.reinitialise(
       modeVisiteGuidee ? mesuresVisiteGuidee : await recupereMesures(idService)
     );
-    await storeVraisemblanceRisqueV2.rafraichis(idService);
+    if (avecRisquesV2) await storeVraisemblanceRisqueV2.rafraichis(idService);
   };
 
   const rafraichisContributeurs = async () => {
