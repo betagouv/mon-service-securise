@@ -1113,6 +1113,7 @@ describe('Le middleware MSS', () => {
     let adaptateurEnvironnement;
     const featureFlag = {
       dateDebutBandeauMSC: () => '2025-01-01 00:00:00Z',
+      avecRisquesV2: () => false,
     };
 
     beforeEach(() => {
@@ -1142,6 +1143,25 @@ describe('Le middleware MSS', () => {
 
         middleware.chargeFeatureFlags(requete, reponse, () => {
           expect(reponse.locals.featureFlags.avecBandeauMSC).to.be(true);
+        });
+      });
+    });
+
+    describe("concernant l'affichage des risques V2", () => {
+      it("n'affiche pas les risques V2 si le feature flag est désactivé", async () => {
+        middleware.chargeFeatureFlags(requete, reponse, () => {
+          expect(reponse.locals.featureFlags.avecRisquesV2).to.be(false);
+        });
+      });
+
+      it('affiche les risques V2 si le feature flag est activé', async () => {
+        adaptateurEnvironnement = {
+          featureFlag: () => ({ ...featureFlag, avecRisquesV2: () => true }),
+        };
+        middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
+
+        middleware.chargeFeatureFlags(requete, reponse, () => {
+          expect(reponse.locals.featureFlags.avecRisquesV2).to.be(true);
         });
       });
     });

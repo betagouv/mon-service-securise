@@ -461,6 +461,7 @@ const middleware = (configuration: ConfigurationMiddleware) => {
         new Date(
           adaptateurEnvironnement.featureFlag().dateDebutBandeauMSC() || 0
         ),
+      avecRisquesV2: adaptateurEnvironnement.featureFlag().avecRisquesV2(),
     };
     suite();
   };
