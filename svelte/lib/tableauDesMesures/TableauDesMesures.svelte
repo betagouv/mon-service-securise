@@ -55,6 +55,7 @@
   import { rechercheParThematique } from './stores/rechercheParThematique.store';
   import { rechercheParPartieResponsable } from './stores/rechercheParPartieResponsable.store';
   import { storeVraisemblanceRisqueV2 } from '../ui/stores/vraisemblanceRisqueV2.store';
+  import ModaleExplicationRisquesV2 from '../risquesV2/modale/ModaleExplicationRisquesV2.svelte';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -67,6 +68,7 @@
     modeVisiteGuidee: boolean;
     versionService: VersionService;
     avecRisquesV2: boolean;
+    afficheExplicationRisquesV2: boolean;
   }
 
   let {
@@ -78,7 +80,10 @@
     modeVisiteGuidee,
     versionService,
     avecRisquesV2,
+    afficheExplicationRisquesV2,
   }: Props = $props();
+
+  let modaleExplicationRisquesV2: ModaleExplicationRisquesV2 | undefined;
 
   $effect(() => {
     const requete = new URLSearchParams(window.location.search);
@@ -174,6 +179,12 @@
 
     if (!$nombreResultats.nombreParAvancement.statutADefinir)
       $rechercheParAvancement = 'enAction';
+  });
+
+  $effect(() => {
+    if (afficheExplicationRisquesV2) {
+      modaleExplicationRisquesV2?.affiche();
+    }
   });
 
   let etatEnregistrement: EtatEnregistrement = $state(Jamais);
@@ -453,6 +464,11 @@
     {/if}
   </tbody>
 </table>
+
+<ModaleExplicationRisquesV2
+  {idService}
+  bind:this={modaleExplicationRisquesV2}
+/>
 
 <style>
   .barre-filtres {

@@ -25,6 +25,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      white-space: nowrap;
 
       .carre-legende {
         width: 13px;

@@ -19,6 +19,9 @@ $(() => {
     'indice-cyber-personnalise'
   );
   const avecRisquesV2 = lisDonneesPartagees('avec-risques-v2');
+  const afficheExplicationRisquesV2 = lisDonneesPartagees(
+    'affiche-modale-risques-v2'
+  );
 
   const enVisiteGuidee = () =>
     etatVisiteGuidee.dejaTerminee === false && !etatVisiteGuidee.enPause;
@@ -27,6 +30,7 @@ $(() => {
     new CustomEvent('svelte-recharge-tableau-mesures', {
       detail: {
         avecRisquesV2,
+        afficheExplicationRisquesV2,
         categories,
         statuts,
         priorites,
