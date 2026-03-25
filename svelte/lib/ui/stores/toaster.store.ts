@@ -8,10 +8,17 @@ import { encode } from 'html-entities';
 
 export type NiveauMessage = 'info' | 'succes' | 'erreur';
 
+export type BoutonAction = {
+  label: string;
+  icone: string;
+  href: string;
+};
+
 export type MessageToast = {
   niveau: NiveauMessage;
   titre: string;
   contenu: string;
+  boutonAction?: BoutonAction;
   timeout: number;
   id?: number;
   avecInterpolationHTMLDangereuse?: boolean;
@@ -30,9 +37,16 @@ export const toasterStore = {
   info: (
     titre: string,
     contenu: string,
-    avecInterpolationHTMLDangereuse: boolean = false
+    avecInterpolationHTMLDangereuse: boolean = false,
+    boutonAction?: BoutonAction
   ) => {
-    afficheToast(titre, contenu, 'info', avecInterpolationHTMLDangereuse);
+    afficheToast(
+      titre,
+      contenu,
+      'info',
+      avecInterpolationHTMLDangereuse,
+      boutonAction
+    );
   },
   succes: (
     titre: string,
@@ -82,6 +96,7 @@ const fabriqueToast = (
   contenu: string,
   niveau: NiveauMessage,
   avecInterpolationHTMLDangereuse: boolean,
+  boutonAction?: BoutonAction,
   timeout = 5000
 ): MessageToast => {
   return {
@@ -90,6 +105,7 @@ const fabriqueToast = (
     contenu,
     timeout,
     avecInterpolationHTMLDangereuse,
+    boutonAction,
     id: +new Date() + Math.random(),
   };
 };
@@ -98,13 +114,15 @@ function afficheToast(
   titre: string,
   contenu: string,
   niveau: NiveauMessage,
-  avecInterpolationHTMLDangereuse: boolean
+  avecInterpolationHTMLDangereuse: boolean,
+  boutonAction?: BoutonAction
 ) {
   const message = fabriqueToast(
     titre,
     contenu,
     niveau,
-    avecInterpolationHTMLDangereuse
+    avecInterpolationHTMLDangereuse,
+    boutonAction
   );
   setTimeout(() => {
     update((etatActuel) => {

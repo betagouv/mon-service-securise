@@ -1,10 +1,12 @@
 <script lang="ts">
   import { glisse } from './animations/transitions';
+  import type { BoutonAction } from './stores/toaster.store';
 
   interface Props {
     niveau: 'info' | 'succes' | 'erreur' | 'alerte';
     titre: string;
     contenu: string;
+    avecBoutonAction?: BoutonAction;
     avecOmbre?: boolean;
     avecAnimation?: boolean;
     avecFermeture?: boolean;
@@ -16,6 +18,7 @@
     niveau,
     titre,
     contenu,
+    avecBoutonAction = undefined,
     avecOmbre = true,
     avecAnimation = true,
     avecFermeture = false,
@@ -72,6 +75,20 @@
         {@html contenu}
       {:else}
         {contenu}
+      {/if}
+      {#if avecBoutonAction}
+        <dsfr-button
+          label={avecBoutonAction.label}
+          kind="tertiary"
+          size="md"
+          has-icon
+          icon={avecBoutonAction.icone}
+          icon-place="left"
+          markup="a"
+          type="button"
+          href={avecBoutonAction.href}
+          target="blank"
+        ></dsfr-button>
       {/if}
     </p>
   </div>
@@ -153,6 +170,10 @@
         font-weight: 400;
         line-height: 1.5rem;
       }
+    }
+
+    dsfr-button {
+      margin-top: 16px;
     }
   }
 </style>

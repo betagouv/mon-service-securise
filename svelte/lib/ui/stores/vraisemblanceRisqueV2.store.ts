@@ -53,7 +53,12 @@ export const storeVraisemblanceRisqueV2 = {
         toasterStore.info(
           'Cartographie de risques de sécurité mise à jour',
           contenu,
-          true
+          true,
+          {
+            label: 'Voir la cartographie',
+            icone: 'eye-line',
+            href: `/service/${idService}/risques/v2`,
+          }
         );
       }
     }
