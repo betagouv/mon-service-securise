@@ -1,5 +1,8 @@
 import testeurMSS from '../testeurMSS.js';
-import { unServiceV2 } from '../../constructeurs/constructeurService.js';
+import {
+  unService,
+  unServiceV2,
+} from '../../constructeurs/constructeurService.js';
 import {
   Permissions,
   Rubriques,
@@ -54,6 +57,17 @@ describe('Les routes /service/:id/risques/v2', () => {
       expect(reponse.body.risques).toBeInstanceOf(Array);
       expect(reponse.body.risquesCibles).toBeInstanceOf(Array);
       expect(reponse.body.risquesBruts).toBeInstanceOf(Array);
+    });
+
+    it('jette une erreur si le service est en V1', async () => {
+      testeur
+        .middleware()
+        // @ts-expect-error le middleware est rechargé partiellement
+        .reinitialise({ serviceARenvoyer: unService().construis() });
+
+      const { status } = await testeur.get('/api/service/456/risques/v2');
+
+      expect(status).toBe(422);
     });
   });
 
