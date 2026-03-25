@@ -22,6 +22,7 @@ export type DonneesParcoursUtilisateur = {
   explicationNouveauReferentiel?: { dejaTermine: boolean };
   idUtilisateur: UUID;
   versionsService?: VersionService[];
+  aVuExplicationRisquesV2?: boolean;
 };
 
 class ParcoursUtilisateur {
@@ -31,6 +32,7 @@ class ParcoursUtilisateur {
   readonly etatVisiteGuidee: EtatVisiteGuidee;
   readonly explicationNouveauReferentiel: ExplicationNouveauReferentiel;
   dateDerniereConnexion?: string;
+  aVuExplicationRisquesV2: boolean;
 
   constructor(
     donnees: DonneesParcoursUtilisateur,
@@ -51,6 +53,7 @@ class ParcoursUtilisateur {
       versionsService: donnees.versionsService,
     });
     this.adaptateurHorloge = adaptateurHorloge;
+    this.aVuExplicationRisquesV2 = donnees.aVuExplicationRisquesV2 || false;
   }
 
   enregistreDerniereConnexionMaintenant() {
@@ -58,6 +61,10 @@ class ParcoursUtilisateur {
       .maintenant()
       .toISOString();
     this.aVuTableauDeBordDepuisConnexion = false;
+  }
+
+  marqueExplicationsRisquesV2Vues() {
+    this.aVuExplicationRisquesV2 = true;
   }
 
   finaliseExplicationNouveauReferentiel() {
@@ -104,6 +111,7 @@ class ParcoursUtilisateur {
         this.etatVisiteGuidee.toJSON() as DonneesEtatVisiteGuidee,
       explicationNouveauReferentiel:
         this.explicationNouveauReferentiel.toJSON(),
+      aVuExplicationRisquesV2: this.aVuExplicationRisquesV2,
     };
   }
 
