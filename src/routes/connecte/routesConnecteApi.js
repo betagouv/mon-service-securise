@@ -40,6 +40,7 @@ import {
 import { schemaMesureGenerale } from '../../http/schemas/mesure.schema.js';
 import routesConnecteApiModeleMesureSpecifique from './routesConnecteApiModeleMesureSpecifique.js';
 import { routesConnecteApiUtilisateur } from './routesConnecteApiUtilisateur.js';
+import { routesConnecteApiExplicationRisquesV2 } from './routesConnecteApiExplicationRisquesV2.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER } = Rubriques;
@@ -370,6 +371,14 @@ const routesConnecteApi = ({
     '/explicationNouveauReferentiel',
     middleware.verificationAcceptationCGU,
     routesConnecteApiExplicationNouveauReferentiel({
+      depotDonnees,
+    })
+  );
+
+  routes.use(
+    '/explicationRisquesV2',
+    middleware.verificationAcceptationCGU,
+    routesConnecteApiExplicationRisquesV2({
       depotDonnees,
     })
   );
