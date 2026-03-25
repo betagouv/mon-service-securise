@@ -2,8 +2,8 @@ import ParcoursUtilisateur, {
   DonneesParcoursUtilisateur,
 } from '../../src/modeles/parcoursUtilisateur.ts';
 import * as Referentiel from '../../src/referentiel.js';
-import EtatVisiteGuidee from '../../src/modeles/etatVisiteGuidee.js';
 import { creeReferentielVide } from '../../src/referentiel.js';
+import EtatVisiteGuidee from '../../src/modeles/etatVisiteGuidee.js';
 import { unUUID } from '../constructeurs/UUID.ts';
 
 const donneesParcoursUtilisateur = (): DonneesParcoursUtilisateur => ({
@@ -12,6 +12,7 @@ const donneesParcoursUtilisateur = (): DonneesParcoursUtilisateur => ({
   dateDerniereConnexion: '2023-01-01',
   etatVisiteGuidee: { dejaTerminee: false, enPause: true },
   explicationNouveauReferentiel: { dejaTermine: false },
+  aVuExplicationRisquesV2: false,
 });
 
 describe('Un parcours utilisateur', () => {
@@ -26,6 +27,7 @@ describe('Un parcours utilisateur', () => {
       explicationNouveauReferentiel: {
         dejaTermine: false,
       },
+      aVuExplicationRisquesV2: false,
     });
   });
 
@@ -50,6 +52,7 @@ describe('Un parcours utilisateur', () => {
     expect(
       etatInitial.explicationNouveauReferentiel.aVuTableauDeBordDepuisConnexion
     ).toBe(false);
+    expect(etatInitial.aVuExplicationRisquesV2).toBe(false);
   });
 
   it("sait enregistrer une date de dernière connexion en utilisant l'adaptateur horloge", () => {
@@ -74,5 +77,13 @@ describe('Un parcours utilisateur', () => {
     const p = new ParcoursUtilisateur(sansExplicationPrealable);
 
     expect(p.explicationNouveauReferentiel.estTermine()).toBe(false);
+  });
+
+  it("sait enregistrer que l'utilisateur a vu l'explication sur les risques v2", () => {
+    const unParcours = new ParcoursUtilisateur(donneesParcoursUtilisateur());
+
+    unParcours.marqueExplicationsRisquesV2Vues();
+
+    expect(unParcours.toJSON().aVuExplicationRisquesV2).toBe(true);
   });
 });
