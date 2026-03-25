@@ -64,6 +64,7 @@ let idUtilisateurCourant;
 let sourceAuthentification;
 let listeAdressesIPsAutorisee = [];
 let preferencesChargees = false;
+let etatExplicationRisquesV2Charge = false;
 let etatVisiteGuideeCharge = false;
 let etatExplicationNouveauReferentielCharge = false;
 let etatExplicationUtilisationMFA = false;
@@ -99,6 +100,7 @@ const middlewareFantaisie = {
     autorisationChargee = autorisationACharger;
     listeAdressesIPsAutorisee = [];
     preferencesChargees = false;
+    etatExplicationRisquesV2Charge = false;
     etatVisiteGuideeCharge = false;
     etatExplicationNouveauReferentielCharge = false;
     etatExplicationUtilisationMFA = false;
@@ -145,6 +147,12 @@ const middlewareFantaisie = {
   chargeExplicationNouveauReferentiel: (_requete, reponse, suite) => {
     reponse.locals.afficheExplicationNouveauReferentiel = true;
     etatExplicationNouveauReferentielCharge = true;
+    suite();
+  },
+
+  chargeExplicationRisquesV2: (_requete, reponse, suite) => {
+    reponse.locals.afficheExplicationRisquesV2 = true;
+    etatExplicationRisquesV2Charge = true;
     suite();
   },
 
@@ -259,6 +267,13 @@ const middlewareFantaisie = {
   verifieChargementDesPreferences: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => preferencesChargees },
+      app,
+      ...params
+    ),
+
+  verifieChargementDeLExplicationDesRisquesV2: async (app, ...params) =>
+    verifieRequeteChangeEtat(
+      { lectureEtat: () => etatExplicationRisquesV2Charge },
       app,
       ...params
     ),

@@ -87,6 +87,7 @@ const routesConnectePageService = ({
     middleware.trouveService({ [SECURISER]: LECTURE }),
     middleware.chargeAutorisationsService,
     middleware.chargePreferencesUtilisateur,
+    middleware.chargeExplicationRisquesV2,
     async (requete, reponse) => {
       const { service } = requete;
 
