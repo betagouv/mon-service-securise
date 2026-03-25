@@ -318,6 +318,28 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     suite();
   };
 
+  const chargeExplicationRisquesV2 = async (
+    requete: RequeteMSS,
+    reponse: Response,
+    suite: NextFunction
+  ) => {
+    if (!requete.idUtilisateurCourant)
+      throw new ErreurChainageMiddleware(
+        'Un utilisateur courant doit être présent dans la requête. Manque-t-il un appel à `verificationJWT` ?'
+      );
+
+    if (!adaptateurEnvironnement.featureFlag().avecRisquesV2()) {
+      reponse.locals.afficheExplicationRisquesV2 = false;
+    } else {
+      const parcoursUtilisateur = await depotDonnees.lisParcoursUtilisateur(
+        requete.idUtilisateurCourant
+      );
+      reponse.locals.afficheExplicationRisquesV2 =
+        !parcoursUtilisateur.aVuExplicationRisquesV2;
+    }
+    suite();
+  };
+
   const chargePreferencesUtilisateur: RequestHandler = (
     requete,
     reponse,
@@ -471,6 +493,7 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     chargeAutorisationsService,
     chargeEtatVisiteGuidee,
     chargeExplicationNouveauReferentiel,
+    chargeExplicationRisquesV2,
     chargeExplicationUtilisationMFA,
     chargeFeatureFlags,
     chargePreferencesUtilisateur,
