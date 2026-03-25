@@ -1,8 +1,8 @@
 import expect from 'expect.js';
 import Middleware from '../../src/http/middleware.js';
 import {
-  ErreurDroitsIncoherents,
   ErreurChainageMiddleware,
+  ErreurDroitsIncoherents,
 } from '../../src/erreurs.js';
 import { uneAutorisation } from '../constructeurs/constructeurAutorisation.js';
 import ParcoursUtilisateur from '../../src/modeles/parcoursUtilisateur.js';
@@ -1164,6 +1164,66 @@ describe('Le middleware MSS', () => {
           expect(reponse.locals.featureFlags.avecRisquesV2).to.be(true);
         });
       });
+    });
+  });
+
+  describe("sur demande de chargement de l'explication des risques v2", () => {
+    let adaptateurEnvironnement;
+    let middleware;
+    beforeEach(() => {
+      adaptateurEnvironnement = {
+        featureFlag: () => ({
+          avecRisquesV2: () => true,
+        }),
+      };
+      middleware = Middleware({ adaptateurEnvironnement });
+      requete.idUtilisateurCourant = '1234';
+    });
+
+    it("ne demande pas l'affichage si le feature flag des risques v2 est désactivé", async () => {
+      let doitAfficher;
+      adaptateurEnvironnement = {
+        featureFlag: () => ({ avecRisquesV2: () => false }),
+      };
+      middleware = Middleware({ adaptateurEnvironnement });
+
+      await middleware.chargeExplicationRisquesV2(requete, reponse, () => {
+        doitAfficher = reponse.locals.afficheExplicationRisquesV2;
+      });
+
+      expect(doitAfficher).to.be(false);
+    });
+
+    it("ne demande pas l'affichage si l'utilisateur a déjà vu les explications", async () => {
+      let doitAfficher;
+      depotDonnees.lisParcoursUtilisateur = async () =>
+        new ParcoursUtilisateur({
+          idUtilisateur: '1234',
+          aVuExplicationRisquesV2: true,
+        });
+      middleware = Middleware({ adaptateurEnvironnement, depotDonnees });
+
+      await middleware.chargeExplicationRisquesV2(requete, reponse, () => {
+        doitAfficher = reponse.locals.afficheExplicationRisquesV2;
+      });
+
+      expect(doitAfficher).to.be(false);
+    });
+
+    it("demande l'affichage si l'utilisateur n'a pas vu les explications", async () => {
+      let doitAfficher;
+      depotDonnees.lisParcoursUtilisateur = async () =>
+        new ParcoursUtilisateur({
+          idUtilisateur: '1234',
+          aVuExplicationRisquesV2: false,
+        });
+      middleware = Middleware({ adaptateurEnvironnement, depotDonnees });
+
+      await middleware.chargeExplicationRisquesV2(requete, reponse, () => {
+        doitAfficher = reponse.locals.afficheExplicationRisquesV2;
+      });
+
+      expect(doitAfficher).to.be(true);
     });
   });
 });
