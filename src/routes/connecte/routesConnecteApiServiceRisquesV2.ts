@@ -14,6 +14,7 @@ import { DepotDonnees } from '../../depotDonnees.interface.js';
 import { ReferentielV2 } from '../../referentiel.interface.js';
 import { RequestRouteConnecteService } from './routesConnecte.types.js';
 import { DonneesMiseAJourRisqueSpecifiqueV2 } from '../../moteurRisques/v2/risqueSpecifiqueV2.js';
+import { VersionService } from '../../modeles/versionService.js';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { RISQUES } = Rubriques;
@@ -35,6 +36,11 @@ const routesConnecteApiServiceRisquesV2 = ({
     middleware.chargeAutorisationsService,
     async (requete, reponse) => {
       const { service } = requete as unknown as RequestRouteConnecteService;
+
+      if (service.version() === VersionService.v1) {
+        reponse.sendStatus(422);
+        return;
+      }
 
       reponse.json(service.risquesV2!.toJSON());
     }
