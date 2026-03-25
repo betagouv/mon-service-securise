@@ -16,6 +16,7 @@
   import Bouton from '../ui/Bouton.svelte';
   import ModaleAnciensRisques from './modale/ModaleAnciensRisques.svelte';
   import TableauRisquesV2 from './TableauRisquesV2.svelte';
+  import Infobulle from '../ui/Infobulle.svelte';
 
   interface Props {
     idService: string;
@@ -113,9 +114,27 @@
           hideOutputLabel={true}
         ></dsfr-range>
         <div class="conteneur-legende-slider">
-          <span>Risques bruts</span>
-          <span>Risques résiduels</span>
-          <span>Risques cibles</span>
+          <div class="legende-avec-infobulle">
+            <span>Risques bruts</span>
+            <Infobulle
+              contenu="Les risques bruts sont les risques évalués sans prendre en compte la mise en place des mesures de sécurité."
+              enfantDirect
+            />
+          </div>
+          <div class="legende-avec-infobulle">
+            <span>Risques résiduels</span>
+            <Infobulle
+              contenu="Les risques résiduels actuels sont les risques évalués en prenant en compte les mesures de sécurité que vous avez déjà mises en place."
+              enfantDirect
+            />
+          </div>
+          <div class="legende-avec-infobulle">
+            <span>Risques cibles</span>
+            <Infobulle
+              contenu="Les risques cibles sont les risques évalués en considérant toutes les mesures mises en place."
+              enfantDirect
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -253,6 +272,11 @@
       .conteneur-legende-slider {
         display: flex;
         justify-content: space-between;
+
+        .legende-avec-infobulle {
+          display: flex;
+          align-items: center;
+        }
 
         span {
           color: #666;
