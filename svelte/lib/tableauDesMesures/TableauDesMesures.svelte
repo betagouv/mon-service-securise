@@ -54,6 +54,7 @@
   import type { VersionService } from '../../../src/modeles/versionService';
   import { rechercheParThematique } from './stores/rechercheParThematique.store';
   import { rechercheParPartieResponsable } from './stores/rechercheParPartieResponsable.store';
+  import { storeVraisemblanceRisqueV2 } from '../ui/stores/vraisemblanceRisqueV2.store';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -112,6 +113,7 @@
     mesures.reinitialise(
       modeVisiteGuidee ? mesuresVisiteGuidee : await recupereMesures(idService)
     );
+    await storeVraisemblanceRisqueV2.rafraichis(idService);
   };
 
   const rafraichisContributeurs = async () => {
