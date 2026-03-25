@@ -1,13 +1,3 @@
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
 import { get } from 'svelte/store';
 import { nouveautesPage } from '../../../lib/ui/stores/nouveautesPage.store';
 import axios from 'axios';
