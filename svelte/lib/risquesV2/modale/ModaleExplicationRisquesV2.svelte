@@ -6,6 +6,10 @@
   import { recupereRisques } from '../risquesV2.api';
   import type { TousRisques } from '../risquesV2.d';
   import LegendeMatrice from '../matrice/LegendeMatrice.svelte';
+  import Tableau from '../../ui/Tableau.svelte';
+  import CartouchesRisqueV2 from '../kit/CartouchesRisqueV2.svelte';
+  import CartoucheIdentifiantRisque from '../kit/CartoucheIdentifiantRisque.svelte';
+  import { couleur } from '../kit/kit';
 
   interface Props {
     idService: string;
@@ -22,9 +26,29 @@
     risquesCibles: [],
     risquesSpecifiques: [],
   });
+
+  let cocheAVu = $state(false);
+
   onMount(async () => {
     risques = await recupereRisques(idService);
   });
+
+  let risquesDeGraviteHaute = $derived(
+    risques.risques.filter(
+      (risque) => couleur(risque.gravite, risque.vraisemblance) === 'rouge'
+    )
+  );
+
+  const enregistreUtilisateurAVuExplications = (e: CustomEvent<boolean>) => {
+    cocheAVu = e.detail;
+  };
+
+  const fermeModale = async () => {
+    if (cocheAVu) {
+      await axios.post('/api/explicationRisquesV2/termine');
+    }
+    elementModale?.ferme();
+  };
 
   export const affiche = () => {
     elementModale?.affiche();
@@ -95,23 +119,48 @@
           <LegendeMatrice />
         {/if}
       </div>
+      {#if risquesDeGraviteHaute.length > 0}
+        <h5>Risques de gravité haute</h5>
+        <Tableau
+          colonnes={[
+            { cle: 'id', libelle: 'Identifiant' },
+            { cle: 'intitule', libelle: 'Intitulé du risque' },
+          ]}
+          donnees={risquesDeGraviteHaute}
+        >
+          {#snippet cellule({ donnee, colonne })}
+            {#if colonne.cle === 'id'}
+              <div class="colonne-identifiant colonne">
+                <CartoucheIdentifiantRisque risque={donnee} />
+              </div>
+            {:else if colonne.cle === 'intitule'}
+              <div class="colonne-intitule colonne">
+                <span>{donnee.intitule}</span>
+                <CartouchesRisqueV2 risque={donnee} />
+              </div>
+            {/if}
+          {/snippet}
+        </Tableau>
+      {/if}
     </div>
   {/snippet}
   {#snippet actions()}
-    <!--    &lt;!&ndash; svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions &ndash;&gt;-->
-    <!--    <dsfr-button-->
-    <!--      label="Fermer"-->
-    <!--      kind="secondary"-->
-    <!--      size="md"-->
-    <!--      onclick={() => elementModale?.ferme()}-->
-    <!--    ></dsfr-button>-->
-    <!--    <Lien-->
-    <!--      type="bouton-primaire"-->
-    <!--      href="/service/{idService}/risques/export.csv"-->
-    <!--      titre="Télécharger la liste de risques en CSV"-->
-    <!--      target="_blank"-->
-    <!--      icone="telecharger"-->
-    <!--    />-->
+    <div class="contenu-actions">
+      <dsfr-checkbox
+        label="Ne plus voir cette information"
+        id="checkbox-vu"
+        onvaluechanged={enregistreUtilisateurAVuExplications}
+      >
+      </dsfr-checkbox>
+
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label="Commencer à sécuriser mon service 🚀"
+        kind="primary"
+        size="md"
+        onclick={async () => await fermeModale()}
+      ></dsfr-button>
+    </div>
   {/snippet}
 </Modale>
 
@@ -131,6 +180,12 @@
     font-size: 1.5rem;
     line-height: 2rem;
     font-weight: bold;
+  }
+  .contenu-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
 
   .contenu-modale {
@@ -159,6 +214,20 @@
 
       .conteneur-matrice {
         padding-left: 32px;
+        text-align: center;
+      }
+    }
+    .colonne-identifiant {
+      width: 168px;
+    }
+    .colonne-intitule {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+
+      span {
+        font-weight: 500;
       }
     }
   }
