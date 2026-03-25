@@ -266,6 +266,15 @@ describe('Le serveur MSS des routes /service/*', () => {
         .verifieChargementDesPreferences(testeur.app(), '/service/456/mesures');
     });
 
+    it("charge l'état d'affichage de l'explication des risques v2", async () => {
+      await testeur
+        .middleware()
+        .verifieChargementDeLExplicationDesRisquesV2(
+          testeur.app(),
+          '/service/456/mesures'
+        );
+    });
+
     it('interroge le moteur de règles pour obtenir les mesures personnalisées', async () => {
       let descriptionRecue;
       const requete = {};
