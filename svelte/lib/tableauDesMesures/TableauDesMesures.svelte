@@ -183,12 +183,19 @@
       $rechercheParAvancement = 'enAction';
   });
 
-  $effect(() => {
-    if (
+  let afficheLaModaleExplicationRisquesV2 = $derived.by(() => {
+    const requete = new URLSearchParams(window.location.search);
+    const vientDeCreerLeService = requete.get('succesCreationService');
+
+    return (
       !modeVisiteGuidee &&
       afficheExplicationRisquesV2 &&
-      versionService === 'v2'
-    ) {
+      versionService === 'v2' &&
+      vientDeCreerLeService
+    );
+  });
+  $effect(() => {
+    if (afficheLaModaleExplicationRisquesV2) {
       modaleExplicationRisquesV2?.affiche();
     }
   });
@@ -471,7 +478,7 @@
   </tbody>
 </table>
 
-{#if !modeVisiteGuidee && afficheExplicationRisquesV2 && versionService === 'v2'}
+{#if afficheLaModaleExplicationRisquesV2}
   <ModaleExplicationRisquesV2
     {idService}
     bind:this={modaleExplicationRisquesV2}
