@@ -1,20 +1,62 @@
 extends base
 
+mixin matrice(risques)
+  div(class="conteneur-matrice-risques-v2")
+    table(class="matrice-risques-v2")
+      caption(class="legende")
+        span Gravité
+      caption(class="legende bas-droite")
+        span Vraisemblance
+      tbody
+      each ligne, indexLigne in new Array(4).fill(0)
+        - const gravite = indexLigne * -1 + 4
+        tr
+          th(scope="row")
+            span= indexLigne * -1 + 4
+
+          each colonne, indexColonne in new Array(4).fill(0)
+            - const vraisemblance = indexColonne + 1
+            - const laCouleur = niveauRisque(gravite, vraisemblance)
+            -
+              const risqueDeCetteCellule = risques.filter(
+                (r) =>
+                    r.gravite === gravite &&
+                    r.vraisemblance === vraisemblance
+                  )
+            - const idRisques = risqueDeCetteCellule.map((r) => r.id).join(', ')
+            td
+              .contenu-cellule(class=laCouleur)
+                if idRisques
+                  span= idRisques
+
+      tr(class="legende-x")
+        th(aria-hidden="true")
+        each colonne, indexColonne in new Array(4).fill(0)
+          th(scope="col")
+            span= indexColonne + 1
+
+
 block page
+  -
+    const niveauRisque = (gravite, vraisemblance) => {
+      const niveau = gravite * vraisemblance;
+      return niveau <= 4 && vraisemblance < 3 && gravite < 4
+              ? 'faible'
+              : niveau >= 8 && vraisemblance > 2 && gravite >= 2
+                      ? 'eleve'
+                      : 'moyen';
+    };
   +boite-grise('Cartographie des risques', 'cartographie')
+    h5 Risques usuels bruts
+    +matrice(donneesRisques.risques.risquesBruts)
+    h5 Risques usuels résiduels
+    +matrice(donneesRisques.risques.risques)
+    h5 Risques usuels cibles
+    +matrice(donneesRisques.risques.risquesCibles)
 
 
   +boite-grise('Risques', 'liste-risques')
     ul.risques
-      -
-        const niveauRisque = (gravite, vraisemblance) => {
-          const niveau = gravite * vraisemblance;
-          return niveau <= 4 && vraisemblance < 3 && gravite < 4
-            ? 'faible'
-            : niveau >= 8 && vraisemblance > 2 && gravite >= 2
-            ? 'eleve'
-            : 'moyen';
-          };
       each risque in donneesRisques.risques.risques
         - const niveauDuRisque = niveauRisque(risque.gravite, risque.vraisemblance)
         li.bloc-risque.bloc-indivisible
