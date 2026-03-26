@@ -13,7 +13,7 @@ import {
   dateEnFrancais,
   dateInvalide,
 } from '../../utilitaires/date.js';
-import { Referentiel } from '../../referentiel.interface.js';
+import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
 import { creeReferentielVide } from '../../referentiel.js';
 
 export type DonneesDecision = {
@@ -29,11 +29,11 @@ class Decision extends Etape {
   dureeValidite?: DureeValidite;
   refusee?: boolean;
   private readonly adaptateurHorloge: AdaptateurHorloge;
-  private readonly referentiel!: Referentiel;
+  private readonly referentiel!: Referentiel | ReferentielV2;
 
   constructor(
     { dateHomologation, dureeValidite, refusee }: Partial<DonneesDecision> = {},
-    referentiel: Referentiel = creeReferentielVide(),
+    referentiel: Referentiel | ReferentielV2 = creeReferentielVide(),
     adaptateurHorloge: AdaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     super(
@@ -121,7 +121,7 @@ class Decision extends Etape {
 
   static valide(
     { dateHomologation, dureeValidite, refusee }: Partial<DonneesDecision>,
-    referentiel: Referentiel
+    referentiel: Referentiel | ReferentielV2
   ) {
     if (refusee && dureeValidite) {
       throw new ErreurDecisionInvalide(
