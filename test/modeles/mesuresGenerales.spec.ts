@@ -17,7 +17,7 @@ describe('La liste des mesures générales', () => {
   describe("sur demande de mise à jour d'une mesure", () => {
     beforeEach(() => {
       referentiel = creeReferentiel({
-        // @ts-expect-error On recharge un référentiel partiellement
+        // @ts-expect-error identifiant de mesure factice
         mesures: { m1: {} },
       });
     });
@@ -59,8 +59,9 @@ describe('La liste des mesures générales', () => {
   });
 
   it('est complète quand les mesures sont complètes', () => {
-    // @ts-expect-error On recharge un référentiel partiellement
-    referentiel = creeReferentiel({ mesures: { mesure: {} } });
+    referentiel = creeReferentiel();
+    // @ts-expect-error on utilise un identifiant de mesure factice
+    referentiel.recharge({ mesures: { mesure: {} } });
 
     const donnees: DonneesMesuresGenerales<'mesure'> = {
       mesuresGenerales: [{ id: 'mesure', statut: 'fait' }],
@@ -71,7 +72,7 @@ describe('La liste des mesures générales', () => {
   });
 
   it('est à compléter quand toutes les mesures ne sont pas complètes', () => {
-    // @ts-expect-error On recharge un référentiel partiellement
+    // @ts-expect-error identifiant de mesure factice
     referentiel = creeReferentiel({ mesures: { mesure: {} } });
 
     const donnees: DonneesMesuresGenerales<'mesure'> = {
@@ -86,7 +87,7 @@ describe('La liste des mesures générales', () => {
     beforeEach(() => {
       referentiel = creeReferentiel({
         mesures: {
-          // @ts-expect-error On recharge un référentiel partiellement
+          // @ts-expect-error on utilise des idMesure factices
           mesure1: {
             description: 'Mesure une',
             categorie: 'categorie1',
@@ -121,7 +122,6 @@ describe('La liste des mesures générales', () => {
         referentiel
       );
 
-      // @ts-expect-error On utilise une catégorie factice
       expect(mesures.parStatutEtCategorie().fait.categorie1.length).toEqual(1);
     });
 
@@ -132,7 +132,6 @@ describe('La liste des mesures générales', () => {
       );
 
       expect(
-        // @ts-expect-error On utilise une catégorie factice
         mesures.parStatutEtCategorie().fait.categorie1[0].indispensable
       ).toBe(true);
     });
@@ -144,7 +143,6 @@ describe('La liste des mesures générales', () => {
       );
 
       expect(
-        // @ts-expect-error On utilise une catégorie factice
         mesures.parStatutEtCategorie().fait.categorie1[0].description
       ).toEqual('Mesure une');
     });
@@ -162,7 +160,6 @@ describe('La liste des mesures générales', () => {
       const mesures = new MesuresGenerales(donnees, referentiel);
 
       expect(
-        // @ts-expect-error On utilise une catégorie factice
         mesures.parStatutEtCategorie().fait.categorie1[0].modalites
       ).toEqual('Modalités de la mesure');
     });
@@ -200,7 +197,6 @@ describe('La liste des mesures générales', () => {
       );
 
       expect(
-        // @ts-expect-error On utilise une catégorie factice
         mesures.parStatutEtCategorie().fait.categorie1[2].description
       ).toEqual('Mesure deux');
     });

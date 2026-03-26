@@ -23,10 +23,8 @@ describe('Les dossiers liés à un service', () => {
   beforeEach(() =>
     referentiel.recharge({
       echeancesRenouvellement: {
-        // @ts-expect-error on recharge un référentiel partiel
-        unAn: { nbMoisDecalage: 12, nbMoisBientotExpire: 1 },
+        unAn: { nbMoisDecalage: 12, nbMoisBientotExpire: 2 },
       },
-      // @ts-expect-error on recharge un référentiel partiel
       statutsAvisDossierHomologation: { favorable: {} },
     })
   );
