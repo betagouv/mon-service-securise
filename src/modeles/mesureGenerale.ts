@@ -1,8 +1,26 @@
 import Mesure from './mesure.js';
 import { ErreurMesureInconnue } from '../erreurs.js';
+import { IdStatutMesure } from '../referentiel.types.js';
+import { IdMesureV1 } from '../../donneesConversionReferentielMesures.js';
+import { IdMesureV2 } from '../../donneesReferentielMesuresV2.js';
+import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { UUID } from '../typesBasiques.js';
+import { DonneesMesureGenerale } from './mesureGenerale.type.js';
 
-class MesureGenerale extends Mesure {
-  constructor(donneesMesure, referentiel) {
+class MesureGenerale<TVersion extends IdMesureV1 | IdMesureV2> extends Mesure {
+  readonly id!: TVersion;
+  readonly statut!: IdStatutMesure;
+  readonly modalites?: string;
+  readonly priorite?: string;
+  readonly echeance?: Date;
+  readonly rendueIndispensable?: boolean;
+  responsables!: UUID[];
+  private readonly referentiel: Referentiel | ReferentielV2;
+
+  constructor(
+    donneesMesure: Partial<DonneesMesureGenerale<TVersion>>,
+    referentiel: Referentiel | ReferentielV2
+  ) {
     super({
       proprietesAtomiquesRequises: ['id', 'statut'],
       proprietesAtomiquesFacultatives: ['modalites', 'priorite', 'echeance'],
@@ -14,11 +32,12 @@ class MesureGenerale extends Mesure {
 
     this.rendueIndispensable = !!donneesMesure.rendueIndispensable;
     this.referentiel = referentiel;
-    this.echeance = donneesMesure.echeance && new Date(donneesMesure.echeance);
+    if (donneesMesure.echeance)
+      this.echeance = new Date(donneesMesure.echeance);
   }
 
   donneesReferentiel() {
-    return this.referentiel.mesure(this.id);
+    return this.referentiel.mesure(this.id as IdMesureV1 & IdMesureV2);
   }
 
   descriptionMesure() {
@@ -27,7 +46,9 @@ class MesureGenerale extends Mesure {
 
   estIndispensable() {
     return (
-      !!this.donneesReferentiel().indispensable || this.rendueIndispensable
+      !!this.donneesReferentiel().indispensable ||
+      this.rendueIndispensable ||
+      false
     );
   }
 
@@ -39,7 +60,7 @@ class MesureGenerale extends Mesure {
     return Mesure.statutRenseigne(this.statut);
   }
 
-  supprimeResponsable(idUtilisateur) {
+  supprimeResponsable(idUtilisateur: UUID) {
     this.responsables = this.responsables.filter((r) => r !== idUtilisateur);
   }
 
@@ -50,10 +71,18 @@ class MesureGenerale extends Mesure {
     };
   }
 
-  static valide({ id, statut, priorite, echeance }, referentiel) {
+  static valide<TVersion extends IdMesureV1 | IdMesureV2>(
+    {
+      id,
+      statut,
+      priorite,
+      echeance,
+    }: Partial<DonneesMesureGenerale<TVersion>>,
+    referentiel: Referentiel | ReferentielV2
+  ) {
     super.valide({ statut, priorite, echeance }, referentiel);
 
-    if (!referentiel.estIdentifiantMesureConnu(id)) {
+    if (!referentiel.estIdentifiantMesureConnu(id as IdMesureV1 & IdMesureV2)) {
       throw new ErreurMesureInconnue(`La mesure "${id}" n'est pas répertoriée`);
     }
   }

@@ -42,3 +42,13 @@ export type DonneesReferentiel = {
     noteMax: number;
   };
 } & Omit<typeof donnees, 'indiceCyber'>;
+
+export type DetailsMesureGeneraleV1 = {
+  readonly description: string;
+  readonly categorie: IdCategorieMesure;
+  readonly descriptionLongue: string;
+  readonly referentiel: IdReferentielMesure;
+  readonly identifiantNumerique: string;
+  readonly lienBlog?: string;
+  readonly indispensable?: boolean;
+};

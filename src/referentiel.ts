@@ -4,6 +4,7 @@ import {
 } from './erreurs.js';
 import donneesParDefaut from '../donneesReferentiel.js';
 import {
+  DetailsMesureGeneraleV1,
   DonneesReferentiel,
   EtapeHomologation,
   IdCategorieMesure,
@@ -141,7 +142,8 @@ const creeReferentiel = (
   const mesures = () => structuredClone(donnees.mesures);
   const estIdentifiantMesureConnu = (id: IdMesure) =>
     Object.keys(donnees.mesures).includes(id);
-  const mesure = (id: IdMesure) => structuredClone(donnees.mesures[id]);
+  const mesure = (id: IdMesure): DetailsMesureGeneraleV1 =>
+    structuredClone(donnees.mesures[id]);
   const typesService = () => donnees.typesService;
   const nbMoisDecalage = (idEcheance: IdEcheanceRenouvellement) =>
     echeancesRenouvellement()[idEcheance]?.nbMoisDecalage;
