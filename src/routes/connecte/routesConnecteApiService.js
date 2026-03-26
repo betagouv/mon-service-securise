@@ -42,6 +42,7 @@ const routesConnecteApiService = ({
   adaptateurPdf,
   adaptateurZip,
   adaptateurJournal,
+  adaptateurEnvironnement,
 }) => {
   const routes = express.Router();
 
@@ -50,6 +51,7 @@ const routesConnecteApiService = ({
       adaptateurHorloge,
       adaptateurPdf,
       adaptateurZip,
+      adaptateurEnvironnement,
       middleware,
       referentiel,
     })
