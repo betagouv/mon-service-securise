@@ -1,33 +1,33 @@
-import expect from 'expect.js';
-
 import {
-  ErreurMesureInconnue,
-  ErreurStatutMesureInvalide,
-  ErreurPrioriteMesureInvalide,
   ErreurEcheanceMesureInvalide,
+  ErreurMesureInconnue,
+  ErreurPrioriteMesureInvalide,
+  ErreurStatutMesureInvalide,
 } from '../../src/erreurs.js';
 
-import * as Referentiel from '../../src/referentiel.js';
 import MesureGenerale from '../../src/modeles/mesureGenerale.js';
 import InformationsService from '../../src/modeles/informationsService.js';
+import { Referentiel } from '../../src/referentiel.interface.ts';
+import { creeReferentiel } from '../../src/referentiel.ts';
 
 describe('Une mesure de sécurité', () => {
-  let referentiel;
+  let referentiel: Referentiel;
 
-  beforeEach(
-    () =>
-      (referentiel = Referentiel.creeReferentiel({
-        mesures: {
-          identifiantMesure: { description: 'Une description' },
-          identifiantMesureIndispensable: {
-            description: 'Cette mesure est indispensable',
-            indispensable: true,
-          },
+  beforeEach(() => {
+    referentiel = creeReferentiel({
+      mesures: {
+        // @ts-expect-error maj partielle référentiel
+        identifiantMesure: { description: 'Une description' },
+        identifiantMesureIndispensable: {
+          description: 'Cette mesure est indispensable',
+          indispensable: true,
         },
-      }))
-  );
+      },
+    });
+  });
 
   it('sait se décrire', () => {
+    // @ts-expect-error maj partielle référentiel
     referentiel.enrichis({ prioritesMesures: { p3: {} } });
     const mesure = new MesureGenerale(
       {
@@ -41,16 +41,16 @@ describe('Une mesure de sécurité', () => {
       referentiel
     );
 
-    expect(mesure.id).to.equal('identifiantMesure');
-    expect(mesure.statut).to.equal(MesureGenerale.STATUT_FAIT);
-    expect(mesure.modalites).to.equal("Des modalités d'application");
-    expect(mesure.priorite).to.equal('p3');
-    expect(mesure.echeance).to.eql(new Date('01/01/2023'));
-    expect(mesure.responsables).to.eql([
+    expect(mesure.id).toEqual('identifiantMesure');
+    expect(mesure.statut).toEqual(MesureGenerale.STATUT_FAIT);
+    expect(mesure.modalites).toEqual("Des modalités d'application");
+    expect(mesure.priorite).toEqual('p3');
+    expect(mesure.echeance).toEqual(new Date('01/01/2023'));
+    expect(mesure.responsables).toEqual([
       'unIdUtilisateur',
       'unAutreIdUtilisateur',
     ]);
-    expect(mesure.toJSON()).to.eql({
+    expect(mesure.toJSON()).toEqual({
       id: 'identifiantMesure',
       statut: MesureGenerale.STATUT_FAIT,
       modalites: "Des modalités d'application",
@@ -61,62 +61,63 @@ describe('Une mesure de sécurité', () => {
   });
 
   it('vérifie que la mesure est bien répertoriée', () => {
-    try {
-      new MesureGenerale(
-        { id: 'identifiantInconnu', statut: MesureGenerale.STATUT_FAIT },
-        referentiel
-      );
-      expect.fail('La création de la mesure aurait dû lever une exception');
-    } catch (e) {
-      expect(e).to.be.a(ErreurMesureInconnue);
-      expect(e.message).to.equal(
+    expect(
+      () =>
+        new MesureGenerale(
+          { id: 'identifiantInconnu', statut: MesureGenerale.STATUT_FAIT },
+          referentiel
+        )
+    ).toThrowError(
+      new ErreurMesureInconnue(
         'La mesure "identifiantInconnu" n\'est pas répertoriée'
-      );
-    }
+      )
+    );
   });
 
   it('vérifie la nature du statut', () => {
-    try {
-      new MesureGenerale(
-        { id: 'identifiantMesure', statut: 'statutInvalide' },
-        referentiel
-      );
-      expect.fail('La création de la mesure aurait dû lever une exception');
-    } catch (e) {
-      expect(e).to.be.a(ErreurStatutMesureInvalide);
-      expect(e.message).to.equal('Le statut "statutInvalide" est invalide');
-    }
+    expect(
+      () =>
+        new MesureGenerale(
+          // @ts-expect-error on utilise un statut invalide
+          { id: 'identifiantMesure', statut: 'statutInvalide' },
+          referentiel
+        )
+    ).toThrowError(
+      new ErreurStatutMesureInvalide('Le statut "statutInvalide" est invalide')
+    );
   });
 
   it('vérifie la valeur de la priorité', () => {
+    // @ts-expect-error maj partielle référentiel
     referentiel.enrichis({ prioritesMesures: {} });
-    try {
-      new MesureGenerale(
-        { id: 'identifiantMesure', priorite: 'prioriteInvalide' },
-        referentiel
-      );
-      expect().fail('La création de la mesure aurait dû lever une exception');
-    } catch (e) {
-      expect(e).to.be.a(ErreurPrioriteMesureInvalide);
-      expect(e.message).to.equal('La priorité "prioriteInvalide" est invalide');
-    }
+    expect(
+      () =>
+        new MesureGenerale(
+          { id: 'identifiantMesure', priorite: 'prioriteInvalide' },
+          referentiel
+        )
+    ).toThrowError(
+      new ErreurPrioriteMesureInvalide(
+        'La priorité "prioriteInvalide" est invalide'
+      )
+    );
   });
 
   it("vérifie la valeur de l'échéance", () => {
-    try {
-      new MesureGenerale(
-        { id: 'identifiantMesure', echeance: 'pasUneDate' },
-        referentiel
-      );
-      expect().fail('La création de la mesure aurait dû lever une exception');
-    } catch (e) {
-      expect(e).to.be.a(ErreurEcheanceMesureInvalide);
-      expect(e.message).to.equal('L\'échéance "pasUneDate" est invalide');
-    }
+    expect(
+      () =>
+        new MesureGenerale(
+          { id: 'identifiantMesure', echeance: 'pasUneDate' },
+          referentiel
+        )
+    ).toThrowError(
+      new ErreurEcheanceMesureInvalide('L\'échéance "pasUneDate" est invalide')
+    );
   });
 
   it('connaît sa description', () => {
-    expect(referentiel.mesures().identifiantMesure.description).to.equal(
+    // @ts-expect-error on utilise un id de mesure factice
+    expect(referentiel.mesures().identifiantMesure.description).toEqual(
       'Une description'
     );
 
@@ -124,41 +125,44 @@ describe('Une mesure de sécurité', () => {
       { id: 'identifiantMesure', statut: 'fait' },
       referentiel
     );
-    expect(mesure.descriptionMesure()).to.equal('Une description');
+    expect(mesure.descriptionMesure()).toEqual('Une description');
   });
 
   it("sait si elle est indispensable selon l'ANSSI", () => {
     expect(
+      // @ts-expect-error on utilise un id de mesure factice
       referentiel.mesures().identifiantMesureIndispensable.indispensable
-    ).to.be(true);
+    ).toBe(true);
 
     const mesureIndispensable = new MesureGenerale(
       { id: 'identifiantMesureIndispensable', statut: 'fait' },
       referentiel
     );
-    expect(mesureIndispensable.estIndispensable()).to.be(true);
+    expect(mesureIndispensable.estIndispensable()).toBe(true);
   });
 
   it('sait si elle est seulement recommandée', () => {
     expect(
+      // @ts-expect-error on utilise un id de mesure factice
       referentiel.mesures().identifiantMesure.indispensable
-    ).to.not.be.ok();
+    ).toBeUndefined();
 
     const mesure = new MesureGenerale(
       { id: 'identifiantMesure', statut: 'fait' },
       referentiel
     );
-    expect(mesure.estRecommandee()).to.be(true);
+    expect(mesure.estRecommandee()).toBe(true);
   });
 
   it('peut être rendue indispensable, même si le référentiel dit le contraire', () => {
-    expect(referentiel.mesureIndispensable('identifiantMesure')).to.be(false);
+    // @ts-expect-error on utilise un id de mesure factice
+    expect(referentiel.mesureIndispensable('identifiantMesure')).toBe(false);
 
     const mesure = new MesureGenerale(
       { id: 'identifiantMesure', statut: 'fait', rendueIndispensable: true },
       referentiel
     );
-    expect(mesure.estIndispensable()).to.be(true);
+    expect(mesure.estIndispensable()).toBe(true);
   });
 
   it('sait si son statut est renseigné', () => {
@@ -166,17 +170,18 @@ describe('Une mesure de sécurité', () => {
       { id: 'identifiantMesure', statut: 'fait' },
       referentiel
     );
-    expect(mesure.statutRenseigne()).to.be(true);
+    expect(mesure.statutRenseigne()).toBe(true);
   });
 
   it('connait sa priorité', () => {
+    // @ts-expect-error maj partielle référentiel
     referentiel.enrichis({ prioritesMesures: { p2: {} } });
     const mesure = new MesureGenerale(
       { id: 'identifiantMesure', priorite: 'p2' },
       referentiel
     );
 
-    expect(mesure.priorite).to.eql('p2');
+    expect(mesure.priorite).toEqual('p2');
   });
 
   it('ne tient pas compte du champ priorite pour déterminer le statut de saisie', () => {
@@ -189,7 +194,7 @@ describe('Une mesure de sécurité', () => {
       referentiel
     );
 
-    expect(mesure.statutSaisie()).to.equal(InformationsService.COMPLETES);
+    expect(mesure.statutSaisie()).toEqual(InformationsService.COMPLETES);
   });
 
   it("persiste sa date d'échéance au format ISO en UTC", () => {
@@ -201,7 +206,7 @@ describe('Une mesure de sécurité', () => {
 
     const persistance = avecEcheance.donneesSerialisees();
 
-    expect(persistance.echeance).to.be('2024-01-23T10:00:00.000Z');
+    expect(persistance.echeance).toBe('2024-01-23T10:00:00.000Z');
   });
 
   it('conserve une echeance vide', () => {
@@ -214,6 +219,6 @@ describe('Une mesure de sécurité', () => {
       referentiel
     );
 
-    expect(mesure.echeance).to.be('');
+    expect(mesure.echeance).toBe('');
   });
 });

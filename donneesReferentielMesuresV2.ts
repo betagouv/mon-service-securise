@@ -6,6 +6,7 @@ export type DetailReferentielMesureV2 = {
   categorie: 'defense' | 'gouvernance' | 'resilience' | 'protection';
   identifiantNumerique: string;
   referentiel: 'ANSSI' | 'CNIL';
+  indispensable?: never;
 };
 
 export const mesuresV2: Record<string, DetailReferentielMesureV2> = {
