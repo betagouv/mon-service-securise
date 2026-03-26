@@ -47,12 +47,37 @@ block page
                       : 'moyen';
     };
   +boite-grise('Cartographie des risques', 'cartographie')
-    h5 Risques usuels bruts
-    +matrice(donneesRisques.risques.risquesBruts)
-    h5 Risques usuels résiduels
-    +matrice(donneesRisques.risques.risques)
-    h5 Risques usuels cibles
-    +matrice(donneesRisques.risques.risquesCibles)
+    .conteneur-matrices-et-legende
+      .conteneur-matrices-v2
+        h5 Risques usuels bruts
+        +matrice(donneesRisques.risques.risquesBruts)
+        h5 Risques usuels résiduels
+        +matrice(donneesRisques.risques.risques)
+        h5 Risques usuels cibles
+        +matrice(donneesRisques.risques.risquesCibles)
+      .conteneur-legende-v2
+        .conteneur-legende-nombre-risques
+          p= `${donneesRisques.risques.risques.length} risques proposés par l'ANSSI`
+          - const nbRisquesSpecifiques = donneesRisques.risques.risquesSpecifiques.length
+          if nbRisquesSpecifiques > 0
+            p= `+${nbRisquesSpecifiques} ajouté${nbRisquesSpecifiques > 1 ? 's' : ''} par l'équipe.`
+
+
+        .entree-legende
+          .carre-legende.vert
+          span
+            b Faible :
+            |  Acceptable en l'état
+        .entree-legende
+          .carre-legende.orange
+          span
+            b Moyen :
+            |  Tolérable sous contrôle
+        .entree-legende
+          .carre-legende.rouge
+          span
+            b Élevé :
+            |  Inacceptable
 
 
   +boite-grise('Risques', 'liste-risques')
