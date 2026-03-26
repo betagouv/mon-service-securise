@@ -15,7 +15,7 @@ export type StatutMesure = 'fait' | 'enCours' | 'nonFait' | 'aLancer';
 
 const STATUTS: StatutMesure[] = ['fait', 'enCours', 'nonFait', 'aLancer'];
 
-class Mesure extends InformationsService {
+abstract class Mesure extends InformationsService {
   estIndispensable() {
     return false;
   }

@@ -51,6 +51,7 @@ describe('Une mesure', () => {
   describe('sur validation de la priorite', () => {
     it("ne valide pas si la priorité n'est pas dans le référentiel", () => {
       const referentiel = Referentiel.creeReferentielVide();
+      // @ts-expect-error on enrichis partiellement le référentiel
       referentiel.enrichis({ prioritesMesures: {} });
 
       expect(() =>
@@ -63,6 +64,7 @@ describe('Une mesure', () => {
     it('valide la priorité si elle est dans le référentiel', () => {
       const referentiel = Referentiel.creeReferentielVide();
       referentiel.enrichis({
+        // @ts-expect-error on enrichis partiellement le référentiel
         prioritesMesures: { p1: { libelleCourt: '', libelleComplet: '' } },
       });
 
