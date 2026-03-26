@@ -1408,3 +1408,56 @@ h5 {
   color: black;
   margin: 12px 0 0;
 }
+
+.conteneur-matrices-et-legende {
+  display: flex;
+}
+
+.conteneur-matrices-et-legende .conteneur-matrices-v2 {
+  border-right: 1px solid #b5c1d2;
+  padding-right: 40px;
+}
+
+.conteneur-legende-v2 {
+  padding-left: 30px;
+  padding-top: 12px;
+}
+
+.conteneur-legende-v2 .conteneur-legende-nombre-risques {
+  font-weight: 500;
+  font-size: 0.8rem;
+  margin-bottom: 15px;
+  color: #5e5e5e;
+}
+
+.conteneur-legende-v2 .entree-legende {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  margin-bottom: 10px;
+}
+
+.conteneur-legende-v2 .carre-legende {
+  width: 13px;
+  height: 13px;
+}
+
+.conteneur-legende-v2 .carre-legende.vert {
+  background: #77b645;
+}
+
+.conteneur-legende-v2 .carre-legende.orange {
+  background: #fa7a35;
+}
+
+.conteneur-legende-v2 .carre-legende.rouge {
+  background: #e1000f;
+}
+
+.conteneur-legende-v2 span {
+  color: #3a3a3a;
+  font-size: 0.7rem;
+  font-weight: 400;
+  line-height: 1rem;
+}
