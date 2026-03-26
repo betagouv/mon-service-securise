@@ -186,12 +186,13 @@
   let afficheLaModaleExplicationRisquesV2 = $derived.by(() => {
     const requete = new URLSearchParams(window.location.search);
     const vientDeCreerLeService = requete.get('succesCreationService');
+    const vientDeMigrerLeService = requete.get('succesChangementReferentiel');
 
     return (
       !modeVisiteGuidee &&
       afficheExplicationRisquesV2 &&
       versionService === 'v2' &&
-      vientDeCreerLeService
+      (vientDeCreerLeService || vientDeMigrerLeService)
     );
   });
   $effect(() => {
