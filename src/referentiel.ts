@@ -361,7 +361,11 @@ const creeReferentiel = (
       );
   };
 
-  const recharge = (nouvellesDonnees: Partial<DonneesReferentiel>) => {
+  type PartielRecursif<T> = {
+    [P in keyof T]?: T[P] extends object ? PartielRecursif<T[P]> : T[P];
+  };
+
+  const recharge = (nouvellesDonnees: PartielRecursif<DonneesReferentiel>) => {
     donnees = {
       ...donneesReferentielVide,
       ...nouvellesDonnees,
@@ -369,8 +373,8 @@ const creeReferentiel = (
     valideDonnees();
   };
 
-  const enrichis = (nouvellesDonnees: Partial<DonneesReferentiel>) => {
-    donnees = { ...donnees, ...nouvellesDonnees };
+  const enrichis = (nouvellesDonnees: PartielRecursif<DonneesReferentiel>) => {
+    donnees = { ...donnees, ...nouvellesDonnees } as DonneesReferentiel;
     valideDonnees();
   };
 
