@@ -4,7 +4,9 @@ import { MesureAvecStatut } from './vraisemblance/vraisemblance.types.js';
 import type { StatutMesure } from '../../modeles/mesure.js';
 
 export class MesuresPourRisque {
-  constructor(private readonly mesures: Record<IdMesureV2, MesureGenerale>) {}
+  constructor(
+    private readonly mesures: Record<IdMesureV2, MesureGenerale<IdMesureV2>>
+  ) {}
 
   avecStatutReel(): Record<IdMesureV2, MesureAvecStatut> {
     return Object.fromEntries(

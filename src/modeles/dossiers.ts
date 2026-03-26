@@ -7,7 +7,7 @@ import {
   ErreurDossierCourantInexistant,
 } from '../erreurs.js';
 import { dateEnFrancais } from '../utilitaires/date.js';
-import { Referentiel } from '../referentiel.interface.js';
+import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
 import { IdStatutHomologation } from '../referentiel.types.js';
 
@@ -18,7 +18,7 @@ type DonneesDossiers = {
 class Dossiers extends ElementsConstructibles<Dossier> {
   constructor(
     donnees: DonneesDossiers = { dossiers: [] },
-    referentiel: Referentiel = creeReferentielVide()
+    referentiel: Referentiel | ReferentielV2 = creeReferentielVide()
   ) {
     const { dossiers } = donnees;
     Dossiers.valide(donnees);

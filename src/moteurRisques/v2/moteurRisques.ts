@@ -21,7 +21,7 @@ export class MoteurRisquesV2 {
 
   constructor(
     private readonly descriptionService: DescriptionServiceV2,
-    mesuresPersonnalisees: Record<IdMesureV2, MesureGenerale>,
+    mesuresPersonnalisees: Record<IdMesureV2, MesureGenerale<IdMesureV2>>,
     private readonly donnees: DonneesRisquesV2 = {}
   ) {
     this.selectionVecteurs = new SelectionVecteurs().selectionnePourService(

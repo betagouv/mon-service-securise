@@ -1,6 +1,6 @@
 import Risque, { DonneesRisque } from './risque.js';
 import { ErreurRisqueInconnu } from '../erreurs.js';
-import { Referentiel } from '../referentiel.interface.js';
+import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
 import { IdCategorieRisque, IdRisque } from '../referentiel.types.js';
 
@@ -14,7 +14,7 @@ class RisqueGeneral extends Risque {
 
   constructor(
     donneesRisque: Partial<DonneesRisqueGeneral> = {},
-    referentiel: Referentiel = creeReferentielVide()
+    referentiel: Referentiel | ReferentielV2 = creeReferentielVide()
   ) {
     super(donneesRisque, referentiel);
     this.proprietesAtomiquesFacultatives.push('desactive');
@@ -51,7 +51,7 @@ class RisqueGeneral extends Risque {
 
   static valide(
     donnees: Partial<DonneesRisqueGeneral>,
-    referentiel: Referentiel
+    referentiel: Referentiel | ReferentielV2
   ) {
     super.valide(donnees, referentiel);
     const { id } = donnees;
