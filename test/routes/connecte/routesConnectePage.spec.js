@@ -83,6 +83,15 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
         );
     });
 
+    it("charge l'explication des risques V2, car c'est nécessaire sur la page Sécuriser", async () => {
+      await testeur
+        .middleware()
+        .verifieChargementDeLExplicationDesRisquesV2(
+          testeur.app(),
+          '/visiteGuidee/securiser'
+        );
+    });
+
     describe("pour l'étape 'Décrire'", () => {
       it("affiche l'étape 'Décrire V2'", async () => {
         const reponse = await testeur.get('/visiteGuidee/decrire');
