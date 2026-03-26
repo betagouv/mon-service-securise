@@ -80,11 +80,16 @@ const genereAnnexes = async ({
   donneesRisques,
   referentiel,
   donneesEntete,
+  versionPdfRisques,
 }) => {
   try {
-    const risquesPresents = Object.keys(donneesRisques.risques).length > 0;
+    const risquesV1Presents =
+      Object.keys(donneesRisques.risques).length > 0 &&
+      versionPdfRisques === 'v1';
 
-    const [description, mesures, risques] = await Promise.all([
+    const risquesV2Presents = versionPdfRisques === 'v2';
+
+    const [description, mesures, risques, risquesV2] = await Promise.all([
       genereHtml(
         'annexeDescription',
         { donneesDescription },
@@ -96,19 +101,30 @@ const genereAnnexes = async ({
         donneesDescription.nomService,
         donneesEntete
       ),
-      risquesPresents
+      risquesV1Presents
         ? genereHtml(
             'annexeRisques',
             { donneesRisques, referentiel },
             donneesDescription.nomService
           )
         : null,
+      risquesV2Presents
+        ? genereHtml(
+            'annexeRisquesV2',
+            { donneesRisques },
+            donneesDescription.nomService
+          )
+        : null,
     ]);
 
-    const pdfs = await generePdfs(
-      risquesPresents ? [description, mesures, risques] : [description, mesures]
-    );
+    const annexes = [description, mesures];
+    if (risquesV1Presents) {
+      annexes.push(risques);
+    } else if (risquesV2Presents) {
+      annexes.push(risquesV2);
+    }
 
+    const pdfs = await generePdfs(annexes);
     return fusionnePdfs(pdfs);
   } catch (e) {
     fabriqueAdaptateurGestionErreur().logueErreur(e);

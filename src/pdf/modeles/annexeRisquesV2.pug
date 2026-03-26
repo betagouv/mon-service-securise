@@ -1,0 +1,25 @@
+extends base
+
+block page
+  +boite-grise('Cartographie des risques', 'cartographie')
+
+
+  +boite-grise('Risques', 'liste-risques')
+    ul.risques
+      -
+        const niveauRisque = (gravite, vraisemblance) => {
+          const niveau = gravite * vraisemblance;
+          return niveau <= 4 && vraisemblance < 3 && gravite < 4
+            ? 'faible'
+            : niveau >= 8 && vraisemblance > 2 && gravite >= 2
+            ? 'eleve'
+            : 'moyen';
+          };
+      each risque in donneesRisques.risques.risques
+        - const niveauDuRisque = niveauRisque(risque.gravite, risque.vraisemblance)
+        li.bloc-risque.bloc-indivisible
+          div(class=`identifiant-numerique ${niveauDuRisque}`)= risque.id
+          .contenu-risque
+            p.description= risque.intitule
+            if risque.commentaire
+              p.commentaire #[strong Commentaire :] #{risque.commentaire}
