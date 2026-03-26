@@ -41,6 +41,21 @@ describe('Les prédicats de calculs de vraisemblance', () => {
 
       expect(siTout(mesures)).toBe(0);
     });
+
+    it('considère les mesures `nonFait` comme faites', () => {
+      const mesures = [
+        new MesureGenerale(
+          { statut: 'fait', id: 'RECENSEMENT.1' },
+          referentiel
+        ),
+        new MesureGenerale(
+          { statut: 'nonFait', id: 'RECENSEMENT.2' },
+          referentiel
+        ),
+      ];
+
+      expect(siTout(mesures)).toBe(1);
+    });
   });
 
   describe("pour le prédicat 'siAucune'", () => {
@@ -86,6 +101,21 @@ describe('Les prédicats de calculs de vraisemblance', () => {
       const mesures = [
         new MesureGenerale(
           { statut: 'fait', id: 'RECENSEMENT.1' },
+          referentiel
+        ),
+        new MesureGenerale(
+          { statut: 'fait', id: 'RECENSEMENT.2' },
+          referentiel
+        ),
+      ];
+
+      expect(siPasTout(mesures)).toBe(0);
+    });
+
+    it("considère les mesures 'nonFait' comme fait", () => {
+      const mesures = [
+        new MesureGenerale(
+          { statut: 'nonFait', id: 'RECENSEMENT.1' },
           referentiel
         ),
         new MesureGenerale(

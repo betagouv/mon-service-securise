@@ -1,10 +1,13 @@
 import type { MesureAvecStatut } from './vraisemblance.types.js';
 
+const sansLesNonFaites = (mesures: MesureAvecStatut[]) =>
+  mesures.filter((m) => m.statut !== 'nonFait');
+
 export const siTout = (mesures: MesureAvecStatut[]) =>
-  mesures.every((m) => m.statut === 'fait') ? 1 : 0;
+  sansLesNonFaites(mesures).every((m) => m.statut === 'fait') ? 1 : 0;
 
 export const siAucune = (mesures: MesureAvecStatut[]) =>
-  mesures.every((m) => m.statut !== 'fait') ? 1 : 0;
+  sansLesNonFaites(mesures).every((m) => m.statut !== 'fait') ? 1 : 0;
 
 export const siPasTout = (mesures: MesureAvecStatut[]) =>
-  !mesures.every((m) => m.statut === 'fait') ? 1 : 0;
+  !sansLesNonFaites(mesures).every((m) => m.statut === 'fait') ? 1 : 0;
