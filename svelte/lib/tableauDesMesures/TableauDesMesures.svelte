@@ -121,7 +121,7 @@
     mesures.reinitialise(
       modeVisiteGuidee ? mesuresVisiteGuidee : await recupereMesures(idService)
     );
-    if (avecRisquesV2 && versionService === 'v2')
+    if (!modeVisiteGuidee && avecRisquesV2 && versionService === 'v2')
       await storeVraisemblanceRisqueV2.rafraichis(idService);
   };
 
@@ -184,7 +184,11 @@
   });
 
   $effect(() => {
-    if (afficheExplicationRisquesV2 && versionService === 'v2') {
+    if (
+      !modeVisiteGuidee &&
+      afficheExplicationRisquesV2 &&
+      versionService === 'v2'
+    ) {
       modaleExplicationRisquesV2?.affiche();
     }
   });
@@ -467,7 +471,7 @@
   </tbody>
 </table>
 
-{#if afficheExplicationRisquesV2 && versionService === 'v2'}
+{#if !modeVisiteGuidee && afficheExplicationRisquesV2 && versionService === 'v2'}
   <ModaleExplicationRisquesV2
     {idService}
     bind:this={modaleExplicationRisquesV2}
