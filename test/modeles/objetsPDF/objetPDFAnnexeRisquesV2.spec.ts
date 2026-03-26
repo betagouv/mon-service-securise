@@ -1,85 +1,41 @@
-import Service from '../../../src/modeles/service.js';
-import * as Referentiel from '../../../src/referentiel.js';
-import VueAnnexePDFRisques from '../../../src/modeles/objetsPDF/objetPDFAnnexeRisques.js';
+import { unServiceV2 } from '../../constructeurs/constructeurService.js';
+import { ObjetPDFAnnexeRisquesV2 } from '../../../src/modeles/objetsPDF/objetPDFAnnexeRisquesV2.ts';
 
 describe("L'objet PDF des descriptions des risques", () => {
-  const referentiel = Referentiel.creeReferentiel({
-    niveauxGravite: {
-      grave: { description: 'Une description', position: 1 },
-    },
-    vraisemblancesRisques: {
-      probable: { description: 'Une description', position: 1 },
-    },
-    niveauxRisques: {
-      orange: { correspondances: [{ gravite: 0, vraisemblance: 0 }] },
-      rouge: { correspondances: [{ gravite: 1, vraisemblance: 1 }] },
-    },
-    risques: {
-      unRisque: { description: 'Une description', identifiantNumerique: 'R1' },
-      unSecondRisque: {
-        description: 'Une description',
-        identifiantNumerique: 'R2',
-      },
-      unRisqueDesactive: {
-        description: 'Une description',
-        identifiantNumerique: 'R3',
-      },
-    },
-  });
-
-  const service = new Service(
-    {
-      id: '123',
-      idUtilisateur: '456',
-      descriptionService: { nomService: 'Nom Service' },
-      risquesGeneraux: [
-        {
-          id: 'unRisque',
-          niveauGravite: 'grave',
-          niveauVraisemblance: 'probable',
-        },
-        {
-          id: 'unRisqueDesactive',
-          niveauGravite: 'grave',
-          niveauVraisemblance: 'probable',
-          desactive: true,
-        },
-      ],
-    },
-    referentiel
-  );
+  let service = unServiceV2().avecNomService('Nom Service').construis();
 
   it('ajoute le nom du service', () => {
-    const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
+    const vueAnnexePDFRisques = new ObjetPDFAnnexeRisquesV2(service);
 
     const donnees = vueAnnexePDFRisques.donnees();
 
-    expect(donnees).to.have.key('nomService');
     expect(donnees.nomService).toEqual('Nom Service');
   });
 
-  it("ajoute les risques par ordre d'identifiant numérique", () => {
-    const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
+  it('ajoute les risques v2', () => {
+    const vueAnnexePDFRisques = new ObjetPDFAnnexeRisquesV2(service);
 
     const donnees = vueAnnexePDFRisques.donnees();
 
-    expect(donnees).to.have.key('risques');
-    expect(donnees.risques[0].identifiantNumerique).toBe('R1');
+    expect(donnees.risques).toEqual({
+      risques: expect.any(Array),
+      risquesBruts: expect.any(Array),
+      risquesCibles: expect.any(Array),
+      risquesSpecifiques: expect.any(Array),
+    });
   });
 
   it("n'ajoute pas les risques désactivés", () => {
-    const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
+    service = unServiceV2()
+      .avecNomService('Nom Service')
+      .avecRisquesV2({ risquesGeneraux: { R3: { desactive: true } } })
+      .construis();
+    const vueAnnexePDFRisques = new ObjetPDFAnnexeRisquesV2(service);
 
     const donnees = vueAnnexePDFRisques.donnees();
 
-    expect(donnees.risques.length).toBe(1);
-  });
-
-  it('ajoute le risque dans la case de la grille correspondant à sa gravité et sa vraisemblance', () => {
-    const vueAnnexePDFRisques = new VueAnnexePDFRisques(service, referentiel);
-
-    const donnees = vueAnnexePDFRisques.donnees();
-
-    expect(donnees.grilleRisques[3][0]).toEqual(['R1']);
+    expect(donnees.risques.risques.map((r) => r.id)).not.toContain('R3');
+    expect(donnees.risques.risquesBruts.map((r) => r.id)).not.toContain('R3');
+    expect(donnees.risques.risquesCibles.map((r) => r.id)).not.toContain('R3');
   });
 });
