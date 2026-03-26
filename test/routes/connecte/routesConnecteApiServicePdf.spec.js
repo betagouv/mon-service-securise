@@ -58,6 +58,61 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
       expect(adaptateurPdfAppele).to.be(true);
     });
 
+    describe('concernant les données de risque', () => {
+      it("utilise l'objet pdf des risques v1 pour un service v1", async () => {
+        const unV1 = unService().construis();
+        testeur.middleware().reinitialise({ serviceARenvoyer: unV1 });
+
+        let donneesRisquesRecues;
+        testeur.adaptateurPdf().genereAnnexes = async ({ donneesRisques }) => {
+          donneesRisquesRecues = donneesRisques;
+          return 'Pdf annexes';
+        };
+
+        await testeur.get('/api/service/456/pdf/annexes.pdf');
+
+        expect(donneesRisquesRecues.risques).to.be.an('array');
+      });
+
+      it("utilise l'objet pdf des risques v1 pour un service v2, si le feature flag risquesV2 est désactivé", async () => {
+        const unV2 = unServiceV2().construis();
+        testeur.middleware().reinitialise({ serviceARenvoyer: unV2 });
+        testeur.adaptateurEnvironnement().featureFlag = () => ({
+          avecRisquesV2: () => false,
+        });
+
+        let donneesRisquesRecues;
+        testeur.adaptateurPdf().genereAnnexes = async ({ donneesRisques }) => {
+          donneesRisquesRecues = donneesRisques;
+          return 'Pdf annexes';
+        };
+
+        await testeur.get('/api/service/456/pdf/annexes.pdf');
+
+        expect(donneesRisquesRecues.risques).to.be.an('array');
+      });
+
+      it("utilise l'objet pdf des risques v2 pour un service v2, si le feature flag risquesV2 est activé", async () => {
+        const unV2 = unServiceV2().construis();
+        testeur.middleware().reinitialise({ serviceARenvoyer: unV2 });
+        testeur.adaptateurEnvironnement().featureFlag = () => ({
+          avecRisquesV2: () => true,
+        });
+
+        let donneesRisquesRecues;
+        testeur.adaptateurPdf().genereAnnexes = async ({ donneesRisques }) => {
+          donneesRisquesRecues = donneesRisques;
+          return 'Pdf annexes';
+        };
+
+        await testeur.get('/api/service/456/pdf/annexes.pdf');
+
+        expect(donneesRisquesRecues.risques).to.have.property('risques');
+        expect(donneesRisquesRecues.risques).to.have.property('risquesBruts');
+        expect(donneesRisquesRecues.risques).to.have.property('risquesCibles');
+      });
+    });
+
     describe("concernant l'affichage du badge 'ancien référentiel'", () => {
       it("ne l'affiche pas si le service est V2", async () => {
         const unV2 = unServiceV2().construis();

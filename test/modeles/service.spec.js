@@ -25,6 +25,7 @@ import { VersionService } from '../../src/modeles/versionService.js';
 import { uneDescriptionV2Valide } from '../constructeurs/constructeurDescriptionServiceV2.js';
 import { creeReferentielV2 } from '../../src/referentielV2.js';
 import { unUUID } from '../constructeurs/UUID.js';
+import { ObjetPDFAnnexeRisquesV2 } from '../../src/modeles/objetsPDF/objetPDFAnnexeRisquesV2.js';
 
 const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER } = Rubriques;
 const { LECTURE } = Permissions;
@@ -766,7 +767,21 @@ describe('Un service', () => {
       descriptionService: { nomService: 'nom' },
     });
 
-    expect(service.vueAnnexePDFRisques()).toBeInstanceOf(VueAnnexePDFRisques);
+    expect(service.vueAnnexePDFRisques('v1')).toBeInstanceOf(
+      VueAnnexePDFRisques
+    );
+  });
+
+  it("récupère un objet de vue v2 pour le pdf de l'annexe des risques v2", () => {
+    const service = new Service({
+      id: '123',
+      idUtilisateur: '456',
+      descriptionService: { nomService: 'nom' },
+    });
+
+    expect(service.vueAnnexePDFRisques('v2')).toBeInstanceOf(
+      ObjetPDFAnnexeRisquesV2
+    );
   });
 
   it("récupère un objet de vue pour le pdf de l'annexe des mesures", () => {
