@@ -14,9 +14,10 @@ describe('Une mesure de sécurité', () => {
   let referentiel: Referentiel;
 
   beforeEach(() => {
-    referentiel = creeReferentiel({
+    referentiel = creeReferentiel();
+    referentiel.enrichis({
       mesures: {
-        // @ts-expect-error maj partielle référentiel
+        // @ts-expect-error on utilise une mesure factice
         identifiantMesure: { description: 'Une description' },
         identifiantMesureIndispensable: {
           description: 'Cette mesure est indispensable',
@@ -27,7 +28,6 @@ describe('Une mesure de sécurité', () => {
   });
 
   it('sait se décrire', () => {
-    // @ts-expect-error maj partielle référentiel
     referentiel.enrichis({ prioritesMesures: { p3: {} } });
     const mesure = new MesureGenerale(
       {
@@ -88,7 +88,6 @@ describe('Une mesure de sécurité', () => {
   });
 
   it('vérifie la valeur de la priorité', () => {
-    // @ts-expect-error maj partielle référentiel
     referentiel.enrichis({ prioritesMesures: {} });
     expect(
       () =>
@@ -174,7 +173,6 @@ describe('Une mesure de sécurité', () => {
   });
 
   it('connait sa priorité', () => {
-    // @ts-expect-error maj partielle référentiel
     referentiel.enrichis({ prioritesMesures: { p2: {} } });
     const mesure = new MesureGenerale(
       { id: 'identifiantMesure', priorite: 'p2' },

@@ -12,7 +12,6 @@ describe('Une étape « Décision »', () => {
   beforeEach(() =>
     referentiel.recharge({
       echeancesRenouvellement: {
-        // @ts-expect-error on utilise un référentiel partiel
         unAn: {
           description: '1 an',
           nbMoisDecalage: 12,

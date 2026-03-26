@@ -17,10 +17,7 @@ describe("Un dossier d'homologation", () => {
 
   beforeEach(() =>
     referentiel.recharge({
-      // @ts-expect-error on recharge un référentiel partiel
       echeancesRenouvellement: { unAn: {} },
-      documentsHomologation: { decision: {} },
-      // @ts-expect-error on recharge un référentiel partiel
       statutsAvisDossierHomologation: { favorable: {} },
     })
   );
@@ -276,10 +273,8 @@ describe("Un dossier d'homologation", () => {
     beforeEach(() => {
       referentiel.recharge({
         echeancesRenouvellement: {
-          // @ts-expect-error on recharge un référentiel partiel
           unAn: { nbMoisDecalage: 12, nbMoisBientotExpire: 2 },
         },
-        // @ts-expect-error on recharge un référentiel partiel
         statutsAvisDossierHomologation: { favorable: {} },
       });
     });
@@ -354,9 +349,7 @@ describe("Un dossier d'homologation", () => {
   describe('sur demande du caractère actif du dossier', () => {
     beforeEach(() => {
       referentiel.recharge({
-        // @ts-expect-error on recharge un référentiel partiel
         echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
-        // @ts-expect-error on recharge un référentiel partiel
         statutsAvisDossierHomologation: { favorable: {} },
       });
     });
@@ -386,8 +379,6 @@ describe("Un dossier d'homologation", () => {
 
   describe('sur demande de finalisation du dossier', () => {
     it("jette une erreur contenant la liste des étapes incomplètes si le dossier n'est pas complet", () => {
-      // @ts-expect-error on recharge un référentiel partiel
-      referentiel.recharge({ documentsHomologation: { unDocument: {} } });
       const dossier = new Dossier({}, referentiel);
 
       try {
@@ -411,10 +402,7 @@ describe("Un dossier d'homologation", () => {
 
     it("enregistre la finalisation s'il est complet", () => {
       referentiel.recharge({
-        // @ts-expect-error on recharge un référentiel partiel
         echeancesRenouvellement: { unAn: {} },
-        documentsHomologation: { decision: {} },
-        // @ts-expect-error on recharge un référentiel partiel
         statutsAvisDossierHomologation: { favorable: {} },
       });
       const dossierComplet = unDossier(referentiel)
@@ -432,13 +420,11 @@ describe("Un dossier d'homologation", () => {
   describe("sur demande de l'étape courante", () => {
     beforeEach(() => {
       referentiel.recharge({
-        // @ts-expect-error on recharge un référentiel partiel
         echeancesRenouvellement: { unAn: {} },
         // Ici, on référence la PROD à dessein, car on veut s'assurer que le code de `Dossier`
         // et les données du référentiel sont synchronisées.
         etapesParcoursHomologation:
           donneesReferentiel.etapesParcoursHomologation,
-        // @ts-expect-error on recharge un référentiel partiel
         statutsAvisDossierHomologation: { favorable: {} },
       });
     });
@@ -465,13 +451,11 @@ describe("Un dossier d'homologation", () => {
 
     it('jette une erreur si les données du référentiel et les propriété du dossier ne correspondent pas', () => {
       referentiel.recharge({
-        // @ts-expect-error on recharge un référentiel partiel
         echeancesRenouvellement: { unAn: {} },
         etapesParcoursHomologation: [
           // @ts-expect-error on force une étape inconnue
           { numero: 1, libelle: 'Étape inconnue', id: 'etapeInconnue' },
         ],
-        // @ts-expect-error on recharge un référentiel partiel
         statutsAvisDossierHomologation: { favorable: {} },
       });
 
@@ -492,10 +476,8 @@ describe("Un dossier d'homologation", () => {
     it("retourne 'true' si la date de fin tombe dans le « bientôt expiré » associé à la durée d'homologation", () => {
       referentiel.recharge({
         echeancesRenouvellement: {
-          // @ts-expect-error on recharge un référentiel partiel
           sixMois: { nbMoisDecalage: 6, nbMoisBientotExpire: 2 },
         },
-        // @ts-expect-error on recharge un référentiel partiel
         statutsAvisDossierHomologation: { favorable: {} },
       });
       const dossierExpirantDans30Jours = unDossier(referentiel)
@@ -509,10 +491,8 @@ describe("Un dossier d'homologation", () => {
     it("retourne 'false' si la date de fin est postérieure « bientôt expiré » associé à la durée d'homologation", () => {
       referentiel.recharge({
         echeancesRenouvellement: {
-          // @ts-expect-error on recharge un référentiel partiel
-          sixMois: { nbMoisDecalage: 6, nbMoisBientotExpire: 1 },
+          sixMois: { nbMoisDecalage: 6, nbMoisBientotExpire: 2 },
         },
-        // @ts-expect-error on recharge un référentiel partiel
         statutsAvisDossierHomologation: { favorable: {} },
       });
       const dossierExpirantDans60Jours = unDossier(referentiel)
@@ -526,10 +506,8 @@ describe("Un dossier d'homologation", () => {
     it("retourne 'false' si la date de fin est déjà passée", () => {
       referentiel.recharge({
         echeancesRenouvellement: {
-          // @ts-expect-error on recharge un référentiel partiel
           unAn: { nbMoisDecalage: 12, nbMoisBientotExpire: 2 },
         },
-        // @ts-expect-error on recharge un référentiel partiel
         statutsAvisDossierHomologation: { favorable: {} },
       });
       const maintenantPremierJuin = {
@@ -547,9 +525,7 @@ describe("Un dossier d'homologation", () => {
   describe("sur demande d'expiration", () => {
     beforeEach(() => {
       referentiel.recharge({
-        // @ts-expect-error on recharge un référentiel partiel
         echeancesRenouvellement: { unAn: { nbMoisDecalage: 12 } },
-        // @ts-expect-error on recharge un référentiel partiel
         statutsAvisDossierHomologation: { favorable: {} },
       });
     });
