@@ -10,8 +10,21 @@ import {
   ErreurStatutMesureInvalide,
 } from '../erreurs.js';
 import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { IdCategorieMesure, IdStatutMesure } from '../referentiel.types.js';
 
 export type StatutMesure = 'fait' | 'enCours' | 'nonFait' | 'aLancer';
+
+export type MesuresParStatutEtCategorie = Record<
+  IdStatutMesure,
+  Record<
+    IdCategorieMesure,
+    Array<{
+      description: string;
+      indispensable: boolean;
+      modalites?: string;
+    }>
+  >
+>;
 
 const STATUTS: StatutMesure[] = ['fait', 'enCours', 'nonFait', 'aLancer'];
 
@@ -26,10 +39,10 @@ abstract class Mesure extends InformationsService {
 
   static accumulateurInitialStatuts(
     statutFaitALaFin = false
-  ): Record<StatutMesure, Record<string, unknown>> {
+  ): MesuresParStatutEtCategorie {
     return Mesure.statutsPossibles(statutFaitALaFin).reduce(
       (acc, s) => ({ ...acc, [s]: {} }),
-      {} as Record<StatutMesure, Record<string, unknown>>
+      {} as MesuresParStatutEtCategorie
     );
   }
 

@@ -1,18 +1,33 @@
 import ElementsConstructibles from './elementsConstructibles.js';
 import MesureGenerale from './mesureGenerale.js';
+import { DonneesMesureGenerale } from './mesureGenerale.type.js';
+import { IdMesureV1 } from '../../donneesConversionReferentielMesures.js';
+import { IdMesureV2 } from '../../donneesReferentielMesuresV2.js';
+import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { MesuresParStatutEtCategorie } from './mesure.js';
+import { UUID } from '../typesBasiques.js';
 
-class MesuresGenerales extends ElementsConstructibles {
-  constructor(donnees, referentiel) {
+export type DonneesMesuresGenerales<TVersion extends IdMesureV1 | IdMesureV2> =
+  {
+    mesuresGenerales: Array<Partial<DonneesMesureGenerale<TVersion>>>;
+  };
+
+class MesuresGenerales<
+  TVersion extends IdMesureV1 | IdMesureV2,
+> extends ElementsConstructibles<MesureGenerale<TVersion>> {
+  constructor(
+    donnees: DonneesMesuresGenerales<TVersion>,
+    referentiel: Referentiel | ReferentielV2
+  ) {
     const { mesuresGenerales } = donnees;
     super(MesureGenerale, { items: mesuresGenerales }, referentiel);
-    this.referentiel = referentiel;
   }
 
   nonSaisies() {
     return this.nombre() === 0;
   }
 
-  metsAJourMesure(mesure) {
+  metsAJourMesure(mesure: MesureGenerale<TVersion>) {
     const index = this.items.findIndex((m) => m.id === mesure.id);
     if (index !== -1) {
       this.items[index] = mesure;
@@ -22,8 +37,14 @@ class MesuresGenerales extends ElementsConstructibles {
   }
 
   parStatutEtCategorie() {
-    const rangeMesureParStatut = (acc, mesure) => {
-      const mesureReference = this.referentiel.mesure(mesure.id);
+    const rangeMesureParStatut = (
+      acc: MesuresParStatutEtCategorie,
+      mesure: MesureGenerale<TVersion>
+    ) => {
+      const mesureReference = this.referentiel.mesure(
+        mesure.id as IdMesureV1 & IdMesureV2
+      );
+      // eslint-disable-next-line no-param-reassign
       acc[mesure.statut][mesureReference.categorie] ||= [];
       acc[mesure.statut][mesureReference.categorie].push({
         description: mesure.descriptionMesure(),
@@ -39,11 +60,11 @@ class MesuresGenerales extends ElementsConstructibles {
 
     return this.toutes()
       .filter((mesure) => mesure.statutRenseigne())
-      .sort((m, _) => (m.estIndispensable() ? -1 : 1))
+      .sort((m) => (m.estIndispensable() ? -1 : 1))
       .reduce(rangeMesureParStatut, accumulateur);
   }
 
-  supprimeResponsable(idUtilisateur) {
+  supprimeResponsable(idUtilisateur: UUID) {
     this.toutes().forEach((m) => m.supprimeResponsable(idUtilisateur));
   }
 
@@ -59,7 +80,7 @@ class MesuresGenerales extends ElementsConstructibles {
     return MesuresGenerales.A_COMPLETER;
   }
 
-  avecId(idMesure) {
+  avecId(idMesure: TVersion) {
     return this.toutes().find((m) => m.id === idMesure);
   }
 }

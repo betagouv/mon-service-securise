@@ -1,21 +1,23 @@
-import expect from 'expect.js';
-import MesuresGenerales from '../../src/modeles/mesuresGenerales.js';
-import * as Referentiel from '../../src/referentiel.js';
-import { creeReferentiel } from '../../src/referentiel.js';
+import MesuresGenerales, {
+  DonneesMesuresGenerales,
+} from '../../src/modeles/mesuresGenerales.js';
+import { creeReferentiel, creeReferentielVide } from '../../src/referentiel.js';
 import MesureGenerale from '../../src/modeles/mesureGenerale.js';
+import { Referentiel } from '../../src/referentiel.interface.ts';
 
 const { A_SAISIR, COMPLETES, A_COMPLETER } = MesuresGenerales;
 
 describe('La liste des mesures générales', () => {
-  let referentiel;
+  let referentiel: Referentiel;
 
   beforeEach(() => {
-    referentiel = Referentiel.creeReferentielVide();
+    referentiel = creeReferentielVide();
   });
 
   describe("sur demande de mise à jour d'une mesure", () => {
     beforeEach(() => {
       referentiel = creeReferentiel({
+        // @ts-expect-error On recharge un référentiel partiellement
         mesures: { m1: {} },
       });
     });
@@ -28,13 +30,13 @@ describe('La liste des mesures générales', () => {
         new MesureGenerale({ id: 'm1', statut: 'fait' }, referentiel)
       );
 
-      expect(mesuresGenerales.toutes().length).to.equal(1);
-      expect(mesuresGenerales.toutes()[0].id).to.equal('m1');
-      expect(mesuresGenerales.toutes()[0].statut).to.equal('fait');
+      expect(mesuresGenerales.toutes().length).toEqual(1);
+      expect(mesuresGenerales.toutes()[0].id).toEqual('m1');
+      expect(mesuresGenerales.toutes()[0].statut).toEqual('fait');
     });
 
     it('met à jour la mesure si elle existe déjà', () => {
-      const donnees = {
+      const donnees: DonneesMesuresGenerales<'m1'> = {
         mesuresGenerales: [{ id: 'm1', statut: 'fait' }],
       };
       const mesuresGenerales = new MesuresGenerales(donnees, referentiel);
@@ -43,41 +45,48 @@ describe('La liste des mesures générales', () => {
         new MesureGenerale({ id: 'm1', statut: 'aLancer' }, referentiel)
       );
 
-      expect(mesuresGenerales.toutes().length).to.equal(1);
-      expect(mesuresGenerales.toutes()[0].id).to.equal('m1');
-      expect(mesuresGenerales.toutes()[0].statut).to.equal('aLancer');
+      expect(mesuresGenerales.toutes().length).toEqual(1);
+      expect(mesuresGenerales.toutes()[0].id).toEqual('m1');
+      expect(mesuresGenerales.toutes()[0].statut).toEqual('aLancer');
     });
   });
 
   it("est à saisir quand rien n'est saisi", () => {
-    const donnees = { mesuresGenerales: [] };
-    const mesuresGenerales = new MesuresGenerales(donnees);
+    const donnees: DonneesMesuresGenerales<''> = { mesuresGenerales: [] };
+    const mesuresGenerales = new MesuresGenerales(donnees, referentiel);
 
-    expect(mesuresGenerales.statutSaisie()).to.equal(A_SAISIR);
+    expect(mesuresGenerales.statutSaisie()).toEqual(A_SAISIR);
   });
 
   it('est complète quand les mesures sont complètes', () => {
+    // @ts-expect-error On recharge un référentiel partiellement
     referentiel = creeReferentiel({ mesures: { mesure: {} } });
 
-    const donnees = { mesuresGenerales: [{ id: 'mesure', statut: 'fait' }] };
+    const donnees: DonneesMesuresGenerales<'mesure'> = {
+      mesuresGenerales: [{ id: 'mesure', statut: 'fait' }],
+    };
     const mesuresGenerales = new MesuresGenerales(donnees, referentiel);
 
-    expect(mesuresGenerales.statutSaisie()).to.equal(COMPLETES);
+    expect(mesuresGenerales.statutSaisie()).toEqual(COMPLETES);
   });
 
   it('est à compléter quand toutes les mesures ne sont pas complètes', () => {
+    // @ts-expect-error On recharge un référentiel partiellement
     referentiel = creeReferentiel({ mesures: { mesure: {} } });
 
-    const donnees = { mesuresGenerales: [{ id: 'mesure' }] };
+    const donnees: DonneesMesuresGenerales<'mesure'> = {
+      mesuresGenerales: [{ id: 'mesure' }],
+    };
     const mesuresGenerales = new MesuresGenerales(donnees, referentiel);
 
-    expect(mesuresGenerales.statutSaisie()).to.equal(A_COMPLETER);
+    expect(mesuresGenerales.statutSaisie()).toEqual(A_COMPLETER);
   });
 
   describe('sur une demande de mesures par statut', () => {
     beforeEach(() => {
-      referentiel = Referentiel.creeReferentiel({
+      referentiel = creeReferentiel({
         mesures: {
+          // @ts-expect-error On recharge un référentiel partiellement
           mesure1: {
             description: 'Mesure une',
             categorie: 'categorie1',
@@ -103,7 +112,7 @@ describe('La liste des mesures générales', () => {
         referentiel
       );
 
-      expect(mesures.parStatutEtCategorie().fait).to.be.ok();
+      expect(mesures.parStatutEtCategorie().fait).toBeDefined();
     });
 
     it('regroupe par catégorie les mesures', () => {
@@ -112,7 +121,8 @@ describe('La liste des mesures générales', () => {
         referentiel
       );
 
-      expect(mesures.parStatutEtCategorie().fait.categorie1.length).to.equal(1);
+      // @ts-expect-error On utilise une catégorie factice
+      expect(mesures.parStatutEtCategorie().fait.categorie1.length).toEqual(1);
     });
 
     it("ajoute l'importance de la mesure", () => {
@@ -122,8 +132,9 @@ describe('La liste des mesures générales', () => {
       );
 
       expect(
+        // @ts-expect-error On utilise une catégorie factice
         mesures.parStatutEtCategorie().fait.categorie1[0].indispensable
-      ).to.be(true);
+      ).toBe(true);
     });
 
     it('ajoute la description de la mesure', () => {
@@ -133,21 +144,27 @@ describe('La liste des mesures générales', () => {
       );
 
       expect(
+        // @ts-expect-error On utilise une catégorie factice
         mesures.parStatutEtCategorie().fait.categorie1[0].description
-      ).to.equal('Mesure une');
+      ).toEqual('Mesure une');
     });
 
     it('ajoute les modalités de la mesure', () => {
-      const mesuresGenerales = [
-        { id: 'mesure1', statut: 'fait', modalites: 'Modalités de la mesure' },
-      ];
-      const mesures = new MesuresGenerales({ mesuresGenerales }, referentiel, [
-        'mesure1',
-      ]);
+      const donnees: DonneesMesuresGenerales<'mesure1'> = {
+        mesuresGenerales: [
+          {
+            id: 'mesure1',
+            statut: 'fait',
+            modalites: 'Modalités de la mesure',
+          },
+        ],
+      };
+      const mesures = new MesuresGenerales(donnees, referentiel);
 
       expect(
+        // @ts-expect-error On utilise une catégorie factice
         mesures.parStatutEtCategorie().fait.categorie1[0].modalites
-      ).to.equal('Modalités de la mesure');
+      ).toEqual('Modalités de la mesure');
     });
 
     it('ordonne les statuts comme attendu', () => {
@@ -162,7 +179,7 @@ describe('La liste des mesures générales', () => {
         referentiel
       );
 
-      expect(Object.keys(mesures.parStatutEtCategorie())).to.eql([
+      expect(Object.keys(mesures.parStatutEtCategorie())).toEqual([
         'enCours',
         'nonFait',
         'aLancer',
@@ -183,8 +200,9 @@ describe('La liste des mesures générales', () => {
       );
 
       expect(
+        // @ts-expect-error On utilise une catégorie factice
         mesures.parStatutEtCategorie().fait.categorie1[2].description
-      ).to.equal('Mesure deux');
+      ).toEqual('Mesure deux');
     });
   });
 });
