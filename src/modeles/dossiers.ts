@@ -2,12 +2,12 @@ import Dossier, { DonneesDossier } from './dossier.js';
 import ElementsConstructibles from './elementsConstructibles.js';
 
 import {
-  ErreurDossiersInvalides,
-  ErreurDossierNonFinalisable,
   ErreurDossierCourantInexistant,
+  ErreurDossierNonFinalisable,
+  ErreurDossiersInvalides,
 } from '../erreurs.js';
 import { dateEnFrancais } from '../utilitaires/date.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
 import { IdStatutHomologation } from '../referentiel.types.js';
 
@@ -18,7 +18,7 @@ type DonneesDossiers = {
 class Dossiers extends ElementsConstructibles<Dossier> {
   constructor(
     donnees: DonneesDossiers = { dossiers: [] },
-    referentiel: Referentiel | ReferentielV2 = creeReferentielVide()
+    referentiel: TousReferentiels = creeReferentielVide()
   ) {
     const { dossiers } = donnees;
     Dossiers.valide(donnees);

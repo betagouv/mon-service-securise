@@ -4,7 +4,7 @@ import {
   ErreurDetachementModeleMesureSpecifiqueImpossible,
 } from '../erreurs.js';
 import { creeReferentielVide } from '../referentiel.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 import { UUID } from '../typesBasiques.js';
 
 export type DonneesMesureSpecifique = {
@@ -31,7 +31,7 @@ class MesureSpecifique extends Mesure {
   readonly priorite?: string;
   readonly statut!: string;
   responsables!: Array<UUID>;
-  private readonly referentiel: Referentiel | ReferentielV2;
+  private readonly referentiel: TousReferentiels;
 
   static proprietesObligatoires() {
     return ['id', 'description', 'categorie', 'statut'];
@@ -39,7 +39,7 @@ class MesureSpecifique extends Mesure {
 
   constructor(
     donneesMesure: Partial<DonneesMesureSpecifique> = {},
-    referentiel: Referentiel | ReferentielV2 = creeReferentielVide()
+    referentiel: TousReferentiels = creeReferentielVide()
   ) {
     super({
       proprietesAtomiquesRequises: MesureSpecifique.proprietesObligatoires(),
@@ -111,7 +111,7 @@ class MesureSpecifique extends Mesure {
       priorite?: string;
       echeance?: string;
     },
-    referentiel: Referentiel | ReferentielV2
+    referentiel: TousReferentiels
   ) {
     super.valide({ statut, priorite, echeance }, referentiel);
 

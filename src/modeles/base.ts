@@ -1,4 +1,4 @@
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 
 const proprietePresente = (valeur: unknown): boolean => {
   if (Array.isArray(valeur)) {
@@ -23,7 +23,7 @@ const proprietePresente = (valeur: unknown): boolean => {
 
 type ConstructeurAgregat = new (
   donnees: Record<string, unknown>,
-  referentiel?: Referentiel | ReferentielV2
+  referentiel?: TousReferentiels
 ) => Base;
 
 export type ProprietesBase = {
@@ -62,7 +62,7 @@ abstract class Base {
 
   renseigneProprietes(
     donnees: Record<string, unknown>,
-    referentiel?: Referentiel | ReferentielV2
+    referentiel?: TousReferentiels
   ) {
     [
       ...this.proprietesAtomiquesRequises,

@@ -9,7 +9,7 @@ import {
   ErreurPrioriteMesureInvalide,
   ErreurStatutMesureInvalide,
 } from '../erreurs.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 import { IdCategorieMesure, IdStatutMesure } from '../referentiel.types.js';
 
 export type StatutMesure = 'fait' | 'enCours' | 'nonFait' | 'aLancer';
@@ -69,7 +69,7 @@ abstract class Mesure extends InformationsService {
       priorite?: string;
       echeance?: string;
     },
-    referentiel: Referentiel | ReferentielV2
+    referentiel: TousReferentiels
   ) {
     if (statut && !this.statutsPossibles().includes(statut as StatutMesure)) {
       throw new ErreurStatutMesureInvalide(

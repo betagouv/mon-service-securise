@@ -1,7 +1,7 @@
 import Etape from './etape.js';
 import Avis, { DonneesAvis } from '../avis.js';
 import InformationsService from '../informationsService.js';
-import { Referentiel, ReferentielV2 } from '../../referentiel.interface.js';
+import { TousReferentiels } from '../../referentiel.interface.js';
 import { creeReferentielVide } from '../../referentiel.js';
 
 export type DonneesEtapeAvis = {
@@ -12,11 +12,11 @@ export type DonneesEtapeAvis = {
 class EtapeAvis extends Etape {
   avecAvis!: boolean | null;
   avis!: Avis[];
-  private readonly referentiel!: Referentiel | ReferentielV2;
+  private readonly referentiel!: TousReferentiels;
 
   constructor(
     { avis = [], avecAvis = null }: Partial<DonneesEtapeAvis> = {},
-    referentiel: Referentiel | ReferentielV2 = creeReferentielVide()
+    referentiel: TousReferentiels = creeReferentielVide()
   ) {
     super({ proprietesAtomiquesRequises: ['avecAvis'] }, referentiel);
 

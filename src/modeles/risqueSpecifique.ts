@@ -5,7 +5,7 @@ import {
   ErreurCategoriesRisqueManquantes,
   ErreurIntituleRisqueManquant,
 } from '../erreurs.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 import { UUID } from '../typesBasiques.js';
 import { IdCategorieRisque } from '../referentiel.types.js';
 
@@ -26,7 +26,7 @@ class RisqueSpecifique extends Risque {
 
   constructor(
     donneesRisque: Partial<DonneesRisqueSpecifique>,
-    referentiel: Referentiel | ReferentielV2
+    referentiel: TousReferentiels
   ) {
     super(donneesRisque, referentiel);
 
@@ -62,7 +62,7 @@ class RisqueSpecifique extends Risque {
 
   static valide(
     donneesRisque: Partial<DonneesRisqueSpecifique>,
-    referentiel: Referentiel | ReferentielV2
+    referentiel: TousReferentiels
   ) {
     super.valide(donneesRisque, referentiel);
     const { intitule, categories } = donneesRisque;

@@ -3,7 +3,7 @@ import MesureGenerale from './mesureGenerale.js';
 import { DonneesMesureGenerale } from './mesureGenerale.type.js';
 import { IdMesureV1 } from '../../donneesConversionReferentielMesures.js';
 import { IdMesureV2 } from '../../donneesReferentielMesuresV2.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 import { MesuresParStatutEtCategorie } from './mesure.js';
 import { UUID } from '../typesBasiques.js';
 
@@ -17,7 +17,7 @@ class MesuresGenerales<
 > extends ElementsConstructibles<MesureGenerale<TVersion>> {
   constructor(
     donnees: DonneesMesuresGenerales<TVersion>,
-    referentiel: Referentiel | ReferentielV2
+    referentiel: TousReferentiels
   ) {
     const { mesuresGenerales } = donnees;
     super(MesureGenerale, { items: mesuresGenerales }, referentiel);
