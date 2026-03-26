@@ -33,8 +33,8 @@
     risques = await recupereRisques(idService);
   });
 
-  let risquesDeGraviteHaute = $derived(
-    risques.risques.filter(
+  let risquesBrutsDeGraviteHaute = $derived(
+    risques.risquesBruts.filter(
       (risque) => couleur(risque.gravite, risque.vraisemblance) === 'rouge'
     )
   );
@@ -119,14 +119,14 @@
           <LegendeMatrice />
         {/if}
       </div>
-      {#if risquesDeGraviteHaute.length > 0}
-        <h5>Risques de gravité haute</h5>
+      {#if risquesBrutsDeGraviteHaute.length > 0}
+        <h5>Risques bruts de gravité haute</h5>
         <Tableau
           colonnes={[
             { cle: 'id', libelle: 'Identifiant' },
             { cle: 'intitule', libelle: 'Intitulé du risque' },
           ]}
-          donnees={risquesDeGraviteHaute}
+          donnees={risquesBrutsDeGraviteHaute}
         >
           {#snippet cellule({ donnee, colonne })}
             {#if colonne.cle === 'id'}
