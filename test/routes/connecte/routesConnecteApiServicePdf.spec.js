@@ -59,19 +59,28 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
     });
 
     describe('concernant les données de risque', () => {
+      let donneesRisquesRecues;
+      let versionRecue;
+
+      beforeEach(() => {
+        testeur.adaptateurPdf().genereAnnexes = async ({
+          donneesRisques,
+          versionPdfRisques,
+        }) => {
+          donneesRisquesRecues = donneesRisques;
+          versionRecue = versionPdfRisques;
+          return 'Pdf annexes';
+        };
+      });
+
       it("utilise l'objet pdf des risques v1 pour un service v1", async () => {
         const unV1 = unService().construis();
         testeur.middleware().reinitialise({ serviceARenvoyer: unV1 });
 
-        let donneesRisquesRecues;
-        testeur.adaptateurPdf().genereAnnexes = async ({ donneesRisques }) => {
-          donneesRisquesRecues = donneesRisques;
-          return 'Pdf annexes';
-        };
-
         await testeur.get('/api/service/456/pdf/annexes.pdf');
 
         expect(donneesRisquesRecues.risques).to.be.an('array');
+        expect(versionRecue).to.be('v1');
       });
 
       it("utilise l'objet pdf des risques v1 pour un service v2, si le feature flag risquesV2 est désactivé", async () => {
@@ -81,15 +90,10 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
           avecRisquesV2: () => false,
         });
 
-        let donneesRisquesRecues;
-        testeur.adaptateurPdf().genereAnnexes = async ({ donneesRisques }) => {
-          donneesRisquesRecues = donneesRisques;
-          return 'Pdf annexes';
-        };
-
         await testeur.get('/api/service/456/pdf/annexes.pdf');
 
         expect(donneesRisquesRecues.risques).to.be.an('array');
+        expect(versionRecue).to.be('v1');
       });
 
       it("utilise l'objet pdf des risques v2 pour un service v2, si le feature flag risquesV2 est activé", async () => {
@@ -99,17 +103,12 @@ describe('Le serveur MSS des routes /api/service/:id/pdf/*', () => {
           avecRisquesV2: () => true,
         });
 
-        let donneesRisquesRecues;
-        testeur.adaptateurPdf().genereAnnexes = async ({ donneesRisques }) => {
-          donneesRisquesRecues = donneesRisques;
-          return 'Pdf annexes';
-        };
-
         await testeur.get('/api/service/456/pdf/annexes.pdf');
 
         expect(donneesRisquesRecues.risques).to.have.property('risques');
         expect(donneesRisquesRecues.risques).to.have.property('risquesBruts');
         expect(donneesRisquesRecues.risques).to.have.property('risquesCibles');
+        expect(versionRecue).to.be('v2');
       });
     });
 
