@@ -15,14 +15,16 @@ const routesConnecteApiServicePdf = ({
   const routes = express.Router();
 
   const generePdfAnnexes = (service) => {
-    const versionPdf =
+    const versionPdfRisques =
       service.version() === VersionService.v2 &&
       adaptateurEnvironnement.featureFlag().avecRisquesV2()
         ? 'v2'
         : 'v1';
     const donneesDescription = service.vueAnnexePDFDescription().donnees();
     const donneesMesures = service.vueAnnexePDFMesures().donnees();
-    const donneesRisques = service.vueAnnexePDFRisques(versionPdf).donnees();
+    const donneesRisques = service
+      .vueAnnexePDFRisques(versionPdfRisques)
+      .donnees();
 
     const donneesEntete =
       service.version() === VersionService.v1
@@ -35,6 +37,7 @@ const routesConnecteApiServicePdf = ({
       donneesRisques,
       referentiel,
       donneesEntete,
+      versionPdfRisques,
     });
   };
 
