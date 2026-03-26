@@ -332,6 +332,7 @@ const routesConnecteApi = ({
       adaptateurPdf,
       adaptateurZip,
       adaptateurJournal,
+      adaptateurEnvironnement,
     })
   );
 

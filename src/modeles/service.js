@@ -24,6 +24,7 @@ import MesuresGenerales from './mesuresGenerales.js';
 import { MoteurRisquesV2 } from '../moteurRisques/v2/moteurRisques.js';
 import { RisquesV2 } from '../moteurRisques/v2/risquesV2.js';
 import { RisqueSpecifiqueV2 } from '../moteurRisques/v2/risqueSpecifiqueV2.js';
+import { ObjetPDFAnnexeRisquesV2 } from './objetsPDF/objetPDFAnnexeRisquesV2.js';
 
 const NIVEAUX = {
   NIVEAU_SECURITE_BON: 'bon',
@@ -392,8 +393,10 @@ class Service {
     return new ObjetPDFAnnexeMesures(this, this.referentiel);
   }
 
-  vueAnnexePDFRisques() {
-    return new ObjetPDFAnnexeRisques(this, this.referentiel);
+  vueAnnexePDFRisques(versionPdfRisque) {
+    return versionPdfRisque === 'v1'
+      ? new ObjetPDFAnnexeRisques(this, this.referentiel)
+      : new ObjetPDFAnnexeRisquesV2(this);
   }
 
   actionRecommandee() {

@@ -8,15 +8,23 @@ const routesConnecteApiServicePdf = ({
   adaptateurHorloge,
   adaptateurPdf,
   adaptateurZip,
+  adaptateurEnvironnement,
   middleware,
   referentiel,
 }) => {
   const routes = express.Router();
 
   const generePdfAnnexes = (service) => {
+    const versionPdfRisques =
+      service.version() === VersionService.v2 &&
+      adaptateurEnvironnement.featureFlag().avecRisquesV2()
+        ? 'v2'
+        : 'v1';
     const donneesDescription = service.vueAnnexePDFDescription().donnees();
     const donneesMesures = service.vueAnnexePDFMesures().donnees();
-    const donneesRisques = service.vueAnnexePDFRisques().donnees();
+    const donneesRisques = service
+      .vueAnnexePDFRisques(versionPdfRisques)
+      .donnees();
 
     const donneesEntete =
       service.version() === VersionService.v1
@@ -29,6 +37,7 @@ const routesConnecteApiServicePdf = ({
       donneesRisques,
       referentiel,
       donneesEntete,
+      versionPdfRisques,
     });
   };
 

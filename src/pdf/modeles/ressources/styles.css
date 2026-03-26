@@ -1314,3 +1314,150 @@ p {
   border-color: #ff6584;
   color: #ff6584;
 }
+
+.conteneur-matrice-risques-v2 {
+  padding-left: 40px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+table.matrice-risques-v2 {
+  position: relative;
+  border-collapse: collapse;
+  --bordure: #929292;
+  --rouge: #e1000f;
+  --orange: #fa7a35;
+  --vert: #77b645;
+  text-align: center;
+}
+
+table.matrice-risques-v2 th {
+  color: #929292;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+}
+
+table.matrice-risques-v2 th span {
+  margin-right: 10px;
+}
+
+table.matrice-risques-v2 tr td {
+  padding: 2px;
+  border-top: 1px dashed var(--bordure);
+}
+
+table.matrice-risques-v2 tr td:first-of-type {
+  border-left: 1px solid var(--bordure);
+  padding-left: 4px;
+}
+
+table.matrice-risques-v2 .contenu-cellule {
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: bold;
+  line-height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+table.matrice-risques-v2 .contenu-cellule {
+  width: 75px;
+  height: 44px;
+}
+
+table.matrice-risques-v2 .contenu-cellule.faible {
+  background: var(--vert);
+}
+
+table.matrice-risques-v2 .contenu-cellule.moyen {
+  background: var(--orange);
+}
+
+table.matrice-risques-v2 .contenu-cellule.eleve {
+  background: var(--rouge);
+}
+
+table.matrice-risques-v2 .legende-x th:not([aria-hidden='true']) {
+  border-top: 1px solid var(--bordure);
+}
+
+table.matrice-risques-v2 .legende {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  transform: translateX(-100%) translateY(-100%);
+  color: #929292;
+  font-size: 0.8rem;
+  line-height: 1.5rem;
+}
+
+table.matrice-risques-v2 .legende.bas-droite {
+  top: unset;
+  left: unset;
+  bottom: -18px;
+  right: 70px;
+  transform: translateX(100%);
+}
+
+h5 {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  color: black;
+  margin: 12px 0 0;
+}
+
+.conteneur-matrices-et-legende {
+  display: flex;
+}
+
+.conteneur-matrices-et-legende .conteneur-matrices-v2 {
+  border-right: 1px solid #b5c1d2;
+  padding-right: 40px;
+}
+
+.conteneur-legende-v2 {
+  padding-left: 30px;
+  padding-top: 12px;
+}
+
+.conteneur-legende-v2 .conteneur-legende-nombre-risques {
+  font-weight: 500;
+  font-size: 0.8rem;
+  margin-bottom: 15px;
+  color: #5e5e5e;
+}
+
+.conteneur-legende-v2 .entree-legende {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  margin-bottom: 10px;
+}
+
+.conteneur-legende-v2 .carre-legende {
+  width: 13px;
+  height: 13px;
+}
+
+.conteneur-legende-v2 .carre-legende.vert {
+  background: #77b645;
+}
+
+.conteneur-legende-v2 .carre-legende.orange {
+  background: #fa7a35;
+}
+
+.conteneur-legende-v2 .carre-legende.rouge {
+  background: #e1000f;
+}
+
+.conteneur-legende-v2 span {
+  color: #3a3a3a;
+  font-size: 0.7rem;
+  font-weight: 400;
+  line-height: 1rem;
+}

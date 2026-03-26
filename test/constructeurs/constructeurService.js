@@ -57,6 +57,11 @@ class ConstructeurService {
     return this;
   }
 
+  avecRisquesV2(risquesV2) {
+    this.donnees.risquesV2 = risquesV2;
+    return this;
+  }
+
   avecOrganisationResponsable(organisationResponsable) {
     this.donnees.descriptionService.organisationResponsable =
       organisationResponsable;
