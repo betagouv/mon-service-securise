@@ -1,16 +1,13 @@
 import ListeRisques from './listeRisques.js';
 import RisqueGeneral, { DonneesRisqueGeneral } from './risqueGeneral.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 
 export type DonneesRisquesGeneraux = {
   risquesGeneraux: DonneesRisqueGeneral[];
 };
 
 class RisquesGeneraux extends ListeRisques<RisqueGeneral> {
-  constructor(
-    donnees: DonneesRisquesGeneraux,
-    referentiel: Referentiel | ReferentielV2
-  ) {
+  constructor(donnees: DonneesRisquesGeneraux, referentiel: TousReferentiels) {
     const { risquesGeneraux } = donnees;
     super(RisqueGeneral, { items: risquesGeneraux }, referentiel);
   }

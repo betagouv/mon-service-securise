@@ -1,7 +1,7 @@
 import InformationsService from './informationsService.js';
 import NiveauGravite from './niveauGravite.js';
 import { ErreurNiveauVraisemblanceInconnu } from '../erreurs.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
 import {
   IdNiveauGravite,
@@ -21,11 +21,11 @@ class Risque extends InformationsService {
   readonly niveauVraisemblance!: IdVraisemblanceRisque;
   readonly commentaire?: string;
   private readonly objetNiveauGravite: NiveauGravite;
-  readonly referentiel: Referentiel | ReferentielV2;
+  readonly referentiel: TousReferentiels;
 
   constructor(
     donneesRisque: Partial<DonneesRisque> = {},
-    referentiel: Referentiel | ReferentielV2 = creeReferentielVide()
+    referentiel: TousReferentiels = creeReferentielVide()
   ) {
     super({
       proprietesAtomiquesRequises: [
@@ -68,7 +68,7 @@ class Risque extends InformationsService {
 
   static valide(
     { niveauVraisemblance }: { niveauVraisemblance?: string },
-    referentiel: Referentiel | ReferentielV2
+    referentiel: TousReferentiels
   ) {
     const identifiantsNiveauxVraisemblance =
       referentiel.identifiantsNiveauxVraisemblance();

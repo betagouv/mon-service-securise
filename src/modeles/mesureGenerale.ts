@@ -3,7 +3,7 @@ import { ErreurMesureInconnue } from '../erreurs.js';
 import { IdStatutMesure } from '../referentiel.types.js';
 import { IdMesureV1 } from '../../donneesConversionReferentielMesures.js';
 import { IdMesureV2 } from '../../donneesReferentielMesuresV2.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 import { UUID } from '../typesBasiques.js';
 import { DonneesMesureGenerale } from './mesureGenerale.type.js';
 
@@ -15,11 +15,11 @@ class MesureGenerale<TVersion extends IdMesureV1 | IdMesureV2> extends Mesure {
   readonly echeance?: Date;
   readonly rendueIndispensable?: boolean;
   responsables!: UUID[];
-  private readonly referentiel: Referentiel | ReferentielV2;
+  private readonly referentiel: TousReferentiels;
 
   constructor(
     donneesMesure: Partial<DonneesMesureGenerale<TVersion>>,
-    referentiel: Referentiel | ReferentielV2
+    referentiel: TousReferentiels
   ) {
     super({
       proprietesAtomiquesRequises: ['id', 'statut'],
@@ -78,7 +78,7 @@ class MesureGenerale<TVersion extends IdMesureV1 | IdMesureV2> extends Mesure {
       priorite,
       echeance,
     }: Partial<DonneesMesureGenerale<TVersion>>,
-    referentiel: Referentiel | ReferentielV2
+    referentiel: TousReferentiels
   ) {
     super.valide({ statut, priorite, echeance }, referentiel);
 

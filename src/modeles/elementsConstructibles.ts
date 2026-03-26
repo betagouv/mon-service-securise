@@ -1,10 +1,10 @@
 import ListeItems from './listeItems.js';
 import InformationsService from './informationsService.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 
 type Constructible<T> = new (
   data: Record<string, unknown>,
-  referentiel: Referentiel | ReferentielV2
+  referentiel: TousReferentiels
 ) => T;
 
 class ElementsConstructibles<
@@ -13,7 +13,7 @@ class ElementsConstructibles<
   constructor(
     ClasseItem: Constructible<T>,
     donnees: { items: Array<Record<string, unknown>> },
-    referentiel: Referentiel | ReferentielV2
+    referentiel: TousReferentiels
   ) {
     super(
       (donneesItem) => new ClasseItem(donneesItem, referentiel),

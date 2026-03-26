@@ -16,7 +16,7 @@ import {
   ErreurDossierNonFinalisable,
   ErreurDossierNonFinalise,
 } from '../erreurs.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 import { UUID } from '../typesBasiques.js';
 import { creeReferentielVide } from '../referentiel.js';
 import { DonneesAvis } from './avis.js';
@@ -56,12 +56,12 @@ class Dossier extends InformationsService {
   readonly dateTelechargement: DateTelechargement;
   readonly avis: EtapeAvis;
   readonly documents: Documents;
-  private readonly referentiel: Referentiel | ReferentielV2;
+  private readonly referentiel: TousReferentiels;
   private readonly adaptateurHorloge: AdaptateurHorloge;
 
   constructor(
     donneesDossier: Partial<DonneesDossier> = {},
-    referentiel: Referentiel | ReferentielV2 = creeReferentielVide(),
+    referentiel: TousReferentiels = creeReferentielVide(),
     adaptateurHorloge: AdaptateurHorloge = fabriqueAdaptateurHorloge()
   ) {
     // eslint-disable-next-line no-param-reassign

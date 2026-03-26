@@ -1,6 +1,6 @@
 import InformationsService from './informationsService.js';
 import { ErreurAvisInvalide, ErreurDureeValiditeInvalide } from '../erreurs.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
 import {
   IdEcheanceRenouvellement,
@@ -22,7 +22,7 @@ class Avis extends InformationsService {
 
   constructor(
     donnees: Partial<DonneesAvis> = {},
-    referentiel: Referentiel | ReferentielV2 = creeReferentielVide()
+    referentiel: TousReferentiels = creeReferentielVide()
   ) {
     super({
       proprietesAtomiquesRequises: Avis.proprietesAtomiquesRequises(),
@@ -48,7 +48,7 @@ class Avis extends InformationsService {
 
   static valide(
     { dureeValidite, statut }: Partial<DonneesAvis>,
-    referentiel: Referentiel | ReferentielV2
+    referentiel: TousReferentiels
   ) {
     if (!referentiel.estIdentifiantEcheanceRenouvellementConnu(dureeValidite)) {
       throw new ErreurDureeValiditeInvalide(

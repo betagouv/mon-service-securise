@@ -1,9 +1,9 @@
 import { ErreurNiveauGraviteInconnu } from '../erreurs.js';
-import { Referentiel, ReferentielV2 } from '../referentiel.interface.js';
+import { TousReferentiels } from '../referentiel.interface.js';
 import { creeReferentielVide } from '../referentiel.js';
 import { IdNiveauGravite } from '../referentiel.types.js';
 
-const valide = (idNiveau: string, referentiel: Referentiel | ReferentielV2) => {
+const valide = (idNiveau: string, referentiel: TousReferentiels) => {
   const identifiantsNiveauxGravite = referentiel.identifiantsNiveauxGravite();
   if (idNiveau && !identifiantsNiveauxGravite.includes(idNiveau)) {
     throw new ErreurNiveauGraviteInconnu(
@@ -19,7 +19,7 @@ class NiveauGravite {
 
   constructor(
     idNiveau: IdNiveauGravite,
-    referentiel: Referentiel | ReferentielV2 = creeReferentielVide()
+    referentiel: TousReferentiels = creeReferentielVide()
   ) {
     valide(idNiveau, referentiel);
 
