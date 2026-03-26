@@ -109,7 +109,11 @@
           <LegendeMatrice />
         {:else if ongletActif === 'residuels'}
           <div class="conteneur-matrice">
-            <MatriceRisquesV2 risques={risques.risques} taille="sm" />
+            <MatriceRisquesV2
+              risques={[]}
+              enAttenteCompletionMesures
+              taille="sm"
+            />
           </div>
           <LegendeMatrice />
         {:else if ongletActif === 'cibles'}
