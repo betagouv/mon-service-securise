@@ -91,3 +91,9 @@ nav.marges-fixes {
   margin: 0 auto;
   height: unset;
 }
+
+#menu-navigation-service {
+  height: 100%;
+  width: 235px;
+  min-width: 235px;
+}
