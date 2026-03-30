@@ -90,3 +90,12 @@ block page
             p.description= risque.intitule
             if risque.commentaire
               p.commentaire #[strong Commentaire :] #{risque.commentaire}
+
+      each risque in donneesRisques.risques.risquesSpecifiques
+        - const niveauDuRisque = niveauRisque(risque.gravite, risque.vraisemblance)
+        li.bloc-risque.bloc-indivisible
+          div(class=`identifiant-numerique ${niveauDuRisque}`) RS
+          .contenu-risque
+            p.description= risque.intitule
+            if risque.commentaire
+              p.commentaire #[strong Commentaire :] #{risque.commentaire}
