@@ -1,10 +1,16 @@
+<script module lang="ts">
+  export type DonneesServicePourTelechargementDocuments = {
+    id: string;
+    documentsPdfDisponibles: string[];
+  };
+</script>
+
 <script lang="ts">
-  import type { Service } from '../../tableauDeBord/tableauDeBord.d';
   import ContenuTiroir from './ContenuTiroir.svelte';
   import DocumentTelechargeable from './DocumentTelechargeable.svelte';
 
   interface Props {
-    service: Service;
+    service: DonneesServicePourTelechargementDocuments;
     modeVisiteGuidee?: boolean;
   }
 
