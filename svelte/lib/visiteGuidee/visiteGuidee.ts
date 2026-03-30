@@ -1,7 +1,7 @@
 import VisiteGuidee from './VisiteGuidee.svelte';
 import type { VisiteGuideeProps } from './visiteGuidee.d';
 import { utilisateurCourant, visiteGuidee } from './visiteGuidee.store';
-import MenuNavigation from './kit/MenuNavigation.svelte';
+import MenuNavigationVisiteGuidee from './kit/MenuNavigationVisiteGuidee.svelte';
 import { mount, unmount } from 'svelte';
 
 document.body.addEventListener(
@@ -14,7 +14,7 @@ let app: ReturnType<typeof mount>;
 const rechargeApp = async (props: VisiteGuideeProps) => {
   if (appMenuNavigation) await unmount(appMenuNavigation);
 
-  appMenuNavigation = mount(MenuNavigation, {
+  appMenuNavigation = mount(MenuNavigationVisiteGuidee, {
     target: document.getElementById('visite-guidee-menu-navigation')!,
     props: {
       nombreEtapesRestantes: props.nombreEtapesRestantes,
