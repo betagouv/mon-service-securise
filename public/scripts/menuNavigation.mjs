@@ -142,4 +142,21 @@ $(async () => {
   gestionnaireTiroir.brancheComportement();
   await tiroirContributeur(idService, modeVisiteGuidee).brancheComportement();
   tiroirTelechargement(idService).brancheComportement();
+
+  const autorisationsService = lisDonneesPartagees('autorisations-service');
+  const etapeActive = lisDonneesPartagees('etape-active');
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-menu-navigation-service', {
+      detail: {
+        etapeActive,
+        visible: {
+          contactsUtiles: !autorisationsService.CONTACTS.estMasque,
+          risques: !autorisationsService.RISQUES.estMasque,
+          descriptionService: !autorisationsService.DECRIRE.estMasque,
+          mesures: !autorisationsService.SECURISER.estMasque,
+          dossiers: !autorisationsService.HOMOLOGUER.estMasque,
+        },
+      },
+    })
+  );
 });

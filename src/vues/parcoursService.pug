@@ -3,7 +3,6 @@ include ./tiroirs/tiroir.pug
 
 block append styles
   link(href = '/statique/assets/styles/parcoursService.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/menuNavigation.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/tiroir.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
@@ -12,8 +11,11 @@ block append styles
 block append scripts
   script(type = 'module', src = '/statique/scripts/menuNavigation.mjs')
   script(type = 'module', id= 'bandeau-referentiel-v2', src = '/statique/service/bandeauReferentielV2.js' data-version-service=service.version())
+  +composantSvelte('menuNavigationService.js')
   +composantSvelte('gestionContributeurs.js')
   +composantSvelte('bandeauReferentielV2.js')
+  +donneesPartagees('autorisations-service', autorisationsService)
+  +donneesPartagees('etape-active', etapeActive)
 
 block header-gauche
   .conteneur-logo
@@ -24,7 +26,7 @@ block header-gauche
       a(href='/tableauDeBord' title='Retour au tableau de bord') Retour au tableau de bord
 
 block main
-  include ./fragments/menuNavigation
+  #menu-navigation-service
 
   .marges-fixes.page-service(data-id-service=service.id)
       .zone-principale
