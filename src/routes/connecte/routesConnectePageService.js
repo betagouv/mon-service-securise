@@ -268,6 +268,7 @@ const routesConnectePageService = ({
         InformationsService,
         referentiel,
         service,
+        etapeActive: 'risques',
         risquesV1: service.risques.toJSON(),
       });
     }
