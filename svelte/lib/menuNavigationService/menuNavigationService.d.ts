@@ -12,6 +12,7 @@ export type EtapeService =
   | 'dossiers';
 
 export type MenuNavigationServiceProps = {
+  idService: string;
   etapeActive: EtapeService;
   visible: Record<EtapeService, boolean>;
 };

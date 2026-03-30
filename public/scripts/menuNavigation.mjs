@@ -148,6 +148,7 @@ $(async () => {
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-menu-navigation-service', {
       detail: {
+        idService,
         etapeActive,
         visible: {
           contactsUtiles: !autorisationsService.CONTACTS.estMasque,
