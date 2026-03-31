@@ -14,8 +14,15 @@ block append scripts
   +composantSvelte('menuNavigationService.js')
   +composantSvelte('gestionContributeurs.js')
   +composantSvelte('bandeauReferentielV2.js')
+  +composantSvelte('entetePageService.js')
   +donneesPartagees('autorisations-service', autorisationsService)
   +donneesPartagees('etape-active', etapeActive)
+  +donneesPartagees('service', service)
+  +donneesPartagees('donnees-indice-cyber', {
+    indiceCyber: service.indiceCyber().total,
+    noteMax: referentiel.indiceCyberNoteMax()
+  })
+  +donneesPartagees('donnees-indice-cyber-personnalise', { indiceCyberPersonnalise: service.indiceCyberPersonnalise().total })
 
 block header-gauche
   .conteneur-logo
@@ -24,6 +31,9 @@ block header-gauche
     block header-titre-page
     .retour-tableau-de-bord
       a(href='/tableauDeBord' title='Retour au tableau de bord') Retour au tableau de bord
+
+block header-complementaire
+  #entete-page-service
 
 block main
   #menu-navigation-service
