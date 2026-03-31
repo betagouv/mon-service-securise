@@ -69,9 +69,7 @@
     padding: 24px 0;
 
     .les-boutons {
-      max-width: 1000px;
-      padding: 0 54px;
-      margin: 0 auto;
+      padding: 0 72px;
 
       display: flex;
       align-items: center;

@@ -27,7 +27,6 @@
 #tableau-des-mesures > .barre-filtres {
   order: 10;
   width: 50%;
-  padding-top: 24px;
   background: white;
   position: sticky;
   top: 0;
@@ -37,10 +36,6 @@
 #tableau-des-mesures > .tableau-des-mesures {
   order: 30;
   width: 100%;
-}
-
-.conteneur-page-formulaire {
-  max-width: 1200px;
 }
 
 .texte-tiroir {
