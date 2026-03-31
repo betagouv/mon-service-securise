@@ -281,8 +281,7 @@
   }
 
   .conteneur-alerte {
-    max-width: 1000px;
-    margin: 32px auto -8px;
+    margin: 0 72px;
 
     dsfr-alert {
       max-width: 792px;
