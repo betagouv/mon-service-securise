@@ -82,6 +82,7 @@
       {/if}
       <li>
         <button
+          id="voir-telechargement"
           class="lien-navigation"
           onclick={() =>
             tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {

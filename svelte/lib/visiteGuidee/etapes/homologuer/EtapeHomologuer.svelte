@@ -2,6 +2,9 @@
   import ModaleSousEtape from '../../kit/ModaleSousEtape.svelte';
   import { onMount } from 'svelte';
   import type { SousEtape } from '../../kit/ModaleSousEtape';
+  import TiroirTelechargementDocumentsService from '../../../ui/tiroirs/TiroirTelechargementDocumentsService.svelte';
+  import { tiroirStore } from '../../../ui/stores/tiroir.store';
+  import { donneesVisiteGuidee } from '../../../tableauDeBord/tableauDeBord';
 
   let cibleNouvelleHomologation: HTMLElement | undefined = $state();
   let cibleTelechargement: HTMLElement | undefined = $state();
@@ -33,15 +36,14 @@
       {
         cible: cibleTelechargement,
         callbackInitialeCible: async (cible) => {
-          document.body.dispatchEvent(
-            new CustomEvent(
-              'jquery-affiche-tiroir-telechargement-visite-guidee'
-            )
-          );
+          tiroirStore.afficheContenu(TiroirTelechargementDocumentsService, {
+            modeVisiteGuidee: true,
+            service: donneesVisiteGuidee.services[0],
+          });
           document.body.dispatchEvent(
             new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
           );
-          const tiroir = document.querySelector<HTMLDivElement>('.tiroir');
+          const tiroir = document.querySelector<HTMLDivElement>('#tiroir');
           if (tiroir) tiroir.style.zIndex = '10001';
           const boutonFermeture =
             document.querySelector<HTMLButtonElement>('.fermeture-tiroir');
@@ -49,9 +51,7 @@
           if (cible) cible.inert = true;
         },
         callbackFinaleCible: async () => {
-          document
-            .getElementsByClassName('fermeture-tiroir')[0]
-            .dispatchEvent(new Event('click'));
+          tiroirStore.ferme();
         },
         margeElementMisEnAvant: 3,
         positionnementModale: 'BasDroite',
