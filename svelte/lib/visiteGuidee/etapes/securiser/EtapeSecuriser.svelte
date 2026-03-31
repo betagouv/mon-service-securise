@@ -103,7 +103,7 @@
         callbackInitialeCible: async () => {
           document
             .getElementsByClassName('titre-mesure')[0]
-            .dispatchEvent(new Event('click'));
+            .dispatchEvent(new MouseEvent('click', { bubbles: true }));
           const bouton = document.querySelector<HTMLButtonElement>(
             '#conteneur-mesure .conteneur-actions button'
           );
@@ -121,7 +121,9 @@
             const ongletPlanAction = document.querySelector(
               '#conteneur-mesure .conteneur-onglet .onglet:nth-of-type(2)'
             );
-            ongletPlanAction?.dispatchEvent(new Event('click'));
+            ongletPlanAction?.dispatchEvent(
+              new MouseEvent('click', { bubbles: true })
+            );
           }, 300);
         },
         delaiAvantAffichage: 300,
@@ -141,7 +143,7 @@
         callbackInitialeCible: async () => {
           document
             .getElementsByClassName('titre-mesure')[0]
-            .dispatchEvent(new Event('click'));
+            .dispatchEvent(new MouseEvent('click', { bubbles: true }));
           const bouton = document.querySelector<HTMLButtonElement>(
             '#conteneur-mesure .conteneur-actions button'
           );
@@ -159,7 +161,9 @@
             const ongletActivites = document.querySelector(
               '#conteneur-mesure .conteneur-onglet .onglet:nth-of-type(3)'
             );
-            ongletActivites?.dispatchEvent(new Event('click'));
+            ongletActivites?.dispatchEvent(
+              new MouseEvent('click', { bubbles: true })
+            );
           }, 300);
         },
         delaiAvantAffichage: 300,
