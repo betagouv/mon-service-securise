@@ -160,4 +160,23 @@ $(async () => {
       },
     })
   );
+
+  const service = lisDonneesPartagees('service');
+  const { indiceCyber, noteMax } = lisDonneesPartagees('donnees-indice-cyber');
+  const { indiceCyberPersonnalise } = lisDonneesPartagees(
+    'donnees-indice-cyber-personnalise'
+  );
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-entete-page-service', {
+      detail: {
+        idService,
+        nomService: service.descriptionService.nomService,
+        organisationResponsable:
+          service.descriptionService.organisationResponsable.nom,
+        indiceCyber,
+        indiceCyberPersonnalise,
+        noteMax,
+      },
+    })
+  );
 });
