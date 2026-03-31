@@ -17,8 +17,8 @@
     </p>
     <p>
       Il fait évoluer le formulaire de création d'un service (nouvelles
-      questions). <br />
-      Visualisez les changements (mesures, indice cyber) avant d’opérer le changement.
+      questions). Visualisez les changements (mesures, indice cyber) avant
+      d’opérer le changement.
     </p>
   </div>
   <div class="conteneur-actions">
@@ -43,14 +43,15 @@
 <style lang="scss">
   .conteneur-bandeau-referentiel-v2 {
     background-color: #e8edff;
-    padding: 16px 24px;
+    padding: 12px 24px;
     display: flex;
     flex-direction: row;
     gap: 24px;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .conteneur-info {
-    margin-left: 76px;
     text-align: left;
     color: #0063cb;
 
@@ -85,6 +86,10 @@
     flex-direction: row;
     gap: 24px;
     align-items: center;
+
+    & > * {
+      white-space: nowrap;
+    }
   }
 
   button {
