@@ -22,10 +22,6 @@ block append scripts
   +donneesPartagees('avec-risques-v2', featureFlags.avecRisquesV2)
   +donneesPartagees('affiche-modale-risques-v2', afficheExplicationRisquesV2)
 
-block header-titre-page
-  h3
-    +texteTronque({texte: service.nomService() || ''})
-
 block titre
   h1 Sécuriser
 
