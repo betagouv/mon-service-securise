@@ -150,6 +150,7 @@ $(async () => {
       detail: {
         idService,
         etapeActive,
+        modeVisiteGuidee,
         visible: {
           contactsUtiles: !autorisationsService.CONTACTS.estMasque,
           risques: !autorisationsService.RISQUES.estMasque,
@@ -169,7 +170,7 @@ $(async () => {
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-entete-page-service', {
       detail: {
-        idService,
+        idService: modeVisiteGuidee ? undefined : idService,
         nomService: service.descriptionService.nomService,
         organisationResponsable:
           service.descriptionService.organisationResponsable.nom,
