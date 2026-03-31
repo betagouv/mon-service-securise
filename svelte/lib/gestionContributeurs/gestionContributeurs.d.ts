@@ -24,6 +24,8 @@ export type Service = {
   nomService: string;
 };
 
+export type DonneesServicePourTiroirContributeurs = Service;
+
 export type IdUtilisateur = string;
 
 export type Utilisateur = {
