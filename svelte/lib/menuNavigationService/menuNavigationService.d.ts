@@ -15,4 +15,5 @@ export type MenuNavigationServiceProps = {
   idService: string;
   etapeActive: EtapeService;
   visible: Record<EtapeService, boolean>;
+  modeVisiteGuidee: boolean;
 };

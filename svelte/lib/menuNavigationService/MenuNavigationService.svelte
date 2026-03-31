@@ -8,13 +8,20 @@
   import TiroirGestionContributeurs from '../ui/tiroirs/TiroirGestionContributeurs.svelte';
   import type { DonneesServicePourTiroirContributeurs } from '../gestionContributeurs/gestionContributeurs.d';
 
-  let { visible, etapeActive, idService }: MenuNavigationServiceProps =
-    $props();
+  let {
+    visible,
+    etapeActive,
+    idService,
+    modeVisiteGuidee,
+  }: MenuNavigationServiceProps = $props();
 
   type ServicePourMenuNavigation = DonneesServicePourTelechargementDocuments &
     DonneesServicePourTiroirContributeurs;
   let service: ServicePourMenuNavigation;
   onMount(async () => {
+    if (modeVisiteGuidee) {
+      return;
+    }
     const reponse = await axios.get<ServicePourMenuNavigation>(
       `/api/service/${idService}`
     );
@@ -99,27 +106,30 @@
         </li>
       {/if}
     </ul>
-    <dsfr-button
-      label="Gérer les contributeurs"
-      kind="tertiary"
-      size="sm"
-      icon="group-line"
-      icon-place="left"
-      markup="button"
-      type="button"
-      has-icon
-      onclick={() =>
-        tiroirStore.afficheContenu(TiroirGestionContributeurs, {
-          services: [service],
-        })}
-    ></dsfr-button>
+    <div id="gerer-contributeurs">
+      <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+      <dsfr-button
+        label="Gérer les contributeurs"
+        kind="tertiary"
+        size="sm"
+        icon="group-line"
+        icon-place="left"
+        markup="button"
+        type="button"
+        has-icon
+        onclick={() =>
+          tiroirStore.afficheContenu(TiroirGestionContributeurs, {
+            services: [service],
+          })}
+      ></dsfr-button>
+    </div>
   </div>
 </div>
 
 <style lang="scss">
   .menu-navigation-service {
     width: 235px;
-    padding: 24px 32px 24px 24px;
+    padding: 24px 0 24px 24px;
     box-sizing: border-box;
     background: #fff;
     box-shadow: -1px 0 0 0 #ddd inset;
@@ -178,9 +188,13 @@
         }
       }
 
-      dsfr-button {
-        white-space: nowrap;
+      #gerer-contributeurs {
         margin-top: 60px;
+        width: fit-content;
+
+        dsfr-button {
+          white-space: nowrap;
+        }
       }
     }
   }
