@@ -13,11 +13,7 @@ $(() => {
   const estLectureSeule = lisDonneesPartagees('securiser-lecture-seule');
   const versionService = lisDonneesPartagees('version-service');
   const idService = $('.page-service').data('id-service');
-  const { indiceCyber, noteMax } = lisDonneesPartagees('indice-cyber');
   const etatVisiteGuidee = lisDonneesPartagees('etat-visite-guidee');
-  const { indiceCyberPersonnalise } = lisDonneesPartagees(
-    'indice-cyber-personnalise'
-  );
   const avecRisquesV2 = lisDonneesPartagees('avec-risques-v2');
   const afficheExplicationRisquesV2 = lisDonneesPartagees(
     'affiche-modale-risques-v2'
@@ -39,18 +35,6 @@ $(() => {
         modeVisiteGuidee: enVisiteGuidee(),
         versionService,
       },
-    })
-  );
-
-  document.body.dispatchEvent(
-    new CustomEvent('svelte-recharge-indice-cyber', {
-      detail: { indiceCyber, noteMax, idService },
-    })
-  );
-
-  document.body.dispatchEvent(
-    new CustomEvent('svelte-recharge-indice-cyber-personnalise', {
-      detail: { indiceCyberPersonnalise, noteMax, idService },
     })
   );
 

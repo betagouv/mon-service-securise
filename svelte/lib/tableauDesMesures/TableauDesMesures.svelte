@@ -492,6 +492,7 @@
     flex-direction: row;
     gap: 16px;
     align-items: flex-start;
+    margin-bottom: 32px;
   }
 
   .conteneur-recherche {
