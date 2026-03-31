@@ -3,10 +3,6 @@ include ../fragments/texteTronque
 include ../fragments/formulaireDescriptionService
 include ../fragments/avancementEtape
 
-block header-titre-page
-  h3
-    +texteTronque({texte: service.nomService() || ''})
-
 block sous-titre
   h2
     | Complétez les informations permettant d'évaluer les besoins de sécurité du service et de proposer&nbsp;

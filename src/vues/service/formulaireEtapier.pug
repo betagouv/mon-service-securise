@@ -9,10 +9,6 @@ block append styles
 block append scripts
   +donneesPartagees('autorisations-homologuer', autorisationsService.HOMOLOGUER)
 
-block header-titre-page
-  h3
-    +texteTronque({texte: service.nomService() || ''})
-
 block titre
   if idEtape
     h1= referentiel.libelleEtape(idEtape)
