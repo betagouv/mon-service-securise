@@ -271,20 +271,13 @@
     max-width: unset;
   }
 
-  :global(.conteneur-avec-cadre) {
-    max-width: 950px !important;
-  }
-
   .conteneur-resume,
   .conteneur-besoins-securite {
     text-align: left;
     display: flex;
     flex-direction: column;
     gap: 24px;
-
-    max-width: 1000px;
-    padding: 0 54px;
-    margin: 24px auto;
+    margin: 24px 24px 32px 72px;
   }
 
   .conteneur-alerte {
