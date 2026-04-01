@@ -495,12 +495,12 @@ describe("Un dossier d'homologation", () => {
         },
         statutsAvisDossierHomologation: { favorable: {} },
       });
-      const dossierExpirantDans60Jours = unDossier(referentiel)
+      const dossierExpirantDansPlusDe2Mois = unDossier(referentiel)
         .quiEstComplet()
-        .quiVaExpirer(60, 'sixMois')
+        .quiVaExpirer(65, 'sixMois')
         .construit();
 
-      expect(dossierExpirantDans60Jours.estBientotExpire()).toBe(false);
+      expect(dossierExpirantDansPlusDe2Mois.estBientotExpire()).toBe(false);
     });
 
     it("retourne 'false' si la date de fin est déjà passée", () => {
