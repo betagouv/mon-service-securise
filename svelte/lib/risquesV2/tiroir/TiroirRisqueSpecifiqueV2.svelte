@@ -311,7 +311,9 @@
       {/if}
       <!-- svelte-ignore a11y_click_events_have_key_events,a11y_no_static_element_interactions -->
       <dsfr-button
-        label={estModification ? 'Enregistrer le risque' : 'Ajouter le risque'}
+        label={estModification
+          ? 'Enregistrer les modifications'
+          : 'Ajouter le risque'}
         kind="primary"
         size="md"
         has-icon
