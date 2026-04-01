@@ -141,8 +141,8 @@
       top: 0;
 
       ul {
+        padding: 0 32px 0 0;
         list-style: none;
-        padding: 0;
         margin: 0;
 
         li {
