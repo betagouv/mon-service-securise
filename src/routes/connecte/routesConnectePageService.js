@@ -1,6 +1,5 @@
 import express from 'express';
 import { z } from 'zod';
-import InformationsService from '../../modeles/informationsService.js';
 import {
   Permissions,
   premiereRouteDisponible,
@@ -70,7 +69,6 @@ const routesConnectePageService = ({
           : 'service/descriptionService';
 
       reponse.render(template, {
-        InformationsService,
         referentiel,
         service,
         etapeActive: 'descriptionService',
@@ -94,7 +92,6 @@ const routesConnectePageService = ({
       const mesures = moteurRegles.mesures(service.descriptionService);
 
       reponse.render('service/mesures', {
-        InformationsService,
         referentiel,
         service,
         etapeActive: 'mesures',
@@ -197,7 +194,6 @@ const routesConnectePageService = ({
       const referentielConcernes =
         referentiel.formatteListeDeReferentiels(referentiels);
       reponse.render('service/indiceCyber', {
-        InformationsService,
         service,
         etapeActive: 'mesures',
         referentiel,
@@ -214,7 +210,6 @@ const routesConnectePageService = ({
     (requete, reponse) => {
       const { service } = requete;
       reponse.render('service/rolesResponsabilites', {
-        InformationsService,
         service,
         etapeActive: 'contactsUtiles',
         referentiel,
@@ -234,7 +229,6 @@ const routesConnectePageService = ({
         .map((id) => risquesGeneraux.find((r) => r.id === id) || { id })
         .map((donnees) => new RisqueGeneral(donnees, referentiel).toJSON());
       reponse.render('service/risques', {
-        InformationsService,
         referentiel,
         service,
         donneesRisques: {
@@ -265,7 +259,6 @@ const routesConnectePageService = ({
       }
 
       reponse.render('service/risquesV2', {
-        InformationsService,
         referentiel,
         service,
         etapeActive: 'risques',
@@ -288,7 +281,6 @@ const routesConnectePageService = ({
         ) && service.dossiers.aUnDossierEnCoursDeValidite();
 
       reponse.render('service/dossiers', {
-        InformationsService,
         service,
         etapeActive: 'dossiers',
         premiereEtapeParcours: referentiel.premiereEtapeParcours(),
@@ -328,7 +320,6 @@ const routesConnectePageService = ({
         }
 
         reponse.render(`service/etapeDossier/${idEtape}`, {
-          InformationsService,
           referentiel,
           service: s,
           etapeActive: 'dossiers',
