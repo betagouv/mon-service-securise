@@ -20,11 +20,10 @@ header a {
   color: var(--bleu-anssi);
 }
 
-header nav,
 .utilisateur-courant {
   display: flex;
-  column-gap: 0.4em;
   align-items: center;
+  gap: 8px;
 }
 
 header nav {
@@ -101,11 +100,4 @@ header nav a {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-}
-
-.utilisateur-courant {
-  position: relative;
-  cursor: pointer;
-  border: none;
-  background: transparent;
 }

@@ -332,3 +332,9 @@ section:last-of-type {
   text-align: left;
   height: 100%;
 }
+
+.conteneur-outils-entete {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
