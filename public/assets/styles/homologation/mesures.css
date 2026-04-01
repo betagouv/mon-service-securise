@@ -7,23 +7,6 @@
   flex-wrap: wrap;
 }
 
-#tableau-des-mesures > .conteneur-indicateurs {
-  order: 20;
-  background-color: white;
-  margin: 0;
-  width: 50%;
-  z-index: 1;
-  justify-content: flex-end;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  position: sticky;
-  top: 0;
-  right: 0;
-  padding-top: 25px;
-  padding-bottom: 25px;
-}
-
 #tableau-des-mesures > .barre-filtres {
   order: 10;
   width: 50%;
