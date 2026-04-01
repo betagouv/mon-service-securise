@@ -265,14 +265,4 @@ a.nouvel-onglet {
     justify-content: space-between;
     max-width: 1200px;
   }
-
-  footer nav ul {
-    width: 1200px;
-    margin: 0 auto;
-  }
-
-  footer nav ul li:first-of-type a {
-    margin-left: 0;
-    padding-left: 0;
-  }
 }
