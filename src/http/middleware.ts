@@ -340,17 +340,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     suite();
   };
 
-  const chargePreferencesUtilisateur: RequestHandler = (
-    requete,
-    reponse,
-    suite
-  ) => {
-    reponse.locals.preferencesUtilisateur = {
-      etatMenuNavigation: requete.cookies['etat-menu-navigation'],
-    };
-    suite();
-  };
-
   const chargeAutorisationsService = (
     requete: RequeteMSS,
     reponse: Response,
@@ -496,7 +485,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
     chargeExplicationRisquesV2,
     chargeExplicationUtilisationMFA,
     chargeFeatureFlags,
-    chargePreferencesUtilisateur,
     chargeTypeRequete,
     filtreIpAutorisees,
     interdisLaMiseEnCache,

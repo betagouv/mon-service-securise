@@ -56,7 +56,6 @@ const routesConnectePageService = ({
     '/:id/descriptionService',
     middleware.trouveService({ [DECRIRE]: LECTURE }),
     middleware.chargeAutorisationsService,
-    middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { service } = requete;
 
@@ -84,7 +83,6 @@ const routesConnectePageService = ({
     '/:id/mesures',
     middleware.trouveService({ [SECURISER]: LECTURE }),
     middleware.chargeAutorisationsService,
-    middleware.chargePreferencesUtilisateur,
     middleware.chargeExplicationRisquesV2,
     async (requete, reponse) => {
       const { service } = requete;
@@ -185,7 +183,6 @@ const routesConnectePageService = ({
     '/:id/indiceCyber',
     middleware.trouveService(Autorisation.DROITS_VOIR_INDICE_CYBER),
     middleware.chargeAutorisationsService,
-    middleware.chargePreferencesUtilisateur,
     async (requete, reponse) => {
       const { service } = requete;
       const referentiels = Object.entries(
@@ -206,7 +203,6 @@ const routesConnectePageService = ({
     '/:id/rolesResponsabilites',
     middleware.trouveService({ [CONTACTS]: LECTURE }),
     middleware.chargeAutorisationsService,
-    middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { service } = requete;
       reponse.render('service/rolesResponsabilites', {
@@ -221,7 +217,6 @@ const routesConnectePageService = ({
     '/:id/risques',
     middleware.trouveService({ [RISQUES]: LECTURE }),
     middleware.chargeAutorisationsService,
-    middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { service } = requete;
       const { risquesGeneraux, risquesSpecifiques } = service.risques.toJSON();
@@ -244,7 +239,6 @@ const routesConnectePageService = ({
     '/:id/risques/v2',
     middleware.trouveService({ [RISQUES]: LECTURE }),
     middleware.chargeAutorisationsService,
-    middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       if (!adaptateurEnvironnement.featureFlag().avecRisquesV2()) {
         reponse.sendStatus(404);
@@ -271,7 +265,6 @@ const routesConnectePageService = ({
     '/:id/dossiers',
     middleware.trouveService({ [HOMOLOGUER]: LECTURE }),
     middleware.chargeAutorisationsService,
-    middleware.chargePreferencesUtilisateur,
     (requete, reponse) => {
       const { service, autorisationService } = requete;
 
@@ -294,7 +287,6 @@ const routesConnectePageService = ({
     '/:id/homologation/edition/etape/:idEtape',
     middleware.trouveService({ [HOMOLOGUER]: LECTURE }),
     middleware.chargeAutorisationsService,
-    middleware.chargePreferencesUtilisateur,
     async (requete, reponse, suite) => {
       const { service, autorisationService } = requete;
       const { idEtape } = requete.params;
