@@ -16,6 +16,7 @@ main {
   font-weight: normal;
   text-align: left;
   margin: 12px 0 0 0;
+  max-width: 750px;
 }
 
 .marges-fixes {
