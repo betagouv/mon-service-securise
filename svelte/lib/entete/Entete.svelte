@@ -11,8 +11,29 @@
 </script>
 
 {#if !connecte}
-  <a href="/inscription" class="inscription">Inscription</a>
-  <a href="/connexion" class="connexion">Connexion</a>
+  <dsfr-button
+    label="S'inscrire"
+    kind="tertiary-no-outline"
+    size="sm"
+    markup="a"
+    type="button"
+    href="/inscription"
+    target="self"
+    data-themeable="false"
+  ></dsfr-button>
+  <dsfr-button
+    label="Se connecter"
+    kind="tertiary-no-outline"
+    size="sm"
+    markup="a"
+    type="button"
+    href="/connexion"
+    target="self"
+    data-themeable="false"
+    has-icon
+    icon-place="left"
+    icon="account-circle-fill"
+  ></dsfr-button>
 {:else}
   <button
     class="nom-utilisateur-courant"

@@ -326,3 +326,9 @@ section:last-of-type {
   line-height: 1.25rem;
   color: var(--texte-fonce);
 }
+
+.conteneur-outils-entete {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
