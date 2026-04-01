@@ -123,7 +123,7 @@
           color: #fff;
           font-size: 0.875rem;
           font-weight: bold;
-          line-height: 1.5rem;
+          line-height: 1rem;
           display: flex;
           align-items: center;
           justify-content: center;
