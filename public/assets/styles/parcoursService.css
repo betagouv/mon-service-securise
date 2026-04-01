@@ -3,18 +3,19 @@ main {
 }
 
 .titre h1 {
-  font-size: 22px;
-  line-height: 28px;
+  font-size: 1.75rem;
+  line-height: 2.25rem;
   font-weight: bold;
   text-align: left;
   margin: 0 0 8px 0;
 }
 
 .sous-titre h2 {
-  line-height: 24px;
-  font-size: 16px;
+  font-size: 1rem;
+  line-height: 1.5rem;
   font-weight: normal;
   text-align: left;
+  margin: 12px 0 0 0;
 }
 
 .marges-fixes {
@@ -24,37 +25,28 @@ main {
 }
 
 .conteneur-entete {
-  background-color: var(--bleu-mise-en-avant);
-  padding: 32px 0;
-  color: white;
-}
-
-.conteneur-entete .titre,
-.conteneur-entete .sous-titre,
-.conteneur-page-formulaire {
-  margin-left: 100px;
-  margin-right: 62px;
+  background-color: white;
+  padding: 32px 24px 0 72px;
+  color: #161616;
+  margin-bottom: 24px;
 }
 
 .conteneur-page-formulaire {
-  max-width: 1000px;
-  padding: 0 54px;
+  padding: 0 72px 32px;
   background: white;
-  margin: 24px auto;
 }
 
 .zone-principale {
   padding: 0;
-  background: var(--fond-pale);
+  background: white;
   height: 100%;
 }
 
 .avancement-etape {
   text-align: left;
-  margin-left: 100px;
-  margin-right: 62px;
-  font-size: 14px;
-  padding-bottom: 4px;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  color: #666;
 }
 
 .avancement-etape p {
@@ -66,28 +58,35 @@ main {
   width: 588px;
   display: flex;
   gap: 6px;
-  margin: 12px 62px 16px 100px;
-}
-
-.conteneur-etapier a.etape,
-.conteneur-etapier .etape.active {
-  opacity: 1;
+  margin: 12px 0;
 }
 
 .conteneur-etapier .etape {
   height: 8px;
-  background-color: white;
-  opacity: 0.5;
+  background-color: #eeeeee;
   text-decoration: none;
   flex: 1;
 }
 
+.conteneur-etapier a.etape,
 .conteneur-etapier .etape.active {
   cursor: pointer;
+  background-color: var(--bleu-mise-en-avant);
 }
 
 nav.marges-fixes {
   width: 1200px;
   margin: 0 auto;
   height: unset;
+}
+
+#menu-navigation-service {
+  height: 100%;
+  width: 235px;
+  min-width: 235px;
+}
+
+#entete-page-service {
+  height: 136px;
+  min-height: 136px;
 }

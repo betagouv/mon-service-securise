@@ -5,7 +5,7 @@ include fragments/donneesPartagees
 block variables
 
 block page
-  - const UI_KIT_VERSION = '1.44.6';
+  - const UI_KIT_VERSION = '1.44.9';
   block scripts
     script(src='/statique/bibliotheques/axios-1.0.0.min.js')
     script(src='/statique/bibliotheques/jquery-3.6.0.min.js')
@@ -30,6 +30,22 @@ block page
   title MonServiceSécurisé
 
   block header
+    dsfr-header(
+      id="dsfr-header"
+      brand-link-href="/",
+      has-brand-operator,
+      brand-operator-src="/statique/assets/images/logo_ANSSI_MSS.svg",
+      brand-operator-alt="MonServiceSécurisé",
+      brand-operator-style="height:100px;",
+      brand-link-title="Retour à l'accueil du site MonServiceSécurisé - République Française",
+      has-tool-links,
+      menu-id='boutonMenu'
+    )
+      .conteneur-outils-entete(slot="toolLinks")
+        if featureFlags.avecBandeauMSC
+          lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
+        .utilisateur-courant
+
     header(class=(classeDuHeader))
       .header-gauche.fr-header__brand
         block header-gauche
@@ -62,6 +78,7 @@ block page
           span Une maintenance est prévue #{diffFormatee} (#{jourFormate}) sur MonServiceSécurisé, #{avertissementMaintenance.heure}.
           br
           span La plateforme sera inaccessible. Nous nous excusons pour la gêne occasionée.
+    block header-complementaire
 
 
   block session

@@ -25,8 +25,7 @@
   .conteneur-onglets {
     display: flex;
     flex-direction: row;
-    max-width: 1000px;
-    margin: 24px auto 0;
+    margin: 24px 24px 0 72px;
     border-bottom: 2px solid #ddd;
 
     button {

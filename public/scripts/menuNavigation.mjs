@@ -142,4 +142,42 @@ $(async () => {
   gestionnaireTiroir.brancheComportement();
   await tiroirContributeur(idService, modeVisiteGuidee).brancheComportement();
   tiroirTelechargement(idService).brancheComportement();
+
+  const autorisationsService = lisDonneesPartagees('autorisations-service');
+  const etapeActive = lisDonneesPartagees('etape-active');
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-menu-navigation-service', {
+      detail: {
+        idService,
+        etapeActive,
+        modeVisiteGuidee,
+        visible: {
+          contactsUtiles: !autorisationsService.CONTACTS.estMasque,
+          risques: !autorisationsService.RISQUES.estMasque,
+          descriptionService: !autorisationsService.DECRIRE.estMasque,
+          mesures: !autorisationsService.SECURISER.estMasque,
+          dossiers: !autorisationsService.HOMOLOGUER.estMasque,
+        },
+      },
+    })
+  );
+
+  const service = lisDonneesPartagees('service');
+  const { indiceCyber, noteMax } = lisDonneesPartagees('donnees-indice-cyber');
+  const { indiceCyberPersonnalise } = lisDonneesPartagees(
+    'donnees-indice-cyber-personnalise'
+  );
+  document.body.dispatchEvent(
+    new CustomEvent('svelte-recharge-entete-page-service', {
+      detail: {
+        idService: modeVisiteGuidee ? undefined : idService,
+        nomService: service.descriptionService.nomService,
+        organisationResponsable:
+          service.descriptionService.organisationResponsable.nom,
+        indiceCyber,
+        indiceCyberPersonnalise,
+        noteMax,
+      },
+    })
+  );
 });

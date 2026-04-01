@@ -11,8 +11,29 @@
 </script>
 
 {#if !connecte}
-  <a href="/inscription" class="inscription">Inscription</a>
-  <a href="/connexion" class="connexion">Connexion</a>
+  <dsfr-button
+    label="S'inscrire"
+    kind="tertiary-no-outline"
+    size="sm"
+    markup="a"
+    type="button"
+    href="/inscription"
+    target="self"
+    data-themeable="false"
+  ></dsfr-button>
+  <dsfr-button
+    label="Se connecter"
+    kind="tertiary-no-outline"
+    size="sm"
+    markup="a"
+    type="button"
+    href="/connexion"
+    target="self"
+    data-themeable="false"
+    has-icon
+    icon-place="left"
+    icon="account-circle-fill"
+  ></dsfr-button>
 {:else}
   <button
     class="nom-utilisateur-courant"
@@ -28,7 +49,19 @@
     </div>
   {/if}
 
-  <a class="deconnexion" href="/deconnexion">Se déconnecter</a>
+  <dsfr-button
+    label="Se déconnecter"
+    kind="tertiary-no-outline"
+    size="sm"
+    markup="a"
+    type="button"
+    href="/deconnexion"
+    target="self"
+    data-themeable="false"
+    has-icon
+    icon-place="left"
+    icon="logout-box-r-line"
+  ></dsfr-button>
 {/if}
 
 <style lang="scss">
@@ -36,44 +69,6 @@
     border: none;
     background: none;
     cursor: pointer;
-  }
-
-  .inscription {
-    @media screen and (max-width: 1247px) {
-      width: 100%;
-    }
-  }
-
-  .connexion {
-    display: flex;
-    align-items: center;
-    padding-left: 0.5em;
-    border: 1px solid var(--systeme-design-etat-bleu);
-    border-radius: 0.35em;
-
-    &:before {
-      width: 1.3em;
-      height: 1.1em;
-      margin-right: 8px;
-      content: '';
-      background-color: var(--systeme-design-etat-bleu);
-      -webkit-mask: url('/statique/assets/images/icone_utilisateur.svg')
-        no-repeat center;
-      mask: url('/statique/assets/images/icone_utilisateur.svg') no-repeat
-        center;
-      -webkit-mask-size: contain;
-      mask-size: contain;
-    }
-
-    @media screen and (max-width: 1247px) {
-      border-top: 0;
-      border-right: 0;
-      border-left: 0;
-      border-radius: 0;
-      border-bottom: 1px var(--liseres) solid;
-      width: 100%;
-      margin-top: 0;
-    }
   }
 
   .menu {
@@ -93,31 +88,6 @@
       color: var(--systeme-design-etat-bleu);
       font-size: 0.9em;
       text-align: left;
-    }
-  }
-
-  .deconnexion {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    color: var(--systeme-design-etat-bleu);
-
-    &:before {
-      content: '';
-      width: 24px;
-      height: 24px;
-      margin-right: 8px;
-      -webkit-mask: url('/statique/assets/images/icone_deconnecter.svg')
-        no-repeat center;
-      mask: url('/statique/assets/images/icone_deconnecter.svg') no-repeat
-        center;
-      -webkit-mask-size: contain;
-      mask-size: contain;
-      background-color: var(--systeme-design-etat-bleu);
-    }
-
-    @media screen and (max-width: 1247px) {
-      width: 100%;
     }
   }
 

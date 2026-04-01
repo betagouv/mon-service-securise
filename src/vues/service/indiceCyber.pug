@@ -26,10 +26,6 @@ block sous-titre
     b indice cyber personnalisé&nbsp;
     | de votre service
 
-block header-titre-page
-  h3
-    +texteTronque({ texte: service.nomService() || '' })
-
 mixin contenuIndiceCyber(idCible, titre, donneesIndiceCyber, noteMax, donneesTrancheIndiceCyber, referentiel, avecRecommandationANSSI)
   .conteneur-descriptif
     .disque-indice

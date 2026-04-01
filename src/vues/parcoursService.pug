@@ -3,7 +3,6 @@ include ./tiroirs/tiroir.pug
 
 block append styles
   link(href = '/statique/assets/styles/parcoursService.css', rel = 'stylesheet')
-  link(href = '/statique/assets/styles/menuNavigation.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/tiroir.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
   link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
@@ -12,25 +11,38 @@ block append styles
 block append scripts
   script(type = 'module', src = '/statique/scripts/menuNavigation.mjs')
   script(type = 'module', id= 'bandeau-referentiel-v2', src = '/statique/service/bandeauReferentielV2.js' data-version-service=service.version())
+  +composantSvelte('menuNavigationService.js')
   +composantSvelte('gestionContributeurs.js')
   +composantSvelte('bandeauReferentielV2.js')
+  +composantSvelte('entetePageService.js')
+  +donneesPartagees('autorisations-service', autorisationsService)
+  +donneesPartagees('etape-active', etapeActive)
+  +donneesPartagees('service', service)
+  +donneesPartagees('donnees-indice-cyber', {
+    indiceCyber: service.indiceCyber().total,
+    noteMax: referentiel.indiceCyberNoteMax()
+  })
+  +donneesPartagees('donnees-indice-cyber-personnalise', { indiceCyberPersonnalise: service.indiceCyberPersonnalise().total })
 
 block header-gauche
-  .conteneur-logo
-    a.logo-mss(href='/tableauDeBord' title='Retour au tableau de bord')
-  .titre-page
-    block header-titre-page
-    .retour-tableau-de-bord
-      a(href='/tableauDeBord' title='Retour au tableau de bord') Retour au tableau de bord
+  .bloc-marque
+    .marianne
+    .republique-francaise RÉPUBLIQUE<br>FRANÇAISE
+    .devise
+  a.logo-anssi(href='https://cyber.gouv.fr')
+  a.logo-mss(href='/tableauDeBord')
+
+block header-complementaire
+  #conteneur-bandeau-referentiel-v2
+  #entete-page-service
 
 block main
-  include ./fragments/menuNavigation
+  #menu-navigation-service
 
   .marges-fixes.page-service(data-id-service=service.id)
       .zone-principale
         block zone-principale
           .formulaire
-            #conteneur-bandeau-referentiel-v2
             .conteneur-entete
               .avancement-etape
                 block avancement-etape

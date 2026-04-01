@@ -5,6 +5,7 @@ import InformationsService from '../../modeles/informationsService.js';
 import routesConnectePageService from './routesConnectePageService.js';
 import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 import { VersionService } from '../../modeles/versionService.js';
+import Entite from '../../modeles/entite.js';
 
 const routesConnectePage = ({
   middleware,
@@ -106,6 +107,10 @@ const routesConnectePage = ({
       const service = Service.creePourUnUtilisateur(utilisateurVisiteGuidee);
       service.id = 'ID-SERVICE-VISITE-GUIDEE';
       service.descriptionService.niveauSecurite = 'niveau2';
+      service.descriptionService.nomService = 'Nom de mon service';
+      service.descriptionService.organisationResponsable = new Entite({
+        nom: 'Nom de mon entité',
+      });
       service.versionService = VersionService.v2;
 
       const { idEtape } = requete.params;

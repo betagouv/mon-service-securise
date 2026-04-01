@@ -10,8 +10,6 @@ block append styles
 block append scripts
   +composantSvelte('mesure.js')
   +composantSvelte('tableauDesMesures.js')
-  +composantSvelte('indiceCyber.js')
-  +composantSvelte('indiceCyberPersonnalise.js')
   script(type = 'module', src = '/statique/service/mesures.mjs')
 
   +donneesPartagees('referentiel-categories-mesures', referentiel.categoriesMesures())
@@ -19,16 +17,10 @@ block append scripts
   +donneesPartagees('referentiel-priorites-mesures', referentiel.prioritesMesures())
   +donneesPartagees('referentiel-retours-utilisateur', referentiel.retoursUtilisateurMesure())
   +donneesPartagees('securiser-lecture-seule', autorisationsService.SECURISER.estLectureSeule)
-  +donneesPartagees('indice-cyber', { indiceCyber: service.indiceCyber().total, noteMax: referentiel.indiceCyberNoteMax()})
-  +donneesPartagees('indice-cyber-personnalise', { indiceCyberPersonnalise: service.indiceCyberPersonnalise().total })
   +donneesPartagees('version-service', service.version())
   +donneesPartagees('nonce-commentaires', nonce)
   +donneesPartagees('avec-risques-v2', featureFlags.avecRisquesV2)
   +donneesPartagees('affiche-modale-risques-v2', afficheExplicationRisquesV2)
-
-block header-titre-page
-  h3
-    +texteTronque({texte: service.nomService() || ''})
 
 block titre
   h1 Sécuriser
@@ -38,20 +30,3 @@ block sous-titre
 
 block formulaire
   #tableau-des-mesures
-    .conteneur-indicateurs
-      .conteneur-indice-cyber
-        .cartouche-indice-cyber
-          span Indice cyber&nbsp;
-          span
-            b ANSSI&nbsp;&nbsp;
-          br
-          a.lien-indice-cyber(href="indiceCyber?onglet=indice-cyber-ANSSI") Voir le détail
-        #conteneur-indice-cyber
-      .conteneur-indice-cyber.personnalise
-        .cartouche-indice-cyber.personnalise
-          span Indice cyber&nbsp;
-          span
-            b personnalisé&nbsp;&nbsp;
-          br
-          a.lien-indice-cyber(href="indiceCyber?onglet=indice-cyber-personnalise") Voir le détail
-        #conteneur-indice-cyber-personnalise

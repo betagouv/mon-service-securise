@@ -2,10 +2,6 @@
   background: white;
 }
 
-.conteneur-page-formulaire {
-  max-width: 1200px;
-}
-
 .homologation hr {
   display: none;
 }
@@ -21,6 +17,10 @@
   padding: 14px 16px;
   position: relative;
   pointer-events: none;
+}
+
+.homologation .dossiers {
+  margin-top: -24px;
 }
 
 .homologation .dossier:not(.dossier-courant) {
