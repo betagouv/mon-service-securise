@@ -1,0 +1,27 @@
+mixin footer(connecte =  false)
+  -
+    const descriptionFooter = "MonServiceSécurisé aide les entités publiques à sécuriser et homologuer leurs services publics numériques :" +
+            " site web, applications mobiles, API. " +
+            "<br><br>Il est développé par l'<dsfr-link label=\"Agence nationale de la sécurité des systèmes d'information\" size='sm' href='https://cyber.gouv.fr' title=\"Site de l'ANSSI\" blank></dsfr-link>, " +
+            "en lien avec <dsfr-link label='BetaGouv' size='sm' href='https://beta.gouv.fr' title='Site de BetaGouv' blank></dsfr-link> et la " +
+            "<dsfr-link label='Direction interministérielle du numérique' size='sm' href='https://www.numerique.gouv.fr/dinum' title='Site de la DINUM' blank></dsfr-link>."
+    const liens = [
+      { markup:"a", href: '/aPropos', label: "À propos" },
+      { markup:"a", href: '/mentionsLegales', label: "Mentions légales" },
+      { markup:"a", href: '/confidentialite', label: "Politique de confidentialité" },
+      { markup:"a", href: '/cgu', label: "Conditions générales" },
+      { markup:"a", href: '/statistiques', label: "Statistiques d'utilisation" },
+      { markup:"a", href: '/securite', label: "Sécurité" },
+      { markup:"a", href: '/accessibilite', label: "Accessibilité : non conforme" },
+    ]
+  dsfr-footer(
+    id="footer"
+    content-description=descriptionFooter
+    brand-logo-title="République<br>Française"
+    brand-link-id="brand-link"
+    brand-link-href="/"
+    brand-link-title="Retour à l'accueil du site - MonServiceSécurisé - République Française"
+    bottom-links=JSON.stringify(liens)
+    has-description
+    compact=connecte
+  )
