@@ -23,12 +23,22 @@
     bloqueScroll();
   };
 
+  let scrollY = $state(0);
+
   const bloqueScroll = () => {
+    scrollY = window.scrollY;
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
   };
 
   const debloqueScroll = () => {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
     document.body.style.overflow = '';
+    window.scrollTo({ top: scrollY, behavior: 'instant' });
   };
 
   onDestroy(() => debloqueScroll());
