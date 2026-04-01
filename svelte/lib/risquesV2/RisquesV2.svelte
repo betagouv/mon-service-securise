@@ -327,8 +327,7 @@
     }
 
     h2 {
-      margin: 0px;
-      margin-bottom: 8px;
+      margin: 0 0 8px;
       font-size: 1.25rem;
       line-height: 1.75rem;
       color: black;
@@ -336,6 +335,7 @@
 
     .sous-titre {
       margin-bottom: 24px;
+      max-width: 750px;
     }
   }
   dsfr-transcription {
