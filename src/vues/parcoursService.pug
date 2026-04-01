@@ -17,7 +17,10 @@ block append scripts
   +composantSvelte('entetePageService.js')
   +donneesPartagees('autorisations-service', autorisationsService)
   +donneesPartagees('etape-active', etapeActive)
-  +donneesPartagees('service', service)
+  -
+    const nomService = service.nomService();
+    const nomOrganisationResponsable = service.descriptionService?.organisationResponsable?.nom ?? '';
+  +donneesPartagees('service', { nomService, nomOrganisationResponsable })
   +donneesPartagees('donnees-indice-cyber', {
     indiceCyber: service.indiceCyber().total,
     noteMax: referentiel.indiceCyberNoteMax()
