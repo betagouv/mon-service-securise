@@ -1,7 +1,6 @@
 import express from 'express';
 import Utilisateur from '../../modeles/utilisateur.js';
 import Service from '../../modeles/service.js';
-import InformationsService from '../../modeles/informationsService.js';
 import routesConnectePageService from './routesConnectePageService.js';
 import { questionsV2 } from '../../../donneesReferentielMesuresV2.js';
 import { VersionService } from '../../modeles/versionService.js';
@@ -142,7 +141,6 @@ const routesConnectePage = ({
         service.indiceCyber = () => ({ total: 4.3 });
         service.indiceCyberPersonnalise = () => ({ total: 4.6 });
         reponse.render('service/mesures', {
-          InformationsService,
           referentiel,
           service,
           etapeActive: 'mesures',
@@ -150,7 +148,6 @@ const routesConnectePage = ({
         });
       } else if (idEtape === 'homologuer') {
         reponse.render('service/dossiers', {
-          InformationsService,
           service,
           etapeActive: 'dossiers',
           premiereEtapeParcours: referentiel.premiereEtapeParcours(),
