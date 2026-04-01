@@ -1,53 +1,6 @@
 import { gestionnaireTiroir } from '../modules/tableauDeBord/gestionnaireTiroir.mjs';
-import ActionContributeurs from '../modules/tableauDeBord/actions/ActionContributeurs.mjs';
 import ActionTelechargement from '../modules/tableauDeBord/actions/ActionTelechargement.mjs';
 import lisDonneesPartagees from '../modules/donneesPartagees.mjs';
-
-const tiroirContributeur = (idService, modeVisiteGuidee = false) => {
-  const contributeurs = new ActionContributeurs();
-  let donneesService;
-
-  const chargeDonneesDuService = async () => {
-    if (!modeVisiteGuidee) {
-      const reponse = await axios.get(`/api/service/${idService}`);
-      donneesService = reponse.data;
-    }
-  };
-
-  return {
-    brancheComportement: async () => {
-      if (idService) await chargeDonneesDuService();
-
-      $(document.body).on('collaboratif-service-modifie', async () => {
-        await chargeDonneesDuService();
-      });
-
-      $(document.body).on(
-        'jquery-affiche-tiroir-contributeurs-visite-guidee',
-        () =>
-          gestionnaireTiroir.afficheContenuAction(
-            { action: contributeurs, estSelectionMulitple: false },
-            { modeVisiteGuidee: true }
-          )
-      );
-
-      const ouvreTiroirContributeurs = () => {
-        gestionnaireTiroir.afficheContenuAction(
-          { action: contributeurs, estSelectionMulitple: false },
-          { donneesServices: [donneesService] }
-        );
-      };
-
-      $('#gerer-contributeurs').on('click', () => {
-        ouvreTiroirContributeurs();
-      });
-
-      $(document.body).on('jquery-affiche-tiroir-contributeurs', () => {
-        ouvreTiroirContributeurs();
-      });
-    },
-  };
-};
 
 const tiroirTelechargement = (idService) => {
   const telechargement = new ActionTelechargement();
@@ -140,7 +93,6 @@ $(async () => {
   repliMenu().brancheComportement();
 
   gestionnaireTiroir.brancheComportement();
-  await tiroirContributeur(idService, modeVisiteGuidee).brancheComportement();
   tiroirTelechargement(idService).brancheComportement();
 
   const autorisationsService = lisDonneesPartagees('autorisations-service');
