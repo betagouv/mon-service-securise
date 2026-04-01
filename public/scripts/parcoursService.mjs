@@ -58,7 +58,8 @@ $(async () => {
     })
   );
 
-  const service = lisDonneesPartagees('service');
+  const { nomService, nomOrganisationResponsable } =
+    lisDonneesPartagees('service');
   const { indiceCyber, noteMax } = lisDonneesPartagees('donnees-indice-cyber');
   const { indiceCyberPersonnalise } = lisDonneesPartagees(
     'donnees-indice-cyber-personnalise'
@@ -67,9 +68,8 @@ $(async () => {
     new CustomEvent('svelte-recharge-entete-page-service', {
       detail: {
         idService: modeVisiteGuidee ? undefined : idService,
-        nomService: service.descriptionService.nomService,
-        organisationResponsable:
-          service.descriptionService.organisationResponsable.nom,
+        nomService,
+        organisationResponsable: nomOrganisationResponsable,
         indiceCyber,
         indiceCyberPersonnalise,
         noteMax,
