@@ -19,19 +19,28 @@
     <h2>{organisationResponsable}</h2>
   </div>
   <div class="indices-cyber">
-    <div class="conteneur-indice-cyber">
+    <a
+      class="conteneur-indice-cyber"
+      href="/service/{idService}/indiceCyber?onglet=indice-cyber-ANSSI"
+    >
       <div class="indice-cyber">
         <IndiceCyber {idService} {indiceCyber} {noteMax} />
       </div>
       <div class="intitule-indice-cyber">
         <span>Indice cyber ANSSI</span>
-        <a href="/service/{idService}/indiceCyber?onglet=indice-cyber-ANSSI">
-          <lab-anssi-icone nom="arrow-right-line" taille="sm"
-          ></lab-anssi-icone>Voir le détail</a
-        >
+        <span class="detail">
+          Voir le détail
+          <span class="fleche">
+            <lab-anssi-icone nom="arrow-right-line" taille="sm"
+            ></lab-anssi-icone>
+          </span>
+        </span>
       </div>
-    </div>
-    <div class="conteneur-indice-cyber">
+    </a>
+    <a
+      class="conteneur-indice-cyber"
+      href="/service/{idService}/indiceCyber?onglet=indice-cyber-personnalise"
+    >
       <div class="indice-cyber">
         <IndiceCyberPersonnalise
           {idService}
@@ -41,14 +50,15 @@
       </div>
       <div class="intitule-indice-cyber">
         <span>Indice cyber personnalisé</span>
-        <a
-          href="/service/{idService}/indiceCyber?onglet=indice-cyber-personnalise"
-        >
-          <lab-anssi-icone nom="arrow-right-line" taille="sm"></lab-anssi-icone>
-          Voir le détail</a
-        >
+        <span class="detail">
+          Voir le détail
+          <span class="fleche">
+            <lab-anssi-icone nom="arrow-right-line" taille="sm"
+            ></lab-anssi-icone>
+          </span>
+        </span>
       </div>
-    </div>
+    </a>
   </div>
 </div>
 
@@ -71,6 +81,17 @@
         padding: 4px 0;
         display: flex;
         align-items: center;
+        text-decoration: none;
+        background: white;
+        overflow: hidden;
+
+        &:hover {
+          background: #f6f6f6;
+        }
+
+        &:active {
+          background: #ededed;
+        }
 
         .indice-cyber {
           width: 60px;
@@ -86,17 +107,17 @@
         gap: 4px;
         padding: 0 12px;
 
-        a {
+        .detail {
           font-size: 0.75rem;
           line-height: 1.25rem;
           font-weight: normal;
           color: #666666;
-          text-decoration: none;
           display: flex;
-          gap: 8px;
+          justify-content: space-between;
+          align-items: center;
 
-          &:hover {
-            text-decoration: underline;
+          .fleche {
+            color: #000091;
           }
         }
 
@@ -104,7 +125,7 @@
           font-size: 0.875rem;
           line-height: 1.5rem;
           font-weight: bold;
-          color: var(--bleu-mise-en-avant);
+          color: #000091;
         }
       }
     }
