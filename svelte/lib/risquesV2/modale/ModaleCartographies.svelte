@@ -106,6 +106,7 @@
     display: flex;
     gap: 155px;
     padding-left: 54px;
+    padding-bottom: 24px;
     overflow-x: scroll;
   }
 
