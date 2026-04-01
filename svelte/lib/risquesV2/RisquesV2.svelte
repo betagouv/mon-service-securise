@@ -108,7 +108,7 @@
           min={1}
           max={3}
           value={2}
-          step={0.5}
+          step={1}
           is-step
           indicators={false}
           onvaluechanged={metAJourOpacite}
