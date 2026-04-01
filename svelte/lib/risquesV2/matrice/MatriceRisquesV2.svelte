@@ -121,7 +121,7 @@
 
         .contenu-cellule {
           color: #fff;
-          font-size: 1rem;
+          font-size: 0.875rem;
           font-weight: bold;
           line-height: 1.5rem;
           display: flex;
