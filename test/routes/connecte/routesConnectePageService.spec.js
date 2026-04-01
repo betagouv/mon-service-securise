@@ -214,15 +214,6 @@ describe('Le serveur MSS des routes /service/*', () => {
           '/service/456/descriptionService'
         );
     });
-
-    it("charge les préférences de l'utilisateur", async () => {
-      await testeur
-        .middleware()
-        .verifieChargementDesPreferences(
-          testeur.app(),
-          '/service/456/descriptionService'
-        );
-    });
   });
 
   describe('quand requête GET sur `/service/:id/mesures`', () => {
@@ -258,12 +249,6 @@ describe('Le serveur MSS des routes /service/*', () => {
           testeur.app(),
           '/service/456/mesures'
         );
-    });
-
-    it("charge les préférences de l'utilisateur", async () => {
-      await testeur
-        .middleware()
-        .verifieChargementDesPreferences(testeur.app(), '/service/456/mesures');
     });
 
     it("charge l'état d'affichage de l'explication des risques v2", async () => {
@@ -546,15 +531,6 @@ describe('Le serveur MSS des routes /service/*', () => {
           '/service/456/indiceCyber'
         );
     });
-
-    it("charge les préférences de l'utilisateur", async () => {
-      await testeur
-        .middleware()
-        .verifieChargementDesPreferences(
-          testeur.app(),
-          '/service/456/indiceCyber'
-        );
-    });
   });
 
   describe('quand requete GET sur `/service/:id/rolesResponsabilites`', () => {
@@ -572,15 +548,6 @@ describe('Le serveur MSS des routes /service/*', () => {
       await testeur
         .middleware()
         .verifieChargementDesAutorisations(
-          testeur.app(),
-          '/service/456/rolesResponsabilites'
-        );
-    });
-
-    it("charge les préférences de l'utilisateur", async () => {
-      await testeur
-        .middleware()
-        .verifieChargementDesPreferences(
           testeur.app(),
           '/service/456/rolesResponsabilites'
         );
@@ -605,12 +572,6 @@ describe('Le serveur MSS des routes /service/*', () => {
           testeur.app(),
           '/service/456/risques'
         );
-    });
-
-    it("charge les préférences de l'utilisateur", async () => {
-      await testeur
-        .middleware()
-        .verifieChargementDesPreferences(testeur.app(), '/service/456/risques');
     });
 
     it('merge les données du référentiel et du service pour les risques généraux', async () => {
@@ -670,15 +631,6 @@ describe('Le serveur MSS des routes /service/*', () => {
           '/service/456/dossiers'
         );
     });
-
-    it("charge les préférences de l'utilisateur", async () => {
-      await testeur
-        .middleware()
-        .verifieChargementDesPreferences(
-          testeur.app(),
-          '/service/456/dossiers'
-        );
-    });
   });
 
   describe('quand requête GET sur `/service/:id/homologation/edition/etape/:idEtape`', () => {
@@ -717,15 +669,6 @@ describe('Le serveur MSS des routes /service/*', () => {
       await testeur
         .middleware()
         .verifieChargementDesAutorisations(
-          testeur.app(),
-          '/service/456/homologation/edition/etape/dateTelechargement'
-        );
-    });
-
-    it("charge les préférences de l'utilisateur", async () => {
-      await testeur
-        .middleware()
-        .verifieChargementDesPreferences(
           testeur.app(),
           '/service/456/homologation/edition/etape/dateTelechargement'
         );

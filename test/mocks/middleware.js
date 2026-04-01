@@ -63,7 +63,6 @@ let serviceTrouve;
 let idUtilisateurCourant;
 let sourceAuthentification;
 let listeAdressesIPsAutorisee = [];
-let preferencesChargees = false;
 let etatExplicationRisquesV2Charge = false;
 let etatVisiteGuideeCharge = false;
 let etatExplicationNouveauReferentielCharge = false;
@@ -99,7 +98,6 @@ const middlewareFantaisie = {
     idUtilisateurCourant = idUtilisateur;
     autorisationChargee = autorisationACharger;
     listeAdressesIPsAutorisee = [];
-    preferencesChargees = false;
     etatExplicationRisquesV2Charge = false;
     etatVisiteGuideeCharge = false;
     etatExplicationNouveauReferentielCharge = false;
@@ -158,12 +156,6 @@ const middlewareFantaisie = {
 
   chargeExplicationUtilisationMFA: (_requete, _reponse, suite) => {
     etatExplicationUtilisationMFA = true;
-    suite();
-  },
-
-  chargePreferencesUtilisateur: (_requete, reponse, suite) => {
-    reponse.locals.preferencesUtilisateur = {};
-    preferencesChargees = true;
     suite();
   },
 
@@ -260,13 +252,6 @@ const middlewareFantaisie = {
   verifieChargementDesAutorisations: async (app, ...params) =>
     verifieRequeteChangeEtat(
       { lectureEtat: () => autorisationsChargees },
-      app,
-      ...params
-    ),
-
-  verifieChargementDesPreferences: async (app, ...params) =>
-    verifieRequeteChangeEtat(
-      { lectureEtat: () => preferencesChargees },
       app,
       ...params
     ),

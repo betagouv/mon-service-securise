@@ -56,15 +56,6 @@ describe('Le serveur MSS des pages pour un utilisateur "Connecté"', () => {
   });
 
   describe('quand requête GET sur /visiteGuidee/:idEtape', () => {
-    it("charge les préférences de l'utilisateur", async () => {
-      await testeur
-        .middleware()
-        .verifieChargementDesPreferences(
-          testeur.app(),
-          '/visiteGuidee/decrire'
-        );
-    });
-
     it("charge l'explication du nouveau référentiel, car c'est nécessaire au tableau de bord", async () => {
       await testeur
         .middleware()

@@ -693,26 +693,6 @@ describe('Le middleware MSS', () => {
     });
   });
 
-  describe('sur demande de chargement des préférences utilisateurs', () => {
-    it('ajoute un objet de préférences à `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
-      const middleware = leMiddleware();
-
-      middleware.chargePreferencesUtilisateur(requete, reponse, () => {
-        expect(reponse.locals.preferencesUtilisateur).not.to.be(undefined);
-      });
-    });
-
-    it("lit l'état d'ouverture/fermeture du menu de navigation", async () => {
-      const middleware = leMiddleware();
-
-      requete.cookies['etat-menu-navigation'] = 'ferme';
-      middleware.chargePreferencesUtilisateur(requete, reponse, () => {
-        const { preferencesUtilisateur } = reponse.locals;
-        expect(preferencesUtilisateur.etatMenuNavigation).to.be('ferme');
-      });
-    });
-  });
-
   describe('sur demande de chargement des autorisations pour un service', () => {
     beforeEach(() => {
       requete.idUtilisateurCourant = '999';
