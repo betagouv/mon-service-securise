@@ -13,9 +13,6 @@
 
   let sousEtapes: SousEtape[] = $state([]);
   onMount(() => {
-    document.body.dispatchEvent(
-      new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
-    );
     ciblePremiereMesure = document.getElementsByClassName(
       'titre-mesure'
     )[0]! as HTMLDivElement;

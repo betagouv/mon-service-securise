@@ -21,9 +21,6 @@
         callbackInitialeCible: async () => {
           const bouton = document.getElementById('commencer-homologation');
           if (bouton) bouton.inert = true;
-          document.body.dispatchEvent(
-            new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
-          );
         },
         positionnementModale: 'BasGauche',
         titre: 'Homologuez votre service',
@@ -40,9 +37,6 @@
             modeVisiteGuidee: true,
             service: donneesVisiteGuidee.services[0],
           });
-          document.body.dispatchEvent(
-            new CustomEvent('jquery-replie-menu-navigation-visite-guidee')
-          );
           const tiroir = document.querySelector<HTMLDivElement>('#tiroir');
           if (tiroir) tiroir.style.zIndex = '10001';
           const boutonFermeture =
