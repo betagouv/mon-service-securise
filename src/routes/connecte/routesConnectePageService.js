@@ -64,7 +64,7 @@ const routesConnectePageService = ({
 
       const template =
         service.version() === 'v2'
-          ? 'service/decrire-v2'
+          ? 'service/pagesService'
           : 'service/descriptionService';
 
       reponse.render(template, {

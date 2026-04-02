@@ -2,6 +2,7 @@ import type { EtapeService } from '../menuNavigationService/menuNavigationServic
 import type { IdCategorie } from '../tableauDesMesures/tableauDesMesures.d';
 import type { StatutMesure } from '../modeles/modeleMesure';
 import type { ReferentielPriorite } from '../ui/types';
+import type { DescriptionServiceV2API } from '../decrireV2/decrireV2.d';
 
 declare global {
   interface HTMLElementEventMap {
@@ -32,4 +33,8 @@ export type PagesServiceProps = {
   preferencesUtilisateur: {
     afficheExplicationRisquesV2: boolean;
   };
+  suggestionsService: {
+    finalisationDescriptionServiceImporte: boolean;
+  };
+  descriptionService: DescriptionServiceV2API;
 };

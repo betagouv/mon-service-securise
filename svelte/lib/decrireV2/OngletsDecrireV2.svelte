@@ -25,7 +25,6 @@
   .conteneur-onglets {
     display: flex;
     flex-direction: row;
-    margin: 24px 24px 0 72px;
     border-bottom: 2px solid #ddd;
 
     button {
