@@ -363,6 +363,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(reponse.body).to.eql({
         id: '456',
         nomService: 'Nom service',
+        version: 'v1',
         organisationResponsable: 'ANSSI',
         contributeurs: [
           {
