@@ -277,7 +277,7 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
-    margin: 24px 24px 32px 72px;
+    margin: 24px 0 32px;
   }
 
   .conteneur-alerte {

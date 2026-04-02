@@ -11,12 +11,13 @@
   let {
     idService,
     referentiel,
-    etapeActive,
     modeVisiteGuidee,
     visible,
     estLectureSeule,
     featureFlags,
     preferencesUtilisateur,
+    descriptionService,
+    suggestionsService,
   }: PagesServiceProps = $props();
 
   type ServicePourPagesService = {
@@ -106,18 +107,10 @@
               versionService={service.version}
               avecRisquesV2={featureFlags.avecRisquesV2}
               afficheExplicationRisquesV2={preferencesUtilisateur.afficheExplicationRisquesV2}
+              {descriptionService}
+              lectureSeule={estLectureSeule.descriptionService}
+              doitFinaliserDescription={suggestionsService.finalisationDescriptionServiceImporte}
             />
-            <!--          <TableauDesMesures-->
-            <!--            {idService}-->
-            <!--            categories={referentiel.mesures.categories}-->
-            <!--            statuts={referentiel.mesures.statuts}-->
-            <!--            priorites={referentiel.mesures.priorites}-->
-            <!--            estLectureSeule={estLectureSeule.mesures}-->
-            <!--            {modeVisiteGuidee}-->
-            <!--            versionService={service.version}-->
-            <!--            avecRisquesV2={featureFlags.avecRisquesV2}-->
-            <!--            afficheExplicationRisquesV2={preferencesUtilisateur.afficheExplicationRisquesV2}-->
-            <!--          />-->
           </div>
         {/key}
       </div>
