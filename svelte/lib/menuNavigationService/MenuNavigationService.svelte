@@ -129,12 +129,13 @@
 
 <style lang="scss">
   .menu-navigation-service {
-    width: 235px;
     padding: 24px 0 24px 24px;
     box-sizing: border-box;
     background: #fff;
     box-shadow: -1px 0 0 0 #ddd inset;
     height: 100%;
+    width: 235px;
+    min-width: 235px;
 
     .conteneur-menu-navigation-service {
       position: sticky;

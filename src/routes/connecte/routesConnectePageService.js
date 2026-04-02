@@ -89,7 +89,7 @@ const routesConnectePageService = ({
 
       const mesures = moteurRegles.mesures(service.descriptionService);
 
-      reponse.render('service/mesures', {
+      reponse.render('service/pagesService', {
         referentiel,
         service,
         etapeActive: 'mesures',
