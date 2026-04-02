@@ -32,8 +32,8 @@ describe('Le routeur des pages service', () => {
   it('peut naviguer vers une url', async () => {
     const routeurStore = await leRouteur();
 
-    routeurStore.navigue('/service/1234/url');
+    routeurStore.navigue('/service/1234/mesures');
 
-    expect(get(routeurStore).location).toBe('/service/1234/url');
+    expect(get(routeurStore).location).toBe('/service/1234/mesures');
   });
 });
