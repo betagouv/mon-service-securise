@@ -1,0 +1,49 @@
+extends ../mssConnecte
+include ../tiroirs/tiroir.pug
+
+block append styles
+  link(href = '/statique/assets/styles/parcoursService.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/tiroir.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/modules/selectize.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/formulaire.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/homologation/formulaire.css', rel = 'stylesheet')
+  link(href = '/statique/assets/styles/homologation/mesures.css', rel = 'stylesheet')
+
+block append scripts
+  +composantSvelte('mesure.js')
+  +composantSvelte('pagesService.js')
+  script(type = 'module', src = '/statique/service/pagesService.mjs')
+  +donneesPartagees('etape-active', etapeActive)
+  +donneesPartagees('autorisations-service', autorisationsService)
+  +donneesPartagees('referentiel', {
+    indiceCyber: {
+      noteMax: referentiel.indiceCyberNoteMax()
+    },
+    mesures: {
+      categories: referentiel.categoriesMesures(),
+      priorites: referentiel.prioritesMesures(),
+      statuts: referentiel.statutsMesures(),
+      retoursUtilisateur: referentiel.retoursUtilisateurMesure()
+    }
+  })
+  +donneesPartagees('feature-flags', { avecRisquesV2: featureFlags.avecRisquesV2 })
+  +donneesPartagees('preferences-utilisateur', { afficheExplicationRisquesV2 })
+  +donneesPartagees('nonce-commentaires', nonce)
+
+block header-gauche
+  .bloc-marque
+    .marianne
+    .republique-francaise RÉPUBLIQUE<br>FRANÇAISE
+    .devise
+  a.logo-anssi(href='https://cyber.gouv.fr')
+  a.logo-mss(href='/tableauDeBord')
+
+block main
+  #pages-service(data-id-service=service.id)
+
+  +tiroir
+    include ../tiroirs/tiroirTelechargement
+    include ../tiroirs/tiroirMesure
+    include ../tiroirs/tiroirExportMesures
+    include ../tiroirs/tiroirTelechargementTamponHomologation
+    include ../tiroirs/tiroirSuppressionDossierCourant
