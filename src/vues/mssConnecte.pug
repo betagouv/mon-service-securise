@@ -42,7 +42,8 @@ block centre-aide
     { texte: '🙌 Consulter la F.A.Q.', href: 'https://aide.monservicesecurise.cyber.gouv.fr/' },
   ]))
     
-block footer-bandeau-mss
+block footer
+  +footer(true)
 
 block visite-guidee
   +donneesPartagees('etat-visite-guidee', etatVisiteGuidee || {})

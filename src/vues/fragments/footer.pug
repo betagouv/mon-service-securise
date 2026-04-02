@@ -1,0 +1,35 @@
+mixin footer(connecte =  false)
+  -
+    const liens = [
+      { markup:"a", href: '/aPropos', label: "À propos" },
+      { markup:"a", href: '/mentionsLegales', label: "Mentions légales" },
+      { markup:"a", href: '/confidentialite', label: "Politique de confidentialité" },
+      { markup:"a", href: '/cgu', label: "Conditions générales" },
+      { markup:"a", href: '/statistiques', label: "Statistiques d'utilisation" },
+      { markup:"a", href: '/securite', label: "Sécurité" },
+      { markup:"a", href: '/accessibilite', label: "Accessibilité : non conforme" },
+    ]
+  dsfr-footer(
+    id="footer"
+    content-description
+    brand-logo-title="République<br>Française"
+    brand-link-id="brand-link"
+    brand-link-href="/"
+    brand-link-title="Retour à l'accueil du site - MonServiceSécurisé - République Française"
+    bottom-links=JSON.stringify(liens)
+    has-description
+    compact=connecte
+  )
+    div(slot="description")
+      span.
+        MonServiceSécurisé aide les entités publiques à sécuriser et homologuer leurs services publics numériques :
+        site web, applications mobiles, API.
+      br
+      span
+        | Il est développé par l'
+        dsfr-link(neutral label="Agence nationale de la sécurité des systèmes d'information" href='https://cyber.gouv.fr' title="Site de l'ANSSI" blank)
+        | &nbsp;en lien avec&nbsp;
+        dsfr-link(neutral label='BetaGouv' href='https://beta.gouv.fr' title='Site de BetaGouv' blank)
+        | &nbsp;et la&nbsp;
+        dsfr-link(neutral label='Direction interministérielle du numérique' href='https://www.numerique.gouv.fr/dinum' title='Site de la DINUM' blank)
+        | .
