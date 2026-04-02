@@ -1,10 +1,5 @@
 mixin footer(connecte =  false)
   -
-    const descriptionFooter = "MonServiceSécurisé aide les entités publiques à sécuriser et homologuer leurs services publics numériques :" +
-            " site web, applications mobiles, API. " +
-            "<br>Il est développé par l'<dsfr-link label=\"Agence nationale de la sécurité des systèmes d'information\" size='sm' href='https://cyber.gouv.fr' title=\"Site de l'ANSSI\" blank></dsfr-link>, " +
-            "en lien avec <dsfr-link label='BetaGouv' size='sm' href='https://beta.gouv.fr' title='Site de BetaGouv' blank></dsfr-link> et la " +
-            "<dsfr-link label='Direction interministérielle du numérique' size='sm' href='https://www.numerique.gouv.fr/dinum' title='Site de la DINUM' blank></dsfr-link>."
     const liens = [
       { markup:"a", href: '/aPropos', label: "À propos" },
       { markup:"a", href: '/mentionsLegales', label: "Mentions légales" },
@@ -16,7 +11,7 @@ mixin footer(connecte =  false)
     ]
   dsfr-footer(
     id="footer"
-    content-description=descriptionFooter
+    content-description
     brand-logo-title="République<br>Française"
     brand-link-id="brand-link"
     brand-link-href="/"
@@ -25,3 +20,16 @@ mixin footer(connecte =  false)
     has-description
     compact=connecte
   )
+    div(slot="description")
+      span.
+        MonServiceSécurisé aide les entités publiques à sécuriser et homologuer leurs services publics numériques :
+        site web, applications mobiles, API.
+      br
+      span
+        | Il est développé par l'
+        dsfr-link(neutral label="Agence nationale de la sécurité des systèmes d'information" href='https://cyber.gouv.fr' title="Site de l'ANSSI" blank)
+        | &nbsp;en lien avec&nbsp;
+        dsfr-link(neutral label='BetaGouv' href='https://beta.gouv.fr' title='Site de BetaGouv' blank)
+        | &nbsp;et la&nbsp;
+        dsfr-link(neutral label='Direction interministérielle du numérique' href='https://www.numerique.gouv.fr/dinum' title='Site de la DINUM' blank)
+        | .
