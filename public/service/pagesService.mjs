@@ -13,6 +13,8 @@ $(() => {
   const etapeActive = lisDonneesPartagees('etape-active');
   const featureFlags = lisDonneesPartagees('feature-flags');
   const preferencesUtilisateur = lisDonneesPartagees('preferences-utilisateur');
+  const suggestionsService = lisDonneesPartagees('suggestions-service');
+  const descriptionService = lisDonneesPartagees('description-service');
 
   const autorisationsService = lisDonneesPartagees('autorisations-service');
   document.body.dispatchEvent(
@@ -24,6 +26,8 @@ $(() => {
         modeVisiteGuidee,
         featureFlags,
         preferencesUtilisateur,
+        suggestionsService,
+        descriptionService,
         visible: {
           contactsUtiles: !autorisationsService.CONTACTS.estMasque,
           risques: !autorisationsService.RISQUES.estMasque,
