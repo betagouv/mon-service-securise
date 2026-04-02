@@ -8,8 +8,14 @@ window.addEventListener('popstate', () => {
 });
 
 const navigue = (url: string) => {
-  history.pushState({}, '', url);
-  set({ location: url });
+  const morceaux = url.split('/').filter(Boolean);
+  const pageDemandee = morceaux.at(-1) || '';
+  if (['mesures', 'descriptionService'].includes(pageDemandee)) {
+    history.pushState({}, '', url);
+    set({ location: url });
+  } else {
+    window.location.href = url;
+  }
 };
 
 export const routeurStore = {
