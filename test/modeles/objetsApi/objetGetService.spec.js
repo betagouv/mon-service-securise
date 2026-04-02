@@ -113,6 +113,7 @@ describe("L'objet d'API de `GET /service`", () => {
       actionRecommandee: { id: 'simulerReferentielV2', autorisee: true },
       niveauSecurite: 'niveau1',
       pourcentageCompletude: 0.5,
+      version: 'v1',
     });
   });
 

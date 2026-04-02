@@ -327,3 +327,9 @@ section:last-of-type {
   line-height: 1.25rem;
   color: var(--texte-fonce);
 }
+
+#pages-service {
+  width: 100%;
+  text-align: left;
+  height: 100%;
+}

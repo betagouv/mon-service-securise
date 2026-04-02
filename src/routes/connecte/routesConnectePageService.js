@@ -64,7 +64,7 @@ const routesConnectePageService = ({
 
       const template =
         service.version() === 'v2'
-          ? 'service/decrire-v2'
+          ? 'service/pagesService'
           : 'service/descriptionService';
 
       reponse.render(template, {
@@ -89,7 +89,7 @@ const routesConnectePageService = ({
 
       const mesures = moteurRegles.mesures(service.descriptionService);
 
-      reponse.render('service/mesures', {
+      reponse.render('service/pagesService', {
         referentiel,
         service,
         etapeActive: 'mesures',
