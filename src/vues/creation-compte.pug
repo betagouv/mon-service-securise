@@ -1,7 +1,5 @@
 extends ./mss
-
-block variables
-    - const classeDuHeader = 'header-a-gauche-uniquement'
+include ./fragments/header
 
 block append styles
     link(href = '/statique/assets/styles/creation-compte.css', rel = 'stylesheet')
@@ -14,6 +12,9 @@ block append scripts
     +donneesPartagees('informations-professionnelles', { informationsProfessionnelles })
     +donneesPartagees('departements', { departements })
     +donneesPartagees('invite', invite)
+
+block header
+    +header(avertissementMaintenance, featureFlags, true, '/', "Retour à l'accueil du site MonServiceSécurisé - République Française", true)
 
 block main
     #conteneur-inscription
