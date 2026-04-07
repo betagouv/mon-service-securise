@@ -95,6 +95,7 @@
     border-radius: 5px;
     height: 36px;
     position: relative;
+    display: flex;
   }
 
   #affiche-notifications:hover {
