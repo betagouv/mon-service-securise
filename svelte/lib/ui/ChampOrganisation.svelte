@@ -125,7 +125,7 @@
   >
   </dsfr-input>
   <div class="liste-suggestions" class:visible={suggestionsVisibles}>
-    {#each suggestions as suggestion (suggestion.siret)}
+    {#each suggestions as suggestion, index (index)}
       <div
         class="option"
         role="button"
