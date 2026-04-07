@@ -327,3 +327,9 @@ section:last-of-type {
   gap: 8px;
   align-items: center;
 }
+
+.utilisateur-courant {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
