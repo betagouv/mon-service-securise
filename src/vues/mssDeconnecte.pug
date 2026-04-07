@@ -1,8 +1,9 @@
 extends mss
+include ./fragments/header
+
+block header
+  +header(avertissementMaintenance, featureFlags, false, '/', "Retour à l'accueil du site MonServiceSécurisé - République Française", false)
 
 block bandeau-promotion-msc
   if featureFlags.avecBandeauMSC
     lab-anssi-mes-services-cyber-bandeau
-
-block navigation
-  .utilisateur-courant
