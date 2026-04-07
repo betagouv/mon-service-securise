@@ -1,4 +1,5 @@
 extends mss
+include ./fragments/header
 
 block append styles
   link(href = '/statique/assets/styles/headerLarge.css', rel = 'stylesheet')
@@ -9,9 +10,9 @@ block append scripts
   +composantSvelte('centreNotifications.js')
   +composantSvelte('tiroir.js')
 
-block navigation
-  #centre-notifications
-  .utilisateur-courant
+block header
+  +header(avertissementMaintenance, featureFlags, true, '/tableauDeBord', "Retour au tableau de bord", false)
+    #centre-notifications
 
 block tiroir
   #tiroir

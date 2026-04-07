@@ -261,11 +261,6 @@ a.nouvel-onglet {
     padding: 48px 96px;
   }
 
-  header {
-    justify-content: space-between;
-    max-width: 1200px;
-  }
-
   footer nav ul {
     width: 1200px;
     margin: 0 auto;
