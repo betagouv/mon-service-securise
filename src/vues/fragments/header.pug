@@ -6,7 +6,10 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
     has-brand-operator,
     brand-operator-src="/statique/assets/images/logo_ANSSI_MSS.svg",
     brand-operator-alt="MonServiceSécurisé",
-    brand-operator-style="height:100px;",
+    brand-operator-style="height:4rem",
+    brand-service="MonServiceSécurisé"
+    has-brand-tagline
+    brand-tagline="Innovation ANSSI"
     brand-link-title=titreLienSurLogo,
     has-tool-links,
     menu-id='boutonMenu',
@@ -18,7 +21,7 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
           lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
         if block
           block
-        span.utilisateur-courant
+        .utilisateur-courant
 
   if avertissementMaintenance
     .banniere-maintenance
