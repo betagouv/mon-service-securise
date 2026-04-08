@@ -239,11 +239,6 @@ section:last-of-type {
   margin-bottom: 2em;
 }
 
-.header-a-gauche-uniquement {
-  justify-content: space-between;
-  max-width: 1200px;
-}
-
 .erreur-champ-saisie-dsfr,
 .valide-champ-saisie-dsfr {
   font-size: 12px;
@@ -326,4 +321,16 @@ section:last-of-type {
   font-weight: 400;
   line-height: 1.25rem;
   color: var(--texte-fonce);
+}
+
+.conteneur-outils-entete {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.utilisateur-courant {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }

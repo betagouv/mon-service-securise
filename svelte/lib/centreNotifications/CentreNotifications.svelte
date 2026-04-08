@@ -83,6 +83,10 @@
 </div>
 
 <style>
+  .centre-notifications {
+    display: inline-block;
+  }
+
   #affiche-notifications {
     border: none;
     background: none;
@@ -91,6 +95,7 @@
     border-radius: 5px;
     height: 36px;
     position: relative;
+    display: flex;
   }
 
   #affiche-notifications:hover {
@@ -129,6 +134,7 @@
   }
 
   #masque-notifications {
+    font-size: 0.9rem;
     background: none;
     border: none;
     color: var(--bleu-anssi);
@@ -177,5 +183,6 @@
     display: flex;
     justify-content: space-evenly;
     transform: translateY(1px);
+    font-size: 0.9rem;
   }
 </style>

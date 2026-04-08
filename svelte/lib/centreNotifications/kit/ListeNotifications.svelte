@@ -29,6 +29,8 @@
   .contenu-notifications {
     max-height: 626px;
     overflow-y: auto;
+    font-size: 0.9rem;
+    text-align: left;
   }
 
   .conteneur-aucune-notification {
