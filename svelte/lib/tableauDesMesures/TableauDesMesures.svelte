@@ -514,6 +514,7 @@
 
   .tableau-des-mesures {
     border-collapse: collapse;
+    width: 100%;
   }
 
   thead tr th {

@@ -47,6 +47,7 @@ const donnees = (service, autorisation, referentiel) => {
       gestionContributeurs: autorisation.peutGererContributeurs(),
     },
     aUneSuggestionAction: !!service.aUneSuggestionDAction(),
+    version: service.version(),
     ...(actionRecommandee && {
       actionRecommandee: {
         id: actionRecommandee.id,
