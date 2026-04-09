@@ -2,7 +2,6 @@
   import ChampTexte from '../ui/ChampTexte.svelte';
   import type { Departement, Organisation } from './inscription.d';
   import { validationChamp } from '../directives/validationChamp';
-  import { tick } from 'svelte';
 
   type OrganisationAvecLabel = Organisation & {
     label: string;
@@ -82,7 +81,7 @@
 
   $effect(() => {
     if (valeur) {
-      tick().then(() => champValeur?.dispatchEvent(new Event('input')));
+      saisie = construisLabel(valeur);
     }
   });
 
