@@ -3,7 +3,7 @@
   import ChampTexte from '../ui/ChampTexte.svelte';
   import ControleFormulaire from '../ui/ControleFormulaire.svelte';
   import { validationChamp } from '../directives/validationChamp';
-  import { tick } from 'svelte';
+  import { untrack } from 'svelte';
 
   interface Props {
     valeurs: string[];
@@ -13,8 +13,6 @@
 
   let { valeurs = $bindable(), requis = false, id = '' }: Props = $props();
   let menu: MenuFlottant | undefined = $state();
-  let autreDomaine: string = $state('');
-  let champDeclencheur: HTMLInputElement | undefined = $state();
 
   if (!valeurs) valeurs = [];
 
@@ -30,33 +28,31 @@
   ];
   const idsDesDomaines = domaines.map((f) => f.id);
 
-  let selection: string[] = $state(
-    valeurs.filter((v) => idsDesDomaines.includes(v))
+  let autreDomaine: string = $derived(
+    valeurs.find((v) => !idsDesDomaines.includes(v)) || ''
   );
-  const autreValeur = valeurs.find((v) => !idsDesDomaines.includes(v));
 
-  $effect(() => {
-    if (autreValeur) {
-      selection.push('autre');
-      autreDomaine = autreValeur;
+  let selection: string[] = $derived.by(() => {
+    const valeursInitiales = untrack(() => valeurs);
+    const valeursSelectionnees = valeursInitiales.filter((v) =>
+      idsDesDomaines.includes(v)
+    );
+    if (valeursInitiales.find((v) => !idsDesDomaines.includes(v))) {
+      valeursSelectionnees.push('autre');
     }
+    return valeursSelectionnees;
   });
 
   let label = $derived(
     selection.map((id) => domaines.find((f) => f.id === id)?.libelle).join(', ')
   );
 
-  $effect(() => {
-    if (label) {
-      tick().then(() => champDeclencheur?.dispatchEvent(new Event('input')));
-    }
-  });
-
   let labelRappelDeclencheur = $derived(
     selection.length === 0 ? 'Sélectionner un domaine de spécialité' : label
   );
 
   let afficheAutre = $derived(selection.includes('autre'));
+
   $effect(() => {
     valeurs = [
       ...selection.filter((f) => f !== 'autre'),
@@ -87,7 +83,6 @@
           use:validationChamp={requis
             ? 'Le domaine est obligatoire. Veuillez le renseigner.'
             : ''}
-          bind:this={champDeclencheur}
         />
       </div>
     {/snippet}

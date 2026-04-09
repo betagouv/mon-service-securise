@@ -57,10 +57,12 @@
           transactionnelAccepte: $utilisateur.transactionnelAccepte,
           siretEntite: entite.siret,
         });
+        window.location.href = '/tableauDeBord';
+      } catch {
+        // L'erreur est gérée, le formulaire reste visible pour que l'utilisateur puisse réessayer
       } finally {
         enCoursEnvoi = false;
       }
-      window.location.href = '/tableauDeBord';
     }
   };
 
