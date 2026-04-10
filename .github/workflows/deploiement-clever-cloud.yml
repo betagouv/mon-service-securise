@@ -1,0 +1,36 @@
+name: Déploiement sur Clever Cloud
+permissions: {}
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+jobs:
+  deploiement:
+    name: Déploiement en ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cloner le dépôt Git
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Cloner l'intégralité du dépôt, pour ne pas avoir de « shallow repo » rejeté par Clever
+
+      - name: Installer la CLI Clever Cloud
+        shell: bash
+        run: npm install -g clever-tools@4.4.0 # Utilisation de `npm` acceptable avec une version épinglée
+
+      - name: Déployer
+        env:
+          CLEVER_SECRET: ${{ secrets.CLEVER_CLOUD_SECRET }}
+          CLEVER_TOKEN: ${{ secrets.CLEVER_CLOUD_TOKEN }}
+          ID_APP: ${{ secrets.CLEVER_CLOUD_ID_APP }}
+          ID_ORGANISATION: ${{ secrets.CLEVER_CLOUD_ID_ORGANISATION }}
+        run: |
+          NODE_VERSION="$(./scripts/get-node-version.sh)"
+          clever link -o="$ID_ORGANISATION" "$ID_APP"
+          clever env set CC_NODE_VERSION "$NODE_VERSION"
+          clever deploy --force --same-commit-policy=rebuild
