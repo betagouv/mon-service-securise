@@ -9,3 +9,4 @@ public/composants-svelte
 *report.json
 *report.xml
 .pnpm-store
+test-results

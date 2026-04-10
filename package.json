@@ -12,6 +12,7 @@
     "migration-bdd": "tsx node_modules/knex/bin/cli.js migrate:latest",
     "test": "eslint . && vitest",
     "test:watch": "vitest",
+    "test:a11y": "playwright test",
     "start": "node --require dotenv/config dist/server.js",
     "prepare": "husky install",
     "preinstall": "npx only-allow@1.2.2 pnpm"
@@ -71,9 +72,12 @@
     "zod": "^4.1.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
+    "axe-core": "^4.11.2",
     "@electric-sql/pglite": "^0.4.0",
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.4",
+    "@playwright/test": "^1.59.1",
     "@sentry/vite-plugin": "^5.1.1",
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tsconfig/svelte": "^5.0.8",

@@ -180,4 +180,16 @@ module.exports = defineConfig([
       'import/extensions': ['off'],
     },
   },
+  {
+    files: ['test_accessibilite/**/*.*ts', 'playwright.config.ts'],
+
+    rules: {
+      'import/no-extraneous-dependencies': [
+        'error',
+        {
+          devDependencies: true,
+        },
+      ],
+    },
+  },
 ]);
