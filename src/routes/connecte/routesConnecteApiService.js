@@ -17,7 +17,11 @@ import routesConnecteApiServiceActivitesMesure from './routesConnecteApiServiceA
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import routesConnecteApiSimulationMigrationReferentiel from './routesConnecteApiSimulationMigrationReferentiel.js';
 import { schemaSuggestionAction } from '../../http/schemas/suggestionAction.schema.js';
-import { valideBody, valideParams } from '../../http/validePayloads.js';
+import {
+  valideBody,
+  valideParams,
+  valideQuery,
+} from '../../http/validePayloads.js';
 import { schemaPutRisqueGeneral } from './routesConnecteApiService.schema.js';
 import { schemaAutorisation } from '../../http/schemas/autorisation.schema.js';
 import { routesConnecteApiServiceMesuresSpecifiques } from './routesConnecteApiServiceMesuresSpecifiques.js';
@@ -29,6 +33,7 @@ import { routesConnecteApiServiceMesuresGenerales } from './routesConnecteApiSer
 import { routesConnecteApiServiceDescription } from './routesConnecteApiServiceDescription.js';
 import { routesConnecteApiServiceRolesReponsaibilites } from './routesConnecteApiServiceRolesReponsabilites.js';
 import routesConnecteApiServiceRisquesV2 from './routesConnecteApiServiceRisquesV2.js';
+import { ObjetGetServiceComplet } from '../../modeles/objetsApi/objetGetServiceComplet.ts';
 
 const { ECRITURE, LECTURE } = Permissions;
 const { SECURISER, RISQUES } = Rubriques;
@@ -134,13 +139,24 @@ const routesConnecteApiService = ({
     '/:id',
     middleware.trouveService({}),
     middleware.chargeAutorisationsService,
+    valideQuery(z.strictObject({ complet: z.literal('true').optional() })),
     async (requete, reponse) => {
-      const donnees = objetGetService.donnees(
-        requete.service,
-        requete.autorisationService,
-        referentiel
-      );
-      reponse.json(donnees);
+      const { complet } = requete.query;
+
+      if (complet) {
+        const donnees = new ObjetGetServiceComplet(
+          requete.service,
+          requete.autorisationService
+        ).donnees();
+        reponse.json(donnees);
+      } else {
+        const donnees = objetGetService.donnees(
+          requete.service,
+          requete.autorisationService,
+          referentiel
+        );
+        reponse.json(donnees);
+      }
     }
   );
 
