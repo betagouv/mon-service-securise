@@ -357,7 +357,7 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         .verifieChargementDesAutorisations(testeur.app(), '/api/service/456');
     });
 
-    it('retourne la représentation du service grâce à `objetGetService`', async () => {
+    it('retourne la représentation du service', async () => {
       const reponse = await testeur.get('/api/service/456');
 
       expect(reponse.body).to.eql({
@@ -394,6 +394,19 @@ describe('Le serveur MSS des routes /api/service/*', () => {
         niveauSecurite: 'niveau1',
         pourcentageCompletude: 0,
       });
+    });
+
+    it('retourne la représentation complète du service si le paramètre `complet` vaut `true`', async () => {
+      const reponse = await testeur.get('/api/service/456?complet=true');
+
+      expect(reponse.body.descriptionService).not.to.be(undefined);
+      expect(reponse.body.mesures).not.to.be(undefined);
+    });
+
+    it('jette une erreur si le paramètre `complet` est invalide', async () => {
+      const { status } = await testeur.get('/api/service/456?complet=1234');
+
+      expect(status).to.be(400);
     });
   });
 
