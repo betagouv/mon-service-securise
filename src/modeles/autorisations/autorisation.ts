@@ -57,7 +57,7 @@ export class Autorisation extends Base {
     return this.droits[rubrique] >= niveau;
   }
 
-  aLesPermissions(droits: Droits) {
+  aLesPermissions(droits: Partial<Droits>) {
     return Object.entries(droits).every(([rubrique, niveau]) =>
       this.aLaPermission(niveau, rubrique as Rubrique)
     );
