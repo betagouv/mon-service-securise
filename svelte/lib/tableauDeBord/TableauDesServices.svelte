@@ -119,7 +119,7 @@
             onchange={basculeSelectionTousServices}
             checked={toutEstCoche}
             indeterminate={!toutEstCoche && selection.length > 0}
-            title="Sélection de tous les services"
+            aria-label="Sélection de tous les services"
           />
         </th>
         <th>Nom du service</th>
@@ -148,7 +148,7 @@
               type="checkbox"
               bind:group={$selectionIdsServices}
               value={brouillon.id}
-              title="Sélection du brouillon {brouillon.nomService}"
+              aria-label="Sélection du brouillon {brouillon.nomService}"
             />
           </th>
           <td class="cellule-noms">
@@ -201,7 +201,7 @@
               type="checkbox"
               bind:group={$selectionIdsServices}
               value={idService}
-              title="Sélection du service {service.nomService}"
+              aria-label="Sélection du service {service.nomService}"
             />
           </th>
           <td class="cellule-noms">
