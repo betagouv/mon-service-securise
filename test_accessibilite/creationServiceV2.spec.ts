@@ -2,6 +2,7 @@ import { expect, Page, test } from '@playwright/test';
 import {
   messageDErreur,
   navigueSurPageConnectee,
+  navigueSurTableauDeBordSansConnexion,
   problemesSerieux,
 } from './aideAuxTests.js';
 
@@ -13,6 +14,29 @@ const remplirChamp = async (idInput: string, valeur: string, page: Page) => {
   await page.keyboard.type(valeur);
   await page.keyboard.press('Tab');
 };
+
+let idService: string;
+let nomService: string;
+
+test.beforeEach(async ({ page }) => {
+  await navigueSurPageConnectee('/service/v2/creation', page);
+
+  nomService = `Mon service test ${new Date().getTime()}`;
+  await remplirChamp('nom-service', nomService, page);
+  const reponse = await page.waitForResponse(
+    (r) => r.url().includes('/api/brouillon-service') && r.status() === 200
+  );
+  const { id } = await reponse.json();
+  idService = id;
+});
+
+test.afterEach(async ({ page }) => {
+  await navigueSurTableauDeBordSansConnexion(page);
+  await page.click(`input.selection-service[value="${idService}"]`);
+  await page.locator('button', { hasText: 'Supprimer' }).first().click();
+  await page.locator('input#confirmation-suppression').fill(nomService);
+  await page.click('text="Confirmer la suppression"');
+});
 
 test("Le formulaire de création de service v2 n'a aucune violation grave d'accessibilité", async ({
   page,
@@ -30,13 +54,7 @@ test("Le formulaire de création de service v2 n'a aucune violation grave d'acce
     etape += 1;
   };
 
-  await navigueSurPageConnectee('/service/v2/creation', page);
   await checkIntermediaire();
-
-  await remplirChamp('nom-service', 'Mon service test', page);
-  await page.waitForResponse(
-    (r) => r.url().includes('/api/brouillon-service') && r.status() === 200
-  );
   await cliquerSuivant(page);
 
   await checkIntermediaire();
@@ -103,15 +121,10 @@ test("Le formulaire de création de service v2 n'a aucune violation grave d'acce
 test("Le formulaire de création de service v2 en mode rapide n'a aucune violation grave d'accessibilité", async ({
   page,
 }) => {
-  await navigueSurPageConnectee('/service/v2/creation', page);
-  await remplirChamp('nom-service', 'Mon service test', page);
-  await page.waitForResponse(
-    (r) => r.url().includes('/api/brouillon-service') && r.status() === 200
-  );
   await page.click('id=modeRapide');
 
   const problemes = await problemesSerieux(page);
   await page.screenshot({ path: 'screenshots/creation-service-rapide.png' });
 
-  expect.soft(problemes.length, messageDErreur(problemes)).toBe(0);
+  expect(problemes.length, messageDErreur(problemes)).toBe(0);
 });
