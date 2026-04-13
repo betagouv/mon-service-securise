@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { AxeBuilder } from '@axe-core/playwright';
 import {
   messageDErreur,
   navigueSurTableauDeBord,
@@ -10,8 +9,7 @@ test(`La visite guidée n'a aucune violation grave d'accessibilité`, async ({
   page,
 }) => {
   const checkDEtape = async (nomEtape: string) => {
-    const resultats = await new AxeBuilder({ page }).analyze();
-    const problemes = problemesSerieux(resultats);
+    const problemes = await problemesSerieux(page);
     await page.screenshot({
       path: `screenshots/visite-guidee-${nomEtape}.png`,
     });

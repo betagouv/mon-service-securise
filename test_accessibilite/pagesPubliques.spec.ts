@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-syntax */
 import { expect, test } from '@playwright/test';
-import { AxeBuilder } from '@axe-core/playwright';
 import { messageDErreur, problemesSerieux } from './aideAuxTests.js';
 
 const pages = [
@@ -35,8 +34,7 @@ for (const { nom, url } of pages) {
   }) => {
     await page.goto(url);
 
-    const resultats = await new AxeBuilder({ page }).analyze();
-    const problemes = problemesSerieux(resultats);
+    const problemes = await problemesSerieux(page);
 
     expect(problemes.length, messageDErreur(problemes)).toBe(0);
   });

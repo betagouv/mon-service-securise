@@ -1,22 +1,31 @@
-import type { AxeResults, Result } from 'axe-core';
 import { Page } from '@playwright/test';
+import { AxeBuilder } from '@axe-core/playwright';
 
 export const ID_SERVICE = 'a471cb88-b199-450e-ab5d-2628e8a90e42';
 const EMAIL_CONNEXION = 'test@fia1.fr';
 
-export const messageDErreur = (problemes: Result[]) =>
-  `${JSON.stringify(
-    problemes.map(({ id, description, nodes }) => ({
-      id,
-      description,
-      nodes: nodes.map((n) => n.html),
-    })),
-    null,
-    2
-  )}\n n'est pas vide.`;
+export type ProblemeAccessibilite = {
+  id: string;
+  description: string;
+  noeuds: string[];
+};
 
-export const problemesSerieux = (resultats: AxeResults) =>
-  resultats.violations.filter((v) => v.impact === 'serious');
+export const messageDErreur = (problemes: ProblemeAccessibilite[]) =>
+  `${JSON.stringify(problemes, null, 2)}\n n'est pas vide.`;
+
+export const problemesSerieux = async (
+  page: Page
+): Promise<ProblemeAccessibilite[]> => {
+  const analyse = await new AxeBuilder({ page }).analyze();
+  const erreursSerieuses = analyse.violations.filter(
+    (v) => v.impact === 'serious'
+  );
+  return erreursSerieuses.map(({ id, description, nodes }) => ({
+    id,
+    description,
+    noeuds: nodes.map((n) => n.html),
+  }));
+};
 
 export const navigueSurPageConnectee = async (urlPage: string, page: Page) => {
   const redirect = urlPage.replace('/', '%2F');

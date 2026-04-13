@@ -1,5 +1,4 @@
 import { expect, Page, test } from '@playwright/test';
-import { AxeBuilder } from '@axe-core/playwright';
 import {
   messageDErreur,
   navigueSurPageConnectee,
@@ -20,8 +19,7 @@ test("Le formulaire de création de service v2 n'a aucune violation grave d'acce
 }) => {
   let etape = 1;
   const checkIntermediaire = async () => {
-    const resultats = await new AxeBuilder({ page }).analyze();
-    const problemes = problemesSerieux(resultats);
+    const problemes = await problemesSerieux(page);
     await page.screenshot({
       path: `screenshots/creation-service-${etape}.png`,
     });
@@ -112,8 +110,7 @@ test("Le formulaire de création de service v2 en mode rapide n'a aucune violati
   );
   await page.click('id=modeRapide');
 
-  const resultats = await new AxeBuilder({ page }).analyze();
-  const problemes = problemesSerieux(resultats);
+  const problemes = await problemesSerieux(page);
   await page.screenshot({ path: 'screenshots/creation-service-rapide.png' });
 
   expect.soft(problemes.length, messageDErreur(problemes)).toBe(0);

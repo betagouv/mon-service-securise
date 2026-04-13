@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-syntax */
 import { expect, test } from '@playwright/test';
-import { AxeBuilder } from '@axe-core/playwright';
 import {
   messageDErreur,
   navigueSurPageConnectee,
@@ -19,8 +18,7 @@ for (const { nom, url } of pages) {
   }) => {
     await navigueSurPageConnectee(url, page);
 
-    const resultats = await new AxeBuilder({ page }).analyze();
-    const problemes = problemesSerieux(resultats);
+    const problemes = await problemesSerieux(page);
 
     expect(problemes.length, messageDErreur(problemes)).toBe(0);
   });
@@ -31,8 +29,7 @@ test("La page tableau de bord n'a aucune violation grave d'accessibilité", asyn
 }) => {
   await navigueSurTableauDeBord(page);
 
-  const resultats = await new AxeBuilder({ page }).analyze();
-  const problemes = problemesSerieux(resultats);
+  const problemes = await problemesSerieux(page);
 
   expect(problemes.length, messageDErreur(problemes)).toBe(0);
 });
