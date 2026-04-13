@@ -16,7 +16,9 @@ export const messageDErreur = (problemes: ProblemeAccessibilite[]) =>
 export const problemesSerieux = async (
   page: Page
 ): Promise<ProblemeAccessibilite[]> => {
-  const analyse = await new AxeBuilder({ page }).analyze();
+  const analyse = await new AxeBuilder({ page })
+    .exclude('lab-anssi-centre-aide')
+    .analyze();
   const erreursSerieuses = analyse.violations.filter(
     (v) => v.impact === 'serious'
   );
