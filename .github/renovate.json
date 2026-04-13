@@ -8,6 +8,7 @@
     "npm",
     "nvm"
   ],
+  "useBaseBranchConfig": "merge",
   "platform": "github",
   "forkProcessing": "enabled",
   "repositories": ["betagouv/mon-service-securise"],
