@@ -1,6 +1,9 @@
 import type { AxeResults, Result } from 'axe-core';
 import { Page } from '@playwright/test';
 
+export const ID_SERVICE = 'a471cb88-b199-450e-ab5d-2628e8a90e42';
+const EMAIL_CONNEXION = 'test@fia1.fr';
+
 export const messageDErreur = (problemes: Result[]) =>
   `${JSON.stringify(
     problemes.map(({ id, description, nodes }) => ({
@@ -20,9 +23,32 @@ export const navigueSurPageConnectee = async (urlPage: string, page: Page) => {
   await page.goto(`/connexion?urlRedirection=${redirect}`);
   await page.click("text=S'identifier avec ProConnect");
   await page.waitForURL(/dev-agentconnect/);
-  await page.fill('input[type="email"]', 'test@fia1.fr');
+  await page.fill('input[type="email"]', EMAIL_CONNEXION);
   await page.click('button[type="submit"]');
   await page.waitForURL(/dev-agentconnect/);
   await page.click('button[type="submit"]');
   await page.waitForURL(urlPage);
+};
+
+export const fermeModale2FASiPresente = async (page: Page) => {
+  const popin2FAEstVisible = await page
+    .locator(
+      ':text("Activez l\'authentification multifacteurs sur ProConnect")'
+    )
+    .isVisible();
+  if (popin2FAEstVisible) await page.click('text=Me le rappeler plus tard');
+};
+
+export const fermeModaleVisiteGuideeSiPresente = async (page: Page) => {
+  const popinVisiteGuideeeEstVisible = await page
+    .locator(':text("Ignorer la visite guidée")')
+    .isVisible();
+  if (popinVisiteGuideeeEstVisible)
+    await page.click('text=Ignorer la visite guidée');
+};
+
+export const navigueSurTableauDeBord = async (page: Page) => {
+  await navigueSurPageConnectee('/tableauDeBord', page);
+  await fermeModale2FASiPresente(page);
+  await fermeModaleVisiteGuideeSiPresente(page);
 };
