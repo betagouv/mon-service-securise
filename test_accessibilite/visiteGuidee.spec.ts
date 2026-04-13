@@ -31,14 +31,14 @@ test(`La visite guidée n'a aucune violation grave d'accessibilité`, async ({
   await checkDEtape('menu-accueil');
 
   await page.click("text=C'est parti !");
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForURL('/visiteGuidee/decrire');
   await checkDEtape('decrire-1');
 
   await page.click('text=Suivant ');
   await checkDEtape('decrire-2');
 
   await page.click('text=Suivant ');
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForURL('/visiteGuidee/securiser');
   await checkDEtape('securiser-1');
 
   await page.click('text=Suivant ');
@@ -57,14 +57,14 @@ test(`La visite guidée n'a aucune violation grave d'accessibilité`, async ({
   await checkDEtape('securiser-6');
 
   await page.click('text=Suivant ');
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForURL('/visiteGuidee/homologuer');
   await checkDEtape('homologuer-1');
 
   await page.click('text=Suivant ');
   await checkDEtape('homologuer-2');
 
   await page.click('text=Suivant ');
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForURL('/visiteGuidee/piloter');
   await checkDEtape('piloter-1');
 
   await page.click('text=Suivant ');
