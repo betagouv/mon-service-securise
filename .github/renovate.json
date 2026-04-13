@@ -1,6 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "onboarding": true,
+  "onboarding": false,
+  "enabledManagers": [
+    "docker-compose",
+    "dockerfile",
+    "github-actions",
+    "npm",
+    "nvm"
+  ],
   "platform": "github",
   "forkProcessing": "enabled",
   "repositories": ["betagouv/mon-service-securise"],
