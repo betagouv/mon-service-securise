@@ -4,6 +4,7 @@ export default defineConfig({
   testDir: './test_accessibilite',
   use: {
     baseURL: 'http://localhost:3000',
+    viewport: { width: 1550, height: 900 },
   },
   webServer: {
     command: 'pnpm dev:back',
@@ -13,7 +14,10 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1550, height: 900 },
+      },
     },
   ],
 });
