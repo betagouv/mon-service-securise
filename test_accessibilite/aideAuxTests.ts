@@ -8,24 +8,26 @@ export type ProblemeAccessibilite = {
   id: string;
   description: string;
   noeuds: string[];
+  niveau: 'sérieux' | 'critique';
 };
 
 export const messageDErreur = (problemes: ProblemeAccessibilite[]) =>
   `${JSON.stringify(problemes, null, 2)}\n n'est pas vide.`;
 
-export const problemesSerieux = async (
+export const problemesDAccessibiliteDeLaPage = async (
   page: Page
 ): Promise<ProblemeAccessibilite[]> => {
   const analyse = await new AxeBuilder({ page })
     .exclude('lab-anssi-centre-aide')
     .analyze();
   const erreursSerieuses = analyse.violations.filter(
-    (v) => v.impact === 'serious'
+    (v) => v.impact === 'serious' || v.impact === 'critical'
   );
-  return erreursSerieuses.map(({ id, description, nodes }) => ({
+  return erreursSerieuses.map(({ id, description, nodes, impact }) => ({
     id,
     description,
     noeuds: nodes.map((n) => n.html),
+    niveau: impact === 'critical' ? 'critique' : 'sérieux',
   }));
 };
 

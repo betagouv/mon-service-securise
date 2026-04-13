@@ -2,14 +2,14 @@ import { expect, test } from '@playwright/test';
 import {
   messageDErreur,
   navigueSurTableauDeBordAvecConnexion,
-  problemesSerieux,
+  problemesDAccessibiliteDeLaPage,
 } from './aideAuxTests.js';
 
 test(`La visite guidée n'a aucune violation grave d'accessibilité`, async ({
   page,
 }) => {
   const checkDEtape = async (nomEtape: string) => {
-    const problemes = await problemesSerieux(page);
+    const problemes = await problemesDAccessibiliteDeLaPage(page);
     await page.screenshot({
       path: `screenshots/visite-guidee-${nomEtape}.png`,
     });
