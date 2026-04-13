@@ -11,7 +11,6 @@ import {
 const pages = [
   { nom: 'Profil', url: '/profil' },
   { nom: 'Mesures', url: '/mesures' },
-  { nom: 'Création de service (v2)', url: '/service/v2/creation' },
 ];
 
 for (const { nom, url } of pages) {
