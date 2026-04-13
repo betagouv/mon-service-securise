@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-syntax */
 import { expect, test } from '@playwright/test';
-import { AxeBuilder } from '@axe-core/playwright';
 import {
   ID_SERVICE,
   messageDErreur,
@@ -30,8 +29,7 @@ for (const { nom, url } of pages) {
   }) => {
     await navigueSurPageConnectee(url, page);
 
-    const resultats = await new AxeBuilder({ page }).analyze();
-    const problemes = problemesSerieux(resultats);
+    const problemes = await problemesSerieux(page);
 
     expect(problemes.length, messageDErreur(problemes)).toBe(0);
   });
