@@ -5,3 +5,7 @@ preferFrozenLockfile: true
 
 onlyBuiltDependencies:
   - bcrypt@6.0.0
+
+minimumReleaseAgeExclude:
+  - '@lab-anssi/lib@2.1.6'
+  - axios@1.15.0
