@@ -121,6 +121,7 @@
     bind:this={champValeur}
     bind:value={saisie}
     class="valeur-cache"
+    aria-label="SIRET retenu"
     required
     use:validationChamp={'Ce champ est obligatoire. Veuillez sélectionner une entrée.'}
   />

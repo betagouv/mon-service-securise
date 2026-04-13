@@ -76,6 +76,7 @@
           type="text"
           role="button"
           placeholder="Sélectionner un domaine de spécialité"
+          aria-label="Ouvrir le menu de sélection"
           class="bouton bouton-secondaire contenu-declencheur"
           class:complete={selection.length > 0}
           bind:value={label}
