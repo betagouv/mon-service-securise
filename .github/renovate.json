@@ -3,7 +3,6 @@
   "onboarding": true,
   "platform": "github",
   "forkProcessing": "enabled",
-  "dryRun": "full",
   "repositories": ["betagouv/mon-service-securise"],
   "packageRules": [
     {
