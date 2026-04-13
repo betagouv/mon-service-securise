@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
   messageDErreur,
-  navigueSurTableauDeBord,
+  navigueSurTableauDeBordAvecConnexion,
   problemesSerieux,
 } from './aideAuxTests.js';
 
@@ -19,7 +19,7 @@ test(`La visite guidée n'a aucune violation grave d'accessibilité`, async ({
       .toBe(0);
   };
 
-  await navigueSurTableauDeBord(page);
+  await navigueSurTableauDeBordAvecConnexion(page);
   await page.click("text= Centre d'aide");
   await page.click('text=🔎 Parcourir la visite guidée');
   await page.waitForEvent('load');

@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import {
   messageDErreur,
   navigueSurPageConnectee,
-  navigueSurTableauDeBord,
+  navigueSurTableauDeBordAvecConnexion,
   problemesSerieux,
 } from './aideAuxTests.js';
 
@@ -27,7 +27,7 @@ for (const { nom, url } of pages) {
 test("La page tableau de bord n'a aucune violation grave d'accessibilité", async ({
   page,
 }) => {
-  await navigueSurTableauDeBord(page);
+  await navigueSurTableauDeBordAvecConnexion(page);
 
   const problemes = await problemesSerieux(page);
 

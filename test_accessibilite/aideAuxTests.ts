@@ -58,8 +58,14 @@ export const fermeModaleVisiteGuideeSiPresente = async (page: Page) => {
     await page.click('text=Ignorer la visite guidée');
 };
 
-export const navigueSurTableauDeBord = async (page: Page) => {
+export const navigueSurTableauDeBordAvecConnexion = async (page: Page) => {
   await navigueSurPageConnectee('/tableauDeBord', page);
+  await fermeModale2FASiPresente(page);
+  await fermeModaleVisiteGuideeSiPresente(page);
+};
+
+export const navigueSurTableauDeBordSansConnexion = async (page: Page) => {
+  await page.goto('/tableauDeBord');
   await fermeModale2FASiPresente(page);
   await fermeModaleVisiteGuideeSiPresente(page);
 };
