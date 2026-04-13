@@ -15,5 +15,5 @@ jobs:
       - name: Lance la github action Renovate
         uses: renovatebot/github-action@v46.1.9
         with:
-          configurationFile: .renovate/renovate-config.js
+          configurationFile: .github/renovate.json
           token: ${{ secrets.RENOVATE_TOKEN }}
