@@ -1,6 +1,9 @@
 /* eslint-disable no-restricted-syntax */
 import { expect, test } from '@playwright/test';
-import { messageDErreur, problemesSerieux } from './aideAuxTests.js';
+import {
+  messageDErreur,
+  problemesDAccessibiliteDeLaPage,
+} from './aideAuxTests.js';
 
 const pages = [
   { nom: 'Accueil', url: '/' },
@@ -34,7 +37,7 @@ for (const { nom, url } of pages) {
   }) => {
     await page.goto(url);
 
-    const problemes = await problemesSerieux(page);
+    const problemes = await problemesDAccessibiliteDeLaPage(page);
 
     expect(problemes.length, messageDErreur(problemes)).toBe(0);
   });

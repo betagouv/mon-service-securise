@@ -4,7 +4,7 @@ import {
   messageDErreur,
   navigueSurPageConnectee,
   navigueSurTableauDeBordAvecConnexion,
-  problemesSerieux,
+  problemesDAccessibiliteDeLaPage,
 } from './aideAuxTests.js';
 
 const pages = [
@@ -18,7 +18,7 @@ for (const { nom, url } of pages) {
   }) => {
     await navigueSurPageConnectee(url, page);
 
-    const problemes = await problemesSerieux(page);
+    const problemes = await problemesDAccessibiliteDeLaPage(page);
 
     expect(problemes.length, messageDErreur(problemes)).toBe(0);
   });
@@ -29,7 +29,7 @@ test("La page tableau de bord n'a aucune violation grave d'accessibilité", asyn
 }) => {
   await navigueSurTableauDeBordAvecConnexion(page);
 
-  const problemes = await problemesSerieux(page);
+  const problemes = await problemesDAccessibiliteDeLaPage(page);
 
   expect(problemes.length, messageDErreur(problemes)).toBe(0);
 });

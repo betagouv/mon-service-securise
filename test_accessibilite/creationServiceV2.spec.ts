@@ -3,7 +3,7 @@ import {
   messageDErreur,
   navigueSurPageConnectee,
   navigueSurTableauDeBordSansConnexion,
-  problemesSerieux,
+  problemesDAccessibiliteDeLaPage,
 } from './aideAuxTests.js';
 
 const cliquerSuivant = (page: Page) =>
@@ -43,7 +43,7 @@ test("Le formulaire de création de service v2 n'a aucune violation grave d'acce
 }) => {
   let etape = 1;
   const checkIntermediaire = async () => {
-    const problemes = await problemesSerieux(page);
+    const problemes = await problemesDAccessibiliteDeLaPage(page);
     await page.screenshot({
       path: `screenshots/creation-service-${etape}.png`,
     });
@@ -123,7 +123,7 @@ test("Le formulaire de création de service v2 en mode rapide n'a aucune violati
 }) => {
   await page.click('id=modeRapide');
 
-  const problemes = await problemesSerieux(page);
+  const problemes = await problemesDAccessibiliteDeLaPage(page);
   await page.screenshot({ path: 'screenshots/creation-service-rapide.png' });
 
   expect(problemes.length, messageDErreur(problemes)).toBe(0);
