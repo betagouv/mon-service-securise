@@ -1,0 +1,19 @@
+name: Renovate
+permissions: {}
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 11 * * 1,3' # À 11h, les lundis et mercredis.
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+      - name: Lance la github action Renovate
+        uses: renovatebot/github-action@v46.1.9
+        with:
+          configurationFile: .github/renovate.json
+          token: ${{ secrets.RENOVATE_TOKEN }}
