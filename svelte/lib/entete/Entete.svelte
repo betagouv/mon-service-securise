@@ -44,9 +44,11 @@
     content-type="links"
     align="left"
     data-themeable="false"
+    items={[
+      { label: 'Mon tableau de bord', href: '/tableauDeBord' },
+      { label: 'Mettre à jour mon profil', href: '/profil' },
+    ]}
   >
-    <a href="/tableauDeBord">Mon tableau de bord</a>
-    <a href="/profil">Mettre à jour mon profil</a>
   </dsfr-dropdown>
 
   <dsfr-button
