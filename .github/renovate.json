@@ -10,6 +10,8 @@
   ],
   "useBaseBranchConfig": "merge",
   "commitMessagePrefix": "[RENOVATE]",
+  "prHourlyLimit": 10,
+  "prConcurrentLimit": 10,
   "platform": "github",
   "forkProcessing": "enabled",
   "repositories": ["betagouv/mon-service-securise"],
