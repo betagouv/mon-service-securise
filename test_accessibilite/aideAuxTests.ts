@@ -49,7 +49,7 @@ export const problemesDAccessibiliteDeLaPage = async (
 };
 
 export const navigueSurPageConnectee = async (urlPage: string, page: Page) => {
-  const redirect = urlPage.replace('/', '%2F');
+  const redirect = urlPage.replaceAll('/', '%2F');
   await page.goto(`/connexion?urlRedirection=${redirect}`);
   await page.click("text=S'identifier avec ProConnect");
   await page.waitForURL(/dev-agentconnect/);
