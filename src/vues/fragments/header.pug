@@ -1,6 +1,68 @@
-mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreLienSurLogo, headerAGaucheUniquement)
+mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreLienSurLogo, headerAGaucheUniquement, ongletActif)
+  -
+    const itemsMenu = [
+      {
+        "id": "nav-accueil",
+        "type": "link",
+        "active": ongletActif === 'accueil',
+        "collapsable": false,
+        "label": "Accueil",
+        "href": "/"
+      },
+      {
+        "id": "nav-promouvoir",
+        "type": "menu",
+        "active": ongletActif && ongletActif.includes('promouvoir/'),
+        "collapsable": true,
+        "collapseId": "nav-promouvoir",
+        "label": "Promouvoir",
+        "items": [
+          {
+            "id": "nav-faire-connaitre",
+            "type": "link",
+            "active": ongletActif && ongletActif.includes('/faire-connaitre'),
+            "collapsable": false,
+            "label": "Promouvoir MonServiceSécurisé",
+            "href": "/faire-connaitre-et-recommander-monservicesecurise"
+          },
+          {
+            "id": "nav-ambassadeurrice",
+            "type": "link",
+            "active": ongletActif && ongletActif.includes('/devenir-ambassadeurrice'),
+            "collapsable": false,
+            "label": "Devenir Ambassadeur/rice",
+            "href": "/devenir-ambassadeurrice-monservicesecurise"
+          }
+        ]
+      },
+      {
+        "id": "nav-co-construire",
+        "type": "link",
+        "active": ongletActif === 'co-construire-monservicesecurise',
+        "collapsable": false,
+        "label": "Co-construire MonServiceSécurisé",
+        "href": "/co-construire-monservicesecurise"
+      },
+      {
+        "id": "nav-conseils-cyber",
+        "type": "link",
+        "active": ongletActif === 'conseils-cyber',
+        "collapsable": false,
+        "label": "Conseils Cyber",
+        "href": "/conseils-cyber"
+      },
+      {
+        "id": "nav-doctrine-homologation-anssi",
+        "type": "link",
+        "active": ongletActif === 'doctrine-homologation-anssi',
+        "collapsable": false,
+        "label": "L'homologation simplifiée",
+        "href": "/doctrine-homologation-anssi"
+      },
+    ];
   dsfr-header(
     id="dsfr-header"
+    class="fr-header__brand"
     has-navigation
     brand-link-href=lienSurLogo,
     has-brand-operator,
@@ -13,12 +75,19 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
     brand-link-title=titreLienSurLogo,
     has-tool-links,
     menu-id='boutonMenu',
-    fluid=fluide
+    fluid=fluide,
+    navigation-items=JSON.stringify(fluide ? [] : itemsMenu)
   )
     if !headerAGaucheUniquement
-      .conteneur-outils-entete(slot="toolLinks")
+      div(slot="beforetoolslinks")
         if featureFlags.avecBandeauMSC
           lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
+      div(slot="beforenavbarbuttons")
+        if featureFlags.avecBandeauMSC
+          lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
+      div(slot="modalToolLinks")
+        .utilisateur-courant
+      .conteneur-outils-entete(slot="toolLinks")
         if block
           block
         .utilisateur-courant
