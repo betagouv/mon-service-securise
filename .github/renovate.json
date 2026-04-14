@@ -9,6 +9,7 @@
     "nvm"
   ],
   "useBaseBranchConfig": "merge",
+  "commitMessagePrefix": "[RENOVATE]",
   "platform": "github",
   "forkProcessing": "enabled",
   "repositories": ["betagouv/mon-service-securise"],
