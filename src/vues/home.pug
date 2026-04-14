@@ -24,25 +24,72 @@ mixin chiffreCle(chiffre, description)
     h4.alignement-gauche.centre-tablette.couleur-principale-foncee= chiffre
     p.alignement-gauche.centre-tablette= description
 
-mixin carteCarrousel(numero, description)
-  .carte-carrousel(id=`slide-${numero}`)
-    img.petite-marge-basse(loading="lazy" src=`/statique/assets/images/home/illustration_carrousel_${numero}.svg` alt='')
-    h3= description
+mixin carteCarrousel(numero, titre, description)
+  dsfr-tile(
+    class="carte-carrousel"
+    id=`slide-${numero}`
+    title=titre
+    markup="h3"
+    description=description
+    details="Détail (optionnel)"
+    action-markup="false"
+    href="#"
+    size="md"
+    vertical-breakpoint="false"
+    variations="none"
+    markup-level="2"
+    has-description
+    no-link
+  )
 
 mixin carrousel(id, texteBoutonSuivant)
   div(id=id)
     .conteneur-carrousel
       block
     .conteneur-liens-carrousel
-      button.precedent(title="Précédent")
-        img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
-      button.suivant(title="Suivant")
-        span= texteBoutonSuivant
-        img(src='/statique/assets/images/home/icone_fleche_gauche.svg' alt='')
+      dsfr-button(
+        class="precedent"
+        label="Précédent"
+        kind="tertiary-no-outline"
+        size="md"
+        icon="arrow-left-s-line"
+        icon-place="left"
+        markup="button"
+        type="button"
+        has-icon
+      )
+      dsfr-button(
+        class="suivant"
+        label="Suivant"
+        kind="tertiary-no-outline"
+        size="md"
+        icon="arrow-right-s-line"
+        icon-place="right"
+        markup="button"
+        type="button"
+        has-icon
+      )
+
+mixin carteAvecImage(titre, imageSrc, tag)
+  dsfr-card(
+    title=titre
+    size="md"
+    src=imageSrc
+    alt=titre
+    has-tag
+    no-link
+  )
+    dsfr-tag(slot="tagsgroup" label=tag)
+
+mixin carteRetractable(titre, description, imgSrc)
+  .carte-retractable
+    p.titre-carte-retractable= titre
+    p.description-carte-retractable= description
+    img(src=imgSrc, alt=titre)
+
 
 block append styles
   link(href='/statique/assets/styles/entete.responsive.css', rel='stylesheet')
-  link(href='/statique/assets/styles/piedPage.responsive.css', rel='stylesheet')
   link(href='/statique/assets/styles/home.css', rel='stylesheet')
   link(href='/statique/assets/styles/home.tablette.css', rel='stylesheet')
   link(href='/statique/assets/styles/home.desktop.css', rel='stylesheet')
@@ -71,23 +118,52 @@ block main
           .conteneur-logo-partenaire.petite-marge-basse
             img(src='/statique/assets/images/home/cnil.svg' alt='Logo de la CNIL')
     +carrousel('carrousel-presentation', 'Suivant')
-      +carteCarrousel(1, "Gratuit, 100% en ligne et collaboratif")
-      +carteCarrousel(2, "Accessible à toutes les entités publiques")
-      +carteCarrousel(3, "Conçu par les spécialistes de l'ANSSI")
-    .bloc-contenu.fond-couleur-principale-attenuee
-      h3.alignement-gauche.moyenne-marge-basse Les avantages de MonServiceSécurisé
-      .conteneur-avantage
-        img.grande-marge-basse.taille-maximale.plus-grand#illustration-laptop(src='/statique/assets/images/home/illustration_portable_tdb.png' alt='')
-        .conteneur-avantages.grande-marge-basse
-          +contenuAvantage('Laissez-vous guider !', "Utilisez MonServiceSécurisé, même si la cybersécurité n'a QUE des secrets pour vous.")
-          +contenuAvantage('Renforcez la sécurité de tous vos services', 'Placez votre effort au bon niveau et obtenez des résultats concrets.')
-          +contenuAvantage('Mettez-vous en conformité', "L'homologation de sécurité devient un jeu d'enfant avec MonServiceSécurisé.")
-      .conteneur-centre
-        a.principal.petite-marge-basse#commencer-a-securiser-avantages(href='/inscription') Commencer à sécuriser
-    .bloc-contenu
-      h3.alignement-gauche.moyenne-marge-basse.couleur-principale-foncee Découvrez MonServiceSécurisé en vidéo
-      .conteneur-video
-        video#video-presentation(src="https://monservicesecurise-ressources.cellar-c2.services.clever-cloud.com/Video_MonServiceSecurise_Thumbnail.mp4" controls)
+      +carteCarrousel(1, "Gratuit, 100% en ligne", "et collaboratif")
+      +carteCarrousel(2, "Pour les agents publics", "et leurs prestataires")
+      +carteCarrousel(3, "Un outil conçu par l’ANSSI", "en collaboration avec la CNIL")
+    .bloc-contenu.fond-couleur-principale-attenuee.bloc-32
+      .bloc-titre
+        h3 Sécurisez vos systèmes d'information en 3 étapes
+        p.sous-titre Du premier ajout d'un système d’information à la signature de la décision d'homologation, MonServiceSécurisé vous guide à chaque étape.
+      .bloc-16
+        +carteAvecImage("Évaluez les besoins de sécurité de votre service numérique", "https://betagouv.github.io/lab-anssi-ui-kit/assets/placeholder.16x9-BgJU1mfU.png", "01")
+        +carteAvecImage("Sécurisez, grâce à des mesures adaptées", "https://betagouv.github.io/lab-anssi-ui-kit/assets/placeholder.16x9-BgJU1mfU.png", "02")
+        +carteAvecImage("Homologuez en toute simplicité", "https://betagouv.github.io/lab-anssi-ui-kit/assets/placeholder.16x9-BgJU1mfU.png", "03")
+      dsfr-button.largeur-max(
+        label="Commencer à sécuriser"
+        kind="primary"
+        size="md"
+        icon="arrow-right-line"
+        icon-place="right"
+        markup="a"
+        type="button"
+        href="/inscription"
+        has-icon
+        centered
+      )
+    .bloc-contenu.bloc-56
+      h3 Les fonctionnalités clés
+      .groupe-tags
+        dsfr-tag(
+          label="Pour toutes les équipes"
+          type="pressable"
+          accent="défaut"
+          size="md"
+          id="tag-equipe"
+          class="tag-fonctionnalite"
+          pressed
+        )
+        dsfr-tag(
+          label="Pour les FSSI & RSSI"
+          type="pressable"
+          accent="défaut"
+          size="md"
+          id="tag-fssi"
+          class="tag-fonctionnalite"
+        )
+      .conteneur-fonctionnalite
+        +carteRetractable("Plan d’action cyber collaboratif", "Collaborez avec vos équipes, assignez les mesures de sécurité et suivez leur avancement.", "https://betagouv.github.io/lab-anssi-ui-kit/assets/placeholder.16x9-BgJU1mfU.png")
+        hr
     .bloc-contenu.bloc-etroit.fond-couleur-principale.bloc-impact-national
       .conteneur-droite-gauche
         .conteneur-gauche

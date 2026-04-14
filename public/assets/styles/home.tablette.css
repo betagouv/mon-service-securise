@@ -48,7 +48,6 @@
 
   #home .carte-carrousel {
     width: calc(50vw - (56px + 56px + 16px * 2 + 12px));
-    padding: 24px 54px 54px 54px;
   }
 
   #home .carte-carrousel h3 {

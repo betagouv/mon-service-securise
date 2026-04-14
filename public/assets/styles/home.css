@@ -26,10 +26,6 @@ main {
   color: #282828;
 }
 
-#home .fond-couleur-principale-attenuee h3 {
-  color: #08416a;
-}
-
 #home .tag-impact-national {
   text-align: left;
   background: #defbe5;
@@ -69,8 +65,46 @@ main {
 }
 
 #home h3 {
-  font-size: 1.8em;
-  margin: 24px 0 0;
+  margin: 0 0 8px;
+  text-align: left;
+  color: var(--text-title-grey);
+  font-size: 1.75rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 2.25rem;
+}
+
+#home .sous-titre {
+  text-align: left;
+  color: var(--text-title-grey);
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem;
+}
+
+#home .bloc-16 {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#home .bloc-24 {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#home .bloc-32 {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#home .bloc-56 {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
 }
 
 #home .alignement-gauche {
@@ -355,8 +389,6 @@ main {
 #home .carte-carrousel {
   background: #ffffff;
   border-radius: 4px;
-  box-shadow: 0 12px 12px 0 #0000001a;
-  padding: 0 32px 32px 32px;
   width: calc(100vw - (32px + 32px + 16px * 2));
   flex-shrink: 0;
   scroll-snap-align: center;
@@ -385,8 +417,12 @@ main {
   flex-direction: row;
   gap: 16px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 16px 24px 16px;
+}
+
+#home #carrousel-presentation .conteneur-liens-carrousel {
+  background: var(--couleur-principale-attenuee);
 }
 
 #home #carrousel-temoignages .conteneur-liens-carrousel {
@@ -487,4 +523,36 @@ main {
 
 #home .fond-couleur-principale-attenuee h3.police-noire {
   color: black;
+}
+
+#home .groupe-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#home .carte-retractable {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+#home .carte-retractable .titre-carte-retractable {
+  color: var(--text-title-grey);
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.5rem;
+}
+
+#home .carte-retractable .description-carte-retractable {
+  color: var(--text-title-grey);
+  font-size: 1rem;
+  font-style: normal;
+  line-height: 1.5rem;
+}
+
+#home dsfr-card {
+  text-align: left;
 }
