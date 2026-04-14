@@ -80,11 +80,9 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
   )
     if !headerAGaucheUniquement
       div(slot="beforetoolslinks")
-        if featureFlags.avecBandeauMSC
-          lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
+        lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
       div(slot="beforenavbarbuttons")
-        if featureFlags.avecBandeauMSC
-          lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
+        lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
       div(slot="modalToolLinks")
         .utilisateur-courant
       .conteneur-outils-entete(slot="toolLinks")

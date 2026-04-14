@@ -12,8 +12,6 @@ $(() => {
     etatVisiteGuidee.utilisateurCourant.dateInscription
   );
 
-  const avecPromotionDeMsc = lisDonneesPartagees('avec-promotion-de-msc');
-
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-tableau-de-bord', {
       detail: {
@@ -21,7 +19,6 @@ $(() => {
         modeVisiteGuidee,
         profilUtilisateurComplet,
         dateInscriptionUtilisateur,
-        avecPromotionDeMsc,
       },
     })
   );

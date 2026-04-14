@@ -19,7 +19,6 @@ import { extraisIp } from './requeteHttp.js';
 import { SourceAuthentification } from '../modeles/sourceAuthentification.js';
 import { TYPES_REQUETES } from './configurationServeur.js';
 import { DepotDonnees } from '../depotDonnees.interface.js';
-import { AdaptateurHorloge } from '../adaptateurs/adaptateurHorloge.js';
 import { AdaptateurEnvironnement } from '../adaptateurs/adaptateurEnvironnement.interface.js';
 import { AdaptateurJWT } from '../adaptateurs/adaptateurJWT.interface.js';
 import { AdaptateurProtection } from '../adaptateurs/adaptateurProtection.interface.js';
@@ -34,7 +33,6 @@ import { Autorisation } from '../modeles/autorisations/autorisation.js';
 const { LECTURE, INVISIBLE } = Permissions;
 
 type ConfigurationMiddleware = {
-  adaptateurHorloge: AdaptateurHorloge;
   adaptateurEnvironnement: AdaptateurEnvironnement;
   adaptateurJWT: AdaptateurJWT;
   adaptateurProtection: AdaptateurProtection;
@@ -60,7 +58,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
   const {
     depotDonnees,
     adaptateurEnvironnement = adaptateurEnvironnementParDefaut,
-    adaptateurHorloge,
     adaptateurJWT,
     adaptateurProtection,
     adaptateurGestionErreur,
@@ -467,11 +464,6 @@ const middleware = (configuration: ConfigurationMiddleware) => {
 
   const chargeFeatureFlags: RequestHandler = (_requete, reponse, suite) => {
     reponse.locals.featureFlags = {
-      avecBandeauMSC:
-        adaptateurHorloge.maintenant() >
-        new Date(
-          adaptateurEnvironnement.featureFlag().dateDebutBandeauMSC() || 0
-        ),
       avecRisquesV2: adaptateurEnvironnement.featureFlag().avecRisquesV2(),
     };
     suite();
