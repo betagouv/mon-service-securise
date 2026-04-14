@@ -73,7 +73,7 @@ importers:
         version: 3.10.1
       knex:
         specifier: ^3.1.0
-        version: 3.1.0(pg@8.8.0)
+        version: 3.2.9(pg@8.8.0)
       lusca:
         specifier: ^1.7.0
         version: 1.7.0
@@ -224,7 +224,7 @@ importers:
         version: 29.0.2(@noble/hashes@1.8.0)
       knex-pglite:
         specifier: ^0.13.0
-        version: 0.13.0(@electric-sql/pglite@0.4.3)(knex@3.1.0(pg@8.8.0))
+        version: 0.13.0(@electric-sql/pglite@0.4.3)(knex@3.2.9(pg@8.8.0))
       lint-staged:
         specifier: ^16.4.0
         version: 16.4.0
@@ -2894,8 +2894,8 @@ packages:
       '@electric-sql/pglite': 0.x
       knex: 3.x
 
-  knex@3.1.0:
-    resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
+  knex@3.2.9:
+    resolution: {integrity: sha512-dtAILTjBMaG8YloP5oBxohDIKyIsdQ/TkcVvSjhsksvsjeH63Y0PADyuMDfNZKbVT3Rlx3vEYVBlecbPT/KerA==}
     engines: {node: '>=16'}
     hasBin: true
     peerDependencies:
@@ -2904,6 +2904,7 @@ packages:
       mysql2: '*'
       pg: '*'
       pg-native: '*'
+      pg-query-stream: ^4.14.0
       sqlite3: '*'
       tedious: '*'
     peerDependenciesMeta:
@@ -2916,6 +2917,8 @@ packages:
       pg:
         optional: true
       pg-native:
+        optional: true
+      pg-query-stream:
         optional: true
       sqlite3:
         optional: true
@@ -3065,8 +3068,8 @@ packages:
   lodash.once@4.1.1:
     resolution: {integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==}
 
-  lodash@4.17.23:
-    resolution: {integrity: sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==}
+  lodash@4.18.1:
+    resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
 
   log-update@6.1.0:
     resolution: {integrity: sha512-9ie8ItPR6tjY5uYJh8K/Zrv/RMZ5VOlOWvtZdEHYSTFKZfIBPQa9tOAEeAWhd+AnIneLJ22w5fjOYtoutpWq5w==}
@@ -7077,12 +7080,12 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  knex-pglite@0.13.0(@electric-sql/pglite@0.4.3)(knex@3.1.0(pg@8.8.0)):
+  knex-pglite@0.13.0(@electric-sql/pglite@0.4.3)(knex@3.2.9(pg@8.8.0)):
     dependencies:
       '@electric-sql/pglite': 0.4.3
-      knex: 3.1.0(pg@8.8.0)
+      knex: 3.2.9(pg@8.8.0)
 
-  knex@3.1.0(pg@8.8.0):
+  knex@3.2.9(pg@8.8.0):
     dependencies:
       colorette: 2.0.19
       commander: 10.0.1
@@ -7092,7 +7095,7 @@ snapshots:
       get-package-type: 0.1.0
       getopts: 2.3.0
       interpret: 2.2.0
-      lodash: 4.17.23
+      lodash: 4.18.1
       pg-connection-string: 2.6.2
       rechoir: 0.8.0
       resolve-from: 5.0.0
@@ -7221,7 +7224,7 @@ snapshots:
 
   lodash.once@4.1.1: {}
 
-  lodash@4.17.23: {}
+  lodash@4.18.1: {}
 
   log-update@6.1.0:
     dependencies:
