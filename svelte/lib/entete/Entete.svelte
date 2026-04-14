@@ -17,7 +17,7 @@
     markup="a"
     type="button"
     href="/inscription"
-    target="self"
+    target="_self"
     data-themeable="false"
   ></dsfr-button>
   <dsfr-button
@@ -27,7 +27,7 @@
     markup="a"
     type="button"
     href="/connexion"
-    target="self"
+    target="_self"
     data-themeable="false"
     has-icon
     icon-place="left"
@@ -60,7 +60,7 @@
     markup="a"
     type="button"
     href="/deconnexion"
-    target="self"
+    target="_self"
     has-icon
     data-themeable="false"
   ></dsfr-button>
