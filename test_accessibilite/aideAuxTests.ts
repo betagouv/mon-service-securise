@@ -3,10 +3,8 @@ import { Page } from '@playwright/test';
 import { AxeBuilder } from '@axe-core/playwright';
 import { AxeResults } from 'axe-core';
 
-const DOSSIER_RAPPORT = 'test_accessibilite/rapport';
+export const { ID_SERVICE, EMAIL_CONNEXION, DOSSIER_RAPPORT } = process.env;
 const FICHIER_VIOLATIONS = `${DOSSIER_RAPPORT}/violations.jsonl`;
-export const ID_SERVICE = 'a471cb88-b199-450e-ab5d-2628e8a90e42';
-const EMAIL_CONNEXION = 'test@fia1.fr';
 
 export type ProblemeAccessibilite = {
   id: string;
@@ -16,7 +14,7 @@ export type ProblemeAccessibilite = {
 };
 
 const alimenteRapportFinal = (url: string, analyse: AxeResults) => {
-  mkdirSync(DOSSIER_RAPPORT, { recursive: true });
+  mkdirSync(DOSSIER_RAPPORT!, { recursive: true });
   appendFileSync(
     FICHIER_VIOLATIONS,
     `${JSON.stringify({ url, violations: analyse.violations })}\n`
@@ -53,7 +51,7 @@ export const navigueSurPageConnectee = async (urlPage: string, page: Page) => {
   await page.goto(`/connexion?urlRedirection=${redirect}`);
   await page.click('a[href^="/oidc/connexion"]');
   await page.waitForURL(/dev-agentconnect/);
-  await page.fill('input[type="email"]', EMAIL_CONNEXION);
+  await page.fill('input[type="email"]', EMAIL_CONNEXION!);
   await page.click('button[type="submit"]');
   await page.waitForURL(/dev-agentconnect/);
   await page.click('button[type="submit"]');
