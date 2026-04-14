@@ -1092,7 +1092,6 @@ describe('Le middleware MSS', () => {
     let adaptateurHorloge;
     let adaptateurEnvironnement;
     const featureFlag = {
-      dateDebutBandeauMSC: () => '2025-01-01 00:00:00Z',
       avecRisquesV2: () => false,
     };
 
@@ -1107,23 +1106,6 @@ describe('Le middleware MSS', () => {
     it('ajoute un objet de feature flags à `reponse.locals`, le rendant ainsi accessible aux `.pug`', async () => {
       middleware.chargeFeatureFlags(requete, reponse, () => {
         expect(reponse.locals.featureFlags).not.to.be(undefined);
-      });
-    });
-
-    describe("concernant l'affichage du bandeau de promotion MesServicesCyber", () => {
-      it("n'affiche pas le bandeau si la date du jour est antérieure à la date d'affichage", async () => {
-        middleware.chargeFeatureFlags(requete, reponse, () => {
-          expect(reponse.locals.featureFlags.avecBandeauMSC).to.be(false);
-        });
-      });
-
-      it("affiche le bandeau si la date d'affichage est passée", async () => {
-        adaptateurHorloge.maintenant = () => new Date('2026-01-01 00:00:00Z');
-        middleware = Middleware({ adaptateurEnvironnement, adaptateurHorloge });
-
-        middleware.chargeFeatureFlags(requete, reponse, () => {
-          expect(reponse.locals.featureFlags.avecBandeauMSC).to.be(true);
-        });
       });
     });
 
