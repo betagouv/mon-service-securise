@@ -1,8 +1,8 @@
 extends mssDeconnecte
-include ./fragments/navigationSiteVitrine
 
 block variables
   - const meta_description = "Découvrez les statistiques d'utilisation de MonServiceSécurisé et l'impact généré sur les services numériques qui utilisent le produit."
+  - const ongletActif = ""
 
 block title
   title Statistiques | MonServiceSécurisé
@@ -11,10 +11,6 @@ block append styles
   link(href='/statique/assets/styles/entete.responsive.css', rel='stylesheet')
   link(href='/statique/assets/styles/piedPage.responsive.css', rel='stylesheet')
   link(href='/statique/assets/styles/statistiques.css', rel='stylesheet')
-
-block navigation-site-vitrine
-  +navigationSiteVitrine()
-
 
 mixin uneCarteDeStats(illustration, chiffre, label, evolution, avecSuffixe = true)
   .carte

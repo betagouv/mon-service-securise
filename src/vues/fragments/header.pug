@@ -1,0 +1,106 @@
+mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreLienSurLogo, headerAGaucheUniquement, ongletActif)
+  -
+    const itemsMenu = [
+      {
+        "id": "nav-accueil",
+        "type": "link",
+        "active": ongletActif === 'accueil',
+        "collapsable": false,
+        "label": "Accueil",
+        "href": "/"
+      },
+      {
+        "id": "nav-promouvoir",
+        "type": "menu",
+        "active": ongletActif && ongletActif.includes('promouvoir/'),
+        "collapsable": true,
+        "collapseId": "nav-promouvoir",
+        "label": "Promouvoir",
+        "items": [
+          {
+            "id": "nav-faire-connaitre",
+            "type": "link",
+            "active": ongletActif && ongletActif.includes('/faire-connaitre'),
+            "collapsable": false,
+            "label": "Promouvoir MonServiceSécurisé",
+            "href": "/faire-connaitre-et-recommander-monservicesecurise"
+          },
+          {
+            "id": "nav-ambassadeurrice",
+            "type": "link",
+            "active": ongletActif && ongletActif.includes('/devenir-ambassadeurrice'),
+            "collapsable": false,
+            "label": "Devenir Ambassadeur/rice",
+            "href": "/devenir-ambassadeurrice-monservicesecurise"
+          }
+        ]
+      },
+      {
+        "id": "nav-co-construire",
+        "type": "link",
+        "active": ongletActif === 'co-construire-monservicesecurise',
+        "collapsable": false,
+        "label": "Co-construire MonServiceSécurisé",
+        "href": "/co-construire-monservicesecurise"
+      },
+      {
+        "id": "nav-conseils-cyber",
+        "type": "link",
+        "active": ongletActif === 'conseils-cyber',
+        "collapsable": false,
+        "label": "Conseils Cyber",
+        "href": "/conseils-cyber"
+      },
+      {
+        "id": "nav-doctrine-homologation-anssi",
+        "type": "link",
+        "active": ongletActif === 'doctrine-homologation-anssi',
+        "collapsable": false,
+        "label": "L'homologation simplifiée",
+        "href": "/doctrine-homologation-anssi"
+      },
+    ];
+  dsfr-header(
+    id="dsfr-header"
+    class="fr-header__brand"
+    has-navigation
+    brand-link-href=lienSurLogo,
+    has-brand-operator,
+    brand-operator-src="/statique/assets/images/logo_ANSSI_MSS.svg",
+    brand-operator-alt="MonServiceSécurisé",
+    brand-operator-style="height:4rem",
+    brand-service="MonServiceSécurisé"
+    has-brand-tagline
+    brand-tagline="Innovation ANSSI"
+    brand-link-title=titreLienSurLogo,
+    has-tool-links,
+    menu-id='boutonMenu',
+    fluid=fluide,
+    navigation-items=JSON.stringify(fluide ? [] : itemsMenu)
+  )
+    if !headerAGaucheUniquement
+      div(slot="beforetoolslinks")
+        lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
+      div(slot="beforenavbarbuttons")
+        lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
+      div(slot="modalToolLinks")
+        .utilisateur-courant
+      .conteneur-outils-entete(slot="toolLinks")
+        if block
+          block
+        .utilisateur-courant
+
+  if avertissementMaintenance
+    .banniere-maintenance
+      img(src="/statique/assets/images/icone_danger.svg" alt="")
+      p
+        -
+          const dateDuJour = new Date()
+          dateDuJour.setHours(0, 0, 0, 0);
+          const diffDate = new Date(avertissementMaintenance.jour) - dateDuJour
+          const diffJour = Math.round(diffDate / (1000 * 60 * 60 * 24));
+          const diffFormatee = new Intl.RelativeTimeFormat('fr', {numeric: 'auto'}).format(diffJour, 'day');
+          const jourFormate = new Intl.DateTimeFormat('fr', {dateStyle: "full"}).format(new Date(avertissementMaintenance.jour));
+        span Une maintenance est prévue #{diffFormatee} (#{jourFormate}) sur MonServiceSécurisé, #{avertissementMaintenance.heure}.
+        br
+        span La plateforme sera inaccessible. Nous nous excusons pour la gêne occasionnée.

@@ -6,7 +6,7 @@ include fragments/footer
 block variables
 
 block page
-  - const UI_KIT_VERSION = '1.46.1';
+  - const UI_KIT_VERSION = '1.47.0';
   block scripts
     script(src='/statique/bibliotheques/axios-1.0.0.min.js')
     script(src='/statique/bibliotheques/jquery-3.6.0.min.js')
@@ -29,46 +29,12 @@ block page
   title MonServiceSécurisé
 
   block header
-    header(class=(classeDuHeader))
-      .header-gauche.fr-header__brand
-        block header-gauche
-          .bloc-marque
-            .marianne
-            .republique-francaise RÉPUBLIQUE<br>FRANÇAISE
-            .devise
-          a.logo-anssi(href='https://cyber.gouv.fr')
-          a.logo-mss(href='/')
 
-      .header-droit
-        if featureFlags.avecBandeauMSC
-          lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
-        block header-droit
-          button(aria-label='Menu sandwich').sandwich
-          nav
-            .bouton-fermer Fermer
-            block navigation
-    if avertissementMaintenance
-      .banniere-maintenance
-        img(src="/statique/assets/images/icone_danger.svg" alt="")
-        p
-          -
-            const dateDuJour = new Date()
-            dateDuJour.setHours(0, 0, 0, 0);
-            const diffDate = new Date(avertissementMaintenance.jour) - dateDuJour
-            const diffJour = Math.round(diffDate   / (1000 * 60 * 60 * 24));
-            const diffFormatee = new Intl.RelativeTimeFormat('fr', { numeric: 'auto' }).format(diffJour, 'day');
-            const jourFormate = new Intl.DateTimeFormat('fr', { dateStyle: "full" }).format(new Date(avertissementMaintenance.jour));
-          span Une maintenance est prévue #{diffFormatee} (#{jourFormate}) sur MonServiceSécurisé, #{avertissementMaintenance.heure}.
-          br
-          span La plateforme sera inaccessible. Nous nous excusons pour la gêne occasionée.
-    block header-complementaire
-
+  block header-complementaire
 
   block session
 
   block visite-guidee
-
-  block bandeau-promotion-msc
 
   block navigation-site-vitrine
 

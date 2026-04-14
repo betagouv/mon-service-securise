@@ -1,7 +1,5 @@
 extends ./mss
-
-block variables
-    - const classeDuHeader = 'header-a-gauche-uniquement'
+include ./fragments/header
 
 block append styles
     link(href = '/statique/assets/styles/connexion.css', rel = 'stylesheet')
@@ -10,6 +8,9 @@ block append styles
 block append scripts
     +composantSvelte('connexion.js')
     +donneesPartagees('url-redirection', {urlRedirection})
+
+block header
+    +header(avertissementMaintenance, featureFlags, true, '/', "Retour à l'accueil du site MonServiceSécurisé - République Française", true)
 
 block main
     #conteneur-connexion

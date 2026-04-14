@@ -94,7 +94,6 @@ cableTousLesAbonnes(busEvenements, {
 });
 
 const middleware = Middleware({
-  adaptateurHorloge,
   adaptateurEnvironnement,
   adaptateurJWT,
   adaptateurProtection,

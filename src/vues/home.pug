@@ -1,7 +1,7 @@
 extends mssDeconnecte
-include ./fragments/navigationSiteVitrine
 block variables
   - const meta_description = 'Pilotez la sécurité de vos services numériques en équipe et homologuez les rapidement avec MonServiceSécurisé. Découvrez maintenant !'
+  - const ongletActif = 'accueil'
 
 mixin contenuAvantage(titre, description)
   .contenu-avantage
@@ -49,9 +49,6 @@ block append styles
 
 block append scripts
   script(type = 'module', src = '/statique/home.js')
-
-block navigation-site-vitrine
-  +navigationSiteVitrine('accueil')
 
 block main
   #home

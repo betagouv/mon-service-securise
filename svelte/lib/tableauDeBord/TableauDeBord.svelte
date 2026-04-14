@@ -20,7 +20,6 @@
     estSuperviseur: boolean;
     modeVisiteGuidee: boolean;
     dateInscriptionUtilisateur: Date;
-    avecPromotionDeMsc: boolean;
     profilUtilisateurComplet?: boolean;
   }
 
@@ -28,7 +27,6 @@
     estSuperviseur,
     modeVisiteGuidee,
     dateInscriptionUtilisateur,
-    avecPromotionDeMsc,
     profilUtilisateurComplet = true,
   }: Props = $props();
 
@@ -109,7 +107,7 @@
     {/if}
     <BandeauFiltres />
     <TableauDesServices indicesCyberCharges={indiceCyberMoyen !== undefined} />
-    <BandeauBlog {dateInscriptionUtilisateur} {avecPromotionDeMsc} />
+    <BandeauBlog {dateInscriptionUtilisateur} />
   {/if}
 </div>
 
