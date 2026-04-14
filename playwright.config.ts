@@ -2,6 +2,8 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './test_accessibilite',
+  globalSetup: './test_accessibilite/globalSetup.ts',
+  globalTeardown: './test_accessibilite/globalTeardown.ts',
   use: {
     baseURL: 'http://localhost:3000',
     viewport: { width: 1550, height: 900 },
