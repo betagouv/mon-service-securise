@@ -4,10 +4,9 @@
 
   interface Props {
     dateInscriptionUtilisateur: Date;
-    avecPromotionDeMsc: boolean;
   }
 
-  let { dateInscriptionUtilisateur, avecPromotionDeMsc }: Props = $props();
+  let { dateInscriptionUtilisateur }: Props = $props();
 
   const ilYA1Mois = new SvelteDate().setMonth(new Date().getMonth() - 1);
   let utilisateurInscritDepuisPlusD1Mois = $derived(
@@ -55,38 +54,21 @@
     <b>Échangez</b> directement avec vos pairs pour une collaboration facilitée.
   </CarteDePromotion>
 
-  {#if avecPromotionDeMsc}
-    <CarteDePromotion
-      titre="Découvrez MesServicesCyber !"
-      href="https://messervices.cyber.gouv.fr/"
-      fondIllustration="jaune"
-    >
-      {#snippet illustration()}
-        <img
-          src="/statique/assets/images/tableauDeBord/image_promotion_msc.png"
-          width="135"
-          alt=""
-        />
-      {/snippet}
-      MesServicesCyber, la plateforme pour faciliter l'accès de tous aux services
-      et ressources de l'ANSSI et de ses partenaires.
-    </CarteDePromotion>
-  {:else}
-    <CarteDePromotion
-      titre="Découvrez le blog"
-      href="/conseils-cyber"
-      fondIllustration="bleu-clair"
-    >
-      {#snippet illustration()}
-        <img
-          src="/statique/assets/images/tableauDeBord/image_decouvrez_blog.svg"
-          alt=""
-        />
-      {/snippet}
-      Toutes les réponses à vos questions sur l'homologation de sécurité, la mise
-      en oeuvre des mesures
-    </CarteDePromotion>
-  {/if}
+  <CarteDePromotion
+    titre="Découvrez MesServicesCyber !"
+    href="https://messervices.cyber.gouv.fr/"
+    fondIllustration="jaune"
+  >
+    {#snippet illustration()}
+      <img
+        src="/statique/assets/images/tableauDeBord/image_promotion_msc.png"
+        width="135"
+        alt=""
+      />
+    {/snippet}
+    MesServicesCyber, la plateforme pour faciliter l'accès de tous aux services et
+    ressources de l'ANSSI et de ses partenaires.
+  </CarteDePromotion>
 </div>
 
 <style>

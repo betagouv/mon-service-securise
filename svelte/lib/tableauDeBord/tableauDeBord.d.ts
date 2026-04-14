@@ -10,7 +10,6 @@ export type TableauDeBordProps = {
   modeVisiteGuidee: boolean;
   dateInscriptionUtilisateur: Date;
   profilUtilisateurComplet?: boolean;
-  avecPromotionDeMsc: boolean;
 };
 
 type Contributeur = {
