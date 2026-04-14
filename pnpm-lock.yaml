@@ -112,7 +112,7 @@ importers:
         version: 24.40.0(typescript@5.9.3)
       string-strip-html:
         specifier: ^8.4.0
-        version: 8.4.0
+        version: 8.5.0
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
@@ -3935,8 +3935,8 @@ packages:
     resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
     engines: {node: '>=0.6.19'}
 
-  string-strip-html@8.4.0:
-    resolution: {integrity: sha512-ajjEpk0V1G0+/RrX08I2pSj/kfsYU5wkUKWEKPQJXVQpdahZNSljiuWVqf8UgrB2E9DvFcougbl1gPwHzkuEDg==}
+  string-strip-html@8.5.0:
+    resolution: {integrity: sha512-5ICsK1B1j0A3AF1d45m0sqQCcmi1Q+t1QpF+b794LO5FTHV+ITkGR5C+UCDJQZgs5LMuRruqr6j48PxQVIurJQ==}
     engines: {node: '>=14'}
 
   string-width@4.2.3:
@@ -8272,7 +8272,7 @@ snapshots:
 
   string-argv@0.3.2: {}
 
-  string-strip-html@8.4.0: {}
+  string-strip-html@8.5.0: {}
 
   string-width@4.2.3:
     dependencies:
