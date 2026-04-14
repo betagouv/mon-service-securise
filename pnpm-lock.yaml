@@ -223,8 +223,8 @@ importers:
         specifier: ^29.0.0
         version: 29.0.2(@noble/hashes@1.8.0)
       knex-pglite:
-        specifier: ^0.13.0
-        version: 0.13.0(@electric-sql/pglite@0.4.3)(knex@3.2.9(pg@8.8.0))
+        specifier: ^0.14.0
+        version: 0.14.0(@electric-sql/pglite@0.4.3)(knex@3.2.9(pg@8.8.0))
       lint-staged:
         specifier: ^16.4.0
         version: 16.4.0
@@ -2888,8 +2888,8 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
-  knex-pglite@0.13.0:
-    resolution: {integrity: sha512-p27m7uXwjWLOJ6qb6JheCJViWBrDghU16ZyMVtUyOzwMo024OBKeEA20gwu6sxaAjdSnqT3lOkwlNqvSQxNQYg==}
+  knex-pglite@0.14.0:
+    resolution: {integrity: sha512-6KVnjKFqhd/LK0ah4DGf/jcF7TjcDQkRxh3bGlZOfo26gfH5SIlN6LzhSxxiAgLy+shkiGnY9VnMtd36Yw/dfw==}
     peerDependencies:
       '@electric-sql/pglite': 0.x
       knex: 3.x
@@ -7080,7 +7080,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  knex-pglite@0.13.0(@electric-sql/pglite@0.4.3)(knex@3.2.9(pg@8.8.0)):
+  knex-pglite@0.14.0(@electric-sql/pglite@0.4.3)(knex@3.2.9(pg@8.8.0)):
     dependencies:
       '@electric-sql/pglite': 0.4.3
       knex: 3.2.9(pg@8.8.0)
