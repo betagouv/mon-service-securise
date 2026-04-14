@@ -218,7 +218,7 @@ importers:
         version: 8.0.3
       jquery:
         specifier: ^3.6.3
-        version: 3.6.3
+        version: 3.7.1
       jsdom:
         specifier: ^29.0.0
         version: 29.0.2(@noble/hashes@1.8.0)
@@ -2814,8 +2814,8 @@ packages:
   jose@4.15.9:
     resolution: {integrity: sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==}
 
-  jquery@3.6.3:
-    resolution: {integrity: sha512-bZ5Sy3YzKo9Fyc8wH2iIQK4JImJ6R0GWI9kL1/k7Z91ZBNgkRXE6U0JfHIizZbort8ZunhSI3jw9I6253ahKfg==}
+  jquery@3.7.1:
+    resolution: {integrity: sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==}
 
   js-stringify@1.0.2:
     resolution: {integrity: sha512-rtS5ATOo2Q5k1G+DADISilDA6lv79zIiwFd6CcjuIxGKLFm5C+RLImRscVap9k55i+MOZwgliw+NejvkLuGD5g==}
@@ -6982,7 +6982,7 @@ snapshots:
 
   jose@4.15.9: {}
 
-  jquery@3.6.3: {}
+  jquery@3.7.1: {}
 
   js-stringify@1.0.2: {}
 
