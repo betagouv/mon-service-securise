@@ -686,6 +686,13 @@ const nouvelAdaptateur = (
   const estJwtRevoque = async (jwtHashe) =>
     donnees.revocationsJwt.some((r) => r === jwtHashe);
 
+  const tousLesSelsDeHachage = async () => [
+    {
+      version: 1,
+      empreinte: '$2b$10$89i41VrnyY0cnTq4iyVx.uJiutPhXFP.2owiAGuHc9pRXiIHd31gG',
+    },
+  ];
+
   return {
     activitesMesure,
     ajouteActiviteMesure,
@@ -761,6 +768,7 @@ const nouvelAdaptateur = (
     supprimeUtilisateur,
     supprimeUtilisateurs,
     tachesDeServicePour,
+    tousLesSelsDeHachage,
     tousServicesSontAssociesAuModeleMesureSpecifique,
     tousUtilisateurs,
     toutesLesAutorisationsDeProprietaire,
