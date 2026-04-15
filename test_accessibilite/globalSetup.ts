@@ -19,7 +19,11 @@ export default async (config: FullConfig) => {
   rmSync('test_accessibilite/rapport/violations.jsonl', { force: true });
 
   const urlBase = config.projects[0].use.baseURL;
-  const emailUtilisateurTest = config.webServer!.env!.EMAIL_CONNEXION;
+  process.env.EMAIL_CONNEXION = config.webServer!.env!.EMAIL_CONNEXION;
+  process.env.DOSSIER_RAPPORT = config.webServer!.env!.DOSSIER_RAPPORT;
+  process.env.DOSSIER_SCREENSHOTS = config.webServer!.env!.DOSSIER_SCREENSHOTS;
+  process.env.SECRET_JWT = config.webServer!.env!.SECRET_JWT;
+
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
@@ -28,7 +32,7 @@ export default async (config: FullConfig) => {
       await page.goto(`${urlBase}/connexion`);
       await page.click('a[href^="/oidc/connexion"]');
       await page.waitForURL(/dev-agentconnect/);
-      await page.fill('input[type="email"]', emailUtilisateurTest);
+      await page.fill('input[type="email"]', process.env.EMAIL_CONNEXION!);
       await page.click('button[type="submit"]');
       await page.waitForURL(/dev-agentconnect/);
       await page.click('button[type="submit"]');
@@ -95,15 +99,12 @@ export default async (config: FullConfig) => {
       const urlPageMesures = page.url();
       const id = urlPageMesures.split('service/')[1].split('/')[0];
       process.env.ID_SERVICE = id;
-      process.env.EMAIL_CONNEXION = emailUtilisateurTest;
     } catch (e) {
       await captureDEcran(page, `globalSetup-creerService-failure.png`);
       throw e;
     }
   };
 
-  process.env.DOSSIER_RAPPORT = config.webServer!.env!.DOSSIER_RAPPORT;
-  process.env.DOSSIER_SCREENSHOTS = config.webServer!.env!.DOSSIER_SCREENSHOTS;
   await creerUtilisateur();
   await creerService();
   await browser.close();

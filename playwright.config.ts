@@ -38,6 +38,7 @@ export default defineConfig({
       CRISP_ID_ARTICLE_PROMOUVOIR: 'cc1e1ff4-5dae-41ff-a40f-4e4b979741aa',
       CRISP_ID_ARTICLE_ROADMAP: '107f8554-ccea-4fe3-950c-2c07a106811a',
       CRISP_ID_CATEGORIE_BLOG: '8424d4d8-aa79-46fc-bef9-afd0287df0aa',
+      FEATURE_FLAG_AVEC_RISQUES_V2: 'true',
     },
     stdout: 'pipe',
     stderr: 'pipe',
