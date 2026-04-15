@@ -117,36 +117,38 @@
       >
         <h4>{niveau.nom}</h4>
         <p>{niveau.resume}</p>
-        <div class="conteneur-illustration">
-          <img
-            src="/statique/assets/images/niveauxSecurite/{niveau.id}.svg"
-            alt="Illustration du niveau {index + 1} de sécurité"
+        <div class="colle-en-bas">
+          <div class="conteneur-illustration">
+            <img
+              src="/statique/assets/images/niveauxSecurite/{niveau.id}.svg"
+              alt="Illustration du niveau {index + 1} de sécurité"
+            />
+          </div>
+          <input
+            type="radio"
+            id={niveau.id}
+            bind:group={niveauChoisi}
+            name="niveauSecurite"
+            value={niveau.id}
+            disabled={estNiveauTropBas(niveau.id) || modeVisiteGuidee}
           />
-        </div>
-        <input
-          type="radio"
-          id={niveau.id}
-          bind:group={niveauChoisi}
-          name="niveauSecurite"
-          value={niveau.id}
-          disabled={estNiveauTropBas(niveau.id) || modeVisiteGuidee}
-        />
-        {#if estNiveauTropBas(niveau.id)}
-          {#if !lectureSeule}
-            <div class="niveau-trop-bas">
-              Il est impossible de sélectionner des besoins de sécurité moins
-              élevés que ceux identifiés par l'ANSSI
-            </div>
+          {#if estNiveauTropBas(niveau.id)}
+            {#if !lectureSeule}
+              <div class="niveau-trop-bas">
+                Il est impossible de sélectionner des besoins de sécurité moins
+                élevés que ceux identifiés par l'ANSSI
+              </div>
+            {/if}
+          {:else if !lectureSeule || niveau.id === niveauChoisi}
+            <label
+              class:niveau-choisi={niveau.id === niveauChoisi}
+              class:lectureSeule
+              for={niveau.id}
+            >
+              {niveau.id === niveauChoisi ? 'Sélectionné' : 'Sélectionner'}
+            </label>
           {/if}
-        {:else if !lectureSeule || niveau.id === niveauChoisi}
-          <label
-            class:niveau-choisi={niveau.id === niveauChoisi}
-            class:lectureSeule
-            for={niveau.id}
-          >
-            {niveau.id === niveauChoisi ? 'Sélectionné' : 'Sélectionner'}
-          </label>
-        {/if}
+        </div>
       </button>
     {/each}
   </div>
@@ -274,7 +276,7 @@
   {/if}
 </div>
 
-<style>
+<style lang="scss">
   .racine {
     padding-top: 48px;
   }
@@ -293,6 +295,7 @@
   .boite-niveau {
     display: flex;
     flex-direction: column;
+    align-items: center;
     flex: 1;
     padding: 32px 11px;
     outline: 1px dashed var(--liseres-fonce);
@@ -303,6 +306,13 @@
     transition:
       transform 0.2s ease-out,
       box-shadow 0.2s ease-out;
+
+    .colle-en-bas {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
   .boite-niveau:not(.mode-visite-guidee),

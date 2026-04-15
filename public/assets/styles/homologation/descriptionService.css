@@ -28,6 +28,10 @@ form.homologation .banniere p {
   margin-bottom: 0;
 }
 
+#homologation {
+  max-width: 924px;
+}
+
 .banniere.invisible {
   display: none;
 }

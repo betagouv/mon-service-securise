@@ -6,6 +6,10 @@
   display: none;
 }
 
+.homologation {
+  max-width: 924px;
+}
+
 .homologation .titre-section {
   margin: 24px 0 16px;
   font-weight: bold;

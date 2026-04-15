@@ -45,3 +45,7 @@
 section:first-of-type {
   border-top: none;
 }
+
+#roles-responsabilites {
+  max-width: 924px;
+}
