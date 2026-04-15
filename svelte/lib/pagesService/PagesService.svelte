@@ -60,6 +60,10 @@
     service = (
       await axios.get<ServicePourPagesService>(`/api/service/${idService}`)
     ).data;
+    routeurStore.chargeInformationsService({
+      visible,
+      version: service.version,
+    });
     indiceCyber = (
       await axios.get<IndiceCyber>(`/api/service/${idService}/indiceCyber`)
     ).data;
