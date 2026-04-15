@@ -49,7 +49,6 @@
       e.ctrlKey ||
       e.shiftKey ||
       e.altKey
-      // Vérifier que c'est une route couverte par notre routeur, et qu'elle fait partie de "estVisible"
     )
       return;
 
