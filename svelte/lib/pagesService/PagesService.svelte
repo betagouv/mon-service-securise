@@ -91,6 +91,42 @@
 
     risques = tousRisques(serviceComplet.risques);
   });
+
+  let propsDuComposant = $derived.by(() => {
+    switch ($pageCourante) {
+      case 'mesures':
+        return {
+          estLectureSeule: estLectureSeule.mesures,
+          categories: referentiel.mesures.categories,
+          statuts: referentiel.mesures.statuts,
+          priorites: referentiel.mesures.priorites,
+          versionService: service?.version,
+          avecRisquesV2: featureFlags.avecRisquesV2,
+          afficheExplicationRisquesV2:
+            preferencesUtilisateur.afficheExplicationRisquesV2,
+        };
+      case 'descriptionService':
+        return {
+          lectureSeule: estLectureSeule.descriptionService,
+          descriptionService,
+          doitFinaliserDescription:
+            suggestionsService.finalisationDescriptionServiceImporte,
+        };
+      case 'risques':
+        return {
+          estLectureSeule: estLectureSeule.risques,
+          categoriesRisque: referentiel.risques.categories,
+          niveauxGravite: referentiel.risques.gravites,
+          niveauxVraisemblance: referentiel.risques.vraisemblances,
+          referentielRisques: referentiel.risques.descriptions,
+          matriceNiveauxRisque: referentiel.risques.matrice,
+          niveauxRisque: referentiel.risques.niveaux,
+          risques,
+        };
+      default:
+        return {};
+    }
+  });
 </script>
 
 <svelte:document
@@ -119,31 +155,10 @@
         {#key $routeurStore.location}
           {@const donneesPage = metadonneesPages[$pageCourante]}
           {@const Composant = donneesPage?.composant}
-          {@const lectureSeule = estLectureSeule[$pageCourante]}
           <h1>{donneesPage?.titre}</h1>
           <h2>{donneesPage?.sousTitre}</h2>
           <div class="conteneur-composant-page" in:fade={{ duration: 150 }}>
-            <Composant
-              {idService}
-              categories={referentiel.mesures.categories}
-              statuts={referentiel.mesures.statuts}
-              priorites={referentiel.mesures.priorites}
-              estLectureSeule={lectureSeule}
-              {modeVisiteGuidee}
-              versionService={service.version}
-              avecRisquesV2={featureFlags.avecRisquesV2}
-              afficheExplicationRisquesV2={preferencesUtilisateur.afficheExplicationRisquesV2}
-              {descriptionService}
-              {lectureSeule}
-              doitFinaliserDescription={suggestionsService.finalisationDescriptionServiceImporte}
-              categoriesRisque={referentiel.risques.categories}
-              niveauxGravite={referentiel.risques.gravites}
-              niveauxVraisemblance={referentiel.risques.vraisemblances}
-              referentielRisques={referentiel.risques.descriptions}
-              matriceNiveauxRisque={referentiel.risques.matrice}
-              niveauxRisque={referentiel.risques.niveaux}
-              {risques}
-            />
+            <Composant {idService} {...propsDuComposant} />
           </div>
         {/key}
       </div>
