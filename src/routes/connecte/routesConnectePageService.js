@@ -7,7 +7,6 @@ import {
 } from '../../modeles/autorisations/gestionDroits.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
-import RisqueGeneral from '../../modeles/risqueGeneral.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { valideQuery } from '../../http/validePayloads.js';
 
@@ -215,17 +214,10 @@ const routesConnectePageService = ({
     middleware.chargeAutorisationsService,
     (requete, reponse) => {
       const { service } = requete;
-      const { risquesGeneraux, risquesSpecifiques } = service.risques.toJSON();
-      const risquesGenerauxAConsiderer = Object.keys(referentiel.risques())
-        .map((id) => risquesGeneraux.find((r) => r.id === id) || { id })
-        .map((donnees) => new RisqueGeneral(donnees, referentiel).toJSON());
+
       reponse.render('service/pagesService', {
         referentiel,
         service,
-        donneesRisques: {
-          risquesGeneraux: risquesGenerauxAConsiderer,
-          risquesSpecifiques,
-        },
         etapeActive: 'risques',
       });
     }
