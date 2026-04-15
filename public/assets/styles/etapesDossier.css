@@ -19,6 +19,10 @@ section.autorite {
   border: 0;
 }
 
+.homologation {
+  max-width: 924px;
+}
+
 .consignes {
   padding: 1em 0 1em 1em;
 }
