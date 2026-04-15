@@ -57,13 +57,17 @@
     routeurStore.navigue(href);
   };
 
-  onMount(async () => {
+  const rafraichisResumeService = async () => {
     service = (
       await axios.get<ServicePourPagesService>(`/api/service/${idService}`)
     ).data;
+  };
+
+  onMount(async () => {
+    await rafraichisResumeService();
     routeurStore.chargeInformationsService({
       visible,
-      version: service.version,
+      version: service!.version,
     });
     indiceCyber = (
       await axios.get<IndiceCyber>(`/api/service/${idService}/indiceCyber`)
@@ -83,7 +87,11 @@
   });
 </script>
 
-<svelte:document onclick={interecepteNavigation} />
+<svelte:document
+  onclick={interecepteNavigation}
+  on:description-service-modifiee={rafraichisResumeService}
+/>
+
 {#if service && descriptionService && indiceCyber && indiceCyberPersonnalise}
   <div class="conteneur-pages-service">
     <EntetePageService

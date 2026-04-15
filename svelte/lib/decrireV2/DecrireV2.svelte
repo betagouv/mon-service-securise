@@ -135,6 +135,7 @@
 
       copiePourRestauration = $state.snapshot(descriptionEditable);
       retourAuModeResume();
+      document.dispatchEvent(new CustomEvent('description-service-modifiee'));
     } catch (e) {
       const x = e as AxiosError<{ erreur: { code: string } }>;
       if (
