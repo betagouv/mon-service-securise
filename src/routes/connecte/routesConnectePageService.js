@@ -18,7 +18,6 @@ const routesConnectePageService = ({
   middleware,
   referentiel,
   depotDonnees,
-  moteurRegles,
   adaptateurCsv,
   adaptateurGestionErreur,
   adaptateurHorloge,
@@ -87,13 +86,10 @@ const routesConnectePageService = ({
     async (requete, reponse) => {
       const { service } = requete;
 
-      const mesures = moteurRegles.mesures(service.descriptionService);
-
       reponse.render('service/pagesService', {
         referentiel,
         service,
         etapeActive: 'mesures',
-        mesures,
       });
     }
   );
@@ -223,7 +219,7 @@ const routesConnectePageService = ({
       const risquesGenerauxAConsiderer = Object.keys(referentiel.risques())
         .map((id) => risquesGeneraux.find((r) => r.id === id) || { id })
         .map((donnees) => new RisqueGeneral(donnees, referentiel).toJSON());
-      reponse.render('service/risques', {
+      reponse.render('service/pagesService', {
         referentiel,
         service,
         donneesRisques: {
