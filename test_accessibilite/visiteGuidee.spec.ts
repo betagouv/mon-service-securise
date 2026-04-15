@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import {
+  captureDEcran,
   messageDErreur,
   navigueSurTableauDeBordAvecConnexion,
   problemesDAccessibiliteDeLaPage,
@@ -10,9 +11,7 @@ test(`La visite guidée n'a aucune violation grave d'accessibilité`, async ({
 }) => {
   const checkDEtape = async (nomEtape: string) => {
     const problemes = await problemesDAccessibiliteDeLaPage(page);
-    await page.screenshot({
-      path: `screenshots/visite-guidee-${nomEtape}.png`,
-    });
+    await captureDEcran(page, `visite-guidee-${nomEtape}.png`);
 
     expect
       .soft(problemes.length, `${nomEtape}: \n${messageDErreur(problemes)}`)

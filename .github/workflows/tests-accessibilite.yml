@@ -39,3 +39,10 @@ jobs:
       - name: Publier le rapport d'accessibilité
         if: ${{ !cancelled() }}
         run: cat test_accessibilite/rapport/rapport-accessibilite.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Publier les screenshots d'exécution
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: screenshots
+          path: test_accessibilite/screenshots/
