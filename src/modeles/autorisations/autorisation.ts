@@ -133,6 +133,10 @@ export class Autorisation extends Base {
     [SECURISER]: LECTURE,
   };
 
+  static DROITS_VOIR_RISQUES: Partial<Droits> = {
+    [RISQUES]: LECTURE,
+  };
+
   static DROITS_EDITER_MESURES: Partial<Droits> = {
     [SECURISER]: ECRITURE,
   };
