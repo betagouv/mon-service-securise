@@ -1,5 +1,17 @@
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import { fabriqueAdaptateurGestionErreur } from './fabriqueAdaptateurGestionErreur.js';
+
+axiosRetry(axios, {
+  retries: 3,
+  retryCondition: (e) => e.response?.status === 429,
+  retryDelay: (retryCount, e) => {
+    const retryAfter = e.response?.headers?.['retry-after'];
+    return retryAfter
+      ? Number(retryAfter) * 1000
+      : axiosRetry.exponentialDelay(retryCount);
+  },
+});
 
 const extraisDepartement = (commune) => {
   if (!commune) {
