@@ -2,7 +2,7 @@ import { derived, get, writable } from 'svelte/store';
 import type { EtapeService } from '../../menuNavigationService/menuNavigationService.d';
 import type { VersionService } from '../../../../src/modeles/versionService';
 
-type InformationsService = {
+export type InformationsService = {
   visible: Record<EtapeService, boolean>;
   version: VersionService;
 };
@@ -37,9 +37,17 @@ const navigue = (
 ) => {
   const morceaux = url.split('/').filter(Boolean);
   const pageDemandee = (morceaux.at(-1) || '') as EtapeService;
-  const pageVisible =
-    get(routeurStore).informationsService?.visible[pageDemandee];
-  if (pageVisible && rubriquesGereesParSPA.includes(pageDemandee)) {
+  const informationsService = get(routeurStore).informationsService;
+  const pageVisible = informationsService?.visible[pageDemandee];
+  const versionService = informationsService?.version;
+
+  const descriptionServicePourV1 =
+    pageDemandee === 'descriptionService' && versionService === 'v1';
+  if (
+    pageVisible &&
+    rubriquesGereesParSPA.includes(pageDemandee) &&
+    !descriptionServicePourV1
+  ) {
     history.pushState({}, '', url);
     update((etat) => {
       etat.location = url;

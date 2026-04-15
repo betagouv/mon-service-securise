@@ -1,5 +1,6 @@
 import { get } from 'svelte/store';
 import type { VersionService } from '../../../../src/modeles/versionService';
+import type { InformationsService } from '../../../lib/pagesService/store/routeur.store';
 
 describe('Le routeur des pages service', () => {
   beforeEach(() => {
@@ -21,9 +22,8 @@ describe('Le routeur des pages service', () => {
   });
 
   const chargeInformationsService = (
-    routeurStore: Awaited<ReturnType<typeof leRouteur>>
-  ) => {
-    routeurStore.chargeInformationsService({
+    routeurStore: Awaited<ReturnType<typeof leRouteur>>,
+    informationsService: InformationsService = {
       visible: {
         contactsUtiles: true,
         risques: true,
@@ -32,7 +32,9 @@ describe('Le routeur des pages service', () => {
         dossiers: true,
       },
       version: 'v1' as VersionService,
-    });
+    }
+  ) => {
+    routeurStore.chargeInformationsService(informationsService);
   };
 
   it("peut s'initialiser avec les informations d'un service", async () => {
@@ -73,7 +75,7 @@ describe('Le routeur des pages service', () => {
   describe('concernant les contraintes de navigation', () => {
     it("navigue en dehors de la SPA si la rubrique n'est pas visible", async () => {
       const routeurStore = await leRouteur();
-      routeurStore.chargeInformationsService({
+      chargeInformationsService(routeurStore, {
         visible: {
           contactsUtiles: true,
           risques: true,
@@ -98,6 +100,27 @@ describe('Le routeur des pages service', () => {
       routeurStore.navigue('/service/1234/dossiers', navigueHorsSPA);
 
       expect(navigueHorsSPA).toHaveBeenCalledWith('/service/1234/dossiers');
+    });
+
+    it('navigue en dehors de la SPA si la rubrique `descriptionService` est demandée pour un service V1', async () => {
+      const routeurStore = await leRouteur();
+      chargeInformationsService(routeurStore, {
+        visible: {
+          contactsUtiles: true,
+          risques: true,
+          descriptionService: true,
+          mesures: true,
+          dossiers: true,
+        },
+        version: 'v1' as VersionService,
+      });
+      const navigueHorsSPA = vi.fn();
+
+      routeurStore.navigue('/service/1234/descriptionService', navigueHorsSPA);
+
+      expect(navigueHorsSPA).toHaveBeenCalledWith(
+        '/service/1234/descriptionService'
+      );
     });
   });
 });
