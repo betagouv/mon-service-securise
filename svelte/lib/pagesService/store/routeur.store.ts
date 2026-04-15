@@ -1,6 +1,7 @@
 import { derived, get, writable } from 'svelte/store';
 import type { EtapeService } from '../../menuNavigationService/menuNavigationService.d';
 import type { VersionService } from '../../../../src/modeles/versionService';
+import { metadonneesPages } from '../pages.donnees';
 
 export type InformationsService = {
   visible: Record<EtapeService, boolean>;
@@ -23,10 +24,9 @@ window.addEventListener('popstate', () => {
   });
 });
 
-const rubriquesGereesParSPA: Array<EtapeService> = [
-  'mesures',
-  'descriptionService',
-];
+const rubriquesGereesParSPA = Object.keys(
+  metadonneesPages
+) as Array<EtapeService>;
 
 type NavExterne = (url: string) => void;
 const navigue = (

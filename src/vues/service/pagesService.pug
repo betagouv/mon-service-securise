@@ -25,6 +25,14 @@ block append scripts
       priorites: referentiel.prioritesMesures(),
       statuts: referentiel.statutsMesures(),
       retoursUtilisateur: referentiel.retoursUtilisateurMesure()
+    },
+    risques: {
+      categories: referentiel.detailCategoriesRisque(),
+      gravites: referentiel.niveauxGravite(),
+      vraisemblances: referentiel.niveauxVraisemblance(),
+      descriptions: referentiel.risques(),
+      matrice: referentiel.matriceNiveauxRisques(),
+      niveaux: referentiel.niveauxRisque()
     }
   })
   +donneesPartagees('feature-flags', { avecRisquesV2: featureFlags.avecRisquesV2 })

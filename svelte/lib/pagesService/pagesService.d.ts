@@ -2,6 +2,14 @@ import type { EtapeService } from '../menuNavigationService/menuNavigationServic
 import type { IdCategorie } from '../tableauDesMesures/tableauDesMesures.d';
 import type { StatutMesure } from '../modeles/modeleMesure';
 import type { ReferentielPriorite } from '../ui/types';
+import type {
+  MatriceNiveauxRisque,
+  NiveauGravite,
+  ReferentielCategories,
+  ReferentielNiveauxRisque,
+  ReferentielRisques,
+  ReferentielVraisemblances,
+} from '../risques/risques.d';
 
 declare global {
   interface HTMLElementEventMap {
@@ -17,6 +25,14 @@ export type ReferentielPagesService = {
     categories: Record<IdCategorie, string>;
     statuts: Record<StatutMesure, string>;
     priorites: ReferentielPriorite;
+  };
+  risques: {
+    categories: ReferentielCategories;
+    gravites: Record<string, NiveauGravite>;
+    vraisemblances: ReferentielVraisemblances;
+    descriptions: ReferentielRisques;
+    matrice: MatriceNiveauxRisque;
+    niveaux: ReferentielNiveauxRisque;
   };
 };
 export type PagesServiceProps = {
