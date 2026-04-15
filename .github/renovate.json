@@ -1,3 +1,31 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json"
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "onboarding": false,
+  "enabledManagers": [
+    "docker-compose",
+    "dockerfile",
+    "github-actions",
+    "npm",
+    "nvm"
+  ],
+  "useBaseBranchConfig": "merge",
+  "commitMessagePrefix": "[RENOVATE]",
+  "prHourlyLimit": 10,
+  "prConcurrentLimit": 10,
+  "platform": "github",
+  "repositories": ["betagouv/mon-service-securise"],
+  "packageRules": [
+    {
+      "description": "lockFileMaintenance",
+      "matchUpdateTypes": [
+        "pin",
+        "digest",
+        "patch",
+        "minor",
+        "major",
+        "lockFileMaintenance"
+      ],
+      "minimumReleaseAge": "7 days"
+    }
+  ]
 }
