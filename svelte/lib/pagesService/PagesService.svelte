@@ -8,6 +8,8 @@
   import type { VersionService } from '../../../src/modeles/versionService';
   import { pageCourante, routeurStore } from './store/routeur.store';
   import type { DescriptionServiceV2API } from '../decrireV2/decrireV2.d';
+  import { tousRisques } from '../risques/risques';
+  import type { Risques } from '../risques/risques.d';
 
   let {
     idService,
@@ -34,6 +36,7 @@
   let descriptionService: DescriptionServiceV2API | undefined = $state();
   let indiceCyber: IndiceCyber | undefined = $state();
   let indiceCyberPersonnalise: IndiceCyber | undefined = $state();
+  let risques: ReturnType<typeof tousRisques> | undefined = $state();
 
   const interecepteNavigation = (e: MouseEvent) => {
     const link = (e.target as Element).closest('a');
@@ -79,11 +82,14 @@
     ).data;
 
     const serviceComplet = (
-      await axios.get<{ descriptionService: DescriptionServiceV2API }>(
-        `/api/service/${idService}?complet=true`
-      )
+      await axios.get<{
+        descriptionService: DescriptionServiceV2API;
+        risques: Risques;
+      }>(`/api/service/${idService}?complet=true`)
     ).data;
     descriptionService = serviceComplet.descriptionService;
+
+    risques = tousRisques(serviceComplet.risques);
   });
 </script>
 
@@ -113,6 +119,7 @@
         {#key $routeurStore.location}
           {@const donneesPage = metadonneesPages[$pageCourante]}
           {@const Composant = donneesPage?.composant}
+          {@const lectureSeule = estLectureSeule[$pageCourante]}
           <h1>{donneesPage?.titre}</h1>
           <h2>{donneesPage?.sousTitre}</h2>
           <div class="conteneur-composant-page" in:fade={{ duration: 150 }}>
@@ -121,14 +128,21 @@
               categories={referentiel.mesures.categories}
               statuts={referentiel.mesures.statuts}
               priorites={referentiel.mesures.priorites}
-              estLectureSeule={estLectureSeule.mesures}
+              estLectureSeule={lectureSeule}
               {modeVisiteGuidee}
               versionService={service.version}
               avecRisquesV2={featureFlags.avecRisquesV2}
               afficheExplicationRisquesV2={preferencesUtilisateur.afficheExplicationRisquesV2}
               {descriptionService}
-              lectureSeule={estLectureSeule.descriptionService}
+              {lectureSeule}
               doitFinaliserDescription={suggestionsService.finalisationDescriptionServiceImporte}
+              categoriesRisque={referentiel.risques.categories}
+              niveauxGravite={referentiel.risques.gravites}
+              niveauxVraisemblance={referentiel.risques.vraisemblances}
+              referentielRisques={referentiel.risques.descriptions}
+              matriceNiveauxRisque={referentiel.risques.matrice}
+              niveauxRisque={referentiel.risques.niveaux}
+              {risques}
             />
           </div>
         {/key}

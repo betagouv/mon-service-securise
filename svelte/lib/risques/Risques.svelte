@@ -27,7 +27,7 @@
     idService: string;
     estLectureSeule: boolean;
     risques: Risque[];
-    categories: ReferentielCategories;
+    categoriesRisque: ReferentielCategories;
     niveauxGravite: ReferentielGravites;
     niveauxVraisemblance: ReferentielVraisemblances;
     referentielRisques: ReferentielRisques;
@@ -39,7 +39,7 @@
     idService,
     estLectureSeule,
     risques = $bindable(),
-    categories,
+    categoriesRisque,
     niveauxGravite,
     niveauxVraisemblance,
     referentielRisques,
@@ -264,7 +264,7 @@
       <LigneRisque
         {risque}
         onclick={() => ouvreRisque(risque)}
-        {categories}
+        categories={categoriesRisque}
         {niveauxGravite}
         {niveauxVraisemblance}
         {estLectureSeule}
@@ -287,7 +287,7 @@
 <TiroirRisque
   bind:ouvert={tiroirRisqueOuvert}
   risque={risqueEnEdition}
-  referentielCategories={categories}
+  referentielCategories={categoriesRisque}
   {referentielRisques}
   referentielGravites={niveauxGravite}
   referentielVraisemblances={niveauxVraisemblance}
