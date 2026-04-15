@@ -7,6 +7,7 @@
   import { metadonneesPages } from './pages.donnees';
   import type { VersionService } from '../../../src/modeles/versionService';
   import { pageCourante, routeurStore } from './store/routeur.store';
+  import type { DescriptionServiceV2API } from '../decrireV2/decrireV2.d';
 
   let {
     idService,
@@ -16,7 +17,6 @@
     estLectureSeule,
     featureFlags,
     preferencesUtilisateur,
-    descriptionService,
     suggestionsService,
   }: PagesServiceProps = $props();
 
@@ -31,6 +31,7 @@
   };
 
   let service: ServicePourPagesService | undefined = $state();
+  let descriptionService: DescriptionServiceV2API | undefined = $state();
   let indiceCyber: IndiceCyber | undefined = $state();
   let indiceCyberPersonnalise: IndiceCyber | undefined = $state();
 
@@ -72,11 +73,18 @@
         `/api/service/${idService}/indiceCyberPersonnalise`
       )
     ).data;
+
+    const serviceComplet = (
+      await axios.get<{ descriptionService: DescriptionServiceV2API }>(
+        `/api/service/${idService}?complet=true`
+      )
+    ).data;
+    descriptionService = serviceComplet.descriptionService;
   });
 </script>
 
 <svelte:document onclick={interecepteNavigation} />
-{#if service}
+{#if service && descriptionService && indiceCyber && indiceCyberPersonnalise}
   <div class="conteneur-pages-service">
     <EntetePageService
       {idService}

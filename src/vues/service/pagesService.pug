@@ -15,8 +15,6 @@ block append scripts
   script(type = 'module', src = '/statique/service/pagesService.mjs')
   +donneesPartagees('etape-active', etapeActive)
   +donneesPartagees('autorisations-service', autorisationsService)
-  if !autorisationsService.DECRIRE.estMasque
-    +donneesPartagees('description-service', { ...service.descriptionService.toJSON() })
   +donneesPartagees('suggestions-service', {finalisationDescriptionServiceImporte: service.pourraitFaire('finalisationDescriptionServiceImporte')})
   +donneesPartagees('referentiel', {
     indiceCyber: {
