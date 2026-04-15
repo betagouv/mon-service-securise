@@ -2,6 +2,9 @@ import { appendFileSync, mkdirSync } from 'fs';
 import { Page } from '@playwright/test';
 import { AxeBuilder } from '@axe-core/playwright';
 import { AxeResults } from 'axe-core';
+import { TokenMSSPourCreationUtilisateur } from '../src/utilisateur/tokenMSSPourCreationUtilisateur.js';
+import { adaptateurJWT } from '../src/adaptateurs/adaptateurJWT.js';
+import * as adaptateurEnvironnement from '../src/adaptateurs/adaptateurEnvironnement.js';
 
 export const { ID_SERVICE } = process.env;
 const { EMAIL_CONNEXION, DOSSIER_RAPPORT } = process.env;
@@ -94,3 +97,17 @@ export const navigueSurTableauDeBordSansConnexion = async (page: Page) => {
   await fermeModale2FASiPresente(page);
   await fermeModaleVisiteGuideeSiPresente(page);
 };
+
+export const genereTokenPourCreationCompte = () =>
+  new TokenMSSPourCreationUtilisateur(
+    adaptateurJWT({ adaptateurEnvironnement })
+  ).cree({
+    nom: 'John',
+    prenom: 'Doe',
+    email: EMAIL_CONNEXION!,
+    organisation: {
+      departement: '75',
+      siret: '13000766900018',
+      nom: 'ANSSI',
+    },
+  });
