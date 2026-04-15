@@ -10,5 +10,5 @@ public/composants-svelte
 *report.xml
 .pnpm-store
 test-results
-screenshots
 test_accessibilite/rapport
+test_accessibilite/screenshots

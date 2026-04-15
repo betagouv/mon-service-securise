@@ -3,7 +3,8 @@ import { Page } from '@playwright/test';
 import { AxeBuilder } from '@axe-core/playwright';
 import { AxeResults } from 'axe-core';
 
-export const { ID_SERVICE, EMAIL_CONNEXION, DOSSIER_RAPPORT } = process.env;
+export const { ID_SERVICE } = process.env;
+const { EMAIL_CONNEXION, DOSSIER_RAPPORT } = process.env;
 const FICHIER_VIOLATIONS = `${DOSSIER_RAPPORT}/violations.jsonl`;
 
 export type ProblemeAccessibilite = {
@@ -30,6 +31,13 @@ const construisResultat = (analyse: AxeResults): ProblemeAccessibilite[] =>
       noeuds: nodes.map((n) => n.html),
       niveau: impact === 'critical' ? 'critique' : 'sérieux',
     }));
+
+export const captureDEcran = async (page: Page, nomImage: string) => {
+  mkdirSync(process.env.DOSSIER_SCREENSHOTS!, { recursive: true });
+  await page.screenshot({
+    path: `${process.env.DOSSIER_SCREENSHOTS}/${nomImage}`,
+  });
+};
 
 export const messageDErreur = (problemes: ProblemeAccessibilite[]) =>
   `${JSON.stringify(problemes, null, 2)}\n n'est pas vide.`;

@@ -1,5 +1,6 @@
 import { expect, Page, test } from '@playwright/test';
 import {
+  captureDEcran,
   messageDErreur,
   navigueSurPageConnectee,
   navigueSurTableauDeBordSansConnexion,
@@ -44,9 +45,7 @@ test("Le formulaire de création de service v2 n'a aucune violation grave d'acce
   let etape = 1;
   const checkIntermediaire = async () => {
     const problemes = await problemesDAccessibiliteDeLaPage(page);
-    await page.screenshot({
-      path: `screenshots/creation-service-${etape}.png`,
-    });
+    await captureDEcran(page, `creation-service-${etape}.png`);
 
     expect
       .soft(problemes.length, `${etape}: \n${messageDErreur(problemes)}`)
@@ -73,9 +72,7 @@ test("Le formulaire de création de service v2 n'a aucune violation grave d'acce
 
   await checkIntermediaire();
   await page.click('label[for="enProjet"]');
-  await page.screenshot({
-    path: `screenshots/creation-service-debug.png`,
-  });
+  await captureDEcran(page, 'creation-service-debug.png');
 
   await checkIntermediaire();
   await cliquerSuivant(page);
@@ -124,7 +121,7 @@ test("Le formulaire de création de service v2 en mode rapide n'a aucune violati
   await page.click('id=modeRapide');
 
   const problemes = await problemesDAccessibiliteDeLaPage(page);
-  await page.screenshot({ path: 'screenshots/creation-service-rapide.png' });
+  await captureDEcran(page, 'creation-service-rapide.png');
 
   expect(problemes.length, messageDErreur(problemes)).toBe(0);
 });
