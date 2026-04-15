@@ -2,8 +2,9 @@ name: Tests d'accessibilité
 permissions: {}
 
 on:
-  pull_request:
-    branches: [master]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 7 * * 1'
 
 jobs:
   accessibilite:
@@ -41,11 +42,23 @@ jobs:
           CRISP_CLE_API: ${{ secrets.ACCESSIBILITE_CRISP_CLE_API }}
         run: pnpm test:a11y
 
-      - name: Publier le rapport d'accessibilité
+      - name: Publier le rapport d'accessibilité dans le summary Github
         if: ${{ !cancelled() }}
         run: cat test_accessibilite/rapport/rapport-accessibilite.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Publier les screenshots d'exécution
+      - name: Publier le rapport d'accessibilité sur Mattermost
+        if: ${{ !cancelled() }}
+        env:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.ACCESSIBILITE_MATTERMOST_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          RESUME=$(awk '/^## Résumé/{found=1} found && /^## Violations/{exit} found{print}' test_accessibilite/rapport/rapport-accessibilite.md)
+          MESSAGE="$(printf '%s\n\n[Voir le rapport complet sur Github](%s)' "$RESUME" "$RUN_URL")"
+          curl -X POST "$MATTERMOST_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -n --arg text "$MESSAGE" '{"text": $text}')"
+
+      - name: Publier les screenshots d'exécution en artefact
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
