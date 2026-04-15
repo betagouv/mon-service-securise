@@ -1,4 +1,5 @@
 import { get } from 'svelte/store';
+import type { VersionService } from '../../../../src/modeles/versionService';
 
 describe('Le routeur des pages service', () => {
   beforeEach(() => {
@@ -19,6 +20,37 @@ describe('Le routeur des pages service', () => {
     expect(get(routeurStore).location).toBe('/service/1234');
   });
 
+  const chargeInformationsService = (
+    routeurStore: Awaited<ReturnType<typeof leRouteur>>
+  ) => {
+    routeurStore.chargeInformationsService({
+      visible: {
+        contactsUtiles: true,
+        risques: true,
+        descriptionService: true,
+        mesures: true,
+        dossiers: true,
+      },
+      version: 'v1' as VersionService,
+    });
+  };
+
+  it("peut s'initialiser avec les informations d'un service", async () => {
+    const routeurStore = await leRouteur();
+    chargeInformationsService(routeurStore);
+
+    expect(get(routeurStore).informationsService).toEqual({
+      visible: {
+        contactsUtiles: true,
+        risques: true,
+        descriptionService: true,
+        mesures: true,
+        dossiers: true,
+      },
+      version: 'v1',
+    });
+  });
+
   it('mets à jour sa location quand un évènement popstate intervient', async () => {
     window.history.pushState({}, '', '/service/1234');
     const routeurStore = await leRouteur();
@@ -31,9 +63,41 @@ describe('Le routeur des pages service', () => {
 
   it('peut naviguer vers une url', async () => {
     const routeurStore = await leRouteur();
+    chargeInformationsService(routeurStore);
 
     routeurStore.navigue('/service/1234/mesures');
 
     expect(get(routeurStore).location).toBe('/service/1234/mesures');
+  });
+
+  describe('concernant les contraintes de navigation', () => {
+    it("navigue en dehors de la SPA si la rubrique n'est pas visible", async () => {
+      const routeurStore = await leRouteur();
+      routeurStore.chargeInformationsService({
+        visible: {
+          contactsUtiles: true,
+          risques: true,
+          descriptionService: true,
+          mesures: false,
+          dossiers: true,
+        },
+        version: 'v1' as VersionService,
+      });
+      const navigueHorsSPA = vi.fn();
+
+      routeurStore.navigue('/service/1234/mesures', navigueHorsSPA);
+
+      expect(navigueHorsSPA).toHaveBeenCalledWith('/service/1234/mesures');
+    });
+
+    it("navigue en dehors de la SPA si la rubrique n'est pas encore gérée par la SPA", async () => {
+      const routeurStore = await leRouteur();
+      chargeInformationsService(routeurStore);
+      const navigueHorsSPA = vi.fn();
+
+      routeurStore.navigue('/service/1234/dossiers', navigueHorsSPA);
+
+      expect(navigueHorsSPA).toHaveBeenCalledWith('/service/1234/dossiers');
+    });
   });
 });

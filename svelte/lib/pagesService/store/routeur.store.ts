@@ -1,24 +1,66 @@
-import { derived, writable } from 'svelte/store';
+import { derived, get, writable } from 'svelte/store';
 import type { EtapeService } from '../../menuNavigationService/menuNavigationService.d';
+import type { VersionService } from '../../../../src/modeles/versionService';
 
-const { subscribe, set } = writable({ location: window.location.pathname });
+type InformationsService = {
+  visible: Record<EtapeService, boolean>;
+  version: VersionService;
+};
 
-window.addEventListener('popstate', () => {
-  set({ location: window.location.pathname });
+type RouteurStoreProps = {
+  location: string;
+  informationsService?: InformationsService;
+};
+
+const { subscribe, update } = writable<RouteurStoreProps>({
+  location: window.location.pathname,
 });
 
-const navigue = (url: string) => {
-  const morceaux = url.split('/').filter(Boolean);
-  const pageDemandee = morceaux.at(-1) || '';
-  if (['mesures', 'descriptionService'].includes(pageDemandee)) {
-    history.pushState({}, '', url);
-    set({ location: url });
-  } else {
+window.addEventListener('popstate', () => {
+  update((etat) => {
+    etat.location = window.location.pathname;
+    return etat;
+  });
+});
+
+const rubriquesGereesParSPA: Array<EtapeService> = [
+  'mesures',
+  'descriptionService',
+];
+
+type NavExterne = (url: string) => void;
+const navigue = (
+  url: string,
+  navigueHorsSPA: NavExterne = (url) => {
     window.location.href = url;
+  }
+) => {
+  const morceaux = url.split('/').filter(Boolean);
+  const pageDemandee = (morceaux.at(-1) || '') as EtapeService;
+  const pageVisible =
+    get(routeurStore).informationsService?.visible[pageDemandee];
+  if (pageVisible && rubriquesGereesParSPA.includes(pageDemandee)) {
+    history.pushState({}, '', url);
+    update((etat) => {
+      etat.location = url;
+      return etat;
+    });
+  } else {
+    navigueHorsSPA(url);
   }
 };
 
+const chargeInformationsService = (
+  informationsService: InformationsService
+) => {
+  update((etat) => {
+    etat.informationsService = informationsService;
+    return etat;
+  });
+};
+
 export const routeurStore = {
+  chargeInformationsService,
   subscribe,
   navigue,
 };
