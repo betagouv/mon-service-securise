@@ -4,6 +4,13 @@
     TypePartiePrenante,
   } from './contactsUtiles.types';
   import InputDSFR from './InputDSFR.svelte';
+  import { metsAJourContactsUtiles } from './contactsUtiles.api';
+
+  interface Props {
+    idService: string;
+  }
+
+  let { idService }: Props = $props();
 
   const configurationsTabs = [
     {
@@ -78,6 +85,10 @@
 
   const supprimePartiePrenante = (index: number) => {
     contactsUtiles.partiesPrenantesSpecifiques.splice(index, 1);
+  };
+
+  const sauvegardeContacts = async () => {
+    await metsAJourContactsUtiles(idService, contactsUtiles);
   };
 </script>
 
@@ -229,37 +240,64 @@
     ></dsfr-button>
   </div>
 </dsfr-tabs>
+<div class="barre-actions">
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+  <dsfr-button
+    label="Enregistrer les modifications"
+    kind="primary"
+    has-icon
+    icon="save-line"
+    icon-place="left"
+    size="md"
+    onclick={sauvegardeContacts}
+  ></dsfr-button>
+</div>
 
 <style lang="scss">
-  .conteneur-onglet {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+  dsfr-tabs {
+    margin-bottom: 32px;
 
-    .conteneur-avec-cadre {
-      position: relative;
-      max-width: 924px;
-      border: 1px solid #ddd;
-      padding: 24px;
-      border-radius: 8px;
+    .conteneur-onglet {
       display: flex;
       flex-direction: column;
       gap: 24px;
-    }
 
-    .bouton-suppression-contact {
-      position: absolute;
-      top: 12px;
-      right: 24px;
-      z-index: 1;
-    }
+      .conteneur-avec-cadre {
+        position: relative;
+        max-width: 924px;
+        border: 1px solid #ddd;
+        padding: 24px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
 
-    h5 {
-      margin: 0;
-      padding: 0;
-      font-weight: 700;
-      font-size: 1.375rem;
-      line-height: 1.75;
+      .bouton-suppression-contact {
+        position: absolute;
+        top: 12px;
+        right: 24px;
+        z-index: 1;
+      }
+
+      h5 {
+        margin: 0;
+        padding: 0;
+        font-weight: 700;
+        font-size: 1.375rem;
+        line-height: 1.75;
+      }
     }
+  }
+
+  .barre-actions {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    border-top: 1px solid #ddd;
+    padding: 24px 72px;
+    margin-left: -72px;
+    margin-right: -24px;
+    margin-bottom: -24px;
   }
 </style>
