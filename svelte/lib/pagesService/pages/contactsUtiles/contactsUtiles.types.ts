@@ -15,6 +15,11 @@ export type ActeurHomologation = {
   fonction: string;
 };
 
+export type PartiesPrenantes = Record<
+  TypePartiePrenante,
+  DonneesPartiePrenante
+>;
+
 export type ContactsUtiles = {
   autoriteHomologation: ActeurHomologation;
   expertCybersecurite: ActeurHomologation;
@@ -25,6 +30,6 @@ export type ContactsUtiles = {
       role: string;
     }
   >;
-  partiesPrenantes: Record<TypePartiePrenante, DonneesPartiePrenante>;
+  partiesPrenantes: PartiesPrenantes;
   partiesPrenantesSpecifiques: Array<DonneesPartiePrenante>;
 };

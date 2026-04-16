@@ -16,7 +16,6 @@
   import { toasterStore } from '../ui/stores/toaster.store';
   import type { UUID } from '../typesBasiquesSvelte';
   import ResumeNiveauSecurite from '../ui/ResumeNiveauSecurite.svelte';
-  import Toaster from '../ui/Toaster.svelte';
   import type { IdNiveauDeSecurite } from '../ui/types';
   import NiveauDeSecuriteEditable from '../creationV2/NiveauDeSecuriteEditable.svelte';
   import Toast from '../ui/Toast.svelte';
@@ -156,7 +155,6 @@
   };
 </script>
 
-<Toaster />
 <div class="conteneur-decrire-v2">
   {#if doitFinaliserDescription}
     <div class="conteneur-alerte">
