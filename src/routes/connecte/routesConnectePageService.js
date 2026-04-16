@@ -202,7 +202,7 @@ const routesConnectePageService = ({
       const { service } = requete;
       reponse.render('service/rolesResponsabilites', {
         service,
-        etapeActive: 'contactsUtiles',
+        etapeActive: 'rolesResponsabilites',
         referentiel,
       });
     }

@@ -6,6 +6,7 @@ export const pagesServiceGerees = enEtape([
   'mesures',
   'descriptionService',
   'risques',
+  'rolesResponsabilites',
 ] as const);
 
 export type PageServiceGeree = (typeof pagesServiceGerees)[number];

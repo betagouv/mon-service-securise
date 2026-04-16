@@ -26,7 +26,7 @@ describe('Le routeur des pages service', () => {
     routeurStore: Awaited<ReturnType<typeof leRouteur>>,
     informationsService: InformationsService = {
       visible: {
-        contactsUtiles: true,
+        rolesResponsabilites: true,
         risques: true,
         descriptionService: true,
         mesures: true,
@@ -44,7 +44,7 @@ describe('Le routeur des pages service', () => {
 
     expect(get(routeurStore).informationsService).toEqual({
       visible: {
-        contactsUtiles: true,
+        rolesResponsabilites: true,
         risques: true,
         descriptionService: true,
         mesures: true,
@@ -78,7 +78,7 @@ describe('Le routeur des pages service', () => {
       const routeurStore = await leRouteur();
       chargeInformationsService(routeurStore, {
         visible: {
-          contactsUtiles: true,
+          rolesResponsabilites: true,
           risques: true,
           descriptionService: true,
           mesures: false,
@@ -107,7 +107,7 @@ describe('Le routeur des pages service', () => {
       const routeurStore = await leRouteur();
       chargeInformationsService(routeurStore, {
         visible: {
-          contactsUtiles: true,
+          rolesResponsabilites: true,
           risques: true,
           descriptionService: true,
           mesures: true,
