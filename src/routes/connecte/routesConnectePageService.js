@@ -200,7 +200,7 @@ const routesConnectePageService = ({
     middleware.chargeAutorisationsService,
     (requete, reponse) => {
       const { service } = requete;
-      reponse.render('service/rolesResponsabilites', {
+      reponse.render('service/pagesService', {
         service,
         etapeActive: 'rolesResponsabilites',
         referentiel,
