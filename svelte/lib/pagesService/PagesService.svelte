@@ -10,6 +10,8 @@
   import type { DescriptionServiceV2API } from '../decrireV2/decrireV2.d';
   import { tousRisques } from '../risques/risques';
   import type { Risques } from '../risques/risques.d';
+  import type { ContactsUtiles } from './pages/contactsUtiles/contactsUtiles.types';
+  import Toaster from '../ui/Toaster.svelte';
 
   let {
     idService,
@@ -37,6 +39,7 @@
   let indiceCyber: IndiceCyber | undefined = $state();
   let indiceCyberPersonnalise: IndiceCyber | undefined = $state();
   let risques: ReturnType<typeof tousRisques> | undefined = $state();
+  let contactsUtiles: ContactsUtiles | undefined = $state();
 
   const interecepteNavigation = (e: MouseEvent) => {
     const link = (e.target as Element).closest('a');
@@ -66,6 +69,20 @@
     ).data;
   };
 
+  const rafraichisServiceComplet = async () => {
+    const serviceComplet = (
+      await axios.get<{
+        descriptionService: DescriptionServiceV2API;
+        risques: Risques;
+        contactsUtiles: ContactsUtiles;
+      }>(`/api/service/${idService}?complet=true`)
+    ).data;
+
+    descriptionService = serviceComplet.descriptionService;
+    risques = tousRisques(serviceComplet.risques);
+    contactsUtiles = serviceComplet.contactsUtiles;
+  };
+
   onMount(async () => {
     await rafraichisResumeService();
     routeurStore.chargeInformationsService({
@@ -81,15 +98,7 @@
       )
     ).data;
 
-    const serviceComplet = (
-      await axios.get<{
-        descriptionService: DescriptionServiceV2API;
-        risques: Risques;
-      }>(`/api/service/${idService}?complet=true`)
-    ).data;
-    descriptionService = serviceComplet.descriptionService;
-
-    risques = tousRisques(serviceComplet.risques);
+    await rafraichisServiceComplet();
   });
 
   let propsDuComposant = $derived.by(() => {
@@ -123,6 +132,10 @@
           niveauxRisque: referentiel.risques.niveaux,
           risques,
         };
+      case 'rolesResponsabilites':
+        return {
+          contactsUtiles,
+        };
       default:
         return {};
     }
@@ -132,9 +145,11 @@
 <svelte:document
   onclick={interecepteNavigation}
   on:description-service-modifiee={rafraichisResumeService}
+  on:contacts-utiles-service-modifiee={rafraichisServiceComplet}
 />
 
-{#if service && descriptionService && indiceCyber && indiceCyberPersonnalise}
+<Toaster />
+{#if service && descriptionService && indiceCyber && indiceCyberPersonnalise && contactsUtiles}
   <div class="conteneur-pages-service">
     <EntetePageService
       {idService}

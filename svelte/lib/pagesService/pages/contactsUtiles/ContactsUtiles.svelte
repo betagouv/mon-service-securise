@@ -1,16 +1,51 @@
 <script lang="ts">
   import type {
     ContactsUtiles,
+    PartiesPrenantes,
     TypePartiePrenante,
   } from './contactsUtiles.types';
   import InputDSFR from './InputDSFR.svelte';
   import { metsAJourContactsUtiles } from './contactsUtiles.api';
+  import { untrack } from 'svelte';
+  import { toasterStore } from '../../../ui/stores/toaster.store';
 
   interface Props {
     idService: string;
+    contactsUtiles: ContactsUtiles;
   }
 
-  let { idService }: Props = $props();
+  let { idService, contactsUtiles: contactsUtilesInitiaux }: Props = $props();
+  let contactsUtiles = $state<ContactsUtiles>(
+    (() => {
+      const snapshot = $state.snapshot(untrack(() => contactsUtilesInitiaux));
+      return {
+        ...snapshot,
+        partiesPrenantes: {
+          Hebergement: {
+            nom: '',
+            pointContact: '',
+            natureAcces: '',
+          },
+          SecuriteService: {
+            nom: '',
+            pointContact: '',
+            natureAcces: '',
+          },
+          DeveloppementFourniture: {
+            nom: '',
+            pointContact: '',
+            natureAcces: '',
+          },
+          MaintenanceService: {
+            nom: '',
+            pointContact: '',
+            natureAcces: '',
+          },
+          ...(snapshot.partiesPrenantes as Partial<PartiesPrenantes>),
+        },
+      };
+    })()
+  );
 
   const configurationsTabs = [
     {
@@ -22,40 +57,13 @@
       label: 'Parties prenantes',
     },
   ];
-  let contactsUtiles: ContactsUtiles | undefined = $state({
-    autoriteHomologation: { nom: '', fonction: '' },
-    delegueProtectionDonnees: { nom: '', fonction: '' },
-    expertCybersecurite: { nom: '', fonction: '' },
-    piloteProjet: { nom: '', fonction: '' },
-    acteursHomologation: [],
-    partiesPrenantes: {
-      Hebergement: {
-        nom: '',
-        pointContact: '',
-        natureAcces: '',
-      },
-      SecuriteService: {
-        nom: '',
-        pointContact: '',
-        natureAcces: '',
-      },
-      DeveloppementFourniture: {
-        nom: '',
-        pointContact: '',
-        natureAcces: '',
-      },
-      MaintenanceService: {
-        nom: '',
-        pointContact: '',
-        natureAcces: '',
-      },
-    },
-    partiesPrenantesSpecifiques: [],
-  });
 
-  const toutesPartiesPrenantes = Object.keys(
-    contactsUtiles.partiesPrenantes
-  ) as Array<TypePartiePrenante>;
+  const toutesPartiesPrenantes = [
+    'Hebergement',
+    'DeveloppementFourniture',
+    'MaintenanceService',
+    'SecuriteService',
+  ] as Array<TypePartiePrenante>;
   const labelsPartiesPrenantes: Record<TypePartiePrenante, string> = {
     Hebergement: 'Hébergement du service',
     DeveloppementFourniture: 'Développement / fourniture du service',
@@ -89,6 +97,11 @@
 
   const sauvegardeContacts = async () => {
     await metsAJourContactsUtiles(idService, contactsUtiles);
+    document.dispatchEvent(new CustomEvent('contacts-utiles-service-modifiee'));
+    toasterStore.succes(
+      'Mise à jour réussie',
+      'Les contacts utiles de votre service ont été mis à jour avec succès.'
+    );
   };
 </script>
 

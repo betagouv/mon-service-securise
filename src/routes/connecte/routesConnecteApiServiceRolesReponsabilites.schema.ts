@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-const chainePouvantEtreVide = z.string().max(200);
-const chaineOptionelleNonVide = z.string().min(1).max(200).optional();
+const chainePouvantEtreVide = z.string().max(200).optional();
 
 const acteurHomologation = z.strictObject({
   nom: chainePouvantEtreVide,
@@ -10,9 +9,9 @@ const acteurHomologation = z.strictObject({
 
 const partiePrenanteOptionnelle = z
   .strictObject({
-    nom: chaineOptionelleNonVide,
-    natureAcces: chaineOptionelleNonVide,
-    pointContact: chaineOptionelleNonVide,
+    nom: chainePouvantEtreVide,
+    natureAcces: chainePouvantEtreVide,
+    pointContact: chainePouvantEtreVide,
   })
   .optional();
 
@@ -24,9 +23,9 @@ export const schemaPostRolesResponsabilites = () => ({
   acteursHomologation: z
     .array(
       z.strictObject({
-        role: chaineOptionelleNonVide,
-        nom: chaineOptionelleNonVide,
-        fonction: chaineOptionelleNonVide,
+        role: chainePouvantEtreVide,
+        nom: chainePouvantEtreVide,
+        fonction: chainePouvantEtreVide,
       })
     )
     .max(50),

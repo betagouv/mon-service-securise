@@ -27,7 +27,6 @@
     mesuresVisiteGuidee,
   } from './modeVisiteGuidee/donneesVisiteGuidee';
   import Onglet from '../ui/Onglet.svelte';
-  import Toaster from '../ui/Toaster.svelte';
   import { toasterStore } from '../ui/stores/toaster.store';
   import { rechercheTextuelle } from './stores/rechercheTextuelle.store';
   import { resultatsDeRecherche } from './stores/resultatsDeRecherche.store';
@@ -284,7 +283,6 @@
   on:modeles-mesure-specifique-associes={() =>
     ($rechercheParAvancement = 'enAction')}
 />
-<Toaster />
 <div class="barre-filtres">
   <div class="conteneur-recherche">
     <img
