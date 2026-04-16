@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { get } from 'svelte/store';
 import type { VersionService } from '../../../../src/modeles/versionService';
 import type { InformationsService } from '../../../lib/pagesService/store/routeur.store';
