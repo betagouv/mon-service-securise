@@ -4,9 +4,14 @@ import * as objetGetMesures from './objetGetMesures.js';
 import { Droits } from '../autorisations/gestionDroits.js';
 import RisqueGeneral from '../risqueGeneral.js';
 import { TousReferentiels } from '../../referentiel.interface.js';
+import { ObjetGetContactsUtiles } from './objetGetContactsUtiles.js';
 
-const { DROITS_VOIR_DESCRIPTION, DROITS_VOIR_MESURES, DROITS_VOIR_RISQUES } =
-  Autorisation;
+const {
+  DROITS_VOIR_DESCRIPTION,
+  DROITS_VOIR_MESURES,
+  DROITS_VOIR_RISQUES,
+  DROITS_VOIR_CONTACTS_UTILES,
+} = Autorisation;
 
 type RisquesAPI = {
   risquesGeneraux: Array<Record<string, unknown>>;
@@ -24,6 +29,7 @@ export class ObjetGetServiceComplet {
     descriptionService?: Record<string, unknown>;
     mesures?: Record<string, unknown>;
     risques?: RisquesAPI;
+    contactsUtiles?: Record<string, unknown>;
   } {
     const { risquesGeneraux, risquesSpecifiques } =
       this.service.risques.toJSON() as RisquesAPI;
@@ -43,6 +49,9 @@ export class ObjetGetServiceComplet {
           risquesGeneraux: risquesGenerauxAConsiderer,
           risquesSpecifiques,
         },
+      }),
+      ...(this.peut(DROITS_VOIR_CONTACTS_UTILES) && {
+        contactsUtiles: new ObjetGetContactsUtiles(this.service).donnees(),
       }),
     };
   }
