@@ -1,7 +1,10 @@
 import { derived, get, writable } from 'svelte/store';
 import type { EtapeService } from '../../menuNavigationService/menuNavigationService.d';
 import type { VersionService } from '../../../../src/modeles/versionService';
-import { metadonneesPages } from '../pages.donnees';
+import {
+  type PageServiceGeree,
+  pagesServiceGerees,
+} from '../pagesServiceGerees';
 
 export type InformationsService = {
   visible: Record<EtapeService, boolean>;
@@ -24,10 +27,6 @@ window.addEventListener('popstate', () => {
   });
 });
 
-const rubriquesGereesParSPA = Object.keys(
-  metadonneesPages
-) as Array<EtapeService>;
-
 type NavExterne = (url: string) => void;
 const navigue = (
   url: string,
@@ -36,7 +35,7 @@ const navigue = (
   }
 ) => {
   const morceaux = url.split('/').filter(Boolean);
-  const pageDemandee = (morceaux.at(-1) || '') as EtapeService;
+  const pageDemandee = (morceaux.at(-1) || '') as PageServiceGeree;
   const informationsService = get(routeurStore).informationsService;
   const pageVisible = informationsService?.visible[pageDemandee];
   const versionService = informationsService?.version;
@@ -45,7 +44,7 @@ const navigue = (
     pageDemandee === 'descriptionService' && versionService === 'v1';
   if (
     pageVisible &&
-    rubriquesGereesParSPA.includes(pageDemandee) &&
+    pagesServiceGerees.includes(pageDemandee) &&
     !descriptionServicePourV1
   ) {
     history.pushState({}, '', url);
@@ -75,5 +74,5 @@ export const routeurStore = {
 
 export const pageCourante = derived(routeurStore, ($r) => {
   const morceaux = $r.location.split('/').filter(Boolean);
-  return morceaux.at(-1) as EtapeService;
+  return morceaux.at(-1) as PageServiceGeree;
 });

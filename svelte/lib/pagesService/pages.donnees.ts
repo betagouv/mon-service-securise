@@ -1,8 +1,8 @@
-import type { EtapeService } from '../menuNavigationService/menuNavigationService.d';
 import TableauDesMesures from '../tableauDesMesures/TableauDesMesures.svelte';
 import type { Component } from 'svelte';
 import DecrireV2 from '../decrireV2/DecrireV2.svelte';
 import Risques from '../risques/Risques.svelte';
+import { type PageServiceGeree } from './pagesServiceGerees';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type DonneesPage = {
@@ -11,7 +11,7 @@ type DonneesPage = {
   composant: Component<any>;
 };
 
-export const metadonneesPages: Partial<Record<EtapeService, DonneesPage>> = {
+export const metadonneesPages: Record<PageServiceGeree, DonneesPage> = {
   mesures: {
     titre: 'Sécuriser',
     sousTitre:
