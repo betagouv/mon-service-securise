@@ -114,4 +114,36 @@ describe("Sur demande de la représentation API complète d'un service", () => {
       expect(donnees.risques).toBeUndefined();
     });
   });
+
+  describe('concernant les contacts utiles du service', () => {
+    it('retourne la représentation JSON des contacts utiles', () => {
+      const serviceV2 = unServiceV2().construis();
+
+      const donnees = new ObjetGetServiceComplet(
+        serviceV2,
+        autorisationProprietaire,
+        referentiel
+      ).donnees();
+
+      expect(donnees.contactsUtiles).toBeDefined();
+    });
+
+    it('ne retourne pas la représentation des contacts utiles si les droits sont insuffisants', () => {
+      const serviceV2 = unServiceV2().construis();
+      const autorisation = uneAutorisation()
+        .avecDroits({
+          ...tousDroitsEnEcriture(),
+          [Rubriques.CONTACTS]: Permissions.INVISIBLE,
+        })
+        .construis();
+
+      const donnees = new ObjetGetServiceComplet(
+        serviceV2,
+        autorisation,
+        referentiel
+      ).donnees();
+
+      expect(donnees.contactsUtiles).toBeUndefined();
+    });
+  });
 });
