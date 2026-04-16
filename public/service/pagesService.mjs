@@ -27,14 +27,14 @@ $(() => {
         preferencesUtilisateur,
         suggestionsService,
         visible: {
-          contactsUtiles: !autorisationsService.CONTACTS.estMasque,
+          rolesResponsabilites: !autorisationsService.CONTACTS.estMasque,
           risques: !autorisationsService.RISQUES.estMasque,
           descriptionService: !autorisationsService.DECRIRE.estMasque,
           mesures: !autorisationsService.SECURISER.estMasque,
           dossiers: !autorisationsService.HOMOLOGUER.estMasque,
         },
         estLectureSeule: {
-          contactsUtiles: autorisationsService.CONTACTS.estLectureSeule,
+          rolesResponsabilites: autorisationsService.CONTACTS.estLectureSeule,
           risques: autorisationsService.RISQUES.estLectureSeule,
           descriptionService: autorisationsService.DECRIRE.estLectureSeule,
           mesures: autorisationsService.SECURISER.estLectureSeule,

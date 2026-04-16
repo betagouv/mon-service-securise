@@ -68,10 +68,10 @@
           </a>
         </li>
       {/if}
-      {#if visible.contactsUtiles}
+      {#if visible.rolesResponsabilites}
         <li>
           <a
-            class:actif={etapeActive === 'contactsUtiles'}
+            class:actif={etapeActive === 'rolesResponsabilites'}
             class="lien-navigation"
             href="/service/{idService}/rolesResponsabilites"
           >

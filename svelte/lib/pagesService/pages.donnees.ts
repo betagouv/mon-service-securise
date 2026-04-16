@@ -3,6 +3,7 @@ import type { Component } from 'svelte';
 import DecrireV2 from '../decrireV2/DecrireV2.svelte';
 import Risques from '../risques/Risques.svelte';
 import { type PageServiceGeree } from './pagesServiceGerees';
+import ContactsUtiles from './pages/contactsUtiles/ContactsUtiles.svelte';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type DonneesPage = {
@@ -29,5 +30,11 @@ export const metadonneesPages: Record<PageServiceGeree, DonneesPage> = {
     sousTitre:
       'Réalisez une première analyse de risque grâce aux risques courants suggérés par l’ANSSI et/ou recensez les risques identifiés dans le cadre d’une analyse de risque plus approfondie.',
     composant: Risques,
+  },
+  rolesResponsabilites: {
+    titre: 'Contacts utiles',
+    sousTitre:
+      'Enregistrez les coordonnées des personnes importantes pour le service',
+    composant: ContactsUtiles,
   },
 };
