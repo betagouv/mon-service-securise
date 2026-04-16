@@ -15,7 +15,6 @@ import {
 } from '../../aides/verifieFichierServi.js';
 import { unUtilisateur } from '../../constructeurs/constructeurUtilisateur.js';
 import { donneesPartagees } from '../../aides/http.js';
-import Risque from '../../../src/modeles/risque.js';
 import uneDescriptionValide from '../../constructeurs/constructeurDescriptionService.js';
 
 const { LECTURE, ECRITURE } = Permissions;
@@ -258,25 +257,6 @@ describe('Le serveur MSS des routes /service/*', () => {
           testeur.app(),
           '/service/456/mesures'
         );
-    });
-
-    it('interroge le moteur de règles pour obtenir les mesures personnalisées', async () => {
-      let descriptionRecue;
-      const requete = {};
-
-      testeur.middleware().trouveService(requete, undefined, () => {
-        const { nomService } = requete.service.descriptionService;
-        expect(nomService).to.equal('un service'); // sanity check
-      });
-
-      testeur.moteurRegles().mesures = (descriptionService) => {
-        descriptionRecue = descriptionService;
-        return {};
-      };
-
-      await testeur.get('/service/456/mesures');
-
-      expect(descriptionRecue.nomService).to.equal('un service');
     });
   });
 
@@ -572,39 +552,6 @@ describe('Le serveur MSS des routes /service/*', () => {
           testeur.app(),
           '/service/456/risques'
         );
-    });
-
-    it('merge les données du référentiel et du service pour les risques généraux', async () => {
-      const serviceARenvoyer = unService()
-        .avecId('456')
-        .avecNomService('un service')
-        .construis();
-      testeur.referentiel().recharge({
-        risques: {
-          logicielsMalveillants: {
-            categories: ['integrite'],
-            identifiantNumerique: 'R6',
-            description: "Détournement de l'usage du service numérique",
-          },
-        },
-        categoriesRisques: { integrite: 'Intégrité' },
-      });
-      testeur.middleware().reinitialise({ serviceARenvoyer });
-
-      const reponse = await testeur.get('/service/456/risques');
-
-      const { risquesGeneraux } = donneesPartagees(
-        reponse.text,
-        'donnees-risques'
-      );
-      expect(risquesGeneraux.length).to.be(1);
-      expect(risquesGeneraux[0]).to.eql({
-        id: 'logicielsMalveillants',
-        categories: ['integrite'],
-        identifiantNumerique: 'R6',
-        intitule: 'Détournement de l&apos;usage du service numérique',
-        niveauRisque: Risque.NIVEAU_RISQUE_INDETERMINABLE,
-      });
     });
   });
 

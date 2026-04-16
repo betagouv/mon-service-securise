@@ -7,7 +7,6 @@ import {
 } from '../../modeles/autorisations/gestionDroits.js';
 import { Autorisation } from '../../modeles/autorisations/autorisation.js';
 import { dateYYYYMMDD } from '../../utilitaires/date.js';
-import RisqueGeneral from '../../modeles/risqueGeneral.js';
 import { VersionService } from '../../modeles/versionService.js';
 import { valideQuery } from '../../http/validePayloads.js';
 
@@ -18,7 +17,6 @@ const routesConnectePageService = ({
   middleware,
   referentiel,
   depotDonnees,
-  moteurRegles,
   adaptateurCsv,
   adaptateurGestionErreur,
   adaptateurHorloge,
@@ -64,7 +62,7 @@ const routesConnectePageService = ({
 
       const template =
         service.version() === 'v2'
-          ? 'service/decrire-v2'
+          ? 'service/pagesService'
           : 'service/descriptionService';
 
       reponse.render(template, {
@@ -87,13 +85,10 @@ const routesConnectePageService = ({
     async (requete, reponse) => {
       const { service } = requete;
 
-      const mesures = moteurRegles.mesures(service.descriptionService);
-
-      reponse.render('service/mesures', {
+      reponse.render('service/pagesService', {
         referentiel,
         service,
         etapeActive: 'mesures',
-        mesures,
       });
     }
   );
@@ -205,9 +200,9 @@ const routesConnectePageService = ({
     middleware.chargeAutorisationsService,
     (requete, reponse) => {
       const { service } = requete;
-      reponse.render('service/rolesResponsabilites', {
+      reponse.render('service/pagesService', {
         service,
-        etapeActive: 'contactsUtiles',
+        etapeActive: 'rolesResponsabilites',
         referentiel,
       });
     }
@@ -219,17 +214,10 @@ const routesConnectePageService = ({
     middleware.chargeAutorisationsService,
     (requete, reponse) => {
       const { service } = requete;
-      const { risquesGeneraux, risquesSpecifiques } = service.risques.toJSON();
-      const risquesGenerauxAConsiderer = Object.keys(referentiel.risques())
-        .map((id) => risquesGeneraux.find((r) => r.id === id) || { id })
-        .map((donnees) => new RisqueGeneral(donnees, referentiel).toJSON());
-      reponse.render('service/risques', {
+
+      reponse.render('service/pagesService', {
         referentiel,
         service,
-        donneesRisques: {
-          risquesGeneraux: risquesGenerauxAConsiderer,
-          risquesSpecifiques,
-        },
         etapeActive: 'risques',
       });
     }

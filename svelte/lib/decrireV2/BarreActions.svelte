@@ -67,6 +67,9 @@
     background: white;
     border-top: 1px solid #ddd;
     padding: 24px 0;
+    margin-left: -72px;
+    margin-right: -24px;
+    margin-bottom: -24px;
 
     .les-boutons {
       padding: 0 72px;

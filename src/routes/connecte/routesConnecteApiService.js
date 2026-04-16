@@ -146,7 +146,8 @@ const routesConnecteApiService = ({
       if (complet) {
         const donnees = new ObjetGetServiceComplet(
           requete.service,
-          requete.autorisationService
+          requete.autorisationService,
+          referentielV2
         ).donnees();
         reponse.json(donnees);
       } else {

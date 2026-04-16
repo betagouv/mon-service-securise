@@ -5,7 +5,7 @@ declare global {
 }
 
 export type EtapeService =
-  | 'contactsUtiles'
+  | 'rolesResponsabilites'
   | 'risques'
   | 'descriptionService'
   | 'mesures'

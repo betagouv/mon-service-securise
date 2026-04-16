@@ -83,7 +83,7 @@ export type RisquesProps = {
   idService: string;
   estLectureSeule: boolean;
   risques: Risques;
-  categories: ReferentielCategories;
+  categoriesRisque: ReferentielCategories;
   niveauxGravite: Record<string, NiveauGravite>;
   referentielRisques: ReferentielRisques;
   niveauxVraisemblance: ReferentielVraisemblances;

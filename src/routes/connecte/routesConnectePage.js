@@ -226,7 +226,6 @@ const routesConnectePage = ({
       middleware,
       referentiel,
       depotDonnees,
-      moteurRegles,
       adaptateurCsv,
       adaptateurGestionErreur,
       adaptateurHorloge,

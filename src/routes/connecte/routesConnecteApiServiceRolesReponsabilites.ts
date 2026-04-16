@@ -29,29 +29,38 @@ export const routesConnecteApiServiceRolesReponsaibilites = ({
     valideBody(z.strictObject(schemaPostRolesResponsabilites())),
     async (requete, reponse) => {
       const {
-        acteursHomologation,
         autoriteHomologation,
-        fonctionAutoriteHomologation,
-        fonctionDelegueProtectionDonnees,
-        delegueProtectionDonnees,
-        fonctionExpertCybersecurite,
         expertCybersecurite,
-        fonctionPiloteProjet,
+        delegueProtectionDonnees,
         piloteProjet,
+        acteursHomologation,
         partiesPrenantes,
+        partiesPrenantesSpecifiques,
       } = requete.body;
 
+      const partiesPrenantesCompletes = Object.entries(partiesPrenantes).map(
+        ([type, partiePrenante]) => ({
+          type,
+          ...(partiePrenante as Record<string, unknown>),
+        })
+      );
+      partiesPrenantesCompletes.push(
+        ...partiesPrenantesSpecifiques.map((p: Record<string, unknown>) => ({
+          type: 'PartiePrenanteSpecifique',
+          ...p,
+        }))
+      );
       const rolesResponsabilites = new RolesResponsabilites({
         acteursHomologation,
-        autoriteHomologation,
-        fonctionAutoriteHomologation,
-        fonctionDelegueProtectionDonnees,
-        delegueProtectionDonnees,
-        fonctionExpertCybersecurite,
-        expertCybersecurite,
-        fonctionPiloteProjet,
-        piloteProjet,
-        partiesPrenantes,
+        autoriteHomologation: autoriteHomologation.nom,
+        fonctionAutoriteHomologation: autoriteHomologation.fonction,
+        delegueProtectionDonnees: delegueProtectionDonnees.nom,
+        fonctionDelegueProtectionDonnees: delegueProtectionDonnees.fonction,
+        expertCybersecurite: expertCybersecurite.nom,
+        fonctionExpertCybersecurite: expertCybersecurite.fonction,
+        piloteProjet: piloteProjet.nom,
+        fonctionPiloteProjet: piloteProjet.fonction,
+        partiesPrenantes: partiesPrenantesCompletes,
       });
 
       const {

@@ -98,6 +98,11 @@ class ConstructeurService {
     this.donnees.aUneSimulationMigrationReferentiel = true;
     return this;
   }
+
+  avecContactsUtiles(donneesContactsUtiles) {
+    this.donnees.rolesResponsabilites = donneesContactsUtiles;
+    return this;
+  }
 }
 
 const unService = (referentiel = Referentiel.creeReferentielVide()) =>

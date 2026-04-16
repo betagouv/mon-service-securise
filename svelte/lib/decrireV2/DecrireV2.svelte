@@ -16,7 +16,6 @@
   import { toasterStore } from '../ui/stores/toaster.store';
   import type { UUID } from '../typesBasiquesSvelte';
   import ResumeNiveauSecurite from '../ui/ResumeNiveauSecurite.svelte';
-  import Toaster from '../ui/Toaster.svelte';
   import type { IdNiveauDeSecurite } from '../ui/types';
   import NiveauDeSecuriteEditable from '../creationV2/NiveauDeSecuriteEditable.svelte';
   import Toast from '../ui/Toast.svelte';
@@ -135,6 +134,7 @@
 
       copiePourRestauration = $state.snapshot(descriptionEditable);
       retourAuModeResume();
+      document.dispatchEvent(new CustomEvent('description-service-modifiee'));
     } catch (e) {
       const x = e as AxiosError<{ erreur: { code: string } }>;
       if (
@@ -155,7 +155,6 @@
   };
 </script>
 
-<Toaster />
 <div class="conteneur-decrire-v2">
   {#if doitFinaliserDescription}
     <div class="conteneur-alerte">
@@ -277,7 +276,7 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
-    margin: 24px 24px 32px 72px;
+    margin: 24px 0 32px;
   }
 
   .conteneur-alerte {

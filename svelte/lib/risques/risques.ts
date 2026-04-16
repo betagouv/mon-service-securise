@@ -2,6 +2,7 @@ import Risques from './Risques.svelte';
 import type {
   DonneesRisque,
   Risque,
+  Risques as TousRisques,
   RisquesProps,
   TypeRisque,
 } from './risques.d';
@@ -35,6 +36,13 @@ export const convertisDonneesRisqueSpecifique = (
   niveauVraisemblance: donneesRisque.niveauVraisemblance ?? '',
   type: 'SPECIFIQUE' as TypeRisque,
 });
+
+export const tousRisques = (risques: TousRisques) => {
+  return [
+    ...risques.risquesGeneraux.map(convertisDonneesRisqueGeneral),
+    ...risques.risquesSpecifiques.map(convertisDonneesRisqueSpecifique),
+  ];
+};
 
 const rechargeApp = async (props: RisquesProps) => {
   if (app) await unmount(app);

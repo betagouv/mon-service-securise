@@ -48,7 +48,7 @@ $(async () => {
         etapeActive,
         modeVisiteGuidee,
         visible: {
-          contactsUtiles: !autorisationsService.CONTACTS.estMasque,
+          rolesResponsabilites: !autorisationsService.CONTACTS.estMasque,
           risques: !autorisationsService.RISQUES.estMasque,
           descriptionService: !autorisationsService.DECRIRE.estMasque,
           mesures: !autorisationsService.SECURISER.estMasque,

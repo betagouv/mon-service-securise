@@ -11,7 +11,7 @@ import {
 import { type UUID } from '../../typesBasiques.js';
 import { ActionRecommandee } from '../actionsRecommandees.js';
 
-const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER } = Rubriques;
+const { DECRIRE, SECURISER, RISQUES, HOMOLOGUER, CONTACTS } = Rubriques;
 const { LECTURE, ECRITURE } = Permissions;
 
 export type DonneesAutorisation = {
@@ -131,6 +131,14 @@ export class Autorisation extends Base {
 
   static DROITS_VOIR_MESURES: Partial<Droits> = {
     [SECURISER]: LECTURE,
+  };
+
+  static DROITS_VOIR_RISQUES: Partial<Droits> = {
+    [RISQUES]: LECTURE,
+  };
+
+  static DROITS_VOIR_CONTACTS_UTILES: Partial<Droits> = {
+    [CONTACTS]: LECTURE,
   };
 
   static DROITS_EDITER_MESURES: Partial<Droits> = {
