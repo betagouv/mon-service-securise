@@ -15,29 +15,40 @@ describe('Le serveur MSS des routes /api/service/*', () => {
   beforeEach(() => testeur.initialise());
 
   const unePayloadValideSauf = (cleValeur?: Record<string, unknown>) => ({
-    autoriteHomologation: 'autorité',
-    fonctionAutoriteHomologation: 'fonction autorité',
-    expertCybersecurite: 'expert',
-    fonctionExpertCybersecurite: 'fonction expert',
-    delegueProtectionDonnees: 'délégué',
-    fonctionDelegueProtectionDonnees: 'fonction délégué',
-    piloteProjet: 'pilote',
-    fonctionPiloteProjet: 'fonction pilote',
+    autoriteHomologation: { nom: 'autorité', fonction: 'fonction autorité' },
+    expertCybersecurite: { nom: 'expert', fonction: 'fonction expert' },
+    delegueProtectionDonnees: { nom: 'délégué', fonction: 'fonction délégué' },
+    piloteProjet: { nom: 'pilote', fonction: 'fonction pilote' },
     acteursHomologation: [{ role: 'acteur', nom: 'nom', fonction: 'fonction' }],
-    partiesPrenantes: [
-      {
-        type: 'PartiePrenanteSpecifique',
-        nom: 'nom',
-        natureAcces: 'nature',
-        pointContact: 'point',
-      },
+    partiesPrenantesSpecifiques: [
       {
         nom: 'nom',
         natureAcces: 'nature',
         pointContact: 'point',
-        type: 'DeveloppementFourniture',
       },
     ],
+    partiesPrenantes: {
+      Hebergement: {
+        nom: 'nomHebergement',
+        natureAcces: 'natureHebergement',
+        pointContact: 'pointHebergement',
+      },
+      DeveloppementFourniture: {
+        nom: 'nomDeveloppementFourniture',
+        natureAcces: 'natureDeveloppementFourniture',
+        pointContact: 'pointDeveloppementFourniture',
+      },
+      MaintenanceService: {
+        nom: 'nomMaintenanceService',
+        natureAcces: 'natureMaintenanceService',
+        pointContact: 'pointMaintenanceService',
+      },
+      SecuriteService: {
+        nom: 'nomSecuriteService',
+        natureAcces: 'natureSecuriteService',
+        pointContact: 'pointSecuriteService',
+      },
+    },
     ...cleValeur,
   });
 
@@ -65,15 +76,12 @@ describe('Le serveur MSS des routes /api/service/*', () => {
     describe('jette une erreur 400 si...', () => {
       it.each([
         { autoriteHomologation: undefined },
-        { fonctionAutoriteHomologation: undefined },
         { expertCybersecurite: undefined },
-        { fonctionExpertCybersecurite: undefined },
         { delegueProtectionDonnees: undefined },
-        { fonctionDelegueProtectionDonnees: undefined },
         { piloteProjet: undefined },
-        { fonctionPiloteProjet: undefined },
         { acteursHomologation: undefined },
         { partiesPrenantes: undefined },
+        { partiesPrenantesSpecifiques: undefined },
       ])('la payload contient %s', async (donneesDuTest) => {
         const { status } = await testeur.post(
           '/api/service/456/rolesResponsabilites',
@@ -102,7 +110,51 @@ describe('Le serveur MSS des routes /api/service/*', () => {
       expect(status).toEqual(200);
       expect(body).toEqual({ idService: '456' });
       expect(donneesRecues!.idService).toEqual('456');
-      expect(donneesRecues!.role.autoriteHomologation).toEqual('autorité');
+      expect(donneesRecues!.role.donneesSerialisees()).toEqual({
+        autoriteHomologation: 'autorité',
+        fonctionAutoriteHomologation: 'fonction autorité',
+        expertCybersecurite: 'expert',
+        fonctionExpertCybersecurite: 'fonction expert',
+        delegueProtectionDonnees: 'délégué',
+        fonctionDelegueProtectionDonnees: 'fonction délégué',
+        piloteProjet: 'pilote',
+        fonctionPiloteProjet: 'fonction pilote',
+        acteursHomologation: [
+          { role: 'acteur', nom: 'nom', fonction: 'fonction' },
+        ],
+        partiesPrenantes: [
+          {
+            nom: 'nomHebergement',
+            natureAcces: 'natureHebergement',
+            pointContact: 'pointHebergement',
+            type: 'Hebergement',
+          },
+          {
+            nom: 'nomMaintenanceService',
+            natureAcces: 'natureMaintenanceService',
+            pointContact: 'pointMaintenanceService',
+            type: 'MaintenanceService',
+          },
+          {
+            nom: 'nomDeveloppementFourniture',
+            natureAcces: 'natureDeveloppementFourniture',
+            pointContact: 'pointDeveloppementFourniture',
+            type: 'DeveloppementFourniture',
+          },
+          {
+            nom: 'nomSecuriteService',
+            natureAcces: 'natureSecuriteService',
+            pointContact: 'pointSecuriteService',
+            type: 'SecuriteService',
+          },
+          {
+            type: 'PartiePrenanteSpecifique',
+            nom: 'nom',
+            natureAcces: 'nature',
+            pointContact: 'point',
+          },
+        ],
+      });
     });
   });
 });
