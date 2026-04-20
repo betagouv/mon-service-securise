@@ -137,6 +137,8 @@
         return {
           contactsUtiles,
         };
+      case 'indiceCyber':
+        return {};
       default:
         return {};
     }

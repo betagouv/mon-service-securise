@@ -35,7 +35,8 @@
       {#if visible.mesures}
         <li>
           <a
-            class:actif={etapeActive === 'mesures'}
+            class:actif={etapeActive === 'mesures' ||
+              etapeActive === 'indiceCyber'}
             class="lien-navigation"
             href="/service/{idService}/mesures"
           >

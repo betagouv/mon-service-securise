@@ -180,16 +180,11 @@ const routesConnectePageService = ({
     middleware.chargeAutorisationsService,
     async (requete, reponse) => {
       const { service } = requete;
-      const referentiels = Object.entries(
-        service.mesures.enrichiesAvecDonneesPersonnalisees().mesuresGenerales
-      ).map(([_, mesure]) => mesure.referentiel);
-      const referentielConcernes =
-        referentiel.formatteListeDeReferentiels(referentiels);
-      reponse.render('service/indiceCyber', {
+
+      reponse.render('service/pagesService', {
         service,
-        etapeActive: 'mesures',
+        etapeActive: 'indiceCyber',
         referentiel,
-        referentielConcernes,
       });
     }
   );
