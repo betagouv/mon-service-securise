@@ -147,6 +147,10 @@ const middleware = (configuration: ConfigurationMiddleware) => {
       requete.cguAcceptees = requete.session?.cguAcceptees;
       requete.estInvite = requete.session?.estInvite;
       requete.sourceAuthentification = token.source;
+      reponse.locals.utilisateurConnecte = {
+        prenomNom: utilisateur.prenomNom(),
+        email: utilisateur.email,
+      };
     } catch {
       return renvoieUtilisateurSansJWTValide();
     }

@@ -94,7 +94,7 @@ describe('Le middleware MSS', () => {
 
     depotDonnees.service = async () => {};
     depotDonnees.utilisateur = async () =>
-      unUtilisateur().avecId('123').construis();
+      unUtilisateur().avecId('123').quiSAppelle('Jean Dujardin').construis();
     depotDonnees.estJwtRevoque = async () => false;
   });
 
@@ -264,6 +264,17 @@ describe('Le middleware MSS', () => {
       expect(requete.estInvite).to.be('INVITÉ');
     });
 
+    it("ajoute le nom et prénom de l'utilisateur connecté à `reponse.locals`", async () => {
+      const middleware = leMiddleware();
+
+      await middleware.verificationJWT(requete, reponse, () => {});
+
+      expect(reponse.locals.utilisateurConnecte).to.eql({
+        prenomNom: 'Jean Dujardin',
+        email: 'jean.dujardin@beta.gouv.com',
+      });
+    });
+
     describe('quand le JWT est expiré', () => {
       const adaptateurJWT = {
         decode: () => {
@@ -318,7 +329,10 @@ describe('Le middleware MSS', () => {
 
   describe("sur vérification de l'acceptation des CGU", () => {
     beforeEach(() => {
-      depotDonnees.utilisateur = () => ({ genereToken: () => 'NOUVEAU_TOKEN' });
+      depotDonnees.utilisateur = () => ({
+        genereToken: () => 'NOUVEAU_TOKEN',
+        prenomNom: () => 'Jean Dujardin',
+      });
     });
 
     describe('pour un utilisateur invité', () => {
@@ -391,7 +405,10 @@ describe('Le middleware MSS', () => {
     beforeEach(() => {
       idService = unUUIDRandom();
       depotDonnees.service = () => Promise.resolve();
-      depotDonnees.utilisateur = () => ({ genereToken: () => 'NOUVEAU_TOKEN' });
+      depotDonnees.utilisateur = () => ({
+        genereToken: () => 'NOUVEAU_TOKEN',
+        prenomNom: () => 'Jean Dujardin',
+      });
     });
 
     it("jette une erreur si l'id est invalide", async () => {
