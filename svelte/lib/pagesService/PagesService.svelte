@@ -138,7 +138,11 @@
           contactsUtiles,
         };
       case 'indiceCyber':
-        return {};
+        return {
+          indiceCyber,
+          indiceCyberPersonnalise,
+          noteMax: referentiel.indiceCyber.noteMax,
+        };
       default:
         return {};
     }
