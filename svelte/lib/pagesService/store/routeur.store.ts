@@ -35,8 +35,7 @@ const navigue = (
     window.location.href = url;
   }
 ) => {
-  const morceaux = url.split('/').filter(Boolean);
-  const pageDemandee = (morceaux.at(-1) || '') as PageServiceGeree;
+  const pageDemandee = pageDepuisURL(url) || '';
   const informationsService = get(routeurStore).informationsService;
   const pageVisible = informationsService?.visible[pageDemandee];
   const versionService = informationsService?.version;
@@ -75,7 +74,12 @@ export const routeurStore = {
   navigue,
 };
 
-export const pageCourante = derived(routeurStore, ($r) => {
-  const morceaux = $r.location.split('/').filter(Boolean);
+const pageDepuisURL = (url: string) => {
+  const { pathname } = new URL(url, window.location.origin);
+  const morceaux = pathname.split('/').filter(Boolean);
   return morceaux.at(-1) as PageServiceGeree;
+};
+
+export const pageCourante = derived(routeurStore, ($r) => {
+  return pageDepuisURL($r.location);
 });
