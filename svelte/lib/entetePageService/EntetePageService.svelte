@@ -21,7 +21,7 @@
   <div class="indices-cyber">
     <a
       class="conteneur-indice-cyber"
-      href="/service/{idService}/indiceCyber?onglet=indice-cyber-ANSSI"
+      href="/service/{idService}/indiceCyber?onglet=indice-cyber-anssi"
     >
       <div class="indice-cyber">
         <IndiceCyber {idService} {indiceCyber} {noteMax} />
