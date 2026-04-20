@@ -19,7 +19,7 @@ importers:
         version: 3.22.3(@tiptap/pm@3.22.2)
       '@tiptap/extension-mention':
         specifier: ^3.20.1
-        version: 3.22.3(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2)(@tiptap/suggestion@3.22.2(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2))
+        version: 3.22.3(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2)(@tiptap/suggestion@3.22.3(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2))
       '@tiptap/extension-placeholder':
         specifier: ^3.20.1
         version: 3.22.3(@tiptap/extensions@3.22.2(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2))
@@ -28,7 +28,7 @@ importers:
         version: 3.22.2
       '@tiptap/suggestion':
         specifier: ^3.20.1
-        version: 3.22.2(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2)
+        version: 3.22.3(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2)
       axios:
         specifier: ^1.15.0
         version: 1.15.0
@@ -1263,11 +1263,11 @@ packages:
   '@tiptap/starter-kit@3.22.2':
     resolution: {integrity: sha512-+CCKX8tOQ/ZPb2k/z6em4AQCFYAcdd8+0TOzPWiuLxRyCHRPBBVhnPsXOKgKwE4OO3E8BsezquuYRYRwsyzCqg==}
 
-  '@tiptap/suggestion@3.22.2':
-    resolution: {integrity: sha512-t2GQSrF4eQyPb+KqXVfcC2cokYIDNfpLLq7B0ELlnWBJURnLOVJ2ssJ6ASI247scu9ZKPG1g5bFP4IXdBhyPgg==}
+  '@tiptap/suggestion@3.22.3':
+    resolution: {integrity: sha512-m2c+5gDj2vW7UI1J4JHCKehQUVE12qBhgF+DC+WEWUU8ZrFNf5OEYWQHDNsopa5RRpilfKfhPNbMtXgvGOsk6g==}
     peerDependencies:
-      '@tiptap/core': ^3.22.2
-      '@tiptap/pm': ^3.22.2
+      '@tiptap/core': ^3.22.3
+      '@tiptap/pm': ^3.22.3
 
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
@@ -5248,11 +5248,11 @@ snapshots:
       '@tiptap/core': 3.22.3(@tiptap/pm@3.22.2)
       '@tiptap/pm': 3.22.2
 
-  '@tiptap/extension-mention@3.22.3(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2)(@tiptap/suggestion@3.22.2(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2))':
+  '@tiptap/extension-mention@3.22.3(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2)(@tiptap/suggestion@3.22.3(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2))':
     dependencies:
       '@tiptap/core': 3.22.3(@tiptap/pm@3.22.2)
       '@tiptap/pm': 3.22.2
-      '@tiptap/suggestion': 3.22.2(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2)
+      '@tiptap/suggestion': 3.22.3(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2)
 
   '@tiptap/extension-ordered-list@3.22.2(@tiptap/extension-list@3.22.2(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2))':
     dependencies:
@@ -5331,7 +5331,7 @@ snapshots:
       '@tiptap/extensions': 3.22.2(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2)
       '@tiptap/pm': 3.22.2
 
-  '@tiptap/suggestion@3.22.2(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2)':
+  '@tiptap/suggestion@3.22.3(@tiptap/core@3.22.3(@tiptap/pm@3.22.2))(@tiptap/pm@3.22.2)':
     dependencies:
       '@tiptap/core': 3.22.3(@tiptap/pm@3.22.2)
       '@tiptap/pm': 3.22.2
