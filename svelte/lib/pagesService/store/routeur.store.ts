@@ -5,6 +5,7 @@ import {
   type PageServiceGeree,
   pagesServiceGerees,
 } from '../pagesServiceGerees';
+import { tiroirStore } from '../../ui/stores/tiroir.store';
 
 export type InformationsService = {
   visible: Record<EtapeService, boolean>;
@@ -52,6 +53,8 @@ const navigue = (
       etat.location = url;
       return etat;
     });
+    tiroirStore.ferme();
+    document.body.dispatchEvent(new CustomEvent('ferme-tiroir'));
   } else {
     navigueHorsSPA(url);
   }
