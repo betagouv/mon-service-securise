@@ -186,10 +186,6 @@
 {/if}
 
 <style lang="scss">
-  :global(.menu-navigation-service) {
-    height: unset !important;
-  }
-
   .conteneur-pages-service {
     display: flex;
     flex-direction: column;
