@@ -4,6 +4,7 @@ import DecrireV2 from '../decrireV2/DecrireV2.svelte';
 import Risques from '../risques/Risques.svelte';
 import { type PageServiceGeree } from './pagesServiceGerees';
 import ContactsUtiles from './pages/contactsUtiles/ContactsUtiles.svelte';
+import IndiceCyber from './pages/indiceCyber/IndiceCyber.svelte';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type DonneesPage = {
@@ -36,5 +37,11 @@ export const metadonneesPages: Record<PageServiceGeree, DonneesPage> = {
     sousTitre:
       'Enregistrez les coordonnées des personnes importantes pour le service',
     composant: ContactsUtiles,
+  },
+  indiceCyber: {
+    titre: 'Sécuriser',
+    sousTitre:
+      "Suivez l'indice cyber ANSSI et l'indice cyber personnalisé de votre service",
+    composant: IndiceCyber,
   },
 };

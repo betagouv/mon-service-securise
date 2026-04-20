@@ -31,6 +31,7 @@ $(() => {
           risques: !autorisationsService.RISQUES.estMasque,
           descriptionService: !autorisationsService.DECRIRE.estMasque,
           mesures: !autorisationsService.SECURISER.estMasque,
+          indiceCyber: !autorisationsService.SECURISER.estMasque,
           dossiers: !autorisationsService.HOMOLOGUER.estMasque,
         },
         estLectureSeule: {
@@ -38,6 +39,7 @@ $(() => {
           risques: autorisationsService.RISQUES.estLectureSeule,
           descriptionService: autorisationsService.DECRIRE.estLectureSeule,
           mesures: autorisationsService.SECURISER.estLectureSeule,
+          indiceCyber: autorisationsService.SECURISER.estLectureSeule,
           dossiers: autorisationsService.HOMOLOGUER.estLectureSeule,
         },
       },

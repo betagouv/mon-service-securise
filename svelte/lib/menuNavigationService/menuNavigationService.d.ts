@@ -9,7 +9,8 @@ export type EtapeService =
   | 'risques'
   | 'descriptionService'
   | 'mesures'
-  | 'dossiers';
+  | 'dossiers'
+  | 'indiceCyber';
 
 export type MenuNavigationServiceProps = {
   idService: string;
