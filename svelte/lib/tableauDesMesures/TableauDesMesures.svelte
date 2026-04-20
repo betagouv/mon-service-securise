@@ -55,6 +55,7 @@
   import { rechercheParPartieResponsable } from './stores/rechercheParPartieResponsable.store';
   import { storeVraisemblanceRisqueV2 } from '../ui/stores/vraisemblanceRisqueV2.store';
   import ModaleExplicationRisquesV2 from '../risquesV2/modale/ModaleExplicationRisquesV2.svelte';
+  import NavigationSecuriser from '../pagesService/kit/NavigationSecuriser.svelte';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -283,6 +284,7 @@
   on:modeles-mesure-specifique-associes={() =>
     ($rechercheParAvancement = 'enAction')}
 />
+<NavigationSecuriser {idService} />
 <div class="barre-filtres">
   <div class="conteneur-recherche">
     <img

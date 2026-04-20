@@ -17,8 +17,14 @@ export const metadonneesPages: Record<PageServiceGeree, DonneesPage> = {
   mesures: {
     titre: 'Sécuriser',
     sousTitre:
-      'Mettez en œuvre, en équipe, les mesures de sécurité adaptées à votre service',
+      "Réalisez les mesures de securité, évaluez vos risques et suivez la progression de l'indice cyber",
     composant: TableauDesMesures,
+  },
+  indiceCyber: {
+    titre: 'Sécuriser',
+    sousTitre:
+      "Réalisez les mesures de securité, évaluez vos risques et suivez la progression de l'indice cyber",
+    composant: IndiceCyber,
   },
   descriptionService: {
     titre: 'Récapitulatif',
@@ -37,11 +43,5 @@ export const metadonneesPages: Record<PageServiceGeree, DonneesPage> = {
     sousTitre:
       'Enregistrez les coordonnées des personnes importantes pour le service',
     composant: ContactsUtiles,
-  },
-  indiceCyber: {
-    titre: 'Sécuriser',
-    sousTitre:
-      "Suivez l'indice cyber ANSSI et l'indice cyber personnalisé de votre service",
-    composant: IndiceCyber,
   },
 };
