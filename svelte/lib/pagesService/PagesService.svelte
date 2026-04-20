@@ -13,6 +13,7 @@
   import type { ContactsUtiles } from './pages/contactsUtiles/contactsUtiles.types';
   import Toaster from '../ui/Toaster.svelte';
   import BandeauReferentielV2 from '../bandeauReferentielV2/BandeauReferentielV2.svelte';
+  import type { IndicesCyber } from './pages/indiceCyber/indiceCyber.types';
 
   let {
     idService,
@@ -31,16 +32,12 @@
     organisationResponsable: string;
     version: VersionService;
   };
-  type IndiceCyber = {
-    total: number;
-  };
 
   let service: ServicePourPagesService | undefined = $state();
   let descriptionService: DescriptionServiceV2API | undefined = $state();
-  let indiceCyber: IndiceCyber | undefined = $state();
-  let indiceCyberPersonnalise: IndiceCyber | undefined = $state();
   let risques: ReturnType<typeof tousRisques> | undefined = $state();
   let contactsUtiles: ContactsUtiles | undefined = $state();
+  let indicesCyber: IndicesCyber | undefined = $state();
 
   const interecepteNavigation = (e: MouseEvent) => {
     const link = (e.target as Element).closest('a');
@@ -76,12 +73,14 @@
         descriptionService: DescriptionServiceV2API;
         risques: Risques;
         contactsUtiles: ContactsUtiles;
+        indicesCyber: IndicesCyber;
       }>(`/api/service/${idService}?complet=true`)
     ).data;
 
     descriptionService = serviceComplet.descriptionService;
     risques = tousRisques(serviceComplet.risques);
     contactsUtiles = serviceComplet.contactsUtiles;
+    indicesCyber = serviceComplet.indicesCyber;
   };
 
   onMount(async () => {
@@ -90,15 +89,6 @@
       visible,
       version: service!.version,
     });
-    indiceCyber = (
-      await axios.get<IndiceCyber>(`/api/service/${idService}/indiceCyber`)
-    ).data;
-    indiceCyberPersonnalise = (
-      await axios.get<IndiceCyber>(
-        `/api/service/${idService}/indiceCyberPersonnalise`
-      )
-    ).data;
-
     await rafraichisServiceComplet();
   });
 
@@ -139,9 +129,13 @@
         };
       case 'indiceCyber':
         return {
-          indiceCyber,
-          indiceCyberPersonnalise,
+          indiceCyber: indicesCyber?.indiceCyberAnssi,
+          indiceCyberPersonnalise: indicesCyber?.indiceCyberPersonnalise,
           noteMax: referentiel.indiceCyber.noteMax,
+          referentielsMesureConcernes:
+            indicesCyber?.referentielsMesureConcernes,
+          nombreMesuresSpecifiques: indicesCyber?.nombreMesuresSpecifiques,
+          nombreMesuresNonFait: indicesCyber?.nombreMesuresNonFait,
         };
       default:
         return {};
@@ -156,7 +150,7 @@
 />
 
 <Toaster />
-{#if service && descriptionService && indiceCyber && indiceCyberPersonnalise && contactsUtiles}
+{#if service && descriptionService && indicesCyber && contactsUtiles}
   <div class="conteneur-pages-service">
     {#if service.version === 'v1'}
       <BandeauReferentielV2 {idService} />
@@ -164,8 +158,8 @@
     <EntetePageService
       {idService}
       nomService={service.nomService}
-      indiceCyber={indiceCyber?.total ?? 0}
-      indiceCyberPersonnalise={indiceCyberPersonnalise?.total ?? 0}
+      indiceCyber={indicesCyber.indiceCyberAnssi?.total ?? 0}
+      indiceCyberPersonnalise={indicesCyber.indiceCyberPersonnalise?.total ?? 0}
       noteMax={referentiel.indiceCyber.noteMax}
       organisationResponsable={service.organisationResponsable}
     />

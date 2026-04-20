@@ -146,4 +146,55 @@ describe("Sur demande de la représentation API complète d'un service", () => {
       expect(donnees.contactsUtiles).toBeUndefined();
     });
   });
+
+  describe("concernant les données d'indice cyber", () => {
+    it('retourne la représentation JSON des indices cyber', () => {
+      const serviceV2 = unServiceV2().construis();
+
+      const donnees = new ObjetGetServiceComplet(
+        serviceV2,
+        autorisationProprietaire,
+        referentiel
+      ).donnees();
+
+      expect(donnees.indicesCyber).toBeDefined();
+      expect(donnees.indicesCyber).toEqual({
+        indiceCyberAnssi: {
+          total: 0,
+          gouvernance: 0,
+          protection: 0,
+          resilience: 0,
+          defense: 0,
+        },
+        indiceCyberPersonnalise: {
+          total: 0,
+          gouvernance: 0,
+          protection: 0,
+          resilience: 0,
+          defense: 0,
+        },
+        referentielsMesureConcernes: expect.any(String),
+        nombreMesuresSpecifiques: 0,
+        nombreMesuresNonFait: 0,
+      });
+    });
+
+    it('ne retourne pas la représentation des indices cyber si les droits sont insuffisants', () => {
+      const serviceV2 = unServiceV2().construis();
+      const autorisation = uneAutorisation()
+        .avecDroits({
+          ...tousDroitsEnEcriture(),
+          [Rubriques.SECURISER]: Permissions.INVISIBLE,
+        })
+        .construis();
+
+      const donnees = new ObjetGetServiceComplet(
+        serviceV2,
+        autorisation,
+        referentiel
+      ).donnees();
+
+      expect(donnees.indicesCyber).toBeUndefined();
+    });
+  });
 });
