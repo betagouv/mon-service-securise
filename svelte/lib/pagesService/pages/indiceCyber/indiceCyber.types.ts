@@ -5,3 +5,11 @@ export type DonneesIndiceCyber = {
   defense: number;
   resilience: number;
 };
+
+export type IndicesCyber = {
+  indiceCyberAnssi: DonneesIndiceCyber;
+  indiceCyberPersonnalise: DonneesIndiceCyber;
+  referentielsMesureConcernes: string;
+  nombreMesuresSpecifiques: number;
+  nombreMesuresNonFait: number;
+};
