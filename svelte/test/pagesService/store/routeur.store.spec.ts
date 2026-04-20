@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { get } from 'svelte/store';
 import type { VersionService } from '../../../../src/modeles/versionService';
-import type { InformationsService } from '../../../lib/pagesService/store/routeur.store';
+import { type InformationsService } from '../../../lib/pagesService/store/routeur.store';
 
 describe('Le routeur des pages service', () => {
   beforeEach(() => {
@@ -31,6 +31,7 @@ describe('Le routeur des pages service', () => {
         descriptionService: true,
         mesures: true,
         dossiers: true,
+        indiceCyber: true,
       },
       version: 'v1' as VersionService,
     }
@@ -49,6 +50,7 @@ describe('Le routeur des pages service', () => {
         descriptionService: true,
         mesures: true,
         dossiers: true,
+        indiceCyber: true,
       },
       version: 'v1',
     });
@@ -83,6 +85,7 @@ describe('Le routeur des pages service', () => {
           descriptionService: true,
           mesures: false,
           dossiers: true,
+          indiceCyber: true,
         },
         version: 'v1' as VersionService,
       });
@@ -112,6 +115,7 @@ describe('Le routeur des pages service', () => {
           descriptionService: true,
           mesures: true,
           dossiers: true,
+          indiceCyber: true,
         },
         version: 'v1' as VersionService,
       });
@@ -122,6 +126,36 @@ describe('Le routeur des pages service', () => {
       expect(navigueHorsSPA).toHaveBeenCalledWith(
         '/service/1234/descriptionService'
       );
+    });
+  });
+
+  describe('concernant la page courante', () => {
+    const laPageCourante = async () =>
+      (await import('../../../lib/pagesService/store/routeur.store'))
+        .pageCourante;
+
+    it('sait extraire la page courante de service', async () => {
+      const routeurStore = await leRouteur();
+      const pageCourante = await laPageCourante();
+      chargeInformationsService(routeurStore);
+      routeurStore.navigue('/service/1234/mesures');
+
+      const page = get(pageCourante);
+
+      expect(page).toBe('mesures');
+    });
+
+    it('ne prend pas en compte les `queryParams`', async () => {
+      const routeurStore = await leRouteur();
+      const pageCourante = await laPageCourante();
+      chargeInformationsService(routeurStore);
+      routeurStore.navigue(
+        '/service/1234/indiceCyber?onglet=indice-cyber-anssi'
+      );
+
+      const page = get(pageCourante);
+
+      expect(page).toBe('indiceCyber');
     });
   });
 });
