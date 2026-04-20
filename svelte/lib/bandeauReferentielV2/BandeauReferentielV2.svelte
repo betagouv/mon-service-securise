@@ -1,9 +1,8 @@
 <script lang="ts">
-  import type { UUID } from '../typesBasiquesSvelte';
   import ExplicationNouveauReferentiel from '../explicationNouveauReferentiel/ExplicationNouveauReferentiel.svelte';
 
   interface Props {
-    idService: UUID;
+    idService: string;
   }
 
   let { idService }: Props = $props();
@@ -49,6 +48,7 @@
     gap: 24px;
     align-items: center;
     justify-content: space-between;
+    font-size: 1rem;
   }
 
   .conteneur-info {
