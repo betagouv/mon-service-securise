@@ -12,6 +12,7 @@
   import type { Risques } from '../risques/risques.d';
   import type { ContactsUtiles } from './pages/contactsUtiles/contactsUtiles.types';
   import Toaster from '../ui/Toaster.svelte';
+  import BandeauReferentielV2 from '../bandeauReferentielV2/BandeauReferentielV2.svelte';
 
   let {
     idService,
@@ -151,6 +152,9 @@
 <Toaster />
 {#if service && descriptionService && indiceCyber && indiceCyberPersonnalise && contactsUtiles}
   <div class="conteneur-pages-service">
+    {#if service.version === 'v1'}
+      <BandeauReferentielV2 {idService} />
+    {/if}
     <EntetePageService
       {idService}
       nomService={service.nomService}
