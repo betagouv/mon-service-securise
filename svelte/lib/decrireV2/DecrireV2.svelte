@@ -280,8 +280,6 @@
   }
 
   .conteneur-alerte {
-    margin: 0 72px;
-
     dsfr-alert {
       max-width: 792px;
       text-align: left;

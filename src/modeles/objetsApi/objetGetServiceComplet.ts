@@ -6,6 +6,7 @@ import RisqueGeneral from '../risqueGeneral.js';
 import { TousReferentiels } from '../../referentiel.interface.js';
 import { ObjetGetContactsUtiles } from './objetGetContactsUtiles.js';
 import { IdReferentielMesure } from '../../referentiel.types.js';
+import Dossier from '../dossier.js';
 
 const {
   DROITS_VOIR_DESCRIPTION,
@@ -47,10 +48,39 @@ export class ObjetGetServiceComplet {
   }
 
   private donneesDossiers() {
-    const dossierCourant = this.service.dossiers.dossierCourant();
-    const dossierActif = this.service.dossiers.dossierActif();
-    const dossiersPasses = this.service.dossiers.archives();
-    const dossiersRefuses = this.service.dossiers.refuses();
+    const versDossierComplet = (dossier?: Dossier) => {
+      if (!dossier) return undefined;
+      const etapeCourante = this.referentiel.etapeDossierAutorisee(
+        dossier.etapeCourante(),
+        this.autorisation.peutHomologuer()
+      )!;
+      return {
+        ...dossier.toJSON(),
+        statut: dossier.statutHomologation(),
+        descriptionProchaineDateHomologation:
+          dossier.descriptionProchaineDateHomologation(),
+        etapeCourante: {
+          nomEtape: etapeCourante,
+          numeroEtape: this.referentiel.numeroEtape(etapeCourante),
+          numeroDerniereEtape: this.referentiel.derniereEtapeParcours(
+            this.autorisation.peutHomologuer()
+          )?.numero,
+        },
+      };
+    };
+
+    const dossierCourant = versDossierComplet(
+      this.service.dossiers.dossierCourant()
+    );
+    const dossierActif = versDossierComplet(
+      this.service.dossiers.dossierActif()
+    );
+    const dossiersPasses = this.service.dossiers
+      .archives()
+      .map(versDossierComplet);
+    const dossiersRefuses = this.service.dossiers
+      .refuses()
+      .map(versDossierComplet);
     const aucunDossier =
       !dossierCourant &&
       !dossierActif &&

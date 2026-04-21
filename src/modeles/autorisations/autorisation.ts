@@ -71,8 +71,8 @@ export class Autorisation extends Base {
     return this.estProprietaire;
   }
 
-  peutHomologuer() {
-    return this.estProprietaire;
+  peutHomologuer(): boolean {
+    return this.estProprietaire as boolean;
   }
 
   peutSupprimerService() {

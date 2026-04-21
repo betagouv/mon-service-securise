@@ -34,6 +34,9 @@ export type ReferentielPagesService = {
     matrice: MatriceNiveauxRisque;
     niveaux: ReferentielNiveauxRisque;
   };
+  dossiers: {
+    statutsHomologation: Record<string, { libelle: string }>;
+  };
 };
 export type PagesServiceProps = {
   idService: string;

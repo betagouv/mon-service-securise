@@ -17,5 +17,6 @@
   .conteneur-image {
     padding: 8px 8px 4px 8px;
     cursor: help;
+    display: flex;
   }
 </style>
