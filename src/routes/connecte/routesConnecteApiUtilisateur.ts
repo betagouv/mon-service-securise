@@ -93,21 +93,5 @@ export const routesConnecteApiUtilisateur = ({
     }
   );
 
-  routes.get('/utilisateurCourant', (requete, reponse) => {
-    const { idUtilisateurCourant: idUtilisateur, sourceAuthentification } =
-      requete as RequeteMSS;
-
-    if (idUtilisateur) {
-      depotDonnees.utilisateur(idUtilisateur).then((utilisateur) => {
-        reponse.json({
-          sourceAuthentification,
-          utilisateur: {
-            prenomNom: utilisateur!.prenomNom(),
-          },
-        });
-      });
-    } else reponse.status(401).send("Pas d'utilisateur courant");
-  });
-
   return routes;
 };
