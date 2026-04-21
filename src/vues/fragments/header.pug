@@ -60,6 +60,8 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
         "href": "/doctrine-homologation-anssi"
       },
     ];
+    const estConnecte = !!utilisateurConnecte;
+
   dsfr-header(
     id="dsfr-header"
     class="fr-header__brand"
@@ -74,21 +76,43 @@ mixin header(avertissementMaintenance, featureFlags, fluide, lienSurLogo, titreL
     brand-tagline="Innovation ANSSI"
     brand-link-title=titreLienSurLogo,
     has-tool-links,
+    tool-links=!estConnecte && !headerAGaucheUniquement ? JSON.stringify([{label: "S'inscrire",url:'/inscription', markup:"a",},{label: "Se connecter",url:'/connexion', markup:"a",icon: "account-circle-fill"}]) : undefined,
     menu-id='boutonMenu',
     fluid=fluide,
     navigation-items=JSON.stringify(fluide ? [] : itemsMenu)
   )
     if !headerAGaucheUniquement
-      div(slot="beforetoolslinks")
-        lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
-      div(slot="beforenavbarbuttons")
-        lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
-      div(slot="modalToolLinks")
-        .utilisateur-courant
-      .conteneur-outils-entete(slot="toolLinks")
-        if block
-          block
-        .utilisateur-courant
+      lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé", slot="beforenavbarbuttons")
+      if estConnecte
+        div(slot="modalToolLinks")
+          dsfr-user(
+            user-name=utilisateurConnecte.prenomNom
+            user-email=utilisateurConnecte.email
+            button-label="Mon espace"
+            button-icon="account-circle-fill"
+            collapse-id="user-menu-collapse"
+            button-id="user-menu-btn"
+            has-logout
+            links=JSON.stringify([{ label: "Mon tableau de bord", href: "/tableauDeBord" },{ label: "Mettre à jour mon profil", href: "/profil" }])
+          )
+        .conteneur-outils-entete(slot="toolLinks")
+          lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé")
+          #centre-notifications
+          dsfr-user(
+            user-name=utilisateurConnecte.prenomNom
+            user-email=utilisateurConnecte.email
+            button-label="Mon espace"
+            button-icon="account-circle-fill"
+            collapse-id="user-menu-collapse"
+            button-id="user-menu-btn"
+            has-logout
+            links=JSON.stringify([{
+              label: "Mon tableau de bord",
+              href: "/tableauDeBord"
+            }, {label: "Mettre à jour mon profil", href: "/profil"}])
+          )
+      else
+        lab-anssi-bouton-suite-cyber-navigation(sourceUtm="MonServiceSécurisé", slot="beforetoolslinks")
 
   if avertissementMaintenance
     .banniere-maintenance

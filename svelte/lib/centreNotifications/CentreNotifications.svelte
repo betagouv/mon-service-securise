@@ -42,15 +42,26 @@
   class:ouvert
   bind:this={elementCentreNotifications}
 >
-  <button id="affiche-notifications" onclick={() => (ouvert = !ouvert)}>
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+  <dsfr-button
+    id="affiche-notifications"
+    label="Notifications"
+    kind="tertiary-no-outline"
+    hasIcon
+    icon="notification-3-line"
+    size="sm"
+    data-themeable="false"
+    onclick={() => (ouvert = !ouvert)}
+    class="bouton-notification"
+  >
+    Notifications
+
     {#if nbNonLue}
-      <span class="pastille-nb-non-lue">{nbNonLue}</span>
+      <span class="bouton-notification__indicateur" aria-hidden="true"
+        >{nbNonLue}</span
+      >
     {/if}
-    <img
-      src="/statique/assets/images/icone_notification.svg"
-      alt="Centre de notifications"
-    />
-  </button>
+  </dsfr-button>
   <div class="conteneur-notifications">
     <div class="entete-centre-notifications">
       <p class="titre-centre-notifications">Notifications</p>
@@ -83,6 +94,25 @@
 </div>
 
 <style>
+  .bouton-notification {
+    position: relative;
+  }
+
+  .bouton-notification__indicateur {
+    background-color: var(--artwork-minor-red-marianne);
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-inverted-grey);
+    font-size: 8px;
+    position: absolute;
+    left: 16px;
+    top: 4px;
+  }
+
   .centre-notifications {
     display: inline-block;
   }
@@ -100,21 +130,6 @@
 
   #affiche-notifications:hover {
     background: var(--systeme-design-etat-gris-survol);
-  }
-
-  #affiche-notifications .pastille-nb-non-lue {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: #ca3535;
-    width: 16px;
-    height: 16px;
-    border: 1px solid white;
-    font-size: 12px;
-    line-height: 14px;
-    font-weight: 500;
-    border-radius: 9999px;
-    color: white;
   }
 
   .centre-notifications.ouvert #affiche-notifications {

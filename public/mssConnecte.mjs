@@ -5,6 +5,10 @@ import { lanceDecompteDeconnexion } from './modules/deconnexion.js';
 $(() => {
   initialiseComportementModale($('.rideau#deconnexion'));
 
+  $('dsfr-header').on('logout', () => {
+    window.location.href = '/deconnexion';
+  });
+
   document.body.dispatchEvent(
     new CustomEvent('svelte-recharge-centre-notifications')
   );
