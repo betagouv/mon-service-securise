@@ -176,6 +176,16 @@ describe("Sur demande de la représentation API complète d'un service", () => {
         referentielsMesureConcernes: expect.any(String),
         nombreMesuresSpecifiques: 0,
         nombreMesuresNonFait: 0,
+        tranches: {
+          indiceCyber: {
+            valeurs: expect.any(Object),
+            descriptions: expect.any(Array),
+          },
+          indiceCyberPersonnalise: {
+            valeurs: expect.any(Object),
+            descriptions: expect.any(Array),
+          },
+        },
       });
     });
 

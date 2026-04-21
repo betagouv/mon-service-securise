@@ -136,6 +136,10 @@
             indicesCyber?.referentielsMesureConcernes,
           nombreMesuresSpecifiques: indicesCyber?.nombreMesuresSpecifiques,
           nombreMesuresNonFait: indicesCyber?.nombreMesuresNonFait,
+          categories: referentiel.mesures.categories,
+          tranches: indicesCyber?.tranches.indiceCyber,
+          tranchesPersonnalisees:
+            indicesCyber?.tranches.indiceCyberPersonnalise,
         };
       default:
         return {};
@@ -147,6 +151,7 @@
   onclick={interecepteNavigation}
   on:description-service-modifiee={rafraichisResumeService}
   on:contacts-utiles-service-modifiee={rafraichisServiceComplet}
+  on:mesure-modifiee={rafraichisServiceComplet}
 />
 
 <Toaster />
