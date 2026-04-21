@@ -292,47 +292,4 @@ describe("Les routes connectées d'API pour l'utilisateur", () => {
       });
     });
   });
-
-  describe('quand requête GET sur `/api/utilisateurCourant`', () => {
-    it("renvoie des infos de l'utilisateur correspondant à l'identifiant", async () => {
-      testeur.middleware().reinitialise({ idUtilisateur: '123' });
-      let idUtilisateurRecu = null;
-      const depotDonnees = testeur.depotDonnees();
-      depotDonnees.utilisateur = async (idUtilisateur: UUID) => {
-        idUtilisateurRecu = idUtilisateur;
-        return unUtilisateur()
-          .quiSAppelle('Marie Jeanne')
-          .quiTravaillePourUneEntiteAvecSiret('12345')
-          .construis();
-      };
-
-      const reponse = await testeur.get('/api/utilisateurCourant');
-
-      expect(reponse.status).toEqual(200);
-      expect(idUtilisateurRecu).toEqual('123');
-      const { utilisateur: courant } = reponse.body;
-      expect(courant.prenomNom).toEqual('Marie Jeanne');
-    });
-
-    it("renvoie la source d'authentification", async () => {
-      testeur.middleware().reinitialise({
-        idUtilisateur: '123',
-        authentificationAUtiliser: SourceAuthentification.AGENT_CONNECT,
-      });
-      const depotDonnees = testeur.depotDonnees();
-      depotDonnees.utilisateur = async () => unUtilisateur().construis();
-
-      const reponse = await testeur.get('/api/utilisateurCourant');
-
-      const { sourceAuthentification } = reponse.body;
-      expect(sourceAuthentification).toEqual('AGENT_CONNECT');
-    });
-
-    it("répond avec un code 401 quand il n'y a pas d'identifiant", async () => {
-      testeur.middleware().reinitialise({ idUtilisateur: '' });
-
-      const reponse = await testeur.get('/api/utilisateurCourant');
-      expect(reponse.status).toEqual(401);
-    });
-  });
 });

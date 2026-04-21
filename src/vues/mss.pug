@@ -12,7 +12,6 @@ block page
     script(src='/statique/bibliotheques/jquery-3.7.1.min.js')
     include csrf.pug
     script(src=`https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/${UI_KIT_VERSION}/lab-anssi-ui-kit.iife.js` nonce=nonce defer)
-    +composantSvelte('entete.js')
 
   block styles
     link(href='/statique/assets/styles/palette.css', rel='stylesheet')
@@ -20,8 +19,6 @@ block page
     link(href='/statique/assets/styles/bouton.css', rel='stylesheet')
     link(href='/statique/assets/styles/lien.css', rel='stylesheet')
     link(href='/statique/assets/styles/mss.css', rel='stylesheet')
-    link(href='/statique/assets/styles/entete.css', rel='stylesheet')
-    link(href='/statique/assets/styles/entete.responsive.css', rel='stylesheet')
     link(href=`https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/${UI_KIT_VERSION}/dsfr-variables.css`, rel='stylesheet', nonce=nonce)
     link(href=`https://lab-anssi-ui-kit-prod-s3-assets.cellar-c2.services.clever-cloud.com/${UI_KIT_VERSION}/lab-anssi-theme.mss.css`, rel="stylesheet", nonce=nonce)
     +feuilleDeStyleSvelte()
@@ -54,5 +51,3 @@ block page
 
   block footer
     +footer
-
-  script(type = 'module', src = '/statique/entete.js')
