@@ -36,12 +36,41 @@ export class ObjetGetServiceComplet {
     indicesCyber?: Record<string, unknown>;
     dossiers?: Record<string, unknown>;
   } {
-    const { risquesGeneraux, risquesSpecifiques } =
-      this.service.risques.toJSON() as RisquesAPI;
-    const risquesGenerauxAConsiderer = Object.keys(this.referentiel.risques())
-      .map((id) => risquesGeneraux.find((r) => r.id === id) || { id })
-      .map((donnees) => new RisqueGeneral(donnees, this.referentiel).toJSON());
+    return {
+      ...this.donneesDescription(),
+      ...this.donneesMesures(),
+      ...this.donneesRisques(),
+      ...this.donneesContactsUtiles(),
+      ...this.donneesIndiceCyber(),
+      ...this.donneesDossiers(),
+    };
+  }
 
+  private donneesDossiers() {
+    const dossierCourant = this.service.dossiers.dossierCourant();
+    const dossierActif = this.service.dossiers.dossierActif();
+    const dossiersPasses = this.service.dossiers.archives();
+    const dossiersRefuses = this.service.dossiers.refuses();
+    const aucunDossier =
+      !dossierCourant &&
+      !dossierActif &&
+      !dossiersPasses.length &&
+      !dossiersRefuses.length;
+
+    return (
+      this.peut(DROITS_VOIR_HOMOLOGUER) && {
+        dossiers: {
+          dossierCourant,
+          dossierActif,
+          dossiersPasses,
+          dossiersRefuses,
+          aucunDossier,
+        },
+      }
+    );
+  }
+
+  private donneesIndiceCyber() {
     const referentielsMesureConcernes =
       this.referentiel.formatteListeDeReferentiels(
         Object.entries(
@@ -55,33 +84,8 @@ export class ObjetGetServiceComplet {
     const indiceCyberAnssi = this.service.indiceCyber();
     const indiceCyberPersonnalise = this.service.indiceCyberPersonnalise();
 
-    const dossierCourant = this.service.dossiers.dossierCourant();
-    const dossierActif = this.service.dossiers.dossierActif();
-    const dossiersPasses = this.service.dossiers.archives();
-    const dossiersRefuses = this.service.dossiers.refuses();
-    const aucunDossier =
-      !dossierCourant &&
-      !dossierActif &&
-      !dossiersPasses.length &&
-      !dossiersRefuses.length;
-
-    return {
-      ...(this.peut(DROITS_VOIR_DESCRIPTION) && {
-        descriptionService: this.service.descriptionService.toJSON(),
-      }),
-      ...(this.peut(DROITS_VOIR_MESURES) && {
-        mesures: objetGetMesures.donnees(this.service),
-      }),
-      ...(this.peut(DROITS_VOIR_RISQUES) && {
-        risques: {
-          risquesGeneraux: risquesGenerauxAConsiderer,
-          risquesSpecifiques,
-        },
-      }),
-      ...(this.peut(DROITS_VOIR_CONTACTS_UTILES) && {
-        contactsUtiles: new ObjetGetContactsUtiles(this.service).donnees(),
-      }),
-      ...(this.peut(DROITS_VOIR_INDICE_CYBER) && {
+    return (
+      this.peut(DROITS_VOIR_INDICE_CYBER) && {
         indicesCyber: {
           indiceCyberAnssi,
           indiceCyberPersonnalise,
@@ -107,17 +111,49 @@ export class ObjetGetServiceComplet {
             },
           },
         },
-      }),
-      ...(this.peut(DROITS_VOIR_HOMOLOGUER) && {
-        dossiers: {
-          dossierCourant,
-          dossierActif,
-          dossiersPasses,
-          dossiersRefuses,
-          aucunDossier,
+      }
+    );
+  }
+
+  private donneesContactsUtiles() {
+    return (
+      this.peut(DROITS_VOIR_CONTACTS_UTILES) && {
+        contactsUtiles: new ObjetGetContactsUtiles(this.service).donnees(),
+      }
+    );
+  }
+
+  private donneesRisques() {
+    const { risquesGeneraux, risquesSpecifiques } =
+      this.service.risques.toJSON() as RisquesAPI;
+    const risquesGenerauxAConsiderer = Object.keys(this.referentiel.risques())
+      .map((id) => risquesGeneraux.find((r) => r.id === id) || { id })
+      .map((donnees) => new RisqueGeneral(donnees, this.referentiel).toJSON());
+
+    return (
+      this.peut(DROITS_VOIR_RISQUES) && {
+        risques: {
+          risquesGeneraux: risquesGenerauxAConsiderer,
+          risquesSpecifiques,
         },
-      }),
-    };
+      }
+    );
+  }
+
+  private donneesMesures() {
+    return (
+      this.peut(DROITS_VOIR_MESURES) && {
+        mesures: objetGetMesures.donnees(this.service),
+      }
+    );
+  }
+
+  private donneesDescription() {
+    return (
+      this.peut(DROITS_VOIR_DESCRIPTION) && {
+        descriptionService: this.service.descriptionService.toJSON(),
+      }
+    );
   }
 
   private peut(droits: Partial<Droits>) {
