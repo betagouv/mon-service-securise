@@ -73,7 +73,6 @@
   viewBox="0 0 160 160"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
-  filter="drop-shadow(0px 4.6857147216796875px 23.428573608398438px rgba(26, 68, 139, 0.2))"
 >
   <g>
     <circle
