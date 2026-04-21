@@ -13,6 +13,7 @@ const {
   DROITS_VOIR_RISQUES,
   DROITS_VOIR_CONTACTS_UTILES,
   DROITS_VOIR_INDICE_CYBER,
+  DROITS_VOIR_HOMOLOGUER,
 } = Autorisation;
 
 type RisquesAPI = {
@@ -33,6 +34,7 @@ export class ObjetGetServiceComplet {
     risques?: RisquesAPI;
     contactsUtiles?: Record<string, unknown>;
     indicesCyber?: Record<string, unknown>;
+    dossiers?: Record<string, unknown>;
   } {
     const { risquesGeneraux, risquesSpecifiques } =
       this.service.risques.toJSON() as RisquesAPI;
@@ -52,6 +54,16 @@ export class ObjetGetServiceComplet {
       );
     const indiceCyberAnssi = this.service.indiceCyber();
     const indiceCyberPersonnalise = this.service.indiceCyberPersonnalise();
+
+    const dossierCourant = this.service.dossiers.dossierCourant();
+    const dossierActif = this.service.dossiers.dossierActif();
+    const dossiersPasses = this.service.dossiers.archives();
+    const dossiersRefuses = this.service.dossiers.refuses();
+    const aucunDossier =
+      !dossierCourant &&
+      !dossierActif &&
+      !dossiersPasses.length &&
+      !dossiersRefuses.length;
 
     return {
       ...(this.peut(DROITS_VOIR_DESCRIPTION) && {
@@ -94,6 +106,15 @@ export class ObjetGetServiceComplet {
               ),
             },
           },
+        },
+      }),
+      ...(this.peut(DROITS_VOIR_HOMOLOGUER) && {
+        dossiers: {
+          dossierCourant,
+          dossierActif,
+          dossiersPasses,
+          dossiersRefuses,
+          aucunDossier,
         },
       }),
     };

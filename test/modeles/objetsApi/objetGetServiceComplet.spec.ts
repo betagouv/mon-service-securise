@@ -7,6 +7,7 @@ import {
   tousDroitsEnEcriture,
 } from '../../../src/modeles/autorisations/gestionDroits.ts';
 import { creeReferentielV2 } from '../../../src/referentielV2.ts';
+import { unDossier } from '../../constructeurs/constructeurDossier.ts';
 
 describe("Sur demande de la représentation API complète d'un service", () => {
   const autorisationProprietaire = uneAutorisation()
@@ -205,6 +206,50 @@ describe("Sur demande de la représentation API complète d'un service", () => {
       ).donnees();
 
       expect(donnees.indicesCyber).toBeUndefined();
+    });
+  });
+
+  describe("concernant les données de dossiers d'homologation", () => {
+    it('retourne la représentation JSON de tous les dossiers', () => {
+      const donneesDossier = unDossier(creeReferentielV2())
+        .quiEstComplet()
+        .quiEstActif().donnees;
+      const serviceV2 = unServiceV2()
+        .avecDossiers([donneesDossier])
+        .construis();
+
+      const donnees = new ObjetGetServiceComplet(
+        serviceV2,
+        autorisationProprietaire,
+        referentiel
+      ).donnees();
+
+      expect(donnees.dossiers).toBeDefined();
+      expect(donnees.dossiers).toEqual({
+        dossierCourant: undefined,
+        dossierActif: expect.any(Object),
+        dossiersPasses: expect.any(Array),
+        dossiersRefuses: expect.any(Array),
+        aucunDossier: false,
+      });
+    });
+
+    it('ne retourne pas la représentation des dossiers si les droits sont insuffisants', () => {
+      const serviceV2 = unServiceV2().construis();
+      const autorisation = uneAutorisation()
+        .avecDroits({
+          ...tousDroitsEnEcriture(),
+          [Rubriques.HOMOLOGUER]: Permissions.INVISIBLE,
+        })
+        .construis();
+
+      const donnees = new ObjetGetServiceComplet(
+        serviceV2,
+        autorisation,
+        referentiel
+      ).donnees();
+
+      expect(donnees.dossiers).toBeUndefined();
     });
   });
 });
