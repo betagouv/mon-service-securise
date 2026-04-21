@@ -26,17 +26,17 @@ export const metadonneesPages: Record<PageServiceGeree, DonneesPage> = {
       "Réalisez les mesures de securité, évaluez vos risques et suivez la progression de l'indice cyber",
     composant: IndiceCyber,
   },
+  risques: {
+    titre: 'Sécuriser',
+    sousTitre:
+      "Réalisez les mesures de securité, évaluez vos risques et suivez la progression de l'indice cyber",
+    composant: Risques,
+  },
   descriptionService: {
     titre: 'Récapitulatif',
     sousTitre:
       'Cette page présente les informations clés du service. Toute modification de certaines données peut entraîner une réévaluation automatique des besoins de sécurité et modifier les mesures de protection nécessaires.',
     composant: DecrireV2,
-  },
-  risques: {
-    titre: 'Risques de sécurité',
-    sousTitre:
-      'Réalisez une première analyse de risque grâce aux risques courants suggérés par l’ANSSI et/ou recensez les risques identifiés dans le cadre d’une analyse de risque plus approfondie.',
-    composant: Risques,
   },
   rolesResponsabilites: {
     titre: 'Contacts utiles',

@@ -6,6 +6,7 @@
   import IndiceCyberPersonnalise from '../../../indiceCyberPersonnalise/IndiceCyberPersonnalise.svelte';
   import type { IdCategorie } from '../../../tableauDesMesures/tableauDesMesures.d';
   import RadarIndiceCyber from './RadarIndiceCyber.svelte';
+  import type { EtapeService } from '../../../menuNavigationService/menuNavigationService.d';
 
   interface Props {
     idService: string;
@@ -18,6 +19,7 @@
     categories: Record<IdCategorie, string>;
     tranches: Tranches;
     tranchesPersonnalisees: Tranches;
+    visible: Record<EtapeService, boolean>;
   }
 
   let {
@@ -31,6 +33,7 @@
     categories,
     tranches,
     tranchesPersonnalisees,
+    visible,
   }: Props = $props();
 
   const configurationsTabs = [
@@ -71,7 +74,7 @@
 </script>
 
 <div class="conteneur-indice-cyber">
-  <NavigationSecuriser {idService} />
+  <NavigationSecuriser {idService} {visible} />
   <dsfr-tabs
     tabs={configurationsTabs}
     activeTabIndex={tabActive}

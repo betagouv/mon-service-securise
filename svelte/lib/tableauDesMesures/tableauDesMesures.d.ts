@@ -6,6 +6,7 @@ import {
 } from '../ui/types.d';
 import type { StatutMesure } from '../modeles/modeleMesure';
 import type { VersionService } from '../../../src/modeles/versionService';
+import type { EtapeService } from '../menuNavigationService/menuNavigationService.d';
 
 declare global {
   interface HTMLElementEventMap {
@@ -26,6 +27,7 @@ export type TableauDesMesuresProps = {
   versionService: VersionService;
   avecRisquesV2: boolean;
   afficheExplicationRisquesV2: boolean;
+  visible: Record<EtapeService, boolean>;
 };
 
 export type PartieResponsable = 'Projet' | 'Presta' | 'Mixte';

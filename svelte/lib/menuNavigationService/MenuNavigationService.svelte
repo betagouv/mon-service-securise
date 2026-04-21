@@ -32,11 +32,12 @@
 <div class="menu-navigation-service">
   <div class="conteneur-menu-navigation-service">
     <ul>
-      {#if visible.mesures}
+      {#if visible.mesures || visible.indiceCyber || visible.risques}
         <li>
           <a
             class:actif={etapeActive === 'mesures' ||
-              etapeActive === 'indiceCyber'}
+              etapeActive === 'indiceCyber' ||
+              etapeActive === 'risques'}
             class="lien-navigation"
             href="/service/{idService}/mesures"
           >
@@ -54,18 +55,6 @@
           >
             <lab-anssi-icone nom="award-line" taille="sm"></lab-anssi-icone>
             Homologuer
-          </a>
-        </li>
-      {/if}
-      {#if visible.risques}
-        <li>
-          <a
-            class:actif={etapeActive === 'risques'}
-            class="lien-navigation"
-            href="/service/{idService}/risques"
-          >
-            <lab-anssi-icone nom="warning-line" taille="sm"></lab-anssi-icone>
-            Risques
           </a>
         </li>
       {/if}

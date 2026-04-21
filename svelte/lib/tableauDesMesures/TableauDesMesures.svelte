@@ -56,6 +56,7 @@
   import { storeVraisemblanceRisqueV2 } from '../ui/stores/vraisemblanceRisqueV2.store';
   import ModaleExplicationRisquesV2 from '../risquesV2/modale/ModaleExplicationRisquesV2.svelte';
   import NavigationSecuriser from '../pagesService/kit/NavigationSecuriser.svelte';
+  import type { EtapeService } from '../menuNavigationService/menuNavigationService.d';
 
   const { Jamais, EnCours, Fait } = EtatEnregistrement;
 
@@ -69,6 +70,7 @@
     versionService: VersionService;
     avecRisquesV2: boolean;
     afficheExplicationRisquesV2: boolean;
+    visible: Record<EtapeService, boolean>;
   }
 
   let {
@@ -81,6 +83,7 @@
     versionService,
     avecRisquesV2,
     afficheExplicationRisquesV2,
+    visible,
   }: Props = $props();
 
   let modaleExplicationRisquesV2: ModaleExplicationRisquesV2 | undefined =
@@ -284,7 +287,7 @@
   on:modeles-mesure-specifique-associes={() =>
     ($rechercheParAvancement = 'enAction')}
 />
-<NavigationSecuriser {idService} />
+<NavigationSecuriser {idService} {visible} />
 <div class="barre-filtres">
   <div class="conteneur-recherche">
     <img

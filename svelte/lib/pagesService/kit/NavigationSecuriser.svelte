@@ -1,25 +1,37 @@
 <script lang="ts">
-  import { untrack } from 'svelte';
   import { pageCourante, routeurStore } from '../store/routeur.store';
+  import type { EtapeService } from '../../menuNavigationService/menuNavigationService.d';
 
   interface Props {
     idService: string;
+    visible: Record<EtapeService, boolean>;
   }
 
-  let { idService }: Props = $props();
+  let { idService, visible }: Props = $props();
 
-  const configurationNav = untrack(() => [
-    {
-      label: 'Mesures de sécurité',
-      href: `/service/${idService}/mesures`,
-      current: $pageCourante === 'mesures',
-    },
-    {
-      label: 'Indice Cyber',
-      href: `/service/${idService}/indiceCyber`,
-      current: $pageCourante === 'indiceCyber',
-    },
-  ]);
+  const configurationNav = $derived.by(() => {
+    const navVisibles = [];
+    if (visible.mesures)
+      navVisibles.push({
+        label: 'Mesures de sécurité',
+        href: `/service/${idService}/mesures`,
+        current: $pageCourante === 'mesures',
+      });
+    if (visible.risques)
+      navVisibles.push({
+        label: 'Risques de sécurité',
+        href: `/service/${idService}/risques`,
+        current: $pageCourante === 'risques',
+      });
+    if (visible.indiceCyber)
+      navVisibles.push({
+        label: 'Indice Cyber',
+        href: `/service/${idService}/indiceCyber`,
+        current: $pageCourante === 'indiceCyber',
+      });
+
+    return navVisibles;
+  });
 
   type TabnavLink = { href: string };
   const gereClicNavigation = (e: CustomEvent<{ link: TabnavLink }>) => {

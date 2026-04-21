@@ -182,7 +182,7 @@
           <h1>{donneesPage?.titre}</h1>
           <h2>{donneesPage?.sousTitre}</h2>
           <div class="conteneur-composant-page" in:fade={{ duration: 150 }}>
-            <Composant {idService} {...propsDuComposant} />
+            <Composant {idService} {visible} {...propsDuComposant} />
           </div>
         {/key}
       </div>
