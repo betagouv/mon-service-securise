@@ -1,3 +1,5 @@
+import type { EtapeService } from '../menuNavigationService/menuNavigationService.d';
+
 declare global {
   interface HTMLElementEventMap {
     'svelte-recharge-risques': CustomEvent;
@@ -89,4 +91,5 @@ export type RisquesProps = {
   niveauxVraisemblance: ReferentielVraisemblances;
   niveauxRisque: ReferentielNiveauxRisque;
   matriceNiveauxRisque: MatriceNiveauxRisque;
+  visible: Record<EtapeService, boolean>;
 };
