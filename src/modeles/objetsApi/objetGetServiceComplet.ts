@@ -50,6 +50,9 @@ export class ObjetGetServiceComplet {
             (mesure as { referentiel: IdReferentielMesure }).referentiel
         )
       );
+    const indiceCyberAnssi = this.service.indiceCyber();
+    const indiceCyberPersonnalise = this.service.indiceCyberPersonnalise();
+
     return {
       ...(this.peut(DROITS_VOIR_DESCRIPTION) && {
         descriptionService: this.service.descriptionService.toJSON(),
@@ -68,11 +71,29 @@ export class ObjetGetServiceComplet {
       }),
       ...(this.peut(DROITS_VOIR_INDICE_CYBER) && {
         indicesCyber: {
-          indiceCyberAnssi: this.service.indiceCyber(),
-          indiceCyberPersonnalise: this.service.indiceCyberPersonnalise(),
+          indiceCyberAnssi,
+          indiceCyberPersonnalise,
           referentielsMesureConcernes,
           nombreMesuresSpecifiques: this.service.nombreMesuresSpecifiques(),
           nombreMesuresNonFait: this.service.nombreTotalMesuresNonFait(),
+          tranches: {
+            indiceCyber: {
+              valeurs: this.referentiel.trancheIndiceCyber(
+                indiceCyberAnssi.total
+              ),
+              descriptions: this.referentiel.descriptionsTranchesIndiceCyber(
+                indiceCyberAnssi.total
+              ),
+            },
+            indiceCyberPersonnalise: {
+              valeurs: this.referentiel.trancheIndiceCyber(
+                indiceCyberPersonnalise.total
+              ),
+              descriptions: this.referentiel.descriptionsTranchesIndiceCyber(
+                indiceCyberAnssi.total
+              ),
+            },
+          },
         },
       }),
     };
